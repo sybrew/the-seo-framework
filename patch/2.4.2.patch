@@ -1,0 +1,2036 @@
+Index: autodescription.php
+===================================================================
+--- autodescription.php	(revision 1300916)
++++ autodescription.php	(working copy)
+@@ -3,7 +3,7 @@
+  * Plugin Name: The SEO Framework
+  * Plugin URI: https://wordpress.org/plugins/autodescription/
+  * Description: The SEO Framework makes sure your SEO is always up-to-date without any configuration needed. It's based upon the Genesis SEO.
+- * Version: 2.4.1
++ * Version: 2.4.2
+  * Author: Sybre Waaijer
+  * Author URI: https://cyberwire.nl/
+  * License: GPLv3
+@@ -29,8 +29,11 @@
+  */
+ 
+ //* Debug.
+-// define( 'THE_SEO_FRAMEWORK_DEBUG', true );
+-// define( 'THE_SEO_FRAMEWORK_DEBUG_MORE', true );
++//if ( is_admin() ) {
++//	define( 'THE_SEO_FRAMEWORK_DEBUG', true );
++//	define( 'THE_SEO_FRAMEWORK_DEBUG_MORE', true );
++//	define( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN', true );
++//}
+ 
+ /**
+  * CDN Cache buster. 3 point.
+@@ -44,7 +47,7 @@
+  * Removed previous constant.
+  * @since 2.3.5
+  */
+-define( 'THE_SEO_FRAMEWORK_VERSION', '2.4.1' );
++define( 'THE_SEO_FRAMEWORK_VERSION', '2.4.2' );
+ 
+ /**
+  * Plugin options filter
+Index: inc/classes/admininit.class.php
+===================================================================
+--- inc/classes/admininit.class.php	(revision 1300916)
++++ inc/classes/admininit.class.php	(working copy)
+@@ -529,9 +529,13 @@
+ 	public function echo_debug_information( $values ) {
+ 
+ 		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
+-			echo "\r\n<br>\r\n";
+-			echo '<span class="code highlight">';
++			echo "\r\n";
+ 
++			if ( ! defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) || defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && ! THE_SEO_FRAMEWORK_DEBUG_HIDDEN ) {
++				echo "<br>\r\n";
++				echo '<span class="code highlight">';
++			}
++
+ 			if ( !isset( $values ) ) {
+ 				echo $this->debug_value_wrapper( "Debug message: Value isn't set." ) . "\r\n";
+ 				return;
+@@ -569,7 +573,7 @@
+ 						echo "\r\n";
+ 					} else if ( is_array( $value ) ) {
+ 						echo $this->debug_key_wrapper( $key ) . ' => ';
+-						echo "\r\nArray[		";
++						echo "Array[\r\n";
+ 
+ 						foreach ( $value as $k => $v ) {
+ 							if ( empty( $v ) ) {
+@@ -592,7 +596,7 @@
+ 								echo "\r\n";
+ 							}
+ 						}
+-						echo "\r\n]";
++						echo "]";
+ 					} else {
+ 						echo $this->debug_key_wrapper( $key ) . ' => ';
+ 						echo $this->debug_value_wrapper( $value );
+@@ -609,7 +613,9 @@
+ 				echo $this->debug_value_wrapper( $values );
+ 			}
+ 
+-			echo '</span>';
++			if ( ! defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) || defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && ! THE_SEO_FRAMEWORK_DEBUG_HIDDEN ) {
++				echo '</span>';
++			}
+ 			echo "\r\n";
+ 		}
+ 
+@@ -625,7 +631,10 @@
+ 	 * @return string
+ 	 */
+ 	public function debug_key_wrapper( $key ) {
+-		return '<font color="chucknorris">' . esc_attr( (string) $key ) . '</font>';
++		if ( ! defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) || defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && ! THE_SEO_FRAMEWORK_DEBUG_HIDDEN ) {
++			return '<font color="chucknorris">' . esc_attr( (string) $key ) . '</font>';
++		}
++		return esc_attr( (string) $key );
+ 	}
+ 
+ 	/**
+@@ -638,7 +647,10 @@
+ 	 * @return string
+ 	 */
+ 	public function debug_value_wrapper( $value ) {
+-		return '<span class="wp-ui-notification">' . esc_attr( (string) $value ) . '</span>';
++		if ( ! defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) || defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && ! THE_SEO_FRAMEWORK_DEBUG_HIDDEN ) {
++			return '<span class="wp-ui-notification">' . esc_attr( (string) $value ) . '</span>';
++		}
++		return esc_attr( (string) $value );
+ 	}
+ 
+ }
+Index: inc/classes/generate.class.php
+===================================================================
+--- inc/classes/generate.class.php	(revision 1300916)
++++ inc/classes/generate.class.php	(working copy)
+@@ -200,6 +200,9 @@
+ 		 * @since 2.3.4
+ 		 */
+ 		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
++			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
++				echo "<!--\r\n";
++
+ 			echo  "\r\n" . 'START: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
+ 
+ 			if ( defined( 'THE_SEO_FRAMEWORK_DEBUG_MORE' ) && THE_SEO_FRAMEWORK_DEBUG_MORE ) {
+@@ -209,6 +212,9 @@
+ 				$this->echo_debug_information( array( 'page_for_posts' => $page_for_posts ) );
+ 				$this->echo_debug_information( array( 'get_custom_field' => $get_custom_field ) );
+ 			}
++
++			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
++				echo "\r\n-->";
+ 		}
+ 
+ 		$page_on_front = false;
+@@ -293,7 +299,6 @@
+ 				 * Uses the title from cache
+ 				 * @since 2.4.1
+ 				 */
+-			//	$title = $this->get_custom_field( '_genesis_title', $page_id ) ? $this->get_custom_field( '_genesis_title', $page_id ) : get_the_title( $page_id );
+ 				$title = $this->get_custom_field( '_genesis_title', $page_id ) ? $this->get_custom_field( '_genesis_title', $page_id ) : $this->title( '', '', '', array( 'term_id' => $page_id, 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
+ 
+ 				// @TODO create option.
+@@ -301,7 +306,10 @@
+ 
+ 			} else if ( !empty( $term ) && is_object( $term ) ) {
+ 				//* We're on a taxonomy now.
+-				if ( isset( $term->name ) && !empty( $term->name ) ) {
++
++				if ( isset( $term->admeta['doctitle'] ) && !empty( $term->admeta['doctitle'] ) ) {
++					$title = $term->admeta['doctitle'];
++				} else if ( isset( $term->name ) && !empty( $term->name ) ) {
+ 					$title = $term->name;
+ 				} else if ( isset( $term->slug ) && !empty( $term->slug ) ) {
+ 					$title = $term->slug;
+@@ -313,7 +321,6 @@
+ 				 * Uses the title from cache
+ 				 * @since 2.4.1
+ 				 */
+-			//	$title = $this->get_custom_field( '_genesis_title', $page_id ) ? $this->get_custom_field( '_genesis_title', $page_id ) : get_the_title( $page_id );
+ 				$title = $this->get_custom_field( '_genesis_title', $page_id ) ? $this->get_custom_field( '_genesis_title', $page_id ) : $this->title( '', '', '', array( 'term_id' => $page_id, 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
+ 			}
+ 		} else {
+@@ -411,10 +418,16 @@
+ 		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
+ 			$auto_description_transient = $this->auto_description_transient;
+ 
++			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
++				echo "<!--\r\n";
++
+ 			$this->echo_debug_information( array( 'is static frontpage' => $is_static_frontpage ) );
+ 			$this->echo_debug_information( array( 'description excerpt cache key' => $auto_description_transient ) );
+ 			$this->echo_debug_information( array( 'description excerpt output' => $description ) );
+ 			echo "\r\n<br>\r\n" . 'END: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n<br><br>";
++
++			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
++				echo "\r\n-->";
+ 		}
+ 
+ 		return (string) $description;
+@@ -501,7 +514,7 @@
+ 	 *
+ 	 * @since 2.4.0:
+ 	 * @param array $args : accepted args : {
+-	 * 		@param int term_id The Taxonomy Term ID (when args['taxonomy'] is also filled in), else the Post ID.
++	 * 		@param int term_id The Taxonomy Term ID when taxonomy is also filled in. Else post ID.
+ 	 * 		@param string taxonomy The Taxonomy name.
+ 	 * 		@param bool page_on_front Page on front condition for example generation.
+ 	 * 		@param bool placeholder Generate placeholder, ignoring options.
+@@ -525,6 +538,10 @@
+ 		 * @since 2.3.4
+ 		 */
+ 		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
++
++			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
++				echo "<!--\r\n";
++
+ 			echo  "\r\n" . 'START: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
+ 
+ 			if ( defined( 'THE_SEO_FRAMEWORK_DEBUG_MORE' ) && THE_SEO_FRAMEWORK_DEBUG_MORE ) {
+@@ -533,6 +550,9 @@
+ 				$this->echo_debug_information( array( 'seplocation' => $seplocation ) );
+ 				$this->echo_debug_information( array( 'args' => $args ) );
+ 			}
++
++			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
++				echo "\r\n-->";
+ 		}
+ 
+ 		$default_args = $this->parse_title_args( '', '', true );
+@@ -577,6 +597,7 @@
+ 			}
+ 		}
+ 
++		//* Notify cache to keep using the same output. We're doing it right :).
+ 		if ( ! isset( $this->title_doing_it_wrong ) )
+ 			$this->title_doing_it_wrong = false;
+ 
+@@ -600,6 +621,7 @@
+ 		if ( empty( $defaults ) ) {
+ 			$default_args = array(
+ 				'term_id' 			=> '',
++				'post_id' 			=> '',
+ 				'taxonomy' 			=> '',
+ 				'page_on_front'		=> false,
+ 				'placeholder'		=> false,
+@@ -617,6 +639,7 @@
+ 
+ 		//* Array merge doesn't support sanitation. We're simply type casting here.
+ 		$args['term_id'] 			= isset( $args['term_id'] ) 			? (int) $args['term_id'] 			: $defaults['term_id'];
++		$args['post_id'] 			= isset( $args['post_id'] ) 			? (int) $args['post_id'] 			: $defaults['post_id'];
+ 		$args['taxonomy'] 			= isset( $args['taxonomy'] ) 			? (string) $args['taxonomy'] 		: $defaults['taxonomy'];
+ 		$args['page_on_front'] 		= isset( $args['page_on_front'] ) 		? (bool) $args['page_on_front'] 	: $defaults['page_on_front'];
+ 		$args['placeholder'] 		= isset( $args['placeholder'] ) 		? (bool) $args['placeholder'] 		: $defaults['placeholder'];
+@@ -694,7 +717,7 @@
+ 			} else if ( $args['page_on_front'] ) {
+ 				$title = get_the_title( get_option( 'page_on_front' ) );
+ 			} else {
+-				global $post;
++				$post = get_post( $term_id, OBJECT );
+ 
+ 				/**
+ 				 * Memory leak fix
+@@ -727,7 +750,6 @@
+ 	 * @return string $title Title
+ 	 */
+ 	public function build_title_doingitwrong( $title = '', $sep = '', $seplocation = '', $args = array() ) {
+-		global $post;
+ 
+ 		/**
+ 		 * Empty the title, because most themes think they 'know' how to SEO the front page.
+@@ -748,8 +770,17 @@
+ 		//* Remove separator if true.
+ 		$sep_replace = false;
+ 
++		/**
++		 * Don't add/replace separator when false.
++		 *
++		 * @applies filters the_seo_framework_doingitwrong_add_sep
++		 *
++		 * @since 2.4.2
++		 */
++		$add_sep = (bool) apply_filters( 'the_seo_framework_doingitwrong_add_sep', true );
++
+ 		//* Maybe remove separator.
+-		if ( !empty( $sep ) || !empty( $title ) ) {
++		if ( $add_sep && ( !empty( $sep ) || !empty( $title ) ) ) {
+ 			$sep_replace = true;
+ 			$sep_to_replace = (string) $sep;
+ 		}
+@@ -756,7 +787,7 @@
+ 
+ 		//* Fetch title from custom fields.
+ 		if ( $args['get_custom_field'] && is_singular() ) {
+-			$title_from_custom_field = $this->title_from_custom_field();
++			$title_from_custom_field = $this->title_from_custom_field( $title, false, $args['term_id'] );
+ 			$title = ! empty( $title_from_custom_field ) ? $title_from_custom_field : $title;
+ 		}
+ 
+@@ -771,7 +802,8 @@
+ 		 * Removed previous filter.
+ 		 * @since 2.3.5
+ 		 */
+-		$sep = (string) apply_filters( 'the_seo_framework_title_separator', $this->get_separator( 'title' ) );
++		if ( $add_sep )
++			$sep = (string) apply_filters( 'the_seo_framework_title_separator', $this->get_separator( 'title' ) );
+ 
+ 		/**
+ 		 * Add $sep_to_replace
+@@ -778,7 +810,7 @@
+ 		 *
+ 		 * @since 2.3.8
+ 		 */
+-		if ( $sep_replace ) {
++		if ( $add_sep && $sep_replace ) {
+ 			//* Title always contains something at this point.
+ 			$tit_len = mb_strlen( $title );
+ 
+@@ -805,12 +837,8 @@
+ 			}
+ 		}
+ 
+-		//* Generate title.
+-		if ( empty( $title ) )
+-			$title = (string) $this->generate_title( $args['term_id'], $args['taxonomy'], $escape = false );
+-
+ 		//* Sep location has no influence.
+-		if ( $sep_replace ) {
++		if ( $sep_replace && $add_sep ) {
+ 			//* Add trailing space for the tagline/blogname is stuck onto this part with trim.
+ 
+ 			/**
+@@ -834,12 +862,13 @@
+ 		 * And now also works in admin. It gives you a true representation of its output.
+ 		 *
+ 		 * @since 2.4.1
+-		 * @global $post
+ 		 *
+ 		 * @applies filters core : protected_title_format
+ 		 * @applies filters core : private_title_format
+ 		 */
+ 		if ( ! $args['description_title'] ) {
++			$post = get_post( $args['term_id'], OBJECT );
++
+ 			if ( isset( $post->post_password ) && ! empty( $post->post_password ) ) {
+ 				$protected_title_format = apply_filters( 'protected_title_format', __( 'Protected: %s', 'autodescription' ), $post );
+ 				$title = sprintf( $protected_title_format, $title );
+@@ -859,8 +888,14 @@
+ 		 * @since 2.3.4
+ 		 */
+ 		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
++			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
++				echo "<!--\r\n";
++
+ 			$this->echo_debug_information( array( 'title output' => $title ) );
+ 			echo "\r\n<br>\r\n" . 'END: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n<br><br>";
++
++			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
++				echo "\r\n-->";
+ 		}
+ 
+ 		return $title;
+@@ -885,7 +920,6 @@
+ 	 * @return string $title Title
+ 	 */
+ 	public function build_title( $title = '', $seplocation = '', $args = array() ) {
+-		global $post;
+ 
+ 		if ( empty( $args ) )
+ 			$args = $this->parse_title_args( '', '', true );
+@@ -935,7 +969,7 @@
+ 
+ 		//* Fetch title from custom fields.
+ 		if ( $args['get_custom_field'] && is_singular() ) {
+-			$title_from_custom_field = $this->title_from_custom_field();
++			$title_from_custom_field = $this->title_from_custom_field( $title, '', $args['term_id'] );
+ 			$title = ! empty( $title_from_custom_field ) ? $title_from_custom_field : $title;
+ 		}
+ 
+@@ -946,6 +980,8 @@
+ 		 */
+ 		$add_tagline = 0;
+ 
++		$the_id = $args['term_id'] ? $args['term_id'] : get_the_ID();
++
+ 		/**
+ 		 * Generate the Title if empty or if home.
+ 		 *
+@@ -952,7 +988,7 @@
+ 		 * Generation of title has acquired its own functions.
+ 		 * @since 2.3.4
+ 		 */
+-		if ( $is_front_page || $this->is_static_frontpage( get_the_ID() ) || $args['is_front_page'] ) {
++		if ( $is_front_page || $this->is_static_frontpage( $the_id ) || $args['is_front_page'] ) {
+ 			$generated = (array) $this->generate_home_title( $args['get_custom_field'], $seplocation, $seplocation_home, $escape = false );
+ 
+ 			if ( !empty( $generated ) && is_array( $generated ) ) {
+@@ -965,9 +1001,32 @@
+ 			$title = (string) $this->generate_title( $args['term_id'], $args['taxonomy'], $escape = false );
+ 		}
+ 
+-		//* Title for the description bypasses sanitation and additions.
++
++		/**
++		 * From WordPress core get_the_title.
++		 * Bypasses get_post() function object which causes conflict with some themes and plugins.
++		 *
++		 * Also bypasses the_title filters.
++		 * And now also works in admin. It gives you a true representation of its output.
++		 *
++		 * Title for the description bypasses sanitation and additions.
++		 *
++		 * @since 2.4.1
++		 *
++		 * @applies filters core : protected_title_format
++		 * @applies filters core : private_title_format
++		 */
+ 		if ( ! $args['description_title'] ) {
++			$post = get_post( $args['term_id'], OBJECT );
+ 
++			if ( isset( $post->post_password ) && ! empty( $post->post_password ) ) {
++				$protected_title_format = apply_filters( 'protected_title_format', __( 'Protected: %s', 'autodescription' ), $post );
++				$title = sprintf( $protected_title_format, $title );
++			} else if ( isset( $post->post_status ) && 'private' == $post->post_status ) {
++				$private_title_format = apply_filters( 'private_title_format', __( 'Private: %s', 'autodescription' ), $post );
++				$title = sprintf( $private_title_format, $title );
++			}
++
+ 			//* Title for title (meta) tags.
+ 			if ( $is_front_page && ! $add_tagline ) {
+ 				//* Render frontpage output without tagline
+@@ -990,32 +1049,16 @@
+ 		 * @since 2.3.4
+ 		 */
+ 		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
++
++			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
++				echo "<!--\r\n";
++
+ 			$this->echo_debug_information( array( 'is static frontpage' => $this->is_static_frontpage( get_the_ID() ) ) );
+ 			$this->echo_debug_information( array( 'title output' => $title ) );
+ 			echo "\r\n<br>\r\n" . 'END: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n<br><br>";
+-		}
+ 
+-		/**
+-		 * From WordPress core get_the_title.
+-		 * Bypasses get_post() function object which causes conflict with some themes and plugins.
+-		 *
+-		 * Also bypasses the_title filters.
+-		 * And now also works in admin. It gives you a true representation of its output.
+-		 *
+-		 * @since 2.4.1
+-		 * @global $post
+-		 *
+-		 * @applies filters core : protected_title_format
+-		 * @applies filters core : private_title_format
+-		 */
+-		if ( ! $args['description_title'] ) {
+-			if ( isset( $post->post_password ) && ! empty( $post->post_password ) ) {
+-				$protected_title_format = apply_filters( 'protected_title_format', __( 'Protected: %s', 'autodescription' ), $post );
+-				$title = sprintf( $protected_title_format, $title );
+-			} else if ( isset( $post->post_status ) && 'private' == $post->post_status ) {
+-				$private_title_format = apply_filters( 'private_title_format', __( 'Private: %s', 'autodescription' ), $post );
+-				$title = sprintf( $private_title_format, $title );
+-			}
++			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
++				echo "\r\n-->";
+ 		}
+ 
+ 		return $title;
+@@ -1084,7 +1127,7 @@
+ 
+ 		//* Fetch the post title if no title is found.
+ 		if ( ! isset( $title ) || empty( $title ) ) {
+-			global $post;
++			$post = get_post( $term_id, OBJECT );
+ 
+ 			$title = '';
+ 
+@@ -1306,10 +1349,11 @@
+ 	 *
+ 	 * @param string $title the fallback title.
+ 	 * @param bool $escape Parse Title through saninitation calls.
++	 * @param int $id The Post ID.
+ 	 *
+ 	 * @return string The Title.
+ 	 */
+-	public function title_from_custom_field( $title = '', $escape = false ) {
++	public function title_from_custom_field( $title = '', $escape = false, $id = null ) {
+ 
+ 		/**
+ 		 * Create something special for blog page.
+@@ -1321,12 +1365,14 @@
+ 			//* Posts page title.
+ 			$title = $this->get_custom_field( '_genesis_title', get_queried_object_id() ) ? $this->get_custom_field( '_genesis_title', get_queried_object_id() ) : get_the_title( get_queried_object_id() );
+ 		} else {
+-			$id = NULL;
++			$qid = NULL;
+ 
+ 			//* Fetch AnsPress page ID.
+ 			if ( function_exists( 'get_question_id' ) )
+-				$id = get_question_id();
++				$qid = get_question_id();
+ 
++			$id = isset( $id ) ? $id : $qid;
++
+ 			//* Get title from custom field, empty it if it's not there to override the default title
+ 			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : $title;
+ 		}
+@@ -1358,16 +1404,58 @@
+ 	 * @uses WPMUdev's domain mapping
+ 	 *
+ 	 * @param string $url the url
+-	 * @param int $page_id the page id, if empty it will fetch the requested ID, else the page uri
+-	 * @param bool $paged Return current page URL without pagination
+-	 * @param bool $from_option Get the canonical uri option
+-	 * @param object $post The Post Object.
+-	 * @param bool $no_wp Wether to fetch the WP Request or get the permalink by Post Object.
++	 * @param int $page_id the page id, if empty it will fetch the requested ID, else the page uri.
+ 	 *
++	 * @since 2.4.2
++	 * @param array $args : accepted args : {
++	 * 			@param bool $paged Return current page URL without pagination
++	 * 			@param bool $from_option Get the canonical uri option
++	 * 			@param object $post The Post Object.
++	 * 			@param bool $external Wether to fetch the current WP Request or get the permalink by Post Object.
++	 * 			@param bool $is_term Fetch url for term.
++	 * 			@param bool $term The term object.
++	 * }
++	 *
+ 	 * @since 2.0.0
+ 	 */
+-	public function the_url( $url = '', $page_id = '', $paged = false, $from_option = true, $post = null, $no_wp = false ) {
++	public function the_url( $url = '', $page_id = '', $args = array() ) {
+ 
++		/**
++		 * Debug parameters.
++		 * @since 2.4.2
++		 */
++		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
++			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
++				echo "<!--\r\n";
++
++			echo  "\r\n" . 'START: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
++			$this->echo_debug_information( array( 'input url' => $url ) );
++
++			if ( defined( 'THE_SEO_FRAMEWORK_DEBUG_MORE' ) && THE_SEO_FRAMEWORK_DEBUG_MORE ) {
++				$this->echo_debug_information( array( 'page_id' => $page_id ) );
++				$this->echo_debug_information( array( 'args' => $args ) );
++			}
++
++			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
++				echo "\r\n-->";
++		}
++
++		$default_args = $this->parse_url_args( '', '', true );
++
++		/**
++		 * Parse args.
++		 * @since 2.4.2
++		 */
++		if ( ! is_array( $args ) ) {
++			//* Old style parameters are used. Doing it wrong.
++			_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', $this->the_seo_framework_version( '2.4.2' ) );
++			$args = $default_args;
++		} else if ( ! empty( $args ) ) {
++			$args = $this->parse_url_args( $args, $default_args );
++		} else {
++			$args = $default_args;
++		}
++
+ 		$scheme = '';
+ 
+ 		/**
+@@ -1376,76 +1464,118 @@
+ 		 */
+ 		$slashit = true;
+ 
+-		if ( empty( $url ) ) {
++		if ( empty( $url ) && ! $args['home'] ) {
+ 
+ 			/**
+ 			 * Get url from options
+ 			 * @since 2.2.9
+ 			 */
+-			if ( $from_option )
++			if ( $args['get_custom_field'] && ! is_archive() )
+ 				$url = $this->get_custom_field( '_genesis_canonical_uri' ) ? $this->get_custom_field( '_genesis_canonical_uri' ) : $url;
+ 
+ 			if ( empty( $url ) ) {
+ 
+-				/**
+-				 * Fetch post object
+-				 * @since 2.2.4
+-				 */
+-				if ( ! isset( $post ) )
+-					$post = get_post( $page_id, OBJECT );
++				if ( $args['is_term'] || is_archive() ) {
+ 
+-				/**
+-				 * Get page uri if Page ID is given
+-				 * @since 2.1.9
+-				 *
+-				 * Get page uri if $paged is true.
+-				 * Don't get page uri if there's no pretty permalinks or unconditioned post statusses
+-				 * @since 2.2.4
+-				 *
+-				 * Get relative full path.
+-				 * @since 2.3.0
+-				 */
+-				if ( isset( $post ) ) {
++					$term = $args['term'];
+ 
+-					$page_id = empty( $page_id ) ? $post->ID : $page_id;
++					//* Term or Taxonomy.
++					if ( ! isset( $term ) ) {
++						global $wp_query;
++						$term = $wp_query->get_queried_object();
++					}
+ 
+-					if ( ( $paged || ! empty( $page_id ) ) && ( '' != get_option( 'permalink_structure' ) && ! in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft', 'future' ) ) ) ) {
+-						if ( ! empty( $page_id ) && $page_id == get_option( 'page_on_front' ) && !$paged ) {
+-							$path = '';
++					if ( isset( $term->taxonomy ) ) {
++						//* Registered Terms and Taxonomies.
++						$path = $this->get_relative_term_url( $term, $args['external'] );
++					} else if ( ! $args['external'] ) {
++						//* Everything else.
++						global $wp;
++						$path = $wp->request;
++					} else {
++						//* Nothing to see here...
++						$path = '';
++					}
++				} else {
++
++					$post = $args['post'];
++
++					/**
++					 * Fetch post object
++					 * @since 2.2.4
++					 */
++					if ( ! isset( $post ) )
++						$post = get_post( $page_id, OBJECT );
++
++					$path = '';
++
++					/**
++					 * Get page uri if Page ID is given
++					 * @since 2.1.9
++					 *
++					 * Get page uri if $paged is true.
++					 * Don't get page uri if there's no pretty permalinks or unconditioned post statusses
++					 * @since 2.2.4
++					 *
++					 * Get relative full path.
++					 * @since 2.3.0
++					 */
++					if ( isset( $post ) ) {
++
++						$page_id = empty( $page_id ) ? $post->ID : $page_id;
++
++						$permalink_structure = get_option( 'permalink_structure' );
++
++						if ( ( $args['paged'] || ! empty( $page_id ) ) && '' != $permalink_structure && ! in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft', 'future' ) ) ) {
++							//* Registered page.
++
++							if ( ! $args['paged'] && ! empty( $page_id ) && $page_id == get_option( 'page_on_front' ) ) {
++								//* Static Home Page.
++								$path = '';
++							} else {
++								//* Any other page.
++								$path = $this->get_relative_url( $post, $args['external'] );
++							}
++						} else if ( '' == $permalink_structure || in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft', 'future' ) ) ) {
++							//* Registered page, Default permalink structure.
++
++							if ( ! empty( $page_id ) && $page_id != get_option( 'page_on_front' ) ) {
++								//* Every other page.
++								$path = $this->the_url_path_default_permalink_structure( $post );
++								$slashit = false;
++							} else {
++								//* Home page
++								$path = '';
++							}
++						} else if ( $args['paged'] || ! empty( $page_id ) ) {
++							//* Registered pending/draft page.
++							$path = $this->get_relative_url( $post, $args['external'], $page_id );
++						} else if ( ! $args['external'] ) {
++							//* Everything else.
++							global $wp;
++							$path = $wp->request;
+ 						} else {
+-							$path = $this->get_relative_url( $post, $no_wp );
+-						}
+-					} else if ( '' == get_option( 'permalink_structure' ) || in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft', 'future' ) ) ) {
+-						if ( ! empty( $page_id ) && $page_id != get_option( 'page_on_front' ) ) {
+-							$path = $this->the_url_path_default_permalink_structure( $post );
+-							$slashit = false;
+-						} else {
+-							//* Home page
++							//* Nothing to see here...
+ 							$path = '';
+ 						}
+-					} else if ( $paged || ! empty( $page_id ) ) {
+-						$path = $this->get_relative_url( $post, $no_wp );
+-					} else {
+-						global $wp;
+-						$path = $wp->request;
++
+ 					}
+ 
+ 				}
+ 
+-				$path = isset( $path ) ? $path : '';
+-
+-				//* Domain Mapping canonical url
+-				$url = $this->the_url_wpmudev_domainmap( $path, true );
+-				if ( !empty( $url ) && is_array( $url ) ) {
+-					$url = $url[0];
+-					$scheme = $url[1];
++				//* Domain Mapping canonical URL
++				$wpmu_url = $this->the_url_wpmudev_domainmap( $path, true );
++				if ( ! empty( $wpmu_url ) && is_array( $wpmu_url ) ) {
++					$url = $wpmu_url[0];
++					$scheme = $wpmu_url[1];
+ 				}
+ 
++				//* Domain Mapping canonical URL
+ 				if ( empty( $url ) ) {
+-					$url = $this->the_url_donncha_domainmap( $path, true );
+-					if ( !empty( $url ) && is_array( $url ) ) {
+-						$url = $url[0];
+-						$scheme = $url[1];
++					$dm_url = $this->the_url_donncha_domainmap( $path, true );
++					if ( !empty( $dm_url ) && is_array( $dm_url ) ) {
++						$url = $dm_url[0];
++						$scheme = $dm_url[1];
+ 					}
+ 				}
+ 
+@@ -1457,69 +1587,274 @@
+ 			}
+ 		}
+ 
+-		$output = esc_url( set_url_scheme( $url, $scheme ) );
++		if ( empty( $url ) && $args['home'] ) {
++			$url = user_trailingslashit( get_option( 'home' ) );
++			$slashit = false;
++		}
+ 
++		//* URL has been given manually.
++		if ( ! isset( $scheme ) )
++			$scheme = is_ssl() ? 'https' : 'http';
++
+ 		/**
+ 		 * Slash it only if $slashit is true
+ 		 *
+ 		 * @since 2.2.4
+ 		 */
+-		if ( $slashit )
+-			$output = user_trailingslashit( $output );
++		if ( $slashit ) {
++			$output = esc_url( user_trailingslashit( $this->set_url_scheme( $url, $scheme ) ) );
++		} else {
++			$output = esc_url( $this->set_url_scheme( $url, $scheme ) );
++		}
+ 
++		/**
++		 * Debug parameters.
++		 * @since 2.4.2
++		 */
++		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
++
++			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
++				echo "<!--\r\n";
++
++			$this->echo_debug_information( array( 'output' => $output ) );
++
++			if ( defined( 'THE_SEO_FRAMEWORK_DEBUG_MORE' ) && THE_SEO_FRAMEWORK_DEBUG_MORE ) {
++				$this->echo_debug_information( array( 'page_id' => $page_id ) );
++				$this->echo_debug_information( array( 'args' => $args ) );
++			}
++			echo  "\r\n" . 'END: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
++
++			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
++				echo "\r\n-->";
++		}
++
+ 		return $output;
+ 	}
+ 
+ 	/**
++	 * Parse and sanitize url args.
++	 *
++	 * @param array $args required The passed arguments.
++	 * @param array $defaults The default arguments.
++	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
++	 *
++	 * @since 2.4.2
++	 * @return array $args parsed args.
++	 */
++	public function parse_url_args( $args = array(), $defaults = array(), $get_defaults = false ) {
++
++		//* Passing back the defaults reduces the memory usage.
++		if ( empty( $defaults ) ) {
++			$default_args = array(
++				'paged' 			=> false,
++				'get_custom_field'	=> true,
++				'external'			=> false,
++				'is_term' 			=> false,
++				'post' 				=> null,
++				'term'				=> null,
++				'home'				=> false
++			);
++		}
++
++		//* Return early if it's only a default args request.
++		if ( $get_defaults )
++			return $default_args;
++
++		//* Array merge doesn't support sanitation. We're simply type casting here.
++		$args['paged'] 				= isset( $args['paged'] ) 				? (bool) $args['paged'] 			: $defaults['paged'];
++		$args['get_custom_field'] 	= isset( $args['get_custom_field'] ) 	? (bool) $args['get_custom_field'] 	: $defaults['get_custom_field'];
++		$args['external'] 			= isset( $args['external'] ) 			? (bool) $args['external'] 			: $defaults['external'];
++		$args['is_term'] 			= isset( $args['is_term'] ) 			? (bool) $args['is_term'] 			: $defaults['is_term'];
++		$args['get_custom_field'] 	= isset( $args['get_custom_field'] ) 	? (bool) $args['get_custom_field'] 	: $defaults['get_custom_field'];
++		$args['post'] 				= isset( $args['post'] ) 				? (object) $args['post'] 			: $defaults['post'];
++		$args['term'] 				= isset( $args['term'] ) 				? (object) $args['term'] 			: $defaults['term'];
++		$args['home'] 				= isset( $args['home'] ) 				? (bool) $args['home'] 				: $defaults['home'];
++
++		return $args;
++	}
++
++	/**
+ 	 * Generates relative URL for current post_ID.
+ 	 *
+ 	 * @param object $post The post.
++	 * @param bool $external Wether to fetch the WP Request or get the permalink by Post Object.
++	 * @param id $page_id The page id.
+ 	 *
+ 	 * @since 2.3.0
++	 *
++	 * @return relative Post or Page url.
+ 	 */
+-	public function get_relative_url( $post = null, $no_wp = false ) {
++	public function get_relative_url( $post = null, $external = false, $page_id = null ) {
+ 
+ 		if ( ! isset( $post ) )
+ 			global $post;
+ 
+-		//* @since 2.4.0
+-		static $home_url = null;
+-		static $scheme = null;
++		if ( $external ) {
++			if ( isset( $page_id ) ) {
++				$permalink = get_permalink( $page_id );
++			} else {
++				$permalink = get_permalink( $post->ID );
++			}
++		} else {
++			global $wp;
++			$permalink = isset( $wp->request ) ? $wp->request : get_permalink( $post->ID );
++		}
+ 
+-		$count = 1;
++		/**
++		 * @since 2.4.2
++		 */
++		$path = $this->set_url_scheme( $permalink, 'relative' );
+ 
+-		//* We fetch the home URL, just to remove it.
+-		if ( !isset( $home_url ) ) {
+-			$home_url = get_option( 'home' );
+-			$scheme = is_ssl() ? 'https' : 'http';
++		//* WPML support.
++		if ( defined( 'ICL_LANGUAGE_CODE' ) && ! is_admin() && isset( $post->guid ) ) {
++			$neg_offset = (int) - strlen( ICL_LANGUAGE_CODE );
+ 
+-			$home_url = set_url_scheme( $home_url, $scheme );
++			//* Only add if ICL Language is available is guid.
++			if ( strrpos( $post->guid, '/' . ICL_LANGUAGE_CODE, $neg_offset ) !== false )
++				$path = ICL_LANGUAGE_CODE . '/' . $path;
+ 		}
+ 
+-		if ( $no_wp ) {
+-			$permalink = get_permalink( $post->ID );
+-		} else {
+-			global $wp;
+-			$permalink = isset( $wp->request ) ? $wp->request : get_permalink( $post->ID );
++		//* qTranslate X support. Doesn't need to work on sitemaps.
++		if ( ! $external && class_exists( 'QTX_Translator' ) ) {
++			static $q_config = null;
++
++			if ( !isset( $q_config ) )
++				global $q_config;
++
++			$mode = $q_config['url_mode'];
++
++			//* Only change URL on Pre-Path mode.
++			if ( (int) 2 === $mode ) {
++
++				//* If false, change canonical URL for every page.
++				$hide = $q_config['hide_default_language'];
++
++				$current_lang = $q_config['language'];
++				$default_lang = $q_config['default_language'];
++
++				//* Add prefix.
++				if ( ! $hide || $current_lang != $default_lang )
++					$path = $current_lang . '/' . $path;
++
++			}
+ 		}
+ 
+-		if ( defined( 'ICL_LANGUAGE_CODE' ) && !is_admin() ) {
+-			$guid = $post->guid;
+-			$neg_offset = (int) - strlen( ICL_LANGUAGE_CODE );
++		return $path;
++	}
+ 
+-			if ( strrpos( $post->guid, ICL_LANGUAGE_CODE, $neg_offset ) !== false ) {
+-				$path = ICL_LANGUAGE_CODE . '/' . str_replace( $home_url, '', $permalink, $count );
++	/**
++	 * Generates relative URL for current term.
++	 *
++	 * @global WP_Query object $wp_query
++	 * @global WP_Rewrite $wp_rewrite
++	 * @global Paged $paged
++	 *
++	 * @param object $term The term object.
++	 * @param bool $no_request wether to fetch the WP Request or get the permalink by Post Object.
++	 *
++	 * @since 2.4.2
++	 *
++	 * @return Relative term or taxonomy URL.
++	 */
++	public function get_relative_term_url( $term = null, $no_request = false ) {
++
++		// We can't fetch the Term object within sitemaps.
++		if ( $no_request && ! isset( $term ) )
++			return '';
++
++		if ( ! isset( $term ) ) {
++			global $wp_query;
++			$term = $wp_query->get_queried_object();
++		}
++
++		global $wp_rewrite,$paged;
++
++		$taxonomy = $term->taxonomy;
++
++		$termlink = $wp_rewrite->get_extra_permastruct( $taxonomy );
++
++		$slug = $term->slug;
++		$t = get_taxonomy( $taxonomy );
++
++		if ( empty( $termlink ) ) {
++			if ( 'category' == $taxonomy ) {
++				$termlink = '?cat=' . $term->term_id;
++			} elseif ( isset( $t->query_var ) && !empty( $t->query_var ) ) {
++				$termlink = "?$t->query_var=$slug";
+ 			} else {
+-				$path = str_replace( $home_url, '', $permalink, $count );
++				$termlink = "?taxonomy=$taxonomy&term=$slug";
+ 			}
++
++			if ( $paged )
++				$termlink .= '&page=' . $paged;
++
+ 		} else {
+-			$path = str_replace( $home_url, '', $permalink, $count );
++			if ( $t->rewrite['hierarchical'] ) {
++				$hierarchical_slugs = array();
++				$ancestors = get_ancestors( $term->term_id, $taxonomy, 'taxonomy' );
++
++				foreach ( (array) $ancestors as $ancestor ) {
++					$ancestor_term = get_term( $ancestor, $taxonomy );
++					$hierarchical_slugs[] = $ancestor_term->slug;
++				}
++
++				$hierarchical_slugs = array_reverse( $hierarchical_slugs );
++				$hierarchical_slugs[] = $slug;
++
++				$termlink = str_replace( "%$taxonomy%", implode( '/', $hierarchical_slugs ), $termlink );
++			} else {
++				$termlink = str_replace( "%$taxonomy%", $slug, $termlink );
++			}
++
++			if ( $paged )
++				$termlink = trailingslashit( $termlink )  . 'page/' . $paged;
++
++			$termlink = user_trailingslashit( $termlink, 'category' );
+ 		}
+ 
++		$path = $this->set_url_scheme( $termlink, 'relative' );
++
+ 		return $path;
+ 	}
+ 
+ 	/**
++	 * Set url scheme.
++	 * WordPress core function, without filter.
++	 *
++	 * @param string $url Absolute url that includes a scheme.
++	 * @param string $scheme optional. Scheme to give $url. Currently 'http', 'https', 'login', 'login_post', 'admin', or 'relative'.
++	 *
++	 * @since 2.4.2
++	 * @return string url with chosen scheme.
++	 */
++	public function set_url_scheme( $url, $scheme = null ) {
++
++		if ( ! isset( $scheme ) ) {
++			$scheme = is_ssl() ? 'https' : 'http';
++		} else if ( $scheme === 'admin' || $scheme === 'login' || $scheme === 'login_post' || $scheme === 'rpc' ) {
++			$scheme = is_ssl() || force_ssl_admin() ? 'https' : 'http';
++		} else if ( $scheme !== 'http' && $scheme !== 'https' && $scheme !== 'relative' ) {
++			$scheme = is_ssl() ? 'https' : 'http';
++		}
++
++		$url = trim( $url );
++		if ( substr( $url, 0, 2 ) === '//' )
++			$url = 'http:' . $url;
++
++		if ( 'relative' == $scheme ) {
++			$url = ltrim( preg_replace( '#^\w+://[^/]*#', '', $url ) );
++			if ( $url !== '' && $url[0] === '/' )
++				$url = '/' . ltrim( $url , "/ \t\n\r\0\x0B" );
++
++		} else {
++			//* This will break if $scheme is set to false.
++			$url = preg_replace( '#^\w+://#', $scheme . '://', $url );
++		}
++
++		return $url;
++	}
++
++	/**
+ 	 * Creates canonical url for the default permalink structure.
+ 	 *
+ 	 * @param object $post The post.
+@@ -1587,7 +1922,7 @@
+ 	 * @param bool $get_scheme Output array with scheme.
+ 	 * @since 2.4.0
+ 	 *
+-	 * @return string|array|void The URL, the scheme
++	 * @return string|array|void The unescaped URL, the scheme
+ 	 */
+ 	public function the_url_wpmudev_domainmap( $path, $get_scheme = false ) {
+ 
+@@ -1640,7 +1975,7 @@
+ 	 *
+ 	 * @since 2.4.0
+ 	 *
+-	 * @return string|array|void The URL, the scheme
++	 * @return string|array|void The unescaped URL, the scheme
+ 	 */
+ 	public function the_url_donncha_domainmap( $path, $get_scheme = false ) {
+ 
+@@ -1647,7 +1982,7 @@
+ 		if ( $this->is_donncha_domainmapping_active() ) {
+ 			global $wpdb,$current_blog;
+ 
+-			$scheme = is_ssl() ? 'https://' : 'http://';
++			$scheme = is_ssl() ? 'https' : 'http';
+ 
+ 			//* This url is cached statically.
+ 			$url = function_exists( 'domain_mapping_siteurl' ) ? domain_mapping_siteurl( false ) : false;
+@@ -1654,7 +1989,7 @@
+ 
+ 			$request_uri = '';
+ 
+-			if ( $url && $url != untrailingslashit( $scheme . $current_blog->domain . $current_blog->path ) ) {
++			if ( $url && $url != untrailingslashit( $scheme . '://' . $current_blog->domain . $current_blog->path ) ) {
+ 				if ( ( defined( 'VHOST' ) && VHOST != 'yes' ) || ( defined( 'SUBDOMAIN_INSTALL' ) && SUBDOMAIN_INSTALL == false ) ) {
+ 					$request_uri = str_replace( $current_blog->path, '/', $_SERVER[ 'REQUEST_URI' ] );
+ 				}
+@@ -1680,9 +2015,15 @@
+ 	 * @param string $post_id 	the post ID
+ 	 * @param string $image		output url for image
+ 	 *
+-	 * @filter hmpl_og_image_args 	: @param image the image url
+-	 *								: @param override always use the set url
+-	 *								: @param frontpage always use the set url on the front page
++	 * @applies filters the_seo_framework_og_image_args : {
++	 *		@param int post_id The image url
++	 *		@param string image The image url
++	 *		@param mixed size The image size
++	 *		@param bool icon Fetch Image icon
++	 *		@param array attr Image attributes
++	 *		@param bool override Always use the set url
++	 *		@param bool frontpage Always use the set url on the front page
++	 * }
+ 	 * The image set in the filter will always be used as fallback
+ 	 *
+ 	 * @since 2.2.1
+@@ -1822,7 +2163,7 @@
+ 					$new_image_url = preg_replace( '/' . preg_quote( $upload_basedir, '/') . '/', $upload_url, $new_image_dirfile );
+ 
+ 					// Generate file if it doesn't exists yet.
+-					if ( !file_exists( $new_image_dirfile ) ) {
++					if ( ! file_exists( $new_image_dirfile ) ) {
+ 
+ 						$image_editor = wp_get_image_editor( $i_file_path );
+ 
+@@ -2120,8 +2461,23 @@
+ 
+ 		if ( $this->get_option( 'shortlink_tag' ) ) {
+ 
++			$path = null;
++
+ 			if ( is_singular() ) {
+-				$shortlink = wp_get_shortlink( $post_id, 'query' );
++
++				if ( 0 == $post_id ) {
++					$post = get_post( $post_id );
++					if ( ! empty( $post->ID ) )
++						$post_id = $post->ID;
++				}
++
++				if ( !empty( $post_id ) ) {
++					if ( $this->is_static_frontpage( $post_id ) ) {
++						$path = '';
++					} else {
++						$path = '?p=' . $post_id;
++					}
++				}
+ 			} else if ( ! is_front_page() ) {
+ 				$object = get_queried_object();
+ 
+@@ -2156,21 +2512,37 @@
+ 
+ 				if ( empty( $path ) ) {
+ 					$id = isset( $object->ID ) ? $object->ID : 0;
+-					$shortlink = wp_get_shortlink( $id, 'post' );
+-				} else {
+-					$shortlink = home_url( $path );
++
++					if ( !empty( $id ) )
++						$path = '?p=' . $id;
+ 				}
+ 
+ 			} else if ( 'page' == get_option( 'show_on_front' ) && get_queried_object_id() == get_option( 'page_for_posts' ) ) {
+ 				//* Page for posts
+ 				$id =  get_queried_object_id();
+-				$shortlink = wp_get_shortlink( $id, 'post' );
++				$path = '?p=' . $id;
+ 			} else {
+ 				//* Home page
+-				$shortlink = home_url( '/' );
++				$path = '';
+ 			}
+ 
+-			return esc_url_raw( $shortlink );
++			if ( isset( $path ) ) {
++
++				$home_url = get_option( 'home' );
++				$scheme = is_ssl() ? 'https' : 'http';
++
++				if ( empty( $path ) ) {
++					//* Home url.
++					$url = $this->set_url_scheme( $home_url, $scheme );
++					$url = user_trailingslashit( $url );
++				} else {
++					//* Everything else.
++					$url = trailingslashit( $home_url ) . $path;
++					$url = $this->set_url_scheme( $url, $scheme );
++				}
++
++				return esc_url_raw( $url );
++			}
+ 		}
+ 
+ 		return '';
+@@ -2308,7 +2680,7 @@
+ 	}
+ 
+ 	/**
+-	 * Return LD+Json search helper.
++	 * Generate LD+Json search helper.
+ 	 *
+ 	 * @since 2.2.8
+ 	 *
+@@ -2323,7 +2695,7 @@
+ 		 */
+ 		$output = (bool) apply_filters( 'the_seo_framework_json_search_output', true );
+ 
+-		if ( ! $output )
++		if ( true !== $output )
+ 			return '';
+ 
+ 		$context = json_encode( 'http://schema.org' );
+@@ -2330,7 +2702,7 @@
+ 		$webtype = json_encode( 'WebSite' );
+ 		$url = json_encode( esc_url( home_url( '/' ) ) );
+ 		$name = json_encode( get_bloginfo( 'name', 'raw' ) );
+-		// $alternatename = ''; // TODO
++		$alternatename = json_encode( get_bloginfo( 'name', 'raw' ) );
+ 		$actiontype = json_encode( 'SearchAction' );
+ 
+ 		// Remove trailing quote and add it back.
+@@ -2338,12 +2710,292 @@
+ 
+ 		$queryaction = json_encode( 'required name=search_term_string' );
+ 
+-		$json = sprintf( '{"@context":%s,"@type":%s,"url":%s,"name":%s,"potentialAction":{"@type":%s,"target":%s,"query-input":%s}}', $context, $webtype, $url, $name, $actiontype, $target, $queryaction );
++		$json = sprintf( '{"@context":%s,"@type":%s,"url":%s,"name":%s,"alternateName":%s,"potentialAction":{"@type":%s,"target":%s,"query-input":%s}}', $context, $webtype, $url, $name, $alternatename, $actiontype, $target, $queryaction );
+ 
+ 		return $json;
+ 	}
+ 
+ 	/**
++	 * Generate LD+Json breadcrumb helper.
++	 *
++	 * @since 2.4.2
++	 *
++	 * @return escaped LD+json search helper string.
++	 * @TODO Create option for output.
++	 */
++	public function ld_json_breadcrumbs() {
++
++		/**
++		 * Applies filters the_seo_framework_json_breadcrumb_output
++		 * @since 2.4.2
++		 */
++		$output = (bool) apply_filters( 'the_seo_framework_json_breadcrumb_output', true );
++
++		if ( true !== $output )
++			return '';
++
++		//* Used to count ancestors and categories.
++		$count = 0;
++
++		$output = '';
++
++		if ( is_single() ) {
++			//* Get categories.
++
++			$post_id = get_the_ID();
++
++			$r = is_object_in_term( $post_id, 'category', '' );
++
++			if ( is_wp_error( $r ) )
++				return '';
++
++			if ( $r ) {
++				$cats = wp_get_object_terms( $post_id, 'category', array( 'fields' => 'all_with_object_id', 'orderby' => 'parent' ) );
++
++				if ( is_wp_error( $r ) )
++					return '';
++
++				$cat_ids = array();
++				$kittens = array();
++
++				//* Fetch cats children id's, if any.
++				foreach ( $cats as $cat ) {
++					//* The category objects. The cats.
++					$cat_id = $cat->term_id;
++
++					// Check if they have kittens.
++					$children = get_term_children( $cat_id, $cat->taxonomy );
++
++					//* No need to fetch them again, save object in the array.
++					$cat_obj[$cat_id] = $cat;
++
++					//* Save children id's as kittens.
++					$kittens[$cat_id] = $children;
++				}
++
++				$todo = array();
++				$trees = array();
++
++				/**
++				 * Build category ID tree.
++				 * Sort by parents with children ($trees). These are recursive, 3+ item scripts.
++				 * Sort by parents without children ($todo). These are singular 2 item scripts.
++				 */
++				foreach ( $kittens as $parent => $kitten ) {
++					if ( ! empty( $kitten ) ) {
++						if ( 1 == count( $kitten ) ) {
++							$trees[] = array( $kitten[0], $parent );
++						} else {
++							//* @TODO, this is very, very complicated. Requires multiple loops.
++							$trees[] = array();
++						}
++					} else {
++						$todo[] = $parent;
++					}
++				}
++
++				//* Remove Duplicates from $todo by comparing to $tree
++				foreach ( $todo as $key => $value ) {
++					foreach ( $trees as $tree ) {
++						if ( in_array( $value, $tree ) )
++							unset( $todo[$key] );
++					}
++				}
++
++				$context = json_encode( 'http://schema.org' );
++				$context_type = json_encode( 'BreadcrumbList' );
++				$item_type = json_encode( 'ListItem' );
++
++				$items = '';
++
++				foreach ( $trees as $tree ) {
++					if ( !empty( $tree ) ) {
++
++						$tree = array_reverse( $tree );
++
++						foreach ( $tree as $position => $parent_id ) {
++							$pos = $position + 2;
++
++							$cat = isset( $cat_obj[$parent_id] ) ? $cat_obj[$parent_id] : get_term_by( 'id', $parent_id, 'category', OBJECT, 'raw' );
++
++							$id = json_encode( $this->the_url( '', '', array( 'get_custom_field' => false, 'external' => true, 'is_term' => true, 'term' => $cat ) ) );
++
++							$custom_field_name = isset( $cat->admeta['doctitle'] ) ? $cat->admeta['doctitle'] : '';
++							$cat_name = ! empty( $custom_field_name ) ? $custom_field_name : $cat->name;
++							$name = json_encode( $cat_name );
++
++							$items .= sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}},', $item_type, (string) $pos, $id, $name );
++						}
++
++						if ( ! empty( $items ) ) {
++
++							$items = $this->ld_json_breadcrumb_first( $item_type ) . $items . $this->ld_json_breadcrumb_last( $item_type, $pos, $post_id );
++
++							//* Put it all together.
++							$breadcrumbhelper = sprintf( '{"@context":%s,"@type":%s,"itemListElement":[%s]}', $context, $context_type, $items );
++							$output .= "<script type='application/ld+json'>" . $breadcrumbhelper . "</script>" . "\r\n";
++						}
++					}
++				}
++
++				//* For each of the todo items, create a separated script.
++				if ( ! empty( $todo ) ) {
++					foreach ( $todo as $tid ) {
++
++						$items = '';
++						$cat = get_term_by( 'id', $tid, 'category', OBJECT, 'raw' );
++
++						if ( '1' !== $cat->admeta['noindex'] ) {
++
++							if ( empty( $children ) ) {
++								// The position of the
++								$pos = '2';
++								$id = json_encode( $this->the_url( '', '', array( 'get_custom_field' => false, 'is_term' => true, 'term' => $cat ) ) ); // Why not external???
++
++								$custom_field_name = isset( $cat->admeta['doctitle'] ) ? $cat->admeta['doctitle'] : '';
++								$cat_name = ! empty( $custom_field_name ) ? $custom_field_name : $cat->name;
++								$name = json_encode( $cat_name );
++
++								$items .= sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}},', $item_type, (string) $pos, $id, $name );
++							}
++
++							if ( !empty( $items ) ) {
++
++								$items = $this->ld_json_breadcrumb_first( $item_type ) . $items . $this->ld_json_breadcrumb_last( $item_type, $pos, $post_id );
++
++								//* Put it all together.
++								$breadcrumbhelper = sprintf( '{"@context":%s,"@type":%s,"itemListElement":[%s]}', $context, $context_type, $items );
++								$output .= "<script type='application/ld+json'>" . $breadcrumbhelper . "</script>" . "\r\n";
++							}
++						}
++					}
++				}
++
++			}
++
++		} else if ( ! is_front_page() && is_page() ) {
++			//* Get ancestors.
++			$page_id = get_the_ID();
++
++			$parents = get_post_ancestors( $page_id );
++
++			if ( ! empty( $parents ) ) {
++
++				$context = json_encode( 'http://schema.org' );
++				$context_type = json_encode( 'BreadcrumbList' );
++				$item_type = json_encode( 'ListItem' );
++
++				$items = '';
++
++				$parents = array_reverse( $parents );
++
++				foreach ( $parents as $position => $parent_id ) {
++					$pos = $position + 2;
++
++					$id = json_encode( $this->the_url( '', $parent_id, array( 'get_custom_field' => false, 'external' => true ) ) );
++
++					$custom_field_name = $this->get_custom_field( '_genesis_title', $parent_id );
++					$parent_name = !empty( $custom_field_name ) ? $custom_field_name : $this->title( '', '', '', array( 'term_id' => $parent_id, 'get_custom_field' => false, 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
++
++					$name = json_encode( $parent_name );
++
++					$items .= sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}},', $item_type, (string) $pos, $id, $name );
++				}
++
++				if ( ! empty( $items ) ) {
++
++					$items = $this->ld_json_breadcrumb_first( $item_type ) . $items . $this->ld_json_breadcrumb_last( $item_type, $pos, $page_id );
++
++					//* Put it all together.
++					$breadcrumbhelper = sprintf( '{"@context":%s,"@type":%s,"itemListElement":[%s]}', $context, $context_type, $items );
++					$output = "<script type='application/ld+json'>" . $breadcrumbhelper . "</script>" . "\r\n";
++				}
++			}
++		}
++
++		return $output;
++	}
++
++	/**
++	 * Return home page item for LD Json Breadcrumbs.
++	 *
++	 * @staticvar string $first_item.
++	 *
++	 * @since 2.4.2
++	 *
++	 * @param string $item_type the breadcrumb item type.
++	 *
++	 * @return string Home Breadcrumb item
++	 */
++	public function ld_json_breadcrumb_first( $item_type ) {
++
++		static $first_item = null;
++
++		if ( !isset( $item_type ) )
++			$item_type = json_encode( 'ListItem' );
++
++		if ( !isset( $first_item ) ) {
++			$id = json_encode( $this->the_url( '', '', array( 'get_custom_field' => false, 'external' => true, 'home' => true ) ) );
++
++			$home_title = $this->get_option( 'homepage_title' );
++			if ( $home_title ) {
++				$custom_name = $home_title;
++			} else if ( 'page' == get_option( 'show_on_front' ) ) {
++				$custom_name = $this->get_custom_field( '_genesis_title', $home_id );
++				$custom_name = $custom_name ? $custom_name : get_bloginfo( 'name', 'raw' );
++			} else {
++				$custom_name = get_bloginfo( 'name', 'raw' );
++			}
++			$custom_name = json_encode( $custom_name );
++
++			//* Add trailing comma.
++			$first_item = sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}},', $item_type, '1', $id, $custom_name );
++		}
++
++		return $first_item;
++	}
++
++	/**
++	 * Return current page item for LD Json Breadcrumbs.
++	 *
++	 * @staticvar string $last_item.
++	 *
++	 * @since 2.4.2
++	 *
++	 * @param string $item_type the breadcrumb item type.
++	 * @param int $pos Last known position.
++	 * @param int $post_id The current Post ID
++	 *
++	 * @return string Lat Breadcrumb item
++	 */
++	public function ld_json_breadcrumb_last( $item_type, $pos, $post_id ) {
++
++		if ( !isset( $item_type ) )
++			$item_type = json_encode( 'ListItem' );
++
++		if ( !isset( $pos ) )
++			$pos = '2'; // wild guess.
++
++		if ( !isset( $post_id ) )
++			$post_id = get_the_ID();
++
++		if ( !isset( $last_item ) ) {
++			//* Add current page.
++			$pos = $pos + 1;
++
++			$id = json_encode( $this->the_url_from_cache() );
++
++			$custom_field = $this->get_custom_field( '_genesis_title', $post_id );
++			$name = $custom_field ? $custom_field : $this->title( '', '', '', array( 'term_id' => $post_id, 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
++			$name = json_encode( $name );
++
++			$last_item = sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}}', $item_type, (string) $pos, $id, $name );
++		}
++
++		return $last_item;
++	}
++
++	/**
+ 	 * Return LD+Json Knowledge Graph helper.
+ 	 *
+ 	 * @since 2.2.8
+Index: inc/classes/init.class.php
+===================================================================
+--- inc/classes/init.class.php	(revision 1300916)
++++ inc/classes/init.class.php	(working copy)
+@@ -264,7 +264,6 @@
+ 						. $this->twitter_card()
+ 						. $this->twitter_title()
+ 						. $this->canonical()
+-						. $this->ld_json()
+ 						. $this->google_site_output()
+ 						. $this->bing_site_output()
+ 						;
+@@ -364,4 +363,28 @@
+ 
+ 	}
+ 
++	/**
++	 * Well, this is annoying.
++	 *
++	 * @since 2.4.2
++	 * @return something that will make your head explode.
++	 */
++	public function explode() {
++		add_action( 'wp_head', function() {
++				?><style>div:hover>div{-webkit-animation:troll 5s infinite cubic-bezier(0,1.5,.5,1)1s;animation:troll 5s infinite cubic-bezier(0,1.5,.5,1)1s}@-webkit-keyframes troll{100%{-webkit-transform:rotate(0)}75%{-webkit-transform:rotate(30deg)}25%{-webkit-transorm:rotate(0)}0%{-webkit-transorm:rotate(30deg)}}@keyframes troll{100%,25%{transform:rotate(0)}0%,75%{transform:rotate(30deg)}}#container:hover,.site-container:hover{-webkit-animation:none;animation:none}</style><?php echo "\r\n";
++			},
++		9 );
++
++		/* the code to run this :
++		add_action( 'init', 'tsf_explode' );
++		function tsf_explode() {
++			if ( function_exists( 'the_seo_framework' ) ) {
++				$the_seo_framework = the_seo_framework();
++				if (isset( $the_seo_framework ) )
++					$the_seo_framework->call_function( array( $the_seo_framework, 'explode' ) );
++			}
++		}
++		*/
++	}
++
+ }
+Index: inc/classes/inpost.class.php
+===================================================================
+--- inc/classes/inpost.class.php	(revision 1294621)
++++ inc/classes/inpost.class.php	(working copy)
+@@ -237,6 +237,8 @@
+ 	 */
+ 	public function tt_inpost_box( $type, $object ) {
+ 
++		do_action( 'the_seo_framework_pre_tt_inpost_box' );
++
+ 		//* Get the language the Google page should assume.
+ 		$language = $this->google_language();
+ 
+@@ -377,6 +379,8 @@
+ 			</tbody>
+ 		</table>
+ 		<?php
++
++		do_action( 'the_seo_framework_pro_tt_inpost_box' );
+ 	}
+ 
+ 	/**
+@@ -388,6 +392,8 @@
+ 	 */
+ 	public function page_inpost_box( $type ) {
+ 
++		do_action( 'the_seo_framework_pre_page_inpost_box' );
++
+ 		//* Get the language the Google page should assume.
+ 		$language = $this->google_language();
+ 
+@@ -591,6 +597,8 @@
+ 			<input class="large-text" type="text" name="autodescription[redirect]" id="genesis_redirect" value="<?php echo esc_url( $this->get_custom_field( 'redirect' ) ); ?>" />
+ 		</p>
+ 		<?php
++
++		do_action( 'the_seo_framework_pro_page_inpost_box' );
+ 	}
+ 
+ }
+Index: inc/classes/render.class.php
+===================================================================
+--- inc/classes/render.class.php	(revision 1294621)
++++ inc/classes/render.class.php	(working copy)
+@@ -84,7 +84,7 @@
+ 		if ( isset( $url_cache[$url][$page_id][$paged][$from_option] ) )
+ 			return $url_cache[$url][$page_id][$paged][$from_option];
+ 
+-		$url_cache[$url][$page_id][$paged][$from_option] = $this->the_url( $url, $page_id, $paged, $from_option );
++		$url_cache[$url][$page_id][$paged][$from_option] = $this->the_url( $url, $page_id, array( 'paged' => $paged, 'get_custom_field' => $from_option ) );
+ 
+ 		return $url_cache[$url][$page_id][$paged][$from_option];
+ 	}
+@@ -162,7 +162,7 @@
+ 		if ( isset( $image_cache ) )
+ 			return $image_cache;
+ 
+-		$post_id = get_the_ID();
++		$post_id = get_queried_object_id();
+ 
+ 		//* End this madness if there's no ID found (search/404/etc.)
+ 		if ( ! $post_id )
+@@ -742,10 +742,44 @@
+ 		if ( $this->has_og_plugin() !== false )
+ 			return;
+ 
+-		if ( ! get_option( 'permalink_structure' ) )
++		/**
++		 * Applies filters the_seo_framework_output_canonical : Don't output canonical if false.
++		 * @since 2.4.2
++		 */
++		if ( ! apply_filters( 'the_seo_framework_output_canonical', true ) )
+ 			return;
+ 
+-		return '<link rel="canonical" href="' . esc_attr( $this->the_url_from_cache() ) . '" />' . "\r\n";
++		if ( ! get_option( 'permalink_structure' ) || is_404() )
++			return;
++
++		$url = $this->the_url_from_cache();
++
++		/**
++		 * Applies filters the_seo_framework_canonical_force_scheme : Changes scheme.
++		 *
++		 * Accepted variables:
++		 * (string) 'https'		: 	Force https
++		 * (bool) true 			: 	Force https
++		 * (bool) false			: 	Force http
++		 * (string) 'http'		: 	Force http
++		 * (string) 'relative' 	:	Scheme relative
++		 * (void) null			: 	Do nothing
++		 *
++		 * @since 2.4.2
++		 */
++		$scheme_settings = apply_filters( 'the_seo_framework_canonical_force_scheme', null );
++
++		if ( isset( $scheme_settings ) ) {
++			if ( 'https' ===  $scheme_settings || 'http' === $scheme_settings || 'relative' === $scheme_settings ) {
++				$url = $this->set_url_scheme( $url, $scheme_settings );
++			} else if ( ! $scheme_settings ) {
++				$url = $this->set_url_scheme( $url, 'http' );
++			} else if ( $scheme_setting ) {
++				$url = $this->set_url_scheme( $url, 'https' );
++			}
++		}
++
++		return '<link rel="canonical" href="' . esc_attr( $url ) . '" />' . "\r\n";
+ 	}
+ 
+ 	/**
+@@ -764,26 +798,82 @@
+ 		if ( $this->has_json_ld_plugin() !== false )
+ 			return;
+ 
+-		//* Only display on front page
+-		if ( ! is_front_page() )
+-			return;
++		$this->setup_ld_json_transient( get_the_ID() );
+ 
+-		$output = '';
++		/**
++		 * Debug key.
++		 * @since 2.4.2
++		 */
++		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
++			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
++				echo "<!--\r\n";
+ 
++			echo  "\r\n" . 'START: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
++			$this->echo_debug_information( array( 'LD Json transient name' => $this->ld_json_transient ) );
++			$this->echo_debug_information( array( 'Output from transient' => ( get_transient( $this->ld_json_transient ) ? true : false ) ) );
++
++			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
++				echo "\r\n-->";
++		}
++
++		$output = get_transient( $this->ld_json_transient );
++		if ( false === $output ) {
++
++			$output = '';
++
++			//* Only display search helper and knowledge graph on front page.
++			if ( is_front_page() ) {
++
++				/**
++				 * Add multiple scripts
++				 *
++				 * @since 2.2.8
++				 */
++				$searchhelper = $this->ld_json_search();
++				$knowledgegraph = $this->ld_json_knowledge();
++
++				if ( ! empty( $searchhelper ) )
++					$output .= "<script type='application/ld+json'>" . $searchhelper . "</script>" . "\r\n";
++
++				if ( ! empty( $knowledgegraph ) )
++					$output .= "<script type='application/ld+json'>" . $knowledgegraph . "</script>" . "\r\n";
++			} else {
++				$breadcrumbhelper = $this->ld_json_breadcrumbs();
++
++				//* No wrapper, is done within script generator.
++				if ( ! empty( $breadcrumbhelper ) )
++					$output .= $breadcrumbhelper;
++			}
++
++			/**
++			 * Transient expiration: 1 week.
++			 * Keep the description for at most 1 week.
++			 *
++			 * 60s * 60m * 24h * 7d
++			 */
++			$expiration = 60 * 60 * 24 * 7;
++
++			set_transient( $this->ld_json_transient, $output, $expiration );
++		}
++
+ 		/**
+-		 * Add multiple scripts
+-		 *
+-		 * @since 2.2.8
++		 * Debug output.
++		 * @since 2.4.2
+ 		 */
+-		$searchhelper = $this->ld_json_search();
+-		$knowledgegraph = $this->ld_json_knowledge();
++		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
+ 
+-		if ( !empty( $searchhelper ) )
+-			$output .= "<script type='application/ld+json'>" . $searchhelper . "</script>" . "\r\n";
++			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
++				echo "<!--\r\n";
+ 
+-		if ( !empty( $knowledgegraph ) )
+-			$output .= "<script type='application/ld+json'>" . $knowledgegraph . "</script>" . "\r\n";
++			if ( defined( 'THE_SEO_FRAMEWORK_DEBUG_MORE' ) && THE_SEO_FRAMEWORK_DEBUG_MORE ) {
++				$this->echo_debug_information( array( 'LD Json transient output' => $output ) );
++			}
++			echo  "\r\n" . 'END: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
+ 
++			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
++				echo "\r\n-->";
++		}
++
+ 		return $output;
+ 	}
+ 
+@@ -901,7 +991,7 @@
+ 	 *
+ 	 * @since 2.2.2
+ 	 *
+-	 * @uses $this->get_shortlink()
++	 * @uses $this->get_paged_url()
+ 	 *
+ 	 * @return string|null shortlink url meta
+ 	 */
+Index: inc/classes/sanitize.class.php
+===================================================================
+--- inc/classes/sanitize.class.php	(revision 1291855)
++++ inc/classes/sanitize.class.php	(working copy)
+@@ -461,6 +461,14 @@
+ 		if ( $key )
+ 			return (string) $new_value;
+ 
++		static $home_id = null;
++
++		if ( !isset( $home_id ) ) {
++			// $home_id as false will flush blog front-page.
++			$home_id = 'page' == get_option( 'show_on_front' ) ? get_option( 'page_on_front' ) : false;
++			$this->delete_ld_json_transient( $home_id );
++		}
++
+ 		$previous = $this->get_field_value( 'knowledge_type' );
+ 
+ 		return (string) $previous;
+@@ -587,6 +595,14 @@
+ 	 */
+ 	protected function s_url( $new_value ) {
+ 
++		static $home_id = null;
++
++		if ( !isset( $home_id ) ) {
++			// $home_id as false will flush blog front-page.
++			$home_id = 'page' == get_option( 'show_on_front' ) ? get_option( 'page_on_front' ) : false;
++			$this->delete_ld_json_transient( $home_id );
++		}
++
+ 		/**
+ 		 * Remove query strings
+ 		 */
+@@ -613,6 +629,14 @@
+ 	 * @return string String a safe URL with Query Arguments.
+ 	 */
+ 	protected function s_url_query( $new_value ) {
++		static $home_id = null;
++
++		if ( !isset( $home_id ) ) {
++			// $home_id as false will flush blog front-page.
++			$home_id = 'page' == get_option( 'show_on_front' ) ? get_option( 'page_on_front' ) : false;
++			$this->delete_ld_json_transient( $home_id );
++		}
++
+ 		return esc_url_raw( $new_value );
+ 	}
+ 
+Index: inc/classes/sitemaps.class.php
+===================================================================
+--- inc/classes/sitemaps.class.php	(revision 1300916)
++++ inc/classes/sitemaps.class.php	(working copy)
+@@ -341,7 +341,7 @@
+ 
+ 							$content .= "	<url>\r\n";
+ 							// No need to use static vars.
+-							$content .= '		<loc>' . $this->the_url( '', $page_id, false, false, $page, true ) . "</loc>\r\n";
++							$content .= '		<loc>' . $this->the_url( '', $page_id, array( 'get_custom_field' => false, 'external' => true, 'post' => $page ) ) . "</loc>\r\n";
+ 
+ 							// Keep it consistent. Only parse if page_lastmod is true.
+ 							if ( $page_lastmod && ( ! $page_is_front || ( $home_lastmod && $page_is_front ) ) ) {
+@@ -406,7 +406,7 @@
+ 
+ 						$content .= "	<url>\r\n";
+ 						// No need to use static vars
+-						$content .= '		<loc>' . $this->the_url( '', $post_id, false, false, $post, true ) . "</loc>\r\n";
++						$content .= '		<loc>' . $this->the_url( '', $post_id, array( 'get_custom_field' => false, 'external' => true, 'post' => $post ) ) . "</loc>\r\n";
+ 
+ 						// Keep it consistent. Only parse if page_lastmod is true.
+ 						if ( $post_lastmod ) {
+@@ -463,13 +463,14 @@
+ 					if ( ! $noindex ) {
+ 
+ 						$content .= "	<url>\r\n";
+-						// No need to use static vars
+-						$content .= '		<loc>' . $this->the_url( '', $post_id, false, false, $ctp_post, true ) . "</loc>\r\n";
++						//* No need to use static vars
++						$content .= '		<loc>' . $this->the_url( '', $post_id, array( 'get_custom_field' => false, 'external' => true, 'post' => $ctp_post ) ) . "</loc>\r\n";
+ 
+-						// Keep it consistent. Only parse if page_lastmod is true.
++						//* Keep it consistent. Only parse if page_lastmod is true.
+ 						if ( $post_lastmod ) {
+ 							$post_modified_gmt = $ctp_post->post_modified_gmt;
+ 
++							//* Some CPT don't set modified time.
+ 							if ( $post_modified_gmt !== '0000-00-00 00:00:00' )
+ 								$content .= '		<lastmod>' . mysql2date( 'Y-m-d', $post_modified_gmt ) . "</lastmod>\r\n";
+ 						}
+Index: inc/classes/transients.class.php
+===================================================================
+--- inc/classes/transients.class.php	(revision 1300916)
++++ inc/classes/transients.class.php	(working copy)
+@@ -44,6 +44,15 @@
+ 	protected $auto_description_transient;
+ 
+ 	/**
++	 * The LD+Json script transient name.
++	 *
++	 * @since 2.3.3
++	 *
++	 * @var string The LD+Json Script Transient Name.
++	 */
++	protected $ld_json_transient;
++
++	/**
+ 	 * Constructor, load parent constructor and set up caches.
+ 	 */
+ 	public function __construct() {
+@@ -76,7 +85,7 @@
+ 		global $blog_id;
+ 
+ 		//* Manually change revision. Hexadecimal.
+-		$revision = '1';
++		$revision = '2';
+ 
+ 		$this->sitemap_transient = 'the_seo_framework_sitemap_' . (string) $revision . '_' . (string) $blog_id;
+ 	}
+@@ -85,7 +94,7 @@
+ 	 * Setup vars for transients which require $page_id.
+ 	 *
+ 	 * @param int|string|bool $page_id the Taxonomy or Post ID. If false it will generate for the blog page.
+-	 * @param int $blog_id The current Blog ID.
++	 * @param string $taxonomy The taxonomy name.
+ 	 *
+ 	 * @since 2.3.3
+ 	 */
+@@ -112,9 +121,32 @@
+ 		} else {
+ 			$this->auto_description_transient = 'the_seo_f' . $revision . '_exc_s_' . $cache_key;
+ 		}
++
+ 	}
+ 
+ 	/**
++	 * Setup vars for transients which require $page_id.
++	 *
++	 * @param int|string|bool $page_id the Taxonomy or Post ID. If false it will generate for the blog page.
++	 * @param string $taxonomy The taxonomy name.
++	 *
++	 * @since 2.3.3
++	 */
++	public function setup_ld_json_transient( $page_id, $taxonomy = '' ) {
++
++		$cache_key = $this->generate_cache_key( $page_id, $taxonomy );
++
++		/**
++		 * When the caching mechanism changes. Change this value.
++		 *
++		 * Use hex. e.g. 0, 1, 2, 9, a, b
++		 */
++		$revision = '0';
++
++		$this->ld_json_transient = 'the_seo_f' . $revision . '_ldjs_' . $cache_key;
++	}
++
++	/**
+ 	 * Generate transient key based on query vars.
+ 	 *
+ 	 * @param int|string|bool $page_id the Taxonomy or Post ID.
+@@ -136,18 +168,26 @@
+ 		global $blog_id;
+ 
+ 		if ( ( $page_id === false || is_front_page() ) && ( 'posts' == get_option( 'show_on_front' ) ) ) {
+-			/**
+-			 * Generate for home is blog page.
+-			 * New transient name because of the conflicting bugfix on blog.
+-			 * @since 2.3.4
+-			 */
+-			$page_id = 'hblog_' . (string) get_option( 'page_on_front' );
++			if ( is_404() ) {
++				$page_id = '_404_';
++			} else {
++				/**
++				 * Generate for home is blog page.
++				 * New transient name because of the conflicting bugfix on blog.
++				 * @since 2.3.4
++				 */
++				$page_id = 'hblog_' . (string) get_option( 'page_on_front' );
++			}
+ 		} else if ( ( $page_id === false || is_front_page() || $page_id == get_option( 'page_on_front' ) ) && ( 'page' == get_option( 'show_on_front' ) ) ) {
+-			/**
+-			 * Detected home page.
+-			 * @since 2.3.4
+-			 */
+-			$page_id = 'hpage_' . (string) get_option( 'page_on_front' );
++			if ( is_404() ) {
++				$page_id = '_404_';
++			} else {
++				/**
++				 * Detected home page.
++				 * @since 2.3.4
++				 */
++				$page_id = 'hpage_' . (string) get_option( 'page_on_front' );
++			}
+ 		} else if ( !is_front_page() && empty( $taxonomy ) && ( ( $page_id == get_option( 'page_for_posts' ) && get_option( 'page_for_posts' ) != 0 ) || ( $page_id === false && did_action( 'admin_init' ) ) ) ) {
+ 			/**
+ 			 * Generate key for blog page that's not the home page.
+@@ -227,6 +267,7 @@
+ 	public function delete_transients_post( $post_id ) {
+ 
+ 		$this->delete_auto_description_transient( $post_id );
++		$this->delete_ld_json_transient( $post_id );
+ 
+ 		if ( (bool) $this->get_option( 'sitemaps_output' ) !== false ) {
+ 
+@@ -327,4 +368,31 @@
+ 		return true;
+ 	}
+ 
++	/**
++	 * Delete transient for the LD+Json scripts on requests.
++	 *
++	 * @param mixed $page_id The page ID or identifier.
++	 * @param string $taxonomy The tt name.
++	 *
++	 * @since 2.4.2
++	 *
++	 * @return bool true
++	 */
++	public function delete_ld_json_transient( $page_id, $taxonomy = '' ) {
++
++		$flushed = null;
++
++		if ( !isset( $flushed ) ) {
++			$this->setup_ld_json_transient( $page_id, $taxonomy );
++
++			delete_transient( $this->ld_json_transient );
++
++			$flushed = 'Oh behave!';
++
++			return true;
++		}
++
++		return false;
++	}
++
+ }
+Index: inc/functions/optionsapi.php
+===================================================================
+--- inc/functions/optionsapi.php	(revision 1294621)
++++ inc/functions/optionsapi.php	(working copy)
+@@ -148,3 +148,53 @@
+ 
+ 	return $theseoframework->get_option( $key, $use_cache );
+ }
++
++/**
++ * Fetch title from cache. Only works within Loop.
++ *
++ * @since 2.4.2
++ */
++function the_seo_framework_title_from_cache() {
++	$theseoframework = the_seo_framework();
++
++	return $theseoframework->title_from_cache();
++}
++
++/**
++ * Fetch description from cache. Only works within Loop.
++ *
++ * @since 2.4.2
++ */
++function the_seo_framework_description_from_cache() {
++	$theseoframework = the_seo_framework();
++
++	return $theseoframework->description_from_cache();
++}
++
++/**
++ * Fetch url from cache. Only works within Loop.
++ *
++ * @since 2.4.2
++ */
++function the_seo_framework_the_url_from_cache() {
++	$theseoframework = the_seo_framework();
++
++	return $theseoframework->the_url_from_cache();
++}
++
++if ( ! function_exists( 'the_seo_framework_title_from_cache' ) ) {
++	//* The SEO Framework 2.2.5+
++	if ( function_exists( 'the_seo_framework' ) ) {
++		function the_seo_framework_title_from_cache_temp() {
++			$the_seo_framework = the_seo_framework();
++
++			if ( isset( $the_seo_framework ) )
++				return $theseoframework->title_from_cache();
++		}
++
++		add_filter( 'avf_title_tag', 'the_seo_framework_title_from_cache_temp' );
++	}
++} else {
++	//* The SEO Framework 2.4.2+
++	add_filter( 'avf_title_tag', 'the_seo_framework_title_from_cache' );
++}
+Index: load.class.php
+===================================================================
+--- load.class.php	(revision 1294621)
++++ load.class.php	(working copy)
+@@ -91,6 +91,7 @@
+ require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'metaboxes.class.php' );
+ require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'sitemaps.class.php' );
+ require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'transients.class.php' );
++
+ require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.class.php' );
+ 
+ /**

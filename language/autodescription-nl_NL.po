@@ -1,0 +1,1420 @@
+# Copyright (C) 2015 The SEO Framework
+# This file is distributed under the same license as the The SEO Framework package.
+msgid ""
+msgstr ""
+"Project-Id-Version: The SEO Framework 2.4.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/autodescription\n"
+"POT-Creation-Date: 2015-12-04 20:07+0100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2015-12-04 20:16+0100\n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.5\n"
+"Last-Translator: Sybre Waaijer <info@cyberwire.nl>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: nl_NL\n"
+
+#: inc/classes/admininit.class.php:97
+msgid "No Search"
+msgstr "Geen Zoeken"
+
+#: inc/classes/admininit.class.php:303
+msgid "The changes you made will be lost if you navigate away from this page."
+msgstr "De wijzigingen zullen verloren gaan als je deze pagina nu verlaat."
+
+#: inc/classes/admininit.class.php:304
+msgid "Are you sure you want to reset all SEO settings to their defaults?"
+msgstr ""
+"Weet u zeker dat u de standaardwaarden wilt herstellen van alle SEO "
+"instellingen?"
+
+#: inc/classes/admininit.class.php:490
+msgctxt "e.g. en for English, nl for Dutch, fi for Finish, de for German"
+msgid "en"
+msgstr "nl"
+
+#: inc/classes/adminpages.class.php:120
+msgid "Save Settings"
+msgstr "Instellingen Opslaan"
+
+#: inc/classes/adminpages.class.php:121
+msgid "Reset Settings"
+msgstr "Instellingen Resetten"
+
+#: inc/classes/adminpages.class.php:122
+msgid "Settings saved."
+msgstr "Instellingen opgeslagen."
+
+#: inc/classes/adminpages.class.php:123
+msgid "Settings reset."
+msgstr "Instellingen gereset."
+
+#: inc/classes/adminpages.class.php:124
+msgid "Error saving settings."
+msgstr "Fout bij het opslaan van instellingen."
+
+#: inc/classes/adminpages.class.php:142 inc/classes/siteoptions.class.php:523
+msgid "SEO Settings"
+msgstr "SEO Instellingen"
+
+#: inc/classes/adminpages.class.php:143
+msgid "SEO"
+msgstr "SEO"
+
+#: inc/classes/adminpages.class.php:193
+msgid "Network SEO Settings"
+msgstr "Netwerk SEO Instellingen"
+
+#: inc/classes/adminpages.class.php:194
+msgid "Network SEO"
+msgstr "Netwerk SEO"
+
+#: inc/classes/adminpages.class.php:427
+msgid "Title Settings"
+msgstr "Titel Instellingen"
+
+#: inc/classes/adminpages.class.php:437
+msgid "Description Meta Settings"
+msgstr "Beschrijving Meta Instellingen"
+
+#: inc/classes/adminpages.class.php:447
+msgid "Home Page Settings"
+msgstr "Home Pagina Instellingen"
+
+#: inc/classes/adminpages.class.php:457
+msgid "Social Meta Settings"
+msgstr "Sociale Meta Instellingen"
+
+#: inc/classes/adminpages.class.php:467 inc/classes/metaboxes.class.php:1382
+msgid "Knowledge Graph Settings"
+msgstr "Kennis Grafiek Instellingen"
+
+#: inc/classes/adminpages.class.php:477 inc/classes/inpost.class.php:350
+#: inc/classes/inpost.class.php:549
+msgid "Robots Meta Settings"
+msgstr "Robots Meta Instellingen"
+
+#: inc/classes/adminpages.class.php:487
+msgid "Webmaster Meta Settings"
+msgstr "Webmaster Meta Instellingen"
+
+#: inc/classes/adminpages.class.php:497
+msgid "Sitemaps Settings"
+msgstr "Sitemap Instellingen"
+
+#: inc/classes/doingitright.class.php:227
+msgid "Post"
+msgstr "Bericht"
+
+#: inc/classes/doingitright.class.php:231
+#: inc/classes/doingitright.class.php:264
+#: inc/classes/doingitright.class.php:269 inc/classes/inpost.class.php:211
+#: inc/classes/inpost.class.php:216 inc/classes/metaboxes.class.php:1487
+msgid "Page"
+msgstr "Pagina"
+
+#: inc/classes/doingitright.class.php:315
+msgid "Title:"
+msgstr "Titel:"
+
+#: inc/classes/doingitright.class.php:316
+msgid "Description:"
+msgstr "Beschrijving:"
+
+#: inc/classes/doingitright.class.php:317
+msgid "Index:"
+msgstr "Index:"
+
+#: inc/classes/doingitright.class.php:318
+msgid "Follow:"
+msgstr "Volgen:"
+
+#: inc/classes/doingitright.class.php:319
+msgid "Archive:"
+msgstr "Archief:"
+
+#: inc/classes/doingitright.class.php:320
+msgid "Redirect:"
+msgstr "Omleiding:"
+
+#: inc/classes/doingitright.class.php:469
+msgctxt "Generated"
+msgid "G"
+msgstr "G"
+
+#: inc/classes/doingitright.class.php:471
+msgid "Generated: Automatically generated."
+msgstr "Gegenereerd: Automatisch gegenereerd."
+
+#: inc/classes/doingitright.class.php:480
+msgid "far too short."
+msgstr "Lengte is veel te kort."
+
+#: inc/classes/doingitright.class.php:483
+msgid "too short."
+msgstr "te kort."
+
+#: inc/classes/doingitright.class.php:486
+msgid "too long."
+msgstr "te lang."
+
+#: inc/classes/doingitright.class.php:489
+msgid "far too long."
+msgstr "Lengte is veel te lang."
+
+#: inc/classes/doingitright.class.php:492
+msgid "good."
+msgstr "goed."
+
+#: inc/classes/doingitright.class.php:508
+msgid "%s is used %d times."
+msgstr "%s is %d keer gebruikt."
+
+#: inc/classes/doingitright.class.php:519
+msgid "Length is far too short."
+msgstr "Lengte is veel te kort."
+
+#: inc/classes/doingitright.class.php:522
+msgid "Length is too short."
+msgstr "Lengte is te kort."
+
+#: inc/classes/doingitright.class.php:527
+msgid "Length is too long."
+msgstr "Lengte is te lang."
+
+#: inc/classes/doingitright.class.php:532
+msgid "Length is far too long."
+msgstr "Lengte is veel te lang."
+
+#: inc/classes/doingitright.class.php:535
+msgid "Length is good."
+msgstr "Lengte is goed."
+
+#: inc/classes/doingitright.class.php:541
+msgid "%s is being indexed."
+msgstr "%s wordt geïndexeerd."
+
+#: inc/classes/doingitright.class.php:550
+msgid "But you've disabled indexing for the whole site."
+msgstr "Maar je hebt indexering uitgeschakeld voor de hele site."
+
+#: inc/classes/doingitright.class.php:555
+msgid ""
+"But the blog isn't set to public. This means WordPress disencourages "
+"indexing."
+msgstr ""
+"Maar de blog is niet publiek gesteld. Dit betekent dat WordPress indexering "
+"ontmoedigd."
+
+#: inc/classes/doingitright.class.php:565
+msgid ""
+"But there are no posts in this %s. Therefore indexing has been disabled."
+msgstr ""
+"Maar er zijn geen berichten in deze %s. Hierdoor is indexering uitgeschakeld."
+
+#: inc/classes/doingitright.class.php:570
+msgid "%s links are being followed."
+msgstr "%s links worden gevolgd."
+
+#: inc/classes/doingitright.class.php:579
+msgid "But you've disabled following of links for the whole site."
+msgstr "Maar je hebt links volgen uitgeschakeld voor de hele site."
+
+#: inc/classes/doingitright.class.php:583
+msgid "%s links aren't being followed."
+msgstr "%s links worden niet gevolgd."
+
+#: inc/classes/doingitright.class.php:587
+msgid ""
+"But the blog isn't set to public. This means WordPress allows the links to "
+"be followed regardless."
+msgstr ""
+"Maar de blog is niet publiek gesteld. Dit betekent dat WordPress toch "
+"toestaat om links te laten volgen."
+
+#: inc/classes/doingitright.class.php:592
+msgid "Search Engine are allowed to archive this %s."
+msgstr "Zoekmachines zijn toegestaan om deze %s te archiveren."
+
+#: inc/classes/doingitright.class.php:601
+msgid "But you've disabled archiving for the whole site."
+msgstr "Maar je hebt archivering uitgeschakeld voor de hele site."
+
+#: inc/classes/doingitright.class.php:606
+msgid "Search Engine aren't allowed to archive this %s."
+msgstr "Zoekmachines zijn niet toegestaan om deze %s te archiveren."
+
+#: inc/classes/doingitright.class.php:610
+msgid ""
+"But the blog isn't set to public. This means WordPress allows the blog to be "
+"archived regardless."
+msgstr ""
+"Maar de blog is niet publiek gesteld. Dit betekent dat WordPress toch "
+"toestaat om de blog gearchiveerd te laten worden."
+
+#: inc/classes/doingitright.class.php:614
+msgid "%s isn't being redirected."
+msgstr "%s wordt niet omgeleid."
+
+#: inc/classes/doingitright.class.php:619
+msgctxt "Title"
+msgid "T"
+msgstr "T"
+
+#: inc/classes/doingitright.class.php:626
+msgctxt "Description"
+msgid "D"
+msgstr "B"
+
+#: inc/classes/doingitright.class.php:632
+#: inc/classes/doingitright.class.php:681
+#: inc/classes/doingitright.class.php:709
+msgctxt "no-Index"
+msgid "I"
+msgstr "I"
+
+#: inc/classes/doingitright.class.php:639
+msgctxt "no-Follow"
+msgid "F"
+msgstr "V"
+
+#: inc/classes/doingitright.class.php:647
+msgctxt "no-Archive"
+msgid "A"
+msgstr "A"
+
+#: inc/classes/doingitright.class.php:655
+#: inc/classes/doingitright.class.php:672
+#: inc/classes/doingitright.class.php:695
+msgctxt "Redirect"
+msgid "R"
+msgstr "O"
+
+#: inc/classes/doingitright.class.php:668
+#: inc/classes/doingitright.class.php:691
+msgid "%s is being redirected. This means no SEO values have to be set."
+msgstr ""
+"%s wordt omgeleid. Dit betekent dat geen SEO waarden ingesteld hoeven te "
+"worden."
+
+#: inc/classes/doingitright.class.php:677
+#: inc/classes/doingitright.class.php:705
+msgid "%s is not being indexed. This means no SEO values have to be set."
+msgstr ""
+"%s wordt niet geindexeerd. Dit betekent dat geen SEO waarden ingesteld "
+"hoeven te worden."
+
+#: inc/classes/doingitright.class.php:718
+msgid "Failed to fetch post ID."
+msgstr "Mislukt om post ID op te halen."
+
+#: inc/classes/generate.class.php:300
+msgctxt "High priority translation, used in front-end"
+msgid "Latest posts:"
+msgstr "Laatste berichten:"
+
+#: inc/classes/generate.class.php:331 inc/classes/generate.class.php:654
+#: inc/classes/generate.class.php:1066 inc/classes/generate.class.php:1113
+msgid "Untitled"
+msgstr "Naamloos"
+
+#: inc/classes/generate.class.php:336 inc/classes/metaboxes.class.php:302
+msgctxt "Placement. e.g. Post Title \"on\" Blog Name"
+msgid "on"
+msgstr "op"
+
+#: inc/classes/generate.class.php:844 inc/classes/generate.class.php:1013
+msgid "Protected: %s"
+msgstr "Beschermd: %s"
+
+#: inc/classes/generate.class.php:847 inc/classes/generate.class.php:1016
+msgid "Private: %s"
+msgstr "Priv&#233;: %s"
+
+#: inc/classes/generate.class.php:1057
+msgid "Search results for:"
+msgstr "Zoekresultaten voor:"
+
+#: inc/classes/generate.class.php:1081 inc/classes/generate.class.php:2473
+msgid "Archives"
+msgstr "Archieven"
+
+#: inc/classes/generate.class.php:2435
+msgid "Category: %s"
+msgstr "Categorie: %s"
+
+#: inc/classes/generate.class.php:2437
+msgid "Tag: %s"
+msgstr "Tag: %s"
+
+#: inc/classes/generate.class.php:2439
+msgid "Author: %s"
+msgstr "Auteur"
+
+#: inc/classes/generate.class.php:2441
+msgid "Year: %s"
+msgstr "Jaar: %s"
+
+#: inc/classes/generate.class.php:2441
+msgctxt "yearly archives date format"
+msgid "Y"
+msgstr "Y"
+
+#: inc/classes/generate.class.php:2443
+msgid "Month: %s"
+msgstr "Maand: %s"
+
+#: inc/classes/generate.class.php:2443
+msgctxt "monthly archives date format"
+msgid "F Y"
+msgstr "F Y"
+
+#: inc/classes/generate.class.php:2445
+msgid "Day: %s"
+msgstr "Dag: %s"
+
+#: inc/classes/generate.class.php:2445
+msgctxt "daily archives date format"
+msgid "F j, Y"
+msgstr "j f, Y"
+
+#: inc/classes/generate.class.php:2448
+msgctxt "post format archive title"
+msgid "Asides"
+msgstr "Asides"
+
+#: inc/classes/generate.class.php:2450
+msgctxt "post format archive title"
+msgid "Galleries"
+msgstr "Gallerijen"
+
+#: inc/classes/generate.class.php:2452
+msgctxt "post format archive title"
+msgid "Images"
+msgstr "Plaatjes"
+
+#: inc/classes/generate.class.php:2454
+msgctxt "post format archive title"
+msgid "Videos"
+msgstr "Videos"
+
+#: inc/classes/generate.class.php:2456
+msgctxt "post format archive title"
+msgid "Quotes"
+msgstr "Quotes"
+
+#: inc/classes/generate.class.php:2458
+msgctxt "post format archive title"
+msgid "Links"
+msgstr "Links"
+
+#: inc/classes/generate.class.php:2460
+msgctxt "post format archive title"
+msgid "Statuses"
+msgstr "Statussen"
+
+#: inc/classes/generate.class.php:2462
+msgctxt "post format archive title"
+msgid "Audio"
+msgstr "Audio"
+
+#: inc/classes/generate.class.php:2464
+msgctxt "post format archive title"
+msgid "Chats"
+msgstr "Gesprekken"
+
+#: inc/classes/generate.class.php:2467
+msgid "Archives: %s"
+msgstr "Archieven: %s"
+
+#. translators: 1: Taxonomy singular name, 2: Current taxonomy term
+#: inc/classes/generate.class.php:2471
+msgid "%1$s: %2$s"
+msgstr "%1$s: %2$s"
+
+#: inc/classes/inpost.class.php:123 inc/classes/inpost.class.php:319
+msgid "%s SEO Settings"
+msgstr "%s SEO Instellingen"
+
+#: inc/classes/inpost.class.php:326
+msgid "%s Title"
+msgstr "%s Titel"
+
+#: inc/classes/inpost.class.php:327 inc/classes/inpost.class.php:520
+#: inc/classes/metaboxes.class.php:825
+msgid "Recommended Length: 50 to 55 characters"
+msgstr "Aanbevolen Lengte: 50 tot 55 tekens"
+
+#: inc/classes/inpost.class.php:332 inc/classes/inpost.class.php:345
+#: inc/classes/inpost.class.php:521 inc/classes/inpost.class.php:532
+#: inc/classes/metaboxes.class.php:826 inc/classes/metaboxes.class.php:844
+msgid "Characters Used: %s"
+msgstr "Gebruikte Tekens: %s"
+
+#: inc/classes/inpost.class.php:339
+msgid "%s Meta Description"
+msgstr "%s Meta Beschrijving"
+
+#: inc/classes/inpost.class.php:340 inc/classes/inpost.class.php:531
+#: inc/classes/metaboxes.class.php:843
+msgid "Recommended Length: 145 to 155 characters"
+msgstr "Aanbevolen Lengte: 145 tot 155 tekens"
+
+#: inc/classes/inpost.class.php:353 inc/classes/inpost.class.php:360
+#: inc/classes/inpost.class.php:367 inc/classes/inpost.class.php:552
+#: inc/classes/inpost.class.php:559 inc/classes/inpost.class.php:566
+msgid "Apply %s to this %s"
+msgstr "Pas %s toe op %s Archieven?"
+
+#: inc/classes/inpost.class.php:354 inc/classes/inpost.class.php:553
+#: inc/classes/metaboxes.class.php:867
+msgid "Tell Search Engines not to show this page in their search results"
+msgstr "Vertel Zoekmachines om deze pagina niet te tonen in hun zoekresultaten"
+
+#: inc/classes/inpost.class.php:361 inc/classes/inpost.class.php:560
+#: inc/classes/metaboxes.class.php:876
+msgid "Tell Search Engines not to follow links on this page"
+msgstr "Vertel Zoekmachines om links op deze pagina niet te volgen"
+
+#: inc/classes/inpost.class.php:368 inc/classes/inpost.class.php:567
+#: inc/classes/metaboxes.class.php:885
+msgid "Tell Search Engines not to save a cached copy this page"
+msgstr ""
+"Vertel Zoekmachines om niet een kopie in hun cache op te slaan van deze "
+"pagina"
+
+#: inc/classes/inpost.class.php:519 inc/classes/metaboxes.class.php:824
+msgid "Custom %s Title"
+msgstr "Aangepaste %s Titel"
+
+#: inc/classes/inpost.class.php:530 inc/classes/metaboxes.class.php:842
+msgid "Custom %s Description"
+msgstr "Aangepaste %s Beschrijving"
+
+#: inc/classes/inpost.class.php:541
+msgid "Custom Canonical URL"
+msgstr "Aangepaste Canonieke URL"
+
+#: inc/classes/inpost.class.php:576
+msgid "Local Search Settings"
+msgstr "Lokale Zoek Instellingen"
+
+#: inc/classes/inpost.class.php:579
+msgid "Exclude this %s from local search"
+msgstr "Sluit deze %s uit van lokaal zoeken"
+
+#: inc/classes/inpost.class.php:580
+msgid "This excludes this %s from local on-site search results."
+msgstr "Dit sluit deze %s uit van de lokale on-site zoekresultaten."
+
+#: inc/classes/inpost.class.php:586
+msgid "Custom 301 Redirect URL"
+msgstr "Aangepaste 301 Omleiding URL"
+
+#: inc/classes/metaboxes.class.php:183 inc/classes/metaboxes.class.php:286
+msgid "Recommended"
+msgstr "Aanbevolen"
+
+#: inc/classes/metaboxes.class.php:214
+msgid "Example Post Title"
+msgstr "Voorbeeld Bericht Titel"
+
+#: inc/classes/metaboxes.class.php:227
+msgid "Document Title Separator"
+msgstr "Document Title Afscheider"
+
+#: inc/classes/metaboxes.class.php:234
+msgid ""
+"If the title consists of two parts (original title and optional addition), "
+"then the separator will go in between them."
+msgstr ""
+"Wanneer de titel bestaat uit twee delen (originele titel en eventuele "
+"toevoeging), dan zal de afscheider er tussen in gaan."
+
+#: inc/classes/metaboxes.class.php:240 inc/classes/metaboxes.class.php:780
+msgid "Document Title Additions Location"
+msgstr "Document Titel Toevoegings Locatie"
+
+#: inc/classes/metaboxes.class.php:241 inc/classes/metaboxes.class.php:781
+msgid "Determines which side the added title text will go on."
+msgstr "Bepaalt welke kant de toegevoegde titel tekst op zal gaan."
+
+#: inc/classes/metaboxes.class.php:247 inc/classes/metaboxes.class.php:787
+msgid "Left:"
+msgstr "Links:"
+
+#: inc/classes/metaboxes.class.php:254 inc/classes/metaboxes.class.php:794
+msgid "Right:"
+msgstr "Rechts:"
+
+#: inc/classes/metaboxes.class.php:259
+msgid "The Home Page has a specific option."
+msgstr "De Home Pagina heeft een specifieke optie."
+
+#: inc/classes/metaboxes.class.php:301
+msgid "Example Title"
+msgstr "Voorbeeld Titel"
+
+#: inc/classes/metaboxes.class.php:303
+msgid "This is an example description&#8230;"
+msgstr "Dit is een voorbeeld beschrijving&#8230;"
+
+#: inc/classes/metaboxes.class.php:324
+msgid "Example Description Output"
+msgstr "Voorbeeld Beschrijving Uitvoer"
+
+#: inc/classes/metaboxes.class.php:331
+msgid "Description Excerpt Separator"
+msgstr "Beschrijving Uitreksel Afscheider"
+
+#: inc/classes/metaboxes.class.php:338
+msgid ""
+"If the Automated Description consists of two parts (Title and excerpt), then "
+"the separator will go in between them."
+msgstr ""
+"Wanneer de Automatische Beschrijving bestaat uit twee delen (Titel en "
+"Beschrijving), dan zal de afscheider er tussen in gaan."
+
+#: inc/classes/metaboxes.class.php:343
+msgid "Add Blogname to Description"
+msgstr "Voeg Blognaam toe aan beschrijving"
+
+#: inc/classes/metaboxes.class.php:347
+msgid "Add blogname to automated description?"
+msgstr "Blognaam toevoegen aan automatische beschrijving?"
+
+#: inc/classes/metaboxes.class.php:368
+msgid "Category"
+msgstr "Categorie"
+
+#: inc/classes/metaboxes.class.php:369
+msgid "Tag"
+msgstr "Tag"
+
+#: inc/classes/metaboxes.class.php:370
+msgid "Author"
+msgstr "Auteur"
+
+#: inc/classes/metaboxes.class.php:371
+msgid "Date"
+msgstr "Datum"
+
+#: inc/classes/metaboxes.class.php:372
+msgid "Search Pages"
+msgstr "Zoek Pagina's"
+
+#: inc/classes/metaboxes.class.php:373
+msgid "Attachment Pages"
+msgstr "Bijlage Pagina's"
+
+#: inc/classes/metaboxes.class.php:374
+msgid "the entire site"
+msgstr "de gehele site"
+
+#: inc/classes/metaboxes.class.php:381
+msgid "NoIndex"
+msgstr "NoIndex"
+
+#: inc/classes/metaboxes.class.php:382
+msgid ""
+"These options prevent indexing of the selected archives. If you enable this, "
+"the selected archives will be removed from search engine result pages."
+msgstr ""
+"Deze opties voorkomen indexering van de geselecteerde archieven. Als je dit "
+"inschakelt zullen de geselecteerde archieven verwijderd worden van de zoek "
+"machine zoek resultaten."
+
+#: inc/classes/metaboxes.class.php:386
+msgid "NoFollow"
+msgstr "NoFollow"
+
+#: inc/classes/metaboxes.class.php:387
+msgid ""
+"These options prevent links from being followed on the selected archives. If "
+"you enable this, the selected archives in-page links will gain no SEO value, "
+"including your own links."
+msgstr ""
+"Deze opties voorkomen dat links gevolgd worden binnen de geselecteerde "
+"archieven. Als je dit inschakelt, zullen de geselecteerde archieven in-"
+"pagina links geen SEO waarde ontvangen, inclusief jouw eigen links."
+
+#: inc/classes/metaboxes.class.php:391
+msgid "NoArchive"
+msgstr "NoArchive"
+
+#: inc/classes/metaboxes.class.php:392
+msgid ""
+"These options prevent caching of the selected archives. If you enable this, "
+"search engines will not create a cached copy of the selected archives."
+msgstr ""
+"Deze opties voorkomen dat de geselecteerde archieven worden gecached. Als je "
+"dit inschakelt, zullen zoekmachines niet een cachekopie van de geselecteerde "
+"archieven maken."
+
+#: inc/classes/metaboxes.class.php:412 inc/classes/metaboxes.class.php:932
+#: inc/classes/metaboxes.class.php:1335 inc/classes/metaboxes.class.php:1609
+msgid "General"
+msgstr "Algemeen"
+
+#: inc/classes/metaboxes.class.php:418
+msgid "Indexing"
+msgstr "Indexering"
+
+#: inc/classes/metaboxes.class.php:424
+msgid "Following"
+msgstr "Volgen"
+
+#: inc/classes/metaboxes.class.php:430
+msgid "Archiving"
+msgstr "Archivering"
+
+#: inc/classes/metaboxes.class.php:466
+msgid "Open Directory Settings"
+msgstr "Open Directory Instellingen"
+
+#: inc/classes/metaboxes.class.php:467
+msgid ""
+"Sometimes, search engines use resources from certain Directories to find "
+"titles and descriptions for your content. You generally don't want them to "
+"do so. Turn these options on to prevent them from doing so."
+msgstr ""
+"Af en toe gebruiken zoekmachines bepaalde Bronnen om titels en "
+"beschrijvingen te vinden voor jouw inhoud. In het algemeen wil je niet dat "
+"ze dit doen. Zet deze opties aan om te voorkomen dat ze dit doen."
+
+#: inc/classes/metaboxes.class.php:468
+msgid ""
+"The Open Directory Project and the Yahoo! Directory may contain outdated SEO "
+"values. Therefore, it's best to leave these options checked."
+msgstr ""
+"De Open Directory Project en de Yahoo! Directory kunnen verouderde SEO "
+"waarden bevatten. Hierdoor is het aanbevolen om deze opties aangevinkt te "
+"houden."
+
+#: inc/classes/metaboxes.class.php:473 inc/classes/metaboxes.class.php:480
+msgid "Apply %s to the entire site?"
+msgstr "Pas %s toe op de hele site?"
+
+#: inc/classes/metaboxes.class.php:486
+msgid "Paged Archive Settings"
+msgstr "Pagina Archief Instellingen"
+
+#: inc/classes/metaboxes.class.php:487
+msgid ""
+"Indexing the second or later page of any archive might cause duplication "
+"errors, search engines look down upon them. Therefore it's recommended to "
+"disable indexing of those pages."
+msgstr ""
+"Indexering van de tweede of latere pagina van een archief kan duplicatie "
+"fouten veroorzaken, zoekmachines kijken hierop neer. Hierom is het "
+"aanbevolen om indexering uit te schakelen van die pagina's."
+
+#: inc/classes/metaboxes.class.php:491
+msgid "Apply %s to every second or later archive page?"
+msgstr "Pas %s toe op elke tweede of latere archief pagina?"
+
+#: inc/classes/metaboxes.class.php:511
+msgid "%s Robots Settings"
+msgstr "%s Robots Instellingen"
+
+#: inc/classes/metaboxes.class.php:524
+msgid "Apply %s to %s?"
+msgstr "Pas %s toe op %s?"
+
+#: inc/classes/metaboxes.class.php:532
+msgid "Apply %s to %s Archives?"
+msgstr "Pas %s toe op %s Archieven?"
+
+#: inc/classes/metaboxes.class.php:578
+msgid "Title"
+msgstr "Titel"
+
+#: inc/classes/metaboxes.class.php:579
+msgid "Description"
+msgstr "Beschrijving"
+
+#: inc/classes/metaboxes.class.php:580 inc/classes/metaboxes.class.php:1185
+#: inc/classes/metaboxes.class.php:1216
+msgid "Home Page"
+msgstr "Home Pagina"
+
+#: inc/classes/metaboxes.class.php:663 inc/classes/metaboxes.class.php:739
+msgid "Note:"
+msgstr "Noteer:"
+
+#: inc/classes/metaboxes.class.php:663 inc/classes/metaboxes.class.php:739
+msgid "The %s is fetched from the %s on the %s."
+msgstr "De %s is verkregen van de %s op de %s."
+
+#: inc/classes/metaboxes.class.php:663 inc/classes/metaboxes.class.php:739
+msgid "Page SEO Settings"
+msgstr "Pagina SEO Instellingen"
+
+#: inc/classes/metaboxes.class.php:769
+msgid "View Home Page Settings"
+msgstr "Bekijk Home Pagina Instellingen"
+
+#: inc/classes/metaboxes.class.php:769
+msgid "Checked in Page"
+msgstr "Aangevinkt in Pagina"
+
+#: inc/classes/metaboxes.class.php:775
+msgid ""
+"These settings will take precedence over the settings set within the home "
+"page page edit screen, if any."
+msgstr ""
+"Deze instellingen nemen voorrang op de instellingen ingesteld binnen het "
+"home pagina bewerkings scherm, indien van toepassing."
+
+#: inc/classes/metaboxes.class.php:803
+msgid "%s Tagline"
+msgstr "%s Slogan"
+
+#: inc/classes/metaboxes.class.php:807
+msgid "Add site description (tagline) to the Title on the %s?"
+msgstr "Voeg website beschrijving (slogan) toe aan de Titel op de %s"
+
+#: inc/classes/metaboxes.class.php:813
+msgid "Custom %s Title Tagline"
+msgstr "Aangepaste %s Titel Slogan"
+
+#: inc/classes/metaboxes.class.php:850
+msgid ""
+"The meta description can be used to determine the text used under the title "
+"on search engine results pages."
+msgstr ""
+"De meta beschrijving kan worden gebruikt om de tekst te bepalen onder de "
+"titel op zoek machine resultaten pagina&#39;s."
+
+#: inc/classes/metaboxes.class.php:861
+msgid "Homepage Robots Meta Settings"
+msgstr "Home Pagina Robots Meta instellingen"
+
+#: inc/classes/metaboxes.class.php:866 inc/classes/metaboxes.class.php:875
+#: inc/classes/metaboxes.class.php:884
+msgid "Apply %s to the %s?"
+msgstr "Pas %s toe op %s Archieven?"
+
+#: inc/classes/metaboxes.class.php:893
+msgid ""
+"Note: If any of these options are unchecked, but are checked on the "
+"homepage, they will be output regardless."
+msgstr ""
+"Noteer: Wanneer een van deze opties niet is aangevinkt, maar toch actief is "
+"op de home pagina, dan worden ze toch geactiveerd."
+
+#: inc/classes/metaboxes.class.php:947
+msgid "Post Dates"
+msgstr "Bericht Data"
+
+#: inc/classes/metaboxes.class.php:952
+msgid "Link Relationships"
+msgstr "Link Relaties"
+
+#: inc/classes/metaboxes.class.php:989
+msgid "Site Shortlink Settings"
+msgstr "Site Shortlink Instellingen"
+
+#: inc/classes/metaboxes.class.php:990
+msgid ""
+"The shortlink tag might have some use for 3rd party service discoverability, "
+"but it has little to no SEO value whatsoever."
+msgstr ""
+"De shortlink tag wordt soms gebruikt door 3de partijen, maar het heeft "
+"weinig tot geen SEO waarde hoe dan ook."
+
+#: inc/classes/metaboxes.class.php:994
+msgid "Include shortlink tag?"
+msgstr "Voeg shortlink tag toe?"
+
+#: inc/classes/metaboxes.class.php:1000
+msgid "Output Meta Tags"
+msgstr "Meta Tags Inschakelen"
+
+#: inc/classes/metaboxes.class.php:1001
+msgid ""
+"Output various meta tags for social site integration, among other 3rd party "
+"services."
+msgstr ""
+"Schakel verschillende meta tags in voor sociale site integratie, met onder "
+"andere andere 3e partij diensten."
+
+#: inc/classes/metaboxes.class.php:1008
+msgid "Output Open Graph meta tags?"
+msgstr "Open Graph meta tags inschakelen?"
+
+#: inc/classes/metaboxes.class.php:1010
+msgid ""
+"Facebook, Twitter, Pinterest and many other social sites make use of these "
+"tags."
+msgstr ""
+"Facebook, Twitter, Pinterest en vele andere sociale sites maken gebruik van "
+"deze tags."
+
+#: inc/classes/metaboxes.class.php:1018
+msgid "Output Facebook meta tags?"
+msgstr "Facebook meta tags inschakelen?"
+
+#: inc/classes/metaboxes.class.php:1020 inc/classes/metaboxes.class.php:1029
+msgid "Output various tags targetted at %s."
+msgstr "Schakel tags in gericht op %s."
+
+#: inc/classes/metaboxes.class.php:1028
+msgid "Output Twitter meta tags?"
+msgstr "Twitter meta tags inschakelen?"
+
+#: inc/classes/metaboxes.class.php:1057
+msgctxt "Example Facebook Personal URL"
+msgid "http://www.facebook.com/YourPersonalProfile"
+msgstr "http://www.facebook.com/JouwPersoonlijkeProfiel"
+
+#: inc/classes/metaboxes.class.php:1060
+msgctxt "Example Verified Facebook Business URL"
+msgid "http://www.facebook.com/YourVerifiedBusinessProfile"
+msgstr "http://www.facebook.com/JouwGeverifieerdeBedrijfProfiel"
+
+#: inc/classes/metaboxes.class.php:1066
+msgid "Default Facebook Integration Settings"
+msgstr "Standaard Facebook Integratie Instellingen"
+
+#: inc/classes/metaboxes.class.php:1067
+msgid ""
+"Facebook post sharing works mostly through Open Graph. However, you can also "
+"link your Business and Personal Facebook pages, among various other options."
+msgstr ""
+"Facebook bericht delen werkt meestal via Open Graph. Maar je kan ook jouw "
+"Zakelijke en Persoonlijke Facebook pagina&#39s verbinden, samen met "
+"verschillende andere opties."
+
+#: inc/classes/metaboxes.class.php:1068
+msgid ""
+"When these options are filled in, Facebook might link your Facebook Profiles "
+"to be followed and liked when your post or page is shared."
+msgstr ""
+"Wanneer deze opties ingevuld zijn, kan Facebook misschien jouw Facebook "
+"Profielen linken om gevolgd en leuk gevonden te worden wanneer jouw bericht "
+"of pagina gedeeld wordt."
+
+#: inc/classes/metaboxes.class.php:1074
+msgid "Article Author Facebook URL"
+msgstr "Artikel Auteur Facebook URL"
+
+#: inc/classes/metaboxes.class.php:1075
+msgid "Your Facebook profile."
+msgstr "Jouw Facebook profiel."
+
+#: inc/classes/metaboxes.class.php:1084
+msgid "Article Publisher Facebook URL"
+msgstr "Artikel Uitgever Facebook URL"
+
+#: inc/classes/metaboxes.class.php:1085
+msgid "To use this, you need to be a verified business."
+msgstr "Om dit te gebruiken, moet je een geverifieerde bedrijf zijn."
+
+#: inc/classes/metaboxes.class.php:1094
+msgid "Facebook App ID"
+msgstr "Facebook App ID"
+
+#: inc/classes/metaboxes.class.php:1095
+msgid "Get Facebook App ID"
+msgstr "Verkrijg Facebook App ID"
+
+#: inc/classes/metaboxes.class.php:1115
+msgctxt "Twitter @username"
+msgid "@your-site-username"
+msgstr "@jouw-site-gebruikersnaam"
+
+#: inc/classes/metaboxes.class.php:1118
+msgctxt "Twitter @username"
+msgid "@your-personal-username"
+msgstr "@jouw-persoonlijke-gebruikersnaam"
+
+#: inc/classes/metaboxes.class.php:1121
+msgid "Default Twitter Integration Settings"
+msgstr "Standaard Twitter Integratie Instellingen"
+
+#: inc/classes/metaboxes.class.php:1122
+msgid ""
+"Twitter post sharing works mostly through Open Graph. However, you can also "
+"link your Business and Personal Twitter pages, among various other options."
+msgstr ""
+"Twitter post delen werkt meestal via Open Graph. Maar, je kan echter ook "
+"jouw Zakelijke en Persoonlijke Twitter pagina&#39s verbinden, samen met "
+"verschillende andere opties."
+
+#: inc/classes/metaboxes.class.php:1127
+msgid "Twitter Card Type"
+msgstr "Twitter Kaart Type"
+
+#: inc/classes/metaboxes.class.php:1128
+msgid ""
+"What kind of Twitter card would you like to use? It will default to %s if no "
+"image is found."
+msgstr ""
+"Wat voor soort Twitter kaart zou je willen gebruiken? Het gebruikt %s als er "
+"geen afbeelding is gevonden."
+
+#: inc/classes/metaboxes.class.php:1139
+msgid "Example"
+msgstr "Voorbeeld"
+
+#: inc/classes/metaboxes.class.php:1150
+msgid ""
+"When the following options are filled in, Twitter might link your Twitter "
+"Site or Personal Profile when your post or page is shared."
+msgstr ""
+"Wanneer de volgende opties ingevuld zijn, kan Twitter misschien een "
+"koppeling maken met jouw Twitter Site of Persoonlijke Profiel wanneer jouw "
+"post of pagina wordt gedeeld."
+
+#: inc/classes/metaboxes.class.php:1153
+msgid "Your Website's Twitter Profile"
+msgstr "Jouw Website's Twitter Profiel"
+
+#: inc/classes/metaboxes.class.php:1154 inc/classes/metaboxes.class.php:1164
+msgid "Find your @username"
+msgstr "Vind  jouw @gebruikersnaam"
+
+#: inc/classes/metaboxes.class.php:1163
+msgid "Your Personal Twitter Profile"
+msgstr "Jouw Persoonlijke Twitter Profiel"
+
+#: inc/classes/metaboxes.class.php:1183
+msgid "Pages"
+msgstr "Pagina's"
+
+#: inc/classes/metaboxes.class.php:1184
+msgid "Posts"
+msgstr "Berichten"
+
+#: inc/classes/metaboxes.class.php:1188
+msgid "Post Dates Settings"
+msgstr "Bericht Data Instellingen"
+
+#: inc/classes/metaboxes.class.php:1189
+msgid ""
+"Some Search Engines output the publishing date and modified date next to the "
+"search results. These help search engines find new content and could impact "
+"SEO value."
+msgstr ""
+"Sommige Zoek Machines laten de publicatie datum en modificatie datum zien "
+"naast de zoek resultaten. Dezen helpen zoek machines nieuwe inhoud te vinden "
+"en kan SEO waarde be&#239;nvloeden."
+
+#: inc/classes/metaboxes.class.php:1190
+msgid ""
+"It's recommended on posts, it's not recommended on pages unless you modify "
+"or create new pages frequently."
+msgstr ""
+"Het is aanbevolen op berichten, het is niet aanbevolen op pagina's tenzij je "
+"vaak pagina's wijzigt of toevoegt."
+
+#: inc/classes/metaboxes.class.php:1194 inc/classes/metaboxes.class.php:1199
+#: inc/classes/metaboxes.class.php:1205 inc/classes/metaboxes.class.php:1210
+msgid "Add %s to %s?"
+msgstr "Voeg %s toe aan %s?"
+
+#: inc/classes/metaboxes.class.php:1217
+msgid ""
+"Because you only publish the home page once, Search Engines might think your "
+"site is outdated. This can be prevented by disabling the following options."
+msgstr ""
+"Omdat je de home pagina eenmalig publiceert, denken Zoekmachines misschien "
+"dat jouw site is verouderd. Dit kan worden voorkomen door het uitschakelen "
+"van de volgende opties."
+
+#: inc/classes/metaboxes.class.php:1221 inc/classes/metaboxes.class.php:1226
+msgid "Add %s to the %s?"
+msgstr "Voeg %s toe aan %s?"
+
+#: inc/classes/metaboxes.class.php:1242
+msgid "Link Relationship Settings"
+msgstr "Link Relatie Instellingen"
+
+#: inc/classes/metaboxes.class.php:1243
+msgid ""
+"Some Search Engines look for relations between content of your pages. If you "
+"have multiple pages for a single Post or Page, or have archives indexed, "
+"this option will help Search Engines look for the right page to display in "
+"the Search Results."
+msgstr ""
+"Sommige Zoek Machines zoeken naar relaties tussen inhoud van jouw pagina's. "
+"Als je meerdere pagina's hebt voor een enkele Bericht of Pagina, of je hebt "
+"Archieven geindexeerd, zal deze optie Zoek Machines helpen om de juiste "
+"pagina's te vertonen in de Zoek Resultaten."
+
+#: inc/classes/metaboxes.class.php:1244
+msgid ""
+"It's recommended to turn this option on for better SEO consistency and to "
+"prevent duplicated content errors."
+msgstr ""
+"Het is aanbevolen om deze optie aan te zetten voor betere SEO samenhang en "
+"om inhoud duplicatie fouten te voorkomen."
+
+#: inc/classes/metaboxes.class.php:1249
+msgid "Add %s link tags to Posts and Pages?"
+msgstr "Voeg %s link tags toe aan Berichten en Pagina's?"
+
+#: inc/classes/metaboxes.class.php:1254
+msgid "Add %s link tags to Archives?"
+msgstr "Voeg %s link tags toe aan Archieven?"
+
+#: inc/classes/metaboxes.class.php:1278
+msgid "Webmaster Integration Settings"
+msgstr "Webmaster Integratie Instellingen"
+
+#: inc/classes/metaboxes.class.php:1279
+msgid ""
+"When adding your site to Google or Bing Webmaster Tools, you'll be asked to "
+"add a code or file to your site for verification purposes. These options "
+"will help you easily integrate those codes."
+msgstr ""
+"Wanneer je jouw site aan Google of Bing Webmaster Tools toevoegt, word je "
+"gevraagtd om een code of bestand aan jouw website toe te voegen voor "
+"verificatie doeleinden. Deze opties zullen jou helpen gemakkelijk deze codes "
+"te integreren."
+
+#: inc/classes/metaboxes.class.php:1280
+msgid ""
+"Verifying your website has no SEO value whatsoever. But you might gain added "
+"benefits such as search ranking insights to help you improve your Website's "
+"content."
+msgstr ""
+"Jouw website verifi&euml;ren heeft geen enkele SEO waarde. Maar je kan "
+"misschien extra voordelen krijgen zoals inzicht op plaatsing om je te helpen "
+"jouw Website's inhoud te verbeteren."
+
+#: inc/classes/metaboxes.class.php:1286
+msgid "Google Webmaster Verification Code"
+msgstr "Google Webmaster Verificatie Code"
+
+#: inc/classes/metaboxes.class.php:1287
+msgid "Get the Google Verification code."
+msgstr "Verkrijg de Google Verificatie Code"
+
+#: inc/classes/metaboxes.class.php:1296
+msgid "Bing Webmaster Verification Code"
+msgstr "Bing Webmaster Verificatie Code"
+
+#: inc/classes/metaboxes.class.php:1297
+msgid "Get Bing Verification Code"
+msgstr "Verkrijg Bing Verificatie Code"
+
+#: inc/classes/metaboxes.class.php:1340
+msgid "Website"
+msgstr "Website"
+
+#: inc/classes/metaboxes.class.php:1383
+msgid ""
+"The Knowledge Graph lets Google and other Search Engines know where to find "
+"you or your organization and its relevant content."
+msgstr ""
+"De Kennis Grafiek laat Google en andere Zoekmachines weten waar ze jou of "
+"jouw organisatie en hun relevante inhoud kunnen vinden."
+
+#: inc/classes/metaboxes.class.php:1384
+msgid ""
+"Google is becoming more of an 'Answer Engine' than a 'Search Engine'. "
+"Setting up these options has a huge positive impact on the SEO value of your "
+"website."
+msgstr ""
+"Google begint meer een 'Antwoordmachine' te worden dan een 'Zoek Machine'. "
+"Het instellen van deze opties heeft een enorm postitieve impact op de SEO "
+"waarde van jouw website."
+
+#: inc/classes/metaboxes.class.php:1389
+msgid "Output Knowledge tags?"
+msgstr "Kennis tags inschakelen?"
+
+#: inc/classes/metaboxes.class.php:1398
+msgctxt "WordPress Customizer"
+msgid "Website logo"
+msgstr "Website logo"
+
+#: inc/classes/metaboxes.class.php:1402
+msgid "Use the Favicon from Customizer as Organization Logo?"
+msgstr "De Favicon van Customizer als organisatie Logo gebruiken?"
+
+#: inc/classes/metaboxes.class.php:1405
+msgid ""
+"This option only has effect when this site represents an Organization. If "
+"left disabled, Search Engines will look elsewhere for a logo, if it exists "
+"and is assigned as a logo."
+msgstr ""
+"Deze optie heeft alleen effect wanneer deze site een Organisatie "
+"representeert. Wanneer het uitgeschakeld staat, zullen Zoekmachines ergens "
+"anders zoeken naar een logo, als het bestaat en toegewezen is als een logo."
+
+#: inc/classes/metaboxes.class.php:1423
+msgid "About this website"
+msgstr "Over deze website"
+
+#: inc/classes/metaboxes.class.php:1424
+msgid "About who or what is your website?"
+msgstr "Over wie of wat is jouw website?"
+
+#: inc/classes/metaboxes.class.php:1429
+msgctxt "...Organization or Person."
+msgid "This website represents:"
+msgstr "Deze website representeert:"
+
+#: inc/classes/metaboxes.class.php:1435
+msgid "An Organization"
+msgstr "Een Organisatie"
+
+#: inc/classes/metaboxes.class.php:1436
+msgid "A Person"
+msgstr "Een Persoon"
+
+#: inc/classes/metaboxes.class.php:1449
+msgid "The organization or personal name"
+msgstr "De organisatie of persoonlijke naam"
+
+#: inc/classes/metaboxes.class.php:1469
+msgid "Social Pages connected to this website"
+msgstr "Sociale Pagina's verbonden aan deze website"
+
+#: inc/classes/metaboxes.class.php:1470
+msgid ""
+"Don't have a page at a site or is the profile only privately accessible? "
+"Leave that field empty. Unsure? Fill it in anyway."
+msgstr ""
+"Heb je geen pagina op de site of is het profiel alleen priv&#233; "
+"toegankelijk? Laat het veld leeg. Onzeker? Voeg het dan toch toe."
+
+#: inc/classes/metaboxes.class.php:1471
+msgid "Add the link that leads directly to the social page of this website."
+msgstr ""
+"Voeg een link dat direct leidt naar de sociale pagina van deze website."
+
+#: inc/classes/metaboxes.class.php:1476
+msgctxt "Example link placeholder for a social profile"
+msgid "RelatedProfile"
+msgstr "GerelateerdProfiel"
+
+#: inc/classes/metaboxes.class.php:1477
+msgctxt "Social Profile"
+msgid "Profile"
+msgstr "Profiel"
+
+#: inc/classes/metaboxes.class.php:1543
+msgid "Blog"
+msgstr "Blog"
+
+#: inc/classes/metaboxes.class.php:1583
+msgid "Permalink settings"
+msgstr "Permalink instellingen"
+
+#: inc/classes/metaboxes.class.php:1583 inc/classes/metaboxes.class.php:1683
+#: inc/classes/metaboxes.class.php:1702
+msgctxt "The sitemap can be found %s."
+msgid "here"
+msgstr "hier"
+
+#: inc/classes/metaboxes.class.php:1586
+msgid "You're using the default permalink structure."
+msgstr "U gebruikt de standaard permalink structuur."
+
+#: inc/classes/metaboxes.class.php:1587
+msgid "This means we can't output the sitemap through WordPress rewrite."
+msgstr ""
+"Dit betekent dat we kunnen niet de output van de sitemaps door middel van "
+"WordPress herschrijven."
+
+#: inc/classes/metaboxes.class.php:1589
+msgctxt "%s = here"
+msgid "Change your permalink settings %s (we recommend 'postname')."
+msgstr "Pas jouw permalink settings %s aan (wij bevelen 'berichtnaam' aan)."
+
+#: inc/classes/metaboxes.class.php:1619
+msgid "Timestamps"
+msgstr "Tijdstempels"
+
+#: inc/classes/metaboxes.class.php:1624
+msgctxt "Ping or notify search engine"
+msgid "Ping"
+msgstr "Ping"
+
+#: inc/classes/metaboxes.class.php:1667
+msgid "Sitemap Integration Settings"
+msgstr "Webmaster Integratie Instellingen"
+
+#: inc/classes/metaboxes.class.php:1668
+msgid ""
+"The Sitemap is an XML file that lists pages and posts for your site along "
+"with optional metadata about each post or page. This helps Search Engines "
+"crawl your site easier."
+msgstr ""
+"De Sitemap is een XML bestand welke een lijst maakt van pagina's en "
+"berichten voor jouw site samen met optionele metadata over elke post of "
+"pagina. Dit helpt Zoekmachines makkelijker jouw site te doorzoeken."
+
+#: inc/classes/metaboxes.class.php:1669
+msgid ""
+"The optional metadata include the post and page modified time and a page "
+"priority indication, which is automated."
+msgstr ""
+"De optionele metadata bevatten de bericht en pagina modificatie tijd en een "
+"pagina prioriteits indicatie, welke geautomatiseerd is."
+
+#: inc/classes/metaboxes.class.php:1673
+msgid "Sitemap Output"
+msgstr "Sitemap Inschakelen"
+
+#: inc/classes/metaboxes.class.php:1677
+msgid "Output Sitemap?"
+msgstr "Schakel Sitemap In?"
+
+#: inc/classes/metaboxes.class.php:1683
+msgid "View sitemap"
+msgstr "Bekijk Home Pagina Instellingen"
+
+#: inc/classes/metaboxes.class.php:1685
+msgctxt "%s = here"
+msgid "The sitemap can be found %s."
+msgstr "De sitemap kan %s gevonden worden."
+
+#: inc/classes/metaboxes.class.php:1702
+msgid "View robots.txt"
+msgstr "Bekijk robots.txt"
+
+#: inc/classes/metaboxes.class.php:1705
+msgid "Robots.txt Settings"
+msgstr "Robots.txt Instellingen"
+
+#: inc/classes/metaboxes.class.php:1706
+msgid ""
+"The robots.txt file is the first thing Search Engine look for. If you add "
+"the sitemap location in the robots.txt file, then search engines will look "
+"for and index the sitemap."
+msgstr ""
+"Het robots.txt bestand is het eerste waar Zoek Machines naar zoeken. Als je "
+"de sitemap lokatie toevoegt in het robots.txt bestand, dan zullen "
+"zoekmachines zoeken naar de sitemap en deze indexeren."
+
+#: inc/classes/metaboxes.class.php:1707
+msgid ""
+"If you do not add the sitemap location to the robots.txt file, you will need "
+"to notify search engines manually through the Webmaster Console provided by "
+"the search engines."
+msgstr ""
+"Als je niet de sitemap locatie toevoegt in het robots.txt bestand, dan zou "
+"je de zoekmachines handmatig op de hoogte moeten stellen doormiddel van het "
+"Webmaster Console welke beschikbaar is gesteld door de zoekmachines."
+
+#: inc/classes/metaboxes.class.php:1711
+msgid "Add sitemap location in robots.txt"
+msgstr "Voeg sitemap lokatie toe in robots.txt"
+
+#: inc/classes/metaboxes.class.php:1715
+msgid "Add sitemap location in robots?"
+msgstr "Voeg sitemap lokatie toe in robots?"
+
+#: inc/classes/metaboxes.class.php:1721
+msgctxt "%s = here"
+msgid "The robots.txt file can be found %s."
+msgstr "Het robots.txt bestand kan %s gevonden worden."
+
+#: inc/classes/metaboxes.class.php:1736
+msgid "Timestamps Settings"
+msgstr "Tijdstempel Instellingen"
+
+#: inc/classes/metaboxes.class.php:1737
+msgid ""
+"The modified time hint Search Engines where to look for content changes. It "
+"has no impact on SEO value unless you drastically change pages or posts. It "
+"then depends on how well your content is constructed."
+msgstr ""
+"De aangepaste tijd geven de Zoekmachines een indicatie waar ze moeten zoeken "
+"voor inhoud veranderingen. Het heeft geen impact op SEO waarde tenzij je "
+"drastische wijzigingen toebrengt op je pagina's of berichten. Het hangt er "
+"dan vanaf hoe goed jouw content is opgezet."
+
+#: inc/classes/metaboxes.class.php:1738
+msgid ""
+"By default, the sitemap only outputs the modified date if you've enabled "
+"them within the Social Metabox. This setting overrides those settings for "
+"the Sitemap."
+msgstr ""
+"De sitemap laat normaal alleen de modificatie datum zien wanneer je dit hebt "
+"aangezet binnen de Sociale Metabox. Deze instelling overschrijft de "
+"instellingen voor de Sitemap."
+
+#: inc/classes/metaboxes.class.php:1742
+msgid "Output Modified Date"
+msgstr "Modificatie Datum Inschakelen"
+
+#: inc/classes/metaboxes.class.php:1746
+msgid "Add %s to the sitemap?"
+msgstr "Voeg %s toe aan de sitemap?"
+
+#: inc/classes/metaboxes.class.php:1763
+msgid "Ping Settings"
+msgstr "Ping Instellingen"
+
+#: inc/classes/metaboxes.class.php:1764
+msgid ""
+"Notifying Search Engines of a sitemap change is helpful to get your content "
+"indexed as soon as possible."
+msgstr ""
+"Het notificeren van sitemap veranderingen aan Zoekmachines is handig om jouw "
+"inhoud zo snel mogelijk geïndexeerd te krijgen."
+
+#: inc/classes/metaboxes.class.php:1765
+msgid "By default this will happen at most once an hour."
+msgstr "Normaal gebeurt dit op z'n meest een keer per uur."
+
+#: inc/classes/metaboxes.class.php:1769
+msgid "Notify Search Engines"
+msgstr "Notificeer Zoekmachines"
+
+#: inc/classes/metaboxes.class.php:1773 inc/classes/metaboxes.class.php:1778
+#: inc/classes/metaboxes.class.php:1783
+msgid "Notify %s about sitemap changes?"
+msgstr "Notificeer %s over sitemap veranderingen?"
+
+#: inc/classes/siteoptions.class.php:524
+msgctxt "As in: The Plugin Home Page"
+msgid "Plugin Home"
+msgstr "Plugin Home"
+
+#: load.class.php:166
+msgid "Class or Method not found."
+msgstr "Klasse of Methode niet gevonden."
+
+#: load.class.php:183
+msgid "Class or Method not found. Needs to be called statically."
+msgstr "Klasse of Methode niet gevonden. Moet statisch aangeroepen worden."
+
+#: load.class.php:203
+msgid "Function needs to be called as string."
+msgstr "Functie moet opgeroepen worden als string."
+
+#: load.class.php:216
+msgid "%s of The SEO Framework"
+msgstr "%s van The SEO Framework"
+
+#. Plugin Name of the plugin/theme
+msgid "The SEO Framework"
+msgstr "The SEO Framework"
+
+#. Plugin URI of the plugin/theme
+msgid "https://wordpress.org/plugins/autodescription/"
+msgstr "https://wordpress.org/plugins/autodescription/"
+
+#. Description of the plugin/theme
+msgid ""
+"The SEO Framework makes sure your SEO is always up-to-date without any "
+"configuration needed. It's based upon the Genesis SEO."
+msgstr ""
+"De SEO Framework zorgt ervoor dat jouw SEO altijd up-to-date is zonder "
+"configuratie. Het is gebaseerd op het Genesis SEO."
+
+#. Author of the plugin/theme
+msgid "Sybre Waaijer"
+msgstr "Sybre Waaijer"
+
+#. Author URI of the plugin/theme
+msgid "https://cyberwire.nl/"
+msgstr "https://cyberwire.nl/"
