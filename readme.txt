@@ -1,7 +1,7 @@
 === The SEO Framework ===
 Contributors: Cybr
 Donate link: http://theseoframework.com/
-Tags: seo, description, automatic, title, og, type, meta, ogtype, breadcrumbs, multisite, multibyte, search engine optimization, canonical, keywords, options, domain, mapping, genesis, robots, nofollow, noindex, noarchive, noodp, noydir, redirect, icon, facebook, twitter, author, article, taxonomy, rtl, screenreader, framework, sitemap, sitemaps, woocommerce, custom post types, bbpress
+Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl
 Requires at least: 3.6.0
 Tested up to: 4.4.0
 Stable tag: 2.4.2
@@ -362,10 +362,13 @@ If you wish to export data from The SEO Framework, please poke StudioPress with 
 /
 * Added: Title pagination indication, so you won't have duplicated titles anymore on Categories and paginated pages. This only works on themes that are doing it right, and is shown within the Open Graph and Twitter titles on any theme.
 * TODO Fixed: Duplicate entires within WPML sitemap's are now correct again.
+* Fixed: The Knowledge Graph now outputs your organisation or personal name correctly again.
 
 **For Developers:**
-
+/
+* Added: New filters.
 * Improved: `the_seo_framework_sitemap_custom_posts_count` now doesn't fetch any posts when set to `0` or `false`-ish.
+* TODO Changed: Invalidated LD+Json transient cache key because of the fix. The expired cache will be flushed automatically.
 
 = 2.4.2 - Canon in C =
 

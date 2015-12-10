@@ -1002,7 +1002,6 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$title = (string) $this->generate_title( $args['term_id'], $args['taxonomy'], $escape = false );
 		}
 
-
 		/**
 		 * From WordPress core get_the_title.
 		 * Bypasses get_post() function object which causes conflict with some themes and plugins.
@@ -1014,6 +1013,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 *
 		 * @since 2.4.1
 		 *
+		 * @global $page
 		 * @global $paged
 		 *
 		 * @applies filters core : protected_title_format
@@ -1034,19 +1034,35 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 			/**
 			 * @since 2.4.3
-			 * var_dump(); //todo check this
+			 * Adds page numbering within the title.
 			 */
-			if ( ( $paged >= 2 || $page >= 2 ) && ! is_404() )
-				$title .= $sep . sprintf( __( 'Page %s', 'autodescription' ), max( $paged, $page ) ) );
+			if ( ! $is_front_page && ! is_404() && ( $paged >= 2 || $page >= 2 ) )
+				$title .= $sep . sprintf( __( 'Page %s', 'autodescription' ), max( $paged, $page ) );
 
 			//* Title for title (meta) tags.
 			if ( $is_front_page && ! $add_tagline ) {
 				//* Render frontpage output without tagline
 				$title = $blogname;
-			} else if ( $seplocation == 'right' ) {
-				$title = $title . " $sep " . $blogname;
-			} else {
-				$title = $blogname . " $sep " . $title;
+			}
+
+			/**
+			 * Applies filters the_seo_framework_add_blogname_to_title.
+			 * @since 2.4.3
+			 */
+			$add_blogname = (bool) apply_filters( 'the_seo_framework_add_blogname_to_title', true );
+
+			/**
+			 * On frontpage: Add title if add_tagline is true.
+			 * On all other pages: Add tagline if filters $add_blogname is true.
+			 *
+			 * @since 2.4.3
+			 */
+			if ( ( $add_blogname && ! $is_front_page ) || ( $is_front_page && $add_tagline ) ) {
+				if ( 'right' == $seplocation ) {
+					$title = $title . " $sep " . $blogname;
+				} else {
+					$title = $blogname . " $sep " . $title;
+				}
 			}
 
 			$title = wptexturize( $title );
@@ -3025,7 +3041,13 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			return '';
 
 		$knowledge_type = $this->get_option( 'knowledge_type' );
-		$knowledge_name = $knowledge_type ? $knowledge_type : get_bloginfo( 'name', 'raw' );
+
+		/**
+		 * Forgot to add this.
+		 * @since 2.4.3
+		 */
+		$knowledge_name = $this->get_option( 'knowledge_name' );
+		$knowledge_name = $knowledge_name ? $knowledge_name : get_bloginfo( 'name', 'raw' );
 
 		$context = json_encode( 'http://schema.org' );
 		$type = json_encode( ucfirst( $knowledge_type ) );
