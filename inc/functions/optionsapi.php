@@ -51,10 +51,11 @@ function the_seo_framework() {
  * @return string|null The SEO Framework three point version number. (e.g. '2.2.5')
  */
 function the_seo_framework_version() {
+
 	if ( the_seo_framework_active() )
 		return THE_SEO_FRAMEWORK_VERSION;
 
-	return;
+	return null;
 }
 
 /**
@@ -117,7 +118,10 @@ function the_seo_framework_active() {
 function tsf_wp_version( $version = '4.3.0', $compare = '>=' ) {
 	$theseoframework = the_seo_framework();
 
-	return $theseoframework->wp_version( $version, $compare );
+	if ( isset( $theseoframework ) )
+		return $theseoframework->wp_version( $version, $compare );
+
+	return null;
 }
 
 /**
@@ -130,7 +134,10 @@ function tsf_wp_version( $version = '4.3.0', $compare = '>=' ) {
 function tsf_options_pagehook() {
 	$theseoframework = the_seo_framework();
 
-	return $theseoframework->pagehook;
+	if ( isset( $theseoframework ) )
+		return $theseoframework->pagehook;
+
+	return null;
 }
 
 /**
@@ -146,18 +153,26 @@ function tsf_options_pagehook() {
 function tsf_get_option( $key, $use_cache = true ) {
 	$theseoframework = the_seo_framework();
 
-	return $theseoframework->get_option( $key, $use_cache );
+	if ( isset( $theseoframework ) )
+		return $theseoframework->get_option( $key, $use_cache );
+
+	return null;
 }
 
 /**
  * Fetch title from cache. Only works within Loop.
  *
+ * @param string|null $title the previous title
+ *
  * @since 2.4.2
  */
-function the_seo_framework_title_from_cache() {
+function the_seo_framework_title_from_cache( $title = null ) {
 	$theseoframework = the_seo_framework();
 
-	return $theseoframework->title_from_cache();
+	if ( isset( $theseoframework ) )
+		$title = $theseoframework->title_from_cache();
+
+	return $title;
 }
 
 /**
@@ -168,7 +183,10 @@ function the_seo_framework_title_from_cache() {
 function the_seo_framework_description_from_cache() {
 	$theseoframework = the_seo_framework();
 
-	return $theseoframework->description_from_cache();
+	if ( isset( $theseoframework ) )
+		return $theseoframework->description_from_cache();
+
+	return null;
 }
 
 /**
@@ -179,22 +197,8 @@ function the_seo_framework_description_from_cache() {
 function the_seo_framework_the_url_from_cache() {
 	$theseoframework = the_seo_framework();
 
-	return $theseoframework->the_url_from_cache();
-}
+	if ( isset( $theseoframework ) )
+		return $theseoframework->the_url_from_cache();
 
-if ( ! function_exists( 'the_seo_framework_title_from_cache' ) ) {
-	//* The SEO Framework 2.2.5+
-	if ( function_exists( 'the_seo_framework' ) ) {
-		function the_seo_framework_title_from_cache_temp() {
-			$the_seo_framework = the_seo_framework();
-
-			if ( isset( $the_seo_framework ) )
-				return $theseoframework->title_from_cache();
-		}
-
-		add_filter( 'avf_title_tag', 'the_seo_framework_title_from_cache_temp' );
-	}
-} else {
-	//* The SEO Framework 2.4.2+
-	add_filter( 'avf_title_tag', 'the_seo_framework_title_from_cache' );
+	return null;
 }

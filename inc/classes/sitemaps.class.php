@@ -602,15 +602,26 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		if ( false === $output ) {
 			$output = '';
 
-			$home_url = $this->the_url_from_cache( '', '0', false, false );
+			$scheme = is_ssl() ? 'https' : 'http';
+			$home_url = get_option( 'home' );
+			$home_url = $this->set_url_scheme( $home_url, $scheme );
+
 			$parse_url = parse_url( $home_url );
-			$path = ( !empty( $site_url['path'] ) ) ? $site_url['path'] : '';
+			
+			$path = ! empty( $parse_url['path'] ) ? $parse_url['path'] : '';
 
 			//* Output defaults
 			$output .= "Disallow: $path/wp-includes/\r\n";
 
-			//* Prevents query indexing
-			$output .= "Disallow: $path/*?*\r\n";
+			/**
+			 * Prevents query indexing
+			 * @since 2.2.9
+			 *
+			 * Applies filters the_seo_framework_robots_allow_queries : Wether to allow queries for robots.
+			 * @since 2.4.3
+			 */
+			if ( ! (bool) apply_filters( 'the_seo_framework_robots_allow_queries', false ) )
+				$output .= "Disallow: $path/*?*\r\n";
 
 			//* Add whitespace
 			$output .= "\r\n";
@@ -618,7 +629,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			if ( $this->get_option( 'sitemaps_output') &&  (bool) $this->get_option ( 'sitemaps_robots' ) ) {
 				//* Add sitemap full url
 				//* Becomes relative if host is empty.
-				$host = ( !empty( $parse_url['host'] ) ) ? $parse_url['host'] : '';
+				$host = ! empty( $parse_url['host'] ) ? $parse_url['host'] : '';
 				$scheme = ( !empty( $parse_url['scheme'] ) && !empty( $host ) ) ? $parse_url['scheme'] . '://' : '';
 				$output .= "Sitemap: $scheme$host/sitemap.xml\r\n";
 			}

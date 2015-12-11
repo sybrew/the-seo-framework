@@ -1735,15 +1735,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		//* WPML support.
 		if ( defined( 'ICL_LANGUAGE_CODE' ) && ! is_admin() && isset( $post->guid ) ) {
-			$home_url = trailingslashit( get_option( 'home' ) ) . ltrim( $path, '\/' );
-			$home_url = set_url_scheme( $home_url, 'relative' );
-
-			$neg_offset = (int) - strlen( ICL_LANGUAGE_CODE );
-
-			//* Only add if ICL Language is available in guid.
-			if ( strrpos( $post->guid, ICL_LANGUAGE_CODE, $neg_offset ) !== false )
-				$path = ICL_LANGUAGE_CODE . $path;
-
+			$path = $this->get_relative_wmpl_url( $path, $post );
 		}
 
 		//* qTranslate X support. Doesn't need to work on sitemaps.
@@ -1766,8 +1758,103 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 				//* Add prefix.
 				if ( ! $hide || $current_lang != $default_lang )
-					$path = $current_lang . '/' . $path;
+					$path = '/' . $current_lang . '/' . ltrim( $path, '\/ ' );
 
+			}
+		}
+
+		return $path;
+	}
+
+	/**
+	 * Generate relative WPML url.
+	 *
+	 * @param string $path The current path.
+	 * @param string $post The Post Object.
+	 *
+	 * @since 2.4.3
+	 *
+	 * @return relative path for WPML urls.
+	 */
+	public function get_relative_wmpl_url( $path, $post ) {
+		global $sitepress;
+
+		$post_guid = $post->guid;
+
+		if ( isset( $sitepress ) ) {
+			$negotiation_type = $sitepress->get_setting( 'language_negotiation_type' );
+
+			//* If negotiation_type is 2, the home_url will handle this.
+
+			if ( $negotiation_type == 1 ) {
+				//* Language is path.
+
+				$icl_gl_exists = function_exists( 'icl_get_languages' );
+
+				if ( $icl_gl_exists && strpos( $post_guid, 'lang=' ) !== false ) {
+					//* Language is found in query arg.
+
+					//* Fetch first directory path
+					$lang_path = explode( '/', $path );
+					$lang_path = isset( $lang_path[1] ) ? $lang_path[1] : '';
+
+					if ( !empty( $lang_path ) ) {
+						//* Directory path parsed succesfully.
+
+						$language_keys = array_keys( icl_get_languages() );
+						if ( ! empty( $language_keys ) && ! in_array( $lang_path, $language_keys ) ) {
+							//* Language code isn't found in first part of path. Add it.
+
+							$path = '/' . $lang_path . '/' . ltrim( $path, '\/ ' );
+						}
+					}
+				} else {
+
+					$neg_offset = (int) - strlen( ICL_LANGUAGE_CODE );
+
+					//* Only add if ICL Language is available in guid.
+					if ( strpos( $post_guid, '/' . ICL_LANGUAGE_CODE . '/' ) !== false ) {
+						//* Language path is found in GUID.
+
+						if ( strpos( $path, '/' . ICL_LANGUAGE_CODE . '/' ) === false ) {
+							//* Language path isn't found in permalink. Add it.
+
+							$path = '/' . ICL_LANGUAGE_CODE . '/' . ltrim( $path, '\/ ' );
+						}
+
+					} else if ( $icl_gl_exists && strpos( $post_guid, 'lang=' ) !== false ) {
+						//* Language is found in query arg.
+
+						//* Fetch first directory path
+						$lang_path = explode( '/', $path );
+						$lang_path = $lang_path[1];
+
+						if ( ! empty( $lang_path ) ) {
+							//* Directory path parsed succesfully.
+
+							$language_keys = array_keys( icl_get_languages() );
+							if ( !empty( $language_keys ) && in_array( $lang_path, $language_keys ) ) {
+								//* Language code isn't found in first part of path. Add it.
+
+								$path = '/' . $lang_path . '/' . ltrim( $path, '\/ ' );
+							}
+						}
+					}
+				}
+
+			} else if ( $negotiation_type == 3 ) {
+				//* Language names are parameters.
+
+				// @TODO parse slashit.
+
+				if ( false !== strpos( $post_guid, 'lang=' ) ) {
+					//* Add language parameter.
+
+					$parsed_url = parse_url( $post_guid );
+					parse_str( $parts['query'], $queries );
+
+					$path = user_trailingslashit( $path ) . '?lang=' . $queries['lang'];
+				}
 			}
 		}
 

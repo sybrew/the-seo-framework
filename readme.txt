@@ -27,13 +27,13 @@ The SEO Framework makes sure your Website's SEO is always up-to-date without any
 = What this plugin does, in a few lines =
 * Automatically configures your SEO including the title, description, etc...
 * Allows you to adjust the SEO.
-* Shows you how to improve your SEO with a beautiful SEO bar for each post/page/tag/category.
-* Helps your site get ranked better.
+* Shows you how to improve your SEO with a beautiful SEO bar for each supported Post, Page and Taxonomy.
+* Helps your pages get ranked distinctively through various Metatag techniques.
 * Helps your pages get shared more beautiful through e.g. Facebook and Twitter.
 * Allows plugin authors to easily extend this plugin.
 * Supports custom post types, like WooCommerce and bbPress.
-* Automatically upgrades from Genesis SEO.
-* Allows upgrade from other SEO plugins using a tool.
+* Automatically upgrades itself from Genesis SEO.
+* Allows easy switch from other SEO plugins using a tool.
 
 *Read **Transferring SEO Content using SEO Data Transporter** below for transferring instructions.*
 
@@ -358,20 +358,33 @@ If you wish to export data from The SEO Framework, please poke StudioPress with 
 
 = 2.4.3 - ?? =
 
-**For Everyone:**
+**Summarized:**
+/
+* TODO
+
+**SEO Tip of the Update:**
+/
+* TODO
+
+**For everyone:**
 /
 * Added: Title pagination indication, so you won't have duplicated titles anymore on Categories and paginated pages. This only works on themes that are doing it right, and is shown within the Open Graph and Twitter titles on any theme.
-* Updated: The way object caching is implemented. It's much more consistent. This also invalidates many object cache keys within this plugin which will automatically be reinstated at the earliest request.
+* Updated: The way object caching is implemented. It's now much more consistent. This also invalidates many object cache keys within this plugin which will automatically be reinstated at the earliest request.
 * Improved: When using object cache, the SEO Settings Page is a tad faster now.
-* TODO Fixed: Duplicate entires within WPML sitemap's are now correct again.
+* Fixed: The title could double its output when the theme is doing it wrong in special scenarios.
+* Fixed: Many setting combinations with WPML have been covered now for the URL in various places.
 * Fixed: The Knowledge Graph now outputs your organisation or personal name correctly again.
+* Fixed: Robots.txt's output is now correct again when you're using a subdirectory for your WordPress installation.
 
-**For Developers:**
+**For developers:**
 /
 * Added: New filters.
 * Added: Enhanced functionality with object caching. Mainly allowing it to be enabled or disabled.
 * Changed: Grouped all object caching keys together in `theseoframework` group, instead of several based on my other plugins.
 * Improved: `the_seo_framework_sitemap_custom_posts_count` now doesn't fetch any posts when set to `0` or `false`-ish.
+* Fixed: PHP notice in robots.txt
+* Fixed: API functions will return null now when The SEO Framework is not active through a filter instead of a fatal error.
+* Removed: Redundant code left for testing purposes.
 * TODO Changed: Invalidated LD+Json transient cache key because of the fix. The expired cache will be flushed automatically.
 
 = 2.4.2 - Canon in C =
@@ -670,3 +683,9 @@ They are found here: [The SEO Framework actions](http://theseoframework.com/docs
 = Add settings to and interact with The SEO Framework. =
 
 Read how to here: [The SEO Framework Settings API](http://theseoframework.com/docs/api/settings/)
+
+== Beta Version ==
+
+= Stay updated with the latest version before it's released? =
+
+The beta is available [on Github](https://github.com/sybrew/the-seo-framework). Please note that changes might not reflect the final outcome of the full version release.
