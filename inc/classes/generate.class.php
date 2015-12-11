@@ -1961,26 +1961,30 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		if ( $this->is_domainmapping_active() ) {
 			global $wpdb,$blog_id;
 
+			$mapped_key = 'wpmudev_mapped_domain_' . $blog_id;
+
 			//* Check if the domain is mapped
-			$mapped_domain = wp_cache_get( 'wap_mapped_domain_' . $blog_id, 'domain_mapping' );
+			$mapped_domain = $this->object_cache_get( $mapped_key );
 			if ( false === $mapped_domain ) {
-				$mapped_domain = $wpdb->get_var( $wpdb->prepare( "SELECT domain FROM {$wpdb->base_prefix}domain_mapping WHERE blog_id = %d", $blog_id ) ); //string
-				wp_cache_set( 'wap_mapped_domain_' . $blog_id, $mapped_domain, 'domain_mapping', 3600 ); // 1 hour
+				$mapped_domain = $wpdb->get_var( $wpdb->prepare( "SELECT domain FROM {$wpdb->base_prefix}domain_mapping WHERE blog_id = %d", $blog_id ) );
+				$this->object_cache_set( $mapped_key, $mapped_domain, 3600 );
 			}
 
 			if ( !empty( $mapped_domain ) ) {
 
+				$scheme_key = 'wpmudev_mapped_scheme_' . $blog_id;
+
 				//* Fetch scheme
-				$mappedscheme = wp_cache_get( 'wap_mapped_scheme_' . $blog_id, 'domain_mapping' );
+				$mappedscheme = $this->object_cache_get( $scheme_key );
 				if ( false === $mappedscheme ) {
-					$mappedscheme = $wpdb->get_var( $wpdb->prepare( "SELECT scheme FROM {$wpdb->base_prefix}domain_mapping WHERE blog_id = %d", $blog_id ) ); //bool
-					wp_cache_set('wap_mapped_scheme_' . $blog_id, $mappedscheme, 'domain_mapping', 3600 ); // 1 hour
+					$mappedscheme = $wpdb->get_var( $wpdb->prepare( "SELECT scheme FROM {$wpdb->base_prefix}domain_mapping WHERE blog_id = %d", $blog_id ) );
+					$this->object_cache_set( $scheme_key, $mappedscheme, 3600 );
 				}
 
 				if ( $mappedscheme === '1' ) {
 					$scheme_full = 'https://';
 					$scheme = 'https';
-				} else if ( $mappedscheme === '0' ) {
+				} else {
 					$scheme_full = 'http://';
 					$scheme = 'http';
 				}

@@ -27,18 +27,6 @@
 class AutoDescription_PostData extends AutoDescription_Detect {
 
 	/**
-	 * StopWords array
-	 *
-	 * Holds words which hold low SEO value to be stripped or warned.
-	 *
-	 * Uses localisation
-	 *
-	 * @since ???
-	 * @todo
-	 */
-	protected $stopwords = array();
-
-	/**
 	 * Constructor, load parent constructor
 	 */
 	public function __construct() {
@@ -152,6 +140,54 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 		$output = implode( $new_lines );
 
 		return (string) $output;
+	}
+
+	/**
+	 * Fetch latest public post ID.
+	 *
+	 * @staticvar int $page_id
+	 * @global object $wpdb
+	 * @global int $blog_id
+	 *
+	 * @since 2.4.3
+	 */
+	public function get_latest_post_id() {
+		global $wpdb, $blog_id;
+
+		static $page_id = null;
+
+		if ( isset( $page_id ) )
+			return $page_id;
+
+		$latest_posts_key = 'latest_post_id_' . $blog_id;
+
+		$page_id = $this->object_cache_get( $latest_posts_key );
+		if ( false === $page_id ) {
+
+			// Prepare array
+			$post_type = esc_sql( array( 'post', 'page' ) );
+			$post_type_in_string = "'" . implode( "','", $post_type ) . "'";
+
+			// Prepare array
+			$post_status = esc_sql( array( 'publish', 'future', 'pending' ) );
+			$post_status_in_string = "'" . implode( "','", $post_status ) . "'";
+
+			$sql = $wpdb->prepare(
+				"SELECT ID
+				FROM $wpdb->posts
+				WHERE post_title <> %s
+				AND post_type IN ($post_type_in_string)
+				AND post_date < NOW()
+				AND post_status IN ($post_status_in_string)
+				ORDER BY post_date DESC
+				LIMIT %d",
+				'', 1 );
+
+			$page_id = $wpdb->get_var( $sql );
+			$this->object_cache_set( $latest_posts_key, $page_id, 86400 );
+		}
+
+		return $page_id;
 	}
 
 }

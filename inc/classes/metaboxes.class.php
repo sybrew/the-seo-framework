@@ -167,12 +167,9 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 	 *
 	 * @since 2.2.2
 	 *
-	 * @uses globals $wpdb fetch post for the example
-	 *
 	 * @see $this->title_metabox()	Callback for Title Settings box.
 	 */
 	public function title_metabox() {
-		global $wpdb,$blog_id;
 
 		do_action( 'the_seo_framework_title_metabox_before' );
 
@@ -182,33 +179,10 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		$example_right = '';
 		$recommended = ' class="recommended" title="' . __( 'Recommended', 'autodescription' ) . '"';
 
-		// Prepare array
-		$post_type = esc_sql( array( 'post', 'page' ) );
-		$post_type_in_string = "'" . implode( "','", $post_type ) . "'";
+		$latest_post_id = $this->get_latest_post_id();
 
-		// Prepare array
-		$post_status = esc_sql( array( 'publish', 'future', 'pending' ) );
-		$post_status_in_string = "'" . implode( "','", $post_status ) . "'";
-
-		$page_id = wp_cache_get( 'ad_latestpost_' . $blog_id, 'autodescription' );
-		if ( false === $page_id ) {
-			$sql = $wpdb->prepare(
-				"SELECT ID
-				FROM $wpdb->posts
-				WHERE post_title <> %s
-				AND post_type IN ($post_type_in_string)
-				AND post_date < NOW()
-				AND post_status IN ($post_status_in_string)
-				ORDER BY post_date DESC
-				LIMIT %d",
-				'', 1 );
-
-			$page_id = $wpdb->get_var( $sql );
-			wp_cache_set( 'ad_latestpost_' . $blog_id, $page_id, 'autodescription' );
-		}
-
-		if ( !empty( $page_id ) ) {
-			$post = get_post( (int) $page_id, OBJECT );
+		if ( !empty( $latest_post_id ) ) {
+			$post = get_post( (int) $latest_post_id, OBJECT );
 			$title = esc_attr( $post->post_title );
 		} else {
 			$title = __( 'Example Post Title', 'autodescription' );

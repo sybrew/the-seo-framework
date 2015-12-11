@@ -44,11 +44,16 @@ class AutoDescription_Search extends AutoDescription_Generate {
 	 * @param array $args				Posts search arguments
 	 * @param array $protected_posts	Posts array with excluded key
 	 *
+	 * @global int $blog_id
+	 *
 	 * @since 2.1.7
 	 */
 	public function exclude_search_ids() {
+		global $blog_id;
 
-		$post_ids = wp_cache_get( 'exclude_search', 'autodescription' );
+		$cache_key = 'exclude_search_ids_' . $blog_id;
+
+		$post_ids = $this->ojbect_cache_get( $cache_key );
 		if ( false === $post_ids ) {
 			$post_ids = array();
 
@@ -66,7 +71,7 @@ class AutoDescription_Search extends AutoDescription_Generate {
 				$post_ids = wp_list_pluck( $protected_posts, 'ID' );
 			}
 
-			wp_cache_set( 'exclude_search', $post_ids, 'autodescription', 86400 );
+			$this->object_cache_set( $cache_key, $post_ids, 86400 );
 		}
 
 		// return an array of exclude post IDs

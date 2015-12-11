@@ -583,9 +583,12 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 	 *
 	 * @since 2.2.9
 	 *
+	 * @global int $blog_id;
+	 *
 	 * @todo maybe combine with noindex/noarchive/(nofollow) -> only when object caching?
 	 */
 	public function robots_txt( $robots_txt = '', $public = '' ) {
+		global $blog_id;
 
 		/**
 		 * Don't do anything if the blog isn't public
@@ -593,9 +596,9 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		if ( '0' == $public )
 			return $robots_txt;
 
-		$blog_id = (string) get_current_blog_id();
+		$cache_key = 'robots_txt_output_' . $blog_id;
 
-		$output = wp_cache_get( 'the_seo_framework_robots_' . $blog_id, 'the_seo_framework' );
+		$output = $this->object_cache_get( $cache_key );
 		if ( false === $output ) {
 			$output = '';
 
@@ -620,7 +623,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 				$output .= "Sitemap: $scheme$host/sitemap.xml\r\n";
 			}
 
-			wp_cache_set( 'the_seo_framework_robots_' . $blog_id , $output, 'the_seo_framework', 86400 ); // 24 hours
+			$this->object_cache_set( $cache_key, $output, 86400 );
 		}
 
 		$robots_txt .= $output;

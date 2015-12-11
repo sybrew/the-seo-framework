@@ -27,6 +27,15 @@
 class AutoDescription_Init {
 
 	/**
+	 * Allow object caching through a filter.
+	 *
+	 * @since 2.4.3
+	 *
+	 * @var bool Enable object caching.
+	 */
+	protected $use_object_cache = true;
+
+	/**
 	 * Constructor. Init actions.
 	 *
 	 * @since 2.1.6
@@ -35,6 +44,8 @@ class AutoDescription_Init {
 
 		add_action( 'init', array( $this, 'autodescription_run' ), 1 );
 		add_action( 'template_redirect', array( $this, 'custom_field_redirect') );
+
+		$this->use_object_cache = (bool) apply_filters( 'the_seo_framework_use_object_cache', true );
 
 	}
 
@@ -211,7 +222,9 @@ class AutoDescription_Init {
 			$indicatorafter = '<!-- End The Seo Framework' . ( $sybre ? ' by Sybre Waaijer' : '' ) . ' -->' . "\r\n";
 		}
 
-		$output = wp_cache_get( 'seo_framework_output_' . $key . '_' . $paged . '_' . $page, 'theseoframework' );
+		$cache_key = 'seo_framework_output_' . $key . '_' . $paged . '_' . $page;
+
+		$output = $this->object_cache_get( $cache_key );
 		if ( false === $output ) {
 
 			/**
@@ -296,7 +309,7 @@ class AutoDescription_Init {
 
 			$output = "\r\n" . $indicatorbefore . $robots . $before . $before_actions . $output . $after_actions . $after . $generator;
 
-			wp_cache_set( 'seo_framework_output_' . $key . '_' . $paged . '_' . $page, $output, 'theseoframework', 86400 );
+			$this->object_cache_set( $cache_key, $output, 86400 );
 		}
 
 		/**
@@ -361,6 +374,49 @@ class AutoDescription_Init {
 
 		}
 
+	}
+
+	/**
+	 * Object cache set wrapper.
+	 * Applies filters 'the_seo_framework_use_object_cache' : Disable object
+	 * caching for this plugin, when applicable.
+	 *
+	 * @param string $key The Object cache key.
+	 * @param mixed $data The Object cache data.
+	 * @param int $expire The Object cache expire time.
+	 * @param string $group The Object cache group.
+	 *
+	 * @since 2.4.3
+	 *
+	 * @return void
+	 */
+	public function object_cache_set( $key, $data, $expire = 0, $group = 'the_seo_framework' ) {
+
+		if ( $this->use_object_cache )
+			wp_cache_set( $key, $data, $group, $expire );
+
+	}
+
+	/**
+	 * Object cache get wrapper.
+	 * Applies filters 'the_seo_framework_use_object_cache' : Disable object
+	 * caching for this plugin, when applicable.
+	 *
+	 * @param string $key The Object cache key.
+	 * @param string $group The Object cache group.
+	 * @param bool $force Wether to force an update of the local cache.
+	 * @param bool $found Wether the key was found in the cache. Disambiguates a return of false, a storable value.
+	 *
+	 * @since 2.4.3
+	 *
+	 * @return mixed wp_cache_get if object caching is allowed. False otherwise.
+	 */
+	public function object_cache_get( $key, $group = 'theseoframework', $force = false, &$found = null ) {
+
+		if ( $this->use_object_cache )
+			return wp_cache_get( $key, $group, $force, $found );
+
+		return false;
 	}
 
 	/**

@@ -361,12 +361,16 @@ If you wish to export data from The SEO Framework, please poke StudioPress with 
 **For Everyone:**
 /
 * Added: Title pagination indication, so you won't have duplicated titles anymore on Categories and paginated pages. This only works on themes that are doing it right, and is shown within the Open Graph and Twitter titles on any theme.
+* Updated: The way object caching is implemented. It's much more consistent. This also invalidates many object cache keys within this plugin which will automatically be reinstated at the earliest request.
+* Improved: When using object cache, the SEO Settings Page is a tad faster now.
 * TODO Fixed: Duplicate entires within WPML sitemap's are now correct again.
 * Fixed: The Knowledge Graph now outputs your organisation or personal name correctly again.
 
 **For Developers:**
 /
 * Added: New filters.
+* Added: Enhanced functionality with object caching. Mainly allowing it to be enabled or disabled.
+* Changed: Grouped all object caching keys together in `theseoframework` group, instead of several based on my other plugins.
 * Improved: `the_seo_framework_sitemap_custom_posts_count` now doesn't fetch any posts when set to `0` or `false`-ish.
 * TODO Changed: Invalidated LD+Json transient cache key because of the fix. The expired cache will be flushed automatically.
 
