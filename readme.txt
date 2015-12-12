@@ -114,9 +114,9 @@ We have also provided an API documentation located at [The SEO Framework API Doc
 **We call this The SEO Bar. Check out the [Screenshots](https://wordpress.org/plugins/autodescription/screenshots/#plugin-info) to see how it helps you!**
 **Screenshots are a little outdated and will be updated soon.**
 
-> This plugin is fully compatible with the [Domain Mapping plugin by WPMUdev](https://premium.wpmudev.org/project/domain-mapping/) and [Domain Mapping plugin by Donncha](https://wordpress.org/plugins/wordpress-mu-domain-mapping/).
-> This plugin is now also compatible with all kinds of custom post types.
-> This will **prevent canonical errors**. This way your site will always be correctly indexed, no matter what you use!
+> This plugin is fully compatible with the [Domain Mapping plugin by WPMUdev](https://premium.wpmudev.org/project/domain-mapping/) and the [Domain Mapping plugin by Donncha](https://wordpress.org/plugins/wordpress-mu-domain-mapping/).<br />
+> This plugin is now also compatible with all kinds of custom post types.<br />
+> This will **prevent canonical errors**. This way your site will always be correctly indexed, no matter what you use!<br />
 >
 > This plugin is also completely ad-free and has a WordPress integrated clean layout. As per WordPress.org plugin guidelines and standards.
 >
@@ -356,6 +356,25 @@ If you wish to export data from The SEO Framework, please poke StudioPress with 
 
 == Changelog ==
 
+= 2.4.4 - ??? =
+
+**Summarized:**
+/
+* TODO
+
+**SEO Tip of the Update:**
+/
+* TODO
+
+**For everyone:**
+/
+* Fixed: The object cache key is now generating a different cache key for search queries before checking if it's the home page.
+* Fixed: Sitemap and robots example links weren't correct when the permalink structure doesn't end with a slash.
+
+**For developers:**
+/
+* TODO
+
 = 2.4.3 - The Littlest Things | Page 2 =
 
 **Summarized:**
@@ -365,10 +384,10 @@ If you wish to export data from The SEO Framework, please poke StudioPress with 
 
 **SEO Tip of the Update:**
 
-* Maintaining a blog will output not only fresh content and notify Search Engines that your website is active, but it will also simultaneously improve your chances to be found.
-* There are so many (big) questions to be answered, a blog on each of those questions will surely attract different visitors.
+* Maintaining a blog will output not only fresh content, and notify Search Engines that your website is active, but it will also simultaneously improve your chances to be found.
+* There are so many (big) questions to be answered, a blog post on each of those questions will surely attract different visitors.
 * Keep the blog related to the main subject of your site, for it will categorize your website as a whole. Visitors will more likely engage and then keep coming back for more information.
-* After all, you're most likely the expert on the subject of your website.
+* After all, you're most likely the expert on the subject of your website. Share your knowledge!
 
 **For everyone:**
 
@@ -470,198 +489,6 @@ To top it off, this plugin is now also 150% to 500% times faster on the front pa
 * Pages will always have at most one script output.
 * Test categorized posts and pages with a tree [here](https://developers.google.com/structured-data/testing-tool/). Let me know if you find an error under `BreadcrumbList`, thank you very much in advance!
 * This feature will not do anything yet with CPT, since they're not predictable. I will take a look at them in the future, because I really believe Portfolio's and Forums should support this.
-
-= 2.4.1 - Update This Is =
-
-**Summarized:**
-
-With a great influx of users, a great amount of use case scenarios have been revealed. This update makes sure all known scenarios are covered.
-
-First and foremost, I want to thank everyone for their support and trust in this plugin! I also want to thank everyone who has helped me discover hard to find bugs and their ideas for improvements.
-
-This update brings many fixes of previously undiscovered ground. Most importantly, when your theme is doing it wrong and places the blog name on the left of the title, the title will now be correctly displayed.
-
-Terms and Taxonomies' SEO bar is now output correctly. And many more Custom Post Types are now also automatically supported, including Jetpack Custom Content Types.
-
-Other fixes include that trashed or private Custom Post Types are now no longer added to the Sitemap and the transient cache on enormous MultiSite networks and very large blogs built upon very old WordPress installations are now working on various post types.
-
-Enjoy using AnsPress, that's great! The SEO Framework completely supports AnsPress too!
-
-A few other minor changes have taken place, one of them is that the SEO Bar now highlights the words too many for the description.
-
-**SEO Tip of the Update:**
-
-* Navigation is very important for your website. Depending on your content, create an easy menu on what visitors need the most.
-* Do not depend on your sitemap too much, if a user can't find a page, then why should a Search Engine?
-* Internal links with aptly named titles are therefore considered best practice. Naming a link "read more here" is for this reason not advised for links that lead to landing pages.
-* Rather use: Read all about "my product name here". Do not forget to make everything natural to read.
-
-**For everyone:**
-
-* Added: Highlighted the "words too many" within the SEO Bar description-description. Thanks Ovidiu for the suggestion!
-* Added: The "words too many" within the SEO bar now represents capitalized abbreviations correctly, based on first encounter. E.g. "SEO" now doesn't become "Seo", but "SeO" still does change into "Seo" and "THis" is reflected as "This", this change makes sure that "SEO" stays "SEO".
-* Added: The titles now add Protected and Private prefixes where applicable, based on Post or Page settings.
-* Added: Support for all Custom Post Types (CPT) which support a title and editor. This is now possible because of the memory leak fix. It's reversible through a new filter.
-* Added: Sitemap support for all CPT which support the title and editor.
-* Changed: The AutoDescription title now is in par with the title on very special occasions.
-* Changed: The Title is now fetched through the post object, instead of a function. This fixes a memory leak.
-* Improved: The title is now generated a little bit faster in some scenarios.
-* Fixed: Because of the way the title is now fetched, special plugins like AnsPress now correctly fetch the title on many occasions.
-* Fixed: AnsPress Metadata conflicts have been resolved. Thank you Rahul (AnsPress author) for the functions.
-* Fixed: AnsPress Custom SEO Settings can now be saved.
-* Fixed: Anspress Custom SEO Settings for questions are now fetched correctly on the front-end.
-* Fixed: Title separator was on the wrong side on themes that are doing it wrong and decided to switch things up.
-* Fixed: Custom Post Types which are not published no longer are visible within the Sitemap (caused by typo).
-* Fixed: Minor security improvement in the admin area. Disclosed and shouldn't have caused any security issues.
-* Fixed: CPT Terms and Taxonomies could have too long transients names, causing them not to work on older WordPress installations.
-* Fixed: Ping throttling for sitemaps updates could have too long transients names on older WordPress installations.
-* Fixed: The homepage transient could be too long on older WordPress installations on very special occasions.
-* Fixed: The 'Archives' title for untitled archives is now translatable.
-* Fixed: Dutch typos within the SEO Settings Page.
-* Fixed: Typo within Home Page Settings metabox, visible when robots settings were interchanged.
-* Fixed: The Custom Home Page description placeholder within the Home Page Settings metabox now reflects its outcome when the front page is static.
-* Fixed: The SEO Bar on Taxonomies and Terms now display the correct information again.
-* Updated: POT language file.
-* Updated: Dutch Translations.
-
-**For developers:**
-
-* Added: New filters.
-* Added: New arguments for the `AutoDescription_Generate::title()` function. Boolean `description_title` and boolean `is_front_page`.
-* Added: New function, `AutoDescription_Generate::description_from_custom_field()`.
-* Updated: CSS files.
-* Changed: WordPress' core `the_title` filter no longer influences this plugin's titles output anymore.
-* Removed: Metabox action listeners that actually should've been removed in 2.4.0, because they have been replaced with new ones to prevent plugin conflict.
-* Fixed: The Search query alternation now uses an action instead of a filter.
-* Cleaned up code.
-
-= 2.4.0 - Frequently Asked Queries =
-
-**Summarized:**
-
-The SEO Framework is now updated to a new second dot version. This means I've pushed a huge update and that the API has been optimized.
-
-This also means that there has been an overhaul on many functions. A big rework. While doing so, there were many little bugs found, all of them have been fixed.
-
-Meanwhile, the whole plugin has been improved once more to be faster. I believe the quest for speed has been very successful and come to an end.
-
-The Sitemaps now also adds posts and pages created by Custom Post Types, like bbPress and WooCommerce.
-
-Moreover, Domain Mapping by Donncha is now also supported, to prevent canonical errors and easily transfer SEO value when you map domains and keep them both accessible.
-
-Because The SEO Framework is easily manipulated through the API, feel free to write your own (free or premium) extension plugin to add options.
-
-**SEO Tip of the Update:**
-
-* Invalid HTML doesn't affect your site's SEO value. However, valid HTML is considered best practice, and with a good reason.
-* The good reason for valid HTML is that you can be certain that your website (almost) looks the same on every browser, so you're certain that the visitor will see your website as you intended.
-* However, it doesn't affect your site's SEO value because Search Engines want to put out the best content for your search, not the most 'valid' content.
-* With so many 'invalid' websites out there, Search Engines try to read the HTML as many web browsers would: by fixing common mistakes.
-* Still using HTML4 or xHTML? Try to find a way to upgrade to HTML5, its semantic elements are very SEO friendly.
-
-**For everyone:**
-
-* Added: FAQ on WordPress.org's The SEO Framework plugin page.
-* Added: Sitemap WPML compatibility.
-* Added: The default permalink structure and shortlinks now also generate links based on registered query args, e.g. Custom Post Types.
-* Added: Domain Mapping by Donncha support. This plugin is now suitable for every MultiSite :).
-* Added: Removal of the WordPress core shortlink tag for when themes choose to include it, it's replaced with the SEO framework version if active (faster and more reliable).
-* Added: The SEO Framework now shows you how much page load The SEO Framework has added to your page in the indicator after The SEO Framework Meta. This can be removed through a filter.
-* Added: More sitemap content is available, now it supports posts and pages from Custom Post Types (bbPress, WooCommerce, AnsPress, etc.). Please note that it will combine all post types to prevent exceeding the memory limit. It will limit the maximum CPT posts/pages to 600 by default and are ordered by date, descending.
-* Optimized: The Sitemap generation has once again been optimized. This is especially noticeable when there are many pages which are set to noindex.
-* Changed: The Sitemap now allows for 100 more posts per post type. Making a total of 2100.
-* Changed: The URLs now take your slashes into account.
-* Rewritten: The Title generation has been completely rewritten, requires fewer server resources, is easier to maintain, etc.
-* Rewritten: Massively improved the Title Cache by preemptively notifying the plugin if the theme is doing it wrong or right. It's now two to three times as fast on the front end which could save up to 0.2s of load time on old servers.
-* Updated: Translation POT File.
-* Updated: Dutch Translations.
-* Removed: Home Page Title on Doing it Wrong themes is back to default.
-* Removed: Legacy AnsPress title support for AnsPress versions lower than 2.4.
-* Fixed: The Canonical URL is now correct for some plugins which don't abide to the WordPress default URL structure.
-* Fixed: The title length calculation now doesn't add 3 characters too many to the counter when emptied.
-* Fixed: The post modified time is now correct for posts in the sitemap.
-* Fixed: Filter `the_seo_framework_sitemap_posts_count` now works again as intended.
-* Fixed: The Homepage Metabox now notifies if the description is fetched from the front page, if applicable, again.
-* Fixed: The SEO Bar on Terms and Taxonomies were incorrect at many points because of caching.
-* Fixed: Bug where pages are output in the sitemap when the Blog Page was the last page added.
-* Fixed: Title Placeholder in the Inpost SEO box was shown as the home page title when using WPML on a translated page using sub directories.
-* Fixed: The SEO Bar title length calculation for every page when WPML is activated, it thought every page was the front page.
-* Fixed: Home Page title could have unexpected results with the separator and separator location.
-* Fixed: WPMUdev Domain Mapping external mapped URL now checks for scheme again.
-* Fixed Typo: Therefor is now Therefore on various places.
-
-**For developers:**
-
-* Added: New filters!
-* Added: User defined `$query->set( 'post__not_in' )` compatibility. This plugin now merges all values set `below 999 priority` for search queries on the `pre_get_posts` filter.
-* Added: Better version compare: Use `the_seo_framework_dot_version( '2.4.x' )`, this returns true if the version is at least 2.4.0 and at most 2.4.9.
-* Added: The debugger now also processes two dimensional arrays.
-* Added: The SEO Framework Post Type support can now also be determined on `init`.
-* Added: Sitemap generation time when debugger is active.
-* **Reworked:** With over 734 lines of combined code, before it's too late: `AutoDescription_Generate:title` was very smelly because of compatibility with so many themes, plugins, etc. So it's now separated over different functions for different hooks, which all fall back to cached title. Please note that the `parameters` will output a `_doing_it_wrong` notice if your input call is invalid. The code will continue to run normally but will ignore your parameters set.
-* Removed: AutoDescription_Load class and file. It has been replaced by The_SEO_Framework_Load since 2.2.5.
-* Changed: moved `setup_sitemap_transient()` from transients.class.php to sitemaps.class.php, as it generates output it belongs there more nicely.
-* Cleaned up code.
-
-**Note for developers:**
-
-* As with every second dot (2.4.x, 2.5.x, etc.) update, new API functions will be added or changed. Use `function the_seo_framework_dot_version()` to easily compare WordPress version. Read all about it [here](http://theseoframework.com/docs/api/settings/).
-
-**About the performance change in 2.4.0:**
-
-* This plugin now adds a total of about 1.5 milliseconds of load time on pages and 15 milliseconds in the admin area on PHP7. Enjoy!
-* The sitemap is now generated within 0.15 seconds when parsing 2100 posts on PHP7.
-* Please note that increasing this limit to 10,000 posts will use up to 80MB of RAM, the current limit has been carefully chosen and missing URL's within the sitemap doesn't affect SEO in almost all cases, especially with WordPress.
-
-**Coming soon:**
-
-* An Extension Manager, a separated opt-in plugin.
-* The SEO Framework will stay ad-free and will never contain the Extension Manager by default.
-* The Extension Manager allows you to install free/premium extensions.
-* The extensions will be made available through subscriptions, ad-free, all-in-one.
-* Free subscriptions for free extensions will be available, like with Akismet.
-* More on this in December.
-
-= 2.3.9 - The Littlest Things =
-
-**Summarized:**
-
-Version 2.2.8 of The SEO Framework was optimized on one place too many, this caused the Knowledge Graph LD+Json data not to be output on the front page. This update fixes that.
-
-Like to change your settings in Customizer often? This update takes one more variable into account so the Title and Description is what it should be.
-
-The SEO Bar initialization is now also reworked. Your admin area is much faster now and the SEO Bar requires fewer filters to implement.
-
-**SEO Tip of the Update:**
-
-* Search engines follow visitor interaction throughout the pages. If a visitor doesn't stay on a page long enough and hits the back button, your content probably isn't what the visitor was looking for and the Search Engine gets notified and adjusts for future queries.
-* So be sure to create great titles and build a related and constructive first paragraph. If the visitor is hooked, the visitor will stay, read on or click through. Search Engines take note of this and your SERP value goes up.
-
-**For everyone:**
-
-* Added: The SEO Bar is now auto-loaded on all supported pages and posts.
-* Improved: Inpost SEO Post Type support check is now cached.
-* Improved: WPMUdev Avatars active plugin check, it's now more lightweight.
-* Improved: Description and Title length are now trimmed of whitespaces in the length calculation on The SEO Bar.
-* Improved: SEO Bar initialization. It's much faster now throughout the whole dashboard.
-* Fixed: The page on the previously assigned static home page was handled as the front page for the title, description and the SEO bar when no longer a static home page is assigned.
-* Fixed: Knowledge Graph output now works again (didn't work since 2.3.8).
-
-**For developers:**
-
-* Added: New filters!
-* Added: The debugger now also shows if the page is a static front page.
-* Changed: `AutoDescription_DoingItRight::init_columns` is now hooked at `current_screen` instead of `admin_init`. This way we can manipulate the screen and post type support.
-* Changed: The Custom Post Types no longer has to support an author. See `AutoDescription_Inpost::post_type_supports_inpost` for the check.
-* Updated: The debugger is more readable, consistent and flashy in the admin area.
-* Changed: `AutoDescription_Detect::post_type_supports_inpost` no longer returns true by default if no parameter is set.
-* Pre-emptive fix: Prevented minor unexpected results in various places.
-* Removed: `the_seo_framework_column_support` filter, it's now completely automated. Refer to the `the_seo_framework_supported_post_types` filter if your post type is not added automatically.
-* Cleaned up code.
-
-**Note:**
-
-* I've re-tested the database interactions (this value was wrong because of object caching). If you wish to conduct your own tests, feel free to let me know your results (and all variables taken into account). I'll update the numbers if necessary.
 
 = Full changelog =
 
