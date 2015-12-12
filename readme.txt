@@ -4,7 +4,7 @@ Donate link: http://theseoframework.com/
 Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl
 Requires at least: 3.6.0
 Tested up to: 4.4.0
-Stable tag: 2.4.2
+Stable tag: 2.4.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -356,36 +356,45 @@ If you wish to export data from The SEO Framework, please poke StudioPress with 
 
 == Changelog ==
 
-= 2.4.3 - ?? =
+= 2.4.3 - The Littlest Things | Page 2 =
 
 **Summarized:**
-/
-* TODO
+
+* Districting titles together with different content is a very important SEO factor. And for this reason, the Title has now obtained pagination.
+* Besides this change, many little fixes have been put in place, and a few filters have been added for special cases.
 
 **SEO Tip of the Update:**
-/
-* TODO
+
+* Maintaining a blog will output not only fresh content and notify Search Engines that your website is active, but it will also simultaneously improve your chances to be found.
+* There are so many (big) questions to be answered, a blog on each of those questions will surely attract different visitors.
+* Keep the blog related to the main subject of your site, for it will categorize your website as a whole. Visitors will more likely engage and then keep coming back for more information.
+* After all, you're most likely the expert on the subject of your website.
 
 **For everyone:**
-/
+
 * Added: Title pagination indication, so you won't have duplicated titles anymore on Categories and paginated pages. This only works on themes that are doing it right, and is shown within the Open Graph and Twitter titles on any theme.
+* Added: Bundled all "SEO Tip of the Update" together in one .txt file shipped with each update :)
 * Updated: The way object caching is implemented. It's now much more consistent. This also invalidates many object cache keys within this plugin which will automatically be reinstated at the earliest request.
+* Changed: Titles can now be a tad shorter (8 characters) before firing a "too short" notice. Although this might not be "perfect", "50 to 55" was however too intrusive. A good descriptive title is always better than a long title.
 * Improved: When using object cache, the SEO Settings Page is a tad faster now.
+* Updated: POT File.
+* Updated: Dutch Translations.
 * Fixed: The title could double its output when the theme is doing it wrong in special scenarios.
 * Fixed: Many setting combinations with WPML have been covered now for the URL in various places.
 * Fixed: The Knowledge Graph now outputs your organisation or personal name correctly again.
 * Fixed: Robots.txt's output is now correct again when you're using a subdirectory for your WordPress installation.
 
 **For developers:**
-/
+
 * Added: New filters.
 * Added: Enhanced functionality with object caching. Mainly allowing it to be enabled or disabled.
 * Changed: Grouped all object caching keys together in `theseoframework` group, instead of several based on my other plugins.
 * Improved: `the_seo_framework_sitemap_custom_posts_count` now doesn't fetch any posts when set to `0` or `false`-ish.
 * Fixed: PHP notice in robots.txt
-* Fixed: API functions will return null now when The SEO Framework is not active through a filter instead of a fatal error.
+* Fixed: API functions will return null now when The SEO Framework is not active through a filter instead of giving a fatal error.
 * Removed: Redundant code left for testing purposes.
-* TODO Changed: Invalidated LD+Json transient cache key because of the fix. The expired cache will be flushed automatically.
+* Changed: Invalidated LD+Json transient cache key because of the fix. The expired cache will be flushed automatically.
+* Cleaned up Code.
 
 = 2.4.2 - Canon in C =
 

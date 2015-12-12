@@ -141,7 +141,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		 *
 		 * Use hex. e.g. 0, 1, 2, 9, a, b
 		 */
-		$revision = '0';
+		$revision = '1';
 
 		$this->ld_json_transient = 'the_seo_f' . $revision . '_ldjs_' . $cache_key;
 	}

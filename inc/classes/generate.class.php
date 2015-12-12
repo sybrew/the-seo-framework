@@ -595,7 +595,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 					$this->title_doing_it_wrong = true;
 
 					return $this->build_title_doingitwrong( $title, $sep, $seplocation, $args );
-				} else if ( !empty( $sep ) ) {
+				} else if ( ! empty( $sep ) ) {
 					// Don't disturb the precious title when WP_DEBUG is on.
 					add_action( 'wp_footer', array( $this, 'title_doing_it_wrong' ), 20 );
 
@@ -779,6 +779,9 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * This small piece of code will fix all that.
 		 * By removing the separator from the title and adding the blog name always to the right.
 		 * Which is always the case with doing_it_wrong.
+		 *
+		 * @thanks JW_ https://wordpress.org/support/topic/wp_title-problem-bug
+		 * @since 2.4.3
 		 */
 		if ( isset( $args['empty_title'] ) ) {
 			$title = trim( str_replace( $sep, '', $title ) );
@@ -1059,8 +1062,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			 * @since 2.4.3
 			 * Adds page numbering within the title.
 			 */
-			if ( ! $is_front_page && ! is_404() && ( $paged >= 2 || $page >= 2 ) )
-				$title .= $sep . sprintf( __( 'Page %s', 'autodescription' ), max( $paged, $page ) );
+			if ( ! is_404() && ( $paged >= 2 || $page >= 2 ) )
+				$title .= " $sep " . sprintf( __( 'Page %s', 'autodescription' ), max( $paged, $page ) );
 
 			//* Title for title (meta) tags.
 			if ( $is_front_page && ! $add_tagline ) {
@@ -1193,12 +1196,6 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			 * @global $post
 			 */
 			$title = isset( $post->post_title ) ? $post->post_title : $title;
-
-			/**
-			 * Not anymore!
-			 * @since 2.4.1
-			 */
-			//$title = get_the_title( get_queried_object_id() );
 		}
 
 		//* You forgot to enter a title "anywhere"!

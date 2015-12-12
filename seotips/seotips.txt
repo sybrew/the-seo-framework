@@ -1,0 +1,68 @@
+	= 2.3.3 - Domain Age is important =
+
+* Is your domain name just registered? Give it some time. It can take from three to six months before Google thinks you deserve a better spot on the search results page. Google doesn't really like new domains because new domains often contain spam. While waiting for a higher spot, be creative! Get awesome content out there for when your domain does get some authority :).
+* Bing and Yahoo, however, don't (really) look at domain age, but rather at domain name. So it's much easier to rank higher early on those search engines. DuckDuckGo is still a mystery but it seems that they look at Geo location, backlinks and titles.
+
+	= 2.3.4 - Descriptions are organic & Limiting scripts =
+
+* Search engines do not always pick out the description you've provided, but sometimes take an organic part based on your search query. This only proves more that your content is more important than SEO optimization. But every little part helps!
+* One little part that helps, a lot, is that you reduce the amount of styles and scripts you push to the visitor. Use a great theme from the WordPress repository or use a premium theme from Genesis or WooThemes. They work according to the standards and are following guidelines set by Automattic. Also avoid using many plugins that provide front-end goodies, but only use what you really need. Your visitors and Search Engines alike will love your site for it!
+
+	= 2.3.5 - Go Social & Use Knowledge Graph =
+
+* Go social! Search Engines don't just look at your website anymore these days, but also take a look at social activity. Most importantly: Having a Facebook, Twitter and/or Google+ page increases your chances to be found.
+* Use the Knowledge Graph options to improve Search Engine presence on your company or trademark by connecting your site socially, be sure to engage with your audience by linking back to content on your site. But don't spam!
+
+	= 2.3.6 - Plenty of Content, but not too much =
+
+* Make sure you have plenty of content for your visitors to read. About 600 to 1000 words of content per page is recommended.
+* Your content is for your visitors, not for search engines.
+* So, do not split up content if it exceeds the recommended amount. If a piece of text can't support itself, readers won't understand the subject and will leave your website.
+* If you have fewer words but you've covered everything that needed to be covered for the page, don't extend it just for the sake of SEO. Do not over-optimize.
+
+	= 2.3.7 - Sitemaps, just wait and see =
+
+* Nowadays, sitemaps are a tool for Search Engines, not for users. This means that styling the sitemap just adds unnecessary resource usage.
+* Having a sitemap available will make sure your content is reached out faster to the Search Index since the Search Engines know what has changed and when. So be sure to enable the lastmod feature if you frequently post new posts or pages!
+* No sitemap? Not a problem! Search Engines will just follow links within your site to find new pages. This default behavior will also continue with a sitemap available, so no pages are missed even if your sitemap has reached its limit.
+
+	= 2.3.8 - Title Tag binds your site together, answer questions with it =
+
+* The Title tag is considered the most important part for SEO. It's what binds the whole site together. That's why this plugin outputs the blog name on every page.
+* Having a well-constructed Title consists of the Blog Name and an addition. This addition should describe the whole page in a few words.
+* Referring back to the Title within the first or last paragraph, or within a subheader as well as in the Description will improve your chances to be found for those words.
+* Alternatively, a question as the title where you give an answer in the first paragraph is considered rich content. It might even put your page in the rich content results on Google.
+
+	= 2.3.9 - Following visitors, hook them with an introduction =
+
+* Search engines follow visitor interaction throughout the pages. If a visitor doesn't stay on a page long enough and hits the back button, your content probably isn't what the visitor was looking for and the Search Engine gets notified and adjusts for future queries.
+* So be sure to create great titles and build a related and constructive first paragraph. If the visitor is hooked, the visitor will stay, read on or click through. Search Engines take note of this and your SERP value goes up.
+
+	= 2.4.0 - Invalid HTML, Valid Content and use HTML5 =
+
+* Invalid HTML doesn't affect your site's SEO value. However, valid HTML is considered best practice, and with a good reason.
+* The good reason for valid HTML is that you can be certain that your website (almost) looks the same on every browser, so you're certain that the visitor will see your website as you intended.
+* However, it doesn't affect your site's SEO value because Search Engines want to put out the best content for your search, not the most 'valid' content.
+* With so many "invalid" websites out there, Search Engines try to read the HTML as many web browsers would: by fixing common mistakes.
+* Still using HTML4 or xHTML? Try to find a way to upgrade to HTML5, its semantic elements are very SEO friendly.
+
+	= 2.4.1 - Navigation and Naming internal links =
+
+* Navigation is very important for your website. Depending on your content, create an easy menu on what visitors need the most.
+* Do not depend on your sitemap too much, if a user can't find a page, then why should a Search Engine?
+* Internal links with aptly named titles are therefore considered best practice. Naming a link "read more here" is for this reason not advised for links that lead to landing pages.
+* Rather use: Read all about "my product name here". Do not forget to make everything natural to read.
+
+	= 2.4.2 - Canonical URLs =
+
+* Canonical URLs are the URLs that lead to exactly where a page is located. It's very important for Search Engines to find the right page, to prevent duplicated content mistakes.
+* The Search Engine will therefore always follow the canonical URL and will most likely ignore the current page if the canonical URL points to a page other than the current page.
+* For this reason, the canonical URL within The SEO Framework will look for many variables before making one, with this update even more so.
+* This concludes that it's advised not to touch the Custom Canonical URL unless you're absolutely certain that Search Engines should look for another webpage.
+
+	= 2.4.3 - Go blog, keep it related =
+
+* Maintaining a blog will output not only fresh content and notify Search Engines that your website is active, but it will also simultaneously improve your chances to be found.
+* There are so many (big) questions to be answered, a blog on each of those questions will surely attract different visitors.
+* Keep the blog related to the main subject of your site, for it will categorize your website as a whole. Visitors will more likely engage and then keep coming back for more information.
+* After all, you're most likely the expert on the subject of your website.

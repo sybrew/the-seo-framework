@@ -45,6 +45,11 @@ class AutoDescription_Init {
 		add_action( 'init', array( $this, 'autodescription_run' ), 1 );
 		add_action( 'template_redirect', array( $this, 'custom_field_redirect') );
 
+		/**
+		 * Applies filters : the_seo_framework_use_object_cache
+		 *
+		 * @since 2.4.3
+		 */
 		$this->use_object_cache = (bool) apply_filters( 'the_seo_framework_use_object_cache', true );
 
 	}

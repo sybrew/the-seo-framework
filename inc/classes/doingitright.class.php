@@ -491,7 +491,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 				if ( $tit_len < 25 ) {
 					$titlen_notice = $title_i18n . ' ' . __( 'far too short.', 'autodescription' );
 					$titlen_class = $bad;
-				} else if ( $tit_len < 50 ) {
+				} else if ( $tit_len < 42 ) {
 					$titlen_notice = $title_i18n . ' ' . __( 'too short.', 'autodescription' );
 					$titlen_class = $okay;
 				} else if ( $tit_len > 55 && $tit_len < 75 ) {

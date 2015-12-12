@@ -161,6 +161,7 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 
 		$latest_posts_key = 'latest_post_id_' . $blog_id;
 
+		//* @TODO consider transient.
 		$page_id = $this->object_cache_get( $latest_posts_key );
 		if ( false === $page_id ) {
 
