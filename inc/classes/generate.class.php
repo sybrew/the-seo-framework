@@ -1653,7 +1653,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 *
 		 * @since 2.2.4
 		 */
-		if ( $slashit && ! $args['forceslash'] ) {
+		if ( $slashit && ! $args['forceslash'] )
 			$output = user_trailingslashit( $output );
 
 		if ( $args['forceslash'] )
