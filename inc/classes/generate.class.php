@@ -519,7 +519,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 * 		@param bool page_on_front Page on front condition for example generation.
 	 * 		@param bool placeholder Generate placeholder, ignoring options.
 	 * 		@param bool notagline Generate title without tagline.
-	 * 		@param bool meta Ignore doint_it_wrong. Used in og:title/twitter:title
+	 * 		@param bool meta Ignore doing_it_wrong. Used in og:title/twitter:title
 	 * 		@param bool get_custom_field Do not fetch custom title when false.
 	 * 		@param bool description_title Fetch title for description.
 	 * 		@param bool is_front_page Fetch front page title.
@@ -586,14 +586,26 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * @since 2.2.5
 		 */
 		if ( ! $args['meta'] ) {
-			if ( ! empty( $seplocation ) && doing_filter( 'wp_title' ) && ! $this->detect_theme_support( 'title-tag' ) ) {
-				// Don't disturb the precious title when WP_DEBUG is on.
-				add_action( 'wp_footer', array( $this, 'title_doing_it_wrong' ), 20 );
+			if ( ! $this->detect_theme_support( 'title-tag' ) && doing_filter( 'wp_title' ) ) {
+				if ( ! empty( $seplocation ) ) {
+					// Don't disturb the precious title when WP_DEBUG is on.
+					add_action( 'wp_footer', array( $this, 'title_doing_it_wrong' ), 20 );
 
-				//* Notify cache.
-				$this->title_doing_it_wrong = true;
+					//* Notify cache.
+					$this->title_doing_it_wrong = true;
 
-				return $this->build_title_doingitwrong( $title, $sep, $seplocation, $args );
+					return $this->build_title_doingitwrong( $title, $sep, $seplocation, $args );
+				} else if ( !empty( $sep ) ) {
+					// Don't disturb the precious title when WP_DEBUG is on.
+					add_action( 'wp_footer', array( $this, 'title_doing_it_wrong' ), 20 );
+
+					//* Notify cache.
+					$this->title_doing_it_wrong = true;
+
+					$args['empty_title'] = true;
+
+					return $this->build_title_doingitwrong( $title, $sep, $seplocation, $args );
+				}
 			}
 		}
 
@@ -761,6 +773,17 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 */
 		if ( is_front_page() )
 			return $title = '';
+
+		/**
+		 * When using an empty wp_title() function, outputs are unexpected.
+		 * This small piece of code will fix all that.
+		 * By removing the separator from the title and adding the blog name always to the right.
+		 * Which is always the case with doing_it_wrong.
+		 */
+		if ( isset( $args['empty_title'] ) ) {
+			$title = trim( str_replace( $sep, '', $title ) );
+			$seplocation = 'right';
+		}
 
 		if ( empty( $args ) )
 			$args = $this->parse_title_args( '', '', true );
