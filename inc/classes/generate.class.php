@@ -1706,7 +1706,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				'is_term' 			=> false,
 				'post' 				=> null,
 				'term'				=> null,
-				'home'				=> false
+				'home'				=> false,
 				'forceslash'		=> false
 			);
 		}

@@ -154,6 +154,8 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	 *
 	 * @staticvar array $cached_id
 	 *
+	 * @global $blog_id;
+	 *
 	 * @since 2.3.3
 	 *
 	 * @return string The generated page id key.
@@ -167,99 +169,126 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 
 		global $blog_id;
 
-		if ( ! is_search() ) {
-			if ( ( $page_id === false || is_front_page() ) && ( 'posts' == get_option( 'show_on_front' ) ) ) {
-				if ( is_404() ) {
-					$page_id = '_404_';
-				} else {
-					/**
-					 * Generate for home is blog page.
-					 * New transient name because of the conflicting bugfix on blog.
-					 * @since 2.3.4
-					 */
-					$page_id = 'hblog_' . (string) get_option( 'page_on_front' );
-				}
-			} else if ( ( $page_id === false || is_front_page() || $page_id == get_option( 'page_on_front' ) ) && ( 'page' == get_option( 'show_on_front' ) ) ) {
-				if ( is_404() ) {
-					$page_id = '_404_';
-				} else {
-					/**
-					 * Detected home page.
-					 * @since 2.3.4
-					 */
-					$page_id = 'hpage_' . (string) get_option( 'page_on_front' );
-				}
-			} else if ( !is_front_page() && empty( $taxonomy ) && ( ( $page_id == get_option( 'page_for_posts' ) && get_option( 'page_for_posts' ) != 0 ) || ( $page_id === false && did_action( 'admin_init' ) ) ) ) {
+		$the_id = '';
+
+		/**
+		 * Generate home page cache key for the Home Page metabox.
+		 * @since 2.4.3.1
+		 */
+		if ( $this->is_menu_page( $this->pagehook ) ) {
+			if ( 'posts' == get_option( 'show_on_front' ) ) {
 				/**
-				 * Generate key for blog page that's not the home page.
-				 * Bugfix
+				 * Detected home page.
 				 * @since 2.3.4
 				 */
-				$page_id = 'blog_' . $page_id;
-			} else if ( !is_singular() && empty( $taxonomy ) && ! did_action( 'admin_init' ) ) {
-				global $wp_query;
-
+				$the_id = 'hpage_' . (string) get_option( 'page_on_front' );
+			} else {
 				/**
-				 * Generate for everything else.
-				 * Doesn't work on admin_init action.
-				 */
-
-				$query = isset( $wp_query->query ) ? (array) $wp_query->query : null;
-
-				/**
-				 * Automatically generate transient based on query.
-				 *
-				 * Adjusted to comply with the 45 char limit.
+				 * Detected home page.
 				 * @since 2.3.4
 				 */
-				if ( isset( $query ) ) {
-					$page_id = '';
-
-					// Trim key to 2 chars.
-					foreach ( $query as $key => $value )
-						$page_id .= substr( $key, 0, 2 ) . '_' . mb_substr( $value, 0, 2 ) . '_' . get_queried_object_id() . '_';
-
-					//* Remove final underscore
-					$page_id = rtrim( $page_id, '_' );
-				}
-			} else if ( !is_singular() && !empty( $taxonomy ) ) {
-
-				//* Strip the ID from the taxonomy name.
-				$tax_len = mb_strlen( $taxonomy );
-				$_id = mb_substr( $page_id, $tax_len );
-
-				//* Empty page id.
-				$page_id = '';
-
-				//* Save taxonomy name and split into words with 3 length.
-				$taxonomy_name = explode( '_', $taxonomy );
-				foreach ( $taxonomy_name as $name )
-					$page_id .= substr( $name, 0, 3 ) . '_';
-
-				//* Put it all together.
-				$page_id = $page_id . ltrim( $_id, '_' );
+				$the_id = 'hpage_' . (string) get_option( 'page_on_front' );
 			}
 		} else {
-			//* Search query.
-			$query = '';
+			if ( ! is_search() ) {
+				if ( ( $page_id === false || is_front_page() ) && ( 'posts' == get_option( 'show_on_front' ) ) ) {
+					if ( is_404() ) {
+						$the_id = '_404_';
+					} else {
+						/**
+						 * Generate for home is blog page.
+						 * New transient name because of the conflicting bugfix on blog.
+						 * @since 2.3.4
+						 */
+						$the_id = 'hblog_' . (string) get_option( 'page_on_front' );
+					}
+				} else if ( ( $page_id === false || is_front_page() || $page_id == get_option( 'page_on_front' ) ) && ( 'page' == get_option( 'show_on_front' ) ) ) {
+					if ( is_404() ) {
+						$the_id = '_404_';
+					} else {
+						/**
+						 * Detected home page.
+						 * @since 2.3.4
+						 */
+						$the_id = 'hpage_' . (string) get_option( 'page_on_front' );
+					}
+				} else if ( ! is_front_page() && empty( $taxonomy ) && ( ( $page_id == get_option( 'page_for_posts' ) && get_option( 'page_for_posts' ) != 0 ) || ( $page_id === false && did_action( 'admin_init' ) ) ) ) {
+					/**
+					 * Generate key for blog page that's not the home page.
+					 * Bugfix
+					 * @since 2.3.4
+					 */
+					$the_id = 'blog_' . $page_id;
+				} else if ( ! is_singular() && empty( $taxonomy ) && ! did_action( 'admin_init' ) ) {
+					global $wp_query;
 
-			if ( function_exists( 'get_search_query' ) ) {
-				$query = str_replace( ' ', '', get_search_query() );
+					/**
+					 * Generate for everything else.
+					 * Doesn't work on admin_init action.
+					 */
 
-				//* Limit to 10 chars.
-				if ( mb_strlen( $query ) > 10 )
-					$query = mb_substr( $query, 0, 10 );
+					$query = isset( $wp_query->query ) ? (array) $wp_query->query : null;
+
+					/**
+					 * Automatically generate transient based on query.
+					 *
+					 * Adjusted to comply with the 45 char limit.
+					 * @since 2.3.4
+					 */
+					if ( isset( $query ) ) {
+						$the_id = '';
+
+						// Trim key to 2 chars.
+						foreach ( $query as $key => $value )
+							$the_id .= substr( $key, 0, 2 ) . '_' . mb_substr( $value, 0, 2 ) . '_' . get_queried_object_id() . '_';
+
+						//* Remove final underscore
+						$the_id = rtrim( $the_id, '_' );
+					}
+				} else if ( ! is_singular() && ! empty( $taxonomy ) ) {
+
+					//* Strip the ID from the taxonomy name.
+					$tax_len = mb_strlen( $taxonomy );
+					$_id = mb_substr( $page_id, $tax_len );
+
+					//* Empty page id.
+					$the_id = '';
+
+					//* Save taxonomy name and split into words with 3 length.
+					$taxonomy_name = explode( '_', $taxonomy );
+					foreach ( $taxonomy_name as $name )
+						$the_id .= substr( $name, 0, 3 ) . '_';
+
+					//* Put it all together.
+					$the_id = $the_id . ltrim( $_id, '_' );
+				} else if ( ! empty( $page_id ) ) {
+					$the_id = $page_id;
+				}
+			} else {
+				//* Search query.
+				$query = '';
+
+				if ( function_exists( 'get_search_query' ) ) {
+					$search_query = get_search_query();
+
+					if ( !empty( $search_query ) )
+						$query = str_replace( ' ', '', $search_query );
+
+					//* Limit to 10 chars.
+					if ( mb_strlen( $query ) > 10 )
+						$query = mb_substr( $query, 0, 10 );
+				}
+
+				$the_id = $page_id . '_s_' . $query;
 			}
-
-			$page_id = $page_id . '_s_' . $query;
 		}
 
 		/**
 		 * Static Front page isn't set. Causes all kinds of problems :(
 		 * Noob. :D
 		 */
-		if ( empty( $page_id ) ) {
-			$page_id = 'home_noob';
+		if ( empty( $the_id ) ) {
+			$the_id = 'home_noob';
 		}
 
 		/**
@@ -267,7 +296,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		 * Then some cache keys will conflict on every 10th blog ID from eachother which post something on the same day..
 		 * On the day archive. With the same description setting (short).
 		 */
-		return $cached_id[$page_id][$taxonomy] = (string) $page_id . '_' . (string) $blog_id;
+		return $cached_id[$page_id][$taxonomy] = (string) $the_id . '_' . (string) $blog_id;
 	}
 
 	/**

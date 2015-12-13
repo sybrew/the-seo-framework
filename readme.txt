@@ -356,24 +356,24 @@ If you wish to export data from The SEO Framework, please poke StudioPress with 
 
 == Changelog ==
 
-= 2.4.4 - ??? =
+= 2.4.3.1 - Naming Things =
 
 **Summarized:**
-/
-* TODO
 
-**SEO Tip of the Update:**
-/
-* TODO
+* Small update which fixes two bugs reported by my dear users, Thanks! :)
+* Search Pages are now also generating a new cache key so they can't conflict with the home page cache anymore in special scenarios.
 
 **For everyone:**
-/
-* Fixed: The object cache key is now generating a different cache key for search queries before checking if it's the home page.
+
+* Improved: Massively improved plugin speed on 404 and search pages by eliminating redundant calls.
+* Improved: Cache generation key is now using static cache correctly.
+* Fixed: The object cache key is now generating a different cache key for search queries before checking if it's the home page. This will prevent Search Queries to take over the home page cache when using a premium theme to design a one-pager front-page through widgets.
 * Fixed: Sitemap and robots example links weren't correct when the permalink structure doesn't end with a slash.
+* Fixed: Fatal error caused by typo on search pages.
 
 **For developers:**
-/
-* TODO
+
+* Added: Extra parameter to `AutoDescription_Generate::the_url()` for forcing trailing slashes.
 
 = 2.4.3 - The Littlest Things | Page 2 =
 
