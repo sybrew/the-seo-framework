@@ -795,7 +795,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	public function ld_json() {
 
 		//* Check for WPSEO LD+JSON
-		if ( $this->has_json_ld_plugin() !== false )
+		if ( $this->has_json_ld_plugin() !== false || is_search() || is_404() )
 			return;
 
 		$this->setup_ld_json_transient( get_the_ID() );

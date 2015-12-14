@@ -53,7 +53,7 @@ class AutoDescription_Search extends AutoDescription_Generate {
 
 		$cache_key = 'exclude_search_ids_' . $blog_id;
 
-		$post_ids = $this->ojbect_cache_get( $cache_key );
+		$post_ids = $this->object_cache_get( $cache_key );
 		if ( false === $post_ids ) {
 			$post_ids = array();
 

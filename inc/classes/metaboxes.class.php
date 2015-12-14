@@ -1635,7 +1635,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 
 		$site_url = $this->the_url_from_cache( '', '0', false, false );
 
-		$sitemap_url = esc_url( $site_url . 'sitemap.xml' );
+		$sitemap_url = esc_url( trailingslashit( $site_url ) . 'sitemap.xml' );
 
 		?>
 		<h4><?php _e( 'Sitemap Integration Settings', 'autodescription' ); ?></h4>
@@ -1672,7 +1672,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 
 		$site_url = $this->the_url_from_cache( '', '0', false, false );
 
-		$robots_url = esc_url( $site_url . 'robots.txt' );
+		$robots_url = esc_url( trailingslashit( $site_url ) . 'robots.txt' );
 		$here =  '<a href="' . $robots_url  . '" target="_blank" title="' . __( 'View robots.txt', 'autodescription' ) . '">' . _x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 
 		?>

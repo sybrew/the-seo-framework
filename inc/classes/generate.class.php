@@ -1461,7 +1461,9 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 * 			@param object $post The Post Object.
 	 * 			@param bool $external Wether to fetch the current WP Request or get the permalink by Post Object.
 	 * 			@param bool $is_term Fetch url for term.
-	 * 			@param bool $term The term object.
+	 * 			@param object $term The term object.
+	 * 			@param bool $home Fetch home URL.
+	 * 			@param bool $forceslash Fetch home URL and slash it, always.
 	 * }
 	 *
 	 * @since 2.0.0
@@ -1644,16 +1646,20 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		if ( ! isset( $scheme ) )
 			$scheme = is_ssl() ? 'https' : 'http';
 
+		$output = $this->set_url_scheme( $url, $scheme );
+
 		/**
 		 * Slash it only if $slashit is true
 		 *
 		 * @since 2.2.4
 		 */
-		if ( $slashit ) {
-			$output = esc_url( user_trailingslashit( $this->set_url_scheme( $url, $scheme ) ) );
-		} else {
-			$output = esc_url( $this->set_url_scheme( $url, $scheme ) );
-		}
+		if ( $slashit && ! $args['forceslash'] )
+			$output = user_trailingslashit( $output );
+
+		if ( $args['forceslash'] )
+			$output = trailingslashit( $output );
+
+		$output = esc_url( $output );
 
 		/**
 		 * Debug parameters.
@@ -1700,7 +1706,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				'is_term' 			=> false,
 				'post' 				=> null,
 				'term'				=> null,
-				'home'				=> false
+				'home'				=> false,
+				'forceslash'		=> false
 			);
 		}
 
@@ -1717,6 +1724,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		$args['post'] 				= isset( $args['post'] ) 				? (object) $args['post'] 			: $defaults['post'];
 		$args['term'] 				= isset( $args['term'] ) 				? (object) $args['term'] 			: $defaults['term'];
 		$args['home'] 				= isset( $args['home'] ) 				? (bool) $args['home'] 				: $defaults['home'];
+		$args['forceslash'] 		= isset( $args['forceslash'] ) 			? (bool) $args['forceslash'] 		: $defaults['forceslash'];
 
 		return $args;
 	}
