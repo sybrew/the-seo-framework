@@ -547,7 +547,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 	 * @since 2.2.9
 	 */
 	public function ping_google() {
-		$pingurl = 'http://www.google.com/webmasters/sitemaps/ping?sitemap=' . urlencode( trailingslashit( $this->the_url_from_cache( '', '0', false, false ) ) . 'sitemap.xml' );
+		$pingurl = 'http://www.google.com/webmasters/sitemaps/ping?sitemap=' . urlencode( $this->the_home_url_from_cache( true ) . 'sitemap.xml' );
 
 		wp_remote_get( $pingurl );
 	}
@@ -558,7 +558,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 	 * @since 2.2.9
 	 */
 	public function ping_bing() {
-		$pingurl = 'http://www.bing.com/webmaster/ping.aspx?siteMap=' . urlencode( trailingslashit( $this->the_url_from_cache( '', '0', false, false ) ) . 'sitemap.xml' );
+		$pingurl = 'http://www.bing.com/webmaster/ping.aspx?siteMap=' . urlencode( $this->the_home_url_from_cache( true ) . 'sitemap.xml' );
 
 		wp_remote_get( $pingurl );
 	}
@@ -569,7 +569,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 	 * @since 2.2.9
 	 */
 	public function ping_yahoo() {
-		$pingurl = 'http://search.yahooapis.com/SiteExplorerService/V1/ping?sitemap=' . urlencode( trailingslashit( $this->the_url_from_cache( '', '0', false, false ) ) . 'sitemap.xml' );
+		$pingurl = 'http://search.yahooapis.com/SiteExplorerService/V1/ping?sitemap=' . urlencode( $this->the_home_url_from_cache( true ) . 'sitemap.xml' );
 
 		wp_remote_get( $pingurl );
 	}
@@ -596,11 +596,21 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		if ( '0' == $public )
 			return $robots_txt;
 
-		$cache_key = 'robots_txt_output_' . $blog_id;
+		$revision = '1';
+
+		$cache_key = 'robots_txt_output_' . $revision . $blog_id;
 
 		$output = $this->object_cache_get( $cache_key );
 		if ( false === $output ) {
 			$output = '';
+
+			/**
+			 * Apply filters the_seo_framework_robots_txt_pre & the_seo_framework_robots_txt_pro
+			 * 		: Add custom cacheable lines.
+			 *		: Don't forget to add line breaks ( "\r\n" | PHP_EOL )
+			 */
+			$pre = (string) apply_filters( 'the_seo_framework_robots_txt_pre', '' );
+			$pro = (string) apply_filters( 'the_seo_framework_robots_txt_pro', '' );
 
 			/**
 			 * @TODO use the_url_from_cache() ?
@@ -610,16 +620,15 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			 * @var_dump()
 			 * FOUND BUG: Mapped WordPress installations robots.txt will not be compatible. =/
 			 */
-			$scheme = is_ssl() ? 'https' : 'http';
-			$home_url = get_option( 'home' );
-			$home_url = $this->set_url_scheme( $home_url, $scheme );
-
+			$home_url = $this->the_home_url_from_cache();
 			$parse_url = parse_url( $home_url );
+			$path = ! empty( $site_url['path'] ) ? $site_url['path'] : '';
 
-			$path = ! empty( $parse_url['path'] ) ? $parse_url['path'] : '';
-
+			$output .= $pre;
 			//* Output defaults
-			$output .= "Disallow: $path/wp-includes/\r\n";
+			$output .= "User-agent: *\r\n";
+			$output .= "Disallow: $path/wp-admin/\r\n";
+			$output .= "Allow: $path/wp-admin/admin-ajax.php\r\n";
 
 			/**
 			 * Prevents query indexing
@@ -631,28 +640,24 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			if ( ! (bool) apply_filters( 'the_seo_framework_robots_allow_queries', false ) )
 				$output .= "Disallow: $path/*?*\r\n";
 
-			//* Add whitespace
-			$output .= "\r\n";
+			$output .= $pro;
 
 			if ( $this->get_option( 'sitemaps_output') && (bool) $this->get_option( 'sitemaps_robots' ) ) {
+				//* Add whitespace before sitemap.
+				$output .= "\r\n";
+
 				//* Add sitemap full url
-				//* Becomes relative if host is empty.
-				$host = ! empty( $parse_url['host'] ) ? $parse_url['host'] : '';
-
-				//* @TODO check if you should use $scheme instead of $parse_url...
-				$scheme = ( !empty( $parse_url['scheme'] ) && !empty( $host ) ) ? $parse_url['scheme'] . '://' : '';
-
-				//* @TODO use trailingslashit( $home_url ) ?
-				$output .= "Sitemap: $scheme$host/sitemap.xml\r\n";
-
-				//* @TODO use this?
-				// $output .= 'Sitemap: ' . trailingslashit( $home_url ) . "sitemap.xml\r\n";
+				$output .= 'Sitemap: ' . trailingslashit( $home_url ) . "sitemap.xml\r\n";
 			}
 
 			$this->object_cache_set( $cache_key, $output, 86400 );
 		}
 
-		$robots_txt .= $output;
+		/**
+		 * Override robots with output.
+		 * @since 2.4.4
+		 */
+		$robots_txt = $output;
 
 		return $robots_txt;
 	}

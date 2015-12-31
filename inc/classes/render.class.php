@@ -90,6 +90,28 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	}
 
 	/**
+	 * Cache home URL in static variable
+	 *
+	 * @param bool $force_slash Force slash
+	 *
+	 * @staticvar array $url_cache
+	 *
+	 * @since 2.2.2
+	 * @return string The url
+	 */
+	public function the_home_url_from_cache( $force_slash = false ) {
+
+		static $url_cache = array();
+
+		if ( isset( $url_cache[$force_slash] ) )
+			return $url_cache[$force_slash];
+
+		$url_cache[$force_slash] = $this->the_url( '', '', array( 'home' => true, 'force_slash' => $force_slash ) );
+
+		return $url_cache[$force_slash];
+	}
+
+	/**
 	 * Cache current Title in static variable
 	 * Must be called inside the loop
 	 *

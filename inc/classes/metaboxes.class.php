@@ -1242,7 +1242,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 
 		do_action( 'the_seo_framework_webmaster_metabox_before' );
 
-		$site_url = $this->the_url_from_cache( '', '0', false, false );
+		$site_url = $this->the_home_url_from_cache();
 		$language = $this->google_language();
 
 		$bing_site_url = "https://www.bing.com/webmaster/configure/verify/ownership?url=" . urlencode( $site_url );
@@ -1633,9 +1633,9 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 	 */
 	public function sitemaps_metabox_general_tab() {
 
-		$site_url = $this->the_url_from_cache( '', '0', false, false );
+		$site_url = $this->the_home_url_from_cache( true );
 
-		$sitemap_url = esc_url( trailingslashit( $site_url ) . 'sitemap.xml' );
+		$sitemap_url = $site_url . 'sitemap.xml';
 
 		?>
 		<h4><?php _e( 'Sitemap Integration Settings', 'autodescription' ); ?></h4>
@@ -1670,9 +1670,9 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 	 */
 	public function sitemaps_metabox_robots_tab() {
 
-		$site_url = $this->the_url_from_cache( '', '0', false, false );
+		$site_url = $this->the_home_url_from_cache( true );
 
-		$robots_url = esc_url( trailingslashit( $site_url ) . 'robots.txt' );
+		$robots_url = trailingslashit( $site_url ) . 'robots.txt';
 		$here =  '<a href="' . $robots_url  . '" target="_blank" title="' . __( 'View robots.txt', 'autodescription' ) . '">' . _x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 
 		?>

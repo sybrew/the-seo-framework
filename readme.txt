@@ -371,23 +371,30 @@ TODO
 
 **For everyone:**
 /
+* TODO Added: All WooCommerce Product Images are now also added with multiple `og:image` meta tags. Now users can now thoroughly scroll through your items when shared on social sites (where supported)!
+* TODO Added: Full Elegant Themes' Divi compatibility. Read more below under heading "About: Divi Compatibility".
+* TODO Added: Colorized character counters! These subtle colors now let you know you're doing it right right away :).
+* Changed: Disabled OG Meta tags output when Add Meta Tags is active.
+* Changed: Color changes to the SEO Bar to fully support all color deficiency spectra, with limited support for achromatopsia (green and orange e.g. good and okay still look the same). This also makes the SEO bar more vibrant and more beautiful for non-colorblind people.
 * Improved: The Breadcrumb home URL now also considers the Domain Mapping domains instead of only the current domain.
 * TODO Fixed: WooCommerce product overview layout was messed up on smaller (tablet to 15") screens by the addition of The SEO Bar. It now all fits. (table.wp-list-table .column-name,table.wp-list-table .column-is_in_stock{width:10%}). Further optimization is left in the hands of WooCommerce as they still need to optimize this themself.
 * TODO Fixed: Incorrect Dutch translation on Robots Meta Settings on the Inpost metabox.
-* Changed: Disabled OG Meta tags output when Add Meta Tags is active.
-* TODO Added: Full Elegant Themes' Divi compatibility. Read more below under "About: Divi Compatibility"
 * TODO Fixed: Title bug with categories when both a custom title and category title are filled in.
 * TODO Fixed: AnsPress bug where not all page descriptions are fetched correctly on the front-end.
-* TODO Fixed: Robots.txt sitemap wasn't pointed to correctly on Subdirectory Multisite installations.
-* TODO Added: All WooCommerce Product Images are now also added with multiple `og:image` meta tags. Now users can now thoroughly scroll through your items when shared on social sites (where supported)!
-* TODO Removed: /wp-includes/ blocking through robots.txt, this was accidentally added long ago and the removal should resolve issues with Google Webmaster Tools.
-* TODO Added: Colorized character counters! These subtle colors now let you know you're doing it right right away :).
-* Changed: Color changes to the SEO Bar to fully support all color deficiency spectra, with limited support for achromatopsia (green and orange e.g. good and okay still look the same). This also makes the SEO bar more vibrant and more beautiful for non-colorblind people.
+* Fixed: Robots.txt sitemap wasn't pointed to correctly on Subdirectory Multisite installations.
+* Fixed: Robots.txt sitemap wasn't pointed to correctly on Mapped Multisite domains.
+* Removed: /wp-includes/ blocking through robots.txt, this was accidentally added long ago and the removal should resolve issues with Google Webmaster Tools.
 
 **For developers:**
 /
-* TODO: Added new robots filters.
+* Added: New function `AutoDescription_Render::the_home_url_from_cache( $force_slash )`.
+* Added: New filters. (TODO document robots filters in site).
+* Added: Static caching for the current page in ld+json breadcrumbs.
+* Changed: Default WordPress robots.txt is now completely overwritten to maintain compatibility.
 * Cleaned up code.
+
+/** NOTE CACHED ITEMS CHANGE **
+/ TODO Should look at error log consistently before pushing tag.
 
 **About: Divi Compatibility**
 /

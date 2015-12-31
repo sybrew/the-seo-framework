@@ -3118,33 +3118,45 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 * @param int $pos Last known position.
 	 * @param int $post_id The current Post ID
 	 *
+	 * @staticvar string $type The breadcrumb item type.
+	 * @staticvar string $id The current post/page/archive url.
+	 * @staticvar string $name The current post/page/archive title.
+	 *
 	 * @return string Lat Breadcrumb item
 	 */
 	public function ld_json_breadcrumb_last( $item_type, $pos, $post_id ) {
 
-		//* @TODO staticvar this?
-		
-		if ( !isset( $item_type ) )
-			$item_type = json_encode( 'ListItem' );
+		if ( ! isset( $pos ) )
+			$pos = '2'; // Wild guess, but holds mostly true. This shouldn't run anyway. Pos should always be provided.
 
-		if ( !isset( $pos ) )
-			$pos = '2'; // wild guess.
+		if ( ! isset( $item_type ) ) {
+			static $type = '';
+
+			if ( ! isset( $type ) )
+				$type = json_encode( 'ListItem' );
+
+			$item_type = $type;
+		}
 
 		if ( !isset( $post_id ) )
 			$post_id = get_the_ID();
 
-		if ( !isset( $last_item ) ) {
-			//* Add current page.
-			$pos = $pos + 1;
+		//* Add current page.
+		$pos = $pos + 1;
 
+		static $id = '';
+		static $name = '';
+
+		if ( ! isset( $id ) )
 			$id = json_encode( $this->the_url_from_cache() );
 
+		if ( ! isset( $name ) ) {
 			$custom_field = $this->get_custom_field( '_genesis_title', $post_id );
 			$name = $custom_field ? $custom_field : $this->title( '', '', '', array( 'term_id' => $post_id, 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
 			$name = json_encode( $name );
-
-			$last_item = sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}}', $item_type, (string) $pos, $id, $name );
 		}
+
+		$last_item = sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}}', $item_type, (string) $pos, $id, $name );
 
 		return $last_item;
 	}
