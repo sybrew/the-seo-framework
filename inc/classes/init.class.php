@@ -194,7 +194,7 @@ class AutoDescription_Init {
 
 		$plugin_start = microtime( true );
 
-		$the_id = get_queried_object_id() ? get_queried_object_id() : get_the_ID();
+		$the_id = $this->get_the_real_ID();
 
 		//* Hexadecimal revision.
 		$revision = '1';

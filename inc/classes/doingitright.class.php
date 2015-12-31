@@ -204,7 +204,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 		//* Fetch Post ID if it hasn't been provided.
 		if ( empty( $post_id ) )
-			$post_id = get_the_ID();
+			$post_id = $this->get_the_real_ID();
 
 		//* Only run when post ID is found.
 		if ( isset( $post_id ) && !empty( $post_id ) ) {

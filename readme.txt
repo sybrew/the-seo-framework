@@ -363,7 +363,7 @@ If you wish to export data from The SEO Framework, please poke StudioPress with 
 * This update is for both robots and humans. With better support for people with color vision deficiency and with better support for robots to access and understand your website.
 * Also, WooCommerce has gained extra support for Product Images and AnsPress question descriptions have been fixed.
 * And last but not least, you can now see how well the length is of the descriptions and titles while editing a page or post.
-* A few other bugfixes have also been included.
+* A few other bugfixes have also been included. The biggest fix is regarding correctly fetching of the ID. Expect quick compatibility improvements in the future!
 
 **SEO Tip of the Update:**
 /
@@ -375,20 +375,25 @@ TODO
 * TODO Added: Full Elegant Themes' Divi compatibility. Read more below under heading "About: Divi Compatibility".
 * TODO Added: Colorized character counters! These subtle colors now let you know you're doing it right right away :).
 * Changed: Disabled OG Meta tags output when Add Meta Tags is active.
-* Changed: Color changes to the SEO Bar to fully support all color deficiency spectra, with limited support for achromatopsia (green and orange e.g. good and okay still look the same). This also makes the SEO bar more vibrant and more beautiful for non-colorblind people.
+* Changed: Color changes to the SEO Bar to fully support all vision deficiency spectra. This also makes the SEO bar more vibrant for non-colorblind people.
 * Improved: The Breadcrumb home URL now also considers the Domain Mapping domains instead of only the current domain.
+* Improved: Breadcrumb generation time.
 * TODO Fixed: WooCommerce product overview layout was messed up on smaller (tablet to 15") screens by the addition of The SEO Bar. It now all fits. (table.wp-list-table .column-name,table.wp-list-table .column-is_in_stock{width:10%}). Further optimization is left in the hands of WooCommerce as they still need to optimize this themself.
 * TODO Fixed: Incorrect Dutch translation on Robots Meta Settings on the Inpost metabox.
-* TODO Fixed: Title bug with categories when both a custom title and category title are filled in.
+* TODO Fixed: Title bug with categories when both a custom title and category title are filled in. // UNCONFIRMED, weird.
 * TODO Fixed: AnsPress bug where not all page descriptions are fetched correctly on the front-end.
+* Fixed: WooCommerce main shop page took the title of the latest product.
+* Fixed: Inconsistent cache key for WooCommerce shop page.
 * Fixed: Robots.txt sitemap wasn't pointed to correctly on Subdirectory Multisite installations.
 * Fixed: Robots.txt sitemap wasn't pointed to correctly on Mapped Multisite domains.
+* Fixed: Bug for Home Title in the breadcrumbs when the homepage is a page. Because of the bugfix, the LD+Json cache will be flushed upon update. The cache will clean itself up within 7 days automatically.
 * Removed: /wp-includes/ blocking through robots.txt, this was accidentally added long ago and the removal should resolve issues with Google Webmaster Tools.
 
 **For developers:**
 /
 * Added: New function `AutoDescription_Render::the_home_url_from_cache( $force_slash )`.
-* Added: New filters. (TODO document robots filters in site).
+* Added: New function `AutoDescription_Render::get_the_real_ID()`. Fetches the real ID for all pages, posts, terms, taxonomies and CPT, including WooCommerce and AnsPress.
+* Added: New filters. (TODO document robots filters in TSF home).
 * Added: Static caching for the current page in ld+json breadcrumbs.
 * Changed: Default WordPress robots.txt is now completely overwritten to maintain compatibility.
 * Cleaned up code.

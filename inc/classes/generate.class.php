@@ -95,12 +95,13 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		$page_for_posts = false;
 
 		//* Fetch AnsPress page ID.
-		if ( function_exists( 'get_question_id' ) ) {
+		//* Uses get_the_real_ID() @since 2.4.4
+	/*	if ( function_exists( 'get_question_id' ) ) {
 			$ans_id = get_question_id();
 
 			if ( false !== $ans_id && empty( $id ) )
 				$id = $ans_id;
-		}
+		}*/
 
 		if ( is_front_page() || ( ! empty( $id ) && empty( $taxonomy ) && $id == get_option( 'page_on_front' ) ) ) {
 			$description = $this->get_option( 'homepage_description' ) ? $this->get_option( 'homepage_description' ) : $description;
@@ -156,7 +157,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * @since 2.2.8
 		 */
 		if ( $this->is_blog_page( $id ) && empty( $description ) ) {
-			$description = $this->get_custom_field( '_genesis_description', get_queried_object_id() ) ? $this->get_custom_field( '_genesis_description', get_queried_object_id() ) : $description;
+			$description = $this->get_custom_field( '_genesis_description', $id ) ? $this->get_custom_field( '_genesis_description', $id ) : $description;
 			$page_for_posts = true;
 		}
 
@@ -229,7 +230,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * Now uses get_queried_object_id()
 		 * @since 2.2.8
 		 */
-		$page_id = get_queried_object_id() ? get_queried_object_id() : get_the_ID();
+		$page_id = $this->get_the_real_ID();
 
 		if ( ! empty( $id ) && ! empty( $taxonomy ) ) {
 			//* This only runs in admin, because we provide these values there.
@@ -632,7 +633,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		//* Passing back the defaults reduces the memory usage.
 		if ( empty( $defaults ) ) {
 			$default_args = array(
-				'term_id' 			=> '',
+				'term_id' 			=> $this->get_the_real_ID(),
 				'post_id' 			=> '',
 				'taxonomy' 			=> '',
 				'page_on_front'		=> false,
@@ -1007,15 +1008,13 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 */
 		$add_tagline = 0;
 
-		$the_id = $args['term_id'] ? $args['term_id'] : get_the_ID();
-
 		/**
 		 * Generate the Title if empty or if home.
 		 *
 		 * Generation of title has acquired its own functions.
 		 * @since 2.3.4
 		 */
-		if ( $is_front_page || $this->is_static_frontpage( $the_id ) || $args['is_front_page'] ) {
+		if ( $is_front_page || $this->is_static_frontpage( $args['term_id'] ) || $args['is_front_page'] ) {
 			$generated = (array) $this->generate_home_title( $args['get_custom_field'], $seplocation, $seplocation_home, $escape = false );
 
 			if ( !empty( $generated ) && is_array( $generated ) ) {
@@ -1107,7 +1106,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
 				echo "<!--\r\n";
 
-			$this->echo_debug_information( array( 'is static frontpage' => $this->is_static_frontpage( get_the_ID() ) ) );
+			$this->echo_debug_information( array( 'is static frontpage' => $this->is_static_frontpage( $this->get_the_real_ID() ) ) );
 			$this->echo_debug_information( array( 'title output' => $title ) );
 			echo "\r\n<br>\r\n" . 'END: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n<br><br>";
 
@@ -1154,7 +1153,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$title = __( 'Search results for:', 'autodescription' ) . ' ' . get_search_query();
 
 		//* Generate admin placeholder for taxonomies
-		if ( empty( $title ) && !empty( $term_id ) && !empty( $taxonomy ) ) {
+		if ( empty( $title ) && ! empty( $term_id ) && ! empty( $taxonomy ) ) {
 			$term = get_term_by( 'id', $term_id, $taxonomy, OBJECT );
 
 			if ( !empty( $term ) && is_object( $term ) ) {
@@ -1181,6 +1180,10 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		//* Fetch the post title if no title is found.
 		if ( ! isset( $title ) || empty( $title ) ) {
+
+			if ( empty( $term_id ) )
+				$term_id = $this->get_the_real_ID();
+
 			$post = get_post( $term_id, OBJECT );
 
 			$title = '';
@@ -1203,7 +1206,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		if ( empty( $title ) )
 			$title = __( 'Untitled', 'autodescription' );
 
-		if ( $escape === true ) {
+		if ( true === $escape ) {
 			$title = wptexturize( $title );
 			$title = convert_chars( $title );
 			$title = esc_html( $title );
@@ -1403,24 +1406,25 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 */
 	public function title_from_custom_field( $title = '', $escape = false, $id = null ) {
 
+		$id = isset( $id ) ? $id : $this->get_the_real_ID();
+
 		/**
 		 * Create something special for blog page.
 		 * Only if it's not the home page.
 		 *
 		 * @since 2.2.8
 		 */
-		if ( $this->is_blog_page() ) {
+		if ( $this->is_blog_page( $id ) ) {
 			//* Posts page title.
-			$title = $this->get_custom_field( '_genesis_title', get_queried_object_id() ) ? $this->get_custom_field( '_genesis_title', get_queried_object_id() ) : get_the_title( get_queried_object_id() );
+			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : get_the_title( $id );
 		} else {
-			$qid = NULL;
-
 			//* Fetch AnsPress page ID.
+			//* Uses get_the_real_ID() @since 2.4.4
+			/*
+			$qid = null;
 			if ( function_exists( 'get_question_id' ) )
 				$qid = get_question_id();
-
-			$id = isset( $id ) ? $id : $qid;
-
+			*/
 			//* Get title from custom field, empty it if it's not there to override the default title
 			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : $title;
 		}
@@ -1433,7 +1437,6 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 			$title = isset( $post->post_title ) ? $post->post_title : '';
 			$id = isset( $post->ID ) ? $post->ID : 0;
-
 		}
 
 		if ( $escape ) {
@@ -2185,7 +2188,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	public function get_image( $post_id = '', $args = array() ) {
 
 		if ( empty( $post_id ) )
-			$post_id = get_the_ID();
+			$post_id = $this->get_the_real_ID();
 
 		if ( empty( $post_id ) )
 			return '';
@@ -2669,9 +2672,9 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 						$path = '?p=' . $id;
 				}
 
-			} else if ( 'page' == get_option( 'show_on_front' ) && get_queried_object_id() == get_option( 'page_for_posts' ) ) {
+			} else if ( 'page' == get_option( 'show_on_front' ) && $this->get_the_real_ID() == get_option( 'page_for_posts' ) ) {
 				//* Page for posts
-				$id =  get_queried_object_id();
+				$id =  $this->get_the_real_ID();
 				$path = '?p=' . $id;
 			} else {
 				//* Home page
@@ -2894,7 +2897,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		if ( is_single() ) {
 			//* Get categories.
 
-			$post_id = get_the_ID();
+			$post_id = $this->get_the_real_ID();
 
 			$r = is_object_in_term( $post_id, 'category', '' );
 
@@ -3027,7 +3030,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		} else if ( ! is_front_page() && is_page() ) {
 			//* Get ancestors.
-			$page_id = get_the_ID();
+			$page_id = $this->get_the_real_ID();
 
 			$parents = get_post_ancestors( $page_id );
 
@@ -3083,21 +3086,26 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		static $first_item = null;
 
-		if ( !isset( $item_type ) )
-			$item_type = json_encode( 'ListItem' );
+		if ( ! isset( $first_item ) ) {
 
-		if ( !isset( $first_item ) ) {
+			if ( ! isset( $item_type ) )
+				$item_type = json_encode( 'ListItem' );
+
 			$id = json_encode( $this->the_url( '', '', array( 'get_custom_field' => false, 'external' => true, 'home' => true ) ) );
 
 			$home_title = $this->get_option( 'homepage_title' );
+
 			if ( $home_title ) {
 				$custom_name = $home_title;
 			} else if ( 'page' == get_option( 'show_on_front' ) ) {
+				$home_id = (int) get_option( 'page_on_front' );
+
 				$custom_name = $this->get_custom_field( '_genesis_title', $home_id );
 				$custom_name = $custom_name ? $custom_name : get_bloginfo( 'name', 'raw' );
 			} else {
 				$custom_name = get_bloginfo( 'name', 'raw' );
 			}
+
 			$custom_name = json_encode( $custom_name );
 
 			//* Add trailing comma.
@@ -3138,8 +3146,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$item_type = $type;
 		}
 
-		if ( !isset( $post_id ) )
-			$post_id = get_the_ID();
+		if ( ! isset( $post_id ) )
+			$post_id = $this->get_the_real_ID();
 
 		//* Add current page.
 		$pos = $pos + 1;

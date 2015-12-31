@@ -397,11 +397,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		//* Get the language the Google page should assume.
 		$language = $this->google_language();
 
-		/**
-		 * Now uses get_queried_object_id()
-		 * @since 2.2.8
-		 */
-		$post_id = get_queried_object_id() ? get_queried_object_id() : get_the_ID();
+		$post_id = $this->get_the_real_ID();
 		$title = $this->get_custom_field( '_genesis_title' );
 
 		$page_on_front_option = get_option( 'page_on_front' );

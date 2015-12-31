@@ -141,7 +141,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		 *
 		 * Use hex. e.g. 0, 1, 2, 9, a, b
 		 */
-		$revision = '1';
+		$revision = '2';
 
 		$this->ld_json_transient = 'the_seo_f' . $revision . '_ldjs_' . $cache_key;
 	}
@@ -176,6 +176,8 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		 * @since 2.4.3.1
 		 */
 		if ( $this->is_menu_page( $this->pagehook ) ) {
+			//* We're on the SEO Settings page now.
+
 			if ( 'posts' == get_option( 'show_on_front' ) ) {
 				/**
 				 * Detected home page.
@@ -189,9 +191,12 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 				 */
 				$the_id = 'hpage_' . (string) get_option( 'page_on_front' );
 			}
+
 		} else {
+			//* All other pages, admin and front-end.
+
 			if ( ! is_search() ) {
-				if ( ( $page_id === false || is_front_page() ) && ( 'posts' == get_option( 'show_on_front' ) ) ) {
+				if ( ( false === $page_id || is_front_page() ) && ( 'posts' == get_option( 'show_on_front' ) ) ) {
 					if ( is_404() ) {
 						$the_id = '_404_';
 					} else {
@@ -202,7 +207,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 						 */
 						$the_id = 'hblog_' . (string) get_option( 'page_on_front' );
 					}
-				} else if ( ( $page_id === false || is_front_page() || $page_id == get_option( 'page_on_front' ) ) && ( 'page' == get_option( 'show_on_front' ) ) ) {
+				} else if ( ( false === $page_id || is_front_page() || $page_id == get_option( 'page_on_front' ) ) && ( 'page' == get_option( 'show_on_front' ) ) ) {
 					if ( is_404() ) {
 						$the_id = '_404_';
 					} else {
@@ -220,32 +225,40 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 					 */
 					$the_id = 'blog_' . $page_id;
 				} else if ( ! is_singular() && empty( $taxonomy ) && ! did_action( 'admin_init' ) ) {
-					global $wp_query;
+					//* Unsigned CPT and e.g. WooCommerce shop, AnsPress question, etc.
 
-					/**
-					 * Generate for everything else.
-					 * Doesn't work on admin_init action.
-					 */
+					if ( function_exists( 'is_shop' ) && is_shop() ) {
+						//* WooCommerce destroys the is_page query var, let's fetch it back.
+						$the_id = get_option( 'woocommerce_shop_page_id' );
+					} else {
+						global $wp_query;
 
-					$query = isset( $wp_query->query ) ? (array) $wp_query->query : null;
+						/**
+						 * Generate for everything else.
+						 * Doesn't work on admin_init action.
+						 */
 
-					/**
-					 * Automatically generate transient based on query.
-					 *
-					 * Adjusted to comply with the 45 char limit.
-					 * @since 2.3.4
-					 */
-					if ( isset( $query ) ) {
-						$the_id = '';
+						$query = isset( $wp_query->query ) ? (array) $wp_query->query : null;
 
-						// Trim key to 2 chars.
-						foreach ( $query as $key => $value )
-							$the_id .= substr( $key, 0, 2 ) . '_' . mb_substr( $value, 0, 2 ) . '_' . get_queried_object_id() . '_';
+						/**
+						 * Automatically generate transient based on query.
+						 *
+						 * Adjusted to comply with the 45 char limit.
+						 * @since 2.3.4
+						 */
+						if ( isset( $query ) ) {
+							$the_id = '';
 
-						//* Remove final underscore
-						$the_id = rtrim( $the_id, '_' );
+							// Trim key to 2 chars.
+							foreach ( $query as $key => $value )
+								$the_id .= substr( $key, 0, 2 ) . '_' . mb_substr( $value, 0, 2 ) . '_' . $this->get_the_real_ID() . '_';
+
+							//* Remove final underscore
+							$the_id = rtrim( $the_id, '_' );
+						}
 					}
 				} else if ( ! is_singular() && ! empty( $taxonomy ) ) {
+					//* Taxonomy
 
 					//* Strip the ID from the taxonomy name.
 					$tax_len = mb_strlen( $taxonomy );
@@ -271,7 +284,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 				if ( function_exists( 'get_search_query' ) ) {
 					$search_query = get_search_query();
 
-					if ( !empty( $search_query ) )
+					if ( ! empty( $search_query ) )
 						$query = str_replace( ' ', '', $search_query );
 
 					//* Limit to 10 chars.

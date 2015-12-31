@@ -266,7 +266,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		 */
 		if ( $hook ) {
 			// We're somewhere within default WordPress pages.
-			$post_id = get_the_ID();
+			$post_id = $this->get_the_real_ID();
 
 			if ( $this->is_static_frontpage( $post_id ) ) {
 				$title = $blog_name;
@@ -397,7 +397,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 			return $field_cache[$field][$post_id];
 
 		if ( null === $post_id || empty( $post_id ) )
-			$post_id = get_the_ID();
+			$post_id = $this->get_the_real_ID();
 
 		if ( null === $post_id || empty( $post_id ) )
 			return '';

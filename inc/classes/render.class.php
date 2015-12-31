@@ -184,7 +184,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		if ( isset( $image_cache ) )
 			return $image_cache;
 
-		$post_id = get_queried_object_id();
+		$post_id = $this->get_the_real_ID();
 
 		//* End this madness if there's no ID found (search/404/etc.)
 		if ( ! $post_id )
@@ -820,7 +820,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		if ( $this->has_json_ld_plugin() !== false || is_search() || is_404() )
 			return;
 
-		$this->setup_ld_json_transient( get_the_ID() );
+		$this->setup_ld_json_transient( $this->get_the_real_ID() );
 
 		/**
 		 * Debug transient key.

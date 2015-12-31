@@ -705,6 +705,39 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	}
 
 	/**
+	 * Get the real page ID, also depending on CPT.
+	 *
+	 * @staticvar int $id the ID.
+	 *
+	 * @since 2.4.4
+	 */
+	public function get_the_real_ID() {
+
+		static $id = null;
+
+		if ( isset( $id ) )
+			return $id;
+
+		if ( function_exists( 'is_shop' ) && is_shop() ) {
+			//* WooCommerce Shop
+			$id = get_option( 'woocommerce_shop_page_id' );
+		} else if ( function_exists( 'is_anspress' ) && is_anspress() ) {
+			//* Get AnsPress Question ID.
+			if ( function_exists( 'get_question_id' ) )
+				$id = get_question_id();
+		}
+
+		if ( ! isset( $id ) || empty( $id ) ) {
+			$id = get_queried_object_id();
+
+			if ( empty( $id ) )
+				$id = get_the_ID();
+		}
+
+		return $id;
+	}
+
+	/**
 	 * Detect the blog page.
 	 *
 	 * @param int $id the Page ID.
@@ -719,7 +752,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	public function is_blog_page( $id = '' ) {
 
 		if ( empty( $id ) )
-			$o_id = get_queried_object_id();
+			$o_id = $this->get_the_real_ID();
 
 		static $is_blog_page = array();
 
@@ -740,7 +773,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 					if ( $id == $pfp )
 						return $is_blog_page[$id] = true;
 
-					$o_id = get_queried_object_id();
+					$o_id = $this->get_the_real_ID();
 
 					if ( $o_id == $pfp )
 						return $is_blog_page[$id] = true;
@@ -771,7 +804,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			return false;
 
 		if ( empty( $id ) )
-			$o_id = get_queried_object_id() ? get_queried_object_id() : get_the_ID();
+			$o_id = $this->get_the_real_ID();
 
 		static $is_frontpage = array();
 
@@ -791,7 +824,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 				if ( $id == $pof )
 					return $is_frontpage[$id] = true;
 
-				$o_id = get_queried_object_id() ? get_queried_object_id() : get_the_ID();
+				$o_id = $this->get_the_real_ID();
 
 				if ( $o_id == $pof )
 					return $is_frontpage[$id] = true;
