@@ -1,10 +1,10 @@
 === The SEO Framework ===
 Contributors: Cybr
-Donate link: http://theseoframework.com/
+Donate link: https://theseoframework.com/
 Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl
 Requires at least: 3.6.0
 Tested up to: 4.4.0
-Stable tag: 2.4.3
+Stable tag: 2.4.3.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -356,6 +356,43 @@ If you wish to export data from The SEO Framework, please poke StudioPress with 
 
 == Changelog ==
 
+= 2.4.4 - Bleep Bloop Zerp =
+
+**Summarized:**
+
+* This update is for both robots and humans. With better support for people with color vision deficiency and with better support for robots to access and understand your website.
+* Also, WooCommerce has gained extra support for Product Images and AnsPress question descriptions have been fixed.
+* And last but not least, you can now see how well the length is of the descriptions and titles while editing a page or post.
+* A few other bugfixes have also been included.
+
+**SEO Tip of the Update:**
+/
+TODO
+
+**For everyone:**
+/
+* Improved: The Breadcrumb home URL now also considers the Domain Mapping domains instead of only the current domain.
+* TODO Fixed: WooCommerce product overview layout was messed up on smaller (tablet to 15") screens by the addition of The SEO Bar. It now all fits. (table.wp-list-table .column-name,table.wp-list-table .column-is_in_stock{width:10%}). Further optimization is left in the hands of WooCommerce as they still need to optimize this themself.
+* TODO Fixed: Incorrect Dutch translation on Robots Meta Settings on the Inpost metabox.
+* Changed: Disabled OG Meta tags output when Add Meta Tags is active.
+* TODO Added: Full Elegant Themes' Divi compatibility. Read more below under "About: Divi Compatibility"
+* TODO Fixed: Title bug with categories when both a custom title and category title are filled in.
+* TODO Fixed: AnsPress bug where not all page descriptions are fetched correctly on the front-end.
+* TODO Fixed: Robots.txt sitemap wasn't pointed to correctly on Subdirectory Multisite installations.
+* TODO Added: All WooCommerce Product Images are now also added with multiple `og:image` meta tags. Now users can now thoroughly scroll through your items when shared on social sites (where supported)!
+* TODO Removed: /wp-includes/ blocking through robots.txt, this was accidentally added long ago and the removal should resolve issues with Google Webmaster Tools.
+* TODO Added: Colorized character counters! These subtle colors now let you know you're doing it right right away :).
+* Changed: Color changes to the SEO Bar to fully support all color deficiency spectra, with limited support for achromatopsia (green and orange e.g. good and okay still look the same). This also makes the SEO bar more vibrant and more beautiful for non-colorblind people.
+
+**For developers:**
+/
+* TODO: Added new robots filters.
+* Cleaned up code.
+
+**About: Divi Compatibility**
+/
+TODO explain what has changed
+
 = 2.4.3.1 - Naming Things =
 
 **Summarized:**
@@ -496,31 +533,31 @@ To top it off, this plugin is now also 150% to 500% times faster on the front pa
 
 == Other Notes ==
 
-== Filters ==
+= Filters =
 
 = Add any of the filters to your theme's functions.php or a plugin to change this plugin's output. =
 
 Learn about them here: [The SEO Framework filters](http://theseoframework.com/docs/api/filters/)
 
-== Constants ==
+= Constants =
 
 = Overwrite any of these constants in your theme's functions.php or a plugin to change this plugin's output by simply defining the constants. =
 
 View them here: [The SEO Framework constants](http://theseoframework.com/docs/api/constants/)
 
-== Actions ==
+= Actions =
 
 = Use any of these actions to add your own output. =
 
 They are found here: [The SEO Framework actions](http://theseoframework.com/docs/api/actions/)
 
-== Settings API ==
+= Settings API =
 
 = Add settings to and interact with The SEO Framework. =
 
 Read how to here: [The SEO Framework Settings API](http://theseoframework.com/docs/api/settings/)
 
-== Beta Version ==
+= Beta Version =
 
 = Stay updated with the latest version before it's released? =
 

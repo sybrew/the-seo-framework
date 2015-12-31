@@ -602,6 +602,14 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		if ( false === $output ) {
 			$output = '';
 
+			/**
+			 * @TODO use the_url_from_cache() ?
+			 *
+			 * @see https://architech.hostmijnpagina.nl/robots.txt
+			 * Will fix robots :D
+			 * @var_dump()
+			 * FOUND BUG: Mapped WordPress installations robots.txt will not be compatible. =/
+			 */
 			$scheme = is_ssl() ? 'https' : 'http';
 			$home_url = get_option( 'home' );
 			$home_url = $this->set_url_scheme( $home_url, $scheme );
@@ -626,12 +634,19 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			//* Add whitespace
 			$output .= "\r\n";
 
-			if ( $this->get_option( 'sitemaps_output') &&  (bool) $this->get_option ( 'sitemaps_robots' ) ) {
+			if ( $this->get_option( 'sitemaps_output') && (bool) $this->get_option( 'sitemaps_robots' ) ) {
 				//* Add sitemap full url
 				//* Becomes relative if host is empty.
 				$host = ! empty( $parse_url['host'] ) ? $parse_url['host'] : '';
+
+				//* @TODO check if you should use $scheme instead of $parse_url...
 				$scheme = ( !empty( $parse_url['scheme'] ) && !empty( $host ) ) ? $parse_url['scheme'] . '://' : '';
+
+				//* @TODO use trailingslashit( $home_url ) ?
 				$output .= "Sitemap: $scheme$host/sitemap.xml\r\n";
+
+				//* @TODO use this?
+				// $output .= 'Sitemap: ' . trailingslashit( $home_url ) . "sitemap.xml\r\n";
 			}
 
 			$this->object_cache_set( $cache_key, $output, 86400 );

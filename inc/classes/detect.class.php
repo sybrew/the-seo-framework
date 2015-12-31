@@ -243,7 +243,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		if ( isset( $has_plugin ) )
 			return $has_plugin;
 
-		$plugins = array( 'classes' => array( 'WPSEO_OpenGraph', 'All_in_One_SEO_Pack_Opengraph' ) );
+		$plugins = array( 'classes' => array( 'WPSEO_OpenGraph', 'All_in_One_SEO_Pack_Opengraph' ), 'functions' => array( 'amt_plugin_actions' ) );
 
 		return $has_plugin = $this->detect_plugin( $plugins ) ? true : false;
 	}
@@ -877,7 +877,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 *
 	 * @return bool true of post type is supported.
 	 */
-	 public function post_type_supports_custom_seo( $post_type = '' ) {
+	public function post_type_supports_custom_seo( $post_type = '' ) {
 
 		if ( empty( $post_type ) ) {
 
@@ -919,6 +919,6 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			return $supported[$post_type] = true;
 
 		return $supported[$post_type] = false;
-	 }
+	}
 
 }

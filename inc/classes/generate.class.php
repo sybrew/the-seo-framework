@@ -1506,6 +1506,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$args = $default_args;
 		}
 
+		$path = '';
 		$scheme = '';
 
 		/**
@@ -1556,8 +1557,6 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 					 */
 					if ( ! isset( $post ) )
 						$post = get_post( $page_id, OBJECT );
-
-					$path = '';
 
 					/**
 					 * Get page uri if Page ID is given
@@ -1613,36 +1612,37 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 				}
 
-				//* Domain Mapping canonical URL
-				$wpmu_url = $this->the_url_wpmudev_domainmap( $path, true );
-				if ( ! empty( $wpmu_url ) && is_array( $wpmu_url ) ) {
-					$url = $wpmu_url[0];
-					$scheme = $wpmu_url[1];
-				}
-
-				//* Domain Mapping canonical URL
-				if ( empty( $url ) ) {
-					$dm_url = $this->the_url_donncha_domainmap( $path, true );
-					if ( !empty( $dm_url ) && is_array( $dm_url ) ) {
-						$url = $dm_url[0];
-						$scheme = $dm_url[1];
-					}
-				}
-
-				//* Non-domainmap URL
-				if ( empty( $url ) ) {
-					$url = trailingslashit( get_option( 'home' ) ) . ltrim( $path, '\/ ' );
-					$scheme = is_ssl() ? 'https' : 'http';
-				}
 			}
 		}
 
-		if ( empty( $url ) && $args['home'] ) {
-			$url = user_trailingslashit( get_option( 'home' ) );
-			$slashit = false;
+		//* Domain Mapping canonical URL
+		$wpmu_url = $this->the_url_wpmudev_domainmap( $path, true );
+		if ( ! empty( $wpmu_url ) && is_array( $wpmu_url ) ) {
+			$url = $wpmu_url[0];
+			$scheme = $wpmu_url[1];
 		}
 
-		//* URL has been given manually.
+		//* Domain Mapping canonical URL
+		if ( empty( $url ) ) {
+			$dm_url = $this->the_url_donncha_domainmap( $path, true );
+			if ( !empty( $dm_url ) && is_array( $dm_url ) ) {
+				$url = $dm_url[0];
+				$scheme = $dm_url[1];
+			}
+		}
+
+		//* Non-domainmap URL
+		if ( empty( $url ) ) {
+			if ( $args['home'] ) {
+				$url = user_trailingslashit( get_option( 'home' ) );
+				$slashit = false;
+			} else {
+				$url = trailingslashit( get_option( 'home' ) ) . ltrim( $path, '\/ ' );
+				$scheme = is_ssl() ? 'https' : 'http';
+			}
+		}
+
+		//* URL has been given manually or $args['home'] is true.
 		if ( ! isset( $scheme ) )
 			$scheme = is_ssl() ? 'https' : 'http';
 
@@ -1656,6 +1656,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		if ( $slashit && ! $args['forceslash'] )
 			$output = user_trailingslashit( $output );
 
+		//* Be careful with the default permalink structure.
 		if ( $args['forceslash'] )
 			$output = trailingslashit( $output );
 
@@ -3121,6 +3122,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 */
 	public function ld_json_breadcrumb_last( $item_type, $pos, $post_id ) {
 
+		//* @TODO staticvar this?
+		
 		if ( !isset( $item_type ) )
 			$item_type = json_encode( 'ListItem' );
 
