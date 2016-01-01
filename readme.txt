@@ -137,23 +137,24 @@ The output will be stored for each page, if you've edited a page the page output
 * Full internationalization support through WordPress.org. Dutch is maintained by the plugin author.
 * Extended Multibyte support (CJK).
 * Right to Left support.
-* Complete screen-reader support for accessibility.
-* Admin: Posts, Pages, Taxonomies, Terms, Custom Post Types.
+* Colorblind accessibility.
+* Screen-reader accessibility.
+* Admin screen: Posts, Pages, Taxonomies, Terms, Custom Post Types.
 * Front-end: Every page, post, taxonomy, term, custom post type, search request, 404, etc.
 
 **Plugins:**
 
 * W3 Total Cache, WP Super Cache, Batcache, etc.
-* WooCommerce: Products, Product Categories and Product Tags.
+* WooCommerce: Shop Page, Products, Product Categories and Product Tags.
 * Custom Post Types, (all kinds of plugins) with automatic integration.
 * WPMUdev and Donncha's Domain Mapping with full HTTPS support.
 * WPMUdev Avatars for og:image and twitter:image if no other image is found.
 * bbPress: Forums, Topics, Replies.
-* BuddyPress.
+* BuddyPress profiles.
 * AnsPress Questions and Pages, also Canonical errors have been fixed.
 * StudioPress SEO Data Transporter for Posts, Pages, Taxonomies and Terms.
 * WPML, URL's, sitemap and per-page/post SEO settings. (The full and automated compatibility is being discussed with WPML.)
-* qTranslate X, URL's, sitemap and per-page/post SEO settings (through shortcodes by set by qTranslate X).
+* qTranslate X, URL's, limited sitemap and per-page/post SEO settings (through shortcodes by set by qTranslate X).
 * Most popular SEO plugins, let's not get in each other's way.
 * Jetpack modules: Custom Content Types (Testimonials, Portfolio), Infinite Scroll, Photon.
 * Many, many others, yet to confirm.
@@ -162,6 +163,7 @@ The output will be stored for each page, if you've edited a page the page output
 
 * All themes.
 * Genesis & Genesis SEO. This plugin takes all Post, Page, Category and Tag SEO values from Genesis and uses them within The SEO Framework Options. The easiest upgrade!
+* Elegant Themes SEO including Divi SEO.
 
 **Caches:**
 
@@ -362,6 +364,8 @@ If you wish to export data from The SEO Framework, please poke StudioPress with 
 
 * This update is for both robots and humans. With better support for people with color vision deficiency and with better support for robots to access and understand your website.
 * Also, WooCommerce has gained extra support for Product Images and AnsPress question descriptions have been fixed.
+* Social Descriptions have recieved an overhaul since they abide to different standards, they may also be much longer!
+* Accessibility and understanding of how this plugin handles titles has been improved when adding custom titles.
 * And last but not least, you can now see how well the length is of the descriptions and titles while editing a page or post.
 * A few other bugfixes have also been included. The biggest fix is regarding correctly fetching of the ID. Expect quick compatibility improvements in the future!
 
@@ -373,19 +377,25 @@ TODO
 /
 * TODO Added: All WooCommerce Product Images are now also added with multiple `og:image` meta tags. Now users can now thoroughly scroll through your items when shared on social sites (where supported)!
 * TODO Added: Full Elegant Themes' Divi compatibility. Read more below under heading "About: Divi Compatibility".
+* TODO Added: Elegant Themes SEO compatibility.
+* TODO Added: Elegant Themes builder compatibility.
 * TODO Added: Colorized character counters! These subtle colors now let you know you're doing it right right away :).
+* Added: Custom Title now shows the possible additions to deliver a more expected experience.
 * Changed: Disabled OG Meta tags output when Add Meta Tags is active.
 * Changed: Color changes to the SEO Bar to fully support all vision deficiency spectra. This also makes the SEO bar more vibrant for non-colorblind people.
 * Improved: The Breadcrumb home URL now also considers the Domain Mapping domains instead of only the current domain.
+* TODO Improved: OG and Twitter Auto Generated description Meta tags now don't contain the title and blogname for a more organic social experience.
+* TODO Improved: OG and Twitter Auto Generated description meta tags are now up to 200 characters long.
 * Improved: Breadcrumb generation time.
+* Improved: Overal plugin speed, again.
 * TODO Fixed: WooCommerce product overview layout was messed up on smaller (tablet to 15") screens by the addition of The SEO Bar. It now all fits. (table.wp-list-table .column-name,table.wp-list-table .column-is_in_stock{width:10%}). Further optimization is left in the hands of WooCommerce as they still need to optimize this themself.
 * TODO Fixed: Incorrect Dutch translation on Robots Meta Settings on the Inpost metabox.
-* TODO Fixed: Title bug with categories when both a custom title and category title are filled in. // UNCONFIRMED, weird.
-* TODO Fixed: AnsPress bug where not all page descriptions are fetched correctly on the front-end.
+* TODO Fixed: Title bug with categories when both a custom title and category title are filled in. // UNCONFIRMED bug, weird.
+* Fixed: Bug with AnsPress where not all page descriptions are fetched correctly on the front-end. Because of the bugfix, the description cache will be flushed upon update. The cache will clean itself up within 7 days automatically.
 * Fixed: WooCommerce main shop page took the title of the latest product.
 * Fixed: Inconsistent cache key for WooCommerce shop page.
 * Fixed: Robots.txt sitemap wasn't pointed to correctly on Subdirectory Multisite installations.
-* Fixed: Robots.txt sitemap wasn't pointed to correctly on Mapped Multisite domains.
+* Fixed: Robots.txt sitemap wasn't pointed to correctly with mapped domains on Multisite sites.
 * Fixed: Bug for Home Title in the breadcrumbs when the homepage is a page. Because of the bugfix, the LD+Json cache will be flushed upon update. The cache will clean itself up within 7 days automatically.
 * Removed: /wp-includes/ blocking through robots.txt, this was accidentally added long ago and the removal should resolve issues with Google Webmaster Tools.
 
@@ -396,6 +406,8 @@ TODO
 * Added: New filters. (TODO document robots filters in TSF home).
 * Added: Static caching for the current page in ld+json breadcrumbs.
 * Changed: Default WordPress robots.txt is now completely overwritten to maintain compatibility.
+* TODO: Changed: `the_description()` function parameters have now been put into an arguments array.
+* Fixed: `AutoDescription_Generate::get_separator()` didn't listen to the escape parameter because of the cache. This function has been reworked for better caching.
 * Cleaned up code.
 
 /** NOTE CACHED ITEMS CHANGE **

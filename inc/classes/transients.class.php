@@ -109,7 +109,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		 *
 		 * @since 2.3.4
 		 */
-		$revision = '0';
+		$revision = '1';
 
 		/**
 		 * Two different cache keys for two different settings.

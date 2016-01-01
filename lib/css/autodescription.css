@@ -7,6 +7,29 @@
     width: 20%;
 }
 
+#autodescription-title-wrap {
+    position: relative;
+}
+
+#autodescription-title-offset {
+    visibility: hidden;
+    height: 0;
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    color: transparent;
+    white-space: pre;
+}
+
+#autodescription-title-placeholder {
+    position: absolute;
+    color: #777;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 /* WooCommerce fix */
 th:last-of-type#ad_seo {
     width: 160px;

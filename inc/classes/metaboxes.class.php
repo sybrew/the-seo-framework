@@ -101,7 +101,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		 * Start navigation
 		 */
 		?>
-		<h3 class="nav-tab-wrapper hide-if-no-js " id="<?php echo $id; ?>-tabs-js">
+		<h3 class="nav-tab-wrapper hide-if-no-js" id="<?php echo $id; ?>-tabs-js">
 		<?php
 			$count = 1;
 			foreach ( $tabs as $tab => $value ) {

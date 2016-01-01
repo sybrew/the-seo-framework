@@ -330,7 +330,10 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 						</label>
 					</th>
 					<td>
-						<input name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" type="text" placeholder="<?php echo $doctitle_placeholder ?>" value="<?php echo esc_attr( $ad_doctitle ); ?>" size="40" />
+						<div id="autodescription-title-wrap">
+							<input name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" type="text" placeholder="<?php echo $doctitle_placeholder ?>" value="<?php echo esc_attr( $ad_doctitle ); ?>" size="40" />
+							<span id="autodescription-title-offset" class="hide-if-no-js"></span><span id="autodescription-title-placeholder" class="hide-if-no-js"></span>
+						</div>
 						<p class="description"><?php printf( __( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[doctitle]_chars">'. mb_strlen( $tit_len_parsed ) .'</span>' ); ?></p>
 					</td>
 				</tr>
@@ -398,7 +401,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		$language = $this->google_language();
 
 		$post_id = $this->get_the_real_ID();
-		$title = $this->get_custom_field( '_genesis_title' );
+		$title = $this->get_custom_field( '_genesis_title', $post_id );
 
 		$page_on_front_option = get_option( 'page_on_front' );
 
@@ -524,7 +527,10 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 			</label>
 		</p>
 		<p>
-			<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" placeholder="<?php echo $doctitle_placeholder ?>" value="<?php echo esc_attr( $this->get_custom_field( '_genesis_title' ) ); ?>" />
+			<div id="autodescription-title-wrap">
+				<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" placeholder="<?php echo $doctitle_placeholder ?>" value="<?php echo esc_attr( $this->get_custom_field( '_genesis_title' ) ); ?>" />
+				<span id="autodescription-title-offset" class="hide-if-no-js"></span><span id="autodescription-title-placeholder" class="hide-if-no-js"></span>
+			</div>
 		</p>
 
 		<p>

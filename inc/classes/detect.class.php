@@ -707,16 +707,23 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	/**
 	 * Get the real page ID, also depending on CPT.
 	 *
+	 * @param bool $use_cache Wether to use the cache or not.
+	 *
 	 * @staticvar int $id the ID.
 	 *
 	 * @since 2.4.4
 	 */
-	public function get_the_real_ID() {
+	public function get_the_real_ID( $use_cache = true ) {
 
-		static $id = null;
+		//* Never use cache in admin. Only causes bugs.
+		$use_cache = is_admin() ? false : $use_cache;
 
-		if ( isset( $id ) )
-			return $id;
+		if ( $use_cache ) {
+			static $id = null;
+
+			if ( isset( $id ) )
+				return $id;
+		}
 
 		if ( function_exists( 'is_shop' ) && is_shop() ) {
 			//* WooCommerce Shop
@@ -765,7 +772,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 			$sof = get_option( 'show_on_front' );
 
-			if ( 'page' == $sof && !is_front_page() && !is_archive() ) {
+			if ( 'page' == $sof && ! is_front_page() && ! is_archive() ) {
 				if ( isset( $o_id ) ) {
 					if ( $o_id == $pfp )
 						return $is_blog_page[$id] = true;

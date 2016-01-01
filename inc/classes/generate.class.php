@@ -94,15 +94,6 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		$description = '';
 		$page_for_posts = false;
 
-		//* Fetch AnsPress page ID.
-		//* Uses get_the_real_ID() @since 2.4.4
-	/*	if ( function_exists( 'get_question_id' ) ) {
-			$ans_id = get_question_id();
-
-			if ( false !== $ans_id && empty( $id ) )
-				$id = $ans_id;
-		}*/
-
 		if ( is_front_page() || ( ! empty( $id ) && empty( $taxonomy ) && $id == get_option( 'page_on_front' ) ) ) {
 			$description = $this->get_option( 'homepage_description' ) ? $this->get_option( 'homepage_description' ) : $description;
 		}
@@ -226,9 +217,6 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * The Page ID is only used for caching, or determining the home page. Nothing else.
 		 *
 		 * The term and post objects are however used for generation.
-		 *
-		 * Now uses get_queried_object_id()
-		 * @since 2.2.8
 		 */
 		$page_id = $this->get_the_real_ID();
 
@@ -1418,13 +1406,6 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			//* Posts page title.
 			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : get_the_title( $id );
 		} else {
-			//* Fetch AnsPress page ID.
-			//* Uses get_the_real_ID() @since 2.4.4
-			/*
-			$qid = null;
-			if ( function_exists( 'get_question_id' ) )
-				$qid = get_question_id();
-			*/
 			//* Get title from custom field, empty it if it's not there to override the default title
 			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : $title;
 		}
@@ -3322,39 +3303,45 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 * @param bool $escape Escape the separator.
 	 *
 	 * @staticvar array $sepcache The separator cache.
+	 * @staticvar array $sepcache_type The escaped separator cache.
 	 *
 	 * @since 2.3.9
 	 */
 	public function get_separator( $type = 'title', $escape = false ) {
 
 		static $sepcache = array();
+		static $sepcache_type = array();
 
-		if ( isset( $sepcache[$type] ) )
-			return $sepcache[$type];
+		if ( isset( $sepcache_type[$escape] ) )
+			return $sepcache_type[$escape];
 
-		if ( $type == 'title' ) {
-			$sep_option = $this->get_option( 'title_seperator' ); // Note: typo.
-		} else {
-			$sep_option = $this->get_option( $type . '_separator' );
-		}
+		if ( ! isset( $sepcache[$type] ) ) {
+			if ( 'title' == $type ) {
+				$sep_option = $this->get_option( 'title_seperator' ); // Note: typo.
+			} else {
+				$sep_option = $this->get_option( $type . '_separator' );
+			}
 
-		if ( $sep_option === 'pipe' ) {
-			$sep = '|';
-		} else if ( $sep_option === 'dash' ) {
-			$sep = '-';
-		} else if ( ! empty( $sep_option ) ) {
-			//* Encapsulate within html entities.
-			$sep = '&' . $sep_option . ';';
-		} else {
-			//* Nothing found.
-			$sep = '|';
+			if ( 'pipe' === $sep_option ) {
+				$sep = '|';
+			} else if ( 'dash' === $sep_option ) {
+				$sep = '-';
+			} else if ( ! empty( $sep_option ) ) {
+				//* Encapsulate within html entities.
+				$sep = '&' . $sep_option . ';';
+			} else {
+				//* Nothing found.
+				$sep = '|';
+			}
+
+			$sepcache[$type] = $sep;
 		}
 
 		if ( $escape ) {
-			$sep = esc_html( $sep );
+			return $sepcache_type[$escape] = esc_html( $sepcache[$type] );
+		} else {
+			return $sepcache_type[$escape] = $sepcache[$type];
 		}
-
-		return $sepcache[$type] = $sep;
 	}
 
 }

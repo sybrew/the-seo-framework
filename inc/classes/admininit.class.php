@@ -257,6 +257,8 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		$tagline = $this->get_option( 'homepage_tagline' ) ? true : false;
 		$home_tagline = $this->get_option( 'homepage_title_tagline' );
 
+		$separator = $this->get_separator( 'title', true );
+
 		/**
 		 * We're gaining UX in exchange for resource usage.
 		 *
@@ -306,6 +308,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 			'titleAdditions' => $additions,
 			'blogDescription' => $description,
 			'titleTagline' 	=> $tagline,
+			'titleSeparator' => $separator,
 		);
 
 		wp_localize_script( 'autodescription-js', 'autodescriptionL10n', $strings );
