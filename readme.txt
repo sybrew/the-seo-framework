@@ -145,7 +145,7 @@ The output will be stored for each page, if you've edited a page the page output
 **Plugins:**
 
 * W3 Total Cache, WP Super Cache, Batcache, etc.
-* WooCommerce: Shop Page, Products, Product Categories and Product Tags.
+* WooCommerce: Shop Page, Products, Product Galleries, Product Categories and Product Tags.
 * Custom Post Types, (all kinds of plugins) with automatic integration.
 * WPMUdev and Donncha's Domain Mapping with full HTTPS support.
 * WPMUdev Avatars for og:image and twitter:image if no other image is found.
@@ -375,7 +375,7 @@ TODO
 
 **For everyone:**
 /
-* TODO Added: All WooCommerce Product Images are now also added with multiple `og:image` meta tags. Now users can now thoroughly scroll through your items when shared on social sites (where supported)!
+* Added: All WooCommerce Product Images are now also added with multiple `og:image` meta tags. Now users can now thoroughly scroll through your items when shared on social sites (where supported)!
 * TODO Added: Full Elegant Themes' Divi compatibility. Read more below under heading "About: Divi Compatibility".
 * TODO Added: Elegant Themes SEO compatibility.
 * TODO Added: Elegant Themes builder compatibility.
@@ -391,12 +391,11 @@ TODO
 * TODO Improved: OG and Twitter Auto Generated description meta tags are now up to 200 characters long.
 * Improved: Hover messages from the SEO Bar are now aligned to the left so they're easier to read.
 * Improved: Hover messages from the SEO Bar now contain an extra break when duplicated words highlighted.
-* Improved: The hover message balloon arrow now can't overflow to the left.
+* Improved: The hover message balloon arrow now can't overflow over the balloon's corners.
 * Improved: Breadcrumb generation time.
 * Improved: Overal plugin speed, again :).
 * TODO Fixed: WooCommerce product overview layout was messed up on smaller (tablet to 15") screens by the addition of The SEO Bar. It now all fits. (table.wp-list-table .column-name,table.wp-list-table .column-is_in_stock{width:10%}). Further optimization is left in the hands of WooCommerce as they still need to optimize this themself.
 * TODO Fixed: Incorrect Dutch translation on Robots Meta Settings on the Inpost metabox.
-* TODO Fixed: Title bug with categories when both a custom title and category title are filled in. // UNCONFIRMED bug, weird.
 * Fixed: Bug with AnsPress where not all page descriptions are fetched correctly on the front-end. Because of the bugfix, the description cache will be flushed upon update. The cache will clean itself up within 7 days automatically.
 * Fixed: WooCommerce main shop page took the title of the latest product.
 * Fixed: Inconsistent cache key for WooCommerce shop page.
@@ -408,12 +407,15 @@ TODO
 **For developers:**
 /
 * Added: New function `AutoDescription_Render::the_home_url_from_cache( $force_slash )`.
+* Added: New function `AutoDescription_Generate::parse_og_image( $image_id, $args )`, parses image to a maximum of 1500px width or height based on biggest factor and saves it if not yet parsed, returns the URL of the parsed image.
 * Added: New function `AutoDescription_Render::get_the_real_ID()`. Fetches the real ID for all pages, posts, terms, taxonomies and CPT, including WooCommerce and AnsPress.
-* Added: New filters. (TODO document robots filters in TSF home).
+* Added: New filters. (TODO document robots filters in TSF home && argument filters && cpt sitemap filters).
 * Added: Static caching for the current page in ld+json breadcrumbs.
+* Improved: Default arguments for the title, url and image are now auto-correcting when called to incorrectly.
 * Changed: Default WordPress robots.txt is now completely overwritten to maintain compatibility.
 * TODO: Changed: `the_description()` function parameters have now been put into an arguments array.
 * Fixed: `AutoDescription_Generate::get_separator()` didn't listen to the escape parameter because of the cache. This function has been reworked for better caching.
+* Removed: `$args['post_id']` argument from the title functions as it was unused. Use `$args['term_id']` instead.
 * Cleaned up code.
 
 /** NOTE CACHED ITEMS CHANGE **

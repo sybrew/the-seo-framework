@@ -365,15 +365,37 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		if ( empty( $image ) )
 			$image = $this->get_image_from_cache();
 
-		if ( empty( $image ) )
-			$image = $image;
+		if ( function_exists( 'is_product' ) && is_product() ) {
 
-		/**
-		 * Always output
-		 *
-		 * @since 2.1.1
-		 */
-		return '<meta property="og:image" content="' . esc_attr( $image ) . '" />' . "\r\n";
+			$output = '';
+
+			if ( ! empty( $image ) )
+				$output .= '<meta property="og:image" content="' . esc_attr( $image ) . '" />' . "\r\n";
+
+			$images = $this->get_image_from_woocommerce_gallery();
+
+			if ( is_array( $images ) && ! empty( $images ) ) {
+				foreach ( $images as $id ) {
+					//* Parse 1500px url.
+					$img = $this->parse_og_image( $id );
+
+					if ( ! empty( $img ) )
+						$output .= '<meta property="og:image" content="' . esc_attr( $img ) . '" />' . "\r\n";
+				}
+			} else if ( empty( $output ) ) {
+				//* Always add empty if none is found.
+				$output .= '<meta property="og:image" content="' . esc_attr( $image ) . '" />' . "\r\n";
+			}
+		} else {
+			/**
+			 * Always output
+			 *
+			 * @since 2.1.1
+			 */
+			$output = '<meta property="og:image" content="' . esc_attr( $image ) . '" />' . "\r\n";
+		}
+
+		return $output;
 	}
 
 	/**

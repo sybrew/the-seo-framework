@@ -613,6 +613,18 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 * @param array $defaults The default arguments.
 	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
 	 *
+	 * @applies filters the_seo_framework_title_args : {
+	 * 		@param int term_id The Taxonomy Term ID when taxonomy is also filled in. Else post ID.
+	 * 		@param string taxonomy The Taxonomy name.
+	 * 		@param bool page_on_front Page on front condition for example generation.
+	 * 		@param bool placeholder Generate placeholder, ignoring options.
+	 * 		@param bool notagline Generate title without tagline.
+	 * 		@param bool meta Ignore doing_it_wrong. Used in og:title/twitter:title
+	 * 		@param bool get_custom_field Do not fetch custom title when false.
+	 * 		@param bool description_title Fetch title for description.
+	 * 		@param bool is_front_page Fetch front page title.
+	 * }
+	 *
 	 * @since 2.4.0
 	 * @return array $args parsed args.
 	 */
@@ -620,9 +632,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		//* Passing back the defaults reduces the memory usage.
 		if ( empty( $defaults ) ) {
-			$default_args = array(
+			$defaults = array(
 				'term_id' 			=> $this->get_the_real_ID(),
-				'post_id' 			=> '',
 				'taxonomy' 			=> '',
 				'page_on_front'		=> false,
 				'placeholder'		=> false,
@@ -632,15 +643,17 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				'description_title'	=> false,
 				'is_front_page'		=> false
 			);
+
+			//* @since 2.4.4
+			$defaults = (array) apply_filters( 'the_seo_framework_title_args', $defaults, $args );
 		}
 
 		//* Return early if it's only a default args request.
 		if ( $get_defaults )
-			return $default_args;
+			return $defaults;
 
 		//* Array merge doesn't support sanitation. We're simply type casting here.
 		$args['term_id'] 			= isset( $args['term_id'] ) 			? (int) $args['term_id'] 			: $defaults['term_id'];
-		$args['post_id'] 			= isset( $args['post_id'] ) 			? (int) $args['post_id'] 			: $defaults['post_id'];
 		$args['taxonomy'] 			= isset( $args['taxonomy'] ) 			? (string) $args['taxonomy'] 		: $defaults['taxonomy'];
 		$args['page_on_front'] 		= isset( $args['page_on_front'] ) 		? (bool) $args['page_on_front'] 	: $defaults['page_on_front'];
 		$args['placeholder'] 		= isset( $args['placeholder'] ) 		? (bool) $args['placeholder'] 		: $defaults['placeholder'];
@@ -1677,6 +1690,17 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 * @param array $defaults The default arguments.
 	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
 	 *
+	 * @applies filters the_seo_framework_url_args : {
+	 * 		@param bool $paged Return current page URL without pagination
+	 * 		@param bool $from_option Get the canonical uri option
+	 * 		@param object $post The Post Object.
+	 * 		@param bool $external Wether to fetch the current WP Request or get the permalink by Post Object.
+	 * 		@param bool $is_term Fetch url for term.
+	 * 		@param object $term The term object.
+	 * 		@param bool $home Fetch home URL.
+	 * 		@param bool $forceslash Fetch home URL and slash it, always.
+	 * }
+	 *
 	 * @since 2.4.2
 	 * @return array $args parsed args.
 	 */
@@ -1684,7 +1708,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		//* Passing back the defaults reduces the memory usage.
 		if ( empty( $defaults ) ) {
-			$default_args = array(
+			$defaults = array(
 				'paged' 			=> false,
 				'get_custom_field'	=> true,
 				'external'			=> false,
@@ -1694,11 +1718,14 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				'home'				=> false,
 				'forceslash'		=> false
 			);
+
+			//* @since 2.4.4
+			$defaults = (array) apply_filters( 'the_seo_framework_url_args', $defaults, $args );
 		}
 
 		//* Return early if it's only a default args request.
 		if ( $get_defaults )
-			return $default_args;
+			return $defaults;
 
 		//* Array merge doesn't support sanitation. We're simply type casting here.
 		$args['paged'] 				= isset( $args['paged'] ) 				? (bool) $args['paged'] 			: $defaults['paged'];
@@ -2151,17 +2178,6 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 * @param string $post_id 	the post ID
 	 * @param string $image		output url for image
 	 *
-	 * @applies filters the_seo_framework_og_image_args : {
-	 *		@param int post_id The image url
-	 *		@param string image The image url
-	 *		@param mixed size The image size
-	 *		@param bool icon Fetch Image icon
-	 *		@param array attr Image attributes
-	 *		@param bool override Always use the set url
-	 *		@param bool frontpage Always use the set url on the front page
-	 * }
-	 * The image set in the filter will always be used as fallback
-	 *
 	 * @since 2.2.1
 	 *
 	 * @todo create options and upload area
@@ -2174,28 +2190,28 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		if ( empty( $post_id ) )
 			return '';
 
-		$defaults = array(
-				'post_id'	=> $post_id,
-				'size'		=> 'full',
-				'icon'		=> 0,
-				'attr'		=> '',
-				'image'		=> '',
-				'override'	=> false,
-				'frontpage'	=> true,
-			);
+		$default_args = $this->parse_image_args( '', '', true );
 
 		/**
-		 * @since 2.0.5
-		 *
-		 * New filter.
-		 * @since 2.3.0
-		 *
-		 * Removed previous filter.
-		 * @since 2.3.5
+		 * Parse args.
+		 * @since 2.4.4
 		 */
-		$defaults = (array) apply_filters( 'the_seo_framework_og_image_args', $defaults, $args );
+		if ( ! is_array( $args ) ) {
+			//* Old style parameters are used. Doing it wrong.
+			_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', $this->the_seo_framework_version( '2.4.4' ) );
+			$args = $default_args;
+		} else if ( ! empty( $args ) ) {
+			$args = $this->parse_image_args( $args, $default_args );
+		} else {
+			$args = $default_args;
+		}
 
-		$args = wp_parse_args( $args, $defaults );
+		/**
+		 * Backwards compat with parse args
+		 * @since 2.4.4
+		 */
+		if ( ! isset( $args['post_id'] ) )
+			$args['post_id'] = $post_id;
 
 		$image = $args['image'];
 
@@ -2226,6 +2242,57 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	}
 
 	/**
+	 * Parse and sanitize image args.
+	 *
+	 * @param array $args required The passed arguments.
+	 * @param array $defaults The default arguments.
+	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
+	 *
+	 * @applies filters the_seo_framework_og_image_args : {
+	 *		@param string image The image url
+	 *		@param mixed size The image size
+	 *		@param bool icon Fetch Image icon
+	 *		@param array attr Image attributes
+	 *		@param bool override Always use the set url
+	 *		@param bool frontpage Always use the set url on the front page
+	 * }
+	 * The image set in the filter will always be used as fallback
+	 *
+	 * @since 2.4.4
+	 * @return array $args parsed args.
+	 */
+	public function parse_image_args( $args = array(), $defaults = array(), $get_defaults = false ) {
+
+		//* Passing back the defaults reduces the memory usage.
+		if ( empty( $defaults ) ) {
+			$defaults = array(
+				'image'		=> '',
+				'size'		=> 'full',
+				'icon'		=> false,
+				'attr'		=> '',
+				'override'	=> false,
+				'frontpage'	=> true,
+			);
+
+			$defaults = (array) apply_filters( 'the_seo_framework_og_image_args', $defaults, $args );
+		}
+
+		//* Return early if it's only a default args request.
+		if ( $get_defaults )
+			return $defaults;
+
+		//* Array merge doesn't support sanitation. We're simply type casting here.
+		$args['image'] 		= isset( $args['image'] ) 		? (string) $args['image'] 		: $defaults['image'];
+		$args['size'] 		= isset( $args['size'] ) 		? $args['size'] 				: $defaults['size']; // Mixed.
+		$args['icon'] 		= isset( $args['icon'] ) 		? (bool) $args['icon'] 			: $defaults['icon'];
+		$args['attr'] 		= isset( $args['attr'] ) 		? (array) $args['attr'] 		: $defaults['attr'];
+		$args['override'] 	= isset( $args['override'] ) 	? (bool) $args['override'] 		: $defaults['override'];
+		$args['frontpage'] 	= isset( $args['frontpage'] ) 	? (bool) $args['frontpage'] 	: $defaults['frontpage'];
+
+		return $args;
+	}
+
+	/**
 	 * Fetches image from post thumbnail.
 	 * Resizes the image between 1500px if bigger. Then it saves the image and
 	 * Keeps dimensions relative.
@@ -2240,84 +2307,148 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		$image = '';
 
+		if ( ! isset( $args['post_id'] ) )
+			$args['post_id'] = $this->get_the_real_ID();
+
 		if ( has_post_thumbnail( $args['post_id'] ) ) {
 			$id = get_post_thumbnail_id( $args['post_id'] );
-			$src = wp_get_attachment_image_src( $id, $args['size'], $args['icon'], $args['attr'] );
 
-			$i = $src[0];
-			$w = $src[1];
-			$h = $src[2];
-
-			//* Prefered 1500px, resize it
-			if ( $w > 1500 || $h > 1500 ) {
-
-				if ( $w == $h ) {
-					//* Square
-					$w = 1500;
-					$h = 1500;
-				} else if ( $w > $h ) {
-					//* Landscape
-					$dev = $w / 1500;
-
-					$h = $h / $dev;
-
-					$h = round( $h );
-					$w = 1500;
-				} else if ( $h > $w ) {
-					//* Portrait
-					$dev = $h / 1500;
-
-					$w = $w / $dev;
-
-					$w = round( $w );
-					$h = 1500;
-				}
-
-				// Get path of image and load it into the wp_get_image_editor
-				$i_file_path = get_attached_file( $id );
-
-				$i_file_old_name	= basename( get_attached_file( $id ));
-				$i_file_ext			= pathinfo( $i_file_path, PATHINFO_EXTENSION );
-
-				if ( !empty( $i_file_ext ) ) {
-					$i_file_dir_name 	= pathinfo( $i_file_path, PATHINFO_DIRNAME );
-					// Add trailing slash
-					$i_file_dir_name	.= ( substr( $i_file_dir_name, -1 ) == '/' ? '' : '/' );
-
-					$i_file_file_name 	= pathinfo( $i_file_path, PATHINFO_FILENAME );
-
-					// Yes I know, I should use generate_filename, but it's slower.
-					// Will look at that later. This is already 100 lines of correctly working code.
-					$new_image_dirfile 	= $i_file_dir_name . $i_file_file_name . '-' . $w . 'x' . $h . '.' . $i_file_ext;
-
-					// This should work on multisite too.
-					$upload_dir 	= wp_upload_dir();
-					$upload_url 	= $upload_dir['baseurl'];
-					$upload_basedir = $upload_dir['basedir'];
-
-					// Dub this $new_image
-					$new_image_url = preg_replace( '/' . preg_quote( $upload_basedir, '/') . '/', $upload_url, $new_image_dirfile );
-
-					// Generate file if it doesn't exists yet.
-					if ( ! file_exists( $new_image_dirfile ) ) {
-
-						$image_editor = wp_get_image_editor( $i_file_path );
-
-						if ( ! is_wp_error( $image_editor ) ) {
-							$image_editor->resize( $w, $h, false );
-							$image_editor->set_quality( 70 ); // Let's save some bandwidth, Facebook compresses it even further anyway.
-							$image_editor->save( $new_image_dirfile );
-						}
-					}
-
-					$i = $new_image_url;
-				}
-			}
-
-			$image = $i;
+			$image = $this->parse_og_image( $id, $args );
 		}
 
 		return $image;
+	}
+
+	/**
+	 * Fetches images id's from WooCommerce gallery
+	 *
+	 * @staticvar array $ids The image ids
+	 *
+	 * @param array $args Image arguments.
+	 *
+	 * @since 2.4.4
+	 *
+	 * @return array The image URL's.
+	 */
+	public function get_image_from_woocommerce_gallery() {
+
+		static $ids = null;
+
+		if ( isset( $ids ) )
+			return $ids;
+
+		$attachment_ids = '';
+
+		$post_id = $this->get_the_real_ID();
+
+		if ( metadata_exists( 'post', $post_id, '_product_image_gallery' ) ) {
+			$product_image_gallery = get_post_meta( $post_id, '_product_image_gallery', true );
+
+			$attachment_ids = array_filter( explode( ',', $product_image_gallery ) );
+		}
+
+		return $ids = $attachment_ids;
+	}
+
+	/**
+	 * Parses OG image to correct size
+	 *
+	 * @staticvar string $called Checks if image ID has already been fetched
+	 *
+	 * @param int $id The attachment ID.
+	 * @param array $args The image args
+	 *
+	 * @since 2.4.4
+	 *
+	 * @return string|empty Parsed image url or empty if already called
+	 */
+	public function parse_og_image( $id, $args = array() ) {
+
+		//* Don't do anything if $id isn't given.
+		if ( ! isset( $id ) || empty( $id ) )
+			return;
+
+		static $called = array();
+
+		if ( isset( $called[$id] ) )
+			return '';
+
+		if ( empty( $args ) )
+			$args = $this->parse_image_args( '', '', true );
+
+		$src = wp_get_attachment_image_src( $id, $args['size'], $args['icon'], $args['attr'] );
+
+		$i = $src[0]; // Source URL
+		$w = $src[1]; // Width
+		$h = $src[2]; // Height
+
+		//* Prefered 1500px, resize it
+		if ( $w > 1500 || $h > 1500 ) {
+
+			if ( $w == $h ) {
+				//* Square
+				$w = 1500;
+				$h = 1500;
+			} else if ( $w > $h ) {
+				//* Landscape
+				$dev = $w / 1500;
+
+				$h = $h / $dev;
+
+				$h = round( $h );
+				$w = 1500;
+			} else if ( $h > $w ) {
+				//* Portrait
+				$dev = $h / 1500;
+
+				$w = $w / $dev;
+
+				$w = round( $w );
+				$h = 1500;
+			}
+
+			// Get path of image and load it into the wp_get_image_editor
+			$i_file_path = get_attached_file( $id );
+
+			$i_file_old_name	= basename( get_attached_file( $id ));
+			$i_file_ext			= pathinfo( $i_file_path, PATHINFO_EXTENSION );
+
+			if ( ! empty( $i_file_ext ) ) {
+				$i_file_dir_name 	= pathinfo( $i_file_path, PATHINFO_DIRNAME );
+				// Add trailing slash
+				$i_file_dir_name	.= ( substr( $i_file_dir_name, -1 ) == '/' ? '' : '/' );
+
+				$i_file_file_name 	= pathinfo( $i_file_path, PATHINFO_FILENAME );
+
+				// Yes I know, I should use generate_filename, but it's slower.
+				// Will look at that later. This is already 100 lines of correctly working code.
+				$new_image_dirfile 	= $i_file_dir_name . $i_file_file_name . '-' . $w . 'x' . $h . '.' . $i_file_ext;
+
+				// This should work on multisite too.
+				$upload_dir 	= wp_upload_dir();
+				$upload_url 	= $upload_dir['baseurl'];
+				$upload_basedir = $upload_dir['basedir'];
+
+				// Dub this $new_image
+				$new_image_url = preg_replace( '/' . preg_quote( $upload_basedir, '/') . '/', $upload_url, $new_image_dirfile );
+
+				// Generate file if it doesn't exists yet.
+				if ( ! file_exists( $new_image_dirfile ) ) {
+
+					$image_editor = wp_get_image_editor( $i_file_path );
+
+					if ( ! is_wp_error( $image_editor ) ) {
+						$image_editor->resize( $w, $h, false );
+						$image_editor->set_quality( 70 ); // Let's save some bandwidth, Facebook compresses it even further anyway.
+						$image_editor->save( $new_image_dirfile );
+					}
+				}
+
+				$i = $new_image_url;
+			}
+		}
+
+		return $called[$id] = $i;
 	}
 
 	/**
