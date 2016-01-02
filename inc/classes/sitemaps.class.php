@@ -272,12 +272,20 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 
 		$cpt = array();
 
+		/**
+		 * @applies filters Array the_seo_framework_sitemap_exclude_cpt : Excludes these CPT
+		 * @since 2.4.4
+		 */
+		$excluded_cpt = (array) apply_filters( 'the_seo_framework_sitemap_exclude_cpt', array() );
+
 		if ( $total_cpt_posts ) {
 			$post_page = (array) get_post_types( array( 'public' => true ) );
 			foreach ( $post_page as $post_type ) {
 				if ( $post_type != 'post' && $post_type != 'page' && $post_type != 'attachment' ) {
-					if ( $this->post_type_supports_custom_seo( $post_type ) )
-						$cpt[] = $post_type;
+					if ( $this->post_type_supports_custom_seo( $post_type ) ) {
+						if ( empty( $excluded_cpt ) || ! in_array( $post_type, $excluded_cpt ) )
+							$cpt[] = $post_type;
+					}
 				}
 			}
 		}

@@ -289,7 +289,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			 * @since 2.3.5
 			 */
 			$square_it = (bool) apply_filters( 'the_seo_framework_seo_bar_squared', false );
-			$square = $square_it ? 'square' : '';
+			$square = $square_it ? ' square' : '';
 
 			//* German Capitalization compat.
 			$post_low = $this->is_locale( 'de' ) ? $post : strtolower( $post );
@@ -507,12 +507,10 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 				$desclen_notice = $description_i18n;
 
-				if ( !empty( $desc_too_many ) && is_array( $desc_too_many ) ) {
+				if ( ! empty( $desc_too_many ) && is_array( $desc_too_many ) ) {
 
 					$words_count = count( $desc_too_many );
 					$desclen_class = $words_count <= 1 ? $okay : $bad;
-
-					$count = 1;
 
 					foreach ( $desc_too_many as $key => $desc_array ) {
 						foreach ( $desc_array as $desc_value => $desc_count ) {
@@ -526,10 +524,8 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 							$desclen_notice .= sprintf( __( '%s is used %d times.', 'autodescription' ), '<span>' . $desc_value . '</span>', $desc_count );
 
-							if ( $words_count > 1 && $count != $words_count )
+							if ( $words_count > 1 )
 								$desclen_notice .= '<br />'; // Yes, <br /> is used inside an attribute. Allowed.
-
-							$count++;
 						}
 					}
 				}
@@ -633,14 +629,14 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 				$red_notice = $redirect_i18n . ' ' . sprintf( __( "%s isn't being redirected.", 'autodescription' ), $post );
 				$red_class = $good;
 
-				if ( !empty( $titlen_notice ) )
+				if ( ! empty( $titlen_notice ) )
 					$title_notice		= '<span class="ad-sec-wrap ad-25">'
 										. '<a href="#" onclick="return false;" class="' . $titlen_class . '"  data-desc="' . $titlen_notice . $gen_t_notice . '">' . _x( 'T', 'Title', 'autodescription') . $gen_t . '</a>'
 										. '<span class="screen-reader-text">' . $titlen_notice . $gen_t_notice . '</span>'
 										. '</span>'
 										;
 
-				if ( !empty( $desclen_notice ) )
+				if ( ! empty( $desclen_notice ) )
 					$description_notice	= '<span class="ad-sec-wrap ad-25">'
 										. '<a href="#" onclick="return false;" class="' . $desclen_class . '" data-desc="' . $desclen_notice . $gen_d_notice . '">' . _x( 'D', 'Description', 'autodescription') . $gen_d . '</a>'
 										. '<span class="screen-reader-text">' . $desclen_notice . $gen_d_notice . '</span>'
@@ -653,7 +649,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 										. '</span>'
 										;
 
-				if ( !empty( $fol_notice ) )
+				if ( ! empty( $fol_notice ) )
 					$follow_notice		= '<span class="ad-sec-wrap ' . $ad_125 . '">'
 					 					. '<a href="#" onclick="return false;" class="' . $fol_class . '" data-desc="' . $fol_notice . '">' . _x( 'F', 'no-Follow', 'autodescription') . '</a>'
 										. '<span class="screen-reader-text">' . $fol_notice . '</span>'
@@ -661,7 +657,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 										;
 
 
-				if ( !empty( $arc_notice ) )
+				if ( ! empty( $arc_notice ) )
 					$archive_notice		= '<span class="ad-sec-wrap ' . $ad_125 . '">'
 										. '<a href="#" onclick="return false;" class="' . $arc_class . '" data-desc="' . $arc_notice . '">' . _x( 'A', 'no-Archive', 'autodescription') . '</a>'
 										. '<span class="screen-reader-text">' . $arc_notice . '</span>'
@@ -679,7 +675,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 					$redirect_notice 	= '';
 				}
 
-				$content = sprintf( '<span class="ad-seo clearfix ' . $ad_100 . ' ' . $square . '"><span class="ad-bar-wrap">%s %s %s %s %s %s</span></span>', $title_notice, $description_notice, $index_notice, $follow_notice, $archive_notice, $redirect_notice );
+				$content = sprintf( '<span class="ad-seo clearfix ' . $ad_100 . $square . '"><span class="ad-bar-wrap">%s %s %s %s %s %s</span></span>', $title_notice, $description_notice, $index_notice, $follow_notice, $archive_notice, $redirect_notice );
 
 			// Redirect and noindex found, why bother showing SEO.
 			} else if ( !empty( $redirect ) && !empty( $noindex ) ) {
@@ -702,10 +698,10 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 									. '</span>'
 									;
 
-				$content = sprintf( '<span class="ad-seo clearfix ' . $ad_100 . ' ' . $square . '"><span class="ad-bar-wrap">%s %s</span></span>', $redirect_notice, $noindex_notice );
+				$content = sprintf( '<span class="ad-seo clearfix ' . $ad_100 . $square . '"><span class="ad-bar-wrap">%s %s</span></span>', $redirect_notice, $noindex_notice );
 
-			// Redirect found, why bother showing SEO info?
-			} else if ( !empty( $redirect ) && empty( $noindex ) ) {
+			} else if ( ! empty( $redirect ) && empty( $noindex ) ) {
+				//* Redirect found, why bother showing SEO info?
 
 				$red_notice = $redirect_i18n . ' ' . sprintf( __( "%s is being redirected. This means no SEO values have to be set.", 'autodescription' ), $post );
 				$red_class = $unknown;
@@ -716,10 +712,10 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 									. '</span>'
 									;
 
-				$content = sprintf( '<span class="ad-seo clearfix ' . $ad_100 . ' ' . $square . '"><span class="ad-bar-wrap">%s</span></span>', $redirect_notice );
+				$content = sprintf( '<span class="ad-seo clearfix ' . $ad_100 . $square . '"><span class="ad-bar-wrap">%s</span></span>', $redirect_notice );
 
 			// Noindex found, why bother showing SEO info?
-			} else if ( empty( $redirect ) && !empty( $noindex ) ) {
+			} else if ( empty( $redirect ) && ! empty( $noindex ) ) {
 
 				$noi_notice = $index_i18n . ' ' . sprintf( __( "%s is not being indexed. This means no SEO values have to be set.", 'autodescription' ), $post );
 				$noi_class = $unknown;
@@ -730,7 +726,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 								. '</span>'
 								;
 
-				$content = sprintf( '<span class="ad-seo clearfix ' . $ad_100 . ' ' . $square . '"><span class="ad-bar-wrap">%s</span></span>', $noindex_notice );
+				$content = sprintf( '<span class="ad-seo clearfix ' . $ad_100 . $square . '"><span class="ad-bar-wrap">%s</span></span>', $noindex_notice );
 			}
 
 		} else {

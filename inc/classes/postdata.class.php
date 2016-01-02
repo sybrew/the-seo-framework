@@ -67,7 +67,7 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 		 *
 		 * @since 2.3.3
 		 */
-		if ( !empty( $tt_id ) ) {
+		if ( ! empty( $tt_id ) ) {
 
 			$args = array(
 				'posts_per_page'	=> 1,
@@ -133,7 +133,8 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 
 		//* Remove line breaks
 		foreach ( $lines as $i => $line ) {
-			if ( ! empty( $line ) )
+			//* Don't add empty lines or paragraphs
+			if ( ! empty( $line ) && '&nbsp;' !== $line )
 				$new_lines[] = trim( $line ) . ' ';
 		}
 
@@ -184,7 +185,7 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 				LIMIT %d",
 				'', 1 );
 
-			$page_id = $wpdb->get_var( $sql );
+			$page_id = (int) $wpdb->get_var( $sql );
 			$this->object_cache_set( $latest_posts_key, $page_id, 86400 );
 		}
 

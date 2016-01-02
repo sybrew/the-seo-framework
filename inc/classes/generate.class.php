@@ -2984,7 +2984,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 						if ( '1' !== $cat->admeta['noindex'] ) {
 
 							if ( empty( $children ) ) {
-								// The position of the
+								// The position of the current item is always static here.
 								$pos = '2';
 								$id = json_encode( $this->the_url( '', '', array( 'get_custom_field' => false, 'is_term' => true, 'term' => $cat ) ) ); // Why not external???
 
@@ -3072,7 +3072,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			if ( ! isset( $item_type ) )
 				$item_type = json_encode( 'ListItem' );
 
-			$id = json_encode( $this->the_url( '', '', array( 'get_custom_field' => false, 'external' => true, 'home' => true ) ) );
+			$id = json_encode( $this->the_home_url_from_cache() );
 
 			$home_title = $this->get_option( 'homepage_title' );
 
@@ -3115,11 +3115,12 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 */
 	public function ld_json_breadcrumb_last( $item_type, $pos, $post_id ) {
 
+		// 2 holds mostly true for single term items. This shouldn't run anyway. Pos should always be provided.
 		if ( ! isset( $pos ) )
-			$pos = '2'; // Wild guess, but holds mostly true. This shouldn't run anyway. Pos should always be provided.
+			$pos = '2';
 
 		if ( ! isset( $item_type ) ) {
-			static $type = '';
+			static $type = null;
 
 			if ( ! isset( $type ) )
 				$type = json_encode( 'ListItem' );
@@ -3127,14 +3128,14 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$item_type = $type;
 		}
 
-		if ( ! isset( $post_id ) )
+		if ( ! isset( $post_id ) || empty( $post_id ) )
 			$post_id = $this->get_the_real_ID();
 
 		//* Add current page.
 		$pos = $pos + 1;
 
-		static $id = '';
-		static $name = '';
+		static $id = null;
+		static $name = null;
 
 		if ( ! isset( $id ) )
 			$id = json_encode( $this->the_url_from_cache() );

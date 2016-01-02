@@ -181,8 +181,8 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 
 		$latest_post_id = $this->get_latest_post_id();
 
-		if ( !empty( $latest_post_id ) ) {
-			$post = get_post( (int) $latest_post_id, OBJECT );
+		if ( ! empty( $latest_post_id ) ) {
+			$post = get_post( $latest_post_id, OBJECT );
 			$title = esc_attr( $post->post_title );
 		} else {
 			$title = __( 'Example Post Title', 'autodescription' );
@@ -801,7 +801,10 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 			</label>
 		</p>
 		<p class="fields">
-			<input type="text" name="<?php $this->field_name( 'homepage_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title' ); ?>" placeholder="<?php echo $home_title_placeholder ?>" value="<?php echo esc_attr( $home_title ); ?>" />
+			<div id="autodescription-title-wrap">
+				<input type="text" name="<?php $this->field_name( 'homepage_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title' ); ?>" placeholder="<?php echo $home_title_placeholder ?>" value="<?php echo esc_attr( $home_title ); ?>" />
+				<span id="autodescription-title-offset" class="hide-if-no-js"></span><span id="autodescription-title-placeholder" class="hide-if-no-js"></span>
+			</div>
 			<?php
 			if ( $title_from_post_message ) {
 				echo '<br /><span class="description">' . $title_from_post_message . '</span>';

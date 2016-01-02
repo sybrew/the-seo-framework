@@ -158,7 +158,7 @@ define( 'THE_SEO_FRAMEWORK_DIR_PATH_FUNCT', THE_SEO_FRAMEWORK_DIR_PATH . '/inc/f
  * @return void
  */
 function the_seo_framework_locale_init() {
-	load_plugin_textdomain( 'autodescription', false, basename( dirname( __FILE__ ) ) . '/language/');
+	load_plugin_textdomain( 'autodescription', false, basename( dirname( __FILE__ ) ) . '/language/' );
 }
 add_action( 'plugins_loaded', 'the_seo_framework_locale_init', 10 );
 

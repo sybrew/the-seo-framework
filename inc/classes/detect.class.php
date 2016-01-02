@@ -634,77 +634,6 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	}
 
 	/**
-	 * Detect the current page. Admin or Front-end. With fallback to $_GET values.
-	 * Because the page/post detection is so complex this function has been created.
-	 * However, it does not work as intended within the admin pages and can therefore
-	 * only be used within the loop.
-	 *
-	 * WARNING: This function is currently inactive and can be removed or changed in the future without prior notice.
-	 * Using this function in the current state can result into crashing your website after an update.
-	 *
-	 * Use within the loop or provide a page id.
-	 *
-	 * @param string|int $page_id The Page ID or tt_id (taxonomy and terms).
-	 * @param string $post_type The post type (taxonomy/term) to check for.
-	 * @param bool $admin If the check should be solely on admin or not.
-	 * @param bool $use_cache Set to false to bypass the cache.
-	 *
-	 * @staticvar array $current_page
-	 *
-	 * @since 2.3.4
-	 *
-	 * @return string|null the current page. Null early if no page_id is given and wp_query isn't set.
-	 */
-	public function current_page( $page_id = 0, $post_type = null, $admin = false, $use_cache = true ) {
-		// @TODO
-		// Do not use!
-		return;
-
-		// Should probably use this somewhere:
-		// return get_post_type( $page_id ); // Doesn't work on archives.
-
-		//* Cache the current page.
-		static $current_page = array();
-
-		//* Return cache early if page_id is given.
-		if ( $use_cache && $page_id && isset( $current_page[$page_id][$post_type][$admin] ) )
-			return $current_page[$page_id][$post_type][$admin];
-
-		global $wp_query;
-
-		//* Test $page_id and $wp_query. Try to fetch object ID if available.
-		if ( !$page_id && isset( $wp_query ) ) {
-			//* Fetch queried object ID from $wp_query, if available. Fetch page_id if not.
-			$page_id = $wp_query->get_queried_object_id() ? $wp_query->get_queried_object_id() : $wp_query->page_id;
-
-			//* Fetch Page ID from (latest) post if no page ID is found. This should actually never run.
-			if ( !$page_id ) {
-				$post = get_post();
-				$page_id = ( !empty( $post ) ) ? $post->ID : '';
-			}
-
-			//* Still No page ID found? Return NULL. This happens when $wp_query is empty.
-			if ( !$page_id )
-				return NULL;
-
-		} else if ( !$page_id && ! isset( $wp_query ) ) {
-			//* Return NULL if no $wp_query is set and no $page_id is found.
-			return NULL;
-		}
-
-		//* Try to return cache again if no page_id was given.
-		if ( $use_cache && isset( $current_page[$page_id][$post_type][$admin] ) )
-			return $current_page[$page_id][$post_type][$admin];
-
-		//* Setup cached values.
-		if ( $use_cache )
-			return $current_page[$page_id][$post_type][$admin] = $this->current_page_pre( $page_id, (string) $post_type, $admin );
-
-		//* Default behaviour is no cache is used.
-		return $this->current_page_pre( $page_id, (string) $post_type, $admin );
-	}
-
-	/**
 	 * Get the real page ID, also depending on CPT.
 	 *
 	 * @param bool $use_cache Wether to use the cache or not.
@@ -929,7 +858,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 				static $post_page = null;
 
-				if ( !isset( $post_page ) )
+				if ( ! isset( $post_page ) )
 					$post_page = (array) get_post_types( array( 'public' => true ) );
 
 				//* Smart var. This elemenates the need for a foreach loop, reducing resource usage.

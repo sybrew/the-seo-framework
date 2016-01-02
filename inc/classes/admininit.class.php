@@ -259,6 +259,8 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 
 		$separator = $this->get_separator( 'title', true );
 
+		$rtl = is_rtl() ? '1' : '0';
+
 		/**
 		 * We're gaining UX in exchange for resource usage.
 		 *
@@ -309,6 +311,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 			'blogDescription' => $description,
 			'titleTagline' 	=> $tagline,
 			'titleSeparator' => $separator,
+			'isRTL' => $rtl,
 		);
 
 		wp_localize_script( 'autodescription-js', 'autodescriptionL10n', $strings );

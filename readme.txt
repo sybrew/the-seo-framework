@@ -367,7 +367,7 @@ If you wish to export data from The SEO Framework, please poke StudioPress with 
 * Social Descriptions have recieved an overhaul since they abide to different standards, they may also be much longer!
 * Accessibility and understanding of how this plugin handles titles has been improved when adding custom titles.
 * And last but not least, you can now see how well the length is of the descriptions and titles while editing a page or post.
-* A few other bugfixes have also been included. The biggest fix is regarding correctly fetching of the ID. Expect quick compatibility improvements in the future!
+* A few other bugfixes and visual updates have also been included. The bugfix which had the most impact is regarding correctly fetching of the page ID. This makes many more plugins more compatible with The SEO Framework and expect quick compatibility improvements in the future!
 
 **SEO Tip of the Update:**
 /
@@ -379,15 +379,21 @@ TODO
 * TODO Added: Full Elegant Themes' Divi compatibility. Read more below under heading "About: Divi Compatibility".
 * TODO Added: Elegant Themes SEO compatibility.
 * TODO Added: Elegant Themes builder compatibility.
-* TODO Added: Colorized character counters! These subtle colors now let you know you're doing it right right away :).
-* Added: Custom Title now shows the possible additions to deliver a more expected experience.
+* Added: Colorized character counters! These subtle colors now let you know you're doing it right right away without going back to the SEO Bar.
+* Added: Custom Title now shows the possible additions to deliver a more expected experience. This also takes the Custom HomePage tagline into account.
+* Added: This is also optimized for Right-To-Left languages.
 * Changed: Disabled OG Meta tags output when Add Meta Tags is active.
-* Changed: Color changes to the SEO Bar to fully support all vision deficiency spectra. This also makes the SEO bar more vibrant for non-colorblind people.
+* Changed: Color changes to the SEO Bar to fully support all vision deficiency spectra. This also makes the SEO bar more vibrant and easier on your eyes.
+* Improved: Slightly improved JavaScript speed.
 * Improved: The Breadcrumb home URL now also considers the Domain Mapping domains instead of only the current domain.
+* Improved: Multiple consecutive empty paragraph entries no longer generate equivalent spaces in the automated description.
 * TODO Improved: OG and Twitter Auto Generated description Meta tags now don't contain the title and blogname for a more organic social experience.
 * TODO Improved: OG and Twitter Auto Generated description meta tags are now up to 200 characters long.
+* Improved: Hover messages from the SEO Bar are now aligned to the left so they're easier to read.
+* Improved: Hover messages from the SEO Bar now contain an extra break when duplicated words highlighted.
+* Improved: The hover message balloon arrow now can't overflow to the left.
 * Improved: Breadcrumb generation time.
-* Improved: Overal plugin speed, again.
+* Improved: Overal plugin speed, again :).
 * TODO Fixed: WooCommerce product overview layout was messed up on smaller (tablet to 15") screens by the addition of The SEO Bar. It now all fits. (table.wp-list-table .column-name,table.wp-list-table .column-is_in_stock{width:10%}). Further optimization is left in the hands of WooCommerce as they still need to optimize this themself.
 * TODO Fixed: Incorrect Dutch translation on Robots Meta Settings on the Inpost metabox.
 * TODO Fixed: Title bug with categories when both a custom title and category title are filled in. // UNCONFIRMED bug, weird.
