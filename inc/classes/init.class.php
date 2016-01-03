@@ -86,12 +86,16 @@ class AutoDescription_Init {
 		 * @since 2.4.1
 		 */
 		if ( $genesis || (bool) apply_filters( 'the_seo_framework_manipulate_title', true ) ) {
+			//* Removes all pre_get_document_title filters.
+			remove_all_filters( 'wp_title', false );
 			//* Override WordPress Title
 			add_filter( 'wp_title', array( $this, 'title_from_cache' ), 9, 3 );
 		}
 
+		//* Removes all pre_get_document_title filters.
+		remove_all_filters( 'pre_get_document_title', false );
 		//* New WordPress 4.4.0 filter. Hurray! It's also much faster :)
-		add_filter( 'pre_get_document_title', array( $this, 'title_from_cache' ), 99 );
+		add_filter( 'pre_get_document_title', array( $this, 'title_from_cache' ), 10 );
 
 		//* Override AnsPress Theme Title
 		add_filter( 'ap_title', array( $this, 'title_from_cache' ), 99, 1 );

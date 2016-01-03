@@ -178,13 +178,15 @@ function the_seo_framework_title_from_cache( $title = null ) {
 /**
  * Fetch description from cache. Only works within Loop.
  *
+ * @param bool $social Fetch social description.
+ *
  * @since 2.4.2
  */
-function the_seo_framework_description_from_cache() {
+function the_seo_framework_description_from_cache( $social = false ) {
 	$theseoframework = the_seo_framework();
 
 	if ( isset( $theseoframework ) )
-		return $theseoframework->description_from_cache();
+		return $theseoframework->description_from_cache( $social );
 
 	return null;
 }

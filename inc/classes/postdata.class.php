@@ -54,7 +54,7 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 		 * Now casts to array
 		 * @since 2.3.3
 		 */
-		if ( !empty( $the_id ) ) {
+		if ( ! empty( $the_id ) ) {
 			$post = get_post( $the_id, ARRAY_A );
 		} else {
 			global $post_id;
@@ -86,7 +86,7 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 		 *
 		 * @since 2.3.4
 		 */
-		if ( $the_id == get_option( 'page_for_posts' ) && !is_front_page() ) {
+		if ( $the_id == get_option( 'page_for_posts' ) && ! is_front_page() ) {
 			$args = array(
 				'posts_per_page'	=> 1,
 				'offset'			=> 0,

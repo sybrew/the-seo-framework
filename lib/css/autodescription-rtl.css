@@ -1,3 +1,15 @@
+ /**
+  * WooCommerce fix
+  */
+ table.wp-list-table .column-name {
+ 	width: 15%;
+ }
+
+ table.wp-list-table .column-is_in_stock,
+ table.wp-list-table .column-sku,
+ table.wp-list-table .column-price {
+     width: 8%;
+ }
 #ad_seo {
     width: 20%;
 }
@@ -30,6 +42,9 @@
     box-sizing: content-box;
     top: 0;
     left: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 span.ad-count-bad {

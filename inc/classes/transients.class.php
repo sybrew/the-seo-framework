@@ -109,7 +109,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		 *
 		 * @since 2.3.4
 		 */
-		$revision = '1';
+		$revision = '2';
 
 		/**
 		 * Two different cache keys for two different settings.
@@ -207,7 +207,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 						 */
 						$the_id = 'hblog_' . (string) get_option( 'page_on_front' );
 					}
-				} else if ( ( false === $page_id || is_front_page() || $page_id == get_option( 'page_on_front' ) ) && ( 'page' == get_option( 'show_on_front' ) ) ) {
+				} else if ( ( false === $page_id || is_front_page() || $page_id == get_option( 'page_on_front' ) ) && ( empty( $taxonomy ) && 'page' == get_option( 'show_on_front' ) ) ) {
 					if ( is_404() ) {
 						$the_id = '_404_';
 					} else {
@@ -249,9 +249,11 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 						if ( isset( $query ) ) {
 							$the_id = '';
 
+							$p_id = $this->get_the_real_ID();
+
 							// Trim key to 2 chars.
 							foreach ( $query as $key => $value )
-								$the_id .= substr( $key, 0, 2 ) . '_' . mb_substr( $value, 0, 2 ) . '_' . $this->get_the_real_ID() . '_';
+								$the_id .= substr( $key, 0, 2 ) . '_' . mb_substr( $value, 0, 2 ) . '_' . $p_id . '_';
 
 							//* Remove final underscore
 							$the_id = rtrim( $the_id, '_' );
@@ -260,11 +262,6 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 				} else if ( ! is_singular() && ! empty( $taxonomy ) ) {
 					//* Taxonomy
 
-					//* Strip the ID from the taxonomy name.
-					$tax_len = mb_strlen( $taxonomy );
-					$_id = mb_substr( $page_id, $tax_len );
-
-					//* Empty page id.
 					$the_id = '';
 
 					//* Save taxonomy name and split into words with 3 length.
@@ -272,8 +269,10 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 					foreach ( $taxonomy_name as $name )
 						$the_id .= substr( $name, 0, 3 ) . '_';
 
+					$p_id = $page_id ? $page_id : $this->get_the_real_ID();
+
 					//* Put it all together.
-					$the_id = $the_id . ltrim( $_id, '_' );
+					$the_id = rtrim( $the_id, '_' ) . '_' . $p_id;
 				} else if ( ! empty( $page_id ) ) {
 					$the_id = $page_id;
 				}

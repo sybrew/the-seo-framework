@@ -42,8 +42,13 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		 */
 		add_filter( 'genesis_detect_seo_plugins', array( $this, 'no_more_genesis_seo' ), 10 );
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 10, 1 );
+		/**
+		 * @since 2.4.4
+		 * Doesn't work. ePanel filters are buggy and inconsistent.
+		 */
+		// add_filter( 'epanel_page_maintabs', array( $this, 'no_more_elegant_seo' ), 10, 1 );
 
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 10, 1 );
 	}
 
 	/**
@@ -123,6 +128,60 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	}
 
 	/**
+	 * Removes ePanel (Elegant Themes) SEO options.
+	 *
+	 * @since 2.4.4
+	 */
+	public function no_more_elegant_seo( $modules = array() ) {
+
+		//* Something went wrong here.
+		if ( ! is_array( $modules ) )
+			return $modules;
+
+		$modules = array_flip( $modules );
+		unset( $modules['seo'] );
+		//* Fill the keys back in order.
+		$modules = array_values( array_flip( $modules ) );
+
+		/**
+		 * Unset globals $options['randomkeyforseo']
+		 *
+		 * @NOTE to Elegant Themes:
+		 * Why Elegant Themes? This is why I never trusted your themes. :(
+		 * Uploading most of them in binary will crash also the layout.
+		 * And having unsanitized globals $options (great name for a global!), shouldn't be used.
+		 *
+		 * Try static functions, take a look at the `the_seo_framework_init` function for a great example of countering globals.
+		 *
+		 * Please also provide more documentation for developers.
+		 *
+		 * Please rewrite your ePanel. Try to start by adding keys to options and removing globals.
+		 * More filters are also for everyone's pleasure :).
+		 *
+		 * I also recommend using Atom.io or Notepad++, because whatever you're using:
+		 * It's not working well with UTF-8.
+		 *
+		 * @global $options
+		 */
+		global $options;
+
+		if ( is_array( $options ) ) {
+			$keys = array();
+
+			foreach ( $options as $key => $array ) {
+				$seo_key = array_search( 'seo', $array );
+				if ( false !== $seo_key && 'name' === $seo_key )
+					$keys[] = $seo_key;
+			}
+
+			foreach ( $keys as $key )
+				unset( $options[$key] );
+		}
+
+		return (array) $modules;
+	}
+
+	/**
 	 * Adds post type support
 	 *
 	 * Applies filters the_seo_framework_supported_post_types : The supported post types.
@@ -134,12 +193,13 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 
 		/**
 		 * Finding the screens.
-		 * @debug
 		 * @since 2.4.1
+		 *
+		 * Listens to debug constant.
+		 * @since 2.4.4
 		 */
-		/*
-		add_action( 'admin_footer', function() { global $current_screen; ?><div style="float:right;margin:3em;padding:1em;border:1px solid;background:#fff;color:#000;"><?php foreach( $current_screen as $screen ) echo "<p>$screen</p>"; ?></div><?php } );
-		*/
+		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG )
+			add_action( 'admin_footer', function() { global $current_screen; ?><div style="float:right;margin:3em;padding:1em;border:1px solid;background:#fff;color:#000;"><?php foreach( $current_screen as $screen ) echo "<p>$screen</p>"; ?></div><?php } );
 
 		$args = array();
 
@@ -284,7 +344,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 				$title = $this->title( '', '', '', array( 'placeholder' => true, 'notagline' => true ) );
 				$additions = $blog_name;
 			} else {
-				//* We're in terms and taxonomies
+				//* We're in a special place.
 				// Can't fetch title.
 				$title = '';
 				$additions = $blog_name;

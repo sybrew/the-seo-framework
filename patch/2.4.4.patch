@@ -1,0 +1,3719 @@
+Index: autodescription.php
+===================================================================
+--- autodescription.php	(revision 1307169)
++++ autodescription.php	(working copy)
+@@ -158,7 +158,7 @@
+  * @return void
+  */
+ function the_seo_framework_locale_init() {
+-	load_plugin_textdomain( 'autodescription', false, basename( dirname( __FILE__ ) ) . '/language/');
++	load_plugin_textdomain( 'autodescription', false, basename( dirname( __FILE__ ) ) . '/language/' );
+ }
+ add_action( 'plugins_loaded', 'the_seo_framework_locale_init', 10 );
+ 
+Index: inc/classes/admininit.class.php
+===================================================================
+--- inc/classes/admininit.class.php	(revision 1302381)
++++ inc/classes/admininit.class.php	(working copy)
+@@ -42,8 +42,13 @@
+ 		 */
+ 		add_filter( 'genesis_detect_seo_plugins', array( $this, 'no_more_genesis_seo' ), 10 );
+ 
++		/**
++		 * @since 2.4.4
++		 * Doesn't work. ePanel filters are buggy and inconsistent.
++		 */
++		// add_filter( 'epanel_page_maintabs', array( $this, 'no_more_elegant_seo' ), 10, 1 );
++
+ 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 10, 1 );
+-
+ 	}
+ 
+ 	/**
+@@ -123,6 +128,60 @@
+ 	}
+ 
+ 	/**
++	 * Removes ePanel (Elegant Themes) SEO options.
++	 *
++	 * @since 2.4.4
++	 */
++	public function no_more_elegant_seo( $modules = array() ) {
++
++		//* Something went wrong here.
++		if ( ! is_array( $modules ) )
++			return $modules;
++
++		$modules = array_flip( $modules );
++		unset( $modules['seo'] );
++		//* Fill the keys back in order.
++		$modules = array_values( array_flip( $modules ) );
++
++		/**
++		 * Unset globals $options['randomkeyforseo']
++		 *
++		 * @NOTE to Elegant Themes:
++		 * Why Elegant Themes? This is why I never trusted your themes. :(
++		 * Uploading most of them in binary will crash also the layout.
++		 * And having unsanitized globals $options (great name for a global!), shouldn't be used.
++		 *
++		 * Try static functions, take a look at the `the_seo_framework_init` function for a great example of countering globals.
++		 *
++		 * Please also provide more documentation for developers.
++		 *
++		 * Please rewrite your ePanel. Try to start by adding keys to options and removing globals.
++		 * More filters are also for everyone's pleasure :).
++		 *
++		 * I also recommend using Atom.io or Notepad++, because whatever you're using:
++		 * It's not working well with UTF-8.
++		 *
++		 * @global $options
++		 */
++		global $options;
++
++		if ( is_array( $options ) ) {
++			$keys = array();
++
++			foreach ( $options as $key => $array ) {
++				$seo_key = array_search( 'seo', $array );
++				if ( false !== $seo_key && 'name' === $seo_key )
++					$keys[] = $seo_key;
++			}
++
++			foreach ( $keys as $key )
++				unset( $options[$key] );
++		}
++
++		return (array) $modules;
++	}
++
++	/**
+ 	 * Adds post type support
+ 	 *
+ 	 * Applies filters the_seo_framework_supported_post_types : The supported post types.
+@@ -134,12 +193,13 @@
+ 
+ 		/**
+ 		 * Finding the screens.
+-		 * @debug
+ 		 * @since 2.4.1
++		 *
++		 * Listens to debug constant.
++		 * @since 2.4.4
+ 		 */
+-		/*
+-		add_action( 'admin_footer', function() { global $current_screen; ?><div style="float:right;margin:3em;padding:1em;border:1px solid;background:#fff;color:#000;"><?php foreach( $current_screen as $screen ) echo "<p>$screen</p>"; ?></div><?php } );
+-		*/
++		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG )
++			add_action( 'admin_footer', function() { global $current_screen; ?><div style="float:right;margin:3em;padding:1em;border:1px solid;background:#fff;color:#000;"><?php foreach( $current_screen as $screen ) echo "<p>$screen</p>"; ?></div><?php } );
+ 
+ 		$args = array();
+ 
+@@ -257,6 +317,10 @@
+ 		$tagline = $this->get_option( 'homepage_tagline' ) ? true : false;
+ 		$home_tagline = $this->get_option( 'homepage_title_tagline' );
+ 
++		$separator = $this->get_separator( 'title', true );
++
++		$rtl = is_rtl() ? '1' : '0';
++
+ 		/**
+ 		 * We're gaining UX in exchange for resource usage.
+ 		 *
+@@ -266,7 +330,7 @@
+ 		 */
+ 		if ( $hook ) {
+ 			// We're somewhere within default WordPress pages.
+-			$post_id = get_the_ID();
++			$post_id = $this->get_the_real_ID();
+ 
+ 			if ( $this->is_static_frontpage( $post_id ) ) {
+ 				$title = $blog_name;
+@@ -280,7 +344,7 @@
+ 				$title = $this->title( '', '', '', array( 'placeholder' => true, 'notagline' => true ) );
+ 				$additions = $blog_name;
+ 			} else {
+-				//* We're in terms and taxonomies
++				//* We're in a special place.
+ 				// Can't fetch title.
+ 				$title = '';
+ 				$additions = $blog_name;
+@@ -306,6 +370,8 @@
+ 			'titleAdditions' => $additions,
+ 			'blogDescription' => $description,
+ 			'titleTagline' 	=> $tagline,
++			'titleSeparator' => $separator,
++			'isRTL' => $rtl,
+ 		);
+ 
+ 		wp_localize_script( 'autodescription-js', 'autodescriptionL10n', $strings );
+@@ -397,7 +463,7 @@
+ 			return $field_cache[$field][$post_id];
+ 
+ 		if ( null === $post_id || empty( $post_id ) )
+-			$post_id = get_the_ID();
++			$post_id = $this->get_the_real_ID();
+ 
+ 		if ( null === $post_id || empty( $post_id ) )
+ 			return '';
+Index: inc/classes/detect.class.php
+===================================================================
+--- inc/classes/detect.class.php	(revision 1300916)
++++ inc/classes/detect.class.php	(working copy)
+@@ -243,7 +243,7 @@
+ 		if ( isset( $has_plugin ) )
+ 			return $has_plugin;
+ 
+-		$plugins = array( 'classes' => array( 'WPSEO_OpenGraph', 'All_in_One_SEO_Pack_Opengraph' ) );
++		$plugins = array( 'classes' => array( 'WPSEO_OpenGraph', 'All_in_One_SEO_Pack_Opengraph' ), 'functions' => array( 'amt_plugin_actions' ) );
+ 
+ 		return $has_plugin = $this->detect_plugin( $plugins ) ? true : false;
+ 	}
+@@ -634,74 +634,70 @@
+ 	}
+ 
+ 	/**
+-	 * Detect the current page. Admin or Front-end. With fallback to $_GET values.
+-	 * Because the page/post detection is so complex this function has been created.
+-	 * However, it does not work as intended within the admin pages and can therefore
+-	 * only be used within the loop.
++	 * Get the real page ID, also depending on CPT.
+ 	 *
+-	 * WARNING: This function is currently inactive and can be removed or changed in the future without prior notice.
+-	 * Using this function in the current state can result into crashing your website after an update.
++	 * @param bool $use_cache Wether to use the cache or not.
+ 	 *
+-	 * Use within the loop or provide a page id.
++	 * @staticvar int $id the ID.
+ 	 *
+-	 * @param string|int $page_id The Page ID or tt_id (taxonomy and terms).
+-	 * @param string $post_type The post type (taxonomy/term) to check for.
+-	 * @param bool $admin If the check should be solely on admin or not.
+-	 * @param bool $use_cache Set to false to bypass the cache.
+-	 *
+-	 * @staticvar array $current_page
+-	 *
+-	 * @since 2.3.4
+-	 *
+-	 * @return string|null the current page. Null early if no page_id is given and wp_query isn't set.
++	 * @since 2.4.4
+ 	 */
+-	public function current_page( $page_id = 0, $post_type = null, $admin = false, $use_cache = true ) {
+-		// @TODO
+-		// Do not use!
+-		return;
++	public function get_the_real_ID( $use_cache = true ) {
+ 
+-		// Should probably use this somewhere:
+-		// return get_post_type( $page_id ); // Doesn't work on archives.
++		$is_admin = is_admin();
+ 
+-		//* Cache the current page.
+-		static $current_page = array();
++		//* Never use cache in admin. Only causes bugs.
++		$use_cache = $is_admin ? false : $use_cache;
+ 
+-		//* Return cache early if page_id is given.
+-		if ( $use_cache && $page_id && isset( $current_page[$page_id][$post_type][$admin] ) )
+-			return $current_page[$page_id][$post_type][$admin];
++		if ( $use_cache ) {
++			static $id = null;
+ 
+-		global $wp_query;
++			if ( isset( $id ) )
++				return $id;
++		}
+ 
+-		//* Test $page_id and $wp_query. Try to fetch object ID if available.
+-		if ( !$page_id && isset( $wp_query ) ) {
+-			//* Fetch queried object ID from $wp_query, if available. Fetch page_id if not.
+-			$page_id = $wp_query->get_queried_object_id() ? $wp_query->get_queried_object_id() : $wp_query->page_id;
++		if ( ! $is_admin )
++			$id = $this->check_the_real_ID();
+ 
+-			//* Fetch Page ID from (latest) post if no page ID is found. This should actually never run.
+-			if ( !$page_id ) {
+-				$post = get_post();
+-				$page_id = ( !empty( $post ) ) ? $post->ID : '';
+-			}
++		if ( ! isset( $id ) || empty( $id ) ) {
++			$id = get_queried_object_id();
+ 
+-			//* Still No page ID found? Return NULL. This happens when $wp_query is empty.
+-			if ( !$page_id )
+-				return NULL;
+-
+-		} else if ( !$page_id && ! isset( $wp_query ) ) {
+-			//* Return NULL if no $wp_query is set and no $page_id is found.
+-			return NULL;
++			if ( empty( $id ) )
++				$id = get_the_ID();
+ 		}
+ 
+-		//* Try to return cache again if no page_id was given.
+-		if ( $use_cache && isset( $current_page[$page_id][$post_type][$admin] ) )
+-			return $current_page[$page_id][$post_type][$admin];
++		return $id;
++	}
+ 
+-		//* Setup cached values.
+-		if ( $use_cache )
+-			return $current_page[$page_id][$post_type][$admin] = $this->current_page_pre( $page_id, (string) $post_type, $admin );
++	/**
++	 * There's no need to check for inconsistent functions for the current ID.
++	 * Only works in front-end.
++	 *
++	 * @since 2.4.4
++	 *
++	 * @staticvar int $cached_id The cached ID.
++	 *
++	 * @return int|empty the ID.
++	 */
++	public function check_the_real_ID() {
+ 
+-		//* Default behaviour is no cache is used.
+-		return $this->current_page_pre( $page_id, (string) $post_type, $admin );
++		static $cached_id = null;
++
++		if ( isset( $cached_id ) )
++			return $cached_id;
++
++		$id = '';
++
++		if ( function_exists( 'is_shop' ) && is_shop() ) {
++			//* WooCommerce Shop
++			$id = get_option( 'woocommerce_shop_page_id' );
++		} else if ( function_exists( 'is_anspress' ) && is_anspress() ) {
++			//* Get AnsPress Question ID.
++			if ( function_exists( 'get_question_id' ) )
++				$id = get_question_id();
++		}
++
++		return $cached_id = $id;
+ 	}
+ 
+ 	/**
+@@ -719,7 +715,7 @@
+ 	public function is_blog_page( $id = '' ) {
+ 
+ 		if ( empty( $id ) )
+-			$o_id = get_queried_object_id();
++			$o_id = $this->get_the_real_ID();
+ 
+ 		static $is_blog_page = array();
+ 
+@@ -732,7 +728,7 @@
+ 
+ 			$sof = get_option( 'show_on_front' );
+ 
+-			if ( 'page' == $sof && !is_front_page() && !is_archive() ) {
++			if ( 'page' == $sof && ! is_front_page() && ! is_archive() ) {
+ 				if ( isset( $o_id ) ) {
+ 					if ( $o_id == $pfp )
+ 						return $is_blog_page[$id] = true;
+@@ -740,7 +736,7 @@
+ 					if ( $id == $pfp )
+ 						return $is_blog_page[$id] = true;
+ 
+-					$o_id = get_queried_object_id();
++					$o_id = $this->get_the_real_ID();
+ 
+ 					if ( $o_id == $pfp )
+ 						return $is_blog_page[$id] = true;
+@@ -771,7 +767,7 @@
+ 			return false;
+ 
+ 		if ( empty( $id ) )
+-			$o_id = get_queried_object_id() ? get_queried_object_id() : get_the_ID();
++			$o_id = $this->get_the_real_ID();
+ 
+ 		static $is_frontpage = array();
+ 
+@@ -791,7 +787,7 @@
+ 				if ( $id == $pof )
+ 					return $is_frontpage[$id] = true;
+ 
+-				$o_id = get_queried_object_id() ? get_queried_object_id() : get_the_ID();
++				$o_id = $this->get_the_real_ID();
+ 
+ 				if ( $o_id == $pof )
+ 					return $is_frontpage[$id] = true;
+@@ -877,7 +873,7 @@
+ 	 *
+ 	 * @return bool true of post type is supported.
+ 	 */
+-	 public function post_type_supports_custom_seo( $post_type = '' ) {
++	public function post_type_supports_custom_seo( $post_type = '' ) {
+ 
+ 		if ( empty( $post_type ) ) {
+ 
+@@ -889,7 +885,7 @@
+ 
+ 				static $post_page = null;
+ 
+-				if ( !isset( $post_page ) )
++				if ( ! isset( $post_page ) )
+ 					$post_page = (array) get_post_types( array( 'public' => true ) );
+ 
+ 				//* Smart var. This elemenates the need for a foreach loop, reducing resource usage.
+@@ -919,6 +915,6 @@
+ 			return $supported[$post_type] = true;
+ 
+ 		return $supported[$post_type] = false;
+-	 }
++	}
+ 
+ }
+Index: inc/classes/doingitright.class.php
+===================================================================
+--- inc/classes/doingitright.class.php	(revision 1306741)
++++ inc/classes/doingitright.class.php	(working copy)
+@@ -55,8 +55,10 @@
+ 				$type = $id;
+ 				$slug = substr( $id, (int) 5 );
+ 
+-				add_action( "manage_{$type}_columns", array( $this, 'add_column' ), 10, 1 );
+-				add_action( "manage_{$slug}_custom_column", array( $this, 'seo_column' ), 10, 3 );
++				if ( $type !== 'post' && $type !== 'page' ) {
++					add_action( "manage_{$type}_columns", array( $this, 'add_column' ), 10, 1 );
++					add_action( "manage_{$slug}_custom_column", array( $this, 'seo_column' ), 10, 3 );
++				}
+ 
+ 				/**
+ 				 * Always load pages and posts.
+@@ -163,7 +165,7 @@
+ 
+ 		// It's a bug in WP? I'll report.
+ 		// Reported: https://core.trac.wordpress.org/ticket/33521
+-		if ( !empty( $tax_id ) || ! $type ) {
++		if ( ! empty( $tax_id ) || ! $type ) {
+ 			$column = $post_id;
+ 			$post_id = $tax_id;
+ 
+@@ -204,10 +206,10 @@
+ 
+ 		//* Fetch Post ID if it hasn't been provided.
+ 		if ( empty( $post_id ) )
+-			$post_id = get_the_ID();
++			$post_id = $this->get_the_real_ID();
+ 
+ 		//* Only run when post ID is found.
+-		if ( isset( $post_id ) && !empty( $post_id ) ) {
++		if ( isset( $post_id ) && ! empty( $post_id ) ) {
+ 
+ 			//* Fetch Post Type.
+ 			if ( empty( $type ) )
+@@ -247,7 +249,7 @@
+ 
+ 				$term = get_term_by( 'id', $post_id, $type, OBJECT );
+ 
+-				if ( !empty( $term ) && is_object( $term ) ) {
++				if ( ! empty( $term ) && is_object( $term ) ) {
+ 					$tax_type = $term->taxonomy;
+ 
+ 					/**
+@@ -289,7 +291,7 @@
+ 			 * @since 2.3.5
+ 			 */
+ 			$square_it = (bool) apply_filters( 'the_seo_framework_seo_bar_squared', false );
+-			$square = $square_it ? 'square' : '';
++			$square = $square_it ? ' square' : '';
+ 
+ 			//* German Capitalization compat.
+ 			$post_low = $this->is_locale( 'de' ) ? $post : strtolower( $post );
+@@ -364,7 +366,7 @@
+ 					}
+ 
+ 					//* Fetch the title normally.
+-					if ( $title_custom_field && !$is_front_page ) {
++					if ( $title_custom_field && ! $is_front_page ) {
+ 						//* Let's try not to fix the bloated function for now.
+ 						$blogname = get_bloginfo( 'name', 'raw' );
+ 
+@@ -438,11 +440,14 @@
+ 
+ 				$description_custom_field = true;
+ 
+-				if ( $desc_len == 0 ) {
++				//* Generate description if custom isn't found.
++				if ( 0 == $desc_len ) {
+ 					if ( ! $is_term ) {
+-						$description = $this->generate_description();
++						$description_args = array( 'id' => $post_id, 'get_custom_field' => false );
++						$description = $this->generate_description( '', $description_args );
+ 					} else {
+-						$description = $this->generate_description( '', $post_id, $type );
++						$description_args = array( 'id' => $post_id, 'taxonomy' => $type, 'get_custom_field' => false );
++						$description = $this->generate_description( '', $description_args );
+ 					}
+ 
+ 					//* Convert to what Google outputs. @since 2.3.4
+@@ -507,13 +512,11 @@
+ 
+ 				$desclen_notice = $description_i18n;
+ 
+-				if ( !empty( $desc_too_many ) && is_array( $desc_too_many ) ) {
++				if ( ! empty( $desc_too_many ) && is_array( $desc_too_many ) ) {
+ 
+ 					$words_count = count( $desc_too_many );
+ 					$desclen_class = $words_count <= 1 ? $okay : $bad;
+ 
+-					$count = 1;
+-
+ 					foreach ( $desc_too_many as $key => $desc_array ) {
+ 						foreach ( $desc_array as $desc_value => $desc_count ) {
+ 							$desclen_notice .= ' ';
+@@ -525,11 +528,7 @@
+ 							$desc_value = ctype_upper( $desc_value ) ? $desc_value : ucfirst( $desc_value );
+ 
+ 							$desclen_notice .= sprintf( __( '%s is used %d times.', 'autodescription' ), '<span>' . $desc_value . '</span>', $desc_count );
+-
+-							if ( $words_count > 1 && $count != $words_count )
+-								$desclen_notice .= '<br />'; // Yes, <br /> is used inside an attribute. Allowed.
+-
+-							$count++;
++							$desclen_notice .= '<br />'; // Yes, <br /> is used inside an attribute. Allowed.
+ 						}
+ 					}
+ 				}
+@@ -633,7 +632,7 @@
+ 				$red_notice = $redirect_i18n . ' ' . sprintf( __( "%s isn't being redirected.", 'autodescription' ), $post );
+ 				$red_class = $good;
+ 
+-				if ( !empty( $titlen_notice ) )
++				if ( ! empty( $titlen_notice ) )
+ 					$title_notice		= '<span class="ad-sec-wrap ad-25">'
+ 										. '<a href="#" onclick="return false;" class="' . $titlen_class . '"  data-desc="' . $titlen_notice . $gen_t_notice . '">' . _x( 'T', 'Title', 'autodescription') . $gen_t . '</a>'
+ 										. '<span class="screen-reader-text">' . $titlen_notice . $gen_t_notice . '</span>'
+@@ -640,7 +639,7 @@
+ 										. '</span>'
+ 										;
+ 
+-				if ( !empty( $desclen_notice ) )
++				if ( ! empty( $desclen_notice ) )
+ 					$description_notice	= '<span class="ad-sec-wrap ad-25">'
+ 										. '<a href="#" onclick="return false;" class="' . $desclen_class . '" data-desc="' . $desclen_notice . $gen_d_notice . '">' . _x( 'D', 'Description', 'autodescription') . $gen_d . '</a>'
+ 										. '<span class="screen-reader-text">' . $desclen_notice . $gen_d_notice . '</span>'
+@@ -653,7 +652,7 @@
+ 										. '</span>'
+ 										;
+ 
+-				if ( !empty( $fol_notice ) )
++				if ( ! empty( $fol_notice ) )
+ 					$follow_notice		= '<span class="ad-sec-wrap ' . $ad_125 . '">'
+ 					 					. '<a href="#" onclick="return false;" class="' . $fol_class . '" data-desc="' . $fol_notice . '">' . _x( 'F', 'no-Follow', 'autodescription') . '</a>'
+ 										. '<span class="screen-reader-text">' . $fol_notice . '</span>'
+@@ -661,7 +660,7 @@
+ 										;
+ 
+ 
+-				if ( !empty( $arc_notice ) )
++				if ( ! empty( $arc_notice ) )
+ 					$archive_notice		= '<span class="ad-sec-wrap ' . $ad_125 . '">'
+ 										. '<a href="#" onclick="return false;" class="' . $arc_class . '" data-desc="' . $arc_notice . '">' . _x( 'A', 'no-Archive', 'autodescription') . '</a>'
+ 										. '<span class="screen-reader-text">' . $arc_notice . '</span>'
+@@ -679,7 +678,7 @@
+ 					$redirect_notice 	= '';
+ 				}
+ 
+-				$content = sprintf( '<span class="ad-seo clearfix ' . $ad_100 . ' ' . $square . '"><span class="ad-bar-wrap">%s %s %s %s %s %s</span></span>', $title_notice, $description_notice, $index_notice, $follow_notice, $archive_notice, $redirect_notice );
++				$content = sprintf( '<span class="ad-seo clearfix ' . $ad_100 . $square . '"><span class="ad-bar-wrap">%s %s %s %s %s %s</span></span>', $title_notice, $description_notice, $index_notice, $follow_notice, $archive_notice, $redirect_notice );
+ 
+ 			// Redirect and noindex found, why bother showing SEO.
+ 			} else if ( !empty( $redirect ) && !empty( $noindex ) ) {
+@@ -702,10 +701,10 @@
+ 									. '</span>'
+ 									;
+ 
+-				$content = sprintf( '<span class="ad-seo clearfix ' . $ad_100 . ' ' . $square . '"><span class="ad-bar-wrap">%s %s</span></span>', $redirect_notice, $noindex_notice );
++				$content = sprintf( '<span class="ad-seo clearfix ' . $ad_100 . $square . '"><span class="ad-bar-wrap">%s %s</span></span>', $redirect_notice, $noindex_notice );
+ 
+-			// Redirect found, why bother showing SEO info?
+-			} else if ( !empty( $redirect ) && empty( $noindex ) ) {
++			} else if ( ! empty( $redirect ) && empty( $noindex ) ) {
++				//* Redirect found, why bother showing SEO info?
+ 
+ 				$red_notice = $redirect_i18n . ' ' . sprintf( __( "%s is being redirected. This means no SEO values have to be set.", 'autodescription' ), $post );
+ 				$red_class = $unknown;
+@@ -716,10 +715,10 @@
+ 									. '</span>'
+ 									;
+ 
+-				$content = sprintf( '<span class="ad-seo clearfix ' . $ad_100 . ' ' . $square . '"><span class="ad-bar-wrap">%s</span></span>', $redirect_notice );
++				$content = sprintf( '<span class="ad-seo clearfix ' . $ad_100 . $square . '"><span class="ad-bar-wrap">%s</span></span>', $redirect_notice );
+ 
+ 			// Noindex found, why bother showing SEO info?
+-			} else if ( empty( $redirect ) && !empty( $noindex ) ) {
++			} else if ( empty( $redirect ) && ! empty( $noindex ) ) {
+ 
+ 				$noi_notice = $index_i18n . ' ' . sprintf( __( "%s is not being indexed. This means no SEO values have to be set.", 'autodescription' ), $post );
+ 				$noi_class = $unknown;
+@@ -730,7 +729,7 @@
+ 								. '</span>'
+ 								;
+ 
+-				$content = sprintf( '<span class="ad-seo clearfix ' . $ad_100 . ' ' . $square . '"><span class="ad-bar-wrap">%s</span></span>', $noindex_notice );
++				$content = sprintf( '<span class="ad-seo clearfix ' . $ad_100 . $square . '"><span class="ad-bar-wrap">%s</span></span>', $noindex_notice );
+ 			}
+ 
+ 		} else {
+Index: inc/classes/generate.class.php
+===================================================================
+--- inc/classes/generate.class.php	(revision 1307169)
++++ inc/classes/generate.class.php	(working copy)
+@@ -37,30 +37,53 @@
+ 	 * Create description
+ 	 *
+ 	 * @param string $description the description.
+-	 * @param int $id the term or page id.
+-	 * @param string $taxonomy taxonomy name.
+-	 * @param bool $is_home We're generating for the home page.
+-	 * @param bool $get_custom_field Do not fetch custom title when false.
++	 * @param array $args description args : {
++	 * 		@param int $id the term or page id.
++	 * 		@param string $taxonomy taxonomy name.
++	 * 		@param bool $is_home We're generating for the home page.
++	 * 		@param bool $get_custom_field Do not fetch custom title when false.
++	 * 		@param bool $social Generate Social Description when true.
++	 * }
+ 	 *
+ 	 * @since 1.0.0
+ 	 *
+ 	 * @return string The description
+ 	 */
+-	 public function generate_description( $description = '', $id = '', $taxonomy = '', $is_home = false, $get_custom_field = true ) {
++	 public function generate_description( $description = '', $args = array() ) {
+ 
++		$default_args = $this->parse_description_args( '', '', true );
++
++		/**
++		 * Parse args.
++		 * @since 2.4.4
++		 */
++		if ( ! is_array( $args ) ) {
++			//* Old style parameters are used. Doing it wrong.
++			_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', $this->the_seo_framework_version( '2.4.4' ) );
++			$args = $default_args;
++		} else if ( ! empty( $args ) ) {
++			$args = $this->parse_description_args( $args, $default_args );
++		} else {
++			$args = $default_args;
++		}
++
++		//* Determine if it's the post page.
+ 		$page_for_posts = false;
+ 
+-		if ( $get_custom_field && empty( $description ) ) {
++		if ( $args['get_custom_field'] && empty( $description ) ) {
+ 			//* Fetch from options, if any.
+-			$custom_desc = (array) $this->description_from_custom_field( $id, $taxonomy, $is_home, false, false );
++			$custom_desc = (array) $this->description_from_custom_field( $args, false, false );
+ 
+ 			$description = $custom_desc['description'];
+ 			$page_for_posts = $custom_desc['page_for_posts'];
+ 		}
+ 
++		//* We've already checked the custom fields, so let's remove the check in the generation.
++		$args['get_custom_field'] = ! $args['get_custom_field'];
++
+ 		//* Still no description found? Create an auto description based on content.
+-		if ( empty( $description ) || !is_string( $description ) )
+-			$description = $this->generate_description_from_id( $id, $taxonomy, $is_home, $page_for_posts, $get_custom_field, false );
++		if ( empty( $description ) || ! is_string( $description ) )
++			$description = $this->generate_description_from_id( $args, $page_for_posts, $escape = false );
+ 
+ 		/**
+ 		 * Beautify.
+@@ -76,11 +99,61 @@
+ 	}
+ 
+ 	/**
++	 * Parse and sanitize description args.
++	 *
++	 * @param array $args required The passed arguments.
++	 * @param array $defaults The default arguments.
++	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
++	 *
++	 * @applies filters the_seo_framework_description_args : {
++	 * 		@param int $id the term or page id.
++	 * 		@param string $taxonomy taxonomy name.
++	 * 		@param bool $is_home We're generating for the home page.
++	 * 		@param bool $get_custom_field Do not fetch custom title when false.
++	 * 		@param bool $social Generate Social Description when true.
++	 * }
++	 *
++	 * @since 2.4.4
++	 * @return array $args parsed args.
++	 */
++	public function parse_description_args( $args = array(), $defaults = array(), $get_defaults = false ) {
++
++		//* Passing back the defaults reduces the memory usage.
++		if ( empty( $defaults ) ) {
++			$defaults = array(
++				'id' 				=> $this->get_the_real_ID(),
++				'taxonomy'			=> '',
++				'is_home'			=> false,
++				'get_custom_field' 	=> false,
++				'social' 			=> false,
++			);
++
++			//* @since 2.4.4
++			$defaults = (array) apply_filters( 'the_seo_framework_description_args', $defaults, $args );
++		}
++
++		//* Return early if it's only a default args request.
++		if ( $get_defaults )
++			return $defaults;
++
++		//* Array merge doesn't support sanitation. We're simply type casting here.
++		$args['id'] 				= isset( $args['id'] ) 					? (int) $args['id'] 				: $defaults['id'];
++		$args['taxonomy'] 			= isset( $args['taxonomy'] ) 			? (string) $args['taxonomy'] 		: $defaults['taxonomy'];
++		$args['is_home'] 			= isset( $args['is_home'] ) 			? (bool) $args['is_home'] 			: $defaults['is_home'];
++		$args['get_custom_field'] 	= isset( $args['get_custom_field'] ) 	? (bool) $args['get_custom_field'] 	: $defaults['get_custom_field'];
++		$args['social'] 			= isset( $args['social'] ) 				? (bool) $args['social'] 			: $defaults['social'];
++
++		return $args;
++	}
++
++	/**
+ 	 * Create description
+ 	 *
+-	 * @param int $id the term or page id.
+-	 * @param string $taxonomy taxonomy name.
+-	 * @param bool $is_home We're generating for the home page.
++	 * @param array $args description args : {
++	 * 		@param int $id the term or page id.
++	 * 		@param string $taxonomy taxonomy name.
++	 * 		@param bool $is_home We're generating for the home page.
++	 * }
+ 	 * @param bool $escape Escape the output if true.
+ 	 * @param bool $single Return single description string when true, else array.
+ 	 *
+@@ -88,27 +161,37 @@
+ 	 *
+ 	 * @return string|mixed The description, might be unsafe for html output.
+ 	 */
+-	public function description_from_custom_field( $id = '', $taxonomy = '', $is_home = false, $escape = true, $single = true ) {
++	public function description_from_custom_field( $args = array(), $escape = true, $single = true ) {
+ 		global $wp_query;
+ 
++		$default_args = $this->parse_description_args( '', '', true );
++
++		/**
++		 * Parse args.
++		 * @since 2.4.4
++		 */
++		if ( ! is_array( $args ) ) {
++			//* Old style parameters are used. Doing it wrong.
++			_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', $this->the_seo_framework_version( '2.4.4' ) );
++			$args = $default_args;
++		} else if ( ! empty( $args ) ) {
++			$args = $this->parse_description_args( $args, $default_args );
++		} else {
++			$args = $default_args;
++		}
++
+ 		$description = '';
+ 		$page_for_posts = false;
+ 
+-		//* Fetch AnsPress page ID.
+-		if ( function_exists( 'get_question_id' ) ) {
+-			$ans_id = get_question_id();
+-
+-			if ( false !== $ans_id && empty( $id ) )
+-				$id = $ans_id;
++		if ( $args['is_home'] || is_front_page() || ( ! empty( $args['id'] ) && empty( $args['taxonomy'] ) && $args['id'] == get_option( 'page_on_front' ) ) ) {
++			$custom_desc = $this->get_option( 'homepage_description' );
++			$description = $custom_desc ? $custom_desc : $description;
+ 		}
+ 
+-		if ( is_front_page() || ( ! empty( $id ) && empty( $taxonomy ) && $id == get_option( 'page_on_front' ) ) ) {
+-			$description = $this->get_option( 'homepage_description' ) ? $this->get_option( 'homepage_description' ) : $description;
+-		}
+-
+ 		if ( is_singular() && empty( $description ) ) {
+ 			//* Bugfix 2.2.7 run only if description is stil empty from home page.
+-			$description = $this->get_custom_field( '_genesis_description', $id ) ? $this->get_custom_field( '_genesis_description', $id ) : $description;
++			$custom_desc = $this->get_custom_field( '_genesis_description', $args['id'] );
++			$description = $custom_desc ? $custom_desc : $description;
+ 		}
+ 
+ 		if ( is_category() ) {
+@@ -118,7 +201,7 @@
+ 
+ 			$flag = $term->admeta['saved_flag'] != '0' ? true : false;
+ 
+-			if ( !$flag && empty( $description ) && isset( $term->meta['description'] ) )
++			if ( ! $flag && empty( $description ) && isset( $term->meta['description'] ) )
+ 				$description = ! empty( $term->meta['description'] ) ? $term->meta['description'] : $description;
+ 		}
+ 
+@@ -129,7 +212,7 @@
+ 
+ 			$flag = $term->admeta['saved_flag'] != '0' ? true : false;
+ 
+-			if ( !$flag && empty( $description ) && isset( $term->meta['description'] ) )
++			if ( ! $flag && empty( $description ) && isset( $term->meta['description'] ) )
+ 				$description = ! empty( $term->meta['description'] ) ? $term->meta['description'] : $description;
+ 		}
+ 
+@@ -139,7 +222,7 @@
+ 
+ 			$flag = $term->admeta['saved_flag'] != '0' ? true : false;
+ 
+-			if ( !$flag && empty( $description ) && isset( $term->meta['description'] ) )
++			if ( ! $flag && empty( $description ) && isset( $term->meta['description'] ) )
+ 				$description = ! empty( $term->meta['description'] ) ? $term->meta['description'] : $description;
+ 		}
+ 
+@@ -155,8 +238,8 @@
+ 		 *
+ 		 * @since 2.2.8
+ 		 */
+-		if ( $this->is_blog_page( $id ) && empty( $description ) ) {
+-			$description = $this->get_custom_field( '_genesis_description', get_queried_object_id() ) ? $this->get_custom_field( '_genesis_description', get_queried_object_id() ) : $description;
++		if ( $this->is_blog_page( $args['id'] ) && empty( $description ) ) {
++			$description = $this->get_custom_field( '_genesis_description', $args['id'] ) ? $this->get_custom_field( '_genesis_description', $args['id'] ) : $description;
+ 			$page_for_posts = true;
+ 		}
+ 
+@@ -181,11 +264,15 @@
+ 	 * Generate description from content
+ 	 *
+ 	 * @since 1.0.0
+-	 * @param int $id the term or page id.
+-	 * @param string $taxonomy taxonomy name.
+-	 * @param bool $is_home We're generating for the home page.
++	 *
++	 * @param array $args description args : {
++	 * 		@param int $id the term or page id.
++	 * 		@param string $taxonomy taxonomy name.
++	 * 		@param bool $is_home We're generating for the home page.
++	 * 		@param bool $get_custom_field Do not fetch custom title when false.
++	 * 		@param bool $social Generate Social Description when true.
++	 * }
+ 	 * @param bool $page_for_posts We're generating for the blog page.
+-	 * @param bool $get_custom_field Do not fetch custom title when false.
+ 	 * @param bool $escape Escape output when true.
+ 	 *
+ 	 * Gained its own function.
+@@ -193,9 +280,35 @@
+ 	 *
+ 	 * @return string output The description.
+ 	 */
+-	public function generate_description_from_id( $id = '', $taxonomy = '', $is_home = false, $page_for_posts = false, $get_custom_field = true, $escape = true ) {
++	public function generate_description_from_id( $args = array(), $page_for_posts = false, $escape = true ) {
+ 
+ 		/**
++		 * Applies filters bool 'the_seo_framework_enable_auto_description' : Enable or disable the description.
++		 *
++		 * @since 2.4.4
++		 */
++		$autodescription = (bool) apply_filters( 'the_seo_framework_enable_auto_description', true );
++
++		if ( ! $autodescription )
++			return '';
++
++		$default_args = $this->parse_description_args( '', '', true );
++
++		/**
++		 * Parse args.
++		 * @since 2.4.4
++		 */
++		if ( ! is_array( $args ) ) {
++			//* Old style parameters are used. Doing it wrong.
++			_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', $this->the_seo_framework_version( '2.4.4' ) );
++			$args = $default_args;
++		} else if ( ! empty( $args ) ) {
++			$args = $this->parse_description_args( $args, $default_args );
++		} else {
++			$args = $default_args;
++		}
++
++		/**
+ 		 * Debug parameters.
+ 		 * @since 2.3.4
+ 		 */
+@@ -203,14 +316,13 @@
+ 			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+ 				echo "<!--\r\n";
+ 
+-			echo  "\r\n" . 'START: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
++			echo "\r\n" . 'START: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
+ 
++			$timer_start = microtime( true );
++
+ 			if ( defined( 'THE_SEO_FRAMEWORK_DEBUG_MORE' ) && THE_SEO_FRAMEWORK_DEBUG_MORE ) {
+-				$this->echo_debug_information( array( 'id' => $id ) );
+-				$this->echo_debug_information( array( 'taxonomy' => $taxonomy ) );
+-				$this->echo_debug_information( array( 'is_home' => $is_home ) );
++				$this->echo_debug_information( array( 'args' => $args ) );
+ 				$this->echo_debug_information( array( 'page_for_posts' => $page_for_posts ) );
+-				$this->echo_debug_information( array( 'get_custom_field' => $get_custom_field ) );
+ 			}
+ 
+ 			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+@@ -217,94 +329,67 @@
+ 				echo "\r\n-->";
+ 		}
+ 
+-		$page_on_front = false;
+ 		$term = '';
+-		$page_id_on_front = (int) get_option( 'page_on_front' );
++		if ( ! empty( $args['taxonomy'] ) && false !== $args['id'] ) {
++			//* Fetch taxonomy from args.
++			//* This only runs in admin, because we provide these arg values there.
++			$term = get_term_by( 'id', $args['id'], $args['taxonomy'], OBJECT );
++		} else if ( is_admin() ) {
++			//* Test other admin screens.
++			global $current_screen;
+ 
+-		/**
+-		 * The Page ID is only used for caching, or determining the home page. Nothing else.
+-		 *
+-		 * The term and post objects are however used for generation.
+-		 *
+-		 * Now uses get_queried_object_id()
+-		 * @since 2.2.8
+-		 */
+-		$page_id = get_queried_object_id() ? get_queried_object_id() : get_the_ID();
++			if ( isset( $current_screen->taxonomy ) && ! empty( $current_screen->taxonomy ) ) {
++				//* Fetch taxonomy in admin.
++				$args['taxonomy'] = $current_screen->taxonomy;
++				$term = get_term_by( 'id', $args['id'], $args['taxonomy'], OBJECT );
++			}
++		} else if ( is_archive() && ! is_front_page() ) {
++			//* Fetch Taxonomy through wp_query on front-end
++			global $wp_query;
+ 
+-		if ( ! empty( $id ) && ! empty( $taxonomy ) ) {
+-			//* This only runs in admin, because we provide these values there.
+-			$term = get_term_by( 'id', $id, $taxonomy, OBJECT );
+-
+-			$page_id = $term ? $taxonomy . '_' . $id : $page_id;
+-		} else if ( $is_home && ! empty( $id ) && 'page' == get_option( 'show_on_front' ) ) {
+-			//* If on front page as page
+-			$page_id = $id;
++			$term = $wp_query->get_queried_object();
++			$args['taxonomy'] = $term->taxonomy;
+ 		}
+ 
+ 		/**
+-		 * @param bool $is_static_frontpage Is frontpage page the static frontpage.
+-		 */
+-		$is_static_frontpage = $this->is_static_frontpage( $page_id );
+-
+-		//* Assign $tt_id as integer, it doesn't contain Taxonomy values if $id is assigned.
+-		$tt_id = ! empty( $id ) ? $id : $page_id;
+-
+-		if ( empty( $taxonomy ) ) {
+-			//* This only runs in front-end, because no values have been provided.
+-
+-			$object = get_queried_object();
+-
+-			if ( isset( $object->taxonomy ) ) {
+-				$taxonomy = $object->taxonomy;
+-
+-				$term = get_term_by( 'id', $tt_id, $taxonomy, OBJECT );
+-
+-				//* Since 2.3.4
+-				$page_id = $term ? $taxonomy . '_' . $tt_id : $page_id;
+-			}
+-		}
+-
+-		/**
+ 		 * Return early if description is found from Home Page Settings.
+-		 * Only do so when $get_custom_field is true.
++		 * Only do so when $args['get_custom_field'] is true.
+ 		 *
+ 		 * @since 2.3.4
+ 		 */
+-		if ( $get_custom_field && ( is_front_page() || ( ! empty( $page_id ) && empty( $taxonomy ) && $is_static_frontpage ) ) ) {
+-			$description = $this->get_option( 'homepage_description' ) ? $this->get_option( 'homepage_description' ) : '';
++		if ( $args['get_custom_field'] && ( $args['is_home'] || is_front_page() ) ) {
++			$custom_desc = $this->get_option( 'homepage_description' );
++			$description = $custom_desc ? $custom_desc : null;
+ 
+-			if ( !empty( $description ) )
++			if ( isset( $description ) )
+ 				return $description;
+ 		}
+ 
++		$page_on_front = false;
+ 		/**
+-		 * We're on the home page blog now. So let's create something special.
+-		 * @since 2.2.5
+-		 *
+-		 * Check for is_front_page()
+-		 * @since 2.2.6
+-		 *
+-		 * Seperate from if else loop
+-		 * @since 2.2.8
++		 * We're on the home page now. So let's create something special.
+ 		 */
+-		if ( $page_id === false || is_front_page() || $is_static_frontpage )
++		if ( $args['id'] === false || is_front_page() || $args['is_home'] )
+ 			$page_on_front = true;
+ 
+ 		if ( ! $page_on_front ) {
++			/**
++			 * No need to parse these when generating social description.
++			 *
++			 * @since 2.4.4
++			 */
+ 			if ( $page_for_posts ) {
+ 				/**
+ 				 * We're on the blog page now.
+ 				 * @since 2.2.8
+-				 *
+-				 * Uses the title from cache
+-				 * @since 2.4.1
+ 				 */
+-				$title = $this->get_custom_field( '_genesis_title', $page_id ) ? $this->get_custom_field( '_genesis_title', $page_id ) : $this->title( '', '', '', array( 'term_id' => $page_id, 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
++				$custom_title = $this->get_custom_field( '_genesis_title', $args['id'] );
++				$title = $custom_title ? $custom_title : $this->title( '', '', '', array( 'term_id' => $args['id'], 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
+ 
+ 				// @TODO create option.
+ 				$title = _x( 'Latest posts:', 'High priority translation, used in front-end', 'autodescription' ) . ' ' . $title;
+ 
+-			} else if ( !empty( $term ) && is_object( $term ) ) {
++			} else if ( ! empty( $term ) && is_object( $term ) ) {
+ 				//* We're on a taxonomy now.
+ 
+ 				if ( isset( $term->admeta['doctitle'] ) && !empty( $term->admeta['doctitle'] ) ) {
+@@ -316,17 +401,13 @@
+ 				}
+ 			} else {
+ 				//* We're on a page now.
+-
+-				/**
+-				 * Uses the title from cache
+-				 * @since 2.4.1
+-				 */
+-				$title = $this->get_custom_field( '_genesis_title', $page_id ) ? $this->get_custom_field( '_genesis_title', $page_id ) : $this->title( '', '', '', array( 'term_id' => $page_id, 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
++				$custom_title = $this->get_custom_field( '_genesis_title', $args['id'] );
++				$title = $custom_title ? $custom_title : $this->title( '', '', '', array( 'term_id' => $args['id'], 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
+ 			}
+ 		} else {
+-			//* We're on the home page blog now.
++			//* We're on the home page now.
+ 			//* Fetch home page id.
+-			$page_id = $page_id ? $page_id : $page_id_on_front;
++			$args['id'] = (int) get_option( 'page_on_front' );
+ 
+ 			$title = get_bloginfo( 'description', 'raw' );
+ 		}
+@@ -351,11 +432,12 @@
+ 		 */
+ 		$sep = (string) apply_filters( 'the_seo_framework_description_separator', $this->get_separator( 'description' ) );
+ 
++
+ 		/**
+ 		 * Setup transient.
+ 		 * This value has to be re-asigned for deletion.
+ 		 */
+-		$this->setup_auto_description_transient( $page_id, $taxonomy );
++		$this->setup_auto_description_transient( $args['id'], $args['taxonomy'] );
+ 
+ 		/**
+ 		 * Cache the generated description within a transient.
+@@ -368,20 +450,27 @@
+ 		$excerpt = get_transient( $this->auto_description_transient );
+ 		if ( false === $excerpt ) {
+ 
+-			//* Assign $term as we pass it on to another function.
+-			$term = isset( $term ) ? $term : '';
+-
+ 			/**
+ 			 * Get max char length
+ 			 * 149 will account for the added (single char) ... and two spaces around $on and the separator + 2 spaces around the separator: makes 155
+ 			 *
+ 			 * 151 will count for the added (single char) ... and the separator + 2 spaces around the separator: makes 155
++			 *
++			 * Default to 200 when $args['social']
+ 			 */
+-			$max_char_length = $description_additions ? (int) 149 - mb_strlen( html_entity_decode( $title . $on . $blogname ) ) : (int) 151 - mb_strlen( html_entity_decode( $title ) );
++			$max_char_length_normal = $description_additions ? (int) 149 - mb_strlen( html_entity_decode( $title . $on . $blogname ) ) : (int) 151 - mb_strlen( html_entity_decode( $title ) );
++			$max_char_length_social = 200;
+ 
+-			//* Generate Excerpt.
+-			$excerpt = $this->generate_excerpt( $page_id, $tt_id, $term, $page_on_front, $page_for_posts, $max_char_length );
++			//* Generate Excerpts.
++			$excerpt_normal = $this->generate_excerpt( $args['id'], $term, $page_on_front, $page_for_posts, $max_char_length_normal );
++			$excerpt_social = $this->generate_excerpt( $args['id'], $term, $page_on_front, $page_for_posts, $max_char_length_social );
+ 
++			//* Put in array to be accessed later.
++			$excerpt = array(
++				'normal' => $excerpt_normal,
++				'social' => $excerpt_social
++			);
++
+ 			/**
+ 			 * Transient expiration: 1 week.
+ 			 * Keep the description for at most 1 week.
+@@ -393,14 +482,24 @@
+ 			set_transient( $this->auto_description_transient, $excerpt, $expiration );
+ 		}
+ 
+-		if ( !empty( $excerpt ) && $description_additions ) {
+-			$description = (string) sprintf( '%s %s %s %s %s', $title, $on, $blogname, $sep, $excerpt );
+-		} else if ( !empty( $excerpt ) ) {
+-			$description = (string) sprintf( '%s %s %s', $title, $sep, $excerpt );
++		/**
++		 * Check for Social description, don't add blogname then.
++		 * Also continues normally if it's the front page.
++		 *
++		 * @since 2.4.4
++		 */
++		if ( $args['social'] && ! $page_on_front ) {
++			$description = $excerpt['social'];
+ 		} else {
+-			//* We still add the additions when no excerpt has been found.
+-			// i.e. home page.
+-			$description = (string) sprintf( '%s %s %s', $title, $on, $blogname );
++			if ( ! empty( $excerpt['social'] ) && $description_additions ) {
++				$description = (string) sprintf( '%s %s %s %s %s', $title, $on, $blogname, $sep, $excerpt['social'] );
++			} else if ( ! empty( $excerpt['social'] ) ) {
++				$description = (string) sprintf( '%s %s %s', $title, $sep, $excerpt['social'] );
++			} else {
++				//* We still add the additions when no excerpt has been found.
++				// i.e. home page.
++				$description = (string) sprintf( '%s %s %s', $title, $on, $blogname );
++			}
+ 		}
+ 
+ 		if ( $escape ) {
+@@ -416,14 +515,14 @@
+ 		 * @since 2.3.4
+ 		 */
+ 		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
+-			$auto_description_transient = $this->auto_description_transient;
+ 
+ 			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+ 				echo "<!--\r\n";
+ 
+-			$this->echo_debug_information( array( 'is static frontpage' => $is_static_frontpage ) );
+-			$this->echo_debug_information( array( 'description excerpt cache key' => $auto_description_transient ) );
++			$this->echo_debug_information( array( 'description excerpt cache key' => $this->auto_description_transient ) );
+ 			$this->echo_debug_information( array( 'description excerpt output' => $description ) );
++			$this->echo_debug_information( array( 'Generation time' => number_format( microtime(true) - $timer_start, 5 ) . 's' ) );
++
+ 			echo "\r\n<br>\r\n" . 'END: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n<br><br>";
+ 
+ 			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+@@ -437,7 +536,6 @@
+ 	 * Generate the excerpt.
+ 	 *
+ 	 * @param int|string $page_id required : The Page ID
+-	 * @param int $tt_id The Taxonomy Term ID.
+ 	 * @param object|null $term The Taxonomy Term.
+ 	 * @param bool $page_on_front If the page is on front.
+ 	 * @param bool $page_for_posts If the page is for posts and not on front.
+@@ -445,29 +543,46 @@
+ 	 *
+ 	 * @since 2.3.4
+ 	 *
++	 * @staticvar array $excerpt_cache Holds the excerpt
++	 * @staticvar array $excerptlength_cache Holds the excerpt length
++	 *
+ 	 * @access public
+ 	 * Please note that this does not reflect the actual output becaue the $max_char_length isn't calculated on direct call.
+ 	 */
+-	public function generate_excerpt( $page_id, $tt_id = 0, $term = '', $page_on_front = false, $page_for_posts = false, $max_char_length = 155 ) {
++	public function generate_excerpt( $page_id, $term = '', $page_on_front = false, $page_for_posts = false, $max_char_length = 155 ) {
+ 
+-		if ( ! $page_on_front ) {
+-			if ( $page_for_posts ) {
+-				//* We're on the blog page now.
+-				$excerpt = $this->get_excerpt_by_id( '', $page_id );
+-			} else if ( !empty( $term ) && is_object( $term ) ) {
+-				//* We're on a taxonomy now.
+-				$excerpt = !empty( $term->description ) ? $term->description : $this->get_excerpt_by_id( '', '', $tt_id ); // The latter will return empty in admin pages
++		static $excerpt_cache = array();
++		static $excerptlength_cache = array();
++
++		$term_id = isset( $term->term_id ) ? $term->term_id : false;
++
++		if ( ! isset( $excerpt_cache[$page_id][$term_id][$page_on_front][$page_for_posts] ) ) {
++			if ( ! $page_on_front ) {
++				if ( $page_for_posts ) {
++					//* We're on the blog page now.
++					$excerpt = $this->get_excerpt_by_id( '', $page_id );
++				} else if ( ! empty( $term ) && is_object( $term ) ) {
++					//* We're on a taxonomy now.
++					$excerpt = ! empty( $term->description ) ? $term->description : $this->get_excerpt_by_id( '', '', $page_id ); // The latter will return empty in admin pages
++				} else {
++					//* We're on a page now.
++					$excerpt = $this->get_excerpt_by_id( '', $page_id );
++				}
+ 			} else {
+-				//* We're on a page now.
+-				$excerpt = $this->get_excerpt_by_id( '', $page_id );
++				//* We're on the home page blog now.
++				$excerpt = '';
+ 			}
+-		} else {
+-			//* We're on the home page blog now.
+-			$excerpt = '';
++
++			$excerpt_cache[$page_id][$term_id][$page_on_front][$page_for_posts] = $excerpt;
+ 		}
+ 
+-		$excerptlength = (int) mb_strlen( $excerpt );
++		$excerpt = $excerpt_cache[$page_id][$term_id][$page_on_front][$page_for_posts];
+ 
++		if ( ! isset( $excerptlength_cache[$page_id][$term_id][$page_on_front][$page_for_posts] ) )
++			$excerptlength_cache[$page_id][$term_id][$page_on_front][$page_for_posts] = (int) mb_strlen( $excerpt );
++
++		$excerptlength = $excerptlength_cache[$page_id][$term_id][$page_on_front][$page_for_posts];
++
+ 		// Trunculate if the excerpt is longer than the max char length
+ 		if ( $excerptlength > $max_char_length ) {
+ 
+@@ -624,6 +739,18 @@
+ 	 * @param array $defaults The default arguments.
+ 	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
+ 	 *
++	 * @applies filters the_seo_framework_title_args : {
++	 * 		@param int term_id The Taxonomy Term ID when taxonomy is also filled in. Else post ID.
++	 * 		@param string taxonomy The Taxonomy name.
++	 * 		@param bool page_on_front Page on front condition for example generation.
++	 * 		@param bool placeholder Generate placeholder, ignoring options.
++	 * 		@param bool notagline Generate title without tagline.
++	 * 		@param bool meta Ignore doing_it_wrong. Used in og:title/twitter:title
++	 * 		@param bool get_custom_field Do not fetch custom title when false.
++	 * 		@param bool description_title Fetch title for description.
++	 * 		@param bool is_front_page Fetch front page title.
++	 * }
++	 *
+ 	 * @since 2.4.0
+ 	 * @return array $args parsed args.
+ 	 */
+@@ -631,9 +758,8 @@
+ 
+ 		//* Passing back the defaults reduces the memory usage.
+ 		if ( empty( $defaults ) ) {
+-			$default_args = array(
+-				'term_id' 			=> '',
+-				'post_id' 			=> '',
++			$defaults = array(
++				'term_id' 			=> $this->get_the_real_ID(),
+ 				'taxonomy' 			=> '',
+ 				'page_on_front'		=> false,
+ 				'placeholder'		=> false,
+@@ -643,15 +769,17 @@
+ 				'description_title'	=> false,
+ 				'is_front_page'		=> false
+ 			);
++
++			//* @since 2.4.4
++			$defaults = (array) apply_filters( 'the_seo_framework_title_args', $defaults, $args );
+ 		}
+ 
+ 		//* Return early if it's only a default args request.
+ 		if ( $get_defaults )
+-			return $default_args;
++			return $defaults;
+ 
+ 		//* Array merge doesn't support sanitation. We're simply type casting here.
+ 		$args['term_id'] 			= isset( $args['term_id'] ) 			? (int) $args['term_id'] 			: $defaults['term_id'];
+-		$args['post_id'] 			= isset( $args['post_id'] ) 			? (int) $args['post_id'] 			: $defaults['post_id'];
+ 		$args['taxonomy'] 			= isset( $args['taxonomy'] ) 			? (string) $args['taxonomy'] 		: $defaults['taxonomy'];
+ 		$args['page_on_front'] 		= isset( $args['page_on_front'] ) 		? (bool) $args['page_on_front'] 	: $defaults['page_on_front'];
+ 		$args['placeholder'] 		= isset( $args['placeholder'] ) 		? (bool) $args['placeholder'] 		: $defaults['placeholder'];
+@@ -1007,8 +1135,6 @@
+ 		 */
+ 		$add_tagline = 0;
+ 
+-		$the_id = $args['term_id'] ? $args['term_id'] : get_the_ID();
+-
+ 		/**
+ 		 * Generate the Title if empty or if home.
+ 		 *
+@@ -1015,10 +1141,10 @@
+ 		 * Generation of title has acquired its own functions.
+ 		 * @since 2.3.4
+ 		 */
+-		if ( $is_front_page || $this->is_static_frontpage( $the_id ) || $args['is_front_page'] ) {
++		if ( $is_front_page || $this->is_static_frontpage( $args['term_id'] ) || $args['is_front_page'] ) {
+ 			$generated = (array) $this->generate_home_title( $args['get_custom_field'], $seplocation, $seplocation_home, $escape = false );
+ 
+-			if ( !empty( $generated ) && is_array( $generated ) ) {
++			if ( ! empty( $generated ) && is_array( $generated ) ) {
+ 				$title = $generated['title'] ? (string) $generated['title'] : $title;
+ 				$blogname = $generated['blogname'] ? (string) $generated['blogname'] : $blogname;
+ 				$add_tagline = $generated['add_tagline'] ? (bool) $generated['add_tagline'] : $add_tagline;
+@@ -1107,7 +1233,7 @@
+ 			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+ 				echo "<!--\r\n";
+ 
+-			$this->echo_debug_information( array( 'is static frontpage' => $this->is_static_frontpage( get_the_ID() ) ) );
++			$this->echo_debug_information( array( 'is static frontpage' => $this->is_static_frontpage( $this->get_the_real_ID() ) ) );
+ 			$this->echo_debug_information( array( 'title output' => $title ) );
+ 			echo "\r\n<br>\r\n" . 'END: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n<br><br>";
+ 
+@@ -1154,7 +1280,7 @@
+ 			$title = __( 'Search results for:', 'autodescription' ) . ' ' . get_search_query();
+ 
+ 		//* Generate admin placeholder for taxonomies
+-		if ( empty( $title ) && !empty( $term_id ) && !empty( $taxonomy ) ) {
++		if ( empty( $title ) && ! empty( $term_id ) && ! empty( $taxonomy ) ) {
+ 			$term = get_term_by( 'id', $term_id, $taxonomy, OBJECT );
+ 
+ 			if ( !empty( $term ) && is_object( $term ) ) {
+@@ -1181,6 +1307,10 @@
+ 
+ 		//* Fetch the post title if no title is found.
+ 		if ( ! isset( $title ) || empty( $title ) ) {
++
++			if ( empty( $term_id ) )
++				$term_id = $this->get_the_real_ID();
++
+ 			$post = get_post( $term_id, OBJECT );
+ 
+ 			$title = '';
+@@ -1203,7 +1333,7 @@
+ 		if ( empty( $title ) )
+ 			$title = __( 'Untitled', 'autodescription' );
+ 
+-		if ( $escape === true ) {
++		if ( true === $escape ) {
+ 			$title = wptexturize( $title );
+ 			$title = convert_chars( $title );
+ 			$title = esc_html( $title );
+@@ -1403,6 +1533,8 @@
+ 	 */
+ 	public function title_from_custom_field( $title = '', $escape = false, $id = null ) {
+ 
++		$id = isset( $id ) ? $id : $this->get_the_real_ID();
++
+ 		/**
+ 		 * Create something special for blog page.
+ 		 * Only if it's not the home page.
+@@ -1409,18 +1541,10 @@
+ 		 *
+ 		 * @since 2.2.8
+ 		 */
+-		if ( $this->is_blog_page() ) {
++		if ( $this->is_blog_page( $id ) ) {
+ 			//* Posts page title.
+-			$title = $this->get_custom_field( '_genesis_title', get_queried_object_id() ) ? $this->get_custom_field( '_genesis_title', get_queried_object_id() ) : get_the_title( get_queried_object_id() );
++			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : get_the_title( $id );
+ 		} else {
+-			$qid = NULL;
+-
+-			//* Fetch AnsPress page ID.
+-			if ( function_exists( 'get_question_id' ) )
+-				$qid = get_question_id();
+-
+-			$id = isset( $id ) ? $id : $qid;
+-
+ 			//* Get title from custom field, empty it if it's not there to override the default title
+ 			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : $title;
+ 		}
+@@ -1433,7 +1557,6 @@
+ 
+ 			$title = isset( $post->post_title ) ? $post->post_title : '';
+ 			$id = isset( $post->ID ) ? $post->ID : 0;
+-
+ 		}
+ 
+ 		if ( $escape ) {
+@@ -1486,6 +1609,8 @@
+ 				$this->echo_debug_information( array( 'args' => $args ) );
+ 			}
+ 
++			$timer_start = microtime( true );
++
+ 			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+ 				echo "\r\n-->";
+ 		}
+@@ -1506,6 +1631,7 @@
+ 			$args = $default_args;
+ 		}
+ 
++		$path = '';
+ 		$scheme = '';
+ 
+ 		/**
+@@ -1557,8 +1683,6 @@
+ 					if ( ! isset( $post ) )
+ 						$post = get_post( $page_id, OBJECT );
+ 
+-					$path = '';
+-
+ 					/**
+ 					 * Get page uri if Page ID is given
+ 					 * @since 2.1.9
+@@ -1613,36 +1737,37 @@
+ 
+ 				}
+ 
+-				//* Domain Mapping canonical URL
+-				$wpmu_url = $this->the_url_wpmudev_domainmap( $path, true );
+-				if ( ! empty( $wpmu_url ) && is_array( $wpmu_url ) ) {
+-					$url = $wpmu_url[0];
+-					$scheme = $wpmu_url[1];
+-				}
++			}
++		}
+ 
+-				//* Domain Mapping canonical URL
+-				if ( empty( $url ) ) {
+-					$dm_url = $this->the_url_donncha_domainmap( $path, true );
+-					if ( !empty( $dm_url ) && is_array( $dm_url ) ) {
+-						$url = $dm_url[0];
+-						$scheme = $dm_url[1];
+-					}
+-				}
++		//* Domain Mapping canonical URL
++		$wpmu_url = $this->the_url_wpmudev_domainmap( $path, true );
++		if ( ! empty( $wpmu_url ) && is_array( $wpmu_url ) ) {
++			$url = $wpmu_url[0];
++			$scheme = $wpmu_url[1];
++		}
+ 
+-				//* Non-domainmap URL
+-				if ( empty( $url ) ) {
+-					$url = trailingslashit( get_option( 'home' ) ) . ltrim( $path, '\/ ' );
+-					$scheme = is_ssl() ? 'https' : 'http';
+-				}
++		//* Domain Mapping canonical URL
++		if ( empty( $url ) ) {
++			$dm_url = $this->the_url_donncha_domainmap( $path, true );
++			if ( !empty( $dm_url ) && is_array( $dm_url ) ) {
++				$url = $dm_url[0];
++				$scheme = $dm_url[1];
+ 			}
+ 		}
+ 
+-		if ( empty( $url ) && $args['home'] ) {
+-			$url = user_trailingslashit( get_option( 'home' ) );
+-			$slashit = false;
++		//* Non-domainmap URL
++		if ( empty( $url ) ) {
++			if ( $args['home'] ) {
++				$url = user_trailingslashit( get_option( 'home' ) );
++				$slashit = false;
++			} else {
++				$url = trailingslashit( get_option( 'home' ) ) . ltrim( $path, '\/ ' );
++				$scheme = is_ssl() ? 'https' : 'http';
++			}
+ 		}
+ 
+-		//* URL has been given manually.
++		//* URL has been given manually or $args['home'] is true.
+ 		if ( ! isset( $scheme ) )
+ 			$scheme = is_ssl() ? 'https' : 'http';
+ 
+@@ -1656,6 +1781,7 @@
+ 		if ( $slashit && ! $args['forceslash'] )
+ 			$output = user_trailingslashit( $output );
+ 
++		//* Be careful with the default permalink structure.
+ 		if ( $args['forceslash'] )
+ 			$output = trailingslashit( $output );
+ 
+@@ -1676,6 +1802,7 @@
+ 				$this->echo_debug_information( array( 'page_id' => $page_id ) );
+ 				$this->echo_debug_information( array( 'args' => $args ) );
+ 			}
++			$this->echo_debug_information( array( 'Generation time' => number_format( microtime(true) - $timer_start, 5 ) . 's' ) );
+ 			echo  "\r\n" . 'END: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
+ 
+ 			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+@@ -1692,6 +1819,17 @@
+ 	 * @param array $defaults The default arguments.
+ 	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
+ 	 *
++	 * @applies filters the_seo_framework_url_args : {
++	 * 		@param bool $paged Return current page URL without pagination
++	 * 		@param bool $from_option Get the canonical uri option
++	 * 		@param object $post The Post Object.
++	 * 		@param bool $external Wether to fetch the current WP Request or get the permalink by Post Object.
++	 * 		@param bool $is_term Fetch url for term.
++	 * 		@param object $term The term object.
++	 * 		@param bool $home Fetch home URL.
++	 * 		@param bool $forceslash Fetch home URL and slash it, always.
++	 * }
++	 *
+ 	 * @since 2.4.2
+ 	 * @return array $args parsed args.
+ 	 */
+@@ -1699,7 +1837,7 @@
+ 
+ 		//* Passing back the defaults reduces the memory usage.
+ 		if ( empty( $defaults ) ) {
+-			$default_args = array(
++			$defaults = array(
+ 				'paged' 			=> false,
+ 				'get_custom_field'	=> true,
+ 				'external'			=> false,
+@@ -1709,11 +1847,14 @@
+ 				'home'				=> false,
+ 				'forceslash'		=> false
+ 			);
++
++			//* @since 2.4.4
++			$defaults = (array) apply_filters( 'the_seo_framework_url_args', $defaults, $args );
+ 		}
+ 
+ 		//* Return early if it's only a default args request.
+ 		if ( $get_defaults )
+-			return $default_args;
++			return $defaults;
+ 
+ 		//* Array merge doesn't support sanitation. We're simply type casting here.
+ 		$args['paged'] 				= isset( $args['paged'] ) 				? (bool) $args['paged'] 			: $defaults['paged'];
+@@ -2166,17 +2307,6 @@
+ 	 * @param string $post_id 	the post ID
+ 	 * @param string $image		output url for image
+ 	 *
+-	 * @applies filters the_seo_framework_og_image_args : {
+-	 *		@param int post_id The image url
+-	 *		@param string image The image url
+-	 *		@param mixed size The image size
+-	 *		@param bool icon Fetch Image icon
+-	 *		@param array attr Image attributes
+-	 *		@param bool override Always use the set url
+-	 *		@param bool frontpage Always use the set url on the front page
+-	 * }
+-	 * The image set in the filter will always be used as fallback
+-	 *
+ 	 * @since 2.2.1
+ 	 *
+ 	 * @todo create options and upload area
+@@ -2184,33 +2314,33 @@
+ 	public function get_image( $post_id = '', $args = array() ) {
+ 
+ 		if ( empty( $post_id ) )
+-			$post_id = get_the_ID();
++			$post_id = $this->get_the_real_ID();
+ 
+ 		if ( empty( $post_id ) )
+ 			return '';
+ 
+-		$defaults = array(
+-				'post_id'	=> $post_id,
+-				'size'		=> 'full',
+-				'icon'		=> 0,
+-				'attr'		=> '',
+-				'image'		=> '',
+-				'override'	=> false,
+-				'frontpage'	=> true,
+-			);
++		$default_args = $this->parse_image_args( '', '', true );
+ 
+ 		/**
+-		 * @since 2.0.5
+-		 *
+-		 * New filter.
+-		 * @since 2.3.0
+-		 *
+-		 * Removed previous filter.
+-		 * @since 2.3.5
++		 * Parse args.
++		 * @since 2.4.4
+ 		 */
+-		$defaults = (array) apply_filters( 'the_seo_framework_og_image_args', $defaults, $args );
++		if ( ! is_array( $args ) ) {
++			//* Old style parameters are used. Doing it wrong.
++			_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', $this->the_seo_framework_version( '2.4.4' ) );
++			$args = $default_args;
++		} else if ( ! empty( $args ) ) {
++			$args = $this->parse_image_args( $args, $default_args );
++		} else {
++			$args = $default_args;
++		}
+ 
+-		$args = wp_parse_args( $args, $defaults );
++		/**
++		 * Backwards compat with parse args
++		 * @since 2.4.4
++		 */
++		if ( ! isset( $args['post_id'] ) )
++			$args['post_id'] = $post_id;
+ 
+ 		$image = $args['image'];
+ 
+@@ -2241,6 +2371,57 @@
+ 	}
+ 
+ 	/**
++	 * Parse and sanitize image args.
++	 *
++	 * @param array $args required The passed arguments.
++	 * @param array $defaults The default arguments.
++	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
++	 *
++	 * @applies filters the_seo_framework_og_image_args : {
++	 *		@param string image The image url
++	 *		@param mixed size The image size
++	 *		@param bool icon Fetch Image icon
++	 *		@param array attr Image attributes
++	 *		@param bool override Always use the set url
++	 *		@param bool frontpage Always use the set url on the front page
++	 * }
++	 * The image set in the filter will always be used as fallback
++	 *
++	 * @since 2.4.4
++	 * @return array $args parsed args.
++	 */
++	public function parse_image_args( $args = array(), $defaults = array(), $get_defaults = false ) {
++
++		//* Passing back the defaults reduces the memory usage.
++		if ( empty( $defaults ) ) {
++			$defaults = array(
++				'image'		=> '',
++				'size'		=> 'full',
++				'icon'		=> false,
++				'attr'		=> '',
++				'override'	=> false,
++				'frontpage'	=> true,
++			);
++
++			$defaults = (array) apply_filters( 'the_seo_framework_og_image_args', $defaults, $args );
++		}
++
++		//* Return early if it's only a default args request.
++		if ( $get_defaults )
++			return $defaults;
++
++		//* Array merge doesn't support sanitation. We're simply type casting here.
++		$args['image'] 		= isset( $args['image'] ) 		? (string) $args['image'] 		: $defaults['image'];
++		$args['size'] 		= isset( $args['size'] ) 		? $args['size'] 				: $defaults['size']; // Mixed.
++		$args['icon'] 		= isset( $args['icon'] ) 		? (bool) $args['icon'] 			: $defaults['icon'];
++		$args['attr'] 		= isset( $args['attr'] ) 		? (array) $args['attr'] 		: $defaults['attr'];
++		$args['override'] 	= isset( $args['override'] ) 	? (bool) $args['override'] 		: $defaults['override'];
++		$args['frontpage'] 	= isset( $args['frontpage'] ) 	? (bool) $args['frontpage'] 	: $defaults['frontpage'];
++
++		return $args;
++	}
++
++	/**
+ 	 * Fetches image from post thumbnail.
+ 	 * Resizes the image between 1500px if bigger. Then it saves the image and
+ 	 * Keeps dimensions relative.
+@@ -2255,84 +2436,148 @@
+ 
+ 		$image = '';
+ 
++		if ( ! isset( $args['post_id'] ) )
++			$args['post_id'] = $this->get_the_real_ID();
++
+ 		if ( has_post_thumbnail( $args['post_id'] ) ) {
+ 			$id = get_post_thumbnail_id( $args['post_id'] );
+-			$src = wp_get_attachment_image_src( $id, $args['size'], $args['icon'], $args['attr'] );
+ 
+-			$i = $src[0];
+-			$w = $src[1];
+-			$h = $src[2];
++			$image = $this->parse_og_image( $id, $args );
++		}
+ 
+-			//* Prefered 1500px, resize it
+-			if ( $w > 1500 || $h > 1500 ) {
++		return $image;
++	}
+ 
+-				if ( $w == $h ) {
+-					//* Square
+-					$w = 1500;
+-					$h = 1500;
+-				} else if ( $w > $h ) {
+-					//* Landscape
+-					$dev = $w / 1500;
++	/**
++	 * Fetches images id's from WooCommerce gallery
++	 *
++	 * @staticvar array $ids The image ids
++	 *
++	 * @param array $args Image arguments.
++	 *
++	 * @since 2.4.4
++	 *
++	 * @return array The image URL's.
++	 */
++	public function get_image_from_woocommerce_gallery() {
+ 
+-					$h = $h / $dev;
++		static $ids = null;
+ 
+-					$h = round( $h );
+-					$w = 1500;
+-				} else if ( $h > $w ) {
+-					//* Portrait
+-					$dev = $h / 1500;
++		if ( isset( $ids ) )
++			return $ids;
+ 
+-					$w = $w / $dev;
++		$attachment_ids = '';
+ 
+-					$w = round( $w );
+-					$h = 1500;
+-				}
++		$post_id = $this->get_the_real_ID();
+ 
+-				// Get path of image and load it into the wp_get_image_editor
+-				$i_file_path = get_attached_file( $id );
++		if ( metadata_exists( 'post', $post_id, '_product_image_gallery' ) ) {
++			$product_image_gallery = get_post_meta( $post_id, '_product_image_gallery', true );
+ 
+-				$i_file_old_name	= basename( get_attached_file( $id ));
+-				$i_file_ext			= pathinfo( $i_file_path, PATHINFO_EXTENSION );
++			$attachment_ids = array_filter( explode( ',', $product_image_gallery ) );
++		}
+ 
+-				if ( !empty( $i_file_ext ) ) {
+-					$i_file_dir_name 	= pathinfo( $i_file_path, PATHINFO_DIRNAME );
+-					// Add trailing slash
+-					$i_file_dir_name	.= ( substr( $i_file_dir_name, -1 ) == '/' ? '' : '/' );
++		return $ids = $attachment_ids;
++	}
+ 
+-					$i_file_file_name 	= pathinfo( $i_file_path, PATHINFO_FILENAME );
++	/**
++	 * Parses OG image to correct size
++	 *
++	 * @staticvar string $called Checks if image ID has already been fetched
++	 *
++	 * @param int $id The attachment ID.
++	 * @param array $args The image args
++	 *
++	 * @since 2.4.4
++	 *
++	 * @return string|empty Parsed image url or empty if already called
++	 */
++	public function parse_og_image( $id, $args = array() ) {
+ 
+-					// Yes I know, I should use generate_filename, but it's slower.
+-					// Will look at that later. This is already 100 lines of correctly working code.
+-					$new_image_dirfile 	= $i_file_dir_name . $i_file_file_name . '-' . $w . 'x' . $h . '.' . $i_file_ext;
++		//* Don't do anything if $id isn't given.
++		if ( ! isset( $id ) || empty( $id ) )
++			return;
+ 
+-					// This should work on multisite too.
+-					$upload_dir 	= wp_upload_dir();
+-					$upload_url 	= $upload_dir['baseurl'];
+-					$upload_basedir = $upload_dir['basedir'];
++		static $called = array();
+ 
+-					// Dub this $new_image
+-					$new_image_url = preg_replace( '/' . preg_quote( $upload_basedir, '/') . '/', $upload_url, $new_image_dirfile );
++		if ( isset( $called[$id] ) )
++			return '';
+ 
+-					// Generate file if it doesn't exists yet.
+-					if ( ! file_exists( $new_image_dirfile ) ) {
++		if ( empty( $args ) )
++			$args = $this->parse_image_args( '', '', true );
+ 
+-						$image_editor = wp_get_image_editor( $i_file_path );
++		$src = wp_get_attachment_image_src( $id, $args['size'], $args['icon'], $args['attr'] );
+ 
+-						if ( ! is_wp_error( $image_editor ) ) {
+-							$image_editor->resize( $w, $h, false );
+-							$image_editor->set_quality( 70 ); // Let's save some bandwidth, Facebook compresses it even further anyway.
+-							$image_editor->save( $new_image_dirfile );
+-						}
++		$i = $src[0]; // Source URL
++		$w = $src[1]; // Width
++		$h = $src[2]; // Height
++
++		//* Prefered 1500px, resize it
++		if ( $w > 1500 || $h > 1500 ) {
++
++			if ( $w == $h ) {
++				//* Square
++				$w = 1500;
++				$h = 1500;
++			} else if ( $w > $h ) {
++				//* Landscape
++				$dev = $w / 1500;
++
++				$h = $h / $dev;
++
++				$h = round( $h );
++				$w = 1500;
++			} else if ( $h > $w ) {
++				//* Portrait
++				$dev = $h / 1500;
++
++				$w = $w / $dev;
++
++				$w = round( $w );
++				$h = 1500;
++			}
++
++			// Get path of image and load it into the wp_get_image_editor
++			$i_file_path = get_attached_file( $id );
++
++			$i_file_old_name	= basename( get_attached_file( $id ));
++			$i_file_ext			= pathinfo( $i_file_path, PATHINFO_EXTENSION );
++
++			if ( ! empty( $i_file_ext ) ) {
++				$i_file_dir_name 	= pathinfo( $i_file_path, PATHINFO_DIRNAME );
++				// Add trailing slash
++				$i_file_dir_name	.= ( substr( $i_file_dir_name, -1 ) == '/' ? '' : '/' );
++
++				$i_file_file_name 	= pathinfo( $i_file_path, PATHINFO_FILENAME );
++
++				// Yes I know, I should use generate_filename, but it's slower.
++				// Will look at that later. This is already 100 lines of correctly working code.
++				$new_image_dirfile 	= $i_file_dir_name . $i_file_file_name . '-' . $w . 'x' . $h . '.' . $i_file_ext;
++
++				// This should work on multisite too.
++				$upload_dir 	= wp_upload_dir();
++				$upload_url 	= $upload_dir['baseurl'];
++				$upload_basedir = $upload_dir['basedir'];
++
++				// Dub this $new_image
++				$new_image_url = preg_replace( '/' . preg_quote( $upload_basedir, '/') . '/', $upload_url, $new_image_dirfile );
++
++				// Generate file if it doesn't exists yet.
++				if ( ! file_exists( $new_image_dirfile ) ) {
++
++					$image_editor = wp_get_image_editor( $i_file_path );
++
++					if ( ! is_wp_error( $image_editor ) ) {
++						$image_editor->resize( $w, $h, false );
++						$image_editor->set_quality( 70 ); // Let's save some bandwidth, Facebook compresses it even further anyway.
++						$image_editor->save( $new_image_dirfile );
+ 					}
++				}
+ 
+-					$i = $new_image_url;
+-				}
++				$i = $new_image_url;
+ 			}
+-
+-			$image = $i;
+ 		}
+ 
+-		return $image;
++		return $called[$id] = $i;
+ 	}
+ 
+ 	/**
+@@ -2668,9 +2913,9 @@
+ 						$path = '?p=' . $id;
+ 				}
+ 
+-			} else if ( 'page' == get_option( 'show_on_front' ) && get_queried_object_id() == get_option( 'page_for_posts' ) ) {
++			} else if ( 'page' == get_option( 'show_on_front' ) && $this->get_the_real_ID() == get_option( 'page_for_posts' ) ) {
+ 				//* Page for posts
+-				$id =  get_queried_object_id();
++				$id =  $this->get_the_real_ID();
+ 				$path = '?p=' . $id;
+ 			} else {
+ 				//* Home page
+@@ -2753,10 +2998,10 @@
+ 
+ 		}
+ 
+-		if ( !empty( $prev ) )
++		if ( ! empty( $prev ) )
+ 			return esc_url_raw( $prev );
+ 
+-		if ( !empty( $next ) )
++		if ( ! empty( $next ) )
+ 			return esc_url_raw( $next );
+ 
+ 		return '';
+@@ -2893,7 +3138,7 @@
+ 		if ( is_single() ) {
+ 			//* Get categories.
+ 
+-			$post_id = get_the_ID();
++			$post_id = $this->get_the_real_ID();
+ 
+ 			$r = is_object_in_term( $post_id, 'category', '' );
+ 
+@@ -2999,7 +3244,7 @@
+ 						if ( '1' !== $cat->admeta['noindex'] ) {
+ 
+ 							if ( empty( $children ) ) {
+-								// The position of the
++								// The position of the current item is always static here.
+ 								$pos = '2';
+ 								$id = json_encode( $this->the_url( '', '', array( 'get_custom_field' => false, 'is_term' => true, 'term' => $cat ) ) ); // Why not external???
+ 
+@@ -3026,7 +3271,7 @@
+ 
+ 		} else if ( ! is_front_page() && is_page() ) {
+ 			//* Get ancestors.
+-			$page_id = get_the_ID();
++			$page_id = $this->get_the_real_ID();
+ 
+ 			$parents = get_post_ancestors( $page_id );
+ 
+@@ -3082,21 +3327,26 @@
+ 
+ 		static $first_item = null;
+ 
+-		if ( !isset( $item_type ) )
+-			$item_type = json_encode( 'ListItem' );
++		if ( ! isset( $first_item ) ) {
+ 
+-		if ( !isset( $first_item ) ) {
+-			$id = json_encode( $this->the_url( '', '', array( 'get_custom_field' => false, 'external' => true, 'home' => true ) ) );
++			if ( ! isset( $item_type ) )
++				$item_type = json_encode( 'ListItem' );
+ 
++			$id = json_encode( $this->the_home_url_from_cache() );
++
+ 			$home_title = $this->get_option( 'homepage_title' );
++
+ 			if ( $home_title ) {
+ 				$custom_name = $home_title;
+ 			} else if ( 'page' == get_option( 'show_on_front' ) ) {
++				$home_id = (int) get_option( 'page_on_front' );
++
+ 				$custom_name = $this->get_custom_field( '_genesis_title', $home_id );
+ 				$custom_name = $custom_name ? $custom_name : get_bloginfo( 'name', 'raw' );
+ 			} else {
+ 				$custom_name = get_bloginfo( 'name', 'raw' );
+ 			}
++
+ 			$custom_name = json_encode( $custom_name );
+ 
+ 			//* Add trailing comma.
+@@ -3117,32 +3367,47 @@
+ 	 * @param int $pos Last known position.
+ 	 * @param int $post_id The current Post ID
+ 	 *
++	 * @staticvar string $type The breadcrumb item type.
++	 * @staticvar string $id The current post/page/archive url.
++	 * @staticvar string $name The current post/page/archive title.
++	 *
+ 	 * @return string Lat Breadcrumb item
+ 	 */
+ 	public function ld_json_breadcrumb_last( $item_type, $pos, $post_id ) {
+ 
+-		if ( !isset( $item_type ) )
+-			$item_type = json_encode( 'ListItem' );
++		// 2 holds mostly true for single term items. This shouldn't run anyway. Pos should always be provided.
++		if ( ! isset( $pos ) )
++			$pos = '2';
+ 
+-		if ( !isset( $pos ) )
+-			$pos = '2'; // wild guess.
++		if ( ! isset( $item_type ) ) {
++			static $type = null;
+ 
+-		if ( !isset( $post_id ) )
+-			$post_id = get_the_ID();
++			if ( ! isset( $type ) )
++				$type = json_encode( 'ListItem' );
+ 
+-		if ( !isset( $last_item ) ) {
+-			//* Add current page.
+-			$pos = $pos + 1;
++			$item_type = $type;
++		}
+ 
++		if ( ! isset( $post_id ) || empty( $post_id ) )
++			$post_id = $this->get_the_real_ID();
++
++		//* Add current page.
++		$pos = $pos + 1;
++
++		static $id = null;
++		static $name = null;
++
++		if ( ! isset( $id ) )
+ 			$id = json_encode( $this->the_url_from_cache() );
+ 
++		if ( ! isset( $name ) ) {
+ 			$custom_field = $this->get_custom_field( '_genesis_title', $post_id );
+ 			$name = $custom_field ? $custom_field : $this->title( '', '', '', array( 'term_id' => $post_id, 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
+ 			$name = json_encode( $name );
+-
+-			$last_item = sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}}', $item_type, (string) $pos, $id, $name );
+ 		}
+ 
++		$last_item = sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}}', $item_type, (string) $pos, $id, $name );
++
+ 		return $last_item;
+ 	}
+ 
+@@ -3299,6 +3564,7 @@
+ 	 * @param bool $escape Escape the separator.
+ 	 *
+ 	 * @staticvar array $sepcache The separator cache.
++	 * @staticvar array $sepcache_type The escaped separator cache.
+ 	 *
+ 	 * @since 2.3.9
+ 	 */
+@@ -3305,33 +3571,38 @@
+ 	public function get_separator( $type = 'title', $escape = false ) {
+ 
+ 		static $sepcache = array();
++		static $sepcache_type = array();
+ 
+-		if ( isset( $sepcache[$type] ) )
+-			return $sepcache[$type];
++		if ( isset( $sepcache_type[$escape] ) )
++			return $sepcache_type[$escape];
+ 
+-		if ( $type == 'title' ) {
+-			$sep_option = $this->get_option( 'title_seperator' ); // Note: typo.
+-		} else {
+-			$sep_option = $this->get_option( $type . '_separator' );
+-		}
++		if ( ! isset( $sepcache[$type] ) ) {
++			if ( 'title' == $type ) {
++				$sep_option = $this->get_option( 'title_seperator' ); // Note: typo.
++			} else {
++				$sep_option = $this->get_option( $type . '_separator' );
++			}
+ 
+-		if ( $sep_option === 'pipe' ) {
+-			$sep = '|';
+-		} else if ( $sep_option === 'dash' ) {
+-			$sep = '-';
+-		} else if ( ! empty( $sep_option ) ) {
+-			//* Encapsulate within html entities.
+-			$sep = '&' . $sep_option . ';';
+-		} else {
+-			//* Nothing found.
+-			$sep = '|';
++			if ( 'pipe' === $sep_option ) {
++				$sep = '|';
++			} else if ( 'dash' === $sep_option ) {
++				$sep = '-';
++			} else if ( ! empty( $sep_option ) ) {
++				//* Encapsulate within html entities.
++				$sep = '&' . $sep_option . ';';
++			} else {
++				//* Nothing found.
++				$sep = '|';
++			}
++
++			$sepcache[$type] = $sep;
+ 		}
+ 
+ 		if ( $escape ) {
+-			$sep = esc_html( $sep );
++			return $sepcache_type[$escape] = esc_html( $sepcache[$type] );
++		} else {
++			return $sepcache_type[$escape] = $sepcache[$type];
+ 		}
+-
+-		return $sepcache[$type] = $sep;
+ 	}
+ 
+ }
+Index: inc/classes/init.class.php
+===================================================================
+--- inc/classes/init.class.php	(revision 1306741)
++++ inc/classes/init.class.php	(working copy)
+@@ -86,12 +86,16 @@
+ 		 * @since 2.4.1
+ 		 */
+ 		if ( $genesis || (bool) apply_filters( 'the_seo_framework_manipulate_title', true ) ) {
++			//* Removes all pre_get_document_title filters.
++			remove_all_filters( 'wp_title', false );
+ 			//* Override WordPress Title
+ 			add_filter( 'wp_title', array( $this, 'title_from_cache' ), 9, 3 );
+ 		}
+ 
++		//* Removes all pre_get_document_title filters.
++		remove_all_filters( 'pre_get_document_title', false );
+ 		//* New WordPress 4.4.0 filter. Hurray! It's also much faster :)
+-		add_filter( 'pre_get_document_title', array( $this, 'title_from_cache' ), 99 );
++		add_filter( 'pre_get_document_title', array( $this, 'title_from_cache' ), 10 );
+ 
+ 		//* Override AnsPress Theme Title
+ 		add_filter( 'ap_title', array( $this, 'title_from_cache' ), 99, 1 );
+@@ -194,7 +198,7 @@
+ 
+ 		$plugin_start = microtime( true );
+ 
+-		$the_id = get_queried_object_id() ? get_queried_object_id() : get_the_ID();
++		$the_id = $this->get_the_real_ID();
+ 
+ 		//* Hexadecimal revision.
+ 		$revision = '1';
+Index: inc/classes/inpost.class.php
+===================================================================
+--- inc/classes/inpost.class.php	(revision 1302381)
++++ inc/classes/inpost.class.php	(working copy)
+@@ -280,9 +280,14 @@
+ 			'get_custom_field' => false
+ 		);
+ 
++		$generated_description_args = array(
++			'id' => $term_id,
++			'taxonomy' => $taxonomy
++		);
++
+ 		//* Generate title and description.
+ 		$generated_doctitle = $this->title( '', '', '', $generated_doctitle_args );
+-		$generated_description = $this->generate_description_from_id( $term_id, $taxonomy, false, false );
++		$generated_description = $this->generate_description_from_id( $generated_description_args );
+ 
+ 		/**
+ 		 * Calculate true Title length
+@@ -330,7 +335,10 @@
+ 						</label>
+ 					</th>
+ 					<td>
+-						<input name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" type="text" placeholder="<?php echo $doctitle_placeholder ?>" value="<?php echo esc_attr( $ad_doctitle ); ?>" size="40" />
++						<div id="autodescription-title-wrap">
++							<input name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" type="text" placeholder="<?php echo $doctitle_placeholder ?>" value="<?php echo esc_attr( $ad_doctitle ); ?>" size="40" />
++							<span id="autodescription-title-offset" class="hide-if-no-js"></span><span id="autodescription-title-placeholder" class="hide-if-no-js"></span>
++						</div>
+ 						<p class="description"><?php printf( __( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[doctitle]_chars">'. mb_strlen( $tit_len_parsed ) .'</span>' ); ?></p>
+ 					</td>
+ 				</tr>
+@@ -397,12 +405,8 @@
+ 		//* Get the language the Google page should assume.
+ 		$language = $this->google_language();
+ 
+-		/**
+-		 * Now uses get_queried_object_id()
+-		 * @since 2.2.8
+-		 */
+-		$post_id = get_queried_object_id() ? get_queried_object_id() : get_the_ID();
+-		$title = $this->get_custom_field( '_genesis_title' );
++		$post_id = $this->get_the_real_ID();
++		$title = $this->get_custom_field( '_genesis_title', $post_id );
+ 
+ 		$page_on_front_option = get_option( 'page_on_front' );
+ 
+@@ -426,8 +430,13 @@
+ 				'get_custom_field' => false,
+ 			);
+ 
++			$generated_description_args = array(
++				'id' => $post_id,
++				'is_home' => true
++			);
++
+ 			$generated_doctitle = $this->title( '', '', '', $generated_doctitle_args );
+-			$generated_description = $this->generate_description_from_id( $post_id, '', true, false );
++			$generated_description = $this->generate_description_from_id( $generated_description_args );
+ 		} else if ( $this->is_blog_page( $post_id ) ) {
+ 			//* Page for posts.
+ 			$generated_doctitle_args = array(
+@@ -436,8 +445,13 @@
+ 				'get_custom_field' => false,
+ 			);
+ 
++			$generated_description_args = array(
++				'id' => $post_id,
++				'page_for_posts' => true
++			);
++
+ 			$generated_doctitle = $this->title( '', '', '', $generated_doctitle_args );
+-			$generated_description = $this->generate_description_from_id( $post_id, '', false, true );
++			$generated_description = $this->generate_description_from_id( $generated_description_args );
+ 		} else {
+ 			$generated_doctitle_args = array(
+ 				'placeholder' => true,
+@@ -445,8 +459,12 @@
+ 				'get_custom_field' => false,
+ 			);
+ 
++			$generated_description_args = array(
++				'id' => $post_id
++			);
++
+ 			$generated_doctitle = $this->title( '', '', '', $generated_doctitle_args );
+-			$generated_description = $this->generate_description_from_id( $post_id, '', false, false );
++			$generated_description = $this->generate_description_from_id( $generated_description_args );
+ 		}
+ 
+ 		/**
+@@ -528,7 +546,10 @@
+ 			</label>
+ 		</p>
+ 		<p>
+-			<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" placeholder="<?php echo $doctitle_placeholder ?>" value="<?php echo esc_attr( $this->get_custom_field( '_genesis_title' ) ); ?>" />
++			<div id="autodescription-title-wrap">
++				<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" placeholder="<?php echo $doctitle_placeholder ?>" value="<?php echo esc_attr( $this->get_custom_field( '_genesis_title' ) ); ?>" />
++				<span id="autodescription-title-offset" class="hide-if-no-js"></span><span id="autodescription-title-placeholder" class="hide-if-no-js"></span>
++			</div>
+ 		</p>
+ 
+ 		<p>
+Index: inc/classes/metaboxes.class.php
+===================================================================
+--- inc/classes/metaboxes.class.php	(revision 1307169)
++++ inc/classes/metaboxes.class.php	(working copy)
+@@ -101,7 +101,7 @@
+ 		 * Start navigation
+ 		 */
+ 		?>
+-		<h3 class="nav-tab-wrapper hide-if-no-js " id="<?php echo $id; ?>-tabs-js">
++		<h3 class="nav-tab-wrapper hide-if-no-js" id="<?php echo $id; ?>-tabs-js">
+ 		<?php
+ 			$count = 1;
+ 			foreach ( $tabs as $tab => $value ) {
+@@ -181,8 +181,8 @@
+ 
+ 		$latest_post_id = $this->get_latest_post_id();
+ 
+-		if ( !empty( $latest_post_id ) ) {
+-			$post = get_post( (int) $latest_post_id, OBJECT );
++		if ( ! empty( $latest_post_id ) ) {
++			$post = get_post( $latest_post_id, OBJECT );
+ 			$title = esc_attr( $post->post_title );
+ 		} else {
+ 			$title = __( 'Example Post Title', 'autodescription' );
+@@ -677,10 +677,16 @@
+ 		 * Reworked. Always create a placeholder.
+ 		 * @since 2.3.4
+ 		 */
+-		if ( !empty( $frompost_description ) ) {
++		if ( ! empty( $frompost_description ) ) {
+ 			$description_placeholder = $frompost_description;
+ 		} else {
+-			$description_placeholder = $home_is_blog_notify ? $this->generate_description( '', $home_id, '', true, false ) : $this->generate_description( '', $home_id, '', true, false );
++			$description_args = array(
++				'id' => $home_id,
++				'is_home' => true,
++				'get_custom_field' => true
++			);
++
++			$description_placeholder = $this->generate_description( $description_args );
+ 		}
+ 
+ 		/**
+@@ -688,7 +694,7 @@
+ 		 * the frompost description.
+ 		 * @since 2.3.4
+ 		 */
+-		if ( empty( $home_description ) && ! $home_is_blog_notify && !empty( $frompost_description )  )
++		if ( empty( $home_description ) && ! $home_is_blog_notify && ! empty( $frompost_description )  )
+ 			$home_description_frompost = true;
+ 
+ 		/**
+@@ -712,7 +718,7 @@
+ 		if ( $home_description_frompost )
+ 			$description_from_post_message = __( 'Note:', 'autodescription' ) . ' ' . sprintf( __( 'The %s is fetched from the %s on the %s.', 'autodescription' ), $description_i18n, __( 'Page SEO Settings', 'autodescription' ), $home_page_i18n );
+ 
+-		$desc_len_pre = !empty( $home_description ) ? $home_description : $description_placeholder;
++		$desc_len_pre = ! empty( $home_description ) ? $home_description : $description_placeholder;
+ 
+ 		/**
+ 		 * Convert to what Google outputs.
+@@ -801,7 +807,10 @@
+ 			</label>
+ 		</p>
+ 		<p class="fields">
+-			<input type="text" name="<?php $this->field_name( 'homepage_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title' ); ?>" placeholder="<?php echo $home_title_placeholder ?>" value="<?php echo esc_attr( $home_title ); ?>" />
++			<div id="autodescription-title-wrap">
++				<input type="text" name="<?php $this->field_name( 'homepage_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title' ); ?>" placeholder="<?php echo $home_title_placeholder ?>" value="<?php echo esc_attr( $home_title ); ?>" />
++				<span id="autodescription-title-offset" class="hide-if-no-js"></span><span id="autodescription-title-placeholder" class="hide-if-no-js"></span>
++			</div>
+ 			<?php
+ 			if ( $title_from_post_message ) {
+ 				echo '<br /><span class="description">' . $title_from_post_message . '</span>';
+@@ -1242,7 +1251,7 @@
+ 
+ 		do_action( 'the_seo_framework_webmaster_metabox_before' );
+ 
+-		$site_url = $this->the_url_from_cache( '', '0', false, false );
++		$site_url = $this->the_home_url_from_cache();
+ 		$language = $this->google_language();
+ 
+ 		$bing_site_url = "https://www.bing.com/webmaster/configure/verify/ownership?url=" . urlencode( $site_url );
+@@ -1633,9 +1642,9 @@
+ 	 */
+ 	public function sitemaps_metabox_general_tab() {
+ 
+-		$site_url = $this->the_url_from_cache( '', '0', false, false );
++		$site_url = $this->the_home_url_from_cache( true );
+ 
+-		$sitemap_url = esc_url( trailingslashit( $site_url ) . 'sitemap.xml' );
++		$sitemap_url = $site_url . 'sitemap.xml';
+ 
+ 		?>
+ 		<h4><?php _e( 'Sitemap Integration Settings', 'autodescription' ); ?></h4>
+@@ -1670,9 +1679,9 @@
+ 	 */
+ 	public function sitemaps_metabox_robots_tab() {
+ 
+-		$site_url = $this->the_url_from_cache( '', '0', false, false );
++		$site_url = $this->the_home_url_from_cache( true );
+ 
+-		$robots_url = esc_url( trailingslashit( $site_url ) . 'robots.txt' );
++		$robots_url = trailingslashit( $site_url ) . 'robots.txt';
+ 		$here =  '<a href="' . $robots_url  . '" target="_blank" title="' . __( 'View robots.txt', 'autodescription' ) . '">' . _x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
+ 
+ 		?>
+Index: inc/classes/pageoptions.class.php
+===================================================================
+--- inc/classes/pageoptions.class.php	(revision 1291855)
++++ inc/classes/pageoptions.class.php	(working copy)
+@@ -75,13 +75,18 @@
+ 		) );
+ 
+ 		foreach ( (array) $data as $key => $value ) {
+-			//* Sanitize the title and description
+-			if ( in_array( $key, array( '_genesis_title', '_genesis_description' ) ) ) {
++			//* Sanitize the title
++			if ( '_genesis_title' === $key ) {
+ 				$data[$key] = trim( strip_tags( $value ) );
+ 			}
+ 
++			//* Sanitize the description
++			if ( '_genesis_description' === $key ) {
++				$data[$key] = $this->s_description( $value );
++			}
++
+ 			//* Sanitize the URL. Make sure it's an absolute URL
+-			if ( in_array( $key, array( 'redirect' ) ) ) {
++			if ( 'redirect' === $key ) {
+ 				$data[$key] = $this->s_redirect_url( $value );
+ 			}
+ 		}
+@@ -148,12 +153,13 @@
+ 	}
+ 
+ 	/**
+-	 * Add term meta data into options table. Couldn't merge with Genesis because of overlapping option tables.
++	 * Add term meta data into options table of the term.
++	 * Adds separated database options for terms, as the terms table doesn't allow for addition.
+ 	 *
+-	 * We are forced to create its own term-meta data structure in the options table, since it is not support in core WP.
++	 * Applies filters array the_seo_framework_term_meta_defaults : Array of default term SEO options
++	 * Applies filters mixed the_seo_framework_term_meta_{field} : Override filter for specifics.
++	 * Applies filters array the_seo_framework_term_meta : Override output for term or taxonomy.
+ 	 *
+-	 * Applies `the_seo_framework_term_meta_defaults`, `the_seo_framework_term_meta_{field}` and `the_seo_framework_term_meta` filters.
+-	 *
+ 	 * @since 2.1.8
+ 	 *
+ 	 * @param object $term     Database row object.
+@@ -187,7 +193,7 @@
+ 			'noindex'             => 0,
+ 			'nofollow'            => 0,
+ 			'noarchive'           => 0,
+-			'saved_flag'          => 0, // Don't touch, used to prevent data conflict.
++			'saved_flag'          => 0, // Don't touch, used to prevent data conflict with Genesis.
+ 		) );
+ 
+ 		$term->admeta = wp_parse_args( $term_meta, $args );
+@@ -194,7 +200,24 @@
+ 
+ 		//* Sanitize term meta
+ 		foreach ( $term->admeta as $field => $value ) {
++
+ 			/**
++			 * Trim and sanitize the title beforehand.
++			 * @since 2.4.4
++			 */
++			if ( 'doctitle' === $field ) {
++				$value = trim( strip_tags( $value ) );
++			}
++
++			/**
++			 * Trim and sanitize the description beforehand.
++			 * @since 2.4.4
++			 */
++			if ( 'description' === $field ) {
++				$value = $this->s_description( $value );
++			}
++
++			/**
+ 			 * New filter.
+ 			 * @since 2.3.0
+ 			 *
+Index: inc/classes/postdata.class.php
+===================================================================
+--- inc/classes/postdata.class.php	(revision 1306741)
++++ inc/classes/postdata.class.php	(working copy)
+@@ -54,7 +54,7 @@
+ 		 * Now casts to array
+ 		 * @since 2.3.3
+ 		 */
+-		if ( !empty( $the_id ) ) {
++		if ( ! empty( $the_id ) ) {
+ 			$post = get_post( $the_id, ARRAY_A );
+ 		} else {
+ 			global $post_id;
+@@ -67,7 +67,7 @@
+ 		 *
+ 		 * @since 2.3.3
+ 		 */
+-		if ( !empty( $tt_id ) ) {
++		if ( ! empty( $tt_id ) ) {
+ 
+ 			$args = array(
+ 				'posts_per_page'	=> 1,
+@@ -86,7 +86,7 @@
+ 		 *
+ 		 * @since 2.3.4
+ 		 */
+-		if ( $the_id == get_option( 'page_for_posts' ) && !is_front_page() ) {
++		if ( $the_id == get_option( 'page_for_posts' ) && ! is_front_page() ) {
+ 			$args = array(
+ 				'posts_per_page'	=> 1,
+ 				'offset'			=> 0,
+@@ -133,7 +133,8 @@
+ 
+ 		//* Remove line breaks
+ 		foreach ( $lines as $i => $line ) {
+-			if ( ! empty( $line ) )
++			//* Don't add empty lines or paragraphs
++			if ( ! empty( $line ) && '&nbsp;' !== $line )
+ 				$new_lines[] = trim( $line ) . ' ';
+ 		}
+ 
+@@ -184,7 +185,7 @@
+ 				LIMIT %d",
+ 				'', 1 );
+ 
+-			$page_id = $wpdb->get_var( $sql );
++			$page_id = (int) $wpdb->get_var( $sql );
+ 			$this->object_cache_set( $latest_posts_key, $page_id, 86400 );
+ 		}
+ 
+Index: inc/classes/render.class.php
+===================================================================
+--- inc/classes/render.class.php	(revision 1307169)
++++ inc/classes/render.class.php	(working copy)
+@@ -46,21 +46,21 @@
+ 	 * Cache description in static variable
+ 	 * Must be called inside the loop
+ 	 *
+-	 * @staticvar string $description_cache
++	 * @staticvar array $description_cache
+ 	 *
+ 	 * @since 2.2.2
+ 	 * @return string The description
+ 	 */
+-	public function description_from_cache() {
++	public function description_from_cache( $social = false ) {
+ 
+-		static $description_cache = null;
++		static $description_cache = array();
+ 
+-		if ( isset( $description_cache ) )
+-			return $description_cache;
++		if ( isset( $description_cache[$social] ) )
++			return $description_cache[$social];
+ 
+-		$description_cache = $this->generate_description();
++		$description_cache[$social] = $this->generate_description( '', array( 'social' => $social ) );
+ 
+-		return $description_cache;
++		return $description_cache[$social];
+ 	}
+ 
+ 	/**
+@@ -90,6 +90,28 @@
+ 	}
+ 
+ 	/**
++	 * Cache home URL in static variable
++	 *
++	 * @param bool $force_slash Force slash
++	 *
++	 * @staticvar array $url_cache
++	 *
++	 * @since 2.4.4
++	 * @return string The url
++	 */
++	public function the_home_url_from_cache( $force_slash = false ) {
++
++		static $url_cache = array();
++
++		if ( isset( $url_cache[$force_slash] ) )
++			return $url_cache[$force_slash];
++
++		$url_cache[$force_slash] = $this->the_url( '', '', array( 'home' => true, 'force_slash' => $force_slash ) );
++
++		return $url_cache[$force_slash];
++	}
++
++	/**
+ 	 * Cache current Title in static variable
+ 	 * Must be called inside the loop
+ 	 *
+@@ -162,7 +184,7 @@
+ 		if ( isset( $image_cache ) )
+ 			return $image_cache;
+ 
+-		$post_id = get_queried_object_id();
++		$post_id = $this->get_the_real_ID();
+ 
+ 		//* End this madness if there's no ID found (search/404/etc.)
+ 		if ( ! $post_id )
+@@ -192,7 +214,10 @@
+ 		if ( empty( $description ) )
+ 			$description = $this->description_from_cache();
+ 
+-		return '<meta name="description" content="' . esc_attr( $description ) . '" />' . "\r\n";
++		if ( ! empty( $description ) )
++			return '<meta name="description" content="' . esc_attr( $description ) . '" />' . "\r\n";
++
++		return '';
+ 	}
+ 
+ 	/**
+@@ -220,7 +245,7 @@
+ 		$description = (string) apply_filters( 'the_seo_framework_ogdescription_output', '' );
+ 
+ 		if ( empty( $description ) )
+-			$description = $this->description_from_cache();
++			$description = $this->description_from_cache( true );
+ 
+ 		return '<meta property="og:description" content="' . esc_attr( $description ) . '" />' . "\r\n";
+ 	}
+@@ -343,15 +368,37 @@
+ 		if ( empty( $image ) )
+ 			$image = $this->get_image_from_cache();
+ 
+-		if ( empty( $image ) )
+-			$image = $image;
++		if ( function_exists( 'is_product' ) && is_product() ) {
+ 
+-		/**
+-		 * Always output
+-		 *
+-		 * @since 2.1.1
+-		 */
+-		return '<meta property="og:image" content="' . esc_attr( $image ) . '" />' . "\r\n";
++			$output = '';
++
++			if ( ! empty( $image ) )
++				$output .= '<meta property="og:image" content="' . esc_attr( $image ) . '" />' . "\r\n";
++
++			$images = $this->get_image_from_woocommerce_gallery();
++
++			if ( is_array( $images ) && ! empty( $images ) ) {
++				foreach ( $images as $id ) {
++					//* Parse 1500px url.
++					$img = $this->parse_og_image( $id );
++
++					if ( ! empty( $img ) )
++						$output .= '<meta property="og:image" content="' . esc_attr( $img ) . '" />' . "\r\n";
++				}
++			} else if ( empty( $output ) ) {
++				//* Always add empty if none is found.
++				$output .= '<meta property="og:image" content="' . esc_attr( $image ) . '" />' . "\r\n";
++			}
++		} else {
++			/**
++			 * Always output
++			 *
++			 * @since 2.1.1
++			 */
++			$output = '<meta property="og:image" content="' . esc_attr( $image ) . '" />' . "\r\n";
++		}
++
++		return $output;
+ 	}
+ 
+ 	/**
+@@ -415,7 +462,6 @@
+ 	/**
+ 	 * Render twitter:card
+ 	 *
+-	 * @uses $this->generate_description()
+ 	 * @uses $this->has_og_plugin()
+ 	 *
+ 	 * @since 2.2.2
+@@ -429,15 +475,11 @@
+ 		$card = (string) apply_filters( 'the_seo_framework_twittercard_output', '' );
+ 
+ 		if ( empty( $card ) ) {
+-			$card = $this->get_option( 'twitter_card' );
+-
+ 			/**
+ 			 * Return card type if image is found
+ 			 * Return to summary if not
+ 			 */
+-			if ( ! $this->get_image_from_cache() ) {
+-				$card = 'summary';
+-			}
++			$card = $this->get_image_from_cache() ? $this->get_option( 'twitter_card' ) : 'summary';
+ 		}
+ 
+ 		return '<meta name="twitter:card" content="' . esc_attr( $card ) . '" />' . "\r\n";
+@@ -538,7 +580,7 @@
+ 		$description = (string) apply_filters( 'the_seo_framework_twitterdescription_output', '' );
+ 
+ 		if ( empty( $description ) )
+-			$description = $this->description_from_cache();
++			$description = $this->description_from_cache( true );
+ 
+ 		return '<meta name="twitter:description" content="' . esc_attr( $description ) . '" />' . "\r\n";
+ 	}
+@@ -798,7 +840,7 @@
+ 		if ( $this->has_json_ld_plugin() !== false || is_search() || is_404() )
+ 			return;
+ 
+-		$this->setup_ld_json_transient( get_the_ID() );
++		$this->setup_ld_json_transient( $this->get_the_real_ID() );
+ 
+ 		/**
+ 		 * Debug transient key.
+Index: inc/classes/sanitize.class.php
+===================================================================
+--- inc/classes/sanitize.class.php	(revision 1306741)
++++ inc/classes/sanitize.class.php	(working copy)
+@@ -60,7 +60,7 @@
+ 		 *
+ 		 * @since 2.2.9
+ 		 */
+-		if ( false === ( isset( $_POST ) && ! empty( $_POST ) && isset( $_POST[THE_SEO_FRAMEWORK_SITE_OPTIONS] ) && is_array( $_POST[THE_SEO_FRAMEWORK_SITE_OPTIONS] ) ) )
++		if ( ! isset( $_POST ) || empty( $_POST ) || ! isset( $_POST[THE_SEO_FRAMEWORK_SITE_OPTIONS] ) || ! is_array( $_POST[THE_SEO_FRAMEWORK_SITE_OPTIONS] ) )
+ 			return;
+ 
+ 		$this->autodescription_add_option_filter(
+@@ -80,6 +80,14 @@
+ 		);
+ 
+ 		$this->autodescription_add_option_filter(
++			's_description',
++			$this->settings_field,
++			array(
++				'homepage_description',
++			)
++		);
++
++		$this->autodescription_add_option_filter(
+ 			's_knowledge_type',
+ 			$this->settings_field,
+ 			array(
+@@ -180,7 +188,6 @@
+ 			$this->settings_field,
+ 			array(
+ 				'homepage_title',
+-				'homepage_description',
+ 				'homepage_title_tagline',
+ 
+ 				'facebook_appid',
+@@ -371,6 +378,7 @@
+ 			's_left_right' 				=> array( $this, 's_left_right' 			),
+ 			's_title_separator' 		=> array( $this, 's_title_separator' 		),
+ 			's_description_separator' 	=> array( $this, 's_description_separator' 	),
++			's_description' 			=> array( $this, 's_description' 			),
+ 			's_knowledge_type'			=> array( $this, 's_knowledge_type'			),
+ 			's_one_zero' 				=> array( $this, 's_one_zero' 				),
+ 			's_one_zero_flush_rewrite'	=> array( $this, 's_one_zero_flush_rewrite'	),
+@@ -445,6 +453,33 @@
+ 	}
+ 
+ 	/**
++	 * Returns a one-line sanitized description
++	 *
++	 * @since 2.4.4
++	 *
++	 * @param string $new_value The Description
++	 * @return string One line sanitized description.
++	 */
++	protected function s_description( $new_value ) {
++
++		$description = str_replace( array( "\r\n", "\r", "\n" ), "\n", $new_value );
++
++		$lines = explode( "\n", $description );
++		$new_lines = array();
++
++		//* Remove line breaks
++		foreach ( $lines as $i => $line ) {
++			//* Don't add empty lines or paragraphs
++			if ( ! empty( $line ) && '&nbsp;' !== $line )
++				$new_lines[] = trim( $line ) . ' ';
++		}
++
++		$output = trim( implode( $new_lines ) );
++
++		return (string) strip_tags( $output );
++	}
++
++	/**
+ 	 * Returns the knowledge type value string.
+ 	 *
+ 	 * @since 2.2.8
+@@ -463,7 +498,7 @@
+ 
+ 		static $home_id = null;
+ 
+-		if ( !isset( $home_id ) ) {
++		if ( ! isset( $home_id ) ) {
+ 			// $home_id as false will flush blog front-page.
+ 			$home_id = 'page' == get_option( 'show_on_front' ) ? get_option( 'page_on_front' ) : false;
+ 			$this->delete_ld_json_transient( $home_id );
+@@ -552,7 +587,7 @@
+ 	protected function s_one_zero_flush_sitemap( $new_value ) {
+ 		static $flushed = null;
+ 
+-		if ( !isset( $flushed ) )
++		if ( ! isset( $flushed ) )
+ 			$this->delete_sitemap_transient();
+ 
+ 		$flushed = true;
+@@ -597,7 +632,7 @@
+ 
+ 		static $home_id = null;
+ 
+-		if ( !isset( $home_id ) ) {
++		if ( ! isset( $home_id ) ) {
+ 			// $home_id as false will flush blog front-page.
+ 			$home_id = 'page' == get_option( 'show_on_front' ) ? get_option( 'page_on_front' ) : false;
+ 			$this->delete_ld_json_transient( $home_id );
+@@ -631,7 +666,7 @@
+ 	protected function s_url_query( $new_value ) {
+ 		static $home_id = null;
+ 
+-		if ( !isset( $home_id ) ) {
++		if ( ! isset( $home_id ) ) {
+ 			// $home_id as false will flush blog front-page.
+ 			$home_id = 'page' == get_option( 'show_on_front' ) ? get_option( 'page_on_front' ) : false;
+ 			$this->delete_ld_json_transient( $home_id );
+@@ -707,7 +742,7 @@
+ 
+ 		$url = strip_tags( $new_value );
+ 
+-		if ( !empty( $url ) ) {
++		if ( ! empty( $url ) ) {
+ 
+ 			/**
+ 			 * New filter.
+Index: inc/classes/sitemaps.class.php
+===================================================================
+--- inc/classes/sitemaps.class.php	(revision 1306741)
++++ inc/classes/sitemaps.class.php	(working copy)
+@@ -274,10 +274,20 @@
+ 
+ 		if ( $total_cpt_posts ) {
+ 			$post_page = (array) get_post_types( array( 'public' => true ) );
++
++			/**
++			 * @applies filters Array the_seo_framework_sitemap_exclude_cpt : Excludes these CPT
++			 * @since 2.4.4
++			 */
++			$excluded_cpt = (array) apply_filters( 'the_seo_framework_sitemap_exclude_cpt', array() );
++
+ 			foreach ( $post_page as $post_type ) {
+ 				if ( $post_type != 'post' && $post_type != 'page' && $post_type != 'attachment' ) {
+-					if ( $this->post_type_supports_custom_seo( $post_type ) )
+-						$cpt[] = $post_type;
++					if ( empty( $excluded_cpt ) || ! in_array( $post_type, $excluded_cpt ) ) {
++						if ( $this->post_type_supports_custom_seo( $post_type ) ) {
++							$cpt[] = $post_type;
++						}
++					}
+ 				}
+ 			}
+ 		}
+@@ -547,7 +557,7 @@
+ 	 * @since 2.2.9
+ 	 */
+ 	public function ping_google() {
+-		$pingurl = 'http://www.google.com/webmasters/sitemaps/ping?sitemap=' . urlencode( trailingslashit( $this->the_url_from_cache( '', '0', false, false ) ) . 'sitemap.xml' );
++		$pingurl = 'http://www.google.com/webmasters/sitemaps/ping?sitemap=' . urlencode( $this->the_home_url_from_cache( true ) . 'sitemap.xml' );
+ 
+ 		wp_remote_get( $pingurl );
+ 	}
+@@ -558,7 +568,7 @@
+ 	 * @since 2.2.9
+ 	 */
+ 	public function ping_bing() {
+-		$pingurl = 'http://www.bing.com/webmaster/ping.aspx?siteMap=' . urlencode( trailingslashit( $this->the_url_from_cache( '', '0', false, false ) ) . 'sitemap.xml' );
++		$pingurl = 'http://www.bing.com/webmaster/ping.aspx?siteMap=' . urlencode( $this->the_home_url_from_cache( true ) . 'sitemap.xml' );
+ 
+ 		wp_remote_get( $pingurl );
+ 	}
+@@ -569,7 +579,7 @@
+ 	 * @since 2.2.9
+ 	 */
+ 	public function ping_yahoo() {
+-		$pingurl = 'http://search.yahooapis.com/SiteExplorerService/V1/ping?sitemap=' . urlencode( trailingslashit( $this->the_url_from_cache( '', '0', false, false ) ) . 'sitemap.xml' );
++		$pingurl = 'http://search.yahooapis.com/SiteExplorerService/V1/ping?sitemap=' . urlencode( $this->the_home_url_from_cache( true ) . 'sitemap.xml' );
+ 
+ 		wp_remote_get( $pingurl );
+ 	}
+@@ -596,22 +606,31 @@
+ 		if ( '0' == $public )
+ 			return $robots_txt;
+ 
+-		$cache_key = 'robots_txt_output_' . $blog_id;
++		$revision = '1';
+ 
++		$cache_key = 'robots_txt_output_' . $revision . $blog_id;
++
+ 		$output = $this->object_cache_get( $cache_key );
+ 		if ( false === $output ) {
+ 			$output = '';
+ 
+-			$scheme = is_ssl() ? 'https' : 'http';
+-			$home_url = get_option( 'home' );
+-			$home_url = $this->set_url_scheme( $home_url, $scheme );
++			/**
++			 * Apply filters the_seo_framework_robots_txt_pre & the_seo_framework_robots_txt_pro
++			 * 		: Add custom cacheable lines.
++			 *		: Don't forget to add line breaks ( "\r\n" | PHP_EOL )
++			 */
++			$pre = (string) apply_filters( 'the_seo_framework_robots_txt_pre', '' );
++			$pro = (string) apply_filters( 'the_seo_framework_robots_txt_pro', '' );
+ 
++			$home_url = $this->the_home_url_from_cache();
+ 			$parse_url = parse_url( $home_url );
++			$path = ! empty( $site_url['path'] ) ? $site_url['path'] : '';
+ 
+-			$path = ! empty( $parse_url['path'] ) ? $parse_url['path'] : '';
+-
++			$output .= $pre;
+ 			//* Output defaults
+-			$output .= "Disallow: $path/wp-includes/\r\n";
++			$output .= "User-agent: *\r\n";
++			$output .= "Disallow: $path/wp-admin/\r\n";
++			$output .= "Allow: $path/wp-admin/admin-ajax.php\r\n";
+ 
+ 			/**
+ 			 * Prevents query indexing
+@@ -623,21 +642,24 @@
+ 			if ( ! (bool) apply_filters( 'the_seo_framework_robots_allow_queries', false ) )
+ 				$output .= "Disallow: $path/*?*\r\n";
+ 
+-			//* Add whitespace
+-			$output .= "\r\n";
++			$output .= $pro;
+ 
+-			if ( $this->get_option( 'sitemaps_output') &&  (bool) $this->get_option ( 'sitemaps_robots' ) ) {
++			if ( $this->get_option( 'sitemaps_output') && (bool) $this->get_option( 'sitemaps_robots' ) ) {
++				//* Add whitespace before sitemap.
++				$output .= "\r\n";
++
+ 				//* Add sitemap full url
+-				//* Becomes relative if host is empty.
+-				$host = ! empty( $parse_url['host'] ) ? $parse_url['host'] : '';
+-				$scheme = ( !empty( $parse_url['scheme'] ) && !empty( $host ) ) ? $parse_url['scheme'] . '://' : '';
+-				$output .= "Sitemap: $scheme$host/sitemap.xml\r\n";
++				$output .= 'Sitemap: ' . trailingslashit( $home_url ) . "sitemap.xml\r\n";
+ 			}
+ 
+ 			$this->object_cache_set( $cache_key, $output, 86400 );
+ 		}
+ 
+-		$robots_txt .= $output;
++		/**
++		 * Override robots with output.
++		 * @since 2.4.4
++		 */
++		$robots_txt = $output;
+ 
+ 		return $robots_txt;
+ 	}
+Index: inc/classes/transients.class.php
+===================================================================
+--- inc/classes/transients.class.php	(revision 1307169)
++++ inc/classes/transients.class.php	(working copy)
+@@ -109,7 +109,7 @@
+ 		 *
+ 		 * @since 2.3.4
+ 		 */
+-		$revision = '0';
++		$revision = '2';
+ 
+ 		/**
+ 		 * Two different cache keys for two different settings.
+@@ -141,7 +141,7 @@
+ 		 *
+ 		 * Use hex. e.g. 0, 1, 2, 9, a, b
+ 		 */
+-		$revision = '1';
++		$revision = '2';
+ 
+ 		$this->ld_json_transient = 'the_seo_f' . $revision . '_ldjs_' . $cache_key;
+ 	}
+@@ -176,6 +176,8 @@
+ 		 * @since 2.4.3.1
+ 		 */
+ 		if ( $this->is_menu_page( $this->pagehook ) ) {
++			//* We're on the SEO Settings page now.
++
+ 			if ( 'posts' == get_option( 'show_on_front' ) ) {
+ 				/**
+ 				 * Detected home page.
+@@ -189,9 +191,12 @@
+ 				 */
+ 				$the_id = 'hpage_' . (string) get_option( 'page_on_front' );
+ 			}
++
+ 		} else {
++			//* All other pages, admin and front-end.
++
+ 			if ( ! is_search() ) {
+-				if ( ( $page_id === false || is_front_page() ) && ( 'posts' == get_option( 'show_on_front' ) ) ) {
++				if ( ( false === $page_id || is_front_page() ) && ( 'posts' == get_option( 'show_on_front' ) ) ) {
+ 					if ( is_404() ) {
+ 						$the_id = '_404_';
+ 					} else {
+@@ -202,7 +207,7 @@
+ 						 */
+ 						$the_id = 'hblog_' . (string) get_option( 'page_on_front' );
+ 					}
+-				} else if ( ( $page_id === false || is_front_page() || $page_id == get_option( 'page_on_front' ) ) && ( 'page' == get_option( 'show_on_front' ) ) ) {
++				} else if ( ( false === $page_id || is_front_page() || $page_id == get_option( 'page_on_front' ) ) && ( empty( $taxonomy ) && 'page' == get_option( 'show_on_front' ) ) ) {
+ 					if ( is_404() ) {
+ 						$the_id = '_404_';
+ 					} else {
+@@ -220,38 +225,43 @@
+ 					 */
+ 					$the_id = 'blog_' . $page_id;
+ 				} else if ( ! is_singular() && empty( $taxonomy ) && ! did_action( 'admin_init' ) ) {
+-					global $wp_query;
++					//* Unsigned CPT and e.g. WooCommerce shop, AnsPress question, etc.
+ 
+-					/**
+-					 * Generate for everything else.
+-					 * Doesn't work on admin_init action.
+-					 */
++					if ( function_exists( 'is_shop' ) && is_shop() ) {
++						//* WooCommerce destroys the is_page query var, let's fetch it back.
++						$the_id = get_option( 'woocommerce_shop_page_id' );
++					} else {
++						global $wp_query;
+ 
+-					$query = isset( $wp_query->query ) ? (array) $wp_query->query : null;
++						/**
++						 * Generate for everything else.
++						 * Doesn't work on admin_init action.
++						 */
+ 
+-					/**
+-					 * Automatically generate transient based on query.
+-					 *
+-					 * Adjusted to comply with the 45 char limit.
+-					 * @since 2.3.4
+-					 */
+-					if ( isset( $query ) ) {
+-						$the_id = '';
++						$query = isset( $wp_query->query ) ? (array) $wp_query->query : null;
+ 
+-						// Trim key to 2 chars.
+-						foreach ( $query as $key => $value )
+-							$the_id .= substr( $key, 0, 2 ) . '_' . mb_substr( $value, 0, 2 ) . '_' . get_queried_object_id() . '_';
++						/**
++						 * Automatically generate transient based on query.
++						 *
++						 * Adjusted to comply with the 45 char limit.
++						 * @since 2.3.4
++						 */
++						if ( isset( $query ) ) {
++							$the_id = '';
+ 
+-						//* Remove final underscore
+-						$the_id = rtrim( $the_id, '_' );
++							$p_id = $this->get_the_real_ID();
++
++							// Trim key to 2 chars.
++							foreach ( $query as $key => $value )
++								$the_id .= substr( $key, 0, 2 ) . '_' . mb_substr( $value, 0, 2 ) . '_' . $p_id . '_';
++
++							//* Remove final underscore
++							$the_id = rtrim( $the_id, '_' );
++						}
+ 					}
+ 				} else if ( ! is_singular() && ! empty( $taxonomy ) ) {
++					//* Taxonomy
+ 
+-					//* Strip the ID from the taxonomy name.
+-					$tax_len = mb_strlen( $taxonomy );
+-					$_id = mb_substr( $page_id, $tax_len );
+-
+-					//* Empty page id.
+ 					$the_id = '';
+ 
+ 					//* Save taxonomy name and split into words with 3 length.
+@@ -259,8 +269,10 @@
+ 					foreach ( $taxonomy_name as $name )
+ 						$the_id .= substr( $name, 0, 3 ) . '_';
+ 
++					$p_id = $page_id ? $page_id : $this->get_the_real_ID();
++
+ 					//* Put it all together.
+-					$the_id = $the_id . ltrim( $_id, '_' );
++					$the_id = rtrim( $the_id, '_' ) . '_' . $p_id;
+ 				} else if ( ! empty( $page_id ) ) {
+ 					$the_id = $page_id;
+ 				}
+@@ -271,7 +283,7 @@
+ 				if ( function_exists( 'get_search_query' ) ) {
+ 					$search_query = get_search_query();
+ 
+-					if ( !empty( $search_query ) )
++					if ( ! empty( $search_query ) )
+ 						$query = str_replace( ' ', '', $search_query );
+ 
+ 					//* Limit to 10 chars.
+Index: inc/functions/optionsapi.php
+===================================================================
+--- inc/functions/optionsapi.php	(revision 1306741)
++++ inc/functions/optionsapi.php	(working copy)
+@@ -178,13 +178,15 @@
+ /**
+  * Fetch description from cache. Only works within Loop.
+  *
++ * @param bool $social Fetch social description.
++ *
+  * @since 2.4.2
+  */
+-function the_seo_framework_description_from_cache() {
++function the_seo_framework_description_from_cache( $social = false ) {
+ 	$theseoframework = the_seo_framework();
+ 
+ 	if ( isset( $theseoframework ) )
+-		return $theseoframework->description_from_cache();
++		return $theseoframework->description_from_cache( $social );
+ 
+ 	return null;
+ }
+Index: lib/css/autodescription-rtl.css
+===================================================================
+--- lib/css/autodescription-rtl.css	(revision 1300916)
++++ lib/css/autodescription-rtl.css	(working copy)
+@@ -1,7 +1,67 @@
++ /**
++  * WooCommerce fix
++  */
++ table.wp-list-table .column-name {
++ 	width: 15%;
++ }
++
++ table.wp-list-table .column-is_in_stock,
++ table.wp-list-table .column-sku,
++ table.wp-list-table .column-price {
++     width: 8%;
++ }
+ #ad_seo {
+     width: 20%;
+ }
+ 
++#autodescription-title-wrap {
++    position: relative;
++    display: block;
++    padding: 0;
++    height: auto;
++    width: auto;
++}
++
++#autodescription-title-offset {
++    visibility: hidden;
++    height: 0;
++    display: inline-block;
++    position: absolute;
++    right: 0;
++    color: transparent;
++    white-space: pre;
++}
++
++#autodescription-title-placeholder {
++    position: absolute;
++    color: #777;
++    -webkit-user-select: none;
++    -moz-user-select: none;
++    -ms-user-select: none;
++    user-select: none;
++    box-sizing: content-box;
++    top: 0;
++    left: 0;
++    overflow: hidden;
++    white-space: nowrap;
++    text-overflow: ellipsis;
++}
++
++span.ad-count-bad {
++    color: #dd3811;
++    font-weight: 600;
++}
++
++span.ad-count-okay {
++    color: #ffa700;
++    font-weight: 600;
++}
++
++span.ad-count-good {
++    color: #0cc34b;
++    font-weight: 600;
++}
++
+ /* WooCommerce fix */
+ th:last-of-type#ad_seo {
+     width: 160px;
+@@ -118,19 +178,19 @@
+ }
+ 
+ .ad-seo-bad {
+-    background-color: #dd3d36;
++    background-color: #dd3811;
+ }
+ 
+ .ad-seo-okay {
+-    background-color: #ffba00;
++    background-color: #ffa700;
+ }
+ 
+ .ad-seo-good {
+-    background-color: #7ad03a;
++    background-color: #0cc34b;
+ }
+ 
+ .ad-seo-unknown {
+-    background-color: #00a0d2;
++    background-color: #007bd2;
+ }
+ 
+ span.ad-seo .explanation-desc {
+@@ -139,7 +199,7 @@
+     min-width: 90%;
+     max-width: inherit;
+     font-weight: 600;
+-    background: #00a0d2;
++    background: #007bd2;
+     padding: 12px 16px;
+     color: #fdfdfd;
+     border-radius: 3px;
+@@ -147,6 +207,7 @@
+     box-shadow: 0px 0px 2px rgb(171, 171, 171), 2px 6px 3px -2px rgba(255,255,255,0.2) inset, -2px -6px 3px -2px rgba(41,41,41,0.05) inset;
+     border: 1px solid #ccc;
+     left: 0;
++    text-align: right;
+ }
+ 
+ span.ad-seo .explanation-desc span {
+@@ -158,7 +219,7 @@
+     height: 0;
+     border-left: 10px solid transparent;
+     border-right: 10px solid transparent;
+-    border-top: 10px solid #00a0d2;
++    border-top: 10px solid #007bd2;
+     position: absolute;
+     bottom: -8px;
+     z-index: 9999999;
+@@ -251,8 +312,8 @@
+ 
+ .autodescription-metaboxes #title-separator label.recommended,
+ .autodescription-metaboxes #description-separator label.recommended {
+-    border: 1px solid #7ad03a;
+-    box-shadow: -1px -1px 1px #7ad03a inset;
++    border: 1px solid #0cc34b;
++    box-shadow: -1px -1px 1px #0cc34b inset;
+ }
+ 
+ .autodescription-metaboxes #title-separator input:hover + label,
+@@ -355,11 +416,11 @@
+ }
+ 
+ .autodescription-metaboxes .seoframework-warning-selected {
+-    border-color: #dd3d36;
++    border-color: #dd3811;
+ }
+ 
+ .autodescription-metaboxes .seoframework-warning-selected:checked:before {
+-    color: #dd3d36;
++    color: #dd3811;
+ }
+ 
+ @media screen and (max-width: 782px) {
+Index: lib/css/autodescription-rtl.min.css
+===================================================================
+--- lib/css/autodescription-rtl.min.css	(revision 1300916)
++++ lib/css/autodescription-rtl.min.css	(working copy)
+@@ -1 +1 @@
+-.autodescription-metaboxes #message,.autodescription-metaboxes .metabox-holder{clear:both}#ad_seo{width:20%}th:last-of-type#ad_seo{width:160px}span.ad-seo{display:block;background-color:#F1F1F1;width:85%;max-width:300px;border-radius:30px;padding:3px}.ad-100,.ad-bar-wrap a,span.ad-seo.ad-100{width:100%}span.ad-seo.square{border-radius:0}span.ad-bar-wrap{display:table;width:100%;border-radius:30px;margin:0 auto;border-collapse:separate;border-spacing:0;vertical-align:middle;position:relative}span.ad-seo.square span.ad-bar-wrap{border-radius:0}span.ad-sec-wrap{display:table-cell;border-collapse:collapse}.ad-bar-wrap a{display:table;color:#fff;text-align:center;cursor:help;height:100%;vertical-align:top;line-height:1.625em;box-shadow:2px 6px 3px -2px rgba(255,255,255,.2)inset,-2px -6px 3px -2px rgba(41,41,41,.2)inset,0 0 1px rgba(41,41,41,.6)}.ad-bar-wrap span.ad-sec-wrap:last-of-type,.ad-bar-wrap span.ad-sec-wrap:last-of-type a{border-top-left-radius:30px;border-bottom-left-radius:30px}.ad-bar-wrap span.ad-sec-wrap:first-of-type,.ad-bar-wrap span.ad-sec-wrap:first-of-type a{border-top-right-radius:30px;border-bottom-right-radius:30px}.ad-seo.square .ad-bar-wrap span.ad-sec-wrap,.ad-seo.square .ad-bar-wrap span.ad-sec-wrap a{border-radius:0}.ad-60{width:60%}.ad-50{width:50%}.ad-40{width:40%}.ad-33{width:33.333%}.ad-25{width:25%}.ad-20{width:20%}.ad-16{width:16.666%}.ad-12-5{width:12.5%}.ad-11{width:11.333%}.ad-10{width:10%}.ad-seo-bad{background-color:#dd3d36}.ad-seo-okay{background-color:#ffba00}.ad-seo-good{background-color:#7ad03a}.ad-seo-unknown{background-color:#00a0d2}span.ad-seo .explanation-desc{position:absolute;width:auto;min-width:90%;max-width:inherit;font-weight:600;background:#00a0d2;padding:12px 16px;color:#fdfdfd;border-radius:3px;z-index:9999999;box-shadow:0 0 2px #ababab,2px 6px 3px -2px rgba(255,255,255,.2)inset,-2px -6px 3px -2px rgba(41,41,41,.05)inset;border:1px solid #ccc;left:0}span.ad-seo .explanation-desc span{text-decoration:underline}span.ad-seo .explanation-desc div{width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:10px solid #00a0d2;position:absolute;bottom:-8px;z-index:9999999;left:0}.ad_seo.column-ad_seo{overflow:initial!important;min-width:160px}#col-container,#col-right{overflow:initial}.autodescription-metaboxes{box-sizing:border-box;max-width:690px;padding-bottom:20px}.autodescription-metaboxes>form>h1,.autodescription-metaboxes>form>h2{float:right}.postbox-container{width:100%}.autodescription-metaboxes .top-buttons{float:left}.autodescription-metaboxes .bottom-buttons{text-align:left}.autodescription-metaboxes .bottom-buttons input,.autodescription-metaboxes .top-buttons input{margin-left:10px}.autodescription-metaboxes #description-separator,.autodescription-metaboxes #title-separator{display:table;width:100%;border-collapse:collapse;border-spacing:0}.autodescription-metaboxes #description-separator input,.autodescription-metaboxes #title-separator input{display:none;float:left;width:0;min-width:0;opacity:0}.autodescription-metaboxes #description-separator label,.autodescription-metaboxes #title-separator label{display:inline-block;width:auto;min-width:28px;min-height:28px;margin:3px;padding:0 4px;border:1px solid #ccc;line-height:28px;text-align:center;cursor:pointer;box-shadow:-1px -1px 1px #aaa inset;font-size:16px}.autodescription-metaboxes #description-separator label.recommended,.autodescription-metaboxes #title-separator label.recommended{border:1px solid #7ad03a;box-shadow:-1px -1px 1px #7ad03a inset}.autodescription-metaboxes #description-separator input:hover+label,.autodescription-metaboxes #description-separator label:hover,.autodescription-metaboxes #title-separator input:hover+label,.autodescription-metaboxes #title-separator label:hover{box-shadow:1px 1px 1px #aaa inset;background-color:#fff}.autodescription-metaboxes #description-separator input:checked+label,.autodescription-metaboxes #title-separator input:checked+label{box-shadow:1px 1px 1px #333 inset;background-color:#fff}.autodescription-metaboxes #home-title-location,.autodescription-metaboxes #title-location{display:block}.autodescription-metaboxes #home-title-location span,.autodescription-metaboxes #title-location span{display:block;margin-bottom:4px}.autodescription-metaboxes #home-title-location label span,.autodescription-metaboxes #title-location label span,.autodescription-metaboxes #twitter-cards label span{display:inline-block;min-width:60px;vertical-align:baseline}.autodescription-metaboxes #twitter-cards label span{min-width:150px}.autodescription-metaboxes #home-title-location label .autodescription-sep-js,.autodescription-metaboxes #home-title-location label span.custom-blogname-js,.autodescription-metaboxes #home-title-location label span.custom-tagline-js,.autodescription-metaboxes #home-title-location label span.custom-title-js,.autodescription-metaboxes #title-location label .autodescription-sep-js{display:inline;min-width:0}.autodescription-metaboxes #knowledge-tabs-js,.autodescription-metaboxes #robots-tabs-js,.autodescription-metaboxes #sitemaps-tabs-js,.autodescription-metaboxes #social-tabs-js,.autodescription-metaboxes .inside .nav-tab-wrapper{position:relative;clear:both;width:100%;padding:8px 14px 0;margin:-4px -14px}.autodescription-metaboxes #knowledge-tabs-js .nav-tab-active,.autodescription-metaboxes #robots-tabs-js .nav-tab-active,.autodescription-metaboxes #sitemaps-tabs-js .nav-tab-active,.autodescription-metaboxes #social-tabs-js .nav-tab-active{background-color:inherit;border-bottom-color:#fff}.autodescription-metaboxes .dashicons-before:before,.autodescription-metaboxes .dashicons-tabs{font-size:initial;display:inline;vertical-align:text-bottom}.autodescription-metaboxes .knowledge-tabs-radio,.autodescription-metaboxes .robots-tabs-radio,.autodescription-metaboxes .sitemaps-tabs-radio,.autodescription-metaboxes .social-tabs-radio{display:none;width:0;height:0;position:absolute}.autodescription-metaboxes .knowledge-tab-content.checked-tab .autodescription-metaboxes .sitemaps-tab-content.checked-tab,.autodescription-metaboxes .robots-tab-content.checked-tab,.autodescription-metaboxes .social-tab-content.checked-tab{display:block}.autodescription-metaboxes .seoframework-default-selected{border-color:#1c9d38}.autodescription-metaboxes .seoframework-default-selected:checked:before{color:#1c9d38}.autodescription-metaboxes .seoframework-warning-selected{border-color:#dd3d36}.autodescription-metaboxes .seoframework-warning-selected:checked:before{color:#dd3d36}@media screen and (max-width:782px){.autodescription-metaboxes p.fields,.theseoframework-inpost-box p.fields{line-height:2.8}.autodescription-metaboxes #home-title-location label span,.autodescription-metaboxes #title-location label span{min-width:40px}}@media screen and (max-width:642px){.autodescription-metaboxes span.seoframework-nav-desktop{display:none}}
++.autodescription-metaboxes #message,.autodescription-metaboxes .metabox-holder{clear:both}table.wp-list-table .column-name{width:15%}table.wp-list-table .column-is_in_stock,table.wp-list-table .column-price,table.wp-list-table .column-sku{width:8%}#ad_seo{width:20%}#autodescription-title-wrap{position:relative;display:block;padding:0;height:auto;width:auto}#autodescription-title-offset{visibility:hidden;height:0;display:inline-block;position:absolute;right:0;color:transparent;white-space:pre}#autodescription-title-placeholder{position:absolute;color:#777;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;box-sizing:content-box;top:0;left:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}span.ad-count-bad{color:#dd3811;font-weight:600}span.ad-count-okay{color:#ffa700;font-weight:600}span.ad-count-good{color:#0cc34b;font-weight:600}th:last-of-type#ad_seo{width:160px}span.ad-seo{display:block;background-color:#F1F1F1;width:85%;max-width:300px;border-radius:30px;padding:3px}.ad-100,.ad-bar-wrap a,span.ad-seo.ad-100{width:100%}span.ad-seo.square{border-radius:0}span.ad-bar-wrap{display:table;width:100%;border-radius:30px;margin:0 auto;border-collapse:separate;border-spacing:0;vertical-align:middle;position:relative}span.ad-seo.square span.ad-bar-wrap{border-radius:0}span.ad-sec-wrap{display:table-cell;border-collapse:collapse}.ad-bar-wrap a{display:table;color:#fff;text-align:center;cursor:help;height:100%;vertical-align:top;line-height:1.625em;box-shadow:2px 6px 3px -2px rgba(255,255,255,.2)inset,-2px -6px 3px -2px rgba(41,41,41,.2)inset,0 0 1px rgba(41,41,41,.6)}.ad-bar-wrap span.ad-sec-wrap:last-of-type,.ad-bar-wrap span.ad-sec-wrap:last-of-type a{border-top-left-radius:30px;border-bottom-left-radius:30px}.ad-bar-wrap span.ad-sec-wrap:first-of-type,.ad-bar-wrap span.ad-sec-wrap:first-of-type a{border-top-right-radius:30px;border-bottom-right-radius:30px}.ad-seo.square .ad-bar-wrap span.ad-sec-wrap,.ad-seo.square .ad-bar-wrap span.ad-sec-wrap a{border-radius:0}.ad-60{width:60%}.ad-50{width:50%}.ad-40{width:40%}.ad-33{width:33.333%}.ad-25{width:25%}.ad-20{width:20%}.ad-16{width:16.666%}.ad-12-5{width:12.5%}.ad-11{width:11.333%}.ad-10{width:10%}.ad-seo-bad{background-color:#dd3811}.ad-seo-okay{background-color:#ffa700}.ad-seo-good{background-color:#0cc34b}.ad-seo-unknown{background-color:#007bd2}span.ad-seo .explanation-desc{position:absolute;width:auto;min-width:90%;max-width:inherit;font-weight:600;background:#007bd2;padding:12px 16px;color:#fdfdfd;border-radius:3px;z-index:9999999;box-shadow:0 0 2px #ababab,2px 6px 3px -2px rgba(255,255,255,.2)inset,-2px -6px 3px -2px rgba(41,41,41,.05)inset;border:1px solid #ccc;left:0;text-align:right}span.ad-seo .explanation-desc span{text-decoration:underline}span.ad-seo .explanation-desc div{width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:10px solid #007bd2;position:absolute;bottom:-8px;z-index:9999999;left:0}.ad_seo.column-ad_seo{overflow:initial!important;min-width:160px}#col-container,#col-right{overflow:initial}.autodescription-metaboxes{box-sizing:border-box;max-width:690px;padding-bottom:20px}.autodescription-metaboxes>form>h1,.autodescription-metaboxes>form>h2{float:right}.postbox-container{width:100%}.autodescription-metaboxes .top-buttons{float:left}.autodescription-metaboxes .bottom-buttons{text-align:left}.autodescription-metaboxes .bottom-buttons input,.autodescription-metaboxes .top-buttons input{margin-left:10px}.autodescription-metaboxes #description-separator,.autodescription-metaboxes #title-separator{display:table;width:100%;border-collapse:collapse;border-spacing:0}.autodescription-metaboxes #description-separator input,.autodescription-metaboxes #title-separator input{display:none;float:left;width:0;min-width:0;opacity:0}.autodescription-metaboxes #description-separator label,.autodescription-metaboxes #title-separator label{display:inline-block;width:auto;min-width:28px;min-height:28px;margin:3px;padding:0 4px;border:1px solid #ccc;line-height:28px;text-align:center;cursor:pointer;box-shadow:-1px -1px 1px #aaa inset;font-size:16px}.autodescription-metaboxes #description-separator label.recommended,.autodescription-metaboxes #title-separator label.recommended{border:1px solid #0cc34b;box-shadow:-1px -1px 1px #0cc34b inset}.autodescription-metaboxes #description-separator input:hover+label,.autodescription-metaboxes #description-separator label:hover,.autodescription-metaboxes #title-separator input:hover+label,.autodescription-metaboxes #title-separator label:hover{box-shadow:1px 1px 1px #aaa inset;background-color:#fff}.autodescription-metaboxes #description-separator input:checked+label,.autodescription-metaboxes #title-separator input:checked+label{box-shadow:1px 1px 1px #333 inset;background-color:#fff}.autodescription-metaboxes #home-title-location,.autodescription-metaboxes #title-location{display:block}.autodescription-metaboxes #home-title-location span,.autodescription-metaboxes #title-location span{display:block;margin-bottom:4px}.autodescription-metaboxes #home-title-location label span,.autodescription-metaboxes #title-location label span,.autodescription-metaboxes #twitter-cards label span{display:inline-block;min-width:60px;vertical-align:baseline}.autodescription-metaboxes #twitter-cards label span{min-width:150px}.autodescription-metaboxes #home-title-location label .autodescription-sep-js,.autodescription-metaboxes #home-title-location label span.custom-blogname-js,.autodescription-metaboxes #home-title-location label span.custom-tagline-js,.autodescription-metaboxes #home-title-location label span.custom-title-js,.autodescription-metaboxes #title-location label .autodescription-sep-js{display:inline;min-width:0}.autodescription-metaboxes #knowledge-tabs-js,.autodescription-metaboxes #robots-tabs-js,.autodescription-metaboxes #sitemaps-tabs-js,.autodescription-metaboxes #social-tabs-js,.autodescription-metaboxes .inside .nav-tab-wrapper{position:relative;clear:both;width:100%;padding:8px 14px 0;margin:-4px -14px}.autodescription-metaboxes #knowledge-tabs-js .nav-tab-active,.autodescription-metaboxes #robots-tabs-js .nav-tab-active,.autodescription-metaboxes #sitemaps-tabs-js .nav-tab-active,.autodescription-metaboxes #social-tabs-js .nav-tab-active{background-color:inherit;border-bottom-color:#fff}.autodescription-metaboxes .dashicons-before:before,.autodescription-metaboxes .dashicons-tabs{font-size:initial;display:inline;vertical-align:text-bottom}.autodescription-metaboxes .knowledge-tabs-radio,.autodescription-metaboxes .robots-tabs-radio,.autodescription-metaboxes .sitemaps-tabs-radio,.autodescription-metaboxes .social-tabs-radio{display:none;width:0;height:0;position:absolute}.autodescription-metaboxes .knowledge-tab-content.checked-tab .autodescription-metaboxes .sitemaps-tab-content.checked-tab,.autodescription-metaboxes .robots-tab-content.checked-tab,.autodescription-metaboxes .social-tab-content.checked-tab{display:block}.autodescription-metaboxes .seoframework-default-selected{border-color:#1c9d38}.autodescription-metaboxes .seoframework-default-selected:checked:before{color:#1c9d38}.autodescription-metaboxes .seoframework-warning-selected{border-color:#dd3811}.autodescription-metaboxes .seoframework-warning-selected:checked:before{color:#dd3811}@media screen and (max-width:782px){.autodescription-metaboxes p.fields,.theseoframework-inpost-box p.fields{line-height:2.8}.autodescription-metaboxes #home-title-location label span,.autodescription-metaboxes #title-location label span{min-width:40px}}@media screen and (max-width:642px){.autodescription-metaboxes span.seoframework-nav-desktop{display:none}}
+Index: lib/css/autodescription.css
+===================================================================
+--- lib/css/autodescription.css	(revision 1300916)
++++ lib/css/autodescription.css	(working copy)
+@@ -1,7 +1,73 @@
++/**
++ * See, for colors:
++ * https://color.adobe.com/create/color-wheel/?base=2&rule=Custom&selected=1&name=Mijn%20Color-thema&mode=rgb&rgbvalues=0,0,0,1,0.6289566724811484,0.10577297701442445,0.04724043389094745,0.7647058823529411,0.2945255209368204,0,0.4806705005377058,0.8235294117647058,0.8666666666666667,0.2196078431372549,0.06666666666666667&swatchOrder=0,1,2,3,4
++ */
++
++/**
++ * WooCommerce fix
++ */
++table.wp-list-table .column-name {
++	width: 15%;
++}
++
++table.wp-list-table .column-is_in_stock,
++table.wp-list-table .column-sku,
++table.wp-list-table .column-price {
++    width: 8%;
++}
++
+ #ad_seo {
+     width: 20%;
+ }
+ 
++#autodescription-title-wrap {
++    position: relative;
++    display: block;
++    padding: 0;
++    height: auto;
++    width: auto;
++}
++
++#autodescription-title-offset {
++    visibility: hidden;
++    height: 0;
++    display: inline-block;
++    position: absolute;
++    left: 0;
++    color: transparent;
++    white-space: pre;
++}
++
++#autodescription-title-placeholder {
++    position: absolute;
++    color: #777;
++    -webkit-user-select: none;
++    -moz-user-select: none;
++    -ms-user-select: none;
++    user-select: none;
++    box-sizing: content-box;
++    top: 0;
++    left: 0;
++    overflow: hidden;
++    white-space: nowrap;
++    text-overflow: ellipsis;
++}
++
++span.ad-count-bad {
++    color: #dd3811;
++    font-weight: 600;
++}
++
++span.ad-count-okay {
++    color: #ffa700;
++    font-weight: 600;
++}
++
++span.ad-count-good {
++    color: #0cc34b;
++    font-weight: 600;
++}
++
+ /* WooCommerce fix */
+ th:last-of-type#ad_seo {
+     width: 160px;
+@@ -118,19 +184,19 @@
+ }
+ 
+ .ad-seo-bad {
+-    background-color: #dd3d36;
++    background-color: #dd3811;
+ }
+ 
+ .ad-seo-okay {
+-    background-color: #ffba00;
++    background-color: #ffa700;
+ }
+ 
+ .ad-seo-good {
+-    background-color: #7ad03a;
++    background-color: #0cc34b;
+ }
+ 
+ .ad-seo-unknown {
+-    background-color: #00a0d2;
++    background-color: #007bd2;
+ }
+ 
+ span.ad-seo .explanation-desc {
+@@ -139,7 +205,7 @@
+     min-width: 90%;
+     max-width: inherit;
+     font-weight: 600;
+-    background: #00a0d2;
++    background: #007bd2;
+     padding: 12px 16px;
+     color: #fdfdfd;
+     border-radius: 3px;
+@@ -147,6 +213,7 @@
+     box-shadow: 0px 0px 2px rgb(171, 171, 171), 2px 6px 3px -2px rgba(255,255,255,0.2) inset, -2px -6px 3px -2px rgba(41,41,41,0.05) inset;
+     border: 1px solid #ccc;
+     left: 0;
++    text-align: left;
+ }
+ 
+ span.ad-seo .explanation-desc span {
+@@ -158,7 +225,7 @@
+     height: 0;
+     border-left: 10px solid transparent;
+     border-right: 10px solid transparent;
+-    border-top: 10px solid #00a0d2;
++    border-top: 10px solid #007bd2;
+     position: absolute;
+     bottom: -8px;
+     z-index: 9999999;
+@@ -251,8 +318,8 @@
+ 
+ .autodescription-metaboxes #title-separator label.recommended,
+ .autodescription-metaboxes #description-separator label.recommended {
+-    border: 1px solid #7ad03a;
+-    box-shadow: -1px -1px 1px #7ad03a inset;
++    border: 1px solid #0cc34b;
++    box-shadow: -1px -1px 1px #0cc34b inset;
+ }
+ 
+ .autodescription-metaboxes #title-separator input:hover + label,
+@@ -355,11 +422,11 @@
+ }
+ 
+ .autodescription-metaboxes .seoframework-warning-selected {
+-    border-color: #dd3d36;
++    border-color: #dd3811;
+ }
+ 
+ .autodescription-metaboxes .seoframework-warning-selected:checked:before {
+-    color: #dd3d36;
++    color: #dd3811;
+ }
+ 
+ @media screen and (max-width: 782px) {
+Index: lib/css/autodescription.min.css
+===================================================================
+--- lib/css/autodescription.min.css	(revision 1300916)
++++ lib/css/autodescription.min.css	(working copy)
+@@ -1 +1 @@
+-.autodescription-metaboxes #message,.autodescription-metaboxes .metabox-holder{clear:both}#ad_seo{width:20%}th:last-of-type#ad_seo{width:160px}span.ad-seo{display:block;background-color:#F1F1F1;width:85%;max-width:300px;border-radius:30px;padding:3px}.ad-100,.ad-bar-wrap a,span.ad-seo.ad-100{width:100%}span.ad-seo.square{border-radius:0}span.ad-bar-wrap{display:table;width:100%;border-radius:30px;margin:0 auto;border-collapse:separate;border-spacing:0;vertical-align:middle;position:relative}span.ad-seo.square span.ad-bar-wrap{border-radius:0}span.ad-sec-wrap{display:table-cell;border-collapse:collapse}.ad-bar-wrap a{display:table;color:#fff;text-align:center;cursor:help;height:100%;vertical-align:top;line-height:1.625em;box-shadow:2px 6px 3px -2px rgba(255,255,255,.2)inset,-2px -6px 3px -2px rgba(41,41,41,.2)inset,0 0 1px rgba(41,41,41,.6)}.ad-bar-wrap span.ad-sec-wrap:first-of-type,.ad-bar-wrap span.ad-sec-wrap:first-of-type a{border-top-left-radius:30px;border-bottom-left-radius:30px}.ad-bar-wrap span.ad-sec-wrap:last-of-type,.ad-bar-wrap span.ad-sec-wrap:last-of-type a{border-top-right-radius:30px;border-bottom-right-radius:30px}.ad-seo.square .ad-bar-wrap span.ad-sec-wrap,.ad-seo.square .ad-bar-wrap span.ad-sec-wrap a{border-radius:0}.ad-60{width:60%}.ad-50{width:50%}.ad-40{width:40%}.ad-33{width:33.333%}.ad-25{width:25%}.ad-20{width:20%}.ad-16{width:16.666%}.ad-12-5{width:12.5%}.ad-11{width:11.333%}.ad-10{width:10%}.ad-seo-bad{background-color:#dd3d36}.ad-seo-okay{background-color:#ffba00}.ad-seo-good{background-color:#7ad03a}.ad-seo-unknown{background-color:#00a0d2}span.ad-seo .explanation-desc{position:absolute;width:auto;min-width:90%;max-width:inherit;font-weight:600;background:#00a0d2;padding:12px 16px;color:#fdfdfd;border-radius:3px;z-index:9999999;box-shadow:0 0 2px #ababab,2px 6px 3px -2px rgba(255,255,255,.2)inset,-2px -6px 3px -2px rgba(41,41,41,.05)inset;border:1px solid #ccc;left:0}span.ad-seo .explanation-desc span{text-decoration:underline}span.ad-seo .explanation-desc div{width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:10px solid #00a0d2;position:absolute;bottom:-8px;z-index:9999999;left:0}.ad_seo.column-ad_seo{overflow:initial!important;min-width:160px}#col-container,#col-right{overflow:initial}.autodescription-metaboxes{box-sizing:border-box;max-width:690px;padding-bottom:20px}.autodescription-metaboxes>form>h1,.autodescription-metaboxes>form>h2{float:left}.postbox-container{width:100%}.autodescription-metaboxes .top-buttons{float:right}.autodescription-metaboxes .bottom-buttons{text-align:right}.autodescription-metaboxes .bottom-buttons input,.autodescription-metaboxes .top-buttons input{margin-left:10px}.autodescription-metaboxes #description-separator,.autodescription-metaboxes #title-separator{display:table;width:100%;border-collapse:collapse;border-spacing:0}.autodescription-metaboxes #description-separator input,.autodescription-metaboxes #title-separator input{display:none;float:left;width:0;min-width:0;opacity:0}.autodescription-metaboxes #description-separator label,.autodescription-metaboxes #title-separator label{display:inline-block;width:auto;min-width:28px;min-height:28px;margin:3px;padding:0 4px;border:1px solid #ccc;line-height:28px;text-align:center;cursor:pointer;box-shadow:-1px -1px 1px #aaa inset;font-size:16px}.autodescription-metaboxes #description-separator label.recommended,.autodescription-metaboxes #title-separator label.recommended{border:1px solid #7ad03a;box-shadow:-1px -1px 1px #7ad03a inset}.autodescription-metaboxes #description-separator input:hover+label,.autodescription-metaboxes #description-separator label:hover,.autodescription-metaboxes #title-separator input:hover+label,.autodescription-metaboxes #title-separator label:hover{box-shadow:1px 1px 1px #aaa inset;background-color:#fff}.autodescription-metaboxes #description-separator input:checked+label,.autodescription-metaboxes #title-separator input:checked+label{box-shadow:1px 1px 1px #333 inset;background-color:#fff}.autodescription-metaboxes #home-title-location,.autodescription-metaboxes #title-location{display:block}.autodescription-metaboxes #home-title-location span,.autodescription-metaboxes #title-location span{display:block;margin-bottom:4px}.autodescription-metaboxes #home-title-location label span,.autodescription-metaboxes #title-location label span,.autodescription-metaboxes #twitter-cards label span{display:inline-block;min-width:60px;vertical-align:baseline}.autodescription-metaboxes #twitter-cards label span{min-width:150px}.autodescription-metaboxes #home-title-location label .autodescription-sep-js,.autodescription-metaboxes #home-title-location label span.custom-blogname-js,.autodescription-metaboxes #home-title-location label span.custom-tagline-js,.autodescription-metaboxes #home-title-location label span.custom-title-js,.autodescription-metaboxes #title-location label .autodescription-sep-js{display:inline;min-width:0}.autodescription-metaboxes #knowledge-tabs-js,.autodescription-metaboxes #robots-tabs-js,.autodescription-metaboxes #sitemaps-tabs-js,.autodescription-metaboxes #social-tabs-js,.autodescription-metaboxes .inside .nav-tab-wrapper{position:relative;clear:both;width:100%;padding:8px 14px 0;margin:-4px -14px}.autodescription-metaboxes #knowledge-tabs-js .nav-tab-active,.autodescription-metaboxes #robots-tabs-js .nav-tab-active,.autodescription-metaboxes #sitemaps-tabs-js .nav-tab-active,.autodescription-metaboxes #social-tabs-js .nav-tab-active{background-color:inherit;border-bottom-color:#fff}.autodescription-metaboxes .dashicons-before:before,.autodescription-metaboxes .dashicons-tabs{font-size:initial;display:inline;vertical-align:text-bottom}.autodescription-metaboxes .knowledge-tabs-radio,.autodescription-metaboxes .robots-tabs-radio,.autodescription-metaboxes .sitemaps-tabs-radio,.autodescription-metaboxes .social-tabs-radio{display:none;width:0;height:0;position:absolute}.autodescription-metaboxes .knowledge-tab-content.checked-tab,.autodescription-metaboxes .robots-tab-content.checked-tab,.autodescription-metaboxes .sitemaps-tab-content.checked-tab,.autodescription-metaboxes .social-tab-content.checked-tab{display:block}.autodescription-metaboxes .seoframework-default-selected{border-color:#1c9d38}.autodescription-metaboxes .seoframework-default-selected:checked:before{color:#1c9d38}.autodescription-metaboxes .seoframework-warning-selected{border-color:#dd3d36}.autodescription-metaboxes .seoframework-warning-selected:checked:before{color:#dd3d36}@media screen and (max-width:782px){.autodescription-metaboxes p.fields,.theseoframework-inpost-box p.fields{line-height:2.8}.autodescription-metaboxes #home-title-location label span,.autodescription-metaboxes #title-location label span{min-width:40px}}@media screen and (max-width:642px){.autodescription-metaboxes span.seoframework-nav-desktop{display:none}}
++.autodescription-metaboxes #message,.autodescription-metaboxes .metabox-holder{clear:both}table.wp-list-table .column-name{width:15%}table.wp-list-table .column-is_in_stock,table.wp-list-table .column-price,table.wp-list-table .column-sku{width:8%}#ad_seo{width:20%}#autodescription-title-wrap{position:relative;display:block;padding:0;height:auto;width:auto}#autodescription-title-offset{visibility:hidden;height:0;display:inline-block;position:absolute;left:0;color:transparent;white-space:pre}#autodescription-title-placeholder{position:absolute;color:#777;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;box-sizing:content-box;top:0;left:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}span.ad-count-bad{color:#dd3811;font-weight:600}span.ad-count-okay{color:#ffa700;font-weight:600}span.ad-count-good{color:#0cc34b;font-weight:600}th:last-of-type#ad_seo{width:160px}span.ad-seo{display:block;background-color:#F1F1F1;width:85%;max-width:300px;border-radius:30px;padding:3px}.ad-100,.ad-bar-wrap a,span.ad-seo.ad-100{width:100%}span.ad-seo.square{border-radius:0}span.ad-bar-wrap{display:table;width:100%;border-radius:30px;margin:0 auto;border-collapse:separate;border-spacing:0;vertical-align:middle;position:relative}span.ad-seo.square span.ad-bar-wrap{border-radius:0}span.ad-sec-wrap{display:table-cell;border-collapse:collapse}.ad-bar-wrap a{display:table;color:#fff;text-align:center;cursor:help;height:100%;vertical-align:top;line-height:1.625em;box-shadow:2px 6px 3px -2px rgba(255,255,255,.2)inset,-2px -6px 3px -2px rgba(41,41,41,.2)inset,0 0 1px rgba(41,41,41,.6)}.ad-bar-wrap span.ad-sec-wrap:first-of-type,.ad-bar-wrap span.ad-sec-wrap:first-of-type a{border-top-left-radius:30px;border-bottom-left-radius:30px}.ad-bar-wrap span.ad-sec-wrap:last-of-type,.ad-bar-wrap span.ad-sec-wrap:last-of-type a{border-top-right-radius:30px;border-bottom-right-radius:30px}.ad-seo.square .ad-bar-wrap span.ad-sec-wrap,.ad-seo.square .ad-bar-wrap span.ad-sec-wrap a{border-radius:0}.ad-60{width:60%}.ad-50{width:50%}.ad-40{width:40%}.ad-33{width:33.333%}.ad-25{width:25%}.ad-20{width:20%}.ad-16{width:16.666%}.ad-12-5{width:12.5%}.ad-11{width:11.333%}.ad-10{width:10%}.ad-seo-bad{background-color:#dd3811}.ad-seo-okay{background-color:#ffa700}.ad-seo-good{background-color:#0cc34b}.ad-seo-unknown{background-color:#007bd2}span.ad-seo .explanation-desc{position:absolute;width:auto;min-width:90%;max-width:inherit;font-weight:600;background:#007bd2;padding:12px 16px;color:#fdfdfd;border-radius:3px;z-index:9999999;box-shadow:0 0 2px #ababab,2px 6px 3px -2px rgba(255,255,255,.2)inset,-2px -6px 3px -2px rgba(41,41,41,.05)inset;border:1px solid #ccc;left:0;text-align:left}span.ad-seo .explanation-desc span{text-decoration:underline}span.ad-seo .explanation-desc div{width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:10px solid #007bd2;position:absolute;bottom:-8px;z-index:9999999;left:0}.ad_seo.column-ad_seo{overflow:initial!important;min-width:160px}#col-container,#col-right{overflow:initial}.autodescription-metaboxes{box-sizing:border-box;max-width:690px;padding-bottom:20px}.autodescription-metaboxes>form>h1,.autodescription-metaboxes>form>h2{float:left}.postbox-container{width:100%}.autodescription-metaboxes .top-buttons{float:right}.autodescription-metaboxes .bottom-buttons{text-align:right}.autodescription-metaboxes .bottom-buttons input,.autodescription-metaboxes .top-buttons input{margin-left:10px}.autodescription-metaboxes #description-separator,.autodescription-metaboxes #title-separator{display:table;width:100%;border-collapse:collapse;border-spacing:0}.autodescription-metaboxes #description-separator input,.autodescription-metaboxes #title-separator input{display:none;float:left;width:0;min-width:0;opacity:0}.autodescription-metaboxes #description-separator label,.autodescription-metaboxes #title-separator label{display:inline-block;width:auto;min-width:28px;min-height:28px;margin:3px;padding:0 4px;border:1px solid #ccc;line-height:28px;text-align:center;cursor:pointer;box-shadow:-1px -1px 1px #aaa inset;font-size:16px}.autodescription-metaboxes #description-separator label.recommended,.autodescription-metaboxes #title-separator label.recommended{border:1px solid #0cc34b;box-shadow:-1px -1px 1px #0cc34b inset}.autodescription-metaboxes #description-separator input:hover+label,.autodescription-metaboxes #description-separator label:hover,.autodescription-metaboxes #title-separator input:hover+label,.autodescription-metaboxes #title-separator label:hover{box-shadow:1px 1px 1px #aaa inset;background-color:#fff}.autodescription-metaboxes #description-separator input:checked+label,.autodescription-metaboxes #title-separator input:checked+label{box-shadow:1px 1px 1px #333 inset;background-color:#fff}.autodescription-metaboxes #home-title-location,.autodescription-metaboxes #title-location{display:block}.autodescription-metaboxes #home-title-location span,.autodescription-metaboxes #title-location span{display:block;margin-bottom:4px}.autodescription-metaboxes #home-title-location label span,.autodescription-metaboxes #title-location label span,.autodescription-metaboxes #twitter-cards label span{display:inline-block;min-width:60px;vertical-align:baseline}.autodescription-metaboxes #twitter-cards label span{min-width:150px}.autodescription-metaboxes #home-title-location label .autodescription-sep-js,.autodescription-metaboxes #home-title-location label span.custom-blogname-js,.autodescription-metaboxes #home-title-location label span.custom-tagline-js,.autodescription-metaboxes #home-title-location label span.custom-title-js,.autodescription-metaboxes #title-location label .autodescription-sep-js{display:inline;min-width:0}.autodescription-metaboxes #knowledge-tabs-js,.autodescription-metaboxes #robots-tabs-js,.autodescription-metaboxes #sitemaps-tabs-js,.autodescription-metaboxes #social-tabs-js,.autodescription-metaboxes .inside .nav-tab-wrapper{position:relative;clear:both;width:100%;padding:8px 14px 0;margin:-4px -14px}.autodescription-metaboxes #knowledge-tabs-js .nav-tab-active,.autodescription-metaboxes #robots-tabs-js .nav-tab-active,.autodescription-metaboxes #sitemaps-tabs-js .nav-tab-active,.autodescription-metaboxes #social-tabs-js .nav-tab-active{background-color:inherit;border-bottom-color:#fff}.autodescription-metaboxes .dashicons-before:before,.autodescription-metaboxes .dashicons-tabs{font-size:initial;display:inline;vertical-align:text-bottom}.autodescription-metaboxes .knowledge-tabs-radio,.autodescription-metaboxes .robots-tabs-radio,.autodescription-metaboxes .sitemaps-tabs-radio,.autodescription-metaboxes .social-tabs-radio{display:none;width:0;height:0;position:absolute}.autodescription-metaboxes .knowledge-tab-content.checked-tab,.autodescription-metaboxes .robots-tab-content.checked-tab,.autodescription-metaboxes .sitemaps-tab-content.checked-tab,.autodescription-metaboxes .social-tab-content.checked-tab{display:block}.autodescription-metaboxes .seoframework-default-selected{border-color:#1c9d38}.autodescription-metaboxes .seoframework-default-selected:checked:before{color:#1c9d38}.autodescription-metaboxes .seoframework-warning-selected{border-color:#dd3811}.autodescription-metaboxes .seoframework-warning-selected:checked:before{color:#dd3811}@media screen and (max-width:782px){.autodescription-metaboxes p.fields,.theseoframework-inpost-box p.fields{line-height:2.8}.autodescription-metaboxes #home-title-location label span,.autodescription-metaboxes #title-location label span{min-width:40px}}@media screen and (max-width:642px){.autodescription-metaboxes span.seoframework-nav-desktop{display:none}}
+Index: lib/js/autodescription.js
+===================================================================
+--- lib/js/autodescription.js	(revision 1294621)
++++ lib/js/autodescription.js	(working copy)
+@@ -27,11 +27,11 @@
+ // ==ClosureCompiler==
+ // @compilation_level SIMPLE_OPTIMIZATIONS
+ // @output_file_name autodescription.min.js
+-// @externs_url https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js
++// @externs_url https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.js
+ // ==/ClosureCompiler==
+ // http://closure-compiler.appspot.com/home
+ 
+-/* global settingsChanged, autodescription, autodescriptionL10n, titleTagline, titleAdditions, blogDescription, siteTitle, saveAlert, confirmReset */
++/* global autodescription, autodescriptionL10n, docTitles, confirm, escapeStr */
+ 
+ /* Advanced Optimizations don't work well with function tabToggle, nor with the title character length */
+ 
+@@ -47,15 +47,12 @@
+ 	settingsChanged: false,
+ 
+ 	titleTagline: autodescriptionL10n.titleTagline,
+-
+ 	titleAdditions: autodescriptionL10n.titleAdditions,
+-
+ 	blogDescription: autodescriptionL10n.blogDescription,
+-
+ 	siteTitle: autodescriptionL10n.siteTitle,
+-
++	titleSeparator: autodescriptionL10n.titleSeparator,
++	isRTL: autodescriptionL10n.isRTL,
+ 	saveAlert: autodescriptionL10n.saveAlert,
+-
+ 	confirmReset: autodescriptionL10n.confirmReset,
+ 
+ 	/**
+@@ -70,12 +67,29 @@
+ 	docTitles: function() {
+ 		'use strict';
+ 
+-		var $doctitles = jQuery( '#autodescription_title, #autodescription-meta-doctitle, #autodescription-meta\\[doctitle\\], #autodescription-site-settings\\[homepage_title\\]' );
++		var $doctitles = jQuery( '#autodescription_title, #autodescription-meta\\[doctitle\\], #autodescription-site-settings\\[homepage_title\\]' );
+ 
+ 		return $doctitles;
+ 	},
+ 
+ 	/**
++	 * Cached description function.
++	 *
++	 * @since 2.4.4
++	 *
++	 * @function
++	 *
++	 * @returns {Object} The jQuery description ID's
++	 */
++	docDescriptions: function() {
++		'use strict';
++
++		var $descriptions = jQuery( "#autodescription_description, #autodescription-meta\\[description\\], #autodescription-site-settings\\[homepage_description\\]" );
++
++		return $descriptions;
++	},
++
++	/**
+ 	 * Helper function for confirming a user action.
+ 	 *
+ 	 * @since 2.2.4
+@@ -105,17 +119,28 @@
+ 
+ 		var $this = jQuery( event.target ),
+ 			$length = $this.val().length,
+-			$placeholder = $this.attr('placeholder').length;
++			$phLength = $this.attr( 'placeholder' ).length,
++			$counter = jQuery( '#' + autodescription.escapeStr( event.target.id ) + '_chars' ),
++			$counterClass = '',
++			$output = '';
+ 
+ 		// Emptied input, get Description placeholder.
+ 		if ( $length === 0 ) {
+ 			//* Output length from placeholder.
+-			var $output = ( $placeholder ).toString();
++			$length = $phLength;
++		}
+ 
+-			jQuery('#' + autodescription.escapeStr( event.target.id ) + '_chars').html( $output );
++		$output = $length.toString();
++
++		if ( $length < 100 || $length >= 175 ) {
++			$counterClass = 'ad-count-bad';
++		} else if ( $length < 145 || ( $length > 155 && $length < 175 ) ) {
++			$counterClass = 'ad-count-okay';
+ 		} else {
+-			jQuery( '#' + autodescription.escapeStr( event.target.id ) + '_chars' ).html( jQuery( event.target ).val().length.toString() );
++			$counterClass = 'ad-count-good';
+ 		}
++
++		$counter.html( $output ).removeClass().addClass( $counterClass );
+ 	},
+ 
+ 	/**
+@@ -137,7 +162,10 @@
+ 			$titleLength = $this.val().length,
+ 			$placeholder = $this.attr('placeholder').length,
+ 			$tagline = jQuery( '#autodescription-site-settings\\[homepage_title_tagline\\]' ).val(),
+-			$seplen = 3;
++			$seplen = 3,
++			$counter = jQuery('#' + autodescription.escapeStr( event.target.id ) + '_chars'),
++			$length = 0,
++			$counterClass = '';
+ 
+ 		// Tagline removed, remove additions and separator.
+ 		if ( ! autodescription.titleTagline ) {
+@@ -151,9 +179,7 @@
+ 				$titleLength = $siteTitle;
+ 			} else {
+ 				//* Output length from placeholder.
+-				var $output = ( $placeholder ).toString();
+-
+-				jQuery('#' + autodescription.escapeStr( event.target.id ) + '_chars').html( $output );
++				$length = $placeholder;
+ 			}
+ 		}
+ 
+@@ -172,10 +198,18 @@
+ 			}
+ 
+ 			// Put it all together
+-			var $output = ( $titleLength + $seplen + $additions ).toString();
++			$length = $titleLength + $seplen + $additions;
++		}
+ 
+-			jQuery('#' + autodescription.escapeStr( event.target.id ) + '_chars').html( $output );
++		if ( $length < 25 || $length >= 75 ) {
++			$counterClass = 'ad-count-bad';
++		} else if ( $length < 42 || ( $length > 55 && $length < 75 ) ) {
++			$counterClass = 'ad-count-okay';
++		} else {
++			$counterClass = 'ad-count-good';
+ 		}
++
++		$counter.html( $length.toString() ).removeClass().addClass( $counterClass );
+ 	},
+ 
+ 	/**
+@@ -269,10 +303,19 @@
+ 				$this.find( 'div.explanation-desc' ).css( 'top', ( $this.position().top - $thisHeight ) + 'px' );
+ 			}
+ 		}).mousemove( function( event ) {
+-			var mousex = event.pageX - $wrap.offset().left;
+-			jQuery( 'span.ad-seo .explanation-desc div' ).css({
+-				left: mousex - 10 // -10px is needed, but why?
+-			});
++			var $mousex = event.pageX - $wrap.offset().left - 10, // 20px width of arrow / 2 = 10
++				$arrow = jQuery( 'span.ad-seo .explanation-desc div' ),
++				$left = jQuery( 'div.explanation-desc' ).offset().left,
++				$width = jQuery( 'div.explanation-desc' ).width(),
++				$maxOffset = $left + $width + 20;
++
++			if ( $mousex < 1 ) {
++				$arrow.css( 'left', 0 + "px" );
++			} else if ( event.pageX > $maxOffset ) {
++				$arrow.css( 'left', $width + 10 + "px" );
++			} else {
++				$arrow.css( 'left', $mousex + "px" );
++			}
+ 		}).mouseleave( function() {
+ 			jQuery( this ).find( 'div.explanation-desc' ).remove();
+ 		});
+@@ -525,6 +568,158 @@
+ 	},
+ 
+ 	/**
++	 * Adds dynamic placeholder to Title input based on site settings.
++	 *
++	 * @since 2.4.4
++	 *
++	 * @function
++	 *
++	 * @return {String} the placeholder additions.
++	 */
++	dynamicPlaceholder: function( event ) {
++		'use strict';
++
++		var $tagbox = jQuery( '#title-tagline-toggle :input' ),
++			$placeholder = jQuery( '#autodescription-title-placeholder' );
++
++		if ( typeof $tagbox !== "undefined" && $tagbox.length > 0 && ! $tagbox.is( ':checked' ) ) {
++			return $placeholder.css( 'display', 'none' );
++		} else {
++
++			var $this = jQuery( event.target ),
++				$inputVal = $this.val(),
++				$additions = autodescription.titleSeparator + " " + autodescription.titleAdditions,
++				$offsetTest = jQuery( "#autodescription-title-offset" ),
++				$offsetWidth = 0,
++				$heightPad = ( $this.outerHeight(true) - $this.height() ) / 2,
++				$horPad = ( $this.outerWidth() - $this.width() ) / 2,
++				$leftOffset = ( $this.outerWidth(true) - $this.width() ) / 2,
++				$taglineVal = jQuery( "#autodescription-site-settings\\[homepage_title_tagline\\]" ).val(),
++				$rtl = autodescription.isRTL,
++				$pos = 'left';
++
++			if ( $rtl === '1' ) {
++				$pos = 'right';
++			}
++
++			// Exchange the placeholder value of the custom Tagline in the HomePage Metabox
++			if ( typeof $taglineVal !== "undefined" && $taglineVal.length > 0 ) {
++				$additions = autodescription.titleSeparator + " " + $taglineVal;
++			}
++
++			// Width offset container, copy variables and remain hidden.
++			$offsetTest.text( $inputVal );
++			$offsetTest.css({
++				fontFamily: $this.css( "fontFamily" ),
++				fontWeight: $this.css( "fontWeight" ),
++				letterSpacing: $this.css( "letterSpacing" ),
++				fontSize: $this.css( "fontSize" ),
++			});
++			$offsetWidth = $offsetTest.width();
++
++			// Moving Placeholder output
++			$placeholder.css({
++				display: $this.css( "display" ),
++				lineHeight: $this.css( "lineHeight" ),
++				paddingTop: $heightPad + "px",
++				paddingBottom: $heightPad + "px",
++				fontFamily: $this.css( "fontFamily" ),
++				fontWeight: $this.css( "fontWeight" ),
++				fontSize: $this.css( "fontSize" ),
++				letterSpacing: $this.css( "letterSpacing" ),
++				maxWidth: ( $this.width() - $horPad - $offsetWidth ) + "px",
++			});
++
++			// Don't calculate when empty.
++			if ( $this.outerWidth() > $leftOffset )
++				$placeholder.css( $pos, $horPad + $leftOffset + $offsetTest.width() + "px" );
++
++			//* Empty or fill placeholder.
++			if ( typeof $inputVal === "undefined" || $inputVal.length < 1 ) {
++				return $placeholder.empty();
++			} else {
++				return $placeholder.text( $additions );
++			}
++		}
++	},
++
++	/**
++	 * Makes user click act natural by selecting the parent Title text input.
++	 *
++	 * @since 2.4.4
++	 *
++	 * @function
++	 */
++	selectTitleInput: function() {
++		'use strict';
++
++		var $input = autodescription.docTitles();
++
++		$input.focus();
++
++		if ( $input.setSelectionRange ) {
++			// Go to end times 2 if setSelectionRange exists.
++			var $length = $input.val().length * 2;
++			$input.setSelectionRange( $length, $length );
++		} else {
++			// Replace value with itself.
++			$input.val( $input.val() ).focus();
++		}
++	},
++
++	/**
++	 * Adds dynamic placeholder to Title input based on site settings on Load.
++	 *
++	 * @since 2.4.4
++	 *
++	 * @function
++	 */
++	dynamicPlaceholderOnLoad: function() {
++		'use strict';
++
++		var $input = autodescription.docTitles();
++
++		if ( typeof $input.val() !== "undefined" ) {
++			if ( $input.val().length > 0 ) {
++				$input.trigger( 'keyup', autodescription.dynamicPlaceholder );
++			} else {
++				$input.trigger( 'keyup', autodescription.updateCharacterCountTitle );
++			}
++		}
++
++	},
++
++	/**
++	 * Triggers keyup on description input so the counter can colorize.
++	 *
++	 * @since 2.4.4
++	 *
++	 * @function
++	 */
++	triggerDescriptionOnLoad: function() {
++		'use strict';
++
++		var $input = autodescription.docDescriptions();
++
++		$input.trigger( 'keyup', autodescription.updateCharacterCountDescription );
++
++	},
++
++	/**
++	 * OnLoad changes can affect settings changes. This function reverts those.
++	 *
++	 * @since 2.4.4
++	 *
++	 * @function
++	 */
++	onLoadUnregisterChange: function() {
++		'use strict';
++
++		//* Prevent trigger of settings change
++		autodescription.settingsChanged = false;
++	},
++
++	/**
+ 	 * Initialises all aspects of the scripts.
+ 	 *
+ 	 * Generally ordered with stuff that inserts new elements into the DOM first,
+@@ -539,11 +734,35 @@
+ 	ready: function() {
+ 		'use strict';
+ 
++		// Before Change listener
++
+ 		// Move the page updates notices below the top-buttons
+ 		jQuery( 'div.updated, div.error, div.notice-warning' ).insertAfter( 'p.top-buttons' );
+ 
++		// Toggle Dynamic Title Placeholder onLoad, also toggles doing it right colors.
++		jQuery( document.body ).ready( autodescription.dynamicPlaceholderOnLoad );
++		// Toggle Description doing it right colors
++		jQuery( document.body ).ready( autodescription.triggerDescriptionOnLoad );
++
++		// Check if the Title Tagline or Description Additions should be removed when page is loaded
++		jQuery( document.body ).ready( autodescription.taglineToggleOnload );
++
++		// Initialize the status bar hover balloon.
++		autodescription.statusBarHover();
++
++		// Initialize status bar removal hover for touch screens.
++		jQuery( document.body ).on( 'touchstart MSPointerDown', autodescription.removeDesc );
++
++		// Initialise form field changing flag.
++		autodescription.attachUnsavedChangesListener();
++
++		// Deregister changes.
++		jQuery( document.body ).ready( autodescription.onLoadUnregisterChange );
++
++		// After Change listener
++
+ 		// Bind character counters
+-		jQuery( '#autodescription_description, #autodescription-meta\\[description\\], #autodescription-site-settings\\[homepage_description\\]' ).on( 'keyup', autodescription.updateCharacterCountDescription );
++		autodescription.docDescriptions().on( 'keyup', autodescription.updateCharacterCountDescription );
+ 
+ 		autodescription.docTitles().on( 'keyup', autodescription.updateCharacterCountTitle );
+ 
+@@ -552,15 +771,6 @@
+ 		// Allow description separator to be changed dynamically.
+ 		jQuery( '#description-separator input' ).on( 'click', autodescription.separatorSwitchDesc );
+ 
+-		// Initialise form field changing flag.
+-		autodescription.attachUnsavedChangesListener();
+-
+-		// Initialize the status bar hover balloon.
+-		autodescription.statusBarHover();
+-
+-		// Initialize status bar removal hover for touch screens.
+-		jQuery( document.body ).on( 'touchstart MSPointerDown', autodescription.removeDesc );
+-
+ 		// Bind reset confirmation
+ 		jQuery( '.autodescription-js-confirm-reset' ).on( 'click.autodescription.autodescription_confirm_reset', autodescription.confirmedReset );
+ 
+@@ -573,15 +783,16 @@
+ 		// Toggle Description additions removal.
+ 		jQuery( '#description-onblogname-toggle :input' ).on( 'click', autodescription.taglineToggleDesc );
+ 
+-		// Check if the Title Tagline or Description Additions should be removed when page is loaded
+-		jQuery( document.body ).ready( autodescription.taglineToggleOnload );
+-
+ 		// Change Title Example prop on textual input change
+ 		jQuery( '#autodescription-site-settings\\[homepage_title\\]' ).on( 'keyup', autodescription.titleProp );
+ 		jQuery( '#autodescription-site-settings\\[homepage_title_tagline\\]' ).on( 'keyup', autodescription.taglineProp );
+ 
++		// Dynamic Placeholder, acts on keydown for a11y, although more cpu intensive. Acts on keyup for perfect output.
++		autodescription.docTitles().on( 'keydown keyup', autodescription.dynamicPlaceholder );
++
++		jQuery( "#autodescription-title-placeholder" ).on( 'click', autodescription.selectTitleInput );
++
+ 	}
+ 
+ };
+-
+ jQuery( autodescription.ready );
+Index: lib/js/autodescription.min.js
+===================================================================
+--- lib/js/autodescription.min.js	(revision 1294621)
++++ lib/js/autodescription.min.js	(working copy)
+@@ -1,12 +1,17 @@
+-window.autodescription={settingsChanged:!1,titleTagline:autodescriptionL10n.titleTagline,titleAdditions:autodescriptionL10n.titleAdditions,blogDescription:autodescriptionL10n.blogDescription,siteTitle:autodescriptionL10n.siteTitle,saveAlert:autodescriptionL10n.saveAlert,confirmReset:autodescriptionL10n.confirmReset,docTitles:function(){return jQuery("#autodescription_title, #autodescription-meta-doctitle, #autodescription-meta\\[doctitle\\], #autodescription-site-settings\\[homepage_title\\]")},confirm:function(a){return confirm(a)},
+-updateCharacterCountDescription:function(a){var b=jQuery(a.target),c=b.val().length,b=b.attr("placeholder").length;0===c?(c=b.toString(),jQuery("#"+autodescription.escapeStr(a.target.id)+"_chars").html(c)):jQuery("#"+autodescription.escapeStr(a.target.id)+"_chars").html(jQuery(a.target).val().length.toString())},updateCharacterCountTitle:function(a){var b=jQuery(a.target),c=autodescription.titleAdditions.length,e=autodescription.blogDescription.length,d=autodescription.siteTitle.length,f=b.val().length,
+-h=b.attr("placeholder").length,g=jQuery("#autodescription-site-settings\\[homepage_title_tagline\\]").val(),b=3;autodescription.titleTagline||(b=c=0);0===f&&(0!==d?f=d:(d=h.toString(),jQuery("#"+autodescription.escapeStr(a.target.id)+"_chars").html(d)));0!==f&&(0!==c&&"undefined"!==typeof g&&(c=g.length,c=0!==c?c:e),d=(f+b+c).toString(),jQuery("#"+autodescription.escapeStr(a.target.id)+"_chars").html(d))},escapeStr:function(a){return a?a.replace(/([\[\]\/])/g,"\\$1"):a},separatorSwitch:function(a){var b=
+-jQuery(".autodescription-sep-js");a=jQuery(a.target).val();"pipe"==a?b.text(" | "):"dash"==a?b.text(" - "):b.html(" &"+a+"; ")},separatorSwitchDesc:function(a){var b=jQuery(".autodescription-descsep-js");a=jQuery(a.target).val();"pipe"==a?b.text(" | "):"dash"==a?b.text(" - "):b.html(" &"+a+"; ")},statusBarHover:function(){var a=jQuery(".ad-bar-wrap");jQuery(".ad-bar-wrap a").mouseenter(function(){var a=jQuery(this),c=a.attr("data-desc");void 0!==c&&0===a.find("div").length&&(a.append('<div class="explanation-desc">'+
+-c+"<div></div></div>"),c=a.find("div.explanation-desc").height()+36,a.find("div.explanation-desc").css("top",a.position().top-c+"px"))}).mousemove(function(b){b=b.pageX-a.offset().left;jQuery("span.ad-seo .explanation-desc div").css({left:b-10})}).mouseleave(function(){jQuery(this).find("div.explanation-desc").remove()})},removeDesc:function(a){a=jQuery(a.target);var b=jQuery(".ad-bar-wrap a");a.closest(b).length||b.find("div.explanation-desc").remove()},tabToggle:function(a){jQuery("div.autodescription-metaboxes .nav-tab-wrapper :input").each(function(){var b=
+-jQuery(this),c=jQuery(a.target).attr("id");b.next().toggleClass("nav-tab-active",this.checked);"undefined"!==typeof c&&-1===c.indexOf("-tabs-js")&&autodescription.tabContent(c)})},tabContent:function(a){if("undefined"!=typeof a){var b=a.slice(0,a.indexOf("-tab")),b=jQuery("."+b+"-tab-content");a=jQuery("#"+a+"-box");b.css("display","none");a.css("display","block")}},taglineToggle:function(a){a=jQuery(a.target);var b=jQuery(".custom-blogname-js");a.is(":checked")?(b.css("display","inline"),autodescription.titleTagline=
+-!0):(b.css("display","none"),autodescription.titleTagline=!1);return autodescription.docTitles().trigger("keyup",autodescription.updateCharacterCountTitle)},taglineToggleDesc:function(a){a=jQuery(a.target);var b=jQuery(".on-blogname-js");a.is(":checked")?b.css("display","inline"):b.css("display","none")},taglineToggleOnload:function(a){a=jQuery("#title-tagline-toggle :input");var b=jQuery(".custom-blogname-js"),c=jQuery("#description-onblogname-toggle :input"),e=jQuery(".on-blogname-js");a.is(":checked")?
+-b.css("display","inline"):b.css("display","none");c.is(":checked")?e.css("display","inline"):e.css("display","none")},titleProp:function(a){a=jQuery(a.target).val();var b=jQuery(".custom-title-js");0===a.length?b.text(autodescription.siteTitle):b.text(a)},taglineProp:function(a){a=jQuery(a.target).val();var b=jQuery(".custom-tagline-js");0===a.length?b.text(autodescription.blogDescription):b.text(a);autodescription.docTitles().trigger("keyup",autodescription.updateCharacterCountTitle)},attachUnsavedChangesListener:function(){jQuery("div.autodescription-metaboxes :input, div#theseoframework-inpost-box .inside :input").not(".nav-tab-wrapper :input").change(function(){autodescription.registerChange()});
++window.autodescription={settingsChanged:!1,titleTagline:autodescriptionL10n.titleTagline,titleAdditions:autodescriptionL10n.titleAdditions,blogDescription:autodescriptionL10n.blogDescription,siteTitle:autodescriptionL10n.siteTitle,titleSeparator:autodescriptionL10n.titleSeparator,isRTL:autodescriptionL10n.isRTL,saveAlert:autodescriptionL10n.saveAlert,confirmReset:autodescriptionL10n.confirmReset,docTitles:function(){return jQuery("#autodescription_title, #autodescription-meta\\[doctitle\\], #autodescription-site-settings\\[homepage_title\\]")},
++docDescriptions:function(){return jQuery("#autodescription_description, #autodescription-meta\\[description\\], #autodescription-site-settings\\[homepage_description\\]")},confirm:function(a){return confirm(a)},updateCharacterCountDescription:function(a){var b=jQuery(a.target),c=b.val().length,b=b.attr("placeholder").length;a=jQuery("#"+autodescription.escapeStr(a.target.id)+"_chars");var d="",e="";0===c&&(c=b);e=c.toString();d=100>c||175<=c?"ad-count-bad":145>c||155<c&&175>c?"ad-count-okay":"ad-count-good";
++a.html(e).removeClass().addClass(d)},updateCharacterCountTitle:function(a){var b=jQuery(a.target),c=autodescription.titleAdditions.length,d=autodescription.blogDescription.length,e=autodescription.siteTitle.length,f=b.val().length,l=b.attr("placeholder").length,h=jQuery("#autodescription-site-settings\\[homepage_title_tagline\\]").val(),b=3;a=jQuery("#"+autodescription.escapeStr(a.target.id)+"_chars");var g=0,k="";autodescription.titleTagline||(b=c=0);0===f&&(0!==e?f=e:g=l);0!==f&&(0!==c&&"undefined"!==
++typeof h&&(c=h.length,c=0!==c?c:d),g=f+b+c);k=25>g||75<=g?"ad-count-bad":42>g||55<g&&75>g?"ad-count-okay":"ad-count-good";a.html(g.toString()).removeClass().addClass(k)},escapeStr:function(a){return a?a.replace(/([\[\]\/])/g,"\\$1"):a},separatorSwitch:function(a){var b=jQuery(".autodescription-sep-js");a=jQuery(a.target).val();"pipe"==a?b.text(" | "):"dash"==a?b.text(" - "):b.html(" &"+a+"; ")},separatorSwitchDesc:function(a){var b=jQuery(".autodescription-descsep-js");a=jQuery(a.target).val();"pipe"==
++a?b.text(" | "):"dash"==a?b.text(" - "):b.html(" &"+a+"; ")},statusBarHover:function(){var a=jQuery(".ad-bar-wrap");jQuery(".ad-bar-wrap a").mouseenter(function(){var a=jQuery(this),c=a.attr("data-desc");void 0!==c&&0===a.find("div").length&&(a.append('<div class="explanation-desc">'+c+"<div></div></div>"),c=a.find("div.explanation-desc").height()+36,a.find("div.explanation-desc").css("top",a.position().top-c+"px"))}).mousemove(function(b){var c=b.pageX-a.offset().left-10,d=jQuery("span.ad-seo .explanation-desc div"),
++e=jQuery("div.explanation-desc").offset().left,f=jQuery("div.explanation-desc").width(),e=e+f+20;1>c?d.css("left","0px"):b.pageX>e?d.css("left",f+10+"px"):d.css("left",c+"px")}).mouseleave(function(){jQuery(this).find("div.explanation-desc").remove()})},removeDesc:function(a){a=jQuery(a.target);var b=jQuery(".ad-bar-wrap a");a.closest(b).length||b.find("div.explanation-desc").remove()},tabToggle:function(a){jQuery("div.autodescription-metaboxes .nav-tab-wrapper :input").each(function(){var b=jQuery(this),
++c=jQuery(a.target).attr("id");b.next().toggleClass("nav-tab-active",this.checked);"undefined"!==typeof c&&-1===c.indexOf("-tabs-js")&&autodescription.tabContent(c)})},tabContent:function(a){if("undefined"!=typeof a){var b=a.slice(0,a.indexOf("-tab")),b=jQuery("."+b+"-tab-content");a=jQuery("#"+a+"-box");b.css("display","none");a.css("display","block")}},taglineToggle:function(a){a=jQuery(a.target);var b=jQuery(".custom-blogname-js");a.is(":checked")?(b.css("display","inline"),autodescription.titleTagline=
++!0):(b.css("display","none"),autodescription.titleTagline=!1);return autodescription.docTitles().trigger("keyup",autodescription.updateCharacterCountTitle)},taglineToggleDesc:function(a){a=jQuery(a.target);var b=jQuery(".on-blogname-js");a.is(":checked")?b.css("display","inline"):b.css("display","none")},taglineToggleOnload:function(a){a=jQuery("#title-tagline-toggle :input");var b=jQuery(".custom-blogname-js"),c=jQuery("#description-onblogname-toggle :input"),d=jQuery(".on-blogname-js");a.is(":checked")?
++b.css("display","inline"):b.css("display","none");c.is(":checked")?d.css("display","inline"):d.css("display","none")},titleProp:function(a){a=jQuery(a.target).val();var b=jQuery(".custom-title-js");0===a.length?b.text(autodescription.siteTitle):b.text(a)},taglineProp:function(a){a=jQuery(a.target).val();var b=jQuery(".custom-tagline-js");0===a.length?b.text(autodescription.blogDescription):b.text(a);autodescription.docTitles().trigger("keyup",autodescription.updateCharacterCountTitle)},attachUnsavedChangesListener:function(){jQuery("div.autodescription-metaboxes :input, div#theseoframework-inpost-box .inside :input").not(".nav-tab-wrapper :input").change(function(){autodescription.registerChange()});
+ jQuery("div.autodescription-metaboxes input[type=text], div.autodescription-metaboxes textarea, div#theseoframework-inpost-box .inside input[type=text], div#theseoframework-inpost-box .inside textarea").not(".nav-tab-wrapper :input").on("keyup",function(){autodescription.registerChange()});window.onbeforeunload=function(){if(autodescription.settingsChanged)return autodescription.saveAlert};jQuery('div.autodescription-metaboxes input[type="submit"], div#publishing-action input[type="submit"]').click(function(){window.onbeforeunload=
+-null})},registerChange:function(){autodescription.settingsChanged=!0},confirmedReset:function(){return confirm(autodescription.confirmReset)},ready:function(){jQuery("div.updated, div.error, div.notice-warning").insertAfter("p.top-buttons");jQuery("#autodescription_description, #autodescription-meta\\[description\\], #autodescription-site-settings\\[homepage_description\\]").on("keyup",autodescription.updateCharacterCountDescription);autodescription.docTitles().on("keyup",autodescription.updateCharacterCountTitle);
+-jQuery("#title-separator input").on("click",autodescription.separatorSwitch);jQuery("#description-separator input").on("click",autodescription.separatorSwitchDesc);autodescription.attachUnsavedChangesListener();autodescription.statusBarHover();jQuery(document.body).on("touchstart MSPointerDown",autodescription.removeDesc);jQuery(".autodescription-js-confirm-reset").on("click.autodescription.autodescription_confirm_reset",autodescription.confirmedReset);jQuery("#social-tabs-js, #robots-tabs-js, #knowledge-tabs-js, #sitemaps-tabs-js").on("click",
+-autodescription.tabToggle);jQuery("#title-tagline-toggle :input").on("click",autodescription.taglineToggle);jQuery("#description-onblogname-toggle :input").on("click",autodescription.taglineToggleDesc);jQuery(document.body).ready(autodescription.taglineToggleOnload);jQuery("#autodescription-site-settings\\[homepage_title\\]").on("keyup",autodescription.titleProp);jQuery("#autodescription-site-settings\\[homepage_title_tagline\\]").on("keyup",autodescription.taglineProp)}};jQuery(autodescription.ready);
++null})},registerChange:function(){autodescription.settingsChanged=!0},confirmedReset:function(){return confirm(autodescription.confirmReset)},dynamicPlaceholder:function(a){var b=jQuery("#title-tagline-toggle :input"),c=jQuery("#autodescription-title-placeholder");if("undefined"!==typeof b&&0<b.length&&!b.is(":checked"))return c.css("display","none");a=jQuery(a.target);var b=a.val(),d=autodescription.titleSeparator+" "+autodescription.titleAdditions,e=jQuery("#autodescription-title-offset"),f=0,l=
++(a.outerHeight(!0)-a.height())/2,h=(a.outerWidth()-a.width())/2,g=(a.outerWidth(!0)-a.width())/2,f=jQuery("#autodescription-site-settings\\[homepage_title_tagline\\]").val(),k="left";"1"===autodescription.isRTL&&(k="right");"undefined"!==typeof f&&0<f.length&&(d=autodescription.titleSeparator+" "+f);e.text(b);e.css({fontFamily:a.css("fontFamily"),fontWeight:a.css("fontWeight"),letterSpacing:a.css("letterSpacing"),fontSize:a.css("fontSize")});f=e.width();c.css({display:a.css("display"),lineHeight:a.css("lineHeight"),
++paddingTop:l+"px",paddingBottom:l+"px",fontFamily:a.css("fontFamily"),fontWeight:a.css("fontWeight"),fontSize:a.css("fontSize"),letterSpacing:a.css("letterSpacing"),maxWidth:a.width()-h-f+"px"});a.outerWidth()>g&&c.css(k,h+g+e.width()+"px");return"undefined"===typeof b||1>b.length?c.empty():c.text(d)},selectTitleInput:function(){var a=autodescription.docTitles();a.focus();if(a.setSelectionRange){var b=2*a.val().length;a.setSelectionRange(b,b)}else a.val(a.val()).focus()},dynamicPlaceholderOnLoad:function(){var a=
++autodescription.docTitles();"undefined"!==typeof a.val()&&(0<a.val().length?a.trigger("keyup",autodescription.dynamicPlaceholder):a.trigger("keyup",autodescription.updateCharacterCountTitle))},triggerDescriptionOnLoad:function(){autodescription.docDescriptions().trigger("keyup",autodescription.updateCharacterCountDescription)},onLoadUnregisterChange:function(){autodescription.settingsChanged=!1},ready:function(){jQuery("div.updated, div.error, div.notice-warning").insertAfter("p.top-buttons");jQuery(document.body).ready(autodescription.dynamicPlaceholderOnLoad);
++jQuery(document.body).ready(autodescription.triggerDescriptionOnLoad);jQuery(document.body).ready(autodescription.taglineToggleOnload);autodescription.statusBarHover();jQuery(document.body).on("touchstart MSPointerDown",autodescription.removeDesc);autodescription.attachUnsavedChangesListener();jQuery(document.body).ready(autodescription.onLoadUnregisterChange);autodescription.docDescriptions().on("keyup",autodescription.updateCharacterCountDescription);autodescription.docTitles().on("keyup",autodescription.updateCharacterCountTitle);
++jQuery("#title-separator input").on("click",autodescription.separatorSwitch);jQuery("#description-separator input").on("click",autodescription.separatorSwitchDesc);jQuery(".autodescription-js-confirm-reset").on("click.autodescription.autodescription_confirm_reset",autodescription.confirmedReset);jQuery("#social-tabs-js, #robots-tabs-js, #knowledge-tabs-js, #sitemaps-tabs-js").on("click",autodescription.tabToggle);jQuery("#title-tagline-toggle :input").on("click",autodescription.taglineToggle);jQuery("#description-onblogname-toggle :input").on("click",
++autodescription.taglineToggleDesc);jQuery("#autodescription-site-settings\\[homepage_title\\]").on("keyup",autodescription.titleProp);jQuery("#autodescription-site-settings\\[homepage_title_tagline\\]").on("keyup",autodescription.taglineProp);autodescription.docTitles().on("keydown keyup",autodescription.dynamicPlaceholder);jQuery("#autodescription-title-placeholder").on("click",autodescription.selectTitleInput)}};jQuery(autodescription.ready);

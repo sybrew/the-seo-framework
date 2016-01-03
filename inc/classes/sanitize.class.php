@@ -60,7 +60,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		 *
 		 * @since 2.2.9
 		 */
-		if ( false === ( isset( $_POST ) && ! empty( $_POST ) && isset( $_POST[THE_SEO_FRAMEWORK_SITE_OPTIONS] ) && is_array( $_POST[THE_SEO_FRAMEWORK_SITE_OPTIONS] ) ) )
+		if ( ! isset( $_POST ) || empty( $_POST ) || ! isset( $_POST[THE_SEO_FRAMEWORK_SITE_OPTIONS] ) || ! is_array( $_POST[THE_SEO_FRAMEWORK_SITE_OPTIONS] ) )
 			return;
 
 		$this->autodescription_add_option_filter(
@@ -76,6 +76,14 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			$this->settings_field,
 			array(
 				'description_separator',
+			)
+		);
+
+		$this->autodescription_add_option_filter(
+			's_description',
+			$this->settings_field,
+			array(
+				'homepage_description',
 			)
 		);
 
@@ -180,7 +188,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			$this->settings_field,
 			array(
 				'homepage_title',
-				'homepage_description',
 				'homepage_title_tagline',
 
 				'facebook_appid',
@@ -371,6 +378,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			's_left_right' 				=> array( $this, 's_left_right' 			),
 			's_title_separator' 		=> array( $this, 's_title_separator' 		),
 			's_description_separator' 	=> array( $this, 's_description_separator' 	),
+			's_description' 			=> array( $this, 's_description' 			),
 			's_knowledge_type'			=> array( $this, 's_knowledge_type'			),
 			's_one_zero' 				=> array( $this, 's_one_zero' 				),
 			's_one_zero_flush_rewrite'	=> array( $this, 's_one_zero_flush_rewrite'	),
@@ -445,6 +453,33 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	}
 
 	/**
+	 * Returns a one-line sanitized description
+	 *
+	 * @since 2.4.4
+	 *
+	 * @param string $new_value The Description
+	 * @return string One line sanitized description.
+	 */
+	protected function s_description( $new_value ) {
+
+		$description = str_replace( array( "\r\n", "\r", "\n" ), "\n", $new_value );
+
+		$lines = explode( "\n", $description );
+		$new_lines = array();
+
+		//* Remove line breaks
+		foreach ( $lines as $i => $line ) {
+			//* Don't add empty lines or paragraphs
+			if ( ! empty( $line ) && '&nbsp;' !== $line )
+				$new_lines[] = trim( $line ) . ' ';
+		}
+
+		$output = trim( implode( $new_lines ) );
+
+		return (string) strip_tags( $output );
+	}
+
+	/**
 	 * Returns the knowledge type value string.
 	 *
 	 * @since 2.2.8
@@ -463,7 +498,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 
 		static $home_id = null;
 
-		if ( !isset( $home_id ) ) {
+		if ( ! isset( $home_id ) ) {
 			// $home_id as false will flush blog front-page.
 			$home_id = 'page' == get_option( 'show_on_front' ) ? get_option( 'page_on_front' ) : false;
 			$this->delete_ld_json_transient( $home_id );
@@ -552,7 +587,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	protected function s_one_zero_flush_sitemap( $new_value ) {
 		static $flushed = null;
 
-		if ( !isset( $flushed ) )
+		if ( ! isset( $flushed ) )
 			$this->delete_sitemap_transient();
 
 		$flushed = true;
@@ -597,7 +632,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 
 		static $home_id = null;
 
-		if ( !isset( $home_id ) ) {
+		if ( ! isset( $home_id ) ) {
 			// $home_id as false will flush blog front-page.
 			$home_id = 'page' == get_option( 'show_on_front' ) ? get_option( 'page_on_front' ) : false;
 			$this->delete_ld_json_transient( $home_id );
@@ -631,7 +666,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	protected function s_url_query( $new_value ) {
 		static $home_id = null;
 
-		if ( !isset( $home_id ) ) {
+		if ( ! isset( $home_id ) ) {
 			// $home_id as false will flush blog front-page.
 			$home_id = 'page' == get_option( 'show_on_front' ) ? get_option( 'page_on_front' ) : false;
 			$this->delete_ld_json_transient( $home_id );
@@ -707,7 +742,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 
 		$url = strip_tags( $new_value );
 
-		if ( !empty( $url ) ) {
+		if ( ! empty( $url ) ) {
 
 			/**
 			 * New filter.

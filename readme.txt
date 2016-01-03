@@ -163,15 +163,14 @@ The output will be stored for each page, if you've edited a page the page output
 
 * All themes.
 * Genesis & Genesis SEO. This plugin takes all Post, Page, Category and Tag SEO values from Genesis and uses them within The SEO Framework Options. The easiest upgrade!
-* Elegant Themes SEO including Divi SEO.
 
 **Caches:**
 
-* Opcode
+* Opcode (optimized)
 * Page
-* Object
-* Transient
-* CDN
+* Object for database calls
+* Transients for often used
+* CDN for images
 
 If you have other popular SEO plugins activated, this plugin will automatically prevent SEO mistakes by deactivating itself on almost every part.
 It will however output robots metadata and og:image, among various other things which are bound to social media.
@@ -351,10 +350,9 @@ If you wish to remove only my name from your HTML code, here's the filter:
 
 = I want to transport SEO data from other plugins to The SEO Framework, how do I do this? =
 
-Please refer to [SEO Data Migration](http://theseoframework.com/docs/seo-data-migration/).
+Please refer to this small guide: [SEO Data Migration](http://theseoframework.com/docs/seo-data-migration/).
 
-Transporting from The SEO Framework to other plugins currently isn't supported for Terms and Taxonomies.
-If you wish to export data from The SEO Framework, please poke StudioPress with the request and tell them to look for 'admeta'.
+Transporting Terms and Taxonomies data currently isn't supported.
 
 == Changelog ==
 
@@ -362,12 +360,14 @@ If you wish to export data from The SEO Framework, please poke StudioPress with 
 
 **Summarized:**
 
-* This update is for both robots and humans. With better support for people with color vision deficiency and with better support for robots to access and understand your website.
-* Also, WooCommerce has gained extra support for Product Images and AnsPress question descriptions have been fixed.
-* Social Descriptions have recieved an overhaul since they abide to different standards, they may also be much longer!
+* This massive update is made for robots (bleep bloop, zerp!), but even more for humans.
+* This update contains better support for people with color vision deficiency and better support for robots to access and understand your website.
+* WooCommerce has gained extra support for multiple Social Product Images and AnsPress question descriptions have been fixed.
+* Theme load has been reduced with removal of unneeded filters as The SEO Framework overrides them.
+* Social (Auto-)Descriptions have recieved an overhaul since they abide to different standards, they may also be much longer!
 * Accessibility and understanding of how this plugin handles titles has been improved when adding custom titles.
 * And last but not least, you can now see how well the length is of the descriptions and titles while editing a page or post.
-* A few other bugfixes and visual updates have also been included. The bugfix which had the most impact is regarding correctly fetching of the page ID. This makes many more plugins more compatible with The SEO Framework and expect quick compatibility improvements in the future!
+* And let's not forget, huge changes for developers and super-users have been put in place which have therefore caused a version bump.
 
 **SEO Tip of the Update:**
 /
@@ -375,26 +375,27 @@ TODO
 
 **For everyone:**
 /
-* Added: All WooCommerce Product Images are now also added with multiple `og:image` meta tags. Now users can now thoroughly scroll through your items when shared on social sites (where supported)!
-* TODO Added: Full Elegant Themes' Divi compatibility. Read more below under heading "About: Divi Compatibility".
-* TODO Added: Elegant Themes SEO compatibility.
-* TODO Added: Elegant Themes builder compatibility.
+* Added: All WooCommerce Product Images from the gallery are now also added with multiple `og:image` meta tags (with dupe detection). Now users can now scroll through your item images when shared on social sites (when supported by the Social Site)!
 * Added: Colorized character counters! These subtle colors now let you know you're doing it right right away without going back to the SEO Bar.
 * Added: Custom Title now shows the possible additions to deliver a more expected experience. This also takes the Custom HomePage tagline into account.
 * Added: This is also optimized for Right-To-Left languages.
+* Added: Removed line breaks from manual descriptions on save.
+* Added: Static caching for the current page in ld+json breadcrumbs to improve generation time.
 * Changed: Disabled OG Meta tags output when Add Meta Tags is active.
 * Changed: Color changes to the SEO Bar to fully support all vision deficiency spectra. This also makes the SEO bar more vibrant and easier on your eyes.
 * Improved: Slightly improved JavaScript speed.
 * Improved: The Breadcrumb home URL now also considers the Domain Mapping domains instead of only the current domain.
 * Improved: Multiple consecutive empty paragraph entries no longer generate equivalent spaces in the automated description.
-* TODO Improved: OG and Twitter Auto Generated description Meta tags now don't contain the title and blogname for a more organic social experience.
-* TODO Improved: OG and Twitter Auto Generated description meta tags are now up to 200 characters long.
+* Improved: OG and Twitter Auto Generated description Meta tags now don't contain the title and blogname for a more organic social experience.
+* Improved: OG and Twitter Auto Generated description meta tags are now up to 200 characters long.
 * Improved: Hover messages from the SEO Bar are now aligned to the left so they're easier to read.
 * Improved: Hover messages from the SEO Bar now contain an extra break when duplicated words highlighted.
 * Improved: The hover message balloon arrow now can't overflow over the balloon's corners.
 * Improved: Breadcrumb generation time.
+* Improved: Cache key generation time.
 * Improved: Overal plugin speed, again :).
-* TODO Fixed: WooCommerce product overview layout was messed up on smaller (tablet to 15") screens by the addition of The SEO Bar. It now all fits. (table.wp-list-table .column-name,table.wp-list-table .column-is_in_stock{width:10%}). Further optimization is left in the hands of WooCommerce as they still need to optimize this themself.
+* Fixed: SEO Column bar was registered for load on Post and Page edit screens, even if it wasn't visibles.
+* Fixed: WooCommerce admin page product overview layout was messed up on smaller (tablet to 15") screens by the addition of The SEO Bar. It now all mostly fits. Further optimization is left in the hands of WooCommerce.
 * TODO Fixed: Incorrect Dutch translation on Robots Meta Settings on the Inpost metabox.
 * Fixed: Bug with AnsPress where not all page descriptions are fetched correctly on the front-end. Because of the bugfix, the description cache will be flushed upon update. The cache will clean itself up within 7 days automatically.
 * Fixed: WooCommerce main shop page took the title of the latest product.
@@ -402,28 +403,32 @@ TODO
 * Fixed: Robots.txt sitemap wasn't pointed to correctly on Subdirectory Multisite installations.
 * Fixed: Robots.txt sitemap wasn't pointed to correctly with mapped domains on Multisite sites.
 * Fixed: Bug for Home Title in the breadcrumbs when the homepage is a page. Because of the bugfix, the LD+Json cache will be flushed upon update. The cache will clean itself up within 7 days automatically.
-* Removed: /wp-includes/ blocking through robots.txt, this was accidentally added long ago and the removal should resolve issues with Google Webmaster Tools.
+* Fixed: Cache naming bug in taxonomy and terms admin pages displaying the front page description.
+* Removed: /wp-includes/ blocking through robots.txt, this was accidentally added a long time ago and the removal should resolve issues with Google Webmaster Tools.
 
 **For developers:**
 /
 * Added: New function `AutoDescription_Render::the_home_url_from_cache( $force_slash )`.
 * Added: New function `AutoDescription_Generate::parse_og_image( $image_id, $args )`, parses image to a maximum of 1500px width or height based on biggest factor and saves it if not yet parsed, returns the URL of the parsed image.
 * Added: New function `AutoDescription_Render::get_the_real_ID()`. Fetches the real ID for all pages, posts, terms, taxonomies and CPT, including WooCommerce and AnsPress.
-* Added: New filters. (TODO document robots filters in TSF home && argument filters && cpt sitemap filters).
-* Added: Static caching for the current page in ld+json breadcrumbs.
-* Improved: Default arguments for the title, url and image are now auto-correcting when called to incorrectly.
+* Added: New function `AutoDescription_Sanitize::s_description()`. Removes spaces and breaks from the description and created a clean flowing single line. Sanitizes as well.
+* Added: New filters. (TODO document robots filters in TSF home && argument filters && cpt sitemap filters && auto_description filter && the_seo_framework_description_args).
+* Added: Generation time output on the URL and Description when debugging is activated.
+* Added: Removal of all `wp_title` filters prior to execution to reduce theme load. This is done at `init` priority `1`.
+* Added: Removal of all `pre_get_document_title` filters prior to execution to reduce theme load. This is done at `init` priority `1`.
+* Changed: `pre_get_document_title` filter priority is now `10`, was `99` for easier manipulation. This is run at `init` priority `1`.
+* Changed: Rewritter `AutoDescription_Generate::generate_description_from_id()` as it was previously built upon bugfixes and chance.
 * Changed: Default WordPress robots.txt is now completely overwritten to maintain compatibility.
-* TODO: Changed: `the_description()` function parameters have now been put into an arguments array.
+* Changed: `AutoDescription_Generate::generate_description()` function parameters have now been put into an arguments array. This array is passed onto the following functions as well: `AutoDescription_Generate::description_from_custom_field()` and `AutoDescription_Generate::generate_description_from_id()`
+* Improved: Default arguments for the title, url and image are now auto-correcting when called to incorrectly in some scenarios. Keep an eye out on the error log if you're using the parsers directly.
 * Fixed: `AutoDescription_Generate::get_separator()` didn't listen to the escape parameter because of the cache. This function has been reworked for better caching.
 * Removed: `$args['post_id']` argument from the title functions as it was unused. Use `$args['term_id']` instead.
+* Removed: 2nd argument ($tt_id) from `AutoDescription_Generate::generate_excerpt()`. Use the first argument ($post_id) instead.
 * Cleaned up code.
 
 /** NOTE CACHED ITEMS CHANGE **
 / TODO Should look at error log consistently before pushing tag.
-
-**About: Divi Compatibility**
-/
-TODO explain what has changed
+/ TODO test separator changes throughout the plugin interface and frontend
 
 = 2.4.3.1 - Naming Things =
 
@@ -483,81 +488,6 @@ TODO explain what has changed
 * Removed: Redundant code left for testing purposes.
 * Changed: Invalidated LD+Json transient cache key because of the fix. The expired cache will be flushed automatically.
 * Cleaned up Code.
-
-= 2.4.2 - Canon in C =
-
-**Summarized:**
-
-This update is harmonizing canonical URL's in special situations. This includes complete support with WPML and qTranslate X, and on complex mutiple certificate MultiSite installations the canonical URL is now always correct when-and where ever you go.
-
-Moreover, I present to you with pride, canonical URL's have been put into a lovely breadcrumb script. Where the sitemap lacks, the breadcrumb script makes up for it, and Google will better structure your website in the search results; this also informs the visitor of the structure of your pages before entering your website.
-
-Among these changes, a few functions have been added to the options API to cover very special cases for every developer to use.
-
-To top it off, this plugin is now also 150% to 500% times faster on the front page! Thanks to added transient caching methods on the LD+Json scripts.
-
-**SEO Tip of the Update:**
-
-* Canonical URLs are the URLs that lead to exactly where a page is located. It's very important for Search Engines to find the right page, to prevent duplicated content mistakes.
-* The Search Engine will therefore always follow the canonical URL and will most likely ignore the current page if the canonical URL points to a page other than the current page.
-* For this reason, the canonical URL within The SEO Framework will look for many variables before making one, with this update even more so.
-* This concludes that it's advised not to touch the Custom Canonical URL unless you're absolutely certain that Search Engines should look for another webpage.
-
-**For everyone:**
-
-* Added: Breadcrumbs LD+Json script on categorized posts and child pages. This makes sure Google knows what category a post belongs to, or what page a page is a child of, even more structured than regular breadcrumbs. This can be removed through a filter.
-* Added: Added more than one index-able category for a post? Now Google will know.
-* Added: Complete Canonical URL support for qTranslate X.
-* Added: Basic Sitemap Support for qTranslate X, it will create a sitemap for each of the languages if `Hide URL Language information` is set to off. It will generate one for the current language it finds otherwise and will cache it for a week or until post update.
-* Added: Taxonomies and Terms Automated Descriptions now also try to fetch the custom Title.
-* Added: The LD+Json scripts are now cached inside a transient for each page.
-* Fixed: The Canonical URL within Posts and Pages are now correct again when using WPMUdev Domain Mapping and when you are within the original's domain dashboard.
-* Fixed: The Canonical URL on the front end now doesn't output the incorrect scheme when using HTTPS anymore when the subdomain is HTTPS but the Mapped Domain is HTTP when using Domain Mapping by WPMUdev.
-* Fixed: When using Donncha's Domain Mapping, the scheme will now always be correct.
-* Fixed: The sitemap URLs now shows language domain URLs correctly again when using WPML.
-* Fixed: Shortlink URL's no longer includes the language base when using WPML or qTranslate X.
-* Fixed: The manual Canonical URL set for posts or pages are no longer reflected on the contained archives if the set post or page is the latest post or page.
-* Fixed: The Featured Image set for posts or pages are no longer reflected on the contained archives for the social image Meta tags if the set post or page is the latest post or page.
-* Improved: URL sanitation.
-* Improved: No more home page cache keys are being generated on 404 pages.
-* Improved: LD+Json search script, it now outputs your website's name in custom search if newly registered.
-* Removed: Canonical URL on 404 pages. Not only was it unnecessary, but it was also wrong.
-* Note: All sitemap transients will be invalidated upon this update to remain a consistent experience, they will be cleaned up automatically.
-
-**For developers:**
-
-* Added: New filters.
-* Added: New functions for the options API.
-* Added: New actions action listeners in page/taxonomy post boxes.
-* Added: New useful function `AutoDescription_Generate::set_url_scheme()`. It's WordPress' core function without filter and a negligible nanosecond optimization.
-* Added: New useful function `AutoDescription_Generate::get_relative_term_url()` for fetching archive urls.
-* Added: URL input debugging when using debug 'more'.
-* Added: Output debug in source only with a new constant. This still outputs debug information in the title tag, so be careful.
-* Revised: Shortlink URL. It now uses a more static way of making one, instead of relying on `home_url()`.
-* **Reworked:** `AutoDescription_Generate::the_url()` was starting to get smelly because of compatibility with so many plugins and types of pages. All parameters except the first two have been put into an argument array. Please note that the `parameters` will output a `_doing_it_wrong` notice if your input call is invalid. The code will continue to run normally but will ignore your parameters set.
-* Revised: All title functions can now fetch the title from external posts.
-* Cleaned up code.
-
-**Note:**
-
-* I've seen websites using CloudFlare combined with a relative scheme URL layer of some sort. This won't hurt your site, unless you mainly prefer using HTTPS.
-* To prevent this from happening, I've created a filter which will force the https scheme. `the_seo_framework_canonical_force_scheme'.
-* Please note that the CloudFlare layer, or any other early scheme overriding plugin will prevent the filter from working.
-* The filter is quite simple, and can be found [here, heading "Since 2.4.2"](https://theseoframework.com/docs/api/filters/).
-* Don't know what Canonical does? Then let The SEO Framework figure it all out for you :).
-* What's better than this filter? A global 301 redirect from https to http, or vice versa. Consult with your hosting provider.
-
-**About the breadcrumb script:**
-
-* Read [all about the breadcrumb script](https://developers.google.com/structured-data/breadcrumbs?hl=en).
-* It's a heavy process, it even tripled the output time of the meta on some pages. This is because each individual LD+Json input item has to be sanitized.
-* Therefor it has been cached, simultaneously reducing this plugin's load time on the front-page by almost 100% caused by the search and Knowledge Graph script.
-* Because WordPress doesn't have a one-way does it structure; this is truly something unique :). It has been tested on many sites with different parameters.
-* Posts with multiple categories will have multiple scripts output.
-* Posts with multiple categories of the same tree will have one script output per tree.
-* Pages will always have at most one script output.
-* Test categorized posts and pages with a tree [here](https://developers.google.com/structured-data/testing-tool/). Let me know if you find an error under `BreadcrumbList`, thank you very much in advance!
-* This feature will not do anything yet with CPT, since they're not predictable. I will take a look at them in the future, because I really believe Portfolio's and Forums should support this.
 
 = Full changelog =
 

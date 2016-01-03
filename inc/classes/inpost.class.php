@@ -280,9 +280,14 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 			'get_custom_field' => false
 		);
 
+		$generated_description_args = array(
+			'id' => $term_id,
+			'taxonomy' => $taxonomy
+		);
+
 		//* Generate title and description.
 		$generated_doctitle = $this->title( '', '', '', $generated_doctitle_args );
-		$generated_description = $this->generate_description_from_id( $term_id, $taxonomy, false, false );
+		$generated_description = $this->generate_description_from_id( $generated_description_args );
 
 		/**
 		 * Calculate true Title length
@@ -425,8 +430,13 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 				'get_custom_field' => false,
 			);
 
+			$generated_description_args = array(
+				'id' => $post_id,
+				'is_home' => true
+			);
+
 			$generated_doctitle = $this->title( '', '', '', $generated_doctitle_args );
-			$generated_description = $this->generate_description_from_id( $post_id, '', true, false );
+			$generated_description = $this->generate_description_from_id( $generated_description_args );
 		} else if ( $this->is_blog_page( $post_id ) ) {
 			//* Page for posts.
 			$generated_doctitle_args = array(
@@ -435,8 +445,13 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 				'get_custom_field' => false,
 			);
 
+			$generated_description_args = array(
+				'id' => $post_id,
+				'page_for_posts' => true
+			);
+
 			$generated_doctitle = $this->title( '', '', '', $generated_doctitle_args );
-			$generated_description = $this->generate_description_from_id( $post_id, '', false, true );
+			$generated_description = $this->generate_description_from_id( $generated_description_args );
 		} else {
 			$generated_doctitle_args = array(
 				'placeholder' => true,
@@ -444,8 +459,12 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 				'get_custom_field' => false,
 			);
 
+			$generated_description_args = array(
+				'id' => $post_id
+			);
+
 			$generated_doctitle = $this->title( '', '', '', $generated_doctitle_args );
-			$generated_description = $this->generate_description_from_id( $post_id, '', false, false );
+			$generated_description = $this->generate_description_from_id( $generated_description_args );
 		}
 
 		/**

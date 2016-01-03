@@ -677,10 +677,16 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		 * Reworked. Always create a placeholder.
 		 * @since 2.3.4
 		 */
-		if ( !empty( $frompost_description ) ) {
+		if ( ! empty( $frompost_description ) ) {
 			$description_placeholder = $frompost_description;
 		} else {
-			$description_placeholder = $home_is_blog_notify ? $this->generate_description( '', $home_id, '', true, false ) : $this->generate_description( '', $home_id, '', true, false );
+			$description_args = array(
+				'id' => $home_id,
+				'is_home' => true,
+				'get_custom_field' => true
+			);
+
+			$description_placeholder = $this->generate_description( $description_args );
 		}
 
 		/**
@@ -688,7 +694,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		 * the frompost description.
 		 * @since 2.3.4
 		 */
-		if ( empty( $home_description ) && ! $home_is_blog_notify && !empty( $frompost_description )  )
+		if ( empty( $home_description ) && ! $home_is_blog_notify && ! empty( $frompost_description )  )
 			$home_description_frompost = true;
 
 		/**
@@ -712,7 +718,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		if ( $home_description_frompost )
 			$description_from_post_message = __( 'Note:', 'autodescription' ) . ' ' . sprintf( __( 'The %s is fetched from the %s on the %s.', 'autodescription' ), $description_i18n, __( 'Page SEO Settings', 'autodescription' ), $home_page_i18n );
 
-		$desc_len_pre = !empty( $home_description ) ? $home_description : $description_placeholder;
+		$desc_len_pre = ! empty( $home_description ) ? $home_description : $description_placeholder;
 
 		/**
 		 * Convert to what Google outputs.

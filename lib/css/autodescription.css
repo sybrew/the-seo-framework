@@ -3,12 +3,29 @@
  * https://color.adobe.com/create/color-wheel/?base=2&rule=Custom&selected=1&name=Mijn%20Color-thema&mode=rgb&rgbvalues=0,0,0,1,0.6289566724811484,0.10577297701442445,0.04724043389094745,0.7647058823529411,0.2945255209368204,0,0.4806705005377058,0.8235294117647058,0.8666666666666667,0.2196078431372549,0.06666666666666667&swatchOrder=0,1,2,3,4
  */
 
+/**
+ * WooCommerce fix
+ */
+table.wp-list-table .column-name {
+	width: 15%;
+}
+
+table.wp-list-table .column-is_in_stock,
+table.wp-list-table .column-sku,
+table.wp-list-table .column-price {
+    width: 8%;
+}
+
 #ad_seo {
     width: 20%;
 }
 
 #autodescription-title-wrap {
     position: relative;
+    display: block;
+    padding: 0;
+    height: auto;
+    width: auto;
 }
 
 #autodescription-title-offset {
@@ -31,6 +48,9 @@
     box-sizing: content-box;
     top: 0;
     left: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 span.ad-count-bad {

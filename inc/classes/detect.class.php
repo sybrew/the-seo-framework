@@ -644,8 +644,10 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 */
 	public function get_the_real_ID( $use_cache = true ) {
 
+		$is_admin = is_admin();
+
 		//* Never use cache in admin. Only causes bugs.
-		$use_cache = is_admin() ? false : $use_cache;
+		$use_cache = $is_admin ? false : $use_cache;
 
 		if ( $use_cache ) {
 			static $id = null;
@@ -653,6 +655,38 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			if ( isset( $id ) )
 				return $id;
 		}
+
+		if ( ! $is_admin )
+			$id = $this->check_the_real_ID();
+
+		if ( ! isset( $id ) || empty( $id ) ) {
+			$id = get_queried_object_id();
+
+			if ( empty( $id ) )
+				$id = get_the_ID();
+		}
+
+		return $id;
+	}
+
+	/**
+	 * There's no need to check for inconsistent functions for the current ID.
+	 * Only works in front-end.
+	 *
+	 * @since 2.4.4
+	 *
+	 * @staticvar int $cached_id The cached ID.
+	 *
+	 * @return int|empty the ID.
+	 */
+	public function check_the_real_ID() {
+
+		static $cached_id = null;
+
+		if ( isset( $cached_id ) )
+			return $cached_id;
+
+		$id = '';
 
 		if ( function_exists( 'is_shop' ) && is_shop() ) {
 			//* WooCommerce Shop
@@ -663,14 +697,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 				$id = get_question_id();
 		}
 
-		if ( ! isset( $id ) || empty( $id ) ) {
-			$id = get_queried_object_id();
-
-			if ( empty( $id ) )
-				$id = get_the_ID();
-		}
-
-		return $id;
+		return $cached_id = $id;
 	}
 
 	/**

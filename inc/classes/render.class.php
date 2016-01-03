@@ -46,21 +46,21 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	 * Cache description in static variable
 	 * Must be called inside the loop
 	 *
-	 * @staticvar string $description_cache
+	 * @staticvar array $description_cache
 	 *
 	 * @since 2.2.2
 	 * @return string The description
 	 */
-	public function description_from_cache() {
+	public function description_from_cache( $social = false ) {
 
-		static $description_cache = null;
+		static $description_cache = array();
 
-		if ( isset( $description_cache ) )
-			return $description_cache;
+		if ( isset( $description_cache[$social] ) )
+			return $description_cache[$social];
 
-		$description_cache = $this->generate_description();
+		$description_cache[$social] = $this->generate_description( '', array( 'social' => $social ) );
 
-		return $description_cache;
+		return $description_cache[$social];
 	}
 
 	/**
@@ -96,7 +96,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	 *
 	 * @staticvar array $url_cache
 	 *
-	 * @since 2.2.2
+	 * @since 2.4.4
 	 * @return string The url
 	 */
 	public function the_home_url_from_cache( $force_slash = false ) {
@@ -214,7 +214,10 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		if ( empty( $description ) )
 			$description = $this->description_from_cache();
 
-		return '<meta name="description" content="' . esc_attr( $description ) . '" />' . "\r\n";
+		if ( ! empty( $description ) )
+			return '<meta name="description" content="' . esc_attr( $description ) . '" />' . "\r\n";
+
+		return '';
 	}
 
 	/**
@@ -242,7 +245,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		$description = (string) apply_filters( 'the_seo_framework_ogdescription_output', '' );
 
 		if ( empty( $description ) )
-			$description = $this->description_from_cache();
+			$description = $this->description_from_cache( true );
 
 		return '<meta property="og:description" content="' . esc_attr( $description ) . '" />' . "\r\n";
 	}
@@ -459,7 +462,6 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	/**
 	 * Render twitter:card
 	 *
-	 * @uses $this->generate_description()
 	 * @uses $this->has_og_plugin()
 	 *
 	 * @since 2.2.2
@@ -473,15 +475,11 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		$card = (string) apply_filters( 'the_seo_framework_twittercard_output', '' );
 
 		if ( empty( $card ) ) {
-			$card = $this->get_option( 'twitter_card' );
-
 			/**
 			 * Return card type if image is found
 			 * Return to summary if not
 			 */
-			if ( ! $this->get_image_from_cache() ) {
-				$card = 'summary';
-			}
+			$card = $this->get_image_from_cache() ? $this->get_option( 'twitter_card' ) : 'summary';
 		}
 
 		return '<meta name="twitter:card" content="' . esc_attr( $card ) . '" />' . "\r\n";
@@ -582,7 +580,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		$description = (string) apply_filters( 'the_seo_framework_twitterdescription_output', '' );
 
 		if ( empty( $description ) )
-			$description = $this->description_from_cache();
+			$description = $this->description_from_cache( true );
 
 		return '<meta name="twitter:description" content="' . esc_attr( $description ) . '" />' . "\r\n";
 	}

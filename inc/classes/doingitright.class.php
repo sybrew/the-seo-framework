@@ -55,8 +55,10 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 				$type = $id;
 				$slug = substr( $id, (int) 5 );
 
-				add_action( "manage_{$type}_columns", array( $this, 'add_column' ), 10, 1 );
-				add_action( "manage_{$slug}_custom_column", array( $this, 'seo_column' ), 10, 3 );
+				if ( $type !== 'post' && $type !== 'page' ) {
+					add_action( "manage_{$type}_columns", array( $this, 'add_column' ), 10, 1 );
+					add_action( "manage_{$slug}_custom_column", array( $this, 'seo_column' ), 10, 3 );
+				}
 
 				/**
 				 * Always load pages and posts.
@@ -163,7 +165,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 		// It's a bug in WP? I'll report.
 		// Reported: https://core.trac.wordpress.org/ticket/33521
-		if ( !empty( $tax_id ) || ! $type ) {
+		if ( ! empty( $tax_id ) || ! $type ) {
 			$column = $post_id;
 			$post_id = $tax_id;
 
@@ -207,7 +209,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			$post_id = $this->get_the_real_ID();
 
 		//* Only run when post ID is found.
-		if ( isset( $post_id ) && !empty( $post_id ) ) {
+		if ( isset( $post_id ) && ! empty( $post_id ) ) {
 
 			//* Fetch Post Type.
 			if ( empty( $type ) )
@@ -247,7 +249,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 				$term = get_term_by( 'id', $post_id, $type, OBJECT );
 
-				if ( !empty( $term ) && is_object( $term ) ) {
+				if ( ! empty( $term ) && is_object( $term ) ) {
 					$tax_type = $term->taxonomy;
 
 					/**
@@ -364,7 +366,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 					}
 
 					//* Fetch the title normally.
-					if ( $title_custom_field && !$is_front_page ) {
+					if ( $title_custom_field && ! $is_front_page ) {
 						//* Let's try not to fix the bloated function for now.
 						$blogname = get_bloginfo( 'name', 'raw' );
 
@@ -438,11 +440,14 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 				$description_custom_field = true;
 
-				if ( $desc_len == 0 ) {
+				//* Generate description if custom isn't found.
+				if ( 0 == $desc_len ) {
 					if ( ! $is_term ) {
-						$description = $this->generate_description();
+						$description_args = array( 'id' => $post_id, 'get_custom_field' => false );
+						$description = $this->generate_description( '', $description_args );
 					} else {
-						$description = $this->generate_description( '', $post_id, $type );
+						$description_args = array( 'id' => $post_id, 'taxonomy' => $type, 'get_custom_field' => false );
+						$description = $this->generate_description( '', $description_args );
 					}
 
 					//* Convert to what Google outputs. @since 2.3.4
@@ -523,9 +528,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 							$desc_value = ctype_upper( $desc_value ) ? $desc_value : ucfirst( $desc_value );
 
 							$desclen_notice .= sprintf( __( '%s is used %d times.', 'autodescription' ), '<span>' . $desc_value . '</span>', $desc_count );
-
-							if ( $words_count > 1 )
-								$desclen_notice .= '<br />'; // Yes, <br /> is used inside an attribute. Allowed.
+							$desclen_notice .= '<br />'; // Yes, <br /> is used inside an attribute. Allowed.
 						}
 					}
 				}

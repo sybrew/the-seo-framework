@@ -272,19 +272,21 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 
 		$cpt = array();
 
-		/**
-		 * @applies filters Array the_seo_framework_sitemap_exclude_cpt : Excludes these CPT
-		 * @since 2.4.4
-		 */
-		$excluded_cpt = (array) apply_filters( 'the_seo_framework_sitemap_exclude_cpt', array() );
-
 		if ( $total_cpt_posts ) {
 			$post_page = (array) get_post_types( array( 'public' => true ) );
+
+			/**
+			 * @applies filters Array the_seo_framework_sitemap_exclude_cpt : Excludes these CPT
+			 * @since 2.4.4
+			 */
+			$excluded_cpt = (array) apply_filters( 'the_seo_framework_sitemap_exclude_cpt', array() );
+
 			foreach ( $post_page as $post_type ) {
 				if ( $post_type != 'post' && $post_type != 'page' && $post_type != 'attachment' ) {
-					if ( $this->post_type_supports_custom_seo( $post_type ) ) {
-						if ( empty( $excluded_cpt ) || ! in_array( $post_type, $excluded_cpt ) )
+					if ( empty( $excluded_cpt ) || ! in_array( $post_type, $excluded_cpt ) ) {
+						if ( $this->post_type_supports_custom_seo( $post_type ) ) {
 							$cpt[] = $post_type;
+						}
 					}
 				}
 			}
@@ -620,14 +622,6 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			$pre = (string) apply_filters( 'the_seo_framework_robots_txt_pre', '' );
 			$pro = (string) apply_filters( 'the_seo_framework_robots_txt_pro', '' );
 
-			/**
-			 * @TODO use the_url_from_cache() ?
-			 *
-			 * @see https://architech.hostmijnpagina.nl/robots.txt
-			 * Will fix robots :D
-			 * @var_dump()
-			 * FOUND BUG: Mapped WordPress installations robots.txt will not be compatible. =/
-			 */
 			$home_url = $this->the_home_url_from_cache();
 			$parse_url = parse_url( $home_url );
 			$path = ! empty( $site_url['path'] ) ? $site_url['path'] : '';

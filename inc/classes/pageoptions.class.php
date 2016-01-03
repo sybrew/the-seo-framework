@@ -75,13 +75,18 @@ class AutoDescription_PageOptions extends AutoDescription_DoingItRight {
 		) );
 
 		foreach ( (array) $data as $key => $value ) {
-			//* Sanitize the title and description
-			if ( in_array( $key, array( '_genesis_title', '_genesis_description' ) ) ) {
+			//* Sanitize the title
+			if ( '_genesis_title' === $key ) {
 				$data[$key] = trim( strip_tags( $value ) );
 			}
 
+			//* Sanitize the description
+			if ( '_genesis_description' === $key ) {
+				$data[$key] = $this->s_description( $value );
+			}
+
 			//* Sanitize the URL. Make sure it's an absolute URL
-			if ( in_array( $key, array( 'redirect' ) ) ) {
+			if ( 'redirect' === $key ) {
 				$data[$key] = $this->s_redirect_url( $value );
 			}
 		}
@@ -148,11 +153,12 @@ class AutoDescription_PageOptions extends AutoDescription_DoingItRight {
 	}
 
 	/**
-	 * Add term meta data into options table. Couldn't merge with Genesis because of overlapping option tables.
+	 * Add term meta data into options table of the term.
+	 * Adds separated database options for terms, as the terms table doesn't allow for addition.
 	 *
-	 * We are forced to create its own term-meta data structure in the options table, since it is not support in core WP.
-	 *
-	 * Applies `the_seo_framework_term_meta_defaults`, `the_seo_framework_term_meta_{field}` and `the_seo_framework_term_meta` filters.
+	 * Applies filters array the_seo_framework_term_meta_defaults : Array of default term SEO options
+	 * Applies filters mixed the_seo_framework_term_meta_{field} : Override filter for specifics.
+	 * Applies filters array the_seo_framework_term_meta : Override output for term or taxonomy.
 	 *
 	 * @since 2.1.8
 	 *
@@ -187,13 +193,30 @@ class AutoDescription_PageOptions extends AutoDescription_DoingItRight {
 			'noindex'             => 0,
 			'nofollow'            => 0,
 			'noarchive'           => 0,
-			'saved_flag'          => 0, // Don't touch, used to prevent data conflict.
+			'saved_flag'          => 0, // Don't touch, used to prevent data conflict with Genesis.
 		) );
 
 		$term->admeta = wp_parse_args( $term_meta, $args );
 
 		//* Sanitize term meta
 		foreach ( $term->admeta as $field => $value ) {
+
+			/**
+			 * Trim and sanitize the title beforehand.
+			 * @since 2.4.4
+			 */
+			if ( 'doctitle' === $field ) {
+				$value = trim( strip_tags( $value ) );
+			}
+
+			/**
+			 * Trim and sanitize the description beforehand.
+			 * @since 2.4.4
+			 */
+			if ( 'description' === $field ) {
+				$value = $this->s_description( $value );
+			}
+
 			/**
 			 * New filter.
 			 * @since 2.3.0
