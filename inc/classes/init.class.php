@@ -313,7 +313,7 @@ class AutoDescription_Init {
 			 */
 			$generator = (string) apply_filters( 'the_seo_framework_generator_tag', '' );
 
-			if ( !empty( $generator ) )
+			if ( ! empty( $generator ) )
 				$generator = '<meta name="generator" content="' . esc_attr( $generator ) . '" />' . "\r\n";
 
 			$output = "\r\n" . $indicatorbefore . $robots . $before . $before_actions . $output . $after_actions . $after . $generator;
@@ -397,13 +397,14 @@ class AutoDescription_Init {
 	 *
 	 * @since 2.4.3
 	 *
-	 * @return void
+	 * @return bool true on set, false when disabled.
 	 */
 	public function object_cache_set( $key, $data, $expire = 0, $group = 'the_seo_framework' ) {
 
 		if ( $this->use_object_cache )
-			wp_cache_set( $key, $data, $group, $expire );
+			return wp_cache_set( $key, $data, $group, $expire );
 
+		return false;
 	}
 
 	/**

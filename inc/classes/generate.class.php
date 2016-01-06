@@ -124,7 +124,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				'id' 				=> $this->get_the_real_ID(),
 				'taxonomy'			=> '',
 				'is_home'			=> false,
-				'get_custom_field' 	=> false,
+				'get_custom_field' 	=> true,
 				'social' 			=> false,
 			);
 
@@ -182,9 +182,9 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		$description = '';
 		$page_for_posts = false;
 
-		if ( $args['is_home'] || is_front_page() || ( ! empty( $args['id'] ) && empty( $args['taxonomy'] ) && $args['id'] == get_option( 'page_on_front' ) ) ) {
+		if ( $args['is_home'] || is_front_page() || ( ! empty( $args['id'] ) && empty( $args['taxonomy'] ) && $this->is_static_frontpage( $args['id'] ) ) ) {
 			$custom_desc = $this->get_option( 'homepage_description' );
-			$description = $custom_desc ? $custom_desc : $description;
+			$description = ! empty( $custom_desc ) ? $custom_desc : $description;
 		}
 
 		if ( is_singular() && empty( $description ) ) {
@@ -3376,7 +3376,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 */
 	public function ld_json_breadcrumb_last( $item_type, $pos, $post_id ) {
 
-		// 2 holds mostly true for single term items. This shouldn't run anyway. Pos should always be provided.
+		// 2 (becomes 3) holds mostly true for single term items. This shouldn't run anyway. Pos should always be provided.
 		if ( ! isset( $pos ) )
 			$pos = '2';
 

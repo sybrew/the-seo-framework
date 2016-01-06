@@ -742,7 +742,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		 * @since 2.2.4
 		 */
 		if ( $noindex_post || $nofollow_post || $noarchive_post ) {
-			$checked_home = ' - <a href="' . admin_url( 'post.php?post=' . $home_id . '&action=edit#theseoframework-inpost-box' ) . '" target="_blank" class="attention" title="' . __( 'View Home Page Settings', 'autodescription' ) . '" >' . __( 'Checked in Page', 'autodescription' ) . '</a>';
+			$checked_home = ' - <a href="' . esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#theseoframework-inpost-box' ) ) . '" target="_blank" class="attention" title="' . __( 'View Home Page Settings', 'autodescription' ) . '" >' . __( 'Checked in Page', 'autodescription' ) . '</a>';
 		} else {
 			$checked_home = '';
 		}
