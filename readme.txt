@@ -277,7 +277,7 @@ Nope! Only premium extensions. These are being developed.
 
 This plugin is built to be an all-in-one SEO solution, so:
 
-No advertisements about the premium extensions will be placed within this plugin. 
+No advertisements about the premium extensions will be placed within this plugin.
 No features will be removed or replaced for premium-only features.
 The premium extensions will most likely only be used for big-business SEO. Which are very difficult to develop and which will confuse most users anyway.
 
@@ -356,7 +356,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 **Summarized:**
 
 * This is a massive update which makes The SEO Framework much easier to understand, with colorized counters, color vision deficiency support and many more changes.
-* The SEO Framework now has better support for people with color vision deficiency and has better support for robots to access and understand your website.
+* The SEO Framework now also has better support for robots to access and understand your website.
 * One way robots better understands your website is that Social (Auto-)Descriptions have received an overhaul since they abide to different standards, they may also be much longer!
 * The Robots.txt file output has been reworked and will now prevent notifications in Google Webmaster Tools.
 * WooCommerce has gained extra support with multiple Social Open Graph Product Images and front-end AnsPress question descriptions now reflect the admin side.
