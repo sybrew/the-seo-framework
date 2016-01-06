@@ -146,8 +146,8 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			'twitter_creator' 		=> '', 	// Twitter user @username
 
 			'og_tags' 				=> 1,	// Output of Open Graph meta tags
-			'facebook_tags'			=> 0, 	// Output the Facebook meta tags
-			'twitter_tags'			=> 0, 	// Output the Twitter meta tags
+			'facebook_tags'			=> 1, 	// Output the Facebook meta tags
+			'twitter_tags'			=> 1, 	// Output the Twitter meta tags
 
 			'google_verification'	=> '', 	// Google Verification Code
 			'bing_verification'		=> '', 	// Bing Verification Code

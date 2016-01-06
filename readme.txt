@@ -3,8 +3,8 @@ Contributors: Cybr
 Donate link: https://theseoframework.com/
 Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl
 Requires at least: 3.6.0
-Tested up to: 4.4.0
-Stable tag: 2.4.3.1
+Tested up to: 4.5.0
+Stable tag: 2.5.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -25,17 +25,18 @@ The SEO Framework makes sure your Website's SEO is always up-to-date without any
 > The Default Settings are recommended in the SEO Settings page. If you know what you're doing, go ahead and change them! Each option is also documented.
 
 = What this plugin does, in a few lines =
-* Automatically configures your SEO including the title, description, etc...
-* Allows you to adjust the SEO.
+* Automatically configures SEO for every page, post, taxonomy and term.
+* Allows you to adjust the SEO globally.
+* Allows you to adjust the SEO for every applicable page.
 * Shows you how to improve your SEO with a beautiful SEO bar for each supported Post, Page and Taxonomy.
-* Helps your pages get ranked distinctively through various Metatag techniques.
-* Helps your pages get shared more beautiful through e.g. Facebook and Twitter.
+* Helps your pages get ranked distinctively through various Metatag and scripting techniques.
+* Helps your pages get shared more beautiful through Facebook, Twitter and other social sites.
 * Allows plugin authors to easily extend this plugin.
 * Supports custom post types, like WooCommerce and bbPress.
 * Automatically upgrades itself from Genesis SEO.
-* Allows easy switch from other SEO plugins using a tool.
+* Allows for easy SEO plugin switch using a tool.
 
-*Read **Transferring SEO Content using SEO Data Transporter** below for transferring instructions.*
+*Read **Transferring SEO Content using SEO Data Transporter** below for SEO plugin transitioning instructions.*
 
 = Numbers don't lie =
 Optimizing SEO is a fundamental process for any website. So we try to be non-intrusive with The SEO Framework.
@@ -48,43 +49,40 @@ The SEO Framework is byte and process optimized on PHP level, with each update t
 * 100% fewer advertisements. Let's keep it that way.
 
 = Completely pluggable =
-The SEO Framework also features pluggable functions. All functions are working and can be called within the WordPress Loop.
+The SEO Framework also features pluggable functions. All functions are active and can be called within the WordPress Loop.
+This allows other developers to extend the plugin wherever needed.
 We have also provided an API documentation located at [The SEO Framework API Docs](http://theseoframework.com/docs/api/).
 
 = Still not convinced? Let's dive deeper =
 
 **This plugin automatically generates:**
 
-* Description
+* Description, with anti-spam techniques
 * Title, with super-fast 'wrong themes' support (so no buffer rewriting!)
-* og:image
-* og:locale
-* og:type
-* og:title
-* og:description
-* og:url
-* og:site_name
+* Various Open Graph tags
+* Special Open Graph description, which organically integrates with the Facebook and Twitter snippets.
+* Extended Open Graph Images support, including image manipulation.
 * Canonical, with full WPMUdev Domain Mapping and HTTPS support
-* LD+Json, extended search support for Google Search and Chrome
-* LD+Json, Knowledge Graph (partially)
-* LD+Json, Breadcrumbs
+* LD+Json script that adds extended search support for Google Search and Chrome
+* LD+Json script for Knowledge Graph (Personal/Business site relations, name and logo)
+* LD+Json Breadcrumbs script
 * Publishing and editing dates
 * Link relationships, with full WPMUdev Domain Mapping and HTTPS support
 * Various Facebook and Twitter Meta tags
-* And a Sitemap
+* Sitemap
 
 **This plugin allows you to manually set these values for each post, page and taxonomy:**
 
 * Title
 * Description
-* Canonical
+* Canonical URL
 * Robots (nofollow, noindex, noarchive)
-* Redirect, with Multisite spam filter
+* Redirect, with MultiSite spam filter
 * Local on-site search settings
 
 **This plugin allows you to adjust various site settings:**
 
-* Title Separator
+* Title and Description Separators
 * Title Additions Location
 * Auto Description Output
 * Robots for Archives
@@ -100,27 +98,23 @@ We have also provided an API documentation located at [The SEO Framework API Doc
 * Google Knowledge Graph
 * Sitemap
 * Robots.txt
-* Etc.
+* And much more
 
 **This plugin helps you to create better content, at a glance. By showing you:**
 
 * If the title is too long, too short and/or automatically generated.
 * If the description is too long, too short and/or automatically generated.
 * If the description uses some words too often.
-* If the pages are indexed.
 * If the page is indexed, redirected, followed and/or archived.
-* If your blog is public.
+* If your website is publicly accessible.
 
 **We call this The SEO Bar. Check out the [Screenshots](https://wordpress.org/plugins/autodescription/screenshots/#plugin-info) to see how it helps you!**
-**Screenshots are a little outdated and will be updated soon.**
 
 > This plugin is fully compatible with the [Domain Mapping plugin by WPMUdev](https://premium.wpmudev.org/project/domain-mapping/) and the [Domain Mapping plugin by Donncha](https://wordpress.org/plugins/wordpress-mu-domain-mapping/).<br />
 > This plugin is now also compatible with all kinds of custom post types.<br />
 > This will **prevent canonical errors**. This way your site will always be correctly indexed, no matter what you use!<br />
 >
 > This plugin is also completely ad-free and has a WordPress integrated clean layout. As per WordPress.org plugin guidelines and standards.
->
-> No initial configuration is needed. Either Network Activate this or use it on a single site.
 
 = Caching =
 
@@ -134,10 +128,10 @@ The output will be stored for each page, if you've edited a page the page output
 
 **Basics:**
 
-* Full internationalization support through WordPress.org. Dutch is maintained by the plugin author.
+* Full internationalization support through WordPress.org.
 * Extended Multibyte support (CJK).
-* Right to Left support.
-* Colorblind accessibility.
+* Full Right to Left (RTL) support.
+* Color deficiency accessibility.
 * Screen-reader accessibility.
 * Admin screen: Posts, Pages, Taxonomies, Terms, Custom Post Types.
 * Front-end: Every page, post, taxonomy, term, custom post type, search request, 404, etc.
@@ -155,25 +149,25 @@ The output will be stored for each page, if you've edited a page the page output
 * StudioPress SEO Data Transporter for Posts, Pages, Taxonomies and Terms.
 * WPML, URL's, sitemap and per-page/post SEO settings. (The full and automated compatibility is being discussed with WPML.)
 * qTranslate X, URL's, limited sitemap and per-page/post SEO settings (through shortcodes by set by qTranslate X).
-* Most popular SEO plugins, let's not get in each other's way.
 * Jetpack modules: Custom Content Types (Testimonials, Portfolio), Infinite Scroll, Photon.
-* Many, many others, yet to confirm.
+* Most popular SEO plugins, let's not get in each other's way.
+* Many, many other plugins, yet to confirm.
 
 **Themes:**
 
 * All themes.
-* Genesis & Genesis SEO. This plugin takes all Post, Page, Category and Tag SEO values from Genesis and uses them within The SEO Framework Options. The easiest upgrade!
+* Special extended support Genesis & Genesis SEO. This plugin takes all Post, Page, Category and Tag SEO values from Genesis and uses them within The SEO Framework Options. The easiest upgrade!
 
 **Caches:**
 
 * Opcode (optimized)
-* Page
+* Staticvar
 * Object for database calls
-* Transients for often used
-* CDN for images
+* Transients for process intensive operations
+* CDN for Open Graph and Twitter images
 
 If you have other popular SEO plugins activated, this plugin will automatically prevent SEO mistakes by deactivating itself on almost every part.
-It will however output robots metadata and og:image, among various other things which are bound to social media.
+It will however output robots metadata, LD+Json and og:image, among various other meta data which are bound to social media.
 
 = Transferring SEO data using SEO Data Transporter =
 
@@ -195,17 +189,15 @@ Because this plugin was initially written to extend the Genesis SEO, it uses the
 
 = Other notes =
 
-**This plugin copies data from the Genesis SEO Meta, this means that when you use Genesis, you can easily upgrade to this plugin without editing each page!**
+*Genesis SEO will be disabled upon activating this plugin. This plugin takes over and extends Genesis SEO.*
 
-*Genesis SEO will be disabled upon activating this plugin. The new SEO Settings page adds extended SEO support.*
+***The Automatic Description Generation will work with any installation, but it will exclude shortcodes. This means that if you use shortcodes or a page builder, be sure to enter your custom description or the description will fall short.***
 
-***The Automatic Description Generation will work with any installation. But it will exclude shortcodes. This means that if you use shortcodes or a page builder, be sure to enter your custom description or the description will fall short in length.***
-
-***The home page tagline settings don't have any effect on the title output if your theme's title output is not written according to the WordPress standards, which luckily are enforced strongly on new WordPress.org themes since recently.***
+***The home page tagline settings won't have any effect on the title output if your theme's title output is not written according to the WordPress standards, which luckily are enforced strongly on new WordPress.org themes since recently.***
 
 > <strong>Check out the "[Other Notes](https://wordpress.org/plugins/autodescription/other_notes/#Other-Notes)" tab for the API documentation.</strong>
 
-*I'm aware that radio buttons lose their input when you drag the metaboxes around. This issue will be fixed in WordPress 4.5.0 according to the milestones.*
+*I'm aware that radio buttons lose their input when you drag the metaboxes around. This issue is fixed since WordPress 4.5.0 (alpha and later).*
 *But not to worry: Your previous value will be returned on save. So it's like nothing happened.*
 
 == Installation ==
@@ -213,6 +205,7 @@ Because this plugin was initially written to extend the Genesis SEO, it uses the
 1. Install The SEO Framework either via the WordPress.org plugin directory, or by uploading the files to your server.
 1. Either Network Activate this plugin or activate it on a single site.
 1. That's it!
+
 1. Let the plugin automatically work or fine-tune each page with the metaboxes beneath the content or on the taxonomy pages.
 1. Adjust the SEO settings through the SEO settings page if desired. Red checkboxes are rather left unchecked. Green checkboxes are default enabled.
 
@@ -380,7 +373,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 
 **For everyone:**
 
-* Added: All WooCommerce Product Images from the gallery are now also added with multiple `og:image` meta tags (with dupe detection and automatic resizing if needed). Now users can now scroll through your item images when shared on social sites (when supported by the Social Site)!
+* Added: All WooCommerce Product Images from the gallery are now also added with multiple `og:image` meta tags (with dupe detection and automatic resizing if needed). Now users can now scroll through and select your item images before sharing on social sites (when supported by the Social Site)!
 * Added: Colorized character counters! These subtle colors now let you know you're Doing it Right instantly without going back to the SEO Bar.
 * Added: Custom Title now shows the possible additions to deliver a more expected experience. This also takes the Custom HomePage tagline into account. This only works on the following conditions:
  * 1. HomePage Title: If Document Title Additions Location is set to "Left". When using RTL languages, it should be "Right".
@@ -388,6 +381,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Added: Removed line breaks from manual descriptions on save.
 * Added: Static caching for the current page in LD+json breadcrumbs to improve generation time.
 * Added: The Custom Home Page Title placeholder now reflects changes made throughout the settings Metabox.
+* Changed: Global Twitter and Facebook tags output are now enabled by default, this change will only affect new installations or on settings reset.
 * Changed: Robots.txt now allows for query args by default instead of blocking them.
 * Changed: Disabled OG Meta tags output when Add Meta Tags is active.
 * Changed: Color changes to the SEO Bar to fully support all vision deficiency spectra. This also makes the SEO bar more vibrant and easier on your eyes.
@@ -403,13 +397,13 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Improved: Breadcrumb generation time.
 * Improved: Cache key generation time.
 * Improved: Overal plugin speed, again :).
-* Fixed: SEO Column bar was registered for load on Post and Page edit screens, even if it wasn't visibles.
+* Fixed: SEO Column bar was registered for load on Post and Page edit screens, even if it wasn't visible.
 * Fixed: WooCommerce admin page product overview layout was messed up on smaller (tablet to 15") screens by the addition of The SEO Bar. It now all mostly fits. Further optimization is left in the hands of WooCommerce.
 * Fixed: Bug with AnsPress where not all page descriptions are fetched correctly on the front-end. Because of the bugfix, the description cache will be flushed upon update. The cache will clean itself up within 7 days automatically.
 * Fixed: WooCommerce main shop page took the title of the latest product.
 * Fixed: Inconsistent cache key for WooCommerce shop page.
-* Fixed: Robots.txt sitemap wasn't pointed to correctly on Subdirectory Multisite installations.
-* Fixed: Robots.txt sitemap wasn't pointed to correctly with mapped domains on Multisite sites.
+* Fixed: Robots.txt sitemap wasn't pointed to correctly on Subdirectory MultiSite installations.
+* Fixed: Robots.txt sitemap wasn't pointed to correctly with mapped domains on MultiSite sites.
 * Fixed: Bug for Home Title in the breadcrumbs when the homepage is a page. Because of the bugfix, the LD+Json cache will be flushed upon update. The cache will clean itself up within 7 days automatically.
 * Fixed: Cache naming bug in taxonomy and terms admin pages displaying the front page description.
 * Removed: /wp-includes/ blocking through robots.txt, this was accidentally added a long time ago and the removal should resolve issues with Google Webmaster Tools.
@@ -423,7 +417,6 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Added: New function `AutoDescription_Sanitize::s_description()`. Removes spaces and breaks from the description and created a clean flowing single line. Sanitizes as well.
 * Added: New filters.
 * Added: Generation time output on the URL and Description when debugging is activated.
-* Added: Removal of all `wp_title` filters prior to execution to reduce theme load. This is done at `init` priority `1`.
 * Added: Removal of all `pre_get_document_title` filters prior to execution to reduce theme load. This is done at `init` priority `1`.
 * Changed: `pre_get_document_title` filter priority is now `10`, was `99` for easier manipulation. This is run at `init` priority `1`.
 * Changed: Rewritter `AutoDescription_Generate::generate_description_from_id()` as it was previously built upon bugfixes and chance.

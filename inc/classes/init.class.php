@@ -78,7 +78,7 @@ class AutoDescription_Init {
 
 		/**
 		 * Disables the title tag manipulation on old themes.
-		 * @applies filters the_seo_framework_manipulate_title
+		 * Applies filters the_seo_framework_manipulate_title
 		 *
 		 * Genesis SEO is disabled through this plugin, so to prevent empty
 		 * titles this filter will not work when using Genesis.
@@ -86,8 +86,6 @@ class AutoDescription_Init {
 		 * @since 2.4.1
 		 */
 		if ( $genesis || (bool) apply_filters( 'the_seo_framework_manipulate_title', true ) ) {
-			//* Removes all pre_get_document_title filters.
-			remove_all_filters( 'wp_title', false );
 			//* Override WordPress Title
 			add_filter( 'wp_title', array( $this, 'title_from_cache' ), 9, 3 );
 		}
