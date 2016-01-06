@@ -75,9 +75,9 @@ th:last-of-type#ad_seo {
 
 span.ad-seo {
     display: block;
-    background-color: #F1F1F1;
-    width: 85%;
-    max-width: 300px;
+    background-color: #f1f1f1;
+    width: 95%;
+    max-width: 260px;
     border-radius: 30px;
     padding: 3px;
 }
