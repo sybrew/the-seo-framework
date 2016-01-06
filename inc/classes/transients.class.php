@@ -84,7 +84,11 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	public function setup_transient_names() {
 		global $blog_id;
 
-		//* Manually change revision. Hexadecimal.
+		/**
+		 * When the caching mechanism changes. Change this value.
+		 *
+		 * Use hex. e.g. 0, 1, 2, 9, a, b
+		 */
 		$revision = '2';
 
 		$this->sitemap_transient = 'the_seo_framework_sitemap_' . (string) $revision . '_' . (string) $blog_id;
@@ -109,7 +113,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		 *
 		 * @since 2.3.4
 		 */
-		$revision = '2';
+		$revision = '3';
 
 		/**
 		 * Two different cache keys for two different settings.

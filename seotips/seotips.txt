@@ -71,4 +71,4 @@
 
 * Images are a great way to attract visitors. Not only will it make your site more lively, visitors will know right away what the subject is about or related to.
 * Images are also required for Posts to adhere to the article standard set by Google for generating better Rich Snippets to be shown in the Search Engine Results Page (SERP).
-* Force yourself and your team to improve the SEO of your site by using the [Require Featured Image](https://wordpress.org/plugins/require-featured-image/) plugin by David Hayes.
+* Force yourself and your team to improve the SEO of your site by using the Require Featured Image plugin by David Hayes.

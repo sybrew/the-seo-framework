@@ -362,7 +362,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 
 * This is a massive update which makes The SEO Framework much easier to understand, with colorized counters, color deficiency support and many more changes.
 * The SEO Framework now has better support for people with color vision deficiency and has better support for robots to access and understand your website.
-* One way robots better understands your website is that Social (Auto-)Descriptions have recieved an overhaul since they abide to different standards, they may also be much longer!
+* One way robots better understands your website is that Social (Auto-)Descriptions have received an overhaul since they abide to different standards, they may also be much longer!
 * The Robots.txt file output has been reworked and will now prevent notifications in Google Webmaster Tools.
 * WooCommerce has gained extra support with multiple Social Open Graph Product Images and front-end AnsPress question descriptions now reflect the admin side.
 * Accessibility and understanding of how this plugin handles titles has been improved when adding custom titles.
@@ -374,20 +374,20 @@ Transporting Terms and Taxonomies data currently isn't supported.
 
 **SEO Tip of the Update:**
 
-* Images are a great way to attract visitors. Not only will it make your site more lively, visitors will know right away what the subject is about or related to.
+* Images are a great way to attract visitors. Not only will it make your site livelier, visitors will know instantly what the subject is about or related to.
 * Images are also required for Posts to adhere to the article standard set by Google for generating better Rich Snippets to be shown in the Search Engine Results Page (SERP).
 * Force yourself and your team to improve the SEO of your site by using the [Require Featured Image](https://wordpress.org/plugins/require-featured-image/) plugin by David Hayes.
 
 **For everyone:**
-/
+
 * Added: All WooCommerce Product Images from the gallery are now also added with multiple `og:image` meta tags (with dupe detection and automatic resizing if needed). Now users can now scroll through your item images when shared on social sites (when supported by the Social Site)!
-* Added: Colorized character counters! These subtle colors now let you know you're doing it right right away without going back to the SEO Bar.
+* Added: Colorized character counters! These subtle colors now let you know you're Doing it Right instantly without going back to the SEO Bar.
 * Added: Custom Title now shows the possible additions to deliver a more expected experience. This also takes the Custom HomePage tagline into account. This only works on the following conditions:
  * 1. HomePage Title: If Document Title Additions Location is set to "Left". When using RTL languages, it should be "Right".
  * 2. All other Titles: If Document Title Additions Location is set to "Right". When using RTL languages, it should be "Left".
 * Added: Removed line breaks from manual descriptions on save.
-* Added: Static caching for the current page in ld+json breadcrumbs to improve generation time.
-* Added: The Custom Home Page Title placeholder now reflects changes made throughout the settings metabox.
+* Added: Static caching for the current page in LD+json breadcrumbs to improve generation time.
+* Added: The Custom Home Page Title placeholder now reflects changes made throughout the settings Metabox.
 * Changed: Robots.txt now allows for query args by default instead of blocking them.
 * Changed: Disabled OG Meta tags output when Add Meta Tags is active.
 * Changed: Color changes to the SEO Bar to fully support all vision deficiency spectra. This also makes the SEO bar more vibrant and easier on your eyes.
@@ -395,10 +395,10 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Improved: The Breadcrumb home URL now also considers the Domain Mapping domains instead of only the current domain.
 * Improved: Multiple consecutive empty paragraph entries no longer generate equivalent spaces in the automated description.
 * Improved: The Home Page Slogan now alters the Custom Home Page Title dynamically.
-* Improved: OG and Twitter Auto Generated description Meta tags now don't contain the title and blogname for a more organic social experience.
+* Improved: OG and Twitter Auto Generated description Meta tags now don't contain the Title and Blogname for a more organic social experience.
 * Improved: OG and Twitter Auto Generated description meta tags are now up to 200 characters long.
 * Improved: Hover messages from the SEO Bar are now aligned to the left so they're easier to read.
-* Improved: Hover messages from the SEO Bar now contain an extra break when duplicated words highlighted.
+* Improved: Hover messages from the SEO Bar now contain an extra line break when duplicated words are highlighted.
 * Improved: The hover message balloon arrow now can't overflow over the balloon's corners.
 * Improved: Breadcrumb generation time.
 * Improved: Cache key generation time.
@@ -416,7 +416,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Removed: Dutch Translation Files as they're maintained now through WordPress.org.
 
 **For developers:**
-/
+
 * Added: New function `AutoDescription_Render::the_home_url_from_cache( $force_slash )`.
 * Added: New function `AutoDescription_Generate::parse_og_image( $image_id, $args )`, parses image to a maximum of 1500px width or height based on biggest factor and saves it if not yet parsed, returns the URL of the parsed image.
 * Added: New function `AutoDescription_Render::get_the_real_ID()`. Fetches the real ID for all pages, posts, terms, taxonomies and CPT, including WooCommerce and AnsPress.
@@ -430,16 +430,12 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Changed: Default WordPress robots.txt is now completely overwritten to maintain compatibility.
 * Changed: `AutoDescription_Generate::generate_description()` function parameters have now been put into an arguments array. This array is passed onto the following functions as well: `AutoDescription_Generate::description_from_custom_field()` and `AutoDescription_Generate::generate_description_from_id()`
 * Changed: `the_seo_framework_robots_allow_queries` filter became `the_seo_framework_robots_disallow_queries`.
-* Improved: Default arguments for the title, url and image are now auto-correcting when called to incorrectly in some scenarios. Keep an eye out on the error log if you're using the parsers directly.
+* Improved: Default arguments for the Title, URL and Image are now auto-correcting when called to incorrectly in some scenarios. Keep an eye out on the error log if you're using the parsers directly.
 * Improved: Debug constants have been pushed in public class variables, effectively reducing plugin run time.
 * Fixed: `AutoDescription_Generate::get_separator()` didn't listen to the escape parameter because of the cache. This function has been reworked for better caching.
 * Removed: `$args['post_id']` argument from the title functions as it was unused. Use `$args['term_id']` instead.
 * Removed: 2nd argument ($tt_id) from `AutoDescription_Generate::generate_excerpt()`. Use the first argument ($post_id) instead.
 * Cleaned up code.
-
-/** NOTE CACHED ITEMS CHANGE **
-/ TODO Should look at error log consistently before pushing tag.
-/ TODO test separator changes throughout the plugin interface and frontend
 
 = 2.4.3.1 - Naming Things =
 
