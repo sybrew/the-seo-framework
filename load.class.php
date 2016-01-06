@@ -104,10 +104,29 @@ require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.class.php'
 class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 
 	/**
+	 * Cached debug constants. Initialized on plugins_loaded.
+	 *
+	 * @since 2.2.9
+	 *
+	 * @var bool The SEO Framework Debug is defined.
+	 */
+	public $the_seo_framework_debug = false;
+	public $the_seo_framework_debug_more = false;
+	public $the_seo_framework_debug_hidden = false;
+
+	/**
 	 * Constructor, load parent constructor
 	 */
 	public function __construct() {
 		parent::__construct();
+
+		$this->the_seo_framework_debug = defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ? true : $this->the_seo_framework_debug;
+
+		if ( $this->the_seo_framework_debug ) {
+			//* No need to set these to true if no debugging is enabled.
+			$this->the_seo_framework_debug_more = defined( 'THE_SEO_FRAMEWORK_DEBUG_MORE' ) && THE_SEO_FRAMEWORK_DEBUG_MORE ? true : $this->the_seo_framework_debug_more;
+			$this->the_seo_framework_debug_hidden = defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN ? true : $this->the_seo_framework_debug_hidden;
+		}
 	}
 
 	/**

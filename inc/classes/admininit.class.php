@@ -43,7 +43,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		add_filter( 'genesis_detect_seo_plugins', array( $this, 'no_more_genesis_seo' ), 10 );
 
 		/**
-		 * @since 2.4.4
+		 * @since 2.5.0
 		 * Doesn't work. ePanel filters are buggy and inconsistent.
 		 */
 		// add_filter( 'epanel_page_maintabs', array( $this, 'no_more_elegant_seo' ), 10, 1 );
@@ -130,7 +130,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	/**
 	 * Removes ePanel (Elegant Themes) SEO options.
 	 *
-	 * @since 2.4.4
+	 * @since 2.5.0
 	 */
 	public function no_more_elegant_seo( $modules = array() ) {
 
@@ -196,9 +196,9 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		 * @since 2.4.1
 		 *
 		 * Listens to debug constant.
-		 * @since 2.4.4
+		 * @since 2.5.0
 		 */
-		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG )
+		if ( $this->the_seo_framework_debug )
 			add_action( 'admin_footer', function() { global $current_screen; ?><div style="float:right;margin:3em;padding:1em;border:1px solid;background:#fff;color:#000;"><?php foreach( $current_screen as $screen ) echo "<p>$screen</p>"; ?></div><?php } );
 
 		$args = array();
@@ -316,10 +316,12 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 
 		$tagline = $this->get_option( 'homepage_tagline' ) ? true : false;
 		$home_tagline = $this->get_option( 'homepage_title_tagline' );
+		$title_location = $this->get_option( 'title_location' );
 
 		$separator = $this->get_separator( 'title', true );
 
-		$rtl = is_rtl() ? '1' : '0';
+		$rtl = is_rtl() ? true : false;
+		$ishome = false;
 
 		/**
 		 * We're gaining UX in exchange for resource usage.
@@ -334,6 +336,9 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 
 			if ( $this->is_static_frontpage( $post_id ) ) {
 				$title = $blog_name;
+				$title_location = $this->get_option( 'home_title_location' );
+				$ishome = true;
+
 				if ( $tagline ) {
 					$additions = $home_tagline ? $home_tagline : $description;
 				} else {
@@ -371,7 +376,9 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 			'blogDescription' => $description,
 			'titleTagline' 	=> $tagline,
 			'titleSeparator' => $separator,
+			'titleLocation' => $title_location,
 			'isRTL' => $rtl,
+			'isHome' => $ishome,
 		);
 
 		wp_localize_script( 'autodescription-js', 'autodescriptionL10n', $strings );
@@ -594,15 +601,15 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 */
 	public function echo_debug_information( $values ) {
 
-		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
+		if ( $this->the_seo_framework_debug ) {
 			echo "\r\n";
 
-			if ( ! defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) || defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && ! THE_SEO_FRAMEWORK_DEBUG_HIDDEN ) {
+			if ( ! $this->the_seo_framework_debug_hidden ) {
 				echo "<br>\r\n";
 				echo '<span class="code highlight">';
 			}
 
-			if ( !isset( $values ) ) {
+			if ( ! isset( $values ) ) {
 				echo $this->debug_value_wrapper( "Debug message: Value isn't set." ) . "\r\n";
 				return;
 			}
@@ -679,7 +686,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 				echo $this->debug_value_wrapper( $values );
 			}
 
-			if ( ! defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) || defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && ! THE_SEO_FRAMEWORK_DEBUG_HIDDEN ) {
+			if ( ! $this->the_seo_framework_debug_hidden ) {
 				echo '</span>';
 			}
 			echo "\r\n";
@@ -697,9 +704,9 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 * @return string
 	 */
 	public function debug_key_wrapper( $key ) {
-		if ( ! defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) || defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && ! THE_SEO_FRAMEWORK_DEBUG_HIDDEN ) {
+		if ( ! $this->the_seo_framework_debug_hidden )
 			return '<font color="chucknorris">' . esc_attr( (string) $key ) . '</font>';
-		}
+
 		return esc_attr( (string) $key );
 	}
 
@@ -713,9 +720,9 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 * @return string
 	 */
 	public function debug_value_wrapper( $value ) {
-		if ( ! defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) || defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && ! THE_SEO_FRAMEWORK_DEBUG_HIDDEN ) {
+		if ( ! $this->the_seo_framework_debug_hidden )
 			return '<span class="wp-ui-notification">' . esc_attr( (string) $value ) . '</span>';
-		}
+
 		return esc_attr( (string) $value );
 	}
 

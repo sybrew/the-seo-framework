@@ -55,11 +55,11 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		/**
 		 * Parse args.
-		 * @since 2.4.4
+		 * @since 2.5.0
 		 */
 		if ( ! is_array( $args ) ) {
 			//* Old style parameters are used. Doing it wrong.
-			_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', $this->the_seo_framework_version( '2.4.4' ) );
+			_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', $this->the_seo_framework_version( '2.5.0' ) );
 			$args = $default_args;
 		} else if ( ! empty( $args ) ) {
 			$args = $this->parse_description_args( $args, $default_args );
@@ -76,10 +76,10 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 			$description = $custom_desc['description'];
 			$page_for_posts = $custom_desc['page_for_posts'];
-		}
 
-		//* We've already checked the custom fields, so let's remove the check in the generation.
-		$args['get_custom_field'] = ! $args['get_custom_field'];
+			//* We've already checked the custom fields, so let's remove the check in the generation.
+			$args['get_custom_field'] = false;
+		}
 
 		//* Still no description found? Create an auto description based on content.
 		if ( empty( $description ) || ! is_string( $description ) )
@@ -113,7 +113,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 * 		@param bool $social Generate Social Description when true.
 	 * }
 	 *
-	 * @since 2.4.4
+	 * @since 2.5.0
 	 * @return array $args parsed args.
 	 */
 	public function parse_description_args( $args = array(), $defaults = array(), $get_defaults = false ) {
@@ -128,7 +128,6 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				'social' 			=> false,
 			);
 
-			//* @since 2.4.4
 			$defaults = (array) apply_filters( 'the_seo_framework_description_args', $defaults, $args );
 		}
 
@@ -168,11 +167,11 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		/**
 		 * Parse args.
-		 * @since 2.4.4
+		 * @since 2.5.0
 		 */
 		if ( ! is_array( $args ) ) {
 			//* Old style parameters are used. Doing it wrong.
-			_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', $this->the_seo_framework_version( '2.4.4' ) );
+			_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', $this->the_seo_framework_version( '2.5.0' ) );
 			$args = $default_args;
 		} else if ( ! empty( $args ) ) {
 			$args = $this->parse_description_args( $args, $default_args );
@@ -285,7 +284,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		/**
 		 * Applies filters bool 'the_seo_framework_enable_auto_description' : Enable or disable the description.
 		 *
-		 * @since 2.4.4
+		 * @since 2.5.0
 		 */
 		$autodescription = (bool) apply_filters( 'the_seo_framework_enable_auto_description', true );
 
@@ -296,11 +295,11 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		/**
 		 * Parse args.
-		 * @since 2.4.4
+		 * @since 2.5.0
 		 */
 		if ( ! is_array( $args ) ) {
 			//* Old style parameters are used. Doing it wrong.
-			_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', $this->the_seo_framework_version( '2.4.4' ) );
+			_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', $this->the_seo_framework_version( '2.5.0' ) );
 			$args = $default_args;
 		} else if ( ! empty( $args ) ) {
 			$args = $this->parse_description_args( $args, $default_args );
@@ -312,20 +311,20 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * Debug parameters.
 		 * @since 2.3.4
 		 */
-		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
-			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+		if ( $this->the_seo_framework_debug ) {
+			if ( $this->the_seo_framework_debug_hidden )
 				echo "<!--\r\n";
 
 			echo "\r\n" . 'START: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
 
 			$timer_start = microtime( true );
 
-			if ( defined( 'THE_SEO_FRAMEWORK_DEBUG_MORE' ) && THE_SEO_FRAMEWORK_DEBUG_MORE ) {
+			if ( $this->the_seo_framework_debug_more ) {
 				$this->echo_debug_information( array( 'args' => $args ) );
 				$this->echo_debug_information( array( 'page_for_posts' => $page_for_posts ) );
 			}
 
-			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+			if ( $this->the_seo_framework_debug_hidden )
 				echo "\r\n-->";
 		}
 
@@ -348,7 +347,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			global $wp_query;
 
 			$term = $wp_query->get_queried_object();
-			$args['taxonomy'] = $term->taxonomy;
+			$args['taxonomy'] = isset( $term->taxonomy ) ? $term->taxonomy : '';
 		}
 
 		/**
@@ -357,7 +356,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 *
 		 * @since 2.3.4
 		 */
-		if ( $args['get_custom_field'] && ( $args['is_home'] || is_front_page() ) ) {
+		if ( $args['get_custom_field'] && ( $args['is_home'] || $this->is_static_frontpage( $args['id'] ) || is_front_page() ) ) {
 			$custom_desc = $this->get_option( 'homepage_description' );
 			$description = $custom_desc ? $custom_desc : null;
 
@@ -369,14 +368,14 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		/**
 		 * We're on the home page now. So let's create something special.
 		 */
-		if ( $args['id'] === false || is_front_page() || $args['is_home'] )
+		if ( false === $args['id'] || $args['is_home'] || $this->is_static_frontpage( $args['id'] ) || is_front_page() )
 			$page_on_front = true;
 
 		if ( ! $page_on_front ) {
 			/**
 			 * No need to parse these when generating social description.
 			 *
-			 * @since 2.4.4
+			 * @since 2.5.0
 			 */
 			if ( $page_for_posts ) {
 				/**
@@ -417,11 +416,10 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * @since 2.2.8
 		 */
 		$title = empty( $title ) ? __( 'Untitled', 'autodescription' ) : $title;
+		$on = _x( 'on', 'Placement. e.g. Post Title "on" Blog Name', 'autodescription' );
+		$blogname = get_bloginfo( 'name', 'raw' );
 
 		$description_additions = $this->get_option( 'description_blogname' );
-
-		$blogname = get_bloginfo( 'name', 'raw' );
-		$on = _x( 'on', 'Placement. e.g. Post Title "on" Blog Name', 'autodescription' );
 
 		/**
 		 * Now uses options.
@@ -431,7 +429,6 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * @since 2.3.9
 		 */
 		$sep = (string) apply_filters( 'the_seo_framework_description_separator', $this->get_separator( 'description' ) );
-
 
 		/**
 		 * Setup transient.
@@ -486,15 +483,17 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * Check for Social description, don't add blogname then.
 		 * Also continues normally if it's the front page.
 		 *
-		 * @since 2.4.4
+		 * @since 2.5.0
 		 */
 		if ( $args['social'] && ! $page_on_front ) {
 			$description = $excerpt['social'];
 		} else {
-			if ( ! empty( $excerpt['social'] ) && $description_additions ) {
-				$description = (string) sprintf( '%s %s %s %s %s', $title, $on, $blogname, $sep, $excerpt['social'] );
-			} else if ( ! empty( $excerpt['social'] ) ) {
-				$description = (string) sprintf( '%s %s %s', $title, $sep, $excerpt['social'] );
+			$excerpt_exists = ! empty( $excerpt['normal'] ) ? true : false;
+
+			if ( $excerpt_exists && $description_additions ) {
+				$description = (string) sprintf( '%s %s %s %s %s', $title, $on, $blogname, $sep, $excerpt['normal'] );
+			} else if ( $excerpt_exists ) {
+				$description = (string) sprintf( '%s %s %s', $title, $sep, $excerpt['normal'] );
 			} else {
 				//* We still add the additions when no excerpt has been found.
 				// i.e. home page.
@@ -514,18 +513,19 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * Debug cache key and output.
 		 * @since 2.3.4
 		 */
-		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
+		if ( $this->the_seo_framework_debug ) {
 
-			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+			if ( $this->the_seo_framework_debug_hidden )
 				echo "<!--\r\n";
 
 			$this->echo_debug_information( array( 'description excerpt cache key' => $this->auto_description_transient ) );
-			$this->echo_debug_information( array( 'description excerpt output' => $description ) );
+			$this->echo_debug_information( array( 'description output' => $description ) );
+			$this->echo_debug_information( array( 'description output social' => $excerpt['social'] ) );
 			$this->echo_debug_information( array( 'Generation time' => number_format( microtime(true) - $timer_start, 5 ) . 's' ) );
 
 			echo "\r\n<br>\r\n" . 'END: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n<br><br>";
 
-			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+			if ( $this->the_seo_framework_debug_hidden )
 				echo "\r\n-->";
 		}
 
@@ -652,21 +652,21 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * Debug parameters.
 		 * @since 2.3.4
 		 */
-		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
+		if ( $this->the_seo_framework_debug ) {
 
-			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+			if ( $this->the_seo_framework_debug_hidden )
 				echo "<!--\r\n";
 
 			echo  "\r\n" . 'START: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
 
-			if ( defined( 'THE_SEO_FRAMEWORK_DEBUG_MORE' ) && THE_SEO_FRAMEWORK_DEBUG_MORE ) {
+			if ( $this->the_seo_framework_debug_more ) {
 				$this->echo_debug_information( array( 'title' => $title ) );
 				$this->echo_debug_information( array( 'sep' => $sep ) );
 				$this->echo_debug_information( array( 'seplocation' => $seplocation ) );
 				$this->echo_debug_information( array( 'args' => $args ) );
 			}
 
-			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+			if ( $this->the_seo_framework_debug_hidden )
 				echo "\r\n-->";
 		}
 
@@ -770,7 +770,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				'is_front_page'		=> false
 			);
 
-			//* @since 2.4.4
+			//* @since 2.5.0
 			$defaults = (array) apply_filters( 'the_seo_framework_title_args', $defaults, $args );
 		}
 
@@ -1042,14 +1042,14 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * Debug output.
 		 * @since 2.3.4
 		 */
-		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
-			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+		if ( $this->the_seo_framework_debug ) {
+			if ( $this->the_seo_framework_debug_hidden )
 				echo "<!--\r\n";
 
 			$this->echo_debug_information( array( 'title output' => $title ) );
 			echo "\r\n<br>\r\n" . 'END: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n<br><br>";
 
-			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+			if ( $this->the_seo_framework_debug_hidden )
 				echo "\r\n-->";
 		}
 
@@ -1228,16 +1228,16 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * Debug output.
 		 * @since 2.3.4
 		 */
-		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
+		if ( $this->the_seo_framework_debug ) {
 
-			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+			if ( $this->the_seo_framework_debug_hidden )
 				echo "<!--\r\n";
 
 			$this->echo_debug_information( array( 'is static frontpage' => $this->is_static_frontpage( $this->get_the_real_ID() ) ) );
 			$this->echo_debug_information( array( 'title output' => $title ) );
 			echo "\r\n<br>\r\n" . 'END: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n<br><br>";
 
-			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+			if ( $this->the_seo_framework_debug_hidden )
 				echo "\r\n-->";
 		}
 
@@ -1597,21 +1597,21 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * Debug parameters.
 		 * @since 2.4.2
 		 */
-		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
-			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+		if ( $this->the_seo_framework_debug ) {
+			if ( $this->the_seo_framework_debug_hidden )
 				echo "<!--\r\n";
 
 			echo  "\r\n" . 'START: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
 			$this->echo_debug_information( array( 'input url' => $url ) );
 
-			if ( defined( 'THE_SEO_FRAMEWORK_DEBUG_MORE' ) && THE_SEO_FRAMEWORK_DEBUG_MORE ) {
+			if ( $this->the_seo_framework_debug_more ) {
 				$this->echo_debug_information( array( 'page_id' => $page_id ) );
 				$this->echo_debug_information( array( 'args' => $args ) );
 			}
 
 			$timer_start = microtime( true );
 
-			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+			if ( $this->the_seo_framework_debug_hidden )
 				echo "\r\n-->";
 		}
 
@@ -1791,21 +1791,21 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * Debug parameters.
 		 * @since 2.4.2
 		 */
-		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
+		if ( $this->the_seo_framework_debug ) {
 
-			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+			if ( $this->the_seo_framework_debug_hidden )
 				echo "<!--\r\n";
 
 			$this->echo_debug_information( array( 'output' => $output ) );
 
-			if ( defined( 'THE_SEO_FRAMEWORK_DEBUG_MORE' ) && THE_SEO_FRAMEWORK_DEBUG_MORE ) {
+			if ( $this->the_seo_framework_debug_more ) {
 				$this->echo_debug_information( array( 'page_id' => $page_id ) );
 				$this->echo_debug_information( array( 'args' => $args ) );
 			}
 			$this->echo_debug_information( array( 'Generation time' => number_format( microtime(true) - $timer_start, 5 ) . 's' ) );
 			echo  "\r\n" . 'END: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
 
-			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+			if ( $this->the_seo_framework_debug_hidden )
 				echo "\r\n-->";
 		}
 
@@ -1848,7 +1848,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				'forceslash'		=> false
 			);
 
-			//* @since 2.4.4
+			//* @since 2.5.0
 			$defaults = (array) apply_filters( 'the_seo_framework_url_args', $defaults, $args );
 		}
 
@@ -2323,11 +2323,11 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		/**
 		 * Parse args.
-		 * @since 2.4.4
+		 * @since 2.5.0
 		 */
 		if ( ! is_array( $args ) ) {
 			//* Old style parameters are used. Doing it wrong.
-			_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', $this->the_seo_framework_version( '2.4.4' ) );
+			_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', $this->the_seo_framework_version( '2.5.0' ) );
 			$args = $default_args;
 		} else if ( ! empty( $args ) ) {
 			$args = $this->parse_image_args( $args, $default_args );
@@ -2337,7 +2337,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		/**
 		 * Backwards compat with parse args
-		 * @since 2.4.4
+		 * @since 2.5.0
 		 */
 		if ( ! isset( $args['post_id'] ) )
 			$args['post_id'] = $post_id;
@@ -2387,7 +2387,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 * }
 	 * The image set in the filter will always be used as fallback
 	 *
-	 * @since 2.4.4
+	 * @since 2.5.0
 	 * @return array $args parsed args.
 	 */
 	public function parse_image_args( $args = array(), $defaults = array(), $get_defaults = false ) {
@@ -2403,6 +2403,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				'frontpage'	=> true,
 			);
 
+			//* @since 2.0.1
 			$defaults = (array) apply_filters( 'the_seo_framework_og_image_args', $defaults, $args );
 		}
 
@@ -2455,7 +2456,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 *
 	 * @param array $args Image arguments.
 	 *
-	 * @since 2.4.4
+	 * @since 2.5.0
 	 *
 	 * @return array The image URL's.
 	 */
@@ -2487,7 +2488,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 * @param int $id The attachment ID.
 	 * @param array $args The image args
 	 *
-	 * @since 2.4.4
+	 * @since 2.5.0
 	 *
 	 * @return string|empty Parsed image url or empty if already called
 	 */
@@ -3039,7 +3040,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			if ( $i >= (int) 2 ) {
 				//* Fix adding pagination url.
 
-				$urlfromcache = $this->the_url_from_cache( '', '', '', $from_option );
+				$urlfromcache = $this->the_url_from_cache( '', $post_id, false, $from_option );
 
 				// Calculate current page number.
 				$int_current = 'next' == $pos ? $i -1 : $i + 1;
@@ -3056,7 +3057,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 						$urlfromcache = substr_replace( $urlfromcache, '/', $last_occurence, strlen( '/' . $string_current . '/' ) );
 				}
 			} else {
-				$urlfromcache = $this->the_url_from_cache( '', '', '', $from_option );
+				$urlfromcache = $this->the_url_from_cache( '', $post_id, false, $from_option );
 			}
 
 			if ( '' == get_option( 'permalink_structure' ) || in_array( $post->post_status, array( 'draft', 'pending' ) ) ) {
@@ -3564,17 +3565,17 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 * @param bool $escape Escape the separator.
 	 *
 	 * @staticvar array $sepcache The separator cache.
-	 * @staticvar array $sepcache_type The escaped separator cache.
+	 * @staticvar array $sep_esc The escaped separator cache.
 	 *
 	 * @since 2.3.9
 	 */
 	public function get_separator( $type = 'title', $escape = false ) {
 
 		static $sepcache = array();
-		static $sepcache_type = array();
+		static $sep_esc = array();
 
-		if ( isset( $sepcache_type[$escape] ) )
-			return $sepcache_type[$escape];
+		if ( isset( $sep_esc[$type][$escape] ) )
+			return $sep_esc[$type][$escape];
 
 		if ( ! isset( $sepcache[$type] ) ) {
 			if ( 'title' == $type ) {
@@ -3599,9 +3600,9 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		}
 
 		if ( $escape ) {
-			return $sepcache_type[$escape] = esc_html( $sepcache[$type] );
+			return $sep_esc[$type][$escape] = esc_html( $sepcache[$type] );
 		} else {
-			return $sepcache_type[$escape] = $sepcache[$type];
+			return $sep_esc[$type][$escape] = $sepcache[$type];
 		}
 	}
 

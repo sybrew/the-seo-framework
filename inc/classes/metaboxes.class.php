@@ -603,14 +603,14 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		 * Reworked. Creates placeholders for when it's being emptied.
 		 * @since 2.3.4
 		 */
-		if ( !empty( $frompost_title ) ) {
+		if ( ! empty( $frompost_title ) ) {
 			//* Fetch frompost title.
 			if ( $this->get_option( 'homepage_tagline' ) ) {
 				$home_title_placeholder = $frompost_title . " $sep " . $blog_description;
 			} else {
 				$home_title_placeholder = $frompost_title;
 			}
-		} else if ( !empty( $home_title ) && empty( $frompost_title ) ) {
+		} else if ( ! empty( $home_title ) ) {
 			//* Fetch default title
 			$blogname = get_bloginfo( 'name', 'raw' );
 
@@ -639,29 +639,25 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		/**
 		 * Generate example for Title Additions Location
 		 *
-		 * Double check.
+		 * Double (nested) check.
 		 * @param string $frompost_title The possible title from the post.
 		 */
-		$title_example_pre = !empty( $home_title ) ? $home_title : $frompost_title;
-		$title_example = !empty( $title_example_pre ) ? $title_example_pre : get_bloginfo( 'name', 'display' );
+		$title_example_pre = ! empty( $home_title ) ? $home_title : $frompost_title;
+		$title_example = ! empty( $title_example_pre ) ? $title_example_pre : get_bloginfo( 'name', 'display' );
 
 		/**
 		 * Check for options to calculate title length.
 		 *
 		 * @since 2.3.4
 		 */
-		if ( $this->get_option( 'homepage_tagline' ) && !empty( $home_title ) ) {
-			$tit_len_pre = $home_title . " $sep " . $blog_description;
-		} else if ( $this->get_option( 'homepage_tagline' ) && empty( $home_title ) ) {
-			$tit_len_pre = $home_title_placeholder;
-		} else if ( ! $this->get_option( 'homepage_tagline' ) && !empty( $home_title ) ) {
-			$tit_len_pre = $home_title;
-		} else if ( ! $this->get_option( 'homepage_tagline' ) && empty( $home_title ) ) {
-			$tit_len_pre = $home_title_placeholder; // dupe?
-		} else if ( $home_title_frompost ) {
-			$tit_len_pre = $home_title_placeholder;
+		if ( ! empty( $home_title ) ) {
+			if ( $this->get_option( 'homepage_tagline' ) ) {
+				$tit_len_pre = $home_title . " $sep " . $blog_description;
+			} else {
+				$tit_len_pre = $home_title;
+			}
 		} else {
-			$tit_len_pre = $home_title;
+			$tit_len_pre = $home_title_placeholder;
 		}
 
 		//* Fetch the description from the home page.
@@ -683,10 +679,10 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 			$description_args = array(
 				'id' => $home_id,
 				'is_home' => true,
-				'get_custom_field' => true
+				'get_custom_field' => false
 			);
 
-			$description_placeholder = $this->generate_description( $description_args );
+			$description_placeholder = $this->generate_description( '', $description_args );
 		}
 
 		/**

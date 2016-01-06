@@ -203,19 +203,17 @@ class AutoDescription_PageOptions extends AutoDescription_DoingItRight {
 
 			/**
 			 * Trim and sanitize the title beforehand.
-			 * @since 2.4.4
+			 * @since 2.5.0
 			 */
-			if ( 'doctitle' === $field ) {
+			if ( 'doctitle' === $field )
 				$value = trim( strip_tags( $value ) );
-			}
 
 			/**
 			 * Trim and sanitize the description beforehand.
-			 * @since 2.4.4
+			 * @since 2.5.0
 			 */
-			if ( 'description' === $field ) {
+			if ( 'description' === $field )
 				$value = $this->s_description( $value );
-			}
 
 			/**
 			 * New filter.

@@ -96,7 +96,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	 *
 	 * @staticvar array $url_cache
 	 *
-	 * @since 2.4.4
+	 * @since 2.5.0
 	 * @return string The url
 	 */
 	public function the_home_url_from_cache( $force_slash = false ) {
@@ -846,15 +846,15 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		 * Debug transient key.
 		 * @since 2.4.2
 		 */
-		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
-			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+		if ( $this->the_seo_framework_debug ) {
+			if ( $this->the_seo_framework_debug_hidden )
 				echo "<!--\r\n";
 
 			echo  "\r\n" . 'START: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
 			$this->echo_debug_information( array( 'LD Json transient name' => $this->ld_json_transient ) );
 			$this->echo_debug_information( array( 'Output from transient' => ( get_transient( $this->ld_json_transient ) ? true : false ) ) );
 
-			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+			if ( $this->the_seo_framework_debug_hidden )
 				echo "\r\n-->";
 		}
 
@@ -902,17 +902,17 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		 * Debug output.
 		 * @since 2.4.2
 		 */
-		if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
+		if ( $this->the_seo_framework_debug ) {
 
-			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+			if ( $this->the_seo_framework_debug_hidden )
 				echo "<!--\r\n";
 
-			if ( defined( 'THE_SEO_FRAMEWORK_DEBUG_MORE' ) && THE_SEO_FRAMEWORK_DEBUG_MORE ) {
+			if ( $this->the_seo_framework_debug_hidden ) {
 				$this->echo_debug_information( array( 'LD Json transient output' => $output ) );
 			}
 			echo  "\r\n" . 'END: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
 
-			if ( defined ( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN )
+			if ( $this->the_seo_framework_debug_hidden )
 				echo "\r\n-->";
 		}
 

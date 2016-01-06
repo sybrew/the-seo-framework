@@ -406,6 +406,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		$language = $this->google_language();
 
 		$post_id = $this->get_the_real_ID();
+		$is_static_frontpage = $this->is_static_frontpage( $post_id );
 		$title = $this->get_custom_field( '_genesis_title', $post_id );
 
 		$page_on_front_option = get_option( 'page_on_front' );
@@ -421,7 +422,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		 * Generate description for Posts Page if selected in customizer.
 		 * @since 2.2.8
 		 */
-		if ( $post_id == $page_on_front_option && 'page' == get_option( 'show_on_front' ) ) {
+		if ( $is_static_frontpage ) {
 			//* Front page.
 			$generated_doctitle_args = array(
 				'page_on_front' => true,
@@ -432,7 +433,8 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 
 			$generated_description_args = array(
 				'id' => $post_id,
-				'is_home' => true
+				'is_home' => true,
+				'get_custom_field' => true,
 			);
 
 			$generated_doctitle = $this->title( '', '', '', $generated_doctitle_args );
@@ -447,7 +449,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 
 			$generated_description_args = array(
 				'id' => $post_id,
-				'page_for_posts' => true
+				'page_for_posts' => true,
 			);
 
 			$generated_doctitle = $this->title( '', '', '', $generated_doctitle_args );
@@ -460,7 +462,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 			);
 
 			$generated_description_args = array(
-				'id' => $post_id
+				'id' => $post_id,
 			);
 
 			$generated_doctitle = $this->title( '', '', '', $generated_doctitle_args );
@@ -472,9 +474,9 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		 *
 		 * @since 2.3.4
 		 */
-		if ( $post_id == $page_on_front_option && ! $this->get_option( 'homepage_tagline' ) ) {
+		if ( $is_static_frontpage && ! $this->get_option( 'homepage_tagline' ) ) {
 			$tit_len_pre = ! empty( $title ) ? $title : $generated_doctitle;
-		} else if ( $post_id == get_option( 'page_on_front' ) ) {
+		} else if ( $is_static_frontpage ) {
 			$tit_len_pre = !empty( $title ) ? $title . " | " . get_bloginfo( 'description', 'raw' ) : $generated_doctitle;
 		} else {
 			/**
@@ -502,11 +504,11 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		 * Reworked.
 		 * @since 2.3.4
 		 */
-		if ( $post_id == $page_on_front_option && 'page' == get_option( 'show_on_front' ) ) {
+		if ( $is_static_frontpage ) {
 			//* The homepage description takes precedence.
 			$homepage_description = $this->get_option( 'homepage_description' );
 
-			if ( !empty( $description ) ) {
+			if ( ! empty( $description ) ) {
 				$desc_len_pre = ! empty( $homepage_description ) ? $homepage_description : $description;
 			} else {
 				$desc_len_pre = ! empty( $homepage_description ) ? $homepage_description : $generated_description;

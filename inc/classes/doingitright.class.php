@@ -35,10 +35,13 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		parent::__construct();
 
 		add_action( 'current_screen', array( $this, 'init_columns' ) );
+		add_action( 'wp_ajax_current_screen', array( $this, 'init_columns' ) );
 	}
 
 	/**
 	 * Initializes columns
+	 *
+	 * Applies filter the_seo_framework_show_seo_column : Show the SEO column in edit.php
 	 *
 	 * @param array $support_admin_pages the supported admin pages
 	 *
@@ -46,16 +49,26 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	 */
 	public function init_columns() {
 
-		if ( $this->post_type_supports_custom_seo() ) {
+		/**
+		 * New filter.
+		 * @since 2.3.0
+		 *
+		 * Removed previous filter.
+		 * @since 2.3.5
+		 */
+		$show_seo_column = (bool) apply_filters( 'the_seo_framework_show_seo_column', true );
+
+		if ( $show_seo_column && $this->post_type_supports_custom_seo() ) {
 			global $current_screen;
 
 			$id = isset( $current_screen->id ) ? $current_screen->id : '';
 
 			if ( ! empty( $id ) ) {
+
 				$type = $id;
 				$slug = substr( $id, (int) 5 );
 
-				if ( $type !== 'post' && $type !== 'page' ) {
+				if ( 'post' !== $type && 'page' !== $type ) {
 					add_action( "manage_{$type}_columns", array( $this, 'add_column' ), 10, 1 );
 					add_action( "manage_{$slug}_custom_column", array( $this, 'seo_column' ), 10, 3 );
 				}
@@ -77,8 +90,6 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	/**
 	 * Adds SEO column on edit.php
 	 *
-	 * Applies filter the_seo_framework_show_seo_column : Show the SEO column in edit.php
-	 *
 	 * @param $offset 	determines where the column should be placed. Prefered before comments, then data, then tags.
 	 *					If neither found, it will add the column to the end.
 	 *
@@ -86,18 +97,6 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	 * @return array $columns the column data
 	 */
 	public function add_column( $columns ) {
-
-		/**
-		 * New filter.
-		 * @since 2.3.0
-		 *
-		 * Removed previous filter.
-		 * @since 2.3.5
-		 */
-		$show_seo_column = (bool) apply_filters( 'the_seo_framework_show_seo_column', true );
-
-		if ( ! $show_seo_column )
-			return $columns;
 
 		$seocolumn = array( 'ad_seo' => 'SEO' );
 
@@ -107,27 +106,27 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		$offset = array_search( 'comments', $column_keys );
 
 		// Try Count (posts) on taxonomies
-		if ( empty( $offset ) )
+		if ( false === $offset )
 			$offset = array_search( 'posts', $column_keys );
 
 		// Try date
-		if ( empty( $offset ) )
+		if ( false === $offset )
 			$offset = array_search( 'date', $column_keys );
 
 		// Try tags
-		if ( empty( $offset ) )
+		if ( false === $offset )
 			$offset = array_search( 'tags', $column_keys );
 
 		// Try bbPress Topic Freshness
-		if ( empty( $offset ) )
+		if ( false === $offset )
 			$offset = array_search( 'bbp_topic_freshness', $column_keys );
 
 		// Try bbPress Forum Freshness
-		if ( empty( $offset ) )
+		if ( false === $offset )
 			$offset = array_search( 'bbp_forum_freshness', $column_keys );
 
 		// I tried but found nothing
-		if ( empty( $offset ) ) {
+		if ( false === $offset ) {
 			//* Add SEO bar at the end of columns.
 			$columns = array_merge( $columns, $seocolumn );
 		} else {
@@ -165,7 +164,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 		// It's a bug in WP? I'll report.
 		// Reported: https://core.trac.wordpress.org/ticket/33521
-		if ( ! empty( $tax_id ) || ! $type ) {
+		if ( ! $type || ! empty( $tax_id ) ) {
 			$column = $post_id;
 			$post_id = $tax_id;
 
@@ -175,7 +174,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 				$type = $screen->taxonomy;
 		}
 
-		if ( $column == 'ad_seo' )
+		if ( 'ad_seo' === $column )
 			$status = $this->post_status( $post_id, $type, true );
 
 		echo $status;
@@ -410,7 +409,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 					$noarchive = isset( $term->admeta['noarchive'] ) ? $term->admeta['noarchive'] : '';
 
 					//* Genesis data fetch
-					if ( !$flag && isset( $term->meta ) ) {
+					if ( ! $flag && isset( $term->meta ) ) {
 						if ( empty( $title ) && isset( $term->meta['doctitle'] ) )
 							$title = $term->meta['doctitle'];
 

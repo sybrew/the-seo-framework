@@ -277,7 +277,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 
 			/**
 			 * @applies filters Array the_seo_framework_sitemap_exclude_cpt : Excludes these CPT
-			 * @since 2.4.4
+			 * @since 2.5.0
 			 */
 			$excluded_cpt = (array) apply_filters( 'the_seo_framework_sitemap_exclude_cpt', array() );
 
@@ -292,7 +292,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			}
 		}
 
-		if ( $total_cpt_posts && !empty( $cpt ) ) {
+		if ( $total_cpt_posts && ! empty( $cpt ) ) {
 			//* Descend by the date for CPTs. The latest posts get to the top of the list after pages.
 			$args = array(
 				'numberposts' => $total_cpt_posts,
@@ -618,6 +618,8 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			 * Apply filters the_seo_framework_robots_txt_pre & the_seo_framework_robots_txt_pro
 			 * 		: Add custom cacheable lines.
 			 *		: Don't forget to add line breaks ( "\r\n" | PHP_EOL )
+			 *
+			 * @since 2.5.0
 			 */
 			$pre = (string) apply_filters( 'the_seo_framework_robots_txt_pre', '' );
 			$pro = (string) apply_filters( 'the_seo_framework_robots_txt_pro', '' );
@@ -636,10 +638,10 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			 * Prevents query indexing
 			 * @since 2.2.9
 			 *
-			 * Applies filters the_seo_framework_robots_allow_queries : Wether to allow queries for robots.
-			 * @since 2.4.3
+			 * Applies filters the_seo_framework_robots_disallow_queries : Wether to allow queries for robots.
+			 * @since 2.5.0
 			 */
-			if ( ! (bool) apply_filters( 'the_seo_framework_robots_allow_queries', false ) )
+			if ( (bool) apply_filters( 'the_seo_framework_robots_disallow_queries', false ) )
 				$output .= "Disallow: $path/*?*\r\n";
 
 			$output .= $pro;
@@ -656,8 +658,8 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		}
 
 		/**
-		 * Override robots with output.
-		 * @since 2.4.4
+		 * Completely override robots with output.
+		 * @since 2.5.0
 		 */
 		$robots_txt = $output;
 

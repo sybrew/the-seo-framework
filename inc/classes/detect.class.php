@@ -640,7 +640,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 *
 	 * @staticvar int $id the ID.
 	 *
-	 * @since 2.4.4
+	 * @since 2.5.0
 	 */
 	public function get_the_real_ID( $use_cache = true ) {
 
@@ -670,10 +670,14 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	}
 
 	/**
-	 * There's no need to check for inconsistent functions for the current ID.
-	 * Only works in front-end.
+	 * Get the real ID from plugins.
 	 *
-	 * @since 2.4.4
+	 * Only works in front-end as there's no need to check for inconsistent
+	 * functions for the current ID in the admin.
+	 *
+	 * @since 2.5.0
+	 *
+	 * Applies filters the_seo_framework_real_id : The Real ID for plugins on front-end.
 	 *
 	 * @staticvar int $cached_id The cached ID.
 	 *
@@ -697,7 +701,9 @@ class AutoDescription_Detect extends AutoDescription_Render {
 				$id = get_question_id();
 		}
 
-		return $cached_id = $id;
+		$cached_id = (int) apply_filters( 'the_seo_framework_real_id', $id );
+
+		return $cached_id;
 	}
 
 	/**

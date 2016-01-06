@@ -455,7 +455,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	/**
 	 * Returns a one-line sanitized description
 	 *
-	 * @since 2.4.4
+	 * @since 2.5.0
 	 *
 	 * @param string $new_value The Description
 	 * @return string One line sanitized description.
