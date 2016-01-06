@@ -297,9 +297,8 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 * @usedby enqueue_javascript
 	 *
 	 * @param string|array|object $hook the current page
-	 * @param array|object $term the current term
 	 *
-	 * @todo Optimize this
+	 * @todo Optimize this, check hook if supported by SEO?
 	 */
 	public function enqueue_admin_javascript( $hook ) {
 

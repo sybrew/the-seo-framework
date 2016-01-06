@@ -131,7 +131,7 @@ The output will be stored for each page, if you've edited a page the page output
 * Full internationalization support through WordPress.org.
 * Extended Multibyte support (CJK).
 * Full Right to Left (RTL) support.
-* Color deficiency accessibility.
+* Color vision deficiency accessibility.
 * Screen-reader accessibility.
 * Admin screen: Posts, Pages, Taxonomies, Terms, Custom Post Types.
 * Front-end: Every page, post, taxonomy, term, custom post type, search request, 404, etc.
@@ -210,11 +210,13 @@ Because this plugin was initially written to extend the Genesis SEO, it uses the
 1. Adjust the SEO settings through the SEO settings page if desired. Red checkboxes are rather left unchecked. Green checkboxes are default enabled.
 
 == Screenshots ==
-1. This plugin shows you what you can improve, at a glance. Try to aim for all green!
-2. Hover over any of the SEO bar's color to see how you can improve the page's SEO.
-3. The Post/Page SEO settings box. This box is also neatly implemented in Categories and Tags. (Aim for 145 to 155 characters, screenshot is outdated.)
-4. The SEO settings page Title Settings. Also shows you a glance of the Robots Meta Settings.
-5. The SEO settings page Home Page Settings.
+
+**Screenshots as of The SEO Framework version 2.5.0**
+
+1. This plugin shows you what you can improve, at a glance. With full color vision deficiency support.
+2. Hover over any of the SEO Bar's items to see how you can improve the page's SEO. Red is bad, orange is okay, green is good. Blue is situational.
+3. The dynamic Post/Page SEO settings Metabox. This box is also neatly implemented in Categories and Tags.
+4. The SEO Settings Page. With over 70 settings, you are in full control. The Default Settings and filling in the Knowledge Graph Settings is recommended.
 
 == Frequently Asked Questions ==
 
@@ -353,7 +355,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 
 **Summarized:**
 
-* This is a massive update which makes The SEO Framework much easier to understand, with colorized counters, color deficiency support and many more changes.
+* This is a massive update which makes The SEO Framework much easier to understand, with colorized counters, color vision deficiency support and many more changes.
 * The SEO Framework now has better support for people with color vision deficiency and has better support for robots to access and understand your website.
 * One way robots better understands your website is that Social (Auto-)Descriptions have received an overhaul since they abide to different standards, they may also be much longer!
 * The Robots.txt file output has been reworked and will now prevent notifications in Google Webmaster Tools.
@@ -382,6 +384,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Added: Static caching for the current page in LD+json breadcrumbs to improve generation time.
 * Added: The Custom Home Page Title placeholder now reflects changes made throughout the settings Metabox.
 * Changed: Global Twitter and Facebook tags output are now enabled by default, this change will only affect new installations or on settings reset.
+* Changed: Default Title location settings are switched when an RTL language is active, this change will only affect new installations or on settings reset.
 * Changed: Robots.txt now allows for query args by default instead of blocking them.
 * Changed: Disabled OG Meta tags output when Add Meta Tags is active.
 * Changed: Color changes to the SEO Bar to fully support all vision deficiency spectra. This also makes the SEO bar more vibrant and easier on your eyes.
@@ -391,7 +394,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Improved: The Home Page Slogan now alters the Custom Home Page Title dynamically.
 * Improved: OG and Twitter Auto Generated description Meta tags now don't contain the Title and Blogname for a more organic social experience.
 * Improved: OG and Twitter Auto Generated description meta tags are now up to 200 characters long.
-* Improved: Hover messages from the SEO Bar are now aligned to the left so they're easier to read.
+* Improved: Hover messages from the SEO Bar are now aligned to the left so they're easier to read. When using RTL languages, it's aligned ot the right.
 * Improved: Hover messages from the SEO Bar now contain an extra line break when duplicated words are highlighted.
 * Improved: The hover message balloon arrow now can't overflow over the balloon's corners.
 * Improved: Breadcrumb generation time.
@@ -423,11 +426,12 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Changed: Default WordPress robots.txt is now completely overwritten to maintain compatibility.
 * Changed: `AutoDescription_Generate::generate_description()` function parameters have now been put into an arguments array. This array is passed onto the following functions as well: `AutoDescription_Generate::description_from_custom_field()` and `AutoDescription_Generate::generate_description_from_id()`
 * Changed: `the_seo_framework_robots_allow_queries` filter became `the_seo_framework_robots_disallow_queries`.
+* Changed: Default and warned settings are now initialized at `after_theme_setup, 0` rather than `plugins_loaded, 5` to support RTL early.
 * Improved: Default arguments for the Title, URL and Image are now auto-correcting when called to incorrectly in some scenarios. Keep an eye out on the error log if you're using the parsers directly.
 * Improved: Debug constants have been pushed in public class variables, effectively reducing plugin run time.
 * Fixed: `AutoDescription_Generate::get_separator()` didn't listen to the escape parameter because of the cache. This function has been reworked for better caching.
 * Removed: `$args['post_id']` argument from the title functions as it was unused. Use `$args['term_id']` instead.
-* Removed: 2nd argument ($tt_id) from `AutoDescription_Generate::generate_excerpt()`. Use the first argument ($post_id) instead.
+* Removed: 2nd argument ($tt_id) from `AutoDescription_Generate::generate_excerpt()`. Use the first argument ($post_id) instead, this induces a parameter switch.
 * Cleaned up code.
 
 = 2.4.3.1 - Naming Things =

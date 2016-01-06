@@ -67,8 +67,45 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	public function __construct() {
 		parent::__construct();
 
+		//* Register defaults early.
+		add_action( 'after_setup_theme', array( $this, 'initialize_defaults' ), 0 );
+
+		$this->settings_field = THE_SEO_FRAMEWORK_SITE_OPTIONS;
+
+		//* Set up site settings and save/reset them
+		add_action( 'admin_init', array( $this, 'register_settings' ) );
+
+		// The page_id
+		$this->page_id = 'autodescription-settings';
+
 		/**
-		 * Default site settings. Seperated from Author, page or network settings.
+		 * Add plugin links to the plugin activation page.
+		 * @since 2.2.8
+		 */
+		add_filter( 'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, array( $this, 'plugin_action_links' ), 10, 2 );
+	}
+
+	/**
+	 * Initializes default settings very early at the after_setup_theme hook
+	 * Therefore supports is_rtl().
+	 *
+	 * @since 2.5.0
+	 */
+	public function initialize_defaults() {
+		/**
+		 * Switch when RTL is active;
+		 * @since 2.5.0
+		 */
+		if ( is_rtl() ) {
+			$titleloc = 'left';
+			$h_titleloc = 'right';
+		} else {
+			$titleloc = 'right';
+			$h_titleloc = 'left';
+		}
+
+		/**
+		 * Default site settings. Separated from Author, page or network settings.
 		 *
 		 * These settings can be overwritten per page or post depending on type and setting.
 		 *
@@ -79,7 +116,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 		 */
 		$this->default_site_options = array(
 			'title_seperator'		=> 'pipe',	// Title separator (note: TYPO)
-			'title_location'		=> 'right',	// Title seperation location
+			'title_location'		=> $titleloc,	// Title separation location
 
 			'description_separator'	=> 'pipe',	// Description separator
 			'description_blogname'	=> 1, 		// "on Blogname" within Description
@@ -121,7 +158,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			'homepage_tagline'		=> 1,	// Home Page add blog Tagline
 			'homepage_description'	=> '',	// Home Page Description string
 			'homepage_title_tagline' => '',	// Home Page Tagline string
-			'home_title_location'	=> 'left',	// Title seperation location
+			'home_title_location'	=> $h_titleloc,	// Title separation location
 
 			'shortlink_tag'			=> 0,	// Adds shortlink tag
 
@@ -257,20 +294,6 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			'ping_bing'				=> 0,	// Ping Bing
 			'ping_yahoo'			=> 0,	// Ping Yahoo
 		);
-
-		$this->settings_field = THE_SEO_FRAMEWORK_SITE_OPTIONS;
-
-		//* Set up site settings and save/reset them
-		add_action( 'admin_init', array( $this, 'register_settings' ) );
-
-		// The page_id
-		$this->page_id = 'autodescription-settings';
-
-		/**
-		 * Add plugin links to the plugin activation page.
-		 * @since 2.2.8
-		 */
-		add_filter( 'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, array( $this, 'plugin_action_links' ), 10, 2 );
 	}
 
 	/**
