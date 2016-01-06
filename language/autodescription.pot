@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the The SEO Framework package.
 msgid ""
 msgstr ""
-"Project-Id-Version: The SEO Framework 2.4.3.1\n"
+"Project-Id-Version: The SEO Framework 2.5.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/autodescription\n"
-"POT-Creation-Date: 2016-01-06 04:01:32+00:00\n"
+"POT-Creation-Date: 2016-01-06 13:05:26+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -16,15 +16,15 @@ msgstr ""
 msgid "No Search"
 msgstr ""
 
-#: inc/classes/admininit.class.php:372
+#: inc/classes/admininit.class.php:371
 msgid "The changes you made will be lost if you navigate away from this page."
 msgstr ""
 
-#: inc/classes/admininit.class.php:373
+#: inc/classes/admininit.class.php:372
 msgid "Are you sure you want to reset all SEO settings to their defaults?"
 msgstr ""
 
-#: inc/classes/admininit.class.php:563
+#: inc/classes/admininit.class.php:562
 msgctxt "e.g. en for English, nl for Dutch, fi for Finish, de for German"
 msgid "en"
 msgstr ""
@@ -49,7 +49,7 @@ msgstr ""
 msgid "Error saving settings."
 msgstr ""
 
-#: inc/classes/adminpages.class.php:142 inc/classes/siteoptions.class.php:523
+#: inc/classes/adminpages.class.php:142 inc/classes/siteoptions.class.php:546
 msgid "SEO Settings"
 msgstr ""
 
@@ -1163,7 +1163,7 @@ msgstr ""
 msgid "Notify %s about sitemap changes?"
 msgstr ""
 
-#: inc/classes/siteoptions.class.php:524
+#: inc/classes/siteoptions.class.php:547
 msgctxt "As in: The Plugin Home Page"
 msgid "Plugin Home"
 msgstr ""

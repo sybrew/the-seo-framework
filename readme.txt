@@ -277,9 +277,9 @@ Nope! Only premium extensions. These are being developed.
 
 This plugin is built to be an all-in-one SEO solution, so:
 
-* No advertisements about the premium extensions will be placed within this plugin.
-* No features will be removed or replaced for premium-only features.
-* The premium extensions will most likely only be used for big-business SEO. Which are very difficult to develop and which will confuse most users anyway.
+No advertisements about the premium extensions will be placed within this plugin. 
+No features will be removed or replaced for premium-only features.
+The premium extensions will most likely only be used for big-business SEO. Which are very difficult to develop and which will confuse most users anyway.
 
 = I've heard about an extension manager, what's that? =
 
@@ -369,7 +369,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 
 **SEO Tip of the Update:**
 
-* Images are a great way to attract visitors. Not only will it make your site livelier, visitors will know instantly what the subject is about or related to.
+* Images are a great way to attract visitors. Not only will it make your site livelier, visitors will also know instantly what the subject is about or related to.
 * Images are also required for Posts to adhere to the article standard set by Google for generating better Rich Snippets to be shown in the Search Engine Results Page (SERP).
 * Force yourself and your team to improve the SEO of your site by using the [Require Featured Image](https://wordpress.org/plugins/require-featured-image/) plugin by David Hayes.
 
@@ -378,8 +378,8 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Added: All WooCommerce Product Images from the gallery are now also added with multiple `og:image` meta tags (with dupe detection and automatic resizing if needed). Now users can now scroll through and select your item images before sharing on social sites (when supported by the Social Site)!
 * Added: Colorized character counters! These subtle colors now let you know you're Doing it Right instantly without going back to the SEO Bar.
 * Added: Custom Title now shows the possible additions to deliver a more expected experience. This also takes the Custom HomePage tagline into account. This only works on the following conditions:
- * 1. HomePage Title: If Document Title Additions Location is set to "Left". When using RTL languages, it should be "Right".
- * 2. All other Titles: If Document Title Additions Location is set to "Right". When using RTL languages, it should be "Left".
+  * HomePage Title: If Document Title Additions Location is set to "Left". When using RTL languages, it should be "Right".
+  * All other Titles: If Document Title Additions Location is set to "Right". When using RTL languages, it should be "Left".
 * Added: Removed line breaks from manual descriptions on save.
 * Added: Static caching for the current page in LD+json breadcrumbs to improve generation time.
 * Added: The Custom Home Page Title placeholder now reflects changes made throughout the settings Metabox.
@@ -422,7 +422,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Added: Generation time output on the URL and Description when debugging is activated.
 * Added: Removal of all `pre_get_document_title` filters prior to execution to reduce theme load. This is done at `init` priority `1`.
 * Changed: `pre_get_document_title` filter priority is now `10`, was `99` for easier manipulation. This is run at `init` priority `1`.
-* Changed: Rewritter `AutoDescription_Generate::generate_description_from_id()` as it was previously built upon bugfixes and chance.
+* Changed: Rewritten `AutoDescription_Generate::generate_description_from_id()` as it was previously built upon bugfixes and chance.
 * Changed: Default WordPress robots.txt is now completely overwritten to maintain compatibility.
 * Changed: `AutoDescription_Generate::generate_description()` function parameters have now been put into an arguments array. This array is passed onto the following functions as well: `AutoDescription_Generate::description_from_custom_field()` and `AutoDescription_Generate::generate_description_from_id()`
 * Changed: `the_seo_framework_robots_allow_queries` filter became `the_seo_framework_robots_disallow_queries`.
