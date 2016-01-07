@@ -76,5 +76,5 @@
 	= 2.5.1 - Speed up the Web =
 
 * Having a faster website will improve your Search Engine Results Page (SERP) ranking.
-* Not only will Google rank your website higher, but it will also prevent people from hitting the back button if they can't reach your website.
+* It will also prevent potential visitors from hitting the back button if they can't reach your website in a timely manner.
 * See SEO Tip of The Update (2.3.9) for related information on how page speed affects SEO.

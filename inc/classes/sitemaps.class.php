@@ -542,6 +542,9 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 				 * Transient expiration. 1 hour.
 				 *
 				 * 60s * 60m
+				 *
+				 * Applies filters the_seo_framework_sitemap_throttle_seconds
+				 * @since 2.5.1
 				 */
 				$expiration = (int) apply_filters( 'the_seo_framework_sitemap_throttle_seconds', 60 * 60 );
 

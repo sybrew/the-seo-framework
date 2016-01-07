@@ -359,7 +359,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 **SEO Tip of the Update:**
 
 * Having a faster website will improve your Search Engine Results Page (SERP) ranking.
-* Not only will Google rank your website higher, but it will also prevent people from hitting the back button if they can't reach your website.
+* It will also prevent potential visitors from hitting the back button if they can't reach your website in a timely manner.
 * See SEO Tip of The Update (2.3.9) for related information on how page speed affects SEO. You can find all the previous SEO tips within the plugin folder.
 
 **For everyone:**
@@ -380,7 +380,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Changed: Space after each exclamation mark to maintain flow in PHP from being mixed.
 * Cleaned up code.
 
-**List of properties fixes:**
+**List of property fixes:**
 
 * article:author
 * article:publisher
