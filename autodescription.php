@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://wordpress.org/plugins/autodescription/
  * Description: The SEO Framework makes sure your SEO is always up-to-date without any configuration needed. It's based upon the Genesis SEO.
- * Version: 2.5.0
+ * Version: 2.5.1
  * Author: Sybre Waaijer
  * Author URI: https://cyberwire.nl/
  * License: GPLv3
@@ -13,7 +13,7 @@
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -21,11 +21,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 //* Debug.

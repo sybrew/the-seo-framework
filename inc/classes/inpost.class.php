@@ -1,7 +1,7 @@
 <?php
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -9,11 +9,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -108,7 +108,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 			if ( is_object( $object ) ) {
 				$labels = isset( $object->labels ) ? $object->labels : '';
 
-				if ( !empty( $labels ) ) {
+				if ( ! empty( $labels ) ) {
 					$singular_name = isset( $labels->singular_name ) ? $labels->singular_name : $labels->name;
 
 					//* Title and type are used interchangeably.
@@ -194,7 +194,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		} else {
 			$term = get_term_by( 'id', $object->term_id, $object->taxonomy, OBJECT );
 
-			if ( !empty( $term ) && is_object( $term ) ) {
+			if ( ! empty( $term ) && is_object( $term ) ) {
 				$tax_type = $term->taxonomy;
 
 				/**
@@ -251,7 +251,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		$flag = $ad_savedflag ? true : false;
 
 		//* Genesis data fetch. This will override our options with Genesis options.
-		if ( !$flag && isset( $object->meta ) ) {
+		if ( ! $flag && isset( $object->meta ) ) {
 			if ( empty( $ad_doctitle ) && isset( $object->meta['doctitle'] ) )
 				$ad_doctitle = $object->meta['doctitle'];
 
@@ -477,7 +477,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		if ( $is_static_frontpage && ! $this->get_option( 'homepage_tagline' ) ) {
 			$tit_len_pre = ! empty( $title ) ? $title : $generated_doctitle;
 		} else if ( $is_static_frontpage ) {
-			$tit_len_pre = !empty( $title ) ? $title . " | " . get_bloginfo( 'description', 'raw' ) : $generated_doctitle;
+			$tit_len_pre = ! empty( $title ) ? $title . " | " . get_bloginfo( 'description', 'raw' ) : $generated_doctitle;
 		} else {
 			/**
 			 * Calculate true Title length

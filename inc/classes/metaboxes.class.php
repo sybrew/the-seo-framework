@@ -1,7 +1,7 @@
 <?php
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -9,11 +9,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -113,8 +113,8 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 				<span>
 					<input type="radio" class="<?php echo $id; ?>-tabs-radio" id="<?php echo $id; ?>-tab-<?php echo $tab ?>" name="<?php echo $id; ?>-tabs" <?php echo $count == abs(1) ? 'checked' : ''; ?>>
 					<label for="<?php echo $id; ?>-tab-<?php echo $tab ?>" class="nav-tab <?php echo $count == abs(1) ? 'nav-tab-active' : '' ?>">
-						<?php echo !empty( $dashicon ) ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' dashicons-tabs"></span>' : ''; ?>
-						<?php echo !empty( $name ) ? '<span class="seoframework-nav-desktop">' . esc_attr( $name ) . '</span>' : ''; ?>
+						<?php echo ! empty( $dashicon ) ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' dashicons-tabs"></span>' : ''; ?>
+						<?php echo ! empty( $name ) ? '<span class="seoframework-nav-desktop">' . esc_attr( $name ) . '</span>' : ''; ?>
 					</label>
 				</span>
 				<?php
@@ -138,17 +138,17 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 			<div class="<?php echo $id; ?>-tab-content <?php echo $_count == abs(1) ? 'checked-tab' : ''; ?> <?php echo $_count != abs(1) ? 'hide-if-js' : ''; ?>" id="<?php echo $id; ?>-tab-<?php echo $tab ?>-box">
 				<h3 class="nav-tab-wrapper hide-if-js">
 					<span class="nav-tab nav-tab-active">
-						<?php echo !empty( $dashicon ) ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' dashicons-tabs"></span>' : ''; ?>
+						<?php echo ! empty( $dashicon ) ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' dashicons-tabs"></span>' : ''; ?>
 						<?php
 						// This is no-javascript
-						echo !empty( $name ) ? esc_attr( $name ) : '';
+						echo ! empty( $name ) ? esc_attr( $name ) : '';
 						?>
 					</span>
 				</h3>
 			<?php
 				$callback = isset( $value['callback'] ) ? $value['callback'] : '';
 
-				if ( !empty( $callback ) ) {
+				if ( ! empty( $callback ) ) {
 					$params = isset( $value['args'] ) ? $value['args'] : '';
 					$output = $this->call_function( $callback, $version, $params );
 					echo $output;
@@ -576,7 +576,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		 * title and the frompost title.
 		 * @since 2.3.4
 		 */
-		if ( empty( $home_title ) && ! $home_is_blog_notify && !empty( $frompost_title ) )
+		if ( empty( $home_title ) && ! $home_is_blog_notify && ! empty( $frompost_title ) )
 			$home_title_frompost = true;
 
 		//* Get blog tagline
@@ -1531,7 +1531,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 				<label for="<?php $this->field_id( $value['option'] ); ?>">
 					<strong><?php echo $value['desc'] ?></strong>
 					<?php
-					if ( !empty( $value['examplelink'] ) ) {
+					if ( ! empty( $value['examplelink'] ) ) {
 						?><a href="<?php echo esc_url( $value['examplelink'] ); ?>" target="_blank">[?]</a><?php
 					}
 					?>

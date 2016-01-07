@@ -216,10 +216,10 @@ if ( ! function_exists( '_mb_strpos' ) ) :
 			return false;
 		}
 
-		if ( !is_string( $needle ) ) {
+		if ( ! is_string( $needle ) ) {
 			$needle = (string) $needle;
 
-			if ( !is_string( $needle ) ) {
+			if ( ! is_string( $needle ) ) {
 				trigger_error( 'mb_strpos(): Array to string conversion', E_USER_WARNING );
 				return false;
 			}

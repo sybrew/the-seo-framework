@@ -1,7 +1,7 @@
 <?php
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -9,11 +9,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -83,7 +83,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		//* Still no description found? Create an auto description based on content.
 		if ( empty( $description ) || ! is_string( $description ) )
-			$description = $this->generate_description_from_id( $args, $page_for_posts, $escape = false );
+			$description = $this->generate_description_from_id( $args, $page_for_posts, false );
 
 		/**
 		 * Beautify.
@@ -315,7 +315,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			if ( $this->the_seo_framework_debug_hidden )
 				echo "<!--\r\n";
 
-			echo "\r\n" . 'START: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
+			echo "\r\n" . 'START: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n";
 
 			$timer_start = microtime( true );
 
@@ -377,7 +377,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			 *
 			 * @since 2.5.0
 			 */
-			if ( $page_for_posts ) {
+			if ( $page_for_posts || $this->is_blog_page( $args['id'] ) ) {
 				/**
 				 * We're on the blog page now.
 				 * @since 2.2.8
@@ -391,11 +391,11 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			} else if ( ! empty( $term ) && is_object( $term ) ) {
 				//* We're on a taxonomy now.
 
-				if ( isset( $term->admeta['doctitle'] ) && !empty( $term->admeta['doctitle'] ) ) {
+				if ( isset( $term->admeta['doctitle'] ) && ! empty( $term->admeta['doctitle'] ) ) {
 					$title = $term->admeta['doctitle'];
-				} else if ( isset( $term->name ) && !empty( $term->name ) ) {
+				} else if ( isset( $term->name ) && ! empty( $term->name ) ) {
 					$title = $term->name;
-				} else if ( isset( $term->slug ) && !empty( $term->slug ) ) {
+				} else if ( isset( $term->slug ) && ! empty( $term->slug ) ) {
 					$title = $term->slug;
 				}
 			} else {
@@ -665,7 +665,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			if ( $this->the_seo_framework_debug_hidden )
 				echo "<!--\r\n";
 
-			echo  "\r\n" . 'START: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
+			echo  "\r\n" . 'START: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n";
 
 			if ( $this->the_seo_framework_debug_more ) {
 				$this->echo_debug_information( array( 'title' => $title ) );
@@ -860,7 +860,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		if ( $args['placeholder'] && empty( $title ) ) {
 			$term_id = $args['term_id'];
 
-			if ( !empty( $term_id ) ) {
+			if ( ! empty( $term_id ) ) {
 				$title = get_the_title( $term_id );
 			} else if ( $args['page_on_front'] ) {
 				$title = get_the_title( get_option( 'page_on_front' ) );
@@ -871,7 +871,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				 * Memory leak fix
 				 * @since 2.3.5
 				 */
-				$title = isset( $post->post_title ) && !empty( $post->post_title ) ? $post->post_title : '';
+				$title = isset( $post->post_title ) && ! empty( $post->post_title ) ? $post->post_title : '';
 			}
 		}
 
@@ -942,13 +942,13 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		$add_sep = (bool) apply_filters( 'the_seo_framework_doingitwrong_add_sep', true );
 
 		//* Maybe remove separator.
-		if ( $add_sep && ( !empty( $sep ) || !empty( $title ) ) ) {
+		if ( $add_sep && ( ! empty( $sep ) || ! empty( $title ) ) ) {
 			$sep_replace = true;
 			$sep_to_replace = (string) $sep;
 		}
 
 		//* Fetch title from custom fields.
-		if ( $args['get_custom_field'] && is_singular() ) {
+		if ( $args['get_custom_field'] && ( is_singular() || $this->is_blog_page( $args['term_id'] ) ) ) {
 			$title_from_custom_field = $this->title_from_custom_field( $title, false, $args['term_id'] );
 			$title = ! empty( $title_from_custom_field ) ? $title_from_custom_field : $title;
 		}
@@ -1131,7 +1131,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		$sep = (string) apply_filters( 'the_seo_framework_title_separator', $this->get_separator( 'title' ) );
 
 		//* Fetch title from custom fields.
-		if ( $args['get_custom_field'] && is_singular() ) {
+		if ( $args['get_custom_field'] && ( is_singular() || $this->is_blog_page( $args['term_id'] ) ) ) {
 			$title_from_custom_field = $this->title_from_custom_field( $title, '', $args['term_id'] );
 			$title = ! empty( $title_from_custom_field ) ? $title_from_custom_field : $title;
 		}
@@ -1269,7 +1269,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * Combined the statements
 		 * @since 2.2.7 && @since 2.2.8
 		 */
-		if ( is_category() || is_tag() || is_tax() || ( !empty( $term_id ) && !empty( $taxonomy ) ) )
+		if ( is_category() || is_tag() || is_tax() || ( ! empty( $term_id ) && ! empty( $taxonomy ) ) )
 			$title = $this->title_for_terms();
 
 		/**
@@ -1291,8 +1291,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		if ( empty( $title ) && ! empty( $term_id ) && ! empty( $taxonomy ) ) {
 			$term = get_term_by( 'id', $term_id, $taxonomy, OBJECT );
 
-			if ( !empty( $term ) && is_object( $term ) ) {
-				$term_name = !empty( $term->name ) ? $term->name : $term->slug;
+			if ( ! empty( $term ) && is_object( $term ) ) {
+				$term_name = ! empty( $term->name ) ? $term->name : $term->slug;
 			} else {
 				$term_name = __( 'Untitled', 'autodescription' );
 			}
@@ -1449,7 +1449,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * @since 2.2.2
 		 */
 		$home_title_option = (string) $this->get_option( 'homepage_title' );
-		$home_title = !empty( $home_title_option ) ? $home_title_option : $home_title;
+		$home_title = ! empty( $home_title_option ) ? $home_title_option : $home_title;
 
 		/**
 		 * Fetch from Home Page InPost SEO Box if empty.
@@ -1464,7 +1464,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 */
 		if ( $get_custom_field && 'page' === get_option( 'show_on_front' ) && empty( $home_title ) ) {
 			$custom_field = $this->get_custom_field( '_genesis_title' );
-			$home_title = !empty( $custom_field ) ? (string) $custom_field : $home_title;
+			$home_title = ! empty( $custom_field ) ? (string) $custom_field : $home_title;
 		}
 
 		if ( $escape ) {
@@ -1497,11 +1497,11 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$title = ! empty( $term->admeta['doctitle'] ) ? $term->admeta['doctitle'] : $title;
 			$flag = $term->admeta['saved_flag'] != '0' ? true : false;
 
-			if ( !$flag && empty( $title ) && isset( $term->meta['doctitle'] ) )
+			if ( ! $flag && empty( $title ) && isset( $term->meta['doctitle'] ) )
 				$title = ! empty( $term->meta['doctitle'] ) ? $term->meta['doctitle'] : $title;
 
 			if ( empty( $title ) )
-				$title = !empty( $term->name ) ? wp_strip_all_tags( $this->get_the_archive_title() ) : $term->slug;
+				$title = ! empty( $term->name ) ? wp_strip_all_tags( $this->get_the_archive_title() ) : $term->slug;
 
 		} else if ( is_tax() ) {
 
@@ -1510,11 +1510,11 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$title = ! empty( $term->admeta['doctitle'] ) ? wp_kses_stripslashes( wp_kses_decode_entities( $term->admeta['doctitle'] ) ) : $title;
 			$flag = $term->admeta['saved_flag'] != '0' ? true : false;
 
-			if ( !$flag && empty( $title ) && isset( $term->meta['doctitle'] ) )
+			if ( ! $flag && empty( $title ) && isset( $term->meta['doctitle'] ) )
 				$title = ! empty( $term->meta['doctitle'] ) ? wp_kses_stripslashes( wp_kses_decode_entities( $term->meta['doctitle'] ) ) : $title;
 
 			if ( empty( $title ) )
-				$title = !empty( $term->name ) ? wp_strip_all_tags( $this->get_the_archive_title() ) : $term->slug;
+				$title = ! empty( $term->name ) ? wp_strip_all_tags( $this->get_the_archive_title() ) : $term->slug;
 
 		}
 
@@ -1609,7 +1609,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			if ( $this->the_seo_framework_debug_hidden )
 				echo "<!--\r\n";
 
-			echo  "\r\n" . 'START: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
+			echo  "\r\n" . 'START: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n";
 			$this->echo_debug_information( array( 'input url' => $url ) );
 
 			if ( $this->the_seo_framework_debug_more ) {
@@ -1758,7 +1758,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		//* Domain Mapping canonical URL
 		if ( empty( $url ) ) {
 			$dm_url = $this->the_url_donncha_domainmap( $path, true );
-			if ( !empty( $dm_url ) && is_array( $dm_url ) ) {
+			if ( ! empty( $dm_url ) && is_array( $dm_url ) ) {
 				$url = $dm_url[0];
 				$scheme = $dm_url[1];
 			}
@@ -1811,7 +1811,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				$this->echo_debug_information( array( 'args' => $args ) );
 			}
 			$this->echo_debug_information( array( 'Generation time' => number_format( microtime(true) - $timer_start, 5 ) . 's' ) );
-			echo  "\r\n" . 'END: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
+			echo  "\r\n" . 'END: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n";
 
 			if ( $this->the_seo_framework_debug_hidden )
 				echo "\r\n-->";
@@ -1919,7 +1919,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		if ( ! $external && class_exists( 'QTX_Translator' ) ) {
 			static $q_config = null;
 
-			if ( !isset( $q_config ) )
+			if ( ! isset( $q_config ) )
 				global $q_config;
 
 			$mode = $q_config['url_mode'];
@@ -1975,7 +1975,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 					$lang_path = explode( '/', $path );
 					$lang_path = isset( $lang_path[1] ) ? $lang_path[1] : '';
 
-					if ( !empty( $lang_path ) ) {
+					if ( ! empty( $lang_path ) ) {
 						//* Directory path parsed succesfully.
 
 						$language_keys = array_keys( icl_get_languages() );
@@ -2010,7 +2010,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 							//* Directory path parsed succesfully.
 
 							$language_keys = array_keys( icl_get_languages() );
-							if ( !empty( $language_keys ) && in_array( $lang_path, $language_keys ) ) {
+							if ( ! empty( $language_keys ) && in_array( $lang_path, $language_keys ) ) {
 								//* Language code isn't found in first part of path. Add it.
 
 								$path = '/' . $lang_path . '/' . ltrim( $path, '\/ ' );
@@ -2075,7 +2075,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		if ( empty( $termlink ) ) {
 			if ( 'category' == $taxonomy ) {
 				$termlink = '?cat=' . $term->term_id;
-			} elseif ( isset( $t->query_var ) && !empty( $t->query_var ) ) {
+			} elseif ( isset( $t->query_var ) && ! empty( $t->query_var ) ) {
 				$termlink = "?$t->query_var=$slug";
 			} else {
 				$termlink = "?taxonomy=$taxonomy&term=$slug";
@@ -2176,8 +2176,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 					$query = $wp_query->query;
 
 					$year = $query->year;
-					$month = !empty( $query->monthnum ) ? '&monthnum=' . $query->monthnum : '';
-					$day = !empty( $query->day ) ? '&day=' . $query->day : '';
+					$month = ! empty( $query->monthnum ) ? '&monthnum=' . $query->monthnum : '';
+					$day = ! empty( $query->day ) ? '&day=' . $query->day : '';
 
 					$path = '?year=' . $year . $month . $day;
 				} else if ( is_author() ) {
@@ -2191,17 +2191,21 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 					$path = '?p=' . $id;
 				}
 			} else {
-				if ( ! isset( $post ) )
-					global $post;
+				if ( isset( $post->ID ) ) {
+					$id = $post->ID;
+				} else {
+					$id = $this->get_the_real_ID();
+				}
 
-				$id = $post->ID;
 				$path = '?p=' . $id;
 			}
 		} else {
-			if ( ! isset( $post ) )
-				global $post;
+			if ( isset( $post->ID ) ) {
+				$id = $post->ID;
+			} else {
+				$id = $this->get_the_real_ID();
+			}
 
-			$id = $post->ID;
 			$path = '?p=' . $id;
 		}
 
@@ -2234,7 +2238,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				$this->object_cache_set( $mapped_key, $mapped_domain, 3600 );
 			}
 
-			if ( !empty( $mapped_domain ) ) {
+			if ( ! empty( $mapped_domain ) ) {
 
 				$scheme_key = 'wpmudev_mapped_scheme_' . $blog_id;
 
@@ -2653,7 +2657,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				}
 			}
 
-			$image = !empty( $path ) ? $path : '';
+			$image = ! empty( $path ) ? $path : '';
 		}
 
 		return $image;
@@ -2842,7 +2846,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$meta['noarchive'] = $this->get_option( 'attachment_noarchive' ) ? 'noarchive' : $meta['noarchive'];
 		}
 
-		if ( is_singular() ) {
+		if ( is_singular() || $this->is_blog_page() ) {
 			$meta['noindex'] = $this->get_custom_field( '_genesis_noindex' ) ? 'noindex' : $meta['noindex'];
 			$meta['nofollow'] = $this->get_custom_field( '_genesis_nofollow' ) ? 'nofollow' : $meta['nofollow'];
 			$meta['noarchive'] = $this->get_custom_field( '_genesis_noarchive' ) ? 'noarchive' : $meta['noarchive'];
@@ -2868,15 +2872,12 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 			$path = null;
 
-			if ( is_singular() ) {
+			if ( is_singular() || $this->is_blog_page() ) {
 
-				if ( 0 == $post_id ) {
-					$post = get_post( $post_id );
-					if ( ! empty( $post->ID ) )
-						$post_id = $post->ID;
-				}
+				if ( 0 == $post_id )
+					$post_id = $this->get_the_real_ID();
 
-				if ( !empty( $post_id ) ) {
+				if ( ! empty( $post_id ) ) {
 					if ( $this->is_static_frontpage( $post_id ) ) {
 						$path = '';
 					} else {
@@ -2918,14 +2919,10 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				if ( empty( $path ) ) {
 					$id = isset( $object->ID ) ? $object->ID : 0;
 
-					if ( !empty( $id ) )
+					if ( ! empty( $id ) )
 						$path = '?p=' . $id;
 				}
 
-			} else if ( 'page' == get_option( 'show_on_front' ) && $this->get_the_real_ID() == get_option( 'page_for_posts' ) ) {
-				//* Page for posts
-				$id =  $this->get_the_real_ID();
-				$path = '?p=' . $id;
 			} else {
 				//* Home page
 				$path = '';
@@ -2965,7 +2962,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 */
 	public function get_paged_url( $prev_next = 'next', $post_id = 0 ) {
 
-		if ( !$this->get_option( 'prev_next_posts' ) && !$this->get_option( 'prev_next_archives' ) )
+		if ( ! $this->get_option( 'prev_next_posts' ) && ! $this->get_option( 'prev_next_archives' ) )
 			return '';
 
 		global $wp_query;
@@ -3214,7 +3211,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				$items = '';
 
 				foreach ( $trees as $tree ) {
-					if ( !empty( $tree ) ) {
+					if ( ! empty( $tree ) ) {
 
 						$tree = array_reverse( $tree );
 
@@ -3264,7 +3261,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 								$items .= sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}},', $item_type, (string) $pos, $id, $name );
 							}
 
-							if ( !empty( $items ) ) {
+							if ( ! empty( $items ) ) {
 
 								$items = $this->ld_json_breadcrumb_first( $item_type ) . $items . $this->ld_json_breadcrumb_last( $item_type, $pos, $post_id );
 
@@ -3300,7 +3297,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 					$id = json_encode( $this->the_url( '', $parent_id, array( 'get_custom_field' => false, 'external' => true ) ) );
 
 					$custom_field_name = $this->get_custom_field( '_genesis_title', $parent_id );
-					$parent_name = !empty( $custom_field_name ) ? $custom_field_name : $this->title( '', '', '', array( 'term_id' => $parent_id, 'get_custom_field' => false, 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
+					$parent_name = ! empty( $custom_field_name ) ? $custom_field_name : $this->title( '', '', '', array( 'term_id' => $parent_id, 'get_custom_field' => false, 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
 
 					$name = json_encode( $parent_name );
 
@@ -3495,7 +3492,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		//* Remove trailing comma
 		$sameurls = rtrim( $sameurls, $comma );
 
-		if ( !empty( $sameurls ) )
+		if ( ! empty( $sameurls ) )
 			$json = sprintf( '{"@context":%s,"@type":%s,"name":%s,"url":%s,%s"sameAs":[%s]}', $context, $type, $name, $url, $logo, $sameurls );
 
 		return $json;

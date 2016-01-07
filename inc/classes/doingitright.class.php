@@ -1,7 +1,7 @@
 <?php
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -9,11 +9,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -221,7 +221,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			 * Static caching.
 			 * @since 2.3.8
 			 */
-			if ( !isset( $post ) && !isset( $is_term ) ) {
+			if ( ! isset( $post ) && ! isset( $is_term ) ) {
 				//* Setup i18n values for posts and pages.
 				if ( $type == 'post' ) {
 					$post = __( 'Post', 'autodescription' );
@@ -336,7 +336,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 				$redirect = ''; // We don't apply redirect on taxonomies (yet)
 
 				//* Genesis data fetch
-				if ( empty( $noindex ) && !$flag && isset( $term->meta ) )
+				if ( empty( $noindex ) && ! $flag && isset( $term->meta ) )
 					$noindex = isset( $term->meta['noindex'] ) ? $term->meta['noindex'] : '';
 
 				$ad_125 = 'ad-16';
@@ -679,7 +679,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 				$content = sprintf( '<span class="ad-seo clearfix ' . $ad_100 . $square . '"><span class="ad-bar-wrap">%s %s %s %s %s %s</span></span>', $title_notice, $description_notice, $index_notice, $follow_notice, $archive_notice, $redirect_notice );
 
 			// Redirect and noindex found, why bother showing SEO.
-			} else if ( !empty( $redirect ) && !empty( $noindex ) ) {
+			} else if ( ! empty( $redirect ) && ! empty( $noindex ) ) {
 
 				$red_notice = $redirect_i18n . ' ' . sprintf( __( "%s is being redirected. This means no SEO values have to be set.", 'autodescription' ), $post );
 				$red_class = $unknown;

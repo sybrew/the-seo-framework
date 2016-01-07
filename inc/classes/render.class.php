@@ -1,7 +1,7 @@
 <?php
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -9,11 +9,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -333,10 +333,12 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		$type = (string) apply_filters( 'the_seo_framework_ogtype_output', '' );
 
 		if ( empty( $type ) ) {
-			if ( is_single() ) {
+			if ( is_single() && ! empty( $this->get_image_from_cache() ) ) {
 				$type = 'article';
 			} else if ( is_author() ) {
 				$type = 'profile';
+			} else if ( $this->is_blog_page() || ( is_front_page() && 'page' !== get_option( 'show_on_front' ) ) ) {
+				$type = 'blog';
 			} else {
 				$type = 'website';
 			}
@@ -532,7 +534,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 			 * Return site:id instead of creator is no twitter:site is found.
 			 * Per Twitter requirements
 			 */
-			if ( empty( $site ) && !empty( $creator ) )
+			if ( empty( $site ) && ! empty( $creator ) )
 				return '<meta name="twitter:site:id" content="' . esc_attr( $creator ) . '" />' . "\r\n";
 		}
 
@@ -605,7 +607,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		if ( empty( $image ) )
 			$image = $this->get_image_from_cache();
 
-		if ( !empty( $image ) ) {
+		if ( ! empty( $image ) ) {
 			return '<meta name="twitter:image:src" content="' . esc_attr( $image ) . '" />' . "\r\n";
 		} else {
 			return '';
@@ -695,7 +697,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	public function article_published_time() {
 
 		// Don't do anything if it's not a page or post.
-		if ( !is_singular() )
+		if ( ! is_singular() )
 			return;
 
 		$front_page = (bool) is_front_page();
@@ -734,7 +736,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	public function article_modified_time() {
 
 		// Don't do anything if it's not a page or post, or if both options are disabled
-		if ( !is_singular() )
+		if ( ! is_singular() )
 			return;
 
 		$is_front_page = is_front_page();
@@ -850,7 +852,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 			if ( $this->the_seo_framework_debug_hidden )
 				echo "<!--\r\n";
 
-			echo  "\r\n" . 'START: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
+			echo  "\r\n" . 'START: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n";
 			$this->echo_debug_information( array( 'LD Json transient name' => $this->ld_json_transient ) );
 			$this->echo_debug_information( array( 'Output from transient' => ( get_transient( $this->ld_json_transient ) ? true : false ) ) );
 
@@ -910,7 +912,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 			if ( $this->the_seo_framework_debug_hidden ) {
 				$this->echo_debug_information( array( 'LD Json transient output' => $output ) );
 			}
-			echo  "\r\n" . 'END: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
+			echo  "\r\n" . 'END: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n";
 
 			if ( $this->the_seo_framework_debug_hidden )
 				echo "\r\n-->";

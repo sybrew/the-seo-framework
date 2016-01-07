@@ -1,7 +1,7 @@
 <?php
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -9,11 +9,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -92,7 +92,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 */
 	public function is_theme( $themes = null, $use_cache = true ) {
 
-		if ( !isset( $themes ) )
+		if ( ! isset( $themes ) )
 			return false;
 
 		if ( ! $use_cache ) {
@@ -322,7 +322,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		global $wp_version;
 
 		// Add a .0 if WP outputs something like 4.3 instead of 4.3.0
-		if ( strlen( $wp_version ) === 3 )
+		if ( 3 === strlen( $wp_version ) )
 			$wp_version = $wp_version . '.0';
 
 		//* Evade 'true-ish' values.
@@ -437,7 +437,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			return $this->detect_theme_support( 'custom-header', 'uploads' );
 		//* } End SEO Framework Edits.
 
-		if ( !isset( $_wp_theme_features[$feature] ) )
+		if ( ! isset( $_wp_theme_features[$feature] ) )
 			return false;
 
 		if ( 'title-tag' == $feature ) {
@@ -828,7 +828,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		static $get_locale = null;
 
-		if ( !isset( $get_locale ) )
+		if ( ! isset( $get_locale ) )
 			$get_locale = get_locale();
 
 		return $locale[$str] = strpos( $get_locale, $str ) !== false ? true : false;

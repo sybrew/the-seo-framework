@@ -72,3 +72,9 @@
 * Images are a great way to attract visitors. Not only will it make your site more lively, visitors will also know right away what the subject is about or related to.
 * Images are also required for Posts to adhere to the article standard set by Google for generating better Rich Snippets to be shown in the Search Engine Results Page (SERP).
 * Force yourself and your team to improve the SEO of your site by using the Require Featured Image plugin by David Hayes.
+
+	= 2.5.1 - Speed up the Web =
+
+* Having a faster website will improve your Search Engine Results Page (SERP) ranking.
+* Not only will Google rank your website higher, but it will also prevent people from hitting the back button if they can't reach your website.
+* See SEO Tip of The Update (2.3.9) for related information on how page speed affects SEO.

@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/
 Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl
 Requires at least: 3.6.0
 Tested up to: 4.5.0
-Stable tag: 2.5.0
+Stable tag: 2.5.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -214,7 +214,7 @@ Because this plugin was initially written to extend the Genesis SEO, it uses the
 1. This plugin shows you what you can improve, at a glance. With full color vision deficiency support.
 2. Hover over any of the SEO Bar's items to see how you can improve the page's SEO. Red is bad, orange is okay, green is good. Blue is situational.
 3. The dynamic Post/Page SEO settings Metabox. This box is also neatly implemented in Categories and Tags.
-4. The SEO Settings Page. With over 70 settings, you are in full control. The Default Settings and filling in the Knowledge Graph Settings is recommended.
+4. The SEO Settings Page. With over 70 settings, you are in full control. Using the Default Settings and filling in the Knowledge Graph Settings is recommended to do.
 
 == Frequently Asked Questions ==
 
@@ -256,8 +256,8 @@ Advertisements are made to control your behavior, slowly and certainly you'll be
 ***But how do you make a living?***
 
 Currently, The SEO Framework is non-profit.
-This plugin was first released to the public in March 15th, 2015. From there it has grown from 179 lines of code, to more than 14300 lines.
-With over 540,000 characters of code written, this plugin is absolutely a piece of art in my mind.
+This plugin was first released to the public in March 15th, 2015. From there it has grown, from 179 lines of code, to more than 17100 lines.
+With over 640,000 characters of code written, this plugin is absolutely a piece of art in my mind.
 And that's what it should stay, (functional) art.
 I trust that people are good at heart and will tell their friends and family about the things they enjoy the most, what they're excited about, what they find beneficial or even beautiful.
 
@@ -348,6 +348,45 @@ Please refer to this small guide: [SEO Data Migration](http://theseoframework.co
 Transporting Terms and Taxonomies data currently isn't supported.
 
 == Changelog ==
+
+= 2.5.1 - Undocumented Properties =
+
+**Summarized:**
+
+* This update addresses issues with the Facebook protocol caused by overlooked (and undocumented) terms. This makes sure the Facebook meta tags work correctly and as per standards.
+* Also, all Posts Page data has been fixed and is now being fetched correctly.
+
+**SEO Tip of the Update:**
+
+* Having a faster website will improve your Search Engine Results Page (SERP) ranking.
+* Not only will Google rank your website higher, but it will also prevent people from hitting the back button if they can't reach your website.
+* See SEO Tip of The Update (2.3.9) for related information on how page speed affects SEO. You can find all the previous SEO tips within the plugin folder.
+
+**For everyone:**
+
+* Added: The 'blog' og:type type for the blog page or homepage when it's a Post Page.
+* Changed: Page type has been set to `website` rather than `article` when no og:image has been provided on a post to adhere to the standard, this will still output an error in the validator although it's correct.
+* Improved: Standardized the default permalink structure URL and reduced memory usage.
+* Improved: Shortlink generation time.
+* Fixed: The Blog Page now listens to the robots settings.
+* Fixed: The Blog Page now listens the custom Title set.
+* Fixed: The Blog Page auto-description InPost Metabox placeholder is now what it outputs on the front-end.
+* Fixed: Usage of "name" instead of "property" in OG/Facebook meta tags. Sometimes Facebook fixed this automatically, see "List of property fixes" below for more information.
+
+**For developers:**
+
+* Added: New filter.
+* Added: Bumped year of copyright.
+* Changed: Space after each exclamation mark to maintain flow in PHP from being mixed.
+* Cleaned up code.
+
+**List of properties fixes:**
+
+* article:author
+* article:publisher
+* fb:app_id
+* article:published_time
+* article:modified_time
 
 = 2.5.0 - Vibrant SEO =
 
@@ -450,46 +489,6 @@ Transporting Terms and Taxonomies data currently isn't supported.
 **For developers:**
 
 * Added: Extra parameter to `AutoDescription_Generate::the_url()` for forcing trailing slashes.
-
-= 2.4.3 - The Littlest Things | Page 2 =
-
-**Summarized:**
-
-* Districting titles together with different content is a very important SEO factor. And for this reason, the Title has now obtained pagination.
-* Besides this change, many little fixes have been put in place, and a few filters have been added for special cases.
-
-**SEO Tip of the Update:**
-
-* Maintaining a blog will output not only fresh content, and notify Search Engines that your website is active, but it will also simultaneously improve your chances to be found.
-* There are so many (big) questions to be answered, a blog post on each of those questions will surely attract different visitors.
-* Keep the blog related to the main subject of your site, for it will categorize your website as a whole. Visitors will more likely engage and then keep coming back for more information.
-* After all, you're most likely the expert on the subject of your website. Share your knowledge!
-
-**For everyone:**
-
-* Added: Title pagination indication, so you won't have duplicated titles anymore on Categories and paginated pages. This only works on themes that are doing it right, and is shown within the Open Graph and Twitter titles on any theme.
-* Added: Bundled all "SEO Tip of the Update" together in one .txt file shipped with each update :)
-* Updated: The way object caching is implemented. It's now much more consistent. This also invalidates many object cache keys within this plugin which will automatically be reinstated at the earliest request.
-* Changed: Titles can now be a tad shorter (8 characters) before firing a "too short" notice. Although this might not be "perfect", "50 to 55" was however too intrusive. A good descriptive title is always better than a long title.
-* Improved: When using object cache, the SEO Settings Page is a tad faster now.
-* Updated: POT File.
-* Updated: Dutch Translations.
-* Fixed: The title could double its output when the theme is doing it wrong in special scenarios.
-* Fixed: Many setting combinations with WPML have been covered now for the URL in various places.
-* Fixed: The Knowledge Graph now outputs your organisation or personal name correctly again.
-* Fixed: Robots.txt's output is now correct again when you're using a subdirectory for your WordPress installation.
-
-**For developers:**
-
-* Added: New filters.
-* Added: Enhanced functionality with object caching. Mainly allowing it to be enabled or disabled.
-* Changed: Grouped all object caching keys together in `theseoframework` group, instead of several based on my other plugins.
-* Improved: `the_seo_framework_sitemap_custom_posts_count` now doesn't fetch any posts when set to `0` or `false`-ish.
-* Fixed: PHP notice in robots.txt
-* Fixed: API functions will return null now when The SEO Framework is not active through a filter instead of giving a fatal error.
-* Removed: Redundant code left for testing purposes.
-* Changed: Invalidated LD+Json transient cache key because of the fix. The expired cache will be flushed automatically.
-* Cleaned up Code.
 
 = Full changelog =
 

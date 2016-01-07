@@ -1,7 +1,7 @@
 <?php
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -9,11 +9,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -315,7 +315,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 */
 	public function sanitize( $new_value, $option ) {
 
-		if ( !isset( $this->options[$option] ) ) {
+		if ( ! isset( $this->options[$option] ) ) {
 			//* We are not filtering this option at all
 			return $new_value;
 		} else if ( is_string( $this->options[$option] ) ) {
@@ -717,7 +717,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 
 		if ( substr( $profile, 0, 4 ) === 'http' ) {
 			$path = str_replace( '/', '', parse_url( $profile, PHP_URL_PATH ) );
-			$profile = !empty( $path ) ? '@' . $path : '';
+			$profile = ! empty( $path ) ? '@' . $path : '';
 
 			return (string) $profile;
 		}
@@ -793,7 +793,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 						$this->object_cache_set( $mapped_key, $mapped_domain, 3600 );
 					}
 
-					if ( !empty( $mapped_domain ) ) {
+					if ( ! empty( $mapped_domain ) ) {
 						//* Set that the domain is mapped
 						$ismapped = '1';
 
@@ -825,7 +825,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 					$scheme = is_ssl() ? 'https' : 'http';
 				}
 
-				$scheme = !empty( $scheme ) ? $scheme : '';
+				$scheme = ! empty( $scheme ) ? $scheme : '';
 
 				$url = esc_url_raw( $url, $scheme );
 

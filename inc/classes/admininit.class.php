@@ -1,7 +1,7 @@
 <?php
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -9,11 +9,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -93,7 +93,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	public function add_post_state( $states = array() ) {
 		global $post;
 
-		if ( !empty( $post ) ) {
+		if ( ! empty( $post ) ) {
 			$post_id = $post->ID;
 
 			$searchexclude = $this->get_custom_field( 'exclude_local_search', $post_id ) ? true : false;
@@ -111,6 +111,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 * @since 2.2.4
 	 */
 	public function no_more_genesis_seo() {
+
 		$plugins = array(
 				// Classes to detect.
 				'classes' => array(
@@ -213,7 +214,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 			'product',
 			'forum', 'topic',
 			'jetpack-testimonial', 'jetpack-portfolio'
-		 );
+		);
 		$post_types = (array) apply_filters( 'the_seo_framework_supported_post_types', $defaults, $args );
 
 		$post_types = wp_parse_args( $args, $post_types );
@@ -275,7 +276,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		 * Check hook first.
 		 * @since 2.3.9
 		 */
-		if ( isset( $hook ) && !empty( $hook ) && ( $hook == 'edit.php' || $hook == 'post.php' || $hook = 'edit-tags.php' ) ) {
+		if ( isset( $hook ) && ! empty( $hook ) && ( $hook == 'edit.php' || $hook == 'post.php' || $hook = 'edit-tags.php' ) ) {
 			/**
 			 * @uses $this->post_type_supports_custom_seo()
 			 * @since 2.3.9
@@ -363,7 +364,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 				// Home is a blog.
 				$inpost_title = '';
 			}
-			$title = !empty( $inpost_title ) ? $inpost_title : $blog_name;
+			$title = ! empty( $inpost_title ) ? $inpost_title : $blog_name;
 			$additions = $home_tagline ? $home_tagline : $description;
 		}
 

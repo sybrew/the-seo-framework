@@ -1,0 +1,1491 @@
+Index: autodescription.php
+===================================================================
+--- autodescription.php	(revision 1322361)
++++ autodescription.php	(working copy)
+@@ -3,7 +3,7 @@
+  * Plugin Name: The SEO Framework
+  * Plugin URI: https://wordpress.org/plugins/autodescription/
+  * Description: The SEO Framework makes sure your SEO is always up-to-date without any configuration needed. It's based upon the Genesis SEO.
+- * Version: 2.5.0
++ * Version: 2.5.1
+  * Author: Sybre Waaijer
+  * Author URI: https://cyberwire.nl/
+  * License: GPLv3
+@@ -13,7 +13,7 @@
+ 
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -21,11 +21,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ //* Debug.
+Index: inc/classes/admininit.class.php
+===================================================================
+--- inc/classes/admininit.class.php	(revision 1322361)
++++ inc/classes/admininit.class.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ /**
+@@ -93,7 +93,7 @@
+ 	public function add_post_state( $states = array() ) {
+ 		global $post;
+ 
+-		if ( !empty( $post ) ) {
++		if ( ! empty( $post ) ) {
+ 			$post_id = $post->ID;
+ 
+ 			$searchexclude = $this->get_custom_field( 'exclude_local_search', $post_id ) ? true : false;
+@@ -111,6 +111,7 @@
+ 	 * @since 2.2.4
+ 	 */
+ 	public function no_more_genesis_seo() {
++
+ 		$plugins = array(
+ 				// Classes to detect.
+ 				'classes' => array(
+@@ -213,7 +214,7 @@
+ 			'product',
+ 			'forum', 'topic',
+ 			'jetpack-testimonial', 'jetpack-portfolio'
+-		 );
++		);
+ 		$post_types = (array) apply_filters( 'the_seo_framework_supported_post_types', $defaults, $args );
+ 
+ 		$post_types = wp_parse_args( $args, $post_types );
+@@ -275,7 +276,7 @@
+ 		 * Check hook first.
+ 		 * @since 2.3.9
+ 		 */
+-		if ( isset( $hook ) && !empty( $hook ) && ( $hook == 'edit.php' || $hook == 'post.php' || $hook = 'edit-tags.php' ) ) {
++		if ( isset( $hook ) && ! empty( $hook ) && ( $hook == 'edit.php' || $hook == 'post.php' || $hook = 'edit-tags.php' ) ) {
+ 			/**
+ 			 * @uses $this->post_type_supports_custom_seo()
+ 			 * @since 2.3.9
+@@ -363,7 +364,7 @@
+ 				// Home is a blog.
+ 				$inpost_title = '';
+ 			}
+-			$title = !empty( $inpost_title ) ? $inpost_title : $blog_name;
++			$title = ! empty( $inpost_title ) ? $inpost_title : $blog_name;
+ 			$additions = $home_tagline ? $home_tagline : $description;
+ 		}
+ 
+Index: inc/classes/adminpages.class.php
+===================================================================
+--- inc/classes/adminpages.class.php	(revision 1300916)
++++ inc/classes/adminpages.class.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ /**
+@@ -727,7 +727,7 @@
+ 
+ 		$default = $this->get_default_settings( $key, $setting );
+ 
+-		if ( !is_string( $default ) && $default != -1 && $default )
++		if ( ! is_string( $default ) && $default != -1 && $default )
+ 			$class = 'seoframework-default-selected';
+ 
+ 		if ( $echo ) {
+@@ -804,11 +804,11 @@
+ 		$default = $this->is_default_checked( $key, $setting, false, false );
+ 		$warned = $this->is_warning_checked( $key, $setting, false, false );
+ 
+-		if ( !empty( $default ) && !empty( $warned ) ) {
++		if ( ! empty( $default ) && ! empty( $warned ) ) {
+ 			$class = $default . ' ' . $warned;
+-		} else if ( !empty( $default ) ) {
++		} else if ( ! empty( $default ) ) {
+ 			$class = $default;
+-		} else if ( !empty( $warned ) ) {
++		} else if ( ! empty( $warned ) ) {
+ 			$class = $warned;
+ 		}
+ 
+Index: inc/classes/detect.class.php
+===================================================================
+--- inc/classes/detect.class.php	(revision 1322361)
++++ inc/classes/detect.class.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ /**
+@@ -92,7 +92,7 @@
+ 	 */
+ 	public function is_theme( $themes = null, $use_cache = true ) {
+ 
+-		if ( !isset( $themes ) )
++		if ( ! isset( $themes ) )
+ 			return false;
+ 
+ 		if ( ! $use_cache ) {
+@@ -322,7 +322,7 @@
+ 		global $wp_version;
+ 
+ 		// Add a .0 if WP outputs something like 4.3 instead of 4.3.0
+-		if ( strlen( $wp_version ) === 3 )
++		if ( 3 === strlen( $wp_version ) )
+ 			$wp_version = $wp_version . '.0';
+ 
+ 		//* Evade 'true-ish' values.
+@@ -437,7 +437,7 @@
+ 			return $this->detect_theme_support( 'custom-header', 'uploads' );
+ 		//* } End SEO Framework Edits.
+ 
+-		if ( !isset( $_wp_theme_features[$feature] ) )
++		if ( ! isset( $_wp_theme_features[$feature] ) )
+ 			return false;
+ 
+ 		if ( 'title-tag' == $feature ) {
+@@ -828,7 +828,7 @@
+ 
+ 		static $get_locale = null;
+ 
+-		if ( !isset( $get_locale ) )
++		if ( ! isset( $get_locale ) )
+ 			$get_locale = get_locale();
+ 
+ 		return $locale[$str] = strpos( $get_locale, $str ) !== false ? true : false;
+Index: inc/classes/doingitright.class.php
+===================================================================
+--- inc/classes/doingitright.class.php	(revision 1322361)
++++ inc/classes/doingitright.class.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ /**
+@@ -35,7 +35,6 @@
+ 		parent::__construct();
+ 
+ 		add_action( 'current_screen', array( $this, 'init_columns' ) );
+-		add_action( 'wp_ajax_current_screen', array( $this, 'init_columns' ) );
+ 	}
+ 
+ 	/**
+@@ -222,7 +221,7 @@
+ 			 * Static caching.
+ 			 * @since 2.3.8
+ 			 */
+-			if ( !isset( $post ) && !isset( $is_term ) ) {
++			if ( ! isset( $post ) && ! isset( $is_term ) ) {
+ 				//* Setup i18n values for posts and pages.
+ 				if ( $type == 'post' ) {
+ 					$post = __( 'Post', 'autodescription' );
+@@ -337,7 +336,7 @@
+ 				$redirect = ''; // We don't apply redirect on taxonomies (yet)
+ 
+ 				//* Genesis data fetch
+-				if ( empty( $noindex ) && !$flag && isset( $term->meta ) )
++				if ( empty( $noindex ) && ! $flag && isset( $term->meta ) )
+ 					$noindex = isset( $term->meta['noindex'] ) ? $term->meta['noindex'] : '';
+ 
+ 				$ad_125 = 'ad-16';
+@@ -680,7 +679,7 @@
+ 				$content = sprintf( '<span class="ad-seo clearfix ' . $ad_100 . $square . '"><span class="ad-bar-wrap">%s %s %s %s %s %s</span></span>', $title_notice, $description_notice, $index_notice, $follow_notice, $archive_notice, $redirect_notice );
+ 
+ 			// Redirect and noindex found, why bother showing SEO.
+-			} else if ( !empty( $redirect ) && !empty( $noindex ) ) {
++			} else if ( ! empty( $redirect ) && ! empty( $noindex ) ) {
+ 
+ 				$red_notice = $redirect_i18n . ' ' . sprintf( __( "%s is being redirected. This means no SEO values have to be set.", 'autodescription' ), $post );
+ 				$red_class = $unknown;
+Index: inc/classes/generate.class.php
+===================================================================
+--- inc/classes/generate.class.php	(revision 1322361)
++++ inc/classes/generate.class.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ /**
+@@ -83,7 +83,7 @@
+ 
+ 		//* Still no description found? Create an auto description based on content.
+ 		if ( empty( $description ) || ! is_string( $description ) )
+-			$description = $this->generate_description_from_id( $args, $page_for_posts, $escape = false );
++			$description = $this->generate_description_from_id( $args, $page_for_posts, false );
+ 
+ 		/**
+ 		 * Beautify.
+@@ -315,7 +315,7 @@
+ 			if ( $this->the_seo_framework_debug_hidden )
+ 				echo "<!--\r\n";
+ 
+-			echo "\r\n" . 'START: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
++			echo "\r\n" . 'START: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n";
+ 
+ 			$timer_start = microtime( true );
+ 
+@@ -377,7 +377,7 @@
+ 			 *
+ 			 * @since 2.5.0
+ 			 */
+-			if ( $page_for_posts ) {
++			if ( $page_for_posts || $this->is_blog_page( $args['id'] ) ) {
+ 				/**
+ 				 * We're on the blog page now.
+ 				 * @since 2.2.8
+@@ -391,11 +391,11 @@
+ 			} else if ( ! empty( $term ) && is_object( $term ) ) {
+ 				//* We're on a taxonomy now.
+ 
+-				if ( isset( $term->admeta['doctitle'] ) && !empty( $term->admeta['doctitle'] ) ) {
++				if ( isset( $term->admeta['doctitle'] ) && ! empty( $term->admeta['doctitle'] ) ) {
+ 					$title = $term->admeta['doctitle'];
+-				} else if ( isset( $term->name ) && !empty( $term->name ) ) {
++				} else if ( isset( $term->name ) && ! empty( $term->name ) ) {
+ 					$title = $term->name;
+-				} else if ( isset( $term->slug ) && !empty( $term->slug ) ) {
++				} else if ( isset( $term->slug ) && ! empty( $term->slug ) ) {
+ 					$title = $term->slug;
+ 				}
+ 			} else {
+@@ -556,6 +556,7 @@
+ 
+ 		$term_id = isset( $term->term_id ) ? $term->term_id : false;
+ 
++		//* Put excerpt in cache.
+ 		if ( ! isset( $excerpt_cache[$page_id][$term_id][$page_on_front][$page_for_posts] ) ) {
+ 			if ( ! $page_on_front ) {
+ 				if ( $page_for_posts ) {
+@@ -576,11 +577,18 @@
+ 			$excerpt_cache[$page_id][$term_id][$page_on_front][$page_for_posts] = $excerpt;
+ 		}
+ 
++		//* Fetch excerpt from cache.
+ 		$excerpt = $excerpt_cache[$page_id][$term_id][$page_on_front][$page_for_posts];
+ 
++		/**
++		 * Put excerptlength in cache.
++		 * Why cache? My tests have shown that mb_strlen is 1.03x faster than cache fetching.
++		 * However, _mb_strlen (compat) is about 1740x slower. And this is the reason it's cached!
++		 */
+ 		if ( ! isset( $excerptlength_cache[$page_id][$term_id][$page_on_front][$page_for_posts] ) )
+ 			$excerptlength_cache[$page_id][$term_id][$page_on_front][$page_for_posts] = (int) mb_strlen( $excerpt );
+ 
++		//* Fetch the length from cache.
+ 		$excerptlength = $excerptlength_cache[$page_id][$term_id][$page_on_front][$page_for_posts];
+ 
+ 		// Trunculate if the excerpt is longer than the max char length
+@@ -657,7 +665,7 @@
+ 			if ( $this->the_seo_framework_debug_hidden )
+ 				echo "<!--\r\n";
+ 
+-			echo  "\r\n" . 'START: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
++			echo  "\r\n" . 'START: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n";
+ 
+ 			if ( $this->the_seo_framework_debug_more ) {
+ 				$this->echo_debug_information( array( 'title' => $title ) );
+@@ -852,7 +860,7 @@
+ 		if ( $args['placeholder'] && empty( $title ) ) {
+ 			$term_id = $args['term_id'];
+ 
+-			if ( !empty( $term_id ) ) {
++			if ( ! empty( $term_id ) ) {
+ 				$title = get_the_title( $term_id );
+ 			} else if ( $args['page_on_front'] ) {
+ 				$title = get_the_title( get_option( 'page_on_front' ) );
+@@ -863,7 +871,7 @@
+ 				 * Memory leak fix
+ 				 * @since 2.3.5
+ 				 */
+-				$title = isset( $post->post_title ) && !empty( $post->post_title ) ? $post->post_title : '';
++				$title = isset( $post->post_title ) && ! empty( $post->post_title ) ? $post->post_title : '';
+ 			}
+ 		}
+ 
+@@ -934,13 +942,13 @@
+ 		$add_sep = (bool) apply_filters( 'the_seo_framework_doingitwrong_add_sep', true );
+ 
+ 		//* Maybe remove separator.
+-		if ( $add_sep && ( !empty( $sep ) || !empty( $title ) ) ) {
++		if ( $add_sep && ( ! empty( $sep ) || ! empty( $title ) ) ) {
+ 			$sep_replace = true;
+ 			$sep_to_replace = (string) $sep;
+ 		}
+ 
+ 		//* Fetch title from custom fields.
+-		if ( $args['get_custom_field'] && is_singular() ) {
++		if ( $args['get_custom_field'] && ( is_singular() || $this->is_blog_page( $args['term_id'] ) ) ) {
+ 			$title_from_custom_field = $this->title_from_custom_field( $title, false, $args['term_id'] );
+ 			$title = ! empty( $title_from_custom_field ) ? $title_from_custom_field : $title;
+ 		}
+@@ -1123,7 +1131,7 @@
+ 		$sep = (string) apply_filters( 'the_seo_framework_title_separator', $this->get_separator( 'title' ) );
+ 
+ 		//* Fetch title from custom fields.
+-		if ( $args['get_custom_field'] && is_singular() ) {
++		if ( $args['get_custom_field'] && ( is_singular() || $this->is_blog_page( $args['term_id'] ) ) ) {
+ 			$title_from_custom_field = $this->title_from_custom_field( $title, '', $args['term_id'] );
+ 			$title = ! empty( $title_from_custom_field ) ? $title_from_custom_field : $title;
+ 		}
+@@ -1261,7 +1269,7 @@
+ 		 * Combined the statements
+ 		 * @since 2.2.7 && @since 2.2.8
+ 		 */
+-		if ( is_category() || is_tag() || is_tax() || ( !empty( $term_id ) && !empty( $taxonomy ) ) )
++		if ( is_category() || is_tag() || is_tax() || ( ! empty( $term_id ) && ! empty( $taxonomy ) ) )
+ 			$title = $this->title_for_terms();
+ 
+ 		/**
+@@ -1283,8 +1291,8 @@
+ 		if ( empty( $title ) && ! empty( $term_id ) && ! empty( $taxonomy ) ) {
+ 			$term = get_term_by( 'id', $term_id, $taxonomy, OBJECT );
+ 
+-			if ( !empty( $term ) && is_object( $term ) ) {
+-				$term_name = !empty( $term->name ) ? $term->name : $term->slug;
++			if ( ! empty( $term ) && is_object( $term ) ) {
++				$term_name = ! empty( $term->name ) ? $term->name : $term->slug;
+ 			} else {
+ 				$term_name = __( 'Untitled', 'autodescription' );
+ 			}
+@@ -1441,7 +1449,7 @@
+ 		 * @since 2.2.2
+ 		 */
+ 		$home_title_option = (string) $this->get_option( 'homepage_title' );
+-		$home_title = !empty( $home_title_option ) ? $home_title_option : $home_title;
++		$home_title = ! empty( $home_title_option ) ? $home_title_option : $home_title;
+ 
+ 		/**
+ 		 * Fetch from Home Page InPost SEO Box if empty.
+@@ -1456,7 +1464,7 @@
+ 		 */
+ 		if ( $get_custom_field && 'page' === get_option( 'show_on_front' ) && empty( $home_title ) ) {
+ 			$custom_field = $this->get_custom_field( '_genesis_title' );
+-			$home_title = !empty( $custom_field ) ? (string) $custom_field : $home_title;
++			$home_title = ! empty( $custom_field ) ? (string) $custom_field : $home_title;
+ 		}
+ 
+ 		if ( $escape ) {
+@@ -1489,11 +1497,11 @@
+ 			$title = ! empty( $term->admeta['doctitle'] ) ? $term->admeta['doctitle'] : $title;
+ 			$flag = $term->admeta['saved_flag'] != '0' ? true : false;
+ 
+-			if ( !$flag && empty( $title ) && isset( $term->meta['doctitle'] ) )
++			if ( ! $flag && empty( $title ) && isset( $term->meta['doctitle'] ) )
+ 				$title = ! empty( $term->meta['doctitle'] ) ? $term->meta['doctitle'] : $title;
+ 
+ 			if ( empty( $title ) )
+-				$title = !empty( $term->name ) ? wp_strip_all_tags( $this->get_the_archive_title() ) : $term->slug;
++				$title = ! empty( $term->name ) ? wp_strip_all_tags( $this->get_the_archive_title() ) : $term->slug;
+ 
+ 		} else if ( is_tax() ) {
+ 
+@@ -1502,11 +1510,11 @@
+ 			$title = ! empty( $term->admeta['doctitle'] ) ? wp_kses_stripslashes( wp_kses_decode_entities( $term->admeta['doctitle'] ) ) : $title;
+ 			$flag = $term->admeta['saved_flag'] != '0' ? true : false;
+ 
+-			if ( !$flag && empty( $title ) && isset( $term->meta['doctitle'] ) )
++			if ( ! $flag && empty( $title ) && isset( $term->meta['doctitle'] ) )
+ 				$title = ! empty( $term->meta['doctitle'] ) ? wp_kses_stripslashes( wp_kses_decode_entities( $term->meta['doctitle'] ) ) : $title;
+ 
+ 			if ( empty( $title ) )
+-				$title = !empty( $term->name ) ? wp_strip_all_tags( $this->get_the_archive_title() ) : $term->slug;
++				$title = ! empty( $term->name ) ? wp_strip_all_tags( $this->get_the_archive_title() ) : $term->slug;
+ 
+ 		}
+ 
+@@ -1601,7 +1609,7 @@
+ 			if ( $this->the_seo_framework_debug_hidden )
+ 				echo "<!--\r\n";
+ 
+-			echo  "\r\n" . 'START: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
++			echo  "\r\n" . 'START: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n";
+ 			$this->echo_debug_information( array( 'input url' => $url ) );
+ 
+ 			if ( $this->the_seo_framework_debug_more ) {
+@@ -1750,7 +1758,7 @@
+ 		//* Domain Mapping canonical URL
+ 		if ( empty( $url ) ) {
+ 			$dm_url = $this->the_url_donncha_domainmap( $path, true );
+-			if ( !empty( $dm_url ) && is_array( $dm_url ) ) {
++			if ( ! empty( $dm_url ) && is_array( $dm_url ) ) {
+ 				$url = $dm_url[0];
+ 				$scheme = $dm_url[1];
+ 			}
+@@ -1803,7 +1811,7 @@
+ 				$this->echo_debug_information( array( 'args' => $args ) );
+ 			}
+ 			$this->echo_debug_information( array( 'Generation time' => number_format( microtime(true) - $timer_start, 5 ) . 's' ) );
+-			echo  "\r\n" . 'END: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
++			echo  "\r\n" . 'END: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n";
+ 
+ 			if ( $this->the_seo_framework_debug_hidden )
+ 				echo "\r\n-->";
+@@ -1911,7 +1919,7 @@
+ 		if ( ! $external && class_exists( 'QTX_Translator' ) ) {
+ 			static $q_config = null;
+ 
+-			if ( !isset( $q_config ) )
++			if ( ! isset( $q_config ) )
+ 				global $q_config;
+ 
+ 			$mode = $q_config['url_mode'];
+@@ -1967,7 +1975,7 @@
+ 					$lang_path = explode( '/', $path );
+ 					$lang_path = isset( $lang_path[1] ) ? $lang_path[1] : '';
+ 
+-					if ( !empty( $lang_path ) ) {
++					if ( ! empty( $lang_path ) ) {
+ 						//* Directory path parsed succesfully.
+ 
+ 						$language_keys = array_keys( icl_get_languages() );
+@@ -2002,7 +2010,7 @@
+ 							//* Directory path parsed succesfully.
+ 
+ 							$language_keys = array_keys( icl_get_languages() );
+-							if ( !empty( $language_keys ) && in_array( $lang_path, $language_keys ) ) {
++							if ( ! empty( $language_keys ) && in_array( $lang_path, $language_keys ) ) {
+ 								//* Language code isn't found in first part of path. Add it.
+ 
+ 								$path = '/' . $lang_path . '/' . ltrim( $path, '\/ ' );
+@@ -2067,7 +2075,7 @@
+ 		if ( empty( $termlink ) ) {
+ 			if ( 'category' == $taxonomy ) {
+ 				$termlink = '?cat=' . $term->term_id;
+-			} elseif ( isset( $t->query_var ) && !empty( $t->query_var ) ) {
++			} elseif ( isset( $t->query_var ) && ! empty( $t->query_var ) ) {
+ 				$termlink = "?$t->query_var=$slug";
+ 			} else {
+ 				$termlink = "?taxonomy=$taxonomy&term=$slug";
+@@ -2168,8 +2176,8 @@
+ 					$query = $wp_query->query;
+ 
+ 					$year = $query->year;
+-					$month = !empty( $query->monthnum ) ? '&monthnum=' . $query->monthnum : '';
+-					$day = !empty( $query->day ) ? '&day=' . $query->day : '';
++					$month = ! empty( $query->monthnum ) ? '&monthnum=' . $query->monthnum : '';
++					$day = ! empty( $query->day ) ? '&day=' . $query->day : '';
+ 
+ 					$path = '?year=' . $year . $month . $day;
+ 				} else if ( is_author() ) {
+@@ -2183,17 +2191,21 @@
+ 					$path = '?p=' . $id;
+ 				}
+ 			} else {
+-				if ( ! isset( $post ) )
+-					global $post;
++				if ( isset( $post->ID ) ) {
++					$id = $post->ID;
++				} else {
++					$id = $this->get_the_real_ID();
++				}
+ 
+-				$id = $post->ID;
+ 				$path = '?p=' . $id;
+ 			}
+ 		} else {
+-			if ( ! isset( $post ) )
+-				global $post;
++			if ( isset( $post->ID ) ) {
++				$id = $post->ID;
++			} else {
++				$id = $this->get_the_real_ID();
++			}
+ 
+-			$id = $post->ID;
+ 			$path = '?p=' . $id;
+ 		}
+ 
+@@ -2226,7 +2238,7 @@
+ 				$this->object_cache_set( $mapped_key, $mapped_domain, 3600 );
+ 			}
+ 
+-			if ( !empty( $mapped_domain ) ) {
++			if ( ! empty( $mapped_domain ) ) {
+ 
+ 				$scheme_key = 'wpmudev_mapped_scheme_' . $blog_id;
+ 
+@@ -2645,7 +2657,7 @@
+ 				}
+ 			}
+ 
+-			$image = !empty( $path ) ? $path : '';
++			$image = ! empty( $path ) ? $path : '';
+ 		}
+ 
+ 		return $image;
+@@ -2834,7 +2846,7 @@
+ 			$meta['noarchive'] = $this->get_option( 'attachment_noarchive' ) ? 'noarchive' : $meta['noarchive'];
+ 		}
+ 
+-		if ( is_singular() ) {
++		if ( is_singular() || $this->is_blog_page() ) {
+ 			$meta['noindex'] = $this->get_custom_field( '_genesis_noindex' ) ? 'noindex' : $meta['noindex'];
+ 			$meta['nofollow'] = $this->get_custom_field( '_genesis_nofollow' ) ? 'nofollow' : $meta['nofollow'];
+ 			$meta['noarchive'] = $this->get_custom_field( '_genesis_noarchive' ) ? 'noarchive' : $meta['noarchive'];
+@@ -2860,15 +2872,12 @@
+ 
+ 			$path = null;
+ 
+-			if ( is_singular() ) {
++			if ( is_singular() || $this->is_blog_page() ) {
+ 
+-				if ( 0 == $post_id ) {
+-					$post = get_post( $post_id );
+-					if ( ! empty( $post->ID ) )
+-						$post_id = $post->ID;
+-				}
++				if ( 0 == $post_id )
++					$post_id = $this->get_the_real_ID();
+ 
+-				if ( !empty( $post_id ) ) {
++				if ( ! empty( $post_id ) ) {
+ 					if ( $this->is_static_frontpage( $post_id ) ) {
+ 						$path = '';
+ 					} else {
+@@ -2910,14 +2919,10 @@
+ 				if ( empty( $path ) ) {
+ 					$id = isset( $object->ID ) ? $object->ID : 0;
+ 
+-					if ( !empty( $id ) )
++					if ( ! empty( $id ) )
+ 						$path = '?p=' . $id;
+ 				}
+ 
+-			} else if ( 'page' == get_option( 'show_on_front' ) && $this->get_the_real_ID() == get_option( 'page_for_posts' ) ) {
+-				//* Page for posts
+-				$id =  $this->get_the_real_ID();
+-				$path = '?p=' . $id;
+ 			} else {
+ 				//* Home page
+ 				$path = '';
+@@ -2957,7 +2962,7 @@
+ 	 */
+ 	public function get_paged_url( $prev_next = 'next', $post_id = 0 ) {
+ 
+-		if ( !$this->get_option( 'prev_next_posts' ) && !$this->get_option( 'prev_next_archives' ) )
++		if ( ! $this->get_option( 'prev_next_posts' ) && ! $this->get_option( 'prev_next_archives' ) )
+ 			return '';
+ 
+ 		global $wp_query;
+@@ -3206,7 +3211,7 @@
+ 				$items = '';
+ 
+ 				foreach ( $trees as $tree ) {
+-					if ( !empty( $tree ) ) {
++					if ( ! empty( $tree ) ) {
+ 
+ 						$tree = array_reverse( $tree );
+ 
+@@ -3256,7 +3261,7 @@
+ 								$items .= sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}},', $item_type, (string) $pos, $id, $name );
+ 							}
+ 
+-							if ( !empty( $items ) ) {
++							if ( ! empty( $items ) ) {
+ 
+ 								$items = $this->ld_json_breadcrumb_first( $item_type ) . $items . $this->ld_json_breadcrumb_last( $item_type, $pos, $post_id );
+ 
+@@ -3292,7 +3297,7 @@
+ 					$id = json_encode( $this->the_url( '', $parent_id, array( 'get_custom_field' => false, 'external' => true ) ) );
+ 
+ 					$custom_field_name = $this->get_custom_field( '_genesis_title', $parent_id );
+-					$parent_name = !empty( $custom_field_name ) ? $custom_field_name : $this->title( '', '', '', array( 'term_id' => $parent_id, 'get_custom_field' => false, 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
++					$parent_name = ! empty( $custom_field_name ) ? $custom_field_name : $this->title( '', '', '', array( 'term_id' => $parent_id, 'get_custom_field' => false, 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
+ 
+ 					$name = json_encode( $parent_name );
+ 
+@@ -3487,7 +3492,7 @@
+ 		//* Remove trailing comma
+ 		$sameurls = rtrim( $sameurls, $comma );
+ 
+-		if ( !empty( $sameurls ) )
++		if ( ! empty( $sameurls ) )
+ 			$json = sprintf( '{"@context":%s,"@type":%s,"name":%s,"url":%s,%s"sameAs":[%s]}', $context, $type, $name, $url, $logo, $sameurls );
+ 
+ 		return $json;
+Index: inc/classes/init.class.php
+===================================================================
+--- inc/classes/init.class.php	(revision 1322361)
++++ inc/classes/init.class.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ /**
+@@ -150,7 +150,7 @@
+ 
+ 		$functions = wp_parse_args( $args, $filter );
+ 
+-		if ( !empty( $functions ) && is_array( $functions ) ) {
++		if ( ! empty( $functions ) && is_array( $functions ) ) {
+ 			foreach ( $functions as $function ) {
+ 				$arguments = isset( $function['args'] ) ? $function['args'] : '';
+ 
+@@ -248,7 +248,7 @@
+ 			$robots = $this->robots();
+ 
+ 			//* Limit processing on 404 or search
+-			if ( !is_404() && !is_search() ) {
++			if ( ! is_404() && ! is_search() ) {
+ 				$output	= $this->the_description()
+ 						. $this->og_image()
+ 						. $this->og_locale()
+Index: inc/classes/inpost.class.php
+===================================================================
+--- inc/classes/inpost.class.php	(revision 1322361)
++++ inc/classes/inpost.class.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ /**
+@@ -108,7 +108,7 @@
+ 			if ( is_object( $object ) ) {
+ 				$labels = isset( $object->labels ) ? $object->labels : '';
+ 
+-				if ( !empty( $labels ) ) {
++				if ( ! empty( $labels ) ) {
+ 					$singular_name = isset( $labels->singular_name ) ? $labels->singular_name : $labels->name;
+ 
+ 					//* Title and type are used interchangeably.
+@@ -194,7 +194,7 @@
+ 		} else {
+ 			$term = get_term_by( 'id', $object->term_id, $object->taxonomy, OBJECT );
+ 
+-			if ( !empty( $term ) && is_object( $term ) ) {
++			if ( ! empty( $term ) && is_object( $term ) ) {
+ 				$tax_type = $term->taxonomy;
+ 
+ 				/**
+@@ -251,7 +251,7 @@
+ 		$flag = $ad_savedflag ? true : false;
+ 
+ 		//* Genesis data fetch. This will override our options with Genesis options.
+-		if ( !$flag && isset( $object->meta ) ) {
++		if ( ! $flag && isset( $object->meta ) ) {
+ 			if ( empty( $ad_doctitle ) && isset( $object->meta['doctitle'] ) )
+ 				$ad_doctitle = $object->meta['doctitle'];
+ 
+@@ -477,7 +477,7 @@
+ 		if ( $is_static_frontpage && ! $this->get_option( 'homepage_tagline' ) ) {
+ 			$tit_len_pre = ! empty( $title ) ? $title : $generated_doctitle;
+ 		} else if ( $is_static_frontpage ) {
+-			$tit_len_pre = !empty( $title ) ? $title . " | " . get_bloginfo( 'description', 'raw' ) : $generated_doctitle;
++			$tit_len_pre = ! empty( $title ) ? $title . " | " . get_bloginfo( 'description', 'raw' ) : $generated_doctitle;
+ 		} else {
+ 			/**
+ 			 * Calculate true Title length
+Index: inc/classes/metaboxes.class.php
+===================================================================
+--- inc/classes/metaboxes.class.php	(revision 1322361)
++++ inc/classes/metaboxes.class.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ /**
+@@ -113,8 +113,8 @@
+ 				<span>
+ 					<input type="radio" class="<?php echo $id; ?>-tabs-radio" id="<?php echo $id; ?>-tab-<?php echo $tab ?>" name="<?php echo $id; ?>-tabs" <?php echo $count == abs(1) ? 'checked' : ''; ?>>
+ 					<label for="<?php echo $id; ?>-tab-<?php echo $tab ?>" class="nav-tab <?php echo $count == abs(1) ? 'nav-tab-active' : '' ?>">
+-						<?php echo !empty( $dashicon ) ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' dashicons-tabs"></span>' : ''; ?>
+-						<?php echo !empty( $name ) ? '<span class="seoframework-nav-desktop">' . esc_attr( $name ) . '</span>' : ''; ?>
++						<?php echo ! empty( $dashicon ) ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' dashicons-tabs"></span>' : ''; ?>
++						<?php echo ! empty( $name ) ? '<span class="seoframework-nav-desktop">' . esc_attr( $name ) . '</span>' : ''; ?>
+ 					</label>
+ 				</span>
+ 				<?php
+@@ -138,10 +138,10 @@
+ 			<div class="<?php echo $id; ?>-tab-content <?php echo $_count == abs(1) ? 'checked-tab' : ''; ?> <?php echo $_count != abs(1) ? 'hide-if-js' : ''; ?>" id="<?php echo $id; ?>-tab-<?php echo $tab ?>-box">
+ 				<h3 class="nav-tab-wrapper hide-if-js">
+ 					<span class="nav-tab nav-tab-active">
+-						<?php echo !empty( $dashicon ) ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' dashicons-tabs"></span>' : ''; ?>
++						<?php echo ! empty( $dashicon ) ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' dashicons-tabs"></span>' : ''; ?>
+ 						<?php
+ 						// This is no-javascript
+-						echo !empty( $name ) ? esc_attr( $name ) : '';
++						echo ! empty( $name ) ? esc_attr( $name ) : '';
+ 						?>
+ 					</span>
+ 				</h3>
+@@ -148,7 +148,7 @@
+ 			<?php
+ 				$callback = isset( $value['callback'] ) ? $value['callback'] : '';
+ 
+-				if ( !empty( $callback ) ) {
++				if ( ! empty( $callback ) ) {
+ 					$params = isset( $value['args'] ) ? $value['args'] : '';
+ 					$output = $this->call_function( $callback, $version, $params );
+ 					echo $output;
+@@ -576,7 +576,7 @@
+ 		 * title and the frompost title.
+ 		 * @since 2.3.4
+ 		 */
+-		if ( empty( $home_title ) && ! $home_is_blog_notify && !empty( $frompost_title ) )
++		if ( empty( $home_title ) && ! $home_is_blog_notify && ! empty( $frompost_title ) )
+ 			$home_title_frompost = true;
+ 
+ 		//* Get blog tagline
+@@ -1531,7 +1531,7 @@
+ 				<label for="<?php $this->field_id( $value['option'] ); ?>">
+ 					<strong><?php echo $value['desc'] ?></strong>
+ 					<?php
+-					if ( !empty( $value['examplelink'] ) ) {
++					if ( ! empty( $value['examplelink'] ) ) {
+ 						?><a href="<?php echo esc_url( $value['examplelink'] ); ?>" target="_blank">[?]</a><?php
+ 					}
+ 					?>
+Index: inc/classes/networkoptions.class.php
+===================================================================
+--- inc/classes/networkoptions.class.php	(revision 1291855)
++++ inc/classes/networkoptions.class.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ /**
+Index: inc/classes/pageoptions.class.php
+===================================================================
+--- inc/classes/pageoptions.class.php	(revision 1322361)
++++ inc/classes/pageoptions.class.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ /**
+Index: inc/classes/postdata.class.php
+===================================================================
+--- inc/classes/postdata.class.php	(revision 1322361)
++++ inc/classes/postdata.class.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ /**
+@@ -112,7 +112,7 @@
+ 		}
+ 
+ 		//* Stop getting something that doesn't exists. E.g. 404
+-		if ( is_array( $post ) && !isset( $post['post_content'] ) || is_object( $post ) || ( isset( $post['ID'] ) && 0 == $post['ID'] ) )
++		if ( is_array( $post ) && ! isset( $post['post_content'] ) || is_object( $post ) || ( isset( $post['ID'] ) && 0 == $post['ID'] ) )
+ 			return '';
+ 
+ 		/**
+Index: inc/classes/render.class.php
+===================================================================
+--- inc/classes/render.class.php	(revision 1322361)
++++ inc/classes/render.class.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ /**
+@@ -333,10 +333,12 @@
+ 		$type = (string) apply_filters( 'the_seo_framework_ogtype_output', '' );
+ 
+ 		if ( empty( $type ) ) {
+-			if ( is_single() ) {
++			if ( is_single() && ! empty( $this->get_image_from_cache() ) ) {
+ 				$type = 'article';
+ 			} else if ( is_author() ) {
+ 				$type = 'profile';
++			} else if ( $this->is_blog_page() || ( is_front_page() && 'page' !== get_option( 'show_on_front' ) ) ) {
++				$type = 'blog';
+ 			} else {
+ 				$type = 'website';
+ 			}
+@@ -532,7 +534,7 @@
+ 			 * Return site:id instead of creator is no twitter:site is found.
+ 			 * Per Twitter requirements
+ 			 */
+-			if ( empty( $site ) && !empty( $creator ) )
++			if ( empty( $site ) && ! empty( $creator ) )
+ 				return '<meta name="twitter:site:id" content="' . esc_attr( $creator ) . '" />' . "\r\n";
+ 		}
+ 
+@@ -605,7 +607,7 @@
+ 		if ( empty( $image ) )
+ 			$image = $this->get_image_from_cache();
+ 
+-		if ( !empty( $image ) ) {
++		if ( ! empty( $image ) ) {
+ 			return '<meta name="twitter:image:src" content="' . esc_attr( $image ) . '" />' . "\r\n";
+ 		} else {
+ 			return '';
+@@ -632,7 +634,7 @@
+ 			$author = $this->get_option( 'facebook_author' );
+ 
+ 		if ( ! empty( $author ) )
+-			return '<meta name="article:author" content="' . esc_attr( esc_url_raw( $author ) ) . '" />' . "\r\n";
++			return '<meta property="article:author" content="' . esc_attr( esc_url_raw( $author ) ) . '" />' . "\r\n";
+ 
+ 		return '';
+ 	}
+@@ -656,7 +658,7 @@
+ 			$publisher = $this->get_option( 'facebook_publisher' );
+ 
+ 		if ( ! empty( $publisher ) )
+-			return '<meta name="article:publisher" content="' . esc_attr( esc_url_raw( $publisher ) ) . '" />' . "\r\n";
++			return '<meta property="article:publisher" content="' . esc_attr( esc_url_raw( $publisher ) ) . '" />' . "\r\n";
+ 
+ 		return '';
+ 	}
+@@ -680,7 +682,7 @@
+ 			$app_id = $this->get_option( 'facebook_appid' );
+ 
+ 		if ( ! empty( $app_id ) )
+-			return '<meta name="fb:app_id" content="' . esc_attr( $app_id ) . '" />' . "\r\n";
++			return '<meta property="fb:app_id" content="' . esc_attr( $app_id ) . '" />' . "\r\n";
+ 
+ 		return '';
+ 	}
+@@ -695,7 +697,7 @@
+ 	public function article_published_time() {
+ 
+ 		// Don't do anything if it's not a page or post.
+-		if ( !is_singular() )
++		if ( ! is_singular() )
+ 			return;
+ 
+ 		$front_page = (bool) is_front_page();
+@@ -719,7 +721,7 @@
+ 			$time = get_the_date( 'Y-m-d', '' );
+ 
+ 		if ( ! empty( $time ) )
+-			return '<meta name="article:published_time" content="' . esc_attr( $time ) . '" />' . "\r\n";
++			return '<meta property="article:published_time" content="' . esc_attr( $time ) . '" />' . "\r\n";
+ 
+ 		return '';
+ 	}
+@@ -734,7 +736,7 @@
+ 	public function article_modified_time() {
+ 
+ 		// Don't do anything if it's not a page or post, or if both options are disabled
+-		if ( !is_singular() )
++		if ( ! is_singular() )
+ 			return;
+ 
+ 		$is_front_page = is_front_page();
+@@ -758,7 +760,7 @@
+ 			$time = the_modified_date( 'Y-m-d', '', '', false );
+ 
+ 		if ( ! empty( $time ) ) {
+-			$output = '<meta name="article:modified_time" content="' . esc_attr( $time ) . '" />' . "\r\n";
++			$output = '<meta property="article:modified_time" content="' . esc_attr( $time ) . '" />' . "\r\n";
+ 
+ 			if ( $this->get_option( 'og_tags' ) )
+ 				$output .= '<meta property="og:updated_time" content="' . esc_attr( $time ) . '" />'. "\r\n";
+@@ -850,7 +852,7 @@
+ 			if ( $this->the_seo_framework_debug_hidden )
+ 				echo "<!--\r\n";
+ 
+-			echo  "\r\n" . 'START: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
++			echo  "\r\n" . 'START: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n";
+ 			$this->echo_debug_information( array( 'LD Json transient name' => $this->ld_json_transient ) );
+ 			$this->echo_debug_information( array( 'Output from transient' => ( get_transient( $this->ld_json_transient ) ? true : false ) ) );
+ 
+@@ -910,7 +912,7 @@
+ 			if ( $this->the_seo_framework_debug_hidden ) {
+ 				$this->echo_debug_information( array( 'LD Json transient output' => $output ) );
+ 			}
+-			echo  "\r\n" . 'END: ' .__CLASS__ . '::' . __FUNCTION__ .  "\r\n";
++			echo  "\r\n" . 'END: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n";
+ 
+ 			if ( $this->the_seo_framework_debug_hidden )
+ 				echo "\r\n-->";
+Index: inc/classes/sanitize.class.php
+===================================================================
+--- inc/classes/sanitize.class.php	(revision 1322361)
++++ inc/classes/sanitize.class.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ /**
+@@ -315,7 +315,7 @@
+ 	 */
+ 	public function sanitize( $new_value, $option ) {
+ 
+-		if ( !isset( $this->options[$option] ) ) {
++		if ( ! isset( $this->options[$option] ) ) {
+ 			//* We are not filtering this option at all
+ 			return $new_value;
+ 		} else if ( is_string( $this->options[$option] ) ) {
+@@ -717,7 +717,7 @@
+ 
+ 		if ( substr( $profile, 0, 4 ) === 'http' ) {
+ 			$path = str_replace( '/', '', parse_url( $profile, PHP_URL_PATH ) );
+-			$profile = !empty( $path ) ? '@' . $path : '';
++			$profile = ! empty( $path ) ? '@' . $path : '';
+ 
+ 			return (string) $profile;
+ 		}
+@@ -793,7 +793,7 @@
+ 						$this->object_cache_set( $mapped_key, $mapped_domain, 3600 );
+ 					}
+ 
+-					if ( !empty( $mapped_domain ) ) {
++					if ( ! empty( $mapped_domain ) ) {
+ 						//* Set that the domain is mapped
+ 						$ismapped = '1';
+ 
+@@ -825,7 +825,7 @@
+ 					$scheme = is_ssl() ? 'https' : 'http';
+ 				}
+ 
+-				$scheme = !empty( $scheme ) ? $scheme : '';
++				$scheme = ! empty( $scheme ) ? $scheme : '';
+ 
+ 				$url = esc_url_raw( $url, $scheme );
+ 
+Index: inc/classes/search.class.php
+===================================================================
+--- inc/classes/search.class.php	(revision 1307169)
++++ inc/classes/search.class.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ /**
+@@ -101,7 +101,7 @@
+ 					$get = $query->get( 'post__not_in' );
+ 
+ 					//* Merge user defined query.
+-					if ( !empty( $get ) )
++					if ( ! empty( $get ) )
+ 						$protected_posts = array_merge( $protected_posts, $get );
+ 
+ 					$query->set( 'post__not_in', $protected_posts );
+Index: inc/classes/sitemaps.class.php
+===================================================================
+--- inc/classes/sitemaps.class.php	(revision 1322361)
++++ inc/classes/sitemaps.class.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ /**
+@@ -543,7 +543,7 @@
+ 				 *
+ 				 * 60s * 60m
+ 				 */
+-				$expiration = 60 * 60;
++				$expiration = (int) apply_filters( 'the_seo_framework_sitemap_throttle_seconds', 60 * 60 );
+ 
+ 				set_transient( $transient, $throttle, $expiration );
+ 			}
+Index: inc/classes/siteoptions.class.php
+===================================================================
+--- inc/classes/siteoptions.class.php	(revision 1322361)
++++ inc/classes/siteoptions.class.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ /**
+@@ -450,7 +450,7 @@
+ 	 */
+ 	public function get_default_settings( $key, $setting = '', $use_cache = true ) {
+ 
+-		if ( !isset( $key ) || empty( $key ) )
++		if ( ! isset( $key ) || empty( $key ) )
+ 			return false;
+ 
+ 		//* Fetch default settings if it's not set.
+@@ -501,7 +501,7 @@
+ 	 */
+ 	public function get_warned_settings( $key, $setting = '', $use_cache = true ) {
+ 
+-		if ( !isset( $key ) || empty( $key ) )
++		if ( ! isset( $key ) || empty( $key ) )
+ 			return false;
+ 
+ 		//* Fetch default settings if it's not set.
+Index: inc/classes/transients.class.php
+===================================================================
+--- inc/classes/transients.class.php	(revision 1322361)
++++ inc/classes/transients.class.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ /**
+@@ -441,7 +441,7 @@
+ 
+ 		$flushed = null;
+ 
+-		if ( !isset( $flushed ) ) {
++		if ( ! isset( $flushed ) ) {
+ 			$this->setup_ld_json_transient( $page_id, $taxonomy );
+ 
+ 			delete_transient( $this->ld_json_transient );
+Index: inc/deprecated/deprecated.class.php
+===================================================================
+--- inc/deprecated/deprecated.class.php	(revision 1294621)
++++ inc/deprecated/deprecated.class.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ /**
+Index: inc/deprecated/deprecated.php
+===================================================================
+--- inc/deprecated/deprecated.php	(revision 1291855)
++++ inc/deprecated/deprecated.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ /**
+Index: inc/functions/compat.php
+===================================================================
+--- inc/functions/compat.php	(revision 1294621)
++++ inc/functions/compat.php	(working copy)
+@@ -216,10 +216,10 @@
+ 			return false;
+ 		}
+ 
+-		if ( !is_string( $needle ) ) {
++		if ( ! is_string( $needle ) ) {
+ 			$needle = (string) $needle;
+ 
+-			if ( !is_string( $needle ) ) {
++			if ( ! is_string( $needle ) ) {
+ 				trigger_error( 'mb_strpos(): Array to string conversion', E_USER_WARNING );
+ 				return false;
+ 			}
+Index: inc/functions/optionsapi.php
+===================================================================
+--- inc/functions/optionsapi.php	(revision 1322361)
++++ inc/functions/optionsapi.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ /**
+Index: lib/js/autodescription.js
+===================================================================
+--- lib/js/autodescription.js	(revision 1322361)
++++ lib/js/autodescription.js	(working copy)
+@@ -9,7 +9,7 @@
+ 
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -17,11 +17,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ // ==ClosureCompiler==
+Index: load.class.php
+===================================================================
+--- load.class.php	(revision 1322361)
++++ load.class.php	(working copy)
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * The SEO Framework plugin
+- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
++ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License version 3 as published
+@@ -9,11 +9,11 @@
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ add_action( 'plugins_loaded', 'the_seo_framework_init', 5 );

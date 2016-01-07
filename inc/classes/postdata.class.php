@@ -1,7 +1,7 @@
 <?php
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -9,11 +9,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -112,7 +112,7 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 		}
 
 		//* Stop getting something that doesn't exists. E.g. 404
-		if ( is_array( $post ) && !isset( $post['post_content'] ) || is_object( $post ) || ( isset( $post['ID'] ) && 0 == $post['ID'] ) )
+		if ( is_array( $post ) && ! isset( $post['post_content'] ) || is_object( $post ) || ( isset( $post['ID'] ) && 0 == $post['ID'] ) )
 			return '';
 
 		/**
