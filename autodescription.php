@@ -47,7 +47,7 @@
  * Removed previous constant.
  * @since 2.3.5
  */
-define( 'THE_SEO_FRAMEWORK_VERSION', '2.5.0' );
+define( 'THE_SEO_FRAMEWORK_VERSION', '2.5.1' );
 
 /**
  * Plugin options filter
