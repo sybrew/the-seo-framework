@@ -632,7 +632,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 			$author = $this->get_option( 'facebook_author' );
 
 		if ( ! empty( $author ) )
-			return '<meta name="article:author" content="' . esc_attr( esc_url_raw( $author ) ) . '" />' . "\r\n";
+			return '<meta property="article:author" content="' . esc_attr( esc_url_raw( $author ) ) . '" />' . "\r\n";
 
 		return '';
 	}
@@ -656,7 +656,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 			$publisher = $this->get_option( 'facebook_publisher' );
 
 		if ( ! empty( $publisher ) )
-			return '<meta name="article:publisher" content="' . esc_attr( esc_url_raw( $publisher ) ) . '" />' . "\r\n";
+			return '<meta property="article:publisher" content="' . esc_attr( esc_url_raw( $publisher ) ) . '" />' . "\r\n";
 
 		return '';
 	}
@@ -680,7 +680,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 			$app_id = $this->get_option( 'facebook_appid' );
 
 		if ( ! empty( $app_id ) )
-			return '<meta name="fb:app_id" content="' . esc_attr( $app_id ) . '" />' . "\r\n";
+			return '<meta property="fb:app_id" content="' . esc_attr( $app_id ) . '" />' . "\r\n";
 
 		return '';
 	}
@@ -719,7 +719,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 			$time = get_the_date( 'Y-m-d', '' );
 
 		if ( ! empty( $time ) )
-			return '<meta name="article:published_time" content="' . esc_attr( $time ) . '" />' . "\r\n";
+			return '<meta property="article:published_time" content="' . esc_attr( $time ) . '" />' . "\r\n";
 
 		return '';
 	}
@@ -758,7 +758,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 			$time = the_modified_date( 'Y-m-d', '', '', false );
 
 		if ( ! empty( $time ) ) {
-			$output = '<meta name="article:modified_time" content="' . esc_attr( $time ) . '" />' . "\r\n";
+			$output = '<meta property="article:modified_time" content="' . esc_attr( $time ) . '" />' . "\r\n";
 
 			if ( $this->get_option( 'og_tags' ) )
 				$output .= '<meta property="og:updated_time" content="' . esc_attr( $time ) . '" />'. "\r\n";

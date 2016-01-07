@@ -543,7 +543,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 				 *
 				 * 60s * 60m
 				 */
-				$expiration = 60 * 60;
+				$expiration = (int) apply_filters( 'the_seo_framework_sitemap_throttle_seconds', 60 * 60 );
 
 				set_transient( $transient, $throttle, $expiration );
 			}

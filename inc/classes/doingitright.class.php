@@ -35,7 +35,6 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		parent::__construct();
 
 		add_action( 'current_screen', array( $this, 'init_columns' ) );
-		add_action( 'wp_ajax_current_screen', array( $this, 'init_columns' ) );
 	}
 
 	/**

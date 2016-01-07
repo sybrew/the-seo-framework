@@ -156,7 +156,7 @@ The output will be stored for each page, if you've edited a page the page output
 **Themes:**
 
 * All themes.
-* Special extended support Genesis & Genesis SEO. This plugin takes all Post, Page, Category and Tag SEO values from Genesis and uses them within The SEO Framework Options. The easiest upgrade!
+* Special extended support for Genesis & Genesis SEO. This plugin takes all Post, Page, Category and Tag SEO values from Genesis and uses them within The SEO Framework Options. The easiest upgrade!
 
 **Caches:**
 
@@ -210,8 +210,6 @@ Because this plugin was initially written to extend the Genesis SEO, it uses the
 1. Adjust the SEO settings through the SEO settings page if desired. Red checkboxes are rather left unchecked. Green checkboxes are default enabled.
 
 == Screenshots ==
-
-**Screenshots as of The SEO Framework version 2.5.0**
 
 1. This plugin shows you what you can improve, at a glance. With full color vision deficiency support.
 2. Hover over any of the SEO Bar's items to see how you can improve the page's SEO. Red is bad, orange is okay, green is good. Blue is situational.

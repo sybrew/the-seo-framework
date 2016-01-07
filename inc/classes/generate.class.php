@@ -556,6 +556,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		$term_id = isset( $term->term_id ) ? $term->term_id : false;
 
+		//* Put excerpt in cache.
 		if ( ! isset( $excerpt_cache[$page_id][$term_id][$page_on_front][$page_for_posts] ) ) {
 			if ( ! $page_on_front ) {
 				if ( $page_for_posts ) {
@@ -576,11 +577,18 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$excerpt_cache[$page_id][$term_id][$page_on_front][$page_for_posts] = $excerpt;
 		}
 
+		//* Fetch excerpt from cache.
 		$excerpt = $excerpt_cache[$page_id][$term_id][$page_on_front][$page_for_posts];
 
+		/**
+		 * Put excerptlength in cache.
+		 * Why cache? My tests have shown that mb_strlen is 1.03x faster than cache fetching.
+		 * However, _mb_strlen (compat) is about 1740x slower. And this is the reason it's cached!
+		 */
 		if ( ! isset( $excerptlength_cache[$page_id][$term_id][$page_on_front][$page_for_posts] ) )
 			$excerptlength_cache[$page_id][$term_id][$page_on_front][$page_for_posts] = (int) mb_strlen( $excerpt );
 
+		//* Fetch the length from cache.
 		$excerptlength = $excerptlength_cache[$page_id][$term_id][$page_on_front][$page_for_posts];
 
 		// Trunculate if the excerpt is longer than the max char length
