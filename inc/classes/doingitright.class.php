@@ -210,7 +210,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		if ( isset( $post_id ) && ! empty( $post_id ) ) {
 
 			//* Fetch Post Type.
-			if ( empty( $type ) )
+			if ( empty( $type ) || 'inpost' === $type )
 				$type = get_post_type( $post_id );
 
 			//* No need to re-evalute these.
@@ -330,7 +330,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 				$ad_100 = '';
 			} else {
 				$ad_savedflag = $term->admeta['saved_flag'] != '0' ? true : false;
-				$flag = $ad_savedflag ? true : false;
+				$flag = (bool) $ad_savedflag;
 
 				$noindex = isset( $term->admeta['noindex'] ) ? $term->admeta['noindex'] : '';
 				$redirect = ''; // We don't apply redirect on taxonomies (yet)
@@ -347,7 +347,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 				//* No redirect or noindex found, proceed.
 
 				if ( ! $is_term ) {
-					$title_custom_field = $this->get_custom_field( '_genesis_title' ) ? true : false;
+					$title_custom_field = (bool) $this->get_custom_field( '_genesis_title' );
 
 					$description = $this->get_custom_field( '_genesis_description' ) ? $this->get_custom_field( '_genesis_description' ) : '';
 
@@ -366,7 +366,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 					//* Fetch the title normally.
 					if ( $title_custom_field && ! $is_front_page ) {
 						//* Let's try not to fix the bloated function for now.
-						$blogname = get_bloginfo( 'name', 'raw' );
+						$blogname = $this->get_blogname();
 
 						$title = $this->title_from_custom_field();
 
@@ -389,7 +389,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 					//* Fetch the title normally.
 					if ( $title_custom_field ) {
 						//* Let's try not to fix the bloated function for now.
-						$blogname = get_bloginfo( 'name', 'raw' );
+						$blogname = $this->get_blogname();
 
 						/**
 						 * Separator doesn't matter. Since html_entity_decode is used.

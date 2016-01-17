@@ -61,40 +61,53 @@ class AutoDescription_Init {
 	 */
 	public function autodescription_run() {
 
-		//* Don't run in admin.
-		if ( is_admin() )
+		/**
+		 * Don't run in admin.
+		 * Don't do anything on preview either.
+		 * @since 2.2.4
+		 */
+		if ( is_admin() || is_preview() )
 			return;
+
+		$this->init_actions();
+		$this->init_filters();
+	}
+
+	/**
+	 * Initialize front-end actions.
+	 *
+	 * @since 2.5.2
+	 */
+	protected function init_actions() {
 
 		//* Remove canonical header tag from WP
 		remove_action( 'wp_head', 'rel_canonical' );
-		//* Remove generator tag from WP
-		add_filter( 'the_generator', '__return_false' );
+		//* Remove shortlink.
+		remove_action( 'wp_head', 'wp_shortlink_wp_head' );
+		//* Remove adjecent rel tags.
+		remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head' );
+		//* Earlier removal of the generator tag. Doesn't require filter.
+		remove_action( 'wp_head', 'wp_generator' );
 
-		/**
-		 * No longer needs cache, it's the only call.
-		 * @since 2.3.8
-		 */
-		$genesis = $this->is_theme( 'genesis', false );
-
-		/**
-		 * Disables the title tag manipulation on old themes.
-		 * Applies filters the_seo_framework_manipulate_title
-		 *
-		 * Genesis SEO is disabled through this plugin, so to prevent empty
-		 * titles this filter will not work when using Genesis.
-		 *
-		 * @since 2.4.1
-		 */
-		if ( $genesis || (bool) apply_filters( 'the_seo_framework_manipulate_title', true ) ) {
-			//* Override WordPress Title
-			add_filter( 'wp_title', array( $this, 'title_from_cache' ), 9, 3 );
+		if ( $this->is_theme( 'genesis', false ) ) {
+			add_action( 'genesis_meta', array( $this, 'html_output' ), 5 );
+		} else {
+			add_action( 'wp_head', array( $this, 'html_output' ), 1 );
 		}
+	}
+
+	/**
+	 * Initialize front-end filters.
+	 *
+	 * @since 2.5.2
+	 */
+	protected function init_filters() {
 
 		//* Removes all pre_get_document_title filters.
 		remove_all_filters( 'pre_get_document_title', false );
+
 		//* New WordPress 4.4.0 filter. Hurray! It's also much faster :)
 		add_filter( 'pre_get_document_title', array( $this, 'title_from_cache' ), 10 );
-
 		//* Override AnsPress Theme Title
 		add_filter( 'ap_title', array( $this, 'title_from_cache' ), 99, 1 );
 		//* Override bbPress title
@@ -102,20 +115,15 @@ class AutoDescription_Init {
 		//* Override Woo Themes Title
 		add_filter( 'woo_title', array( $this, 'title_from_cache'), 99 );
 
-		//* Remove shortlink.
-		remove_action( 'wp_head', 'wp_shortlink_wp_head', 10, 0 );
-
 		/**
-		 * Don't do anything on preview
-		 * @since 2.2.4
+		 * Disables the title tag manipulation on old themes.
+		 * Applies filters the_seo_framework_manipulate_title
+		 *
+		 * @since 2.4.1
 		 */
-		if ( ! is_preview() ) {
-
-			if ( $genesis ) {
-				add_action( 'genesis_meta', array( $this, 'html_output' ), 5 );
-			} else {
-				add_action( 'wp_head', array( $this, 'html_output' ), 1 );
-			}
+		if ( (bool) apply_filters( 'the_seo_framework_manipulate_title', true ) ) {
+			//* Override WordPress Title
+			add_filter( 'wp_title', array( $this, 'title_from_cache' ), 9, 3 );
 		}
 	}
 
@@ -225,8 +233,9 @@ class AutoDescription_Init {
 		$indicatorafter = '';
 
 		if ( $indicator ) {
-			$indicatorbefore = '<!-- Start The Seo Framework' . ( $sybre ? ' by Sybre Waaijer' : '' ) . ' -->' . "\r\n";
-			$indicatorafter = '<!-- End The Seo Framework' . ( $sybre ? ' by Sybre Waaijer' : '' ) . ' -->' . "\r\n";
+			$me =  $sybre ? ' ' . __( 'by Sybre Waaijer', 'autodescription' ) : '';
+			$indicatorbefore = '<!-- ' . __( 'Start The Seo Framework', 'autodescription' ) . $me . ' -->' . "\r\n";
+			$indicatorafter = '<!-- ' . __( 'End The Seo Framework', 'autodescription' ) . $me . ' -->' . "\r\n";
 		}
 
 		$cache_key = 'seo_framework_output_' . $key . '_' . $paged . '_' . $page;
@@ -274,6 +283,7 @@ class AutoDescription_Init {
 						. $this->ld_json()
 						. $this->google_site_output()
 						. $this->bing_site_output()
+						. $this->pint_site_output()
 						;
 			} else {
 				$output	= $this->og_locale()
@@ -286,6 +296,7 @@ class AutoDescription_Init {
 						. $this->canonical()
 						. $this->google_site_output()
 						. $this->bing_site_output()
+						. $this->pint_site_output()
 						;
 			}
 
@@ -434,10 +445,7 @@ class AutoDescription_Init {
 	 * @return something that will make your head explode.
 	 */
 	public function explode() {
-		add_action( 'wp_head', function() {
-				?><style>div:hover>div{-webkit-animation:troll 5s infinite cubic-bezier(0,1.5,.5,1)1s;animation:troll 5s infinite cubic-bezier(0,1.5,.5,1)1s}@-webkit-keyframes troll{100%{-webkit-transform:rotate(0)}75%{-webkit-transform:rotate(30deg)}25%{-webkit-transorm:rotate(0)}0%{-webkit-transorm:rotate(30deg)}}@keyframes troll{100%,25%{transform:rotate(0)}0%,75%{transform:rotate(30deg)}}#container:hover,.site-container:hover{-webkit-animation:none;animation:none}</style><?php echo "\r\n";
-			},
-		9 );
+		add_action( 'wp_head', array( $this, 'troll' ) );
 
 		/* the code to run this :
 		add_action( 'init', 'tsf_explode' );
@@ -449,6 +457,19 @@ class AutoDescription_Init {
 			}
 		}
 		*/
+	}
+
+	/**
+	 * Header CSS
+	 *
+	 * @since 2.5.2
+	 * @return annoying front-end CSS. Do not use on corporate websites.
+	 */
+	public function troll() {
+		?>
+		<style>div:hover>div{-webkit-animation:troll 5s infinite cubic-bezier(0,1.5,.5,1)1s;animation:troll 5s infinite cubic-bezier(0,1.5,.5,1)1s}@-webkit-keyframes troll{100%{-webkit-transform:rotate(0)}75%{-webkit-transform:rotate(30deg)}25%{-webkit-transorm:rotate(0)}0%{-webkit-transorm:rotate(30deg)}}@keyframes troll{100%,25%{transform:rotate(0)}0%,75%{transform:rotate(30deg)}}#container:hover,.site-container:hover{-webkit-animation:none;animation:none}</style>
+		<?php
+		echo "\r\n";
 	}
 
 }

@@ -188,9 +188,9 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		$sitemap_content = get_transient( $this->sitemap_transient );
 
 		if ( false == $sitemap_content ) {
-			$cached_content = "\r\n<!-- Sitemap is generated for this view -->";
+			$cached_content = "\r\n<!-- " . __( 'Sitemap is generated for this view', 'autodescription' ) . " -->";
 		} else {
-			$cached_content = "\r\n<!-- Sitemap is served from cache -->";
+			$cached_content = "\r\n<!-- " . __( 'Sitemap is served from cache', 'autodescription' ) . " -->";
 		}
 
 		$content  = '<?xml version="1.0" encoding="UTF-8"?>' . "\r\n";
@@ -263,20 +263,45 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		$totalpages = (int) apply_filters( 'the_seo_framework_sitemap_pages_count', $this->max_posts );
 		$totalposts = (int) apply_filters( 'the_seo_framework_sitemap_posts_count', $this->max_posts );
 		$total_cpt_posts = (int) apply_filters( 'the_seo_framework_sitemap_custom_posts_count', $this->max_posts );
+		$total_cpt_posts_bool = $total_cpt_posts ? true : false;
 
-		//* Ascend by the date for normal pages. Older pages get to the top of the list.
-		$latest_pages = $totalpages ? get_posts( 'numberposts=' . $totalpages . '&post_type=page&orderby=date&order=ASC&post_status=publish' ) : array();
-
-		//* Descend by the date for posts. The latest posts get to the top of the list after pages.
-		$latest_posts = $totalposts ? get_posts( 'numberposts=' . $totalposts . '&post_type=post&orderby=date&order=DESC&post_status=publish' ) : array();
-
+		$latest_pages = array();
+		$latest_posts = array();
+		$latest_cpt_posts = array();
 		$cpt = array();
 
-		if ( $total_cpt_posts ) {
+		if ( $totalpages ) {
+			//* Ascend by the date for normal pages. Older pages get to the top of the list.
+			$args = array(
+				'numberposts' => $totalpages,
+				'posts_per_page' => $totalpages,
+				'post_type' => 'page',
+				'orderby' => 'date',
+				'order' => 'ASC',
+				'post_status' => 'publish'
+			);
+			$latest_pages = get_posts( $args );
+		}
+
+		if ( $totalposts ) {
+			//* Descend by the date for posts. The latest posts get to the top of the list after pages.
+			$args = array(
+				'numberposts' => $totalposts,
+				'posts_per_page' => $totalposts,
+				'post_type' => 'post',
+				'orderby' => 'date',
+				'order' => 'DESC',
+				'post_status' => 'publish'
+			);
+
+			$latest_posts = get_posts( $args );
+		}
+
+		if ( $total_cpt_posts_bool ) {
 			$post_page = (array) get_post_types( array( 'public' => true ) );
 
 			/**
-			 * @applies filters Array the_seo_framework_sitemap_exclude_cpt : Excludes these CPT
+			 * Applies filters Array the_seo_framework_sitemap_exclude_cpt : Excludes these CPT
 			 * @since 2.5.0
 			 */
 			$excluded_cpt = (array) apply_filters( 'the_seo_framework_sitemap_exclude_cpt', array() );
@@ -292,10 +317,11 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			}
 		}
 
-		if ( $total_cpt_posts && ! empty( $cpt ) ) {
+		if ( $total_cpt_posts_bool && ! empty( $cpt ) ) {
 			//* Descend by the date for CPTs. The latest posts get to the top of the list after pages.
 			$args = array(
 				'numberposts' => $total_cpt_posts,
+				'posts_per_page' => $total_cpt_posts,
 				'post_type' => $cpt,
 				'orderby' => 'date',
 				'order' => 'DESC',
@@ -303,8 +329,6 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			);
 
 			$latest_cpt_posts = get_posts( $args );
-		} else {
-			$latest_cpt_posts = array();
 		}
 
 		/**
@@ -323,7 +347,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		$timestamp = (bool) apply_filters( 'the_seo_framework_sitemap_timestamp', true );
 
 		if ( $timestamp )
-			$content .= '<!-- Sitemap is generated on ' . current_time( "Y-m-d H:i:s" ) . ' -->' . "\r\n";
+			$content .= '<!-- ' . __( 'Sitemap is generated on', 'autodescription' ) . ' ' . current_time( "Y-m-d H:i:s" ) . ' -->' . "\r\n";
 
 		$latest_pages_amount = (int) count( $latest_pages );
 
@@ -341,10 +365,10 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 					$page_id = $page->ID;
 
 					//* Is this the front page?
-					$page_is_front = $page_id == $page_on_front ? true : false;
+					$page_is_front = ( $page_id == $page_on_front ) ? true : false;
 
 					//* Fetch the noindex option, per page.
-					$noindex = $this->get_custom_field( '_genesis_noindex', $page_id ) ? true : false;
+					$noindex = (bool) $this->get_custom_field( '_genesis_noindex', $page_id );
 
 					//* Continue if indexed.
 					if ( ! $noindex ) {
@@ -411,7 +435,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 					$post_id = $post->ID;
 
 					//* Fetch the noindex option, per page.
-					$noindex = $this->get_custom_field( '_genesis_noindex', $post_id ) ? true : false;
+					$noindex = (bool) $this->get_custom_field( '_genesis_noindex', $post_id );
 
 					//* Continue if indexed
 					if ( ! $noindex ) {
@@ -469,7 +493,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 					$post_id = $ctp_post->ID;
 
 					//* Fetch the noindex option, per page.
-					$noindex = $this->get_custom_field( '_genesis_noindex', $post_id ) ? true : false;
+					$noindex = (bool) $this->get_custom_field( '_genesis_noindex', $post_id );
 
 					//* Continue if indexed
 					if ( ! $noindex ) {

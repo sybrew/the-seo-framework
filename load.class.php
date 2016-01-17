@@ -91,6 +91,7 @@ require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'networkoptions.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'metaboxes.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'sitemaps.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'transients.class.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'feed.class.php' );
 
 require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.class.php' );
 
@@ -233,14 +234,14 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 	 */
 	public function the_seo_framework_version( $version = '' ) {
 
-		$output = is_null( $version ) ? '' : sprintf( __( '%s of The SEO Framework', 'autodescription' ), $version );
+		$output = empty( $version ) ? '' : sprintf( __( '%s of The SEO Framework', 'autodescription' ), $version );
 
 		return $output;
 	}
 
 }
 
-//* Load deprecated functions and classes.
+//* Load deprecated functions.
 require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.php' );
 
 /**

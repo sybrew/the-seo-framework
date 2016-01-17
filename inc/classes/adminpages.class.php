@@ -419,6 +419,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		$knowledge 		= (bool) apply_filters( 'the_seo_framework_knowledge_metabox', true );
 		$webmaster 		= (bool) apply_filters( 'the_seo_framework_webmaster_metabox', true );
 		$sitemap 		= (bool) apply_filters( 'the_seo_framework_sitemap_metabox', true );
+		$feed 			= (bool) apply_filters( 'the_seo_framework_feed_metabox', true );
 
 		//* Title Meta Box
 		if ( $title )
@@ -496,6 +497,16 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				'autodescription-sitemap-settings',
 				__( 'Sitemaps Settings', 'autodescription' ),
 				array( $this, 'sitemaps_metabox' ),
+				$this->pagehook,
+				'main'
+			);
+
+		//* Feed Meta Box
+		if ( $feed )
+			add_meta_box(
+				'autodescription-feed-settings',
+				__( 'Feed Settings', 'autodescription' ),
+				array( $this, 'feed_metabox' ),
 				$this->pagehook,
 				'main'
 			);

@@ -188,6 +188,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 
 			'google_verification'	=> '', 	// Google Verification Code
 			'bing_verification'		=> '', 	// Bing Verification Code
+			'pint_verification'		=> '', 	// Pinterest Verification Code
 
 			// https://developers.google.com/structured-data/customize/contact-points - This is extremely extended and valuable. Expect a premium version.
 			'knowledge_output'		=> 1,				// Default for outputing the Knowledge SEO.
@@ -216,6 +217,10 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			'ping_google'			=> 1,	// Ping Google
 			'ping_bing'				=> 1,	// Ping Bing
 			'ping_yahoo'			=> 1,	// Ping Yahoo
+
+			// Feed
+			'excerpt_the_feed'		=> 1,	// Generate feed Excerpts
+			'source_the_feed'		=> 1,	// Add backlink at the end of the feed
 		);
 
 		/**
@@ -293,6 +298,10 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			'ping_google'			=> 0,	// Ping Google
 			'ping_bing'				=> 0,	// Ping Bing
 			'ping_yahoo'			=> 0,	// Ping Yahoo
+
+			// Feed
+			'excerpt_the_feed'		=> 0,	// Generate feed Excerpts
+			'source_the_feed'		=> 0,	// Add backlink at the end of the feed
 		);
 	}
 
@@ -388,7 +397,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 * @return array The SEO Framework Warned Options
 	 */
 	protected function warned_site_options( $args = array() ) {
-		return $this->default_site_options = wp_parse_args(
+		return $this->warned_site_options = wp_parse_args(
 			$args,
 			apply_filters(
 				'the_seo_framework_warned_site_options',
@@ -544,7 +553,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 
 		$framework_links = array(
 			'settings' => '<a href="' . esc_url( admin_url( 'admin.php?page=' . $this->page_id ) ) . '">' . __( 'SEO Settings', 'autodescription' ) . '</a>',
-			'home' => '<a href="'. esc_url( 'http://theseoframework.com', 'http' ) . '" target="_blank">' . _x( 'Plugin Home', 'As in: The Plugin Home Page', 'autodescription' ) . '</a>'
+			'home' => '<a href="'. esc_url( 'https://theseoframework.com' ) . '" target="_blank">' . _x( 'Plugin Home', 'As in: The Plugin Home Page', 'autodescription' ) . '</a>'
 		);
 
 		return array_merge( $framework_links, $links );

@@ -100,10 +100,16 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			$this->settings_field,
 			array(
 				'title_location',
-				'home_title_location',
 			)
 		);
 
+		$this->autodescription_add_option_filter(
+			's_left_right_home',
+			$this->settings_field,
+			array(
+				'home_title_location',
+			)
+		);
 		$this->autodescription_add_option_filter(
 			's_one_zero',
 			$this->settings_field,
@@ -172,6 +178,9 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 				'ping_google',
 				'ping_bing',
 				'ping_yahoo',
+
+				'excerpt_the_feed',
+				'source_the_feed',
 			)
 		);
 
@@ -190,11 +199,19 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 				'homepage_title',
 				'homepage_title_tagline',
 
+				'knowledge_name',
+			)
+		);
+
+		$this->autodescription_add_option_filter(
+			's_no_html_space',
+			$this->settings_field,
+			array(
 				'facebook_appid',
+
 				'google_verification',
 				'bing_verification',
-
-				'knowledge_name',
+				'pint_verification',
 			)
 		);
 
@@ -231,6 +248,14 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			array(
 				'twitter_site',
 				'twitter_creator',
+			)
+		);
+
+		$this->autodescription_add_option_filter(
+			's_twitter_card',
+			$this->settings_field,
+			array(
+				'twitter_card',
 			)
 		);
 
@@ -362,8 +387,8 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	/**
 	 * Return array of known sanitization filter types.
 	 *
-	 * Array can be filtered via 'the_seo_framework_available_sanitizer_filters' to let
-	 * child themes and plugins add their own sanitization filters.
+	 * Array can be filtered via 'the_seo_framework_available_sanitizer_filters'
+	 * to let themes and other plugins add their own sanitization filters.
 	 *
 	 * @since 2.2.2
 	 *
@@ -376,6 +401,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 
 		$default_filters = array(
 			's_left_right' 				=> array( $this, 's_left_right' 			),
+			's_left_right_home' 		=> array( $this, 's_left_right_home' 		),
 			's_title_separator' 		=> array( $this, 's_title_separator' 		),
 			's_description_separator' 	=> array( $this, 's_description_separator' 	),
 			's_description' 			=> array( $this, 's_description' 			),
@@ -384,11 +410,13 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			's_one_zero_flush_rewrite'	=> array( $this, 's_one_zero_flush_rewrite'	),
 			's_one_zero_flush_sitemap'	=> array( $this, 's_one_zero_flush_sitemap'	),
 			's_no_html' 				=> array( $this, 's_no_html' 				),
+			's_no_html_space' 			=> array( $this, 's_no_html_space' 			),
 			's_absint' 					=> array( $this, 's_absint' 				),
 			's_safe_html' 				=> array( $this, 's_safe_html' 				),
 			's_url' 					=> array( $this, 's_url' 					),
 			's_url_query' 				=> array( $this, 's_url_query' 				),
 			's_twitter_name' 			=> array( $this, 's_twitter_name' 			),
+			's_twitter_card' 			=> array( $this, 's_twitter_card' 			),
 		);
 
 		/**
@@ -426,6 +454,10 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 
 		$previous = $this->get_field_value( 'title_seperator' ); // NOTE: Typo
 
+		//* Fallback to default if empty.
+		if ( empty( $previous ) )
+			$previous = $this->get_default_option( 'title_seperator' );
+
 		return (string) $previous;
 	}
 
@@ -448,6 +480,10 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			return (string) $new_value;
 
 		$previous = $this->get_field_value( 'description_separator' );
+
+		//* Fallback to default if empty.
+		if ( empty( $previous ) )
+			$previous = $this->get_default_option( 'description_separator' );
 
 		return (string) $previous;
 	}
@@ -523,6 +559,32 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			return (string) $new_value;
 
 		$previous = $this->get_field_value( 'title_location' );
+
+		//* Fallback if previous is also empty.
+		if ( empty( $previous ) )
+			$previous = $this->get_default_option( 'title_location' );
+
+		return (string) $previous;
+	}
+
+	/**
+	 * Returns left or right, for the home separator location.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @param mixed $new_value Should ideally be a string 'left' or 'right' passed in
+	 * @return string left or right
+	 */
+	protected function s_left_right_home( $new_value ) {
+
+		if ( (string) $new_value == 'left' || (string) $new_value == 'right' )
+			return (string) $new_value;
+
+		$previous = $this->get_field_value( 'home_title_location' );
+
+		//* Fallback if previous is also empty.
+		if ( empty( $previous ) )
+			$previous = $this->get_default_option( 'home_title_location' );
 
 		return (string) $previous;
 	}
@@ -617,6 +679,18 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 */
 	protected function s_no_html( $new_value ) {
 		return strip_tags( $new_value );
+	}
+
+	/**
+	 * Removes HTML tags and line breaks from string.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @param string $new_value String, possibly with HTML and spaces in it
+	 * @return string String without HTML and breaks in it.
+	 */
+	protected function s_no_html_space( $new_value ) {
+		return str_replace( ' ', '', strip_tags( $new_value ) );
 	}
 
 	/**
@@ -727,6 +801,33 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		}
 
 		return (string) $profile;
+	}
+
+	/**
+	 * Parses Twitter Card radio input. Fills in default if incorrect value is supplied.
+	 * Falls back to previous value if empty. If previous value is empty if will go to default.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @param string $new_value String with potentially wrong option value.
+	 * @return string Sanitized twitter card type.
+	 */
+	protected function s_twitter_card( $new_value ) {
+
+		//* Fetch Twitter card array.
+		$card = $this->twitter_card;
+
+		$key = array_key_exists( $new_value, $card );
+
+		if ( $key )
+			return (string) $new_value;
+
+		$previous = $this->get_field_value( 'twitter_card' );
+
+		if ( empty( $previous ) )
+			$previous = $this->get_default_option( 'twitter_card' );
+
+		return (string) $previous;
 	}
 
 	/**

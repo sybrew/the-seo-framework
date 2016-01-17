@@ -22,7 +22,7 @@
  *
  * @since 2.3.4
  */
-class The_SEO_Framework_Deprecated extends AutoDescription_Transients {
+class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 
 	public function __construct() {
 		parent::__construct();

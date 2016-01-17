@@ -106,7 +106,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		if ( isset( $url_cache[$force_slash] ) )
 			return $url_cache[$force_slash];
 
-		$url_cache[$force_slash] = $this->the_url( '', '', array( 'home' => true, 'force_slash' => $force_slash ) );
+		$url_cache[$force_slash] = $this->the_url( '', '', array( 'home' => true, 'forceslash' => $force_slash ) );
 
 		return $url_cache[$force_slash];
 	}
@@ -366,7 +366,12 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		if ( ! $this->get_option( 'og_tags' ) )
 			return;
 
-		//* @since 2.3.0
+		/**
+		 * @since 2.3.0
+		 *
+		 * @NOTE: Use of this might cause incorrect meta since other functions
+		 * depend on the image from cache.
+		 */
 		$image = (string) apply_filters( 'the_seo_framework_ogimage_output', '' );
 
 		if ( empty( $image ) )
@@ -841,7 +846,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	public function ld_json() {
 
 		//* Check for WPSEO LD+JSON
-		if ( $this->has_json_ld_plugin() !== false || is_search() || is_404() )
+		if ( false !== $this->has_json_ld_plugin() || is_search() || is_404() )
 			return;
 
 		$this->setup_ld_json_transient( $this->get_the_real_ID() );
@@ -856,7 +861,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 
 			echo  "\r\n" . 'START: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n";
 			$this->echo_debug_information( array( 'LD Json transient name' => $this->ld_json_transient ) );
-			$this->echo_debug_information( array( 'Output from transient' => ( get_transient( $this->ld_json_transient ) ? true : false ) ) );
+			$this->echo_debug_information( array( 'Output from transient' => (bool) get_transient( $this->ld_json_transient ) ) );
 
 			if ( $this->the_seo_framework_debug_hidden )
 				echo "\r\n-->";
@@ -963,6 +968,27 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 			return '';
 
 		return '<meta name="msvalidate.01" content="' . esc_attr( $code ) . '" />' . "\r\n";
+	}
+
+	/**
+	 * Outputs Bing Site Verification code
+	 *
+	 * @since 2.5.2
+	 *
+	 * @return string|null Bing Webmaster code
+	 */
+	public function pint_site_output() {
+
+		//* @since 2.3.0
+		$code = (string) apply_filters( 'the_seo_framework_pintsite_output', '' );
+
+		if ( empty( $code ) )
+			$code = $this->get_option( 'pint_verification' );
+
+		if ( empty( $code ) )
+			return '';
+
+		return '<meta name="p:domain_verify" content="' . esc_attr( $code ) . '" />' . "\r\n";
 	}
 
 	/**

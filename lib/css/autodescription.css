@@ -1,11 +1,11 @@
 /**
- * See, for colors:
- * https://color.adobe.com/create/color-wheel/?base=2&rule=Custom&selected=1&name=Mijn%20Color-thema&mode=rgb&rgbvalues=0,0,0,1,0.6289566724811484,0.10577297701442445,0.04724043389094745,0.7647058823529411,0.2945255209368204,0,0.4806705005377058,0.8235294117647058,0.8666666666666667,0.2196078431372549,0.06666666666666667&swatchOrder=0,1,2,3,4
- */
+* See, for colors:
+* https://color.adobe.com/create/color-wheel/?base=2&rule=Custom&selected=1&name=Mijn%20Color-thema&mode=rgb&rgbvalues=0,0,0,1,0.6289566724811484,0.10577297701442445,0.04724043389094745,0.7647058823529411,0.2945255209368204,0,0.4806705005377058,0.8235294117647058,0.8666666666666667,0.2196078431372549,0.06666666666666667&swatchOrder=0,1,2,3,4
+*/
 
 /**
- * WooCommerce fix
- */
+* WooCommerce fix
+*/
 table.wp-list-table .column-name {
 	width: 15%;
 }
@@ -13,350 +13,355 @@ table.wp-list-table .column-name {
 table.wp-list-table .column-is_in_stock,
 table.wp-list-table .column-sku,
 table.wp-list-table .column-price {
-    width: 8%;
+	width: 8%;
 }
 
 #ad_seo {
-    width: 20%;
+	width: 20%;
+}
+
+.ad-seo a {
+	text-decoration: none;
+	font-size: 13px;
 }
 
 #autodescription-title-wrap {
-    position: relative;
-    display: block;
-    padding: 0;
-    height: auto;
-    width: auto;
+	position: relative;
+	display: block;
+	padding: 0;
+	height: auto;
+	width: auto;
 }
 
 #autodescription-title-offset {
-    visibility: hidden;
-    height: 0;
-    display: inline-block;
-    position: absolute;
-    left: 0;
-    color: transparent;
-    white-space: pre;
+	visibility: hidden;
+	height: 0;
+	display: inline-block;
+	position: absolute;
+	left: 0;
+	color: transparent;
+	white-space: pre;
 }
 
 #autodescription-title-placeholder {
-    position: absolute;
-    color: #777;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    box-sizing: content-box;
-    top: 0;
-    left: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+	position: absolute;
+	color: #777;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	box-sizing: content-box;
+	top: 0;
+	left: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 span.ad-count-bad {
-    color: #dd3811;
-    font-weight: 600;
+	color: #dd3811;
+	font-weight: 600;
 }
 
 span.ad-count-okay {
-    color: #ffa700;
-    font-weight: 600;
+	color: #ffa700;
+	font-weight: 600;
 }
 
 span.ad-count-good {
-    color: #0cc34b;
-    font-weight: 600;
+	color: #0cc34b;
+	font-weight: 600;
 }
 
 /* WooCommerce fix */
 th:last-of-type#ad_seo {
-    width: 160px;
+	width: 160px;
 }
 
 span.ad-seo {
-    display: block;
-    background-color: #f1f1f1;
-    width: 95%;
-    max-width: 260px;
-    border-radius: 30px;
-    padding: 3px;
+	display: block;
+	background-color: #f1f1f1;
+	width: 95%;
+	max-width: 260px;
+	border-radius: 30px;
+	padding: 3px;
 }
 
 span.ad-seo.square {
-    border-radius: 0px;
+	border-radius: 0px;
 }
 
 span.ad-seo.ad-100 {
-    width: 100%;
+	width: 100%;
 }
 
 span.ad-bar-wrap {
-    display: table;
-    width: 100%;
-    border-radius: 30px;
-    margin: 0 auto;
-    border-collapse: separate;
-    border-spacing: 0;
-    vertical-align: middle;
-    position: relative;
+	display: table;
+	width: 100%;
+	border-radius: 30px;
+	margin: 0 auto;
+	border-collapse: separate;
+	border-spacing: 0;
+	vertical-align: middle;
+	position: relative;
 }
 
 span.ad-seo.square span.ad-bar-wrap {
-    border-radius: 0px;
+	border-radius: 0px;
 }
 
 span.ad-sec-wrap {
-    display: table-cell;
-    border-collapse: collapse;
+	display: table-cell;
+	border-collapse: collapse;
 }
 
 .ad-bar-wrap a {
-    display: table;
-    width: 100%;
-    color: #fff;
-    text-align: center;
-    cursor: help;
-    height: 100%;
-    vertical-align: top;
-    line-height: 1.625em;
-    box-shadow: 2px 6px 3px -2px rgba(255,255,255,0.2) inset, -2px -6px 3px -2px rgba(41,41,41,0.2) inset, 0px 0px 1px rgba(41,41,41,0.6);
+	display: table;
+	width: 100%;
+	color: #fff;
+	text-align: center;
+	cursor: help;
+	height: 100%;
+	vertical-align: top;
+	line-height: 1.625em;
+	box-shadow: 2px 6px 3px -2px rgba(255,255,255,0.2) inset, -2px -6px 3px -2px rgba(41,41,41,0.2) inset, 0px 0px 1px rgba(41,41,41,0.6);
 }
 
 .ad-bar-wrap span.ad-sec-wrap:first-of-type,
 .ad-bar-wrap span.ad-sec-wrap:first-of-type a {
-    border-top-left-radius: 30px;
-    border-bottom-left-radius: 30px;
+	border-top-left-radius: 30px;
+	border-bottom-left-radius: 30px;
 }
 
 .ad-bar-wrap span.ad-sec-wrap:last-of-type,
 .ad-bar-wrap span.ad-sec-wrap:last-of-type a {
-    border-top-right-radius: 30px;
-    border-bottom-right-radius: 30px;
+	border-top-right-radius: 30px;
+	border-bottom-right-radius: 30px;
 }
 
 .ad-seo.square .ad-bar-wrap span.ad-sec-wrap,
 .ad-seo.square .ad-bar-wrap span.ad-sec-wrap a {
-    border-radius: 0px;
+	border-radius: 0px;
 }
 
 .ad-100 {
-    width: 100%;
+	width: 100%;
 }
 
 .ad-60 {
-    width: 60%;
+	width: 60%;
 }
 
 .ad-50 {
-    width: 50%;
+	width: 50%;
 }
 
 .ad-40 {
-    width: 40%;
+	width: 40%;
 }
 
 .ad-33 {
-    width: 33.333%;
+	width: 33.333%;
 }
 
 .ad-25 {
-    width: 25%;
+	width: 25%;
 }
 
 .ad-20 {
-    width: 20%;
+	width: 20%;
 }
 
 .ad-16 {
-    width: 16.666%;
+	width: 16.666%;
 }
 
 .ad-12-5 {
-    width: 12.5%;
+	width: 12.5%;
 }
 
 .ad-11 {
-    width: 11.333%;
+	width: 11.333%;
 }
 
 .ad-10 {
-    width: 10%;
+	width: 10%;
 }
 
 .ad-seo-bad {
-    background-color: #dd3811;
+	background-color: #dd3811;
 }
 
 .ad-seo-okay {
-    background-color: #ffa700;
+	background-color: #ffa700;
 }
 
 .ad-seo-good {
-    background-color: #0cc34b;
+	background-color: #0cc34b;
 }
 
 .ad-seo-unknown {
-    background-color: #007bd2;
+	background-color: #007bd2;
 }
 
 span.ad-seo .explanation-desc {
-    position: absolute;
-    width: auto;
-    min-width: 90%;
-    max-width: inherit;
-    font-weight: 600;
-    background: #007bd2;
-    padding: 12px 16px;
-    color: #fdfdfd;
-    border-radius: 3px;
-    z-index: 9999999;
-    box-shadow: 0px 0px 2px rgb(171, 171, 171), 2px 6px 3px -2px rgba(255,255,255,0.2) inset, -2px -6px 3px -2px rgba(41,41,41,0.05) inset;
-    border: 1px solid #ccc;
-    left: 0;
-    text-align: left;
+	position: absolute;
+	width: auto;
+	min-width: 90%;
+	max-width: inherit;
+	font-weight: 600;
+	background: #007bd2;
+	padding: 12px 16px;
+	color: #fdfdfd;
+	border-radius: 3px;
+	z-index: 9999999;
+	box-shadow: 0px 0px 2px rgb(171, 171, 171), 2px 6px 3px -2px rgba(255,255,255,0.2) inset, -2px -6px 3px -2px rgba(41,41,41,0.05) inset;
+	border: 1px solid #ccc;
+	left: 0;
+	text-align: left;
 }
 
 span.ad-seo .explanation-desc span {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 span.ad-seo .explanation-desc div {
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 10px solid #007bd2;
-    position: absolute;
-    bottom: -8px;
-    z-index: 9999999;
-    left: 0;
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-top: 10px solid #007bd2;
+	position: absolute;
+	bottom: -8px;
+	z-index: 9999999;
+	left: 0;
 }
 
 /* Mobile support */
 /* Needs more refining.... e.g. iPhone 6 = good, iPhone 6+ = offscreen */
 .ad_seo.column-ad_seo {
-    overflow: initial !important;
-    min-width: 160px;
+	overflow: initial !important;
+	min-width: 160px;
 }
 
 /* Taxonomies overflow fix */
 /* @todo Needs to be changed within Javascript to show information below bar on first 2 entries */
 #col-container, #col-right {
-    overflow: initial;
+	overflow: initial;
 }
 
 /* Site Settings */
 
 .autodescription-metaboxes {
-    box-sizing: border-box;
-    max-width: 690px;
-    padding-bottom: 20px;
+	box-sizing: border-box;
+	max-width: 690px;
+	padding-bottom: 20px;
 }
 
 .autodescription-metaboxes > form > h1,
 .autodescription-metaboxes > form > h2 {
-    float: left;
+	float: left;
 }
 
 .autodescription-metaboxes .metabox-holder {
-    clear: both;
+	clear: both;
 }
 
 .postbox-container {
-    width: 100%;
+	width: 100%;
 }
 
 .autodescription-metaboxes .top-buttons {
-    float: right;
+	float: right;
 }
 
 .autodescription-metaboxes .bottom-buttons {
-    text-align: right;
+	text-align: right;
 }
 
 .autodescription-metaboxes .top-buttons input,
 .autodescription-metaboxes .bottom-buttons input {
-    margin-left: 10px;
+	margin-left: 10px;
 }
 
 .autodescription-metaboxes #message {
-    clear: both;
+	clear: both;
 }
 
 .autodescription-metaboxes #title-separator,
 .autodescription-metaboxes #description-separator {
-    display: table;
-    width: 100%;
-    border-collapse: collapse;
-    border-spacing: 0;
+	display: table;
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
 }
 
 .autodescription-metaboxes #title-separator input,
 .autodescription-metaboxes #description-separator input {
-    display: none;
-    float: left;
-    width: 0;
-    min-width: 0;
-    opacity: 0;
+	display: none;
+	float: left;
+	width: 0;
+	min-width: 0;
+	opacity: 0;
 }
 
 .autodescription-metaboxes #title-separator label,
 .autodescription-metaboxes #description-separator label {
-    display: inline-block;
-    width: auto;
-    min-width: 28px;
-    min-height: 28px;
-    margin: 3px;
-    padding: 0 4px;
-    border: 1px solid #ccc;
-    line-height: 28px;
-    text-align: center;
-    cursor: pointer;
-    box-shadow: -1px -1px 1px #aaa inset;
-    font-size: 16px;
+	display: inline-block;
+	width: auto;
+	min-width: 28px;
+	min-height: 28px;
+	margin: 3px;
+	padding: 0 4px;
+	border: 1px solid #ccc;
+	line-height: 28px;
+	text-align: center;
+	cursor: pointer;
+	box-shadow: -1px -1px 1px #aaa inset;
+	font-size: 16px;
 }
 
 .autodescription-metaboxes #title-separator label.recommended,
 .autodescription-metaboxes #description-separator label.recommended {
-    border: 1px solid #0cc34b;
-    box-shadow: -1px -1px 1px #0cc34b inset;
+	border: 1px solid #0cc34b;
+	box-shadow: -1px -1px 1px #0cc34b inset;
 }
 
 .autodescription-metaboxes #title-separator input:hover + label,
 .autodescription-metaboxes #title-separator label:hover,
 .autodescription-metaboxes #description-separator input:hover + label,
 .autodescription-metaboxes #description-separator label:hover {
-    box-shadow: 1px 1px 1px #aaa inset;
-    background-color: #fff;
+	box-shadow: 1px 1px 1px #aaa inset;
+	background-color: #fff;
 }
 
 .autodescription-metaboxes #title-separator input:checked + label,
 .autodescription-metaboxes #description-separator input:checked + label {
-    box-shadow: 1px 1px 1px #333 inset;
-    background-color: #fff;
+	box-shadow: 1px 1px 1px #333 inset;
+	background-color: #fff;
 }
 
 .autodescription-metaboxes #title-location,
 .autodescription-metaboxes #home-title-location {
-    display: block;
+	display: block;
 }
 
 .autodescription-metaboxes #title-location span,
 .autodescription-metaboxes #home-title-location span {
-    display: block;
-    margin-bottom: 4px;
+	display: block;
+	margin-bottom: 4px;
 }
 
 .autodescription-metaboxes #title-location label span,
 .autodescription-metaboxes #home-title-location label span,
 .autodescription-metaboxes #twitter-cards label span {
-    display: inline-block;
-    min-width: 60px;
-    vertical-align: baseline;
+	display: inline-block;
+	min-width: 60px;
+	vertical-align: baseline;
 }
 
 .autodescription-metaboxes #twitter-cards label span {
-    min-width: 150px;
+	min-width: 150px;
 }
 
 .autodescription-metaboxes #home-title-location label span.custom-title-js,
@@ -364,8 +369,8 @@ span.ad-seo .explanation-desc div {
 .autodescription-metaboxes #home-title-location label span.custom-tagline-js,
 .autodescription-metaboxes #title-location label .autodescription-sep-js,
 .autodescription-metaboxes #home-title-location label .autodescription-sep-js {
-    display: inline;
-    min-width: 0;
+	display: inline;
+	min-width: 0;
 }
 
 .autodescription-metaboxes #social-tabs-js,
@@ -373,76 +378,87 @@ span.ad-seo .explanation-desc div {
 .autodescription-metaboxes #knowledge-tabs-js,
 .autodescription-metaboxes #sitemaps-tabs-js,
 .autodescription-metaboxes .inside .nav-tab-wrapper {
-    position:relative;
-    clear:both;
-    margin:0 auto;
-    width:100%;
-    padding:8px 14px 0px;
-    margin:-4px -14px -4px;
+	position:relative;
+	clear:both;
+	margin:0 auto;
+	width:100%;
+	padding:8px 14px 0px;
+	margin:-4px -14px -4px;
 }
 
 .autodescription-metaboxes #social-tabs-js .nav-tab-active,
 .autodescription-metaboxes #robots-tabs-js .nav-tab-active,
 .autodescription-metaboxes #knowledge-tabs-js .nav-tab-active,
 .autodescription-metaboxes #sitemaps-tabs-js .nav-tab-active {
-    background-color: inherit; /* Compatible with EM Dashboard */
-    border-bottom-color: #fff;
+	background-color: inherit; /* Compatible with EM Dashboard */
+	border-bottom-color: #fff;
 }
 
 .autodescription-metaboxes .dashicons-tabs,
 .autodescription-metaboxes .dashicons-before:before {
-    font-size: initial;
-    display: inline;
-    vertical-align: text-bottom;
+	font-size: initial;
+	display: inline;
+	vertical-align: text-bottom;
 }
 
 .autodescription-metaboxes .social-tabs-radio,
 .autodescription-metaboxes .robots-tabs-radio,
 .autodescription-metaboxes .knowledge-tabs-radio,
 .autodescription-metaboxes .sitemaps-tabs-radio {
-    display:none;
-    width:0;
-    height:0;
-    position:absolute;
+	display:none;
+	width:0;
+	height:0;
+	position:absolute;
 }
 
 .autodescription-metaboxes .social-tab-content.checked-tab,
 .autodescription-metaboxes .robots-tab-content.checked-tab,
 .autodescription-metaboxes .knowledge-tab-content.checked-tab,
 .autodescription-metaboxes .sitemaps-tab-content.checked-tab {
-    display: block;
+	display: block;
 }
 
 .autodescription-metaboxes .seoframework-default-selected {
-    border-color: #1c9d38;
+	border-color: #1c9d38;
 }
 
 .autodescription-metaboxes .seoframework-default-selected:checked:before {
-    color: #1c9d38;
+	color: #1c9d38;
 }
 
 .autodescription-metaboxes .seoframework-warning-selected {
-    border-color: #dd3811;
+	border-color: #dd3811;
 }
 
 .autodescription-metaboxes .seoframework-warning-selected:checked:before {
-    color: #dd3811;
+	color: #dd3811;
 }
 
 @media screen and (max-width: 782px) {
-    .autodescription-metaboxes p.fields,
-    .theseoframework-inpost-box p.fields {
-        line-height: 2.8;
-    }
+	.autodescription-metaboxes p.fields,
+	.theseoframework-inpost-box p.fields {
+		line-height: 2.8;
+	}
 
-    .autodescription-metaboxes #title-location label span,
-    .autodescription-metaboxes #home-title-location label span {
-        min-width: 40px;
-    }
+	.autodescription-metaboxes #title-location label span,
+	.autodescription-metaboxes #home-title-location label span {
+		min-width: 40px;
+	}
 }
 
 @media screen and (max-width: 642px) {
-    .autodescription-metaboxes span.seoframework-nav-desktop {
-        display: none;
-    }
+	.autodescription-metaboxes span.seoframework-nav-desktop {
+		display: none;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.autodescription-metaboxes h3.nav-tab-wrapper {
+		border-bottom: 1px solid #ccc;
+		margin-bottom: -1px;
+	}
+
+	.autodescription-metaboxes h3 .nav-tab {
+		margin-right: 7px;
+	}
 }

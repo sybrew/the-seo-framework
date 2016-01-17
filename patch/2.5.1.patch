@@ -34,6 +34,15 @@ Index: autodescription.php
   */
  
  //* Debug.
+@@ -47,7 +47,7 @@
+  * Removed previous constant.
+  * @since 2.3.5
+  */
+-define( 'THE_SEO_FRAMEWORK_VERSION', '2.5.0' );
++define( 'THE_SEO_FRAMEWORK_VERSION', '2.5.1' );
+ 
+ /**
+  * Plugin options filter
 Index: inc/classes/admininit.class.php
 ===================================================================
 --- inc/classes/admininit.class.php	(revision 1322361)
@@ -1008,12 +1017,14 @@ Index: inc/classes/render.class.php
   */
  
  /**
-@@ -333,10 +333,12 @@
+@@ -333,10 +333,14 @@
  		$type = (string) apply_filters( 'the_seo_framework_ogtype_output', '' );
  
  		if ( empty( $type ) ) {
 -			if ( is_single() ) {
-+			if ( is_single() && ! empty( $this->get_image_from_cache() ) ) {
++			$image = $this->get_image_from_cache();
++
++			if ( is_single() && ! empty( $image ) ) {
  				$type = 'article';
  			} else if ( is_author() ) {
  				$type = 'profile';
@@ -1022,7 +1033,7 @@ Index: inc/classes/render.class.php
  			} else {
  				$type = 'website';
  			}
-@@ -532,7 +534,7 @@
+@@ -532,7 +536,7 @@
  			 * Return site:id instead of creator is no twitter:site is found.
  			 * Per Twitter requirements
  			 */
@@ -1031,7 +1042,7 @@ Index: inc/classes/render.class.php
  				return '<meta name="twitter:site:id" content="' . esc_attr( $creator ) . '" />' . "\r\n";
  		}
  
-@@ -605,7 +607,7 @@
+@@ -605,7 +609,7 @@
  		if ( empty( $image ) )
  			$image = $this->get_image_from_cache();
  
@@ -1040,7 +1051,7 @@ Index: inc/classes/render.class.php
  			return '<meta name="twitter:image:src" content="' . esc_attr( $image ) . '" />' . "\r\n";
  		} else {
  			return '';
-@@ -632,7 +634,7 @@
+@@ -632,7 +636,7 @@
  			$author = $this->get_option( 'facebook_author' );
  
  		if ( ! empty( $author ) )
@@ -1049,7 +1060,7 @@ Index: inc/classes/render.class.php
  
  		return '';
  	}
-@@ -656,7 +658,7 @@
+@@ -656,7 +660,7 @@
  			$publisher = $this->get_option( 'facebook_publisher' );
  
  		if ( ! empty( $publisher ) )
@@ -1058,7 +1069,7 @@ Index: inc/classes/render.class.php
  
  		return '';
  	}
-@@ -680,7 +682,7 @@
+@@ -680,7 +684,7 @@
  			$app_id = $this->get_option( 'facebook_appid' );
  
  		if ( ! empty( $app_id ) )
@@ -1067,7 +1078,7 @@ Index: inc/classes/render.class.php
  
  		return '';
  	}
-@@ -695,7 +697,7 @@
+@@ -695,7 +699,7 @@
  	public function article_published_time() {
  
  		// Don't do anything if it's not a page or post.
@@ -1076,7 +1087,7 @@ Index: inc/classes/render.class.php
  			return;
  
  		$front_page = (bool) is_front_page();
-@@ -719,7 +721,7 @@
+@@ -719,7 +723,7 @@
  			$time = get_the_date( 'Y-m-d', '' );
  
  		if ( ! empty( $time ) )
@@ -1085,7 +1096,7 @@ Index: inc/classes/render.class.php
  
  		return '';
  	}
-@@ -734,7 +736,7 @@
+@@ -734,7 +738,7 @@
  	public function article_modified_time() {
  
  		// Don't do anything if it's not a page or post, or if both options are disabled
@@ -1094,7 +1105,7 @@ Index: inc/classes/render.class.php
  			return;
  
  		$is_front_page = is_front_page();
-@@ -758,7 +760,7 @@
+@@ -758,7 +762,7 @@
  			$time = the_modified_date( 'Y-m-d', '', '', false );
  
  		if ( ! empty( $time ) ) {
@@ -1103,7 +1114,7 @@ Index: inc/classes/render.class.php
  
  			if ( $this->get_option( 'og_tags' ) )
  				$output .= '<meta property="og:updated_time" content="' . esc_attr( $time ) . '" />'. "\r\n";
-@@ -850,7 +852,7 @@
+@@ -850,7 +854,7 @@
  			if ( $this->the_seo_framework_debug_hidden )
  				echo "<!--\r\n";
  
@@ -1112,7 +1123,7 @@ Index: inc/classes/render.class.php
  			$this->echo_debug_information( array( 'LD Json transient name' => $this->ld_json_transient ) );
  			$this->echo_debug_information( array( 'Output from transient' => ( get_transient( $this->ld_json_transient ) ? true : false ) ) );
  
-@@ -910,7 +912,7 @@
+@@ -910,7 +914,7 @@
  			if ( $this->the_seo_framework_debug_hidden ) {
  				$this->echo_debug_information( array( 'LD Json transient output' => $output ) );
  			}
@@ -1247,9 +1258,13 @@ Index: inc/classes/sitemaps.class.php
   */
  
  /**
-@@ -543,7 +543,7 @@
+@@ -542,8 +542,11 @@
+ 				 * Transient expiration. 1 hour.
  				 *
  				 * 60s * 60m
++				 *
++				 * Applies filters the_seo_framework_sitemap_throttle_seconds
++				 * @since 2.5.1
  				 */
 -				$expiration = 60 * 60;
 +				$expiration = (int) apply_filters( 'the_seo_framework_sitemap_throttle_seconds', 60 * 60 );

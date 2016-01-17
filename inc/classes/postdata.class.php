@@ -46,86 +46,80 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 	 */
 	public function get_excerpt_by_id( $excerpt = '', $the_id = '', $tt_id = '' ) {
 
-		/**
-		 * Use the 2nd parameter.
-		 *
-		 * @since 2.2.8
-		 *
-		 * Now casts to array
-		 * @since 2.3.3
-		 */
-		if ( ! empty( $the_id ) ) {
-			$post = get_post( $the_id, ARRAY_A );
-		} else {
-			global $post_id;
-
-			$post = get_post( $post_id, ARRAY_A );
-		}
-
-		/**
-		 * Match the descriptions in admin as on the front end.
-		 *
-		 * @since 2.3.3
-		 */
-		if ( ! empty( $tt_id ) ) {
-
-			$args = array(
-				'posts_per_page'	=> 1,
-				'offset'			=> 0,
-				'category'			=> $tt_id,
-				'category_name'		=> '',
-				'post_type'			=> 'post',
-				'post_status'		=> 'publish',
-			);
-
-			$post = get_posts( $args );
-		}
-
-		/**
-		 * Get most recent post for blog page.
-		 *
-		 * @since 2.3.4
-		 */
-		if ( $the_id == get_option( 'page_for_posts' ) && ! is_front_page() ) {
-			$args = array(
-				'posts_per_page'	=> 1,
-				'offset'			=> 0,
-				'category'			=> '',
-				'category_name'		=> '',
-				'orderby'			=> 'date',
-				'order'				=> 'DESC',
-				'post_type'			=> 'post',
-				'post_status'		=> 'publish',
-			);
-
-			$post = get_posts( $args );
-		}
-
-		/**
-		 * Cast object to array.
-		 *
-		 * @since 2.3.3
-		 */
-		if ( isset( $post[0] ) && is_object( $post[0] ) ) {
-			$object = $post[0];
-			$post = (array) $object;
-		}
-
-		//* Stop getting something that doesn't exists. E.g. 404
-		if ( is_array( $post ) && ! isset( $post['post_content'] ) || is_object( $post ) || ( isset( $post['ID'] ) && 0 == $post['ID'] ) )
-			return '';
-
-		/**
-		 * No need to run esc_attr after wp_strip_all_tags
-		 *
-		 * @since 2.2.8
-		 */
 		if ( empty( $excerpt ) ) {
-			$excerpt = wp_strip_all_tags( strip_shortcodes( $post['post_content'] ) );
-		} else {
-			$excerpt = esc_attr( $excerpt );
+			/**
+			 * Use the 2nd parameter.
+			 *
+			 * @since 2.2.8
+			 *
+			 * Now casts to array
+			 * @since 2.3.3
+			 */
+			if ( ! empty( $the_id ) ) {
+				$post = get_post( $the_id, ARRAY_A );
+			} else {
+				global $post_id;
+
+				$post = get_post( $post_id, ARRAY_A );
+			}
+
+			/**
+			 * Match the descriptions in admin as on the front end.
+			 *
+			 * @since 2.3.3
+			 */
+			if ( ! empty( $tt_id ) ) {
+
+				$args = array(
+					'posts_per_page'	=> 1,
+					'offset'			=> 0,
+					'category'			=> $tt_id,
+					'category_name'		=> '',
+					'post_type'			=> 'post',
+					'post_status'		=> 'publish',
+				);
+
+				$post = get_posts( $args );
+			}
+
+			/**
+			 * Get most recent post for blog page.
+			 *
+			 * @since 2.3.4
+			 */
+			if ( $the_id == get_option( 'page_for_posts' ) && ! is_front_page() ) {
+				$args = array(
+					'posts_per_page'	=> 1,
+					'offset'			=> 0,
+					'category'			=> '',
+					'category_name'		=> '',
+					'orderby'			=> 'date',
+					'order'				=> 'DESC',
+					'post_type'			=> 'post',
+					'post_status'		=> 'publish',
+				);
+
+				$post = get_posts( $args );
+			}
+
+			/**
+			 * Cast object to array.
+			 *
+			 * @since 2.3.3
+			 */
+			if ( isset( $post[0] ) && is_object( $post[0] ) ) {
+				$object = $post[0];
+				$post = (array) $object;
+			}
+
+			//* Stop getting something that doesn't exists. E.g. 404
+			if ( is_array( $post ) && ! isset( $post['post_content'] ) || is_object( $post ) || ( isset( $post['ID'] ) && 0 == $post['ID'] ) )
+				return '';
+
+			$excerpt = $post['post_content'];
 		}
 
+		$excerpt = wp_strip_all_tags( strip_shortcodes( $excerpt ) );
 		$excerpt = str_replace( array( "\r\n", "\r", "\n" ), "\n", $excerpt );
 
 		$lines = explode( "\n", $excerpt );

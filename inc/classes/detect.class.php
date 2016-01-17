@@ -76,6 +76,93 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	}
 
 	/**
+	 * Detect if you can use the given constants, functions and classes.
+	 * All must be available to return true.
+	 *
+	 * @param array $plugins Array of array for constants, classes and / or functions to check for plugin existence.
+	 * @param bool $use_cache Bypasses cache if false
+	 *
+	 * @staticvar array $cache
+	 * @uses $this->detect_plugin_multi()
+	 *
+	 * @since 2.5.2
+	 */
+	public function can_i_use( array $plugins = array(), $use_cache = true ) {
+
+		if ( ! $use_cache )
+			return $this->detect_plugin_multi( $plugins );
+
+		static $cache = array();
+
+		$merge = array();
+		$mapped = array();
+
+		//* Prepare multidimensional array for cache.
+		foreach ( $plugins as $key => $array ) {
+			if ( ! is_array( $array ) )
+				return false;
+
+			$array = array_flip( $array );
+			ksort( $array );
+			$array = array_flip( $array );
+
+			$mapped[$key] = $key . '_' . implode( $array );
+		}
+
+		ksort( $mapped );
+
+		$plugins_cache = implode( $mapped );
+
+		if ( isset( $cache[$plugins_cache] ) )
+			return $cache[$plugins_cache];
+
+		return $cache[$plugins_cache] = $this->detect_plugin_multi( $plugins );
+	}
+
+	/**
+	 * Detect active plugin by constant, class or function existence.
+	 * All parameters must match and return true.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @param array $plugins Array of array for constants, classes and / or functions to check for plugin existence.
+	 *
+	 * @return boolean True if plugin exists or false if plugin constant, class or function not detected.
+	 */
+	public function detect_plugin_multi( array $plugins ) {
+
+		//* Check for classes
+		if ( isset( $plugins['classes'] ) ) {
+			foreach ( $plugins['classes'] as $name ) {
+				if ( ! class_exists( $name ) )
+					return false;
+					break;
+			}
+		}
+
+		//* Check for functions
+		if ( isset( $plugins['functions'] ) ) {
+			foreach ( $plugins['functions'] as $name ) {
+				if ( ! function_exists( $name ) )
+					return false;
+					break;
+			}
+		}
+
+		//* Check for constants
+		if ( isset( $plugins['constants'] ) ) {
+			foreach ( $plugins['constants'] as $name ) {
+				if ( ! defined( $name ) )
+					return false;
+					break;
+			}
+		}
+
+		//* All classes, functions and constant have been found to exist
+		return true;
+	}
+
+	/**
 	 * Checks if the (parent) theme name is loaded.
 	 *
 	 * @NOTE will return true if ANY of the array values matches.
@@ -243,9 +330,17 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		if ( isset( $has_plugin ) )
 			return $has_plugin;
 
-		$plugins = array( 'classes' => array( 'WPSEO_OpenGraph', 'All_in_One_SEO_Pack_Opengraph' ), 'functions' => array( 'amt_plugin_actions' ) );
+		$plugins = array(
+			'classes' => array(
+				'WPSEO_OpenGraph',
+				'All_in_One_SEO_Pack_Opengraph'
+			),
+			'functions' => array(
+				'amt_plugin_actions'
+			)
+		);
 
-		return $has_plugin = $this->detect_plugin( $plugins ) ? true : false;
+		return $has_plugin = (bool) $this->detect_plugin( $plugins );
 	}
 
 	/**
@@ -269,7 +364,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		$plugins = array('classes' => array( 'WPSEO_JSON_LD' ) );
 
-		return $has_plugin = $this->detect_plugin( $plugins ) ? true : false;
+		return $has_plugin = (bool) $this->detect_plugin( $plugins );
 	}
 
 	/**
@@ -296,7 +391,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 				'functions' => array( 'wpss_init', 'gglstmp_sitemapcreate' ),
 			);
 
-		return $has_plugin = $this->detect_plugin( $plugins ) ? true : false;
+		return $has_plugin = (bool) $this->detect_plugin( $plugins );
 	}
 
 	/**
@@ -512,14 +607,14 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	}
 
 	/**
-	 * Add doing it wrong notice in the footer/error-log
+	 * Add doing it wrong html code in the footer.
 	 *
 	 * @since 2.2.5
 	 * @staticvar bool $no_spam
 	 *
 	 * @return void
 	 */
-	public function title_doing_it_wrong() {
+	public function title_doing_it_wrong( $sep = null, $display = null, $seplocation = null ) {
 
 		//* Prevent error log spam.
 		static $no_spam = null;
@@ -527,25 +622,18 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		if ( isset( $no_spam ) )
 			return;
 
-		/**
-		 * Don't put out a deprecation notice on WordPress 4.4.x since WordPress does it.
-		 *
-		 * @since 2.3.4
-		 */
-		if ( $this->wp_version( '4.4.0' ) ) {
-			$no_spam = true;
-			return;
+		$sep = isset( $sep ) ? 'notset' : $sep;
+		if ( is_bool( $display ) ) {
+			if ( $display ) {
+				$display = 'true';
+			} else {
+				$display = 'false';
+			}
 		}
+		$display = isset( $display ) ? 'notset' : $display;
+		$seplocation = isset( $seplocation ) ? 'notset' : $seplocation;
 
-		$version = $this->the_seo_framework_version( '2.2.5' );
-
-		$example = esc_html( "<title><?php wp_title(''); ?></title>" );
-		$example2 = esc_html( esc_url( "https://codex.wordpress.org/Title_Tag" ) );
-
-		$message = "wp_title() should be called with only a single empty parameter in your header. Like exactly so: <br>\r\n$example\r\n<br>";
-		$message2 = "Alternatively, you could add the title-tag theme support. This is recommended and required since WordPress 4.4. Read how-to here: \r\n$example2\r\n<br>";
-
-		_doing_it_wrong( 'wp_title', $message . $message2, $version );
+		echo '<!-- Title diw: ' . $sep . ' ' . $display . ' ' . $seplocation . ' -->';
 
 		$no_spam = true;
 

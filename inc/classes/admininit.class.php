@@ -17,7 +17,7 @@
  */
 
 /**
- * Class AutoDescription_AdminInit
+ * Class AutoDescription_Admin_Init
  *
  * Initializes the plugin for the wp-admin screens.
  * Enqueues css and javascript.
@@ -96,7 +96,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		if ( ! empty( $post ) ) {
 			$post_id = $post->ID;
 
-			$searchexclude = $this->get_custom_field( 'exclude_local_search', $post_id ) ? true : false;
+			$searchexclude = (bool) $this->get_custom_field( 'exclude_local_search', $post_id );
 
 			if ( $searchexclude === true )
 				$states[] = __( 'No Search', 'autodescription' );
@@ -152,7 +152,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		 * Uploading most of them in binary will crash also the layout.
 		 * And having unsanitized globals $options (great name for a global!), shouldn't be used.
 		 *
-		 * Try static functions, take a look at the `the_seo_framework_init` function for a great example of countering globals.
+		 * Try statically cached functions, take a look at the `the_seo_framework_init` function for a great example of countering globals.
 		 *
 		 * Please also provide more documentation for developers.
 		 *
@@ -311,16 +311,16 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		 * i18n.
 		 * @todo only enqueue this on pages that actually need this (edit.php)
 		 */
-		$blog_name = get_bloginfo( 'name', 'display' );
-		$description = get_bloginfo( 'description', 'display' );
+		$blog_name = $this->get_blogname();
+		$description = $this->get_blogdescription();
 
-		$tagline = $this->get_option( 'homepage_tagline' ) ? true : false;
+		$tagline = (bool) $this->get_option( 'homepage_tagline' );
 		$home_tagline = $this->get_option( 'homepage_title_tagline' );
 		$title_location = $this->get_option( 'title_location' );
 
 		$separator = $this->get_separator( 'title', true );
 
-		$rtl = is_rtl() ? true : false;
+		$rtl = (bool) is_rtl();
 		$ishome = false;
 
 		/**

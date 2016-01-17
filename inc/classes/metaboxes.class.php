@@ -188,7 +188,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 			$title = __( 'Example Post Title', 'autodescription' );
 		}
 
-		$blogname = get_bloginfo( 'name', 'display' );
+		$blogname = $this->get_blogname();
 
 		$sep_option = $this->get_field_value( 'title_seperator' ); // Note: typo.
 		$sep = array_search( $sep_option, array_flip( $title_separator ), false );
@@ -259,7 +259,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 
 		$recommended = ' class="recommended" title="' . __( 'Recommended', 'autodescription' ) . '"';
 
-		$blogname = get_bloginfo( 'name', 'display' );
+		$blogname = $this->get_blogname();
 
 		$sep_option = $this->get_field_value( 'description_separator' );
 		$sep_from_options = $this->get_option( 'description_separator' );
@@ -295,7 +295,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		$example_nojs = $page_title . $example_nojs_onblog . " $sep " . $excerpt;
 
 		?>
-		<h4><?php _e( 'Example Description Output', 'autodescription' ); ?></h4>
+		<h4><?php _e( 'Example Automated Description Output', 'autodescription' ); ?></h4>
 		<p class="hide-if-no-js"><?php echo $this->code_wrap_noesc( $example ); ?></p>
 		<p class="hide-if-js"><?php echo $this->code_wrap( $example_nojs ); ?></p>
 
@@ -580,7 +580,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 			$home_title_frompost = true;
 
 		//* Get blog tagline
-		$blog_description = get_bloginfo( 'description', 'display' );
+		$blog_description = $this->get_blogdescription();
 
 		/**
 		 * Homepage Tagline settings.
@@ -612,7 +612,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 			}
 		} else if ( ! empty( $home_title ) ) {
 			//* Fetch default title
-			$blogname = get_bloginfo( 'name', 'raw' );
+			$blogname = $this->get_blogname();
 
 			if ( $this->get_option( 'homepage_tagline' ) ) {
 				$home_title_placeholder = $blogname . " $sep " . $blog_description;
@@ -643,7 +643,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		 * @param string $frompost_title The possible title from the post.
 		 */
 		$title_example_pre = ! empty( $home_title ) ? $home_title : $frompost_title;
-		$title_example = ! empty( $title_example_pre ) ? $title_example_pre : get_bloginfo( 'name', 'display' );
+		$title_example = ! empty( $title_example_pre ) ? $title_example_pre : $this->get_blogname();
 
 		/**
 		 * Check for options to calculate title length.
@@ -970,7 +970,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		<p class="fields">
 			<label for="<?php $this->field_id( 'shortlink_tag' ); ?>">
 				<input type="checkbox" name="<?php $this->field_name( 'shortlink_tag' ); ?>" id="<?php $this->field_id( 'shortlink_tag' ); ?>" <?php $this->is_conditional_checked( 'shortlink_tag' ); ?> value="1" <?php checked( $this->get_field_value( 'shortlink_tag' ) ); ?> />
-				<?php _e( 'Include shortlink tag?', 'autodescription' ); ?>
+				<?php _e( 'Output shortlink tag?', 'autodescription' ); ?>
 			</label>
 		</p>
 
@@ -987,6 +987,13 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 				<?php _e( 'Output Open Graph meta tags?', 'autodescription' ); ?>
 			</label>
 			<p class="description"><?php _e( 'Facebook, Twitter, Pinterest and many other social sites make use of these tags.', 'autodescription' ); ?></p>
+			<?php
+			if ( $this->has_og_plugin() ) {
+				?>
+				<p class="description"><?php _e( 'Note: Another Open Graph plugin has been detected. This means no Open Graph meta tags will be output.', 'autodescription' ); ?></p>
+				<?php
+			}
+			?>
 		</p>
 
 		<hr>
@@ -1240,8 +1247,6 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 	 * Webmaster meta box on the Site SEO Settings page.
 	 *
 	 * @since 2.2.4
-	 *
-	 * @see $this->social_metabox() Callback for Social Settings box.
 	 */
 	public function webmaster_metabox() {
 
@@ -1252,10 +1257,11 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 
 		$bing_site_url = "https://www.bing.com/webmaster/configure/verify/ownership?url=" . urlencode( $site_url );
 		$google_site_url = "https://www.google.com/webmasters/verification/verification?hl=" . $language . "&siteUrl=" . $site_url;
+		$pint_site_url = "https://analytics.pinterest.com/";
 
 		?>
 		<h4><?php _e( 'Webmaster Integration Settings', 'autodescription' ); ?></h4>
-		<p><span class="description"><?php printf( __( "When adding your site to Google or Bing Webmaster Tools, you'll be asked to add a code or file to your site for verification purposes. These options will help you easily integrate those codes.", 'autodescription' ) ); ?></span></p>
+		<p><span class="description"><?php printf( __( "When adding your site to Google, Bing and other Webmaster Tools, you'll be asked to add a code or file to your site for verification purposes. These options will help you easily integrate those codes.", 'autodescription' ) ); ?></span></p>
 		<p><span class="description"><?php printf( __( "Verifying your website has no SEO value whatsoever. But you might gain added benefits such as search ranking insights to help you improve your Website's content.", 'autodescription' ) ); ?></span></p>
 
 		<hr>
@@ -1263,7 +1269,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		<p>
 			<label for="<?php $this->field_id( 'google_verification' ); ?>">
 				<strong><?php _e( "Google Webmaster Verification Code", 'autodescription' ); ?></strong>
-				<a href="<?php echo esc_url( $google_site_url ); ?>" target="_blank" class="description" title="<?php _e( 'Get the Google Verification code.', 'autodescription' ); ?>">[?]</a>
+				<a href="<?php echo esc_url( $google_site_url ); ?>" target="_blank" class="description" title="<?php _e( 'Get the Google Verification code', 'autodescription' ); ?>">[?]</a>
 			</label>
 		</p>
 		<p class="fields">
@@ -1278,6 +1284,16 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		</p>
 		<p class="fields">
 			<input type="text" name="<?php $this->field_name( 'bing_verification' ); ?>" class="large-text" id="<?php $this->field_id( 'bing_verification' ); ?>" placeholder="123A456B78901C2D3456E7890F1A234D" value="<?php echo esc_attr( $this->get_field_value( 'bing_verification' ) ); ?>" />
+		</p>
+
+		<p>
+			<label for="<?php $this->field_id( 'pint_verification' ); ?>">
+				<strong><?php _e( "Pinterest Analytics Verification Code", 'autodescription' ); ?></strong>
+				<a href="<?php echo esc_url( $pint_site_url ); ?>" target="_blank" class="description" title="<?php _e( 'Get Pinterest Verification Code', 'autodescription' ); ?>">[?]</a>
+			</label>
+		</p>
+		<p class="fields">
+			<input type="text" name="<?php $this->field_name( 'pint_verification' ); ?>" class="large-text" id="<?php $this->field_id( 'pint_verification' ); ?>" placeholder="123456a7b8901de2fa34bcdef5a67b98" value="<?php echo esc_attr( $this->get_field_value( 'pint_verification' ) ); ?>" />
 		</p>
 		<?php
 
@@ -1396,7 +1412,8 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 	 * @see $this->knowledge_metabox() Callback for Knowledge Graph Settings box.
 	 */
 	public function knowledge_metabox_about_tab() {
-		$blogname = get_bloginfo( 'name', 'raw' );
+
+		$blogname = $this->get_blogname();
 
 		?>
 		<h4><?php _e( 'About this website', 'autodescription' ); ?></h4>
@@ -1658,11 +1675,15 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		</p>
 		<?php
 
-		if ( $this->get_option( 'sitemaps_output') ) :
+		if ( $this->has_sitemap_plugin() ) {
+			?>
+			<p><span class="description"><?php _e( "Note: Another sitemap plugin has been detected. This means that no sitemap will be output.", 'autodescription' ); ?></span></p>
+			<?php
+		} else if ( $this->get_option( 'sitemaps_output') ) {
 			$here =  '<a href="' . $sitemap_url  . '" target="_blank" title="' . __( 'View sitemap', 'autodescription' ) . '">' . _x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 
 			?><p><span class="description"><?php printf( _x( 'The sitemap can be found %s.', '%s = here', 'autodescription' ), $here ); ?></span></p><?php
-		endif;
+		}
 
 	}
 
@@ -1763,6 +1784,48 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 			</label>
 		</p>
 		<?php
+
+	}
+
+	/**
+	 * Webmaster meta box on the Site SEO Settings page.
+	 *
+	 * @since 2.2.4
+	 *
+	 * @see $this->social_metabox() Callback for Social Settings box.
+	 */
+	public function feed_metabox() {
+
+		do_action( 'the_seo_framework_feed_metabox_before' );
+
+		$site_url = $this->the_home_url_from_cache( true );
+
+		$feed_url = esc_url( user_trailingslashit( $site_url . 'feed' ) );
+
+		?>
+		<h4><?php _e( 'Feed Content Settings', 'autodescription' ); ?></h4>
+		<p><span class="description"><?php printf( __( "Sometimes, your content can get stolen by robots through the WordPress feeds. This can cause duplicated content issues. To prevent these issues from happening, it's recommended to convert the feed's content into an excerpt.", 'autodescription' ) ); ?></span></p>
+		<p><span class="description"><?php printf( __( "Adding a backlink below the feed's content will also let the visitors know where the content came from.", 'autodescription' ) ); ?></span></p>
+
+		<hr>
+
+		<h4><?php _e( 'Change Feed Settings', 'autodescription' ); ?></h4>
+		<p class="fields">
+			<label for="<?php $this->field_id( 'excerpt_the_feed' ); ?>">
+				<input type="checkbox" name="<?php $this->field_name( 'excerpt_the_feed' ); ?>" id="<?php $this->field_id( 'excerpt_the_feed' ); ?>" <?php $this->is_conditional_checked( 'excerpt_the_feed' ); ?> value="1" <?php checked( $this->get_field_value( 'excerpt_the_feed' ) ); ?> />
+				<?php _e( 'Convert feed content into excerpts?', 'autodescription' ); ?>
+				<span title="<?php _e( "By default the excerpt will be at most 400 characters long", 'autodescription' ); ?>">[?]</span>
+			</label>
+			<br />
+			<label for="<?php $this->field_id( 'source_the_feed' ); ?>">
+				<input type="checkbox" name="<?php $this->field_name( 'source_the_feed' ); ?>" id="<?php $this->field_id( 'source_the_feed' ); ?>" <?php $this->is_conditional_checked( 'source_the_feed' ); ?> value="1" <?php checked( $this->get_field_value( 'source_the_feed' ) ); ?> />
+				<?php _e( 'Add backlinks below the feed content?', 'autodescription' ); ?>
+				<span title="<?php _e( "This link will not be followed by Search Engines", 'autodescription' ); ?>">[?]</span>
+			</label>
+		</p>
+		<?php
+
+		do_action( 'the_seo_framework_feed_metabox_after' );
 
 	}
 

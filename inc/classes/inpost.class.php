@@ -26,16 +26,35 @@
 class AutoDescription_Inpost extends AutoDescription_PageOptions {
 
 	/**
+	 * Add inpost SEO Bar through a filter.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @var bool|string Wether and where to show the inpost SEO bar.
+	 */
+	protected $inpost_seo_bar = false;
+
+	/**
 	 * Constructor, load parent constructor
 	 */
 	public function __construct() {
 		parent::__construct();
 
-		// Enqueue inpost meta boxes
+		//* Enqueue inpost meta boxes
 		add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box_init' ), 5 );
 
-		// Enqueue taxonomy meta boxes
+		//* Enqueue taxonomy meta boxes
 		add_action( 'admin_init', array( $this, 'add_taxonomy_seo_box_init' ), 9 );
+
+		/**
+		 * Applies filters bool|string the_seo_framework_inpost_seo_bar :
+		 * Wether to output the SEO bar within the inpost SEO Settings metabox.
+		 * @param 	: string 'above' Outputs it above the Settings
+		 * 			: string 'below' Outputs it below the Settings
+		 * 			: bool false No output.
+		 * @since 2.5.2
+		 */
+		$this->inpost_seo_bar = apply_filters( 'the_seo_framework_inpost_seo_bar', 'below' );
 	}
 
 	/**
@@ -247,8 +266,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		$ad_noindex = isset( $object->admeta['noindex'] ) ? $object->admeta['noindex'] : '';
 		$ad_nofollow = isset( $object->admeta['nofollow'] ) ? $object->admeta['nofollow'] : '';
 		$ad_noarchive = isset( $object->admeta['noarchive'] ) ? $object->admeta['noarchive'] : '';
-		$ad_savedflag = isset( $object->admeta['saved_flag'] ) ? $object->admeta['saved_flag'] : false;
-		$flag = $ad_savedflag ? true : false;
+		$flag = isset( $object->admeta['saved_flag'] ) ? (bool) $object->admeta['saved_flag'] : false;
 
 		//* Genesis data fetch. This will override our options with Genesis options.
 		if ( ! $flag && isset( $object->meta ) ) {
@@ -294,7 +312,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		 *
 		 * @since 2.2.4
 		 */
-		$blog_name = get_bloginfo( 'name', 'display' );
+		$blog_name = $this->get_blogname();
 
 		/**
 		 * Separator doesn't matter. Since html_entity_decode is used.
@@ -327,6 +345,16 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 
 		<table class="form-table">
 			<tbody>
+
+				<?php if ( false !== $this->inpost_seo_bar && 'above' === $this->inpost_seo_bar ) : ?>
+				<tr>
+					<th scope="row" valign="top"><?php _e( 'Doing it Right', 'autodescription' ); ?></th>
+					<td>
+						<?php echo $this->post_status( $term_id, $taxonomy, true ); ?>
+					</td>
+				</tr>
+				<?php endif; ?>
+
 				<tr class="form-field">
 					<th scope="row" valign="top">
 						<label for="autodescription-meta[doctitle]">
@@ -384,6 +412,16 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 						</label>
 					</td>
 				</tr>
+
+				<?php if ( false !== $this->inpost_seo_bar && 'below' === $this->inpost_seo_bar ) : ?>
+				<tr>
+					<th scope="row" valign="top"><?php _e( 'Doing it Right', 'autodescription' ); ?></th>
+					<td>
+						<?php echo $this->post_status( $term_id, $taxonomy, true ); ?>
+					</td>
+				</tr>
+				<?php endif; ?>
+
 			</tbody>
 		</table>
 		<?php
@@ -477,14 +515,14 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		if ( $is_static_frontpage && ! $this->get_option( 'homepage_tagline' ) ) {
 			$tit_len_pre = ! empty( $title ) ? $title : $generated_doctitle;
 		} else if ( $is_static_frontpage ) {
-			$tit_len_pre = ! empty( $title ) ? $title . " | " . get_bloginfo( 'description', 'raw' ) : $generated_doctitle;
+			$tit_len_pre = ! empty( $title ) ? $title . " | " . $this->get_blogdescription() : $generated_doctitle;
 		} else {
 			/**
 			 * Calculate true Title length
 			 *
 			 * @since 2.2.4
 			 */
-			$blog_name = get_bloginfo( 'name', 'display' );
+			$blog_name = $this->get_blogname();
 
 			/**
 			 * Separator doesn't matter. Since html_entity_decode is used.
@@ -541,6 +579,13 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		$canonical_placeholder = $this->the_url_from_cache( '', $post_id, false, false );
 
 		?>
+		<?php if ( false !== $this->inpost_seo_bar && 'above' === $this->inpost_seo_bar ) : ?>
+		<p>
+			<strong><?php _e( 'Doing it Right', 'autodescription' ); ?></strong>
+			<div><?php echo $this->post_status( $post_id, 'inpost', true ); ?></div>
+		</p>
+		<?php endif; ?>
+
 		<p>
 			<label for="autodescription_title"><strong><?php printf( __( 'Custom %s Title', 'autodescription' ), $type ); ?></strong>
 				<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#3" target="_blank" title="<?php _e( 'Recommended Length: 50 to 55 characters', 'autodescription' ) ?>">[?]</a>
@@ -606,7 +651,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		<p>
 			<label for="autodescription_exclude_local_search"><input type="checkbox" name="autodescription[exclude_local_search]" id="autodescription_exclude_local_search" value="1" <?php checked( $this->get_custom_field( 'exclude_local_search' ) ); ?> />
 				<?php printf( __( 'Exclude this %s from local search', 'autodescription' ), $type ); ?>
-				<span title="<?php printf( __( 'This excludes this %s from local on-site search results.', 'autodescription' ), $type ) ?>">[?]</a>
+				<span title="<?php printf( __( 'This excludes this %s from local on-site search results', 'autodescription' ), $type ) ?>">[?]</span>
 			</label>
 		</p>
 
@@ -619,7 +664,13 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		<p>
 			<input class="large-text" type="text" name="autodescription[redirect]" id="genesis_redirect" value="<?php echo esc_url( $this->get_custom_field( 'redirect' ) ); ?>" />
 		</p>
-		<?php
+
+		<?php if ( false !== $this->inpost_seo_bar && 'below' === $this->inpost_seo_bar ) : ?>
+		<p>
+			<strong><?php _e( 'Doing it Right', 'autodescription' ); ?></strong>
+			<div><?php echo $this->post_status( $post_id, 'inpost', true ); ?></div>
+		</p>
+		<?php endif;
 
 		do_action( 'the_seo_framework_pro_page_inpost_box' );
 	}

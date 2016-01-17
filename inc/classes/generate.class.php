@@ -386,7 +386,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				$title = $custom_title ? $custom_title : $this->title( '', '', '', array( 'term_id' => $args['id'], 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
 
 				// @TODO create option.
-				$title = _x( 'Latest posts:', 'High priority translation, used in front-end', 'autodescription' ) . ' ' . $title;
+				/* translators: Front-end output. */
+				$title = __( 'Latest posts:', 'autodescription' ) . ' ' . $title;
 
 			} else if ( ! empty( $term ) && is_object( $term ) ) {
 				//* We're on a taxonomy now.
@@ -408,16 +409,18 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			//* Fetch home page id.
 			$args['id'] = (int) get_option( 'page_on_front' );
 
-			$title = get_bloginfo( 'description', 'raw' );
+			$title = $this->get_blogdescription();
 		}
 
 		/**
 		 * Use Untitled on empty titles.
 		 * @since 2.2.8
 		 */
+		/* translators: Front-end output. */
 		$title = empty( $title ) ? __( 'Untitled', 'autodescription' ) : $title;
+		/* translators: Front-end output. */
 		$on = _x( 'on', 'Placement. e.g. Post Title "on" Blog Name', 'autodescription' );
-		$blogname = get_bloginfo( 'name', 'raw' );
+		$blogname = $this->get_blogname();
 
 		$description_additions = $this->get_option( 'description_blogname' );
 
@@ -486,7 +489,16 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * @since 2.5.0
 		 */
 		if ( $args['social'] && ! $page_on_front ) {
-			$description = $excerpt['social'];
+			/**
+			 * @since 2.5.2
+			 */
+			$excerpt_exists = ! empty( $excerpt['social'] ) ? true : false;
+
+			if ( $excerpt_exists && $description_additions ) {
+				$description = $excerpt['social'];
+			} else {
+				$description = (string) sprintf( '%s %s %s', $title, $on, $blogname );
+			}
 		} else {
 			$excerpt_exists = ! empty( $excerpt['normal'] ) ? true : false;
 
@@ -608,15 +620,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				// We're all good here, continue.
 				$excerpt = $subex;
 			}
-			// Replace exceeding word with ...
-			$exceed = '...';
 
-			/**
-			 * Moved up, to reduce processing power
-			 *
-			 * @since 2.2.8
-			 */
-			$excerpt = str_replace( ' ...', '...', $excerpt . $exceed );
+			$excerpt = rtrim( $excerpt ) . '...';
 		}
 
 		return (string) $excerpt;
@@ -927,7 +932,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		if ( empty( $args ) )
 			$args = $this->parse_title_args( '', '', true );
 
-		$blogname = get_bloginfo( 'name', 'raw' );
+		$blogname = $this->get_blogname();
 
 		//* Remove separator if true.
 		$sep_replace = false;
@@ -1004,14 +1009,23 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			//* Add trailing space for the tagline/blogname is stuck onto this part with trim.
 
 			/**
+			 * Convert characters to easier match and prevent removal of matching entities and title characters.
+			 * Reported by Riccardo: https://wordpress.org/support/topic/problem-with-post-titles
+			 * @since 2.5.2
+			 */
+			$sep_to_replace = html_entity_decode( $sep_to_replace );
+			$title = html_entity_decode( $title );
+
+			/**
 			 * Now also considers seplocation.
 			 * @since 2.4.1
 			 */
 			if ( $seplocation == 'right' ) {
-				$title = trim( rtrim( $title, " $sep_to_replace " ) ) . " $sep ";
+				$title = trim( rtrim( $title, "$sep_to_replace " ) ) . " $sep ";
 			} else {
-				$title = " $sep " . trim( ltrim( $title, " $sep_to_replace " ) );
+				$title = " $sep " . trim( ltrim( $title, " $sep_to_replace" ) );
 			}
+
 		} else {
 			$title = trim( $title ) . " $sep ";
 		}
@@ -1095,7 +1109,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		$title = '';
 
 		$is_front_page = is_front_page() || $args['page_on_front'] ? true : false;
-		$blogname = get_bloginfo( 'name', 'raw' );
+		$blogname = $this->get_blogname();
 
 		/**
 		 * Cache the seplocation for is_home()
@@ -1269,23 +1283,25 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * Combined the statements
 		 * @since 2.2.7 && @since 2.2.8
 		 */
-		if ( is_category() || is_tag() || is_tax() || ( ! empty( $term_id ) && ! empty( $taxonomy ) ) )
+		if ( is_category() || is_tag() || is_tax() || ( ! empty( $term_id ) && ! empty( $taxonomy ) ) ) {
 			$title = $this->title_for_terms();
-
-		/**
-		 * Combined the statements
-		 * @since 2.2.8
-		 */
-		if ( is_date() || is_author() )
+		} else if ( is_archive() ) {
+			/**
+			 * Get all archive titles
+			 * @since 2.5.2
+			 */
 			$title = wp_strip_all_tags( $this->get_the_archive_title() );
+		}
 
 		// @TODO create option?
 		if ( is_404() )
 			$title = '404';
 
 		// @TODO create options
-		if ( is_search() )
+		if ( is_search() ) {
+			/* translators: Front-end output. */
 			$title = __( 'Search results for:', 'autodescription' ) . ' ' . get_search_query();
+		}
 
 		//* Generate admin placeholder for taxonomies
 		if ( empty( $title ) && ! empty( $term_id ) && ! empty( $taxonomy ) ) {
@@ -1294,6 +1310,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			if ( ! empty( $term ) && is_object( $term ) ) {
 				$term_name = ! empty( $term->name ) ? $term->name : $term->slug;
 			} else {
+				/* translators: Front-end output. */
 				$term_name = __( 'Untitled', 'autodescription' );
 			}
 
@@ -1309,6 +1326,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			if ( isset( $term_labels ) ) {
 				$title = $term_labels->singular_name . ': ' . $term_name;
 			} else {
+				/* translators: Front-end output. */
 				$title = __( 'Archives', 'autodescription' );
 			}
 		}
@@ -1338,10 +1356,12 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		//* You forgot to enter a title "anywhere"!
 		//* So it's untitled :D
-		if ( empty( $title ) )
+		if ( empty( $title ) ) {
+			/* translators: Front-end output. */
 			$title = __( 'Untitled', 'autodescription' );
+		}
 
-		if ( true === $escape ) {
+		if ( $escape ) {
 			$title = wptexturize( $title );
 			$title = convert_chars( $title );
 			$title = esc_html( $title );
@@ -1392,7 +1412,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			 * @since 2.3.8
 			 */
 			$tagline = (string) $this->get_option( 'homepage_title_tagline' );
-			$title = ! empty( $tagline ) ? $tagline : get_bloginfo( 'description', 'raw' );
+			$title = ! empty( $tagline ) ? $tagline : $this->get_blogdescription();
 		} else {
 			$title = '';
 		}
@@ -1402,7 +1422,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * @since 2.2.8
 		 */
 		$title_for_home = $this->title_for_home( '', $get_custom_field, false );
-		$blogname = ! empty( $title_for_home ) ? $title_for_home : get_bloginfo( 'name', 'raw' );
+		$blogname = ! empty( $title_for_home ) ? $title_for_home : $this->get_blogname();
 
 		if ( empty( $seplocation_home ) || $seplocation_home !== 'left' || $seplocation_home !== 'right' ) {
 			/**
@@ -1552,6 +1572,9 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		if ( $this->is_blog_page( $id ) ) {
 			//* Posts page title.
 			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : get_the_title( $id );
+	//	} else if ( $this->detect_plugin( array( 'functions' => array( 'um_is_core_page' ) ) ) && um_is_core_page( 'user' ) && function_exists( 'um_get_requested_user' ) && um_get_requested_user() ) {
+		} else if ( $this->can_i_use( array( 'functions' => array( 'um_user', 'um_is_core_page' ) ) ) && um_is_core_page( 'user' ) ) {
+			$title = um_user( 'display_name' );
 		} else {
 			//* Get title from custom field, empty it if it's not there to override the default title
 			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : $title;
@@ -1647,6 +1670,13 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * @since 2.2.4
 		 */
 		$slashit = true;
+
+		/**
+		 * Fetch permalink if Feed.
+		 * @since 2.5.2
+		 */
+		if ( is_feed() )
+			$url = get_permalink();
 
 		if ( empty( $url ) && ! $args['home'] ) {
 
@@ -1963,7 +1993,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 			//* If negotiation_type is 2, the home_url will handle this.
 
-			if ( $negotiation_type == 1 ) {
+			if ( 1 === $negotiation_type ) {
 				//* Language is path.
 
 				$icl_gl_exists = function_exists( 'icl_get_languages' );
@@ -2019,7 +2049,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 					}
 				}
 
-			} else if ( $negotiation_type == 3 ) {
+			} else if ( 3 === $negotiation_type ) {
 				//* Language names are parameters.
 
 				// @TODO parse slashit.
@@ -2070,6 +2100,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		$termlink = $wp_rewrite->get_extra_permastruct( $taxonomy );
 
 		$slug = $term->slug;
+		//* var_dump() isn't $term already what we need? =/
 		$t = get_taxonomy( $taxonomy );
 
 		if ( empty( $termlink ) ) {
@@ -3103,8 +3134,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		$context = json_encode( 'http://schema.org' );
 		$webtype = json_encode( 'WebSite' );
 		$url = json_encode( esc_url( home_url( '/' ) ) );
-		$name = json_encode( get_bloginfo( 'name', 'raw' ) );
-		$alternatename = json_encode( get_bloginfo( 'name', 'raw' ) );
+		$name = json_encode( $this->get_blogname() );
+		$alternatename = $name;
 		$actiontype = json_encode( 'SearchAction' );
 
 		// Remove trailing quote and add it back.
@@ -3148,79 +3179,110 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 			$r = is_object_in_term( $post_id, 'category', '' );
 
-			if ( is_wp_error( $r ) )
+			if ( is_wp_error( $r ) || ! $r )
 				return '';
 
-			if ( $r ) {
-				$cats = wp_get_object_terms( $post_id, 'category', array( 'fields' => 'all_with_object_id', 'orderby' => 'parent' ) );
+			$cats = wp_get_object_terms( $post_id, 'category', array( 'fields' => 'all_with_object_id', 'orderby' => 'parent' ) );
 
-				if ( is_wp_error( $r ) )
-					return '';
+			if ( is_wp_error( $cats ) || empty( $cats ) )
+				return '';
 
-				$cat_ids = array();
-				$kittens = array();
+			$cat_ids = array();
+			$kittens = array();
 
-				//* Fetch cats children id's, if any.
-				foreach ( $cats as $cat ) {
-					//* The category objects. The cats.
-					$cat_id = $cat->term_id;
+			//* Fetch cats children id's, if any.
+			foreach ( $cats as $cat ) {
+				//* The category objects. The cats.
+				$cat_id = $cat->term_id;
 
-					// Check if they have kittens.
-					$children = get_term_children( $cat_id, $cat->taxonomy );
+				// Check if they have kittens.
+				$children = get_term_children( $cat_id, $cat->taxonomy );
 
-					//* No need to fetch them again, save object in the array.
-					$cat_obj[$cat_id] = $cat;
+				//* No need to fetch them again, save object in the array.
+				$cat_obj[$cat_id] = $cat;
 
-					//* Save children id's as kittens.
-					$kittens[$cat_id] = $children;
-				}
+				//* Save children id's as kittens.
+				$kittens[$cat_id] = $children;
+			}
 
-				$todo = array();
-				$trees = array();
+			$todo = array();
+			$trees = array();
 
-				/**
-				 * Build category ID tree.
-				 * Sort by parents with children ($trees). These are recursive, 3+ item scripts.
-				 * Sort by parents without children ($todo). These are singular 2 item scripts.
-				 */
-				foreach ( $kittens as $parent => $kitten ) {
-					if ( ! empty( $kitten ) ) {
-						if ( 1 == count( $kitten ) ) {
-							$trees[] = array( $kitten[0], $parent );
-						} else {
-							//* @TODO, this is very, very complicated. Requires multiple loops.
-							$trees[] = array();
-						}
+			/**
+			 * Build category ID tree.
+			 * Sort by parents with children ($trees). These are recursive, 3+ item scripts.
+			 * Sort by parents without children ($todo). These are singular 2 item scripts.
+			 */
+			foreach ( $kittens as $parent => $kitten ) {
+				if ( ! empty( $kitten ) ) {
+					if ( 1 == count( $kitten ) ) {
+						$trees[] = array( $kitten[0], $parent );
 					} else {
-						$todo[] = $parent;
+						//* @TODO, this is very, very complicated. Requires multiple loops.
+						$trees[] = array();
 					}
+				} else {
+					$todo[] = $parent;
 				}
+			}
 
-				//* Remove Duplicates from $todo by comparing to $tree
-				foreach ( $todo as $key => $value ) {
-					foreach ( $trees as $tree ) {
-						if ( in_array( $value, $tree ) )
-							unset( $todo[$key] );
-					}
-				}
-
-				$context = json_encode( 'http://schema.org' );
-				$context_type = json_encode( 'BreadcrumbList' );
-				$item_type = json_encode( 'ListItem' );
-
-				$items = '';
-
+			//* Remove Duplicates from $todo by comparing to $tree
+			foreach ( $todo as $key => $value ) {
 				foreach ( $trees as $tree ) {
-					if ( ! empty( $tree ) ) {
+					if ( in_array( $value, $tree ) )
+						unset( $todo[$key] );
+				}
+			}
 
-						$tree = array_reverse( $tree );
+			$context = json_encode( 'http://schema.org' );
+			$context_type = json_encode( 'BreadcrumbList' );
+			$item_type = json_encode( 'ListItem' );
 
-						foreach ( $tree as $position => $parent_id ) {
-							$pos = $position + 2;
+			$items = '';
 
-							$cat = isset( $cat_obj[$parent_id] ) ? $cat_obj[$parent_id] : get_term_by( 'id', $parent_id, 'category', OBJECT, 'raw' );
+			foreach ( $trees as $tree ) {
+				if ( ! empty( $tree ) ) {
 
-							$id = json_encode( $this->the_url( '', '', array( 'get_custom_field' => false, 'external' => true, 'is_term' => true, 'term' => $cat ) ) );
+					$tree = array_reverse( $tree );
+
+					foreach ( $tree as $position => $parent_id ) {
+						$pos = $position + 2;
+
+						$cat = isset( $cat_obj[$parent_id] ) ? $cat_obj[$parent_id] : get_term_by( 'id', $parent_id, 'category', OBJECT, 'raw' );
+
+						$id = json_encode( $this->the_url( '', '', array( 'get_custom_field' => false, 'external' => true, 'is_term' => true, 'term' => $cat ) ) );
+
+						$custom_field_name = isset( $cat->admeta['doctitle'] ) ? $cat->admeta['doctitle'] : '';
+						$cat_name = ! empty( $custom_field_name ) ? $custom_field_name : $cat->name;
+						$name = json_encode( $cat_name );
+
+						$items .= sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}},', $item_type, (string) $pos, $id, $name );
+					}
+
+					if ( ! empty( $items ) ) {
+
+						$items = $this->ld_json_breadcrumb_first( $item_type ) . $items . $this->ld_json_breadcrumb_last( $item_type, $pos, $post_id );
+
+						//* Put it all together.
+						$breadcrumbhelper = sprintf( '{"@context":%s,"@type":%s,"itemListElement":[%s]}', $context, $context_type, $items );
+						$output .= "<script type='application/ld+json'>" . $breadcrumbhelper . "</script>" . "\r\n";
+					}
+				}
+			}
+
+			//* For each of the todo items, create a separated script.
+			if ( ! empty( $todo ) ) {
+				foreach ( $todo as $tid ) {
+
+					$items = '';
+					$cat = get_term_by( 'id', $tid, 'category', OBJECT, 'raw' );
+
+					if ( '1' !== $cat->admeta['noindex'] ) {
+
+						if ( empty( $children ) ) {
+							// The position of the current item is always static here.
+							$pos = '2';
+							$id = json_encode( $this->the_url( '', '', array( 'get_custom_field' => false, 'is_term' => true, 'term' => $cat ) ) ); // Why not external???
 
 							$custom_field_name = isset( $cat->admeta['doctitle'] ) ? $cat->admeta['doctitle'] : '';
 							$cat_name = ! empty( $custom_field_name ) ? $custom_field_name : $cat->name;
@@ -3239,42 +3301,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 						}
 					}
 				}
-
-				//* For each of the todo items, create a separated script.
-				if ( ! empty( $todo ) ) {
-					foreach ( $todo as $tid ) {
-
-						$items = '';
-						$cat = get_term_by( 'id', $tid, 'category', OBJECT, 'raw' );
-
-						if ( '1' !== $cat->admeta['noindex'] ) {
-
-							if ( empty( $children ) ) {
-								// The position of the current item is always static here.
-								$pos = '2';
-								$id = json_encode( $this->the_url( '', '', array( 'get_custom_field' => false, 'is_term' => true, 'term' => $cat ) ) ); // Why not external???
-
-								$custom_field_name = isset( $cat->admeta['doctitle'] ) ? $cat->admeta['doctitle'] : '';
-								$cat_name = ! empty( $custom_field_name ) ? $custom_field_name : $cat->name;
-								$name = json_encode( $cat_name );
-
-								$items .= sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}},', $item_type, (string) $pos, $id, $name );
-							}
-
-							if ( ! empty( $items ) ) {
-
-								$items = $this->ld_json_breadcrumb_first( $item_type ) . $items . $this->ld_json_breadcrumb_last( $item_type, $pos, $post_id );
-
-								//* Put it all together.
-								$breadcrumbhelper = sprintf( '{"@context":%s,"@type":%s,"itemListElement":[%s]}', $context, $context_type, $items );
-								$output .= "<script type='application/ld+json'>" . $breadcrumbhelper . "</script>" . "\r\n";
-							}
-						}
-					}
-				}
-
 			}
-
 		} else if ( ! is_front_page() && is_page() ) {
 			//* Get ancestors.
 			$page_id = $this->get_the_real_ID();
@@ -3348,9 +3375,9 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				$home_id = (int) get_option( 'page_on_front' );
 
 				$custom_name = $this->get_custom_field( '_genesis_title', $home_id );
-				$custom_name = $custom_name ? $custom_name : get_bloginfo( 'name', 'raw' );
+				$custom_name = $custom_name ? $custom_name : $this->get_blogname();
 			} else {
-				$custom_name = get_bloginfo( 'name', 'raw' );
+				$custom_name = $this->get_blogname();
 			}
 
 			$custom_name = json_encode( $custom_name );
@@ -3437,7 +3464,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * @since 2.4.3
 		 */
 		$knowledge_name = $this->get_option( 'knowledge_name' );
-		$knowledge_name = $knowledge_name ? $knowledge_name : get_bloginfo( 'name', 'raw' );
+		$knowledge_name = $knowledge_name ? $knowledge_name : $this->get_blogname();
 
 		$context = json_encode( 'http://schema.org' );
 		$type = json_encode( ucfirst( $knowledge_type ) );
@@ -3512,44 +3539,61 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			return get_the_archive_title();
 
 		if ( is_category() ) {
+			/* translators: Front-end output. */
 			$title = sprintf( __( 'Category: %s', 'autodescription' ), single_cat_title( '', false ) );
 		} elseif ( is_tag() ) {
+			/* translators: Front-end output. */
 			$title = sprintf( __( 'Tag: %s', 'autodescription' ), single_tag_title( '', false ) );
 		} elseif ( is_author() ) {
+			/* translators: Front-end output. */
 			$title = sprintf( __( 'Author: %s', 'autodescription' ), '<span class="vcard">' . get_the_author() . '</span>' );
 		} elseif ( is_year() ) {
+			/* translators: Front-end output. */
 			$title = sprintf( __( 'Year: %s', 'autodescription' ), get_the_date( _x( 'Y', 'yearly archives date format', 'autodescription' ) ) );
 		} elseif ( is_month() ) {
+			/* translators: Front-end output. */
 			$title = sprintf( __( 'Month: %s', 'autodescription' ), get_the_date( _x( 'F Y', 'monthly archives date format', 'autodescription' ) ) );
 		} elseif ( is_day() ) {
+			/* translators: Front-end output. */
 			$title = sprintf( __( 'Day: %s', 'autodescription' ), get_the_date( _x( 'F j, Y', 'daily archives date format', 'autodescription' ) ) );
 		} elseif ( is_tax( 'post_format' ) ) {
 			if ( is_tax( 'post_format', 'post-format-aside' ) ) {
+				/* translators: Front-end output. */
 				$title = _x( 'Asides', 'post format archive title', 'autodescription' );
 			} elseif ( is_tax( 'post_format', 'post-format-gallery' ) ) {
+				/* translators: Front-end output. */
 				$title = _x( 'Galleries', 'post format archive title', 'autodescription' );
 			} elseif ( is_tax( 'post_format', 'post-format-image' ) ) {
+				/* translators: Front-end output. */
 				$title = _x( 'Images', 'post format archive title', 'autodescription' );
 			} elseif ( is_tax( 'post_format', 'post-format-video' ) ) {
+				/* translators: Front-end output. */
 				$title = _x( 'Videos', 'post format archive title', 'autodescription' );
 			} elseif ( is_tax( 'post_format', 'post-format-quote' ) ) {
+				/* translators: Front-end output. */
 				$title = _x( 'Quotes', 'post format archive title', 'autodescription' );
 			} elseif ( is_tax( 'post_format', 'post-format-link' ) ) {
+				/* translators: Front-end output. */
 				$title = _x( 'Links', 'post format archive title', 'autodescription' );
 			} elseif ( is_tax( 'post_format', 'post-format-status' ) ) {
+				/* translators: Front-end output. */
 				$title = _x( 'Statuses', 'post format archive title', 'autodescription' );
 			} elseif ( is_tax( 'post_format', 'post-format-audio' ) ) {
+				/* translators: Front-end output. */
 				$title = _x( 'Audio', 'post format archive title', 'autodescription' );
 			} elseif ( is_tax( 'post_format', 'post-format-chat' ) ) {
+				/* translators: Front-end output. */
 				$title = _x( 'Chats', 'post format archive title', 'autodescription' );
 			}
 		} elseif ( is_post_type_archive() ) {
+			/* translators: Front-end output. */
 			$title = sprintf( __( 'Archives: %s' ), post_type_archive_title( '', false ) );
 		} elseif ( is_tax() ) {
 			$tax = get_taxonomy( get_queried_object()->taxonomy );
-			/* translators: 1: Taxonomy singular name, 2: Current taxonomy term */
+			/* translators: Front-end output. 1: Taxonomy singular name, 2: Current taxonomy term */
 			$title = sprintf( __( '%1$s: %2$s', 'autodescription' ), $tax->labels->singular_name, single_term_title( '', false ) );
 		} else {
+			/* translators: Front-end output. */
 			$title = __( 'Archives', 'autodescription' );
 		}
 
@@ -3609,6 +3653,42 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		} else {
 			return $sep_esc[$type][$escape] = $sepcache[$type];
 		}
+	}
+
+	/**
+	 * Fetch blogname
+	 *
+	 * @staticvar string $blogname
+	 *
+	 * @since 2.5.2
+	 * @return string $blogname The trimmed and sanitized blogname
+	 */
+	public function get_blogname() {
+
+		$name = null;
+
+		if ( isset( $blogname ) )
+			return $blogname;
+
+		return $blogname = trim( get_bloginfo( 'name', 'display' ) );
+	}
+
+	/**
+	 * Fetch blog description.
+	 *
+	 * @staticvar string $blogname
+	 *
+	 * @since 2.5.2
+	 * @return string $blogname The trimmed and sanitized blog description.
+	 */
+	public function get_blogdescription() {
+
+		$name = null;
+
+		if ( isset( $blogname ) )
+			return $blogname;
+
+		return $blogname = trim( get_bloginfo( 'description', 'display' ) );
 	}
 
 }
