@@ -54,7 +54,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		 * 			: bool false No output.
 		 * @since 2.5.2
 		 */
-		$this->inpost_seo_bar = apply_filters( 'the_seo_framework_inpost_seo_bar', 'below' );
+		$this->inpost_seo_bar = apply_filters( 'the_seo_framework_inpost_seo_bar', false );
 	}
 
 	/**

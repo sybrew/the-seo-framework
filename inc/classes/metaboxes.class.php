@@ -93,37 +93,42 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 	 *		)
 	 *	}
 	 * @param string $version the The SEO Framework version
+	 * @param bool $use_tabs Wether to output tabs, only works when $tabs only has one count.
 	 *
 	 * @since 2.3.6
 	 */
-	public function nav_tab_wrapper( $id, $tabs = array(), $version = '2.3.6' ) {
+	public function nav_tab_wrapper( $id, $tabs = array(), $version = '2.3.6', $use_tabs = true ) {
 		/**
 		 * Start navigation
+		 *
+		 * Don't output navigation if $use_tabs is false and the amount of tabs is 1 or lower.
 		 */
-		?>
-		<h3 class="nav-tab-wrapper hide-if-no-js" id="<?php echo $id; ?>-tabs-js">
-		<?php
-			$count = 1;
-			foreach ( $tabs as $tab => $value ) {
+		if ( $use_tabs || ( ! $use_tabs && count( $tabs ) > (int) 1 ) ) {
+			?>
+			<h3 class="nav-tab-wrapper hide-if-no-js" id="<?php echo $id; ?>-tabs-js">
+			<?php
+				$count = 1;
+				foreach ( $tabs as $tab => $value ) {
 
-				$dashicon = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
-				$name = isset( $value['name'] ) ? $value['name'] : '';
+					$dashicon = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
+					$name = isset( $value['name'] ) ? $value['name'] : '';
 
-				?>
-				<span>
-					<input type="radio" class="<?php echo $id; ?>-tabs-radio" id="<?php echo $id; ?>-tab-<?php echo $tab ?>" name="<?php echo $id; ?>-tabs" <?php echo $count == abs(1) ? 'checked' : ''; ?>>
-					<label for="<?php echo $id; ?>-tab-<?php echo $tab ?>" class="nav-tab <?php echo $count == abs(1) ? 'nav-tab-active' : '' ?>">
-						<?php echo ! empty( $dashicon ) ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' dashicons-tabs"></span>' : ''; ?>
-						<?php echo ! empty( $name ) ? '<span class="seoframework-nav-desktop">' . esc_attr( $name ) . '</span>' : ''; ?>
-					</label>
-				</span>
-				<?php
+					?>
+					<span>
+						<input type="radio" class="<?php echo $id; ?>-tabs-radio" id="<?php echo $id; ?>-tab-<?php echo $tab ?>" name="<?php echo $id; ?>-tabs" <?php echo $count == abs(1) ? 'checked' : ''; ?>>
+						<label for="<?php echo $id; ?>-tab-<?php echo $tab ?>" class="nav-tab <?php echo $count == abs(1) ? 'nav-tab-active' : '' ?>">
+							<?php echo ! empty( $dashicon ) ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' dashicons-tabs"></span>' : ''; ?>
+							<?php echo ! empty( $name ) ? '<span class="seoframework-nav-desktop">' . esc_attr( $name ) . '</span>' : ''; ?>
+						</label>
+					</span>
+					<?php
 
-				$count++;
-			}
-		?>
-		</h3>
-		<?php
+					$count++;
+				}
+			?>
+			</h3>
+			<?php
+		}
 
 		/**
 		 * Start settings content
@@ -990,7 +995,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 			<?php
 			if ( $this->has_og_plugin() ) {
 				?>
-				<p class="description"><?php _e( 'Note: Another Open Graph plugin has been detected. This means no Open Graph meta tags will be output.', 'autodescription' ); ?></p>
+				<p class="description"><?php _e( 'Note: Another Open Graph plugin has been detected. This means not all Open Graph meta tags will be output.', 'autodescription' ); ?></p>
 				<?php
 			}
 			?>
@@ -1573,7 +1578,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 
 		do_action( 'the_seo_framework_sitemaps_metabox_before' );
 
-		if ( get_option( 'permalink_structure' ) == '' ) {
+		if ( '' == get_option( 'permalink_structure' ) ) {
 
 			$permalink_settings_url = esc_url( admin_url( 'options-permalink.php' ) );
 			$here = '<a href="' . $permalink_settings_url  . '" target="_blank" title="' . __( 'Permalink settings', 'autodescription' ) . '">' . _x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
@@ -1637,8 +1642,32 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 			$defaults = (array) apply_filters( 'the_seo_framework_sitemaps_settings_tabs', $default_tabs );
 
 			$tabs = wp_parse_args( $args, $defaults );
+			$use_tabs = true;
 
-			$this->nav_tab_wrapper( 'sitemaps', $tabs, '2.2.8' );
+			$sitemap_plugin = $this->has_sitemap_plugin();
+			$robots_detected = $this->has_robots_txt();
+
+			/**
+			 * Remove the timestamps and notify submenus
+			 * @since 2.5.2
+			 */
+			if ( $sitemap_plugin ) {
+				unset( $tabs['timestamps'] );
+				unset( $tabs['notify'] );
+			}
+
+			/**
+			 * Remove the robots submenu
+			 * @since 2.5.2
+			 */
+			if ( $robots_detected ) {
+				unset( $tabs['robots'] );
+			}
+
+			if ( $robots_detected && $sitemap_plugin )
+				$use_tabs = false;
+
+			$this->nav_tab_wrapper( 'sitemaps', $tabs, '2.2.8', $use_tabs );
 
 		}
 
@@ -1658,28 +1687,34 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		$site_url = $this->the_home_url_from_cache( true );
 
 		$sitemap_url = $site_url . 'sitemap.xml';
+		$has_sitemap_plugin = $this->has_sitemap_plugin();
 
 		?>
 		<h4><?php _e( 'Sitemap Integration Settings', 'autodescription' ); ?></h4>
-		<p><span class="description"><?php printf( __( "The Sitemap is an XML file that lists pages and posts for your site along with optional metadata about each post or page. This helps Search Engines crawl your site easier.", 'autodescription' ) ); ?></span></p>
-		<p><span class="description"><?php printf( __( "The optional metadata include the post and page modified time and a page priority indication, which is automated.", 'autodescription' ) ); ?></span></p>
-
-		<hr>
-
-		<h4 style="margin-top:0;"><?php printf( __( 'Sitemap Output', 'autodescription' ) ); ?></h4>
-		<p>
-			<label for="<?php $this->field_id( 'sitemaps_output' ); ?>">
-				<input type="checkbox" name="<?php $this->field_name( 'sitemaps_output' ); ?>" id="<?php $this->field_id( 'sitemaps_output' ); ?>" <?php $this->is_conditional_checked( 'sitemaps_output' ); ?> value="1" <?php checked( $this->get_field_value( 'sitemaps_output' ) ); ?> />
-				<?php printf( __( 'Output Sitemap?', 'autodescription' ) ); ?>
-			</label>
-		</p>
 		<?php
 
-		if ( $this->has_sitemap_plugin() ) {
+		if ( $has_sitemap_plugin ) {
 			?>
-			<p><span class="description"><?php _e( "Note: Another sitemap plugin has been detected. This means that no sitemap will be output.", 'autodescription' ); ?></span></p>
+			<p><span class="description"><?php _e( "Another active sitemap plugin has been detected. This means that the sitemap functionality has been replaced.", 'autodescription' ); ?></span></p>
 			<?php
-		} else if ( $this->get_option( 'sitemaps_output') ) {
+		} else {
+			?>
+			<p><span class="description"><?php printf( __( "The Sitemap is an XML file that lists pages and posts for your site along with optional metadata about each post or page. This helps Search Engines crawl your site easier.", 'autodescription' ) ); ?></span></p>
+			<p><span class="description"><?php printf( __( "The optional metadata include the post and page modified time and a page priority indication, which is automated.", 'autodescription' ) ); ?></span></p>
+
+			<hr>
+
+			<h4 style="margin-top:0;"><?php printf( __( 'Sitemap Output', 'autodescription' ) ); ?></h4>
+			<p>
+				<label for="<?php $this->field_id( 'sitemaps_output' ); ?>">
+					<input type="checkbox" name="<?php $this->field_name( 'sitemaps_output' ); ?>" id="<?php $this->field_id( 'sitemaps_output' ); ?>" <?php $this->is_conditional_checked( 'sitemaps_output' ); ?> value="1" <?php checked( $this->get_field_value( 'sitemaps_output' ) ); ?> />
+					<?php printf( __( 'Output Sitemap?', 'autodescription' ) ); ?>
+				</label>
+			</p>
+			<?php
+		}
+
+		if ( !$has_sitemap_plugin && $this->get_option( 'sitemaps_output') ) {
 			$here =  '<a href="' . $sitemap_url  . '" target="_blank" title="' . __( 'View sitemap', 'autodescription' ) . '">' . _x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 
 			?><p><span class="description"><?php printf( _x( 'The sitemap can be found %s.', '%s = here', 'autodescription' ), $here ); ?></span></p><?php

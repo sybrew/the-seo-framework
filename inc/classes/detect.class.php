@@ -94,24 +94,26 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		static $cache = array();
 
-		$merge = array();
 		$mapped = array();
 
 		//* Prepare multidimensional array for cache.
-		foreach ( $plugins as $key => $array ) {
-			if ( ! is_array( $array ) )
+		foreach ( $plugins as $key => $func ) {
+			if ( ! is_array( $func ) )
 				return false;
 
-			$array = array_flip( $array );
-			ksort( $array );
-			$array = array_flip( $array );
+			//* Sort alphanumeric by value, put values back after sorting.
+			$func = array_flip( $func );
+			ksort( $func );
+			$func = array_flip( $func );
 
-			$mapped[$key] = $key . '_' . implode( $array );
+			//* Glue with underscore and space for debugging purposes.
+			$mapped[$key] = $key . '_' . implode( ' ', $array );
 		}
 
 		ksort( $mapped );
 
-		$plugins_cache = implode( $mapped );
+		//* Glue with dash instead of underscore for debugging purposes.
+		$plugins_cache = implode( '-', $mapped );
 
 		if ( isset( $cache[$plugins_cache] ) )
 			return $cache[$plugins_cache];
@@ -127,34 +129,37 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 *
 	 * @param array $plugins Array of array for constants, classes and / or functions to check for plugin existence.
 	 *
-	 * @return boolean True if plugin exists or false if plugin constant, class or function not detected.
+	 * @return boolean True if ALL functions classes and constants exists or false if plugin constant, class or function not detected.
 	 */
 	public function detect_plugin_multi( array $plugins ) {
 
 		//* Check for classes
 		if ( isset( $plugins['classes'] ) ) {
 			foreach ( $plugins['classes'] as $name ) {
-				if ( ! class_exists( $name ) )
+				if ( ! class_exists( $name ) ) {
 					return false;
 					break;
+				}
 			}
 		}
 
 		//* Check for functions
 		if ( isset( $plugins['functions'] ) ) {
 			foreach ( $plugins['functions'] as $name ) {
-				if ( ! function_exists( $name ) )
+				if ( ! function_exists( $name ) ) {
 					return false;
 					break;
+				}
 			}
 		}
 
 		//* Check for constants
 		if ( isset( $plugins['constants'] ) ) {
 			foreach ( $plugins['constants'] as $name ) {
-				if ( ! defined( $name ) )
+				if ( ! defined( $name ) ) {
 					return false;
 					break;
+				}
 			}
 		}
 
@@ -192,12 +197,12 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 			if ( is_string( $themes ) ) {
 				$themes = strtolower( $themes );
-				if ( $theme_parent == $themes || $theme_name == $themes )
+				if ( $theme_parent === $themes || $theme_name === $themes )
 					return true;
 			} else if ( is_array( $themes ) ) {
 				foreach ( $themes as $theme ) {
 					$theme = strtolower( $theme );
-					if ( $theme_parent == $theme || $theme_name == $theme ) {
+					if ( $theme_parent === $theme || $theme_name === $theme ) {
 						return true;
 						break;
 					}
@@ -229,17 +234,18 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		$wp_get_theme = wp_get_theme();
 
+		//* Fetch both themes if child theme is present.
 		$theme_parent = strtolower( $wp_get_theme->get('Template') );
 		$theme_name = strtolower( $wp_get_theme->get('Name') );
 
 		if ( is_string( $themes ) ) {
 			$themes = strtolower( $themes );
-			if ( $theme_parent == $themes || $theme_name == $themes )
+			if ( $theme_parent === $themes || $theme_name === $themes )
 				$themes_cache[$themes] = true;
 		} else if ( is_array( $themes ) ) {
 			foreach ( $themes as $theme ) {
 				$theme = strtolower( $theme );
-				if ( $theme_parent == $theme || $theme_name == $theme ) {
+				if ( $theme_parent === $theme || $theme_name === $theme ) {
 					return $themes_cache[$theme] = true;
 					break;
 				} else {
@@ -322,6 +328,8 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 *
 	 * @staticvar bool $has_plugin
 	 * @since 2.2.5
+	 *
+	 * @return bool $has_plugin one of the plugins has been found.
 	 */
 	public function has_og_plugin() {
 
@@ -354,6 +362,8 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 *
 	 * @staticvar bool $has_plugin
 	 * @since 2.2.5
+	 *
+	 * @return bool $has_plugin one of the plugins has been found.
 	 */
 	public function has_json_ld_plugin() {
 
@@ -362,7 +372,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		if ( isset( $has_plugin ) )
 			return $has_plugin;
 
-		$plugins = array('classes' => array( 'WPSEO_JSON_LD' ) );
+		$plugins = array( 'classes' => array( 'WPSEO_JSON_LD' ) );
 
 		return $has_plugin = (bool) $this->detect_plugin( $plugins );
 	}
@@ -378,6 +388,8 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 *
 	 * @staticvar bool $has_plugin
 	 * @since 2.2.5
+	 *
+	 * @return bool $has_plugin one of the plugins has been found.
 	 */
 	public function has_sitemap_plugin() {
 
@@ -392,6 +404,27 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			);
 
 		return $has_plugin = (bool) $this->detect_plugin( $plugins );
+	}
+
+	/**
+	 * Detects presence of robots.txt in root folder.
+	 *
+	 * @staticvar $has_robots
+	 *
+	 * @since 2.5.2
+	 */
+	public function has_robots_txt() {
+
+		static $has_robots = null;
+
+		if ( isset( $has_robots ) )
+			return $has_robots;
+
+		$path = get_home_path() . 'robots.txt';
+
+		$found = (bool) file_exists( $path );
+
+		return $has_robots = $found;
 	}
 
 	/**
