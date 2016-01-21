@@ -474,9 +474,6 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 				'is_home' => true,
 				'get_custom_field' => true,
 			);
-
-			$generated_doctitle = $this->title( '', '', '', $generated_doctitle_args );
-			$generated_description = $this->generate_description_from_id( $generated_description_args );
 		} else if ( $this->is_blog_page( $post_id ) ) {
 			//* Page for posts.
 			$generated_doctitle_args = array(
@@ -489,9 +486,6 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 				'id' => $post_id,
 				'page_for_posts' => true,
 			);
-
-			$generated_doctitle = $this->title( '', '', '', $generated_doctitle_args );
-			$generated_description = $this->generate_description_from_id( $generated_description_args );
 		} else {
 			$generated_doctitle_args = array(
 				'placeholder' => true,
@@ -502,10 +496,9 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 			$generated_description_args = array(
 				'id' => $post_id,
 			);
-
-			$generated_doctitle = $this->title( '', '', '', $generated_doctitle_args );
-			$generated_description = $this->generate_description_from_id( $generated_description_args );
 		}
+		$generated_doctitle = $this->title( '', '', '', $generated_doctitle_args );
+		$generated_description = $this->generate_description_from_id( $generated_description_args );
 
 		/**
 		 * Special check for home page.

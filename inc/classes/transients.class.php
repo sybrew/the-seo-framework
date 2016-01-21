@@ -53,6 +53,15 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	protected $ld_json_transient;
 
 	/**
+	 * The Theme is doing the Title right transient name
+	 *
+	 * @since 2.5.2
+	 *
+	 * @var string The Theme Doing It Right Transient Name.
+	 */
+	protected $theme_doing_it_right_transient;
+
+	/**
 	 * Constructor, load parent constructor and set up caches.
 	 */
 	public function __construct() {
@@ -74,6 +83,10 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 
 		add_action( 'update_option_blogdescription', array( $this, 'delete_auto_description_blog_transient' ), 10, 1 );
 
+		//* Delete doing it wrong transient after theme switch.
+		add_action( 'after_switch_theme', array( $this, 'delete_theme_dir_transient' ), 10 );
+
+
 	}
 
 	/**
@@ -92,6 +105,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		$revision = '2';
 
 		$this->sitemap_transient = 'the_seo_framework_sitemap_' . (string) $revision . '_' . (string) $blog_id;
+		$this->theme_doing_it_right_transient = 'the_seo_framework_tdir_' . (string) $revision . '_' . (string) $blog_id;
 	}
 
 	/**
@@ -113,7 +127,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		 *
 		 * @since 2.3.4
 		 */
-		$revision = '3';
+		$revision = '3'; // var_dump() @TODO change to 4 prior to pushing release.
 
 		/**
 		 * Two different cache keys for two different settings.
@@ -228,42 +242,34 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 					 * @since 2.3.4
 					 */
 					$the_id = 'blog_' . $page_id;
-				} else if ( ! is_singular() && empty( $taxonomy ) && ! did_action( 'admin_init' ) ) {
-					//* Unsigned CPT and e.g. WooCommerce shop, AnsPress question, etc.
+				} else if ( ! $this->is_singular() && empty( $taxonomy ) && ! did_action( 'admin_init' ) ) {
+					//* Unsigned CPT, AnsPress question, etc.
+					global $wp_query;
 
-					if ( function_exists( 'is_shop' ) && is_shop() ) {
-						//* WooCommerce destroys the is_page query var, let's fetch it back.
-						$the_id = get_option( 'woocommerce_shop_page_id' );
-					} else {
-						global $wp_query;
+					/**
+					 * Generate for everything else.
+					 * Doesn't work on admin_init action.
+					 */
 
-						/**
-						 * Generate for everything else.
-						 * Doesn't work on admin_init action.
-						 */
+					$query = isset( $wp_query->query ) ? (array) $wp_query->query : null;
 
-						$query = isset( $wp_query->query ) ? (array) $wp_query->query : null;
+					/**
+					 * Automatically generate transient based on query.
+					 *
+					 * Adjusted to comply with the 45 char limit.
+					 * @since 2.3.4
+					 */
+					if ( isset( $query ) ) {
+						$the_id = '';
 
-						/**
-						 * Automatically generate transient based on query.
-						 *
-						 * Adjusted to comply with the 45 char limit.
-						 * @since 2.3.4
-						 */
-						if ( isset( $query ) ) {
-							$the_id = '';
+						// Trim key to 2 chars.
+						foreach ( $query as $key => $value )
+							$the_id .= substr( $key, 0, 2 ) . '_' . mb_substr( $value, 0, 2 ) . '_';
 
-							$p_id = $this->get_the_real_ID();
-
-							// Trim key to 2 chars.
-							foreach ( $query as $key => $value )
-								$the_id .= substr( $key, 0, 2 ) . '_' . mb_substr( $value, 0, 2 ) . '_' . $p_id . '_';
-
-							//* Remove final underscore
-							$the_id = rtrim( $the_id, '_' );
-						}
+						//* add Page ID.
+						$the_id .= (string) $this->get_the_real_ID();
 					}
-				} else if ( ! is_singular() && ! empty( $taxonomy ) ) {
+				} else if ( ! $this->is_singular() && ! empty( $taxonomy ) ) {
 					//* Taxonomy
 
 					$the_id = '';
@@ -276,7 +282,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 					$p_id = $page_id ? $page_id : $this->get_the_real_ID();
 
 					//* Put it all together.
-					$the_id = rtrim( $the_id, '_' ) . '_' . $p_id;
+					$the_id = rtrim( $the_id, '_' ) . '_' . (string) $p_id;
 				} else if ( ! empty( $page_id ) ) {
 					$the_id = $page_id;
 				}
@@ -452,6 +458,45 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Delete transient for the Theme doing it Right bool on special requests.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @return bool true
+	 */
+	public function delete_theme_dir_transient() {
+
+		delete_transient( $this->theme_doing_it_right_transient );
+
+		return true;
+	}
+
+	/**
+	 * Sets transient for Theme doing it Right
+	 *
+	 * @since 2.5.2
+	 *
+	 * @param bool $doing_it_right
+	 */
+	public function set_theme_dir_transient( $dir = '' ) {
+
+		if ( is_bool( $dir ) && false === get_transient( $this->theme_doing_it_right_transient ) ) {
+
+			//* Convert $dir to 1 or 0 as transients can be false on failure.
+			$dir = $dir ? '1' : '0';
+
+			/**
+			 * Expiration time, 3 days.
+			 * 60s * 60m * 24d * 3d
+			 */
+			$expiration = 60 * 60 * 24 * 3;
+
+			set_transient( $this->theme_doing_it_right_transient, $dir, $expiration );
+		}
+
 	}
 
 }

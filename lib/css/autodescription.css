@@ -371,6 +371,7 @@ span.ad-seo .explanation-desc div {
 .autodescription-metaboxes #home-title-location label .autodescription-sep-js {
 	display: inline;
 	min-width: 0;
+	white-space: pre;
 }
 
 .autodescription-metaboxes #social-tabs-js,
@@ -455,10 +456,10 @@ span.ad-seo .explanation-desc div {
 @media screen and (max-width: 600px) {
 	.autodescription-metaboxes h3.nav-tab-wrapper {
 		border-bottom: 1px solid #ccc;
-		margin-bottom: -1px;
 	}
 
 	.autodescription-metaboxes h3 .nav-tab {
 		margin-right: 7px;
+		margin-bottom: -1px;
 	}
 }

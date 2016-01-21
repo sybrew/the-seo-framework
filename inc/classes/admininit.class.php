@@ -225,45 +225,6 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	}
 
 	/**
-	 * Helper function for allowed post/page screens where this plugin is active.
-	 *
-	 * @param array $screens The allowed screens
-	 *
-	 * @since 2.1.9
-	 *
-	 * Applies filters the_seo_framework_supported_screens : The supported administration
-	 * screens where css and javascript files are loaded.
-	 *
-	 * @param array $args the custom supported screens.
-	 *
-	 * Added WooCommerce edit-product screens.
-	 * @since 2.3.1
-	 *
-	 * Unused.
-	 * @since 2.3.5
-	 *
-	 * @return array $screens
-	 */
-	protected function supported_screens( $args = array() ) {
-
-		/**
-		 * Instead of supporting page ID's, we support the Page base now.
-		 *
-		 * @since 2.3.3
-		 */
-		$defaults = array(
-			'edit',
-			'post',
-			'edit-tags',
-		);
-
-		$screens = (array) apply_filters( 'the_seo_framework_supported_screens', $defaults, $args );
-		$screens = wp_parse_args( $args, $screens );
-
-		return $screens;
-	}
-
-	/**
 	 * Enqueues scripts in the admin area on the supported screens.
 	 *
 	 * @since 2.3.3
@@ -298,8 +259,6 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 * @usedby enqueue_javascript
 	 *
 	 * @param string|array|object $hook the current page
-	 *
-	 * @todo Optimize this, check hook if supported by SEO?
 	 */
 	public function enqueue_admin_javascript( $hook ) {
 
@@ -309,7 +268,6 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 
 		/**
 		 * i18n.
-		 * @todo only enqueue this on pages that actually need this (edit.php)
 		 */
 		$blog_name = $this->get_blogname();
 		$description = $this->get_blogdescription();
@@ -330,7 +288,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		 *
 		 * @since 2.2.4
 		 */
-		if ( $hook ) {
+		if ( '' !== $hook ) {
 			// We're somewhere within default WordPress pages.
 			$post_id = $this->get_the_real_ID();
 
@@ -633,9 +591,9 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 
 			if ( is_array( $values ) ) {
 				foreach ( $values as $key => $value ) {
-					if ( empty( $value ) ) {
+					if ( '' === $value ) {
 						echo $this->debug_key_wrapper( $key ) . ' => ';
-						echo $this->debug_value_wrapper( 'Debug message: Empty value given.' );
+						echo $this->debug_value_wrapper( "''" );
 						echo "\r\n";
 					} else if ( is_string( $value ) || is_int( $value ) ) {
 						echo $this->debug_key_wrapper( $key ) . ' => ' . $this->debug_value_wrapper( $value );
@@ -649,23 +607,28 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 						echo "Array[\r\n";
 
 						foreach ( $value as $k => $v ) {
-							if ( empty( $v ) ) {
+							if ( '' === $v ) {
 								echo $this->debug_key_wrapper( $k ) . ' => ';
-								echo $this->debug_value_wrapper( 'Debug message: Empty value given.' );
+								echo $this->debug_value_wrapper( "''" );
+								echo ',';
 								echo "\r\n";
 							} else if ( is_string( $v ) || is_int( $v ) ) {
 								echo $this->debug_key_wrapper( $k ) . ' => ' . $this->debug_value_wrapper( $v );
+								echo ',';
 								echo "\r\n";
 							} else if ( is_bool( $v ) ) {
 								echo $this->debug_key_wrapper( $k ) . ' => ';
 								echo $this->debug_value_wrapper( $v ? 'true' : 'false' );
+								echo ',';
 								echo "\r\n";
 							} else if ( is_array( $v ) ) {
 								echo $this->debug_key_wrapper( $k ) . ' => ';
-								echo $this->debug_value_wrapper( 'Debug message: Third dimensional array.' );
+								echo $this->debug_value_wrapper( 'Debug message: Three+ dimensional array.' );
+								echo ',';
 							} else {
 								echo $this->debug_key_wrapper( $k ) . ' => ';
 								echo $this->debug_value_wrapper( $v );
+								echo ',';
 								echo "\r\n";
 							}
 						}
@@ -676,12 +639,12 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 						echo "\r\n";
 					}
 				}
-			} else if ( is_string( $values ) || is_int( $value ) ) {
+			} else if ( '' === $values ) {
+				echo $this->debug_value_wrapper( "''" );
+			} else if ( is_string( $values ) || is_int( $values ) ) {
 				echo $this->debug_value_wrapper( $values );
 			} else if ( is_bool( $values ) ) {
 				echo $this->debug_value_wrapper( $values ? 'true' : 'false' );
-			} else if ( empty( $values ) ) {
-				echo $this->debug_value_wrapper( 'Debug message: Empty value given.' );
 			} else {
 				echo $this->debug_value_wrapper( $values );
 			}
@@ -721,7 +684,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 */
 	public function debug_value_wrapper( $value ) {
 		if ( ! $this->the_seo_framework_debug_hidden )
-			return '<span class="wp-ui-notification">' . esc_attr( (string) $value ) . '</span>';
+			return '<span class="wp-ui-notification">' . esc_attr( (string) trim( $value ) ) . '</span>';
 
 		return esc_attr( (string) $value );
 	}

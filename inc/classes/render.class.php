@@ -274,7 +274,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		$locale = (string) apply_filters( 'the_seo_framework_oglocale_output', '' );
 
 		if ( empty( $locale ) )
-			$locale = get_locale();
+			$locale = $this->fetch_locale();
 
 		return '<meta property="og:locale" content="' . esc_attr( $locale ) . '" />' . "\r\n";
 	}
@@ -919,7 +919,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 			if ( $this->the_seo_framework_debug_hidden ) {
 				$this->echo_debug_information( array( 'LD Json transient output' => $output ) );
 			}
-			echo  "\r\n" . 'END: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n";
+			echo  "\r\n<br>\r\n" . 'END: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n";
 
 			if ( $this->the_seo_framework_debug_hidden )
 				echo "\r\n-->";
@@ -1080,6 +1080,22 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 			$output .= sprintf( '<link rel="next" href="%s" />' . "\r\n", $next );
 
 		return $output;
+	}
+
+	/**
+	 * Detemrmines wether to add or remove title additions.
+	 *
+	 * @since 2.5.2
+	 * @return bool True when additions are allowed.
+	 */
+	public function add_title_additions() {
+
+		$remove = $this->get_option( 'title_rem_additions' );
+
+		if ( ! $remove )
+			return true;
+
+		return false;
 	}
 
 }

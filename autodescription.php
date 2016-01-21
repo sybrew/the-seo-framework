@@ -28,11 +28,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//* Debug.
-//if ( is_admin() ) {
-//	define( 'THE_SEO_FRAMEWORK_DEBUG', true );
-//	define( 'THE_SEO_FRAMEWORK_DEBUG_MORE', true );
-//	define( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN', true );
+//* Debug. Not to be used on production websites as it dumps all kinds of stuff everywhere.
+//if ( is_admin() ) { // Warning: This allows every user to still see it.
+//	if ( is_super_admin() ) { // AntiWarning: This allows for enabling it only for the (multi-)site admin user.
+//		define( 'THE_SEO_FRAMEWORK_DEBUG', true );
+//		define( 'THE_SEO_FRAMEWORK_DEBUG_MORE', true );
+//		define( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN', true );
+//	}
 //}
 
 /**

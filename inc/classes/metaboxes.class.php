@@ -96,6 +96,8 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 	 * @param bool $use_tabs Wether to output tabs, only works when $tabs only has one count.
 	 *
 	 * @since 2.3.6
+	 *
+	 * @todo (2.5.3) Rework with radio buttons without WP Core dependancies.
 	 */
 	public function nav_tab_wrapper( $id, $tabs = array(), $version = '2.3.6', $use_tabs = true ) {
 		/**
@@ -103,7 +105,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		 *
 		 * Don't output navigation if $use_tabs is false and the amount of tabs is 1 or lower.
 		 */
-		if ( $use_tabs || ( ! $use_tabs && count( $tabs ) > (int) 1 ) ) {
+		if ( $use_tabs || count( $tabs ) > (int) 1 ) {
 			?>
 			<h3 class="nav-tab-wrapper hide-if-no-js" id="<?php echo $id; ?>-tabs-js">
 			<?php
@@ -140,7 +142,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 			$name = isset( $value['name'] ) ? $value['name'] : '';
 
 			?>
-			<div class="<?php echo $id; ?>-tab-content <?php echo $_count == abs(1) ? 'checked-tab' : ''; ?> <?php echo $_count != abs(1) ? 'hide-if-js' : ''; ?>" id="<?php echo $id; ?>-tab-<?php echo $tab ?>-box">
+			<div class="<?php echo $id; ?>-tab-content <?php echo (int) 1 === $_count ? 'checked-tab' : ''; ?> <?php echo (int) 1 !== $_count ? 'hide-if-js' : ''; ?>" id="<?php echo $id; ?>-tab-<?php echo $tab ?>-box">
 				<h3 class="nav-tab-wrapper hide-if-js">
 					<span class="nav-tab nav-tab-active">
 						<?php echo ! empty( $dashicon ) ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' dashicons-tabs"></span>' : ''; ?>
@@ -180,9 +182,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 
 		$title_separator = $this->title_separator;
 
-		$example_left = '';
-		$example_right = '';
-		$recommended = ' class="recommended" title="' . __( 'Recommended', 'autodescription' ) . '"';
+		$recommended = ' class="recommended" title="' . esc_attr__( 'Recommended', 'autodescription' ) . '"';
 
 		$latest_post_id = $this->get_latest_post_id();
 
@@ -190,7 +190,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 			$post = get_post( $latest_post_id, OBJECT );
 			$title = esc_attr( $post->post_title );
 		} else {
-			$title = __( 'Example Post Title', 'autodescription' );
+			$title = esc_attr__( 'Example Post Title', 'autodescription' );
 		}
 
 		$blogname = $this->get_blogname();
@@ -198,8 +198,10 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		$sep_option = $this->get_field_value( 'title_seperator' ); // Note: typo.
 		$sep = array_search( $sep_option, array_flip( $title_separator ), false );
 
-		$example_left = '<em>' . $blogname . '<span class="autodescription-sep-js"> ' . $sep . ' </span>' . $title . '</em>';
-		$example_right = '<em>' . $title . '<span class="autodescription-sep-js"> ' . $sep . ' </span>' . $blogname . '</em>';
+		$example_left = '<em><span class="title-additions-js">' . $blogname . '<span class="autodescription-sep-js">' . " $sep " . '</span></span>' . $title . '</em>';
+		$example_right = '<em>' . $title . '<span class="title-additions-js"><span class="autodescription-sep-js">' . " $sep " . '</span>' . $blogname . '</span></em>';
+
+		$home_page_has_option = __( 'The Home Page has a specific option.', 'autodescription' );
 
 		?>
 		<fieldset>
@@ -224,21 +226,36 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 					<input type="radio" name="<?php $this->field_name( 'title_location' ); ?>" id="<?php $this->field_id( 'title_location_left' ); ?>" value="left" <?php checked( $this->get_field_value( 'title_location' ), 'left' ); ?> />
 					<label for="<?php $this->field_id( 'title_location_left' ); ?>">
 						<span><?php _e( 'Left:', 'autodescription' ); ?></span>
-						<?php echo ( $example_left ) ? $this->code_wrap_noesc( $example_left ) : ''; ?>
+						<?php echo $this->code_wrap_noesc( $example_left ) ?>
 					</label>
 				</span>
 				<span>
 					<input type="radio" name="<?php $this->field_name( 'title_location' ); ?>" id="<?php $this->field_id( 'title_location_right' ); ?>" value="right" <?php checked( $this->get_field_value( 'title_location' ), 'right' ); ?> />
 					<label for="<?php $this->field_id( 'title_location_right' ); ?>">
 						<span><?php _e( 'Right:', 'autodescription' ); ?></span>
-						<?php echo ( $example_right ) ? $this->code_wrap_noesc( $example_right ) : ''; ?>
+						<?php echo $this->code_wrap_noesc( $example_right ); ?>
 					</label>
 				</span>
 			</p>
-			<span class="description"><?php _e( 'The Home Page has a specific option.', 'autodescription' ); ?></span>
+			<span class="description"><?php echo $home_page_has_option; ?></span>
 		</fieldset>
 
 		<?php
+		//* Only add this option if the theme is doing it right.
+		if ( $this->theme_title_doing_it_right() ) : ?>
+			<hr>
+
+			<h4><?php _e( 'Remove Blogname from Title', 'autodescription' ); ?></h4>
+			<p id="title-additions-toggle">
+				<label for="<?php $this->field_id( 'title_rem_additions' ); ?>">
+					<input type="checkbox" name="<?php $this->field_name( 'title_rem_additions' ); ?>" id="<?php $this->field_id( 'title_rem_additions' ); ?>" <?php $this->is_conditional_checked( 'title_rem_additions' ); ?> value="1" <?php checked( $this->get_field_value( 'title_rem_additions' ) ); ?> />
+					<?php _e( 'Remove blogname from title?', 'autodescription' ); ?>
+				</label>
+				<span title="<?php _e( 'This might decouple your posts and pages from the rest of the of the website.', 'autodescription' ); ?>">[?]</span>
+			</p>
+			<span class="description"><?php _e( 'Only use this option if you are aware of its SEO effects.', 'autodescription' ); ?></span>
+			<span class="description"><?php echo $home_page_has_option; ?></span>
+		<?php endif;
 
 		do_action( 'the_seo_framework_title_metabox_after' );
 	}
@@ -314,7 +331,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 				<label for="<?php $this->field_id( 'description_separator' . $name ); ?>" <?php echo ( $name == 'pipe' || $name == 'dash' ) ? $recommended : ''; ?>><?php echo $html ?></label>
 			<?php } ?>
 			</p>
-			<span class="description"><?php _e( 'If the Automated Description consists of two parts (Title and excerpt), then the separator will go in between them.', 'autodescription' ); ?></span>
+			<span class="description"><?php _e( 'If the Automated Description consists of two parts (title and excerpt), then the separator will go in between them.', 'autodescription' ); ?></span>
 		</fieldset>
 
 		<hr>
@@ -1587,7 +1604,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 			<h4><?php _e( "You're using the default permalink structure.", 'autodescription' ); ?></h4>
 			<p><span class="description"><?php _e( "This means we can't output the sitemap through WordPress rewrite.", 'autodescription' ); ?></span></p>
 			<hr>
-			<p><span class="description"><?php printf( _x( "Change your permalink settings %s (we recommend 'postname').", '%s = here', 'autodescription' ), $here ); ?></span></p>
+			<p><span class="description"><?php printf( _x( "Change your permalink settings %s (Recommended: 'postname').", '%s = here', 'autodescription' ), $here ); ?></span></p>
 			<?php
 
 		} else {
@@ -1838,7 +1855,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		$feed_url = esc_url( user_trailingslashit( $site_url . 'feed' ) );
 
 		?>
-		<h4><?php _e( 'Feed Content Settings', 'autodescription' ); ?></h4>
+		<h4><?php _e( 'Content Feed Settings', 'autodescription' ); ?></h4>
 		<p><span class="description"><?php printf( __( "Sometimes, your content can get stolen by robots through the WordPress feeds. This can cause duplicated content issues. To prevent these issues from happening, it's recommended to convert the feed's content into an excerpt.", 'autodescription' ) ); ?></span></p>
 		<p><span class="description"><?php printf( __( "Adding a backlink below the feed's content will also let the visitors know where the content came from.", 'autodescription' ) ); ?></span></p>
 

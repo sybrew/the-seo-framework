@@ -88,8 +88,6 @@ class AutoDescription_Networkoptions extends AutoDescription_Siteoptions {
 	 * Register the database settings for storage.
 	 *
 	 * @since 2.2.2
-	 *
-	 * @return void
 	 */
 	public function register_network_settings() {
 		//* If this page doesn't store settings, no need to register them

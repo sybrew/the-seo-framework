@@ -353,7 +353,7 @@ class AutoDescription_Init {
 	public function custom_field_redirect() {
 
 		//* Prevent redirect from options on uneditable pages.
-		if ( ! is_singular() )
+		if ( ! $this->is_singular() )
 			return;
 
 		$url = $this->get_custom_field( 'redirect' );
@@ -371,13 +371,12 @@ class AutoDescription_Init {
 
 			/**
 			 * If the URL is made relative, prevent scheme issues
-			 * Always do this if IS_HMPL
 			 *
 			 * Removes http:// and https://
 			 *
 			 * esc_url_raw uses is_ssl() to make the url valid again :)
 			 */
-			if ( ! $allow_external || ( defined( 'IS_HMPL' ) && IS_HMPL ) ) {
+			if ( ! $allow_external ) {
 				$pattern 	= 	'/'
 							.	'(((http)(s)?)\:)' 	// 1: http: https:
 							. 	'(\/\/)'			// 2: slash slash
@@ -445,7 +444,7 @@ class AutoDescription_Init {
 	 * @return something that will make your head explode.
 	 */
 	public function explode() {
-		add_action( 'wp_head', array( $this, 'troll' ) );
+		add_action( 'wp_head', array( $this, 'roll' ) );
 
 		/* the code to run this :
 		add_action( 'init', 'tsf_explode' );
@@ -463,9 +462,9 @@ class AutoDescription_Init {
 	 * Header CSS
 	 *
 	 * @since 2.5.2
-	 * @return annoying front-end CSS. Do not use on corporate websites.
+	 * @return annoying front-end CSS.
 	 */
-	public function troll() {
+	public function roll() {
 		?>
 		<style>div:hover>div{-webkit-animation:troll 5s infinite cubic-bezier(0,1.5,.5,1)1s;animation:troll 5s infinite cubic-bezier(0,1.5,.5,1)1s}@-webkit-keyframes troll{100%{-webkit-transform:rotate(0)}75%{-webkit-transform:rotate(30deg)}25%{-webkit-transorm:rotate(0)}0%{-webkit-transorm:rotate(30deg)}}@keyframes troll{100%,25%{transform:rotate(0)}0%,75%{transform:rotate(30deg)}}#container:hover,.site-container:hover{-webkit-animation:none;animation:none}</style>
 		<?php

@@ -152,6 +152,9 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	 * @param string $tax_id this is empty         : If it's a taxonomy, this is the taxonomy id
 	 * @param string $status the status in html
 	 *
+	 * @staticvar string $type_cache
+	 * @staticvar string $column_cache
+	 *
 	 * @since 2.1.9
 	 * @return array $columns the column data
 	 */
@@ -159,22 +162,34 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 		$status = '';
 
-		$type = get_post_type( $post_id );
+		static $type_cache = null;
+		static $column_cache = null;
 
-		// It's a bug in WP? I'll report.
-		// Reported: https://core.trac.wordpress.org/ticket/33521
-		if ( ! $type || ! empty( $tax_id ) ) {
+		if ( ! isset( $type_cache ) || ! isset( $column_cache ) ) {
+			$type = get_post_type( $post_id );
+
+			if ( ! $type || '' !== $tax_id ) {
+				$screen = (object) get_current_screen();
+
+				if ( isset( $screen->taxonomy ) )
+					$type = $screen->taxonomy;
+			}
+
+			$type_cache = $type;
+			$column_cache = $column;
+		}
+
+		/**
+		 * Params are shifted.
+		 * @link https://core.trac.wordpress.org/ticket/33521
+		 */
+		if ( '' !== $tax_id ) {
 			$column = $post_id;
 			$post_id = $tax_id;
-
-			$screen = (object) get_current_screen();
-
-			if ( isset( $screen->taxonomy ) )
-				$type = $screen->taxonomy;
 		}
 
 		if ( 'ad_seo' === $column )
-			$status = $this->post_status( $post_id, $type, true );
+			$status = $this->post_status( $post_id, $type_cache, true );
 
 		echo $status;
 	}
@@ -192,7 +207,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	 *
 	 * @staticvar string $post The post type slug.
 	 * @staticvar bool $is_term If we're dealing with tt pages.
-	 * @staticvar object $term The Term object.
+	 * @staticvar string $term_name The Term name.
 	 *
 	 * @since 2.1.9
 	 * @return string $content the post SEO status
@@ -210,7 +225,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		if ( isset( $post_id ) && ! empty( $post_id ) ) {
 
 			//* Fetch Post Type.
-			if ( empty( $type ) || 'inpost' === $type )
+			if ( 'inpost' === $type || empty( $type ) )
 				$type = get_post_type( $post_id );
 
 			//* No need to re-evalute these.
@@ -222,6 +237,8 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			 * @since 2.3.8
 			 */
 			if ( ! isset( $post ) && ! isset( $is_term ) ) {
+				//* Run once.
+
 				//* Setup i18n values for posts and pages.
 				if ( $type == 'post' ) {
 					$post = __( 'Post', 'autodescription' );
@@ -247,27 +264,38 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 				$term = get_term_by( 'id', $post_id, $type, OBJECT );
 
-				if ( ! empty( $term ) && is_object( $term ) ) {
-					$tax_type = $term->taxonomy;
+				static $term_name = null;
 
-					/**
-					 * Dynamically fetch the term name.
-					 *
-					 * @since 2.3.1
-					 */
-					$term_labels = $this->get_tax_labels( $tax_type );
+				if ( ! isset( $term_name ) ) {
+					//* Run once.
 
-					if ( isset( $term_labels ) ) {
-						$post = $term_labels->singular_name;
+					if ( ! empty( $term ) && is_object( $term ) ) {
+						$tax_type = $term->taxonomy;
+
+						/**
+						 * Dynamically fetch the term name.
+						 *
+						 * @since 2.3.1
+						 */
+						$term_labels = $this->get_tax_labels( $tax_type );
+
+						if ( isset( $term_labels ) ) {
+							$post = $term_labels->singular_name;
+						} else {
+							// Fallback to Page as it is generic.
+							$post = __( 'Page', 'autodescription' );
+						}
+
 					} else {
 						// Fallback to Page as it is generic.
 						$post = __( 'Page', 'autodescription' );
 					}
 
-				} else {
-					// Fallback to Page as it is generic.
-					$post = __( 'Page', 'autodescription' );
+
+					$term_name = $post;
 				}
+				//* Fetch from cache.
+				$post = $term_name;
 
 				/**
 				 * Check if current post type is a page or taxonomy.
@@ -277,6 +305,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 				 */
 				if ( $is_term && $this->is_post_type_page( $type ) )
 					$is_term = false;
+
 			}
 
 			/**
@@ -291,8 +320,16 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			$square_it = (bool) apply_filters( 'the_seo_framework_seo_bar_squared', false );
 			$square = $square_it ? ' square' : '';
 
-			//* German Capitalization compat.
-			$post_low = $this->is_locale( 'de' ) ? $post : strtolower( $post );
+			/**
+			 * German Capitalization compat.
+			 *
+			 * @staticvar string $post_low
+			 * @since 2.5.2
+			 */
+			static $post_low = null;
+
+			if ( ! isset( $post_low ) )
+				$post_low = $this->is_locale( 'de' ) ? $post : strtolower( $post );
 
 			$is_front_page = $this->is_static_frontpage( $post_id );
 
@@ -319,7 +356,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			$archive_i18n = __( 'Archive:', 'autodescription' );
 			$redirect_i18n = __( 'Redirect:', 'autodescription' );
 
-			if ( ! $is_term ) {
+			if ( false === $is_term ) {
 				$redirect = $this->get_custom_field( 'redirect' );
 				$noindex = $this->get_custom_field( '_genesis_noindex' );
 
@@ -336,17 +373,17 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 				$redirect = ''; // We don't apply redirect on taxonomies (yet)
 
 				//* Genesis data fetch
-				if ( empty( $noindex ) && ! $flag && isset( $term->meta ) )
+				if ( ! $noindex && ! $flag && isset( $term->meta ) )
 					$noindex = isset( $term->meta['noindex'] ) ? $term->meta['noindex'] : '';
 
 				$ad_125 = 'ad-16';
 				$ad_100 = 'ad-100';
 			}
 
-			if ( empty( $redirect ) && empty( $noindex ) ) {
+			if ( '' === $redirect && ! $noindex ) {
 				//* No redirect or noindex found, proceed.
 
-				if ( ! $is_term ) {
+				if ( false === $is_term ) {
 					$title_custom_field = (bool) $this->get_custom_field( '_genesis_title' );
 
 					$description = $this->get_custom_field( '_genesis_description' ) ? $this->get_custom_field( '_genesis_description' ) : '';

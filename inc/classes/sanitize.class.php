@@ -114,6 +114,8 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			's_one_zero',
 			$this->settings_field,
 			array(
+				'title_rem_additions',
+				
 				'description_blogname',
 
 				'noodp',
@@ -856,11 +858,10 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 
 			/**
 			 * Sanitize the redirect URL to only a relative link and removes first slash
-			 * Always do this if IS_HMPL
 			 *
 			 * @requires WP 4.1.0 and up to prevent adding upon itself.
 			 */
-			if ( ! $allow_external || ( defined( 'IS_HMPL' ) && IS_HMPL ) )
+			if ( ! $allow_external )
 				$url = ltrim( wp_make_link_relative( $url ), '/' );
 
 			//* URL pattern without path

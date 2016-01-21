@@ -85,8 +85,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	public function fetch_sitemap_transient_name() {
 		_deprecated_function( 'AutoDescription_Transients::' . __FUNCTION__, $this->the_seo_framework_version( '2.3.3' ), 'Completely removed. Use AutoDescription_Transients::$sitemap_transient' );
 
-		global $blog_id;
-		return 'the_seo_framework_sitemap_' . (string) $blog_id;
+		return $this->sitemap_transient;
 	}
 
 	/**
@@ -145,6 +144,50 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 
 		$this->setup_transient_names();
 		return false;
+	}
+
+	/**
+	 * Helper function for allowed post/page screens where this plugin is active.
+	 *
+	 * @param array $screens The allowed screens
+	 *
+	 * @since 2.1.9
+	 *
+	 * Applies filters the_seo_framework_supported_screens : The supported administration
+	 * screens where css and javascript files are loaded.
+	 *
+	 * @param array $args the custom supported screens.
+	 *
+	 * Added WooCommerce edit-product screens.
+	 * @since 2.3.1
+	 *
+	 * Unused.
+	 * @since 2.3.5
+	 *
+	 * @deprecated
+	 * @since 2.5.2
+	 *
+	 * @return array $screens
+	 */
+	protected function supported_screens( $args = array() ) {
+
+		_deprecated_function( 'AutoDescription_Admin_Init::' . __FUNCTION__, $this->the_seo_framework_version( '2.5.2' ) );
+
+		/**
+		 * Instead of supporting page ID's, we support the Page base now.
+		 *
+		 * @since 2.3.3
+		 */
+		$defaults = array(
+			'edit',
+			'post',
+			'edit-tags',
+		);
+
+		$screens = (array) apply_filters( 'the_seo_framework_supported_screens', $defaults, $args );
+		$screens = wp_parse_args( $args, $screens );
+
+		return $screens;
 	}
 
 }

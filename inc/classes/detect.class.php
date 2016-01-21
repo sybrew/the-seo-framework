@@ -107,7 +107,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			$func = array_flip( $func );
 
 			//* Glue with underscore and space for debugging purposes.
-			$mapped[$key] = $key . '_' . implode( ' ', $array );
+			$mapped[$key] = $key . '_' . implode( ' ', $func );
 		}
 
 		ksort( $mapped );
@@ -398,9 +398,35 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		if ( isset( $has_plugin ) )
 			return $has_plugin;
 
+		//* Only sitemap plugins which influence sitemap.xml
 		$plugins = array(
-				'classes' => array( 'GoogleSitemapGeneratorLoader', 'xml_sitemaps', 'All_in_One_SEO_Pack_Sitemap', 'SimpleWpSitemap', 'Incsub_SimpleSitemaps' ),
-				'functions' => array( 'wpss_init', 'gglstmp_sitemapcreate' ),
+				'classes' => array(
+					'xml_sitemaps',
+					'All_in_One_SEO_Pack_Sitemap',
+					'SimpleWpSitemap',
+					'Incsub_SimpleSitemaps',
+					'BWP_Sitemaps',
+					'KocujSitemapPlugin',
+					'LTI_Sitemap',
+					'ps_auto_sitemap',
+					'scalible_sitemaps',
+					'Sewn_Xml_Sitemap',
+					'csitemap',
+				),
+				'functions' => array(
+					'sm_Setup',
+					'wpss_init',
+					'gglstmp_sitemapcreate',
+					'asxs_sitemap2',
+					'build_baidu_sitemap',
+					'ect_sitemap_nav',
+					'apgmxs_generate_sitemap',
+					'sm_Setup',
+					'ADSetupSitemapPlugin',
+					'ksm_generate_sitemap',
+					'studio_xml_sitemap',
+					'RegisterPluginLinks_xmlsite',
+				),
 			);
 
 		return $has_plugin = (bool) $this->detect_plugin( $plugins );
@@ -556,6 +582,8 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * @return bool
 	 *
 	 * Taken from WP Core, but it now returns true on title-tag support.
+	 *
+	 * @todo rework, it's a mess.
 	 */
 	public function current_theme_supports( $feature ) {
 		global $_wp_theme_features;
@@ -663,8 +691,8 @@ class AutoDescription_Detect extends AutoDescription_Render {
 				$display = 'false';
 			}
 		}
-		$display = isset( $display ) ? 'notset' : $display;
-		$seplocation = isset( $seplocation ) ? 'notset' : $seplocation;
+		$display = ! isset( $display ) ? 'notset' : $display;
+		$seplocation = ! isset( $seplocation ) ? 'notset' : $seplocation;
 
 		echo '<!-- Title diw: ' . $sep . ' ' . $display . ' ' . $seplocation . ' -->';
 
@@ -813,7 +841,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		$id = '';
 
-		if ( function_exists( 'is_shop' ) && is_shop() ) {
+		if ( $this->is_wc_shop() ) {
 			//* WooCommerce Shop
 			$id = get_option( 'woocommerce_shop_page_id' );
 		} else if ( function_exists( 'is_anspress' ) && is_anspress() ) {
@@ -834,14 +862,14 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 *
 	 * @since 2.3.4
 	 *
-	 * @staticvar array $is_blog_page
-	 * @since 2.3.8
+	 * @staticvar bool $is_blog_page
+	 * @staticvar bool $pof
 	 *
 	 * @return bool true if is blog page. Always false if blog page is homepage.
 	 */
 	public function is_blog_page( $id = '' ) {
 
-		if ( empty( $id ) )
+		if ( '' === $id )
 			$o_id = $this->get_the_real_ID();
 
 		static $is_blog_page = array();
@@ -853,9 +881,12 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		if ( $pfp != 0 ) {
 
-			$sof = get_option( 'show_on_front' );
+			static $pof = null;
 
-			if ( 'page' == $sof && ! is_front_page() && ! is_archive() ) {
+			if ( ! isset( $pof ) )
+				$pof = 'page' === get_option( 'show_on_front' ) ? true : false;
+
+			if ( $pof && ! is_front_page() && ! is_archive() ) {
 				if ( isset( $o_id ) ) {
 					if ( $o_id == $pfp )
 						return $is_blog_page[$id] = true;
@@ -893,7 +924,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		if ( false === $id )
 			return false;
 
-		if ( empty( $id ) )
+		if ( '' === $id )
 			$o_id = $this->get_the_real_ID();
 
 		static $is_frontpage = array();
@@ -938,9 +969,8 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 */
 	public function is_locale( $str, $use_cache = true ) {
 
-		if ( ! $use_cache ) {
+		if ( true !== $use_cache )
 			return (bool) strpos( get_locale(), $str );
-		}
 
 		static $locale = array();
 
@@ -1002,7 +1032,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 */
 	public function post_type_supports_custom_seo( $post_type = '' ) {
 
-		if ( empty( $post_type ) ) {
+		if ( '' === $post_type ) {
 
 			static $post_type = null;
 
@@ -1042,6 +1072,105 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			return $supported[$post_type] = true;
 
 		return $supported[$post_type] = false;
+	}
+
+	/**
+	 * Is Ulimate Member user page.
+	 * Check for function accessibility: um_user, um_is_core_page, um_get_requested_user
+	 *
+	 * @staticvar bool $cache
+	 * @uses $this->can_i_use()
+	 *
+	 * @since 2.5.2
+	 */
+	public function is_ultimate_member_user_page() {
+
+		static $cache = null;
+
+		if ( isset( $cache ) )
+			return $cache;
+
+		$caniuse = (bool) $this->can_i_use( array( 'functions' => array( 'um_user', 'um_is_core_page', 'um_get_requested_user' ) ), false );
+
+		return $cache = $caniuse;
+	}
+
+	/**
+	 * Check for shop page.
+	 *
+	 * @staticvar bool $cache
+	 *
+	 * @since 2.5.2
+	 */
+	public function is_wc_shop() {
+
+		static $cache = null;
+
+		if ( isset( $cache ) )
+			return $cache;
+
+		//* Can't check in admin.
+		if ( ! is_admin() && function_exists( 'is_shop' ) && is_shop() )
+			return $cache = true;
+
+		return $cache = false;
+	}
+
+	/**
+	 * Replaces default WordPress is_singular.
+	 *
+	 * @uses $this->is_blog_page()
+	 * @uses $this->is_wc_shop()
+	 * @uses is_single()
+	 * @uses is_page()
+	 * @uses is_attachment()
+	 *
+	 * @staticvar bool $cache
+	 *
+	 * @since 2.5.2
+	 */
+	public function is_singular( $id = 0 ) {
+
+		if ( 0 === $id )
+			$id = $this->get_the_real_ID();
+
+		$cache = array();
+
+		if ( isset( $cache[$id] ) )
+			return $cache[$id];
+
+		if ( is_single( $id ) || is_page( $id ) || is_attachment( $id ) || $this->is_blog_page( $id ) || $this->is_wc_shop() )
+			return $cache[$id] = true;
+
+		return $cache[$id] = false;
+	}
+
+	/**
+	 * Calculates wether the theme is outputting the title correctly.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @staticvar bool $dir
+	 *
+	 * @return bool True theme is doing it right.
+	 */
+	public function theme_title_doing_it_right() {
+
+		static $dir = null;
+
+		if ( isset( $dir ) )
+			return $dir;
+
+		$transient = get_transient( $this->theme_doing_it_right_transient );
+
+		if ( '0' === $transient )
+			return $dir = false;
+
+		/**
+		 * Transient has not been set yet (false)
+		 * or the theme is doing it right ('1').
+		 */
+		return $dir = true;
 	}
 
 }

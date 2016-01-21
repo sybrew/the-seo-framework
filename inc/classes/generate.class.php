@@ -67,15 +67,9 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$args = $default_args;
 		}
 
-		//* Determine if it's the post page.
-		$page_for_posts = false;
-
 		if ( $args['get_custom_field'] && empty( $description ) ) {
 			//* Fetch from options, if any.
-			$custom_desc = (array) $this->description_from_custom_field( $args, false, false );
-
-			$description = $custom_desc['description'];
-			$page_for_posts = $custom_desc['page_for_posts'];
+			$description = (string) $this->description_from_custom_field( $args, false );
 
 			//* We've already checked the custom fields, so let's remove the check in the generation.
 			$args['get_custom_field'] = false;
@@ -83,7 +77,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		//* Still no description found? Create an auto description based on content.
 		if ( empty( $description ) || ! is_string( $description ) )
-			$description = $this->generate_description_from_id( $args, $page_for_posts, false );
+			$description = $this->generate_description_from_id( $args, false );
 
 		/**
 		 * Beautify.
@@ -154,13 +148,12 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 * 		@param bool $is_home We're generating for the home page.
 	 * }
 	 * @param bool $escape Escape the output if true.
-	 * @param bool $single Return single description string when true, else array.
 	 *
 	 * @since 2.4.1
 	 *
 	 * @return string|mixed The description, might be unsafe for html output.
 	 */
-	public function description_from_custom_field( $args = array(), $escape = true, $single = true ) {
+	public function description_from_custom_field( $args = array(), $escape = true ) {
 		global $wp_query;
 
 		$default_args = $this->parse_description_args( '', '', true );
@@ -180,14 +173,13 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		}
 
 		$description = '';
-		$page_for_posts = false;
 
-		if ( $args['is_home'] || is_front_page() || ( ! empty( $args['id'] ) && empty( $args['taxonomy'] ) && $this->is_static_frontpage( $args['id'] ) ) ) {
+		if ( $args['is_home'] || is_front_page() || ( '' === $args['taxonomy'] && $this->is_static_frontpage( $args['id'] ) ) ) {
 			$custom_desc = $this->get_option( 'homepage_description' );
 			$description = ! empty( $custom_desc ) ? $custom_desc : $description;
 		}
 
-		if ( is_singular() && empty( $description ) ) {
+		if ( $this->is_singular() && empty( $description ) ) {
 			//* Bugfix 2.2.7 run only if description is stil empty from home page.
 			$custom_desc = $this->get_custom_field( '_genesis_description', $args['id'] );
 			$description = $custom_desc ? $custom_desc : $description;
@@ -231,17 +223,6 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$description = $user_description ? $user_description : $description;
 		}
 
-		/**
-		 * Fetch description from blog page.
-		 * Tell the autodescription we're on a blogpage now.
-		 *
-		 * @since 2.2.8
-		 */
-		if ( $this->is_blog_page( $args['id'] ) && empty( $description ) ) {
-			$description = $this->get_custom_field( '_genesis_description', $args['id'] ) ? $this->get_custom_field( '_genesis_description', $args['id'] ) : $description;
-			$page_for_posts = true;
-		}
-
 		if ( $escape ) {
 			$description = wptexturize( $description );
 			$description = convert_chars( $description );
@@ -250,13 +231,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$description = trim( $description );
 		}
 
-		if ( $single )
-			return $description;
-
-		return array(
-			'description' => $description,
-			'page_for_posts' => $page_for_posts
-		);
+		return $description;
 	}
 
 	/**
@@ -271,15 +246,20 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 * 		@param bool $get_custom_field Do not fetch custom title when false.
 	 * 		@param bool $social Generate Social Description when true.
 	 * }
-	 * @param bool $page_for_posts We're generating for the blog page.
 	 * @param bool $escape Escape output when true.
+	 * @param bool $_escape deprecated.
 	 *
 	 * Gained its own function.
 	 * @since 2.3.3
 	 *
 	 * @return string output The description.
 	 */
-	public function generate_description_from_id( $args = array(), $page_for_posts = false, $escape = true ) {
+	public function generate_description_from_id( $args = array(), $escape = true, $_escape = 'depr' ) {
+
+		if ( 'depr' !== $_escape ) {
+			_deprecated_function( __FUNCTION__, $this->the_seo_framework_version( '2.5.2' ), 'Use 2nd argument for escape.' );
+			$escape = (bool) $_escape;
+		}
 
 		/**
 		 * Applies filters bool 'the_seo_framework_enable_auto_description' : Enable or disable the description.
@@ -315,14 +295,15 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			if ( $this->the_seo_framework_debug_hidden )
 				echo "<!--\r\n";
 
-			echo "\r\n" . 'START: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n";
+			echo "\r\n<br>\r\n" . 'START: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n";
 
 			$timer_start = microtime( true );
 
 			if ( $this->the_seo_framework_debug_more ) {
 				$this->echo_debug_information( array( 'args' => $args ) );
-				$this->echo_debug_information( array( 'page_for_posts' => $page_for_posts ) );
 			}
+
+			echo "\r\n<br>\r\n";
 
 			if ( $this->the_seo_framework_debug_hidden )
 				echo "\r\n-->";
@@ -350,167 +331,131 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$args['taxonomy'] = isset( $term->taxonomy ) ? $term->taxonomy : '';
 		}
 
-		/**
-		 * Return early if description is found from Home Page Settings.
-		 * Only do so when $args['get_custom_field'] is true.
-		 *
-		 * @since 2.3.4
-		 */
-		if ( $args['get_custom_field'] && ( $args['is_home'] || $this->is_static_frontpage( $args['id'] ) || is_front_page() ) ) {
-			$custom_desc = $this->get_option( 'homepage_description' );
-			$description = $custom_desc ? $custom_desc : null;
-
-			if ( isset( $description ) )
-				return $description;
-		}
-
 		$page_on_front = false;
 		/**
 		 * We're on the home page now. So let's create something special.
+		 * Check if ID is false means its a blog page as home.
 		 */
-		if ( false === $args['id'] || $args['is_home'] || $this->is_static_frontpage( $args['id'] ) || is_front_page() )
+		if ( is_front_page() || $args['is_home'] || $this->is_static_frontpage( $args['id'] ) ) {
 			$page_on_front = true;
-
-		if ( ! $page_on_front ) {
-			/**
-			 * No need to parse these when generating social description.
-			 *
-			 * @since 2.5.0
-			 */
-			if ( $page_for_posts || $this->is_blog_page( $args['id'] ) ) {
-				/**
-				 * We're on the blog page now.
-				 * @since 2.2.8
-				 */
-				$custom_title = $this->get_custom_field( '_genesis_title', $args['id'] );
-				$title = $custom_title ? $custom_title : $this->title( '', '', '', array( 'term_id' => $args['id'], 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
-
-				// @TODO create option.
-				/* translators: Front-end output. */
-				$title = __( 'Latest posts:', 'autodescription' ) . ' ' . $title;
-
-			} else if ( ! empty( $term ) && is_object( $term ) ) {
-				//* We're on a taxonomy now.
-
-				if ( isset( $term->admeta['doctitle'] ) && ! empty( $term->admeta['doctitle'] ) ) {
-					$title = $term->admeta['doctitle'];
-				} else if ( isset( $term->name ) && ! empty( $term->name ) ) {
-					$title = $term->name;
-				} else if ( isset( $term->slug ) && ! empty( $term->slug ) ) {
-					$title = $term->slug;
-				}
-			} else {
-				//* We're on a page now.
-				$custom_title = $this->get_custom_field( '_genesis_title', $args['id'] );
-				$title = $custom_title ? $custom_title : $this->title( '', '', '', array( 'term_id' => $args['id'], 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
-			}
-		} else {
-			//* We're on the home page now.
-			//* Fetch home page id.
 			$args['id'] = (int) get_option( 'page_on_front' );
 
-			$title = $this->get_blogdescription();
+			/**
+			 * Return early if description is found from Home Page Settings.
+			 * Only do so when $args['get_custom_field'] is true.
+			 *
+			 * @since 2.3.4
+			 */
+			if ( $args['get_custom_field'] ) {
+				$custom_desc = $this->get_option( 'homepage_description' );
+				$description = $custom_desc ? $custom_desc : null;
+
+				if ( isset( $description ) )
+					return $description;
+			}
 		}
 
-		/**
-		 * Use Untitled on empty titles.
-		 * @since 2.2.8
-		 */
-		/* translators: Front-end output. */
-		$title = empty( $title ) ? __( 'Untitled', 'autodescription' ) : $title;
+		//* Fetch Description Title.
+		$title = $this->generate_description_title( $args['id'], $term, $page_on_front );
 		/* translators: Front-end output. */
 		$on = _x( 'on', 'Placement. e.g. Post Title "on" Blog Name', 'autodescription' );
 		$blogname = $this->get_blogname();
 
-		$description_additions = $this->get_option( 'description_blogname' );
+		if ( ! $page_on_front ) {
 
-		/**
-		 * Now uses options.
-		 * @since 2.3.4
-		 *
-		 * Applies filters the_seo_framework_description_separator
-		 * @since 2.3.9
-		 */
-		$sep = (string) apply_filters( 'the_seo_framework_description_separator', $this->get_separator( 'description' ) );
-
-		/**
-		 * Setup transient.
-		 * This value has to be re-asigned for deletion.
-		 */
-		$this->setup_auto_description_transient( $args['id'], $args['taxonomy'] );
-
-		/**
-		 * Cache the generated description within a transient.
-		 *
-		 * @since 2.3.3
-		 *
-		 * Put inside a different function.
-		 * @since 2.3.4
-		 */
-		$excerpt = get_transient( $this->auto_description_transient );
-		if ( false === $excerpt ) {
+			$description_additions = $this->get_option( 'description_blogname' );
 
 			/**
-			 * Get max char length
-			 * 149 will account for the added (single char) ... and two spaces around $on and the separator + 2 spaces around the separator: makes 155
+			 * Now uses options.
+			 * @since 2.3.4
 			 *
-			 * 151 will count for the added (single char) ... and the separator + 2 spaces around the separator: makes 155
-			 *
-			 * Default to 200 when $args['social']
+			 * Applies filters the_seo_framework_description_separator
+			 * @since 2.3.9
 			 */
-			$max_char_length_normal = $description_additions ? (int) 149 - mb_strlen( html_entity_decode( $title . $on . $blogname ) ) : (int) 151 - mb_strlen( html_entity_decode( $title ) );
-			$max_char_length_social = 200;
-
-			//* Generate Excerpts.
-			$excerpt_normal = $this->generate_excerpt( $args['id'], $term, $page_on_front, $page_for_posts, $max_char_length_normal );
-			$excerpt_social = $this->generate_excerpt( $args['id'], $term, $page_on_front, $page_for_posts, $max_char_length_social );
-
-			//* Put in array to be accessed later.
-			$excerpt = array(
-				'normal' => $excerpt_normal,
-				'social' => $excerpt_social
-			);
+			$sep = (string) apply_filters( 'the_seo_framework_description_separator', $this->get_separator( 'description' ) );
 
 			/**
-			 * Transient expiration: 1 week.
-			 * Keep the description for at most 1 week.
-			 *
-			 * 60s * 60m * 24h * 7d
+			 * Setup transient.
 			 */
-			$expiration = 60 * 60 * 24 * 7;
+			$this->setup_auto_description_transient( $args['id'], $args['taxonomy'] );
 
-			set_transient( $this->auto_description_transient, $excerpt, $expiration );
-		}
-
-		/**
-		 * Check for Social description, don't add blogname then.
-		 * Also continues normally if it's the front page.
-		 *
-		 * @since 2.5.0
-		 */
-		if ( $args['social'] && ! $page_on_front ) {
 			/**
-			 * @since 2.5.2
+			 * Cache the generated description within a transient.
+			 *
+			 * @since 2.3.3
+			 *
+			 * Put inside a different function.
+			 * @since 2.3.4
 			 */
-			$excerpt_exists = ! empty( $excerpt['social'] ) ? true : false;
+			$excerpt = get_transient( $this->auto_description_transient );
+			$excerpt = false;
+			if ( false === $excerpt ) {
 
-			if ( $excerpt_exists && $description_additions ) {
-				$description = $excerpt['social'];
+				/**
+				 * Get max char length
+				 * 149 will account for the added (single char) ... and two spaces around $on and the separator + 2 spaces around the separator: makes 155
+				 *
+				 * 151 will count for the added (single char) ... and the separator + 2 spaces around the separator: makes 155
+				 *
+				 * Default to 200 when $args['social']
+				 */
+				$max_char_length_normal = $description_additions ? (int) 149 - mb_strlen( html_entity_decode( $title . $on . $blogname ) ) : (int) 151 - mb_strlen( html_entity_decode( $title ) );
+				$max_char_length_social = 200;
+
+				//* Generate Excerpts.
+				$excerpt_normal = $this->generate_excerpt( $args['id'], $term, $max_char_length_normal );
+				$excerpt_social = $this->generate_excerpt( $args['id'], $term, $max_char_length_social );
+
+				//* Put in array to be accessed later.
+				$excerpt = array(
+					'normal' => $excerpt_normal,
+					'social' => $excerpt_social
+				);
+
+				/**
+				 * Transient expiration: 1 week.
+				 * Keep the description for at most 1 week.
+				 *
+				 * 60s * 60m * 24h * 7d
+				 */
+				$expiration = 60 * 60 * 24 * 7;
+
+				set_transient( $this->auto_description_transient, $excerpt, $expiration );
+			}
+
+			/**
+			 * Check for Social description, don't add blogname then.
+			 * Also continues normally if it's the front page.
+			 *
+			 * @since 2.5.0
+			 */
+			if ( $args['social'] ) {
+				/**
+				 * @since 2.5.2
+				 */
+				$excerpt_exists = ! empty( $excerpt['social'] ) ? true : false;
+
+				if ( $excerpt_exists && $description_additions ) {
+					$description = $excerpt['social'];
+				} else {
+					$description = (string) sprintf( '%s %s %s', $title, $on, $blogname );
+				}
 			} else {
-				$description = (string) sprintf( '%s %s %s', $title, $on, $blogname );
+				$excerpt_exists = ! empty( $excerpt['normal'] ) ? true : false;
+
+				if ( $excerpt_exists && $description_additions ) {
+					$description = (string) sprintf( '%s %s %s %s %s', $title, $on, $blogname, $sep, $excerpt['normal'] );
+				} else if ( $excerpt_exists ) {
+					$description = (string) sprintf( '%s %s %s', $title, $sep, $excerpt['normal'] );
+				} else {
+					//* We still add the additions when no excerpt has been found.
+					// i.e. home page or empty/shortcode filled page.
+					$description = (string) sprintf( '%s %s %s', $title, $on, $blogname );
+				}
 			}
 		} else {
-			$excerpt_exists = ! empty( $excerpt['normal'] ) ? true : false;
-
-			if ( $excerpt_exists && $description_additions ) {
-				$description = (string) sprintf( '%s %s %s %s %s', $title, $on, $blogname, $sep, $excerpt['normal'] );
-			} else if ( $excerpt_exists ) {
-				$description = (string) sprintf( '%s %s %s', $title, $sep, $excerpt['normal'] );
-			} else {
-				//* We still add the additions when no excerpt has been found.
-				// i.e. home page.
-				$description = (string) sprintf( '%s %s %s', $title, $on, $blogname );
-			}
+			//* Home page Description.
+			$description = (string) sprintf( '%s %s %s', $title, $on, $blogname );
 		}
 
 		if ( $escape ) {
@@ -530,9 +475,12 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			if ( $this->the_seo_framework_debug_hidden )
 				echo "<!--\r\n";
 
+			$excerpt = $page_on_front ? 'Front page has no excerpt.' : $excerpt;
+
 			$this->echo_debug_information( array( 'description excerpt cache key' => $this->auto_description_transient ) );
-			$this->echo_debug_information( array( 'description output' => $description ) );
-			$this->echo_debug_information( array( 'description output social' => $excerpt['social'] ) );
+			$this->echo_debug_information( array( 'page on front' => $page_on_front ) );
+			$this->echo_debug_information( array( 'is static frontpage' => $this->is_static_frontpage( $args['id'] ) ) );
+			$this->echo_debug_information( array( 'description excerpt' => $excerpt ) );
 			$this->echo_debug_information( array( 'Generation time' => number_format( microtime(true) - $timer_start, 5 ) . 's' ) );
 
 			echo "\r\n<br>\r\n" . 'END: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n<br><br>";
@@ -545,23 +493,93 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	}
 
 	/**
+	 * Generates the Title for description.
+	 *
+	 * @param int $id The page ID.
+	 * @param void|object $term The term object.
+	 * @param bool $page_on_front If front page.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @return string The description title.
+	 */
+	public function generate_description_title( $id = '',  $term = '', $page_on_front = false ) {
+
+		if ( '' === $id )
+			$id = $this->get_the_real_ID();
+
+		if ( ! $page_on_front ) {
+			/**
+			 * No need to parse these when generating social description.
+			 *
+			 * @since 2.5.0
+			 */
+			if ( $this->is_blog_page( $id ) ) {
+				/**
+				 * We're on the blog page now.
+				 * @since 2.2.8
+				 */
+				$custom_title = $this->get_custom_field( '_genesis_title', $id );
+				$title = $custom_title ? $custom_title : $this->title( '', '', '', array( 'term_id' => $id, 'placeholder' => true, 'notagline' => true, 'description_title' => true, 'escape' => false ) );
+
+				// @TODO create option.
+				/* translators: Front-end output. */
+				$title = __( 'Latest posts:', 'autodescription' ) . ' ' . $title;
+			} else if ( ! empty( $term ) && is_object( $term ) ) {
+				//* We're on a taxonomy now.
+
+				if ( isset( $term->admeta['doctitle'] ) && ! empty( $term->admeta['doctitle'] ) ) {
+					$title = $term->admeta['doctitle'];
+				} else if ( isset( $term->name ) && ! empty( $term->name ) ) {
+					$title = $term->name;
+				} else if ( isset( $term->slug ) && ! empty( $term->slug ) ) {
+					$title = $term->slug;
+				}
+			} else {
+				//* We're on a page now.
+				$custom_title = $this->get_custom_field( '_genesis_title', $id );
+				$title = $custom_title ? $custom_title : $this->title( '', '', '', array( 'term_id' => $id, 'placeholder' => true, 'notagline' => true, 'description_title' => true, 'escape' => false ) );
+			}
+		} else {
+			$title = $this->get_blogdescription();
+		}
+
+		/**
+		 * Use Untitled on empty titles.
+		 * @since 2.2.8
+		 */
+		/* translators: Front-end output. */
+		$title = empty( $title ) ? __( 'Untitled', 'autodescription' ) : trim( $title );
+
+		return $title;
+	}
+
+	/**
 	 * Generate the excerpt.
 	 *
 	 * @param int|string $page_id required : The Page ID
 	 * @param object|null $term The Taxonomy Term.
-	 * @param bool $page_on_front If the page is on front.
-	 * @param bool $page_for_posts If the page is for posts and not on front.
 	 * @param int $max_char_length The maximum excerpt char length.
+	 * @param int $_max_char_length deprecated.
+	 * @param int $__max_char_length deprecated.
 	 *
 	 * @since 2.3.4
 	 *
 	 * @staticvar array $excerpt_cache Holds the excerpt
 	 * @staticvar array $excerptlength_cache Holds the excerpt length
 	 *
-	 * @access public
 	 * Please note that this does not reflect the actual output becaue the $max_char_length isn't calculated on direct call.
 	 */
-	public function generate_excerpt( $page_id, $term = '', $page_on_front = false, $page_for_posts = false, $max_char_length = 155 ) {
+	public function generate_excerpt( $page_id, $term = '', $max_char_length = 155, $_max_char_length = 'depr', $__max_char_length = 'depr' ) {
+
+		if ( 'depr' !== $__max_char_length ) {
+			_deprecated_function( __FUNCTION__, $this->the_seo_framework_version( '2.5.2' ), 'Use 3nd argument for max_car_length.' );
+			$max_char_length = (int) $__max_char_length;
+		}
+
+		if ( 'depr' !== $_max_char_length ) {
+			_deprecated_function( __FUNCTION__, $this->the_seo_framework_version( '2.5.2' ), 'Removed last 2 arguments.' );
+		}
 
 		static $excerpt_cache = array();
 		static $excerptlength_cache = array();
@@ -569,39 +587,33 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		$term_id = isset( $term->term_id ) ? $term->term_id : false;
 
 		//* Put excerpt in cache.
-		if ( ! isset( $excerpt_cache[$page_id][$term_id][$page_on_front][$page_for_posts] ) ) {
-			if ( ! $page_on_front ) {
-				if ( $page_for_posts ) {
-					//* We're on the blog page now.
-					$excerpt = $this->get_excerpt_by_id( '', $page_id );
-				} else if ( ! empty( $term ) && is_object( $term ) ) {
-					//* We're on a taxonomy now.
-					$excerpt = ! empty( $term->description ) ? $term->description : $this->get_excerpt_by_id( '', '', $page_id ); // The latter will return empty in admin pages
-				} else {
-					//* We're on a page now.
-					$excerpt = $this->get_excerpt_by_id( '', $page_id );
-				}
+		if ( ! isset( $excerpt_cache[$page_id][$term_id] ) ) {
+			if ( $this->is_singular( $page_id ) ) {
+				//* We're on the blog page now.
+				$excerpt = $this->get_excerpt_by_id( '', $page_id );
+			} else if ( ! empty( $term ) && is_object( $term ) ) {
+				//* We're on a taxonomy now.
+				$excerpt = ! empty( $term->description ) ? $term->description : $this->get_excerpt_by_id( '', '', $page_id );
 			} else {
-				//* We're on the home page blog now.
 				$excerpt = '';
 			}
 
-			$excerpt_cache[$page_id][$term_id][$page_on_front][$page_for_posts] = $excerpt;
+			$excerpt_cache[$page_id][$term_id] = $excerpt;
 		}
 
 		//* Fetch excerpt from cache.
-		$excerpt = $excerpt_cache[$page_id][$term_id][$page_on_front][$page_for_posts];
+		$excerpt = $excerpt_cache[$page_id][$term_id];
 
 		/**
 		 * Put excerptlength in cache.
 		 * Why cache? My tests have shown that mb_strlen is 1.03x faster than cache fetching.
 		 * However, _mb_strlen (compat) is about 1740x slower. And this is the reason it's cached!
 		 */
-		if ( ! isset( $excerptlength_cache[$page_id][$term_id][$page_on_front][$page_for_posts] ) )
-			$excerptlength_cache[$page_id][$term_id][$page_on_front][$page_for_posts] = (int) mb_strlen( $excerpt );
+		if ( ! isset( $excerptlength_cache[$page_id][$term_id] ) )
+			$excerptlength_cache[$page_id][$term_id] = (int) mb_strlen( $excerpt );
 
 		//* Fetch the length from cache.
-		$excerptlength = $excerptlength_cache[$page_id][$term_id][$page_on_front][$page_for_posts];
+		$excerptlength = $excerptlength_cache[$page_id][$term_id];
 
 		// Trunculate if the excerpt is longer than the max char length
 		if ( $excerptlength > $max_char_length ) {
@@ -710,7 +722,6 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * Add doing it wrong notice for better SEO consistency.
 		 * Only when in wp_title.
 		 *
-		 * @todo create transient to tell/adjust HomePage metabox it's wrong? So specific...
 		 * @since 2.2.5
 		 */
 		if ( ! $args['meta'] ) {
@@ -722,6 +733,9 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 					//* Notify cache.
 					$this->title_doing_it_wrong = true;
 
+					//* Notify transients
+					$this->set_theme_dir_transient( false );
+
 					return $this->build_title_doingitwrong( $title, $sep, $seplocation, $args );
 				} else if ( ! empty( $sep ) ) {
 					// Don't disturb the precious title when WP_DEBUG is on.
@@ -730,6 +744,10 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 					//* Notify cache.
 					$this->title_doing_it_wrong = true;
 
+					//* Notify transients
+					$this->set_theme_dir_transient( false );
+
+					//* Title is empty.
 					$args['empty_title'] = true;
 
 					return $this->build_title_doingitwrong( $title, $sep, $seplocation, $args );
@@ -780,7 +798,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				'meta' 				=> true,
 				'get_custom_field'	=> true,
 				'description_title'	=> false,
-				'is_front_page'		=> false
+				'is_front_page'		=> false,
+				'escape'			=> true
 			);
 
 			//* @since 2.5.0
@@ -801,6 +820,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		$args['get_custom_field'] 	= isset( $args['get_custom_field'] ) 	? (bool) $args['get_custom_field'] 	: $defaults['get_custom_field'];
 		$args['description_title'] 	= isset( $args['description_title'] ) 	? (bool) $args['description_title'] : $defaults['description_title'];
 		$args['is_front_page'] 		= isset( $args['is_front_page'] ) 		? (bool) $args['is_front_page'] 	: $defaults['is_front_page'];
+		$args['escape'] 			= isset( $args['escape'] ) 				? (bool) $args['escape'] 			: $defaults['escape'];
 
 		return $args;
 	}
@@ -829,11 +849,13 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		if ( empty( $title ) )
 			$title = __( 'Untitled', 'autodescription' );
 
-		$title = wptexturize( $title );
-		$title = convert_chars( $title );
-		$title = esc_html( $title );
-		$title = capital_P_dangit( $title );
-		$title = trim( $title );
+		if ( true === $args['escape'] ) {
+			$title = wptexturize( $title );
+			$title = convert_chars( $title );
+			$title = esc_html( $title );
+			$title = capital_P_dangit( $title );
+			$title = trim( $title );
+		}
 
 		return $title;
 	}
@@ -953,7 +975,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		}
 
 		//* Fetch title from custom fields.
-		if ( $args['get_custom_field'] && ( is_singular() || $this->is_blog_page( $args['term_id'] ) ) ) {
+		if ( $args['get_custom_field'] && $this->is_singular( $args['term_id'] ) ) {
 			$title_from_custom_field = $this->title_from_custom_field( $title, false, $args['term_id'] );
 			$title = ! empty( $title_from_custom_field ) ? $title_from_custom_field : $title;
 		}
@@ -1055,10 +1077,12 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		}
 
-		$title = wptexturize( $title );
-		$title = convert_chars( $title );
-		$title = esc_html( $title );
-		$title = capital_P_dangit( $title );
+		if ( true === $args['escape'] ) {
+			$title = wptexturize( $title );
+			$title = convert_chars( $title );
+			$title = esc_html( $title );
+			$title = capital_P_dangit( $title );
+		}
 
 		/**
 		 * Debug output.
@@ -1121,7 +1145,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * Filters the separator location
 		 * @since 2.1.8
 		 */
-		if ( empty( $seplocation ) || $seplocation !== 'right' || $seplocation !== 'left' ) {
+		if ( '' === $seplocation || 'right' !== $seplocation || 'left' !== $seplocation || empty( $seplocation ) ) {
 			/**
 			 * New filter.
 			 * @since 2.3.0
@@ -1145,7 +1169,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		$sep = (string) apply_filters( 'the_seo_framework_title_separator', $this->get_separator( 'title' ) );
 
 		//* Fetch title from custom fields.
-		if ( $args['get_custom_field'] && ( is_singular() || $this->is_blog_page( $args['term_id'] ) ) ) {
+		if ( $args['get_custom_field'] && $this->is_singular( $args['term_id'] ) ) {
 			$title_from_custom_field = $this->title_from_custom_field( $title, '', $args['term_id'] );
 			$title = ! empty( $title_from_custom_field ) ? $title_from_custom_field : $title;
 		}
@@ -1220,10 +1244,15 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			}
 
 			/**
+			 * Get blogname additions from option, invert it and cast to bool.
+			 * @since 2.5.2
+			 */
+			$add_blogname_option = (bool) ! $this->get_option( 'title_rem_additions' );
+			/**
 			 * Applies filters the_seo_framework_add_blogname_to_title.
 			 * @since 2.4.3
 			 */
-			$add_blogname = (bool) apply_filters( 'the_seo_framework_add_blogname_to_title', true );
+			$add_blogname = (bool) apply_filters( 'the_seo_framework_add_blogname_to_title', $add_blogname_option );
 
 			/**
 			 * On frontpage: Add title if add_tagline is true.
@@ -1232,6 +1261,9 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			 * @since 2.4.3
 			 */
 			if ( ( $add_blogname && ! $is_front_page ) || ( $is_front_page && $add_tagline ) ) {
+				$title = trim( $title );
+				$blogname = trim( $blogname );
+
 				if ( 'right' == $seplocation ) {
 					$title = $title . " $sep " . $blogname;
 				} else {
@@ -1239,11 +1271,13 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				}
 			}
 
-			$title = wptexturize( $title );
-			$title = convert_chars( $title );
-			$title = esc_html( $title );
-			$title = capital_P_dangit( $title );
-			$title = trim( $title );
+			if ( true === $args['escape'] ) {
+				$title = wptexturize( $title );
+				$title = convert_chars( $title );
+				$title = esc_html( $title );
+				$title = capital_P_dangit( $title );
+				$title = trim( $title );
+			}
 		}
 
 		/**
@@ -1287,7 +1321,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$title = $this->title_for_terms();
 		} else if ( is_archive() ) {
 			/**
-			 * Get all archive titles
+			 * Get all other archive titles
 			 * @since 2.5.2
 			 */
 			$title = wp_strip_all_tags( $this->get_the_archive_title() );
@@ -1572,8 +1606,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		if ( $this->is_blog_page( $id ) ) {
 			//* Posts page title.
 			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : get_the_title( $id );
-	//	} else if ( $this->detect_plugin( array( 'functions' => array( 'um_is_core_page' ) ) ) && um_is_core_page( 'user' ) && function_exists( 'um_get_requested_user' ) && um_get_requested_user() ) {
-		} else if ( $this->can_i_use( array( 'functions' => array( 'um_user', 'um_is_core_page' ) ) ) && um_is_core_page( 'user' ) ) {
+		} else if ( $this->is_ultimate_member_user_page() && um_is_core_page( 'user' ) && um_get_requested_user() ) {
 			$title = um_user( 'display_name' );
 		} else {
 			//* Get title from custom field, empty it if it's not there to override the default title
@@ -1841,7 +1874,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				$this->echo_debug_information( array( 'args' => $args ) );
 			}
 			$this->echo_debug_information( array( 'Generation time' => number_format( microtime(true) - $timer_start, 5 ) . 's' ) );
-			echo  "\r\n" . 'END: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n";
+			echo  "\r\n<br>\r\n" . 'END: ' . __CLASS__ . '::' . __FUNCTION__ .  "\r\n<br>\r\n";
 
 			if ( $this->the_seo_framework_debug_hidden )
 				echo "\r\n-->";
@@ -2103,6 +2136,9 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		//* var_dump() isn't $term already what we need? =/
 		$t = get_taxonomy( $taxonomy );
 
+		var_dump( $term );
+		var_dump( $t );
+
 		if ( empty( $termlink ) ) {
 			if ( 'category' == $taxonomy ) {
 				$termlink = '?cat=' . $term->term_id;
@@ -2190,7 +2226,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 */
 	public function the_url_path_default_permalink_structure( $post = null ) {
 
-		if ( ! is_singular() ) {
+		if ( ! $this->is_singular() ) {
 			//* We're on a taxonomy
 			$object = get_queried_object();
 
@@ -2221,16 +2257,10 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 					$id = $object->ID;
 					$path = '?p=' . $id;
 				}
-			} else {
-				if ( isset( $post->ID ) ) {
-					$id = $post->ID;
-				} else {
-					$id = $this->get_the_real_ID();
-				}
-
-				$path = '?p=' . $id;
 			}
-		} else {
+		}
+
+		if ( ! isset( $path ) ) {
 			if ( isset( $post->ID ) ) {
 				$id = $post->ID;
 			} else {
@@ -2877,7 +2907,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$meta['noarchive'] = $this->get_option( 'attachment_noarchive' ) ? 'noarchive' : $meta['noarchive'];
 		}
 
-		if ( is_singular() || $this->is_blog_page() ) {
+		if ( $this->is_singular() ) {
 			$meta['noindex'] = $this->get_custom_field( '_genesis_noindex' ) ? 'noindex' : $meta['noindex'];
 			$meta['nofollow'] = $this->get_custom_field( '_genesis_nofollow' ) ? 'nofollow' : $meta['nofollow'];
 			$meta['noarchive'] = $this->get_custom_field( '_genesis_noarchive' ) ? 'noarchive' : $meta['noarchive'];
@@ -2903,7 +2933,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 			$path = null;
 
-			if ( is_singular() || $this->is_blog_page() ) {
+			if ( $this->is_singular( $post_id ) ) {
 
 				if ( 0 == $post_id )
 					$post_id = $this->get_the_real_ID();
@@ -3464,7 +3494,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * @since 2.4.3
 		 */
 		$knowledge_name = $this->get_option( 'knowledge_name' );
-		$knowledge_name = $knowledge_name ? $knowledge_name : $this->get_blogname();
+		$knowledge_name = ! empty( $knowledge_name ) ? $knowledge_name : $this->get_blogname();
 
 		$context = json_encode( 'http://schema.org' );
 		$type = json_encode( ucfirst( $knowledge_type ) );
@@ -3473,10 +3503,10 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		$logo = '';
 
-		if ( $knowledge_type == 'organization' && $this->get_option( 'knowledge_logo' ) ) {
+		if ( $this->get_option( 'knowledge_logo' ) && 'organization' === $knowledge_type ) {
 			$icon = $this->site_icon();
 
-			if ( $icon ) {
+			if ( ! empty( $icon ) ) {
 				$logourl = esc_url_raw( $icon );
 
 				//* Add trailing comma
@@ -3509,15 +3539,14 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			foreach ( $options as $option ) {
 				$the_option = $this->get_option( $option );
 
-				if ( $the_option )
+				if ( '' !== $the_option )
 					$sameurls .= json_encode( $the_option ) . $comma;
 			}
 		}
 
-		$json = '';
-
 		//* Remove trailing comma
 		$sameurls = rtrim( $sameurls, $comma );
+		$json = '';
 
 		if ( ! empty( $sameurls ) )
 			$json = sprintf( '{"@context":%s,"@type":%s,"name":%s,"url":%s,%s"sameAs":[%s]}', $context, $type, $name, $url, $logo, $sameurls );
@@ -3665,7 +3694,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 */
 	public function get_blogname() {
 
-		$name = null;
+		$blogname = null;
 
 		if ( isset( $blogname ) )
 			return $blogname;
@@ -3676,19 +3705,65 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	/**
 	 * Fetch blog description.
 	 *
-	 * @staticvar string $blogname
+	 * @staticvar string $description
 	 *
 	 * @since 2.5.2
 	 * @return string $blogname The trimmed and sanitized blog description.
 	 */
 	public function get_blogdescription() {
 
-		$name = null;
+		$description = null;
 
-		if ( isset( $blogname ) )
-			return $blogname;
+		if ( isset( $description ) )
+			return $description;
 
-		return $blogname = trim( get_bloginfo( 'description', 'display' ) );
+		return $description = trim( get_bloginfo( 'description', 'display' ) );
+	}
+
+	/**
+	 * Matches WordPress locales.
+	 * If not matched, it will calculate a locale.
+	 *
+	 * @param $match the locale to match. Defaults to WordPress locale.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @return string Facebook acceptable OG locale.
+	 */
+	public function fetch_locale( $match = '' ) {
+
+		if ( ! empty( $match ) )
+			$match = get_locale();
+
+		$match_len = strlen( $match );
+		$valid_locales = (array) $this->fb_locales();
+		$default = 'en_US';
+
+		if ( 5 === $match_len ) {
+			//* Full locale is used.
+
+			//* Return the match if found.
+			if ( in_array( $match, $valid_locales ) )
+				return $match;
+
+			//* Convert to only language portion.
+			$match = substr( $match, 0, 2 );
+			$match_len = 2;
+		}
+
+		if ( 2 === $match_len ) {
+			//* Language key is provided.
+
+			$locale_keys = (array) $this->language_keys();
+
+			//* No need to do for each loop. Just match the keys.
+			if ( $key = array_search( $match, $locale_keys ) ) {
+				//* Fetch the corresponding value from key within the language array.
+				return $valid_locales[$key];
+			}
+		}
+
+		return $default;
 	}
 
 }

@@ -34,7 +34,7 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 	}
 
 	/**
-	 * Get the excerpt of the post
+	 * Get or parse the excerpt of the post
 	 *
 	 * @since 1.0.0
 	 *
@@ -46,78 +46,17 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 	 */
 	public function get_excerpt_by_id( $excerpt = '', $the_id = '', $tt_id = '' ) {
 
-		if ( empty( $excerpt ) ) {
-			/**
-			 * Use the 2nd parameter.
-			 *
-			 * @since 2.2.8
-			 *
-			 * Now casts to array
-			 * @since 2.3.3
-			 */
-			if ( ! empty( $the_id ) ) {
-				$post = get_post( $the_id, ARRAY_A );
-			} else {
-				global $post_id;
+		static $cache = array();
 
-				$post = get_post( $post_id, ARRAY_A );
-			}
+		if ( isset( $cache[$excerpt][$the_id][$tt_id] ) )
+			return $cache[$excerpt][$the_id][$tt_id];
 
-			/**
-			 * Match the descriptions in admin as on the front end.
-			 *
-			 * @since 2.3.3
-			 */
-			if ( ! empty( $tt_id ) ) {
+		if ( empty( $excerpt ) )
+			$excerpt = $this->fetch_excerpt( $the_id, $tt_id );
 
-				$args = array(
-					'posts_per_page'	=> 1,
-					'offset'			=> 0,
-					'category'			=> $tt_id,
-					'category_name'		=> '',
-					'post_type'			=> 'post',
-					'post_status'		=> 'publish',
-				);
-
-				$post = get_posts( $args );
-			}
-
-			/**
-			 * Get most recent post for blog page.
-			 *
-			 * @since 2.3.4
-			 */
-			if ( $the_id == get_option( 'page_for_posts' ) && ! is_front_page() ) {
-				$args = array(
-					'posts_per_page'	=> 1,
-					'offset'			=> 0,
-					'category'			=> '',
-					'category_name'		=> '',
-					'orderby'			=> 'date',
-					'order'				=> 'DESC',
-					'post_type'			=> 'post',
-					'post_status'		=> 'publish',
-				);
-
-				$post = get_posts( $args );
-			}
-
-			/**
-			 * Cast object to array.
-			 *
-			 * @since 2.3.3
-			 */
-			if ( isset( $post[0] ) && is_object( $post[0] ) ) {
-				$object = $post[0];
-				$post = (array) $object;
-			}
-
-			//* Stop getting something that doesn't exists. E.g. 404
-			if ( is_array( $post ) && ! isset( $post['post_content'] ) || is_object( $post ) || ( isset( $post['ID'] ) && 0 == $post['ID'] ) )
-				return '';
-
-			$excerpt = $post['post_content'];
-		}
+		//* No need to parse an empty excerpt.
+		if ( '' === $excerpt )
+			return '';
 
 		$excerpt = wp_strip_all_tags( strip_shortcodes( $excerpt ) );
 		$excerpt = str_replace( array( "\r\n", "\r", "\n" ), "\n", $excerpt );
@@ -135,6 +74,98 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 		$output = implode( $new_lines );
 
 		return (string) $output;
+	}
+
+	/**
+	 * Generate excerpt.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @param int $the_id The Post ID.
+	 * @param int $tt_id The Taxonomy Term ID
+	 *
+	 * @return string|empty excerpt.
+	 */
+	public function fetch_excerpt( $the_id = '', $tt_id = '' ) {
+
+		if ( '' === $the_id && '' === $tt_id ) {
+			$the_id = $this->get_the_real_ID();
+
+			if ( false === $the_id )
+				return '';
+		}
+
+		/**
+		 * Use the 2nd parameter.
+		 * @since 2.2.8
+		 *
+		 * Now casts to array
+		 * @since 2.3.3
+		 */
+		if ( '' !== $the_id && $this->is_blog_page( $the_id ) ) {
+			$args = array(
+				'posts_per_page'	=> 1,
+				'offset'			=> 0,
+				'category'			=> '',
+				'category_name'		=> '',
+				'orderby'			=> 'date',
+				'order'				=> 'DESC',
+				'post_type'			=> 'post',
+				'post_status'		=> 'publish',
+			);
+
+			$post = get_posts( $args );
+		} else if ( '' !== $the_id ) {
+			$post = get_post( $the_id, ARRAY_A );
+		} else if ( '' !== $tt_id ) {
+			/**
+			 * Match the descriptions in admin as on the front end.
+			 * @since 2.3.3
+			 */
+			$args = array(
+				'posts_per_page'	=> 1,
+				'offset'			=> 0,
+				'category'			=> $tt_id,
+				'category_name'		=> '',
+				'post_type'			=> 'post',
+				'post_status'		=> 'publish',
+			);
+
+			$post = get_posts( $args );
+		} else {
+			$post = get_post( $the_id, ARRAY_A );
+		}
+
+		/**
+		 * Cast last found post object to array and put it in $post.
+		 * @since 2.3.3
+		 */
+		if ( isset( $post[0] ) && is_object( $post[0] ) ) {
+			$object = $post[0];
+			$post = (array) $object;
+		}
+
+		// Something went wrong, nothing to be found. Return empty.
+		if ( ! isset( $post ) || ! is_array( $post ) )
+			return '';
+
+		//* Stop getting something that doesn't exists. E.g. 404
+		if ( isset( $post['ID'] ) && 0 == $post['ID'] )
+			return '';
+
+		/**
+		 * Fetch custom excerpt, if not empty, from the post_excerpt field.
+		 * @since 2.5.2
+		 */
+		if ( isset( $post['post_excerpt'] ) && '' !== $post['post_excerpt'] ) {
+			$excerpt = $post['post_excerpt'];
+		} else if ( isset( $post['post_excerpt'] ) ) {
+			$excerpt = $post['post_content'];
+		} else {
+			$excerpt = '';
+		}
+
+		return $excerpt;
 	}
 
 	/**
