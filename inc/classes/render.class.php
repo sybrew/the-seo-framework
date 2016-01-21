@@ -190,7 +190,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		if ( ! $post_id )
 			return '';
 
-		$image_cache = esc_url_raw( $this->get_image( $post_id ) );
+		$image_cache = $this->get_image( $post_id );
 
 		return $image_cache;
 	}

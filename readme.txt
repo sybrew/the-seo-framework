@@ -359,11 +359,11 @@ Transporting Terms and Taxonomies data currently isn't supported.
 
 **Summarized:**
 /
-* This is the biggest update so far, with many functions rewritten (again) to remove redundant calls and replace them with caching functions.
+* This is the biggest update so far, with many functions rewritten (once more) to remove redundant calls and replace them with cached functions.
 * This update of The SEO Framework brings you Feed excerpt generation as well as options to add backlinks in the feed.
 * Also, a lot of WordPress behaviour and plugin detection has been reworked, improved and been put to great use within the option pages to elliminate confusion.
 * And last but not least, due to popular demand an extra option has been added to change the Title generation, although it decouples all your pages within your website.
-* Oh, and many minor improvements and bug fixes have also been put into effect, including an more important WooCommerce fix.
+* Oh, and many minor improvements and bug fixes have also been put into effect, including a more important WooCommerce fix.
 
 **SEO Tip of the Update:**
 /
@@ -377,8 +377,10 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Added: Feed option to add a non-followed backlink to the feed content to counter scrapers and bad links. Default enabled on new installations.
 * Added: The custom excerpt field (if available) is now taken into account before generating one from the content.
 * Added: Title additions options, which allows you to remove the blogname from all pages (except the home page, which has its own option already). This option is only available to themes which supports title-tag. Default disabled and recommended not to be used.
+* Added: The custom inpost titles now also listen to the new Title addition options.
+* Added: The dynamic title additions placeholder has also been put into effect when the Title Additions Location has been set in reverse order. This effectively also eliminates confusion.
 * Added: Dynamic title additions left/right options based on being enabled or disabled.
-* Added: PHP 5.2 compatibility, which is actually very much outdated. PHP 5.2 will henceforth be (syntaxwise) supported until at least March 2016. TODO test each file for syntax.
+* Added: PHP 5.2 compatibility, which is actually very much outdated. PHP 5.2 will henceforth be (syntax-wise) supported until at least March 2016. Stay updated!
 * Added: Subtle sitemap plugin detection notification on SEO Settings Page. If a sitemap plugin is detected, the option will be removed from view and will be replaced with the notification.
 * Added: The sitemap detection will also remove the Sitemap ping and timestamp submenus and their options.
 * Added: Robots.txt file detection. If a robots.txt file is detected in the website's root folder the options to change them will be removed.
@@ -400,7 +402,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Improved: Various comparison checks are sped up.
 * Improved: Added trimming of spaces around the blogname and title in the Title and Description.
 * Changed: Small textual change to make things more clear in the Description Settings.
-* TODO Fixed: Title length counter excluded the Document Title and Separator when the Document Title Separator Location is set to Left.
+* TODO Fixed: Title length counter excluded the Document Title and Separator when the Document Title Separator Location is set to Left. ??? @NOTE UNCONFIRMED.
 * Fixed: og:locale content when WPML is active, it now determines the correct locale automatically.
 * Fixed: Saving Draft after SEO Settings change gave an unnecessary and incorrect unsaved data popup notification.
 * Fixed: Sitemap URL Location missed a slash with special permalink settings.
@@ -415,15 +417,17 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Fixed: WooCommerce main shop page now listens to all the assigned page SEO settings.
 * Fixed: When a static front page has been asigned, the Posts Page can now listen to the redirect option.
 * Fixed: Temporarily added lines back (which were removed in WordPress 4.4) beneath the option tabs in the metaboxes on mobile screens.
+* Fixed: Dynamic Title Placeholder input text visual glitch when the input text was overflowing.
 * TODO Updated: POT file. // Because of new text lines in the Pinterest/Sitemap notification.
-* TODO Fixed: When options are hidden, their "values" are still kept (disclosed feature as it's mandatory with this update)
+* TODO Fixed: When options are hidden, their "values" are still kept (disclosed feature as it's mandatory with this update). @todo pre-load all checkboxes in form as hidden fields?
 
 **For developers:**
 /
 * TODO Added: New filters. (extra sitemap string+array and 404 + search title + sitemap ID exclusion)
 * Added: New Class: `AutoDescription_Feed` within `feed.class.php`.
 * MAYBE TODO Code is now tested with the help from Phabricator.
-* TODO Added: More filterable image arguments, see https://wordpress.org/support/topic/filter-suggestion-ability-to-skip-site-icon-avatar-at-ogimage-generation?replies=1
+* Added: More filterable image arguments.
+* Added: Two Image fallback filters.
 * Added: Extra title argument to disable sanitation. Requires santition afterwards.
 * Added: If the theme you're using is doing the `wp_title()` function wrong, the title parameters are now added in a HTML comment (e.g. '&lt;!-- Title diw: | true right --&gt;') in the theme's footer for developer debugging purposes.
 * Added: Sanitation for effectively removing spaces and html tags, `s_no_html_space`.
@@ -431,6 +435,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Added: New cached function: `AutoDescription_PostData::get_blogdescription()`.
 * Added: New function: `AutoDescription_Generate::fetch_locale()`, fetches correct Open Graph locale based on WordPress settings or through parameter.
 * Added: New cached function: `AutoDescription_Detect::can_i_use()`. Dump your multidimensional array of functions, classes and constants in this function and it will calculate if they can all be used, which also caches the matches for these checks are quite intensive.
+* Added: New cached function: `AutoDescription_Detect::is_singular()`. Special is_singular check which works both front-end as backend. This also tells that the WooCommerce Shop page is singular instead of an archive.
 * Added: Many more functions, which aren't important enough to be highlighted.
 * Optimized: Many comparisons have been converted into type sensitive statements, this is less forgiving to errorous option array filters.
 * Changed: When the first parameter of `AutoDescription_PostData::get_excerpt_by_id()` is filled in, it will now not only escape the attributes, but strip the whole content from its tags and shortcodes.
@@ -448,6 +453,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Removed: Doing it Wrong notice in the footer when the theme is outputting the title wrong on WordPress 4.4.0 and lower. This has been exchanged for a small html comment.
 * Removed: Genesis check for `wp_title` as it now supports the much required title tag.
 * Removed: IS_HMPL constant check, now only listens to the filter.
+* Removed: Override and frontpage image args as it has been replaced with a more extensive and easier to understand filter.
 * Deprecated: `AudoDescription_Generate::generate_description_from_id()` 2nd argument. Exchanged for escape. 3rd parameter will still work until 2.6.0.
 * Deprecated: `AudoDescription_Generate::generate_excerpt()` 5th argument. Exchanged for char length. 3rd parameter will still work until 2.6.0.
 * Deprecated: `AutoDescription_Admin_Init::supported_screens` as it isn't used anymore.
@@ -461,8 +467,12 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * NOTE ADDED: the_seo_framework_max_content_feed_length int filter
 * NOTE ADDED: the_seo_framework_feed_metabox int filter
 * NOTE ADDED: the_seo_framework_inpost_seo_bar mixed filter
+* NOTE ADDED: the_seo_framework_og_image_after_featured string filter
+* NOTE ADDED: the_seo_framework_og_image_after_header  string filter
+* NOTE ADDED: the_seo_framework_404_title  string filter
+* NOTE ADDED: the_seo_framework_search_title  string filter
 * NOTE ADDED: the_seo_framework_feed_metabox_after/before action
-* NOTE Detection of plugins depend on their classes being active. Most of the time this is conditional. Checking for all these parameters is extremely time consuming.
+* NOTE Detection of plugins depend on their classes being active. Most of the time this is conditional.
 
 = 2.5.1 - Undocumented Properties =
 

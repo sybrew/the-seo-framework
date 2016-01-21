@@ -1125,14 +1125,22 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * @uses is_page()
 	 * @uses is_attachment()
 	 *
+	 * @param int $id the Page ID.
+	 *
 	 * @staticvar bool $cache
 	 *
 	 * @since 2.5.2
+	 *
+	 * @return bool Post Type is singular
 	 */
 	public function is_singular( $id = 0 ) {
 
 		if ( 0 === $id )
 			$id = $this->get_the_real_ID();
+
+		//* WP_Query functions require loop, do alternative check.
+		if ( is_admin() )
+			return $this->is_singular_admin( $id );
 
 		$cache = array();
 
@@ -1143,6 +1151,32 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			return $cache[$id] = true;
 
 		return $cache[$id] = false;
+	}
+
+	/**
+	 * Extends default WordPress is_singular and made available in admin.
+	 *
+	 * @staticvar bool $cache
+	 *
+	 * @since 2.5.2
+	 *
+	 * @global object $current_screen
+	 *
+	 * @return bool Post Type is singular
+	 */
+	public function is_singular_admin() {
+
+		$cache = null;
+
+		if ( isset( $cache ) )
+			return $cache;
+
+		global $current_screen;
+
+		if ( isset( $current_screen->base ) && ( 'edit' === $current_screen->base || 'post' === $current_screen->base ) )
+			return $cache = true;
+
+		return $cache = false;
 	}
 
 	/**

@@ -62,7 +62,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 			$id = isset( $current_screen->id ) ? $current_screen->id : '';
 
-			if ( ! empty( $id ) ) {
+			if ( '' !== $id ) {
 
 				$type = $id;
 				$slug = substr( $id, (int) 5 );
@@ -74,7 +74,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 				/**
 				 * Always load pages and posts.
-				 * Many plugins rely on these.
+				 * Many CPT plugins rely on these.
 				 */
 				add_action( 'manage_posts_columns', array( $this, 'add_column' ), 10, 1 );
 				add_action( 'manage_pages_columns', array( $this, 'add_column' ), 10, 1 );
@@ -101,28 +101,20 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 		$column_keys = array_keys( $columns );
 
-		// Try comments
-		$offset = array_search( 'comments', $column_keys );
+		//* Column keys to look for, in order of appearance.
+		$order_keys = array(
+			'comments',
+			'posts',
+			'date',
+			'tags',
+			'bbp_topic_freshness',
+			'bbp_forum_freshness',
+		);
 
-		// Try Count (posts) on taxonomies
-		if ( false === $offset )
-			$offset = array_search( 'posts', $column_keys );
-
-		// Try date
-		if ( false === $offset )
-			$offset = array_search( 'date', $column_keys );
-
-		// Try tags
-		if ( false === $offset )
-			$offset = array_search( 'tags', $column_keys );
-
-		// Try bbPress Topic Freshness
-		if ( false === $offset )
-			$offset = array_search( 'bbp_topic_freshness', $column_keys );
-
-		// Try bbPress Forum Freshness
-		if ( false === $offset )
-			$offset = array_search( 'bbp_forum_freshness', $column_keys );
+		foreach ( $order_keys as $key ) {
+			if ( false !== ( $offset = array_search( $key, $column_keys ) ) )
+				break;
+		}
 
 		// I tried but found nothing
 		if ( false === $offset ) {
@@ -384,12 +376,12 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 				//* No redirect or noindex found, proceed.
 
 				if ( false === $is_term ) {
-					$title_custom_field = (bool) $this->get_custom_field( '_genesis_title' );
+					$title_custom_field = (bool) $this->get_custom_field( '_genesis_title', $post_id );
 
-					$description = $this->get_custom_field( '_genesis_description' ) ? $this->get_custom_field( '_genesis_description' ) : '';
+					$description = $this->get_custom_field( '_genesis_description', $post_id ) ? $this->get_custom_field( '_genesis_description', $post_id ) : '';
 
-					$nofollow = $this->get_custom_field( '_genesis_nofollow' );
-					$noarchive = $this->get_custom_field( '_genesis_noarchive' );
+					$nofollow = $this->get_custom_field( '_genesis_nofollow', $post_id );
+					$noarchive = $this->get_custom_field( '_genesis_noarchive', $post_id );
 
 					if ( $is_front_page ) {
 						$title_custom_field = $this->get_option( 'homepage_title' ) ? true : $title_custom_field;
@@ -401,43 +393,15 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 					}
 
 					//* Fetch the title normally.
-					if ( $title_custom_field && ! $is_front_page ) {
-						//* Let's try not to fix the bloated function for now.
-						$blogname = $this->get_blogname();
-
-						$title = $this->title_from_custom_field();
-
-						/**
-						 * Separator doesn't matter. Since html_entity_decode is used.
-						 * Order doesn't matter either. Since it's just used for length calculation.
-						 *
-						 * @since 2.3.4
-						 */
-						$title = $blogname . " | " . $title;
-					} else if ( $is_front_page ) {
-						$title = $this->title( '', '', '', array( 'page_on_front' => true ) );
+					if ( $is_front_page ) {
+						$title = $this->title( '', '', '', array( 'term_id' => $post_id, 'page_on_front' => true, 'meta' => true ) );
 					} else {
-						//* Fetch the title normally.
-						$title = $this->title();
+						$title = $this->title( '', '', '', array( 'term_id' => $post_id, 'meta' => true ) );
 					}
 				} else {
-					$title_custom_field = isset( $term->admeta['doctitle'] ) && $term->admeta['doctitle'] ? true : false;
+					$title_custom_field = isset( $term->admeta['doctitle'] ) && '' !== $term->admeta['doctitle'] ? true : false;
 
-					//* Fetch the title normally.
-					if ( $title_custom_field ) {
-						//* Let's try not to fix the bloated function for now.
-						$blogname = $this->get_blogname();
-
-						/**
-						 * Separator doesn't matter. Since html_entity_decode is used.
-						 * Order doesn't matter either. Since it's just used for length calculation.
-						 *
-						 * @since 2.3.4
-						 */
-						$title = $blogname . " | " . $term->admeta['doctitle'];
-					} else {
-						$title = $this->title( '', '', '', array( 'term_id' => $post_id, 'taxonomy' => $type ) );
-					}
+					$title = $this->title( '', '', '', array( 'term_id' => $post_id, 'taxonomy' => $type, 'meta' => true ) );
 
 					$description = isset( $term->admeta['description'] ) ? $term->admeta['description'] : '';
 

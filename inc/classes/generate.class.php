@@ -179,7 +179,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$description = ! empty( $custom_desc ) ? $custom_desc : $description;
 		}
 
-		if ( $this->is_singular() && empty( $description ) ) {
+		if ( '' === $description && $this->is_singular( $args['id'] ) ) {
 			//* Bugfix 2.2.7 run only if description is stil empty from home page.
 			$custom_desc = $this->get_custom_field( '_genesis_description', $args['id'] );
 			$description = $custom_desc ? $custom_desc : $description;
@@ -1327,14 +1327,21 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$title = wp_strip_all_tags( $this->get_the_archive_title() );
 		}
 
-		// @TODO create option?
+		/**
+		 * Applies filters string the_seo_framework_404_title
+		 * @since 2.5.2
+		 */
 		if ( is_404() )
-			$title = '404';
+			$title = (string) apply_filters( 'the_seo_framework_404_title', '404' );
 
-		// @TODO create options
 		if ( is_search() ) {
+			/**
+			 * Applies filters string the_seo_framework_404_title
+			 * @since 2.5.2
+			 */
 			/* translators: Front-end output. */
-			$title = __( 'Search results for:', 'autodescription' ) . ' ' . get_search_query();
+			$search_title = (string) apply_filters( 'the_seo_framework_search_title', __( 'Search results for:', 'autodescription' ) );
+			$title = $search_title . ' ' . trim( get_search_query() );
 		}
 
 		//* Generate admin placeholder for taxonomies
@@ -2133,11 +2140,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		$termlink = $wp_rewrite->get_extra_permastruct( $taxonomy );
 
 		$slug = $term->slug;
-		//* var_dump() isn't $term already what we need? =/
 		$t = get_taxonomy( $taxonomy );
-
-		var_dump( $term );
-		var_dump( $t );
 
 		if ( empty( $termlink ) ) {
 			if ( 'category' == $taxonomy ) {
@@ -2373,18 +2376,23 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	}
 
 	/**
-	 * Adds og:image
+	 * Fetches og:image
 	 *
 	 * @uses get_header_image
 	 *
-	 * @param string $post_id 	the post ID
-	 * @param string $image		output url for image
+	 * @param string $post_id the post ID
+	 * @param string $image output url for image
+	 * @param bool $escape Wether to escape the image url
 	 *
 	 * @since 2.2.1
 	 *
+	 * Applies filters string the_seo_framework_og_image_after_featured
+	 * Applies filters string the_seo_framework_og_image_after_header
+	 * @since 2.5.2
+	 *
 	 * @todo create options and upload area
 	 */
-	public function get_image( $post_id = '', $args = array() ) {
+	public function get_image( $post_id = '', $args = array(), $escape = true ) {
 
 		if ( empty( $post_id ) )
 			$post_id = $this->get_the_real_ID();
@@ -2415,32 +2423,50 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		if ( ! isset( $args['post_id'] ) )
 			$args['post_id'] = $post_id;
 
+		//* 0. Image from argument.
 		$image = $args['image'];
 
-		$is_front = $post_id == get_option( 'page_on_front' ) ? true : false;
+		$check = (bool) empty( $args['disallowed'] );
 
 		/**
+		 * 1. Fetch image from featured
+		 *
 		 * Fetch image if
+		 * + override is not false (always go)
 		 * + no image found (always go)
-		 * + override is true (always go)
 		 * + is not front page AND frontpage override is set to true
 		 */
-		if ( $args['override'] !== false || empty( $image ) || ( ! $is_front && $args['frontpage'] !== false ) )
+		if ( empty( $image ) && ( $check || ! in_array( 'featured', $args['disallowed'] ) ) )
 			$image = $this->get_image_from_post_thumbnail( $args );
 
-		//* Get the WP 4.3.0 Site Icon
+		//* 2. Fetch image from fallback filter 1
 		if ( empty( $image ) )
-			$image = $this->site_icon();
+			$image = (string) apply_filters( 'the_seo_framework_og_image_after_featured', '' );
 
-		//* Fallback: Get header image if exists
-		if ( empty( $image ) )
+		//* 3. Fallback: Get header image if exists
+		if ( empty( $image ) && ( $check || ! in_array( 'header', $args['disallowed'] ) ) )
 			$image = get_header_image();
 
-		//* If there still is no image, get the "site avatar" from WPMUdev Avatars
+		//* 4. Fetch image from fallback filter 1
 		if ( empty( $image ) )
+			$image = (string) apply_filters( 'the_seo_framework_og_image_after_header', '' );
+
+		//* 5. Get the WP 4.3.0 Site Icon
+		if ( empty( $image ) && ( $check || ! in_array( 'icon', $args['disallowed'] ) ) )
+			$image = $this->site_icon();
+
+		//* 6. If there still is no image, try the "site avatar" from WPMUdev Avatars
+		if ( empty( $image ) && ( $check || ! in_array( 'wpmudev-avatars', $args['disallowed'] ) ) )
 			$image = $this->get_image_from_wpmudev_avatars();
 
-		return $image;
+		/**
+		 * Escape in Generation.
+		 * @since 2.5.2
+		 */
+		if ( ! empty( $image ) && $escape )
+			return esc_url( $image );
+
+		return '';
 	}
 
 	/**
@@ -2450,13 +2476,19 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 * @param array $defaults The default arguments.
 	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
 	 *
-	 * @applies filters the_seo_framework_og_image_args : {
+	 * Applies filters the_seo_framework_og_image_args : {
 	 *		@param string image The image url
 	 *		@param mixed size The image size
 	 *		@param bool icon Fetch Image icon
 	 *		@param array attr Image attributes
-	 *		@param bool override Always use the set url
-	 *		@param bool frontpage Always use the set url on the front page
+	 *		@param array disallowed Disallowed image types : {
+	 *			array (
+	 * 				string 'featured'
+	 * 				string 'header'
+	 * 				string 'icon'
+	 * 				string 'wpmudev-avatars'
+	 *			)
+	 * 		}
 	 * }
 	 * The image set in the filter will always be used as fallback
 	 *
@@ -2471,9 +2503,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				'image'		=> '',
 				'size'		=> 'full',
 				'icon'		=> false,
-				'attr'		=> '',
-				'override'	=> false,
-				'frontpage'	=> true,
+				'attr'		=> array(),
+				'disallowed' => array(),
 			);
 
 			//* @since 2.0.1
@@ -2489,8 +2520,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		$args['size'] 		= isset( $args['size'] ) 		? $args['size'] 				: $defaults['size']; // Mixed.
 		$args['icon'] 		= isset( $args['icon'] ) 		? (bool) $args['icon'] 			: $defaults['icon'];
 		$args['attr'] 		= isset( $args['attr'] ) 		? (array) $args['attr'] 		: $defaults['attr'];
-		$args['override'] 	= isset( $args['override'] ) 	? (bool) $args['override'] 		: $defaults['override'];
-		$args['frontpage'] 	= isset( $args['frontpage'] ) 	? (bool) $args['frontpage'] 	: $defaults['frontpage'];
+		$args['disallowed'] = isset( $args['disallowed'] ) 	? (array) $args['disallowed'] 	: $defaults['disallowed'];
 
 		return $args;
 	}
@@ -2677,9 +2707,13 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 				$size = '256';
 
-				$file = $ms_avatar->blog_avatar_dir . $ms_avatar->encode_avatar_folder( $blog_id ) . '/blog-' . $blog_id . '-' . $size . '.png';
+				if ( method_exists( $ms_avatar, 'encode_avatar_folder' ) ) {
+					$file = $ms_avatar->blog_avatar_dir . $ms_avatar->encode_avatar_folder( $blog_id ) . '/blog-' . $blog_id . '-' . $size . '.png';
+				} else {
+					return '';
+				}
 
-				if ( is_file( $file ) ) {
+				if ( false !== $file && is_file( $file ) ) {
 
 					$upload_dir = wp_upload_dir();
 					$upload_url = $upload_dir['baseurl'];

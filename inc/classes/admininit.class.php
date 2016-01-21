@@ -49,6 +49,15 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		// add_filter( 'epanel_page_maintabs', array( $this, 'no_more_elegant_seo' ), 10, 1 );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 10, 1 );
+
+		/**
+		 * @since 2.5.0
+		 *
+		 * PHP 5.2 compat
+		 * @since 2.5.2
+		 */
+		if ( $this->the_seo_framework_debug )
+			add_action( 'admin_footer', 'debug_screens' );
 	}
 
 	/**
@@ -192,16 +201,6 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 */
 	public function post_type_support() {
 
-		/**
-		 * Finding the screens.
-		 * @since 2.4.1
-		 *
-		 * Listens to debug constant.
-		 * @since 2.5.0
-		 */
-		if ( $this->the_seo_framework_debug )
-			add_action( 'admin_footer', function() { global $current_screen; ?><div style="float:right;margin:3em;padding:1em;border:1px solid;background:#fff;color:#000;"><?php foreach( $current_screen as $screen ) echo "<p>$screen</p>"; ?></div><?php } );
-
 		$args = array();
 
 		/**
@@ -275,6 +274,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		$tagline = (bool) $this->get_option( 'homepage_tagline' );
 		$home_tagline = $this->get_option( 'homepage_title_tagline' );
 		$title_location = $this->get_option( 'title_location' );
+		$title_rem_additions = (bool) $this->get_option( 'title_rem_additions' );
 
 		$separator = $this->get_separator( 'title', true );
 
@@ -305,7 +305,12 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 			} else if ( $post_id ) {
 				//* We're on post.php
 				$title = $this->title( '', '', '', array( 'placeholder' => true, 'notagline' => true ) );
-				$additions = $blog_name;
+
+				if ( ! $title_rem_additions ) {
+					$additions = $blog_name;
+				} else {
+					$additions = '';
+				}
 			} else {
 				//* We're in a special place.
 				// Can't fetch title.
@@ -687,6 +692,22 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 			return '<span class="wp-ui-notification">' . esc_attr( (string) trim( $value ) ) . '</span>';
 
 		return esc_attr( (string) $value );
+	}
+
+	/**
+	 * Echo found screens in the admin footer when debugging is enabled.
+	 *
+	 * @since 2.5.2
+	 */
+	protected function debug_screens() {
+		global $current_screen;
+
+		?><div style="float:right;margin:3em;padding:1em;border:1px solid;background:#fff;color:#000;"><?php
+
+			foreach( $current_screen as $screen )
+				echo "<p>$screen</p>";
+
+		?></div><?php
 	}
 
 }
