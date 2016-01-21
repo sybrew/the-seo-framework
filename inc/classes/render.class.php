@@ -333,9 +333,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		$type = (string) apply_filters( 'the_seo_framework_ogtype_output', '' );
 
 		if ( empty( $type ) ) {
-			$image = $this->get_image_from_cache();
-
-			if ( is_single() && ! empty( $image ) ) {
+			if ( is_single() && '' !== $this->get_image_from_cache() ) {
 				$type = 'article';
 			} else if ( is_author() ) {
 				$type = 'profile';
