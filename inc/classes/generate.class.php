@@ -257,7 +257,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	public function generate_description_from_id( $args = array(), $escape = true, $_escape = 'depr' ) {
 
 		if ( 'depr' !== $_escape ) {
-			_deprecated_function( __FUNCTION__, $this->the_seo_framework_version( '2.5.2' ), 'Use 2nd argument for escape.' );
+			_deprecated_argument( __FUNCTION__, $this->the_seo_framework_version( '2.5.2' ), 'Use 2nd argument for escape.' );
 			$escape = (bool) $_escape;
 		}
 
@@ -573,12 +573,12 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	public function generate_excerpt( $page_id, $term = '', $max_char_length = 155, $_max_char_length = 'depr', $__max_char_length = 'depr' ) {
 
 		if ( 'depr' !== $__max_char_length ) {
-			_deprecated_function( __FUNCTION__, $this->the_seo_framework_version( '2.5.2' ), 'Use 3nd argument for max_car_length.' );
+			_deprecated_argument( __FUNCTION__, $this->the_seo_framework_version( '2.5.2' ), 'Use 3nd argument for max_car_length.' );
 			$max_char_length = (int) $__max_char_length;
 		}
 
 		if ( 'depr' !== $_max_char_length ) {
-			_deprecated_function( __FUNCTION__, $this->the_seo_framework_version( '2.5.2' ), 'Removed last 2 arguments.' );
+			_deprecated_argument( __FUNCTION__, $this->the_seo_framework_version( '2.5.2' ), 'Removed last 2 arguments.' );
 		}
 
 		static $excerpt_cache = array();

@@ -173,15 +173,15 @@ endif;
 /**
  * Extended charset support
  *
- * @uses strpos
- * @return mb_strpos
+ * @see _mb_strpos()
  *
- * @since 1.3.0
- *
- * Rewritten.
- * @since 2.3.5
+ * @param string		$haystack	The string to search in.
+ * @param mixed 		$needle		If needle is not a string, it is converted to an integer and applied as the ordinal value of a character.
+ * @param int			$offset		Optional, search will start this number of characters counted from the beginning of the string. The offset cannot be negative.
+ * @param string|null	$encoding	Optional. Character encoding to use. Default null.
  *
  * @license GLPv2 or later
+ * @return int Position of first occurence found of $haystack of `$needle`.
  */
 if ( ! function_exists( 'mb_strpos' ) ) :
 	function mb_strpos( $haystack, $needle, $offset = 0, $encoding = null ) {
@@ -190,11 +190,22 @@ if ( ! function_exists( 'mb_strpos' ) ) :
 endif;
 
 /**
+ * Compat function to mimic mb_strpos().
+ *
  * Only understands UTF-8 and 8bit.  All other character sets will be treated as 8bit.
  * For $encoding === UTF-8, the $str input is expected to be a valid UTF-8 byte sequence.
  * The behavior of this function for invalid inputs is PHP compliant.
  *
+ * @since 4.5.0
  * @license GLPv2 or later
+ *
+ * @param string		$haystack	The string to search in.
+ * @param mixed 		$needle		If needle is not a string, it is converted to an integer and applied as the ordinal value of a character.
+ * @param int			$offset		Optional, search will start this number of characters counted from the beginning of the string. The offset cannot be negative.
+ * @param string|null	$encoding	Optional. Character encoding to use. Default null.
+ *
+ * @license GLPv2 or later
+ * @return int Position of first occurence found of $haystack of `$needle`.
  */
 if ( ! function_exists( '_mb_strpos' ) ) :
 	function _mb_strpos( $haystack, $needle, $offset = 0, $encoding = null ) {
@@ -204,7 +215,7 @@ if ( ! function_exists( '_mb_strpos' ) ) :
 		}
 
 		// The solution below works only for UTF-8,
-		// so in case of a different charset just use built-in strpos()
+		// So in case of a different charset just use built-in strpos()
 		if ( ! in_array( $encoding, array( 'utf8', 'utf-8', 'UTF8', 'UTF-8' ) ) ) {
 			return $offset === 0 ? strpos( $haystack, $needle ) : strpos( $haystack, $needle, $offset );
 		}
@@ -217,9 +228,9 @@ if ( ! function_exists( '_mb_strpos' ) ) :
 		}
 
 		if ( ! is_string( $needle ) ) {
-			$needle = (string) $needle;
+			$needle = (int) $needle;
 
-			if ( ! is_string( $needle ) ) {
+			if ( ! is_int( $needle ) ) {
 				trigger_error( 'mb_strpos(): Array to string conversion', E_USER_WARNING );
 				return false;
 			}
@@ -238,11 +249,25 @@ if ( ! function_exists( '_mb_strpos' ) ) :
 			preg_match_all( "/./us", $haystack, $match_h );
 			preg_match_all( "/$needle/us", $haystack_sub, $match_n );
 
-			$pos = key( array_intersect( $match_h[0], $match_n[0] ) );
+			$inter = array_intersect( $match_h[0], $match_n[0] );
 
-			if ( empty( $pos ) ) {
+			if ( ! isset( $inter ) )
 				return false;
+
+			//* Prevent bugs, (re)assign var.
+			$pos = null;
+
+			// Find first occurence greater than or equal to offset
+			foreach ( $inter as $key => $value ) {
+				if ( $key >= $offset ) {
+					$pos = $key;
+					break;
+				}
 			}
+
+			//* No key has been found.
+			if ( ! isset( $pos ) )
+				return false;
 
 			return (int) $pos;
 		}
@@ -305,8 +330,28 @@ if ( ! function_exists( '_mb_strpos' ) ) :
 		 * Compute match of haystack offset with needle
 		 * If passed, return the array key number within the full haystack.
 		 */
-		if ( in_array( $match_n[0], $match_hs ) ) {
-			return (int) key( array_intersect( $match_h, $match_n ) );
+		if ( false !== in_array( $match_n[0], $match_hs ) ) {
+			$inter = array_intersect( $match_h, $match_n );
+
+			if ( ! isset( $inter ) )
+				return false;
+
+			//* Prevent bugs, (re)assign var.
+			$pos = null;
+
+			// Find first occurence greater than or equal to offset
+			foreach ( $inter as $key => $value ) {
+				if ( $key >= $offset ) {
+					$pos = $key;
+					break;
+				}
+			}
+
+			//* No key has been found.
+			if ( ! isset( $pos ) )
+				return false;
+
+			return (int) $pos;
 		} else {
 			return false;
 		}

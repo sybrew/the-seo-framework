@@ -418,6 +418,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Fixed: When a static front page has been asigned, the Posts Page can now listen to the redirect option.
 * Fixed: Temporarily added lines back (which were removed in WordPress 4.4) beneath the option tabs in the metaboxes on mobile screens.
 * Fixed: Dynamic Title Placeholder input text visual glitch when the input text was overflowing.
+* Fixed: Miscalculation in multibyte string positioning when using non UTF-8 characters and when the server didn't support mbstring. This could've caused a miscalculation for the title when the theme was doing it wrong.
 * TODO Updated: POT file. // Because of new text lines in the Pinterest/Sitemap notification.
 * TODO Fixed: When options are hidden, their "values" are still kept (disclosed feature as it's mandatory with this update). @todo pre-load all checkboxes in form as hidden fields?
 
@@ -458,7 +459,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Deprecated: `AudoDescription_Generate::generate_excerpt()` 5th argument. Exchanged for char length. 3rd parameter will still work until 2.6.0.
 * Deprecated: `AutoDescription_Admin_Init::supported_screens` as it isn't used anymore.
 * Note: On many places, `empty()` has been exchanged for type sensitive checks. If you do not wish to use a parameter, always input the default to maintain expected behaviour.
-* Note: The description excerpt cache version has been bumped to refresh all excerpts.
+* TODO Note: The description excerpt cache version has been bumped to refresh all excerpts.
 * Cleaned up code.
 
 **TEMP LOG**

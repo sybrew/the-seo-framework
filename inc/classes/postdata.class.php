@@ -159,7 +159,7 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 		 */
 		if ( isset( $post['post_excerpt'] ) && '' !== $post['post_excerpt'] ) {
 			$excerpt = $post['post_excerpt'];
-		} else if ( isset( $post['post_excerpt'] ) ) {
+		} else if ( isset( $post['post_content'] ) ) {
 			$excerpt = $post['post_content'];
 		} else {
 			$excerpt = '';
