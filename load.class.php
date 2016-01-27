@@ -241,6 +241,9 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 
 	/**
 	 * Faster way of doing an in_array search compared to default PHP behavior.
+	 * @NOTE only to show improvement with large arrays. Might slow down with small arrays.
+	 * @NOTE can't do type checks. Always assume the comparing value is a string.
+	 *
 	 * @uses array_flip()
 	 * @uses isset()
 	 *

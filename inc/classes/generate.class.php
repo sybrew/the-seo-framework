@@ -323,7 +323,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				$args['taxonomy'] = $current_screen->taxonomy;
 				$term = get_term_by( 'id', $args['id'], $args['taxonomy'], OBJECT );
 			}
-		} else if ( is_archive() && ! is_front_page() ) {
+		} else if ( is_archive() && ! is_front_page() && ! $this->is_singular( $args['id'] ) ) {
 			//* Fetch Taxonomy through wp_query on front-end
 			global $wp_query;
 
@@ -1345,15 +1345,20 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		/**
 		 * Combined the statements
 		 * @since 2.2.7 && @since 2.2.8
+		 *
+		 * Check for singular first, like WooCommerce shop.
+		 * @since 2.5.2
 		 */
-		if ( is_category() || is_tag() || is_tax() || ( ! empty( $term_id ) && ! empty( $taxonomy ) ) ) {
-			$title = $this->title_for_terms();
-		} else if ( is_archive() ) {
-			/**
-			 * Get all other archive titles
-			 * @since 2.5.2
-			 */
-			$title = wp_strip_all_tags( $this->get_the_archive_title() );
+		if ( ! $this->is_singular( $term_id ) ) {
+			if ( is_category() || is_tag() || is_tax() || ( ! empty( $term_id ) && ! empty( $taxonomy ) ) ) {
+				$title = $this->title_for_terms();
+			} else if ( is_archive() ) {
+				/**
+				 * Get all other archive titles
+				 * @since 2.5.2
+				 */
+				$title = wp_strip_all_tags( $this->get_the_archive_title() );
+			}
 		}
 
 		/**
@@ -1419,7 +1424,6 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			 * And now also works in admin. It gives you a true representation of its output.
 			 *
 			 * @since 2.4.1
-			 * @global $post
 			 */
 			$title = isset( $post->post_title ) ? $post->post_title : $title;
 		}
@@ -1651,7 +1655,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * Fetch Title from WordPress page title input.
 		 */
 		if ( empty( $title ) ) {
-			global $post;
+			$post = get_post( $id, OBJECT );
 
 			$title = isset( $post->post_title ) ? $post->post_title : '';
 			$id = isset( $post->ID ) ? $post->ID : 0;
@@ -2055,9 +2059,10 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	public function get_relative_wmpl_url( $path, $post ) {
 		global $sitepress;
 
-		$post_guid = $post->guid;
-
 		if ( isset( $sitepress ) ) {
+
+			$post_guid = $post->guid;
+
 			$negotiation_type = $sitepress->get_setting( 'language_negotiation_type' );
 
 			//* If negotiation_type is 2, the home_url will handle this.
@@ -2117,8 +2122,6 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 			} else if ( 3 === $negotiation_type ) {
 				//* Language names are parameters.
-
-				// @TODO parse slashit.
 
 				if ( false !== strpos( $post_guid, 'lang=' ) ) {
 					//* Add language parameter.

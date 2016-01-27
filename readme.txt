@@ -363,7 +363,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * This update of The SEO Framework brings you Feed excerpt generation as well as options to add backlinks in the feed. You can now also add your pinterest verification code.
 * Also, a lot of WordPress behavior and plugin detection has been reworked, improved and has been put to great use within the option pages to elliminate confusion by removing options if they have no effect.
 * And last but not least, due to popular demand an extra option has been added to change the Title generation, although it decouples all your pages within your website.
-* Oh, and many minor improvements and bug fixes have also been put into effect, including a more important WooCommerce shop page fix and 20% overall performance improvement.
+* Oh, and many minor improvements and bug fixes have also been put into effect, including a few more important WooCommerce shop page fix and a proud-to-be-of 20% overall performance improvement.
 
 **SEO Tip of the Update:**
 
@@ -421,6 +421,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Fixed: Missing characters at the end of the title when the theme is using an html entity that has characters like the the end of the title name.
 * Fixed: Day date archives cache keys could've been too long on old WordPress installations.
 * Fixed: WooCommerce main shop page now listens to all the assigned page SEO settings.
+* Fixed: WooCommerce main shop page description title is now correct.
 * Fixed: When a static front page has been asigned, the Posts Page can now listen to the redirect option.
 * Fixed: Temporarily added lines back (which were removed in WordPress 4.4) beneath the option tabs in the metaboxes on mobile screens.
 * Fixed: Dynamic Title Placeholder input text visual glitch when the input text was overflowing.
@@ -449,6 +450,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Improved: `AutoDescription_PostData::get_excerpt_by_id()` now listens more carefully to the first parameter. If it's not empty, it doesn't try to fetch the post content.
 * Improved: Removed the Generator tag through action instead of filter.
 * Improved: Disabled plugin output completely on Preview mode, including the title tag manipulation.
+* Improved: `AutoDescription_Admin_Init::add_post_state` no longer uses `global $post`.
 * Improved: Cleaned up debug messages.
 * Updated: Doing it Wrong notice to the current standards.
 * Fixed: Unlikely confict in the default site options and warned site options. This should only have caused a problem if the (protected) warned settings were fetched before admin_init.

@@ -100,16 +100,13 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 * @since 2.1.0
 	 */
 	public function add_post_state( $states = array() ) {
-		global $post;
 
-		if ( ! empty( $post ) ) {
-			$post_id = $post->ID;
+		$post_id = $this->get_the_real_ID( false );
 
-			$searchexclude = (bool) $this->get_custom_field( 'exclude_local_search', $post_id );
+		$searchexclude = (bool) $this->get_custom_field( 'exclude_local_search', $post_id );
 
-			if ( $searchexclude === true )
-				$states[] = __( 'No Search', 'autodescription' );
-		}
+		if ( $searchexclude === true )
+			$states[] = __( 'No Search', 'autodescription' );
 
 		return $states;
 	}
