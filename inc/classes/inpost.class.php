@@ -406,7 +406,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 							<a href="https://support.google.com/webmasters/answer/79812?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Tell Search Engines not to save a cached copy this page', 'autodescription' ) ) ?>">[?]</a>
 						</label>
 
-						<?php // Saved flag, if set then it won't fetch for genesis meta anymore ?>
+						<?php // Saved flag, if set then it won't fetch for Genesis meta anymore ?>
 						<label class="hidden" for="autodescription-meta[saved_flag]">
 							<input name="autodescription-meta[saved_flag]" id="autodescription-meta[saved_flag]" type="checkbox" value="1" checked='checked' />
 						</label>

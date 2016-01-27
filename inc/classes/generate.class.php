@@ -388,7 +388,6 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			 * @since 2.3.4
 			 */
 			$excerpt = get_transient( $this->auto_description_transient );
-			$excerpt = false;
 			if ( false === $excerpt ) {
 
 				/**
@@ -976,8 +975,14 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		//* Fetch title from custom fields.
 		if ( $args['get_custom_field'] && $this->is_singular( $args['term_id'] ) ) {
-			$title_from_custom_field = $this->title_from_custom_field( $title, false, $args['term_id'] );
-			$title = ! empty( $title_from_custom_field ) ? $title_from_custom_field : $title;
+			$title_special = $this->title_from_special_fields();
+
+			if ( empty( $title_special ) ) {
+				$title_from_custom_field = $this->title_from_custom_field( $title, false, $args['term_id'] );
+				$title = ! empty( $title_from_custom_field ) ? $title_from_custom_field : $title;
+			} else {
+				$title = $title_special;
+			}
 		}
 
 		//* Generate the Title if empty or if home.
@@ -1170,8 +1175,14 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		//* Fetch title from custom fields.
 		if ( $args['get_custom_field'] && $this->is_singular( $args['term_id'] ) ) {
-			$title_from_custom_field = $this->title_from_custom_field( $title, '', $args['term_id'] );
-			$title = ! empty( $title_from_custom_field ) ? $title_from_custom_field : $title;
+			$title_special = $this->title_from_special_fields();
+
+			if ( empty( $title_special ) ) {
+				$title_from_custom_field = $this->title_from_custom_field( $title, '', $args['term_id'] );
+				$title = ! empty( $title_from_custom_field ) ? $title_from_custom_field : $title;
+			} else {
+				$title = $title_special;
+			}
 		}
 
 		/**
@@ -1295,6 +1306,24 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 			if ( $this->the_seo_framework_debug_hidden )
 				echo "\r\n-->";
+		}
+
+		return $title;
+	}
+
+	/**
+	 * Fetches title from special fields, like other plugins.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @return string $title Title from Special Field.
+	 */
+	public function title_from_special_fields() {
+
+		$title = '';
+
+		if ( $this->is_ultimate_member_user_page() && um_is_core_page( 'user' ) && um_get_requested_user() ) {
+			$title = um_user( 'display_name' );
 		}
 
 		return $title;
@@ -1613,8 +1642,6 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		if ( $this->is_blog_page( $id ) ) {
 			//* Posts page title.
 			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : get_the_title( $id );
-		} else if ( $this->is_ultimate_member_user_page() && um_is_core_page( 'user' ) && um_get_requested_user() ) {
-			$title = um_user( 'display_name' );
 		} else {
 			//* Get title from custom field, empty it if it's not there to override the default title
 			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : $title;
@@ -1659,6 +1686,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 * 			@param bool $home Fetch home URL.
 	 * 			@param bool $forceslash Fetch home URL and slash it, always.
 	 * }
+	 *
+	 * @TODO Clean this function up @since 2.5.3
 	 *
 	 * @since 2.0.0
 	 */
@@ -1778,7 +1807,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 						$permalink_structure = get_option( 'permalink_structure' );
 
-						if ( ( $args['paged'] || ! empty( $page_id ) ) && '' != $permalink_structure && ! in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft', 'future' ) ) ) {
+						if ( ( $args['paged'] || ! empty( $page_id ) ) && '' != $permalink_structure && ! $this->in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft', 'future' ) ) ) {
 							//* Registered page.
 
 							if ( ! $args['paged'] && ! empty( $page_id ) && $page_id == get_option( 'page_on_front' ) ) {
@@ -1788,7 +1817,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 								//* Any other page.
 								$path = $this->get_relative_url( $post, $args['external'] );
 							}
-						} else if ( '' == $permalink_structure || in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft', 'future' ) ) ) {
+						} else if ( '' == $permalink_structure || $this->in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft', 'future' ) ) ) {
 							//* Registered page, Default permalink structure.
 
 							if ( ! empty( $page_id ) && $page_id != get_option( 'page_on_front' ) ) {
@@ -2051,7 +2080,6 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 						$language_keys = array_keys( icl_get_languages() );
 						if ( ! empty( $language_keys ) && ! in_array( $lang_path, $language_keys ) ) {
 							//* Language code isn't found in first part of path. Add it.
-
 							$path = '/' . $lang_path . '/' . ltrim( $path, '\/ ' );
 						}
 					}
@@ -2065,7 +2093,6 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 						if ( strpos( $path, '/' . ICL_LANGUAGE_CODE . '/' ) === false ) {
 							//* Language path isn't found in permalink. Add it.
-
 							$path = '/' . ICL_LANGUAGE_CODE . '/' . ltrim( $path, '\/ ' );
 						}
 
@@ -2082,7 +2109,6 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 							$language_keys = array_keys( icl_get_languages() );
 							if ( ! empty( $language_keys ) && in_array( $lang_path, $language_keys ) ) {
 								//* Language code isn't found in first part of path. Add it.
-
 								$path = '/' . $lang_path . '/' . ltrim( $path, '\/ ' );
 							}
 						}
@@ -3147,7 +3173,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				$string_current = (string) $int_current;
 
 				if ( $i === (int) 1 ) {
-					//* We're returning to the first page. Continue normal behaviour.
+					//* We're returning to the first page. Continue normal behavior.
 					$urlfromcache = $urlfromcache;
 				} else {
 					//* We're adding a page.
@@ -3161,9 +3187,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			}
 
 			if ( '' == get_option( 'permalink_structure' ) || in_array( $post->post_status, array( 'draft', 'pending' ) ) ) {
-
 				$url = add_query_arg( 'page', $i, $urlfromcache );
-
 			} else if ( 'page' == get_option( 'show_on_front' ) && get_option( 'page_on_front' ) == $post->ID ) {
 				global $wp_rewrite;
 
@@ -3293,7 +3317,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			//* Remove Duplicates from $todo by comparing to $tree
 			foreach ( $todo as $key => $value ) {
 				foreach ( $trees as $tree ) {
-					if ( in_array( $value, $tree ) )
+					if ( $this->in_array( $value, $tree ) )
 						unset( $todo[$key] );
 				}
 			}
@@ -3766,7 +3790,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 */
 	public function fetch_locale( $match = '' ) {
 
-		if ( ! empty( $match ) )
+		if ( empty( $match ) )
 			$match = get_locale();
 
 		$match_len = strlen( $match );
@@ -3777,7 +3801,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			//* Full locale is used.
 
 			//* Return the match if found.
-			if ( in_array( $match, $valid_locales ) )
+			if ( $this->in_array( $match, $valid_locales ) )
 				return $match;
 
 			//* Convert to only language portion.

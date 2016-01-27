@@ -239,6 +239,35 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 		return $output;
 	}
 
+	/**
+	 * Faster way of doing an in_array search compared to default PHP behavior.
+	 * @uses array_flip()
+	 * @uses isset()
+	 *
+	 * @since 2.5.2
+	 *
+	 * @param string|array $needle The needle(s) to search for
+	 * @param array $array The single dimensional array to search in.
+	 *
+	 * @return bool true if value is in array.
+	 */
+	public function in_array( $needle, $array ) {
+
+		$array = array_flip( $array );
+
+		if ( is_string( $needle ) ) {
+			if ( isset( $array[$needle] ) )
+				return true;
+		} else if ( is_array( $needle ) ) {
+			foreach ( $needle as $str ) {
+				if ( isset( $array[$str] ) )
+					return true;
+			}
+		}
+
+		return false;
+	}
+
 }
 
 //* Load deprecated functions.

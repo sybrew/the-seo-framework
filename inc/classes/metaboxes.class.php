@@ -1663,12 +1663,13 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 
 			$sitemap_plugin = $this->has_sitemap_plugin();
 			$robots_detected = $this->has_robots_txt();
+			$sitemap_detected = $this->has_sitemap_xml();
 
 			/**
 			 * Remove the timestamps and notify submenus
 			 * @since 2.5.2
 			 */
-			if ( $sitemap_plugin ) {
+			if ( $sitemap_plugin || $sitemap_detected ) {
 				unset( $tabs['timestamps'] );
 				unset( $tabs['notify'] );
 			}
@@ -1681,7 +1682,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 				unset( $tabs['robots'] );
 			}
 
-			if ( $robots_detected && $sitemap_plugin )
+			if ( $robots_detected && ( $sitemap_plugin || $sitemap_detected ) )
 				$use_tabs = false;
 
 			$this->nav_tab_wrapper( 'sitemaps', $tabs, '2.2.8', $use_tabs );
@@ -1705,6 +1706,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 
 		$sitemap_url = $site_url . 'sitemap.xml';
 		$has_sitemap_plugin = $this->has_sitemap_plugin();
+		$sitemap_detected = $this->has_sitemap_xml();
 
 		?>
 		<h4><?php _e( 'Sitemap Integration Settings', 'autodescription' ); ?></h4>
@@ -1713,6 +1715,10 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		if ( $has_sitemap_plugin ) {
 			?>
 			<p><span class="description"><?php _e( "Another active sitemap plugin has been detected. This means that the sitemap functionality has been replaced.", 'autodescription' ); ?></span></p>
+			<?php
+		} else if ( $sitemap_detected ) {
+			?>
+			<p><span class="description"><?php _e( "A sitemap has been detected in the root folder of your website. This means that the sitemap functionality has no effect.", 'autodescription' ); ?></span></p>
 			<?php
 		} else {
 			?>
@@ -1731,7 +1737,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 			<?php
 		}
 
-		if ( !$has_sitemap_plugin && $this->get_option( 'sitemaps_output') ) {
+		if ( ! ( $has_sitemap_plugin || $sitemap_detected ) && $this->get_option( 'sitemaps_output' ) ) {
 			$here =  '<a href="' . $sitemap_url  . '" target="_blank" title="' . __( 'View sitemap', 'autodescription' ) . '">' . _x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 
 			?><p><span class="description"><?php printf( _x( 'The sitemap can be found %s.', '%s = here', 'autodescription' ), $here ); ?></span></p><?php
@@ -1840,11 +1846,9 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 	}
 
 	/**
-	 * Webmaster meta box on the Site SEO Settings page.
+	 * Feed meta box on the Site SEO Settings page.
 	 *
-	 * @since 2.2.4
-	 *
-	 * @see $this->social_metabox() Callback for Social Settings box.
+	 * @since 2.5.2
 	 */
 	public function feed_metabox() {
 

@@ -49,7 +49,7 @@
  * Removed previous constant.
  * @since 2.3.5
  */
-define( 'THE_SEO_FRAMEWORK_VERSION', '2.5.1beta01212016' );
+define( 'THE_SEO_FRAMEWORK_VERSION', '2.5.1beta1272016' );
 
 /**
  * Plugin options filter

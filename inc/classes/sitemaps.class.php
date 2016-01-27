@@ -52,7 +52,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		$this->max_posts = (int) apply_filters( 'the_seo_framework_sitemap_post_limit', 700 );
 
 		// I'm not going to initialize my own rewrite engine. Causes too many problems.
-		$this->pretty_permalinks = ( get_option( 'permalink_structure' ) != '' ) ? true : false;
+		$this->pretty_permalinks = ( '' !== get_option( 'permalink_structure' ) ) ? true : false;
 
 		/**
 		 * Add query strings to rewrite
@@ -253,6 +253,19 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		$content = '';
 
 		/**
+		 * Applies filters the_seo_framework_sitemap_exclude_ids : array of id's
+		 *
+		 * @since 2.5.2
+		 */
+		$excluded = (array) apply_filters( 'the_seo_framework_sitemap_exclude_ids', array() );
+
+		if ( empty( $excluded ) ) {
+			$excluded = '';
+		} else {
+			$excluded = array_flip( $excluded );
+		}
+
+		/**
 		 * Maximum pages and posts to fetch.
 		 * A total of 2100, consisting of 3 times $max_posts
 		 *
@@ -364,35 +377,37 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 				if ( isset( $page->ID ) ) {
 					$page_id = $page->ID;
 
-					//* Is this the front page?
-					$page_is_front = ( $page_id == $page_on_front ) ? true : false;
+					if ( '' === $excluded || ! isset( $excluded[$post_id] ) ) {
+						//* Is this the front page?
+						$page_is_front = ( $page_id === $page_on_front ) ? true : false;
 
-					//* Fetch the noindex option, per page.
-					$noindex = (bool) $this->get_custom_field( '_genesis_noindex', $page_id );
+						//* Fetch the noindex option, per page.
+						$noindex = (bool) $this->get_custom_field( '_genesis_noindex', $page_id );
 
-					//* Continue if indexed.
-					if ( ! $noindex ) {
-						//* Don't add the posts page.
-						if ( ! $page_show_on_front || ! ( $page_show_on_front && $page_id == $page_for_posts_option ) ) {
+						//* Continue if indexed.
+						if ( ! $noindex ) {
+							//* Don't add the posts page.
+							if ( ! $page_show_on_front || ! ( $page_show_on_front && $page_id == $page_for_posts_option ) ) {
 
-							$content .= "	<url>\r\n";
-							// No need to use static vars.
-							$content .= '		<loc>' . $this->the_url( '', $page_id, array( 'get_custom_field' => false, 'external' => true, 'post' => $page ) ) . "</loc>\r\n";
+								$content .= "	<url>\r\n";
+								// No need to use static vars.
+								$content .= '		<loc>' . $this->the_url( '', $page_id, array( 'get_custom_field' => false, 'external' => true, 'post' => $page ) ) . "</loc>\r\n";
 
-							// Keep it consistent. Only parse if page_lastmod is true.
-							if ( $page_lastmod && ( ! $page_is_front || ( $home_lastmod && $page_is_front ) ) ) {
-								$page_modified_gmt = $page->post_modified_gmt;
+								// Keep it consistent. Only parse if page_lastmod is true.
+								if ( $page_lastmod && ( ! $page_is_front || ( $home_lastmod && $page_is_front ) ) ) {
+									$page_modified_gmt = $page->post_modified_gmt;
 
-								if ( $page_modified_gmt !== '0000-00-00 00:00:00' )
-									$content .= '		<lastmod>' . mysql2date( 'Y-m-d', $page_modified_gmt ) . "</lastmod>\r\n";
+									if ( $page_modified_gmt !== '0000-00-00 00:00:00' )
+										$content .= '		<lastmod>' . mysql2date( 'Y-m-d', $page_modified_gmt, false ) . "</lastmod>\r\n";
+								}
+
+								// Give higher priority to the home page.
+								$priority_page = $page_is_front ? 1 : 0.9;
+
+								$content .= '		<priority>' . number_format( $priority_page, 1 ) . "</priority>\r\n";
+								$content .= "	</url>\r\n";
+
 							}
-
-							// Give higher priority to the home page.
-							$priority_page = $page_is_front ? 1 : 0.9;
-
-							$content .= '		<priority>' . number_format( $priority_page, 1 ) . "</priority>\r\n";
-							$content .= "	</url>\r\n";
-
 						}
 					}
 				}
@@ -434,32 +449,35 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 				if ( isset( $post->ID ) ) {
 					$post_id = $post->ID;
 
-					//* Fetch the noindex option, per page.
-					$noindex = (bool) $this->get_custom_field( '_genesis_noindex', $post_id );
+					if ( '' === $excluded || ! isset( $excluded[$post_id] ) ) {
 
-					//* Continue if indexed
-					if ( ! $noindex ) {
+						//* Fetch the noindex option, per page.
+						$noindex = (bool) $this->get_custom_field( '_genesis_noindex', $post_id );
 
-						$content .= "	<url>\r\n";
-						// No need to use static vars
-						$content .= '		<loc>' . $this->the_url( '', $post_id, array( 'get_custom_field' => false, 'external' => true, 'post' => $post ) ) . "</loc>\r\n";
+						//* Continue if indexed
+						if ( ! $noindex ) {
 
-						// Keep it consistent. Only parse if page_lastmod is true.
-						if ( $post_lastmod ) {
-							$post_modified_gmt = $post->post_modified_gmt;
+							$content .= "	<url>\r\n";
+							// No need to use static vars
+							$content .= '		<loc>' . $this->the_url( '', $post_id, array( 'get_custom_field' => false, 'external' => true, 'post' => $post ) ) . "</loc>\r\n";
 
-							if ( $post_modified_gmt !== '0000-00-00 00:00:00' )
-								$content .= '		<lastmod>' . mysql2date( 'Y-m-d', $post_modified_gmt ) . "</lastmod>\r\n";
+							// Keep it consistent. Only parse if page_lastmod is true.
+							if ( $post_lastmod ) {
+								$post_modified_gmt = $post->post_modified_gmt;
+
+								if ( $post_modified_gmt !== '0000-00-00 00:00:00' )
+									$content .= '		<lastmod>' . mysql2date( 'Y-m-d', $post_modified_gmt, false ) . "</lastmod>\r\n";
+							}
+
+							$content .= '		<priority>' . number_format( $priority, 1 ) . "</priority>\r\n";
+							$content .= "	</url>\r\n";
+
+							// Lower the priority for the next pass.
+							$priority = $priority - $prioritydiff;
+
+							// Cast away negative numbers.
+							$priority = $priority <= (int) 0 ? (int) 0 : (float) $priority;
 						}
-
-						$content .= '		<priority>' . number_format( $priority, 1 ) . "</priority>\r\n";
-						$content .= "	</url>\r\n";
-
-						// Lower the priority for the next pass.
-						$priority = $priority - $prioritydiff;
-
-						// Cast away negative numbers.
-						$priority = $priority <= (int) 0 ? (int) 0 : (float) $priority;
 					}
 				}
 			}
@@ -468,6 +486,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		$latest_cpt_posts_amount = (int) count( $latest_cpt_posts );
 
 		if ( $latest_cpt_posts_amount > 0 ) {
+
 			/**
 			 * Setting up priorities, with pages always being important.
 			 *
@@ -492,37 +511,88 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 				if ( isset( $ctp_post->ID ) ) {
 					$post_id = $ctp_post->ID;
 
-					//* Fetch the noindex option, per page.
-					$noindex = (bool) $this->get_custom_field( '_genesis_noindex', $post_id );
+					if ( '' === $excluded || ! isset( $excluded[$post_id] ) ) {
 
-					//* Continue if indexed
-					if ( ! $noindex ) {
+						//* Fetch the noindex option, per page.
+						$noindex = (bool) $this->get_custom_field( '_genesis_noindex', $post_id );
 
-						$content .= "	<url>\r\n";
-						//* No need to use static vars
-						$content .= '		<loc>' . $this->the_url( '', $post_id, array( 'get_custom_field' => false, 'external' => true, 'post' => $ctp_post ) ) . "</loc>\r\n";
+						//* Continue if indexed
+						if ( ! $noindex ) {
 
-						//* Keep it consistent. Only parse if page_lastmod is true.
-						if ( $post_lastmod ) {
-							$post_modified_gmt = $ctp_post->post_modified_gmt;
+							$content .= "	<url>\r\n";
+							//* No need to use static vars
+							$content .= '		<loc>' . $this->the_url( '', $post_id, array( 'get_custom_field' => false, 'external' => true, 'post' => $ctp_post ) ) . "</loc>\r\n";
 
-							//* Some CPT don't set modified time.
-							if ( $post_modified_gmt !== '0000-00-00 00:00:00' )
-								$content .= '		<lastmod>' . mysql2date( 'Y-m-d', $post_modified_gmt ) . "</lastmod>\r\n";
+							//* Keep it consistent. Only parse if page_lastmod is true.
+							if ( $post_lastmod ) {
+								$post_modified_gmt = $ctp_post->post_modified_gmt;
+
+								//* Some CPT don't set modified time.
+								if ( $post_modified_gmt !== '0000-00-00 00:00:00' )
+									$content .= '		<lastmod>' . mysql2date( 'Y-m-d', $post_modified_gmt, false ) . "</lastmod>\r\n";
+							}
+
+							$content .= '		<priority>' . number_format( $priority_cpt, 1 ) . "</priority>\r\n";
+							$content .= "	</url>\r\n";
+
+							// Lower the priority for the next pass.
+							$priority_cpt = $priority_cpt - $prioritydiff_cpt;
+
+							// Cast away negative numbers.
+							$priority_cpt = $priority_cpt <= (int) 0 ? (int) 0 : (float) $priority_cpt;
 						}
-
-						$content .= '		<priority>' . number_format( $priority_cpt, 1 ) . "</priority>\r\n";
-						$content .= "	</url>\r\n";
-
-						// Lower the priority for the next pass.
-						$priority_cpt = $priority_cpt - $prioritydiff_cpt;
-
-						// Cast away negative numbers.
-						$priority_cpt = $priority_cpt <= (int) 0 ? (int) 0 : (float) $priority_cpt;
 					}
 				}
 			}
 		}
+
+		/**
+		 * Applies filters the_seo_framework_sitemap_additional_urls : {
+		 * 		@param string url The absolute url to the page. : {
+		 * 			@param string lastmod UNIXTIME Last modified date, e.g. "2016-01-26 13:04:55"
+		 * 			@param float|int|string priority URL Priority
+		 *		}
+		 * }
+		 *
+		 * @since 2.5.2
+		 */
+		$custom_urls = (array) apply_filters( 'the_seo_framework_sitemap_additional_urls', array() );
+
+		if ( ! empty( $custom_urls ) ) {
+			foreach ( $custom_urls as $url => $args ) {
+
+				if ( ! is_array( $args ) ) {
+					$url = $args;
+				}
+
+				$content .= "	<url>\r\n";
+				//* No need to use static vars
+				$content .= '		<loc>' . esc_url_raw( $url ) . "</loc>\r\n";
+
+				if ( isset( $args['lastmod'] ) && ! empty( $args['lastmod'] ) ) {
+					$content .= '		<lastmod>' . mysql2date( 'Y-m-d', $args['lastmod'], false ) . "</lastmod>\r\n";
+				}
+
+				if ( isset( $args['priority'] ) && ! empty( $args['priority'] ) ) {
+					$priority = $args['priority'];
+				} else {
+					$priority = 0.9;
+				}
+
+				$content .= '		<priority>' . number_format( $priority, 1 ) . "</priority>\r\n";
+				$content .= "	</url>\r\n";
+			}
+		}
+
+		/**
+		 * Applies filters the_seo_framework_sitemap_extend
+		 *
+		 * @since 2.5.2
+		 */
+		$extend = (string) apply_filters( 'the_seo_framework_sitemap_extend', '' );
+
+		if ( '' !== $extend )
+			$content .= "	" . $extend . "\r\n";
 
 		return $content;
 	}
@@ -570,7 +640,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 				 * Applies filters the_seo_framework_sitemap_throttle_seconds
 				 * @since 2.5.1
 				 */
-				$expiration = (int) apply_filters( 'the_seo_framework_sitemap_throttle_seconds', 60 * 60 );
+				$expiration = (int) apply_filters( 'the_seo_framework_sitemap_throttle_s', 60 * 60 );
 
 				set_transient( $transient, $throttle, $expiration );
 			}

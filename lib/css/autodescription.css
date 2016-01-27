@@ -258,8 +258,14 @@ span.ad-seo .explanation-desc div {
 	padding-bottom: 20px;
 }
 
-.autodescription-metaboxes > form > h1,
-.autodescription-metaboxes > form > h2 {
+.autodescription-metaboxes .top-wrap {
+	width: 100%;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.autodescription-metaboxes .top-wrap > h1,
+.autodescription-metaboxes .top-wrap > h2 {
 	float: left;
 }
 
@@ -312,6 +318,8 @@ span.ad-seo .explanation-desc div {
 	min-width: 28px;
 	min-height: 28px;
 	margin: 3px;
+	-moz-margin-end: 1.5px;
+	-moz-margin-start: 1.5px;
 	padding: 0 4px;
 	border: 1px solid #ccc;
 	line-height: 28px;
@@ -461,5 +469,20 @@ span.ad-seo .explanation-desc div {
 	.autodescription-metaboxes h3 .nav-tab {
 		margin-right: 7px;
 		margin-bottom: -1px;
+	}
+}
+
+/* Firefix */
+@-moz-document url-prefix() {
+	.autodescription-metaboxes .seoframework-default-selected {
+		box-shadow: 0 0 2px 0 #1c9d38;
+	}
+
+	.autodescription-metaboxes .seoframework-warning-selected {
+		box-shadow: 0 0 2px 0 #dd3811;
+	}
+
+	.autodescription-metaboxes legend h4 {
+		margin: 2px 0;
 	}
 }

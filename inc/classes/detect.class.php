@@ -197,12 +197,12 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 			if ( is_string( $themes ) ) {
 				$themes = strtolower( $themes );
-				if ( $theme_parent === $themes || $theme_name === $themes )
+				if ( $themes === $theme_parent || $themes === $theme_name )
 					return true;
 			} else if ( is_array( $themes ) ) {
 				foreach ( $themes as $theme ) {
 					$theme = strtolower( $theme );
-					if ( $theme_parent === $theme || $theme_name === $theme ) {
+					if ( $theme === $theme_parent || $theme === $theme_name ) {
 						return true;
 						break;
 					}
@@ -240,12 +240,12 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		if ( is_string( $themes ) ) {
 			$themes = strtolower( $themes );
-			if ( $theme_parent === $themes || $theme_name === $themes )
+			if ( $themes === $theme_parent || $themes === $theme_name )
 				$themes_cache[$themes] = true;
 		} else if ( is_array( $themes ) ) {
 			foreach ( $themes as $theme ) {
 				$theme = strtolower( $theme );
-				if ( $theme_parent === $theme || $theme_name === $theme ) {
+				if ( $theme === $theme_parent || $theme === $theme_name ) {
 					return $themes_cache[$theme] = true;
 					break;
 				} else {
@@ -451,6 +451,27 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		$found = (bool) file_exists( $path );
 
 		return $has_robots = $found;
+	}
+
+	/**
+	 * Detects presence of sitemap.xml in root folder.
+	 *
+	 * @staticvar $has_map
+	 *
+	 * @since 2.5.2
+	 */
+	public function has_sitemap_xml() {
+
+		static $has_map = null;
+
+		if ( isset( $has_map ) )
+			return $has_map;
+
+		$path = get_home_path() . 'sitemap.xml';
+
+		$found = (bool) file_exists( $path );
+
+		return $has_map = $found;
 	}
 
 	/**

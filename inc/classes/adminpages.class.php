@@ -286,13 +286,15 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 			<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
 			<?php settings_fields( $this->settings_field ); ?>
 
-			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-			<p class="top-buttons">
-				<?php
-				submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
-				submit_button( $this->page_defaults['reset_button_text'], 'secondary autodescription-js-confirm-reset', $this->get_field_name( 'reset' ), false, array( 'id' => '' ) );
-				?>
-			</p>
+			<div class="top-wrap">
+				<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+				<p class="top-buttons">
+					<?php
+					submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
+					submit_button( $this->page_defaults['reset_button_text'], 'secondary autodescription-js-confirm-reset', $this->get_field_name( 'reset' ), false, array( 'id' => '' ) );
+					?>
+				</p>
+			</div>
 
 			<?php do_action( "{$this->pagehook}_settings_page_boxes", $this->pagehook ); ?>
 

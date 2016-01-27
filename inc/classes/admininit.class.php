@@ -688,6 +688,10 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 * @return string
 	 */
 	public function debug_value_wrapper( $value ) {
+
+		if ( ! is_scalar( $value ) )
+			return 'Debug message: not scalar';
+
 		if ( ! $this->the_seo_framework_debug_hidden )
 			return '<span class="wp-ui-notification">' . esc_attr( (string) trim( $value ) ) . '</span>';
 

@@ -127,7 +127,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		 *
 		 * @since 2.3.4
 		 */
-		$revision = '3'; // var_dump() @TODO change to 4 prior to pushing release.
+		$revision = '4';
 
 		/**
 		 * Two different cache keys for two different settings.
@@ -263,8 +263,25 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 						$the_id = '';
 
 						// Trim key to 2 chars.
-						foreach ( $query as $key => $value )
-							$the_id .= substr( $key, 0, 2 ) . '_' . mb_substr( $value, 0, 2 ) . '_';
+						foreach ( $query as $key => $value ) {
+							/**
+							 * If array, combine keys.
+							 *
+							 * @NOTE Fixes unconfirmed bug.
+							 * @since 2.5.2
+							 */
+							if ( is_array( $value ) ) {
+
+								$the_id .= substr( $key, 0, 2 ) . '_';
+
+								//* mb_substr will generate a notice if array to string conversion still takes place. All is good :).
+								foreach ( $value as $v )
+									$the_id .= mb_substr( $v, 0, 2 ) . '_';
+
+							} else {
+								$the_id .= substr( $key, 0, 2 ) . '_' . mb_substr( $value, 0, 2 ) . '_';
+							}
+						}
 
 						//* add Page ID.
 						$the_id .= (string) $this->get_the_real_ID();
