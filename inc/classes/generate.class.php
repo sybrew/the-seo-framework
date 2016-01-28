@@ -1262,6 +1262,11 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			 * @since 2.5.2
 			 */
 			$add_blogname_option = (bool) ! $this->get_option( 'title_rem_additions' );
+
+			//* If theme is doing it wrong, add it anyway in the admin area.
+			if ( is_admin() && ! $this->theme_title_doing_it_right() )
+				$add_blogname_option = true;
+
 			/**
 			 * Applies filters the_seo_framework_add_blogname_to_title.
 			 * @since 2.4.3
@@ -1706,7 +1711,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * Debug parameters.
 		 * @since 2.4.2
 		 */
-		if ( $this->the_seo_framework_debug ) {
+		if ( $this->the_seo_framework_debug && ! $this->doing_sitemap ) {
 			if ( $this->the_seo_framework_debug_hidden )
 				echo "<!--\r\n";
 
@@ -1754,7 +1759,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * @since 2.5.2
 		 */
 		if ( is_feed() )
-			$url = get_permalink();
+			$url = get_permalink( $args['post'] );
 
 		if ( empty( $url ) && ! $args['home'] ) {
 
@@ -1762,7 +1767,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			 * Get url from options
 			 * @since 2.2.9
 			 */
-			if ( $args['get_custom_field'] && ! is_archive() )
+			if ( $args['get_custom_field'] && $this->is_singular() )
 				$url = $this->get_custom_field( '_genesis_canonical_uri' ) ? $this->get_custom_field( '_genesis_canonical_uri' ) : $url;
 
 			if ( empty( $url ) ) {
@@ -1857,10 +1862,12 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		}
 
 		//* Domain Mapping canonical URL
-		$wpmu_url = $this->the_url_wpmudev_domainmap( $path, true );
-		if ( ! empty( $wpmu_url ) && is_array( $wpmu_url ) ) {
-			$url = $wpmu_url[0];
-			$scheme = $wpmu_url[1];
+		if ( empty( $url ) ) {
+			$wpmu_url = $this->the_url_wpmudev_domainmap( $path, true );
+			if ( ! empty( $wpmu_url ) && is_array( $wpmu_url ) ) {
+				$url = $wpmu_url[0];
+				$scheme = $wpmu_url[1];
+			}
 		}
 
 		//* Domain Mapping canonical URL
@@ -1907,7 +1914,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * Debug parameters.
 		 * @since 2.4.2
 		 */
-		if ( $this->the_seo_framework_debug ) {
+		if ( $this->the_seo_framework_debug && ! $this->doing_sitemap ) {
 
 			if ( $this->the_seo_framework_debug_hidden )
 				echo "<!--\r\n";
@@ -2006,11 +2013,11 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			if ( isset( $page_id ) ) {
 				$permalink = get_permalink( $page_id );
 			} else {
-				$permalink = get_permalink( $post->ID );
+				$permalink = get_permalink( $post );
 			}
 		} else {
 			global $wp;
-			$permalink = isset( $wp->request ) ? $wp->request : get_permalink( $post->ID );
+			$permalink = isset( $wp->request ) ? $wp->request : get_permalink( $post );
 		}
 
 		/**
@@ -2018,13 +2025,28 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 */
 		$path = $this->set_url_scheme( $permalink, 'relative' );
 
+		/**
+		 * @since 2.5.2
+		 */
+		static $icl_exists = null;
+
+		if ( ! isset( $icl_exists ) )
+			$icl_exists = (bool) defined( 'ICL_LANGUAGE_CODE' );
+
 		//* WPML support.
-		if ( defined( 'ICL_LANGUAGE_CODE' ) && ! is_admin() && isset( $post->guid ) ) {
+		if ( $icl_exists && ! is_admin() && isset( $post->guid ) )
 			$path = $this->get_relative_wmpl_url( $path, $post );
-		}
+
+		/**
+		 * @since 2.5.2
+		 */
+		static $qt_exists = null;
+
+		if ( ! isset( $qt_exists ) )
+			$qt_exists = (bool) class_exists( 'QTX_Translator' );
 
 		//* qTranslate X support. Doesn't need to work on sitemaps.
-		if ( ! $external && class_exists( 'QTX_Translator' ) ) {
+		if ( ! $external && $qt_exists ) {
 			static $q_config = null;
 
 			if ( ! isset( $q_config ) )
@@ -2075,7 +2097,13 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			if ( 1 === $negotiation_type ) {
 				//* Language is path.
 
-				$icl_gl_exists = function_exists( 'icl_get_languages' );
+				/**
+				 * @since 2.5.2
+				 */
+				static $icl_gl_exists = null;
+
+				if ( ! isset( $icl_gl_exists ) )
+					$icl_gl_exists = (bool) function_exists( 'icl_get_languages' );
 
 				if ( $icl_gl_exists && strpos( $post_guid, 'lang=' ) !== false ) {
 					//* Language is found in query arg.

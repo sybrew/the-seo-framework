@@ -56,8 +56,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		 * PHP 5.2 compat
 		 * @since 2.5.2
 		 */
-		if ( $this->the_seo_framework_debug )
-			add_action( 'admin_footer', 'debug_screens' );
+		add_action( 'admin_footer', array( $this, 'debug_screens' ) );
 	}
 
 	/**
@@ -303,7 +302,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 				//* We're on post.php
 				$title = $this->title( '', '', '', array( 'placeholder' => true, 'notagline' => true ) );
 
-				if ( ! $title_rem_additions ) {
+				if ( ! $title_rem_additions || ! $this->theme_title_doing_it_right() ) {
 					$additions = $blog_name;
 				} else {
 					$additions = '';
@@ -697,17 +696,22 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	/**
 	 * Echo found screens in the admin footer when debugging is enabled.
 	 *
+	 * @uses bool $this->the_seo_framework_debug
+	 * @global array $current_screen
+	 *
 	 * @since 2.5.2
 	 */
-	protected function debug_screens() {
-		global $current_screen;
+	public function debug_screens() {
+		if ( $this->the_seo_framework_debug ) {
+			global $current_screen;
 
-		?><div style="float:right;margin:3em;padding:1em;border:1px solid;background:#fff;color:#000;"><?php
+			?><div style="float:right;margin:3em;padding:1em;border:1px solid;background:#fff;color:#000;"><?php
 
-			foreach( $current_screen as $screen )
-				echo "<p>$screen</p>";
+				foreach( $current_screen as $screen )
+					echo "<p>$screen</p>";
 
-		?></div><?php
+			?></div><?php
+		}
 	}
 
 }

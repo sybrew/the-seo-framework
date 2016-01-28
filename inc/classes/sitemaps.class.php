@@ -44,6 +44,15 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 	protected $pretty_permalinks;
 
 	/**
+	 * Checks if sitemap is being output.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @var bool true if sitemap is being output.
+	 */
+	protected $doing_sitemap = false;
+
+	/**
 	 * Constructor, load parent constructor and set up caches.
 	 */
 	public function __construct() {
@@ -137,14 +146,16 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			 *
 			 * @since 2.2.9
 			 */
-			if ( isset( $current_blog ) && ( $current_blog->spam == 1 || $current_blog->deleted == 1 ) )
+			if ( isset( $current_blog ) && ( 1 == $current_blog->spam || 1 == $current_blog->deleted ) )
 				return;
 
 			global $wp_query;
 
-			if ( isset( $wp_query->query_vars['the_seo_framework_sitemap'] ) && $wp_query->query_vars['the_seo_framework_sitemap'] === 'xml' ) {
+			if ( isset( $wp_query->query_vars['the_seo_framework_sitemap'] ) && 'xml' === $wp_query->query_vars['the_seo_framework_sitemap'] ) {
 				// Don't let WordPress think this is 404.
 				$wp_query->is_404 = false;
+
+				$this->doing_sitemap = true;
 
 				return $this->output_sitemap();
 			}
@@ -162,7 +173,14 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		//* Fetch sitemap content.
 		$xml_content = $this->get_sitemap_content();
 
-		header( 'Content-type: text/xml; charset=utf-8' );
+		$setheader = true;
+
+		//* Don't crash the system when debugging
+		if ( $this->the_seo_framework_debug && headers_sent() )
+			$setheader = false;
+
+		if ( false !== $setheader )
+			header( 'Content-type: text/xml; charset=utf-8' );
 
 		echo $xml_content . "\r\n";
 

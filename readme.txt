@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl
 Requires at least: 3.6.0
 Tested up to: 4.5.0
-Stable tag: 2.5.1
+Stable tag: 2.5.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -361,7 +361,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 
 * This is the biggest update so far, with over a hundred noticeable changes and with many functions added to remove repeated calls and replace them with memory stored functions.
 * This update of The SEO Framework brings you Feed excerpt generation as well as options to add backlinks in the feed. You can now also add your Pinterest verification code.
-* Also, a lot of WordPress behavior and plugin detection has been reworked, improved and has been put to great use within the option pages to eliminate confusion by removing options if they have no effect.
+* Also, a lot of the WordPress behavior detection and plugin detection has been reworked, improved and has been put to great use within the option pages to eliminate confusion by removing options if they have no effect.
 * And last but not least, due to popular demand an extra option has been added to change the Title generation, although it decouples all your pages within your website.
 * Oh, and many minor improvements and bug fixes have also been put into effect, including a few more important WooCommerce shop page fix and a proud-to-be-of 20% overall performance improvement.
 
@@ -403,7 +403,9 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Improved: Various comparison checks are sped up.
 * Improved: Added trimming of spaces around the blogname and title in the Title and Description.
 * Improved: The character counter and settings changes is much more responsive and now listens to more browser interactions.
+* Improved: Greatly reduced sitemap generation time by caching more variables.
 * Changed: Small textual change to make things more clear in the Description Settings.
+* Fixed: Custom Canonical URL now works again when using WPMUdev Domain Mapping.
 * Fixed: Firefox checkbox colors are now also visible through shadows, when FireFox officially supports checkbox styling (which has been in question for [almost 8 years](https://bugzilla.mozilla.org/show_bug.cgi?id=418833)!) it will be removed.
 * Fixed: Firefox separator radio button margins were doubled.
 * Fixed: Firefox unnecessary white space above separator buttons.
@@ -441,9 +443,10 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Added: New cached function: `AutoDescription_PostData::get_blogdescription()`.
 * Added: New function: `AutoDescription_Generate::fetch_locale()`, fetches correct Open Graph locale based on WordPress settings or through parameter.
 * Added: New cached function: `AutoDescription_Detect::can_i_use()`. Dump your multidimensional array of functions, classes and constants in this function and it will calculate if they can all be used, which also caches the matches for these checks are quite intensive.
-* Added: New cached function: `AutoDescription_Detect::is_singular()`. Special is_singular check which works both front-end as backend. This also tells that the WooCommerce Shop page is singular instead of an archive.
+* Added: New cached function: `AutoDescription_Detect::is_singular()`. Special is_singular check which works on both front-end as backend. This also tells that the WooCommerce Shop page is singular instead of an archive.
 * Added: Many more functions, which aren't important enough to be highlighted.
 * Added: `post_id` filterable argument on `AutoDescription_Generate::get_image()`.
+* Added: When The SEO Framework debugger is activated, the screen names are shown at the bottom-right in the admin screens.
 * Optimized: Many comparisons have been converted into type sensitive statements, this is less forgiving to erroneous option array filters.
 * Changed: Reduced sitemap ping throttle transient name length.
 * Changed: When the first parameter of `AutoDescription_PostData::get_excerpt_by_id()` is filled in, it will now not only escape the attributes, but strip the whole content from its tags and shortcodes.
@@ -461,6 +464,8 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Fixed: Debugger no longer generates an error when fetching a non-existing excerpt on the front page.
 * Fixed: PHP Warning on transient generation when displaying multiple CPT on a page.
 * Fixed: PHP Fatal error when debugging a taxonomy.
+* Fixed: PHP Fatal errors when debugging the sitemap (unrelated fix).
+* Removed: Generic debug messages in the sitemap, these caused the sitemap syntax to fail on generation.
 * Removed: Doing it Wrong notice in the footer when the theme is outputting the title wrong on WordPress 4.4.0 and lower. This has been exchanged for a small html comment.
 * Removed: Genesis check for `wp_title` as it now supports the much required title tag.
 * Removed: IS_HMPL constant check, now only listens to the filter.
@@ -471,6 +476,10 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Note: On many places, `empty()` has been exchanged for type sensitive checks. If you do not wish to use a parameter, always input the default to maintain expected behavior.
 * Note: The description excerpt cache version has been bumped to refresh all excerpts.
 * Cleaned up code.
+
+**Notes:**
+
+* I am aware that the GeoDirectory plugin title settings are ignored by this plugin. A compatibility update is planned. The archive is also set to noindex
 
 = 2.5.1 - Undocumented Properties =
 

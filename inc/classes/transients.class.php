@@ -502,7 +502,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 
 		if ( is_bool( $dir ) && false === get_transient( $this->theme_doing_it_right_transient ) ) {
 
-			//* Convert $dir to 1 or 0 as transients can be false on failure.
+			//* Convert $dir to string 1 or 0 as transients can be false on failure.
 			$dir = $dir ? '1' : '0';
 
 			/**

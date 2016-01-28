@@ -112,6 +112,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		);
 
 		foreach ( $order_keys as $key ) {
+			//* Put value in $offset, if not false, break loop.
 			if ( false !== ( $offset = array_search( $key, $column_keys ) ) )
 				break;
 		}
