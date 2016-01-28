@@ -607,7 +607,6 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 					} else if ( is_array( $value ) ) {
 						echo $this->debug_key_wrapper( $key ) . ' => ';
 						echo "Array[\r\n";
-
 						foreach ( $value as $k => $v ) {
 							if ( '' === $v ) {
 								echo $this->debug_key_wrapper( $k ) . ' => ';

@@ -204,7 +204,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 			$page = $args_split[1];
 
 			// Only add nonce on post/page edit screen
-			if ( $page === 'is_post_page' ) {
+			if ( 'is_post_page' === $page ) {
 				wp_nonce_field( 'inpost_seo_save', 'hmpl_ad_inpost_seo_nonce' );
 			} else {
 				// This shouldn't happen.
@@ -224,13 +224,12 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 				$term_labels = $this->get_tax_labels( $tax_type );
 
 				if ( isset( $term_labels ) ) {
-					$type = isset( $term_labels->singular_name ) ? $term_labels->singular_name : $term_labels->name;
-				} else {
-					// Fallback to Page as it is generic.
-					$type = __( 'Page', 'autodescription' );
+					$type = isset( $term_labels->singular_name ) ? $term_labels->singular_name : null;
+					$type = ! isset( $type ) && isset( $term_labels->name ) ? $term_labels->name : $type;
 				}
+			}
 
-			} else {
+			if ( ! isset( $type ) ) {
 				// Fallback to Page as it is generic.
 				$type = __( 'Page', 'autodescription' );
 			}
@@ -346,7 +345,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		<table class="form-table">
 			<tbody>
 
-				<?php if ( false !== $this->inpost_seo_bar && 'above' === $this->inpost_seo_bar ) : ?>
+				<?php if ( 'above' === $this->inpost_seo_bar ) : ?>
 				<tr>
 					<th scope="row" valign="top"><?php _e( 'Doing it Right', 'autodescription' ); ?></th>
 					<td>
@@ -413,7 +412,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 					</td>
 				</tr>
 
-				<?php if ( false !== $this->inpost_seo_bar && 'below' === $this->inpost_seo_bar ) : ?>
+				<?php if ( 'below' === $this->inpost_seo_bar ) : ?>
 				<tr>
 					<th scope="row" valign="top"><?php _e( 'Doing it Right', 'autodescription' ); ?></th>
 					<td>
@@ -572,7 +571,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		$canonical_placeholder = $this->the_url_from_cache( '', $post_id, false, false );
 
 		?>
-		<?php if ( false !== $this->inpost_seo_bar && 'above' === $this->inpost_seo_bar ) : ?>
+		<?php if ( 'above' === $this->inpost_seo_bar ) : ?>
 		<p>
 			<strong><?php _e( 'Doing it Right', 'autodescription' ); ?></strong>
 			<div><?php echo $this->post_status( $post_id, 'inpost', true ); ?></div>
@@ -658,7 +657,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 			<input class="large-text" type="text" name="autodescription[redirect]" id="genesis_redirect" value="<?php echo esc_url( $this->get_custom_field( 'redirect' ) ); ?>" />
 		</p>
 
-		<?php if ( false !== $this->inpost_seo_bar && 'below' === $this->inpost_seo_bar ) : ?>
+		<?php if ( 'below' === $this->inpost_seo_bar ) : ?>
 		<p>
 			<strong><?php _e( 'Doing it Right', 'autodescription' ); ?></strong>
 			<div><?php echo $this->post_status( $post_id, 'inpost', true ); ?></div>

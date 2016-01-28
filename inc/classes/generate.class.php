@@ -256,6 +256,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 */
 	public function generate_description_from_id( $args = array(), $escape = true, $_escape = 'depr' ) {
 
+		//* @TODO remove @since 2.6.0
 		if ( 'depr' !== $_escape ) {
 			_deprecated_argument( __FUNCTION__, $this->the_seo_framework_version( '2.5.2' ), 'Use 2nd argument for escape.' );
 			$escape = (bool) $_escape;
@@ -571,11 +572,13 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 */
 	public function generate_excerpt( $page_id, $term = '', $max_char_length = 155, $_max_char_length = 'depr', $__max_char_length = 'depr' ) {
 
+		//* @TODO remove @since 2.6.0
 		if ( 'depr' !== $__max_char_length ) {
 			_deprecated_argument( __FUNCTION__, $this->the_seo_framework_version( '2.5.2' ), 'Use 3nd argument for max_car_length.' );
 			$max_char_length = (int) $__max_char_length;
 		}
 
+		//* @TODO remove @since 2.6.0
 		if ( 'depr' !== $_max_char_length ) {
 			_deprecated_argument( __FUNCTION__, $this->the_seo_framework_version( '2.5.2' ), 'Removed last 2 arguments.' );
 		}
@@ -1313,6 +1316,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 	/**
 	 * Fetches title from special fields, like other plugins.
+	 * Used before and has priority over custom fields.
+	 * Front end only.
 	 *
 	 * @since 2.5.2
 	 *
@@ -1322,8 +1327,10 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		$title = '';
 
-		if ( $this->is_ultimate_member_user_page() && um_is_core_page( 'user' ) && um_get_requested_user() ) {
-			$title = um_user( 'display_name' );
+		if ( ! is_admin() ) {
+			if ( $this->is_ultimate_member_user_page() && um_is_core_page( 'user' ) && um_get_requested_user() ) {
+				$title = um_user( 'display_name' );
+			}
 		}
 
 		return $title;
@@ -1398,7 +1405,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			 */
 			$term_labels = $this->get_tax_labels( $tax_type );
 
-			if ( isset( $term_labels ) ) {
+			if ( isset( $term_labels ) && isset( $term_labels->singular_name ) ) {
 				$title = $term_labels->singular_name . ': ' . $term_name;
 			} else {
 				/* translators: Front-end output. */
@@ -1656,9 +1663,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 */
 		if ( empty( $title ) ) {
 			$post = get_post( $id, OBJECT );
-
 			$title = isset( $post->post_title ) ? $post->post_title : '';
-			$id = isset( $post->ID ) ? $post->ID : 0;
 		}
 
 		if ( $escape ) {
@@ -2457,14 +2462,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		$check = (bool) empty( $args['disallowed'] );
 
-		/**
-		 * 1. Fetch image from featured
-		 *
-		 * Fetch image if
-		 * + override is not false (always go)
-		 * + no image found (always go)
-		 * + is not front page AND frontpage override is set to true
-		 */
+		//* 1. Fetch image from featured
 		if ( empty( $image ) && ( $check || ! in_array( 'featured', $args['disallowed'] ) ) )
 			$image = $this->get_image_from_post_thumbnail( $args );
 
@@ -2529,6 +2527,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		//* Passing back the defaults reduces the memory usage.
 		if ( empty( $defaults ) ) {
 			$defaults = array(
+				'post_id'	=> $this->get_the_real_ID(),
 				'image'		=> '',
 				'size'		=> 'full',
 				'icon'		=> false,
@@ -2545,6 +2544,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			return $defaults;
 
 		//* Array merge doesn't support sanitation. We're simply type casting here.
+		$args['post_id'] 	= isset( $args['post_id'] ) 	? (int) $args['post_id'] 		: $defaults['post_id'];
 		$args['image'] 		= isset( $args['image'] ) 		? (string) $args['image'] 		: $defaults['image'];
 		$args['size'] 		= isset( $args['size'] ) 		? $args['size'] 				: $defaults['size']; // Mixed.
 		$args['icon'] 		= isset( $args['icon'] ) 		? (bool) $args['icon'] 			: $defaults['icon'];
@@ -2567,16 +2567,12 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 */
 	public function get_image_from_post_thumbnail( $args ) {
 
-		$image = '';
-
 		if ( ! isset( $args['post_id'] ) )
 			$args['post_id'] = $this->get_the_real_ID();
 
-		if ( has_post_thumbnail( $args['post_id'] ) ) {
-			$id = get_post_thumbnail_id( $args['post_id'] );
+		$id = get_post_thumbnail_id( $args['post_id'] );
 
-			$image = $this->parse_og_image( $id, $args );
-		}
+		$image = $id ? $this->parse_og_image( $id, $args ) : '';
 
 		return $image;
 	}
@@ -2615,7 +2611,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	/**
 	 * Parses OG image to correct size
 	 *
-	 * @staticvar string $called Checks if image ID has already been fetched
+	 * @staticvar string $called Checks if image ID has already been fetched (to prevent duplicate output on WooCommerce).
 	 *
 	 * @param int $id The attachment ID.
 	 * @param array $args The image args
@@ -2672,7 +2668,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			// Get path of image and load it into the wp_get_image_editor
 			$i_file_path = get_attached_file( $id );
 
-			$i_file_old_name	= basename( get_attached_file( $id ));
+			$i_file_old_name	= basename( get_attached_file( $id ) );
 			$i_file_ext			= pathinfo( $i_file_path, PATHINFO_EXTENSION );
 
 			if ( ! empty( $i_file_ext ) ) {
@@ -2692,7 +2688,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				$upload_basedir = $upload_dir['basedir'];
 
 				// Dub this $new_image
-				$new_image_url = preg_replace( '/' . preg_quote( $upload_basedir, '/') . '/', $upload_url, $new_image_dirfile );
+				$new_image_url = preg_replace( '/' . preg_quote( $upload_basedir, '/' ) . '/', $upload_url, $new_image_dirfile );
 
 				// Generate file if it doesn't exists yet.
 				if ( ! file_exists( $new_image_dirfile ) ) {

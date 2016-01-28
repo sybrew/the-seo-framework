@@ -359,16 +359,16 @@ Transporting Terms and Taxonomies data currently isn't supported.
 
 **Summarized:**
 
-* This is the biggest update so far, with over a hundred noticable changes and with many functions added to remove repeated calls and replace them with memory stored functions.
-* This update of The SEO Framework brings you Feed excerpt generation as well as options to add backlinks in the feed. You can now also add your pinterest verification code.
-* Also, a lot of WordPress behavior and plugin detection has been reworked, improved and has been put to great use within the option pages to elliminate confusion by removing options if they have no effect.
+* This is the biggest update so far, with over a hundred noticeable changes and with many functions added to remove repeated calls and replace them with memory stored functions.
+* This update of The SEO Framework brings you Feed excerpt generation as well as options to add backlinks in the feed. You can now also add your Pinterest verification code.
+* Also, a lot of WordPress behavior and plugin detection has been reworked, improved and has been put to great use within the option pages to eliminate confusion by removing options if they have no effect.
 * And last but not least, due to popular demand an extra option has been added to change the Title generation, although it decouples all your pages within your website.
 * Oh, and many minor improvements and bug fixes have also been put into effect, including a few more important WooCommerce shop page fix and a proud-to-be-of 20% overall performance improvement.
 
 **SEO Tip of the Update:**
 
 * If you are writing blog posts, take a look at the rising trends at Google Trends before it's all over the internet.
-* Write about any of the mtrends once in a while, and if the trend kicks off your website might just be exposed to many people.
+* Write about any of the trends once in a while, and if the trend kicks off your website might just be exposed to many people.
 
 **For everyone:**
 
@@ -377,7 +377,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Added: Feed option to add a non-followed backlink to the feed content to counter scrapers and bad links. Default enabled on new installations.
 * Added: The custom excerpt field (if available) is now taken into account before generating one from the content.
 * Added: Title additions options, which allows you to remove the blogname from all pages (except the home page, which has its own option already). This option is only available to themes which are doing it right. Default disabled and recommended not to be used, not even if the SEO data transfer went otherwise than expected.
-* Added: The custom inpost titles now also listen to the new Title addition options.
+* Added: The custom in-post titles now also listen to the new Title addition options.
 * Added: The dynamic title additions placeholder has also been put into effect when the Title Additions Location has been set in reverse order. This effectively also eliminates confusion.
 * Added: Dynamic title additions left/right options based on being enabled or disabled.
 * Added: PHP 5.2 compatibility, which is actually very much outdated. PHP 5.2 will henceforth be (syntax-wise) supported until at least March 2016. Please [stay](http://php.net/eol.php) [updated](http://php.net/supported-versions.php)!
@@ -389,7 +389,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Added: The generation comments within the Sitemap output are now translatable.
 * Added: The plugin usage comments within the HTML output are now translatable.
 * Added: Translation comments aimed at front-end translations, translators can now easily find high-priority translations through the "Front-end" filter keyword.
-* Added: Removal of adjecent post rel links, this is now managed by The SEO Framework.
+* Added: Removal of WordPress Core adjacent post rel links, this is now managed by The SEO Framework.
 * Added: Implemented, but left deactivated, the SEO bar in the Post Edit screens. You can enable this through a filter, found at [The SEO Framework filters](https://theseoframework.com/docs/api/filters/).
 * Added: Ultimate Member profile titles compatibility.
 * Added: A lot more sitemap plugins can be detected.
@@ -406,7 +406,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Changed: Small textual change to make things more clear in the Description Settings.
 * Fixed: Firefox checkbox colors are now also visible through shadows, when FireFox officially supports checkbox styling (which has been in question for [almost 8 years](https://bugzilla.mozilla.org/show_bug.cgi?id=418833)!) it will be removed.
 * Fixed: Firefox separator radio button margins were doubled.
-* Fixed: Firefox unecessary white space above separator buttons.
+* Fixed: Firefox unnecessary white space above separator buttons.
 * Fixed: Sitemap `lastmod` dates could be in an incorrect syntax due to WordPress translations.
 * Fixed: Some other plugins pop up annoying notices over the controls within the SEO Framework (outside of their plugin domain!). They've been pushed down. Because of this fix the title is also pushed in-line to go beneath the Screen Options on tablets, a welcome side effect.
 * Fixed: og:locale content when a translation plugin has incorrectly changed the locale code of WordPress.
@@ -416,13 +416,13 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Fixed: Robots.txt URL Location missed a slash with special permalink settings.
 * Fixed: WPML Negotiation Type miscalculation, Different Domain Language URL format was treated as the subdirectory URL format.
 * Fixed: Invalid HTML around the Local Search Settings question mark in the Inpost Metabox.
-* Fixed: Twitter card type wasn't properly sanitized. This didn't cause a security issue as the option value is propperly escaped before it's sent to the database and on output. Hurray for Framework.
-* Fixed: Settings radioboxes now contain a second fall back to default if empty value is and was given.
-* Fixed: Missing characters at the end of the title when the theme is using an html entity that has characters like the the end of the title name.
+* Fixed: Twitter card type wasn't properly sanitized. This didn't cause a security issue as the option value is properly escaped before it's sent to the database and on output. Hurray for Framework.
+* Fixed: Settings radio boxes now contain a second fall back to default if empty value is and was given.
+* Fixed: Missing characters at the end of the title when the theme is using an html entity that has characters like the end of the title name.
 * Fixed: Day date archives cache keys could've been too long on old WordPress installations.
 * Fixed: WooCommerce main shop page now listens to all the assigned page SEO settings.
 * Fixed: WooCommerce main shop page description title is now correct.
-* Fixed: When a static front page has been asigned, the Posts Page can now listen to the redirect option.
+* Fixed: When a static front page has been assigned, the Posts Page can now listen to the redirect option.
 * Fixed: Temporarily added lines back (which were removed in WordPress 4.4) beneath the option tabs in the metaboxes on mobile screens.
 * Fixed: Dynamic Title Placeholder input text visual glitch when the input text was overflowing.
 * Fixed: Miscalculation in multibyte string positioning when using non UTF-8 characters and when the server didn't support mbstring. This could've caused a miscalculation for the title when the theme was doing it wrong.
@@ -435,7 +435,7 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Added: More filterable image arguments.
 * Added: Two Image fallback filters.
 * Added: Extra title argument to disable sanitation. Requires santition afterwards.
-* Added: If the theme you're using is doing the `wp_title()` function wrong, the title parameters are now added in a HTML comment (e.g. '&lt;!-- Title diw: | true right --&gt;') in the theme's footer for developer debugging purposes.
+* Added: If the theme you're using is doing the `wp_title()` function wrong, the title parameters are now added in a HTML comment (i.e. e.g. `&lt;!-- Title diw: | true right --&gt;`) in the theme's footer for developer debugging purposes.
 * Added: Sanitation for effectively removing spaces and html tags, `s_no_html_space`.
 * Added: With up to 140 calls in a single load in the admin area, a new cached function has arrived: `AutoDescription_PostData::get_blogname()`. Effectively reduced RAM usage by 800kB with 100 posts displayed.
 * Added: New cached function: `AutoDescription_PostData::get_blogdescription()`.
@@ -443,7 +443,8 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Added: New cached function: `AutoDescription_Detect::can_i_use()`. Dump your multidimensional array of functions, classes and constants in this function and it will calculate if they can all be used, which also caches the matches for these checks are quite intensive.
 * Added: New cached function: `AutoDescription_Detect::is_singular()`. Special is_singular check which works both front-end as backend. This also tells that the WooCommerce Shop page is singular instead of an archive.
 * Added: Many more functions, which aren't important enough to be highlighted.
-* Optimized: Many comparisons have been converted into type sensitive statements, this is less forgiving to errorous option array filters.
+* Added: `post_id` filterable argument on `AutoDescription_Generate::get_image()`.
+* Optimized: Many comparisons have been converted into type sensitive statements, this is less forgiving to erroneous option array filters.
 * Changed: Reduced sitemap ping throttle transient name length.
 * Changed: When the first parameter of `AutoDescription_PostData::get_excerpt_by_id()` is filled in, it will now not only escape the attributes, but strip the whole content from its tags and shortcodes.
 * Changed: `AudoDescription_Generate::description_from_custom_field()` can no longer return an array with page for posts data.
@@ -453,19 +454,19 @@ Transporting Terms and Taxonomies data currently isn't supported.
 * Improved: `AutoDescription_Admin_Init::add_post_state` no longer uses `global $post`.
 * Improved: Cleaned up debug messages.
 * Updated: Doing it Wrong notice to the current standards.
-* Fixed: Unlikely confict in the default site options and warned site options. This should only have caused a problem if the (protected) warned settings were fetched before admin_init.
+* Fixed: Unlikely conflict in the default site options and warned site options. This should only have caused a problem if the (protected) warned settings were fetched before admin_init.
 * Fixed: Check for error in breadcrumbs is now also applicable for the term fetch, instead of doubling the cat check.
 * Fixed: Empty values can now be correctly debugged for value type through the debugger.
 * Fixed: Debugger no longer generates an error when parsing boolean values.
 * Fixed: Debugger no longer generates an error when fetching a non-existing excerpt on the front page.
-* Fixed: PHP Warning on transient generation when displaying mulitple CPT on a page.
+* Fixed: PHP Warning on transient generation when displaying multiple CPT on a page.
 * Fixed: PHP Fatal error when debugging a taxonomy.
 * Removed: Doing it Wrong notice in the footer when the theme is outputting the title wrong on WordPress 4.4.0 and lower. This has been exchanged for a small html comment.
 * Removed: Genesis check for `wp_title` as it now supports the much required title tag.
 * Removed: IS_HMPL constant check, now only listens to the filter.
-* Removed: Override and frontpage image args as it has been replaced with a more extensive and easier to understand filter.
+* Removed: Override and front-page image arguments as it has been replaced with a more extensive and easier to understand filter.
 * Deprecated: `AudoDescription_Generate::generate_description_from_id()` 2nd argument. Exchanged for escape. 3rd parameter will still work until 2.6.0.
-* Deprecated: `AudoDescription_Generate::generate_excerpt()` 5th argument. Exchanged for char length. 3rd parameter will still work until 2.6.0.
+* Deprecated: `AudoDescription_Generate::generate_excerpt()` 3rd argument. Exchanged for char length. 4th and 5th parameters are also deprecated and will work as max_char_length until 2.6.0.
 * Deprecated: `AutoDescription_Admin_Init::supported_screens` as it isn't used anymore. This also deprecates the `the_seo_framework_supported_screens` filter.
 * Note: On many places, `empty()` has been exchanged for type sensitive checks. If you do not wish to use a parameter, always input the default to maintain expected behavior.
 * Note: The description excerpt cache version has been bumped to refresh all excerpts.
