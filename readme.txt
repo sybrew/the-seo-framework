@@ -1,7 +1,7 @@
 === The SEO Framework ===
 Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
-Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl
+Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl, feed
 Requires at least: 3.6.0
 Tested up to: 4.5.0
 Stable tag: 2.5.2
@@ -69,7 +69,7 @@ We have also provided an API documentation located at [The SEO Framework API Doc
 * Publishing and editing dates, accurate to the day.
 * Link relationships, with full WPMUdev Domain Mapping and HTTPS support.
 * Various Facebook and Twitter Meta tags.
-* Simple Sitemap with Pages, Posts and Custom Post Types (CPT), which listens to the inpost settings.
+* Simple Sitemap with Pages, Posts and Custom Post Types (CPT), which listens to the in-post settings.
 * Feed excerpts and backlinks to prevent content scraping.
 
 **This plugin goes further, behind the screens it:**
@@ -155,6 +155,8 @@ The output will be stored for each page, if you've edited a page the page output
 * Admin screen: Posts, Pages, Taxonomies, Terms, Custom Post Types.
 * Front-end: Every page, post, taxonomy, term, custom post type, search request, 404, etc.
 * MultiSite, this plugin is in fact built upon one.
+* Detection of robots.txt and sitemap.xml files.
+* Detection of theme Title "doing it right" (or wrong).
 
 **Plugins:**
 
@@ -266,20 +268,15 @@ Please note that a free plugin is underway which will allow you to change all fi
 = No ads! Why? =
 
 Nope, no ads! No nags! No links! Never!
-Why? Because I hate them, probably more than you do. :(
-
+Why? Because I hate them, probably more than you do.
 I also don't want to taint your website from the inside, like many popular plugins do.
 Read more about this on the [Plugin Guidelines, Section 7](https://wordpress.org/plugins/about/guidelines/).
-
-***This plugin does leave one link to theseoframework.com in the plugin activation page. But that's OK, right? <3***
-
-Advertisements are made to control your behavior, slowly and certainly you'll be persuaded by them, even if you don't like the product behind it. Ew! D:
 
 ***But how do you make a living?***
 
 Currently, The SEO Framework is non-profit.
 This plugin was first released to the public in March 15th, 2015. From there it has grown, from 179 lines of code, to more than 17100 lines.
-With over 640,000 characters of code written, this plugin is absolutely a piece of art in my mind.
+With over 600,000 characters of code written, this plugin is absolutely a piece of art in my mind.
 And that's what it should stay, (functional) art.
 I trust that people are good at heart and will tell their friends and family about the things they enjoy the most, what they're excited about, what they find beneficial or even beautiful.
 
@@ -297,33 +294,26 @@ Nope! Only premium extensions. These are being developed.
 
 This plugin is built to be an all-in-one SEO solution, so:
 
-No advertisements about the premium extensions will be placed within this plugin.
-No features will be removed or replaced for premium-only features.
-The premium extensions will most likely only be used for big-business SEO. Which are very difficult to develop and which will confuse most users anyway.
+1. No advertisements about the premium extensions will be placed within this plugin.
+1. No features will be removed or replaced for premium-only features.
+1. The premium extensions will most likely only be used for big-business SEO. Which are very difficult to develop and which will confuse most users anyway.
 
 = I've heard about an extension manager, what's that? =
 
 Currently it's not available. When it is, it will allow you to download and activate extensions for The SEO Framework. It will support both multisite and single-site and the registration will be based on the Akismet plugin.
 
-= I've heard that X SEO plugin does Y, why doesn't The SEO Framework do Y? =
+= The sitemap doesn't contain categories, images, news, etc. is this OK? =
 
-I have no idea what you're talking about! What's X and what's Y? Silly :3.
-Please be more elaborate in [the support forums](https://wordpress.org/support/plugin/autodescription), let's get Y working in The SEO Framework (if reasonable)!
-
-= The sitemap doesn't contain categories, is this OK? =
-
-This is not a problem and is currently done so by design to safe processing power. Search Engines love crawling WordPress because its structure is consistent and well known.
-The lack of categories in the sitemap is currently extensively covered through a breadcrumb script output on every post which has a category. This way Search Engines will know of the existence of the category and will index it.
+This is not a problem. Search Engines love crawling WordPress because its structure is consistent and well known.
+If a visitor can't find a page, why would a Search Engine? Don't rely on your sitemap, but on your content and website's useability.
 
 = What's does the application/ld+json script do? =
 
 The LD+Json scripts are Search Engine helpers which tell Search Engines how to connect and index the site. They tell the Search Engine if your site contains an internal search engine, what sites you're socially connected to and what page structure you're using.
 
-= My home page title is different from the og:title, or doesn't do what I told it to. =
+= The (home page) title is different from the og:title, or doesn't do what I want or told it to. =
 
 The theme you're using is using outdated standards and is therefore doing it wrong. Inform your theme author about this issue.
-
-**This is very, very bad for your website's SEO value.**
 
 Give the theme author this link: https://codex.wordpress.org/Title_Tag
 And this link: https://make.wordpress.org/themes/2015/08/25/title-tag-support-now-required/
@@ -350,8 +340,7 @@ If you wish to remove only my name from your HTML code, here's the filter:
 = I want to transport SEO data from other plugins to The SEO Framework, how do I do this? =
 
 Please refer to this small guide: [SEO Data Migration](http://theseoframework.com/docs/seo-data-migration/).
-
-Transporting Terms and Taxonomies data currently isn't supported.
+Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
@@ -637,4 +626,4 @@ Read how to here: [The SEO Framework Settings API](http://theseoframework.com/do
 
 = Stay updated with the latest version before it's released? =
 
-The beta is available [on Github](https://github.com/sybrew/the-seo-framework). Please note that changes might not reflect the final outcome of the full version release.
+If there's a beta, it will be available [on Github](https://github.com/sybrew/the-seo-framework). Please note that changes there might not reflect the final outcome of the full version release.

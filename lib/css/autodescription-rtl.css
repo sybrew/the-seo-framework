@@ -1,9 +1,9 @@
  /**
   * WooCommerce fix
   */
- table.wp-list-table .column-name {
- 	width: 15%;
- }
+table.wp-list-table .column-name {
+	width: 15%;
+}
 
  table.wp-list-table .column-is_in_stock,
  table.wp-list-table .column-sku,

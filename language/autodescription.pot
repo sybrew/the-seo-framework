@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the The SEO Framework package.
 msgid ""
 msgstr ""
-"Project-Id-Version: The SEO Framework 2.5.1\n"
+"Project-Id-Version: The SEO Framework 2.5.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/autodescription\n"
-"POT-Creation-Date: 2016-01-26 23:39:28+00:00\n"
+"POT-Creation-Date: 2016-01-29 03:30:18+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,19 +12,19 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: inc/classes/admininit.class.php:111
+#: inc/classes/admininit.class.php:108
 msgid "No Search"
 msgstr ""
 
-#: inc/classes/admininit.class.php:335
+#: inc/classes/admininit.class.php:331
 msgid "The changes you made will be lost if you navigate away from this page."
 msgstr ""
 
-#: inc/classes/admininit.class.php:336
+#: inc/classes/admininit.class.php:332
 msgid "Are you sure you want to reset all SEO settings to their defaults?"
 msgstr ""
 
-#: inc/classes/admininit.class.php:526
+#: inc/classes/admininit.class.php:522
 msgctxt "e.g. en for English, nl for Dutch, fi for Finish, de for German"
 msgid "en"
 msgstr ""
@@ -85,8 +85,8 @@ msgstr ""
 msgid "Knowledge Graph Settings"
 msgstr ""
 
-#: inc/classes/adminpages.class.php:480 inc/classes/inpost.class.php:388
-#: inc/classes/inpost.class.php:616
+#: inc/classes/adminpages.class.php:480 inc/classes/inpost.class.php:387
+#: inc/classes/inpost.class.php:615
 msgid "Robots Meta Settings"
 msgstr ""
 
@@ -102,191 +102,191 @@ msgstr ""
 msgid "Feed Settings"
 msgstr ""
 
-#: inc/classes/doingitright.class.php:236
+#: inc/classes/doingitright.class.php:237
 msgid "Post"
 msgstr ""
 
-#: inc/classes/doingitright.class.php:240
-#: inc/classes/doingitright.class.php:278
-#: inc/classes/doingitright.class.php:283 inc/classes/inpost.class.php:230
-#: inc/classes/inpost.class.php:235 inc/classes/metaboxes.class.php:1505
+#: inc/classes/doingitright.class.php:241
+#: inc/classes/doingitright.class.php:279
+#: inc/classes/doingitright.class.php:284 inc/classes/inpost.class.php:234
+#: inc/classes/metaboxes.class.php:1505
 msgid "Page"
 msgstr ""
 
-#: inc/classes/doingitright.class.php:344
+#: inc/classes/doingitright.class.php:345
 msgid "Title:"
 msgstr ""
 
-#: inc/classes/doingitright.class.php:345
+#: inc/classes/doingitright.class.php:346
 msgid "Description:"
 msgstr ""
 
-#: inc/classes/doingitright.class.php:346
+#: inc/classes/doingitright.class.php:347
 msgid "Index:"
 msgstr ""
 
-#: inc/classes/doingitright.class.php:347
+#: inc/classes/doingitright.class.php:348
 msgid "Follow:"
 msgstr ""
 
-#: inc/classes/doingitright.class.php:348
+#: inc/classes/doingitright.class.php:349
 msgid "Archive:"
 msgstr ""
 
-#: inc/classes/doingitright.class.php:349
+#: inc/classes/doingitright.class.php:350
 msgid "Redirect:"
 msgstr ""
 
-#: inc/classes/doingitright.class.php:485
+#: inc/classes/doingitright.class.php:486
 msgctxt "Generated"
 msgid "G"
 msgstr ""
 
-#: inc/classes/doingitright.class.php:487
+#: inc/classes/doingitright.class.php:488
 msgid "Generated: Automatically generated."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:496
+#: inc/classes/doingitright.class.php:497
 msgid "far too short."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:499
+#: inc/classes/doingitright.class.php:500
 msgid "too short."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:502
+#: inc/classes/doingitright.class.php:503
 msgid "too long."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:505
+#: inc/classes/doingitright.class.php:506
 msgid "far too long."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:508
+#: inc/classes/doingitright.class.php:509
 msgid "good."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:529
+#: inc/classes/doingitright.class.php:530
 msgid "%s is used %d times."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:536
+#: inc/classes/doingitright.class.php:537
 msgid "Length is far too short."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:539
+#: inc/classes/doingitright.class.php:540
 msgid "Length is too short."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:544
+#: inc/classes/doingitright.class.php:545
 msgid "Length is too long."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:549
+#: inc/classes/doingitright.class.php:550
 msgid "Length is far too long."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:552
+#: inc/classes/doingitright.class.php:553
 msgid "Length is good."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:558
+#: inc/classes/doingitright.class.php:559
 msgid "%s is being indexed."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:567
+#: inc/classes/doingitright.class.php:568
 msgid "But you've disabled indexing for the whole site."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:572
+#: inc/classes/doingitright.class.php:573
 msgid "But the blog isn't set to public. This means WordPress disencourages indexing."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:582
+#: inc/classes/doingitright.class.php:583
 msgid "But there are no posts in this %s. Therefore indexing has been disabled."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:587
+#: inc/classes/doingitright.class.php:588
 msgid "%s links are being followed."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:596
+#: inc/classes/doingitright.class.php:597
 msgid "But you've disabled following of links for the whole site."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:600
+#: inc/classes/doingitright.class.php:601
 msgid "%s links aren't being followed."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:604
+#: inc/classes/doingitright.class.php:605
 msgid "But the blog isn't set to public. This means WordPress allows the links to be followed regardless."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:609
+#: inc/classes/doingitright.class.php:610
 msgid "Search Engine are allowed to archive this %s."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:618
+#: inc/classes/doingitright.class.php:619
 msgid "But you've disabled archiving for the whole site."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:623
+#: inc/classes/doingitright.class.php:624
 msgid "Search Engine aren't allowed to archive this %s."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:627
+#: inc/classes/doingitright.class.php:628
 msgid "But the blog isn't set to public. This means WordPress allows the blog to be archived regardless."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:631
+#: inc/classes/doingitright.class.php:632
 msgid "%s isn't being redirected."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:636
+#: inc/classes/doingitright.class.php:637
 msgctxt "Title"
 msgid "T"
 msgstr ""
 
-#: inc/classes/doingitright.class.php:643
+#: inc/classes/doingitright.class.php:644
 msgctxt "Description"
 msgid "D"
 msgstr ""
 
-#: inc/classes/doingitright.class.php:649
-#: inc/classes/doingitright.class.php:698
-#: inc/classes/doingitright.class.php:726
+#: inc/classes/doingitright.class.php:650
+#: inc/classes/doingitright.class.php:699
+#: inc/classes/doingitright.class.php:727
 msgctxt "no-Index"
 msgid "I"
 msgstr ""
 
-#: inc/classes/doingitright.class.php:656
+#: inc/classes/doingitright.class.php:657
 msgctxt "no-Follow"
 msgid "F"
 msgstr ""
 
-#: inc/classes/doingitright.class.php:664
+#: inc/classes/doingitright.class.php:665
 msgctxt "no-Archive"
 msgid "A"
 msgstr ""
 
-#: inc/classes/doingitright.class.php:672
-#: inc/classes/doingitright.class.php:689
-#: inc/classes/doingitright.class.php:712
+#: inc/classes/doingitright.class.php:673
+#: inc/classes/doingitright.class.php:690
+#: inc/classes/doingitright.class.php:713
 msgctxt "Redirect"
 msgid "R"
 msgstr ""
 
-#: inc/classes/doingitright.class.php:685
-#: inc/classes/doingitright.class.php:708
+#: inc/classes/doingitright.class.php:686
+#: inc/classes/doingitright.class.php:709
 msgid "%s is being redirected. This means no SEO values have to be set."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:694
-#: inc/classes/doingitright.class.php:722
+#: inc/classes/doingitright.class.php:695
+#: inc/classes/doingitright.class.php:723
 msgid "%s is not being indexed. This means no SEO values have to be set."
 msgstr ""
 
-#: inc/classes/doingitright.class.php:735
+#: inc/classes/doingitright.class.php:736
 msgid "Failed to fetch post ID."
 msgstr ""
 
@@ -297,172 +297,172 @@ msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:361 inc/classes/metaboxes.class.php:298
+#: inc/classes/generate.class.php:362 inc/classes/metaboxes.class.php:298
 msgctxt "Placement. e.g. Post Title \"on\" Blog Name"
 msgid "on"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:526
+#: inc/classes/generate.class.php:527
 msgid "Latest posts:"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:551 inc/classes/generate.class.php:849
-#: inc/classes/generate.class.php:1384 inc/classes/generate.class.php:1431
+#: inc/classes/generate.class.php:552 inc/classes/generate.class.php:852
+#: inc/classes/generate.class.php:1401 inc/classes/generate.class.php:1447
 msgid "Untitled"
 msgstr ""
 
-#: inc/classes/generate.class.php:1076 inc/classes/generate.class.php:1237
+#: inc/classes/generate.class.php:1079 inc/classes/generate.class.php:1240
 msgid "Protected: %s"
 msgstr ""
 
-#: inc/classes/generate.class.php:1079 inc/classes/generate.class.php:1240
+#: inc/classes/generate.class.php:1082 inc/classes/generate.class.php:1243
 msgid "Private: %s"
 msgstr ""
 
-#: inc/classes/generate.class.php:1249
+#: inc/classes/generate.class.php:1252
 msgid "Page %s"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:1372
+#: inc/classes/generate.class.php:1389
 msgid "Search results for:"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:1400 inc/classes/generate.class.php:3684
+#: inc/classes/generate.class.php:1417 inc/classes/generate.class.php:3711
 msgid "Archives"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:3630
+#: inc/classes/generate.class.php:3657
 msgid "Category: %s"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:3633
+#: inc/classes/generate.class.php:3660
 msgid "Tag: %s"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:3636
+#: inc/classes/generate.class.php:3663
 msgid "Author: %s"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:3639
+#: inc/classes/generate.class.php:3666
 msgid "Year: %s"
 msgstr ""
 
-#: inc/classes/generate.class.php:3639
+#: inc/classes/generate.class.php:3666
 msgctxt "yearly archives date format"
 msgid "Y"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:3642
+#: inc/classes/generate.class.php:3669
 msgid "Month: %s"
 msgstr ""
 
-#: inc/classes/generate.class.php:3642
+#: inc/classes/generate.class.php:3669
 msgctxt "monthly archives date format"
 msgid "F Y"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:3645
+#: inc/classes/generate.class.php:3672
 msgid "Day: %s"
 msgstr ""
 
-#: inc/classes/generate.class.php:3645
+#: inc/classes/generate.class.php:3672
 msgctxt "daily archives date format"
 msgid "F j, Y"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:3649
+#: inc/classes/generate.class.php:3676
 msgctxt "post format archive title"
 msgid "Asides"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:3652
+#: inc/classes/generate.class.php:3679
 msgctxt "post format archive title"
 msgid "Galleries"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:3655
+#: inc/classes/generate.class.php:3682
 msgctxt "post format archive title"
 msgid "Images"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:3658
+#: inc/classes/generate.class.php:3685
 msgctxt "post format archive title"
 msgid "Videos"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:3661
+#: inc/classes/generate.class.php:3688
 msgctxt "post format archive title"
 msgid "Quotes"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:3664
+#: inc/classes/generate.class.php:3691
 msgctxt "post format archive title"
 msgid "Links"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:3667
+#: inc/classes/generate.class.php:3694
 msgctxt "post format archive title"
 msgid "Statuses"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:3670
+#: inc/classes/generate.class.php:3697
 msgctxt "post format archive title"
 msgid "Audio"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:3673
+#: inc/classes/generate.class.php:3700
 msgctxt "post format archive title"
 msgid "Chats"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate.class.php:3677
+#: inc/classes/generate.class.php:3704
 msgid "Archives: %s"
 msgstr ""
 
 #. translators: Front-end output. 1: Taxonomy singular name, 2: Current
 #. taxonomy term
 
-#: inc/classes/generate.class.php:3681
+#: inc/classes/generate.class.php:3708
 msgid "%1$s: %2$s"
 msgstr ""
 
@@ -478,85 +478,85 @@ msgstr ""
 msgid "End The Seo Framework"
 msgstr ""
 
-#: inc/classes/inpost.class.php:142 inc/classes/inpost.class.php:344
+#: inc/classes/inpost.class.php:142 inc/classes/inpost.class.php:343
 msgid "%s SEO Settings"
 msgstr ""
 
-#: inc/classes/inpost.class.php:351 inc/classes/inpost.class.php:418
-#: inc/classes/inpost.class.php:577 inc/classes/inpost.class.php:663
+#: inc/classes/inpost.class.php:350 inc/classes/inpost.class.php:417
+#: inc/classes/inpost.class.php:576 inc/classes/inpost.class.php:662
 msgid "Doing it Right"
 msgstr ""
 
-#: inc/classes/inpost.class.php:361
+#: inc/classes/inpost.class.php:360
 msgid "%s Title"
 msgstr ""
 
-#: inc/classes/inpost.class.php:362 inc/classes/inpost.class.php:584
+#: inc/classes/inpost.class.php:361 inc/classes/inpost.class.php:583
 #: inc/classes/metaboxes.class.php:823
 msgid "Recommended Length: 50 to 55 characters"
 msgstr ""
 
-#: inc/classes/inpost.class.php:370 inc/classes/inpost.class.php:383
-#: inc/classes/inpost.class.php:585 inc/classes/inpost.class.php:599
+#: inc/classes/inpost.class.php:369 inc/classes/inpost.class.php:382
+#: inc/classes/inpost.class.php:584 inc/classes/inpost.class.php:598
 #: inc/classes/metaboxes.class.php:824 inc/classes/metaboxes.class.php:845
 msgid "Characters Used: %s"
 msgstr ""
 
-#: inc/classes/inpost.class.php:377
+#: inc/classes/inpost.class.php:376
 msgid "%s Meta Description"
 msgstr ""
 
-#: inc/classes/inpost.class.php:378 inc/classes/inpost.class.php:598
+#: inc/classes/inpost.class.php:377 inc/classes/inpost.class.php:597
 #: inc/classes/metaboxes.class.php:844
 msgid "Recommended Length: 145 to 155 characters"
 msgstr ""
 
-#: inc/classes/inpost.class.php:391 inc/classes/inpost.class.php:398
-#: inc/classes/inpost.class.php:405 inc/classes/inpost.class.php:619
-#: inc/classes/inpost.class.php:626 inc/classes/inpost.class.php:633
+#: inc/classes/inpost.class.php:390 inc/classes/inpost.class.php:397
+#: inc/classes/inpost.class.php:404 inc/classes/inpost.class.php:618
+#: inc/classes/inpost.class.php:625 inc/classes/inpost.class.php:632
 msgid "Apply %s to this %s"
 msgstr ""
 
-#: inc/classes/inpost.class.php:392 inc/classes/inpost.class.php:620
+#: inc/classes/inpost.class.php:391 inc/classes/inpost.class.php:619
 #: inc/classes/metaboxes.class.php:868
 msgid "Tell Search Engines not to show this page in their search results"
 msgstr ""
 
-#: inc/classes/inpost.class.php:399 inc/classes/inpost.class.php:627
+#: inc/classes/inpost.class.php:398 inc/classes/inpost.class.php:626
 #: inc/classes/metaboxes.class.php:877
 msgid "Tell Search Engines not to follow links on this page"
 msgstr ""
 
-#: inc/classes/inpost.class.php:406 inc/classes/inpost.class.php:634
+#: inc/classes/inpost.class.php:405 inc/classes/inpost.class.php:633
 #: inc/classes/metaboxes.class.php:886
 msgid "Tell Search Engines not to save a cached copy this page"
 msgstr ""
 
-#: inc/classes/inpost.class.php:583 inc/classes/metaboxes.class.php:822
+#: inc/classes/inpost.class.php:582 inc/classes/metaboxes.class.php:822
 msgid "Custom %s Title"
 msgstr ""
 
-#: inc/classes/inpost.class.php:597 inc/classes/metaboxes.class.php:843
+#: inc/classes/inpost.class.php:596 inc/classes/metaboxes.class.php:843
 msgid "Custom %s Description"
 msgstr ""
 
-#: inc/classes/inpost.class.php:608
+#: inc/classes/inpost.class.php:607
 msgid "Custom Canonical URL"
 msgstr ""
 
-#: inc/classes/inpost.class.php:643
+#: inc/classes/inpost.class.php:642
 msgid "Local Search Settings"
 msgstr ""
 
-#: inc/classes/inpost.class.php:646
+#: inc/classes/inpost.class.php:645
 msgid "Exclude this %s from local search"
 msgstr ""
 
-#: inc/classes/inpost.class.php:647
+#: inc/classes/inpost.class.php:646
 msgid "This excludes this %s from local on-site search results"
 msgstr ""
 
-#: inc/classes/inpost.class.php:653
+#: inc/classes/inpost.class.php:652
 msgid "Custom 301 Redirect URL"
 msgstr ""
 
@@ -1299,15 +1299,15 @@ msgstr ""
 msgid "This link will not be followed by Search Engines"
 msgstr ""
 
-#: inc/classes/sitemaps.class.php:191
+#: inc/classes/sitemaps.class.php:209
 msgid "Sitemap is generated for this view"
 msgstr ""
 
-#: inc/classes/sitemaps.class.php:193
+#: inc/classes/sitemaps.class.php:211
 msgid "Sitemap is served from cache"
 msgstr ""
 
-#: inc/classes/sitemaps.class.php:363
+#: inc/classes/sitemaps.class.php:381
 msgid "Sitemap is generated on"
 msgstr ""
 
