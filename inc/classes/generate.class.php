@@ -729,8 +729,10 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		if ( ! $args['meta'] ) {
 			if ( ! $this->detect_theme_support( 'title-tag' ) && doing_filter( 'wp_title' ) ) {
 				if ( ! empty( $seplocation ) ) {
-					// Don't disturb the precious title when WP_DEBUG is on.
-					add_action( 'wp_footer', array( $this, 'title_doing_it_wrong' ), 20 );
+					//* Set doing it wrong parameters.
+					$this->tell_title_doing_it_wrong( $title, $sep, $seplocation, false );
+					//* And echo them.
+					add_action( 'wp_footer', array( $this, 'tell_title_doing_it_wrong' ), 20 );
 
 					//* Notify cache.
 					$this->title_doing_it_wrong = true;
@@ -740,8 +742,10 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 					return $this->build_title_doingitwrong( $title, $sep, $seplocation, $args );
 				} else if ( ! empty( $sep ) ) {
-					// Don't disturb the precious title when WP_DEBUG is on.
-					add_action( 'wp_footer', array( $this, 'title_doing_it_wrong' ), 20 );
+					//* Set doing it wrong parameters.
+					$this->tell_title_doing_it_wrong( $title, $sep, $seplocation, false );
+					//* And echo them.
+					add_action( 'wp_footer', array( $this, 'tell_title_doing_it_wrong' ), 20 );
 
 					//* Notify cache.
 					$this->title_doing_it_wrong = true;
@@ -760,6 +764,10 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		//* Notify cache to keep using the same output. We're doing it right :).
 		if ( ! isset( $this->title_doing_it_wrong ) )
 			$this->title_doing_it_wrong = false;
+
+		//* Set transient to true if the theme is doing it right.
+		if ( false !== $this->title_doing_it_wrong )
+			$this->set_theme_dir_transient( true );
 
 		//* Empty title and rebuild it.
 		return $this->build_title( $title = '', $seplocation, $args );
@@ -2881,7 +2889,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * @todo maybe create option
 		 * @since 2.2.8
 		 */
-		if ( isset( $wp_query->post_count ) && $wp_query->post_count === (int) 0 )
+		if ( isset( $wp_query->post_count ) && (int) 0 === $wp_query->post_count )
 			$meta['noindex'] = 'noindex';
 
 		//* Check home page SEO settings, set noindex, nofollow and noarchive

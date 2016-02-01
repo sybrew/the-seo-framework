@@ -200,14 +200,24 @@ class AutoDescription_Init {
 	 * Echos output.
 	 */
 	public function html_output() {
-		global $blog_id,$paged,$page;
+		global $blog_id, $paged, $page;
 
+		/**
+		 * Start the timer here. I know it doesn't calculate the initiation of
+		 * the plugin, but it will make the code smelly if I were to do so.
+		 * A static array cache counter function would make it possible, but meh.
+		 * This function takes the most time anyway.
+		 */
 		$plugin_start = microtime( true );
 
+		/**
+		 * Cache key buster
+		 * Hexadecimal revision, e.g. 0, 1, 2, e, f,
+		 *
+		 * @busted to '2' @version 2.5.2.1
+		 */
+		$revision = '2';
 		$the_id = $this->get_the_real_ID();
-
-		//* Hexadecimal revision.
-		$revision = '1';
 		$key = $this->generate_cache_key( $the_id ) . $revision;
 
 		/**
@@ -217,31 +227,12 @@ class AutoDescription_Init {
 		$page = isset( $page ) ? (string) $page : '0';
 		$paged = isset( $paged ) ? (string) $paged : '0';
 
-		/**
-		 * New filter.
-		 * @since 2.3.0
-		 *
-		 * Removed previous filter.
-		 * @since 2.3.5
-		 */
-		$indicator = (bool) apply_filters( 'the_seo_framework_indicator', true );
-
-		$sybre = (bool) apply_filters( 'sybre_waaijer_<3', true );
-		$timer = (bool) apply_filters( 'the_seo_framework_indicator_timing', true );
-
-		$indicatorbefore = '';
-		$indicatorafter = '';
-
-		if ( $indicator ) {
-			$me =  $sybre ? ' ' . __( 'by Sybre Waaijer', 'autodescription' ) : '';
-			$indicatorbefore = '<!-- ' . __( 'Start The Seo Framework', 'autodescription' ) . $me . ' -->' . "\r\n";
-			$indicatorafter = '<!-- ' . __( 'End The Seo Framework', 'autodescription' ) . $me . ' -->' . "\r\n";
-		}
-
 		$cache_key = 'seo_framework_output_' . $key . '_' . $paged . '_' . $page;
 
 		$output = $this->object_cache_get( $cache_key );
 		if ( false === $output ) {
+
+			$robots = $this->robots();
 
 			/**
 			 * New filter.
@@ -253,8 +244,6 @@ class AutoDescription_Init {
 			$before = (string) apply_filters( 'the_seo_framework_pre', '' );
 
 			$before_actions = $this->header_actions( '', true );
-
-			$robots = $this->robots();
 
 			//* Limit processing on 404 or search
 			if ( ! is_404() && ! is_search() ) {
@@ -291,8 +280,6 @@ class AutoDescription_Init {
 						. $this->og_title()
 						. $this->og_url()
 						. $this->og_sitename()
-						. $this->twitter_card()
-						. $this->twitter_title()
 						. $this->canonical()
 						. $this->google_site_output()
 						. $this->bing_site_output()
@@ -322,22 +309,48 @@ class AutoDescription_Init {
 			 */
 			$generator = (string) apply_filters( 'the_seo_framework_generator_tag', '' );
 
-			if ( ! empty( $generator ) )
+			if ( '' !== $generator )
 				$generator = '<meta name="generator" content="' . esc_attr( $generator ) . '" />' . "\r\n";
 
-			$output = "\r\n" . $indicatorbefore . $robots . $before . $before_actions . $output . $after_actions . $after . $generator;
+			$output = $robots . $before . $before_actions . $output . $after_actions . $after . $generator;
 
 			$this->object_cache_set( $cache_key, $output, 86400 );
 		}
 
 		/**
-		 * Calculate the plugin load time.
-		 * @since 2.4.0
+		 * New filter.
+		 * @since 2.3.0
+		 *
+		 * Removed previous filter.
+		 * @since 2.3.5
 		 */
-		if ( $indicator && $timer )
-			$indicatorafter = '<!-- End The Seo Framework' . ( $sybre ? ' by Sybre Waaijer' : '' ) . ' | ' . number_format( microtime( true ) - $plugin_start, 5 ) . 's -->' . "\r\n";
+		$indicator = (bool) apply_filters( 'the_seo_framework_indicator', true );
 
-		$output .= $indicatorafter . "\r\n";
+		$indicatorbefore = '';
+		$indicatorafter = '';
+
+		if ( true === $indicator ) {
+			$timer = (bool) apply_filters( 'the_seo_framework_indicator_timing', true );
+			$sybre = (bool) apply_filters( 'sybre_waaijer_<3', true );
+
+			$start = __( 'Start The Seo Framework', 'autodescription' );
+			$end = __( 'End The Seo Framework', 'autodescription' );
+			$me =  $sybre ? ' ' . __( 'by Sybre Waaijer', 'autodescription' ) : '';
+
+			$indicatorbefore = '<!-- ' . $start . $me . ' -->' . "\r\n";
+
+			/**
+			 * Calculate the plugin load time.
+			 * @since 2.4.0
+			 */
+			if ( true === $timer ) {
+				$indicatorafter = '<!-- ' . $end . $me . ' | ' . number_format( microtime( true ) - $plugin_start, 5 ) . 's -->' . "\r\n";
+			} else {
+				$indicatorafter = '<!-- ' . $end . $me . ' -->' . "\r\n";
+			}
+		}
+
+		$output = "\r\n" . $indicatorbefore . $output . $indicatorafter . "\r\n";
 
 		echo $output;
 	}
@@ -376,7 +389,7 @@ class AutoDescription_Init {
 			 *
 			 * esc_url_raw uses is_ssl() to make the url valid again :)
 			 */
-			if ( ! $allow_external ) {
+			if ( true !== $allow_external ) {
 				$pattern 	= 	'/'
 							.	'(((http)(s)?)\:)' 	// 1: http: https:
 							. 	'(\/\/)'			// 2: slash slash
@@ -429,7 +442,7 @@ class AutoDescription_Init {
 	 *
 	 * @return mixed wp_cache_get if object caching is allowed. False otherwise.
 	 */
-	public function object_cache_get( $key, $group = 'theseoframework', $force = false, &$found = null ) {
+	public function object_cache_get( $key, $group = 'the_seo_framework', $force = false, &$found = null ) {
 
 		if ( $this->use_object_cache )
 			return wp_cache_get( $key, $group, $force, $found );

@@ -190,4 +190,19 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 		return $screens;
 	}
 
+	/**
+	 * Add doing it wrong html code in the footer.
+	 *
+	 * @since 2.2.5
+	 *
+	 * @deprecated
+	 * @since 2.5.2.1
+	 */
+	public function title_doing_it_wrong() {
+
+		_deprecated_function( 'AutoDescription_Detect::' . __FUNCTION__, $this->the_seo_framework_version( '2.5.2.1' ) );
+
+		return;
+	}
+
 }

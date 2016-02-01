@@ -234,7 +234,7 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 	 */
 	public function the_seo_framework_version( $version = '' ) {
 
-		$output = empty( $version ) ? '' : sprintf( __( '%s of The SEO Framework', 'autodescription' ), $version );
+		$output = empty( $version ) ? '' : sprintf( __( '%s of The SEO Framework', 'autodescription' ), esc_attr( $version ) );
 
 		return $output;
 	}

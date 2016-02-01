@@ -691,33 +691,55 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	/**
 	 * Add doing it wrong html code in the footer.
 	 *
-	 * @since 2.2.5
+	 * @since 2.5.2.1
 	 * @staticvar bool $no_spam
+	 *
+	 * @staticvar string $sep_output
+	 * @staticvar string $display_output
+	 * @staticvar string $seplocation_output
+	 *
+	 * @param null|string $title The given title
+	 * @param null|string $sep The separator
+	 * @param null|string $seplocation Wether the blogname is left or right.
+	 * @param bool $output Wether to store cache values or echo the output in the footer.
 	 *
 	 * @return void
 	 */
-	public function title_doing_it_wrong( $sep = null, $display = null, $seplocation = null ) {
+	public function tell_title_doing_it_wrong( $title = null, $sep = null, $seplocation = null, $output = true ) {
 
-		//* Prevent error log spam.
-		static $no_spam = null;
+		if ( true === $output ) {
+			//* Prevent error log spam.
+			static $no_spam = null;
 
-		if ( isset( $no_spam ) )
-			return;
+			if ( isset( $no_spam ) )
+				return;
 
-		$sep = isset( $sep ) ? 'notset' : $sep;
-		if ( is_bool( $display ) ) {
-			if ( $display ) {
-				$display = 'true';
-			} else {
-				$display = 'false';
-			}
+			$no_spam = true;
 		}
-		$display = ! isset( $display ) ? 'notset' : $display;
-		$seplocation = ! isset( $seplocation ) ? 'notset' : $seplocation;
 
-		echo '<!-- Title diw: ' . $sep . ' ' . $display . ' ' . $seplocation . ' -->';
+		static $title_output = null;
+		static $sep_output = null;
+		static $seplocation_output = null;
 
-		$no_spam = true;
+		if ( ! isset( $title_output ) || ! isset( $sep_output ) || ! isset( $seplocation_output ) ) {
+			//* Initiate caches.
+
+			if ( '' === $title )
+				$title = 'empty';
+
+			if ( '' === $sep )
+				$sep = 'empty';
+
+			if ( '' === $seplocation )
+				$seplocation = 'empty';
+
+			$title_output = ! isset( $title ) ? 'notset' : esc_attr( $title );
+			$sep_output = ! isset( $sep ) ? 'notset' : esc_attr( $sep );
+			$seplocation_output = ! isset( $seplocation ) ? 'notset' : esc_attr( $seplocation );
+		}
+
+		if ( true === $output )
+			echo '<!-- Title diw: "' . $title_output . '" : "' . $sep_output . '" : "' . $seplocation_output . '" -->' . "\r\n";
 
 		return;
 	}
