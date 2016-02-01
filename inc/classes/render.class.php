@@ -486,7 +486,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 			 * Return card type if image is found
 			 * Return to summary if not
 			 */
-			$card = $this->get_image_from_cache() ? $this->get_option( 'twitter_card' ) : 'summary';
+			$card = '' !== $this->get_image_from_cache() ? $this->get_option( 'twitter_card' ) : 'summary';
 		}
 
 		return '<meta name="twitter:card" content="' . esc_attr( $card ) . '" />' . "\r\n";

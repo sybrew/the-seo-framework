@@ -315,10 +315,9 @@ The LD+Json scripts are Search Engine helpers which tell Search Engines how to c
 
 The theme you're using is using outdated standards and is therefore doing it wrong. Inform your theme author about this issue.
 
-Give the theme author this link: https://codex.wordpress.org/Title_Tag
-And this link: https://make.wordpress.org/themes/2015/08/25/title-tag-support-now-required/
+Give the theme author these two links: https://codex.wordpress.org/Title_Tag https://make.wordpress.org/themes/2015/08/25/title-tag-support-now-required/
 
-If you know your way around PHP, you can speed up this process by replacing the `&lt;title&gt;some code here&lt;/title&gt;` code with `&lt;title&gt;&lt;?php wp_title('') ?&gt;&lt;/title&gt;` within the `header.php` file of the theme you're using.
+If you know your way around PHP, you can speed up this process by replacing the `<title>some code here</title>` code with `<title><?php wp_title('') ?></title>` within the `header.php` file of the theme you're using.
 
 = The meta data is not being updated, and I'm using a caching plugin. =
 
@@ -344,6 +343,29 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
+= 2.5.2.1 - Unforeseen Improvements =
+
+**Summarized:**
+
+* This minor update brings you a special scenario fix that caused an unnecessary browser alert.
+* Also, the object cache key fetching used to be incorrect. Now object caching works as intended and you can see a minor performance improvement when used.
+
+**For everyone:**
+
+* Improved: The HTML plugin indicators now ignore object cache. Making the filter more responsive.
+* Fixed: The HTML plugin indicator timer translation is now put to use (oops).
+* Fixed: JavaScript bug caused by undefined error where the user was promted for settings change while there weren't any on the Post or Page edit screens when the *"Remove blogname from title?"* option is checked or when editing the home page and the *"Add site description (tagline) to the Title on the Home Page?"* is unchecked.
+* Removed: Twitter card and Twitter title output on 404 and search pages. The Twitter tags rely on other tags which can't be rendered in their full extend by default on these pages. Twitter uses OG tags to fallback on.
+* Note: The per-page output cache key has changed for the output, this forces the object cache to be invalidated.
+
+**For developers:**
+
+* Added: `AutoDescription_Detect::tell_title_doing_it_wrong()`, based on the following deprecated function.
+* Deprecated: `AutoDescription_Detect::title_doing_it_wrong()`, this function was reworked to a point of uselessness in 2.5.2.
+* Changed: If the theme you're using is doing the wp_title() function wrong, the title parameters are now changed within the hidden HTML comment, i.e. e.g. `<!-- Title diw: "title" : "sep" : "seplocation" -->`).
+* Improved: Transient for title doing it right is now also set if the theme is doing it right to reduce extra database calls.
+* Cleaned up code.
+
 = 2.5.2 - Data Feed Influx =
 
 **Summarized:**
@@ -352,7 +374,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * This update of The SEO Framework brings you Feed excerpt generation as well as options to add backlinks in the feed. You can now also add your Pinterest verification code.
 * Also, a lot of the WordPress behavior detection and plugin detection has been reworked, improved and has been put to great use within the option pages to eliminate confusion by removing options if they have no effect.
 * And last but not least, due to popular demand an extra option has been added to change the Title generation, although it decouples all your pages within your website.
-* Oh, and many minor improvements and bug fixes have also been put into effect, including a few more important WooCommerce shop page fix and a proud-to-be-of 20% overall performance improvement.
+* Oh, and many minor improvements and bug fixes have also been put into effect, including a few more important WooCommerce shop page fixes and a proud-to-be-of 20% overall performance improvement.
 
 **SEO Tip of the Update:**
 
@@ -426,7 +448,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * Added: More filterable image arguments.
 * Added: Two Image fallback filters.
 * Added: Extra title argument to disable sanitation. Requires santition afterwards.
-* Added: If the theme you're using is doing the `wp_title()` function wrong, the title parameters are now added in a HTML comment (i.e. e.g. `&lt;!-- Title diw: | true right --&gt;`) in the theme's footer for developer debugging purposes.
+* Added: If the theme you're using is doing the `wp_title()` function wrong, the title parameters are now added in a hidden HTML comment (i.e. e.g. `<!-- Title diw: | true right -->`) in the page footer for developer debugging purposes.
 * Added: Sanitation for effectively removing spaces and html tags, `s_no_html_space`.
 * Added: With up to 140 calls in a single load in the admin area, a new cached function has arrived: `AutoDescription_PostData::get_blogname()`. Effectively reduced RAM usage by 800kB with 100 posts displayed.
 * Added: New cached function: `AutoDescription_PostData::get_blogdescription()`.
@@ -468,7 +490,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Notes:**
 
-* I am aware that the GeoDirectory plugin title settings are ignored by this plugin. A compatibility update is planned. The archive is also set to noindex
+* I am aware that the GeoDirectory plugin title settings are ignored by this plugin. A compatibility update is planned.
 
 = 2.5.1 - Undocumented Properties =
 
@@ -508,89 +530,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * fb:app_id
 * article:published_time
 * article:modified_time
-
-= 2.5.0 - Vibrant SEO =
-
-**Summarized:**
-
-* This is a massive update which makes The SEO Framework much easier to understand, with colorized counters, color vision deficiency support and many more changes.
-* The SEO Framework now also has better support for robots to access and understand your website.
-* One way robots better understands your website is that Social (Auto-)Descriptions have received an overhaul since they abide to different standards, they may also be much longer!
-* The Robots.txt file output has been reworked and will now prevent notifications in Google Webmaster Tools.
-* WooCommerce has gained extra support with multiple Social Open Graph Product Images and front-end AnsPress question descriptions now reflect the admin side.
-* Accessibility and understanding of how this plugin handles titles has been improved when adding custom titles.
-* Theme load has been reduced with removal of unneeded filters as The SEO Framework overrides them.
-* Many requests by The SEO Framework users have been instated, most of them are hidden in filters.
-* For developers, a way of adding custom page ID's is now possible through a filter. This makes sure this plugin is extensible and compatible on a new big layer.
-* A few functions have been rewritten, and because of this and other big changes for developers and super-users alike, a version bump has been put in place.
-* And many fixes have been put in place. These fixes will make sure everything works as expected in special cases.
-
-**SEO Tip of the Update:**
-
-* Images are a great way to attract visitors. Not only will it make your site livelier, visitors will also know instantly what the subject is about or related to.
-* Images are also required for Posts to adhere to the article standard set by Google for generating better Rich Snippets to be shown in the Search Engine Results Page (SERP).
-* Force yourself and your team to improve the SEO of your site by using the [Require Featured Image](https://wordpress.org/plugins/require-featured-image/) plugin by David Hayes.
-
-**For everyone:**
-
-* Added: All WooCommerce Product Images from the gallery are now also added with multiple `og:image` meta tags (with dupe detection and automatic resizing if needed). Now users can now scroll through and select your item images before sharing on social sites (when supported by the Social Site)!
-* Added: Colorized character counters! These subtle colors now let you know you're Doing it Right instantly without going back to the SEO Bar.
-* Added: Custom Title now shows the possible additions to deliver a more expected experience. This also takes the Custom HomePage tagline into account. This only works on the following conditions:
-  * HomePage Title: If Document Title Additions Location is set to "Left". When using RTL languages, it should be "Right".
-  * All other Titles: If Document Title Additions Location is set to "Right". When using RTL languages, it should be "Left".
-* Added: Removed line breaks from manual descriptions on save.
-* Added: Static caching for the current page in LD+json breadcrumbs to improve generation time.
-* Added: The Custom Home Page Title placeholder now reflects changes made throughout the settings Metabox.
-* Changed: Global Twitter and Facebook tags output are now enabled by default, this change will only affect new installations or on settings reset.
-* Changed: Default Title location settings are switched when an RTL language is active, this change will only affect new installations or on settings reset.
-* Changed: Robots.txt now allows for query args by default instead of blocking them.
-* Changed: Disabled OG Meta tags output when Add Meta Tags is active.
-* Changed: Color changes to the SEO Bar to fully support all vision deficiency spectra. This also makes the SEO bar more vibrant and easier on your eyes.
-* Improved: Slightly improved JavaScript speed by caching more variables.
-* Improved: The Breadcrumb home URL now also considers the Domain Mapping domains instead of only the current domain.
-* Improved: Multiple consecutive empty paragraph entries no longer generate equivalent spaces in the automated description.
-* Improved: The Home Page Slogan now alters the Custom Home Page Title dynamically.
-* Improved: OG and Twitter Auto Generated description Meta tags now don't contain the Title and Blogname for a more organic social experience.
-* Improved: OG and Twitter Auto Generated description meta tags are now up to 200 characters long.
-* Improved: Hover messages from the SEO Bar are now aligned to the left so they're easier to read. When using RTL languages, it's aligned ot the right.
-* Improved: Hover messages from the SEO Bar now contain an extra line break when duplicated words are highlighted.
-* Improved: The hover message balloon arrow now can't overflow over the balloon's corners.
-* Improved: Breadcrumb generation time.
-* Improved: Cache key generation time.
-* Improved: Overal plugin speed, again :).
-* Fixed: SEO Column bar was registered for load on Post and Page edit screens, even if it wasn't visible.
-* Fixed: WooCommerce admin page product overview layout was messed up on smaller (tablet to 15") screens by the addition of The SEO Bar. It now all mostly fits. Further optimization is left in the hands of WooCommerce.
-* Fixed: Bug with AnsPress where not all page descriptions are fetched correctly on the front-end. Because of the bugfix, the description cache will be flushed upon update. The cache will clean itself up within 7 days automatically.
-* Fixed: WooCommerce main shop page took the title of the latest product.
-* Fixed: Inconsistent cache key for WooCommerce shop page.
-* Fixed: Robots.txt sitemap wasn't pointed to correctly on Subdirectory MultiSite installations.
-* Fixed: Robots.txt sitemap wasn't pointed to correctly with mapped domains on MultiSite sites.
-* Fixed: Bug for Home Title in the breadcrumbs when the homepage is a page. Because of the bugfix, the LD+Json cache will be flushed upon update. The cache will clean itself up within 7 days automatically.
-* Fixed: Cache naming bug in taxonomy and terms admin pages displaying the front page description.
-* Removed: /wp-includes/ blocking through robots.txt, this was accidentally added a long time ago and the removal should resolve issues with Google Webmaster Tools.
-* Removed: Dutch Translation Files as they're maintained now through WordPress.org.
-
-**For developers:**
-
-* Added: New function `AutoDescription_Render::the_home_url_from_cache( $force_slash )`.
-* Added: New function `AutoDescription_Generate::parse_og_image( $image_id, $args )`, parses image to a maximum of 1500px width or height based on biggest factor and saves it if not yet parsed, returns the URL of the parsed image.
-* Added: New function `AutoDescription_Render::get_the_real_ID()`. Fetches the real ID for all pages, posts, terms, taxonomies and CPT, including WooCommerce and AnsPress.
-* Added: New function `AutoDescription_Sanitize::s_description()`. Removes spaces and breaks from the description and created a clean flowing single line. Sanitizes as well.
-* Added: New filters.
-* Added: Generation time output on the URL and Description when debugging is activated.
-* Added: Removal of all `pre_get_document_title` filters prior to execution to reduce theme load. This is done at `init` priority `1`.
-* Changed: `pre_get_document_title` filter priority is now `10`, was `99` for easier manipulation. This is run at `init` priority `1`.
-* Changed: Rewritten `AutoDescription_Generate::generate_description_from_id()` as it was previously built upon bugfixes and chance.
-* Changed: Default WordPress robots.txt is now completely overwritten to maintain compatibility.
-* Changed: `AutoDescription_Generate::generate_description()` function parameters have now been put into an arguments array. This array is passed onto the following functions as well: `AutoDescription_Generate::description_from_custom_field()` and `AutoDescription_Generate::generate_description_from_id()`
-* Changed: `the_seo_framework_robots_allow_queries` filter became `the_seo_framework_robots_disallow_queries`.
-* Changed: Default and warned settings are now initialized at `after_theme_setup, 0` rather than `plugins_loaded, 5` to support RTL early.
-* Improved: Default arguments for the Title, URL and Image are now auto-correcting when called to incorrectly in some scenarios. Keep an eye out on the error log if you're using the parsers directly.
-* Improved: Debug constants have been pushed in public class variables, effectively reducing plugin run time.
-* Fixed: `AutoDescription_Generate::get_separator()` didn't listen to the escape parameter because of the cache. This function has been reworked for better caching.
-* Removed: `$args['post_id']` argument from the title functions as it was unused. Use `$args['term_id']` instead.
-* Removed: 2nd argument ($tt_id) from `AutoDescription_Generate::generate_excerpt()`. Use the first argument ($post_id) instead, this induces a parameter switch.
-* Cleaned up code.
 
 = Full changelog =
 
