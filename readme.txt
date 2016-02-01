@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl, feed
 Requires at least: 3.6.0
 Tested up to: 4.5.0
-Stable tag: 2.5.2
+Stable tag: 2.5.2.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -348,13 +348,14 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **Summarized:**
 
 * This minor update brings you a special scenario fix that caused an unnecessary browser alert.
-* Also, the object cache key fetching used to be incorrect. Now object caching works as intended and you can see a minor performance improvement when used.
+* Also, object caching now works as intended and you can see a minor performance improvement when used.
 
 **For everyone:**
 
 * Improved: The HTML plugin indicators now ignore object cache. Making the filter more responsive.
 * Fixed: The HTML plugin indicator timer translation is now put to use (oops).
-* Fixed: JavaScript bug caused by undefined error where the user was prompted for settings change while there weren't any on the Post or Page edit screens when the *"Remove blogname from title?"* option is checked or when editing the home page and the *"Add site description (tagline) to the Title on the Home Page?"* is unchecked.
+* Fixed: JavaScript bug caused by undefined error where the user was prompted for settings change while there weren't any on the Post or Page edit screens when the **"Remove blogname from title?"** option is checked or when editing the home page and the **"Add site description (tagline) to the Title on the Home Page?"** is unchecked.
+* Fixed: Incompatible object cache group names.
 * Removed: Twitter card and Twitter title output on 404 and search pages. The Twitter tags rely on other tags which can't be rendered in their full extend by default on these pages. Twitter uses OG tags to fall back on.
 * Note: The per-page output cache key has changed for the output, this forces the object cache to be invalidated.
 
