@@ -1,0 +1,618 @@
+Index: autodescription.php
+===================================================================
+--- autodescription.php	(revision 1385490)
++++ autodescription.php	(working copy)
+@@ -3,7 +3,7 @@
+  * Plugin Name: The SEO Framework
+  * Plugin URI: https://wordpress.org/plugins/autodescription/
+  * Description: The SEO Framework makes sure your SEO is always up-to-date without any configuration needed. It's based upon the Genesis SEO.
+- * Version: 2.5.2.3
++ * Version: 2.5.2.4
+  * Author: Sybre Waaijer
+  * Author URI: https://cyberwire.nl/
+  * License: GPLv3
+@@ -49,7 +49,7 @@
+  * Removed previous constant.
+  * @since 2.3.5
+  */
+-define( 'THE_SEO_FRAMEWORK_VERSION', '2.5.2.3' );
++define( 'THE_SEO_FRAMEWORK_VERSION', '2.5.2.4' );
+ 
+ /**
+  * Plugin options filter
+Index: inc/classes/detect.class.php
+===================================================================
+--- inc/classes/detect.class.php	(revision 1385490)
++++ inc/classes/detect.class.php	(working copy)
+@@ -1250,4 +1250,46 @@
+ 		return $dir = true;
+ 	}
+ 
++	/**
++	 * The amount of pages.
++	 * Fetches global $page through Query Var.
++	 *
++	 * @staticvar int $page
++	 * @since 2.5.2.4
++	 *
++	 * @return int $page
++	 */
++	public function page() {
++
++		static $page = null;
++
++		if ( isset( $page ) )
++			return $page;
++
++		$page = get_query_var( 'page' );
++
++		return $page = $page ? (int) $page : 1;
++	}
++
++	/**
++	 * The number of the current page.
++	 * Fetches global $paged through Query Var. Determines
++	 *
++	 * @staticvar int $paged
++	 * @since 2.5.2.4
++	 *
++	 * @return int $paged
++	 */
++	public function paged() {
++
++		static $paged = null;
++
++		if ( isset( $paged ) )
++			return $paged;
++
++		$paged = get_query_var( 'paged' );
++
++		return $paged = $paged ? (int) $paged : 1;
++	}
++
+ }
+Index: inc/classes/generate.class.php
+===================================================================
+--- inc/classes/generate.class.php	(revision 1385490)
++++ inc/classes/generate.class.php	(working copy)
+@@ -83,6 +83,22 @@
+ 		 * Beautify.
+ 		 * @since 2.3.4
+ 		 */
++		$description = $this->escape_description( $description );
++
++		return $description;
++	}
++
++	/**
++	 * Escapes and beautifies description.
++	 *
++	 * @param string $description The description to escape and beautify.
++	 *
++	 * @since 2.5.2
++	 *
++	 * @return string Escaped and beautified description.
++	 */
++	public function escape_description( $description = '' ) {
++
+ 		$description = wptexturize( $description );
+ 		$description = convert_chars( $description );
+ 		$description = esc_html( $description );
+@@ -224,11 +240,7 @@
+ 		}
+ 
+ 		if ( $escape ) {
+-			$description = wptexturize( $description );
+-			$description = convert_chars( $description );
+-			$description = esc_html( $description );
+-			$description = capital_P_dangit( $description );
+-			$description = trim( $description );
++			$description = $this->escape_description( $description );
+ 		}
+ 
+ 		return $description;
+@@ -462,11 +474,7 @@
+ 		}
+ 
+ 		if ( $escape ) {
+-			$description = wptexturize( $description );
+-			$description = convert_chars( $description );
+-			$description = esc_html( $description );
+-			$description = capital_P_dangit( $description );
+-			$description = trim( $description );
++			$description = $this->escape_description( $description );
+ 		}
+ 
+ 		/**
+@@ -777,6 +785,27 @@
+ 	}
+ 
+ 	/**
++	 * Escapes and beautifies title.
++	 *
++	 * @param string $title The title to escape and beautify.
++	 * @param bool $trim Whether to trim the title from whitespaces.
++	 *
++	 * @since 2.5.2
++	 *
++	 * @return string Escaped and beautified title.
++	 */
++	public function escape_title( $title = '', $trim = true ) {
++
++		$title = wptexturize( $title );
++		$title = convert_chars( $title );
++		$title = esc_html( $title );
++		$title = capital_P_dangit( $title );
++		$title = $trim ? trim( $title ) : $title;
++
++		return $title;
++	}
++
++	/**
+ 	 * Parse and sanitize title args.
+ 	 *
+ 	 * @param array $args required The passed arguments.
+@@ -862,13 +891,8 @@
+ 		if ( empty( $title ) )
+ 			$title = __( 'Untitled', 'autodescription' );
+ 
+-		if ( true === $args['escape'] ) {
+-			$title = wptexturize( $title );
+-			$title = convert_chars( $title );
+-			$title = esc_html( $title );
+-			$title = capital_P_dangit( $title );
+-			$title = trim( $title );
+-		}
++		if ( true === $args['escape'] )
++			$title = $this->escape_title( $title );
+ 
+ 		return $title;
+ 	}
+@@ -1096,12 +1120,8 @@
+ 
+ 		}
+ 
+-		if ( true === $args['escape'] ) {
+-			$title = wptexturize( $title );
+-			$title = convert_chars( $title );
+-			$title = esc_html( $title );
+-			$title = capital_P_dangit( $title );
+-		}
++		if ( true === $args['escape'] )
++			$title = $this->escape_title( $title, false );
+ 
+ 		/**
+ 		 * Debug output.
+@@ -1236,14 +1256,10 @@
+ 		 *
+ 		 * @since 2.4.1
+ 		 *
+-		 * @global $page
+-		 * @global $paged
+-		 *
+ 		 * @applies filters core : protected_title_format
+ 		 * @applies filters core : private_title_format
+ 		 */
+ 		if ( ! $args['description_title'] ) {
+-			global $page, $paged;
+ 
+ 			$post = get_post( $args['term_id'], OBJECT );
+ 
+@@ -1255,6 +1271,9 @@
+ 				$title = sprintf( $private_title_format, $title );
+ 			}
+ 
++			$page = $this->page();
++			$paged = $this->paged();
++
+ 			/**
+ 			 * @since 2.4.3
+ 			 * Adds page numbering within the title.
+@@ -1262,6 +1281,7 @@
+ 			if ( ! is_404() && ( $paged >= 2 || $page >= 2 ) )
+ 				$title .= " $sep " . sprintf( __( 'Page %s', 'autodescription' ), max( $paged, $page ) );
+ 
++
+ 			//* Title for title (meta) tags.
+ 			if ( $is_front_page && ! $add_tagline ) {
+ 				//* Render frontpage output without tagline
+@@ -1301,13 +1321,9 @@
+ 				}
+ 			}
+ 
+-			if ( true === $args['escape'] ) {
+-				$title = wptexturize( $title );
+-				$title = convert_chars( $title );
+-				$title = esc_html( $title );
+-				$title = capital_P_dangit( $title );
+-				$title = trim( $title );
+-			}
++			if ( true === $args['escape'] )
++				$title = $this->escape_title( $title );
++
+ 		}
+ 
+ 		/**
+@@ -1458,12 +1474,8 @@
+ 			$title = __( 'Untitled', 'autodescription' );
+ 		}
+ 
+-		if ( $escape ) {
+-			$title = wptexturize( $title );
+-			$title = convert_chars( $title );
+-			$title = esc_html( $title );
+-			$title = capital_P_dangit( $title );
+-		}
++		if ( $escape )
++			$title = $this->escape_title( $title, false );
+ 
+ 		return $title;
+ 	}
+@@ -1532,12 +1544,8 @@
+ 			$seplocation = (string) apply_filters( 'the_seo_framework_title_seplocation_front', $this->get_option( 'home_title_location' ) );
+ 		}
+ 
+-		if ( $escape ) {
+-			$title = wptexturize( $title );
+-			$title = convert_chars( $title );
+-			$title = esc_html( $title );
+-			$title = capital_P_dangit( $title );
+-		}
++		if ( $escape )
++			$title = $this->escape_title( $title, false );
+ 
+ 		return array(
+ 			'title' => $title,
+@@ -1584,12 +1592,8 @@
+ 			$home_title = ! empty( $custom_field ) ? (string) $custom_field : $home_title;
+ 		}
+ 
+-		if ( $escape ) {
+-			$home_title = wptexturize( $home_title );
+-			$home_title = convert_chars( $home_title );
+-			$home_title = esc_html( $home_title );
+-			$home_title = capital_P_dangit( $home_title );
+-		}
++		if ( $escape )
++			$home_title = $this->escape_title( $home_title, false );
+ 
+ 		return (string) $home_title;
+ 	}
+@@ -1635,12 +1639,8 @@
+ 
+ 		}
+ 
+-		if ( $escape ) {
+-			$title = wptexturize( $title );
+-			$title = convert_chars( $title );
+-			$title = esc_html( $title );
+-			$title = capital_P_dangit( $title );
+-		}
++		if ( $escape )
++			$title = $this->escape_title( $title, false );
+ 
+ 		return (string) $title;
+ 	}
+@@ -1682,12 +1682,8 @@
+ 			$title = isset( $post->post_title ) ? $post->post_title : '';
+ 		}
+ 
+-		if ( $escape ) {
+-			$title = wptexturize( $title );
+-			$title = convert_chars( $title );
+-			$title = esc_html( $title );
+-			$title = capital_P_dangit( $title );
+-		}
++		if ( $escape )
++			$title = $this->escape_title( $title, false );
+ 
+ 		return (string) $title;
+ 	}
+@@ -2186,7 +2182,6 @@
+ 	 *
+ 	 * @global WP_Query object $wp_query
+ 	 * @global WP_Rewrite $wp_rewrite
+-	 * @global Paged $paged
+ 	 *
+ 	 * @param object $term The term object.
+ 	 * @param bool $no_request wether to fetch the WP Request or get the permalink by Post Object.
+@@ -2206,7 +2201,7 @@
+ 			$term = $wp_query->get_queried_object();
+ 		}
+ 
+-		global $wp_rewrite,$paged;
++		global $wp_rewrite;
+ 
+ 		$taxonomy = $term->taxonomy;
+ 
+@@ -2215,6 +2210,8 @@
+ 		$slug = $term->slug;
+ 		$t = get_taxonomy( $taxonomy );
+ 
++		$paged = $this->paged();
++
+ 		if ( empty( $termlink ) ) {
+ 			if ( 'category' == $taxonomy ) {
+ 				$termlink = '?cat=' . $term->term_id;
+@@ -3132,7 +3129,7 @@
+ 
+ 		if ( $this->get_option( 'prev_next_archives' ) && ! is_singular() ) {
+ 
+-			$paged = get_query_var( 'paged' ) ? (int) get_query_var( 'paged' ) : 1;
++			$paged = $this->paged();
+ 
+ 			if ( $prev_next == 'prev' )
+ 				$prev = $paged > 1 ? get_previous_posts_page_link() : $prev;
+@@ -3142,7 +3139,7 @@
+ 
+ 		} else if ( $this->get_option( 'prev_next_posts' ) && is_singular() ) {
+ 
+-			$page  = (int) get_query_var( 'page' );
++			$page = $this->page();
+ 
+ 			$numpages = substr_count( $wp_query->post->post_content, '<!--nextpage-->' ) + 1;
+ 
+Index: inc/classes/init.class.php
+===================================================================
+--- inc/classes/init.class.php	(revision 1385490)
++++ inc/classes/init.class.php	(working copy)
+@@ -200,7 +200,7 @@
+ 	 * Echos output.
+ 	 */
+ 	public function html_output() {
+-		global $blog_id, $paged, $page;
++		global $blog_id;
+ 
+ 		/**
+ 		 * Start the timer here. I know it doesn't calculate the initiation of
+@@ -224,8 +224,8 @@
+ 		 * Give each paged pages/archives a different cache key.
+ 		 * @since 2.2.6
+ 		 */
+-		$page = isset( $page ) ? (string) $page : '0';
+-		$paged = isset( $paged ) ? (string) $paged : '0';
++		$page = (string) $this->page();
++		$paged = (string) $this->paged();
+ 
+ 		$cache_key = 'seo_framework_output_' . $key . '_' . $paged . '_' . $page;
+ 
+Index: inc/classes/metaboxes.class.php
+===================================================================
+--- inc/classes/metaboxes.class.php	(revision 1385490)
++++ inc/classes/metaboxes.class.php	(working copy)
+@@ -265,12 +265,9 @@
+ 	 *
+ 	 * @since 2.3.4
+ 	 *
+-	 * @uses globals $wpdb fetch post for the example
+-	 *
+ 	 * @see $this->description_metabox()	Callback for Description Settings box.
+ 	 */
+ 	public function description_metabox() {
+-		global $wpdb,$blog_id;
+ 
+ 		do_action( 'the_seo_framework_description_metabox_before' );
+ 
+@@ -298,6 +295,10 @@
+ 		$on = _x( 'on', 'Placement. e.g. Post Title "on" Blog Name', 'autodescription' );
+ 		$excerpt = __( 'This is an example description&#8230;', 'autodescription' );
+ 
++		$page_title = $this->escape_description( $page_title );
++		$on = $this->escape_description( $on );
++		$excerpt = $this->escape_description( $excerpt );
++
+ 		//* Put it together.
+ 		$example 	= $page_title
+ 					. '<span class="on-blogname-js">' . " $on " . $blogname . '</span>'
+Index: inc/classes/sanitize.class.php
+===================================================================
+--- inc/classes/sanitize.class.php	(revision 1385490)
++++ inc/classes/sanitize.class.php	(working copy)
+@@ -88,6 +88,17 @@
+ 		);
+ 
+ 		$this->autodescription_add_option_filter(
++			's_title',
++			$this->settings_field,
++			array(
++				'homepage_title',
++				'homepage_title_tagline',
++
++				'knowledge_name',
++			)
++		);
++
++		$this->autodescription_add_option_filter(
+ 			's_knowledge_type',
+ 			$this->settings_field,
+ 			array(
+@@ -198,10 +209,6 @@
+ 			's_no_html',
+ 			$this->settings_field,
+ 			array(
+-				'homepage_title',
+-				'homepage_title_tagline',
+-
+-				'knowledge_name',
+ 			)
+ 		);
+ 
+@@ -407,6 +414,7 @@
+ 			's_title_separator' 		=> array( $this, 's_title_separator' 		),
+ 			's_description_separator' 	=> array( $this, 's_description_separator' 	),
+ 			's_description' 			=> array( $this, 's_description' 			),
++			's_title' 					=> array( $this, 's_title' 					),
+ 			's_knowledge_type'			=> array( $this, 's_knowledge_type'			),
+ 			's_one_zero' 				=> array( $this, 's_one_zero' 				),
+ 			's_one_zero_flush_rewrite'	=> array( $this, 's_one_zero_flush_rewrite'	),
+@@ -518,6 +526,23 @@
+ 	}
+ 
+ 	/**
++	 * Returns a sanitized and trimmed title.
++	 *
++	 * @since 2.5.2
++	 *
++	 * @param string $new_value The Title
++	 *
++	 * @return string Sanitized and trimmed title.
++	 */
++	protected function s_title( $new_value ) {
++
++		$title = esc_html( $new_value );
++		$title = trim( $title );
++
++		return (string) strip_tags( $title );
++	}
++
++	/**
+ 	 * Returns the knowledge type value string.
+ 	 *
+ 	 * @since 2.2.8
+Index: lib/js/autodescription.js
+===================================================================
+--- lib/js/autodescription.js	(revision 1385490)
++++ lib/js/autodescription.js	(working copy)
+@@ -219,12 +219,13 @@
+ 	},
+ 
+ 	/**
+-	 * Escapes HTML strings
++	 * Escapes HTML strings.
+ 	 *
+ 	 * @since 2.2.4
+ 	 *
+ 	 * @function
+ 	 *
++	 * @param {String} str
+ 	 * @return {String} HTML to jQuery converted string
+ 	 */
+ 	escapeStr: function( str ) {
+@@ -237,6 +238,25 @@
+ 	},
+ 
+ 	/**
++	 * Escapes HTML entities.
++	 *
++	 * @since 2.5.2
++	 *
++	 * @function
++	 *
++	 * @param {String|null} str
++	 * @return {String} HTML to jQuery converted string
++	 */
++	escapeTags: function( str ) {
++		'use strict';
++
++		if ( str )
++			str.replace( /&/g, '&amp;' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
++
++		return str;
++	},
++
++	/**
+ 	 * Dynamic Title separator replacement in metabox
+ 	 *
+ 	 * @since 2.2.2
+@@ -517,32 +537,36 @@
+ 			$target = jQuery( '#autodescription-site-settings\\[homepage_title\\]' ),
+ 			$leftRight = jQuery( '#home-title-location input:checked' ).val(),
+ 			$toggle = jQuery( '#autodescription-site-settings\\[homepage_tagline\\]' ),
+-			$placeholder = autodescriptionL10n.siteTitle,
++			$title = autodescriptionL10n.siteTitle,
++			$placeholder = $title,
+ 			$description = autodescription.blogDescription,
+ 			$sep = jQuery( '#title-separator input:checked' ).val(),
+ 			$sepOutput = autodescription.titleSeparator;
+ 
+-		if ( $toggle.is(':checked') ) {
++		if ( $toggle.is( ':checked' ) ) {
+ 
+ 			if ( $val.length !== 0 ) {
+-				$description = $val;
++				$val = autodescription.escapeTags( $val );
++
++				// Create a memory div to store the html in, convert to text to append in $placeholder and $floatTag
++				$description = jQuery( '<div/>' ).text( $val ).html();
+ 			}
+ 
+ 			if ( $sep.length !== 0 ) {
+-				if ( $sep == 'pipe' ) {
++				if ( 'pipe' === $sep ) {
+ 					$sepOutput = ( "|" );
+-				} else if ( $sep == 'dash' ) {
++				} else if ( 'dash' === $sep ) {
+ 					$sepOutput = ( "-" );
+ 				} else {
+ 					// Create a memory div to store the html in, convert to text to append in $placeholder
+-					$sepOutput = jQuery('<div/>').html( "&" + $sep + ";" ).text();
++					$sepOutput = jQuery( '<div/>' ).html( "&" + $sep + ";" ).text();
+ 				}
+ 			}
+ 
+-			if ( $leftRight.length !== 0 && $leftRight == 'left' ) {
+-				$placeholder = autodescriptionL10n.siteTitle + ' ' + $sepOutput + ' ' + $description;
++			if ( $leftRight.length !== 0 && 'left' === $leftRight ) {
++				$placeholder = $title + ' ' + $sepOutput + ' ' + $description;
+ 			} else {
+-				$placeholder = $description + ' ' + $sepOutput + ' ' + autodescriptionL10n.siteTitle;
++				$placeholder = $description + ' ' + $sepOutput + ' ' + $title;
+ 			}
+ 		}
+ 
+@@ -563,7 +587,7 @@
+ 	taglinePropTrigger: function() {
+ 		'use strict';
+ 
+-		return jQuery( "#autodescription-site-settings\\[homepage_title_tagline\\]" ).trigger( 'keyup', autodescription.taglineProp );
++		jQuery( "#autodescription-site-settings\\[homepage_title_tagline\\]" ).trigger( 'keyup', autodescription.taglineProp );
+ 	},
+ 
+ 	/**
+Index: lib/js/autodescription.min.js
+===================================================================
+--- lib/js/autodescription.min.js	(revision 1385490)
++++ lib/js/autodescription.min.js	(working copy)
+@@ -1,22 +1,22 @@
+ window.autodescription={settingsChanged:!1,titleTagline:autodescriptionL10n.titleTagline,titleAdditions:autodescriptionL10n.titleAdditions,titleLocation:autodescriptionL10n.titleLocation,blogDescription:autodescriptionL10n.blogDescription,siteTitle:autodescriptionL10n.siteTitle,titleSeparator:autodescriptionL10n.titleSeparator,isRTL:autodescriptionL10n.isRTL,isHome:autodescriptionL10n.isHome,saveAlert:autodescriptionL10n.saveAlert,confirmReset:autodescriptionL10n.confirmReset,docTitles:function(){return jQuery("#autodescription_title, #autodescription-meta\\[doctitle\\], #autodescription-site-settings\\[homepage_title\\]")},
+ docDescriptions:function(){return jQuery("#autodescription_description, #autodescription-meta\\[description\\], #autodescription-site-settings\\[homepage_description\\]")},confirm:function(a){return confirm(a)},updateCharacterCountDescription:function(a){var b=jQuery(a.target),c=b.val().length,b=b.attr("placeholder").length;a=jQuery("#"+autodescription.escapeStr(a.target.id)+"_chars");var d="",f="";0===c&&(c=b);f=c.toString();d=100>c||175<=c?"ad-count-bad":145>c||155<c&&175>c?"ad-count-okay":"ad-count-good";
+-a.html(f).removeClass().addClass(d)},updateCharacterCountTitle:function(a){var b=jQuery(a.target),c=autodescription.titleAdditions.length,d=autodescription.blogDescription.length,f=autodescription.siteTitle.length,g=b.val().length,k=b.attr("placeholder").length,h=jQuery("#autodescription-site-settings\\[homepage_title_tagline\\]").val(),b=3;a=jQuery("#"+autodescription.escapeStr(a.target.id)+"_chars");var e=0,l="";autodescription.titleTagline||(b=c=0);0===g&&(0!==f?g=f:e=k);0!==g&&(0!==c&&"undefined"!==
+-typeof h&&(c=h.length,c=0!==c?c:d),e=0===c?g:g+b+c);l=25>e||75<=e?"ad-count-bad":42>e||55<e&&75>e?"ad-count-okay":"ad-count-good";a.html(e.toString()).removeClass().addClass(l)},escapeStr:function(a){return a?a.replace(/([\[\]\/])/g,"\\$1"):a},separatorSwitch:function(a){var b=jQuery(".autodescription-sep-js");a=jQuery(a.target).val();"pipe"==a?b.text(" | "):"dash"==a?b.text(" - "):b.html(" &"+a+"; ")},separatorSwitchDesc:function(a){var b=jQuery(".autodescription-descsep-js");a=jQuery(a.target).val();
+-"pipe"==a?b.text(" | "):"dash"==a?b.text(" - "):b.html(" &"+a+"; ")},statusBarHover:function(){var a=jQuery(".ad-bar-wrap");jQuery(".ad-bar-wrap a").mouseenter(function(){var a=jQuery(this),c=a.attr("data-desc");void 0!==c&&0===a.find("div").length&&(a.append('<div class="explanation-desc">'+c+"<div></div></div>"),c=a.find("div.explanation-desc").height()+36,a.find("div.explanation-desc").css("top",a.position().top-c+"px"))}).mousemove(function(b){var c=b.pageX-a.offset().left-10,d=jQuery("span.ad-seo .explanation-desc div"),
+-f=jQuery("div.explanation-desc").offset().left,g=jQuery("div.explanation-desc").width(),f=f+g+20;1>c?d.css("left","0px"):b.pageX>f?d.css("left",g+10+"px"):d.css("left",c+"px")}).mouseleave(function(){jQuery(this).find("div.explanation-desc").remove()})},removeDesc:function(a){a=jQuery(a.target);var b=jQuery(".ad-bar-wrap a");a.closest(b).length||b.find("div.explanation-desc").remove()},tabToggle:function(a){jQuery("div.autodescription-metaboxes .nav-tab-wrapper :input").each(function(){var b=jQuery(this),
+-c=jQuery(a.target).attr("id");b.next().toggleClass("nav-tab-active",this.checked);"undefined"!==typeof c&&-1===c.indexOf("-tabs-js")&&autodescription.tabContent(c)})},tabContent:function(a){if("undefined"!=typeof a){var b=a.slice(0,a.indexOf("-tab")),b=jQuery("."+b+"-tab-content");a=jQuery("#"+a+"-box");b.css("display","none");a.css("display","block")}},taglineToggle:function(a){a=jQuery(a.target);var b=jQuery(".custom-blogname-js");a.is(":checked")?(b.css("display","inline"),autodescription.titleTagline=
+-!0):(b.css("display","none"),autodescription.titleTagline=!1);return autodescription.docTitles().trigger("keyup",autodescription.updateCharacterCountTitle)},taglineToggleDesc:function(a){a=jQuery(a.target);var b=jQuery(".on-blogname-js");a.is(":checked")?b.css("display","inline"):b.css("display","none")},taglineToggleOnload:function(a){a=jQuery("#title-tagline-toggle :input");var b=jQuery(".custom-blogname-js"),c=jQuery("#description-onblogname-toggle :input"),d=jQuery(".on-blogname-js"),f=jQuery("#title-additions-toggle :input"),
+-g=jQuery(".title-additions-js");a.is(":checked")?b.css("display","inline"):b.css("display","none");c.is(":checked")?d.css("display","inline"):d.css("display","none");f.is(":checked")?g.css("display","none"):g.css("display","inline")},titleProp:function(a){a=jQuery(a.target).val();var b=jQuery(".custom-title-js");0===a.length?b.text(autodescription.siteTitle):b.text(a)},taglineProp:function(a){a=jQuery(a.target).val();var b=jQuery(".custom-tagline-js"),c=jQuery("#autodescription-site-settings\\[homepage_title\\]"),
+-d=jQuery("#home-title-location input:checked").val(),f=jQuery("#autodescription-site-settings\\[homepage_tagline\\]"),g=autodescriptionL10n.siteTitle,k=autodescription.blogDescription,h=jQuery("#title-separator input:checked").val(),e=autodescription.titleSeparator;f.is(":checked")&&(0!==a.length&&(k=a),0!==h.length&&(e="pipe"==h?"|":"dash"==h?"-":jQuery("<div/>").html("&"+h+";").text()),g=0!==d.length&&"left"==d?autodescriptionL10n.siteTitle+" "+e+" "+k:k+" "+e+" "+autodescriptionL10n.siteTitle);
+-b.html(k);c.attr("placeholder",g);autodescription.docTitles().trigger("keyup",autodescription.updateCharacterCountTitle)},taglinePropTrigger:function(){return jQuery("#autodescription-site-settings\\[homepage_title_tagline\\]").trigger("keyup",autodescription.taglineProp)},titleToggle:function(){var a=jQuery(event.target),b=jQuery(".title-additions-js");a.is(":checked")?b.css("display","none"):b.css("display","inline")},attachUnsavedChangesListener:function(){jQuery("div.autodescription-metaboxes :input, div#theseoframework-inpost-box .inside :input").not(".nav-tab-wrapper :input").change(function(){autodescription.registerChange()});
+-jQuery("div.autodescription-metaboxes input[type=text], div.autodescription-metaboxes textarea, div#theseoframework-inpost-box .inside input[type=text], div#theseoframework-inpost-box .inside textarea").not(".nav-tab-wrapper :input").on("keyup",function(){autodescription.registerChange()});window.onbeforeunload=function(){if(autodescription.settingsChanged)return autodescription.saveAlert};jQuery('div.autodescription-metaboxes input[type="submit"], div#publishing-action input[type="submit"], div#save-action input[type="submit"]').click(function(){window.onbeforeunload=
+-null})},registerChange:function(){autodescription.settingsChanged=!0},confirmedReset:function(){return confirm(autodescription.confirmReset)},dynamicPlaceholder:function(a){var b=autodescription.titleAdditions.length,c=jQuery("#autodescription-title-placeholder");if(0!==b){var b=!1,d=jQuery("#home-title-location input:checked").val(),f=autodescription.isRTL;if("undefined"!==typeof d&&0!==d.length)"1"===f?"right"===d&&(b=!0):"left"===d&&(b=!0);else{var d=autodescription.titleLocation,g=autodescription.titleTagline;
+-"1"===autodescription.isHome?"1"===g&&("1"===f?"right"===d&&(b=!0):"left"===d&&(b=!0)):"1"===f?"left"===d&&(b=!0):"right"===d&&(b=!0)}}else return a=jQuery(a.target),a.css("text-indent","initial"),c.empty();d=jQuery("#title-tagline-toggle :input");if("undefined"!==typeof d&&0<d.length&&!d.is(":checked"))a=jQuery(a.target),a.css("text-indent","initial"),c.css("display","none");else{a=jQuery(a.target);var k=a.val(),h=jQuery("#autodescription-title-offset"),e=0,l=(a.outerHeight(!0)-a.height())/2,m=(a.outerWidth()-
+-a.width())/2,d=(a.outerWidth(!0)-a.width())/2,e=jQuery("#autodescription-site-settings\\[homepage_title_tagline\\]").val(),g="left";"1"===f&&(g="right");b?(f=autodescription.titleSeparator+" "+autodescription.titleAdditions,"undefined"!==typeof e&&0<e.length&&(f=autodescription.titleSeparator+" "+e),a.css("text-indent","initial")):(f=autodescription.titleAdditions+" "+autodescription.titleSeparator,"undefined"!==typeof e&&0<e.length&&(f=e+" "+autodescription.titleSeparator));h.text(k);h.css({fontFamily:a.css("fontFamily"),
+-fontWeight:a.css("fontWeight"),letterSpacing:a.css("letterSpacing"),fontSize:a.css("fontSize")});e=h.width();e=a.width()-m-e;0>e&&(e=0);c.css({display:a.css("display"),lineHeight:a.css("lineHeight"),paddingTop:l+"px",paddingBottom:l+"px",fontFamily:a.css("fontFamily"),fontWeight:a.css("fontWeight"),fontSize:a.css("fontSize"),letterSpacing:a.css("letterSpacing"),maxWidth:e+"px"});"undefined"===typeof k||1>k.length?(b||a.css("text-indent","initial"),c.empty()):(c.text(f),a.outerWidth()>d&&(b?c.css(g,
+-m+d+h.width()+"px"):(b=m+c.width(),0>b&&(b=0),c.css(g,d+"px"),a.css("text-indent",b+"px"))))}},selectTitleInput:function(){var a=autodescription.docTitles();a.focus();if(a.setSelectionRange){var b=2*a.val().length;a.setSelectionRange(b,b)}else a.val(a.val()).focus()},dynamicPlaceholderOnLoad:function(){var a=autodescription.docTitles();"undefined"!==typeof a.val()&&(0<a.val().length?a.trigger("keyup",autodescription.dynamicPlaceholder):a.trigger("keyup",autodescription.updateCharacterCountTitle))},
+-triggerDescriptionOnLoad:function(){autodescription.docDescriptions().trigger("keyup",autodescription.updateCharacterCountDescription)},onLoadUnregisterChange:function(){autodescription.settingsChanged=!1},ready:function(){jQuery("div.updated, div.error, div.notice-warning").insertAfter("div.top-wrap");jQuery(document.body).ready(autodescription.dynamicPlaceholderOnLoad);jQuery(document.body).ready(autodescription.triggerDescriptionOnLoad);jQuery(document.body).ready(autodescription.taglineToggleOnload);
+-autodescription.statusBarHover();jQuery(document.body).on("touchstart MSPointerDown",autodescription.removeDesc);autodescription.attachUnsavedChangesListener();jQuery(document.body).ready(autodescription.onLoadUnregisterChange);autodescription.docDescriptions().on("keydown keyup paste",autodescription.updateCharacterCountDescription);autodescription.docTitles().on("keydown keyup paste",autodescription.updateCharacterCountTitle);jQuery("#title-separator input").on("click",autodescription.separatorSwitch);
+-jQuery("#description-separator input").on("click",autodescription.separatorSwitchDesc);jQuery(".autodescription-js-confirm-reset").on("click.autodescription.autodescription_confirm_reset",autodescription.confirmedReset);jQuery("#social-tabs-js, #robots-tabs-js, #knowledge-tabs-js, #sitemaps-tabs-js").on("click",autodescription.tabToggle);jQuery("#title-tagline-toggle :input").on("click",autodescription.taglineToggle);jQuery("#description-onblogname-toggle :input").on("click",autodescription.taglineToggleDesc);
+-jQuery("#autodescription-site-settings\\[homepage_title\\]").on("keydown keyup paste",autodescription.titleProp);jQuery("#home-title-location :input, #title-tagline-toggle :input, #title-separator input").on("click",autodescription.taglinePropTrigger);jQuery("#autodescription-site-settings\\[homepage_title_tagline\\]").on("keydown keyup paste",autodescription.taglineProp);jQuery("#autodescription-site-settings\\[title_rem_additions\\]").on("click",autodescription.titleToggle);autodescription.docTitles().on("keydown keyup paste",
+-autodescription.dynamicPlaceholder);jQuery("#autodescription-title-placeholder").on("click",autodescription.selectTitleInput)}};jQuery(autodescription.ready);
++a.html(f).removeClass().addClass(d)},updateCharacterCountTitle:function(a){var b=jQuery(a.target),c=autodescription.titleAdditions.length,d=autodescription.blogDescription.length,f=autodescription.siteTitle.length,g=b.val().length,l=b.attr("placeholder").length,h=jQuery("#autodescription-site-settings\\[homepage_title_tagline\\]").val(),b=3;a=jQuery("#"+autodescription.escapeStr(a.target.id)+"_chars");var e=0,k="";autodescription.titleTagline||(b=c=0);0===g&&(0!==f?g=f:e=l);0!==g&&(0!==c&&"undefined"!==
++typeof h&&(c=h.length,c=0!==c?c:d),e=0===c?g:g+b+c);k=25>e||75<=e?"ad-count-bad":42>e||55<e&&75>e?"ad-count-okay":"ad-count-good";a.html(e.toString()).removeClass().addClass(k)},escapeStr:function(a){return a?a.replace(/([\[\]\/])/g,"\\$1"):a},escapeTags:function(a){a&&a.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");return a},separatorSwitch:function(a){var b=jQuery(".autodescription-sep-js");a=jQuery(a.target).val();"pipe"==a?b.text(" | "):"dash"==a?b.text(" - "):b.html(" &"+a+
++"; ")},separatorSwitchDesc:function(a){var b=jQuery(".autodescription-descsep-js");a=jQuery(a.target).val();"pipe"==a?b.text(" | "):"dash"==a?b.text(" - "):b.html(" &"+a+"; ")},statusBarHover:function(){var a=jQuery(".ad-bar-wrap");jQuery(".ad-bar-wrap a").mouseenter(function(){var a=jQuery(this),c=a.attr("data-desc");void 0!==c&&0===a.find("div").length&&(a.append('<div class="explanation-desc">'+c+"<div></div></div>"),c=a.find("div.explanation-desc").height()+36,a.find("div.explanation-desc").css("top",
++a.position().top-c+"px"))}).mousemove(function(b){var c=b.pageX-a.offset().left-10,d=jQuery("span.ad-seo .explanation-desc div"),f=jQuery("div.explanation-desc").offset().left,g=jQuery("div.explanation-desc").width(),f=f+g+20;1>c?d.css("left","0px"):b.pageX>f?d.css("left",g+10+"px"):d.css("left",c+"px")}).mouseleave(function(){jQuery(this).find("div.explanation-desc").remove()})},removeDesc:function(a){a=jQuery(a.target);var b=jQuery(".ad-bar-wrap a");a.closest(b).length||b.find("div.explanation-desc").remove()},
++tabToggle:function(a){jQuery("div.autodescription-metaboxes .nav-tab-wrapper :input").each(function(){var b=jQuery(this),c=jQuery(a.target).attr("id");b.next().toggleClass("nav-tab-active",this.checked);"undefined"!==typeof c&&-1===c.indexOf("-tabs-js")&&autodescription.tabContent(c)})},tabContent:function(a){if("undefined"!=typeof a){var b=a.slice(0,a.indexOf("-tab")),b=jQuery("."+b+"-tab-content");a=jQuery("#"+a+"-box");b.css("display","none");a.css("display","block")}},taglineToggle:function(a){a=
++jQuery(a.target);var b=jQuery(".custom-blogname-js");a.is(":checked")?(b.css("display","inline"),autodescription.titleTagline=!0):(b.css("display","none"),autodescription.titleTagline=!1);return autodescription.docTitles().trigger("keyup",autodescription.updateCharacterCountTitle)},taglineToggleDesc:function(a){a=jQuery(a.target);var b=jQuery(".on-blogname-js");a.is(":checked")?b.css("display","inline"):b.css("display","none")},taglineToggleOnload:function(a){a=jQuery("#title-tagline-toggle :input");
++var b=jQuery(".custom-blogname-js"),c=jQuery("#description-onblogname-toggle :input"),d=jQuery(".on-blogname-js"),f=jQuery("#title-additions-toggle :input"),g=jQuery(".title-additions-js");a.is(":checked")?b.css("display","inline"):b.css("display","none");c.is(":checked")?d.css("display","inline"):d.css("display","none");f.is(":checked")?g.css("display","none"):g.css("display","inline")},titleProp:function(a){a=jQuery(a.target).val();var b=jQuery(".custom-title-js");0===a.length?b.text(autodescription.siteTitle):
++b.text(a)},taglineProp:function(a){a=jQuery(a.target).val();var b=jQuery(".custom-tagline-js"),c=jQuery("#autodescription-site-settings\\[homepage_title\\]"),d=jQuery("#home-title-location input:checked").val(),f=jQuery("#autodescription-site-settings\\[homepage_tagline\\]"),g=autodescriptionL10n.siteTitle,l=g,h=autodescription.blogDescription,e=jQuery("#title-separator input:checked").val(),k=autodescription.titleSeparator;f.is(":checked")&&(0!==a.length&&(a=autodescription.escapeTags(a),h=jQuery("<div/>").text(a).html()),
++0!==e.length&&(k="pipe"===e?"|":"dash"===e?"-":jQuery("<div/>").html("&"+e+";").text()),l=0!==d.length&&"left"===d?g+" "+k+" "+h:h+" "+k+" "+g);b.html(h);c.attr("placeholder",l);autodescription.docTitles().trigger("keyup",autodescription.updateCharacterCountTitle)},taglinePropTrigger:function(){jQuery("#autodescription-site-settings\\[homepage_title_tagline\\]").trigger("keyup",autodescription.taglineProp)},titleToggle:function(){var a=jQuery(event.target),b=jQuery(".title-additions-js");a.is(":checked")?
++b.css("display","none"):b.css("display","inline")},attachUnsavedChangesListener:function(){jQuery("div.autodescription-metaboxes :input, div#theseoframework-inpost-box .inside :input").not(".nav-tab-wrapper :input").change(function(){autodescription.registerChange()});jQuery("div.autodescription-metaboxes input[type=text], div.autodescription-metaboxes textarea, div#theseoframework-inpost-box .inside input[type=text], div#theseoframework-inpost-box .inside textarea").not(".nav-tab-wrapper :input").on("keyup",
++function(){autodescription.registerChange()});window.onbeforeunload=function(){if(autodescription.settingsChanged)return autodescription.saveAlert};jQuery('div.autodescription-metaboxes input[type="submit"], div#publishing-action input[type="submit"], div#save-action input[type="submit"]').click(function(){window.onbeforeunload=null})},registerChange:function(){autodescription.settingsChanged=!0},confirmedReset:function(){return confirm(autodescription.confirmReset)},dynamicPlaceholder:function(a){var b=
++autodescription.titleAdditions.length,c=jQuery("#autodescription-title-placeholder");if(0!==b){var b=!1,d=jQuery("#home-title-location input:checked").val(),f=autodescription.isRTL;if("undefined"!==typeof d&&0!==d.length)"1"===f?"right"===d&&(b=!0):"left"===d&&(b=!0);else{var d=autodescription.titleLocation,g=autodescription.titleTagline;"1"===autodescription.isHome?"1"===g&&("1"===f?"right"===d&&(b=!0):"left"===d&&(b=!0)):"1"===f?"left"===d&&(b=!0):"right"===d&&(b=!0)}}else return a=jQuery(a.target),
++a.css("text-indent","initial"),c.empty();d=jQuery("#title-tagline-toggle :input");if("undefined"!==typeof d&&0<d.length&&!d.is(":checked"))a=jQuery(a.target),a.css("text-indent","initial"),c.css("display","none");else{a=jQuery(a.target);var l=a.val(),h=jQuery("#autodescription-title-offset"),e=0,k=(a.outerHeight(!0)-a.height())/2,m=(a.outerWidth()-a.width())/2,d=(a.outerWidth(!0)-a.width())/2,e=jQuery("#autodescription-site-settings\\[homepage_title_tagline\\]").val(),g="left";"1"===f&&(g="right");
++b?(f=autodescription.titleSeparator+" "+autodescription.titleAdditions,"undefined"!==typeof e&&0<e.length&&(f=autodescription.titleSeparator+" "+e),a.css("text-indent","initial")):(f=autodescription.titleAdditions+" "+autodescription.titleSeparator,"undefined"!==typeof e&&0<e.length&&(f=e+" "+autodescription.titleSeparator));h.text(l);h.css({fontFamily:a.css("fontFamily"),fontWeight:a.css("fontWeight"),letterSpacing:a.css("letterSpacing"),fontSize:a.css("fontSize")});e=h.width();e=a.width()-m-e;0>
++e&&(e=0);c.css({display:a.css("display"),lineHeight:a.css("lineHeight"),paddingTop:k+"px",paddingBottom:k+"px",fontFamily:a.css("fontFamily"),fontWeight:a.css("fontWeight"),fontSize:a.css("fontSize"),letterSpacing:a.css("letterSpacing"),maxWidth:e+"px"});"undefined"===typeof l||1>l.length?(b||a.css("text-indent","initial"),c.empty()):(c.text(f),a.outerWidth()>d&&(b?c.css(g,m+d+h.width()+"px"):(b=m+c.width(),0>b&&(b=0),c.css(g,d+"px"),a.css("text-indent",b+"px"))))}},selectTitleInput:function(){var a=
++autodescription.docTitles();a.focus();if(a.setSelectionRange){var b=2*a.val().length;a.setSelectionRange(b,b)}else a.val(a.val()).focus()},dynamicPlaceholderOnLoad:function(){var a=autodescription.docTitles();"undefined"!==typeof a.val()&&(0<a.val().length?a.trigger("keyup",autodescription.dynamicPlaceholder):a.trigger("keyup",autodescription.updateCharacterCountTitle))},triggerDescriptionOnLoad:function(){autodescription.docDescriptions().trigger("keyup",autodescription.updateCharacterCountDescription)},
++onLoadUnregisterChange:function(){autodescription.settingsChanged=!1},ready:function(){jQuery("div.updated, div.error, div.notice-warning").insertAfter("div.top-wrap");jQuery(document.body).ready(autodescription.dynamicPlaceholderOnLoad);jQuery(document.body).ready(autodescription.triggerDescriptionOnLoad);jQuery(document.body).ready(autodescription.taglineToggleOnload);autodescription.statusBarHover();jQuery(document.body).on("touchstart MSPointerDown",autodescription.removeDesc);autodescription.attachUnsavedChangesListener();
++jQuery(document.body).ready(autodescription.onLoadUnregisterChange);autodescription.docDescriptions().on("keydown keyup paste",autodescription.updateCharacterCountDescription);autodescription.docTitles().on("keydown keyup paste",autodescription.updateCharacterCountTitle);jQuery("#title-separator input").on("click",autodescription.separatorSwitch);jQuery("#description-separator input").on("click",autodescription.separatorSwitchDesc);jQuery(".autodescription-js-confirm-reset").on("click.autodescription.autodescription_confirm_reset",
++autodescription.confirmedReset);jQuery("#social-tabs-js, #robots-tabs-js, #knowledge-tabs-js, #sitemaps-tabs-js").on("click",autodescription.tabToggle);jQuery("#title-tagline-toggle :input").on("click",autodescription.taglineToggle);jQuery("#description-onblogname-toggle :input").on("click",autodescription.taglineToggleDesc);jQuery("#autodescription-site-settings\\[homepage_title\\]").on("keydown keyup paste",autodescription.titleProp);jQuery("#home-title-location :input, #title-tagline-toggle :input, #title-separator input").on("click",
++autodescription.taglinePropTrigger);jQuery("#autodescription-site-settings\\[homepage_title_tagline\\]").on("keydown keyup paste",autodescription.taglineProp);jQuery("#autodescription-site-settings\\[title_rem_additions\\]").on("click",autodescription.titleToggle);autodescription.docTitles().on("keydown keyup paste",autodescription.dynamicPlaceholder);jQuery("#autodescription-title-placeholder").on("click",autodescription.selectTitleInput)}};jQuery(autodescription.ready);

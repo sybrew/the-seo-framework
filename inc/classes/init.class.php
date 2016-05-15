@@ -200,7 +200,7 @@ class AutoDescription_Init {
 	 * Echos output.
 	 */
 	public function html_output() {
-		global $blog_id, $paged, $page;
+		global $blog_id;
 
 		/**
 		 * Start the timer here. I know it doesn't calculate the initiation of
@@ -224,8 +224,8 @@ class AutoDescription_Init {
 		 * Give each paged pages/archives a different cache key.
 		 * @since 2.2.6
 		 */
-		$page = isset( $page ) ? (string) $page : '0';
-		$paged = isset( $paged ) ? (string) $paged : '0';
+		$page = (string) $this->page();
+		$paged = (string) $this->paged();
 
 		$cache_key = 'seo_framework_output_' . $key . '_' . $paged . '_' . $page;
 

@@ -3,8 +3,8 @@ Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl, feed
 Requires at least: 3.6.0
-Tested up to: 4.5.0
-Stable tag: 2.5.2.1
+Tested up to: 4.5.1
+Stable tag: 2.5.2.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -77,7 +77,6 @@ We have also provided an API documentation located at [The SEO Framework API Doc
 * Prevents canonical errors with categories, pages, subdomains and multisite domain mapping.
 * Disables 404 pages and empty categories from being indexed, even if they don't send a 404 response.
 * Automatically notifies Google, Bing and Yahoo on Post or Page update when sitemaps are enabled.
-* Prevents duplicated content by disabling
 
 **This plugin allows you to manually set these values for each post, page, supported CPT and term:**
 
@@ -342,6 +341,72 @@ Please refer to this small guide: [SEO Data Migration](http://theseoframework.co
 Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
+
+= 2.5.2.4 - Secure Globals =
+
+**Summarized**
+
+* This minor security update ensures the Runway Framework theme compatibility as well as resolving some minor security concerns.
+
+**For everyone:**
+
+* Fixed: Global Page/Paged vars could (undesirably) be overwritten by external themes, causing the website to crash on archives.
+* Improved: Various admin-only sanitation features.
+
+= 2.5.2.3 - Unfamiliar Homefront =
+
+**Summarized:**
+
+* This minor update resolves an issue where an uncommon type of Home Page as blog could be seen as an empty Archive. This results in the Home Page being removed from the Search Index.
+* 2.6.0 and all its promised features are still being developed and is due in April.
+
+**For everyone:**
+
+* Fixed: When the Home Page is a blog, it could be seen as an empty Archive when no Posts are set to published.
+* Note: This detection is actually a feature to prevent bad Archives and 404 pages from being indexed. Alas, the Home Page has enough settings and can be uncommonly adjusted by Themes and (builder) Plugins.
+
+**For whoever was affected:**
+
+* First off, I'm terribly sorry for this inconvenience and this negative hit on your Home Page.
+* Luckily, its effects aren't lasting and your Home Page will be reindexed automatically.
+* Your website was only affected by this bug if you have 0 posts published, and - at the same time - if your Home Page isn't assigned as a Static Page, but a Blog.
+
+**For whoever was affected and wants to speed things up:**
+
+* You can manually reindex your Home Page with Google and the Bing Search Network (Yahoo!, Bing, DuckDuckGo, and others whom use the Bing Search Network).
+* To do this, perform the following steps. Be sure to clear all your caches beforehand:
+
+***Google:***
+
+1. Go to [Google Webmasters](https://www.google.com/webmasters/) and sign up if you haven't already.
+1. Add your property if you haven't already.
+1. Verify your property if you haven't already. You can add the verification code they give within the Webmasters Settings metabox within the SEO Settings page. Be sure to clear your cache.
+1. Go to your property.
+1. On the left, go to `Crawl => Fetch as Google`.
+1. Without changing any details, hit "Fetch and Render".
+1. It takes up to 3 days for Google to re-index your Home Page.
+
+***Bing Search Network:***
+
+1. Go to [Bing Webmaster Tools](http://www.bing.com/toolbox/webmaster) and sign up if you haven't already.
+1. Add your property if you haven't already.
+1. Verify your property if you haven't already. You can add the verification code they give within the Webmasters Settings metabox within the SEO Settings page. Be sure to clear your cache.
+1. Go to your property.
+1. On the left, go to `Diagnostics & Tools => Fetch as Bingbot`.
+1. Enter your Home Page URL and hit "Fetch".
+1. Wait a little and Bing will output the source of your page on success.
+1. It takes up to 3 days for Bing to re-index your Home Page. It takes up to 14 days for the network to catch up.
+
+= 2.5.2.2 - Description Conditions =
+
+**Summarized:**
+
+* 2.6.0 is already underway, but I found the following fix mandatory. So here is 2.5.2.2!
+* This minor update makes sure the social description is as intended when you choose to remove the blogname from the regular description.
+
+**For everyone:**
+
+* Fixed: When description additions are disabled, the social description is no longer "Title on Blogname".
 
 = 2.5.2.1 - Unforeseen Improvements =
 
