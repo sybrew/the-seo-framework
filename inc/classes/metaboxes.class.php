@@ -265,12 +265,9 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 	 *
 	 * @since 2.3.4
 	 *
-	 * @uses globals $wpdb fetch post for the example
-	 *
 	 * @see $this->description_metabox()	Callback for Description Settings box.
 	 */
 	public function description_metabox() {
-		global $wpdb,$blog_id;
 
 		do_action( 'the_seo_framework_description_metabox_before' );
 
@@ -297,6 +294,10 @@ class AutoDescription_Metaboxes extends AutoDescription_Networkoptions {
 		$page_title = __( 'Example Title', 'autodescription' );
 		$on = _x( 'on', 'Placement. e.g. Post Title "on" Blog Name', 'autodescription' );
 		$excerpt = __( 'This is an example description&#8230;', 'autodescription' );
+
+		$page_title = $this->escape_description( $page_title );
+		$on = $this->escape_description( $on );
+		$excerpt = $this->escape_description( $excerpt );
 
 		//* Put it together.
 		$example 	= $page_title

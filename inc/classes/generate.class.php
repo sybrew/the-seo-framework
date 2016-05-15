@@ -83,6 +83,22 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 * Beautify.
 		 * @since 2.3.4
 		 */
+		$description = $this->escape_description( $description );
+
+		return $description;
+	}
+
+	/**
+	 * Escapes and beautifies description.
+	 *
+	 * @param string $description The description to escape and beautify.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @return string Escaped and beautified description.
+	 */
+	public function escape_description( $description = '' ) {
+
 		$description = wptexturize( $description );
 		$description = convert_chars( $description );
 		$description = esc_html( $description );
@@ -224,11 +240,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		}
 
 		if ( $escape ) {
-			$description = wptexturize( $description );
-			$description = convert_chars( $description );
-			$description = esc_html( $description );
-			$description = capital_P_dangit( $description );
-			$description = trim( $description );
+			$description = $this->escape_description( $description );
 		}
 
 		return $description;
@@ -435,7 +447,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				 */
 				$excerpt_exists = ! empty( $excerpt['social'] ) ? true : false;
 
-				if ( $excerpt_exists && $description_additions ) {
+				if ( $excerpt_exists ) {
 					$description = $excerpt['social'];
 				} else {
 					$description = (string) sprintf( '%s %s %s', $title, $on, $blogname );
@@ -443,15 +455,18 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			} else {
 				$excerpt_exists = ! empty( $excerpt['normal'] ) ? true : false;
 
-				if ( $excerpt_exists && $description_additions ) {
-					$description = (string) sprintf( '%s %s %s %s %s', $title, $on, $blogname, $sep, $excerpt['normal'] );
-				} else if ( $excerpt_exists ) {
-					$description = (string) sprintf( '%s %s %s', $title, $sep, $excerpt['normal'] );
+				if ( true === $excerpt_exists ) {
+					if ( $description_additions ) {
+						$description = (string) sprintf( '%s %s %s %s %s', $title, $on, $blogname, $sep, $excerpt['normal'] );
+					} else {
+						$description = (string) sprintf( '%s %s %s', $title, $sep, $excerpt['normal'] );
+					}
 				} else {
 					//* We still add the additions when no excerpt has been found.
 					// i.e. home page or empty/shortcode filled page.
 					$description = (string) sprintf( '%s %s %s', $title, $on, $blogname );
 				}
+
 			}
 		} else {
 			//* Home page Description.
@@ -459,11 +474,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		}
 
 		if ( $escape ) {
-			$description = wptexturize( $description );
-			$description = convert_chars( $description );
-			$description = esc_html( $description );
-			$description = capital_P_dangit( $description );
-			$description = trim( $description );
+			$description = $this->escape_description( $description );
 		}
 
 		/**
@@ -774,6 +785,27 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	}
 
 	/**
+	 * Escapes and beautifies title.
+	 *
+	 * @param string $title The title to escape and beautify.
+	 * @param bool $trim Whether to trim the title from whitespaces.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @return string Escaped and beautified title.
+	 */
+	public function escape_title( $title = '', $trim = true ) {
+
+		$title = wptexturize( $title );
+		$title = convert_chars( $title );
+		$title = esc_html( $title );
+		$title = capital_P_dangit( $title );
+		$title = $trim ? trim( $title ) : $title;
+
+		return $title;
+	}
+
+	/**
 	 * Parse and sanitize title args.
 	 *
 	 * @param array $args required The passed arguments.
@@ -859,13 +891,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		if ( empty( $title ) )
 			$title = __( 'Untitled', 'autodescription' );
 
-		if ( true === $args['escape'] ) {
-			$title = wptexturize( $title );
-			$title = convert_chars( $title );
-			$title = esc_html( $title );
-			$title = capital_P_dangit( $title );
-			$title = trim( $title );
-		}
+		if ( true === $args['escape'] )
+			$title = $this->escape_title( $title );
 
 		return $title;
 	}
@@ -1093,12 +1120,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		}
 
-		if ( true === $args['escape'] ) {
-			$title = wptexturize( $title );
-			$title = convert_chars( $title );
-			$title = esc_html( $title );
-			$title = capital_P_dangit( $title );
-		}
+		if ( true === $args['escape'] )
+			$title = $this->escape_title( $title, false );
 
 		/**
 		 * Debug output.
@@ -1233,14 +1256,10 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		 *
 		 * @since 2.4.1
 		 *
-		 * @global $page
-		 * @global $paged
-		 *
 		 * @applies filters core : protected_title_format
 		 * @applies filters core : private_title_format
 		 */
 		if ( ! $args['description_title'] ) {
-			global $page, $paged;
 
 			$post = get_post( $args['term_id'], OBJECT );
 
@@ -1252,12 +1271,16 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				$title = sprintf( $private_title_format, $title );
 			}
 
+			$page = $this->page();
+			$paged = $this->paged();
+
 			/**
 			 * @since 2.4.3
 			 * Adds page numbering within the title.
 			 */
 			if ( ! is_404() && ( $paged >= 2 || $page >= 2 ) )
 				$title .= " $sep " . sprintf( __( 'Page %s', 'autodescription' ), max( $paged, $page ) );
+
 
 			//* Title for title (meta) tags.
 			if ( $is_front_page && ! $add_tagline ) {
@@ -1298,13 +1321,9 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				}
 			}
 
-			if ( true === $args['escape'] ) {
-				$title = wptexturize( $title );
-				$title = convert_chars( $title );
-				$title = esc_html( $title );
-				$title = capital_P_dangit( $title );
-				$title = trim( $title );
-			}
+			if ( true === $args['escape'] )
+				$title = $this->escape_title( $title );
+
 		}
 
 		/**
@@ -1455,12 +1474,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$title = __( 'Untitled', 'autodescription' );
 		}
 
-		if ( $escape ) {
-			$title = wptexturize( $title );
-			$title = convert_chars( $title );
-			$title = esc_html( $title );
-			$title = capital_P_dangit( $title );
-		}
+		if ( $escape )
+			$title = $this->escape_title( $title, false );
 
 		return $title;
 	}
@@ -1529,12 +1544,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$seplocation = (string) apply_filters( 'the_seo_framework_title_seplocation_front', $this->get_option( 'home_title_location' ) );
 		}
 
-		if ( $escape ) {
-			$title = wptexturize( $title );
-			$title = convert_chars( $title );
-			$title = esc_html( $title );
-			$title = capital_P_dangit( $title );
-		}
+		if ( $escape )
+			$title = $this->escape_title( $title, false );
 
 		return array(
 			'title' => $title,
@@ -1581,12 +1592,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$home_title = ! empty( $custom_field ) ? (string) $custom_field : $home_title;
 		}
 
-		if ( $escape ) {
-			$home_title = wptexturize( $home_title );
-			$home_title = convert_chars( $home_title );
-			$home_title = esc_html( $home_title );
-			$home_title = capital_P_dangit( $home_title );
-		}
+		if ( $escape )
+			$home_title = $this->escape_title( $home_title, false );
 
 		return (string) $home_title;
 	}
@@ -1632,12 +1639,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		}
 
-		if ( $escape ) {
-			$title = wptexturize( $title );
-			$title = convert_chars( $title );
-			$title = esc_html( $title );
-			$title = capital_P_dangit( $title );
-		}
+		if ( $escape )
+			$title = $this->escape_title( $title, false );
 
 		return (string) $title;
 	}
@@ -1679,12 +1682,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$title = isset( $post->post_title ) ? $post->post_title : '';
 		}
 
-		if ( $escape ) {
-			$title = wptexturize( $title );
-			$title = convert_chars( $title );
-			$title = esc_html( $title );
-			$title = capital_P_dangit( $title );
-		}
+		if ( $escape )
+			$title = $this->escape_title( $title, false );
 
 		return (string) $title;
 	}
@@ -2183,7 +2182,6 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 *
 	 * @global WP_Query object $wp_query
 	 * @global WP_Rewrite $wp_rewrite
-	 * @global Paged $paged
 	 *
 	 * @param object $term The term object.
 	 * @param bool $no_request wether to fetch the WP Request or get the permalink by Post Object.
@@ -2203,7 +2201,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			$term = $wp_query->get_queried_object();
 		}
 
-		global $wp_rewrite,$paged;
+		global $wp_rewrite;
 
 		$taxonomy = $term->taxonomy;
 
@@ -2211,6 +2209,8 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		$slug = $term->slug;
 		$t = get_taxonomy( $taxonomy );
+
+		$paged = $this->paged();
 
 		if ( empty( $termlink ) ) {
 			if ( 'category' == $taxonomy ) {
@@ -2883,20 +2883,21 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		if ( (int) $paged > (int) 1 )
 			$meta['noindex'] = $this->get_option( 'paged_noindex' ) ? 'noindex' : $meta['noindex'];
 
-		/**
-		 * Check if archive is empty, set noindex for those.
-		 *
-		 * @todo maybe create option
-		 * @since 2.2.8
-		 */
-		if ( isset( $wp_query->post_count ) && (int) 0 === $wp_query->post_count )
-			$meta['noindex'] = 'noindex';
 
 		//* Check home page SEO settings, set noindex, nofollow and noarchive
 		if ( is_front_page() ) {
 			$meta['noindex']   = $this->get_option( 'homepage_noindex' ) ? 'noindex' : $meta['noindex'];
 			$meta['nofollow']  = $this->get_option( 'homepage_nofollow' ) ? 'nofollow' : $meta['nofollow'];
 			$meta['noarchive'] = $this->get_option( 'homepage_noarchive' ) ? 'noarchive' : $meta['noarchive'];
+		} else {
+			/**
+			 * Check if archive is empty, set noindex for those.
+			 *
+			 * @todo maybe create option
+			 * @since 2.2.8
+			 */
+			if ( isset( $wp_query->post_count ) && (int) 0 === $wp_query->post_count )
+				$meta['noindex'] = 'noindex';
 		}
 
 		if ( is_category() ) {
@@ -3128,7 +3129,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		if ( $this->get_option( 'prev_next_archives' ) && ! is_singular() ) {
 
-			$paged = get_query_var( 'paged' ) ? (int) get_query_var( 'paged' ) : 1;
+			$paged = $this->paged();
 
 			if ( $prev_next == 'prev' )
 				$prev = $paged > 1 ? get_previous_posts_page_link() : $prev;
@@ -3138,7 +3139,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		} else if ( $this->get_option( 'prev_next_posts' ) && is_singular() ) {
 
-			$page  = (int) get_query_var( 'page' );
+			$page = $this->page();
 
 			$numpages = substr_count( $wp_query->post->post_content, '<!--nextpage-->' ) + 1;
 
