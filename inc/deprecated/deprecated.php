@@ -33,7 +33,7 @@
  * @see the_seo_framework_load();
  */
 function hmpl_ad_load() {
-	_deprecated_function( __FUNCTION__, $this->the_seo_framework_version( '2.3.7' ), 'the_seo_framework_load()' );
+	_deprecated_function( __FUNCTION__, '2.3.7 of The SEO Framework', 'the_seo_framework_load()' );
 
 	return the_seo_framework_load();
 }

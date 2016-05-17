@@ -73,21 +73,16 @@ function the_seo_framework_dot_version( $version = '2.4' ) {
 
 	if ( $current_version ) {
 		$version_len = strlen( $version );
+		$current_version_len = strlen( $current_version );
 
-		//* Only allow 3 or 5 length.
-		if ( $version_len != 3 && $version_len != 5 )
-			return false;
+		//* Only allow 3 length.
+		if ( 3 !== $version_len )
+			$version = substr( $version, 0, 3 );
 
-		//* If 5 length, chop.
-		if ( $version_len == 5 ) {
-			$version = (string) substr( $version, 0, -2 );
-		} else {
-			$version = (string) $version;
-		}
+		if ( 3 !== $current_version_len )
+			$current_version = substr( $current_version, 0, 3 );
 
-		$current_version = (string) substr( $current_version, 0, -2 );
-
-		if ( version_compare( $current_version, $version, '=' ) )
+		if ( $current_version_len === $verion )
 			return true;
 	}
 
@@ -129,9 +124,10 @@ function tsf_wp_version( $version = '4.3.0', $compare = '>=' ) {
  *
  * @since 2.2.9
  *
- * @return string The pagehook.
+ * @return string|null The pagehook.
  */
 function tsf_options_pagehook() {
+
 	$theseoframework = the_seo_framework();
 
 	if ( isset( $theseoframework ) )
@@ -151,6 +147,7 @@ function tsf_options_pagehook() {
  * @return mixed The option value.
  */
 function tsf_get_option( $key, $use_cache = true ) {
+
 	$theseoframework = the_seo_framework();
 
 	if ( isset( $theseoframework ) )
@@ -165,8 +162,11 @@ function tsf_get_option( $key, $use_cache = true ) {
  * @param string|null $title the previous title
  *
  * @since 2.4.2
+ *
+ * @return string|null The current page title.
  */
 function the_seo_framework_title_from_cache( $title = null ) {
+
 	$theseoframework = the_seo_framework();
 
 	if ( isset( $theseoframework ) )
@@ -181,8 +181,11 @@ function the_seo_framework_title_from_cache( $title = null ) {
  * @param bool $social Fetch social description.
  *
  * @since 2.4.2
+ *
+ * @return string|null The current page description.
  */
 function the_seo_framework_description_from_cache( $social = false ) {
+
 	$theseoframework = the_seo_framework();
 
 	if ( isset( $theseoframework ) )
@@ -195,12 +198,32 @@ function the_seo_framework_description_from_cache( $social = false ) {
  * Fetch url from cache. Only works within Loop.
  *
  * @since 2.4.2
+ *
+ * @return string|null The current page URL.
  */
 function the_seo_framework_the_url_from_cache() {
+
 	$theseoframework = the_seo_framework();
 
 	if ( isset( $theseoframework ) )
 		return $theseoframework->the_url_from_cache();
 
 	return null;
+}
+
+/**
+ * Whether we're on the SEO settings page.
+ *
+ * @since 2.6.0
+ *
+ * @return bool
+ */
+function the_seo_framework_is_settings_page() {
+
+	$theseoframework = the_seo_framework();
+
+	if ( isset( $theseoframework ) )
+		return $theseoframework->is_seo_settings_page();
+
+	return false;
 }

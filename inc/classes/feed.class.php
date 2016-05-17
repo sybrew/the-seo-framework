@@ -32,19 +32,55 @@ class AutoDescription_Feed extends AutoDescription_Transients {
 	public function __construct() {
 		parent::__construct();
 
+		add_action( 'template_redirect', array( $this, 'init_feed' ) );
+	}
+
+	/**
+	 * Initializes feed actions and hooks.
+	 *
+	 * @since 2.6.0
+	 */
+	public function init_feed() {
+
+		if ( false === $this->is_feed() )
+			return;
+
 		add_filter( 'the_content_feed', array( $this, 'the_content_feed' ), 10, 2 );
+
+		//* Only add the feed link to the excerpt if we're only building excerpts.
+		if ( $this->rss_uses_excerpt() )
+			add_filter( 'the_excerpt_rss', array( $this, 'the_content_feed' ), 10, 1 );
+
+	}
+
+	/**
+	 * Determines whether the WordPress excerpt RSS feed option is used.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @return bool
+	 */
+	public function rss_uses_excerpt() {
+		return (bool) get_option( 'rss_use_excerpt' );
 	}
 
 	/**
 	 * Changes feed's content.
 	 *
+	 * @param $content The feed's content.
+	 * @param $feed_type The feed type (not used in excerpted content)
+	 *
 	 * @since 2.5.2
 	 */
-	public function the_content_feed( $content, $feed_type ) {
+	public function the_content_feed( $content, $feed_type = null ) {
 
-		if ( ! empty( $content ) ) {
+		if ( $content ) {
 
-			if ( $this->get_option( 'excerpt_the_feed' ) ) {
+			/**
+			 * Don't alter already-excerpts or descriptions.
+			 * $feed_type is only set on 'the_content_feed' filter.
+			 */
+			if ( isset( $feed_type ) && $this->get_option( 'excerpt_the_feed' ) ) {
 				//* Strip all code and lines.
 				$excerpt = $this->get_excerpt_by_id( $content );
 
@@ -56,28 +92,11 @@ class AutoDescription_Feed extends AutoDescription_Transients {
 				$max_len = (int) apply_filters( 'the_seo_framework_max_content_feed_length', 400 );
 
 				//* Generate excerpt.
-				if ( $excerpt_len > $max_len ) {
-					// Cut string to fit $max_char_length.
-					$subex = mb_substr( $excerpt, 0, $max_len );
-					// Split words in array. Boom.
-					$exwords = explode( ' ', $subex );
-					// Calculate if last word exceeds.
-					$excut = - ( mb_strlen( $exwords[ count( $exwords ) - (int) 1 ] ) );
-
-					if ( $excut < (int) 0 ) {
-						//* Cut out exceeding word.
-						$excerpt = mb_substr( $subex, 0, $excut );
-					} else {
-						// We're all good here, continue.
-						$excerpt = $subex;
-					}
-
-					$excerpt = rtrim( $excerpt ) . '...';
-				}
+				$excerpt = $this->trim_excerpt( $excerpt, $excerpt_len, $max_len );
 
 				$h2_output = '';
 
-				if ( 0 === mb_strpos( $content, '<h2>' ) ) {
+				if ( 0 === strpos( $content, '<h2>' ) ) {
 					//* Add the h2 title back
 					$h2_end = mb_strpos( $content, '</h2>' );
 
@@ -103,10 +122,15 @@ class AutoDescription_Feed extends AutoDescription_Transients {
 			}
 
 			if ( $this->get_option( 'source_the_feed' ) ) {
+
 				//* Fetch permalink and add it to the content.
 				$permalink = $this->the_url();
 
-				$source_i18n = _x( 'Source', 'The content source', 'autodescription' );
+				/**
+				 * Applies filters 'the_seo_framework_feed_source_link' : string
+				 * @since 2.6.0
+				 */
+				$source_i18n = (string) apply_filters( 'the_seo_framework_feed_source_link_text', _x( 'Source', 'The content source', 'autodescription' ) );
 				$content .= "\r\n" . '<p><a href="' . $permalink . '" rel="external nofollow">' . $source_i18n . '</a></p>';
 			}
 

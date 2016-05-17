@@ -19,12 +19,11 @@
 /**
  * Class AutoDescription_Init
  *
- * Initializes the plugin
  * Outputs all data in front-end header
  *
  * @since 2.1.6
  */
-class AutoDescription_Init {
+class AutoDescription_Init extends AutoDescription_Query {
 
 	/**
 	 * Allow object caching through a filter.
@@ -41,6 +40,7 @@ class AutoDescription_Init {
 	 * @since 2.1.6
 	 */
 	public function __construct() {
+		parent::__construct();
 
 		add_action( 'init', array( $this, 'autodescription_run' ), 1 );
 		add_action( 'template_redirect', array( $this, 'custom_field_redirect') );
@@ -66,11 +66,12 @@ class AutoDescription_Init {
 		 * Don't do anything on preview either.
 		 * @since 2.2.4
 		 */
-		if ( is_admin() || is_preview() )
+		if ( $this->is_admin() || $this->is_preview() )
 			return;
 
 		$this->init_actions();
 		$this->init_filters();
+
 	}
 
 	/**
@@ -94,6 +95,7 @@ class AutoDescription_Init {
 		} else {
 			add_action( 'wp_head', array( $this, 'html_output' ), 1 );
 		}
+
 	}
 
 	/**
@@ -125,6 +127,7 @@ class AutoDescription_Init {
 			//* Override WordPress Title
 			add_filter( 'wp_title', array( $this, 'title_from_cache' ), 9, 3 );
 		}
+
 	}
 
 	/**
@@ -147,18 +150,15 @@ class AutoDescription_Init {
 		$functions = array();
 
 		/**
-		 * New filter.
-		 * @since 2.3.0
-		 *
-		 * Removed previous filter.
-		 * @since 2.3.5
+		 * Applies filters 'the_seo_framework_before_output' : array after functions output
+		 * Applies filters 'the_seo_framework_after_output' : array after functions output
 		 */
 		$filter_tag = $before ? 'the_seo_framework_before_output' : 'the_seo_framework_after_output';
 		$filter = (array) apply_filters( $filter_tag, $functions );
 
 		$functions = wp_parse_args( $args, $filter );
 
-		if ( ! empty( $functions ) && is_array( $functions ) ) {
+		if ( $functions && is_array( $functions ) ) {
 			foreach ( $functions as $function ) {
 				$arguments = isset( $function['args'] ) ? $function['args'] : '';
 
@@ -184,6 +184,7 @@ class AutoDescription_Init {
 	 * Applies filters the_seo_framework_pro 	: Adds content after
 	 *											: @param after
 	 *											: cached
+	 * Applies filters the_seo_framework_generator_tag : String generator tag content
 	 * Applies filters the_seo_framework_indicator : True to show indicator in html
 	 *
 	 * @uses hmpl_ad_description()
@@ -200,7 +201,12 @@ class AutoDescription_Init {
 	 * Echos output.
 	 */
 	public function html_output() {
+<<<<<<< HEAD
 		global $blog_id;
+=======
+
+		do_action( 'the_seo_framework_do_before_output' );
+>>>>>>> ef405fe90ddfcedfe3f7898dcde7198f4eccf621
 
 		/**
 		 * Start the timer here. I know it doesn't calculate the initiation of
@@ -208,7 +214,8 @@ class AutoDescription_Init {
 		 * A static array cache counter function would make it possible, but meh.
 		 * This function takes the most time anyway.
 		 */
-		$plugin_start = microtime( true );
+		$init_start = microtime( true );
+		$memory_start = $this->the_seo_framework_debug ? $this->profile( false, false, 'memory', 'html_output' ) : 0;
 
 		/**
 		 * Cache key buster
@@ -234,19 +241,23 @@ class AutoDescription_Init {
 
 			$robots = $this->robots();
 
-			/**
-			 * New filter.
-			 * @since 2.3.0
-			 *
-			 * Removed previous filter.
-			 * @since 2.3.5
-			 */
 			$before = (string) apply_filters( 'the_seo_framework_pre', '' );
 
 			$before_actions = $this->header_actions( '', true );
 
 			//* Limit processing on 404 or search
-			if ( ! is_404() && ! is_search() ) {
+			if ( $this->is_404() || $this->is_search() ) {
+				$output	= $this->og_locale()
+						. $this->og_type()
+						. $this->og_title()
+						. $this->og_url()
+						. $this->og_sitename()
+						. $this->google_site_output()
+						. $this->bing_site_output()
+						. $this->yandex_site_output()
+						. $this->pint_site_output()
+						;
+			} else {
 				$output	= $this->the_description()
 						. $this->og_image()
 						. $this->og_locale()
@@ -272,40 +283,17 @@ class AutoDescription_Init {
 						. $this->ld_json()
 						. $this->google_site_output()
 						. $this->bing_site_output()
-						. $this->pint_site_output()
-						;
-			} else {
-				$output	= $this->og_locale()
-						. $this->og_type()
-						. $this->og_title()
-						. $this->og_url()
-						. $this->og_sitename()
-						. $this->canonical()
-						. $this->google_site_output()
-						. $this->bing_site_output()
+						. $this->yandex_site_output()
 						. $this->pint_site_output()
 						;
 			}
 
 			$after_actions = $this->header_actions( '', false );
 
-			/**
-			 * New filter.
-			 * @since 2.3.0
-			 *
-			 * Removed previous filter.
-			 * @since 2.3.5
-			 */
 			$after = (string) apply_filters( 'the_seo_framework_pro', '' );
 
 			/**
 			 * @see https://wordpress.org/plugins/generator-the-seo-framework/
-			 *
-			 * New filter.
-			 * @since 2.3.0
-			 *
-			 * Removed previous filter.
-			 * @since 2.3.5
 			 */
 			$generator = (string) apply_filters( 'the_seo_framework_generator_tag', '' );
 
@@ -317,19 +305,12 @@ class AutoDescription_Init {
 			$this->object_cache_set( $cache_key, $output, 86400 );
 		}
 
-		/**
-		 * New filter.
-		 * @since 2.3.0
-		 *
-		 * Removed previous filter.
-		 * @since 2.3.5
-		 */
 		$indicator = (bool) apply_filters( 'the_seo_framework_indicator', true );
 
 		$indicatorbefore = '';
 		$indicatorafter = '';
 
-		if ( true === $indicator ) {
+		if ( $indicator ) {
 			$timer = (bool) apply_filters( 'the_seo_framework_indicator_timing', true );
 			$sybre = (bool) apply_filters( 'sybre_waaijer_<3', true );
 
@@ -343,8 +324,9 @@ class AutoDescription_Init {
 			 * Calculate the plugin load time.
 			 * @since 2.4.0
 			 */
-			if ( true === $timer ) {
-				$indicatorafter = '<!-- ' . $end . $me . ' | ' . number_format( microtime( true ) - $plugin_start, 5 ) . 's -->' . "\r\n";
+			if ( $timer ) {
+				$memory = $this->the_seo_framework_debug ? ' | ' . number_format( $this->profile( false, true, 'memory', 'html_output' ) / 1024, 2 ) . ' kiB' : '';
+				$indicatorafter = '<!-- ' . $end . $me . ' | ' . number_format( microtime( true ) - $init_start, 5 ) . 's' . $memory . ' -->' . "\r\n";
 			} else {
 				$indicatorafter = '<!-- ' . $end . $me . ' -->' . "\r\n";
 			}
@@ -352,14 +334,14 @@ class AutoDescription_Init {
 
 		$output = "\r\n" . $indicatorbefore . $output . $indicatorafter . "\r\n";
 
+		do_action( 'the_seo_framework_do_after_output' );
+
 		echo $output;
 	}
 
 	/**
 	 * Redirect singular page to an alternate URL.
 	 * Called outside html_output
-	 *
-	 * Applies filters the_seo_framework_allow_external_redirect
 	 *
 	 * @since 2.0.9
 	 */
@@ -373,14 +355,7 @@ class AutoDescription_Init {
 
 		if ( $url ) {
 
-			/**
-			 * New filter.
-			 * @since 2.3.0
-			 *
-			 * Removed previous filter.
-			 * @since 2.3.5
-			 */
-			$allow_external = (bool) apply_filters( 'the_seo_framework_allow_external_redirect', true );
+			$allow_external = $this->allow_external_redirect();
 
 			/**
 			 * If the URL is made relative, prevent scheme issues
@@ -401,53 +376,8 @@ class AutoDescription_Init {
 
 			wp_redirect( esc_url_raw( $url ), 301 );
 			exit;
-
 		}
 
-	}
-
-	/**
-	 * Object cache set wrapper.
-	 * Applies filters 'the_seo_framework_use_object_cache' : Disable object
-	 * caching for this plugin, when applicable.
-	 *
-	 * @param string $key The Object cache key.
-	 * @param mixed $data The Object cache data.
-	 * @param int $expire The Object cache expire time.
-	 * @param string $group The Object cache group.
-	 *
-	 * @since 2.4.3
-	 *
-	 * @return bool true on set, false when disabled.
-	 */
-	public function object_cache_set( $key, $data, $expire = 0, $group = 'the_seo_framework' ) {
-
-		if ( $this->use_object_cache )
-			return wp_cache_set( $key, $data, $group, $expire );
-
-		return false;
-	}
-
-	/**
-	 * Object cache get wrapper.
-	 * Applies filters 'the_seo_framework_use_object_cache' : Disable object
-	 * caching for this plugin, when applicable.
-	 *
-	 * @param string $key The Object cache key.
-	 * @param string $group The Object cache group.
-	 * @param bool $force Wether to force an update of the local cache.
-	 * @param bool $found Wether the key was found in the cache. Disambiguates a return of false, a storable value.
-	 *
-	 * @since 2.4.3
-	 *
-	 * @return mixed wp_cache_get if object caching is allowed. False otherwise.
-	 */
-	public function object_cache_get( $key, $group = 'the_seo_framework', $force = false, &$found = null ) {
-
-		if ( $this->use_object_cache )
-			return wp_cache_get( $key, $group, $force, $found );
-
-		return false;
 	}
 
 	/**
@@ -464,18 +394,17 @@ class AutoDescription_Init {
 		function tsf_explode() {
 			if ( function_exists( 'the_seo_framework' ) ) {
 				$the_seo_framework = the_seo_framework();
-				if (isset( $the_seo_framework ) )
-					$the_seo_framework->call_function( array( $the_seo_framework, 'explode' ) );
+				if ( isset( $the_seo_framework ) )
+					$the_seo_framework->explode();
 			}
 		}
 		*/
 	}
 
 	/**
-	 * Header CSS
+	 * After using explosions, you tend to roll away.
 	 *
 	 * @since 2.5.2
-	 * @return annoying front-end CSS.
 	 */
 	public function roll() {
 		?>

@@ -83,3 +83,11 @@
 
 * If you are writing blog posts, take a look at the rising trends at Google Trends before it's all over the internet.
 * Write about any of the trends once in a while, and if the trend kicks off your website might just be exposed to many people.
+
+	= 2.6.0 - Redirects & Canonical =
+
+* A change in the Canonical URL or the use of a 301 Redirect URL indicate that your page has moved.
+* These can be seen by Search Engines as the same. However, the 301 Redirect enforces the relocation of the page to everyone, whereas the Canonical URL softly indicates.
+* When changing the Canonical URL of a Page, you're telling robots to look and elsewhere, be sure to include a link to the new Page on the canonicalized Page to indicate where everything has moved to.
+* However, it's even better to enforce a 301 redirect. This makes sure both your visitors as Search Engines know where to be instantaneously.
+* If you've changed the permalink of a popular post, you should create an empty post that follows one of the said examples.

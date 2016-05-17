@@ -26,24 +26,6 @@
 class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 
 	/**
-	 * Filterable Site Settings array.
-	 *
-	 * @since 2.2.2
-	 *
-	 * @var array Holds Site SEO options.
-	 */
-	protected $default_site_options = array();
-
-	/**
-	 * Filterable Site Settings array.
-	 *
-	 * @since 2.2.2
-	 *
-	 * @var array Holds Site SEO options.
-	 */
-	protected $warned_site_options = array();
-
-	/**
 	 * Site Settings field.
 	 *
 	 * @since 2.2.2
@@ -53,7 +35,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	protected $settings_field;
 
 	/**
-	 * Hold the Page ID for this class
+	 * Hold the Page ID for this plugin.
 	 *
 	 * @since 2.2.2
 	 *
@@ -62,36 +44,41 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	protected $page_id;
 
 	/**
+	 * Holds the update option.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @var string The Updated option name.
+	 */
+	protected $o_plugin_updated;
+
+	/**
 	 * Constructor, load parent constructor and set up cachable variables.
 	 */
 	public function __construct() {
 		parent::__construct();
 
-		//* Register defaults early.
-		add_action( 'after_setup_theme', array( $this, 'initialize_defaults' ), 0 );
-
 		$this->settings_field = THE_SEO_FRAMEWORK_SITE_OPTIONS;
-
-		//* Set up site settings and save/reset them
-		add_action( 'admin_init', array( $this, 'register_settings' ) );
-
-		// The page_id
+		$this->o_plugin_updated = 'updated_' . str_replace( '.', '', THE_SEO_FRAMEWORK_VERSION );
 		$this->page_id = 'autodescription-settings';
 
-		/**
-		 * Add plugin links to the plugin activation page.
-		 * @since 2.2.8
-		 */
-		add_filter( 'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, array( $this, 'plugin_action_links' ), 10, 2 );
+		//* Set up site settings and save/reset them
+		add_action( 'admin_init', array( $this, 'register_settings' ), 5 );
+
+		//* Update site options at plugin update.
+		add_action( 'admin_init', array( $this, 'site_updated_plugin_option' ) );
+
 	}
 
 	/**
-	 * Initializes default settings very early at the after_setup_theme hook
-	 * Therefore supports is_rtl().
+	 * Holds default site options.
 	 *
-	 * @since 2.5.0
+	 * @since 2.6.0
+	 *
+	 * @return array Default site options.
 	 */
-	public function initialize_defaults() {
+	public function get_default_site_options() {
+
 		/**
 		 * Switch when RTL is active;
 		 * @since 2.5.0
@@ -114,17 +101,24 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 		 * No longer directly applies filters
 		 * @since 2.2.7
 		 */
-		$this->default_site_options = array(
-			'title_seperator'		=> 'pipe',	// Title separator (note: TYPO)
+		return array(
+			// Title.
+			'title_seperator'		=> 'pipe',		// Title separator (note: TYPO), dropdown
 			'title_location'		=> $titleloc,	// Title separation location
-			'title_rem_additions'	=> 0,		// Remove title additions
+			'title_rem_additions'	=> 0,			// Remove title additions
+			'title_rem_prefixes'	=> 0, 			// Remove title prefixes
 
-			'description_separator'	=> 'pipe',	// Description separator
+			// Description.
+			'description_separator'	=> 'pipe',	// Description separator, dropdown
+			'description_additions'	=> 1,		// "Title on Blogname" within Description
 			'description_blogname'	=> 1, 		// "on Blogname" within Description
+			'description_custom'	=> '',		// Custom prefix
 
+			// Robots directory.
 			'noodp'					=> 1, 	// Site noopd robots settings
 			'noydir'				=> 1, 	// Site noydir robots settings
 
+			// Robots index.
 			'category_noindex'		=> 0,	// Category Archive robots noindex
 			'tag_noindex'			=> 0,	// Tag Archive robots noindex
 			'author_noindex'		=> 0,	// Author Archive robots noindex
@@ -133,6 +127,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			'attachment_noindex'	=> 1,	// Attachment Pages robots noindex
 			'site_noindex'			=> 0,	// Site Page robots noindex
 
+			// Robots follow.
 			'category_nofollow'		=> 0,	// Category Archive robots nofollow
 			'tag_nofollow'			=> 0,	// Tag Archive robots nofollow
 			'author_nofollow'		=> 0,	// Author Archive robots nofollow
@@ -141,6 +136,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			'attachment_nofollow'	=> 0,	// Attachment Pages robots noindex
 			'site_nofollow'			=> 0,	// Site Page robots nofollow
 
+			// Robots archive.
 			'category_noarchive'	=> 0,	// Category Archive robots noarchive
 			'tag_noarchive'			=> 0,	// Tag Archive robots noarchive
 			'author_noarchive'		=> 0,	// Author Archive robots noarchive
@@ -149,27 +145,34 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			'attachment_noarchive'	=> 0,	// Attachment Page robots noarchive
 			'site_noarchive'		=> 0,	// Site Page robots noarchive
 
+			// Robots pagination index.
 			'paged_noindex'			=> 1,	// Every second or later page noindex
+			'home_paged_noindex'	=> 0,	// Every second or later homepage noindex
 
+			// Robots home.
 			'homepage_noindex'		=> 0,	// Home Page robots noindex
 			'homepage_nofollow'		=> 0,	// Home Page robots noarchive
 			'homepage_noarchive'	=> 0,	// Home Page robots nofollow
 
+			// Home meta.
 			'homepage_title'		=> '',	// Home Page Title string
 			'homepage_tagline'		=> 1,	// Home Page add blog Tagline
 			'homepage_description'	=> '',	// Home Page Description string
 			'homepage_title_tagline' => '',	// Home Page Tagline string
 			'home_title_location'	=> $h_titleloc,	// Title separation location
 
+			// Relationships
 			'shortlink_tag'			=> 0,	// Adds shortlink tag
-
 			'prev_next_posts'		=> 0,	// Adds next/prev tags
 			'prev_next_archives'	=> 1,	// Adds next/prev tags
+			'prev_next_frontpage'	=> 1,	// Adds next/prev tags
 
+			// Facebook.
 			'facebook_publisher'	=> '',	// Facebook Business Url
 			'facebook_author'		=> '',	// Facebook User URl
 			'facebook_appid'		=> '',	// Facebook App ID
 
+			// Dates.
 			'post_publish_time'		=> 1,	// Article Published Time
 			'post_modify_time'		=> 1,	// Article Modified Time
 
@@ -179,23 +182,28 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			'home_publish_time'		=> 0,	// Article Modified Time
 			'home_modify_time'		=> 0,	// Article Modified Time
 
-			'twitter_card' 			=> 'summary_large_image',	// Twitter Card layout. If no twitter:image image is found, it'll change to 'summary'
+			// Twitter.
+			'twitter_card' 			=> 'summary_large_image',	// Twitter Card layout. If no twitter:image image is found, it'll change to 'summary', dropdown
 			'twitter_site' 			=> '', 	// Twitter business @username
 			'twitter_creator' 		=> '', 	// Twitter user @username
 
+			// Social on/off.
 			'og_tags' 				=> 1,	// Output of Open Graph meta tags
 			'facebook_tags'			=> 1, 	// Output the Facebook meta tags
 			'twitter_tags'			=> 1, 	// Output the Twitter meta tags
+			'googleplus_tags'		=> 1, 	// Output the Google+ meta tags
 
+			// Webmasters.
 			'google_verification'	=> '', 	// Google Verification Code
 			'bing_verification'		=> '', 	// Bing Verification Code
+			'yandex_verification'	=> '', 	// Yandex Verification Code
 			'pint_verification'		=> '', 	// Pinterest Verification Code
 
-			// https://developers.google.com/structured-data/customize/contact-points - This is extremely extended and valuable. Expect a premium version.
+			// Knowledge general. https://developers.google.com/structured-data/customize/contact-points - This is extremely extended and valuable. Expect a premium version.
 			'knowledge_output'		=> 1,				// Default for outputing the Knowledge SEO.
-			'knowledge_type'		=> 'organization',	// Organization or Person
+			'knowledge_type'		=> 'organization',	// Organization or Person, dropdown
 
-			// https://developers.google.com/structured-data/customize/logos
+			// Knowledge business. https://developers.google.com/structured-data/customize/logos
 			'knowledge_logo'		=> 1,	// Fetch logo from WP Favicon
 			'knowledge_name'		=> '',	// Person or Organization name
 
@@ -211,34 +219,57 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			'knowledge_soundcloud'	=> '',	// SoundCloud Account
 			'knowledge_tumblr'		=> '',	// Tumblr Account
 
-			// Sitemaps
+			// Sitemaps.
 			'sitemaps_output'		=> 1,	// Output of sitemaps
 			'sitemaps_modified'		=> 1,	// Add sitemaps modified time
+			'sitemap_timestamps'	=> '1',	// Sitemaps modified time format, dropdown
 			'sitemaps_robots'		=> 1,	// Add sitemaps location to robots.txt
 			'ping_google'			=> 1,	// Ping Google
 			'ping_bing'				=> 1,	// Ping Bing
-			'ping_yahoo'			=> 1,	// Ping Yahoo
+			'ping_yandex'			=> 1,	// Ping Yandex
 
-			// Feed
+			// Feed.
 			'excerpt_the_feed'		=> 1,	// Generate feed Excerpts
 			'source_the_feed'		=> 1,	// Add backlink at the end of the feed
-		);
 
+			// Schema
+			'ld_json_searchbox'		=> 1,	// LD+Json Sitelinks Searchbox
+			'ld_json_sitename'		=> 1,	// LD+Json Sitename
+			'ld_json_breadcrumbs'	=> 1,	// LD+Json Breadcrumbs
+
+			// Misc.
+			'counter_type' => 3, // JS counter type.
+
+			// Cache.
+			$this->o_plugin_updated => 1,	// Plugin update cache.
+		);
+	}
+
+	/**
+	 * Holds warned site options array.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @return array $options.
+	 */
+	public function get_warned_site_options() {
 		/**
 		 * Warned site settings. Only accepts checkbox options.
-		 * When listed as 1, it's a feature which can destroy your site's SEO value when checked.
+		 * When listed as 1, it's a feature which can destroy your website's SEO value when checked.
 		 *
 		 * Unchecking a box is simply "I'm not active." - Removing features generally do not negatively impact SEO value.
 		 * Since it's all about the content.
 		 *
 		 * Only used within the SEO Settings page.
 		 */
-		$this->warned_site_options = array(
+		return array(
 			'title_rem_additions'	=> 1, 	// Title remove additions.
+			'title_rem_prefixes'	=> 0, 	// Title remove prefixes.
 
 			'noodp'					=> 0, 	// Site noopd robots settings
 			'noydir'				=> 0, 	// Site noydir robots settings
 
+			'description_additions'	=> 0,	// "Title on Blogname" within Description
 			'description_blogname'	=> 0, 	// "on Blogname" within Description
 
 			'category_noindex'		=> 0,	// Category Archive robots noindex
@@ -266,6 +297,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			'site_noarchive'		=> 0,	// Site Page robots noarchive
 
 			'paged_noindex'			=> 0,	// Every second or later page noindex
+			'home_paged_noindex'	=> 0,	// Every second or later homepage noindex
 
 			'homepage_noindex'		=> 1,	// Home Page robots noindex
 			'homepage_nofollow'		=> 1,	// Home Page robots noarchive
@@ -277,6 +309,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 
 			'prev_next_posts'		=> 0,	// Adds next/prev tags
 			'prev_next_archives'	=> 0,	// Adds next/prev tags
+			'prev_next_frontpage'	=> 0,	// Adds next/prev tags
 
 			'post_publish_time'		=> 0,	// Article Published Time
 			'post_modify_time'		=> 0,	// Article Modified Time
@@ -290,22 +323,142 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			'og_tags' 				=> 0,	// Output of Open Graph meta tags
 			'facebook_tags'			=> 0, 	// Output the Facebook meta tags
 			'twitter_tags'			=> 0, 	// Output the Twitter meta tags
+			'googleplus_tags'		=> 0, 	// Output the Google+ meta tags
 
 			'knowledge_output'		=> 0,	// Default for outputing the Knowledge SEO.
 			'knowledge_logo'		=> 0,	// Fetch logo from WP Favicon
 
-			// Sitemaps
 			'sitemaps_output'		=> 0,	// Output of sitemaps
 			'sitemaps_modified'		=> 0,	// Add sitemaps modified time
 			'sitemaps_robots'		=> 0,	// Add sitemaps location to robots.txt
 			'ping_google'			=> 0,	// Ping Google
 			'ping_bing'				=> 0,	// Ping Bing
-			'ping_yahoo'			=> 0,	// Ping Yahoo
+			'ping_yandex'			=> 0,	// Ping Yandex
 
-			// Feed
 			'excerpt_the_feed'		=> 0,	// Generate feed Excerpts
 			'source_the_feed'		=> 0,	// Add backlink at the end of the feed
+
+			'ld_json_searchbox'		=> 0,	// LD+Json Sitelinks Searchbox
+			'ld_json_sitename'		=> 0,	// LD+Json Sitename
+			'ld_json_breadcrumbs'	=> 0,	// LD+Json Breadcrumbs
 		);
+
+	}
+
+	/**
+	 * Updates special hidden values to default on settings save.
+	 *
+	 * @since 2.6.0
+	 */
+	protected function update_hidden_options_to_default() {
+
+		//* Disables the New SEO Settings Updated notification.
+		$plugin_updated = $this->o_plugin_updated;
+		$_POST[THE_SEO_FRAMEWORK_SITE_OPTIONS][$plugin_updated] = 1;
+
+	}
+
+	/**
+	 * Updates option from default options at plugin update.
+	 *
+	 * @since 2.6.0
+	 * @access private
+	 *
+	 * @return void early if already has been updated.
+	 */
+	public function site_updated_plugin_option() {
+
+		$plugin_updated = $this->o_plugin_updated;
+
+		/**
+		 * Prevent this function from running more than once after update.
+		 * Also prevent running if no settings field is found.
+		 */
+		if ( $this->get_option( $plugin_updated ) || empty( $this->settings_field ) )
+			return;
+
+		//* If current user isn't allowed to update options, don't do anything.
+		if ( ! current_user_can( $this->settings_capability() ) )
+			return;
+
+		/**
+		 * Applies filters 'the_seo_framework_update_options_at_update' : bool
+		 * @since 2.6.0
+		 */
+		if ( ! apply_filters( 'the_seo_framework_update_options_at_update', true ) )
+			return;
+
+		$updated = false;
+		$options = $this->get_all_options();
+		$default_options = $this->default_site_options();
+
+		//* Merge the options. Add to if it's non-existent.
+		foreach ( $default_options as $key => $value ) {
+			if ( ! isset( $options[$key] ) ) {
+				if ( isset( $default_options[$key] ) && ! empty( $default_options[$key] ) ) {
+					$options[$key] = $default_options[$key];
+					$updated = true;
+				}
+			}
+		}
+
+		//* Stop this madness from happening again until next update.
+		$options[$plugin_updated] = 1;
+
+		//* Updated the options. Check for updated flag and see if settings pages are loaded.
+		if ( update_option( $this->settings_field, $options ) && $updated && $this->load_options ) {
+			$this->pre_output_site_updated_plugin_notice();
+		}
+
+		//* Flush rewrite rules at shutdown.
+		$this->enqueue_rewrite_flush_other( true );
+	}
+
+	/**
+	 * Determine whether to output update notice directly or on refresh.
+	 * Run before headers are sent.
+	 *
+	 * @since 2.6.0
+	 */
+	protected function pre_output_site_updated_plugin_notice() {
+
+		if ( $this->is_seo_settings_page() ) {
+			//* Redirect to current page if on options page to correct option values. Once.
+			if ( ! isset( $_REQUEST['seo-updated'] ) || 'true' !== $_REQUEST['seo-updated'] )
+				$this->admin_redirect( $this->page_id, array( 'seo-updated' => 'true' ) );
+
+			//* Notice has already been sent.
+			return;
+		}
+
+		//* Make sure this plugin's scripts are being loaded.
+		$this->init_admin_scripts();
+
+		//* Output notice.
+		add_action( 'admin_notices', array( $this, 'site_updated_plugin_notice' ) );
+
+	}
+
+	/**
+	 * Echo plugin updated notification.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @access private
+	 */
+	public function site_updated_plugin_notice() {
+
+		$notice = $this->page_defaults['plugin_update_text'];
+
+		$settings_url = $this->seo_settings_page_url();
+		$link = sprintf( '<a href="%s" title="%s" target="_self">%s</a>', $settings_url, __( 'SEO Settings', 'autodescription' ), __( 'here', 'autodescription' ) );
+
+		$go_to_page = sprintf( _x( 'View the new options %s.', '%s = here', 'autodescription' ), $link );
+
+		$notice = $notice . ' ' . $go_to_page;
+
+		echo $this->generate_dismissible_notice( $notice, 'updated' );
+
 	}
 
 	/**
@@ -323,6 +476,84 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 */
 	public function get_option( $key, $use_cache = true ) {
 		return $this->the_seo_framework_get_option( $key, THE_SEO_FRAMEWORK_SITE_OPTIONS, $use_cache );
+	}
+
+	/**
+	 * Return current option array.
+	 *
+	 * Applies filters 'the_seo_framework_get_options' : boolean
+	 *
+	 * @since 2.6.0
+	 * @staticvar array $cache The option cache.
+	 *
+	 * @return array Options.
+	 */
+	public function get_all_options( $setting = null ) {
+
+		static $cache = array();
+
+		if ( isset( $cache[$setting] ) )
+			return $cache[$setting];
+
+		if ( is_null( $setting ) )
+			$setting = THE_SEO_FRAMEWORK_SITE_OPTIONS;
+
+		return $cache[$setting] = apply_filters( 'the_seo_framework_get_options', get_option( $setting ), $setting );
+	}
+
+	/**
+	 * Return option from the options table and cache result.
+	 *
+	 * Applies `the_seo_framework_get_options` filters.
+	 * This filter retrieves the (previous) values from Genesis if exists.
+	 *
+	 * Values pulled from the database are cached on each request, so a second request for the same value won't cause a
+	 * second DB interaction.
+	 * @staticvar array $settings_cache
+	 * @staticvar array $options_cache
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string  $key        Option name.
+	 * @param string  $setting    Optional. Settings field name. Eventually defaults to null if not passed as an argument.
+	 * @param boolean $use_cache  Optional. Whether to use the cache value or not. Default is true.
+	 *
+	 * @return mixed The value of this $key in the database.
+	 *
+	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
+	 */
+	public function the_seo_framework_get_option( $key, $setting = null, $use_cache = true ) {
+
+		//* If we need to bypass the cache
+		if ( ! $use_cache ) {
+			$options = get_option( $setting );
+
+			if ( ! is_array( $options ) || ! array_key_exists( $key, $options ) )
+				return '';
+
+			return is_array( $options[$key] ) ? stripslashes_deep( $options[$key] ) : stripslashes( wp_kses_decode_entities( $options[$key] ) );
+		}
+
+		//* Setup caches
+		static $options_cache = array();
+
+		//* Check options cache
+		if ( isset( $options_cache[$setting][$key] ) )
+			//* Option has been cached
+			return $options_cache[$setting][$key];
+
+		$options = $this->get_all_options( $setting );
+
+		//* Check for non-existent option
+		if ( ! is_array( $options ) || ! array_key_exists( $key, (array) $options ) ) {
+			//* Cache non-existent option
+			$options_cache[$setting][$key] = '';
+		} else {
+			//* Option has not been previously been cached, so cache now
+			$options_cache[$setting][$key] = is_array( $options[$key] ) ? stripslashes_deep( $options[$key] ) : stripslashes( wp_kses_decode_entities( $options[$key] ) );
+		}
+
+		return $options_cache[$setting][$key];
 	}
 
 	/**
@@ -360,30 +591,24 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	}
 
 	/**
-	 * Return the compiled default options array.
+	 * Return the parsed default options array.
 	 *
 	 * @since 2.2.7
 	 *
-	 * Applies filters the_seo_framework_default_site_options The default site options array.
+	 * Applies filters the_seo_framework_default_site_options : The default site options array.
 	 *
-	 * @param array $args The new default options through filter.
+	 * @param array $args Additional default options to filter.
+	 *
 	 * @return array The SEO Framework Options
 	 */
 	protected function default_site_options( $args = array() ) {
-		/**
-		 * New filter.
-		 * @since 2.3.0
-		 *
-		 * Removed previous filter.
-		 * @since 2.3.5
-		 */
-		return $this->default_site_options = wp_parse_args(
+		return wp_parse_args(
 			$args,
 			apply_filters(
 				'the_seo_framework_default_site_options',
 				wp_parse_args(
 					$args,
-					$this->default_site_options
+					$this->get_default_site_options()
 				)
 			)
 		);
@@ -396,17 +621,18 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 *
 	 * Applies filters the_seo_framework_warned_site_options The warned site options array.
 	 *
-	 * @param array $args The new warned options through filter.
+	 * @param array $args Additional warned options to filter.
+	 *
 	 * @return array The SEO Framework Warned Options
 	 */
 	protected function warned_site_options( $args = array() ) {
-		return $this->warned_site_options = wp_parse_args(
+		return wp_parse_args(
 			$args,
 			apply_filters(
 				'the_seo_framework_warned_site_options',
 				wp_parse_args(
 					$args,
-					$this->warned_site_options
+					$this->get_warned_site_options()
 				)
 			)
 		);
@@ -422,15 +648,16 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 */
 	public function register_settings() {
+
 		//* If this page doesn't store settings, no need to register them
-		if ( ! $this->settings_field )
+		if ( empty( $this->settings_field ) )
 			return;
 
 		register_setting( $this->settings_field, $this->settings_field );
 		add_option( $this->settings_field, $this->default_site_options() );
 
 		//* If this page isn't the SEO Settings page, there's no need to check for a reset.
-		if ( ! $this->is_menu_page( $this->page_id ) )
+		if ( false === $this->is_seo_settings_page() )
 			return;
 
 		if ( $this->get_option( 'reset', $this->settings_field ) ) {
@@ -508,12 +735,12 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 *
 	 * @staticvar array $warned_cache
 	 *
-	 * @return 	int|bool|string default option
+	 * @return 	int 0|1 Whether the option is flagged as dangerous for SEO.
 	 *			int '-1' if option doesn't exist.
 	 */
 	public function get_warned_settings( $key, $setting = '', $use_cache = true ) {
 
-		if ( ! isset( $key ) || empty( $key ) )
+		if ( empty( $key ) )
 			return false;
 
 		//* Fetch default settings if it's not set.
@@ -527,7 +754,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			if ( ! is_array( $warned ) || ! array_key_exists( $key, $warned ) )
 				return -1;
 
-			return is_array( $warned[$key] ) ? stripslashes_deep( $warned[$key] ) : stripslashes( wp_kses_decode_entities( $warned[$key] ) );
+			return $this->s_one_zero( $warned[$key] );
 		}
 
 		static $warned_cache = array();
@@ -537,29 +764,14 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			//* Option has been cached
 			return $warned_cache[$key];
 
-		$warned_cache = $this->warned_site_options();
+		$warned_options = $this->warned_site_options();
 
-		if ( ! is_array( $warned_cache ) || ! array_key_exists( $key, (array) $warned_cache ) )
+		if ( ! is_array( $warned_options ) || ! array_key_exists( $key, (array) $warned_options ) )
 			$warned_cache[$key] = -1;
 
+		$warned_cache[$key] = $this->s_one_zero( $warned_options[$key] );
+
 		return $warned_cache[$key];
-	}
-
-	/**
-	 * Adds link from plugins page to SEO Settings page.
-	 *
-	 * @param array $links The current links.
-	 *
-	 * @since 2.2.8
-	 */
-	public function plugin_action_links( $links ) {
-
-		$framework_links = array(
-			'settings' => '<a href="' . esc_url( admin_url( 'admin.php?page=' . $this->page_id ) ) . '">' . __( 'SEO Settings', 'autodescription' ) . '</a>',
-			'home' => '<a href="'. esc_url( 'https://theseoframework.com' ) . '" target="_blank">' . _x( 'Plugin Home', 'As in: The Plugin Home Page', 'autodescription' ) . '</a>'
-		);
-
-		return array_merge( $framework_links, $links );
 	}
 
 	/**

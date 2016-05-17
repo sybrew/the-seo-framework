@@ -54,13 +54,6 @@ function the_seo_framework_init() {
  * @action plugins_loaded
  */
 function the_seo_framework_load() {
-	/**
-	 * New filter.
-	 * @since 2.3.0
-	 *
-	 * Removed previous filter.
-	 * @since 2.3.5
-	 */
 	return (bool) apply_filters( 'the_seo_framework_load', true );
 }
 
@@ -69,17 +62,34 @@ function the_seo_framework_load() {
  * @uses THE_SEO_FRAMEWORK_DIR_PATH_FUNCT
  * @uses THE_SEO_FRAMEWORK_DIR_PATH_CLASS
  *
+ * @benchmarked require_once (file inclusion) takes less than 0.0001s.
+ *
  * @since 2.1.6
  */
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'compat.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'optionsapi.php' );
+//require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'benchmark.php' );
 
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'core.class.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'debug.class.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'compat.class.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'query.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'init.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'admininit.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'render.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'detect.class.php' );
+
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'postdata.class.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'termdata.class.php' );
+
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate.class.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-description.class.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-title.class.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-url.class.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-image.class.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-ldjson.class.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-author.class.php' );
+
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'search.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'doingitright.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'pageoptions.class.php' );
@@ -87,7 +97,6 @@ require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'inpost.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'adminpages.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'sanitize.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'siteoptions.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'networkoptions.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'metaboxes.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'sitemaps.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'transients.class.php' );
@@ -105,29 +114,46 @@ require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.class.php'
 class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 
 	/**
-	 * Cached debug constants. Initialized on plugins_loaded.
+	 * Cached debug/profile constants. Initialized on plugins_loaded priority 5.
 	 *
 	 * @since 2.2.9
 	 *
-	 * @var bool The SEO Framework Debug is defined.
+	 * @var bool The SEO Framework Debug/Profile constants is/are defined.
 	 */
 	public $the_seo_framework_debug = false;
-	public $the_seo_framework_debug_more = false;
 	public $the_seo_framework_debug_hidden = false;
+	public $the_seo_framework_use_transients = true;
+	public $script_debug = false;
+	public $debug_time;
 
 	/**
-	 * Constructor, load parent constructor
+	 * Constructor, setup debug vars and then load parent constructor.
 	 */
 	public function __construct() {
+		//* Setup debug vars before initializing parents.
+		$this->init_debug_vars();
+
 		parent::__construct();
+	}
+
+	/**
+	 * Initializes public debug variables for the class to use.
+	 *
+	 * @since 2.6.0
+	 */
+	public function init_debug_vars() {
 
 		$this->the_seo_framework_debug = defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ? true : $this->the_seo_framework_debug;
-
 		if ( $this->the_seo_framework_debug ) {
 			//* No need to set these to true if no debugging is enabled.
-			$this->the_seo_framework_debug_more = defined( 'THE_SEO_FRAMEWORK_DEBUG_MORE' ) && THE_SEO_FRAMEWORK_DEBUG_MORE ? true : $this->the_seo_framework_debug_more;
 			$this->the_seo_framework_debug_hidden = defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN ? true : $this->the_seo_framework_debug_hidden;
 		}
+
+		$this->the_seo_framework_use_transients = defined( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS' ) && THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS ? false : $this->the_seo_framework_use_transients;
+
+		//* WP Core definition.
+		$this->script_debug = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? true : $this->script_debug;
+
 	}
 
 	/**
@@ -141,6 +167,9 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 	 * @since 2.2.2
 	 *
 	 * @return mixed $output The function called.
+	 *
+	 * @NOTE _doing_it_wrong notices go towards the callback. Unless this
+	 * function is used wrongfully. Then the notice is about this function.
 	 *
 	 * @param array|string $params The arguments passed to the function.
 	 * @since 2.2.4
@@ -167,61 +196,60 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 			$args = (array) $params;
 		}
 
+		$class = reset( $function );
+		$method = next( $function );
+
 		/**
 		 * Fetch method/function
 		 */
-		if ( is_object( $function[0] ) ) {
-			$method = (string) $function[1];
+		if ( is_object( $class ) && is_string( $method ) ) {
+			$class = get_class( $class );
 
-			if ( $function[0] == $this ) {
+			if ( $class === get_class( $this ) ) {
 				if ( method_exists( $this, $method ) ) {
 					if ( empty( $args ) ) {
 						// In-Object calling.
 						$output = call_user_func( array( $this, $method ) );
 					} else {
 						// In-Object calling.
-						$output = call_user_func_array( array( $this, $method ), (array) $args );
+						$output = call_user_func_array( array( $this, $method ), $args );
 					}
-				} else if ( $version ) {
-					$version = $this->the_seo_framework_version( $version );
-					 _doing_it_wrong( (string) $this . '::' . (string) $method, __( "Class or Method not found.", 'autodescription' ), $version );
+				} else {
+					$this->_doing_it_wrong( (string) $class . '::' . (string) $method, __( "Class or Method not found.", 'autodescription' ), $version );
 				}
 			} else {
-				// This doesn't work in Apache configurations.
-				$class = get_class( $function[0] );
-				$method = (string) $function[1];
-
 				if ( method_exists( $class, $method ) ) {
 					if ( empty( $args ) ) {
-						// Static calling
-						$output = call_user_func( $class . '::'. $method );
+						$output = call_user_func( array( $class, $method ) );
 					} else {
-						// Static calling
-						$output = call_user_func_array( $class . '::'. $method, (array) $args );
+						$output = call_user_func_array( array( $class, $method ), $args );
 					}
-				} else if ( $version ) {
-					$version = $this->the_seo_framework_version( $version );
-					 _doing_it_wrong( (string) $class . '::' . (string) $method, __( "Class or Method not found. Needs to be called statically.", 'autodescription' ), $version );
+				} else {
+					$this->_doing_it_wrong( (string) $class . '::' . (string) $method, __( "Class or Method not found.", 'autodescription' ), $version );
 				}
 			}
-		} else if ( is_string( $function[0] ) && ! empty( $function[1] ) ) {
-			if ( empty( $args ) ) {
-				// Static calling
-				$output = call_user_func( $function[0] . '::' . $function[1] );
+		} else if ( is_string( $class ) && is_string( $method ) ) {
+			//* This could be combined with the one above.
+			if ( method_exists( $class, $method ) ) {
+				if ( empty( $args ) ) {
+					$output = call_user_func( array( $class, $method ) );
+				} else {
+					$output = call_user_func_array( array( $class, $method ), $args );
+				}
 			} else {
-				// Static calling
-				$output = call_user_func_array( $function[0] . '::' . $function[1], (array) $args );
+				$this->_doing_it_wrong( (string) $class . '::' . (string) $method, __( "Class or Method not found.", 'autodescription' ), $version );
 			}
-		} else if ( is_string( $function[0] ) ) {
-			$func = $function[0];
+		} else if ( is_string( $class ) ) {
+			//* Class is function.
+			$func = $class;
+
 			if ( empty( $args ) ) {
 				$output = call_user_func( $func );
 			} else {
-				$output = call_user_func_array( $func, (array) $args );
+				$output = call_user_func_array( $func, $args );
 			}
-		} else if ( $version ) {
-			$version = $this->the_seo_framework_version( $version );
-			_doing_it_wrong( (string) $callback, __( "Function needs to be called as string.", 'autodescription' ), $version );
+		} else {
+			$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, __( "Function needs to be called as a string.", 'autodescription' ), $version );
 		}
 
 		return $output;
@@ -234,54 +262,9 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 	 */
 	public function the_seo_framework_version( $version = '' ) {
 
-		$output = empty( $version ) ? '' : sprintf( __( '%s of The SEO Framework', 'autodescription' ), esc_attr( $version ) );
+		$output = $version ? sprintf( __( '%s of The SEO Framework', 'autodescription' ), esc_attr( $version ) ) : '';
 
 		return $output;
 	}
 
-	/**
-	 * Faster way of doing an in_array search compared to default PHP behavior.
-	 * @NOTE only to show improvement with large arrays. Might slow down with small arrays.
-	 * @NOTE can't do type checks. Always assume the comparing value is a string.
-	 *
-	 * @uses array_flip()
-	 * @uses isset()
-	 *
-	 * @since 2.5.2
-	 *
-	 * @param string|array $needle The needle(s) to search for
-	 * @param array $array The single dimensional array to search in.
-	 *
-	 * @return bool true if value is in array.
-	 */
-	public function in_array( $needle, $array ) {
-
-		$array = array_flip( $array );
-
-		if ( is_string( $needle ) ) {
-			if ( isset( $array[$needle] ) )
-				return true;
-		} else if ( is_array( $needle ) ) {
-			foreach ( $needle as $str ) {
-				if ( isset( $array[$str] ) )
-					return true;
-			}
-		}
-
-		return false;
-	}
-
 }
-
-//* Load deprecated functions.
-require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.php' );
-
-/**
- * FLush permalinks on activation/deactivation
- *
- * Calls functions statically.
- *
- * @since 2.2.9
- */
-register_activation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, array( 'The_SEO_Framework_Load', 'flush_rewrite_rules_activation' ) );
-register_deactivation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, array( 'The_SEO_Framework_Load', 'flush_rewrite_rules_deactivation' ) );

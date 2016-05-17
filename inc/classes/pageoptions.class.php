@@ -76,19 +76,17 @@ class AutoDescription_PageOptions extends AutoDescription_DoingItRight {
 
 		foreach ( (array) $data as $key => $value ) {
 			//* Sanitize the title
-			if ( '_genesis_title' === $key ) {
+			if ( '_genesis_title' === $key )
 				$data[$key] = trim( strip_tags( $value ) );
-			}
 
 			//* Sanitize the description
-			if ( '_genesis_description' === $key ) {
+			if ( '_genesis_description' === $key )
 				$data[$key] = $this->s_description( $value );
-			}
 
 			//* Sanitize the URL. Make sure it's an absolute URL
-			if ( 'redirect' === $key ) {
+			if ( 'redirect' === $key )
 				$data[$key] = $this->s_redirect_url( $value );
-			}
+
 		}
 
 		$this->save_custom_fields( $data, 'inpost_seo_save', 'hmpl_ad_inpost_seo_nonce', $post );
@@ -165,6 +163,13 @@ class AutoDescription_PageOptions extends AutoDescription_DoingItRight {
 	 * @param object $term     Database row object.
 	 * @param string $taxonomy Taxonomy name that $term is part of.
 	 *
+	 * @todo Use WordPress 4.4.0 get_term_meta() / update_term_meta()
+	 * @priority OMG WTF BBQ 2.6.x / Genesis 2.3.0
+	 * @see @link http://www.studiopress.com/important-announcement-for-genesis-plugin-developers/
+	 * @link https://core.trac.wordpress.org/browser/tags/4.5/src/wp-includes/taxonomy.php#L1814
+	 * @todo still use arrays in get_term_meta() / update_term_meta() ?
+	 * @NOTE Keep WP 3.8 compat.
+	 *
 	 * @return object $term Database row object.
 	 */
 	public function get_term_filter( $term, $taxonomy ) {
@@ -173,20 +178,32 @@ class AutoDescription_PageOptions extends AutoDescription_DoingItRight {
 		if ( ! is_object( $term ) )
 			return $term;
 
-		//* Do nothing, if called in the context of creating a term via an ajax call
-		if ( did_action( 'wp_ajax_add-tag' ) )
+		/**
+		 * No need to process this data outside of the Terms' scope.
+		 * @since 2.6.0
+		 */
+		if ( false === $this->is_admin() && false === $this->is_archive() )
+			return $term;
+
+		/**
+		 * No need to process this after the data has already been output.
+		 * @since 2.6.0
+		 */
+		if ( did_action( 'the_seo_framework_do_after_output' ) )
+			return $term;
+
+		/**
+		 * Do nothing if called in the context of creating a term via an Ajax call to prevent data conflict.
+		 * @since ???
+		 *
+		 * @since 2.6.0 delay did_action call as it's a heavy array call.
+		 */
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX && did_action( 'wp_ajax_add-tag' ) )
 			return $term;
 
 		$db = get_option( 'autodescription-term-meta' );
 		$term_meta = isset( $db[$term->term_id] ) ? $db[$term->term_id] : array();
 
-		/**
-		 * New filter.
-		 * @since 2.3.0
-		 *
-		 * Removed previous filter.
-		 * @since 2.3.5
-		 */
 		$args = (array) apply_filters( 'the_seo_framework_term_meta_defaults', array(
 			'doctitle'            => '',
 			'description'         => '',
@@ -216,25 +233,13 @@ class AutoDescription_PageOptions extends AutoDescription_DoingItRight {
 				$value = $this->s_description( $value );
 
 			/**
-			 * New filter.
-			 * @since 2.3.0
-			 *
-			 * Removed previous filter.
-			 * @since 2.3.5
-			 *
-			 * @param $taxonomy the Taxonomy name
+			 * @param string $taxonomy the Taxonomy name
 			 */
 			$term->admeta[$field] = (string) apply_filters( "the_seo_framework_term_meta_{$field}", stripslashes( wp_kses_decode_entities( $value ) ), $term, $taxonomy );
 		}
 
 		/**
-		 * New filter.
-		 * @since 2.3.0
-		 *
-		 * Removed previous filter.
-		 * @since 2.3.5
-		 *
-		 * @param $taxonomy the Taxonomy name
+		 * @param array $taxonomy The taxonomy data.
 		 */
 		$term->admeta = (array) apply_filters( 'the_seo_framework_term_meta', $term->admeta, $term, $taxonomy );
 

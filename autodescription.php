@@ -2,8 +2,13 @@
 /**
  * Plugin Name: The SEO Framework
  * Plugin URI: https://wordpress.org/plugins/autodescription/
+<<<<<<< HEAD
  * Description: The SEO Framework makes sure your SEO is always up-to-date without any configuration needed. It's based upon the Genesis SEO.
  * Version: 2.5.2.4
+=======
+ * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.
+ * Version: 2.6.0
+>>>>>>> ef405fe90ddfcedfe3f7898dcde7198f4eccf621
  * Author: Sybre Waaijer
  * Author URI: https://cyberwire.nl/
  * License: GPLv3
@@ -28,28 +33,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//* Debug. Not to be used on production websites as it dumps all kinds of stuff everywhere.
-//if ( is_admin() ) { // Warning: This allows every user to still see it.
-//	if ( is_super_admin() ) { // AntiWarning: This allows for enabling it only for the (multi-)site admin user.
-//		define( 'THE_SEO_FRAMEWORK_DEBUG', true );
-//		define( 'THE_SEO_FRAMEWORK_DEBUG_MORE', true );
-//		define( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN', true );
-//	}
-//}
+//* Debug. Not to be used on production websites as it dumps and/or disables all kinds of stuff everywhere.
+//add_action( 'plugins_loaded', function() { if ( is_super_admin() ) {
+	//if ( is_admin() ) {
+	//		define( 'THE_SEO_FRAMEWORK_DEBUG', true );
+	//		define( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN', true );
+	//		define( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS', true );
+	//}
+//}},0);
 
 /**
- * CDN Cache buster. 3 point.
- * Not many caching plugins use CDN in dashboard. What a shame.
+ * CDN Cache buster. 3 to 4 point.
+ * Not many caching plugins use CDN in dashboard. What a shame. Firefox does cache.
  *
  * @since 1.0.0
- *
- * New constant.
- * @since 2.3.0
- *
- * Removed previous constant.
- * @since 2.3.5
  */
+<<<<<<< HEAD
 define( 'THE_SEO_FRAMEWORK_VERSION', '2.5.2.4' );
+=======
+define( 'THE_SEO_FRAMEWORK_VERSION', '2.6.0' );
+>>>>>>> ef405fe90ddfcedfe3f7898dcde7198f4eccf621
 
 /**
  * Plugin options filter
@@ -57,12 +60,6 @@ define( 'THE_SEO_FRAMEWORK_VERSION', '2.5.2.4' );
  * We can change the filter, however. So we did.
  *
  * @since 2.2.2
- *
- * New constant and filter.
- * @since 2.3.0
- *
- * Removed previous constant and filter.
- * @since 2.3.5
  */
 define( 'THE_SEO_FRAMEWORK_SITE_OPTIONS', (string) apply_filters( 'the_seo_framework_site_options', 'autodescription-site-settings' ) );
 
@@ -72,12 +69,6 @@ define( 'THE_SEO_FRAMEWORK_SITE_OPTIONS', (string) apply_filters( 'the_seo_frame
  * We can change the filter, however. So we did.
  *
  * @since 2.2.2
- *
- * New constant and filter.
- * @since 2.3.0
- *
- * Removed previous constant and filter.
- * @since 2.3.5
  */
 define( 'THE_SEO_FRAMEWORK_NETWORK_OPTIONS', (string) apply_filters( 'the_seo_framework_network_settings', 'autodescription-network-settings' ) );
 
@@ -85,13 +76,7 @@ define( 'THE_SEO_FRAMEWORK_NETWORK_OPTIONS', (string) apply_filters( 'the_seo_fr
  * The plugin map url.
  * Used for calling browser files.
  *
- * @since 1.0.0
- *
- * New constant.
- * @since 2.3.0
- *
- * Removed previous constant.
- * @since 2.3.5
+ * @since 2.2.2
  */
 define( 'THE_SEO_FRAMEWORK_DIR_URL', plugin_dir_url( __FILE__ ) );
 
@@ -99,13 +84,7 @@ define( 'THE_SEO_FRAMEWORK_DIR_URL', plugin_dir_url( __FILE__ ) );
  * The plugin map absolute path.
  * Used for calling php files.
  *
- * @since 1.0.0
- *
- * New constant.
- * @since 2.3.0
- *
- * Removed previous constant.
- * @since 2.3.5
+ * @since 2.2.2
  */
 define( 'THE_SEO_FRAMEWORK_DIR_PATH', plugin_dir_path( __FILE__ ) );
 
@@ -119,50 +98,32 @@ define( 'THE_SEO_FRAMEWORK_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 /**
  * The plugin file, absolute unix path.
  * @since 2.2.9
- *
- * New constant.
- * @since 2.3.0
- *
- * Removed previous constant.
- * @since 2.3.5
  */
 define( 'THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE', __FILE__ );
 
 /**
  * The plugin class map absolute path.
- *
- * New constant.
- * @since 2.3.0
- *
- * Removed previous constant.
- * @since 2.3.5
+ * @since 2.2.9
  */
 define( 'THE_SEO_FRAMEWORK_DIR_PATH_CLASS', THE_SEO_FRAMEWORK_DIR_PATH . '/inc/classes/' );
 
 /**
  * The plugin function map absolute path.
- *
- * New constant.
- * @since 2.3.0
- *
- * Removed previous constant.
- * @since 2.3.5
+ * @since 2.2.9
  */
 define( 'THE_SEO_FRAMEWORK_DIR_PATH_FUNCT', THE_SEO_FRAMEWORK_DIR_PATH . '/inc/functions/' );
 
+add_action( 'plugins_loaded', 'the_seo_framework_locale_init', 10 );
 /**
  * Plugin locale 'autodescription'
  *
  * File located in plugin folder autodescription/language/
  *
  * @since 1.0.0
- *
- * @return void
  */
 function the_seo_framework_locale_init() {
 	load_plugin_textdomain( 'autodescription', false, basename( dirname( __FILE__ ) ) . '/language/' );
 }
-add_action( 'plugins_loaded', 'the_seo_framework_locale_init', 10 );
 
 /**
  * Load plugin files
@@ -172,3 +133,16 @@ add_action( 'plugins_loaded', 'the_seo_framework_locale_init', 10 );
  * @uses THE_SEO_FRAMEWORK_DIR_PATH
  */
 require_once( THE_SEO_FRAMEWORK_DIR_PATH . '/load.class.php' );
+
+//* Load deprecated functions.
+require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.php' );
+
+/**
+ * FLush permalinks on activation/deactivation
+ *
+ * Calls functions statically.
+ *
+ * @since 2.2.9
+ */
+register_activation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, array( 'The_SEO_Framework_Load', 'flush_rewrite_rules_activation' ) );
+register_deactivation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, array( 'The_SEO_Framework_Load', 'flush_rewrite_rules_deactivation' ) );

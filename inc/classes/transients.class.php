@@ -70,10 +70,16 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		// Setup Transient names
 		add_action( 'plugins_loaded', array( $this, 'setup_transient_names' ), 10 );
 
-		//* Delete Sitemap and Description transients on post publish/delete.
+		/**
+		 * Delete Sitemap and Description transients on post publish/delete.
+		 * @see WP Core wp_transition_post_status()
+		 */
 		add_action( 'publish_post', array( $this, 'delete_transients_post' ) );
-		add_action( 'delete_post', array( $this, 'delete_transients_post' ) );
-		add_action( 'save_post', array( $this, 'delete_transients_post' ) );
+		add_action( 'publish_page', array( $this, 'delete_transients_post' ) );
+		add_action( 'deleted_post', array( $this, 'delete_transients_post' ) );
+		add_action( 'deleted_page', array( $this, 'delete_transients_post' ) );
+		add_action( 'post_updated', array( $this, 'delete_transients_post' ) );
+		add_action( 'page_updated', array( $this, 'delete_transients_post' ) );
 
 		add_action( 'edit_term', array( $this, 'delete_auto_description_transients_term' ), 10, 3 );
 		add_action( 'delete_term', array( $this, 'delete_auto_description_transients_term' ), 10, 4 );
@@ -86,6 +92,46 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		//* Delete doing it wrong transient after theme switch.
 		add_action( 'after_switch_theme', array( $this, 'delete_theme_dir_transient' ), 10 );
 
+	}
+
+	/**
+	 * Get the value of the transient.
+	 *
+	 * If the transient does not exists, does not have a value or has expired,
+	 * or transients have been disabled through a constant, then the transient
+	 * will be false.
+	 * @see $this->the_seo_framework_use_transients
+	 *
+	 * @since 2.6.0
+	 *
+	 * @param string $transient Transient name. Expected to not be SQL-escaped.
+	 *
+	 * @return mixed|bool Value of the transient. False on failure or non existing transient.
+	 */
+	public function get_transient( $transient ) {
+
+		if ( $this->the_seo_framework_use_transients )
+			return get_transient( $transient );
+
+		return false;
+	}
+
+	/**
+	 * Set the value of the transient..
+	 *
+	 * Prevents setting of transients when they're disabled.
+	 * @see $this->the_seo_framework_use_transients
+	 *
+	 * @since 2.6.0
+	 *
+	 * @param string $transient Transient name. Expected to not be SQL-escaped.
+	 * @param string $value Transient value. Expected to not be SQL-escaped.
+	 * @param int $expiration Optional Transient expiration date, optional. Expected to not be SQL-escaped.
+	 */
+	public function set_transient( $transient, $value, $expiration = '' ) {
+
+		if ( $this->the_seo_framework_use_transients )
+			set_transient( $transient, $value, $expiration );
 
 	}
 
@@ -99,13 +145,12 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 
 		/**
 		 * When the caching mechanism changes. Change this value.
-		 *
 		 * Use hex. e.g. 0, 1, 2, 9, a, b
 		 */
-		$revision = '2';
+		$revision = '0';
 
-		$this->sitemap_transient = 'the_seo_framework_sitemap_' . (string) $revision . '_' . (string) $blog_id;
-		$this->theme_doing_it_right_transient = 'the_seo_framework_tdir_' . (string) $revision . '_' . (string) $blog_id;
+		$this->sitemap_transient = 'tsf_sitemap_' . (string) $revision . '_' . (string) $blog_id;
+		$this->theme_doing_it_right_transient = 'tsf_tdir_' . (string) $revision . '_' . (string) $blog_id;
 	}
 
 	/**
@@ -122,22 +167,19 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 
 		/**
 		 * When the caching mechanism changes. Change this value.
-		 *
 		 * Use hex. e.g. 0, 1, 2, 9, a, b
 		 *
 		 * @since 2.3.4
 		 */
-		$revision = '4';
+		$revision = '0';
 
-		/**
-		 * Two different cache keys for two different settings.
-		 *
-		 * @since 2.3.4
-		 */
-		if ( $this->get_option( 'description_blogname' ) ) {
-			$this->auto_description_transient = 'the_seo_f' . $revision . '_exc_' . $cache_key;
+		$additions = $this->add_description_additions( $page_id, $taxonomy );
+
+		if ( $additions ) {
+			$option = $this->get_option( 'description_blogname' ) ? '1' : '0';
+			$this->auto_description_transient = 'tsf_desc_' . $option . '_' . $revision . '_' . $cache_key;
 		} else {
-			$this->auto_description_transient = 'the_seo_f' . $revision . '_exc_s_' . $cache_key;
+			$this->auto_description_transient = 'tsf_desc_noa_' . $revision . '_' . $cache_key;
 		}
 
 	}
@@ -159,9 +201,16 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		 *
 		 * Use hex. e.g. 0, 1, 2, 9, a, b
 		 */
-		$revision = '3';
+		$revision = '6';
 
-		$this->ld_json_transient = 'the_seo_f' . $revision . '_ldjs_' . $cache_key;
+		/**
+		 * Change key based on options.
+		 */
+		$options = $this->enable_ld_json_breadcrumbs() ? '1' : '0';
+		$options .= $this->enable_ld_json_sitename() ? '1' : '0';
+		$options .= $this->enable_ld_json_searchbox() ? '1' : '0';
+
+		$this->ld_json_transient = 'the_seo_f' . $revision . '_' . $options . '_ldjs_' . $cache_key;
 	}
 
 	/**
@@ -170,15 +219,20 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	 * @param int|string|bool $page_id the Taxonomy or Post ID.
 	 * @param string $taxonomy The Taxonomy name.
 	 *
-	 * @staticvar array $cached_id
+	 * @staticvar array $cached_id : contains cache strings.
 	 *
-	 * @global $blog_id;
+	 * @global int $blog_id;
 	 *
 	 * @since 2.3.3
+	 *
+	 * @refactored
+	 * @since 2.6.0
 	 *
 	 * @return string The generated page id key.
 	 */
 	public function generate_cache_key( $page_id, $taxonomy = '' ) {
+
+		$page_id = $page_id ? $page_id : $this->get_the_real_ID();
 
 		static $cached_id = array();
 
@@ -187,161 +241,192 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 
 		global $blog_id;
 
+		$locale = '_' . strtolower( get_locale() );
+
+		//* Placeholder ID.
 		$the_id = '';
 
-		/**
-		 * Generate home page cache key for the Home Page metabox.
-		 * @since 2.4.3.1
-		 */
-		if ( $this->is_menu_page( $this->pagehook ) ) {
-			//* We're on the SEO Settings page now.
-
-			if ( 'posts' == get_option( 'show_on_front' ) ) {
-				/**
-				 * Detected home page.
-				 * @since 2.3.4
-				 */
-				$the_id = 'hpage_' . (string) get_option( 'page_on_front' );
+		if ( $this->is_404() ) {
+			//* 404.
+			$the_id = '_404_';
+		} else if ( ( $this->is_front_page( $page_id ) ) || ( $this->is_admin() && $this->is_menu_page( $this->pagehook ) ) ) {
+			//* Fetch Home key.
+			$the_id = $this->generate_front_page_cache_key();
+		} else if ( $this->is_blog_page( $page_id ) ) {
+			//* Blog page.
+			$the_id = 'blog_' . $page_id;
+		} else if ( $this->is_singular() ) {
+			if ( $this->is_page( $page_id ) ) {
+				//* Page.
+				$the_id = 'page_' . $page_id;
+			} else if ( $this->is_single( $page_id ) ) {
+				//* Post.
+				$the_id = 'post_' . $page_id;
+			} else if ( $this->is_attachment( $page_id ) ) {
+				//* Attachment.
+				$the_id = 'attach_' . $page_id;
 			} else {
-				/**
-				 * Detected home page.
-				 * @since 2.3.4
-				 */
-				$the_id = 'hpage_' . (string) get_option( 'page_on_front' );
+				//* Other.
+				$the_id = 'singular_' . $page_id;
+			}
+		} else if ( $this->is_search() ) {
+			//* Search query.
+			$query = '';
+
+			if ( function_exists( 'get_search_query' ) ) {
+				$search_query = get_search_query();
+
+				if ( $search_query )
+					$query = str_replace( ' ', '', $search_query );
+
+				//* Limit to 10 chars.
+				if ( mb_strlen( $query ) > 10 )
+					$query = mb_substr( $query, 0, 10 );
+
+				$query = esc_sql( $query );
 			}
 
-		} else {
-			//* All other pages, admin and front-end.
+			$the_id = $page_id . '_s_' . $query;
+		} else if ( $this->is_archive() ) {
+			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
+				//* Term.
 
-			if ( ! is_search() ) {
-				if ( ( false === $page_id || is_front_page() ) && ( 'posts' == get_option( 'show_on_front' ) ) ) {
-					if ( is_404() ) {
-						$the_id = '_404_';
-					} else {
-						/**
-						 * Generate for home is blog page.
-						 * New transient name because of the conflicting bugfix on blog.
-						 * @since 2.3.4
-						 */
-						$the_id = 'hblog_' . (string) get_option( 'page_on_front' );
+				if ( empty( $taxonomy ) )
+					$taxonomy = get_query_var( 'taxonomy' );
+
+				$the_id = $this->generate_taxonomial_cache_key( $page_id, $taxonomy );
+
+				if ( $this->is_tax() )
+					$the_id = 'archives_' . $the_id;
+
+			} else if ( $this->is_author() ) {
+				//* Author page.
+				$the_id = 'author_' . $page_id;
+			} else if ( $this->is_date() ) {
+				//* Dates.
+				$post = get_post();
+
+				if ( $post && isset( $post->post_date ) ) {
+					$date = $post->post_date;
+
+					if ( $this->is_year() ) {
+						//* Year.
+						$the_id .= 'year_' . mysql2date( 'y', $date, false );
+					} else if ( $this->is_month() ) {
+						//* Month.
+						$the_id .= 'month_' . mysql2date( 'm_y', $date, false );
+					} else if ( $this->is_day() ) {
+						//* Day. The correct notation.
+						$the_id .= 'day_' . mysql2date( 'd_m_y', $date, false );
 					}
-				} else if ( ( false === $page_id || is_front_page() || $page_id == get_option( 'page_on_front' ) ) && ( empty( $taxonomy ) && 'page' == get_option( 'show_on_front' ) ) ) {
-					if ( is_404() ) {
-						$the_id = '_404_';
-					} else {
-						/**
-						 * Detected home page.
-						 * @since 2.3.4
-						 */
-						$the_id = 'hpage_' . (string) get_option( 'page_on_front' );
-					}
-				} else if ( ! is_front_page() && empty( $taxonomy ) && ( ( $page_id == get_option( 'page_for_posts' ) && get_option( 'page_for_posts' ) != 0 ) || ( $page_id === false && did_action( 'admin_init' ) ) ) ) {
-					/**
-					 * Generate key for blog page that's not the home page.
-					 * Bugfix
-					 * @since 2.3.4
-					 */
-					$the_id = 'blog_' . $page_id;
-				} else if ( ! $this->is_singular() && empty( $taxonomy ) && ! did_action( 'admin_init' ) ) {
-					//* Unsigned CPT, AnsPress question, etc.
-					global $wp_query;
-
-					/**
-					 * Generate for everything else.
-					 * Doesn't work on admin_init action.
-					 */
-
-					$query = isset( $wp_query->query ) ? (array) $wp_query->query : null;
+				} else {
+					//* Get seconds since UNIX Epoch. This is a failsafe.
 
 					/**
-					 * Automatically generate transient based on query.
-					 *
-					 * Adjusted to comply with the 45 char limit.
-					 * @since 2.3.4
+					 * @staticvar string $unix : Used to maintain a static timestamp for this query.
 					 */
-					if ( isset( $query ) ) {
-						$the_id = '';
+					static $unix = null;
 
-						// Trim key to 2 chars.
-						foreach ( $query as $key => $value ) {
-							/**
-							 * If array, combine keys.
-							 *
-							 * @NOTE Fixes unconfirmed bug.
-							 * @since 2.5.2
-							 */
-							if ( is_array( $value ) ) {
+					if ( ! isset( $unix ) )
+						$unix = date( 'U' );
 
-								$the_id .= substr( $key, 0, 2 ) . '_';
+					//* Temporarily disable transients to prevent database spam.
+					$this->the_seo_framework_use_transients = false;
+					$this->use_object_cache = false;
 
-								//* mb_substr will generate a notice if array to string conversion still takes place. All is good :).
-								foreach ( $value as $v )
-									$the_id .= mb_substr( $v, 0, 2 ) . '_';
-
-							} else {
-								$the_id .= substr( $key, 0, 2 ) . '_' . mb_substr( $value, 0, 2 ) . '_';
-							}
-						}
-
-						//* add Page ID.
-						$the_id .= (string) $this->get_the_real_ID();
-					}
-				} else if ( ! $this->is_singular() && ! empty( $taxonomy ) ) {
-					//* Taxonomy
-
-					$the_id = '';
-
-					//* Save taxonomy name and split into words with 3 length.
-					$taxonomy_name = explode( '_', $taxonomy );
-					foreach ( $taxonomy_name as $name )
-						$the_id .= substr( $name, 0, 3 ) . '_';
-
-					$p_id = $page_id ? $page_id : $this->get_the_real_ID();
-
-					//* Put it all together.
-					$the_id = rtrim( $the_id, '_' ) . '_' . (string) $p_id;
-				} else if ( ! empty( $page_id ) ) {
-					$the_id = $page_id;
+					$the_id = 'unix_' . $unix;
 				}
 			} else {
-				//* Search query.
-				$query = '';
+				//* Other taxonomial archives.
 
-				if ( function_exists( 'get_search_query' ) ) {
-					$search_query = get_search_query();
+				if ( empty( $taxonomy ) ) {
+					$post_type = get_query_var( 'post_type' );
 
-					if ( ! empty( $search_query ) )
-						$query = str_replace( ' ', '', $search_query );
+					if ( is_array( $post_type ) )
+						reset( $post_type );
 
-					//* Limit to 10 chars.
-					if ( mb_strlen( $query ) > 10 )
-						$query = mb_substr( $query, 0, 10 );
+					if ( $post_type )
+						$post_type_obj = get_post_type_object( $post_type );
+
+					if ( isset( $post_type_obj->labels->name ) )
+						$taxonomy = $post_type_obj->labels->name;
 				}
 
-				$the_id = $page_id . '_s_' . $query;
+				//* Still empty? Try this.
+				if ( empty( $taxonomy ) )
+					$taxonomy = get_query_var( 'taxonomy' );
+
+				$the_id = $this->generate_taxonomial_cache_key( $page_id, $taxonomy );
+				$the_id = 'archives_' . $the_id;
 			}
 		}
 
 		/**
-		 * Static Front page isn't set. Causes all kinds of problems :(
+		 * Blog page isn't set or something else is happening. Causes all kinds of problems :(
 		 * Noob. :D
 		 */
-		if ( empty( $the_id ) ) {
-			$the_id = 'home_noob';
-		}
+		if ( empty( $the_id ) )
+			$the_id = 'noob_' . $page_id . '_' . $taxonomy;
 
 		/**
 		 * This should be at most 25 chars. Unless the $blog_id is higher than 99,999,999.
 		 * Then some cache keys will conflict on every 10th blog ID from eachother which post something on the same day..
 		 * On the day archive. With the same description setting (short).
 		 */
-		return $cached_id[$page_id][$taxonomy] = (string) $the_id . '_' . (string) $blog_id;
+		return $cached_id[$page_id][$taxonomy] = $the_id . '_' . $blog_id . $locale;
+	}
+
+	/**
+	 * Returns the front page partial transient key.
+	 *
+	 * @param string $type
+	 *
+	 * @return string the front page transient key.
+	 */
+	public function generate_front_page_cache_key( $type = '' ) {
+
+		if ( empty( $type ) ) {
+			if ( $this->has_page_on_front() )
+				$type = 'page';
+			else
+				$type = 'blog';
+		} else {
+			$type = esc_sql( $type );
+		}
+
+		return $the_id = 'h' . $type . '_' . $this->get_the_front_page_ID();
+	}
+
+	/**
+	 * Generates Cache key for taxonomial archives.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @param int $page_id The taxonomy or page ID.
+	 * @param string $taxonomy The taxonomy name.
+	 *
+	 * @return string The Taxonomial Archive cache key.
+	 */
+	protected function generate_taxonomial_cache_key( $page_id = '', $taxonomy = '' ) {
+
+		$the_id = '';
+
+		$taxonomy_name = explode( '_', $taxonomy );
+		if ( is_array( $taxonomy_name ) ) {
+			foreach ( $taxonomy_name as $name )
+				$the_id .= mb_substr( $name, 0, 3 ) . '_';
+		}
+
+		//* Put it all together.
+		return rtrim( $the_id, '_' ) . '_' . $page_id;
 	}
 
 	/**
 	 * Delete transient on post save.
 	 *
 	 * @since 2.2.9
+	 *
+	 * @param int $post_id The Post ID that has been updated.
 	 *
 	 * @return bool|null True when sitemap is flushed. False on revision. Null
 	 * when sitemaps are deactivated.
@@ -351,7 +436,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		$this->delete_auto_description_transient( $post_id );
 		$this->delete_ld_json_transient( $post_id );
 
-		if ( (bool) $this->get_option( 'sitemaps_output' ) !== false ) {
+		if ( $this->is_option_checked( 'sitemaps_output' ) ) {
 
 			//* Don't flush sitemap on revision.
 			if ( wp_is_post_revision( $post_id ) )
@@ -381,11 +466,11 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	}
 
 	/**
-	 * Checks wether the permalink structure is updated.
+	 * Checks whether the permalink structure is updated.
 	 *
 	 * @since 2.3.0
 	 *
-	 * @return bool Wether if sitemap transient is deleted.
+	 * @return bool Whether if sitemap transient is deleted.
 	 */
 	public function delete_sitemap_transient_permalink_updated() {
 
@@ -424,7 +509,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	 */
 	public function delete_auto_description_blog_transient( $old_option ) {
 
-		$this->setup_auto_description_transient( false );
+		$this->setup_auto_description_transient( (int) get_option( 'page_for_posts' ) );
 
 		delete_transient( $this->auto_description_transient );
 
@@ -462,7 +547,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	 */
 	public function delete_ld_json_transient( $page_id, $taxonomy = '' ) {
 
-		$flushed = null;
+		static $flushed = null;
 
 		if ( ! isset( $flushed ) ) {
 			$this->setup_ld_json_transient( $page_id, $taxonomy );
@@ -514,6 +599,28 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 			set_transient( $this->theme_doing_it_right_transient, $dir, $expiration );
 		}
 
+	}
+
+	/**
+	 * Flushes the home page LD+Json transient.
+	 *
+	 * @staticvar bool $flushed
+	 * @since 2.6.0
+	 *
+	 * @return bool Whether it's flushed on current call.
+	 */
+	public function delete_front_ld_json_transient() {
+
+		static $flushed = null;
+
+		if ( isset( $flushed ) )
+			return false;
+
+		$front_id = $this->get_the_front_page_ID();
+
+		$this->delete_ld_json_transient( $front_id );
+
+		return $flushed = true;
 	}
 
 }

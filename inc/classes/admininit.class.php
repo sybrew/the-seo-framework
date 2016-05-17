@@ -27,6 +27,33 @@
 class AutoDescription_Admin_Init extends AutoDescription_Init {
 
 	/**
+	 * Page Hook.
+	 *
+	 * @since 2.5.2.2
+	 *
+	 * @var String Holds Admin Page hook.
+	 */
+	protected $page_hook;
+
+	/**
+	 * JavaScript name identifier to be used with enqueuing.
+	 *
+	 * @since 2.5.2.2
+	 *
+	 * @var array JavaScript name identifier.
+	 */
+	public $js_name;
+
+	/**
+	 * CSS script name identifier to be used with enqueuing.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @var array CSS name identifier.
+	 */
+	public $css_name;
+
+	/**
 	 * Constructor, load parent constructor
 	 *
 	 * Initalizes wp-admin functions
@@ -34,188 +61,13 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	public function __construct() {
 		parent::__construct();
 
-		add_action( 'admin_init', array( $this, 'post_state' ) );
-		add_action( 'init', array( $this, 'post_type_support' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 0, 1 );
 
-		/**
-		 * @since 2.2.4
-		 */
-		add_filter( 'genesis_detect_seo_plugins', array( $this, 'no_more_genesis_seo' ), 10 );
+		$this->js_name = 'autodescription';
+		$this->css_name = 'autodescription';
 
-		/**
-		 * @since 2.5.0
-		 * Doesn't work. ePanel filters are buggy and inconsistent.
-		 */
-		// add_filter( 'epanel_page_maintabs', array( $this, 'no_more_elegant_seo' ), 10, 1 );
-
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 10, 1 );
-
-		/**
-		 * @since 2.5.0
-		 *
-		 * PHP 5.2 compat
-		 * @since 2.5.2
-		 */
-		add_action( 'admin_footer', array( $this, 'debug_screens' ) );
-	}
-
-	/**
-	 * Add post state on edit.php to the page or post that has been altered
-	 *
-	 * Called outside autodescription_run
-	 *
-	 * Applies `hmpl_ad_states` filters.
-	 *
-	 * @uses $this->add_post_state
-	 *
-	 * @since 2.1.0
-	 */
-	public function post_state() {
-
-		/**
-		 * New filter.
-		 * @since 2.3.0
-		 *
-		 * Removed previous filter.
-		 * @since 2.3.5
-		 */
-		$allow_states = (bool) apply_filters( 'the_seo_framework_allow_states', true );
-
-		//* Prevent this function from running if this plugin is set to disabled.
-		if ( ! $allow_states )
-			return;
-
-		add_filter( 'display_post_states', array( $this, 'add_post_state' ) );
-
-	}
-
-	/**
-	 * Adds post states in post/page edit.php query
-	 *
-	 * @param array states 		the current post state
-	 * @param string redirected	$this->get_custom_field( 'redirect' );
-	 * @param string noindex	$this->get_custom_field( '_genesis_noindex' );
-	 *
-	 * @since 2.1.0
-	 */
-	public function add_post_state( $states = array() ) {
-
-		$post_id = $this->get_the_real_ID( false );
-
-		$searchexclude = (bool) $this->get_custom_field( 'exclude_local_search', $post_id );
-
-		if ( $searchexclude === true )
-			$states[] = __( 'No Search', 'autodescription' );
-
-		return $states;
-	}
-
-	/**
-	 * Removes the Genesis SEO meta boxes on the SEO Settings page
-	 *
-	 * @since 2.2.4
-	 */
-	public function no_more_genesis_seo() {
-
-		$plugins = array(
-				// Classes to detect.
-				'classes' => array(
-					'The_SEO_Framework_Load',
-				),
-
-				// Functions to detect.
-				'functions' => array(),
-
-				// Constants to detect.
-				'constants' => array(),
-			);
-
-		return (array) $plugins;
-	}
-
-	/**
-	 * Removes ePanel (Elegant Themes) SEO options.
-	 *
-	 * @since 2.5.0
-	 */
-	public function no_more_elegant_seo( $modules = array() ) {
-
-		//* Something went wrong here.
-		if ( ! is_array( $modules ) )
-			return $modules;
-
-		$modules = array_flip( $modules );
-		unset( $modules['seo'] );
-		//* Fill the keys back in order.
-		$modules = array_values( array_flip( $modules ) );
-
-		/**
-		 * Unset globals $options['randomkeyforseo']
-		 *
-		 * @NOTE to Elegant Themes:
-		 * Why Elegant Themes? This is why I never trusted your themes. :(
-		 * Uploading most of them in binary will crash also the layout.
-		 * And having unsanitized globals $options (great name for a global!), shouldn't be used.
-		 *
-		 * Try statically cached functions, take a look at the `the_seo_framework_init` function for a great example of countering globals.
-		 *
-		 * Please also provide more documentation for developers.
-		 *
-		 * Please rewrite your ePanel. Try to start by adding keys to options and removing globals.
-		 * More filters are also for everyone's pleasure :).
-		 *
-		 * I also recommend using Atom.io or Notepad++, because whatever you're using:
-		 * It's not working well with UTF-8.
-		 *
-		 * @global $options
-		 */
-		global $options;
-
-		if ( is_array( $options ) ) {
-			$keys = array();
-
-			foreach ( $options as $key => $array ) {
-				$seo_key = array_search( 'seo', $array );
-				if ( false !== $seo_key && 'name' === $seo_key )
-					$keys[] = $seo_key;
-			}
-
-			foreach ( $keys as $key )
-				unset( $options[$key] );
-		}
-
-		return (array) $modules;
-	}
-
-	/**
-	 * Adds post type support
-	 *
-	 * Applies filters the_seo_framework_supported_post_types : The supported post types.
-	 * @since 2.3.1
-	 *
-	 * @since 2.1.6
-	 */
-	public function post_type_support() {
-
-		$args = array();
-
-		/**
-		 * Added product post type.
-		 *
-		 * @since 2.3.1
-		 */
-		$defaults = array(
-			'post', 'page',
-			'product',
-			'forum', 'topic',
-			'jetpack-testimonial', 'jetpack-portfolio'
-		);
-		$post_types = (array) apply_filters( 'the_seo_framework_supported_post_types', $defaults, $args );
-
-		$post_types = wp_parse_args( $args, $post_types );
-
-		foreach ( $post_types as $type )
-			add_post_type_support( $type, array( 'autodescription-meta' ) );
+		//* Admin AJAX for counter options.
+		add_action( 'wp_ajax_the_seo_framework_update_counter', array( $this, 'the_counter_visualized' ) );
 
 	}
 
@@ -228,25 +80,44 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 */
 	public function enqueue_admin_scripts( $hook ) {
 
+		$enqueue_hooks = array(
+			'edit.php',
+			'post.php',
+			'post-new.php',
+			'edit-tags.php',
+			'term.php',
+		);
+
 		/**
 		 * Check hook first.
 		 * @since 2.3.9
 		 */
-		if ( isset( $hook ) && ! empty( $hook ) && ( $hook == 'edit.php' || $hook == 'post.php' || $hook = 'edit-tags.php' ) ) {
+		if ( isset( $hook ) && $hook && in_array( $hook, $enqueue_hooks ) ) {
 			/**
 			 * @uses $this->post_type_supports_custom_seo()
 			 * @since 2.3.9
 			 */
-			if ( $this->post_type_supports_custom_seo() ) {
-				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_css' ), 11 );
-				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_javascript' ), 11 );
-			}
+			if ( $this->post_type_supports_custom_seo() )
+				$this->init_admin_scripts();
+
 		}
 
 	}
 
 	/**
-	 * AutoDescription Javascript helper file
+	 * Register and output Admin scripts.
+	 *
+	 * @since 2.6.0
+	 */
+	public function init_admin_scripts() {
+
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_css' ), 1 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_javascript' ), 1 );
+
+	}
+
+	/**
+	 * AutoDescription JavaScript helper file
 	 *
 	 * @since 2.0.2
 	 *
@@ -257,20 +128,99 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 */
 	public function enqueue_admin_javascript( $hook ) {
 
-		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		/**
+		 * Put hook and js name in class vars.
+		 * @since 2.5.2.2
+		 */
+		$this->page_hook = $this->page_hook ? $this->page_hook : $hook;
 
-		wp_enqueue_script( 'autodescription-js', THE_SEO_FRAMEWORK_DIR_URL . "lib/js/autodescription{$suffix}.js", array( 'jquery' ), THE_SEO_FRAMEWORK_VERSION, true );
+		//* Register the script.
+		$this->register_admin_javascript();
+
+		wp_enqueue_script( $this->js_name );
 
 		/**
-		 * i18n.
+		 * Localize JavaScript.
+		 * @since 2.5.2.2
 		 */
+		add_action( 'admin_footer', array( $this, 'localize_admin_javascript' ) );
+
+	}
+
+	/**
+	 * Registers Admin CSS.
+	 *
+	 * @since 2.6.0
+	 * @staticvar bool $registered : Prevents Re-registering of the style.
+	 *
+	 * @access private
+	 */
+	public function register_admin_javascript() {
+
+		static $registered = null;
+
+		if ( isset( $registered ) )
+			return;
+
+		$suffix = $this->script_debug ? '' : '.min';
+
+		wp_register_script( $this->js_name, THE_SEO_FRAMEWORK_DIR_URL . "lib/js/autodescription{$suffix}.js", array( 'jquery' ), THE_SEO_FRAMEWORK_VERSION, true );
+
+		$registered = true;
+
+	}
+
+	/**
+	 * Localizes admin javascript.
+	 *
+	 * @since 2.5.2.2
+	 */
+	public function localize_admin_javascript() {
+
+		static $localized = null;
+
+		if ( isset( $localized ) )
+			return;
+
+		$strings = $this->get_javascript_l10n();
+
+		wp_localize_script( $this->js_name, 'autodescriptionL10n', $strings );
+
+		$localized = true;
+
+	}
+
+	/**
+	 * Generate Javascript Localization.
+	 *
+	 * @since 2.6.0
+	 * @staticvar array $strings : The l10n strings.
+	 *
+	 * @return array $strings The l10n strings.
+	 */
+	protected function get_javascript_l10n() {
+
+		static $strings = null;
+
+		if ( isset( $strings ) )
+			return $strings;
+
 		$blog_name = $this->get_blogname();
 		$description = $this->get_blogdescription();
+		$title = '';
+		$additions = '';
 
 		$tagline = (bool) $this->get_option( 'homepage_tagline' );
 		$home_tagline = $this->get_option( 'homepage_title_tagline' );
 		$title_location = $this->get_option( 'title_location' );
-		$title_rem_additions = (bool) $this->get_option( 'title_rem_additions' );
+		$title_add_additions = $this->add_title_additions();
+		$counter_type = $this->get_option( 'counter_type' );
+
+		//* Enunciate the lenghts of Titles and Descriptions.
+		$good = __( 'Good', 'autodescription' );
+		$okay = __( 'Okay', 'autodescription' );
+		$bad = __( 'Bad', 'autodescription' );
+		$unknown = __( 'Unknown', 'autodescription' );
 
 		$separator = $this->get_separator( 'title', true );
 
@@ -284,7 +234,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		 *
 		 * @since 2.2.4
 		 */
-		if ( '' !== $hook ) {
+		if ( isset( $this->page_hook ) && $this->page_hook ) {
 			// We're somewhere within default WordPress pages.
 			$post_id = $this->get_the_real_ID();
 
@@ -300,34 +250,63 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 				}
 			} else if ( $post_id ) {
 				//* We're on post.php
-				$title = $this->title( '', '', '', array( 'placeholder' => true, 'notagline' => true ) );
+				$generated_doctitle_args = array(
+					'term_id' => $post_id,
+					'notagline' => true,
+					'get_custom_field' => false,
+				);
 
-				if ( ! $title_rem_additions || ! $this->theme_title_doing_it_right() ) {
+				$title = $this->title( '', '', '', $generated_doctitle_args );
+
+				if ( $title_add_additions ) {
 					$additions = $blog_name;
+					$tagline = true;
 				} else {
 					$additions = '';
+					$tagline = false;
 				}
+			} else if ( $this->is_archive() ) {
+				//* Category or Tag.
+				global $current_screen;
+
+				if ( isset( $current_screen->taxonomy ) ) {
+
+					$term_id = $this->get_admin_term_id();
+
+					if ( $term_id ) {
+						$generated_doctitle_args = array(
+							'term_id' => $term_id,
+							'taxonomy' => $current_screen->taxonomy,
+							'notagline' => true,
+							'get_custom_field' => false
+						);
+
+						$title = $this->title( '', '', '', $generated_doctitle_args );
+						$additions = $title_add_additions ? $blog_name : '';
+					}
+				}
+
 			} else {
 				//* We're in a special place.
 				// Can't fetch title.
 				$title = '';
-				$additions = $blog_name;
+				$additions = $title_add_additions ? $blog_name : '';
 			}
 
 		} else {
 			// We're on our SEO settings pages.
-			if ( 'page' === get_option( 'show_on_front' ) ) {
+			if ( $this->has_page_on_front() ) {
 				// Home is a page.
 				$inpost_title = $this->get_custom_field( '_genesis_title', get_option( 'page_on_front' ) );
 			} else {
 				// Home is a blog.
 				$inpost_title = '';
 			}
-			$title = ! empty( $inpost_title ) ? $inpost_title : $blog_name;
+			$title = $inpost_title ? $inpost_title : $blog_name;
 			$additions = $home_tagline ? $home_tagline : $description;
 		}
 
-		$strings = array(
+		return $strings = array(
 			'saveAlert'		=> __( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
 			'confirmReset'	=> __( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
 			'siteTitle' 	=> $title,
@@ -338,10 +317,12 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 			'titleLocation' => $title_location,
 			'isRTL' => $rtl,
 			'isHome' => $ishome,
+			'counterType' => $counter_type,
+			'good' => $good,
+			'okay' => $okay,
+			'bad' => $bad,
+			'unknown' => $unknown,
 		);
-
-		wp_localize_script( 'autodescription-js', 'autodescriptionL10n', $strings );
-
 	}
 
 	/**
@@ -352,104 +333,56 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 * @param $hook the current page
 	 *
 	 * @todo get_network_option
+	 * @priority low 3.0.0
 	 */
 	public function enqueue_admin_css( $hook ) {
+
+		/**
+		 * Put hook and js name in class vars.
+		 * @since 2.5.2.2
+		 */
+		$this->page_hook = $this->page_hook ? $this->page_hook : $hook;
+
+		//* Register the script.
+		$this->register_admin_css();
+
+		wp_enqueue_style( $this->css_name );
+
+	}
+
+	/**
+	 * Registers Admin CSS.
+	 *
+	 * @since 2.6.0
+	 * @staticvar bool $registered : Prevents Re-registering of the style.
+	 *
+	 * @access private
+	 */
+	protected function register_admin_css() {
+
+		static $registered = null;
+
+		if ( isset( $registered ) )
+			return;
 
 		$rtl = '';
 
 		if ( is_rtl() )
 			$rtl = '-rtl';
 
-		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$suffix = $this->script_debug ? '' : '.min';
 
-		wp_enqueue_style( 'autodescription-css', THE_SEO_FRAMEWORK_DIR_URL . "lib/css/autodescription{$rtl}{$suffix}.css", array(), THE_SEO_FRAMEWORK_VERSION, 'all' );
+		wp_register_style( $this->css_name, THE_SEO_FRAMEWORK_DIR_URL . "lib/css/autodescription{$rtl}{$suffix}.css", array(), THE_SEO_FRAMEWORK_VERSION, 'all' );
 
-	}
+		$registered = true;
 
-	/**
-	 * Mark up content with code tags.
-	 *
-	 * Escapes all HTML, so `<` gets changed to `&lt;` and displays correctly.
-	 *
-	 * @since 2.0.0
-	 *
-	 * @param  string $content Content to be wrapped in code tags.
-	 *
-	 * @return string Content wrapped in code tags.
-	 */
-	public function code_wrap( $content ) {
-		return '<code>' . esc_html( $content ) . '</code>';
-	}
-
-	/**
-	 * Mark up content with code tags.
-	 *
-	 * Escapes no HTML.
-	 *
-	 * @since 2.2.2
-	 *
-	 * @param  string $content Content to be wrapped in code tags.
-	 *
-	 * @return string Content wrapped in code tags.
-	 */
-	public function code_wrap_noesc( $content ) {
-		return '<code>' . $content . '</code>';
-	}
-
-	/**
-	 * Return custom field post meta data.
-	 *
-	 * Return only the first value of custom field. Return false if field is
-	 * blank or not set.
-	 *
-	 * @since 2.0.0
-	 *
-	 * @param string $field	Custom field key.
-	 * @param int $post_id	The post ID
-	 *
-	 * @return string|boolean Return value or false on failure.
-	 *
-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
-	 *
-	 * @staticvar array $field_cache
-	 * @since 2.2.5
-	 */
-	public function get_custom_field( $field, $post_id = null ) {
-
-		//* No field has been provided.
-		if ( empty( $field ) )
-			return false;
-
-		//* Setup cache.
-		static $field_cache = array();
-
-		//* Check field cache.
-		if ( isset( $field_cache[$field][$post_id] ) )
-			//* Field has been cached.
-			return $field_cache[$field][$post_id];
-
-		if ( null === $post_id || empty( $post_id ) )
-			$post_id = $this->get_the_real_ID();
-
-		if ( null === $post_id || empty( $post_id ) )
-			return '';
-
-		$custom_field = get_post_meta( $post_id, $field, true );
-
-		// If custom field is empty, return null.
-		if ( ! $custom_field )
-			$field_cache[$field][$post_id] = '';
-
-		//* Render custom field, slashes stripped, sanitized if string
-		$field_cache[$field][$post_id] = is_array( $custom_field ) ? stripslashes_deep( $custom_field ) : stripslashes( wp_kses_decode_entities( $custom_field ) );
-
-		return $field_cache[$field][$post_id];
 	}
 
 	/**
 	 * Checks the screen hook.
 	 *
 	 * @since 2.2.2
+	 * @global string $page_hook the current page hook.
 	 *
 	 * @return bool true if screen match.
 	 */
@@ -459,7 +392,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		if ( isset( $page_hook ) && $page_hook === $pagehook )
 			return true;
 
-			//* May be too early for $page_hook
+		//* May be too early for $page_hook
 		if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === $pagehook )
 			return true;
 
@@ -476,242 +409,60 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 * @param array  $query_args 	Optional. Associative array of query string arguments
 	 * 								(key => value). Default is an empty array.
 	 *
+	 * @credits StudioPress for some code.
+	 *
 	 * @return null Return early if first argument is false.
 	 */
 	public function admin_redirect( $page, array $query_args = array() ) {
 
-		if ( ! $page )
+		if ( empty( $page ) )
 			return;
 
 		$url = html_entity_decode( menu_page_url( $page, 0 ) );
 
-		foreach ( (array) $query_args as $key => $value ) {
-			if ( empty( $key ) && empty( $value ) ) {
+		foreach ( $query_args as $key => $value ) {
+			if ( empty( $key ) || empty( $value ) )
 				unset( $query_args[$key] );
-			}
 		}
 
 		$url = add_query_arg( $query_args, $url );
 
 		wp_redirect( esc_url_raw( $url ) );
 		exit;
-
 	}
 
-	/**
-	 * Google docs language determinator.
-	 *
-	 * @since 2.2.2
-	 *
-	 * @staticvar string $language
-	 *
-	 * @return string language code
-	 */
-	protected function google_language() {
-
-		/**
-		 * Cache value
-		 * @since 2.2.4
-		 */
-		static $language = null;
-
-		if ( isset( $language ) )
-			return $language;
-
-		//* Language shorttag to be used in Google help pages,
-		$language = _x( 'en', 'e.g. en for English, nl for Dutch, fi for Finish, de for German', 'autodescription' );
-
-		return $language;
-	}
 
 	/**
-	 * Fetch Tax labels
+	 * Handles counter option update on AJAX request.
 	 *
-	 * @param string $tax_type the Taxonomy type.
-	 *
-	 * @since 2.3.1
-	 *
-	 * @staticvar object $labels
-	 *
-	 * @return object|null with all the labels as member variables
+	 * @since 2.6.0
+	 * @access private
 	 */
-	public function get_tax_labels( $tax_type ) {
+	public function the_counter_visualized() {
 
-		static $labels = null;
+		if ( $this->is_admin() && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			//* If current user isn't allowed to edit posts, don't do anything.
+			if ( ! current_user_can( 'publish_posts' ) )
+				exit;
 
-		if ( isset( $labels ) )
-			return $labels;
+			$options = $this->get_all_options();
 
-		$tax_object = get_taxonomy( $tax_type );
+			/**
+			 * Count up, reset to 0 if needed. We have 4 options: 0, 1, 2, 3
+			 * We're not accepting any $_POST values. Keeping it clean.
+			 * Yet we should for consistency. @TODO
+			 * @priority high 2.6.2
+			 */
+			$options['counter_type'] = $options['counter_type'] + 1;
+			if ( $options['counter_type'] > 3 )
+				$options['counter_type'] = 0;
 
-		if ( is_object( $tax_object ) )
-			return $labels = (object) $tax_object->labels;
+			update_option( $this->settings_field, $options );
 
-		//* Nothing found.
-		return null;
-	}
-
-	/**
-	 * Echo debug values.
-	 *
-	 * @param mixed $values What to be output.
-	 *
-	 * @since 2.3.4
-	 */
-	public function echo_debug_information( $values ) {
-
-		if ( $this->the_seo_framework_debug ) {
-			echo "\r\n";
-
-			if ( ! $this->the_seo_framework_debug_hidden ) {
-				echo "<br>\r\n";
-				echo '<span class="code highlight">';
-			}
-
-			if ( ! isset( $values ) ) {
-				echo $this->debug_value_wrapper( "Debug message: Value isn't set." ) . "\r\n";
-				return;
-			}
-
-			if ( is_object( $values ) ) {
-				// Ugh.
-				$values = (array) $values;
-
-				if ( is_array( $values ) ) {
-					foreach ( $values as $key => $value ) {
-						if ( is_object( $value ) ) {
-							foreach ( $values as $key => $value ) {
-								$values = $value;
-								break;
-							}
-						}
-						break;
-					}
-				}
-			}
-
-			if ( is_array( $values ) ) {
-				foreach ( $values as $key => $value ) {
-					if ( '' === $value ) {
-						echo $this->debug_key_wrapper( $key ) . ' => ';
-						echo $this->debug_value_wrapper( "''" );
-						echo "\r\n";
-					} else if ( is_string( $value ) || is_int( $value ) ) {
-						echo $this->debug_key_wrapper( $key ) . ' => ' . $this->debug_value_wrapper( $value );
-						echo "\r\n";
-					} else if ( is_bool( $value ) ) {
-						echo $this->debug_key_wrapper( $key ) . ' => ';
-						echo $this->debug_value_wrapper( $value ? 'true' : 'false' );
-						echo "\r\n";
-					} else if ( is_array( $value ) ) {
-						echo $this->debug_key_wrapper( $key ) . ' => ';
-						echo "Array[\r\n";
-						foreach ( $value as $k => $v ) {
-							if ( '' === $v ) {
-								echo $this->debug_key_wrapper( $k ) . ' => ';
-								echo $this->debug_value_wrapper( "''" );
-								echo ',';
-								echo "\r\n";
-							} else if ( is_string( $v ) || is_int( $v ) ) {
-								echo $this->debug_key_wrapper( $k ) . ' => ' . $this->debug_value_wrapper( $v );
-								echo ',';
-								echo "\r\n";
-							} else if ( is_bool( $v ) ) {
-								echo $this->debug_key_wrapper( $k ) . ' => ';
-								echo $this->debug_value_wrapper( $v ? 'true' : 'false' );
-								echo ',';
-								echo "\r\n";
-							} else if ( is_array( $v ) ) {
-								echo $this->debug_key_wrapper( $k ) . ' => ';
-								echo $this->debug_value_wrapper( 'Debug message: Three+ dimensional array.' );
-								echo ',';
-							} else {
-								echo $this->debug_key_wrapper( $k ) . ' => ';
-								echo $this->debug_value_wrapper( $v );
-								echo ',';
-								echo "\r\n";
-							}
-						}
-						echo "]";
-					} else {
-						echo $this->debug_key_wrapper( $key ) . ' => ';
-						echo $this->debug_value_wrapper( $value );
-						echo "\r\n";
-					}
-				}
-			} else if ( '' === $values ) {
-				echo $this->debug_value_wrapper( "''" );
-			} else if ( is_string( $values ) || is_int( $values ) ) {
-				echo $this->debug_value_wrapper( $values );
-			} else if ( is_bool( $values ) ) {
-				echo $this->debug_value_wrapper( $values ? 'true' : 'false' );
-			} else {
-				echo $this->debug_value_wrapper( $values );
-			}
-
-			if ( ! $this->the_seo_framework_debug_hidden ) {
-				echo '</span>';
-			}
-			echo "\r\n";
+			//* Kill PHP.
+			exit;
 		}
 
-	}
-
-	/**
-	 * Wrap debug key in a colored span.
-	 *
-	 * @param string $key The debug key.
-	 *
-	 * @since 2.3.9
-	 *
-	 * @return string
-	 */
-	public function debug_key_wrapper( $key ) {
-		if ( ! $this->the_seo_framework_debug_hidden )
-			return '<font color="chucknorris">' . esc_attr( (string) $key ) . '</font>';
-
-		return esc_attr( (string) $key );
-	}
-
-	/**
-	 * Wrap debug value in a colored span.
-	 *
-	 * @param string $value The debug value.
-	 *
-	 * @since 2.3.9
-	 *
-	 * @return string
-	 */
-	public function debug_value_wrapper( $value ) {
-
-		if ( ! is_scalar( $value ) )
-			return 'Debug message: not scalar';
-
-		if ( ! $this->the_seo_framework_debug_hidden )
-			return '<span class="wp-ui-notification">' . esc_attr( (string) trim( $value ) ) . '</span>';
-
-		return esc_attr( (string) $value );
-	}
-
-	/**
-	 * Echo found screens in the admin footer when debugging is enabled.
-	 *
-	 * @uses bool $this->the_seo_framework_debug
-	 * @global array $current_screen
-	 *
-	 * @since 2.5.2
-	 */
-	public function debug_screens() {
-		if ( $this->the_seo_framework_debug ) {
-			global $current_screen;
-
-			?><div style="float:right;margin:3em;padding:1em;border:1px solid;background:#fff;color:#000;"><?php
-
-				foreach( $current_screen as $screen )
-					echo "<p>$screen</p>";
-
-			?></div><?php
-		}
 	}
 
 }

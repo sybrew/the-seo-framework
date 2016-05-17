@@ -20,7 +20,6 @@
  * Class AutoDescription_Detect
  *
  * Detects other plugins and themes
- * Returns booleans
  *
  * @since 2.1.6
  */
@@ -47,27 +46,30 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		//* Check for classes
 		if ( isset( $plugins['classes'] ) ) {
 			foreach ( $plugins['classes'] as $name ) {
-				if ( class_exists( $name ) )
+				if ( class_exists( $name ) ) {
 					return true;
 					break;
+				}
 			}
 		}
 
 		//* Check for functions
 		if ( isset( $plugins['functions'] ) ) {
 			foreach ( $plugins['functions'] as $name ) {
-				if ( function_exists( $name ) )
+				if ( function_exists( $name ) ) {
 					return true;
 					break;
+				}
 			}
 		}
 
 		//* Check for constants
 		if ( isset( $plugins['constants'] ) ) {
 			foreach ( $plugins['constants'] as $name ) {
-				if ( defined( $name ) )
+				if ( defined( $name ) ) {
 					return true;
 					break;
+				}
 			}
 		}
 
@@ -283,33 +285,27 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		/**
 		 * Use this filter to adjust plugin tests.
-		 *
-		 * New filter.
-		 * @since 2.3.0
-		 *
-		 * Removed previous filter.
-		 * @since 2.3.5
 		 */
 		$plugins_check = (array) apply_filters(
 			'the_seo_framework_detect_seo_plugins',
 			//* Add to this array to add new plugin checks.
 			array(
-
 				// Classes to detect.
 				'classes' => array(
-					'All_in_One_SEO_Pack',
-					'All_in_One_SEO_Pack_p',
-					'HeadSpace_Plugin',
-					'Platinum_SEO_Pack',
-					'wpSEO',
-					'SEO_Ultimate',
+					'gregsHighPerformanceSEO'
 				),
 
 				// Functions to detect.
 				'functions' => array(),
 
 				// Constants to detect.
-				'constants' => array( 'WPSEO_VERSION', ),
+				'constants' => array(
+					'AIOSEOPPRO',		// All in one SEO + Pro
+					'AMT_PLUGIN_FILE',	// Add Meta Tags
+					'WPSEO_FILE',		// Yoast SEO
+					'SQ_VERSION',		// SEO by Squirrly
+					'SU_PLUGIN_NAME',	// SEO Ultimate
+				),
 			)
 		);
 
@@ -345,10 +341,12 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			),
 			'functions' => array(
 				'amt_plugin_actions'
-			)
+			),
+			'constants' => array(
+			),
 		);
 
-		return $has_plugin = (bool) $this->detect_plugin( $plugins );
+		return $has_plugin = $this->detect_plugin( $plugins );
 	}
 
 	/**
@@ -374,7 +372,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		$plugins = array( 'classes' => array( 'WPSEO_JSON_LD' ) );
 
-		return $has_plugin = (bool) $this->detect_plugin( $plugins );
+		return $has_plugin = $this->detect_plugin( $plugins );
 	}
 
 	/**
@@ -389,6 +387,11 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * @staticvar bool $has_plugin
 	 * @since 2.2.5
 	 *
+	 * @todo Try to use constants if possible.
+	 * @priority low 2.8.x
+	 * @todo List plugin names
+	 * @priority low
+	 *
 	 * @return bool $has_plugin one of the plugins has been found.
 	 */
 	public function has_sitemap_plugin() {
@@ -402,9 +405,8 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		$plugins = array(
 				'classes' => array(
 					'xml_sitemaps',
-					'All_in_One_SEO_Pack_Sitemap',
+					'All_in_One_SEO_Pack_Sitemap',	// All in One SEO Sitemap
 					'SimpleWpSitemap',
-					'Incsub_SimpleSitemaps',
 					'BWP_Sitemaps',
 					'KocujSitemapPlugin',
 					'LTI_Sitemap',
@@ -414,6 +416,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 					'csitemap',
 				),
 				'functions' => array(
+					'jetpack_sitemap_initialize', // Jetpack
 					'sm_Setup',
 					'wpss_init',
 					'gglstmp_sitemapcreate',
@@ -421,15 +424,41 @@ class AutoDescription_Detect extends AutoDescription_Render {
 					'build_baidu_sitemap',
 					'ect_sitemap_nav',
 					'apgmxs_generate_sitemap',
-					'sm_Setup',
 					'ADSetupSitemapPlugin',
 					'ksm_generate_sitemap',
 					'studio_xml_sitemap',
 					'RegisterPluginLinks_xmlsite',
 				),
+				'constants' => array(
+					'SIMPLE_SITEMAPS_USE_CACHE'	// WPMUdev Simple Sitemaps
+				),
 			);
 
-		return $has_plugin = (bool) $this->detect_plugin( $plugins );
+		return $has_plugin = $this->detect_plugin( $plugins );
+	}
+
+	/**
+	 * Whether able to add a line within robots based by plugin detection, or sitemap output option.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @return bool True when no conflicting plugins are detected or when The SEO Framework's Sitemaps are output.
+	 */
+	public function can_do_sitemap_robots() {
+
+		$plugins = array(
+			'functions' => array(
+				'jetpack_sitemap_initialize' // Jetpack
+			),
+		);
+
+		if ( $this->detect_plugin( $plugins ) )
+			return false;
+
+		if ( $this->is_option_checked( 'sitemaps_output' ) )
+			return true;
+
+		return false;
 	}
 
 	/**
@@ -448,9 +477,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		$path = get_home_path() . 'robots.txt';
 
-		$found = (bool) file_exists( $path );
-
-		return $has_robots = $found;
+		return $has_robots = file_exists( $path );
 	}
 
 	/**
@@ -469,9 +496,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		$path = get_home_path() . 'sitemap.xml';
 
-		$found = (bool) file_exists( $path );
-
-		return $has_map = $found;
+		return $has_map = file_exists( $path );
 	}
 
 	/**
@@ -482,17 +507,20 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * @param string $version the three part version to compare to WordPress
 	 * @param string $compare the comparing operator, default "$version >= Current WP Version"
 	 *
-	 * @staticvar array $compare_cache
+	 * @staticvar array $cache
 	 * @since 2.3.8
 	 *
 	 * @return bool wp version is "compare" to
 	 */
 	public function wp_version( $version = '4.3.0', $compare = '>=' ) {
 
-		static $compare_cache = array();
+		static $cache = array();
 
-		if ( isset( $compare_cache[$version][$compare] ) )
-			return $compare_cache[$version][$compare];
+		if ( empty( $compare ) )
+			$compare = '>=';
+
+		if ( isset( $cache[$version][$compare] ) )
+			return $cache[$version][$compare];
 
 		global $wp_version;
 
@@ -500,14 +528,10 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		if ( 3 === strlen( $wp_version ) )
 			$wp_version = $wp_version . '.0';
 
-		//* Evade 'true-ish' values.
-		if ( empty( $compare ) )
-			$compare = '>=';
-
 		if ( version_compare( $wp_version, $version, $compare ) )
-			return $compare_cache[$version][$compare] = true;
+			return $cache[$version][$compare] = true;
 
-		return $compare_cache[$version][$compare] = false;
+		return $cache[$version][$compare] = false;
 	}
 
 	/**
@@ -532,12 +556,12 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		if ( ! $use_cache ) {
 			//* Don't use cache.
 
-			if ( is_string( $features ) && ( $this->current_theme_supports( $features ) ) )
+			if ( is_string( $features ) && ( current_theme_supports( $features ) ) )
 				return true;
 
 			if ( is_array( $features ) ) {
 				foreach ( $features as $feature ) {
-					if ( $this->current_theme_supports( $feature ) ) {
+					if ( current_theme_supports( $feature ) ) {
 						return true;
 						break;
 					}
@@ -568,14 +592,14 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		//* Setup cache values
 		if ( is_string( $features ) ) {
-			if ( $this->current_theme_supports( $features ) ) {
+			if ( current_theme_supports( $features ) ) {
 				return $cache[$features] = true;
 			} else {
 				return $cache[$features] = false;
 			}
 		} else if ( is_array( $features ) ) {
 			foreach ( $features as $feature ) {
-				if ( $this->current_theme_supports( $feature ) ) {
+				if ( current_theme_supports( $feature ) ) {
 					return $cache[$feature] = true;
 					break;
 				} else {
@@ -593,99 +617,28 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	}
 
 	/**
-	 * Checks a theme's support for a given feature
+	 * Checks a theme's support for title-tag.
 	 *
-	 * @since 2.2.5
+	 * @since 2.6.0
+	 * @staticvar bool $supports
 	 *
 	 * @global array $_wp_theme_features
 	 *
-	 * @param string $feature the feature being checked
 	 * @return bool
-	 *
-	 * Taken from WP Core, but it now returns true on title-tag support.
-	 *
-	 * @todo rework, it's a mess.
 	 */
-	public function current_theme_supports( $feature ) {
+	public function current_theme_supports_title_tag() {
+
+		static $supports = null;
+
+		if ( isset( $supports ) )
+			return $supports;
+
 		global $_wp_theme_features;
 
-		//* SEO Framework Edits. {
-		if ( 'custom-header-uploads' == $feature )
-			return $this->detect_theme_support( 'custom-header', 'uploads' );
-		//* } End SEO Framework Edits.
+		if ( isset( $_wp_theme_features['title-tag'] ) && true === $_wp_theme_features['title-tag'] )
+			return $supports = true;
 
-		if ( ! isset( $_wp_theme_features[$feature] ) )
-			return false;
-
-		if ( 'title-tag' == $feature ) {
-
-			//* SEO Framework Edits. {
-
-				//* The SEO Framework unique 'feature'.
-				if ( true === $_wp_theme_features[$feature] )
-					return true;
-
-				//* We might as well return false now preventing the debug_backtrace();
-				return false;
-
-			//* } End SEO Framework Edits.
-
-			// Don't confirm support unless called internally.
-			$trace = debug_backtrace();
-
-			if ( ! in_array( $trace[1]['function'], array( '_wp_render_title_tag', 'wp_title' ) ) ) {
-				return false;
-			}
-		}
-
-		// If no args passed then no extra checks need be performed
-		if ( func_num_args() <= 1 )
-			return true;
-
-		$args = array_slice( func_get_args(), 1 );
-
-		switch ( $feature ) {
-			case 'post-thumbnails':
-				// post-thumbnails can be registered for only certain content/post types by passing
-				// an array of types to add_theme_support(). If no array was passed, then
-				// any type is accepted
-				if ( true === $_wp_theme_features[$feature] )  // Registered for all types
-					return true;
-				$content_type = $args[0];
-				return in_array( $content_type, $_wp_theme_features[$feature][0] );
-
-			case 'html5':
-			case 'post-formats':
-				// specific post formats can be registered by passing an array of types to
-				// add_theme_support()
-
-				// Specific areas of HTML5 support *must* be passed via an array to add_theme_support()
-
-				$type = $args[0];
-				return in_array( $type, $_wp_theme_features[$feature][0] );
-
-			case 'custom-header':
-			case 'custom-background' :
-				// specific custom header and background capabilities can be registered by passing
-				// an array to add_theme_support()
-				$header_support = $args[0];
-				return ( isset( $_wp_theme_features[$feature][0][$header_support] ) && $_wp_theme_features[$feature][0][$header_support] );
-		}
-
-		/**
-		 * Filter whether the current theme supports a specific feature.
-		 *
-		 * The dynamic portion of the hook name, `$feature`, refers to the specific theme
-		 * feature. Possible values include 'post-formats', 'post-thumbnails', 'custom-background',
-		 * 'custom-header', 'menus', 'automatic-feed-links', 'title-tag' and 'html5'.
-		 *
-		 * @since WP 3.4.0
-		 *
-		 * @param bool   true     Whether the current theme supports the given feature. Default true.
-		 * @param array  $args    Array of arguments for the feature.
-		 * @param string $feature The theme feature.
-		 */
-		return apply_filters( "current_theme_supports-{$feature}", true, $args, $_wp_theme_features[$feature] );
+		return $supports = false;
 	}
 
 	/**
@@ -700,14 +653,14 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 *
 	 * @param null|string $title The given title
 	 * @param null|string $sep The separator
-	 * @param null|string $seplocation Wether the blogname is left or right.
-	 * @param bool $output Wether to store cache values or echo the output in the footer.
+	 * @param null|string $seplocation Whether the blogname is left or right.
+	 * @param bool $output Whether to store cache values or echo the output in the footer.
 	 *
 	 * @return void
 	 */
 	public function tell_title_doing_it_wrong( $title = null, $sep = null, $seplocation = null, $output = true ) {
 
-		if ( true === $output ) {
+		if ( $output ) {
 			//* Prevent error log spam.
 			static $no_spam = null;
 
@@ -722,7 +675,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		static $seplocation_output = null;
 
 		if ( ! isset( $title_output ) || ! isset( $sep_output ) || ! isset( $seplocation_output ) ) {
-			//* Initiate caches.
+			//* Initiate caches, set up variables.
 
 			if ( '' === $title )
 				$title = 'empty';
@@ -738,7 +691,8 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			$seplocation_output = ! isset( $seplocation ) ? 'notset' : esc_attr( $seplocation );
 		}
 
-		if ( true === $output )
+		//* Echo the HTML comment.
+		if ( $output )
 			echo '<!-- Title diw: "' . $title_output . '" : "' . $sep_output . '" : "' . $seplocation_output . '" -->' . "\r\n";
 
 		return;
@@ -750,7 +704,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * @since 2.3.0
 	 * @staticvar bool $active
 	 *
-	 * @return bool false if Domain Mapping isn't active
+	 * @return bool
 	 */
 	public function is_domainmapping_active() {
 
@@ -759,16 +713,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		if ( isset( $active ) )
 			return $active;
 
-		/**
-		 * Now uses $this->detect_plugin()
-		 *
-		 * @since 2.3.1
-		 */
-		if ( $this->detect_plugin( array( 'classes' => array( 'domain_map' ) ) ) ) {
-			return $active = true;
-		} else {
-			return $active = false;
-		}
+		return $active = $this->detect_plugin( array( 'classes' => array( 'domain_map' ) ) );
 	}
 
 	/**
@@ -777,7 +722,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * @since 2.4.0
 	 * @staticvar bool $active
 	 *
-	 * @return bool false if Domain Mapping isn't active
+	 * @return bool
 	 */
 	public function is_donncha_domainmapping_active() {
 
@@ -786,16 +731,43 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		if ( isset( $active ) )
 			return $active;
 
-		/**
-		 * Now uses $this->detect_plugin()
-		 *
-		 * @since 2.3.1
-		 */
-		if ( $this->detect_plugin( array( 'functions' => array( 'redirect_to_mapped_domain' ) ) ) ) {
-			return $active = true;
-		} else {
-			return $active = false;
-		}
+		return $active = $this->detect_plugin( array( 'functions' => array( 'redirect_to_mapped_domain' ) ) );
+	}
+
+	/**
+	 * Detect WPML plugin.
+	 *
+	 * @since 2.6.0
+	 * @staticvar bool $active
+	 *
+	 * @return bool
+	 */
+	public function is_wpml_active() {
+
+		static $active = null;
+
+		if ( isset( $active ) )
+			return $active;
+
+		return $active = $this->detect_plugin( array( 'constants' => array( 'ICL_LANGUAGE_CODE' ) ) );
+	}
+
+	/**
+	 * Detect qTranslate X plugin.
+	 *
+	 * @since 2.6.0
+	 * @staticvar bool $active
+	 *
+	 * @return bool
+	 */
+	public function is_qtranslate_active() {
+
+		static $active = null;
+
+		if ( isset( $active ) )
+			return $active;
+
+		return $active = $this->detect_plugin( array( 'constants' => array( 'QTX_VERSION' ) ) );
 	}
 
 	/**
@@ -805,6 +777,8 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * @staticvar array $is_page
 	 *
 	 * @since 2.3.1
+	 *
+	 * @return bool true if post type is a page or post
 	 */
 	public function is_post_type_page( $type ) {
 
@@ -816,7 +790,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		$post_page = (array) get_post_types( array( 'public' => true ) );
 
 		foreach ( $post_page as $screen ) {
-			if ( $type == $screen ) {
+			if ( $type === $screen ) {
 				return $is_page[$type] = true;
 				break;
 			}
@@ -826,206 +800,38 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	}
 
 	/**
-	 * Get the real page ID, also depending on CPT.
-	 *
-	 * @param bool $use_cache Wether to use the cache or not.
-	 *
-	 * @staticvar int $id the ID.
-	 *
-	 * @since 2.5.0
-	 */
-	public function get_the_real_ID( $use_cache = true ) {
-
-		$is_admin = is_admin();
-
-		//* Never use cache in admin. Only causes bugs.
-		$use_cache = $is_admin ? false : $use_cache;
-
-		if ( $use_cache ) {
-			static $id = null;
-
-			if ( isset( $id ) )
-				return $id;
-		}
-
-		if ( ! $is_admin )
-			$id = $this->check_the_real_ID();
-
-		if ( ! isset( $id ) || empty( $id ) ) {
-			$id = get_queried_object_id();
-
-			if ( empty( $id ) )
-				$id = get_the_ID();
-		}
-
-		return $id;
-	}
-
-	/**
-	 * Get the real ID from plugins.
-	 *
-	 * Only works in front-end as there's no need to check for inconsistent
-	 * functions for the current ID in the admin.
-	 *
-	 * @since 2.5.0
-	 *
-	 * Applies filters the_seo_framework_real_id : The Real ID for plugins on front-end.
-	 *
-	 * @staticvar int $cached_id The cached ID.
-	 *
-	 * @return int|empty the ID.
-	 */
-	public function check_the_real_ID() {
-
-		static $cached_id = null;
-
-		if ( isset( $cached_id ) )
-			return $cached_id;
-
-		$id = '';
-
-		if ( $this->is_wc_shop() ) {
-			//* WooCommerce Shop
-			$id = get_option( 'woocommerce_shop_page_id' );
-		} else if ( function_exists( 'is_anspress' ) && is_anspress() ) {
-			//* Get AnsPress Question ID.
-			if ( function_exists( 'get_question_id' ) )
-				$id = get_question_id();
-		}
-
-		$cached_id = (int) apply_filters( 'the_seo_framework_real_id', $id );
-
-		return $cached_id;
-	}
-
-	/**
-	 * Detect the blog page.
-	 *
-	 * @param int $id the Page ID.
-	 *
-	 * @since 2.3.4
-	 *
-	 * @staticvar bool $is_blog_page
-	 * @staticvar bool $pof
-	 *
-	 * @return bool true if is blog page. Always false if blog page is homepage.
-	 */
-	public function is_blog_page( $id = '' ) {
-
-		if ( '' === $id )
-			$o_id = $this->get_the_real_ID();
-
-		static $is_blog_page = array();
-
-		if ( isset( $is_blog_page[$id] ) )
-			return $is_blog_page[$id];
-
-		$pfp = get_option( 'page_for_posts' );
-
-		if ( $pfp != 0 ) {
-
-			static $pof = null;
-
-			if ( ! isset( $pof ) )
-				$pof = 'page' === get_option( 'show_on_front' ) ? true : false;
-
-			if ( $pof && ! is_front_page() && ! is_archive() ) {
-				if ( isset( $o_id ) ) {
-					if ( $o_id == $pfp )
-						return $is_blog_page[$id] = true;
-				} else {
-					if ( $id == $pfp )
-						return $is_blog_page[$id] = true;
-
-					$o_id = $this->get_the_real_ID();
-
-					if ( $o_id == $pfp )
-						return $is_blog_page[$id] = true;
-				}
-			}
-		}
-
-		return $is_blog_page[$id] = false;
-	}
-
-	/**
-	 * Detect the static front page.
-	 *
-	 * @param int $id the Page ID.
-	 *
-	 * @since 2.3.9
-	 *
-	 * @staticvar array $is_frontpage
-	 * @since 2.3.8
-	 *
-	 * @return bool true if is blog page. Always false if blog page is homepage.
-	 * False early when false as ID is entered.
-	 */
-	public function is_static_frontpage( $id = '' ) {
-
-		//* Oops, passed a false ID. No need to process.
-		if ( false === $id )
-			return false;
-
-		if ( '' === $id )
-			$o_id = $this->get_the_real_ID();
-
-		static $is_frontpage = array();
-
-		if ( isset( $is_frontpage[$id] ) )
-			return $is_frontpage[$id];
-
-		$sof = (string) get_option( 'show_on_front' );
-
-		if ( $sof === 'page' ) {
-			$pof = (int) get_option( 'page_on_front' );
-
-			if ( isset( $o_id ) ) {
-				if ( $o_id === $pof )
-					return $is_frontpage[$id] = true;
-			} else {
-
-				if ( $id == $pof )
-					return $is_frontpage[$id] = true;
-
-				$o_id = $this->get_the_real_ID();
-
-				if ( $o_id == $pof )
-					return $is_frontpage[$id] = true;
-			}
-		}
-
-		return $is_frontpage[$id] = false;
-	}
-
-	/**
 	 * Detect WordPress language.
-	 * Considers en_UK, en_US, etc.
+	 * Considers en_UK, en_US, en, etc.
 	 *
-	 * @param string $str Required, the locale.
+	 * @param string $locale Required, the locale.
 	 * @param bool $use_cache Set to false to bypass the cache.
 	 *
 	 * @staticvar array $locale
 	 * @staticvar string $get_locale
 	 *
-	 * @since 2.3.8
+	 * @since 2.6.0
+	 *
+	 * @return bool Whether the locale is in the WordPress locale.
 	 */
-	public function is_locale( $str, $use_cache = true ) {
+	public function check_wp_locale( $locale = '', $use_cache = true ) {
+
+		if ( empty( $locale ) )
+			return false;
 
 		if ( true !== $use_cache )
-			return (bool) strpos( get_locale(), $str );
+			return (bool) strpos( get_locale(), $locale );
 
-		static $locale = array();
+		static $cache = array();
 
-		if ( isset( $locale[$str] ) )
-			return $locale[$str];
+		if ( isset( $cache[$locale] ) )
+			return $cache[$locale];
 
 		static $get_locale = null;
 
 		if ( ! isset( $get_locale ) )
 			$get_locale = get_locale();
 
-		return $locale[$str] = strpos( $get_locale, $str ) !== false ? true : false;
+		return $cache[$locale] = false !== strpos( $get_locale, $locale ) ? true : false;
 	}
 
 	/**
@@ -1076,26 +882,11 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	public function post_type_supports_custom_seo( $post_type = '' ) {
 
 		if ( '' === $post_type ) {
-
-			static $post_type = null;
-
-			//* Detect post type if empty or not set.
-			if ( ! isset( $post_type ) || empty( $post_type ) ) {
-				global $current_screen;
-
-				static $post_page = null;
-
-				if ( ! isset( $post_page ) )
-					$post_page = (array) get_post_types( array( 'public' => true ) );
-
-				//* Smart var. This elemenates the need for a foreach loop, reducing resource usage.
-				$post_type = isset( $post_page[ $current_screen->post_type ] ) ? $current_screen->post_type : '';
-			}
-
-			//* No post type has been found.
-			if ( empty( $post_type ) )
-				return false;
+			$post_type = $this->get_current_post_type();
 		}
+
+		if ( empty( $post_type ) )
+			return false;
 
 		static $supported = array();
 
@@ -1108,122 +899,51 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		 *
 		 * @since 2.3.5
 		 */
-		if ( post_type_supports( $post_type, 'autodescription-meta' ) )
-			return $supported[$post_type] = true;
-
-		if ( $this->post_type_supports_inpost( $post_type ) )
+		if ( post_type_supports( $post_type, 'autodescription-meta' ) || $this->post_type_supports_inpost( $post_type ) )
 			return $supported[$post_type] = true;
 
 		return $supported[$post_type] = false;
 	}
 
 	/**
-	 * Is Ulimate Member user page.
-	 * Check for function accessibility: um_user, um_is_core_page, um_get_requested_user
+	 * Returns Post Type from current screen.
 	 *
-	 * @staticvar bool $cache
-	 * @uses $this->can_i_use()
+	 * @param bool $public Whether to only get Public Post types.
 	 *
-	 * @since 2.5.2
+	 * @since 2.6.0
+	 *
+	 * @return bool|string The Post Type
 	 */
-	public function is_ultimate_member_user_page() {
+	public function get_current_post_type( $public = true ) {
 
-		static $cache = null;
+		static $post_type = null;
 
-		if ( isset( $cache ) )
-			return $cache;
+		//* Detect post type if empty or not set.
+		if ( is_null( $post_type ) || empty( $post_type ) ) {
+			global $current_screen;
 
-		$caniuse = (bool) $this->can_i_use( array( 'functions' => array( 'um_user', 'um_is_core_page', 'um_get_requested_user' ) ), false );
+			if ( isset( $current_screen->post_type ) ) {
+				static $post_page = array();
 
-		return $cache = $caniuse;
+				$args = $public ? array( 'public' => true ) : array();
+
+				if ( ! isset( $post_page[$public] ) )
+					$post_page[$public] = (array) get_post_types( $args );
+
+				//* Smart var. This elemenates the need for a foreach loop, reducing resource usage.
+				$post_type = isset( $post_page[$public][ $current_screen->post_type ] ) ? $current_screen->post_type : '';
+			}
+		}
+
+		//* No post type has been found.
+		if ( empty( $post_type ) )
+			return false;
+
+		return $post_type;
 	}
 
 	/**
-	 * Check for shop page.
-	 *
-	 * @staticvar bool $cache
-	 *
-	 * @since 2.5.2
-	 */
-	public function is_wc_shop() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) )
-			return $cache;
-
-		//* Can't check in admin.
-		if ( ! is_admin() && function_exists( 'is_shop' ) && is_shop() )
-			return $cache = true;
-
-		return $cache = false;
-	}
-
-	/**
-	 * Replaces default WordPress is_singular.
-	 *
-	 * @uses $this->is_blog_page()
-	 * @uses $this->is_wc_shop()
-	 * @uses is_single()
-	 * @uses is_page()
-	 * @uses is_attachment()
-	 *
-	 * @param int $id the Page ID.
-	 *
-	 * @staticvar bool $cache
-	 *
-	 * @since 2.5.2
-	 *
-	 * @return bool Post Type is singular
-	 */
-	public function is_singular( $id = 0 ) {
-
-		if ( 0 === $id )
-			$id = $this->get_the_real_ID();
-
-		//* WP_Query functions require loop, do alternative check.
-		if ( is_admin() )
-			return $this->is_singular_admin( $id );
-
-		$cache = array();
-
-		if ( isset( $cache[$id] ) )
-			return $cache[$id];
-
-		if ( is_single( $id ) || is_page( $id ) || is_attachment( $id ) || $this->is_blog_page( $id ) || $this->is_wc_shop() )
-			return $cache[$id] = true;
-
-		return $cache[$id] = false;
-	}
-
-	/**
-	 * Extends default WordPress is_singular and made available in admin.
-	 *
-	 * @staticvar bool $cache
-	 *
-	 * @since 2.5.2
-	 *
-	 * @global object $current_screen
-	 *
-	 * @return bool Post Type is singular
-	 */
-	public function is_singular_admin() {
-
-		$cache = null;
-
-		if ( isset( $cache ) )
-			return $cache;
-
-		global $current_screen;
-
-		if ( isset( $current_screen->base ) && ( 'edit' === $current_screen->base || 'post' === $current_screen->base ) )
-			return $cache = true;
-
-		return $cache = false;
-	}
-
-	/**
-	 * Calculates wether the theme is outputting the title correctly.
+	 * Determines whether the theme is outputting the title correctly based on transient.
 	 *
 	 * @since 2.5.2
 	 *
@@ -1248,6 +968,59 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		 * or the theme is doing it right ('1').
 		 */
 		return $dir = true;
+	}
+
+	/**
+	 * Detect theme title fix extension plugin.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @return bool True theme will do it right.
+	 */
+	public function theme_title_fix_active() {
+
+		static $fixed = null;
+
+		if ( isset( $fixed ) )
+			return $fixed;
+
+		if ( defined( 'THE_SEO_FRAMEWORK_TITLE_FIX' ) && THE_SEO_FRAMEWORK_TITLE_FIX )
+			return $fixed = true;
+
+		return $fixed = false;
+	}
+
+	/**
+	 * Checks whether we can use special manipulation filters.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @return bool True if we can manipulate title.
+	 */
+	public function can_manipulate_title() {
+
+		if ( $this->theme_title_doing_it_right() || $this->theme_title_fix_active() )
+			return true;
+
+		return false;
+	}
+
+	/**
+	 * Whether a page or blog is on front.
+	 *
+	 * @staticvar bool $pof
+	 * @since 2.6.0
+	 *
+	 * @return bool
+	 */
+	public function has_page_on_front() {
+
+		static $pof = null;
+
+		if ( isset( $pof ) )
+			return $pof;
+
+		return $pof = 'page' === get_option( 'show_on_front' ) ? true : false;
 	}
 
 	/**

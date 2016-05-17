@@ -30,7 +30,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 	 *
 	 * @since 2.5.2
 	 *
-	 * @var bool|string Wether and where to show the inpost SEO bar.
+	 * @var bool|string Whether and where to show the inpost SEO bar.
 	 */
 	protected $inpost_seo_bar = false;
 
@@ -40,21 +40,22 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 	public function __construct() {
 		parent::__construct();
 
-		//* Enqueue inpost meta boxes
+		//* Enqueue Inpost meta boxes.
 		add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box_init' ), 5 );
 
-		//* Enqueue taxonomy meta boxes
-		add_action( 'admin_init', array( $this, 'add_taxonomy_seo_box_init' ), 9 );
+		//* Enqueue Taxonomy meta output.
+		add_action( 'current_screen', array( $this, 'add_taxonomy_seo_box_init' ), 10 );
 
 		/**
 		 * Applies filters bool|string the_seo_framework_inpost_seo_bar :
-		 * Wether to output the SEO bar within the inpost SEO Settings metabox.
+		 * Whether to output the SEO bar within the inpost SEO Settings metabox.
 		 * @param 	: string 'above' Outputs it above the Settings
 		 * 			: string 'below' Outputs it below the Settings
 		 * 			: bool false No output.
 		 * @since 2.5.2
 		 */
 		$this->inpost_seo_bar = apply_filters( 'the_seo_framework_inpost_seo_bar', false );
+
 	}
 
 	/**
@@ -62,84 +63,98 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 	 *
 	 * Called outside autodescription_run
 	 *
-	 * Applies the_seo_framework_seobox_output filters. Return false to disable the meta boxes
+	 * Applies filters the_seo_framework_seobox_output : bool
 	 *
 	 * @since 2.0.0
 	 */
 	public function add_inpost_seo_box_init() {
 
 		if ( $this->detect_seo_plugins() )
-			return '';
+			return;
 
-		/**
-		 * New filter.
-		 * @since 2.3.0
-		 *
-		 * Removed previous filter.
-		 * @since 2.3.5
-		 */
 		$show_seobox = (bool) apply_filters( 'the_seo_framework_seobox_output', true );
 
 		if ( $show_seobox )
-			add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box' ), 10 );
+			add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box' ), 10, 2 );
+
 	}
 
 	/**
-	 * Adds SEO Meta boxes within Taxonomy screens
+	 * Adds SEO Meta boxes within Taxonomy screens.
 	 *
 	 * @since 2.1.8
-	 *
-	 * @options Genesis : Merge these options with Genesis options. Prevents lost data.
 	 */
 	public function add_taxonomy_seo_box_init() {
-		// Add taxonomy meta boxes
-		foreach ( get_taxonomies( array( 'public' => true ) ) as $tax_name )
-			add_action( $tax_name . '_edit_form', array( &$this, 'pre_seo_box' ), 10, 2 );
+
+		//* @since 2.6.0
+		if ( $this->detect_seo_plugins() )
+			return;
+
+		//* @since 2.6.0
+		if ( $this->is_term_edit() ) {
+
+			/**
+			 * High priority, this box is seen right below the post/page edit screen.
+			 * Applies filters 'the_seo_framework_term_metabox_priority' : int
+			 *
+			 * @since 2.6.0
+			 */
+			$priority = (int) apply_filters( 'the_seo_framework_term_metabox_priority', 0 );
+
+			//* Add taxonomy meta boxes
+			foreach ( get_taxonomies( array( 'public' => true ) ) as $tax_name )
+				add_action( $tax_name . '_edit_form', array( $this, 'pre_seo_box' ), $priority, 2 );
+
+		}
 
 	}
 
 	/**
-	 * Adds SEO Meta boxes beneath every page/post edit screen
+	 * Adds SEO Meta boxes beneath every page/post edit screen.
 	 *
-	 * High priority, this box is seen right below the post/page edit screen.
+	 * @param string $post_type The current Post Type.
+	 * @param object $post The post Object. Unused.
 	 *
 	 * @since 2.0.0
-	 *
-	 * @options Genesis : Merge these options with Genesis options. Prevents lost data.
-	 *
-	 * Rewritten to reduce resource usage. It now supports not only set Posts
-	 * and Pages, but all kinds of types.
-	 * @since 2.3.5
 	 */
-	public function add_inpost_seo_box() {
+	public function add_inpost_seo_box( $post_type, $post ) {
 
 		/**
 		 * @uses $this->post_type_supports_custom_seo()
 		 * @since 2.3.9
 		 */
-		if ( $this->post_type_supports_custom_seo() ) {
-			global $current_screen;
+		if ( $this->post_type_supports_custom_seo( $post_type ) ) {
 
-			$screen = $current_screen->post_type;
+			$post = get_post_type_object( $post_type );
 
-			$object = get_post_type_object( $screen );
+			if ( is_object( $post ) ) {
+				$labels = isset( $post->labels ) ? $post->labels : '';
 
-			if ( is_object( $object ) ) {
-				$labels = isset( $object->labels ) ? $object->labels : '';
-
-				if ( ! empty( $labels ) ) {
-					$singular_name = isset( $labels->singular_name ) ? $labels->singular_name : $labels->name;
-
+				if ( $labels ) {
 					//* Title and type are used interchangeably.
-					$title = $type = $singular_name;
+					$title = isset( $labels->singular_name ) ? $labels->singular_name : $labels->name;
+					$args = array( $title, 'is_post_page' );
 
-					$args = array( $type, 'is_post_page' );
+					/**
+					 * Applies filters the_seo_framework_metabox_id : string The metabox priority and class ID.
+					 * @since 2.6.0
+					 * @NOTE warning: might cause CSS and JS conflicts.
+					 * @TODO solve note.
+					 * @priority medium 2.7.0
+					 */
+					$id = (string) apply_filters( 'the_seo_framework_metabox_id', 'theseoframework-inpost-box' );
+					$context = 'normal';
 
-					// Metabox HTML class/id
-					$id = 'theseoframework-inpost-box';
+					/**
+					 * High priority, this box is seen right below the post/page edit screen.
+					 * Applies filters 'the_seo_framework_metabox_priority' : string
+					 * Accepts 'high', 'default', 'low'
+					 * @since 2.6.0
+					 */
+					$priority = (string) apply_filters( 'the_seo_framework_metabox_priority', 'high' );
 
 					// Note: Pass on the object $this
-					add_meta_box( $id, sprintf( __( '%s SEO Settings', 'autodescription' ), $title ), array( &$this, 'pre_seo_box' ), $screen, 'normal', 'high', $args );
+					add_meta_box( $id, sprintf( __( '%s SEO Settings', 'autodescription' ), $title ), array( $this, 'pre_seo_box' ), $post_type, $context, $priority, $args );
 				}
 			}
 		}
@@ -154,7 +169,9 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 	 * @used by add_inpost_seo_box
 	 *
 	 * @param $object the page/post/taxonomy object
-	 * @param $args the page/post arguments or taxonomy slug
+	 * @param $args the page/post arguments or taxonomy slug.
+	 *
+	 * @return string Inpost SEO box.
 	 */
 	public function pre_seo_box( $object, $args ) {
 
@@ -164,21 +181,24 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 			$page = $args_split[1];
 
 			// Return $args as array on post/page
-			if ( $page === 'is_post_page') {
+			if ( 'is_post_page' === $page ) {
 				// Note: Passes through object.
 				return $this->inpost_seo_box( $object, (array) $args );
 			}
 		} else {
-			// Note: Passes through object.
+			//* Note: Passes object.
 			// Empty the arguments, if any.
 			return $this->inpost_seo_box( $object, $args = '' );
 		}
+
+		return '';
 	}
 
 	/**
 	 * Callback for in-post SEO meta box.
 	 *
 	 * @since 2.0.0
+	 * @access private
 	 *
 	 * @param array $post		The post object
 	 *
@@ -189,10 +209,10 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 	 *
 	 * Note: Passed through object $object by reference
 	 */
-	public function inpost_seo_box( &$object, $args ) {
+	public function inpost_seo_box( $object, $args ) {
 
 		//* Determines if it's inside a meta box or within a taxonomy page.
-		$nobox = false;
+		$is_term = false;
 
 		// Args are passed.
 		if ( is_array( $args ) && isset( $args['args'] ) ) {
@@ -208,36 +228,27 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 				wp_nonce_field( 'inpost_seo_save', 'hmpl_ad_inpost_seo_nonce' );
 			} else {
 				// This shouldn't happen.
-				return '';
+				return;
 			}
-		} else {
-			$term = get_term_by( 'id', $object->term_id, $object->taxonomy, OBJECT );
+		} else if ( is_object( $object ) ) {
 
-			if ( ! empty( $term ) && is_object( $term ) ) {
-				$tax_type = $term->taxonomy;
+			//* Singular name.
+			$type = $this->get_the_term_name( $object, true, false );
 
-				/**
-				 * Dynamically fetch the term name.
-				 *
-				 * @since 2.3.1
-				 */
-				$term_labels = $this->get_tax_labels( $tax_type );
+			//* Plural name.
+			if ( empty( $type ) )
+				$type = $this->get_the_term_name( $object, false, false );
 
-				if ( isset( $term_labels ) ) {
-					$type = isset( $term_labels->singular_name ) ? $term_labels->singular_name : null;
-					$type = ! isset( $type ) && isset( $term_labels->name ) ? $term_labels->name : $type;
-				}
-			}
-
-			if ( ! isset( $type ) ) {
+			if ( empty( $type ) ) {
 				// Fallback to Page as it is generic.
 				$type = __( 'Page', 'autodescription' );
 			}
 
-			$nobox = true;
+			$is_term = true;
 		}
 
-		if ( $nobox ) {
+		//* Echo output.
+		if ( $is_term ) {
 			$this->tt_inpost_box( $type, $object );
 		} else {
 			$this->page_inpost_box( $type );
@@ -249,6 +260,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 	 * Callback function for Taxonomy and Terms inpost box.
 	 *
 	 * @since 2.3.5
+	 * @access private
 	 *
 	 * @param string $type The TT type name.
 	 * @param object $object The TT object.
@@ -260,30 +272,13 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		//* Get the language the Google page should assume.
 		$language = $this->google_language();
 
-		$ad_doctitle = isset( $object->admeta['doctitle'] ) ? $object->admeta['doctitle'] : '';
-		$ad_description = isset( $object->admeta['description'] ) ? $object->admeta['description'] : '';
-		$ad_noindex = isset( $object->admeta['noindex'] ) ? $object->admeta['noindex'] : '';
-		$ad_nofollow = isset( $object->admeta['nofollow'] ) ? $object->admeta['nofollow'] : '';
-		$ad_noarchive = isset( $object->admeta['noarchive'] ) ? $object->admeta['noarchive'] : '';
-		$flag = isset( $object->admeta['saved_flag'] ) ? (bool) $object->admeta['saved_flag'] : false;
+		$data = $this->get_term_data( $object );
 
-		//* Genesis data fetch. This will override our options with Genesis options.
-		if ( ! $flag && isset( $object->meta ) ) {
-			if ( empty( $ad_doctitle ) && isset( $object->meta['doctitle'] ) )
-				$ad_doctitle = $object->meta['doctitle'];
-
-			if ( empty( $ad_description ) && isset( $object->meta['description'] ) )
-				$ad_description = $object->meta['description'];
-
-			if ( empty( $ad_noindex ) && isset( $object->meta['noindex'] ) )
-				$ad_noindex = $object->meta['noindex'];
-
-			if ( empty( $ad_nofollow ) && isset( $object->meta['nofollow'] ) )
-				$ad_nofollow = $object->meta['nofollow'];
-
-			if ( empty( $ad_noarchive ) && isset( $object->meta['noarchive'] ) )
-				$ad_noarchive = $object->meta['doctitle'];
-		}
+		$title = isset( $data['title'] ) ? $data['title'] : '';
+		$description = isset( $data['description'] ) ? $data['description'] : '';
+		$noindex = isset( $data['noindex'] ) ? $data['noindex'] : '';
+		$nofollow = isset( $data['nofollow'] ) ? $data['nofollow'] : '';
+		$noarchive = isset( $data['noarchive'] ) ? $data['noarchive'] : '';
 
 		//* Fetch Term ID and taxonomy.
 		$term_id = $object->term_id;
@@ -293,25 +288,21 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 			'term_id' => $term_id,
 			'taxonomy' => $taxonomy,
 			'placeholder' => true,
-			'meta' => true,
-			'get_custom_field' => false
+			'get_custom_field' => false,
 		);
 
 		$generated_description_args = array(
 			'id' => $term_id,
-			'taxonomy' => $taxonomy
+			'taxonomy' => $taxonomy,
+			'get_custom_field' => false,
 		);
 
 		//* Generate title and description.
 		$generated_doctitle = $this->title( '', '', '', $generated_doctitle_args );
-		$generated_description = $this->generate_description_from_id( $generated_description_args );
+		$generated_description = $this->generate_description( '', $generated_description_args );
 
-		/**
-		 * Calculate true Title length
-		 *
-		 * @since 2.2.4
-		 */
 		$blog_name = $this->get_blogname();
+		$add_additions = $this->add_title_additions();
 
 		/**
 		 * Separator doesn't matter. Since html_entity_decode is used.
@@ -319,8 +310,9 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		 *
 		 * @since 2.3.4
 		 */
-		$ad_doctitle_len	= ! empty ( $ad_doctitle ) 		? $ad_doctitle . " | " . $blog_name : $generated_doctitle;
-		$ad_description_len = ! empty ( $ad_description )	? $ad_description : $generated_description;
+		$doc_pre_rem = $add_additions ? $title . " | " . $blog_name : $title;
+		$title_len = $title ? $doc_pre_rem : $generated_doctitle;
+		$description_len = $description	? $description : $generated_description;
 
 		/**
 		 * Convert to what Google outputs.
@@ -328,15 +320,15 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		 * This will convert e.g. &raquo; to a single length character.
 		 * @since 2.3.4
 		 */
-		$tit_len_parsed = html_entity_decode( $ad_doctitle_len );
-		$desc_len_parsed = html_entity_decode( $ad_description_len );
+		$tit_len_parsed = html_entity_decode( $title_len );
+		$desc_len_parsed = html_entity_decode( $description_len );
 
 		/**
 		 * Generate static placeholder for when title or description is emptied
 		 *
 		 * @since 2.2.4
 		 */
-		$doctitle_placeholder = $generated_doctitle;
+		$title_placeholder = $generated_doctitle;
 		$description_placeholder = $generated_description;
 
 		?>
@@ -363,10 +355,10 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 					</th>
 					<td>
 						<div id="autodescription-title-wrap">
-							<input name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" type="text" placeholder="<?php echo $doctitle_placeholder ?>" value="<?php echo esc_attr( $ad_doctitle ); ?>" size="40" />
+							<input name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" type="text" placeholder="<?php echo $title_placeholder ?>" value="<?php echo esc_attr( $title ); ?>" size="40" />
 							<span id="autodescription-title-offset" class="hide-if-no-js"></span><span id="autodescription-title-placeholder" class="hide-if-no-js"></span>
 						</div>
-						<p class="description"><?php printf( __( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[doctitle]_chars">'. mb_strlen( $tit_len_parsed ) .'</span>' ); ?></p>
+						<p class="description theseoframework-counter"><?php printf( __( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[doctitle]_chars">'. mb_strlen( $tit_len_parsed ) .'</span>' ); ?></p>
 					</td>
 				</tr>
 
@@ -378,31 +370,31 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 						</label>
 					</th>
 					<td>
-						<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" placeholder="<?php echo $description_placeholder ?>" rows="5" cols="50" class="large-text"><?php echo esc_html( $ad_description ); ?></textarea>
-						<p class="description"><?php printf( __( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[description]_chars">'. mb_strlen( $desc_len_parsed ) .'</span>' ); ?></p>
+						<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" placeholder="<?php echo $description_placeholder ?>" rows="5" cols="50" class="large-text"><?php echo esc_html( $description ); ?></textarea>
+						<p class="description theseoframework-counter"><?php printf( __( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[description]_chars">'. mb_strlen( $desc_len_parsed ) .'</span>' ); ?></p>
 					</td>
 				</tr>
 
 				<tr>
 					<th scope="row" valign="top"><?php _e( 'Robots Meta Settings', 'autodescription' ); ?></th>
 					<td>
-						<label for="autodescription-meta[noindex]"><input name="autodescription-meta[noindex]" id="autodescription-meta[noindex]" type="checkbox" value="1" <?php checked( $ad_noindex ); ?> />
-							<?php printf( __( 'Apply %s to this %s', 'autodescription' ), $this->code_wrap( 'noindex' ), $type ); ?>
+						<label for="autodescription-meta[noindex]"><input name="autodescription-meta[noindex]" id="autodescription-meta[noindex]" type="checkbox" value="1" <?php checked( $noindex ); ?> />
+							<?php printf( __( 'Apply %s to this term', 'autodescription' ), $this->code_wrap( 'noindex' ) ); ?>
 							<a href="https://support.google.com/webmasters/answer/93710?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Tell Search Engines not to show this page in their search results', 'autodescription' ) ) ?>">[?]</a>
 						</label>
 
-						<br />
+						<br>
 
-						<label for="autodescription-meta[nofollow]"><input name="autodescription-meta[nofollow]" id="autodescription-meta[nofollow]" type="checkbox" value="1" <?php checked( $ad_nofollow ); ?> />
-							<?php printf( __( 'Apply %s to this %s', 'autodescription' ), $this->code_wrap( 'nofollow' ), $type ); ?>
+						<label for="autodescription-meta[nofollow]"><input name="autodescription-meta[nofollow]" id="autodescription-meta[nofollow]" type="checkbox" value="1" <?php checked( $nofollow ); ?> />
+							<?php printf( __( 'Apply %s to this term', 'autodescription' ), $this->code_wrap( 'nofollow' ) ); ?>
 							<a href="https://support.google.com/webmasters/answer/96569?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Tell Search Engines not to follow links on this page', 'autodescription' ) ) ?>">[?]</a>
 						</label>
 
-						<br />
+						<br>
 
-						<label for="autodescription-meta[noarchive]"><input name="autodescription-meta[noarchive]" id="autodescription-meta[noarchive]" type="checkbox" value="1" <?php checked( $ad_noarchive ); ?> />
-							<?php printf( __( 'Apply %s to this %s', 'autodescription' ), $this->code_wrap( 'noarchive' ), $type ); ?>
-							<a href="https://support.google.com/webmasters/answer/79812?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Tell Search Engines not to save a cached copy this page', 'autodescription' ) ) ?>">[?]</a>
+						<label for="autodescription-meta[noarchive]"><input name="autodescription-meta[noarchive]" id="autodescription-meta[noarchive]" type="checkbox" value="1" <?php checked( $noarchive ); ?> />
+							<?php printf( __( 'Apply %s to this term', 'autodescription' ), $this->code_wrap( 'noarchive' ) ); ?>
+							<a href="https://support.google.com/webmasters/answer/79812?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Tell Search Engines not to save a cached copy of this page', 'autodescription' ) ) ?>">[?]</a>
 						</label>
 
 						<?php // Saved flag, if set then it won't fetch for Genesis meta anymore ?>
@@ -426,12 +418,14 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		<?php
 
 		do_action( 'the_seo_framework_pro_tt_inpost_box' );
+
 	}
 
 	/**
 	 * Callback function for Post and Pages inpost metabox.
 	 *
 	 * @since 2.3.5
+	 * @access private
 	 *
 	 * @param string $type The post type name.
 	 */
@@ -444,6 +438,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 
 		$post_id = $this->get_the_real_ID();
 		$is_static_frontpage = $this->is_static_frontpage( $post_id );
+
 		$title = $this->get_custom_field( '_genesis_title', $post_id );
 
 		$page_on_front_option = get_option( 'page_on_front' );
@@ -504,25 +499,24 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		 *
 		 * @since 2.3.4
 		 */
-		if ( $is_static_frontpage && ! $this->get_option( 'homepage_tagline' ) ) {
-			$tit_len_pre = ! empty( $title ) ? $title : $generated_doctitle;
-		} else if ( $is_static_frontpage ) {
-			$tit_len_pre = ! empty( $title ) ? $title . " | " . $this->get_blogdescription() : $generated_doctitle;
+		if ( $is_static_frontpage ) {
+			if ( $this->get_option( 'homepage_tagline' ) ) {
+				$tit_len_pre = $title ? $title . " | " . $this->get_blogdescription() : $generated_doctitle;
+			} else {
+				$tit_len_pre = $title ? $title : $generated_doctitle;
+			}
 		} else {
-			/**
-			 * Calculate true Title length
-			 *
-			 * @since 2.2.4
-			 */
-			$blog_name = $this->get_blogname();
-
 			/**
 			 * Separator doesn't matter. Since html_entity_decode is used.
 			 * Order doesn't matter either. Since it's just used for length calculation.
 			 *
 			 * @since 2.3.4
 			 */
-			$tit_len_pre = ! empty( $title ) ? $title . " | " . $blog_name : $generated_doctitle;
+			if ( $this->add_title_additions() ) {
+				$tit_len_pre = $title ? $title . " | " . $this->get_blogname() : $generated_doctitle;
+			} else {
+				$tit_len_pre = $title ? $title : $generated_doctitle;
+			}
 		}
 
 		//* Fetch description from option.
@@ -538,13 +532,13 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 			//* The homepage description takes precedence.
 			$homepage_description = $this->get_option( 'homepage_description' );
 
-			if ( ! empty( $description ) ) {
-				$desc_len_pre = ! empty( $homepage_description ) ? $homepage_description : $description;
+			if ( $description ) {
+				$desc_len_pre = $homepage_description ? $homepage_description : $description;
 			} else {
-				$desc_len_pre = ! empty( $homepage_description ) ? $homepage_description : $generated_description;
+				$desc_len_pre = $homepage_description ? $homepage_description : $generated_description;
 			}
 		} else {
-			$desc_len_pre = ! empty( $description ) ? $description : $generated_description;
+			$desc_len_pre = $description ? $description : $generated_description;
 		}
 
 		/**
@@ -580,8 +574,8 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 
 		<p>
 			<label for="autodescription_title"><strong><?php printf( __( 'Custom %s Title', 'autodescription' ), $type ); ?></strong>
-				<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#3" target="_blank" title="<?php _e( 'Recommended Length: 50 to 55 characters', 'autodescription' ) ?>">[?]</a>
-				<span class="description"><?php printf( __( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_title_chars">'. mb_strlen( $tit_len_parsed ) .'</span>' ); ?></span>
+				<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#3" target="_blank" title="<?php _e( 'Recommended Length: 50 to 55 characters', 'autodescription' ); ?>">[?]</a>
+				<span class="description theseoframework-counter"><?php printf( __( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_title_chars">'. mb_strlen( $tit_len_parsed ) .'</span>' ); ?></span>
 			</label>
 		</p>
 		<p>
@@ -594,8 +588,8 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		<p>
 			<label for="autodescription_description">
 				<strong><?php printf( __( 'Custom %s Description', 'autodescription' ), $type ); ?></strong>
-				<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#1" target="_blank" title="<?php _e( 'Recommended Length: 145 to 155 characters', 'autodescription' ) ?>">[?]</a>
-				<span class="description"><?php printf( __( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_description_chars">'. mb_strlen( $desc_len_parsed ) .'</span>' ); ?></span>
+				<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#1" target="_blank" title="<?php _e( 'Recommended Length: 145 to 155 characters', 'autodescription' ); ?>">[?]</a>
+				<span class="description theseoframework-counter"><?php printf( __( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_description_chars">'. mb_strlen( $desc_len_parsed ) .'</span>' ); ?></span>
 			</label>
 		</p>
 		<p>
@@ -605,7 +599,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		<p>
 			<label for="autodescription_canonical">
 				<strong><?php _e( 'Custom Canonical URL', 'autodescription' ); ?></strong>
-				<a href="https://support.google.com/webmasters/answer/139066?hl=<?php echo $language; ?>" target="_blank" title="&lt;link rel=&quot;canonical&quot; /&gt;">[?]</a>
+				<a href="https://support.google.com/webmasters/answer/139066?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Preferred %s URL location', 'autodescription' ), $type ); ?>">[?]</a>
 			</label>
 		</p>
 		<p>
@@ -615,22 +609,31 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		<p><strong><?php _e( 'Robots Meta Settings', 'autodescription' ); ?></strong></p>
 		<p>
 			<label for="autodescription_noindex"><input type="checkbox" name="autodescription[_genesis_noindex]" id="autodescription_noindex" value="1" <?php checked( $this->get_custom_field( '_genesis_noindex' ) ); ?> />
-				<?php printf( __( 'Apply %s to this %s', 'autodescription' ), $this->code_wrap( 'noindex' ), $type ); ?>
-				<a href="https://support.google.com/webmasters/answer/93710?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Tell Search Engines not to show this page in their search results', 'autodescription' ) ) ?>">[?]</a>
+				<?php
+					/* translators: 1: Option, 2: Post or Page */
+					printf( __( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'noindex' ), $type );
+				?>
+				<a href="https://support.google.com/webmasters/answer/93710?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Tell Search Engines not to show this %s in their search results', 'autodescription' ), $type ); ?>">[?]</a>
 			</label>
 
-			<br />
+			<br>
 
 			<label for="autodescription_nofollow"><input type="checkbox" name="autodescription[_genesis_nofollow]" id="autodescription_nofollow" value="1" <?php checked( $this->get_custom_field( '_genesis_nofollow' ) ); ?> />
-				<?php printf( __( 'Apply %s to this %s', 'autodescription' ), $this->code_wrap( 'nofollow' ), $type ); ?>
-				<a href="https://support.google.com/webmasters/answer/96569?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Tell Search Engines not to follow links on this page', 'autodescription' ) ) ?>">[?]</a>
+				<?php
+					/* translators: 1: Option, 2: Post or Page */
+					printf( __( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'nofollow' ), $type );
+				?>
+				<a href="https://support.google.com/webmasters/answer/96569?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Tell Search Engines not to follow links on this %s', 'autodescription' ), $type ); ?>">[?]</a>
 			</label>
 
-			<br />
+			<br>
 
 			<label for="autodescription_noarchive"><input type="checkbox" name="autodescription[_genesis_noarchive]" id="autodescription_noarchive" value="1" <?php checked( $this->get_custom_field( '_genesis_noarchive' ) ); ?> />
-				<?php printf( __( 'Apply %s to this %s', 'autodescription' ), $this->code_wrap( 'noarchive' ), $type ); ?>
-				<a href="https://support.google.com/webmasters/answer/79812?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Tell Search Engines not to save a cached copy this page', 'autodescription' ) ) ?>">[?]</a>
+				<?php
+					/* translators: 1: Option, 2: Post or Page */
+					printf( __( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'noarchive' ), $type );
+				?>
+				<a href="https://support.google.com/webmasters/answer/79812?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Tell Search Engines not to save a cached copy of this %s', 'autodescription' ), $type ); ?>">[?]</a>
 			</label>
 
 			<?php // Saved flag, if set then it won't fetch for genesis meta anymore ?>
@@ -643,14 +646,14 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		<p>
 			<label for="autodescription_exclude_local_search"><input type="checkbox" name="autodescription[exclude_local_search]" id="autodescription_exclude_local_search" value="1" <?php checked( $this->get_custom_field( 'exclude_local_search' ) ); ?> />
 				<?php printf( __( 'Exclude this %s from local search', 'autodescription' ), $type ); ?>
-				<span title="<?php printf( __( 'This excludes this %s from local on-site search results', 'autodescription' ), $type ) ?>">[?]</span>
+				<span title="<?php printf( __( 'This excludes this %s from local on-site search results', 'autodescription' ), $type ); ?>">[?]</span>
 			</label>
 		</p>
 
 		<p>
 			<label for="autodescription_redirect">
 				<strong><?php _e( 'Custom 301 Redirect URL', 'autodescription' ); ?></strong>
-				<a href="https://support.google.com/webmasters/answer/93633?hl=<?php echo $language; ?>" target="_blank" title="301 Redirect">[?]</a>
+				<a href="https://support.google.com/webmasters/answer/93633?hl=<?php echo $language; ?>" target="_blank" title="<?php _e( 'This will force visitors to go to another URL', 'autodescription' ); ?>">[?]</a>
 			</label>
 		</p>
 		<p>
@@ -665,6 +668,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		<?php endif;
 
 		do_action( 'the_seo_framework_pro_page_inpost_box' );
+
 	}
 
 }

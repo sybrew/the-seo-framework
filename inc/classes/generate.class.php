@@ -19,12 +19,11 @@
 /**
  * Class AutoDescription_Generate
  *
- * Generates SEO data based on content
- * Returns strings/arrays
+ * Generates general SEO data based on content.
  *
  * @since 2.1.6
  */
-class AutoDescription_Generate extends AutoDescription_PostData {
+class AutoDescription_Generate extends AutoDescription_TermData {
 
 	/**
 	 * Constructor, load parent constructor
@@ -34,6 +33,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Create description
 	 *
 	 * @param string $description the description.
@@ -3017,106 +3017,20 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 	/**
 	 * Generates shortlink url
+=======
+	 * Output the `index`, `follow`, `noodp`, `noydir`, `noarchive` robots meta code in array
+>>>>>>> ef405fe90ddfcedfe3f7898dcde7198f4eccf621
 	 *
 	 * @since 2.2.2
 	 *
-	 * @param int $post_id The post ID
-	 * @return string|null Escaped site Shortlink URL
+	 * @uses genesis_get_seo_option()   Get SEO setting value.
+	 * @uses genesis_get_custom_field() Get custom field value.
+	 *
+	 * @global object $wp_query
+	 *
+	 * @return array|null robots
 	 */
-	public function get_shortlink( $post_id = 0 ) {
-
-		if ( $this->get_option( 'shortlink_tag' ) ) {
-
-			$path = null;
-
-			if ( $this->is_singular( $post_id ) ) {
-
-				if ( 0 == $post_id )
-					$post_id = $this->get_the_real_ID();
-
-				if ( ! empty( $post_id ) ) {
-					if ( $this->is_static_frontpage( $post_id ) ) {
-						$path = '';
-					} else {
-						$path = '?p=' . $post_id;
-					}
-				}
-			} else if ( ! is_front_page() ) {
-				$object = get_queried_object();
-
-				if ( is_category() ) {
-					$id = $object->term_id;
-					$path = '?cat=' . $id;
-				}
-
-				if ( is_tag() ) {
-					$name = $object->name;
-					$path = '?tag=' . $name;
-				}
-
-				if ( is_date() ) {
-					// This isn't exactly "short" for a shortlink...
-					$year = get_query_var( 'year' );
-					$month = get_query_var( 'monthnum' ) ? '&monthnum=' . get_query_var( 'monthnum' ) : '';
-					$day = get_query_var( 'day' ) ? '&day=' . get_query_var( 'day' ) : '';
-
-					$path = '?year=' . $year . $month . $day;
-				}
-
-				if ( is_author() ) {
-					$id = $object->ID;
-					$path = '?author=' . $id;
-				}
-
-				if ( is_tax() ) {
-					$id = $object->ID;
-					$path = '?taxonomy=' . $id;
-				}
-
-				if ( empty( $path ) ) {
-					$id = isset( $object->ID ) ? $object->ID : 0;
-
-					if ( ! empty( $id ) )
-						$path = '?p=' . $id;
-				}
-
-			} else {
-				//* Home page
-				$path = '';
-			}
-
-			if ( isset( $path ) ) {
-
-				$home_url = get_option( 'home' );
-				$scheme = is_ssl() ? 'https' : 'http';
-
-				if ( empty( $path ) ) {
-					//* Home url.
-					$url = $this->set_url_scheme( $home_url, $scheme );
-					$url = user_trailingslashit( $url );
-				} else {
-					//* Everything else.
-					$url = trailingslashit( $home_url ) . $path;
-					$url = $this->set_url_scheme( $url, $scheme );
-				}
-
-				return esc_url_raw( $url );
-			}
-		}
-
-		return '';
-	}
-
-	/**
-	 * Generates Previous and Next links
-	 *
-	 * @since 2.2.4
-	 *
-	 * @param string $prev_next Previous or next page link
-	 * @param int $post_id The post ID
-	 *
-	 * @return string|null Escaped site Pagination URL
-	 */
+<<<<<<< HEAD
 	public function get_paged_url( $prev_next = 'next', $post_id = 0 ) {
 
 		if ( ! $this->get_option( 'prev_next_posts' ) && ! $this->get_option( 'prev_next_archives' ) )
@@ -3166,568 +3080,134 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 
 		if ( ! empty( $next ) )
 			return esc_url_raw( $next );
+=======
+	public function robots_meta() {
+>>>>>>> ef405fe90ddfcedfe3f7898dcde7198f4eccf621
 
-		return '';
-	}
+		//* Defaults
+		$meta = array(
+			'noindex'   => $this->get_option( 'site_noindex' ) ? 'noindex' : '',
+			'nofollow'  => $this->get_option( 'site_nofollow' ) ? 'nofollow' : '',
+			'noarchive' => $this->get_option( 'site_noarchive' ) ? 'noarchive' : '',
+			'noodp'     => $this->get_option( 'noodp' ) ? 'noodp' : '',
+			'noydir'    => $this->get_option( 'noydir' ) ? 'noydir' : '',
+		);
 
-	/**
-	 * Return the special URL of a paged post.
-	 *
-	 * Taken from _wp_link_page() in WordPress core, but instead of anchor markup, just return the URL.
-	 * Also adds WPMUdev Domain Mapping support and is optimized for speed.
-	 *
-	 * @uses $this->the_url_from_cache();
-	 * @since 2.2.4
-	 *
-	 * @param int $i The page number to generate the URL from.
-	 * @param int $post_id The post ID
-	 * @param string $pos Which url to get, accepts next|prev
-	 *
-	 * @return string Unescaped URL
-	 */
-	public function get_paged_post_url( $i, $post_id = 0, $pos = '' ) {
+		/**
+		 * Check the Robots SEO settings, set noindex for paged archives.
+		 * @since 2.2.4
+		 */
+		if ( $this->is_archive() && $this->paged() > 1 )
+			$meta['noindex'] = $this->get_option( 'paged_noindex' ) ? 'noindex' : $meta['noindex'];
 
-		$from_option = false;
+		if ( $this->is_front_page() && ( $this->page() > 1 || $this->paged() > 1 ) )
+			$meta['noindex'] = $this->get_option( 'home_paged_noindex' ) ? 'noindex' : $meta['noindex'];
 
-		if ( $i === (int) 1 ) {
-			$url = $this->the_url_from_cache( '', $post_id, true, $from_option );
+		//* Check home page SEO settings, set noindex, nofollow and noarchive
+		if ( $this->is_front_page() ) {
+			$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'homepage_noindex' ) ? 'noindex' : $meta['noindex'];
+			$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'homepage_nofollow' ) ? 'nofollow' : $meta['nofollow'];
+			$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'homepage_noarchive' ) ? 'noarchive' : $meta['noarchive'];
 		} else {
-			$post = get_post( $post_id );
+			global $wp_query;
 
 			/**
-			 * Fix the url.
+			 * Check if archive is empty, set noindex for those.
+			 * @since 2.2.8
 			 *
-			 * @since 2.2.5
+			 * @todo maybe create option
+			 * @priority so low... 3.0.0+
 			 */
-			if ( $i >= (int) 2 ) {
-				//* Fix adding pagination url.
+			if ( isset( $wp_query->post_count ) && 0 === $wp_query->post_count )
+				$meta['noindex'] = 'noindex';
+		}
 
-				$urlfromcache = $this->the_url_from_cache( '', $post_id, false, $from_option );
+		if ( $this->is_category() || $this->is_tag() ) {
+			$term = get_queried_object();
 
-				// Calculate current page number.
-				$int_current = 'next' == $pos ? $i -1 : $i + 1;
-				$string_current = (string) $int_current;
+			$meta['noindex']   = empty( $meta['noindex'] ) && $term->admeta['noindex'] ? 'noindex' : $meta['noindex'];
+			$meta['nofollow']  = empty( $meta['nofollow'] ) && $term->admeta['nofollow'] ? 'nofollow' : $meta['nofollow'];
+			$meta['noarchive'] = empty( $meta['noarchive'] ) && $term->admeta['noarchive'] ? 'noarchive' : $meta['noarchive'];
 
-				if ( $i === (int) 1 ) {
-					//* We're returning to the first page. Continue normal behavior.
-					$urlfromcache = $urlfromcache;
-				} else {
-					//* We're adding a page.
-					$last_occurence = strrpos( $urlfromcache, '/' . $string_current . '/' );
-
-					if ( $last_occurence !== false )
-						$urlfromcache = substr_replace( $urlfromcache, '/', $last_occurence, strlen( '/' . $string_current . '/' ) );
-				}
-			} else {
-				$urlfromcache = $this->the_url_from_cache( '', $post_id, false, $from_option );
+			if ( $this->is_category() ) {
+				$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'category_noindex' ) ? 'noindex' : $meta['noindex'];
+				$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'category_nofollow' ) ? 'nofollow' : $meta['nofollow'];
+				$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'category_noindex' ) ? 'noarchive' : $meta['noarchive'];
+			} else if ( $this->is_tag() ) {
+				$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'tag_noindex' ) ? 'noindex' : $meta['noindex'];
+				$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'tag_nofollow' ) ? 'nofollow' : $meta['nofollow'];
+				$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'tag_noindex' ) ? 'noarchive' : $meta['noarchive'];
 			}
 
-			if ( '' == get_option( 'permalink_structure' ) || in_array( $post->post_status, array( 'draft', 'pending' ) ) ) {
-				$url = add_query_arg( 'page', $i, $urlfromcache );
-			} else if ( 'page' == get_option( 'show_on_front' ) && get_option( 'page_on_front' ) == $post->ID ) {
-				global $wp_rewrite;
+			$flag = '0' !== $term->admeta['saved_flag'] ? true : false;
 
-				$url = trailingslashit( $urlfromcache ) . user_trailingslashit( "$wp_rewrite->pagination_base/" . $i, 'single_paged' );
-			} else {
-				$url = trailingslashit( $urlfromcache ) . user_trailingslashit( $i, 'single_paged' );
+			if ( false === $flag && isset( $term->meta ) ) {
+				//* Genesis support.
+				$meta['noindex']   = empty( $meta['noindex'] ) && $term->meta['noindex'] ? 'noindex' : $meta['noindex'];
+				$meta['nofollow']  = empty( $meta['nofollow'] ) && $term->meta['nofollow'] ? 'nofollow' : $meta['nofollow'];
+				$meta['noarchive'] = empty( $meta['noarchive'] ) && $term->meta['noarchive'] ? 'noarchive' : $meta['noarchive'];
 			}
 		}
 
-		return $url;
-	}
+		// Is custom Taxonomy page. But not a category or tag. Should've recieved specific term SEO settings.
+		if ( $this->is_tax() ) {
+			$term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
 
-	/**
-	 * Generate LD+Json search helper.
-	 *
-	 * @since 2.2.8
-	 *
-	 * @return escaped LD+json search helper string.
-	 * @TODO Create option for output.
-	 */
-	public function ld_json_search() {
+			$meta['noindex']   = empty( $meta['noindex'] ) && $term->admeta['noindex'] ? 'noindex' : $meta['noindex'];
+			$meta['nofollow']  = empty( $meta['nofollow'] ) && $term->admeta['nofollow'] ? 'nofollow' : $meta['nofollow'];
+			$meta['noarchive'] = empty( $meta['noarchive'] ) && $term->admeta['noarchive'] ? 'noarchive' : $meta['noarchive'];
+		}
 
-		/**
-		 * Applies filters the_seo_framework_json_search_output
-		 * @since 2.3.9
-		 */
-		$output = (bool) apply_filters( 'the_seo_framework_json_search_output', true );
-
-		if ( true !== $output )
-			return '';
-
-		$context = json_encode( 'http://schema.org' );
-		$webtype = json_encode( 'WebSite' );
-		$url = json_encode( esc_url( home_url( '/' ) ) );
-		$name = json_encode( $this->get_blogname() );
-		$alternatename = $name;
-		$actiontype = json_encode( 'SearchAction' );
-
-		// Remove trailing quote and add it back.
-		$target = mb_substr( json_encode( esc_url( home_url( '/?s=' ) ) ), 0, -1 ) . '{search_term_string}"';
-
-		$queryaction = json_encode( 'required name=search_term_string' );
-
-		$json = sprintf( '{"@context":%s,"@type":%s,"url":%s,"name":%s,"alternateName":%s,"potentialAction":{"@type":%s,"target":%s,"query-input":%s}}', $context, $webtype, $url, $name, $alternatename, $actiontype, $target, $queryaction );
-
-		return $json;
-	}
-
-	/**
-	 * Generate LD+Json breadcrumb helper.
-	 *
-	 * @since 2.4.2
-	 *
-	 * @return escaped LD+json search helper string.
-	 * @TODO Create option for output.
-	 */
-	public function ld_json_breadcrumbs() {
-
-		/**
-		 * Applies filters the_seo_framework_json_breadcrumb_output
-		 * @since 2.4.2
-		 */
-		$output = (bool) apply_filters( 'the_seo_framework_json_breadcrumb_output', true );
-
-		if ( true !== $output )
-			return '';
-
-		//* Used to count ancestors and categories.
-		$count = 0;
-
-		$output = '';
-
-		if ( is_single() ) {
-			//* Get categories.
-
-			$post_id = $this->get_the_real_ID();
-
-			$r = is_object_in_term( $post_id, 'category', '' );
-
-			if ( is_wp_error( $r ) || ! $r )
-				return '';
-
-			$cats = wp_get_object_terms( $post_id, 'category', array( 'fields' => 'all_with_object_id', 'orderby' => 'parent' ) );
-
-			if ( is_wp_error( $cats ) || empty( $cats ) )
-				return '';
-
-			$cat_ids = array();
-			$kittens = array();
-
-			//* Fetch cats children id's, if any.
-			foreach ( $cats as $cat ) {
-				//* The category objects. The cats.
-				$cat_id = $cat->term_id;
-
-				// Check if they have kittens.
-				$children = get_term_children( $cat_id, $cat->taxonomy );
-
-				//* No need to fetch them again, save object in the array.
-				$cat_obj[$cat_id] = $cat;
-
-				//* Save children id's as kittens.
-				$kittens[$cat_id] = $children;
-			}
-
-			$todo = array();
-			$trees = array();
+		if ( $this->is_author() ) {
+			// $author_id = (int) get_query_var( 'author' );
 
 			/**
-			 * Build category ID tree.
-			 * Sort by parents with children ($trees). These are recursive, 3+ item scripts.
-			 * Sort by parents without children ($todo). These are singular 2 item scripts.
+			 * @todo
+			 * @priority high 2.6.x
 			 */
-			foreach ( $kittens as $parent => $kitten ) {
-				if ( ! empty( $kitten ) ) {
-					if ( 1 == count( $kitten ) ) {
-						$trees[] = array( $kitten[0], $parent );
-					} else {
-						//* @TODO, this is very, very complicated. Requires multiple loops.
-						$trees[] = array();
-					}
-				} else {
-					$todo[] = $parent;
-				}
-			}
+			// $meta['noindex']   = empty( $meta['noindex'] ) && get_the_author_meta( 'noindex', $author_id ) ? 'noindex' : $meta['noindex'];
+			// $meta['nofollow']  = empty( $meta['nofollow'] ) && get_the_author_meta( 'nofollow', $author_id ) ? 'nofollow' : $meta['nofollow'];
+			// $meta['noarchive'] = empty( $meta['noarchive'] ) && get_the_author_meta( 'noarchive', $author_id ) ? 'noarchive' : $meta['noarchive'];
 
-			//* Remove Duplicates from $todo by comparing to $tree
-			foreach ( $todo as $key => $value ) {
-				foreach ( $trees as $tree ) {
-					if ( $this->in_array( $value, $tree ) )
-						unset( $todo[$key] );
-				}
-			}
-
-			$context = json_encode( 'http://schema.org' );
-			$context_type = json_encode( 'BreadcrumbList' );
-			$item_type = json_encode( 'ListItem' );
-
-			$items = '';
-
-			foreach ( $trees as $tree ) {
-				if ( ! empty( $tree ) ) {
-
-					$tree = array_reverse( $tree );
-
-					foreach ( $tree as $position => $parent_id ) {
-						$pos = $position + 2;
-
-						$cat = isset( $cat_obj[$parent_id] ) ? $cat_obj[$parent_id] : get_term_by( 'id', $parent_id, 'category', OBJECT, 'raw' );
-
-						$id = json_encode( $this->the_url( '', '', array( 'get_custom_field' => false, 'external' => true, 'is_term' => true, 'term' => $cat ) ) );
-
-						$custom_field_name = isset( $cat->admeta['doctitle'] ) ? $cat->admeta['doctitle'] : '';
-						$cat_name = ! empty( $custom_field_name ) ? $custom_field_name : $cat->name;
-						$name = json_encode( $cat_name );
-
-						$items .= sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}},', $item_type, (string) $pos, $id, $name );
-					}
-
-					if ( ! empty( $items ) ) {
-
-						$items = $this->ld_json_breadcrumb_first( $item_type ) . $items . $this->ld_json_breadcrumb_last( $item_type, $pos, $post_id );
-
-						//* Put it all together.
-						$breadcrumbhelper = sprintf( '{"@context":%s,"@type":%s,"itemListElement":[%s]}', $context, $context_type, $items );
-						$output .= "<script type='application/ld+json'>" . $breadcrumbhelper . "</script>" . "\r\n";
-					}
-				}
-			}
-
-			//* For each of the todo items, create a separated script.
-			if ( ! empty( $todo ) ) {
-				foreach ( $todo as $tid ) {
-
-					$items = '';
-					$cat = get_term_by( 'id', $tid, 'category', OBJECT, 'raw' );
-
-					if ( '1' !== $cat->admeta['noindex'] ) {
-
-						if ( empty( $children ) ) {
-							// The position of the current item is always static here.
-							$pos = '2';
-							$id = json_encode( $this->the_url( '', '', array( 'get_custom_field' => false, 'is_term' => true, 'term' => $cat ) ) ); // Why not external???
-
-							$custom_field_name = isset( $cat->admeta['doctitle'] ) ? $cat->admeta['doctitle'] : '';
-							$cat_name = ! empty( $custom_field_name ) ? $custom_field_name : $cat->name;
-							$name = json_encode( $cat_name );
-
-							$items .= sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}},', $item_type, (string) $pos, $id, $name );
-						}
-
-						if ( ! empty( $items ) ) {
-
-							$items = $this->ld_json_breadcrumb_first( $item_type ) . $items . $this->ld_json_breadcrumb_last( $item_type, $pos, $post_id );
-
-							//* Put it all together.
-							$breadcrumbhelper = sprintf( '{"@context":%s,"@type":%s,"itemListElement":[%s]}', $context, $context_type, $items );
-							$output .= "<script type='application/ld+json'>" . $breadcrumbhelper . "</script>" . "\r\n";
-						}
-					}
-				}
-			}
-		} else if ( ! is_front_page() && is_page() ) {
-			//* Get ancestors.
-			$page_id = $this->get_the_real_ID();
-
-			$parents = get_post_ancestors( $page_id );
-
-			if ( ! empty( $parents ) ) {
-
-				$context = json_encode( 'http://schema.org' );
-				$context_type = json_encode( 'BreadcrumbList' );
-				$item_type = json_encode( 'ListItem' );
-
-				$items = '';
-
-				$parents = array_reverse( $parents );
-
-				foreach ( $parents as $position => $parent_id ) {
-					$pos = $position + 2;
-
-					$id = json_encode( $this->the_url( '', $parent_id, array( 'get_custom_field' => false, 'external' => true ) ) );
-
-					$custom_field_name = $this->get_custom_field( '_genesis_title', $parent_id );
-					$parent_name = ! empty( $custom_field_name ) ? $custom_field_name : $this->title( '', '', '', array( 'term_id' => $parent_id, 'get_custom_field' => false, 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
-
-					$name = json_encode( $parent_name );
-
-					$items .= sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}},', $item_type, (string) $pos, $id, $name );
-				}
-
-				if ( ! empty( $items ) ) {
-
-					$items = $this->ld_json_breadcrumb_first( $item_type ) . $items . $this->ld_json_breadcrumb_last( $item_type, $pos, $page_id );
-
-					//* Put it all together.
-					$breadcrumbhelper = sprintf( '{"@context":%s,"@type":%s,"itemListElement":[%s]}', $context, $context_type, $items );
-					$output = "<script type='application/ld+json'>" . $breadcrumbhelper . "</script>" . "\r\n";
-				}
-			}
+			$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'author_noindex' ) ? 'noindex' : $meta['noindex'];
+			$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'author_nofollow' ) ? 'nofollow' : $meta['nofollow'];
+			$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'author_noarchive' ) ? 'noarchive' : $meta['noarchive'];
 		}
 
-		return $output;
-	}
-
-	/**
-	 * Return home page item for LD Json Breadcrumbs.
-	 *
-	 * @staticvar string $first_item.
-	 *
-	 * @since 2.4.2
-	 *
-	 * @param string $item_type the breadcrumb item type.
-	 *
-	 * @return string Home Breadcrumb item
-	 */
-	public function ld_json_breadcrumb_first( $item_type ) {
-
-		static $first_item = null;
-
-		if ( ! isset( $first_item ) ) {
-
-			if ( ! isset( $item_type ) )
-				$item_type = json_encode( 'ListItem' );
-
-			$id = json_encode( $this->the_home_url_from_cache() );
-
-			$home_title = $this->get_option( 'homepage_title' );
-
-			if ( $home_title ) {
-				$custom_name = $home_title;
-			} else if ( 'page' == get_option( 'show_on_front' ) ) {
-				$home_id = (int) get_option( 'page_on_front' );
-
-				$custom_name = $this->get_custom_field( '_genesis_title', $home_id );
-				$custom_name = $custom_name ? $custom_name : $this->get_blogname();
-			} else {
-				$custom_name = $this->get_blogname();
-			}
-
-			$custom_name = json_encode( $custom_name );
-
-			//* Add trailing comma.
-			$first_item = sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}},', $item_type, '1', $id, $custom_name );
+		if ( $this->is_date() ) {
+			$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'date_noindex' ) ? 'noindex' : $meta['noindex'];
+			$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'date_nofollow' ) ? 'nofollow' : $meta['nofollow'];
+			$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'date_noarchive' ) ? 'noarchive' : $meta['noarchive'];
 		}
 
-		return $first_item;
-	}
-
-	/**
-	 * Return current page item for LD Json Breadcrumbs.
-	 *
-	 * @staticvar string $last_item.
-	 *
-	 * @since 2.4.2
-	 *
-	 * @param string $item_type the breadcrumb item type.
-	 * @param int $pos Last known position.
-	 * @param int $post_id The current Post ID
-	 *
-	 * @staticvar string $type The breadcrumb item type.
-	 * @staticvar string $id The current post/page/archive url.
-	 * @staticvar string $name The current post/page/archive title.
-	 *
-	 * @return string Lat Breadcrumb item
-	 */
-	public function ld_json_breadcrumb_last( $item_type, $pos, $post_id ) {
-
-		// 2 (becomes 3) holds mostly true for single term items. This shouldn't run anyway. Pos should always be provided.
-		if ( ! isset( $pos ) )
-			$pos = '2';
-
-		if ( ! isset( $item_type ) ) {
-			static $type = null;
-
-			if ( ! isset( $type ) )
-				$type = json_encode( 'ListItem' );
-
-			$item_type = $type;
+		if ( $this->is_search() ) {
+			$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'search_noindex' ) ? 'noindex' : $meta['noindex'];
+			$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'search_nofollow' ) ? 'nofollow' : $meta['nofollow'];
+			$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'search_noarchive' ) ? 'noarchive' : $meta['noarchive'];
 		}
 
-		if ( ! isset( $post_id ) || empty( $post_id ) )
-			$post_id = $this->get_the_real_ID();
-
-		//* Add current page.
-		$pos = $pos + 1;
-
-		static $id = null;
-		static $name = null;
-
-		if ( ! isset( $id ) )
-			$id = json_encode( $this->the_url_from_cache() );
-
-		if ( ! isset( $name ) ) {
-			$custom_field = $this->get_custom_field( '_genesis_title', $post_id );
-			$name = $custom_field ? $custom_field : $this->title( '', '', '', array( 'term_id' => $post_id, 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
-			$name = json_encode( $name );
+		if ( $this->is_attachment() ) {
+			$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'attachment_noindex' ) ? 'noindex' : $meta['noindex'];
+			$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'attachment_nofollow' ) ? 'nofollow' : $meta['nofollow'];
+			$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'attachment_noarchive' ) ? 'noarchive' : $meta['noarchive'];
 		}
 
-		$last_item = sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}}', $item_type, (string) $pos, $id, $name );
-
-		return $last_item;
-	}
-
-	/**
-	 * Return LD+Json Knowledge Graph helper.
-	 *
-	 * @since 2.2.8
-	 *
-	 * @return null|escaped LD+json Knowledge Graph helper string.
-	 * @todo transient cache this.
-	 */
-	public function ld_json_knowledge() {
-
-		if ( ! $this->get_option( 'knowledge_output' ) )
-			return '';
-
-		$knowledge_type = $this->get_option( 'knowledge_type' );
+		if ( $this->is_singular() ) {
+			$meta['noindex']   = empty( $meta['noindex'] ) && $this->get_custom_field( '_genesis_noindex' ) ? 'noindex' : $meta['noindex'];
+			$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->get_custom_field( '_genesis_nofollow' ) ? 'nofollow' : $meta['nofollow'];
+			$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->get_custom_field( '_genesis_noarchive' ) ? 'noarchive' : $meta['noarchive'];
+		}
 
 		/**
-		 * Forgot to add this.
-		 * @since 2.4.3
+		 * Applies filters the_seo_framework_robots_meta_array : array
+		 * @since 2.6.0
 		 */
-		$knowledge_name = $this->get_option( 'knowledge_name' );
-		$knowledge_name = ! empty( $knowledge_name ) ? $knowledge_name : $this->get_blogname();
+		$meta = (array) apply_filters( 'the_seo_framework_robots_meta_array', $meta );
 
-		$context = json_encode( 'http://schema.org' );
-		$type = json_encode( ucfirst( $knowledge_type ) );
-		$name = json_encode( $knowledge_name );
-		$url = json_encode( esc_url( home_url( '/' ) ) );
+		//* Strip empty array items
+		$meta = array_filter( $meta );
 
-		$logo = '';
-
-		if ( $this->get_option( 'knowledge_logo' ) && 'organization' === $knowledge_type ) {
-			$icon = $this->site_icon();
-
-			if ( ! empty( $icon ) ) {
-				$logourl = esc_url_raw( $icon );
-
-				//* Add trailing comma
-				$logo = '"logo":' . json_encode( $logourl ) . ',';
-			}
-		}
-
-		/**
-		 * Fetch option names
-		 *
-		 * @uses filter the_seo_framework_json_options
-		 */
-		$options = (array) apply_filters( 'the_seo_framework_json_options', array(
-			'knowledge_facebook',
-			'knowledge_twitter',
-			'knowledge_gplus',
-			'knowledge_instagram',
-			'knowledge_youtube',
-			'knowledge_linkedin',
-			'knowledge_pinterest',
-			'knowledge_soundcloud',
-			'knowledge_tumblr',
-		) );
-
-		$sameurls = '';
-		$comma = ',';
-
-		//* Put the urls together from the options.
-		if ( is_array( $options ) ) {
-			foreach ( $options as $option ) {
-				$the_option = $this->get_option( $option );
-
-				if ( '' !== $the_option )
-					$sameurls .= json_encode( $the_option ) . $comma;
-			}
-		}
-
-		//* Remove trailing comma
-		$sameurls = rtrim( $sameurls, $comma );
-		$json = '';
-
-		if ( ! empty( $sameurls ) )
-			$json = sprintf( '{"@context":%s,"@type":%s,"name":%s,"url":%s,%s"sameAs":[%s]}', $context, $type, $name, $url, $logo, $sameurls );
-
-		return $json;
-	}
-
-	/**
-	 * Get the archive Title.
-	 *
-	 * WordPress core function 4.1.0
-	 *
-	 * @since 2.3.6
-	 */
-	public function get_the_archive_title() {
-
-		//* Return WP Core function.
-		if ( function_exists( 'get_the_archive_title' ) )
-			return get_the_archive_title();
-
-		if ( is_category() ) {
-			/* translators: Front-end output. */
-			$title = sprintf( __( 'Category: %s', 'autodescription' ), single_cat_title( '', false ) );
-		} elseif ( is_tag() ) {
-			/* translators: Front-end output. */
-			$title = sprintf( __( 'Tag: %s', 'autodescription' ), single_tag_title( '', false ) );
-		} elseif ( is_author() ) {
-			/* translators: Front-end output. */
-			$title = sprintf( __( 'Author: %s', 'autodescription' ), '<span class="vcard">' . get_the_author() . '</span>' );
-		} elseif ( is_year() ) {
-			/* translators: Front-end output. */
-			$title = sprintf( __( 'Year: %s', 'autodescription' ), get_the_date( _x( 'Y', 'yearly archives date format', 'autodescription' ) ) );
-		} elseif ( is_month() ) {
-			/* translators: Front-end output. */
-			$title = sprintf( __( 'Month: %s', 'autodescription' ), get_the_date( _x( 'F Y', 'monthly archives date format', 'autodescription' ) ) );
-		} elseif ( is_day() ) {
-			/* translators: Front-end output. */
-			$title = sprintf( __( 'Day: %s', 'autodescription' ), get_the_date( _x( 'F j, Y', 'daily archives date format', 'autodescription' ) ) );
-		} elseif ( is_tax( 'post_format' ) ) {
-			if ( is_tax( 'post_format', 'post-format-aside' ) ) {
-				/* translators: Front-end output. */
-				$title = _x( 'Asides', 'post format archive title', 'autodescription' );
-			} elseif ( is_tax( 'post_format', 'post-format-gallery' ) ) {
-				/* translators: Front-end output. */
-				$title = _x( 'Galleries', 'post format archive title', 'autodescription' );
-			} elseif ( is_tax( 'post_format', 'post-format-image' ) ) {
-				/* translators: Front-end output. */
-				$title = _x( 'Images', 'post format archive title', 'autodescription' );
-			} elseif ( is_tax( 'post_format', 'post-format-video' ) ) {
-				/* translators: Front-end output. */
-				$title = _x( 'Videos', 'post format archive title', 'autodescription' );
-			} elseif ( is_tax( 'post_format', 'post-format-quote' ) ) {
-				/* translators: Front-end output. */
-				$title = _x( 'Quotes', 'post format archive title', 'autodescription' );
-			} elseif ( is_tax( 'post_format', 'post-format-link' ) ) {
-				/* translators: Front-end output. */
-				$title = _x( 'Links', 'post format archive title', 'autodescription' );
-			} elseif ( is_tax( 'post_format', 'post-format-status' ) ) {
-				/* translators: Front-end output. */
-				$title = _x( 'Statuses', 'post format archive title', 'autodescription' );
-			} elseif ( is_tax( 'post_format', 'post-format-audio' ) ) {
-				/* translators: Front-end output. */
-				$title = _x( 'Audio', 'post format archive title', 'autodescription' );
-			} elseif ( is_tax( 'post_format', 'post-format-chat' ) ) {
-				/* translators: Front-end output. */
-				$title = _x( 'Chats', 'post format archive title', 'autodescription' );
-			}
-		} elseif ( is_post_type_archive() ) {
-			/* translators: Front-end output. */
-			$title = sprintf( __( 'Archives: %s' ), post_type_archive_title( '', false ) );
-		} elseif ( is_tax() ) {
-			$tax = get_taxonomy( get_queried_object()->taxonomy );
-			/* translators: Front-end output. 1: Taxonomy singular name, 2: Current taxonomy term */
-			$title = sprintf( __( '%1$s: %2$s', 'autodescription' ), $tax->labels->singular_name, single_term_title( '', false ) );
-		} else {
-			/* translators: Front-end output. */
-			$title = __( 'Archives', 'autodescription' );
-		}
-
-		/**
-		* Filter the archive title.
-		*
-		* @since 4.1.0
-		*
-		* @param string $title Archive title to be displayed.
-		*/
-		return apply_filters( 'get_the_archive_title', $title );
+		return $meta;
 	}
 
 	/**
@@ -3750,7 +3230,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 			return $sep_esc[$type][$escape];
 
 		if ( ! isset( $sepcache[$type] ) ) {
-			if ( 'title' == $type ) {
+			if ( 'title' === $type ) {
 				$sep_option = $this->get_option( 'title_seperator' ); // Note: typo.
 			} else {
 				$sep_option = $this->get_option( $type . '_separator' );
@@ -3760,7 +3240,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 				$sep = '|';
 			} else if ( 'dash' === $sep_option ) {
 				$sep = '-';
-			} else if ( ! empty( $sep_option ) ) {
+			} else if ( '' !== $sep_option ) {
 				//* Encapsulate within html entities.
 				$sep = '&' . $sep_option . ';';
 			} else {
@@ -3788,7 +3268,7 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 */
 	public function get_blogname() {
 
-		$blogname = null;
+		static $blogname = null;
 
 		if ( isset( $blogname ) )
 			return $blogname;
@@ -3806,12 +3286,14 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 	 */
 	public function get_blogdescription() {
 
-		$description = null;
+		static $description = null;
 
 		if ( isset( $description ) )
 			return $description;
 
-		return $description = trim( get_bloginfo( 'description', 'display' ) );
+		$description = trim( get_bloginfo( 'description', 'display' ) );
+
+		return $description = $description ? $description : $this->untitled();
 	}
 
 	/**
@@ -3833,11 +3315,17 @@ class AutoDescription_Generate extends AutoDescription_PostData {
 		$valid_locales = (array) $this->fb_locales();
 		$default = 'en_US';
 
+		if ( $match_len > 5 ) {
+			//* More than full is used. Make it just full.
+			$match = substr( $match, 0, 5 );
+			$match_len = 5;
+		}
+
 		if ( 5 === $match_len ) {
 			//* Full locale is used.
 
 			//* Return the match if found.
-			if ( $this->in_array( $match, $valid_locales ) )
+			if ( in_array( $match, $valid_locales ) )
 				return $match;
 
 			//* Convert to only language portion.
