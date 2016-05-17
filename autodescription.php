@@ -2,13 +2,8 @@
 /**
  * Plugin Name: The SEO Framework
  * Plugin URI: https://wordpress.org/plugins/autodescription/
-<<<<<<< HEAD
- * Description: The SEO Framework makes sure your SEO is always up-to-date without any configuration needed. It's based upon the Genesis SEO.
- * Version: 2.5.2.4
-=======
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.
  * Version: 2.6.0
->>>>>>> ef405fe90ddfcedfe3f7898dcde7198f4eccf621
  * Author: Sybre Waaijer
  * Author URI: https://cyberwire.nl/
  * License: GPLv3
@@ -48,11 +43,7 @@
  *
  * @since 1.0.0
  */
-<<<<<<< HEAD
-define( 'THE_SEO_FRAMEWORK_VERSION', '2.5.2.4' );
-=======
 define( 'THE_SEO_FRAMEWORK_VERSION', '2.6.0' );
->>>>>>> ef405fe90ddfcedfe3f7898dcde7198f4eccf621
 
 /**
  * Plugin options filter

@@ -1023,46 +1023,4 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		return $pof = 'page' === get_option( 'show_on_front' ) ? true : false;
 	}
 
-	/**
-	 * The amount of pages.
-	 * Fetches global $page through Query Var.
-	 *
-	 * @staticvar int $page
-	 * @since 2.5.2.4
-	 *
-	 * @return int $page
-	 */
-	public function page() {
-
-		static $page = null;
-
-		if ( isset( $page ) )
-			return $page;
-
-		$page = get_query_var( 'page' );
-
-		return $page = $page ? (int) $page : 1;
-	}
-
-	/**
-	 * The number of the current page.
-	 * Fetches global $paged through Query Var. Determines
-	 *
-	 * @staticvar int $paged
-	 * @since 2.5.2.4
-	 *
-	 * @return int $paged
-	 */
-	public function paged() {
-
-		static $paged = null;
-
-		if ( isset( $paged ) )
-			return $paged;
-
-		$paged = get_query_var( 'paged' );
-
-		return $paged = $paged ? (int) $paged : 1;
-	}
-
 }

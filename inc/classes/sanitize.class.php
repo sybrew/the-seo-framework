@@ -103,17 +103,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		);
 
 		$this->autodescription_add_option_filter(
-			's_title',
-			$this->settings_field,
-			array(
-				'homepage_title',
-				'homepage_title_tagline',
-
-				'knowledge_name',
-			)
-		);
-
-		$this->autodescription_add_option_filter(
 			's_knowledge_type',
 			$this->settings_field,
 			array(
@@ -551,23 +540,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		$description = trim( implode( $new_lines ) );
 
 		return (string) strip_tags( $description );
-	}
-
-	/**
-	 * Returns a sanitized and trimmed title.
-	 *
-	 * @since 2.5.2
-	 *
-	 * @param string $new_value The Title
-	 *
-	 * @return string Sanitized and trimmed title.
-	 */
-	protected function s_title( $new_value ) {
-
-		$title = esc_html( $new_value );
-		$title = trim( $title );
-
-		return (string) strip_tags( $title );
 	}
 
 	/**

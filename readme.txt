@@ -2,15 +2,9 @@
 Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl, feed
-<<<<<<< HEAD
-Requires at least: 3.6.0
-Tested up to: 4.5.1
-Stable tag: 2.5.2.4
-=======
 Requires at least: 3.8.0
 Tested up to: 4.5.2
 Stable tag: 2.6.0
->>>>>>> ef405fe90ddfcedfe3f7898dcde7198f4eccf621
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -97,11 +91,7 @@ We have also provided an API documentation located at [The SEO Framework API Doc
 
 * Prevents canonical errors with categories, pages, subdomains and Multisite Domain Mapping.
 * Disables 404 pages and empty categories from being indexed, even if they don't send a 404 response.
-<<<<<<< HEAD
-* Automatically notifies Google, Bing and Yahoo on Post or Page update when sitemaps are enabled.
-=======
 * Automatically notifies Google, Bing and Yandex on Post or Page update and deletion when sitemaps are enabled.
->>>>>>> ef405fe90ddfcedfe3f7898dcde7198f4eccf621
 
 **This plugin allows you to manually set these values for each post, page, supported CPT and term:**
 
@@ -360,80 +350,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
-<<<<<<< HEAD
-= 2.5.2.4 - Secure Globals =
-
-**Summarized**
-
-* This minor security update ensures the Runway Framework theme compatibility as well as resolving some minor security concerns.
-
-**For everyone:**
-
-* Fixed: Global Page/Paged vars could (undesirably) be overwritten by external themes, causing the website to crash on archives.
-* Improved: Various admin-only sanitation features.
-
-= 2.5.2.3 - Unfamiliar Homefront =
-
-**Summarized:**
-
-* This minor update resolves an issue where an uncommon type of Home Page as blog could be seen as an empty Archive. This results in the Home Page being removed from the Search Index.
-* 2.6.0 and all its promised features are still being developed and is due in April.
-
-**For everyone:**
-
-* Fixed: When the Home Page is a blog, it could be seen as an empty Archive when no Posts are set to published.
-* Note: This detection is actually a feature to prevent bad Archives and 404 pages from being indexed. Alas, the Home Page has enough settings and can be uncommonly adjusted by Themes and (builder) Plugins.
-
-**For whoever was affected:**
-
-* First off, I'm terribly sorry for this inconvenience and this negative hit on your Home Page.
-* Luckily, its effects aren't lasting and your Home Page will be reindexed automatically.
-* Your website was only affected by this bug if you have 0 posts published, and - at the same time - if your Home Page isn't assigned as a Static Page, but a Blog.
-
-**For whoever was affected and wants to speed things up:**
-
-* You can manually reindex your Home Page with Google and the Bing Search Network (Yahoo!, Bing, DuckDuckGo, and others whom use the Bing Search Network).
-* To do this, perform the following steps. Be sure to clear all your caches beforehand:
-
-***Google:***
-
-1. Go to [Google Webmasters](https://www.google.com/webmasters/) and sign up if you haven't already.
-1. Add your property if you haven't already.
-1. Verify your property if you haven't already. You can add the verification code they give within the Webmasters Settings metabox within the SEO Settings page. Be sure to clear your cache.
-1. Go to your property.
-1. On the left, go to `Crawl => Fetch as Google`.
-1. Without changing any details, hit "Fetch and Render".
-1. It takes up to 3 days for Google to re-index your Home Page.
-
-***Bing Search Network:***
-
-1. Go to [Bing Webmaster Tools](http://www.bing.com/toolbox/webmaster) and sign up if you haven't already.
-1. Add your property if you haven't already.
-1. Verify your property if you haven't already. You can add the verification code they give within the Webmasters Settings metabox within the SEO Settings page. Be sure to clear your cache.
-1. Go to your property.
-1. On the left, go to `Diagnostics & Tools => Fetch as Bingbot`.
-1. Enter your Home Page URL and hit "Fetch".
-1. Wait a little and Bing will output the source of your page on success.
-1. It takes up to 3 days for Bing to re-index your Home Page. It takes up to 14 days for the network to catch up.
-
-= 2.5.2.2 - Description Conditions =
-
-**Summarized:**
-
-* 2.6.0 is already underway, but I found the following fix mandatory. So here is 2.5.2.2!
-* This minor update makes sure the social description is as intended when you choose to remove the blogname from the regular description.
-
-**For everyone:**
-
-* Fixed: When description additions are disabled, the social description is no longer "Title on Blogname".
-
-= 2.5.2.1 - Unforeseen Improvements =
-
-**Summarized:**
-
-* This minor update brings you a special scenario fix that caused an unnecessary browser alert.
-* Also, object caching now works as intended and you can see a minor performance improvement when used.
-=======
 = 2.6.0 - Pragmatic Foundation =
 
 **Release date:**
@@ -491,21 +407,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * When changing the Canonical URL of a Page, you're telling robots to look and elsewhere, be sure to include a link to the new Page on the canonicalized Page to indicate where everything has moved to.
 * However, it's even better to enforce a 301 redirect. This makes sure both your visitors as Search Engines know where to be instantaneously.
 * If you've changed the permalink of a popular post, you should create an empty post that follows one of the said examples.
->>>>>>> ef405fe90ddfcedfe3f7898dcde7198f4eccf621
 
 **Announcements:**
 
-<<<<<<< HEAD
-* Improved: The HTML plugin indicators now ignore object cache. Making the filter more responsive.
-* Fixed: The HTML plugin indicator timer translation is now put to use (oops).
-* Fixed: JavaScript bug caused by undefined error where the user was prompted for settings change while there weren't any on the Post or Page edit screens when the **"Remove blogname from title?"** option is checked or when editing the home page and the **"Add site description (tagline) to the Title on the Home Page?"** is unchecked.
-* Fixed: Incompatible object cache group names.
-* Removed: Twitter card and Twitter title output on 404 and search pages. The Twitter tags rely on other tags which can't be rendered in their full extend by default on these pages. Twitter uses OG tags to fall back on.
-* Note: The per-page output cache key has changed for the output, this forces the object cache to be invalidated.
-=======
 * Back when I started developing this update, I announced a new extension plugin for The SEO Framework! [Title Fix - The SEO Framework](https://wordpress.org/plugins/the-seo-framework-title-fix/).
 * This update ensures extra compatibility with the Title Fix plugin, this will add back removed title features for if the theme is doing it wrong and when the Title Fix plugin is active.
->>>>>>> ef405fe90ddfcedfe3f7898dcde7198f4eccf621
 
 **About: Plugin progression and help wanted:**
 

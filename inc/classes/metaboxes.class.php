@@ -401,11 +401,6 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 *
 	 * @since 2.6.0
 	 *
-<<<<<<< HEAD
-	 * @see $this->description_metabox()	Callback for Description Settings box.
-	 */
-	public function description_metabox() {
-=======
 	 * @param array $additions : array {
 	 * 		'left'	=> Left Example Addtitions
 	 * 		'right'	=> Right Example Additions
@@ -415,7 +410,6 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 * @see $this->title_metabox() : Callback for Title Settings box.
 	 */
 	public function title_metabox_prefixes_tab( $additions = array(), $showleft = false ) {
->>>>>>> ef405fe90ddfcedfe3f7898dcde7198f4eccf621
 
 		$left_additions = $additions['left'];
 		$right_additions = $additions['right'];
@@ -503,10 +497,6 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 		$page_title = __( 'Example Title', 'autodescription' );
 		$on = _x( 'on', 'Placement. e.g. Post Title "on" Blog Name', 'autodescription' );
 		$excerpt = __( 'This is an example description...', 'autodescription' );
-
-		$page_title = $this->escape_description( $page_title );
-		$on = $this->escape_description( $on );
-		$excerpt = $this->escape_description( $excerpt );
 
 		$page_title = $this->escape_description( $page_title );
 		$on = $this->escape_description( $on );

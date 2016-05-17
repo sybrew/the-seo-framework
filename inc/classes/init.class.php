@@ -201,12 +201,8 @@ class AutoDescription_Init extends AutoDescription_Query {
 	 * Echos output.
 	 */
 	public function html_output() {
-<<<<<<< HEAD
-		global $blog_id;
-=======
 
 		do_action( 'the_seo_framework_do_before_output' );
->>>>>>> ef405fe90ddfcedfe3f7898dcde7198f4eccf621
 
 		/**
 		 * Start the timer here. I know it doesn't calculate the initiation of
