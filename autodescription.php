@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://wordpress.org/plugins/autodescription/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.
- * Version: 2.6.0
+ * Version: 2.6.0.1
  * Author: Sybre Waaijer
  * Author URI: https://cyberwire.nl/
  * License: GPLv3

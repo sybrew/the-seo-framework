@@ -88,7 +88,6 @@ require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-title.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-url.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-image.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-ldjson.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-author.class.php' );
 
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'search.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'doingitright.class.php' );
