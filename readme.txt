@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl, feed
 Requires at least: 3.8.0
 Tested up to: 4.5.2
-Stable tag: 2.6.0.1
+Stable tag: 2.6.0.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -347,6 +347,23 @@ Please refer to this small guide: [SEO Data Migration](http://theseoframework.co
 Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
+
+= 2.6.0.2 - Tough Understructure =
+
+**Release date:**
+
+* May 18th 2016
+
+**Summarized:**
+
+* The SEO Framework 2.6.0 "Pragmatic Foundation" (released May 17th) brought a whole new way for determining the Page Type, synchronous for both the admin side and front-end.
+* However, in some installations, a few WordPress variables may have not yet been unassigned when called within this plugin.
+* This caused a wrong cache initialization, and therefore SEO values and settings were incorrectly rendered.
+* This minor update adds determination for if the WordPress Query or Admin Page Type are accessible before caching anything to make sure no wrong status values are being used throughout the plugin.
+
+**Detailed log:**
+
+***Want to read the verbose "detailed" log? Please refer to [the detailed changelog](https://theseoframework.com/?p=1222#detailed).***
 
 = 2.6.0.1 - The real Pragmatic Foundation =
 

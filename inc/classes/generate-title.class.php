@@ -794,18 +794,18 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 */
 	public function title_from_custom_field( $title = '', $escape = false, $id = null, $taxonomy = null ) {
 
-		$id = isset( $id ) ? $id : $this->get_the_real_ID();
+		$id = isset( $id ) ? $id : null;
 
 		/**
 		 * Create something special for blog page. Only if it's not the home page.
 		 * @since 2.2.8
 		 */
-		if ( $this->is_blog_page( $id ) ) {
-			//* Posts page title.
-			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : get_the_title( $id );
-		} else if ( $this->is_singular() ) {
+		if ( $this->is_singular() ) {
 			//* Get title from custom field, empty it if it's not there to override the default title
 			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : $title;
+		} else if ( $this->is_blog_page( $id ) ) {
+			//* Posts page title.
+			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : get_the_title( $id );
 		} else if ( $this->is_archive() || ( $id && $taxonomy ) ) {
 			//* Get the custom title for terms.
 			$term = get_term( $id, $taxonomy, OBJECT, 'raw' );
@@ -1035,6 +1035,9 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 * @return string Post Title
 	 */
 	public function post_title_from_ID( $id = 0, $title = '' ) {
+
+		if ( $this->is_archive() )
+			return $title;
 
 		$post = get_post( $id, OBJECT );
 

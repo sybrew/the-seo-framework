@@ -1,0 +1,512 @@
+Index: autodescription.php
+===================================================================
+--- autodescription.php	(revision 1418942)
++++ autodescription.php	(working copy)
+@@ -3,7 +3,7 @@
+  * Plugin Name: The SEO Framework
+  * Plugin URI: https://wordpress.org/plugins/autodescription/
+  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.
+- * Version: 2.6.0.1
++ * Version: 2.6.0.2
+  * Author: Sybre Waaijer
+  * Author URI: https://cyberwire.nl/
+  * License: GPLv3
+@@ -43,7 +43,7 @@
+  *
+  * @since 1.0.0
+  */
+-define( 'THE_SEO_FRAMEWORK_VERSION', '2.6.0' );
++define( 'THE_SEO_FRAMEWORK_VERSION', '2.6.0.2' );
+ 
+ /**
+  * Plugin options filter
+Index: inc/classes/generate-title.class.php
+===================================================================
+--- inc/classes/generate-title.class.php	(revision 1418924)
++++ inc/classes/generate-title.class.php	(working copy)
+@@ -794,18 +794,18 @@
+ 	 */
+ 	public function title_from_custom_field( $title = '', $escape = false, $id = null, $taxonomy = null ) {
+ 
+-		$id = isset( $id ) ? $id : $this->get_the_real_ID();
++		$id = isset( $id ) ? $id : null;
+ 
+ 		/**
+ 		 * Create something special for blog page. Only if it's not the home page.
+ 		 * @since 2.2.8
+ 		 */
+-		if ( $this->is_blog_page( $id ) ) {
++		if ( $this->is_singular() ) {
++			//* Get title from custom field, empty it if it's not there to override the default title
++			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : $title;
++		} else if ( $this->is_blog_page( $id ) ) {
+ 			//* Posts page title.
+ 			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : get_the_title( $id );
+-		} else if ( $this->is_singular() ) {
+-			//* Get title from custom field, empty it if it's not there to override the default title
+-			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : $title;
+ 		} else if ( $this->is_archive() || ( $id && $taxonomy ) ) {
+ 			//* Get the custom title for terms.
+ 			$term = get_term( $id, $taxonomy, OBJECT, 'raw' );
+@@ -1036,6 +1036,9 @@
+ 	 */
+ 	public function post_title_from_ID( $id = 0, $title = '' ) {
+ 
++		if ( $this->is_archive() )
++			return $title;
++
+ 		$post = get_post( $id, OBJECT );
+ 
+ 		return $title = isset( $post->post_title ) ? $post->post_title : $title;
+Index: inc/classes/query.class.php
+===================================================================
+--- inc/classes/query.class.php	(revision 1418924)
++++ inc/classes/query.class.php	(working copy)
+@@ -34,6 +34,29 @@
+ 	}
+ 
+ 	/**
++	 * Checks whether $wp_query or $current_screen is set.
++	 *
++	 * @since 2.6.1
++	 * @staticvar bool $cache : Always true if set.
++	 * @global object $wp_query
++	 * @global object|null $current_screen
++	 *
++	 * @return bool True when WP_Query has been initialized.
++	 */
++	public function can_cache_query() {
++
++		static $cache = null;
++
++		if ( isset( $cache ) )
++			return $cache;
++
++		if ( isset( $GLOBALS['wp_query']->query ) || isset( $GLOBALS['current_screen'] ) )
++			return $cache = true;
++
++		return false;
++	}
++
++	/**
+ 	 * Get the real page ID, also depending on CPT.
+ 	 *
+ 	 * @param bool $use_cache Whether to use the cache or not.
+@@ -56,6 +79,9 @@
+ 
+ 			if ( isset( $id ) )
+ 				return $id;
++
++			if ( false === $this->can_cache_query() )
++				return false;
+ 		}
+ 
+ 		$id = $is_admin ? '' : $this->check_the_real_ID();
+@@ -93,6 +119,9 @@
+ 		if ( isset( $cached_id ) )
+ 			return $cached_id;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		$id = '';
+ 
+ 		if ( $this->is_wc_shop() ) {
+@@ -124,6 +153,9 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		if ( is_404() )
+ 			return $cache = true;
+ 
+@@ -145,6 +177,9 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		if ( is_admin() )
+ 			return $cache = true;
+ 
+@@ -169,6 +204,9 @@
+ 		if ( isset( $cache[$attachment] ) )
+ 			return $cache[$attachment];
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		if ( $this->is_singular( $attachment ) && is_attachment( $attachment ) )
+ 			return $cache[$attachment] = true;
+ 
+@@ -193,6 +231,9 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		if ( is_archive() && false === $this->is_singular() )
+ 			return $cache = true;
+ 
+@@ -216,6 +257,9 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		global $current_screen;
+ 
+ 		if ( isset( $current_screen->base ) && ( 'edit-tags' === $current_screen->base || 'term' === $current_screen->base ) )
+@@ -241,6 +285,9 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		global $current_screen;
+ 
+ 		if ( $this->wp_version( '4.4.9999', '>=' ) ) {
+@@ -271,9 +318,12 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		global $current_screen;
+ 
+-		if ( isset( $current_screen->base ) && ( 'post' === $current_screen->base ) )
++		if ( isset( $current_screen->base ) && 'post' === $current_screen->base )
+ 			return $cache = true;
+ 
+ 		return $cache = false;
+@@ -296,10 +346,13 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		global $current_screen;
+ 
+ 		//* @NOTE USE WITH CAUTION - WP 4.5 & < 4.5 conflict.
+-		if ( isset( $current_screen->base ) && ( ( 'edit' === $current_screen->base ) || ( 'edit-tags' === $current_screen->base ) ) )
++		if ( isset( $current_screen->base ) && ( 'edit' === $current_screen->base || 'edit-tags' === $current_screen->base ) )
+ 			return $cache = true;
+ 
+ 		return $cache = false;
+@@ -323,6 +376,9 @@
+ 		if ( isset( $cache[$author] ) )
+ 			return $cache[$author];
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		if ( $this->is_archive() && is_author( $author ) )
+ 			return $cache[$author] = true;
+ 
+@@ -350,6 +406,9 @@
+ 		if ( isset( $is_blog_page[$id] ) )
+ 			return $is_blog_page[$id];
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		$pfp = (int) get_option( 'page_for_posts' );
+ 
+ 		if ( $id === $pfp ) {
+@@ -383,6 +442,9 @@
+ 		if ( isset( $cache[$category] ) )
+ 			return $cache[$category];
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		if ( $this->is_archive() && is_category( $category ) )
+ 			return $cache[$category] = true;
+ 
+@@ -406,13 +468,14 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
+-		if ( $this->is_archive_admin() ) {
+-			global $current_screen;
++		if ( false === $this->can_cache_query() )
++			return false;
+ 
+-			if ( isset( $current_screen->taxonomy ) ) {
+-				if ( false !== strrpos( $current_screen->taxonomy, 'category', -8 ) || false !== strrpos( $current_screen->taxonomy, 'cat', -3 ) )
+-					return $cache = true;
+-			}
++		global $current_screen;
++
++		if ( $this->is_archive_admin() && isset( $current_screen->taxonomy ) ) {
++			if ( false !== strrpos( $current_screen->taxonomy, 'category', -8 ) || false !== strrpos( $current_screen->taxonomy, 'cat', -3 ) )
++				return $cache = true;
+ 		}
+ 
+ 		return $cache = false;
+@@ -434,6 +497,9 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		if ( $this->is_archive() && is_date() )
+ 			return $cache = true;
+ 
+@@ -456,6 +522,9 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		if ( $this->is_date() && is_day() )
+ 			return $cache = true;
+ 
+@@ -479,6 +548,9 @@
+ 		if ( isset( $cache[$feeds] ) )
+ 			return $cache[$feeds];
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		if ( is_feed( $feeds ) )
+ 			return $cache[$feeds] = true;
+ 
+@@ -502,6 +574,9 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		if ( is_front_page() )
+ 			return $cache = true;
+ 
+@@ -533,6 +608,9 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		if ( is_home() )
+ 			return $cache = true;
+ 
+@@ -555,6 +633,9 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		if ( $this->is_date() && is_month() )
+ 			return $cache = true;
+ 
+@@ -579,6 +660,9 @@
+ 		if ( isset( $cache[$page] ) )
+ 			return $cache[$page];
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		if ( $this->is_singular( $page ) ) {
+ 			if ( is_page( $page ) )
+ 				return $cache[$page] = true;
+@@ -603,6 +687,10 @@
+ 	 * @return bool
+ 	 */
+ 	public function is_page_admin( $page = '' ) {
++
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		global $current_screen;
+ 
+ 		if ( isset( $current_screen->post_type ) && 'page' === $current_screen->post_type )
+@@ -626,6 +714,9 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		if ( is_preview() )
+ 			return $cache = true;
+ 
+@@ -647,6 +738,9 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		if ( is_search() )
+ 			return $cache = true;
+ 
+@@ -671,6 +765,9 @@
+ 		if ( isset( $cache[$post] ) )
+ 			return $cache[$post];
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		if ( $this->is_singular( $post ) ) {
+ 			if ( is_single( $post ) )
+ 				return $cache[$post] = true;
+@@ -727,6 +824,9 @@
+ 		if ( isset( $cache[$post_types] ) )
+ 			return $cache[$post_types];
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		//* WP_Query functions require loop, do alternative check.
+ 		if ( $this->is_admin() )
+ 			return $cache[$post_types] = $this->is_singular_admin();
+@@ -768,6 +868,9 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		global $current_screen;
+ 
+ 		if ( isset( $current_screen->base ) && ( 'edit' === $current_screen->base || 'post' === $current_screen->base ) )
+@@ -827,6 +930,9 @@
+ 		if ( isset( $cache[$tag] ) )
+ 			return $cache[$tag];
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		//* Admin requires another check.
+ 		if ( $this->is_admin() )
+ 			return $cache[$tag] = $this->is_tag_admin();
+@@ -854,6 +960,9 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		if ( $this->is_archive_admin() ) {
+ 			global $current_screen;
+ 
+@@ -883,6 +992,9 @@
+ 		if ( isset( $cache[$taxonomy][$term] ) )
+ 			return $cache[$taxonomy][$term];
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		if ( $this->is_archive() && is_tax( $taxonomy, $term ) )
+ 			return $cache[$taxonomy][$term] = true;
+ 
+@@ -905,6 +1017,9 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		$caniuse = (bool) $this->can_i_use( array( 'functions' => array( 'um_user', 'um_is_core_page', 'um_get_requested_user' ) ), false );
+ 
+ 		return $cache = $caniuse;
+@@ -924,6 +1039,9 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		//* Can't check in admin.
+ 		if ( false === $this->is_admin() && function_exists( 'is_shop' ) && is_shop() )
+ 			return $cache = true;
+@@ -945,6 +1063,9 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		//* Can't check in admin.
+ 		if ( false === $this->is_admin() && function_exists( 'is_product' ) && is_product() )
+ 			return $cache = true;
+@@ -968,6 +1089,9 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		if ( $this->is_date() && is_year() )
+ 			return $cache = true;
+ 
+@@ -989,6 +1113,9 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		return $cache = $this->is_menu_page( $this->page_id );
+ 	}
+ 
+@@ -1008,6 +1135,9 @@
+ 		if ( isset( $page ) )
+ 			return $page;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		$page = get_query_var( 'page' );
+ 
+ 		return $page = $page ? (int) $page : 1;
+@@ -1029,6 +1159,9 @@
+ 		if ( isset( $paged ) )
+ 			return $paged;
+ 
++		if ( false === $this->can_cache_query() )
++			return false;
++
+ 		$paged = get_query_var( 'paged' );
+ 
+ 		return $paged = $paged ? (int) $paged : 1;
+Index: inc/classes/siteoptions.class.php
+===================================================================
+--- inc/classes/siteoptions.class.php	(revision 1418924)
++++ inc/classes/siteoptions.class.php	(working copy)
+@@ -392,6 +392,12 @@
+ 		$options = $this->get_all_options();
+ 		$default_options = $this->default_site_options();
+ 
++		/**
++		 * Stop this madness from happening again until next update.
++		 * Also prevent $updated returning true when no options are added.
++		 */
++		$options[$plugin_updated] = 1;
++
+ 		//* Merge the options. Add to if it's non-existent.
+ 		foreach ( $default_options as $key => $value ) {
+ 			if ( ! isset( $options[$key] ) ) {
+@@ -402,9 +408,6 @@
+ 			}
+ 		}
+ 
+-		//* Stop this madness from happening again until next update.
+-		$options[$plugin_updated] = 1;
+-
+ 		//* Updated the options. Check for updated flag and see if settings pages are loaded.
+ 		if ( update_option( $this->settings_field, $options ) && $updated && $this->load_options ) {
+ 			$this->pre_output_site_updated_plugin_notice();
