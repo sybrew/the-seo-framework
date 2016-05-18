@@ -90,7 +90,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 			//* Does not always return false.
 			$id = get_queried_object_id();
 
-			if ( empty( $id ) && false === $this->is_archive() )
+			if ( empty( $id ) && false === is_archive() )
 				$id = get_the_ID();
 		}
 

@@ -380,4 +380,94 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 		return;
 	}
 
+	/**
+	 * Old style method for detecting SEO plugins.
+	 *
+	 * @since 2.6.1
+	 * @access private
+	 *
+	 * @return bool
+	 *
+	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
+	 */
+	public function detect_seo_plugins_old() {
+
+		/**
+		 * Applies filters 'the_seo_framework_detect_seo_plugins' : array
+		 * @deprecated
+		 * @since 2.6.1
+		 *
+		 * Use this filter to adjust plugin tests.
+		 */
+		$plugins_check = apply_filters(
+			'the_seo_framework_detect_seo_plugins',
+			//* Add to this array to add new plugin checks.
+			null
+		);
+
+		if ( isset( $plugins_check ) ) {
+			$this->_deprecated_function( 'the_seo_framework_detect_seo_plugins', 'the_seo_framework_conflicting_plugins', '2.6.1' );
+			return $this->detect_plugin( $plugins_check );
+		}
+
+		return null;
+	}
+
+
+	/**
+	 * Detects if plugins outputting og:type exists
+	 *
+	 * @note isn't used in $this->og_image() Because og:image may be output multiple times.
+	 *
+	 * @uses $this->detect_plugin()
+	 *
+	 * @since 1.3.0
+	 * @return bool OG plugin detected.
+	 *
+	 * @staticvar bool $has_plugin
+	 * @since 2.2.5
+	 *
+	 * @return bool $has_plugin one of the plugins has been found.
+	 */
+	public function has_og_plugin() {
+
+		/**
+		 * Applies filters 'the_seo_framework_detect_og_plugins' : array
+		 * @since 2.6.1
+		 * @deprecated
+		 * @since 2.6.1 (same patch)
+		 *
+		 * Use this filter to adjust plugin tests.
+		 */
+		$plugins_check = apply_filters(
+			'the_seo_framework_detect_og_plugins',
+			//* Add to this array to add new plugin checks.
+			null
+		);
+
+		if ( isset( $plugins_check ) ) {
+			$this->_deprecated_function( 'the_seo_framework_detect_og_plugins', 'the_seo_framework_conflicting_plugins', '2.6.1' );
+			return $this->detect_plugin( $plugins_check );
+		}
+
+		return null;
+	}
+
+	/**
+	 * Detecs sitemap plugins
+	 *
+	 * @since 2.1.0
+	 * @staticvar bool $detected
+	 *
+	 * @deprecated
+	 * @since 2.6.1
+	 *
+	 * @return bool
+	 */
+	public function has_sitemap_plugin() {
+		$this->_deprecated_function( 'AutoDescription_Detect::' . __FUNCTION__, 'AutoDescription_Detect::detect_sitemap_plugin', '2.6.1' );
+
+		return $this->detect_sitemap_plugin();
+	}
+
 }

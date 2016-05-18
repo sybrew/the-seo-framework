@@ -310,7 +310,9 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 			$type = (string) apply_filters( 'the_seo_framework_ogtype_output', '', $this->get_the_real_ID() );
 
 			if ( empty( $type ) ) {
-				if ( $this->is_single() && $this->get_image_from_cache() ) {
+				if ( $this->is_wc_product() ) {
+					$type = 'product';
+				} else if ( $this->is_single() && $this->get_image_from_cache() ) {
 					$type = 'article';
 				} else if ( $this->is_author() ) {
 					$type = 'profile';
@@ -593,7 +595,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	}
 
 	/**
-	 * Render twitter:image
+	 * Render twitter:image:src
 	 *
 	 * @param string $image url for image
 	 *
@@ -625,7 +627,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 			}
 
 			if ( $image )
-				return '<meta name="twitter:image" content="' . esc_attr( $image ) . '" />' . "\r\n";
+				return '<meta name="twitter:image:src" content="' . esc_attr( $image ) . '" />' . "\r\n";
 		}
 
 		return '';
@@ -835,7 +837,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	public function ld_json() {
 
 		//* Check for LD+JSON compat
-		if ( $this->has_json_ld_plugin() || $this->is_search() || $this->is_404() )
+		if ( $this->is_search() || $this->is_404() )
 			return;
 
 		/**
@@ -1058,7 +1060,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		if ( isset( $cache ) )
 			return $cache;
 
-		return $cache = $this->is_option_checked( 'og_tags' );
+		return $cache = $this->is_option_checked( 'og_tags' ) && false === $this->detect_og_plugin();
 	}
 
 	/**
@@ -1094,7 +1096,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		if ( isset( $cache ) )
 			return $cache;
 
-		return $cache = $this->is_option_checked( 'twitter_tags' );
+		return $cache = $this->is_option_checked( 'twitter_tags' ) && false == $this->detect_twitter_card_plugin();
 	}
 
 	/**

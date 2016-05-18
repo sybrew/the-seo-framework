@@ -564,15 +564,4 @@ class AutoDescription_Core {
 		return date_default_timezone_set( $tzstring );
 	}
 
-	/**
-	 * Resets the timezone to default or UTC.
-	 *
-	 * @since 2.6.0
-	 *
-	 * @return bool True on success. False on failure.
-	 */
-	public function reset_timezone() {
-		return $this->set_timezone( '', true );
-	}
-
 }

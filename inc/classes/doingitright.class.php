@@ -971,10 +971,12 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		$desc_too_many = '';
 
 		//* Convert description's special characters into PHP readable words.
-		$description = htmlentities( $description, ENT_XHTML );
+		$description = htmlentities( $description, ENT_COMPAT );
+
+		//* Because we've converted all characters to XHTML codes, the odd ones should be only numerical.
+		$html_special_chars = '&0123456789;';
 
 		//* Count the words.
-		$html_special_chars = '&0123456789;';
 		$desc_words = str_word_count( strtolower( $description ), 2, $html_special_chars );
 
 		static $bother_me_length = null;

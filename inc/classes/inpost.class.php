@@ -75,7 +75,7 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 		$show_seobox = (bool) apply_filters( 'the_seo_framework_seobox_output', true );
 
 		if ( $show_seobox )
-			add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box' ), 10, 2 );
+			add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box' ), 10, 1 );
 
 	}
 
@@ -113,11 +113,10 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 	 * Adds SEO Meta boxes beneath every page/post edit screen.
 	 *
 	 * @param string $post_type The current Post Type.
-	 * @param object $post The post Object. Unused.
 	 *
 	 * @since 2.0.0
 	 */
-	public function add_inpost_seo_box( $post_type, $post ) {
+	public function add_inpost_seo_box( $post_type ) {
 
 		/**
 		 * @uses $this->post_type_supports_custom_seo()

@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl, feed
 Requires at least: 3.8.0
 Tested up to: 4.5.2
-Stable tag: 2.6.0.2
+Stable tag: 2.6.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -348,6 +348,66 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
+= 2.6.1 - Pacified Handling =
+
+**Release data:**
+
+* May 19th 2016
+
+**Summarized:**
+
+* The new plugin detection features from 2.6.0 "Pragmatic Foundation" was done in a manner that any arbitrary plugin could be detected with conflicting namespaces.
+* For this reason, I've taken JetPack's philosophical standpoint on this and implemented it within The SEO Framework.
+* The new special Greek/Latin duplicated word counter now also works great on PHP versions 5.2 and 5.3.
+* And in some configurations, the Home Page Title could have been rendered empty, so I got that fixed as well!
+* For developers, many new filters have been added for plugin detection, be sure to check them out in the detailed log.
+
+**Feature highlights:**
+
+* **New:**
+	* Twitter and Open Graph image tags now obtained a corresponding resoltion tag output.
+	* Open Graph Product types are now supported on WooCommerce products.
+
+* **Improved:**
+	* The Twitter Image tag has been updated to the latest standards.
+	* Revised plugin detection.
+
+**SEO Tip of the Update - Image Descriptions:**
+
+* Do you use Images in your Posts and Pages? Be sure to describe them! This way people are able to find your website through the Image Results.
+* This can be easily done when editing the Image through WordPress' Media Library or when inserting an Image in the content. When you click on an Image, you can define various details.
+* The Alt Text is to be used. If that's not found, the Image Caption is used. And if that's also not found, then the Image Title will be used.
+* Make sure it clearly describes the Image, and be aware that it will fall back to it when the browser can't render the Image. It's also a great additions for people who are vision impaired.
+
+**Detailed log:**
+
+***Love details? Then head onto [the detailed changelog](https://theseoframework.com/?p=xxxx#detailed).***
+
+**For developers:**
+
+* **Improved:**
+	* Removed the 2nd parameter `$post` from `AutoDescription_Inpost::add_inpost_seo_box`, as it's unused and caused a PHP warning in some CPT edit screens.
+* **Changed:**
+	* `AutoDescription_Detect::has_json_ld_plugin()` now always returns false.
+* **Removed:**
+	* `AutoDescription_Detect::is_theme()` no longer caches results to preserve memory.
+* **Filter Notes:**
+	* **Added:**
+		* `(array) the_seo_framework_detect_og_plugins` (Note: deprecated this patch)
+		* `(array) the_seo_framework_conflicting_plugins`
+		* `(array) the_seo_framework_conflicting_plugins_type`
+		* `(bool) the_seo_framework_seo_plugin_detected`
+		* `(bool) the_seo_framework_og_plugin_detected`
+		* `(bool) the_seo_framework_twittercard_plugin_detected`
+		* `(bool) the_seo_framework_sitemap_plugin_detected`
+	* **Deprecated:**
+		* `(array) the_seo_framework_detect_og_plugins` (Note: added this patch)
+		* `(array) the_seo_framework_detect_seo_plugins`
+* **Notes:**
+	* As described in the 2.6.0 update, there was concern for a possible conflict and confusion with the home page title. This has now been resolved.
+	* Be sure to use in the blogname as title and title as blogname in `AutoDescription_Generate_Title::process_title_additions()`. As it's effectively switched on the home page. This is the only function that switches it.
+	* I'm considering an extra parameter for dealing with the home page on that function. Which should, by it's fundamental design, automatically be backwards compatible.
+
 = 2.6.0.2 - Tough Understructure =
 
 **Release date:**
@@ -356,8 +416,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Summarized:**
 
-* The SEO Framework 2.6.0 "Pragmatic Foundation" (released May 17th) brought a whole new way for determining the Page Type, synchronous for both the admin side and front-end.
-* However, in some installations, a few WordPress variables may have not yet been unassigned when called within this plugin.
+* The SEO Framework 2.6.0 "Pragmatic Foundation" (released May 17th) brought a whole new way for determining the Page Type, synchronous with both the admin side and the front-end.
+* However, in some installations, a few WordPress variables may have not yet been assigned when called within this plugin.
 * This caused a wrong cache initialization, and therefore SEO values and settings were incorrectly rendered.
 * This minor update adds determination for if the WordPress Query or Admin Page Type are accessible before caching anything to make sure no wrong status values are being used throughout the plugin.
 

@@ -907,6 +907,13 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 
 	}
 
+	/**
+	 * HomePage Metabox General Tab Output
+	 *
+	 * @since 2.6.0
+	 *
+	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
+	 */
 	public function homepage_metabox_general() {
 
 		/**
@@ -959,7 +966,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 		 * @since 2.2.4
 		 */
 		$home_title_args = $this->generate_home_title( true, '', '', true, false );
-		$home_title_placeholder = $this->process_title_additions( $home_title_args['title'], $home_title_args['blogname'], $home_title_args['seplocation'] );
+		$home_title_placeholder = $this->process_title_additions( $home_title_args['blogname'], $home_title_args['title'], $home_title_args['seplocation'] );
 
 		/**
 		 * If the home title is fetched from the post, notify about that instead.
@@ -979,7 +986,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 		 */
 		if ( $home_title ) {
 			$home_title_args = $this->generate_home_title();
-			$tit_len_pre = $this->process_title_additions( $home_title_args['title'], $home_title_args['blogname'], $home_title_args['seplocation'] );
+			$tit_len_pre = $this->process_title_additions( $home_title_args['blogname'], $home_title_args['title'], $home_title_args['seplocation'] );
 		} else {
 			$tit_len_pre = $home_title_placeholder;
 		}
@@ -1094,7 +1101,6 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 
 	}
 
-
 	/**
 	 * HomePage Metabox Additions Tab Output
 	 *
@@ -1111,9 +1117,9 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 		 */
 		$title_args = $this->generate_home_title();
 
-		//* I know, brilliant. @TODO @priority high 2.6.x.
-		$title = $title_args['blogname'];
-		$blogname = $title_args['title'];
+		//* I know, brilliant.
+		$title = $title_args['title'];
+		$blogname = $title_args['blogname'];
 
 		// Get title separator
 		$sep = $this->get_separator( 'title', true );
@@ -1399,7 +1405,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 			true
 		);
 
-		if ( $this->has_og_plugin() )
+		if ( $this->detect_og_plugin() )
 			echo '<p class="description">' . __( 'Note: Another Open Graph plugin has been detected.', 'autodescription' ) . '</p>';
 
 		?><hr><?php
@@ -1425,6 +1431,9 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 			),
 			true
 		);
+
+		if ( $this->detect_twitter_card_plugin() )
+			echo '<p class="description">' . __( 'Note: Another Twitter Card plugin has been detected.', 'autodescription' ) . '</p>';
 
 	}
 

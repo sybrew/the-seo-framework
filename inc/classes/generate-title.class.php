@@ -495,6 +495,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 			//* Fetch the title as is.
 			if ( empty( $title ) )
 				$title = $this->get_notagline_title( $args );
+
 			$blogname = $this->get_blogname();
 		}
 
@@ -511,19 +512,17 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		 */
 		if ( ! $args['description_title'] ) {
 
+			$title = $this->add_title_protection( $title, $args['term_id'] );
+			$title = $this->add_title_pagination( $title );
+
 			if ( $is_front_page ) {
-				$additions = $this->home_page_add_title_tagline();
-				$blogname = $this->add_title_protection( $blogname, $args['term_id'] );
-				$blogname = $this->add_title_pagination( $blogname );
+				if ( $this->home_page_add_title_tagline() )
+					$title = $this->process_title_additions( $blogname, $title, $seplocation );
 			} else {
-				$additions = $this->add_title_additions();
-				$title = $this->add_title_protection( $title, $args['term_id'] );
-				$title = $this->add_title_pagination( $title );
+				if ( $this->add_title_additions() )
+					$title = $this->process_title_additions( $title, $blogname, $seplocation );
 			}
 
-			if ( $additions ) {
-				$title = $this->process_title_additions( $title, $blogname, $seplocation );
-			}
 		}
 
 		$title = $this->do_title_pro_filter( $title, $args, false );
@@ -641,27 +640,29 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 */
 	public function generate_home_title( $get_custom_field = true, $seplocation = '', $deprecated = '', $escape = true, $get_option = true ) {
 
+		$add_tagline = $this->home_page_add_title_tagline();
+
 		/**
 		 * Add tagline or not based on option
 		 *
 		 * @since 2.2.2
 		 */
-		if ( $add_tagline = $this->home_page_add_title_tagline() ) {
+		if ( $add_tagline ) {
 			/**
 			 * Tagline based on option.
 			 * @since 2.3.8
 			 */
-			$tagline = $this->get_option( 'homepage_title_tagline' );
-			$title = $tagline ? $tagline : $this->get_blogdescription();
+			$blogname = $this->get_option( 'homepage_title_tagline' );
+			$blogname = $blogname ? $blogname : $this->get_blogdescription();
 		} else {
-			$title = '';
+			$blogname = '';
 		}
 
 		/**
 		 * Render from function
 		 * @since 2.2.8
 		 */
-		$blogname = $this->title_for_home( '', $get_custom_field, false, $get_option );
+		$title = $this->title_for_home( '', $get_custom_field, false, $get_option );
 		$seplocation = $this->get_home_title_seplocation( $seplocation );
 
 		if ( $escape ) {
@@ -679,6 +680,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 
 	/**
 	 * Gets the title for the static home page.
+	 * Essentially falling back to the blogname. Not to be confused with $blogname.
 	 *
 	 * @since 2.2.8
 	 * @access private
@@ -698,7 +700,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		 * @since 2.2.2
 		 */
 		if ( $get_option ) {
-			$home_title_option = $this->get_option( 'homepage_title' ) ? (string) $this->get_option( 'homepage_title' ) : $home_title;
+			$home_title_option = $this->get_option( 'homepage_title' ) ? $this->get_option( 'homepage_title' ) : $home_title;
 			$home_title = $home_title_option ? $home_title_option : $home_title;
 		}
 
@@ -708,9 +710,9 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		 */
 		if ( $get_custom_field && empty( $home_title ) && $this->has_page_on_front() ) {
 			$custom_field = $this->get_custom_field( '_genesis_title', $this->get_the_front_page_ID() );
-			$home_title = $custom_field ? (string) $custom_field : $this->get_blogname();
+			$home_title = $custom_field ? $custom_field : $this->get_blogname();
 		} else {
-			$home_title = $home_title ? (string) $home_title : $this->get_blogname();
+			$home_title = $home_title ? $home_title : $this->get_blogname();
 		}
 
 		if ( $escape )
@@ -1188,7 +1190,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 *
 	 * @since 2.6.0
 	 */
-	public function process_title_additions( $title, $blogname, $seplocation ) {
+	public function process_title_additions( $title = '', $blogname = '', $seplocation = '' ) {
 
 		$sep = $this->get_title_separator();
 
