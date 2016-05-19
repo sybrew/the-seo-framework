@@ -358,19 +358,22 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * The new plugin detection features from 2.6.0 "Pragmatic Foundation" was done in a manner that any arbitrary plugin could be detected with conflicting namespaces.
 * For this reason, I've taken JetPack's philosophical standpoint on this and implemented it within The SEO Framework.
-* The new special Greek/Latin duplicated word counter now also works great on PHP versions 5.2 and 5.3.
+* Also, the new special Greek/Latin duplicated word counter now also works great on PHP versions 5.2 and 5.3.
 * And in some configurations, the Home Page Title could have been rendered empty, so I got that fixed as well!
 * For developers, many new filters have been added for plugin detection, be sure to check them out in the detailed log.
 
 **Feature highlights:**
 
 * **New:**
-	* Twitter and Open Graph image tags now obtained a corresponding resoltion tag output.
-	* Open Graph Product types are now supported on WooCommerce products.
+
+* Twitter and Open Graph image tags now obtained a corresponding resoltion tag output.
+* Open Graph Product types are now supported on WooCommerce products.
 
 * **Improved:**
-	* The Twitter Image tag has been updated to the latest standards.
-	* Revised plugin detection.
+
+* The Twitter Image tag has been updated to the latest standards.
+* Revised plugin detection.
+* A probable memory leak on archives has been fixed.
 
 **SEO Tip of the Update - Image Descriptions:**
 
@@ -381,32 +384,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Detailed log:**
 
-***Love details? Then head onto [the detailed changelog](https://theseoframework.com/?p=xxxx#detailed).***
-
-**For developers:**
-
-* **Improved:**
-	* Removed the 2nd parameter `$post` from `AutoDescription_Inpost::add_inpost_seo_box`, as it's unused and caused a PHP warning in some CPT edit screens.
-* **Changed:**
-	* `AutoDescription_Detect::has_json_ld_plugin()` now always returns false.
-* **Removed:**
-	* `AutoDescription_Detect::is_theme()` no longer caches results to preserve memory.
-* **Filter Notes:**
-	* **Added:**
-		* `(array) the_seo_framework_detect_og_plugins` (Note: deprecated this patch)
-		* `(array) the_seo_framework_conflicting_plugins`
-		* `(array) the_seo_framework_conflicting_plugins_type`
-		* `(bool) the_seo_framework_seo_plugin_detected`
-		* `(bool) the_seo_framework_og_plugin_detected`
-		* `(bool) the_seo_framework_twittercard_plugin_detected`
-		* `(bool) the_seo_framework_sitemap_plugin_detected`
-	* **Deprecated:**
-		* `(array) the_seo_framework_detect_og_plugins` (Note: added this patch)
-		* `(array) the_seo_framework_detect_seo_plugins`
-* **Notes:**
-	* As described in the 2.6.0 update, there was concern for a possible conflict and confusion with the home page title. This has now been resolved.
-	* Be sure to use in the blogname as title and title as blogname in `AutoDescription_Generate_Title::process_title_additions()`. As it's effectively switched on the home page. This is the only function that switches it.
-	* I'm considering an extra parameter for dealing with the home page on that function. Which should, by it's fundamental design, automatically be backwards compatible.
+***Love details? Then head onto [the detailed changelog](https://theseoframework.com/?p=1231#detailed).***
 
 = 2.6.0.2 - Tough Understructure =
 

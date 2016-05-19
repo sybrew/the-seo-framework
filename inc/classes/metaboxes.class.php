@@ -966,7 +966,11 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 		 * @since 2.2.4
 		 */
 		$home_title_args = $this->generate_home_title( true, '', '', true, false );
-		$home_title_placeholder = $this->process_title_additions( $home_title_args['blogname'], $home_title_args['title'], $home_title_args['seplocation'] );
+		if ( $this->home_page_add_title_tagline() ) {
+			$home_title_placeholder = $this->process_title_additions( $home_title_args['blogname'], $home_title_args['title'], $home_title_args['seplocation'] );
+		} else {
+			$home_title_placeholder = $home_title_args['title'];
+		}
 
 		/**
 		 * If the home title is fetched from the post, notify about that instead.
@@ -986,7 +990,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 		 */
 		if ( $home_title ) {
 			$home_title_args = $this->generate_home_title();
-			$tit_len_pre = $this->process_title_additions( $home_title_args['blogname'], $home_title_args['title'], $home_title_args['seplocation'] );
+			$tit_len_pre = $this->process_title_additions( $home_title_args['title'], $home_title_args['blogname'], $home_title_args['seplocation'] );
 		} else {
 			$tit_len_pre = $home_title_placeholder;
 		}
@@ -2048,7 +2052,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 			$tabs = wp_parse_args( $args, $defaults );
 			$use_tabs = true;
 
-			$sitemap_plugin = $this->has_sitemap_plugin();
+			$sitemap_plugin = $this->detect_sitemap_plugin();
 			$sitemap_detected = $this->has_sitemap_xml();
 			$robots_detected = $this->has_robots_txt();
 
@@ -2092,7 +2096,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 		$site_url = $this->the_home_url_from_cache( true );
 
 		$sitemap_url = $site_url . 'sitemap.xml';
-		$has_sitemap_plugin = $this->has_sitemap_plugin();
+		$has_sitemap_plugin = $this->detect_sitemap_plugin();
 		$sitemap_detected = $this->has_sitemap_xml();
 
 		?>

@@ -120,7 +120,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			 * On sitemap plugin activation, the sitemap plugin should flush the
 			 * rewrite rules. If it doesn't, then this plugin's sitemap will be called.
 			 */
-			if ( $this->has_sitemap_plugin() )
+			if ( $this->detect_sitemap_plugin() )
 				return;
 
 			add_rewrite_rule( 'sitemap\.xml$', 'index.php?the_seo_framework_sitemap=xml', 'top' );

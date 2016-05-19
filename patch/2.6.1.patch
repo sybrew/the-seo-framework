@@ -1,0 +1,982 @@
+Index: autodescription.php
+===================================================================
+--- autodescription.php	(revision 1419228)
++++ autodescription.php	(working copy)
+@@ -3,7 +3,7 @@
+  * Plugin Name: The SEO Framework
+  * Plugin URI: https://wordpress.org/plugins/autodescription/
+  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.
+- * Version: 2.6.0.2
++ * Version: 2.6.1
+  * Author: Sybre Waaijer
+  * Author URI: https://cyberwire.nl/
+  * License: GPLv3
+@@ -43,7 +43,7 @@
+  *
+  * @since 1.0.0
+  */
+-define( 'THE_SEO_FRAMEWORK_VERSION', '2.6.0.2' );
++define( 'THE_SEO_FRAMEWORK_VERSION', '2.6.1' );
+ 
+ /**
+  * Plugin options filter
+Index: inc/classes/detect.class.php
+===================================================================
+--- inc/classes/detect.class.php	(revision 1418924)
++++ inc/classes/detect.class.php	(working copy)
+@@ -33,6 +33,143 @@
+ 	}
+ 
+ 	/**
++	 * Returns list of active plugins.
++	 *
++	 * @since 2.6.1
++	 * @staticvar array $active_plugins
++	 *
++	 * @credits JetPack for most code.
++	 *
++	 * @return array List of active plugins.
++	 */
++	public function active_plugins() {
++
++		static $active_plugins = null;
++
++		if ( isset( $active_plugins ) )
++			return $active_plugins;
++
++		$active_plugins = (array) get_option( 'active_plugins', array() );
++
++		if ( is_multisite() ) {
++			// Due to legacy code, active_sitewide_plugins stores them in the keys,
++			// whereas active_plugins stores them in the values.
++			$network_plugins = array_keys( get_site_option( 'active_sitewide_plugins', array() ) );
++			if ( $network_plugins ) {
++				$active_plugins = array_merge( $active_plugins, $network_plugins );
++			}
++		}
++
++		sort( $active_plugins );
++
++		return $active_plugins = array_unique( $active_plugins );
++	}
++
++	/**
++	 * Filterable list of conflicting plugins.
++	 *
++	 * Applies filters 'the_seo_framework_conflicting_plugins' : array
++	 * @since 2.6.0
++	 *
++	 * @credits JetPack for most code.
++	 *
++	 * @return array List of conflicting plugins.
++	 */
++	public function conflicting_plugins() {
++
++		$conflicting_plugins = array(
++			'seo_tools' => array(
++				'Yoast SEO'                            => 'wordpress-seo/wp-seo.php',
++				'Yoast SEO Premium'                    => 'wordpress-seo-premium/wp-seo-premium.php',
++				'All in One SEO Pack'                  => 'all-in-one-seo-pack/all_in_one_seo_pack.php',
++				'SEO Ultimate'                         => 'seo-ultimate/seo-ultimate.php',
++				'Gregs High Performance SEO'           => 'gregs-high-performance-seo/ghpseo.php',
++			),
++			'sitemaps' => array(
++				'Google XML Sitemaps'                  => 'google-sitemap-generator/sitemap.php',
++				'Better WordPress Google XML Sitemaps' => 'bwp-google-xml-sitemaps/bwp-simple-gxs.php',
++				'Google XML Sitemaps for qTranslate'   => 'google-xml-sitemaps-v3-for-qtranslate/sitemap.php',
++				'XML Sitemap & Google News feeds'      => 'xml-sitemap-feed/xml-sitemap.php',
++				'Google Sitemap by BestWebSoft'        => 'google-sitemap-plugin/google-sitemap-plugin.php',
++				'WordPress SEO by Yoast'               => 'wordpress-seo/wp-seo.php',
++				'WordPress SEO Premium by Yoast'       => 'wordpress-seo-premium/wp-seo-premium.php',
++				'All in One SEO Pack'                  => 'all-in-one-seo-pack/all_in_one_seo_pack.php',
++				'Sitemap'                              => 'sitemap/sitemap.php',
++				'Simple Wp Sitemap'                    => 'simple-wp-sitemap/simple-wp-sitemap.php',
++				'Simple Sitemap'                       => 'simple-sitemap/simple-sitemap.php',
++				'XML Sitemaps'                         => 'xml-sitemaps/xml-sitemaps.php',
++				'MSM Sitemaps'                         => 'msm-sitemap/msm-sitemap.php',
++			),
++			'open_graph' => array(
++				'2 Click Social Media Buttons'         => '2-click-socialmedia-buttons/2-click-socialmedia-buttons.php',
++				'Add Link to Facebook'                 => 'add-link-to-facebook/add-link-to-facebook.php',
++				'Add Meta Tags'                        => 'add-meta-tags/add-meta-tags.php',
++				'Easy Facebook Share Thumbnail'        => 'easy-facebook-share-thumbnails/esft.php',
++				'Facebook'                             => 'facebook/facebook.php',
++				'Facebook AWD All in one'              => 'facebook-awd/AWD_facebook.php',
++				'Facebook Featured Image & OG Meta Tags' => 'facebook-featured-image-and-open-graph-meta-tags/fb-featured-image.php',
++				'Facebook Meta Tags'                   => 'facebook-meta-tags/facebook-metatags.php',
++				'Facebook Open Graph Meta Tags for WordPress' => 'wonderm00ns-simple-facebook-open-graph-tags/wonderm00n-open-graph.php',
++				'Facebook Revised Open Graph Meta Tag' => 'facebook-revised-open-graph-meta-tag/index.php',
++				'Facebook Thumb Fixer'                 => 'facebook-thumb-fixer/_facebook-thumb-fixer.php',
++				'Fedmichs Facebook Open Graph Meta'    => 'facebook-and-digg-thumbnail-generator/facebook-and-digg-thumbnail-generator.php',
++				'Header and Footer'                    => 'header-footer/plugin.php',
++				'Network Publisher'                    => 'network-publisher/networkpub.php',
++				'NextGEN Facebook OG'                  => 'nextgen-facebook/nextgen-facebook.php',
++				'NextScripts SNAP'                     => 'social-networks-auto-poster-facebook-twitter-g/NextScripts_SNAP.php',
++				'Open Graph'                           => 'opengraph/opengraph.php',
++				'Open Graph Protocol Framework'        => 'open-graph-protocol-framework/open-graph-protocol-framework.php',
++				'SEO Facebook Comments'                => 'seo-facebook-comments/seofacebook.php',
++				'Shareaholic'                          => 'sexybookmarks/sexy-bookmarks.php',
++				'Shareaholic2'                         => 'shareaholic/sexy-bookmarks.php',
++				'SharePress'                           => 'sharepress/sharepress.php',
++				'Simple Facebook Connect'              => 'simple-facebook-connect/sfc.php',
++				'Social Discussions'                   => 'social-discussions/social-discussions.php',
++				'Social Sharing Toolkit'               => 'social-sharing-toolkit/social_sharing_toolkit.php',
++				'Socialize'                            => 'socialize/socialize.php',
++				'Tweet, Like, Google +1 and Share'     => 'only-tweet-like-share-and-google-1/tweet-like-plusone.php',
++				'Wordbooker'                           => 'wordbooker/wordbooker.php',
++				'WordPress Social Sharing Optimization' => 'wpsso/wpsso.php',
++				'WP Caregiver'                         => 'wp-caregiver/wp-caregiver.php',
++				'WP Facebook Like Send & Open Graph Meta' => 'wp-facebook-like-send-open-graph-meta/wp-facebook-like-send-open-graph-meta.php',
++				'WP Facebook Open Graph protocol'      => 'wp-facebook-open-graph-protocol/wp-facebook-ogp.php',
++				'WP-OGP'                               => 'wp-ogp/wp-ogp.php',
++				'Zolton.org Social Plugin'             => 'zoltonorg-social-plugin/zosp.php',
++				'WP Facebook Like Button'              => 'wp-fb-share-like-button/wp_fb_share-like_widget.php'
++			),
++			'twitter_card' => array(
++				'Twitter'                              => 'twitter/twitter.php',
++				'Eewee Twitter Card'                   => 'eewee-twitter-card/index.php',
++				'IG:Twitter Cards'                     => 'ig-twitter-cards/ig-twitter-cards.php',
++				'Twitter Cards'                        => 'twitter-cards/twitter-cards.php',
++				'Twitter Cards Meta'                   => 'twitter-cards-meta/twitter-cards-meta.php',
++				'WP Twitter Cards'                     => 'wp-twitter-cards/twitter_cards.php',
++			),
++		);
++
++		return (array) apply_filters( 'the_seo_framework_conflicting_plugins', $conflicting_plugins );
++	}
++
++	/**
++	 * Fetches type of conflicting plugins.
++	 *
++	 * @param string $type The Key from $this->conflicting_plugins()
++	 *
++	 * @since 2.6.0
++	 *
++	 * @return array
++	 */
++	public function get_conflicting_plugins( $type = 'seo_tools' ) {
++
++		$conflicting_plugins = $this->conflicting_plugins();
++
++		if ( isset( $conflicting_plugins[ $type ] ) )
++			return (array) apply_filters( 'the_seo_framework_conflicting_plugins_type', $conflicting_plugins[ $type ], $type );
++
++		return array();
++	}
++
++	/**
+ 	 * Detect active plugin by constant, class or function existence.
+ 	 *
+ 	 * @since 1.3.0
+@@ -175,68 +312,19 @@
+ 	 * @NOTE will return true if ANY of the array values matches.
+ 	 *
+ 	 * @param string|array $themes the current theme name
+-	 * @param bool $use_cache If set to false don't use cache.
++	 * @param bool $depr If set to false don't use cache.
+ 	 *
+ 	 * @since 2.1.0
+ 	 *
+-	 * @staticvar array $themes_cache
+-	 * @since 2.2.4
+-	 *
+ 	 * @return bool is theme active.
+ 	 */
+-	public function is_theme( $themes = null, $use_cache = true ) {
++	public function is_theme( $themes = null, $depr = null ) {
+ 
+ 		if ( ! isset( $themes ) )
+ 			return false;
+ 
+-		if ( ! $use_cache ) {
+-			//* Don't use cache.
+-
+-			$wp_get_theme = wp_get_theme();
+-
+-			$theme_parent = strtolower( $wp_get_theme->get('Template') );
+-			$theme_name = strtolower( $wp_get_theme->get('Name') );
+-
+-			if ( is_string( $themes ) ) {
+-				$themes = strtolower( $themes );
+-				if ( $themes === $theme_parent || $themes === $theme_name )
+-					return true;
+-			} else if ( is_array( $themes ) ) {
+-				foreach ( $themes as $theme ) {
+-					$theme = strtolower( $theme );
+-					if ( $theme === $theme_parent || $theme === $theme_name ) {
+-						return true;
+-						break;
+-					}
+-				}
+-			}
+-
+-			return false;
+-		}
+-
+-		static $themes_cache = array();
+-
+-		//* Check theme check cache
+-		if ( is_string( $themes ) && isset( $themes_cache[$themes] ) ) {
+-			$themes = strtolower( $themes );
+-			//* Theme check has been cached
+-			return $themes_cache[$themes];
+-		}
+-
+-		if ( is_array( $themes ) ) {
+-			foreach ( $themes as $theme ) {
+-				$theme = strtolower( $theme );
+-				if ( isset( $themes_cache[$theme] ) && in_array( $themes_cache[$theme], $themes ) && $themes_cache[$theme] ) {
+-					// Feature is found and true
+-					return $themes_cache[$theme];
+-					break;
+-				}
+-			}
+-		}
+-
+ 		$wp_get_theme = wp_get_theme();
+ 
+-		//* Fetch both themes if child theme is present.
+ 		$theme_parent = strtolower( $wp_get_theme->get('Template') );
+ 		$theme_name = strtolower( $wp_get_theme->get('Name') );
+ 
+@@ -243,25 +331,18 @@
+ 		if ( is_string( $themes ) ) {
+ 			$themes = strtolower( $themes );
+ 			if ( $themes === $theme_parent || $themes === $theme_name )
+-				$themes_cache[$themes] = true;
++				return true;
+ 		} else if ( is_array( $themes ) ) {
+ 			foreach ( $themes as $theme ) {
+ 				$theme = strtolower( $theme );
+ 				if ( $theme === $theme_parent || $theme === $theme_name ) {
+-					return $themes_cache[$theme] = true;
++					return true;
+ 					break;
+-				} else {
+-					$themes_cache[$theme] = false;
+ 				}
+ 			}
+-			return $themes_cache[$theme];
+ 		}
+ 
+-		//* The theme isn't active
+-		if ( is_string( $themes ) && ! isset( $themes_cache[$themes] ) )
+-			$themes_cache[$themes] = false;
+-
+-		return $themes_cache[$themes];
++		return false;
+ 	}
+ 
+ 	/**
+@@ -272,9 +353,10 @@
+ 	 * @staticvar bool $detected
+ 	 * @since 2.2.5
+ 	 *
++	 * Applies filters 'the_seo_framework_seo_plugin_detected' : bool
++	 * @since 2.6.1
++	 *
+ 	 * @return bool SEO plugin detected.
+-	 *
+-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
+ 	 */
+ 	public function detect_seo_plugins() {
+ 
+@@ -283,158 +365,154 @@
+ 		if ( isset( $detected ) )
+ 			return $detected;
+ 
+-		/**
+-		 * Use this filter to adjust plugin tests.
+-		 */
+-		$plugins_check = (array) apply_filters(
+-			'the_seo_framework_detect_seo_plugins',
+-			//* Add to this array to add new plugin checks.
+-			array(
+-				// Classes to detect.
+-				'classes' => array(
+-					'gregsHighPerformanceSEO'
+-				),
++		//* Old style filter.
++		$detected = $this->detect_seo_plugins_old();
++		if ( isset( $detected ) )
++			return $detected;
+ 
+-				// Functions to detect.
+-				'functions' => array(),
++		$active_plugins = $this->active_plugins();
+ 
+-				// Constants to detect.
+-				'constants' => array(
+-					'AIOSEOPPRO',		// All in one SEO + Pro
+-					'AMT_PLUGIN_FILE',	// Add Meta Tags
+-					'WPSEO_FILE',		// Yoast SEO
+-					'SQ_VERSION',		// SEO by Squirrly
+-					'SU_PLUGIN_NAME',	// SEO Ultimate
+-				),
+-			)
+-		);
++		if ( ! empty( $active_plugins ) ) {
++			$conflicting_plugins = $this->get_conflicting_plugins( 'seo_tools' );
+ 
+-		return $detected = $this->detect_plugin( $plugins_check );
++			foreach ( $conflicting_plugins as $plugin ) {
++				if ( in_array( $plugin, $active_plugins ) ) {
++					$detected = apply_filters( 'the_seo_framework_seo_plugin_detected', true );
++					break;
++				}
++			}
++		}
++
++		return $detected = $detected ? true : false;
+ 	}
+ 
+ 	/**
+-	 * Detects if plugins outputting og:type exists
++	 * Open Graph plugin detection
+ 	 *
+-	 * @note isn't used in $this->og_image() Because og:image may be output multiple times.
+-	 *
+-	 * @uses $this->detect_plugin()
+-	 *
+ 	 * @since 1.3.0
+-	 * @return bool OG plugin detected.
+ 	 *
+-	 * @staticvar bool $has_plugin
++	 * @staticvar bool $detected
+ 	 * @since 2.2.5
+ 	 *
+-	 * @return bool $has_plugin one of the plugins has been found.
++	 * Applies filters 'the_seo_framework_og_plugin_detected' : bool
++	 * @since 2.6.1
++	 *
++	 * @return bool OG plugin detected.
+ 	 */
+-	public function has_og_plugin() {
++	public function detect_og_plugin() {
+ 
+-		static $has_plugin = null;
++		static $detected = null;
+ 
+-		if ( isset( $has_plugin ) )
+-			return $has_plugin;
++		if ( isset( $detected ) )
++			return $detected;
+ 
+-		$plugins = array(
+-			'classes' => array(
+-				'WPSEO_OpenGraph',
+-				'All_in_One_SEO_Pack_Opengraph'
+-			),
+-			'functions' => array(
+-				'amt_plugin_actions'
+-			),
+-			'constants' => array(
+-			),
+-		);
++		//* Detect SEO plugins beforehand.
++		$detected = $this->detect_seo_plugins();
++		if ( $detected )
++			return $detected;
+ 
+-		return $has_plugin = $this->detect_plugin( $plugins );
++		//* Old style filter.
++		$detected = $this->has_og_plugin();
++		if ( isset( $detected ) )
++			return $detected;
++
++		$active_plugins = $this->active_plugins();
++
++		if ( ! empty( $active_plugins ) ) {
++			$conflicting_plugins = $this->get_conflicting_plugins( 'open_graph' );
++
++			foreach ( $conflicting_plugins as $plugin ) {
++				if ( in_array( $plugin, $active_plugins ) ) {
++					$detected = apply_filters( 'the_seo_framework_og_plugin_detected', true );
++					break;
++				}
++			}
++		}
++
++		return $detected = $detected ? true : false;
+ 	}
+ 
+ 	/**
+-	 * Detects if plugins outputting ld+json exists
++	 * Open Graph plugin detection
+ 	 *
+-	 * @uses $this->detect_plugin()
++	 * @since 2.6.0
+ 	 *
+-	 * @since 1.3.0
++	 * @staticvar bool $detected
++	 * @since 2.6.0
+ 	 *
+-	 * @return bool LD+Json plugin detected
+-	 *
+-	 * @staticvar bool $has_plugin
+-	 * @since 2.2.5
+-	 *
+-	 * @return bool $has_plugin one of the plugins has been found.
++	 * @return bool Twitter Card plugin detected.
+ 	 */
+-	public function has_json_ld_plugin() {
++	public function detect_twitter_card_plugin() {
+ 
+-		static $has_plugin = null;
++		static $detected = null;
+ 
+-		if ( isset( $has_plugin ) )
+-			return $has_plugin;
++		if ( isset( $detected ) )
++			return $detected;
+ 
+-		$plugins = array( 'classes' => array( 'WPSEO_JSON_LD' ) );
++		//* Detect SEO plugins beforehand.
++		$detected = $this->detect_seo_plugins();
++		if ( $detected )
++			return $detected;
+ 
+-		return $has_plugin = $this->detect_plugin( $plugins );
++		$active_plugins = $this->active_plugins();
++
++		if ( ! empty( $active_plugins ) ) {
++			$conflicting_plugins = $this->get_conflicting_plugins( 'twitter_card' );
++
++			foreach ( $conflicting_plugins as $plugin ) {
++				if ( in_array( $plugin, $active_plugins ) ) {
++					$detected = apply_filters( 'the_seo_framework_og_plugin_detected', true );
++					break;
++				}
++			}
++		}
++
++		return $detected = $detected ? true : false;
+ 	}
+ 
+ 	/**
+-	 * Detecs sitemap plugins
++	 * Detects if plugins outputting ld+json exists
+ 	 *
+-	 * @uses $this->detect_plugin()
++	 * @since 1.3.0
+ 	 *
+-	 * @since 2.1.0
++	 * Always return false.
++	 * @since 2.6.1
+ 	 *
+-	 * @return bool Sitemap plugin detected.
++	 * @return bool false
++	 */
++	public function has_json_ld_plugin() {
++		return false;
++	}
++
++	/**
++	 * Detecs sitemap plugins
+ 	 *
+-	 * @staticvar bool $has_plugin
+-	 * @since 2.2.5
++	 * @since 2.1.0
++	 * @staticvar bool $detected
+ 	 *
+-	 * @todo Try to use constants if possible.
+-	 * @priority low 2.8.x
+-	 * @todo List plugin names
+-	 * @priority low
+-	 *
+-	 * @return bool $has_plugin one of the plugins has been found.
++	 * @return bool
+ 	 */
+-	public function has_sitemap_plugin() {
++	public function detect_sitemap_plugin() {
+ 
+-		static $has_plugin = null;
++		static $detected = null;
+ 
+-		if ( isset( $has_plugin ) )
+-			return $has_plugin;
++		if ( isset( $detected ) )
++			return $detected;
+ 
+-		//* Only sitemap plugins which influence sitemap.xml
+-		$plugins = array(
+-				'classes' => array(
+-					'xml_sitemaps',
+-					'All_in_One_SEO_Pack_Sitemap',	// All in One SEO Sitemap
+-					'SimpleWpSitemap',
+-					'BWP_Sitemaps',
+-					'KocujSitemapPlugin',
+-					'LTI_Sitemap',
+-					'ps_auto_sitemap',
+-					'scalible_sitemaps',
+-					'Sewn_Xml_Sitemap',
+-					'csitemap',
+-				),
+-				'functions' => array(
+-					'jetpack_sitemap_initialize', // Jetpack
+-					'sm_Setup',
+-					'wpss_init',
+-					'gglstmp_sitemapcreate',
+-					'asxs_sitemap2',
+-					'build_baidu_sitemap',
+-					'ect_sitemap_nav',
+-					'apgmxs_generate_sitemap',
+-					'ADSetupSitemapPlugin',
+-					'ksm_generate_sitemap',
+-					'studio_xml_sitemap',
+-					'RegisterPluginLinks_xmlsite',
+-				),
+-				'constants' => array(
+-					'SIMPLE_SITEMAPS_USE_CACHE'	// WPMUdev Simple Sitemaps
+-				),
+-			);
++		$active_plugins = $this->active_plugins();
+ 
+-		return $has_plugin = $this->detect_plugin( $plugins );
++		if ( ! empty( $active_plugins ) ) {
++			$conflicting_plugins = $this->get_conflicting_plugins( 'sitemaps' );
++
++			foreach ( $conflicting_plugins as $plugin ) {
++				if ( in_array( $plugin, $active_plugins ) ) {
++					$detected = apply_filters( 'the_seo_framework_sitemap_plugin_detected', true );
++					break;
++				}
++			}
++		}
++
++		return $detected = $detected ? true : false;
+ 	}
+ 
+ 	/**
+Index: inc/classes/doingitright.class.php
+===================================================================
+--- inc/classes/doingitright.class.php	(revision 1418924)
++++ inc/classes/doingitright.class.php	(working copy)
+@@ -971,10 +971,12 @@
+ 		$desc_too_many = '';
+ 
+ 		//* Convert description's special characters into PHP readable words.
+-		$description = htmlentities( $description, ENT_XHTML );
++		$description = htmlentities( $description, ENT_COMPAT );
+ 
++		//* Because we've converted all characters to XHTML codes, the odd ones should be only numerical.
++		$html_special_chars = '&0123456789;';
++
+ 		//* Count the words.
+-		$html_special_chars = '&0123456789;';
+ 		$desc_words = str_word_count( strtolower( $description ), 2, $html_special_chars );
+ 
+ 		static $bother_me_length = null;
+Index: inc/classes/generate-title.class.php
+===================================================================
+--- inc/classes/generate-title.class.php	(revision 1419228)
++++ inc/classes/generate-title.class.php	(working copy)
+@@ -495,6 +495,7 @@
+ 			//* Fetch the title as is.
+ 			if ( empty( $title ) )
+ 				$title = $this->get_notagline_title( $args );
++
+ 			$blogname = $this->get_blogname();
+ 		}
+ 
+@@ -511,19 +512,17 @@
+ 		 */
+ 		if ( ! $args['description_title'] ) {
+ 
++			$title = $this->add_title_protection( $title, $args['term_id'] );
++			$title = $this->add_title_pagination( $title );
++
+ 			if ( $is_front_page ) {
+-				$additions = $this->home_page_add_title_tagline();
+-				$blogname = $this->add_title_protection( $blogname, $args['term_id'] );
+-				$blogname = $this->add_title_pagination( $blogname );
++				if ( $this->home_page_add_title_tagline() )
++					$title = $this->process_title_additions( $blogname, $title, $seplocation );
+ 			} else {
+-				$additions = $this->add_title_additions();
+-				$title = $this->add_title_protection( $title, $args['term_id'] );
+-				$title = $this->add_title_pagination( $title );
++				if ( $this->add_title_additions() )
++					$title = $this->process_title_additions( $title, $blogname, $seplocation );
+ 			}
+ 
+-			if ( $additions ) {
+-				$title = $this->process_title_additions( $title, $blogname, $seplocation );
+-			}
+ 		}
+ 
+ 		$title = $this->do_title_pro_filter( $title, $args, false );
+@@ -641,20 +640,22 @@
+ 	 */
+ 	public function generate_home_title( $get_custom_field = true, $seplocation = '', $deprecated = '', $escape = true, $get_option = true ) {
+ 
++		$add_tagline = $this->home_page_add_title_tagline();
++
+ 		/**
+ 		 * Add tagline or not based on option
+ 		 *
+ 		 * @since 2.2.2
+ 		 */
+-		if ( $add_tagline = $this->home_page_add_title_tagline() ) {
++		if ( $add_tagline ) {
+ 			/**
+ 			 * Tagline based on option.
+ 			 * @since 2.3.8
+ 			 */
+-			$tagline = $this->get_option( 'homepage_title_tagline' );
+-			$title = $tagline ? $tagline : $this->get_blogdescription();
++			$blogname = $this->get_option( 'homepage_title_tagline' );
++			$blogname = $blogname ? $blogname : $this->get_blogdescription();
+ 		} else {
+-			$title = '';
++			$blogname = '';
+ 		}
+ 
+ 		/**
+@@ -661,7 +662,7 @@
+ 		 * Render from function
+ 		 * @since 2.2.8
+ 		 */
+-		$blogname = $this->title_for_home( '', $get_custom_field, false, $get_option );
++		$title = $this->title_for_home( '', $get_custom_field, false, $get_option );
+ 		$seplocation = $this->get_home_title_seplocation( $seplocation );
+ 
+ 		if ( $escape ) {
+@@ -679,6 +680,7 @@
+ 
+ 	/**
+ 	 * Gets the title for the static home page.
++	 * Essentially falling back to the blogname. Not to be confused with $blogname.
+ 	 *
+ 	 * @since 2.2.8
+ 	 * @access private
+@@ -698,7 +700,7 @@
+ 		 * @since 2.2.2
+ 		 */
+ 		if ( $get_option ) {
+-			$home_title_option = $this->get_option( 'homepage_title' ) ? (string) $this->get_option( 'homepage_title' ) : $home_title;
++			$home_title_option = $this->get_option( 'homepage_title' ) ? $this->get_option( 'homepage_title' ) : $home_title;
+ 			$home_title = $home_title_option ? $home_title_option : $home_title;
+ 		}
+ 
+@@ -708,9 +710,9 @@
+ 		 */
+ 		if ( $get_custom_field && empty( $home_title ) && $this->has_page_on_front() ) {
+ 			$custom_field = $this->get_custom_field( '_genesis_title', $this->get_the_front_page_ID() );
+-			$home_title = $custom_field ? (string) $custom_field : $this->get_blogname();
++			$home_title = $custom_field ? $custom_field : $this->get_blogname();
+ 		} else {
+-			$home_title = $home_title ? (string) $home_title : $this->get_blogname();
++			$home_title = $home_title ? $home_title : $this->get_blogname();
+ 		}
+ 
+ 		if ( $escape )
+@@ -1188,7 +1190,7 @@
+ 	 *
+ 	 * @since 2.6.0
+ 	 */
+-	public function process_title_additions( $title, $blogname, $seplocation ) {
++	public function process_title_additions( $title = '', $blogname = '', $seplocation = '' ) {
+ 
+ 		$sep = $this->get_title_separator();
+ 
+Index: inc/classes/inpost.class.php
+===================================================================
+--- inc/classes/inpost.class.php	(revision 1418924)
++++ inc/classes/inpost.class.php	(working copy)
+@@ -75,7 +75,7 @@
+ 		$show_seobox = (bool) apply_filters( 'the_seo_framework_seobox_output', true );
+ 
+ 		if ( $show_seobox )
+-			add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box' ), 10, 2 );
++			add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box' ), 10, 1 );
+ 
+ 	}
+ 
+@@ -113,11 +113,10 @@
+ 	 * Adds SEO Meta boxes beneath every page/post edit screen.
+ 	 *
+ 	 * @param string $post_type The current Post Type.
+-	 * @param object $post The post Object. Unused.
+ 	 *
+ 	 * @since 2.0.0
+ 	 */
+-	public function add_inpost_seo_box( $post_type, $post ) {
++	public function add_inpost_seo_box( $post_type ) {
+ 
+ 		/**
+ 		 * @uses $this->post_type_supports_custom_seo()
+Index: inc/classes/metaboxes.class.php
+===================================================================
+--- inc/classes/metaboxes.class.php	(revision 1418924)
++++ inc/classes/metaboxes.class.php	(working copy)
+@@ -907,6 +907,13 @@
+ 
+ 	}
+ 
++	/**
++	 * HomePage Metabox General Tab Output
++	 *
++	 * @since 2.6.0
++	 *
++	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
++	 */
+ 	public function homepage_metabox_general() {
+ 
+ 		/**
+@@ -959,7 +966,11 @@
+ 		 * @since 2.2.4
+ 		 */
+ 		$home_title_args = $this->generate_home_title( true, '', '', true, false );
+-		$home_title_placeholder = $this->process_title_additions( $home_title_args['title'], $home_title_args['blogname'], $home_title_args['seplocation'] );
++		if ( $this->home_page_add_title_tagline() ) {
++			$home_title_placeholder = $this->process_title_additions( $home_title_args['blogname'], $home_title_args['title'], $home_title_args['seplocation'] );
++		} else {
++			$home_title_placeholder = $home_title_args['title'];
++		}
+ 
+ 		/**
+ 		 * If the home title is fetched from the post, notify about that instead.
+@@ -1094,7 +1105,6 @@
+ 
+ 	}
+ 
+-
+ 	/**
+ 	 * HomePage Metabox Additions Tab Output
+ 	 *
+@@ -1111,9 +1121,9 @@
+ 		 */
+ 		$title_args = $this->generate_home_title();
+ 
+-		//* I know, brilliant. @TODO @priority high 2.6.x.
+-		$title = $title_args['blogname'];
+-		$blogname = $title_args['title'];
++		//* I know, brilliant.
++		$title = $title_args['title'];
++		$blogname = $title_args['blogname'];
+ 
+ 		// Get title separator
+ 		$sep = $this->get_separator( 'title', true );
+@@ -1399,7 +1409,7 @@
+ 			true
+ 		);
+ 
+-		if ( $this->has_og_plugin() )
++		if ( $this->detect_og_plugin() )
+ 			echo '<p class="description">' . __( 'Note: Another Open Graph plugin has been detected.', 'autodescription' ) . '</p>';
+ 
+ 		?><hr><?php
+@@ -1426,6 +1436,9 @@
+ 			true
+ 		);
+ 
++		if ( $this->detect_twitter_card_plugin() )
++			echo '<p class="description">' . __( 'Note: Another Twitter Card plugin has been detected.', 'autodescription' ) . '</p>';
++
+ 	}
+ 
+ 	/**
+@@ -2039,7 +2052,7 @@
+ 			$tabs = wp_parse_args( $args, $defaults );
+ 			$use_tabs = true;
+ 
+-			$sitemap_plugin = $this->has_sitemap_plugin();
++			$sitemap_plugin = $this->detect_sitemap_plugin();
+ 			$sitemap_detected = $this->has_sitemap_xml();
+ 			$robots_detected = $this->has_robots_txt();
+ 
+@@ -2083,7 +2096,7 @@
+ 		$site_url = $this->the_home_url_from_cache( true );
+ 
+ 		$sitemap_url = $site_url . 'sitemap.xml';
+-		$has_sitemap_plugin = $this->has_sitemap_plugin();
++		$has_sitemap_plugin = $this->detect_sitemap_plugin();
+ 		$sitemap_detected = $this->has_sitemap_xml();
+ 
+ 		?>
+Index: inc/classes/query.class.php
+===================================================================
+--- inc/classes/query.class.php	(revision 1419228)
++++ inc/classes/query.class.php	(working copy)
+@@ -90,7 +90,7 @@
+ 			//* Does not always return false.
+ 			$id = get_queried_object_id();
+ 
+-			if ( empty( $id ) && false === $this->is_archive() )
++			if ( empty( $id ) && false === is_archive() )
+ 				$id = get_the_ID();
+ 		}
+ 
+Index: inc/classes/render.class.php
+===================================================================
+--- inc/classes/render.class.php	(revision 1418924)
++++ inc/classes/render.class.php	(working copy)
+@@ -310,7 +310,9 @@
+ 			$type = (string) apply_filters( 'the_seo_framework_ogtype_output', '', $this->get_the_real_ID() );
+ 
+ 			if ( empty( $type ) ) {
+-				if ( $this->is_single() && $this->get_image_from_cache() ) {
++				if ( $this->is_wc_product() ) {
++					$type = 'product';
++				} else if ( $this->is_single() && $this->get_image_from_cache() ) {
+ 					$type = 'article';
+ 				} else if ( $this->is_author() ) {
+ 					$type = 'profile';
+@@ -593,7 +595,7 @@
+ 	}
+ 
+ 	/**
+-	 * Render twitter:image
++	 * Render twitter:image:src
+ 	 *
+ 	 * @param string $image url for image
+ 	 *
+@@ -625,7 +627,7 @@
+ 			}
+ 
+ 			if ( $image )
+-				return '<meta name="twitter:image" content="' . esc_attr( $image ) . '" />' . "\r\n";
++				return '<meta name="twitter:image:src" content="' . esc_attr( $image ) . '" />' . "\r\n";
+ 		}
+ 
+ 		return '';
+@@ -835,7 +837,7 @@
+ 	public function ld_json() {
+ 
+ 		//* Check for LD+JSON compat
+-		if ( $this->has_json_ld_plugin() || $this->is_search() || $this->is_404() )
++		if ( $this->is_search() || $this->is_404() )
+ 			return;
+ 
+ 		/**
+@@ -1058,7 +1060,7 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
+-		return $cache = $this->is_option_checked( 'og_tags' );
++		return $cache = $this->is_option_checked( 'og_tags' ) && false === $this->detect_og_plugin();
+ 	}
+ 
+ 	/**
+@@ -1094,7 +1096,7 @@
+ 		if ( isset( $cache ) )
+ 			return $cache;
+ 
+-		return $cache = $this->is_option_checked( 'twitter_tags' );
++		return $cache = $this->is_option_checked( 'twitter_tags' ) && false == $this->detect_twitter_card_plugin();
+ 	}
+ 
+ 	/**
+Index: inc/classes/sitemaps.class.php
+===================================================================
+--- inc/classes/sitemaps.class.php	(revision 1418924)
++++ inc/classes/sitemaps.class.php	(working copy)
+@@ -120,7 +120,7 @@
+ 			 * On sitemap plugin activation, the sitemap plugin should flush the
+ 			 * rewrite rules. If it doesn't, then this plugin's sitemap will be called.
+ 			 */
+-			if ( $this->has_sitemap_plugin() )
++			if ( $this->detect_sitemap_plugin() )
+ 				return;
+ 
+ 			add_rewrite_rule( 'sitemap\.xml$', 'index.php?the_seo_framework_sitemap=xml', 'top' );
+Index: inc/deprecated/deprecated.class.php
+===================================================================
+--- inc/deprecated/deprecated.class.php	(revision 1418924)
++++ inc/deprecated/deprecated.class.php	(working copy)
+@@ -380,4 +380,94 @@
+ 		return;
+ 	}
+ 
++	/**
++	 * Old style method for detecting SEO plugins.
++	 *
++	 * @since 2.6.1
++	 * @access private
++	 *
++	 * @return bool
++	 *
++	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
++	 */
++	public function detect_seo_plugins_old() {
++
++		/**
++		 * Applies filters 'the_seo_framework_detect_seo_plugins' : array
++		 * @deprecated
++		 * @since 2.6.1
++		 *
++		 * Use this filter to adjust plugin tests.
++		 */
++		$plugins_check = apply_filters(
++			'the_seo_framework_detect_seo_plugins',
++			//* Add to this array to add new plugin checks.
++			null
++		);
++
++		if ( isset( $plugins_check ) ) {
++			$this->_deprecated_function( 'the_seo_framework_detect_seo_plugins', 'the_seo_framework_conflicting_plugins', '2.6.1' );
++			return $this->detect_plugin( $plugins_check );
++		}
++
++		return null;
++	}
++
++
++	/**
++	 * Detects if plugins outputting og:type exists
++	 *
++	 * @note isn't used in $this->og_image() Because og:image may be output multiple times.
++	 *
++	 * @uses $this->detect_plugin()
++	 *
++	 * @since 1.3.0
++	 * @return bool OG plugin detected.
++	 *
++	 * @staticvar bool $has_plugin
++	 * @since 2.2.5
++	 *
++	 * @return bool $has_plugin one of the plugins has been found.
++	 */
++	public function has_og_plugin() {
++
++		/**
++		 * Applies filters 'the_seo_framework_detect_og_plugins' : array
++		 * @since 2.6.1
++		 * @deprecated
++		 * @since 2.6.1 (same patch)
++		 *
++		 * Use this filter to adjust plugin tests.
++		 */
++		$plugins_check = apply_filters(
++			'the_seo_framework_detect_og_plugins',
++			//* Add to this array to add new plugin checks.
++			null
++		);
++
++		if ( isset( $plugins_check ) ) {
++			$this->_deprecated_function( 'the_seo_framework_detect_og_plugins', 'the_seo_framework_conflicting_plugins', '2.6.1' );
++			return $this->detect_plugin( $plugins_check );
++		}
++
++		return null;
++	}
++
++	/**
++	 * Detecs sitemap plugins
++	 *
++	 * @since 2.1.0
++	 * @staticvar bool $detected
++	 *
++	 * @deprecated
++	 * @since 2.6.1
++	 *
++	 * @return bool
++	 */
++	public function has_sitemap_plugin() {
++		$this->_deprecated_function( 'AutoDescription_Detect::' . __FUNCTION__, 'AutoDescription_Detect::detect_sitemap_plugin', '2.6.1' );
++
++		return $this->detect_sitemap_plugin();
++	}
++
+ }

@@ -159,7 +159,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 *
 	 * @return array
 	 */
-	public function get_conflicting_plugins( $type = 'seo-tools' ) {
+	public function get_conflicting_plugins( $type = 'seo_tools' ) {
 
 		$conflicting_plugins = $this->conflicting_plugins();
 
@@ -312,13 +312,13 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * @NOTE will return true if ANY of the array values matches.
 	 *
 	 * @param string|array $themes the current theme name
-	 * @param bool $derp If set to false don't use cache.
+	 * @param bool $depr If set to false don't use cache.
 	 *
 	 * @since 2.1.0
 	 *
 	 * @return bool is theme active.
 	 */
-	public function is_theme( $themes = null, $derp = null ) {
+	public function is_theme( $themes = null, $depr = null ) {
 
 		if ( ! isset( $themes ) )
 			return false;
@@ -352,6 +352,9 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 *
 	 * @staticvar bool $detected
 	 * @since 2.2.5
+	 *
+	 * Applies filters 'the_seo_framework_seo_plugin_detected' : bool
+	 * @since 2.6.1
 	 *
 	 * @return bool SEO plugin detected.
 	 */
@@ -390,6 +393,9 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 *
 	 * @staticvar bool $detected
 	 * @since 2.2.5
+	 *
+	 * Applies filters 'the_seo_framework_og_plugin_detected' : bool
+	 * @since 2.6.1
 	 *
 	 * @return bool OG plugin detected.
 	 */
