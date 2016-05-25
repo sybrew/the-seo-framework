@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl, feed
 Requires at least: 3.8.0
 Tested up to: 4.5.2
-Stable tag: 2.6.1
+Stable tag: 2.6.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -174,10 +174,11 @@ The output will be stored for each page, if you've edited a page the page output
 * AnsPress Questions, Profiles and Pages, also Canonical errors have been fixed.
 * StudioPress SEO Data Transporter for Posts and Pages.
 * WPML, URLs, full sitemap and per-page/post SEO settings (Documentation is coming soon).
-* qTranslate X, URLs, full sitemap and per-page/post SEO settings (Documentation is coming soon).
+* qTranslate X, URLs, per-page/post SEO settings, the main language's sitemap (Documentation is coming soon).
+* Polylang, URLs, per-page/post SEO settings, the main language's sitemap.
 * Confirmed Jetpack modules: Custom Content Types (Testimonials, Portfolio), Infinite Scroll, Photon, Sitemaps, Publicize.
 * Most popular SEO plugins, let's not get in each other's way.
-* Many, many other plugins, yet to confirm.
+* Many, many more plugins, yet to be confirmed.
 
 **Themes:**
 
@@ -348,9 +349,33 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
+= 2.6.2 - Condensed Associations =
+
+**Release date:**
+
+* May 26th 2016
+
+**Summarized:**
+
+* Simply put, this update fixes a few bugs. One of these bugs caused all recognized Post Types to be judged wrongfully for supporting SEO.
+* A very small bug with a major impact has also been fixed. This bug caused WooCommerce Shop Pages to canonicalized to the latest product.
+* This update also makes sure all translations of 2.6.0 and later are put into effect.
+* UTF-8 required languages are now correctly rendered on PHP5.3 and lower within the SEO bar, like Russian.
+* And for developers, the URL generation has been slightly refactored. With more reliable and lighter variables being used throughout the generation.
+
+**SEO Tip of the Updated - Geo Targeting:**
+
+* Is your website about a local business? Then be sure to sign up for Google Businesses. This will massively increase your search presence, by an artificial result.
+* It also greatly helps to have your server located near your target audience's location. The website will not only respond faster, but Search Engines can pick up descriptive signals from it.
+* If your business resides and only serves in Belgium, for example, it's also better to have a ".be" domain name extension rather than a ".com" domain name extension.
+
+**Detailed log:**
+
+***Say hello to [my little friend](https://theseoframework.com/?p=1254#detailed).***
+
 = 2.6.1 - Pacified Handling =
 
-**Release data:**
+**Release date:**
 
 * May 19th 2016
 
@@ -365,15 +390,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **Feature highlights:**
 
 * **New:**
-
-* Twitter and Open Graph image tags now obtained a corresponding resoltion tag output.
-* Open Graph Product types are now supported on WooCommerce products.
-
+	* Open Graph Product types are now supported on WooCommerce products.
 * **Improved:**
-
-* The Twitter Image tag has been updated to the latest standards.
-* Revised plugin detection.
-* A probable memory leak on archives has been fixed.
+	* The Twitter Image tag has been updated to the latest standards.
+	* Revised plugin detection.
+	* A probable memory leak on archives has been fixed.
 
 **SEO Tip of the Update - Image Descriptions:**
 
@@ -568,6 +589,11 @@ Not all planned features made it into 2.6.0. The following features are planned 
 = Full changelog =
 
 **The full changelog can be found [here](http://theseoframework.com/?cat=3).**
+
+== Upgrade Notice ==
+
+= 2.6.2 =
+This update resolves an issue with the WooCommerce Shop Page Canonical URL. Installing this update is therefore highly recommended.
 
 == Other Notes ==
 

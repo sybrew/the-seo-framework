@@ -971,7 +971,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		$desc_too_many = '';
 
 		//* Convert description's special characters into PHP readable words.
-		$description = htmlentities( $description, ENT_COMPAT );
+		$description = htmlentities( $description, ENT_COMPAT, "UTF-8" );
 
 		//* Because we've converted all characters to XHTML codes, the odd ones should be only numerical.
 		$html_special_chars = '&0123456789;';
