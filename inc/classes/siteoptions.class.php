@@ -66,7 +66,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 		add_action( 'admin_init', array( $this, 'register_settings' ), 5 );
 
 		//* Update site options at plugin update.
-		add_action( 'admin_init', array( $this, 'site_updated_plugin_option' ) );
+		add_action( 'init', array( $this, 'site_updated_plugin_option' ), 0 );
 
 	}
 
@@ -367,6 +367,9 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 * @return void early if already has been updated.
 	 */
 	public function site_updated_plugin_option() {
+
+		if ( false === $this->is_admin() )
+			return;
 
 		$plugin_updated = $this->o_plugin_updated;
 

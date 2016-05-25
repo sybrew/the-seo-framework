@@ -4,8 +4,8 @@
  * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 3 as published
- * by the Free Software Foundation.
+ * it under the terms of the GNU General Public License version 2 or later as
+ * published by the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,9 +20,11 @@
  * Class AutoDescription_Query
  *
  * Caches and organizes the WP Query.
- * Functions are in alphabetical order!
+ * Functions are (somewhat) in alphabetical order!
  *
  * @since 2.6.0
+ *
+ * @license GPLv2+ <http://www.gnu.org/licenses/gpl-2.0.html>
  */
 class AutoDescription_Query extends AutoDescription_Compat {
 
@@ -93,6 +95,18 @@ class AutoDescription_Query extends AutoDescription_Compat {
 			if ( empty( $id ) && false === is_archive() )
 				$id = get_the_ID();
 		}
+
+		/**
+		 * Applies filters 'the_seo_framework_current_object_id' : integer
+		 * Can be either the Post ID, or the Term ID.
+		 *
+		 * @param int $id
+		 * @param bool Whether the globals WP_Query or current_screen are set.
+		 * @see AutoDescription_Query::can_cache_query()
+		 *
+		 * @since 2.6.2
+		 */
+		$id = (int) apply_filters( 'the_seo_framework_current_object_id', $id, $this->can_cache_query() );
 
 		//* Turn ID into 0 if empty.
 		return $id = empty( $id ) ? 0 : $id;

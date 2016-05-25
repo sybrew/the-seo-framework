@@ -470,4 +470,47 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 		return $this->detect_sitemap_plugin();
 	}
 
+	/**
+	 * Returns Post Type from current screen.
+	 *
+	 * @param bool $public Whether to only get Public Post types.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @deprecated
+	 * @since 2.6.1
+	 *
+	 * @return bool|string The Post Type
+	 */
+	public function get_current_post_type( $public = true ) {
+
+		$this->_deprecated_function( 'AutoDescription_Detect::' . __FUNCTION__, 'AutoDescription_Detect::get_supported_post_type', '2.6.2' );
+
+		static $post_type = null;
+
+		//* Detect post type if empty or not set.
+		if ( is_null( $post_type ) || empty( $post_type ) ) {
+			global $current_screen;
+
+			if ( isset( $current_screen->post_type ) ) {
+
+				static $post_page = array();
+
+				$args = $public ? array( 'public' => true ) : array();
+
+				if ( ! isset( $post_page[$public] ) )
+					$post_page[$public] = (array) get_post_types( $args );
+
+				//* Smart var. This elemenates the need for a foreach loop, reducing resource usage.
+				$post_type = isset( $post_page[$public][ $current_screen->post_type ] ) ? $current_screen->post_type : '';
+			}
+		}
+
+		//* No post type has been found.
+		if ( empty( $post_type ) )
+			return false;
+
+		return $post_type;
+	}
+
 }

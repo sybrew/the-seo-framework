@@ -915,6 +915,21 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 	}
 
 	/**
+	 * Initialize and flush rewrite rules.
+	 *
+	 * @since 2.6.0
+	 * @access private
+	 */
+	public function flush_rewrite_rules() {
+		global $wp_rewrite;
+
+		$this->rewrite_rule_sitemap();
+
+		$wp_rewrite->init();
+		$wp_rewrite->flush_rules( true );
+	}
+
+	/**
 	 * Enqueue rewrite flush for activation.
 	 *
 	 * @since 2.3.0
@@ -1008,23 +1023,6 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 	}
 
 	/**
-	 * Initialize and flush rewrite rules.
-	 *
-	 * @param bool $reset Whether to reset the rules.
-	 *
-	 * @since 2.6.0
-	 * @access private
-	 */
-	public function flush_rewrite_rules( $reset = false ) {
-		global $wp_rewrite;
-
-		if ( $reset )
-			$wp_rewrite->init();
-
-		$wp_rewrite->flush_rules( true );
-	}
-
-	/**
 	 * Add the WPMUdev Domain Mapping rules again. And flush them on init.
 	 * Domain Mapping bugfix.
 	 *
@@ -1048,9 +1046,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			if ( isset( $run ) && $run )
 				return;
 
-			$action = current_action();
-
-			if ( $options_saved || 'init' === $action || 'admin_init' === $action ) {
+			if ( $options_saved || 'init' === current_action() ) {
 				$run = true;
 
 				if ( class_exists( 'Domainmap_Module_Cdsso' ) && defined( 'Domainmap_Module_Cdsso::SSO_ENDPOINT' ) ) {

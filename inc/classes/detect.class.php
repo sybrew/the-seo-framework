@@ -916,17 +916,17 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * Determines if the post type is compatible with The SEO Framework inpost metabox.
 	 *
 	 * @since 2.3.5
+	 * @param string|null $post_type
 	 *
 	 * @return bool True if post type is supported.
 	 */
-	public function post_type_supports_inpost( $post_type ) {
+	public function post_type_supports_inpost( $post_type = null ) {
 
-		if ( isset( $post_type ) ) {
+		if ( isset( $post_type ) && $post_type ) {
 			$supports = (array) apply_filters( 'the_seo_framework_custom_post_type_support',
 				array(
 					'title',
 					'editor',
-				//	'custom-fields',
 				)
 			);
 
@@ -935,6 +935,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 					return false;
 					break;
 				}
+				continue;
 			}
 
 			return true;
@@ -959,9 +960,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 */
 	public function post_type_supports_custom_seo( $post_type = '' ) {
 
-		if ( '' === $post_type ) {
-			$post_type = $this->get_current_post_type();
-		}
+		$post_type = $this->get_supported_post_type( true, $post_type );
 
 		if ( empty( $post_type ) )
 			return false;
@@ -984,47 +983,67 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	}
 
 	/**
-	 * Returns Post Type from current screen.
+	 * Checks (current) Post Type for if this plugin may use it.
 	 *
 	 * @param bool $public Whether to only get Public Post types.
+	 * @param string $post_type Optional. The post type to check.
 	 *
 	 * @since 2.6.0
+	 * @staticvar string $cache
 	 *
-	 * @return bool|string The Post Type
+	 * @return bool|string The Allowed Post Type.
 	 */
-	public function get_current_post_type( $public = true ) {
+	public function get_supported_post_type( $public = true, $post_type = '' ) {
 
-		static $post_type = null;
-
-		//* Detect post type if empty or not set.
-		if ( is_null( $post_type ) || empty( $post_type ) ) {
+		if ( empty( $post_type ) ) {
 			global $current_screen;
 
 			if ( isset( $current_screen->post_type ) ) {
-				static $post_page = array();
-
-				$args = $public ? array( 'public' => true ) : array();
-
-				if ( ! isset( $post_page[$public] ) )
-					$post_page[$public] = (array) get_post_types( $args );
-
-				//* Smart var. This elemenates the need for a foreach loop, reducing resource usage.
-				$post_type = isset( $post_page[$public][ $current_screen->post_type ] ) ? $current_screen->post_type : '';
+				$post_type = $current_screen->post_type;
+			} else {
+				return false;
 			}
 		}
 
-		//* No post type has been found.
-		if ( empty( $post_type ) )
-			return false;
+		$post_type_evaluated = $post_type;
 
-		return $post_type;
+		static $cache = array();
+
+		if ( isset( $cache[$public][$post_type] ) )
+			return $cache[$public][$post_type];
+
+		$object = get_post_type_object( $post_type );
+
+		//* Check if rewrite is enabled. Bypass builtin post types.
+		if ( isset( $object->_builtin ) && false === $object->_builtin )
+			if ( isset( $object->rewrite ) && false === $object->rewrite )
+				$post_type = false;
+
+		//* Check if post is public if public parameter is set.
+		if ( $post_type && $public )
+			if ( isset( $object->public ) && ! $object->public )
+				$post_type = false;
+
+		/**
+		 * Applies filters 'the_seo_framework_supported_post_type' : string
+		 * @since 2.6.2
+		 *
+		 * @param string $post_type The supported post type.
+		 * @param string $post_type_evaluated The evaluated post type.
+		 */
+		$post_type = (string) apply_filters( 'the_seo_framework_supported_post_type', $post_type, $post_type_evaluated );
+
+		//* No supported post type has been found.
+		if ( empty( $post_type ) )
+			return $cache[$public][$post_type] = false;
+
+		return $cache[$public][$post_type] = $post_type;
 	}
 
 	/**
 	 * Determines whether the theme is outputting the title correctly based on transient.
 	 *
 	 * @since 2.5.2
-	 *
 	 * @staticvar bool $dir
 	 *
 	 * @return bool True theme is doing it right.

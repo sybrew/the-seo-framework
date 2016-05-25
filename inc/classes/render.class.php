@@ -66,24 +66,24 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	 * Must be called inside the loop
 	 *
 	 * @param string $url the url
-	 * @param int $page_id the page id, if empty it will fetch the requested ID, else the page uri
+	 * @param int $post_id the page id, if empty it will fetch the requested ID, else the page uri
 	 * @param bool $paged Return current page URL without pagination
 	 * @param bool $from_option Get the canonical uri option
-	 * @param bool $paged_plural Whether to allow pagination on second later pages.
+	 * @param bool $paged_plural Whether to allow pagination on second or later pages.
 	 *
 	 * @staticvar array $url_cache
 	 *
 	 * @since 2.2.2
 	 * @return string The url
 	 */
-	public function the_url_from_cache( $url = '', $page_id = '', $paged = false, $from_option = true, $paged_plural = true ) {
+	public function the_url_from_cache( $url = '', $post_id = null, $paged = false, $from_option = true, $paged_plural = true ) {
 
 		static $url_cache = array();
 
-		if ( isset( $url_cache[$url][$page_id][$paged][$from_option][$paged_plural] ) )
-			return $url_cache[$url][$page_id][$paged][$from_option][$paged_plural];
+		if ( isset( $url_cache[$url][$post_id][$paged][$from_option][$paged_plural] ) )
+			return $url_cache[$url][$post_id][$paged][$from_option][$paged_plural];
 
-		return $url_cache[$url][$page_id][$paged][$from_option][$paged_plural] = $this->the_url( $url, array( 'paged' => $paged, 'get_custom_field' => $from_option, 'id' => $page_id, 'paged_plural' => $paged_plural ) );
+		return $url_cache[$url][$post_id][$paged][$from_option][$paged_plural] = $this->the_url( $url, array( 'paged' => $paged, 'get_custom_field' => $from_option, 'id' => $post_id, 'paged_plural' => $paged_plural ) );
 	}
 
 	/**

@@ -98,7 +98,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	public function nav_tab_wrapper( $id, $tabs = array(), $version = '2.3.6', $use_tabs = true ) {
 
 		//* Whether tabs are active.
-		$use_tabs = $use_tabs || count( $tabs ) > 1 ? true : false;
+		$use_tabs = $use_tabs && count( $tabs ) > 1 ? true : false;
 
 		/**
 		 * Start navigation.

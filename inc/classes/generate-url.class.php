@@ -72,27 +72,20 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 */
 	public function the_url( $url = '', $args = array() ) {
 
+		$args = $this->reparse_url_args( $args );
+
+		/**
+		 * Fetch permalink if Feed.
+		 * @since 2.5.2
+		 */
+		if ( $this->is_feed() )
+			$url = get_permalink( $args['post'] );
+
 		if ( $this->the_seo_framework_debug && false === $this->doing_sitemap ) $this->debug_init( __CLASS__, __FUNCTION__, true, $debug_key = microtime(true), get_defined_vars() );
 
 		//* Reset cache.
 		$this->url_slashit = true;
 		$this->add_subdomain = '';
-
-		$default_args = $this->parse_url_args( '', '', true );
-
-		/**
-		 * Parse args.
-		 * @since 2.4.2
-		 */
-		if ( ! is_array( $args ) ) {
-			//* Old style parameters are used. Doing it wrong.
-			$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', '2.4.2' );
-			$args = $default_args;
-		} else if ( $args ) {
-			$args = $this->parse_url_args( $args, $default_args );
-		} else {
-			$args = $default_args;
-		}
 
 		$path = '';
 		$scheme = '';
@@ -103,20 +96,19 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		 */
 		$slashit = true;
 
-		/**
-		 * Fetch permalink if Feed.
-		 * @since 2.5.2
-		 */
-		if ( $this->is_feed() )
-			$url = get_permalink( $args['post'] );
-
 		if ( ! $args['home'] && empty( $url ) ) {
 			/**
 			 * Get url from options
 			 * @since 2.2.9
 			 */
-			if ( $args['get_custom_field'] && $this->is_singular() )
-				$url = $this->get_custom_field( '_genesis_canonical_uri' ) ? $this->get_custom_field( '_genesis_canonical_uri' ) : $url;
+			if ( $args['get_custom_field'] && $this->is_singular() ) {
+				$custom_url = $this->get_custom_field( '_genesis_canonical_uri' );
+
+				if ( $custom_url ) {
+					$url = $custom_url;
+					$this->url_slashit = false;
+				}
+			}
 
 			if ( empty( $url ) )
 				$path = $this->generate_url_path( $args );
@@ -150,13 +142,12 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				$slashit = false;
 			} else {
 				$url = $this->generate_full_url( $path );
-
 				$scheme = is_ssl() ? 'https' : 'http';
 			}
 		}
 
 		//* Add subdomain, if any.
-		if ( '' !== $this->add_subdomain ) {
+		if ( $this->add_subdomain ) {
 			$parsed_url = parse_url( $url );
 			$url = str_replace( $parsed_url['scheme'] . '://', '', $url );
 
@@ -254,6 +245,33 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	}
 
 	/**
+	 * Reparse URL args.
+	 *
+	 * @param array $args required The passed arguments.
+	 *
+	 * @since 2.6.2
+	 * @return array $args parsed args.
+	 */
+	public function reparse_url_args( $args = array() ) {
+
+		$default_args = $this->parse_url_args( '', '', true );
+
+		if ( is_array( $args ) ) {
+			 if ( empty( $args ) ) {
+				$args = $default_args;
+			} else {
+				$args = $this->parse_url_args( $args, $default_args );
+			}
+		} else {
+			//* Old style parameters are used. Doing it wrong.
+			$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', '2.4.2' );
+			$args = $default_args;
+		}
+
+		return $args;
+	}
+
+	/**
 	 * Generate url from Args.
 	 *
 	 * @since 2.6.0
@@ -264,8 +282,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 */
 	public function generate_url_path( $args = array() ) {
 
-		if ( empty( $args ) )
-			$args = $this->parse_url_args( '', '', true );
+		$args = $this->reparse_url_args( $args );
 
 		if ( $args['is_term'] || $this->is_archive() ) {
 			$term = $args['term'];
@@ -287,34 +304,26 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			}
 		} else {
 
-			$post = $args['post'];
-
-			/**
-			 * Fetch post object
-			 * @since 2.2.4
-			 */
-			if ( ! isset( $post ) )
-				$post = get_post( $args['id'], OBJECT );
-
 			/**
 			 * Reworked to use the $args['id'] check based on get_the_real_ID.
-			 * @since 2.6.0
+			 * @since 2.6.0 & 2.6.2
 			 */
-			if ( isset( $post ) ) {
+			if ( isset( $args['id'] ) ) {
 
-				$post_id = isset( $post->ID ) ? $post->ID : $args['id'];
+				$post_id = isset( $args['post']->ID ) ? $args['post']->ID : $args['id'];
 
 				if ( $post_id ) {
+					if ( $this->pretty_permalinks ) {
 
-					if ( '' === $this->permalink_structure() ) {
-						$path = $this->the_url_path_default_permalink_structure( $post );
-					} else {
+						$post = get_post( $post_id );
 
 						//* Don't slash draft shortlinks.
 						if ( isset( $post->post_status ) && ( 'auto-draft' === $post->post_status || 'draft' === $post->post_status ) )
 							$this->url_slashit = false;
 
-						$path = $this->get_relative_url( $post, $args['external'], $post_id );
+						$path = $this->get_relative_url( $post_id, $args['external'] );
+					} else {
+						$path = $this->the_url_path_default_permalink_structure( $post_id );
 					}
 				}
 
@@ -330,9 +339,9 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	/**
 	 * Generates relative URL for current post_ID.
 	 *
-	 * @param object $post The post.
+	 * @param int|object $post The post object or ID.
 	 * @param bool $external Whether to fetch the WP Request or get the permalink by Post Object.
-	 * @param id $post_id The page id.
+	 * @param int $depr Deprecated The post ID.
 	 *
 	 * @since 2.3.0
 	 *
@@ -340,20 +349,26 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 *
 	 * @return relative Post or Page url.
 	 */
-	public function get_relative_url( $post = null, $external = false, $post_id = null ) {
+	public function get_relative_url( $post = null, $external = false, $depr = null ) {
 
-		if ( ! isset( $post_id ) ) {
-			if ( isset( $post->ID ) )
-				$post_id = $post->ID;
-
-			if ( ! isset( $post_id ) && ! $external )
-				$post_id = $this->get_the_real_ID();
+		if ( ! isset( $depr ) ) {
+			if ( is_object( $post ) ) {
+				if ( isset( $post->ID ) )
+					$post_id = $post->ID;
+			} else if ( is_scalar( $post ) ) {
+				$post_id = (int) $post;
+			}
+		} else {
+			$post_id = $depr;
 		}
+
+		if ( ! isset( $post_id ) && ! $external )
+			$post_id = $this->get_the_real_ID();
 
 		if ( ! isset( $post_id ) )
 			return '';
 
-		if ( $post_id && ( $external || ! $this->is_home() ) ) {
+		if ( $external || ! $this->is_front_page() ) {
 			$permalink = get_permalink( $post_id );
 		} else if ( ! $external ) {
 			global $wp;
@@ -366,9 +381,6 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		if ( ! isset( $permalink ) )
 			return '';
 
-		/**
-		 * @since 2.4.2
-		 */
 		$path = $this->set_url_scheme( $permalink, 'relative' );
 
 		return $path;
@@ -380,6 +392,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 * @since 2.6.0
 	 * @staticvar string $home_url The Home URL.
 	 * @staticvar string|bool $home_path The Home Directory Path.
+	 *
+	 * @param string $path The current path.
 	 *
 	 * @return string URL the full URL.
 	 */
@@ -674,13 +688,12 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			$term = get_queried_object();
 
 		$taxonomy = $term->taxonomy;
-
-		$paged = $this->maybe_get_paged( $this->paged(), $args['paged'], $args['paged_plural'] );
-
 		$termlink = $wp_rewrite->get_extra_permastruct( $taxonomy );
 
 		$slug = $term->slug;
 		$t = get_taxonomy( $taxonomy );
+
+		$paged = $this->maybe_get_paged( $this->paged(), $args['paged'], $args['paged_plural'] );
 
 		if ( empty( $termlink ) ) {
 			if ( 'category' === $taxonomy ) {
@@ -693,6 +706,9 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 			if ( $paged )
 				$termlink .= '&page=' . $paged;
+
+			//* Don't slash it.
+			$this->url_slashit = false;
 
 		} else {
 			if ( $t->rewrite['hierarchical'] ) {
@@ -713,7 +729,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			}
 
 			if ( $paged )
-				$termlink = trailingslashit( $termlink )  . 'page/' . $paged;
+				$termlink = trailingslashit( $termlink ) . 'page/' . $paged;
 
 			$termlink = user_trailingslashit( $termlink, 'category' );
 		}
@@ -818,7 +834,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	/**
 	 * Creates canonical url for the default permalink structure.
 	 *
-	 * @param object $post The post.
+	 * @param object|int $post The post object or ID.
 	 *
 	 * @since 2.3.0
 	 */
@@ -862,9 +878,16 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		}
 
 		if ( ! isset( $path ) ) {
-			if ( isset( $post->ID ) ) {
-				$id = $post->ID;
-			} else {
+
+			if ( isset( $post ) ) {
+				if ( is_object( $post ) && isset( $post->ID ) ) {
+					$id = $post->ID;
+				} else if ( is_scalar( $post ) ) {
+					$id = $post;
+				}
+			}
+
+			if ( ! isset( $id ) ) {
 				$id = $this->get_the_real_ID();
 			}
 
@@ -877,9 +900,9 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	/**
 	 * Try to get an canonical URL when WPMUdev Domain Mapping is active.
 	 *
-	 * @param string $path The post relative path.
-	 *
 	 * @since 2.3.0
+	 *
+	 * @param string $path The post relative path.
 	 *
 	 * @param bool $get_scheme Output array with scheme.
 	 * @since 2.4.0
@@ -1006,11 +1029,13 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	}
 
 	/**
-	 * Generates shortlink url
+	 * Generates shortlink URL.
 	 *
 	 * @since 2.2.2
+	 * @global object $wp_query
 	 *
 	 * @param int $post_id The post ID
+	 *
 	 * @return string|null Escaped site Shortlink URL
 	 */
 	public function get_shortlink( $post_id = 0 ) {
@@ -1019,7 +1044,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 			$path = null;
 
-			if ( ! is_front_page() ) {
+			if ( false === $this->is_front_page() ) {
 				if ( $this->is_singular( $post_id ) ) {
 
 					if ( 0 === $post_id )
@@ -1032,37 +1057,43 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 							$path = '?p=' . $post_id;
 						}
 					}
-				} else if ( ! is_front_page() && is_archive() ) {
+				} else if ( $this->is_archive() ) {
 
-					$object = get_queried_object();
-
-					if ( is_category() ) {
-						$id = $object->term_id;
+					if ( $this->is_category() ) {
+						$id = get_queried_object_id();
 						$path = '?cat=' . $id;
-					}
-
-					if ( is_tag() ) {
-						$name = $object->name;
-						$path = '?tag=' . $name;
-					}
-
-					if ( is_date() ) {
+					} else if ( $this->is_tag() ) {
+						$id = get_queried_object_id();
+						$path = '?post_tag=' . $id;
+					} else if ( $this->is_date() ) {
 						// This isn't exactly "short" for a shortlink...
-						$year = get_query_var( 'year' );
-						$month = get_query_var( 'monthnum' ) ? '&monthnum=' . get_query_var( 'monthnum' ) : '';
-						$day = get_query_var( 'day' ) ? '&day=' . get_query_var( 'day' ) : '';
+						global $wp_query;
 
-						$path = '?year=' . $year . $month . $day;
-					}
+						$query = $wp_query->query;
+						$var = '';
 
-					if ( is_author() ) {
-						$id = $object->ID;
+						$first = true;
+						foreach ( $query as $key => $val ) {
+							$var .= $first ? '?' : '&';
+							$var .= $key . '=' . $val;
+							$first = false;
+						}
+
+						$path = $var;
+					} else if ( $this->is_author() ) {
+						$id = get_queried_object_id();
 						$path = '?author=' . $id;
-					}
+					} else if ( $this->is_tax() ) {
+						$object = get_queried_object();
 
-					if ( is_tax() ) {
-						$id = $object->ID;
-						$path = '?taxonomy=' . $id;
+						$t = isset( $object->taxonomy ) ? urlencode( $object->taxonomy ) : '';
+
+						if ( $t ) {
+							$slug = isset( $object->slug ) ? urlencode( $object->slug ) : '';
+
+							if ( $slug )
+								$path = '?' . $t . '=' . $slug;
+						}
 					}
 
 				}
@@ -1070,7 +1101,10 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 			if ( isset( $path ) ) {
 
-				$url = $this->the_url_from_cache();
+				if ( 0 === $post_id )
+					$post_id = $this->get_the_real_ID();
+
+				$url = $this->the_url_from_cache( '', $post_id, false, false, false );
 				$parsed_url = parse_url( $url );
 
 				$additions = '';
@@ -1091,7 +1125,6 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 * Generates Previous and Next links
 	 *
 	 * @since 2.2.4
-	 * @global object $wp_query
 	 *
 	 * @param string $prev_next Previous or next page link
 	 * @param int $post_id The post ID
@@ -1128,6 +1161,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 				if ( 'next' === $prev_next )
 					$next = $page < $numpages ? (string) $this->get_paged_post_url( $page + 1, $post_id, 'next' ) : $next;
+
 			}
 		} else if ( $this->is_archive() || $this->is_home() ) {
 
