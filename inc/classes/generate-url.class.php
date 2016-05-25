@@ -51,7 +51,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	}
 
 	/**
-	 * Creates canonical url
+	 * Creates canonical URL.
 	 *
 	 * @param string $url the url
 	 *
@@ -69,6 +69,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 * }
 	 *
 	 * @since 2.0.0
+	 *
+	 * @return string Escape url.
 	 */
 	public function the_url( $url = '', $args = array() ) {
 
@@ -79,7 +81,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		 * @since 2.5.2
 		 */
 		if ( $this->is_feed() )
-			$url = get_permalink( $args['post'] );
+			$url = get_permalink();
 
 		if ( $this->the_seo_framework_debug && false === $this->doing_sitemap ) $this->debug_init( __CLASS__, __FUNCTION__, true, $debug_key = microtime(true), get_defined_vars() );
 
@@ -114,7 +116,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				$path = $this->generate_url_path( $args );
 		}
 
-		//* Translate the URL.
+		//* Translate the URL, when possible.
 		$path = $this->get_translation_path( $path, $args['id'], $args['external'] );
 
 		//* Domain Mapping canonical URL
@@ -146,14 +148,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			}
 		}
 
-		//* Add subdomain, if any.
-		if ( $this->add_subdomain ) {
-			$parsed_url = parse_url( $url );
-			$url = str_replace( $parsed_url['scheme'] . '://', '', $url );
-
-			//* Put it together.
-			$url = $this->add_subdomain . '.' . $url;
-		}
+		$url = $this->set_url_subdomain( $url );
 
 		//* URL has been given manually or $args['home'] is true.
 		if ( ! isset( $scheme ) )
@@ -164,7 +159,6 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		if ( $this->url_slashit ) {
 			/**
 			 * Slash it only if $slashit is true
-			 *
 			 * @since 2.2.4
 			 */
 			if ( $slashit && ! $args['forceslash'] )
@@ -308,26 +302,23 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			 * Reworked to use the $args['id'] check based on get_the_real_ID.
 			 * @since 2.6.0 & 2.6.2
 			 */
-			if ( isset( $args['id'] ) ) {
+			$post_id = isset( $args['post']->ID ) ? $args['post']->ID : $args['id'];
 
-				$post_id = isset( $args['post']->ID ) ? $args['post']->ID : $args['id'];
+			if ( $post_id ) {
+				if ( $this->pretty_permalinks ) {
 
-				if ( $post_id ) {
-					if ( $this->pretty_permalinks ) {
+					$post = get_post( $post_id );
 
-						$post = get_post( $post_id );
+					//* Don't slash draft shortlinks.
+					if ( isset( $post->post_status ) && ( 'auto-draft' === $post->post_status || 'draft' === $post->post_status ) )
+						$this->url_slashit = false;
 
-						//* Don't slash draft shortlinks.
-						if ( isset( $post->post_status ) && ( 'auto-draft' === $post->post_status || 'draft' === $post->post_status ) )
-							$this->url_slashit = false;
-
-						$path = $this->get_relative_url( $post_id, $args['external'] );
-					} else {
-						$path = $this->the_url_path_default_permalink_structure( $post_id );
-					}
+					$path = $this->get_relative_url( $post_id, $args['external'] );
+				} else {
+					$path = $this->the_url_path_default_permalink_structure( $post_id );
 				}
-
 			}
+
 		}
 
 		if ( isset( $path ) )
@@ -345,30 +336,31 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 *
 	 * @since 2.3.0
 	 *
-	 * @global object $post
+	 * @global object $wp
 	 *
 	 * @return relative Post or Page url.
 	 */
 	public function get_relative_url( $post = null, $external = false, $depr = null ) {
 
-		if ( ! isset( $depr ) ) {
+		if ( isset( $depr ) ) {
+			$post_id = $depr;
+		} else {
 			if ( is_object( $post ) ) {
 				if ( isset( $post->ID ) )
 					$post_id = $post->ID;
 			} else if ( is_scalar( $post ) ) {
 				$post_id = (int) $post;
 			}
-		} else {
-			$post_id = $depr;
 		}
 
-		if ( ! isset( $post_id ) && ! $external )
-			$post_id = $this->get_the_real_ID();
+		if ( ! isset( $post_id ) ) {
+			if ( ! $external )
+				$post_id = $this->get_the_real_ID();
+			else
+				return '';
+		}
 
-		if ( ! isset( $post_id ) )
-			return '';
-
-		if ( $external || ! $this->is_front_page() ) {
+		if ( $external || ! $this->is_home() ) {
 			$permalink = get_permalink( $post_id );
 		} else if ( ! $external ) {
 			global $wp;
@@ -655,7 +647,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 * @global WP_Rewrite object $wp_rewrite
 	 *
 	 * @param object $term The term object.
-	 * @param bool $args {
+	 * @param array|bool $args {
 	 *		'external' : Whether to fetch the WP Request or get the permalink by Post Object.
 	 *		'paged'	: Whether to add pagination for all types.
 	 *		'paged_plural' : Whether to add pagination for the second or later page.
@@ -887,9 +879,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				}
 			}
 
-			if ( ! isset( $id ) ) {
+			if ( ! isset( $id ) )
 				$id = $this->get_the_real_ID();
-			}
 
 			$path = '?p=' . $id;
 		}
@@ -1232,15 +1223,15 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 					$urlfromcache = str_replace( '?' . $query_arg, '', $urlfromcache );
 
 				// Calculate current page number.
-				$int_current = 'next' === $pos ? ( $i - 1 ) : ( $i + 1 );
-				$string_current = (string) $int_current;
+				$current = 'next' === $pos ? ( $i - 1 ) : ( $i + 1 );
+				$current = (string) $current;
 
 				if ( $i !== 1 ) {
 					//* We're adding a page.
-					$last_occurence = strrpos( $urlfromcache, '/' . $string_current . '/' );
+					$last_occurence = strrpos( $urlfromcache, '/' . $current . '/' );
 
 					if ( $last_occurence !== false )
-						$urlfromcache = substr_replace( $urlfromcache, '/', $last_occurence, strlen( '/' . $string_current . '/' ) );
+						$urlfromcache = substr_replace( $urlfromcache, '/', $last_occurence, strlen( '/' . $current . '/' ) );
 				}
 			}
 
@@ -1261,6 +1252,29 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				if ( isset( $query_arg ) )
 					$url = $url . '?' . $query_arg;
 			}
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Adds subdomain to URL.
+	 *
+	 * @since 2.6.2
+	 *
+	 * @param string $url The current URL without subdomain.
+	 *
+	 * @return string $url URL with possible subdomain.
+	 */
+	protected function set_url_subdomain( $url = '' ) {
+
+		//* Add subdomain, if any.
+		if ( $this->add_subdomain ) {
+			$parsed_url = parse_url( $url );
+			$url = str_replace( $parsed_url['scheme'] . '://', '', $url );
+
+			//* Put it together.
+			$url = $this->add_subdomain . '.' . $url;
 		}
 
 		return $url;
