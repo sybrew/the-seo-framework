@@ -366,18 +366,23 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Detailed log:**
 /
-***Do you like [fancy stuff](https://theseoframework.com/?p= TODO #detailed)?***
+***Want to know which bugs are fixed? Go ahead, [read them here](https://theseoframework.com/?p= TODO #detailed)***
 
 **For everyone:**
 	* **Fixed:**
 		/
 		* TODO Posts and Pages pagination URL was outputting the Home Page URL only.
 		* Infinite loop (unresolvable code) when a query altering plugin is activated on all Categories and Tags.
-		* TODO WPMUdev domain mapping SSO rewrite endpoint now works again.
 
 **For developers:**
+	* **Improved:**
+		* WPMUdev Domain Mapping rewrite endpoint is no longer being checked.
+		* Settings update check is now once more done on `admin_init`, rather than `init`.
+		* Although deprecated since this update, `AutoDescription_Sitemaps::wpmudev_domainmap_flush_fix()` now uses a single site option for all blogs, rather than many.
 	* **Fixed:**
 		* Within `AutoDescription_Query::can_cache_query()`, it now looks for `$GLOBALS['wp_query']->queried_object` rather than `$GLOBALS['wp_query']->query` to prevent plugin/theme crashes.
+	* **Deprecated:**
+		* `AutoDescription_Sitemaps::wpmudev_domainmap_flush_fix()`, this plugin is no longer fiddling with Domain Mapping.
 
 = 2.6.2 - Condensed Associations =
 
