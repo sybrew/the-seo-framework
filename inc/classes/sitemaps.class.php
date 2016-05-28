@@ -1036,6 +1036,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 	 * So it will flush the next time on init.
 	 *
 	 * @since 2.3.0
+	 * @access private
 	 */
 	public function wpmudev_domainmap_flush_fix( $options_saved = false, $flush_now = true ) {
 

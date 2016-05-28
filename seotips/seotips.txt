@@ -101,6 +101,6 @@
 
 	= 2.6.2 - Geo Targetting =
 
-* Is your website about a local business? Then be sure to sign up for Google Businesses. This will massively increase your search rankings, by an artificial result.
+* Is your website about a local business? Then be sure to sign up for Google Businesses. This will massively increase your search presence, by an artificial result.
 * It also greatly helps to have your server located near your target audience's location. The website will not only respond faster, but Search Engines can pick up descriptive signals from it.
 * If your business resides and only serves in Belgium, for example, it's also better to have a ".be" domain name extension rather than a ".com" domain name extension.

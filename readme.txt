@@ -349,6 +349,36 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
+= 2.6.3 - ??? =
+
+**Release date:**
+/
+* May TODO 2016
+
+**Summarized:**
+/
+* This update is another maintenance release. This essentially means that even more bugs have been fixed, but no features have been added.
+* For developers, the query variables can now only be cached when the queried object has been set, rather than just the query.
+
+**SEO Tip of the Updated - ????:**
+/
+* TODO
+
+**Detailed log:**
+/
+***Do you like [fancy stuff](https://theseoframework.com/?p= TODO #detailed)?***
+
+**For everyone:**
+	* **Fixed:**
+		/
+		* TODO Posts and Pages pagination URL was outputting the Home Page URL only.
+		* Infinite loop (unresolvable code) when a query altering plugin is activated on all Categories and Tags.
+		* TODO WPMUdev domain mapping SSO rewrite endpoint now works again.
+
+**For developers:**
+	* **Fixed:**
+		* Within `AutoDescription_Query::can_cache_query()`, it now looks for `$GLOBALS['wp_query']->queried_object` rather than `$GLOBALS['wp_query']->query` to prevent plugin/theme crashes.
+
 = 2.6.2 - Condensed Associations =
 
 **Release date:**

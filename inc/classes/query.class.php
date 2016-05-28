@@ -52,7 +52,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		if ( isset( $cache ) )
 			return $cache;
 
-		if ( isset( $GLOBALS['wp_query']->query ) || isset( $GLOBALS['current_screen'] ) )
+		if ( ( isset( $GLOBALS['wp_query']->queried_object ) || isset( $GLOBALS['current_screen'] ) )  )
 			return $cache = true;
 
 		return false;
