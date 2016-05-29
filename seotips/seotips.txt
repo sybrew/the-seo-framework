@@ -15,7 +15,7 @@
 
 	= 2.3.6 - Plenty of Content, but not too much =
 
-* Make sure you have plenty of content for your visitors to read. About 600 to 1000 words of content per page is recommended.
+* Make sure you have plenty of content for your visitors to read. About 600 to 1900 words of content per page is recommended.
 * Your content is for your visitors, not for search engines.
 * So, do not split up content if it exceeds the recommended amount. If a piece of text can't support itself, readers won't understand the subject and will leave your website.
 * If you have fewer words but you've covered everything that needed to be covered for the page, don't extend it just for the sake of SEO. Do not over-optimize.
@@ -104,3 +104,9 @@
 * Is your website about a local business? Then be sure to sign up for Google Businesses. This will massively increase your search presence, by an artificial result.
 * It also greatly helps to have your server located near your target audience's location. The website will not only respond faster, but Search Engines can pick up descriptive signals from it.
 * If your business resides and only serves in Belgium, for example, it's also better to have a ".be" domain name extension rather than a ".com" domain name extension.
+
+	= 2.6.3 - Keep it Alive =
+
+* Have you written about something already, and is the subject coming up again? Link back to the older publication.
+* About 2 to 5 internal links within the content to older pages will help your visitors understand your hierarchy and find more related content (of which they're already interested in).
+* It will also help Search Engines spread page importance over multiple pages within your site; this is also known as link juice.

@@ -57,15 +57,16 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 *
 	 * @since 2.4.2
 	 * @param array $args : accepted args : {
-	 * 			@param bool $paged Return current page URL without pagination if false.
-	 * 			@param bool $from_option Get the canonical uri option
-	 * 			@param object $post The Post Object.
-	 * 			@param bool $external Whether to fetch the current WP Request or get the permalink by Post Object.
-	 * 			@param bool $is_term Fetch url for term.
-	 * 			@param object $term The term object.
-	 * 			@param bool $home Fetch home URL.
-	 * 			@param bool $forceslash Fetch home URL and slash it, always.
-	 *			@param int $id The Page id.
+	 * 		@param bool $paged Return current page URL without pagination if false
+	 * 		@param bool $paged_plural Whether to add pagination for the second or later page.
+	 * 		@param bool $from_option Get the canonical uri option
+	 * 		@param object $post The Post Object.
+	 * 		@param bool $external Whether to fetch the current WP Request or get the permalink by Post Object.
+	 * 		@param bool $is_term Fetch url for term.
+	 * 		@param object $term The term object.
+	 * 		@param bool $home Fetch home URL.
+	 * 		@param bool $forceslash Fetch home URL and slash it, always.
+	 *		@param int $id The Page or Term ID.
 	 * }
 	 *
 	 * @since 2.0.0
@@ -73,6 +74,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 * @return string Escape url.
 	 */
 	public function the_url( $url = '', $args = array() ) {
+
+		if ( $this->the_seo_framework_debug && false === $this->doing_sitemap ) $this->debug_init( __CLASS__, __FUNCTION__, true, $debug_key = microtime(true), get_defined_vars() );
 
 		$args = $this->reparse_url_args( $args );
 
@@ -82,8 +85,6 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		 */
 		if ( $this->is_feed() )
 			$url = get_permalink();
-
-		if ( $this->the_seo_framework_debug && false === $this->doing_sitemap ) $this->debug_init( __CLASS__, __FUNCTION__, true, $debug_key = microtime(true), get_defined_vars() );
 
 		//* Reset cache.
 		$this->url_slashit = true;
@@ -109,6 +110,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				if ( $custom_url ) {
 					$url = $custom_url;
 					$this->url_slashit = false;
+					$scheme = parse_url( $custom_url, PHP_URL_SCHEME );
 				}
 			}
 
@@ -154,7 +156,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		if ( ! isset( $scheme ) )
 			$scheme = is_ssl() ? 'https' : 'http';
 
-		$output = $this->set_url_scheme( $url, $scheme );
+		$url = $this->set_url_scheme( $url, $scheme );
 
 		if ( $this->url_slashit ) {
 			/**
@@ -162,14 +164,19 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			 * @since 2.2.4
 			 */
 			if ( $slashit && ! $args['forceslash'] )
-				$output = user_trailingslashit( $output );
+				$url = user_trailingslashit( $url );
 
 			//* Be careful with the default permalink structure.
 			if ( $args['forceslash'] )
-				$output = trailingslashit( $output );
+				$url = trailingslashit( $url );
 		}
 
-		$url = esc_url( $output );
+		if ( $this->pretty_permalinks ) {
+			$url = esc_url( $url );
+		} else {
+			//* Keep the &'s more readable.
+			$url = esc_url_raw( $url );
+		}
 
 		if ( $this->the_seo_framework_debug && false === $this->doing_sitemap ) $this->debug_init( __CLASS__, __FUNCTION__, false, $debug_key, array( 'url_output' => $url ) );
 
@@ -185,6 +192,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 *
 	 * @applies filters the_seo_framework_url_args : {
 	 * 		@param bool $paged Return current page URL without pagination if false
+	 * 		@param bool $paged_plural Whether to add pagination for the second or later page.
 	 * 		@param bool $from_option Get the canonical uri option
 	 * 		@param object $post The Post Object.
 	 * 		@param bool $external Whether to fetch the current WP Request or get the permalink by Post Object.
@@ -192,6 +200,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 * 		@param object $term The term object.
 	 * 		@param bool $home Fetch home URL.
 	 * 		@param bool $forceslash Fetch home URL and slash it, always.
+	 *		@param int $id The Page or Term ID.
 	 * }
 	 *
 	 * @since 2.4.2
@@ -309,13 +318,13 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 					$post = get_post( $post_id );
 
-					//* Don't slash draft shortlinks.
+					//* Don't slash draft links.
 					if ( isset( $post->post_status ) && ( 'auto-draft' === $post->post_status || 'draft' === $post->post_status ) )
 						$this->url_slashit = false;
 
 					$path = $this->get_relative_url( $post_id, $args['external'] );
 				} else {
-					$path = $this->the_url_path_default_permalink_structure( $post_id );
+					$path = $this->the_url_path_default_permalink_structure( $post_id, $args['paged'], $args['paged_plural'] );
 				}
 			}
 
@@ -688,6 +697,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		$paged = $this->maybe_get_paged( $this->paged(), $args['paged'], $args['paged_plural'] );
 
 		if ( empty( $termlink ) ) {
+			//* Default permalink structure.
+
 			if ( 'category' === $taxonomy ) {
 				$termlink = '?cat=' . $term->term_id;
 			} else if ( isset( $t->query_var ) && '' !== $t->query_var ) {
@@ -697,7 +708,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			}
 
 			if ( $paged )
-				$termlink .= '&page=' . $paged;
+				$termlink .= '&paged=' . $paged;
 
 			//* Don't slash it.
 			$this->url_slashit = false;
@@ -827,25 +838,25 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 * Creates canonical url for the default permalink structure.
 	 *
 	 * @param object|int $post The post object or ID.
+	 * @param bool $paged Whether to add pagination for all types.
+	 * @param bool $paged_plural Whether to add pagination for the second or later page.
 	 *
 	 * @since 2.3.0
 	 */
-	public function the_url_path_default_permalink_structure( $post = null ) {
+	public function the_url_path_default_permalink_structure( $post = null, $paged = false, $paged_plural = true ) {
 
 		//* Don't slash it.
 		$this->url_slashit = false;
 
-		if ( ! $this->is_singular() ) {
+		if ( false === $this->is_singular() ) {
 			//* We're on a taxonomy
 			$object = get_queried_object();
 
 			if ( is_object( $object ) ) {
 				if ( $this->is_category() ) {
-					$id = $object->term_id;
-					$path = '?cat=' . $id;
+					$path = '?cat=' . $object->term_id;
 				} else if ( $this->is_tag() ) {
-					$name = $object->name;
-					$path = '?tag=' . $id;
+					$path = '?tag=' . $object->name;
 				} else if ( $this->is_date() ) {
 					global $wp_query;
 
@@ -857,16 +868,20 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 					$path = '?year=' . $year . $month . $day;
 				} else if ( $this->is_author() ) {
-					$name = $object->author_name;
-					$path = '?author=' . $name;
+					$path = '?author=' . $object->author_name;
 				} else if ( $this->is_tax() ) {
-					$name = $object->taxonomy;
-					$path = '?taxonomy=' . $name;
+					$path = '?taxonomy=' . $object->taxonomy . '&term=' . $object->slug;
+				} else if ( isset( $object->query_var ) && $object->query_var ) {
+					$path = '?' . $object->query_var . '=' . $object->slug;
 				} else {
-					$id = $object->ID;
-					$path = '?p=' . $id;
+					$path = '?p=' . $object->ID;
 				}
+
+				$paged = $this->maybe_get_paged( $this->paged(), $paged, $paged_plural );
+				if ( $paged )
+					$path .= '&paged=' . $paged;
 			}
+
 		}
 
 		if ( ! isset( $path ) ) {
@@ -883,6 +898,10 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				$id = $this->get_the_real_ID();
 
 			$path = '?p=' . $id;
+
+			$page = $this->maybe_get_paged( $this->page(), $paged, $paged_plural );
+			if ( $page )
+				$path .= '&page=' . $page;
 		}
 
 		return $path;
@@ -1075,6 +1094,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 						$id = get_queried_object_id();
 						$path = '?author=' . $id;
 					} else if ( $this->is_tax() ) {
+						//* Generate shortlink for object type and slug.
 						$object = get_queried_object();
 
 						$t = isset( $object->taxonomy ) ? urlencode( $object->taxonomy ) : '';
@@ -1095,12 +1115,33 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				if ( 0 === $post_id )
 					$post_id = $this->get_the_real_ID();
 
-				$url = $this->the_url_from_cache( '', $post_id, false, false, false );
-				$parsed_url = parse_url( $url );
+				$url = $this->the_url_from_cache( '', $post_id, false, false, true );
+				$query = parse_url( $url, PHP_URL_QUERY );
 
 				$additions = '';
-				if ( isset( $parsed_url['query'] ) )
-					$additions = '&' . $parsed_url['query'];
+				if ( isset( $query ) ) {
+					if ( false !== strpos( $query, '&' ) )
+						$query = explode( '&', $query );
+					else
+						$query = array( $query );
+
+					foreach ( $query as $arg ) {
+						if ( false === strpos( $path, $arg ) )
+							$additions .= '&' . $arg;
+					}
+				}
+
+				if ( $this->pretty_permalinks ) {
+					if ( $this->is_archive() || $this->is_home() ) {
+						$paged = $this->paged();
+						if ( $paged > 1 )
+							$path .= '&paged=' . $paged;
+					} else {
+						$page = $this->paged();
+						if ( $page > 1 )
+							$path .= '&page=' . $page;
+					}
+				}
 
 				$home_url = $this->the_home_url_from_cache( true );
 				$url = $home_url . $path . $additions;
@@ -1132,45 +1173,52 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 		if ( $this->is_singular() ) {
 
-			$output_singular_paged = false;
-			if ( $this->is_front_page() ) {
-				$output_singular_paged = $this->is_option_checked( 'prev_next_frontpage' );
-			} else {
-				$output_singular_paged = $this->is_option_checked( 'prev_next_posts' );
-			}
+			$output_singular_paged = $this->is_front_page() ? $this->is_option_checked( 'prev_next_frontpage' ) : $this->is_option_checked( 'prev_next_posts' );
 
 			if ( $output_singular_paged ) {
 
 				$page = $this->page();
 				$numpages = substr_count( $this->get_post_content( $this->get_the_real_ID() ), '<!--nextpage-->' ) + 1;
 
-				if ( ! $page && $numpages )
+				if ( ! $page )
 					$page = 1;
 
-				if ( 'prev' === $prev_next )
-					$prev = $page > 1 ? (string) $this->get_paged_post_url( $page - 1, $post_id, 'prev' ) : $prev;
-
-				if ( 'next' === $prev_next )
-					$next = $page < $numpages ? (string) $this->get_paged_post_url( $page + 1, $post_id, 'next' ) : $next;
+				if ( 'prev' === $prev_next ) {
+					$prev = $page > 1 ? $this->get_paged_post_url( $page - 1, $post_id, 'prev' ) : '';
+				} else if ( 'next' === $prev_next ) {
+					$next = $page < $numpages ? $this->get_paged_post_url( $page + 1, $post_id, 'next' ) : '';
+				}
 
 			}
 		} else if ( $this->is_archive() || $this->is_home() ) {
 
 			$output_archive_paged = false;
 			if ( $this->is_front_page() ) {
+				//* Only home.
 				$output_archive_paged = $this->is_option_checked( 'prev_next_frontpage' );
 			} else {
+				//* Both home and archives.
 				$output_archive_paged = $this->is_option_checked( 'prev_next_archives' );
 			}
 
 			if ( $output_archive_paged ) {
 				$paged = $this->paged();
 
-				if ( 'prev' === $prev_next )
-					$prev = $paged > 1 ? get_previous_posts_page_link() : $prev;
+				if ( 'prev' === $prev_next && $paged > 1 ) {
+					$paged = intval( $paged ) - 1;
 
-				if ( 'next' === $prev_next )
-					$next = $paged < $GLOBALS["wp_query"]->max_num_pages ? get_next_posts_page_link() : $next;
+					if ( $paged < 1 )
+						$paged = 1;
+
+					$prev = get_pagenum_link( $paged, false );
+				} else if ( 'next' === $prev_next && $paged < $GLOBALS["wp_query"]->max_num_pages ) {
+
+					if ( ! $paged )
+						$paged = 1;
+					$paged = intval( $paged ) + 1;
+
+					$next = get_pagenum_link( $paged, false );
+				}
 			}
 		}
 
@@ -1198,26 +1246,24 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 *
 	 * @return string Unescaped URL
 	 */
-	public function get_paged_post_url( $i, $post_id = 0, $pos = '' ) {
+	public function get_paged_post_url( $i, $post_id = 0, $pos = 'prev' ) {
 
 		$from_option = false;
 
+		if ( empty( $post_id ) )
+			$post_id = $this->get_the_real_ID();
+
 		if ( $i === 1 ) {
-			$url = $this->the_url_from_cache( '', $post_id, true, $from_option );
+			$url = $this->the_url_from_cache( '', $post_id, false, $from_option, false );
 		} else {
 			$post = get_post( $post_id );
 
-			$urlfromcache = $this->the_url_from_cache( '', $post_id, false, $from_option );
+			$urlfromcache = $this->the_url_from_cache( '', $post_id, false, $from_option, false );
 
-			/**
-			 * Fix the url.
-			 *
-			 * @since 2.2.5
-			 */
 			if ( $i >= 2 ) {
 				//* Fix adding pagination url.
 
-				//* Parse query arg and put in var.
+				//* Parse query arg, put in var and remove from current URL.
 				$query_arg = parse_url( $urlfromcache, PHP_URL_QUERY );
 				if ( isset( $query_arg ) )
 					$urlfromcache = str_replace( '?' . $query_arg, '', $urlfromcache );
@@ -1226,7 +1272,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				$current = 'next' === $pos ? ( $i - 1 ) : ( $i + 1 );
 				$current = (string) $current;
 
-				if ( $i !== 1 ) {
+				//* Continue if still bigger than or equal to 2.
+				if ( $i >= 2 ) {
 					//* We're adding a page.
 					$last_occurence = strrpos( $urlfromcache, '/' . $current . '/' );
 
@@ -1235,12 +1282,17 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				}
 			}
 
-			if ( '' === $this->permalink_structure() || in_array( $post->post_status, array( 'draft', 'auto-draft', 'pending' ) ) ) {
+			if ( ! $this->pretty_permalinks || in_array( $post->post_status, array( 'draft', 'auto-draft', 'pending' ) ) ) {
+
+				//* Put removed query arg back prior to adding pagination.
+				if ( isset( $query_arg ) )
+					$urlfromcache = $urlfromcache . '?' . $query_arg;
+
 				$url = add_query_arg( 'page', $i, $urlfromcache );
-			} else if ( $this->is_static_frontpage( $post->ID ) ) {
+			} else if ( $this->is_static_frontpage( $post_id ) ) {
 				global $wp_rewrite;
 
-				$url = trailingslashit( $urlfromcache ) . user_trailingslashit( "$wp_rewrite->pagination_base/" . $i, 'single_paged' );
+				$url = trailingslashit( $urlfromcache ) . user_trailingslashit( $wp_rewrite->pagination_base . "/" . $i, 'single_paged' );
 
 				//* Add back query arg if removed.
 				if ( isset( $query_arg ) )

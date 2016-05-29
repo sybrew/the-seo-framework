@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl, feed
 Requires at least: 3.8.0
 Tested up to: 4.5.2
-Stable tag: 2.6.2
+Stable tag: 2.6.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -349,40 +349,28 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
-= 2.6.3 - ??? =
+= 2.6.3 - Plain Loops =
 
 **Release date:**
-/
-* May TODO 2016
+
+* May 29th 2016
 
 **Summarized:**
-/
-* This update is another maintenance release. This essentially means that even more bugs have been fixed, but no features have been added.
-* For developers, the query variables can now only be cached when the queried object has been set, rather than just the query.
 
-**SEO Tip of the Updated - ????:**
-/
-* TODO
+* This update is another maintenance release. This essentially means that bugs have been fixed.
+* Most of the bugs that have been fixed are regarding URL generation for the shortlink and relationships.
+* Next to that, the default "plain" permalink structure has now obtained a Canonical URL output.
+* A much more reliable hook has been found to be used prior to caching the query. This prevents not only an infinite redirect loop in conjunction with some plugins, but will also prevent incorrect metadata being used on some themes.
+
+**SEO Tip of the Updated - Keep it Alive:**
+
+* Have you written about something already, and is the subject coming up again? Link back to the older publication.
+* About 2 to 5 internal links within the content to older pages will help your visitors understand your hierarchy and find more related content (of which they're already interested in).
+* It will also inform Search Engines on other important pages within your site; this is also known as link juice and will increase your Search Rankings overall.
 
 **Detailed log:**
-/
-***Want to know which bugs are fixed? Go ahead, [read them here](https://theseoframework.com/?p= TODO #detailed)***
 
-**For everyone:**
-	* **Fixed:**
-		/
-		* TODO Posts and Pages pagination URL was outputting the Home Page URL only.
-		* Infinite loop (unresolvable code) when a query altering plugin is activated on all Categories and Tags.
-
-**For developers:**
-	* **Improved:**
-		* WPMUdev Domain Mapping rewrite endpoint is no longer being checked.
-		* Settings update check is now once more done on `admin_init`, rather than `init`.
-		* Although deprecated since this update, `AutoDescription_Sitemaps::wpmudev_domainmap_flush_fix()` now uses a single site option for all blogs, rather than many.
-	* **Fixed:**
-		* Within `AutoDescription_Query::can_cache_query()`, it now looks for `$GLOBALS['wp_query']->queried_object` rather than `$GLOBALS['wp_query']->query` to prevent plugin/theme crashes.
-	* **Deprecated:**
-		* `AutoDescription_Sitemaps::wpmudev_domainmap_flush_fix()`, this plugin is no longer fiddling with Domain Mapping.
+***Want to know which specific bugs have been fixed? Go ahead, you can [read them here](https://theseoframework.com/?p=1269#detailed).***
 
 = 2.6.2 - Condensed Associations =
 
@@ -626,6 +614,9 @@ Not all planned features made it into 2.6.0. The following features are planned 
 **The full changelog can be found [here](http://theseoframework.com/?cat=3).**
 
 == Upgrade Notice ==
+
+= 2.6.3 =
+This update resolves an issue with the Home Page (blog) Title and Description output.
 
 = 2.6.2 =
 This update resolves an issue with the WooCommerce Shop Page Canonical URL. Installing this update is therefore highly recommended.
