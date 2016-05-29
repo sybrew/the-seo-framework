@@ -513,4 +513,63 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 		return $post_type;
 	}
 
+	/**
+	 * Add the WPMUdev Domain Mapping rules again. And flush them on init.
+	 * Domain Mapping bugfix.
+	 *
+	 * @param bool $options_saved : If we're in admin and the sanitiation function runs.
+	 * @param bool $flush_now : Whether to flush directly on call if not yet flushed. Only when $options_saved is false.
+	 *
+	 * Runs a flush and updates the site option to "true".
+	 * When the site option is set to true, it not flush again on init.
+	 *
+	 * If $options_saved is true, it will not check for the init action hook and continue,
+	 * So it will flush the next time on init.
+	 *
+	 * @since 2.3.0
+	 * @access private
+	 *
+	 * @deprecated
+	 * @since 2.6.3
+	 */
+	public function wpmudev_domainmap_flush_fix( $options_saved = false, $flush_now = true ) {
+
+		$this->_deprecated_function( 'AutoDescription_Sitemaps::' . __FUNCTION__, '', '2.6.2' );
+
+		if ( $this->pretty_permalinks && $this->is_domainmapping_active() ) {
+			if ( $options_saved || 'init' === current_action() ) {
+
+				if ( class_exists( 'Domainmap_Module_Cdsso' ) && defined( 'Domainmap_Module_Cdsso::SSO_ENDPOINT' ) ) {
+					add_rewrite_endpoint( Domainmap_Module_Cdsso::SSO_ENDPOINT, EP_ALL );
+
+					$name = 'tsf_wpmudev_dm_fix';
+					$option = (array) get_site_option( $name, array() );
+					$key = get_current_blog_id();
+					$value = $this->o_plugin_updated;
+
+					if ( $options_saved ) {
+						//* Reset the flush on option change.
+						if ( isset( $option[$key] ) && $value === $option[$key] ) {
+							$option[$key] = false;
+							update_site_option( $name, $option );
+						}
+					} else {
+						if ( ! isset( $option[$key] ) || false === $option[$key] ) {
+							//* Prevent flushing multiple times.
+							$option[$key] = $value;
+							update_site_option( $name, $option );
+
+							//* Now flush
+							if ( $flush_now )
+								$this->flush_rewrite_rules();
+							else
+								$this->enqueue_rewrite_flush_other( true );
+						}
+					}
+				}
+			}
+		}
+
+	}
+
 }

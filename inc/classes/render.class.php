@@ -67,7 +67,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	 *
 	 * @param string $url the url
 	 * @param int $post_id the page id, if empty it will fetch the requested ID, else the page uri
-	 * @param bool $paged Return current page URL without pagination
+	 * @param bool $paged Return current page URL with pagination
 	 * @param bool $from_option Get the canonical uri option
 	 * @param bool $paged_plural Whether to allow pagination on second or later pages.
 	 *
@@ -79,6 +79,9 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	public function the_url_from_cache( $url = '', $post_id = null, $paged = false, $from_option = true, $paged_plural = true ) {
 
 		static $url_cache = array();
+
+		if ( is_null( $post_id ) )
+			$post_id = $this->get_the_real_ID();
 
 		if ( isset( $url_cache[$url][$post_id][$paged][$from_option][$paged_plural] ) )
 			return $url_cache[$url][$post_id][$paged][$from_option][$paged_plural];
@@ -816,14 +819,10 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		if ( ! apply_filters( 'the_seo_framework_output_canonical', true, $this->get_the_real_ID() ) )
 			return;
 
-		/**
-		 * @todo see if canonical URL is correct on '' permalink structure.
-		 * @priority high 2.6.1
-		 */
-		if ( '' === $this->permalink_structure() || $this->is_404() )
+		if ( $this->is_404() )
 			return;
 
-		return '<link rel="canonical" href="' . esc_attr( $this->the_url_from_cache() ) . '" />' . "\r\n";
+		return '<link rel="canonical" href="' . $this->the_url_from_cache() . '" />' . "\r\n";
 	}
 
 	/**

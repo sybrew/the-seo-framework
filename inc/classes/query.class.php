@@ -52,7 +52,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		if ( isset( $cache ) )
 			return $cache;
 
-		if ( isset( $GLOBALS['wp_query']->query ) || isset( $GLOBALS['current_screen'] ) )
+		if ( did_action( 'get_header' ) || isset( $GLOBALS['current_screen'] ) )
 			return $cache = true;
 
 		return false;
@@ -92,7 +92,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 			//* Does not always return false.
 			$id = get_queried_object_id();
 
-			if ( empty( $id ) && false === is_archive() )
+			//* Never get this when is_home() is true. It will always return the wrong value.
+			if ( empty( $id ) && false === is_archive() && false === is_home() )
 				$id = get_the_ID();
 		}
 

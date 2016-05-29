@@ -124,8 +124,6 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 				return;
 
 			add_rewrite_rule( 'sitemap\.xml$', 'index.php?the_seo_framework_sitemap=xml', 'top' );
-
-			$this->wpmudev_domainmap_flush_fix( false );
 		}
 
 	}
@@ -850,7 +848,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			 * @since 2.5.0
 			 */
 			if ( apply_filters( 'the_seo_framework_robots_disallow_queries', false ) ) {
-				$home_url = parse_url( rtrim( $this->the_home_url_from_cache(), ' /' ) );
+				$home_url = parse_url( rtrim( $this->the_home_url_from_cache(), ' /\\' ) );
 				$home_path = ( ! empty( $home_url['path'] ) ) ? $home_url['path'] : '';
 				$output .= "Disallow: $home_path/*?*\r\n";
 			}
@@ -998,8 +996,6 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		if ( $enqueue )
 			return $flush = true;
 
-		$this->wpmudev_domainmap_flush_fix( false, false );
-
 		return false;
 	}
 
@@ -1019,61 +1015,6 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 
 		if ( $this->enqueue_rewrite_flush_other() )
 			$this->flush_rewrite_rules();
-
-	}
-
-	/**
-	 * Add the WPMUdev Domain Mapping rules again. And flush them on init.
-	 * Domain Mapping bugfix.
-	 *
-	 * @param bool $options_saved : If we're in admin and the sanitiation function runs.
-	 * @param bool $flush_now : Whether to flush directly on call if not yet flushed.
-	 *
-	 * Runs a flush and updates the site option to "true".
-	 * When the site option is set to true, it not flush again on init.
-	 *
-	 * If $options_saved is true, it will not check for the init action hook and continue,
-	 * So it will flush the next time on init.
-	 *
-	 * @since 2.3.0
-	 */
-	public function wpmudev_domainmap_flush_fix( $options_saved = false, $flush_now = true ) {
-
-		if ( $this->pretty_permalinks && $this->is_domainmapping_active() ) {
-
-			static $run = null;
-
-			if ( isset( $run ) && $run )
-				return;
-
-			if ( $options_saved || 'init' === current_action() ) {
-				$run = true;
-
-				if ( class_exists( 'Domainmap_Module_Cdsso' ) && defined( 'Domainmap_Module_Cdsso::SSO_ENDPOINT' ) ) {
-					add_rewrite_endpoint( Domainmap_Module_Cdsso::SSO_ENDPOINT, EP_ALL );
-
-					//* Force extra flush on init.
-					$key = 'tsf_wpmudev_dm' . get_current_blog_id() . '_extraf_' . $this->o_plugin_updated;
-
-					if ( $options_saved ) {
-						//* Reset the flush on option change.
-						if ( get_site_option( $key ) )
-							update_site_option( $key, false );
-					} else {
-						if ( false === get_site_option( $key ) ) {
-							//* Prevent flushing multiple times.
-							update_site_option( $key, true );
-
-							//* Now flush
-							if ( $flush_now )
-								$this->flush_rewrite_rules();
-							else
-								$this->enqueue_rewrite_flush_other( true );
-						}
-					}
-				}
-			}
-		}
 
 	}
 

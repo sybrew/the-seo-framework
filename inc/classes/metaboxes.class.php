@@ -1992,7 +1992,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 
 		do_action( 'the_seo_framework_sitemaps_metabox_before' );
 
-		if ( '' === $this->permalink_structure() ) {
+		if ( ! $this->pretty_permalinks ) {
 
 			$permalink_settings_url = esc_url( admin_url( 'options-permalink.php' ) );
 			$here = '<a href="' . $permalink_settings_url  . '" target="_blank" title="' . __( 'Permalink Settings', 'autodescription' ) . '">' . _x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
@@ -2349,13 +2349,13 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 
 		<hr>
 
-		<?php /* translators: https://developers.google.com/structured-data/slsb-overview */ ?>
+		<?php /* translators: https://developers.google.com/search/docs/data-types/sitelinks-searchbox */ ?>
 		<h4><?php _ex( 'Sitelinks Search Box', 'Product name', 'autodescription' ); ?></h4>
 		<p class="description"><?php _e( 'When Search users search for your brand name, the following option allows them to search through your website directly from the Search Results.', 'autodescription' ); ?></p>
 		<?php
 		$info = $this->make_info(
 			_x( 'Sitelinks Search Box', 'Product name', 'autodescription' ),
-			'https://developers.google.com/structured-data/slsb-overview',
+			'https://developers.google.com/search/docs/data-types/sitelinks-searchbox',
 			false
 		);
 		$this->wrap_fields(
@@ -2375,7 +2375,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 		<?php
 		$info = $this->make_info(
 			__( 'Include your Site Name in Search Results', 'autodescription' ),
-			'https://developers.google.com/structured-data/site-name',
+			'https://developers.google.com/search/docs/data-types/sitename',
 			false
 		);
 		$description = sprintf( __( "The Site Name is: %s", 'autodescription' ), $this->code_wrap( $this->get_blogname() ) );
@@ -2396,7 +2396,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 		<?php
 		$info = $this->make_info(
 			__( 'About Breadcrumbs', 'autodescription' ),
-			'https://developers.google.com/structured-data/breadcrumbs',
+			'https://developers.google.com/search/docs/data-types/breadcrumbs',
 			false
 		);
 		$description = __( "Multiple trails can be outputted. The longest trail is prioritized.", 'autodescription' );

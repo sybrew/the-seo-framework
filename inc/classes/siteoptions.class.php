@@ -66,7 +66,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 		add_action( 'admin_init', array( $this, 'register_settings' ), 5 );
 
 		//* Update site options at plugin update.
-		add_action( 'init', array( $this, 'site_updated_plugin_option' ), 0 );
+		add_action( 'admin_init', array( $this, 'site_updated_plugin_option' ), 10 );
 
 	}
 

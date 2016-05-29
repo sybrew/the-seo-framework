@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://wordpress.org/plugins/autodescription/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.
- * Version: 2.6.2
+ * Version: 2.6.3
  * Author: Sybre Waaijer
  * Author URI: https://cyberwire.nl/
  * License: GPLv3
@@ -40,25 +40,18 @@
 /**
  * CDN Cache buster. 3 to 4 point.
  * Not many caching plugins use CDN in dashboard. What a shame. Firefox does cache.
- *
  * @since 1.0.0
  */
-define( 'THE_SEO_FRAMEWORK_VERSION', '2.6.2' );
+define( 'THE_SEO_FRAMEWORK_VERSION', '2.6.3' );
 
 /**
- * Plugin options filter
- * We can't change the options name without erasing the settings.
- * We can change the filter, however. So we did.
- *
+ * Plugin options filter.
  * @since 2.2.2
  */
 define( 'THE_SEO_FRAMEWORK_SITE_OPTIONS', (string) apply_filters( 'the_seo_framework_site_options', 'autodescription-site-settings' ) );
 
 /**
- * Plugin options filter
- * We can't change the options name without erasing the settings.
- * We can change the filter, however. So we did.
- *
+ * Plugin options filter.
  * @since 2.2.2
  */
 define( 'THE_SEO_FRAMEWORK_NETWORK_OPTIONS', (string) apply_filters( 'the_seo_framework_network_settings', 'autodescription-network-settings' ) );
@@ -66,7 +59,6 @@ define( 'THE_SEO_FRAMEWORK_NETWORK_OPTIONS', (string) apply_filters( 'the_seo_fr
 /**
  * The plugin map url.
  * Used for calling browser files.
- *
  * @since 2.2.2
  */
 define( 'THE_SEO_FRAMEWORK_DIR_URL', plugin_dir_url( __FILE__ ) );
@@ -74,14 +66,12 @@ define( 'THE_SEO_FRAMEWORK_DIR_URL', plugin_dir_url( __FILE__ ) );
 /**
  * The plugin map absolute path.
  * Used for calling php files.
- *
  * @since 2.2.2
  */
 define( 'THE_SEO_FRAMEWORK_DIR_PATH', plugin_dir_path( __FILE__ ) );
 
 /**
  * The plugin file relative to the plugins dir.
- *
  * @since 2.2.8
  */
 define( 'THE_SEO_FRAMEWORK_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
@@ -107,9 +97,7 @@ define( 'THE_SEO_FRAMEWORK_DIR_PATH_FUNCT', THE_SEO_FRAMEWORK_DIR_PATH . '/inc/f
 add_action( 'plugins_loaded', 'the_seo_framework_locale_init', 10 );
 /**
  * Plugin locale 'autodescription'
- *
  * File located in plugin folder autodescription/language/
- *
  * @since 1.0.0
  */
 function the_seo_framework_locale_init() {
@@ -117,22 +105,18 @@ function the_seo_framework_locale_init() {
 }
 
 /**
- * Load plugin files
- *
+ * Load plugin files.
  * @since 1.0.0
- *
  * @uses THE_SEO_FRAMEWORK_DIR_PATH
  */
 require_once( THE_SEO_FRAMEWORK_DIR_PATH . '/load.class.php' );
 
 //* Load deprecated functions.
-require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.php' );
+//require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.php' );
 
 /**
- * FLush permalinks on activation/deactivation
- *
+ * FLush permalinks on activation/deactivation.
  * Calls functions statically.
- *
  * @since 2.2.9
  */
 register_activation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, array( 'The_SEO_Framework_Load', 'flush_rewrite_rules_activation' ) );

@@ -666,8 +666,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			$this->enqueue_rewrite_deactivate( true );
 		}
 
-		$this->wpmudev_domainmap_flush_fix( true );
-
 		return (int) (bool) $new_value;
 	}
 
