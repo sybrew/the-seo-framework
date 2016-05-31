@@ -91,7 +91,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		if ( empty( $id ) ) {
 			//* The Post ID can be this ID as well.
-			$id = isset( $GLOBALS['wp_query']->queried_object_id ) ? $GLOBALS['wp_query']->queried_object_id : 0;
+			$id = get_queried_object_id();
 
 			//* Never get this when this is an archive. It will always return the wrong value.
 			if ( empty( $id ) && false === is_archive() && false === is_home() )
