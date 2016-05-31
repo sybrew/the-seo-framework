@@ -206,11 +206,11 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 		$description = $this->get_custom_homepage_description( $args );
 
 		//* Singular Description.
-		if ( empty( $description ) && empty( $args['taxonomy'] ) )
+		if ( empty( $description ) && false === $this->is_archive() )
 			$description = $this->get_custom_singular_description( $args['id'] );
 
 		//* Archive Description.
-		if ( empty( $description ) )
+		if ( empty( $description ) && $this->is_archive() )
 			$description = $this->get_custom_archive_description( $args );
 
 		if ( $escape && $description )
@@ -301,11 +301,11 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 					$description = empty( $term->meta['description'] ) ? $description : $term->meta['description'];
 			}
 
-			if ( $this->is_author() ) {
-				$user_description = get_the_author_meta( 'meta_description', (int) get_query_var( 'author' ) );
-
-				$description = $user_description ? $user_description : $description;
-			}
+			/**
+			 * @TODO add filter.
+			 * @priority medium 2.7.0
+			 */
+			// if ( $this->is_author() ) {}
 		}
 
 
@@ -728,6 +728,8 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 			} else if ( $term && is_object( $term ) ) {
 				//* We're on a taxonomy now.
 				$excerpt = empty( $term->description ) ? $this->get_excerpt_by_id( '', '', $page_id ) : $term->description;
+			} else if ( $this->is_author() ) {
+				$excerpt = get_the_author_meta( 'description', (int) get_query_var( 'author' ) );
 			} else {
 				$excerpt = '';
 			}

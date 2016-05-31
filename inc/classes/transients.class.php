@@ -81,6 +81,8 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		add_action( 'post_updated', array( $this, 'delete_transients_post' ) );
 		add_action( 'page_updated', array( $this, 'delete_transients_post' ) );
 
+		add_action( 'profile_update', array( $this, 'delete_transients_author' ) );
+
 		add_action( 'edit_term', array( $this, 'delete_auto_description_transients_term' ), 10, 3 );
 		add_action( 'delete_term', array( $this, 'delete_auto_description_transients_term' ), 10, 4 );
 
@@ -158,12 +160,13 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	 *
 	 * @param int|string|bool $page_id the Taxonomy or Post ID. If false it will generate for the blog page.
 	 * @param string $taxonomy The taxonomy name.
+	 * @param strgin $type The Post Type
 	 *
 	 * @since 2.3.3
 	 */
-	public function setup_auto_description_transient( $page_id, $taxonomy = '' ) {
+	public function setup_auto_description_transient( $page_id, $taxonomy = '', $type = null ) {
 
-		$cache_key = $this->generate_cache_key( $page_id, $taxonomy );
+		$cache_key = $this->generate_cache_key( $page_id, $taxonomy, $type );
 
 		/**
 		 * When the caching mechanism changes. Change this value.
@@ -218,6 +221,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	 *
 	 * @param int|string|bool $page_id the Taxonomy or Post ID.
 	 * @param string $taxonomy The Taxonomy name.
+	 * @param string $type The Post Type
 	 *
 	 * @staticvar array $cached_id : contains cache strings.
 	 *
@@ -230,14 +234,14 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	 *
 	 * @return string The generated page id key.
 	 */
-	public function generate_cache_key( $page_id, $taxonomy = '' ) {
+	public function generate_cache_key( $page_id, $taxonomy = '', $type = null ) {
 
 		$page_id = $page_id ? $page_id : $this->get_the_real_ID();
 
 		static $cached_id = array();
 
-		if ( isset( $cached_id[$page_id][$taxonomy] ) )
-			return $cached_id[$page_id][$taxonomy];
+		if ( isset( $cached_id[$page_id][$taxonomy][$type] ) )
+			return $cached_id[$page_id][$taxonomy][$type];
 
 		global $blog_id;
 
@@ -246,7 +250,12 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		//* Placeholder ID.
 		$the_id = '';
 
-		if ( $this->is_404() ) {
+		if ( isset( $type ) ) {
+			if ( 'author' === $type ) {
+				//* Author page.
+				$the_id = 'author_' . $page_id;
+			}
+		} else if ( $this->is_404() ) {
 			//* 404.
 			$the_id = '_404_';
 		} else if ( ( $this->is_front_page( $page_id ) ) || ( $this->is_admin() && $this->is_menu_page( $this->pagehook ) ) ) {
@@ -373,7 +382,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		 * Then some cache keys will conflict on every 10th blog ID from eachother which post something on the same day..
 		 * On the day archive. With the same description setting (short).
 		 */
-		return $cached_id[$page_id][$taxonomy] = $the_id . '_' . $blog_id . $locale;
+		return $cached_id[$page_id][$taxonomy][$type] = $the_id . '_' . $blog_id . $locale;
 	}
 
 	/**
@@ -449,6 +458,17 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	}
 
 	/**
+	 * Delete transient on profile save.
+	 *
+	 * @since 2.6.4
+	 *
+	 * @param int $user_id The User ID that has been updated.
+	 */
+	public function delete_transients_author( $user_id ) {
+		$this->delete_auto_description_transient( $user_id, 'author', 'author' );
+	}
+
+	/**
 	 * Delete transient on term save/deletion.
 	 *
 	 * @param int $term_id The Term ID
@@ -521,14 +541,15 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	 *
 	 * @param mixed $page_id The page ID or identifier.
 	 * @param string $taxonomy The tt name.
+	 * @param string $type The Post Type
 	 *
 	 * @since 2.3.3
 	 *
 	 * @return bool true
 	 */
-	public function delete_auto_description_transient( $page_id, $taxonomy = '' ) {
+	public function delete_auto_description_transient( $page_id, $taxonomy = '', $type = null ) {
 
-		$this->setup_auto_description_transient( $page_id, $taxonomy );
+		$this->setup_auto_description_transient( $page_id, $taxonomy, $type );
 
 		delete_transient( $this->auto_description_transient );
 

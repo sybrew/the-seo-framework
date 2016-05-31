@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl, feed
 Requires at least: 3.8.0
 Tested up to: 4.5.2
-Stable tag: 2.6.3
+Stable tag: 2.6.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -349,6 +349,24 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
+= 2.6.4 - Biographic Consistency =
+
+**Release date:**
+
+* May 31st 2016
+
+**Summarized:**
+
+* This update is another maintenance release. It's highly recommended to install this update to prevent incorrect meta values.
+* The fix that has been applied now set at the root cause for the issues that have persisted since the release of 2.6.0, rather than later on.
+* I also bring you Author Descriptions. This description is pulled from the user's profile biography input and is handled the same way as other automated descriptions.
+
+***Sorry, no SEO Tip of the Update this time.***
+
+**Detailed log:**
+
+***The smaller things in life can be [found here](https://theseoframework.com/?p=1284#detailed).***
+
 = 2.6.3 - Plain Loops =
 
 **Release date:**
@@ -614,6 +632,9 @@ Not all planned features made it into 2.6.0. The following features are planned 
 **The full changelog can be found [here](http://theseoframework.com/?cat=3).**
 
 == Upgrade Notice ==
+
+= 2.6.4 =
+Highly recommended update that fixes various query checks and caches.
 
 = 2.6.3 =
 This update resolves an issue with the Home Page (blog) Title and Description output.

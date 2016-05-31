@@ -179,6 +179,12 @@ class AutoDescription_PageOptions extends AutoDescription_DoingItRight {
 			return $term;
 
 		/**
+		 * We can't set query vars just yet.
+		 */
+		if ( false === $this->can_cache_query() )
+			return $term;
+
+		/**
 		 * No need to process this data outside of the Terms' scope.
 		 * @since 2.6.0
 		 */
