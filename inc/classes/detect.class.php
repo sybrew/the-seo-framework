@@ -561,9 +561,10 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	/**
 	 * Detects presence of sitemap.xml in root folder.
 	 *
-	 * @staticvar $has_map
-	 *
 	 * @since 2.5.2
+	 * @staticvar bool $has_map
+	 *
+	 * @return bool
 	 */
 	public function has_sitemap_xml() {
 
@@ -1028,7 +1029,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		 * Applies filters 'the_seo_framework_supported_post_type' : string
 		 * @since 2.6.2
 		 *
-		 * @param string $post_type The supported post type.
+		 * @param string $post_type The supported post type. Is boolean false if not supported.
 		 * @param string $post_type_evaluated The evaluated post type.
 		 */
 		$post_type = (string) apply_filters( 'the_seo_framework_supported_post_type', $post_type, $post_type_evaluated );

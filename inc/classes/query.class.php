@@ -39,11 +39,13 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * Checks whether $wp_query or $current_screen is set.
 	 *
 	 * @since 2.6.1
+	 * @access private
 	 * @staticvar bool $cache : Always true if set.
+	 *
 	 * @global object $wp_query
 	 * @global object|null $current_screen
 	 *
-	 * @return bool True when WP_Query has been initialized.
+	 * @return bool True when wp_query or current_screen has been initialized.
 	 */
 	public function can_cache_query() {
 
@@ -52,7 +54,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		if ( isset( $cache ) )
 			return $cache;
 
-		if ( did_action( 'get_header' ) || isset( $GLOBALS['current_screen'] ) )
+		if ( isset( $GLOBALS['wp_query']->query ) || isset( $GLOBALS['current_screen'] ) )
 			return $cache = true;
 
 		return false;
@@ -72,27 +74,26 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	public function get_the_real_ID( $use_cache = true ) {
 
 		$is_admin = $this->is_admin();
+		$can_cache = $this->can_cache_query();
 
 		//* Never use cache for this in admin. Only causes bugs.
-		$use_cache = $is_admin ? false : $use_cache;
+		$use_cache = $is_admin || false === $can_cache ? false : $use_cache;
 
 		if ( $use_cache ) {
 			static $id = null;
 
 			if ( isset( $id ) )
 				return $id;
-
-			if ( false === $this->can_cache_query() )
-				return false;
 		}
 
-		$id = $is_admin ? '' : $this->check_the_real_ID();
+		//* Try to get ID from plugins.
+		$id = $is_admin || false === $can_cache ? 0 : $this->check_the_real_ID();
 
 		if ( empty( $id ) ) {
-			//* Does not always return false.
-			$id = get_queried_object_id();
+			//* The Post ID can be this ID as well.
+			$id = isset( $GLOBALS['wp_query']->queried_object_id ) ? $GLOBALS['wp_query']->queried_object_id : 0;
 
-			//* Never get this when is_home() is true. It will always return the wrong value.
+			//* Never get this when this is an archive. It will always return the wrong value.
 			if ( empty( $id ) && false === is_archive() && false === is_home() )
 				$id = get_the_ID();
 		}
@@ -131,21 +132,17 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cached_id = null;
 
-		if ( isset( $cached_id ) )
+		if ( isset( $cached_id ) && $this->can_cache_query() )
 			return $cached_id;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		$id = '';
 
 		if ( $this->is_wc_shop() ) {
 			//* WooCommerce Shop
 			$id = get_option( 'woocommerce_shop_page_id' );
-		} else if ( function_exists( 'is_anspress' ) && is_anspress() ) {
-			//* Get AnsPress Question ID.
-			if ( function_exists( 'get_question_id' ) )
-				$id = get_question_id();
+		} else if ( function_exists( 'get_question_id' ) && did_action( 'template_redirect' ) ) {
+			//* AnsPress
+			$id = get_question_id();
 		}
 
 		$cached_id = (int) apply_filters( 'the_seo_framework_real_id', $id );
@@ -165,11 +162,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		if ( is_404() )
 			return $cache = true;
@@ -189,11 +183,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		if ( is_admin() )
 			return $cache = true;
@@ -216,11 +207,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = array();
 
-		if ( isset( $cache[$attachment] ) )
+		if ( isset( $cache[$attachment] ) && $this->can_cache_query() )
 			return $cache[$attachment];
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		if ( $this->is_singular( $attachment ) && is_attachment( $attachment ) )
 			return $cache[$attachment] = true;
@@ -243,11 +231,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		if ( is_archive() && false === $this->is_singular() )
 			return $cache = true;
@@ -269,11 +254,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		global $current_screen;
 
@@ -297,11 +279,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		global $current_screen;
 
@@ -330,11 +309,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		global $current_screen;
 
@@ -358,11 +334,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		global $current_screen;
 
@@ -388,11 +361,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = array();
 
-		if ( isset( $cache[$author] ) )
+		if ( isset( $cache[$author] ) && $this->can_cache_query() )
 			return $cache[$author];
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		if ( $this->is_archive() && is_author( $author ) )
 			return $cache[$author] = true;
@@ -418,11 +388,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $is_blog_page = array();
 
-		if ( isset( $is_blog_page[$id] ) )
+		if ( isset( $is_blog_page[$id] ) && $this->can_cache_query() )
 			return $is_blog_page[$id];
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		$pfp = (int) get_option( 'page_for_posts' );
 
@@ -452,13 +419,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		if ( $this->is_admin() )
 			return $this->is_category_admin();
 
-		static $cache = null;
+		static $cache = array();
 
-		if ( isset( $cache[$category] ) )
+		if ( isset( $cache[$category] ) && $this->can_cache_query() )
 			return $cache[$category];
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		if ( $this->is_archive() && is_category( $category ) )
 			return $cache[$category] = true;
@@ -480,11 +444,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		global $current_screen;
 
@@ -509,11 +470,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		if ( $this->is_archive() && is_date() )
 			return $cache = true;
@@ -534,13 +492,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
 
-		if ( false === $this->can_cache_query() )
-			return false;
-
-		if ( $this->is_date() && is_day() )
+		if ( is_day() )
 			return $cache = true;
 
 		return $cache = false;
@@ -560,11 +515,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = array();
 
-		if ( isset( $cache[$feeds] ) )
+		if ( isset( $cache[$feeds] ) && $this->can_cache_query() )
 			return $cache[$feeds];
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		if ( is_feed( $feeds ) )
 			return $cache[$feeds] = true;
@@ -584,28 +536,33 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 */
 	public function is_front_page( $id = 0 ) {
 
-		static $cache = null;
+		static $cache = array();
 
-		if ( isset( $cache ) )
-			return $cache;
+		if ( isset( $cache[$id] ) && $this->can_cache_query() )
+			return $cache[$id];
 
-		if ( false === $this->can_cache_query() )
-			return false;
+		if ( is_front_page() && empty( $id ) )
+			return $cache[$id] = true;
 
-		if ( is_front_page() )
-			return $cache = true;
+		//* Elegant Themes Support.
+		if ( empty( $id ) && $this->is_home() ) {
+			$sof = get_option( 'show_on_front' );
+
+			if ( 'page' !== $sof && 'posts' !== $sof )
+				return $cache[$id] = true;
+		}
 
 		if ( $id ) {
 			$sof = get_option( 'show_on_front' );
 
 			if ( 'page' === $sof && $id === get_option( 'page_on_front' ) )
-				return $cache = true;
+				return $cache[$id] = true;
 
 			if ( 'posts' === $sof && $id === get_option( 'page_for_posts' ) )
-				return $cache = true;
+				return $cache[$id] = true;
 		}
 
-		return $cache = false;
+		return $cache[$id] = false;
 	}
 
 	/**
@@ -620,11 +577,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		if ( is_home() )
 			return $cache = true;
@@ -645,13 +599,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
 
-		if ( false === $this->can_cache_query() )
-			return false;
-
-		if ( $this->is_date() && is_month() )
+		if ( is_month() )
 			return $cache = true;
 
 		return $cache = false;
@@ -672,11 +623,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = array();
 
-		if ( isset( $cache[$page] ) )
+		if ( isset( $cache[$page] ) && $this->can_cache_query() )
 			return $cache[$page];
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		if ( $this->is_singular( $page ) ) {
 			if ( is_page( $page ) )
@@ -702,10 +650,6 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * @return bool
 	 */
 	public function is_page_admin( $page = '' ) {
-
-		if ( false === $this->can_cache_query() )
-			return false;
-
 		global $current_screen;
 
 		if ( isset( $current_screen->post_type ) && 'page' === $current_screen->post_type )
@@ -726,11 +670,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		if ( is_preview() )
 			return $cache = true;
@@ -750,11 +691,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		if ( is_search() )
 			return $cache = true;
@@ -777,11 +715,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = array();
 
-		if ( isset( $cache[$post] ) )
+		if ( isset( $cache[$post] ) && $this->can_cache_query() )
 			return $cache[$post];
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		if ( $this->is_singular( $post ) ) {
 			if ( is_single( $post ) )
@@ -836,18 +771,15 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = array();
 
-		if ( isset( $cache[$post_types] ) )
+		if ( isset( $cache[$post_types] ) && $this->can_cache_query() )
 			return $cache[$post_types];
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		//* WP_Query functions require loop, do alternative check.
 		if ( $this->is_admin() )
 			return $cache[$post_types] = $this->is_singular_admin();
 
 		if ( is_int( $post_types ) ) {
-			//* Cache ID. is_singlar doesn't accept integers.
+			//* Cache ID. Core is_singlar() doesn't accept integers.
 			$id = $post_types;
 			$post_types = '';
 		}
@@ -880,11 +812,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		global $current_screen;
 
@@ -899,7 +828,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 *
 	 * @param int $id the Page ID.
 	 *
-	 * @staticvar array $is_frontpage
+	 * @staticvar array $cache
 	 * @since 2.3.8
 	 *
 	 * @return bool true if is blog page. Always false if blog page is homepage.
@@ -907,13 +836,13 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 */
 	public function is_static_frontpage( $id = '' ) {
 
-		if ( '' === $id )
+		if ( empty( $id ) )
 			$id = $this->get_the_real_ID();
 
-		static $is_frontpage = array();
+		static $cache = array();
 
-		if ( isset( $is_frontpage[$id] ) )
-			return $is_frontpage[$id];
+		if ( isset( $cache[$id] ) && $this->can_cache_query() )
+			return $cache[$id];
 
 		$sof = (string) get_option( 'show_on_front' );
 
@@ -921,10 +850,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 			$pof = (int) get_option( 'page_on_front' );
 
 			if ( $id === $pof )
-				return $is_frontpage[$id] = true;
+				return $cache[$id] = true;
 		}
 
-		return $is_frontpage[$id] = false;
+		return $cache[$id] = false;
 	}
 
 	/**
@@ -942,17 +871,14 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = array();
 
-		if ( isset( $cache[$tag] ) )
+		if ( isset( $cache[$tag] ) && $this->can_cache_query() )
 			return $cache[$tag];
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		//* Admin requires another check.
 		if ( $this->is_admin() )
 			return $cache[$tag] = $this->is_tag_admin();
 
-		if ( $this->is_archive() && is_tag( $tag ) )
+		if ( is_tag( $tag ) )
 			return $cache[$tag] = true;
 
 		return $cache[$tag] = false;
@@ -972,11 +898,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		if ( $this->is_archive_admin() ) {
 			global $current_screen;
@@ -1004,13 +927,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache[$taxonomy][$term] ) )
+		if ( isset( $cache[$taxonomy][$term] ) && $this->can_cache_query() )
 			return $cache[$taxonomy][$term];
 
-		if ( false === $this->can_cache_query() )
-			return false;
-
-		if ( $this->is_archive() && is_tax( $taxonomy, $term ) )
+		if ( is_tax( $taxonomy, $term ) )
 			return $cache[$taxonomy][$term] = true;
 
 		return $cache[$taxonomy][$term] = false;
@@ -1029,11 +949,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		$caniuse = (bool) $this->can_i_use( array( 'functions' => array( 'um_user', 'um_is_core_page', 'um_get_requested_user' ) ), false );
 
@@ -1051,11 +968,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		//* Can't check in admin.
 		if ( false === $this->is_admin() && function_exists( 'is_shop' ) && is_shop() )
@@ -1075,11 +989,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		//* Can't check in admin.
 		if ( false === $this->is_admin() && function_exists( 'is_product' ) && is_product() )
@@ -1101,13 +1012,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
 
-		if ( false === $this->can_cache_query() )
-			return false;
-
-		if ( $this->is_date() && is_year() )
+		if ( is_year() )
 			return $cache = true;
 
 		return $cache = false;
@@ -1125,11 +1033,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		return $cache = $this->is_menu_page( $this->page_id );
 	}
@@ -1147,11 +1052,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $page = null;
 
-		if ( isset( $page ) )
+		if ( isset( $page ) && $this->can_cache_query() )
 			return $page;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		$page = get_query_var( 'page' );
 
@@ -1171,11 +1073,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $paged = null;
 
-		if ( isset( $paged ) )
+		if ( isset( $paged ) && $this->can_cache_query() )
 			return $paged;
-
-		if ( false === $this->can_cache_query() )
-			return false;
 
 		$paged = get_query_var( 'paged' );
 

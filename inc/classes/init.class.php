@@ -43,7 +43,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 		parent::__construct();
 
 		add_action( 'init', array( $this, 'autodescription_run' ), 1 );
-		add_action( 'template_redirect', array( $this, 'custom_field_redirect') );
+		add_action( 'template_redirect', array( $this, 'custom_field_redirect' ) );
 
 		/**
 		 * Applies filters : the_seo_framework_use_object_cache

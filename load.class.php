@@ -47,6 +47,7 @@ function the_seo_framework_init() {
  * @return bool allow loading of plugin
  *
  * @since 2.1.0
+ * @staticvar bool $loaded
  *
  * New function name.
  * @since 2.3.7
@@ -54,7 +55,13 @@ function the_seo_framework_init() {
  * @action plugins_loaded
  */
 function the_seo_framework_load() {
-	return (bool) apply_filters( 'the_seo_framework_load', true );
+
+	static $loaded = null;
+
+	if ( isset( $loaded ) )
+		return $loaded;
+
+	return $loaded = (bool) apply_filters( 'the_seo_framework_load', true );
 }
 
 /**
