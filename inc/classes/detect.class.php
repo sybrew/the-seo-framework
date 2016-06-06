@@ -461,7 +461,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 			foreach ( $conflicting_plugins as $plugin ) {
 				if ( in_array( $plugin, $active_plugins ) ) {
-					$detected = apply_filters( 'the_seo_framework_og_plugin_detected', true );
+					$detected = apply_filters( 'the_seo_framework_twittercard_plugin_detected', true );
 					break;
 				}
 			}
@@ -481,7 +481,11 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * @return bool false
 	 */
 	public function has_json_ld_plugin() {
-		return false;
+		/**
+		 * Applies filters 'the_seo_framework_ldjson_plugin_detected' : boolean
+		 * @since 2.6.5
+		 */
+		return (bool) apply_filters( 'the_seo_framework_ldjson_plugin_detected', false );
 	}
 
 	/**

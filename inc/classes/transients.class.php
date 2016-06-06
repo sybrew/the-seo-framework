@@ -192,12 +192,13 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	 *
 	 * @param int|string|bool $page_id the Taxonomy or Post ID. If false it will generate for the blog page.
 	 * @param string $taxonomy The taxonomy name.
+	 * @param string|null $type The post type.
 	 *
 	 * @since 2.3.3
 	 */
-	public function setup_ld_json_transient( $page_id, $taxonomy = '' ) {
+	public function setup_ld_json_transient( $page_id, $taxonomy = '', $type = null ) {
 
-		$cache_key = $this->generate_cache_key( $page_id, $taxonomy );
+		$cache_key = $this->generate_cache_key( $page_id, $taxonomy, $type );
 
 		/**
 		 * When the caching mechanism changes. Change this value.
@@ -243,17 +244,20 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		if ( isset( $cached_id[$page_id][$taxonomy][$type] ) )
 			return $cached_id[$page_id][$taxonomy][$type];
 
-		global $blog_id;
-
-		$locale = '_' . strtolower( get_locale() );
-
 		//* Placeholder ID.
 		$the_id = '';
+		$t = $taxonomy;
 
 		if ( isset( $type ) ) {
 			if ( 'author' === $type ) {
 				//* Author page.
 				$the_id = 'author_' . $page_id;
+			} else if ( 'frontpage' === $type ) {
+				//* Home Page.
+				$the_id = $this->generate_front_page_cache_key();
+			} else {
+				$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, __( 'Third parameter must be a known type.', 'autodescription' ), '2.6.5' );
+				$the_id = esc_sql( $type . '_' . $page_id . '_' . $t );
 			}
 		} else if ( $this->is_404() ) {
 			//* 404.
@@ -262,24 +266,19 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 			//* Fetch Home key.
 			$the_id = $this->generate_front_page_cache_key();
 		} else if ( $this->is_blog_page( $page_id ) ) {
-			//* Blog page.
 			$the_id = 'blog_' . $page_id;
 		} else if ( $this->is_singular() ) {
 			if ( $this->is_page( $page_id ) ) {
-				//* Page.
 				$the_id = 'page_' . $page_id;
 			} else if ( $this->is_single( $page_id ) ) {
-				//* Post.
 				$the_id = 'post_' . $page_id;
 			} else if ( $this->is_attachment( $page_id ) ) {
-				//* Attachment.
 				$the_id = 'attach_' . $page_id;
 			} else {
 				//* Other.
 				$the_id = 'singular_' . $page_id;
 			}
 		} else if ( $this->is_search() ) {
-			//* Search query.
 			$query = '';
 
 			if ( function_exists( 'get_search_query' ) ) {
@@ -298,31 +297,30 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 			$the_id = $page_id . '_s_' . $query;
 		} else if ( $this->is_archive() ) {
 			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
-				//* Term.
 
-				if ( empty( $taxonomy ) )
-					$taxonomy = get_query_var( 'taxonomy' );
+				if ( empty( $t ) ) {
+					$o = get_queried_object();
 
-				$the_id = $this->generate_taxonomial_cache_key( $page_id, $taxonomy );
+					if ( isset( $o->taxonomy ) )
+						$t = $o->taxonomy;
+				}
+
+				$the_id = $this->generate_taxonomial_cache_key( $page_id, $t );
 
 				if ( $this->is_tax() )
 					$the_id = 'archives_' . $the_id;
 
 			} else if ( $this->is_author() ) {
-				//* Author page.
 				$the_id = 'author_' . $page_id;
 			} else if ( $this->is_date() ) {
-				//* Dates.
 				$post = get_post();
 
 				if ( $post && isset( $post->post_date ) ) {
 					$date = $post->post_date;
 
 					if ( $this->is_year() ) {
-						//* Year.
 						$the_id .= 'year_' . mysql2date( 'y', $date, false );
 					} else if ( $this->is_month() ) {
-						//* Month.
 						$the_id .= 'month_' . mysql2date( 'm_y', $date, false );
 					} else if ( $this->is_day() ) {
 						//* Day. The correct notation.
@@ -339,7 +337,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 					if ( ! isset( $unix ) )
 						$unix = date( 'U' );
 
-					//* Temporarily disable transients to prevent database spam.
+					//* Temporarily disable caches to prevent database spam.
 					$this->the_seo_framework_use_transients = false;
 					$this->use_object_cache = false;
 
@@ -348,7 +346,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 			} else {
 				//* Other taxonomial archives.
 
-				if ( empty( $taxonomy ) ) {
+				if ( empty( $t ) ) {
 					$post_type = get_query_var( 'post_type' );
 
 					if ( is_array( $post_type ) )
@@ -358,14 +356,15 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 						$post_type_obj = get_post_type_object( $post_type );
 
 					if ( isset( $post_type_obj->labels->name ) )
-						$taxonomy = $post_type_obj->labels->name;
+						$t = $post_type_obj->labels->name;
 				}
 
 				//* Still empty? Try this.
-				if ( empty( $taxonomy ) )
-					$taxonomy = get_query_var( 'taxonomy' );
+				if ( empty( $t ) )
+					$t = get_query_var( 'taxonomy' );
 
-				$the_id = $this->generate_taxonomial_cache_key( $page_id, $taxonomy );
+				$the_id = $this->generate_taxonomial_cache_key( $page_id, $t );
+
 				$the_id = 'archives_' . $the_id;
 			}
 		}
@@ -375,14 +374,18 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		 * Noob. :D
 		 */
 		if ( empty( $the_id ) )
-			$the_id = 'noob_' . $page_id . '_' . $taxonomy;
+			$the_id = 'noob_' . $page_id . '_' . $t;
+
+		global $blog_id;
+
+		$locale = strtolower( get_locale() );
 
 		/**
 		 * This should be at most 25 chars. Unless the $blog_id is higher than 99,999,999.
 		 * Then some cache keys will conflict on every 10th blog ID from eachother which post something on the same day..
 		 * On the day archive. With the same description setting (short).
 		 */
-		return $cached_id[$page_id][$taxonomy][$type] = $the_id . '_' . $blog_id . $locale;
+		return $cached_id[$page_id][$taxonomy][$type] = $the_id . '_' . $blog_id . '_' . $locale;
 	}
 
 	/**
@@ -420,11 +423,27 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 
 		$the_id = '';
 
-		$taxonomy_name = explode( '_', $taxonomy );
-		if ( is_array( $taxonomy_name ) ) {
-			foreach ( $taxonomy_name as $name )
-				$the_id .= mb_substr( $name, 0, 3 ) . '_';
+		if ( false !== strpos( $taxonomy, '_' ) ) {
+			$taxonomy_name = explode( '_', $taxonomy );
+			if ( is_array( $taxonomy_name ) ) {
+				foreach ( $taxonomy_name as $name )
+					if ( mb_strlen( $name ) >= 3 ) {
+						$the_id .= mb_substr( $name, 0, 3 ) . '_';
+					} else {
+						$the_id = strtolower( $name ) . '_';
+					}
+			}
 		}
+
+		if ( empty( $the_id ) ) {
+			if ( mb_strlen( $taxonomy ) >= 5 ) {
+				$the_id = mb_substr( $taxonomy, 0, 5 );
+			} else {
+				$the_id = esc_sql( $taxonomy );
+			}
+		}
+
+		$the_id = strtolower( $the_id );
 
 		//* Put it all together.
 		return rtrim( $the_id, '_' ) . '_' . $page_id;
@@ -561,17 +580,18 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	 *
 	 * @param mixed $page_id The page ID or identifier.
 	 * @param string $taxonomy The tt name.
+	 * @param string|null $type The post type.
 	 *
 	 * @since 2.4.2
 	 *
 	 * @return bool true
 	 */
-	public function delete_ld_json_transient( $page_id, $taxonomy = '' ) {
+	public function delete_ld_json_transient( $page_id, $taxonomy = '', $type = null ) {
 
 		static $flushed = null;
 
 		if ( ! isset( $flushed ) ) {
-			$this->setup_ld_json_transient( $page_id, $taxonomy );
+			$this->setup_ld_json_transient( $page_id, $taxonomy, $type );
 
 			delete_transient( $this->ld_json_transient );
 
@@ -639,7 +659,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 
 		$front_id = $this->get_the_front_page_ID();
 
-		$this->delete_ld_json_transient( $front_id );
+		$this->delete_ld_json_transient( $front_id, '', 'frontpage' );
 
 		return $flushed = true;
 	}

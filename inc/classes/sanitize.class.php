@@ -48,6 +48,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * @see AutoDescription_Sanitize::add_filter() Add sanitization filters to options.
 	 */
 	public function sanitizer_filters() {
+
 		//* If this page doesn't store settings, no need to sanitize them
 		if ( ! $this->settings_field )
 			return;
@@ -55,8 +56,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		/**
 		 * If this page doesn't parse the site options,
 		 * There's no need to filter them on each request.
-		 *
-		 * Reverse call for something we want in our POST.
 		 *
 		 * @since 2.2.9
 		 */
@@ -332,12 +331,12 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 *
 	 * @since 2.2.2
 	 *
+	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
+	 *
 	 * @param string $filter Sanitization filter type
 	 * @param string $option Option key
 	 * @param array|string $suboption Optional. Suboption key
 	 * @return boolean Returns true when complete
-	 *
-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 */
 	public function add_filter( $filter, $option, $suboption = null ) {
 
@@ -361,11 +360,11 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 *
 	 * @since 2.2.2
 	 *
+	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
+	 *
 	 * @param mixed $new_value New value
 	 * @param string $option Name of the option
 	 * @return mixed Filtered, or unfiltered value
-	 *
-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 */
 	public function sanitize( $new_value, $option ) {
 
@@ -395,13 +394,13 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 *
 	 * @since 2.2.2
 	 *
+	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
+	 *
 	 * @param string $filter Sanitization filter type
 	 * @param string $new_value New value
 	 * @param string $old_value Previous value
 	 * @return mixed Returns filtered value, or submitted value if value is
 	 * unfiltered.
-	 *
-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 */
 	protected function do_filter( $filter, $new_value, $old_value ) {
 
@@ -421,10 +420,10 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 *
 	 * @since 2.2.2
 	 *
+	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
+	 *
 	 * @return array Array with keys of sanitization types, and values of the
 	 * filter function name as a callback
-	 *
-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 */
 	protected function get_available_filters() {
 
@@ -520,7 +519,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * @since 2.5.0
 	 *
 	 * @param string $new_value The Description.
-	 *
 	 * @return string One line sanitized description.
 	 */
 	protected function s_description( $new_value ) {
@@ -547,8 +545,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 *
 	 * @since 2.5.2
 	 *
-	 * @param string $new_value The Title
-	 *
+	 * @param string $new_value The Title.
 	 * @return string Sanitized and trimmed title.
 	 */
 	protected function s_title( $new_value ) {
@@ -565,7 +562,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * @since 2.2.8
 	 *
 	 * @param mixed $new_value Should be identical to any of the $person_organization values.
-	 *
 	 * @return string title Knowledge type option
 	 */
 	protected function s_knowledge_type( $new_value ) {
@@ -584,7 +580,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * @since 2.2.2
 	 *
 	 * @param mixed $new_value Should ideally be a string 'left' or 'right' passed in.
-	 *
 	 * @return string left or right
 	 */
 	protected function s_left_right( $new_value ) {
@@ -607,7 +602,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * @since 2.5.2
 	 *
 	 * @param mixed $new_value Should ideally be a string 'left' or 'right' passed in.
-	 *
 	 * @return string left or right
 	 */
 	protected function s_left_right_home( $new_value ) {
@@ -632,7 +626,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * @since 2.2.2
 	 *
 	 * @param mixed $new_value Should ideally be a 1 or 0 integer passed in.
-	 *
 	 * @return integer 1 or 0.
 	 */
 	protected function s_one_zero( $new_value ) {
@@ -649,7 +642,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * @since 2.2.9
 	 *
 	 * @param mixed $new_value Should ideally be a 1 or 0 integer passed in.
-	 *
 	 * @return integer 1 or 0.
 	 */
 	protected function s_one_zero_flush_rewrite( $new_value ) {
@@ -680,7 +672,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * @staticvar bool $flushed
 	 *
 	 * @param mixed $new_value Should ideally be a 1 or 0 integer passed in.
-	 *
 	 * @return integer 1 or 0.
 	 */
 	protected function s_one_zero_flush_sitemap( $new_value ) {
@@ -701,7 +692,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * @since 2.2.2
 	 *
 	 * @param mixed $new_value Should ideally be a positive integer.
-	 *
 	 * @return integer Positive integer.
 	 */
 	protected function s_absint( $new_value ) {
@@ -714,7 +704,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * @since 2.2.2
 	 *
 	 * @param string $new_value String, possibly with HTML in it.
-	 *
 	 * @return string String without HTML in it.
 	 */
 	protected function s_no_html( $new_value ) {
@@ -727,7 +716,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * @since 2.5.2
 	 *
 	 * @param string $new_value String, possibly with HTML and spaces in it.
-	 *
 	 * @return string String without HTML and breaks in it.
 	 */
 	protected function s_no_html_space( $new_value ) {
@@ -739,8 +727,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 *
 	 * @since 2.2.2
 	 *
-	 * @param string $new_value String, a URL, possibly unsafe
-	 *
+	 * @param string $new_value String, a URL, possibly unsafe.
 	 * @return string String a safe URL without Query Arguments.
 	 */
 	protected function s_url( $new_value ) {
@@ -762,8 +749,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 *
 	 * @since 2.2.8
 	 *
-	 * @param string $new_value String, a URL, possibly unsafe
-	 *
+	 * @param string $new_value String, a URL, possibly unsafe.
 	 * @return string String a safe URL with Query Arguments.
 	 */
 	protected function s_url_query( $new_value ) {
@@ -779,7 +765,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * @since 2.2.2
 	 *
 	 * @param string $new_value String, an email address, possibly unsafe.
-	 *
 	 * @return string String a safe email address
 	 */
 	protected function s_email_address( $new_value ) {
@@ -792,7 +777,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * @since 2.2.2
 	 *
 	 * @param string $new_value String with potentially unsafe HTML in it.
-	 *
 	 * @return string String with only safe HTML in it
 	 */
 	protected function s_safe_html( $new_value ) {
@@ -806,7 +790,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * @since 2.2.2
 	 *
 	 * @param string $new_value String with potentially wrong Twitter username.
-	 *
 	 * @return string String with 'correct' Twitter username
 	 */
 	protected function s_twitter_name( $new_value ) {
@@ -837,7 +820,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * @since 2.5.2
 	 *
 	 * @param string $new_value String with potentially wrong option value.
-	 *
 	 * @return string Sanitized twitter card type.
 	 */
 	protected function s_twitter_card( $new_value ) {
@@ -859,12 +841,26 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	}
 
 	/**
+	 * Converts full URL paths to absolute paths.
+	 *
+	 * Removes the http or https protocols and the domain. Keeps the path '/' at the
+	 * beginning, so it isn't a true relative link, but from the web root base.
+	 *
+	 * @since 2.6.5
+	 *
+	 * @param string $url Full Path URL or relative URL.
+	 * @return string Abolute path.
+	 */
+	protected function s_relative_url( $url ) {
+		return ltrim( preg_replace( '|^(https?:)?//[^/]+(/.*)|i', '$2', $url ), ' \//' );
+	}
+
+	/**
 	 * Sanitize the Redirect URL
 	 *
 	 * @since 2.2.4
 	 *
 	 * @param string $new_value String with potentially unwanted redirect URL.
-	 *
 	 * @return string The Sanitized Redirect URL
 	 */
 	protected function s_redirect_url( $new_value ) {
@@ -877,11 +873,10 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 
 			/**
 			 * Sanitize the redirect URL to only a relative link and removes first slash
-			 *
 			 * @requires WP 4.1.0 and up to prevent adding upon itself.
 			 */
 			if ( ! $allow_external )
-				$url = ltrim( wp_make_link_relative( $url ), '/' );
+				$url = $this->s_relative_url( $url );
 
 			//* Find a path.
 			if ( _wp_can_use_pcre_u() ) {

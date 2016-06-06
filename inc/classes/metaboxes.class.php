@@ -623,7 +623,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 		 * @priority low 2.6.x
 		 */
 		?>
-		<h4><?php printf( __( 'Additions Description Settings', 'autodescription' ) ); ?></h4>
+		<h4><?php printf( __( 'Description Additions Settings', 'autodescription' ) ); ?></h4>
 		<p><span class="description"><?php printf( __( "To create a more organic description, a small introduction can be added before the description.", 'autodescription' ) ); ?></span></p>
 		<p><span class="description"><?php printf( __( "The introduction consists of the title and optionally the blogname.", 'autodescription' ) ); ?></span></p>
 
@@ -1646,12 +1646,15 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 
 		<hr>
 		<?php
+			/* translators: %s = <code>rel</code> */
 			$prev_next_posts_label = sprintf( __( 'Add %s link tags to Posts and Pages?', 'autodescription' ), $this->code_wrap( 'rel' ) );
 			$prev_next_posts_checkbox = $this->make_checkbox( 'prev_next_posts', $prev_next_posts_label, '' );
 
+			/* translators: %s = <code>rel</code> */
 			$prev_next_archives_label = sprintf( __( 'Add %s link tags to Archives?', 'autodescription' ), $this->code_wrap( 'rel' ) );
 			$prev_next_archives_checkbox = $this->make_checkbox( 'prev_next_archives', $prev_next_archives_label, '' );
 
+			/* translators: %s = <code>rel</code> */
 			$prev_next_frontpage_label = sprintf( __( 'Add %s link tags to the Home Page?', 'autodescription' ), $this->code_wrap( 'rel' ) );
 			$prev_next_frontpage_checkbox = $this->make_checkbox( 'prev_next_frontpage', $prev_next_frontpage_label, '' );
 

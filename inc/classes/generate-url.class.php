@@ -275,12 +275,13 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	}
 
 	/**
-	 * Generate url from Args.
+	 * Generate URL from arguments.
 	 *
 	 * @since 2.6.0
 	 *
-	 * @param array $args the URL args.
+	 * @global object $wp
 	 *
+	 * @param array $args the URL args.
 	 * @return string $path
 	 */
 	public function generate_url_path( $args = array() ) {
@@ -313,21 +314,15 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			 */
 			$post_id = isset( $args['post']->ID ) ? $args['post']->ID : $args['id'];
 
-			if ( $post_id ) {
-				if ( $this->pretty_permalinks ) {
+			if ( $this->pretty_permalinks && $post_id && $this->is_singular() ) {
+				$post = get_post( $post_id );
 
-					$post = get_post( $post_id );
-
-					//* Don't slash draft links.
-					if ( isset( $post->post_status ) && ( 'auto-draft' === $post->post_status || 'draft' === $post->post_status ) )
-						$this->url_slashit = false;
-
-					$path = $this->get_relative_url( $post_id, $args['external'] );
-				} else {
-					$path = $this->the_url_path_default_permalink_structure( $post_id, $args['paged'], $args['paged_plural'] );
-				}
+				//* Don't slash draft links.
+				if ( isset( $post->post_status ) && ( 'auto-draft' === $post->post_status || 'draft' === $post->post_status ) )
+					$this->url_slashit = false;
 			}
 
+			$path = $this->build_singular_relative_url( $post_id, $args );
 		}
 
 		if ( isset( $path ) )
@@ -337,52 +332,62 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	}
 
 	/**
-	 * Generates relative URL for current post_ID.
+	 * Generates relative URL for the Homepage and Singular Posts.
 	 *
-	 * @param int|object $post The post object or ID.
-	 * @param bool $external Whether to fetch the WP Request or get the permalink by Post Object.
-	 * @param int $depr Deprecated The post ID.
-	 *
-	 * @since 2.3.0
+	 * @since 2.6.5
 	 *
 	 * @global object $wp
 	 *
+	 * @param int $post_id The ID.
+	 * @param array $args The URL arguments.
 	 * @return relative Post or Page url.
 	 */
-	public function get_relative_url( $post = null, $external = false, $depr = null ) {
-
-		if ( isset( $depr ) ) {
-			$post_id = $depr;
-		} else {
-			if ( is_object( $post ) ) {
-				if ( isset( $post->ID ) )
-					$post_id = $post->ID;
-			} else if ( is_scalar( $post ) ) {
-				$post_id = (int) $post;
-			}
-		}
+	public function build_singular_relative_url( $post_id = null, $args = array() ) {
 
 		if ( ! isset( $post_id ) ) {
-			if ( ! $external )
+			if ( ! $args['external'] )
 				$post_id = $this->get_the_real_ID();
 			else
 				return '';
 		}
 
-		if ( $external || ! $this->is_home() ) {
-			$permalink = get_permalink( $post_id );
-		} else if ( ! $external ) {
+		$args = $this->reparse_url_args( $args );
+
+		if ( $args['external'] || ! $this->is_home() ) {
+			$url = get_permalink( $post_id );
+		} else if ( $this->is_home() ) {
+			$url = get_home_url();
+		} else if ( ! $args['external'] ) {
 			global $wp;
 
 			if ( isset( $wp->request ) )
-				$permalink = $wp->request;
+				$url = $wp->request;
 		}
 
 		//* No permalink found.
-		if ( ! isset( $permalink ) )
+		if ( ! isset( $url ) )
 			return '';
 
-		$path = $this->set_url_scheme( $permalink, 'relative' );
+		if ( $this->is_singular() )
+			$paged = $this->maybe_get_paged( $this->page(), $args['paged'], $args['paged_plural'] );
+		else
+			$paged = $this->maybe_get_paged( $this->paged(), $args['paged'], $args['paged_plural'] );
+
+		if ( $paged ) {
+			if ( $this->pretty_permalinks ) {
+				if ( $this->is_singular() )
+					$url = trailingslashit( $url ) . $paged;
+				else
+					$url = trailingslashit( $url ) . 'page/' . $paged;
+			} else {
+				if ( $this->is_singular() )
+					$url = add_query_arg( 'page', $paged, $url );
+				else
+					$url = add_query_arg( 'paged', $paged, $url );
+			}
+		}
+
+		$path = $this->set_url_scheme( $url, 'relative' );
 
 		return $path;
 	}
@@ -619,6 +624,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 						break;
 
 					case '2' :
+						//* THIS IS NOT CORRECT var_dump()
+
 						//* Notify cache of subdomain addition.
 						$this->add_subdomain = $current_lang;
 
@@ -835,79 +842,6 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	}
 
 	/**
-	 * Creates canonical url for the default permalink structure.
-	 *
-	 * @param object|int $post The post object or ID.
-	 * @param bool $paged Whether to add pagination for all types.
-	 * @param bool $paged_plural Whether to add pagination for the second or later page.
-	 *
-	 * @since 2.3.0
-	 */
-	public function the_url_path_default_permalink_structure( $post = null, $paged = false, $paged_plural = true ) {
-
-		//* Don't slash it.
-		$this->url_slashit = false;
-
-		if ( false === $this->is_singular() ) {
-			//* We're on a taxonomy
-			$object = get_queried_object();
-
-			if ( is_object( $object ) ) {
-				if ( $this->is_category() ) {
-					$path = '?cat=' . $object->term_id;
-				} else if ( $this->is_tag() ) {
-					$path = '?tag=' . $object->name;
-				} else if ( $this->is_date() ) {
-					global $wp_query;
-
-					$query = $wp_query->query;
-
-					$year = $query->year;
-					$month = $query->monthnum ? '&monthnum=' . $query->monthnum : '';
-					$day = $query->day ? '&day=' . $query->day : '';
-
-					$path = '?year=' . $year . $month . $day;
-				} else if ( $this->is_author() ) {
-					$path = '?author=' . $object->author_name;
-				} else if ( $this->is_tax() ) {
-					$path = '?taxonomy=' . $object->taxonomy . '&term=' . $object->slug;
-				} else if ( isset( $object->query_var ) && $object->query_var ) {
-					$path = '?' . $object->query_var . '=' . $object->slug;
-				} else {
-					$path = '?p=' . $object->ID;
-				}
-
-				$paged = $this->maybe_get_paged( $this->paged(), $paged, $paged_plural );
-				if ( $paged )
-					$path .= '&paged=' . $paged;
-			}
-
-		}
-
-		if ( ! isset( $path ) ) {
-
-			if ( isset( $post ) ) {
-				if ( is_object( $post ) && isset( $post->ID ) ) {
-					$id = $post->ID;
-				} else if ( is_scalar( $post ) ) {
-					$id = $post;
-				}
-			}
-
-			if ( ! isset( $id ) )
-				$id = $this->get_the_real_ID();
-
-			$path = '?p=' . $id;
-
-			$page = $this->maybe_get_paged( $this->page(), $paged, $paged_plural );
-			if ( $page )
-				$path .= '&page=' . $page;
-		}
-
-		return $path;
-	}
-
-	/**
 	 * Try to get an canonical URL when WPMUdev Domain Mapping is active.
 	 *
 	 * @since 2.3.0
@@ -1064,7 +998,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 						if ( $this->is_static_frontpage( $post_id ) ) {
 							$path = '';
 						} else {
-							$path = '?p=' . $post_id;
+							//* This will be converted to '?p' later.
+							$path = '?page_id=' . $post_id;
 						}
 					}
 				} else if ( $this->is_archive() ) {
@@ -1111,11 +1046,12 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			}
 
 			if ( isset( $path ) ) {
+				//* Path always has something. So we can safely use .='&' instead of add_query_arg().
 
 				if ( 0 === $post_id )
 					$post_id = $this->get_the_real_ID();
 
-				$url = $this->the_url_from_cache( '', $post_id, false, false, true );
+				$url = $this->the_url_from_cache( '', $post_id, false, false, false );
 				$query = parse_url( $url, PHP_URL_QUERY );
 
 				$additions = '';
@@ -1131,16 +1067,17 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 					}
 				}
 
-				if ( $this->pretty_permalinks ) {
-					if ( $this->is_archive() || $this->is_home() ) {
-						$paged = $this->paged();
-						if ( $paged > 1 )
-							$path .= '&paged=' . $paged;
-					} else {
-						$page = $this->paged();
-						if ( $page > 1 )
-							$path .= '&page=' . $page;
-					}
+				//* We used 'page_id' to determine duplicates. Now we can convert it to a shorter form.
+				$path = str_replace( 'page_id=', 'p=', $path );
+
+				if ( $this->is_archive() || $this->is_home() ) {
+					$paged = $this->maybe_get_paged( $this->paged(), false, true );
+					if ( $paged )
+						$path .= '&paged=' . $paged;
+				} else {
+					$page = $this->maybe_get_paged( $this->page(), false, true );
+					if ( $page )
+						$path .= '&page=' . $page;
 				}
 
 				$home_url = $this->the_home_url_from_cache( true );

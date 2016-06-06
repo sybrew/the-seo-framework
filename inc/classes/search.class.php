@@ -53,6 +53,11 @@ class AutoDescription_Search extends AutoDescription_Generate_Ldjson {
 		// Don't exclude pages in wp-admin
 		if ( $query->is_search && false === $this->is_admin() ) {
 
+			$q = $query->query;
+			//* Only interact with an actual Search Query.
+			if ( ! isset( $q['s'] ) || ! $q['s'] )
+				return;
+
 			/**
 			 * @param array $protected_posts : Posts array with excluded key
 			 */

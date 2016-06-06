@@ -152,7 +152,6 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 					 */
 					$priority = (string) apply_filters( 'the_seo_framework_metabox_priority', 'high' );
 
-					// Note: Pass on the object $this
 					add_meta_box( $id, sprintf( __( '%s SEO Settings', 'autodescription' ), $title ), array( $this, 'pre_seo_box' ), $post_type, $context, $priority, $args );
 				}
 			}

@@ -612,7 +612,6 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 
 		}
 
-
 		if ( $escape )
 			$title = $this->escape_title( $title, false );
 

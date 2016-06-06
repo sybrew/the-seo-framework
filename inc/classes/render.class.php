@@ -452,7 +452,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	public function og_url() {
 
 		if ( $this->use_og_tags() )
-			return '<meta property="og:url" content="' . esc_attr( $this->the_url_from_cache() ) . '" />' . "\r\n";
+			return '<meta property="og:url" content="' . $this->the_url_from_cache() . '" />' . "\r\n";
 
 		return '';
 	}
