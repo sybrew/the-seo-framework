@@ -693,7 +693,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		 */
 		$extend = (string) apply_filters( 'the_seo_framework_sitemap_extend', '' );
 
-		if ( '' !== $extend )
+		if ( $extend )
 			$content .= "\t" . $extend . "\r\n";
 
 		//* Reset timezone to default.

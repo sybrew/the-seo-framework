@@ -349,24 +349,29 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
-= 2.6.4 - ??? =
+= 2.6.5 - ??? =
 
 **Release date:**
 /
-* June TODO 2016
+* June 7th 2016
 
 **Summarized:**
 
 * Another maintenance release for The SEO Framework 2.6 is coming right at you!
-* While Polylang creates a Taxonomy from Pages without acknowledging it being an Archive, I have found a workaround for the Title not to show up correctly.
+* While Polylang creates Taxonomies from Pages without acknowledging it being an Archive, I have found a workaround for the Title not to show up correctly.
 * Also, bbPress' Original Post within a topic is now shown correctly, although the bbPress 2.6.0 will resolve this as well.
 * On special pages like the Forum page of bbPress, no more cache key conflicts will be present, this makes it a recommended update.
-* WPML Multilingual domains are now also fully supported. So instead of just listening to the subdomain, this plugin now also takes whole new domains into consideration.
+* WPML Multilingual domains are now also fully supported. So instead of just adding a subdomain, this plugin now also takes whole new domains into consideration.
 * The URL generation has also been improved once more. It now contains Canonical Pagination support, and expanded Plain Permalink structure support.
 * And just when you thought new options were available, now you won't be fooled again.
-* And for developers I made it easier to debug, and I've also added two (three, cough) brand new filters.
+* And for developers I made it easier to debug, and I've also added two (actually three) brand new filters.
 
-***Sorry, no SEO Tip of the Update this time.***
+**SEO Tip of the Update:**
+
+* Have you found something that greatly interests you, and do you think you can write a better article than you've found?
+* Go write it, in your own words and style. Don't forget to make it much longer, better and more detailed. Don't forget to add images.
+* Finally, share the content, reach out to the public, and of course your public. This will increase your rankings significantly.
+* This method is known as the Skyscraper Technique; it's used for and as this SEO tip, minus the images, details or length.
 
 **Detailed Log:**
 
@@ -374,7 +379,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * **Added:**
 	/
-	* TODO WPML multi-domain compatibility.
+	* WPML multi-domain compatibility.
 	* Pagination support for the Canonical URL on the Home Page and Singular Pages.
 	* Pagination support for the Shortlink when using the Plain permalink structure.
 * **Improved:**
@@ -393,13 +398,16 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Unregistered Taxonomies' transient keys now have an expected outcome, like on bbPress Forums.
 	* Transient key generation static cache now works on terms and taxonomies.
 	* New Settings Update notification now really doesn't pop up when no New Settings have been found.
+	* Plausible incorrect root Canonical URL when no path is given.
 
 **For developers:**
 
 * **Added:**
+	/
 	* When generating a cache key with an unknown given type, a "doingitwrong" notice is emitted.
 	* Debugging can now be done on the front-end as well.
 	* Debugging now shows variable type information and has better indentation.
+	* TODO When The SEO Framework debugging is enabled, the whole output will be shown within the footer, even the ones that shouldn't be output.
 * **Improved:**
 	* `AutoDescription_Query::is_archive()` now also checks other Archive Types rather than only relying on WordPress core is_archive().
 	* `AutoDescription_Search::search_filter()` now also checks for the `s` query variable requests being present prior to filtering.

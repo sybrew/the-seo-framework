@@ -271,6 +271,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 					<div style="clear:both;float:left;position:relative;width:calc( 100% - 200px );min-height:700px;padding:0;margin:20px 20px 40px 180px;overflow:hidden;border:1px solid #ccc;border-radius:3px;">
 						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom: 2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">SEO Debug Information</h3>
 						<div style="position:absolute;bottom:0;right:0;left:0;top:41px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;">
+							<?php echo $this->debug_init_output(); ?>
 							<?php echo $this->debug_output; ?>
 						</div>
 					</div>
@@ -283,6 +284,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 							SEO Debug Information :: Type: <?php echo $this->get_the_term_name( $this->fetch_the_term( $this->get_the_real_ID() ) ); ?> &mdash; ID: <?php echo $this->get_the_real_ID(); ?> &mdash; Is front: <?php echo $this->is_front_page() ? 'Yes' : 'No'; ?>
 						</h3>
 						<div style="position:absolute;bottom:0;right:0;left:0;top:41px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;">
+							<?php echo $this->debug_init_output(); ?>
 							<?php echo $this->debug_output; ?>
 						</div>
 					</div>
@@ -683,6 +685,60 @@ class AutoDescription_Debug extends AutoDescription_Core {
 		} else {
 			$output = $previous = microtime( true );
 		}
+
+		return $output;
+	}
+
+	protected function debug_init_output() {
+
+		if ( $this->is_admin() && ! $this->is_term_edit() && ! $this->is_post_edit() && ! $this->is_seo_settings_page() )
+			return;
+
+		if ( $this->is_seo_settings_page() )
+			add_filter( 'the_seo_framework_current_object_id', array( $this, 'get_the_front_page_ID' ) );
+
+		$init_start = microtime( true );
+
+		$output	= $this->the_description()
+				. $this->og_image()
+				. $this->og_locale()
+				. $this->og_type()
+				. $this->og_title()
+				. $this->og_description()
+				. $this->og_url()
+				. $this->og_sitename()
+				. $this->facebook_publisher()
+				. $this->facebook_author()
+				. $this->facebook_app_id()
+				. $this->article_published_time()
+				. $this->article_modified_time()
+				. $this->twitter_card()
+				. $this->twitter_site()
+				. $this->twitter_creator()
+				. $this->twitter_title()
+				. $this->twitter_description()
+				. $this->twitter_image()
+				. $this->shortlink()
+				. $this->canonical()
+				. $this->paged_urls()
+				. $this->ld_json()
+				. $this->google_site_output()
+				. $this->bing_site_output()
+				. $this->yandex_site_output()
+				. $this->pint_site_output()
+				;
+
+		$timer = '<div style="display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( microtime( true ) - $init_start, 5 ) . ' seconds</div>' ;
+
+		$title = $this->is_admin() ? 'Expected SEO Output' : 'Current SEO Output';
+		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #ccc;"><h2 style="color:#ddd;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
+
+		//* Escape it, replace EOL with breaks, and style everything between quotes (which are ending with space).
+		$output = str_replace( PHP_EOL, '<br>', esc_html( $output ) );
+		$output = preg_replace( "/(&quot;.*?&quot;)(\s)/", '<font color="arnoldschwarzenegger">$1</font> ', $output );
+
+		$output = '<div style="display:inline-block;width:100%;padding:20px;font-family:Consolas,Monaco,monospace;font-size:14px;">' . $output . '</div>';
+		$output = '<div style="display:block;width:100%;background:#23282D;color:#ddd;border-bottom:1px solid #ccc">' . $title . $timer . $output . '</div>';
 
 		return $output;
 	}

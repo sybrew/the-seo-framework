@@ -44,10 +44,30 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	protected $add_subdomain;
 
 	/**
-	 * Constructor, load parent constructor
+	 * Holds current HTTP host.
+	 *
+	 * @since 2.6.5
+	 *
+	 * @var string The current HTTP host.
+	 */
+	protected $current_host;
+
+	/**
+	 * Holds home HTTP host.
+	 *
+	 * @since 2.6.5
+	 *
+	 * @var string The home HTTP host.
+	 */
+	protected $home_host;
+
+	/**
+	 * Constructor, load parent constructor and set up variables.
 	 */
 	public function __construct() {
 		parent::__construct();
+
+		$this->home_host = parse_url( get_option( 'home' ), PHP_URL_HOST );
 	}
 
 	/**
@@ -89,6 +109,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		//* Reset cache.
 		$this->url_slashit = true;
 		$this->add_subdomain = '';
+		$this->current_host = '';
 
 		$path = '';
 		$scheme = '';
@@ -141,16 +162,16 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 		//* Non-domainmap URL
 		if ( empty( $url ) ) {
-			if ( $args['home'] || '' === $path ) {
-				$url = user_trailingslashit( get_option( 'home' ) );
-				$slashit = false;
-			} else {
-				$url = $this->generate_full_url( $path );
-				$scheme = is_ssl() ? 'https' : 'http';
+			if ( $args['home'] ) {
+				$this->current_lang = '';
+				$this->add_subdomain = '';
 			}
+
+			$url = $this->add_url_host( $path );
+			$scheme = is_ssl() ? 'https' : 'http';
 		}
 
-		$url = $this->set_url_subdomain( $url );
+		$url = $this->add_url_subdomain( $url );
 
 		//* URL has been given manually or $args['home'] is true.
 		if ( ! isset( $scheme ) )
@@ -393,41 +414,19 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	}
 
 	/**
-	 * Generate full URL from path.
+	 * Create full valid URL with parsed host.
+	 * Don't forget to use set_url_scheme() afterwards.
 	 *
-	 * @since 2.6.0
-	 * @staticvar string $home_url The Home URL.
-	 * @staticvar string|bool $home_path The Home Directory Path.
+	 * @since 2.6.5
 	 *
-	 * @param string $path The current path.
-	 *
-	 * @return string URL the full URL.
+	 * @param string $path Current path.
+	 * @return string Full valid URL with http host.
 	 */
-	protected function generate_full_url( $path = '' ) {
+	public function add_url_host( $path = '' ) {
 
-		static $home_url = null;
-		static $home_path = null;
-		static $home_url_slashed = null;
+		$host = $this->current_host ? $this->current_host : $this->home_host;
 
-		//* Set up caches.
-		if ( is_null( $home_url ) ) {
-			$home_url = get_option( 'home' );
-
-			$home_url_parsed = parse_url( $home_url );
-			$home_path = isset( $home_url_parsed['path'] ) ? $home_url_parsed['path'] : false;
-
-			$home_url_slashed = trailingslashit( $home_url );
-		}
-
-		//* Prevent duplicated first path from Site Address config.
-		if ( $home_path ) {
-			$count = 1;
-			$url = $home_url_slashed . ltrim( str_replace( $home_path, '', $path ), '\/ ' );
-		} else {
-			$url = $home_url_slashed . ltrim( $path, '\/ ' );
-		}
-
-		return $url;
+		return $url = 'http://' . trailingslashit( $host ) . ltrim( $path, ' \\/' );
 	}
 
 	/**
@@ -539,16 +538,14 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	/**
 	 * Generate relative WPML url.
 	 *
-	 * @param string $path The current path.
-	 * @param int $post_id The Post ID.
-	 *
-	 * @global object $sitepress
-	 *
+	 * @since 2.4.3
 	 * @staticvar bool $gli_exists
 	 * @staticvar string $default_lang
 	 *
-	 * @since 2.4.3
+	 * @global object $sitepress
 	 *
+	 * @param string $path The current path.
+	 * @param int $post_id The Post ID.
 	 * @return relative path for WPML urls.
 	 */
 	public function get_relative_wmpl_url( $path = '', $post_id = '' ) {
@@ -625,9 +622,14 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 					case '2' :
 						//* THIS IS NOT CORRECT var_dump()
+						$langsettings = $sitepress->get_setting( 'language_domains' );
+						$current_lang_setting = isset( $langsettings[ $current_lang ] ) ? $langsettings[ $current_lang ] : '';
 
-						//* Notify cache of subdomain addition.
-						$this->add_subdomain = $current_lang;
+						if ( empty( $current_lang_setting ) )
+							return $path;
+
+						$current_host = parse_url( $current_lang_setting, PHP_URL_HOST );
+						$this->current_host = $current_host;
 
 						//* No need to alter the path.
 						return $path;
@@ -855,77 +857,76 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 */
 	public function the_url_wpmudev_domainmap( $path, $get_scheme = false ) {
 
-		if ( $this->is_domainmapping_active() ) {
-			global $wpdb, $blog_id;
+		if ( false === $this->is_domainmapping_active() )
+			return '';
 
-			/**
-			 * Cache revisions. Hexadecimal.
-			 *
-			 * @since 2.6.0
-			 */
-			$revision = '1';
+		global $wpdb, $blog_id;
 
-			$cache_key = 'wpmudev_mapped_domain_' . $revision . '_' . $blog_id;
+		/**
+		 * Cache revisions. Hexadecimal.
+		 * @since 2.6.0
+		 */
+		$revision = '1';
 
-			//* Check if the domain is mapped
-			$mapped_domain = $this->object_cache_get( $cache_key );
-			if ( false === $mapped_domain ) {
-				//* Setup cache. Results may only contain one object.
+		$cache_key = 'wpmudev_mapped_domain_' . $revision . '_' . $blog_id;
 
-				$mapped_domains = $wpdb->get_results( $wpdb->prepare( "SELECT id, domain, is_primary, scheme FROM {$wpdb->base_prefix}domain_mapping WHERE blog_id = %d", $blog_id ), OBJECT );
+		//* Check if the domain is mapped
+		$mapped_domain = $this->object_cache_get( $cache_key );
+		if ( false === $mapped_domain ) {
 
-				$primary_key = 0;
-				$domain_ids = array();
-				foreach ( $mapped_domains as $key => $domain ) {
-					if ( isset( $domain->is_primary ) && '1' === $domain->is_primary ) {
-						$primary_key = $key;
+			$mapped_domains = $wpdb->get_results( $wpdb->prepare( "SELECT id, domain, is_primary, scheme FROM {$wpdb->base_prefix}domain_mapping WHERE blog_id = %d", $blog_id ), OBJECT );
 
-						//* We've found the primary key, break loop.
-						break;
-					} else {
-						//* Save IDs.
-						if ( isset( $domain->id ) && $domain->id )
-							$domain_ids[$key] = $domain->id;
-					}
+			$primary_key = 0;
+			$domain_ids = array();
+			foreach ( $mapped_domains as $key => $domain ) {
+				if ( isset( $domain->is_primary ) && '1' === $domain->is_primary ) {
+					$primary_key = $key;
+
+					//* We've found the primary key, break loop.
+					break;
+				} else {
+					//* Save IDs.
+					if ( isset( $domain->id ) && $domain->id )
+						$domain_ids[$key] = $domain->id;
 				}
-
-				if ( 0 === $primary_key && ! empty( $domain_ids ) ) {
-					//* No primary ID has been found. Get the one with the lowest ID, which has been added first.
-					$primary_key = array_keys( $domain_ids, min( $domain_ids ), true );
-					$primary_key = reset( $primary_key );
-				}
-
-				//* Set 0, as we check for false to begin with.
-				$mapped_domain = isset( $mapped_domains[$primary_key] ) ? $mapped_domains[$primary_key] : 0;
-
-				$this->object_cache_set( $cache_key, $mapped_domain, 3600 );
 			}
 
-			if ( $mapped_domain ) {
+			if ( 0 === $primary_key && ! empty( $domain_ids ) ) {
+				//* No primary ID has been found. Get the one with the lowest ID, which has been added first.
+				$primary_key = array_keys( $domain_ids, min( $domain_ids ), true );
+				$primary_key = reset( $primary_key );
+			}
 
-				$domain = isset( $mapped_domain->domain ) ? $mapped_domain->domain : '0';
-				$scheme = isset( $mapped_domain->scheme ) ? $mapped_domain->scheme : '';
+			//* Set 0, as we check for false to begin with.
+			$mapped_domain = isset( $mapped_domains[$primary_key] ) ? $mapped_domains[$primary_key] : 0;
 
-				//* Fallback to is_ssl if no scheme has been found.
-				if ( '' === $scheme )
-					$scheme = is_ssl() ? '1' : '0';
+			$this->object_cache_set( $cache_key, $mapped_domain, 3600 );
+		}
 
-				if ( '1' === $scheme ) {
-					$scheme_full = 'https://';
-					$scheme = 'https';
-				} else {
-					$scheme_full = 'http://';
-					$scheme = 'http';
-				}
+		if ( $mapped_domain ) {
 
-				//* Put it all together.
-				$url = trailingslashit( $scheme_full . $domain ) . ltrim( $path, '\/' );
+			$domain = isset( $mapped_domain->domain ) ? $mapped_domain->domain : '0';
+			$scheme = isset( $mapped_domain->scheme ) ? $mapped_domain->scheme : '';
 
-				if ( ! $get_scheme ) {
-					return $url;
-				} else {
-					return array( $url, $scheme );
-				}
+			//* Fallback to is_ssl if no scheme has been found.
+			if ( '' === $scheme )
+				$scheme = is_ssl() ? '1' : '0';
+
+			if ( '1' === $scheme ) {
+				$scheme_full = 'https://';
+				$scheme = 'https';
+			} else {
+				$scheme_full = 'http://';
+				$scheme = 'http';
+			}
+
+			//* Put it all together.
+			$url = trailingslashit( $scheme_full . $domain ) . ltrim( $path, '\/' );
+
+			if ( ! $get_scheme ) {
+				return $url;
+			} else {
+				return array( $url, $scheme );
 			}
 		}
 
@@ -944,28 +945,27 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 */
 	public function the_url_donncha_domainmap( $path, $get_scheme = false ) {
 
-		if ( $this->is_donncha_domainmapping_active() ) {
-			global $wpdb,$current_blog;
+		if ( false === $this->is_donncha_domainmapping_active() )
+			return '';
 
-			$scheme = is_ssl() ? 'https' : 'http';
+		global $current_blog;
 
-			//* This url is cached statically.
-			$url = function_exists( 'domain_mapping_siteurl' ) ? domain_mapping_siteurl( false ) : false;
+		$scheme = is_ssl() ? 'https' : 'http';
+		$url = function_exists( 'domain_mapping_siteurl' ) ? domain_mapping_siteurl( false ) : false;
 
-			$request_uri = '';
+		$request_uri = '';
 
-			if ( $url && $url !== untrailingslashit( $scheme . '://' . $current_blog->domain . $current_blog->path ) ) {
-				if ( ( defined( 'VHOST' ) && 'yes' !== VHOST ) || ( defined( 'SUBDOMAIN_INSTALL' ) && false === SUBDOMAIN_INSTALL ) ) {
-					$request_uri = str_replace( $current_blog->path, '/', $_SERVER['REQUEST_URI'] );
-				}
+		if ( $url && $url !== untrailingslashit( $scheme . '://' . $current_blog->domain . $current_blog->path ) ) {
+			if ( ( defined( 'VHOST' ) && 'yes' !== VHOST ) || ( defined( 'SUBDOMAIN_INSTALL' ) && false === SUBDOMAIN_INSTALL ) ) {
+				$request_uri = str_replace( $current_blog->path, '/', $_SERVER['REQUEST_URI'] );
+			}
 
-				$url = trailingslashit( $url . $request_uri ) . ltrim( $path, '\/ ' );
+			$url = trailingslashit( $url . $request_uri ) . ltrim( $path, '\\/ ' );
 
-				if ( $get_scheme ) {
-					return array( $url, $scheme );
-				} else {
-					return $url;
-				}
+			if ( $get_scheme ) {
+				return array( $url, $scheme );
+			} else {
+				return $url;
 			}
 		}
 
@@ -1249,18 +1249,17 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	/**
 	 * Adds subdomain to URL.
 	 *
-	 * @since 2.6.2
+	 * @since 2.6.5
 	 *
 	 * @param string $url The current URL without subdomain.
-	 *
 	 * @return string $url URL with possible subdomain.
 	 */
-	protected function set_url_subdomain( $url = '' ) {
+	public function add_url_subdomain( $url = '' ) {
 
-		//* Add subdomain, if any.
+		//* Add subdomain, if set.
 		if ( $this->add_subdomain ) {
-			$parsed_url = parse_url( $url );
-			$url = str_replace( $parsed_url['scheme'] . '://', '', $url );
+			$scheme = parse_url( $url, PHP_URL_SCHEME );
+			$url = str_replace( $scheme . '://', '', $url );
 
 			//* Put it together.
 			$url = $this->add_subdomain . '.' . $url;
