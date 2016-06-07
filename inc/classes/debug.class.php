@@ -689,6 +689,13 @@ class AutoDescription_Debug extends AutoDescription_Core {
 		return $output;
 	}
 
+	/**
+	 * Wraps header output in front-end code.
+	 *
+	 * @since 2.6.5
+	 *
+	 * @return string Wrapped HTML debug output.
+	 */
 	protected function debug_init_output() {
 
 		if ( $this->is_admin() && ! $this->is_term_edit() && ! $this->is_post_edit() && ! $this->is_seo_settings_page() )

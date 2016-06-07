@@ -182,6 +182,8 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 				'twitter_tags',
 				'googleplus_tags',
 
+				'knowledge_output',
+
 				'post_publish_time',
 				'post_modify_time',
 

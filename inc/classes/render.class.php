@@ -819,9 +819,6 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		if ( ! apply_filters( 'the_seo_framework_output_canonical', true, $this->get_the_real_ID() ) )
 			return;
 
-		if ( $this->is_404() )
-			return;
-
 		return '<link rel="canonical" href="' . $this->the_url_from_cache() . '" />' . "\r\n";
 	}
 

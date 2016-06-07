@@ -395,21 +395,22 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 		$options = $this->get_all_options();
 		$new_options = $this->default_site_options();
 
-		//* Prevent $updated returning true when no options are added.
-		$new_options[$plugin_updated] = 0;
+		/**
+		 * Stop this madness from happening again until next update.
+		 * Also prevent $updated to become true on this call.
+		 */
+		$new_options[$plugin_updated] = 1;
+		$options[$plugin_updated] = 1;
 
 		//* Merge the options. Add to if it's non-existent.
 		foreach ( $new_options as $key => $value ) {
 			if ( ! isset( $options[$key] ) ) {
-				if ( isset( $new_options[$key] ) && ! empty( $new_options[$key] ) ) {
+				if ( ! empty( $new_options[$key] ) ) {
 					$options[$key] = $new_options[$key];
 					$updated = true;
 				}
 			}
 		}
-
-		//* Stop this madness from happening again until next update.
-		$options[$plugin_updated] = 1;
 
 		//* Updated the options. Check for updated flag and see if settings pages are loaded.
 		if ( update_option( $this->settings_field, $options ) && $updated && $this->load_options ) {

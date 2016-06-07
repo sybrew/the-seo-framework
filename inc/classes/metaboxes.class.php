@@ -2357,18 +2357,18 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 			<hr>
 
 			<?php /* translators: https://developers.google.com/search/docs/data-types/sitelinks-searchbox */ ?>
-			<h4><?php _ex( 'Sitelinks Search Box', 'Product name', 'autodescription' ); ?></h4>
+			<h4><?php _ex( 'Sitelinks Searchbox', 'Product name', 'autodescription' ); ?></h4>
 			<p class="description"><?php _e( 'When Search users search for your brand name, the following option allows them to search through your website directly from the Search Results.', 'autodescription' ); ?></p>
 			<?php
 			$info = $this->make_info(
-				_x( 'Sitelinks Search Box', 'Product name', 'autodescription' ),
+				_x( 'Sitelinks Searchbox', 'Product name', 'autodescription' ),
 				'https://developers.google.com/search/docs/data-types/sitelinks-searchbox',
 				false
 			);
 			$this->wrap_fields(
 				$this->make_checkbox(
 					'ld_json_searchbox',
-					_x( 'Enable Sitelinks Search Box?', 'Product name', 'autodescription' ) . ' ' . $info,
+					_x( 'Enable Sitelinks Searchbox?', 'Product name', 'autodescription' ) . ' ' . $info,
 					''
 				),
 				true

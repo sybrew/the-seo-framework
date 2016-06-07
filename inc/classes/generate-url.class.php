@@ -169,9 +169,9 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 			$url = $this->add_url_host( $path );
 			$scheme = is_ssl() ? 'https' : 'http';
-		}
 
-		$url = $this->add_url_subdomain( $url );
+			$url = $this->add_url_subdomain( $url );
+		}
 
 		//* URL has been given manually or $args['home'] is true.
 		if ( ! isset( $scheme ) )
@@ -374,7 +374,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 		$args = $this->reparse_url_args( $args );
 
-		if ( $args['external'] || ! $this->is_home() ) {
+		if ( $args['external'] || ! $this->is_front_page() ) {
 			$url = get_permalink( $post_id );
 		} else if ( $this->is_front_page() ) {
 			$url = get_home_url();
@@ -382,7 +382,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			global $wp;
 
 			if ( isset( $wp->request ) )
-				$url = $wp->request;
+				$url = trailingslashit( get_option( 'home' ) ) . $wp->request;
+
 		}
 
 		//* No permalink found.
@@ -1257,9 +1258,12 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 * @since 2.6.5
 	 *
 	 * @param string $url The current URL without subdomain.
-	 * @return string $url URL with possible subdomain.
+	 * @return string $url Fully qualified URL with possible subdomain.
 	 */
 	public function add_url_subdomain( $url = '' ) {
+
+		if ( '//' === substr( $url, 0, 2 ) )
+			$url = 'http:' . $url;
 
 		//* Add subdomain, if set.
 		if ( $this->add_subdomain ) {
@@ -1267,7 +1271,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			$url = str_replace( $scheme . '://', '', $url );
 
 			//* Put it together.
-			$url = $this->add_subdomain . '.' . $url;
+			$url = $scheme . '://' . $this->add_subdomain . '.' . $url;
 		}
 
 		return $url;

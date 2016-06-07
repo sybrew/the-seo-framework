@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl, feed
 Requires at least: 3.8.0
 Tested up to: 4.5.2
-Stable tag: 2.6.4
+Stable tag: 2.6.4dev5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -349,10 +349,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
-= 2.6.5 - ??? =
+= 2.6.5 - Systematic Support =
 
 **Release date:**
-/
+
 * June 7th 2016
 
 **Summarized:**
@@ -364,7 +364,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * WPML Multilingual domains are now also fully supported. So instead of just adding a subdomain, this plugin now also takes whole new domains into consideration.
 * The URL generation has also been improved once more. It now contains Canonical Pagination support, and expanded Plain Permalink structure support.
 * And just when you thought new options were available, now you won't be fooled again.
-* And for developers I made it easier to debug, and I've also added two (actually three) brand new filters.
+* For developers it's now much easier to debug, and there are also two (actually three) brand new filters.
+* And last but not least, 404 pages and Search Pages now have a Canonical URL, right towards your Homepage.
 
 **SEO Tip of the Update:**
 
@@ -378,19 +379,17 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **For everyone:**
 
 * **Added:**
-	/
 	* WPML multi-domain compatibility.
 	* Pagination support for the Canonical URL on the Home Page and Singular Pages.
 	* Pagination support for the Shortlink when using the Plain permalink structure.
+	* 404 and Search page Canonical URL.
 * **Improved:**
 	* Some sentences were weird or incorrect. These have been improved.
 	* Redirect URL now has more expected behaviour upon sanitizing on WordPress versions lower than 4.1.
 	* The Open Graph URL now isn't sanitized twice.
 * **Updated:**
-	/
-	* TODO POT translation file.
+	* POT translation file.
 * **Fixed:**
-	/
 	* bbPress Topic Starter's first post is now visible on bbPress 2.5.9 and lower. bbPress 2.6.0 has included its own fix.
 	* Search Query alteration is now only done on actual Search Queries.
 	* When saving the Site SEO Settings, the Homepage Schema.org output transient and the Description transient are now flushed correctly again.
@@ -403,11 +402,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **For developers:**
 
 * **Added:**
-	/
 	* When generating a cache key with an unknown given type, a "doingitwrong" notice is emitted.
 	* Debugging can now be done on the front-end as well.
 	* Debugging now shows variable type information and has better indentation.
-	* TODO When The SEO Framework debugging is enabled, the whole output will be shown within the footer, even the ones that shouldn't be output.
+	* When The SEO Framework debugging is enabled, the whole output will be shown within the footer, even the ones that shouldn't be output.
 * **Improved:**
 	* `AutoDescription_Query::is_archive()` now also checks other Archive Types rather than only relying on WordPress core is_archive().
 	* `AutoDescription_Search::search_filter()` now also checks for the `s` query variable requests being present prior to filtering.

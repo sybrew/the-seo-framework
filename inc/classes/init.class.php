@@ -248,6 +248,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 						. $this->og_title()
 						. $this->og_url()
 						. $this->og_sitename()
+						. $this->canonical()
 						. $this->google_site_output()
 						. $this->bing_site_output()
 						. $this->yandex_site_output()
