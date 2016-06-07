@@ -439,8 +439,6 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 
 		$title = $this->get_custom_field( '_genesis_title', $post_id );
 
-		$page_on_front_option = get_option( 'page_on_front' );
-
 		/**
 		 * Generate static placeholder for when title or description is emptied
 		 *
@@ -530,11 +528,10 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 			//* The homepage description takes precedence.
 			$homepage_description = $this->get_option( 'homepage_description' );
 
-			if ( $description ) {
+			if ( $description )
 				$desc_len_pre = $homepage_description ? $homepage_description : $description;
-			} else {
+			else
 				$desc_len_pre = $homepage_description ? $homepage_description : $generated_description;
-			}
 		} else {
 			$desc_len_pre = $description ? $description : $generated_description;
 		}

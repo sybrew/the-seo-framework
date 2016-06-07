@@ -569,10 +569,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		if ( $id ) {
 			$sof = get_option( 'show_on_front' );
 
-			if ( 'page' === $sof && $id === get_option( 'page_on_front' ) )
+			if ( 'page' === $sof && $id === (int) get_option( 'page_on_front' ) )
 				return $cache[$id] = true;
 
-			if ( 'posts' === $sof && $id === get_option( 'page_for_posts' ) )
+			if ( 'posts' === $sof && $id === (int) get_option( 'page_for_posts' ) )
 				return $cache[$id] = true;
 		}
 

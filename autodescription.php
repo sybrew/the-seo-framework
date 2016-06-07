@@ -42,7 +42,7 @@
  * Not many caching plugins use CDN in dashboard. What a shame. Firefox does cache.
  * @since 1.0.0
  */
-define( 'THE_SEO_FRAMEWORK_VERSION', '2.6.4dev' );
+define( 'THE_SEO_FRAMEWORK_VERSION', '2.6.4dev5' );
 
 /**
  * Plugin options filter.

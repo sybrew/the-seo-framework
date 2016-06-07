@@ -355,7 +355,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 		if ( $args['external'] || ! $this->is_home() ) {
 			$url = get_permalink( $post_id );
-		} else if ( $this->is_home() ) {
+		} else if ( $this->is_front_page() ) {
 			$url = get_home_url();
 		} else if ( ! $args['external'] ) {
 			global $wp;

@@ -42,6 +42,9 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 	 */
 	public function render_ld_json_scripts() {
 
+		if ( $this->has_json_ld_plugin() )
+			return '';
+
 		$this->setup_ld_json_transient( $this->get_the_real_ID() );
 
 		if ( $this->the_seo_framework_debug ) $this->debug_init( __CLASS__, __FUNCTION__, true, $debug_key = microtime(true), array( 'LD Json transient' => $this->ld_json_transient, 'Is output' => (bool) $this->get_transient( $this->ld_json_transient ) ) );
@@ -729,7 +732,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 	 */
 	public function ld_json_knowledge() {
 
-		if ( false === $this->is_option_checked( 'knowledge_output' ) )
+		if ( false === $this->enable_ld_json_knowledge() )
 			return '';
 
 		$knowledge_type = $this->get_option( 'knowledge_type' );
@@ -760,9 +763,9 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 		}
 
 		/**
-		 * Fetch option names
-		 *
-		 * @uses filter the_seo_framework_json_options
+		 * Applies filters 'the_seo_framework_json_options' : array The option names
+		 * @since ???
+		 * @todo Document.
 		 */
 		$options = (array) apply_filters( 'the_seo_framework_json_options', array(
 			'knowledge_facebook',
@@ -895,11 +898,36 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 			return $cache;
 
 		/**
-		 * Applies filters the_seo_framework_json_search_output
+		 * Applies filters 'the_seo_framework_json_search_output'
 		 * @since 2.3.9
 		 */
 		$filter = (bool) apply_filters( 'the_seo_framework_json_search_output', true );
 		$option = $this->is_option_checked( 'ld_json_searchbox' );
+
+		return $cache = $filter && $option ? true : false;
+	}
+
+	/**
+	 * Determines if Knowledge Graph Script is enabled.
+	 *
+	 * @since 2.6.5
+	 * @staticvar bool $cache
+	 *
+	 * @return bool
+	 */
+	public function enable_ld_json_knowledge() {
+
+		static $cache = null;
+
+		if ( isset( $cache ) )
+			return $cache;
+
+		/**
+		 * Applies filters 'the_seo_framework_json_search_output'
+		 * @since 2.6.5
+		 */
+		$filter = (bool) apply_filters( 'the_seo_framework_json_knowledge_output', true );
+		$option = $this->is_option_checked( 'ld_json_knowledge' );
 
 		return $cache = $filter && $option ? true : false;
 	}

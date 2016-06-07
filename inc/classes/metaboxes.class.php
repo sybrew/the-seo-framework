@@ -2204,13 +2204,13 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 		 */
 		$timestamp_1 = date( 'Y-m-d\TH:iP' );
 
-		//* Reset timezone to default.
+		//* Reset timezone to previous value.
 		$this->reset_timezone();
 
 		?>
 		<h4><?php _e( 'Timestamps Settings', 'autodescription' ); ?></h4>
-		<p><span class="description"><?php printf( __( 'The modified time suggests to Search Engines where to look for content changes. It has no impact on the SEO value unless you drastically change pages or posts. It then depends on how well your content is constructed.', 'autodescription' ) ); ?></span></p>
-		<p><span class="description"><?php printf( __( "By default, the sitemap only outputs the modified date if you've enabled them within the Social Metabox. This setting overrides those settings for the Sitemap.", 'autodescription' ) ); ?></span></p>
+		<p><span class="description"><?php _e( 'The modified time suggests to Search Engines where to look for content changes. It has no impact on the SEO value unless you drastically change pages or posts. It then depends on how well your content is constructed.', 'autodescription' ); ?></span></p>
+		<p><span class="description"><?php _e( "By default, the sitemap only outputs the modified date if you've enabled them within the Social Metabox. This setting overrides those settings for the Sitemap.", 'autodescription' ); ?></span></p>
 
 		<hr>
 
@@ -2347,70 +2347,75 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 
 		?>
 		<h4><?php _e( 'Schema.org Output Settings', 'autodescription' ); ?></h4>
-		<p class="description"><?php _e( "The Schema.org markup is a standard way of annotating structured data for Search Engines. This markup is represented within hidden scripts throughout the website.", 'autodescription' ); ?></p>
-		<p class="description"><?php _e( "When your web pages include structured data markup, Search Engines can use that data to index your content better, present it more prominently in Search Results, and use it in several different applications.", 'autodescription' ); ?></p>
 
-		<hr>
+		<?php if ( $this->has_json_ld_plugin() ) : ?>
+			<p class="description"><?php _e( 'Another Schema.org plugin has been detected.', 'autodescription' ); ?></p>
+		<?php else : ?>
+			<p class="description"><?php _e( "The Schema.org markup is a standard way of annotating structured data for Search Engines. This markup is represented within hidden scripts throughout the website.", 'autodescription' ); ?></p>
+			<p class="description"><?php _e( "When your web pages include structured data markup, Search Engines can use that data to index your content better, present it more prominently in Search Results, and use it in several different applications.", 'autodescription' ); ?></p>
 
-		<?php /* translators: https://developers.google.com/search/docs/data-types/sitelinks-searchbox */ ?>
-		<h4><?php _ex( 'Sitelinks Search Box', 'Product name', 'autodescription' ); ?></h4>
-		<p class="description"><?php _e( 'When Search users search for your brand name, the following option allows them to search through your website directly from the Search Results.', 'autodescription' ); ?></p>
-		<?php
-		$info = $this->make_info(
-			_x( 'Sitelinks Search Box', 'Product name', 'autodescription' ),
-			'https://developers.google.com/search/docs/data-types/sitelinks-searchbox',
-			false
-		);
-		$this->wrap_fields(
-			$this->make_checkbox(
-				'ld_json_searchbox',
-				_x( 'Enable Sitelinks Search Box?', 'Product name', 'autodescription' ) . ' ' . $info,
-				''
-			),
-			true
-		);
-		?>
+			<hr>
 
-		<hr>
+			<?php /* translators: https://developers.google.com/search/docs/data-types/sitelinks-searchbox */ ?>
+			<h4><?php _ex( 'Sitelinks Search Box', 'Product name', 'autodescription' ); ?></h4>
+			<p class="description"><?php _e( 'When Search users search for your brand name, the following option allows them to search through your website directly from the Search Results.', 'autodescription' ); ?></p>
+			<?php
+			$info = $this->make_info(
+				_x( 'Sitelinks Search Box', 'Product name', 'autodescription' ),
+				'https://developers.google.com/search/docs/data-types/sitelinks-searchbox',
+				false
+			);
+			$this->wrap_fields(
+				$this->make_checkbox(
+					'ld_json_searchbox',
+					_x( 'Enable Sitelinks Search Box?', 'Product name', 'autodescription' ) . ' ' . $info,
+					''
+				),
+				true
+			);
+			?>
 
-		<h4><?php _e( 'Site Name', 'autodescription' ); ?></h4>
-		<p class="description"><?php _e( "When using breadcrumbs, the first entry is by default your website's address. Using the following option will convert it to the Site Name.", 'autodescription' ); ?></p>
-		<?php
-		$info = $this->make_info(
-			__( 'Include your Site Name in Search Results', 'autodescription' ),
-			'https://developers.google.com/search/docs/data-types/sitename',
-			false
-		);
-		$description = sprintf( __( "The Site Name is: %s", 'autodescription' ), $this->code_wrap( $this->get_blogname() ) );
-		$this->wrap_fields(
-			$this->make_checkbox(
-				'ld_json_sitename',
-				__( 'Convert URL to Site Name?', 'autodescription' ) . ' ' . $info,
-				$description
-			),
-			true
-		);
-		?>
+			<hr>
 
-		<hr>
+			<h4><?php _e( 'Site Name', 'autodescription' ); ?></h4>
+			<p class="description"><?php _e( "When using breadcrumbs, the first entry is by default your website's address. Using the following option will convert it to the Site Name.", 'autodescription' ); ?></p>
+			<?php
+			$info = $this->make_info(
+				__( 'Include your Site Name in Search Results', 'autodescription' ),
+				'https://developers.google.com/search/docs/data-types/sitename',
+				false
+			);
+			$description = sprintf( __( "The Site Name is: %s", 'autodescription' ), $this->code_wrap( $this->get_blogname() ) );
+			$this->wrap_fields(
+				$this->make_checkbox(
+					'ld_json_sitename',
+					__( 'Convert URL to Site Name?', 'autodescription' ) . ' ' . $info,
+					$description
+				),
+				true
+			);
+			?>
 
-		<h4><?php _e( 'Breadcrumbs', 'autodescription' ); ?></h4>
-		<p class="description"><?php _e( "Breadcrumb trails indicate the page's position in the site hierarchy. Using the following option will show the hierarchy within the Search Results when available.", 'autodescription' ); ?></p>
-		<?php
-		$info = $this->make_info(
-			__( 'About Breadcrumbs', 'autodescription' ),
-			'https://developers.google.com/search/docs/data-types/breadcrumbs',
-			false
-		);
-		$description = __( "Multiple trails can be outputted. The longest trail is prioritized.", 'autodescription' );
-		$this->wrap_fields(
-			$this->make_checkbox(
-				'ld_json_breadcrumbs',
-				__( 'Enable Breadcrumbs?', 'autodescription' ) . ' ' . $info,
-				$description
-			),
-			true
-		);
+			<hr>
+
+			<h4><?php _e( 'Breadcrumbs', 'autodescription' ); ?></h4>
+			<p class="description"><?php _e( "Breadcrumb trails indicate the page's position in the site hierarchy. Using the following option will show the hierarchy within the Search Results when available.", 'autodescription' ); ?></p>
+			<?php
+			$info = $this->make_info(
+				__( 'About Breadcrumbs', 'autodescription' ),
+				'https://developers.google.com/search/docs/data-types/breadcrumbs',
+				false
+			);
+			$description = __( "Multiple trails can be outputted. The longest trail is prioritized.", 'autodescription' );
+			$this->wrap_fields(
+				$this->make_checkbox(
+					'ld_json_breadcrumbs',
+					__( 'Enable Breadcrumbs?', 'autodescription' ) . ' ' . $info,
+					$description
+				),
+				true
+			);
+		endif;
 
 		do_action( 'the_seo_framework_schema_metabox_after' );
 

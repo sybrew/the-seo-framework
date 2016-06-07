@@ -357,8 +357,14 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Summarized:**
 
-* Polylang creates a Taxonomies from Pages without acknowledging it being an Archive. This caused the Title not to show up correctly.
-* bbPress' Original Post within a topic is now shown correctly.
+* Another maintenance release for The SEO Framework 2.6 is coming right at you!
+* While Polylang creates a Taxonomy from Pages without acknowledging it being an Archive, I have found a workaround for the Title not to show up correctly.
+* Also, bbPress' Original Post within a topic is now shown correctly, although the bbPress 2.6.0 will resolve this as well.
+* On special pages like the Forum page of bbPress, no more cache key conflicts will be present, this makes it a recommended update.
+* WPML Multilingual domains are now also fully supported. So instead of just listening to the subdomain, this plugin now also takes whole new domains into consideration.
+* The URL generation has also been improved once more. It now contains Canonical Pagination support, and expanded Plain Permalink structure support.
+* And just when you thought new options were available, now you won't be fooled again.
+* And for developers I made it easier to debug, and I've also added two (three, cough) brand new filters.
 
 ***Sorry, no SEO Tip of the Update this time.***
 
@@ -380,26 +386,32 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* TODO POT translation file.
 * **Fixed:**
 	/
-	* bbPress Topic Starter's first post is now visible.
+	* bbPress Topic Starter's first post is now visible on bbPress 2.5.9 and lower. bbPress 2.6.0 has included its own fix.
 	* Search Query alteration is now only done on actual Search Queries.
-	* TODO TEST When saving the Site SEO Settings, the Homepage Schema.org output transient and the Description transient are now flushed correctly again.
+	* When saving the Site SEO Settings, the Homepage Schema.org output transient and the Description transient are now flushed correctly again.
 	* Taxonomial transients keys are now correct on the front-end, this should lighten up the database entries.
 	* Unregistered Taxonomies' transient keys now have an expected outcome, like on bbPress Forums.
 	* Transient key generation static cache now works on terms and taxonomies.
+	* New Settings Update notification now really doesn't pop up when no New Settings have been found.
 
 **For developers:**
 
 * **Added:**
 	* When generating a cache key with an unknown given type, a "doingitwrong" notice is emitted.
+	* Debugging can now be done on the front-end as well.
+	* Debugging now shows variable type information and has better indentation.
 * **Improved:**
 	* `AutoDescription_Query::is_archive()` now also checks other Archive Types rather than only relying on WordPress core is_archive().
 	* `AutoDescription_Search::search_filter()` now also checks for the `s` query variable requests being present prior to filtering.
+	* Hidden debug output is now more readable.
 	* Relative URL generation for the Default Permalink structure is now incorporated within `AutoDescription_Generate_Url::build_singular_relative_url()`, using WordPress core functions.
 * **Fixed:**
 	* Plausible PHP warning when using CPT in the admin area when trying to look for a category.
+	* The Frontpage can now correctly be recognized by the ID parameter on `AutoDescription_Query::is_front_page()`
 * **Filter Notes:*
 	* **New:**
 		* `(bool) the_seo_framework_ldjson_plugin_detected`
+		* `(bool) the_seo_framework_json_knowledge_output`
 	* **Fixed:**
 		* `(bool) the_seo_framework_twittercard_plugin_detected` now doesn't listen to `(bool) the_seo_framework_og_plugin_detected`.
 		* `(bool) the_seo_framework_og_plugin_detected` now doesn't apply detection for Twitter Card.

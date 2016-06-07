@@ -20,7 +20,7 @@
  * Class AutoDescription_Admin_Init
  *
  * Initializes the plugin for the wp-admin screens.
- * Enqueues css and javascript.
+ * Enqueues CSS and Javascript.
  *
  * @since 2.1.6
  */
