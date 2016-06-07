@@ -555,105 +555,110 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		$this->url_slashit = true;
 		$this->add_subdomain = '';
 
-		if ( isset( $sitepress ) ) {
+		if ( ! isset( $sitepress ) )
+			return $path;
 
-			static $gli_exists = null;
+		static $gli_exists = null;
+		if ( is_null( $gli_exists ) )
+			$gli_exists = function_exists( 'wpml_get_language_information' );
 
-			if ( is_null( $gli_exists ) )
-				$gli_exists = function_exists( 'wpml_get_language_information' );
+		if ( ! $gli_exists )
+			return $path;
 
-			if ( $gli_exists ) {
+		if ( empty( $post_id ) )
+			$post_id = $this->get_the_real_ID();
 
-				if ( '' === $post_id )
-					$post_id = $this->get_the_real_ID();
+		//* Cache default language.
+		static $default_lang = null;
+		if ( is_null( $default_lang ) )
+			$default_lang = $sitepress->get_default_language();
 
-				//* Cache default language.
-				static $default_lang = null;
-				if ( is_null( $default_lang ) )
-					$default_lang = $sitepress->get_default_language();
+		/**
+		 * Applies filters wpml_post_language_details : array|wp_error
+		 *
+		 * ... Somehow WPML thought this would be great and understandable.
+		 * This should be put inside a callable function.
+		 * @since 2.6.0
+		 */
+		$lang_info = apply_filters( 'wpml_post_language_details', NULL, $post_id );
+
+		if ( is_wp_error( $lang_info ) ) {
+			//* Terms and Taxonomies.
+			$lang_info = array();
+
+			//* Cache the code.
+			static $lang_code = null;
+			if ( is_null( $lang_code ) && defined( 'ICL_LANGUAGE_CODE' ) )
+				$lang_code = ICL_LANGUAGE_CODE;
+
+			$lang_info['language_code'] = $lang_code;
+		}
+
+		//* If filter isn't used, bail.
+		if ( ! isset( $lang_info['language_code'] ) )
+			return $path;
+
+		$current_lang = $lang_info['language_code'];
+
+		//* No need to alter URL if we're on default lang.
+		if ( $current_lang === $default_lang )
+			return $path;
+
+		//* Cache negotiation type.
+		static $negotiation_type = null;
+		if ( ! isset( $negotiation_type ) )
+			$negotiation_type = $sitepress->get_setting( 'language_negotiation_type' );
+
+		switch ( $negotiation_type ) {
+
+			case '1' :
+				//* Subdirectory
 
 				/**
-				 * Applies filters wpml_post_language_details : array|wp_error
-				 *
-				 * ... Somehow WPML thought this would be great and understandable.
-				 * This should be put inside a callable function.
-				 * @since 2.6.0
+				 * Might not always work.
+				 * @TODO Fix.
+				 * @priority OMG WTF BBQ
 				 */
-				$lang_info = apply_filters( 'wpml_post_language_details', NULL, $post_id );
+				$contains_path = strpos( $path, '/' . $current_lang . '/' );
+				if ( false !== $contains_path && 0 === $contains_path )
+					return $path;
+				else
+					return $path = trailingslashit( $current_lang ) . ltrim( $path, '\/ ' );
+				break;
 
-				if ( is_wp_error( $lang_info ) ) {
-					//* Terms and Taxonomies.
-					$lang_info = array();
+			case '2' :
+				//* Custom domain.
 
-					//* Cache the code.
-					static $lang_code = null;
-					if ( is_null( $lang_code ) && defined( 'ICL_LANGUAGE_CODE' ) )
-						$lang_code = ICL_LANGUAGE_CODE;
+				$langsettings = $sitepress->get_setting( 'language_domains' );
+				$current_lang_setting = isset( $langsettings[ $current_lang ] ) ? $langsettings[ $current_lang ] : '';
 
-					$lang_info['language_code'] = $lang_code;
-				}
-
-				//* If filter isn't used, bail.
-				if ( ! isset( $lang_info['language_code'] ) )
+				if ( empty( $current_lang_setting ) )
 					return $path;
 
-				$current_lang = $lang_info['language_code'];
+				$parsed = parse_url( $current_lang_setting );
 
-				//* No need to alter URL if we're on default lang.
-				if ( $current_lang === $default_lang )
-					return $path;
+				$this->current_host = isset( $parsed['host'] ) ? $parsed['host'] : '';
+				$current_path = isset( $parsed['path'] ) ? trailingslashit( $parsed['path'] ) : '';
 
-				//* Cache negotiation type.
-				static $negotiation_type = null;
-				if ( ! isset( $negotiation_type ) )
-					$negotiation_type = $sitepress->get_setting( 'language_negotiation_type' );
+				return $current_path . $path;
+				break;
 
-				switch ( $negotiation_type ) {
+			case '3' :
+				//* Negotiation type query var.
 
-					case '1' :
-						//* Subdirectory
+				//* Don't slash it further.
+				$this->url_slashit = false;
 
-						$contains_path = strpos( $path, '/' . $current_lang . '/' );
-						if ( false !== $contains_path && 0 === $contains_path )
-							return $path;
-						else
-							return $path = trailingslashit( $current_lang ) . ltrim( $path, '\/ ' );
-						break;
+				/**
+				 * Path must have trailing slash for pagination permalinks to work.
+				 * So we remove the query string and add it back with slash.
+				 */
+				if ( false !== strpos( $path, '?lang=' . $current_lang ) )
+					$path = str_replace( '?lang=' . $current_lang, '', $path );
 
-					case '2' :
-						//* THIS IS NOT CORRECT var_dump()
-						$langsettings = $sitepress->get_setting( 'language_domains' );
-						$current_lang_setting = isset( $langsettings[ $current_lang ] ) ? $langsettings[ $current_lang ] : '';
+				return user_trailingslashit( $path ) . '?lang=' . $current_lang;
+				break;
 
-						if ( empty( $current_lang_setting ) )
-							return $path;
-
-						$current_host = parse_url( $current_lang_setting, PHP_URL_HOST );
-						$this->current_host = $current_host;
-
-						//* No need to alter the path.
-						return $path;
-						break;
-
-					case '3' :
-						//* Negotiation type query var.
-
-						//* Don't slash it further.
-						$this->url_slashit = false;
-
-						/**
-						 * Path must have trailing slash for pagination permalinks to work.
-						 * So we remove the query string and add it back with slash.
-						 */
-						if ( false !== strpos( $path, '?lang=' . $current_lang ) )
-							$path = str_replace( '?lang=' . $current_lang, '', $path );
-
-						return user_trailingslashit( $path ) . '?lang=' . $current_lang;
-						break;
-
-				}
-
-			}
 		}
 
 		return $path;
