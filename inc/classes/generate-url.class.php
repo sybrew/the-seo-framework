@@ -323,7 +323,6 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				//* Everything else.
 				global $wp;
 				$path = trailingslashit( get_option( 'home' ) ) . $wp->request;
-
 				$path = $this->set_url_scheme( $path, 'relative' );
 			} else {
 				//* Nothing to see here...
@@ -523,7 +522,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				if ( 0 === strpos( $path, '/' . $current_lang . '/' ) )
 					return $path;
 				else
-					return $path = trailingslashit( $current_lang ) . ltrim( $path, '\/ ' );
+					return $path = trailingslashit( $current_lang ) . ltrim( $path, ' \\/' );
 				break;
 
 			case '3' :
@@ -627,7 +626,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				if ( false !== $contains_path && 0 === $contains_path )
 					return $path;
 				else
-					return $path = trailingslashit( $current_lang ) . ltrim( $path, '\/ ' );
+					return $path = trailingslashit( $current_lang ) . ltrim( $path, ' \\/' );
 				break;
 
 			case '2' :
@@ -708,26 +707,26 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			$term = get_queried_object();
 
 		$taxonomy = $term->taxonomy;
-		$termlink = $wp_rewrite->get_extra_permastruct( $taxonomy );
+		$path = $wp_rewrite->get_extra_permastruct( $taxonomy );
 
 		$slug = $term->slug;
 		$t = get_taxonomy( $taxonomy );
 
 		$paged = $this->maybe_get_paged( $this->paged(), $args['paged'], $args['paged_plural'] );
 
-		if ( empty( $termlink ) ) {
+		if ( empty( $path ) ) {
 			//* Default permalink structure.
 
 			if ( 'category' === $taxonomy ) {
-				$termlink = '?cat=' . $term->term_id;
+				$path = '?cat=' . $term->term_id;
 			} else if ( isset( $t->query_var ) && '' !== $t->query_var ) {
-				$termlink = '?' . $t->query_var . '=' . $slug;
+				$path = '?' . $t->query_var . '=' . $slug;
 			} else {
-				$termlink = '?taxonomy=' . $taxonomy . '&term=' . $slug;
+				$path = '?taxonomy=' . $taxonomy . '&term=' . $slug;
 			}
 
 			if ( $paged )
-				$termlink .= '&paged=' . $paged;
+				$path .= '&paged=' . $paged;
 
 			//* Don't slash it.
 			$this->url_slashit = false;
@@ -745,18 +744,19 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				$hierarchical_slugs = array_reverse( $hierarchical_slugs );
 				$hierarchical_slugs[] = $slug;
 
-				$termlink = str_replace( "%$taxonomy%", implode( '/', $hierarchical_slugs ), $termlink );
+				$path = str_replace( "%$taxonomy%", implode( '/', $hierarchical_slugs ), $path );
 			} else {
-				$termlink = str_replace( "%$taxonomy%", $slug, $termlink );
+				$path = str_replace( "%$taxonomy%", $slug, $path );
 			}
 
 			if ( $paged )
-				$termlink = trailingslashit( $termlink ) . 'page/' . $paged;
+				$path = trailingslashit( $path ) . 'page/' . $paged;
 
-			$termlink = user_trailingslashit( $termlink, 'category' );
+			$path = user_trailingslashit( $path, 'category' );
 		}
 
-		$path = $this->set_url_scheme( $termlink, 'relative' );
+		//* Leading Slash it..
+		$path = '/' . ltrim( $path, ' \\/' );
 
 		return $path;
 	}
@@ -929,7 +929,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			}
 
 			//* Put it all together.
-			$url = trailingslashit( $scheme_full . $domain ) . ltrim( $path, '\/' );
+			$url = trailingslashit( $scheme_full . $domain ) . ltrim( $path, ' \\/' );
 
 			if ( ! $get_scheme ) {
 				return $url;
@@ -1338,46 +1338,6 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		}
 
 		return $url;
-	}
-
-	/**
-	 * WordPress core function "rel_canonical". Only works on singular pages.
-	 * Debugging purposes only. Returns value instead of echoing it.
-	 *
-	 * Used as a fallback canonical URL for when The SEO Framework can't resolve
-	 * a correct URL, for whatever reason.
-	 *
-	 * @since 2.9.0 WP Core.
-	 * @since 2.6.5 The SEO Framework.
-	 *
-	 * @return string Escaped Canonical URL.
-	 */
-	public function wp_rel_canonical() {
-		if ( ! is_singular() ) {
-			return;
-		}
-
-		if ( ! $id = get_queried_object_id() ) {
-			return;
-		}
-
-		$url = get_permalink( $id );
-
-		$page = get_query_var( 'page' );
-		if ( $page >= 2 ) {
-			if ( '' == get_option( 'permalink_structure' ) ) {
-				$url = add_query_arg( 'page', $page, $url );
-			} else {
-				$url = trailingslashit( $url ) . user_trailingslashit( $page, 'single_paged' );
-			}
-		}
-
-		$cpage = get_query_var( 'cpage' );
-		if ( $cpage ) {
-			$url = get_comments_pagenum_link( $cpage );
-		}
-
-		return esc_url( $url );
 	}
 
 }

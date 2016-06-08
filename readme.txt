@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl, feed
 Requires at least: 3.8.0
 Tested up to: 4.5.2
-Stable tag: 2.6.4dev5
+Stable tag: 2.6.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -311,7 +311,7 @@ Currently it's not available. When it is, it will allow you to download and acti
 = The sitemap doesn't contain categories, images, news, etc. is this OK? =
 
 This is not a problem. Search Engines love crawling WordPress because its structure is consistent and well known.
-If a visitor can't find a page, why would a Search Engine? Don't rely on your sitemap, but on your content and website's useability.
+If a visitor can't find a page, why would a Search Engine? Don't rely on your sitemap, but on your content and website's usability.
 
 = What's does the application/ld+json script do? =
 
@@ -367,7 +367,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * For developers it's now much easier to debug, and there are also three (actually four) brand new filters.
 * And last but not least, 404 pages and Search Pages now have a Canonical URL, right towards your Homepage.
 
-**SEO Tip of the Update:**
+**SEO Tip of the Update - Skyscraper Technique:**
 
 * Have you found something that greatly interests you, and do you think you can write a better article than you've found?
 * Go write it, in your own words and style. Don't forget to make it much longer, better and more detailed. Don't forget to add images.
@@ -376,57 +376,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Detailed Log:**
 
-**For everyone:**
-
-* **Added:**
-	* WPML multi-domain compatibility.
-	* Pagination support for the Canonical URL on the Home Page and Singular Pages.
-	* Pagination support for the Shortlink when using the Plain permalink structure.
-	* 404 and Search page Canonical URL.
-* **Improved:**
-	* Some sentences were weird or incorrect. These have been improved.
-	* Redirect URL now has more expected behaviour upon sanitizing on WordPress versions lower than 4.1.
-	* The Open Graph URL now isn't sanitized twice.
-* **Updated:**
-	* POT translation file.
-* **Fixed:**
-	* bbPress Topic Starter's first post is now visible on bbPress 2.5.9 and lower. bbPress 2.6.0 has included its own fix.
-	* Search Query alteration is now only done on actual Search Queries.
-	* When saving the Site SEO Settings, the Homepage Schema.org output transient and the Description transient are now flushed correctly again.
-	* Taxonomial transients keys are now correct on the front-end, this should lighten up the database entries.
-	* Unregistered Taxonomies' transient keys now have an expected outcome, like on bbPress Forums.
-	* Transient key generation static cache now works on terms and taxonomies.
-	* New Settings Update notification now really doesn't pop up when no New Settings have been found.
-	* Plausible incorrect root Canonical URL when no path is given.
-
-**For developers:**
-
-* **Added:**
-	* When generating a cache key with an unknown given type, a "doingitwrong" notice is emitted.
-	* Debugging can now be done on the front-end as well.
-	* Debugging now shows variable type information and has better indentation.
-	* When The SEO Framework debugging is enabled, the whole output will be shown within the footer, even the ones that shouldn't be output.
-* **Improved:**
-	* `AutoDescription_Query::is_archive()` now also checks other Archive Types rather than only relying on WordPress core is_archive().
-	* `AutoDescription_Search::search_filter()` now also checks for the `s` query variable requests being present prior to filtering.
-	* Hidden debug output is now more readable.
-	* Relative URL generation for the Default Permalink structure is now incorporated within `AutoDescription_Generate_Url::build_singular_relative_url()`, using WordPress core functions.
-* **Fixed:**
-	* Plausible PHP warning when using CPT in the admin area when trying to look for a category.
-	* The Frontpage can now correctly be recognized by the ID parameter on `AutoDescription_Query::is_front_page()`
-* **Filter Notes:*
-	* **New:**
-		* `(bool) the_seo_framework_ldjson_plugin_detected`
-		* `(bool) the_seo_framework_json_knowledge_output`
-		* `(string) the_seo_framework_rel_canonical_output`
-	* **Fixed:**
-		* `(bool) the_seo_framework_twittercard_plugin_detected` now doesn't listen to `(bool) the_seo_framework_og_plugin_detected`.
-		* `(bool) the_seo_framework_og_plugin_detected` now doesn't apply detection for Twitter Card.
-* **Deprecated:**
-	* `AutoDescription_Generate_Url::get_relative_url()`, use `AutoDescription_Generate_Url::build_singular_relative_url()` instead.
-	* `AutoDescription_Generate_Url::the_url_path_default_permalink_structure()`, use `AutoDescription_Generate_Url::build_singular_relative_url()` instead.
-* **Other:**
-	* Cleaned up code.
+***Sometimes, you just have to look [a little harder](https://theseoframework.com/?p=1339#detailed).***
 
 = 2.6.4 - Biographic Consistency =
 
