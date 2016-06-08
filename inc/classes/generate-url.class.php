@@ -322,11 +322,14 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			} else if ( ! $args['external'] ) {
 				//* Everything else.
 				global $wp;
-				$path = $wp->request;
+				$path = trailingslashit( get_option( 'home' ) ) . $wp->request;
+
+				$path = $this->set_url_scheme( $path, 'relative' );
 			} else {
 				//* Nothing to see here...
 				$path = '';
 			}
+
 		} else {
 
 			/**
@@ -636,6 +639,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				if ( empty( $current_lang_setting ) )
 					return $path;
 
+				$current_lang_setting = $this->make_fully_qualified_url( $current_lang_setting );
 				$parsed = parse_url( $current_lang_setting );
 
 				$this->current_host = isset( $parsed['host'] ) ? $parsed['host'] : '';
@@ -782,9 +786,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			$scheme = is_ssl() ? 'https' : 'http';
 		}
 
-		$url = trim( $url );
-		if ( '//' === substr( $url, 0, 2 ) )
-			$url = 'http:' . $url;
+		$url = $this->make_fully_qualified_url( $url );
 
 		if ( 'relative' === $scheme ) {
 			$url = ltrim( preg_replace( '#^\w+://[^/]*#', '', $url ) );
@@ -1262,8 +1264,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 */
 	public function add_url_subdomain( $url = '' ) {
 
-		if ( '//' === substr( $url, 0, 2 ) )
-			$url = 'http:' . $url;
+		$url = $this->make_fully_qualified_url( $url );
 
 		//* Add subdomain, if set.
 		if ( $this->add_subdomain ) {
@@ -1317,6 +1318,66 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Makes a fully qualified URL from input. Always uses http to fix.
+	 * @see $this->set_url_scheme()
+	 *
+	 * @since 2.6.5
+	 *
+	 * @param string $url Required the current maybe not fully qualified URL.
+	 * @return string $url
+	 */
+	public function make_fully_qualified_url( $url ) {
+
+		if ( '//' === substr( $url, 0, 2 ) ) {
+			$url = 'http:' . $url;
+		} else if ( 'http' !== substr( $url, 0, 4 ) ) {
+			$url = 'http://' . $url;
+		}
+
+		return $url;
+	}
+
+	/**
+	 * WordPress core function "rel_canonical". Only works on singular pages.
+	 * Debugging purposes only. Returns value instead of echoing it.
+	 *
+	 * Used as a fallback canonical URL for when The SEO Framework can't resolve
+	 * a correct URL, for whatever reason.
+	 *
+	 * @since 2.9.0 WP Core.
+	 * @since 2.6.5 The SEO Framework.
+	 *
+	 * @return string Escaped Canonical URL.
+	 */
+	public function wp_rel_canonical() {
+		if ( ! is_singular() ) {
+			return;
+		}
+
+		if ( ! $id = get_queried_object_id() ) {
+			return;
+		}
+
+		$url = get_permalink( $id );
+
+		$page = get_query_var( 'page' );
+		if ( $page >= 2 ) {
+			if ( '' == get_option( 'permalink_structure' ) ) {
+				$url = add_query_arg( 'page', $page, $url );
+			} else {
+				$url = trailingslashit( $url ) . user_trailingslashit( $page, 'single_paged' );
+			}
+		}
+
+		$cpage = get_query_var( 'cpage' );
+		if ( $cpage ) {
+			$url = get_comments_pagenum_link( $cpage );
+		}
+
+		return esc_url( $url );
 	}
 
 }

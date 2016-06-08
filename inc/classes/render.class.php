@@ -819,7 +819,13 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		if ( ! apply_filters( 'the_seo_framework_output_canonical', true, $this->get_the_real_ID() ) )
 			return;
 
-		return '<link rel="canonical" href="' . $this->the_url_from_cache() . '" />' . "\r\n";
+		/**
+		 * Applies filters 'the_seo_framework_rel_canonical_output' : Change canonical URL output.
+		 * @since 2.6.5
+		 */
+		$url = (string) apply_filters( 'the_seo_framework_rel_canonical_output', $this->the_url_from_cache(), $this->get_the_real_ID() );
+
+		return '<link rel="canonical" href="' . $url . '" />' . "\r\n";
 	}
 
 	/**

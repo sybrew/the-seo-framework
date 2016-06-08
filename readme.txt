@@ -353,7 +353,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Release date:**
 
-* June 7th 2016
+* June 8th 2016
 
 **Summarized:**
 
@@ -364,7 +364,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * WPML Multilingual domains are now also fully supported. So instead of just adding a subdomain, this plugin now also takes whole new domains into consideration.
 * The URL generation has also been improved once more. It now contains Canonical Pagination support, and expanded Plain Permalink structure support.
 * And just when you thought new options were available, now you won't be fooled again.
-* For developers it's now much easier to debug, and there are also two (actually three) brand new filters.
+* For developers it's now much easier to debug, and there are also three (actually four) brand new filters.
 * And last but not least, 404 pages and Search Pages now have a Canonical URL, right towards your Homepage.
 
 **SEO Tip of the Update:**
@@ -418,6 +418,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **New:**
 		* `(bool) the_seo_framework_ldjson_plugin_detected`
 		* `(bool) the_seo_framework_json_knowledge_output`
+		* `(string) the_seo_framework_rel_canonical_output`
 	* **Fixed:**
 		* `(bool) the_seo_framework_twittercard_plugin_detected` now doesn't listen to `(bool) the_seo_framework_og_plugin_detected`.
 		* `(bool) the_seo_framework_og_plugin_detected` now doesn't apply detection for Twitter Card.
