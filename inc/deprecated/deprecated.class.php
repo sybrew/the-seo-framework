@@ -572,4 +572,139 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 
 	}
 
+	/**
+	 * Generates relative URL for current post_ID.
+	 *
+	 * @param int|object $post The post object or ID.
+	 * @param bool $external Whether to fetch the WP Request or get the permalink by Post Object.
+	 * @param int $depr Deprecated The post ID.
+	 *
+	 * @since 2.3.0
+	 *
+	 * @deprecated
+	 * @since 2.6.5
+	 *
+	 * @global object $wp
+	 *
+	 * @return relative Post or Page url.
+	 */
+	public function get_relative_url( $post = null, $external = false, $depr = null ) {
+
+		$this->_deprecated_function( 'AutoDescription_Generate_Url::' . __FUNCTION__, 'AutoDescription_Generate_Url::build_singular_relative_url()', '2.6.5' );
+
+		if ( isset( $depr ) ) {
+			$post_id = $depr;
+		} else {
+			if ( is_object( $post ) ) {
+				if ( isset( $post->ID ) )
+					$post_id = $post->ID;
+			} else if ( is_scalar( $post ) ) {
+				$post_id = (int) $post;
+			}
+		}
+
+		if ( ! isset( $post_id ) ) {
+			if ( ! $external )
+				$post_id = $this->get_the_real_ID();
+			else
+				return '';
+		}
+
+		if ( $external || ! $this->is_home() ) {
+			$permalink = get_permalink( $post_id );
+		} else if ( ! $external ) {
+			global $wp;
+
+			if ( isset( $wp->request ) )
+				$permalink = $wp->request;
+		}
+
+		//* No permalink found.
+		if ( ! isset( $permalink ) )
+			return '';
+
+		$path = $this->set_url_scheme( $permalink, 'relative' );
+
+		return $path;
+	}
+	/**
+	 * Creates canonical url for the default permalink structure.
+	 *
+	 * @param object|int $post The post object or ID.
+	 * @param bool $paged Whether to add pagination for all types.
+	 * @param bool $paged_plural Whether to add pagination for the second or later page.
+	 *
+	 * @since 2.3.0
+	 *
+	 * @deprecated
+	 * @since 2.6.5
+	 *
+	 * @return string The URL path.
+	 */
+	public function the_url_path_default_permalink_structure( $post = null, $paged = false, $paged_plural = true ) {
+
+		$this->_deprecated_function( 'AutoDescription_Generate_Url::' . __FUNCTION__, 'AutoDescription_Generate_Url::build_singular_relative_url()', '2.6.5' );
+
+		//* Don't slash it.
+		$this->url_slashit = false;
+
+		if ( false === $this->is_singular() ) {
+			//* We're on a taxonomy
+			$object = get_queried_object();
+
+			if ( is_object( $object ) ) {
+				if ( $this->is_category() ) {
+					$path = '?cat=' . $object->term_id;
+				} else if ( $this->is_tag() ) {
+					$path = '?tag=' . $object->name;
+				} else if ( $this->is_date() ) {
+					global $wp_query;
+
+					$query = $wp_query->query;
+
+					$year = $query->year;
+					$month = $query->monthnum ? '&monthnum=' . $query->monthnum : '';
+					$day = $query->day ? '&day=' . $query->day : '';
+
+					$path = '?year=' . $year . $month . $day;
+				} else if ( $this->is_author() ) {
+					$path = '?author=' . $object->author_name;
+				} else if ( $this->is_tax() ) {
+					$path = '?taxonomy=' . $object->taxonomy . '&term=' . $object->slug;
+				} else if ( isset( $object->query_var ) && $object->query_var ) {
+					$path = '?' . $object->query_var . '=' . $object->slug;
+				} else {
+					$path = '?p=' . $object->ID;
+				}
+
+				$paged = $this->maybe_get_paged( $this->paged(), $paged, $paged_plural );
+				if ( $paged )
+					$path .= '&paged=' . $paged;
+			}
+
+		}
+
+		if ( ! isset( $path ) ) {
+
+			if ( isset( $post ) ) {
+				if ( is_object( $post ) && isset( $post->ID ) ) {
+					$id = $post->ID;
+				} else if ( is_scalar( $post ) ) {
+					$id = $post;
+				}
+			}
+
+			if ( ! isset( $id ) )
+				$id = $this->get_the_real_ID();
+
+			$path = '?p=' . $id;
+
+			$page = $this->maybe_get_paged( $this->page(), $paged, $paged_plural );
+			if ( $page )
+				$path .= '&page=' . $page;
+		}
+
+		return $path;
+	}
+
 }

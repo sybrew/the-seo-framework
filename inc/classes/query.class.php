@@ -234,8 +234,16 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
 
+		global $wp_query;
+
 		if ( is_archive() && false === $this->is_singular() )
 			return $cache = true;
+
+		global $wp_query;
+
+		if ( $this->can_cache_query() && false === $this->is_singular() )
+			if ( $wp_query->is_post_type_archive || $wp_query->is_date || $wp_query->is_author || $wp_query->is_category || $wp_query->is_tag || $wp_query->is_tax )
+				return $cache = true;
 
 		return $cache = false;
 	}
@@ -450,7 +458,13 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		global $current_screen;
 
 		if ( $this->is_archive_admin() && isset( $current_screen->taxonomy ) ) {
-			if ( false !== strrpos( $current_screen->taxonomy, 'category', -8 ) || false !== strrpos( $current_screen->taxonomy, 'cat', -3 ) )
+			$tax = $current_screen->taxonomy;
+			$len = strlen( $tax );
+
+			if ( $len >= 8 && false !== strrpos( $tax, 'category', -8 ) )
+				return $cache = true;
+
+			if ( $len >= 3 && false !== strrpos( $tax, 'cat', -3 ) )
 				return $cache = true;
 		}
 
@@ -555,10 +569,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		if ( $id ) {
 			$sof = get_option( 'show_on_front' );
 
-			if ( 'page' === $sof && $id === get_option( 'page_on_front' ) )
+			if ( 'page' === $sof && $id === (int) get_option( 'page_on_front' ) )
 				return $cache[$id] = true;
 
-			if ( 'posts' === $sof && $id === get_option( 'page_for_posts' ) )
+			if ( 'posts' === $sof && $id === (int) get_option( 'page_for_posts' ) )
 				return $cache[$id] = true;
 		}
 
@@ -904,7 +918,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		if ( $this->is_archive_admin() ) {
 			global $current_screen;
 
-			if ( isset( $current_screen->taxonomy ) && false !== strrpos( $current_screen->taxonomy, 'tag', -3 ) )
+			if ( isset( $current_screen->taxonomy ) && strlen( $current_screen->taxonomy ) >= 3 && false !== strrpos( $current_screen->taxonomy, 'tag', -3 ) )
 				return $cache = true;
 		}
 

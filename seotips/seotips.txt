@@ -110,3 +110,10 @@
 * Have you written about something already, and is the subject coming up again? Link back to the older publication.
 * About 2 to 5 internal links within the content to older pages will help your visitors understand your hierarchy and find more related content (of which they're already interested in).
 * It will also help Search Engines spread page importance over multiple pages within your site; this is also known as link juice.
+
+	= 2.6.5 - Skyscraper Technique =
+
+* Have you found something that greatly interests you, and do you think you can write a better article than you've found?
+* Go write it, in your own words and style. Don't forget to make it much longer, better and more detailed. Don't forget to add images.
+* Finally, share the content, reach out to the public, and of course your public. This will increase your rankings significantly.
+* This method is known as the Skyscraper Technique; it's used for and as this SEO tip, minus the images, details or length.

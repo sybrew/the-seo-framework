@@ -59,7 +59,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		parent::__construct();
 
 		// I'm not going to initialize my own rewrite engine. Causes too many problems.
-		$this->pretty_permalinks = ( '' !== get_option( 'permalink_structure' ) ) ? true : false;
+		$this->pretty_permalinks = ( '' !== $this->permalink_structure() ) ? true : false;
 
 		/**
 		 * Add query strings to rewrite
@@ -693,7 +693,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		 */
 		$extend = (string) apply_filters( 'the_seo_framework_sitemap_extend', '' );
 
-		if ( '' !== $extend )
+		if ( $extend )
 			$content .= "\t" . $extend . "\r\n";
 
 		//* Reset timezone to default.

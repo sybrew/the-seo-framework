@@ -44,10 +44,30 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	protected $add_subdomain;
 
 	/**
-	 * Constructor, load parent constructor
+	 * Holds current HTTP host.
+	 *
+	 * @since 2.6.5
+	 *
+	 * @var string The current HTTP host.
+	 */
+	protected $current_host;
+
+	/**
+	 * Holds home HTTP host.
+	 *
+	 * @since 2.6.5
+	 *
+	 * @var string The home HTTP host.
+	 */
+	protected $home_host;
+
+	/**
+	 * Constructor, load parent constructor and set up variables.
 	 */
 	public function __construct() {
 		parent::__construct();
+
+		$this->home_host = parse_url( get_option( 'home' ), PHP_URL_HOST );
 	}
 
 	/**
@@ -89,6 +109,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		//* Reset cache.
 		$this->url_slashit = true;
 		$this->add_subdomain = '';
+		$this->current_host = '';
 
 		$path = '';
 		$scheme = '';
@@ -141,16 +162,16 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 		//* Non-domainmap URL
 		if ( empty( $url ) ) {
-			if ( $args['home'] || '' === $path ) {
-				$url = user_trailingslashit( get_option( 'home' ) );
-				$slashit = false;
-			} else {
-				$url = $this->generate_full_url( $path );
-				$scheme = is_ssl() ? 'https' : 'http';
+			if ( $args['home'] ) {
+				$this->current_lang = '';
+				$this->add_subdomain = '';
 			}
-		}
 
-		$url = $this->set_url_subdomain( $url );
+			$url = $this->add_url_host( $path );
+			$scheme = is_ssl() ? 'https' : 'http';
+
+			$url = $this->add_url_subdomain( $url );
+		}
 
 		//* URL has been given manually or $args['home'] is true.
 		if ( ! isset( $scheme ) )
@@ -275,12 +296,13 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	}
 
 	/**
-	 * Generate url from Args.
+	 * Generate URL from arguments.
 	 *
 	 * @since 2.6.0
 	 *
-	 * @param array $args the URL args.
+	 * @global object $wp
 	 *
+	 * @param array $args the URL args.
 	 * @return string $path
 	 */
 	public function generate_url_path( $args = array() ) {
@@ -300,11 +322,13 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			} else if ( ! $args['external'] ) {
 				//* Everything else.
 				global $wp;
-				$path = $wp->request;
+				$path = trailingslashit( get_option( 'home' ) ) . $wp->request;
+				$path = $this->set_url_scheme( $path, 'relative' );
 			} else {
 				//* Nothing to see here...
 				$path = '';
 			}
+
 		} else {
 
 			/**
@@ -313,21 +337,15 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			 */
 			$post_id = isset( $args['post']->ID ) ? $args['post']->ID : $args['id'];
 
-			if ( $post_id ) {
-				if ( $this->pretty_permalinks ) {
+			if ( $this->pretty_permalinks && $post_id && $this->is_singular() ) {
+				$post = get_post( $post_id );
 
-					$post = get_post( $post_id );
-
-					//* Don't slash draft links.
-					if ( isset( $post->post_status ) && ( 'auto-draft' === $post->post_status || 'draft' === $post->post_status ) )
-						$this->url_slashit = false;
-
-					$path = $this->get_relative_url( $post_id, $args['external'] );
-				} else {
-					$path = $this->the_url_path_default_permalink_structure( $post_id, $args['paged'], $args['paged_plural'] );
-				}
+				//* Don't slash draft links.
+				if ( isset( $post->post_status ) && ( 'auto-draft' === $post->post_status || 'draft' === $post->post_status ) )
+					$this->url_slashit = false;
 			}
 
+			$path = $this->build_singular_relative_url( $post_id, $args );
 		}
 
 		if ( isset( $path ) )
@@ -337,92 +355,81 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	}
 
 	/**
-	 * Generates relative URL for current post_ID.
+	 * Generates relative URL for the Homepage and Singular Posts.
 	 *
-	 * @param int|object $post The post object or ID.
-	 * @param bool $external Whether to fetch the WP Request or get the permalink by Post Object.
-	 * @param int $depr Deprecated The post ID.
-	 *
-	 * @since 2.3.0
+	 * @since 2.6.5
 	 *
 	 * @global object $wp
 	 *
+	 * @param int $post_id The ID.
+	 * @param array $args The URL arguments.
 	 * @return relative Post or Page url.
 	 */
-	public function get_relative_url( $post = null, $external = false, $depr = null ) {
-
-		if ( isset( $depr ) ) {
-			$post_id = $depr;
-		} else {
-			if ( is_object( $post ) ) {
-				if ( isset( $post->ID ) )
-					$post_id = $post->ID;
-			} else if ( is_scalar( $post ) ) {
-				$post_id = (int) $post;
-			}
-		}
+	public function build_singular_relative_url( $post_id = null, $args = array() ) {
 
 		if ( ! isset( $post_id ) ) {
-			if ( ! $external )
+			if ( ! $args['external'] )
 				$post_id = $this->get_the_real_ID();
 			else
 				return '';
 		}
 
-		if ( $external || ! $this->is_home() ) {
-			$permalink = get_permalink( $post_id );
-		} else if ( ! $external ) {
+		$args = $this->reparse_url_args( $args );
+
+		if ( $args['external'] || ! $this->is_front_page() ) {
+			$url = get_permalink( $post_id );
+		} else if ( $this->is_front_page() ) {
+			$url = get_home_url();
+		} else if ( ! $args['external'] ) {
 			global $wp;
 
 			if ( isset( $wp->request ) )
-				$permalink = $wp->request;
+				$url = trailingslashit( get_option( 'home' ) ) . $wp->request;
+
 		}
 
 		//* No permalink found.
-		if ( ! isset( $permalink ) )
+		if ( ! isset( $url ) )
 			return '';
 
-		$path = $this->set_url_scheme( $permalink, 'relative' );
+		if ( $this->is_singular() )
+			$paged = $this->maybe_get_paged( $this->page(), $args['paged'], $args['paged_plural'] );
+		else
+			$paged = $this->maybe_get_paged( $this->paged(), $args['paged'], $args['paged_plural'] );
+
+		if ( $paged ) {
+			if ( $this->pretty_permalinks ) {
+				if ( $this->is_singular() )
+					$url = trailingslashit( $url ) . $paged;
+				else
+					$url = trailingslashit( $url ) . 'page/' . $paged;
+			} else {
+				if ( $this->is_singular() )
+					$url = add_query_arg( 'page', $paged, $url );
+				else
+					$url = add_query_arg( 'paged', $paged, $url );
+			}
+		}
+
+		$path = $this->set_url_scheme( $url, 'relative' );
 
 		return $path;
 	}
 
 	/**
-	 * Generate full URL from path.
+	 * Create full valid URL with parsed host.
+	 * Don't forget to use set_url_scheme() afterwards.
 	 *
-	 * @since 2.6.0
-	 * @staticvar string $home_url The Home URL.
-	 * @staticvar string|bool $home_path The Home Directory Path.
+	 * @since 2.6.5
 	 *
-	 * @param string $path The current path.
-	 *
-	 * @return string URL the full URL.
+	 * @param string $path Current path.
+	 * @return string Full valid URL with http host.
 	 */
-	protected function generate_full_url( $path = '' ) {
+	public function add_url_host( $path = '' ) {
 
-		static $home_url = null;
-		static $home_path = null;
-		static $home_url_slashed = null;
+		$host = $this->current_host ? $this->current_host : $this->home_host;
 
-		//* Set up caches.
-		if ( is_null( $home_url ) ) {
-			$home_url = get_option( 'home' );
-
-			$home_url_parsed = parse_url( $home_url );
-			$home_path = isset( $home_url_parsed['path'] ) ? $home_url_parsed['path'] : false;
-
-			$home_url_slashed = trailingslashit( $home_url );
-		}
-
-		//* Prevent duplicated first path from Site Address config.
-		if ( $home_path ) {
-			$count = 1;
-			$url = $home_url_slashed . ltrim( str_replace( $home_path, '', $path ), '\/ ' );
-		} else {
-			$url = $home_url_slashed . ltrim( $path, '\/ ' );
-		}
-
-		return $url;
+		return $url = 'http://' . trailingslashit( $host ) . ltrim( $path, ' \\/' );
 	}
 
 	/**
@@ -515,7 +522,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				if ( 0 === strpos( $path, '/' . $current_lang . '/' ) )
 					return $path;
 				else
-					return $path = trailingslashit( $current_lang ) . ltrim( $path, '\/ ' );
+					return $path = trailingslashit( $current_lang ) . ltrim( $path, ' \\/' );
 				break;
 
 			case '3' :
@@ -534,16 +541,14 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	/**
 	 * Generate relative WPML url.
 	 *
-	 * @param string $path The current path.
-	 * @param int $post_id The Post ID.
-	 *
-	 * @global object $sitepress
-	 *
+	 * @since 2.4.3
 	 * @staticvar bool $gli_exists
 	 * @staticvar string $default_lang
 	 *
-	 * @since 2.4.3
+	 * @global object $sitepress
 	 *
+	 * @param string $path The current path.
+	 * @param int $post_id The Post ID.
 	 * @return relative path for WPML urls.
 	 */
 	public function get_relative_wmpl_url( $path = '', $post_id = '' ) {
@@ -553,98 +558,111 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		$this->url_slashit = true;
 		$this->add_subdomain = '';
 
-		if ( isset( $sitepress ) ) {
+		if ( ! isset( $sitepress ) )
+			return $path;
 
-			static $gli_exists = null;
+		static $gli_exists = null;
+		if ( is_null( $gli_exists ) )
+			$gli_exists = function_exists( 'wpml_get_language_information' );
 
-			if ( is_null( $gli_exists ) )
-				$gli_exists = function_exists( 'wpml_get_language_information' );
+		if ( ! $gli_exists )
+			return $path;
 
-			if ( $gli_exists ) {
+		if ( empty( $post_id ) )
+			$post_id = $this->get_the_real_ID();
 
-				if ( '' === $post_id )
-					$post_id = $this->get_the_real_ID();
+		//* Cache default language.
+		static $default_lang = null;
+		if ( is_null( $default_lang ) )
+			$default_lang = $sitepress->get_default_language();
 
-				//* Cache default language.
-				static $default_lang = null;
-				if ( is_null( $default_lang ) )
-					$default_lang = $sitepress->get_default_language();
+		/**
+		 * Applies filters wpml_post_language_details : array|wp_error
+		 *
+		 * ... Somehow WPML thought this would be great and understandable.
+		 * This should be put inside a callable function.
+		 * @since 2.6.0
+		 */
+		$lang_info = apply_filters( 'wpml_post_language_details', NULL, $post_id );
+
+		if ( is_wp_error( $lang_info ) ) {
+			//* Terms and Taxonomies.
+			$lang_info = array();
+
+			//* Cache the code.
+			static $lang_code = null;
+			if ( is_null( $lang_code ) && defined( 'ICL_LANGUAGE_CODE' ) )
+				$lang_code = ICL_LANGUAGE_CODE;
+
+			$lang_info['language_code'] = $lang_code;
+		}
+
+		//* If filter isn't used, bail.
+		if ( ! isset( $lang_info['language_code'] ) )
+			return $path;
+
+		$current_lang = $lang_info['language_code'];
+
+		//* No need to alter URL if we're on default lang.
+		if ( $current_lang === $default_lang )
+			return $path;
+
+		//* Cache negotiation type.
+		static $negotiation_type = null;
+		if ( ! isset( $negotiation_type ) )
+			$negotiation_type = $sitepress->get_setting( 'language_negotiation_type' );
+
+		switch ( $negotiation_type ) {
+
+			case '1' :
+				//* Subdirectory
 
 				/**
-				 * Applies filters wpml_post_language_details : array|wp_error
-				 *
-				 * ... Somehow WPML thought this would be great and understandable.
-				 * This should be put inside a callable function.
-				 * @since 2.6.0
+				 * Might not always work.
+				 * @TODO Fix.
+				 * @priority OMG WTF BBQ
 				 */
-				$lang_info = apply_filters( 'wpml_post_language_details', NULL, $post_id );
+				$contains_path = strpos( $path, '/' . $current_lang . '/' );
+				if ( false !== $contains_path && 0 === $contains_path )
+					return $path;
+				else
+					return $path = trailingslashit( $current_lang ) . ltrim( $path, ' \\/' );
+				break;
 
-				if ( is_wp_error( $lang_info ) ) {
-					//* Terms and Taxonomies.
-					$lang_info = array();
+			case '2' :
+				//* Custom domain.
 
-					//* Cache the code.
-					static $lang_code = null;
-					if ( is_null( $lang_code ) && defined( 'ICL_LANGUAGE_CODE' ) )
-						$lang_code = ICL_LANGUAGE_CODE;
+				$langsettings = $sitepress->get_setting( 'language_domains' );
+				$current_lang_setting = isset( $langsettings[ $current_lang ] ) ? $langsettings[ $current_lang ] : '';
 
-					$lang_info['language_code'] = $lang_code;
-				}
-
-				//* If filter isn't used, bail.
-				if ( ! isset( $lang_info['language_code'] ) )
+				if ( empty( $current_lang_setting ) )
 					return $path;
 
-				$current_lang = $lang_info['language_code'];
+				$current_lang_setting = $this->make_fully_qualified_url( $current_lang_setting );
+				$parsed = parse_url( $current_lang_setting );
 
-				//* No need to alter URL if we're on default lang.
-				if ( $current_lang === $default_lang )
-					return $path;
+				$this->current_host = isset( $parsed['host'] ) ? $parsed['host'] : '';
+				$current_path = isset( $parsed['path'] ) ? trailingslashit( $parsed['path'] ) : '';
 
-				//* Cache negotiation type.
-				static $negotiation_type = null;
-				if ( ! isset( $negotiation_type ) )
-					$negotiation_type = $sitepress->get_setting( 'language_negotiation_type' );
+				return $current_path . $path;
+				break;
 
-				switch ( $negotiation_type ) {
+			case '3' :
+				//* Negotiation type query var.
 
-					case '1' :
-						//* Subdirectory
+				//* Don't slash it further.
+				$this->url_slashit = false;
 
-						$contains_path = strpos( $path, '/' . $current_lang . '/' );
-						if ( false !== $contains_path && 0 === $contains_path )
-							return $path;
-						else
-							return $path = trailingslashit( $current_lang ) . ltrim( $path, '\/ ' );
-						break;
+				/**
+				 * Path must have trailing slash for pagination permalinks to work.
+				 * So we remove the query string and add it back with slash.
+				 */
+				if ( false !== strpos( $path, '?lang=' . $current_lang ) )
+					$path = str_replace( '?lang=' . $current_lang, '', $path );
 
-					case '2' :
-						//* Notify cache of subdomain addition.
-						$this->add_subdomain = $current_lang;
+				return user_trailingslashit( $path ) . '?lang=' . $current_lang;
+				break;
 
-						//* No need to alter the path.
-						return $path;
-						break;
-
-					case '3' :
-						//* Negotiation type query var.
-
-						//* Don't slash it further.
-						$this->url_slashit = false;
-
-						/**
-						 * Path must have trailing slash for pagination permalinks to work.
-						 * So we remove the query string and add it back with slash.
-						 */
-						if ( false !== strpos( $path, '?lang=' . $current_lang ) )
-							$path = str_replace( '?lang=' . $current_lang, '', $path );
-
-						return user_trailingslashit( $path ) . '?lang=' . $current_lang;
-						break;
-
-				}
-
-			}
 		}
 
 		return $path;
@@ -689,26 +707,26 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			$term = get_queried_object();
 
 		$taxonomy = $term->taxonomy;
-		$termlink = $wp_rewrite->get_extra_permastruct( $taxonomy );
+		$path = $wp_rewrite->get_extra_permastruct( $taxonomy );
 
 		$slug = $term->slug;
 		$t = get_taxonomy( $taxonomy );
 
 		$paged = $this->maybe_get_paged( $this->paged(), $args['paged'], $args['paged_plural'] );
 
-		if ( empty( $termlink ) ) {
+		if ( empty( $path ) ) {
 			//* Default permalink structure.
 
 			if ( 'category' === $taxonomy ) {
-				$termlink = '?cat=' . $term->term_id;
+				$path = '?cat=' . $term->term_id;
 			} else if ( isset( $t->query_var ) && '' !== $t->query_var ) {
-				$termlink = '?' . $t->query_var . '=' . $slug;
+				$path = '?' . $t->query_var . '=' . $slug;
 			} else {
-				$termlink = '?taxonomy=' . $taxonomy . '&term=' . $slug;
+				$path = '?taxonomy=' . $taxonomy . '&term=' . $slug;
 			}
 
 			if ( $paged )
-				$termlink .= '&paged=' . $paged;
+				$path .= '&paged=' . $paged;
 
 			//* Don't slash it.
 			$this->url_slashit = false;
@@ -726,18 +744,19 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				$hierarchical_slugs = array_reverse( $hierarchical_slugs );
 				$hierarchical_slugs[] = $slug;
 
-				$termlink = str_replace( "%$taxonomy%", implode( '/', $hierarchical_slugs ), $termlink );
+				$path = str_replace( "%$taxonomy%", implode( '/', $hierarchical_slugs ), $path );
 			} else {
-				$termlink = str_replace( "%$taxonomy%", $slug, $termlink );
+				$path = str_replace( "%$taxonomy%", $slug, $path );
 			}
 
 			if ( $paged )
-				$termlink = trailingslashit( $termlink ) . 'page/' . $paged;
+				$path = trailingslashit( $path ) . 'page/' . $paged;
 
-			$termlink = user_trailingslashit( $termlink, 'category' );
+			$path = user_trailingslashit( $path, 'category' );
 		}
 
-		$path = $this->set_url_scheme( $termlink, 'relative' );
+		//* Leading Slash it..
+		$path = '/' . ltrim( $path, ' \\/' );
 
 		return $path;
 	}
@@ -767,9 +786,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			$scheme = is_ssl() ? 'https' : 'http';
 		}
 
-		$url = trim( $url );
-		if ( '//' === substr( $url, 0, 2 ) )
-			$url = 'http:' . $url;
+		$url = $this->make_fully_qualified_url( $url );
 
 		if ( 'relative' === $scheme ) {
 			$url = ltrim( preg_replace( '#^\w+://[^/]*#', '', $url ) );
@@ -835,79 +852,6 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	}
 
 	/**
-	 * Creates canonical url for the default permalink structure.
-	 *
-	 * @param object|int $post The post object or ID.
-	 * @param bool $paged Whether to add pagination for all types.
-	 * @param bool $paged_plural Whether to add pagination for the second or later page.
-	 *
-	 * @since 2.3.0
-	 */
-	public function the_url_path_default_permalink_structure( $post = null, $paged = false, $paged_plural = true ) {
-
-		//* Don't slash it.
-		$this->url_slashit = false;
-
-		if ( false === $this->is_singular() ) {
-			//* We're on a taxonomy
-			$object = get_queried_object();
-
-			if ( is_object( $object ) ) {
-				if ( $this->is_category() ) {
-					$path = '?cat=' . $object->term_id;
-				} else if ( $this->is_tag() ) {
-					$path = '?tag=' . $object->name;
-				} else if ( $this->is_date() ) {
-					global $wp_query;
-
-					$query = $wp_query->query;
-
-					$year = $query->year;
-					$month = $query->monthnum ? '&monthnum=' . $query->monthnum : '';
-					$day = $query->day ? '&day=' . $query->day : '';
-
-					$path = '?year=' . $year . $month . $day;
-				} else if ( $this->is_author() ) {
-					$path = '?author=' . $object->author_name;
-				} else if ( $this->is_tax() ) {
-					$path = '?taxonomy=' . $object->taxonomy . '&term=' . $object->slug;
-				} else if ( isset( $object->query_var ) && $object->query_var ) {
-					$path = '?' . $object->query_var . '=' . $object->slug;
-				} else {
-					$path = '?p=' . $object->ID;
-				}
-
-				$paged = $this->maybe_get_paged( $this->paged(), $paged, $paged_plural );
-				if ( $paged )
-					$path .= '&paged=' . $paged;
-			}
-
-		}
-
-		if ( ! isset( $path ) ) {
-
-			if ( isset( $post ) ) {
-				if ( is_object( $post ) && isset( $post->ID ) ) {
-					$id = $post->ID;
-				} else if ( is_scalar( $post ) ) {
-					$id = $post;
-				}
-			}
-
-			if ( ! isset( $id ) )
-				$id = $this->get_the_real_ID();
-
-			$path = '?p=' . $id;
-
-			$page = $this->maybe_get_paged( $this->page(), $paged, $paged_plural );
-			if ( $page )
-				$path .= '&page=' . $page;
-		}
-
-		return $path;
-	}
-
-	/**
 	 * Try to get an canonical URL when WPMUdev Domain Mapping is active.
 	 *
 	 * @since 2.3.0
@@ -921,77 +865,76 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 */
 	public function the_url_wpmudev_domainmap( $path, $get_scheme = false ) {
 
-		if ( $this->is_domainmapping_active() ) {
-			global $wpdb, $blog_id;
+		if ( false === $this->is_domainmapping_active() )
+			return '';
 
-			/**
-			 * Cache revisions. Hexadecimal.
-			 *
-			 * @since 2.6.0
-			 */
-			$revision = '1';
+		global $wpdb, $blog_id;
 
-			$cache_key = 'wpmudev_mapped_domain_' . $revision . '_' . $blog_id;
+		/**
+		 * Cache revisions. Hexadecimal.
+		 * @since 2.6.0
+		 */
+		$revision = '1';
 
-			//* Check if the domain is mapped
-			$mapped_domain = $this->object_cache_get( $cache_key );
-			if ( false === $mapped_domain ) {
-				//* Setup cache. Results may only contain one object.
+		$cache_key = 'wpmudev_mapped_domain_' . $revision . '_' . $blog_id;
 
-				$mapped_domains = $wpdb->get_results( $wpdb->prepare( "SELECT id, domain, is_primary, scheme FROM {$wpdb->base_prefix}domain_mapping WHERE blog_id = %d", $blog_id ), OBJECT );
+		//* Check if the domain is mapped
+		$mapped_domain = $this->object_cache_get( $cache_key );
+		if ( false === $mapped_domain ) {
 
-				$primary_key = 0;
-				$domain_ids = array();
-				foreach ( $mapped_domains as $key => $domain ) {
-					if ( isset( $domain->is_primary ) && '1' === $domain->is_primary ) {
-						$primary_key = $key;
+			$mapped_domains = $wpdb->get_results( $wpdb->prepare( "SELECT id, domain, is_primary, scheme FROM {$wpdb->base_prefix}domain_mapping WHERE blog_id = %d", $blog_id ), OBJECT );
 
-						//* We've found the primary key, break loop.
-						break;
-					} else {
-						//* Save IDs.
-						if ( isset( $domain->id ) && $domain->id )
-							$domain_ids[$key] = $domain->id;
-					}
+			$primary_key = 0;
+			$domain_ids = array();
+			foreach ( $mapped_domains as $key => $domain ) {
+				if ( isset( $domain->is_primary ) && '1' === $domain->is_primary ) {
+					$primary_key = $key;
+
+					//* We've found the primary key, break loop.
+					break;
+				} else {
+					//* Save IDs.
+					if ( isset( $domain->id ) && $domain->id )
+						$domain_ids[$key] = $domain->id;
 				}
-
-				if ( 0 === $primary_key && ! empty( $domain_ids ) ) {
-					//* No primary ID has been found. Get the one with the lowest ID, which has been added first.
-					$primary_key = array_keys( $domain_ids, min( $domain_ids ), true );
-					$primary_key = reset( $primary_key );
-				}
-
-				//* Set 0, as we check for false to begin with.
-				$mapped_domain = isset( $mapped_domains[$primary_key] ) ? $mapped_domains[$primary_key] : 0;
-
-				$this->object_cache_set( $cache_key, $mapped_domain, 3600 );
 			}
 
-			if ( $mapped_domain ) {
+			if ( 0 === $primary_key && ! empty( $domain_ids ) ) {
+				//* No primary ID has been found. Get the one with the lowest ID, which has been added first.
+				$primary_key = array_keys( $domain_ids, min( $domain_ids ), true );
+				$primary_key = reset( $primary_key );
+			}
 
-				$domain = isset( $mapped_domain->domain ) ? $mapped_domain->domain : '0';
-				$scheme = isset( $mapped_domain->scheme ) ? $mapped_domain->scheme : '';
+			//* Set 0, as we check for false to begin with.
+			$mapped_domain = isset( $mapped_domains[$primary_key] ) ? $mapped_domains[$primary_key] : 0;
 
-				//* Fallback to is_ssl if no scheme has been found.
-				if ( '' === $scheme )
-					$scheme = is_ssl() ? '1' : '0';
+			$this->object_cache_set( $cache_key, $mapped_domain, 3600 );
+		}
 
-				if ( '1' === $scheme ) {
-					$scheme_full = 'https://';
-					$scheme = 'https';
-				} else {
-					$scheme_full = 'http://';
-					$scheme = 'http';
-				}
+		if ( $mapped_domain ) {
 
-				//* Put it all together.
-				$url = trailingslashit( $scheme_full . $domain ) . ltrim( $path, '\/' );
+			$domain = isset( $mapped_domain->domain ) ? $mapped_domain->domain : '0';
+			$scheme = isset( $mapped_domain->scheme ) ? $mapped_domain->scheme : '';
 
-				if ( ! $get_scheme ) {
-					return $url;
-				} else {
-					return array( $url, $scheme );
-				}
+			//* Fallback to is_ssl if no scheme has been found.
+			if ( '' === $scheme )
+				$scheme = is_ssl() ? '1' : '0';
+
+			if ( '1' === $scheme ) {
+				$scheme_full = 'https://';
+				$scheme = 'https';
+			} else {
+				$scheme_full = 'http://';
+				$scheme = 'http';
+			}
+
+			//* Put it all together.
+			$url = trailingslashit( $scheme_full . $domain ) . ltrim( $path, ' \\/' );
+
+			if ( ! $get_scheme ) {
+				return $url;
+			} else {
+				return array( $url, $scheme );
 			}
 		}
 
@@ -1010,28 +953,27 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 */
 	public function the_url_donncha_domainmap( $path, $get_scheme = false ) {
 
-		if ( $this->is_donncha_domainmapping_active() ) {
-			global $wpdb,$current_blog;
+		if ( false === $this->is_donncha_domainmapping_active() )
+			return '';
 
-			$scheme = is_ssl() ? 'https' : 'http';
+		global $current_blog;
 
-			//* This url is cached statically.
-			$url = function_exists( 'domain_mapping_siteurl' ) ? domain_mapping_siteurl( false ) : false;
+		$scheme = is_ssl() ? 'https' : 'http';
+		$url = function_exists( 'domain_mapping_siteurl' ) ? domain_mapping_siteurl( false ) : false;
 
-			$request_uri = '';
+		$request_uri = '';
 
-			if ( $url && $url !== untrailingslashit( $scheme . '://' . $current_blog->domain . $current_blog->path ) ) {
-				if ( ( defined( 'VHOST' ) && 'yes' !== VHOST ) || ( defined( 'SUBDOMAIN_INSTALL' ) && false === SUBDOMAIN_INSTALL ) ) {
-					$request_uri = str_replace( $current_blog->path, '/', $_SERVER['REQUEST_URI'] );
-				}
+		if ( $url && $url !== untrailingslashit( $scheme . '://' . $current_blog->domain . $current_blog->path ) ) {
+			if ( ( defined( 'VHOST' ) && 'yes' !== VHOST ) || ( defined( 'SUBDOMAIN_INSTALL' ) && false === SUBDOMAIN_INSTALL ) ) {
+				$request_uri = str_replace( $current_blog->path, '/', $_SERVER['REQUEST_URI'] );
+			}
 
-				$url = trailingslashit( $url . $request_uri ) . ltrim( $path, '\/ ' );
+			$url = trailingslashit( $url . $request_uri ) . ltrim( $path, '\\/ ' );
 
-				if ( $get_scheme ) {
-					return array( $url, $scheme );
-				} else {
-					return $url;
-				}
+			if ( $get_scheme ) {
+				return array( $url, $scheme );
+			} else {
+				return $url;
 			}
 		}
 
@@ -1064,7 +1006,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 						if ( $this->is_static_frontpage( $post_id ) ) {
 							$path = '';
 						} else {
-							$path = '?p=' . $post_id;
+							//* This will be converted to '?p' later.
+							$path = '?page_id=' . $post_id;
 						}
 					}
 				} else if ( $this->is_archive() ) {
@@ -1111,11 +1054,12 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			}
 
 			if ( isset( $path ) ) {
+				//* Path always has something. So we can safely use .='&' instead of add_query_arg().
 
 				if ( 0 === $post_id )
 					$post_id = $this->get_the_real_ID();
 
-				$url = $this->the_url_from_cache( '', $post_id, false, false, true );
+				$url = $this->the_url_from_cache( '', $post_id, false, false, false );
 				$query = parse_url( $url, PHP_URL_QUERY );
 
 				$additions = '';
@@ -1131,16 +1075,17 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 					}
 				}
 
-				if ( $this->pretty_permalinks ) {
-					if ( $this->is_archive() || $this->is_home() ) {
-						$paged = $this->paged();
-						if ( $paged > 1 )
-							$path .= '&paged=' . $paged;
-					} else {
-						$page = $this->paged();
-						if ( $page > 1 )
-							$path .= '&page=' . $page;
-					}
+				//* We used 'page_id' to determine duplicates. Now we can convert it to a shorter form.
+				$path = str_replace( 'page_id=', 'p=', $path );
+
+				if ( $this->is_archive() || $this->is_home() ) {
+					$paged = $this->maybe_get_paged( $this->paged(), false, true );
+					if ( $paged )
+						$path .= '&paged=' . $paged;
+				} else {
+					$page = $this->maybe_get_paged( $this->page(), false, true );
+					if ( $page )
+						$path .= '&page=' . $page;
 				}
 
 				$home_url = $this->the_home_url_from_cache( true );
@@ -1312,21 +1257,22 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	/**
 	 * Adds subdomain to URL.
 	 *
-	 * @since 2.6.2
+	 * @since 2.6.5
 	 *
 	 * @param string $url The current URL without subdomain.
-	 *
-	 * @return string $url URL with possible subdomain.
+	 * @return string $url Fully qualified URL with possible subdomain.
 	 */
-	protected function set_url_subdomain( $url = '' ) {
+	public function add_url_subdomain( $url = '' ) {
 
-		//* Add subdomain, if any.
+		$url = $this->make_fully_qualified_url( $url );
+
+		//* Add subdomain, if set.
 		if ( $this->add_subdomain ) {
-			$parsed_url = parse_url( $url );
-			$url = str_replace( $parsed_url['scheme'] . '://', '', $url );
+			$scheme = parse_url( $url, PHP_URL_SCHEME );
+			$url = str_replace( $scheme . '://', '', $url );
 
 			//* Put it together.
-			$url = $this->add_subdomain . '.' . $url;
+			$url = $scheme . '://' . $this->add_subdomain . '.' . $url;
 		}
 
 		return $url;
@@ -1372,6 +1318,26 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Makes a fully qualified URL from input. Always uses http to fix.
+	 * @see $this->set_url_scheme()
+	 *
+	 * @since 2.6.5
+	 *
+	 * @param string $url Required the current maybe not fully qualified URL.
+	 * @return string $url
+	 */
+	public function make_fully_qualified_url( $url ) {
+
+		if ( '//' === substr( $url, 0, 2 ) ) {
+			$url = 'http:' . $url;
+		} else if ( 'http' !== substr( $url, 0, 4 ) ) {
+			$url = 'http://' . $url;
+		}
+
+		return $url;
 	}
 
 }

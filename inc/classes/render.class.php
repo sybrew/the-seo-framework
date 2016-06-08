@@ -452,7 +452,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	public function og_url() {
 
 		if ( $this->use_og_tags() )
-			return '<meta property="og:url" content="' . esc_attr( $this->the_url_from_cache() ) . '" />' . "\r\n";
+			return '<meta property="og:url" content="' . $this->the_url_from_cache() . '" />' . "\r\n";
 
 		return '';
 	}
@@ -819,10 +819,13 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		if ( ! apply_filters( 'the_seo_framework_output_canonical', true, $this->get_the_real_ID() ) )
 			return;
 
-		if ( $this->is_404() )
-			return;
+		/**
+		 * Applies filters 'the_seo_framework_rel_canonical_output' : Change canonical URL output.
+		 * @since 2.6.5
+		 */
+		$url = (string) apply_filters( 'the_seo_framework_rel_canonical_output', $this->the_url_from_cache(), $this->get_the_real_ID() );
 
-		return '<link rel="canonical" href="' . $this->the_url_from_cache() . '" />' . "\r\n";
+		return '<link rel="canonical" href="' . $url . '" />' . "\r\n";
 	}
 
 	/**

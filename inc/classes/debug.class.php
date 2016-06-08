@@ -43,6 +43,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 		if ( $this->the_seo_framework_debug ) {
 			add_action( 'admin_footer', array( $this, 'debug_screens' ) );
 			add_action( 'admin_footer', array( $this, 'debug_output' ) );
+			add_action( 'wp_footer', array( $this, 'debug_output' ) );
 		}
 
 	}
@@ -262,18 +263,34 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	public function debug_output() {
 
 		if ( $this->debug_output ) {
-			if ( $this->the_seo_framework_debug_hidden ) echo "<!--\r\n";
-
-			?>
-			<div style="clear: both;float: left;position: relative;width: calc( 100% - 200px );min-height: 700px;padding: 0;margin: 20px 20px 40px 180px;overflow: hidden;border: 1px solid #ccc;border-radius: 3px;">
-				<h3 style="font-size: 14px;padding: 0 12px;margin: 0;line-height: 39px;border-bottom: 2px solid #aaa;position: absolute;z-index: 1;width: 100%;right: 0;left: 0;top: 0;background: #fff;border-radius: 3px 3px 0 0;height: 39px;">SEO Debug Information</h3>
-				<div style="position: absolute;bottom: 0;right: 0;left: 0;top: 41px;margin: 0;padding: 0;background: #fff;border-radius: 3px;overflow-x: hidden;">
-					<?php echo $this->debug_output; ?>
-				</div>
-			</div>
-			<?php
-
-			if ( $this->the_seo_framework_debug_hidden ) echo "\r\n-->";
+			if ( $this->the_seo_framework_debug_hidden ) {
+				echo "\r\n<!--\r\n:: THE SEO FRAMEWORK DEBUG :: \r\n" . $this->debug_output . "\r\n:: / THE SEO FRAMEWORK DEBUG ::\r\n-->\r\n";
+			} else {
+				if ( $this->is_admin() ) {
+					?>
+					<div style="clear:both;float:left;position:relative;width:calc( 100% - 200px );min-height:700px;padding:0;margin:20px 20px 40px 180px;overflow:hidden;border:1px solid #ccc;border-radius:3px;">
+						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom: 2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">SEO Debug Information</h3>
+						<div style="position:absolute;bottom:0;right:0;left:0;top:41px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;">
+							<?php echo $this->debug_init_output(); ?>
+							<?php echo $this->debug_output; ?>
+						</div>
+					</div>
+					<?php
+				} else {
+					?>
+					<style type="text/css">.wp-ui-notification{color:#fff;background-color:#d54e21}.code.highlight{font-family:Consolas,Monaco,monospace;font-size:14px;}</style>
+					<div style="clear:both;float:left;position:relative;width:calc( 100% - 80px );min-height:700px;padding:0;margin:40px;overflow:hidden;border:1px solid #ccc;border-radius:3px;">
+						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom: 2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">
+							SEO Debug Information :: Type: <?php echo $this->get_the_term_name( $this->fetch_the_term( $this->get_the_real_ID() ) ); ?> &mdash; ID: <?php echo $this->get_the_real_ID(); ?> &mdash; Is front: <?php echo $this->is_front_page() ? 'Yes' : 'No'; ?>
+						</h3>
+						<div style="position:absolute;bottom:0;right:0;left:0;top:41px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;">
+							<?php echo $this->debug_init_output(); ?>
+							<?php echo $this->debug_output; ?>
+						</div>
+					</div>
+					<?php
+				}
+			}
 		}
 
 	}
@@ -320,12 +337,14 @@ class AutoDescription_Debug extends AutoDescription_Core {
 			if ( is_array( $values ) ) {
 				$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="margin:0;padding-left:12px">';
 				foreach ( $values as $key => $value ) {
+					$output .= "\t\t";
 					if ( '' === $value ) {
 						$output .= $this->debug_key_wrapper( $key ) . ' => ';
 						$output .= $this->debug_value_wrapper( "''" );
 						$output .= "\r\n";
 					} else if ( is_string( $value ) || is_int( $value ) ) {
-						$output .= $this->debug_key_wrapper( $key ) . ' => ' . $this->debug_value_wrapper( $value );
+						$output .= $this->debug_key_wrapper( $key ) . ' => ';
+						$output .= $this->debug_value_wrapper( $value );
 						$output .= "\r\n";
 					} else if ( is_bool( $value ) ) {
 						$output .= $this->debug_key_wrapper( $key ) . ' => ';
@@ -336,30 +355,25 @@ class AutoDescription_Debug extends AutoDescription_Core {
 						$output .= "Array[\r\n";
 						$output .= $this->the_seo_framework_debug_hidden ? '' : '<p style="margin:0;padding-left:12px">';
 						foreach ( $value as $k => $v ) {
+							$output .= "\t\t\t";
 							if ( '' === $v ) {
 								$output .= $this->debug_key_wrapper( $k ) . ' => ';
 								$output .= $this->debug_value_wrapper( "''" );
-								$output .= ',';
-								$output .= "\r\n";
 							} else if ( is_string( $v ) || is_int( $v ) ) {
-								$output .= $this->debug_key_wrapper( $k ) . ' => ' . $this->debug_value_wrapper( $v );
-								$output .= ',';
-								$output .= "\r\n";
+								$output .= $this->debug_key_wrapper( $k ) . ' => ';
+								$output .= $this->debug_value_wrapper( $v );
 							} else if ( is_bool( $v ) ) {
 								$output .= $this->debug_key_wrapper( $k ) . ' => ';
 								$output .= $this->debug_value_wrapper( $v ? 'true' : 'false' );
-								$output .= ',';
-								$output .= "\r\n";
 							} else if ( is_array( $v ) ) {
 								$output .= $this->debug_key_wrapper( $k ) . ' => ';
 								$output .= $this->debug_value_wrapper( 'Debug message: Three+ dimensional array' );
-								$output .= ',';
 							} else {
 								$output .= $this->debug_key_wrapper( $k ) . ' => ';
 								$output .= $this->debug_value_wrapper( $v );
-								$output .= ',';
-								$output .= "\r\n";
 							}
+							$output .= ',';
+							$output .= "\r\n";
 							$output .= $this->the_seo_framework_debug_hidden ? '' : '<br>';
 						}
 						$output .= $this->the_seo_framework_debug_hidden ? '' : '</p>';
@@ -373,12 +387,16 @@ class AutoDescription_Debug extends AutoDescription_Core {
 				}
 				$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
 			} else if ( '' === $values ) {
+				$output .= "\t\t";
 				$output .= $this->debug_value_wrapper( "''" );
 			} else if ( is_string( $values ) || is_int( $values ) ) {
+				$output .= "\t\t";
 				$output .= $this->debug_value_wrapper( $values );
 			} else if ( is_bool( $values ) ) {
+				$output .= "\t\t";
 				$output .= $this->debug_value_wrapper( $values ? 'true' : 'false' );
 			} else {
+				$output .= "\t\t";
 				$output .= $this->debug_value_wrapper( $values );
 			}
 
@@ -424,6 +442,9 @@ class AutoDescription_Debug extends AutoDescription_Core {
 		if ( ! is_scalar( $value ) )
 			return 'Debug message: not scalar';
 
+		if ( "''" === $value && $this->the_seo_framework_debug_hidden )
+			return html_entity_decode( $value );
+
 		if ( $ignore || false === $this->the_seo_framework_debug_hidden )
 			return '<span class="wp-ui-notification">' . esc_attr( (string) trim( $value ) ) . '</span>';
 
@@ -448,7 +469,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	 */
 	protected function debug_init( $class, $method, $store, $debug_key ) {
 
-		if ( false === $this->the_seo_framework_debug || false === $this->is_admin() )
+		if ( false === $this->the_seo_framework_debug )
 			return;
 
 		$output = '';
@@ -483,10 +504,13 @@ class AutoDescription_Debug extends AutoDescription_Core {
 				$loop++;
 				$debug_key = '[Debug key: ' . $loop . ' - ' . $method . ']';
 
-				if ( 'admin_footer' !== current_action() )
-					echo '<p>' . $debug_key . '</p>';
+				if ( $this->is_admin() && 'admin_footer' !== current_action() ) {
+					echo "\r\n";
+					echo $this->the_seo_framework_debug_hidden ? $debug_key . ' action. ' : '<p>' . $debug_key . '</p>';
+				}
 
-				$output .= '<h3>' . $debug_key . '</h3>';
+				$output .= "\r\n";
+				$output .= $this->the_seo_framework_debug_hidden ? $debug_key . ' output. ' : '<h3>' . $debug_key . '</h3>';
 
 				if ( isset( $cached_args[$class][$method] ) ) {
 					$args[] = array(
@@ -511,41 +535,42 @@ class AutoDescription_Debug extends AutoDescription_Core {
 					$output .= $method . '( ';
 				}
 
-
 				if ( isset( $hold_args[$class][$method][0] ) ) {
 					if ( is_array( $hold_args[$class][$method][0] ) ) {
 						foreach ( $hold_args[$class][$method][0] as $var => $a ) {
-								$output .= '$' . $var . ', ';
+								$output .= gettype( $a ) . ' $' . $var . ', ';
 						}
 					}
 					$output = rtrim( $output, ', ' );
 					$hold_args[$class][$method] = null;
 				}
 
-				$output .= ' )' . "<br>\r\n";
+				$output .= ' )';
+				$output .= $this->the_seo_framework_debug_hidden ? "\r\n" : "<br>\r\n";
 
 				foreach ( $args as $num => $a ) {
 					if ( is_array( $a ) ) {
 						foreach ( $a as $k => $v ) {
-							$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:6px">';
-								$output .= (string) $k . ': ';
-								$output .= $this->the_seo_framework_debug_hidden ? '' : '<br>';
-								$output .= gettype( $v ) . ': [';
-								$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:12px">';
-									$output .= $this->get_debug_information( $v );
-								$output .= $this->the_seo_framework_debug_hidden ? '' : '</div><br>';
-								$output .= ']' . "\r\n";
+							$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:12px">';
+								$output .= "\t" . (string) $k . ': ';
+								$output .= $this->the_seo_framework_debug_hidden ? "\r\n" : '<br><div style="padding-left:12px">' . "\r\n";
+									$output .= "\t  " . gettype( $v ) . ': [';
+									$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:12px">';
+										$output .= "\t\t" . $this->get_debug_information( $v );
+									$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
+									$output .= "\t  " .  ']' . "\r\n";
+								$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
 							$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
 						}
 					} else {
-						$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:6px">';
-							$output .= (string) $num . ': ';
-							$output .= $this->the_seo_framework_debug_hidden ? '' : '<br>';
-							$output .= gettype( $a ) . ': [';
+						$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:12px">';
+							$output .= "\t" . (string) $num . ': ';
+							$output .= $this->the_seo_framework_debug_hidden ? "\r\n" : "<br>\r\n";
+							$output .= "\t  " . gettype( $a ) . ': [';
 							$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:12px">';
-								$output .= $this->get_debug_information( $a );
-							$output .= $this->the_seo_framework_debug_hidden ? '' : '</div><br>';
-							$output .= ']' . "\r\n";
+								$output .= "\t\t" . $this->get_debug_information( $a );
+							$output .= $this->the_seo_framework_debug_hidden ? '' : "</div><br>\r\n";
+							$output .= "\t  " . ']' . "\r\n";
 						$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
 					}
 				}
@@ -554,10 +579,10 @@ class AutoDescription_Debug extends AutoDescription_Core {
 
 		if ( $output ) {
 
-			static $odd = null;
-			if ( isset( $odd ) ) {
+			static $odd = false;
+			if ( $odd ) {
 				$bg = 'f1f1f1';
-				$odd = null;
+				$odd = false;
 			} else {
 				$bg = 'dadada';
 				$odd = true;
@@ -660,6 +685,67 @@ class AutoDescription_Debug extends AutoDescription_Core {
 		} else {
 			$output = $previous = microtime( true );
 		}
+
+		return $output;
+	}
+
+	/**
+	 * Wraps header output in front-end code.
+	 *
+	 * @since 2.6.5
+	 *
+	 * @return string Wrapped HTML debug output.
+	 */
+	protected function debug_init_output() {
+
+		if ( $this->is_admin() && ! $this->is_term_edit() && ! $this->is_post_edit() && ! $this->is_seo_settings_page() )
+			return;
+
+		if ( $this->is_seo_settings_page() )
+			add_filter( 'the_seo_framework_current_object_id', array( $this, 'get_the_front_page_ID' ) );
+
+		$init_start = microtime( true );
+
+		$output	= $this->the_description()
+				. $this->og_image()
+				. $this->og_locale()
+				. $this->og_type()
+				. $this->og_title()
+				. $this->og_description()
+				. $this->og_url()
+				. $this->og_sitename()
+				. $this->facebook_publisher()
+				. $this->facebook_author()
+				. $this->facebook_app_id()
+				. $this->article_published_time()
+				. $this->article_modified_time()
+				. $this->twitter_card()
+				. $this->twitter_site()
+				. $this->twitter_creator()
+				. $this->twitter_title()
+				. $this->twitter_description()
+				. $this->twitter_image()
+				. $this->shortlink()
+				. $this->canonical()
+				. $this->paged_urls()
+				. $this->ld_json()
+				. $this->google_site_output()
+				. $this->bing_site_output()
+				. $this->yandex_site_output()
+				. $this->pint_site_output()
+				;
+
+		$timer = '<div style="display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( microtime( true ) - $init_start, 5 ) . ' seconds</div>' ;
+
+		$title = $this->is_admin() ? 'Expected SEO Output' : 'Current SEO Output';
+		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #ccc;"><h2 style="color:#ddd;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
+
+		//* Escape it, replace EOL with breaks, and style everything between quotes (which are ending with space).
+		$output = str_replace( PHP_EOL, '<br>', esc_html( $output ) );
+		$output = preg_replace( "/(&quot;.*?&quot;)(\s)/", '<font color="arnoldschwarzenegger">$1</font> ', $output );
+
+		$output = '<div style="display:inline-block;width:100%;padding:20px;font-family:Consolas,Monaco,monospace;font-size:14px;">' . $output . '</div>';
+		$output = '<div style="display:block;width:100%;background:#23282D;color:#ddd;border-bottom:1px solid #ccc">' . $title . $timer . $output . '</div>';
 
 		return $output;
 	}
