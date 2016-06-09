@@ -1,0 +1,2399 @@
+Index: autodescription.php
+===================================================================
+--- autodescription.php	(revision 1427876)
++++ autodescription.php	(working copy)
+@@ -3,7 +3,7 @@
+  * Plugin Name: The SEO Framework
+  * Plugin URI: https://wordpress.org/plugins/autodescription/
+  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.
+- * Version: 2.6.4
++ * Version: 2.6.5
+  * Author: Sybre Waaijer
+  * Author URI: https://cyberwire.nl/
+  * License: GPLv3
+@@ -42,7 +42,7 @@
+  * Not many caching plugins use CDN in dashboard. What a shame. Firefox does cache.
+  * @since 1.0.0
+  */
+-define( 'THE_SEO_FRAMEWORK_VERSION', '2.6.4' );
++define( 'THE_SEO_FRAMEWORK_VERSION', '2.6.5' );
+ 
+ /**
+  * Plugin options filter.
+Index: inc/classes/admininit.class.php
+===================================================================
+--- inc/classes/admininit.class.php	(revision 1418924)
++++ inc/classes/admininit.class.php	(working copy)
+@@ -20,7 +20,7 @@
+  * Class AutoDescription_Admin_Init
+  *
+  * Initializes the plugin for the wp-admin screens.
+- * Enqueues css and javascript.
++ * Enqueues CSS and Javascript.
+  *
+  * @since 2.1.6
+  */
+Index: inc/classes/debug.class.php
+===================================================================
+--- inc/classes/debug.class.php	(revision 1418924)
++++ inc/classes/debug.class.php	(working copy)
+@@ -43,6 +43,7 @@
+ 		if ( $this->the_seo_framework_debug ) {
+ 			add_action( 'admin_footer', array( $this, 'debug_screens' ) );
+ 			add_action( 'admin_footer', array( $this, 'debug_output' ) );
++			add_action( 'wp_footer', array( $this, 'debug_output' ) );
+ 		}
+ 
+ 	}
+@@ -262,18 +263,34 @@
+ 	public function debug_output() {
+ 
+ 		if ( $this->debug_output ) {
+-			if ( $this->the_seo_framework_debug_hidden ) echo "<!--\r\n";
+-
+-			?>
+-			<div style="clear: both;float: left;position: relative;width: calc( 100% - 200px );min-height: 700px;padding: 0;margin: 20px 20px 40px 180px;overflow: hidden;border: 1px solid #ccc;border-radius: 3px;">
+-				<h3 style="font-size: 14px;padding: 0 12px;margin: 0;line-height: 39px;border-bottom: 2px solid #aaa;position: absolute;z-index: 1;width: 100%;right: 0;left: 0;top: 0;background: #fff;border-radius: 3px 3px 0 0;height: 39px;">SEO Debug Information</h3>
+-				<div style="position: absolute;bottom: 0;right: 0;left: 0;top: 41px;margin: 0;padding: 0;background: #fff;border-radius: 3px;overflow-x: hidden;">
+-					<?php echo $this->debug_output; ?>
+-				</div>
+-			</div>
+-			<?php
+-
+-			if ( $this->the_seo_framework_debug_hidden ) echo "\r\n-->";
++			if ( $this->the_seo_framework_debug_hidden ) {
++				echo "\r\n<!--\r\n:: THE SEO FRAMEWORK DEBUG :: \r\n" . $this->debug_output . "\r\n:: / THE SEO FRAMEWORK DEBUG ::\r\n-->\r\n";
++			} else {
++				if ( $this->is_admin() ) {
++					?>
++					<div style="clear:both;float:left;position:relative;width:calc( 100% - 200px );min-height:700px;padding:0;margin:20px 20px 40px 180px;overflow:hidden;border:1px solid #ccc;border-radius:3px;">
++						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom: 2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">SEO Debug Information</h3>
++						<div style="position:absolute;bottom:0;right:0;left:0;top:41px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;">
++							<?php echo $this->debug_init_output(); ?>
++							<?php echo $this->debug_output; ?>
++						</div>
++					</div>
++					<?php
++				} else {
++					?>
++					<style type="text/css">.wp-ui-notification{color:#fff;background-color:#d54e21}.code.highlight{font-family:Consolas,Monaco,monospace;font-size:14px;}</style>
++					<div style="clear:both;float:left;position:relative;width:calc( 100% - 80px );min-height:700px;padding:0;margin:40px;overflow:hidden;border:1px solid #ccc;border-radius:3px;">
++						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom: 2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">
++							SEO Debug Information :: Type: <?php echo $this->get_the_term_name( $this->fetch_the_term( $this->get_the_real_ID() ) ); ?> &mdash; ID: <?php echo $this->get_the_real_ID(); ?> &mdash; Is front: <?php echo $this->is_front_page() ? 'Yes' : 'No'; ?>
++						</h3>
++						<div style="position:absolute;bottom:0;right:0;left:0;top:41px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;">
++							<?php echo $this->debug_init_output(); ?>
++							<?php echo $this->debug_output; ?>
++						</div>
++					</div>
++					<?php
++				}
++			}
+ 		}
+ 
+ 	}
+@@ -320,12 +337,14 @@
+ 			if ( is_array( $values ) ) {
+ 				$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="margin:0;padding-left:12px">';
+ 				foreach ( $values as $key => $value ) {
++					$output .= "\t\t";
+ 					if ( '' === $value ) {
+ 						$output .= $this->debug_key_wrapper( $key ) . ' => ';
+ 						$output .= $this->debug_value_wrapper( "''" );
+ 						$output .= "\r\n";
+ 					} else if ( is_string( $value ) || is_int( $value ) ) {
+-						$output .= $this->debug_key_wrapper( $key ) . ' => ' . $this->debug_value_wrapper( $value );
++						$output .= $this->debug_key_wrapper( $key ) . ' => ';
++						$output .= $this->debug_value_wrapper( $value );
+ 						$output .= "\r\n";
+ 					} else if ( is_bool( $value ) ) {
+ 						$output .= $this->debug_key_wrapper( $key ) . ' => ';
+@@ -336,30 +355,25 @@
+ 						$output .= "Array[\r\n";
+ 						$output .= $this->the_seo_framework_debug_hidden ? '' : '<p style="margin:0;padding-left:12px">';
+ 						foreach ( $value as $k => $v ) {
++							$output .= "\t\t\t";
+ 							if ( '' === $v ) {
+ 								$output .= $this->debug_key_wrapper( $k ) . ' => ';
+ 								$output .= $this->debug_value_wrapper( "''" );
+-								$output .= ',';
+-								$output .= "\r\n";
+ 							} else if ( is_string( $v ) || is_int( $v ) ) {
+-								$output .= $this->debug_key_wrapper( $k ) . ' => ' . $this->debug_value_wrapper( $v );
+-								$output .= ',';
+-								$output .= "\r\n";
++								$output .= $this->debug_key_wrapper( $k ) . ' => ';
++								$output .= $this->debug_value_wrapper( $v );
+ 							} else if ( is_bool( $v ) ) {
+ 								$output .= $this->debug_key_wrapper( $k ) . ' => ';
+ 								$output .= $this->debug_value_wrapper( $v ? 'true' : 'false' );
+-								$output .= ',';
+-								$output .= "\r\n";
+ 							} else if ( is_array( $v ) ) {
+ 								$output .= $this->debug_key_wrapper( $k ) . ' => ';
+ 								$output .= $this->debug_value_wrapper( 'Debug message: Three+ dimensional array' );
+-								$output .= ',';
+ 							} else {
+ 								$output .= $this->debug_key_wrapper( $k ) . ' => ';
+ 								$output .= $this->debug_value_wrapper( $v );
+-								$output .= ',';
+-								$output .= "\r\n";
+ 							}
++							$output .= ',';
++							$output .= "\r\n";
+ 							$output .= $this->the_seo_framework_debug_hidden ? '' : '<br>';
+ 						}
+ 						$output .= $this->the_seo_framework_debug_hidden ? '' : '</p>';
+@@ -373,12 +387,16 @@
+ 				}
+ 				$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
+ 			} else if ( '' === $values ) {
++				$output .= "\t\t";
+ 				$output .= $this->debug_value_wrapper( "''" );
+ 			} else if ( is_string( $values ) || is_int( $values ) ) {
++				$output .= "\t\t";
+ 				$output .= $this->debug_value_wrapper( $values );
+ 			} else if ( is_bool( $values ) ) {
++				$output .= "\t\t";
+ 				$output .= $this->debug_value_wrapper( $values ? 'true' : 'false' );
+ 			} else {
++				$output .= "\t\t";
+ 				$output .= $this->debug_value_wrapper( $values );
+ 			}
+ 
+@@ -424,6 +442,9 @@
+ 		if ( ! is_scalar( $value ) )
+ 			return 'Debug message: not scalar';
+ 
++		if ( "''" === $value && $this->the_seo_framework_debug_hidden )
++			return html_entity_decode( $value );
++
+ 		if ( $ignore || false === $this->the_seo_framework_debug_hidden )
+ 			return '<span class="wp-ui-notification">' . esc_attr( (string) trim( $value ) ) . '</span>';
+ 
+@@ -448,7 +469,7 @@
+ 	 */
+ 	protected function debug_init( $class, $method, $store, $debug_key ) {
+ 
+-		if ( false === $this->the_seo_framework_debug || false === $this->is_admin() )
++		if ( false === $this->the_seo_framework_debug )
+ 			return;
+ 
+ 		$output = '';
+@@ -483,10 +504,13 @@
+ 				$loop++;
+ 				$debug_key = '[Debug key: ' . $loop . ' - ' . $method . ']';
+ 
+-				if ( 'admin_footer' !== current_action() )
+-					echo '<p>' . $debug_key . '</p>';
++				if ( $this->is_admin() && 'admin_footer' !== current_action() ) {
++					echo "\r\n";
++					echo $this->the_seo_framework_debug_hidden ? $debug_key . ' action. ' : '<p>' . $debug_key . '</p>';
++				}
+ 
+-				$output .= '<h3>' . $debug_key . '</h3>';
++				$output .= "\r\n";
++				$output .= $this->the_seo_framework_debug_hidden ? $debug_key . ' output. ' : '<h3>' . $debug_key . '</h3>';
+ 
+ 				if ( isset( $cached_args[$class][$method] ) ) {
+ 					$args[] = array(
+@@ -511,11 +535,10 @@
+ 					$output .= $method . '( ';
+ 				}
+ 
+-
+ 				if ( isset( $hold_args[$class][$method][0] ) ) {
+ 					if ( is_array( $hold_args[$class][$method][0] ) ) {
+ 						foreach ( $hold_args[$class][$method][0] as $var => $a ) {
+-								$output .= '$' . $var . ', ';
++								$output .= gettype( $a ) . ' $' . $var . ', ';
+ 						}
+ 					}
+ 					$output = rtrim( $output, ', ' );
+@@ -522,30 +545,32 @@
+ 					$hold_args[$class][$method] = null;
+ 				}
+ 
+-				$output .= ' )' . "<br>\r\n";
++				$output .= ' )';
++				$output .= $this->the_seo_framework_debug_hidden ? "\r\n" : "<br>\r\n";
+ 
+ 				foreach ( $args as $num => $a ) {
+ 					if ( is_array( $a ) ) {
+ 						foreach ( $a as $k => $v ) {
+-							$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:6px">';
+-								$output .= (string) $k . ': ';
+-								$output .= $this->the_seo_framework_debug_hidden ? '' : '<br>';
+-								$output .= gettype( $v ) . ': [';
+-								$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:12px">';
+-									$output .= $this->get_debug_information( $v );
+-								$output .= $this->the_seo_framework_debug_hidden ? '' : '</div><br>';
+-								$output .= ']' . "\r\n";
++							$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:12px">';
++								$output .= "\t" . (string) $k . ': ';
++								$output .= $this->the_seo_framework_debug_hidden ? "\r\n" : '<br><div style="padding-left:12px">' . "\r\n";
++									$output .= "\t  " . gettype( $v ) . ': [';
++									$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:12px">';
++										$output .= "\t\t" . $this->get_debug_information( $v );
++									$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
++									$output .= "\t  " .  ']' . "\r\n";
++								$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
+ 							$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
+ 						}
+ 					} else {
+-						$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:6px">';
+-							$output .= (string) $num . ': ';
+-							$output .= $this->the_seo_framework_debug_hidden ? '' : '<br>';
+-							$output .= gettype( $a ) . ': [';
++						$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:12px">';
++							$output .= "\t" . (string) $num . ': ';
++							$output .= $this->the_seo_framework_debug_hidden ? "\r\n" : "<br>\r\n";
++							$output .= "\t  " . gettype( $a ) . ': [';
+ 							$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:12px">';
+-								$output .= $this->get_debug_information( $a );
+-							$output .= $this->the_seo_framework_debug_hidden ? '' : '</div><br>';
+-							$output .= ']' . "\r\n";
++								$output .= "\t\t" . $this->get_debug_information( $a );
++							$output .= $this->the_seo_framework_debug_hidden ? '' : "</div><br>\r\n";
++							$output .= "\t  " . ']' . "\r\n";
+ 						$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
+ 					}
+ 				}
+@@ -554,10 +579,10 @@
+ 
+ 		if ( $output ) {
+ 
+-			static $odd = null;
+-			if ( isset( $odd ) ) {
++			static $odd = false;
++			if ( $odd ) {
+ 				$bg = 'f1f1f1';
+-				$odd = null;
++				$odd = false;
+ 			} else {
+ 				$bg = 'dadada';
+ 				$odd = true;
+@@ -664,4 +689,65 @@
+ 		return $output;
+ 	}
+ 
++	/**
++	 * Wraps header output in front-end code.
++	 *
++	 * @since 2.6.5
++	 *
++	 * @return string Wrapped HTML debug output.
++	 */
++	protected function debug_init_output() {
++
++		if ( $this->is_admin() && ! $this->is_term_edit() && ! $this->is_post_edit() && ! $this->is_seo_settings_page() )
++			return;
++
++		if ( $this->is_seo_settings_page() )
++			add_filter( 'the_seo_framework_current_object_id', array( $this, 'get_the_front_page_ID' ) );
++
++		$init_start = microtime( true );
++
++		$output	= $this->the_description()
++				. $this->og_image()
++				. $this->og_locale()
++				. $this->og_type()
++				. $this->og_title()
++				. $this->og_description()
++				. $this->og_url()
++				. $this->og_sitename()
++				. $this->facebook_publisher()
++				. $this->facebook_author()
++				. $this->facebook_app_id()
++				. $this->article_published_time()
++				. $this->article_modified_time()
++				. $this->twitter_card()
++				. $this->twitter_site()
++				. $this->twitter_creator()
++				. $this->twitter_title()
++				. $this->twitter_description()
++				. $this->twitter_image()
++				. $this->shortlink()
++				. $this->canonical()
++				. $this->paged_urls()
++				. $this->ld_json()
++				. $this->google_site_output()
++				. $this->bing_site_output()
++				. $this->yandex_site_output()
++				. $this->pint_site_output()
++				;
++
++		$timer = '<div style="display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( microtime( true ) - $init_start, 5 ) . ' seconds</div>' ;
++
++		$title = $this->is_admin() ? 'Expected SEO Output' : 'Current SEO Output';
++		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #ccc;"><h2 style="color:#ddd;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
++
++		//* Escape it, replace EOL with breaks, and style everything between quotes (which are ending with space).
++		$output = str_replace( PHP_EOL, '<br>', esc_html( $output ) );
++		$output = preg_replace( "/(&quot;.*?&quot;)(\s)/", '<font color="arnoldschwarzenegger">$1</font> ', $output );
++
++		$output = '<div style="display:inline-block;width:100%;padding:20px;font-family:Consolas,Monaco,monospace;font-size:14px;">' . $output . '</div>';
++		$output = '<div style="display:block;width:100%;background:#23282D;color:#ddd;border-bottom:1px solid #ccc">' . $title . $timer . $output . '</div>';
++
++		return $output;
++	}
++
+ }
+Index: inc/classes/detect.class.php
+===================================================================
+--- inc/classes/detect.class.php	(revision 1427876)
++++ inc/classes/detect.class.php	(working copy)
+@@ -461,7 +461,7 @@
+ 
+ 			foreach ( $conflicting_plugins as $plugin ) {
+ 				if ( in_array( $plugin, $active_plugins ) ) {
+-					$detected = apply_filters( 'the_seo_framework_og_plugin_detected', true );
++					$detected = apply_filters( 'the_seo_framework_twittercard_plugin_detected', true );
+ 					break;
+ 				}
+ 			}
+@@ -481,7 +481,11 @@
+ 	 * @return bool false
+ 	 */
+ 	public function has_json_ld_plugin() {
+-		return false;
++		/**
++		 * Applies filters 'the_seo_framework_ldjson_plugin_detected' : boolean
++		 * @since 2.6.5
++		 */
++		return (bool) apply_filters( 'the_seo_framework_ldjson_plugin_detected', false );
+ 	}
+ 
+ 	/**
+Index: inc/classes/generate-ldjson.class.php
+===================================================================
+--- inc/classes/generate-ldjson.class.php	(revision 1418924)
++++ inc/classes/generate-ldjson.class.php	(working copy)
+@@ -42,6 +42,9 @@
+ 	 */
+ 	public function render_ld_json_scripts() {
+ 
++		if ( $this->has_json_ld_plugin() )
++			return '';
++
+ 		$this->setup_ld_json_transient( $this->get_the_real_ID() );
+ 
+ 		if ( $this->the_seo_framework_debug ) $this->debug_init( __CLASS__, __FUNCTION__, true, $debug_key = microtime(true), array( 'LD Json transient' => $this->ld_json_transient, 'Is output' => (bool) $this->get_transient( $this->ld_json_transient ) ) );
+@@ -729,7 +732,7 @@
+ 	 */
+ 	public function ld_json_knowledge() {
+ 
+-		if ( false === $this->is_option_checked( 'knowledge_output' ) )
++		if ( false === $this->enable_ld_json_knowledge() )
+ 			return '';
+ 
+ 		$knowledge_type = $this->get_option( 'knowledge_type' );
+@@ -760,9 +763,9 @@
+ 		}
+ 
+ 		/**
+-		 * Fetch option names
+-		 *
+-		 * @uses filter the_seo_framework_json_options
++		 * Applies filters 'the_seo_framework_json_options' : array The option names
++		 * @since ???
++		 * @todo Document.
+ 		 */
+ 		$options = (array) apply_filters( 'the_seo_framework_json_options', array(
+ 			'knowledge_facebook',
+@@ -895,7 +898,7 @@
+ 			return $cache;
+ 
+ 		/**
+-		 * Applies filters the_seo_framework_json_search_output
++		 * Applies filters 'the_seo_framework_json_search_output'
+ 		 * @since 2.3.9
+ 		 */
+ 		$filter = (bool) apply_filters( 'the_seo_framework_json_search_output', true );
+@@ -904,4 +907,29 @@
+ 		return $cache = $filter && $option ? true : false;
+ 	}
+ 
++	/**
++	 * Determines if Knowledge Graph Script is enabled.
++	 *
++	 * @since 2.6.5
++	 * @staticvar bool $cache
++	 *
++	 * @return bool
++	 */
++	public function enable_ld_json_knowledge() {
++
++		static $cache = null;
++
++		if ( isset( $cache ) )
++			return $cache;
++
++		/**
++		 * Applies filters 'the_seo_framework_json_search_output'
++		 * @since 2.6.5
++		 */
++		$filter = (bool) apply_filters( 'the_seo_framework_json_knowledge_output', true );
++		$option = $this->is_option_checked( 'ld_json_knowledge' );
++
++		return $cache = $filter && $option ? true : false;
++	}
++
+ }
+Index: inc/classes/generate-title.class.php
+===================================================================
+--- inc/classes/generate-title.class.php	(revision 1420011)
++++ inc/classes/generate-title.class.php	(working copy)
+@@ -612,7 +612,6 @@
+ 
+ 		}
+ 
+-
+ 		if ( $escape )
+ 			$title = $this->escape_title( $title, false );
+ 
+Index: inc/classes/generate-url.class.php
+===================================================================
+--- inc/classes/generate-url.class.php	(revision 1426209)
++++ inc/classes/generate-url.class.php	(working copy)
+@@ -44,10 +44,30 @@
+ 	protected $add_subdomain;
+ 
+ 	/**
+-	 * Constructor, load parent constructor
++	 * Holds current HTTP host.
++	 *
++	 * @since 2.6.5
++	 *
++	 * @var string The current HTTP host.
+ 	 */
++	protected $current_host;
++
++	/**
++	 * Holds home HTTP host.
++	 *
++	 * @since 2.6.5
++	 *
++	 * @var string The home HTTP host.
++	 */
++	protected $home_host;
++
++	/**
++	 * Constructor, load parent constructor and set up variables.
++	 */
+ 	public function __construct() {
+ 		parent::__construct();
++
++		$this->home_host = parse_url( get_option( 'home' ), PHP_URL_HOST );
+ 	}
+ 
+ 	/**
+@@ -89,6 +109,7 @@
+ 		//* Reset cache.
+ 		$this->url_slashit = true;
+ 		$this->add_subdomain = '';
++		$this->current_host = '';
+ 
+ 		$path = '';
+ 		$scheme = '';
+@@ -141,17 +162,17 @@
+ 
+ 		//* Non-domainmap URL
+ 		if ( empty( $url ) ) {
+-			if ( $args['home'] || '' === $path ) {
+-				$url = user_trailingslashit( get_option( 'home' ) );
+-				$slashit = false;
+-			} else {
+-				$url = $this->generate_full_url( $path );
+-				$scheme = is_ssl() ? 'https' : 'http';
++			if ( $args['home'] ) {
++				$this->current_lang = '';
++				$this->add_subdomain = '';
+ 			}
++
++			$url = $this->add_url_host( $path );
++			$scheme = is_ssl() ? 'https' : 'http';
++
++			$url = $this->add_url_subdomain( $url );
+ 		}
+ 
+-		$url = $this->set_url_subdomain( $url );
+-
+ 		//* URL has been given manually or $args['home'] is true.
+ 		if ( ! isset( $scheme ) )
+ 			$scheme = is_ssl() ? 'https' : 'http';
+@@ -275,12 +296,13 @@
+ 	}
+ 
+ 	/**
+-	 * Generate url from Args.
++	 * Generate URL from arguments.
+ 	 *
+ 	 * @since 2.6.0
+ 	 *
++	 * @global object $wp
++	 *
+ 	 * @param array $args the URL args.
+-	 *
+ 	 * @return string $path
+ 	 */
+ 	public function generate_url_path( $args = array() ) {
+@@ -300,11 +322,13 @@
+ 			} else if ( ! $args['external'] ) {
+ 				//* Everything else.
+ 				global $wp;
+-				$path = $wp->request;
++				$path = trailingslashit( get_option( 'home' ) ) . $wp->request;
++				$path = $this->set_url_scheme( $path, 'relative' );
+ 			} else {
+ 				//* Nothing to see here...
+ 				$path = '';
+ 			}
++
+ 		} else {
+ 
+ 			/**
+@@ -313,21 +337,15 @@
+ 			 */
+ 			$post_id = isset( $args['post']->ID ) ? $args['post']->ID : $args['id'];
+ 
+-			if ( $post_id ) {
+-				if ( $this->pretty_permalinks ) {
++			if ( $this->pretty_permalinks && $post_id && $this->is_singular() ) {
++				$post = get_post( $post_id );
+ 
+-					$post = get_post( $post_id );
+-
+-					//* Don't slash draft links.
+-					if ( isset( $post->post_status ) && ( 'auto-draft' === $post->post_status || 'draft' === $post->post_status ) )
+-						$this->url_slashit = false;
+-
+-					$path = $this->get_relative_url( $post_id, $args['external'] );
+-				} else {
+-					$path = $this->the_url_path_default_permalink_structure( $post_id, $args['paged'], $args['paged_plural'] );
+-				}
++				//* Don't slash draft links.
++				if ( isset( $post->post_status ) && ( 'auto-draft' === $post->post_status || 'draft' === $post->post_status ) )
++					$this->url_slashit = false;
+ 			}
+ 
++			$path = $this->build_singular_relative_url( $post_id, $args );
+ 		}
+ 
+ 		if ( isset( $path ) )
+@@ -337,92 +355,81 @@
+ 	}
+ 
+ 	/**
+-	 * Generates relative URL for current post_ID.
++	 * Generates relative URL for the Homepage and Singular Posts.
+ 	 *
+-	 * @param int|object $post The post object or ID.
+-	 * @param bool $external Whether to fetch the WP Request or get the permalink by Post Object.
+-	 * @param int $depr Deprecated The post ID.
++	 * @since 2.6.5
+ 	 *
+-	 * @since 2.3.0
+-	 *
+ 	 * @global object $wp
+ 	 *
++	 * @param int $post_id The ID.
++	 * @param array $args The URL arguments.
+ 	 * @return relative Post or Page url.
+ 	 */
+-	public function get_relative_url( $post = null, $external = false, $depr = null ) {
++	public function build_singular_relative_url( $post_id = null, $args = array() ) {
+ 
+-		if ( isset( $depr ) ) {
+-			$post_id = $depr;
+-		} else {
+-			if ( is_object( $post ) ) {
+-				if ( isset( $post->ID ) )
+-					$post_id = $post->ID;
+-			} else if ( is_scalar( $post ) ) {
+-				$post_id = (int) $post;
+-			}
+-		}
+-
+ 		if ( ! isset( $post_id ) ) {
+-			if ( ! $external )
++			if ( ! $args['external'] )
+ 				$post_id = $this->get_the_real_ID();
+ 			else
+ 				return '';
+ 		}
+ 
+-		if ( $external || ! $this->is_home() ) {
+-			$permalink = get_permalink( $post_id );
+-		} else if ( ! $external ) {
++		$args = $this->reparse_url_args( $args );
++
++		if ( $args['external'] || ! $this->is_front_page() ) {
++			$url = get_permalink( $post_id );
++		} else if ( $this->is_front_page() ) {
++			$url = get_home_url();
++		} else if ( ! $args['external'] ) {
+ 			global $wp;
+ 
+ 			if ( isset( $wp->request ) )
+-				$permalink = $wp->request;
++				$url = trailingslashit( get_option( 'home' ) ) . $wp->request;
++
+ 		}
+ 
+ 		//* No permalink found.
+-		if ( ! isset( $permalink ) )
++		if ( ! isset( $url ) )
+ 			return '';
+ 
+-		$path = $this->set_url_scheme( $permalink, 'relative' );
++		if ( $this->is_singular() )
++			$paged = $this->maybe_get_paged( $this->page(), $args['paged'], $args['paged_plural'] );
++		else
++			$paged = $this->maybe_get_paged( $this->paged(), $args['paged'], $args['paged_plural'] );
+ 
++		if ( $paged ) {
++			if ( $this->pretty_permalinks ) {
++				if ( $this->is_singular() )
++					$url = trailingslashit( $url ) . $paged;
++				else
++					$url = trailingslashit( $url ) . 'page/' . $paged;
++			} else {
++				if ( $this->is_singular() )
++					$url = add_query_arg( 'page', $paged, $url );
++				else
++					$url = add_query_arg( 'paged', $paged, $url );
++			}
++		}
++
++		$path = $this->set_url_scheme( $url, 'relative' );
++
+ 		return $path;
+ 	}
+ 
+ 	/**
+-	 * Generate full URL from path.
++	 * Create full valid URL with parsed host.
++	 * Don't forget to use set_url_scheme() afterwards.
+ 	 *
+-	 * @since 2.6.0
+-	 * @staticvar string $home_url The Home URL.
+-	 * @staticvar string|bool $home_path The Home Directory Path.
++	 * @since 2.6.5
+ 	 *
+-	 * @param string $path The current path.
+-	 *
+-	 * @return string URL the full URL.
++	 * @param string $path Current path.
++	 * @return string Full valid URL with http host.
+ 	 */
+-	protected function generate_full_url( $path = '' ) {
++	public function add_url_host( $path = '' ) {
+ 
+-		static $home_url = null;
+-		static $home_path = null;
+-		static $home_url_slashed = null;
++		$host = $this->current_host ? $this->current_host : $this->home_host;
+ 
+-		//* Set up caches.
+-		if ( is_null( $home_url ) ) {
+-			$home_url = get_option( 'home' );
+-
+-			$home_url_parsed = parse_url( $home_url );
+-			$home_path = isset( $home_url_parsed['path'] ) ? $home_url_parsed['path'] : false;
+-
+-			$home_url_slashed = trailingslashit( $home_url );
+-		}
+-
+-		//* Prevent duplicated first path from Site Address config.
+-		if ( $home_path ) {
+-			$count = 1;
+-			$url = $home_url_slashed . ltrim( str_replace( $home_path, '', $path ), '\/ ' );
+-		} else {
+-			$url = $home_url_slashed . ltrim( $path, '\/ ' );
+-		}
+-
+-		return $url;
++		return $url = 'http://' . trailingslashit( $host ) . ltrim( $path, ' \\/' );
+ 	}
+ 
+ 	/**
+@@ -515,7 +522,7 @@
+ 				if ( 0 === strpos( $path, '/' . $current_lang . '/' ) )
+ 					return $path;
+ 				else
+-					return $path = trailingslashit( $current_lang ) . ltrim( $path, '\/ ' );
++					return $path = trailingslashit( $current_lang ) . ltrim( $path, ' \\/' );
+ 				break;
+ 
+ 			case '3' :
+@@ -534,16 +541,14 @@
+ 	/**
+ 	 * Generate relative WPML url.
+ 	 *
+-	 * @param string $path The current path.
+-	 * @param int $post_id The Post ID.
+-	 *
+-	 * @global object $sitepress
+-	 *
++	 * @since 2.4.3
+ 	 * @staticvar bool $gli_exists
+ 	 * @staticvar string $default_lang
+ 	 *
+-	 * @since 2.4.3
++	 * @global object $sitepress
+ 	 *
++	 * @param string $path The current path.
++	 * @param int $post_id The Post ID.
+ 	 * @return relative path for WPML urls.
+ 	 */
+ 	public function get_relative_wmpl_url( $path = '', $post_id = '' ) {
+@@ -553,98 +558,111 @@
+ 		$this->url_slashit = true;
+ 		$this->add_subdomain = '';
+ 
+-		if ( isset( $sitepress ) ) {
++		if ( ! isset( $sitepress ) )
++			return $path;
+ 
+-			static $gli_exists = null;
++		static $gli_exists = null;
++		if ( is_null( $gli_exists ) )
++			$gli_exists = function_exists( 'wpml_get_language_information' );
+ 
+-			if ( is_null( $gli_exists ) )
+-				$gli_exists = function_exists( 'wpml_get_language_information' );
++		if ( ! $gli_exists )
++			return $path;
+ 
+-			if ( $gli_exists ) {
++		if ( empty( $post_id ) )
++			$post_id = $this->get_the_real_ID();
+ 
+-				if ( '' === $post_id )
+-					$post_id = $this->get_the_real_ID();
++		//* Cache default language.
++		static $default_lang = null;
++		if ( is_null( $default_lang ) )
++			$default_lang = $sitepress->get_default_language();
+ 
+-				//* Cache default language.
+-				static $default_lang = null;
+-				if ( is_null( $default_lang ) )
+-					$default_lang = $sitepress->get_default_language();
++		/**
++		 * Applies filters wpml_post_language_details : array|wp_error
++		 *
++		 * ... Somehow WPML thought this would be great and understandable.
++		 * This should be put inside a callable function.
++		 * @since 2.6.0
++		 */
++		$lang_info = apply_filters( 'wpml_post_language_details', NULL, $post_id );
+ 
+-				/**
+-				 * Applies filters wpml_post_language_details : array|wp_error
+-				 *
+-				 * ... Somehow WPML thought this would be great and understandable.
+-				 * This should be put inside a callable function.
+-				 * @since 2.6.0
+-				 */
+-				$lang_info = apply_filters( 'wpml_post_language_details', NULL, $post_id );
++		if ( is_wp_error( $lang_info ) ) {
++			//* Terms and Taxonomies.
++			$lang_info = array();
+ 
+-				if ( is_wp_error( $lang_info ) ) {
+-					//* Terms and Taxonomies.
+-					$lang_info = array();
++			//* Cache the code.
++			static $lang_code = null;
++			if ( is_null( $lang_code ) && defined( 'ICL_LANGUAGE_CODE' ) )
++				$lang_code = ICL_LANGUAGE_CODE;
+ 
+-					//* Cache the code.
+-					static $lang_code = null;
+-					if ( is_null( $lang_code ) && defined( 'ICL_LANGUAGE_CODE' ) )
+-						$lang_code = ICL_LANGUAGE_CODE;
++			$lang_info['language_code'] = $lang_code;
++		}
+ 
+-					$lang_info['language_code'] = $lang_code;
+-				}
++		//* If filter isn't used, bail.
++		if ( ! isset( $lang_info['language_code'] ) )
++			return $path;
+ 
+-				//* If filter isn't used, bail.
+-				if ( ! isset( $lang_info['language_code'] ) )
+-					return $path;
++		$current_lang = $lang_info['language_code'];
+ 
+-				$current_lang = $lang_info['language_code'];
++		//* No need to alter URL if we're on default lang.
++		if ( $current_lang === $default_lang )
++			return $path;
+ 
+-				//* No need to alter URL if we're on default lang.
+-				if ( $current_lang === $default_lang )
++		//* Cache negotiation type.
++		static $negotiation_type = null;
++		if ( ! isset( $negotiation_type ) )
++			$negotiation_type = $sitepress->get_setting( 'language_negotiation_type' );
++
++		switch ( $negotiation_type ) {
++
++			case '1' :
++				//* Subdirectory
++
++				/**
++				 * Might not always work.
++				 * @TODO Fix.
++				 * @priority OMG WTF BBQ
++				 */
++				$contains_path = strpos( $path, '/' . $current_lang . '/' );
++				if ( false !== $contains_path && 0 === $contains_path )
+ 					return $path;
++				else
++					return $path = trailingslashit( $current_lang ) . ltrim( $path, ' \\/' );
++				break;
+ 
+-				//* Cache negotiation type.
+-				static $negotiation_type = null;
+-				if ( ! isset( $negotiation_type ) )
+-					$negotiation_type = $sitepress->get_setting( 'language_negotiation_type' );
++			case '2' :
++				//* Custom domain.
+ 
+-				switch ( $negotiation_type ) {
++				$langsettings = $sitepress->get_setting( 'language_domains' );
++				$current_lang_setting = isset( $langsettings[ $current_lang ] ) ? $langsettings[ $current_lang ] : '';
+ 
+-					case '1' :
+-						//* Subdirectory
++				if ( empty( $current_lang_setting ) )
++					return $path;
+ 
+-						$contains_path = strpos( $path, '/' . $current_lang . '/' );
+-						if ( false !== $contains_path && 0 === $contains_path )
+-							return $path;
+-						else
+-							return $path = trailingslashit( $current_lang ) . ltrim( $path, '\/ ' );
+-						break;
++				$current_lang_setting = $this->make_fully_qualified_url( $current_lang_setting );
++				$parsed = parse_url( $current_lang_setting );
+ 
+-					case '2' :
+-						//* Notify cache of subdomain addition.
+-						$this->add_subdomain = $current_lang;
++				$this->current_host = isset( $parsed['host'] ) ? $parsed['host'] : '';
++				$current_path = isset( $parsed['path'] ) ? trailingslashit( $parsed['path'] ) : '';
+ 
+-						//* No need to alter the path.
+-						return $path;
+-						break;
++				return $current_path . $path;
++				break;
+ 
+-					case '3' :
+-						//* Negotiation type query var.
++			case '3' :
++				//* Negotiation type query var.
+ 
+-						//* Don't slash it further.
+-						$this->url_slashit = false;
++				//* Don't slash it further.
++				$this->url_slashit = false;
+ 
+-						/**
+-						 * Path must have trailing slash for pagination permalinks to work.
+-						 * So we remove the query string and add it back with slash.
+-						 */
+-						if ( false !== strpos( $path, '?lang=' . $current_lang ) )
+-							$path = str_replace( '?lang=' . $current_lang, '', $path );
++				/**
++				 * Path must have trailing slash for pagination permalinks to work.
++				 * So we remove the query string and add it back with slash.
++				 */
++				if ( false !== strpos( $path, '?lang=' . $current_lang ) )
++					$path = str_replace( '?lang=' . $current_lang, '', $path );
+ 
+-						return user_trailingslashit( $path ) . '?lang=' . $current_lang;
+-						break;
++				return user_trailingslashit( $path ) . '?lang=' . $current_lang;
++				break;
+ 
+-				}
+-
+-			}
+ 		}
+ 
+ 		return $path;
+@@ -689,7 +707,7 @@
+ 			$term = get_queried_object();
+ 
+ 		$taxonomy = $term->taxonomy;
+-		$termlink = $wp_rewrite->get_extra_permastruct( $taxonomy );
++		$path = $wp_rewrite->get_extra_permastruct( $taxonomy );
+ 
+ 		$slug = $term->slug;
+ 		$t = get_taxonomy( $taxonomy );
+@@ -696,19 +714,19 @@
+ 
+ 		$paged = $this->maybe_get_paged( $this->paged(), $args['paged'], $args['paged_plural'] );
+ 
+-		if ( empty( $termlink ) ) {
++		if ( empty( $path ) ) {
+ 			//* Default permalink structure.
+ 
+ 			if ( 'category' === $taxonomy ) {
+-				$termlink = '?cat=' . $term->term_id;
++				$path = '?cat=' . $term->term_id;
+ 			} else if ( isset( $t->query_var ) && '' !== $t->query_var ) {
+-				$termlink = '?' . $t->query_var . '=' . $slug;
++				$path = '?' . $t->query_var . '=' . $slug;
+ 			} else {
+-				$termlink = '?taxonomy=' . $taxonomy . '&term=' . $slug;
++				$path = '?taxonomy=' . $taxonomy . '&term=' . $slug;
+ 			}
+ 
+ 			if ( $paged )
+-				$termlink .= '&paged=' . $paged;
++				$path .= '&paged=' . $paged;
+ 
+ 			//* Don't slash it.
+ 			$this->url_slashit = false;
+@@ -726,18 +744,19 @@
+ 				$hierarchical_slugs = array_reverse( $hierarchical_slugs );
+ 				$hierarchical_slugs[] = $slug;
+ 
+-				$termlink = str_replace( "%$taxonomy%", implode( '/', $hierarchical_slugs ), $termlink );
++				$path = str_replace( "%$taxonomy%", implode( '/', $hierarchical_slugs ), $path );
+ 			} else {
+-				$termlink = str_replace( "%$taxonomy%", $slug, $termlink );
++				$path = str_replace( "%$taxonomy%", $slug, $path );
+ 			}
+ 
+ 			if ( $paged )
+-				$termlink = trailingslashit( $termlink ) . 'page/' . $paged;
++				$path = trailingslashit( $path ) . 'page/' . $paged;
+ 
+-			$termlink = user_trailingslashit( $termlink, 'category' );
++			$path = user_trailingslashit( $path, 'category' );
+ 		}
+ 
+-		$path = $this->set_url_scheme( $termlink, 'relative' );
++		//* Leading Slash it..
++		$path = '/' . ltrim( $path, ' \\/' );
+ 
+ 		return $path;
+ 	}
+@@ -767,9 +786,7 @@
+ 			$scheme = is_ssl() ? 'https' : 'http';
+ 		}
+ 
+-		$url = trim( $url );
+-		if ( '//' === substr( $url, 0, 2 ) )
+-			$url = 'http:' . $url;
++		$url = $this->make_fully_qualified_url( $url );
+ 
+ 		if ( 'relative' === $scheme ) {
+ 			$url = ltrim( preg_replace( '#^\w+://[^/]*#', '', $url ) );
+@@ -835,79 +852,6 @@
+ 	}
+ 
+ 	/**
+-	 * Creates canonical url for the default permalink structure.
+-	 *
+-	 * @param object|int $post The post object or ID.
+-	 * @param bool $paged Whether to add pagination for all types.
+-	 * @param bool $paged_plural Whether to add pagination for the second or later page.
+-	 *
+-	 * @since 2.3.0
+-	 */
+-	public function the_url_path_default_permalink_structure( $post = null, $paged = false, $paged_plural = true ) {
+-
+-		//* Don't slash it.
+-		$this->url_slashit = false;
+-
+-		if ( false === $this->is_singular() ) {
+-			//* We're on a taxonomy
+-			$object = get_queried_object();
+-
+-			if ( is_object( $object ) ) {
+-				if ( $this->is_category() ) {
+-					$path = '?cat=' . $object->term_id;
+-				} else if ( $this->is_tag() ) {
+-					$path = '?tag=' . $object->name;
+-				} else if ( $this->is_date() ) {
+-					global $wp_query;
+-
+-					$query = $wp_query->query;
+-
+-					$year = $query->year;
+-					$month = $query->monthnum ? '&monthnum=' . $query->monthnum : '';
+-					$day = $query->day ? '&day=' . $query->day : '';
+-
+-					$path = '?year=' . $year . $month . $day;
+-				} else if ( $this->is_author() ) {
+-					$path = '?author=' . $object->author_name;
+-				} else if ( $this->is_tax() ) {
+-					$path = '?taxonomy=' . $object->taxonomy . '&term=' . $object->slug;
+-				} else if ( isset( $object->query_var ) && $object->query_var ) {
+-					$path = '?' . $object->query_var . '=' . $object->slug;
+-				} else {
+-					$path = '?p=' . $object->ID;
+-				}
+-
+-				$paged = $this->maybe_get_paged( $this->paged(), $paged, $paged_plural );
+-				if ( $paged )
+-					$path .= '&paged=' . $paged;
+-			}
+-
+-		}
+-
+-		if ( ! isset( $path ) ) {
+-
+-			if ( isset( $post ) ) {
+-				if ( is_object( $post ) && isset( $post->ID ) ) {
+-					$id = $post->ID;
+-				} else if ( is_scalar( $post ) ) {
+-					$id = $post;
+-				}
+-			}
+-
+-			if ( ! isset( $id ) )
+-				$id = $this->get_the_real_ID();
+-
+-			$path = '?p=' . $id;
+-
+-			$page = $this->maybe_get_paged( $this->page(), $paged, $paged_plural );
+-			if ( $page )
+-				$path .= '&page=' . $page;
+-		}
+-
+-		return $path;
+-	}
+-
+-	/**
+ 	 * Try to get an canonical URL when WPMUdev Domain Mapping is active.
+ 	 *
+ 	 * @since 2.3.0
+@@ -921,78 +865,77 @@
+ 	 */
+ 	public function the_url_wpmudev_domainmap( $path, $get_scheme = false ) {
+ 
+-		if ( $this->is_domainmapping_active() ) {
+-			global $wpdb, $blog_id;
++		if ( false === $this->is_domainmapping_active() )
++			return '';
+ 
+-			/**
+-			 * Cache revisions. Hexadecimal.
+-			 *
+-			 * @since 2.6.0
+-			 */
+-			$revision = '1';
++		global $wpdb, $blog_id;
+ 
+-			$cache_key = 'wpmudev_mapped_domain_' . $revision . '_' . $blog_id;
++		/**
++		 * Cache revisions. Hexadecimal.
++		 * @since 2.6.0
++		 */
++		$revision = '1';
+ 
+-			//* Check if the domain is mapped
+-			$mapped_domain = $this->object_cache_get( $cache_key );
+-			if ( false === $mapped_domain ) {
+-				//* Setup cache. Results may only contain one object.
++		$cache_key = 'wpmudev_mapped_domain_' . $revision . '_' . $blog_id;
+ 
+-				$mapped_domains = $wpdb->get_results( $wpdb->prepare( "SELECT id, domain, is_primary, scheme FROM {$wpdb->base_prefix}domain_mapping WHERE blog_id = %d", $blog_id ), OBJECT );
++		//* Check if the domain is mapped
++		$mapped_domain = $this->object_cache_get( $cache_key );
++		if ( false === $mapped_domain ) {
+ 
+-				$primary_key = 0;
+-				$domain_ids = array();
+-				foreach ( $mapped_domains as $key => $domain ) {
+-					if ( isset( $domain->is_primary ) && '1' === $domain->is_primary ) {
+-						$primary_key = $key;
++			$mapped_domains = $wpdb->get_results( $wpdb->prepare( "SELECT id, domain, is_primary, scheme FROM {$wpdb->base_prefix}domain_mapping WHERE blog_id = %d", $blog_id ), OBJECT );
+ 
+-						//* We've found the primary key, break loop.
+-						break;
+-					} else {
+-						//* Save IDs.
+-						if ( isset( $domain->id ) && $domain->id )
+-							$domain_ids[$key] = $domain->id;
+-					}
+-				}
++			$primary_key = 0;
++			$domain_ids = array();
++			foreach ( $mapped_domains as $key => $domain ) {
++				if ( isset( $domain->is_primary ) && '1' === $domain->is_primary ) {
++					$primary_key = $key;
+ 
+-				if ( 0 === $primary_key && ! empty( $domain_ids ) ) {
+-					//* No primary ID has been found. Get the one with the lowest ID, which has been added first.
+-					$primary_key = array_keys( $domain_ids, min( $domain_ids ), true );
+-					$primary_key = reset( $primary_key );
++					//* We've found the primary key, break loop.
++					break;
++				} else {
++					//* Save IDs.
++					if ( isset( $domain->id ) && $domain->id )
++						$domain_ids[$key] = $domain->id;
+ 				}
++			}
+ 
+-				//* Set 0, as we check for false to begin with.
+-				$mapped_domain = isset( $mapped_domains[$primary_key] ) ? $mapped_domains[$primary_key] : 0;
+-
+-				$this->object_cache_set( $cache_key, $mapped_domain, 3600 );
++			if ( 0 === $primary_key && ! empty( $domain_ids ) ) {
++				//* No primary ID has been found. Get the one with the lowest ID, which has been added first.
++				$primary_key = array_keys( $domain_ids, min( $domain_ids ), true );
++				$primary_key = reset( $primary_key );
+ 			}
+ 
+-			if ( $mapped_domain ) {
++			//* Set 0, as we check for false to begin with.
++			$mapped_domain = isset( $mapped_domains[$primary_key] ) ? $mapped_domains[$primary_key] : 0;
+ 
+-				$domain = isset( $mapped_domain->domain ) ? $mapped_domain->domain : '0';
+-				$scheme = isset( $mapped_domain->scheme ) ? $mapped_domain->scheme : '';
++			$this->object_cache_set( $cache_key, $mapped_domain, 3600 );
++		}
+ 
+-				//* Fallback to is_ssl if no scheme has been found.
+-				if ( '' === $scheme )
+-					$scheme = is_ssl() ? '1' : '0';
++		if ( $mapped_domain ) {
+ 
+-				if ( '1' === $scheme ) {
+-					$scheme_full = 'https://';
+-					$scheme = 'https';
+-				} else {
+-					$scheme_full = 'http://';
+-					$scheme = 'http';
+-				}
++			$domain = isset( $mapped_domain->domain ) ? $mapped_domain->domain : '0';
++			$scheme = isset( $mapped_domain->scheme ) ? $mapped_domain->scheme : '';
+ 
+-				//* Put it all together.
+-				$url = trailingslashit( $scheme_full . $domain ) . ltrim( $path, '\/' );
++			//* Fallback to is_ssl if no scheme has been found.
++			if ( '' === $scheme )
++				$scheme = is_ssl() ? '1' : '0';
+ 
+-				if ( ! $get_scheme ) {
+-					return $url;
+-				} else {
+-					return array( $url, $scheme );
+-				}
++			if ( '1' === $scheme ) {
++				$scheme_full = 'https://';
++				$scheme = 'https';
++			} else {
++				$scheme_full = 'http://';
++				$scheme = 'http';
+ 			}
++
++			//* Put it all together.
++			$url = trailingslashit( $scheme_full . $domain ) . ltrim( $path, ' \\/' );
++
++			if ( ! $get_scheme ) {
++				return $url;
++			} else {
++				return array( $url, $scheme );
++			}
+ 		}
+ 
+ 		return '';
+@@ -1010,28 +953,27 @@
+ 	 */
+ 	public function the_url_donncha_domainmap( $path, $get_scheme = false ) {
+ 
+-		if ( $this->is_donncha_domainmapping_active() ) {
+-			global $wpdb,$current_blog;
++		if ( false === $this->is_donncha_domainmapping_active() )
++			return '';
+ 
+-			$scheme = is_ssl() ? 'https' : 'http';
++		global $current_blog;
+ 
+-			//* This url is cached statically.
+-			$url = function_exists( 'domain_mapping_siteurl' ) ? domain_mapping_siteurl( false ) : false;
++		$scheme = is_ssl() ? 'https' : 'http';
++		$url = function_exists( 'domain_mapping_siteurl' ) ? domain_mapping_siteurl( false ) : false;
+ 
+-			$request_uri = '';
++		$request_uri = '';
+ 
+-			if ( $url && $url !== untrailingslashit( $scheme . '://' . $current_blog->domain . $current_blog->path ) ) {
+-				if ( ( defined( 'VHOST' ) && 'yes' !== VHOST ) || ( defined( 'SUBDOMAIN_INSTALL' ) && false === SUBDOMAIN_INSTALL ) ) {
+-					$request_uri = str_replace( $current_blog->path, '/', $_SERVER['REQUEST_URI'] );
+-				}
++		if ( $url && $url !== untrailingslashit( $scheme . '://' . $current_blog->domain . $current_blog->path ) ) {
++			if ( ( defined( 'VHOST' ) && 'yes' !== VHOST ) || ( defined( 'SUBDOMAIN_INSTALL' ) && false === SUBDOMAIN_INSTALL ) ) {
++				$request_uri = str_replace( $current_blog->path, '/', $_SERVER['REQUEST_URI'] );
++			}
+ 
+-				$url = trailingslashit( $url . $request_uri ) . ltrim( $path, '\/ ' );
++			$url = trailingslashit( $url . $request_uri ) . ltrim( $path, '\\/ ' );
+ 
+-				if ( $get_scheme ) {
+-					return array( $url, $scheme );
+-				} else {
+-					return $url;
+-				}
++			if ( $get_scheme ) {
++				return array( $url, $scheme );
++			} else {
++				return $url;
+ 			}
+ 		}
+ 
+@@ -1064,7 +1006,8 @@
+ 						if ( $this->is_static_frontpage( $post_id ) ) {
+ 							$path = '';
+ 						} else {
+-							$path = '?p=' . $post_id;
++							//* This will be converted to '?p' later.
++							$path = '?page_id=' . $post_id;
+ 						}
+ 					}
+ 				} else if ( $this->is_archive() ) {
+@@ -1111,11 +1054,12 @@
+ 			}
+ 
+ 			if ( isset( $path ) ) {
++				//* Path always has something. So we can safely use .='&' instead of add_query_arg().
+ 
+ 				if ( 0 === $post_id )
+ 					$post_id = $this->get_the_real_ID();
+ 
+-				$url = $this->the_url_from_cache( '', $post_id, false, false, true );
++				$url = $this->the_url_from_cache( '', $post_id, false, false, false );
+ 				$query = parse_url( $url, PHP_URL_QUERY );
+ 
+ 				$additions = '';
+@@ -1131,16 +1075,17 @@
+ 					}
+ 				}
+ 
+-				if ( $this->pretty_permalinks ) {
+-					if ( $this->is_archive() || $this->is_home() ) {
+-						$paged = $this->paged();
+-						if ( $paged > 1 )
+-							$path .= '&paged=' . $paged;
+-					} else {
+-						$page = $this->paged();
+-						if ( $page > 1 )
+-							$path .= '&page=' . $page;
+-					}
++				//* We used 'page_id' to determine duplicates. Now we can convert it to a shorter form.
++				$path = str_replace( 'page_id=', 'p=', $path );
++
++				if ( $this->is_archive() || $this->is_home() ) {
++					$paged = $this->maybe_get_paged( $this->paged(), false, true );
++					if ( $paged )
++						$path .= '&paged=' . $paged;
++				} else {
++					$page = $this->maybe_get_paged( $this->page(), false, true );
++					if ( $page )
++						$path .= '&page=' . $page;
+ 				}
+ 
+ 				$home_url = $this->the_home_url_from_cache( true );
+@@ -1312,21 +1257,22 @@
+ 	/**
+ 	 * Adds subdomain to URL.
+ 	 *
+-	 * @since 2.6.2
++	 * @since 2.6.5
+ 	 *
+ 	 * @param string $url The current URL without subdomain.
+-	 *
+-	 * @return string $url URL with possible subdomain.
++	 * @return string $url Fully qualified URL with possible subdomain.
+ 	 */
+-	protected function set_url_subdomain( $url = '' ) {
++	public function add_url_subdomain( $url = '' ) {
+ 
+-		//* Add subdomain, if any.
++		$url = $this->make_fully_qualified_url( $url );
++
++		//* Add subdomain, if set.
+ 		if ( $this->add_subdomain ) {
+-			$parsed_url = parse_url( $url );
+-			$url = str_replace( $parsed_url['scheme'] . '://', '', $url );
++			$scheme = parse_url( $url, PHP_URL_SCHEME );
++			$url = str_replace( $scheme . '://', '', $url );
+ 
+ 			//* Put it together.
+-			$url = $this->add_subdomain . '.' . $url;
++			$url = $scheme . '://' . $this->add_subdomain . '.' . $url;
+ 		}
+ 
+ 		return $url;
+@@ -1374,4 +1320,24 @@
+ 		return false;
+ 	}
+ 
++	/**
++	 * Makes a fully qualified URL from input. Always uses http to fix.
++	 * @see $this->set_url_scheme()
++	 *
++	 * @since 2.6.5
++	 *
++	 * @param string $url Required the current maybe not fully qualified URL.
++	 * @return string $url
++	 */
++	public function make_fully_qualified_url( $url ) {
++
++		if ( '//' === substr( $url, 0, 2 ) ) {
++			$url = 'http:' . $url;
++		} else if ( 'http' !== substr( $url, 0, 4 ) ) {
++			$url = 'http://' . $url;
++		}
++
++		return $url;
++	}
++
+ }
+Index: inc/classes/init.class.php
+===================================================================
+--- inc/classes/init.class.php	(revision 1427876)
++++ inc/classes/init.class.php	(working copy)
+@@ -248,6 +248,7 @@
+ 						. $this->og_title()
+ 						. $this->og_url()
+ 						. $this->og_sitename()
++						. $this->canonical()
+ 						. $this->google_site_output()
+ 						. $this->bing_site_output()
+ 						. $this->yandex_site_output()
+Index: inc/classes/inpost.class.php
+===================================================================
+--- inc/classes/inpost.class.php	(revision 1420011)
++++ inc/classes/inpost.class.php	(working copy)
+@@ -152,7 +152,6 @@
+ 					 */
+ 					$priority = (string) apply_filters( 'the_seo_framework_metabox_priority', 'high' );
+ 
+-					// Note: Pass on the object $this
+ 					add_meta_box( $id, sprintf( __( '%s SEO Settings', 'autodescription' ), $title ), array( $this, 'pre_seo_box' ), $post_type, $context, $priority, $args );
+ 				}
+ 			}
+@@ -440,8 +439,6 @@
+ 
+ 		$title = $this->get_custom_field( '_genesis_title', $post_id );
+ 
+-		$page_on_front_option = get_option( 'page_on_front' );
+-
+ 		/**
+ 		 * Generate static placeholder for when title or description is emptied
+ 		 *
+@@ -531,11 +528,10 @@
+ 			//* The homepage description takes precedence.
+ 			$homepage_description = $this->get_option( 'homepage_description' );
+ 
+-			if ( $description ) {
++			if ( $description )
+ 				$desc_len_pre = $homepage_description ? $homepage_description : $description;
+-			} else {
++			else
+ 				$desc_len_pre = $homepage_description ? $homepage_description : $generated_description;
+-			}
+ 		} else {
+ 			$desc_len_pre = $description ? $description : $generated_description;
+ 		}
+Index: inc/classes/metaboxes.class.php
+===================================================================
+--- inc/classes/metaboxes.class.php	(revision 1426209)
++++ inc/classes/metaboxes.class.php	(working copy)
+@@ -623,7 +623,7 @@
+ 		 * @priority low 2.6.x
+ 		 */
+ 		?>
+-		<h4><?php printf( __( 'Additions Description Settings', 'autodescription' ) ); ?></h4>
++		<h4><?php printf( __( 'Description Additions Settings', 'autodescription' ) ); ?></h4>
+ 		<p><span class="description"><?php printf( __( "To create a more organic description, a small introduction can be added before the description.", 'autodescription' ) ); ?></span></p>
+ 		<p><span class="description"><?php printf( __( "The introduction consists of the title and optionally the blogname.", 'autodescription' ) ); ?></span></p>
+ 
+@@ -1646,12 +1646,15 @@
+ 
+ 		<hr>
+ 		<?php
++			/* translators: %s = <code>rel</code> */
+ 			$prev_next_posts_label = sprintf( __( 'Add %s link tags to Posts and Pages?', 'autodescription' ), $this->code_wrap( 'rel' ) );
+ 			$prev_next_posts_checkbox = $this->make_checkbox( 'prev_next_posts', $prev_next_posts_label, '' );
+ 
++			/* translators: %s = <code>rel</code> */
+ 			$prev_next_archives_label = sprintf( __( 'Add %s link tags to Archives?', 'autodescription' ), $this->code_wrap( 'rel' ) );
+ 			$prev_next_archives_checkbox = $this->make_checkbox( 'prev_next_archives', $prev_next_archives_label, '' );
+ 
++			/* translators: %s = <code>rel</code> */
+ 			$prev_next_frontpage_label = sprintf( __( 'Add %s link tags to the Home Page?', 'autodescription' ), $this->code_wrap( 'rel' ) );
+ 			$prev_next_frontpage_checkbox = $this->make_checkbox( 'prev_next_frontpage', $prev_next_frontpage_label, '' );
+ 
+@@ -2201,13 +2204,13 @@
+ 		 */
+ 		$timestamp_1 = date( 'Y-m-d\TH:iP' );
+ 
+-		//* Reset timezone to default.
++		//* Reset timezone to previous value.
+ 		$this->reset_timezone();
+ 
+ 		?>
+ 		<h4><?php _e( 'Timestamps Settings', 'autodescription' ); ?></h4>
+-		<p><span class="description"><?php printf( __( 'The modified time suggests to Search Engines where to look for content changes. It has no impact on the SEO value unless you drastically change pages or posts. It then depends on how well your content is constructed.', 'autodescription' ) ); ?></span></p>
+-		<p><span class="description"><?php printf( __( "By default, the sitemap only outputs the modified date if you've enabled them within the Social Metabox. This setting overrides those settings for the Sitemap.", 'autodescription' ) ); ?></span></p>
++		<p><span class="description"><?php _e( 'The modified time suggests to Search Engines where to look for content changes. It has no impact on the SEO value unless you drastically change pages or posts. It then depends on how well your content is constructed.', 'autodescription' ); ?></span></p>
++		<p><span class="description"><?php _e( "By default, the sitemap only outputs the modified date if you've enabled them within the Social Metabox. This setting overrides those settings for the Sitemap.", 'autodescription' ); ?></span></p>
+ 
+ 		<hr>
+ 
+@@ -2344,71 +2347,76 @@
+ 
+ 		?>
+ 		<h4><?php _e( 'Schema.org Output Settings', 'autodescription' ); ?></h4>
+-		<p class="description"><?php _e( "The Schema.org markup is a standard way of annotating structured data for Search Engines. This markup is represented within hidden scripts throughout the website.", 'autodescription' ); ?></p>
+-		<p class="description"><?php _e( "When your web pages include structured data markup, Search Engines can use that data to index your content better, present it more prominently in Search Results, and use it in several different applications.", 'autodescription' ); ?></p>
+ 
+-		<hr>
++		<?php if ( $this->has_json_ld_plugin() ) : ?>
++			<p class="description"><?php _e( 'Another Schema.org plugin has been detected.', 'autodescription' ); ?></p>
++		<?php else : ?>
++			<p class="description"><?php _e( "The Schema.org markup is a standard way of annotating structured data for Search Engines. This markup is represented within hidden scripts throughout the website.", 'autodescription' ); ?></p>
++			<p class="description"><?php _e( "When your web pages include structured data markup, Search Engines can use that data to index your content better, present it more prominently in Search Results, and use it in several different applications.", 'autodescription' ); ?></p>
+ 
+-		<?php /* translators: https://developers.google.com/search/docs/data-types/sitelinks-searchbox */ ?>
+-		<h4><?php _ex( 'Sitelinks Search Box', 'Product name', 'autodescription' ); ?></h4>
+-		<p class="description"><?php _e( 'When Search users search for your brand name, the following option allows them to search through your website directly from the Search Results.', 'autodescription' ); ?></p>
+-		<?php
+-		$info = $this->make_info(
+-			_x( 'Sitelinks Search Box', 'Product name', 'autodescription' ),
+-			'https://developers.google.com/search/docs/data-types/sitelinks-searchbox',
+-			false
+-		);
+-		$this->wrap_fields(
+-			$this->make_checkbox(
+-				'ld_json_searchbox',
+-				_x( 'Enable Sitelinks Search Box?', 'Product name', 'autodescription' ) . ' ' . $info,
+-				''
+-			),
+-			true
+-		);
+-		?>
++			<hr>
+ 
+-		<hr>
++			<?php /* translators: https://developers.google.com/search/docs/data-types/sitelinks-searchbox */ ?>
++			<h4><?php _ex( 'Sitelinks Searchbox', 'Product name', 'autodescription' ); ?></h4>
++			<p class="description"><?php _e( 'When Search users search for your brand name, the following option allows them to search through your website directly from the Search Results.', 'autodescription' ); ?></p>
++			<?php
++			$info = $this->make_info(
++				_x( 'Sitelinks Searchbox', 'Product name', 'autodescription' ),
++				'https://developers.google.com/search/docs/data-types/sitelinks-searchbox',
++				false
++			);
++			$this->wrap_fields(
++				$this->make_checkbox(
++					'ld_json_searchbox',
++					_x( 'Enable Sitelinks Searchbox?', 'Product name', 'autodescription' ) . ' ' . $info,
++					''
++				),
++				true
++			);
++			?>
+ 
+-		<h4><?php _e( 'Site Name', 'autodescription' ); ?></h4>
+-		<p class="description"><?php _e( "When using breadcrumbs, the first entry is by default your website's address. Using the following option will convert it to the Site Name.", 'autodescription' ); ?></p>
+-		<?php
+-		$info = $this->make_info(
+-			__( 'Include your Site Name in Search Results', 'autodescription' ),
+-			'https://developers.google.com/search/docs/data-types/sitename',
+-			false
+-		);
+-		$description = sprintf( __( "The Site Name is: %s", 'autodescription' ), $this->code_wrap( $this->get_blogname() ) );
+-		$this->wrap_fields(
+-			$this->make_checkbox(
+-				'ld_json_sitename',
+-				__( 'Convert URL to Site Name?', 'autodescription' ) . ' ' . $info,
+-				$description
+-			),
+-			true
+-		);
+-		?>
++			<hr>
+ 
+-		<hr>
++			<h4><?php _e( 'Site Name', 'autodescription' ); ?></h4>
++			<p class="description"><?php _e( "When using breadcrumbs, the first entry is by default your website's address. Using the following option will convert it to the Site Name.", 'autodescription' ); ?></p>
++			<?php
++			$info = $this->make_info(
++				__( 'Include your Site Name in Search Results', 'autodescription' ),
++				'https://developers.google.com/search/docs/data-types/sitename',
++				false
++			);
++			$description = sprintf( __( "The Site Name is: %s", 'autodescription' ), $this->code_wrap( $this->get_blogname() ) );
++			$this->wrap_fields(
++				$this->make_checkbox(
++					'ld_json_sitename',
++					__( 'Convert URL to Site Name?', 'autodescription' ) . ' ' . $info,
++					$description
++				),
++				true
++			);
++			?>
+ 
+-		<h4><?php _e( 'Breadcrumbs', 'autodescription' ); ?></h4>
+-		<p class="description"><?php _e( "Breadcrumb trails indicate the page's position in the site hierarchy. Using the following option will show the hierarchy within the Search Results when available.", 'autodescription' ); ?></p>
+-		<?php
+-		$info = $this->make_info(
+-			__( 'About Breadcrumbs', 'autodescription' ),
+-			'https://developers.google.com/search/docs/data-types/breadcrumbs',
+-			false
+-		);
+-		$description = __( "Multiple trails can be outputted. The longest trail is prioritized.", 'autodescription' );
+-		$this->wrap_fields(
+-			$this->make_checkbox(
+-				'ld_json_breadcrumbs',
+-				__( 'Enable Breadcrumbs?', 'autodescription' ) . ' ' . $info,
+-				$description
+-			),
+-			true
+-		);
++			<hr>
+ 
++			<h4><?php _e( 'Breadcrumbs', 'autodescription' ); ?></h4>
++			<p class="description"><?php _e( "Breadcrumb trails indicate the page's position in the site hierarchy. Using the following option will show the hierarchy within the Search Results when available.", 'autodescription' ); ?></p>
++			<?php
++			$info = $this->make_info(
++				__( 'About Breadcrumbs', 'autodescription' ),
++				'https://developers.google.com/search/docs/data-types/breadcrumbs',
++				false
++			);
++			$description = __( "Multiple trails can be outputted. The longest trail is prioritized.", 'autodescription' );
++			$this->wrap_fields(
++				$this->make_checkbox(
++					'ld_json_breadcrumbs',
++					__( 'Enable Breadcrumbs?', 'autodescription' ) . ' ' . $info,
++					$description
++				),
++				true
++			);
++		endif;
++
+ 		do_action( 'the_seo_framework_schema_metabox_after' );
+ 
+ 	}
+Index: inc/classes/query.class.php
+===================================================================
+--- inc/classes/query.class.php	(revision 1427876)
++++ inc/classes/query.class.php	(working copy)
+@@ -234,9 +234,17 @@
+ 		if ( isset( $cache ) && $this->can_cache_query() )
+ 			return $cache;
+ 
++		global $wp_query;
++
+ 		if ( is_archive() && false === $this->is_singular() )
+ 			return $cache = true;
+ 
++		global $wp_query;
++
++		if ( $this->can_cache_query() && false === $this->is_singular() )
++			if ( $wp_query->is_post_type_archive || $wp_query->is_date || $wp_query->is_author || $wp_query->is_category || $wp_query->is_tag || $wp_query->is_tax )
++				return $cache = true;
++
+ 		return $cache = false;
+ 	}
+ 
+@@ -450,8 +458,14 @@
+ 		global $current_screen;
+ 
+ 		if ( $this->is_archive_admin() && isset( $current_screen->taxonomy ) ) {
+-			if ( false !== strrpos( $current_screen->taxonomy, 'category', -8 ) || false !== strrpos( $current_screen->taxonomy, 'cat', -3 ) )
++			$tax = $current_screen->taxonomy;
++			$len = strlen( $tax );
++
++			if ( $len >= 8 && false !== strrpos( $tax, 'category', -8 ) )
+ 				return $cache = true;
++
++			if ( $len >= 3 && false !== strrpos( $tax, 'cat', -3 ) )
++				return $cache = true;
+ 		}
+ 
+ 		return $cache = false;
+@@ -555,10 +569,10 @@
+ 		if ( $id ) {
+ 			$sof = get_option( 'show_on_front' );
+ 
+-			if ( 'page' === $sof && $id === get_option( 'page_on_front' ) )
++			if ( 'page' === $sof && $id === (int) get_option( 'page_on_front' ) )
+ 				return $cache[$id] = true;
+ 
+-			if ( 'posts' === $sof && $id === get_option( 'page_for_posts' ) )
++			if ( 'posts' === $sof && $id === (int) get_option( 'page_for_posts' ) )
+ 				return $cache[$id] = true;
+ 		}
+ 
+@@ -904,7 +918,7 @@
+ 		if ( $this->is_archive_admin() ) {
+ 			global $current_screen;
+ 
+-			if ( isset( $current_screen->taxonomy ) && false !== strrpos( $current_screen->taxonomy, 'tag', -3 ) )
++			if ( isset( $current_screen->taxonomy ) && strlen( $current_screen->taxonomy ) >= 3 && false !== strrpos( $current_screen->taxonomy, 'tag', -3 ) )
+ 				return $cache = true;
+ 		}
+ 
+Index: inc/classes/render.class.php
+===================================================================
+--- inc/classes/render.class.php	(revision 1426209)
++++ inc/classes/render.class.php	(working copy)
+@@ -452,7 +452,7 @@
+ 	public function og_url() {
+ 
+ 		if ( $this->use_og_tags() )
+-			return '<meta property="og:url" content="' . esc_attr( $this->the_url_from_cache() ) . '" />' . "\r\n";
++			return '<meta property="og:url" content="' . $this->the_url_from_cache() . '" />' . "\r\n";
+ 
+ 		return '';
+ 	}
+@@ -819,10 +819,13 @@
+ 		if ( ! apply_filters( 'the_seo_framework_output_canonical', true, $this->get_the_real_ID() ) )
+ 			return;
+ 
+-		if ( $this->is_404() )
+-			return;
++		/**
++		 * Applies filters 'the_seo_framework_rel_canonical_output' : Change canonical URL output.
++		 * @since 2.6.5
++		 */
++		$url = (string) apply_filters( 'the_seo_framework_rel_canonical_output', $this->the_url_from_cache(), $this->get_the_real_ID() );
+ 
+-		return '<link rel="canonical" href="' . $this->the_url_from_cache() . '" />' . "\r\n";
++		return '<link rel="canonical" href="' . $url . '" />' . "\r\n";
+ 	}
+ 
+ 	/**
+Index: inc/classes/sanitize.class.php
+===================================================================
+--- inc/classes/sanitize.class.php	(revision 1426209)
++++ inc/classes/sanitize.class.php	(working copy)
+@@ -48,6 +48,7 @@
+ 	 * @see AutoDescription_Sanitize::add_filter() Add sanitization filters to options.
+ 	 */
+ 	public function sanitizer_filters() {
++
+ 		//* If this page doesn't store settings, no need to sanitize them
+ 		if ( ! $this->settings_field )
+ 			return;
+@@ -56,8 +57,6 @@
+ 		 * If this page doesn't parse the site options,
+ 		 * There's no need to filter them on each request.
+ 		 *
+-		 * Reverse call for something we want in our POST.
+-		 *
+ 		 * @since 2.2.9
+ 		 */
+ 		if ( ! isset( $_POST ) || empty( $_POST ) || ! isset( $_POST[THE_SEO_FRAMEWORK_SITE_OPTIONS] ) || ! is_array( $_POST[THE_SEO_FRAMEWORK_SITE_OPTIONS] ) )
+@@ -183,6 +182,8 @@
+ 				'twitter_tags',
+ 				'googleplus_tags',
+ 
++				'knowledge_output',
++
+ 				'post_publish_time',
+ 				'post_modify_time',
+ 
+@@ -332,12 +333,12 @@
+ 	 *
+ 	 * @since 2.2.2
+ 	 *
++	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
++	 *
+ 	 * @param string $filter Sanitization filter type
+ 	 * @param string $option Option key
+ 	 * @param array|string $suboption Optional. Suboption key
+ 	 * @return boolean Returns true when complete
+-	 *
+-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
+ 	 */
+ 	public function add_filter( $filter, $option, $suboption = null ) {
+ 
+@@ -361,11 +362,11 @@
+ 	 *
+ 	 * @since 2.2.2
+ 	 *
++	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
++	 *
+ 	 * @param mixed $new_value New value
+ 	 * @param string $option Name of the option
+ 	 * @return mixed Filtered, or unfiltered value
+-	 *
+-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
+ 	 */
+ 	public function sanitize( $new_value, $option ) {
+ 
+@@ -395,13 +396,13 @@
+ 	 *
+ 	 * @since 2.2.2
+ 	 *
++	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
++	 *
+ 	 * @param string $filter Sanitization filter type
+ 	 * @param string $new_value New value
+ 	 * @param string $old_value Previous value
+ 	 * @return mixed Returns filtered value, or submitted value if value is
+ 	 * unfiltered.
+-	 *
+-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
+ 	 */
+ 	protected function do_filter( $filter, $new_value, $old_value ) {
+ 
+@@ -421,10 +422,10 @@
+ 	 *
+ 	 * @since 2.2.2
+ 	 *
++	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
++	 *
+ 	 * @return array Array with keys of sanitization types, and values of the
+ 	 * filter function name as a callback
+-	 *
+-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
+ 	 */
+ 	protected function get_available_filters() {
+ 
+@@ -520,7 +521,6 @@
+ 	 * @since 2.5.0
+ 	 *
+ 	 * @param string $new_value The Description.
+-	 *
+ 	 * @return string One line sanitized description.
+ 	 */
+ 	protected function s_description( $new_value ) {
+@@ -547,8 +547,7 @@
+ 	 *
+ 	 * @since 2.5.2
+ 	 *
+-	 * @param string $new_value The Title
+-	 *
++	 * @param string $new_value The Title.
+ 	 * @return string Sanitized and trimmed title.
+ 	 */
+ 	protected function s_title( $new_value ) {
+@@ -565,7 +564,6 @@
+ 	 * @since 2.2.8
+ 	 *
+ 	 * @param mixed $new_value Should be identical to any of the $person_organization values.
+-	 *
+ 	 * @return string title Knowledge type option
+ 	 */
+ 	protected function s_knowledge_type( $new_value ) {
+@@ -584,7 +582,6 @@
+ 	 * @since 2.2.2
+ 	 *
+ 	 * @param mixed $new_value Should ideally be a string 'left' or 'right' passed in.
+-	 *
+ 	 * @return string left or right
+ 	 */
+ 	protected function s_left_right( $new_value ) {
+@@ -607,7 +604,6 @@
+ 	 * @since 2.5.2
+ 	 *
+ 	 * @param mixed $new_value Should ideally be a string 'left' or 'right' passed in.
+-	 *
+ 	 * @return string left or right
+ 	 */
+ 	protected function s_left_right_home( $new_value ) {
+@@ -632,7 +628,6 @@
+ 	 * @since 2.2.2
+ 	 *
+ 	 * @param mixed $new_value Should ideally be a 1 or 0 integer passed in.
+-	 *
+ 	 * @return integer 1 or 0.
+ 	 */
+ 	protected function s_one_zero( $new_value ) {
+@@ -649,7 +644,6 @@
+ 	 * @since 2.2.9
+ 	 *
+ 	 * @param mixed $new_value Should ideally be a 1 or 0 integer passed in.
+-	 *
+ 	 * @return integer 1 or 0.
+ 	 */
+ 	protected function s_one_zero_flush_rewrite( $new_value ) {
+@@ -680,7 +674,6 @@
+ 	 * @staticvar bool $flushed
+ 	 *
+ 	 * @param mixed $new_value Should ideally be a 1 or 0 integer passed in.
+-	 *
+ 	 * @return integer 1 or 0.
+ 	 */
+ 	protected function s_one_zero_flush_sitemap( $new_value ) {
+@@ -701,7 +694,6 @@
+ 	 * @since 2.2.2
+ 	 *
+ 	 * @param mixed $new_value Should ideally be a positive integer.
+-	 *
+ 	 * @return integer Positive integer.
+ 	 */
+ 	protected function s_absint( $new_value ) {
+@@ -714,7 +706,6 @@
+ 	 * @since 2.2.2
+ 	 *
+ 	 * @param string $new_value String, possibly with HTML in it.
+-	 *
+ 	 * @return string String without HTML in it.
+ 	 */
+ 	protected function s_no_html( $new_value ) {
+@@ -727,7 +718,6 @@
+ 	 * @since 2.5.2
+ 	 *
+ 	 * @param string $new_value String, possibly with HTML and spaces in it.
+-	 *
+ 	 * @return string String without HTML and breaks in it.
+ 	 */
+ 	protected function s_no_html_space( $new_value ) {
+@@ -739,8 +729,7 @@
+ 	 *
+ 	 * @since 2.2.2
+ 	 *
+-	 * @param string $new_value String, a URL, possibly unsafe
+-	 *
++	 * @param string $new_value String, a URL, possibly unsafe.
+ 	 * @return string String a safe URL without Query Arguments.
+ 	 */
+ 	protected function s_url( $new_value ) {
+@@ -762,8 +751,7 @@
+ 	 *
+ 	 * @since 2.2.8
+ 	 *
+-	 * @param string $new_value String, a URL, possibly unsafe
+-	 *
++	 * @param string $new_value String, a URL, possibly unsafe.
+ 	 * @return string String a safe URL with Query Arguments.
+ 	 */
+ 	protected function s_url_query( $new_value ) {
+@@ -779,7 +767,6 @@
+ 	 * @since 2.2.2
+ 	 *
+ 	 * @param string $new_value String, an email address, possibly unsafe.
+-	 *
+ 	 * @return string String a safe email address
+ 	 */
+ 	protected function s_email_address( $new_value ) {
+@@ -792,7 +779,6 @@
+ 	 * @since 2.2.2
+ 	 *
+ 	 * @param string $new_value String with potentially unsafe HTML in it.
+-	 *
+ 	 * @return string String with only safe HTML in it
+ 	 */
+ 	protected function s_safe_html( $new_value ) {
+@@ -806,7 +792,6 @@
+ 	 * @since 2.2.2
+ 	 *
+ 	 * @param string $new_value String with potentially wrong Twitter username.
+-	 *
+ 	 * @return string String with 'correct' Twitter username
+ 	 */
+ 	protected function s_twitter_name( $new_value ) {
+@@ -837,7 +822,6 @@
+ 	 * @since 2.5.2
+ 	 *
+ 	 * @param string $new_value String with potentially wrong option value.
+-	 *
+ 	 * @return string Sanitized twitter card type.
+ 	 */
+ 	protected function s_twitter_card( $new_value ) {
+@@ -859,12 +843,26 @@
+ 	}
+ 
+ 	/**
++	 * Converts full URL paths to absolute paths.
++	 *
++	 * Removes the http or https protocols and the domain. Keeps the path '/' at the
++	 * beginning, so it isn't a true relative link, but from the web root base.
++	 *
++	 * @since 2.6.5
++	 *
++	 * @param string $url Full Path URL or relative URL.
++	 * @return string Abolute path.
++	 */
++	protected function s_relative_url( $url ) {
++		return ltrim( preg_replace( '|^(https?:)?//[^/]+(/.*)|i', '$2', $url ), ' \//' );
++	}
++
++	/**
+ 	 * Sanitize the Redirect URL
+ 	 *
+ 	 * @since 2.2.4
+ 	 *
+ 	 * @param string $new_value String with potentially unwanted redirect URL.
+-	 *
+ 	 * @return string The Sanitized Redirect URL
+ 	 */
+ 	protected function s_redirect_url( $new_value ) {
+@@ -877,11 +875,10 @@
+ 
+ 			/**
+ 			 * Sanitize the redirect URL to only a relative link and removes first slash
+-			 *
+ 			 * @requires WP 4.1.0 and up to prevent adding upon itself.
+ 			 */
+ 			if ( ! $allow_external )
+-				$url = ltrim( wp_make_link_relative( $url ), '/' );
++				$url = $this->s_relative_url( $url );
+ 
+ 			//* Find a path.
+ 			if ( _wp_can_use_pcre_u() ) {
+Index: inc/classes/search.class.php
+===================================================================
+--- inc/classes/search.class.php	(revision 1418924)
++++ inc/classes/search.class.php	(working copy)
+@@ -53,6 +53,11 @@
+ 		// Don't exclude pages in wp-admin
+ 		if ( $query->is_search && false === $this->is_admin() ) {
+ 
++			$q = $query->query;
++			//* Only interact with an actual Search Query.
++			if ( ! isset( $q['s'] ) || ! $q['s'] )
++				return;
++
+ 			/**
+ 			 * @param array $protected_posts : Posts array with excluded key
+ 			 */
+Index: inc/classes/sitemaps.class.php
+===================================================================
+--- inc/classes/sitemaps.class.php	(revision 1426209)
++++ inc/classes/sitemaps.class.php	(working copy)
+@@ -59,7 +59,7 @@
+ 		parent::__construct();
+ 
+ 		// I'm not going to initialize my own rewrite engine. Causes too many problems.
+-		$this->pretty_permalinks = ( '' !== get_option( 'permalink_structure' ) ) ? true : false;
++		$this->pretty_permalinks = ( '' !== $this->permalink_structure() ) ? true : false;
+ 
+ 		/**
+ 		 * Add query strings to rewrite
+@@ -693,7 +693,7 @@
+ 		 */
+ 		$extend = (string) apply_filters( 'the_seo_framework_sitemap_extend', '' );
+ 
+-		if ( '' !== $extend )
++		if ( $extend )
+ 			$content .= "\t" . $extend . "\r\n";
+ 
+ 		//* Reset timezone to default.
+Index: inc/classes/siteoptions.class.php
+===================================================================
+--- inc/classes/siteoptions.class.php	(revision 1426209)
++++ inc/classes/siteoptions.class.php	(working copy)
+@@ -393,19 +393,20 @@
+ 
+ 		$updated = false;
+ 		$options = $this->get_all_options();
+-		$default_options = $this->default_site_options();
++		$new_options = $this->default_site_options();
+ 
+ 		/**
+ 		 * Stop this madness from happening again until next update.
+-		 * Also prevent $updated returning true when no options are added.
++		 * Also prevent $updated to become true on this call.
+ 		 */
++		$new_options[$plugin_updated] = 1;
+ 		$options[$plugin_updated] = 1;
+ 
+ 		//* Merge the options. Add to if it's non-existent.
+-		foreach ( $default_options as $key => $value ) {
++		foreach ( $new_options as $key => $value ) {
+ 			if ( ! isset( $options[$key] ) ) {
+-				if ( isset( $default_options[$key] ) && ! empty( $default_options[$key] ) ) {
+-					$options[$key] = $default_options[$key];
++				if ( ! empty( $new_options[$key] ) ) {
++					$options[$key] = $new_options[$key];
+ 					$updated = true;
+ 				}
+ 			}
+Index: inc/classes/transients.class.php
+===================================================================
+--- inc/classes/transients.class.php	(revision 1427876)
++++ inc/classes/transients.class.php	(working copy)
+@@ -192,12 +192,13 @@
+ 	 *
+ 	 * @param int|string|bool $page_id the Taxonomy or Post ID. If false it will generate for the blog page.
+ 	 * @param string $taxonomy The taxonomy name.
++	 * @param string|null $type The post type.
+ 	 *
+ 	 * @since 2.3.3
+ 	 */
+-	public function setup_ld_json_transient( $page_id, $taxonomy = '' ) {
++	public function setup_ld_json_transient( $page_id, $taxonomy = '', $type = null ) {
+ 
+-		$cache_key = $this->generate_cache_key( $page_id, $taxonomy );
++		$cache_key = $this->generate_cache_key( $page_id, $taxonomy, $type );
+ 
+ 		/**
+ 		 * When the caching mechanism changes. Change this value.
+@@ -243,17 +244,20 @@
+ 		if ( isset( $cached_id[$page_id][$taxonomy][$type] ) )
+ 			return $cached_id[$page_id][$taxonomy][$type];
+ 
+-		global $blog_id;
+-
+-		$locale = '_' . strtolower( get_locale() );
+-
+ 		//* Placeholder ID.
+ 		$the_id = '';
++		$t = $taxonomy;
+ 
+ 		if ( isset( $type ) ) {
+ 			if ( 'author' === $type ) {
+ 				//* Author page.
+ 				$the_id = 'author_' . $page_id;
++			} else if ( 'frontpage' === $type ) {
++				//* Home Page.
++				$the_id = $this->generate_front_page_cache_key();
++			} else {
++				$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, __( 'Third parameter must be a known type.', 'autodescription' ), '2.6.5' );
++				$the_id = esc_sql( $type . '_' . $page_id . '_' . $t );
+ 			}
+ 		} else if ( $this->is_404() ) {
+ 			//* 404.
+@@ -262,17 +266,13 @@
+ 			//* Fetch Home key.
+ 			$the_id = $this->generate_front_page_cache_key();
+ 		} else if ( $this->is_blog_page( $page_id ) ) {
+-			//* Blog page.
+ 			$the_id = 'blog_' . $page_id;
+ 		} else if ( $this->is_singular() ) {
+ 			if ( $this->is_page( $page_id ) ) {
+-				//* Page.
+ 				$the_id = 'page_' . $page_id;
+ 			} else if ( $this->is_single( $page_id ) ) {
+-				//* Post.
+ 				$the_id = 'post_' . $page_id;
+ 			} else if ( $this->is_attachment( $page_id ) ) {
+-				//* Attachment.
+ 				$the_id = 'attach_' . $page_id;
+ 			} else {
+ 				//* Other.
+@@ -279,7 +279,6 @@
+ 				$the_id = 'singular_' . $page_id;
+ 			}
+ 		} else if ( $this->is_search() ) {
+-			//* Search query.
+ 			$query = '';
+ 
+ 			if ( function_exists( 'get_search_query' ) ) {
+@@ -298,21 +297,22 @@
+ 			$the_id = $page_id . '_s_' . $query;
+ 		} else if ( $this->is_archive() ) {
+ 			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
+-				//* Term.
+ 
+-				if ( empty( $taxonomy ) )
+-					$taxonomy = get_query_var( 'taxonomy' );
++				if ( empty( $t ) ) {
++					$o = get_queried_object();
+ 
+-				$the_id = $this->generate_taxonomial_cache_key( $page_id, $taxonomy );
++					if ( isset( $o->taxonomy ) )
++						$t = $o->taxonomy;
++				}
+ 
++				$the_id = $this->generate_taxonomial_cache_key( $page_id, $t );
++
+ 				if ( $this->is_tax() )
+ 					$the_id = 'archives_' . $the_id;
+ 
+ 			} else if ( $this->is_author() ) {
+-				//* Author page.
+ 				$the_id = 'author_' . $page_id;
+ 			} else if ( $this->is_date() ) {
+-				//* Dates.
+ 				$post = get_post();
+ 
+ 				if ( $post && isset( $post->post_date ) ) {
+@@ -319,10 +319,8 @@
+ 					$date = $post->post_date;
+ 
+ 					if ( $this->is_year() ) {
+-						//* Year.
+ 						$the_id .= 'year_' . mysql2date( 'y', $date, false );
+ 					} else if ( $this->is_month() ) {
+-						//* Month.
+ 						$the_id .= 'month_' . mysql2date( 'm_y', $date, false );
+ 					} else if ( $this->is_day() ) {
+ 						//* Day. The correct notation.
+@@ -339,7 +337,7 @@
+ 					if ( ! isset( $unix ) )
+ 						$unix = date( 'U' );
+ 
+-					//* Temporarily disable transients to prevent database spam.
++					//* Temporarily disable caches to prevent database spam.
+ 					$this->the_seo_framework_use_transients = false;
+ 					$this->use_object_cache = false;
+ 
+@@ -348,7 +346,7 @@
+ 			} else {
+ 				//* Other taxonomial archives.
+ 
+-				if ( empty( $taxonomy ) ) {
++				if ( empty( $t ) ) {
+ 					$post_type = get_query_var( 'post_type' );
+ 
+ 					if ( is_array( $post_type ) )
+@@ -358,14 +356,15 @@
+ 						$post_type_obj = get_post_type_object( $post_type );
+ 
+ 					if ( isset( $post_type_obj->labels->name ) )
+-						$taxonomy = $post_type_obj->labels->name;
++						$t = $post_type_obj->labels->name;
+ 				}
+ 
+ 				//* Still empty? Try this.
+-				if ( empty( $taxonomy ) )
+-					$taxonomy = get_query_var( 'taxonomy' );
++				if ( empty( $t ) )
++					$t = get_query_var( 'taxonomy' );
+ 
+-				$the_id = $this->generate_taxonomial_cache_key( $page_id, $taxonomy );
++				$the_id = $this->generate_taxonomial_cache_key( $page_id, $t );
++
+ 				$the_id = 'archives_' . $the_id;
+ 			}
+ 		}
+@@ -375,14 +374,18 @@
+ 		 * Noob. :D
+ 		 */
+ 		if ( empty( $the_id ) )
+-			$the_id = 'noob_' . $page_id . '_' . $taxonomy;
++			$the_id = 'noob_' . $page_id . '_' . $t;
+ 
++		global $blog_id;
++
++		$locale = strtolower( get_locale() );
++
+ 		/**
+ 		 * This should be at most 25 chars. Unless the $blog_id is higher than 99,999,999.
+ 		 * Then some cache keys will conflict on every 10th blog ID from eachother which post something on the same day..
+ 		 * On the day archive. With the same description setting (short).
+ 		 */
+-		return $cached_id[$page_id][$taxonomy][$type] = $the_id . '_' . $blog_id . $locale;
++		return $cached_id[$page_id][$taxonomy][$type] = $the_id . '_' . $blog_id . '_' . $locale;
+ 	}
+ 
+ 	/**
+@@ -420,12 +423,28 @@
+ 
+ 		$the_id = '';
+ 
+-		$taxonomy_name = explode( '_', $taxonomy );
+-		if ( is_array( $taxonomy_name ) ) {
+-			foreach ( $taxonomy_name as $name )
+-				$the_id .= mb_substr( $name, 0, 3 ) . '_';
++		if ( false !== strpos( $taxonomy, '_' ) ) {
++			$taxonomy_name = explode( '_', $taxonomy );
++			if ( is_array( $taxonomy_name ) ) {
++				foreach ( $taxonomy_name as $name )
++					if ( mb_strlen( $name ) >= 3 ) {
++						$the_id .= mb_substr( $name, 0, 3 ) . '_';
++					} else {
++						$the_id = strtolower( $name ) . '_';
++					}
++			}
+ 		}
+ 
++		if ( empty( $the_id ) ) {
++			if ( mb_strlen( $taxonomy ) >= 5 ) {
++				$the_id = mb_substr( $taxonomy, 0, 5 );
++			} else {
++				$the_id = esc_sql( $taxonomy );
++			}
++		}
++
++		$the_id = strtolower( $the_id );
++
+ 		//* Put it all together.
+ 		return rtrim( $the_id, '_' ) . '_' . $page_id;
+ 	}
+@@ -561,17 +580,18 @@
+ 	 *
+ 	 * @param mixed $page_id The page ID or identifier.
+ 	 * @param string $taxonomy The tt name.
++	 * @param string|null $type The post type.
+ 	 *
+ 	 * @since 2.4.2
+ 	 *
+ 	 * @return bool true
+ 	 */
+-	public function delete_ld_json_transient( $page_id, $taxonomy = '' ) {
++	public function delete_ld_json_transient( $page_id, $taxonomy = '', $type = null ) {
+ 
+ 		static $flushed = null;
+ 
+ 		if ( ! isset( $flushed ) ) {
+-			$this->setup_ld_json_transient( $page_id, $taxonomy );
++			$this->setup_ld_json_transient( $page_id, $taxonomy, $type );
+ 
+ 			delete_transient( $this->ld_json_transient );
+ 
+@@ -639,7 +659,7 @@
+ 
+ 		$front_id = $this->get_the_front_page_ID();
+ 
+-		$this->delete_ld_json_transient( $front_id );
++		$this->delete_ld_json_transient( $front_id, '', 'frontpage' );
+ 
+ 		return $flushed = true;
+ 	}
+Index: inc/deprecated/deprecated.class.php
+===================================================================
+--- inc/deprecated/deprecated.class.php	(revision 1426209)
++++ inc/deprecated/deprecated.class.php	(working copy)
+@@ -572,4 +572,139 @@
+ 
+ 	}
+ 
++	/**
++	 * Generates relative URL for current post_ID.
++	 *
++	 * @param int|object $post The post object or ID.
++	 * @param bool $external Whether to fetch the WP Request or get the permalink by Post Object.
++	 * @param int $depr Deprecated The post ID.
++	 *
++	 * @since 2.3.0
++	 *
++	 * @deprecated
++	 * @since 2.6.5
++	 *
++	 * @global object $wp
++	 *
++	 * @return relative Post or Page url.
++	 */
++	public function get_relative_url( $post = null, $external = false, $depr = null ) {
++
++		$this->_deprecated_function( 'AutoDescription_Generate_Url::' . __FUNCTION__, 'AutoDescription_Generate_Url::build_singular_relative_url()', '2.6.5' );
++
++		if ( isset( $depr ) ) {
++			$post_id = $depr;
++		} else {
++			if ( is_object( $post ) ) {
++				if ( isset( $post->ID ) )
++					$post_id = $post->ID;
++			} else if ( is_scalar( $post ) ) {
++				$post_id = (int) $post;
++			}
++		}
++
++		if ( ! isset( $post_id ) ) {
++			if ( ! $external )
++				$post_id = $this->get_the_real_ID();
++			else
++				return '';
++		}
++
++		if ( $external || ! $this->is_home() ) {
++			$permalink = get_permalink( $post_id );
++		} else if ( ! $external ) {
++			global $wp;
++
++			if ( isset( $wp->request ) )
++				$permalink = $wp->request;
++		}
++
++		//* No permalink found.
++		if ( ! isset( $permalink ) )
++			return '';
++
++		$path = $this->set_url_scheme( $permalink, 'relative' );
++
++		return $path;
++	}
++	/**
++	 * Creates canonical url for the default permalink structure.
++	 *
++	 * @param object|int $post The post object or ID.
++	 * @param bool $paged Whether to add pagination for all types.
++	 * @param bool $paged_plural Whether to add pagination for the second or later page.
++	 *
++	 * @since 2.3.0
++	 *
++	 * @deprecated
++	 * @since 2.6.5
++	 *
++	 * @return string The URL path.
++	 */
++	public function the_url_path_default_permalink_structure( $post = null, $paged = false, $paged_plural = true ) {
++
++		$this->_deprecated_function( 'AutoDescription_Generate_Url::' . __FUNCTION__, 'AutoDescription_Generate_Url::build_singular_relative_url()', '2.6.5' );
++
++		//* Don't slash it.
++		$this->url_slashit = false;
++
++		if ( false === $this->is_singular() ) {
++			//* We're on a taxonomy
++			$object = get_queried_object();
++
++			if ( is_object( $object ) ) {
++				if ( $this->is_category() ) {
++					$path = '?cat=' . $object->term_id;
++				} else if ( $this->is_tag() ) {
++					$path = '?tag=' . $object->name;
++				} else if ( $this->is_date() ) {
++					global $wp_query;
++
++					$query = $wp_query->query;
++
++					$year = $query->year;
++					$month = $query->monthnum ? '&monthnum=' . $query->monthnum : '';
++					$day = $query->day ? '&day=' . $query->day : '';
++
++					$path = '?year=' . $year . $month . $day;
++				} else if ( $this->is_author() ) {
++					$path = '?author=' . $object->author_name;
++				} else if ( $this->is_tax() ) {
++					$path = '?taxonomy=' . $object->taxonomy . '&term=' . $object->slug;
++				} else if ( isset( $object->query_var ) && $object->query_var ) {
++					$path = '?' . $object->query_var . '=' . $object->slug;
++				} else {
++					$path = '?p=' . $object->ID;
++				}
++
++				$paged = $this->maybe_get_paged( $this->paged(), $paged, $paged_plural );
++				if ( $paged )
++					$path .= '&paged=' . $paged;
++			}
++
++		}
++
++		if ( ! isset( $path ) ) {
++
++			if ( isset( $post ) ) {
++				if ( is_object( $post ) && isset( $post->ID ) ) {
++					$id = $post->ID;
++				} else if ( is_scalar( $post ) ) {
++					$id = $post;
++				}
++			}
++
++			if ( ! isset( $id ) )
++				$id = $this->get_the_real_ID();
++
++			$path = '?p=' . $id;
++
++			$page = $this->maybe_get_paged( $this->page(), $paged, $paged_plural );
++			if ( $page )
++				$path .= '&page=' . $page;
++		}
++
++		return $path;
++	}
++
+ }
