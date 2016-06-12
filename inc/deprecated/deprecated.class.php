@@ -707,4 +707,23 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 		return $path;
 	}
 
+	/**
+	 * Doing it Wrong The SEO Framework version wrapper.
+	 *
+	 * @since 2.3.0
+	 *
+	 * @deprecated
+	 * @since 2.6.5
+	 *
+	 * @return string The SEO Framework version.
+	 */
+	public function the_seo_framework_version( $version = '' ) {
+
+		$this->_deprecated_function( 'AutoDescription_Load::' . __FUNCTION__, '', '2.6.6' );
+
+		$output = $version ? sprintf( __( '%s of The SEO Framework', 'autodescription' ), esc_attr( $version ) ) : '';
+
+		return $output;
+	}
+
 }

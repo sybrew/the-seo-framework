@@ -765,7 +765,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 			if ( $args['get_custom_field'] && isset( $term ) ) {
 				$title = empty( $term->admeta['doctitle'] ) ? $title : wp_kses_stripslashes( wp_kses_decode_entities( $term->admeta['doctitle'] ) );
 
-				$flag = $this->is_checked( $term->admeta['saved_flag'] );
+				$flag = isset( $term->admeta['saved_flag'] ) && $this->is_checked( $term->admeta['saved_flag'] );
 				if ( false === $flag && empty( $title ) && isset( $term->meta['doctitle'] ) )
 					$title = empty( $term->meta['doctitle'] ) ? $title : wp_kses_stripslashes( wp_kses_decode_entities( $term->meta['doctitle'] ) );
 			}

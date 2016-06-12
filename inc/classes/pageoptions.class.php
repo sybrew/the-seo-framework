@@ -43,16 +43,14 @@ class AutoDescription_PageOptions extends AutoDescription_DoingItRight {
 
 	/**
 	 * Save the SEO settings when we save a post or page.
-	 *
 	 * Some values get sanitized, the rest are pulled from identically named subkeys in the $_POST['autodescription'] array.
-	 *
-	 * @since 2.0.0
 	 *
 	 * @uses $this->save_custom_fields() Perform checks and saves post meta / custom field data to a post or page.
 	 *
+	 * @since 2.0.0
+	 *
 	 * @param integer  $post_id  Post ID.
 	 * @param stdClass $post     Post object.
-	 *
 	 * @return mixed Returns post id if permissions incorrect, null if doing autosave, ajax or future post, false if update
 	 *               or delete failed, and true on success.
 	 */
@@ -71,7 +69,6 @@ class AutoDescription_PageOptions extends AutoDescription_DoingItRight {
 			'_genesis_nofollow'      => 0,
 			'_genesis_noarchive'     => 0,
 			'exclude_local_search'   => 0,
-			'saved_flag'             => 0,  // Don't touch, used to prevent data conflict.
 		) );
 
 		foreach ( (array) $data as $key => $value ) {
@@ -104,15 +101,14 @@ class AutoDescription_PageOptions extends AutoDescription_DoingItRight {
 	 *
 	 * @since 2.0.0
 	 *
+	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
+	 *
 	 * @param array    $data         Key/Value pairs of data to save in '_field_name' => 'value' format.
 	 * @param string   $nonce_action Nonce action for use with wp_verify_nonce().
 	 * @param string   $nonce_name   Name of the nonce to check for permissions.
 	 * @param WP_Post|integer $post  Post object or ID.
-	 *
 	 * @return mixed Return null if permissions incorrect, doing autosave, ajax or future post, false if update or delete
 	 *               failed, and true on success.
-	 *
-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 */
 	public function save_custom_fields( array $data, $nonce_action, $nonce_name, $post ) {
 

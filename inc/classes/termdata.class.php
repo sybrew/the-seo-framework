@@ -85,7 +85,6 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 	 * @access private
 	 *
 	 * @param int $id The possible taxonomy Term ID.
-	 *
 	 * @return null|object The Term object.
 	 */
 	public function fetch_the_term( $id = '' ) {
@@ -100,13 +99,11 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 			return false;
 
 		if ( $this->is_admin() ) {
-			if ( 'term.php' === $this->page_hook ) {
-				global $current_screen;
+			global $current_screen;
 
-				if ( isset( $current_screen->taxonomy ) ) {
-					$term_id = $id ? $id : $this->get_admin_term_id();
-					$term[$id] = get_term_by( 'id', $term_id, $current_screen->taxonomy );
-				}
+			if ( isset( $current_screen->taxonomy ) ) {
+				$term_id = $id ? $id : $this->get_admin_term_id();
+				$term[$id] = get_term_by( 'id', $term_id, $current_screen->taxonomy );
 			}
 		} else {
 			if ( $this->is_category() || $this->is_tag() ) {
@@ -125,12 +122,10 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 	/**
 	 * Fetch Tax labels
 	 *
-	 * @param string $tax_type the Taxonomy type.
-	 *
 	 * @since 2.3.1
-	 *
 	 * @staticvar object $labels
 	 *
+	 * @param string $tax_type the Taxonomy type.
 	 * @return object|null with all the labels as member variables
 	 */
 	public function get_tax_labels( $tax_type ) {
@@ -153,14 +148,12 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 	 * Get the current screen term labels.
 	 *
 	 * @since 2.6.0
-	 *
 	 * @staticvar string $term_name : Caution: This function only runs once per screen and doesn't check the term type more than once.
 	 *
 	 * @param object $term The Taxonomy Term object.
 	 * @param bool $singular Whether to fetch a singular or plural name.
 	 * @param bool $fallback Whether to fallback on a generic name.
 	 * @param bool $use_cache Whether to read from cache.
-	 *
 	 * @return string the Term name.
 	 */
 	protected function get_the_term_name( $term, $singular = true, $fallback = true, $use_cache = true ) {
@@ -249,7 +242,7 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 			$term_id = $_REQUEST['term_id'];
 		}
 
-		return $term_id = $term_id ? abs( (int) $term_id ) : 0;
+		return $term_id = $term_id ? absint( $term_id ) : 0;
 	}
 
 }

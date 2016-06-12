@@ -630,11 +630,6 @@ class AutoDescription_Inpost extends AutoDescription_PageOptions {
 				?>
 				<a href="https://support.google.com/webmasters/answer/79812?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Tell Search Engines not to save a cached copy of this %s', 'autodescription' ), $type ); ?>">[?]</a>
 			</label>
-
-			<?php // Saved flag, if set then it won't fetch for genesis meta anymore ?>
-			<label class="hidden" for="autodescription_saved_flag">
-				<input name="autodescription[saved_flag]" id="autodescription[saved_flag]" type="checkbox" value="1" checked='checked' />
-			</label>
 		</p>
 
 		<p><strong><?php _e( 'Local Search Settings', 'autodescription' ); ?></strong></p>

@@ -47,7 +47,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 
 		$this->setup_ld_json_transient( $this->get_the_real_ID() );
 
-		if ( $this->the_seo_framework_debug ) $this->debug_init( __CLASS__, __FUNCTION__, true, $debug_key = microtime(true), array( 'LD Json transient' => $this->ld_json_transient, 'Is output' => (bool) $this->get_transient( $this->ld_json_transient ) ) );
+		if ( $this->the_seo_framework_debug ) $this->debug_init( __CLASS__, __FUNCTION__, false, $debug_key = microtime(true), array( 'LD Json transient' => $this->ld_json_transient, 'Output from transient' => false !== $this->get_transient( $this->ld_json_transient ) ) );
 
 		$output = $this->get_transient( $this->ld_json_transient );
 		if ( false === $output ) {
@@ -80,11 +80,9 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 
 			/**
 			 * Transient expiration: 1 week.
-			 * Keep the description for at most 1 week.
-			 *
-			 * 60s * 60m * 24h * 7d
+			 * Keep the script for at most 1 week.
 			 */
-			$expiration = 60 * 60 * 24 * 7;
+			$expiration = WEEK_IN_SECONDS;
 
 			$this->set_transient( $this->ld_json_transient, $output, $expiration );
 		}

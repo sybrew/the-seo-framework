@@ -79,6 +79,7 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 	 * Generate excerpt.
 	 *
 	 * @since 2.5.2
+	 * @since 2.6.6 Detect Page builders.
 	 *
 	 * @param int $the_id The Post ID.
 	 * @param int $tt_id The Taxonomy Term ID
@@ -87,7 +88,7 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 	 */
 	public function fetch_excerpt( $the_id = '', $tt_id = '' ) {
 
-		$post = $this->fetch_post_by_id( $the_id, $tt_id );
+		$post = $this->fetch_post_by_id( $the_id, $tt_id, OBJECT );
 
 		if ( empty( $post ) )
 			return '';
@@ -96,10 +97,11 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 		 * Fetch custom excerpt, if not empty, from the post_excerpt field.
 		 * @since 2.5.2
 		 */
-		if ( isset( $post['post_excerpt'] ) && $post['post_excerpt'] ) {
-			$excerpt = $post['post_excerpt'];
-		} else if ( isset( $post['post_content'] ) ) {
-			$excerpt = $post['post_content'];
+		if ( isset( $post->post_excerpt ) && $post->post_excerpt ) {
+			$excerpt = $post->post_excerpt;
+		} else if ( isset( $post->post_content ) ) {
+			$is_builder = $this->has_page_builder( $post->ID );
+			$excerpt = $is_builder ? '' : $post->post_content;
 		} else {
 			$excerpt = '';
 		}
@@ -112,13 +114,14 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 	 * Also returns latest post from blog or archive if applicable.
 	 *
 	 * @since 2.6.0
+	 * @since 2.6.6 Added $output parameter.
 	 *
 	 * @param int $the_id The Post ID.
 	 * @param int $tt_id The Taxonomy Term ID
-	 *
+	 * @param mixed $output The value type to return. Accepts OBJECT, ARRAY_A, or ARRAY_N
 	 * @return empty|array The Post Array.
 	 */
-	protected function fetch_post_by_id( $the_id = '', $tt_id = '' ) {
+	protected function fetch_post_by_id( $the_id = '', $tt_id = '', $output = ARRAY_A ) {
 
 		if ( '' === $the_id && '' === $tt_id ) {
 			$the_id = $this->get_the_real_ID();
@@ -128,11 +131,8 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 		}
 
 		/**
-		 * Use the 2nd parameter.
-		 * @since 2.2.8
-		 *
-		 * Now casts to array
-		 * @since 2.3.3
+		 * @since 2.2.8 Use the 2nd parameter.
+		 * @since 2.3.3 Now casts to array
 		 */
 		if ( '' !== $the_id ) {
 			if ( $this->is_blog_page( $the_id ) ) {
@@ -150,12 +150,11 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 
 				$post = get_posts( $args );
 			} else {
-				$post = get_post( $the_id, ARRAY_A );
+				$post = get_post( $the_id );
 			}
 		} else if ( '' !== $tt_id ) {
 			/**
-			 * Match the descriptions in admin as on the front end.
-			 * @since 2.3.3
+			 * @since 2.3.3 Match the descriptions in admin as on the front end.
 			 */
 			$args = array(
 				'posts_per_page'	=> 1,
@@ -169,25 +168,33 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 
 			$post = get_posts( $args );
 		} else {
-			$post = get_post( $the_id, ARRAY_A );
+			$post = get_post( $the_id );
 		}
 
 		/**
-		 * Cast last found post object to array and put it in $post.
-		 * @since 2.3.3
+		 * @since 2.6.5 Transform post array to object (on Archives).
 		 */
-		if ( isset( $post[0] ) && is_object( $post[0] ) ) {
-			$object = $post[0];
-			$post = (array) $object;
-		}
+		if ( is_array( $post ) && isset( $post[0] ) && is_object( $post[0] ) )
+			$post = $post[0];
 
-		// Something went wrong, nothing to be found. Return empty.
-		if ( empty( $post ) || ! is_array( $post ) )
+		//* Something went wrong, nothing to be found. Return empty.
+		if ( empty( $post ) )
 			return '';
 
 		//* Stop getting something that doesn't exists. E.g. 404
-		if ( isset( $post['ID'] ) && 0 === $post['ID'] )
+		if ( isset( $post->ID ) && 0 === $post->ID )
 			return '';
+
+		/**
+		 * @since 2.6.6
+		 */
+		if ( ARRAY_A === $output || ARRAY_N === $output ) {
+			$_post = WP_Post::get_instance( $post );
+			$post = $_post->to_array();
+
+			if ( ARRAY_N === $output )
+				$post = array_values( $post );
+		}
 
 		return $post;
 	}
@@ -195,11 +202,12 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 	/**
 	 * Fetch latest public post ID.
 	 *
+	 * @since 2.4.3
 	 * @staticvar int $page_id
 	 * @global object $wpdb
 	 * @global int $blog_id
 	 *
-	 * @since 2.4.3
+	 * @return int Latest Post ID.
 	 */
 	public function get_latest_post_id() {
 		global $wpdb, $blog_id;
@@ -235,7 +243,7 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 				'', 1 );
 
 			$page_id = (int) $wpdb->get_var( $sql );
-			$this->object_cache_set( $latest_posts_key, $page_id, 86400 );
+			$this->object_cache_set( $latest_posts_key, $page_id, DAY_IN_SECONDS );
 		}
 
 		return $page_id;
@@ -246,25 +254,70 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 	 *
 	 * @since 2.6.0
 	 *
-	 * @param int $id.
-	 *
+	 * @param int $id The post ID.
 	 * @return string The post content.
 	 */
 	public function get_post_content( $id = 0 ) {
 
-		if ( empty( $id ) ) {
-			global $wp_query;
+		$id = $id ? $id : $this->get_the_real_ID();
 
-			if ( isset( $wp_query->post->post_content ) )
-				return $wp_query->post->post_content;
-		} else {
-			$content = get_post_field( 'post_content', $id );
+		$content = get_post_field( 'post_content', $id );
 
-			if ( is_string( $content ) )
-				return $content;
-		}
+		if ( is_string( $content ) )
+			return $content;
 
 		return '';
+	}
+
+	/**
+	 * Determines whether the post has a page builder attached to it.
+	 * Doesn't use plugin detection features as some builders might be incorporated within themes.
+	 *
+	 * Detects the following builders:
+	 * - Divi Builder by Elegant Themes
+	 * - Visual Composer by WPBakery
+	 * - Page Builder by SiteOrigin
+	 * - Beaver Builder by Fastline Media
+	 *
+	 * @since 2.6.6
+	 *
+	 * @param int $post_id
+	 * @return boolean
+	 */
+	public function has_page_builder( $post_id ) {
+
+		/**
+		 * Applies filters 'the_seo_framework_detect_page_builder' : boolean
+		 * Determines whether a page builder has been detected.
+		 * @since 2.6.6
+		 *
+		 * @param boolean The current state.
+		 * @param int $post_id The current Post ID.
+		 */
+		$detected = (bool) apply_filters( 'the_seo_framework_detect_page_builder', false, $post_id );
+
+		if ( $detected )
+			return true;
+
+		$meta = get_post_meta( $post_id );
+
+		if ( empty( $meta ) )
+			return false;
+
+		if ( isset( $meta['_et_pb_use_builder'][0] ) && 'on' === $meta['_et_pb_use_builder'][0] && defined( 'ET_BUILDER_VERSION' ) )
+			//* Divi Builder by Elegant Themes
+			return true;
+		elseif ( isset( $meta['_wpb_vc_js_status'][0] ) && 'true' === $meta['_wpb_vc_js_status'][0] && defined( 'WPB_VC_VERSION' ) )
+			//* Visual Composer by WPBakery
+			return true;
+		elseif ( isset( $meta['panels_data'][0] ) && '' !== $meta['panels_data'][0] && defined( 'SITEORIGIN_PANELS_VERSION' ) )
+			//* Page Builder by SiteOrigin
+			return true;
+		elseif ( isset( $meta['_fl_builder_enabled'][0] ) && '1' === $meta['_fl_builder_enabled'][0] && defined( 'FL_BUILDER_VERSION' ) )
+			//* Beaver Builder by Fastline Media
+			return true;
+
+		return false;
 	}
 
 }

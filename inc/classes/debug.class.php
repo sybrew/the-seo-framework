@@ -35,6 +35,15 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	protected $debug_output = '';
 
 	/**
+	 * Whether to accumulate data.
+	 *
+	 * @since 2.6.5
+	 *
+	 * @var bool Whether to add to AutoDescription_Debug::debug_output.
+	 */
+	protected $add_debug_output = true;
+
+	/**
 	 * Constructor, load parent constructor and add actions.
 	 */
 	public function __construct() {
@@ -266,10 +275,28 @@ class AutoDescription_Debug extends AutoDescription_Core {
 			if ( $this->the_seo_framework_debug_hidden ) {
 				echo "\r\n<!--\r\n:: THE SEO FRAMEWORK DEBUG :: \r\n" . $this->debug_output . "\r\n:: / THE SEO FRAMEWORK DEBUG ::\r\n-->\r\n";
 			} else {
+
+				$id = $this->get_the_real_ID();
+				$mdash = ' &mdash; ';
+				$taxonomy = $this->is_archive() ? $this->fetch_the_term( $id ) : '';
+				$tax_type = isset( $taxonomy->taxonomy ) ? $taxonomy->taxonomy : '';
+				$post_type = ! $this->is_archive() && $this->is_front_page( $id ) ? 'Front Page' : $this->get_the_term_name( $taxonomy );
+				$cache_key = $this->generate_cache_key( $this->get_the_real_ID(), $tax_type );
+
 				if ( $this->is_admin() ) {
 					?>
 					<div style="clear:both;float:left;position:relative;width:calc( 100% - 200px );min-height:700px;padding:0;margin:20px 20px 40px 180px;overflow:hidden;border:1px solid #ccc;border-radius:3px;">
-						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom: 2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">SEO Debug Information</h3>
+						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom: 2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">
+							SEO Debug Information
+							<?php
+							if ( $this->is_post_edit() || $this->is_term_edit() ) :
+								echo ' :: ';
+								echo 'Type: ' . $post_type;
+								echo $mdash . 'ID: ' . $id;
+								echo $mdash . 'Cache key: ' . $cache_key;
+							endif;
+							?>
+						</h3>
 						<div style="position:absolute;bottom:0;right:0;left:0;top:41px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;">
 							<?php echo $this->debug_init_output(); ?>
 							<?php echo $this->debug_output; ?>
@@ -281,7 +308,13 @@ class AutoDescription_Debug extends AutoDescription_Core {
 					<style type="text/css">.wp-ui-notification{color:#fff;background-color:#d54e21}.code.highlight{font-family:Consolas,Monaco,monospace;font-size:14px;}</style>
 					<div style="clear:both;float:left;position:relative;width:calc( 100% - 80px );min-height:700px;padding:0;margin:40px;overflow:hidden;border:1px solid #ccc;border-radius:3px;">
 						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom: 2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">
-							SEO Debug Information :: Type: <?php echo $this->get_the_term_name( $this->fetch_the_term( $this->get_the_real_ID() ) ); ?> &mdash; ID: <?php echo $this->get_the_real_ID(); ?> &mdash; Is front: <?php echo $this->is_front_page() ? 'Yes' : 'No'; ?>
+							SEO Debug Information
+							<?php
+							echo ' :: ';
+							echo 'Type: ' . $post_type;
+							echo $mdash . 'ID: ' . $id;
+							echo $mdash . 'Cache key: ' . $cache_key;
+							?>
 						</h3>
 						<div style="position:absolute;bottom:0;right:0;left:0;top:41px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;">
 							<?php echo $this->debug_init_output(); ?>
@@ -334,6 +367,9 @@ class AutoDescription_Debug extends AutoDescription_Core {
 				}
 			}
 
+			/**
+			 * @TODO Use var_export()?
+			 */
 			if ( is_array( $values ) ) {
 				$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="margin:0;padding-left:12px">';
 				foreach ( $values as $key => $value ) {
@@ -456,20 +492,18 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	 *
 	 * @since 2.6.0
 	 *
+	 * @access private
+	 *
 	 * @param string $class The class name.
 	 * @param string $method The function name.
 	 * @param bool $store Whether to store the output in cache for next run to pick up on.
 	 * @param double $debug_key Use $debug_key as variable, it's reserved.
-	 *
 	 * @param mixed function args.
-	 *
-	 * @access private
-	 *
-	 * @return void early if debugging is disabled.
+	 * @return void early if debugging is disabled or when storing cache values.
 	 */
 	protected function debug_init( $class, $method, $store, $debug_key ) {
 
-		if ( false === $this->the_seo_framework_debug )
+		if ( false === $this->the_seo_framework_debug || false === $this->add_debug_output )
 			return;
 
 		$output = '';
@@ -705,6 +739,9 @@ class AutoDescription_Debug extends AutoDescription_Core {
 			add_filter( 'the_seo_framework_current_object_id', array( $this, 'get_the_front_page_ID' ) );
 
 		$init_start = microtime( true );
+
+		//* Don't register this output.
+		$this->add_debug_output = false;
 
 		$output	= $this->the_description()
 				. $this->og_image()

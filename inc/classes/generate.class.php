@@ -101,7 +101,7 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 				$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'tag_noindex' ) ? 'noarchive' : $meta['noarchive'];
 			}
 
-			$flag = '0' !== $term->admeta['saved_flag'] ? true : false;
+			$flag = isset( $term->admeta['saved_flag'] ) && $this->is_checked( $term->admeta['saved_flag'] );
 
 			if ( false === $flag && isset( $term->meta ) ) {
 				//* Genesis support.

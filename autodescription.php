@@ -119,5 +119,42 @@ require_once( THE_SEO_FRAMEWORK_DIR_PATH . '/load.class.php' );
  * Calls functions statically.
  * @since 2.2.9
  */
-register_activation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, array( 'The_SEO_Framework_Load', 'flush_rewrite_rules_activation' ) );
-register_deactivation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, array( 'The_SEO_Framework_Load', 'flush_rewrite_rules_deactivation' ) );
+register_activation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framework_flush_rewrite_rules_activation' );
+register_deactivation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framework_flush_rewrite_rules_deactivation' );
+
+/**
+ * Add and Flush rewrite rules on plugin activation.
+ *
+ * @global object $wp_rewrite
+ *
+ * @since 2.6.6
+ * @access private
+ */
+function the_seo_framework_flush_rewrite_rules_activation() {
+	global $wp_rewrite;
+
+	//* This function is called statically.
+	$the_seo_framework = the_seo_framework();
+	$the_seo_framework->rewrite_rule_sitemap( true );
+
+	$wp_rewrite->init();
+	$wp_rewrite->flush_rules( true );
+}
+
+/**
+ * Flush rewrite rules on plugin deactivation.
+ *
+ * @global object $wp_rewrite
+ *
+ * @since 2.6.6
+ * @access private
+ */
+function the_seo_framework_flush_rewrite_rules_deactivation() {
+	global $wp_rewrite;
+
+	$wp_rewrite->init();
+
+	unset( $wp_rewrite->extra_rules_top['sitemap\.xml$'] );
+
+	$wp_rewrite->flush_rules( true );
+}

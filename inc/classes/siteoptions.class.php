@@ -416,9 +416,6 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 		if ( update_option( $this->settings_field, $options ) && $updated && $this->load_options ) {
 			$this->pre_output_site_updated_plugin_notice();
 		}
-
-		//* Flush rewrite rules at shutdown.
-		$this->enqueue_rewrite_flush_other( true );
 	}
 
 	/**

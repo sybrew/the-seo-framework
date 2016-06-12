@@ -96,6 +96,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 			//* Never get this when this is an archive. It will always return the wrong value.
 			if ( empty( $id ) && false === is_archive() && false === is_home() )
 				$id = get_the_ID();
+
+			//* Determine the Archive ID on term edit.
+			if ( empty( $id ) && $is_admin && $this->is_archive_admin() )
+				$id = $this->get_admin_term_id();
 		}
 
 		/**
@@ -222,6 +226,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * @staticvar bool $cache
 	 * @since 2.6.0
 	 *
+	 * @global object $wp_query
+	 *
 	 * @return bool
 	 */
 	public function is_archive() {
@@ -234,16 +240,15 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		if ( isset( $cache ) && $this->can_cache_query() )
 			return $cache;
 
-		global $wp_query;
-
 		if ( is_archive() && false === $this->is_singular() )
 			return $cache = true;
 
-		global $wp_query;
+		if ( $this->can_cache_query() && false === $this->is_singular() ) {
+			global $wp_query;
 
-		if ( $this->can_cache_query() && false === $this->is_singular() )
 			if ( $wp_query->is_post_type_archive || $wp_query->is_date || $wp_query->is_author || $wp_query->is_category || $wp_query->is_tag || $wp_query->is_tax )
 				return $cache = true;
+		}
 
 		return $cache = false;
 	}
@@ -458,6 +463,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		global $current_screen;
 
 		if ( $this->is_archive_admin() && isset( $current_screen->taxonomy ) ) {
+
 			$tax = $current_screen->taxonomy;
 			$len = strlen( $tax );
 

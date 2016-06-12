@@ -1123,7 +1123,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			if ( $output_singular_paged ) {
 
 				$page = $this->page();
-				$numpages = substr_count( $this->get_post_content( $this->get_the_real_ID() ), '<!--nextpage-->' ) + 1;
+				$numpages = substr_count( $this->get_post_content( $post_id ), '<!--nextpage-->' ) + 1;
 
 				if ( ! $page )
 					$page = 1;

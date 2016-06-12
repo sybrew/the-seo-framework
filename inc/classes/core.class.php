@@ -520,7 +520,7 @@ class AutoDescription_Core {
 	 */
 	protected function get_tzstring_from_offset( $offset = 0 ) {
 
-		$seconds = round( $offset * 60 * 60 );
+		$seconds = round( $offset * HOUR_IN_SECONDS );
 
 		//* Try Daylight savings.
 		$tzstring = timezone_name_from_abbr( '', $seconds, 1 );

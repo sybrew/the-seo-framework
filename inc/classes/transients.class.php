@@ -138,7 +138,9 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	}
 
 	/**
-	 * Setup vars for transients.
+	 * Setup vars for general site transients.
+	 *
+	 * @global int $blog_id
 	 *
 	 * @since 2.3.3
 	 */
@@ -158,11 +160,11 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	/**
 	 * Setup vars for transients which require $page_id.
 	 *
+	 * @since 2.3.3
+	 *
 	 * @param int|string|bool $page_id the Taxonomy or Post ID. If false it will generate for the blog page.
 	 * @param string $taxonomy The taxonomy name.
 	 * @param strgin $type The Post Type
-	 *
-	 * @since 2.3.3
 	 */
 	public function setup_auto_description_transient( $page_id, $taxonomy = '', $type = null ) {
 
@@ -174,7 +176,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		 *
 		 * @since 2.3.4
 		 */
-		$revision = '0';
+		$revision = '1';
 
 		$additions = $this->add_description_additions( $page_id, $taxonomy );
 
@@ -190,11 +192,11 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	/**
 	 * Setup vars for transients which require $page_id.
 	 *
+	 * @since 2.3.3
+	 *
 	 * @param int|string|bool $page_id the Taxonomy or Post ID. If false it will generate for the blog page.
 	 * @param string $taxonomy The taxonomy name.
 	 * @param string|null $type The post type.
-	 *
-	 * @since 2.3.3
 	 */
 	public function setup_ld_json_transient( $page_id, $taxonomy = '', $type = null ) {
 
@@ -220,19 +222,15 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	/**
 	 * Generate transient key based on query vars.
 	 *
-	 * @param int|string|bool $page_id the Taxonomy or Post ID.
-	 * @param string $taxonomy The Taxonomy name.
-	 * @param string $type The Post Type
-	 *
-	 * @staticvar array $cached_id : contains cache strings.
-	 *
 	 * @global int $blog_id;
 	 *
 	 * @since 2.3.3
+	 * @since 2.6.0 Refactored.
+	 * @staticvar array $cached_id : contains cache strings.
 	 *
-	 * @refactored
-	 * @since 2.6.0
-	 *
+	 * @param int|string|bool $page_id the Taxonomy or Post ID.
+	 * @param string $taxonomy The Taxonomy name.
+	 * @param string $type The Post Type
 	 * @return string The generated page id key.
 	 */
 	public function generate_cache_key( $page_id, $taxonomy = '', $type = null ) {
@@ -253,17 +251,16 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 				//* Author page.
 				$the_id = 'author_' . $page_id;
 			} else if ( 'frontpage' === $type ) {
-				//* Home Page.
+				//* Front/HomePage.
 				$the_id = $this->generate_front_page_cache_key();
 			} else {
 				$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, __( 'Third parameter must be a known type.', 'autodescription' ), '2.6.5' );
 				$the_id = esc_sql( $type . '_' . $page_id . '_' . $t );
 			}
 		} else if ( $this->is_404() ) {
-			//* 404.
 			$the_id = '_404_';
 		} else if ( ( $this->is_front_page( $page_id ) ) || ( $this->is_admin() && $this->is_menu_page( $this->pagehook ) ) ) {
-			//* Fetch Home key.
+			//* Front/HomePage.
 			$the_id = $this->generate_front_page_cache_key();
 		} else if ( $this->is_blog_page( $page_id ) ) {
 			$the_id = 'blog_' . $page_id;
@@ -455,7 +452,6 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	 * @since 2.2.9
 	 *
 	 * @param int $post_id The Post ID that has been updated.
-	 *
 	 * @return bool|null True when sitemap is flushed. False on revision. Null
 	 * when sitemaps are deactivated.
 	 */
@@ -540,10 +536,9 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	 * Delete transient for the automatic description for blog on save request.
 	 * Returns old option, since that's passed for sanitation within WP Core.
 	 *
-	 * @param string $old_option The previous blog description option.
-	 *
 	 * @since 2.3.3
 	 *
+	 * @param string $old_option The previous blog description option.
 	 * @return string Previous option.
 	 */
 	public function delete_auto_description_blog_transient( $old_option ) {
@@ -558,12 +553,11 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	/**
 	 * Delete transient for the automatic description on requests.
 	 *
+	 * @since 2.3.3
+	 *
 	 * @param mixed $page_id The page ID or identifier.
 	 * @param string $taxonomy The tt name.
 	 * @param string $type The Post Type
-	 *
-	 * @since 2.3.3
-	 *
 	 * @return bool true
 	 */
 	public function delete_auto_description_transient( $page_id, $taxonomy = '', $type = null ) {
@@ -578,12 +572,11 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	/**
 	 * Delete transient for the LD+Json scripts on requests.
 	 *
+	 * @since 2.4.2
+	 *
 	 * @param mixed $page_id The page ID or identifier.
 	 * @param string $taxonomy The tt name.
 	 * @param string|null $type The post type.
-	 *
-	 * @since 2.4.2
-	 *
 	 * @return bool true
 	 */
 	public function delete_ld_json_transient( $page_id, $taxonomy = '', $type = null ) {
@@ -635,7 +628,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 			 * Expiration time, 3 days.
 			 * 60s * 60m * 24d * 3d
 			 */
-			$expiration = 60 * 60 * 24 * 3;
+			$expiration = DAY_IN_SECONDS * 3;
 
 			set_transient( $this->theme_doing_it_right_transient, $dir, $expiration );
 		}
@@ -645,8 +638,8 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	/**
 	 * Flushes the home page LD+Json transient.
 	 *
-	 * @staticvar bool $flushed
 	 * @since 2.6.0
+	 * @staticvar bool $flushed Prevents second flush.
 	 *
 	 * @return bool Whether it's flushed on current call.
 	 */
