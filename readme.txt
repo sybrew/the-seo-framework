@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl, feed
 Requires at least: 3.8.0
 Tested up to: 4.5.2
-Stable tag: 2.6.5
+Stable tag: 2.6.5.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -349,6 +349,18 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
+= 2.6.5.1 - Schematic Hotfix =
+
+**Release date:**
+
+* June 9th 2016
+
+**Summarized:**
+
+* A typo in the Knowledge Graph settings check caused the Knowledge Graph not to be output, even if the option was enabled.
+* Because of this, the LD+Json revisional cache key has been bumped up as well.
+* And as this update is so (relatively) minor, it's undocumented.
+
 = 2.6.5 - Systematic Support =
 
 **Release date:**
@@ -359,7 +371,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * Another maintenance release for The SEO Framework 2.6 is coming right at you!
 * While Polylang creates Taxonomies from Pages without acknowledging it being an Archive, I have found a workaround for the Title not to show up correctly.
-* Also, bbPress' Original Post within a topic is now shown correctly, although the bbPress 2.6.0 will resolve this as well.
+* Also, bbPress' Original Post within a topic is now shown correctly, although the bbPress 2.6.0 update will resolve this as well.
 * On special pages like the Forum page of bbPress, no more cache key conflicts will be present, this makes it a recommended update.
 * WPML Multilingual domains are now also fully supported. So instead of just adding a subdomain, this plugin now also takes whole new domains into consideration.
 * The URL generation has also been improved once more. It now contains Canonical Pagination support, and expanded Plain Permalink structure support.

@@ -927,7 +927,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 		 * @since 2.6.5
 		 */
 		$filter = (bool) apply_filters( 'the_seo_framework_json_knowledge_output', true );
-		$option = $this->is_option_checked( 'ld_json_knowledge' );
+		$option = $this->is_option_checked( 'knowledge_output' );
 
 		return $cache = $filter && $option ? true : false;
 	}

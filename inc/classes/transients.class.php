@@ -205,7 +205,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		 *
 		 * Use hex. e.g. 0, 1, 2, 9, a, b
 		 */
-		$revision = '6';
+		$revision = '7';
 
 		/**
 		 * Change key based on options.
