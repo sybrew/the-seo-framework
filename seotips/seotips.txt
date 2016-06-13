@@ -117,3 +117,9 @@
 * Go write it, in your own words and style. Don't forget to make it much longer, better and more detailed. Don't forget to add images.
 * Finally, share the content, reach out to the public, and of course your public. This will increase your rankings significantly.
 * This method is known as the Skyscraper Technique; it's used for and as this SEO tip, minus the images, details or length.
+
+	= 2.6.6 - Know your Keywords =
+
+* To know how your website is found, sign up for Google Search Console. Over a couple of days (or weeks), elegant data has been accumulated about your website.
+* When you go to the Search Analytics within the Search Console, you'll see a list of queries people have used to find your website.
+* The queries can be used as keywords, they are excellent starting points for new post titles and subjects. Go ahead, use them!

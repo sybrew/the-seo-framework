@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://wordpress.org/plugins/autodescription/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.
- * Version: 2.6.5.1
+ * Version: 2.6.5.1dev6
  * Author: Sybre Waaijer
  * Author URI: https://cyberwire.nl/
  * License: GPLv3
@@ -133,7 +133,6 @@ register_deactivation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framewo
 function the_seo_framework_flush_rewrite_rules_activation() {
 	global $wp_rewrite;
 
-	//* This function is called statically.
 	$the_seo_framework = the_seo_framework();
 	$the_seo_framework->rewrite_rule_sitemap( true );
 

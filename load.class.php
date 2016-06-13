@@ -98,7 +98,6 @@ require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-ldjson.class.php' );
 
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'search.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'doingitright.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'pageoptions.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'inpost.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'adminpages.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'sanitize.class.php' );
@@ -111,7 +110,7 @@ require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'feed.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.class.php' );
 
 /**
- * God class.
+ * Facade class.
  *
  * Extending upon parent classes.
  *
@@ -124,13 +123,12 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 	 *
 	 * @since 2.2.9
 	 *
-	 * @var bool The SEO Framework Debug/Profile constants is/are defined.
+	 * @var bool The SEO Framework Debug/Profile states.
 	 */
 	public $the_seo_framework_debug = false;
 	public $the_seo_framework_debug_hidden = false;
 	public $the_seo_framework_use_transients = true;
 	public $script_debug = false;
-	public $debug_time;
 
 	/**
 	 * Constructor, setup debug vars and then load parent constructor.

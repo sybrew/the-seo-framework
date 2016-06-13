@@ -519,6 +519,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * Returns a one-line sanitized description
 	 *
 	 * @since 2.5.0
+	 * @since 2.6.6 Removes duplicated spaces.
 	 *
 	 * @param string $new_value The Description.
 	 * @return string One line sanitized description.
@@ -538,6 +539,12 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		}
 
 		$description = trim( implode( $new_lines ) );
+
+		$i = 0;
+		do {
+			$description = str_replace( '  ', ' ', $description );
+			$i++;
+		} while ( strpos( $description, '  ' ) && $i <= 10 );
 
 		return (string) strip_tags( $description );
 	}

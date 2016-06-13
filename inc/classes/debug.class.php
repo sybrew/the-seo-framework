@@ -285,8 +285,8 @@ class AutoDescription_Debug extends AutoDescription_Core {
 
 				if ( $this->is_admin() ) {
 					?>
-					<div style="clear:both;float:left;position:relative;width:calc( 100% - 200px );min-height:700px;padding:0;margin:20px 20px 40px 180px;overflow:hidden;border:1px solid #ccc;border-radius:3px;">
-						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom: 2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">
+					<div style="color:#444;font-family:Georgio,sans-serif;font-size:14px;clear:both;float:left;position:relative;width:calc( 100% - 200px );min-height:700px;padding:0;margin:20px 20px 40px 180px;overflow:hidden;border:1px solid #ccc;border-radius:3px;font:'Open Sans',sans-serif">
+						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom:2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">
 							SEO Debug Information
 							<?php
 							if ( $this->is_post_edit() || $this->is_term_edit() ) :
@@ -298,7 +298,8 @@ class AutoDescription_Debug extends AutoDescription_Core {
 							?>
 						</h3>
 						<div style="position:absolute;bottom:0;right:0;left:0;top:41px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;">
-							<?php echo $this->debug_init_output(); ?>
+							<?php echo $this->debug_header_output(); ?>
+							<?php echo $this->debug_query_output(); ?>
 							<?php echo $this->debug_output; ?>
 						</div>
 					</div>
@@ -306,8 +307,8 @@ class AutoDescription_Debug extends AutoDescription_Core {
 				} else {
 					?>
 					<style type="text/css">.wp-ui-notification{color:#fff;background-color:#d54e21}.code.highlight{font-family:Consolas,Monaco,monospace;font-size:14px;}</style>
-					<div style="clear:both;float:left;position:relative;width:calc( 100% - 80px );min-height:700px;padding:0;margin:40px;overflow:hidden;border:1px solid #ccc;border-radius:3px;">
-						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom: 2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">
+					<div style="color:#444;font-family:Georgio,sans-serif;font-size:14px;clear:both;float:left;position:relative;width:calc( 100% - 80px );min-height:700px;padding:0;margin:40px;overflow:hidden;border:1px solid #ccc;border-radius:3px;font:'Open Sans',sans-serif">
+						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom:2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">
 							SEO Debug Information
 							<?php
 							echo ' :: ';
@@ -317,7 +318,8 @@ class AutoDescription_Debug extends AutoDescription_Core {
 							?>
 						</h3>
 						<div style="position:absolute;bottom:0;right:0;left:0;top:41px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;">
-							<?php echo $this->debug_init_output(); ?>
+							<?php echo $this->debug_header_output(); ?>
+							<?php echo $this->debug_query_output(); ?>
 							<?php echo $this->debug_output; ?>
 						</div>
 					</div>
@@ -329,12 +331,13 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	}
 
 	/**
-	 * Return debug values.
-	 *
-	 * @param mixed $values What to be output.
+	 * Parses input values and wraps them in human-readable elements.
 	 *
 	 * @access private
 	 * @since 2.6.0
+	 *
+	 * @param mixed $values Values to be parsed.
+	 * @return string $output The parsed value.
 	 */
 	public function get_debug_information( $values = null ) {
 
@@ -707,14 +710,15 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	 *
 	 * @since 2.6.0
 	 *
+	 * @param bool $set Whether to reset the timer.
 	 * @return float PHP Microtime for code execution.
 	 */
-	protected function timer() {
+	protected function timer( $reset = false ) {
 
 		static $previous = null;
 
-		if ( isset( $previous ) ) {
-			$output = $previous - microtime( true );
+		if ( isset( $previous ) && false === $reset ) {
+			$output = microtime( true ) - $previous;
 			$previous = null;
 		} else {
 			$output = $previous = microtime( true );
@@ -725,12 +729,13 @@ class AutoDescription_Debug extends AutoDescription_Core {
 
 	/**
 	 * Wraps header output in front-end code.
+	 * This won't consider hiding the output.
 	 *
 	 * @since 2.6.5
 	 *
-	 * @return string Wrapped HTML debug output.
+	 * @return string Wrapped SEO meta tags output.
 	 */
-	protected function debug_init_output() {
+	protected function debug_header_output() {
 
 		if ( $this->is_admin() && ! $this->is_term_edit() && ! $this->is_post_edit() && ! $this->is_seo_settings_page() )
 			return;
@@ -738,7 +743,8 @@ class AutoDescription_Debug extends AutoDescription_Core {
 		if ( $this->is_seo_settings_page() )
 			add_filter( 'the_seo_framework_current_object_id', array( $this, 'get_the_front_page_ID' ) );
 
-		$init_start = microtime( true );
+		//* Start timer.
+		$this->timer( true );
 
 		//* Don't register this output.
 		$this->add_debug_output = false;
@@ -772,17 +778,109 @@ class AutoDescription_Debug extends AutoDescription_Core {
 				. $this->pint_site_output()
 				;
 
-		$timer = '<div style="display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( microtime( true ) - $init_start, 5 ) . ' seconds</div>' ;
+		$timer = '<div style="display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( $this->timer(), 5 ) . ' seconds</div>' ;
 
 		$title = $this->is_admin() ? 'Expected SEO Output' : 'Current SEO Output';
 		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #ccc;"><h2 style="color:#ddd;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
 
 		//* Escape it, replace EOL with breaks, and style everything between quotes (which are ending with space).
-		$output = str_replace( PHP_EOL, '<br>', esc_html( $output ) );
+		$output = str_replace( PHP_EOL, '<br>' . PHP_EOL, esc_html( $output ) );
 		$output = preg_replace( "/(&quot;.*?&quot;)(\s)/", '<font color="arnoldschwarzenegger">$1</font> ', $output );
 
 		$output = '<div style="display:inline-block;width:100%;padding:20px;font-family:Consolas,Monaco,monospace;font-size:14px;">' . $output . '</div>';
 		$output = '<div style="display:block;width:100%;background:#23282D;color:#ddd;border-bottom:1px solid #ccc">' . $title . $timer . $output . '</div>';
+
+		return $output;
+	}
+
+	/**
+	 * Wraps query status booleans in human-readable code.
+	 *
+	 * @since 2.6.6
+	 *
+	 * @return string Wrapped Query State debug output.
+	 */
+	protected function debug_query_output() {
+
+		//* Start timer.
+		$this->timer( true );
+
+		//* Don't register this output.
+		$this->add_debug_output = false;
+
+		//* Only get true/false values.
+		$is_404 = $this->is_404();
+		$is_admin = $this->is_admin();
+		$is_attachment = $this->is_attachment();
+		$is_archive = $this->is_archive();
+		$is_term_edit = $this->is_term_edit();
+		$is_post_edit = $this->is_post_edit();
+		$is_wp_lists_edit = $this->is_wp_lists_edit();
+		$is_wp_lists_edit = $this->is_wp_lists_edit();
+		$is_author = $this->is_author();
+		$is_blog_page = $this->is_blog_page();
+		$is_category = $this->is_category();
+		$is_date = $this->is_date();
+		$is_day = $this->is_day();
+		$is_feed = $this->is_feed();
+		$is_front_page = $this->is_front_page();
+		$is_home = $this->is_home();
+		$is_month = $this->is_month();
+		$is_page = $this->is_page();
+		$is_preview = $this->is_preview();
+		$is_search = $this->is_search();
+		$is_single = $this->is_single();
+		$is_singular = $this->is_singular();
+		$is_static_frontpage = $this->is_static_frontpage();
+		$is_tag = $this->is_tag();
+		$is_tax = $this->is_tax();
+		$is_ultimate_member_user_page = $this->is_ultimate_member_user_page();
+		$is_wc_shop = $this->is_wc_shop();
+		$is_wc_product = $this->is_wc_product();
+		$is_year = $this->is_year();
+		$is_seo_settings_page = $this->is_seo_settings_page();
+
+		//* Get all above vars, split them in two (true and false) and sort them by key names.
+		$vars = get_defined_vars();
+		$current = array_filter( $vars );
+		$not_current = array_diff_key( $vars, $current );
+		ksort( $current );
+		ksort( $not_current );
+
+		$timer = '<div style="display:inline-block;width:100%;padding:20px;border-bottom:1px solid #666;">Generated in: ' . number_format( $this->timer(), 5 ) . ' seconds</div>' ;
+
+		$output = '';
+		foreach ( $current as $name => $value ) {
+			$type = '(' . gettype( $value ) . ')';
+			if ( is_bool( $value ) )
+				$value = $value ? 'true' : 'false';
+			else
+				$value = esc_attr( var_export( $value, true ) );
+
+			$value = $this->the_seo_framework_debug_hidden ? $type . ' ' . $value : '<font color="harrisonford">' . $type . ' ' . $value . '</font>';
+			$out = $name . ' => ' . $value;
+			$output .= $this->the_seo_framework_debug_hidden ? $out . PHP_EOL : '<span style="background:#dadada">' . $out . '</span>' . PHP_EOL;
+		}
+
+		foreach ( $not_current as $name => $value ) {
+			$type = '(' . gettype( $value ) . ')';
+			if ( is_bool( $value ) )
+				$value = $value ? 'true' : 'false';
+			else
+				$value = esc_attr( var_export( $value, true ) );
+
+			$value = $this->the_seo_framework_debug_hidden ? $type . ' ' . $value : '<font color="harrisonford">' . $type . ' ' . $value . '</font>';
+			$out = $name . ' => ' . $value;
+			$output .= $out . PHP_EOL;
+		}
+
+		$title = $this->is_admin() ? 'Current WordPress Screen + Expected WordPress Query' : 'Current WordPress Query';
+		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #666;"><h2 style="color:#222;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
+
+		$output = $this->the_seo_framework_debug_hidden ? $output : str_replace( PHP_EOL, '<br>' . PHP_EOL, $output );
+
+		$output = '<div style="display:inline-block;width:100%;padding:20px;font-family:Consolas,Monaco,monospace;font-size:14px;">' . $output . '</div>';
+		$output = '<div style="display:block;width:100%;background:#fafafa;color:#333;border-bottom:1px solid #666">' . $title . $timer . $output . '</div>';
 
 		return $output;
 	}

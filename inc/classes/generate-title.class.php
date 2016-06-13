@@ -527,6 +527,13 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 
 		$title = $this->do_title_pro_filter( $title, $args, false );
 
+		/**
+		 * Applies filters 'the_seo_framework_do_shortcodes_in_title' : Boolean
+		 * @since 2.6.6
+		 */
+		if ( apply_filters( 'the_seo_framework_do_shortcodes_in_title', false ) )
+			$title = do_shortcode( $title );
+
 		if ( $args['escape'] )
 			$title = $this->escape_title( $title );
 

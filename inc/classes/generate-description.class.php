@@ -77,8 +77,15 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 			$description = $this->generate_description_from_id( $args, false );
 
 		/**
-		 * Beautify.
-		 * @since 2.3.4
+		 * Applies filters 'the_seo_framework_do_shortcodes_in_description' : Boolean
+		 * @since 2.6.6
+		 */
+		if ( apply_filters( 'the_seo_framework_do_shortcodes_in_description', false ) )
+			$description = do_shortcode( $description );
+
+		/**
+		 * Sanitize.
+		 * @since 2.3.4 Beautifies too.
 		 */
 		$description = $this->escape_description( $description );
 
@@ -707,9 +714,10 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 				$excerpt = $this->get_excerpt_by_id( '', $page_id );
 			} else if ( $term && is_object( $term ) ) {
 				//* We're on a taxonomy now.
-				$excerpt = empty( $term->description ) ? $this->get_excerpt_by_id( '', '', $page_id ) : $term->description;
+				global $shortcode_tags;
+				$excerpt = empty( $term->description ) ? $this->get_excerpt_by_id( '', '', $page_id ) : $this->s_description( $term->description );
 			} else if ( $this->is_author() ) {
-				$excerpt = get_the_author_meta( 'description', (int) get_query_var( 'author' ) );
+				$excerpt = $this->s_description( get_the_author_meta( 'description', (int) get_query_var( 'author' ) ) );
 			} else {
 				$excerpt = '';
 			}
@@ -747,7 +755,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	 * @param int $max_char_length At what point to shave off the excerpt.
 	 * @return string The trimmed excerpt.
 	 */
-	protected function trim_excerpt( $excerpt, $excerpt_length, $max_char_length ) {
+	public function trim_excerpt( $excerpt, $excerpt_length, $max_char_length ) {
 
 		if ( $excerpt_length > $max_char_length ) {
 
@@ -793,7 +801,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 				}
 			}
 
-			//* Remove comma's and spaces.
+			//* Remove trailing/leading comma's and spaces.
 			$excerpt = trim( $excerpt, ' ,' );
 
 			//* Fetch last character.
@@ -806,7 +814,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 
 		}
 
-		return $excerpt;
+		return trim( $excerpt );
 	}
 
 }

@@ -30,6 +30,113 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 	 */
 	public function __construct() {
 		parent::__construct();
+
+		add_action( 'save_post', array( $this, 'inpost_seo_save' ), 1, 2 );
+	}
+
+	/**
+	 * Save the SEO settings when we save a post or page.
+	 * Some values get sanitized, the rest are pulled from identically named subkeys in the $_POST['autodescription'] array.
+	 *
+	 * @uses $this->save_custom_fields() Perform checks and saves post meta / custom field data to a post or page.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param integer  $post_id  Post ID.
+	 * @param stdClass $post     Post object.
+	 * @return mixed Returns post id if permissions incorrect, null if doing autosave, ajax or future post, false if update
+	 *               or delete failed, and true on success.
+	 */
+	public function inpost_seo_save( $post_id, $post ) {
+
+		if ( ! isset( $_POST['autodescription'] ) )
+			return;
+
+		//* Merge user submitted options with fallback defaults
+		$data = wp_parse_args( $_POST['autodescription'], array(
+			'_genesis_title'         => '',
+			'_genesis_description'   => '',
+			'_genesis_canonical_uri' => '',
+			'redirect'               => '',
+			'_genesis_noindex'       => 0,
+			'_genesis_nofollow'      => 0,
+			'_genesis_noarchive'     => 0,
+			'exclude_local_search'   => 0,
+		) );
+
+		foreach ( (array) $data as $key => $value ) {
+			//* Sanitize the title
+			if ( '_genesis_title' === $key )
+				$data[$key] = trim( strip_tags( $value ) );
+
+			//* Sanitize the description
+			if ( '_genesis_description' === $key )
+				$data[$key] = $this->s_description( $value );
+
+			//* Sanitize the URL. Make sure it's an absolute URL
+			if ( 'redirect' === $key )
+				$data[$key] = $this->s_redirect_url( $value );
+
+		}
+
+		$this->save_custom_fields( $data, 'inpost_seo_save', 'hmpl_ad_inpost_seo_nonce', $post );
+	}
+
+	/**
+	 * Save post meta / custom field data for a post or page.
+	 *
+	 * It verifies the nonce, then checks we're not doing autosave, ajax or a future post request. It then checks the
+	 * current user's permissions, before finally* either updating the post meta, or deleting the field if the value was not
+	 * truthy.
+	 *
+	 * By passing an array of fields => values from the same metabox (and therefore same nonce) into the $data argument,
+	 * repeated checks against the nonce, request and permissions are avoided.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
+	 *
+	 * @param array    $data         Key/Value pairs of data to save in '_field_name' => 'value' format.
+	 * @param string   $nonce_action Nonce action for use with wp_verify_nonce().
+	 * @param string   $nonce_name   Name of the nonce to check for permissions.
+	 * @param WP_Post|integer $post  Post object or ID.
+	 * @return mixed Return null if permissions incorrect, doing autosave, ajax or future post, false if update or delete
+	 *               failed, and true on success.
+	 */
+	public function save_custom_fields( array $data, $nonce_action, $nonce_name, $post ) {
+
+		//* Verify the nonce
+		if ( ! isset( $_POST[ $nonce_name ] ) || ! wp_verify_nonce( $_POST[ $nonce_name ], $nonce_action ) )
+			return;
+
+		//* Don't try to save the data under autosave, ajax, or future post.
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+			return;
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX )
+			return;
+		if ( defined( 'DOING_CRON' ) && DOING_CRON )
+			return;
+
+		//* Grab the post object
+		$post = get_post( $post );
+
+		//* Don't save if WP is creating a revision (same as DOING_AUTOSAVE?)
+		if ( 'revision' === get_post_type( $post ) )
+			return;
+
+		//* Check that the user is allowed to edit the post
+		if ( ! current_user_can( 'edit_post', $post->ID ) )
+			return;
+
+		//* Cycle through $data, insert value or delete field
+		foreach ( (array) $data as $field => $value ) {
+			//* Save $value, or delete if the $value is empty
+			if ( $value )
+				update_post_meta( $post->ID, $field, $value );
+			else
+				delete_post_meta( $post->ID, $field );
+		}
+
 	}
 
 	/**
@@ -58,21 +165,10 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 			return '';
 
 		$excerpt = wp_strip_all_tags( strip_shortcodes( $excerpt ) );
-		$excerpt = str_replace( array( "\r\n", "\r", "\n" ), "\n", $excerpt );
 
-		$lines = explode( "\n", $excerpt );
-		$new_lines = array();
+		$output = $this->s_description( $excerpt );
 
-		//* Remove line breaks
-		foreach ( $lines as $i => $line ) {
-			//* Don't add empty lines or paragraphs
-			if ( $line && '&nbsp;' !== $line )
-				$new_lines[] = trim( $line ) . ' ';
-		}
-
-		$output = implode( $new_lines );
-
-		return (string) $output;
+		return $output;
 	}
 
 	/**

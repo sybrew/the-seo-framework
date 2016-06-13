@@ -1076,6 +1076,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * Detect theme title fix extension plugin.
 	 *
 	 * @since 2.6.0
+	 * @staticvar bool $fixed
 	 *
 	 * @return bool True theme will do it right.
 	 */

@@ -179,7 +179,10 @@ The output will be stored for each page, if you've edited a page the page output
 * Confirmed Jetpack modules: Custom Content Types (Testimonials, Portfolio), Infinite Scroll, Photon, Sitemaps, Publicize.
 * Most popular SEO plugins, let's not get in each other's way.
 * Many, many more plugins, yet to be confirmed.
-* Divi page builder // var_dump()
+* Divi Builder by Elegant Themes
+* Visual Composer by WPBakery
+* Page Builder by SiteOrigin
+* Beaver Builder by Fastline Media
 
 **Themes:**
 
@@ -354,72 +357,34 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Release date:**
 
-* June 11th 2016
+* June 14th 2016
 
 **Summarized**
-/
-* Pagebuilders are awesome for if you just want to make a website, and when you want to make it fast.
-* From this update the Divi Builder, Headway Themes, Visual Composer and many other page builders are now fully supported.
 
+* Page builders are great for if you want to style your website, and when you want to do it fast.
+* So from this update the Divi Builder, Visual Composer, Beaver Builder, and the Page Builder by SiteOrigin are now fully supported.
+* Various bugs have also been fixed, to improve your experience. One particular bugfix is related to Polylang; this bugfix should improve performance and reduce other bugs from happening as well.
+* The Automated and Manual description output has been improved in several ways as well.
+* For developers, a class has been removed. All functions within have been moved to more suitable classes. This change will reduce server resource usage and increase overall performance.
 
-**SEO Tip of the Update:**
-/
-* TODO
+**SEO Tip of the Update - Know your Keywords:**
+
+* To know how your website is found, sign up for Google Search Console. Over a couple of days (or weeks), elegant data has been accumulated about your website.
+* When you go to the Search Analytics within the Search Console, you'll see a list of queries people have used to find your website.
+* The queries can be used as keywords, they are excellent starting points for new post titles and subjects. Go ahead, use them!
+
+**For developers - About the class removal:**
+
+* Because the plugin makes use of a "[Facade pattern](https://en.wikipedia.org/wiki/Facade_pattern)". And through class extending, all functions within the plugin are available at all times.
+* In trade for increased resource usage this does make the plugin very compatible, faster, and easier to work with.
+* This plugin serves one single responsibility: Outputting SEO data, and determining the reason why. Therefore, although it looks like a "[God object](https://en.wikipedia.org/wiki/God_object)", it's not.
+* Please keep in mind that all functions from any class are available through the "Facade object". Because of this, the class removal shouldn't cause issues for developers.
+* You can call this "Facade object" through a single cached function (rather than a global variable), this cached function is `the_seo_framework()`.
+* If you wish to extend this plugin, feel free to ask me for any details or suggestions at the [Support forums](https://wordpress.org/support/plugin/autodescription).
 
 **Detailed Log:**
-/
-***There's something to be said about [all these details](https://theseoframework.com/?p= TODO #detailed).***
 
-**For everyone:**
-
-* **Added:**
-	/
-	* Pagebuilder detection, so no more incorrect descriptions can be created when a page builder. The following page builders are now supported, and when detected, the found content will be omitted from the description generation:
-		* Divi Builder by Elegant Themes
-		* Visual Composer by WPBakery
-		* Page Builder by SiteOrigin
-		* Beaver Builder by Fastline Media
-* **Updated:**
-	* Because of the page builder detection, all previous description transients have been invalidated and will be cleaned from the database automatically within 7 days.
-* **Fixed:**
-	/
-	* Incorrect descriptions were parsed in The SEO Bar on Taxonomies and Terms when a custom one is filled in.
-	* TODO CONFIRM CASE ?? The WooCommerce Shop page is now no longer seen as the Homepage when it's not bound to an existing page.
-	* On update, this plugin no longer flushes the WordPress Rewrite Engine to prevent missing rewrite data.
-	* No more Custom Fields will be produced by this plugin.
-* **Note:**
-	* In theory, when not flushing the rewrite data, it's possible that the sitemap will not be outputted correctly.
-	* In practice, this won't be the case; unless you're updating from the SEO Settings saved prior to The SEO Framework 2.2.9.
-
-**For developers:**
-
-* **Added:**
-	* The cache key base is now shown within the debugger title on the front-end and edit pages.
-	* `AutoDescription_Query::get_the_real_ID()` now also works on Terms and Taxonomies within the term edit pages.
-* **Improved:**
-	/
-	* The static functions related to plugin (de-)activation have been moved outside of their class, into (marked private) functions to reduce memory usage on.
-	* Slightly reduced memory useage of `AutoDescription_Load::call_function()` by reusing variables.
-	* TODO Facebook Knowledge Graph and Open Graph URL trailing slash is now trimmed on save to allow for easier in-source copying.
-	* Replaced seconds calculations with predefined WordPress constants.
-	* `AutoDescription_Generate_Url::get_paged_url()` third parameter `$post_id` now also fetches the content for `<!--nextpage-->` accordingly, rather than what's determined through the loop.
-	* Removed the `saved_flag` singular post meta, as it's redundant and caused a Custom Field to show up.
-	* The expected/current meta output doesn't add onto debug values.
-* **Changed:**
-	* `AutoDescription_PostData::fetch_post_by_id()` has gained an $output parameter, default `ARRAY_A`. All linked functions now fetch the post data as an object instead of an array.
-* **Removed:**
-	* Public static function `AutoDescription_Sitemaps::flush_rewrite_rules_activation`, not deprecated as access was private.
-	* Public static function `AutoDescription_Sitemaps::flush_rewrite_rules_deactivation`, not deprecated as access was private.
-* **Deprecated:**
-	* `AutoDescription_Load::the_seo_framework_version()`. It's no longer used within the plugin and serves no purpose.
-* **Fixed:**
-	* Plausible PHP warning on terms and taxonomies when fetching data.
-	* LD+Json transient state is now correctly reflected in the debug output when the output is an empty string.
-* **Filter Notes:**
-	* **New:**
-		* `(bool) the_seo_framework_detect_page_builder`
-* **Other:**
-	* Cleaned up code, quite a lot.
+***There's something to be said about [all these details](https://theseoframework.com/?p=1365#detailed).***
 
 = 2.6.5.1 - Schematic Hotfix =
 

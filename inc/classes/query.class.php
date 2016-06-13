@@ -155,6 +155,31 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	}
 
 	/**
+	 * Fetch the Admin Term ID. For WordPress 4.5 up and below.
+	 *
+	 * @since 2.6.0
+	 * @since 2.6.6 Moved from class AutoDescription_TermData.
+	 * @staticvar int $term_id The Term ID.
+	 *
+	 * @return int Term ID.
+	 */
+	public function get_admin_term_id() {
+
+		static $term_id = null;
+
+		if ( isset( $term_id ) )
+			return $term_id;
+
+		if ( isset( $_REQUEST['tag_ID'] ) && $_REQUEST['tag_ID'] ) {
+			$term_id = $_REQUEST['tag_ID'];
+		} else if ( isset( $_REQUEST['term_id'] ) && $_REQUEST['term_id'] ) {
+			$term_id = $_REQUEST['term_id'];
+		}
+
+		return $term_id = $term_id ? absint( $term_id ) : 0;
+	}
+
+	/**
 	 * Detects 404.
 	 *
 	 * @staticvar bool $cache
