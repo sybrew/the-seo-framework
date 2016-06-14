@@ -64,9 +64,9 @@ class AutoDescription_Compat extends AutoDescription_Debug {
 	 * Removes the Genesis SEO meta boxes on the SEO Settings page
 	 *
 	 * @since 2.2.4
+	 *
 	 * @param array $plugins, overwritten as this filter will fire the
 	 * detection, regardless of other SEO plugins.
-	 *
 	 * @return array Plugins to detect.
 	 */
 	public function no_more_genesis_seo( $plugins ) {

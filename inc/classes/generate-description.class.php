@@ -26,7 +26,7 @@
 class AutoDescription_Generate_Description extends AutoDescription_Generate {
 
 	/**
-	 * Whether we're parsing the manual Excerpt for the automated description.
+	 * Determines whether we're parsing the manual content Excerpt for the automated description.
 	 *
 	 * @since 2.6.0
 	 *
@@ -35,16 +35,18 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	protected $using_manual_excerpt = false;
 
 	/**
-	 * Constructor, load parent constructor
+	 * Constructor, loads parent constructor.
 	 */
 	public function __construct() {
 		parent::__construct();
 	}
 
 	/**
-	 * Create description
+	 * Creates description. Base function.
 	 *
-	 * @param string $description the description.
+	 * @since 1.0.0
+	 *
+	 * @param string $description The optional description to simply parse.
 	 * @param array $args description args : {
 	 * 		@param int $id the term or page id.
 	 * 		@param string $taxonomy taxonomy name.
@@ -52,9 +54,6 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	 * 		@param bool $get_custom_field Do not fetch custom title when false.
 	 * 		@param bool $social Generate Social Description when true.
 	 * }
-	 *
-	 * @since 1.0.0
-	 *
 	 * @return string The description
 	 */
 	public function generate_description( $description = '', $args = array() ) {
@@ -78,8 +77,15 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 			$description = $this->generate_description_from_id( $args, false );
 
 		/**
-		 * Beautify.
-		 * @since 2.3.4
+		 * Applies filters 'the_seo_framework_do_shortcodes_in_description' : Boolean
+		 * @since 2.6.6
+		 */
+		if ( apply_filters( 'the_seo_framework_do_shortcodes_in_description', false ) )
+			$description = do_shortcode( $description );
+
+		/**
+		 * Sanitize.
+		 * @since 2.3.4 Beautifies too.
 		 */
 		$description = $this->escape_description( $description );
 
@@ -89,10 +95,9 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	/**
 	 * Escapes and beautifies description.
 	 *
-	 * @param string $description The description to escape and beautify.
-	 *
 	 * @since 2.5.2
 	 *
+	 * @param string $description The description to escape and beautify.
 	 * @return string Escaped and beautified description.
 	 */
 	public function escape_description( $description = '' ) {
@@ -107,11 +112,9 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Parse and sanitize description args.
+	 * Parses and sanitizes description arguments.
 	 *
-	 * @param array $args required The passed arguments.
-	 * @param array $defaults The default arguments.
-	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
+	 * @since 2.5.0
 	 *
 	 * @applies filters the_seo_framework_description_args : {
 	 * 		@param int $id the term or page id.
@@ -121,7 +124,9 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	 * 		@param bool $social Generate Social Description when true.
 	 * }
 	 *
-	 * @since 2.5.0
+	 * @param array $args required The passed arguments.
+	 * @param array $defaults The default arguments.
+	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
 	 * @return array $args parsed args.
 	 */
 	public function parse_description_args( $args = array(), $defaults = array(), $get_defaults = false ) {
@@ -154,7 +159,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Reparse description args.
+	 * Reparses description args.
 	 *
 	 * @param array $args required The passed arguments.
 	 *
@@ -181,7 +186,9 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Create description
+	 * Creates description from custom fields.
+	 *
+	 * @since 2.4.1
 	 *
 	 * @param array $args description args : {
 	 * 		@param int $id the term or page id.
@@ -189,9 +196,6 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	 * 		@param bool $is_home We're generating for the home page.
 	 * }
 	 * @param bool $escape Escape the output if true.
-	 *
-	 * @since 2.4.1
-	 *
 	 * @return string|mixed The description, might be unsafe for html output.
 	 */
 	public function description_from_custom_field( $args = array(), $escape = true ) {
@@ -205,13 +209,12 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 		//* HomePage Description.
 		$description = $this->get_custom_homepage_description( $args );
 
-		//* Singular Description.
-		if ( empty( $description ) && false === $this->is_archive() )
-			$description = $this->get_custom_singular_description( $args['id'] );
-
-		//* Archive Description.
-		if ( empty( $description ) && $this->is_archive() )
-			$description = $this->get_custom_archive_description( $args );
+		if ( empty( $description ) ) {
+			if ( $this->is_archive() )
+				$description = $this->get_custom_archive_description( $args );
+			else
+				$description = $this->get_custom_singular_description( $args['id'] );
+		}
 
 		if ( $escape && $description )
 			$description = $this->escape_description( $description );
@@ -220,15 +223,13 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Fetch HomePage Description from custom field.
+	 * Fetches HomePage Description from custom field.
 	 *
+	 * @since 2.6.0
 	 * @access protected
 	 * Use $this->description_from_custom_field() instead.
 	 *
 	 * @param array $args Description args.
-	 *
-	 * @since 2.6.0
-	 *
 	 * @return string The Description
 	 */
 	protected function get_custom_homepage_description( $args ) {
@@ -244,15 +245,13 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Fetch Singular Description from custom field.
+	 * Fetches Singular Description from custom field.
 	 *
+	 * @since 2.6.0
 	 * @access protected
 	 * Use $this->description_from_custom_field() instead.
 	 *
 	 * @param int $id The page ID.
-	 *
-	 * @since 2.6.0
-	 *
 	 * @return string The Description
 	 */
 	protected function get_custom_singular_description( $id ) {
@@ -270,13 +269,11 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	/**
 	 * Fetch Archive Description from custom field.
 	 *
+	 * @since 2.6.0
 	 * @access protected
 	 * Use $this->description_from_custom_field() instead.
 	 *
 	 * @param array $args
-	 *
-	 * @since 2.6.0
-	 *
 	 * @return string The Description
 	 */
 	protected function get_custom_archive_description( $args ) {
@@ -313,7 +310,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Generate description from content.
+	 * Generates description from content while parsing filters.
 	 *
 	 * @since 2.3.3
 	 *
@@ -325,7 +322,6 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	 * 		@param bool $social Generate Social Description when true.
 	 * }
 	 * @param bool $escape Escape output when true.
-	 *
 	 * @return string $output The description.
 	 */
 	public function generate_description_from_id( $args = array(), $escape = true ) {
@@ -352,9 +348,10 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Generate description from content
+	 * Generates description from content.
 	 *
 	 * @since 2.6.0
+	 * @staticvar string $title
 	 *
 	 * @param array $args description args : {
 	 * 		@param int $id the term or page id.
@@ -364,9 +361,6 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	 * 		@param bool $social Generate Social Description when true.
 	 * }
 	 * @param bool $escape Whether to escape the description.
-	 *
-	 * @staticvar string $title
-	 *
 	 * @return string The description.
 	 */
 	protected function generate_the_description( $args, $escape = true ) {
@@ -400,11 +394,8 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 
 		/**
 		 * Cache the generated description within a transient.
-		 *
 		 * @since 2.3.3
-		 *
-		 * Put inside a different function.
-		 * @since 2.3.4
+		 * @since 2.3.4 Put inside a different function.
 		 */
 		$excerpt = $this->get_transient( $this->auto_description_transient );
 		if ( false === $excerpt ) {
@@ -434,10 +425,8 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 			/**
 			 * Transient expiration: 1 week.
 			 * Keep the description for at most 1 week.
-			 *
-			 * 60s * 60m * 24h * 7d
 			 */
-			$expiration = 60 * 60 * 24 * 7;
+			$expiration = WEEK_IN_SECONDS;
 
 			$this->set_transient( $this->auto_description_transient, $excerpt, $expiration );
 		}
@@ -487,12 +476,11 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Generate the home page description.
-	 *
-	 * @param bool $custom_field whether to check the Custom Field.
+	 * Generates the home page description.
 	 *
 	 * @since 2.6.0
 	 *
+	 * @param bool $custom_field whether to check the Custom Field.
 	 * @return string The description.
 	 */
 	public function generate_home_page_description( $custom_field = true ) {
@@ -520,15 +508,14 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Whether to add description additions. (╯°□°）╯︵ ┻━┻
+	 * Determines whether to add description additions. (╯°□°）╯︵ ┻━┻
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 *
 	 * @param int $id The current page or post ID.
 	 * @param object|emptystring $term The current Term.
-	 *
-	 * @return bool
+	 * @return bool Whether to add description additions.
 	 */
 	public function add_description_additions( $id = '', $term = '' ) {
 
@@ -554,13 +541,11 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Get Description Separator.
+	 * Gets Description Separator.
 	 *
-	 * Applies filters the_seo_framework_description_separator
+	 * Applies filters 'the_seo_framework_description_separator' : string
 	 * @since 2.3.9
-	 *
-	 * @staticvar $sep
-	 * @since 2.6.0
+	 * @staticvar string $sep
 	 *
 	 * @return string The Separator
 	 */
@@ -575,18 +560,16 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Generate description additions.
+	 * Generates description additions.
 	 *
 	 * @since 2.6.0
+	 * @staticvar array $title string of titles.
+	 * @staticvar string $on
 	 * @access private
 	 *
 	 * @param int $id The post or term ID
 	 * @param object|empty $term The term object
 	 * @param bool $ignore Whether to ignore options and filters.
-	 *
-	 * @staticvar array $title string of titles.
-	 * @staticvar string $on
-	 *
 	 * @return array : {
 	 *		$title		=> The title
 	 *		$on 		=> The word separator
@@ -638,12 +621,11 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	/**
 	 * Generates the Title for description.
 	 *
+	 * @since 2.5.2
+	 *
 	 * @param int $id The page ID.
 	 * @param void|object $term The term object.
 	 * @param bool $page_on_front If front page.
-	 *
-	 * @since 2.5.2
-	 *
 	 * @return string The description title.
 	 */
 	public function generate_description_title( $id = '', $term = '', $page_on_front = false ) {
@@ -700,18 +682,16 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Generate the excerpt.
+	 * Generates the excerpt.
+	 * @NOTE Supply calculated $max_char_length to reflect actual output.
+	 *
+	 * @since 2.3.4
+	 * @staticvar array $excerpt_cache Holds the excerpt
+	 * @staticvar array $excerptlength_cache Holds the excerpt length
 	 *
 	 * @param int|string $page_id required : The Page ID
 	 * @param object|null $term The Taxonomy Term.
 	 * @param int $max_char_length The maximum excerpt char length.
-	 *
-	 * @since 2.3.4
-	 *
-	 * @staticvar array $excerpt_cache Holds the excerpt
-	 * @staticvar array $excerptlength_cache Holds the excerpt length
-	 *
-	 * Please note that this does not reflect the actual output becaue the $max_char_length isn't calculated on direct call.
 	 */
 	public function generate_excerpt( $page_id, $term = '', $max_char_length = 154 ) {
 
@@ -727,9 +707,9 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 				$excerpt = $this->get_excerpt_by_id( '', $page_id );
 			} else if ( $term && is_object( $term ) ) {
 				//* We're on a taxonomy now.
-				$excerpt = empty( $term->description ) ? $this->get_excerpt_by_id( '', '', $page_id ) : $term->description;
+				$excerpt = empty( $term->description ) ? $this->get_excerpt_by_id( '', '', $page_id ) : $this->s_description( $term->description );
 			} else if ( $this->is_author() ) {
-				$excerpt = get_the_author_meta( 'description', (int) get_query_var( 'author' ) );
+				$excerpt = $this->s_description( get_the_author_meta( 'description', (int) get_query_var( 'author' ) ) );
 			} else {
 				$excerpt = '';
 			}
@@ -758,17 +738,16 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Trim the excerpt.
+	 * Trims the excerpt by word and determines sentence stops.
+	 *
+	 * @since 2.6.0
 	 *
 	 * @param string $excerpt The untrimmed excerpt.
 	 * @param int $excerpt_length The current excerpt length.
 	 * @param int $max_char_length At what point to shave off the excerpt.
-	 *
-	 * @since 2.6.0
-	 *
 	 * @return string The trimmed excerpt.
 	 */
-	protected function trim_excerpt( $excerpt, $excerpt_length, $max_char_length ) {
+	public function trim_excerpt( $excerpt, $excerpt_length, $max_char_length ) {
 
 		if ( $excerpt_length > $max_char_length ) {
 
@@ -814,7 +793,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 				}
 			}
 
-			//* Remove comma's and spaces.
+			//* Remove trailing/leading comma's and spaces.
 			$excerpt = trim( $excerpt, ' ,' );
 
 			//* Fetch last character.
@@ -827,7 +806,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 
 		}
 
-		return $excerpt;
+		return trim( $excerpt );
 	}
 
 }

@@ -35,9 +35,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 	protected $use_object_cache = true;
 
 	/**
-	 * Constructor. Init actions.
-	 *
-	 * @since 2.1.6
+	 * Constructor. Initializes actions and loads parent constructor.
 	 */
 	public function __construct() {
 		parent::__construct();
@@ -55,7 +53,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 	}
 
 	/**
-	 * Run the plugin
+	 * Runs the plugin on the front-end.
 	 *
 	 * @since 1.0.0
 	 */
@@ -75,7 +73,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 	}
 
 	/**
-	 * Initialize front-end actions.
+	 * Initializes front-end actions.
 	 *
 	 * @since 2.5.2
 	 */
@@ -99,7 +97,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 	}
 
 	/**
-	 * Initialize front-end filters.
+	 * Runs front-end filters.
 	 *
 	 * @since 2.5.2
 	 */
@@ -118,9 +116,8 @@ class AutoDescription_Init extends AutoDescription_Query {
 		add_filter( 'woo_title', array( $this, 'title_from_cache'), 99 );
 
 		/**
+		 * Applies filters 'the_seo_framework_manipulate_title' : boolean
 		 * Disables the title tag manipulation on old themes.
-		 * Applies filters the_seo_framework_manipulate_title
-		 *
 		 * @since 2.4.1
 		 */
 		if ( (bool) apply_filters( 'the_seo_framework_manipulate_title', true ) ) {
@@ -131,16 +128,14 @@ class AutoDescription_Init extends AutoDescription_Query {
 	}
 
 	/**
-	 * Header actions.
+	 * Runs header actions.
 	 *
+	 * @since 2.2.6
 	 * @uses The_SEO_Framework_Load::call_function()
 	 *
 	 * @param string|array $args the arguments that will be passed
 	 * @param bool $before if the header actions should be before or after the SEO Frameworks output
-	 *
-	 * @since 2.2.6
-	 *
-	 * @return string|null
+	 * @return string|empty The filter output.
 	 */
 	public function header_actions( $args = '', $before = true ) {
 
@@ -172,33 +167,9 @@ class AutoDescription_Init extends AutoDescription_Query {
 	}
 
 	/**
-	 * Output the header meta and script
+	 * Echos the header meta and scripts.
 	 *
 	 * @since 1.0.0
-	 *
-	 * @param blog_id : the blog id
-	 *
-	 * Applies filters the_seo_framework_pre 	: Adds content before
-	 * 											: @param before
-	 *											: cached
-	 * Applies filters the_seo_framework_pro 	: Adds content after
-	 *											: @param after
-	 *											: cached
-	 * Applies filters the_seo_framework_generator_tag : String generator tag content
-	 * Applies filters the_seo_framework_indicator : True to show indicator in html
-	 *
-	 * @uses hmpl_ad_description()
-	 * @uses $this->og_image()
-	 * @uses $this->og_locale()
-	 * @uses $this->og_type()
-	 * @uses $this->og_title()
-	 * @uses $this->og_description()
-	 * @uses $this->og_url()
-	 * @uses $this->og_sitename()
-	 * @uses $this->ld_json()
-	 * @uses $this->canonical()
-	 *
-	 * Echos output.
 	 */
 	public function html_output() {
 
@@ -237,6 +208,11 @@ class AutoDescription_Init extends AutoDescription_Query {
 
 			$robots = $this->robots();
 
+			/**
+			 * Applies filters 'the_seo_framework_pre' : string
+			 * Adds content before the output.
+			 * @since 2.6.0
+			 */
 			$before = (string) apply_filters( 'the_seo_framework_pre', '' );
 
 			$before_actions = $this->header_actions( '', true );
@@ -287,10 +263,17 @@ class AutoDescription_Init extends AutoDescription_Query {
 
 			$after_actions = $this->header_actions( '', false );
 
+			/**
+			 * Applies filters 'the_seo_framework_pro' : string
+			 * Adds content before the output.
+			 * @since 2.6.0
+			 */
 			$after = (string) apply_filters( 'the_seo_framework_pro', '' );
 
 			/**
-			 * @see https://wordpress.org/plugins/generator-the-seo-framework/
+			 * Applies filters 'the_seo_framework_generator_tag' : String generator tag content.
+			 * @since 2.0.1
+			 * @see https://wordpress.org/plugins/generator-the-seo-framework/ For an alternative.
 			 */
 			$generator = (string) apply_filters( 'the_seo_framework_generator_tag', '' );
 
@@ -302,13 +285,30 @@ class AutoDescription_Init extends AutoDescription_Query {
 			$this->object_cache_set( $cache_key, $output, 86400 );
 		}
 
+		/**
+		 * Applies filters 'the_seo_framework_indicator' : Boolean
+		 * Whether to show the indicator in HTML.
+		 * @since 2.0.0
+		 */
 		$indicator = (bool) apply_filters( 'the_seo_framework_indicator', true );
 
 		$indicatorbefore = '';
 		$indicatorafter = '';
 
 		if ( $indicator ) {
+
+			/**
+			 * Applies filters 'the_seo_framework_indicator_timing' : Boolean
+			 * Whether to show the hidden generation time in HTML.
+			 * @since 2.4.0
+			 */
 			$timer = (bool) apply_filters( 'the_seo_framework_indicator_timing', true );
+
+			/**
+			 * Applies filters 'sybre_waaijer_<3' : Boolean
+			 * Whether to show the hidden author name in HTML.
+			 * @since 2.4.0
+			 */
 			$sybre = (bool) apply_filters( 'sybre_waaijer_<3', true );
 
 			$start = __( 'Start The Seo Framework', 'autodescription' );
@@ -337,15 +337,16 @@ class AutoDescription_Init extends AutoDescription_Query {
 	}
 
 	/**
-	 * Redirect singular page to an alternate URL.
-	 * Called outside html_output
+	 * Redirects singular page to an alternate URL.
 	 *
 	 * @since 2.0.9
+	 *
+	 * @return void early on non-singular pages.
 	 */
 	public function custom_field_redirect() {
 
 		//* Prevent redirect from options on uneditable pages.
-		if ( ! $this->is_singular() )
+		if ( ! $this->is_singular() || $this->is_admin() )
 			return;
 
 		$url = $this->get_custom_field( 'redirect' );
@@ -353,25 +354,15 @@ class AutoDescription_Init extends AutoDescription_Query {
 		if ( $url ) {
 
 			$allow_external = $this->allow_external_redirect();
+			$scheme = null;
 
-			/**
-			 * If the URL is made relative, prevent scheme issues
-			 *
-			 * Removes http:// and https://
-			 *
-			 * esc_url_raw uses is_ssl() to make the url valid again :)
-			 */
-			if ( true !== $allow_external ) {
-				$pattern 	= 	'/'
-							.	'(((http)(s)?)\:)' 	// 1: http: https:
-							. 	'(\/\/)'			// 2: slash slash
-							.	'/s'
-							;
-
-				$url = preg_replace( $pattern, '', $url );
+			if ( false === $allow_external ) {
+				$url = $this->set_url_scheme( $url, 'relative' );
+				$url = $this->add_url_host( $url );
+				$scheme = is_ssl() ? 'https' : 'http';
 			}
 
-			wp_redirect( esc_url_raw( $url ), 301 );
+			wp_redirect( esc_url_raw( $url, $scheme ), 301 );
 			exit;
 		}
 

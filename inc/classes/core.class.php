@@ -26,7 +26,7 @@
 class AutoDescription_Core {
 
 	/**
-	 * Constructor, just be there for me when I need you.
+	 * Constructor. Loads actions and filters.
 	 * Latest Class. Doesn't have parent.
 	 */
 	public function __construct() {
@@ -281,16 +281,13 @@ class AutoDescription_Core {
 
 	/**
 	 * Object cache set wrapper.
-	 * Applies filters 'the_seo_framework_use_object_cache' : Disable object
-	 * caching for this plugin, when applicable.
+	 *
+	 * @since 2.4.3
 	 *
 	 * @param string $key The Object cache key.
 	 * @param mixed $data The Object cache data.
 	 * @param int $expire The Object cache expire time.
 	 * @param string $group The Object cache group.
-	 *
-	 * @since 2.4.3
-	 *
 	 * @return bool true on set, false when disabled.
 	 */
 	public function object_cache_set( $key, $data, $expire = 0, $group = 'the_seo_framework' ) {
@@ -303,8 +300,6 @@ class AutoDescription_Core {
 
 	/**
 	 * Object cache get wrapper.
-	 * Applies filters 'the_seo_framework_use_object_cache' : Disable object
-	 * caching for this plugin, when applicable.
 	 *
 	 * @param string $key The Object cache key.
 	 * @param string $group The Object cache group.
@@ -328,14 +323,10 @@ class AutoDescription_Core {
 	 * @NOTE only to show improvement with large arrays. Might slow down with small arrays.
 	 * @NOTE can't do type checks. Always assume the comparing value is a string.
 	 *
-	 * @uses array_flip()
-	 * @uses isset()
-	 *
 	 * @since 2.5.2
 	 *
 	 * @param string|array $needle The needle(s) to search for
 	 * @param array $array The single dimensional array to search in.
-	 *
 	 * @return bool true if value is in array.
 	 */
 	public function in_array( $needle, $array ) {
@@ -358,9 +349,9 @@ class AutoDescription_Core {
 	/**
 	 * Checks if the string input is exactly '1'.
 	 *
-	 * @param string $value The value to check.
-	 *
 	 * @since 2.6.0
+	 *
+	 * @param string $value The value to check.
 	 * @return bool true if value is '1'
 	 */
 	public function is_checked( $value ) {
@@ -374,9 +365,9 @@ class AutoDescription_Core {
 	/**
 	 * Checks if the option is used and checked.
 	 *
-	 * @param string $option The option name.
-	 *
 	 * @since 2.6.0
+	 *
+	 * @param string $option The option name.
 	 * @return bool Option is checked.
 	 */
 	public function is_option_checked( $option ) {
@@ -392,8 +383,8 @@ class AutoDescription_Core {
 	/**
 	 * Checks if blog is public through WordPress core settings.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 *
 	 * @return bool True is blog is public.
 	 */
@@ -415,7 +406,6 @@ class AutoDescription_Core {
 	 * Multisite Only.
 	 *
 	 * @since 2.6.0
-	 *
 	 * @global object $current_blog. NULL on single site.
 	 *
 	 * @return bool Current blog is spam.
@@ -433,8 +423,8 @@ class AutoDescription_Core {
 	 * Whether to lowercase the noun or keep it UCfirst.
 	 * Depending if language is German.
 	 *
-	 * @staticvar array $lowercase Contains nouns.
 	 * @since 2.6.0
+	 * @staticvar array $lowercase Contains nouns.
 	 *
 	 * @return string The maybe lowercase noun.
 	 */
@@ -449,7 +439,7 @@ class AutoDescription_Core {
 	}
 
 	/**
-	 * The minimum role required to
+	 * Returns the minimum role required to adjust settings.
 	 *
 	 * Applies filter 'the_seo_framework_settings_capability' : string
 	 * This filter changes the minimum role for viewing and editing the plugin's settings.
@@ -520,7 +510,7 @@ class AutoDescription_Core {
 	 */
 	protected function get_tzstring_from_offset( $offset = 0 ) {
 
-		$seconds = round( $offset * 60 * 60 );
+		$seconds = round( $offset * HOUR_IN_SECONDS );
 
 		//* Try Daylight savings.
 		$tzstring = timezone_name_from_abbr( '', $seconds, 1 );

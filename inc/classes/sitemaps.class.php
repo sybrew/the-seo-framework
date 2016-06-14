@@ -316,10 +316,8 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			/**
 			 * Transient expiration: 1 week.
 			 * Keep the sitemap for at most 1 week.
-			 *
-			 * 60s * 60m * 24h * 7d
 			 */
-			$expiration = 60 * 60 * 24 * 7;
+			$expiration = WEEK_IN_SECONDS;
 
 			$this->set_transient( $this->sitemap_transient, $sitemap_content, $expiration );
 		}
@@ -741,12 +739,10 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 				 * Limit the pinging to a maximum of 1 per hour.
 				 * Transient expiration. 1 hour.
 				 *
-				 * 60s * 60m
-				 *
 				 * Applies filters the_seo_framework_sitemap_throttle_s
 				 * @since 2.5.1
 				 */
-				$expiration = (int) apply_filters( 'the_seo_framework_sitemap_throttle_s', 60 * 60 );
+				$expiration = (int) apply_filters( 'the_seo_framework_sitemap_throttle_s', HOUR_IN_SECONDS );
 
 				//* @NOTE: Using legacy set_transient to prevent ping spam.
 				set_transient( $transient, $throttle, $expiration );
@@ -873,43 +869,6 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		$robots_txt = $output;
 
 		return $robots_txt;
-	}
-
-	/**
-	 * Add and Flush rewrite rules on plugin activation.
-	 *
-	 * @since 2.2.9
-	 * @access private
-	 *
-	 * Do not return anything. Just be here. Thanks.
-	 */
-	public static function flush_rewrite_rules_activation() {
-		global $wp_rewrite;
-
-		//* This function is called statically.
-		$the_seo_framework = the_seo_framework();
-		$the_seo_framework->rewrite_rule_sitemap( true );
-
-		$wp_rewrite->init();
-		$wp_rewrite->flush_rules( true );
-	}
-
-	/**
-	 * Flush rewrite rules on plugin deactivation.
-	 *
-	 * @since 2.2.9
-	 * @access private
-	 *
-	 * Do not return anything. Just be here. Thanks.
-	 */
-	public static function flush_rewrite_rules_deactivation() {
-		global $wp_rewrite;
-
-		$wp_rewrite->init();
-
-		unset( $wp_rewrite->extra_rules_top['sitemap\.xml$'] );
-
-		$wp_rewrite->flush_rules( true );
 	}
 
 	/**

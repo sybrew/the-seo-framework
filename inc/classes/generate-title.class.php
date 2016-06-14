@@ -527,6 +527,13 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 
 		$title = $this->do_title_pro_filter( $title, $args, false );
 
+		/**
+		 * Applies filters 'the_seo_framework_do_shortcodes_in_title' : Boolean
+		 * @since 2.6.6
+		 */
+		if ( apply_filters( 'the_seo_framework_do_shortcodes_in_title', false ) )
+			$title = do_shortcode( $title );
+
 		if ( $args['escape'] )
 			$title = $this->escape_title( $title );
 
@@ -765,7 +772,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 			if ( $args['get_custom_field'] && isset( $term ) ) {
 				$title = empty( $term->admeta['doctitle'] ) ? $title : wp_kses_stripslashes( wp_kses_decode_entities( $term->admeta['doctitle'] ) );
 
-				$flag = $this->is_checked( $term->admeta['saved_flag'] );
+				$flag = isset( $term->admeta['saved_flag'] ) && $this->is_checked( $term->admeta['saved_flag'] );
 				if ( false === $flag && empty( $title ) && isset( $term->meta['doctitle'] ) )
 					$title = empty( $term->meta['doctitle'] ) ? $title : wp_kses_stripslashes( wp_kses_decode_entities( $term->meta['doctitle'] ) );
 			}

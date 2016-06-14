@@ -27,8 +27,7 @@
 class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 	/**
-	 * Constructor, load parent constructor
-	 *
+	 * Constructor, load parent constructor.
 	 * Initalizes columns and load post states.
 	 */
 	public function __construct() {
@@ -47,7 +46,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	/**
 	 * Add post state on edit.php to the page or post that has been altered
 	 *
-	 * Applies filters `the_seo_framework_allow_states` : boolean
+	 * Applies filters `the_seo_framework_allow_states` : boolean Whether to allow post states output.
 	 *
 	 * @uses $this->add_post_state
 	 *
@@ -70,10 +69,10 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	/**
 	 * Adds post states in post/page edit.php query
 	 *
+	 * @since 2.1.0
+	 *
 	 * @param array $states The current post states array
 	 * @param object $post The Post Object.
-	 *
-	 * @since 2.1.0
 	 */
 	public function add_post_state( $states = array(), $post ) {
 
@@ -110,12 +109,12 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	/**
 	 * Initializes columns
 	 *
-	 * Applies filter the_seo_framework_show_seo_column : Show the SEO column in edit.php
+	 * Applies filter the_seo_framework_show_seo_column : Boolean Show the SEO column in edit.php
+	 *
+	 * @since 2.1.9
 	 *
 	 * @param object|empty $screen WP_Screen
 	 * @param bool $doing_ajax Whether we're doing an AJAX response.
-	 *
-	 * @since 2.1.9
 	 */
 	public function init_columns( $screen = '', $doing_ajax = false ) {
 
@@ -171,12 +170,12 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	/**
 	 * Adds SEO column on edit(-tags).php
 	 *
-	 * @param array $columns The existing columns
-	 *
-	 * @param $offset 	Determines where the column should be placed. Prefered before comments, then data, then tags.
-	 *					If neither found, it will add the column to the end.
+	 * Also determines where the column should be placed. Prefered before comments, then data, then tags.
+	 * If neither found, it will add the column to the end.
 	 *
 	 * @since 2.1.9
+	 *
+	 * @param array $columns The existing columns
 	 * @return array $columns the column data
 	 */
 	public function add_column( $columns ) {
@@ -223,25 +222,20 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	}
 
 	/**
-	 * Adds the SEO Bar.
+	 * Echo's the SEO Bar.
+	 *
+	 * @since 2.6.0
+	 * @staticvar string $type
 	 *
 	 * @param string $column the current column    : If it's a taxonomy, this is empty
 	 * @param int $post_id the post id             : If it's a taxonomy, this is the column name
 	 * @param string $tax_id this is empty         : If it's a taxonomy, this is the taxonomy id
-	 *
-	 * @param string $status the status in html
-	 *
-	 * @staticvar string $type_cache
-	 * @staticvar string $column_cache
-	 *
-	 * @since 2.6.0
 	 */
 	public function seo_bar( $column, $post_id, $tax_id = '' ) {
 
-		static $type_cache = null;
-		static $column_cache = null;
+		static $type = null;
 
-		if ( ! isset( $type_cache ) || ! isset( $column_cache ) ) {
+		if ( ! isset( $type ) ) {
 			$type = get_post_type( $post_id );
 
 			if ( false === $type || '' !== $tax_id ) {
@@ -250,9 +244,6 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 				if ( isset( $screen->taxonomy ) )
 					$type = $screen->taxonomy;
 			}
-
-			$type_cache = $type;
-			$column_cache = $column;
 		}
 
 		/**
@@ -265,23 +256,18 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		}
 
 		if ( 'ad_seo' === $column )
-			echo $this->post_status( $post_id, $type_cache, true );
+			echo $this->post_status( $post_id, $type, true );
 
 	}
 
 	/**
-	 * Adds SEO column to edit screens.
+	 * Echo's the SEO column in edit screens on Ajax call.
+	 *
+	 * @since 2.1.9
 	 *
 	 * @param string $column the current column    : If it's a taxonomy, this is empty
 	 * @param int $post_id the post id             : If it's a taxonomy, this is the column name
 	 * @param string $tax_id this is empty         : If it's a taxonomy, this is the taxonomy id
-	 *
-	 * @param string $status the status in html
-	 *
-	 * @staticvar string $type_cache
-	 * @staticvar string $column_cache
-	 *
-	 * @since 2.1.9
 	 */
 	public function seo_bar_ajax( $column, $post_id, $tax_id = '' ) {
 
@@ -294,12 +280,13 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		if ( '' !== $tax_id ) {
 			$is_term = true;
 			$column = $post_id;
+			$post_id = $tax_id;
 		}
 
 		if ( 'ad_seo' === $column ) {
 			$context = __( 'Refresh to see the SEO Bar status.', 'autodescription' );
 
-			$ajax_id = $column . $tax_id;
+			$ajax_id = $column . $post_id;
 
 			echo $this->post_status_special( $context, '?', 'unknown', $is_term, $ajax_id );
 		}
@@ -309,13 +296,12 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	/**
 	 * Wrap a single-line block for the SEO bar, showing special statuses.
 	 *
+	 * @since 2.6.0
+	 *
 	 * @param string $context The hover/screenreader context.
 	 * @param string $symbol The single-character symbol.
 	 * @param string $class The SEO block color code. : 'bad', 'okay', 'good', 'unknown'.
 	 * @param int|null $ajax_id The unique Ajax ID to generate a small on-hover script for this ID. May be Arbitrary.
-	 *
-	 * @since 2.6.0
-	 *
 	 * @return string The special block with wrap.
 	 */
 	protected function post_status_special( $context, $symbol = '?', $color = 'unknown', $is_term = '', $ajax_id = null ) {
@@ -339,14 +325,13 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	/**
 	 * Renders post status. Caches the output.
 	 *
-	 * @param int $post_id The Post ID or taxonomy ID
-	 * @param string $type Is fetched on edit.php, inpost, taxonomies, etc.
-	 * @param bool $html return the status in html or string
-	 *
+	 * @since 2.1.9
 	 * @staticvar string $post_i18n The post type slug.
 	 * @staticvar bool $is_term If we're dealing with TT pages.
 	 *
-	 * @since 2.1.9
+	 * @param int $post_id The Post ID or taxonomy ID.
+	 * @param string $type Is fetched on edit.php, inpost, taxonomies, etc.
+	 * @param bool $html return the status in html or string.
 	 * @return string $content the post SEO status
 	 */
 	public function post_status( $post_id = '', $type = 'inpost', $html = true ) {
@@ -442,7 +427,6 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	 *		string $width
 	 *		string $class
 	 * }
-	 *
 	 * @return string The SEO Bar block part.
 	 */
 	protected function wrap_the_seo_bar_block( $args ) {
@@ -459,16 +443,15 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	/**
 	 * Wrap the SEO bar.
 	 *
-	 * @staticvar string $class
+	 * If Ajax ID is set, a small jQuery script will also be output to reset the
+	 * DOM element for the status bar hover.
+	 *
 	 * @since 2.6.0
+	 * @staticvar string $class
 	 *
 	 * @param string $content The SEO Bar content.
 	 * @param bool $is_term Whether the bar is for a term.
 	 * @param int|null $ajax_id The unique Ajax ID to generate a small on-hover script for.
-	 *
-	 * If Ajax ID is set, a small jQuery script will also be output to reset the
-	 * DOM element for the status bar hover.
-	 *
 	 * @return string The SEO Bar wrapped.
 	 */
 	protected function get_the_seo_bar_wrap( $content, $is_term, $ajax_id = null ) {
@@ -507,7 +490,6 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	 *	 'post_low' => string $post_low,
 	 *	 'type' => string $type,
 	 * }
-	 *
 	 * @return string $content The SEO bar.
 	 */
 	protected function the_seo_bar_term( $args ) {
@@ -555,7 +537,6 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	 *	 'post_low' => $post_low,
 	 *	 'type' => $type,
 	 * }
-	 *
 	 * @return string $content The SEO bar.
 	 */
 	protected function the_seo_bar_page( $args ) {
@@ -592,11 +573,10 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	/**
 	 * Fetch the post or term data for The SEO Bar, structured and cached.
 	 *
-	 * @staticvar array $data
 	 * @since 2.6.0
+	 * @staticvar array $data
 	 *
 	 * @param array $args The term/post args.
-	 *
 	 * @return array $data {
 	 *	 'title' => $title,
 	 *	 'title_is_from_custom_field' => $title_is_from_custom_field,
@@ -625,11 +605,10 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	/**
 	 * Fetch the term data for The SEO Bar.
 	 *
-	 * @staticvar array $data
 	 * @since 2.6.0
+	 * @staticvar array $data
 	 *
 	 * @param array $args The term args.
-	 *
 	 * @return array $data {
 	 *	 'title' => $title,
 	 *	 'title_is_from_custom_field' => $title_is_from_custom_field,
@@ -676,12 +655,12 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 		$description_is_from_custom_field = (bool) $description_custom_field;
 		if ( $description_is_from_custom_field ) {
-			$taxonomy = isset( $term->taxonomy ) && $term->taxonomy ? $term->taxonomy : false;
+			$taxonomy = isset( $term->taxonomy ) && $term->taxonomy ? $term->taxonomy : '';
 			$description_args = $taxonomy ? array( 'id' => $post_id, 'taxonomy' => $term->taxonomy, 'get_custom_field' => true ) : array( 'get_custom_field' => true );
 
 			$description = $this->generate_description( '', $description_args );
 		} else {
-			$taxonomy = isset( $term->taxonomy ) && $term->taxonomy ? $term->taxonomy : false;
+			$taxonomy = isset( $term->taxonomy ) && $term->taxonomy ? $term->taxonomy : '';
 			$description_args = $taxonomy ? array( 'id' => $post_id, 'taxonomy' => $term->taxonomy, 'get_custom_field' => false ) : array( 'get_custom_field' => false );
 
 			$description = $this->generate_description( '', $description_args );
@@ -703,11 +682,10 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	/**
 	 * Fetch the post data for The SEO Bar.
 	 *
-	 * @staticvar array $data
 	 * @since 2.6.0
+	 * @staticvar array $data
 	 *
 	 * @param array $args The post args.
-	 *
 	 * @return array $data {
 	 *	 'title' => $title,
 	 *	 'title_is_from_custom_field' => $title_is_from_custom_field,
@@ -735,18 +713,16 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		}
 
 		$title_is_from_custom_field = (bool) $title_custom_field;
-		if ( $title_is_from_custom_field ) {
+		if ( $title_is_from_custom_field )
 			$title = $this->title( '', '', '', array( 'term_id' => $post_id, 'page_on_front' => $page_on_front, 'get_custom_field' => true ) );
-		} else {
+		else
 			$title = $this->title( '', '', '', array( 'term_id' => $post_id, 'page_on_front' => $page_on_front, 'get_custom_field' => false ) );
-		}
 
 		$description_is_from_custom_field = (bool) $description_custom_field;
-		if ( $description_is_from_custom_field ) {
+		if ( $description_is_from_custom_field )
 			$description = $this->generate_description( '', array( 'id' => $post_id, 'get_custom_field' => true ) );
-		} else {
+		else
 			$description = $this->generate_description( '', array( 'id' => $post_id, 'get_custom_field' => false ) );
-		}
 
 		$nofollow = $this->is_checked( $nofollow );
 		$noarchive = $this->is_checked( $noarchive );
@@ -764,9 +740,9 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	/**
 	 * Render the SEO bar title block and notice.
 	 *
-	 * @param array $args
 	 * @since 2.6.0
 	 *
+	 * @param array $args
 	 * @return string The SEO Bar Title Block
 	 */
 	protected function the_seo_bar_title_notice( $args ) {
@@ -846,9 +822,9 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	/**
 	 * Render the SEO bar description block and notice.
 	 *
-	 * @param array $args
 	 * @since 2.6.0
 	 *
+	 * @param array $args
 	 * @return string The SEO Bar Description Block
 	 */
 	protected function the_seo_bar_description_notice( $args ) {
@@ -908,11 +884,10 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	/**
 	 * Description Length notices.
 	 *
-	 * @param int $desc_len The Title length
-	 * @param string $class The current color class.
-	 *
 	 * @since 2.6.0
 	 *
+	 * @param int $desc_len The Title length
+	 * @param string $class The current color class.
 	 * @return array {
 	 * 		notice => The notice,
 	 * 		class => The class,
@@ -958,11 +933,10 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	 * Calculates the word count and returns a warning with the words used.
 	 * Only when count is over 3.
 	 *
-	 * @param string $description The Description with maybe words too many.
-	 * @param string $class The current color class.
-	 *
 	 * @since 2.6.0
 	 *
+	 * @param string $description The Description with maybe words too many.
+	 * @param string $class The current color class.
 	 * @return string The warning notice.
 	 */
 	protected function get_the_seo_bar_description_words_warning( $description, $class ) {
@@ -1058,9 +1032,9 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	/**
 	 * Render the SEO bar index block and notice.
 	 *
-	 * @param array $args
 	 * @since 2.6.0
 	 *
+	 * @param array $args
 	 * @return string The SEO Bar Index Block
 	 */
 	protected function the_seo_bar_index_notice( $args ) {
@@ -1165,7 +1139,6 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	 * @staticvar bool $cache
 	 *
 	 * @param string $type : 'noindex', 'nofollow', 'noarchive'
-	 *
 	 * @return bool
 	 */
 	protected function the_seo_bar_archive_robots_options( $type ) {
@@ -1196,9 +1169,9 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	/**
 	 * Render the SEO bar follow block and notice.
 	 *
-	 * @param array $args
 	 * @since 2.6.0
 	 *
+	 * @param array $args
 	 * @return string The SEO Bar Follow Block
 	 */
 	protected function the_seo_bar_follow_notice( $args ) {
@@ -1304,9 +1277,9 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	/**
 	 * Render the SEO bar archive block and notice.
 	 *
-	 * @param array $args
 	 * @since 2.6.0
 	 *
+	 * @param array $args
 	 * @return string The SEO Bar Follow Block
 	 */
 	protected function the_seo_bar_archive_notice( $args ) {
@@ -1412,9 +1385,9 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	/**
 	 * Render the SEO bar redirect block and notice.
 	 *
-	 * @param array $args
 	 * @since 2.6.0
 	 *
+	 * @param array $args
 	 * @return string The SEO Bar Redirect Block
 	 */
 	protected function the_seo_bar_redirect_notice( $args ) {
@@ -1455,15 +1428,14 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	/**
 	 * Render the SEO bar when the page/term is blocked.
 	 *
+	 * @since 2.6.0
+	 *
 	 * @param array $args {
 	 *		$is_term => bool,
 	 *		$redirect => bool,
 	 *		$noindex => bool,
 	 *		$post_i18n => string
 	 * }
-	 *
-	 * @since 2.6.0
-	 *
 	 * @return string The SEO Bar
 	 */
 	protected function the_seo_bar_blocked( $args ) {
@@ -1549,7 +1521,6 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	 *
 	 * @param int $tit_len The Title length
 	 * @param string $class The Current Title notification class.
-	 *
 	 * @return array {
 	 * 		string $notice => The notice,
 	 * 		string $class => The class,

@@ -519,6 +519,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * Returns a one-line sanitized description
 	 *
 	 * @since 2.5.0
+	 * @since 2.6.6 Removes duplicated spaces.
 	 *
 	 * @param string $new_value The Description.
 	 * @return string One line sanitized description.
@@ -538,6 +539,13 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		}
 
 		$description = trim( implode( $new_lines ) );
+
+		$i = 0;
+		//* Run twice at most, to catch uneven multiple spaces.
+		do {
+			$description = str_replace( '  ', ' ', $description );
+			$i++;
+		} while ( strpos( $description, '  ' ) && $i <= 2 );
 
 		return (string) strip_tags( $description );
 	}
@@ -665,9 +673,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 
 	/**
 	 * Returns a 1 or 0, for all truthy / falsy values.
-	 *
 	 * Uses double casting. First, we cast to bool, then to integer.
-	 *
 	 * Also flushes the sitemap.
 	 *
 	 * @since 2.2.9

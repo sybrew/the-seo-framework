@@ -1076,6 +1076,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * Detect theme title fix extension plugin.
 	 *
 	 * @since 2.6.0
+	 * @staticvar bool $fixed
 	 *
 	 * @return bool True theme will do it right.
 	 */
@@ -1108,10 +1109,10 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	}
 
 	/**
-	 * Whether a page or blog is on front.
+	 * Determines whether a page or blog is on front.
 	 *
-	 * @staticvar bool $pof
 	 * @since 2.6.0
+	 * @staticvar bool $pof
 	 *
 	 * @return bool
 	 */

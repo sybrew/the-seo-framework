@@ -26,31 +26,25 @@
 class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 
 	/**
-	 * Constructor, load parent constructor
+	 * Constructor, loads parent constructor.
 	 */
 	public function __construct() {
 		parent::__construct();
 	}
 
 	/**
-	 * Fetches og:image
+	 * Fetches og:image URL.
 	 *
-	 * @uses get_header_image
+	 * @since 2.5.2 Applies filters string the_seo_framework_og_image_after_featured
+	 * @since 2.5.2 Applies filters string the_seo_framework_og_image_after_header
 	 *
-	 * @param string $post_id the post ID
-	 * @param string $image output url for image
-	 * @param bool $escape Whether to escape the image url
-	 *
-	 * @since 2.2.1
-	 *
-	 * Applies filters string the_seo_framework_og_image_after_featured
-	 * Applies filters string the_seo_framework_og_image_after_header
-	 * @since 2.5.2
-	 *
-	 * @todo create options and upload area.
-	 * @priority medium 2.8.0+
 	 * @todo listen to attached images within post.
 	 * @priority medium 2.7.0+
+	 *
+	 * @param string $post_id The post ID.
+	 * @param array $args The image arguments.
+	 * @param bool $escape Whether to escape the image URL.
+	 * @return string the Open Graph Image URL.
 	 */
 	public function get_image( $post_id = '', $args = array(), $escape = true ) {
 
@@ -60,28 +54,14 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 		if ( empty( $post_id ) )
 			return '';
 
-		$default_args = $this->parse_image_args( '', '', true );
-
 		/**
-		 * Parse args.
-		 * @since 2.5.0
-		 */
-		if ( ! is_array( $args ) ) {
-			//* Old style parameters are used. Doing it wrong.
-			$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', '2.5.0' );
-			$args = $default_args;
-		} else if ( $args ) {
-			$args = $this->parse_image_args( $args, $default_args );
-		} else {
-			$args = $default_args;
-		}
-
-		/**
-		 * Backwards compat with parse args
+		 * Backwards compat with parse args.
 		 * @since 2.5.0
 		 */
 		if ( ! isset( $args['post_id'] ) )
 			$args['post_id'] = $post_id;
+
+		$args = $this->reparse_image_args( $args );
 
 		//* 0. Image from argument.
 		$image = $args['image'];
@@ -122,11 +102,9 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 	/**
 	 * Parse and sanitize image args.
 	 *
-	 * @param array $args required The passed arguments.
-	 * @param array $defaults The default arguments.
-	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
+	 * @since 2.5.0
 	 *
-	 * Applies filters the_seo_framework_og_image_args : {
+	 * @since 2.0.1 Applies filters the_seo_framework_og_image_args : {
 	 *		@param string image The image url
 	 *		@param mixed size The image size
 	 *		@param bool icon Fetch Image icon
@@ -141,7 +119,9 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 	 * }
 	 * The image set in the filter will always be used as fallback
 	 *
-	 * @since 2.5.0
+	 * @param array $args required The passed arguments.
+	 * @param array $defaults The default arguments.
+	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
 	 * @return array $args parsed args.
 	 */
 	public function parse_image_args( $args = array(), $defaults = array(), $get_defaults = false ) {
@@ -157,7 +137,6 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 				'disallowed' => array(),
 			);
 
-			//* @since 2.0.1
 			$defaults = (array) apply_filters( 'the_seo_framework_og_image_args', $defaults, $args );
 		}
 
@@ -177,17 +156,46 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 	}
 
 	/**
+	 * Reparses image args.
+	 *
+	 * @since 2.6.6
+	 *
+	 * @param array $args required The passed arguments.
+	 * @return array $args parsed args.
+	 */
+	public function reparse_image_args( $args = array() ) {
+
+		$default_args = $this->parse_image_args( '', '', true );
+
+		if ( is_array( $args ) ) {
+			if ( empty( $args ) ) {
+				$args = $default_args;
+			} else {
+				$args = $this->parse_image_args( $args, $default_args );
+			}
+		} else {
+			//* Old style parameters are used. Doing it wrong.
+			$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', '2.5.0' );
+			$args = $default_args;
+		}
+
+		return $args;
+	}
+
+	/**
 	 * Fetches image from post thumbnail.
 	 * Resizes the image between 1500px if bigger. Then it saves the image and
 	 * Keeps dimensions relative.
 	 *
-	 * @param array $args Image arguments.
-	 *
 	 * @since 2.3.0
 	 *
+	 * @param array $args Image arguments.
 	 * @return string|null the image url.
 	 */
-	public function get_image_from_post_thumbnail( $args ) {
+	public function get_image_from_post_thumbnail( $args = array() ) {
+
+		if ( empty( $args ) )
+			$args = $this->reparse_image_args( $args );
 
 		if ( ! isset( $args['post_id'] ) )
 			$args['post_id'] = $this->get_the_real_ID();
@@ -202,12 +210,10 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 	/**
 	 * Fetches images id's from WooCommerce gallery
 	 *
+	 * @since 2.5.0
 	 * @staticvar array $ids The image ids
 	 *
 	 * @param array $args Image arguments.
-	 *
-	 * @since 2.5.0
-	 *
 	 * @return array The image URL's.
 	 */
 	public function get_image_from_woocommerce_gallery() {
@@ -231,18 +237,16 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 	}
 
 	/**
-	 * Parses OG image to correct size
-	 *
-	 * @staticvar string $called Checks if image ID has already been fetched (to prevent duplicate output on WooCommerce).
-	 *
-	 * @param int $id The attachment ID.
-	 * @param array $args The image args
+	 * Parses OG image to correct size.
 	 *
 	 * @since 2.5.0
+	 * @staticvar string $called Checks if image ID has already been fetched (to prevent duplicate output on WooCommerce).
 	 *
 	 * @todo create formula to fetch transient.
 	 * @priority high 2.7.0
 	 *
+	 * @param int $id The attachment ID.
+	 * @param array $args The image args
 	 * @return string|empty Parsed image url or empty if already called
 	 */
 	public function parse_og_image( $id, $args = array() ) {
@@ -257,7 +261,7 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 			return '';
 
 		if ( empty( $args ) )
-			$args = $this->parse_image_args( '', '', true );
+			$args = $this->reparse_image_args( $args );
 
 		$src = wp_get_attachment_image_src( $id, $args['size'], $args['icon'], $args['attr'] );
 
@@ -293,21 +297,18 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 
 				$i_file_file_name = pathinfo( $i_file_path, PATHINFO_FILENAME );
 
-				//* Yes I know, I should use generate_filename, but it's slower.
+				//* Yes I know, I should use generate_filename(), but it's slower.
 				//* Will look at that later. This is already 100 lines of correctly working code.
 				$new_image_dirfile = $i_file_dir_name . $i_file_file_name . '-' . $w . 'x' . $h . '.' . $i_file_ext;
 
-				/**
-				 * Generate image URL.
-				 */
+				//* Generate image URL.
 				$upload_dir 	= wp_upload_dir();
 				$upload_url 	= $upload_dir['baseurl'];
 				$upload_basedir = $upload_dir['basedir'];
-				$new_image_url = str_ireplace( $upload_basedir, '', $new_image_dirfile );
-				$new_image_url = $upload_url . $new_image_url;
 
 				//* We've got our image path.
-				$i = $new_image_url;
+				$i = str_ireplace( $upload_basedir, '', $new_image_dirfile );
+				$i = $upload_url . $i;
 
 				// Generate file if it doesn't exists yet.
 				if ( ! file_exists( $new_image_dirfile ) ) {
@@ -332,9 +333,9 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 	/**
 	 * Fetches site icon brought in WordPress 4.3.0
 	 *
-	 * @param string $size The icon size, accepts 'full' and pixel values
 	 * @since 2.2.1
 	 *
+	 * @param string $size The icon size, accepts 'full' and pixel values
 	 * @return string url site icon, not escaped.
 	 */
 	public function site_icon( $size = 'full' ) {

@@ -506,11 +506,11 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 
 		if ( isset( $_REQUEST['settings-updated'] ) && 'true' === $_REQUEST['settings-updated'] )
 			echo $this->generate_dismissible_notice( $this->page_defaults['saved_notice_text'], 'updated' );
-		else if ( isset( $_REQUEST['reset'] ) && 'true' === $_REQUEST['reset'] )
+		elseif ( isset( $_REQUEST['reset'] ) && 'true' === $_REQUEST['reset'] )
 			echo $this->generate_dismissible_notice( $this->page_defaults['reset_notice_text'], 'warning' );
-		else if ( isset( $_REQUEST['error'] ) && 'true' === $_REQUEST['error'] )
+		elseif ( isset( $_REQUEST['error'] ) && 'true' === $_REQUEST['error'] )
 			echo $this->generate_dismissible_notice( $this->page_defaults['error_notice_text'], 'error' );
-		else if ( isset( $_REQUEST['seo-updated'] ) && 'true' === $_REQUEST['seo-updated'] )
+		elseif ( isset( $_REQUEST['seo-updated'] ) && 'true' === $_REQUEST['seo-updated'] )
 			echo $this->generate_dismissible_notice( $this->page_defaults['plugin_update_text'], 'updated' );
 
 	}

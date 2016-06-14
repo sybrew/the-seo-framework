@@ -98,7 +98,6 @@ require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-ldjson.class.php' );
 
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'search.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'doingitright.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'pageoptions.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'inpost.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'adminpages.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'sanitize.class.php' );
@@ -111,7 +110,7 @@ require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'feed.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.class.php' );
 
 /**
- * God class.
+ * Facade class.
  *
  * Extending upon parent classes.
  *
@@ -124,13 +123,12 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 	 *
 	 * @since 2.2.9
 	 *
-	 * @var bool The SEO Framework Debug/Profile constants is/are defined.
+	 * @var bool The SEO Framework Debug/Profile states.
 	 */
 	public $the_seo_framework_debug = false;
 	public $the_seo_framework_debug_hidden = false;
 	public $the_seo_framework_use_transients = true;
 	public $script_debug = false;
-	public $debug_time;
 
 	/**
 	 * Constructor, setup debug vars and then load parent constructor.
@@ -164,23 +162,17 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 
 	/**
 	 * Wrapper for function calling through parameters. The golden nugget.
-	 * Is this function not working properly? Send me your code through the WordPress support forums.
-	 * I'll adjust if possible.
-	 *
-	 * @param array|string $callback the method array or function string.
-	 * @param string $version the version of AutoDescription the function is used.
 	 *
 	 * @since 2.2.2
-	 *
-	 * @return mixed $output The function called.
-	 *
 	 * @NOTE _doing_it_wrong notices go towards the callback. Unless this
 	 * function is used wrongfully. Then the notice is about this function.
 	 *
-	 * @param array|string $params The arguments passed to the function.
-	 * @since 2.2.4
+	 * @param array|string $callback the method array or function string.
+	 * @param string $version the version of AutoDescription the function is used.
+	 * @param array|string $args The arguments passed to the function.
+	 * @return mixed $output The function called.
 	 */
-	public function call_function( $callback, $version = '', $params = array() ) {
+	public function call_function( $callback, $version = '', $args = array() ) {
 
 		$output = '';
 
@@ -196,10 +188,10 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 		/**
 		 * Convert string/object to array
 		 */
-		if ( is_object( $params ) ) {
-			$args = array( $params, '' );
+		if ( is_object( $args ) ) {
+			$args = array( $args, '' );
 		} else {
-			$args = (array) $params;
+			$args = (array) $args;
 		}
 
 		$class = reset( $function );
@@ -257,18 +249,6 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 		} else {
 			$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, __( "Function needs to be called as a string.", 'autodescription' ), $version );
 		}
-
-		return $output;
-	}
-
-	/**
-	 * Helper function for Doing it Wrong
-	 *
-	 * @since 2.3.0
-	 */
-	public function the_seo_framework_version( $version = '' ) {
-
-		$output = $version ? sprintf( __( '%s of The SEO Framework', 'autodescription' ), esc_attr( $version ) ) : '';
 
 		return $output;
 	}

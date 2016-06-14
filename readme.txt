@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl, feed
 Requires at least: 3.8.0
 Tested up to: 4.5.2
-Stable tag: 2.6.5.1
+Stable tag: 2.6.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -60,7 +60,7 @@ Page rendering time matters in SEO. This is where we lay focus on.
 * This plugin has on average 1.30 to 1.60x more database interactions in exchange for improved performance.
 * And last but not least, this plugin always has 100% fewer advertisements. Let's keep it that way.
 
-*Numbers may vary per installation and version. Last checked: 14th May 2016*
+*Numbers may vary per installation and version. Last checked: 14th May 2016.*
 *The numbers are based on actual plugin code runtime.*
 
 = Completely pluggable =
@@ -179,6 +179,10 @@ The output will be stored for each page, if you've edited a page the page output
 * Confirmed Jetpack modules: Custom Content Types (Testimonials, Portfolio), Infinite Scroll, Photon, Sitemaps, Publicize.
 * Most popular SEO plugins, let's not get in each other's way.
 * Many, many more plugins, yet to be confirmed.
+* Divi Builder by Elegant Themes
+* Visual Composer by WPBakery
+* Page Builder by SiteOrigin
+* Beaver Builder by Fastline Media
 
 **Themes:**
 
@@ -349,6 +353,39 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
+= 2.6.6 - Semantic Structures =
+
+**Release date:**
+
+* June 14th 2016
+
+**Summarized**
+
+* Page builders are great for if you want to style your website, and when you want to do it fast.
+* So from this update the Divi Builder, Visual Composer, Beaver Builder, and the Page Builder by SiteOrigin are now fully supported.
+* Various bugs have also been fixed, to improve your experience. One particular bugfix is related to Polylang; this bugfix should improve performance and reduce other bugs from happening as well.
+* The Automated and Manual description output has been improved in several ways as well.
+* For developers, a class has been removed. All functions within have been moved to more suitable classes. This change will reduce server resource usage and increase overall performance.
+
+**SEO Tip of the Update - Know your Keywords:**
+
+* To know how your website is found, sign up for Google Search Console. Over a couple of days (or weeks), elegant data has been accumulated about your website.
+* When you go to the Search Analytics within the Search Console, you'll see a list of queries people have used to find your website.
+* The queries can be used as keywords, they are excellent starting points for new post titles and subjects. Go ahead, use them!
+
+**For developers - About the class removal:**
+
+* Because the plugin makes use of a "[Facade pattern](https://en.wikipedia.org/wiki/Facade_pattern)". And through class extending, all functions within the plugin are available at all times.
+* In trade for increased resource usage this does make the plugin very compatible, faster, and easier to work with.
+* This plugin serves one single responsibility: Outputting SEO data, and determining the reason why. Therefore, although it looks like a "[God object](https://en.wikipedia.org/wiki/God_object)", it's not.
+* Please keep in mind that all functions from any class are available through the "Facade object". Because of this, the class removal shouldn't cause issues for developers.
+* You can call this "Facade object" through a single cached function (rather than a global variable), this cached function is `the_seo_framework()`.
+* If you wish to extend this plugin, feel free to ask me for any details or suggestions at the [Support forums](https://wordpress.org/support/plugin/autodescription).
+
+**Detailed Log:**
+
+***There's something to be said about [all these details](https://theseoframework.com/?p=1365#detailed).***
+
 = 2.6.5.1 - Schematic Hotfix =
 
 **Release date:**
@@ -359,7 +396,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * A typo in the Knowledge Graph settings check caused the Knowledge Graph not to be output, even if the option was enabled.
 * Because of this, the LD+Json revisional cache key has been bumped up as well.
-* And as this update is so (relatively) minor, it's undocumented.
+* For developers, as this update is so (relatively) minor, it's not documented on the plugin changelog page, nor a tag will be made.
 
 = 2.6.5 - Systematic Support =
 
