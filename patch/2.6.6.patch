@@ -1,0 +1,3633 @@
+Index: autodescription.php
+===================================================================
+--- autodescription.php	(revision 1433521)
++++ autodescription.php	(working copy)
+@@ -3,7 +3,7 @@
+  * Plugin Name: The SEO Framework
+  * Plugin URI: https://wordpress.org/plugins/autodescription/
+  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.
+- * Version: 2.6.5.1
++ * Version: 2.6.5.1dev6
+  * Author: Sybre Waaijer
+  * Author URI: https://cyberwire.nl/
+  * License: GPLv3
+@@ -119,5 +119,41 @@
+  * Calls functions statically.
+  * @since 2.2.9
+  */
+-register_activation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, array( 'The_SEO_Framework_Load', 'flush_rewrite_rules_activation' ) );
+-register_deactivation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, array( 'The_SEO_Framework_Load', 'flush_rewrite_rules_deactivation' ) );
++register_activation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framework_flush_rewrite_rules_activation' );
++register_deactivation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framework_flush_rewrite_rules_deactivation' );
++
++/**
++ * Add and Flush rewrite rules on plugin activation.
++ *
++ * @global object $wp_rewrite
++ *
++ * @since 2.6.6
++ * @access private
++ */
++function the_seo_framework_flush_rewrite_rules_activation() {
++	global $wp_rewrite;
++
++	$the_seo_framework = the_seo_framework();
++	$the_seo_framework->rewrite_rule_sitemap( true );
++
++	$wp_rewrite->init();
++	$wp_rewrite->flush_rules( true );
++}
++
++/**
++ * Flush rewrite rules on plugin deactivation.
++ *
++ * @global object $wp_rewrite
++ *
++ * @since 2.6.6
++ * @access private
++ */
++function the_seo_framework_flush_rewrite_rules_deactivation() {
++	global $wp_rewrite;
++
++	$wp_rewrite->init();
++
++	unset( $wp_rewrite->extra_rules_top['sitemap\.xml$'] );
++
++	$wp_rewrite->flush_rules( true );
++}
+Index: inc/classes/adminpages.class.php
+===================================================================
+--- inc/classes/adminpages.class.php	(revision 1418924)
++++ inc/classes/adminpages.class.php	(working copy)
+@@ -506,11 +506,11 @@
+ 
+ 		if ( isset( $_REQUEST['settings-updated'] ) && 'true' === $_REQUEST['settings-updated'] )
+ 			echo $this->generate_dismissible_notice( $this->page_defaults['saved_notice_text'], 'updated' );
+-		else if ( isset( $_REQUEST['reset'] ) && 'true' === $_REQUEST['reset'] )
++		elseif ( isset( $_REQUEST['reset'] ) && 'true' === $_REQUEST['reset'] )
+ 			echo $this->generate_dismissible_notice( $this->page_defaults['reset_notice_text'], 'warning' );
+-		else if ( isset( $_REQUEST['error'] ) && 'true' === $_REQUEST['error'] )
++		elseif ( isset( $_REQUEST['error'] ) && 'true' === $_REQUEST['error'] )
+ 			echo $this->generate_dismissible_notice( $this->page_defaults['error_notice_text'], 'error' );
+-		else if ( isset( $_REQUEST['seo-updated'] ) && 'true' === $_REQUEST['seo-updated'] )
++		elseif ( isset( $_REQUEST['seo-updated'] ) && 'true' === $_REQUEST['seo-updated'] )
+ 			echo $this->generate_dismissible_notice( $this->page_defaults['plugin_update_text'], 'updated' );
+ 
+ 	}
+Index: inc/classes/compat.class.php
+===================================================================
+--- inc/classes/compat.class.php	(revision 1418924)
++++ inc/classes/compat.class.php	(working copy)
+@@ -64,9 +64,9 @@
+ 	 * Removes the Genesis SEO meta boxes on the SEO Settings page
+ 	 *
+ 	 * @since 2.2.4
++	 *
+ 	 * @param array $plugins, overwritten as this filter will fire the
+ 	 * detection, regardless of other SEO plugins.
+-	 *
+ 	 * @return array Plugins to detect.
+ 	 */
+ 	public function no_more_genesis_seo( $plugins ) {
+Index: inc/classes/core.class.php
+===================================================================
+--- inc/classes/core.class.php	(revision 1418924)
++++ inc/classes/core.class.php	(working copy)
+@@ -26,7 +26,7 @@
+ class AutoDescription_Core {
+ 
+ 	/**
+-	 * Constructor, just be there for me when I need you.
++	 * Constructor. Loads actions and filters.
+ 	 * Latest Class. Doesn't have parent.
+ 	 */
+ 	public function __construct() {
+@@ -281,16 +281,13 @@
+ 
+ 	/**
+ 	 * Object cache set wrapper.
+-	 * Applies filters 'the_seo_framework_use_object_cache' : Disable object
+-	 * caching for this plugin, when applicable.
+ 	 *
++	 * @since 2.4.3
++	 *
+ 	 * @param string $key The Object cache key.
+ 	 * @param mixed $data The Object cache data.
+ 	 * @param int $expire The Object cache expire time.
+ 	 * @param string $group The Object cache group.
+-	 *
+-	 * @since 2.4.3
+-	 *
+ 	 * @return bool true on set, false when disabled.
+ 	 */
+ 	public function object_cache_set( $key, $data, $expire = 0, $group = 'the_seo_framework' ) {
+@@ -303,8 +300,6 @@
+ 
+ 	/**
+ 	 * Object cache get wrapper.
+-	 * Applies filters 'the_seo_framework_use_object_cache' : Disable object
+-	 * caching for this plugin, when applicable.
+ 	 *
+ 	 * @param string $key The Object cache key.
+ 	 * @param string $group The Object cache group.
+@@ -328,14 +323,10 @@
+ 	 * @NOTE only to show improvement with large arrays. Might slow down with small arrays.
+ 	 * @NOTE can't do type checks. Always assume the comparing value is a string.
+ 	 *
+-	 * @uses array_flip()
+-	 * @uses isset()
+-	 *
+ 	 * @since 2.5.2
+ 	 *
+ 	 * @param string|array $needle The needle(s) to search for
+ 	 * @param array $array The single dimensional array to search in.
+-	 *
+ 	 * @return bool true if value is in array.
+ 	 */
+ 	public function in_array( $needle, $array ) {
+@@ -358,9 +349,9 @@
+ 	/**
+ 	 * Checks if the string input is exactly '1'.
+ 	 *
++	 * @since 2.6.0
++	 *
+ 	 * @param string $value The value to check.
+-	 *
+-	 * @since 2.6.0
+ 	 * @return bool true if value is '1'
+ 	 */
+ 	public function is_checked( $value ) {
+@@ -374,9 +365,9 @@
+ 	/**
+ 	 * Checks if the option is used and checked.
+ 	 *
++	 * @since 2.6.0
++	 *
+ 	 * @param string $option The option name.
+-	 *
+-	 * @since 2.6.0
+ 	 * @return bool Option is checked.
+ 	 */
+ 	public function is_option_checked( $option ) {
+@@ -392,8 +383,8 @@
+ 	/**
+ 	 * Checks if blog is public through WordPress core settings.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 *
+ 	 * @return bool True is blog is public.
+ 	 */
+@@ -415,7 +406,6 @@
+ 	 * Multisite Only.
+ 	 *
+ 	 * @since 2.6.0
+-	 *
+ 	 * @global object $current_blog. NULL on single site.
+ 	 *
+ 	 * @return bool Current blog is spam.
+@@ -433,8 +423,8 @@
+ 	 * Whether to lowercase the noun or keep it UCfirst.
+ 	 * Depending if language is German.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar array $lowercase Contains nouns.
+-	 * @since 2.6.0
+ 	 *
+ 	 * @return string The maybe lowercase noun.
+ 	 */
+@@ -449,7 +439,7 @@
+ 	}
+ 
+ 	/**
+-	 * The minimum role required to
++	 * Returns the minimum role required to adjust settings.
+ 	 *
+ 	 * Applies filter 'the_seo_framework_settings_capability' : string
+ 	 * This filter changes the minimum role for viewing and editing the plugin's settings.
+@@ -520,7 +510,7 @@
+ 	 */
+ 	protected function get_tzstring_from_offset( $offset = 0 ) {
+ 
+-		$seconds = round( $offset * 60 * 60 );
++		$seconds = round( $offset * HOUR_IN_SECONDS );
+ 
+ 		//* Try Daylight savings.
+ 		$tzstring = timezone_name_from_abbr( '', $seconds, 1 );
+Index: inc/classes/debug.class.php
+===================================================================
+--- inc/classes/debug.class.php	(revision 1433389)
++++ inc/classes/debug.class.php	(working copy)
+@@ -35,6 +35,15 @@
+ 	protected $debug_output = '';
+ 
+ 	/**
++	 * Whether to accumulate data.
++	 *
++	 * @since 2.6.5
++	 *
++	 * @var bool Whether to add to AutoDescription_Debug::debug_output.
++	 */
++	protected $add_debug_output = true;
++
++	/**
+ 	 * Constructor, load parent constructor and add actions.
+ 	 */
+ 	public function __construct() {
+@@ -266,12 +275,33 @@
+ 			if ( $this->the_seo_framework_debug_hidden ) {
+ 				echo "\r\n<!--\r\n:: THE SEO FRAMEWORK DEBUG :: \r\n" . $this->debug_output . "\r\n:: / THE SEO FRAMEWORK DEBUG ::\r\n-->\r\n";
+ 			} else {
++
++				$id = $this->get_the_real_ID();
++				$mdash = ' &mdash; ';
++				$term = $this->is_archive() ? $this->fetch_the_term( $id ) : '';
++				$taxonomy = isset( $term->taxonomy ) ? $term->taxonomy : '';
++
++				//* This will return 'Page' on all non-archive types (except the home page)
++				$type = ! $this->is_archive() && $this->is_front_page( $id ) ? 'Front Page' : $this->get_the_term_name( $term );
++				$cache_key = $this->generate_cache_key( $this->get_the_real_ID(), $taxonomy );
++
+ 				if ( $this->is_admin() ) {
+ 					?>
+-					<div style="clear:both;float:left;position:relative;width:calc( 100% - 200px );min-height:700px;padding:0;margin:20px 20px 40px 180px;overflow:hidden;border:1px solid #ccc;border-radius:3px;">
+-						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom: 2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">SEO Debug Information</h3>
++					<div style="color:#444;font-family:Georgio,sans-serif;font-size:14px;clear:both;float:left;position:relative;width:calc( 100% - 200px );min-height:700px;padding:0;margin:20px 20px 40px 180px;overflow:hidden;border:1px solid #ccc;border-radius:3px;font:'Open Sans',sans-serif">
++						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom:2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">
++							SEO Debug Information
++							<?php
++							if ( $this->is_post_edit() || $this->is_term_edit() ) :
++								echo ' :: ';
++								echo 'Type: ' . $type;
++								echo $mdash . 'ID: ' . $id;
++								echo $mdash . 'Cache key: ' . $cache_key;
++							endif;
++							?>
++						</h3>
+ 						<div style="position:absolute;bottom:0;right:0;left:0;top:41px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;">
+-							<?php echo $this->debug_init_output(); ?>
++							<?php echo $this->debug_header_output(); ?>
++							<?php echo $this->debug_query_output(); ?>
+ 							<?php echo $this->debug_output; ?>
+ 						</div>
+ 					</div>
+@@ -279,12 +309,19 @@
+ 				} else {
+ 					?>
+ 					<style type="text/css">.wp-ui-notification{color:#fff;background-color:#d54e21}.code.highlight{font-family:Consolas,Monaco,monospace;font-size:14px;}</style>
+-					<div style="clear:both;float:left;position:relative;width:calc( 100% - 80px );min-height:700px;padding:0;margin:40px;overflow:hidden;border:1px solid #ccc;border-radius:3px;">
+-						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom: 2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">
+-							SEO Debug Information :: Type: <?php echo $this->get_the_term_name( $this->fetch_the_term( $this->get_the_real_ID() ) ); ?> &mdash; ID: <?php echo $this->get_the_real_ID(); ?> &mdash; Is front: <?php echo $this->is_front_page() ? 'Yes' : 'No'; ?>
++					<div style="color:#444;font-family:Georgio,sans-serif;font-size:14px;clear:both;float:left;position:relative;width:calc( 100% - 80px );min-height:700px;padding:0;margin:40px;overflow:hidden;border:1px solid #ccc;border-radius:3px;font:'Open Sans',sans-serif">
++						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom:2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">
++							SEO Debug Information
++							<?php
++							echo ' :: ';
++							echo 'Type: ' . $type;
++							echo $mdash . 'ID: ' . $id;
++							echo $mdash . 'Cache key: ' . $cache_key;
++							?>
+ 						</h3>
+ 						<div style="position:absolute;bottom:0;right:0;left:0;top:41px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;">
+-							<?php echo $this->debug_init_output(); ?>
++							<?php echo $this->debug_header_output(); ?>
++							<?php echo $this->debug_query_output(); ?>
+ 							<?php echo $this->debug_output; ?>
+ 						</div>
+ 					</div>
+@@ -296,12 +333,13 @@
+ 	}
+ 
+ 	/**
+-	 * Return debug values.
++	 * Parses input values and wraps them in human-readable elements.
+ 	 *
+-	 * @param mixed $values What to be output.
+-	 *
+ 	 * @access private
+ 	 * @since 2.6.0
++	 *
++	 * @param mixed $values Values to be parsed.
++	 * @return string $output The parsed value.
+ 	 */
+ 	public function get_debug_information( $values = null ) {
+ 
+@@ -334,6 +372,9 @@
+ 				}
+ 			}
+ 
++			/**
++			 * @TODO Use var_export()?
++			 */
+ 			if ( is_array( $values ) ) {
+ 				$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="margin:0;padding-left:12px">';
+ 				foreach ( $values as $key => $value ) {
+@@ -456,20 +497,18 @@
+ 	 *
+ 	 * @since 2.6.0
+ 	 *
++	 * @access private
++	 *
+ 	 * @param string $class The class name.
+ 	 * @param string $method The function name.
+ 	 * @param bool $store Whether to store the output in cache for next run to pick up on.
+ 	 * @param double $debug_key Use $debug_key as variable, it's reserved.
+-	 *
+ 	 * @param mixed function args.
+-	 *
+-	 * @access private
+-	 *
+-	 * @return void early if debugging is disabled.
++	 * @return void early if debugging is disabled or when storing cache values.
+ 	 */
+ 	protected function debug_init( $class, $method, $store, $debug_key ) {
+ 
+-		if ( false === $this->the_seo_framework_debug )
++		if ( false === $this->the_seo_framework_debug || false === $this->add_debug_output )
+ 			return;
+ 
+ 		$output = '';
+@@ -673,14 +712,15 @@
+ 	 *
+ 	 * @since 2.6.0
+ 	 *
++	 * @param bool $set Whether to reset the timer.
+ 	 * @return float PHP Microtime for code execution.
+ 	 */
+-	protected function timer() {
++	protected function timer( $reset = false ) {
+ 
+ 		static $previous = null;
+ 
+-		if ( isset( $previous ) ) {
+-			$output = $previous - microtime( true );
++		if ( isset( $previous ) && false === $reset ) {
++			$output = microtime( true ) - $previous;
+ 			$previous = null;
+ 		} else {
+ 			$output = $previous = microtime( true );
+@@ -691,12 +731,13 @@
+ 
+ 	/**
+ 	 * Wraps header output in front-end code.
++	 * This won't consider hiding the output.
+ 	 *
+ 	 * @since 2.6.5
+ 	 *
+-	 * @return string Wrapped HTML debug output.
++	 * @return string Wrapped SEO meta tags output.
+ 	 */
+-	protected function debug_init_output() {
++	protected function debug_header_output() {
+ 
+ 		if ( $this->is_admin() && ! $this->is_term_edit() && ! $this->is_post_edit() && ! $this->is_seo_settings_page() )
+ 			return;
+@@ -704,8 +745,12 @@
+ 		if ( $this->is_seo_settings_page() )
+ 			add_filter( 'the_seo_framework_current_object_id', array( $this, 'get_the_front_page_ID' ) );
+ 
+-		$init_start = microtime( true );
++		//* Start timer.
++		$this->timer( true );
+ 
++		//* Don't register this output.
++		$this->add_debug_output = false;
++
+ 		$output	= $this->the_description()
+ 				. $this->og_image()
+ 				. $this->og_locale()
+@@ -735,13 +780,13 @@
+ 				. $this->pint_site_output()
+ 				;
+ 
+-		$timer = '<div style="display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( microtime( true ) - $init_start, 5 ) . ' seconds</div>' ;
++		$timer = '<div style="display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( $this->timer(), 5 ) . ' seconds</div>' ;
+ 
+ 		$title = $this->is_admin() ? 'Expected SEO Output' : 'Current SEO Output';
+ 		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #ccc;"><h2 style="color:#ddd;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
+ 
+ 		//* Escape it, replace EOL with breaks, and style everything between quotes (which are ending with space).
+-		$output = str_replace( PHP_EOL, '<br>', esc_html( $output ) );
++		$output = str_replace( PHP_EOL, '<br>' . PHP_EOL, esc_html( $output ) );
+ 		$output = preg_replace( "/(&quot;.*?&quot;)(\s)/", '<font color="arnoldschwarzenegger">$1</font> ', $output );
+ 
+ 		$output = '<div style="display:inline-block;width:100%;padding:20px;font-family:Consolas,Monaco,monospace;font-size:14px;">' . $output . '</div>';
+@@ -750,4 +795,96 @@
+ 		return $output;
+ 	}
+ 
++	/**
++	 * Wraps query status booleans in human-readable code.
++	 *
++	 * @since 2.6.6
++	 *
++	 * @return string Wrapped Query State debug output.
++	 */
++	protected function debug_query_output() {
++
++		//* Start timer.
++		$this->timer( true );
++
++		//* Don't register this output.
++		$this->add_debug_output = false;
++
++		//* Only get true/false values.
++		$is_404 = $this->is_404();
++		$is_admin = $this->is_admin();
++		$is_attachment = $this->is_attachment();
++		$is_archive = $this->is_archive();
++		$is_term_edit = $this->is_term_edit();
++		$is_post_edit = $this->is_post_edit();
++		$is_wp_lists_edit = $this->is_wp_lists_edit();
++		$is_wp_lists_edit = $this->is_wp_lists_edit();
++		$is_author = $this->is_author();
++		$is_blog_page = $this->is_blog_page();
++		$is_category = $this->is_category();
++		$is_date = $this->is_date();
++		$is_day = $this->is_day();
++		$is_feed = $this->is_feed();
++		$is_front_page = $this->is_front_page();
++		$is_home = $this->is_home();
++		$is_month = $this->is_month();
++		$is_page = $this->is_page();
++		$is_preview = $this->is_preview();
++		$is_search = $this->is_search();
++		$is_single = $this->is_single();
++		$is_singular = $this->is_singular();
++		$is_static_frontpage = $this->is_static_frontpage();
++		$is_tag = $this->is_tag();
++		$is_tax = $this->is_tax();
++		$is_ultimate_member_user_page = $this->is_ultimate_member_user_page();
++		$is_wc_shop = $this->is_wc_shop();
++		$is_wc_product = $this->is_wc_product();
++		$is_year = $this->is_year();
++		$is_seo_settings_page = $this->is_seo_settings_page();
++
++		//* Get all above vars, split them in two (true and false) and sort them by key names.
++		$vars = get_defined_vars();
++		$current = array_filter( $vars );
++		$not_current = array_diff_key( $vars, $current );
++		ksort( $current );
++		ksort( $not_current );
++
++		$timer = '<div style="display:inline-block;width:100%;padding:20px;border-bottom:1px solid #666;">Generated in: ' . number_format( $this->timer(), 5 ) . ' seconds</div>' ;
++
++		$output = '';
++		foreach ( $current as $name => $value ) {
++			$type = '(' . gettype( $value ) . ')';
++			if ( is_bool( $value ) )
++				$value = $value ? 'true' : 'false';
++			else
++				$value = esc_attr( var_export( $value, true ) );
++
++			$value = $this->the_seo_framework_debug_hidden ? $type . ' ' . $value : '<font color="harrisonford">' . $type . ' ' . $value . '</font>';
++			$out = $name . ' => ' . $value;
++			$output .= $this->the_seo_framework_debug_hidden ? $out . PHP_EOL : '<span style="background:#dadada">' . $out . '</span>' . PHP_EOL;
++		}
++
++		foreach ( $not_current as $name => $value ) {
++			$type = '(' . gettype( $value ) . ')';
++			if ( is_bool( $value ) )
++				$value = $value ? 'true' : 'false';
++			else
++				$value = esc_attr( var_export( $value, true ) );
++
++			$value = $this->the_seo_framework_debug_hidden ? $type . ' ' . $value : '<font color="harrisonford">' . $type . ' ' . $value . '</font>';
++			$out = $name . ' => ' . $value;
++			$output .= $out . PHP_EOL;
++		}
++
++		$title = $this->is_admin() ? 'Current WordPress Screen + Expected WordPress Query' : 'Current WordPress Query';
++		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #666;"><h2 style="color:#222;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
++
++		$output = $this->the_seo_framework_debug_hidden ? $output : str_replace( PHP_EOL, '<br>' . PHP_EOL, $output );
++
++		$output = '<div style="display:inline-block;width:100%;padding:20px;font-family:Consolas,Monaco,monospace;font-size:14px;">' . $output . '</div>';
++		$output = '<div style="display:block;width:100%;background:#fafafa;color:#333;border-bottom:1px solid #666">' . $title . $timer . $output . '</div>';
++
++		return $output;
++	}
++
+ }
+Index: inc/classes/detect.class.php
+===================================================================
+--- inc/classes/detect.class.php	(revision 1433389)
++++ inc/classes/detect.class.php	(working copy)
+@@ -1076,6 +1076,7 @@
+ 	 * Detect theme title fix extension plugin.
+ 	 *
+ 	 * @since 2.6.0
++	 * @staticvar bool $fixed
+ 	 *
+ 	 * @return bool True theme will do it right.
+ 	 */
+@@ -1108,10 +1109,10 @@
+ 	}
+ 
+ 	/**
+-	 * Whether a page or blog is on front.
++	 * Determines whether a page or blog is on front.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $pof
+-	 * @since 2.6.0
+ 	 *
+ 	 * @return bool
+ 	 */
+Index: inc/classes/doingitright.class.php
+===================================================================
+--- inc/classes/doingitright.class.php	(revision 1424405)
++++ inc/classes/doingitright.class.php	(working copy)
+@@ -27,8 +27,7 @@
+ class AutoDescription_DoingItRight extends AutoDescription_Search {
+ 
+ 	/**
+-	 * Constructor, load parent constructor
+-	 *
++	 * Constructor, load parent constructor.
+ 	 * Initalizes columns and load post states.
+ 	 */
+ 	public function __construct() {
+@@ -47,7 +46,7 @@
+ 	/**
+ 	 * Add post state on edit.php to the page or post that has been altered
+ 	 *
+-	 * Applies filters `the_seo_framework_allow_states` : boolean
++	 * Applies filters `the_seo_framework_allow_states` : boolean Whether to allow post states output.
+ 	 *
+ 	 * @uses $this->add_post_state
+ 	 *
+@@ -70,10 +69,10 @@
+ 	/**
+ 	 * Adds post states in post/page edit.php query
+ 	 *
++	 * @since 2.1.0
++	 *
+ 	 * @param array $states The current post states array
+ 	 * @param object $post The Post Object.
+-	 *
+-	 * @since 2.1.0
+ 	 */
+ 	public function add_post_state( $states = array(), $post ) {
+ 
+@@ -110,12 +109,12 @@
+ 	/**
+ 	 * Initializes columns
+ 	 *
+-	 * Applies filter the_seo_framework_show_seo_column : Show the SEO column in edit.php
++	 * Applies filter the_seo_framework_show_seo_column : Boolean Show the SEO column in edit.php
+ 	 *
++	 * @since 2.1.9
++	 *
+ 	 * @param object|empty $screen WP_Screen
+ 	 * @param bool $doing_ajax Whether we're doing an AJAX response.
+-	 *
+-	 * @since 2.1.9
+ 	 */
+ 	public function init_columns( $screen = '', $doing_ajax = false ) {
+ 
+@@ -171,12 +170,12 @@
+ 	/**
+ 	 * Adds SEO column on edit(-tags).php
+ 	 *
+-	 * @param array $columns The existing columns
++	 * Also determines where the column should be placed. Prefered before comments, then data, then tags.
++	 * If neither found, it will add the column to the end.
+ 	 *
+-	 * @param $offset 	Determines where the column should be placed. Prefered before comments, then data, then tags.
+-	 *					If neither found, it will add the column to the end.
++	 * @since 2.1.9
+ 	 *
+-	 * @since 2.1.9
++	 * @param array $columns The existing columns
+ 	 * @return array $columns the column data
+ 	 */
+ 	public function add_column( $columns ) {
+@@ -223,25 +222,20 @@
+ 	}
+ 
+ 	/**
+-	 * Adds the SEO Bar.
++	 * Echo's the SEO Bar.
+ 	 *
++	 * @since 2.6.0
++	 * @staticvar string $type
++	 *
+ 	 * @param string $column the current column    : If it's a taxonomy, this is empty
+ 	 * @param int $post_id the post id             : If it's a taxonomy, this is the column name
+ 	 * @param string $tax_id this is empty         : If it's a taxonomy, this is the taxonomy id
+-	 *
+-	 * @param string $status the status in html
+-	 *
+-	 * @staticvar string $type_cache
+-	 * @staticvar string $column_cache
+-	 *
+-	 * @since 2.6.0
+ 	 */
+ 	public function seo_bar( $column, $post_id, $tax_id = '' ) {
+ 
+-		static $type_cache = null;
+-		static $column_cache = null;
++		static $type = null;
+ 
+-		if ( ! isset( $type_cache ) || ! isset( $column_cache ) ) {
++		if ( ! isset( $type ) ) {
+ 			$type = get_post_type( $post_id );
+ 
+ 			if ( false === $type || '' !== $tax_id ) {
+@@ -250,9 +244,6 @@
+ 				if ( isset( $screen->taxonomy ) )
+ 					$type = $screen->taxonomy;
+ 			}
+-
+-			$type_cache = $type;
+-			$column_cache = $column;
+ 		}
+ 
+ 		/**
+@@ -265,23 +256,18 @@
+ 		}
+ 
+ 		if ( 'ad_seo' === $column )
+-			echo $this->post_status( $post_id, $type_cache, true );
++			echo $this->post_status( $post_id, $type, true );
+ 
+ 	}
+ 
+ 	/**
+-	 * Adds SEO column to edit screens.
++	 * Echo's the SEO column in edit screens on Ajax call.
+ 	 *
++	 * @since 2.1.9
++	 *
+ 	 * @param string $column the current column    : If it's a taxonomy, this is empty
+ 	 * @param int $post_id the post id             : If it's a taxonomy, this is the column name
+ 	 * @param string $tax_id this is empty         : If it's a taxonomy, this is the taxonomy id
+-	 *
+-	 * @param string $status the status in html
+-	 *
+-	 * @staticvar string $type_cache
+-	 * @staticvar string $column_cache
+-	 *
+-	 * @since 2.1.9
+ 	 */
+ 	public function seo_bar_ajax( $column, $post_id, $tax_id = '' ) {
+ 
+@@ -294,12 +280,13 @@
+ 		if ( '' !== $tax_id ) {
+ 			$is_term = true;
+ 			$column = $post_id;
++			$post_id = $tax_id;
+ 		}
+ 
+ 		if ( 'ad_seo' === $column ) {
+ 			$context = __( 'Refresh to see the SEO Bar status.', 'autodescription' );
+ 
+-			$ajax_id = $column . $tax_id;
++			$ajax_id = $column . $post_id;
+ 
+ 			echo $this->post_status_special( $context, '?', 'unknown', $is_term, $ajax_id );
+ 		}
+@@ -309,13 +296,12 @@
+ 	/**
+ 	 * Wrap a single-line block for the SEO bar, showing special statuses.
+ 	 *
++	 * @since 2.6.0
++	 *
+ 	 * @param string $context The hover/screenreader context.
+ 	 * @param string $symbol The single-character symbol.
+ 	 * @param string $class The SEO block color code. : 'bad', 'okay', 'good', 'unknown'.
+ 	 * @param int|null $ajax_id The unique Ajax ID to generate a small on-hover script for this ID. May be Arbitrary.
+-	 *
+-	 * @since 2.6.0
+-	 *
+ 	 * @return string The special block with wrap.
+ 	 */
+ 	protected function post_status_special( $context, $symbol = '?', $color = 'unknown', $is_term = '', $ajax_id = null ) {
+@@ -339,14 +325,13 @@
+ 	/**
+ 	 * Renders post status. Caches the output.
+ 	 *
+-	 * @param int $post_id The Post ID or taxonomy ID
+-	 * @param string $type Is fetched on edit.php, inpost, taxonomies, etc.
+-	 * @param bool $html return the status in html or string
+-	 *
++	 * @since 2.1.9
+ 	 * @staticvar string $post_i18n The post type slug.
+ 	 * @staticvar bool $is_term If we're dealing with TT pages.
+ 	 *
+-	 * @since 2.1.9
++	 * @param int $post_id The Post ID or taxonomy ID.
++	 * @param string $type Is fetched on edit.php, inpost, taxonomies, etc.
++	 * @param bool $html return the status in html or string.
+ 	 * @return string $content the post SEO status
+ 	 */
+ 	public function post_status( $post_id = '', $type = 'inpost', $html = true ) {
+@@ -442,7 +427,6 @@
+ 	 *		string $width
+ 	 *		string $class
+ 	 * }
+-	 *
+ 	 * @return string The SEO Bar block part.
+ 	 */
+ 	protected function wrap_the_seo_bar_block( $args ) {
+@@ -459,16 +443,15 @@
+ 	/**
+ 	 * Wrap the SEO bar.
+ 	 *
++	 * If Ajax ID is set, a small jQuery script will also be output to reset the
++	 * DOM element for the status bar hover.
++	 *
++	 * @since 2.6.0
+ 	 * @staticvar string $class
+-	 * @since 2.6.0
+ 	 *
+ 	 * @param string $content The SEO Bar content.
+ 	 * @param bool $is_term Whether the bar is for a term.
+ 	 * @param int|null $ajax_id The unique Ajax ID to generate a small on-hover script for.
+-	 *
+-	 * If Ajax ID is set, a small jQuery script will also be output to reset the
+-	 * DOM element for the status bar hover.
+-	 *
+ 	 * @return string The SEO Bar wrapped.
+ 	 */
+ 	protected function get_the_seo_bar_wrap( $content, $is_term, $ajax_id = null ) {
+@@ -507,7 +490,6 @@
+ 	 *	 'post_low' => string $post_low,
+ 	 *	 'type' => string $type,
+ 	 * }
+-	 *
+ 	 * @return string $content The SEO bar.
+ 	 */
+ 	protected function the_seo_bar_term( $args ) {
+@@ -555,7 +537,6 @@
+ 	 *	 'post_low' => $post_low,
+ 	 *	 'type' => $type,
+ 	 * }
+-	 *
+ 	 * @return string $content The SEO bar.
+ 	 */
+ 	protected function the_seo_bar_page( $args ) {
+@@ -592,11 +573,10 @@
+ 	/**
+ 	 * Fetch the post or term data for The SEO Bar, structured and cached.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar array $data
+-	 * @since 2.6.0
+ 	 *
+ 	 * @param array $args The term/post args.
+-	 *
+ 	 * @return array $data {
+ 	 *	 'title' => $title,
+ 	 *	 'title_is_from_custom_field' => $title_is_from_custom_field,
+@@ -625,11 +605,10 @@
+ 	/**
+ 	 * Fetch the term data for The SEO Bar.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar array $data
+-	 * @since 2.6.0
+ 	 *
+ 	 * @param array $args The term args.
+-	 *
+ 	 * @return array $data {
+ 	 *	 'title' => $title,
+ 	 *	 'title_is_from_custom_field' => $title_is_from_custom_field,
+@@ -676,12 +655,12 @@
+ 
+ 		$description_is_from_custom_field = (bool) $description_custom_field;
+ 		if ( $description_is_from_custom_field ) {
+-			$taxonomy = isset( $term->taxonomy ) && $term->taxonomy ? $term->taxonomy : false;
++			$taxonomy = isset( $term->taxonomy ) && $term->taxonomy ? $term->taxonomy : '';
+ 			$description_args = $taxonomy ? array( 'id' => $post_id, 'taxonomy' => $term->taxonomy, 'get_custom_field' => true ) : array( 'get_custom_field' => true );
+ 
+ 			$description = $this->generate_description( '', $description_args );
+ 		} else {
+-			$taxonomy = isset( $term->taxonomy ) && $term->taxonomy ? $term->taxonomy : false;
++			$taxonomy = isset( $term->taxonomy ) && $term->taxonomy ? $term->taxonomy : '';
+ 			$description_args = $taxonomy ? array( 'id' => $post_id, 'taxonomy' => $term->taxonomy, 'get_custom_field' => false ) : array( 'get_custom_field' => false );
+ 
+ 			$description = $this->generate_description( '', $description_args );
+@@ -703,11 +682,10 @@
+ 	/**
+ 	 * Fetch the post data for The SEO Bar.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar array $data
+-	 * @since 2.6.0
+ 	 *
+ 	 * @param array $args The post args.
+-	 *
+ 	 * @return array $data {
+ 	 *	 'title' => $title,
+ 	 *	 'title_is_from_custom_field' => $title_is_from_custom_field,
+@@ -735,18 +713,16 @@
+ 		}
+ 
+ 		$title_is_from_custom_field = (bool) $title_custom_field;
+-		if ( $title_is_from_custom_field ) {
++		if ( $title_is_from_custom_field )
+ 			$title = $this->title( '', '', '', array( 'term_id' => $post_id, 'page_on_front' => $page_on_front, 'get_custom_field' => true ) );
+-		} else {
++		else
+ 			$title = $this->title( '', '', '', array( 'term_id' => $post_id, 'page_on_front' => $page_on_front, 'get_custom_field' => false ) );
+-		}
+ 
+ 		$description_is_from_custom_field = (bool) $description_custom_field;
+-		if ( $description_is_from_custom_field ) {
++		if ( $description_is_from_custom_field )
+ 			$description = $this->generate_description( '', array( 'id' => $post_id, 'get_custom_field' => true ) );
+-		} else {
++		else
+ 			$description = $this->generate_description( '', array( 'id' => $post_id, 'get_custom_field' => false ) );
+-		}
+ 
+ 		$nofollow = $this->is_checked( $nofollow );
+ 		$noarchive = $this->is_checked( $noarchive );
+@@ -764,9 +740,9 @@
+ 	/**
+ 	 * Render the SEO bar title block and notice.
+ 	 *
+-	 * @param array $args
+ 	 * @since 2.6.0
+ 	 *
++	 * @param array $args
+ 	 * @return string The SEO Bar Title Block
+ 	 */
+ 	protected function the_seo_bar_title_notice( $args ) {
+@@ -846,9 +822,9 @@
+ 	/**
+ 	 * Render the SEO bar description block and notice.
+ 	 *
+-	 * @param array $args
+ 	 * @since 2.6.0
+ 	 *
++	 * @param array $args
+ 	 * @return string The SEO Bar Description Block
+ 	 */
+ 	protected function the_seo_bar_description_notice( $args ) {
+@@ -908,11 +884,10 @@
+ 	/**
+ 	 * Description Length notices.
+ 	 *
++	 * @since 2.6.0
++	 *
+ 	 * @param int $desc_len The Title length
+ 	 * @param string $class The current color class.
+-	 *
+-	 * @since 2.6.0
+-	 *
+ 	 * @return array {
+ 	 * 		notice => The notice,
+ 	 * 		class => The class,
+@@ -958,11 +933,10 @@
+ 	 * Calculates the word count and returns a warning with the words used.
+ 	 * Only when count is over 3.
+ 	 *
++	 * @since 2.6.0
++	 *
+ 	 * @param string $description The Description with maybe words too many.
+ 	 * @param string $class The current color class.
+-	 *
+-	 * @since 2.6.0
+-	 *
+ 	 * @return string The warning notice.
+ 	 */
+ 	protected function get_the_seo_bar_description_words_warning( $description, $class ) {
+@@ -1058,9 +1032,9 @@
+ 	/**
+ 	 * Render the SEO bar index block and notice.
+ 	 *
+-	 * @param array $args
+ 	 * @since 2.6.0
+ 	 *
++	 * @param array $args
+ 	 * @return string The SEO Bar Index Block
+ 	 */
+ 	protected function the_seo_bar_index_notice( $args ) {
+@@ -1165,7 +1139,6 @@
+ 	 * @staticvar bool $cache
+ 	 *
+ 	 * @param string $type : 'noindex', 'nofollow', 'noarchive'
+-	 *
+ 	 * @return bool
+ 	 */
+ 	protected function the_seo_bar_archive_robots_options( $type ) {
+@@ -1196,9 +1169,9 @@
+ 	/**
+ 	 * Render the SEO bar follow block and notice.
+ 	 *
+-	 * @param array $args
+ 	 * @since 2.6.0
+ 	 *
++	 * @param array $args
+ 	 * @return string The SEO Bar Follow Block
+ 	 */
+ 	protected function the_seo_bar_follow_notice( $args ) {
+@@ -1304,9 +1277,9 @@
+ 	/**
+ 	 * Render the SEO bar archive block and notice.
+ 	 *
+-	 * @param array $args
+ 	 * @since 2.6.0
+ 	 *
++	 * @param array $args
+ 	 * @return string The SEO Bar Follow Block
+ 	 */
+ 	protected function the_seo_bar_archive_notice( $args ) {
+@@ -1412,9 +1385,9 @@
+ 	/**
+ 	 * Render the SEO bar redirect block and notice.
+ 	 *
+-	 * @param array $args
+ 	 * @since 2.6.0
+ 	 *
++	 * @param array $args
+ 	 * @return string The SEO Bar Redirect Block
+ 	 */
+ 	protected function the_seo_bar_redirect_notice( $args ) {
+@@ -1455,6 +1428,8 @@
+ 	/**
+ 	 * Render the SEO bar when the page/term is blocked.
+ 	 *
++	 * @since 2.6.0
++	 *
+ 	 * @param array $args {
+ 	 *		$is_term => bool,
+ 	 *		$redirect => bool,
+@@ -1461,9 +1436,6 @@
+ 	 *		$noindex => bool,
+ 	 *		$post_i18n => string
+ 	 * }
+-	 *
+-	 * @since 2.6.0
+-	 *
+ 	 * @return string The SEO Bar
+ 	 */
+ 	protected function the_seo_bar_blocked( $args ) {
+@@ -1549,7 +1521,6 @@
+ 	 *
+ 	 * @param int $tit_len The Title length
+ 	 * @param string $class The Current Title notification class.
+-	 *
+ 	 * @return array {
+ 	 * 		string $notice => The notice,
+ 	 * 		string $class => The class,
+Index: inc/classes/generate-description.class.php
+===================================================================
+--- inc/classes/generate-description.class.php	(revision 1427876)
++++ inc/classes/generate-description.class.php	(working copy)
+@@ -26,7 +26,7 @@
+ class AutoDescription_Generate_Description extends AutoDescription_Generate {
+ 
+ 	/**
+-	 * Whether we're parsing the manual Excerpt for the automated description.
++	 * Determines whether we're parsing the manual content Excerpt for the automated description.
+ 	 *
+ 	 * @since 2.6.0
+ 	 *
+@@ -35,7 +35,7 @@
+ 	protected $using_manual_excerpt = false;
+ 
+ 	/**
+-	 * Constructor, load parent constructor
++	 * Constructor, loads parent constructor.
+ 	 */
+ 	public function __construct() {
+ 		parent::__construct();
+@@ -42,9 +42,11 @@
+ 	}
+ 
+ 	/**
+-	 * Create description
++	 * Creates description. Base function.
+ 	 *
+-	 * @param string $description the description.
++	 * @since 1.0.0
++	 *
++	 * @param string $description The optional description to simply parse.
+ 	 * @param array $args description args : {
+ 	 * 		@param int $id the term or page id.
+ 	 * 		@param string $taxonomy taxonomy name.
+@@ -52,9 +54,6 @@
+ 	 * 		@param bool $get_custom_field Do not fetch custom title when false.
+ 	 * 		@param bool $social Generate Social Description when true.
+ 	 * }
+-	 *
+-	 * @since 1.0.0
+-	 *
+ 	 * @return string The description
+ 	 */
+ 	public function generate_description( $description = '', $args = array() ) {
+@@ -78,9 +77,16 @@
+ 			$description = $this->generate_description_from_id( $args, false );
+ 
+ 		/**
+-		 * Beautify.
+-		 * @since 2.3.4
++		 * Applies filters 'the_seo_framework_do_shortcodes_in_description' : Boolean
++		 * @since 2.6.6
+ 		 */
++		if ( apply_filters( 'the_seo_framework_do_shortcodes_in_description', false ) )
++			$description = do_shortcode( $description );
++
++		/**
++		 * Sanitize.
++		 * @since 2.3.4 Beautifies too.
++		 */
+ 		$description = $this->escape_description( $description );
+ 
+ 		return $description;
+@@ -89,10 +95,9 @@
+ 	/**
+ 	 * Escapes and beautifies description.
+ 	 *
+-	 * @param string $description The description to escape and beautify.
+-	 *
+ 	 * @since 2.5.2
+ 	 *
++	 * @param string $description The description to escape and beautify.
+ 	 * @return string Escaped and beautified description.
+ 	 */
+ 	public function escape_description( $description = '' ) {
+@@ -107,11 +112,9 @@
+ 	}
+ 
+ 	/**
+-	 * Parse and sanitize description args.
++	 * Parses and sanitizes description arguments.
+ 	 *
+-	 * @param array $args required The passed arguments.
+-	 * @param array $defaults The default arguments.
+-	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
++	 * @since 2.5.0
+ 	 *
+ 	 * @applies filters the_seo_framework_description_args : {
+ 	 * 		@param int $id the term or page id.
+@@ -121,7 +124,9 @@
+ 	 * 		@param bool $social Generate Social Description when true.
+ 	 * }
+ 	 *
+-	 * @since 2.5.0
++	 * @param array $args required The passed arguments.
++	 * @param array $defaults The default arguments.
++	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
+ 	 * @return array $args parsed args.
+ 	 */
+ 	public function parse_description_args( $args = array(), $defaults = array(), $get_defaults = false ) {
+@@ -154,7 +159,7 @@
+ 	}
+ 
+ 	/**
+-	 * Reparse description args.
++	 * Reparses description args.
+ 	 *
+ 	 * @param array $args required The passed arguments.
+ 	 *
+@@ -181,8 +186,10 @@
+ 	}
+ 
+ 	/**
+-	 * Create description
++	 * Creates description from custom fields.
+ 	 *
++	 * @since 2.4.1
++	 *
+ 	 * @param array $args description args : {
+ 	 * 		@param int $id the term or page id.
+ 	 * 		@param string $taxonomy taxonomy name.
+@@ -189,9 +196,6 @@
+ 	 * 		@param bool $is_home We're generating for the home page.
+ 	 * }
+ 	 * @param bool $escape Escape the output if true.
+-	 *
+-	 * @since 2.4.1
+-	 *
+ 	 * @return string|mixed The description, might be unsafe for html output.
+ 	 */
+ 	public function description_from_custom_field( $args = array(), $escape = true ) {
+@@ -205,14 +209,13 @@
+ 		//* HomePage Description.
+ 		$description = $this->get_custom_homepage_description( $args );
+ 
+-		//* Singular Description.
+-		if ( empty( $description ) && false === $this->is_archive() )
+-			$description = $this->get_custom_singular_description( $args['id'] );
++		if ( empty( $description ) ) {
++			if ( $this->is_archive() )
++				$description = $this->get_custom_archive_description( $args );
++			else
++				$description = $this->get_custom_singular_description( $args['id'] );
++		}
+ 
+-		//* Archive Description.
+-		if ( empty( $description ) && $this->is_archive() )
+-			$description = $this->get_custom_archive_description( $args );
+-
+ 		if ( $escape && $description )
+ 			$description = $this->escape_description( $description );
+ 
+@@ -220,15 +223,13 @@
+ 	}
+ 
+ 	/**
+-	 * Fetch HomePage Description from custom field.
++	 * Fetches HomePage Description from custom field.
+ 	 *
++	 * @since 2.6.0
+ 	 * @access protected
+ 	 * Use $this->description_from_custom_field() instead.
+ 	 *
+ 	 * @param array $args Description args.
+-	 *
+-	 * @since 2.6.0
+-	 *
+ 	 * @return string The Description
+ 	 */
+ 	protected function get_custom_homepage_description( $args ) {
+@@ -244,15 +245,13 @@
+ 	}
+ 
+ 	/**
+-	 * Fetch Singular Description from custom field.
++	 * Fetches Singular Description from custom field.
+ 	 *
++	 * @since 2.6.0
+ 	 * @access protected
+ 	 * Use $this->description_from_custom_field() instead.
+ 	 *
+ 	 * @param int $id The page ID.
+-	 *
+-	 * @since 2.6.0
+-	 *
+ 	 * @return string The Description
+ 	 */
+ 	protected function get_custom_singular_description( $id ) {
+@@ -270,13 +269,11 @@
+ 	/**
+ 	 * Fetch Archive Description from custom field.
+ 	 *
++	 * @since 2.6.0
+ 	 * @access protected
+ 	 * Use $this->description_from_custom_field() instead.
+ 	 *
+ 	 * @param array $args
+-	 *
+-	 * @since 2.6.0
+-	 *
+ 	 * @return string The Description
+ 	 */
+ 	protected function get_custom_archive_description( $args ) {
+@@ -313,7 +310,7 @@
+ 	}
+ 
+ 	/**
+-	 * Generate description from content.
++	 * Generates description from content while parsing filters.
+ 	 *
+ 	 * @since 2.3.3
+ 	 *
+@@ -325,7 +322,6 @@
+ 	 * 		@param bool $social Generate Social Description when true.
+ 	 * }
+ 	 * @param bool $escape Escape output when true.
+-	 *
+ 	 * @return string $output The description.
+ 	 */
+ 	public function generate_description_from_id( $args = array(), $escape = true ) {
+@@ -352,9 +348,10 @@
+ 	}
+ 
+ 	/**
+-	 * Generate description from content
++	 * Generates description from content.
+ 	 *
+ 	 * @since 2.6.0
++	 * @staticvar string $title
+ 	 *
+ 	 * @param array $args description args : {
+ 	 * 		@param int $id the term or page id.
+@@ -364,9 +361,6 @@
+ 	 * 		@param bool $social Generate Social Description when true.
+ 	 * }
+ 	 * @param bool $escape Whether to escape the description.
+-	 *
+-	 * @staticvar string $title
+-	 *
+ 	 * @return string The description.
+ 	 */
+ 	protected function generate_the_description( $args, $escape = true ) {
+@@ -400,11 +394,8 @@
+ 
+ 		/**
+ 		 * Cache the generated description within a transient.
+-		 *
+ 		 * @since 2.3.3
+-		 *
+-		 * Put inside a different function.
+-		 * @since 2.3.4
++		 * @since 2.3.4 Put inside a different function.
+ 		 */
+ 		$excerpt = $this->get_transient( $this->auto_description_transient );
+ 		if ( false === $excerpt ) {
+@@ -434,10 +425,8 @@
+ 			/**
+ 			 * Transient expiration: 1 week.
+ 			 * Keep the description for at most 1 week.
+-			 *
+-			 * 60s * 60m * 24h * 7d
+ 			 */
+-			$expiration = 60 * 60 * 24 * 7;
++			$expiration = WEEK_IN_SECONDS;
+ 
+ 			$this->set_transient( $this->auto_description_transient, $excerpt, $expiration );
+ 		}
+@@ -487,12 +476,11 @@
+ 	}
+ 
+ 	/**
+-	 * Generate the home page description.
++	 * Generates the home page description.
+ 	 *
+-	 * @param bool $custom_field whether to check the Custom Field.
+-	 *
+ 	 * @since 2.6.0
+ 	 *
++	 * @param bool $custom_field whether to check the Custom Field.
+ 	 * @return string The description.
+ 	 */
+ 	public function generate_home_page_description( $custom_field = true ) {
+@@ -520,15 +508,14 @@
+ 	}
+ 
+ 	/**
+-	 * Whether to add description additions. (╯°□°）╯︵ ┻━┻
++	 * Determines whether to add description additions. (╯°□°）╯︵ ┻━┻
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 *
+ 	 * @param int $id The current page or post ID.
+ 	 * @param object|emptystring $term The current Term.
+-	 *
+-	 * @return bool
++	 * @return bool Whether to add description additions.
+ 	 */
+ 	public function add_description_additions( $id = '', $term = '' ) {
+ 
+@@ -554,14 +541,12 @@
+ 	}
+ 
+ 	/**
+-	 * Get Description Separator.
++	 * Gets Description Separator.
+ 	 *
+-	 * Applies filters the_seo_framework_description_separator
++	 * Applies filters 'the_seo_framework_description_separator' : string
+ 	 * @since 2.3.9
++	 * @staticvar string $sep
+ 	 *
+-	 * @staticvar $sep
+-	 * @since 2.6.0
+-	 *
+ 	 * @return string The Separator
+ 	 */
+ 	public function get_description_separator() {
+@@ -575,18 +560,16 @@
+ 	}
+ 
+ 	/**
+-	 * Generate description additions.
++	 * Generates description additions.
+ 	 *
+ 	 * @since 2.6.0
++	 * @staticvar array $title string of titles.
++	 * @staticvar string $on
+ 	 * @access private
+ 	 *
+ 	 * @param int $id The post or term ID
+ 	 * @param object|empty $term The term object
+ 	 * @param bool $ignore Whether to ignore options and filters.
+-	 *
+-	 * @staticvar array $title string of titles.
+-	 * @staticvar string $on
+-	 *
+ 	 * @return array : {
+ 	 *		$title		=> The title
+ 	 *		$on 		=> The word separator
+@@ -638,12 +621,11 @@
+ 	/**
+ 	 * Generates the Title for description.
+ 	 *
++	 * @since 2.5.2
++	 *
+ 	 * @param int $id The page ID.
+ 	 * @param void|object $term The term object.
+ 	 * @param bool $page_on_front If front page.
+-	 *
+-	 * @since 2.5.2
+-	 *
+ 	 * @return string The description title.
+ 	 */
+ 	public function generate_description_title( $id = '', $term = '', $page_on_front = false ) {
+@@ -700,18 +682,16 @@
+ 	}
+ 
+ 	/**
+-	 * Generate the excerpt.
++	 * Generates the excerpt.
++	 * @NOTE Supply calculated $max_char_length to reflect actual output.
+ 	 *
+-	 * @param int|string $page_id required : The Page ID
+-	 * @param object|null $term The Taxonomy Term.
+-	 * @param int $max_char_length The maximum excerpt char length.
+-	 *
+ 	 * @since 2.3.4
+-	 *
+ 	 * @staticvar array $excerpt_cache Holds the excerpt
+ 	 * @staticvar array $excerptlength_cache Holds the excerpt length
+ 	 *
+-	 * Please note that this does not reflect the actual output becaue the $max_char_length isn't calculated on direct call.
++	 * @param int|string $page_id required : The Page ID
++	 * @param object|null $term The Taxonomy Term.
++	 * @param int $max_char_length The maximum excerpt char length.
+ 	 */
+ 	public function generate_excerpt( $page_id, $term = '', $max_char_length = 154 ) {
+ 
+@@ -727,9 +707,9 @@
+ 				$excerpt = $this->get_excerpt_by_id( '', $page_id );
+ 			} else if ( $term && is_object( $term ) ) {
+ 				//* We're on a taxonomy now.
+-				$excerpt = empty( $term->description ) ? $this->get_excerpt_by_id( '', '', $page_id ) : $term->description;
++				$excerpt = empty( $term->description ) ? $this->get_excerpt_by_id( '', '', $page_id ) : $this->s_description( $term->description );
+ 			} else if ( $this->is_author() ) {
+-				$excerpt = get_the_author_meta( 'description', (int) get_query_var( 'author' ) );
++				$excerpt = $this->s_description( get_the_author_meta( 'description', (int) get_query_var( 'author' ) ) );
+ 			} else {
+ 				$excerpt = '';
+ 			}
+@@ -758,17 +738,16 @@
+ 	}
+ 
+ 	/**
+-	 * Trim the excerpt.
++	 * Trims the excerpt by word and determines sentence stops.
+ 	 *
++	 * @since 2.6.0
++	 *
+ 	 * @param string $excerpt The untrimmed excerpt.
+ 	 * @param int $excerpt_length The current excerpt length.
+ 	 * @param int $max_char_length At what point to shave off the excerpt.
+-	 *
+-	 * @since 2.6.0
+-	 *
+ 	 * @return string The trimmed excerpt.
+ 	 */
+-	protected function trim_excerpt( $excerpt, $excerpt_length, $max_char_length ) {
++	public function trim_excerpt( $excerpt, $excerpt_length, $max_char_length ) {
+ 
+ 		if ( $excerpt_length > $max_char_length ) {
+ 
+@@ -814,7 +793,7 @@
+ 				}
+ 			}
+ 
+-			//* Remove comma's and spaces.
++			//* Remove trailing/leading comma's and spaces.
+ 			$excerpt = trim( $excerpt, ' ,' );
+ 
+ 			//* Fetch last character.
+@@ -827,7 +806,7 @@
+ 
+ 		}
+ 
+-		return $excerpt;
++		return trim( $excerpt );
+ 	}
+ 
+ }
+Index: inc/classes/generate-image.class.php
+===================================================================
+--- inc/classes/generate-image.class.php	(revision 1418924)
++++ inc/classes/generate-image.class.php	(working copy)
+@@ -26,7 +26,7 @@
+ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
+ 
+ 	/**
+-	 * Constructor, load parent constructor
++	 * Constructor, loads parent constructor.
+ 	 */
+ 	public function __construct() {
+ 		parent::__construct();
+@@ -33,24 +33,18 @@
+ 	}
+ 
+ 	/**
+-	 * Fetches og:image
++	 * Fetches og:image URL.
+ 	 *
+-	 * @uses get_header_image
++	 * @since 2.5.2 Applies filters string the_seo_framework_og_image_after_featured
++	 * @since 2.5.2 Applies filters string the_seo_framework_og_image_after_header
+ 	 *
+-	 * @param string $post_id the post ID
+-	 * @param string $image output url for image
+-	 * @param bool $escape Whether to escape the image url
+-	 *
+-	 * @since 2.2.1
+-	 *
+-	 * Applies filters string the_seo_framework_og_image_after_featured
+-	 * Applies filters string the_seo_framework_og_image_after_header
+-	 * @since 2.5.2
+-	 *
+-	 * @todo create options and upload area.
+-	 * @priority medium 2.8.0+
+ 	 * @todo listen to attached images within post.
+ 	 * @priority medium 2.7.0+
++	 *
++	 * @param string $post_id The post ID.
++	 * @param array $args The image arguments.
++	 * @param bool $escape Whether to escape the image URL.
++	 * @return string the Open Graph Image URL.
+ 	 */
+ 	public function get_image( $post_id = '', $args = array(), $escape = true ) {
+ 
+@@ -60,29 +54,15 @@
+ 		if ( empty( $post_id ) )
+ 			return '';
+ 
+-		$default_args = $this->parse_image_args( '', '', true );
+-
+ 		/**
+-		 * Parse args.
++		 * Backwards compat with parse args.
+ 		 * @since 2.5.0
+ 		 */
+-		if ( ! is_array( $args ) ) {
+-			//* Old style parameters are used. Doing it wrong.
+-			$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', '2.5.0' );
+-			$args = $default_args;
+-		} else if ( $args ) {
+-			$args = $this->parse_image_args( $args, $default_args );
+-		} else {
+-			$args = $default_args;
+-		}
+-
+-		/**
+-		 * Backwards compat with parse args
+-		 * @since 2.5.0
+-		 */
+ 		if ( ! isset( $args['post_id'] ) )
+ 			$args['post_id'] = $post_id;
+ 
++		$args = $this->reparse_image_args( $args );
++
+ 		//* 0. Image from argument.
+ 		$image = $args['image'];
+ 
+@@ -122,11 +102,9 @@
+ 	/**
+ 	 * Parse and sanitize image args.
+ 	 *
+-	 * @param array $args required The passed arguments.
+-	 * @param array $defaults The default arguments.
+-	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
++	 * @since 2.5.0
+ 	 *
+-	 * Applies filters the_seo_framework_og_image_args : {
++	 * @since 2.0.1 Applies filters the_seo_framework_og_image_args : {
+ 	 *		@param string image The image url
+ 	 *		@param mixed size The image size
+ 	 *		@param bool icon Fetch Image icon
+@@ -141,7 +119,9 @@
+ 	 * }
+ 	 * The image set in the filter will always be used as fallback
+ 	 *
+-	 * @since 2.5.0
++	 * @param array $args required The passed arguments.
++	 * @param array $defaults The default arguments.
++	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
+ 	 * @return array $args parsed args.
+ 	 */
+ 	public function parse_image_args( $args = array(), $defaults = array(), $get_defaults = false ) {
+@@ -157,7 +137,6 @@
+ 				'disallowed' => array(),
+ 			);
+ 
+-			//* @since 2.0.1
+ 			$defaults = (array) apply_filters( 'the_seo_framework_og_image_args', $defaults, $args );
+ 		}
+ 
+@@ -177,18 +156,47 @@
+ 	}
+ 
+ 	/**
++	 * Reparses image args.
++	 *
++	 * @since 2.6.6
++	 *
++	 * @param array $args required The passed arguments.
++	 * @return array $args parsed args.
++	 */
++	public function reparse_image_args( $args = array() ) {
++
++		$default_args = $this->parse_image_args( '', '', true );
++
++		if ( is_array( $args ) ) {
++			if ( empty( $args ) ) {
++				$args = $default_args;
++			} else {
++				$args = $this->parse_image_args( $args, $default_args );
++			}
++		} else {
++			//* Old style parameters are used. Doing it wrong.
++			$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', '2.5.0' );
++			$args = $default_args;
++		}
++
++		return $args;
++	}
++
++	/**
+ 	 * Fetches image from post thumbnail.
+ 	 * Resizes the image between 1500px if bigger. Then it saves the image and
+ 	 * Keeps dimensions relative.
+ 	 *
+-	 * @param array $args Image arguments.
+-	 *
+ 	 * @since 2.3.0
+ 	 *
++	 * @param array $args Image arguments.
+ 	 * @return string|null the image url.
+ 	 */
+-	public function get_image_from_post_thumbnail( $args ) {
++	public function get_image_from_post_thumbnail( $args = array() ) {
+ 
++		if ( empty( $args ) )
++			$args = $this->reparse_image_args( $args );
++
+ 		if ( ! isset( $args['post_id'] ) )
+ 			$args['post_id'] = $this->get_the_real_ID();
+ 
+@@ -202,12 +210,10 @@
+ 	/**
+ 	 * Fetches images id's from WooCommerce gallery
+ 	 *
++	 * @since 2.5.0
+ 	 * @staticvar array $ids The image ids
+ 	 *
+ 	 * @param array $args Image arguments.
+-	 *
+-	 * @since 2.5.0
+-	 *
+ 	 * @return array The image URL's.
+ 	 */
+ 	public function get_image_from_woocommerce_gallery() {
+@@ -231,18 +237,16 @@
+ 	}
+ 
+ 	/**
+-	 * Parses OG image to correct size
++	 * Parses OG image to correct size.
+ 	 *
++	 * @since 2.5.0
+ 	 * @staticvar string $called Checks if image ID has already been fetched (to prevent duplicate output on WooCommerce).
+ 	 *
+-	 * @param int $id The attachment ID.
+-	 * @param array $args The image args
+-	 *
+-	 * @since 2.5.0
+-	 *
+ 	 * @todo create formula to fetch transient.
+ 	 * @priority high 2.7.0
+ 	 *
++	 * @param int $id The attachment ID.
++	 * @param array $args The image args
+ 	 * @return string|empty Parsed image url or empty if already called
+ 	 */
+ 	public function parse_og_image( $id, $args = array() ) {
+@@ -257,7 +261,7 @@
+ 			return '';
+ 
+ 		if ( empty( $args ) )
+-			$args = $this->parse_image_args( '', '', true );
++			$args = $this->reparse_image_args( $args );
+ 
+ 		$src = wp_get_attachment_image_src( $id, $args['size'], $args['icon'], $args['attr'] );
+ 
+@@ -293,21 +297,18 @@
+ 
+ 				$i_file_file_name = pathinfo( $i_file_path, PATHINFO_FILENAME );
+ 
+-				//* Yes I know, I should use generate_filename, but it's slower.
++				//* Yes I know, I should use generate_filename(), but it's slower.
+ 				//* Will look at that later. This is already 100 lines of correctly working code.
+ 				$new_image_dirfile = $i_file_dir_name . $i_file_file_name . '-' . $w . 'x' . $h . '.' . $i_file_ext;
+ 
+-				/**
+-				 * Generate image URL.
+-				 */
++				//* Generate image URL.
+ 				$upload_dir 	= wp_upload_dir();
+ 				$upload_url 	= $upload_dir['baseurl'];
+ 				$upload_basedir = $upload_dir['basedir'];
+-				$new_image_url = str_ireplace( $upload_basedir, '', $new_image_dirfile );
+-				$new_image_url = $upload_url . $new_image_url;
+ 
+ 				//* We've got our image path.
+-				$i = $new_image_url;
++				$i = str_ireplace( $upload_basedir, '', $new_image_dirfile );
++				$i = $upload_url . $i;
+ 
+ 				// Generate file if it doesn't exists yet.
+ 				if ( ! file_exists( $new_image_dirfile ) ) {
+@@ -332,9 +333,9 @@
+ 	/**
+ 	 * Fetches site icon brought in WordPress 4.3.0
+ 	 *
+-	 * @param string $size The icon size, accepts 'full' and pixel values
+ 	 * @since 2.2.1
+ 	 *
++	 * @param string $size The icon size, accepts 'full' and pixel values
+ 	 * @return string url site icon, not escaped.
+ 	 */
+ 	public function site_icon( $size = 'full' ) {
+Index: inc/classes/generate-ldjson.class.php
+===================================================================
+--- inc/classes/generate-ldjson.class.php	(revision 1433521)
++++ inc/classes/generate-ldjson.class.php	(working copy)
+@@ -47,7 +47,7 @@
+ 
+ 		$this->setup_ld_json_transient( $this->get_the_real_ID() );
+ 
+-		if ( $this->the_seo_framework_debug ) $this->debug_init( __CLASS__, __FUNCTION__, true, $debug_key = microtime(true), array( 'LD Json transient' => $this->ld_json_transient, 'Is output' => (bool) $this->get_transient( $this->ld_json_transient ) ) );
++		if ( $this->the_seo_framework_debug ) $this->debug_init( __CLASS__, __FUNCTION__, false, $debug_key = microtime(true), array( 'LD Json transient' => $this->ld_json_transient, 'Output from transient' => false !== $this->get_transient( $this->ld_json_transient ) ) );
+ 
+ 		$output = $this->get_transient( $this->ld_json_transient );
+ 		if ( false === $output ) {
+@@ -80,11 +80,9 @@
+ 
+ 			/**
+ 			 * Transient expiration: 1 week.
+-			 * Keep the description for at most 1 week.
+-			 *
+-			 * 60s * 60m * 24h * 7d
++			 * Keep the script for at most 1 week.
+ 			 */
+-			$expiration = 60 * 60 * 24 * 7;
++			$expiration = WEEK_IN_SECONDS;
+ 
+ 			$this->set_transient( $this->ld_json_transient, $output, $expiration );
+ 		}
+Index: inc/classes/generate-title.class.php
+===================================================================
+--- inc/classes/generate-title.class.php	(revision 1433389)
++++ inc/classes/generate-title.class.php	(working copy)
+@@ -527,6 +527,13 @@
+ 
+ 		$title = $this->do_title_pro_filter( $title, $args, false );
+ 
++		/**
++		 * Applies filters 'the_seo_framework_do_shortcodes_in_title' : Boolean
++		 * @since 2.6.6
++		 */
++		if ( apply_filters( 'the_seo_framework_do_shortcodes_in_title', false ) )
++			$title = do_shortcode( $title );
++
+ 		if ( $args['escape'] )
+ 			$title = $this->escape_title( $title );
+ 
+@@ -765,7 +772,7 @@
+ 			if ( $args['get_custom_field'] && isset( $term ) ) {
+ 				$title = empty( $term->admeta['doctitle'] ) ? $title : wp_kses_stripslashes( wp_kses_decode_entities( $term->admeta['doctitle'] ) );
+ 
+-				$flag = $this->is_checked( $term->admeta['saved_flag'] );
++				$flag = isset( $term->admeta['saved_flag'] ) && $this->is_checked( $term->admeta['saved_flag'] );
+ 				if ( false === $flag && empty( $title ) && isset( $term->meta['doctitle'] ) )
+ 					$title = empty( $term->meta['doctitle'] ) ? $title : wp_kses_stripslashes( wp_kses_decode_entities( $term->meta['doctitle'] ) );
+ 			}
+Index: inc/classes/generate-url.class.php
+===================================================================
+--- inc/classes/generate-url.class.php	(revision 1433389)
++++ inc/classes/generate-url.class.php	(working copy)
+@@ -1123,7 +1123,7 @@
+ 			if ( $output_singular_paged ) {
+ 
+ 				$page = $this->page();
+-				$numpages = substr_count( $this->get_post_content( $this->get_the_real_ID() ), '<!--nextpage-->' ) + 1;
++				$numpages = substr_count( $this->get_post_content( $post_id ), '<!--nextpage-->' ) + 1;
+ 
+ 				if ( ! $page )
+ 					$page = 1;
+Index: inc/classes/generate.class.php
+===================================================================
+--- inc/classes/generate.class.php	(revision 1418924)
++++ inc/classes/generate.class.php	(working copy)
+@@ -101,7 +101,7 @@
+ 				$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'tag_noindex' ) ? 'noarchive' : $meta['noarchive'];
+ 			}
+ 
+-			$flag = '0' !== $term->admeta['saved_flag'] ? true : false;
++			$flag = isset( $term->admeta['saved_flag'] ) && $this->is_checked( $term->admeta['saved_flag'] );
+ 
+ 			if ( false === $flag && isset( $term->meta ) ) {
+ 				//* Genesis support.
+Index: inc/classes/init.class.php
+===================================================================
+--- inc/classes/init.class.php	(revision 1433389)
++++ inc/classes/init.class.php	(working copy)
+@@ -35,9 +35,7 @@
+ 	protected $use_object_cache = true;
+ 
+ 	/**
+-	 * Constructor. Init actions.
+-	 *
+-	 * @since 2.1.6
++	 * Constructor. Initializes actions and loads parent constructor.
+ 	 */
+ 	public function __construct() {
+ 		parent::__construct();
+@@ -55,7 +53,7 @@
+ 	}
+ 
+ 	/**
+-	 * Run the plugin
++	 * Runs the plugin on the front-end.
+ 	 *
+ 	 * @since 1.0.0
+ 	 */
+@@ -75,7 +73,7 @@
+ 	}
+ 
+ 	/**
+-	 * Initialize front-end actions.
++	 * Initializes front-end actions.
+ 	 *
+ 	 * @since 2.5.2
+ 	 */
+@@ -99,7 +97,7 @@
+ 	}
+ 
+ 	/**
+-	 * Initialize front-end filters.
++	 * Runs front-end filters.
+ 	 *
+ 	 * @since 2.5.2
+ 	 */
+@@ -118,9 +116,8 @@
+ 		add_filter( 'woo_title', array( $this, 'title_from_cache'), 99 );
+ 
+ 		/**
++		 * Applies filters 'the_seo_framework_manipulate_title' : boolean
+ 		 * Disables the title tag manipulation on old themes.
+-		 * Applies filters the_seo_framework_manipulate_title
+-		 *
+ 		 * @since 2.4.1
+ 		 */
+ 		if ( (bool) apply_filters( 'the_seo_framework_manipulate_title', true ) ) {
+@@ -131,16 +128,14 @@
+ 	}
+ 
+ 	/**
+-	 * Header actions.
++	 * Runs header actions.
+ 	 *
++	 * @since 2.2.6
+ 	 * @uses The_SEO_Framework_Load::call_function()
+ 	 *
+ 	 * @param string|array $args the arguments that will be passed
+ 	 * @param bool $before if the header actions should be before or after the SEO Frameworks output
+-	 *
+-	 * @since 2.2.6
+-	 *
+-	 * @return string|null
++	 * @return string|empty The filter output.
+ 	 */
+ 	public function header_actions( $args = '', $before = true ) {
+ 
+@@ -172,33 +167,9 @@
+ 	}
+ 
+ 	/**
+-	 * Output the header meta and script
++	 * Echos the header meta and scripts.
+ 	 *
+ 	 * @since 1.0.0
+-	 *
+-	 * @param blog_id : the blog id
+-	 *
+-	 * Applies filters the_seo_framework_pre 	: Adds content before
+-	 * 											: @param before
+-	 *											: cached
+-	 * Applies filters the_seo_framework_pro 	: Adds content after
+-	 *											: @param after
+-	 *											: cached
+-	 * Applies filters the_seo_framework_generator_tag : String generator tag content
+-	 * Applies filters the_seo_framework_indicator : True to show indicator in html
+-	 *
+-	 * @uses hmpl_ad_description()
+-	 * @uses $this->og_image()
+-	 * @uses $this->og_locale()
+-	 * @uses $this->og_type()
+-	 * @uses $this->og_title()
+-	 * @uses $this->og_description()
+-	 * @uses $this->og_url()
+-	 * @uses $this->og_sitename()
+-	 * @uses $this->ld_json()
+-	 * @uses $this->canonical()
+-	 *
+-	 * Echos output.
+ 	 */
+ 	public function html_output() {
+ 
+@@ -237,6 +208,11 @@
+ 
+ 			$robots = $this->robots();
+ 
++			/**
++			 * Applies filters 'the_seo_framework_pre' : string
++			 * Adds content before the output.
++			 * @since 2.6.0
++			 */
+ 			$before = (string) apply_filters( 'the_seo_framework_pre', '' );
+ 
+ 			$before_actions = $this->header_actions( '', true );
+@@ -287,10 +263,17 @@
+ 
+ 			$after_actions = $this->header_actions( '', false );
+ 
++			/**
++			 * Applies filters 'the_seo_framework_pro' : string
++			 * Adds content before the output.
++			 * @since 2.6.0
++			 */
+ 			$after = (string) apply_filters( 'the_seo_framework_pro', '' );
+ 
+ 			/**
+-			 * @see https://wordpress.org/plugins/generator-the-seo-framework/
++			 * Applies filters 'the_seo_framework_generator_tag' : String generator tag content.
++			 * @since 2.0.1
++			 * @see https://wordpress.org/plugins/generator-the-seo-framework/ For an alternative.
+ 			 */
+ 			$generator = (string) apply_filters( 'the_seo_framework_generator_tag', '' );
+ 
+@@ -302,6 +285,11 @@
+ 			$this->object_cache_set( $cache_key, $output, 86400 );
+ 		}
+ 
++		/**
++		 * Applies filters 'the_seo_framework_indicator' : Boolean
++		 * Whether to show the indicator in HTML.
++		 * @since 2.0.0
++		 */
+ 		$indicator = (bool) apply_filters( 'the_seo_framework_indicator', true );
+ 
+ 		$indicatorbefore = '';
+@@ -308,7 +296,19 @@
+ 		$indicatorafter = '';
+ 
+ 		if ( $indicator ) {
++
++			/**
++			 * Applies filters 'the_seo_framework_indicator_timing' : Boolean
++			 * Whether to show the hidden generation time in HTML.
++			 * @since 2.4.0
++			 */
+ 			$timer = (bool) apply_filters( 'the_seo_framework_indicator_timing', true );
++
++			/**
++			 * Applies filters 'sybre_waaijer_<3' : Boolean
++			 * Whether to show the hidden author name in HTML.
++			 * @since 2.4.0
++			 */
+ 			$sybre = (bool) apply_filters( 'sybre_waaijer_<3', true );
+ 
+ 			$start = __( 'Start The Seo Framework', 'autodescription' );
+@@ -337,15 +337,16 @@
+ 	}
+ 
+ 	/**
+-	 * Redirect singular page to an alternate URL.
+-	 * Called outside html_output
++	 * Redirects singular page to an alternate URL.
+ 	 *
+ 	 * @since 2.0.9
++	 *
++	 * @return void early on non-singular pages.
+ 	 */
+ 	public function custom_field_redirect() {
+ 
+ 		//* Prevent redirect from options on uneditable pages.
+-		if ( ! $this->is_singular() )
++		if ( ! $this->is_singular() || $this->is_admin() )
+ 			return;
+ 
+ 		$url = $this->get_custom_field( 'redirect' );
+@@ -353,25 +354,15 @@
+ 		if ( $url ) {
+ 
+ 			$allow_external = $this->allow_external_redirect();
++			$scheme = null;
+ 
+-			/**
+-			 * If the URL is made relative, prevent scheme issues
+-			 *
+-			 * Removes http:// and https://
+-			 *
+-			 * esc_url_raw uses is_ssl() to make the url valid again :)
+-			 */
+-			if ( true !== $allow_external ) {
+-				$pattern 	= 	'/'
+-							.	'(((http)(s)?)\:)' 	// 1: http: https:
+-							. 	'(\/\/)'			// 2: slash slash
+-							.	'/s'
+-							;
+-
+-				$url = preg_replace( $pattern, '', $url );
++			if ( false === $allow_external ) {
++				$url = $this->set_url_scheme( $url, 'relative' );
++				$url = $this->add_url_host( $url );
++				$scheme = is_ssl() ? 'https' : 'http';
+ 			}
+ 
+-			wp_redirect( esc_url_raw( $url ), 301 );
++			wp_redirect( esc_url_raw( $url, $scheme ), 301 );
+ 			exit;
+ 		}
+ 
+Index: inc/classes/inpost.class.php
+===================================================================
+--- inc/classes/inpost.class.php	(revision 1433389)
++++ inc/classes/inpost.class.php	(working copy)
+@@ -23,7 +23,7 @@
+  *
+  * @since 2.2.2
+  */
+-class AutoDescription_Inpost extends AutoDescription_PageOptions {
++class AutoDescription_Inpost extends AutoDescription_DoingItRight {
+ 
+ 	/**
+ 	 * Add inpost SEO Bar through a filter.
+@@ -630,11 +630,6 @@
+ 				?>
+ 				<a href="https://support.google.com/webmasters/answer/79812?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Tell Search Engines not to save a cached copy of this %s', 'autodescription' ), $type ); ?>">[?]</a>
+ 			</label>
+-
+-			<?php // Saved flag, if set then it won't fetch for genesis meta anymore ?>
+-			<label class="hidden" for="autodescription_saved_flag">
+-				<input name="autodescription[saved_flag]" id="autodescription[saved_flag]" type="checkbox" value="1" checked='checked' />
+-			</label>
+ 		</p>
+ 
+ 		<p><strong><?php _e( 'Local Search Settings', 'autodescription' ); ?></strong></p>
+Index: inc/classes/postdata.class.php
+===================================================================
+--- inc/classes/postdata.class.php	(revision 1418924)
++++ inc/classes/postdata.class.php	(working copy)
+@@ -30,11 +30,118 @@
+ 	 */
+ 	public function __construct() {
+ 		parent::__construct();
++
++		add_action( 'save_post', array( $this, 'inpost_seo_save' ), 1, 2 );
+ 	}
+ 
+ 	/**
+-	 * Get or parse the excerpt of the post
++	 * Save the SEO settings when we save a post or page.
++	 * Some values get sanitized, the rest are pulled from identically named subkeys in the $_POST['autodescription'] array.
+ 	 *
++	 * @uses $this->save_custom_fields() Perform checks and saves post meta / custom field data to a post or page.
++	 *
++	 * @since 2.0.0
++	 *
++	 * @param integer  $post_id  Post ID.
++	 * @param stdClass $post     Post object.
++	 * @return mixed Returns post id if permissions incorrect, null if doing autosave, ajax or future post, false if update
++	 *               or delete failed, and true on success.
++	 */
++	public function inpost_seo_save( $post_id, $post ) {
++
++		if ( ! isset( $_POST['autodescription'] ) )
++			return;
++
++		//* Merge user submitted options with fallback defaults
++		$data = wp_parse_args( $_POST['autodescription'], array(
++			'_genesis_title'         => '',
++			'_genesis_description'   => '',
++			'_genesis_canonical_uri' => '',
++			'redirect'               => '',
++			'_genesis_noindex'       => 0,
++			'_genesis_nofollow'      => 0,
++			'_genesis_noarchive'     => 0,
++			'exclude_local_search'   => 0,
++		) );
++
++		foreach ( (array) $data as $key => $value ) {
++			//* Sanitize the title
++			if ( '_genesis_title' === $key )
++				$data[$key] = trim( strip_tags( $value ) );
++
++			//* Sanitize the description
++			if ( '_genesis_description' === $key )
++				$data[$key] = $this->s_description( $value );
++
++			//* Sanitize the URL. Make sure it's an absolute URL
++			if ( 'redirect' === $key )
++				$data[$key] = $this->s_redirect_url( $value );
++
++		}
++
++		$this->save_custom_fields( $data, 'inpost_seo_save', 'hmpl_ad_inpost_seo_nonce', $post );
++	}
++
++	/**
++	 * Save post meta / custom field data for a post or page.
++	 *
++	 * It verifies the nonce, then checks we're not doing autosave, ajax or a future post request. It then checks the
++	 * current user's permissions, before finally* either updating the post meta, or deleting the field if the value was not
++	 * truthy.
++	 *
++	 * By passing an array of fields => values from the same metabox (and therefore same nonce) into the $data argument,
++	 * repeated checks against the nonce, request and permissions are avoided.
++	 *
++	 * @since 2.0.0
++	 *
++	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
++	 *
++	 * @param array    $data         Key/Value pairs of data to save in '_field_name' => 'value' format.
++	 * @param string   $nonce_action Nonce action for use with wp_verify_nonce().
++	 * @param string   $nonce_name   Name of the nonce to check for permissions.
++	 * @param WP_Post|integer $post  Post object or ID.
++	 * @return mixed Return null if permissions incorrect, doing autosave, ajax or future post, false if update or delete
++	 *               failed, and true on success.
++	 */
++	public function save_custom_fields( array $data, $nonce_action, $nonce_name, $post ) {
++
++		//* Verify the nonce
++		if ( ! isset( $_POST[ $nonce_name ] ) || ! wp_verify_nonce( $_POST[ $nonce_name ], $nonce_action ) )
++			return;
++
++		//* Don't try to save the data under autosave, ajax, or future post.
++		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
++			return;
++		if ( defined( 'DOING_AJAX' ) && DOING_AJAX )
++			return;
++		if ( defined( 'DOING_CRON' ) && DOING_CRON )
++			return;
++
++		//* Grab the post object
++		$post = get_post( $post );
++
++		//* Don't save if WP is creating a revision (same as DOING_AUTOSAVE?)
++		if ( 'revision' === get_post_type( $post ) )
++			return;
++
++		//* Check that the user is allowed to edit the post
++		if ( ! current_user_can( 'edit_post', $post->ID ) )
++			return;
++
++		//* Cycle through $data, insert value or delete field
++		foreach ( (array) $data as $field => $value ) {
++			//* Save $value, or delete if the $value is empty
++			if ( $value )
++				update_post_meta( $post->ID, $field, $value );
++			else
++				delete_post_meta( $post->ID, $field );
++		}
++
++	}
++
++	/**
++	 * Fetches or parses the excerpt of the post
++	 *
+ 	 * @since 1.0.0
+ 	 *
+ 	 * @param string $excerpt the Excerpt
+@@ -58,36 +165,27 @@
+ 			return '';
+ 
+ 		$excerpt = wp_strip_all_tags( strip_shortcodes( $excerpt ) );
+-		$excerpt = str_replace( array( "\r\n", "\r", "\n" ), "\n", $excerpt );
+ 
+-		$lines = explode( "\n", $excerpt );
+-		$new_lines = array();
++		$output = $this->s_description( $excerpt );
+ 
+-		//* Remove line breaks
+-		foreach ( $lines as $i => $line ) {
+-			//* Don't add empty lines or paragraphs
+-			if ( $line && '&nbsp;' !== $line )
+-				$new_lines[] = trim( $line ) . ' ';
+-		}
+-
+-		$output = implode( $new_lines );
+-
+-		return (string) $output;
++		return $output;
+ 	}
+ 
+ 	/**
+-	 * Generate excerpt.
++	 * Fetches excerpt from post excerpt or fetches the full post content.
++	 * Determines if a page builder is used to return an empty string.
++	 * Does not sanitize output.
+ 	 *
+ 	 * @since 2.5.2
++	 * @since 2.6.6 Detects Page builders.
+ 	 *
+ 	 * @param int $the_id The Post ID.
+-	 * @param int $tt_id The Taxonomy Term ID
+-	 *
++	 * @param int $tt_id The Taxonomy Term ID.
+ 	 * @return string|empty excerpt.
+ 	 */
+ 	public function fetch_excerpt( $the_id = '', $tt_id = '' ) {
+ 
+-		$post = $this->fetch_post_by_id( $the_id, $tt_id );
++		$post = $this->fetch_post_by_id( $the_id, $tt_id, OBJECT );
+ 
+ 		if ( empty( $post ) )
+ 			return '';
+@@ -96,10 +194,11 @@
+ 		 * Fetch custom excerpt, if not empty, from the post_excerpt field.
+ 		 * @since 2.5.2
+ 		 */
+-		if ( isset( $post['post_excerpt'] ) && $post['post_excerpt'] ) {
+-			$excerpt = $post['post_excerpt'];
+-		} else if ( isset( $post['post_content'] ) ) {
+-			$excerpt = $post['post_content'];
++		if ( isset( $post->post_excerpt ) && $post->post_excerpt ) {
++			$excerpt = $post->post_excerpt;
++		} else if ( isset( $post->post_content ) ) {
++			$uses_builder = $this->uses_page_builder( $post->ID );
++			$excerpt = $uses_builder ? '' : $post->post_content;
+ 		} else {
+ 			$excerpt = '';
+ 		}
+@@ -112,13 +211,14 @@
+ 	 * Also returns latest post from blog or archive if applicable.
+ 	 *
+ 	 * @since 2.6.0
++	 * @since 2.6.6 Added $output parameter.
+ 	 *
+ 	 * @param int $the_id The Post ID.
+ 	 * @param int $tt_id The Taxonomy Term ID
+-	 *
++	 * @param mixed $output The value type to return. Accepts OBJECT, ARRAY_A, or ARRAY_N
+ 	 * @return empty|array The Post Array.
+ 	 */
+-	protected function fetch_post_by_id( $the_id = '', $tt_id = '' ) {
++	protected function fetch_post_by_id( $the_id = '', $tt_id = '', $output = ARRAY_A ) {
+ 
+ 		if ( '' === $the_id && '' === $tt_id ) {
+ 			$the_id = $this->get_the_real_ID();
+@@ -128,11 +228,8 @@
+ 		}
+ 
+ 		/**
+-		 * Use the 2nd parameter.
+-		 * @since 2.2.8
+-		 *
+-		 * Now casts to array
+-		 * @since 2.3.3
++		 * @since 2.2.8 Use the 2nd parameter.
++		 * @since 2.3.3 Now casts to array
+ 		 */
+ 		if ( '' !== $the_id ) {
+ 			if ( $this->is_blog_page( $the_id ) ) {
+@@ -150,12 +247,11 @@
+ 
+ 				$post = get_posts( $args );
+ 			} else {
+-				$post = get_post( $the_id, ARRAY_A );
++				$post = get_post( $the_id );
+ 			}
+ 		} else if ( '' !== $tt_id ) {
+ 			/**
+-			 * Match the descriptions in admin as on the front end.
+-			 * @since 2.3.3
++			 * @since 2.3.3 Match the descriptions in admin as on the front end.
+ 			 */
+ 			$args = array(
+ 				'posts_per_page'	=> 1,
+@@ -169,26 +265,34 @@
+ 
+ 			$post = get_posts( $args );
+ 		} else {
+-			$post = get_post( $the_id, ARRAY_A );
++			$post = get_post( $the_id );
+ 		}
+ 
+ 		/**
+-		 * Cast last found post object to array and put it in $post.
+-		 * @since 2.3.3
++		 * @since 2.6.5 Transform post array to object (on Archives).
+ 		 */
+-		if ( isset( $post[0] ) && is_object( $post[0] ) ) {
+-			$object = $post[0];
+-			$post = (array) $object;
+-		}
++		if ( is_array( $post ) && isset( $post[0] ) && is_object( $post[0] ) )
++			$post = $post[0];
+ 
+-		// Something went wrong, nothing to be found. Return empty.
+-		if ( empty( $post ) || ! is_array( $post ) )
++		//* Something went wrong, nothing to be found. Return empty.
++		if ( empty( $post ) )
+ 			return '';
+ 
+ 		//* Stop getting something that doesn't exists. E.g. 404
+-		if ( isset( $post['ID'] ) && 0 === $post['ID'] )
++		if ( isset( $post->ID ) && 0 === $post->ID )
+ 			return '';
+ 
++		/**
++		 * @since 2.6.6
++		 */
++		if ( ARRAY_A === $output || ARRAY_N === $output ) {
++			$_post = WP_Post::get_instance( $post );
++			$post = $_post->to_array();
++
++			if ( ARRAY_N === $output )
++				$post = array_values( $post );
++		}
++
+ 		return $post;
+ 	}
+ 
+@@ -195,11 +299,12 @@
+ 	/**
+ 	 * Fetch latest public post ID.
+ 	 *
++	 * @since 2.4.3
+ 	 * @staticvar int $page_id
+ 	 * @global object $wpdb
+ 	 * @global int $blog_id
+ 	 *
+-	 * @since 2.4.3
++	 * @return int Latest Post ID.
+ 	 */
+ 	public function get_latest_post_id() {
+ 		global $wpdb, $blog_id;
+@@ -235,7 +340,7 @@
+ 				'', 1 );
+ 
+ 			$page_id = (int) $wpdb->get_var( $sql );
+-			$this->object_cache_set( $latest_posts_key, $page_id, 86400 );
++			$this->object_cache_set( $latest_posts_key, $page_id, DAY_IN_SECONDS );
+ 		}
+ 
+ 		return $page_id;
+@@ -246,25 +351,71 @@
+ 	 *
+ 	 * @since 2.6.0
+ 	 *
+-	 * @param int $id.
+-	 *
++	 * @param int $id The post ID.
+ 	 * @return string The post content.
+ 	 */
+ 	public function get_post_content( $id = 0 ) {
+ 
+-		if ( empty( $id ) ) {
+-			global $wp_query;
++		$id = $id ? $id : $this->get_the_real_ID();
+ 
+-			if ( isset( $wp_query->post->post_content ) )
+-				return $wp_query->post->post_content;
+-		} else {
+-			$content = get_post_field( 'post_content', $id );
++		$content = get_post_field( 'post_content', $id );
+ 
+-			if ( is_string( $content ) )
+-				return $content;
+-		}
++		if ( is_string( $content ) )
++			return $content;
+ 
+ 		return '';
+ 	}
+ 
++	/**
++	 * Determines whether the post has a page builder attached to it.
++	 * Doesn't use plugin detection features as some builders might be incorporated within themes.
++	 *
++	 * Detects the following builders:
++	 * - Divi Builder by Elegant Themes
++	 * - Visual Composer by WPBakery
++	 * - Page Builder by SiteOrigin
++	 * - Beaver Builder by Fastline Media
++	 *
++	 * @since 2.6.6
++	 *
++	 * @param int $post_id
++	 * @return boolean
++	 */
++	public function uses_page_builder( $post_id ) {
++
++		$meta = get_post_meta( $post_id );
++
++		/**
++		 * Applies filters 'the_seo_framework_detect_page_builder' : boolean
++		 * Determines whether a page builder has been detected.
++		 * @since 2.6.6
++		 *
++		 * @param boolean The current state.
++		 * @param int $post_id The current Post ID.
++		 * @param array $meta The current post meta.
++		 */
++		$detected = (bool) apply_filters( 'the_seo_framework_detect_page_builder', false, $post_id, $meta );
++
++		if ( $detected )
++			return true;
++
++		if ( empty( $meta ) )
++			return false;
++
++		if ( isset( $meta['_et_pb_use_builder'][0] ) && 'on' === $meta['_et_pb_use_builder'][0] && defined( 'ET_BUILDER_VERSION' ) )
++			//* Divi Builder by Elegant Themes
++			return true;
++		elseif ( isset( $meta['_wpb_vc_js_status'][0] ) && 'true' === $meta['_wpb_vc_js_status'][0] && defined( 'WPB_VC_VERSION' ) )
++			//* Visual Composer by WPBakery
++			return true;
++		elseif ( isset( $meta['panels_data'][0] ) && '' !== $meta['panels_data'][0] && defined( 'SITEORIGIN_PANELS_VERSION' ) )
++			//* Page Builder by SiteOrigin
++			return true;
++		elseif ( isset( $meta['_fl_builder_enabled'][0] ) && '1' === $meta['_fl_builder_enabled'][0] && defined( 'FL_BUILDER_VERSION' ) )
++			//* Beaver Builder by Fastline Media
++			return true;
++
++		return false;
++	}
++
+ }
+Index: inc/classes/query.class.php
+===================================================================
+--- inc/classes/query.class.php	(revision 1433389)
++++ inc/classes/query.class.php	(working copy)
+@@ -96,6 +96,10 @@
+ 			//* Never get this when this is an archive. It will always return the wrong value.
+ 			if ( empty( $id ) && false === is_archive() && false === is_home() )
+ 				$id = get_the_ID();
++
++			//* Determine the Archive ID on term edit.
++			if ( empty( $id ) && $is_admin && $this->is_archive_admin() )
++				$id = $this->get_admin_term_id();
+ 		}
+ 
+ 		/**
+@@ -151,10 +155,37 @@
+ 	}
+ 
+ 	/**
++	 * Fetches the Term ID on admin pages.
++	 *
++	 * @since 2.6.0
++	 * @since 2.6.6 Moved from class AutoDescription_TermData.
++	 * @staticvar int $term_id The Term ID.
++	 *
++	 * @return int Term ID.
++	 */
++	public function get_admin_term_id() {
++
++		static $term_id = null;
++
++		if ( isset( $term_id ) )
++			return $term_id;
++
++		if ( isset( $_REQUEST['tag_ID'] ) && $_REQUEST['tag_ID'] ) {
++			//* WordPress 4.5+
++			$term_id = $_REQUEST['tag_ID'];
++		} else if ( isset( $_REQUEST['term_id'] ) && $_REQUEST['term_id'] ) {
++			//* Older WordPress versions.
++			$term_id = $_REQUEST['term_id'];
++		}
++
++		return $term_id = $term_id ? absint( $term_id ) : 0;
++	}
++
++	/**
+ 	 * Detects 404.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 *
+ 	 * @return bool
+ 	 */
+@@ -172,10 +203,10 @@
+ 	}
+ 
+ 	/**
+-	 * Detects admin.
++	 * Detects admin screen.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 *
+ 	 * @return bool
+ 	 */
+@@ -195,8 +226,8 @@
+ 	/**
+ 	 * Detects attachment page.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 * @uses $this->is_singular()
+ 	 *
+ 	 * @param int|string|array|object $attachment Attachment ID, title, slug, or array of such.
+@@ -219,9 +250,11 @@
+ 	/**
+ 	 * Detects archive pages. Also in admin.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 *
++	 * @global object $wp_query
++	 *
+ 	 * @return bool
+ 	 */
+ 	public function is_archive() {
+@@ -234,25 +267,24 @@
+ 		if ( isset( $cache ) && $this->can_cache_query() )
+ 			return $cache;
+ 
+-		global $wp_query;
+-
+ 		if ( is_archive() && false === $this->is_singular() )
+ 			return $cache = true;
+ 
+-		global $wp_query;
++		if ( $this->can_cache_query() && false === $this->is_singular() ) {
++			global $wp_query;
+ 
+-		if ( $this->can_cache_query() && false === $this->is_singular() )
+ 			if ( $wp_query->is_post_type_archive || $wp_query->is_date || $wp_query->is_author || $wp_query->is_category || $wp_query->is_tag || $wp_query->is_tax )
+ 				return $cache = true;
++		}
+ 
+ 		return $cache = false;
+ 	}
+ 
+ 	/**
+-	 * Extends default WordPress is_archive and made available in admin.
++	 * Extends default WordPress is_archive() and determines screen in admin.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 *
+ 	 * @global object $current_screen
+ 	 *
+@@ -276,9 +308,8 @@
+ 	/**
+ 	 * Detects Term edit screen in WP Admin.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+-	 *
+ 	 * @global object $current_screen
+ 	 *
+ 	 * @return bool We're on Term Edit screen.
+@@ -306,9 +337,8 @@
+ 	/**
+ 	 * Detects Post edit screen in WP Admin.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+-	 *
+ 	 * @global object $current_screen
+ 	 *
+ 	 * @return bool We're on Post Edit screen.
+@@ -331,9 +361,8 @@
+ 	/**
+ 	 * Detects Post or Archive Lists in Admin.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+-	 *
+ 	 * @global object $current_screen
+ 	 *
+ 	 * @return bool We're on the edit screen.
+@@ -357,8 +386,8 @@
+ 	/**
+ 	 * Detects author archives.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 * @uses $this->is_archive()
+ 	 *
+ 	 * @param mixed $author Optional. User ID, nickname, nicename, or array of User IDs, nicknames, and nicenames
+@@ -381,12 +410,10 @@
+ 	/**
+ 	 * Detect the separated blog page.
+ 	 *
+-	 * @param int $id the Page ID.
+-	 *
+ 	 * @since 2.3.4
+-	 *
+ 	 * @staticvar bool $is_blog_page
+ 	 *
++	 * @param int $id the Page ID.
+ 	 * @return bool true if is blog page. Always false if blog page is homepage.
+ 	 */
+ 	public function is_blog_page( $id = '' ) {
+@@ -414,12 +441,11 @@
+ 	/**
+ 	 * Detects category archives.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 * @uses $this->is_archive()
+ 	 *
+ 	 * @param mixed $category Optional. Category ID, name, slug, or array of Category IDs, names, and slugs.
+-	 *
+ 	 * @return bool
+ 	 */
+ 	public function is_category( $category = '' ) {
+@@ -439,11 +465,10 @@
+ 	}
+ 
+ 	/**
+-	 * Extends default WordPress is_category and made available in admin.
++	 * Extends default WordPress is_category() and determines screen in admin.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+-	 *
+ 	 * @global object $current_screen
+ 	 *
+ 	 * @return bool Post Type is category
+@@ -458,6 +483,7 @@
+ 		global $current_screen;
+ 
+ 		if ( $this->is_archive_admin() && isset( $current_screen->taxonomy ) ) {
++
+ 			$tax = $current_screen->taxonomy;
+ 			$len = strlen( $tax );
+ 
+@@ -474,8 +500,8 @@
+ 	/**
+ 	 * Detects date archives.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 * @uses $this->is_archive()
+ 	 *
+ 	 * @return bool
+@@ -518,11 +544,10 @@
+ 	/**
+ 	 * Detects feed.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 *
+ 	 * @param string|array $feeds Optional feed types to check.
+-	 *
+ 	 * @return bool
+ 	 */
+ 	public function is_feed( $feeds = '' ) {
+@@ -529,7 +554,7 @@
+ 
+ 		static $cache = array();
+ 
+-		if ( isset( $cache[$feeds] ) && $this->can_cache_query() )
++		if ( is_string( $feeds ) && isset( $cache[$feeds] ) && $this->can_cache_query() )
+ 			return $cache[$feeds];
+ 
+ 		if ( is_feed( $feeds ) )
+@@ -541,11 +566,10 @@
+ 	/**
+ 	 * Detects front page.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 *
+ 	 * @param int $id The page or Post ID.
+-	 *
+ 	 * @return bool
+ 	 */
+ 	public function is_front_page( $id = 0 ) {
+@@ -582,8 +606,8 @@
+ 	/**
+ 	 * Detects home page.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 *
+ 	 * @return bool
+ 	 */
+@@ -603,8 +627,8 @@
+ 	/**
+ 	 * Detects month archives.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 * @uses $this->is_date()
+ 	 *
+ 	 * @return bool
+@@ -625,12 +649,11 @@
+ 	/**
+ 	 * Detects pages.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 * @uses $this->is_singular()
+ 	 *
+ 	 * @param int|string|array $page Optional. Page ID, title, slug, or array of such. Default empty.
+-	 *
+ 	 * @return bool
+ 	 */
+ 	public function is_page( $page = '' ) {
+@@ -656,11 +679,9 @@
+ 	 *
+ 	 * @since 2.6.0
+ 	 * @see $this->is_page()
+-	 *
+ 	 * @global object $current_screen;
+ 	 *
+ 	 * @param int|string|array $page Optional. Page ID, title, slug, or array of such. Default empty.
+-	 *
+ 	 * @return bool
+ 	 */
+ 	public function is_page_admin( $page = '' ) {
+@@ -675,8 +696,8 @@
+ 	/**
+ 	 * Detects preview.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 *
+ 	 * @return bool
+ 	 */
+@@ -696,8 +717,8 @@
+ 	/**
+ 	 * Detects preview.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 *
+ 	 * @return bool
+ 	 */
+@@ -717,12 +738,11 @@
+ 	/**
+ 	 * Detects posts.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 * @uses $this->is_singular()
+ 	 *
+ 	 * @param int|string|array $post Optional. Post ID, title, slug, or array of such. Default empty.
+-	 *
+ 	 * @return bool
+ 	 */
+ 	public function is_single( $post = '' ) {
+@@ -747,12 +767,10 @@
+ 	 * Detects posts within the admin area.
+ 	 *
+ 	 * @since 2.6.0
++	 * @global object $current_screen
+ 	 * @see $this->is_single()
+ 	 *
+-	 * @global object $current_screen;
+-	 *
+ 	 * @param int|string|array $post Optional. Page ID, title, slug, or array of such. Default empty.
+-	 *
+ 	 * @return bool
+ 	 */
+ 	public function is_single_admin( $post = '' ) {
+@@ -765,20 +783,15 @@
+ 	}
+ 
+ 	/**
+-	 * Replaces and expands default WordPress is_singular.
++	 * Determines if the current page is singular is holds singular items within the admin screen.
++	 * Replaces and expands default WordPress is_singular().
+ 	 *
++	 * @since 2.5.2
++	 * @staticvar bool $cache
+ 	 * @uses $this->is_blog_page()
+ 	 * @uses $this->is_wc_shop()
+-	 * @uses $this->is_single()
+-	 * @uses $this->is_page()
+-	 * @uses $this->is_attachment()
+ 	 *
+ 	 * @param string|array $post_types Optional. Post type or array of post types. Default empty.
+-	 *
+-	 * @staticvar bool $cache
+-	 *
+-	 * @since 2.5.2
+-	 *
+ 	 * @return bool Post Type is singular
+ 	 */
+ 	public function is_singular( $post_types = '' ) {
+@@ -812,12 +825,10 @@
+ 	}
+ 
+ 	/**
+-	 * Extends default WordPress is_singular and made available in admin.
++	 * Determines if the page is singular within the admin screen.
+ 	 *
++	 * @since 2.5.2
+ 	 * @staticvar bool $cache
+-	 *
+-	 * @since 2.5.2
+-	 *
+ 	 * @global object $current_screen
+ 	 *
+ 	 * @return bool Post Type is singular
+@@ -838,15 +849,13 @@
+ 	}
+ 
+ 	/**
+-	 * Detect the static front page.
++	 * Detects the static front page.
+ 	 *
+-	 * @param int $id the Page ID.
+-	 *
++	 * @since 2.3.8
+ 	 * @staticvar array $cache
+-	 * @since 2.3.8
+ 	 *
+-	 * @return bool true if is blog page. Always false if blog page is homepage.
+-	 * False early when false as ID is entered.
++	 * @param int $id the Page ID to check. If empty, the current ID will be fetched.
++	 * @return bool true if is blog page. Always false if the homepage is a blog.
+ 	 */
+ 	public function is_static_frontpage( $id = '' ) {
+ 
+@@ -878,7 +887,6 @@
+ 	 * @uses $this->is_archive()
+ 	 *
+ 	 * @param mixed $tag Optional. Tag ID, name, slug, or array of Tag IDs, names, and slugs.
+-	 *
+ 	 * @return bool
+ 	 */
+ 	public function is_tag( $tag = '' ) {
+@@ -899,11 +907,10 @@
+ 	}
+ 
+ 	/**
+-	 * Extends default WordPress is_tag and made available in admin.
++	 * Determines if the page is a tag within the admin screen.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+-	 *
+ 	 * @global object $current_screen
+ 	 *
+ 	 * @return bool Post Type is category
+@@ -928,13 +935,12 @@
+ 	/**
+ 	 * Detects taxonomy archives.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 * @uses $this->is_archive()
+ 	 *
+ 	 * @param string|array     $taxonomy Optional. Taxonomy slug or slugs.
+ 	 * @param int|string|array $term     Optional. Term ID, name, slug or array of Term IDs, names, and slugs.
+-	 *
+ 	 * @return bool
+ 	 */
+ 	public function is_tax( $taxonomy = '', $term = '' ) {
+@@ -951,13 +957,14 @@
+ 	}
+ 
+ 	/**
+-	 * Is Ulimate Member user page.
+-	 * Check for function accessibility: um_user, um_is_core_page, um_get_requested_user
++	 * Determines if the page is a Ulimate Member's plugin User page.
++	 * Checks for function availability: um_user, um_is_core_page, um_get_requested_user
+ 	 *
++	 * @since 2.5.2
+ 	 * @staticvar bool $cache
+ 	 * @uses $this->can_i_use()
+ 	 *
+-	 * @since 2.5.2
++	 * @return bool Whether we're on a Ultimate Member page.
+ 	 */
+ 	public function is_ultimate_member_user_page() {
+ 
+@@ -972,11 +979,12 @@
+ 	}
+ 
+ 	/**
+-	 * Check for WooCommerce shop page.
++	 * Determines if the page is the WooCommerce plugin Shop page.
+ 	 *
++	 * @since 2.5.2
+ 	 * @staticvar bool $cache
+ 	 *
+-	 * @since 2.5.2
++	 * @return bool True if on the WooCommerce shop page.
+ 	 */
+ 	public function is_wc_shop() {
+ 
+@@ -993,11 +1001,12 @@
+ 	}
+ 
+ 	/**
+-	 * Check for WooCommerce product page.
++	 * Determines if the page is the WooCommerce plugin Product page.
+ 	 *
++	 * @since 2.5.2
+ 	 * @staticvar bool $cache
+ 	 *
+-	 * @since 2.5.2
++	 * @return bool True if on a WooCommerce Product page.
+ 	 */
+ 	public function is_wc_product() {
+ 
+@@ -1016,8 +1025,8 @@
+ 	/**
+ 	 * Detects year archives.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 * @uses $this->is_date()
+ 	 *
+ 	 * @return bool
+@@ -1036,10 +1045,10 @@
+ 	}
+ 
+ 	/**
+-	 * Whether we're on the SEO settings page.
++	 * Determines whether we're on the SEO settings page.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar bool $cache
+-	 * @since 2.6.0
+ 	 *
+ 	 * @return bool
+ 	 */
+@@ -1054,13 +1063,13 @@
+ 	}
+ 
+ 	/**
+-	 * The amount of pages.
+-	 * Fetches global $page through Query Var.
++	 * Fetches the amount of pages on the screen.
++	 * Fetches global $page through Query Var to prevent conflicts.
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar int $page
+-	 * @since 2.6.0
+ 	 *
+-	 * @return int $page
++	 * @return int $page Always a positive number.
+ 	 */
+ 	public function page() {
+ 
+@@ -1075,11 +1084,11 @@
+ 	}
+ 
+ 	/**
+-	 * The number of the current page.
++	 * Fetches the number of the current page.
+ 	 * Fetches global $paged through Query Var. Determines
+ 	 *
++	 * @since 2.6.0
+ 	 * @staticvar int $paged
+-	 * @since 2.6.0
+ 	 *
+ 	 * @return int $paged
+ 	 */
+Index: inc/classes/sanitize.class.php
+===================================================================
+--- inc/classes/sanitize.class.php	(revision 1433389)
++++ inc/classes/sanitize.class.php	(working copy)
+@@ -519,6 +519,7 @@
+ 	 * Returns a one-line sanitized description
+ 	 *
+ 	 * @since 2.5.0
++	 * @since 2.6.6 Removes duplicated spaces.
+ 	 *
+ 	 * @param string $new_value The Description.
+ 	 * @return string One line sanitized description.
+@@ -539,6 +540,13 @@
+ 
+ 		$description = trim( implode( $new_lines ) );
+ 
++		$i = 0;
++		//* Run twice at most, to catch uneven multiple spaces.
++		do {
++			$description = str_replace( '  ', ' ', $description );
++			$i++;
++		} while ( strpos( $description, '  ' ) && $i <= 2 );
++
+ 		return (string) strip_tags( $description );
+ 	}
+ 
+@@ -665,9 +673,7 @@
+ 
+ 	/**
+ 	 * Returns a 1 or 0, for all truthy / falsy values.
+-	 *
+ 	 * Uses double casting. First, we cast to bool, then to integer.
+-	 *
+ 	 * Also flushes the sitemap.
+ 	 *
+ 	 * @since 2.2.9
+Index: inc/classes/sitemaps.class.php
+===================================================================
+--- inc/classes/sitemaps.class.php	(revision 1433389)
++++ inc/classes/sitemaps.class.php	(working copy)
+@@ -316,10 +316,8 @@
+ 			/**
+ 			 * Transient expiration: 1 week.
+ 			 * Keep the sitemap for at most 1 week.
+-			 *
+-			 * 60s * 60m * 24h * 7d
+ 			 */
+-			$expiration = 60 * 60 * 24 * 7;
++			$expiration = WEEK_IN_SECONDS;
+ 
+ 			$this->set_transient( $this->sitemap_transient, $sitemap_content, $expiration );
+ 		}
+@@ -741,12 +739,10 @@
+ 				 * Limit the pinging to a maximum of 1 per hour.
+ 				 * Transient expiration. 1 hour.
+ 				 *
+-				 * 60s * 60m
+-				 *
+ 				 * Applies filters the_seo_framework_sitemap_throttle_s
+ 				 * @since 2.5.1
+ 				 */
+-				$expiration = (int) apply_filters( 'the_seo_framework_sitemap_throttle_s', 60 * 60 );
++				$expiration = (int) apply_filters( 'the_seo_framework_sitemap_throttle_s', HOUR_IN_SECONDS );
+ 
+ 				//* @NOTE: Using legacy set_transient to prevent ping spam.
+ 				set_transient( $transient, $throttle, $expiration );
+@@ -876,43 +872,6 @@
+ 	}
+ 
+ 	/**
+-	 * Add and Flush rewrite rules on plugin activation.
+-	 *
+-	 * @since 2.2.9
+-	 * @access private
+-	 *
+-	 * Do not return anything. Just be here. Thanks.
+-	 */
+-	public static function flush_rewrite_rules_activation() {
+-		global $wp_rewrite;
+-
+-		//* This function is called statically.
+-		$the_seo_framework = the_seo_framework();
+-		$the_seo_framework->rewrite_rule_sitemap( true );
+-
+-		$wp_rewrite->init();
+-		$wp_rewrite->flush_rules( true );
+-	}
+-
+-	/**
+-	 * Flush rewrite rules on plugin deactivation.
+-	 *
+-	 * @since 2.2.9
+-	 * @access private
+-	 *
+-	 * Do not return anything. Just be here. Thanks.
+-	 */
+-	public static function flush_rewrite_rules_deactivation() {
+-		global $wp_rewrite;
+-
+-		$wp_rewrite->init();
+-
+-		unset( $wp_rewrite->extra_rules_top['sitemap\.xml$'] );
+-
+-		$wp_rewrite->flush_rules( true );
+-	}
+-
+-	/**
+ 	 * Initialize and flush rewrite rules.
+ 	 *
+ 	 * @since 2.6.0
+Index: inc/classes/siteoptions.class.php
+===================================================================
+--- inc/classes/siteoptions.class.php	(revision 1433389)
++++ inc/classes/siteoptions.class.php	(working copy)
+@@ -416,9 +416,6 @@
+ 		if ( update_option( $this->settings_field, $options ) && $updated && $this->load_options ) {
+ 			$this->pre_output_site_updated_plugin_notice();
+ 		}
+-
+-		//* Flush rewrite rules at shutdown.
+-		$this->enqueue_rewrite_flush_other( true );
+ 	}
+ 
+ 	/**
+Index: inc/classes/termdata.class.php
+===================================================================
+--- inc/classes/termdata.class.php	(revision 1418924)
++++ inc/classes/termdata.class.php	(working copy)
+@@ -26,13 +26,206 @@
+ class AutoDescription_TermData extends AutoDescription_PostData {
+ 
+ 	/**
+-	 * Constructor, load parent constructor
++	 * Constructor, load parent constructor.
+ 	 */
+ 	public function __construct() {
+ 		parent::__construct();
++
++		add_action( 'current_screen', array( $this, 'init_term_filters' ), 999 );
++		add_action( 'get_header', array( $this, 'init_term_filters' ), 999 );
++
++		add_action( 'edit_term', array( $this, 'taxonomy_seo_save' ), 10, 2 );
++		add_action( 'delete_term', array( $this, 'term_meta_delete' ), 10, 2 );
+ 	}
+ 
+ 	/**
++	 * Initializes term filters after wp_query or currentscreen has been set.
++	 *
++	 * @since 2.6.6
++	 * @staticvar boolean $run Whether this function has already run.
++	 * @access private
++	 *
++	 * @return void early if already run.
++	 */
++	public function init_term_filters() {
++
++		static $run = null;
++
++		if ( isset( $run ) )
++			return;
++
++		add_filter( 'get_term', array( $this, 'get_term_filter' ), 10, 2 );
++		add_filter( 'get_terms', array( $this, 'get_terms_filter' ), 10, 2 );
++
++		$run = true;
++
++	}
++
++	/**
++	 * Add term meta data into options table of the term.
++	 * Adds separated database options for terms, as the terms table doesn't allow for addition.
++	 *
++	 * Applies filters array the_seo_framework_term_meta_defaults : Array of default term SEO options
++	 * Applies filters mixed the_seo_framework_term_meta_{field} : Override filter for specifics.
++	 * Applies filters array the_seo_framework_term_meta : Override output for term or taxonomy.
++	 *
++	 * @since 2.1.8
++	 *
++	 * @todo Use WordPress 4.4.0 get_term_meta() / update_term_meta()
++	 * @priority OMG WTF BBQ 2.6.x / Genesis 2.3.0
++	 * @see @link http://www.studiopress.com/important-announcement-for-genesis-plugin-developers/
++	 * @link https://core.trac.wordpress.org/browser/tags/4.5/src/wp-includes/taxonomy.php#L1814
++	 * @todo still use arrays in get_term_meta() / update_term_meta() ?
++	 * @NOTE Keep WP 3.8 compat.
++	 *
++	 * @param object $term     Database row object.
++	 * @param string $taxonomy Taxonomy name that $term is part of.
++	 * @return object $term Database row object.
++	 */
++	public function get_term_filter( $term, $taxonomy ) {
++
++		//* Do nothing, if $term is not an object.
++		if ( ! is_object( $term ) )
++			return $term;
++
++		//* We can't set query vars just yet.
++		if ( false === $this->can_cache_query() )
++			return $term;
++
++		/**
++		 * No need to process this data outside of the Terms' scope.
++		 * @since 2.6.0
++		 */
++		if ( false === $this->is_admin() && false === $this->is_archive() )
++			return $term;
++
++		/**
++		 * No need to process this after the data has already been output.
++		 * @since 2.6.0
++		 */
++		if ( did_action( 'the_seo_framework_do_after_output' ) )
++			return $term;
++
++		/**
++		 * Do nothing if called in the context of creating a term via an Ajax call to prevent data conflict.
++		 * @since ???
++		 *
++		 * @since 2.6.0 delay did_action call as it's a heavy array call.
++		 */
++		if ( defined( 'DOING_AJAX' ) && DOING_AJAX && did_action( 'wp_ajax_add-tag' ) )
++			return $term;
++
++		$db = get_option( 'autodescription-term-meta' );
++		$term_meta = isset( $db[$term->term_id] ) ? $db[$term->term_id] : array();
++
++		$args = (array) apply_filters( 'the_seo_framework_term_meta_defaults', array(
++			'doctitle'            => '',
++			'description'         => '',
++			'noindex'             => 0,
++			'nofollow'            => 0,
++			'noarchive'           => 0,
++			'saved_flag'          => 0, // Don't touch, used to prevent data conflict with Genesis.
++		) );
++
++		$term->admeta = wp_parse_args( $term_meta, $args );
++
++		//* Sanitize term meta
++		foreach ( $term->admeta as $field => $value ) {
++
++			/**
++			 * Trim and sanitize the title beforehand.
++			 * @since 2.5.0
++			 */
++			if ( 'doctitle' === $field )
++				$value = trim( strip_tags( $value ) );
++
++			/**
++			 * Trim and sanitize the description beforehand.
++			 * @since 2.5.0
++			 */
++			if ( 'description' === $field )
++				$value = $this->s_description( $value );
++
++			/**
++			 * @param object $term The Term object.
++			 * @param string $taxonomy The Taxonomy name.
++			 */
++			$term->admeta[$field] = (string) apply_filters( "the_seo_framework_term_meta_{$field}", stripslashes( wp_kses_decode_entities( $value ) ), $term, $taxonomy );
++		}
++
++		/**
++		 * @param object $term The Term object.
++		 * @param array $taxonomy The Taxonomy name.
++		 */
++		$term->admeta = (array) apply_filters( 'the_seo_framework_term_meta', $term->admeta, $term, $taxonomy );
++
++		return $term;
++	}
++
++	/**
++	 * Add AutoDescription term-meta data to functions that return multiple terms.
++	 *
++	 * @since 2.0.0
++	 *
++	 * @param array  $terms    Database row objects.
++	 * @param string $taxonomy Taxonomy name that $terms are part of.
++	 * @return array $terms Database row objects.
++	 */
++	public function get_terms_filter( array $terms, $taxonomy ) {
++
++		foreach( $terms as $term )
++			$term = $this->get_term_filter( $term, $taxonomy );
++
++		return $terms;
++	}
++
++	/**
++	 * Save taxonomy meta data.
++	 * Fires when a user edits and saves a taxonomy.
++	 *
++	 * @since 2.1.8
++	 *
++	 * @param integer $term_id Term ID.
++	 * @param integer $tt_id   Term Taxonomy ID.
++	 * @return void Early on AJAX call.
++	 */
++	public function taxonomy_seo_save( $term_id, $tt_id ) {
++
++		if ( defined( 'DOING_AJAX' ) && DOING_AJAX )
++			return;
++
++		$term_meta = (array) get_option( 'autodescription-term-meta' );
++
++		$term_meta[$term_id] = isset( $_POST['autodescription-meta'] ) ? (array) $_POST['autodescription-meta'] : array();
++
++		//* Pass through wp_kses if not super admin.
++		if ( ! current_user_can( 'unfiltered_html' ) && isset( $term_meta[$term_id]['archive_description'] ) )
++			$term_meta[$term_id]['archive_description'] = wp_kses( $term_meta[$term_id]['archive_description'] );
++
++		update_option( 'autodescription-term-meta', $term_meta );
++
++	}
++
++	/**
++	 * Delete term meta data.
++	 * Fires when a user deletes a term.
++	 *
++	 * @since 2.1.8
++	 *
++	 * @param integer $term_id Term ID.
++	 * @param integer $tt_id   Taxonomy Term ID.
++	 */
++	public function term_meta_delete( $term_id, $tt_id ) {
++
++		$term_meta = (array) get_option( 'autodescription-term-meta' );
++
++		unset( $term_meta[$term_id] );
++
++		update_option( 'autodescription-term-meta', (array) $term_meta );
++
++	}
++
++	/**
+ 	 * Fetch set Term data.
+ 	 *
+ 	 * @param object|null $term The TT object, if it isn't set, one is fetched.
+@@ -85,7 +278,6 @@
+ 	 * @access private
+ 	 *
+ 	 * @param int $id The possible taxonomy Term ID.
+-	 *
+ 	 * @return null|object The Term object.
+ 	 */
+ 	public function fetch_the_term( $id = '' ) {
+@@ -100,13 +292,11 @@
+ 			return false;
+ 
+ 		if ( $this->is_admin() ) {
+-			if ( 'term.php' === $this->page_hook ) {
+-				global $current_screen;
++			global $current_screen;
+ 
+-				if ( isset( $current_screen->taxonomy ) ) {
+-					$term_id = $id ? $id : $this->get_admin_term_id();
+-					$term[$id] = get_term_by( 'id', $term_id, $current_screen->taxonomy );
+-				}
++			if ( isset( $current_screen->taxonomy ) ) {
++				$term_id = $id ? $id : $this->get_admin_term_id();
++				$term[$id] = get_term_by( 'id', $term_id, $current_screen->taxonomy );
+ 			}
+ 		} else {
+ 			if ( $this->is_category() || $this->is_tag() ) {
+@@ -125,12 +315,10 @@
+ 	/**
+ 	 * Fetch Tax labels
+ 	 *
+-	 * @param string $tax_type the Taxonomy type.
+-	 *
+ 	 * @since 2.3.1
+-	 *
+ 	 * @staticvar object $labels
+ 	 *
++	 * @param string $tax_type the Taxonomy type.
+ 	 * @return object|null with all the labels as member variables
+ 	 */
+ 	public function get_tax_labels( $tax_type ) {
+@@ -153,7 +341,6 @@
+ 	 * Get the current screen term labels.
+ 	 *
+ 	 * @since 2.6.0
+-	 *
+ 	 * @staticvar string $term_name : Caution: This function only runs once per screen and doesn't check the term type more than once.
+ 	 *
+ 	 * @param object $term The Taxonomy Term object.
+@@ -160,7 +347,6 @@
+ 	 * @param bool $singular Whether to fetch a singular or plural name.
+ 	 * @param bool $fallback Whether to fallback on a generic name.
+ 	 * @param bool $use_cache Whether to read from cache.
+-	 *
+ 	 * @return string the Term name.
+ 	 */
+ 	protected function get_the_term_name( $term, $singular = true, $fallback = true, $use_cache = true ) {
+@@ -228,28 +414,4 @@
+ 		return $term_name[$singular] = '';
+ 	}
+ 
+-	/**
+-	 * Fetch the Admin Term ID. For WordPress 4.5 up and below.
+-	 *
+-	 * @since 2.6.0
+-	 * @staticvar int $term_id The Term ID.
+-	 *
+-	 * @return int Term ID.
+-	 */
+-	public function get_admin_term_id() {
+-
+-		static $term_id = null;
+-
+-		if ( isset( $term_id ) )
+-			return $term_id;
+-
+-		if ( isset( $_REQUEST['tag_ID'] ) && $_REQUEST['tag_ID'] ) {
+-			$term_id = $_REQUEST['tag_ID'];
+-		} else if ( isset( $_REQUEST['term_id'] ) && $_REQUEST['term_id'] ) {
+-			$term_id = $_REQUEST['term_id'];
+-		}
+-
+-		return $term_id = $term_id ? abs( (int) $term_id ) : 0;
+-	}
+-
+ }
+Index: inc/classes/transients.class.php
+===================================================================
+--- inc/classes/transients.class.php	(revision 1433521)
++++ inc/classes/transients.class.php	(working copy)
+@@ -138,8 +138,10 @@
+ 	}
+ 
+ 	/**
+-	 * Setup vars for transients.
++	 * Setup vars for general site transients.
+ 	 *
++	 * @global int $blog_id
++	 *
+ 	 * @since 2.3.3
+ 	 */
+ 	public function setup_transient_names() {
+@@ -158,11 +160,11 @@
+ 	/**
+ 	 * Setup vars for transients which require $page_id.
+ 	 *
++	 * @since 2.3.3
++	 *
+ 	 * @param int|string|bool $page_id the Taxonomy or Post ID. If false it will generate for the blog page.
+ 	 * @param string $taxonomy The taxonomy name.
+ 	 * @param strgin $type The Post Type
+-	 *
+-	 * @since 2.3.3
+ 	 */
+ 	public function setup_auto_description_transient( $page_id, $taxonomy = '', $type = null ) {
+ 
+@@ -174,7 +176,7 @@
+ 		 *
+ 		 * @since 2.3.4
+ 		 */
+-		$revision = '0';
++		$revision = '1';
+ 
+ 		$additions = $this->add_description_additions( $page_id, $taxonomy );
+ 
+@@ -190,11 +192,11 @@
+ 	/**
+ 	 * Setup vars for transients which require $page_id.
+ 	 *
++	 * @since 2.3.3
++	 *
+ 	 * @param int|string|bool $page_id the Taxonomy or Post ID. If false it will generate for the blog page.
+ 	 * @param string $taxonomy The taxonomy name.
+ 	 * @param string|null $type The post type.
+-	 *
+-	 * @since 2.3.3
+ 	 */
+ 	public function setup_ld_json_transient( $page_id, $taxonomy = '', $type = null ) {
+ 
+@@ -220,19 +222,15 @@
+ 	/**
+ 	 * Generate transient key based on query vars.
+ 	 *
+-	 * @param int|string|bool $page_id the Taxonomy or Post ID.
+-	 * @param string $taxonomy The Taxonomy name.
+-	 * @param string $type The Post Type
+-	 *
+-	 * @staticvar array $cached_id : contains cache strings.
+-	 *
+ 	 * @global int $blog_id;
+ 	 *
+ 	 * @since 2.3.3
++	 * @since 2.6.0 Refactored.
++	 * @staticvar array $cached_id : contains cache strings.
+ 	 *
+-	 * @refactored
+-	 * @since 2.6.0
+-	 *
++	 * @param int|string|bool $page_id the Taxonomy or Post ID.
++	 * @param string $taxonomy The Taxonomy name.
++	 * @param string $type The Post Type
+ 	 * @return string The generated page id key.
+ 	 */
+ 	public function generate_cache_key( $page_id, $taxonomy = '', $type = null ) {
+@@ -253,7 +251,7 @@
+ 				//* Author page.
+ 				$the_id = 'author_' . $page_id;
+ 			} else if ( 'frontpage' === $type ) {
+-				//* Home Page.
++				//* Front/HomePage.
+ 				$the_id = $this->generate_front_page_cache_key();
+ 			} else {
+ 				$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, __( 'Third parameter must be a known type.', 'autodescription' ), '2.6.5' );
+@@ -260,10 +258,9 @@
+ 				$the_id = esc_sql( $type . '_' . $page_id . '_' . $t );
+ 			}
+ 		} else if ( $this->is_404() ) {
+-			//* 404.
+ 			$the_id = '_404_';
+ 		} else if ( ( $this->is_front_page( $page_id ) ) || ( $this->is_admin() && $this->is_menu_page( $this->pagehook ) ) ) {
+-			//* Fetch Home key.
++			//* Front/HomePage.
+ 			$the_id = $this->generate_front_page_cache_key();
+ 		} else if ( $this->is_blog_page( $page_id ) ) {
+ 			$the_id = 'blog_' . $page_id;
+@@ -455,7 +452,6 @@
+ 	 * @since 2.2.9
+ 	 *
+ 	 * @param int $post_id The Post ID that has been updated.
+-	 *
+ 	 * @return bool|null True when sitemap is flushed. False on revision. Null
+ 	 * when sitemaps are deactivated.
+ 	 */
+@@ -540,10 +536,9 @@
+ 	 * Delete transient for the automatic description for blog on save request.
+ 	 * Returns old option, since that's passed for sanitation within WP Core.
+ 	 *
+-	 * @param string $old_option The previous blog description option.
+-	 *
+ 	 * @since 2.3.3
+ 	 *
++	 * @param string $old_option The previous blog description option.
+ 	 * @return string Previous option.
+ 	 */
+ 	public function delete_auto_description_blog_transient( $old_option ) {
+@@ -558,12 +553,11 @@
+ 	/**
+ 	 * Delete transient for the automatic description on requests.
+ 	 *
++	 * @since 2.3.3
++	 *
+ 	 * @param mixed $page_id The page ID or identifier.
+ 	 * @param string $taxonomy The tt name.
+ 	 * @param string $type The Post Type
+-	 *
+-	 * @since 2.3.3
+-	 *
+ 	 * @return bool true
+ 	 */
+ 	public function delete_auto_description_transient( $page_id, $taxonomy = '', $type = null ) {
+@@ -578,12 +572,11 @@
+ 	/**
+ 	 * Delete transient for the LD+Json scripts on requests.
+ 	 *
++	 * @since 2.4.2
++	 *
+ 	 * @param mixed $page_id The page ID or identifier.
+ 	 * @param string $taxonomy The tt name.
+ 	 * @param string|null $type The post type.
+-	 *
+-	 * @since 2.4.2
+-	 *
+ 	 * @return bool true
+ 	 */
+ 	public function delete_ld_json_transient( $page_id, $taxonomy = '', $type = null ) {
+@@ -635,7 +628,7 @@
+ 			 * Expiration time, 3 days.
+ 			 * 60s * 60m * 24d * 3d
+ 			 */
+-			$expiration = 60 * 60 * 24 * 3;
++			$expiration = DAY_IN_SECONDS * 3;
+ 
+ 			set_transient( $this->theme_doing_it_right_transient, $dir, $expiration );
+ 		}
+@@ -645,8 +638,8 @@
+ 	/**
+ 	 * Flushes the home page LD+Json transient.
+ 	 *
+-	 * @staticvar bool $flushed
+ 	 * @since 2.6.0
++	 * @staticvar bool $flushed Prevents second flush.
+ 	 *
+ 	 * @return bool Whether it's flushed on current call.
+ 	 */
+Index: inc/deprecated/deprecated.class.php
+===================================================================
+--- inc/deprecated/deprecated.class.php	(revision 1433389)
++++ inc/deprecated/deprecated.class.php	(working copy)
+@@ -707,4 +707,23 @@
+ 		return $path;
+ 	}
+ 
++	/**
++	 * Doing it Wrong The SEO Framework version wrapper.
++	 *
++	 * @since 2.3.0
++	 *
++	 * @deprecated
++	 * @since 2.6.5
++	 *
++	 * @return string The SEO Framework version.
++	 */
++	public function the_seo_framework_version( $version = '' ) {
++
++		$this->_deprecated_function( 'AutoDescription_Load::' . __FUNCTION__, '', '2.6.6' );
++
++		$output = $version ? sprintf( __( '%s of The SEO Framework', 'autodescription' ), esc_attr( $version ) ) : '';
++
++		return $output;
++	}
++
+ }
+Index: load.class.php
+===================================================================
+--- load.class.php	(revision 1427876)
++++ load.class.php	(working copy)
+@@ -98,7 +98,6 @@
+ 
+ require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'search.class.php' );
+ require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'doingitright.class.php' );
+-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'pageoptions.class.php' );
+ require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'inpost.class.php' );
+ require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'adminpages.class.php' );
+ require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'sanitize.class.php' );
+@@ -111,7 +110,7 @@
+ require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.class.php' );
+ 
+ /**
+- * God class.
++ * Facade class.
+  *
+  * Extending upon parent classes.
+  *
+@@ -124,13 +123,12 @@
+ 	 *
+ 	 * @since 2.2.9
+ 	 *
+-	 * @var bool The SEO Framework Debug/Profile constants is/are defined.
++	 * @var bool The SEO Framework Debug/Profile states.
+ 	 */
+ 	public $the_seo_framework_debug = false;
+ 	public $the_seo_framework_debug_hidden = false;
+ 	public $the_seo_framework_use_transients = true;
+ 	public $script_debug = false;
+-	public $debug_time;
+ 
+ 	/**
+ 	 * Constructor, setup debug vars and then load parent constructor.
+@@ -164,23 +162,17 @@
+ 
+ 	/**
+ 	 * Wrapper for function calling through parameters. The golden nugget.
+-	 * Is this function not working properly? Send me your code through the WordPress support forums.
+-	 * I'll adjust if possible.
+ 	 *
+-	 * @param array|string $callback the method array or function string.
+-	 * @param string $version the version of AutoDescription the function is used.
+-	 *
+ 	 * @since 2.2.2
+-	 *
+-	 * @return mixed $output The function called.
+-	 *
+ 	 * @NOTE _doing_it_wrong notices go towards the callback. Unless this
+ 	 * function is used wrongfully. Then the notice is about this function.
+ 	 *
+-	 * @param array|string $params The arguments passed to the function.
+-	 * @since 2.2.4
++	 * @param array|string $callback the method array or function string.
++	 * @param string $version the version of AutoDescription the function is used.
++	 * @param array|string $args The arguments passed to the function.
++	 * @return mixed $output The function called.
+ 	 */
+-	public function call_function( $callback, $version = '', $params = array() ) {
++	public function call_function( $callback, $version = '', $args = array() ) {
+ 
+ 		$output = '';
+ 
+@@ -196,10 +188,10 @@
+ 		/**
+ 		 * Convert string/object to array
+ 		 */
+-		if ( is_object( $params ) ) {
+-			$args = array( $params, '' );
++		if ( is_object( $args ) ) {
++			$args = array( $args, '' );
+ 		} else {
+-			$args = (array) $params;
++			$args = (array) $args;
+ 		}
+ 
+ 		$class = reset( $function );
+@@ -261,16 +253,4 @@
+ 		return $output;
+ 	}
+ 
+-	/**
+-	 * Helper function for Doing it Wrong
+-	 *
+-	 * @since 2.3.0
+-	 */
+-	public function the_seo_framework_version( $version = '' ) {
+-
+-		$output = $version ? sprintf( __( '%s of The SEO Framework', 'autodescription' ), esc_attr( $version ) ) : '';
+-
+-		return $output;
+-	}
+-
+ }
