@@ -140,7 +140,7 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 	}
 
 	/**
-	 * Get or parse the excerpt of the post
+	 * Fetches or parses the excerpt of the post
 	 *
 	 * @since 1.0.0
 	 *
@@ -172,14 +172,15 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 	}
 
 	/**
-	 * Generate excerpt.
+	 * Fetches excerpt from post excerpt or fetches the full post content.
+	 * Determines if a page builder is used to return an empty string.
+	 * Does not sanitize output.
 	 *
 	 * @since 2.5.2
-	 * @since 2.6.6 Detect Page builders.
+	 * @since 2.6.6 Detects Page builders.
 	 *
 	 * @param int $the_id The Post ID.
-	 * @param int $tt_id The Taxonomy Term ID
-	 *
+	 * @param int $tt_id The Taxonomy Term ID.
 	 * @return string|empty excerpt.
 	 */
 	public function fetch_excerpt( $the_id = '', $tt_id = '' ) {
@@ -196,8 +197,8 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 		if ( isset( $post->post_excerpt ) && $post->post_excerpt ) {
 			$excerpt = $post->post_excerpt;
 		} else if ( isset( $post->post_content ) ) {
-			$is_builder = $this->has_page_builder( $post->ID );
-			$excerpt = $is_builder ? '' : $post->post_content;
+			$uses_builder = $this->uses_page_builder( $post->ID );
+			$excerpt = $uses_builder ? '' : $post->post_content;
 		} else {
 			$excerpt = '';
 		}
@@ -380,7 +381,9 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 	 * @param int $post_id
 	 * @return boolean
 	 */
-	public function has_page_builder( $post_id ) {
+	public function uses_page_builder( $post_id ) {
+
+		$meta = get_post_meta( $post_id );
 
 		/**
 		 * Applies filters 'the_seo_framework_detect_page_builder' : boolean
@@ -389,13 +392,12 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 		 *
 		 * @param boolean The current state.
 		 * @param int $post_id The current Post ID.
+		 * @param array $meta The current post meta.
 		 */
-		$detected = (bool) apply_filters( 'the_seo_framework_detect_page_builder', false, $post_id );
+		$detected = (bool) apply_filters( 'the_seo_framework_detect_page_builder', false, $post_id, $meta );
 
 		if ( $detected )
 			return true;
-
-		$meta = get_post_meta( $post_id );
 
 		if ( empty( $meta ) )
 			return false;

@@ -155,7 +155,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	}
 
 	/**
-	 * Fetch the Admin Term ID. For WordPress 4.5 up and below.
+	 * Fetches the Term ID on admin pages.
 	 *
 	 * @since 2.6.0
 	 * @since 2.6.6 Moved from class AutoDescription_TermData.
@@ -171,8 +171,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 			return $term_id;
 
 		if ( isset( $_REQUEST['tag_ID'] ) && $_REQUEST['tag_ID'] ) {
+			//* WordPress 4.5+
 			$term_id = $_REQUEST['tag_ID'];
 		} else if ( isset( $_REQUEST['term_id'] ) && $_REQUEST['term_id'] ) {
+			//* Older WordPress versions.
 			$term_id = $_REQUEST['term_id'];
 		}
 
@@ -182,8 +184,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detects 404.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
@@ -201,10 +203,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	}
 
 	/**
-	 * Detects admin.
+	 * Detects admin screen.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
@@ -224,8 +226,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detects attachment page.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 * @uses $this->is_singular()
 	 *
 	 * @param int|string|array|object $attachment Attachment ID, title, slug, or array of such.
@@ -248,8 +250,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detects archive pages. Also in admin.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 *
 	 * @global object $wp_query
 	 *
@@ -279,10 +281,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	}
 
 	/**
-	 * Extends default WordPress is_archive and made available in admin.
+	 * Extends default WordPress is_archive() and determines screen in admin.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 *
 	 * @global object $current_screen
 	 *
@@ -306,9 +308,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detects Term edit screen in WP Admin.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
-	 *
+	 * @staticvar bool $cache
 	 * @global object $current_screen
 	 *
 	 * @return bool We're on Term Edit screen.
@@ -336,9 +337,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detects Post edit screen in WP Admin.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
-	 *
+	 * @staticvar bool $cache
 	 * @global object $current_screen
 	 *
 	 * @return bool We're on Post Edit screen.
@@ -361,9 +361,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detects Post or Archive Lists in Admin.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
-	 *
+	 * @staticvar bool $cache
 	 * @global object $current_screen
 	 *
 	 * @return bool We're on the edit screen.
@@ -387,8 +386,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detects author archives.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 * @uses $this->is_archive()
 	 *
 	 * @param mixed $author Optional. User ID, nickname, nicename, or array of User IDs, nicknames, and nicenames
@@ -411,12 +410,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detect the separated blog page.
 	 *
-	 * @param int $id the Page ID.
-	 *
 	 * @since 2.3.4
-	 *
 	 * @staticvar bool $is_blog_page
 	 *
+	 * @param int $id the Page ID.
 	 * @return bool true if is blog page. Always false if blog page is homepage.
 	 */
 	public function is_blog_page( $id = '' ) {
@@ -444,12 +441,11 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detects category archives.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 * @uses $this->is_archive()
 	 *
 	 * @param mixed $category Optional. Category ID, name, slug, or array of Category IDs, names, and slugs.
-	 *
 	 * @return bool
 	 */
 	public function is_category( $category = '' ) {
@@ -469,11 +465,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	}
 
 	/**
-	 * Extends default WordPress is_category and made available in admin.
+	 * Extends default WordPress is_category() and determines screen in admin.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
-	 *
+	 * @staticvar bool $cache
 	 * @global object $current_screen
 	 *
 	 * @return bool Post Type is category
@@ -505,8 +500,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detects date archives.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 * @uses $this->is_archive()
 	 *
 	 * @return bool
@@ -549,18 +544,17 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detects feed.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 *
 	 * @param string|array $feeds Optional feed types to check.
-	 *
 	 * @return bool
 	 */
 	public function is_feed( $feeds = '' ) {
 
 		static $cache = array();
 
-		if ( isset( $cache[$feeds] ) && $this->can_cache_query() )
+		if ( is_string( $feeds ) && isset( $cache[$feeds] ) && $this->can_cache_query() )
 			return $cache[$feeds];
 
 		if ( is_feed( $feeds ) )
@@ -572,11 +566,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detects front page.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 *
 	 * @param int $id The page or Post ID.
-	 *
 	 * @return bool
 	 */
 	public function is_front_page( $id = 0 ) {
@@ -613,8 +606,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detects home page.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
@@ -634,8 +627,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detects month archives.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 * @uses $this->is_date()
 	 *
 	 * @return bool
@@ -656,12 +649,11 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detects pages.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 * @uses $this->is_singular()
 	 *
 	 * @param int|string|array $page Optional. Page ID, title, slug, or array of such. Default empty.
-	 *
 	 * @return bool
 	 */
 	public function is_page( $page = '' ) {
@@ -687,11 +679,9 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 *
 	 * @since 2.6.0
 	 * @see $this->is_page()
-	 *
 	 * @global object $current_screen;
 	 *
 	 * @param int|string|array $page Optional. Page ID, title, slug, or array of such. Default empty.
-	 *
 	 * @return bool
 	 */
 	public function is_page_admin( $page = '' ) {
@@ -706,8 +696,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detects preview.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
@@ -727,8 +717,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detects preview.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
@@ -748,12 +738,11 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detects posts.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 * @uses $this->is_singular()
 	 *
 	 * @param int|string|array $post Optional. Post ID, title, slug, or array of such. Default empty.
-	 *
 	 * @return bool
 	 */
 	public function is_single( $post = '' ) {
@@ -778,12 +767,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * Detects posts within the admin area.
 	 *
 	 * @since 2.6.0
+	 * @global object $current_screen
 	 * @see $this->is_single()
 	 *
-	 * @global object $current_screen;
-	 *
 	 * @param int|string|array $post Optional. Page ID, title, slug, or array of such. Default empty.
-	 *
 	 * @return bool
 	 */
 	public function is_single_admin( $post = '' ) {
@@ -796,20 +783,15 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	}
 
 	/**
-	 * Replaces and expands default WordPress is_singular.
-	 *
-	 * @uses $this->is_blog_page()
-	 * @uses $this->is_wc_shop()
-	 * @uses $this->is_single()
-	 * @uses $this->is_page()
-	 * @uses $this->is_attachment()
-	 *
-	 * @param string|array $post_types Optional. Post type or array of post types. Default empty.
-	 *
-	 * @staticvar bool $cache
+	 * Determines if the current page is singular is holds singular items within the admin screen.
+	 * Replaces and expands default WordPress is_singular().
 	 *
 	 * @since 2.5.2
+	 * @staticvar bool $cache
+	 * @uses $this->is_blog_page()
+	 * @uses $this->is_wc_shop()
 	 *
+	 * @param string|array $post_types Optional. Post type or array of post types. Default empty.
 	 * @return bool Post Type is singular
 	 */
 	public function is_singular( $post_types = '' ) {
@@ -843,12 +825,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	}
 
 	/**
-	 * Extends default WordPress is_singular and made available in admin.
-	 *
-	 * @staticvar bool $cache
+	 * Determines if the page is singular within the admin screen.
 	 *
 	 * @since 2.5.2
-	 *
+	 * @staticvar bool $cache
 	 * @global object $current_screen
 	 *
 	 * @return bool Post Type is singular
@@ -869,15 +849,13 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	}
 
 	/**
-	 * Detect the static front page.
+	 * Detects the static front page.
 	 *
-	 * @param int $id the Page ID.
-	 *
-	 * @staticvar array $cache
 	 * @since 2.3.8
+	 * @staticvar array $cache
 	 *
-	 * @return bool true if is blog page. Always false if blog page is homepage.
-	 * False early when false as ID is entered.
+	 * @param int $id the Page ID to check. If empty, the current ID will be fetched.
+	 * @return bool true if is blog page. Always false if the homepage is a blog.
 	 */
 	public function is_static_frontpage( $id = '' ) {
 
@@ -909,7 +887,6 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * @uses $this->is_archive()
 	 *
 	 * @param mixed $tag Optional. Tag ID, name, slug, or array of Tag IDs, names, and slugs.
-	 *
 	 * @return bool
 	 */
 	public function is_tag( $tag = '' ) {
@@ -930,11 +907,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	}
 
 	/**
-	 * Extends default WordPress is_tag and made available in admin.
+	 * Determines if the page is a tag within the admin screen.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
-	 *
+	 * @staticvar bool $cache
 	 * @global object $current_screen
 	 *
 	 * @return bool Post Type is category
@@ -959,13 +935,12 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detects taxonomy archives.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 * @uses $this->is_archive()
 	 *
 	 * @param string|array     $taxonomy Optional. Taxonomy slug or slugs.
 	 * @param int|string|array $term     Optional. Term ID, name, slug or array of Term IDs, names, and slugs.
-	 *
 	 * @return bool
 	 */
 	public function is_tax( $taxonomy = '', $term = '' ) {
@@ -982,13 +957,14 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	}
 
 	/**
-	 * Is Ulimate Member user page.
-	 * Check for function accessibility: um_user, um_is_core_page, um_get_requested_user
+	 * Determines if the page is a Ulimate Member's plugin User page.
+	 * Checks for function availability: um_user, um_is_core_page, um_get_requested_user
 	 *
+	 * @since 2.5.2
 	 * @staticvar bool $cache
 	 * @uses $this->can_i_use()
 	 *
-	 * @since 2.5.2
+	 * @return bool Whether we're on a Ultimate Member page.
 	 */
 	public function is_ultimate_member_user_page() {
 
@@ -1003,11 +979,12 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	}
 
 	/**
-	 * Check for WooCommerce shop page.
-	 *
-	 * @staticvar bool $cache
+	 * Determines if the page is the WooCommerce plugin Shop page.
 	 *
 	 * @since 2.5.2
+	 * @staticvar bool $cache
+	 *
+	 * @return bool True if on the WooCommerce shop page.
 	 */
 	public function is_wc_shop() {
 
@@ -1024,11 +1001,12 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	}
 
 	/**
-	 * Check for WooCommerce product page.
-	 *
-	 * @staticvar bool $cache
+	 * Determines if the page is the WooCommerce plugin Product page.
 	 *
 	 * @since 2.5.2
+	 * @staticvar bool $cache
+	 *
+	 * @return bool True if on a WooCommerce Product page.
 	 */
 	public function is_wc_product() {
 
@@ -1047,8 +1025,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detects year archives.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 * @uses $this->is_date()
 	 *
 	 * @return bool
@@ -1067,10 +1045,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	}
 
 	/**
-	 * Whether we're on the SEO settings page.
+	 * Determines whether we're on the SEO settings page.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
@@ -1085,13 +1063,13 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	}
 
 	/**
-	 * The amount of pages.
-	 * Fetches global $page through Query Var.
+	 * Fetches the amount of pages on the screen.
+	 * Fetches global $page through Query Var to prevent conflicts.
 	 *
-	 * @staticvar int $page
 	 * @since 2.6.0
+	 * @staticvar int $page
 	 *
-	 * @return int $page
+	 * @return int $page Always a positive number.
 	 */
 	public function page() {
 
@@ -1106,11 +1084,11 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	}
 
 	/**
-	 * The number of the current page.
+	 * Fetches the number of the current page.
 	 * Fetches global $paged through Query Var. Determines
 	 *
-	 * @staticvar int $paged
 	 * @since 2.6.0
+	 * @staticvar int $paged
 	 *
 	 * @return int $paged
 	 */

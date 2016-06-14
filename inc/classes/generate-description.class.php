@@ -26,7 +26,7 @@
 class AutoDescription_Generate_Description extends AutoDescription_Generate {
 
 	/**
-	 * Whether we're parsing the manual Excerpt for the automated description.
+	 * Determines whether we're parsing the manual content Excerpt for the automated description.
 	 *
 	 * @since 2.6.0
 	 *
@@ -35,18 +35,18 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	protected $using_manual_excerpt = false;
 
 	/**
-	 * Constructor, load parent constructor
+	 * Constructor, loads parent constructor.
 	 */
 	public function __construct() {
 		parent::__construct();
 	}
 
 	/**
-	 * Create description
+	 * Creates description. Base function.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $description the description.
+	 * @param string $description The optional description to simply parse.
 	 * @param array $args description args : {
 	 * 		@param int $id the term or page id.
 	 * 		@param string $taxonomy taxonomy name.
@@ -95,10 +95,9 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	/**
 	 * Escapes and beautifies description.
 	 *
-	 * @param string $description The description to escape and beautify.
-	 *
 	 * @since 2.5.2
 	 *
+	 * @param string $description The description to escape and beautify.
 	 * @return string Escaped and beautified description.
 	 */
 	public function escape_description( $description = '' ) {
@@ -113,11 +112,9 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Parse and sanitize description args.
+	 * Parses and sanitizes description arguments.
 	 *
-	 * @param array $args required The passed arguments.
-	 * @param array $defaults The default arguments.
-	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
+	 * @since 2.5.0
 	 *
 	 * @applies filters the_seo_framework_description_args : {
 	 * 		@param int $id the term or page id.
@@ -127,7 +124,9 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	 * 		@param bool $social Generate Social Description when true.
 	 * }
 	 *
-	 * @since 2.5.0
+	 * @param array $args required The passed arguments.
+	 * @param array $defaults The default arguments.
+	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
 	 * @return array $args parsed args.
 	 */
 	public function parse_description_args( $args = array(), $defaults = array(), $get_defaults = false ) {
@@ -160,7 +159,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Reparse description args.
+	 * Reparses description args.
 	 *
 	 * @param array $args required The passed arguments.
 	 *
@@ -187,7 +186,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Create description
+	 * Creates description from custom fields.
 	 *
 	 * @since 2.4.1
 	 *
@@ -224,12 +223,11 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Fetch HomePage Description from custom field.
-	 *
-	 * @access protected
-	 * Use $this->description_from_custom_field() instead.
+	 * Fetches HomePage Description from custom field.
 	 *
 	 * @since 2.6.0
+	 * @access protected
+	 * Use $this->description_from_custom_field() instead.
 	 *
 	 * @param array $args Description args.
 	 * @return string The Description
@@ -247,12 +245,11 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Fetch Singular Description from custom field.
-	 *
-	 * @access protected
-	 * Use $this->description_from_custom_field() instead.
+	 * Fetches Singular Description from custom field.
 	 *
 	 * @since 2.6.0
+	 * @access protected
+	 * Use $this->description_from_custom_field() instead.
 	 *
 	 * @param int $id The page ID.
 	 * @return string The Description
@@ -272,10 +269,9 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	/**
 	 * Fetch Archive Description from custom field.
 	 *
+	 * @since 2.6.0
 	 * @access protected
 	 * Use $this->description_from_custom_field() instead.
-	 *
-	 * @since 2.6.0
 	 *
 	 * @param array $args
 	 * @return string The Description
@@ -314,7 +310,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Generate description from content.
+	 * Generates description from content while parsing filters.
 	 *
 	 * @since 2.3.3
 	 *
@@ -352,7 +348,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Generate description from content
+	 * Generates description from content.
 	 *
 	 * @since 2.6.0
 	 * @staticvar string $title
@@ -398,11 +394,8 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 
 		/**
 		 * Cache the generated description within a transient.
-		 *
 		 * @since 2.3.3
-		 *
-		 * Put inside a different function.
-		 * @since 2.3.4
+		 * @since 2.3.4 Put inside a different function.
 		 */
 		$excerpt = $this->get_transient( $this->auto_description_transient );
 		if ( false === $excerpt ) {
@@ -483,7 +476,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Generate the home page description.
+	 * Generates the home page description.
 	 *
 	 * @since 2.6.0
 	 *
@@ -515,14 +508,14 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Whether to add description additions. (╯°□°）╯︵ ┻━┻
+	 * Determines whether to add description additions. (╯°□°）╯︵ ┻━┻
 	 *
 	 * @since 2.6.0
 	 * @staticvar bool $cache
 	 *
 	 * @param int $id The current page or post ID.
 	 * @param object|emptystring $term The current Term.
-	 * @return bool
+	 * @return bool Whether to add description additions.
 	 */
 	public function add_description_additions( $id = '', $term = '' ) {
 
@@ -548,7 +541,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Get Description Separator.
+	 * Gets Description Separator.
 	 *
 	 * Applies filters 'the_seo_framework_description_separator' : string
 	 * @since 2.3.9
@@ -567,7 +560,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Generate description additions.
+	 * Generates description additions.
 	 *
 	 * @since 2.6.0
 	 * @staticvar array $title string of titles.
@@ -689,7 +682,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Generate the excerpt.
+	 * Generates the excerpt.
 	 * @NOTE Supply calculated $max_char_length to reflect actual output.
 	 *
 	 * @since 2.3.4
@@ -714,7 +707,6 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 				$excerpt = $this->get_excerpt_by_id( '', $page_id );
 			} else if ( $term && is_object( $term ) ) {
 				//* We're on a taxonomy now.
-				global $shortcode_tags;
 				$excerpt = empty( $term->description ) ? $this->get_excerpt_by_id( '', '', $page_id ) : $this->s_description( $term->description );
 			} else if ( $this->is_author() ) {
 				$excerpt = $this->s_description( get_the_author_meta( 'description', (int) get_query_var( 'author' ) ) );
@@ -746,7 +738,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	}
 
 	/**
-	 * Trim the excerpt.
+	 * Trims the excerpt by word and determines sentence stops.
 	 *
 	 * @since 2.6.0
 	 *

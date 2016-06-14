@@ -278,10 +278,12 @@ class AutoDescription_Debug extends AutoDescription_Core {
 
 				$id = $this->get_the_real_ID();
 				$mdash = ' &mdash; ';
-				$taxonomy = $this->is_archive() ? $this->fetch_the_term( $id ) : '';
-				$tax_type = isset( $taxonomy->taxonomy ) ? $taxonomy->taxonomy : '';
-				$post_type = ! $this->is_archive() && $this->is_front_page( $id ) ? 'Front Page' : $this->get_the_term_name( $taxonomy );
-				$cache_key = $this->generate_cache_key( $this->get_the_real_ID(), $tax_type );
+				$term = $this->is_archive() ? $this->fetch_the_term( $id ) : '';
+				$taxonomy = isset( $term->taxonomy ) ? $term->taxonomy : '';
+
+				//* This will return 'Page' on all non-archive types (except the home page)
+				$type = ! $this->is_archive() && $this->is_front_page( $id ) ? 'Front Page' : $this->get_the_term_name( $term );
+				$cache_key = $this->generate_cache_key( $this->get_the_real_ID(), $taxonomy );
 
 				if ( $this->is_admin() ) {
 					?>
@@ -291,7 +293,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 							<?php
 							if ( $this->is_post_edit() || $this->is_term_edit() ) :
 								echo ' :: ';
-								echo 'Type: ' . $post_type;
+								echo 'Type: ' . $type;
 								echo $mdash . 'ID: ' . $id;
 								echo $mdash . 'Cache key: ' . $cache_key;
 							endif;
@@ -312,7 +314,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 							SEO Debug Information
 							<?php
 							echo ' :: ';
-							echo 'Type: ' . $post_type;
+							echo 'Type: ' . $type;
 							echo $mdash . 'ID: ' . $id;
 							echo $mdash . 'Cache key: ' . $cache_key;
 							?>
