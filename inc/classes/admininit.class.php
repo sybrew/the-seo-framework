@@ -31,7 +31,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 *
 	 * @since 2.5.2.2
 	 *
-	 * @var String Holds Admin Page hook.
+	 * @var string Holds Admin Page hook.
 	 */
 	protected $page_hook;
 
@@ -40,7 +40,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 *
 	 * @since 2.5.2.2
 	 *
-	 * @var array JavaScript name identifier.
+	 * @var string JavaScript name identifier.
 	 */
 	public $js_name;
 
@@ -49,22 +49,21 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 *
 	 * @since 2.6.0
 	 *
-	 * @var array CSS name identifier.
+	 * @var string CSS name identifier.
 	 */
 	public $css_name;
 
 	/**
-	 * Constructor, load parent constructor
-	 *
-	 * Initalizes wp-admin functions
+	 * Constructor. Loads parent constructor, registers script names and adds actions.
 	 */
 	public function __construct() {
 		parent::__construct();
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 0, 1 );
-
 		$this->js_name = 'autodescription';
 		$this->css_name = 'autodescription';
+
+		//* Enqueues admin scripts.
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 0, 1 );
 
 		//* Admin AJAX for counter options.
 		add_action( 'wp_ajax_the_seo_framework_update_counter', array( $this, 'the_counter_visualized' ) );
@@ -76,7 +75,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 *
 	 * @since 2.3.3
 	 *
-	 * @param $hook the current page
+	 * @param string $hook The current page hook.
 	 */
 	public function enqueue_admin_scripts( $hook ) {
 
@@ -105,26 +104,28 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	}
 
 	/**
-	 * Register and output Admin scripts.
+	 * Registers admin scripts and styles.
 	 *
 	 * @since 2.6.0
 	 */
-	public function init_admin_scripts() {
+	public function init_admin_scripts( $direct = false ) {
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_css' ), 1 );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_javascript' ), 1 );
+		if ( $direct ) {
+			$this->enqueue_admin_css( $this->page_hook );
+			$this->enqueue_admin_javascript( $this->page_hook );
+		} else {
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_css' ), 1 );
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_javascript' ), 1 );
+		}
 
 	}
 
 	/**
-	 * AutoDescription JavaScript helper file
+	 * Enqueues scripts.
 	 *
 	 * @since 2.0.2
 	 *
-	 * @usedby add_inpost_seo_box
-	 * @usedby enqueue_javascript
-	 *
-	 * @param string|array|object $hook the current page
+	 * @param string $hook The current page hook.
 	 */
 	public function enqueue_admin_javascript( $hook ) {
 
@@ -133,6 +134,9 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		 * @since 2.5.2.2
 		 */
 		$this->page_hook = $this->page_hook ? $this->page_hook : $hook;
+		/**
+		 * var_dump() @see $this->pagehook && $this->page_hook
+		 */
 
 		//* Register the script.
 		$this->register_admin_javascript();
@@ -148,11 +152,10 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	}
 
 	/**
-	 * Registers Admin CSS.
+	 * Registers admin CSS.
 	 *
 	 * @since 2.6.0
 	 * @staticvar bool $registered : Prevents Re-registering of the style.
-	 *
 	 * @access private
 	 */
 	public function register_admin_javascript() {
@@ -355,7 +358,6 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 *
 	 * @since 2.6.0
 	 * @staticvar bool $registered : Prevents Re-registering of the style.
-	 *
 	 * @access private
 	 */
 	protected function register_admin_css() {
@@ -365,10 +367,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		if ( isset( $registered ) )
 			return;
 
-		$rtl = '';
-
-		if ( is_rtl() )
-			$rtl = '-rtl';
+		$rtl = is_rtl() ? '-rtl' : '';
 
 		$suffix = $this->script_debug ? '' : '.min';
 

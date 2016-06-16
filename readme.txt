@@ -353,357 +353,78 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
-= 2.6.6 - Semantic Structures =
+= 2.7.0 - Contemporary Apsiration =
 
 **Release date:**
+/
+* TODO
 
-* June 14th 2016
+** Summarized:**
+/
+* As the Extension Manager is on its way, it's the first time I actually need to make use of this plugin's application framework.
+* With this, I noticed some things are to be improved. And with this update, a lot has been. As this is an Open Source project, the source sometimes needs a little change too.
+* This is a maintenance release, and although nothing noticable has been changed, added or fixed; however, this update makes everything a lot lighter on your server.
+* For developers, the code has been cleaned up again, massively. Enjoy!
+* For everyone, this plugin now makes use of the WordPress core term data handling. Making this plugin much more reliable, and 30% faster (according to xDebug) TODO is expected BENCHMARK to see real results.
+* TODO This is my goal, but is it achieved? Update this if nessecary.
 
-**Summarized**
-
-* Page builders are great for if you want to style your website, and when you want to do it fast.
-* So from this update the Divi Builder, Visual Composer, Beaver Builder, and the Page Builder by SiteOrigin are now fully supported.
-* Various bugs have also been fixed, to improve your experience. One particular bugfix is related to Polylang; this bugfix should improve performance and reduce other bugs from happening as well.
-* The Automated and Manual description output has been improved in several ways as well.
-* For developers, a class has been removed. All functions within have been moved to more suitable classes. This change will reduce server resource usage and increase overall performance.
-
-**SEO Tip of the Update - Know your Keywords:**
-
-* To know how your website is found, sign up for Google Search Console. Over a couple of days (or weeks), elegant data has been accumulated about your website.
-* When you go to the Search Analytics within the Search Console, you'll see a list of queries people have used to find your website.
-* The queries can be used as keywords, they are excellent starting points for new post titles and subjects. Go ahead, use them!
-
-**For developers - About the class removal:**
-
-* Because the plugin makes use of a "[Facade pattern](https://en.wikipedia.org/wiki/Facade_pattern)". And through class extending, all functions within the plugin are available at all times.
-* In trade for increased resource usage this does make the plugin very compatible, faster, and easier to work with.
-* This plugin serves one single responsibility: Outputting SEO data, and determining the reason why. Therefore, although it looks like a "[God object](https://en.wikipedia.org/wiki/God_object)", it's not.
-* Please keep in mind that all functions from any class are available through the "Facade object". Because of this, the class removal shouldn't cause issues for developers.
-* You can call this "Facade object" through a single cached function (rather than a global variable), this cached function is `the_seo_framework()`.
-* If you wish to extend this plugin, feel free to ask me for any details or suggestions at the [Support forums](https://wordpress.org/support/plugin/autodescription).
+**SEO Tip of the Update:**
+/
+* TODO
 
 **Detailed Log:**
-
-***There's something to be said about [all these details](https://theseoframework.com/?p=1365#detailed).***
-
-= 2.6.5.1 - Schematic Hotfix =
-
-**Release date:**
-
-* June 9th 2016
-
-**Summarized:**
-
-* A typo in the Knowledge Graph settings check caused the Knowledge Graph not to be output, even if the option was enabled.
-* Because of this, the LD+Json revisional cache key has been bumped up as well.
-* For developers, as this update is so (relatively) minor, it's not documented on the plugin changelog page, nor a tag will be made.
-
-= 2.6.5 - Systematic Support =
-
-**Release date:**
-
-* June 8th 2016
-
-**Summarized:**
-
-* Another maintenance release for The SEO Framework 2.6 is coming right at you!
-* While Polylang creates Taxonomies from Pages without acknowledging it being an Archive, I have found a workaround for the Title not to show up correctly.
-* Also, bbPress' Original Post within a topic is now shown correctly, although the bbPress 2.6.0 update will resolve this as well.
-* On special pages like the Forum page of bbPress, no more cache key conflicts will be present, this makes it a recommended update.
-* WPML Multilingual domains are now also fully supported. So instead of just adding a subdomain, this plugin now also takes whole new domains into consideration.
-* The URL generation has also been improved once more. It now contains Canonical Pagination support, and expanded Plain Permalink structure support.
-* And just when you thought new options were available, now you won't be fooled again.
-* For developers it's now much easier to debug, and there are also three (actually four) brand new filters.
-* And last but not least, 404 pages and Search Pages now have a Canonical URL, right towards your Homepage.
-
-**SEO Tip of the Update - Skyscraper Technique:**
-
-* Have you found something that greatly interests you, and do you think you can write a better article than you've found?
-* Go write it, in your own words and style. Don't forget to make it much longer, better and more detailed. Don't forget to add images.
-* Finally, share the content, reach out to the public, and of course your public. This will increase your rankings significantly.
-* This method is known as the Skyscraper Technique; it's used for and as this SEO tip, minus the images, details or length.
-
-**Detailed Log:**
-
-***Sometimes, you just have to look [a little harder](https://theseoframework.com/?p=1339#detailed).***
-
-= 2.6.4 - Biographic Consistency =
-
-**Release date:**
-
-* May 31st 2016
-
-**Summarized:**
-
-* This update is another maintenance release. It's highly recommended to install this update to prevent incorrect meta values.
-* The fix that has been applied now set at the root cause for the issues that have persisted since the release of 2.6.0, rather than later on.
-* I also bring you Author Descriptions. This description is pulled from the user's profile biography input and is handled the same way as other automated descriptions.
-
-***Sorry, no SEO Tip of the Update this time.***
-
-**Detailed log:**
-
-***The smaller things in life can be [found here](https://theseoframework.com/?p=1284#detailed).***
-
-= 2.6.3 - Plain Loops =
-
-**Release date:**
-
-* May 29th 2016
-
-**Summarized:**
-
-* This update is another maintenance release. This essentially means that bugs have been fixed.
-* Most of the bugs that have been fixed are regarding URL generation for the shortlink and relationships.
-* Next to that, the default "plain" permalink structure has now obtained a Canonical URL output.
-* A much more reliable hook has been found to be used prior to caching the query. This prevents not only an infinite redirect loop in conjunction with some plugins, but will also prevent incorrect metadata being used on some themes.
-
-**SEO Tip of the Updated - Keep it Alive:**
-
-* Have you written about something already, and is the subject coming up again? Link back to the older publication.
-* About 2 to 5 internal links within the content to older pages will help your visitors understand your hierarchy and find more related content (of which they're already interested in).
-* It will also inform Search Engines on other important pages within your site; this is also known as link juice and will increase your Search Rankings overall.
-
-**Detailed log:**
-
-***Want to know which specific bugs have been fixed? Go ahead, you can [read them here](https://theseoframework.com/?p=1269#detailed).***
-
-= 2.6.2 - Condensed Associations =
-
-**Release date:**
-
-* May 26th 2016
-
-**Summarized:**
-
-* Simply put, this update fixes a few bugs. One of these bugs caused all recognized Post Types to be judged wrongfully for supporting SEO.
-* A very small bug with a major impact has also been fixed. This bug caused WooCommerce Shop Pages to canonicalized to the latest product.
-* This update also makes sure all translations of 2.6.0 and later are put into effect.
-* UTF-8 required languages are now correctly rendered on PHP5.3 and lower within the SEO bar, like Russian.
-* And for developers, the URL generation has been slightly refactored. With more reliable and lighter variables being used throughout the generation.
-
-**SEO Tip of the Updated - Geo Targeting:**
-
-* Is your website about a local business? Then be sure to sign up for Google Businesses. This will massively increase your search presence, by an artificial result.
-* It also greatly helps to have your server located near your target audience's location. The website will not only respond faster, but Search Engines can pick up descriptive signals from it.
-* If your business resides and only serves in Belgium, for example, it's also better to have a ".be" domain name extension rather than a ".com" domain name extension.
-
-**Detailed log:**
-
-***Say hello to [my little friend](https://theseoframework.com/?p=1254#detailed).***
-
-= 2.6.1 - Pacified Handling =
-
-**Release date:**
-
-* May 19th 2016
-
-**Summarized:**
-
-* The new plugin detection features from 2.6.0 "Pragmatic Foundation" was done in a manner that any arbitrary plugin could be detected with conflicting namespaces.
-* For this reason, I've taken JetPack's philosophical standpoint on this and implemented it within The SEO Framework.
-* Also, the new special Greek/Latin duplicated word counter now also works great on PHP versions 5.2 and 5.3.
-* And in some configurations, the Home Page Title could have been rendered empty, so I got that fixed as well!
-* For developers, many new filters have been added for plugin detection, be sure to check them out in the detailed log.
-
-**Feature highlights:**
-
-* **New:**
-	* Open Graph Product types are now supported on WooCommerce products.
-* **Improved:**
-	* The Twitter Image tag has been updated to the latest standards.
-	* Revised plugin detection.
-	* A probable memory leak on archives has been fixed.
-
-**SEO Tip of the Update - Image Descriptions:**
-
-* Do you use Images in your Posts and Pages? Be sure to describe them! This way people are able to find your website through the Image Results.
-* This can be easily done when editing the Image through WordPress' Media Library or when inserting an Image in the content. When you click on an Image, you can define various details.
-* The Alt Text is to be used. If that's not found, the Image Caption is used. And if that's also not found, then the Image Title will be used.
-* Make sure it clearly describes the Image, and be aware that it will fall back to it when the browser can't render the Image. It's also a great additions for people who are vision impaired.
-
-**Detailed log:**
-
-***Love details? Then head onto [the detailed changelog](https://theseoframework.com/?p=1231#detailed).***
-
-= 2.6.0.2 - Tough Understructure =
-
-**Release date:**
-
-* May 18th 2016
-
-**Summarized:**
-
-* The SEO Framework 2.6.0 "Pragmatic Foundation" (released May 17th) brought a whole new way for determining the Page Type, synchronous with both the admin side and the front-end.
-* However, in some installations, a few WordPress variables may have not yet been assigned when called within this plugin.
-* This caused a wrong cache initialization, and therefore SEO values and settings were incorrectly rendered.
-* This minor update adds determination for if the WordPress Query or Admin Page Type are accessible before caching anything to make sure no wrong status values are being used throughout the plugin.
-
-**Detailed log:**
-
-***Want to read the verbose "detailed" log? Please refer to [the detailed changelog](https://theseoframework.com/?p=1222#detailed).***
-
-= 2.6.0.1 - The real Pragmatic Foundation =
-
-* This minor update fixes a fatal error after updating to 2.6.0. Sorry about that!
-
-= 2.6.0 - Pragmatic Foundation =
-
-**Release date:**
-
-* May 17th 2016
-
-**Preamble:**
-
-* This is a dot version bump update, which is done so as the core code has been changed drastically. Nine new classes have been added to maintain structured code, including many more function to fetch data easily and consistently.
-* With hundreds of changes, I had to find a new way to present this update in an understandable manner. So here goes!
-
-**Summarized:**
-
-* With over 200 notable changes, I bring you a new Pragmatic Foundation.
-* Most importantly, this update allows you to be better informed about your website's index status, through the much improved SEO bar.
-* As the issue of the incorrect title length has finally been found, this update glorifies and updates its plugin's title counter once more.
-* Many new options have been included within the SEO Settings page. Including much desired Title, Description and Schema.org options.
-* WPML compatibility has received a rework, now all canonical URLs in the sitemap and front-end are always correct. The qTranslate X settings are now also being taken into account when outputting canonical URLs.
-* A new script has been added on the front-page. This will make sure the Breadcrumb homepage name will be correct in the Search Engine Results Page.
-* The breadcrumb script has been expanded to work on posts with multiple and nested categories. These scripts now also work on WooCommerce products. Don't be surprised if you suddenly have all kinds of scripts in the header! These scripts help Google and other Search Engines better understand your website.
-* And for developers, with the code expanding rapidly, this update brings new light to the code by reorganizing the code into dedicated classes and is including many major refactorizations.
-
-**Feature highlights:**
-
-* **New:**
-	* WooCommerce Schema.org breadcrumbs.
-	* Intelligently nested Schema.org breadcrumbs.
-	* Schema.org website name.
-	* Vibrant character counters for when you need extra visual assistance.
-	* The SEO Bar's tooltip is now able to speak to you through accessiblity tools.
-	* More Automated Description options.
-	* New Archive Title, Sitemap and Schema.org options.
-	* Yandex Sitemap pinging support.
-	* Automatic option merging on update.
-	* AJAX integration when adding tags.
-	* Personalized error handling for developers.
-	* Over 150 new public functions for developers.
-	* More than 20 brand new filters for developers.
-	* WP Query Admin synchronization for developers.
-	* Automated setting navigation tabs for developers.
-* **Improved:**
-	* Better Automated Description sentence punctuations.
-	* Modernized and Smarter SEO bar, with many more conditional checks.
-	* Many linguistic improvements, with more flow in the SEO Bar.
-	* Extended Title Fix extension support.
-	* More efficient cache key generation.
-	* Adaptive WPML & qTranslate X URL generation.
-	* Better editorial translations.
-	* JetPack compatibility.
-
-**SEO Tip of the Update: Redirects & Canonical**
-
-* A change in the Canonical URL or the use of a 301 Redirect URL indicate that your page has moved.
-* These can be seen by Search Engines as the same. However, the 301 Redirect enforces the relocation of the page to everyone, whereas the Canonical URL softly indicates.
-* When changing the Canonical URL of a Page, you're telling robots to look and elsewhere, be sure to include a link to the new Page on the canonicalized Page to indicate where everything has moved to.
-* However, it's even better to enforce a 301 redirect. This makes sure both your visitors as Search Engines know where to be instantaneously.
-* If you've changed the permalink of a popular post, you should create an empty post that follows one of the said examples.
-
-**Announcements:**
-
-* Back when I started developing this update, I announced a new extension plugin for The SEO Framework! [Title Fix - The SEO Framework](https://wordpress.org/plugins/the-seo-framework-title-fix/).
-* This update ensures extra compatibility with the Title Fix plugin, this will add back removed title features for if the theme is doing it wrong and when the Title Fix plugin is active.
-
-**About: Plugin progression and help wanted:**
-
-* This dear project has taken me over 2500 hours to perfect and maintain. This update alone has cost me over 300 hours to complete.
-* I really want to keep this project free. In fact, the upcoming Author SEO is actually planned to be a premium extension, but it will be free.
-* I also want to turn this project into my full-time job, even if it's free from monetization and/or premium content.
-* And I will keep my promises, always: This plugin will stay free of ads, (self-)reference and this plugin will continue to be maintained.
-* All with all, this means I can't do it without your help!
-* Please consider making a donation. The link can be found on the WordPress.org plugin page, or [right here](https://theseoframework.com/?p=572).
-* Thank you so much for your support!
-
-**About: Changes in Changelog**
-
-* I love to push many changes at once every update, as I'm only happy when everything works. If I find a bug, I'll be sure to fix it!
-* So to clean up the massive all-inclusive changelogs, detailed information on updates are put aside and are visible on the plugin's website.
-* With each update, I try to find better ways for presenting information and I try to minimize confusion.
-
-**No Stone Left Unturned:**
-
-* This massive update has touched almost every aspect of this plugin.
-* With this, many fixes are put into effect for all known and possibly many unknown bugs. Better standards have been put into place, both for WordPress and the coding world.
-* All changes have been tested thoroughly. However, it's always possible something has been overlooked. If you find anything out of place, let me know in the [plugin support forums](https://wordpress.org/support/plugin/autodescription)!
-
-**For everyone - Squared SEO Bar:**
-
-* From now on, the SEO bar is flat and squared. This gives a more modern look and feel.
-* Screen Readers are now able to enunciate the tooltip when shown.
-
-**For everyone - New Options Merging:**
-
-* From this plugin update, new default options are automatically merged with the previous options on update.
-* This way, you don't have to update each site you own with the new recommended features.
-* No options will be overwritten in this process, and it only happens once in the admin area when the plugin is active and the one who can edit the site's SEO options is loading the site.
-* This new feature is multisite compatible and can be disabled through a filter.
-* When this happens, a dismissible update notification will show whenever this happens.
-* The notification is unbranded, it will say "New SEO options have been updated." on the SEO Settings Page and will add "View the new options here." on all other Admin Pages.
-
-**For everyone - Schema Markup:**
-
-* New schema markup has been added, this helps Search Engines better understand your website.
-* Breadcrumbs have been expanded, to support nested categories and multiple categories. Now you can see multiple breadcrumb scripts to help Search Engines better understand your website's structure.
-* Breadcrumbs scripts now also work on WooCommerce products, enjoy!
-
-**For translators - High priority translations:**
-
-* Please look for **Front-end output** comments within the translation page to find high-priority translations.
-
-**For translators - Linguistic improvements and other changes:**
-
-* Objective translations for grammatically gendered noun types like "this post" (male in Dutch) and "this page" (genderless in Dutch) within sentences which are fetched dynamically (like "Product" and "Product Tag" for WooCommerce) couldn't be translated correctly.
-* Therefore, I've changed these types of sentences without any loss of understanding.
-* Small changes within translations happen over time, although I try to keep these to the necessary minimum. Nevertheless, as this is an ongoing project you can expect continuous improvements wherever possible. Translating WordPress and its plugins are a team effort :).
-* Other small changes include conversion of WordPress slang to real English. Like "Paged" to "Paginated".
-* Over time, inconsistencies have appeared within the language used within this plugin. These have been fixed. If you still find any, please notify me through the support forums and I'll address them.
-* Thanks @pidengmor for many (over 40) linguistic improvements, they're really appreciated! Thank you so much for your time!
-* I also want to make a big shout out to all the other translators who have contributed to this plugin! <3
-* And if you wish to become a language editor, just let me know!
-
-**For developers - Performance:**
-
-* Because this plugin has grown massively in size with this update, the memory use has been increased marginally (to 4MB from 2.7MB). This shouldn't cause issues. And to improve this, singleton methods are going to be considered.
-* Because many more items are being rendered, the plugin is a tad slower than before, even though overall performance has been improved. This won't affect your website's performance noticeably.
-* This plugin has been benchmarked with PHP Xdebug. With it I found that some functions affected the performance marginally, and have thus been fixed accordingly.
-
-**For developers - Refactoring classes:**
-
-* The classes `AutoDescription_DoingItRight` and `AutoDescription_Generate` among others have been greatly refactored to improve performance and maintainability.
-* Almost all public functions before this overhaul have maintained their initial behavior, the generation of the output has just been split over multiple functions. If this is not the case, and unexpected variables are input, a deprecation notice is output.
-
-**For developers - WordPress Query Sync:**
-
-* The current WordPress query only works on the front-end.
-* `/inc/classes/query.class.php` contains alternative functions based on the WordPress query. However, although these functions work just like WordPress Core query functions, they also look for the screens within the admin area.
-* These functions do not work on custom post types, yet. But they do work on WooCommerce products and product categories.
-* This resulted in easing the whole code base as it doesn't have to check for admin/front-end per-function anymore. Further improvements are planned, but this update already contains most of the overhaul.
-
-**Looking forward - Upcoming features:**
-
-Not all planned features made it into 2.6.0. The following features are planned to be released in a future version.
-
-* Author SEO (Title, Description, Twitter, Facebook, Google+, etc.).
-* Google+ output options.
-* The SEO Bar options.
-* Per page title additions options.
-* Canonical SEO (URL scheme options).
-* Article modified time output options, just like the Sitemap time output options.
-* Image Description as an excerpt for the attachment's page meta descriptions.
-* Twitter card plugin detection and subtle notification of such.
-* WP.me shortlink integration.
-
-**Detailed log:**
-
-***There are a lot more changes in this update which did not make it to this page. Please refer to [the detailed changelog](https://theseoframework.com/?p=1196#detailed).***
-
-*What do you think of this change? Let me know at [Slack](https://wordpress.slack.com/messages/@cybr/) (no support questions there, please)!*
+/
+***The code is strong with [this one](https://theseoframework.com/?p= TODO #detailed).***
+
+**For everyone:**
+/
+TODO
+**Added:**
+	/
+	* General compatibility and other improvements for the upcoming extension manager.
+	* TODO
+**Improved:**
+	/
+	* TODO
+	* Dismissible notices are now dismissible on every admin page when called.
+**Changed:**
+	/
+	* TODO
+	* TODO The SEO Settings page is now a submenu page, name "SEO Settings". This change is only visible when another submenu is added.
+**Updated:**
+	/
+	* TODO
+	* TODO POT translation file.
+**Fixed:**
+	/
+	* TODO
+
+**For developers:**
+/
+TODO
+**Added:**
+	/
+	* TODO
+**Improved:**
+	/
+	* TODO
+**Changed:**
+	/
+	* 'AutoDescription_Siteoptions::page_id' is now publicly accessible. Making it easier to add submenu items.
+**Fixed:**
+	/
+	* Function `the_seo_framework_dot_version()` now works as intended.
+**Removed:**
+	/
+	* TODO Network admin functions. Network admin settings constants and filters are held intact.
+	* TODO Public function `AutoDescription_Adminpages::add_network_menu_link()`, without deprecation.
+**Filter notes:**
+	/
+	* TODO
+**Notes:**
+	/
+	* TODO
+	* Cleaned up code. A whole lot.
 
 = Full changelog =
 

@@ -35,10 +35,31 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 	protected $inpost_seo_bar = false;
 
 	/**
+	 * Defines inpost nonce name.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @var string The nonce name.
+	 */
+	public $inpost_nonce_name;
+
+	/**
+	 * Defines inpost nonce field.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @var string The nonce field.
+	 */
+	public $inpost_nonce_field;
+
+	/**
 	 * Constructor, load parent constructor
 	 */
 	public function __construct() {
 		parent::__construct();
+
+		$this->inpost_nonce_name = 'the_seo_framework_inpost_seo_settings';
+		$this->inpost_nonce_field = 'the_seo_framework_inpost';
 
 		//* Enqueue Inpost meta boxes.
 		add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box_init' ), 5 );
@@ -223,7 +244,7 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 
 			// Only add nonce on post/page edit screen
 			if ( 'is_post_page' === $page ) {
-				wp_nonce_field( 'inpost_seo_save', 'hmpl_ad_inpost_seo_nonce' );
+				wp_nonce_field( $this->inpost_nonce_field, $this->inpost_nonce_name );
 			} else {
 				// This shouldn't happen.
 				return;

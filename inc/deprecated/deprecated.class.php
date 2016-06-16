@@ -25,7 +25,7 @@
 class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 
 	/**
-	 * Constructor. Load parent constructor.
+	 * Constructor. Loads parent constructor.
 	 */
 	public function __construct() {
 		parent::__construct();
@@ -713,7 +713,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @since 2.3.0
 	 *
 	 * @deprecated
-	 * @since 2.6.5
+	 * @since 2.6.6
 	 *
 	 * @return string The SEO Framework version.
 	 */

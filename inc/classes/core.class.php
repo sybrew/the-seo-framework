@@ -142,6 +142,9 @@ class AutoDescription_Core {
 		if ( empty( $message ) )
 			return '';
 
+		//* Make sure the scripts are loaded.
+		$this->init_admin_scripts( true );
+
 		if ( 'warning' === $type )
 			$type = 'notice-warning';
 

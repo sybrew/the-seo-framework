@@ -79,7 +79,7 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 
 		}
 
-		$this->save_custom_fields( $data, 'inpost_seo_save', 'hmpl_ad_inpost_seo_nonce', $post );
+		$this->save_custom_fields( $data, $this->inpost_nonce_field, $this->inpost_nonce_name, $post );
 	}
 
 	/**

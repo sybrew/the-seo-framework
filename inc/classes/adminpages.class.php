@@ -62,7 +62,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	public $load_options;
 
 	/**
-	 * Constructor, load parent constructor and set up variables.
+	 * Constructor. Loads parent constructor, does actions and sets up variables.
 	 */
 	public function __construct() {
 		parent::__construct();
@@ -73,18 +73,21 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		*/
 		$this->load_options = (bool) apply_filters( 'the_seo_framework_load_options', true );
 
-		if ( $this->load_options ) {
+		add_action( 'init', array( $this, 'init_admin_actions' ), 0 );
+	}
+
+	/**
+	 * Initializes Admin Menu actions.
+	 *
+	 * @since 2.7.0
+	 */
+	public function init_admin_actions() {
+
+		if ( $this->load_options && $this->is_admin() ) {
 			add_action( 'admin_init', array( $this, 'enqueue_page_defaults' ), 1 );
 
 			// Add menu links and register $this->pagehook
 			add_action( 'admin_menu', array( $this, 'add_menu_link' ) );
-
-			/**
-			 * Add specific Multisite options
-			 * @TODO
-			 * @priority low 3.0.0
-			 */
-			// if ( is_multisite() ) add_action( 'network_admin_menu', array( $this, 'add_network_menu_link' ) );
 
 			//* Load the page content
 			add_action( 'admin_init', array( $this, 'settings_init' ) );
@@ -132,23 +135,36 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	public function add_menu_link() {
 
 		$menu = array(
-			'pagetitle'		=> __( 'SEO Settings', 'autodescription' ),
-			'menutitle'		=> __( 'SEO', 'autodescription' ),
+			'page_title'	=> __( 'SEO Settings', 'autodescription' ),
+			'menu_title'	=> __( 'SEO', 'autodescription' ),
 			'capability'	=> $this->settings_capability(),
-			'menu_slug'		=> 'autodescription-settings',
+			'menu_slug'		=> $this->page_id,
 			'callback'		=> array( $this, 'admin' ),
 			'icon'			=> 'dashicons-search',
 			'position'		=> '90.9001',
 		);
 
 		$this->pagehook = add_menu_page(
-			$menu['pagetitle'],
-			$menu['menutitle'],
+			$menu['page_title'],
+			$menu['menu_title'],
 			$menu['capability'],
 			$menu['menu_slug'],
 			$menu['callback'],
 			$menu['icon'],
 			$menu['position']
+		);
+
+		/**
+		 * Simply copy the previous, but rename the submenu entry.
+		 * The function add_submenu_page() takes care of the duplications.
+		 */
+		add_submenu_page(
+			$menu['menu_slug'],
+			$menu['page_title'],
+			$menu['page_title'],
+			$menu['capability'],
+			$menu['menu_slug'],
+			$menu['callback']
 		);
 
 		//* Enqueue styles
@@ -156,50 +172,6 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 
 		//* Enqueue scripts
 		add_action( 'admin_print_scripts-' . $this->pagehook, array( $this, 'enqueue_admin_javascript' ), 11 );
-
-	}
-
-	/**
-	 * Adds menu links under "settings" in the wp-admin dashboard
-	 *
-	 * Applies `autodescription_settings_capability` filters.
-	 * This filter changes the minimum role for viewing and editing the plugin's settings.
-	 *
-	 * @since 2.2.2
-	 * @return void
-	 *
-	 * @TODO Everything.
-	 * @priority low 3.0.0
-	 */
-	public function add_network_menu_link() {
-
-		$menu = array(
-			'pagetitle'		=> __( 'Network SEO Settings', 'autodescription' ),
-			'menutitle'		=> __( 'Network SEO', 'autodescription' ),
-
-			'capability'	=> 'manage_network',
-
-			'menu_slug'		=> 'autodescription-network-settings',
-			'callback'		=> array( $this, 'network_admin' ),
-			'icon'			=> 'dashicons-search',
-			'position'		=> '99.9001',
-		);
-
-		$this->network_pagehook = add_menu_page(
-			$menu['pagetitle'],
-			$menu['menutitle'],
-			$menu['capability'],
-			$menu['menu_slug'],
-			$menu['callback'],
-			$menu['icon'],
-			$menu['position']
-		);
-
-		// Enqueue styles
-		add_action( 'admin_print_styles-' . $this->network_pagehook, array( $this, 'enqueue_admin_css' ), 11 );
-
-		// Enqueue scripts
-		add_action( 'admin_print_scripts-' . $this->network_pagehook, array( $this, 'enqueue_admin_javascript' ), 11 );
 
 	}
 
@@ -436,55 +408,6 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
 				// postboxes setup
 				postboxes.add_postbox_toggles('<?php echo $this->pagehook; ?>');
-			});
-			//]]>
-		</script>
-		<?php
-
-	}
-
-	/**
-	 * Use this as the settings admin callback to create an admin page with sortable metaboxes.
-	 * Create a 'settings_boxes' method to add metaboxes.
-	 *
-	 * @since 2.2.2
-	 */
-	public function network_admin() {
-
-		?>
-		<div class="wrap autodescription-metaboxes">
-		<form method="post" action="options.php">
-
-			<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
-			<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
-			<?php settings_fields( $this->network_settings_field ); ?>
-
-			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-			<p class="top-buttons">
-				<?php
-				submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
-				submit_button( $this->page_defaults['reset_button_text'], 'secondary autodescription-js-confirm-reset', $this->get_field_name( 'reset' ), false, array( 'id' => '' ) );
-				?>
-			</p>
-
-			<?php do_action( "{$this->network_pagehook}_settings_page_boxes", $this->network_pagehook ); ?>
-
-			<div class="bottom-buttons">
-				<?php
-				submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
-				submit_button( $this->page_defaults['reset_button_text'], 'secondary autodescription-js-confirm-reset', $this->get_field_name( 'reset' ), false, array( 'id' => '' ) );
-				?>
-			</div>
-		</form>
-		</div>
-		<?php // Add postbox listeners ?>
-		<script type="text/javascript">
-			//<![CDATA[
-			jQuery(document).ready( function ($) {
-				// close postboxes that should be closed
-				$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
-				// postboxes setup
-				postboxes.add_postbox_toggles('<?php echo $this->network_pagehook; ?>');
 			});
 			//]]>
 		</script>

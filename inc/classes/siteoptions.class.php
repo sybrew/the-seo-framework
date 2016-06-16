@@ -41,7 +41,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 *
 	 * @var string The page ID
 	 */
-	protected $page_id;
+	public $page_id;
 
 	/**
 	 * Holds the update option.
@@ -444,7 +444,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	}
 
 	/**
-	 * Echo plugin updated notification.
+	 * Echos plugin updated notification.
 	 *
 	 * @since 2.6.0
 	 *
