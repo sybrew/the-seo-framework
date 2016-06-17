@@ -977,4 +977,37 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 
 	}
 
+	/**
+	 * Add and Flush rewrite rules on plugin settings change.
+	 *
+	 * @since 2.6.6.1
+	 * @access private
+	 */
+	public function flush_rewrite_rules_activation() {
+		global $wp_rewrite;
+
+		//* This function is called statically.
+		$this->rewrite_rule_sitemap( true );
+
+		$wp_rewrite->init();
+		$wp_rewrite->flush_rules( true );
+	}
+
+	/**
+	 * Flush rewrite rules on settings change.
+	 *
+	 * @since 2.6.6.1
+	 * @access private
+	 */
+	public function flush_rewrite_rules_deactivation() {
+		global $wp_rewrite;
+
+		$wp_rewrite->init();
+
+		unset( $wp_rewrite->extra_rules_top['sitemap\.xml$'] );
+
+		$wp_rewrite->flush_rules( true );
+	}
+
+
 }

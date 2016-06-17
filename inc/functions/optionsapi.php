@@ -82,7 +82,7 @@ function the_seo_framework_dot_version( $version = '2.4' ) {
 		if ( 3 !== $current_version_len )
 			$current_version = substr( $current_version, 0, 3 );
 
-		if ( $current_version === $verion )
+		if ( $current_version === $version )
 			return true;
 	}
 

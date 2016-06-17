@@ -86,13 +86,13 @@ define( 'THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE', __FILE__ );
  * The plugin class map absolute path.
  * @since 2.2.9
  */
-define( 'THE_SEO_FRAMEWORK_DIR_PATH_CLASS', THE_SEO_FRAMEWORK_DIR_PATH . '/inc/classes/' );
+define( 'THE_SEO_FRAMEWORK_DIR_PATH_CLASS', THE_SEO_FRAMEWORK_DIR_PATH . 'inc/classes/' );
 
 /**
  * The plugin function map absolute path.
  * @since 2.2.9
  */
-define( 'THE_SEO_FRAMEWORK_DIR_PATH_FUNCT', THE_SEO_FRAMEWORK_DIR_PATH . '/inc/functions/' );
+define( 'THE_SEO_FRAMEWORK_DIR_PATH_FUNCT', THE_SEO_FRAMEWORK_DIR_PATH . 'inc/functions/' );
 
 add_action( 'plugins_loaded', 'the_seo_framework_locale_init', 10 );
 /**

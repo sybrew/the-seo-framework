@@ -404,6 +404,11 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 
 		//* Merge the options. Add to if it's non-existent.
 		foreach ( $new_options as $key => $value ) {
+
+			//* Shut up already.
+			if ( $plugin_updated === $key )
+				continue;
+
 			if ( ! isset( $options[$key] ) ) {
 				if ( ! empty( $new_options[$key] ) ) {
 					$options[$key] = $new_options[$key];

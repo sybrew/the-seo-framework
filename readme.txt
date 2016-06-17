@@ -416,8 +416,9 @@ TODO
 	* Function `the_seo_framework_dot_version()` now works as intended.
 **Removed:**
 	/
-	* TODO Network admin functions. Network admin settings constants and filters are held intact.
-	* TODO Public function `AutoDescription_Adminpages::add_network_menu_link()`, without deprecation.
+	* Network admin functions. Network admin settings constants and filters are held intact. Changes are listed below.
+	* Public function `AutoDescription_Adminpages::add_network_menu_link()`, without deprecation.
+	* Public function `AutoDescription_Adminpages::network_admin()`, without deprecation.
 **Filter notes:**
 	/
 	* TODO
