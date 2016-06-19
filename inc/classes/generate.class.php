@@ -105,9 +105,9 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 
 			if ( false === $flag && isset( $term->meta ) ) {
 				//* Genesis support.
-				$meta['noindex']   = empty( $meta['noindex'] ) && $term->meta['noindex'] ? 'noindex' : $meta['noindex'];
-				$meta['nofollow']  = empty( $meta['nofollow'] ) && $term->meta['nofollow'] ? 'nofollow' : $meta['nofollow'];
-				$meta['noarchive'] = empty( $meta['noarchive'] ) && $term->meta['noarchive'] ? 'noarchive' : $meta['noarchive'];
+				$meta['noindex']   = empty( $meta['noindex'] ) && isset( $term->meta['noindex'] ) && $term->meta['noindex'] ? 'noindex' : $meta['noindex'];
+				$meta['nofollow']  = empty( $meta['nofollow'] ) && isset( $term->meta['nofollow'] ) && $term->meta['nofollow'] ? 'nofollow' : $meta['nofollow'];
+				$meta['noarchive'] = empty( $meta['noarchive'] ) && isset( $term->meta['noarchive'] ) && $term->meta['noarchive'] ? 'noarchive' : $meta['noarchive'];
 			}
 		}
 

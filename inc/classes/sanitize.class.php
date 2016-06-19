@@ -217,6 +217,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			$this->settings_field,
 			array(
 			//	'home_author', @TODO
+				'counter_type',
 			)
 		);
 

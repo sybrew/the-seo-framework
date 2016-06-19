@@ -1,9 +1,9 @@
 === The SEO Framework ===
 Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
-Tags: open graph, description, automatic, generate, generator, title, breadcrumbs, ogtype, meta, metadata, search, engine, optimization, seo, framework, canonical, redirect, bbpress, twitter, facebook, google, bing, yahoo, jetpack, genesis, woocommerce, multisite, robots, icon, cpt, custom, post, types, pages, taxonomy, tag, sitemap, sitemaps, screenreader, rtl, feed
+Tags: open graph, seo, xml sitemap, breadcrumbs, meta, search engine, framework, redirect, robots, rtl, feed, google
 Requires at least: 3.8.0
-Tested up to: 4.5.2
+Tested up to: 4.6.0
 Stable tag: 2.6.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -39,7 +39,7 @@ An accessible, unbranded and extremely fast SEO solution for any WordPress websi
 * Automatically upgrades itself from Genesis SEO.
 * Allows for easy SEO plugin switch using a tool.
 
-*Read **Transferring SEO Content using SEO Data Transporter** below for SEO plugin transitioning instructions.*
+*Read [this guide](https://theseoframework.com/docs/seo-data-migration/) for transferring SEO Content using SEO Data Transporter.
 
 = Unbranded, Free and for the Professional =
 This plugin is unbranded! This even means that we don't even put the name "The SEO Framework" anywhere within the WordPress interface, aside from the plugin activation page.
@@ -68,6 +68,14 @@ The SEO Framework also features pluggable functions. All functions are active an
 This allows other developers to extend the plugin wherever needed.
 We have also provided an API documentation located at [The SEO Framework API Docs](http://theseoframework.com/docs/api/).
 
+**This plugin helps you to create better content, at a glance. By showing you:**
+
+* If the title is too long, too short, duplicated, and/or automatically generated.
+* If the description is too long, too short, duplicated, has too many repeated words and/or automatically generated.
+* If the page is indexed, redirected, followed and/or archived, while looking at other WordPress settings.
+
+**We call this The SEO Bar. Check out the [Screenshots](https://wordpress.org/plugins/autodescription/screenshots/#plugin-info) to see how it helps you!**
+
 = Still not convinced? Let's dive deeper =
 
 **By default, this plugin automatically generates:**
@@ -94,14 +102,7 @@ We have also provided an API documentation located at [The SEO Framework API Doc
 * Disables 404 pages and empty categories from being indexed, even if they don't send a 404 response.
 * Automatically notifies Google, Bing and Yandex on Post or Page update and deletion when sitemaps are enabled.
 
-**This plugin allows you to manually set these values for each post, page, supported CPT and term:**
-
-* Title
-* Description
-* Canonical URL
-* Robots (nofollow, noindex, noarchive)
-* Redirect, with optional Multisite spam filter (Post/Page/CPT only)
-* Local on-site search settings (Post/Page/CPT only)
+**This plugin allows you to manually set various values for each post, page, public CPT and term.**
 
 **This plugin allows you to adjust over 90 site settings, including:**
 
@@ -117,15 +118,7 @@ We have also provided an API documentation located at [The SEO Framework API Doc
 * Sitemap integration.
 * Robots.txt sitemap integration.
 * Feed anti-scraper options.
-* And much, much more.
-
-**This plugin helps you to create better content, at a glance. By showing you:**
-
-* If the title is too long, too short, duplicated, and/or automatically generated.
-* If the description is too long, too short, duplicated, has too many repeated words and/or automatically generated.
-* If the page is indexed, redirected, followed and/or archived, while looking at other WordPress settings.
-
-**We call this The SEO Bar. Check out the [Screenshots](https://wordpress.org/plugins/autodescription/screenshots/#plugin-info) to see how it helps you!**
+* And many, many more settings.
 
 > This plugin is fully compatible with the [Domain Mapping plugin by WPMUdev](https://premium.wpmudev.org/project/domain-mapping/) and the [Domain Mapping plugin by Donncha](https://wordpress.org/plugins/wordpress-mu-domain-mapping/).<br>
 > This compatibility ensures **prevention of canonical errors**. This way your site will always be correctly indexed, no matter what you use!<br>
@@ -135,22 +128,7 @@ We have also provided an API documentation located at [The SEO Framework API Doc
 This plugin's code is highly optimized on PHP-level and uses variable, object and transient caching. This means that there's little extra page load time from this plugin, even with more Meta tags used.
 A caching plugin isn't even needed for this plugin as you won't notice a difference, however it's supported wherever best suited.
 
-**If you use object caching:**
-The output will be stored for each page, if you've edited a page the page output Meta will stay the same until the object cache expires. So be sure to clear your object cache or wait until it expires.
-
-**Used Caches:**
-
-* Server-level Opcode (optimized).
-* Staticvar functions (prevents running code twice or more).
-* Staticvar class (instead of discouraged globals, prevents constructors running multiple times).
-* Object caching for unique database calls and full front-end output.
-* Transients for process intensive operations and persistent communication with front-and back end.
-
-**All caching plugins are supported. If you use one, be sure to clear your cache when you want to robots to notice your changes.**
-
 = Compatibility =
-
-**Basics:**
 
 * Full internationalization support through WordPress.org.
 * Extended Multibyte support (CJK).
@@ -160,54 +138,9 @@ The output will be stored for each page, if you've edited a page the page output
 * MultiSite, this plugin is in fact built upon one.
 * Detection of robots.txt and sitemap.xml files.
 * Detection of theme Title output "doing it right" (or wrong).
+* Automatic detection of various other popular SEO tools.
 
-**Plugins:**
-
-* W3 Total Cache, WP Super Cache, Batcache, etc.
-* WooCommerce: Shop Page, Products, Product Breadcrumbs, Product Galleries, Product Categories and Product Tags.
-* Custom Post Types, (all kinds of plugins) with automatic integration.
-* WPMUdev and Donncha's Domain Mapping with full HTTPS support.
-* WPMUdev Avatars for og:image and twitter:image if no other image is found.
-* bbPress: Forums, Topics, Replies.
-* BuddyPress profiles.
-* Ultimate Member profiles.
-* AnsPress Questions, Profiles and Pages, also Canonical errors have been fixed.
-* StudioPress SEO Data Transporter for Posts and Pages.
-* WPML, URLs, full sitemap and per-page/post SEO settings (Documentation is coming soon).
-* qTranslate X, URLs, per-page/post SEO settings, the main language's sitemap (Documentation is coming soon).
-* Polylang, URLs, per-page/post SEO settings, the main language's sitemap.
-* Confirmed Jetpack modules: Custom Content Types (Testimonials, Portfolio), Infinite Scroll, Photon, Sitemaps, Publicize.
-* Most popular SEO plugins, let's not get in each other's way.
-* Many, many more plugins, yet to be confirmed.
-* Divi Builder by Elegant Themes
-* Visual Composer by WPBakery
-* Page Builder by SiteOrigin
-* Beaver Builder by Fastline Media
-
-**Themes:**
-
-* All themes.
-* Special extended support for Genesis & Genesis SEO. This plugin takes all Post, Page, Category and Tag SEO values from Genesis and uses them within The SEO Framework Options. The easiest upgrade!
-
-If you have other popular SEO plugins activated, this plugin will most likely automatically prevent SEO mistakes by deactivating itself on almost every part.
-
-= Transferring SEO data using SEO Data Transporter =
-
-Because this plugin was initially written to extend the Genesis SEO, it uses the same option name values. This makes transferring from Genesis SEO to The SEO Framework work automatically.
-
-> If you didn't use Genesis SEO previously, Nathan Rice (StudioPress) has created an awesome plugin for your needs to transfer your SEO data.
->
-> Get the [SEO Data Transporter from WordPress.org](https://wordpress.org/plugins/seo-data-transporter/).
->
-> Usage:<br>
-> 1. Install and activate SEO Data Transporter.<br>
-> 2. Go to the <strong>SEO Data Transporter menu within Tools</strong>.<br>
-> 3. Select your <strong>previous SEO plugin</strong> within the first dropdown menu.<br>
-> 4. Select <strong>Genesis</strong> within the second dropdown menu.<br>
-> 5. Click <strong>Analyze</strong> for extra information about the data transport.<br>
-> 6. Click <strong>Convert</strong> to convert the data.
->
-> The SEO Framework now uses the same data from the new Genesis SEO settings on Posts, Pages and Taxonomies.
+**If you have other popular SEO plugins activated, this plugin will automatically prevent SEO mistakes by deactivating itself on almost every part.**
 
 = About the Sitemap =
 
@@ -233,7 +166,6 @@ The Breadcrumb script generated by this plugin on Posts will also make sure Goog
 1. Install The SEO Framework either via the WordPress.org plugin directory, or by uploading the files to your server.
 1. Either Network Activate this plugin or activate it on a single site.
 1. That's it!
-
 1. Let the plugin automatically work or fine-tune each page with the metaboxes beneath the content or on the taxonomy pages.
 1. Adjust the SEO settings through the SEO settings page if desired. Red checkboxes are rather left unchecked. Green checkboxes are default enabled.
 
@@ -275,42 +207,9 @@ However, you can also greatly help by telling your friends about this plugin :).
 The SEO Framework is very pluggable on many fields. Please refer to the [Other Notes](https://wordpress.org/plugins/autodescription/other_notes/).
 Please note that a free plugin is underway which will allow you to change all filters from the dashboard. No ETA yet.
 
-= No ads! Why? =
-
-Nope, no ads! No nags! No links! Never!
-Why? Because I hate them, probably more than you do.
-I also don't want to taint your website from the inside, like many popular plugins do.
-Read more about this on the [Plugin Guidelines, Section 7](https://wordpress.org/plugins/about/guidelines/).
-
-***But how do you make a living?***
-
-Currently, The SEO Framework is non-profit.
-This plugin was first released to the public in March 15th, 2015. From there it has grown, from 179 lines of code, to more than 17100 lines.
-With over 600,000 characters of code written, this plugin is absolutely a piece of art in my mind.
-And that's what it should stay, (functional) art.
-I trust that people are good at heart and will tell their friends and family about the things they enjoy the most, what they're excited about, what they find beneficial or even beautiful.
-
-With The SEO Framework I try to achieve exactly that. It's made with <3.
-
 = Does this plugin collect my data? =
 
 Absolutely not! Read more about this on the [Plugin Guidelines, Section 7](https://wordpress.org/plugins/about/guidelines/).
-
-= Premium version? =
-
-Nope! Only premium extensions. These are planned and being developed.
-
-= If a premium extensions is released, what will happen to this plugin? =
-
-This plugin is built to be an all-in-one SEO solution for professional environments, so:
-
-1. No advertisements about the premium extensions will be placed within this plugin.
-1. No features will be removed or replaced for premium-only features.
-1. The premium extensions will most likely only be used for big-business SEO. Which are very difficult to develop and which will confuse most users anyway.
-
-= I've heard about an extension manager, what's that? =
-
-Currently it's not available. When it is, it will allow you to download and activate extensions for The SEO Framework. It will support both multisite and single-site and the registration will be based on the Akismet plugin.
 
 = The sitemap doesn't contain categories, images, news, etc. is this OK? =
 
@@ -320,14 +219,6 @@ If a visitor can't find a page, why would a Search Engine? Don't rely on your si
 = What's does the application/ld+json script do? =
 
 The LD+Json scripts are Search Engine helpers which tell Search Engines how to connect and index the site. They tell the Search Engine if your site contains an internal search engine, what sites you're socially connected to and what page structure you're using.
-
-= The (home page) title is different from the og:title, or doesn't do what I want or told it to. =
-
-The theme you're using is using outdated standards and is therefore doing it wrong. Inform your theme author about this issue.
-
-Give the theme author these two links: https://codex.wordpress.org/Title_Tag https://make.wordpress.org/themes/2015/08/25/title-tag-support-now-required/
-
-If you know your way around PHP, you can speed up this process by replacing the `<title>some code here</title>` code with `<title><?php wp_title('') ?></title>` within the `header.php` file of the theme you're using.
 
 = The meta data is not being updated, and I'm using a caching plugin. =
 
@@ -343,7 +234,7 @@ Oh well, here's the filter you need to remove the HTML tags saying where the Met
 = I'm fine with The SEO Framework, but not with you! =
 
 Well then! D: We got off on the wrong foot, I guess..
-If you wish to remove only my name from your HTML code, here's the filter:
+If you wish to remove "by Sybre Waaijer" from your HTML code, here's the filter:
 `add_filter( 'sybre_waaijer_<3', '__return_false' );`
 
 = I want to transport SEO data from other plugins to The SEO Framework, how do I do this? =
@@ -382,6 +273,7 @@ TODO
 **Added:**
 	/
 	* General compatibility and other improvements for the upcoming extension manager.
+	* TODO The title and description counter type option is now bound to the user, rather than the site.
 	* TODO
 **Improved:**
 	/
@@ -398,6 +290,8 @@ TODO
 **Fixed:**
 	/
 	* TODO
+	* TODO When saving the Site Options, the counter type was reset. This has been fixed by placing the counter type option out of the plugins options scope.
+	* TODO When updating the plugin, without added options, the update notification now really should no longer show up. ^related
 
 **For developers:**
 /
@@ -416,9 +310,10 @@ TODO
 	* Function `the_seo_framework_dot_version()` now works as intended.
 **Removed:**
 	/
-	* Network admin functions. Network admin settings constants and filters are held intact. Changes are listed below.
+	* Network admin functions. Network admin settings constants and filters are held intact for the future. Changes are listed below.
 	* Public function `AutoDescription_Adminpages::add_network_menu_link()`, without deprecation.
 	* Public function `AutoDescription_Adminpages::network_admin()`, without deprecation.
+	* Public var `AutoDescription_Adminpages::network_pagehook`, without deprecation.
 **Filter notes:**
 	/
 	* TODO

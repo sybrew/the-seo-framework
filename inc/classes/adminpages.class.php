@@ -44,15 +44,6 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	public $pagehook;
 
 	/**
-	 * Name of the network page hook when the menu is registered.
-	 *
-	 * @since 2.2.2
-	 *
-	 * @var string Page hook
-	 */
-	public $network_pagehook;
-
-	/**
 	 * Load the options.
 	 *
 	 * @since 2.6.0
@@ -84,6 +75,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	public function init_admin_actions() {
 
 		if ( $this->load_options && $this->is_admin() ) {
+			// Enqueue i18n defaults.
 			add_action( 'admin_init', array( $this, 'enqueue_page_defaults' ), 1 );
 
 			// Add menu links and register $this->pagehook

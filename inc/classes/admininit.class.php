@@ -42,7 +42,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 *
 	 * @var string JavaScript name identifier.
 	 */
-	public $js_name;
+	public $js_name = 'autodescription';
 
 	/**
 	 * CSS script name identifier to be used with enqueuing.
@@ -51,16 +51,13 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 *
 	 * @var string CSS name identifier.
 	 */
-	public $css_name;
+	public $css_name = 'autodescription';
 
 	/**
 	 * Constructor. Loads parent constructor, registers script names and adds actions.
 	 */
 	public function __construct() {
 		parent::__construct();
-
-		$this->js_name = 'autodescription';
-		$this->css_name = 'autodescription';
 
 		//* Enqueues admin scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 0, 1 );
@@ -230,13 +227,6 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		$rtl = (bool) is_rtl();
 		$ishome = false;
 
-		/**
-		 * We're gaining UX in exchange for resource usage.
-		 *
-		 * Any way to cache this?
-		 *
-		 * @since 2.2.4
-		 */
 		if ( isset( $this->page_hook ) && $this->page_hook ) {
 			// We're somewhere within default WordPress pages.
 			$post_id = $this->get_the_real_ID();
@@ -368,12 +358,10 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 			return;
 
 		$rtl = is_rtl() ? '-rtl' : '';
-
 		$suffix = $this->script_debug ? '' : '.min';
+		$registered = true;
 
 		wp_register_style( $this->css_name, THE_SEO_FRAMEWORK_DIR_URL . "lib/css/autodescription{$rtl}{$suffix}.css", array(), THE_SEO_FRAMEWORK_VERSION, 'all' );
-
-		$registered = true;
 
 	}
 

@@ -31,8 +31,11 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 	public function __construct() {
 		parent::__construct();
 
-		add_action( 'current_screen', array( $this, 'init_term_filters' ), 999 );
-		add_action( 'get_header', array( $this, 'init_term_filters' ), 999 );
+	//	add_action( 'current_screen', array( $this, 'init_term_filters' ), 999 );
+	//	add_action( 'get_header', array( $this, 'init_term_filters' ), 999 );
+
+		add_filter( 'get_term', array( $this, 'get_term_filter' ), 10, 2 );
+		add_filter( 'get_terms', array( $this, 'get_terms_filter' ), 10, 2 );
 
 		add_action( 'edit_term', array( $this, 'taxonomy_seo_save' ), 10, 2 );
 		add_action( 'delete_term', array( $this, 'term_meta_delete' ), 10, 2 );
@@ -88,15 +91,11 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 		if ( ! is_object( $term ) )
 			return $term;
 
-		//* We can't set query vars just yet.
-		if ( false === $this->can_cache_query() )
-			return $term;
-
 		/**
 		 * No need to process this data outside of the Terms' scope.
 		 * @since 2.6.0
 		 */
-		if ( false === $this->is_admin() && false === $this->is_archive() )
+		if ( false === is_admin() && false === is_archive() )
 			return $term;
 
 		/**

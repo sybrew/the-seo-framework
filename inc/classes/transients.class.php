@@ -423,12 +423,13 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		if ( false !== strpos( $taxonomy, '_' ) ) {
 			$taxonomy_name = explode( '_', $taxonomy );
 			if ( is_array( $taxonomy_name ) ) {
-				foreach ( $taxonomy_name as $name )
+				foreach ( $taxonomy_name as $name ) {
 					if ( mb_strlen( $name ) >= 3 ) {
 						$the_id .= mb_substr( $name, 0, 3 ) . '_';
 					} else {
-						$the_id = strtolower( $name ) . '_';
+						$the_id = $name . '_';
 					}
+				}
 			}
 		}
 
