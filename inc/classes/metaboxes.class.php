@@ -1419,7 +1419,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 			$this->make_checkbox(
 				'facebook_tags',
 				__( 'Output Facebook meta tags?', 'autodescription' ),
-				sprintf( __( 'Output various tags targetted at %s.', 'autodescription' ), 'Facebook' )
+				sprintf( __( 'Output various tags targeted at %s.', 'autodescription' ), 'Facebook' )
 			),
 			true
 		);
