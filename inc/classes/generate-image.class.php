@@ -175,7 +175,7 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 			}
 		} else {
 			//* Old style parameters are used. Doing it wrong.
-			$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', '2.5.0' );
+			$this->_doing_it_wrong( __METHOD__, 'Use $args = array() for parameters.', '2.5.0' );
 			$args = $default_args;
 		}
 

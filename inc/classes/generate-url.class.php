@@ -288,7 +288,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			}
 		} else {
 			//* Old style parameters are used. Doing it wrong.
-			$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', '2.4.2' );
+			$this->_doing_it_wrong( __METHOD__, 'Use $args = array() for parameters.', '2.4.2' );
 			$args = $default_args;
 		}
 
@@ -692,7 +692,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			 * @since 2.6.0
 			 * '$args = array()' replaced '$no_request = false'.
 			 */
-			$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', '2.6.0' );
+			$this->_doing_it_wrong( __METHOD__, 'Use $args = array() for parameters.', '2.6.0' );
 
 			$no_request = (bool) $args;
 			$args = $this->parse_url_args( '', '', true );

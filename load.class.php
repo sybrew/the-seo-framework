@@ -247,7 +247,7 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 				$output = call_user_func_array( $func, $args );
 			}
 		} else {
-			$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, __( "Function needs to be called as a string.", 'autodescription' ), $version );
+			$this->_doing_it_wrong( __METHOD__, __( "Function needs to be called as a string.", 'autodescription' ), $version );
 		}
 
 		return $output;

@@ -29,6 +29,11 @@
 class AutoDescription_Query extends AutoDescription_Compat {
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
 	 * Constructor. Load parent constructor.
 	 */
 	public function __construct() {
@@ -121,23 +126,17 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Get the real ID from plugins.
 	 *
-	 * Only works in front-end as there's no need to check for inconsistent
+	 * Only works on front-end as there's no need to check for inconsistent
 	 * functions for the current ID in the admin.
 	 *
 	 * @since 2.5.0
-	 *
-	 * Applies filters the_seo_framework_real_id : The Real ID for plugins on front-end.
-	 *
-	 * @staticvar int $cached_id The cached ID.
 	 *
 	 * @return int|empty the ID.
 	 */
 	public function check_the_real_ID() {
 
-		static $cached_id = null;
-
-		if ( isset( $cached_id ) && $this->can_cache_query() )
-			return $cached_id;
+		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
+			return $cache;
 
 		$id = '';
 
@@ -149,9 +148,17 @@ class AutoDescription_Query extends AutoDescription_Compat {
 			$id = get_question_id();
 		}
 
-		$cached_id = (int) apply_filters( 'the_seo_framework_real_id', $id );
+		/**
+		 * Applies filters the_seo_framework_real_id : The Real ID for plugins on front-end.
+		 * @since 2.5.0
+		 * @TODO add to Filters API.
+		 */
+		$this->set_query_cache(
+			__METHOD__,
+			$id = (int) apply_filters( 'the_seo_framework_real_id', $id )
+		);
 
-		return $cached_id;
+		return $id;
 	}
 
 	/**
@@ -165,10 +172,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 */
 	public function get_admin_term_id() {
 
-		static $term_id = null;
-
-		if ( isset( $term_id ) )
-			return $term_id;
+		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
+			return $cache;
 
 		if ( isset( $_REQUEST['tag_ID'] ) && $_REQUEST['tag_ID'] ) {
 			//* WordPress 4.5+
@@ -178,7 +183,12 @@ class AutoDescription_Query extends AutoDescription_Compat {
 			$term_id = $_REQUEST['term_id'];
 		}
 
-		return $term_id = $term_id ? absint( $term_id ) : 0;
+		$this->set_query_cache(
+			__METHOD__,
+			$term_id = $term_id ? absint( $term_id ) : 0
+		);
+
+		return $term_id;
 	}
 
 	/**
@@ -190,16 +200,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * @return bool
 	 */
 	public function is_404() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
-			return $cache;
-
-		if ( is_404() )
-			return $cache = true;
-
-		return $cache = false;
+		return is_404();
 	}
 
 	/**
@@ -211,48 +212,38 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * @return bool
 	 */
 	public function is_admin() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
-			return $cache;
-
-		if ( is_admin() )
-			return $cache = true;
-
-		return $cache = false;
+		return is_admin();
 	}
 
 	/**
 	 * Detects attachment page.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
-	 * @uses $this->is_singular()
 	 *
-	 * @param int|string|array|object $attachment Attachment ID, title, slug, or array of such.
-	 *
+	 * @param mixed $attachment Attachment ID, title, slug, or array of such.
 	 * @return bool
 	 */
 	public function is_attachment( $attachment = '' ) {
 
-		static $cache = array();
+		if ( empty( $attachment ) )
+			return is_attachment();
 
-		if ( isset( $cache[$attachment] ) && $this->can_cache_query() )
-			return $cache[$attachment];
+		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $attachment ) )
+			return $cache;
 
-		if ( $this->is_singular( $attachment ) && is_attachment( $attachment ) )
-			return $cache[$attachment] = true;
+		$this->set_query_cache(
+			__METHOD__,
+			$is_attachment = is_attachment( $attachment ),
+			$attachment
+		);
 
-		return $cache[$attachment] = false;
+		return $is_attachment;
 	}
 
 	/**
 	 * Detects archive pages. Also in admin.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
-	 *
 	 * @global object $wp_query
 	 *
 	 * @return bool
@@ -262,125 +253,103 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		if ( $this->is_admin() )
 			return $this->is_archive_admin();
 
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
-			return $cache;
-
 		if ( is_archive() && false === $this->is_singular() )
-			return $cache = true;
+			return true;
 
 		if ( $this->can_cache_query() && false === $this->is_singular() ) {
 			global $wp_query;
 
 			if ( $wp_query->is_post_type_archive || $wp_query->is_date || $wp_query->is_author || $wp_query->is_category || $wp_query->is_tag || $wp_query->is_tax )
-				return $cache = true;
+				return true;
 		}
 
-		return $cache = false;
+		return false;
 	}
 
 	/**
 	 * Extends default WordPress is_archive() and determines screen in admin.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
-	 *
 	 * @global object $current_screen
 	 *
 	 * @return bool Post Type is archive
 	 */
 	public function is_archive_admin() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
-			return $cache;
-
 		global $current_screen;
 
 		if ( isset( $current_screen->base ) && ( 'edit-tags' === $current_screen->base || 'term' === $current_screen->base ) )
-			return $cache = true;
+			return true;
 
-		return $cache = false;
+		return false;
 	}
 
 	/**
 	 * Detects Term edit screen in WP Admin.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
 	 * @global object $current_screen
 	 *
 	 * @return bool We're on Term Edit screen.
 	 */
 	public function is_term_edit() {
 
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
+		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
 		global $current_screen;
 
-		if ( $this->wp_version( '4.4.9999', '>=' ) ) {
+		$is_term_edit = false;
+
+		if ( $this->wp_version( '4.4.9999', '>' ) ) {
 			if ( isset( $current_screen->base ) && ( 'term' === $current_screen->base ) )
-				return $cache = true;
+				$is_term_edit = true;
 		} else {
 			if ( isset( $current_screen->base ) && ( 'edit-tags' === $current_screen->base ) )
-				return $cache = true;
+				$is_term_edit = true;
 		}
 
-		return $cache = false;
+		$this->set_query_cache(
+			__METHOD__,
+			$is_term_edit
+		);
+
+		return $is_term_edit;
 	}
 
 	/**
 	 * Detects Post edit screen in WP Admin.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
 	 * @global object $current_screen
 	 *
 	 * @return bool We're on Post Edit screen.
 	 */
 	public function is_post_edit() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
-			return $cache;
-
 		global $current_screen;
 
 		if ( isset( $current_screen->base ) && 'post' === $current_screen->base )
-			return $cache = true;
+			return true;
 
-		return $cache = false;
+		return false;
 	}
 
 	/**
 	 * Detects Post or Archive Lists in Admin.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
 	 * @global object $current_screen
+	 * @access private
 	 *
 	 * @return bool We're on the edit screen.
 	 */
 	public function is_wp_lists_edit() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
-			return $cache;
-
 		global $current_screen;
 
-		//* @NOTE USE WITH CAUTION - WP 4.5 & < 4.5 conflict.
+		//* @NOTE WP >= 4.5 & WP < 4.5 conflict.
 		if ( isset( $current_screen->base ) && ( 'edit' === $current_screen->base || 'edit-tags' === $current_screen->base ) )
-			return $cache = true;
+			return true;
 
-		return $cache = false;
+		return false;
 	}
 
 	/**
@@ -391,20 +360,23 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * @uses $this->is_archive()
 	 *
 	 * @param mixed $author Optional. User ID, nickname, nicename, or array of User IDs, nicknames, and nicenames
-	 *
 	 * @return bool
 	 */
 	public function is_author( $author = '' ) {
 
-		static $cache = array();
+		if ( empty( $author ) )
+			return is_author();
 
-		if ( isset( $cache[$author] ) && $this->can_cache_query() )
-			return $cache[$author];
+		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $author ) )
+			return $cache;
 
-		if ( $this->is_archive() && is_author( $author ) )
-			return $cache[$author] = true;
+		$this->set_query_cache(
+			__METHOD__,
+			$is_author = is_author( $author ),
+			$author
+		);
 
-		return $cache[$author] = false;
+		return $is_author;
 	}
 
 	/**
@@ -416,26 +388,30 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * @param int $id the Page ID.
 	 * @return bool true if is blog page. Always false if blog page is homepage.
 	 */
-	public function is_blog_page( $id = '' ) {
+	public function is_blog_page( $id = 0 ) {
 
-		if ( '' === $id )
+		if ( empty( $id ) )
 			$id = $this->get_the_real_ID();
 
-		static $is_blog_page = array();
+		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $id ) )
+			return $cache;
 
-		if ( isset( $is_blog_page[$id] ) && $this->can_cache_query() )
-			return $is_blog_page[$id];
+		$is_blog_page = false;
 
 		$pfp = (int) get_option( 'page_for_posts' );
 
-		if ( $id === $pfp ) {
-			//* Don't use $this->is_archive (will loop).
-			if ( $this->has_page_on_front() && false === $this->is_front_page() && false === is_archive() ) {
-				return $is_blog_page[$id] = true;
-			}
-		}
+		if ( $id === $pfp )
+			$is_blog_page = true;
+		else if ( $this->has_page_on_front() && is_home() )
+			$is_blog_page = true;
 
-		return $is_blog_page[$id] = false;
+		$this->set_query_cache(
+			__METHOD__,
+			$is_blog_page,
+			$id
+		);
+
+		return $is_blog_page;
 	}
 
 	/**
@@ -453,15 +429,16 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		if ( $this->is_admin() )
 			return $this->is_category_admin();
 
-		static $cache = array();
+		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $category ) )
+			return $cache;
 
-		if ( isset( $cache[$category] ) && $this->can_cache_query() )
-			return $cache[$category];
+		$this->set_query_cache(
+			__METHOD__,
+			$is_category = is_category( $category ),
+			$category
+		);
 
-		if ( $this->is_archive() && is_category( $category ) )
-			return $cache[$category] = true;
-
-		return $cache[$category] = false;
+		return $is_category;
 	}
 
 	/**
@@ -475,12 +452,12 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 */
 	public function is_category_admin() {
 
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
+		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
 		global $current_screen;
+
+		$is_category = false;
 
 		if ( $this->is_archive_admin() && isset( $current_screen->taxonomy ) ) {
 
@@ -488,35 +465,28 @@ class AutoDescription_Query extends AutoDescription_Compat {
 			$len = strlen( $tax );
 
 			if ( $len >= 8 && false !== strrpos( $tax, 'category', -8 ) )
-				return $cache = true;
-
-			if ( $len >= 3 && false !== strrpos( $tax, 'cat', -3 ) )
-				return $cache = true;
+				$is_category = true;
+			else if ( $len >= 3 && false !== strrpos( $tax, 'cat', -3 ) )
+				$is_category = true;
 		}
 
-		return $cache = false;
+		$this->set_query_cache(
+			__METHOD__,
+			$is_category
+		);
+
+		return $is_category;
 	}
 
 	/**
 	 * Detects date archives.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
-	 * @uses $this->is_archive()
 	 *
 	 * @return bool
 	 */
 	public function is_date() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
-			return $cache;
-
-		if ( $this->is_archive() && is_date() )
-			return $cache = true;
-
-		return $cache = false;
+		return is_date();
 	}
 
 	/**
@@ -529,16 +499,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * @return bool
 	 */
 	public function is_day() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
-			return $cache;
-
-		if ( is_day() )
-			return $cache = true;
-
-		return $cache = false;
+		return is_day();
 	}
 
 	/**
@@ -551,56 +512,55 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * @return bool
 	 */
 	public function is_feed( $feeds = '' ) {
-
-		static $cache = array();
-
-		if ( is_string( $feeds ) && isset( $cache[$feeds] ) && $this->can_cache_query() )
-			return $cache[$feeds];
-
-		if ( is_feed( $feeds ) )
-			return $cache[$feeds] = true;
-
-		return $cache[$feeds] = false;
+		return is_feed( $feeds );
 	}
 
 	/**
 	 * Detects front page.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
 	 *
-	 * @param int $id The page or Post ID.
+	 * @param int $id The Page or Post ID.
 	 * @return bool
 	 */
 	public function is_front_page( $id = 0 ) {
 
 		static $cache = array();
 
-		if ( isset( $cache[$id] ) && $this->can_cache_query() )
-			return $cache[$id];
+		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $id ) )
+			return $cache;
+
+		$is_front_page = false;
 
 		if ( is_front_page() && empty( $id ) )
-			return $cache[$id] = true;
+			$is_front_page = true;
 
 		//* Elegant Themes Support.
-		if ( empty( $id ) && $this->is_home() ) {
+		if ( false === $is_front_page && empty( $id ) && $this->is_home() ) {
 			$sof = get_option( 'show_on_front' );
 
 			if ( 'page' !== $sof && 'posts' !== $sof )
-				return $cache[$id] = true;
+				$is_front_page = true;
 		}
 
-		if ( $id ) {
+		//* Compare against $id
+		if ( false === $is_front_page && $id ) {
 			$sof = get_option( 'show_on_front' );
 
 			if ( 'page' === $sof && $id === (int) get_option( 'page_on_front' ) )
-				return $cache[$id] = true;
+				$is_front_page = true;
 
 			if ( 'posts' === $sof && $id === (int) get_option( 'page_for_posts' ) )
-				return $cache[$id] = true;
+				$is_front_page = true;
 		}
 
-		return $cache[$id] = false;
+		$this->set_query_cache(
+			__METHOD__,
+			$is_front_page,
+			$id
+		);
+
+		return $is_front_page;
 	}
 
 	/**
@@ -612,42 +572,23 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * @return bool
 	 */
 	public function is_home() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
-			return $cache;
-
-		if ( is_home() )
-			return $cache = true;
-
-		return $cache = false;
+		return is_home();
 	}
 
 	/**
 	 * Detects month archives.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
-	 * @uses $this->is_date()
 	 *
 	 * @return bool
 	 */
 	public function is_month() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
-			return $cache;
-
-		if ( is_month() )
-			return $cache = true;
-
-		return $cache = false;
+		return is_month();
 	}
 
 	/**
 	 * Detects pages.
+	 * When $page is supplied, it will check against the current object. So it will not work in the admin screens.
 	 *
 	 * @since 2.6.0
 	 * @staticvar bool $cache
@@ -658,20 +599,22 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 */
 	public function is_page( $page = '' ) {
 
-		static $cache = array();
+		if ( $this->is_admin() )
+			return $this->is_page_admin();
 
-		if ( isset( $cache[$page] ) && $this->can_cache_query() )
-			return $cache[$page];
+		if ( empty( $page ) )
+			return is_page();
 
-		if ( $this->is_singular( $page ) ) {
-			if ( is_page( $page ) )
-				return $cache[$page] = true;
+		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $page ) )
+			return $cache;
 
-			if ( $this->is_admin() )
-				return $cache[$page] = $this->is_page_admin( $page );
-		}
+		$this->set_query_cache(
+			__METHOD__,
+			$is_page = is_page( $page ),
+			$page
+		);
 
-		return $cache[$page] = false;
+		return $is_page;
 	}
 
 	/**
@@ -681,10 +624,9 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * @see $this->is_page()
 	 * @global object $current_screen;
 	 *
-	 * @param int|string|array $page Optional. Page ID, title, slug, or array of such. Default empty.
 	 * @return bool
 	 */
-	public function is_page_admin( $page = '' ) {
+	public function is_page_admin() {
 		global $current_screen;
 
 		if ( isset( $current_screen->post_type ) && 'page' === $current_screen->post_type )
@@ -702,16 +644,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * @return bool
 	 */
 	public function is_preview() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
-			return $cache;
-
-		if ( is_preview() )
-			return $cache = true;
-
-		return $cache = false;
+		return is_preview();
 	}
 
 	/**
@@ -723,44 +656,38 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * @return bool
 	 */
 	public function is_search() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
-			return $cache;
-
-		if ( is_search() )
-			return $cache = true;
-
-		return $cache = false;
+		return is_search();
 	}
 
 	/**
 	 * Detects posts.
+	 * When $post is supplied, it will check against the current object. So it will not work in the admin screens.
 	 *
 	 * @since 2.6.0
 	 * @staticvar bool $cache
-	 * @uses $this->is_singular()
+	 * @uses AutoDescription_Query::is_single_admin()
 	 *
 	 * @param int|string|array $post Optional. Post ID, title, slug, or array of such. Default empty.
 	 * @return bool
 	 */
 	public function is_single( $post = '' ) {
 
-		static $cache = array();
+		if ( $this->is_admin() )
+			return $this->is_single_admin();
 
-		if ( isset( $cache[$post] ) && $this->can_cache_query() )
-			return $cache[$post];
+		if ( empty( $post ) )
+			return is_single();
 
-		if ( $this->is_singular( $post ) ) {
-			if ( is_single( $post ) )
-				return $cache[$post] = true;
+		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post ) )
+			return $cache;
 
-			if ( $this->is_admin() )
-				return $cache[$post] = $this->is_single_admin( $post );
-		}
+		$this->set_query_cache(
+			__METHOD__,
+			$is_single = is_single( $post ),
+			$post
+		);
 
-		return $cache[$post] = false;
+		return $is_single;
 	}
 
 	/**
@@ -768,12 +695,11 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 *
 	 * @since 2.6.0
 	 * @global object $current_screen
-	 * @see $this->is_single()
+	 * @see AutoDescription_Query::is_single()
 	 *
-	 * @param int|string|array $post Optional. Page ID, title, slug, or array of such. Default empty.
 	 * @return bool
 	 */
-	public function is_single_admin( $post = '' ) {
+	public function is_single_admin() {
 		global $current_screen;
 
 		if ( isset( $current_screen->post_type ) && 'post' === $current_screen->post_type )
@@ -787,23 +713,22 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * Replaces and expands default WordPress is_singular().
 	 *
 	 * @since 2.5.2
-	 * @staticvar bool $cache
-	 * @uses $this->is_blog_page()
-	 * @uses $this->is_wc_shop()
+	 * @uses AutoDescription_Query::is_singular_admin()
+	 * @uses AutoDescription_Query::is_blog_page()
+	 * @uses AutoDescription_Query::is_wc_shop()
+	 * @access private
 	 *
-	 * @param string|array $post_types Optional. Post type or array of post types. Default empty.
+	 * @param string|array $post_types Optional. Post type or array of post types. Default empty string.
 	 * @return bool Post Type is singular
 	 */
 	public function is_singular( $post_types = '' ) {
 
-		static $cache = array();
-
-		if ( isset( $cache[$post_types] ) && $this->can_cache_query() )
-			return $cache[$post_types];
-
 		//* WP_Query functions require loop, do alternative check.
 		if ( $this->is_admin() )
-			return $cache[$post_types] = $this->is_singular_admin();
+			return $this->is_singular_admin();
+
+		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post_types ) )
+			return $cache;
 
 		if ( is_int( $post_types ) ) {
 			//* Cache ID. Core is_singlar() doesn't accept integers.
@@ -811,48 +736,44 @@ class AutoDescription_Query extends AutoDescription_Compat {
 			$post_types = '';
 		}
 
-		//* Default check.
-		if ( is_singular( $post_types ) )
-			return $cache[$post_types] = true;
+		if ( ! $is_singular = is_singular( $post_types ) ) {
+			$id = isset( $id ) ? $id : $this->get_the_real_ID();
 
-		$id = isset( $id ) ? $id : $this->get_the_real_ID();
+			//* Check for somewhat singulars. We need this to adjust Meta data filled in Posts.
+			if ( $this->is_blog_page( $id ) || $this->is_wc_shop() )
+				$is_singular = true;
+		}
 
-		//* Check for somewhat singulars. We need this to adjust Meta data filled in Posts.
-		if ( $this->is_blog_page( $id ) || $this->is_wc_shop() )
-			return $cache[$post_types] = true;
+		$this->set_query_cache(
+			__METHOD__,
+			$is_singular,
+			$post_types
+		);
 
-		return $cache[$post_types] = false;
+		return $is_singular;
 	}
 
 	/**
 	 * Determines if the page is singular within the admin screen.
 	 *
 	 * @since 2.5.2
-	 * @staticvar bool $cache
 	 * @global object $current_screen
 	 *
 	 * @return bool Post Type is singular
 	 */
 	public function is_singular_admin() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
-			return $cache;
-
 		global $current_screen;
 
 		if ( isset( $current_screen->base ) && ( 'edit' === $current_screen->base || 'post' === $current_screen->base ) )
-			return $cache = true;
+			return true;
 
-		return $cache = false;
+		return false;
 	}
 
 	/**
 	 * Detects the static front page.
 	 *
 	 * @since 2.3.8
-	 * @staticvar array $cache
 	 *
 	 * @param int $id the Page ID to check. If empty, the current ID will be fetched.
 	 * @return bool true if is blog page. Always false if the homepage is a blog.
@@ -862,21 +783,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		if ( empty( $id ) )
 			$id = $this->get_the_real_ID();
 
-		static $cache = array();
+		if ( 'page' === get_option( 'show_on_front' ) )
+			return $id === (int) get_option( 'page_on_front' );
 
-		if ( isset( $cache[$id] ) && $this->can_cache_query() )
-			return $cache[$id];
-
-		$sof = (string) get_option( 'show_on_front' );
-
-		if ( 'page' === $sof ) {
-			$pof = (int) get_option( 'page_on_front' );
-
-			if ( $id === $pof )
-				return $cache[$id] = true;
-		}
-
-		return $cache[$id] = false;
+		return false;
 	}
 
 	/**
@@ -891,53 +801,56 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 */
 	public function is_tag( $tag = '' ) {
 
-		static $cache = array();
-
-		if ( isset( $cache[$tag] ) && $this->can_cache_query() )
-			return $cache[$tag];
-
 		//* Admin requires another check.
 		if ( $this->is_admin() )
-			return $cache[$tag] = $this->is_tag_admin();
+			return $this->is_tag_admin();
 
-		if ( is_tag( $tag ) )
-			return $cache[$tag] = true;
+		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $tag ) )
+			return $cache;
 
-		return $cache[$tag] = false;
+		$this->set_query_cache(
+			__METHOD__,
+			$is_tag = is_tag( $tag ),
+			$tag
+		);
+
+		return $is_tag;
 	}
 
 	/**
 	 * Determines if the page is a tag within the admin screen.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
 	 * @global object $current_screen
 	 *
-	 * @return bool Post Type is category
+	 * @return bool Post Type is category.
 	 */
 	public function is_tag_admin() {
 
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
+		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
+
+		$is_tag = false;
 
 		if ( $this->is_archive_admin() ) {
 			global $current_screen;
 
 			if ( isset( $current_screen->taxonomy ) && strlen( $current_screen->taxonomy ) >= 3 && false !== strrpos( $current_screen->taxonomy, 'tag', -3 ) )
-				return $cache = true;
+				$is_tag = true;
 		}
 
-		return $cache = false;
+		$this->set_query_cache(
+			__METHOD__,
+			$is_tag
+		);
+
+		return $is_tag;
 	}
 
 	/**
 	 * Detects taxonomy archives.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
-	 * @uses $this->is_archive()
 	 *
 	 * @param string|array     $taxonomy Optional. Taxonomy slug or slugs.
 	 * @param int|string|array $term     Optional. Term ID, name, slug or array of Term IDs, names, and slugs.
@@ -945,15 +858,16 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 */
 	public function is_tax( $taxonomy = '', $term = '' ) {
 
-		static $cache = null;
+		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $taxonomy, $term ) )
+			return $cache;
 
-		if ( isset( $cache[$taxonomy][$term] ) && $this->can_cache_query() )
-			return $cache[$taxonomy][$term];
+		$this->set_query_cache(
+			__METHOD__,
+			$is_tax = is_tax( $taxonomy, $term ),
+			$taxonomy, $term
+		);
 
-		if ( is_tax( $taxonomy, $term ) )
-			return $cache[$taxonomy][$term] = true;
-
-		return $cache[$taxonomy][$term] = false;
+		return $is_tax;
 	}
 
 	/**
@@ -961,21 +875,21 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * Checks for function availability: um_user, um_is_core_page, um_get_requested_user
 	 *
 	 * @since 2.5.2
-	 * @staticvar bool $cache
 	 * @uses $this->can_i_use()
 	 *
 	 * @return bool Whether we're on a Ultimate Member page.
 	 */
 	public function is_ultimate_member_user_page() {
 
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
+		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
-		$caniuse = (bool) $this->can_i_use( array( 'functions' => array( 'um_user', 'um_is_core_page', 'um_get_requested_user' ) ), false );
+		$this->set_query_cache(
+			__METHOD__,
+			$is_um_user_page = $this->can_i_use( array( 'functions' => array( 'um_user', 'um_is_core_page', 'um_get_requested_user' ) ), false )
+		);
 
-		return $cache = $caniuse;
+		return $is_um_user_page;
 	}
 
 	/**
@@ -988,78 +902,66 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 */
 	public function is_wc_shop() {
 
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
+		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
-		//* Can't check in admin.
-		if ( false === $this->is_admin() && function_exists( 'is_shop' ) && is_shop() )
-			return $cache = true;
+		$this->set_query_cache(
+			__METHOD__,
+			$is_shop = false === $this->is_admin() && function_exists( 'is_shop' ) && is_shop()
+		);
 
-		return $cache = false;
+		return $is_shop;
 	}
 
 	/**
 	 * Determines if the page is the WooCommerce plugin Product page.
 	 *
 	 * @since 2.5.2
-	 * @staticvar bool $cache
 	 *
 	 * @return bool True if on a WooCommerce Product page.
 	 */
 	public function is_wc_product() {
 
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
+		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
-		//* Can't check in admin.
-		if ( false === $this->is_admin() && function_exists( 'is_product' ) && is_product() )
-			return $cache = true;
+		$this->set_query_cache(
+			__METHOD__,
+			$is_product = false === $this->is_admin() && function_exists( 'is_product' ) && is_product()
+		);
 
-		return $cache = false;
+		return $is_product;
 	}
 
 	/**
 	 * Detects year archives.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
-	 * @uses $this->is_date()
 	 *
 	 * @return bool
 	 */
 	public function is_year() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
-			return $cache;
-
-		if ( is_year() )
-			return $cache = true;
-
-		return $cache = false;
+		return is_year();
 	}
 
 	/**
 	 * Determines whether we're on the SEO settings page.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
 	public function is_seo_settings_page() {
 
-		static $cache = null;
-
-		if ( isset( $cache ) && $this->can_cache_query() )
+		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
-		return $cache = $this->is_menu_page( $this->page_id );
+		$this->set_query_cache(
+			__METHOD__,
+			$page = $this->is_menu_page( $this->page_id )
+		);
+
+		return $page;
 	}
 
 	/**
@@ -1067,20 +969,22 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * Fetches global $page through Query Var to prevent conflicts.
 	 *
 	 * @since 2.6.0
-	 * @staticvar int $page
 	 *
 	 * @return int $page Always a positive number.
 	 */
 	public function page() {
 
-		static $page = null;
-
-		if ( isset( $page ) && $this->can_cache_query() )
-			return $page;
+		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
+			return $cache;
 
 		$page = get_query_var( 'page' );
 
-		return $page = $page ? (int) $page : 1;
+		$this->set_query_cache(
+			__METHOD__,
+			$page = $page ? (int) $page : 1
+		);
+
+		return $page;
 	}
 
 	/**
@@ -1088,20 +992,92 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * Fetches global $paged through Query Var. Determines
 	 *
 	 * @since 2.6.0
-	 * @staticvar int $paged
 	 *
 	 * @return int $paged
 	 */
 	public function paged() {
 
-		static $paged = null;
-
-		if ( isset( $paged ) && $this->can_cache_query() )
-			return $paged;
+		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
+			return $cache;
 
 		$paged = get_query_var( 'paged' );
 
-		return $paged = $paged ? (int) $paged : 1;
+		$this->set_query_cache(
+			__METHOD__,
+			$paged = $paged ? (int) $paged : 1
+		);
+
+		return $paged;
+	}
+
+	/**
+	 * Object cache handler for the query class.
+	 *
+	 * @since 2.7.0
+	 * @staticvar bool $can_cache_query : True when this function can run.
+	 * @staticvar mixed $cache : The cached query.
+	 *
+	 * @param string $key The key to set or get.
+	 * @param mixed $value_to_set The value to set.
+	 * @param mixed $hash Extra arguments, that will be used to generate an alternative cache key.
+	 * @return mixed : {
+	 * 		mixed The cached value if set and $value_to_set is null.
+	 *		null If the query can't be cached yet, or when no value has been set.
+	 *		If $value_is_set is set : {
+	 *			true If the value is being set for the first time.
+	 *			false If the value has been set and $value_to_set is being overwritten.
+	 * 		}
+	 * }
+	 */
+	public function get_query_cache( $key, $value_to_set = null ) {
+
+		static $can_cache_query = null;
+
+		if ( is_null( $can_cache_query ) ) {
+			if ( $this->can_cache_query() )
+				$can_cache_query = true;
+			else
+				return null;
+		}
+
+		static $cache = array();
+
+		$hash = func_num_args() >= 3 ? serialize( array_slice( func_get_args(), 2 ) ) : false;
+
+		if ( isset( $value_to_set ) ) {
+			if ( isset( $cache[$key][$hash] ) ) {
+				$cache[$key][$hash] = $value_to_set;
+				return false;
+			}
+			$cache[$key][$hash] = $value_to_set;
+			return true;
+		} else {
+			if ( isset( $cache[$key][$hash] ) )
+				return $cache[$key][$hash];
+		}
+
+		return null;
+	}
+
+	/**
+	 * Object cache handler for the query class.
+	 *
+	 * @since 2.7.0
+	 * @see AutoDescription_Query::get_query_cache()
+	 *
+	 * @param string $key The key to set.
+	 * @param mixed $value_to_set If null, it will reset the cache key.
+	 * @param mixed Extra arguments, that will be used to generate an alternative cache key.
+	 * @return bool : {
+	 *		true If the value is being set for the first time.
+	 *		false If the value has been set and $value_to_set is being overwritten.
+	 * }
+	 */
+	public function set_query_cache( $key, $value_to_set ) {
+		if ( func_num_args() >= 3 )
+			return $this->get_query_cache( $key, $value_to_set, array_slice( func_get_args(), 2 ) );
+		else
+			return $this->get_query_cache( $key, $value_to_set );
 	}
 
 }

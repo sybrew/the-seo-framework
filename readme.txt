@@ -301,18 +301,20 @@ TODO
 	* TODO
 **Improved:**
 	/
-	* TODO
+	* Class contents `AutoDescription_Query` are now reworked to be much more effecient and predictable.
+	* Methods within `AutoDescription_Query` have been re-evaluated whether they use the WordPress query cache. If that holds true, the query object cache has been omitted from the said method.
 **Changed:**
 	/
 	* 'AutoDescription_Siteoptions::page_id' is now publicly accessible. Making it easier to add submenu items.
 **Fixed:**
 	/
 	* Function `the_seo_framework_dot_version()` now works as intended.
+	* Method `AutoDescription_Query::is_single()` first parameter can now be an array without crashing the site.
 **Removed:**
 	/
-	* Network admin functions. Network admin settings constants and filters are held intact for the future. Changes are listed below.
-	* Public function `AutoDescription_Adminpages::add_network_menu_link()`, without deprecation.
-	* Public function `AutoDescription_Adminpages::network_admin()`, without deprecation.
+	* Network admin methods. Network admin settings constants and filters are held intact for the future. Changes are listed below.
+	* Method `AutoDescription_Adminpages::add_network_menu_link()`, without deprecation.
+	* Method `AutoDescription_Adminpages::network_admin()`, without deprecation.
 	* Public var `AutoDescription_Adminpages::network_pagehook`, without deprecation.
 **Filter notes:**
 	/

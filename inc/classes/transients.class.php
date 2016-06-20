@@ -254,7 +254,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 				//* Front/HomePage.
 				$the_id = $this->generate_front_page_cache_key();
 			} else {
-				$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, __( 'Third parameter must be a known type.', 'autodescription' ), '2.6.5' );
+				$this->_doing_it_wrong( __METHOD__, __( 'Third parameter must be a known type.', 'autodescription' ), '2.6.5' );
 				$the_id = esc_sql( $type . '_' . $page_id . '_' . $t );
 			}
 		} else if ( $this->is_404() ) {
