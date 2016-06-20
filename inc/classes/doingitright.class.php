@@ -948,7 +948,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		$description = htmlentities( $description, ENT_COMPAT, "UTF-8" );
 
 		//* Because we've converted all characters to XHTML codes, the odd ones should be only numerical.
-		$html_special_chars = '&0123456789;';
+		$html_special_chars = '&#0123456789;';
 
 		//* Count the words.
 		$desc_words = str_word_count( strtolower( $description ), 2, $html_special_chars );
@@ -969,13 +969,12 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 			//* Parse word counting.
 			if ( is_array( $desc_word_count ) ) {
-				foreach ( $desc_word_count as $desc_word => $desc_word_count ) {
+				foreach ( $desc_word_count as $desc_word => $count ) {
 
-					if ( mb_strlen( html_entity_decode( $desc_word ) ) < $bother_me_length ) {
-						$run = $desc_word_count >= 5 ? true : false;
-					} else {
-						$run = $desc_word_count >= 3 ? true : false;
-					}
+					if ( mb_strlen( html_entity_decode( $desc_word ) ) < $bother_me_length )
+						$run = $count >= 5;
+					else
+						$run = $count >= 3;
 
 					if ( $run ) {
 						//* The encoded word is longer or equal to the bother lenght.
@@ -986,7 +985,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 						$first_word_original = mb_substr( $description, $position, $word_len );
 
 						//* Found words that are used too frequently.
-						$desc_too_many[] = array( $first_word_original => $desc_word_count );
+						$desc_too_many[] = array( $first_word_original => $count );
 					}
 				}
 			}
