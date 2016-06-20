@@ -568,4 +568,65 @@ class AutoDescription_Core {
 		return $this->set_timezone( '', true );
 	}
 
+	/**
+	 * Counts words from input array.
+	 *
+	 * @since 2.7.0
+	 * @staticvar itn $bother_me_length
+	 *
+	 * @param string $string The string to count words in.
+	 * @return array Containing arrays of words with their count.
+	 */
+	public function get_word_count( $string = '' ) {
+
+		//* Convert string's special characters into PHP readable words.
+		$string = htmlentities( $string, ENT_COMPAT, "UTF-8" );
+
+		//* Count the words. Because we've converted all characters to XHTML codes, the odd ones should be only numerical.
+		$words = str_word_count( strtolower( $string ), 2, '&#0123456789;' );
+
+		$words_too_many = array();
+
+		if ( is_array( $words ) ) {
+
+			static $bother_me_length = null;
+			/**
+			 * Applies filters 'the_seo_framework_bother_me_desc_length' : int Min Character length to bother you with.
+			 * @since 2.6.0
+			 */
+			if ( is_null( $bother_me_length ) )
+				$bother_me_length = (int) apply_filters( 'the_seo_framework_bother_me_desc_length', 3 );
+
+			//* We're going to fetch words based on position, and then flip it to become the key.
+			$word_keys = array_flip( array_reverse( $words, true ) );
+
+			$word_count = array_count_values( $words );
+
+			//* Parse word counting.
+			if ( is_array( $word_count ) ) {
+				foreach ( $word_count as $word => $count ) {
+
+					if ( mb_strlen( html_entity_decode( $word ) ) < $bother_me_length )
+						$run = $count >= 5;
+					else
+						$run = $count >= 3;
+
+					if ( $run ) {
+						//* The encoded word is longer or equal to the bother lenght.
+
+						$word_len = mb_strlen( $word );
+
+						$position = $word_keys[$word];
+						$first_encountered_word = mb_substr( $string, $position, $word_len );
+
+						//* Found words that are used too frequently.
+						$words_too_many[] = array( $first_encountered_word => $count );
+					}
+				}
+			}
+		}
+
+		return $words_too_many;
+	}
+
 }

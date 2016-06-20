@@ -942,68 +942,22 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	protected function get_the_seo_bar_description_words_warning( $description, $class ) {
 
 		$notice = '';
-		$desc_too_many = '';
 
-		//* Convert description's special characters into PHP readable words.
-		$description = htmlentities( $description, ENT_COMPAT, "UTF-8" );
+		$words_too_many = $this->get_word_count( $description );
 
-		//* Because we've converted all characters to XHTML codes, the odd ones should be only numerical.
-		$html_special_chars = '&#0123456789;';
-
-		//* Count the words.
-		$desc_words = str_word_count( strtolower( $description ), 2, $html_special_chars );
-
-		static $bother_me_length = null;
-		/**
-		 * Applies filters 'the_seo_framework_bother_me_desc_length' : int Min Character length to bother you with.
-		 * @since 2.6.0
-		 */
-		if ( is_null( $bother_me_length ) )
-			$bother_me_length = (int) apply_filters( 'the_seo_framework_bother_me_desc_length', 3 );
-
-		if ( is_array( $desc_words ) ) {
-			//* We're going to fetch word based on key, and the last element (as first)
-			$word_keys = array_flip( array_reverse( $desc_words, true ) );
-
-			$desc_word_count = array_count_values( $desc_words );
-
-			//* Parse word counting.
-			if ( is_array( $desc_word_count ) ) {
-				foreach ( $desc_word_count as $desc_word => $count ) {
-
-					if ( mb_strlen( html_entity_decode( $desc_word ) ) < $bother_me_length )
-						$run = $count >= 5;
-					else
-						$run = $count >= 3;
-
-					if ( $run ) {
-						//* The encoded word is longer or equal to the bother lenght.
-
-						$word_len = mb_strlen( $desc_word );
-
-						$position = $word_keys[$desc_word];
-						$first_word_original = mb_substr( $description, $position, $word_len );
-
-						//* Found words that are used too frequently.
-						$desc_too_many[] = array( $first_word_original => $count );
-					}
-				}
-			}
-		}
-
-		if ( '' !== $desc_too_many && is_array( $desc_too_many ) ) {
+		if ( ! empty( $words_too_many ) ) {
 
 			$classes = $this->get_the_seo_bar_classes();
 			$bad = $classes['bad'];
 			$okay = $classes['okay'];
 
-			$words_count = count( $desc_too_many );
+			$words_count = count( $words_too_many );
 			//* Don't make it okay if it's already bad.
 			$class = $bad !== $class && $words_count <= 1 ? $okay : $bad;
 
 			$i = 1;
-			$count = count( $desc_too_many );
-			foreach ( $desc_too_many as $desc_array ) {
+			$count = count( $words_too_many );
+			foreach ( $words_too_many as $desc_array ) {
 				foreach ( $desc_array as $desc_value => $desc_count ) {
 					$notice .= ' ';
 
