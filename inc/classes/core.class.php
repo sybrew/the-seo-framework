@@ -569,15 +569,19 @@ class AutoDescription_Core {
 	}
 
 	/**
-	 * Counts words from input array.
+	 * Counts words encounters from input string.
+	 * Case insensitive. Returns first encounter of each word if found multiple times.
 	 *
 	 * @since 2.7.0
-	 * @staticvar itn $bother_me_length
+	 * @staticvar int $bother_me_length
 	 *
-	 * @param string $string The string to count words in.
+	 * @param string $string Required. The string to count words in.
+	 * @param int $amount Minimum amount of words to encounter in the string. Set to 0 to count all words longer than $bother_length.
+	 * @param int $amount_bother Minimum amount of words to encounter in the string that fall under the $bother_length. Set to 0 to count all words shorter than $bother_length.
+	 * @param int $bother_length The maximum string length of a word to pass for $amount_bother instead of $amount. Set to 0 to pass all words through $amount_bother
 	 * @return array Containing arrays of words with their count.
 	 */
-	public function get_word_count( $string = '' ) {
+	public function get_word_count( $string, $amount = 3, $amount_bother = 5, $bother_length = 3 ) {
 
 		//* Convert string's special characters into PHP readable words.
 		$string = htmlentities( $string, ENT_COMPAT, "UTF-8" );
@@ -595,7 +599,7 @@ class AutoDescription_Core {
 			 * @since 2.6.0
 			 */
 			if ( is_null( $bother_me_length ) )
-				$bother_me_length = (int) apply_filters( 'the_seo_framework_bother_me_desc_length', 3 );
+				$bother_me_length = (int) apply_filters( 'the_seo_framework_bother_me_desc_length', $bother_length );
 
 			//* We're going to fetch words based on position, and then flip it to become the key.
 			$word_keys = array_flip( array_reverse( $words, true ) );
@@ -607,9 +611,9 @@ class AutoDescription_Core {
 				foreach ( $word_count as $word => $count ) {
 
 					if ( mb_strlen( html_entity_decode( $word ) ) < $bother_me_length )
-						$run = $count >= 5;
+						$run = $count >= $amount_bother;
 					else
-						$run = $count >= 3;
+						$run = $count >= $amount;
 
 					if ( $run ) {
 						//* The encoded word is longer or equal to the bother lenght.

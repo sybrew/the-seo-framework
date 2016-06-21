@@ -1011,7 +1011,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	}
 
 	/**
-	 * Object cache handler for the query class.
+	 * Handles object cache for the query class.
 	 *
 	 * @since 2.7.0
 	 * @staticvar bool $can_cache_query : True when this function can run.
@@ -1066,8 +1066,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * @see AutoDescription_Query::get_query_cache()
 	 *
 	 * @param string $key The key to set.
-	 * @param mixed $value_to_set If null, it will reset the cache key.
-	 * @param mixed Extra arguments, that will be used to generate an alternative cache key.
+	 * @param mixed $value_to_set If null, no cache will be set.
+	 * @param mixed $hash Extra arguments, that will be used to generate an alternative cache key.
 	 * @return bool : {
 	 *		true If the value is being set for the first time.
 	 *		false If the value has been set and $value_to_set is being overwritten.
