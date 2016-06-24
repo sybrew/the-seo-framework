@@ -1085,7 +1085,7 @@ msgid "Output Facebook meta tags?"
 msgstr ""
 
 #: inc/classes/metaboxes.class.php:1422 inc/classes/metaboxes.class.php:1434
-msgid "Output various tags targetted at %s."
+msgid "Output various tags targeted at %s."
 msgstr ""
 
 #: inc/classes/metaboxes.class.php:1433
