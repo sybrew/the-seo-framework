@@ -167,13 +167,15 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	}
 
 	/**
-	 * Cache current Image URL in static variable
-	 * Must be called inside the loop
+	 * Caches current Image URL in static variable.
+	 * Must be called inside the loop.
 	 *
 	 * @staticvar string $image_cache
 	 *
 	 * @since 2.2.2
-	 * @return string The image url
+	 * @since 2.7.0 $get_id parameter has been added.
+	 *
+	 * @return string The image URL.
 	 */
 	public function get_image_from_cache() {
 
@@ -333,11 +335,14 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	}
 
 	/**
-	 * Adds og:image
+	 * Outputs og:image
 	 *
 	 * @param string $image url for image
 	 *
 	 * @since 1.3.0
+	 * @since 2.7.0 Added image dimensions if found.
+	 *
+	 * @return string OG Image output.
 	 */
 	public function og_image() {
 
@@ -376,6 +381,11 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 			 */
 			$output = '<meta property="og:image" content="' . esc_attr( $image ) . '" />' . "\r\n";
 
+			if ( ! empty( $this->image_dimensions[$id]['width'] ) && ! empty( $this->image_dimensions[$id]['height'] ) ) {
+				$output .= '<meta property="og:image:width" content="' . esc_attr( $this->image_dimensions[$id]['width'] ) . '" />' . "\r\n";
+				$output .= '<meta property="og:image:height" content="' . esc_attr( $this->image_dimensions[$id]['height'] ) . '" />' . "\r\n";
+			}
+
 			//* Fetch Product images.
 			$woocommerce_product_images = $this->render_woocommerce_product_og_image();
 
@@ -386,9 +396,10 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	}
 
 	/**
-	 * Render more OG images to choose from.
+	 * Outputs WooCommerce Product Gallery OG images.
 	 *
 	 * @since 2.6.0
+	 * @since 2.7.0 Added image dimensions if found.
 	 *
 	 * @return string The rendered OG Image.
 	 */
@@ -405,8 +416,14 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 					//* Parse 1500px url.
 					$img = $this->parse_og_image( $id );
 
-					if ( $img )
+					if ( $img ) {
 						$output .= '<meta property="og:image" content="' . esc_attr( $img ) . '" />' . "\r\n";
+
+						if ( ! empty( $this->image_dimensions[$id]['width'] ) && ! empty( $this->image_dimensions[$id]['height'] ) ) {
+							$output .= '<meta property="og:image:width" content="' . esc_attr( $this->image_dimensions[$id]['width'] ) . '" />' . "\r\n";
+							$output .= '<meta property="og:image:height" content="' . esc_attr( $this->image_dimensions[$id]['height'] ) . '" />' . "\r\n";
+						}
+					}
 				}
 			}
 		}

@@ -573,7 +573,6 @@ class AutoDescription_Core {
 	 * Case insensitive. Returns first encounter of each word if found multiple times.
 	 *
 	 * @since 2.7.0
-	 * @staticvar int $bother_me_length
 	 *
 	 * @param string $string Required. The string to count words in.
 	 * @param int $amount Minimum amount of words to encounter in the string. Set to 0 to count all words longer than $bother_length.
@@ -593,21 +592,19 @@ class AutoDescription_Core {
 
 		if ( is_array( $words ) ) {
 
-			static $bother_me_length = null;
 			/**
 			 * Applies filters 'the_seo_framework_bother_me_desc_length' : int Min Character length to bother you with.
 			 * @since 2.6.0
 			 */
-			if ( is_null( $bother_me_length ) )
-				$bother_me_length = (int) apply_filters( 'the_seo_framework_bother_me_desc_length', $bother_length );
-
-			//* We're going to fetch words based on position, and then flip it to become the key.
-			$word_keys = array_flip( array_reverse( $words, true ) );
+			$bother_me_length = (int) apply_filters( 'the_seo_framework_bother_me_desc_length', $bother_length );
 
 			$word_count = array_count_values( $words );
 
 			//* Parse word counting.
 			if ( is_array( $word_count ) ) {
+				//* We're going to fetch words based on position, and then flip it to become the key.
+				$word_keys = array_flip( array_reverse( $words, true ) );
+
 				foreach ( $word_count as $word => $count ) {
 
 					if ( mb_strlen( html_entity_decode( $word ) ) < $bother_me_length )
