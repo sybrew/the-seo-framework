@@ -88,7 +88,7 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 
 		//* 3. Fallback: Get header image if exists
 		if ( empty( $image ) && ( $all_allowed || ! in_array( 'header', $args['disallowed'] ) ) && current_theme_supports( 'custom-header', 'default-image' ) )
-			$image = $this->get_header_image();
+			$image = $this->get_header_image( true );
 
 		//* 4. Fetch image from fallback filter 2
 		if ( empty( $image ) )
@@ -380,21 +380,22 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 	}
 
 	/**
-	 * Returns header image URL. Also sets image dimensions. Falls back to
-	 * current post ID for index.
+	 * Returns header image URL.
+	 * Also sets image dimensions. Falls back to current post ID for index.
 	 *
 	 * @since 2.7.0
 	 *
-	 * @return string The header image URL.
+	 * @param bool $set_og_dimensions Whether to set size for OG image. Always falls back to the current post ID.
+	 * @return string The header image URL, not escaped.
 	 */
-	public function get_header_image() {
+	public function get_header_image( $set_og_dimensions = false ) {
 
 		$image = get_header_image();
 
-		if ( $image ) {
+		if ( $set_og_dimensions && $image ) {
 
-			$w = get_theme_support( 'custom-header', 'width' );
-			$h = get_theme_support( 'custom-header', 'height' );
+			$w = (int) get_theme_support( 'custom-header', 'width' );
+			$h = (int) get_theme_support( 'custom-header', 'height' );
 
 			if ( $w && $h )
 				$this->image_dimensions = $this->image_dimensions + array( $this->get_the_real_ID() => array( 'width' => $w, 'height' => $h ) );

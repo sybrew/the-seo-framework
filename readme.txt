@@ -318,7 +318,28 @@ TODO
 	* Public var `AutoDescription_Adminpages::network_pagehook`, without deprecation.
 **Filter notes:**
 	/
-	* TODO
+	* **Changed:**
+		/
+		* `(string) the_seo_framework_description_output`, first parameter now contains expected output.
+		* `(string) the_seo_framework_ogdescription_output`, first parameter now contains expected output.
+		* `(string) the_seo_framework_oglocale_output`, first parameter now contains expected output.
+		* `(string) the_seo_framework_ogtitle_output`, first parameter now contains expected output.
+		* `(string) the_seo_framework_ogtype_output`, first parameter now contains expected output.
+		* `(string) the_seo_framework_ogimage_output`, first parameter now contains expected output.
+		* `(string) the_seo_framework_ogsitename_output`, first parameter now contains expected output.
+		* `(string) the_seo_framework_twittercard_output`, first parameter now contains expected output.
+		* `(string) the_seo_framework_twittersite_output`, first parameter now contains expected output.
+		* `(string) the_seo_framework_twittercreator_output`, first parameter now contains expected output.
+		* `(string) the_seo_framework_twittertitle_output`, first parameter now contains expected output.
+		* `(string) the_seo_framework_twitterdescription_output`, first parameter now contains expected output.
+		* `(string) the_seo_framework_twitterimage_output`, first parameter now contains expected output.
+		* `(string) the_seo_framework_facebookauthor_output`, first parameter now contains expected output.
+		* `(string) the_seo_framework_facebookpublisher_output`, first parameter now contains expected output.
+		* `(string) the_seo_framework_facebookappid_output`, first parameter now contains expected output.
+		* `(string) the_seo_framework_publishedtime_output`, first parameter now contains expected output.
+		* `(string) the_seo_framework_modifiedtime_output`, first parameter now contains expected output.
+	* **Deprecated:**
+		* `(bool) the_seo_framework_output_canonical`, use `(string) the_seo_framework_rel_canonical_output` instead. Return empty to achieve the same results.
 **Notes:**
 	/
 	* TODO

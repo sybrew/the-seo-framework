@@ -310,4 +310,40 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 		return $default;
 	}
 
+	/**
+	 * Generates the Open Graph type based on query status.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @return string The Open Graph type.
+	 */
+	public function generate_og_type() {
+
+		if ( $this->is_wc_product() ) {
+			$type = 'product';
+		} else if ( $this->is_single() && $this->get_image_from_cache() ) {
+			$type = 'article';
+		} else if ( $this->is_author() ) {
+			$type = 'profile';
+		} else if ( $this->is_blog_page() || ( $this->is_front_page() && ! $this->has_page_on_front() ) ) {
+			$type = 'blog';
+		} else {
+			$type = 'website';
+		}
+
+		return $type;
+	}
+
+	/**
+	 * Generates the Twitter Card type. When there's an image found, it will
+	 * take the said option. Otherwise, it will fall back to 'summary'.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @return string The Twitter Card type.
+	 */
+	public function generate_twitter_card_type() {
+		return $this->get_image_from_cache() ? $this->get_option( 'twitter_card' ) : 'summary';
+	}
+
 }
