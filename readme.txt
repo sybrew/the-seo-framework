@@ -274,6 +274,8 @@ TODO
 	/
 	* General compatibility and other improvements for the upcoming extension manager.
 	* TODO The title and description counter type option is now bound to the user, rather than the site.
+	* Facebook image width and height meta tags output.
+	* Twitter image width and height meta tags output.
 	* TODO
 **Improved:**
 	/
@@ -283,6 +285,7 @@ TODO
 	/
 	* TODO
 	* The SEO Settings page is now a submenu page, name "SEO Settings". This change is only visible when another submenu is added.
+	* The Twitter Image URL output is now wrapped in the `twitter:image` meta tag instead of `twitter:image:src`, as the latter seems to be deprecated.
 **Updated:**
 	/
 	* TODO

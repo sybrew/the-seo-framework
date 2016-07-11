@@ -369,9 +369,11 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		 */
 		$output = '<meta property="og:image" content="' . esc_attr( $image ) . '" />' . "\r\n";
 
-		if ( ! empty( $this->image_dimensions[$id]['width'] ) && ! empty( $this->image_dimensions[$id]['height'] ) ) {
-			$output .= '<meta property="og:image:width" content="' . esc_attr( $this->image_dimensions[$id]['width'] ) . '" />' . "\r\n";
-			$output .= '<meta property="og:image:height" content="' . esc_attr( $this->image_dimensions[$id]['height'] ) . '" />' . "\r\n";
+		if ( $image ) {
+			if ( ! empty( $this->image_dimensions[$id]['width'] ) && ! empty( $this->image_dimensions[$id]['height'] ) ) {
+				$output .= '<meta property="og:image:width" content="' . esc_attr( $this->image_dimensions[$id]['width'] ) . '" />' . "\r\n";
+				$output .= '<meta property="og:image:height" content="' . esc_attr( $this->image_dimensions[$id]['height'] ) . '" />' . "\r\n";
+			}
 		}
 
 		//* Fetch Product images.
@@ -610,12 +612,20 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
 		 */
-		$image = (string) apply_filters( 'the_seo_framework_twitterimage_output', $this->get_image_from_cache(), $this->get_the_real_ID() );
+		$image = (string) apply_filters( 'the_seo_framework_twitterimage_output', $this->get_image_from_cache(), $id = $this->get_the_real_ID() );
 
-		if ( $image )
-			return '<meta name="twitter:image:src" content="' . esc_attr( $image ) . '" />' . "\r\n";
+		$output = '';
 
-		return '';
+		if ( $image ) {
+			$output = '<meta name="twitter:image" content="' . esc_attr( $image ) . '" />' . "\r\n";
+
+			if ( ! empty( $this->image_dimensions[$id]['width'] ) && ! empty( $this->image_dimensions[$id]['height'] ) ) {
+				$output .= '<meta name="twitter:image:width" content="' . esc_attr( $this->image_dimensions[$id]['width'] ) . '" />' . "\r\n";
+				$output .= '<meta name="twitter:image:height" content="' . esc_attr( $this->image_dimensions[$id]['height'] ) . '" />' . "\r\n";
+			}
+		}
+
+		return $output;
 	}
 
 	/**
