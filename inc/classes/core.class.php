@@ -42,6 +42,26 @@ class AutoDescription_Core {
 	}
 
 	/**
+	 * Fetches files based on input to reduce memory overhead.
+	 * Passes on input vars.
+	 *
+	 * @param string $view The file name.
+	 * @param array $args The arguments to be supplied within the file name.
+	 * 		Each array key is converted to a variable with its value attached.
+	 *
+	 * @credits Akismet For some code.
+	 */
+	protected function get_view( $view, array $args = array() ) {
+
+		foreach ( $args as $key => $val )
+			$$key = $val;
+
+		$file = THE_SEO_FRAMEWORK_DIR_PATH_VIEWS . $view . '.php';
+
+		include( $file );
+	}
+
+	/**
 	 * Proportionate dimensions based on Width and Height.
 	 * AKA Aspect Ratio.
 	 *
@@ -158,32 +178,56 @@ class AutoDescription_Core {
 
 	/**
 	 * Mark up content with code tags.
-	 *
 	 * Escapes all HTML, so `<` gets changed to `&lt;` and displays correctly.
 	 *
 	 * @since 2.0.0
 	 *
 	 * @param string $content Content to be wrapped in code tags.
-	 *
 	 * @return string Content wrapped in code tags.
 	 */
 	public function code_wrap( $content ) {
-		return '<code>' . esc_html( $content ) . '</code>';
+		return $this->code_wrap_noesc( esc_html( $content ) );
 	}
 
 	/**
 	 * Mark up content with code tags.
-	 *
 	 * Escapes no HTML.
 	 *
 	 * @since 2.2.2
 	 *
 	 * @param string $content Content to be wrapped in code tags.
-	 *
 	 * @return string Content wrapped in code tags.
 	 */
 	public function code_wrap_noesc( $content ) {
 		return '<code>' . $content . '</code>';
+	}
+
+	/**
+	 * Mark up content in description wrap.
+	 * Escapes all HTML, so `<` gets changed to `&lt;` and displays correctly.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param string $content Content to be wrapped in the description wrap.
+	 * @param bool $block Whether to wrap the content in <p> tags.
+	 * @return string Content wrapped int he description wrap.
+	 */
+	public function description( $content, $block = true ) {
+		$this->description_noesc( esc_html( $content ), $block );
+	}
+
+	/**
+	 * Mark up content in description wrap.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param string $content Content to be wrapped in the description wrap.
+	 * @param bool $block Whether to wrap the content in <p> tags.
+	 * @return string Content wrapped int he description wrap.
+	 */
+	public function description_noesc( $content, $block = true ) {
+		$output = '<span class="description">' . $content . '</span>';
+		echo $block ? '<p>' . $output . '</p>' : $output;
 	}
 
 	/**

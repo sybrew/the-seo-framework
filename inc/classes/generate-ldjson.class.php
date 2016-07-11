@@ -852,7 +852,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 		$filter = (bool) apply_filters( 'the_seo_framework_json_breadcrumb_output', true );
 		$option = $this->is_option_checked( 'ld_json_breadcrumbs' );
 
-		return $cache = $filter && $option ? true : false;
+		return $cache = $filter && $option;
 	}
 
 	/**
@@ -877,7 +877,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 		$filter = (bool) apply_filters( 'the_seo_framework_json_sitename_output', true );
 		$option = $this->is_option_checked( 'ld_json_sitename' );
 
-		return $cache = $filter && $option ? true : false;
+		return $cache = $filter && $option;
 	}
 
 	/**
@@ -902,7 +902,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 		$filter = (bool) apply_filters( 'the_seo_framework_json_search_output', true );
 		$option = $this->is_option_checked( 'ld_json_searchbox' );
 
-		return $cache = $filter && $option ? true : false;
+		return $cache = $filter && $option;
 	}
 
 	/**
@@ -927,7 +927,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 		$filter = (bool) apply_filters( 'the_seo_framework_json_knowledge_output', true );
 		$option = $this->is_option_checked( 'knowledge_output' );
 
-		return $cache = $filter && $option ? true : false;
+		return $cache = $filter && $option;
 	}
 
 }

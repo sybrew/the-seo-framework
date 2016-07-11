@@ -383,7 +383,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			}
 		}
 
-		return $detected = $detected ? true : false;
+		return $detected = (bool) $detected;
 	}
 
 	/**
@@ -429,7 +429,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			}
 		}
 
-		return $detected = $detected ? true : false;
+		return $detected = (bool) $detected;
 	}
 
 	/**
@@ -467,7 +467,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			}
 		}
 
-		return $detected = $detected ? true : false;
+		return $detected = (bool) $detected;
 	}
 
 	/**
@@ -516,7 +516,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			}
 		}
 
-		return $detected = $detected ? true : false;
+		return $detected = (bool) $detected;
 	}
 
 	/**
@@ -611,10 +611,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		if ( 3 === strlen( $wp_version ) )
 			$wp_version = $wp_version . '.0';
 
-		if ( version_compare( $wp_version, $version, $compare ) )
-			return $cache[$version][$compare] = true;
-
-		return $cache[$version][$compare] = false;
+		return $cache[$version][$compare] = (bool) version_compare( $wp_version, $version, $compare );
 	}
 
 	/**
@@ -692,7 +689,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			return $cache[$feature];
 		}
 
-		// No true value found so far, let's return false.
+		// No true value found so far, return false.
 		if ( ! isset( $cache[$features] ) )
 			$cache[$features] = false;
 
@@ -718,10 +715,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		global $_wp_theme_features;
 
-		if ( isset( $_wp_theme_features['title-tag'] ) && true === $_wp_theme_features['title-tag'] )
-			return $supports = true;
-
-		return $supports = false;
+		return $supports = isset( $_wp_theme_features['title-tag'] ) && true === $_wp_theme_features['title-tag'];
 	}
 
 	/**
@@ -914,7 +908,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		if ( ! isset( $get_locale ) )
 			$get_locale = get_locale();
 
-		return $cache[$locale] = false !== strpos( $get_locale, $locale ) ? true : false;
+		return $cache[$locale] = false !== strpos( $get_locale, $locale );
 	}
 
 	/**
@@ -1087,10 +1081,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		if ( isset( $fixed ) )
 			return $fixed;
 
-		if ( defined( 'THE_SEO_FRAMEWORK_TITLE_FIX' ) && THE_SEO_FRAMEWORK_TITLE_FIX )
-			return $fixed = true;
-
-		return $fixed = false;
+		return $fixed = defined( 'THE_SEO_FRAMEWORK_TITLE_FIX' ) && THE_SEO_FRAMEWORK_TITLE_FIX;
 	}
 
 	/**
@@ -1101,11 +1092,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * @return bool True if we can manipulate title.
 	 */
 	public function can_manipulate_title() {
-
-		if ( $this->theme_title_doing_it_right() || $this->theme_title_fix_active() )
-			return true;
-
-		return false;
+		return $this->theme_title_doing_it_right() || $this->theme_title_fix_active();
 	}
 
 	/**
@@ -1123,7 +1110,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		if ( isset( $pof ) )
 			return $pof;
 
-		return $pof = 'page' === get_option( 'show_on_front' ) ? true : false;
+		return $pof = 'page' === get_option( 'show_on_front' );
 	}
 
 }

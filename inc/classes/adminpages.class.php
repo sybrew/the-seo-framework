@@ -261,7 +261,8 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				__( 'Title Settings', 'autodescription' ),
 				array( $this, 'title_metabox' ),
 				$this->pagehook,
-				'main'
+				'main',
+				array()
 			);
 
 		//* Description Meta Box
@@ -271,7 +272,8 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				__( 'Description Meta Settings', 'autodescription' ),
 				array( $this, 'description_metabox' ),
 				$this->pagehook,
-				'main'
+				'main',
+				array()
 			);
 
 		//* Home Page Meta Box
@@ -281,7 +283,8 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				__( 'Home Page Settings', 'autodescription' ),
 				array( $this, 'homepage_metabox' ),
 				$this->pagehook,
-				'main'
+				'main',
+				array()
 			);
 
 		//* Social Meta Box
@@ -291,7 +294,8 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				__( 'Social Meta Settings', 'autodescription' ),
 				array( $this, 'social_metabox' ),
 				$this->pagehook,
-				'main'
+				'main',
+				array()
 			);
 
 		//* Knowledge Graph Meta Box
@@ -301,7 +305,8 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				__( 'Knowledge Graph Settings', 'autodescription' ),
 				array( $this, 'knowledge_metabox' ),
 				$this->pagehook,
-				'main'
+				'main',
+				array()
 			);
 
 		//* Title Meta Box
@@ -311,7 +316,8 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				__( 'Schema Settings', 'autodescription' ),
 				array( $this, 'schema_metabox' ),
 				$this->pagehook,
-				'main'
+				'main',
+				array()
 			);
 
 		//* Robots Meta Box
@@ -321,7 +327,8 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				__( 'Robots Meta Settings', 'autodescription' ),
 				array( $this, 'robots_metabox' ),
 				$this->pagehook,
-				'main'
+				'main',
+				array()
 			);
 
 		//* Webmaster Meta Box
@@ -331,7 +338,8 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				__( 'Webmaster Meta Settings', 'autodescription' ),
 				array( $this, 'webmaster_metabox' ),
 				$this->pagehook,
-				'main'
+				'main',
+				array()
 			);
 
 		//* Sitemaps Meta Box
@@ -341,7 +349,8 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				__( 'Sitemap Settings', 'autodescription' ),
 				array( $this, 'sitemaps_metabox' ),
 				$this->pagehook,
-				'main'
+				'main',
+				array()
 			);
 
 		//* Feed Meta Box
@@ -351,7 +360,8 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				__( 'Feed Settings', 'autodescription' ),
 				array( $this, 'feed_metabox' ),
 				$this->pagehook,
-				'main'
+				'main',
+				array()
 			);
 
 	}

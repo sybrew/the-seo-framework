@@ -471,7 +471,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		$title = $this->do_title_pre_filter( '', $args, false );
 		$blogname = '';
 
-		$is_front_page = $this->is_front_page() || $args['page_on_front'] || $this->is_static_frontpage( $args['term_id'] ) ? true : false;
+		$is_front_page = $this->is_front_page() || $args['page_on_front'] || $this->is_static_frontpage( $args['term_id'] );
 
 		$seplocation = $this->get_title_seplocation( $seplocation );
 
@@ -757,7 +757,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 
 				$title = empty( $term->admeta['doctitle'] ) ? $title : $term->admeta['doctitle'];
 
-				$flag = isset( $term->admeta['saved_flag'] ) && $this->is_checked( $term->admeta['saved_flag'] ) ? true : false;
+				$flag = isset( $term->admeta['saved_flag'] ) && $this->is_checked( $term->admeta['saved_flag'] );
 				if ( false === $flag && empty( $title ) && isset( $term->meta['doctitle'] ) )
 					$title = empty( $term->meta['doctitle'] ) ? $title : $term->meta['doctitle'];
 			}
@@ -1319,7 +1319,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		$filter = (bool) apply_filters( 'the_seo_framework_use_archive_title_prefix', true, $term );
 		$option = ! $this->get_option( 'title_rem_prefixes' );
 
-		return $cache = $option && $filter ? true : false;
+		return $cache = $option && $filter;
 	}
 
 	/**

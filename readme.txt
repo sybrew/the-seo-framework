@@ -282,11 +282,12 @@ TODO
 **Changed:**
 	/
 	* TODO
-	* TODO The SEO Settings page is now a submenu page, name "SEO Settings". This change is only visible when another submenu is added.
+	* The SEO Settings page is now a submenu page, name "SEO Settings". This change is only visible when another submenu is added.
 **Updated:**
 	/
 	* TODO
 	* TODO POT translation file.
+	* TODO The settings metaboxes order has been reset. This ensures that the General Settings are shown first after updating. (Unless you've filtered it? TODO confirm)
 **Fixed:**
 	/
 	* TODO
@@ -303,19 +304,32 @@ TODO
 	/
 	* Class contents `AutoDescription_Query` are now reworked to be much more effecient and predictable.
 	* Methods within `AutoDescription_Query` have been re-evaluated whether they use the WordPress query cache. If that holds true, the query object cache has been omitted from the said method.
+	* Improved plugin memory usage by 16%. TODO confirm again on release version.
 **Changed:**
 	/
 	* 'AutoDescription_Siteoptions::page_id' is now publicly accessible. Making it easier to add submenu items.
+	* All class `AutoDescription_Metaboxes` metabox output function parameters have been shifted by one. The first parameter is now used for the (unavailable) post object. The second must be an array. This change affects the following methods:
+		* `AutoDescription_Metaboxes::title_metabox`
+		* `AutoDescription_Metaboxes::description_metabox`
+		* `AutoDescription_Metaboxes::homepage_metabox`
+		* `AutoDescription_Metaboxes::social_metabox`
+		* `AutoDescription_Metaboxes::knowledge_metabox`
+		* `AutoDescription_Metaboxes::schema_metabox`
+		* `AutoDescription_Metaboxes::robots_metabox`
+		* `AutoDescription_Metaboxes::webmaster_metabox`
+		* `AutoDescription_Metaboxes::sitemaps_metabox`
+		* `AutoDescription_Metaboxes::feed_metabox`
+	* All class `AutoDescription_Metaboxes` metabox output functions have been put into "views". These view files are included upon calling them. The files that are attached can only be used within the plugin scope. This massively reduces the plugin memory overhead.
 **Fixed:**
 	/
 	* Function `the_seo_framework_dot_version()` now works as intended.
 	* Method `AutoDescription_Query::is_single()` first parameter can now be an array without crashing the site.
 **Removed:**
 	/
-	* Network admin methods. Network admin settings constants and filters are held intact for the future. Changes are listed below.
-	* Method `AutoDescription_Adminpages::add_network_menu_link()`, without deprecation.
-	* Method `AutoDescription_Adminpages::network_admin()`, without deprecation.
-	* Public var `AutoDescription_Adminpages::network_pagehook`, without deprecation.
+	* Unused network admin methods. Network admin settings constants and filters are held intact for the future. The related changes are listed below.
+		* Method `AutoDescription_Adminpages::add_network_menu_link()`, without deprecation.
+		* Method `AutoDescription_Adminpages::network_admin()`, without deprecation.
+		* Public var `AutoDescription_Adminpages::network_pagehook`, without deprecation.
 **Filter notes:**
 	/
 	* **Changed:**
@@ -340,6 +354,9 @@ TODO
 		* `(string) the_seo_framework_modifiedtime_output`, first parameter now contains expected output.
 	* **Deprecated:**
 		* `(bool) the_seo_framework_output_canonical`, use `(string) the_seo_framework_rel_canonical_output` instead. Return empty to achieve the same results.
+**Constant notes:**
+	* **Added:**
+		* `(string) THE_SEO_FRAMEWORK_DIR_PATH_VIEWS`
 **Notes:**
 	/
 	* TODO

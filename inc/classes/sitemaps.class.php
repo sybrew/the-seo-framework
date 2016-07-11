@@ -58,8 +58,8 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 	public function __construct() {
 		parent::__construct();
 
-		// I'm not going to initialize my own rewrite engine. Causes too many problems.
-		$this->pretty_permalinks = ( '' !== $this->permalink_structure() ) ? true : false;
+		//* Whether we're using pretty permalinks.
+		$this->pretty_permalinks = '' !== $this->permalink_structure();
 
 		/**
 		 * Add query strings to rewrite
@@ -99,7 +99,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		 * Don't do anything on a deleted or spam blog.
 		 * There's nothing to find anyway. Multisite Only.
 		 */
-		return $cache = $this->pretty_permalinks && $this->is_option_checked( 'sitemaps_output' ) && false === $this->current_blog_is_spam_or_deleted() ? true : false;
+		return $cache = $this->pretty_permalinks && $this->is_option_checked( 'sitemaps_output' ) && false === $this->current_blog_is_spam_or_deleted();
 	}
 
 	/**
@@ -183,10 +183,9 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 	/**
 	 * Destroy unused $GLOBALS.
 	 *
-	 * @param bool $get_freed_memory Whether to return the freed memory in bytes.
-	 *
 	 * @since 2.6.0
 	 *
+	 * @param bool $get_freed_memory Whether to return the freed memory in bytes.
 	 * @return int $freed_memory
 	 */
 	protected function clean_up_globals( $get_freed_memory = false ) {
@@ -424,7 +423,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 
 					if ( '' === $excluded || ! isset( $excluded[$post_id] ) ) {
 						//* Is this the front page?
-						$page_is_front = ( $page_id === $id_on_front ) ? true : false;
+						$page_is_front = $page_id === $id_on_front;
 
 						//* Fetch the noindex option, per page.
 						$noindex = (bool) $this->get_custom_field( '_genesis_noindex', $page_id );
@@ -709,7 +708,6 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 
 		/**
 		 * Don't ping if the blog isn't public.
-		 *
 		 * @since 2.3.1
 		 */
 		if ( false === $this->is_option_checked( 'site_noindex' ) && $this->is_blog_public() ) {

@@ -83,6 +83,12 @@ define( 'THE_SEO_FRAMEWORK_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 define( 'THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE', __FILE__ );
 
 /**
+ * The plugin views map absolute path.
+ * @since 2.7.0
+ */
+define( 'THE_SEO_FRAMEWORK_DIR_PATH_VIEWS', THE_SEO_FRAMEWORK_DIR_PATH . 'inc/views/' );
+
+/**
  * The plugin class map absolute path.
  * @since 2.2.9
  */

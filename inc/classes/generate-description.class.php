@@ -537,7 +537,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 		$option = (bool) $this->get_option( 'description_additions' );
 		$excerpt = ! $this->using_manual_excerpt;
 
-		return $cache = $option && $filter && $excerpt ? true : false;
+		return $cache = $option && $filter && $excerpt;
 	}
 
 	/**

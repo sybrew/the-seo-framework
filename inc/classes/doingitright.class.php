@@ -499,15 +499,15 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		$post = $args['post_i18n'];
 		$is_term = true;
 
-		$noindex = isset( $term->admeta['noindex'] ) && $this->is_checked( $term->admeta['noindex'] ) ? true : false;
+		$noindex = isset( $term->admeta['noindex'] ) && $this->is_checked( $term->admeta['noindex'] );
 		$redirect = false; // We don't apply redirect on taxonomies (yet)
 
-		$ad_savedflag = isset( $term->admeta['saved_flag'] ) && $this->is_checked( $term->admeta['saved_flag'] ) ? true : false;
+		$ad_savedflag = isset( $term->admeta['saved_flag'] ) && $this->is_checked( $term->admeta['saved_flag'] );
 		$flag = $ad_savedflag;
 
 		//* Genesis data fetch
 		if ( false === $noindex && false === $flag && isset( $term->meta['noindex'] ) )
-			$noindex = $this->is_checked( $term->meta['noindex'] ) ? true : false;
+			$noindex = $this->is_checked( $term->meta['noindex'] );
 
 		//* Blocked SEO, return simple bar.
 		if ( $redirect || $noindex )
@@ -624,7 +624,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		$post_id = $args['post_id'];
 		$taxonomy = $args['type'];
 
-		$flag = isset( $term->admeta['saved_flag'] ) && $this->is_checked( $term->admeta['saved_flag'] ) ? true : false;
+		$flag = isset( $term->admeta['saved_flag'] ) && $this->is_checked( $term->admeta['saved_flag'] );
 
 		$title_custom_field = isset( $term->admeta['doctitle'] ) ? $term->admeta['doctitle'] : '';
 		$description_custom_field = isset( $term->admeta['description'] ) ? $term->admeta['description'] : '';
@@ -1600,10 +1600,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		if ( isset( $cache ) )
 			return $cache;
 
-		//* TODO add option.
-		$filter = (bool) apply_filters( 'the_seo_framework_seo_bar_pill', false );
-
-		return $cache = $filter ? true : false;
+		return $cache = (bool) apply_filters( 'the_seo_framework_seo_bar_pill', false );
 	}
 
 }
