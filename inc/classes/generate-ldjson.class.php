@@ -426,11 +426,11 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 								$pos = $position + 2;
 
 								$cat = get_term_by( 'id', $child_id, $cat_type, OBJECT, 'raw' );
+								$data = $this->get_term_data( $cat, $child_id );
 
 								$id = json_encode( $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'is_term' => true, 'term' => $cat ) ) );
 
-								$custom_field_name = isset( $cat->admeta['doctitle'] ) ? $cat->admeta['doctitle'] : '';
-								$cat_name = $custom_field_name ? $custom_field_name : $cat->name;
+								$cat_name = empty( $data['doctitle'] ) ? $cat->name : $data['doctitle'];
 								$name = json_encode( $cat_name );
 
 								//* Store in cache.
@@ -464,11 +464,11 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 
 					//* $tree_ids is a single ID here.
 					$cat = get_term_by( 'id', $tree_ids, $cat_type, OBJECT, 'raw' );
+					$data = $this->get_term_data( $cat, $tree_ids );
 
 					$id = json_encode( $this->the_url( '', array( 'get_custom_field' => false, 'is_term' => true, 'external' => true, 'term' => $cat ) ) );
 
-					$custom_field_name = isset( $cat->admeta['doctitle'] ) ? $cat->admeta['doctitle'] : '';
-					$cat_name = $custom_field_name ? $custom_field_name : $cat->name;
+					$cat_name = empty( $data['doctitle'] ) ? $cat->name : $data['doctitle'];
 					$name = json_encode( $cat_name );
 
 					$items .= sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}},', $item_type, (string) $pos, $id, $name );

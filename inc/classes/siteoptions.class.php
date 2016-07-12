@@ -66,7 +66,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 		add_action( 'admin_init', array( $this, 'register_settings' ), 5 );
 
 		//* Update site options at plugin update.
-		add_action( 'admin_init', array( $this, 'site_updated_plugin_option' ), 10 );
+		add_action( 'admin_init', array( $this, 'site_updated_plugin_option' ), 30 );
 
 	}
 
@@ -672,6 +672,26 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			exit;
 		}
 
+	}
+
+	/**
+	 * Allows updating of settings.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param string|array $new The new setting(s).
+	 * @param string $settings_field The Settings Field to update. Defaults
+	 *				to The SEO Framework settings field.
+	 */
+	public function update_settings( $new = '', $settings_field = '' ) {
+
+		if ( empty( $settings_field ) )
+			$settings_field = $this->settings_field;
+
+		$old = get_option( $settings_field );
+		$settings = wp_parse_args( $new, $old );
+
+		return update_option( $settings_field, $settings );
 	}
 
 	/**

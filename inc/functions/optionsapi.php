@@ -21,13 +21,6 @@
  * from The SEO FrameWork.
  *
  * @since 2.2.5
- *
- * We could bombard it with every public function, but that's very time consuming.
- * I'll add a bunch of functions on 2nd dot (v.X.v) release. e.g. 2.3.0, 2.4.0, etc.
- *
- * This will allow version comparing more easily (as you'll know how many users
- * use v.X version through the WordPress plugin stats.).
- * Therefore reducing work for you.
  */
 
 /**
@@ -111,6 +104,7 @@ function the_seo_framework_active() {
  * @return bool true if Version passes comparison.
  */
 function tsf_wp_version( $version = '4.3.0', $compare = '>=' ) {
+
 	$theseoframework = the_seo_framework();
 
 	if ( isset( $theseoframework ) )
@@ -224,6 +218,23 @@ function the_seo_framework_is_settings_page() {
 
 	if ( isset( $theseoframework ) )
 		return $theseoframework->is_seo_settings_page();
+
+	return false;
+}
+
+/**
+ * Updates The SEO Framework site options.
+ *
+ * @since 2.7.0
+ *
+ * @return bool True on success. False on failure.
+ */
+function the_seo_framework_update_option( $new_option ) {
+
+	$theseoframework = the_seo_framework();
+
+	if ( isset( $theseoframework ) )
+		return $theseoframework->update_settings( $new_option );
 
 	return false;
 }

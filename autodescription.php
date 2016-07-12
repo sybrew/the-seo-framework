@@ -45,6 +45,12 @@
 define( 'THE_SEO_FRAMEWORK_VERSION', '2.7.0dev' );
 
 /**
+ * Plugin Database version for lightweight version comparing.
+ * @since 2.7.0
+ */
+define( 'THE_SEO_FRAMEWORK_DB_VERSION', '2700' );
+
+/**
  * Plugin options filter.
  * @since 2.2.2
  */
@@ -55,6 +61,12 @@ define( 'THE_SEO_FRAMEWORK_SITE_OPTIONS', (string) apply_filters( 'the_seo_frame
  * @since 2.2.2
  */
 define( 'THE_SEO_FRAMEWORK_NETWORK_OPTIONS', (string) apply_filters( 'the_seo_framework_network_settings', 'autodescription-network-settings' ) );
+
+/**
+ * Plugin term options filter.
+ * @since 2.7.0
+ */
+define( 'THE_SEO_FRAMEWORK_TERM_OPTIONS', (string) apply_filters( 'the_seo_framework_term_options', 'autodescription-term-settings' ) );
 
 /**
  * The plugin map url.

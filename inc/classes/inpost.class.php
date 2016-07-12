@@ -291,17 +291,17 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 		//* Get the language the Google page should assume.
 		$language = $this->google_language();
 
-		$data = $this->get_term_data( $object );
+		//* Fetch Term ID and taxonomy.
+		$term_id = $object->term_id;
+		$taxonomy = $object->taxonomy;
+
+		$data = $this->get_term_data( $object, $term_id );
 
 		$title = isset( $data['title'] ) ? $data['title'] : '';
 		$description = isset( $data['description'] ) ? $data['description'] : '';
 		$noindex = isset( $data['noindex'] ) ? $data['noindex'] : '';
 		$nofollow = isset( $data['nofollow'] ) ? $data['nofollow'] : '';
 		$noarchive = isset( $data['noarchive'] ) ? $data['noarchive'] : '';
-
-		//* Fetch Term ID and taxonomy.
-		$term_id = $object->term_id;
-		$taxonomy = $object->taxonomy;
 
 		$generated_doctitle_args = array(
 			'term_id' => $term_id,

@@ -89,7 +89,8 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		//* Delete Sitemap transient on permalink structure change.
 		add_action( 'load-options-permalink.php', array( $this, 'delete_sitemap_transient_permalink_updated' ), 20 );
 
-		add_action( 'update_option_blogdescription', array( $this, 'delete_auto_description_blog_transient' ), 10, 1 );
+		//* Deletes front page description transient on Tagline change.
+		add_action( 'update_option_blogdescription', array( $this, 'delete_auto_description_frontpage_transient' ), 10, 1 );
 
 		//* Delete doing it wrong transient after theme switch.
 		add_action( 'after_switch_theme', array( $this, 'delete_theme_dir_transient' ), 10 );
@@ -207,7 +208,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		 *
 		 * Use hex. e.g. 0, 1, 2, 9, a, b
 		 */
-		$revision = '7';
+		$revision = '0';
 
 		/**
 		 * Change key based on options.
@@ -216,7 +217,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		$options .= $this->enable_ld_json_sitename() ? '1' : '0';
 		$options .= $this->enable_ld_json_searchbox() ? '1' : '0';
 
-		$this->ld_json_transient = 'the_seo_f' . $revision . '_' . $options . '_ldjs_' . $cache_key;
+		$this->ld_json_transient = 'tsf_' . $revision . '_' . $options . '_ldjs_' . $cache_key;
 	}
 
 	/**
@@ -542,15 +543,15 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	 * @param string $old_option The previous blog description option.
 	 * @return string Previous option.
 	 */
-	public function delete_auto_description_blog_transient( $old_option ) {
+	public function delete_auto_description_frontpage_transient( $old_option ) {
 
-		$this->setup_auto_description_transient( (int) get_option( 'page_for_posts' ) );
+		$this->setup_auto_description_transient( $this->get_the_front_page_ID(), '', 'frontpage' );
 
 		delete_transient( $this->auto_description_transient );
 
 		return $old_option;
 	}
-
+	
 	/**
 	 * Delete transient for the automatic description on requests.
 	 *

@@ -1113,4 +1113,24 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		return $pof = 'page' === get_option( 'show_on_front' );
 	}
 
+
+	/**
+	 * Determines whether we can use the new WordPress core term meta functionality.
+	 *
+	 * @since 2.7.0
+	 * @staticvar bool $cache
+	 *
+	 * @return bool True when WordPress is at version 4.4 or higher and has an
+	 *				accordingly upgraded database.
+	 */
+	public function can_get_term_meta() {
+
+		static $cache = null;
+
+		if ( isset( $cache ) )
+			return $cache;
+
+		return $cache = get_option( 'db_version' ) >= 34370 && get_option( 'the_seo_framework_upgraded_db_version' ) >= '2700' && $this->wp_version( '4.4' );
+	}
+
 }

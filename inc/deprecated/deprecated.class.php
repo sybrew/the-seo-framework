@@ -657,4 +657,188 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 		$this->_deprecated_function( 'AutoDescription_Metaboxes::' . __FUNCTION__, '2.7.0', 'AutoDescription_Metaboxes::homepage_metabox_robots_tab()' );
 		$this->get_view( 'metaboxes/homepage-metabox', array(), 'robots' );
 	}
+
+	/**
+	 * Delete transient for the automatic description for blog on save request.
+	 * Returns old option, since that's passed for sanitation within WP Core.
+	 *
+	 * @since 2.3.3
+	 *
+	 * @deprecated
+	 * @since 2.7.0
+	 *
+	 * @param string $old_option The previous blog description option.
+	 * @return string Previous option.
+	 */
+	public function delete_auto_description_blog_transient( $old_option ) {
+
+		$this->_deprecated_function( 'AutoDescription_Transients::' . __FUNCTION__, '2.7.0', 'AutoDescription_Transients::delete_auto_description_frontpage_transient()' );
+
+		$this->setup_auto_description_transient( $this->get_the_front_page_ID(), '', 'frontpage' );
+
+		delete_transient( $this->auto_description_transient );
+
+		return $old_option;
+	}
+
+	/**
+	 * Add term meta data into options table of the term.
+	 * Adds separated database options for terms, as the terms table doesn't allow for addition.
+	 *
+	 * Applies filters array the_seo_framework_term_meta_defaults : Array of default term SEO options
+	 * Applies filters mixed the_seo_framework_term_meta_{field} : Override filter for specifics.
+	 * Applies filters array the_seo_framework_term_meta : Override output for term or taxonomy.
+	 *
+	 * @since 2.1.8
+	 *
+	 * @deprecated silently.
+	 * @since WordPress 4.4.0
+	 * @since The SEO Framework 2.7.0
+	 *
+	 * @param object $term     Database row object.
+	 * @param string $taxonomy Taxonomy name that $term is part of.
+	 * @return object $term Database row object.
+	 */
+	public function get_term_filter( $term, $taxonomy ) {
+
+		//* Do nothing, if $term is not an object.
+		if ( ! is_object( $term ) )
+			return $term;
+
+		/**
+		 * No need to process this data outside of the Terms' scope.
+		 * @since 2.6.0
+		 */
+		if ( false === is_admin() && false === is_archive() )
+			return $term;
+
+		/**
+		 * No need to process this after the data has already been output.
+		 * @since 2.6.0
+		 */
+		if ( did_action( 'the_seo_framework_do_after_output' ) )
+			return $term;
+
+		/**
+		 * Do nothing if called in the context of creating a term via an Ajax call to prevent data conflict.
+		 * @since 2.1.8
+		 *
+		 * @since 2.6.0 delay did_action call as it's a heavy array call.
+		 */
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX && did_action( 'wp_ajax_add-tag' ) )
+			return $term;
+
+		$db = get_option( 'autodescription-term-meta' );
+		$term_meta = isset( $db[$term->term_id] ) ? $db[$term->term_id] : array();
+
+		$term->admeta = wp_parse_args( $term_meta, $this->get_term_meta_defaults() );
+
+		//* Sanitize term meta
+		foreach ( $term->admeta as $field => $value ) {
+
+			/**
+			 * Trim and sanitize the title beforehand.
+			 * @since 2.5.0
+			 */
+			if ( 'doctitle' === $field )
+				$value = trim( strip_tags( $value ) );
+
+			/**
+			 * Trim and sanitize the description beforehand.
+			 * @since 2.5.0
+			 */
+			if ( 'description' === $field )
+				$value = $this->s_description( $value );
+
+			/**
+			 * @param object $term The Term object.
+			 * @param string $taxonomy The Taxonomy name.
+			 */
+			$term->admeta[$field] = (string) apply_filters( "the_seo_framework_term_meta_{$field}", stripslashes( wp_kses_decode_entities( $value ) ), $term, $taxonomy );
+		}
+
+		/**
+		 * @param object $term The Term object.
+		 * @param array $taxonomy The Taxonomy name.
+		 */
+		$term->admeta = (array) apply_filters( 'the_seo_framework_term_meta', $term->admeta, $term, $taxonomy );
+
+		return $term;
+	}
+
+	/**
+	 * Adds The SEO Framework term meta data to functions that return multiple terms.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @deprecated silently.
+	 * @since WordPress 4.4.0
+	 * @since The SEO Framework 2.7.0
+	 *
+	 * @param array  $terms    Database row objects.
+	 * @param string $taxonomy Taxonomy name that $terms are part of.
+	 * @return array $terms Database row objects.
+	 */
+	public function get_terms_filter( array $terms, $taxonomy ) {
+
+		foreach ( $terms as $term )
+			$term = $this->get_term_filter( $term, $taxonomy );
+
+		return $terms;
+	}
+
+	/**
+	 * Save taxonomy meta data.
+	 * Fires when a user edits and saves a taxonomy.
+	 *
+	 * @since 2.1.8
+	 *
+	 * @deprecated silently.
+	 * @since WordPress 4.4.0
+	 * @since The SEO Framework 2.7.0
+	 *
+	 * @param integer $term_id Term ID.
+	 * @param integer $tt_id   Term Taxonomy ID.
+	 * @return void Early on AJAX call.
+	 */
+	public function taxonomy_seo_save( $term_id, $tt_id ) {
+
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX )
+			return;
+
+		$term_meta = (array) get_option( 'autodescription-term-meta' );
+
+		$term_meta[$term_id] = isset( $_POST['autodescription-meta'] ) ? (array) $_POST['autodescription-meta'] : array();
+
+		//* Pass through wp_kses if not super admin.
+		if ( ! current_user_can( 'unfiltered_html' ) && isset( $term_meta[$term_id]['archive_description'] ) )
+			$term_meta[$term_id]['archive_description'] = wp_kses( $term_meta[$term_id]['archive_description'] );
+
+		update_option( 'autodescription-term-meta', $term_meta );
+
+	}
+
+	/**
+	 * Delete term meta data.
+	 * Fires when a user deletes a term.
+	 *
+	 * @since 2.1.8
+	 *
+	 * @deprecated silently.
+	 * @since WordPress 4.4.0
+	 * @since The SEO Framework 2.7.0
+	 *
+	 * @param integer $term_id Term ID.
+	 * @param integer $tt_id   Taxonomy Term ID.
+	 */
+	public function term_meta_delete( $term_id, $tt_id ) {
+
+		$term_meta = (array) get_option( 'autodescription-term-meta' );
+
+		unset( $term_meta[$term_id] );
+
+		update_option( 'autodescription-term-meta', (array) $term_meta );
+
+	}
+
 }

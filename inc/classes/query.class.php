@@ -175,10 +175,12 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
-		if ( isset( $_REQUEST['tag_ID'] ) && $_REQUEST['tag_ID'] ) {
+		$term_id = 0;
+
+		if ( ! empty( $_REQUEST['tag_ID'] ) ) {
 			//* WordPress 4.5+
 			$term_id = $_REQUEST['tag_ID'];
-		} else if ( isset( $_REQUEST['term_id'] ) && $_REQUEST['term_id'] ) {
+		} else if ( ! empty( $_REQUEST['term_id'] ) ) {
 			//* Older WordPress versions.
 			$term_id = $_REQUEST['term_id'];
 		}

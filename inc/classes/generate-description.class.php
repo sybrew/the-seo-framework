@@ -284,27 +284,11 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
 
 				$term = $this->fetch_the_term( $args['id'] );
+				$data = $this->get_term_data( $term, $args['id'] );
 
-				if ( isset( $term->admeta['description'] ) ) {
-					if ( $this->is_tax() )
-						$description = empty( $term->admeta['description'] ) ? $description : wp_kses_stripslashes( wp_kses_decode_entities( $term->admeta['description'] ) );
-					else
-						$description = empty( $term->admeta['description'] ) ? $description : $term->admeta['description'];
-				}
-
-				$flag = isset( $term->admeta['saved_flag'] ) ? $this->is_checked( $term->admeta['saved_flag'] ) : false;
-
-				if ( false === $flag && empty( $description ) && isset( $term->meta['description'] ) )
-					$description = empty( $term->meta['description'] ) ? $description : $term->meta['description'];
+				$description = empty( $data['description'] ) ? $description : $data['description'];
 			}
-
-			/**
-			 * @TODO add filter.
-			 * @priority medium 2.7.0
-			 */
-			// if ( $this->is_author() ) {}
 		}
-
 
 		return $description;
 	}
@@ -655,14 +639,16 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 				 */
 				/* translators: Front-end output. */
 				$title = __( 'Latest posts:', 'autodescription' ) . ' ' . $title;
-			} else if ( $term && is_object( $term ) ) {
+			} else if ( $term && isset( $term->term_id ) ) {
 				//* We're on a taxonomy now.
 
-				if ( isset( $term->admeta['doctitle'] ) && $term->admeta['doctitle'] ) {
-					$title = $term->admeta['doctitle'];
-				} else if ( isset( $term->name ) && $term->name ) {
+				$data = $this->get_term_data( $term, $term->term_id );
+
+				if ( ! empty( $data['doctitle'] ) ) {
+					$title = $data['doctitle'];
+				} else if ( ! empty( $term->name ) ) {
 					$title = $term->name;
-				} else if ( isset( $term->slug ) && $term->slug ) {
+				} else if ( ! empty( $term->slug ) ) {
 					$title = $term->slug;
 				}
 			} else {
@@ -705,7 +691,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 			if ( $this->is_singular( $page_id ) ) {
 				//* We're on the blog page now.
 				$excerpt = $this->get_excerpt_by_id( '', $page_id );
-			} else if ( $term && is_object( $term ) ) {
+			} else if ( $term_id ) {
 				//* We're on a taxonomy now.
 				$excerpt = empty( $term->description ) ? $this->get_excerpt_by_id( '', '', $page_id ) : $this->s_description( $term->description );
 			} else if ( $this->is_author() ) {

@@ -16,6 +16,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+add_action( 'admin_init', 'the_seo_framework_upgrade', 5 );
+/**
+ * Determines whether the plugin needs an option upgrade.
+ *
+ * @action admin_init
+ * @priority 5
+ *
+ * @since 2.7.0
+ */
+function the_seo_framework_upgrade() {
+
+	if ( false === the_seo_framework_active() )
+		return;
+
+	if ( get_option( 'the_seo_framework_upgraded_db_version' ) >= THE_SEO_FRAMEWORK_DB_VERSION )
+		return;
+
+	require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'upgrade.php' );
+}
+
 add_action( 'plugins_loaded', 'the_seo_framework_init', 5 );
 /**
  * Load The_SEO_Framework_Load class
@@ -29,6 +49,7 @@ add_action( 'plugins_loaded', 'the_seo_framework_init', 5 );
  * @since 2.2.5
  */
 function the_seo_framework_init() {
+
 	//* Cache the class. Do not run everything more than once.
 	static $the_seo_framework = null;
 
@@ -40,19 +61,14 @@ function the_seo_framework_init() {
 }
 
 /**
- * Allow this plugin to load through filter
+ * Determines whether this plugin should load.
  *
- * Applies the_seo_framework_load filters.
- *
- * @return bool allow loading of plugin
- *
- * @since 2.1.0
- * @staticvar bool $loaded
- *
- * New function name.
  * @since 2.3.7
+ * @staticvar bool $loaded
+ * Applies filters 'the_seo_framework_load' : bool
  *
  * @action plugins_loaded
+ * @return bool Whether to allow loading of plugin.
  */
 function the_seo_framework_load() {
 

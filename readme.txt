@@ -273,14 +273,17 @@ TODO
 **Added:**
 	/
 	* General compatibility and other improvements for the upcoming extension manager.
-	* TODO The title and description counter type option is now bound to the user, rather than the site.
 	* Facebook image width and height meta tags output.
 	* Twitter image width and height meta tags output.
+	* Genesis 2.3.0+ term metadata fallback compatibility.
 	* TODO
 **Improved:**
 	/
 	* TODO
+	* TODO The title and description counter type option is now bound to the user, rather than the site.
 	* Dismissible notices are now dismissible on every admin page when called.
+	* The term meta data is now handled through WordPress 4.4 or later functionality, if present.
+		* Note: From The SEO Framework 2.8.0, backwards compatibility towards version 2.6.6.2 or lower will be removed in order to clean up the database.
 **Changed:**
 	/
 	* TODO
@@ -296,18 +299,27 @@ TODO
 	* TODO
 	* TODO When saving the Site Options, the counter type was reset. This has been fixed by placing the counter type option out of the plugins options scope.
 	* TODO When updating the plugin, without added options, the update notification now really should no longer show up. ^related
+	* When changing the WordPress Core tagline settings, the homepage description transient is now flushed, instead of the blog page (which could be on another page).
 
 **For developers:**
-/
+/s
 TODO
 **Added:**
 	/
 	* TODO
+	* Function `the_seo_framework_update_option()`, this allows you to update options remotely.
 **Improved:**
 	/
 	* Class contents `AutoDescription_Query` are now reworked to be much more effecient and predictable.
 	* Methods within `AutoDescription_Query` have been re-evaluated whether they use the WordPress query cache. If that holds true, the query object cache has been omitted from the said method.
 	* Reduced plugin memory usage by 16%. TODO confirm again on release version.
+	* Shortened the transient name for the LD+Json output. This ensures high post ID number transients are working correctly on old WordPress database versions.
+	* TODO This plugin has once more been profiled with xDebug to ensure the highest performance and eliminate culprits.
+	* Method that alter the term data on request will no longer run if the term data has been updated to WordPress 4.4 standards. The affected methods are:
+		* `AutoDescription_TermData::get_term_filter()`
+		* `AutoDescription_TermData::get_terms_filter()`
+		* `AutoDescription_TermData::taxonomy_seo_save()`
+		* `AutoDescription_TermData::term_meta_delete()`
 **Changed:**
 	/
 	* 'AutoDescription_Siteoptions::page_id' is now publicly accessible. Making it easier to add submenu items.
@@ -323,6 +335,7 @@ TODO
 		* `AutoDescription_Metaboxes::sitemaps_metabox`
 		* `AutoDescription_Metaboxes::feed_metabox`
 	* All class `AutoDescription_Metaboxes` metabox output functions have been put into "views". These view files are included upon calling them. The files that are attached can only be used within the plugin scope. This massively reduces the plugin memory overhead.
+	* Method `AutoDescription_TermData::get_term_data()` no longer returns `null` on author request.
 **Fixed:**
 	/
 	* Function `the_seo_framework_dot_version()` now works as intended.
@@ -345,14 +358,21 @@ TODO
 		* `autodescription_version()`
 		* `scripts()`
 		* `setup_transient_names_init()`
+	* Method `AutoDescription_TermData::init_term_filters()`, without deprecation as it was marked private.
 **Deprecated:**
 	/
 	* `AutoDescription_Metaboxes::homepage_metabox_general()`, use `AutoDescription_Metaboxes::homepage_metabox_general_tab()` instead.
 	* `AutoDescription_Metaboxes::homepage_metabox_additions()`, use `AutoDescription_Metaboxes::homepage_metabox_additions_tab()` instead.
 	* `AutoDescription_Metaboxes::homepage_metabox_robots()`, use `AutoDescription_Metaboxes::homepage_metabox_robots_tab()` instead.
-
+	* `AutoDescription_Transients::delete_auto_description_blog_transient()`, use `AutoDescription_Metaboxes::delete_auto_description_frontpage_transient()` instead.
+**Action notes:**
+	* **Added:**
+		* `the_seo_framework_upgraded`, Runs once after the plugin has finished upgrading. Only on WordPress 4.4 and later.
 **Filter notes:**
 	/
+	* **Added:**
+		/
+		* `(string) the_seo_framework_term_options`, the WordPress 4.4+ metadata key.
 	* **Changed:**
 		/
 		* `(string) the_seo_framework_description_output`, first parameter now contains expected output.
@@ -377,7 +397,9 @@ TODO
 		* `(bool) the_seo_framework_output_canonical`, use `(string) the_seo_framework_rel_canonical_output` instead. Return empty to achieve the same results.
 **Constant notes:**
 	* **Added:**
+		* `(string) THE_SEO_FRAMEWORK_DB_VERSION`
 		* `(string) THE_SEO_FRAMEWORK_DIR_PATH_VIEWS`
+		* `(string) THE_SEO_FRAMEWORK_TERM_OPTIONS`
 **Notes:**
 	/
 	* TODO

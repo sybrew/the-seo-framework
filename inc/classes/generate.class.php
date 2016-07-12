@@ -84,13 +84,15 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 				$meta['noindex'] = 'noindex';
 		}
 
-		if ( $this->is_category() || $this->is_tag() ) {
-			$term = get_queried_object();
+		if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
 
-			$meta['noindex']   = empty( $meta['noindex'] ) && $term->admeta['noindex'] ? 'noindex' : $meta['noindex'];
-			$meta['nofollow']  = empty( $meta['nofollow'] ) && $term->admeta['nofollow'] ? 'nofollow' : $meta['nofollow'];
-			$meta['noarchive'] = empty( $meta['noarchive'] ) && $term->admeta['noarchive'] ? 'noarchive' : $meta['noarchive'];
+			$data = $this->get_term_data();
 
+			$meta['noindex']   = empty( $meta['noindex'] ) && ! empty( $data['noindex'] ) ? 'noindex' : $meta['noindex'];
+			$meta['nofollow']  = empty( $meta['nofollow'] ) && ! empty( $data['nofollow'] ) ? 'nofollow' : $meta['nofollow'];
+			$meta['noarchive'] = empty( $meta['noarchive'] ) && ! empty( $data['noarchive'] ) ? 'noarchive' : $meta['noarchive'];
+
+			//* If on custom Taxonomy page, but not a category or tag, then should've recieved specific term SEO settings.
 			if ( $this->is_category() ) {
 				$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'category_noindex' ) ? 'noindex' : $meta['noindex'];
 				$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'category_nofollow' ) ? 'nofollow' : $meta['nofollow'];
@@ -100,37 +102,9 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 				$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'tag_nofollow' ) ? 'nofollow' : $meta['nofollow'];
 				$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'tag_noindex' ) ? 'noarchive' : $meta['noarchive'];
 			}
-
-			$flag = isset( $term->admeta['saved_flag'] ) && $this->is_checked( $term->admeta['saved_flag'] );
-
-			if ( false === $flag && isset( $term->meta ) ) {
-				//* Genesis support.
-				$meta['noindex']   = empty( $meta['noindex'] ) && isset( $term->meta['noindex'] ) && $term->meta['noindex'] ? 'noindex' : $meta['noindex'];
-				$meta['nofollow']  = empty( $meta['nofollow'] ) && isset( $term->meta['nofollow'] ) && $term->meta['nofollow'] ? 'nofollow' : $meta['nofollow'];
-				$meta['noarchive'] = empty( $meta['noarchive'] ) && isset( $term->meta['noarchive'] ) && $term->meta['noarchive'] ? 'noarchive' : $meta['noarchive'];
-			}
-		}
-
-		// Is custom Taxonomy page. But not a category or tag. Should've recieved specific term SEO settings.
-		if ( $this->is_tax() ) {
-			$term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
-
-			$meta['noindex']   = empty( $meta['noindex'] ) && $term->admeta['noindex'] ? 'noindex' : $meta['noindex'];
-			$meta['nofollow']  = empty( $meta['nofollow'] ) && $term->admeta['nofollow'] ? 'nofollow' : $meta['nofollow'];
-			$meta['noarchive'] = empty( $meta['noarchive'] ) && $term->admeta['noarchive'] ? 'noarchive' : $meta['noarchive'];
 		}
 
 		if ( $this->is_author() ) {
-			// $author_id = (int) get_query_var( 'author' );
-
-			/**
-			 * @todo
-			 * @priority high 2.6.x
-			 */
-			// $meta['noindex']   = empty( $meta['noindex'] ) && get_the_author_meta( 'noindex', $author_id ) ? 'noindex' : $meta['noindex'];
-			// $meta['nofollow']  = empty( $meta['nofollow'] ) && get_the_author_meta( 'nofollow', $author_id ) ? 'nofollow' : $meta['nofollow'];
-			// $meta['noarchive'] = empty( $meta['noarchive'] ) && get_the_author_meta( 'noarchive', $author_id ) ? 'noarchive' : $meta['noarchive'];
-
 			$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'author_noindex' ) ? 'noindex' : $meta['noindex'];
 			$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'author_nofollow' ) ? 'nofollow' : $meta['nofollow'];
 			$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'author_noarchive' ) ? 'noarchive' : $meta['noarchive'];

@@ -404,14 +404,13 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 				'type' => $type,
 			);
 
-			if ( $is_term ) {
+			if ( $is_term )
 				return $this->the_seo_bar_term( $args );
-			} else {
+			else
 				return $this->the_seo_bar_page( $args );
-			}
 		} else {
-			$context = __( 'Failed to fetch post ID.', 'autodescription' );
 
+			$context = __( 'Failed to fetch post ID.', 'autodescription' );
 			return $this->post_status_special( $context, '!', 'bad' );
 		}
 	}
@@ -470,7 +469,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 		if ( isset( $ajax_id ) ) {
 			//* Ajax handler.
-			$script = '<script>jQuery("#' . esc_attr( $ajax_id ) . '").on( "hover click", autodescription.statusBarHover );</script>';
+			$script = '<script>jQuery("#' . esc_js( $ajax_id ) . '").on( "hover click", autodescription.statusBarHover );</script>';
 
 			return sprintf( '<span class="%s" id="%s"><span class="ad-bar-wrap">%s</span></span>', $class, $ajax_id, $content ) . $script;
 		}
@@ -486,7 +485,6 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	 * @param array $args {
 	 *	 'is_term' => bool $is_term,
 	 *	 'term' => object $term,
-	 *	 'post_id' => int $post_id,
 	 *	 'post_i18n' => string $post_i18n,
 	 *	 'post_low' => string $post_low,
 	 *	 'type' => string $type,
@@ -495,20 +493,14 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	 */
 	protected function the_seo_bar_term( $args ) {
 
-		$post_id = $args['post_id'];
 		$term = $args['term'];
 		$post = $args['post_i18n'];
 		$is_term = true;
 
-		$noindex = isset( $term->admeta['noindex'] ) && $this->is_checked( $term->admeta['noindex'] );
+		$data = $this->get_term_data( $term, $term->term_id );
+
+		$noindex = isset( $data['noindex'] ) && $this->is_checked( $data['noindex'] );
 		$redirect = false; // We don't apply redirect on taxonomies (yet)
-
-		$ad_savedflag = isset( $term->admeta['saved_flag'] ) && $this->is_checked( $term->admeta['saved_flag'] );
-		$flag = $ad_savedflag;
-
-		//* Genesis data fetch
-		if ( false === $noindex && false === $flag && isset( $term->meta['noindex'] ) )
-			$noindex = $this->is_checked( $term->meta['noindex'] );
 
 		//* Blocked SEO, return simple bar.
 		if ( $redirect || $noindex )
@@ -622,47 +614,32 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	protected function the_seo_bar_term_data( $args ) {
 
 		$term = $args['term'];
-		$post_id = $args['post_id'];
+		$term_id = $args['post_id'];
 		$taxonomy = $args['type'];
 
-		$flag = isset( $term->admeta['saved_flag'] ) && $this->is_checked( $term->admeta['saved_flag'] );
+		$data = $this->get_term_data( $term, $term_id );
 
-		$title_custom_field = isset( $term->admeta['doctitle'] ) ? $term->admeta['doctitle'] : '';
-		$description_custom_field = isset( $term->admeta['description'] ) ? $term->admeta['description'] : '';
-		$nofollow = isset( $term->admeta['nofollow'] ) ? $term->admeta['nofollow'] : '';
-		$noarchive = isset( $term->admeta['noarchive'] ) ? $term->admeta['noarchive'] : '';
-
-		//* Genesis data fetch
-		if ( false === $flag && isset( $term->meta ) ) {
-			if ( empty( $title_custom_field ) && isset( $term->meta['doctitle'] ) )
-				$title_custom_field = $term->meta['doctitle'];
-
-			if ( empty( $description_custom_field ) && isset( $term->meta['description'] ) )
-				$description_custom_field = $term->meta['description'];
-
-			if ( empty( $nofollow ) && isset( $term->meta['nofollow'] ) )
-				$nofollow = $term->meta['nofollow'];
-
-			if ( empty( $noarchive ) && isset( $term->meta['noarchive'] ) )
-				$noarchive = $term->meta['noarchive'];
-		}
+		$title_custom_field = isset( $data['doctitle'] ) ? $data['doctitle'] : '';
+		$description_custom_field = isset( $data['description'] ) ? $data['description'] : '';
+		$nofollow = isset( $data['nofollow'] ) ? $data['nofollow'] : '';
+		$noarchive = isset( $data['noarchive'] ) ? $data['noarchive'] : '';
 
 		$title_is_from_custom_field = (bool) $title_custom_field;
 		if ( $title_is_from_custom_field ) {
-			$title = $this->title( '', '', '', array( 'term_id' => $post_id, 'taxonomy' => $taxonomy, 'get_custom_field' => true ) );
+			$title = $this->title( '', '', '', array( 'term_id' => $term_id, 'taxonomy' => $taxonomy, 'get_custom_field' => true ) );
 		} else {
-			$title = $this->title( '', '', '', array( 'term_id' => $post_id, 'taxonomy' => $taxonomy, 'get_custom_field' => false ) );
+			$title = $this->title( '', '', '', array( 'term_id' => $term_id, 'taxonomy' => $taxonomy, 'get_custom_field' => false ) );
 		}
 
 		$description_is_from_custom_field = (bool) $description_custom_field;
 		if ( $description_is_from_custom_field ) {
-			$taxonomy = isset( $term->taxonomy ) && $term->taxonomy ? $term->taxonomy : '';
-			$description_args = $taxonomy ? array( 'id' => $post_id, 'taxonomy' => $term->taxonomy, 'get_custom_field' => true ) : array( 'get_custom_field' => true );
+			$taxonomy = ! empty( $term->taxonomy ) ? $term->taxonomy : '';
+			$description_args = $taxonomy ? array( 'id' => $term_id, 'taxonomy' => $term->taxonomy, 'get_custom_field' => true ) : array( 'get_custom_field' => true );
 
 			$description = $this->generate_description( '', $description_args );
 		} else {
-			$taxonomy = isset( $term->taxonomy ) && $term->taxonomy ? $term->taxonomy : '';
-			$description_args = $taxonomy ? array( 'id' => $post_id, 'taxonomy' => $term->taxonomy, 'get_custom_field' => false ) : array( 'get_custom_field' => false );
+			$taxonomy = ! empty( $term->taxonomy ) ? $term->taxonomy : '';
+			$description_args = $taxonomy ? array( 'id' => $term_id, 'taxonomy' => $term->taxonomy, 'get_custom_field' => false ) : array( 'get_custom_field' => false );
 
 			$description = $this->generate_description( '', $description_args );
 		}

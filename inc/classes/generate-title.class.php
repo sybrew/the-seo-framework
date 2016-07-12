@@ -735,38 +735,23 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		if ( $args['term_id'] && $args['taxonomy'] )
 			$term = get_term( $args['term_id'], $args['taxonomy'], OBJECT, 'raw' );
 
-		if ( $this->is_category() || $this->is_tag() ) {
+		if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
 
-			if ( $args['get_custom_field'] ) {
-				if ( ! isset( $term ) )
-					$term = $this->fetch_the_term( $args['term_id'] );
-
-				$title = empty( $term->admeta['doctitle'] ) ? $title : $term->admeta['doctitle'];
-
-				$flag = isset( $term->admeta['saved_flag'] ) && $this->is_checked( $term->admeta['saved_flag'] );
-				if ( false === $flag && empty( $title ) && isset( $term->meta['doctitle'] ) )
-					$title = empty( $term->meta['doctitle'] ) ? $title : $term->meta['doctitle'];
-			}
-
-			if ( empty( $title ) )
-				$title = $this->get_the_real_archive_title( $term, $args );
-
-		} else {
 			if ( ! isset( $term ) && $this->is_tax() )
 				$term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
 
-			if ( $args['get_custom_field'] && isset( $term ) ) {
-				$title = empty( $term->admeta['doctitle'] ) ? $title : wp_kses_stripslashes( wp_kses_decode_entities( $term->admeta['doctitle'] ) );
+			if ( ! isset( $term ) )
+				$term = $this->fetch_the_term( $args['term_id'] );
 
-				$flag = isset( $term->admeta['saved_flag'] ) && $this->is_checked( $term->admeta['saved_flag'] );
-				if ( false === $flag && empty( $title ) && isset( $term->meta['doctitle'] ) )
-					$title = empty( $term->meta['doctitle'] ) ? $title : wp_kses_stripslashes( wp_kses_decode_entities( $term->meta['doctitle'] ) );
+			if ( $args['get_custom_field'] ) {
+				$data = $this->get_term_data( $term, $args['term_id'] );
+				$title = empty( $data['doctitle'] ) ? $title : $data['doctitle'];
 			}
 
-			if ( empty( $title ) )
-				$title = $this->get_the_real_archive_title( $term, $args );
-
 		}
+
+		if ( empty( $title ) )
+			$title = $this->get_the_real_archive_title( $term, $args );
 
 		if ( $escape )
 			$title = $this->escape_title( $title, false );
@@ -787,7 +772,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 */
 	public function title_from_custom_field( $title = '', $escape = false, $id = null, $taxonomy = null ) {
 
-		$id = isset( $id ) ? $id : null;
+		$id = isset( $id ) ? $id : $this->get_the_real_ID();
 
 		/**
 		 * Create something special for blog page. Only if it's not the home page.
@@ -802,7 +787,9 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		} else if ( $this->is_archive() || ( $id && $taxonomy ) ) {
 			//* Get the custom title for terms.
 			$term = get_term( $id, $taxonomy, OBJECT, 'raw' );
-			$title = isset( $term->admeta['doctitle'] ) ? $term->admeta['doctitle'] : $title;
+			$data = $this->get_term_data( $term, $id );
+
+			$title = empty( $data['doctitle'] ) ? $title : $data['doctitle'];
 		}
 
 		if ( $escape )
@@ -933,8 +920,6 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		if ( ! $term )
 			return;
 
-		$term_name = '';
-
 		if ( isset( $term->name ) ) {
 			if ( $this->is_category() ) {
 				/**
@@ -968,7 +953,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 			}
 		}
 
-		//* Impossible through WordPress interface. Possible through filters.
+		//* Might be empty through filters.
 		if ( empty( $term_name ) )
 			$term_name = $this->untitled();
 
