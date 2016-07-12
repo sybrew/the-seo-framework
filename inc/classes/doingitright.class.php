@@ -435,7 +435,8 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 					. '<a onclick="return false;" class="' . $args['class'] . '" aria-label="' . $args['notice'] . '" data-desc="' . $args['notice'] . '">'
 						. $args['indicator']
 					. '</a>'
-				. '</span>';
+				. '</span>'
+				;
 
 		return $wrap;
 	}

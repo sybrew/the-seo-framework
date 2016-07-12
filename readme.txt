@@ -307,7 +307,7 @@ TODO
 	/
 	* Class contents `AutoDescription_Query` are now reworked to be much more effecient and predictable.
 	* Methods within `AutoDescription_Query` have been re-evaluated whether they use the WordPress query cache. If that holds true, the query object cache has been omitted from the said method.
-	* Improved plugin memory usage by 16%. TODO confirm again on release version.
+	* Reduced plugin memory usage by 16%. TODO confirm again on release version.
 **Changed:**
 	/
 	* 'AutoDescription_Siteoptions::page_id' is now publicly accessible. Making it easier to add submenu items.
@@ -327,12 +327,30 @@ TODO
 	/
 	* Function `the_seo_framework_dot_version()` now works as intended.
 	* Method `AutoDescription_Query::is_single()` first parameter can now be an array without crashing the site.
+	* Deprecated functions from 2.6.1 and onwards had their version and replacement notification switched. This has been fixed.
 **Removed:**
 	/
 	* Unused network admin methods. Network admin settings constants and filters are held intact for the future. The related changes are listed below.
 		* Method `AutoDescription_Adminpages::add_network_menu_link()`, without deprecation.
 		* Method `AutoDescription_Adminpages::network_admin()`, without deprecation.
 		* Public var `AutoDescription_Adminpages::network_pagehook`, without deprecation.
+	/
+	* TODO either $pagehook or $page_hook has to go. It's confusing me =/.
+	* All deprecated functions that have been deprecated prior to version 2.5.0 of The SEO Framework. These include methods:
+		* `autodescription_get_option()`
+		* `enqueue_javascript()`
+		* `enqueue_css()`
+		* `fetch_sitemap_transient_name()`
+		* `delete_sitemap_transient_post()`
+		* `autodescription_version()`
+		* `scripts()`
+		* `setup_transient_names_init()`
+**Deprecated:**
+	/
+	* `AutoDescription_Metaboxes::homepage_metabox_general()`, use `AutoDescription_Metaboxes::homepage_metabox_general_tab()` instead.
+	* `AutoDescription_Metaboxes::homepage_metabox_additions()`, use `AutoDescription_Metaboxes::homepage_metabox_additions_tab()` instead.
+	* `AutoDescription_Metaboxes::homepage_metabox_robots()`, use `AutoDescription_Metaboxes::homepage_metabox_robots_tab()` instead.
+
 **Filter notes:**
 	/
 	* **Changed:**
@@ -370,6 +388,9 @@ TODO
 **The full changelog can be found [here](http://theseoframework.com/?cat=3).**
 
 == Upgrade Notice ==
+
+= 2.7.0 =
+This version is required for the new Extension Manager plugin and includes many improvements.
 
 = 2.6.4 =
 Highly recommended update that fixes various query checks and caches.

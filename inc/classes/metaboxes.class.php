@@ -212,7 +212,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 * @see $this->title_metabox() : Callback for Title Settings box.
 	 */
 	public function title_metabox_general_tab() {
-		$this->get_view( 'metaboxes/title-metabox-general-tab' );
+		$this->get_view( 'metaboxes/title-metabox', array(), 'general' );
 	}
 
 	/**
@@ -227,7 +227,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 * }
 	 */
 	public function title_metabox_additions_tab( $examples = array() ) {
-		$this->get_view( 'metaboxes/title-metabox-additions-tab', get_defined_vars() );
+		$this->get_view( 'metaboxes/title-metabox', get_defined_vars(), 'additions' );
 	}
 
 	/**
@@ -243,7 +243,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 * @param bool $showleft The example location.
 	 */
 	public function title_metabox_prefixes_tab( $additions = array(), $showleft = false ) {
-		$this->get_view( 'metaboxes/title-metabox-prefixes-tab', get_defined_vars() );
+		$this->get_view( 'metaboxes/title-metabox', get_defined_vars(), 'prefixes' );
 	}
 
 	/**
@@ -267,7 +267,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 * @see $this->description_metabox() Callback for Description Settings box.
 	 */
 	public function description_metabox_general_tab() {
-		$this->get_view( 'metaboxes/description-metabox-general-tab' );
+		$this->get_view( 'metaboxes/description-metabox', array(), 'general' );
 	}
 
 	/**
@@ -277,9 +277,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 * @see $this->description_metabox() Callback for Description Settings box.
 	 */
 	public function description_metabox_additions_tab() {
-
-		$this->get_view( 'metaboxes/description-metabox-additions-tab' );
-
+		$this->get_view( 'metaboxes/description-metabox', array(), 'additions' );
 	}
 
 	/**
@@ -303,7 +301,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 * @see $this->robots_metabox() Callback for Robots Settings box.
 	 */
 	protected function robots_metabox_general_tab() {
-		$this->get_view( 'metaboxes/robots-metabox-general-tab' );
+		$this->get_view( 'metaboxes/robots-metabox', array(), 'general' );
 	}
 
 	/**
@@ -320,7 +318,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 * }
 	 */
 	protected function robots_metabox_no_tab( $types, $robots ) {
-		$this->get_view( 'metaboxes/robots-metabox-no-tab', get_defined_vars() );
+		$this->get_view( 'metaboxes/robots-metabox', get_defined_vars(), 'no' );
 	}
 
 	/**
@@ -340,31 +338,31 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	/**
 	 * HomePage Metabox General Tab Output.
 	 *
-	 * @since 2.6.0
+	 * @since 2.7.0
 	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
 	 */
-	public function homepage_metabox_general() {
-		$this->get_view( 'metaboxes/homepage-metabox-general' );
+	public function homepage_metabox_general_tab() {
+		$this->get_view( 'metaboxes/homepage-metabox', array(), 'general' );
 	}
 
 	/**
 	 * HomePage Metabox Additions Tab Output.
 	 *
-	 * @since 2.6.0
+	 * @since 2.7.0
 	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
 	 */
-	public function homepage_metabox_additions() {
-		$this->get_view( 'metaboxes/homepage-metabox-additions' );
+	public function homepage_metabox_additions_tab() {
+		$this->get_view( 'metaboxes/homepage-metabox', array(), 'additions' );
 	}
 
 	/**
 	 * HomePage Metabox Robots Tab Output
 	 *
-	 * @since 2.6.0
+	 * @since 2.7.0
 	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
 	 */
-	public function homepage_metabox_robots() {
-		$this->get_view( 'metaboxes/homepage-metabox-robots' );
+	public function homepage_metabox_robots_tab() {
+		$this->get_view( 'metaboxes/homepage-metabox', array(), 'robots' );
 	}
 
 	/**
@@ -388,7 +386,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 * @see $this->social_metabox() Callback for Social Settings box.
 	 */
 	protected function social_metabox_general_tab() {
-		$this->get_view( 'metaboxes/social-metabox-general-tab' );
+		$this->get_view( 'metaboxes/social-metabox', array(), 'general' );
 	}
 
 	/**
@@ -399,7 +397,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 * @see $this->social_metabox() Callback for Social Settings box.
 	 */
 	protected function social_metabox_facebook_tab() {
-		$this->get_view( 'metaboxes/social-metabox-facebook-tab' );
+		$this->get_view( 'metaboxes/social-metabox', array(), 'facebook' );
 	}
 
 	/**
@@ -409,7 +407,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 * @see $this->social_metabox() Callback for Social Settings box.
 	 */
 	protected function social_metabox_twitter_tab() {
-		$this->get_view( 'metaboxes/social-metabox-twitter-tab' );
+		$this->get_view( 'metaboxes/social-metabox', array(), 'twitter'  );
 	}
 
 	/**
@@ -419,7 +417,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 * @see $this->social_metabox() Callback for Social Settings box.
 	 */
 	public function social_metabox_postdates_tab() {
-		$this->get_view( 'metaboxes/social-metabox-postdates-tab' );
+		$this->get_view( 'metaboxes/social-metabox', array(), 'postdates'  );
 	}
 
 	/**
@@ -429,7 +427,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 * @see $this->social_metabox() Callback for Social Settings box.
 	 */
 	public function social_metabox_relationships_tab() {
-		$this->get_view( 'metaboxes/social-metabox-relationship-tab' );
+		$this->get_view( 'metaboxes/social-metabox', array(), 'relationships'  );
 	}
 
 	/**
@@ -467,7 +465,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 * @see $this->knowledge_metabox() Callback for Knowledge Graph Settings box.
 	 */
 	public function knowledge_metabox_general_tab() {
-		$this->get_view( 'metaboxes/knowledge-metabox-general-tab' );
+		$this->get_view( 'metaboxes/knowledge-metabox', array(), 'general' );
 	}
 
 	/**
@@ -477,7 +475,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 * @see $this->knowledge_metabox() Callback for Knowledge Graph Settings box.
 	 */
 	public function knowledge_metabox_about_tab() {
-		$this->get_view( 'metaboxes/knowledge-metabox-about-tab' );
+		$this->get_view( 'metaboxes/knowledge-metabox', array(), 'about' );
 	}
 
 	/**
@@ -487,7 +485,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 * @see $this->knowledge_metabox() Callback for Knowledge Graph Settings box.
 	 */
 	public function knowledge_metabox_social_tab() {
-		$this->get_view( 'metaboxes/knowledge-metabox-social-tab' );
+		$this->get_view( 'metaboxes/knowledge-metabox', array(), 'social' );
 	}
 
 	/**
@@ -512,7 +510,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public function sitemaps_metabox_general_tab() {
-		$this->get_view( 'metaboxes/sitemaps-metabox-general-tab' );
+		$this->get_view( 'metaboxes/sitemaps-metabox', array(), 'general' );
 	}
 
 	/**
@@ -522,7 +520,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public function sitemaps_metabox_robots_tab() {
-		$this->get_view( 'metaboxes/sitemaps-metabox-robots-tab' );
+		$this->get_view( 'metaboxes/sitemaps-metabox', array(), 'robots' );
 	}
 
 	/**
@@ -532,7 +530,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public function sitemaps_metabox_timestamps_tab() {
-		$this->get_view( 'metaboxes/sitemaps-metabox-timestamps-tab' );
+		$this->get_view( 'metaboxes/sitemaps-metabox', array(), 'timestamps' );
 	}
 
 	/**
@@ -542,7 +540,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public function sitemaps_metabox_notify_tab() {
-		$this->get_view( 'metaboxes/sitemaps-metabox-notify-tab' );
+		$this->get_view( 'metaboxes/sitemaps-metabox', array(), 'notify' );
 	}
 
 	/**

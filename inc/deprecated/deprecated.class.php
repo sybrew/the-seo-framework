@@ -32,123 +32,6 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	}
 
 	/**
-	 * Return option from the options table and cache result.
-	 *
-	 * @since 2.0.0
-	 *
-	 * @deprecated
-	 * @since 2.3.4
-	 */
-	public function autodescription_get_option( $key, $setting = null, $use_cache = true ) {
-		$this->_deprecated_function( 'AutoDescription_Adminpages::' . __FUNCTION__, '2.3.4', 'AutoDescription_Adminpages::the_seo_framework_get_option()' );
-
-		return $this->the_seo_framework_get_option( $key, $setting, $use_cache );
-	}
-
-	/**
-	 * Enqueues JS in the admin footer
-	 *
-	 * @since 2.1.9
-	 *
-	 * @deprecated
-	 * @since 2.3.3
-	 *
-	 * @param $hook the current page
-	 */
-	public function enqueue_javascript( $hook ) {
-		$this->_deprecated_function( 'AutoDescription_Admin_Init::' . __FUNCTION__, '2.3.3', 'AutoDescription_Admin_Init::enqueue_admin_scripts()' );
-
-		return $this->enqueue_admin_scripts( $hook );
-	}
-
-	/**
-	 * Enqueues CSS in the admin header
-	 *
-	 * @since 2.1.9
-	 *
-	 * @deprecated
-	 * @since 2.3.3
-	 *
-	 * @param $hook the current page
-	 */
-	public function enqueue_css( $hook ) {
-		$this->_deprecated_function( 'AutoDescription_Admin_Init::' . __FUNCTION__, '2.3.3', 'AutoDescription_Admin_Init::enqueue_admin_scripts()' );
-
-		return $this->enqueue_admin_scripts( $hook );
-	}
-
-	/**
-	 * Setup var for sitemap transient.
-	 *
-	 * @since 2.2.9
-	 *
-	 * @deprecated
-	 * @since 2.3.3
-	 */
-	public function fetch_sitemap_transient_name() {
-		$this->_deprecated_function( 'AutoDescription_Transients::' . __FUNCTION__, '2.3.3', 'AutoDescription_Transients::$sitemap_transient' );
-
-		return $this->sitemap_transient;
-	}
-
-	/**
-	 * Delete Sitemap transient on post save.
-	 *
-	 * @since 2.2.9
-	 *
-	 * @deprecated
-	 * @since 2.3.3
-	 */
-	public function delete_sitemap_transient_post( $post_id ) {
-		$this->_deprecated_function( 'AutoDescription_Transients::' . __FUNCTION__, '2.3.3', 'AutoDescription_Transients::delete_sitemap_transient_post()' );
-
-		return $this->delete_transients_post( $post_id );
-	}
-
-	/**
-	 * Helper function for Doing it Wrong
-	 *
-	 * @since 2.2.4
-	 *
-	 * @deprecated
-	 * @since 2.3.0
-	 */
-	public function autodescription_version( $version = '' ) {
-		$this->_deprecated_function( 'The_SEO_Framework_Load::' . __FUNCTION__, '2.3.0', 'The_SEO_Framework_Load::the_seo_framework_version()' );
-
-		return $this->the_seo_framework_version( $version );
-	}
-
-	/**
-	 * Include the necessary sortable metabox scripts.
-	 *
-	 * @since 2.2.2
-	 *
-	 * @deprecated
-	 * @since 2.3.5
-	 */
-	public function scripts() {
-		$this->_deprecated_function( 'AutoDescription_Adminpages::' . __FUNCTION__, '2.3.5', 'AutoDescription_Adminpages::metabox_scripts()' );
-
-		return $this->metabox_scripts();
-	}
-
-	/**
-	 * Setup var for sitemap transient on init/admin_init.
-	 *
-	 * @since 2.3.3
-	 * @deprecated
-	 * @since 2.3.3
-	 * Oops.
-	 */
-	public function setup_transient_names_init() {
-		$this->_deprecated_function( 'AutoDescription_Transients::' . __FUNCTION__, '2.3.3', 'AutoDescription_Transients::setup_transient_names()' );
-
-		$this->setup_transient_names();
-		return false;
-	}
-
-	/**
 	 * Helper function for allowed post/page screens where this plugin is active.
 	 *
 	 * @param array $screens The allowed screens
@@ -386,6 +269,9 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @since 2.6.1
 	 * @access private
 	 *
+	 * @deprecated
+	 * @since 2.6.1
+	 *
 	 * @return bool
 	 *
 	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
@@ -406,7 +292,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 		);
 
 		if ( isset( $plugins_check ) ) {
-			$this->_deprecated_function( 'the_seo_framework_detect_seo_plugins', 'the_seo_framework_conflicting_plugins', '2.6.1' );
+			$this->_deprecated_function( 'the_seo_framework_detect_seo_plugins', '2.6.1', 'the_seo_framework_conflicting_plugins' );
 			return $this->detect_plugin( $plugins_check );
 		}
 
@@ -427,6 +313,9 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @staticvar bool $has_plugin
 	 * @since 2.2.5
 	 *
+	 * @deprecated
+	 * @since 2.6.1
+	 *
 	 * @return bool $has_plugin one of the plugins has been found.
 	 */
 	public function has_og_plugin() {
@@ -446,7 +335,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 		);
 
 		if ( isset( $plugins_check ) ) {
-			$this->_deprecated_function( 'the_seo_framework_detect_og_plugins', 'the_seo_framework_conflicting_plugins', '2.6.1' );
+			$this->_deprecated_function( 'the_seo_framework_detect_og_plugins', '2.6.1', 'the_seo_framework_conflicting_plugins' );
 			return $this->detect_plugin( $plugins_check );
 		}
 
@@ -465,7 +354,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @return bool
 	 */
 	public function has_sitemap_plugin() {
-		$this->_deprecated_function( 'AutoDescription_Detect::' . __FUNCTION__, 'AutoDescription_Detect::detect_sitemap_plugin', '2.6.1' );
+		$this->_deprecated_function( 'AutoDescription_Detect::' . __FUNCTION__, '2.6.1', 'AutoDescription_Detect::detect_sitemap_plugin' );
 
 		return $this->detect_sitemap_plugin();
 	}
@@ -484,7 +373,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 */
 	public function get_current_post_type( $public = true ) {
 
-		$this->_deprecated_function( 'AutoDescription_Detect::' . __FUNCTION__, 'AutoDescription_Detect::get_supported_post_type', '2.6.2' );
+		$this->_deprecated_function( 'AutoDescription_Detect::' . __FUNCTION__, '2.6.2', 'AutoDescription_Detect::get_supported_post_type' );
 
 		static $post_type = null;
 
@@ -534,7 +423,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 */
 	public function wpmudev_domainmap_flush_fix( $options_saved = false, $flush_now = true ) {
 
-		$this->_deprecated_function( 'AutoDescription_Sitemaps::' . __FUNCTION__, '', '2.6.2' );
+		$this->_deprecated_function( 'AutoDescription_Sitemaps::' . __FUNCTION__, '2.6.2' );
 
 		if ( $this->pretty_permalinks && $this->is_domainmapping_active() ) {
 			if ( $options_saved || 'init' === current_action() ) {
@@ -590,7 +479,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 */
 	public function get_relative_url( $post = null, $external = false, $depr = null ) {
 
-		$this->_deprecated_function( 'AutoDescription_Generate_Url::' . __FUNCTION__, 'AutoDescription_Generate_Url::build_singular_relative_url()', '2.6.5' );
+		$this->_deprecated_function( 'AutoDescription_Generate_Url::' . __FUNCTION__, '2.6.5', 'AutoDescription_Generate_Url::build_singular_relative_url()' );
 
 		if ( isset( $depr ) ) {
 			$post_id = $depr;
@@ -643,7 +532,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 */
 	public function the_url_path_default_permalink_structure( $post = null, $paged = false, $paged_plural = true ) {
 
-		$this->_deprecated_function( 'AutoDescription_Generate_Url::' . __FUNCTION__, 'AutoDescription_Generate_Url::build_singular_relative_url()', '2.6.5' );
+		$this->_deprecated_function( 'AutoDescription_Generate_Url::' . __FUNCTION__, '2.6.5' , 'AutoDescription_Generate_Url::build_singular_relative_url()' );
 
 		//* Don't slash it.
 		$this->url_slashit = false;
@@ -719,11 +608,53 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 */
 	public function the_seo_framework_version( $version = '' ) {
 
-		$this->_deprecated_function( 'AutoDescription_Load::' . __FUNCTION__, '', '2.6.6' );
+		$this->_deprecated_function( 'AutoDescription_Load::' . __FUNCTION__, '2.6.6' );
 
 		$output = $version ? sprintf( __( '%s of The SEO Framework', 'autodescription' ), esc_attr( $version ) ) : '';
 
 		return $output;
 	}
 
+
+	/**
+	 * HomePage Metabox General Tab Output.
+	 *
+	 * @since 2.6.0
+	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
+	 *
+	 * @deprecated
+	 * @since 2.7.0
+	 */
+	public function homepage_metabox_general() {
+		$this->_deprecated_function( 'AutoDescription_Metaboxes::' . __FUNCTION__, '2.7.0', 'AutoDescription_Metaboxes::homepage_metabox_general_tab()' );
+		$this->get_view( 'metaboxes/homepage-metabox', array(), 'general' );
+	}
+
+	/**
+	 * HomePage Metabox Additions Tab Output.
+	 *
+	 * @since 2.6.0
+	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
+	 *
+	 * @deprecated
+	 * @since 2.7.0
+	 */
+	public function homepage_metabox_additions() {
+		$this->_deprecated_function( 'AutoDescription_Metaboxes::' . __FUNCTION__, '2.7.0', 'AutoDescription_Metaboxes::homepage_metabox_additions_tab()' );
+		$this->get_view( 'metaboxes/homepage-metabox', array(), 'additions' );
+	}
+
+	/**
+	 * HomePage Metabox Robots Tab Output
+	 *
+	 * @since 2.6.0
+	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
+	 *
+	 * @deprecated
+	 * @since 2.7.0
+	 */
+	public function homepage_metabox_robots() {
+		$this->_deprecated_function( 'AutoDescription_Metaboxes::' . __FUNCTION__, '2.7.0', 'AutoDescription_Metaboxes::homepage_metabox_robots_tab()' );
+		$this->get_view( 'metaboxes/homepage-metabox', array(), 'robots' );
+	}
 }

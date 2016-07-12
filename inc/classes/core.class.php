@@ -48,10 +48,11 @@ class AutoDescription_Core {
 	 * @param string $view The file name.
 	 * @param array $args The arguments to be supplied within the file name.
 	 * 		Each array key is converted to a variable with its value attached.
+	 * @param string $instance The instance suffix to call back upon.
 	 *
 	 * @credits Akismet For some code.
 	 */
-	protected function get_view( $view, array $args = array() ) {
+	protected function get_view( $view, array $args = array(), $instance = 'main' ) {
 
 		foreach ( $args as $key => $val )
 			$$key = $val;
@@ -59,6 +60,17 @@ class AutoDescription_Core {
 		$file = THE_SEO_FRAMEWORK_DIR_PATH_VIEWS . $view . '.php';
 
 		include( $file );
+	}
+
+	/**
+	 * Fetches view instance for switch.
+	 *
+	 * @param string $base The instance basename (namespace).
+	 * @param string $instance The instance suffix to call back upon.
+	 * @return string The file instance case.
+	 */
+	protected function get_view_instance( $base, $instance = 'main' ) {
+		return $base . '_' . str_replace( '-', '_', $instance );
 	}
 
 	/**
@@ -92,11 +104,6 @@ class AutoDescription_Core {
 	 */
 	public function post_type_support() {
 
-		/**
-		 * Added product post type.
-		 *
-		 * @since 2.3.1
-		 */
 		$defaults = array(
 			'post', 'page',
 			'product',

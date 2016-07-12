@@ -779,11 +779,11 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	}
 
 	/**
-	 * Returns Facebook locales array
-	 *
-	 * @see https://www.facebook.com/translations/FacebookLocales.xml
+	 * Returns Facebook locales array.
 	 *
 	 * @since 2.5.2
+	 * @see https://www.facebook.com/translations/FacebookLocales.xml
+	 *
 	 * @return array Valid Facebook locales
 	 */
 	public function fb_locales() {
@@ -936,9 +936,9 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 * This is apart from the fb_locales array since there are "duplicated" keys.
 	 * Use this to compare the numeric key position.
 	 *
+	 * @since 2.5.2
 	 * @see https://www.facebook.com/translations/FacebookLocales.xml
 	 *
-	 * @since 2.5.2
 	 * @return array Valid Facebook locales
 	 */
 	public function language_keys() {
