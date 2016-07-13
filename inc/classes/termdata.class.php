@@ -84,13 +84,15 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 		if ( isset( $data['saved_flag'] ) )
 			return $cache[$term_id] = $data;
 
-		if ( $this->is_theme( 'genesis', false ) ) {
+		if ( $this->is_theme( 'genesis' ) ) {
+			$term = $this->fetch_the_term( $term_id );
+
 			$data = array();
-			$data['doctitle'] = get_term_meta( $tag->term_id, 'doctitle', true );
-			$data['description'] = get_term_meta( $tag->term_id, 'description', true );
-			$data['noindex'] = get_term_meta( $tag->term_id, 'noindex', true );
-			$data['nofollow'] = get_term_meta( $tag->term_id, 'nofollow', true );
-			$data['noarchive'] = get_term_meta( $tag->term_id, 'noarchive', true );
+			$data['doctitle'] = get_term_meta( $term->term_id, 'doctitle', true );
+			$data['description'] = get_term_meta( $term->term_id, 'description', true );
+			$data['noindex'] = get_term_meta( $term->term_id, 'noindex', true );
+			$data['nofollow'] = get_term_meta( $term->term_id, 'nofollow', true );
+			$data['noarchive'] = get_term_meta( $term->term_id, 'noarchive', true );
 
 			return $cache[$term_id] = $data;
 		}

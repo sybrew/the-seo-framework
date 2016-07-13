@@ -36,7 +36,6 @@ add_action( 'admin_init', 'the_seo_framework_do_upgrade', 20 );
  *
  * @since 2.7.0
  * @global int $wp_db_version
- * @global object $current_screen
  *
  * @thanks StudioPress for some code.
  */

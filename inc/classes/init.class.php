@@ -88,7 +88,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 		//* Earlier removal of the generator tag. Doesn't require filter.
 		remove_action( 'wp_head', 'wp_generator' );
 
-		if ( $this->is_theme( 'genesis', false ) ) {
+		if ( $this->is_theme( 'genesis' ) ) {
 			add_action( 'genesis_meta', array( $this, 'html_output' ), 5 );
 		} else {
 			add_action( 'wp_head', array( $this, 'html_output' ), 1 );

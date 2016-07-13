@@ -297,7 +297,7 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 
 		$data = $this->get_term_data( $object, $term_id );
 
-		$title = isset( $data['title'] ) ? $data['title'] : '';
+		$title = isset( $data['doctitle'] ) ? $data['doctitle'] : '';
 		$description = isset( $data['description'] ) ? $data['description'] : '';
 		$noindex = isset( $data['noindex'] ) ? $data['noindex'] : '';
 		$nofollow = isset( $data['nofollow'] ) ? $data['nofollow'] : '';
