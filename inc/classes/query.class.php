@@ -66,23 +66,21 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	}
 
 	/**
-	 * Get the real page ID, also depending on CPT.
-	 *
-	 * @param bool $use_cache Whether to use the cache or not.
-	 *
-	 * @staticvar int $id the ID.
+	 * Get the real page ID, also from CPT, archives, author, blog, etc.
 	 *
 	 * @since 2.5.0
+	 * @staticvar int $id the ID.
 	 *
+	 * @param bool $use_cache Whether to use the cache or not.
 	 * @return int|false The ID.
 	 */
 	public function get_the_real_ID( $use_cache = true ) {
 
-		$is_admin = $this->is_admin();
-		$can_cache = $this->can_cache_query();
+		if ( $this->is_admin() )
+			return $this->get_the_real_admin_ID();
 
-		//* Never use cache for this in admin. Only causes bugs.
-		$use_cache = $is_admin || false === $can_cache ? false : $use_cache;
+		$can_cache = $this->can_cache_query();
+		$use_cache = $can_cache ? $use_cache : false;
 
 		if ( $use_cache ) {
 			static $id = null;
@@ -91,20 +89,12 @@ class AutoDescription_Query extends AutoDescription_Compat {
 				return $id;
 		}
 
-		//* Try to get ID from plugins.
-		$id = $is_admin || false === $can_cache ? 0 : $this->check_the_real_ID();
+		//* Try to get ID from plugins, only on the front end.
+		$id = $can_cache ? $this->check_the_real_ID() : 0;
 
 		if ( empty( $id ) ) {
-			//* The Post ID can be this ID as well.
+			//* This catches most ID's. Even Post IDs.
 			$id = get_queried_object_id();
-
-			//* Never get this when this is an archive. It will always return the wrong value.
-			if ( empty( $id ) && false === is_archive() && false === is_home() )
-				$id = get_the_ID();
-
-			//* Determine the Archive ID on term edit.
-			if ( empty( $id ) && $is_admin && $this->is_archive_admin() )
-				$id = $this->get_admin_term_id();
 		}
 
 		/**
@@ -117,10 +107,25 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		 *
 		 * @since 2.6.2
 		 */
-		$id = (int) apply_filters( 'the_seo_framework_current_object_id', $id, $this->can_cache_query() );
+		return $id = (int) apply_filters( 'the_seo_framework_current_object_id', $id, $can_cache );
+	}
 
-		//* Turn ID into 0 if empty.
-		return $id = empty( $id ) ? 0 : $id;
+	/**
+	 * Fetches post or term ID within the admin.
+	 * Alters while in the loop. Therefore, this can't be cached and must be called within the loop.
+	 *
+	 * @since 2.7.0
+	 */
+	public function get_the_real_admin_ID() {
+
+		//* Current posts object ID (in loop).
+		$id = get_the_ID();
+
+		//* Current term ID (outside loop).
+		if ( empty( $id ) && $this->is_archive_admin() )
+			$id = $this->get_admin_term_id();
+
+		return $id;
 	}
 
 	/**
@@ -729,14 +734,14 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		if ( $this->is_admin() )
 			return $this->is_singular_admin();
 
-		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post_types ) )
-			return $cache;
-
 		if ( is_int( $post_types ) ) {
-			//* Cache ID. Core is_singlar() doesn't accept integers.
+			//* Cache ID. Core is_singular() doesn't accept integers.
 			$id = $post_types;
 			$post_types = '';
 		}
+
+		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post_types ) )
+			return $cache;
 
 		if ( ! $is_singular = is_singular( $post_types ) ) {
 			$id = isset( $id ) ? $id : $this->get_the_real_ID();
@@ -991,7 +996,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 	/**
 	 * Fetches the number of the current page.
-	 * Fetches global $paged through Query Var. Determines
+	 * Fetches global $paged through Query Var to prevent conflicts.
 	 *
 	 * @since 2.6.0
 	 *
@@ -1018,14 +1023,17 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * @since 2.7.0
 	 * @staticvar bool $can_cache_query : True when this function can run.
 	 * @staticvar mixed $cache : The cached query.
+	 * @see AutoDescritpion_Query::set_query_cache(); to set query cache.
 	 *
 	 * @param string $key The key to set or get.
 	 * @param mixed $value_to_set The value to set.
-	 * @param mixed $hash Extra arguments, that will be used to generate an alternative cache key.
+	 * @param array|mixed $hash Extra arguments, that will be used to generate an alternative cache key.
+	 *			Must always be inside a single array when $value_to_set is set. @see AutoDescritpion_Query::set_query_cache()
+	 *			Must always be separated parameters otherwise.
 	 * @return mixed : {
 	 * 		mixed The cached value if set and $value_to_set is null.
 	 *		null If the query can't be cached yet, or when no value has been set.
-	 *		If $value_is_set is set : {
+	 *		If $value_to_set is set : {
 	 *			true If the value is being set for the first time.
 	 *			false If the value has been set and $value_to_set is being overwritten.
 	 * 		}
@@ -1044,7 +1052,11 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = array();
 
-		$hash = func_num_args() >= 3 ? serialize( array_slice( func_get_args(), 2 ) ) : false;
+		if ( func_num_args() >= 3 ) {
+			$hash = isset( $value_to_set ) ? serialize( (array) func_get_arg( 2 ) ) : serialize( array_slice( func_get_args(), 2 ) );
+		} else {
+			$hash = false;
+		}
 
 		if ( isset( $value_to_set ) ) {
 			if ( isset( $cache[$key][$hash] ) ) {
@@ -1076,9 +1088,9 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * }
 	 */
 	public function set_query_cache( $key, $value_to_set ) {
-		if ( func_num_args() >= 3 )
+		if ( func_num_args() >= 3 ) {
 			return $this->get_query_cache( $key, $value_to_set, array_slice( func_get_args(), 2 ) );
-		else
+		} else
 			return $this->get_query_cache( $key, $value_to_set );
 	}
 

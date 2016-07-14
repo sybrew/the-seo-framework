@@ -25,6 +25,10 @@ function the_seo_framework_php_benchmark() {
 	//* Iterations
 	$it = 10000000;
 
+	$int1 = 5;
+	$int2 = 6;
+	$int3 = PHP_INT_MAX;
+
 	//* Start the engines.
 	$i = 0;
 	$t = microtime(true);
@@ -309,15 +313,59 @@ function the_seo_framework_php_benchmark() {
 	}
 	$falsefliptime = microtime(true) - $t;
 
+	//* Loose flip false
+	$i = 0;
+	$t = microtime(true);
+	while ( $i < $it ) {
+		if ( ! $ba ) {
+			// valuated
+		}
+		++$i;
+	}
+	$falsefliptime = microtime(true) - $t;
+
+	//* Bigger than
+	$i = 0;
+	$t = microtime(true);
+	while ( $i < $it ) {
+		if ( $int2 > $int1 ) {
+			// valuated
+		}
+		++$i;
+	}
+	$biggerthan = microtime(true) - $t;
+
+	//* Bigger than or equal to
+	$i = 0;
+	$t = microtime(true);
+	while ( $i < $it ) {
+		if ( $int2 >= $int1 ) {
+			// valuated
+		}
+		++$i;
+	}
+	$biggerthanor = microtime(true) - $t;
+
+	//* Bigger than or equal to max int
+	$i = 0;
+	$t = microtime(true);
+	while ( $i < $it ) {
+		if ( $int2 >= $int3 ) {
+			// valuated
+		}
+		++$i;
+	}
+	$biggerthanormax = microtime(true) - $t;
+
 	//* PHP 7 FCGI results @ 10,000,000 iterations.
-	echo 'Loose time: ' . $loosetime . " seconds\r\n"; 					// 0.1115360260009765625 seconds
+	echo 'Loose time: ' . $loosetime . " seconds\r\n"; 					// 0.1115360260009765625000 seconds
 	echo 'Strict time: ' . $stricttime . " seconds\r\n";				// 0.1202042102813720703125 seconds
 	echo 'Strict Neg time: ' . $strictnegtime . " seconds\r\n";			// 0.1270349025726318359375 seconds
 	echo 'Empty time: ' . $emptytime . " seconds\r\n";					// 0.1297409534454345703125 seconds
-	echo 'Neg Empty time: ' . $negemptytime . " seconds\r\n";			// 0.20085906982421875 seconds <- Triple check
-	echo 'Strict Neg Empty time: ' . $strictemptytime . " seconds\r\n"; // 0.18640804290771484375 seconds <- Double check
-	echo 'Isset time: ' . $issettime . " seconds\r\n"; 					// 0.115377902984619140625 seconds
-	echo 'Strict Isset time: ' . $issetstricttime . " seconds\r\n"; 	// 0.17035007476806640625 seconds <- Double check
+	echo 'Neg Empty time: ' . $negemptytime . " seconds\r\n";			// 0.2008590698242187500000 seconds <- Triple check
+	echo 'Strict Neg Empty time: ' . $strictemptytime . " seconds\r\n"; // 0.1864080429077148437500 seconds <- Double check
+	echo 'Isset time: ' . $issettime . " seconds\r\n"; 					// 0.1153779029846191406250 seconds
+	echo 'Strict Isset time: ' . $issetstricttime . " seconds\r\n"; 	// 0.1703500747680664062500 seconds <- Double check
 
 	echo 'Strict False time: ' . $strictfalsetime . " seconds\r\n"; 	// 0.1211879253387451171875  seconds
 	echo 'Loose Flip time: ' . $falsefliptime . " seconds\r\n";			// 0.1306369304656982421875 seconds
@@ -325,10 +373,10 @@ function the_seo_framework_php_benchmark() {
 	echo "\r\n";
 
 	echo 'Loose Empty String time: ' . $looseemptystring . " seconds\r\n";						// 0.1340930461883544921875 seconds
-	echo 'Loose Neg Empty String time: ' . $loosenegemptystring . " seconds\r\n";				// 0.15882110595703125 seconds
-	echo 'Empty String time: ' . $emptystring . " seconds\r\n"; 								// 0.135138034820556640625 seconds
+	echo 'Loose Neg Empty String time: ' . $loosenegemptystring . " seconds\r\n";				// 0.1588211059570312500000 seconds
+	echo 'Empty String time: ' . $emptystring . " seconds\r\n"; 								// 0.1351380348205566406250 seconds
 	echo 'Strict Empty String time: ' . $emptystrictstring . " seconds\r\n"; 					// 0.1573431491851806640625 seconds
-	echo 'Strict Empty Function String time: ' . $emptystrictfunctionstring . " seconds\r\n"; 	// 0.385016918182373046875 seconds <- Triple check.
+	echo 'Strict Empty Function String time: ' . $emptystrictfunctionstring . " seconds\r\n"; 	// 0.3850169181823730468750 seconds <- Triple check.
 
 	echo "\r\n";
 
@@ -341,8 +389,12 @@ function the_seo_framework_php_benchmark() {
 
 	echo 'In array begin 50: ' . $inarraybegin50 . " seconds\r\n"; 						// 0.3695099353790283203125 seconds
 	echo 'In array begin function 50: ' . $inarraybegin50function . " seconds\r\n"; 	// 8.4975330829620361328125 seconds <- VERY bad.
-	echo 'In array end 50: ' . $inarrayend50 . " seconds\r\n"; 							// 2.392652988433837890625 seconds
-	echo 'In array end function 50: ' . $inarrayend50function . " seconds\r\n"; 		// 2.004433155059814453125 seconds <- miniscule benefit.
+	echo 'In array end 50: ' . $inarrayend50 . " seconds\r\n"; 							// 2.3926529884338378906250 seconds
+	echo 'In array end function 50: ' . $inarrayend50function . " seconds\r\n"; 		// 2.0044331550598144531250 seconds <- miniscule benefit.
+
+	echo 'Bigger than: ' . $biggerthan . " seconds\r\n"; 								// 0.1194138526916503906250 seconds
+	echo 'Bigger than or equal to: ' . $biggerthanor . " seconds\r\n"; 					// 0.1157648563385009765625 seconds
+	echo 'Bigger than or equal to max int: ' . $biggerthanormax . " seconds\r\n"; 		// 0.1121711730957031250000 seconds
 
 }
 

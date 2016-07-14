@@ -370,9 +370,9 @@ class AutoDescription_Init extends AutoDescription_Query {
 
 	/**
 	 * Well, this is annoying.
+	 * Something that will make your head explode.
 	 *
 	 * @since 2.4.2
-	 * @return something that will make your head explode.
 	 */
 	public function explode() {
 		add_action( 'wp_head', array( $this, 'roll' ) );

@@ -59,7 +59,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 		parent::__construct();
 
 		$this->settings_field = THE_SEO_FRAMEWORK_SITE_OPTIONS;
-		$this->o_plugin_updated = 'updated_' . str_replace( '.', '', THE_SEO_FRAMEWORK_VERSION );
+		$this->o_plugin_updated = 'updated_' . THE_SEO_FRAMEWORK_DB_VERSION;
 		$this->page_id = 'autodescription-settings';
 
 		//* Set up site settings and save/reset them

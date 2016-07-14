@@ -551,7 +551,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 
 		return $old_option;
 	}
-	
+
 	/**
 	 * Delete transient for the automatic description on requests.
 	 *
@@ -613,9 +613,10 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	}
 
 	/**
-	 * Sets transient for Theme doing it Right
+	 * Sets transient for Theme doing it Right.
 	 *
 	 * @since 2.5.2
+	 * NOTE: Ignores transient constant.
 	 *
 	 * @param bool $doing_it_right
 	 */
@@ -626,13 +627,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 			//* Convert $dir to string 1 or 0 as transients can be false on failure.
 			$dir = $dir ? '1' : '0';
 
-			/**
-			 * Expiration time, 3 days.
-			 * 60s * 60m * 24d * 3d
-			 */
-			$expiration = DAY_IN_SECONDS * 3;
-
-			set_transient( $this->theme_doing_it_right_transient, $dir, $expiration );
+			set_transient( $this->theme_doing_it_right_transient, $dir, 0 );
 		}
 
 	}

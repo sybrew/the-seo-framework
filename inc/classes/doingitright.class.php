@@ -940,7 +940,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 					$notice .= ' ';
 
 					/**
-					 * Don't ucfirst abbrivations.
+					 * Don't ucfirst abbreviations.
 					 * @since 2.4.1
 					 */
 					$desc_value = ctype_upper( $desc_value ) ? $desc_value : ucfirst( $desc_value );

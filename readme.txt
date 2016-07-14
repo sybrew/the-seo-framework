@@ -263,6 +263,41 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 /
 * TODO
 
+**Announcements:**
+/
+* TODO Extension Manager.
+
+**The goal of this update:**
+
+* With this update, I wanted to improve this plugin in several ways.
+* Normally, this is listed as "for developers". This time, I've tried to make it more understandable for everyone.
+
+1. Minimizing the plugin's load time.
+1. Reducing the plugin's database calls.
+1. Reducing the plugin's server resource usage.
+1. Increase the plugin's compatibility with other plugins and themes.
+1. Upgrading the plugin to the latest WordPress standards.
+1. Reducing future bug reports chance.
+1. Improving the code quality and readability.
+
+* How this was achieved (in order set above):
+
+1. I've removed redundant function calls and I've added more efficient caches and ways of data handling.
+1. I've removed temporarily database entries and I've exchanging them for permanent ones.
+1. I've transferred all option metaboxes into separated files, which are only loaded when needed on the SEO settings page.
+1. I've exchanged category and tag SEO data injection for WordPress 4.4+ term options. This will make sure premium themes can do whatever they want.
+1. Alongside the previous upgrade, I've taken a very close look at the WordPress core functions, and adjusted code accordingly.
+1. Because of all previous steps, this would follow naturally.
+1. I've read all code once more, and discovered ways for improvement. It's like a spellcheck.
+
+**How do I benefit most of this update, and other plugins in general?**
+
+* This update has been writting with the future in mind. Always make sure to:
+
+1. Update to the latest WordPress version. This will make sure your website is secure and compatible.
+1. Update to an actively supported PHP version. Did you know that PHP versions 5.5 and below are no longer updated against security vulnerabilities? Go [tell your hosting provider](https://wordpress.org/about/requirements/).
+1. Process your theme through [Theme Check](https://wordpress.org/plugins/theme-check/). If the theme you wish to use fails many of these checks, feel free to tell the theme author. Bad standards lead to bad performance, compatibility issues, and sometimes even security vulnerabilities.
+
 **Detailed Log:**
 /
 ***The code is strong with [this one](https://theseoframework.com/?p= TODO #detailed).***
@@ -308,34 +343,40 @@ TODO
 	/
 	* TODO
 	* Function `the_seo_framework_update_option()`, this allows you to update options remotely.
+	* Method `AutoDescription_Query::get_the_real_admin_ID()`, this always runs within `AutoDescription_Query::get_the_real_ID()` when in admin.
 **Improved:**
 	/
 	* Class contents `AutoDescription_Query` are now reworked to be much more effecient and predictable.
 	* Methods within `AutoDescription_Query` have been re-evaluated whether they use the WordPress query cache. If that holds true, the query object cache has been omitted from the said method.
 	* Reduced plugin memory usage by 16%. TODO confirm again on release version.
 	* Shortened the transient name for the LD+Json output. This ensures high post ID number transients are working correctly on old WordPress database versions.
-	* TODO This plugin has once more been profiled with xDebug to ensure the highest performance and eliminate culprits.
+	* This plugin has once more been profiled with xDebug to ensure the highest performance and eliminate culprits.
 	* Method that alter the term data on request will no longer run if the term data has been updated to WordPress 4.4 standards. The affected methods are:
 		* `AutoDescription_TermData::get_term_filter()`
 		* `AutoDescription_TermData::get_terms_filter()`
 		* `AutoDescription_TermData::taxonomy_seo_save()`
 		* `AutoDescription_TermData::term_meta_delete()`
+	* `AutoDescription_Query::get_the_real_ID()` processing time has been significantly reduced within the admin area.
+	* The theme doing it right transient has been changed into a permanent transient, this means it's autoloaded with all other options. This transient acts like an option and is flushed on theme change.
 **Changed:**
 	/
-	* 'AutoDescription_Siteoptions::page_id' is now publicly accessible. Making it easier to add submenu items.
+	* Variable 'AutoDescription_Siteoptions::page_id' is now publicly accessible. Making it easier to add submenu items. NOTE rename this to admin_page_id?
 	* All class `AutoDescription_Metaboxes` metabox output function parameters have been shifted by one. The first parameter is now used for the (unavailable) post object. The second must be an array. This change affects the following methods:
-		* `AutoDescription_Metaboxes::title_metabox`
-		* `AutoDescription_Metaboxes::description_metabox`
-		* `AutoDescription_Metaboxes::homepage_metabox`
-		* `AutoDescription_Metaboxes::social_metabox`
-		* `AutoDescription_Metaboxes::knowledge_metabox`
-		* `AutoDescription_Metaboxes::schema_metabox`
-		* `AutoDescription_Metaboxes::robots_metabox`
-		* `AutoDescription_Metaboxes::webmaster_metabox`
-		* `AutoDescription_Metaboxes::sitemaps_metabox`
-		* `AutoDescription_Metaboxes::feed_metabox`
+		* `AutoDescription_Metaboxes::title_metabox()`
+		* `AutoDescription_Metaboxes::description_metabox()`
+		* `AutoDescription_Metaboxes::homepage_metabox()`
+		* `AutoDescription_Metaboxes::social_metabox()`
+		* `AutoDescription_Metaboxes::knowledge_metabox()`
+		* `AutoDescription_Metaboxes::schema_metabox()`
+		* `AutoDescription_Metaboxes::robots_metabox()`
+		* `AutoDescription_Metaboxes::webmaster_metabox()`
+		* `AutoDescription_Metaboxes::sitemaps_metabox()`
+		* `AutoDescription_Metaboxes::feed_metabox()`
 	* All class `AutoDescription_Metaboxes` metabox output functions have been put into "views". These view files are included upon calling them. The files that are attached can only be used within the plugin scope. This massively reduces the plugin memory overhead.
 	* Method `AutoDescription_TermData::get_term_data()` no longer returns `null` on author request.
+	* Method `AutoDescription_Query::get_the_real_ID()` no longer falls back to `get_the_ID()` as `get_queried_object_id()` covers that already.
+		* Note: This plugin shouldn't run within the loop on the front end. Nor should that function. It's completely cached the first time it runs (and when The SEO Framework caching engine is enabled).
+		* Note: That function however does run within the loop in the admin area. Therefore it will directly return method `AutoDescription_Query::get_the_real_admin_ID()` when called in the admin area.
 **Fixed:**
 	/
 	* Function `the_seo_framework_dot_version()` now works as intended.
@@ -401,8 +442,6 @@ TODO
 		* `(string) THE_SEO_FRAMEWORK_DIR_PATH_VIEWS`
 		* `(string) THE_SEO_FRAMEWORK_TERM_OPTIONS`
 **Notes:**
-	/
-	* TODO
 	* Cleaned up code. A whole lot.
 
 = Full changelog =

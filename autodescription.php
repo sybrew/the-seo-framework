@@ -130,7 +130,7 @@ function the_seo_framework_locale_init() {
  */
 require_once( THE_SEO_FRAMEWORK_DIR_PATH . '/load.class.php' );
 
-//* Load deprecated functions.
+//* Load deprecated functions. (there are none available)
 //require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.php' );
 
 /**
