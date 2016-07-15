@@ -147,6 +147,11 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 	public $script_debug = false;
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
 	 * Constructor, setup debug vars and then load parent constructor.
 	 */
 	public function __construct() {
@@ -219,7 +224,7 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 		if ( is_object( $class ) && is_string( $method ) ) {
 			$class = get_class( $class );
 
-			if ( $class === get_class( $this ) ) {
+			if ( get_class( $this ) === $class ) {
 				if ( method_exists( $this, $method ) ) {
 					if ( empty( $args ) ) {
 						// In-Object calling.
@@ -242,7 +247,7 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 					$this->_doing_it_wrong( (string) $class . '::' . (string) $method, __( "Class or Method not found.", 'autodescription' ), $version );
 				}
 			}
-		} else if ( is_string( $class ) && is_string( $method ) ) {
+		} elseif ( is_string( $class ) && is_string( $method ) ) {
 			//* This could be combined with the one above.
 			if ( method_exists( $class, $method ) ) {
 				if ( empty( $args ) ) {
@@ -253,7 +258,7 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 			} else {
 				$this->_doing_it_wrong( (string) $class . '::' . (string) $method, __( "Class or Method not found.", 'autodescription' ), $version );
 			}
-		} else if ( is_string( $class ) ) {
+		} elseif ( is_string( $class ) ) {
 			//* Class is function.
 			$func = $class;
 
@@ -268,5 +273,4 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 
 		return $output;
 	}
-
 }

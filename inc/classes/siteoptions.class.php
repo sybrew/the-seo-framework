@@ -35,13 +35,14 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	protected $settings_field;
 
 	/**
-	 * Hold the Page ID for this plugin.
+	 * Hold the SEO Settings Page ID for this plugin.
 	 *
 	 * @since 2.2.2
+	 * @since 2.70 Renamed var from page_id and made public.
 	 *
 	 * @var string The page ID
 	 */
-	public $page_id;
+	public $seo_settings_page_slug;
 
 	/**
 	 * Holds the update option.
@@ -60,7 +61,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 
 		$this->settings_field = THE_SEO_FRAMEWORK_SITE_OPTIONS;
 		$this->o_plugin_updated = 'updated_' . THE_SEO_FRAMEWORK_DB_VERSION;
-		$this->page_id = 'autodescription-settings';
+		$this->seo_settings_page_slug = 'theseoframework-settings';
 
 		//* Set up site settings and save/reset them
 		add_action( 'admin_init', array( $this, 'register_settings' ), 5 );
@@ -354,7 +355,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 
 		//* Disables the New SEO Settings Updated notification.
 		$plugin_updated = $this->o_plugin_updated;
-		$_POST[THE_SEO_FRAMEWORK_SITE_OPTIONS][$plugin_updated] = 1;
+		$_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ][ $plugin_updated ] = 1;
 
 	}
 
@@ -399,13 +400,13 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 		 * Stop this madness from happening again until next update.
 		 * Also prevent $updated to become true on this call.
 		 */
-		$new_options[$plugin_updated] = 1;
-		$options[$plugin_updated] = 1;
+		$new_options[ $plugin_updated ] = 1;
+		$options[ $plugin_updated ] = 1;
 
 		//* Merge the options. Add to if it's non-existent.
 		foreach ( $new_options as $key => $value ) {
-			if ( ! isset( $options[$key] ) ) {
-				$options[$key] = $value;
+			if ( ! isset( $options[ $key ] ) ) {
+				$options[ $key ] = $value;
 
 				if ( ! empty( $value ) )
 					$updated = true;
@@ -429,7 +430,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 		if ( $this->is_seo_settings_page() ) {
 			//* Redirect to current page if on options page to correct option values. Once.
 			if ( ! isset( $_REQUEST['seo-updated'] ) || 'true' !== $_REQUEST['seo-updated'] )
-				$this->admin_redirect( $this->page_id, array( 'seo-updated' => 'true' ) );
+				$this->admin_redirect( $this->seo_settings_page_slug, array( 'seo-updated' => 'true' ) );
 
 			//* Notice has already been sent.
 			return;
@@ -452,14 +453,11 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 */
 	public function site_updated_plugin_notice() {
 
-		$notice = $this->page_defaults['plugin_update_text'];
-
 		$settings_url = $this->seo_settings_page_url();
-		$link = sprintf( '<a href="%s" title="%s" target="_self">%s</a>', $settings_url, __( 'SEO Settings', 'autodescription' ), __( 'here', 'autodescription' ) );
+		$link = sprintf( '<a href="%s" title="%s" target="_self">%s</a>', $settings_url, esc_attr__( 'SEO Settings', 'autodescription' ), esc_html__( 'here', 'autodescription' ) );
+		$go_to_page = sprintf( esc_html_x( 'View the new options %s.', '%s = here', 'autodescription' ), $link );
 
-		$go_to_page = sprintf( _x( 'View the new options %s.', '%s = here', 'autodescription' ), $link );
-
-		$notice = $notice . ' ' . $go_to_page;
+		$notice = $this->page_defaults['plugin_update_text'] . ' ' . $go_to_page;
 
 		echo $this->generate_dismissible_notice( $notice, 'updated' );
 
@@ -496,13 +494,13 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 
 		static $cache = array();
 
-		if ( isset( $cache[$setting] ) )
-			return $cache[$setting];
+		if ( isset( $cache[ $setting ] ) )
+			return $cache[ $setting ];
 
 		if ( is_null( $setting ) )
 			$setting = THE_SEO_FRAMEWORK_SITE_OPTIONS;
 
-		return $cache[$setting] = apply_filters( 'the_seo_framework_get_options', get_option( $setting ), $setting );
+		return $cache[ $setting ] = apply_filters( 'the_seo_framework_get_options', get_option( $setting ), $setting );
 	}
 
 	/**
@@ -535,29 +533,29 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			if ( ! is_array( $options ) || ! array_key_exists( $key, $options ) )
 				return '';
 
-			return is_array( $options[$key] ) ? stripslashes_deep( $options[$key] ) : stripslashes( wp_kses_decode_entities( $options[$key] ) );
+			return is_array( $options[ $key ] ) ? stripslashes_deep( $options[ $key ] ) : stripslashes( wp_kses_decode_entities( $options[ $key ] ) );
 		}
 
 		//* Setup caches
 		static $options_cache = array();
 
 		//* Check options cache
-		if ( isset( $options_cache[$setting][$key] ) )
+		if ( isset( $options_cache[ $setting ][ $key ] ) )
 			//* Option has been cached
-			return $options_cache[$setting][$key];
+			return $options_cache[ $setting ][ $key ];
 
 		$options = $this->get_all_options( $setting );
 
 		//* Check for non-existent option
 		if ( ! is_array( $options ) || ! array_key_exists( $key, (array) $options ) ) {
 			//* Cache non-existent option
-			$options_cache[$setting][$key] = '';
+			$options_cache[ $setting ][ $key ] = '';
 		} else {
 			//* Option has not been previously been cached, so cache now
-			$options_cache[$setting][$key] = is_array( $options[$key] ) ? stripslashes_deep( $options[$key] ) : stripslashes( wp_kses_decode_entities( $options[$key] ) );
+			$options_cache[ $setting ][ $key ] = is_array( $options[ $key ] ) ? stripslashes_deep( $options[ $key ] ) : stripslashes( wp_kses_decode_entities( $options[ $key ] ) );
 		}
 
-		return $options_cache[$setting][$key];
+		return $options_cache[ $setting ][ $key ];
 	}
 
 	/**
@@ -665,11 +663,13 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			return;
 
 		if ( $this->get_option( 'reset', $this->settings_field ) ) {
-			if ( update_option( $this->settings_field, $this->default_site_options() ) )
-				$this->admin_redirect( $this->page_id, array( 'reset' => 'true' ) );
-			else
-				$this->admin_redirect( $this->page_id, array( 'error' => 'true' ) );
-			exit;
+			if ( update_option( $this->settings_field, $this->default_site_options() ) ) {
+				$this->admin_redirect( $this->seo_settings_page_slug, array( 'reset' => 'true' ) );
+				exit;
+			} else {
+				$this->admin_redirect( $this->seo_settings_page_slug, array( 'error' => 'true' ) );
+				exit;
+			}
 		}
 
 	}
@@ -727,22 +727,22 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			if ( ! is_array( $defaults ) || ! array_key_exists( $key, $defaults ) )
 				return -1;
 
-			return is_array( $defaults[$key] ) ? stripslashes_deep( $defaults[$key] ) : stripslashes( wp_kses_decode_entities( $defaults[$key] ) );
+			return is_array( $defaults[ $key ] ) ? stripslashes_deep( $defaults[ $key ] ) : stripslashes( wp_kses_decode_entities( $defaults[ $key ] ) );
 		}
 
 		static $defaults_cache = array();
 
 		//* Check options cache
-		if ( isset( $defaults_cache[$key] ) )
+		if ( isset( $defaults_cache[ $key ] ) )
 			//* Option has been cached
-			return $defaults_cache[$key];
+			return $defaults_cache[ $key ];
 
 		$defaults_cache = $this->default_site_options();
 
 		if ( ! is_array( $defaults_cache ) || ! array_key_exists( $key, (array) $defaults_cache ) )
-			$defaults_cache[$key] = -1;
+			$defaults_cache[ $key ] = -1;
 
-		return $defaults_cache[$key];
+		return $defaults_cache[ $key ];
 	}
 
 	/**
@@ -778,24 +778,24 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			if ( ! is_array( $warned ) || ! array_key_exists( $key, $warned ) )
 				return -1;
 
-			return $this->s_one_zero( $warned[$key] );
+			return $this->s_one_zero( $warned[ $key ] );
 		}
 
 		static $warned_cache = array();
 
 		//* Check options cache
-		if ( isset( $warned_cache[$key] ) )
+		if ( isset( $warned_cache[ $key ] ) )
 			//* Option has been cached
-			return $warned_cache[$key];
+			return $warned_cache[ $key ];
 
 		$warned_options = $this->warned_site_options();
 
 		if ( ! is_array( $warned_options ) || ! array_key_exists( $key, (array) $warned_options ) )
-			$warned_cache[$key] = -1;
+			$warned_cache[ $key ] = -1;
 
-		$warned_cache[$key] = $this->s_one_zero( $warned_options[$key] );
+		$warned_cache[ $key ] = $this->s_one_zero( $warned_options[ $key ] );
 
-		return $warned_cache[$key];
+		return $warned_cache[ $key ];
 	}
 
 	/**
@@ -1104,7 +1104,5 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			'zu', // Zulu
 			'zz', // Zazaki
 		);
-
 	}
-
 }

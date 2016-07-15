@@ -487,7 +487,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 			if ( is_object( $post ) ) {
 				if ( isset( $post->ID ) )
 					$post_id = $post->ID;
-			} else if ( is_scalar( $post ) ) {
+			} elseif ( is_scalar( $post ) ) {
 				$post_id = (int) $post;
 			}
 		}
@@ -501,7 +501,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 
 		if ( $external || ! $this->is_home() ) {
 			$permalink = get_permalink( $post_id );
-		} else if ( ! $external ) {
+		} elseif ( ! $external ) {
 			global $wp;
 
 			if ( isset( $wp->request ) )
@@ -544,9 +544,9 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 			if ( is_object( $object ) ) {
 				if ( $this->is_category() ) {
 					$path = '?cat=' . $object->term_id;
-				} else if ( $this->is_tag() ) {
+				} elseif ( $this->is_tag() ) {
 					$path = '?tag=' . $object->name;
-				} else if ( $this->is_date() ) {
+				} elseif ( $this->is_date() ) {
 					global $wp_query;
 
 					$query = $wp_query->query;
@@ -556,11 +556,11 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 					$day = $query->day ? '&day=' . $query->day : '';
 
 					$path = '?year=' . $year . $month . $day;
-				} else if ( $this->is_author() ) {
+				} elseif ( $this->is_author() ) {
 					$path = '?author=' . $object->author_name;
-				} else if ( $this->is_tax() ) {
+				} elseif ( $this->is_tax() ) {
 					$path = '?taxonomy=' . $object->taxonomy . '&term=' . $object->slug;
-				} else if ( isset( $object->query_var ) && $object->query_var ) {
+				} elseif ( isset( $object->query_var ) && $object->query_var ) {
 					$path = '?' . $object->query_var . '=' . $object->slug;
 				} else {
 					$path = '?p=' . $object->ID;
@@ -578,7 +578,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 			if ( isset( $post ) ) {
 				if ( is_object( $post ) && isset( $post->ID ) ) {
 					$id = $post->ID;
-				} else if ( is_scalar( $post ) ) {
+				} elseif ( is_scalar( $post ) ) {
 					$id = $post;
 				}
 			}
@@ -839,6 +839,38 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 
 		update_option( 'autodescription-term-meta', (array) $term_meta );
 
+	}
+
+	/**
+	 * Faster way of doing an in_array search compared to default PHP behavior.
+	 * @NOTE only to show improvement with large arrays. Might slow down with small arrays.
+	 * @NOTE can't do type checks. Always assume the comparing value is a string.
+	 *
+	 * @since 2.5.2
+	 * @deprecated
+	 * @since 2.7.0
+	 *
+	 * @param string|array $needle The needle(s) to search for
+	 * @param array $array The single dimensional array to search in.
+	 * @return bool true if value is in array.
+	 */
+	public function in_array( $needle, $array ) {
+
+		$this->_deprecated_function( 'AutoDescription_Core::' . __FUNCTION__, '2.7.0', 'in_array()' );
+
+		$array = array_flip( $array );
+
+		if ( is_string( $needle ) ) {
+			if ( isset( $array[ $needle ] ) )
+				return true;
+		} elseif ( is_array( $needle ) ) {
+			foreach ( $needle as $str ) {
+				if ( isset( $array[ $str ] ) )
+					return true;
+			}
+		}
+
+		return false;
 	}
 
 }

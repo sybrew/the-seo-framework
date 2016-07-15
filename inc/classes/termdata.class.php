@@ -72,8 +72,8 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 		if ( $use_cache ) {
 			static $cache = array();
 
-			if ( isset( $cache[$term_id] ) )
-				return $cache[$term_id];
+			if ( isset( $cache[ $term_id ] ) )
+				return $cache[ $term_id ];
 		} else {
 			$cache = array();
 		}
@@ -82,22 +82,20 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 
 		//* Evaluate merely by presence.
 		if ( isset( $data['saved_flag'] ) )
-			return $cache[$term_id] = $data;
+			return $cache[ $term_id ] = $data;
 
 		if ( $this->is_theme( 'genesis' ) ) {
-			$term = $this->fetch_the_term( $term_id );
-
 			$data = array();
-			$data['doctitle'] = get_term_meta( $term->term_id, 'doctitle', true );
-			$data['description'] = get_term_meta( $term->term_id, 'description', true );
-			$data['noindex'] = get_term_meta( $term->term_id, 'noindex', true );
-			$data['nofollow'] = get_term_meta( $term->term_id, 'nofollow', true );
-			$data['noarchive'] = get_term_meta( $term->term_id, 'noarchive', true );
+			$data['doctitle'] = get_term_meta( $term_id, 'doctitle', true );
+			$data['description'] = get_term_meta( $term_id, 'description', true );
+			$data['noindex'] = get_term_meta( $term_id, 'noindex', true );
+			$data['nofollow'] = get_term_meta( $term_id, 'nofollow', true );
+			$data['noarchive'] = get_term_meta( $term_id, 'noarchive', true );
 
-			return $cache[$term_id] = $data;
+			return $cache[ $term_id ] = $data;
 		}
 
-		return $cache[$term_id] = array();
+		return $cache[ $term_id ] = array();
 	}
 
 	/**
@@ -122,9 +120,7 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 	}
 
 	/**
-	 * Saves term meta data when a term is altered.
-	 * The data is saved without prior sanitation in the database, the output
-	 * should always be checked.
+	 * Sanitizes and saves term meta data when a term is altered.
 	 *
 	 * @since 2.7.0
 	 *
@@ -137,7 +133,10 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX )
 			return;
 
-		$data = isset( $_POST['autodescription-meta'] ) ? (array) $_POST['autodescription-meta'] : array();
+		//* Check again against ambiguous injection.
+		check_admin_referer( 'update-tag_' . $term_id );
+
+		$data = isset( $_POST['autodescription-meta'] ) ? (array) map_deep( $_POST['autodescription-meta'], 'esc_attr' ) : array();
 		$data = wp_parse_args( $data, $this->get_term_meta_defaults() );
 
 		update_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
@@ -160,7 +159,7 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 		$data = get_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true );
 
 		foreach ( $this->get_term_meta_defaults() as $key => $value ) {
-			unset( $data[$key] );
+			unset( $data[ $key ] );
 		}
 
 		if ( empty( $data ) )
@@ -188,13 +187,10 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 			$term = $this->fetch_the_term( $term_id );
 
 		if ( isset( $term->term_id ) ) {
-
-			if ( $this->can_get_term_meta() ) {
+			if ( $this->can_get_term_meta() )
 				return $this->get_term_meta( $term->term_id );
-			} else {
+			else
 				return $this->get_old_term_data( $term );
-			}
-
 		}
 
 		//* Return null if no term can be set.
@@ -245,8 +241,8 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 
 		static $term = array();
 
-		if ( isset( $term[$id] ) )
-			return $term[$id];
+		if ( isset( $term[ $id ] ) )
+			return $term[ $id ];
 
 		//* Return null if no term can be set.
 		if ( false === $this->is_archive() )
@@ -257,20 +253,19 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 
 			if ( isset( $current_screen->taxonomy ) ) {
 				$term_id = $id ? $id : $this->get_admin_term_id();
-				$term[$id] = get_term_by( 'id', $term_id, $current_screen->taxonomy );
+				$term[ $id ] = get_term_by( 'id', $term_id, $current_screen->taxonomy );
 			}
 		} else {
-			if ( $this->is_category() || $this->is_tag() ) {
-				$term[$id] = get_queried_object();
-			} else if ( $this->is_tax() ) {
-				$term[$id] = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
-			}
+			if ( $this->is_category() || $this->is_tag() )
+				$term[ $id ] = get_queried_object();
+			elseif ( $this->is_tax() )
+				$term[ $id ] = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
 		}
 
-		if ( isset( $term[$id] ) )
-			return $term[$id];
+		if ( isset( $term[ $id ] ) )
+			return $term[ $id ];
 
-		return $term[$id] = false;
+		return $term[ $id ] = false;
 	}
 
 	/**
@@ -315,8 +310,8 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 		if ( $use_cache ) {
 			static $term_name = array();
 
-			if ( isset( $term_name[$singular] ) )
-				return $term_name[$singular];
+			if ( isset( $term_name[ $singular ] ) )
+				return $term_name[ $singular ];
 		} else {
 			$term_name = array();
 		}
@@ -330,27 +325,26 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 			 * Dynamically fetch the term name.
 			 * @since 2.3.1
 			 */
-			if ( ! isset( $term_labels[$tax_type] ) )
-				$term_labels[$tax_type] = $this->get_tax_labels( $tax_type );
+			if ( ! isset( $term_labels[ $tax_type ] ) )
+				$term_labels[ $tax_type ] = $this->get_tax_labels( $tax_type );
 
 			if ( $singular ) {
-				if ( isset( $term_labels[$tax_type]->singular_name ) )
-					return $term_name[$singular] = $term_labels[$tax_type]->singular_name;
+				if ( isset( $term_labels[ $tax_type ]->singular_name ) )
+					return $term_name[ $singular ] = $term_labels[ $tax_type ]->singular_name;
 			} else {
 				if ( isset( $term_labels->name ) )
-					return $term_name[$singular] = $term_labels[$tax_type]->name;
+					return $term_name[ $singular ] = $term_labels[ $tax_type ]->name;
 			}
 		}
 
 		if ( $fallback ) {
 			//* Fallback to Page as it is generic.
 			if ( $singular )
-				return $term_name[$singular] = __( 'Page', 'autodescription' );
+				return $term_name[ $singular ] = esc_html__( 'Page', 'autodescription' );
 
-			return $term_name[$singular] = __( 'Pages', 'autodescription' );
+			return $term_name[ $singular ] = esc_html__( 'Pages', 'autodescription' );
 		}
 
-		return $term_name[$singular] = '';
+		return $term_name[ $singular ] = '';
 	}
-
 }

@@ -279,6 +279,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 1. Upgrading the plugin to the latest WordPress standards.
 1. Reducing future bug reports chance.
 1. Improving the code quality and readability.
+1. Helping developers out with better extensibility.
+1. Better coding standards have been introduced.
 
 * How this was achieved (in order set above):
 
@@ -289,6 +291,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 1. Alongside the previous upgrade, I've taken a very close look at the WordPress core functions, and adjusted code accordingly.
 1. Because of all previous steps, this would follow naturally.
 1. I've read all code once more, and discovered ways for improvement. It's like a spellcheck.
+1. Throughout the code, better and more open standards have been introduced, where other developers can easily add to, disable or enable functionality.
+1. With the help of a code linter, [WordPress VIP best practices](https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/) have been enforced throughout the plugin. This increases security and overal performance.
 
 **How do I benefit most of this update, and other plugins in general?**
 
@@ -297,6 +301,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 1. Update to the latest WordPress version. This will make sure your website is secure and compatible.
 1. Update to an actively supported PHP version. Did you know that PHP versions 5.5 and below are no longer updated against security vulnerabilities? Go [tell your hosting provider](https://wordpress.org/about/requirements/).
 1. Process your theme through [Theme Check](https://wordpress.org/plugins/theme-check/). If the theme you wish to use fails many of these checks, feel free to tell the theme author. Bad standards lead to bad performance, compatibility issues, and sometimes even security vulnerabilities.
+
+**Have thousands of categories and tags?**
+
+* No problem! After the plugin has been updated, the first admin request might take a while longer while converting all term data to the new data system.
+* After that, you're good to go. Enjoy!
 
 **Detailed Log:**
 /
@@ -332,17 +341,21 @@ TODO
 **Fixed:**
 	/
 	* TODO
-	* TODO When saving the Site Options, the counter type was reset. This has been fixed by placing the counter type option out of the plugins options scope.
+	* TODO When saving the SEO Options, the counter type was reset. This has been fixed by placing the counter type option out of the plugins options scope.
 	* TODO When updating the plugin, without added options, the update notification now really should no longer show up. ^related
 	* When changing the WordPress Core tagline settings, the homepage description transient is now flushed, instead of the blog page (which could be on another page).
+	* WooCommerce Product Tag and Category IDs can no longer conflict with singular post type IDs.
+	* When solely changing the counter type within the SEO Options, an "unsaved changes" prompt will no longer be displayed.
+	* The LD+Json home URL output now doesn't add a trailing slash when your options don't have supplied one.
 
 **For developers:**
-/s
+/
 TODO
 **Added:**
 	/
 	* TODO
 	* Function `the_seo_framework_update_option()`, this allows you to update options remotely.
+	* Function `the_seo_framework_options_page_slug()`, this allows you to hook into the SEO settings page.
 	* Method `AutoDescription_Query::get_the_real_admin_ID()`, this always runs within `AutoDescription_Query::get_the_real_ID()` when in admin.
 **Improved:**
 	/
@@ -358,9 +371,16 @@ TODO
 		* `AutoDescription_TermData::term_meta_delete()`
 	* `AutoDescription_Query::get_the_real_ID()` processing time has been significantly reduced within the admin area.
 	* The theme doing it right transient has been changed into a permanent transient, this means it's autoloaded with all other options. This transient acts like an option and is flushed on theme change.
+	* WordPress VIP coding standards, including:
+		* External pinging URLs are now cleaned prior to sending the request.
+		* Sitemaps query objects are now being sent through `WP_Query`, rather than get_posts().
+			* Sitemaps post queries are now suppressing filters.
+		* Translation strings are sanitatized when needed.
+		* Included better validation of superglobals.
+	* Transient and Object cache key generation based on type request now run earlier and bypass the static cache for improved performance and reduced memory heap size.
 **Changed:**
 	/
-	* Variable 'AutoDescription_Siteoptions::page_id' is now publicly accessible. Making it easier to add submenu items. NOTE rename this to admin_page_id?
+	* Variable 'AutoDescription_Siteoptions::page_id' is now publicly accessible. Making it easier to add submenu items.
 	* All class `AutoDescription_Metaboxes` metabox output function parameters have been shifted by one. The first parameter is now used for the (unavailable) post object. The second must be an array. This change affects the following methods:
 		* `AutoDescription_Metaboxes::title_metabox()`
 		* `AutoDescription_Metaboxes::description_metabox()`
@@ -387,10 +407,11 @@ TODO
 	* Unused network admin methods. Network admin settings constants and filters are held intact for the future. The related changes are listed below.
 		* Method `AutoDescription_Adminpages::add_network_menu_link()`, without deprecation.
 		* Method `AutoDescription_Adminpages::network_admin()`, without deprecation.
+		* Method `AutoDescription_Adminpages::get_field_value_network()`, without deprecation.
 		* Public var `AutoDescription_Adminpages::network_pagehook`, without deprecation.
 	/
-	* TODO either $pagehook or $page_hook has to go. It's confusing me =/.
-	* All deprecated functions that have been deprecated prior to version 2.5.0 of The SEO Framework. These include methods:
+	* Method `AutoDescription_Render::favicon()`, as it was unused. Without deprecation notice, as it was marked private.
+	* All deprecated class methods that have been deprecated prior to version 2.5.0 of The SEO Framework. These class methods include:
 		* `autodescription_get_option()`
 		* `enqueue_javascript()`
 		* `enqueue_css()`
@@ -400,12 +421,17 @@ TODO
 		* `scripts()`
 		* `setup_transient_names_init()`
 	* Method `AutoDescription_TermData::init_term_filters()`, without deprecation as it was marked private.
+	* Method `AutoDescription_Core::in_array()`, as it is no longer of use.
+	* An useless easter egg in order to clean up code.
 **Deprecated:**
 	/
 	* `AutoDescription_Metaboxes::homepage_metabox_general()`, use `AutoDescription_Metaboxes::homepage_metabox_general_tab()` instead.
 	* `AutoDescription_Metaboxes::homepage_metabox_additions()`, use `AutoDescription_Metaboxes::homepage_metabox_additions_tab()` instead.
 	* `AutoDescription_Metaboxes::homepage_metabox_robots()`, use `AutoDescription_Metaboxes::homepage_metabox_robots_tab()` instead.
 	* `AutoDescription_Transients::delete_auto_description_blog_transient()`, use `AutoDescription_Metaboxes::delete_auto_description_frontpage_transient()` instead.
+	* `tsf_get_option()`, use `the_seo_framework_get_option()` instead.
+	* `tsf_options_pagehook()`, use `the_seo_framework_options_pagehook()` instead.
+	* `tsf_wp_version()`, use `AutoDescription_Detect::wp_version()` instead.
 **Action notes:**
 	* **Added:**
 		* `the_seo_framework_upgraded`, Runs once after the plugin has finished upgrading. Only on WordPress 4.4 and later.
@@ -413,7 +439,7 @@ TODO
 	/
 	* **Added:**
 		/
-		* `(string) the_seo_framework_term_options`, the WordPress 4.4+ metadata key.
+		* `(string) the_seo_framework_term_options`, the WordPress 4.4+ metadata option key name.
 	* **Changed:**
 		/
 		* `(string) the_seo_framework_description_output`, first parameter now contains expected output.
@@ -442,6 +468,7 @@ TODO
 		* `(string) THE_SEO_FRAMEWORK_DIR_PATH_VIEWS`
 		* `(string) THE_SEO_FRAMEWORK_TERM_OPTIONS`
 **Notes:**
+	* The SEO Framework settings page now has the slug `theseoframework-settings` instead of `autodescription-settings`. Use provided functions and variables in the `optionsapi.php` file to determine this state.
 	* Cleaned up code. A whole lot.
 
 = Full changelog =

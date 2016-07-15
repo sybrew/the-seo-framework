@@ -85,6 +85,10 @@ class AutoDescription_Compat extends AutoDescription_Debug {
 	/**
 	 * Adds compatibility with various JetPack modules.
 	 *
+	 * Recently, JetPack made sure this filter doesn't run when The SEO Framework
+	 * is active as they've added their own compatibility check towards this plugin.
+	 * Let's wait until everyone has updated before removing this.
+	 *
 	 * @since 2.6.0
 	 */
 	public function jetpack_compat() {
@@ -95,6 +99,4 @@ class AutoDescription_Compat extends AutoDescription_Debug {
 		}
 
 	}
-
-
 }

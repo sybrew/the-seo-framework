@@ -35,9 +35,19 @@ function the_seo_framework() {
 }
 
 /**
- * The SEO FrameWork version number
+ * Checks if The SEO FrameWork is active based on filter.
  *
- * Useful for version comparing
+ * @since 2.2.5
+ *
+ * @return bool true if SEO framework is active
+ */
+function the_seo_framework_active() {
+	return the_seo_framework_load();
+}
+
+/**
+ * Returns The SEO FrameWork version number.
+ * Useful for version comparing.
  *
  * @since 2.2.5
  *
@@ -52,13 +62,12 @@ function the_seo_framework_version() {
 }
 
 /**
- * The SEO Framework dot version compare.
- *
- * @param string version The two dot version: x.v
+ * Compares The SEO Framework dot versions.
  *
  * @since 2.4.0
  *
- * @return bool False plugin inactive or version compare fails.
+ * @param string version The two dot version: x.v
+ * @return bool False plugin inactive or version compare yields negative results.
  */
 function the_seo_framework_dot_version( $version = '2.4' ) {
 
@@ -83,44 +92,13 @@ function the_seo_framework_dot_version( $version = '2.4' ) {
 }
 
 /**
- * Check if The SEO FrameWork is active based on global filter.
- *
- * @since 2.2.5
- *
- * @return bool true if SEO framework is active
- */
-function the_seo_framework_active() {
-	return the_seo_framework_load();
-}
-
-/**
- * Compare the WordPress version to the input one.
- *
- * @since 2.2.9
- *
- * @param string $version The 3 point version compare
- * @param string $compare The PHP comparison operator.
- *
- * @return bool true if Version passes comparison.
- */
-function tsf_wp_version( $version = '4.3.0', $compare = '>=' ) {
-
-	$theseoframework = the_seo_framework();
-
-	if ( isset( $theseoframework ) )
-		return $theseoframework->wp_version( $version, $compare );
-
-	return null;
-}
-
-/**
  * Fetch the The SEO Framework Options pagehook.
  *
- * @since 2.2.9
+ * @since 2.7.0
  *
  * @return string|null The pagehook.
  */
-function tsf_options_pagehook() {
+function the_seo_framework_options_pagehook() {
 
 	$theseoframework = the_seo_framework();
 
@@ -130,17 +108,17 @@ function tsf_options_pagehook() {
 	return null;
 }
 
+
 /**
  * Fetch an option from The SEO Framework.
  *
- * @since 2.2.9
+ * @since 2.7.0
  *
- * @param string  $key       Option name.
+ * @param string  $key Option name.
  * @param boolean $use_cache Optional. Whether to use the cache value or not. Defaults to true.
- *
  * @return mixed The option value.
  */
-function tsf_get_option( $key, $use_cache = true ) {
+function the_seo_framework_get_option() {
 
 	$theseoframework = the_seo_framework();
 
@@ -153,10 +131,9 @@ function tsf_get_option( $key, $use_cache = true ) {
 /**
  * Fetch title from cache. Only works within Loop.
  *
- * @param string|null $title the previous title
- *
  * @since 2.4.2
  *
+ * @param string|null $title the previous title
  * @return string|null The current page title.
  */
 function the_seo_framework_title_from_cache( $title = null ) {
@@ -172,10 +149,9 @@ function the_seo_framework_title_from_cache( $title = null ) {
 /**
  * Fetch description from cache. Only works within Loop.
  *
- * @param bool $social Fetch social description.
- *
  * @since 2.4.2
  *
+ * @param bool $social Fetch social description.
  * @return string|null The current page description.
  */
 function the_seo_framework_description_from_cache( $social = false ) {
@@ -235,6 +211,23 @@ function the_seo_framework_update_option( $new_option ) {
 
 	if ( isset( $theseoframework ) )
 		return $theseoframework->update_settings( $new_option );
+
+	return false;
+}
+
+/**
+ * Returns the parent slug name of The SEO Framework plugin.
+ *
+ * @since 2.7.0
+ *
+ * @return bool|string False on failure, the slug on success.
+ */
+function the_seo_framework_options_page_slug() {
+
+	$theseoframework = the_seo_framework();
+
+	if ( isset( $theseoframework ) )
+		return $theseoframework->seo_settings_page_slug;
 
 	return false;
 }

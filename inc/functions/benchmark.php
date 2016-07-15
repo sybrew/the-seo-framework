@@ -410,7 +410,7 @@ function the_seo_framework_in_array( $needle, $array ) {
 	if ( is_string( $needle ) ) {
 		if ( isset( $array[$needle] ) )
 			return true;
-	} else if ( is_array( $needle ) ) {
+	} elseif ( is_array( $needle ) ) {
 		foreach ( $needle as $str ) {
 			if ( isset( $array[$str] ) )
 				return true;

@@ -79,7 +79,7 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 		$all_allowed = empty( $args['disallowed'] );
 
 		//* 1. Fetch image from featured
-		if ( empty( $image ) && ( $all_allowed || ! in_array( 'featured', $args['disallowed'] ) ) )
+		if ( empty( $image ) && ( $all_allowed || ! in_array( 'featured', $args['disallowed'], true ) ) )
 			$image = $this->get_image_from_post_thumbnail( $args );
 
 		//* 2. Fetch image from fallback filter 1
@@ -87,7 +87,7 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 			$image = (string) apply_filters( 'the_seo_framework_og_image_after_featured', '', $args['post_id'] );
 
 		//* 3. Fallback: Get header image if exists
-		if ( empty( $image ) && ( $all_allowed || ! in_array( 'header', $args['disallowed'] ) ) && current_theme_supports( 'custom-header', 'default-image' ) )
+		if ( empty( $image ) && ( $all_allowed || ! in_array( 'header', $args['disallowed'], true ) ) && current_theme_supports( 'custom-header', 'default-image' ) )
 			$image = $this->get_header_image( true );
 
 		//* 4. Fetch image from fallback filter 2
@@ -95,7 +95,7 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 			$image = (string) apply_filters( 'the_seo_framework_og_image_after_header', '', $args['post_id'] );
 
 		//* 5. Get the WP 4.3.0 Site Icon
-		if ( empty( $image ) && ( $all_allowed || ! in_array( 'icon', $args['disallowed'] ) ) )
+		if ( empty( $image ) && ( $all_allowed || ! in_array( 'icon', $args['disallowed'], true ) ) )
 			$image = $this->site_icon( 'full', true );
 
 		if ( $escape && $image )
@@ -262,8 +262,9 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 			return;
 
 		static $called = array();
+
 		//* Don't parse image twice. Return empty on second run.
-		if ( isset( $called[$id] ) )
+		if ( isset( $called[ $id ] ) )
 			return '';
 
 		if ( empty( $args ) )
@@ -282,10 +283,10 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 				//* Square
 				$w = 1500;
 				$h = 1500;
-			} else if ( $w > $h ) {
+			} elseif ( $w > $h ) {
 				//* Landscape, set $w to 1500.
 				$h = (int) $this->proportionate_dimensions( $h, $w, $w = 1500 );
-			} else if ( $h > $w ) {
+			} elseif ( $h > $w ) {
 				//* Portrait, set $h to 1500.
 				$w = (int) $this->proportionate_dimensions( $w, $h, $h = 1500 );
 			}
@@ -338,7 +339,7 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 
 		$this->image_dimensions = $this->image_dimensions + array( $usage_id => array( 'width' => $w, 'height' => $h ) );
 
-		return $called[$id] = $i;
+		return $called[ $id ] = $i;
 	}
 
 	/**
@@ -370,8 +371,7 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 					$this->image_dimensions = $this->image_dimensions + array( $this->get_the_real_ID() => array( 'width' => $w, 'height' => $h ) );
 				}
 			}
-
-		} else if ( is_int( $size ) && function_exists( 'has_site_icon' ) && $this->wp_version( '4.3', '>=' ) ) {
+		} elseif ( is_int( $size ) && function_exists( 'has_site_icon' ) && $this->wp_version( '4.3', '>=' ) ) {
 			//* Also applies (MultiSite) filters.
 			$icon = get_site_icon_url( $size );
 		}
@@ -403,5 +403,4 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 
 		return $image;
 	}
-
 }

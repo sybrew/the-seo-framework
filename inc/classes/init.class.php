@@ -88,11 +88,10 @@ class AutoDescription_Init extends AutoDescription_Query {
 		//* Earlier removal of the generator tag. Doesn't require filter.
 		remove_action( 'wp_head', 'wp_generator' );
 
-		if ( $this->is_theme( 'genesis' ) ) {
+		if ( $this->is_theme( 'genesis' ) )
 			add_action( 'genesis_meta', array( $this, 'html_output' ), 5 );
-		} else {
+		else
 			add_action( 'wp_head', array( $this, 'html_output' ), 1 );
-		}
 
 	}
 
@@ -113,7 +112,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 		//* Override bbPress title
 		add_filter( 'bbp_title', array( $this, 'title_from_cache' ), 99, 3 );
 		//* Override Woo Themes Title
-		add_filter( 'woo_title', array( $this, 'title_from_cache'), 99 );
+		add_filter( 'woo_title', array( $this, 'title_from_cache' ), 99 );
 
 		/**
 		 * Applies filters 'the_seo_framework_manipulate_title' : boolean
@@ -313,7 +312,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 
 			$start = __( 'Start The Seo Framework', 'autodescription' );
 			$end = __( 'End The Seo Framework', 'autodescription' );
-			$me =  $sybre ? ' ' . __( 'by Sybre Waaijer', 'autodescription' ) : '';
+			$me = $sybre ? ' ' . __( 'by Sybre Waaijer', 'autodescription' ) : '';
 
 			$indicatorbefore = '<!-- ' . $start . $me . ' -->' . "\r\n";
 
@@ -360,6 +359,9 @@ class AutoDescription_Init extends AutoDescription_Query {
 				$url = $this->set_url_scheme( $url, 'relative' );
 				$url = $this->add_url_host( $url );
 				$scheme = is_ssl() ? 'https' : 'http';
+
+				wp_safe_redirect( esc_url_raw( $url, $scheme ), 301 );
+				exit;
 			}
 
 			wp_redirect( esc_url_raw( $url, $scheme ), 301 );
@@ -367,38 +369,4 @@ class AutoDescription_Init extends AutoDescription_Query {
 		}
 
 	}
-
-	/**
-	 * Well, this is annoying.
-	 * Something that will make your head explode.
-	 *
-	 * @since 2.4.2
-	 */
-	public function explode() {
-		add_action( 'wp_head', array( $this, 'roll' ) );
-
-		/* the code to run this :
-		add_action( 'init', 'tsf_explode' );
-		function tsf_explode() {
-			if ( function_exists( 'the_seo_framework' ) ) {
-				$the_seo_framework = the_seo_framework();
-				if ( isset( $the_seo_framework ) )
-					$the_seo_framework->explode();
-			}
-		}
-		*/
-	}
-
-	/**
-	 * After using explosions, you tend to roll away.
-	 *
-	 * @since 2.5.2
-	 */
-	public function roll() {
-		?>
-		<style>div:hover>div{-webkit-animation:troll 5s infinite cubic-bezier(0,1.5,.5,1)1s;animation:troll 5s infinite cubic-bezier(0,1.5,.5,1)1s}@-webkit-keyframes troll{100%{-webkit-transform:rotate(0)}75%{-webkit-transform:rotate(30deg)}25%{-webkit-transorm:rotate(0)}0%{-webkit-transorm:rotate(30deg)}}@keyframes troll{100%,25%{transform:rotate(0)}0%,75%{transform:rotate(30deg)}}#container:hover,.site-container:hover{-webkit-animation:none;animation:none}</style>
-		<?php
-		echo "\r\n";
-	}
-
 }

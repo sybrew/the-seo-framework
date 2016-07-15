@@ -104,7 +104,7 @@ switch ( $instance ) :
 
 		if ( $has_sitemap_plugin ) {
 			$this->description( __( "Another active sitemap plugin has been detected. This means that the sitemap functionality has been replaced.", 'autodescription' ) );
-		} else if ( $sitemap_detected ) {
+		} elseif ( $sitemap_detected ) {
 			$this->description( __( "A sitemap has been detected in the root folder of your website. This means that the sitemap functionality has no effect.", 'autodescription' ) );
 		} else {
 			$this->description( __( "The Sitemap is an XML file that lists pages and posts for your website along with optional metadata about each post or page. This helps Search Engines crawl your website more easily.", 'autodescription' ) );

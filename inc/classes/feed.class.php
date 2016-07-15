@@ -133,10 +133,8 @@ class AutoDescription_Feed extends AutoDescription_Transients {
 				$source_i18n = (string) apply_filters( 'the_seo_framework_feed_source_link_text', _x( 'Source', 'The content source', 'autodescription' ) );
 				$content .= "\r\n" . '<p><a href="' . $permalink . '" rel="external nofollow">' . $source_i18n . '</a></p>';
 			}
-
 		}
 
 		return $content;
 	}
-
 }

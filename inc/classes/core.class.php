@@ -95,7 +95,7 @@ class AutoDescription_Core {
 	}
 
 	/**
-	 * Adds post type support
+	 * Adds post type support for The SEO Framework.
 	 *
 	 * Applies filters the_seo_framework_supported_post_types : The supported post types.
 	 * @since 2.3.1
@@ -105,10 +105,13 @@ class AutoDescription_Core {
 	public function post_type_support() {
 
 		$defaults = array(
-			'post', 'page',
+			'post',
+			'page',
 			'product',
-			'forum', 'topic',
-			'jetpack-testimonial', 'jetpack-portfolio',
+			'forum',
+			'topic',
+			'jetpack-testimonial',
+			'jetpack-portfolio',
 		);
 
 		$post_types = (array) apply_filters( 'the_seo_framework_supported_post_types', $defaults );
@@ -129,14 +132,14 @@ class AutoDescription_Core {
 	 */
 	public function plugin_action_links( $links = array() ) {
 
-		$framework_links = array();
+		$tsf_links = array();
 
 		if ( $this->load_options )
-			$framework_links['settings'] = '<a href="' . esc_url( admin_url( 'admin.php?page=' . $this->page_id ) ) . '">' . __( 'SEO Settings', 'autodescription' ) . '</a>';
+			$tsf_links['settings'] = '<a href="' . esc_url( admin_url( 'admin.php?page=' . $this->seo_settings_page_slug ) ) . '">' . esc_html__( 'SEO Settings', 'autodescription' ) . '</a>';
 
-		$framework_links['home'] = '<a href="'. esc_url( 'https://theseoframework.com/' ) . '" target="_blank">' . _x( 'Plugin Home', 'As in: The Plugin Home Page', 'autodescription' ) . '</a>';
+		$tsf_links['home'] = '<a href="' . esc_url( 'https://theseoframework.com/' ) . '" target="_blank">' . esc_html_x( 'Plugin Home', 'As in: The Plugin Home Page', 'autodescription' ) . '</a>';
 
-		return array_merge( $framework_links, $links );
+		return array_merge( $tsf_links, $links );
 	}
 
 	/**
@@ -159,8 +162,8 @@ class AutoDescription_Core {
 	/**
 	 * Generate dismissible notice.
 	 *
-	 * @param $message The notice message.
-	 * @param $type The notice type : 'updated', 'error', 'warning'
+	 * @param $message The notice message. Expected to be escaped.
+	 * @param $type The notice type : 'updated', 'error', 'warning'. Expected to be escaped.
 	 *
 	 * @since 2.6.0
 	 */
@@ -228,7 +231,7 @@ class AutoDescription_Core {
 	 *
 	 * @since 2.7.0
 	 *
-	 * @param string $content Content to be wrapped in the description wrap.
+	 * @param string $content Content to be wrapped in the description wrap. Expected to be escaped.
 	 * @param bool $block Whether to wrap the content in <p> tags.
 	 * @return string Content wrapped int he description wrap.
 	 */
@@ -244,54 +247,42 @@ class AutoDescription_Core {
 	 * blank or not set.
 	 *
 	 * @since 2.0.0
+	 * @staticvar array $field_cache
 	 *
 	 * @param string $field	Custom field key.
 	 * @param int $post_id	The post ID
-	 *
 	 * @return string|boolean Return value or false on failure.
-	 *
-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
-	 *
-	 * @staticvar array $field_cache
-	 * @since 2.2.5
 	 */
 	public function get_custom_field( $field, $post_id = null ) {
 
-		//* No field has been provided.
-		if ( empty( $field ) )
+		//* If field is falsy, get_post_meta() will return an array.
+		if ( ! $field )
 			return false;
 
-		//* Setup cache.
 		static $field_cache = array();
 
-		//* Check field cache.
-		if ( isset( $field_cache[$field][$post_id] ) )
-			//* Field has been cached.
-			return $field_cache[$field][$post_id];
+		if ( isset( $field_cache[ $field ][ $post_id ] ) )
+			return $field_cache[ $field ][ $post_id ];
 
-		if ( null === $post_id || empty( $post_id ) )
+		if ( empty( $post_id ) )
 			$post_id = $this->get_the_real_ID();
-
-		if ( null === $post_id || empty( $post_id ) )
-			return '';
 
 		$custom_field = get_post_meta( $post_id, $field, true );
 
-		// If custom field is empty, return null.
+		//* If custom field is empty, empty cache..
 		if ( empty( $custom_field ) )
-			$field_cache[$field][$post_id] = '';
+			$field_cache[ $field ][ $post_id ] = '';
 
 		//* Render custom field, slashes stripped, sanitized if string
-		$field_cache[$field][$post_id] = is_array( $custom_field ) ? stripslashes_deep( $custom_field ) : stripslashes( wp_kses_decode_entities( $custom_field ) );
+		$field_cache[ $field ][ $post_id ] = is_array( $custom_field ) ? stripslashes_deep( $custom_field ) : stripslashes( wp_kses_decode_entities( $custom_field ) );
 
-		return $field_cache[$field][$post_id];
+		return $field_cache[ $field ][ $post_id ];
 	}
 
 	/**
 	 * Google docs language determinator.
 	 *
 	 * @since 2.2.2
-	 *
 	 * @staticvar string $language
 	 *
 	 * @return string language code
@@ -307,8 +298,8 @@ class AutoDescription_Core {
 		if ( isset( $language ) )
 			return $language;
 
-		//* Language shorttag to be used in Google help pages,
-		$language = _x( 'en', 'e.g. en for English, nl for Dutch, fi for Finish, de for German', 'autodescription' );
+		//* Language shorttag to be used in Google help pages.
+		$language = esc_html_x( 'en', 'e.g. en for English, nl for Dutch, fi for Finish, de for German', 'autodescription' );
 
 		return $language;
 	}
@@ -355,47 +346,18 @@ class AutoDescription_Core {
 	/**
 	 * Object cache get wrapper.
 	 *
+	 * @since 2.4.3
+	 *
 	 * @param string $key The Object cache key.
 	 * @param string $group The Object cache group.
 	 * @param bool $force Whether to force an update of the local cache.
 	 * @param bool $found Whether the key was found in the cache. Disambiguates a return of false, a storable value.
-	 *
-	 * @since 2.4.3
-	 *
 	 * @return mixed wp_cache_get if object caching is allowed. False otherwise.
 	 */
 	public function object_cache_get( $key, $group = 'the_seo_framework', $force = false, &$found = null ) {
 
 		if ( $this->use_object_cache )
 			return wp_cache_get( $key, $group, $force, $found );
-
-		return false;
-	}
-
-	/**
-	 * Faster way of doing an in_array search compared to default PHP behavior.
-	 * @NOTE only to show improvement with large arrays. Might slow down with small arrays.
-	 * @NOTE can't do type checks. Always assume the comparing value is a string.
-	 *
-	 * @since 2.5.2
-	 *
-	 * @param string|array $needle The needle(s) to search for
-	 * @param array $array The single dimensional array to search in.
-	 * @return bool true if value is in array.
-	 */
-	public function in_array( $needle, $array ) {
-
-		$array = array_flip( $array );
-
-		if ( is_string( $needle ) ) {
-			if ( isset( $array[$needle] ) )
-				return true;
-		} else if ( is_array( $needle ) ) {
-			foreach ( $needle as $str ) {
-				if ( isset( $array[$str] ) )
-					return true;
-			}
-		}
 
 		return false;
 	}
@@ -486,10 +448,10 @@ class AutoDescription_Core {
 
 		static $lowercase = array();
 
-		if ( isset( $lowercase[$noun] ) )
-			return $lowercase[$noun];
+		if ( isset( $lowercase[ $noun ] ) )
+			return $lowercase[ $noun ];
 
-		return $lowercase[$noun] = $this->check_wp_locale( 'de' ) ? $noun : strtolower( $noun );
+		return $lowercase[ $noun ] = $this->check_wp_locale( 'de' ) ? $noun : strtolower( $noun );
 	}
 
 	/**
@@ -519,7 +481,7 @@ class AutoDescription_Core {
 		if ( $this->load_options ) {
 			//* Options are allowed to be loaded.
 
-			$url = html_entity_decode( menu_page_url( $this->page_id, 0 ) );
+			$url = html_entity_decode( menu_page_url( $this->seo_settings_page_slug, 0 ) );
 
 			return esc_url( $url );
 		}
@@ -634,7 +596,7 @@ class AutoDescription_Core {
 	public function get_word_count( $string, $amount = 3, $amount_bother = 5, $bother_length = 3 ) {
 
 		//* Convert string's special characters into PHP readable words.
-		$string = htmlentities( $string, ENT_COMPAT, "UTF-8" );
+		$string = htmlentities( $string, ENT_COMPAT, 'UTF-8' );
 
 		//* Count the words. Because we've converted all characters to XHTML codes, the odd ones should be only numerical.
 		$words = str_word_count( strtolower( $string ), 2, '&#0123456789;' );
@@ -668,7 +630,7 @@ class AutoDescription_Core {
 
 						$word_len = mb_strlen( $word );
 
-						$position = $word_keys[$word];
+						$position = $word_keys[ $word ];
 						$first_encountered_word = mb_substr( $string, $position, $word_len );
 
 						//* Found words that are used too frequently.
@@ -680,5 +642,4 @@ class AutoDescription_Core {
 
 		return $words_too_many;
 	}
-
 }

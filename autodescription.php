@@ -130,8 +130,8 @@ function the_seo_framework_locale_init() {
  */
 require_once( THE_SEO_FRAMEWORK_DIR_PATH . '/load.class.php' );
 
-//* Load deprecated functions. (there are none available)
-//require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.php' );
+//* Load deprecated functions.
+require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.php' );
 
 /**
  * FLush permalinks on activation/deactivation.

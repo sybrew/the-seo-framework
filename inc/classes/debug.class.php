@@ -259,7 +259,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	public function debug_screens() {
 		global $current_screen;
 
-		$this->debug_init( __CLASS__, __FUNCTION__, false, '', get_defined_vars() );
+		$this->debug_init( __METHOD__, false, '', get_defined_vars() );
 
 	}
 
@@ -287,7 +287,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 
 				if ( $this->is_admin() ) {
 					?>
-					<div style="color:#444;font-family:Georgio,sans-serif;font-size:14px;clear:both;float:left;position:relative;width:calc( 100% - 200px );min-height:700px;padding:0;margin:20px 20px 40px 180px;overflow:hidden;border:1px solid #ccc;border-radius:3px;font:'Open Sans',sans-serif">
+					<div style="color:#444;font-family:Georgio,sans-serif;font-size:14px;clear:both;float:left;position:relative;width:calc( 100% - 200px );min-height:700px;padding:0;margin:20px 20px 40px 180px;overflow:hidden;border:1px solid #ccc;border-radius:3px;line-height:18px">
 						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom:2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">
 							SEO Debug Information
 							<?php
@@ -299,7 +299,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 							endif;
 							?>
 						</h3>
-						<div style="position:absolute;bottom:0;right:0;left:0;top:41px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;">
+						<div style="position:absolute;bottom:0;right:0;left:0;top:39px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;z-index:9001">
 							<?php echo $this->debug_header_output(); ?>
 							<?php echo $this->debug_query_output(); ?>
 							<?php echo $this->debug_output; ?>
@@ -308,9 +308,9 @@ class AutoDescription_Debug extends AutoDescription_Core {
 					<?php
 				} else {
 					?>
-					<style type="text/css">.wp-ui-notification{color:#fff;background-color:#d54e21}.code.highlight{font-family:Consolas,Monaco,monospace;font-size:14px;}</style>
-					<div style="color:#444;font-family:Georgio,sans-serif;font-size:14px;clear:both;float:left;position:relative;width:calc( 100% - 80px );min-height:700px;padding:0;margin:40px;overflow:hidden;border:1px solid #ccc;border-radius:3px;font:'Open Sans',sans-serif">
-						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom:2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">
+					<style type="text/css">.wp-ui-notification{color:#fff;background-color:#d54e21}.code.highlight{font-family:Consolas,Monaco,monospace;font-size:14px;}.theseoframework-debug h3{font-size:18px;margin:18px 0}</style>
+					<div class="theseoframework-debug" style="color:#444;font-family:Georgio,sans-serif;font-size:14px;clear:both;float:left;position:relative;width:calc( 100% - 80px );min-height:700px;padding:0;margin:40px;overflow:hidden;border:1px solid #ccc;border-radius:3px;line-height:18px">
+						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom:2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px">
 							SEO Debug Information
 							<?php
 							echo ' :: ';
@@ -319,7 +319,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 							echo $mdash . 'Cache key: ' . $cache_key;
 							?>
 						</h3>
-						<div style="position:absolute;bottom:0;right:0;left:0;top:41px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;">
+						<div style="position:absolute;bottom:0;right:0;left:0;top:39px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;z-index:9001">
 							<?php echo $this->debug_header_output(); ?>
 							<?php echo $this->debug_query_output(); ?>
 							<?php echo $this->debug_output; ?>
@@ -383,15 +383,15 @@ class AutoDescription_Debug extends AutoDescription_Core {
 						$output .= $this->debug_key_wrapper( $key ) . ' => ';
 						$output .= $this->debug_value_wrapper( "''" );
 						$output .= "\r\n";
-					} else if ( is_string( $value ) || is_int( $value ) ) {
+					} elseif ( is_string( $value ) || is_int( $value ) ) {
 						$output .= $this->debug_key_wrapper( $key ) . ' => ';
 						$output .= $this->debug_value_wrapper( $value );
 						$output .= "\r\n";
-					} else if ( is_bool( $value ) ) {
+					} elseif ( is_bool( $value ) ) {
 						$output .= $this->debug_key_wrapper( $key ) . ' => ';
 						$output .= $this->debug_value_wrapper( $value ? 'true' : 'false' );
 						$output .= "\r\n";
-					} else if ( is_array( $value ) ) {
+					} elseif ( is_array( $value ) ) {
 						$output .= $this->debug_key_wrapper( $key ) . ' => ';
 						$output .= "Array[\r\n";
 						$output .= $this->the_seo_framework_debug_hidden ? '' : '<p style="margin:0;padding-left:12px">';
@@ -400,13 +400,13 @@ class AutoDescription_Debug extends AutoDescription_Core {
 							if ( '' === $v ) {
 								$output .= $this->debug_key_wrapper( $k ) . ' => ';
 								$output .= $this->debug_value_wrapper( "''" );
-							} else if ( is_string( $v ) || is_int( $v ) ) {
+							} elseif ( is_string( $v ) || is_int( $v ) ) {
 								$output .= $this->debug_key_wrapper( $k ) . ' => ';
 								$output .= $this->debug_value_wrapper( $v );
-							} else if ( is_bool( $v ) ) {
+							} elseif ( is_bool( $v ) ) {
 								$output .= $this->debug_key_wrapper( $k ) . ' => ';
 								$output .= $this->debug_value_wrapper( $v ? 'true' : 'false' );
-							} else if ( is_array( $v ) ) {
+							} elseif ( is_array( $v ) ) {
 								$output .= $this->debug_key_wrapper( $k ) . ' => ';
 								$output .= $this->debug_value_wrapper( 'Debug message: Three+ dimensional array' );
 							} else {
@@ -427,13 +427,13 @@ class AutoDescription_Debug extends AutoDescription_Core {
 					$output .= $this->the_seo_framework_debug_hidden ? '' : '<br>';
 				}
 				$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
-			} else if ( '' === $values ) {
+			} elseif ( '' === $values ) {
 				$output .= "\t\t";
 				$output .= $this->debug_value_wrapper( "''" );
-			} else if ( is_string( $values ) || is_int( $values ) ) {
+			} elseif ( is_string( $values ) || is_int( $values ) ) {
 				$output .= "\t\t";
 				$output .= $this->debug_value_wrapper( $values );
-			} else if ( is_bool( $values ) ) {
+			} elseif ( is_bool( $values ) ) {
 				$output .= "\t\t";
 				$output .= $this->debug_value_wrapper( $values ? 'true' : 'false' );
 			} else {
@@ -499,28 +499,27 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	 *
 	 * @access private
 	 *
-	 * @param string $class The class name.
 	 * @param string $method The function name.
 	 * @param bool $store Whether to store the output in cache for next run to pick up on.
 	 * @param double $debug_key Use $debug_key as variable, it's reserved.
 	 * @param mixed function args.
 	 * @return void early if debugging is disabled or when storing cache values.
 	 */
-	protected function debug_init( $class, $method, $store, $debug_key ) {
+	protected function debug_init( $method, $store, $debug_key ) {
 
 		if ( false === $this->the_seo_framework_debug || false === $this->add_debug_output )
 			return;
 
 		$output = '';
 
-		if ( func_num_args() >= 5 ) {
+		if ( func_num_args() >= 4 ) {
 
 			//* Cache the args for $store.
 			static $cached_args = array();
 			static $hold_args = array();
 
-			$args = array_slice( func_get_args(), 4 );
-			$key = $class . '_' . $method . '_' . $debug_key;
+			$args = array_slice( func_get_args(), 3 );
+			$key = $method . '_' . $debug_key;
 
 			if ( $store ) {
 				$this->profile( false, false, 'time', $key ) . ' seconds';
@@ -528,8 +527,8 @@ class AutoDescription_Debug extends AutoDescription_Core {
 
 				unset( $args[0]['debug_key'] );
 
-				$cached_args[$class][$method] = $args;
-				$hold_args[$class][$method] = $args;
+				$cached_args[ $method ] = $args;
+				$hold_args[ $method ] = $args;
 				return;
 			} else {
 
@@ -551,7 +550,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 				$output .= "\r\n";
 				$output .= $this->the_seo_framework_debug_hidden ? $debug_key . ' output. ' : '<h3>' . $debug_key . '</h3>';
 
-				if ( isset( $cached_args[$class][$method] ) ) {
+				if ( isset( $cached_args[ $method ] ) ) {
 					$args[] = array(
 						'profile' => array(
 							'time' => $this->profile( false, true, 'time', $key ) . ' seconds',
@@ -559,29 +558,25 @@ class AutoDescription_Debug extends AutoDescription_Core {
 						)
 					);
 
-					$args = array_merge( $cached_args[$class][$method], $args );
+					$args = array_merge( $cached_args[ $method ], $args );
 
 					//* Reset args for next run.
-					$cached_args[$class][$method] = null;
+					$cached_args[ $method ] = null;
 				}
 			}
 
 			if ( $args ) {
 
-				if ( $class ) {
-					$output .= $class . '::' . $method . '( ';
-				} else {
-					$output .= $method . '( ';
-				}
+				$output .= $method . '( ';
 
-				if ( isset( $hold_args[$class][$method][0] ) ) {
-					if ( is_array( $hold_args[$class][$method][0] ) ) {
-						foreach ( $hold_args[$class][$method][0] as $var => $a ) {
+				if ( isset( $hold_args[ $method ][0] ) ) {
+					if ( is_array( $hold_args[ $method ][0] ) ) {
+						foreach ( $hold_args[ $method ][0] as $var => $a ) {
 								$output .= gettype( $a ) . ' $' . $var . ', ';
 						}
 					}
 					$output = rtrim( $output, ', ' );
-					$hold_args[$class][$method] = null;
+					$hold_args[ $method ] = null;
 				}
 
 				$output .= ' )';
@@ -658,26 +653,26 @@ class AutoDescription_Debug extends AutoDescription_Core {
 		static $plugin_time = array();
 		static $plugin_memory = array();
 
-		$timer_start[$key] = isset( $timer_start[$key] ) ? $timer_start[$key] : 0;
-		$memory_start[$key] = isset( $memory_start[$key] ) ? $memory_start[$key] : 0;
-		$plugin_time[$key] = isset( $plugin_time[$key] ) ? $plugin_time[$key] : 0;
-		$plugin_memory[$key] = isset( $plugin_memory[$key] ) ? $plugin_memory[$key] : 0;
+		$timer_start[ $key ] = isset( $timer_start[ $key ] ) ? $timer_start[ $key ] : 0;
+		$memory_start[ $key ] = isset( $memory_start[ $key ] ) ? $memory_start[ $key ] : 0;
+		$plugin_time[ $key ] = isset( $plugin_time[ $key ] ) ? $plugin_time[ $key ] : 0;
+		$plugin_memory[ $key ] = isset( $plugin_memory[ $key ] ) ? $plugin_memory[ $key ] : 0;
 
 		//* Get now.
 		$time_now = microtime( true );
 		$memory_usage_now = memory_get_usage();
 
 		//* Calculate difference.
-		$difference_time = $time_now - $timer_start[$key];
-		$difference_memory = $memory_usage_now - $memory_start[$key];
+		$difference_time = $time_now - $timer_start[ $key ];
+		$difference_memory = $memory_usage_now - $memory_start[ $key ];
 
 		//* Add difference to total.
-		$plugin_time[$key] = $plugin_time[$key] + $difference_time;
-		$plugin_memory[$key] = $plugin_memory[$key] + $difference_memory;
+		$plugin_time[ $key ] = $plugin_time[ $key ] + $difference_time;
+		$plugin_memory[ $key ] = $plugin_memory[ $key ] + $difference_memory;
 
 		//* Reset timer and memory
-		$timer_start[$key] = $time_now;
-		$memory_start[$key] = $memory_usage_now;
+		$timer_start[ $key ] = $time_now;
+		$memory_start[ $key ] = $memory_usage_now;
 
 		if ( $from_last ) {
 			if ( false === $echo ) {
@@ -695,14 +690,14 @@ class AutoDescription_Debug extends AutoDescription_Core {
 			if ( false === $echo ) {
 				//* Return early if not allowed to echo.
 				if ( 'time' === $what )
-					return number_format( $plugin_time[$key], 5 );
+					return number_format( $plugin_time[ $key ], 5 );
 
 				return $plugin_memory[$key];
 			}
 
 			//* Convert to string and echo if not returned yet.
-			echo (string) "\r\n" . $plugin_time[$key] . "s\r\n";
-			echo (string) ( $plugin_memory[$key] / 1024 ) . "kiB\r\n";
+			echo (string) "\r\n" . $plugin_time[ $key ] . "s\r\n";
+			echo (string) ( $plugin_memory[ $key ] / 1024 ) . "kiB\r\n";
 		}
 
 	}
@@ -787,7 +782,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 
 		//* Escape it, replace EOL with breaks, and style everything between quotes (which are ending with space).
 		$output = str_replace( PHP_EOL, '<br>' . PHP_EOL, esc_html( $output ) );
-		$output = preg_replace( "/(&quot;.*?&quot;)(\s)/", '<font color="arnoldschwarzenegger">$1</font> ', $output );
+		$output = preg_replace( '/(&quot;.*?&quot;)(\s)/', '<font color="arnoldschwarzenegger">$1</font> ', $output );
 
 		$output = '<div style="display:inline-block;width:100%;padding:20px;font-family:Consolas,Monaco,monospace;font-size:14px;">' . $output . '</div>';
 		$output = '<div style="display:block;width:100%;background:#23282D;color:#ddd;border-bottom:1px solid #ccc">' . $title . $timer . $output . '</div>';
@@ -854,6 +849,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 		$output = '';
 		foreach ( $current as $name => $value ) {
 			$type = '(' . gettype( $value ) . ')';
+
 			if ( is_bool( $value ) )
 				$value = $value ? 'true' : 'false';
 			else
@@ -866,6 +862,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 
 		foreach ( $not_current as $name => $value ) {
 			$type = '(' . gettype( $value ) . ')';
+
 			if ( is_bool( $value ) )
 				$value = $value ? 'true' : 'false';
 			else
@@ -886,5 +883,4 @@ class AutoDescription_Debug extends AutoDescription_Core {
 
 		return $output;
 	}
-
 }

@@ -56,10 +56,11 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		/**
 		 * If this page doesn't parse the site options,
 		 * There's no need to filter them on each request.
+		 * Nonce is handled elsewhere. This function merely injects filters to the $_POST data.
 		 *
 		 * @since 2.2.9
 		 */
-		if ( ! isset( $_POST ) || empty( $_POST ) || ! isset( $_POST[THE_SEO_FRAMEWORK_SITE_OPTIONS] ) || ! is_array( $_POST[THE_SEO_FRAMEWORK_SITE_OPTIONS] ) )
+		if ( ! isset( $_POST ) || empty( $_POST ) || ! isset( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) || ! is_array( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) )
 			return;
 
 		//* Update hidden options.
@@ -345,12 +346,12 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 
 		if ( is_array( $suboption ) ) {
 			foreach ( $suboption as $so ) {
-				$this->options[$option][$so] = $filter;
+				$this->options[ $option ][ $so ] = $filter;
 			}
-		} else if ( is_null( $suboption ) ) {
-			$this->options[$option] = $filter;
+		} elseif ( is_null( $suboption ) ) {
+			$this->options[ $option ] = $filter;
 		} else {
-			$this->options[$option][$suboption] = $filter;
+			$this->options[ $option ][ $suboption ] = $filter;
 		}
 
 		add_filter( 'sanitize_option_' . $option, array( $this, 'sanitize' ), 10, 2 );
@@ -371,19 +372,19 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 */
 	public function sanitize( $new_value, $option ) {
 
-		if ( ! isset( $this->options[$option] ) ) {
+		if ( ! isset( $this->options[ $option ] ) ) {
 			//* We are not filtering this option at all
 			return $new_value;
-		} else if ( is_string( $this->options[$option] ) ) {
+		} elseif ( is_string( $this->options[ $option ] ) ) {
 			//* Single option value
-			return $this->do_filter( $this->options[$option], $new_value, get_option( $option ) );
-		} else if ( is_array( $this->options[$option] ) ) {
+			return $this->do_filter( $this->options[ $option ], $new_value, get_option( $option ) );
+		} elseif ( is_array( $this->options[ $option ] ) ) {
 			//* Array of suboption values to loop through
 			$old_value = get_option( $option );
-			foreach ( $this->options[$option] as $suboption => $filter ) {
-				$old_value[$suboption] = isset( $old_value[$suboption] ) ? $old_value[$suboption] : '';
-				$new_value[$suboption] = isset( $new_value[$suboption] ) ? $new_value[$suboption] : '';
-				$new_value[$suboption] = $this->do_filter( $filter, $new_value[$suboption], $old_value[$suboption] );
+			foreach ( $this->options[ $option ] as $suboption => $filter ) {
+				$old_value[ $suboption ] = isset( $old_value[ $suboption ] ) ? $old_value[ $suboption ] : '';
+				$new_value[ $suboption ] = isset( $new_value[ $suboption ] ) ? $new_value[ $suboption ] : '';
+				$new_value[ $suboption ] = $this->do_filter( $filter, $new_value[ $suboption ], $old_value[ $suboption ] );
 			}
 			return $new_value;
 		}
@@ -409,10 +410,10 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 
 		$available_filters = $this->get_available_filters();
 
-		if ( ! in_array( $filter, array_keys( $available_filters ) ) )
+		if ( ! in_array( $filter, array_keys( $available_filters ), true ) )
 			return $new_value;
 
-		return call_user_func( $available_filters[$filter], $new_value, $old_value );
+		return call_user_func( $available_filters[ $filter ], $new_value, $old_value );
 	}
 
 	/**
@@ -809,7 +810,8 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		$profile = trim( strip_tags( $new_value ) );
 
 		if ( 'http' === substr( $profile, 0, 4 ) ) {
-			$path = str_replace( '/', '', parse_url( $profile, PHP_URL_PATH ) );
+			$parsed_url = wp_parse_url( $profile );
+			$path = isset( $parsed_url['path'] ) ? str_replace( '/', '', $parsed_url['path'] ) : '';
 			$profile = $path ? '@' . $path : '';
 
 			return (string) $profile;
@@ -890,24 +892,19 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			//* Find a path.
 			if ( _wp_can_use_pcre_u() ) {
 				//* URL pattern excluding path.
-				$pattern 	= 	'/'
-							.	'((((http)(s)?)?)\:)?' 	// 1: maybe http: https:
-							. 	'(\/\/)?'				// 2: maybe slash slash
-							. 	'((www.)?)'				// 3: maybe www.
-							.	'(.*\.[a-zA-Z0-9]*)'	// 4: any legal domain with tld
-							.	'(?:\/)?'				// 5: trailing slash
-							.	'/'
+				$pattern 	= '/'
+							. '((((http)(s)?)?)\:)?' 	// 1: maybe http: https:
+							. '(\/\/)?'				// 2: maybe slash slash
+							. '((www.)?)'				// 3: maybe www.
+							. '(.*\.[a-zA-Z0-9]*)'	// 4: any legal domain with tld
+							. '(?:\/)?'				// 5: trailing slash
+							. '/'
 							;
 
 				$is_path = ! preg_match( $pattern, $url );
 			} else {
-				$parsed_url = parse_url( $url );
-
-				if ( ! isset( $parsed_url['host'] ) && isset( $parsed_url['path'] ) ) {
-					$is_path = true;
-				} else {
-					$is_path = false;
-				}
+				$parsed_url = wp_parse_url( $url );
+				$is_path = ! isset( $parsed_url['host'] ) && isset( $parsed_url['path'] );
 			}
 
 			//* If link is relative, make it full again
@@ -975,5 +972,4 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		//* Save url
 		return $new_value;
 	}
-
 }

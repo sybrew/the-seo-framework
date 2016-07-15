@@ -148,7 +148,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		if ( $this->is_wc_shop() ) {
 			//* WooCommerce Shop
 			$id = get_option( 'woocommerce_shop_page_id' );
-		} else if ( function_exists( 'get_question_id' ) && did_action( 'template_redirect' ) ) {
+		} elseif ( function_exists( 'get_question_id' ) && did_action( 'template_redirect' ) ) {
 			//* AnsPress
 			$id = get_question_id();
 		}
@@ -185,14 +185,14 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		if ( ! empty( $_REQUEST['tag_ID'] ) ) {
 			//* WordPress 4.5+
 			$term_id = $_REQUEST['tag_ID'];
-		} else if ( ! empty( $_REQUEST['term_id'] ) ) {
+		} elseif ( ! empty( $_REQUEST['term_id'] ) ) {
 			//* Older WordPress versions.
 			$term_id = $_REQUEST['term_id'];
 		}
 
 		$this->set_query_cache(
 			__METHOD__,
-			$term_id = $term_id ? absint( $term_id ) : 0
+			$term_id = intval( $term_id ) ? absint( $term_id ) : 0
 		);
 
 		return $term_id;
@@ -407,10 +407,12 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		$pfp = (int) get_option( 'page_for_posts' );
 
-		if ( $id === $pfp )
-			$is_blog_page = true;
-		else if ( $this->has_page_on_front() && is_home() )
-			$is_blog_page = true;
+		if ( $this->has_page_on_front() ) {
+			if ( $id === $pfp && false === is_archive() )
+				$is_blog_page = true;
+			elseif ( is_home() )
+				$is_blog_page = true;
+		}
 
 		$this->set_query_cache(
 			__METHOD__,
@@ -473,7 +475,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 			if ( $len >= 8 && false !== strrpos( $tax, 'category', -8 ) )
 				$is_category = true;
-			else if ( $len >= 3 && false !== strrpos( $tax, 'cat', -3 ) )
+			elseif ( $len >= 3 && false !== strrpos( $tax, 'cat', -3 ) )
 				$is_category = true;
 		}
 
@@ -554,10 +556,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		if ( false === $is_front_page && $id ) {
 			$sof = get_option( 'show_on_front' );
 
-			if ( 'page' === $sof && $id === (int) get_option( 'page_on_front' ) )
+			if ( 'page' === $sof && (int) get_option( 'page_on_front' ) === $id )
 				$is_front_page = true;
 
-			if ( 'posts' === $sof && $id === (int) get_option( 'page_for_posts' ) )
+			if ( 'posts' === $sof && (int) get_option( 'page_for_posts' ) === $id )
 				$is_front_page = true;
 		}
 
@@ -791,7 +793,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 			$id = $this->get_the_real_ID();
 
 		if ( 'page' === get_option( 'show_on_front' ) )
-			return $id === (int) get_option( 'page_on_front' );
+			return (int) get_option( 'page_on_front' ) === $id;
 
 		return false;
 	}
@@ -965,7 +967,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		$this->set_query_cache(
 			__METHOD__,
-			$page = $this->is_menu_page( $this->page_id )
+			$page = $this->is_menu_page( $this->seo_settings_page_slug )
 		);
 
 		return $page;
@@ -1059,15 +1061,15 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		}
 
 		if ( isset( $value_to_set ) ) {
-			if ( isset( $cache[$key][$hash] ) ) {
-				$cache[$key][$hash] = $value_to_set;
+			if ( isset( $cache[ $key ][ $hash ] ) ) {
+				$cache[ $key ][ $hash ] = $value_to_set;
 				return false;
 			}
-			$cache[$key][$hash] = $value_to_set;
+			$cache[ $key ][ $hash ] = $value_to_set;
 			return true;
 		} else {
-			if ( isset( $cache[$key][$hash] ) )
-				return $cache[$key][$hash];
+			if ( isset( $cache[ $key ][ $hash ] ) )
+				return $cache[ $key ][ $hash ];
 		}
 
 		return null;
@@ -1090,8 +1092,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	public function set_query_cache( $key, $value_to_set ) {
 		if ( func_num_args() >= 3 ) {
 			return $this->get_query_cache( $key, $value_to_set, array_slice( func_get_args(), 2 ) );
-		} else
+		} else {
 			return $this->get_query_cache( $key, $value_to_set );
+		}
 	}
-
 }

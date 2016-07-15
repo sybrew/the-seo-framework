@@ -171,7 +171,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 		$default_args = $this->parse_description_args( '', '', true );
 
 		if ( is_array( $args ) ) {
-			 if ( empty( $args ) ) {
+			if ( empty( $args ) ) {
 				$args = $default_args;
 			} else {
 				$args = $this->parse_description_args( $args, $default_args );
@@ -310,7 +310,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	 */
 	public function generate_description_from_id( $args = array(), $escape = true ) {
 
-		if ( $this->the_seo_framework_debug ) $this->debug_init( __CLASS__, __FUNCTION__, true, $debug_key = microtime(true), get_defined_vars() );
+		if ( $this->the_seo_framework_debug ) $this->debug_init( __METHOD__, true, $debug_key = microtime( true ), get_defined_vars() );
 
 		/**
 		 * Applies filters bool 'the_seo_framework_enable_auto_description' : Enable or disable the description.
@@ -326,7 +326,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 		if ( $escape )
 			$description = $this->escape_description( $description );
 
-		if ( $this->the_seo_framework_debug ) $this->debug_init( __CLASS__, __FUNCTION__, false, $debug_key, array( 'description' => $description, 'transient_key' => $this->auto_description_transient ) );
+		if ( $this->the_seo_framework_debug ) $this->debug_init( __METHOD__, false, $debug_key, array( 'description' => $description, 'transient_key' => $this->auto_description_transient ) );
 
 		return (string) $description;
 	}
@@ -391,7 +391,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 			$additions = trim( $title . " $on " . $blogname );
 			//* If there are additions, add a trailing space.
 			if ( $additions )
-				$additions .= " ";
+				$additions .= ' ';
 
 			$max_char_length_normal = 155 - mb_strlen( html_entity_decode( $additions ) );
 			$max_char_length_social = 200;
@@ -403,7 +403,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 			//* Put in array to be accessed later.
 			$excerpt = array(
 				'normal' => $excerpt_normal,
-				'social' => $excerpt_social
+				'social' => $excerpt_social,
 			);
 
 			/**
@@ -567,8 +567,8 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 
 		if ( $ignore || $this->add_description_additions( $id, $term ) ) {
 
-			if ( ! isset( $title[$id] ) )
-				$title[$id] = $this->generate_description_title( $id, $term, $ignore );
+			if ( ! isset( $title[ $id ] ) )
+				$title[ $id ] = $this->generate_description_title( $id, $term, $ignore );
 
 			if ( $ignore || $this->is_option_checked( 'description_blogname' ) ) {
 
@@ -588,14 +588,14 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 			//* Already cached.
 			$sep = $this->get_description_separator();
 		} else {
-			$title[$id] = '';
+			$title[ $id ] = '';
 			$on = '';
 			$blogname = '';
 			$sep = '';
 		}
 
 		return array(
-			'title' => $title[$id],
+			'title' => $title[ $id ],
 			'on' => $on,
 			'blogname' => $blogname,
 			'sep' => $sep,
@@ -639,16 +639,16 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 				 */
 				/* translators: Front-end output. */
 				$title = __( 'Latest posts:', 'autodescription' ) . ' ' . $title;
-			} else if ( $term && isset( $term->term_id ) ) {
+			} elseif ( $term && isset( $term->term_id ) ) {
 				//* We're on a taxonomy now.
 
 				$data = $this->get_term_data( $term, $term->term_id );
 
 				if ( ! empty( $data['doctitle'] ) ) {
 					$title = $data['doctitle'];
-				} else if ( ! empty( $term->name ) ) {
+				} elseif ( ! empty( $term->name ) ) {
 					$title = $term->name;
-				} else if ( ! empty( $term->slug ) ) {
+				} elseif ( ! empty( $term->slug ) ) {
 					$title = $term->slug;
 				}
 			} else {
@@ -687,35 +687,35 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 		$term_id = isset( $term->term_id ) ? $term->term_id : false;
 
 		//* Put excerpt in cache.
-		if ( ! isset( $excerpt_cache[$page_id][$term_id] ) ) {
+		if ( ! isset( $excerpt_cache[ $page_id ][ $term_id ] ) ) {
 			if ( $this->is_singular( $page_id ) ) {
 				//* We're on the blog page now.
 				$excerpt = $this->get_excerpt_by_id( '', $page_id );
-			} else if ( $term_id ) {
+			} elseif ( $term_id ) {
 				//* We're on a taxonomy now.
 				$excerpt = empty( $term->description ) ? $this->get_excerpt_by_id( '', '', $page_id ) : $this->s_description( $term->description );
-			} else if ( $this->is_author() ) {
+			} elseif ( $this->is_author() ) {
 				$excerpt = $this->s_description( get_the_author_meta( 'description', (int) get_query_var( 'author' ) ) );
 			} else {
 				$excerpt = '';
 			}
 
-			$excerpt_cache[$page_id][$term_id] = $excerpt;
+			$excerpt_cache[ $page_id ][ $term_id ] = $excerpt;
 		}
 
 		//* Fetch excerpt from cache.
-		$excerpt = $excerpt_cache[$page_id][$term_id];
+		$excerpt = $excerpt_cache[ $page_id ][ $term_id ];
 
 		/**
 		 * Put excerptlength in cache.
 		 * Why cache? My tests have shown that mb_strlen is 1.03x faster than cache fetching.
 		 * However, _mb_strlen (compat) is about 1740x slower. And this is the reason it's cached!
 		 */
-		if ( ! isset( $excerptlength_cache[$page_id][$term_id] ) )
-			$excerptlength_cache[$page_id][$term_id] = mb_strlen( $excerpt );
+		if ( ! isset( $excerptlength_cache[ $page_id ][ $term_id ] ) )
+			$excerptlength_cache[ $page_id ][ $term_id ] = mb_strlen( $excerpt );
 
 		//* Fetch the length from cache.
-		$excerpt_length = $excerptlength_cache[$page_id][$term_id];
+		$excerpt_length = $excerptlength_cache[ $page_id ][ $term_id ];
 
 		//* Trunculate if the excerpt is longer than the max char length
 		$excerpt = $this->trim_excerpt( $excerpt, $excerpt_length, $max_char_length );
@@ -787,12 +787,11 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 
 			$stops = array( '.', '?', '!' );
 			//* Add three dots if there's no full stop at the end of the excerpt.
-			if ( ! in_array( $last_char, $stops ) )
+			if ( ! in_array( $last_char, $stops, true ) )
 				$excerpt .= '...';
 
 		}
 
 		return trim( $excerpt );
 	}
-
 }

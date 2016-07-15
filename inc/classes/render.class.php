@@ -55,10 +55,10 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 
 		static $description_cache = array();
 
-		if ( isset( $description_cache[$social] ) )
-			return $description_cache[$social];
+		if ( isset( $description_cache[ $social ] ) )
+			return $description_cache[ $social ];
 
-		return $description_cache[$social] = $this->generate_description( '', array( 'social' => $social ) );
+		return $description_cache[ $social ] = $this->generate_description( '', array( 'social' => $social ) );
 	}
 
 	/**
@@ -80,13 +80,13 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 
 		static $url_cache = array();
 
-		if ( is_null( $post_id ) )
+		if ( empty( $post_id ) )
 			$post_id = $this->get_the_real_ID();
 
-		if ( isset( $url_cache[$url][$post_id][$paged][$from_option][$paged_plural] ) )
-			return $url_cache[$url][$post_id][$paged][$from_option][$paged_plural];
+		if ( isset( $url_cache[ $url ][ $post_id ][ $paged ][ $from_option ][ $paged_plural ] ) )
+			return $url_cache[ $url ][ $post_id ][ $paged ][ $from_option ][ $paged_plural ];
 
-		return $url_cache[$url][$post_id][$paged][$from_option][$paged_plural] = $this->the_url( $url, array( 'paged' => $paged, 'get_custom_field' => $from_option, 'id' => $post_id, 'paged_plural' => $paged_plural ) );
+		return $url_cache[ $url ][ $post_id ][ $paged ][ $from_option ][ $paged_plural ] = $this->the_url( $url, array( 'paged' => $paged, 'get_custom_field' => $from_option, 'id' => $post_id, 'paged_plural' => $paged_plural ) );
 	}
 
 	/**
@@ -103,10 +103,10 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 
 		static $url_cache = array();
 
-		if ( isset( $url_cache[$force_slash] ) )
-			return $url_cache[$force_slash];
+		if ( isset( $url_cache[ $force_slash ] ) )
+			return $url_cache[ $force_slash ];
 
-		return $url_cache[$force_slash] = $this->the_url( '', array( 'home' => true, 'forceslash' => $force_slash ) );
+		return $url_cache[ $force_slash ] = $this->the_url( '', array( 'home' => true, 'forceslash' => $force_slash ) );
 	}
 
 	/**
@@ -160,10 +160,10 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 
 		static $title_cache = array();
 
-		if ( isset( $title_cache[$title][$sep][$seplocation][$meta] ) )
-			return $title_cache[$title][$sep][$seplocation][$meta];
+		if ( isset( $title_cache[ $title ][ $sep ][ $seplocation ][ $meta ] ) )
+			return $title_cache[ $title ][ $sep ][ $seplocation ][ $meta ];
 
-		return $title_cache[$title][$sep][$seplocation][$meta] = $this->title( $title, $sep, $seplocation, array( 'meta' => $meta ) );
+		return $title_cache[ $title ][ $sep ][ $seplocation ][ $meta ] = $this->title( $title, $sep, $seplocation, array( 'meta' => $meta ) );
 	}
 
 	/**
@@ -370,9 +370,9 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		$output = '<meta property="og:image" content="' . esc_attr( $image ) . '" />' . "\r\n";
 
 		if ( $image ) {
-			if ( ! empty( $this->image_dimensions[$id]['width'] ) && ! empty( $this->image_dimensions[$id]['height'] ) ) {
-				$output .= '<meta property="og:image:width" content="' . esc_attr( $this->image_dimensions[$id]['width'] ) . '" />' . "\r\n";
-				$output .= '<meta property="og:image:height" content="' . esc_attr( $this->image_dimensions[$id]['height'] ) . '" />' . "\r\n";
+			if ( ! empty( $this->image_dimensions[ $id ]['width'] ) && ! empty( $this->image_dimensions[ $id ]['height'] ) ) {
+				$output .= '<meta property="og:image:width" content="' . esc_attr( $this->image_dimensions[ $id ]['width'] ) . '" />' . "\r\n";
+				$output .= '<meta property="og:image:height" content="' . esc_attr( $this->image_dimensions[ $id ]['height'] ) . '" />' . "\r\n";
 			}
 		}
 
@@ -406,9 +406,9 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 					if ( $img ) {
 						$output .= '<meta property="og:image" content="' . esc_attr( $img ) . '" />' . "\r\n";
 
-						if ( ! empty( $this->image_dimensions[$id]['width'] ) && ! empty( $this->image_dimensions[$id]['height'] ) ) {
-							$output .= '<meta property="og:image:width" content="' . esc_attr( $this->image_dimensions[$id]['width'] ) . '" />' . "\r\n";
-							$output .= '<meta property="og:image:height" content="' . esc_attr( $this->image_dimensions[$id]['height'] ) . '" />' . "\r\n";
+						if ( ! empty( $this->image_dimensions[ $id ]['width'] ) && ! empty( $this->image_dimensions[ $id ]['height'] ) ) {
+							$output .= '<meta property="og:image:width" content="' . esc_attr( $this->image_dimensions[ $id ]['width'] ) . '" />' . "\r\n";
+							$output .= '<meta property="og:image:height" content="' . esc_attr( $this->image_dimensions[ $id ]['height'] ) . '" />' . "\r\n";
 						}
 					}
 				}
@@ -619,9 +619,9 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		if ( $image ) {
 			$output = '<meta name="twitter:image" content="' . esc_attr( $image ) . '" />' . "\r\n";
 
-			if ( ! empty( $this->image_dimensions[$id]['width'] ) && ! empty( $this->image_dimensions[$id]['height'] ) ) {
-				$output .= '<meta name="twitter:image:width" content="' . esc_attr( $this->image_dimensions[$id]['width'] ) . '" />' . "\r\n";
-				$output .= '<meta name="twitter:image:height" content="' . esc_attr( $this->image_dimensions[$id]['height'] ) . '" />' . "\r\n";
+			if ( ! empty( $this->image_dimensions[ $id ]['width'] ) && ! empty( $this->image_dimensions[ $id ]['height'] ) ) {
+				$output .= '<meta name="twitter:image:width" content="' . esc_attr( $this->image_dimensions[ $id ]['width'] ) . '" />' . "\r\n";
+				$output .= '<meta name="twitter:image:height" content="' . esc_attr( $this->image_dimensions[ $id ]['height'] ) . '" />' . "\r\n";
 			}
 		}
 
@@ -787,7 +787,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 			$output = '<meta property="article:modified_time" content="' . esc_attr( $time ) . '" />' . "\r\n";
 
 			if ( $this->use_og_tags() )
-				$output .= '<meta property="og:updated_time" content="' . esc_attr( $time ) . '" />'. "\r\n";
+				$output .= '<meta property="og:updated_time" content="' . esc_attr( $time ) . '" />' . "\r\n";
 
 			return $output;
 		}
@@ -966,37 +966,9 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	}
 
 	/**
-	 * Renders Favicon URLs.
-	 *
-	 * @since 2.2.1
-	 *
-	 * @uses $this->site_icon()
-	 *
-	 * @return string icon links.
-	 * @TODO Make this work for older wp versions. i.e. add upload area for wp 4.2.99999 and lower
-	 * @TODO Make this work in the first place
-	 * @ignore
-	 * @access private
-	 */
-	public function favicon() {
-
-		if ( $this->wp_version( '4.2.999', '<=' ) ) {
-			$output = '<link rel="icon" type="image/x-icon" href="' . esc_url( $this->site_icon( 16 ) ) . '" sizes="16x16" />' . "\r\n";
-			$output .= '<link rel="icon" type="image/x-icon" href="' . esc_url( $this->site_icon( 192 ) ) . '" sizes="192x192" />' . "\r\n";
-			$output .= '<link rel="apple-touch-icon-precomposed" href="' . esc_url( $this->site_icon( 180 ) ) . '" />' . "\r\n";
-			$output .= '<link rel="msapplication-TileImage" href="' . esc_url( $this->site_icon( 270 ) ) . '" />' . "\r\n";
-
-			return $output;
-		}
-
-		return '';
-	}
-
-	/**
 	 * Renders Shortlink meta tag
 	 *
 	 * @since 2.2.2
-	 *
 	 * @uses $this->get_shortlink()
 	 *
 	 * @return string The Shortlink meta tag.
@@ -1019,7 +991,6 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	 * Renders Prev/Next Paged URL meta tags.
 	 *
 	 * @since 2.2.2
-	 *
 	 * @uses $this->get_paged_url()
 	 *
 	 * @return string The Prev/Next Paged URL meta tags.
@@ -1102,7 +1073,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		if ( isset( $cache ) )
 			return $cache;
 
-		return $cache = $this->is_option_checked( 'twitter_tags' ) && false == $this->detect_twitter_card_plugin();
+		return $cache = $this->is_option_checked( 'twitter_tags' ) && false === $this->detect_twitter_card_plugin();
 	}
 
 	/**
@@ -1122,5 +1093,4 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 
 		return $cache = $this->is_option_checked( 'googleplus_tags' );
 	}
-
 }

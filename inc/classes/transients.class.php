@@ -238,45 +238,47 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 
 		$page_id = $page_id ? $page_id : $this->get_the_real_ID();
 
+		if ( isset( $type ) ) {
+			if ( 'author' === $type ) {
+				//* Author page.
+				return $this->add_cache_key_suffix( 'author_' . $page_id );
+			} elseif ( 'frontpage' === $type ) {
+				//* Front/HomePage.
+				return $this->add_cache_key_suffix( $this->generate_front_page_cache_key() );
+			} else {
+				$this->_doing_it_wrong( __METHOD__, esc_html__( 'Third parameter must be a known type.', 'autodescription' ), '2.6.5' );
+				return $this->add_cache_key_suffix( esc_sql( $type . '_' . $page_id . '_' . $taxonomy ) );
+			}
+		}
+
 		static $cached_id = array();
 
-		if ( isset( $cached_id[$page_id][$taxonomy][$type] ) )
-			return $cached_id[$page_id][$taxonomy][$type];
+		if ( isset( $cached_id[ $page_id ][ $taxonomy ] ) )
+			return $cached_id[ $page_id ][ $taxonomy ];
 
 		//* Placeholder ID.
 		$the_id = '';
 		$t = $taxonomy;
 
-		if ( isset( $type ) ) {
-			if ( 'author' === $type ) {
-				//* Author page.
-				$the_id = 'author_' . $page_id;
-			} else if ( 'frontpage' === $type ) {
-				//* Front/HomePage.
-				$the_id = $this->generate_front_page_cache_key();
-			} else {
-				$this->_doing_it_wrong( __METHOD__, __( 'Third parameter must be a known type.', 'autodescription' ), '2.6.5' );
-				$the_id = esc_sql( $type . '_' . $page_id . '_' . $t );
-			}
-		} else if ( $this->is_404() ) {
+		if ( $this->is_404() ) {
 			$the_id = '_404_';
-		} else if ( ( $this->is_front_page( $page_id ) ) || ( $this->is_admin() && $this->is_menu_page( $this->pagehook ) ) ) {
+		} elseif ( ( $this->is_front_page( $page_id ) ) || ( $this->is_admin() && $this->is_seo_settings_page() ) ) {
 			//* Front/HomePage.
 			$the_id = $this->generate_front_page_cache_key();
-		} else if ( $this->is_blog_page( $page_id ) ) {
+		} elseif ( $this->is_blog_page( $page_id ) ) {
 			$the_id = 'blog_' . $page_id;
-		} else if ( $this->is_singular() ) {
+		} elseif ( $this->is_singular() ) {
 			if ( $this->is_page( $page_id ) ) {
 				$the_id = 'page_' . $page_id;
-			} else if ( $this->is_single( $page_id ) ) {
+			} elseif ( $this->is_single( $page_id ) ) {
 				$the_id = 'post_' . $page_id;
-			} else if ( $this->is_attachment( $page_id ) ) {
+			} elseif ( $this->is_attachment( $page_id ) ) {
 				$the_id = 'attach_' . $page_id;
 			} else {
 				//* Other.
 				$the_id = 'singular_' . $page_id;
 			}
-		} else if ( $this->is_search() ) {
+		} elseif ( $this->is_search() ) {
 			$query = '';
 
 			if ( function_exists( 'get_search_query' ) ) {
@@ -293,7 +295,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 			}
 
 			$the_id = $page_id . '_s_' . $query;
-		} else if ( $this->is_archive() ) {
+		} elseif ( $this->is_archive() ) {
 			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
 
 				if ( empty( $t ) ) {
@@ -308,9 +310,9 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 				if ( $this->is_tax() )
 					$the_id = 'archives_' . $the_id;
 
-			} else if ( $this->is_author() ) {
+			} elseif ( $this->is_author() ) {
 				$the_id = 'author_' . $page_id;
-			} else if ( $this->is_date() ) {
+			} elseif ( $this->is_date() ) {
 				$post = get_post();
 
 				if ( $post && isset( $post->post_date ) ) {
@@ -318,9 +320,9 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 
 					if ( $this->is_year() ) {
 						$the_id .= 'year_' . mysql2date( 'y', $date, false );
-					} else if ( $this->is_month() ) {
+					} elseif ( $this->is_month() ) {
 						$the_id .= 'month_' . mysql2date( 'm_y', $date, false );
-					} else if ( $this->is_day() ) {
+					} elseif ( $this->is_day() ) {
 						//* Day. The correct notation.
 						$the_id .= 'day_' . mysql2date( 'd_m_y', $date, false );
 					}
@@ -374,16 +376,27 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		if ( empty( $the_id ) )
 			$the_id = 'noob_' . $page_id . '_' . $t;
 
-		global $blog_id;
-
-		$locale = strtolower( get_locale() );
-
 		/**
 		 * This should be at most 25 chars. Unless the $blog_id is higher than 99,999,999.
 		 * Then some cache keys will conflict on every 10th blog ID from eachother which post something on the same day..
 		 * On the day archive. With the same description setting (short).
 		 */
-		return $cached_id[$page_id][$taxonomy][$type] = $the_id . '_' . $blog_id . '_' . $locale;
+		return $cached_id[ $page_id ][ $taxonomy ] = $this->add_cache_key_suffix( $the_id );
+	}
+
+	/**
+	 * Adds cache key suffix based on blog id and locale.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @return string the cache key.
+	 */
+	protected function add_cache_key_suffix( $key ) {
+		global $blog_id;
+
+		$locale = strtolower( get_locale() );
+
+		return $key . '_' . $blog_id . '_' . $locale;
 	}
 
 	/**
@@ -396,10 +409,11 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	public function generate_front_page_cache_key( $type = '' ) {
 
 		if ( empty( $type ) ) {
-			if ( $this->has_page_on_front() )
+			if ( $this->has_page_on_front() ) {
 				$type = 'page';
-			else
+			} else {
 				$type = 'blog';
+			}
 		} else {
 			$type = esc_sql( $type );
 		}
@@ -506,13 +520,17 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	 * Checks whether the permalink structure is updated.
 	 *
 	 * @since 2.3.0
+	 * @since 2.7.0 Added admin referer check.
 	 *
 	 * @return bool Whether if sitemap transient is deleted.
 	 */
 	public function delete_sitemap_transient_permalink_updated() {
 
-		if ( isset( $_POST['permalink_structure'] ) || isset( $_POST['category_base'] ) )
+		if ( isset( $_POST['permalink_structure'] ) || isset( $_POST['category_base'] ) ) {
+			check_admin_referer( 'update-permalink' );
+
 			return $this->delete_sitemap_transient();
+		}
 
 		return false;
 	}
@@ -653,5 +671,4 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 
 		return $flushed = true;
 	}
-
 }

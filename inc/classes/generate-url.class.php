@@ -35,15 +35,6 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	protected $url_slashit;
 
 	/**
-	 * Whether to add a subdomain to the url if set.
-	 *
-	 * @since 2.6.0
-	 *
-	 * @var string The subdomain.
-	 */
-	protected $add_subdomain;
-
-	/**
 	 * Holds current HTTP host.
 	 *
 	 * @since 2.6.5
@@ -53,21 +44,10 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	protected $current_host;
 
 	/**
-	 * Holds home HTTP host.
-	 *
-	 * @since 2.6.5
-	 *
-	 * @var string The home HTTP host.
-	 */
-	protected $home_host;
-
-	/**
 	 * Constructor, load parent constructor and set up variables.
 	 */
 	public function __construct() {
 		parent::__construct();
-
-		$this->home_host = parse_url( get_option( 'home' ), PHP_URL_HOST );
 	}
 
 	/**
@@ -95,7 +75,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 */
 	public function the_url( $url = '', $args = array() ) {
 
-		if ( $this->the_seo_framework_debug && false === $this->doing_sitemap ) $this->debug_init( __CLASS__, __FUNCTION__, true, $debug_key = microtime(true), get_defined_vars() );
+		if ( $this->the_seo_framework_debug && false === $this->doing_sitemap ) $this->debug_init( __METHOD__, true, $debug_key = microtime( true ), get_defined_vars() );
 
 		$args = $this->reparse_url_args( $args );
 
@@ -108,7 +88,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 		//* Reset cache.
 		$this->url_slashit = true;
-		$this->add_subdomain = '';
+		$this->unset_current_subdomain();
 		$this->current_host = '';
 
 		$path = '';
@@ -131,7 +111,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				if ( $custom_url ) {
 					$url = $custom_url;
 					$this->url_slashit = false;
-					$scheme = parse_url( $custom_url, PHP_URL_SCHEME );
+					$parsed_url = wp_parse_url( $custom_url );
+					$scheme = isset( $parsed_url['scheme'] ) ? $parsed_url['scheme'] : 'http';
 				}
 			}
 
@@ -162,10 +143,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 		//* Non-domainmap URL
 		if ( empty( $url ) ) {
-			if ( $args['home'] ) {
-				$this->current_lang = '';
-				$this->add_subdomain = '';
-			}
+			if ( $args['home'] )
+				$this->unset_current_subdomain();
 
 			$url = $this->add_url_host( $path );
 			$scheme = is_ssl() ? 'https' : 'http';
@@ -199,7 +178,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			$url = esc_url_raw( $url );
 		}
 
-		if ( $this->the_seo_framework_debug && false === $this->doing_sitemap ) $this->debug_init( __CLASS__, __FUNCTION__, false, $debug_key, array( 'url_output' => $url ) );
+		if ( $this->the_seo_framework_debug && false === $this->doing_sitemap ) $this->debug_init( __METHOD__, false, $debug_key, array( 'url_output' => $url ) );
 
 		return $url;
 	}
@@ -207,10 +186,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	/**
 	 * Parse and sanitize url args.
 	 *
-	 * @param array $args required The passed arguments.
-	 * @param array $defaults The default arguments.
-	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
-	 *
+	 * @since 2.4.2
+	 * @since 2.5.0:
 	 * @applies filters the_seo_framework_url_args : {
 	 * 		@param bool $paged Return current page URL without pagination if false
 	 * 		@param bool $paged_plural Whether to add pagination for the second or later page.
@@ -224,7 +201,9 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 *		@param int $id The Page or Term ID.
 	 * }
 	 *
-	 * @since 2.4.2
+	 * @param array $args required The passed arguments.
+	 * @param array $defaults The default arguments.
+	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
 	 * @return array $args parsed args.
 	 */
 	public function parse_url_args( $args = array(), $defaults = array(), $get_defaults = false ) {
@@ -241,10 +220,9 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				'term'				=> null,
 				'home'				=> false,
 				'forceslash'		=> false,
-				'id'				=> $this->get_the_real_ID()
+				'id'				=> $this->get_the_real_ID(),
 			);
 
-			//* @since 2.5.0
 			$defaults = (array) apply_filters( 'the_seo_framework_url_args', $defaults, $args );
 		}
 
@@ -281,7 +259,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		$default_args = $this->parse_url_args( '', '', true );
 
 		if ( is_array( $args ) ) {
-			 if ( empty( $args ) ) {
+			if ( empty( $args ) ) {
 				$args = $default_args;
 			} else {
 				$args = $this->parse_url_args( $args, $default_args );
@@ -309,7 +287,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 		$args = $this->reparse_url_args( $args );
 
-		if ( $args['is_term'] || $this->is_archive() ) {
+		if ( $this->is_archive() || $args['is_term'] ) {
+
 			$term = $args['term'];
 
 			//* Term or Taxonomy.
@@ -319,7 +298,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			if ( isset( $term->taxonomy ) ) {
 				//* Registered Terms and Taxonomies.
 				$path = $this->get_relative_term_url( $term, $args );
-			} else if ( ! $args['external'] ) {
+			} elseif ( ! $args['external'] ) {
 				//* Everything else.
 				global $wp;
 				$path = trailingslashit( get_option( 'home' ) ) . $wp->request;
@@ -328,7 +307,6 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				//* Nothing to see here...
 				$path = '';
 			}
-
 		} else {
 
 			/**
@@ -368,19 +346,20 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	public function build_singular_relative_url( $post_id = null, $args = array() ) {
 
 		if ( ! isset( $post_id ) ) {
-			if ( ! $args['external'] )
+			if ( ! $args['external'] ) {
 				$post_id = $this->get_the_real_ID();
-			else
+			} else {
 				return '';
+			}
 		}
 
 		$args = $this->reparse_url_args( $args );
 
 		if ( $args['external'] || ! $this->is_front_page() ) {
 			$url = get_permalink( $post_id );
-		} else if ( $this->is_front_page() ) {
+		} elseif ( $this->is_front_page() ) {
 			$url = get_home_url();
-		} else if ( ! $args['external'] ) {
+		} elseif ( ! $args['external'] ) {
 			global $wp;
 
 			if ( isset( $wp->request ) )
@@ -392,22 +371,25 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		if ( ! isset( $url ) )
 			return '';
 
-		if ( $this->is_singular() )
+		if ( $this->is_singular() ) {
 			$paged = $this->maybe_get_paged( $this->page(), $args['paged'], $args['paged_plural'] );
-		else
+		} else {
 			$paged = $this->maybe_get_paged( $this->paged(), $args['paged'], $args['paged_plural'] );
+		}
 
 		if ( $paged ) {
 			if ( $this->pretty_permalinks ) {
-				if ( $this->is_singular() )
+				if ( $this->is_singular() ) {
 					$url = trailingslashit( $url ) . $paged;
-				else
+				} else {
 					$url = trailingslashit( $url ) . 'page/' . $paged;
+				}
 			} else {
-				if ( $this->is_singular() )
+				if ( $this->is_singular() ) {
 					$url = add_query_arg( 'page', $paged, $url );
-				else
+				} else {
 					$url = add_query_arg( 'paged', $paged, $url );
+				}
 			}
 		}
 
@@ -420,6 +402,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 * Create full valid URL with parsed host.
 	 * Don't forget to use set_url_scheme() afterwards.
 	 *
+	 * Note: will return $path if no host can be found.
+	 *
 	 * @since 2.6.5
 	 *
 	 * @param string $path Current path.
@@ -427,9 +411,11 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 */
 	public function add_url_host( $path = '' ) {
 
-		$host = $this->current_host ? $this->current_host : $this->home_host;
+		$host = $this->current_host ? $this->current_host : $this->get_home_host();
 
-		return $url = 'http://' . trailingslashit( $host ) . ltrim( $path, ' \\/' );
+		$scheme = $host ? 'http://' : '';
+
+		return $url = $scheme . trailingslashit( $host ) . ltrim( $path, ' \\/' );
 	}
 
 	/**
@@ -480,7 +466,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 		//* Reset cache.
 		$this->url_slashit = true;
-		$this->add_subdomain = '';
+		$this->unset_current_subdomain();
 
 		static $q_config_mode = null;
 
@@ -527,7 +513,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 			case '3' :
 				//* Notify cache of subdomain addition.
-				$this->add_subdomain = $current_lang;
+				$this->set_current_subdomain( $current_lang );
 
 				//* No need to alter the path.
 				return $path;
@@ -556,7 +542,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 		//* Reset cache.
 		$this->url_slashit = true;
-		$this->add_subdomain = '';
+		$this->unset_current_subdomain();
 
 		if ( ! isset( $sitepress ) )
 			return $path;
@@ -583,7 +569,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		 * This should be put inside a callable function.
 		 * @since 2.6.0
 		 */
-		$lang_info = apply_filters( 'wpml_post_language_details', NULL, $post_id );
+		$lang_info = apply_filters( 'wpml_post_language_details', null, $post_id );
 
 		if ( is_wp_error( $lang_info ) ) {
 			//* Terms and Taxonomies.
@@ -623,10 +609,11 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				 * @priority OMG WTF BBQ
 				 */
 				$contains_path = strpos( $path, '/' . $current_lang . '/' );
-				if ( false !== $contains_path && 0 === $contains_path )
+				if ( false !== $contains_path && 0 === $contains_path ) {
 					return $path;
-				else
+				} else {
 					return $path = trailingslashit( $current_lang ) . ltrim( $path, ' \\/' );
+				}
 				break;
 
 			case '2' :
@@ -639,7 +626,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 					return $path;
 
 				$current_lang_setting = $this->make_fully_qualified_url( $current_lang_setting );
-				$parsed = parse_url( $current_lang_setting );
+				$parsed = wp_parse_url( $current_lang_setting );
 
 				$this->current_host = isset( $parsed['host'] ) ? $parsed['host'] : '';
 				$current_path = isset( $parsed['path'] ) ? trailingslashit( $parsed['path'] ) : '';
@@ -719,7 +706,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 			if ( 'category' === $taxonomy ) {
 				$path = '?cat=' . $term->term_id;
-			} else if ( isset( $t->query_var ) && '' !== $t->query_var ) {
+			} elseif ( isset( $t->query_var ) && '' !== $t->query_var ) {
 				$path = '?' . $t->query_var . '=' . $slug;
 			} else {
 				$path = '?taxonomy=' . $taxonomy . '&term=' . $slug;
@@ -774,15 +761,11 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 */
 	public function set_url_scheme( $url, $scheme = null, $use_filter = true ) {
 
-		/**
-		 * Core should uphold the coding standards (Yoda code). Open issue @link Github.com?
-		 * @todo yoda-fy
-		 */
 		if ( ! isset( $scheme ) ) {
 			$scheme = is_ssl() ? 'https' : 'http';
-		} else if ( $scheme === 'admin' || $scheme === 'login' || $scheme === 'login_post' || $scheme === 'rpc' ) {
+		} elseif ( 'admin' === $scheme || 'login' === $scheme  || 'login_post' === $scheme || 'rpc' === $scheme ) {
 			$scheme = is_ssl() || force_ssl_admin() ? 'https' : 'http';
-		} else if ( $scheme !== 'http' && $scheme !== 'https' && $scheme !== 'relative' ) {
+		} elseif ( 'http' !== $scheme && 'https' !== $scheme && 'relative' !== $scheme ) {
 			$scheme = is_ssl() ? 'https' : 'http';
 		}
 
@@ -790,9 +773,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 		if ( 'relative' === $scheme ) {
 			$url = ltrim( preg_replace( '#^\w+://[^/]*#', '', $url ) );
-			if ( $url !== '' && $url[0] === '/' )
+			if ( '' !== $url && '/' === $url[0] )
 				$url = '/' . ltrim( $url , "/ \t\n\r\0\x0B" );
-
 		} else {
 			//* This will break if $scheme is set to false.
 			$url = preg_replace( '#^\w+://#', $scheme . '://', $url );
@@ -841,9 +823,9 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		if ( isset( $scheme_settings ) ) {
 			if ( 'https' === $scheme_settings || 'http' === $scheme_settings || 'relative' === $scheme_settings ) {
 				$url = $this->set_url_scheme( $url, $scheme_settings, false );
-			} else if ( ! $scheme_settings ) {
+			} elseif ( ! $scheme_settings ) {
 				$url = $this->set_url_scheme( $url, 'http', false );
-			} else if ( $scheme_setting ) {
+			} elseif ( $scheme_setting ) {
 				$url = $this->set_url_scheme( $url, 'https', false );
 			}
 		}
@@ -878,7 +860,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 		$cache_key = 'wpmudev_mapped_domain_' . $revision . '_' . $blog_id;
 
-		//* Check if the domain is mapped
+		//* Check if the domain is mapped. Store in object cache.
 		$mapped_domain = $this->object_cache_get( $cache_key );
 		if ( false === $mapped_domain ) {
 
@@ -895,7 +877,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				} else {
 					//* Save IDs.
 					if ( isset( $domain->id ) && $domain->id )
-						$domain_ids[$key] = $domain->id;
+						$domain_ids[ $key ] = $domain->id;
 				}
 			}
 
@@ -906,7 +888,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			}
 
 			//* Set 0, as we check for false to begin with.
-			$mapped_domain = isset( $mapped_domains[$primary_key] ) ? $mapped_domains[$primary_key] : 0;
+			$mapped_domain = isset( $mapped_domains[ $primary_key ] ) ? $mapped_domains[ $primary_key ] : 0;
 
 			$this->object_cache_set( $cache_key, $mapped_domain, 3600 );
 		}
@@ -944,11 +926,10 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	/**
 	 * Try to get an canonical URL when Donncha Domain Mapping is active.
 	 *
-	 * @param string $path The post relative path.
-	 * @param bool $get_scheme Output array with scheme.
-	 *
 	 * @since 2.4.0
 	 *
+	 * @param string $path The post relative path.
+	 * @param bool $get_scheme Output array with scheme.
 	 * @return string|array|void The unescaped URL, the scheme
 	 */
 	public function the_url_donncha_domainmap( $path, $get_scheme = false ) {
@@ -963,10 +944,9 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 		$request_uri = '';
 
-		if ( $url && $url !== untrailingslashit( $scheme . '://' . $current_blog->domain . $current_blog->path ) ) {
-			if ( ( defined( 'VHOST' ) && 'yes' !== VHOST ) || ( defined( 'SUBDOMAIN_INSTALL' ) && false === SUBDOMAIN_INSTALL ) ) {
+		if ( $url && untrailingslashit( $scheme . '://' . $current_blog->domain . $current_blog->path ) !== $url ) {
+			if ( ( defined( 'VHOST' ) && 'yes' !== VHOST ) || ( defined( 'SUBDOMAIN_INSTALL' ) && false === SUBDOMAIN_INSTALL ) )
 				$request_uri = str_replace( $current_blog->path, '/', $_SERVER['REQUEST_URI'] );
-			}
 
 			$url = trailingslashit( $url . $request_uri ) . ltrim( $path, '\\/ ' );
 
@@ -986,9 +966,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 * @since 2.2.2
 	 * @global object $wp_query
 	 *
-	 * @param int $post_id The post ID
-	 *
-	 * @return string|null Escaped site Shortlink URL
+	 * @param int $post_id The post ID.
+	 * @return string|null Escaped site Shortlink URL.
 	 */
 	public function get_shortlink( $post_id = 0 ) {
 
@@ -998,7 +977,6 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 			if ( false === $this->is_front_page() ) {
 				if ( $this->is_singular( $post_id ) ) {
-
 					if ( 0 === $post_id )
 						$post_id = $this->get_the_real_ID();
 
@@ -1010,16 +988,14 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 							$path = '?page_id=' . $post_id;
 						}
 					}
-				} else if ( $this->is_archive() ) {
-
+				} elseif ( $this->is_archive() ) {
 					if ( $this->is_category() ) {
 						$id = get_queried_object_id();
 						$path = '?cat=' . $id;
-					} else if ( $this->is_tag() ) {
+					} elseif ( $this->is_tag() ) {
 						$id = get_queried_object_id();
 						$path = '?post_tag=' . $id;
-					} else if ( $this->is_date() ) {
-						// This isn't exactly "short" for a shortlink...
+					} elseif ( $this->is_date() ) {
 						global $wp_query;
 
 						$query = $wp_query->query;
@@ -1033,10 +1009,10 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 						}
 
 						$path = $var;
-					} else if ( $this->is_author() ) {
+					} elseif ( $this->is_author() ) {
 						$id = get_queried_object_id();
 						$path = '?author=' . $id;
-					} else if ( $this->is_tax() ) {
+					} elseif ( $this->is_tax() ) {
 						//* Generate shortlink for object type and slug.
 						$object = get_queried_object();
 
@@ -1049,7 +1025,6 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 								$path = '?' . $t . '=' . $slug;
 						}
 					}
-
 				}
 			}
 
@@ -1064,10 +1039,11 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 				$additions = '';
 				if ( isset( $query ) ) {
-					if ( false !== strpos( $query, '&' ) )
+					if ( false !== strpos( $query, '&' ) ) {
 						$query = explode( '&', $query );
-					else
+					} else {
 						$query = array( $query );
+					}
 
 					foreach ( $query as $arg ) {
 						if ( false === strpos( $path, $arg ) )
@@ -1099,13 +1075,12 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	}
 
 	/**
-	 * Generates Previous and Next links
+	 * Generates Previous and Next links.
 	 *
 	 * @since 2.2.4
 	 *
-	 * @param string $prev_next Previous or next page link
-	 * @param int $post_id The post ID
-	 *
+	 * @param string $prev_next Previous or next page link.
+	 * @param int $post_id The post ID.
 	 * @return string|null Escaped site Pagination URL
 	 */
 	public function get_paged_url( $prev_next = 'next', $post_id = 0 ) {
@@ -1130,12 +1105,11 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 				if ( 'prev' === $prev_next ) {
 					$prev = $page > 1 ? $this->get_paged_post_url( $page - 1, $post_id, 'prev' ) : '';
-				} else if ( 'next' === $prev_next ) {
+				} elseif ( 'next' === $prev_next ) {
 					$next = $page < $numpages ? $this->get_paged_post_url( $page + 1, $post_id, 'next' ) : '';
 				}
-
 			}
-		} else if ( $this->is_archive() || $this->is_home() ) {
+		} elseif ( $this->is_archive() || $this->is_home() ) {
 
 			$output_archive_paged = false;
 			if ( $this->is_front_page() ) {
@@ -1156,7 +1130,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 						$paged = 1;
 
 					$prev = get_pagenum_link( $paged, false );
-				} else if ( 'next' === $prev_next && $paged < $GLOBALS["wp_query"]->max_num_pages ) {
+				} elseif ( 'next' === $prev_next && $paged < $GLOBALS['wp_query']->max_num_pages ) {
 
 					if ( ! $paged )
 						$paged = 1;
@@ -1188,7 +1162,6 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 * @param int $i The page number to generate the URL from.
 	 * @param int $post_id The post ID
 	 * @param string $pos Which url to get, accepts next|prev
-	 *
 	 * @return string Unescaped URL
 	 */
 	public function get_paged_post_url( $i, $post_id = 0, $pos = 'prev' ) {
@@ -1198,7 +1171,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		if ( empty( $post_id ) )
 			$post_id = $this->get_the_real_ID();
 
-		if ( $i === 1 ) {
+		if ( 1 === $i ) {
 			$url = $this->the_url_from_cache( '', $post_id, false, $from_option, false );
 		} else {
 			$post = get_post( $post_id );
@@ -1222,22 +1195,22 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 					//* We're adding a page.
 					$last_occurence = strrpos( $urlfromcache, '/' . $current . '/' );
 
-					if ( $last_occurence !== false )
+					if ( false !== $last_occurence )
 						$urlfromcache = substr_replace( $urlfromcache, '/', $last_occurence, strlen( '/' . $current . '/' ) );
 				}
 			}
 
-			if ( ! $this->pretty_permalinks || in_array( $post->post_status, array( 'draft', 'auto-draft', 'pending' ) ) ) {
+			if ( ! $this->pretty_permalinks || in_array( $post->post_status, array( 'draft', 'auto-draft', 'pending' ), true ) ) {
 
 				//* Put removed query arg back prior to adding pagination.
 				if ( isset( $query_arg ) )
 					$urlfromcache = $urlfromcache . '?' . $query_arg;
 
 				$url = add_query_arg( 'page', $i, $urlfromcache );
-			} else if ( $this->is_static_frontpage( $post_id ) ) {
+			} elseif ( $this->is_static_frontpage( $post_id ) ) {
 				global $wp_rewrite;
 
-				$url = trailingslashit( $urlfromcache ) . user_trailingslashit( $wp_rewrite->pagination_base . "/" . $i, 'single_paged' );
+				$url = trailingslashit( $urlfromcache ) . user_trailingslashit( $wp_rewrite->pagination_base . '/' . $i, 'single_paged' );
 
 				//* Add back query arg if removed.
 				if ( isset( $query_arg ) )
@@ -1255,7 +1228,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	}
 
 	/**
-	 * Adds subdomain to URL.
+	 * Adds subdomain to input URL.
 	 *
 	 * @since 2.6.5
 	 *
@@ -1267,15 +1240,63 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		$url = $this->make_fully_qualified_url( $url );
 
 		//* Add subdomain, if set.
-		if ( $this->add_subdomain ) {
-			$scheme = parse_url( $url, PHP_URL_SCHEME );
+		if ( $subdomain = $this->get_current_subdomain() ) {
+			$parsed_url = wp_parse_url( $url );
+			$scheme = isset( $parsed_url['scheme'] ) ? $parsed_url['scheme'] : 'http';
 			$url = str_replace( $scheme . '://', '', $url );
 
 			//* Put it together.
-			$url = $scheme . '://' . $this->add_subdomain . '.' . $url;
+			$url = $scheme . '://' . $subdomain . '.' . $url;
 		}
 
 		return $url;
+	}
+
+	/**
+	 * Fetches current subdomain set by $this->set_current_subdomain();
+	 *
+	 * @since 2.7.0
+	 * @staticvar string $subdomain
+	 *
+	 * @param null|string $set Whether to set a new subdomain.
+	 * @param bool $unset Whether to remove subdomain from cache.
+	 * @return string|bool The set subdomain, false if none is set.
+	 */
+	public function get_current_subdomain( $set = null, $unset = false ) {
+
+		static $subdomain = null;
+
+		if ( isset( $set ) )
+			$subdomain = esc_html( $set );
+
+		if ( $unset )
+			unset( $subdomain );
+
+		if ( isset( $subdomain ) )
+			return $subdomain;
+
+		return false;
+	}
+
+	/**
+	 * Sets current working subdomain.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param string $subdomain The current subdomain.
+	 * @return string The set subdomain.
+	 */
+	public function set_current_subdomain( $subdomain = '' ) {
+		return $this->get_current_subdomain( $subdomain );
+	}
+
+	/**
+	 * Unsets current working subdomain.
+	 *
+	 * @since 2.7.0
+	 */
+	public function unset_current_subdomain() {
+		$this->get_current_subdomain( null, true );
 	}
 
 	/**
@@ -1331,13 +1352,26 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 */
 	public function make_fully_qualified_url( $url ) {
 
-		if ( '//' === substr( $url, 0, 2 ) ) {
+		if ( '//' === substr( $url, 0, 2 ) )
 			$url = 'http:' . $url;
-		} else if ( 'http' !== substr( $url, 0, 4 ) ) {
+		elseif ( 'http' !== substr( $url, 0, 4 ) )
 			$url = 'http://' . $url;
-		}
 
 		return $url;
 	}
 
+	/**
+	 * Fetches home URL host. Like "wordpress.org".
+	 * If this fails, you're going to have a bad time.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @return string The home URL host.
+	 */
+	public function get_home_host() {
+
+		$parsed_url = wp_parse_url( get_option( 'home' ) );
+
+		return isset( $parsed_url['host'] ) ? esc_html( $parsed_url['host'] ) : '';
+	}
 }

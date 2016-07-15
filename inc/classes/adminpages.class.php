@@ -37,7 +37,18 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	/**
 	 * Name of the page hook when the menu is registered.
 	 *
+	 * @since 2.7.0
+	 *
+	 * @var string Page hook
+	 */
+	public $seo_settings_page_hook;
+
+	/**
+	 * Name of the page hook when the menu is registered.
+	 *
 	 * @since 2.2.2
+	 * @deprecated Use $seo_settings_page_hook instead.
+	 * @since 2.7.0
 	 *
 	 * @var string Page hook
 	 */
@@ -78,7 +89,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 			// Enqueue i18n defaults.
 			add_action( 'admin_init', array( $this, 'enqueue_page_defaults' ), 1 );
 
-			// Add menu links and register $this->pagehook
+			// Add menu links and register $this->seo_settings_page_hook
 			add_action( 'admin_menu', array( $this, 'add_menu_link' ) );
 
 			//* Load the page content
@@ -130,13 +141,13 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 			'page_title'	=> __( 'SEO Settings', 'autodescription' ),
 			'menu_title'	=> __( 'SEO', 'autodescription' ),
 			'capability'	=> $this->settings_capability(),
-			'menu_slug'		=> $this->page_id,
+			'menu_slug'		=> $this->seo_settings_page_slug,
 			'callback'		=> array( $this, 'admin' ),
 			'icon'			=> 'dashicons-search',
 			'position'		=> '90.9001',
 		);
 
-		$this->pagehook = add_menu_page(
+		$this->seo_settings_page_hook = add_menu_page(
 			$menu['page_title'],
 			$menu['menu_title'],
 			$menu['capability'],
@@ -145,6 +156,12 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 			$menu['icon'],
 			$menu['position']
 		);
+
+		/**
+		 * Backwards compatibility.
+		 * I have yet to find a way to check for if a variable has been called (without debug_backtrace).
+		 */
+		$this->pagehook = $this->seo_settings_page_hook;
 
 		/**
 		 * Simply copy the previous, but rename the submenu entry.
@@ -160,10 +177,10 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		);
 
 		//* Enqueue styles
-		add_action( 'admin_print_styles-' . $this->pagehook, array( $this, 'enqueue_admin_css' ), 11 );
+		add_action( 'admin_print_styles-' . $this->seo_settings_page_hook, array( $this, 'enqueue_admin_css' ), 11 );
 
 		//* Enqueue scripts
-		add_action( 'admin_print_scripts-' . $this->pagehook, array( $this, 'enqueue_admin_javascript' ), 11 );
+		add_action( 'admin_print_scripts-' . $this->seo_settings_page_hook, array( $this, 'enqueue_admin_javascript' ), 11 );
 
 	}
 
@@ -174,8 +191,8 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	 */
 	public function settings_init() {
 
-		add_action( $this->pagehook . '_settings_page_boxes', array( $this, 'do_metaboxes' ) );
-		add_action( 'load-' . $this->pagehook, array( $this, 'metaboxes' ) );
+		add_action( $this->seo_settings_page_hook . '_settings_page_boxes', array( $this, 'do_metaboxes' ) );
+		add_action( 'load-' . $this->seo_settings_page_hook, array( $this, 'metaboxes' ) );
 
 	}
 
@@ -193,26 +210,26 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		<div class="metabox-holder columns-2">
 			<div class="postbox-container-1">
 				<?php
-				do_action( 'the_seo_framework_before_siteadmin_metaboxes', $this->pagehook );
+				do_action( 'the_seo_framework_before_siteadmin_metaboxes', $this->seo_settings_page_hook );
 
-				do_meta_boxes( $this->pagehook, 'main', null );
+				do_meta_boxes( $this->seo_settings_page_hook, 'main', null );
 
-				if ( isset( $wp_meta_boxes[$this->pagehook]['main_extra'] ) )
-					do_meta_boxes( $this->pagehook, 'main_extra', null );
+				if ( isset( $wp_meta_boxes[ $this->seo_settings_page_hook ]['main_extra'] ) )
+					do_meta_boxes( $this->seo_settings_page_hook, 'main_extra', null );
 
-				do_action( 'the_seo_framework_after_siteadmin_metaboxes', $this->pagehook );
+				do_action( 'the_seo_framework_after_siteadmin_metaboxes', $this->seo_settings_page_hook );
 				?>
 			</div>
 			<div class="postbox-container-2">
 				<?php
-				do_action( 'the_seo_framework_before_siteadmin_metaboxes_side', $this->pagehook );
+				do_action( 'the_seo_framework_before_siteadmin_metaboxes_side', $this->seo_settings_page_hook );
 
 				/**
 				 * @TODO fill this in
 				 * @priority low 2.9.0
 				 */
 
-				do_action( 'the_seo_framework_after_siteadmin_metaboxes_side', $this->pagehook );
+				do_action( 'the_seo_framework_after_siteadmin_metaboxes_side', $this->seo_settings_page_hook );
 				?>
 			</div>
 		</div>
@@ -260,7 +277,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				'autodescription-title-settings',
 				__( 'Title Settings', 'autodescription' ),
 				array( $this, 'title_metabox' ),
-				$this->pagehook,
+				$this->seo_settings_page_hook,
 				'main',
 				array()
 			);
@@ -271,7 +288,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				'autodescription-description-settings',
 				__( 'Description Meta Settings', 'autodescription' ),
 				array( $this, 'description_metabox' ),
-				$this->pagehook,
+				$this->seo_settings_page_hook,
 				'main',
 				array()
 			);
@@ -282,7 +299,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				'autodescription-homepage-settings',
 				__( 'Home Page Settings', 'autodescription' ),
 				array( $this, 'homepage_metabox' ),
-				$this->pagehook,
+				$this->seo_settings_page_hook,
 				'main',
 				array()
 			);
@@ -293,7 +310,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				'autodescription-social-settings',
 				__( 'Social Meta Settings', 'autodescription' ),
 				array( $this, 'social_metabox' ),
-				$this->pagehook,
+				$this->seo_settings_page_hook,
 				'main',
 				array()
 			);
@@ -304,7 +321,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				'autodescription-knowledgegraph-settings',
 				__( 'Knowledge Graph Settings', 'autodescription' ),
 				array( $this, 'knowledge_metabox' ),
-				$this->pagehook,
+				$this->seo_settings_page_hook,
 				'main',
 				array()
 			);
@@ -315,7 +332,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				'autodescription-schema-settings',
 				__( 'Schema Settings', 'autodescription' ),
 				array( $this, 'schema_metabox' ),
-				$this->pagehook,
+				$this->seo_settings_page_hook,
 				'main',
 				array()
 			);
@@ -326,7 +343,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				'autodescription-robots-settings',
 				__( 'Robots Meta Settings', 'autodescription' ),
 				array( $this, 'robots_metabox' ),
-				$this->pagehook,
+				$this->seo_settings_page_hook,
 				'main',
 				array()
 			);
@@ -337,7 +354,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				'autodescription-webmaster-settings',
 				__( 'Webmaster Meta Settings', 'autodescription' ),
 				array( $this, 'webmaster_metabox' ),
-				$this->pagehook,
+				$this->seo_settings_page_hook,
 				'main',
 				array()
 			);
@@ -348,7 +365,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				'autodescription-sitemap-settings',
 				__( 'Sitemap Settings', 'autodescription' ),
 				array( $this, 'sitemaps_metabox' ),
-				$this->pagehook,
+				$this->seo_settings_page_hook,
 				'main',
 				array()
 			);
@@ -359,7 +376,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				'autodescription-feed-settings',
 				__( 'Feed Settings', 'autodescription' ),
 				array( $this, 'feed_metabox' ),
-				$this->pagehook,
+				$this->seo_settings_page_hook,
 				'main',
 				array()
 			);
@@ -392,7 +409,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				</p>
 			</div>
 
-			<?php do_action( "{$this->pagehook}_settings_page_boxes", $this->pagehook ); ?>
+			<?php do_action( "{$this->seo_settings_page_hook}_settings_page_boxes", $this->seo_settings_page_hook ); ?>
 
 			<div class="bottom-buttons">
 				<?php
@@ -409,7 +426,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				// close postboxes that should be closed
 				$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
 				// postboxes setup
-				postboxes.add_postbox_toggles('<?php echo $this->pagehook; ?>');
+				postboxes.add_postbox_toggles('<?php echo esc_js( $this->seo_settings_page_hook ); ?>');
 			});
 			//]]>
 		</script>
@@ -459,13 +476,12 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	 * Echo constructed name attributes in form fields.
 	 *
 	 * @since 2.2.2
-	 *
 	 * @uses $this->get_field_name() Construct name attributes for use in form fields.
 	 *
 	 * @param string $name Field name base
 	 */
 	public function field_name( $name ) {
-		echo $this->get_field_name( $name );
+		echo esc_attr( $this->get_field_name( $name ) );
 	}
 
 	/**
@@ -484,7 +500,6 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	 * Echo constructed id attributes in form fields.
 	 *
 	 * @since 2.2.2
-	 *
 	 * @uses $this->get_field_id() Constructs id attributes for use in form fields.
 	 *
 	 * @param string $id Field id base
@@ -494,7 +509,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	public function field_id( $id, $echo = true ) {
 
 		if ( $echo ) {
-			echo $this->get_field_id( $id );
+			echo esc_attr( $this->get_field_id( $id ) );
 		} else {
 			return $this->get_field_id( $id );
 		}
@@ -503,7 +518,6 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	/**
 	 * Helper function that returns a setting value from this form's settings
 	 * field for use in form fields.
-	 *
 	 * Fetches blog option.
 	 *
 	 * @since 2.2.2
@@ -516,31 +530,15 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	}
 
 	/**
-	 * Helper function that returns a setting value from this form's settings
-	 * field for use in form fields.
-	 *
-	 * Fetches network option.
-	 *
-	 * @since 2.2.2
-	 *
-	 * @param string $key Field key
-	 * @return string Field value
-	 */
-	public function get_field_value_network( $key ) {
-		return $this->get_site_option( $key, $this->settings_field );
-	}
-
-	/**
 	 * Echo a setting value from this form's settings field for use in form fields.
 	 *
-	 * @uses $this->get_field_value() Constructs value attributes for use in form fields.
-	 *
 	 * @since 2.2.2
+	 * @uses $this->get_field_value() Constructs value attributes for use in form fields.
 	 *
 	 * @param string $key Field key
 	 */
 	public function field_value( $key ) {
-		echo $this->get_field_value( $key );
+		echo esc_attr( $this->get_field_value( $key ) );
 	}
 
 	/**
@@ -550,7 +548,6 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	 *
 	 * @param string $input The input to wrap.
 	 * @param bool $echo Whether to echo or return.
-	 *
 	 * @return Wrapped $input.
 	 */
 	public function wrap_fields( $input = '', $echo = false ) {
@@ -572,7 +569,6 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	 * @param string $field_id The option ID. Must be within the Autodescription settings.
 	 * @param string $label The checkbox description label
 	 * @param string $description Addition description to place beneath the checkbox.
-	 *
 	 * @return HTML checkbox output.
 	 */
 	public function make_checkbox( $field_id = '', $label = '', $description = '' ) {
@@ -606,7 +602,6 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	 * @param string $description The descriptive on-hover title.
 	 * @param string $link The non-escaped link.
 	 * @param bool $echo Whether to echo or return.
-	 *
 	 * @return HTML checkbox output.
 	 */
 	public function make_info( $description = '', $link = '', $echo = true ) {
@@ -629,7 +624,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	 */
 	public function load_assets() {
 		//* Hook scripts method
-		add_action( "load-{$this->pagehook}", array( $this, 'metabox_scripts' ) );
+		add_action( "load-{$this->seo_settings_page_hook}", array( $this, 'metabox_scripts' ) );
 	}
 
 	/**
@@ -681,16 +676,12 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	/**
 	 * Returns the HTML class wrap for warning Checkbox options.
 	 *
-	 * This function does nothing special. But is merely a simple wrapper.
-	 * Just like code_wrap.
+	 * @since 2.3.4
 	 *
 	 * @param string $key required The option name which returns boolean.
 	 * @param string $setting optional The settings field
 	 * @param bool $wrap optional output class="" or just the class name.
 	 * @param bool $echo optional echo or return the output.
-	 *
-	 * @since 2.3.4
-	 *
 	 * @return string Empty on echo or The class with an optional wrapper.
 	 */
 	public function is_warning_checked( $key, $setting = '', $wrap = true, $echo = true ) {
@@ -703,11 +694,10 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 			$class = 'seoframework-warning-selected';
 
 		if ( $echo ) {
-			if ( $wrap ) {
+			if ( $wrap )
 				printf( 'class="%s"', $class );
-			} else {
+			else
 				echo $class;
-			}
 		} else {
 			if ( $wrap )
 				return sprintf( 'class="%s"', $class );
@@ -751,41 +741,38 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 
 		if ( '' !== $default && '' !== $warned ) {
 			$class = $default . ' ' . $warned;
-		} else if ( '' !== $default ) {
+		} elseif ( '' !== $default ) {
 			$class = $default;
-		} else if ( '' !== $warned ) {
+		} elseif ( '' !== $warned ) {
 			$class = $warned;
 		}
 
 		if ( $echo ) {
-			if ( $wrap ) {
+			if ( $wrap )
 				printf( 'class="%s"', $class );
-			} else {
+			else
 				echo $class;
-			}
 		} else {
-			if ( $wrap ) {
+			if ( $wrap )
 				return sprintf( 'class="%s"', $class );
-			} else {
-				return $class;
-			}
+
+			return $class;
 		}
 	}
 
 	/**
 	 * Returns the HTML class wrap for default radio options.
 	 *
-	 * @param string $key required The option name which returns boolean.
-	 * @param string $value required The option value which returns boolean.
-	 * @param string $setting optional The settings field
-	 * @param bool $wrap optional output class="" or just the class name.
-	 * @param bool $echo optional echo or return the output.
-	 *
 	 * @since 2.2.5
 	 *
 	 * @TODO use this
 	 * @priority low 2.8.0+
 	 *
+	 * @param string $key required The option name which returns boolean.
+	 * @param string $value required The option value which returns boolean.
+	 * @param string $setting optional The settings field
+	 * @param bool $wrap optional output class="" or just the class name.
+	 * @param bool $echo optional echo or return the output.
 	 * @return string|null the default selected class.
 	 */
 	public function is_default_radio( $key, $value, $setting = '', $wrap = true, $echo = true ) {
@@ -798,11 +785,10 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 			$class = 'seoframework-default-selected';
 
 		if ( $echo ) {
-			if ( $wrap ) {
+			if ( $wrap )
 				echo sprintf( 'class="%s"', $class );
-			} else {
+			else
 				echo $class;
-			}
 		} else {
 			if ( $wrap )
 				return sprintf( 'class="%s"', $class );
@@ -810,5 +796,4 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 			return $class;
 		}
 	}
-
 }

@@ -97,7 +97,7 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 				$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'category_noindex' ) ? 'noindex' : $meta['noindex'];
 				$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'category_nofollow' ) ? 'nofollow' : $meta['nofollow'];
 				$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'category_noindex' ) ? 'noarchive' : $meta['noarchive'];
-			} else if ( $this->is_tag() ) {
+			} elseif ( $this->is_tag() ) {
 				$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'tag_noindex' ) ? 'noindex' : $meta['noindex'];
 				$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'tag_nofollow' ) ? 'nofollow' : $meta['nofollow'];
 				$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'tag_noindex' ) ? 'noarchive' : $meta['noarchive'];
@@ -159,13 +159,14 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 	 */
 	public function get_separator( $type = 'title', $escape = false ) {
 
-		static $sepcache = array();
 		static $sep_esc = array();
 
-		if ( isset( $sep_esc[$type][$escape] ) )
-			return $sep_esc[$type][$escape];
+		if ( isset( $sep_esc[ $type ][ $escape ] ) )
+			return $sep_esc[ $type ][ $escape ];
 
-		if ( ! isset( $sepcache[$type] ) ) {
+		static $sepcache = array();
+
+		if ( ! isset( $sepcache[ $type ] ) ) {
 			if ( 'title' === $type ) {
 				$sep_option = $this->get_option( 'title_seperator' ); // Note: typo.
 			} else {
@@ -174,9 +175,9 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 
 			if ( 'pipe' === $sep_option ) {
 				$sep = '|';
-			} else if ( 'dash' === $sep_option ) {
+			} elseif ( 'dash' === $sep_option ) {
 				$sep = '-';
-			} else if ( '' !== $sep_option ) {
+			} elseif ( '' !== $sep_option ) {
 				//* Encapsulate within html entities.
 				$sep = '&' . $sep_option . ';';
 			} else {
@@ -184,13 +185,13 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 				$sep = '|';
 			}
 
-			$sepcache[$type] = $sep;
+			$sepcache[ $type ] = $sep;
 		}
 
 		if ( $escape ) {
-			return $sep_esc[$type][$escape] = esc_html( $sepcache[$type] );
+			return $sep_esc[ $type ][ $escape ] = esc_html( $sepcache[ $type ] );
 		} else {
-			return $sep_esc[$type][$escape] = $sepcache[$type];
+			return $sep_esc[ $type ][ $escape ] = $sepcache[ $type ];
 		}
 	}
 
@@ -261,7 +262,7 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 			//* Full locale is used.
 
 			//* Return the match if found.
-			if ( in_array( $match, $valid_locales ) )
+			if ( in_array( $match, $valid_locales, true ) )
 				return $match;
 
 			//* Convert to only language portion.
@@ -277,7 +278,7 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 			//* No need to do for each loop. Just match the keys.
 			if ( $key = array_search( $match, $locale_keys ) ) {
 				//* Fetch the corresponding value from key within the language array.
-				return $valid_locales[$key];
+				return $valid_locales[ $key ];
 			}
 		}
 
@@ -295,11 +296,11 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 
 		if ( $this->is_wc_product() ) {
 			$type = 'product';
-		} else if ( $this->is_single() && $this->get_image_from_cache() ) {
+		} elseif ( $this->is_single() && $this->get_image_from_cache() ) {
 			$type = 'article';
-		} else if ( $this->is_author() ) {
+		} elseif ( $this->is_author() ) {
 			$type = 'profile';
-		} else if ( $this->is_blog_page() || ( $this->is_front_page() && ! $this->has_page_on_front() ) ) {
+		} elseif ( $this->is_blog_page() || ( $this->is_front_page() && ! $this->has_page_on_front() ) ) {
 			$type = 'blog';
 		} else {
 			$type = 'website';
@@ -319,5 +320,4 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 	public function generate_twitter_card_type() {
 		return $this->get_image_from_cache() ? $this->get_option( 'twitter_card' ) : 'summary';
 	}
-
 }

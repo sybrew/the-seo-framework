@@ -80,11 +80,7 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 	}
 
 	/**
-	 * Render the SEO meta box
-	 *
-	 * Called outside autodescription_run
-	 *
-	 * Applies filters the_seo_framework_seobox_output : bool
+	 * Adds the SEO meta box to post edit screens.
 	 *
 	 * @since 2.0.0
 	 */
@@ -93,6 +89,10 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 		if ( $this->detect_seo_plugins() )
 			return;
 
+		/**
+		 * Applies filters the_seo_framework_seobox_output : bool
+		 * @since 2.0.0
+		 */
 		$show_seobox = (bool) apply_filters( 'the_seo_framework_seobox_output', true );
 
 		if ( $show_seobox )
@@ -104,29 +104,25 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 	 * Adds SEO Meta boxes within Taxonomy screens.
 	 *
 	 * @since 2.1.8
+	 * @since 2.6.0 Can no longer run outside of the term edit scope.
+	 * @since 2.6.0 Can no longer run when another SEO plugin is active.
 	 */
 	public function add_taxonomy_seo_box_init() {
 
-		//* @since 2.6.0
-		if ( $this->detect_seo_plugins() )
+		if ( $this->detect_seo_plugins() || ! $this->is_term_edit() )
 			return;
 
-		//* @since 2.6.0
-		if ( $this->is_term_edit() ) {
+		/**
+		 * High priority, this box is seen right below the post/page edit screen.
+		 * Applies filters 'the_seo_framework_term_metabox_priority' : int
+		 *
+		 * @since 2.6.0
+		 */
+		$priority = (int) apply_filters( 'the_seo_framework_term_metabox_priority', 0 );
 
-			/**
-			 * High priority, this box is seen right below the post/page edit screen.
-			 * Applies filters 'the_seo_framework_term_metabox_priority' : int
-			 *
-			 * @since 2.6.0
-			 */
-			$priority = (int) apply_filters( 'the_seo_framework_term_metabox_priority', 0 );
-
-			//* Add taxonomy meta boxes
-			foreach ( get_taxonomies( array( 'public' => true ) ) as $tax_name )
-				add_action( $tax_name . '_edit_form', array( $this, 'pre_seo_box' ), $priority, 2 );
-
-		}
+		//* Add taxonomy meta boxes
+		foreach ( get_taxonomies( array( 'public' => true ) ) as $tax_name )
+			add_action( $tax_name . '_edit_form', array( $this, 'pre_seo_box' ), $priority, 2 );
 
 	}
 
@@ -249,7 +245,7 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 				// This shouldn't happen.
 				return;
 			}
-		} else if ( is_object( $object ) ) {
+		} elseif ( is_object( $object ) ) {
 
 			//* Singular name.
 			$type = $this->get_the_term_name( $object, true, false );
@@ -329,7 +325,7 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 		 *
 		 * @since 2.3.4
 		 */
-		$doc_pre_rem = $add_additions ? $title . " | " . $blog_name : $title;
+		$doc_pre_rem = $add_additions ? $title . ' | ' . $blog_name : $title;
 		$title_len = $title ? $doc_pre_rem : $generated_doctitle;
 		$description_len = $description	? $description : $generated_description;
 
@@ -351,14 +347,14 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 		$description_placeholder = $generated_description;
 
 		?>
-		<h3><?php printf( __( '%s SEO Settings', 'autodescription' ), $type ); ?></h3>
+		<h3><?php printf( esc_html__( '%s SEO Settings', 'autodescription' ), $type ); ?></h3>
 
 		<table class="form-table">
 			<tbody>
 
 				<?php if ( 'above' === $this->inpost_seo_bar ) : ?>
 				<tr>
-					<th scope="row" valign="top"><?php _e( 'Doing it Right', 'autodescription' ); ?></th>
+					<th scope="row" valign="top"><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
 					<td>
 						<?php echo $this->post_status( $term_id, $taxonomy, true ); ?>
 					</td>
@@ -368,8 +364,8 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 				<tr class="form-field">
 					<th scope="row" valign="top">
 						<label for="autodescription-meta[doctitle]">
-							<strong><?php printf( __( '%s Title', 'autodescription' ), $type ); ?></strong>
-							<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#3" target="_blank" title="<?php _e( 'Recommended Length: 50 to 55 characters', 'autodescription' ) ?>">[?]</a>
+							<strong><?php printf( esc_html__( '%s Title', 'autodescription' ), $type ); ?></strong>
+							<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#3" target="_blank" title="<?php esc_html_e( 'Recommended Length: 50 to 55 characters', 'autodescription' ) ?>">[?]</a>
 						</label>
 					</th>
 					<td>
@@ -377,20 +373,20 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 							<input name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" type="text" placeholder="<?php echo $title_placeholder ?>" value="<?php echo esc_attr( $title ); ?>" size="40" />
 							<span id="autodescription-title-offset" class="hide-if-no-js"></span><span id="autodescription-title-placeholder" class="hide-if-no-js"></span>
 						</div>
-						<p class="description theseoframework-counter"><?php printf( __( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[doctitle]_chars">'. mb_strlen( $tit_len_parsed ) .'</span>' ); ?></p>
+						<p class="description theseoframework-counter"><?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[doctitle]_chars">'. mb_strlen( $tit_len_parsed ) .'</span>' ); ?></p>
 					</td>
 				</tr>
 
 				<tr class="form-field">
 					<th scope="row" valign="top">
 						<label for="autodescription-meta[description]">
-							<strong><?php printf( __( '%s Meta Description', 'autodescription' ), $type ); ?></strong>
+							<strong><?php printf( esc_html__( '%s Meta Description', 'autodescription' ), $type ); ?></strong>
 							<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#1" target="_blank" title="<?php _e( 'Recommended Length: 145 to 155 characters', 'autodescription' ) ?>">[?]</a>
 						</label>
 					</th>
 					<td>
 						<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" placeholder="<?php echo $description_placeholder ?>" rows="5" cols="50" class="large-text"><?php echo esc_html( $description ); ?></textarea>
-						<p class="description theseoframework-counter"><?php printf( __( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[description]_chars">'. mb_strlen( $desc_len_parsed ) .'</span>' ); ?></p>
+						<p class="description theseoframework-counter"><?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[description]_chars">'. mb_strlen( $desc_len_parsed ) .'</span>' ); ?></p>
 					</td>
 				</tr>
 
@@ -398,22 +394,22 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 					<th scope="row" valign="top"><?php _e( 'Robots Meta Settings', 'autodescription' ); ?></th>
 					<td>
 						<label for="autodescription-meta[noindex]"><input name="autodescription-meta[noindex]" id="autodescription-meta[noindex]" type="checkbox" value="1" <?php checked( $noindex ); ?> />
-							<?php printf( __( 'Apply %s to this term', 'autodescription' ), $this->code_wrap( 'noindex' ) ); ?>
-							<a href="https://support.google.com/webmasters/answer/93710?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Tell Search Engines not to show this page in their search results', 'autodescription' ) ) ?>">[?]</a>
+							<?php printf( esc_html__( 'Apply %s to this term?', 'autodescription' ), $this->code_wrap( 'noindex' ) ); ?>
+							<a href="https://support.google.com/webmasters/answer/93710?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( esc_html__( 'Tell Search Engines not to show this page in their search results', 'autodescription' ) ) ?>">[?]</a>
 						</label>
 
 						<br>
 
 						<label for="autodescription-meta[nofollow]"><input name="autodescription-meta[nofollow]" id="autodescription-meta[nofollow]" type="checkbox" value="1" <?php checked( $nofollow ); ?> />
-							<?php printf( __( 'Apply %s to this term', 'autodescription' ), $this->code_wrap( 'nofollow' ) ); ?>
-							<a href="https://support.google.com/webmasters/answer/96569?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Tell Search Engines not to follow links on this page', 'autodescription' ) ) ?>">[?]</a>
+							<?php printf( esc_html__( 'Apply %s to this term?', 'autodescription' ), $this->code_wrap( 'nofollow' ) ); ?>
+							<a href="https://support.google.com/webmasters/answer/96569?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( esc_html__( 'Tell Search Engines not to follow links on this page', 'autodescription' ) ) ?>">[?]</a>
 						</label>
 
 						<br>
 
 						<label for="autodescription-meta[noarchive]"><input name="autodescription-meta[noarchive]" id="autodescription-meta[noarchive]" type="checkbox" value="1" <?php checked( $noarchive ); ?> />
-							<?php printf( __( 'Apply %s to this term', 'autodescription' ), $this->code_wrap( 'noarchive' ) ); ?>
-							<a href="https://support.google.com/webmasters/answer/79812?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Tell Search Engines not to save a cached copy of this page', 'autodescription' ) ) ?>">[?]</a>
+							<?php printf( esc_html__( 'Apply %s to this term?', 'autodescription' ), $this->code_wrap( 'noarchive' ) ); ?>
+							<a href="https://support.google.com/webmasters/answer/79812?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( esc_html__( 'Tell Search Engines not to save a cached copy of this page', 'autodescription' ) ) ?>">[?]</a>
 						</label>
 
 						<?php // Saved flag, if set then it won't fetch for Genesis meta anymore ?>
@@ -425,7 +421,7 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 
 				<?php if ( 'below' === $this->inpost_seo_bar ) : ?>
 				<tr>
-					<th scope="row" valign="top"><?php _e( 'Doing it Right', 'autodescription' ); ?></th>
+					<th scope="row" valign="top"><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
 					<td>
 						<?php echo $this->post_status( $term_id, $taxonomy, true ); ?>
 					</td>
@@ -485,7 +481,7 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 				'is_home' => true,
 				'get_custom_field' => true,
 			);
-		} else if ( $this->is_blog_page( $post_id ) ) {
+		} elseif ( $this->is_blog_page( $post_id ) ) {
 			//* Page for posts.
 			$generated_doctitle_args = array(
 				'placeholder' => true,
@@ -517,11 +513,10 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 		 * @since 2.3.4
 		 */
 		if ( $is_static_frontpage ) {
-			if ( $this->get_option( 'homepage_tagline' ) ) {
+			if ( $this->get_option( 'homepage_tagline' ) )
 				$tit_len_pre = $title ? $title . " | " . $this->get_blogdescription() : $generated_doctitle;
-			} else {
+			else
 				$tit_len_pre = $title ? $title : $generated_doctitle;
-			}
 		} else {
 			/**
 			 * Separator doesn't matter. Since html_entity_decode is used.
@@ -529,11 +524,10 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 			 *
 			 * @since 2.3.4
 			 */
-			if ( $this->add_title_additions() ) {
+			if ( $this->add_title_additions() )
 				$tit_len_pre = $title ? $title . " | " . $this->get_blogname() : $generated_doctitle;
-			} else {
+			else
 				$tit_len_pre = $title ? $title : $generated_doctitle;
-			}
 		}
 
 		//* Fetch description from option.
@@ -589,9 +583,9 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 		<?php endif; ?>
 
 		<p>
-			<label for="autodescription_title"><strong><?php printf( __( 'Custom %s Title', 'autodescription' ), $type ); ?></strong>
+			<label for="autodescription_title"><strong><?php printf( esc_html__( 'Custom %s Title', 'autodescription' ), $type ); ?></strong>
 				<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#3" target="_blank" title="<?php _e( 'Recommended Length: 50 to 55 characters', 'autodescription' ); ?>">[?]</a>
-				<span class="description theseoframework-counter"><?php printf( __( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_title_chars">'. mb_strlen( $tit_len_parsed ) .'</span>' ); ?></span>
+				<span class="description theseoframework-counter"><?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_title_chars">'. mb_strlen( $tit_len_parsed ) .'</span>' ); ?></span>
 			</label>
 		</p>
 		<p>
@@ -603,9 +597,9 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 
 		<p>
 			<label for="autodescription_description">
-				<strong><?php printf( __( 'Custom %s Description', 'autodescription' ), $type ); ?></strong>
-				<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#1" target="_blank" title="<?php _e( 'Recommended Length: 145 to 155 characters', 'autodescription' ); ?>">[?]</a>
-				<span class="description theseoframework-counter"><?php printf( __( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_description_chars">'. mb_strlen( $desc_len_parsed ) .'</span>' ); ?></span>
+				<strong><?php printf( esc_html__( 'Custom %s Description', 'autodescription' ), $type ); ?></strong>
+				<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#1" target="_blank" title="<?php esc_html_e( 'Recommended Length: 145 to 155 characters', 'autodescription' ); ?>">[?]</a>
+				<span class="description theseoframework-counter"><?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_description_chars">'. mb_strlen( $desc_len_parsed ) .'</span>' ); ?></span>
 			</label>
 		</p>
 		<p>
@@ -614,22 +608,22 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 
 		<p>
 			<label for="autodescription_canonical">
-				<strong><?php _e( 'Custom Canonical URL', 'autodescription' ); ?></strong>
-				<a href="https://support.google.com/webmasters/answer/139066?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Preferred %s URL location', 'autodescription' ), $type ); ?>">[?]</a>
+				<strong><?php esc_html_e( 'Custom Canonical URL', 'autodescription' ); ?></strong>
+				<a href="https://support.google.com/webmasters/answer/139066?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( esc_html__( 'Preferred %s URL location', 'autodescription' ), $type ); ?>">[?]</a>
 			</label>
 		</p>
 		<p>
 			<input class="large-text" type="text" name="autodescription[_genesis_canonical_uri]" id="autodescription_canonical" placeholder="<?php echo $canonical_placeholder ?>" value="<?php echo esc_url( $this->get_custom_field( '_genesis_canonical_uri' ) ); ?>" />
 		</p>
 
-		<p><strong><?php _e( 'Robots Meta Settings', 'autodescription' ); ?></strong></p>
+		<p><strong><?php esc_html_e( 'Robots Meta Settings', 'autodescription' ); ?></strong></p>
 		<p>
 			<label for="autodescription_noindex"><input type="checkbox" name="autodescription[_genesis_noindex]" id="autodescription_noindex" value="1" <?php checked( $this->get_custom_field( '_genesis_noindex' ) ); ?> />
 				<?php
 					/* translators: 1: Option, 2: Post or Page */
-					printf( __( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'noindex' ), $type );
+					printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'noindex' ), $type );
 				?>
-				<a href="https://support.google.com/webmasters/answer/93710?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Tell Search Engines not to show this %s in their search results', 'autodescription' ), $type ); ?>">[?]</a>
+				<a href="https://support.google.com/webmasters/answer/93710?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( esc_html__( 'Tell Search Engines not to show this %s in their search results', 'autodescription' ), $type ); ?>">[?]</a>
 			</label>
 
 			<br>
@@ -637,9 +631,9 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 			<label for="autodescription_nofollow"><input type="checkbox" name="autodescription[_genesis_nofollow]" id="autodescription_nofollow" value="1" <?php checked( $this->get_custom_field( '_genesis_nofollow' ) ); ?> />
 				<?php
 					/* translators: 1: Option, 2: Post or Page */
-					printf( __( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'nofollow' ), $type );
+					printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'nofollow' ), $type );
 				?>
-				<a href="https://support.google.com/webmasters/answer/96569?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Tell Search Engines not to follow links on this %s', 'autodescription' ), $type ); ?>">[?]</a>
+				<a href="https://support.google.com/webmasters/answer/96569?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( esc_html__( 'Tell Search Engines not to follow links on this %s', 'autodescription' ), $type ); ?>">[?]</a>
 			</label>
 
 			<br>
@@ -647,24 +641,24 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 			<label for="autodescription_noarchive"><input type="checkbox" name="autodescription[_genesis_noarchive]" id="autodescription_noarchive" value="1" <?php checked( $this->get_custom_field( '_genesis_noarchive' ) ); ?> />
 				<?php
 					/* translators: 1: Option, 2: Post or Page */
-					printf( __( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'noarchive' ), $type );
+					printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'noarchive' ), $type );
 				?>
-				<a href="https://support.google.com/webmasters/answer/79812?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( __( 'Tell Search Engines not to save a cached copy of this %s', 'autodescription' ), $type ); ?>">[?]</a>
+				<a href="https://support.google.com/webmasters/answer/79812?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( esc_html__( 'Tell Search Engines not to save a cached copy of this %s', 'autodescription' ), $type ); ?>">[?]</a>
 			</label>
 		</p>
 
-		<p><strong><?php _e( 'Local Search Settings', 'autodescription' ); ?></strong></p>
+		<p><strong><?php esc_html_e( 'Local Search Settings', 'autodescription' ); ?></strong></p>
 		<p>
 			<label for="autodescription_exclude_local_search"><input type="checkbox" name="autodescription[exclude_local_search]" id="autodescription_exclude_local_search" value="1" <?php checked( $this->get_custom_field( 'exclude_local_search' ) ); ?> />
-				<?php printf( __( 'Exclude this %s from local search', 'autodescription' ), $type ); ?>
-				<span title="<?php printf( __( 'This excludes this %s from local on-site search results', 'autodescription' ), $type ); ?>">[?]</span>
+				<?php printf( esc_html__( 'Exclude this %s from local search', 'autodescription' ), $type ); ?>
+				<span title="<?php printf( esc_html__( 'This excludes this %s from local on-site search results', 'autodescription' ), $type ); ?>">[?]</span>
 			</label>
 		</p>
 
 		<p>
 			<label for="autodescription_redirect">
-				<strong><?php _e( 'Custom 301 Redirect URL', 'autodescription' ); ?></strong>
-				<a href="https://support.google.com/webmasters/answer/93633?hl=<?php echo $language; ?>" target="_blank" title="<?php _e( 'This will force visitors to go to another URL', 'autodescription' ); ?>">[?]</a>
+				<strong><?php esc_html_e( 'Custom 301 Redirect URL', 'autodescription' ); ?></strong>
+				<a href="https://support.google.com/webmasters/answer/93633?hl=<?php echo $language; ?>" target="_blank" title="<?php esc_html_e( 'This will force visitors to go to another URL', 'autodescription' ); ?>">[?]</a>
 			</label>
 		</p>
 		<p>
@@ -673,7 +667,7 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 
 		<?php if ( 'below' === $this->inpost_seo_bar ) : ?>
 		<p>
-			<strong><?php _e( 'Doing it Right', 'autodescription' ); ?></strong>
+			<strong><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></strong>
 			<div><?php echo $this->post_status( $post_id, 'inpost', true ); ?></div>
 		</p>
 		<?php endif;
@@ -681,5 +675,4 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 		do_action( 'the_seo_framework_pro_page_inpost_box' );
 
 	}
-
 }

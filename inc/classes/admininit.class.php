@@ -27,13 +27,13 @@
 class AutoDescription_Admin_Init extends AutoDescription_Init {
 
 	/**
-	 * Page Hook.
+	 * The page base file.
 	 *
 	 * @since 2.5.2.2
 	 *
-	 * @var string Holds Admin Page hook.
+	 * @var string Holds Admin page base file.
 	 */
-	protected $page_hook;
+	protected $page_base_file;
 
 	/**
 	 * JavaScript name identifier to be used with enqueuing.
@@ -88,16 +88,14 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		 * Check hook first.
 		 * @since 2.3.9
 		 */
-		if ( isset( $hook ) && $hook && in_array( $hook, $enqueue_hooks ) ) {
+		if ( isset( $hook ) && $hook && in_array( $hook, $enqueue_hooks, true ) ) {
 			/**
 			 * @uses $this->post_type_supports_custom_seo()
 			 * @since 2.3.9
 			 */
 			if ( $this->post_type_supports_custom_seo() )
 				$this->init_admin_scripts();
-
 		}
-
 	}
 
 	/**
@@ -108,8 +106,8 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	public function init_admin_scripts( $direct = false ) {
 
 		if ( $direct ) {
-			$this->enqueue_admin_css( $this->page_hook );
-			$this->enqueue_admin_javascript( $this->page_hook );
+			$this->enqueue_admin_css( $this->page_base_file );
+			$this->enqueue_admin_javascript( $this->page_base_file );
 		} else {
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_css' ), 1 );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_javascript' ), 1 );
@@ -130,10 +128,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		 * Put hook and js name in class vars.
 		 * @since 2.5.2.2
 		 */
-		$this->page_hook = $this->page_hook ? $this->page_hook : $hook;
-		/**
-		 * var_dump() @see $this->pagehook && $this->page_hook
-		 */
+		$this->page_base_file = $this->page_base_file ? $this->page_base_file : $hook;
 
 		//* Register the script.
 		$this->register_admin_javascript();
@@ -227,7 +222,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		$rtl = (bool) is_rtl();
 		$ishome = false;
 
-		if ( isset( $this->page_hook ) && $this->page_hook ) {
+		if ( isset( $this->page_base_file ) && $this->page_base_file ) {
 			// We're somewhere within default WordPress pages.
 			$post_id = $this->get_the_real_ID();
 
@@ -241,7 +236,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 				} else {
 					$additions = '';
 				}
-			} else if ( $post_id ) {
+			} elseif ( $post_id ) {
 				//* We're on post.php
 				$generated_doctitle_args = array(
 					'term_id' => $post_id,
@@ -258,7 +253,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 					$additions = '';
 					$tagline = false;
 				}
-			} else if ( $this->is_archive() ) {
+			} elseif ( $this->is_archive() ) {
 				//* Category or Tag.
 				global $current_screen;
 
@@ -271,21 +266,19 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 							'term_id' => $term_id,
 							'taxonomy' => $current_screen->taxonomy,
 							'notagline' => true,
-							'get_custom_field' => false
+							'get_custom_field' => false,
 						);
 
 						$title = $this->title( '', '', '', $generated_doctitle_args );
 						$additions = $title_add_additions ? $blog_name : '';
 					}
 				}
-
 			} else {
 				//* We're in a special place.
 				// Can't fetch title.
 				$title = '';
 				$additions = $title_add_additions ? $blog_name : '';
 			}
-
 		} else {
 			// We're on our SEO settings pages.
 			if ( $this->has_page_on_front() ) {
@@ -334,7 +327,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		 * Put hook and js name in class vars.
 		 * @since 2.5.2.2
 		 */
-		$this->page_hook = $this->page_hook ? $this->page_hook : $hook;
+		$this->page_base_file = $this->page_base_file ? $this->page_base_file : $hook;
 
 		//* Register the script.
 		$this->register_admin_css();
@@ -366,7 +359,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	}
 
 	/**
-	 * Checks the screen hook.
+	 * Checks the screen base file through global $page_hook or $_REQEUST.
 	 *
 	 * @since 2.2.2
 	 * @global string $page_hook the current page hook.
@@ -380,7 +373,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 			return true;
 
 		//* May be too early for $page_hook
-		if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === $pagehook )
+		if ( defined( 'WP_ADMIN' ) && WP_ADMIN && isset( $_GET['page'] ) && $_GET['page'] === $pagehook )
 			return true;
 
 		return false;
@@ -395,9 +388,6 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 * @param string $page			Menu slug.
 	 * @param array  $query_args 	Optional. Associative array of query string arguments
 	 * 								(key => value). Default is an empty array.
-	 *
-	 * @credits StudioPress for some code.
-	 *
 	 * @return null Return early if first argument is false.
 	 */
 	public function admin_redirect( $page, array $query_args = array() ) {
@@ -409,15 +399,14 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 
 		foreach ( $query_args as $key => $value ) {
 			if ( empty( $key ) || empty( $value ) )
-				unset( $query_args[$key] );
+				unset( $query_args[ $key ] );
 		}
 
 		$url = add_query_arg( $query_args, $url );
 
-		wp_redirect( esc_url_raw( $url ) );
+		wp_safe_redirect( esc_url_raw( $url ), 302 );
 		exit;
 	}
-
 
 	/**
 	 * Handles counter option update on AJAX request.
@@ -449,7 +438,5 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 			//* Kill PHP.
 			exit;
 		}
-
 	}
-
 }
