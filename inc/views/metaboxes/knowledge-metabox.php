@@ -50,7 +50,7 @@ switch ( $instance ) :
 	break;
 	case 'the_seo_framework_knowledge_metabox_general' :
 
-		?><h4><?php _e( 'Knowledge Graph Settings', 'autodescription' ); ?></h4><?php
+		?><h4><?php esc_html_e( 'Knowledge Graph Settings', 'autodescription' ); ?></h4><?php
 		$this->description( __( "The Knowledge Graph lets Google and other Search Engines know where to find you or your organization and its relevant content.", 'autodescription' ) );
 		$this->description( __( "Google is becoming more of an 'Answer Engine' than a 'Search Engine'. Setting up these options could have a positive impact on the SEO value of your website.", 'autodescription' ) );
 
@@ -59,7 +59,8 @@ switch ( $instance ) :
 			$this->make_checkbox(
 				'knowledge_output',
 				__( 'Output Knowledge tags?', 'autodescription' ),
-				''
+				'',
+				true
 			), true
 		);
 
@@ -67,14 +68,15 @@ switch ( $instance ) :
 		?>
 			<hr>
 
-			<h4><?php _e( "Website logo", 'autodescription' ); ?></h4>
+			<h4><?php esc_html_e( 'Website logo', 'autodescription' ); ?></h4>
 			<?php
 			//* Echo checkbox.
 			$this->wrap_fields(
 				$this->make_checkbox(
 					'knowledge_logo',
 					__( 'Use the Favicon from Customizer as the Organization Logo?', 'autodescription' ),
-					__( "This option only has an effect when this site represents an Organization. If left disabled, Search Engines will look elsewhere for a logo, if it exists and is assigned as a logo.", 'autodescription' )
+					__( 'This option only has an effect when this site represents an Organization. If left disabled, Search Engines will look elsewhere for a logo, if it exists and is assigned as a logo.', 'autodescription' ),
+					true
 				), true
 			);
 		endif;
@@ -84,14 +86,14 @@ switch ( $instance ) :
 
 		$blogname = $this->get_blogname();
 
-		?>
-		<h4><?php _e( 'About this website', 'autodescription' ); ?></h4>
-		<p><span class="description"><?php printf( __( 'Who or what is your website about?', 'autodescription' ) ); ?></span></p>
+		?><h4><?php esc_html_e( 'About this website', 'autodescription' ); ?></h4><?php
+		$this->description( __( 'Who or what is your website about?', 'autodescription' ) );
 
+		?>
 		<hr>
 
 		<p>
-			<label for="<?php $this->field_id( 'knowledge_type' ); ?>"><?php _ex( 'This website represents:', '...Organization or Person.', 'autodescription' ); ?></label>
+			<label for="<?php $this->field_id( 'knowledge_type' ); ?>"><?php echo esc_html_x( 'This website represents:', '...Organization or Person.', 'autodescription' ); ?></label>
 			<select name="<?php $this->field_name( 'knowledge_type' ); ?>" id="<?php $this->field_id( 'knowledge_type' ); ?>">
 			<?php
 			$knowledge_type = (array) apply_filters(
@@ -111,7 +113,7 @@ switch ( $instance ) :
 
 		<p>
 			<label for="<?php $this->field_id( 'knowledge_name' ); ?>">
-				<strong><?php _e( "The organization or personal name", 'autodescription' ); ?></strong>
+				<strong><?php esc_html_e( 'The organization or personal name', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<p>
@@ -122,9 +124,9 @@ switch ( $instance ) :
 	break;
 	case 'the_seo_framework_knowledge_metabox_social' :
 
-		?><h4><?php _e( 'Social Pages connected to this website', 'autodescription' ); ?></h4><?php
+		?><h4><?php esc_html_e( 'Social Pages connected to this website', 'autodescription' ); ?></h4><?php
 		$this->description( __( "Don't have a page at a site or is the profile only privately accessible? Leave that field empty. Unsure? Fill it in anyway.", 'autodescription' ) );
-		$this->description( __( "Add the link that leads directly to the social page of this website.", 'autodescription' ) );
+		$this->description( __( 'Add the link that leads directly to the social page of this website.', 'autodescription' ) );
 
 		?><hr><?php
 
@@ -153,7 +155,7 @@ switch ( $instance ) :
 			'gplus' => array(
 				'option'		=> 'knowledge_gplus',
 				'dashicon'		=> 'dashicons-googleplus',
-				'desc' 			=>  'Google+ ' . $profile18n,
+				'desc' 			=> 'Google+ ' . $profile18n,
 				'placeholder'	=> 'https://plus.google.com/' . $connectedi18n,
 				'examplelink'	=> esc_url( 'https://plus.google.com/me' ),
 			),
@@ -205,7 +207,7 @@ switch ( $instance ) :
 			?>
 			<p>
 				<label for="<?php $this->field_id( $value['option'] ); ?>">
-					<strong><?php echo $value['desc'] ?></strong>
+					<strong><?php echo esc_html( $value['desc'] ); ?></strong>
 					<?php
 					if ( $value['examplelink'] ) {
 						?><a href="<?php echo esc_url( $value['examplelink'] ); ?>" target="_blank">[?]</a><?php

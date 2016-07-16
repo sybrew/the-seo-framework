@@ -381,7 +381,7 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 					<th scope="row" valign="top">
 						<label for="autodescription-meta[description]">
 							<strong><?php printf( esc_html__( '%s Meta Description', 'autodescription' ), $type ); ?></strong>
-							<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#1" target="_blank" title="<?php _e( 'Recommended Length: 145 to 155 characters', 'autodescription' ) ?>">[?]</a>
+							<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#1" target="_blank" title="<?php esc_html_e( 'Recommended Length: 145 to 155 characters', 'autodescription' ) ?>">[?]</a>
 						</label>
 					</th>
 					<td>
@@ -391,7 +391,7 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 				</tr>
 
 				<tr>
-					<th scope="row" valign="top"><?php _e( 'Robots Meta Settings', 'autodescription' ); ?></th>
+					<th scope="row" valign="top"><?php esc_html_e( 'Robots Meta Settings', 'autodescription' ); ?></th>
 					<td>
 						<label for="autodescription-meta[noindex]"><input name="autodescription-meta[noindex]" id="autodescription-meta[noindex]" type="checkbox" value="1" <?php checked( $noindex ); ?> />
 							<?php printf( esc_html__( 'Apply %s to this term?', 'autodescription' ), $this->code_wrap( 'noindex' ) ); ?>
@@ -577,14 +577,14 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 		?>
 		<?php if ( 'above' === $this->inpost_seo_bar ) : ?>
 		<p>
-			<strong><?php _e( 'Doing it Right', 'autodescription' ); ?></strong>
+			<strong><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></strong>
 			<div><?php echo $this->post_status( $post_id, 'inpost', true ); ?></div>
 		</p>
 		<?php endif; ?>
 
 		<p>
 			<label for="autodescription_title"><strong><?php printf( esc_html__( 'Custom %s Title', 'autodescription' ), $type ); ?></strong>
-				<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#3" target="_blank" title="<?php _e( 'Recommended Length: 50 to 55 characters', 'autodescription' ); ?>">[?]</a>
+				<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#3" target="_blank" title="<?php esc_html_e( 'Recommended Length: 50 to 55 characters', 'autodescription' ); ?>">[?]</a>
 				<span class="description theseoframework-counter"><?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_title_chars">'. mb_strlen( $tit_len_parsed ) .'</span>' ); ?></span>
 			</label>
 		</p>

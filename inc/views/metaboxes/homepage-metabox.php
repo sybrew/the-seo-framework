@@ -62,9 +62,9 @@ switch ( $instance ) :
 		$description_from_post_message = '';
 		$title_from_post_message  = '';
 
-		$title_i18n = __( 'Title', 'autodescription' );
-		$description_i18n = __( 'Description', 'autodescription' );
-		$home_page_i18n = __( 'Home Page', 'autodescription' );
+		$title_i18n = esc_html__( 'Title', 'autodescription' );
+		$description_i18n = esc_html__( 'Description', 'autodescription' );
+		$home_page_i18n = esc_html__( 'Home Page', 'autodescription' );
 
 		$home_id = $this->get_the_front_page_ID();
 		$home_title = $this->escape_title( $this->get_option( 'homepage_title' ) );
@@ -178,7 +178,7 @@ switch ( $instance ) :
 		?>
 		<p>
 			<label for="<?php $this->field_id( 'homepage_title_tagline' ); ?>" class="toblock">
-				<strong><?php printf( __( 'Custom %s Title Tagline', 'autodescription' ), $home_page_i18n ); ?></strong>
+				<strong><?php printf( esc_html__( 'Custom %s Title Tagline', 'autodescription' ), $home_page_i18n ); ?></strong>
 			</label>
 		</p>
 		<p>
@@ -189,13 +189,13 @@ switch ( $instance ) :
 
 		<p>
 			<label for="<?php $this->field_id( 'homepage_title' ); ?>" class="toblock">
-				<strong><?php printf( __( 'Custom %s Title', 'autodescription' ), $home_page_i18n ); ?></strong>
-				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3' ); ?>" target="_blank" title="<?php _e( 'Recommended Length: 50 to 55 characters', 'autodescription' ) ?>">[?]</a>
-				<span class="description theseoframework-counter"><?php printf( __( 'Characters Used: %s', 'autodescription' ), '<span id="' . $this->field_id( 'homepage_title', false ) . '_chars">'. mb_strlen( $tit_len ) .'</span>' ); ?></span>
+				<strong><?php printf( esc_html__( 'Custom %s Title', 'autodescription' ), $home_page_i18n ); ?></strong>
+				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 50 to 55 characters', 'autodescription' ) ?>">[?]</a>
+				<span class="description theseoframework-counter"><?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="' . $this->field_id( 'homepage_title', false ) . '_chars">'. mb_strlen( $tit_len ) .'</span>' ); ?></span>
 			</label>
 		</p>
 		<p id="autodescription-title-wrap">
-			<input type="text" name="<?php $this->field_name( 'homepage_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title' ); ?>" placeholder="<?php echo $home_title_placeholder ?>" value="<?php echo esc_attr( $home_title ); ?>" />
+			<input type="text" name="<?php $this->field_name( 'homepage_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title' ); ?>" placeholder="<?php echo esc_attr( $home_title_placeholder ); ?>" value="<?php echo esc_attr( $home_title ); ?>" />
 			<span id="autodescription-title-offset" class="hide-if-no-js"></span><span id="autodescription-title-placeholder" class="hide-if-no-js"></span>
 		</p>
 		<?php
@@ -207,7 +207,7 @@ switch ( $instance ) :
 
 		<p>
 			<label for="<?php $this->field_id( 'homepage_description' ); ?>" class="toblock">
-				<strong><?php printf( __( 'Custom %s Description', 'autodescription' ), $home_page_i18n ); ?></strong>
+				<strong><?php printf( esc_html__( 'Custom %s Description', 'autodescription' ), $home_page_i18n ); ?></strong>
 				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1' ); ?>" target="_blank" title="<?php _e( 'Recommended Length: 145 to 155 characters', 'autodescription' ) ?>">[?]</a>
 				<span class="description theseoframework-counter"><?php printf( __( 'Characters Used: %s', 'autodescription' ), '<span id="' . $this->field_id( 'homepage_description', false ) . '_chars">'. mb_strlen( $desc_len ) .'</span>' ); ?></span>
 			</label>
@@ -219,57 +219,52 @@ switch ( $instance ) :
 		$this->description( __( 'The meta description can be used to determine the text used under the title on Search Engine results pages.', 'autodescription' ) );
 
 		if ( $description_from_post_message ) {
-			echo '<p class="description">' . $description_from_post_message . '</p>';
+			echo '<p class="description">' . esc_html( $description_from_post_message ) . '</p>';
 		}
 
 	break;
 	case 'the_seo_framework_homepage_metabox_additions' :
 
+		//* Fetches escaped title parts.
 		$title_args = $this->generate_home_title();
 		$title = $title_args['title'];
 		$blogname = $title_args['blogname'];
-		$sep = $this->get_separator( 'title', true );
+		$sep = $this->get_separator( 'title' );
 
-		$example_left = '<em><span class="custom-title-js">' . esc_attr( $title ) . '</span><span class="custom-blogname-js"><span class="autodescription-sep-js"> ' . esc_attr( $sep ) . ' </span><span class="custom-tagline-js">' . esc_attr( $blogname ) . '</span></span></span></em>';
-		$example_right = '<em><span class="custom-blogname-js"><span class="custom-tagline-js">' . esc_attr( $blogname ) . '</span><span class="autodescription-sep-js"> ' . esc_attr( $sep ) . ' </span></span><span class="custom-title-js">' . esc_attr( $title ) . '</span></em>';
+		$example_left = '<em><span class="custom-title-js">' . $title . '</span><span class="custom-blogname-js"><span class="autodescription-sep-js"> ' . $sep . ' </span><span class="custom-tagline-js">' . $blogname . '</span></span></span></em>';
+		$example_right = '<em><span class="custom-blogname-js"><span class="custom-tagline-js">' . $blogname . '</span><span class="autodescription-sep-js"> ' . $sep . ' </span></span><span class="custom-title-js">' . $title . '</span></em>';
 
-		$home_page_i18n = __( 'Home Page', 'autodescription' );
+		$home_page_i18n = esc_html__( 'Home Page', 'autodescription' );
 
 		?>
 		<fieldset>
-			<legend><h4><?php _e( 'Document Title Additions Location', 'autodescription' ); ?></h4></legend>
+			<legend><h4><?php esc_html_e( 'Document Title Additions Location', 'autodescription' ); ?></h4></legend>
 			<?php $this->description( __( 'Determines which side the added title text will go on.', 'autodescription' ) ); ?>
 
 			<p id="home-title-location" class="theseoframework-fields">
 				<span class="toblock">
 					<input type="radio" name="<?php $this->field_name( 'home_title_location' ); ?>" id="<?php $this->field_id( 'home_title_location_left' ); ?>" value="left" <?php checked( $this->get_field_value( 'home_title_location' ), 'left' ); ?> />
 					<label for="<?php $this->field_id( 'home_title_location_left' ); ?>">
-						<span><?php _e( 'Left:', 'autodescription' ); ?></span>
+						<span><?php esc_html_e( 'Left:', 'autodescription' ); ?></span>
 						<?php echo ( $example_left ) ? $this->code_wrap_noesc( $example_left ) : ''; ?>
 					</label>
 				</span>
 				<span class="toblock">
 					<input type="radio" name="<?php $this->field_name( 'home_title_location' ); ?>" id="<?php $this->field_id( 'home_title_location_right' ); ?>" value="right" <?php checked( $this->get_field_value( 'home_title_location' ), 'right' ); ?> />
 					<label for="<?php $this->field_id( 'home_title_location_right' ); ?>">
-						<span><?php _e( 'Right:', 'autodescription' ); ?></span>
-						<?php echo ( $example_right ) ? $this->code_wrap_noesc( $example_right ) : ''; ?>
+						<span><?php esc_html_e( 'Right:', 'autodescription' ); ?></span>
+						<?php echo $example_right ? $this->code_wrap_noesc( $example_right ) : ''; ?>
 					</label>
 				</span>
 			</p>
 		</fieldset>
 
 		<hr>
-		<?php
-		/**
-		 * @TODO work on this checkbox.
-		 * @priority low 2.6.x
-		 */
-		?>
-		<h4><?php printf( __( '%s Tagline', 'autodescription' ), $home_page_i18n ); ?></h4>
+		<h4><?php printf( esc_html__( '%s Tagline', 'autodescription' ), $home_page_i18n ); ?></h4>
 		<p id="title-tagline-toggle">
 			<label for="<?php $this->field_id( 'homepage_tagline' ); ?>" class="toblock">
 				<input type="checkbox" name="<?php $this->field_name( 'homepage_tagline' ); ?>" id="<?php $this->field_id( 'homepage_tagline' ); ?>" <?php $this->is_conditional_checked( 'homepage_tagline' ); ?> value="1" <?php checked( $this->get_field_value( 'homepage_tagline' ) ); ?> />
-				<?php printf( __( 'Add site description (tagline) to the Title on the %s?', 'autodescription' ), $home_page_i18n ); ?>
+				<?php printf( esc_html__( 'Add site description (tagline) to the Title on the %s?', 'autodescription' ), $home_page_i18n ); ?>
 			</label>
 		</p>
 		<?php
@@ -278,7 +273,7 @@ switch ( $instance ) :
 	case 'the_seo_framework_homepage_metabox_robots' :
 
 		$language = $this->google_language();
-		$home_page_i18n = __( 'Home Page', 'autodescription' );
+		$home_page_i18n = esc_html__( 'Home Page', 'autodescription' );
 
 		//* Get home page ID. If blog on front, it's 0.
 		$home_id = $this->get_the_front_page_ID();
@@ -295,10 +290,10 @@ switch ( $instance ) :
 		 * @since 2.2.4
 		 */
 		if ( $noindex_post || $nofollow_post || $noarchive_post ) {
-			$checked_home = ' - <a href="' . esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#theseoframework-inpost-box' ) ) . '" target="_blank" class="attention" title="' . __( 'View Home Page Settings', 'autodescription' ) . '" >' . __( 'Checked in Page', 'autodescription' ) . '</a>';
+			$checked_home = ' - <a href="' . esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#theseoframework-inpost-box' ) ) . '" target="_blank" class="attention" title="' . esc_attr__( 'View Home Page Settings', 'autodescription' ) . '" >' . esc_html__( 'Checked in Page', 'autodescription' ) . '</a>';
 		}
 
-		?><h4><?php _e( 'Home Page Robots Meta Settings', 'autodescription' ); ?></h4><?php
+		?><h4><?php esc_html_e( 'Home Page Robots Meta Settings', 'autodescription' ); ?></h4><?php
 
 		$noindex_note = $noindex_post ? $checked_home : '';
 		$nofollow_note = $nofollow_post ? $checked_home : '';
@@ -306,7 +301,7 @@ switch ( $instance ) :
 
 		//* Index label.
 		/* translators: 1: Option, 2: Location */
-		$i_label	= sprintf( __( 'Apply %1$s to the %2$s?', 'autodescription' ), $this->code_wrap( 'noindex' ), $home_page_i18n );
+		$i_label	= sprintf( esc_html__( 'Apply %1$s to the %2$s?', 'autodescription' ), $this->code_wrap( 'noindex' ), $home_page_i18n );
 		$i_label	.= ' ';
 		$i_label	.= $this->make_info(
 							__( 'Tell Search Engines not to show this page in their search results', 'autodescription' ),
@@ -317,7 +312,7 @@ switch ( $instance ) :
 
 		//* Follow label.
 		/* translators: 1: Option, 2: Location */
-		$f_label	= sprintf( __( 'Apply %1$s to the %2$s?', 'autodescription' ), $this->code_wrap( 'nofollow' ), $home_page_i18n );
+		$f_label	= sprintf( esc_html__( 'Apply %1$s to the %2$s?', 'autodescription' ), $this->code_wrap( 'nofollow' ), $home_page_i18n );
 		$f_label	.= ' ';
 		$f_label	.= $this->make_info(
 							__( 'Tell Search Engines not to follow links on this page', 'autodescription' ),
@@ -328,7 +323,7 @@ switch ( $instance ) :
 
 		//* Archive label.
 		/* translators: 1: Option, 2: Location */
-		$a_label	= sprintf( __( 'Apply %1$s to the %2$s?', 'autodescription' ), $this->code_wrap( 'noarchive' ), $home_page_i18n );
+		$a_label	= sprintf( esc_html__( 'Apply %1$s to the %2$s?', 'autodescription' ), $this->code_wrap( 'noarchive' ), $home_page_i18n );
 		$a_label	.= ' ';
 		$a_label	.=	$this->make_info(
 						__( 'Tell Search Engines not to save a cached copy of this page', 'autodescription' ),
@@ -343,17 +338,20 @@ switch ( $instance ) :
 				$this->make_checkbox(
 					'homepage_noindex',
 					$i_label,
-					''
+					'',
+					false
 				),
 				$this->make_checkbox(
 					'homepage_nofollow',
 					$f_label,
-					''
+					'',
+					false
 				),
 				$this->make_checkbox(
 					'homepage_noarchive',
 					$a_label,
-					''
+					'',
+					false
 				),
 			),
 			true
@@ -367,7 +365,7 @@ switch ( $instance ) :
 
 		<hr>
 
-		<h4><?php _e( 'Home Page Pagination Robots Settings', 'autodescription' ); ?></h4>
+		<h4><?php esc_html_e( 'Home Page Pagination Robots Settings', 'autodescription' ); ?></h4>
 		<?php $this->description( __( "If your Home Page is paginated and outputs content that's also found elsewhere on the website, enabling this option might prevent duplicate content.", 'autodescription' ) ); ?>
 
 		<?php
@@ -376,8 +374,9 @@ switch ( $instance ) :
 			$this->make_checkbox(
 				'home_paged_noindex',
 				/* translators: 1: Option, 2: Location */
-				sprintf( __( 'Apply %1$s to every second or later page on the %2$s?', 'autodescription' ), $this->code_wrap( 'noindex' ), $home_page_i18n ),
-				''
+				sprintf( esc_html__( 'Apply %1$s to every second or later page on the %2$s?', 'autodescription' ), $this->code_wrap( 'noindex' ), $home_page_i18n ),
+				'',
+				false
 			),
 			true
 		);

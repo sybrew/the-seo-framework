@@ -6,18 +6,14 @@ switch ( $instance ) :
 	case 'the_seo_framework_description_metabox_main' :
 
 		$blogname = $this->get_blogname();
-		$sep = $this->get_separator( 'description', true );
+		$sep = $this->get_separator( 'description' );
 
 		/**
 		 * Generate example.
 		 */
-		$page_title = __( 'Example Title', 'autodescription' );
-		$on = _x( 'on', 'Placement. e.g. Post Title "on" Blog Name', 'autodescription' );
-		$excerpt = __( 'This is an example description...', 'autodescription' );
-
-		$page_title = $this->escape_description( $page_title );
-		$on = $this->escape_description( $on );
-		$excerpt = $this->escape_description( $excerpt );
+		$page_title = $this->escape_description( __( 'Example Title', 'autodescription' ) );
+		$on = $this->escape_description( _x( 'on', 'Placement. e.g. Post Title "on" Blog Name', 'autodescription' ) );
+		$excerpt = $this->escape_description( __( 'This is an example description...', 'autodescription' ) );
 
 		//* Put it together.
 		$example 	= '<span id="description-additions-js">'
@@ -39,11 +35,11 @@ switch ( $instance ) :
 
 		$example_nojs = $nojs_additions . $excerpt;
 
-		?>
-		<h4><?php printf( __( 'Automated Description Settings', 'autodescription' ) ); ?></h4>
-		<p><span class="description"><?php printf( __( "The meta description can be used to determine the text used under the title on Search Engine results pages.", 'autodescription' ) ); ?></span></p>
+		?><h4><?php printf( esc_html__( 'Automated Description Settings', 'autodescription' ) ); ?></h4><?php
+		$this->description( __( 'The meta description can be used to determine the text used under the title on Search Engine results pages.', 'autodescription' ) );
 
-		<h4><?php _e( 'Example Automated Description Output', 'autodescription' ); ?></h4>
+		?>
+		<h4><?php esc_html_e( 'Example Automated Description Output', 'autodescription' ); ?></h4>
 		<p class="hide-if-no-js"><?php echo $this->code_wrap_noesc( $example ); ?></p>
 		<p class="hide-if-js"><?php echo $this->code_wrap( $example_nojs ); ?></p>
 
@@ -65,12 +61,12 @@ switch ( $instance ) :
 		 */
 		$default_tabs = array(
 			'general' => array(
-				'name' 		=> __( 'General', 'autodescription' ),
+				'name' 		=> esc_html__( 'General', 'autodescription' ),
 				'callback'	=> array( $this, 'description_metabox_general_tab' ),
 				'dashicon'	=> 'admin-generic',
 			),
 			'additions' => array(
-				'name'		=> __( 'Additions', 'autodescription' ),
+				'name'		=> esc_html__( 'Additions', 'autodescription' ),
 				'callback'	=> array( $this, 'description_metabox_additions_tab' ),
 				'dashicon'	=> 'plus',
 			),
@@ -96,18 +92,18 @@ switch ( $instance ) :
 		$sep_option = $this->get_option( 'description_separator' );
 		$sep_option = $sep_option ? $sep_option : 'pipe';
 
-		$recommended = ' class="recommended" title="' . __( 'Recommended', 'autodescription' ) . '"';
+		$recommended = ' class="recommended" title="' . esc_attr__( 'Recommended', 'autodescription' ) . '"';
 
 		?>
 		<fieldset>
-			<legend><h4><?php _e( 'Description Excerpt Separator', 'autodescription' ); ?></h4></legend>
+			<legend><h4><?php esc_html_e( 'Description Excerpt Separator', 'autodescription' ); ?></h4></legend>
 			<p id="description-separator" class="theseoframework-fields">
 			<?php foreach ( $description_separator as $name => $html ) { ?>
 				<input type="radio" name="<?php $this->field_name( 'description_separator' ); ?>" id="<?php $this->field_id( 'description_separator' . $name ); ?>" value="<?php echo $name ?>" <?php checked( $sep_option, $name ); ?> />
 				<label for="<?php $this->field_id( 'description_separator' . $name ); ?>" <?php echo ( 'pipe' === $name || 'dash' === $name ) ? $recommended : ''; ?>><?php echo $html ?></label>
 			<?php } ?>
 			</p>
-			<span class="description"><?php _e( 'If the Automated Description consists of two parts (title and excerpt), then the separator will go in-between them.', 'autodescription' ); ?></span>
+			<span class="description"><?php esc_html_e( 'If the Automated Description consists of two parts (title and excerpt), then the separator will go in-between them.', 'autodescription' ); ?></span>
 		</fieldset>
 		<?php
 
@@ -118,28 +114,28 @@ switch ( $instance ) :
 		$google_explanation = esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1' );
 
 		?>
-		<h4><?php _e( 'Description Additions Settings', 'autodescription' ); ?></h4>
+		<h4><?php esc_html_e( 'Description Additions Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( "To create a more organic description, a small introduction can be added before the description.", 'autodescription' ) );
-		$this->description( __( "The introduction consists of the title and optionally the blogname.", 'autodescription' ) );
+		$this->description( __( 'To create a more organic description, a small introduction can be added before the description.', 'autodescription' ) );
+		$this->description( __( 'The introduction consists of the title and optionally the blogname.', 'autodescription' ) );
 		?>
 
 		<hr>
 
-		<h4><?php _e( 'Add descriptive Additions to Description', 'autodescription' ); ?></h4>
+		<h4><?php esc_html_e( 'Add descriptive Additions to Description', 'autodescription' ); ?></h4>
 		<p id="description-additions-toggle">
 			<label for="<?php $this->field_id( 'description_additions' ); ?>" class="toblock">
 				<input type="checkbox" name="<?php $this->field_name( 'description_additions' ); ?>" id="<?php $this->field_id( 'description_additions' ); ?>" <?php $this->is_conditional_checked( 'description_additions' ); ?> value="1" <?php checked( $this->get_field_value( 'description_additions' ) ); ?> />
-				<?php _e( 'Add Additions to automated description?', 'autodescription' ); ?>
-				<a href="<?php echo esc_url( $google_explanation ); ?>" target="_blank" class="description" title="<?php _e( 'This creates good meta descriptions', 'autodescription' ); ?>">[?]</a>
+				<?php esc_html_e( 'Add Additions to automated description?', 'autodescription' ); ?>
+				<a href="<?php echo esc_url( $google_explanation ); ?>" target="_blank" class="description" title="<?php esc_attr_e( 'This creates good meta descriptions', 'autodescription' ); ?>">[?]</a>
 			</label>
 		</p>
 
-		<h4><?php _e( 'Add Blogname to Additions', 'autodescription' ); ?></h4>
+		<h4><?php esc_html_e( 'Add Blogname to Additions', 'autodescription' ); ?></h4>
 		<p id="description-onblogname-toggle">
 			<label for="<?php $this->field_id( 'description_blogname' ); ?>" class="toblock">
 				<input type="checkbox" name="<?php $this->field_name( 'description_blogname' ); ?>" id="<?php $this->field_id( 'description_blogname' ); ?>" <?php $this->is_conditional_checked( 'description_blogname' ); ?> value="1" <?php checked( $this->get_field_value( 'description_blogname' ) ); ?> />
-				<?php _e( 'Add Blogname to automated description additions?', 'autodescription' ); ?>
+				<?php esc_html_e( 'Add Blogname to automated description additions?', 'autodescription' ); ?>
 			</label>
 		</p>
 		<?php

@@ -217,7 +217,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		$bad = __( 'Bad', 'autodescription' );
 		$unknown = __( 'Unknown', 'autodescription' );
 
-		$separator = $this->get_separator( 'title', true );
+		$separator = $this->get_separator( 'title' );
 
 		$rtl = (bool) is_rtl();
 		$ishome = false;

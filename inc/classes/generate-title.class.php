@@ -1064,7 +1064,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 * @since 2.3.9:
 	 * Applies filters the_seo_framework_title_separator
 	 *
-	 * @return string The Separator
+	 * @return string The Separator, unescaped.
 	 */
 	public function get_title_separator() {
 
@@ -1073,7 +1073,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		if ( isset( $sep ) )
 			return $sep;
 
-		return $sep = (string) apply_filters( 'the_seo_framework_title_separator', $this->get_separator( 'title' ) );
+		return $sep = (string) apply_filters( 'the_seo_framework_title_separator', $this->get_separator( 'title', false ) );
 	}
 
 	/**

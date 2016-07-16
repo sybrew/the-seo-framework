@@ -81,11 +81,9 @@ function the_seo_framework_load() {
 }
 
 /**
- * Load plugin files
+ * Load plugin files.
  * @uses THE_SEO_FRAMEWORK_DIR_PATH_FUNCT
  * @uses THE_SEO_FRAMEWORK_DIR_PATH_CLASS
- *
- * @benchmarked require_once (file inclusion) takes less than 0.0001s.
  *
  * @since 2.1.6
  */
@@ -234,7 +232,7 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 						$output = call_user_func_array( array( $this, $method ), $args );
 					}
 				} else {
-					$this->_doing_it_wrong( (string) $class . '::' . (string) $method, __( "Class or Method not found.", 'autodescription' ), $version );
+					$this->_doing_it_wrong( $class . '::' . $method, __( 'Class or Method not found.', 'autodescription' ), $version );
 				}
 			} else {
 				if ( method_exists( $class, $method ) ) {
@@ -244,7 +242,7 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 						$output = call_user_func_array( array( $class, $method ), $args );
 					}
 				} else {
-					$this->_doing_it_wrong( (string) $class . '::' . (string) $method, __( "Class or Method not found.", 'autodescription' ), $version );
+					$this->_doing_it_wrong( $class . '::' . $method, __( 'Class or Method not found.', 'autodescription' ), $version );
 				}
 			}
 		} elseif ( is_string( $class ) && is_string( $method ) ) {
@@ -256,7 +254,7 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 					$output = call_user_func_array( array( $class, $method ), $args );
 				}
 			} else {
-				$this->_doing_it_wrong( (string) $class . '::' . (string) $method, __( "Class or Method not found.", 'autodescription' ), $version );
+				$this->_doing_it_wrong( $class . '::' . $method, __( 'Class or Method not found.', 'autodescription' ), $version );
 			}
 		} elseif ( is_string( $class ) ) {
 			//* Class is function.
@@ -268,7 +266,7 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 				$output = call_user_func_array( $func, $args );
 			}
 		} else {
-			$this->_doing_it_wrong( __METHOD__, __( "Function needs to be called as a string.", 'autodescription' ), $version );
+			$this->_doing_it_wrong( __METHOD__, __( 'Function needs to be called as a string.', 'autodescription' ), $version );
 		}
 
 		return $output;

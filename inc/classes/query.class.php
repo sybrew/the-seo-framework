@@ -89,7 +89,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 				return $id;
 		}
 
-		//* Try to get ID from plugins, only on the front end.
+		//* Try to get ID from plugins.
 		$id = $can_cache ? $this->check_the_real_ID() : 0;
 
 		if ( empty( $id ) ) {
@@ -180,14 +180,17 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
+		if ( false === $this->is_archive_admin() )
+			return 0;
+
 		$term_id = 0;
 
-		if ( ! empty( $_REQUEST['tag_ID'] ) ) {
+		if ( ! empty( $_GET['tag_ID'] ) ) {
 			//* WordPress 4.5+
-			$term_id = $_REQUEST['tag_ID'];
-		} elseif ( ! empty( $_REQUEST['term_id'] ) ) {
+			$term_id = $_GET['tag_ID'];
+		} elseif ( ! empty( $_GET['term_id'] ) ) {
 			//* Older WordPress versions.
-			$term_id = $_REQUEST['term_id'];
+			$term_id = $_GET['term_id'];
 		}
 
 		$this->set_query_cache(

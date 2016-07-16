@@ -7,13 +7,13 @@ switch ( $instance ) :
 
 		if ( ! $this->pretty_permalinks ) {
 
-			$permalink_settings_url = esc_url( admin_url( 'options-permalink.php' ) );
-			$here = '<a href="' . $permalink_settings_url  . '" target="_blank" title="' . __( 'Permalink Settings', 'autodescription' ) . '">' . _x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
+			$permalink_settings_url = admin_url( 'options-permalink.php' );
+			$here = '<a href="' . esc_url( $permalink_settings_url ) . '" target="_blank" title="' . esc_attr__( 'Permalink Settings', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 
-			?><h4><?php _e( "You're using the plain permalink structure.", 'autodescription' ); ?></h4><?php
+			?><h4><?php esc_html_e( "You're using the plain permalink structure.", 'autodescription' ); ?></h4><?php
 			$this->description( __( "This means we can't output the sitemap through the WordPress rewrite rules.", 'autodescription' ) );
 			?><hr><?php
-			$this->description_noesc( sprintf( _x( "Change your Permalink Settings %s (Recommended: 'postname').", '%s = here', 'autodescription' ), $here ) );
+			$this->description_noesc( sprintf( esc_html_x( "Change your Permalink Settings %s (Recommended: 'postname').", '%s = here', 'autodescription' ), $here ) );
 
 		} else {
 
@@ -100,20 +100,20 @@ switch ( $instance ) :
 		$has_sitemap_plugin = $this->detect_sitemap_plugin();
 		$sitemap_detected = $this->has_sitemap_xml();
 
-		?><h4><?php _e( 'Sitemap Integration Settings', 'autodescription' ); ?></h4><?php
+		?><h4><?php esc_html_e( 'Sitemap Integration Settings', 'autodescription' ); ?></h4><?php
 
 		if ( $has_sitemap_plugin ) {
-			$this->description( __( "Another active sitemap plugin has been detected. This means that the sitemap functionality has been replaced.", 'autodescription' ) );
+			$this->description( __( 'Another active sitemap plugin has been detected. This means that the sitemap functionality has been replaced.', 'autodescription' ) );
 		} elseif ( $sitemap_detected ) {
-			$this->description( __( "A sitemap has been detected in the root folder of your website. This means that the sitemap functionality has no effect.", 'autodescription' ) );
+			$this->description( __( 'A sitemap has been detected in the root folder of your website. This means that the sitemap functionality has no effect.', 'autodescription' ) );
 		} else {
-			$this->description( __( "The Sitemap is an XML file that lists pages and posts for your website along with optional metadata about each post or page. This helps Search Engines crawl your website more easily.", 'autodescription' ) );
-			$this->description( __( "The optional metadata include the post and page modified time and a page priority indication, which is automated.", 'autodescription' ) );
+			$this->description( __( 'The Sitemap is an XML file that lists pages and posts for your website along with optional metadata about each post or page. This helps Search Engines crawl your website more easily.', 'autodescription' ) );
+			$this->description( __( 'The optional metadata include the post and page modified time and a page priority indication, which is automated.', 'autodescription' ) );
 
 			?>
 			<hr>
 
-			<h4><?php _e( 'Sitemap Output', 'autodescription' ); ?></h4>
+			<h4><?php esc_html_e( 'Sitemap Output', 'autodescription' ); ?></h4>
 			<?php
 
 			//* Echo checkbox.
@@ -121,13 +121,14 @@ switch ( $instance ) :
 				$this->make_checkbox(
 					'sitemaps_output',
 					__( 'Output Sitemap?', 'autodescription' ),
-					''
+					'',
+					true
 				), true
 			);
 		}
 
 		if ( ! ( $has_sitemap_plugin || $sitemap_detected ) && $this->get_option( 'sitemaps_output' ) ) {
-			$here = '<a href="' . $sitemap_url  . '" target="_blank" title="' . __( 'View sitemap', 'autodescription' ) . '">' . _x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
+			$here = '<a href="' . esc_url( $sitemap_url ) . '" target="_blank" title="' . esc_attr__( 'View sitemap', 'autodescription' ) . '">' . esc_attr_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 			$this->description_noesc( sprintf( _x( 'The sitemap can be found %s.', '%s = here', 'autodescription' ), $here ) );
 		}
 
@@ -136,9 +137,9 @@ switch ( $instance ) :
 
 		$site_url = $this->the_home_url_from_cache( true );
 		$robots_url = trailingslashit( $site_url ) . 'robots.txt';
-		$here =  '<a href="' . $robots_url  . '" target="_blank" title="' . __( 'View robots.txt', 'autodescription' ) . '">' . _x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
+		$here = '<a href="' . esc_url( $robots_url ) . '" target="_blank" title="' . esc_attr__( 'View robots.txt', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 
-		?><h4><?php _e( 'Robots.txt Settings', 'autodescription' ); ?></h4><?php
+		?><h4><?php esc_html_e( 'Robots.txt Settings', 'autodescription' ); ?></h4><?php
 
 		if ( $this->can_do_sitemap_robots() ) :
 			$this->description( __( 'The robots.txt file is the first thing Search Engines look for. If you add the sitemap location in the robots.txt file, then Search Engines will look for and index the sitemap.', 'autodescription' ) );
@@ -147,7 +148,7 @@ switch ( $instance ) :
 			?>
 			<hr>
 
-			<h4><?php _e( 'Add sitemap location in robots.txt', 'autodescription' ); ?></h4>
+			<h4><?php esc_html_e( 'Add sitemap location in robots.txt', 'autodescription' ); ?></h4>
 			<?php
 
 			//* Echo checkbox.
@@ -155,14 +156,15 @@ switch ( $instance ) :
 				$this->make_checkbox(
 					'sitemaps_robots',
 					__( 'Add sitemap location in robots?', 'autodescription' ),
-					''
+					'',
+					true
 				), true
 			);
 		else :
 			$this->description( __( 'Another robots.txt sitemap Location addition has been detected.', 'autodescription' ) );
 		endif;
 
-		$this->description_noesc( sprintf( _x( 'The robots.txt file can be found %s.', '%s = here', 'autodescription' ), $here ) );
+		$this->description_noesc( sprintf( esc_html_x( 'The robots.txt file can be found %s.', '%s = here', 'autodescription' ), $here ) );
 
 	break;
 	case 'the_seo_framework_sitemaps_metabox_timestamps' :
@@ -181,22 +183,23 @@ switch ( $instance ) :
 		//* Reset timezone to previous value.
 		$this->reset_timezone();
 
-		?><h4><?php _e( 'Timestamps Settings', 'autodescription' ); ?></h4><?php
-		$this->description( __( 'The modified time suggests to Search Engines where to look for content changes. It has no impact on the SEO value unless you drastically change pages or posts. It then depends on how well your content is constructed.', 'autodescription'  ) );
+		?><h4><?php esc_html_e( 'Timestamps Settings', 'autodescription' ); ?></h4><?php
+		$this->description( __( 'The modified time suggests to Search Engines where to look for content changes. It has no impact on the SEO value unless you drastically change pages or posts. It then depends on how well your content is constructed.', 'autodescription' ) );
 		$this->description( __( "By default, the sitemap only outputs the modified date if you've enabled them within the Social Metabox. This setting overrides those settings for the Sitemap.", 'autodescription' ) );
 
 		?>
 		<hr>
 
-		<h4><?php _e( 'Output Modified Date', 'autodescription' ); ?></h4>
+		<h4><?php esc_html_e( 'Output Modified Date', 'autodescription' ); ?></h4>
 		<?php
 
 		//* Echo checkbox.
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'sitemaps_modified',
-				sprintf( __( 'Add %s to the sitemap?', 'autodescription' ), $this->code_wrap( '<lastmod>' ) ),
-				''
+				sprintf( esc_html__( 'Add %s to the sitemap?', 'autodescription' ), $this->code_wrap( '<lastmod>' ) ),
+				'',
+				false
 			), true
 		);
 
@@ -204,20 +207,20 @@ switch ( $instance ) :
 		<hr>
 
 		<fieldset>
-			<legend><h4><?php _e( 'Timestamp Format Settings', 'autodescription' ); ?></h4></legend>
+			<legend><h4><?php esc_html_e( 'Timestamp Format Settings', 'autodescription' ); ?></h4></legend>
 			<?php $this->description( __( 'Determines how specific the modification timestamp is.', 'autodescription' ) ); ?>
 
 			<p id="sitemaps-timestamp-format" class="theseoframework-fields">
 				<span class="toblock">
 					<input type="radio" name="<?php $this->field_name( 'sitemap_timestamps' ); ?>" id="<?php $this->field_id( 'sitemap_timestamps_0' ); ?>" value="0" <?php checked( $this->get_field_value( 'sitemap_timestamps' ), '0' ); ?> />
 					<label for="<?php $this->field_id( 'sitemap_timestamps_0' ); ?>">
-						<span title="<?php _e( 'Complete date', 'autodescription' ); ?>"><?php echo $this->code_wrap( $timestamp_0 ) ?> [?]</span>
+						<span title="<?php esc_attr_e( 'Complete date', 'autodescription' ); ?>"><?php echo $this->code_wrap( $timestamp_0 ); ?> [?]</span>
 					</label>
 				</span>
 				<span class="toblock">
 					<input type="radio" name="<?php $this->field_name( 'sitemap_timestamps' ); ?>" id="<?php $this->field_id( 'sitemap_timestamps_1' ); ?>" value="1" <?php checked( $this->get_field_value( 'sitemap_timestamps' ), '1' ); ?> />
 					<label for="<?php $this->field_id( 'sitemap_timestamps_1' ); ?>">
-						<span title="<?php _e( 'Complete date plus hours, minutes and timezone', 'autodescription' ); ?>"><?php echo $this->code_wrap( $timestamp_1 ); ?> [?]</span>
+						<span title="<?php esc_attr_e( 'Complete date plus hours, minutes and timezone', 'autodescription' ); ?>"><?php echo $this->code_wrap( $timestamp_1 ); ?> [?]</span>
 					</label>
 				</span>
 			</p>
@@ -227,27 +230,27 @@ switch ( $instance ) :
 	break;
 	case 'the_seo_framework_sitemaps_metabox_notify' :
 
-		?><h4><?php _e( 'Ping Settings', 'autodescription' ); ?></h4><?php
-		$this->description( __( "Notifying Search Engines of a sitemap change is helpful to get your content indexed as soon as possible.", 'autodescription' ) );
-		$this->description( __( "By default this will happen at most once an hour.", 'autodescription' ) );
+		?><h4><?php esc_html_e( 'Ping Settings', 'autodescription' ); ?></h4><?php
+		$this->description( __( 'Notifying Search Engines of a sitemap change is helpful to get your content indexed as soon as possible.', 'autodescription' ) );
+		$this->description( __( 'By default this will happen at most once an hour.', 'autodescription' ) );
 
 		?>
 		<hr>
 
-		<h4><?php _e( 'Notify Search Engines', 'autodescription' ); ?></h4>
+		<h4><?php esc_html_e( 'Notify Search Engines', 'autodescription' ); ?></h4>
 		<?php
 
 		$engines = array(
 			'ping_google'	=> 'Google',
 			'ping_bing' 	=> 'Bing',
-			'ping_yandex'	=> 'Yandex'
+			'ping_yandex'	=> 'Yandex',
 		);
 
 		$ping_checkbox = '';
 
 		foreach ( $engines as $option => $engine ) {
 			$ping_label = sprintf( __( 'Notify %s about sitemap changes?', 'autodescription' ), $engine );
-			$ping_checkbox .= $this->make_checkbox( $option, $ping_label, '' );
+			$ping_checkbox .= $this->make_checkbox( $option, $ping_label, '', true );
 		}
 
 		//* Echo checkbox.

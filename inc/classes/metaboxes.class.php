@@ -37,6 +37,9 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 *
 	 * @since 2.6.0
 	 *
+	 * @todo add filter.
+	 * @todo check if filter can propagate within all functions.
+	 *
 	 * @return array Title separators.
 	 */
 	public function get_separator_list() {
@@ -100,17 +103,14 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 		//* Whether tabs are active.
 		$use_tabs = $use_tabs && count( $tabs ) > 1;
 
-		$id = esc_attr( $id );
-
 		/**
 		 * Start navigation.
 		 *
 		 * Don't output navigation if $use_tabs is false and the amount of tabs is 1 or lower.
 		 */
 		if ( $use_tabs ) {
-			?>
-			<div class="seoframework-nav-tab-wrapper hide-if-no-js" id="<?php echo $id; ?>-tabs-wrapper">
-			<?php
+
+			?><div class="seoframework-nav-tab-wrapper hide-if-no-js" id="<?php echo esc_attr( $id . '-tabs-wrapper' ); ?>"><?php
 				$count = 1;
 				foreach ( $tabs as $tab => $value ) {
 
@@ -118,8 +118,8 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 					$name = isset( $value['name'] ) ? $value['name'] : '';
 
 					$checked = 1 === $count ? 'checked' : '';
-					$the_id = $id . '-tab-' . esc_attr( $tab );
-					$the_name = $id . '-tabs';
+					$the_id = esc_attr( $id . '-tab-' . $tab );
+					$the_name = esc_attr( $id . '-tabs' );
 
 					$label_class = $checked ? ' seoframework-active-tab' : ''; // maybe
 
@@ -135,9 +135,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 
 					$count++;
 				}
-			?>
-			</div>
-			<?php
+			?></div><?php
 		}
 
 		/**
@@ -148,14 +146,13 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 		$count = 1;
 		foreach ( $tabs as $tab => $value ) {
 
-			$the_id = $id . '-tab-' . esc_attr( $tab ) . '-content';
+			$the_id = $id . '-tab-' . $tab . '-content';
 			$the_name = $id . '-tabs-content';
 
 			//* Current tab for JS.
 			$current = 1 === $count ? ' seoframework-active-tab-content' : '';
 
-			?><div class="seoframework-tabs-content <?php echo esc_attr( $the_name ) . $current; ?>" id="<?php echo $the_id; ?>" ><?php
-
+			?><div class="seoframework-tabs-content <?php echo esc_attr( $the_name . $current ); ?>" id="<?php echo esc_attr( $the_id ); ?>" ><?php
 				//* No-JS tabs.
 				if ( $use_tabs ) {
 					$dashicon = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
@@ -180,7 +177,6 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 					$output = $this->call_function( $callback, $version, $params );
 					echo $output;
 				}
-
 			?></div><?php
 
 			$count++;

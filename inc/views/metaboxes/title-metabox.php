@@ -15,7 +15,7 @@ switch ( $instance ) :
 		}
 
 		$blogname = $this->get_blogname();
-		$sep = $this->get_separator( 'title', true );
+		$sep = $this->get_separator( 'title' );
 
 		$additions_left = '<span class="title-additions-js">' . $blogname . '<span class="autodescription-sep-js">' . " $sep " . '</span></span>';
 		$additions_right = '<span class="title-additions-js"><span class="autodescription-sep-js">' . " $sep " . '</span>' . $blogname . '</span>';
@@ -27,11 +27,11 @@ switch ( $instance ) :
 		//* Check left first, as right is default (and thus fallback).
 		$showleft = 'left' === $this->get_option( 'title_location' );
 
-		?>
-		<h4><?php _e( 'Automated Title Settings', 'autodescription' ); ?></h4>
-		<?php $this->description( __( "The page title is prominently shown within the browser tab as well as within the Search Engine results pages.", 'autodescription' ) ); ?>
+		?><h4><?php esc_html_e( 'Automated Title Settings', 'autodescription' ); ?></h4><?php
+		$this->description( __( 'The page title is prominently shown within the browser tab as well as within the Search Engine results pages.', 'autodescription' ) );
 
-		<h4><?php _e( 'Example Automated Title Output', 'autodescription' ); ?></h4>
+		?>
+		<h4><?php esc_html_e( 'Example Automated Title Output', 'autodescription' ); ?></h4>
 		<p>
 			<span class="title-additions-example-left" style="display:<?php echo $showleft ? 'inline' : 'none'; ?>"><?php echo $this->code_wrap_noesc( $example_left ); ?></span>
 			<span class="title-additions-example-right" style="display:<?php echo $showleft ? 'none' : 'inline'; ?>"><?php echo $this->code_wrap_noesc( $example_right ); ?></span>
@@ -81,7 +81,7 @@ switch ( $instance ) :
 					),
 					'showleft' => $showleft,
 				),
-			)
+			),
 		);
 
 		/**
@@ -103,11 +103,11 @@ switch ( $instance ) :
 
 		?>
 		<fieldset>
-			<legend><h4><?php _e( 'Document Title Separator', 'autodescription' ); ?></h4></legend>
+			<legend><h4><?php esc_html_e( 'Document Title Separator', 'autodescription' ); ?></h4></legend>
 			<p id="title-separator" class="theseoframework-fields">
 			<?php foreach ( $title_separator as $name => $html ) { ?>
-				<input type="radio" name="<?php $this->field_name( 'title_seperator' ); ?>" id="<?php $this->field_id( 'title_seperator_' . $name ); ?>" value="<?php echo $name ?>" <?php checked( $this->get_field_value( 'title_seperator' ), $name ); ?> />
-				<label for="<?php $this->field_id( 'title_seperator_' . $name ); ?>" <?php echo ( $name === 'pipe' || $name === 'dash' ) ? $recommended : ''; ?>><?php echo $html ?></label>
+				<input type="radio" name="<?php $this->field_name( 'title_seperator' ); ?>" id="<?php $this->field_id( 'title_seperator_' . $name ); ?>" value="<?php echo esc_attr( $name ); ?>" <?php checked( $this->get_field_value( 'title_seperator' ), $name ); ?> />
+				<label for="<?php $this->field_id( 'title_seperator_' . $name ); ?>" <?php echo in_array( $name, array( 'dash', 'pipe' ), true ) ? $recommended : ''; ?>><?php echo esc_html( $html ); ?></label>
 			<?php } ?>
 			</p>
 			<?php $this->description( __( 'If the title consists of two parts (original title and optional addition), then the separator will go in-between them.', 'autodescription' ) ); ?>
@@ -126,7 +126,7 @@ switch ( $instance ) :
 
 		?>
 		<fieldset>
-			<legend><h4><?php _e( 'Document Title Additions Location', 'autodescription' ); ?></h4></legend>
+			<legend><h4><?php esc_html_e( 'Document Title Additions Location', 'autodescription' ); ?></h4></legend>
 
 			<?php $this->description( __( 'Determines which side the added title text will go on.', 'autodescription' ) ); ?>
 
@@ -134,14 +134,14 @@ switch ( $instance ) :
 				<span class="toblock">
 					<input type="radio" name="<?php $this->field_name( 'title_location' ); ?>" id="<?php $this->field_id( 'title_location_left' ); ?>" value="left" <?php checked( $this->get_field_value( 'title_location' ), 'left' ); ?> />
 					<label for="<?php $this->field_id( 'title_location_left' ); ?>">
-						<span><?php _e( 'Left:', 'autodescription' ); ?></span>
+						<span><?php esc_html_e( 'Left:', 'autodescription' ); ?></span>
 						<?php echo $this->code_wrap_noesc( $example_left ) ?>
 					</label>
 				</span>
 				<span class="toblock">
 					<input type="radio" name="<?php $this->field_name( 'title_location' ); ?>" id="<?php $this->field_id( 'title_location_right' ); ?>" value="right" <?php checked( $this->get_field_value( 'title_location' ), 'right' ); ?> />
 					<label for="<?php $this->field_id( 'title_location_right' ); ?>">
-						<span><?php _e( 'Right:', 'autodescription' ); ?></span>
+						<span><?php esc_html_e( 'Right:', 'autodescription' ); ?></span>
 						<?php echo $this->code_wrap_noesc( $example_right ); ?>
 					</label>
 				</span>
@@ -151,14 +151,15 @@ switch ( $instance ) :
 		<?php
 
 		//* Only add this option if the theme is doing it right.
-		if ( $this->can_manipulate_title() ) : ?>
+		if ( $this->can_manipulate_title() ) :
+			?>
 			<hr>
 
-			<h4><?php _e( 'Remove Blogname from Title', 'autodescription' ); ?></h4>
+			<h4><?php esc_html_e( 'Remove Blogname from Title', 'autodescription' ); ?></h4>
 			<div id="title-additions-toggle">
 				<?php
 				$info = $this->make_info(
-					__( 'This might decouple your posts and pages from the rest of the website.', 'autodescription' ),
+					__( 'This might decouple your posts and pages from the rest of the website', 'autodescription' ),
 					'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3',
 					false
 				);
@@ -166,16 +167,18 @@ switch ( $instance ) :
 				$this->wrap_fields(
 					$this->make_checkbox(
 						'title_rem_additions',
-						__( 'Remove Blogname from title?', 'autodescription' ) . ' ' . $info,
-						''
+						esc_html__( 'Remove Blogname from title?', 'autodescription' ) . ' ' . $info,
+						'',
+						false
 					),
 					true
 				);
 				?>
 			</div>
-			<?php $this->description( __( 'Only use this option if you are aware of its SEO effects.', 'autodescription' ), false ); ?>
-			<?php $this->description( $home_page_has_option, false ); ?>
-		<?php endif;
+			<?php
+			$this->description( __( 'Only use this option if you are aware of its SEO effects.', 'autodescription' ), false );
+			$this->description( $home_page_has_option, false );
+		endif;
 
 	break;
 	case 'the_seo_framework_title_metabox_prefixes' :
@@ -192,18 +195,19 @@ switch ( $instance ) :
 			//* Default fallback category.
 			$cat = 1;
 		}
+
 		//* If cat is found, it will return its name. Otherwise it's an empty string.
 		$cat_name = get_cat_name( $cat );
 		$cat_name = $cat_name ? $cat_name : __( 'Example Category', 'autodescription' );
 
 		$display_prefix = $this->is_option_checked( 'title_rem_prefixes' ) ? 'none' : 'inline';
-		$title = '<span class="title-prefix-example" style="display:' . $display_prefix . '">' . $label . ': </span>' . $cat_name;
+		$title = '<span class="title-prefix-example" style="display:' . $display_prefix . '">' . esc_html( $label ) . ': </span>' . esc_html( $cat_name );
 
-		$left_additions = $additions['left'];
-		$right_additions = $additions['right'];
+		$additions_left = $additions['left'];
+		$additions_right = $additions['right'];
 
-		$example_left = '<em>' . $left_additions . $title . '</em>';
-		$example_right = '<em>' . $title . $right_additions . '</em>';
+		$example_left = '<em>' . $additions_left . $title . '</em>';
+		$example_right = '<em>' . $title . $additions_right . '</em>';
 
 		$language = $this->google_language();
 
@@ -212,11 +216,11 @@ switch ( $instance ) :
 		 * @priority low 2.6.x
 		 */
 
-		?>
-		<h4><?php _e( 'Title prefix options', 'autodescription' ); ?></h4>
-		<p><span class="description"><?php _e( "On archives a descriptive prefix may be added to the title.", 'autodescription' ); ?></span></p>
+		?><h4><?php esc_html_e( 'Title prefix options', 'autodescription' ); ?></h4><?php
+		$this->description( __( 'On archives a descriptive prefix may be added to the title.', 'autodescription' ) );
 
-		<h4><?php _e( 'Example Automated Archive Title Output', 'autodescription' ); ?></h4>
+		?>
+		<h4><?php esc_html_e( 'Example Automated Archive Title Output', 'autodescription' ); ?></h4>
 		<p>
 			<span class="title-additions-example-left" style="display:<?php echo $showleft ? 'inline' : 'none'; ?>"><?php echo $this->code_wrap_noesc( $example_left ); ?></span>
 			<span class="title-additions-example-right" style="display:<?php echo $showleft ? 'none' : 'inline'; ?>"><?php echo $this->code_wrap_noesc( $example_right ); ?></span>
@@ -224,11 +228,11 @@ switch ( $instance ) :
 
 		<hr>
 
-		<h4><?php _e( 'Remove Archive Title Prefixes', 'autodescription' ); ?></h4>
+		<h4><?php esc_html_e( 'Remove Archive Title Prefixes', 'autodescription' ); ?></h4>
 		<p id="title-prefixes-toggle">
 			<label for="<?php $this->field_id( 'title_rem_prefixes' ); ?>">
 				<input type="checkbox" name="<?php $this->field_name( 'title_rem_prefixes' ); ?>" id="<?php $this->field_id( 'title_rem_prefixes' ); ?>" <?php $this->is_conditional_checked( 'title_rem_prefixes' ); ?> value="1" <?php checked( $this->get_field_value( 'title_rem_prefixes' ) ); ?> />
-				<?php _e( 'Remove Prefixes from title?', 'autodescription' ); ?>
+				<?php esc_html_e( 'Remove prefixes from title?', 'autodescription' ); ?>
 			</label>
 			<?php
 			$this->make_info(

@@ -39,7 +39,8 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	 *
 	 * @since 2.6.5
 	 *
-	 * @var bool Whether to add to AutoDescription_Debug::debug_output.
+	 * @var bool Whether to continue adding to AutoDescription_Debug::debug_output
+	 * within AutoDescription_Debug::debug_init().
 	 */
 	protected $add_debug_output = true;
 
@@ -224,10 +225,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	}
 
 	/**
-	 * Echo's error.
-	 *
-	 * @access private
-	 * Please don't use this error handler.
+	 * Echos error.
 	 *
 	 * @since 2.6.0
 	 *
@@ -248,13 +246,12 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	}
 
 	/**
-	 * Echo found screens in the admin footer when debugging is enabled.
+	 * Echos found screens in the admin footer when debugging is enabled.
 	 *
-	 * @uses bool $this->the_seo_framework_debug
-	 * @global array $current_screen
-	 *
-	 * @access private
 	 * @since 2.5.2
+	 * @uses bool $this->the_seo_framework_debug
+	 * @access private
+	 * @global array $current_screen
 	 */
 	public function debug_screens() {
 		global $current_screen;
@@ -266,8 +263,8 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	/**
 	 * Echos debug output.
 	 *
-	 * @access private
 	 * @since 2.6.0
+	 * @access private
 	 */
 	public function debug_output() {
 
@@ -335,8 +332,8 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	/**
 	 * Parses input values and wraps them in human-readable elements.
 	 *
-	 * @access private
 	 * @since 2.6.0
+	 * @access private
 	 *
 	 * @param mixed $values Values to be parsed.
 	 * @return string $output The parsed value.
@@ -348,7 +345,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 		if ( $this->the_seo_framework_debug ) {
 
 			$output .= "\r\n";
-			$output .=  $this->the_seo_framework_debug_hidden ? '' : '<span class="code highlight">';
+			$output .= $this->the_seo_framework_debug_hidden ? '' : '<span class="code highlight">';
 
 			if ( is_null( $values ) ) {
 				$output .= $this->debug_value_wrapper( "Debug message: Value isn't set." ) . "\r\n";
@@ -544,18 +541,18 @@ class AutoDescription_Debug extends AutoDescription_Core {
 
 				if ( $this->is_admin() && 'admin_footer' !== current_action() ) {
 					echo "\r\n";
-					echo $this->the_seo_framework_debug_hidden ? $debug_key . ' action. ' : '<p>' . $debug_key . '</p>';
+					echo $this->the_seo_framework_debug_hidden ? $debug_key . ' action. ' : '<p>' . esc_html( $debug_key ) . '</p>';
 				}
 
 				$output .= "\r\n";
-				$output .= $this->the_seo_framework_debug_hidden ? $debug_key . ' output. ' : '<h3>' . $debug_key . '</h3>';
+				$output .= $this->the_seo_framework_debug_hidden ? $debug_key . ' output. ' : '<h3>' . esc_html( $debug_key ) . '</h3>';
 
 				if ( isset( $cached_args[ $method ] ) ) {
 					$args[] = array(
 						'profile' => array(
 							'time' => $this->profile( false, true, 'time', $key ) . ' seconds',
-							'memory' => $this->profile( false, true, 'memory', $key ) . ' bytes'
-						)
+							'memory' => $this->profile( false, true, 'memory', $key ) . ' bytes',
+						),
 					);
 
 					$args = array_merge( $cached_args[ $method ], $args );
@@ -592,7 +589,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 									$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:12px">';
 										$output .= "\t\t" . $this->get_debug_information( $v );
 									$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
-									$output .= "\t  " .  ']' . "\r\n";
+									$output .= "\t  " . ']' . "\r\n";
 								$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
 							$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
 						}

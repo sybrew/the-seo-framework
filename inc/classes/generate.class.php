@@ -157,7 +157,7 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 	 *
 	 * @since 2.3.9
 	 */
-	public function get_separator( $type = 'title', $escape = false ) {
+	public function get_separator( $type = 'title', $escape = true ) {
 
 		static $sep_esc = array();
 
@@ -196,12 +196,12 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 	}
 
 	/**
-	 * Fetch blogname
+	 * Fetches blogname.
 	 *
 	 * @staticvar string $blogname
 	 *
 	 * @since 2.5.2
-	 * @return string $blogname The trimmed and sanitized blogname
+	 * @return string $blogname The trimmed and sanitized blogname.
 	 */
 	public function get_blogname() {
 

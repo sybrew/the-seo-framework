@@ -196,7 +196,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	 * 		@param bool $is_home We're generating for the home page.
 	 * }
 	 * @param bool $escape Escape the output if true.
-	 * @return string|mixed The description, might be unsafe for html output.
+	 * @return string|mixed The description.
 	 */
 	public function description_from_custom_field( $args = array(), $escape = true ) {
 
@@ -216,7 +216,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 				$description = $this->get_custom_singular_description( $args['id'] );
 		}
 
-		if ( $escape && $description )
+		if ( $escape )
 			$description = $this->escape_description( $description );
 
 		return $description;
@@ -357,7 +357,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 
 		//* Home Page description
 		if ( $args['is_home'] || $this->is_front_page() || $this->is_static_frontpage( $args['id'] ) )
-			return $this->generate_home_page_description( $args['get_custom_field'] );
+			return $this->generate_home_page_description( $args['get_custom_field'], $escape );
 
 		$term = $this->fetch_the_term( $args['id'] );
 
@@ -465,9 +465,10 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	 * @since 2.6.0
 	 *
 	 * @param bool $custom_field whether to check the Custom Field.
+	 * @param bool $escape Whether to escape the output.
 	 * @return string The description.
 	 */
-	public function generate_home_page_description( $custom_field = true ) {
+	public function generate_home_page_description( $custom_field = true, $escape = true ) {
 
 		$id = $this->get_the_front_page_ID();
 
@@ -478,8 +479,14 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 		 */
 		if ( $custom_field ) {
 			$description = $this->get_custom_homepage_description( array( 'is_home' => true ) );
-			if ( $description )
+
+			if ( $description ) {
+
+				if ( $escape )
+					$description = $this->escape_description( $description );
+
 				return $description;
+			}
 		}
 
 		$title_on_blogname = $this->generate_description_additions( $id, '', true );
@@ -487,6 +494,12 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 		$title = $title_on_blogname['title'];
 		$on = $title_on_blogname['on'];
 		$blogname = $title_on_blogname['blogname'];
+
+		if ( $escape ) {
+			$title = $this->escape_description( $title );
+			$on = $this->escape_description( $on );
+			$blogname = $this->escape_description( $blogname );
+		}
 
 		return $description = sprintf( '%s %s %s', $title, $on, $blogname );
 	}
@@ -531,7 +544,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	 * @since 2.3.9
 	 * @staticvar string $sep
 	 *
-	 * @return string The Separator
+	 * @return string The Separator, unescaped.
 	 */
 	public function get_description_separator() {
 
@@ -540,7 +553,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 		if ( isset( $sep ) )
 			return $sep;
 
-		return $sep = (string) apply_filters( 'the_seo_framework_description_separator', $this->get_separator( 'description' ) );
+		return $sep = (string) apply_filters( 'the_seo_framework_description_separator', $this->get_separator( 'description', false ) );
 	}
 
 	/**

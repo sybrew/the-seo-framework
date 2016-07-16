@@ -117,12 +117,12 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		$this->page_defaults = (array) apply_filters(
 			'the_seo_framework_admin_page_defaults',
 			array(
-				'save_button_text'		=> __( 'Save Settings', 'autodescription' ),
-				'reset_button_text'		=> __( 'Reset Settings', 'autodescription' ),
-				'saved_notice_text'		=> __( 'Settings are saved.', 'autodescription' ),
-				'reset_notice_text'		=> __( 'Settings are reset.', 'autodescription' ),
-				'error_notice_text'		=> __( 'Error saving settings.', 'autodescription' ),
-				'plugin_update_text'	=> __( 'New SEO Settings have been updated.', 'autodescription' ),
+				'save_button_text'		=> esc_html__( 'Save Settings', 'autodescription' ),
+				'reset_button_text'		=> esc_html__( 'Reset Settings', 'autodescription' ),
+				'saved_notice_text'		=> esc_html__( 'Settings are saved.', 'autodescription' ),
+				'reset_notice_text'		=> esc_html__( 'Settings are reset.', 'autodescription' ),
+				'error_notice_text'		=> esc_html__( 'Error saving settings.', 'autodescription' ),
+				'plugin_update_text'	=> esc_html__( 'New SEO Settings have been updated.', 'autodescription' ),
 			)
 		);
 
@@ -138,8 +138,8 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	public function add_menu_link() {
 
 		$menu = array(
-			'page_title'	=> __( 'SEO Settings', 'autodescription' ),
-			'menu_title'	=> __( 'SEO', 'autodescription' ),
+			'page_title'	=> esc_html__( 'SEO Settings', 'autodescription' ),
+			'menu_title'	=> esc_html__( 'SEO', 'autodescription' ),
 			'capability'	=> $this->settings_capability(),
 			'menu_slug'		=> $this->seo_settings_page_slug,
 			'callback'		=> array( $this, 'admin' ),
@@ -275,7 +275,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		if ( $title )
 			add_meta_box(
 				'autodescription-title-settings',
-				__( 'Title Settings', 'autodescription' ),
+				esc_html__( 'Title Settings', 'autodescription' ),
 				array( $this, 'title_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
@@ -286,7 +286,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		if ( $description )
 			add_meta_box(
 				'autodescription-description-settings',
-				__( 'Description Meta Settings', 'autodescription' ),
+				esc_html__( 'Description Meta Settings', 'autodescription' ),
 				array( $this, 'description_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
@@ -297,7 +297,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		if ( $home )
 			add_meta_box(
 				'autodescription-homepage-settings',
-				__( 'Home Page Settings', 'autodescription' ),
+				esc_html__( 'Home Page Settings', 'autodescription' ),
 				array( $this, 'homepage_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
@@ -308,7 +308,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		if ( $social )
 			add_meta_box(
 				'autodescription-social-settings',
-				__( 'Social Meta Settings', 'autodescription' ),
+				esc_html__( 'Social Meta Settings', 'autodescription' ),
 				array( $this, 'social_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
@@ -319,7 +319,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		if ( $knowledge )
 			add_meta_box(
 				'autodescription-knowledgegraph-settings',
-				__( 'Knowledge Graph Settings', 'autodescription' ),
+				esc_html__( 'Knowledge Graph Settings', 'autodescription' ),
 				array( $this, 'knowledge_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
@@ -330,7 +330,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		if ( $schema )
 			add_meta_box(
 				'autodescription-schema-settings',
-				__( 'Schema Settings', 'autodescription' ),
+				esc_html__( 'Schema Settings', 'autodescription' ),
 				array( $this, 'schema_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
@@ -341,7 +341,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		if ( $robots )
 			add_meta_box(
 				'autodescription-robots-settings',
-				__( 'Robots Meta Settings', 'autodescription' ),
+				esc_html__( 'Robots Meta Settings', 'autodescription' ),
 				array( $this, 'robots_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
@@ -352,7 +352,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		if ( $webmaster )
 			add_meta_box(
 				'autodescription-webmaster-settings',
-				__( 'Webmaster Meta Settings', 'autodescription' ),
+				esc_html__( 'Webmaster Meta Settings', 'autodescription' ),
 				array( $this, 'webmaster_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
@@ -363,7 +363,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		if ( $sitemap )
 			add_meta_box(
 				'autodescription-sitemap-settings',
-				__( 'Sitemap Settings', 'autodescription' ),
+				esc_html__( 'Sitemap Settings', 'autodescription' ),
 				array( $this, 'sitemaps_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
@@ -374,7 +374,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		if ( $feed )
 			add_meta_box(
 				'autodescription-feed-settings',
-				__( 'Feed Settings', 'autodescription' ),
+				esc_html__( 'Feed Settings', 'autodescription' ),
 				array( $this, 'feed_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
@@ -546,7 +546,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	 *
 	 * @since 2.6.0
 	 *
-	 * @param string $input The input to wrap.
+	 * @param string $input The input to wrap. Should already be escaped.
 	 * @param bool $echo Whether to echo or return.
 	 * @return Wrapped $input.
 	 */
@@ -565,13 +565,18 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	 * Return a chechbox wrapper.
 	 *
 	 * @since 2.6.0
+	 * @since 2.7.0 Added escape parameter. Defaults to true.
 	 *
 	 * @param string $field_id The option ID. Must be within the Autodescription settings.
-	 * @param string $label The checkbox description label
+	 * @param string $label The checkbox description label.
 	 * @param string $description Addition description to place beneath the checkbox.
+	 * @param bool $escape Whether to escape the label and description.
 	 * @return HTML checkbox output.
 	 */
-	public function make_checkbox( $field_id = '', $label = '', $description = '' ) {
+	public function make_checkbox( $field_id = '', $label = '', $description = '', $escape = true ) {
+
+		$description = $escape ? esc_html( $description ) : $description;
+		$label = $escape ? esc_html( $label ) : $label;
 
 		$description = $description ? '<p class="description theseoframework-option-spacer">' . $description . '</p>' : '';
 

@@ -18,17 +18,17 @@ switch ( $instance ) :
 
 		//* Robots i18n
 		$robots = array(
-			'noindex' =>  array(
+			'noindex' => array(
 				'value' => 'noindex',
 				'name' 	=> __( 'NoIndex', 'autodescription' ),
 				'desc' 	=> __( 'These options prevent indexing of the selected archives and pages. If you enable this, the selected archives or pages will be removed from Search Engine results pages.', 'autodescription' ),
 			),
-			'nofollow' =>  array(
+			'nofollow' => array(
 				'value' => 'nofollow',
 				'name'	=> __( 'NoFollow', 'autodescription' ),
 				'desc'	=> __( 'These options prevent links from being followed on the selected archives and pages. If you enable this, the selected archives or pages in-page links will gain no SEO value, including your own links.', 'autodescription' ),
 			),
-			'noarchive' =>  array(
+			'noarchive' => array(
 				'value' => 'noarchive',
 				'name'	=> __( 'NoArchive', 'autodescription' ),
 				'desc'	=> __( 'These options prevent caching of the selected archives and pages. If you enable this, Search Engines will not create a cached copy of the selected archives or pages.', 'autodescription' ),
@@ -91,7 +91,7 @@ switch ( $instance ) :
 	break;
 	case 'the_seo_framework_robots_metabox_general' :
 
-		?><h4><?php _e( 'Open Directory Settings', 'autodescription' ); ?></h4><?php
+		?><h4><?php esc_html_e( 'Open Directory Settings', 'autodescription' ); ?></h4><?php
 		$this->description( __( "Sometimes, Search Engines use resources from certain Directories to find titles and descriptions for your content. You generally don't want them to. Turn these options on to prevent them from doing so.", 'autodescription' ) );
 		$this->description( __( "The Open Directory Project and the Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave these options checked.", 'autodescription' ) );
 
@@ -99,74 +99,70 @@ switch ( $instance ) :
 			array(
 				$this->make_checkbox(
 					'noodp',
-					sprintf( __( 'Apply %s to the entire site?', 'autodescription' ), $this->code_wrap( 'noodp' ) ),
-					''
+					sprintf( esc_html__( 'Apply %s to the entire site?', 'autodescription' ), $this->code_wrap( 'noodp' ) ),
+					'',
+					false
 				),
 				$this->make_checkbox(
 					'noydir',
-					sprintf( __( 'Apply %s to the entire site?', 'autodescription' ), $this->code_wrap( 'noydir' ) ),
-					''
+					sprintf( esc_html__( 'Apply %s to the entire site?', 'autodescription' ), $this->code_wrap( 'noydir' ) ),
+					'',
+					false
 				),
-			),
-			true
+			), true
 		);
 		?>
 		<hr>
 
-		<h4><?php _e( 'Paginated Archive Settings', 'autodescription' ); ?></h4>
-		<p class="description"><?php printf( __( "Indexing the second or later page of any archive might cause duplication errors. Search Engines look down upon them; therefore, it's recommended to disable indexing of those pages.", 'autodescription' ), $this->code_wrap( 'noodp' ), $this->code_wrap( 'noydir' ) ); ?></p>
+		<h4><?php esc_html_e( 'Paginated Archive Settings', 'autodescription' ); ?></h4>
+		<p class="description"><?php printf( esc_html__( "Indexing the second or later page of any archive might cause duplication errors. Search Engines look down upon them; therefore, it's recommended to disable indexing of those pages.", 'autodescription' ), $this->code_wrap( 'noodp' ), $this->code_wrap( 'noydir' ) ); ?></p>
 		<?php
 
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'paged_noindex',
-				sprintf( __( 'Apply %s to every second or later archive page?', 'autodescription' ), $this->code_wrap( 'noindex' ) ),
-				''
-			),
-		true
+				sprintf( esc_html__( 'Apply %s to every second or later archive page?', 'autodescription' ), $this->code_wrap( 'noindex' ) ),
+				'',
+				false
+			), true
 		);
 
 	break;
 	case 'the_seo_framework_robots_metabox_no' :
 
 		$ro_value = $robots['value'];
-		$ro_name = $robots['name'];
+		$ro_name = esc_html( $robots['name'] );
 		$ro_i18n = $robots['desc'];
 
-		?>
-		<h4><?php printf( __( '%s Robots Settings', 'autodescription' ), $ro_name ); ?></h4>
-		<?php $this->description( $ro_i18n ); ?>
-		<p class="theseoframework-fields">
-			<?php
+		?><h4><?php printf( esc_html__( '%s Robots Settings', 'autodescription' ), $ro_name ); ?></h4><?php
+		$this->description( $ro_i18n );
 
+		?><p class="theseoframework-fields"><?php
 			$checkboxes = '';
-
 			foreach ( $types as $type => $i18n ) {
 
 				if ( 'site' === $type || 'attachment' === $type || 'search' === $type ) {
 					//* Singular.
 					/* translators: 1: Option, 2: Post Type */
-					$label = sprintf( __( 'Apply %1$s to %2$s?', 'autodescription' ), $this->code_wrap( $ro_name ), $i18n );
+					$label = sprintf( esc_html__( 'Apply %1$s to %2$s?', 'autodescription' ), $this->code_wrap( $ro_name ), esc_html( $i18n ) );
 				} else {
 					//* Archive.
 					/* translators: 1: Option, 2: Post Type */
-					$label = sprintf( __( 'Apply %1$s to %2$s Archives?', 'autodescription' ), $this->code_wrap( $ro_name ), $i18n );
+					$label = sprintf( esc_html__( 'Apply %1$s to %2$s Archives?', 'autodescription' ), $this->code_wrap( $ro_name ), esc_html( $i18n ) );
 				}
 
 				$id = $type . '_' . $ro_value;
 
 				//* Add <hr> if it's 'site'
-				$checkboxes .= ( 'site' === $type ) ? '<hr class="theseoframework-option-spacer">' : '';
+				$checkboxes .= 'site' === $type ? '<hr class="theseoframework-option-spacer">' : '';
 
-				$checkboxes .= $this->make_checkbox( $id, $label, '' );
+				$checkboxes .= $this->make_checkbox( esc_html( $id ), $label, '', false );
 			}
 
 			//* Echo checkboxes.
 			$this->wrap_fields( $checkboxes, true );
-			?>
-		</p>
-		<?php
-		
+		?></p><?php
+
 	break;
 	default :
 	break;

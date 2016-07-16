@@ -772,7 +772,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			$but_and = $title_length_warning['but'] ? $but_i18n : $and_i18n;
 
 			/* translators: %s = But or And */
-			$notice .= '<br>' . sprintf( __( '%s the Title contains the Blogname multiple times.', 'autodescription' ), $but_and );
+			$notice .= '<br>' . sprintf( esc_html__( '%s the Title contains the Blogname multiple times.', 'autodescription' ), $but_and );
 			$class = $classes['bad'];
 		}
 
@@ -873,24 +873,26 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		$okay	= $classes['okay'];
 		$good	= $classes['good'];
 
+		$i18n = $this->get_the_seo_bar_i18n();
+
 		if ( $desc_len < 100 ) {
-			$notice = ' ' . __( 'Length is far too short.', 'autodescription' );
+			$notice = $i18n['length_far_too_short'];
 			$class = $bad;
 		} elseif ( $desc_len < 137 ) {
-			$notice = ' ' . __( 'Length is too short.', 'autodescription' );
+			$notice = $i18n['length_too_short'];
 
 			// Don't make it okay if it's already bad.
 			$class = $bad === $class ? $class : $okay;
 		} elseif ( $desc_len > 155 && $desc_len < 175 ) {
-			$notice = ' ' . __( 'Length is too long.', 'autodescription' );
+			$notice = $i18n['length_too_long'];
 
 			// Don't make it okay if it's already bad.
 			$class = $bad === $class ? $class : $okay;
 		} elseif ( $desc_len >= 175 ) {
-			$notice = ' ' . __( 'Length is far too long.', 'autodescription' );
+			$notice = $i18n['length_far_too_long'];
 			$class = $bad;
 		} else {
-			$notice = ' ' . __( 'Length is good.', 'autodescription' );
+			$notice = $i18n['length_good'];
 
 			// Don't make it good if it's already bad or okay.
 			$class = $good !== $class ? $class : $good;
@@ -1463,20 +1465,22 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 		$but = false;
 
+		$i18n = $this->get_the_seo_bar_i18n();
+
 		if ( $tit_len < 25 ) {
-			$notice = ' ' . esc_html__( 'Length is far too short.', 'autodescription' );
+			$notice = $i18n['length_far_too_short'];
 			$class = $bad;
 		} elseif ( $tit_len < 42 ) {
-			$notice = ' ' . esc_html__( 'Length is too short.', 'autodescription' );
+			$notice = $i18n['length_too_short'];
 			$class = $okay;
 		} elseif ( $tit_len > 55 && $tit_len < 75 ) {
-			$notice = ' ' . esc_html__( 'Length is too long.', 'autodescription' );
+			$notice = $i18n['length_too_long'];
 			$class = $okay;
 		} elseif ( $tit_len >= 75 ) {
-			$notice = ' ' . esc_html__( 'Length is far too long.', 'autodescription' );
+			$notice = $i18n['length_far_too_long'];
 			$class = $bad;
 		} else {
-			$notice = ' ' . esc_html__( 'Length is good.', 'autodescription' );
+			$notice = $i18n['length_good'];
 			$class = $good;
 			$but = true;
 		}
@@ -1554,6 +1558,12 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 			'but' => esc_html_x( 'But', 'But there are...', 'autodescription' ),
 			'and' => esc_html_x( 'And', 'And there are...', 'autodescription' ),
+
+			'length_far_too_short'	=> ' ' . esc_html__( 'Length is far too short.', 'autodescription' ),
+			'length_too_short'		=> ' ' . esc_html__( 'Length is too short.', 'autodescription' ),
+			'length_too_long'		=> ' ' . esc_html__( 'Length is too long.', 'autodescription' ),
+			'length_far_too_long'	=> ' ' . esc_html__( 'Length is far too long.', 'autodescription' ),
+			'length_good'			=> ' ' . esc_html__( 'Length is good.', 'autodescription' ),
 		);
 	}
 

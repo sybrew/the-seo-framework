@@ -248,7 +248,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Release date:**
 /
-* TODO
+* TODO Planned: September 1st 2016
 
 ** Summarized:**
 /
@@ -269,8 +269,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **The goal of this update:**
 
-* With this update, I wanted to improve this plugin in several ways.
-* Normally, this is listed as "for developers". This time, I've tried to make it more understandable for everyone.
+**With this update, I wanted to improve this plugin in several ways.**
+**Normally, this is listed as "for developers". This time, I've tried to make it more understandable for everyone.**
 
 1. Minimizing the plugin's load time.
 1. Reducing the plugin's database calls.
@@ -282,7 +282,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 1. Helping developers out with better extensibility.
 1. Better coding standards have been introduced.
 
-* How this was achieved (in order set above):
+**How this was achieved (in order set above):**
 
 1. I've removed redundant function calls and I've added more efficient caches and ways of data handling.
 1. I've removed temporarily database entries and I've exchanging them for permanent ones.
@@ -292,7 +292,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 1. Because of all previous steps, this would follow naturally.
 1. I've read all code once more, and discovered ways for improvement. It's like a spellcheck.
 1. Throughout the code, better and more open standards have been introduced, where other developers can easily add to, disable or enable functionality.
-1. With the help of a code linter, [WordPress VIP best practices](https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/) have been enforced throughout the plugin. This increases security and overal performance.
+1. With the help of a code linter, [WordPress VIP best practices](https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/) have been enforced throughout the plugin. This resulted in increased security and overal performance.
 
 **How do I benefit most of this update, and other plugins in general?**
 
@@ -312,48 +312,63 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 ***The code is strong with [this one](https://theseoframework.com/?p= TODO #detailed).***
 
 **For everyone:**
-/
-TODO
+
 **Added:**
-	/
 	* General compatibility and other improvements for the upcoming extension manager.
 	* Facebook image width and height meta tags output.
 	* Twitter image width and height meta tags output.
 	* Genesis Framework 2.3.0+ term metadata upgrade and fallback compatibility.
-	* TODO
 **Improved:**
 	/
-	* TODO
 	* TODO The title and description counter type option is now bound to the user, rather than the site.
 	* Dismissible notices are now dismissible on every admin page when called.
 	* The term meta data is now handled through WordPress 4.4 or later functionality, if present.
 		* Note: From The SEO Framework 2.8.0, backwards compatibility towards version 2.6.6.2 or lower will be removed in order to clean up the database.
 **Changed:**
 	/
-	* TODO
 	* The SEO Settings page is now a submenu page, name "SEO Settings". This change is only visible when another submenu is added.
 	* The Twitter Image URL output is now wrapped in the `twitter:image` meta tag instead of `twitter:image:src`, as the latter seems to be deprecated.
 **Updated:**
 	/
-	* TODO
 	* TODO POT translation file.
 	* TODO The settings metaboxes order has been reset. This ensures that the General Settings are shown first after updating. (Unless you've filtered it? TODO confirm)
+	* TODO The counter type option has been reset as it's now handled per user instead of per site.
+**Removed:**
+	* The SEO plugin detection module is relatively heavy; therefore, some plugins have been removed from checking conflicts against. These include:
+		* Easy Facebook Share Thumbnail (hasn't recieved updates in 3 years).
+		* SEO Facebook Comments (hasn't recieved updates in 2 years).
+		* Simple Facebook Connect (plugin no longer exists).
+		* Social Discussions (hasn't recieved updates in 3 years).
+		* Socialize (hasn't recieved updates in 3 years).
+		* Wordbooker (plugin no longer exists).
+		* WP Caregiver (hasn't recieved updates in 2 years).
+		* WP Facebook Like Send & Open Graph Meta (hasn't recieved updates in 2 years).
+		* WP-OGP (hasn't recieved updates in 2 years).
+		* Zolton.org Social Plugin (hasn't recieved updates in 2 years).
+		* WP Facebook Like Button (plugin no longer exists).
+		* MSM Sitemaps (plugin no longer exists).
+		* WP Twitter Cards (hasn't recieved updates in 2 years).
+		* iG:Twitter Cards (hasn't recieved updates in 3 years).
 **Fixed:**
 	/
-	* TODO
 	* TODO When saving the SEO Options, the counter type was reset. This has been fixed by placing the counter type option out of the plugins options scope.
 	* TODO When updating the plugin, without added options, the update notification now really should no longer show up. ^related
+	* TODO When solely changing the counter type within the SEO Options, an "unsaved changes" prompt will no longer be displayed.
 	* When changing the WordPress Core tagline settings, the homepage description transient is now flushed, instead of the blog page (which could be on another page).
 	* WooCommerce Product Tag and Category IDs can no longer conflict with singular post type IDs.
-	* When solely changing the counter type within the SEO Options, an "unsaved changes" prompt will no longer be displayed.
 	* The LD+Json home URL output now doesn't add a trailing slash when your options don't have supplied one.
 
+**For translators:**
+
+**Updated:**
+	* A few sentences have had a very minor adjustment to be more in line with the rest of the WordPress/plugin environment.
+**Fixed:**
+	* One sentence was never registered correctly. It has now been included within the translations.
+
 **For developers:**
-/
-TODO
+
 **Added:**
 	/
-	* TODO
 	* Function `the_seo_framework_update_option()`, this allows you to update options remotely.
 	* Function `the_seo_framework_options_page_slug()`, this allows you to hook into the SEO settings page.
 	* Method `AutoDescription_Query::get_the_real_admin_ID()`, this always runs within `AutoDescription_Query::get_the_real_ID()` when in admin.
@@ -363,7 +378,7 @@ TODO
 	* Methods within `AutoDescription_Query` have been re-evaluated whether they use the WordPress query cache. If that holds true, the query object cache has been omitted from the said method.
 	* Reduced plugin memory usage by 16%. TODO confirm again on release version.
 	* Shortened the transient name for the LD+Json output. This ensures high post ID number transients are working correctly on old WordPress database versions.
-	* This plugin has once more been profiled with xDebug to ensure the highest performance and eliminate culprits.
+	* This plugin has once more been profiled with xDebug to ensure the highest performance and eliminate culprits, even without Opcode Caching.
 	* Method that alter the term data on request will no longer run if the term data has been updated to WordPress 4.4 standards. The affected methods are:
 		* `AutoDescription_TermData::get_term_filter()`
 		* `AutoDescription_TermData::get_terms_filter()`
@@ -379,9 +394,8 @@ TODO
 		* Included better validation of superglobals.
 	* Transient and Object cache key generation based on type request now run earlier and bypass the static cache for improved performance and reduced memory heap size.
 **Changed:**
-	/
 	* Variable 'AutoDescription_Siteoptions::page_id' is now publicly accessible. Making it easier to add submenu items.
-	* All class `AutoDescription_Metaboxes` metabox output function parameters have been shifted by one. The first parameter is now used for the (unavailable) post object. The second must be an array. This change affects the following methods:
+	* All class `AutoDescription_Metaboxes` metabox output function parameters have been shifted by one to the right to conform to the `add_metabox()` function return arguments. The first parameter is now used for the (unavailable and unused) post object. The second must be an array. This change affects the following methods:
 		* `AutoDescription_Metaboxes::title_metabox()`
 		* `AutoDescription_Metaboxes::description_metabox()`
 		* `AutoDescription_Metaboxes::homepage_metabox()`
@@ -397,19 +411,19 @@ TODO
 	* Method `AutoDescription_Query::get_the_real_ID()` no longer falls back to `get_the_ID()` as `get_queried_object_id()` covers that already.
 		* Note: This plugin shouldn't run within the loop on the front end. Nor should that function. It's completely cached the first time it runs (and when The SEO Framework caching engine is enabled).
 		* Note: That function however does run within the loop in the admin area. Therefore it will directly return method `AutoDescription_Query::get_the_real_admin_ID()` when called in the admin area.
+	* Method `AutoDescription_Generate::get_separator()`'s second parameter (whether to escape the output) now defaults to true instead of false.
+	* Method `AutoDescription_Adminpages::make_checkbox()` now has gained an extra parameter to determine whether to escape the label and description prior to outputting. Defaults to true.
+	* Method `AutoDescription_Generate::generate_home_page_description()` now has gained an extra parameter whether to escape the description. Defaults to true.
 **Fixed:**
-	/
 	* Function `the_seo_framework_dot_version()` now works as intended.
 	* Method `AutoDescription_Query::is_single()` first parameter can now be an array without crashing the site.
 	* Deprecated functions from 2.6.1 and onwards had their version and replacement notification switched. This has been fixed.
 **Removed:**
-	/
 	* Unused network admin methods. Network admin settings constants and filters are held intact for the future. The related changes are listed below.
 		* Method `AutoDescription_Adminpages::add_network_menu_link()`, without deprecation.
 		* Method `AutoDescription_Adminpages::network_admin()`, without deprecation.
 		* Method `AutoDescription_Adminpages::get_field_value_network()`, without deprecation.
 		* Public var `AutoDescription_Adminpages::network_pagehook`, without deprecation.
-	/
 	* Method `AutoDescription_Render::favicon()`, as it was unused. Without deprecation notice, as it was marked private.
 	* All deprecated class methods that have been deprecated prior to version 2.5.0 of The SEO Framework. These class methods include:
 		* `autodescription_get_option()`
@@ -436,12 +450,9 @@ TODO
 	* **Added:**
 		* `the_seo_framework_upgraded`, Runs once after the plugin has finished upgrading. Only on WordPress 4.4 and later.
 **Filter notes:**
-	/
 	* **Added:**
-		/
 		* `(string) the_seo_framework_term_options`, the WordPress 4.4+ metadata option key name.
 	* **Changed:**
-		/
 		* `(string) the_seo_framework_description_output`, first parameter now contains expected output.
 		* `(string) the_seo_framework_ogdescription_output`, first parameter now contains expected output.
 		* `(string) the_seo_framework_oglocale_output`, first parameter now contains expected output.

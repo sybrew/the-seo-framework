@@ -89,20 +89,18 @@ class AutoDescription_Detect extends AutoDescription_Render {
 				'Google XML Sitemaps for qTranslate'   => 'google-xml-sitemaps-v3-for-qtranslate/sitemap.php',
 				'XML Sitemap & Google News feeds'      => 'xml-sitemap-feed/xml-sitemap.php',
 				'Google Sitemap by BestWebSoft'        => 'google-sitemap-plugin/google-sitemap-plugin.php',
-				'WordPress SEO by Yoast'               => 'wordpress-seo/wp-seo.php',
-				'WordPress SEO Premium by Yoast'       => 'wordpress-seo-premium/wp-seo-premium.php',
+				'Yoast SEO'                            => 'wordpress-seo/wp-seo.php',
+				'Yoast SEO Premium'                    => 'wordpress-seo-premium/wp-seo-premium.php',
 				'All in One SEO Pack'                  => 'all-in-one-seo-pack/all_in_one_seo_pack.php',
 				'Sitemap'                              => 'sitemap/sitemap.php',
 				'Simple Wp Sitemap'                    => 'simple-wp-sitemap/simple-wp-sitemap.php',
 				'Simple Sitemap'                       => 'simple-sitemap/simple-sitemap.php',
 				'XML Sitemaps'                         => 'xml-sitemaps/xml-sitemaps.php',
-				'MSM Sitemaps'                         => 'msm-sitemap/msm-sitemap.php',
 			),
 			'open_graph' => array(
 				'2 Click Social Media Buttons'         => '2-click-socialmedia-buttons/2-click-socialmedia-buttons.php',
 				'Add Link to Facebook'                 => 'add-link-to-facebook/add-link-to-facebook.php',
 				'Add Meta Tags'                        => 'add-meta-tags/add-meta-tags.php',
-				'Easy Facebook Share Thumbnail'        => 'easy-facebook-share-thumbnails/esft.php',
 				'Facebook'                             => 'facebook/facebook.php',
 				'Facebook AWD All in one'              => 'facebook-awd/AWD_facebook.php',
 				'Facebook Featured Image & OG Meta Tags' => 'facebook-featured-image-and-open-graph-meta-tags/fb-featured-image.php',
@@ -117,31 +115,19 @@ class AutoDescription_Detect extends AutoDescription_Render {
 				'NextScripts SNAP'                     => 'social-networks-auto-poster-facebook-twitter-g/NextScripts_SNAP.php',
 				'Open Graph'                           => 'opengraph/opengraph.php',
 				'Open Graph Protocol Framework'        => 'open-graph-protocol-framework/open-graph-protocol-framework.php',
-				'SEO Facebook Comments'                => 'seo-facebook-comments/seofacebook.php',
 				'Shareaholic'                          => 'sexybookmarks/sexy-bookmarks.php',
 				'Shareaholic2'                         => 'shareaholic/sexy-bookmarks.php',
 				'SharePress'                           => 'sharepress/sharepress.php',
-				'Simple Facebook Connect'              => 'simple-facebook-connect/sfc.php',
-				'Social Discussions'                   => 'social-discussions/social-discussions.php',
 				'Social Sharing Toolkit'               => 'social-sharing-toolkit/social_sharing_toolkit.php',
-				'Socialize'                            => 'socialize/socialize.php',
 				'Tweet, Like, Google +1 and Share'     => 'only-tweet-like-share-and-google-1/tweet-like-plusone.php',
-				'Wordbooker'                           => 'wordbooker/wordbooker.php',
 				'WordPress Social Sharing Optimization' => 'wpsso/wpsso.php',
-				'WP Caregiver'                         => 'wp-caregiver/wp-caregiver.php',
-				'WP Facebook Like Send & Open Graph Meta' => 'wp-facebook-like-send-open-graph-meta/wp-facebook-like-send-open-graph-meta.php',
 				'WP Facebook Open Graph protocol'      => 'wp-facebook-open-graph-protocol/wp-facebook-ogp.php',
-				'WP-OGP'                               => 'wp-ogp/wp-ogp.php',
-				'Zolton.org Social Plugin'             => 'zoltonorg-social-plugin/zosp.php',
-				'WP Facebook Like Button'              => 'wp-fb-share-like-button/wp_fb_share-like_widget.php',
 			),
 			'twitter_card' => array(
 				'Twitter'                              => 'twitter/twitter.php',
 				'Eewee Twitter Card'                   => 'eewee-twitter-card/index.php',
-				'IG:Twitter Cards'                     => 'ig-twitter-cards/ig-twitter-cards.php',
 				'Twitter Cards'                        => 'twitter-cards/twitter-cards.php',
 				'Twitter Cards Meta'                   => 'twitter-cards-meta/twitter-cards-meta.php',
-				'WP Twitter Cards'                     => 'wp-twitter-cards/twitter_cards.php',
 			),
 		);
 
@@ -734,9 +720,9 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			if ( '' === $seplocation )
 				$seplocation = 'empty';
 
-			$title_output = ! isset( $title ) ? 'notset' : esc_attr( $title );
-			$sep_output = ! isset( $sep ) ? 'notset' : esc_attr( $sep );
-			$seplocation_output = ! isset( $seplocation ) ? 'notset' : esc_attr( $seplocation );
+			$title_output = ! isset( $title ) ? 'notset' : esc_html( $title );
+			$sep_output = ! isset( $sep ) ? 'notset' : esc_html( $sep );
+			$seplocation_output = ! isset( $seplocation ) ? 'notset' : esc_html( $seplocation );
 		}
 
 		//* Echo the HTML comment.
