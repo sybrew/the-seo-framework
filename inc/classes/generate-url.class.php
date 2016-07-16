@@ -742,6 +742,11 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			$path = user_trailingslashit( $path, 'category' );
 		}
 
+		$site_url = parse_url( site_url() );
+		if ( ! empty( $site_url['path'] ) ) {
+			$path = $site_url['path'] . '/' . $path;
+		}
+
 		//* Leading Slash it..
 		$path = '/' . ltrim( $path, ' \\/' );
 
