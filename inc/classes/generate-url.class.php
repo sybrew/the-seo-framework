@@ -277,8 +277,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 * Generate URL from arguments.
 	 *
 	 * @since 2.6.0
-	 *
 	 * @global object $wp
+	 * @NOTE: Handles full path, including home directory.
 	 *
 	 * @param array $args the URL args.
 	 * @return string $path
@@ -336,8 +336,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 * Generates relative URL for the Homepage and Singular Posts.
 	 *
 	 * @since 2.6.5
-	 *
 	 * @global object $wp
+	 * @NOTE: Handles full path, including home directory.
 	 *
 	 * @param int $post_id The ID.
 	 * @param array $args The URL arguments.
@@ -346,11 +346,11 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	public function build_singular_relative_url( $post_id = null, $args = array() ) {
 
 		if ( ! isset( $post_id ) ) {
-			if ( ! $args['external'] ) {
-				$post_id = $this->get_the_real_ID();
-			} else {
+			//* We can't fetch the post ID when there's an external request.
+			if ( $args['external'] )
 				return '';
-			}
+
+			$post_id = $this->get_the_real_ID();
 		}
 
 		$args = $this->reparse_url_args( $args );
@@ -371,25 +371,20 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		if ( ! isset( $url ) )
 			return '';
 
-		if ( $this->is_singular() ) {
-			$paged = $this->maybe_get_paged( $this->page(), $args['paged'], $args['paged_plural'] );
-		} else {
-			$paged = $this->maybe_get_paged( $this->paged(), $args['paged'], $args['paged_plural'] );
-		}
+		$paged = $this->is_singular() ? $this->page() : $this->paged();
+		$paged = $this->maybe_get_paged( $paged, $args['paged'], $args['paged_plural'] );
 
 		if ( $paged ) {
 			if ( $this->pretty_permalinks ) {
-				if ( $this->is_singular() ) {
+				if ( $this->is_singular() )
 					$url = trailingslashit( $url ) . $paged;
-				} else {
+				else
 					$url = trailingslashit( $url ) . 'page/' . $paged;
-				}
 			} else {
-				if ( $this->is_singular() ) {
+				if ( $this->is_singular() )
 					$url = add_query_arg( 'page', $paged, $url );
-				} else {
+				else
 					$url = add_query_arg( 'paged', $paged, $url );
-				}
 			}
 		}
 
@@ -421,14 +416,13 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	/**
 	 * Generates relative URL for current post_ID for translation plugins.
 	 *
+	 * @since 2.6.0
+	 * @global object $post
+	 * @NOTE: Handles full path, including home directory.
+	 *
 	 * @param string $path the current URL path.
 	 * @param int $post_id The post ID.
-	 * @param bool $external Whether to fetch the WP Request or get the permalink by Post Object.
-	 *
-	 * @since 2.6.0
-	 *
-	 * @global object $post
-	 *
+	 * @param bool $external Whether the request for URL generation is external.
 	 * @return relative Post or Page url.
 	 */
 	public function get_translation_path( $path = '', $post_id = null, $external = false ) {
@@ -436,7 +430,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		if ( is_object( $post_id ) )
 			$post_id = isset( $post_id->ID ) ? $post_id->ID : $this->get_the_real_ID();
 
-		if ( ! isset( $post_id ) )
+		if ( is_null( $post_id ) )
 			$post_id = $this->get_the_real_ID();
 
 		//* WPML support.
@@ -453,14 +447,13 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	/**
 	 * Generates qtranslate URL.
 	 *
-	 * @param string $path The current path.
-	 * @param int $post_id The Post ID. Unused.
-	 *
-	 * @global array $q_config
-	 *
-	 * @staticvar int $q_config_mode
-	 *
 	 * @since 2.6.0
+	 * @staticvar int $q_config_mode
+	 * @global array $q_config
+	 * @NOTE: Handles full path, including home directory.
+	 *
+	 * @param string $path The current path.
+	 * @param int $post_id The Post ID. Unused until qTranslate provides external URL forgery.
 	 */
 	public function get_relative_qtranslate_url( $path = '', $post_id = '' ) {
 
@@ -486,7 +479,6 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			return $path;
 
 		switch ( $q_config_mode ) {
-
 			case '1' :
 				//* Negotiation type query var.
 
@@ -519,6 +511,9 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				return $path;
 				break;
 
+			default :
+				return $path;
+				break;
 		}
 
 		return $path;
@@ -530,8 +525,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 * @since 2.4.3
 	 * @staticvar bool $gli_exists
 	 * @staticvar string $default_lang
-	 *
 	 * @global object $sitepress
+	 * @NOTE: Handles full path, including home directory.
 	 *
 	 * @param string $path The current path.
 	 * @param int $post_id The Post ID.
@@ -658,7 +653,10 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	/**
 	 * Generates relative URL for current term.
 	 *
-	 * @global WP_Rewrite object $wp_rewrite
+	 * @since 2.4.2
+	 * @since 2.7.0 Added home directory to output.
+	 * @global object $wp_rewrite
+	 * @NOTE: Handles full path, including home directory.
 	 *
 	 * @param object $term The term object.
 	 * @param array|bool $args {
@@ -666,9 +664,6 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 *		'paged'	: Whether to add pagination for all types.
 	 *		'paged_plural' : Whether to add pagination for the second or later page.
 	 * }
-	 *
-	 * @since 2.4.2
-	 *
 	 * @return Relative term or taxonomy URL.
 	 */
 	public function get_relative_term_url( $term = null, $args = array() ) {
@@ -742,8 +737,9 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			$path = user_trailingslashit( $path, 'category' );
 		}
 
-		//* Leading Slash it..
-		$path = '/' . ltrim( $path, ' \\/' );
+		//* Add plausible domain subdirectories.
+		$url = trailingslashit( get_option( 'home' ) ) . ltrim( $path, ' \\/' );
+		$path = $this->set_url_scheme( $url, 'relative' );
 
 		return $path;
 	}
@@ -793,7 +789,6 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 *
 	 * @param string $url The url with scheme.
 	 * @param string $scheme The current scheme.
-	 *
 	 * @return $url with applied filters.
 	 */
 	public function set_url_scheme_filter( $url, $current_scheme ) {
@@ -802,12 +797,12 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		 * Applies filters the_seo_framework_canonical_force_scheme : Changes scheme.
 		 *
 		 * Accepted variables:
-		 * (string) 'https'		: 	Force https
-		 * (bool) true 			: 	Force https
-		 * (bool) false			: 	Force http
-		 * (string) 'http'		: 	Force http
-		 * (string) 'relative' 	:	Scheme relative
-		 * (void) null			: 	Do nothing
+		 * (string) 'https'		: Force https
+		 * (bool) true 			: Force https
+		 * (bool) false			: Force http
+		 * (string) 'http'		: Force http
+		 * (string) 'relative' 	: Scheme relative
+		 * (void) null			: Do nothing
 		 *
 		 * @param string $current_scheme the current used scheme.
 		 *
@@ -834,15 +829,13 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	}
 
 	/**
-	 * Try to get an canonical URL when WPMUdev Domain Mapping is active.
+	 * Creates a full canonical URL when WPMUdev Domain Mapping is active from path.
 	 *
 	 * @since 2.3.0
+	 * @since 2.4.0 Added $get_scheme parameter.
 	 *
 	 * @param string $path The post relative path.
-	 *
 	 * @param bool $get_scheme Output array with scheme.
-	 * @since 2.4.0
-	 *
 	 * @return string|array|void The unescaped URL, the scheme
 	 */
 	public function the_url_wpmudev_domainmap( $path, $get_scheme = false ) {
@@ -868,6 +861,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 			$primary_key = 0;
 			$domain_ids = array();
+
 			foreach ( $mapped_domains as $key => $domain ) {
 				if ( isset( $domain->is_primary ) && '1' === $domain->is_primary ) {
 					$primary_key = $key;
@@ -913,11 +907,10 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			//* Put it all together.
 			$url = trailingslashit( $scheme_full . $domain ) . ltrim( $path, ' \\/' );
 
-			if ( ! $get_scheme ) {
-				return $url;
-			} else {
+			if ( $get_scheme )
 				return array( $url, $scheme );
-			}
+			else
+				return $url;
 		}
 
 		return '';
@@ -1365,13 +1358,46 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 * If this fails, you're going to have a bad time.
 	 *
 	 * @since 2.7.0
+	 * @staticvar string $cache
 	 *
 	 * @return string The home URL host.
 	 */
 	public function get_home_host() {
 
+		static $cache = null;
+
+		if ( isset( $cache ) )
+			return $cache;
+
 		$parsed_url = wp_parse_url( get_option( 'home' ) );
 
-		return isset( $parsed_url['host'] ) ? esc_html( $parsed_url['host'] ) : '';
+		$host = isset( $parsed_url['host'] ) ? $parsed_url['host'] : '';
+
+		return $cache = $host;
+	}
+
+	/**
+	 * Fetches home URL subdirectory path. Like "wordpress.org/plugins/".
+	 *
+	 * @since 2.7.0
+	 * @staticvar string $cache
+	 *
+	 * @return string The home URL path.
+	 */
+	public function get_home_path() {
+
+		static $cache = null;
+
+		if ( isset( $cache ) )
+			return $cache;
+
+		$path = '';
+
+		$parsed_url = wp_parse_url( get_option( 'home' ) );
+
+		if ( ! empty( $parsed_url['path'] ) && $path = ltrim( $parsed_url['path'], ' \\/' ) )
+			$path = '/' . $path;
+
+		return $cache = $path;
 	}
 }

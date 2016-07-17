@@ -357,6 +357,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* When changing the WordPress Core tagline settings, the homepage description transient is now flushed, instead of the blog page (which could be on another page).
 	* WooCommerce Product Tag and Category IDs can no longer conflict with singular post type IDs.
 	* The LD+Json home URL output now doesn't add a trailing slash when your options don't have supplied one.
+	* When your home URL is on a subdirectory, the canonical term URL is now correct.
 
 **For translators:**
 
@@ -414,6 +415,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Method `AutoDescription_Generate::get_separator()`'s second parameter (whether to escape the output) now defaults to true instead of false.
 	* Method `AutoDescription_Adminpages::make_checkbox()` now has gained an extra parameter to determine whether to escape the label and description prior to outputting. Defaults to true.
 	* Method `AutoDescription_Generate::generate_home_page_description()` now has gained an extra parameter whether to escape the description. Defaults to true.
+	* Method `AutoDescription_Generate_Url::get_relative_term_url()` now adds the home URL directory (if any) to the URL.
 **Fixed:**
 	* Function `the_seo_framework_dot_version()` now works as intended.
 	* Method `AutoDescription_Query::is_single()` first parameter can now be an array without crashing the site.

@@ -219,7 +219,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 
 		$separator = $this->get_separator( 'title' );
 
-		$rtl = (bool) is_rtl();
+		$isrtl = (bool) is_rtl();
 		$ishome = false;
 
 		if ( isset( $this->page_base_file ) && $this->page_base_file ) {
@@ -293,21 +293,21 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		}
 
 		return $strings = array(
-			'saveAlert'		=> __( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
-			'confirmReset'	=> __( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
-			'siteTitle' 	=> $title,
-			'titleAdditions' => $additions,
-			'blogDescription' => $description,
-			'titleTagline' 	=> $tagline,
-			'titleSeparator' => $separator,
-			'titleLocation' => $title_location,
-			'isRTL' => $rtl,
+			'saveAlert' => esc_html__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
+			'confirmReset' => esc_html__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
+			'siteTitle' => esc_html( $title ),
+			'titleAdditions' => esc_html( $additions ),
+			'blogDescription' => esc_html( $description ),
+			'titleTagline' => $tagline,
+			'titleSeparator' => esc_html( $separator ),
+			'titleLocation' => esc_html( $title_location ),
+			'isRTL' => $isrtl,
 			'isHome' => $ishome,
-			'counterType' => $counter_type,
-			'good' => $good,
-			'okay' => $okay,
-			'bad' => $bad,
-			'unknown' => $unknown,
+			'counterType' => esc_html( $counter_type ),
+			'good' => esc_html( $good ),
+			'okay' => esc_html( $okay ),
+			'bad' => esc_html( $bad ),
+			'unknown' => esc_html( $unknown ),
 		);
 	}
 

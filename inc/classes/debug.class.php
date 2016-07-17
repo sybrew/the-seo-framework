@@ -251,7 +251,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	 * @since 2.5.2
 	 * @uses bool $this->the_seo_framework_debug
 	 * @access private
-	 * @global array $current_screen
+	 * @global object $current_screen
 	 */
 	public function debug_screens() {
 		global $current_screen;
