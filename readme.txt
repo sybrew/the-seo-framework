@@ -314,10 +314,13 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **For everyone:**
 
 **Added:**
+	/
 	* General compatibility and other improvements for the upcoming extension manager.
 	* Facebook image width and height meta tags output.
 	* Twitter image width and height meta tags output.
 	* Genesis Framework 2.3.0+ term metadata upgrade and fallback compatibility.
+	* TODO The sitemap now also flushed when changing the Site URL in the General Settings of WordPress Core.
+	* TODO Notification that the Robots.txt file can't be output under specific circumstances. (or simply add it anyway?)
 **Improved:**
 	/
 	* TODO The title and description counter type option is now bound to the user, rather than the site.
@@ -394,6 +397,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Translation strings are sanitatized when needed.
 		* Included better validation of superglobals.
 	* Transient and Object cache key generation based on type request now run earlier and bypass the static cache for improved performance and reduced memory heap size.
+	* Method `AutoDescription_DoingItRight::init_columns_ajax()` now only runs on the applicable AJAX action, right before the tag is output. Instead of `admin_init`.
+	* Method `AutoDescription_DoingItRight::init_columns_ajax()` now adapts its capability check towards WordPress Core filters.
 **Changed:**
 	* Variable 'AutoDescription_Siteoptions::page_id' is now publicly accessible. Making it easier to add submenu items.
 	* All class `AutoDescription_Metaboxes` metabox output function parameters have been shifted by one to the right to conform to the `add_metabox()` function return arguments. The first parameter is now used for the (unavailable and unused) post object. The second must be an array. This change affects the following methods:

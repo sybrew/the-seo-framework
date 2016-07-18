@@ -147,8 +147,6 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 	 * Delete term meta data when a term is deleted.
 	 * Delete only the default data keys.
 	 *
-	 * If this results in an empty data array, all data is removed.
-	 *
 	 * @since 2.7.0
 	 *
 	 * @param int $term_id Term ID.
@@ -156,10 +154,13 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 	 */
 	public function delete_term_meta( $term_id, $tt_id ) {
 
+		//* If this results in an empty data string, all data has already been removed by WP core.
 		$data = get_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true );
 
-		foreach ( $this->get_term_meta_defaults() as $key => $value ) {
-			unset( $data[ $key ] );
+		if ( is_array( $data ) ) {
+			foreach ( $this->get_term_meta_defaults() as $key => $value ) {
+				unset( $data[ $key ] );
+			}
 		}
 
 		if ( empty( $data ) )

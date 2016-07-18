@@ -37,16 +37,14 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		add_action( 'current_screen', array( $this, 'post_state' ) );
 
 		//* Ajax handlers for columns.
-		add_action( 'admin_init', array( $this, 'init_columns_ajax' ) );
+		add_action( 'wp_ajax_add-tag', array( $this, 'init_columns_ajax' ), -1 );
 		//* Initialize columns.
 		add_action( 'current_screen', array( $this, 'init_columns' ) );
 
 	}
 
 	/**
-	 * Add post state on edit.php to the page or post that has been altered
-	 *
-	 * Applies filters `the_seo_framework_allow_states` : boolean Whether to allow post states output.
+	 * Add post state on edit.php to the page or post that has been altered.
 	 *
 	 * @uses $this->add_post_state
 	 *
@@ -57,6 +55,10 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		//* Only load on singular pages.
 		if ( $this->is_singular() ) {
 
+			/**
+			 * Applies filters `the_seo_framework_allow_states` : boolean Whether to allow post states output.
+			 * @since 2.1.0
+			 */
 			$allow_states = (bool) apply_filters( 'the_seo_framework_allow_states', true );
 
 			if ( $allow_states )
@@ -95,12 +97,15 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	 */
 	public function init_columns_ajax() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		/**
+		 * Securely check the referrer, instead of leaving holes everywhere.
+		 */
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX && check_ajax_referer( 'add-tag', '_wpnonce_add-tag', false ) ) {
 
-			/**
-			 * Securely check the referrer, instead of leaving holes everywhere.
-			 */
-			if ( current_user_can( 'publish_posts' ) && check_ajax_referer( 'add-tag', '_wpnonce_add-tag', false ) )
+			$taxonomy = ! empty( $_POST['taxonomy'] ) ? $_POST['taxonomy'] : 'post_tag';
+			$tax = get_taxonomy( $taxonomy );
+
+			if ( current_user_can( $tax->cap->edit_terms ) )
 				$this->init_columns( '', true );
 		}
 

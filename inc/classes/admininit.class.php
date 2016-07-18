@@ -438,5 +438,6 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 			//* Kill PHP.
 			exit;
 		}
+
 	}
 }
