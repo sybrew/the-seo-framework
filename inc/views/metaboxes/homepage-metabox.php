@@ -191,7 +191,10 @@ switch ( $instance ) :
 			<label for="<?php $this->field_id( 'homepage_title' ); ?>" class="toblock">
 				<strong><?php printf( esc_html__( 'Custom %s Title', 'autodescription' ), $home_page_i18n ); ?></strong>
 				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 50 to 55 characters', 'autodescription' ) ?>">[?]</a>
-				<span class="description theseoframework-counter"><?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="' . $this->field_id( 'homepage_title', false ) . '_chars">'. mb_strlen( $tit_len ) .'</span>' ); ?></span>
+				<span class="description theseoframework-counter">
+					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="' . $this->field_id( 'homepage_title', false ) . '_chars">'. mb_strlen( $tit_len ) .'</span>' ); ?>
+					<span class="hide-if-no-js theseoframework-ajax"></span>
+				</span>
 			</label>
 		</p>
 		<p id="autodescription-title-wrap">
@@ -209,7 +212,10 @@ switch ( $instance ) :
 			<label for="<?php $this->field_id( 'homepage_description' ); ?>" class="toblock">
 				<strong><?php printf( esc_html__( 'Custom %s Description', 'autodescription' ), $home_page_i18n ); ?></strong>
 				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1' ); ?>" target="_blank" title="<?php _e( 'Recommended Length: 145 to 155 characters', 'autodescription' ) ?>">[?]</a>
-				<span class="description theseoframework-counter"><?php printf( __( 'Characters Used: %s', 'autodescription' ), '<span id="' . $this->field_id( 'homepage_description', false ) . '_chars">'. mb_strlen( $desc_len ) .'</span>' ); ?></span>
+				<span class="description theseoframework-counter">
+					<?php printf( __( 'Characters Used: %s', 'autodescription' ), '<span id="' . $this->field_id( 'homepage_description', false ) . '_chars">'. mb_strlen( $desc_len ) .'</span>' ); ?>
+					<span class="hide-if-no-js theseoframework-ajax"></span>
+				</span>
 			</label>
 		</p>
 		<p>

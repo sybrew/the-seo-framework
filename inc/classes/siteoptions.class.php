@@ -208,7 +208,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			'knowledge_logo'		=> 1,	// Fetch logo from WP Favicon
 			'knowledge_name'		=> '',	// Person or Organization name
 
-			// 'Sameas'
+			// Knowledge sameas locations
 			'knowledge_facebook'	=> '',	// Facebook Account
 			'knowledge_twitter'		=> '',	// Twitter Account
 			'knowledge_gplus'		=> '',	// Google Plus Account
@@ -237,9 +237,6 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			'ld_json_searchbox'		=> 1,	// LD+Json Sitelinks Searchbox
 			'ld_json_sitename'		=> 1,	// LD+Json Sitename
 			'ld_json_breadcrumbs'	=> 1,	// LD+Json Breadcrumbs
-
-			// Misc.
-			'counter_type' => 3, // JS counter type.
 
 			// Cache.
 			$this->o_plugin_updated => 1,	// Plugin update cache.
@@ -352,6 +349,9 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 * @since 2.6.0
 	 */
 	protected function update_hidden_options_to_default() {
+
+		if ( false === $this->verify_seo_settings_nonce() )
+			return;
 
 		//* Disables the New SEO Settings Updated notification.
 		$plugin_updated = $this->o_plugin_updated;
@@ -796,6 +796,111 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 		$warned_cache[ $key ] = $this->s_one_zero( $warned_options[ $key ] );
 
 		return $warned_cache[ $key ];
+	}
+
+	/**
+	 * Fetches user SEO user meta data by name.
+	 * Caches all meta data per $user_id.
+	 *
+	 * @since 2.7.0
+	 * @staticvar array $options_cache
+	 *
+	 * @param int $user_id The user ID. When empty, it will try to fetch the current user.
+	 * @param string $option The option name.
+	 * @param mixed $default The default value to return when the data doesn't exist.
+	 * @return mixed The metadata value.
+	 */
+	public function get_user_option( $user_id = 0, $option, $default = null ) {
+
+		if ( ! $option )
+			return null;
+
+		if ( empty( $user_id ) )
+			$user_id = $this->get_user_id();
+
+		if ( ! $user_id )
+			return null;
+
+		static $options_cache = array();
+
+		if ( isset( $options_cache[ $user_id ][ $option ] ) )
+			return $options_cache[ $user_id ][ $option ];
+
+		$usermeta = $this->get_user_meta( $user_id );
+
+		return $options_cache[ $user_id ][ $option ] = isset( $usermeta[ $option ] ) ? $usermeta[ $option ] : $default;
+	}
+
+	/**
+	 * Sets up user ID and returns it if user is found.
+	 * To be used in AJAX, back-end and front-end.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @return int $user_id : 0 if user is not found.
+	 */
+	public function get_user_id() {
+
+		static $user_id = null;
+
+		if ( isset( $user_id ) )
+			return $user_id;
+
+		$user = wp_get_current_user();
+
+		return $user_id = $user->exists() ? (int) $user->ID : 0;
+	}
+
+	/**
+	 * Fetches The SEO Framework usermeta.
+	 *
+	 * @since 2.7.0
+	 * @staticvar array $usermeta_cache
+	 *
+	 * @param int $user_id The user ID.
+	 * @param string $key The user metadata key. Leave empty to fetch all data.
+	 * @param bool $user_cache Whether to save options in cache.
+	 * @return array The user SEO meta data.
+	 */
+	public function get_user_meta( $user_id, $key = THE_SEO_FRAMEWORK_USER_OPTIONS, $use_cache = true ) {
+
+		if ( ! $use_cache )
+			return get_user_meta( $user_id, $key, true );
+
+		static $usermeta_cache = array();
+
+		if ( isset( $usermeta_cache[ $user_id ][ $key ] ) )
+			return $usermeta_cache[ $user_id ][ $key ];
+
+		return $usermeta_cache[ $user_id ][ $key ] = get_user_meta( $user_id, $key, true );
+	}
+
+	/**
+	 * Updates user SEO option.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param int $user_id The user ID.
+	 * @param string $option The user's SEO metadata option.
+	 * @param mixed $value The escaped option value.
+	 * @return bool True on success. False on failure.
+	 */
+	public function update_user_option( $user_id = 0, $option, $value ) {
+
+		if ( ! $option )
+			return false;
+
+		if ( empty( $user_id ) )
+			$user_id = $this->get_user_id();
+
+		if ( empty( $user_id ) )
+			return false;
+
+		$meta = $this->get_user_meta( $user_id );
+
+		$meta[ $option ] = $value;
+
+		return update_user_meta( $user_id, THE_SEO_FRAMEWORK_USER_OPTIONS, $meta );
 	}
 
 	/**

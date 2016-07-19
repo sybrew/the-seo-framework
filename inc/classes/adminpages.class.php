@@ -117,12 +117,12 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		$this->page_defaults = (array) apply_filters(
 			'the_seo_framework_admin_page_defaults',
 			array(
-				'save_button_text'		=> esc_html__( 'Save Settings', 'autodescription' ),
-				'reset_button_text'		=> esc_html__( 'Reset Settings', 'autodescription' ),
-				'saved_notice_text'		=> esc_html__( 'Settings are saved.', 'autodescription' ),
-				'reset_notice_text'		=> esc_html__( 'Settings are reset.', 'autodescription' ),
-				'error_notice_text'		=> esc_html__( 'Error saving settings.', 'autodescription' ),
-				'plugin_update_text'	=> esc_html__( 'New SEO Settings have been updated.', 'autodescription' ),
+				'save_button_text'   => esc_html__( 'Save Settings', 'autodescription' ),
+				'reset_button_text'  => esc_html__( 'Reset Settings', 'autodescription' ),
+				'saved_notice_text'  => esc_html__( 'Settings are saved.', 'autodescription' ),
+				'reset_notice_text'  => esc_html__( 'Settings are reset.', 'autodescription' ),
+				'error_notice_text'  => esc_html__( 'Error saving settings.', 'autodescription' ),
+				'plugin_update_text' => esc_html__( 'New SEO Settings have been updated.', 'autodescription' ),
 			)
 		);
 
@@ -138,13 +138,13 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	public function add_menu_link() {
 
 		$menu = array(
-			'page_title'	=> esc_html__( 'SEO Settings', 'autodescription' ),
-			'menu_title'	=> esc_html__( 'SEO', 'autodescription' ),
-			'capability'	=> $this->settings_capability(),
-			'menu_slug'		=> $this->seo_settings_page_slug,
-			'callback'		=> array( $this, 'admin' ),
-			'icon'			=> 'dashicons-search',
-			'position'		=> '90.9001',
+			'page_title' => esc_html__( 'SEO Settings', 'autodescription' ),
+			'menu_title' => esc_html__( 'SEO', 'autodescription' ),
+			'capability' => $this->settings_capability(),
+			'menu_slug'  => $this->seo_settings_page_slug,
+			'callback'   => array( $this, 'admin' ),
+			'icon'       => 'dashicons-search',
+			'position'   => '90.9001',
 		);
 
 		$this->seo_settings_page_hook = add_menu_page(
@@ -260,16 +260,16 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		 *
 		 * @since 2.2.4
 		 */
-		$title 			= (bool) apply_filters( 'the_seo_framework_title_metabox', true );
-		$description 	= (bool) apply_filters( 'the_seo_framework_description_metabox', true );
-		$robots 		= (bool) apply_filters( 'the_seo_framework_robots_metabox', true );
-		$home 			= (bool) apply_filters( 'the_seo_framework_home_metabox', true );
-		$social 		= (bool) apply_filters( 'the_seo_framework_social_metabox', true );
-		$knowledge 		= (bool) apply_filters( 'the_seo_framework_knowledge_metabox', true );
-		$schema 		= (bool) apply_filters( 'the_seo_framework_schema_metabox', true );
-		$webmaster 		= (bool) apply_filters( 'the_seo_framework_webmaster_metabox', true );
-		$sitemap 		= (bool) apply_filters( 'the_seo_framework_sitemap_metabox', true );
-		$feed 			= (bool) apply_filters( 'the_seo_framework_feed_metabox', true );
+		$title       = (bool) apply_filters( 'the_seo_framework_title_metabox', true );
+		$description = (bool) apply_filters( 'the_seo_framework_description_metabox', true );
+		$robots      = (bool) apply_filters( 'the_seo_framework_robots_metabox', true );
+		$home        = (bool) apply_filters( 'the_seo_framework_home_metabox', true );
+		$social      = (bool) apply_filters( 'the_seo_framework_social_metabox', true );
+		$knowledge   = (bool) apply_filters( 'the_seo_framework_knowledge_metabox', true );
+		$schema      = (bool) apply_filters( 'the_seo_framework_schema_metabox', true );
+		$webmaster   = (bool) apply_filters( 'the_seo_framework_webmaster_metabox', true );
+		$sitemap     = (bool) apply_filters( 'the_seo_framework_sitemap_metabox', true );
+		$feed        = (bool) apply_filters( 'the_seo_framework_feed_metabox', true );
 
 		//* Title Meta Box
 		if ( $title )

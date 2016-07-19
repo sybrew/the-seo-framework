@@ -39,19 +39,26 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	}
 
 	/**
-	 * Register each of the settings with a sanitization filter type.
+	 * Checks the SEO Settings page nonce. Returns false if nonce can't be found.
+	 * Performs wp_die() when nonce verification fails.
 	 *
-	 * @since 2.2.2
+	 * Never run a sensitive function when it's returning false. This means no nonce can be verified.
 	 *
-	 * @uses autodescription_add_option_filter() Assign filter to array of settings.
+	 * @since 2.7.0
+	 * @staticvar bool $verified.
 	 *
-	 * @see AutoDescription_Sanitize::add_filter() Add sanitization filters to options.
+	 * @return bool True if verified and matches. False if can't verify.
 	 */
-	public function sanitizer_filters() {
+	public function verify_seo_settings_nonce() {
+
+		static $validated = null;
+
+		if ( isset( $validated ) )
+			return $validated;
 
 		//* If this page doesn't store settings, no need to sanitize them
 		if ( ! $this->settings_field )
-			return;
+			return $validated = false;
 
 		/**
 		 * If this page doesn't parse the site options,
@@ -60,7 +67,25 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		 *
 		 * @since 2.2.9
 		 */
-		if ( ! isset( $_POST ) || empty( $_POST ) || ! isset( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) || ! is_array( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) )
+		if ( empty( $_POST ) || ! isset( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) || ! is_array( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) )
+			return $validated = false;
+
+		check_admin_referer( $this->settings_field . '-options' );
+
+		return $validated = true;
+	}
+
+	/**
+	 * Register each of the settings with a sanitization filter type.
+	 *
+	 * @since 2.2.2
+	 * @uses autodescription_add_option_filter() Assign filter to array of settings.
+	 * @see AutoDescription_Sanitize::add_filter() Add sanitization filters to options.
+	 */
+	public function sanitizer_filters() {
+
+		//* Verify update nonce.
+		if ( false === $this->verify_seo_settings_nonce() )
 			return;
 
 		//* Update hidden options.
@@ -218,7 +243,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			$this->settings_field,
 			array(
 			//	'home_author', @TODO
-				'counter_type',
 			)
 		);
 

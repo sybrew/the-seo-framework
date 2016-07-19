@@ -373,7 +373,10 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 							<input name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" type="text" placeholder="<?php echo $title_placeholder ?>" value="<?php echo esc_attr( $title ); ?>" size="40" />
 							<span id="autodescription-title-offset" class="hide-if-no-js"></span><span id="autodescription-title-placeholder" class="hide-if-no-js"></span>
 						</div>
-						<p class="description theseoframework-counter"><?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[doctitle]_chars">'. mb_strlen( $tit_len_parsed ) .'</span>' ); ?></p>
+						<p class="description theseoframework-counter">
+							<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[doctitle]_chars">'. mb_strlen( $tit_len_parsed ) .'</span>' ); ?>
+							<span class="hide-if-no-js theseoframework-ajax"></span>
+						</p>
 					</td>
 				</tr>
 
@@ -386,7 +389,10 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 					</th>
 					<td>
 						<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" placeholder="<?php echo $description_placeholder ?>" rows="5" cols="50" class="large-text"><?php echo esc_html( $description ); ?></textarea>
-						<p class="description theseoframework-counter"><?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[description]_chars">'. mb_strlen( $desc_len_parsed ) .'</span>' ); ?></p>
+						<p class="description theseoframework-counter">
+							<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[description]_chars">'. mb_strlen( $desc_len_parsed ) .'</span>' ); ?>
+							<span class="hide-if-no-js theseoframework-ajax"></span>
+						</p>
 					</td>
 				</tr>
 
@@ -585,7 +591,10 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 		<p>
 			<label for="autodescription_title"><strong><?php printf( esc_html__( 'Custom %s Title', 'autodescription' ), $type ); ?></strong>
 				<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#3" target="_blank" title="<?php esc_html_e( 'Recommended Length: 50 to 55 characters', 'autodescription' ); ?>">[?]</a>
-				<span class="description theseoframework-counter"><?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_title_chars">'. mb_strlen( $tit_len_parsed ) .'</span>' ); ?></span>
+				<span class="description theseoframework-counter">
+					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_title_chars">'. mb_strlen( $tit_len_parsed ) .'</span>' ); ?>
+					<span class="hide-if-no-js theseoframework-ajax"></span>
+				</span>
 			</label>
 		</p>
 		<p>
@@ -599,7 +608,10 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 			<label for="autodescription_description">
 				<strong><?php printf( esc_html__( 'Custom %s Description', 'autodescription' ), $type ); ?></strong>
 				<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#1" target="_blank" title="<?php esc_html_e( 'Recommended Length: 145 to 155 characters', 'autodescription' ); ?>">[?]</a>
-				<span class="description theseoframework-counter"><?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_description_chars">'. mb_strlen( $desc_len_parsed ) .'</span>' ); ?></span>
+				<span class="description theseoframework-counter">
+					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_description_chars">'. mb_strlen( $desc_len_parsed ) .'</span>' ); ?>
+					<span class="hide-if-no-js theseoframework-ajax"></span>
+				</span>
 			</label>
 		</p>
 		<p>

@@ -542,6 +542,58 @@ body.js .autodescription-metaboxes .seoframework-tabs-content.seoframework-activ
 	margin: 1em 0;
 }
 
+.theseoframework-counter .theseoframework-ajax {
+	margin-left: 3px;
+}
+
+.theseoframework-ajax:before {
+	display: inline-block;
+	line-height: 1;
+	font-family: dashicons;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 1.225em;
+	vertical-align: middle;
+	content: "";
+}
+
+.theseoframework-ajax.theseoframework-loading:before {
+	content: "\f463";
+	color: #007bd2;
+	-webkit-animation: theseoframework-spin 1.5s linear infinite;
+	-moz-animation: theseoframework-spin 1.5s linear infinite;
+	-o-animation: theseoframework-spin 1.5s linear infinite;
+	animation: theseoframework-spin 1.5s linear infinite;
+}
+
+.theseoframework-ajax.theseoframework-error:before {
+	content: "\f158";
+	color: #dd3811;
+}
+
+.theseoframework-ajax.theseoframework-success:before {
+	content: "\f147";
+	color: #0cc34b;
+}
+
+@-webkit-keyframes theseoframework-spin {
+	0% {
+		-webkit-transform: rotate( 0deg );
+	}
+	100% {
+		-webkit-transform: rotate( 360deg );
+	}
+}
+
+@keyframes theseoframework-spin {
+	0% {
+		transform: rotate( 0deg );
+	}
+	100% {
+		transform: rotate( 360deg );
+	}
+}
+
 @media screen and (max-width: 782px) {
 	.autodescription-metaboxes p.theseoframework-fields,
 	.theseoframework-inpost-box p.theseoframework-fields {

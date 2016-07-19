@@ -70,6 +70,12 @@ define( 'THE_SEO_FRAMEWORK_NETWORK_OPTIONS', (string) apply_filters( 'the_seo_fr
 define( 'THE_SEO_FRAMEWORK_TERM_OPTIONS', (string) apply_filters( 'the_seo_framework_term_options', 'autodescription-term-settings' ) );
 
 /**
+ * Plugin term options filter.
+ * @since 2.7.0
+ */
+define( 'THE_SEO_FRAMEWORK_USER_OPTIONS', (string) apply_filters( 'the_seo_framework_user_options', 'autodescription-user-settings' ) );
+
+/**
  * The plugin map url.
  * Used for calling browser files.
  * @since 2.2.2

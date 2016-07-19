@@ -1,7 +1,7 @@
 === The SEO Framework ===
 Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
-Tags: open graph, seo, xml sitemap, breadcrumbs, meta, search engine, framework, redirect, robots, rtl, feed, google
+Tags: open graph, seo, xml sitemap, breadcrumbs, meta, search engine, framework, redirect, robots, facebook, twitter, google, bing, yandex
 Requires at least: 3.8.0
 Tested up to: 4.6.0
 Stable tag: 2.6.6
@@ -244,7 +244,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
-= 2.7.0 - Contemporary Apsiration =
+= 2.7.0 - Contemporary Aspiration =
 
 **Release date:**
 /
@@ -292,7 +292,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 1. Because of all previous steps, this would follow naturally.
 1. I've read all code once more, and discovered ways for improvement. It's like a spellcheck.
 1. Throughout the code, better and more open standards have been introduced, where other developers can easily add to, disable or enable functionality.
-1. With the help of a code linter, [WordPress VIP best practices](https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/) have been enforced throughout the plugin. This resulted in increased security and overal performance.
+1. With the help of a code linter, [WordPress.com VIP best practices](https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/) have been enforced throughout the plugin. This resulted in increased security and overall performance.
 
 **How do I benefit most of this update, and other plugins in general?**
 
@@ -313,30 +313,27 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **For everyone:**
 
-**Added:**
-	/
+* **Added:**
 	* General compatibility and other improvements for the upcoming extension manager.
 	* Facebook image width and height meta tags output.
 	* Twitter image width and height meta tags output.
 	* Genesis Framework 2.3.0+ term metadata upgrade and fallback compatibility.
 	* TODO The sitemap now also flushed when changing the Site URL in the General Settings of WordPress Core.
 	* TODO Notification that the Robots.txt file can't be output under specific circumstances. (or simply add it anyway?)
-**Improved:**
-	/
+* **Improved:**
 	* TODO The title and description counter type option is now bound to the user, rather than the site.
 	* Dismissible notices are now dismissible on every admin page when called.
 	* The term meta data is now handled through WordPress 4.4 or later functionality, if present.
 		* Note: From The SEO Framework 2.8.0, backwards compatibility towards version 2.6.6.2 or lower will be removed in order to clean up the database.
-**Changed:**
-	/
+* **Changed:**
 	* The SEO Settings page is now a submenu page, name "SEO Settings". This change is only visible when another submenu is added.
 	* The Twitter Image URL output is now wrapped in the `twitter:image` meta tag instead of `twitter:image:src`, as the latter seems to be deprecated.
-**Updated:**
+* **Updated:**
 	/
 	* TODO POT translation file.
 	* TODO The settings metaboxes order has been reset. This ensures that the General Settings are shown first after updating. (Unless you've filtered it? TODO confirm)
-	* TODO The counter type option has been reset as it's now handled per user instead of per site.
-**Removed:**
+	* The counter type option has been reset as it's now handled per user instead of per site.
+* **Removed:**
 	* The SEO plugin detection module is relatively heavy; therefore, some plugins have been removed from checking conflicts against. These include:
 		* Easy Facebook Share Thumbnail (hasn't recieved updates in 3 years).
 		* SEO Facebook Comments (hasn't recieved updates in 2 years).
@@ -352,10 +349,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* MSM Sitemaps (plugin no longer exists).
 		* WP Twitter Cards (hasn't recieved updates in 2 years).
 		* iG:Twitter Cards (hasn't recieved updates in 3 years).
-**Fixed:**
+* **Fixed:**
 	/
-	* TODO When saving the SEO Options, the counter type was reset. This has been fixed by placing the counter type option out of the plugins options scope.
-	* TODO When updating the plugin, without added options, the update notification now really should no longer show up. ^related
+	* When saving the SEO Options, the counter type was reset. This has been fixed by placing the counter type option out of the plugins options scope.
+	* When updating the plugin, without added options, the update notification now really should no longer show up. ^related TODO confirm
 	* TODO When solely changing the counter type within the SEO Options, an "unsaved changes" prompt will no longer be displayed.
 	* When changing the WordPress Core tagline settings, the homepage description transient is now flushed, instead of the blog page (which could be on another page).
 	* WooCommerce Product Tag and Category IDs can no longer conflict with singular post type IDs.
@@ -364,19 +361,21 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **For translators:**
 
-**Updated:**
+* **Updated:**
 	* A few sentences have had a very minor adjustment to be more in line with the rest of the WordPress/plugin environment.
-**Fixed:**
+* **Fixed:**
 	* One sentence was never registered correctly. It has now been included within the translations.
 
 **For developers:**
 
-**Added:**
+* **Added:**
 	/
 	* Function `the_seo_framework_update_option()`, this allows you to update options remotely.
 	* Function `the_seo_framework_options_page_slug()`, this allows you to hook into the SEO settings page.
 	* Method `AutoDescription_Query::get_the_real_admin_ID()`, this always runs within `AutoDescription_Query::get_the_real_ID()` when in admin.
-**Improved:**
+	* Method `AutoDescription_Sanitize::verify_seo_settings_nonce()`, returns true when SEO settings nonce has been verified. Always use this if you want to inject custom settings.
+	* CDATA array (JavaScript) `autodescriptionL10n` now contains a nonce string for AJAX requests, accessible through (JavaScript) `autodescriptionL10n.nonce` or (JavaScript) `autodescriptionL10n['nonce']` and (PHP) `check_ajax_referer( 'my_ajax_action', 'nonce' ) ?>` TODO.
+* **Improved:**
 	/
 	* Class contents `AutoDescription_Query` are now reworked to be much more effecient and predictable.
 	* Methods within `AutoDescription_Query` have been re-evaluated whether they use the WordPress query cache. If that holds true, the query object cache has been omitted from the said method.
@@ -396,10 +395,12 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Sitemaps post queries are now suppressing filters.
 		* Translation strings are sanitatized when needed.
 		* Included better validation of superglobals.
+	/
 	* Transient and Object cache key generation based on type request now run earlier and bypass the static cache for improved performance and reduced memory heap size.
 	* Method `AutoDescription_DoingItRight::init_columns_ajax()` now only runs on the applicable AJAX action, right before the tag is output. Instead of `admin_init`.
 	* Method `AutoDescription_DoingItRight::init_columns_ajax()` now adapts its capability check towards WordPress Core filters.
-**Changed:**
+	* TODO Maybe? Transform Theme DIR permanent transient into an option.
+* **Changed:**
 	* Variable 'AutoDescription_Siteoptions::page_id' is now publicly accessible. Making it easier to add submenu items.
 	* All class `AutoDescription_Metaboxes` metabox output function parameters have been shifted by one to the right to conform to the `add_metabox()` function return arguments. The first parameter is now used for the (unavailable and unused) post object. The second must be an array. This change affects the following methods:
 		* `AutoDescription_Metaboxes::title_metabox()`
@@ -421,11 +422,13 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Method `AutoDescription_Adminpages::make_checkbox()` now has gained an extra parameter to determine whether to escape the label and description prior to outputting. Defaults to true.
 	* Method `AutoDescription_Generate::generate_home_page_description()` now has gained an extra parameter whether to escape the description. Defaults to true.
 	* Method `AutoDescription_Generate_Url::get_relative_term_url()` now adds the home URL directory (if any) to the URL.
-**Fixed:**
+	* Method `AutoDescription_Admin_Init::the_counter_visualized()` has been renamed to `AutoDescription_Admin_Init::wp_ajax_update_counter_type()`. Without deprecation as it's marked private.
+	* TODO All CSS class prefixes have been set to `theseoframework`, which were prior `autodescription` or `seoframework`.
+* **Fixed:**
 	* Function `the_seo_framework_dot_version()` now works as intended.
 	* Method `AutoDescription_Query::is_single()` first parameter can now be an array without crashing the site.
 	* Deprecated functions from 2.6.1 and onwards had their version and replacement notification switched. This has been fixed.
-**Removed:**
+* **Removed:**
 	* Unused network admin methods. Network admin settings constants and filters are held intact for the future. The related changes are listed below.
 		* Method `AutoDescription_Adminpages::add_network_menu_link()`, without deprecation.
 		* Method `AutoDescription_Adminpages::network_admin()`, without deprecation.
@@ -444,8 +447,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Method `AutoDescription_TermData::init_term_filters()`, without deprecation as it was marked private.
 	* Method `AutoDescription_Core::in_array()`, as it is no longer of use.
 	* An useless easter egg in order to clean up code.
-**Deprecated:**
-	/
+* **Deprecated:**
 	* `AutoDescription_Metaboxes::homepage_metabox_general()`, use `AutoDescription_Metaboxes::homepage_metabox_general_tab()` instead.
 	* `AutoDescription_Metaboxes::homepage_metabox_additions()`, use `AutoDescription_Metaboxes::homepage_metabox_additions_tab()` instead.
 	* `AutoDescription_Metaboxes::homepage_metabox_robots()`, use `AutoDescription_Metaboxes::homepage_metabox_robots_tab()` instead.
@@ -453,12 +455,13 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* `tsf_get_option()`, use `the_seo_framework_get_option()` instead.
 	* `tsf_options_pagehook()`, use `the_seo_framework_options_pagehook()` instead.
 	* `tsf_wp_version()`, use `AutoDescription_Detect::wp_version()` instead.
-**Action notes:**
+* **Action notes:**
 	* **Added:**
 		* `the_seo_framework_upgraded`, Runs once after the plugin has finished upgrading. Only on WordPress 4.4 and later.
-**Filter notes:**
+* **Filter notes:**
 	* **Added:**
 		* `(string) the_seo_framework_term_options`, the WordPress 4.4+ metadata option key name.
+		* `(string) the_seo_framework_user_options`, the User SEO metadata option key name.
 	* **Changed:**
 		* `(string) the_seo_framework_description_output`, first parameter now contains expected output.
 		* `(string) the_seo_framework_ogdescription_output`, first parameter now contains expected output.
@@ -480,12 +483,13 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* `(string) the_seo_framework_modifiedtime_output`, first parameter now contains expected output.
 	* **Deprecated:**
 		* `(bool) the_seo_framework_output_canonical`, use `(string) the_seo_framework_rel_canonical_output` instead. Return empty to achieve the same results.
-**Constant notes:**
+* **Constant notes:**
 	* **Added:**
 		* `(string) THE_SEO_FRAMEWORK_DB_VERSION`
 		* `(string) THE_SEO_FRAMEWORK_DIR_PATH_VIEWS`
 		* `(string) THE_SEO_FRAMEWORK_TERM_OPTIONS`
-**Notes:**
+		* `(string) THE_SEO_FRAMEWORK_USER_OPTIONS`
+* **Notes:**
 	* The SEO Framework settings page now has the slug `theseoframework-settings` instead of `autodescription-settings`. Use provided functions and variables in the `optionsapi.php` file to determine this state.
 	* Cleaned up code. A whole lot.
 

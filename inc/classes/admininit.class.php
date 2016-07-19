@@ -63,7 +63,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 0, 1 );
 
 		//* Admin AJAX for counter options.
-		add_action( 'wp_ajax_the_seo_framework_update_counter', array( $this, 'the_counter_visualized' ) );
+		add_action( 'wp_ajax_the_seo_framework_update_counter', array( $this, 'wp_ajax_update_counter_type' ) );
 
 	}
 
@@ -190,6 +190,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 *
 	 * @since 2.6.0
 	 * @staticvar array $strings : The l10n strings.
+	 * @since 2.7.0 Added AJAX nonce: 'autodescription-ajax-nonce'
 	 *
 	 * @return array $strings The l10n strings.
 	 */
@@ -209,7 +210,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		$home_tagline = $this->get_option( 'homepage_title_tagline' );
 		$title_location = $this->get_option( 'title_location' );
 		$title_add_additions = $this->add_title_additions();
-		$counter_type = $this->get_option( 'counter_type' );
+		$counter_type = (int) $this->get_user_option( 0, 'counter_type', 3 );
 
 		//* Enunciate the lenghts of Titles and Descriptions.
 		$good = __( 'Good', 'autodescription' );
@@ -292,6 +293,8 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 			$additions = $home_tagline ? $home_tagline : $description;
 		}
 
+		$nonce = wp_create_nonce( 'autodescription-ajax-nonce' );
+
 		return $strings = array(
 			'saveAlert' => esc_html__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
 			'confirmReset' => esc_html__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
@@ -303,11 +306,12 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 			'titleLocation' => esc_html( $title_location ),
 			'isRTL' => $isrtl,
 			'isHome' => $ishome,
-			'counterType' => esc_html( $counter_type ),
+			'counterType' => absint( $counter_type ),
 			'good' => esc_html( $good ),
 			'okay' => esc_html( $okay ),
 			'bad' => esc_html( $bad ),
 			'unknown' => esc_html( $unknown ),
+			'nonce' => $nonce,
 		);
 	}
 
@@ -364,17 +368,20 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 * @since 2.2.2
 	 * @global string $page_hook the current page hook.
 	 *
+	 * @param string $pagehook The menu pagehook to compare to.
 	 * @return bool true if screen match.
 	 */
 	public function is_menu_page( $pagehook = '' ) {
 		global $page_hook;
 
-		if ( isset( $page_hook ) && $page_hook === $pagehook )
-			return true;
-
-		//* May be too early for $page_hook
-		if ( defined( 'WP_ADMIN' ) && WP_ADMIN && isset( $_GET['page'] ) && $_GET['page'] === $pagehook )
-			return true;
+		if ( isset( $page_hook ) ) {
+			if ( $page_hook === $pagehook )
+				return true;
+		} elseif ( defined( 'WP_ADMIN' ) && WP_ADMIN ) {
+			//* May be too early for $page_hook
+			if ( isset( $_GET['page'] ) && $_GET['page'] === $pagehook )
+				return true;
+		}
 
 		return false;
 	}
@@ -414,26 +421,35 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 * @since 2.6.0
 	 * @access private
 	 */
-	public function the_counter_visualized() {
+	public function wp_ajax_update_counter_type() {
 
 		if ( $this->is_admin() && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			//* If current user isn't allowed to edit posts, don't do anything.
+
+			//* If current user isn't allowed to edit posts, don't do anything and kill PHP.
 			if ( ! current_user_can( 'publish_posts' ) )
 				exit;
 
-			$options = $this->get_all_options();
+			check_ajax_referer( 'autodescription-ajax-nonce', 'nonce' );
 
 			/**
 			 * Count up, reset to 0 if needed. We have 4 options: 0, 1, 2, 3
-			 * We're not accepting any $_POST values. Keeping it clean.
-			 * Yet we should for consistency. @TODO
-			 * @priority high 2.6.2
+			 * $_POST['val'] already contains updated number.
 			 */
-			$options['counter_type'] = $options['counter_type'] + 1;
-			if ( $options['counter_type'] > 3 )
-				$options['counter_type'] = 0;
+			$value = intval( $_POST['val'] ) ? $_POST['val'] : $this->get_user_option( 0, 'counter_type', 3 ) + 1;
+			$value = absint( $value );
 
-			update_option( $this->settings_field, $options );
+			if ( $value > 3 )
+				$value = 0;
+
+			$success = $this->update_user_option( 0, 'counter_type', $value ) ? 'success' : 'error';
+
+			$results = array(
+				'type' => $success,
+				'value' => $value,
+			);
+
+			//* Encode and echo results. Requires JSON decode within JS.
+			echo json_encode( $results );
 
 			//* Kill PHP.
 			exit;

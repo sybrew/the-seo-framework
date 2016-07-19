@@ -84,7 +84,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			$searchexclude = (bool) $this->get_custom_field( 'exclude_local_search', $post_id );
 
 			if ( $searchexclude )
-				$states[] = __( 'No Search', 'autodescription' );
+				$states[] = esc_html__( 'No Search', 'autodescription' );
 		}
 
 		return $states;
@@ -410,7 +410,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			else
 				return $this->the_seo_bar_page( $args );
 		} else {
-			$context = esc_html__( 'Failed to fetch post ID.', 'autodescription' );
+			$context = esc_attr__( 'Failed to fetch post ID.', 'autodescription' );
 			return $this->post_status_special( $context, '!', 'bad' );
 		}
 	}
@@ -777,7 +777,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			$but_and = $title_length_warning['but'] ? $but_i18n : $and_i18n;
 
 			/* translators: %s = But or And */
-			$notice .= '<br>' . sprintf( esc_html__( '%s the Title contains the Blogname multiple times.', 'autodescription' ), $but_and );
+			$notice .= '<br>' . sprintf( esc_attr__( '%s the Title contains the Blogname multiple times.', 'autodescription' ), $but_and );
 			$class = $classes['bad'];
 		}
 
@@ -948,7 +948,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 					$desc_value = ctype_upper( $desc_value ) ? $desc_value : ucfirst( $desc_value );
 
 					/* translators: 1: Word, 2: Occurences */
-					$notice .= sprintf( __( '%1$s is used %2$d times.', 'autodescription' ), '<span>' . $desc_value . '</span>', $desc_count );
+					$notice .= sprintf( esc_attr__( '%1$s is used %2$d times.', 'autodescription' ), '<span>' . $desc_value . '</span>', $desc_count );
 
 					//* Don't add break at last occurence.
 					$notice .= $i === $count ? '' : '<br>';
@@ -992,7 +992,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		$and_i18n		= $i18n['and'];
 		$ind_notice		= $i18n['index'];
 
-		$ind_notice .= ' ' . sprintf( esc_html__( '%s is being indexed.', 'autodescription' ), $post_i18n );
+		$ind_notice .= ' ' . sprintf( esc_attr__( '%s is being indexed.', 'autodescription' ), $post_i18n );
 		$ind_class = $good;
 
 		/**
@@ -1001,7 +1001,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		 * @since 2.2.2
 		 */
 		if ( $this->is_option_checked( 'site_noindex' ) ) {
-			$ind_notice .= '<br>' . esc_html__( "But you've disabled indexing for the whole site.", 'autodescription' );
+			$ind_notice .= '<br>' . esc_attr__( "But you've disabled indexing for the whole site.", 'autodescription' );
 			$ind_class = $unknown;
 			$ind_but = true;
 		}
@@ -1025,7 +1025,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 				$label = $this->get_the_term_name( $term, false );
 
 				/* translators: 1: But or And, 2: Current taxonomy term plural label */
-				$ind_notice .= '<br>' . sprintf( esc_html__( '%1$s indexing for %2$s have been disabled.', 'autodescription' ), $but_and, $label );
+				$ind_notice .= '<br>' . sprintf( esc_attr__( '%1$s indexing for %2$s have been disabled.', 'autodescription' ), $but_and, $label );
 				$ind_class = $unknown;
 				$ind_but = true;
 			}
@@ -1035,7 +1035,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		if ( false === $this->is_blog_public() ) {
 			$but_and = isset( $ind_but ) ? $and_i18n : $but_i18n;
 			/* translators: %s = But or And */
-			$ind_notice .= '<br>' . sprintf( esc_html__( "%s the blog isn't set to public. This means WordPress discourages indexing.", 'autodescription' ), $but_and );
+			$ind_notice .= '<br>' . sprintf( esc_attr__( "%s the blog isn't set to public. This means WordPress discourages indexing.", 'autodescription' ), $but_and );
 			$ind_class = $bad;
 			$ind_but = true;
 		}
@@ -1049,7 +1049,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			$but_and = isset( $ind_but ) ? $and_i18n : $but_i18n;
 
 			/* translators: %s = But or And */
-			$ind_notice .= '<br>' . sprintf( esc_html__( '%s there are no posts in this term; therefore, indexing has been disabled.', 'autodescription' ), $but_and );
+			$ind_notice .= '<br>' . sprintf( esc_attr__( '%s there are no posts in this term; therefore, indexing has been disabled.', 'autodescription' ), $but_and );
 			//* Don't make it unknown if it's not good.
 			$ind_class = $ind_class !== $good ? $ind_class : $unknown;
 		}
@@ -1133,13 +1133,13 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		$follow_short	= $i18n['follow_short'];
 
 		if ( $nofollow ) {
-			$fol_notice = $follow_i18n . ' ' . sprintf( esc_html__( "%s links aren't being followed.", 'autodescription' ), $post_i18n );
+			$fol_notice = $follow_i18n . ' ' . sprintf( esc_attr__( "%s links aren't being followed.", 'autodescription' ), $post_i18n );
 			$fol_class = $unknown;
 			$fol_but = true;
 
 			$followed = false;
 		} else {
-			$fol_notice = $follow_i18n . ' ' . sprintf( esc_html__( '%s links are being followed.', 'autodescription' ), $post_i18n );
+			$fol_notice = $follow_i18n . ' ' . sprintf( esc_attr__( '%s links are being followed.', 'autodescription' ), $post_i18n );
 			$fol_class = $good;
 		}
 
@@ -1151,7 +1151,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		if ( $this->is_option_checked( 'site_nofollow' ) ) {
 			$but_and = isset( $fol_but ) ? $and_i18n : $but_i18n;
 			/* translators: %s = But or And */
-			$fol_notice .= '<br>' . sprintf( esc_html__( "%s you've disabled the following of links for the whole site.", 'autodescription' ), $but_and );
+			$fol_notice .= '<br>' . sprintf( esc_attr__( "%s you've disabled the following of links for the whole site.", 'autodescription' ), $but_and );
 			$fol_class = $unknown;
 			$fol_but = true;
 
@@ -1177,7 +1177,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 				$label = $this->get_the_term_name( $term, false );
 
 				/* translators: 1: But or And, 2: Current taxonomy term plural label */
-				$fol_notice .= '<br>' . sprintf( esc_html__( '%1$s following for %2$s have been disabled.', 'autodescription' ), $but_and, $label );
+				$fol_notice .= '<br>' . sprintf( esc_attr__( '%1$s following for %2$s have been disabled.', 'autodescription' ), $but_and, $label );
 				$fol_class = $unknown;
 
 				$followed = false;
@@ -1189,7 +1189,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			$but_and = $followed || ! isset( $fol_but ) ? $and_i18n : $but_i18n;
 
 			/* translators: %s = But or And */
-			$fol_notice .= '<br>' . sprintf( esc_html__( "%s the blog isn't set to public. This means WordPress allows the links to be followed regardless.", 'autodescription' ), $but_and );
+			$fol_notice .= '<br>' . sprintf( esc_attr__( "%s the blog isn't set to public. This means WordPress allows the links to be followed regardless.", 'autodescription' ), $but_and );
 			$fol_class = $followed ? $fol_class : $okay;
 			$fol_but = true;
 
@@ -1241,12 +1241,12 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		$archive_short	= $i18n['archive_short'];
 
 		if ( $noarchive ) {
-			$arc_notice = $archive_i18n . ' ' . sprintf( esc_html__( "Search Engine aren't allowed to archive this %s.", 'autodescription' ), $post_low );
+			$arc_notice = $archive_i18n . ' ' . sprintf( esc_attr__( "Search Engine aren't allowed to archive this %s.", 'autodescription' ), $post_low );
 			$arc_class = $unknown;
 			$archived = false;
 			$arc_but = true;
 		} else {
-			$arc_notice = $archive_i18n . ' ' . sprintf( esc_html__( 'Search Engine are allowed to archive this %s.', 'autodescription' ), $post_low );
+			$arc_notice = $archive_i18n . ' ' . sprintf( esc_attr__( 'Search Engine are allowed to archive this %s.', 'autodescription' ), $post_low );
 			$arc_class = $good;
 		}
 
@@ -1258,7 +1258,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		if ( $this->is_option_checked( 'site_noarchive' ) ) {
 			$but_and = isset( $arc_but ) ? $and_i18n : $but_i18n;
 
-			$arc_notice .= '<br>' . sprintf( esc_html__( "But you've disabled archiving for the whole site.", 'autodescription' ), $but_and );
+			$arc_notice .= '<br>' . sprintf( esc_attr__( "But you've disabled archiving for the whole site.", 'autodescription' ), $but_and );
 			$arc_class = $unknown;
 			$arc_but = true;
 
@@ -1284,7 +1284,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 				$label = $this->get_the_term_name( $term, false );
 
 				/* translators: 1: But or And, 2: Current taxonomy term plural label */
-				$arc_notice .= '<br>' . sprintf( esc_html__( '%1$s archiving for %2$s have been disabled.', 'autodescription' ), $but_and, $label );
+				$arc_notice .= '<br>' . sprintf( esc_attr__( '%1$s archiving for %2$s have been disabled.', 'autodescription' ), $but_and, $label );
 				$arc_class = $unknown;
 				$arc_but = true;
 
@@ -1297,7 +1297,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			$but_and = $archived || ! isset( $arc_but ) ? $and_i18n : $but_i18n;
 
 			/* translators: %s = But or And */
-			$arc_notice .= '<br>' . sprintf( esc_html__( "%s the blog isn't set to public. This means WordPress allows the blog to be archived regardless.", 'autodescription' ), $but_and );
+			$arc_notice .= '<br>' . sprintf( esc_attr__( "%s the blog isn't set to public. This means WordPress allows the blog to be archived regardless.", 'autodescription' ), $but_and );
 			$arc_but = true;
 
 			$arc_class = $archived ? $arc_class : $okay;
@@ -1343,7 +1343,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			$redirect_i18n = $i18n['redirect'];
 			$redirect_short = $i18n['redirect_short'];
 
-			$red_notice = $redirect_i18n . ' ' . sprintf( esc_html__( "%s isn't being redirected.", 'autodescription' ), $post );
+			$red_notice = $redirect_i18n . ' ' . sprintf( esc_attr__( "%s isn't being redirected.", 'autodescription' ), $post );
 			$red_class = $classes['good'];
 
 			$red_wrap_args = array(
@@ -1385,10 +1385,10 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		if ( $redirect && $noindex ) {
 			//* Redirect and noindex found, why bother showing SEO info?
 
-			$red_notice = $i18n['redirect'] . ' ' . sprintf( esc_html__( '%s is being redirected. This means no SEO values have to be set.', 'autodescription' ), $post );
+			$red_notice = $i18n['redirect'] . ' ' . sprintf( esc_attr__( '%s is being redirected. This means no SEO values have to be set.', 'autodescription' ), $post );
 			$red_class = $classes['unknown'];
 
-			$noi_notice = $i18n['index'] . ' ' . sprintf( esc_html__( '%s is not being indexed. This means no SEO values have to be set.', 'autodescription' ), $post );
+			$noi_notice = $i18n['index'] . ' ' . sprintf( esc_attr__( '%s is not being indexed. This means no SEO values have to be set.', 'autodescription' ), $post );
 			$noi_class = $classes['unknown'];
 
 			$red_wrap_args = array(
@@ -1414,7 +1414,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		} elseif ( $redirect && false === $noindex ) {
 			//* Redirect found, why bother showing SEO info?
 
-			$red_notice = $i18n['redirect'] . ' ' . sprintf( esc_html__( '%s is being redirected. This means no SEO values have to be set.', 'autodescription' ), $post );
+			$red_notice = $i18n['redirect'] . ' ' . sprintf( esc_attr__( '%s is being redirected. This means no SEO values have to be set.', 'autodescription' ), $post );
 			$red_class = $classes['unknown'];
 
 			$red_wrap_args = array(
@@ -1430,7 +1430,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		} elseif ( $noindex && false === $redirect ) {
 			//* Noindex found, why bother showing SEO info?
 
-			$noi_notice = $i18n['index'] . ' ' . sprintf( esc_html__( '%s is not being indexed. This means no SEO values have to be set.', 'autodescription' ), $post );
+			$noi_notice = $i18n['index'] . ' ' . sprintf( esc_attr__( '%s is not being indexed. This means no SEO values have to be set.', 'autodescription' ), $post );
 			$noi_class = $classes['unknown'];
 
 			$noi_wrap_args = array(
@@ -1544,14 +1544,14 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			return $i18n;
 
 		return $i18n = array(
-			'title'			=> esc_html__( 'Title:', 'autodescription' ),
-			'description' 	=> esc_html__( 'Description:', 'autodescription' ),
-			'index'			=> esc_html__( 'Index:', 'autodescription' ),
-			'follow'		=> esc_html__( 'Follow:', 'autodescription' ),
-			'archive'		=> esc_html__( 'Archive:', 'autodescription' ),
-			'redirect'		=> esc_html__( 'Redirect:', 'autodescription' ),
+			'title'			=> esc_attr__( 'Title:', 'autodescription' ),
+			'description' 	=> esc_attr__( 'Description:', 'autodescription' ),
+			'index'			=> esc_attr__( 'Index:', 'autodescription' ),
+			'follow'		=> esc_attr__( 'Follow:', 'autodescription' ),
+			'archive'		=> esc_attr__( 'Archive:', 'autodescription' ),
+			'redirect'		=> esc_attr__( 'Redirect:', 'autodescription' ),
 
-			'generated' => esc_html__( 'Generated: Automatically generated.', 'autodescription' ),
+			'generated' => esc_attr__( 'Generated: Automatically generated.', 'autodescription' ),
 
 			'generated_short'	=> esc_html_x( 'G', 'Generated', 'autodescription' ),
 			'title_short'		=> esc_html_x( 'T', 'Title', 'autodescription' ),
@@ -1561,14 +1561,14 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			'archive_short'		=> esc_html_x( 'A', 'no-Archive', 'autodescription' ),
 			'redirect_short'	=> esc_html_x( 'R', 'Redirect', 'autodescription' ),
 
-			'but' => esc_html_x( 'But', 'But there are...', 'autodescription' ),
-			'and' => esc_html_x( 'And', 'And there are...', 'autodescription' ),
+			'but' => esc_attr_x( 'But', 'But there are...', 'autodescription' ),
+			'and' => esc_attr_x( 'And', 'And there are...', 'autodescription' ),
 
-			'length_far_too_short'	=> ' ' . esc_html__( 'Length is far too short.', 'autodescription' ),
-			'length_too_short'		=> ' ' . esc_html__( 'Length is too short.', 'autodescription' ),
-			'length_too_long'		=> ' ' . esc_html__( 'Length is too long.', 'autodescription' ),
-			'length_far_too_long'	=> ' ' . esc_html__( 'Length is far too long.', 'autodescription' ),
-			'length_good'			=> ' ' . esc_html__( 'Length is good.', 'autodescription' ),
+			'length_far_too_short'	=> ' ' . esc_attr__( 'Length is far too short.', 'autodescription' ),
+			'length_too_short'		=> ' ' . esc_attr__( 'Length is too short.', 'autodescription' ),
+			'length_too_long'		=> ' ' . esc_attr__( 'Length is too long.', 'autodescription' ),
+			'length_far_too_long'	=> ' ' . esc_attr__( 'Length is far too long.', 'autodescription' ),
+			'length_good'			=> ' ' . esc_attr__( 'Length is good.', 'autodescription' ),
 		);
 	}
 
