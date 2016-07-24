@@ -178,7 +178,6 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 *
 	 * @since 2.6.0
 	 * @since 2.6.6 Moved from class AutoDescription_TermData.
-	 * @staticvar int $term_id The Term ID.
 	 *
 	 * @return int Term ID.
 	 */
@@ -192,6 +191,10 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		$term_id = 0;
 
+		/**
+		 * is_archive_admin() determines if admin referer checks have run
+		 * through global $current_screen. Will output 'Invalid taxonomy' on try.
+		 */
 		if ( ! empty( $_GET['tag_ID'] ) ) {
 			//* WordPress 4.5+
 			$term_id = $_GET['tag_ID'];
@@ -212,7 +215,6 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * Detects 404.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
@@ -224,7 +226,6 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * Detects admin screen.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
@@ -373,7 +374,6 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * Detects author archives.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
 	 * @uses $this->is_archive()
 	 *
 	 * @param mixed $author Optional. User ID, nickname, nicename, or array of User IDs, nicknames, and nicenames
@@ -400,7 +400,6 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * Detect the separated blog page.
 	 *
 	 * @since 2.3.4
-	 * @staticvar bool $is_blog_page
 	 *
 	 * @param int $id the Page ID.
 	 * @return bool true if is blog page. Always false if blog page is homepage.
@@ -437,7 +436,6 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * Detects category archives.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
 	 * @uses $this->is_archive()
 	 *
 	 * @param mixed $category Optional. Category ID, name, slug, or array of Category IDs, names, and slugs.
@@ -464,7 +462,6 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * Extends default WordPress is_category() and determines screen in admin.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
 	 * @global object $current_screen
 	 *
 	 * @return bool Post Type is category
@@ -511,7 +508,6 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	/**
 	 * Detects day archives.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
 	 * @uses $this->is_date()
 	 *
@@ -525,7 +521,6 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * Detects feed.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
 	 *
 	 * @param string|array $feeds Optional feed types to check.
 	 * @return bool
@@ -991,7 +986,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * @global string $page_hook the current page hook.
 	 *
 	 * @param string $pagehook The menu pagehook to compare to.
-	 * @param string $pagehook The menu pagehook to compare to.
+	 * @param string $pagehook The menu page slug to compare to.
 	 * @return bool true if screen match.
 	 */
 	public function is_menu_page( $pagehook = '', $pageslug = '' ) {

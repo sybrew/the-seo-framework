@@ -100,11 +100,11 @@ class AutoDescription_Init extends AutoDescription_Query {
 		//* Earlier removal of the generator tag. Doesn't require filter.
 		remove_action( 'wp_head', 'wp_generator' );
 
-		if ( $this->is_theme( 'genesis' ) )
+		if ( $this->is_theme( 'genesis' ) ) {
 			add_action( 'genesis_meta', array( $this, 'html_output' ), 5 );
-		else
+		} else {
 			add_action( 'wp_head', array( $this, 'html_output' ), 1 );
-
+		}
 	}
 
 	/**
@@ -322,9 +322,9 @@ class AutoDescription_Init extends AutoDescription_Query {
 			 */
 			$sybre = (bool) apply_filters( 'sybre_waaijer_<3', true );
 
-			$start = __( 'Start The Seo Framework', 'autodescription' );
-			$end = __( 'End The Seo Framework', 'autodescription' );
-			$me = $sybre ? ' ' . __( 'by Sybre Waaijer', 'autodescription' ) : '';
+			$start = esc_html__( 'Start The Seo Framework', 'autodescription' );
+			$end = esc_html__( 'End The Seo Framework', 'autodescription' );
+			$me = $sybre ? ' ' . esc_html__( 'by Sybre Waaijer', 'autodescription' ) : '';
 
 			$indicatorbefore = '<!-- ' . $start . $me . ' -->' . "\r\n";
 
@@ -345,6 +345,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 		do_action( 'the_seo_framework_do_after_output' );
 
 		echo $output;
+
 	}
 
 	/**
@@ -372,13 +373,13 @@ class AutoDescription_Init extends AutoDescription_Query {
 				$url = $this->add_url_host( $url );
 				$scheme = is_ssl() ? 'https' : 'http';
 
-				wp_safe_redirect( esc_url_raw( $url, $scheme ), 301 );
+				wp_safe_redirect( esc_url_raw( $url, array( $scheme ) ), 301 );
 				exit;
 			}
 
-			wp_redirect( esc_url_raw( $url, $scheme ), 301 );
+			//* @TODO set scheme filter, adjustable through (multisite) extensions?
+			wp_redirect( esc_url_raw( $url ), 301 );
 			exit;
 		}
-
 	}
 }

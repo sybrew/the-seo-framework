@@ -297,15 +297,9 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 		if ( ! $r || is_wp_error( $r ) )
 			return '';
 
-		/**
-		 * Get categories.
-		 * "orderby parent" is only supported in WP4.2+, otherwise falls back to term_id order.
-		 * Which is fine.
-		 */
-		$cats = wp_get_object_terms( $post_id, $cat_type, array( 'fields' => 'all_with_object_id', 'orderby' => 'parent' ) );
-
-		if ( empty( $cats ) || is_wp_error( $cats ) )
-			return '';
+		$cats = get_the_terms( $post_id, $cat_type );
+		$cats = wp_list_pluck( $cats, 'parent', 'term_id' );
+		asort( $cats, SORT_NUMERIC );
 
 		$assigned_ids = array();
 		$kittens = array();
@@ -313,20 +307,20 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 		$parents_merge = array();
 
 		//* Fetch cats children id's, if any.
-		foreach ( $cats as $cat ) {
+		foreach ( $cats as $term_id => $parent_id ) {
 			//* The category objects. The cats.
-			$cat_id = $cat->term_id;
+			$cat_id = $term_id;
 
 			//* Store to filter unused Cat ID's from the post.
-			$assigned_ids[] = $cat_id;
+			$assigned_ids[] = $term_id;
 
 			// Check if they have kittens.
-			$children = get_term_children( $cat_id, $cat->taxonomy );
-			$ancestors = get_ancestors( $cat_id, $cat->taxonomy );
+			$children = get_term_children( $term_id, $cat_type );
+			$ancestors = get_ancestors( $term_id, $cat_type );
 
 			//* Save children id's as kittens.
-			$kittens[ $cat_id ] = $children;
-			$parents[ $cat_id ] = $ancestors;
+			$kittens[ $term_id ] = $children;
+			$parents[ $term_id ] = $ancestors;
 		}
 
 		foreach ( $kittens as $kit_id => $child_id ) {

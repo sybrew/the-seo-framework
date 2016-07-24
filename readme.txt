@@ -421,6 +421,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* `admininit.class.php` is now `admin-init.class.php`. That's it!
 		* Note that autoloading, although now supported, is not implemented as it's not benefactory in terms of performance.
 	* (JavaScript) The placeholder variables are no longer escaped multiple times. Instead they're converted to `jQuery text()` so they can't run code anymore.
+	* The LD+JSon breadcrumbs now uses WordPress core cache to fetch the terms instead of a database query. Gaining 4x to 7x performance which also makes sure themes and widgets can use these findings.
 * **Changed:**
 	* Variable 'AutoDescription_Siteoptions::seo_settings_page_slug' is now publicly accessible. Making it easier to add submenu items.
 	* All class `AutoDescription_Metaboxes` metabox output function parameters have been shifted by one to the right to conform to the `add_metabox()` function return arguments. The first parameter is now used for the (unavailable and unused) post object. The second must be an array. This change affects the following methods:

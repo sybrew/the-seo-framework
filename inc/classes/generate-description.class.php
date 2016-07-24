@@ -222,10 +222,11 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 		$description = $this->get_custom_homepage_description( $args );
 
 		if ( empty( $description ) ) {
-			if ( $this->is_archive() )
+			if ( $this->is_archive() ) {
 				$description = $this->get_custom_archive_description( $args );
-			else
+			} else {
 				$description = $this->get_custom_singular_description( $args['id'] );
+			}
 		}
 
 		if ( $escape )

@@ -185,10 +185,11 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 		$default_args = $this->parse_image_args( '', '', true );
 
 		if ( is_array( $args ) ) {
-			if ( empty( $args ) )
+			if ( empty( $args ) ) {
 				$args = $default_args;
-			else
+			} else {
 				$args = $this->parse_image_args( $args, $default_args );
+			}
 		} else {
 			//* Old style parameters are used. Doing it wrong.
 			$this->_doing_it_wrong( __METHOD__, 'Use $args = array() for parameters.', '2.5.0' );
