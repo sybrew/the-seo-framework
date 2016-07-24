@@ -60,6 +60,7 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 	 * @since 2.5.2 Applies filters string the_seo_framework_og_image_after_header
 	 *
 	 * @todo listen to attached images within post.
+	 * @todo set archive and front page image listener, now it simply fail on some calls.
 	 * @priority medium 2.7.0+
 	 *
 	 * @param string $post_id The post ID.

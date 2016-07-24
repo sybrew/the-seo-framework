@@ -201,7 +201,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 	/**
 	 * Returns 'ListItem' json encoded type name.
 	 *
-	 * @staticvar string $crumblist
+	 * @staticvar string $listitem
 	 * @since 2.6.0
 	 *
 	 * @return string The json encoded 'ListItem'.
@@ -214,6 +214,52 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 			return $listitem;
 
 		return $listitem = json_encode( 'ListItem' );
+	}
+
+	/**
+	 * Returns 'image' json encoded value.
+	 *
+	 * @staticvar array $images
+	 * @since 2.7.0
+	 * @todo implement blog page image.
+	 * @priority low 2.7.0+ extension.
+	 *
+	 * @param int|string $id The page, post, product or term ID.
+	 * @param bool $singular Whether the ID is singular.
+	 */
+	public function schema_image( $id = 0, $singular = false ) {
+
+		static $images = array();
+
+		$id = (int) $id;
+
+		if ( isset( $images[ $id ][ $singular ] ) )
+			return $images[ $id ][ $singular ];
+
+		$image = '';
+
+		if ( $singular ) {
+			if ( $id === $this->get_the_real_ID() ) {
+				$image = $this->get_image_from_cache( $id );
+			} elseif ( $id ) {
+				//* No ID (0) results in the home page being a blog. This will be handled in the future.
+				$image = $this->get_image( $id );
+			}
+		} else {
+			//* Placeholder.
+			$image = '';
+		}
+
+		/**
+		 * Applies filters 'the_seo_framework_ld_json_breadcrumb_image' : string
+		 * @since 2.7.0
+		 * @param string $image The current image.
+		 * @param int $id The page, post, product or term ID.
+		 * @param bool $singular Whether the ID is singular.
+		 */
+		$image = apply_filters( 'the_seo_framework_ld_json_breadcrumb_image', $image, $id, $singular );
+
+		return $images[ $id ][ $singular ] = json_encode( esc_url_raw( $image ) );
 	}
 
 	/**
@@ -308,9 +354,6 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 
 		//* Fetch cats children id's, if any.
 		foreach ( $cats as $term_id => $parent_id ) {
-			//* The category objects. The cats.
-			$cat_id = $term_id;
-
 			//* Store to filter unused Cat ID's from the post.
 			$assigned_ids[] = $term_id;
 
@@ -441,12 +484,15 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 								$cat_name = empty( $data['doctitle'] ) ? $cat->name : $data['doctitle'];
 								$name = json_encode( $cat_name );
 
+								$image = $this->schema_image( $child_id );
+
 								//* Store in cache.
 								$item_cache[ $child_id ] = array(
-									'type'	=> $item_type,
-									'pos'	=> (string) $pos,
-									'id'	=> $id,
-									'name'	=> $name,
+									'type'  => $item_type,
+									'pos'   => (string) $pos,
+									'id'    => $id,
+									'name'  => $name,
+									'image' => $image,
 								);
 
 								$items .= $this->make_breadcrumb( $item_cache[ $child_id ], true );
@@ -470,6 +516,8 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 					//* The position of the current item is always static here.
 					$pos = '2';
 
+					$image = $this->schema_image( $tree_ids );
+
 					//* $tree_ids is a single ID here.
 					$cat = get_term_by( 'id', $tree_ids, $cat_type, OBJECT, 'raw' );
 					$data = $this->get_term_data( $cat, $tree_ids );
@@ -479,7 +527,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 					$cat_name = empty( $data['doctitle'] ) ? $cat->name : $data['doctitle'];
 					$name = json_encode( $cat_name );
 
-					$items .= sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}},', $item_type, (string) $pos, $id, $name );
+					$items .= sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s,"image":%s}},', $item_type, (string) $pos, $id, $name, $image );
 
 					if ( $items ) {
 
@@ -531,12 +579,14 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 				$parent_name = $custom_field_name ? $custom_field_name : $this->title( '', '', '', array( 'term_id' => $parent_id, 'meta' => true, 'get_custom_field' => false, 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
 
 				$name = json_encode( $parent_name );
+				$image = $this->schema_image( $parent_id );
 
 				$breadcrumb = array(
-					'type'	=> $item_type,
-					'pos'	=> (string) $pos,
-					'id'	=> $id,
-					'name'	=> $name,
+					'type'  => $item_type,
+					'pos'   => (string) $pos,
+					'id'    => $id,
+					'name'  => $name,
+					'image' => $image,
 				);
 
 				$items .= $this->make_breadcrumb( $breadcrumb, true );
@@ -592,12 +642,14 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 		}
 
 		$custom_name = json_encode( $custom_name );
+		$image = $this->schema_image( $this->get_the_front_page_ID(), true );
 
 		$breadcrumb = array(
-			'type'	=> $item_type,
-			'pos'	=> '1',
-			'id'	=> $id,
-			'name'	=> $custom_name,
+			'type'  => $item_type,
+			'pos'   => '1',
+			'id'    => $id,
+			'name'  => $custom_name,
+			'image' => $image,
 		);
 
 		return $first_item = $this->make_breadcrumb( $breadcrumb, true );
@@ -627,7 +679,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 		 * This shouldn't run anyway. Pos should always be provided.
 		 */
 		if ( is_null( $pos ) )
-			$pos = '2';
+			$pos = 2;
 
 		//* Add current page.
 		$pos = $pos + 1;
@@ -656,11 +708,14 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 			$name = json_encode( $name );
 		}
 
+		$image = $this->schema_image( $post_id, true );
+
 		$breadcrumb = array(
-			'type'	=> $item_type,
-			'pos'	=> (string) $pos,
-			'id'	=> $id,
-			'name'	=> $name,
+			'type'  => $item_type,
+			'pos'   => (string) $pos,
+			'id'    => $id,
+			'name'  => $name,
+			'image' => $image,
 		);
 
 		return $this->make_breadcrumb( $breadcrumb, false );
@@ -682,7 +737,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 	 */
 	public function make_breadcrumb( $item, $comma = true ) {
 		$comma = $comma ? ',' : '';
-		return sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}}%s', $item['type'], $item['pos'], $item['id'], $item['name'], $comma );
+		return sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s,"image":%s}}%s', $item['type'], $item['pos'], $item['id'], $item['name'], $item['image'], $comma );
 	}
 
 	/**

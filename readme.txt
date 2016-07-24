@@ -320,6 +320,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Genesis Framework 2.3.0+ term metadata upgrade and fallback compatibility.
 	* TODO The sitemap now also flushes when changing the Site URL in the General Settings of WordPress Core.
 	* TODO Notification that the Robots.txt file can't be output under specific circumstances. (or simply add it anyway?)
+	* Breadcrumbs images as per new Google requirements. Currently, archives have an empty value.
 * **Improved:**
 	* TODO The title and description counter type option is now bound to the user, rather than the site.
 	* Dismissible notices are now dismissible on every admin page when called.
@@ -333,6 +334,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* TODO POT translation file.
 	* TODO The settings metaboxes order has been reset. This ensures that the General Settings are shown first after updating. (Unless you've filtered it? TODO confirm)
 	* The counter type option has been reset as it's now handled per user instead of per site.
+	* Because the breadcrumbs have been updated, the LD+Json transient cache has been invalidated and will be built up again. Old values are cleaned up automatically by WordPress core.
 * **Removed:**
 	* The SEO plugin detection module is relatively heavy; therefore, some plugins have been removed from checking conflicts against. These include:
 		* Easy Facebook Share Thumbnail (hasn't recieved updates in 3 years).
@@ -490,6 +492,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Added:**
 		* `(string) the_seo_framework_term_options`, the WordPress 4.4+ metadata option key name.
 		* `(string) the_seo_framework_user_options`, the User SEO metadata option key name.
+		* `(string) the_seo_framework_ld_json_breadcrumb_image`, the breadcrumb image. Supplies three parameters.
 	* **Changed:**
 		* `(string) the_seo_framework_description_output`, first parameter now contains expected output.
 		* `(string) the_seo_framework_ogdescription_output`, first parameter now contains expected output.

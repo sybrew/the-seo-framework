@@ -198,10 +198,6 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 
 		$post_id = $this->get_the_real_ID();
 
-		//* End this madness if there's no ID found (search/404/etc.)
-		if ( empty( $post_id ) )
-			return '';
-
 		$image_cache = $this->get_image( $post_id );
 
 		return $image_cache;
@@ -546,10 +542,11 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 			 * Return site:id instead of creator is no twitter:site is found.
 			 * Per Twitter requirements.
 			 */
-			if ( $this->get_option( 'twitter_site' ) )
+			if ( $this->get_option( 'twitter_site' ) ) {
 				return '<meta name="twitter:site:id" content="' . esc_attr( $creator ) . '" />' . "\r\n";
-			else
+			} else {
 				return '<meta name="twitter:creator" content="' . esc_attr( $creator ) . '" />' . "\r\n";
+			}
 		}
 
 		return '';
