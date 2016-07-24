@@ -26,6 +26,18 @@
 class AutoDescription_Search extends AutoDescription_Generate_Ldjson {
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor, load parent constructor
 	 *
 	 * Initalizes options

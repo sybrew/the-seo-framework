@@ -77,8 +77,8 @@ switch ( $instance ) :
 				true
 			);
 		endif;
+		break;
 
-	break;
 	default :
-	break;
+		break;
 endswitch;

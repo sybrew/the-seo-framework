@@ -54,6 +54,18 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	protected $o_plugin_updated;
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor, load parent constructor and set up cachable variables.
 	 */
 	public function __construct() {
@@ -644,10 +656,9 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 * Register the database settings for storage.
 	 *
 	 * @since 2.2.2
+	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 *
 	 * @return void
-	 *
-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 */
 	public function register_settings() {
 
@@ -671,7 +682,6 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 				exit;
 			}
 		}
-
 	}
 
 	/**
@@ -859,12 +869,12 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 *
 	 * @param int $user_id The user ID.
 	 * @param string $key The user metadata key. Leave empty to fetch all data.
-	 * @param bool $user_cache Whether to save options in cache.
+	 * @param bool $use_cache Whether to store and use options from cache.
 	 * @return array The user SEO meta data.
 	 */
 	public function get_user_meta( $user_id, $key = THE_SEO_FRAMEWORK_USER_OPTIONS, $use_cache = true ) {
 
-		if ( ! $use_cache )
+		if ( false === $use_cache )
 			return get_user_meta( $user_id, $key, true );
 
 		static $usermeta_cache = array();
@@ -896,7 +906,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 		if ( empty( $user_id ) )
 			return false;
 
-		$meta = $this->get_user_meta( $user_id );
+		$meta = $this->get_user_meta( $user_id, THE_SEO_FRAMEWORK_USER_OPTIONS, false );
 
 		$meta[ $option ] = $value;
 

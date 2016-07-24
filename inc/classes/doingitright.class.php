@@ -27,6 +27,18 @@
 class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor, load parent constructor.
 	 * Initalizes columns and load post states.
 	 */

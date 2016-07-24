@@ -59,8 +59,8 @@ switch ( $instance ) :
 			<input type="text" name="<?php $this->field_name( 'pint_verification' ); ?>" class="large-text" id="<?php $this->field_id( 'pint_verification' ); ?>" placeholder="123456a7b8901de2fa34bcdef5a67b98" value="<?php echo esc_attr( $this->get_field_value( 'pint_verification' ) ); ?>" />
 		</p>
 		<?php
+		break;
 
-	break;
 	default :
-	break;
+		break;
 endswitch;

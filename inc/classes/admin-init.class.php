@@ -54,6 +54,18 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	public $css_name = 'autodescription';
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor. Loads parent constructor, registers script names and adds actions.
 	 */
 	public function __construct() {
@@ -363,30 +375,6 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	}
 
 	/**
-	 * Checks the screen base file through global $page_hook or $_REQEUST.
-	 *
-	 * @since 2.2.2
-	 * @global string $page_hook the current page hook.
-	 *
-	 * @param string $pagehook The menu pagehook to compare to.
-	 * @return bool true if screen match.
-	 */
-	public function is_menu_page( $pagehook = '' ) {
-		global $page_hook;
-
-		if ( isset( $page_hook ) ) {
-			if ( $page_hook === $pagehook )
-				return true;
-		} elseif ( defined( 'WP_ADMIN' ) && WP_ADMIN ) {
-			//* May be too early for $page_hook
-			if ( isset( $_GET['page'] ) && $_GET['page'] === $pagehook )
-				return true;
-		}
-
-		return false;
-	}
-
-	/**
 	 * Redirect the user to an admin page, and add query args to the URL string
 	 * for alerts, etc.
 	 *
@@ -431,20 +419,23 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 
 			check_ajax_referer( 'autodescription-ajax-nonce', 'nonce' );
 
+			$post_val = intval( $_POST['val'] );
+
 			/**
 			 * Count up, reset to 0 if needed. We have 4 options: 0, 1, 2, 3
 			 * $_POST['val'] already contains updated number.
 			 */
-			$value = intval( $_POST['val'] ) ? $_POST['val'] : $this->get_user_option( 0, 'counter_type', 3 ) + 1;
+			$value = $post_val ? $post_val : $this->get_user_option( 0, 'counter_type', 3 ) + 1;
 			$value = absint( $value );
 
 			if ( $value > 3 )
 				$value = 0;
 
-			$success = $this->update_user_option( 0, 'counter_type', $value ) ? 'success' : 'error';
+			//* Update the option and get results of action.
+			$type = $this->update_user_option( 0, 'counter_type', $value ) ? 'success' : 'error';
 
 			$results = array(
-				'type' => $success,
+				'type' => $type,
 				'value' => $value,
 			);
 

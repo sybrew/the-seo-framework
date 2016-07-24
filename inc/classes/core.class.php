@@ -26,6 +26,47 @@
 class AutoDescription_Core {
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Cloning of this class is forbidden.
+	 */
+	private function __clone() { }
+
+	/**
+	 * __get() deprecation handler.
+	 * @since 2.7.0
+	 * @return mixed $var The object variable.
+	 */
+	public function __get( $name ) {
+
+		switch ( $name ) :
+			case 'pagehook' :
+				$this->_deprecated_function( 'the_seo_framework()->' . $name, '2.7.0', 'the_seo_framework()->seo_settings_page_hook' );
+				return $this->seo_settings_page_hook;
+				break;
+
+			default:
+				break;
+		endswitch;
+
+		//* Invoke default error.
+		return $this->$name;
+	}
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 * @return void
+	 */
+	public function __call( $name, $arguments ) {
+		$_this = the_seo_framework();
+		$_this->_inaccessible_p_or_m( 'the_seo_framework()->' . $name . '()' );
+		return;
+	}
+
+	/**
 	 * Constructor. Loads actions and filters.
 	 * Latest Class. Doesn't have parent.
 	 */
@@ -179,7 +220,7 @@ class AutoDescription_Core {
 			$type = 'notice-warning';
 
 		$notice = '<div class="notice ' . $type . ' seo-notice"><p>';
-		$notice .= '<a class="hide-if-no-js autodescription-dismiss" title="' . __( 'Dismiss', 'AutoDescription' ) . '"></a>';
+		$notice .= '<a class="hide-if-no-js autodescription-dismiss" title="' . esc_attr__( 'Dismiss', 'AutoDescription' ) . '"></a>';
 		$notice .= '<strong>' . $message . '</strong>';
 		$notice .= '</p></div>';
 
@@ -307,10 +348,8 @@ class AutoDescription_Core {
 	/**
 	 * Whether to allow external redirect through the 301 redirect option.
 	 *
-	 * Applies filters the_seo_framework_allow_external_redirect : bool
-	 * @staticvar bool $allowed
-	 *
 	 * @since 2.6.0
+	 * @staticvar bool $allowed
 	 *
 	 * @return bool Whether external redirect is allowed.
 	 */
@@ -321,6 +360,10 @@ class AutoDescription_Core {
 		if ( isset( $allowed ) )
 			return $allowed;
 
+		/**
+		 * Applies filters the_seo_framework_allow_external_redirect : bool
+		 * @since 2.1.0
+		 */
 		return $allowed = (bool) apply_filters( 'the_seo_framework_allow_external_redirect', true );
 	}
 
@@ -497,7 +540,6 @@ class AutoDescription_Core {
 	 *
 	 * @param bool $guess : If true, the timezone will be guessed from the
 	 * WordPress core gmt_offset option.
-	 *
 	 * @return string|empty PHP Timezone String.
 	 */
 	public function get_timezone_string( $guess = false ) {
@@ -521,7 +563,6 @@ class AutoDescription_Core {
 	 * @since 2.6.0
 	 *
 	 * @param int $offset The GMT offzet.
-	 *
 	 * @return string PHP Timezone String.
 	 */
 	protected function get_tzstring_from_offset( $offset = 0 ) {
@@ -548,7 +589,6 @@ class AutoDescription_Core {
 	 * @param string $tzstring Optional. The PHP Timezone string. Best to leave empty to always get a correct one.
 	 * @link http://php.net/manual/en/timezones.php
 	 * @param bool $reset Whether to reset to default. Ignoring first parameter.
-	 *
 	 * @return bool True on success. False on failure.
 	 */
 	public function set_timezone( $tzstring = '', $reset = false ) {

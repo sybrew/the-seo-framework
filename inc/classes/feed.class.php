@@ -27,6 +27,18 @@
 class AutoDescription_Feed extends AutoDescription_Transients {
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor, load parent constructor and run functions.
 	 */
 	public function __construct() {

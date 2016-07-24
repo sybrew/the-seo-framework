@@ -318,7 +318,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Facebook image width and height meta tags output.
 	* Twitter image width and height meta tags output.
 	* Genesis Framework 2.3.0+ term metadata upgrade and fallback compatibility.
-	* TODO The sitemap now also flushed when changing the Site URL in the General Settings of WordPress Core.
+	* TODO The sitemap now also flushes when changing the Site URL in the General Settings of WordPress Core.
 	* TODO Notification that the Robots.txt file can't be output under specific circumstances. (or simply add it anyway?)
 * **Improved:**
 	* TODO The title and description counter type option is now bound to the user, rather than the site.
@@ -358,6 +358,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* WooCommerce Product Tag and Category IDs can no longer conflict with singular post type IDs.
 	* The LD+Json home URL output now doesn't add a trailing slash when your options don't have supplied one.
 	* When your home URL is on a subdirectory, the canonical term URL is now correct.
+	* When inputting HTML entities in the Custom Home Page Title, they're now correctly converted in the placeholder.
 
 **For translators:**
 
@@ -370,11 +371,27 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * **Added:**
 	/
+	* Class overloading. Certain object actions are now handled in a correcting way to prevent insecure or deprecated API actions.
+		* When acquiring a class variable, a deprecation handler is loaded.
+			* This confirms the called variable prior to returning its value. If it's deprecated, it can and will now let you know.
+		* Object cloning is now forbidden.
+			* There are many class constructors in this framework that contain actions. When cloning the object, all these actions will run again. Causing (although not always notable) performance and security issues.
+			* You can simply get the object using `the_seo_framework()` function.
+			* Cloning will result in a fatal error.
+		* Object wakeup is now forbidden.
+			* From this update the framework makes use of `serialize()` for query caching. Although convinient, this can cause security issues.
+			* The security issues are eliminated by disabling the method `__wakeup()` through visibility changes.
+			* Waking up the class will result in a fatal error.
+		* Inaccessible method calling is now handled with an error.
+			* You can access every public function through `the_seo_framework()` function object.
+			* If, for any reason, a method has been removed, the call will not emit a fatal error, but instead will output a notice.
+			* As this is becoming a huge project in a rapid pace, it's perfectly understandable not every developer is up-to-date with the latest changes.
+			* This will also make sure your site will stay accessible when, for example, an extension or plugin update causes an incompatibility within The SEO Framework.
 	* Function `the_seo_framework_update_option()`, this allows you to update options remotely.
 	* Function `the_seo_framework_options_page_slug()`, this allows you to hook into the SEO settings page.
 	* Method `AutoDescription_Query::get_the_real_admin_ID()`, this always runs within `AutoDescription_Query::get_the_real_ID()` when in admin.
 	* Method `AutoDescription_Sanitize::verify_seo_settings_nonce()`, returns true when SEO settings nonce has been verified. Always use this if you want to inject custom settings.
-	* CDATA array (JavaScript) `autodescriptionL10n` now contains a nonce string for AJAX requests, accessible through (JavaScript) `autodescriptionL10n.nonce` or (JavaScript) `autodescriptionL10n['nonce']` and (PHP) `check_ajax_referer( 'my_ajax_action', 'nonce' ) ?>` TODO.
+	* CDATA array (JavaScript) `autodescriptionL10n` now contains a nonce string for AJAX requests, accessible through (JavaScript) `autodescriptionL10n.nonce` or (JavaScript) `autodescriptionL10n['nonce']` and (PHP) `check_ajax_referer( 'autodescription-ajax-nonce', 'nonce' ) ?>`.
 * **Improved:**
 	/
 	* Class contents `AutoDescription_Query` are now reworked to be much more effecient and predictable.
@@ -400,8 +417,12 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Method `AutoDescription_DoingItRight::init_columns_ajax()` now only runs on the applicable AJAX action, right before the tag is output. Instead of `admin_init`.
 	* Method `AutoDescription_DoingItRight::init_columns_ajax()` now adapts its capability check towards WordPress Core filters.
 	* TODO Maybe? Transform Theme DIR permanent transient into an option.
+	* Class autoloading support. Because of this, one class filenames have been changed to ease the autoload flow. This is:
+		* `admininit.class.php` is now `admin-init.class.php`. That's it!
+		* Note that autoloading, although now supported, is not implemented as it's not benefactory in terms of performance.
+	* (JavaScript) The placeholder variables are no longer escaped multiple times. Instead they're converted to `jQuery text()` so they can't run code anymore.
 * **Changed:**
-	* Variable 'AutoDescription_Siteoptions::page_id' is now publicly accessible. Making it easier to add submenu items.
+	* Variable 'AutoDescription_Siteoptions::seo_settings_page_slug' is now publicly accessible. Making it easier to add submenu items.
 	* All class `AutoDescription_Metaboxes` metabox output function parameters have been shifted by one to the right to conform to the `add_metabox()` function return arguments. The first parameter is now used for the (unavailable and unused) post object. The second must be an array. This change affects the following methods:
 		* `AutoDescription_Metaboxes::title_metabox()`
 		* `AutoDescription_Metaboxes::description_metabox()`
@@ -424,6 +445,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Method `AutoDescription_Generate_Url::get_relative_term_url()` now adds the home URL directory (if any) to the URL.
 	* Method `AutoDescription_Admin_Init::the_counter_visualized()` has been renamed to `AutoDescription_Admin_Init::wp_ajax_update_counter_type()`. Without deprecation as it's marked private.
 	* TODO All CSS class prefixes have been set to `theseoframework`, which were prior `autodescription` or `seoframework`.
+	* Method `AutoDescription_Admin_Init::is_menu_page()` has been slightly adjusted:
+		* It no longer checks for page id's on the first parameter, but only for page hooks.
+		* It now checks for page id's on the second parameter.
+		* It has been moved to class `AutoDescription_Query`. So it's now `AutoDescription_Query::is_menu_page()`.
+	* Disabled class variable setting. Use filters instead.
 * **Fixed:**
 	* Function `the_seo_framework_dot_version()` now works as intended.
 	* Method `AutoDescription_Query::is_single()` first parameter can now be an array without crashing the site.
@@ -447,6 +473,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Method `AutoDescription_TermData::init_term_filters()`, without deprecation as it was marked private.
 	* Method `AutoDescription_Core::in_array()`, as it is no longer of use.
 	* An useless easter egg in order to clean up code.
+	* (JavaScript) method `autodescription.escapeTags()` as it's no longer used internally.
 * **Deprecated:**
 	* `AutoDescription_Metaboxes::homepage_metabox_general()`, use `AutoDescription_Metaboxes::homepage_metabox_general_tab()` instead.
 	* `AutoDescription_Metaboxes::homepage_metabox_additions()`, use `AutoDescription_Metaboxes::homepage_metabox_additions_tab()` instead.

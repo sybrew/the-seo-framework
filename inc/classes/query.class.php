@@ -34,6 +34,13 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	private function __wakeup() { }
 
 	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor. Load parent constructor.
 	 */
 	public function __construct() {
@@ -970,10 +977,35 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		$this->set_query_cache(
 			__METHOD__,
-			$page = $this->is_menu_page( $this->seo_settings_page_slug )
+			$page = $this->is_menu_page( $this->seo_settings_page_hook, $this->seo_settings_page_slug )
 		);
 
 		return $page;
+	}
+
+	/**
+	 * Checks the screen base file through global $page_hook or $_REQEUST.
+	 *
+	 * @since 2.2.2
+	 * @since 2.7.0 Added pageslug parameter.
+	 * @global string $page_hook the current page hook.
+	 *
+	 * @param string $pagehook The menu pagehook to compare to.
+	 * @param string $pagehook The menu pagehook to compare to.
+	 * @return bool true if screen match.
+	 */
+	public function is_menu_page( $pagehook = '', $pageslug = '' ) {
+		global $page_hook;
+
+		if ( isset( $page_hook ) ) {
+			if ( $page_hook === $pagehook )
+				return true;
+		} elseif ( $this->is_admin() && $pageslug ) {
+			if ( isset( $_GET['page'] ) && $pageslug === $_GET['page'] )
+				return true;
+		}
+
+		return false;
 	}
 
 	/**

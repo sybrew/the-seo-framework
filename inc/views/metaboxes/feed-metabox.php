@@ -29,18 +29,18 @@ switch ( $instance ) :
 
 		if ( $this->rss_uses_excerpt() ) {
 			$reading_settings_url = admin_url( 'options-reading.php' );
-			$reading_settings_title = esc_html__( 'Reading Settings', 'autodescription' );
-			$reading_settings = '<a href="' . esc_url( $reading_settings_url ) . '" target="_blank" title="' . $reading_settings_title . '">' . $reading_settings_title . '</a>';
+			$reading_settings_title = __( 'Reading Settings', 'autodescription' );
+			$reading_settings = '<a href="' . esc_url( $reading_settings_url ) . '" target="_blank" title="' . esc_attr( $reading_settings_title ) . '">' . esc_html( $reading_settings_title ) . '</a>';
 
 			$this->description_noesc( sprintf( esc_html_x( 'Note: The feed is already converted into an excerpt (summary) through the %s.', '%s = Reading Settings', 'autodescription' ), $reading_settings ) );
 		}
 
 		$feed_url = get_feed_link();
-		$here = '<a href="' . esc_url( $feed_url ) . '" target="_blank" title="' . esc_html__( 'View feed', 'autodescription' ) . '">' . esc_html_x( 'here', 'The feed can be found %s.', 'autodescription' ) . '</a>';
+		$here = '<a href="' . esc_url( $feed_url ) . '" target="_blank" title="' . esc_attr__( 'View feed', 'autodescription' ) . '">' . esc_html_x( 'here', 'The feed can be found %s.', 'autodescription' ) . '</a>';
 
 		$this->description_noesc( sprintf( esc_html_x( 'The feed can be found %s.', '%s = here', 'autodescription' ), $here ) );
+		break;
 
-	break;
 	default :
-	break;
+		break;
 endswitch;

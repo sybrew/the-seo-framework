@@ -26,6 +26,18 @@
 class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor, load parent constructor
 	 */
 	public function __construct() {
@@ -91,7 +103,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		//* Update hidden options.
 		$this->update_hidden_options_to_default();
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_title_separator',
 			$this->settings_field,
 			array(
@@ -99,7 +111,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_description_separator',
 			$this->settings_field,
 			array(
@@ -107,7 +119,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_description',
 			$this->settings_field,
 			array(
@@ -116,7 +128,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_title',
 			$this->settings_field,
 			array(
@@ -127,7 +139,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_knowledge_type',
 			$this->settings_field,
 			array(
@@ -135,7 +147,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_left_right',
 			$this->settings_field,
 			array(
@@ -143,7 +155,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_left_right_home',
 			$this->settings_field,
 			array(
@@ -151,7 +163,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_one_zero',
 			$this->settings_field,
 			array(
@@ -238,7 +250,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_absint',
 			$this->settings_field,
 			array(
@@ -246,7 +258,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_no_html',
 			$this->settings_field,
 			array(
@@ -257,7 +269,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		 * @todo create content="code" stripper
 		 * @priority low 2.9.0+
 		 */
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_no_html_space',
 			$this->settings_field,
 			array(
@@ -270,7 +282,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_url',
 			$this->settings_field,
 			array(
@@ -289,7 +301,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_url_query',
 			$this->settings_field,
 			array(
@@ -297,7 +309,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_twitter_name',
 			$this->settings_field,
 			array(
@@ -306,7 +318,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_twitter_card',
 			$this->settings_field,
 			array(
@@ -315,7 +327,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		);
 
 		//* Special action filter.
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_one_zero_flush_rewrite',
 			$this->settings_field,
 			array(
@@ -324,7 +336,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		);
 
 		//* Special action filter.
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_one_zero_flush_sitemap',
 			$this->settings_field,
 			array(
@@ -339,6 +351,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * Registers option sanitation filter
 	 *
 	 * @since 2.2.2
+	 * @since 2.7.0 : No longer used internally.
 	 *
 	 * @param string $filter The filter to call (see AutoDescription_Siteoptions::$available_filters for options)
 	 * @param string $option The WordPress option name
@@ -358,8 +371,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * sanitizer at the right time.
 	 *
 	 * @since 2.2.2
-	 *
-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
+	 * @since 2.7.0: Uses external caching function.
 	 *
 	 * @param string $filter Sanitization filter type
 	 * @param string $option Option key
@@ -368,19 +380,56 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 */
 	public function add_filter( $filter, $option, $suboption = null ) {
 
-		if ( is_array( $suboption ) ) {
-			foreach ( $suboption as $so ) {
-				$this->options[ $option ][ $so ] = $filter;
-			}
-		} elseif ( is_null( $suboption ) ) {
-			$this->options[ $option ] = $filter;
-		} else {
-			$this->options[ $option ][ $suboption ] = $filter;
-		}
+		$this->set_option_filter( $filter, $option, $suboption );
 
 		add_filter( 'sanitize_option_' . $option, array( $this, 'sanitize' ), 10, 2 );
 
 		return true;
+	}
+
+	/**
+	 * Sets sanitation filters cache.
+	 *
+	 * Associates a sanitization filter to each option (or sub options if they
+	 * exist) before adding a reference to run the option through that
+	 * sanitizer at the right time.
+	 *
+	 * @since 2.7.0
+	 * @staticvar $options The options filter cache.
+	 *
+	 * @param string $filter Sanitization filter type
+	 * @param string $option Option key
+	 * @param array|string $suboption Optional. Suboption key
+	 * @param bool $get Whether to retrieve cache.
+	 * @return boolean Returns true when complete
+	 */
+	protected function set_option_filter( $filter, $option, $suboption = null, $get = false ) {
+
+		static $options = array();
+
+		if ( $get )
+			return $options;
+
+		if ( is_array( $suboption ) ) {
+			foreach ( $suboption as $so ) {
+				$options[ $option ][ $so ] = $filter;
+			}
+		} elseif ( is_null( $suboption ) ) {
+			$options[ $option ] = $filter;
+		} else {
+			$options[ $option ][ $suboption ] = $filter;
+		}
+	}
+
+	/**
+	 * Returns sanitation filters from cache.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @return array Filters with their associated (sub)options.
+	 */
+	protected function get_option_filters() {
+		return $this->set_option_filter( '', '', '', true );
 	}
 
 	/**
@@ -396,16 +445,18 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 */
 	public function sanitize( $new_value, $option ) {
 
-		if ( ! isset( $this->options[ $option ] ) ) {
+		$filters = $this->get_option_filters();
+
+		if ( ! isset( $filters[ $option ] ) ) {
 			//* We are not filtering this option at all
 			return $new_value;
-		} elseif ( is_string( $this->options[ $option ] ) ) {
+		} elseif ( is_string( $filters[ $option ] ) ) {
 			//* Single option value
-			return $this->do_filter( $this->options[ $option ], $new_value, get_option( $option ) );
-		} elseif ( is_array( $this->options[ $option ] ) ) {
+			return $this->do_filter( $filters[ $option ], $new_value, get_option( $option ) );
+		} elseif ( is_array( $filters[ $option ] ) ) {
 			//* Array of suboption values to loop through
 			$old_value = get_option( $option );
-			foreach ( $this->options[ $option ] as $suboption => $filter ) {
+			foreach ( $filters[ $option ] as $suboption => $filter ) {
 				$old_value[ $suboption ] = isset( $old_value[ $suboption ] ) ? $old_value[ $suboption ] : '';
 				$new_value[ $suboption ] = isset( $new_value[ $suboption ] ) ? $new_value[ $suboption ] : '';
 				$new_value[ $suboption ] = $this->do_filter( $filter, $new_value[ $suboption ], $old_value[ $suboption ] );

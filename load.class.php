@@ -91,25 +91,36 @@ require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'compat.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'optionsapi.php' );
 //require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'benchmark.php' );
 
+/**
+ * @since 2.7.0
+ * Unused, set as placeholder.
+ * Do: spl_autoload_register( 'the_seo_framework_autoload' );
+ */
+function the_seo_framework_autoload( $class ) {
+
+	if ( 0 !== strpos( $class, 'AutoDescription_', 0 ) )
+		return;
+
+	$_class = strtolower( str_replace( array( 'AutoDescription_', '_' ), array( '', '-' ), $class ) );
+	require( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . $_class . '.class.php' );
+}
+
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'core.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'debug.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'compat.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'query.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'init.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'admininit.class.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'admin-init.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'render.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'detect.class.php' );
-
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'postdata.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'termdata.class.php' );
-
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-description.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-title.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-url.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-image.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-ldjson.class.php' );
-
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'search.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'doingitright.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'inpost.class.php' );
@@ -148,6 +159,18 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 	 * Unserializing instances of this class is forbidden.
 	 */
 	private function __wakeup() { }
+
+	/**
+	 * Cloning of this class is forbidden.
+	 */
+	private function __clone() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
 
 	/**
 	 * Constructor, setup debug vars and then load parent constructor.

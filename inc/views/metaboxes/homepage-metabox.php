@@ -50,8 +50,8 @@ switch ( $instance ) :
 		$tabs = wp_parse_args( $args, $defaults );
 
 		$this->nav_tab_wrapper( 'homepage', $tabs, '2.6.0' );
+		break;
 
-	break;
 	case 'the_seo_framework_homepage_metabox_general' :
 
 		$language = $this->google_language();
@@ -227,8 +227,8 @@ switch ( $instance ) :
 		if ( $description_from_post_message ) {
 			echo '<p class="description">' . esc_html( $description_from_post_message ) . '</p>';
 		}
+		break;
 
-	break;
 	case 'the_seo_framework_homepage_metabox_additions' :
 
 		//* Fetches escaped title parts.
@@ -274,8 +274,8 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<?php
+		break;
 
-	break;
 	case 'the_seo_framework_homepage_metabox_robots' :
 
 		$language = $this->google_language();
@@ -307,36 +307,33 @@ switch ( $instance ) :
 
 		//* Index label.
 		/* translators: 1: Option, 2: Location */
-		$i_label	= sprintf( esc_html__( 'Apply %1$s to the %2$s?', 'autodescription' ), $this->code_wrap( 'noindex' ), $home_page_i18n );
-		$i_label	.= ' ';
-		$i_label	.= $this->make_info(
-							__( 'Tell Search Engines not to show this page in their search results', 'autodescription' ),
-							'https://support.google.com/webmasters/answer/93710?hl=' . $language,
-							false
-						)
-					. $noindex_note;
+		$i_label = sprintf( esc_html__( 'Apply %1$s to the %2$s?', 'autodescription' ), $this->code_wrap( 'noindex' ), $home_page_i18n );
+		$i_label .= ' ';
+		$i_label .= $this->make_info(
+			__( 'Tell Search Engines not to show this page in their search results', 'autodescription' ),
+			'https://support.google.com/webmasters/answer/93710?hl=' . $language,
+			false
+		) . $noindex_note;
 
 		//* Follow label.
 		/* translators: 1: Option, 2: Location */
-		$f_label	= sprintf( esc_html__( 'Apply %1$s to the %2$s?', 'autodescription' ), $this->code_wrap( 'nofollow' ), $home_page_i18n );
-		$f_label	.= ' ';
-		$f_label	.= $this->make_info(
-							__( 'Tell Search Engines not to follow links on this page', 'autodescription' ),
-							'https://support.google.com/webmasters/answer/96569?hl=' . $language,
-							false
-						)
-					. $nofollow_note;
+		$f_label = sprintf( esc_html__( 'Apply %1$s to the %2$s?', 'autodescription' ), $this->code_wrap( 'nofollow' ), $home_page_i18n );
+		$f_label .= ' ';
+		$f_label .= $this->make_info(
+			__( 'Tell Search Engines not to follow links on this page', 'autodescription' ),
+			'https://support.google.com/webmasters/answer/96569?hl=' . $language,
+			false
+		) . $nofollow_note;
 
 		//* Archive label.
 		/* translators: 1: Option, 2: Location */
-		$a_label	= sprintf( esc_html__( 'Apply %1$s to the %2$s?', 'autodescription' ), $this->code_wrap( 'noarchive' ), $home_page_i18n );
-		$a_label	.= ' ';
-		$a_label	.=	$this->make_info(
-						__( 'Tell Search Engines not to save a cached copy of this page', 'autodescription' ),
-						'https://support.google.com/webmasters/answer/79812?hl=' . $language,
-						false
-					)
-					. $noarchive_note;
+		$a_label = sprintf( esc_html__( 'Apply %1$s to the %2$s?', 'autodescription' ), $this->code_wrap( 'noarchive' ), $home_page_i18n );
+		$a_label .= ' ';
+		$a_label .= $this->make_info(
+			__( 'Tell Search Engines not to save a cached copy of this page', 'autodescription' ),
+			'https://support.google.com/webmasters/answer/79812?hl=' . $language,
+			false
+		) . $noarchive_note;
 
 		//* Echo checkboxes.
 		$this->wrap_fields(
@@ -386,8 +383,8 @@ switch ( $instance ) :
 			),
 			true
 		);
+		break;
 
-	break;
 	default :
-	break;
+		break;
 endswitch;

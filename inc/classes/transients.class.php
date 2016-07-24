@@ -62,6 +62,18 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	protected $theme_doing_it_right_transient;
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor, load parent constructor and set up caches.
 	 */
 	public function __construct() {

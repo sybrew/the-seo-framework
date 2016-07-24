@@ -44,17 +44,6 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	public $seo_settings_page_hook;
 
 	/**
-	 * Name of the page hook when the menu is registered.
-	 *
-	 * @since 2.2.2
-	 * @deprecated Use $seo_settings_page_hook instead.
-	 * @since 2.7.0
-	 *
-	 * @var string Page hook
-	 */
-	public $pagehook;
-
-	/**
 	 * Load the options.
 	 *
 	 * @since 2.6.0
@@ -62,6 +51,18 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	 * @var bool Load options.
 	 */
 	public $load_options;
+
+	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
 
 	/**
 	 * Constructor. Loads parent constructor, does actions and sets up variables.
@@ -156,12 +157,6 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 			$menu['icon'],
 			$menu['position']
 		);
-
-		/**
-		 * Backwards compatibility.
-		 * I have yet to find a way to check for if a variable has been called (without debug_backtrace).
-		 */
-		$this->pagehook = $this->seo_settings_page_hook;
 
 		/**
 		 * Simply copy the previous, but rename the submenu entry.

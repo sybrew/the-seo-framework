@@ -55,8 +55,8 @@ switch ( $instance ) :
 		$tabs = wp_parse_args( $args, $defaults );
 
 		$this->nav_tab_wrapper( 'social', $tabs, '2.2.2' );
+		break;
 
-	break;
 	case 'the_seo_framework_social_metabox_general' :
 
 		?><h4><?php esc_html_e( 'Site Shortlink Settings', 'autodescription' ); ?></h4><?php
@@ -122,10 +122,11 @@ switch ( $instance ) :
 			true
 		);
 
-		if ( $this->detect_twitter_card_plugin() )
+		if ( $this->detect_twitter_card_plugin() ) {
 			$this->description( __( 'Note: Another Twitter Card plugin has been detected.', 'autodescription' ) );
+		}
+		break;
 
-	break;
 	case 'the_seo_framework_social_metabox_facebook' :
 
 		$fb_author = $this->get_field_value( 'facebook_author' );
@@ -174,8 +175,8 @@ switch ( $instance ) :
 			<input type="text" name="<?php $this->field_name( 'facebook_appid' ); ?>" class="large-text" id="<?php $this->field_id( 'facebook_appid' ); ?>" placeholder="<?php echo esc_attr( $fb_appid_placeholder ); ?>" value="<?php echo esc_attr( $fb_appid ); ?>" />
 		</p>
 		<?php
+		break;
 
-	break;
 	case 'the_seo_framework_social_metabox_twitter' :
 
 		$tw_site = $this->get_field_value( 'twitter_site' );
@@ -237,8 +238,8 @@ switch ( $instance ) :
 			<input type="text" name="<?php $this->field_name( 'twitter_creator' ); ?>" class="large-text" id="<?php $this->field_id( 'twitter_creator' ); ?>" placeholder="<?php echo esc_attr( $tw_creator_placeholder ); ?>" value="<?php echo esc_attr( $tw_creator ); ?>" />
 		</p>
 		<?php
+		break;
 
-	break;
 	case 'the_seo_framework_social_metabox_postdates' :
 
 		$pages_i18n = esc_html__( 'Pages', 'autodescription' );
@@ -288,8 +289,8 @@ switch ( $instance ) :
 
 		//* Echo checkboxes.
 		$this->wrap_fields( $home_publish_time_checkbox . $home_modify_time_checkbox, true );
+		break;
 
-	break;
 	case 'the_seo_framework_social_metabox_relationships' :
 
 		?><h4><?php esc_html_e( 'Link Relationship Settings', 'autodescription' ); ?></h4><?php
@@ -312,8 +313,8 @@ switch ( $instance ) :
 
 		//* Echo checkboxes.
 		$this->wrap_fields( $prev_next_posts_checkbox . $prev_next_archives_checkbox . $prev_next_frontpage_checkbox, true );
+		break;
 
-	break;
 	default :
-	break;
+		break;
 endswitch;

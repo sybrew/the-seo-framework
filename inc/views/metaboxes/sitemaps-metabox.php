@@ -90,8 +90,8 @@ switch ( $instance ) :
 			$this->nav_tab_wrapper( 'sitemaps', $tabs, '2.2.8', $use_tabs );
 
 		}
+		break;
 
-	break;
 	case 'the_seo_framework_sitemaps_metabox_general' :
 
 		$site_url = $this->the_home_url_from_cache( true );
@@ -131,8 +131,8 @@ switch ( $instance ) :
 			$here = '<a href="' . esc_url( $sitemap_url ) . '" target="_blank" title="' . esc_attr__( 'View sitemap', 'autodescription' ) . '">' . esc_attr_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 			$this->description_noesc( sprintf( _x( 'The sitemap can be found %s.', '%s = here', 'autodescription' ), $here ) );
 		}
+		break;
 
-	break;
 	case 'the_seo_framework_sitemaps_metabox_robots' :
 
 		$site_url = $this->the_home_url_from_cache( true );
@@ -165,8 +165,8 @@ switch ( $instance ) :
 		endif;
 
 		$this->description_noesc( sprintf( esc_html_x( 'The robots.txt file can be found %s.', '%s = here', 'autodescription' ), $here ) );
+		break;
 
-	break;
 	case 'the_seo_framework_sitemaps_metabox_timestamps' :
 
 		//* Sets timezone according to WordPress settings.
@@ -226,8 +226,8 @@ switch ( $instance ) :
 			</p>
 		</fieldset>
 		<?php
+		break;
 
-	break;
 	case 'the_seo_framework_sitemaps_metabox_notify' :
 
 		?><h4><?php esc_html_e( 'Ping Settings', 'autodescription' ); ?></h4><?php
@@ -255,8 +255,8 @@ switch ( $instance ) :
 
 		//* Echo checkbox.
 		$this->wrap_fields( $ping_checkbox, true );
+		break;
 
-	break;
 	default :
-	break;
+		break;
 endswitch;

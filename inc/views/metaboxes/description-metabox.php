@@ -83,8 +83,8 @@ switch ( $instance ) :
 		$tabs = wp_parse_args( $args, $defaults );
 
 		$this->nav_tab_wrapper( 'description', $tabs, '2.6.0' );
+		break;
 
-	break;
 	case 'the_seo_framework_description_metabox_general' :
 
 		//* Let's use the same separators as for the title.
@@ -106,8 +106,8 @@ switch ( $instance ) :
 			<span class="description"><?php esc_html_e( 'If the Automated Description consists of two parts (title and excerpt), then the separator will go in-between them.', 'autodescription' ); ?></span>
 		</fieldset>
 		<?php
+		break;
 
-	break;
 	case 'the_seo_framework_description_metabox_additions' :
 
 		$language = $this->google_language();
@@ -139,8 +139,8 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<?php
+		break;
 
-	break;
 	default :
-	break;
+		break;
 endswitch;

@@ -45,6 +45,18 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	protected $add_debug_output = true;
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor, load parent constructor and add actions.
 	 */
 	public function __construct() {
@@ -55,7 +67,6 @@ class AutoDescription_Debug extends AutoDescription_Core {
 			add_action( 'admin_footer', array( $this, 'debug_output' ) );
 			add_action( 'wp_footer', array( $this, 'debug_output' ) );
 		}
-
 	}
 
 	/**
@@ -97,9 +108,11 @@ class AutoDescription_Debug extends AutoDescription_Core {
 
 			if ( function_exists( '__' ) ) {
 				if ( isset( $replacement ) )
+					/* translators: 1: Function name, 2: Plugin Version notification, 3: Replacement function */
 					trigger_error( sprintf( __( '%1$s is <strong>deprecated</strong> since version %2$s of The SEO Framework! Use %3$s instead.', 'autodescription' ), $function, $version, $replacement ) );
 				else
-					trigger_error( sprintf( __( '%1$s is <strong>deprecated</strong> since version %2$s of The SEO Framework with no alternative available.' ), $function, $version ) );
+					/* translators: 1: Function name, 2: Plugin Version notification */
+					trigger_error( sprintf( __( '%1$s is <strong>deprecated</strong> since version %2$s of The SEO Framework with no alternative available.', 'autodescription' ), $function, $version ) );
 			} else {
 				if ( isset( $replacement ) )
 					trigger_error( sprintf( '%1$s is <strong>deprecated</strong> since version %2$s of The SEO Framework! Use %3$s instead.', $function, $version, $replacement ) );
@@ -162,9 +175,52 @@ class AutoDescription_Debug extends AutoDescription_Core {
 					'https://codex.wordpress.org/Debugging_in_WordPress'
 				);
 
-				/* translators: 1: Function name, 2: Message, 3: Plugin Version notification */
 				trigger_error( sprintf( '%1$s was called <strong>incorrectly</strong>. %2$s %3$s', $function, $message, $version ) );
 			}
+
+			restore_error_handler();
+		}
+	}
+
+	/**
+	 * Mark a property or method inaccessible when it has been used.
+
+	 * The current behavior is to trigger a user error if WP_DEBUG is true.
+	 *
+	 * @since 2.7.0
+	 * @access private
+	 *
+	 * @param string $p_or_m	The Property or Method.
+	 * @param string $message	A message explaining what has been done incorrectly.
+	 */
+	public function _inaccessible_p_or_m( $p_or_m, $message = '' ) {
+
+		/**
+		 * Fires when the inaccessible property or method is being used.
+		 *
+		 * @since 2.7.0
+		 *
+		 * @param string $p_or_m	The Property or Method.
+		 * @param string $message	A message explaining what has been done incorrectly.
+		 */
+		do_action( 'the_seo_framework_inaccessible_p_or_m_run', $p_or_m, $message );
+
+		/**
+		* Filter whether to trigger an error for _doing_it_wrong() calls.
+		*
+		* @since 3.1.0
+		*
+		* @param bool $trigger Whether to trigger the error for _doing_it_wrong() calls. Default true.
+		*/
+		if ( WP_DEBUG && apply_filters( 'the_seo_framework_inaccessible_p_or_m_trigger_error', true ) ) {
+
+			set_error_handler( array( $this, 'error_handler_inaccessible_call' ) );
+
+			if ( function_exists( '__' ) )
+				/* translators: 1: Method or Property name, 2: Message */
+				trigger_error( sprintf( __( '%1$s is not <strong>accessible</strong>. %2$s', 'autodescription' ), $p_or_m, $message ) );
+			else
+				trigger_error( sprintf( '%1$s is not <strong>accessible</strong>. %2$s', $p_or_m, $message ) );
 
 			restore_error_handler();
 		}
@@ -218,6 +274,32 @@ class AutoDescription_Debug extends AutoDescription_Core {
 			 * 0 = This function. 1 = Debug function. 2 = Error trigger.
 			 */
 			$error = $backtrace[2];
+
+			$this->error_handler( $error, $message );
+		}
+
+	}
+
+	/**
+	 * The SEO Framework error handler.
+	 *
+	 * Only handles notices.
+	 * @see E_USER_NOTICE
+	 *
+	 * @since 2.6.0
+	 *
+	 * @param int Error handling code.
+	 * @param string The error message.
+	 */
+	protected function error_handler_inaccessible_call( $code, $message ) {
+
+		if ( $code >= 1024 && isset( $message ) ) {
+
+			$backtrace = debug_backtrace();
+			/**
+			 * 0 = This function. 1 = Debug function. 2 = debug function. 3-29 = 26 classes loop, 30 = user call.
+			 */
+			$error = $backtrace[30];
 
 			$this->error_handler( $error, $message );
 		}
@@ -326,7 +408,6 @@ class AutoDescription_Debug extends AutoDescription_Core {
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -415,7 +496,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 							$output .= $this->the_seo_framework_debug_hidden ? '' : '<br>';
 						}
 						$output .= $this->the_seo_framework_debug_hidden ? '' : '</p>';
-						$output .= "]";
+						$output .= ']';
 					} else {
 						$output .= $this->debug_key_wrapper( $key ) . ' => ';
 						$output .= $this->debug_value_wrapper( $value );
@@ -624,7 +705,6 @@ class AutoDescription_Debug extends AutoDescription_Core {
 			$this->debug_output .= $output;
 			$this->debug_output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
 		}
-
 	}
 
 	/**

@@ -46,8 +46,8 @@ switch ( $instance ) :
 		$tabs = wp_parse_args( $args, $defaults );
 
 		$this->nav_tab_wrapper( 'knowledge', $tabs, '2.2.8' );
+		break;
 
-	break;
 	case 'the_seo_framework_knowledge_metabox_general' :
 
 		?><h4><?php esc_html_e( 'Knowledge Graph Settings', 'autodescription' ); ?></h4><?php
@@ -80,8 +80,8 @@ switch ( $instance ) :
 				), true
 			);
 		endif;
+		break;
 
-	break;
 	case 'the_seo_framework_knowledge_metabox_about' :
 
 		$blogname = $this->get_blogname();
@@ -120,8 +120,8 @@ switch ( $instance ) :
 			<input type="text" name="<?php $this->field_name( 'knowledge_name' ); ?>" class="large-text" id="<?php $this->field_id( 'knowledge_name' ); ?>" placeholder="<?php echo esc_attr( $blogname ) ?>" value="<?php echo esc_attr( $this->get_field_value( 'knowledge_name' ) ); ?>" />
 		</p>
 		<?php
+		break;
 
-	break;
 	case 'the_seo_framework_knowledge_metabox_social' :
 
 		?><h4><?php esc_html_e( 'Social Pages connected to this website', 'autodescription' ); ?></h4><?php
@@ -220,8 +220,8 @@ switch ( $instance ) :
 			</p>
 			<?php
 		}
+		break;
 
-	break;
 	default :
-	break;
+		break;
 endswitch;

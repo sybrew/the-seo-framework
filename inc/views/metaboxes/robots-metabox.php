@@ -87,8 +87,8 @@ switch ( $instance ) :
 		$tabs = wp_parse_args( $args, $defaults );
 
 		$this->nav_tab_wrapper( 'robots', $tabs, '2.2.4' );
+		break;
 
-	break;
 	case 'the_seo_framework_robots_metabox_general' :
 
 		?><h4><?php esc_html_e( 'Open Directory Settings', 'autodescription' ); ?></h4><?php
@@ -126,8 +126,8 @@ switch ( $instance ) :
 				false
 			), true
 		);
+		break;
 
-	break;
 	case 'the_seo_framework_robots_metabox_no' :
 
 		$ro_value = $robots['value'];
@@ -137,33 +137,33 @@ switch ( $instance ) :
 		?><h4><?php printf( esc_html__( '%s Robots Settings', 'autodescription' ), $ro_name ); ?></h4><?php
 		$this->description( $ro_i18n );
 
-		?><p class="theseoframework-fields"><?php
-			$checkboxes = '';
-			foreach ( $types as $type => $i18n ) {
+		$checkboxes = '';
+		foreach ( $types as $type => $i18n ) {
 
-				if ( 'site' === $type || 'attachment' === $type || 'search' === $type ) {
-					//* Singular.
-					/* translators: 1: Option, 2: Post Type */
-					$label = sprintf( esc_html__( 'Apply %1$s to %2$s?', 'autodescription' ), $this->code_wrap( $ro_name ), esc_html( $i18n ) );
-				} else {
-					//* Archive.
-					/* translators: 1: Option, 2: Post Type */
-					$label = sprintf( esc_html__( 'Apply %1$s to %2$s Archives?', 'autodescription' ), $this->code_wrap( $ro_name ), esc_html( $i18n ) );
-				}
-
-				$id = $type . '_' . $ro_value;
-
-				//* Add <hr> if it's 'site'
-				$checkboxes .= 'site' === $type ? '<hr class="theseoframework-option-spacer">' : '';
-
-				$checkboxes .= $this->make_checkbox( esc_html( $id ), $label, '', false );
+			if ( 'site' === $type || 'attachment' === $type || 'search' === $type ) {
+				//* Singular.
+				/* translators: 1: Option, 2: Post Type */
+				$label = sprintf( esc_html__( 'Apply %1$s to %2$s?', 'autodescription' ), $this->code_wrap( $ro_name ), esc_html( $i18n ) );
+			} else {
+				//* Archive.
+				/* translators: 1: Option, 2: Post Type */
+				$label = sprintf( esc_html__( 'Apply %1$s to %2$s Archives?', 'autodescription' ), $this->code_wrap( $ro_name ), esc_html( $i18n ) );
 			}
 
+			$id = $type . '_' . $ro_value;
+
+			//* Add <hr> if it's 'site'
+			$checkboxes .= 'site' === $type ? '<hr class="theseoframework-option-spacer">' : '';
+
+			$checkboxes .= $this->make_checkbox( esc_html( $id ), $label, '', false );
+		}
+
+		?><p class="theseoframework-fields"><?php
 			//* Echo checkboxes.
 			$this->wrap_fields( $checkboxes, true );
 		?></p><?php
+		break;
 
-	break;
 	default :
-	break;
+		break;
 endswitch;

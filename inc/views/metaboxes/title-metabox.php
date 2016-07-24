@@ -95,8 +95,8 @@ switch ( $instance ) :
 		$tabs = wp_parse_args( $args, $defaults );
 
 		$this->nav_tab_wrapper( 'title', $tabs, '2.6.0' );
+		break;
 
-	break;
 	case 'the_seo_framework_title_metabox_general' :
 		$title_separator = $this->get_separator_list();
 		$recommended = ' class="recommended" title="' . esc_attr__( 'Recommended', 'autodescription' ) . '"';
@@ -113,8 +113,8 @@ switch ( $instance ) :
 			<?php $this->description( __( 'If the title consists of two parts (original title and optional addition), then the separator will go in-between them.', 'autodescription' ) ); ?>
 		</fieldset>
 		<?php
+		break;
 
-	break;
 	case 'the_seo_framework_title_metabox_additions' :
 
 		$language = $this->google_language();
@@ -179,8 +179,8 @@ switch ( $instance ) :
 			$this->description( __( 'Only use this option if you are aware of its SEO effects.', 'autodescription' ), false );
 			$this->description( $home_page_has_option, false );
 		endif;
+		break;
 
-	break;
 	case 'the_seo_framework_title_metabox_prefixes' :
 
 		//* Get translated category label, if it exists. Otherwise, fallback to translation.
@@ -243,8 +243,8 @@ switch ( $instance ) :
 			?>
 		</p>
 		<?php
+		break;
 
-	break;
 	default :
-	break;
+		break;
 endswitch;
