@@ -26,6 +26,18 @@
 class AutoDescription_Search extends AutoDescription_Generate_Ldjson {
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor, load parent constructor
 	 *
 	 * Initalizes options
@@ -37,16 +49,12 @@ class AutoDescription_Search extends AutoDescription_Generate_Ldjson {
 	}
 
 	/**
-	 * Fetches posts with exclude_local_search option on
-	 *
-	 * @param array $query				The search query
-	 *
-	 * @uses $this->exclude_search_ids()
+	 * Fetches posts with exclude_local_search option on.
 	 *
 	 * @since 2.1.7
+	 * @uses $this->exclude_search_ids()
 	 *
-	 * @todo run this only when one post triggers this option?
-	 * @todo priority low 2.7.0+
+	 * @param array $query The search query
 	 */
 	public function search_filter( $query ) {
 
@@ -58,9 +66,7 @@ class AutoDescription_Search extends AutoDescription_Generate_Ldjson {
 			if ( ! isset( $q['s'] ) || ! $q['s'] )
 				return;
 
-			/**
-			 * @param array $protected_posts : Posts array with excluded key
-			 */
+			//* Get excluded IDs.
 			$protected_posts = $this->exclude_search_ids();
 			if ( $protected_posts ) {
 				$get = $query->get( 'post__not_in' );
@@ -95,7 +101,7 @@ class AutoDescription_Search extends AutoDescription_Generate_Ldjson {
 	public function exclude_search_ids() {
 		global $blog_id;
 
-		$cache_key = 'exclude_search_ids_' . $blog_id;
+		$cache_key = 'exclude_search_ids_' . $blog_id . '_' . get_locale();
 
 		$post_ids = $this->object_cache_get( $cache_key );
 		if ( false === $post_ids ) {
@@ -107,9 +113,15 @@ class AutoDescription_Search extends AutoDescription_Generate_Ldjson {
 				'meta_value' => 1,
 				'posts_per_page' => 99999, // get them all! Fast enough! :D
 				'meta_compare' => '=',
-			/*	'post_status' => array('publish','private'),*/
 			);
 
+			/*
+			$get_posts = new WP_Query;
+			$protected_posts = $get_posts->query( $args );
+			unset( $get_posts );
+			*/
+
+			//* @TODO check if this uses cache.
 			$protected_posts = get_posts( $args );
 			if ( $protected_posts )
 				$post_ids = wp_list_pluck( $protected_posts, 'ID' );
@@ -120,5 +132,4 @@ class AutoDescription_Search extends AutoDescription_Generate_Ldjson {
 		// return an array of exclude post IDs
 		return $post_ids;
 	}
-
 }

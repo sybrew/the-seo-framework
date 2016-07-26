@@ -26,99 +26,102 @@
 class AutoDescription_TermData extends AutoDescription_PostData {
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor, load parent constructor.
 	 */
 	public function __construct() {
 		parent::__construct();
 
-		add_action( 'current_screen', array( $this, 'init_term_filters' ), 999 );
-		add_action( 'get_header', array( $this, 'init_term_filters' ), 999 );
-
-		add_action( 'edit_term', array( $this, 'taxonomy_seo_save' ), 10, 2 );
-		add_action( 'delete_term', array( $this, 'term_meta_delete' ), 10, 2 );
+		//* Initialize term meta filters and actions.
+		$this->initialize_term_meta();
 	}
 
 	/**
-	 * Initializes term filters after wp_query or currentscreen has been set.
+	 * Initializes term meta data filters and functions.
 	 *
-	 * @since 2.6.6
-	 * @staticvar boolean $run Whether this function has already run.
-	 * @access private
-	 *
-	 * @return void early if already run.
+	 * @since 2.7.0
 	 */
-	public function init_term_filters() {
+	public function initialize_term_meta() {
 
-		static $run = null;
+		if ( $this->can_get_term_meta() ) {
+			add_action( 'edit_term', array( $this, 'update_term_meta' ), 10, 2 );
+			add_action( 'delete_term', array( $this, 'delete_term_meta' ), 10, 2 );
+		} else {
+			//* Old style term meta data through loop injections.
+			add_filter( 'get_term', array( $this, 'get_term_filter' ), 10, 2 );
+			add_filter( 'get_terms', array( $this, 'get_terms_filter' ), 10, 2 );
 
-		if ( isset( $run ) )
-			return;
-
-		add_filter( 'get_term', array( $this, 'get_term_filter' ), 10, 2 );
-		add_filter( 'get_terms', array( $this, 'get_terms_filter' ), 10, 2 );
-
-		$run = true;
+			add_action( 'edit_term', array( $this, 'taxonomy_seo_save' ), 10, 2 );
+			add_action( 'delete_term', array( $this, 'term_meta_delete' ), 10, 2 );
+		}
 
 	}
 
 	/**
-	 * Add term meta data into options table of the term.
-	 * Adds separated database options for terms, as the terms table doesn't allow for addition.
+	 * Returns term meta data from ID.
+	 * Returns Genesis 2.3.0+ data if no term meta data is set.
 	 *
+	 * @since 2.7.0
+	 * @staticvar array $cache
+	 *
+	 * @param int $term_id The Term ID.
+	 * @param bool $use_cache Whether to use caching.
+	 * @return array The term meta data.
+	 */
+	public function get_term_meta( $term_id, $use_cache = true ) {
+
+		if ( $use_cache ) {
+			static $cache = array();
+
+			if ( isset( $cache[ $term_id ] ) )
+				return $cache[ $term_id ];
+		} else {
+			$cache = array();
+		}
+
+		$data = get_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true );
+
+		//* Evaluate merely by presence.
+		if ( isset( $data['saved_flag'] ) )
+			return $cache[ $term_id ] = $data;
+
+		if ( $this->is_theme( 'genesis' ) ) {
+			$data = array();
+			$data['doctitle'] = get_term_meta( $term_id, 'doctitle', true );
+			$data['description'] = get_term_meta( $term_id, 'description', true );
+			$data['noindex'] = get_term_meta( $term_id, 'noindex', true );
+			$data['nofollow'] = get_term_meta( $term_id, 'nofollow', true );
+			$data['noarchive'] = get_term_meta( $term_id, 'noarchive', true );
+
+			return $cache[ $term_id ] = $data;
+		}
+
+		return $cache[ $term_id ] = array();
+	}
+
+	/**
+	 * Returns an array of default term options.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @since 2.1.8:
 	 * Applies filters array the_seo_framework_term_meta_defaults : Array of default term SEO options
-	 * Applies filters mixed the_seo_framework_term_meta_{field} : Override filter for specifics.
-	 * Applies filters array the_seo_framework_term_meta : Override output for term or taxonomy.
 	 *
-	 * @since 2.1.8
-	 *
-	 * @todo Use WordPress 4.4.0 get_term_meta() / update_term_meta()
-	 * @priority OMG WTF BBQ 2.6.x / Genesis 2.3.0
-	 * @see @link http://www.studiopress.com/important-announcement-for-genesis-plugin-developers/
-	 * @link https://core.trac.wordpress.org/browser/tags/4.5/src/wp-includes/taxonomy.php#L1814
-	 * @todo still use arrays in get_term_meta() / update_term_meta() ?
-	 * @NOTE Keep WP 3.8 compat.
-	 *
-	 * @param object $term     Database row object.
-	 * @param string $taxonomy Taxonomy name that $term is part of.
-	 * @return object $term Database row object.
+	 * @return array The Term Metadata default options.
 	 */
-	public function get_term_filter( $term, $taxonomy ) {
-
-		//* Do nothing, if $term is not an object.
-		if ( ! is_object( $term ) )
-			return $term;
-
-		//* We can't set query vars just yet.
-		if ( false === $this->can_cache_query() )
-			return $term;
-
-		/**
-		 * No need to process this data outside of the Terms' scope.
-		 * @since 2.6.0
-		 */
-		if ( false === $this->is_admin() && false === $this->is_archive() )
-			return $term;
-
-		/**
-		 * No need to process this after the data has already been output.
-		 * @since 2.6.0
-		 */
-		if ( did_action( 'the_seo_framework_do_after_output' ) )
-			return $term;
-
-		/**
-		 * Do nothing if called in the context of creating a term via an Ajax call to prevent data conflict.
-		 * @since ???
-		 *
-		 * @since 2.6.0 delay did_action call as it's a heavy array call.
-		 */
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX && did_action( 'wp_ajax_add-tag' ) )
-			return $term;
-
-		$db = get_option( 'autodescription-term-meta' );
-		$term_meta = isset( $db[$term->term_id] ) ? $db[$term->term_id] : array();
-
-		$args = (array) apply_filters( 'the_seo_framework_term_meta_defaults', array(
+	public function get_term_meta_defaults() {
+		return (array) apply_filters( 'the_seo_framework_term_meta_defaults', array(
 			'doctitle'            => '',
 			'description'         => '',
 			'noindex'             => 0,
@@ -126,149 +129,116 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 			'noarchive'           => 0,
 			'saved_flag'          => 0, // Don't touch, used to prevent data conflict with Genesis.
 		) );
-
-		$term->admeta = wp_parse_args( $term_meta, $args );
-
-		//* Sanitize term meta
-		foreach ( $term->admeta as $field => $value ) {
-
-			/**
-			 * Trim and sanitize the title beforehand.
-			 * @since 2.5.0
-			 */
-			if ( 'doctitle' === $field )
-				$value = trim( strip_tags( $value ) );
-
-			/**
-			 * Trim and sanitize the description beforehand.
-			 * @since 2.5.0
-			 */
-			if ( 'description' === $field )
-				$value = $this->s_description( $value );
-
-			/**
-			 * @param object $term The Term object.
-			 * @param string $taxonomy The Taxonomy name.
-			 */
-			$term->admeta[$field] = (string) apply_filters( "the_seo_framework_term_meta_{$field}", stripslashes( wp_kses_decode_entities( $value ) ), $term, $taxonomy );
-		}
-
-		/**
-		 * @param object $term The Term object.
-		 * @param array $taxonomy The Taxonomy name.
-		 */
-		$term->admeta = (array) apply_filters( 'the_seo_framework_term_meta', $term->admeta, $term, $taxonomy );
-
-		return $term;
 	}
 
 	/**
-	 * Add AutoDescription term-meta data to functions that return multiple terms.
+	 * Sanitizes and saves term meta data when a term is altered.
 	 *
-	 * @since 2.0.0
+	 * @since 2.7.0
 	 *
-	 * @param array  $terms    Database row objects.
-	 * @param string $taxonomy Taxonomy name that $terms are part of.
-	 * @return array $terms Database row objects.
-	 */
-	public function get_terms_filter( array $terms, $taxonomy ) {
-
-		foreach( $terms as $term )
-			$term = $this->get_term_filter( $term, $taxonomy );
-
-		return $terms;
-	}
-
-	/**
-	 * Save taxonomy meta data.
-	 * Fires when a user edits and saves a taxonomy.
-	 *
-	 * @since 2.1.8
-	 *
-	 * @param integer $term_id Term ID.
-	 * @param integer $tt_id   Term Taxonomy ID.
+	 * @param int $term_id Term ID.
+	 * @param int $tt_id   Term Taxonomy ID.
 	 * @return void Early on AJAX call.
 	 */
-	public function taxonomy_seo_save( $term_id, $tt_id ) {
+	public function update_term_meta( $term_id, $tt_id ) {
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX )
 			return;
 
-		$term_meta = (array) get_option( 'autodescription-term-meta' );
+		//* Check again against ambiguous injection.
+		check_admin_referer( 'update-tag_' . $term_id );
 
-		$term_meta[$term_id] = isset( $_POST['autodescription-meta'] ) ? (array) $_POST['autodescription-meta'] : array();
+		$data = isset( $_POST['autodescription-meta'] ) ? (array) map_deep( $_POST['autodescription-meta'], 'esc_attr' ) : array();
+		$data = wp_parse_args( $data, $this->get_term_meta_defaults() );
 
-		//* Pass through wp_kses if not super admin.
-		if ( ! current_user_can( 'unfiltered_html' ) && isset( $term_meta[$term_id]['archive_description'] ) )
-			$term_meta[$term_id]['archive_description'] = wp_kses( $term_meta[$term_id]['archive_description'] );
-
-		update_option( 'autodescription-term-meta', $term_meta );
+		update_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
 
 	}
 
 	/**
-	 * Delete term meta data.
-	 * Fires when a user deletes a term.
+	 * Delete term meta data when a term is deleted.
+	 * Delete only the default data keys.
 	 *
-	 * @since 2.1.8
+	 * @since 2.7.0
 	 *
-	 * @param integer $term_id Term ID.
-	 * @param integer $tt_id   Taxonomy Term ID.
+	 * @param int $term_id Term ID.
+	 * @param int $tt_id   Term Taxonomy ID.
 	 */
-	public function term_meta_delete( $term_id, $tt_id ) {
+	public function delete_term_meta( $term_id, $tt_id ) {
 
-		$term_meta = (array) get_option( 'autodescription-term-meta' );
+		//* If this results in an empty data string, all data has already been removed by WP core.
+		$data = get_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true );
 
-		unset( $term_meta[$term_id] );
+		if ( is_array( $data ) ) {
+			foreach ( $this->get_term_meta_defaults() as $key => $value ) {
+				unset( $data[ $key ] );
+			}
+		}
 
-		update_option( 'autodescription-term-meta', (array) $term_meta );
+		if ( empty( $data ) )
+			delete_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS );
+		else
+			update_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
 
 	}
 
 	/**
 	 * Fetch set Term data.
 	 *
-	 * @param object|null $term The TT object, if it isn't set, one is fetched.
-	 *
 	 * @since 2.6.0
+	 * @since 2.7.0 Handles term object differently for upgraded database.
 	 *
-	 * @return array $data The SEO Framework TT data.
+	 * @todo @since 2.8.0 Will no longer use $term.
+	 *
+	 * @param object|null $term The TT object, if it isn't set, one is fetched.
+	 * @param object|null $term_id The term object.
+	 * @return array The SEO Framework TT data.
 	 */
-	public function get_term_data( $term = null ) {
+	public function get_term_data( $term = null, $term_id = 0 ) {
 
-		if ( is_null( $term ) ) {
-			if ( $this->is_author() ) {
-				//* Special handling.
-				return null;
-			}
+		if ( is_null( $term ) )
+			$term = $this->fetch_the_term( $term_id );
 
-			$term = $this->fetch_the_term();
-		}
-
-		if ( $term ) {
-			$data = array();
-
-			$data['title'] = isset( $term->admeta['doctitle'] ) ? $term->admeta['doctitle'] : '';
-			$data['description'] = isset( $term->admeta['description'] ) ? $term->admeta['description'] : '';
-			$data['noindex'] = isset( $term->admeta['noindex'] ) ? $term->admeta['noindex'] : '';
-			$data['nofollow'] = isset( $term->admeta['nofollow'] ) ? $term->admeta['nofollow'] : '';
-			$data['noarchive'] = isset( $term->admeta['noarchive'] ) ? $term->admeta['noarchive'] : '';
-			$flag = isset( $term->admeta['saved_flag'] ) ? (bool) $term->admeta['saved_flag'] : false;
-
-			//* Genesis data fetch. This will override our options with Genesis options on save.
-			if ( false === $flag && isset( $term->meta ) ) {
-				$data['title'] = empty( $data['title'] ) && isset( $term->meta['doctitle'] ) 				? $term->meta['doctitle'] : $data['noindex'];
-				$data['description'] = empty( $data['description'] ) && isset( $term->meta['description'] )	? $term->meta['description'] : $data['description'];
-				$data['noindex'] = empty( $data['noindex'] ) && isset( $term->meta['noindex'] ) 			? $term->meta['noindex'] : $data['noindex'];
-				$data['nofollow'] = empty( $data['nofollow'] ) && isset( $term->meta['nofollow'] )			? $term->meta['nofollow'] : $data['nofollow'];
-				$data['noarchive'] = empty( $data['noarchive'] ) && isset( $term->meta['noarchive'] )		? $term->meta['noarchive'] : $data['noarchive'];
-			}
-
-			return $data;
+		if ( isset( $term->term_id ) ) {
+			if ( $this->can_get_term_meta() )
+				return $this->get_term_meta( $term->term_id );
+			else
+				return $this->get_old_term_data( $term );
 		}
 
 		//* Return null if no term can be set.
 		return null;
+	}
+
+	/**
+	 * Fetches term metadata array for the inpost term metabox.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param object $term The TT object. Must be assigned.
+	 * @return array The SEO Framework TT data.
+	 */
+	protected function get_old_term_data( $term ) {
+
+		$data = array();
+
+		$data['title'] = isset( $term->admeta['doctitle'] ) ? $term->admeta['doctitle'] : '';
+		$data['description'] = isset( $term->admeta['description'] ) ? $term->admeta['description'] : '';
+		$data['noindex'] = isset( $term->admeta['noindex'] ) ? $term->admeta['noindex'] : '';
+		$data['nofollow'] = isset( $term->admeta['nofollow'] ) ? $term->admeta['nofollow'] : '';
+		$data['noarchive'] = isset( $term->admeta['noarchive'] ) ? $term->admeta['noarchive'] : '';
+		$flag = isset( $term->admeta['saved_flag'] ) ? (bool) $term->admeta['saved_flag'] : false;
+
+		//* Genesis data fetch. This will override our options with Genesis options on save.
+		if ( false === $flag && isset( $term->meta ) ) {
+			$data['title'] = empty( $data['title'] ) && isset( $term->meta['doctitle'] ) 				? $term->meta['doctitle'] : $data['noindex'];
+			$data['description'] = empty( $data['description'] ) && isset( $term->meta['description'] )	? $term->meta['description'] : $data['description'];
+			$data['noindex'] = empty( $data['noindex'] ) && isset( $term->meta['noindex'] ) 			? $term->meta['noindex'] : $data['noindex'];
+			$data['nofollow'] = empty( $data['nofollow'] ) && isset( $term->meta['nofollow'] )			? $term->meta['nofollow'] : $data['nofollow'];
+			$data['noarchive'] = empty( $data['noarchive'] ) && isset( $term->meta['noarchive'] )		? $term->meta['noarchive'] : $data['noarchive'];
+		}
+
+		return $data;
 	}
 
 	/**
@@ -284,8 +254,8 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 
 		static $term = array();
 
-		if ( isset( $term[$id] ) )
-			return $term[$id];
+		if ( isset( $term[ $id ] ) )
+			return $term[ $id ];
 
 		//* Return null if no term can be set.
 		if ( false === $this->is_archive() )
@@ -296,20 +266,19 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 
 			if ( isset( $current_screen->taxonomy ) ) {
 				$term_id = $id ? $id : $this->get_admin_term_id();
-				$term[$id] = get_term_by( 'id', $term_id, $current_screen->taxonomy );
+				$term[ $id ] = get_term_by( 'id', $term_id, $current_screen->taxonomy );
 			}
 		} else {
-			if ( $this->is_category() || $this->is_tag() ) {
-				$term[$id] = get_queried_object();
-			} else if ( $this->is_tax() ) {
-				$term[$id] = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
-			}
+			if ( $this->is_category() || $this->is_tag() )
+				$term[ $id ] = get_queried_object();
+			elseif ( $this->is_tax() )
+				$term[ $id ] = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
 		}
 
-		if ( isset( $term[$id] ) )
-			return $term[$id];
+		if ( isset( $term[ $id ] ) )
+			return $term[ $id ];
 
-		return $term[$id] = false;
+		return $term[ $id ] = false;
 	}
 
 	/**
@@ -351,67 +320,44 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 	 */
 	protected function get_the_term_name( $term, $singular = true, $fallback = true, $use_cache = true ) {
 
-		if ( false === $use_cache ) {
-			//* No cache. Short circuit.
+		if ( $use_cache ) {
+			static $term_name = array();
 
-			if ( $term && is_object( $term ) ) {
-				$tax_type = $term->taxonomy;
-				$term_labels = $this->get_tax_labels( $tax_type );
-
-				if ( $singular ) {
-					if ( isset( $term_labels->singular_name ) )
-						return $term_labels->singular_name;
-				} else {
-					if ( isset( $term_labels->name ) )
-						return $term_labels->name;
-				}
-			}
-
-			if ( $fallback ) {
-				//* Fallback to Page as it is generic.
-				if ( $singular )
-					return __( 'Page', 'autodescription' );
-
-				return __( 'Pages', 'autodescription' );
-			}
+			if ( isset( $term_name[ $singular ] ) )
+				return $term_name[ $singular ];
+		} else {
+			$term_name = array();
 		}
 
-		static $term_name = array();
-
-		if ( isset( $term_name[$singular] ) )
-			return $term_name[$singular];
-
-		if ( $term && is_object( $term ) ) {
+		if ( isset( $term->taxonomy ) ) {
 			$tax_type = $term->taxonomy;
 
-			static $term_labels = null;
+			static $term_labels = array();
 
 			/**
 			 * Dynamically fetch the term name.
-			 *
 			 * @since 2.3.1
 			 */
-			if ( is_null( $term_labels ) )
-				$term_labels = $this->get_tax_labels( $tax_type );
+			if ( ! isset( $term_labels[ $tax_type ] ) )
+				$term_labels[ $tax_type ] = $this->get_tax_labels( $tax_type );
 
 			if ( $singular ) {
-				if ( isset( $term_labels->singular_name ) )
-					return $term_name[$singular] = $term_labels->singular_name;
+				if ( isset( $term_labels[ $tax_type ]->singular_name ) )
+					return $term_name[ $singular ] = $term_labels[ $tax_type ]->singular_name;
 			} else {
 				if ( isset( $term_labels->name ) )
-					return $term_name[$singular] = $term_labels->name;
+					return $term_name[ $singular ] = $term_labels[ $tax_type ]->name;
 			}
 		}
 
 		if ( $fallback ) {
 			//* Fallback to Page as it is generic.
 			if ( $singular )
-				return $term_name[$singular] = __( 'Page', 'autodescription' );
+				return $term_name[ $singular ] = esc_html__( 'Page', 'autodescription' );
 
-			return $term_name[$singular] = __( 'Pages', 'autodescription' );
+			return $term_name[ $singular ] = esc_html__( 'Pages', 'autodescription' );
 		}
 
-		return $term_name[$singular] = '';
+		return $term_name[ $singular ] = '';
 	}
-
 }

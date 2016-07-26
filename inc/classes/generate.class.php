@@ -26,6 +26,18 @@
 class AutoDescription_Generate extends AutoDescription_TermData {
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor, load parent constructor
 	 */
 	public function __construct() {
@@ -84,53 +96,27 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 				$meta['noindex'] = 'noindex';
 		}
 
-		if ( $this->is_category() || $this->is_tag() ) {
-			$term = get_queried_object();
+		if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
 
-			$meta['noindex']   = empty( $meta['noindex'] ) && $term->admeta['noindex'] ? 'noindex' : $meta['noindex'];
-			$meta['nofollow']  = empty( $meta['nofollow'] ) && $term->admeta['nofollow'] ? 'nofollow' : $meta['nofollow'];
-			$meta['noarchive'] = empty( $meta['noarchive'] ) && $term->admeta['noarchive'] ? 'noarchive' : $meta['noarchive'];
+			$data = $this->get_term_data();
 
+			$meta['noindex']   = empty( $meta['noindex'] ) && ! empty( $data['noindex'] ) ? 'noindex' : $meta['noindex'];
+			$meta['nofollow']  = empty( $meta['nofollow'] ) && ! empty( $data['nofollow'] ) ? 'nofollow' : $meta['nofollow'];
+			$meta['noarchive'] = empty( $meta['noarchive'] ) && ! empty( $data['noarchive'] ) ? 'noarchive' : $meta['noarchive'];
+
+			//* If on custom Taxonomy page, but not a category or tag, then should've recieved specific term SEO settings.
 			if ( $this->is_category() ) {
 				$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'category_noindex' ) ? 'noindex' : $meta['noindex'];
 				$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'category_nofollow' ) ? 'nofollow' : $meta['nofollow'];
 				$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'category_noindex' ) ? 'noarchive' : $meta['noarchive'];
-			} else if ( $this->is_tag() ) {
+			} elseif ( $this->is_tag() ) {
 				$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'tag_noindex' ) ? 'noindex' : $meta['noindex'];
 				$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'tag_nofollow' ) ? 'nofollow' : $meta['nofollow'];
 				$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'tag_noindex' ) ? 'noarchive' : $meta['noarchive'];
 			}
-
-			$flag = isset( $term->admeta['saved_flag'] ) && $this->is_checked( $term->admeta['saved_flag'] );
-
-			if ( false === $flag && isset( $term->meta ) ) {
-				//* Genesis support.
-				$meta['noindex']   = empty( $meta['noindex'] ) && $term->meta['noindex'] ? 'noindex' : $meta['noindex'];
-				$meta['nofollow']  = empty( $meta['nofollow'] ) && $term->meta['nofollow'] ? 'nofollow' : $meta['nofollow'];
-				$meta['noarchive'] = empty( $meta['noarchive'] ) && $term->meta['noarchive'] ? 'noarchive' : $meta['noarchive'];
-			}
-		}
-
-		// Is custom Taxonomy page. But not a category or tag. Should've recieved specific term SEO settings.
-		if ( $this->is_tax() ) {
-			$term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
-
-			$meta['noindex']   = empty( $meta['noindex'] ) && $term->admeta['noindex'] ? 'noindex' : $meta['noindex'];
-			$meta['nofollow']  = empty( $meta['nofollow'] ) && $term->admeta['nofollow'] ? 'nofollow' : $meta['nofollow'];
-			$meta['noarchive'] = empty( $meta['noarchive'] ) && $term->admeta['noarchive'] ? 'noarchive' : $meta['noarchive'];
 		}
 
 		if ( $this->is_author() ) {
-			// $author_id = (int) get_query_var( 'author' );
-
-			/**
-			 * @todo
-			 * @priority high 2.6.x
-			 */
-			// $meta['noindex']   = empty( $meta['noindex'] ) && get_the_author_meta( 'noindex', $author_id ) ? 'noindex' : $meta['noindex'];
-			// $meta['nofollow']  = empty( $meta['nofollow'] ) && get_the_author_meta( 'nofollow', $author_id ) ? 'nofollow' : $meta['nofollow'];
-			// $meta['noarchive'] = empty( $meta['noarchive'] ) && get_the_author_meta( 'noarchive', $author_id ) ? 'noarchive' : $meta['noarchive'];
-
 			$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'author_noindex' ) ? 'noindex' : $meta['noindex'];
 			$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'author_nofollow' ) ? 'nofollow' : $meta['nofollow'];
 			$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'author_noarchive' ) ? 'noarchive' : $meta['noarchive'];
@@ -183,15 +169,16 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 	 *
 	 * @since 2.3.9
 	 */
-	public function get_separator( $type = 'title', $escape = false ) {
+	public function get_separator( $type = 'title', $escape = true ) {
 
-		static $sepcache = array();
 		static $sep_esc = array();
 
-		if ( isset( $sep_esc[$type][$escape] ) )
-			return $sep_esc[$type][$escape];
+		if ( isset( $sep_esc[ $type ][ $escape ] ) )
+			return $sep_esc[ $type ][ $escape ];
 
-		if ( ! isset( $sepcache[$type] ) ) {
+		static $sepcache = array();
+
+		if ( ! isset( $sepcache[ $type ] ) ) {
 			if ( 'title' === $type ) {
 				$sep_option = $this->get_option( 'title_seperator' ); // Note: typo.
 			} else {
@@ -200,9 +187,9 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 
 			if ( 'pipe' === $sep_option ) {
 				$sep = '|';
-			} else if ( 'dash' === $sep_option ) {
+			} elseif ( 'dash' === $sep_option ) {
 				$sep = '-';
-			} else if ( '' !== $sep_option ) {
+			} elseif ( '' !== $sep_option ) {
 				//* Encapsulate within html entities.
 				$sep = '&' . $sep_option . ';';
 			} else {
@@ -210,23 +197,23 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 				$sep = '|';
 			}
 
-			$sepcache[$type] = $sep;
+			$sepcache[ $type ] = $sep;
 		}
 
 		if ( $escape ) {
-			return $sep_esc[$type][$escape] = esc_html( $sepcache[$type] );
+			return $sep_esc[ $type ][ $escape ] = esc_html( $sepcache[ $type ] );
 		} else {
-			return $sep_esc[$type][$escape] = $sepcache[$type];
+			return $sep_esc[ $type ][ $escape ] = $sepcache[ $type ];
 		}
 	}
 
 	/**
-	 * Fetch blogname
+	 * Fetches blogname.
 	 *
 	 * @staticvar string $blogname
 	 *
 	 * @since 2.5.2
-	 * @return string $blogname The trimmed and sanitized blogname
+	 * @return string $blogname The trimmed and sanitized blogname.
 	 */
 	public function get_blogname() {
 
@@ -287,7 +274,7 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 			//* Full locale is used.
 
 			//* Return the match if found.
-			if ( in_array( $match, $valid_locales ) )
+			if ( in_array( $match, $valid_locales, true ) )
 				return $match;
 
 			//* Convert to only language portion.
@@ -303,11 +290,46 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 			//* No need to do for each loop. Just match the keys.
 			if ( $key = array_search( $match, $locale_keys ) ) {
 				//* Fetch the corresponding value from key within the language array.
-				return $valid_locales[$key];
+				return $valid_locales[ $key ];
 			}
 		}
 
 		return $default;
 	}
 
+	/**
+	 * Generates the Open Graph type based on query status.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @return string The Open Graph type.
+	 */
+	public function generate_og_type() {
+
+		if ( $this->is_wc_product() ) {
+			$type = 'product';
+		} elseif ( $this->is_single() && $this->get_image_from_cache() ) {
+			$type = 'article';
+		} elseif ( $this->is_author() ) {
+			$type = 'profile';
+		} elseif ( $this->is_blog_page() || ( $this->is_front_page() && ! $this->has_page_on_front() ) ) {
+			$type = 'blog';
+		} else {
+			$type = 'website';
+		}
+
+		return $type;
+	}
+
+	/**
+	 * Generates the Twitter Card type. When there's an image found, it will
+	 * take the said option. Otherwise, it will fall back to 'summary'.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @return string The Twitter Card type.
+	 */
+	public function generate_twitter_card_type() {
+		return $this->get_image_from_cache() ? $this->get_option( 'twitter_card' ) : 'summary';
+	}
 }

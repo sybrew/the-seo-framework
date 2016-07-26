@@ -26,6 +26,18 @@
 class AutoDescription_PostData extends AutoDescription_Detect {
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor, load parent constructor
 	 */
 	public function __construct() {
@@ -52,7 +64,10 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 		if ( ! isset( $_POST['autodescription'] ) )
 			return;
 
-		//* Merge user submitted options with fallback defaults
+		/**
+		 * Merge user submitted options with fallback defaults
+		 * Passes through nonce at the end of the function.
+		 */
 		$data = wp_parse_args( $_POST['autodescription'], array(
 			'_genesis_title'         => '',
 			'_genesis_description'   => '',
@@ -67,19 +82,19 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 		foreach ( (array) $data as $key => $value ) {
 			//* Sanitize the title
 			if ( '_genesis_title' === $key )
-				$data[$key] = trim( strip_tags( $value ) );
+				$data[ $key ] = trim( strip_tags( $value ) );
 
 			//* Sanitize the description
 			if ( '_genesis_description' === $key )
-				$data[$key] = $this->s_description( $value );
+				$data[ $key ] = $this->s_description( $value );
 
 			//* Sanitize the URL. Make sure it's an absolute URL
 			if ( 'redirect' === $key )
-				$data[$key] = $this->s_redirect_url( $value );
+				$data[ $key ] = $this->s_redirect_url( $value );
 
 		}
 
-		$this->save_custom_fields( $data, 'inpost_seo_save', 'hmpl_ad_inpost_seo_nonce', $post );
+		$this->save_custom_fields( $data, $this->inpost_nonce_field, $this->inpost_nonce_name, $post );
 	}
 
 	/**
@@ -140,22 +155,16 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 	}
 
 	/**
-	 * Fetches or parses the excerpt of the post
+	 * Fetches or parses the excerpt of the post.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $excerpt the Excerpt
+	 * @param string $excerpt the Excerpt.
 	 * @param int $the_id The Post ID.
-	 * @param int $tt_id The Taxonomy Term ID
-	 *
+	 * @param int $tt_id The Taxonomy Term ID.
 	 * @return string The Excerpt
 	 */
 	public function get_excerpt_by_id( $excerpt = '', $the_id = '', $tt_id = '' ) {
-
-		static $cache = array();
-
-		if ( isset( $cache[$excerpt][$the_id][$tt_id] ) )
-			return $cache[$excerpt][$the_id][$tt_id];
 
 		if ( empty( $excerpt ) )
 			$excerpt = $this->fetch_excerpt( $the_id, $tt_id );
@@ -164,7 +173,15 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 		if ( '' === $excerpt )
 			return '';
 
-		$excerpt = wp_strip_all_tags( strip_shortcodes( $excerpt ) );
+		/**
+		 * Applies filters 'the_seo_framework_allow_excerpt_shortcode_tags' : boolean
+		 * @since 2.6.6.1
+		 */
+		if ( apply_filters( 'the_seo_framework_allow_excerpt_shortcode_tags', false ) && false === $this->is_feed() ) {
+			$excerpt = wp_strip_all_tags( $excerpt );
+		} else {
+			$excerpt = wp_strip_all_tags( strip_shortcodes( $excerpt ) );
+		}
 
 		$output = $this->s_description( $excerpt );
 
@@ -196,7 +213,7 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 		 */
 		if ( isset( $post->post_excerpt ) && $post->post_excerpt ) {
 			$excerpt = $post->post_excerpt;
-		} else if ( isset( $post->post_content ) ) {
+		} elseif ( isset( $post->post_content ) ) {
 			$uses_builder = $this->uses_page_builder( $post->ID );
 			$excerpt = $uses_builder ? '' : $post->post_content;
 		} else {
@@ -249,7 +266,7 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 			} else {
 				$post = get_post( $the_id );
 			}
-		} else if ( '' !== $tt_id ) {
+		} elseif ( '' !== $tt_id ) {
 			/**
 			 * @since 2.3.3 Match the descriptions in admin as on the front end.
 			 */
@@ -337,7 +354,9 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 				AND post_status IN ($post_status_in_string)
 				ORDER BY post_date DESC
 				LIMIT %d",
-				'', 1 );
+				'',
+				1
+			);
 
 			$page_id = (int) $wpdb->get_var( $sql );
 			$this->object_cache_set( $latest_posts_key, $page_id, DAY_IN_SECONDS );
@@ -417,5 +436,4 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 
 		return false;
 	}
-
 }

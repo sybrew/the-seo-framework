@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://wordpress.org/plugins/autodescription/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.
- * Version: 2.6.6
+ * Version: 2.6.6dev7
  * Author: Sybre Waaijer
  * Author URI: https://cyberwire.nl/
  * License: GPLv3
@@ -34,6 +34,7 @@
 	//		define( 'THE_SEO_FRAMEWORK_DEBUG', true );
 	//		define( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN', true );
 	//		define( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS', true );
+	//		update_option( 'the_seo_framework_upgraded_db_version', '0' );
 	//}
 //}},0);
 
@@ -42,7 +43,13 @@
  * Not many caching plugins use CDN in dashboard. What a shame. Firefox does cache.
  * @since 1.0.0
  */
-define( 'THE_SEO_FRAMEWORK_VERSION', '2.6.6' );
+define( 'THE_SEO_FRAMEWORK_VERSION', '2.7.0dev' );
+
+/**
+ * Plugin Database version for lightweight version comparing.
+ * @since 2.7.0
+ */
+define( 'THE_SEO_FRAMEWORK_DB_VERSION', '2700' );
 
 /**
  * Plugin options filter.
@@ -55,6 +62,18 @@ define( 'THE_SEO_FRAMEWORK_SITE_OPTIONS', (string) apply_filters( 'the_seo_frame
  * @since 2.2.2
  */
 define( 'THE_SEO_FRAMEWORK_NETWORK_OPTIONS', (string) apply_filters( 'the_seo_framework_network_settings', 'autodescription-network-settings' ) );
+
+/**
+ * Plugin term options filter.
+ * @since 2.7.0
+ */
+define( 'THE_SEO_FRAMEWORK_TERM_OPTIONS', (string) apply_filters( 'the_seo_framework_term_options', 'autodescription-term-settings' ) );
+
+/**
+ * Plugin term options filter.
+ * @since 2.7.0
+ */
+define( 'THE_SEO_FRAMEWORK_USER_OPTIONS', (string) apply_filters( 'the_seo_framework_user_options', 'autodescription-user-settings' ) );
 
 /**
  * The plugin map url.
@@ -83,16 +102,22 @@ define( 'THE_SEO_FRAMEWORK_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 define( 'THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE', __FILE__ );
 
 /**
+ * The plugin views map absolute path.
+ * @since 2.7.0
+ */
+define( 'THE_SEO_FRAMEWORK_DIR_PATH_VIEWS', THE_SEO_FRAMEWORK_DIR_PATH . 'inc/views/' );
+
+/**
  * The plugin class map absolute path.
  * @since 2.2.9
  */
-define( 'THE_SEO_FRAMEWORK_DIR_PATH_CLASS', THE_SEO_FRAMEWORK_DIR_PATH . '/inc/classes/' );
+define( 'THE_SEO_FRAMEWORK_DIR_PATH_CLASS', THE_SEO_FRAMEWORK_DIR_PATH . 'inc/classes/' );
 
 /**
  * The plugin function map absolute path.
  * @since 2.2.9
  */
-define( 'THE_SEO_FRAMEWORK_DIR_PATH_FUNCT', THE_SEO_FRAMEWORK_DIR_PATH . '/inc/functions/' );
+define( 'THE_SEO_FRAMEWORK_DIR_PATH_FUNCT', THE_SEO_FRAMEWORK_DIR_PATH . 'inc/functions/' );
 
 add_action( 'plugins_loaded', 'the_seo_framework_locale_init', 10 );
 /**
@@ -109,15 +134,14 @@ function the_seo_framework_locale_init() {
  * @since 1.0.0
  * @uses THE_SEO_FRAMEWORK_DIR_PATH
  */
-require_once( THE_SEO_FRAMEWORK_DIR_PATH . '/load.class.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'load.class.php' );
 
 //* Load deprecated functions.
-//require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.php' );
 
 /**
  * FLush permalinks on activation/deactivation.
- * Calls functions statically.
- * @since 2.2.9
+ * @since 2.6.6
  */
 register_activation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framework_flush_rewrite_rules_activation' );
 register_deactivation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framework_flush_rewrite_rules_deactivation' );

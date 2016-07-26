@@ -26,6 +26,18 @@
 class AutoDescription_Generate_Title extends AutoDescription_Generate_Description {
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor, load parent constructor
 	 */
 	public function __construct() {
@@ -33,7 +45,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	}
 
 	/**
-	 * Get the title. God function.
+	 * Gets the title. Main function.
 	 * Always use this function for the title unless you're absolutely sure what you're doing.
 	 *
 	 * This function is used for all these: Taxonomies and Terms, Posts, Pages, Blog, front page, front-end, back-end.
@@ -57,7 +69,6 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 * 		@param bool description_title Fetch title for description.
 	 * 		@param bool is_front_page Fetch front page title.
 	 * }
-	 *
 	 * @return string $title Title
 	 */
 	public function title( $title = '', $sep = '', $seplocation = '', $args = array() ) {
@@ -95,7 +106,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 					$this->set_theme_dir_transient( false );
 
 					return $this->build_title_doingitwrong( $title, $sep, $seplocation, $args );
-				} else if ( $sep ) {
+				} elseif ( $sep ) {
 					//* Set doing it wrong parameters.
 					$this->tell_title_doing_it_wrong( $title, $sep, $seplocation, false );
 					//* And echo them.
@@ -130,11 +141,10 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	/**
 	 * Escapes and beautifies title.
 	 *
-	 * @param string $title The title to escape and beautify.
-	 * @param bool $trim Whether to trim the title from whitespaces.
-	 *
 	 * @since 2.5.2
 	 *
+	 * @param string $title The title to escape and beautify.
+	 * @param bool $trim Whether to trim the title from whitespaces.
 	 * @return string Escaped and beautified title.
 	 */
 	public function escape_title( $title = '', $trim = true ) {
@@ -151,11 +161,10 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	/**
 	 * Parse and sanitize title args.
 	 *
-	 * @param array $args required The passed arguments.
-	 * @param array $defaults The default arguments.
-	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
+	 * @since 2.4.0
 	 *
-	 * @applies filters the_seo_framework_title_args : {
+	 * @since 2.5.0:
+	 * Applies filters the_seo_framework_title_args : {
 	 * 		@param int term_id The Taxonomy Term ID when taxonomy is also filled in. Else post ID.
 	 * 		@param string taxonomy The Taxonomy name.
 	 * 		@param bool page_on_front Page on front condition for example generation.
@@ -166,7 +175,9 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 * 		@param bool is_front_page Fetch front page title.
 	 * }
 	 *
-	 * @since 2.4.0
+	 * @param array $args required The passed arguments.
+	 * @param array $defaults The default arguments.
+	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
 	 * @return array $args parsed args.
 	 */
 	public function parse_title_args( $args = array(), $defaults = array(), $get_defaults = false ) {
@@ -185,7 +196,6 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 				'escape'			=> true,
 			);
 
-			//* @since 2.5.0
 			$defaults = (array) apply_filters( 'the_seo_framework_title_args', $defaults, $args );
 		}
 
@@ -208,11 +218,11 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	}
 
 	/**
-	 * Reparse title args.
-	 *
-	 * @param array $args required The passed arguments.
+	 * Reparses title args.
 	 *
 	 * @since 2.6.0
+	 *
+	 * @param array $args required The passed arguments.
 	 * @return array $args parsed args.
 	 */
 	public function reparse_title_args( $args = array() ) {
@@ -227,7 +237,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 			}
 		} else {
 			//* Old style parameters are used. Doing it wrong.
-			$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', '2.5.0' );
+			$this->_doing_it_wrong( __METHOD__, 'Use $args = array() for parameters.', '2.5.0' );
 			$args = $default_args;
 		}
 
@@ -235,16 +245,15 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	}
 
 	/**
-	 * Build the title based on input, without tagline.
+	 * Builds the title based on input, without tagline.
+	 *
+	 * @since 2.4.0
 	 *
 	 * @param array $args : accepted args : {
 	 * 		@param int term_id The Taxonomy Term ID
 	 * 		@param bool placeholder Generate placeholder, ignoring options.
 	 * 		@param bool page_on_front Page on front condition for example generation
 	 * }
-	 *
-	 * @since 2.4.0
-	 *
 	 * @return string Title without tagline.
 	 */
 	protected function build_title_notagline( $args = array() ) {
@@ -269,14 +278,13 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 * Build the title based on input, without tagline.
 	 * Note: Not escaped.
 	 *
+	 * @since 2.6.0
+	 *
 	 * @param array $args : accepted args : {
 	 * 		@param int term_id The Taxonomy Term ID
 	 * 		@param bool placeholder Generate placeholder, ignoring options.
 	 * 		@param bool page_on_front Page on front condition for example generation
 	 * }
-	 *
-	 * @since 2.6.0
-	 *
 	 * @return string Title without tagline.
 	 */
 	protected function get_notagline_title( $args = array() ) {
@@ -295,9 +303,11 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	}
 
 	/**
-	 * Build the title based on input for themes that are doing it wrong.
-	 * Pretty much a duplicate of build_title but contains many more variables.
+	 * Builds the title based on input and query status for themes that are doing it wrong.
+	 * Pretty much a duplicate of build_title but contains different variables.
 	 * Keep this in mind.
+	 *
+	 * @since 2.4.0
 	 *
 	 * @param string $title The Title to return
 	 * @param string $sep The Title sepeartor
@@ -308,14 +318,11 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 * 		@param bool placeholder Generate placeholder, ignoring options.
 	 * 		@param bool get_custom_field Do not fetch custom title when false.
 	 * }
-	 *
-	 * @since 2.4.0
-	 *
 	 * @return string $title Title
 	 */
 	public function build_title_doingitwrong( $title = '', $sep = '', $seplocation = '', $args = array() ) {
 
-		if ( $this->the_seo_framework_debug ) $this->debug_init( __CLASS__, __FUNCTION__, true, $debug_key = microtime(true), get_defined_vars() );
+		if ( $this->the_seo_framework_debug ) $this->debug_init( __METHOD__, true, $debug_key = microtime( true ), get_defined_vars() );
 
 		/**
 		 * Empty the title, because most themes think they 'know' how to SEO the front page.
@@ -422,7 +429,6 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 			} else {
 				$title = " $sep " . trim( ltrim( $title, " $sep_to_replace" ) );
 			}
-
 		} else {
 			$title = trim( $title ) . " $sep ";
 		}
@@ -433,13 +439,15 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		if ( $args['escape'] )
 			$title = $this->escape_title( $title, false );
 
-		if ( $this->the_seo_framework_debug ) $this->debug_init( __CLASS__, __FUNCTION__, false, $debug_key, array( 'title_output' => $title ) );
+		if ( $this->the_seo_framework_debug ) $this->debug_init( __METHOD__, false, $debug_key, array( 'title_output' => $title ) );
 
 		return $title;
 	}
 
 	/**
-	 * Build the title based on input.
+	 * Builds the title based on input and query status.
+	 *
+	 * @since 2.4.0
 	 *
 	 * @param string $title The Title to return
 	 * @param string $seplocation The Title sepeartor location ( accepts 'left' or 'right' )
@@ -451,14 +459,11 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 * 		@param bool 	get_custom_field Do not fetch custom title when false.
 	 * 		@param bool 	is_front_page Fetch front page title.
 	 * }
-	 *
-	 * @since 2.4.0
-	 *
 	 * @return string $title Title
 	 */
 	public function build_title( $title = '', $seplocation = '', $args = array() ) {
 
-		if ( $this->the_seo_framework_debug ) $this->debug_init( __CLASS__, __FUNCTION__, true, $debug_key = microtime(true), get_defined_vars() );
+		if ( $this->the_seo_framework_debug ) $this->debug_init( __METHOD__, true, $debug_key = microtime( true ), get_defined_vars() );
 
 		$args = $this->reparse_title_args( $args );
 
@@ -471,7 +476,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		$title = $this->do_title_pre_filter( '', $args, false );
 		$blogname = '';
 
-		$is_front_page = $this->is_front_page() || $args['page_on_front'] || $this->is_static_frontpage( $args['term_id'] ) ? true : false;
+		$is_front_page = $this->is_front_page() || $args['page_on_front'] || $this->is_static_frontpage( $args['term_id'] );
 
 		$seplocation = $this->get_title_seplocation( $seplocation );
 
@@ -511,7 +516,6 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		 * @since 2.4.1
 		 */
 		if ( ! $args['description_title'] ) {
-
 			$title = $this->add_title_protection( $title, $args['term_id'] );
 			$title = $this->add_title_pagination( $title );
 
@@ -522,7 +526,6 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 				if ( $this->add_title_additions() )
 					$title = $this->process_title_additions( $title, $blogname, $seplocation );
 			}
-
 		}
 
 		$title = $this->do_title_pro_filter( $title, $args, false );
@@ -537,7 +540,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		if ( $args['escape'] )
 			$title = $this->escape_title( $title );
 
-		if ( $this->the_seo_framework_debug ) $this->debug_init( __CLASS__, __FUNCTION__, false, $debug_key, array( 'title_output' => $title ) );
+		if ( $this->the_seo_framework_debug ) $this->debug_init( __METHOD__, false, $debug_key, array( 'title_output' => $title ) );
 
 		return $title;
 	}
@@ -568,13 +571,10 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 * Generate the title based on query conditions.
 	 *
 	 * @since 2.3.4
+	 * @staticvar array $cache : contains $title strings.
 	 *
 	 * @param array $args The Title Args.
 	 * @param bool $escape Parse Title through saninitation calls.
-	 *
-	 * @staticvar array $cache : contains $title strings.
-	 * @since 2.6.0
-	 *
 	 * @return string $title The Generated Title.
 	 */
 	public function generate_title( $args = array(), $escape = true ) {
@@ -583,17 +583,17 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 
 		$title = '';
 		$id = $args['term_id'];
-		$taxonomny = $args['taxonomy'];
+		$taxonomy = $args['taxonomy'];
 
 		static $cache = array();
 
-		if ( isset( $cache[$id][$taxonomny] ) )
-			$title = $cache[$id][$taxonomny];
+		if ( isset( $cache[ $id ][ $taxonomy ] ) )
+			$title = $cache[ $id ][ $taxonomy ];
 
 		if ( empty( $title ) ) {
 
 			if ( $this->is_archive() ) {
-				if ( ( $id && $taxonomny ) || $this->is_category() || $this->is_tag() || $this->is_tax() ) {
+				if ( ( $id && $taxonomy ) || $this->is_category() || $this->is_tag() || $this->is_tax() ) {
 					$title = $this->title_for_terms( $args, false );
 				} else {
 					$term = get_queried_object();
@@ -603,7 +603,6 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 					 */
 					$title = $this->get_the_real_archive_title( $term, $args );
 				}
-
 			}
 
 			$title = $this->get_the_404_title( $title );
@@ -636,7 +635,6 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 * @param string $deprecated Deprecated: The Home Page separator location
 	 * @param bool $escape Parse Title through saninitation calls.
 	 * @param bool $get_option Whether to fetch the SEO Settings option.
-	 *
 	 * @return array {
 	 *		'title' => (string) $title : The Generated Title
 	 *		'blogname' => (string) $blogname : The Generated Blogname
@@ -680,7 +678,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 			'title' => $title,
 			'blogname' => $blogname,
 			'add_tagline' => $add_tagline,
-			'seplocation' => $seplocation
+			'seplocation' => $seplocation,
 		);
 	}
 
@@ -696,7 +694,6 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 * @param bool $get_custom_field Fetch Title from InPost Custom Fields.
 	 * @param bool $escape Parse Title through saninitation calls.
 	 * @param bool $get_option Whether to fetch the SEO Settings option.
-	 *
 	 * @return string The Title.
 	 */
 	public function title_for_home( $home_title = '', $get_custom_field = true, $escape = false, $get_option = true ) {
@@ -734,9 +731,6 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 *
 	 * @param array $args The Title arguments.
 	 * @param bool $escape Parse Title through saninitation calls.
-	 *
-	 * @todo put args in array.
-	 *
 	 * @return string The Title.
 	 */
 	public function title_for_terms( $args = array(), $escape = false ) {
@@ -749,38 +743,21 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		if ( $args['term_id'] && $args['taxonomy'] )
 			$term = get_term( $args['term_id'], $args['taxonomy'], OBJECT, 'raw' );
 
-		if ( $this->is_category() || $this->is_tag() ) {
-
-			if ( $args['get_custom_field'] ) {
-				if ( ! isset( $term ) )
-					$term = $this->fetch_the_term( $args['term_id'] );
-
-				$title = empty( $term->admeta['doctitle'] ) ? $title : $term->admeta['doctitle'];
-
-				$flag = isset( $term->admeta['saved_flag'] ) && $this->is_checked( $term->admeta['saved_flag'] ) ? true : false;
-				if ( false === $flag && empty( $title ) && isset( $term->meta['doctitle'] ) )
-					$title = empty( $term->meta['doctitle'] ) ? $title : $term->meta['doctitle'];
-			}
-
-			if ( empty( $title ) )
-				$title = $this->get_the_real_archive_title( $term, $args );
-
-		} else {
+		if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
 			if ( ! isset( $term ) && $this->is_tax() )
 				$term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
 
-			if ( $args['get_custom_field'] && isset( $term ) ) {
-				$title = empty( $term->admeta['doctitle'] ) ? $title : wp_kses_stripslashes( wp_kses_decode_entities( $term->admeta['doctitle'] ) );
+			if ( ! isset( $term ) )
+				$term = $this->fetch_the_term( $args['term_id'] );
 
-				$flag = isset( $term->admeta['saved_flag'] ) && $this->is_checked( $term->admeta['saved_flag'] );
-				if ( false === $flag && empty( $title ) && isset( $term->meta['doctitle'] ) )
-					$title = empty( $term->meta['doctitle'] ) ? $title : wp_kses_stripslashes( wp_kses_decode_entities( $term->meta['doctitle'] ) );
+			if ( $args['get_custom_field'] ) {
+				$data = $this->get_term_data( $term, $args['term_id'] );
+				$title = empty( $data['doctitle'] ) ? $title : $data['doctitle'];
 			}
-
-			if ( empty( $title ) )
-				$title = $this->get_the_real_archive_title( $term, $args );
-
 		}
+
+		if ( empty( $title ) )
+			$title = $this->get_the_real_archive_title( $term, $args );
 
 		if ( $escape )
 			$title = $this->escape_title( $title, false );
@@ -797,12 +774,11 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 * @param bool $escape Parse Title through saninitation calls.
 	 * @param int $id The Post ID.
 	 * @param string $taxonomy The term name.
-	 *
 	 * @return string The Title.
 	 */
 	public function title_from_custom_field( $title = '', $escape = false, $id = null, $taxonomy = null ) {
 
-		$id = isset( $id ) ? $id : null;
+		$id = isset( $id ) ? $id : $this->get_the_real_ID();
 
 		/**
 		 * Create something special for blog page. Only if it's not the home page.
@@ -811,13 +787,15 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		if ( $this->is_singular() ) {
 			//* Get title from custom field, empty it if it's not there to override the default title
 			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : $title;
-		} else if ( $this->is_blog_page( $id ) ) {
+		} elseif ( $this->is_blog_page( $id ) ) {
 			//* Posts page title.
 			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : get_the_title( $id );
-		} else if ( $this->is_archive() || ( $id && $taxonomy ) ) {
+		} elseif ( $this->is_archive() || ( $id && $taxonomy ) ) {
 			//* Get the custom title for terms.
 			$term = get_term( $id, $taxonomy, OBJECT, 'raw' );
-			$title = isset( $term->admeta['doctitle'] ) ? $term->admeta['doctitle'] : $title;
+			$data = $this->get_term_data( $term, $id );
+
+			$title = empty( $data['doctitle'] ) ? $title : $data['doctitle'];
 		}
 
 		if ( $escape )
@@ -830,10 +808,11 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 * Get the archive Title, including filter. Also works in admin.
 	 * @NOTE Taken from WordPress core. Altered to work in the Admin area.
 	 *
+	 * @since 2.6.0
+	 *
 	 * @param object $term The Term object.
 	 * @param array $args The Title arguments.
-	 *
-	 * @since 2.6.0
+	 * @return string The Archive Title.
 	 */
 	public function get_the_real_archive_title( $term = null, $args = array() ) {
 
@@ -862,61 +841,61 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 			$title = $this->single_term_title( '', false, $term );
 			/* translators: Front-end output. 1: Taxonomy singular name, 2: Current taxonomy term */
 			$title = $use_prefix ? sprintf( __( '%1$s: %2$s', 'autodescription' ), $this->get_the_term_name( $term ), $title ) : $title;
-		} else if ( $this->is_author() ) {
+		} elseif ( $this->is_author() ) {
 			$title = get_the_author();
 				/* translators: Front-end output. */
 			$title = $use_prefix ? sprintf( __( 'Author: %s', 'autodescription' ), $title ) : $title;
-		} else if ( $this->is_date() ) {
+		} elseif ( $this->is_date() ) {
 			if ( $this->is_year() ) {
 				/* translators: Front-end output. */
 				$title = get_the_date( _x( 'Y', 'yearly archives date format', 'autodescription' ) );
 				/* translators: Front-end output. */
 				$title = $use_prefix ? sprintf( __( 'Year: %s', 'autodescription' ), $title ) : $title;
-			} else if ( $this->is_month() ) {
+			} elseif ( $this->is_month() ) {
 				/* translators: Front-end output. */
 				$title = get_the_date( _x( 'F Y', 'monthly archives date format', 'autodescription' ) );
 				/* translators: Front-end output. */
 				$title = $use_prefix ? sprintf( __( 'Month: %s', 'autodescription' ), $title ) : $title;
-			} else if ( $this->is_day() ) {
+			} elseif ( $this->is_day() ) {
 				/* translators: Front-end output. */
 				$title = get_the_date( _x( 'F j, Y', 'daily archives date format', 'autodescription' ) );
 				/* translators: Front-end output. */
 				$title = $use_prefix ? sprintf( __( 'Day: %s', 'autodescription' ), $title ) : $title;
 			}
-		} else if ( $this->is_tax( 'post_format' ) ) {
+		} elseif ( $this->is_tax( 'post_format' ) ) {
 			if ( is_tax( 'post_format', 'post-format-aside' ) ) {
 				/* translators: Front-end output. */
 				$title = _x( 'Asides', 'post format archive title', 'autodescription' );
-			} else if ( $this->is_tax( 'post_format', 'post-format-gallery' ) ) {
+			} elseif ( $this->is_tax( 'post_format', 'post-format-gallery' ) ) {
 				/* translators: Front-end output. */
 				$title = _x( 'Galleries', 'post format archive title', 'autodescription' );
-			} else if ( $this->is_tax( 'post_format', 'post-format-image' ) ) {
+			} elseif ( $this->is_tax( 'post_format', 'post-format-image' ) ) {
 				/* translators: Front-end output. */
 				$title = _x( 'Images', 'post format archive title', 'autodescription' );
-			} else if ( $this->is_tax( 'post_format', 'post-format-video' ) ) {
+			} elseif ( $this->is_tax( 'post_format', 'post-format-video' ) ) {
 				/* translators: Front-end output. */
 				$title = _x( 'Videos', 'post format archive title', 'autodescription' );
-			} else if ( $this->is_tax( 'post_format', 'post-format-quote' ) ) {
+			} elseif ( $this->is_tax( 'post_format', 'post-format-quote' ) ) {
 				/* translators: Front-end output. */
 				$title = _x( 'Quotes', 'post format archive title', 'autodescription' );
-			} else if ( $this->is_tax( 'post_format', 'post-format-link' ) ) {
+			} elseif ( $this->is_tax( 'post_format', 'post-format-link' ) ) {
 				/* translators: Front-end output. */
 				$title = _x( 'Links', 'post format archive title', 'autodescription' );
-			} else if ( $this->is_tax( 'post_format', 'post-format-status' ) ) {
+			} elseif ( $this->is_tax( 'post_format', 'post-format-status' ) ) {
 				/* translators: Front-end output. */
 				$title = _x( 'Statuses', 'post format archive title', 'autodescription' );
-			} else if ( $this->is_tax( 'post_format', 'post-format-audio' ) ) {
+			} elseif ( $this->is_tax( 'post_format', 'post-format-audio' ) ) {
 				/* translators: Front-end output. */
 				$title = _x( 'Audio', 'post format archive title', 'autodescription' );
-			} else if ( $this->is_tax( 'post_format', 'post-format-chat' ) ) {
+			} elseif ( $this->is_tax( 'post_format', 'post-format-chat' ) ) {
 				/* translators: Front-end output. */
 				$title = _x( 'Chats', 'post format archive title', 'autodescription' );
 			}
-		} else if ( is_post_type_archive() ) {
+		} elseif ( is_post_type_archive() ) {
 			$title = post_type_archive_title( '', false );
 			/* translators: Front-end output. */
 			$title = $use_prefix ? sprintf( __( 'Archives: %s' ), $title ) : $title;
-		} else if ( isset( $term ) ) {
+		} elseif ( isset( $term ) ) {
 			$title = $this->single_term_title( '', false, $term );
 
 			if ( $use_prefix ) {
@@ -947,8 +926,6 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		if ( ! $term )
 			return;
 
-		$term_name = '';
-
 		if ( isset( $term->name ) ) {
 			if ( $this->is_category() ) {
 				/**
@@ -959,7 +936,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 				* @param string $term_name Category name for archive being displayed.
 				*/
 				$term_name = apply_filters( 'single_cat_title', $term->name );
-			} else if ( $this->is_tag() ) {
+			} elseif ( $this->is_tag() ) {
 				/**
 				* Filter the tag archive page title.
 				*
@@ -968,7 +945,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 				* @param string $term_name Tag name for archive being displayed.
 				*/
 				$term_name = apply_filters( 'single_tag_title', $term->name );
-			} else if ( $this->is_tax() || $this->is_admin() ) {
+			} elseif ( $this->is_tax() || $this->is_admin() ) {
 				/**
 				* Filter the custom taxonomy archive page title.
 				*
@@ -982,25 +959,24 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 			}
 		}
 
-		//* Impossible through WordPress interface. Possible through filters.
+		//* Might be empty through filters.
 		if ( empty( $term_name ) )
 			$term_name = $this->untitled();
 
 		if ( $display )
-			echo $prefix . $term_name;
+			echo esc_attr( $prefix . $term_name );
 		else
 			return $prefix . $term_name;
 	}
 
 	/**
-	 * Return custom field title.
+	 * Returns custom field title.
 	 *
 	 * @since 2.6.0
 	 *
 	 * @param string $title The current title.
 	 * @param int $id The post or TT ID.
 	 * @param string $taxonomy The TT name.
-	 *
 	 * @return string $title The custom field title.
 	 */
 	public function get_custom_field_title( $title = '', $id = '', $taxonomy = '' ) {
@@ -1021,7 +997,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	}
 
 	/**
-	 * Untitled title.
+	 * Returns untitled title.
 	 *
 	 * @since 2.6.0
 	 *
@@ -1033,13 +1009,12 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	}
 
 	/**
-	 * Return Post Title from ID.
+	 * Returns Post Title from ID.
 	 *
 	 * @since 2.6.0
 	 *
 	 * @param int $id The Post ID.
-	 * @param string $title Optional. The current Title.
-	 *
+	 * @param string $title Optional. The current/fallback Title.
 	 * @return string Post Title
 	 */
 	public function post_title_from_ID( $id = 0, $title = '' ) {
@@ -1053,16 +1028,15 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	}
 
 	/**
-	 * Return search title.
+	 * Returns search title.
 	 *
 	 * @since 2.6.0
 	 *
 	 * @param string $title the current title.
 	 * @param bool $escape Whether to escape attributes from query.
-	 *
 	 * @return string Search Title
 	 */
-	public function get_the_search_title( $title, $escape = true ) {
+	public function get_the_search_title( $title = '', $escape = true ) {
 
 		if ( $this->is_search() ) {
 			/* translators: Front-end output. */
@@ -1075,18 +1049,17 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	}
 
 	/**
-	 * Return 404 title.
+	 * Returns 404 title.
 	 *
 	 * @since 2.6.0
 	 *
+	 * @since 2.5.2:
 	 * Applies filters string the_seo_framework_404_title
-	 * @since 2.5.2
 	 *
 	 * @param string $title The current Title
-	 *
 	 * @return string 404 Title
 	 */
-	public function get_the_404_title( $title ) {
+	public function get_the_404_title( $title = '' ) {
 
 		if ( $this->is_404() )
 			return (string) apply_filters( 'the_seo_framework_404_title', '404' );
@@ -1095,15 +1068,15 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	}
 
 	/**
-	 * Get Title Separator.
+	 * Gets Title Separator.
 	 *
 	 * @since 2.6.0
 	 * @staticvar string $sep
 	 *
+	 * @since 2.3.9:
 	 * Applies filters the_seo_framework_title_separator
-	 * @since 2.3.9
 	 *
-	 * @return string The Separator
+	 * @return string The Separator, unescaped.
 	 */
 	public function get_title_separator() {
 
@@ -1112,50 +1085,48 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		if ( isset( $sep ) )
 			return $sep;
 
-		return $sep = (string) apply_filters( 'the_seo_framework_title_separator', $this->get_separator( 'title' ) );
+		return $sep = (string) apply_filters( 'the_seo_framework_title_separator', $this->get_separator( 'title', false ) );
 	}
 
 	/**
-	 * Get Title Seplocation.
+	 * Gets Title Seplocation.
 	 *
+	 * @since 2.3.9
 	 * Applies filters the_seo_framework_title_seplocation : string the title location.
 	 * Applies filters the_seo_framework_title_seplocation_front : string the home page title location.
-	 * @since 2.3.9
 	 *
 	 * @access private
-	 * @since 2.6.0
+	 * @since 2.6.0:
 	 * @staticvar string $cache
 	 *
 	 * @param string $seplocation The current seplocation.
 	 * @param bool $home The home seplocation.
-	 *
 	 * @return string The Seplocation
 	 */
 	public function get_title_seplocation( $seplocation = '', $home = false ) {
 
 		static $cache = array();
 
-		if ( isset( $cache[$seplocation][$home] ) )
-			return $cache[$seplocation][$home];
+		if ( isset( $cache[ $seplocation ][ $home ] ) )
+			return $cache[ $seplocation ][ $home ];
 
 		if ( empty( $seplocation ) || 'right' !== $seplocation || 'left' !== $seplocation ) {
 			if ( $home ) {
-				return $cache[$seplocation][$home] = (string) apply_filters( 'the_seo_framework_title_seplocation_front', $this->get_option( 'home_title_location' ) );
+				return $cache[ $seplocation ][ $home ] = (string) apply_filters( 'the_seo_framework_title_seplocation_front', $this->get_option( 'home_title_location' ) );
 			} else {
-				return $cache[$seplocation][$home] = (string) apply_filters( 'the_seo_framework_title_seplocation', $this->get_option( 'title_location' ) );
+				return $cache[ $seplocation ][ $home ] = (string) apply_filters( 'the_seo_framework_title_seplocation', $this->get_option( 'title_location' ) );
 			}
 		}
 
-		return $cache[$seplocation][$home] = $seplocation;
+		return $cache[ $seplocation ][ $home ] = $seplocation;
 	}
 
 	/**
-	 * Get Title Seplocation for the homepage.
+	 * Gets Title Seplocation for the homepage.
 	 *
 	 * @since 2.6.0
 	 *
 	 * @param string $seplocation The current seplocation.
-	 *
 	 * @return string The Seplocation for the homepage.
 	 */
 	public function get_home_title_seplocation( $seplocation = '' ) {
@@ -1165,10 +1136,10 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	/**
 	 * Determines whether to add or remove title additions.
 	 *
-	 * Applies filters the_seo_framework_add_blogname_to_title : boolean
 	 * @since 2.4.3
+	 * Applies filters the_seo_framework_add_blogname_to_title : boolean
 	 *
-	 * @since 2.6.0
+	 * @since 2.6.0:
 	 * @staticvar bool $add
 	 *
 	 * @return bool True when additions are allowed.
@@ -1188,13 +1159,14 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	}
 
 	/**
-	 * Add the title additions to the title.
+	 * Adds the title additions to the title.
+	 *
+	 * @since 2.6.0
 	 *
 	 * @param string $title The tite.
 	 * @param string $blogname The blogname.
 	 * @param string $seplocation The separator location.
-	 *
-	 * @since 2.6.0
+	 * @return string Title with possible additions.
 	 */
 	public function process_title_additions( $title = '', $blogname = '', $seplocation = '' ) {
 
@@ -1221,7 +1193,6 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 *
 	 * @param $title The current Title.
 	 * @param $id The page ID.
-	 *
 	 * @return string $title with possible affixes.
 	 */
 	public function add_title_protection( $title, $id ) {
@@ -1235,18 +1206,18 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		 *
 		 * @since 2.4.1
 		 *
-		 * @applies filters core : protected_title_format
-		 * @applies filters core : private_title_format
+		 * @applies filters WordPress core 'protected_title_format' : string
+		 * @applies filters WordPress core 'private_title_format' : string
 		 */
 		$post = get_post( $id, OBJECT );
 
 		if ( isset( $post->post_password ) && '' !== $post->post_password ) {
 			/* translators: Front-end output */
-			$protected_title_format = apply_filters( 'protected_title_format', __( 'Protected: %s', 'autodescription' ), $post );
+			$protected_title_format = (string) apply_filters( 'protected_title_format', __( 'Protected: %s', 'autodescription' ), $post );
 			$title = sprintf( $protected_title_format, $title );
-		} else if ( isset( $post->post_status ) && 'private' === $post->post_status ) {
+		} elseif ( isset( $post->post_status ) && 'private' === $post->post_status ) {
 			/* translators: Front-end output */
-			$private_title_format = apply_filters( 'private_title_format', __( 'Private: %s', 'autodescription' ), $post );
+			$private_title_format = (string) apply_filters( 'private_title_format', __( 'Private: %s', 'autodescription' ), $post );
 			$title = sprintf( $private_title_format, $title );
 		}
 
@@ -1259,12 +1230,11 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 * @since 2.6.0
 	 *
 	 * @param string $title The current Title.
-	 *
 	 * @return string Title with maybe pagination added.
 	 */
 	public function add_title_pagination( $title ) {
 
-		if ( $this->is_404() || $this->is_admin() )
+		if ( $this->is_404() || $this->is_admin() || $this->is_preview() )
 			return $title;
 
 		$page = $this->page();
@@ -1287,14 +1257,13 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	}
 
 	/**
-	 * Whether to use a title prefix or not.
+	 * Determines whether to use a title prefix or not.
 	 *
 	 * @since 2.6.0
 	 * @staticvar bool $cache
 	 *
 	 * @param object $term The Term object.
 	 * @param array $args The title arguments.
-	 *
 	 * @return bool
 	 */
 	public function use_archive_prefix( $term = null, $args = array() ) {
@@ -1319,11 +1288,11 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		$filter = (bool) apply_filters( 'the_seo_framework_use_archive_title_prefix', true, $term );
 		$option = ! $this->get_option( 'title_rem_prefixes' );
 
-		return $cache = $option && $filter ? true : false;
+		return $cache = $option && $filter;
 	}
 
 	/**
-	 * Filter the title prior to output.
+	 * Filters the title prior to output.
 	 *
 	 * @since 2.6.0
 	 * @access private
@@ -1331,7 +1300,6 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 * @param string $title The current title.
 	 * @param array $args The title args.
 	 * @param bool $escape Whether to escape the title.
-	 *
 	 * @return string $title
 	 */
 	public function do_title_pre_filter( $title, $args, $escape = true ) {
@@ -1352,7 +1320,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	}
 
 	/**
-	 * Filter the title prior to output.
+	 * Filters the title prior to output.
 	 *
 	 * @since 2.6.0
 	 * @access private
@@ -1360,7 +1328,6 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 * @param string $title The current title.
 	 * @param array $args The title args.
 	 * @param bool $escape Whether to escape the title.
-	 *
 	 * @return string $title
 	 */
 	public function do_title_pro_filter( $title, $args, $escape = true ) {
@@ -1381,7 +1348,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	}
 
 	/**
-	 * Whether to add home page tagline.
+	 * Determines whether to add home page tagline.
 	 *
 	 * @since 2.6.0
 	 *
@@ -1390,5 +1357,4 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	public function home_page_add_title_tagline() {
 		return $this->is_option_checked( 'homepage_tagline' );
 	}
-
 }

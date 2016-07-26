@@ -25,127 +25,22 @@
 class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 
 	/**
-	 * Constructor. Load parent constructor.
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
+	 * Constructor. Loads parent constructor.
 	 */
 	public function __construct() {
 		parent::__construct();
-	}
-
-	/**
-	 * Return option from the options table and cache result.
-	 *
-	 * @since 2.0.0
-	 *
-	 * @deprecated
-	 * @since 2.3.4
-	 */
-	public function autodescription_get_option( $key, $setting = null, $use_cache = true ) {
-		$this->_deprecated_function( 'AutoDescription_Adminpages::' . __FUNCTION__, '2.3.4', 'AutoDescription_Adminpages::the_seo_framework_get_option()' );
-
-		return $this->the_seo_framework_get_option( $key, $setting, $use_cache );
-	}
-
-	/**
-	 * Enqueues JS in the admin footer
-	 *
-	 * @since 2.1.9
-	 *
-	 * @deprecated
-	 * @since 2.3.3
-	 *
-	 * @param $hook the current page
-	 */
-	public function enqueue_javascript( $hook ) {
-		$this->_deprecated_function( 'AutoDescription_Admin_Init::' . __FUNCTION__, '2.3.3', 'AutoDescription_Admin_Init::enqueue_admin_scripts()' );
-
-		return $this->enqueue_admin_scripts( $hook );
-	}
-
-	/**
-	 * Enqueues CSS in the admin header
-	 *
-	 * @since 2.1.9
-	 *
-	 * @deprecated
-	 * @since 2.3.3
-	 *
-	 * @param $hook the current page
-	 */
-	public function enqueue_css( $hook ) {
-		$this->_deprecated_function( 'AutoDescription_Admin_Init::' . __FUNCTION__, '2.3.3', 'AutoDescription_Admin_Init::enqueue_admin_scripts()' );
-
-		return $this->enqueue_admin_scripts( $hook );
-	}
-
-	/**
-	 * Setup var for sitemap transient.
-	 *
-	 * @since 2.2.9
-	 *
-	 * @deprecated
-	 * @since 2.3.3
-	 */
-	public function fetch_sitemap_transient_name() {
-		$this->_deprecated_function( 'AutoDescription_Transients::' . __FUNCTION__, '2.3.3', 'AutoDescription_Transients::$sitemap_transient' );
-
-		return $this->sitemap_transient;
-	}
-
-	/**
-	 * Delete Sitemap transient on post save.
-	 *
-	 * @since 2.2.9
-	 *
-	 * @deprecated
-	 * @since 2.3.3
-	 */
-	public function delete_sitemap_transient_post( $post_id ) {
-		$this->_deprecated_function( 'AutoDescription_Transients::' . __FUNCTION__, '2.3.3', 'AutoDescription_Transients::delete_sitemap_transient_post()' );
-
-		return $this->delete_transients_post( $post_id );
-	}
-
-	/**
-	 * Helper function for Doing it Wrong
-	 *
-	 * @since 2.2.4
-	 *
-	 * @deprecated
-	 * @since 2.3.0
-	 */
-	public function autodescription_version( $version = '' ) {
-		$this->_deprecated_function( 'The_SEO_Framework_Load::' . __FUNCTION__, '2.3.0', 'The_SEO_Framework_Load::the_seo_framework_version()' );
-
-		return $this->the_seo_framework_version( $version );
-	}
-
-	/**
-	 * Include the necessary sortable metabox scripts.
-	 *
-	 * @since 2.2.2
-	 *
-	 * @deprecated
-	 * @since 2.3.5
-	 */
-	public function scripts() {
-		$this->_deprecated_function( 'AutoDescription_Adminpages::' . __FUNCTION__, '2.3.5', 'AutoDescription_Adminpages::metabox_scripts()' );
-
-		return $this->metabox_scripts();
-	}
-
-	/**
-	 * Setup var for sitemap transient on init/admin_init.
-	 *
-	 * @since 2.3.3
-	 * @deprecated
-	 * @since 2.3.3
-	 * Oops.
-	 */
-	public function setup_transient_names_init() {
-		$this->_deprecated_function( 'AutoDescription_Transients::' . __FUNCTION__, '2.3.3', 'AutoDescription_Transients::setup_transient_names()' );
-
-		$this->setup_transient_names();
-		return false;
 	}
 
 	/**
@@ -386,6 +281,9 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @since 2.6.1
 	 * @access private
 	 *
+	 * @deprecated
+	 * @since 2.6.1
+	 *
 	 * @return bool
 	 *
 	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
@@ -406,7 +304,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 		);
 
 		if ( isset( $plugins_check ) ) {
-			$this->_deprecated_function( 'the_seo_framework_detect_seo_plugins', 'the_seo_framework_conflicting_plugins', '2.6.1' );
+			$this->_deprecated_function( 'the_seo_framework_detect_seo_plugins', '2.6.1', 'the_seo_framework_conflicting_plugins' );
 			return $this->detect_plugin( $plugins_check );
 		}
 
@@ -427,6 +325,9 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @staticvar bool $has_plugin
 	 * @since 2.2.5
 	 *
+	 * @deprecated
+	 * @since 2.6.1
+	 *
 	 * @return bool $has_plugin one of the plugins has been found.
 	 */
 	public function has_og_plugin() {
@@ -446,7 +347,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 		);
 
 		if ( isset( $plugins_check ) ) {
-			$this->_deprecated_function( 'the_seo_framework_detect_og_plugins', 'the_seo_framework_conflicting_plugins', '2.6.1' );
+			$this->_deprecated_function( 'the_seo_framework_detect_og_plugins', '2.6.1', 'the_seo_framework_conflicting_plugins' );
 			return $this->detect_plugin( $plugins_check );
 		}
 
@@ -465,7 +366,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @return bool
 	 */
 	public function has_sitemap_plugin() {
-		$this->_deprecated_function( 'AutoDescription_Detect::' . __FUNCTION__, 'AutoDescription_Detect::detect_sitemap_plugin', '2.6.1' );
+		$this->_deprecated_function( 'AutoDescription_Detect::' . __FUNCTION__, '2.6.1', 'AutoDescription_Detect::detect_sitemap_plugin' );
 
 		return $this->detect_sitemap_plugin();
 	}
@@ -484,7 +385,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 */
 	public function get_current_post_type( $public = true ) {
 
-		$this->_deprecated_function( 'AutoDescription_Detect::' . __FUNCTION__, 'AutoDescription_Detect::get_supported_post_type', '2.6.2' );
+		$this->_deprecated_function( 'AutoDescription_Detect::' . __FUNCTION__, '2.6.2', 'AutoDescription_Detect::get_supported_post_type' );
 
 		static $post_type = null;
 
@@ -534,7 +435,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 */
 	public function wpmudev_domainmap_flush_fix( $options_saved = false, $flush_now = true ) {
 
-		$this->_deprecated_function( 'AutoDescription_Sitemaps::' . __FUNCTION__, '', '2.6.2' );
+		$this->_deprecated_function( 'AutoDescription_Sitemaps::' . __FUNCTION__, '2.6.2' );
 
 		if ( $this->pretty_permalinks && $this->is_domainmapping_active() ) {
 			if ( $options_saved || 'init' === current_action() ) {
@@ -590,7 +491,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 */
 	public function get_relative_url( $post = null, $external = false, $depr = null ) {
 
-		$this->_deprecated_function( 'AutoDescription_Generate_Url::' . __FUNCTION__, 'AutoDescription_Generate_Url::build_singular_relative_url()', '2.6.5' );
+		$this->_deprecated_function( 'AutoDescription_Generate_Url::' . __FUNCTION__, '2.6.5', 'AutoDescription_Generate_Url::build_singular_relative_url()' );
 
 		if ( isset( $depr ) ) {
 			$post_id = $depr;
@@ -598,7 +499,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 			if ( is_object( $post ) ) {
 				if ( isset( $post->ID ) )
 					$post_id = $post->ID;
-			} else if ( is_scalar( $post ) ) {
+			} elseif ( is_scalar( $post ) ) {
 				$post_id = (int) $post;
 			}
 		}
@@ -612,7 +513,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 
 		if ( $external || ! $this->is_home() ) {
 			$permalink = get_permalink( $post_id );
-		} else if ( ! $external ) {
+		} elseif ( ! $external ) {
 			global $wp;
 
 			if ( isset( $wp->request ) )
@@ -643,7 +544,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 */
 	public function the_url_path_default_permalink_structure( $post = null, $paged = false, $paged_plural = true ) {
 
-		$this->_deprecated_function( 'AutoDescription_Generate_Url::' . __FUNCTION__, 'AutoDescription_Generate_Url::build_singular_relative_url()', '2.6.5' );
+		$this->_deprecated_function( 'AutoDescription_Generate_Url::' . __FUNCTION__, '2.6.5' , 'AutoDescription_Generate_Url::build_singular_relative_url()' );
 
 		//* Don't slash it.
 		$this->url_slashit = false;
@@ -655,9 +556,9 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 			if ( is_object( $object ) ) {
 				if ( $this->is_category() ) {
 					$path = '?cat=' . $object->term_id;
-				} else if ( $this->is_tag() ) {
+				} elseif ( $this->is_tag() ) {
 					$path = '?tag=' . $object->name;
-				} else if ( $this->is_date() ) {
+				} elseif ( $this->is_date() ) {
 					global $wp_query;
 
 					$query = $wp_query->query;
@@ -667,11 +568,11 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 					$day = $query->day ? '&day=' . $query->day : '';
 
 					$path = '?year=' . $year . $month . $day;
-				} else if ( $this->is_author() ) {
+				} elseif ( $this->is_author() ) {
 					$path = '?author=' . $object->author_name;
-				} else if ( $this->is_tax() ) {
+				} elseif ( $this->is_tax() ) {
 					$path = '?taxonomy=' . $object->taxonomy . '&term=' . $object->slug;
-				} else if ( isset( $object->query_var ) && $object->query_var ) {
+				} elseif ( isset( $object->query_var ) && $object->query_var ) {
 					$path = '?' . $object->query_var . '=' . $object->slug;
 				} else {
 					$path = '?p=' . $object->ID;
@@ -689,7 +590,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 			if ( isset( $post ) ) {
 				if ( is_object( $post ) && isset( $post->ID ) ) {
 					$id = $post->ID;
-				} else if ( is_scalar( $post ) ) {
+				} elseif ( is_scalar( $post ) ) {
 					$id = $post;
 				}
 			}
@@ -713,17 +614,275 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @since 2.3.0
 	 *
 	 * @deprecated
-	 * @since 2.6.5
+	 * @since 2.6.6
 	 *
 	 * @return string The SEO Framework version.
 	 */
 	public function the_seo_framework_version( $version = '' ) {
 
-		$this->_deprecated_function( 'AutoDescription_Load::' . __FUNCTION__, '', '2.6.6' );
+		$this->_deprecated_function( 'AutoDescription_Load::' . __FUNCTION__, '2.6.6' );
 
 		$output = $version ? sprintf( __( '%s of The SEO Framework', 'autodescription' ), esc_attr( $version ) ) : '';
 
 		return $output;
+	}
+
+
+	/**
+	 * HomePage Metabox General Tab Output.
+	 *
+	 * @since 2.6.0
+	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
+	 *
+	 * @deprecated
+	 * @since 2.7.0
+	 */
+	public function homepage_metabox_general() {
+		$this->_deprecated_function( 'AutoDescription_Metaboxes::' . __FUNCTION__, '2.7.0', 'AutoDescription_Metaboxes::homepage_metabox_general_tab()' );
+		$this->get_view( 'metaboxes/homepage-metabox', array(), 'general' );
+	}
+
+	/**
+	 * HomePage Metabox Additions Tab Output.
+	 *
+	 * @since 2.6.0
+	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
+	 *
+	 * @deprecated
+	 * @since 2.7.0
+	 */
+	public function homepage_metabox_additions() {
+		$this->_deprecated_function( 'AutoDescription_Metaboxes::' . __FUNCTION__, '2.7.0', 'AutoDescription_Metaboxes::homepage_metabox_additions_tab()' );
+		$this->get_view( 'metaboxes/homepage-metabox', array(), 'additions' );
+	}
+
+	/**
+	 * HomePage Metabox Robots Tab Output
+	 *
+	 * @since 2.6.0
+	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
+	 *
+	 * @deprecated
+	 * @since 2.7.0
+	 */
+	public function homepage_metabox_robots() {
+		$this->_deprecated_function( 'AutoDescription_Metaboxes::' . __FUNCTION__, '2.7.0', 'AutoDescription_Metaboxes::homepage_metabox_robots_tab()' );
+		$this->get_view( 'metaboxes/homepage-metabox', array(), 'robots' );
+	}
+
+	/**
+	 * Delete transient for the automatic description for blog on save request.
+	 * Returns old option, since that's passed for sanitation within WP Core.
+	 *
+	 * @since 2.3.3
+	 *
+	 * @deprecated
+	 * @since 2.7.0
+	 *
+	 * @param string $old_option The previous blog description option.
+	 * @return string Previous option.
+	 */
+	public function delete_auto_description_blog_transient( $old_option ) {
+
+		$this->_deprecated_function( 'AutoDescription_Transients::' . __FUNCTION__, '2.7.0', 'AutoDescription_Transients::delete_auto_description_frontpage_transient()' );
+
+		$this->setup_auto_description_transient( $this->get_the_front_page_ID(), '', 'frontpage' );
+
+		delete_transient( $this->auto_description_transient );
+
+		return $old_option;
+	}
+
+	/**
+	 * Add term meta data into options table of the term.
+	 * Adds separated database options for terms, as the terms table doesn't allow for addition.
+	 *
+	 * Applies filters array the_seo_framework_term_meta_defaults : Array of default term SEO options
+	 * Applies filters mixed the_seo_framework_term_meta_{field} : Override filter for specifics.
+	 * Applies filters array the_seo_framework_term_meta : Override output for term or taxonomy.
+	 *
+	 * @since 2.1.8
+	 *
+	 * @deprecated silently.
+	 * @since WordPress 4.4.0
+	 * @since The SEO Framework 2.7.0
+	 *
+	 * @param object $term     Database row object.
+	 * @param string $taxonomy Taxonomy name that $term is part of.
+	 * @return object $term Database row object.
+	 */
+	public function get_term_filter( $term, $taxonomy ) {
+
+		//* Do nothing, if $term is not an object.
+		if ( ! is_object( $term ) )
+			return $term;
+
+		/**
+		 * No need to process this data outside of the Terms' scope.
+		 * @since 2.6.0
+		 */
+		if ( false === is_admin() && false === is_archive() )
+			return $term;
+
+		/**
+		 * No need to process this after the data has already been output.
+		 * @since 2.6.0
+		 */
+		if ( did_action( 'the_seo_framework_do_after_output' ) )
+			return $term;
+
+		/**
+		 * Do nothing if called in the context of creating a term via an Ajax call to prevent data conflict.
+		 * @since 2.1.8
+		 *
+		 * @since 2.6.0 delay did_action call as it's a heavy array call.
+		 */
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX && did_action( 'wp_ajax_add-tag' ) )
+			return $term;
+
+		$db = get_option( 'autodescription-term-meta' );
+		$term_meta = isset( $db[$term->term_id] ) ? $db[$term->term_id] : array();
+
+		$term->admeta = wp_parse_args( $term_meta, $this->get_term_meta_defaults() );
+
+		//* Sanitize term meta
+		foreach ( $term->admeta as $field => $value ) {
+
+			/**
+			 * Trim and sanitize the title beforehand.
+			 * @since 2.5.0
+			 */
+			if ( 'doctitle' === $field )
+				$value = trim( strip_tags( $value ) );
+
+			/**
+			 * Trim and sanitize the description beforehand.
+			 * @since 2.5.0
+			 */
+			if ( 'description' === $field )
+				$value = $this->s_description( $value );
+
+			/**
+			 * @param object $term The Term object.
+			 * @param string $taxonomy The Taxonomy name.
+			 */
+			$term->admeta[$field] = (string) apply_filters( "the_seo_framework_term_meta_{$field}", stripslashes( wp_kses_decode_entities( $value ) ), $term, $taxonomy );
+		}
+
+		/**
+		 * @param object $term The Term object.
+		 * @param array $taxonomy The Taxonomy name.
+		 */
+		$term->admeta = (array) apply_filters( 'the_seo_framework_term_meta', $term->admeta, $term, $taxonomy );
+
+		return $term;
+	}
+
+	/**
+	 * Adds The SEO Framework term meta data to functions that return multiple terms.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @deprecated silently.
+	 * @since WordPress 4.4.0
+	 * @since The SEO Framework 2.7.0
+	 *
+	 * @param array  $terms    Database row objects.
+	 * @param string $taxonomy Taxonomy name that $terms are part of.
+	 * @return array $terms Database row objects.
+	 */
+	public function get_terms_filter( array $terms, $taxonomy ) {
+
+		foreach ( $terms as $term )
+			$term = $this->get_term_filter( $term, $taxonomy );
+
+		return $terms;
+	}
+
+	/**
+	 * Save taxonomy meta data.
+	 * Fires when a user edits and saves a taxonomy.
+	 *
+	 * @since 2.1.8
+	 *
+	 * @deprecated silently.
+	 * @since WordPress 4.4.0
+	 * @since The SEO Framework 2.7.0
+	 *
+	 * @param integer $term_id Term ID.
+	 * @param integer $tt_id   Term Taxonomy ID.
+	 * @return void Early on AJAX call.
+	 */
+	public function taxonomy_seo_save( $term_id, $tt_id ) {
+
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX )
+			return;
+
+		$term_meta = (array) get_option( 'autodescription-term-meta' );
+
+		$term_meta[$term_id] = isset( $_POST['autodescription-meta'] ) ? (array) $_POST['autodescription-meta'] : array();
+
+		//* Pass through wp_kses if not super admin.
+		if ( ! current_user_can( 'unfiltered_html' ) && isset( $term_meta[$term_id]['archive_description'] ) )
+			$term_meta[$term_id]['archive_description'] = wp_kses( $term_meta[$term_id]['archive_description'] );
+
+		update_option( 'autodescription-term-meta', $term_meta );
+
+	}
+
+	/**
+	 * Delete term meta data.
+	 * Fires when a user deletes a term.
+	 *
+	 * @since 2.1.8
+	 *
+	 * @deprecated silently.
+	 * @since WordPress 4.4.0
+	 * @since The SEO Framework 2.7.0
+	 *
+	 * @param integer $term_id Term ID.
+	 * @param integer $tt_id   Taxonomy Term ID.
+	 */
+	public function term_meta_delete( $term_id, $tt_id ) {
+
+		$term_meta = (array) get_option( 'autodescription-term-meta' );
+
+		unset( $term_meta[$term_id] );
+
+		update_option( 'autodescription-term-meta', (array) $term_meta );
+
+	}
+
+	/**
+	 * Faster way of doing an in_array search compared to default PHP behavior.
+	 * @NOTE only to show improvement with large arrays. Might slow down with small arrays.
+	 * @NOTE can't do type checks. Always assume the comparing value is a string.
+	 *
+	 * @since 2.5.2
+	 * @deprecated
+	 * @since 2.7.0
+	 *
+	 * @param string|array $needle The needle(s) to search for
+	 * @param array $array The single dimensional array to search in.
+	 * @return bool true if value is in array.
+	 */
+	public function in_array( $needle, $array ) {
+
+		$this->_deprecated_function( 'AutoDescription_Core::' . __FUNCTION__, '2.7.0', 'in_array()' );
+
+		$array = array_flip( $array );
+
+		if ( is_string( $needle ) ) {
+			if ( isset( $array[ $needle ] ) )
+				return true;
+		} elseif ( is_array( $needle ) ) {
+			foreach ( $needle as $str ) {
+				if ( isset( $array[ $str ] ) )
+					return true;
+			}
+		}
+
+		return false;
 	}
 
 }

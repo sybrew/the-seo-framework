@@ -27,6 +27,18 @@
 class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor, load parent constructor
 	 */
 	public function __construct() {
@@ -47,7 +59,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 
 		$this->setup_ld_json_transient( $this->get_the_real_ID() );
 
-		if ( $this->the_seo_framework_debug ) $this->debug_init( __CLASS__, __FUNCTION__, false, $debug_key = microtime(true), array( 'LD Json transient' => $this->ld_json_transient, 'Output from transient' => false !== $this->get_transient( $this->ld_json_transient ) ) );
+		if ( $this->the_seo_framework_debug ) $this->debug_init( __METHOD__, false, $debug_key = microtime( true ), array( 'LD Json transient' => $this->ld_json_transient, 'Output from transient' => false !== $this->get_transient( $this->ld_json_transient ) ) );
 
 		$output = $this->get_transient( $this->ld_json_transient );
 		if ( false === $output ) {
@@ -91,7 +103,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 		 * Debug output.
 		 * @since 2.4.2
 		 */
-		if ( $this->the_seo_framework_debug ) $this->debug_init( __CLASS__, __FUNCTION__, false, $debug_key, array( 'LD Json transient output' => $output ) );
+		if ( $this->the_seo_framework_debug ) $this->debug_init( __METHOD__, false, $debug_key, array( 'LD Json transient output' => $output ) );
 
 		return $output;
 	}
@@ -189,7 +201,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 	/**
 	 * Returns 'ListItem' json encoded type name.
 	 *
-	 * @staticvar string $crumblist
+	 * @staticvar string $listitem
 	 * @since 2.6.0
 	 *
 	 * @return string The json encoded 'ListItem'.
@@ -202,6 +214,52 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 			return $listitem;
 
 		return $listitem = json_encode( 'ListItem' );
+	}
+
+	/**
+	 * Returns 'image' json encoded value.
+	 *
+	 * @staticvar array $images
+	 * @since 2.7.0
+	 * @todo implement blog page image.
+	 * @priority low 2.7.0+ extension.
+	 *
+	 * @param int|string $id The page, post, product or term ID.
+	 * @param bool $singular Whether the ID is singular.
+	 */
+	public function schema_image( $id = 0, $singular = false ) {
+
+		static $images = array();
+
+		$id = (int) $id;
+
+		if ( isset( $images[ $id ][ $singular ] ) )
+			return $images[ $id ][ $singular ];
+
+		$image = '';
+
+		if ( $singular ) {
+			if ( $id === $this->get_the_real_ID() ) {
+				$image = $this->get_image_from_cache( $id );
+			} elseif ( $id ) {
+				//* No ID (0) results in the home page being a blog. This will be handled in the future.
+				$image = $this->get_image( $id );
+			}
+		} else {
+			//* Placeholder.
+			$image = '';
+		}
+
+		/**
+		 * Applies filters 'the_seo_framework_ld_json_breadcrumb_image' : string
+		 * @since 2.7.0
+		 * @param string $image The current image.
+		 * @param int $id The page, post, product or term ID.
+		 * @param bool $singular Whether the ID is singular.
+		 */
+		$image = apply_filters( 'the_seo_framework_ld_json_breadcrumb_image', $image, $id, $singular );
+
+		return $images[ $id ][ $singular ] = json_encode( esc_url_raw( $image ) );
 	}
 
 	/**
@@ -231,7 +289,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 
 		$output = '';
 		if ( $json )
-			$output = '<script type="application/ld+json">' . $json . "</script>" . "\r\n";
+			$output = '<script type="application/ld+json">' . $json . '</script>' . "\r\n";
 
 		return $output;
 	}
@@ -253,7 +311,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 
 		if ( $this->is_single() || $this->is_wc_product() ) {
 			$output = $this->ld_json_breadcrumbs_post();
-		} else if ( false === $this->is_front_page() && $this->is_page() ) {
+		} elseif ( false === $this->is_front_page() && $this->is_page() ) {
 			$output = $this->ld_json_breadcrumbs_page();
 		}
 
@@ -285,11 +343,9 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 		if ( ! $r || is_wp_error( $r ) )
 			return '';
 
-		//* Get categories.
-		$cats = wp_get_object_terms( $post_id, $cat_type, array( 'fields' => 'all_with_object_id', 'orderby' => 'parent' ) );
-
-		if ( empty( $cats ) || is_wp_error( $cats ) )
-			return '';
+		$cats = get_the_terms( $post_id, $cat_type );
+		$cats = wp_list_pluck( $cats, 'parent', 'term_id' );
+		asort( $cats, SORT_NUMERIC );
 
 		$assigned_ids = array();
 		$kittens = array();
@@ -297,20 +353,17 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 		$parents_merge = array();
 
 		//* Fetch cats children id's, if any.
-		foreach ( $cats as $cat ) {
-			//* The category objects. The cats.
-			$cat_id = $cat->term_id;
-
+		foreach ( $cats as $term_id => $parent_id ) {
 			//* Store to filter unused Cat ID's from the post.
-			$assigned_ids[] = $cat_id;
+			$assigned_ids[] = $term_id;
 
 			// Check if they have kittens.
-			$children = get_term_children( $cat_id, $cat->taxonomy );
-			$ancestors = get_ancestors( $cat_id, $cat->taxonomy );
+			$children = get_term_children( $term_id, $cat_type );
+			$ancestors = get_ancestors( $term_id, $cat_type );
 
 			//* Save children id's as kittens.
-			$kittens[$cat_id] = $children;
-			$parents[$cat_id] = $ancestors;
+			$kittens[ $term_id ] = $children;
+			$parents[ $term_id ] = $ancestors;
 		}
 
 		foreach ( $kittens as $kit_id => $child_id ) {
@@ -320,8 +373,8 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 				 * Seed out children that aren't assigned.
 				 * (from levels too deep as get_term_children gets them all).
 				 */
-				if ( $cid && false === in_array( $cid, $assigned_ids ) )
-					unset( $kittens[$kit_id][$ckey] );
+				if ( $cid && false === in_array( $cid, $assigned_ids, true ) )
+					unset( $kittens[ $kit_id ][ $ckey ] );
 
 				/**
 				 * Make the tree count down multiple children are assigned.
@@ -337,12 +390,12 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 				 *
 				 * We want a tree for "Cat 1+2+3", "Cat 1+2", and "Cat 3".
 				 *
-				 * We could add Cat 1, but that's will give two single category lines, which could be misinterperted.
+				 * We could add Cat 1 as well, but that's will give two single category lines, which could be misinterperted.
 				 * So we only use what we know: The kittens (child tree).
 				 */
-				if ( isset( $parents[$cid] ) && ! empty( $parents[$kit_id] ) ) {
-					$parents_merge[$kit_id] = $parents[$kit_id];
-					unset( $kittens[$kit_id] );
+				if ( isset( $parents[ $cid ] ) && ! empty( $parents[ $kit_id ] ) ) {
+					$parents_merge[ $kit_id ] = $parents[ $kit_id ];
+					unset( $kittens[ $kit_id ] );
 				}
 			}
 		}
@@ -372,7 +425,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 					array_push( $parents_ids, $child_id );
 
 					//* Temporarily array.
-					$kitten[$pid] = $parents_ids;
+					$kitten[ $pid ] = $parents_ids;
 
 					$trees = $this->build_breadcrumb_trees( $kitten, $trees );
 				} else {
@@ -412,36 +465,37 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 					$tree_ids = array_reverse( $tree_ids, false );
 
 					foreach ( $tree_ids as $position => $child_id ) {
-						if ( in_array( $child_id, $assigned_ids ) ) {
+						if ( in_array( $child_id, $assigned_ids, true ) ) {
 							//* Cat has been assigned, continue.
 
 							//* Fetch item from cache if available.
-							if ( isset( $item_cache[$child_id] ) ) {
+							if ( isset( $item_cache[ $child_id ] ) ) {
 								$pos = $position + 2;
-								$item_cache[$child_id]['pos'] = $pos;
-								$items .= $this->make_breadcrumb( $item_cache[$child_id], true );
-
+								$item_cache[ $child_id ]['pos'] = $pos;
+								$items .= $this->make_breadcrumb( $item_cache[ $child_id ], true );
 							} else {
-
 								$pos = $position + 2;
 
 								$cat = get_term_by( 'id', $child_id, $cat_type, OBJECT, 'raw' );
+								$data = $this->get_term_data( $cat, $child_id );
 
 								$id = json_encode( $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'is_term' => true, 'term' => $cat ) ) );
 
-								$custom_field_name = isset( $cat->admeta['doctitle'] ) ? $cat->admeta['doctitle'] : '';
-								$cat_name = $custom_field_name ? $custom_field_name : $cat->name;
+								$cat_name = empty( $data['doctitle'] ) ? $cat->name : $data['doctitle'];
 								$name = json_encode( $cat_name );
 
+								$image = $this->schema_image( $child_id );
+
 								//* Store in cache.
-								$item_cache[$child_id] = array(
-									'type'	=> $item_type,
-									'pos'	=> (string) $pos,
-									'id'	=> $id,
-									'name'	=> $name
+								$item_cache[ $child_id ] = array(
+									'type'  => $item_type,
+									'pos'   => (string) $pos,
+									'id'    => $id,
+									'name'  => $name,
+									'image' => $image,
 								);
 
-								$items .= $this->make_breadcrumb( $item_cache[$child_id], true );
+								$items .= $this->make_breadcrumb( $item_cache[ $child_id ], true );
 							}
 						}
 					}
@@ -462,16 +516,18 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 					//* The position of the current item is always static here.
 					$pos = '2';
 
+					$image = $this->schema_image( $tree_ids );
+
 					//* $tree_ids is a single ID here.
 					$cat = get_term_by( 'id', $tree_ids, $cat_type, OBJECT, 'raw' );
+					$data = $this->get_term_data( $cat, $tree_ids );
 
 					$id = json_encode( $this->the_url( '', array( 'get_custom_field' => false, 'is_term' => true, 'external' => true, 'term' => $cat ) ) );
 
-					$custom_field_name = isset( $cat->admeta['doctitle'] ) ? $cat->admeta['doctitle'] : '';
-					$cat_name = $custom_field_name ? $custom_field_name : $cat->name;
+					$cat_name = empty( $data['doctitle'] ) ? $cat->name : $data['doctitle'];
 					$name = json_encode( $cat_name );
 
-					$items .= sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}},', $item_type, (string) $pos, $id, $name );
+					$items .= sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s,"image":%s}},', $item_type, (string) $pos, $id, $name, $image );
 
 					if ( $items ) {
 
@@ -482,7 +538,6 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 						$output .= '<script type="application/ld+json">' . $breadcrumbhelper . '</script>' . "\r\n";
 					}
 				}
-
 			}
 		}
 
@@ -524,12 +579,14 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 				$parent_name = $custom_field_name ? $custom_field_name : $this->title( '', '', '', array( 'term_id' => $parent_id, 'meta' => true, 'get_custom_field' => false, 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
 
 				$name = json_encode( $parent_name );
+				$image = $this->schema_image( $parent_id );
 
 				$breadcrumb = array(
-					'type'	=> $item_type,
-					'pos'	=> (string) $pos,
-					'id'	=> $id,
-					'name'	=> $name
+					'type'  => $item_type,
+					'pos'   => (string) $pos,
+					'id'    => $id,
+					'name'  => $name,
+					'image' => $image,
 				);
 
 				$items .= $this->make_breadcrumb( $breadcrumb, true );
@@ -575,7 +632,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 
 		if ( $home_title ) {
 			$custom_name = $home_title;
-		} else if ( $this->has_page_on_front() ) {
+		} elseif ( $this->has_page_on_front() ) {
 			$home_id = (int) get_option( 'page_on_front' );
 
 			$custom_name = $this->get_custom_field( '_genesis_title', $home_id );
@@ -585,12 +642,14 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 		}
 
 		$custom_name = json_encode( $custom_name );
+		$image = $this->schema_image( $this->get_the_front_page_ID(), true );
 
 		$breadcrumb = array(
-			'type'	=> $item_type,
-			'pos'	=> '1',
-			'id'	=> $id,
-			'name'	=> $custom_name
+			'type'  => $item_type,
+			'pos'   => '1',
+			'id'    => $id,
+			'name'  => $custom_name,
+			'image' => $image,
 		);
 
 		return $first_item = $this->make_breadcrumb( $breadcrumb, true );
@@ -620,7 +679,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 		 * This shouldn't run anyway. Pos should always be provided.
 		 */
 		if ( is_null( $pos ) )
-			$pos = '2';
+			$pos = 2;
 
 		//* Add current page.
 		$pos = $pos + 1;
@@ -649,11 +708,14 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 			$name = json_encode( $name );
 		}
 
+		$image = $this->schema_image( $post_id, true );
+
 		$breadcrumb = array(
-			'type'	=> $item_type,
-			'pos'	=> (string) $pos,
-			'id'	=> $id,
-			'name'	=> $name
+			'type'  => $item_type,
+			'pos'   => (string) $pos,
+			'id'    => $id,
+			'name'  => $name,
+			'image' => $image,
 		);
 
 		return $this->make_breadcrumb( $breadcrumb, false );
@@ -675,7 +737,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 	 */
 	public function make_breadcrumb( $item, $comma = true ) {
 		$comma = $comma ? ',' : '';
-		return sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}}%s', $item['type'], $item['pos'], $item['id'], $item['name'], $comma );
+		return sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s,"image":%s}}%s', $item['type'], $item['pos'], $item['id'], $item['name'], $item['image'], $comma );
 	}
 
 	/**
@@ -706,7 +768,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 
 					foreach ( $kitten as $kit => $kat ) {
 						//* Only add if non-existent in $trees.
-						if ( ! in_array( $kat, $trees ) )
+						if ( ! in_array( $kat, $trees, true ) )
 							$add[] = $kat;
 					}
 
@@ -852,7 +914,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 		$filter = (bool) apply_filters( 'the_seo_framework_json_breadcrumb_output', true );
 		$option = $this->is_option_checked( 'ld_json_breadcrumbs' );
 
-		return $cache = $filter && $option ? true : false;
+		return $cache = $filter && $option;
 	}
 
 	/**
@@ -877,7 +939,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 		$filter = (bool) apply_filters( 'the_seo_framework_json_sitename_output', true );
 		$option = $this->is_option_checked( 'ld_json_sitename' );
 
-		return $cache = $filter && $option ? true : false;
+		return $cache = $filter && $option;
 	}
 
 	/**
@@ -902,7 +964,7 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 		$filter = (bool) apply_filters( 'the_seo_framework_json_search_output', true );
 		$option = $this->is_option_checked( 'ld_json_searchbox' );
 
-		return $cache = $filter && $option ? true : false;
+		return $cache = $filter && $option;
 	}
 
 	/**
@@ -927,7 +989,6 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 		$filter = (bool) apply_filters( 'the_seo_framework_json_knowledge_output', true );
 		$option = $this->is_option_checked( 'knowledge_output' );
 
-		return $cache = $filter && $option ? true : false;
+		return $cache = $filter && $option;
 	}
-
 }

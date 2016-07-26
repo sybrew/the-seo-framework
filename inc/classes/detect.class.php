@@ -26,6 +26,18 @@
 class AutoDescription_Detect extends AutoDescription_Render {
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor, load parent constructor
 	 */
 	public function __construct() {
@@ -37,7 +49,6 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 *
 	 * @since 2.6.1
 	 * @staticvar array $active_plugins
-	 *
 	 * @credits JetPack for most code.
 	 *
 	 * @return array List of active plugins.
@@ -70,7 +81,6 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 *
 	 * Applies filters 'the_seo_framework_conflicting_plugins' : array
 	 * @since 2.6.0
-	 *
 	 * @credits JetPack for most code.
 	 *
 	 * @return array List of conflicting plugins.
@@ -91,20 +101,18 @@ class AutoDescription_Detect extends AutoDescription_Render {
 				'Google XML Sitemaps for qTranslate'   => 'google-xml-sitemaps-v3-for-qtranslate/sitemap.php',
 				'XML Sitemap & Google News feeds'      => 'xml-sitemap-feed/xml-sitemap.php',
 				'Google Sitemap by BestWebSoft'        => 'google-sitemap-plugin/google-sitemap-plugin.php',
-				'WordPress SEO by Yoast'               => 'wordpress-seo/wp-seo.php',
-				'WordPress SEO Premium by Yoast'       => 'wordpress-seo-premium/wp-seo-premium.php',
+				'Yoast SEO'                            => 'wordpress-seo/wp-seo.php',
+				'Yoast SEO Premium'                    => 'wordpress-seo-premium/wp-seo-premium.php',
 				'All in One SEO Pack'                  => 'all-in-one-seo-pack/all_in_one_seo_pack.php',
 				'Sitemap'                              => 'sitemap/sitemap.php',
 				'Simple Wp Sitemap'                    => 'simple-wp-sitemap/simple-wp-sitemap.php',
 				'Simple Sitemap'                       => 'simple-sitemap/simple-sitemap.php',
 				'XML Sitemaps'                         => 'xml-sitemaps/xml-sitemaps.php',
-				'MSM Sitemaps'                         => 'msm-sitemap/msm-sitemap.php',
 			),
 			'open_graph' => array(
 				'2 Click Social Media Buttons'         => '2-click-socialmedia-buttons/2-click-socialmedia-buttons.php',
 				'Add Link to Facebook'                 => 'add-link-to-facebook/add-link-to-facebook.php',
 				'Add Meta Tags'                        => 'add-meta-tags/add-meta-tags.php',
-				'Easy Facebook Share Thumbnail'        => 'easy-facebook-share-thumbnails/esft.php',
 				'Facebook'                             => 'facebook/facebook.php',
 				'Facebook AWD All in one'              => 'facebook-awd/AWD_facebook.php',
 				'Facebook Featured Image & OG Meta Tags' => 'facebook-featured-image-and-open-graph-meta-tags/fb-featured-image.php',
@@ -119,31 +127,19 @@ class AutoDescription_Detect extends AutoDescription_Render {
 				'NextScripts SNAP'                     => 'social-networks-auto-poster-facebook-twitter-g/NextScripts_SNAP.php',
 				'Open Graph'                           => 'opengraph/opengraph.php',
 				'Open Graph Protocol Framework'        => 'open-graph-protocol-framework/open-graph-protocol-framework.php',
-				'SEO Facebook Comments'                => 'seo-facebook-comments/seofacebook.php',
 				'Shareaholic'                          => 'sexybookmarks/sexy-bookmarks.php',
 				'Shareaholic2'                         => 'shareaholic/sexy-bookmarks.php',
 				'SharePress'                           => 'sharepress/sharepress.php',
-				'Simple Facebook Connect'              => 'simple-facebook-connect/sfc.php',
-				'Social Discussions'                   => 'social-discussions/social-discussions.php',
 				'Social Sharing Toolkit'               => 'social-sharing-toolkit/social_sharing_toolkit.php',
-				'Socialize'                            => 'socialize/socialize.php',
 				'Tweet, Like, Google +1 and Share'     => 'only-tweet-like-share-and-google-1/tweet-like-plusone.php',
-				'Wordbooker'                           => 'wordbooker/wordbooker.php',
 				'WordPress Social Sharing Optimization' => 'wpsso/wpsso.php',
-				'WP Caregiver'                         => 'wp-caregiver/wp-caregiver.php',
-				'WP Facebook Like Send & Open Graph Meta' => 'wp-facebook-like-send-open-graph-meta/wp-facebook-like-send-open-graph-meta.php',
 				'WP Facebook Open Graph protocol'      => 'wp-facebook-open-graph-protocol/wp-facebook-ogp.php',
-				'WP-OGP'                               => 'wp-ogp/wp-ogp.php',
-				'Zolton.org Social Plugin'             => 'zoltonorg-social-plugin/zosp.php',
-				'WP Facebook Like Button'              => 'wp-fb-share-like-button/wp_fb_share-like_widget.php'
 			),
 			'twitter_card' => array(
 				'Twitter'                              => 'twitter/twitter.php',
 				'Eewee Twitter Card'                   => 'eewee-twitter-card/index.php',
-				'IG:Twitter Cards'                     => 'ig-twitter-cards/ig-twitter-cards.php',
 				'Twitter Cards'                        => 'twitter-cards/twitter-cards.php',
 				'Twitter Cards Meta'                   => 'twitter-cards-meta/twitter-cards-meta.php',
-				'WP Twitter Cards'                     => 'wp-twitter-cards/twitter_cards.php',
 			),
 		);
 
@@ -153,10 +149,9 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	/**
 	 * Fetches type of conflicting plugins.
 	 *
-	 * @param string $type The Key from $this->conflicting_plugins()
-	 *
 	 * @since 2.6.0
 	 *
+	 * @param string $type The Key from $this->conflicting_plugins()
 	 * @return array
 	 */
 	public function get_conflicting_plugins( $type = 'seo_tools' ) {
@@ -175,7 +170,6 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * @since 1.3.0
 	 *
 	 * @param array $plugins Array of array for constants, classes and / or functions to check for plugin existence.
-	 *
 	 * @return boolean True if plugin exists or false if plugin constant, class or function not detected.
 	 */
 	public function detect_plugin( $plugins ) {
@@ -218,13 +212,12 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * Detect if you can use the given constants, functions and classes.
 	 * All must be available to return true.
 	 *
-	 * @param array $plugins Array of array for constants, classes and / or functions to check for plugin existence.
-	 * @param bool $use_cache Bypasses cache if false
-	 *
+	 * @since 2.5.2
 	 * @staticvar array $cache
 	 * @uses $this->detect_plugin_multi()
 	 *
-	 * @since 2.5.2
+	 * @param array $plugins Array of array for constants, classes and / or functions to check for plugin existence.
+	 * @param bool $use_cache Bypasses cache if false
 	 */
 	public function can_i_use( array $plugins = array(), $use_cache = true ) {
 
@@ -246,7 +239,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			$func = array_flip( $func );
 
 			//* Glue with underscore and space for debugging purposes.
-			$mapped[$key] = $key . '_' . implode( ' ', $func );
+			$mapped[ $key ] = $key . '_' . implode( ' ', $func );
 		}
 
 		ksort( $mapped );
@@ -254,10 +247,10 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		//* Glue with dash instead of underscore for debugging purposes.
 		$plugins_cache = implode( '-', $mapped );
 
-		if ( isset( $cache[$plugins_cache] ) )
-			return $cache[$plugins_cache];
+		if ( isset( $cache[ $plugins_cache ] ) )
+			return $cache[ $plugins_cache ];
 
-		return $cache[$plugins_cache] = $this->detect_plugin_multi( $plugins );
+		return $cache[ $plugins_cache ] = $this->detect_plugin_multi( $plugins );
 	}
 
 	/**
@@ -267,7 +260,6 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * @since 2.5.2
 	 *
 	 * @param array $plugins Array of array for constants, classes and / or functions to check for plugin existence.
-	 *
 	 * @return boolean True if ALL functions classes and constants exists or false if plugin constant, class or function not detected.
 	 */
 	public function detect_plugin_multi( array $plugins ) {
@@ -309,30 +301,26 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	/**
 	 * Checks if the (parent) theme name is loaded.
 	 *
-	 * @NOTE will return true if ANY of the array values matches.
-	 *
-	 * @param string|array $themes the current theme name
-	 * @param bool $depr If set to false don't use cache.
-	 *
 	 * @since 2.1.0
 	 *
+	 * @param string|array $themes the current theme name.
 	 * @return bool is theme active.
 	 */
-	public function is_theme( $themes = null, $depr = null ) {
+	public function is_theme( $themes = '' ) {
 
-		if ( ! isset( $themes ) )
+		if ( empty( $themes ) )
 			return false;
 
 		$wp_get_theme = wp_get_theme();
 
-		$theme_parent = strtolower( $wp_get_theme->get('Template') );
-		$theme_name = strtolower( $wp_get_theme->get('Name') );
+		$theme_parent = strtolower( $wp_get_theme->get( 'Template' ) );
+		$theme_name = strtolower( $wp_get_theme->get( 'Name' ) );
 
 		if ( is_string( $themes ) ) {
 			$themes = strtolower( $themes );
 			if ( $themes === $theme_parent || $themes === $theme_name )
 				return true;
-		} else if ( is_array( $themes ) ) {
+		} elseif ( is_array( $themes ) ) {
 			foreach ( $themes as $theme ) {
 				$theme = strtolower( $theme );
 				if ( $theme === $theme_parent || $theme === $theme_name ) {
@@ -346,12 +334,9 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	}
 
 	/**
-	 * SEO plugin detection
+	 * Determines if other SEO plugins are active.
 	 *
 	 * @since 1.3.0
-	 *
-	 * @staticvar bool $detected
-	 * @since 2.2.5
 	 *
 	 * Applies filters 'the_seo_framework_seo_plugin_detected' : bool
 	 * @since 2.6.1
@@ -376,23 +361,20 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			$conflicting_plugins = $this->get_conflicting_plugins( 'seo_tools' );
 
 			foreach ( $conflicting_plugins as $plugin ) {
-				if ( in_array( $plugin, $active_plugins ) ) {
+				if ( in_array( $plugin, $active_plugins, true ) ) {
 					$detected = apply_filters( 'the_seo_framework_seo_plugin_detected', true );
 					break;
 				}
 			}
 		}
 
-		return $detected = $detected ? true : false;
+		return $detected = (bool) $detected;
 	}
 
 	/**
-	 * Open Graph plugin detection
+	 * Determines if other Open Graph plugins are active.
 	 *
 	 * @since 1.3.0
-	 *
-	 * @staticvar bool $detected
-	 * @since 2.2.5
 	 *
 	 * Applies filters 'the_seo_framework_og_plugin_detected' : bool
 	 * @since 2.6.1
@@ -422,23 +404,21 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			$conflicting_plugins = $this->get_conflicting_plugins( 'open_graph' );
 
 			foreach ( $conflicting_plugins as $plugin ) {
-				if ( in_array( $plugin, $active_plugins ) ) {
+				if ( in_array( $plugin, $active_plugins, true ) ) {
 					$detected = apply_filters( 'the_seo_framework_og_plugin_detected', true );
 					break;
 				}
 			}
 		}
 
-		return $detected = $detected ? true : false;
+		return $detected = (bool) $detected;
 	}
 
 	/**
-	 * Open Graph plugin detection
+	 * Determines if other Twitter Card plugins are active.
 	 *
 	 * @since 2.6.0
-	 *
 	 * @staticvar bool $detected
-	 * @since 2.6.0
 	 *
 	 * @return bool Twitter Card plugin detected.
 	 */
@@ -460,25 +440,23 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			$conflicting_plugins = $this->get_conflicting_plugins( 'twitter_card' );
 
 			foreach ( $conflicting_plugins as $plugin ) {
-				if ( in_array( $plugin, $active_plugins ) ) {
+				if ( in_array( $plugin, $active_plugins, true ) ) {
 					$detected = apply_filters( 'the_seo_framework_twittercard_plugin_detected', true );
 					break;
 				}
 			}
 		}
 
-		return $detected = $detected ? true : false;
+		return $detected = (bool) $detected;
 	}
 
 	/**
-	 * Detects if plugins outputting ld+json exists
+	 * Determines if other Schema.org LD+Json plugins are active.
 	 *
 	 * @since 1.3.0
+	 * @since 2.6.1 Always return false. Let other plugin authors decide its value.
 	 *
-	 * Always return false.
-	 * @since 2.6.1
-	 *
-	 * @return bool false
+	 * @return bool Whether another Schema.org plugin is active.
 	 */
 	public function has_json_ld_plugin() {
 		/**
@@ -489,7 +467,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	}
 
 	/**
-	 * Detecs sitemap plugins
+	 * Determines if other Sitemap plugins are active.
 	 *
 	 * @since 2.1.0
 	 * @staticvar bool $detected
@@ -509,18 +487,18 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			$conflicting_plugins = $this->get_conflicting_plugins( 'sitemaps' );
 
 			foreach ( $conflicting_plugins as $plugin ) {
-				if ( in_array( $plugin, $active_plugins ) ) {
+				if ( in_array( $plugin, $active_plugins, true ) ) {
 					$detected = apply_filters( 'the_seo_framework_sitemap_plugin_detected', true );
 					break;
 				}
 			}
 		}
 
-		return $detected = $detected ? true : false;
+		return $detected = (bool) $detected;
 	}
 
 	/**
-	 * Whether able to add a line within robots based by plugin detection, or sitemap output option.
+	 * Determines whether to add a line within robots based by plugin detection, or sitemap output option.
 	 *
 	 * @since 2.6.0
 	 *
@@ -546,9 +524,10 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	/**
 	 * Detects presence of robots.txt in root folder.
 	 *
+	 * @since 2.5.2
 	 * @staticvar $has_robots
 	 *
-	 * @since 2.5.2
+	 * @return bool Whether the robots.txt file exists.
 	 */
 	public function has_robots_txt() {
 
@@ -568,7 +547,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * @since 2.5.2
 	 * @staticvar bool $has_map
 	 *
-	 * @return bool
+	 * @return bool Whether the sitemap.xml file exists.
 	 */
 	public function has_sitemap_xml() {
 
@@ -587,12 +566,11 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 *
 	 * @since 2.2.1
 	 *
-	 * @param string $version the three part version to compare to WordPress
-	 * @param string $compare the comparing operator, default "$version >= Current WP Version"
-	 *
 	 * @staticvar array $cache
 	 * @since 2.3.8
 	 *
+	 * @param string $version the three part version to compare to WordPress
+	 * @param string $compare the comparing operator, default "$version >= Current WP Version"
 	 * @return bool wp version is "compare" to
 	 */
 	public function wp_version( $version = '4.3.0', $compare = '>=' ) {
@@ -602,8 +580,8 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		if ( empty( $compare ) )
 			$compare = '>=';
 
-		if ( isset( $cache[$version][$compare] ) )
-			return $cache[$version][$compare];
+		if ( isset( $cache[ $version ][ $compare ] ) )
+			return $cache[ $version ][ $compare ];
 
 		global $wp_version;
 
@@ -611,27 +589,19 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		if ( 3 === strlen( $wp_version ) )
 			$wp_version = $wp_version . '.0';
 
-		if ( version_compare( $wp_version, $version, $compare ) )
-			return $cache[$version][$compare] = true;
-
-		return $cache[$version][$compare] = false;
+		return $cache[ $version ][ $compare ] = (bool) version_compare( $wp_version, $version, $compare );
 	}
 
 	/**
 	 * Checks for current theme support.
 	 *
-	 * Also, if it's cached as true from an array, it will be cached as string as well.
-	 * This is desired.
-	 *
-	 * @NOTE will return true if ANY of the array values matches.
+	 * Maintains detection cache, array and strings are mixed through foreach loops.
 	 *
 	 * @since 2.2.5
+	 * @staticvar array $cache
 	 *
 	 * @param string|array required $feature The features to check for.
 	 * @param bool $use_cache If set to false don't use cache.
-	 *
-	 * @staticvar array $cache
-	 *
 	 * @return bool theme support.
 	 */
 	public function detect_theme_support( $features, $use_cache = true ) {
@@ -658,16 +628,16 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		static $cache = array();
 
 		//* Check theme support cache
-		if ( is_string( $features ) && isset( $cache[$features] ) )
+		if ( is_string( $features ) && isset( $cache[ $features ] ) )
 			//* Feature support check has been cached
-			return $cache[$features];
+			return $cache[ $features ];
 
 		//* Check theme support array cache
 		if ( is_array( $features ) ) {
 			foreach ( $features as $feature ) {
-				if ( isset( $cache[$feature] ) && in_array( $cache[$feature], $features ) && $cache[$feature] ) {
-					// Feature is found and true
-					return $cache[$feature];
+				if ( isset( $cache[ $feature ] ) && $cache[ $feature ] ) {
+					// Feature is found and true.
+					return $cache[ $feature ];
 					break;
 				}
 			}
@@ -675,28 +645,27 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		//* Setup cache values
 		if ( is_string( $features ) ) {
-			if ( current_theme_supports( $features ) ) {
-				return $cache[$features] = true;
-			} else {
-				return $cache[$features] = false;
-			}
-		} else if ( is_array( $features ) ) {
+			if ( current_theme_supports( $features ) )
+				return $cache[ $features ] = true;
+			else
+				return $cache[ $features ] = false;
+		} elseif ( is_array( $features ) ) {
 			foreach ( $features as $feature ) {
 				if ( current_theme_supports( $feature ) ) {
-					return $cache[$feature] = true;
+					return $cache[ $feature ] = true;
 					break;
 				} else {
-					$cache[$feature] = false;
+					$cache[ $feature ] = false;
 				}
 			}
-			return $cache[$feature];
+			return $cache[ $feature ];
 		}
 
-		// No true value found so far, let's return false.
-		if ( ! isset( $cache[$features] ) )
-			$cache[$features] = false;
+		// No true value found so far, return false.
+		if ( ! isset( $cache[ $features ] ) )
+			$cache[ $features ] = false;
 
-		return $cache[$features];
+		return $cache[ $features ];
 	}
 
 	/**
@@ -704,7 +673,6 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 *
 	 * @since 2.6.0
 	 * @staticvar bool $supports
-	 *
 	 * @global array $_wp_theme_features
 	 *
 	 * @return bool
@@ -718,10 +686,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		global $_wp_theme_features;
 
-		if ( isset( $_wp_theme_features['title-tag'] ) && true === $_wp_theme_features['title-tag'] )
-			return $supports = true;
-
-		return $supports = false;
+		return $supports = isset( $_wp_theme_features['title-tag'] ) && true === $_wp_theme_features['title-tag'];
 	}
 
 	/**
@@ -729,7 +694,6 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 *
 	 * @since 2.5.2.1
 	 * @staticvar bool $no_spam
-	 *
 	 * @staticvar string $sep_output
 	 * @staticvar string $display_output
 	 * @staticvar string $seplocation_output
@@ -738,7 +702,6 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * @param null|string $sep The separator
 	 * @param null|string $seplocation Whether the blogname is left or right.
 	 * @param bool $output Whether to store cache values or echo the output in the footer.
-	 *
 	 * @return void
 	 */
 	public function tell_title_doing_it_wrong( $title = null, $sep = null, $seplocation = null, $output = true ) {
@@ -769,9 +732,9 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			if ( '' === $seplocation )
 				$seplocation = 'empty';
 
-			$title_output = ! isset( $title ) ? 'notset' : esc_attr( $title );
-			$sep_output = ! isset( $sep ) ? 'notset' : esc_attr( $sep );
-			$seplocation_output = ! isset( $seplocation ) ? 'notset' : esc_attr( $seplocation );
+			$title_output = ! isset( $title ) ? 'notset' : esc_html( $title );
+			$sep_output = ! isset( $sep ) ? 'notset' : esc_html( $sep );
+			$seplocation_output = ! isset( $seplocation ) ? 'notset' : esc_html( $seplocation );
 		}
 
 		//* Echo the HTML comment.
@@ -782,7 +745,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	}
 
 	/**
-	 * Detect WPMUdev Domain Mapping plugin.
+	 * Detects WPMUdev Domain Mapping plugin.
 	 *
 	 * @since 2.3.0
 	 * @staticvar bool $active
@@ -800,7 +763,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	}
 
 	/**
-	 * Detect Donncha Domain Mapping plugin.
+	 * Detects Donncha Domain Mapping plugin.
 	 *
 	 * @since 2.4.0
 	 * @staticvar bool $active
@@ -818,7 +781,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	}
 
 	/**
-	 * Detect WPML plugin.
+	 * Detects WPML plugin.
 	 *
 	 * @since 2.6.0
 	 * @staticvar bool $active
@@ -867,19 +830,19 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		static $is_page = array();
 
-		if ( isset( $is_page[$type] ) )
-			return $is_page[$type];
+		if ( isset( $is_page[ $type ] ) )
+			return $is_page[ $type ];
 
 		$post_page = (array) get_post_types( array( 'public' => true ) );
 
 		foreach ( $post_page as $screen ) {
 			if ( $type === $screen ) {
-				return $is_page[$type] = true;
+				return $is_page[ $type ] = true;
 				break;
 			}
 		}
 
-		return $is_page[$type] = false;
+		return $is_page[ $type ] = false;
 	}
 
 	/**
@@ -890,7 +853,6 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * @param bool $use_cache Set to false to bypass the cache.
 	 *
 	 * @staticvar array $locale
-	 * @staticvar string $get_locale
 	 *
 	 * @since 2.6.0
 	 *
@@ -902,27 +864,22 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			return false;
 
 		if ( true !== $use_cache )
-			return (bool) strpos( get_locale(), $locale );
+			return false !== strpos( get_locale(), $locale );
 
 		static $cache = array();
 
-		if ( isset( $cache[$locale] ) )
-			return $cache[$locale];
+		if ( isset( $cache[ $locale ] ) )
+			return $cache[ $locale ];
 
-		static $get_locale = null;
-
-		if ( ! isset( $get_locale ) )
-			$get_locale = get_locale();
-
-		return $cache[$locale] = false !== strpos( $get_locale, $locale ) ? true : false;
+		return $cache[ $locale ] = false !== strpos( get_locale(), $locale );
 	}
 
 	/**
 	 * Determines if the post type is compatible with The SEO Framework inpost metabox.
 	 *
 	 * @since 2.3.5
-	 * @param string|null $post_type
 	 *
+	 * @param string|null $post_type
 	 * @return bool True if post type is supported.
 	 */
 	public function post_type_supports_inpost( $post_type = null ) {
@@ -954,13 +911,11 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * Doesn't work on admin_init.
 	 *
 	 * @since 2.3.9
-	 *
-	 * @param string $post_type The current post type.
-	 *
 	 * @staticvar string $post_type
 	 * @staticvar bool $supported
 	 * @staticvar array $post_page
 	 *
+	 * @param string $post_type The current post type.
 	 * @return bool true of post type is supported.
 	 */
 	public function post_type_supports_custom_seo( $post_type = '' ) {
@@ -972,8 +927,8 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		static $supported = array();
 
-		if ( isset( $supported[$post_type] ) )
-			return $supported[$post_type];
+		if ( isset( $supported[ $post_type ] ) )
+			return $supported[ $post_type ];
 
 		/**
 		 * We now support all posts that allow a title, content editor and excerpt.
@@ -982,9 +937,9 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		 * @since 2.3.5
 		 */
 		if ( post_type_supports( $post_type, 'autodescription-meta' ) || $this->post_type_supports_inpost( $post_type ) )
-			return $supported[$post_type] = true;
+			return $supported[ $post_type ] = true;
 
-		return $supported[$post_type] = false;
+		return $supported[ $post_type ] = false;
 	}
 
 	/**
@@ -1014,8 +969,8 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		static $cache = array();
 
-		if ( isset( $cache[$public][$post_type] ) )
-			return $cache[$public][$post_type];
+		if ( isset( $cache[ $public ][ $post_type ] ) )
+			return $cache[ $public ][ $post_type ];
 
 		$object = get_post_type_object( $post_type );
 
@@ -1040,9 +995,9 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		//* No supported post type has been found.
 		if ( empty( $post_type ) )
-			return $cache[$public][$post_type] = false;
+			return $cache[ $public ][ $post_type ] = false;
 
-		return $cache[$public][$post_type] = $post_type;
+		return $cache[ $public ][ $post_type ] = $post_type;
 	}
 
 	/**
@@ -1087,10 +1042,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		if ( isset( $fixed ) )
 			return $fixed;
 
-		if ( defined( 'THE_SEO_FRAMEWORK_TITLE_FIX' ) && THE_SEO_FRAMEWORK_TITLE_FIX )
-			return $fixed = true;
-
-		return $fixed = false;
+		return $fixed = defined( 'THE_SEO_FRAMEWORK_TITLE_FIX' ) && THE_SEO_FRAMEWORK_TITLE_FIX;
 	}
 
 	/**
@@ -1101,11 +1053,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * @return bool True if we can manipulate title.
 	 */
 	public function can_manipulate_title() {
-
-		if ( $this->theme_title_doing_it_right() || $this->theme_title_fix_active() )
-			return true;
-
-		return false;
+		return $this->theme_title_doing_it_right() || $this->theme_title_fix_active();
 	}
 
 	/**
@@ -1123,7 +1071,26 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		if ( isset( $pof ) )
 			return $pof;
 
-		return $pof = 'page' === get_option( 'show_on_front' ) ? true : false;
+		return $pof = 'page' === get_option( 'show_on_front' );
 	}
 
+
+	/**
+	 * Determines whether we can use the new WordPress core term meta functionality.
+	 *
+	 * @since 2.7.0
+	 * @staticvar bool $cache
+	 *
+	 * @return bool True when WordPress is at version 4.4 or higher and has an
+	 *				accordingly upgraded database.
+	 */
+	public function can_get_term_meta() {
+
+		static $cache = null;
+
+		if ( isset( $cache ) )
+			return $cache;
+
+		return $cache = get_option( 'db_version' ) >= 34370 && get_option( 'the_seo_framework_upgraded_db_version' ) >= '2700' && $this->wp_version( '4.4' );
+	}
 }

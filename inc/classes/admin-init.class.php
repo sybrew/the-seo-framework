@@ -27,47 +27,55 @@
 class AutoDescription_Admin_Init extends AutoDescription_Init {
 
 	/**
-	 * Page Hook.
+	 * The page base file.
 	 *
 	 * @since 2.5.2.2
 	 *
-	 * @var String Holds Admin Page hook.
+	 * @var string Holds Admin page base file.
 	 */
-	protected $page_hook;
+	protected $page_base_file;
 
 	/**
 	 * JavaScript name identifier to be used with enqueuing.
 	 *
 	 * @since 2.5.2.2
 	 *
-	 * @var array JavaScript name identifier.
+	 * @var string JavaScript name identifier.
 	 */
-	public $js_name;
+	public $js_name = 'autodescription';
 
 	/**
 	 * CSS script name identifier to be used with enqueuing.
 	 *
 	 * @since 2.6.0
 	 *
-	 * @var array CSS name identifier.
+	 * @var string CSS name identifier.
 	 */
-	public $css_name;
+	public $css_name = 'autodescription';
 
 	/**
-	 * Constructor, load parent constructor
-	 *
-	 * Initalizes wp-admin functions
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
+	 * Constructor. Loads parent constructor, registers script names and adds actions.
 	 */
 	public function __construct() {
 		parent::__construct();
 
+		//* Enqueues admin scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 0, 1 );
 
-		$this->js_name = 'autodescription';
-		$this->css_name = 'autodescription';
-
 		//* Admin AJAX for counter options.
-		add_action( 'wp_ajax_the_seo_framework_update_counter', array( $this, 'the_counter_visualized' ) );
+		add_action( 'wp_ajax_the_seo_framework_update_counter', array( $this, 'wp_ajax_update_counter_type' ) );
 
 	}
 
@@ -76,7 +84,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 *
 	 * @since 2.3.3
 	 *
-	 * @param $hook the current page
+	 * @param string $hook The current page hook.
 	 */
 	public function enqueue_admin_scripts( $hook ) {
 
@@ -92,39 +100,39 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		 * Check hook first.
 		 * @since 2.3.9
 		 */
-		if ( isset( $hook ) && $hook && in_array( $hook, $enqueue_hooks ) ) {
+		if ( isset( $hook ) && $hook && in_array( $hook, $enqueue_hooks, true ) ) {
 			/**
 			 * @uses $this->post_type_supports_custom_seo()
 			 * @since 2.3.9
 			 */
 			if ( $this->post_type_supports_custom_seo() )
 				$this->init_admin_scripts();
+		}
+	}
 
+	/**
+	 * Registers admin scripts and styles.
+	 *
+	 * @since 2.6.0
+	 */
+	public function init_admin_scripts( $direct = false ) {
+
+		if ( $direct ) {
+			$this->enqueue_admin_css( $this->page_base_file );
+			$this->enqueue_admin_javascript( $this->page_base_file );
+		} else {
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_css' ), 1 );
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_javascript' ), 1 );
 		}
 
 	}
 
 	/**
-	 * Register and output Admin scripts.
-	 *
-	 * @since 2.6.0
-	 */
-	public function init_admin_scripts() {
-
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_css' ), 1 );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_javascript' ), 1 );
-
-	}
-
-	/**
-	 * AutoDescription JavaScript helper file
+	 * Enqueues scripts.
 	 *
 	 * @since 2.0.2
 	 *
-	 * @usedby add_inpost_seo_box
-	 * @usedby enqueue_javascript
-	 *
-	 * @param string|array|object $hook the current page
+	 * @param string $hook The current page hook.
 	 */
 	public function enqueue_admin_javascript( $hook ) {
 
@@ -132,7 +140,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		 * Put hook and js name in class vars.
 		 * @since 2.5.2.2
 		 */
-		$this->page_hook = $this->page_hook ? $this->page_hook : $hook;
+		$this->page_base_file = $this->page_base_file ? $this->page_base_file : $hook;
 
 		//* Register the script.
 		$this->register_admin_javascript();
@@ -148,11 +156,10 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	}
 
 	/**
-	 * Registers Admin CSS.
+	 * Registers admin CSS.
 	 *
 	 * @since 2.6.0
 	 * @staticvar bool $registered : Prevents Re-registering of the style.
-	 *
 	 * @access private
 	 */
 	public function register_admin_javascript() {
@@ -195,6 +202,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 *
 	 * @since 2.6.0
 	 * @staticvar array $strings : The l10n strings.
+	 * @since 2.7.0 Added AJAX nonce: 'autodescription-ajax-nonce'
 	 *
 	 * @return array $strings The l10n strings.
 	 */
@@ -214,7 +222,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		$home_tagline = $this->get_option( 'homepage_title_tagline' );
 		$title_location = $this->get_option( 'title_location' );
 		$title_add_additions = $this->add_title_additions();
-		$counter_type = $this->get_option( 'counter_type' );
+		$counter_type = (int) $this->get_user_option( 0, 'counter_type', 3 );
 
 		//* Enunciate the lenghts of Titles and Descriptions.
 		$good = __( 'Good', 'autodescription' );
@@ -222,19 +230,12 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		$bad = __( 'Bad', 'autodescription' );
 		$unknown = __( 'Unknown', 'autodescription' );
 
-		$separator = $this->get_separator( 'title', true );
+		$separator = $this->get_separator( 'title' );
 
-		$rtl = (bool) is_rtl();
+		$isrtl = (bool) is_rtl();
 		$ishome = false;
 
-		/**
-		 * We're gaining UX in exchange for resource usage.
-		 *
-		 * Any way to cache this?
-		 *
-		 * @since 2.2.4
-		 */
-		if ( isset( $this->page_hook ) && $this->page_hook ) {
+		if ( isset( $this->page_base_file ) && $this->page_base_file ) {
 			// We're somewhere within default WordPress pages.
 			$post_id = $this->get_the_real_ID();
 
@@ -248,7 +249,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 				} else {
 					$additions = '';
 				}
-			} else if ( $post_id ) {
+			} elseif ( $post_id ) {
 				//* We're on post.php
 				$generated_doctitle_args = array(
 					'term_id' => $post_id,
@@ -265,7 +266,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 					$additions = '';
 					$tagline = false;
 				}
-			} else if ( $this->is_archive() ) {
+			} elseif ( $this->is_archive() ) {
 				//* Category or Tag.
 				global $current_screen;
 
@@ -278,21 +279,19 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 							'term_id' => $term_id,
 							'taxonomy' => $current_screen->taxonomy,
 							'notagline' => true,
-							'get_custom_field' => false
+							'get_custom_field' => false,
 						);
 
 						$title = $this->title( '', '', '', $generated_doctitle_args );
 						$additions = $title_add_additions ? $blog_name : '';
 					}
 				}
-
 			} else {
 				//* We're in a special place.
 				// Can't fetch title.
 				$title = '';
 				$additions = $title_add_additions ? $blog_name : '';
 			}
-
 		} else {
 			// We're on our SEO settings pages.
 			if ( $this->has_page_on_front() ) {
@@ -306,22 +305,25 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 			$additions = $home_tagline ? $home_tagline : $description;
 		}
 
+		$nonce = wp_create_nonce( 'autodescription-ajax-nonce' );
+
 		return $strings = array(
-			'saveAlert'		=> __( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
-			'confirmReset'	=> __( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
-			'siteTitle' 	=> $title,
-			'titleAdditions' => $additions,
-			'blogDescription' => $description,
-			'titleTagline' 	=> $tagline,
-			'titleSeparator' => $separator,
-			'titleLocation' => $title_location,
-			'isRTL' => $rtl,
+			'saveAlert' => esc_html__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
+			'confirmReset' => esc_html__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
+			'siteTitle' => esc_html( $title ),
+			'titleAdditions' => esc_html( $additions ),
+			'blogDescription' => esc_html( $description ),
+			'titleTagline' => $tagline,
+			'titleSeparator' => esc_html( $separator ),
+			'titleLocation' => esc_html( $title_location ),
+			'isRTL' => $isrtl,
 			'isHome' => $ishome,
-			'counterType' => $counter_type,
-			'good' => $good,
-			'okay' => $okay,
-			'bad' => $bad,
-			'unknown' => $unknown,
+			'counterType' => absint( $counter_type ),
+			'good' => esc_html( $good ),
+			'okay' => esc_html( $okay ),
+			'bad' => esc_html( $bad ),
+			'unknown' => esc_html( $unknown ),
+			'nonce' => $nonce,
 		);
 	}
 
@@ -341,7 +343,7 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		 * Put hook and js name in class vars.
 		 * @since 2.5.2.2
 		 */
-		$this->page_hook = $this->page_hook ? $this->page_hook : $hook;
+		$this->page_base_file = $this->page_base_file ? $this->page_base_file : $hook;
 
 		//* Register the script.
 		$this->register_admin_css();
@@ -355,7 +357,6 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 *
 	 * @since 2.6.0
 	 * @staticvar bool $registered : Prevents Re-registering of the style.
-	 *
 	 * @access private
 	 */
 	protected function register_admin_css() {
@@ -365,38 +366,12 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		if ( isset( $registered ) )
 			return;
 
-		$rtl = '';
-
-		if ( is_rtl() )
-			$rtl = '-rtl';
-
+		$rtl = is_rtl() ? '-rtl' : '';
 		$suffix = $this->script_debug ? '' : '.min';
+		$registered = true;
 
 		wp_register_style( $this->css_name, THE_SEO_FRAMEWORK_DIR_URL . "lib/css/autodescription{$rtl}{$suffix}.css", array(), THE_SEO_FRAMEWORK_VERSION, 'all' );
 
-		$registered = true;
-
-	}
-
-	/**
-	 * Checks the screen hook.
-	 *
-	 * @since 2.2.2
-	 * @global string $page_hook the current page hook.
-	 *
-	 * @return bool true if screen match.
-	 */
-	public function is_menu_page( $pagehook = '' ) {
-		global $page_hook;
-
-		if ( isset( $page_hook ) && $page_hook === $pagehook )
-			return true;
-
-		//* May be too early for $page_hook
-		if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === $pagehook )
-			return true;
-
-		return false;
 	}
 
 	/**
@@ -408,9 +383,6 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 * @param string $page			Menu slug.
 	 * @param array  $query_args 	Optional. Associative array of query string arguments
 	 * 								(key => value). Default is an empty array.
-	 *
-	 * @credits StudioPress for some code.
-	 *
 	 * @return null Return early if first argument is false.
 	 */
 	public function admin_redirect( $page, array $query_args = array() ) {
@@ -422,15 +394,14 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 
 		foreach ( $query_args as $key => $value ) {
 			if ( empty( $key ) || empty( $value ) )
-				unset( $query_args[$key] );
+				unset( $query_args[ $key ] );
 		}
 
 		$url = add_query_arg( $query_args, $url );
 
-		wp_redirect( esc_url_raw( $url ) );
+		wp_safe_redirect( esc_url_raw( $url ), 302 );
 		exit;
 	}
-
 
 	/**
 	 * Handles counter option update on AJAX request.
@@ -438,31 +409,42 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 * @since 2.6.0
 	 * @access private
 	 */
-	public function the_counter_visualized() {
+	public function wp_ajax_update_counter_type() {
 
 		if ( $this->is_admin() && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			//* If current user isn't allowed to edit posts, don't do anything.
+
+			//* If current user isn't allowed to edit posts, don't do anything and kill PHP.
 			if ( ! current_user_can( 'publish_posts' ) )
 				exit;
 
-			$options = $this->get_all_options();
+			check_ajax_referer( 'autodescription-ajax-nonce', 'nonce' );
+
+			$post_val = intval( $_POST['val'] );
 
 			/**
 			 * Count up, reset to 0 if needed. We have 4 options: 0, 1, 2, 3
-			 * We're not accepting any $_POST values. Keeping it clean.
-			 * Yet we should for consistency. @TODO
-			 * @priority high 2.6.2
+			 * $_POST['val'] already contains updated number.
 			 */
-			$options['counter_type'] = $options['counter_type'] + 1;
-			if ( $options['counter_type'] > 3 )
-				$options['counter_type'] = 0;
+			$value = $post_val ? $post_val : $this->get_user_option( 0, 'counter_type', 3 ) + 1;
+			$value = absint( $value );
 
-			update_option( $this->settings_field, $options );
+			if ( $value > 3 )
+				$value = 0;
+
+			//* Update the option and get results of action.
+			$type = $this->update_user_option( 0, 'counter_type', $value ) ? 'success' : 'error';
+
+			$results = array(
+				'type' => $type,
+				'value' => $value,
+			);
+
+			//* Encode and echo results. Requires JSON decode within JS.
+			echo json_encode( $results );
 
 			//* Kill PHP.
 			exit;
 		}
 
 	}
-
 }

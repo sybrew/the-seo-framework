@@ -35,13 +35,14 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	protected $settings_field;
 
 	/**
-	 * Hold the Page ID for this plugin.
+	 * Hold the SEO Settings Page ID for this plugin.
 	 *
 	 * @since 2.2.2
+	 * @since 2.70 Renamed var from page_id and made public.
 	 *
 	 * @var string The page ID
 	 */
-	protected $page_id;
+	public $seo_settings_page_slug;
 
 	/**
 	 * Holds the update option.
@@ -53,20 +54,32 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	protected $o_plugin_updated;
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor, load parent constructor and set up cachable variables.
 	 */
 	public function __construct() {
 		parent::__construct();
 
 		$this->settings_field = THE_SEO_FRAMEWORK_SITE_OPTIONS;
-		$this->o_plugin_updated = 'updated_' . str_replace( '.', '', THE_SEO_FRAMEWORK_VERSION );
-		$this->page_id = 'autodescription-settings';
+		$this->o_plugin_updated = 'updated_' . THE_SEO_FRAMEWORK_DB_VERSION;
+		$this->seo_settings_page_slug = 'theseoframework-settings';
 
 		//* Set up site settings and save/reset them
 		add_action( 'admin_init', array( $this, 'register_settings' ), 5 );
 
 		//* Update site options at plugin update.
-		add_action( 'admin_init', array( $this, 'site_updated_plugin_option' ), 10 );
+		add_action( 'admin_init', array( $this, 'site_updated_plugin_option' ), 30 );
 
 	}
 
@@ -207,7 +220,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			'knowledge_logo'		=> 1,	// Fetch logo from WP Favicon
 			'knowledge_name'		=> '',	// Person or Organization name
 
-			// 'Sameas'
+			// Knowledge sameas locations
 			'knowledge_facebook'	=> '',	// Facebook Account
 			'knowledge_twitter'		=> '',	// Twitter Account
 			'knowledge_gplus'		=> '',	// Google Plus Account
@@ -236,9 +249,6 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			'ld_json_searchbox'		=> 1,	// LD+Json Sitelinks Searchbox
 			'ld_json_sitename'		=> 1,	// LD+Json Sitename
 			'ld_json_breadcrumbs'	=> 1,	// LD+Json Breadcrumbs
-
-			// Misc.
-			'counter_type' => 3, // JS counter type.
 
 			// Cache.
 			$this->o_plugin_updated => 1,	// Plugin update cache.
@@ -352,9 +362,12 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 */
 	protected function update_hidden_options_to_default() {
 
+		if ( false === $this->verify_seo_settings_nonce() )
+			return;
+
 		//* Disables the New SEO Settings Updated notification.
 		$plugin_updated = $this->o_plugin_updated;
-		$_POST[THE_SEO_FRAMEWORK_SITE_OPTIONS][$plugin_updated] = 1;
+		$_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ][ $plugin_updated ] = 1;
 
 	}
 
@@ -399,23 +412,23 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 		 * Stop this madness from happening again until next update.
 		 * Also prevent $updated to become true on this call.
 		 */
-		$new_options[$plugin_updated] = 1;
-		$options[$plugin_updated] = 1;
+		$new_options[ $plugin_updated ] = 1;
+		$options[ $plugin_updated ] = 1;
 
 		//* Merge the options. Add to if it's non-existent.
 		foreach ( $new_options as $key => $value ) {
-			if ( ! isset( $options[$key] ) ) {
-				if ( ! empty( $new_options[$key] ) ) {
-					$options[$key] = $new_options[$key];
+			if ( ! isset( $options[ $key ] ) ) {
+				$options[ $key ] = $value;
+
+				if ( ! empty( $value ) )
 					$updated = true;
-				}
 			}
 		}
 
 		//* Updated the options. Check for updated flag and see if settings pages are loaded.
-		if ( update_option( $this->settings_field, $options ) && $updated && $this->load_options ) {
+		if ( update_option( $this->settings_field, $options ) && $updated && $this->load_options )
 			$this->pre_output_site_updated_plugin_notice();
-		}
+
 	}
 
 	/**
@@ -429,7 +442,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 		if ( $this->is_seo_settings_page() ) {
 			//* Redirect to current page if on options page to correct option values. Once.
 			if ( ! isset( $_REQUEST['seo-updated'] ) || 'true' !== $_REQUEST['seo-updated'] )
-				$this->admin_redirect( $this->page_id, array( 'seo-updated' => 'true' ) );
+				$this->admin_redirect( $this->seo_settings_page_slug, array( 'seo-updated' => 'true' ) );
 
 			//* Notice has already been sent.
 			return;
@@ -444,7 +457,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	}
 
 	/**
-	 * Echo plugin updated notification.
+	 * Echos plugin updated notification.
 	 *
 	 * @since 2.6.0
 	 *
@@ -452,14 +465,11 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 */
 	public function site_updated_plugin_notice() {
 
-		$notice = $this->page_defaults['plugin_update_text'];
-
 		$settings_url = $this->seo_settings_page_url();
-		$link = sprintf( '<a href="%s" title="%s" target="_self">%s</a>', $settings_url, __( 'SEO Settings', 'autodescription' ), __( 'here', 'autodescription' ) );
+		$link = sprintf( '<a href="%s" title="%s" target="_self">%s</a>', $settings_url, esc_attr__( 'SEO Settings', 'autodescription' ), esc_html__( 'here', 'autodescription' ) );
+		$go_to_page = sprintf( esc_html_x( 'View the new options %s.', '%s = here', 'autodescription' ), $link );
 
-		$go_to_page = sprintf( _x( 'View the new options %s.', '%s = here', 'autodescription' ), $link );
-
-		$notice = $notice . ' ' . $go_to_page;
+		$notice = $this->page_defaults['plugin_update_text'] . ' ' . $go_to_page;
 
 		echo $this->generate_dismissible_notice( $notice, 'updated' );
 
@@ -496,13 +506,13 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 
 		static $cache = array();
 
-		if ( isset( $cache[$setting] ) )
-			return $cache[$setting];
+		if ( isset( $cache[ $setting ] ) )
+			return $cache[ $setting ];
 
 		if ( is_null( $setting ) )
 			$setting = THE_SEO_FRAMEWORK_SITE_OPTIONS;
 
-		return $cache[$setting] = apply_filters( 'the_seo_framework_get_options', get_option( $setting ), $setting );
+		return $cache[ $setting ] = apply_filters( 'the_seo_framework_get_options', get_option( $setting ), $setting );
 	}
 
 	/**
@@ -535,29 +545,29 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			if ( ! is_array( $options ) || ! array_key_exists( $key, $options ) )
 				return '';
 
-			return is_array( $options[$key] ) ? stripslashes_deep( $options[$key] ) : stripslashes( wp_kses_decode_entities( $options[$key] ) );
+			return is_array( $options[ $key ] ) ? stripslashes_deep( $options[ $key ] ) : stripslashes( wp_kses_decode_entities( $options[ $key ] ) );
 		}
 
 		//* Setup caches
 		static $options_cache = array();
 
 		//* Check options cache
-		if ( isset( $options_cache[$setting][$key] ) )
+		if ( isset( $options_cache[ $setting ][ $key ] ) )
 			//* Option has been cached
-			return $options_cache[$setting][$key];
+			return $options_cache[ $setting ][ $key ];
 
 		$options = $this->get_all_options( $setting );
 
 		//* Check for non-existent option
 		if ( ! is_array( $options ) || ! array_key_exists( $key, (array) $options ) ) {
 			//* Cache non-existent option
-			$options_cache[$setting][$key] = '';
+			$options_cache[ $setting ][ $key ] = '';
 		} else {
 			//* Option has not been previously been cached, so cache now
-			$options_cache[$setting][$key] = is_array( $options[$key] ) ? stripslashes_deep( $options[$key] ) : stripslashes( wp_kses_decode_entities( $options[$key] ) );
+			$options_cache[ $setting ][ $key ] = is_array( $options[ $key ] ) ? stripslashes_deep( $options[ $key ] ) : stripslashes( wp_kses_decode_entities( $options[ $key ] ) );
 		}
 
-		return $options_cache[$setting][$key];
+		return $options_cache[ $setting ][ $key ];
 	}
 
 	/**
@@ -646,10 +656,9 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 * Register the database settings for storage.
 	 *
 	 * @since 2.2.2
+	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 *
 	 * @return void
-	 *
-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 */
 	public function register_settings() {
 
@@ -665,13 +674,34 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			return;
 
 		if ( $this->get_option( 'reset', $this->settings_field ) ) {
-			if ( update_option( $this->settings_field, $this->default_site_options() ) )
-				$this->admin_redirect( $this->page_id, array( 'reset' => 'true' ) );
-			else
-				$this->admin_redirect( $this->page_id, array( 'error' => 'true' ) );
-			exit;
+			if ( update_option( $this->settings_field, $this->default_site_options() ) ) {
+				$this->admin_redirect( $this->seo_settings_page_slug, array( 'reset' => 'true' ) );
+				exit;
+			} else {
+				$this->admin_redirect( $this->seo_settings_page_slug, array( 'error' => 'true' ) );
+				exit;
+			}
 		}
+	}
 
+	/**
+	 * Allows updating of settings.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param string|array $new The new setting(s).
+	 * @param string $settings_field The Settings Field to update. Defaults
+	 *				to The SEO Framework settings field.
+	 */
+	public function update_settings( $new = '', $settings_field = '' ) {
+
+		if ( empty( $settings_field ) )
+			$settings_field = $this->settings_field;
+
+		$old = get_option( $settings_field );
+		$settings = wp_parse_args( $new, $old );
+
+		return update_option( $settings_field, $settings );
 	}
 
 	/**
@@ -707,22 +737,22 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			if ( ! is_array( $defaults ) || ! array_key_exists( $key, $defaults ) )
 				return -1;
 
-			return is_array( $defaults[$key] ) ? stripslashes_deep( $defaults[$key] ) : stripslashes( wp_kses_decode_entities( $defaults[$key] ) );
+			return is_array( $defaults[ $key ] ) ? stripslashes_deep( $defaults[ $key ] ) : stripslashes( wp_kses_decode_entities( $defaults[ $key ] ) );
 		}
 
 		static $defaults_cache = array();
 
 		//* Check options cache
-		if ( isset( $defaults_cache[$key] ) )
+		if ( isset( $defaults_cache[ $key ] ) )
 			//* Option has been cached
-			return $defaults_cache[$key];
+			return $defaults_cache[ $key ];
 
 		$defaults_cache = $this->default_site_options();
 
 		if ( ! is_array( $defaults_cache ) || ! array_key_exists( $key, (array) $defaults_cache ) )
-			$defaults_cache[$key] = -1;
+			$defaults_cache[ $key ] = -1;
 
-		return $defaults_cache[$key];
+		return $defaults_cache[ $key ];
 	}
 
 	/**
@@ -758,32 +788,137 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			if ( ! is_array( $warned ) || ! array_key_exists( $key, $warned ) )
 				return -1;
 
-			return $this->s_one_zero( $warned[$key] );
+			return $this->s_one_zero( $warned[ $key ] );
 		}
 
 		static $warned_cache = array();
 
 		//* Check options cache
-		if ( isset( $warned_cache[$key] ) )
+		if ( isset( $warned_cache[ $key ] ) )
 			//* Option has been cached
-			return $warned_cache[$key];
+			return $warned_cache[ $key ];
 
 		$warned_options = $this->warned_site_options();
 
 		if ( ! is_array( $warned_options ) || ! array_key_exists( $key, (array) $warned_options ) )
-			$warned_cache[$key] = -1;
+			$warned_cache[ $key ] = -1;
 
-		$warned_cache[$key] = $this->s_one_zero( $warned_options[$key] );
+		$warned_cache[ $key ] = $this->s_one_zero( $warned_options[ $key ] );
 
-		return $warned_cache[$key];
+		return $warned_cache[ $key ];
 	}
 
 	/**
-	 * Returns Facebook locales array
+	 * Fetches user SEO user meta data by name.
+	 * Caches all meta data per $user_id.
 	 *
-	 * @see https://www.facebook.com/translations/FacebookLocales.xml
+	 * @since 2.7.0
+	 * @staticvar array $options_cache
+	 *
+	 * @param int $user_id The user ID. When empty, it will try to fetch the current user.
+	 * @param string $option The option name.
+	 * @param mixed $default The default value to return when the data doesn't exist.
+	 * @return mixed The metadata value.
+	 */
+	public function get_user_option( $user_id = 0, $option, $default = null ) {
+
+		if ( ! $option )
+			return null;
+
+		if ( empty( $user_id ) )
+			$user_id = $this->get_user_id();
+
+		if ( ! $user_id )
+			return null;
+
+		static $options_cache = array();
+
+		if ( isset( $options_cache[ $user_id ][ $option ] ) )
+			return $options_cache[ $user_id ][ $option ];
+
+		$usermeta = $this->get_user_meta( $user_id );
+
+		return $options_cache[ $user_id ][ $option ] = isset( $usermeta[ $option ] ) ? $usermeta[ $option ] : $default;
+	}
+
+	/**
+	 * Sets up user ID and returns it if user is found.
+	 * To be used in AJAX, back-end and front-end.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @return int $user_id : 0 if user is not found.
+	 */
+	public function get_user_id() {
+
+		static $user_id = null;
+
+		if ( isset( $user_id ) )
+			return $user_id;
+
+		$user = wp_get_current_user();
+
+		return $user_id = $user->exists() ? (int) $user->ID : 0;
+	}
+
+	/**
+	 * Fetches The SEO Framework usermeta.
+	 *
+	 * @since 2.7.0
+	 * @staticvar array $usermeta_cache
+	 *
+	 * @param int $user_id The user ID.
+	 * @param string $key The user metadata key. Leave empty to fetch all data.
+	 * @param bool $use_cache Whether to store and use options from cache.
+	 * @return array The user SEO meta data.
+	 */
+	public function get_user_meta( $user_id, $key = THE_SEO_FRAMEWORK_USER_OPTIONS, $use_cache = true ) {
+
+		if ( false === $use_cache )
+			return get_user_meta( $user_id, $key, true );
+
+		static $usermeta_cache = array();
+
+		if ( isset( $usermeta_cache[ $user_id ][ $key ] ) )
+			return $usermeta_cache[ $user_id ][ $key ];
+
+		return $usermeta_cache[ $user_id ][ $key ] = get_user_meta( $user_id, $key, true );
+	}
+
+	/**
+	 * Updates user SEO option.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param int $user_id The user ID.
+	 * @param string $option The user's SEO metadata option.
+	 * @param mixed $value The escaped option value.
+	 * @return bool True on success. False on failure.
+	 */
+	public function update_user_option( $user_id = 0, $option, $value ) {
+
+		if ( ! $option )
+			return false;
+
+		if ( empty( $user_id ) )
+			$user_id = $this->get_user_id();
+
+		if ( empty( $user_id ) )
+			return false;
+
+		$meta = $this->get_user_meta( $user_id, THE_SEO_FRAMEWORK_USER_OPTIONS, false );
+
+		$meta[ $option ] = $value;
+
+		return update_user_meta( $user_id, THE_SEO_FRAMEWORK_USER_OPTIONS, $meta );
+	}
+
+	/**
+	 * Returns Facebook locales array.
 	 *
 	 * @since 2.5.2
+	 * @see https://www.facebook.com/translations/FacebookLocales.xml
+	 *
 	 * @return array Valid Facebook locales
 	 */
 	public function fb_locales() {
@@ -936,9 +1071,9 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 * This is apart from the fb_locales array since there are "duplicated" keys.
 	 * Use this to compare the numeric key position.
 	 *
+	 * @since 2.5.2
 	 * @see https://www.facebook.com/translations/FacebookLocales.xml
 	 *
-	 * @since 2.5.2
 	 * @return array Valid Facebook locales
 	 */
 	public function language_keys() {
@@ -1084,7 +1219,5 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 			'zu', // Zulu
 			'zz', // Zazaki
 		);
-
 	}
-
 }

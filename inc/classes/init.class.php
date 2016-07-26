@@ -35,6 +35,18 @@ class AutoDescription_Init extends AutoDescription_Query {
 	protected $use_object_cache = true;
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor. Initializes actions and loads parent constructor.
 	 */
 	public function __construct() {
@@ -88,12 +100,11 @@ class AutoDescription_Init extends AutoDescription_Query {
 		//* Earlier removal of the generator tag. Doesn't require filter.
 		remove_action( 'wp_head', 'wp_generator' );
 
-		if ( $this->is_theme( 'genesis', false ) ) {
+		if ( $this->is_theme( 'genesis' ) ) {
 			add_action( 'genesis_meta', array( $this, 'html_output' ), 5 );
 		} else {
 			add_action( 'wp_head', array( $this, 'html_output' ), 1 );
 		}
-
 	}
 
 	/**
@@ -113,7 +124,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 		//* Override bbPress title
 		add_filter( 'bbp_title', array( $this, 'title_from_cache' ), 99, 3 );
 		//* Override Woo Themes Title
-		add_filter( 'woo_title', array( $this, 'title_from_cache'), 99 );
+		add_filter( 'woo_title', array( $this, 'title_from_cache' ), 99 );
 
 		/**
 		 * Applies filters 'the_seo_framework_manipulate_title' : boolean
@@ -311,9 +322,9 @@ class AutoDescription_Init extends AutoDescription_Query {
 			 */
 			$sybre = (bool) apply_filters( 'sybre_waaijer_<3', true );
 
-			$start = __( 'Start The Seo Framework', 'autodescription' );
-			$end = __( 'End The Seo Framework', 'autodescription' );
-			$me =  $sybre ? ' ' . __( 'by Sybre Waaijer', 'autodescription' ) : '';
+			$start = esc_html__( 'Start The Seo Framework', 'autodescription' );
+			$end = esc_html__( 'End The Seo Framework', 'autodescription' );
+			$me = $sybre ? ' ' . esc_html__( 'by Sybre Waaijer', 'autodescription' ) : '';
 
 			$indicatorbefore = '<!-- ' . $start . $me . ' -->' . "\r\n";
 
@@ -334,6 +345,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 		do_action( 'the_seo_framework_do_after_output' );
 
 		echo $output;
+
 	}
 
 	/**
@@ -360,45 +372,14 @@ class AutoDescription_Init extends AutoDescription_Query {
 				$url = $this->set_url_scheme( $url, 'relative' );
 				$url = $this->add_url_host( $url );
 				$scheme = is_ssl() ? 'https' : 'http';
+
+				wp_safe_redirect( esc_url_raw( $url, array( $scheme ) ), 301 );
+				exit;
 			}
 
-			wp_redirect( esc_url_raw( $url, $scheme ), 301 );
+			//* @TODO set scheme filter, adjustable through (multisite) extensions?
+			wp_redirect( esc_url_raw( $url ), 301 );
 			exit;
 		}
-
 	}
-
-	/**
-	 * Well, this is annoying.
-	 *
-	 * @since 2.4.2
-	 * @return something that will make your head explode.
-	 */
-	public function explode() {
-		add_action( 'wp_head', array( $this, 'roll' ) );
-
-		/* the code to run this :
-		add_action( 'init', 'tsf_explode' );
-		function tsf_explode() {
-			if ( function_exists( 'the_seo_framework' ) ) {
-				$the_seo_framework = the_seo_framework();
-				if ( isset( $the_seo_framework ) )
-					$the_seo_framework->explode();
-			}
-		}
-		*/
-	}
-
-	/**
-	 * After using explosions, you tend to roll away.
-	 *
-	 * @since 2.5.2
-	 */
-	public function roll() {
-		?>
-		<style>div:hover>div{-webkit-animation:troll 5s infinite cubic-bezier(0,1.5,.5,1)1s;animation:troll 5s infinite cubic-bezier(0,1.5,.5,1)1s}@-webkit-keyframes troll{100%{-webkit-transform:rotate(0)}75%{-webkit-transform:rotate(30deg)}25%{-webkit-transorm:rotate(0)}0%{-webkit-transorm:rotate(30deg)}}@keyframes troll{100%,25%{transform:rotate(0)}0%,75%{transform:rotate(30deg)}}#container:hover,.site-container:hover{-webkit-animation:none;animation:none}</style>
-		<?php
-		echo "\r\n";
-	}
-
 }

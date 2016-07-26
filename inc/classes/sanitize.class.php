@@ -26,6 +26,18 @@
 class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor, load parent constructor
 	 */
 	public function __construct() {
@@ -39,33 +51,59 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	}
 
 	/**
-	 * Register each of the settings with a sanitization filter type.
+	 * Checks the SEO Settings page nonce. Returns false if nonce can't be found.
+	 * Performs wp_die() when nonce verification fails.
 	 *
-	 * @since 2.2.2
+	 * Never run a sensitive function when it's returning false. This means no nonce can be verified.
 	 *
-	 * @uses autodescription_add_option_filter() Assign filter to array of settings.
+	 * @since 2.7.0
+	 * @staticvar bool $verified.
 	 *
-	 * @see AutoDescription_Sanitize::add_filter() Add sanitization filters to options.
+	 * @return bool True if verified and matches. False if can't verify.
 	 */
-	public function sanitizer_filters() {
+	public function verify_seo_settings_nonce() {
+
+		static $validated = null;
+
+		if ( isset( $validated ) )
+			return $validated;
 
 		//* If this page doesn't store settings, no need to sanitize them
 		if ( ! $this->settings_field )
-			return;
+			return $validated = false;
 
 		/**
 		 * If this page doesn't parse the site options,
 		 * There's no need to filter them on each request.
+		 * Nonce is handled elsewhere. This function merely injects filters to the $_POST data.
 		 *
 		 * @since 2.2.9
 		 */
-		if ( ! isset( $_POST ) || empty( $_POST ) || ! isset( $_POST[THE_SEO_FRAMEWORK_SITE_OPTIONS] ) || ! is_array( $_POST[THE_SEO_FRAMEWORK_SITE_OPTIONS] ) )
+		if ( empty( $_POST ) || ! isset( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) || ! is_array( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) )
+			return $validated = false;
+
+		check_admin_referer( $this->settings_field . '-options' );
+
+		return $validated = true;
+	}
+
+	/**
+	 * Register each of the settings with a sanitization filter type.
+	 *
+	 * @since 2.2.2
+	 * @uses autodescription_add_option_filter() Assign filter to array of settings.
+	 * @see AutoDescription_Sanitize::add_filter() Add sanitization filters to options.
+	 */
+	public function sanitizer_filters() {
+
+		//* Verify update nonce.
+		if ( false === $this->verify_seo_settings_nonce() )
 			return;
 
 		//* Update hidden options.
 		$this->update_hidden_options_to_default();
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_title_separator',
 			$this->settings_field,
 			array(
@@ -73,7 +111,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_description_separator',
 			$this->settings_field,
 			array(
@@ -81,7 +119,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_description',
 			$this->settings_field,
 			array(
@@ -90,7 +128,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_title',
 			$this->settings_field,
 			array(
@@ -101,7 +139,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_knowledge_type',
 			$this->settings_field,
 			array(
@@ -109,7 +147,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_left_right',
 			$this->settings_field,
 			array(
@@ -117,7 +155,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_left_right_home',
 			$this->settings_field,
 			array(
@@ -125,7 +163,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_one_zero',
 			$this->settings_field,
 			array(
@@ -212,7 +250,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_absint',
 			$this->settings_field,
 			array(
@@ -220,7 +258,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_no_html',
 			$this->settings_field,
 			array(
@@ -231,7 +269,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		 * @todo create content="code" stripper
 		 * @priority low 2.9.0+
 		 */
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_no_html_space',
 			$this->settings_field,
 			array(
@@ -244,7 +282,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_url',
 			$this->settings_field,
 			array(
@@ -263,7 +301,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_url_query',
 			$this->settings_field,
 			array(
@@ -271,7 +309,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_twitter_name',
 			$this->settings_field,
 			array(
@@ -280,7 +318,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			)
 		);
 
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_twitter_card',
 			$this->settings_field,
 			array(
@@ -289,7 +327,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		);
 
 		//* Special action filter.
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_one_zero_flush_rewrite',
 			$this->settings_field,
 			array(
@@ -298,7 +336,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		);
 
 		//* Special action filter.
-		$this->autodescription_add_option_filter(
+		$this->add_filter(
 			's_one_zero_flush_sitemap',
 			$this->settings_field,
 			array(
@@ -313,6 +351,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * Registers option sanitation filter
 	 *
 	 * @since 2.2.2
+	 * @since 2.7.0 : No longer used internally.
 	 *
 	 * @param string $filter The filter to call (see AutoDescription_Siteoptions::$available_filters for options)
 	 * @param string $option The WordPress option name
@@ -332,8 +371,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * sanitizer at the right time.
 	 *
 	 * @since 2.2.2
-	 *
-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
+	 * @since 2.7.0: Uses external caching function.
 	 *
 	 * @param string $filter Sanitization filter type
 	 * @param string $option Option key
@@ -342,19 +380,56 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 */
 	public function add_filter( $filter, $option, $suboption = null ) {
 
-		if ( is_array( $suboption ) ) {
-			foreach ( $suboption as $so ) {
-				$this->options[$option][$so] = $filter;
-			}
-		} else if ( is_null( $suboption ) ) {
-			$this->options[$option] = $filter;
-		} else {
-			$this->options[$option][$suboption] = $filter;
-		}
+		$this->set_option_filter( $filter, $option, $suboption );
 
 		add_filter( 'sanitize_option_' . $option, array( $this, 'sanitize' ), 10, 2 );
 
 		return true;
+	}
+
+	/**
+	 * Sets sanitation filters cache.
+	 *
+	 * Associates a sanitization filter to each option (or sub options if they
+	 * exist) before adding a reference to run the option through that
+	 * sanitizer at the right time.
+	 *
+	 * @since 2.7.0
+	 * @staticvar $options The options filter cache.
+	 *
+	 * @param string $filter Sanitization filter type
+	 * @param string $option Option key
+	 * @param array|string $suboption Optional. Suboption key
+	 * @param bool $get Whether to retrieve cache.
+	 * @return boolean Returns true when complete
+	 */
+	protected function set_option_filter( $filter, $option, $suboption = null, $get = false ) {
+
+		static $options = array();
+
+		if ( $get )
+			return $options;
+
+		if ( is_array( $suboption ) ) {
+			foreach ( $suboption as $so ) {
+				$options[ $option ][ $so ] = $filter;
+			}
+		} elseif ( is_null( $suboption ) ) {
+			$options[ $option ] = $filter;
+		} else {
+			$options[ $option ][ $suboption ] = $filter;
+		}
+	}
+
+	/**
+	 * Returns sanitation filters from cache.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @return array Filters with their associated (sub)options.
+	 */
+	protected function get_option_filters() {
+		return $this->set_option_filter( '', '', '', true );
 	}
 
 	/**
@@ -370,19 +445,21 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 */
 	public function sanitize( $new_value, $option ) {
 
-		if ( ! isset( $this->options[$option] ) ) {
+		$filters = $this->get_option_filters();
+
+		if ( ! isset( $filters[ $option ] ) ) {
 			//* We are not filtering this option at all
 			return $new_value;
-		} else if ( is_string( $this->options[$option] ) ) {
+		} elseif ( is_string( $filters[ $option ] ) ) {
 			//* Single option value
-			return $this->do_filter( $this->options[$option], $new_value, get_option( $option ) );
-		} else if ( is_array( $this->options[$option] ) ) {
+			return $this->do_filter( $filters[ $option ], $new_value, get_option( $option ) );
+		} elseif ( is_array( $filters[ $option ] ) ) {
 			//* Array of suboption values to loop through
 			$old_value = get_option( $option );
-			foreach ( $this->options[$option] as $suboption => $filter ) {
-				$old_value[$suboption] = isset( $old_value[$suboption] ) ? $old_value[$suboption] : '';
-				$new_value[$suboption] = isset( $new_value[$suboption] ) ? $new_value[$suboption] : '';
-				$new_value[$suboption] = $this->do_filter( $filter, $new_value[$suboption], $old_value[$suboption] );
+			foreach ( $filters[ $option ] as $suboption => $filter ) {
+				$old_value[ $suboption ] = isset( $old_value[ $suboption ] ) ? $old_value[ $suboption ] : '';
+				$new_value[ $suboption ] = isset( $new_value[ $suboption ] ) ? $new_value[ $suboption ] : '';
+				$new_value[ $suboption ] = $this->do_filter( $filter, $new_value[ $suboption ], $old_value[ $suboption ] );
 			}
 			return $new_value;
 		}
@@ -408,10 +485,10 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 
 		$available_filters = $this->get_available_filters();
 
-		if ( ! in_array( $filter, array_keys( $available_filters ) ) )
+		if ( ! in_array( $filter, array_keys( $available_filters ), true ) )
 			return $new_value;
 
-		return call_user_func( $available_filters[$filter], $new_value, $old_value );
+		return call_user_func( $available_filters[ $filter ], $new_value, $old_value );
 	}
 
 	/**
@@ -808,7 +885,8 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		$profile = trim( strip_tags( $new_value ) );
 
 		if ( 'http' === substr( $profile, 0, 4 ) ) {
-			$path = str_replace( '/', '', parse_url( $profile, PHP_URL_PATH ) );
+			$parsed_url = wp_parse_url( $profile );
+			$path = isset( $parsed_url['path'] ) ? str_replace( '/', '', $parsed_url['path'] ) : '';
 			$profile = $path ? '@' . $path : '';
 
 			return (string) $profile;
@@ -889,24 +967,19 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			//* Find a path.
 			if ( _wp_can_use_pcre_u() ) {
 				//* URL pattern excluding path.
-				$pattern 	= 	'/'
-							.	'((((http)(s)?)?)\:)?' 	// 1: maybe http: https:
-							. 	'(\/\/)?'				// 2: maybe slash slash
-							. 	'((www.)?)'				// 3: maybe www.
-							.	'(.*\.[a-zA-Z0-9]*)'	// 4: any legal domain with tld
-							.	'(?:\/)?'				// 5: trailing slash
-							.	'/'
+				$pattern 	= '/'
+							. '((((http)(s)?)?)\:)?' 	// 1: maybe http: https:
+							. '(\/\/)?'				// 2: maybe slash slash
+							. '((www.)?)'				// 3: maybe www.
+							. '(.*\.[a-zA-Z0-9]*)'	// 4: any legal domain with tld
+							. '(?:\/)?'				// 5: trailing slash
+							. '/'
 							;
 
 				$is_path = ! preg_match( $pattern, $url );
 			} else {
-				$parsed_url = parse_url( $url );
-
-				if ( ! isset( $parsed_url['host'] ) && isset( $parsed_url['path'] ) ) {
-					$is_path = true;
-				} else {
-					$is_path = false;
-				}
+				$parsed_url = wp_parse_url( $url );
+				$is_path = ! isset( $parsed_url['host'] ) && isset( $parsed_url['path'] );
 			}
 
 			//* If link is relative, make it full again
@@ -974,5 +1047,4 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		//* Save url
 		return $new_value;
 	}
-
 }

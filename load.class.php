@@ -16,6 +16,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+add_action( 'admin_init', 'the_seo_framework_upgrade', 5 );
+/**
+ * Determines whether the plugin needs an option upgrade.
+ *
+ * @action admin_init
+ * @priority 5
+ *
+ * @since 2.7.0
+ */
+function the_seo_framework_upgrade() {
+
+	if ( false === the_seo_framework_active() )
+		return;
+
+	if ( get_option( 'the_seo_framework_upgraded_db_version' ) >= THE_SEO_FRAMEWORK_DB_VERSION )
+		return;
+
+	require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'upgrade.php' );
+}
+
 add_action( 'plugins_loaded', 'the_seo_framework_init', 5 );
 /**
  * Load The_SEO_Framework_Load class
@@ -29,6 +49,7 @@ add_action( 'plugins_loaded', 'the_seo_framework_init', 5 );
  * @since 2.2.5
  */
 function the_seo_framework_init() {
+
 	//* Cache the class. Do not run everything more than once.
 	static $the_seo_framework = null;
 
@@ -40,19 +61,14 @@ function the_seo_framework_init() {
 }
 
 /**
- * Allow this plugin to load through filter
+ * Determines whether this plugin should load.
  *
- * Applies the_seo_framework_load filters.
- *
- * @return bool allow loading of plugin
- *
- * @since 2.1.0
- * @staticvar bool $loaded
- *
- * New function name.
  * @since 2.3.7
+ * @staticvar bool $loaded
+ * Applies filters 'the_seo_framework_load' : bool
  *
  * @action plugins_loaded
+ * @return bool Whether to allow loading of plugin.
  */
 function the_seo_framework_load() {
 
@@ -65,11 +81,9 @@ function the_seo_framework_load() {
 }
 
 /**
- * Load plugin files
+ * Load plugin files.
  * @uses THE_SEO_FRAMEWORK_DIR_PATH_FUNCT
  * @uses THE_SEO_FRAMEWORK_DIR_PATH_CLASS
- *
- * @benchmarked require_once (file inclusion) takes less than 0.0001s.
  *
  * @since 2.1.6
  */
@@ -77,25 +91,36 @@ require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'compat.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'optionsapi.php' );
 //require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'benchmark.php' );
 
+/**
+ * @since 2.7.0
+ * Unused, set as placeholder.
+ * Do: spl_autoload_register( 'the_seo_framework_autoload' );
+ */
+function the_seo_framework_autoload( $class ) {
+
+	if ( 0 !== strpos( $class, 'AutoDescription_', 0 ) )
+		return;
+
+	$_class = strtolower( str_replace( array( 'AutoDescription_', '_' ), array( '', '-' ), $class ) );
+	require( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . $_class . '.class.php' );
+}
+
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'core.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'debug.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'compat.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'query.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'init.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'admininit.class.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'admin-init.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'render.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'detect.class.php' );
-
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'postdata.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'termdata.class.php' );
-
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-description.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-title.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-url.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-image.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-ldjson.class.php' );
-
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'search.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'doingitright.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'inpost.class.php' );
@@ -129,6 +154,23 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 	public $the_seo_framework_debug_hidden = false;
 	public $the_seo_framework_use_transients = true;
 	public $script_debug = false;
+
+	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Cloning of this class is forbidden.
+	 */
+	private function __clone() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
 
 	/**
 	 * Constructor, setup debug vars and then load parent constructor.
@@ -203,7 +245,7 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 		if ( is_object( $class ) && is_string( $method ) ) {
 			$class = get_class( $class );
 
-			if ( $class === get_class( $this ) ) {
+			if ( get_class( $this ) === $class ) {
 				if ( method_exists( $this, $method ) ) {
 					if ( empty( $args ) ) {
 						// In-Object calling.
@@ -213,7 +255,7 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 						$output = call_user_func_array( array( $this, $method ), $args );
 					}
 				} else {
-					$this->_doing_it_wrong( (string) $class . '::' . (string) $method, __( "Class or Method not found.", 'autodescription' ), $version );
+					$this->_doing_it_wrong( $class . '::' . $method, __( 'Class or Method not found.', 'autodescription' ), $version );
 				}
 			} else {
 				if ( method_exists( $class, $method ) ) {
@@ -223,10 +265,10 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 						$output = call_user_func_array( array( $class, $method ), $args );
 					}
 				} else {
-					$this->_doing_it_wrong( (string) $class . '::' . (string) $method, __( "Class or Method not found.", 'autodescription' ), $version );
+					$this->_doing_it_wrong( $class . '::' . $method, __( 'Class or Method not found.', 'autodescription' ), $version );
 				}
 			}
-		} else if ( is_string( $class ) && is_string( $method ) ) {
+		} elseif ( is_string( $class ) && is_string( $method ) ) {
 			//* This could be combined with the one above.
 			if ( method_exists( $class, $method ) ) {
 				if ( empty( $args ) ) {
@@ -235,9 +277,9 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 					$output = call_user_func_array( array( $class, $method ), $args );
 				}
 			} else {
-				$this->_doing_it_wrong( (string) $class . '::' . (string) $method, __( "Class or Method not found.", 'autodescription' ), $version );
+				$this->_doing_it_wrong( $class . '::' . $method, __( 'Class or Method not found.', 'autodescription' ), $version );
 			}
-		} else if ( is_string( $class ) ) {
+		} elseif ( is_string( $class ) ) {
 			//* Class is function.
 			$func = $class;
 
@@ -247,10 +289,9 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 				$output = call_user_func_array( $func, $args );
 			}
 		} else {
-			$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, __( "Function needs to be called as a string.", 'autodescription' ), $version );
+			$this->_doing_it_wrong( __METHOD__, __( 'Function needs to be called as a string.', 'autodescription' ), $version );
 		}
 
 		return $output;
 	}
-
 }

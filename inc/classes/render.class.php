@@ -36,6 +36,18 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	protected $title_doing_it_wrong = null;
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor, load parent constructor
 	 */
 	public function __construct() {
@@ -55,10 +67,10 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 
 		static $description_cache = array();
 
-		if ( isset( $description_cache[$social] ) )
-			return $description_cache[$social];
+		if ( isset( $description_cache[ $social ] ) )
+			return $description_cache[ $social ];
 
-		return $description_cache[$social] = $this->generate_description( '', array( 'social' => $social ) );
+		return $description_cache[ $social ] = $this->generate_description( '', array( 'social' => $social ) );
 	}
 
 	/**
@@ -80,13 +92,13 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 
 		static $url_cache = array();
 
-		if ( is_null( $post_id ) )
+		if ( empty( $post_id ) )
 			$post_id = $this->get_the_real_ID();
 
-		if ( isset( $url_cache[$url][$post_id][$paged][$from_option][$paged_plural] ) )
-			return $url_cache[$url][$post_id][$paged][$from_option][$paged_plural];
+		if ( isset( $url_cache[ $url ][ $post_id ][ $paged ][ $from_option ][ $paged_plural ] ) )
+			return $url_cache[ $url ][ $post_id ][ $paged ][ $from_option ][ $paged_plural ];
 
-		return $url_cache[$url][$post_id][$paged][$from_option][$paged_plural] = $this->the_url( $url, array( 'paged' => $paged, 'get_custom_field' => $from_option, 'id' => $post_id, 'paged_plural' => $paged_plural ) );
+		return $url_cache[ $url ][ $post_id ][ $paged ][ $from_option ][ $paged_plural ] = $this->the_url( $url, array( 'paged' => $paged, 'get_custom_field' => $from_option, 'id' => $post_id, 'paged_plural' => $paged_plural ) );
 	}
 
 	/**
@@ -103,10 +115,10 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 
 		static $url_cache = array();
 
-		if ( isset( $url_cache[$force_slash] ) )
-			return $url_cache[$force_slash];
+		if ( isset( $url_cache[ $force_slash ] ) )
+			return $url_cache[ $force_slash ];
 
-		return $url_cache[$force_slash] = $this->the_url( '', array( 'home' => true, 'forceslash' => $force_slash ) );
+		return $url_cache[ $force_slash ] = $this->the_url( '', array( 'home' => true, 'forceslash' => $force_slash ) );
 	}
 
 	/**
@@ -160,20 +172,22 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 
 		static $title_cache = array();
 
-		if ( isset( $title_cache[$title][$sep][$seplocation][$meta] ) )
-			return $title_cache[$title][$sep][$seplocation][$meta];
+		if ( isset( $title_cache[ $title ][ $sep ][ $seplocation ][ $meta ] ) )
+			return $title_cache[ $title ][ $sep ][ $seplocation ][ $meta ];
 
-		return $title_cache[$title][$sep][$seplocation][$meta] = $this->title( $title, $sep, $seplocation, array( 'meta' => $meta ) );
+		return $title_cache[ $title ][ $sep ][ $seplocation ][ $meta ] = $this->title( $title, $sep, $seplocation, array( 'meta' => $meta ) );
 	}
 
 	/**
-	 * Cache current Image URL in static variable
-	 * Must be called inside the loop
+	 * Caches current Image URL in static variable.
+	 * Must be called inside the loop.
 	 *
 	 * @staticvar string $image_cache
 	 *
 	 * @since 2.2.2
-	 * @return string The image url
+	 * @since 2.7.0 $get_id parameter has been added.
+	 *
+	 * @return string The image URL.
 	 */
 	public function get_image_from_cache() {
 
@@ -184,36 +198,32 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 
 		$post_id = $this->get_the_real_ID();
 
-		//* End this madness if there's no ID found (search/404/etc.)
-		if ( empty( $post_id ) )
-			return '';
-
 		$image_cache = $this->get_image( $post_id );
 
 		return $image_cache;
 	}
 
 	/**
-	 * Render the description
+	 * Renders the description meta tag.
 	 *
 	 * @uses $this->description_from_cache()
 	 * @uses $this->detect_seo_plugins()
 	 *
 	 * @since 1.3.0
+	 *
+	 * @return string The description meta tag.
 	 */
 	public function the_description() {
 
 		if ( $this->detect_seo_plugins() )
-			return;
+			return '';
 
 		/**
 		 * Applies filters 'the_seo_framework_description_output' : string
 		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
 		 */
-		$description = (string) apply_filters( 'the_seo_framework_description_output', '', $this->get_the_real_ID() );
-
-		if ( empty( $description ) )
-			$description = $this->description_from_cache();
+		$description = (string) apply_filters( 'the_seo_framework_description_output', $this->description_from_cache(), $this->get_the_real_ID() );
 
 		if ( $description )
 			return '<meta name="description" content="' . esc_attr( $description ) . '" />' . "\r\n";
@@ -222,173 +232,169 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	}
 
 	/**
-	 * Render og:description
+	 * Renders og:description meta tag
 	 *
 	 * @uses $this->description_from_cache()
-	 *
 	 * @since 1.3.0
+	 *
+	 * @return string The Open Graph description meta tag.
 	 */
 	public function og_description() {
 
-		if ( $this->use_og_tags() ) {
+		if ( ! $this->use_og_tags() )
+			return '';
 
-			/**
-			 * Applies filters 'the_seo_framework_ogdescription_output' : string
-			 * @since 2.3.0
-			 */
-			$description = (string) apply_filters( 'the_seo_framework_ogdescription_output', '', $this->get_the_real_ID() );
+		/**
+		 * Applies filters 'the_seo_framework_ogdescription_output' : string
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 */
+		$description = (string) apply_filters( 'the_seo_framework_ogdescription_output', $this->description_from_cache( true ), $this->get_the_real_ID() );
 
-			if ( empty( $description ) )
-				$description = $this->description_from_cache( true );
-
+		if ( $description )
 			return '<meta property="og:description" content="' . esc_attr( $description ) . '" />' . "\r\n";
-		}
 
 		return '';
 	}
 
 	/**
-	 * Render the OG locale.
+	 * Renders the OG locale meta tag.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @return string The Open Graph locale meta tag.
 	 */
 	public function og_locale() {
 
-		if ( $this->use_og_tags() ) {
+		if ( ! $this->use_og_tags() )
+			return '';
 
-			/**
-			 * Applies filters 'the_seo_framework_oglocale_output' : string
-			 * @since 2.3.0
-			 */
-			$locale = (string) apply_filters( 'the_seo_framework_oglocale_output', '', $this->get_the_real_ID() );
+		/**
+		 * Applies filters 'the_seo_framework_oglocale_output' : string
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 */
+		$locale = (string) apply_filters( 'the_seo_framework_oglocale_output', $this->fetch_locale(), $this->get_the_real_ID() );
 
-			if ( empty( $locale ) )
-				$locale = $this->fetch_locale();
-
+		if ( $locale )
 			return '<meta property="og:locale" content="' . esc_attr( $locale ) . '" />' . "\r\n";
-		}
 
 		return '';
 	}
 
 	/**
-	 * Process the title to WordPress
+	 * Renders the Open Graph title meta tag.
 	 *
 	 * @uses $this->title_from_cache()
-	 *
 	 * @since 2.0.3
+	 *
+	 * @return string The Open Graph title meta tag.
 	 */
 	public function og_title() {
 
-		if ( $this->use_og_tags() ) {
+		if ( ! $this->use_og_tags() )
+			return '';
 
-			/**
-			 * Applies filters 'the_seo_framework_ogtitle_output' : string
-			 * @since 2.3.0
-			 */
-			$title = (string) apply_filters( 'the_seo_framework_ogtitle_output', '', $this->get_the_real_ID() );
+		/**
+		 * Applies filters 'the_seo_framework_ogtitle_output' : string
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 */
+		$title = (string) apply_filters( 'the_seo_framework_ogtitle_output', $this->title_from_cache( '', '', '', true ), $this->get_the_real_ID() );
 
-			if ( empty( $title ) )
-				$title = $this->title_from_cache( '', '', '', true );
-
+		if ( $title )
 			return '<meta property="og:title" content="' . esc_attr( $title ) . '" />' . "\r\n";
-		}
 
 		return '';
 	}
 
 	/**
-	 * Get the OG type.
+	 * Renders the Open Graph type meta tag.
 	 *
 	 * @since 1.1.0
+	 *
+	 * @return string The Open Graph type meta tag.
 	 */
 	public function og_type() {
 
-		if ( $this->use_og_tags() ) {
+		if ( ! $this->use_og_tags() )
+			return '';
 
-			/**
-			 * Applies filters 'the_seo_framework_ogtype_output' : string
-			 * @since 2.3.0
-			 */
-			$type = (string) apply_filters( 'the_seo_framework_ogtype_output', '', $this->get_the_real_ID() );
+		/**
+		 * Applies filters 'the_seo_framework_ogtype_output' : string
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 */
+		$type = (string) apply_filters( 'the_seo_framework_ogtype_output', $this->generate_og_type(), $this->get_the_real_ID() );
 
-			if ( empty( $type ) ) {
-				if ( $this->is_wc_product() ) {
-					$type = 'product';
-				} else if ( $this->is_single() && $this->get_image_from_cache() ) {
-					$type = 'article';
-				} else if ( $this->is_author() ) {
-					$type = 'profile';
-				} else if ( $this->is_blog_page() || ( $this->is_front_page() && ! $this->has_page_on_front() ) ) {
-					$type = 'blog';
-				} else {
-					$type = 'website';
-				}
-			}
-
+		if ( $type )
 			return '<meta property="og:type" content="' . esc_attr( $type ) . '" />' . "\r\n";
-		}
 
 		return '';
 	}
 
 	/**
-	 * Adds og:image
+	 * Renders Open Graph image meta tag.
 	 *
 	 * @param string $image url for image
 	 *
 	 * @since 1.3.0
+	 * @since 2.6.0 Added WooCommerce gallery images.
+	 * @since 2.7.0 Added image dimensions if found.
+	 *
+	 * @return string The Open Graph image meta tag.
 	 */
 	public function og_image() {
 
-		if ( $this->use_og_tags() ) {
+		if ( ! $this->use_og_tags() )
+			return '';
 
-			$id = $this->get_the_real_ID();
+		/**
+		 * Applies filters 'the_seo_framework_ogimage_output' : string|bool
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 *
+		 * @NOTE: Use of this might cause incorrect meta since other functions
+		 * depend on the image from cache.
+		 *
+		 * @todo Place in listener cache.
+		 * @priority medium 2.8.0+
+		 */
+		$image = apply_filters( 'the_seo_framework_ogimage_output', $this->get_image_from_cache(), $id = $this->get_the_real_ID() );
 
-			/**
-			 * Applies filters 'the_seo_framework_ogimage_output' : string|bool
-			 * @since 2.3.0
-			 *
-			 * @NOTE: Use of this might cause incorrect meta since other functions
-			 * depend on the image from cache.
-			 *
-			 * @todo Place in listener cache.
-			 * @priority medium 2.8.0+
-			 */
-			$image = apply_filters( 'the_seo_framework_ogimage_output', '', $id );
+		/**
+		 * Now returns empty string on false.
+		 * @since 2.6.0
+		 */
+		if ( false === $image )
+			return '';
 
-			/**
-			 * Now returns empty string on false.
-			 * @since 2.6.0
-			 */
-			if ( false === $image )
-				return '';
+		$image = (string) $image;
 
-			if ( empty( $image ) ) {
-				$image = $this->get_image_from_cache();
-			} else {
-				$image = (string) $image;
+		/**
+		 * Always output
+		 * @since 2.1.1
+		 */
+		$output = '<meta property="og:image" content="' . esc_attr( $image ) . '" />' . "\r\n";
+
+		if ( $image ) {
+			if ( ! empty( $this->image_dimensions[ $id ]['width'] ) && ! empty( $this->image_dimensions[ $id ]['height'] ) ) {
+				$output .= '<meta property="og:image:width" content="' . esc_attr( $this->image_dimensions[ $id ]['width'] ) . '" />' . "\r\n";
+				$output .= '<meta property="og:image:height" content="' . esc_attr( $this->image_dimensions[ $id ]['height'] ) . '" />' . "\r\n";
 			}
-
-			/**
-			 * Always output
-			 * @since 2.1.1
-			 */
-			$output = '<meta property="og:image" content="' . esc_attr( $image ) . '" />' . "\r\n";
-
-			//* Fetch Product images.
-			$woocommerce_product_images = $this->render_woocommerce_product_og_image();
-
-			return $output . $woocommerce_product_images;
 		}
 
-		return '';
+		//* Fetch Product images.
+		$woocommerce_product_images = $this->render_woocommerce_product_og_image();
+
+		return $output . $woocommerce_product_images;
 	}
 
 	/**
-	 * Render more OG images to choose from.
+	 * Renders WooCommerce Product Gallery OG images.
 	 *
 	 * @since 2.6.0
+	 * @since 2.7.0 Added image dimensions if found.
 	 *
 	 * @return string The rendered OG Image.
 	 */
@@ -405,8 +411,14 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 					//* Parse 1500px url.
 					$img = $this->parse_og_image( $id );
 
-					if ( $img )
+					if ( $img ) {
 						$output .= '<meta property="og:image" content="' . esc_attr( $img ) . '" />' . "\r\n";
+
+						if ( ! empty( $this->image_dimensions[ $id ]['width'] ) && ! empty( $this->image_dimensions[ $id ]['height'] ) ) {
+							$output .= '<meta property="og:image:width" content="' . esc_attr( $this->image_dimensions[ $id ]['width'] ) . '" />' . "\r\n";
+							$output .= '<meta property="og:image:height" content="' . esc_attr( $this->image_dimensions[ $id ]['height'] ) . '" />' . "\r\n";
+						}
+					}
 				}
 			}
 		}
@@ -415,39 +427,37 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	}
 
 	/**
-	 * Adds og:site_name
-	 *
-	 * @param string output	the output
+	 * Renders Open Graph sitename meta tag.
 	 *
 	 * @since 1.3.0
+	 *
+	 * @return string The Open Graph sitename meta tag.
 	 */
 	public function og_sitename() {
 
-		if ( $this->use_og_tags() ) {
+		if ( ! $this->use_og_tags() )
+			return '';
 
-			/**
-			 * Applies filters 'the_seo_framework_ogsitename_output' : string
-			 * @since 2.3.0
-			 */
-			$sitename = (string) apply_filters( 'the_seo_framework_ogsitename_output', '', $this->get_the_real_ID() );
+		/**
+		 * Applies filters 'the_seo_framework_ogsitename_output' : string
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 */
+		$sitename = (string) apply_filters( 'the_seo_framework_ogsitename_output', get_bloginfo( 'name' ), $this->get_the_real_ID() );
 
-			if ( empty( $sitename ) )
-				$sitename = get_bloginfo( 'name' );
-
+		if ( $sitename )
 			return '<meta property="og:site_name" content="' . esc_attr( $sitename ) . '" />' . "\r\n";
-		}
 
 		return '';
 	}
 
 	/**
-	 * Adds og:url
-	 *
-	 * @return string og:url the url meta
+	 * Renders Open Graph URL meta tag.
 	 *
 	 * @since 1.3.0
-	 *
 	 * @uses $this->the_url_from_cache()
+	 *
+	 * @return string The Open Graph URL meta tag.
 	 */
 	public function og_url() {
 
@@ -458,297 +468,285 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	}
 
 	/**
-	 * Render twitter:card
+	 * Renders the Twitter Card type meta tag.
 	 *
 	 * @since 2.2.2
+	 *
+	 * @return string The Twitter Card meta tag.
 	 */
 	public function twitter_card() {
 
-		if ( $this->use_twitter_tags() ) {
+		if ( ! $this->use_twitter_tags() )
+			return '';
 
-			/**
-			 * Applies filters 'the_seo_framework_twittercard_output' : string
-			 * @since 2.3.0
-			 */
-			$card = (string) apply_filters( 'the_seo_framework_twittercard_output', '', $this->get_the_real_ID() );
+		/**
+		 * Applies filters 'the_seo_framework_twittercard_output' : string
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 */
+		$card = (string) apply_filters( 'the_seo_framework_twittercard_output', $this->generate_twitter_card_type(), $this->get_the_real_ID() );
 
-			if ( empty( $card ) ) {
-				/**
-				 * Return card type if image is found.
-				 * Return to summary if not.
-				 */
-				$card = $this->get_image_from_cache() ? $this->get_option( 'twitter_card' ) : 'summary';
-			}
-
+		if ( $card )
 			return '<meta name="twitter:card" content="' . esc_attr( $card ) . '" />' . "\r\n";
-		}
 
 		return '';
 	}
 
 	/**
-	 * Render twitter:site
+	 * Renders the Twitter Site meta tag.
 	 *
 	 * @since 2.2.2
+	 *
+	 * @return string The Twitter Site meta tag.
 	 */
 	public function twitter_site() {
 
-		if ( $this->use_twitter_tags() ) {
+		if ( ! $this->use_twitter_tags() )
+			return '';
 
-			/**
-			 * Applies filters 'the_seo_framework_twittersite_output' : string
-			 * @since 2.3.0
-			 */
-			$site = (string) apply_filters( 'the_seo_framework_twittersite_output', '', $this->get_the_real_ID() );
+		/**
+		 * Applies filters 'the_seo_framework_twittersite_output' : string
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 */
+		$site = (string) apply_filters( 'the_seo_framework_twittersite_output', $this->get_option( 'twitter_site' ), $this->get_the_real_ID() );
 
-			if ( empty( $site ) )
-				$site = $this->get_option( 'twitter_site' );
-
-			if ( $site )
-				return '<meta name="twitter:site" content="' . esc_attr( $site ) . '" />' . "\r\n";
-		}
+		if ( $site )
+			return '<meta name="twitter:site" content="' . esc_attr( $site ) . '" />' . "\r\n";
 
 		return '';
 	}
 
 	/**
-	 * Render twitter:creator or twitter:site:id
+	 * Renders The Twitter Creator meta tag.
+	 * If no Twitter Site is found, it will render the Twitter Site ID meta tag.
 	 *
 	 * @since 2.2.2
+	 *
+	 * @return string The Twitter Creator or Twitter Site ID meta tag.
 	 */
 	public function twitter_creator() {
 
-		if ( $this->use_twitter_tags() ) {
+		if ( ! $this->use_twitter_tags() )
+			return '';
 
+		/**
+		 * Applies filters 'the_seo_framework_twittercreator_output' : string
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 */
+		$creator = (string) apply_filters( 'the_seo_framework_twittercreator_output', $this->get_option( 'twitter_creator' ), $this->get_the_real_ID() );
+
+		if ( $creator ) {
 			/**
-			 * Applies filters 'the_seo_framework_twittercreator_output' : string
-			 * @since 2.3.0
+			 * Return site:id instead of creator is no twitter:site is found.
+			 * Per Twitter requirements.
 			 */
-			$creator = (string) apply_filters( 'the_seo_framework_twittercreator_output', '', $this->get_the_real_ID() );
-
-			if ( empty( $creator ) ) {
-				$site = $this->get_option( 'twitter_site' );
-				$creator = $this->get_option( 'twitter_creator' );
-
-				/**
-				 * Return site:id instead of creator is no twitter:site is found.
-				 * Per Twitter requirements
-				 */
-				if ( empty( $site ) && $creator )
-					return '<meta name="twitter:site:id" content="' . esc_attr( $creator ) . '" />' . "\r\n";
-			}
-
-			if ( $creator )
+			if ( $this->get_option( 'twitter_site' ) ) {
+				return '<meta name="twitter:site:id" content="' . esc_attr( $creator ) . '" />' . "\r\n";
+			} else {
 				return '<meta name="twitter:creator" content="' . esc_attr( $creator ) . '" />' . "\r\n";
+			}
 		}
 
 		return '';
 	}
 
 	/**
-	 * Render twitter:title
+	 * Renders Twitter Title meta tag.
 	 *
 	 * @uses $this->title_from_cache()
-	 *
 	 * @since 2.2.2
+	 *
+	 * @return string The Twitter Title meta tag.
 	 */
 	public function twitter_title() {
 
-		if ( $this->use_twitter_tags() ) {
+		if ( ! $this->use_twitter_tags() )
+			return '';
 
-			/**
-			 * Applies filters 'the_seo_framework_twittertitle_output' : string
-			 * @since 2.3.0
-			 */
-			$title = (string) apply_filters( 'the_seo_framework_twittertitle_output', '', $this->get_the_real_ID() );
+		/**
+		 * Applies filters 'the_seo_framework_twittertitle_output' : string
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 */
+		$title = (string) apply_filters( 'the_seo_framework_twittertitle_output', $this->title_from_cache( '', '', '', true ), $this->get_the_real_ID() );
 
-			if ( empty( $title ) )
-				$title = $this->title_from_cache( '', '', '', true );
-
+		if ( $title )
 			return '<meta name="twitter:title" content="' . esc_attr( $title ) . '" />' . "\r\n";
-		}
 
 		return '';
 	}
 
 	/**
-	 * Render twitter:description
+	 * Renders Twitter Description meta tag.
 	 *
 	 * @uses $this->description_from_cache()
-	 *
 	 * @since 2.2.2
+	 *
+	 * @return string The Twitter Descritpion meta tag.
 	 */
 	public function twitter_description() {
 
-		if ( $this->use_twitter_tags() ) {
+		if ( ! $this->use_twitter_tags() )
+			return '';
 
-			/**
-			 * Applies filters 'the_seo_framework_twitterdescription_output' : string
-			 * @since 2.3.0
-			 */
-			$description = (string) apply_filters( 'the_seo_framework_twitterdescription_output', '', $this->get_the_real_ID() );
+		/**
+		 * Applies filters 'the_seo_framework_twitterdescription_output' : string
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 */
+		$description = (string) apply_filters( 'the_seo_framework_twitterdescription_output', $this->description_from_cache( true ), $this->get_the_real_ID() );
 
-			if ( empty( $description ) )
-				$description = $this->description_from_cache( true );
-
+		if ( $description )
 			return '<meta name="twitter:description" content="' . esc_attr( $description ) . '" />' . "\r\n";
-		}
 
 		return '';
 	}
 
 	/**
-	 * Render twitter:image:src
-	 *
-	 * @param string $image url for image
+	 * Renders Twitter Image meta tag.
 	 *
 	 * @since 2.2.2
 	 *
-	 * @return string|null The twitter image source meta tag
+	 * @return string The Twitter Image meta tag.
 	 */
 	public function twitter_image() {
 
-		if ( $this->use_twitter_tags() ) {
+		if ( ! $this->use_twitter_tags() )
+			return '';
 
-			/**
-			 * Applies filters 'the_seo_framework_twitterimage_output' : string|bool
-			 * @since 2.3.0
-			 */
-			$image = apply_filters( 'the_seo_framework_twitterimage_output', '', $this->get_the_real_ID() );
+		/**
+		 * Applies filters 'the_seo_framework_twitterimage_output' : string|bool
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 */
+		$image = (string) apply_filters( 'the_seo_framework_twitterimage_output', $this->get_image_from_cache(), $id = $this->get_the_real_ID() );
 
-			/**
-			 * Now returns empty string on false.
-			 * @since 2.6.0
-			 */
-			if ( false === $image )
-				return '';
+		$output = '';
 
-			if ( empty( $image ) ) {
-				$image = $this->get_image_from_cache();
-			} else {
-				$image = (string) $image;
+		if ( $image ) {
+			$output = '<meta name="twitter:image" content="' . esc_attr( $image ) . '" />' . "\r\n";
+
+			if ( ! empty( $this->image_dimensions[ $id ]['width'] ) && ! empty( $this->image_dimensions[ $id ]['height'] ) ) {
+				$output .= '<meta name="twitter:image:width" content="' . esc_attr( $this->image_dimensions[ $id ]['width'] ) . '" />' . "\r\n";
+				$output .= '<meta name="twitter:image:height" content="' . esc_attr( $this->image_dimensions[ $id ]['height'] ) . '" />' . "\r\n";
 			}
-
-			if ( $image )
-				return '<meta name="twitter:image:src" content="' . esc_attr( $image ) . '" />' . "\r\n";
 		}
 
-		return '';
+		return $output;
 	}
 
 	/**
-	 * Render article:author
+	 * Renders Facebook Author meta tag.
 	 *
 	 * @since 2.2.2
 	 *
-	 * @return string|null The facebook app id
+	 * @return string The Facebook Author meta tag.
 	 */
 	public function facebook_author() {
 
-		if ( $this->use_facebook_tags() ) {
+		if ( ! $this->use_facebook_tags() )
+			return '';
 
-			/**
-			 * Applies filters 'the_seo_framework_facebookauthor_output' : string
-			 * @since 2.3.0
-			 */
-			$author = (string) apply_filters( 'the_seo_framework_facebookauthor_output', '', $this->get_the_real_ID() );
+		/**
+		 * Applies filters 'the_seo_framework_facebookauthor_output' : string
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 */
+		$author = (string) apply_filters( 'the_seo_framework_facebookauthor_output', $this->get_option( 'facebook_author' ), $this->get_the_real_ID() );
 
-			if ( empty( $author ) )
-				$author = $this->get_option( 'facebook_author' );
-
-			if ( $author )
-				return '<meta property="article:author" content="' . esc_attr( esc_url_raw( $author ) ) . '" />' . "\r\n";
-		}
+		if ( $author )
+			return '<meta property="article:author" content="' . esc_attr( esc_url_raw( $author ) ) . '" />' . "\r\n";
 
 		return '';
 	}
 
 	/**
-	 * Render article:author
+	 * Renders Facebook Publisher meta tag.
 	 *
 	 * @since 2.2.2
 	 *
-	 * @return string|null The facebook app id
+	 * @return string The Facebook Publisher meta tag.
 	 */
 	public function facebook_publisher() {
 
-		if ( $this->use_facebook_tags() ) {
+		if ( ! $this->use_facebook_tags() )
+			return '';
 
-			/**
-			 * Applies filters 'the_seo_framework_facebookpublisher_output' : string
-			 * @since 2.3.0
-			 */
-			$publisher = (string) apply_filters( 'the_seo_framework_facebookpublisher_output', '', $this->get_the_real_ID() );
+		/**
+		 * Applies filters 'the_seo_framework_facebookpublisher_output' : string
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 */
+		$publisher = (string) apply_filters( 'the_seo_framework_facebookpublisher_output', $this->get_option( 'facebook_publisher' ), $this->get_the_real_ID() );
 
-			if ( empty( $publisher ) )
-				$publisher = $this->get_option( 'facebook_publisher' );
-
-			if ( $publisher )
-				return '<meta property="article:publisher" content="' . esc_attr( esc_url_raw( $publisher ) ) . '" />' . "\r\n";
-		}
+		if ( $publisher )
+			return '<meta property="article:publisher" content="' . esc_attr( esc_url_raw( $publisher ) ) . '" />' . "\r\n";
 
 		return '';
 	}
 
 	/**
-	 * Render fb:app_id
+	 * Renders Facebook App ID meta tag.
 	 *
 	 * @since 2.2.2
 	 *
-	 * @return string|null The facebook app id
+	 * @return string The Facebook App ID meta tag.
 	 */
 	public function facebook_app_id() {
 
-		if ( $this->use_facebook_tags() ) {
+		if ( ! $this->use_facebook_tags() )
+			return '';
 
-			/**
-			 * Applies filters 'the_seo_framework_facebookappid_output' : string
-			 * @since 2.3.0
-			 */
-			$app_id = (string) apply_filters( 'the_seo_framework_facebookappid_output', '', $this->get_the_real_ID() );
+		/**
+		 * Applies filters 'the_seo_framework_facebookappid_output' : string
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 */
+		$app_id = (string) apply_filters( 'the_seo_framework_facebookappid_output', $this->get_option( 'facebook_appid' ), $this->get_the_real_ID() );
 
-			if ( empty( $app_id ) )
-				$app_id = $this->get_option( 'facebook_appid' );
-
-			if ( $app_id )
-				return '<meta property="fb:app_id" content="' . esc_attr( $app_id ) . '" />' . "\r\n";
-		}
+		if ( $app_id )
+			return '<meta property="fb:app_id" content="' . esc_attr( $app_id ) . '" />' . "\r\n";
 
 		return '';
 	}
 
 	/**
-	 * Render article:published_time
+	 * Renders Article Publishing Time meta tag.
 	 *
 	 * @since 2.2.2
 	 *
-	 * @return string|null The article:published_time
+	 * @return string The Article Publishing Time meta tag.
 	 */
 	public function article_published_time() {
 
-		// Don't do anything if it's not a page or post.
+		//* Don't do anything if it's not a page or post.
 		if ( false === $this->is_singular() )
-			return;
+			return '';
 
-		$front_page = (bool) is_front_page();
+		if ( $this->is_front_page() ) {
+			//* If it's the frontpage, but the option is disabled, don't do anything.
+			if ( ! $this->get_option( 'home_publish_time' ) )
+				return '';
+		} else {
+			//* If it's a post, but the option is disabled, don't do anything.
+			if ( $this->is_single() && ! $this->get_option( 'post_publish_time' ) )
+				return '';
 
-		// If it's a post, but the option is disabled, don't do anyhting.
-		if ( ! $front_page && $this->is_single() && ! $this->get_option( 'post_publish_time' ) )
-			return;
+			//* If it's a page, but the option is disabled, don't do anything.
+			if ( $this->is_page() && ! $this->get_option( 'page_publish_time' ) )
+				return '';
+		}
 
-		// If it's a page, but the option is disabled, don't do anything.
-		if ( ! $front_page && $this->is_page() && ! $this->get_option( 'page_publish_time' ) )
-			return;
+		$id = $this->get_the_real_ID();
 
-		// If it's  the home page, but the option is disabled, don't do anything.
-		if ( $front_page && ! $this->get_option( 'home_publish_time' ) )
-			return;
-
-		//* @since 2.3.0
-		$time = (string) apply_filters( 'the_seo_framework_publishedtime_output', '', $this->get_the_real_ID() );
-
-		if ( empty( $time ) )
-			$time = get_the_date( 'Y-m-d', '' );
+		/**
+		 * Applies filters 'the_seo_framework_publishedtime_output' : string
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 */
+		$time = (string) apply_filters( 'the_seo_framework_publishedtime_output', get_the_date( 'Y-m-d', $id ), $id );
 
 		if ( $time )
 			return '<meta property="article:published_time" content="' . esc_attr( $time ) . '" />' . "\r\n";
@@ -757,11 +755,13 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	}
 
 	/**
-	 * Render article:modified_time
+	 * Renders Article Modified Time meta tag.
+	 * Also renders the Open Graph Updated Time meta tag if Open Graph tags are enabled.
 	 *
 	 * @since 2.2.2
+	 * @since 2.7.0 Listens to $this->get_the_real_ID() instead of WordPress Core ID determination.
 	 *
-	 * @return string|null The article:modified_time
+	 * @return string The Article Modified Time meta tag, and optionally the Open Graph Updated Time.
 	 */
 	public function article_modified_time() {
 
@@ -770,30 +770,33 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 			return '';
 
 		if ( $this->is_front_page() ) {
-			// If it's the frontpage, but the option is disabled, don't do anything.
+			//* If it's the frontpage, but the option is disabled, don't do anything.
 			if ( ! $this->get_option( 'home_modify_time' ) )
 				return '';
 		} else {
-			// If it's a post, but the option is disabled, don't do anyhting.
+			//* If it's a post, but the option is disabled, don't do anyhting.
 			if ( $this->is_single() && ! $this->get_option( 'post_modify_time' ) )
 				return '';
 
-			// If it's a page, but the option is disabled, don't do anything.
+			//* If it's a page, but the option is disabled, don't do anything.
 			if ( $this->is_page() && ! $this->get_option( 'page_modify_time' ) )
 				return '';
 		}
 
-		//* @since 2.3.0
-		$time = (string) apply_filters( 'the_seo_framework_modifiedtime_output', '', $this->get_the_real_ID() );
+		$id = $this->get_the_real_ID();
 
-		if ( empty( $time ) )
-			$time = the_modified_date( 'Y-m-d', '', '', false );
+		/**
+		 * Applies filters 'the_seo_framework_modifiedtime_output' : string
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 */
+		$time = (string) apply_filters( 'the_seo_framework_modifiedtime_output', get_post_modified_time( 'Y-m-d', false, $id, false ), $id );
 
 		if ( $time ) {
 			$output = '<meta property="article:modified_time" content="' . esc_attr( $time ) . '" />' . "\r\n";
 
 			if ( $this->use_og_tags() )
-				$output .= '<meta property="og:updated_time" content="' . esc_attr( $time ) . '" />'. "\r\n";
+				$output .= '<meta property="og:updated_time" content="' . esc_attr( $time ) . '" />' . "\r\n";
 
 			return $output;
 		}
@@ -802,22 +805,26 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	}
 
 	/**
-	 * Outputs canonical url
+	 * Renders Canonical URL meta tag.
 	 *
 	 * @since 2.0.6
-	 *
 	 * @uses $this->the_url_from_cache()
 	 *
-	 * @return string canonical url meta
+	 * @return string The Canonical URL meta tag.
 	 */
 	public function canonical() {
 
 		/**
 		 * Applies filters the_seo_framework_output_canonical : Don't output canonical if false.
 		 * @since 2.4.2
+		 *
+		 * @deprecated
+		 * @since 2.7.0
 		 */
-		if ( ! apply_filters( 'the_seo_framework_output_canonical', true, $this->get_the_real_ID() ) )
-			return;
+		if ( ! apply_filters( 'the_seo_framework_output_canonical', true, $this->get_the_real_ID() ) ) {
+			$this->_deprecated_function( 'filter the_seo_framework_output_canonical', '2.7.0', "add_filter( 'the_seo_framework_rel_canonical_output', '__return_empty_string' );" );
+			return '';
+		}
 
 		/**
 		 * Applies filters 'the_seo_framework_rel_canonical_output' : Change canonical URL output.
@@ -825,22 +832,28 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		 */
 		$url = (string) apply_filters( 'the_seo_framework_rel_canonical_output', $this->the_url_from_cache(), $this->get_the_real_ID() );
 
-		return '<link rel="canonical" href="' . $url . '" />' . "\r\n";
+		/**
+		 * @since 2.7.0 Listens to the second filter.
+		 */
+		if ( $url )
+			return '<link rel="canonical" href="' . $url . '" />' . "\r\n";
+
+		return '';
 	}
 
 	/**
-	 * LD+JSON helper output
+	 * Renders LD+JSON Schema.org scripts.
 	 *
 	 * @uses $this->render_ld_json_scripts()
 	 *
 	 * @since 1.2.0
-	 * @return string $json LD+json helpers in header on front page.
+	 * @return string The LD+json Schema.org scripts.
 	 */
 	public function ld_json() {
 
-		//* Check for LD+JSON compat
-		if ( $this->is_search() || $this->is_404() )
-			return;
+		//* Don't output on Search, 404 or preview.
+		if ( $this->is_search() || $this->is_404() || $this->is_preview() )
+			return '';
 
 		/**
 		 * Applies filters 'the_seo_framework_ldjson_scripts' : string
@@ -852,11 +865,11 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	}
 
 	/**
-	 * Outputs Google Site Verification code
+	 * Renders Google Site Verification Code meta tag.
 	 *
 	 * @since 2.2.4
 	 *
-	 * @return string|null google verification code
+	 * @return string The Google Site Verification code meta tag.
 	 */
 	public function google_site_output() {
 
@@ -866,18 +879,18 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		 */
 		$code = (string) apply_filters( 'the_seo_framework_googlesite_output', $this->get_option( 'google_verification' ), $this->get_the_real_ID() );
 
-		if ( empty( $code ) )
-			return '';
+		if ( $code )
+			return '<meta name="google-site-verification" content="' . esc_attr( $code ) . '" />' . "\r\n";
 
-		return '<meta name="google-site-verification" content="' . esc_attr( $code ) . '" />' . "\r\n";
+		return '';
 	}
 
 	/**
-	 * Outputs Bing Site Verification code
+	 * Renders Bing Site Verification Code meta tag.
 	 *
 	 * @since 2.2.4
 	 *
-	 * @return string|null Bing Webmaster code
+	 * @return string The Bing Site Verification Code meta tag.
 	 */
 	public function bing_site_output() {
 
@@ -887,18 +900,18 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		 */
 		$code = (string) apply_filters( 'the_seo_framework_bingsite_output', $this->get_option( 'bing_verification' ), $this->get_the_real_ID() );
 
-		if ( empty( $code ) )
-			return '';
+		if ( $code )
+			return '<meta name="msvalidate.01" content="' . esc_attr( $code ) . '" />' . "\r\n";
 
-		return '<meta name="msvalidate.01" content="' . esc_attr( $code ) . '" />' . "\r\n";
+		return '';
 	}
 
 	/**
-	 * Outputs Yandex Site Verification code
+	 * Renders Yandex Site Verification code meta tag.
 	 *
 	 * @since 2.6.0
 	 *
-	 * @return string|null Yandex Webmaster code
+	 * @return string The Yandex Site Verification code meta tag.
 	 */
 	public function yandex_site_output() {
 
@@ -908,18 +921,18 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		 */
 		$code = (string) apply_filters( 'the_seo_framework_yandexsite_output', $this->get_option( 'yandex_verification' ), $this->get_the_real_ID() );
 
-		if ( empty( $code ) )
-			return '';
+		if ( $code )
+			return '<meta name="yandex-verification" content="' . esc_attr( $code ) . '" />' . "\r\n";
 
-		return '<meta name="yandex-verification" content="' . esc_attr( $code ) . '" />' . "\r\n";
+		return '';
 	}
 
 	/**
-	 * Outputs Bing Site Verification code
+	 * Renders Pinterest Site Verification code meta tag.
 	 *
 	 * @since 2.5.2
 	 *
-	 * @return string|null Bing Webmaster code
+	 * @return string The Pinterest Site Verification code meta tag.
 	 */
 	public function pint_site_output() {
 
@@ -929,18 +942,19 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		 */
 		$code = (string) apply_filters( 'the_seo_framework_pintsite_output', $this->get_option( 'pint_verification' ), $this->get_the_real_ID() );
 
-		if ( empty( $code ) )
-			return '';
+		if ( $code )
+			return '<meta name="p:domain_verify" content="' . esc_attr( $code ) . '" />' . "\r\n";
 
-		return '<meta name="p:domain_verify" content="' . esc_attr( $code ) . '" />' . "\r\n";
+		return '';
 	}
 
 	/**
-	 * Output robots meta tags
+	 * Renders Robots meta tags.
+	 * Returns early if blog isn't public. WordPress Core will then output the meta tags.
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return null Return early if blog is not public.
+	 * @return string The Robots meta tags.
 	 */
 	public function robots() {
 
@@ -954,53 +968,24 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		 */
 		$meta = (array) apply_filters( 'the_seo_framework_robots_meta', $this->robots_meta(), $this->get_the_real_ID() );
 
-		//* Add meta if any exist
-		if ( $meta )
-			return sprintf( '<meta name="robots" content="%s" />' . "\r\n", implode( ',', $meta ) );
+		if ( empty( $meta ) )
+			return '';
 
-		 return '';
+		return sprintf( '<meta name="robots" content="%s" />' . "\r\n", implode( ',', $meta ) );
 	}
 
 	/**
-	 * Outputs favicon urls
-	 *
-	 * @since 2.2.1
-	 *
-	 * @uses $this->site_icon()
-	 *
-	 * @return string icon links.
-	 * @TODO Make this work for older wp versions. i.e. add upload area for wp 4.2.99999 and lower
-	 * @TODO Make this work in the first place
-	 * @ignore
-	 * @access private
-	 */
-	public function favicon() {
-
-		if ( $this->wp_version( '4.2.999', '<=' ) ) {
-			$output = '<link rel="icon" type="image/x-icon" href="' . esc_url( $this->site_icon( 16 ) ) . '" sizes="16x16" />' . "\r\n";
-			$output .= '<link rel="icon" type="image/x-icon" href="' . esc_url( $this->site_icon( 192 ) ) . '" sizes="192x192" />' . "\r\n";
-			$output .= '<link rel="apple-touch-icon-precomposed" href="' . esc_url( $this->site_icon( 180 ) ) . '" />' . "\r\n";
-			$output .= '<link rel="msapplication-TileImage" href="' . esc_url( $this->site_icon( 270 ) ) . '" />' . "\r\n";
-
-			return $output;
-		}
-
-		return '';
-	}
-
-	/**
-	 * Outputs shortlink meta tag
+	 * Renders Shortlink meta tag
 	 *
 	 * @since 2.2.2
-	 *
 	 * @uses $this->get_shortlink()
 	 *
-	 * @return string|null shortlink url meta
+	 * @return string The Shortlink meta tag.
 	 */
 	public function shortlink() {
 
 		/**
-		 * Applies filters 'the_seo_framework_shortlink_output' : array
+		 * Applies filters 'the_seo_framework_shortlink_output' : string
 		 * @since 2.6.0
 		 */
 		$url = (string) apply_filters( 'the_seo_framework_shortlink_output', $this->get_shortlink(), $this->get_the_real_ID() );
@@ -1012,13 +997,12 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	}
 
 	/**
-	 * Outputs paged urls meta tag
+	 * Renders Prev/Next Paged URL meta tags.
 	 *
 	 * @since 2.2.2
-	 *
 	 * @uses $this->get_paged_url()
 	 *
-	 * @return string
+	 * @return string The Prev/Next Paged URL meta tags.
 	 */
 	public function paged_urls() {
 
@@ -1048,7 +1032,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	}
 
 	/**
-	 * Whether we can use Open Graph tags.
+	 * Determines whether we can use Open Graph tags.
 	 *
 	 * @since 2.6.0
 	 * @staticvar bool $cache
@@ -1066,7 +1050,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	}
 
 	/**
-	 * Whether we can use Facebook tags.
+	 * Determines whether we can use Facebook tags.
 	 *
 	 * @since 2.6.0
 	 * @staticvar bool $cache
@@ -1084,7 +1068,7 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 	}
 
 	/**
-	 * Whether we can use Twitter tags.
+	 * Determines whether we can use Twitter tags.
 	 *
 	 * @since 2.6.0
 	 * @staticvar bool $cache
@@ -1098,11 +1082,11 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 		if ( isset( $cache ) )
 			return $cache;
 
-		return $cache = $this->is_option_checked( 'twitter_tags' ) && false == $this->detect_twitter_card_plugin();
+		return $cache = $this->is_option_checked( 'twitter_tags' ) && false === $this->detect_twitter_card_plugin();
 	}
 
 	/**
-	 * Whether we can use Google+ tags.
+	 * Determines whether we can use Google+ tags.
 	 *
 	 * @since 2.6.0
 	 * @staticvar bool $cache
@@ -1118,5 +1102,4 @@ class AutoDescription_Render extends AutoDescription_Admin_Init {
 
 		return $cache = $this->is_option_checked( 'googleplus_tags' );
 	}
-
 }

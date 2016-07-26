@@ -26,6 +26,27 @@
 class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 
 	/**
+	 * Holds the image dimensions, if found.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @var array
+	 */
+	public $image_dimensions = array();
+
+	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor, loads parent constructor.
 	 */
 	public function __construct() {
@@ -39,12 +60,13 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 	 * @since 2.5.2 Applies filters string the_seo_framework_og_image_after_header
 	 *
 	 * @todo listen to attached images within post.
+	 * @todo set archive and front page image listener, now it simply fail on some calls.
 	 * @priority medium 2.7.0+
 	 *
 	 * @param string $post_id The post ID.
 	 * @param array $args The image arguments.
 	 * @param bool $escape Whether to escape the image URL.
-	 * @return string the Open Graph Image URL.
+	 * @return string the image URL.
 	 */
 	public function get_image( $post_id = '', $args = array(), $escape = true ) {
 
@@ -70,7 +92,7 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 		$all_allowed = empty( $args['disallowed'] );
 
 		//* 1. Fetch image from featured
-		if ( empty( $image ) && ( $all_allowed || ! in_array( 'featured', $args['disallowed'] ) ) )
+		if ( empty( $image ) && ( $all_allowed || ! in_array( 'featured', $args['disallowed'], true ) ) )
 			$image = $this->get_image_from_post_thumbnail( $args );
 
 		//* 2. Fetch image from fallback filter 1
@@ -78,21 +100,17 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 			$image = (string) apply_filters( 'the_seo_framework_og_image_after_featured', '', $args['post_id'] );
 
 		//* 3. Fallback: Get header image if exists
-		if ( empty( $image ) && ( $all_allowed || ! in_array( 'header', $args['disallowed'] ) ) && current_theme_supports( 'custom-header', 'default-image' ) )
-			$image = get_header_image();
+		if ( empty( $image ) && ( $all_allowed || ! in_array( 'header', $args['disallowed'], true ) ) && current_theme_supports( 'custom-header', 'default-image' ) )
+			$image = $this->get_header_image( true );
 
 		//* 4. Fetch image from fallback filter 2
 		if ( empty( $image ) )
 			$image = (string) apply_filters( 'the_seo_framework_og_image_after_header', '', $args['post_id'] );
 
 		//* 5. Get the WP 4.3.0 Site Icon
-		if ( empty( $image ) && ( $all_allowed || ! in_array( 'icon', $args['disallowed'] ) ) )
-			$image = $this->site_icon();
+		if ( empty( $image ) && ( $all_allowed || ! in_array( 'icon', $args['disallowed'], true ) ) )
+			$image = $this->site_icon( 'full', true );
 
-		/**
-		 * Escape in Generation.
-		 * @since 2.5.2
-		 */
 		if ( $escape && $image )
 			return esc_url( $image );
 
@@ -105,11 +123,11 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 	 * @since 2.5.0
 	 *
 	 * @since 2.0.1 Applies filters the_seo_framework_og_image_args : {
-	 *		@param string image The image url
-	 *		@param mixed size The image size
-	 *		@param bool icon Fetch Image icon
-	 *		@param array attr Image attributes
-	 *		@param array disallowed Disallowed image types : {
+	 *		@param string $image The image url
+	 *		@param mixed $size The image size
+	 *		@param bool $icon Fetch Image icon
+	 *		@param array $attr Image attributes
+	 *		@param array $disallowed Disallowed image types : {
 	 *			array (
 	 * 				string 'featured'
 	 * 				string 'header'
@@ -175,7 +193,7 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 			}
 		} else {
 			//* Old style parameters are used. Doing it wrong.
-			$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', '2.5.0' );
+			$this->_doing_it_wrong( __METHOD__, 'Use $args = array() for parameters.', '2.5.0' );
 			$args = $default_args;
 		}
 
@@ -201,6 +219,8 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 			$args['post_id'] = $this->get_the_real_ID();
 
 		$id = get_post_thumbnail_id( $args['post_id'] );
+
+		$args['get_the_real_ID'] = true;
 
 		$image = $id ? $this->parse_og_image( $id, $args ) : '';
 
@@ -256,8 +276,9 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 			return;
 
 		static $called = array();
+
 		//* Don't parse image twice. Return empty on second run.
-		if ( isset( $called[$id] ) )
+		if ( isset( $called[ $id ] ) )
 			return '';
 
 		if ( empty( $args ) )
@@ -276,12 +297,12 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 				//* Square
 				$w = 1500;
 				$h = 1500;
-			} else if ( $w > $h ) {
-				//* Landscape
-				$h = $this->proportionate_dimensions( $h, $w, $w = 1500 );
-			} else if ( $h > $w ) {
-				//* Portrait
-				$w = $this->proportionate_dimensions( $w, $h, $h = 1500 );
+			} elseif ( $w > $h ) {
+				//* Landscape, set $w to 1500.
+				$h = (int) $this->proportionate_dimensions( $h, $w, $w = 1500 );
+			} elseif ( $h > $w ) {
+				//* Portrait, set $h to 1500.
+				$w = (int) $this->proportionate_dimensions( $w, $h, $h = 1500 );
 			}
 
 			//* Get path of image and load it into the wp_get_image_editor
@@ -327,7 +348,12 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 			}
 		}
 
-		return $called[$id] = $i;
+		//* Whether to use the post ID (Post Thumbnail) or input ID (ID was known beforehand)
+		$usage_id = isset( $args['get_the_real_ID'] ) && $args['get_the_real_ID'] ? $this->get_the_real_ID() : $id;
+
+		$this->image_dimensions = $this->image_dimensions + array( $usage_id => array( 'width' => $w, 'height' => $h ) );
+
+		return $called[ $id ] = $i;
 	}
 
 	/**
@@ -335,10 +361,11 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 	 *
 	 * @since 2.2.1
 	 *
-	 * @param string $size The icon size, accepts 'full' and pixel values
-	 * @return string url site icon, not escaped.
+	 * @param string $size The icon size, accepts 'full' and pixel values.
+	 * @param bool $set_og_dimensions Whether to set size for OG image. Always falls back to the current post ID.
+	 * @return string URL site icon, not escaped.
 	 */
-	public function site_icon( $size = 'full' ) {
+	public function site_icon( $size = 'full', $set_og_dimensions = false ) {
 
 		$icon = '';
 
@@ -350,9 +377,15 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 				$url_data = wp_get_attachment_image_src( $site_icon_id, $size );
 
 				$icon = $url_data ? $url_data[0] : '';
-			}
 
-		} else if ( is_int( $size ) && function_exists( 'has_site_icon' ) && $this->wp_version( '4.3', '>=' ) ) {
+				if ( $set_og_dimensions && $icon ) {
+					$w = $url_data[1];
+					$h = $url_data[2];
+
+					$this->image_dimensions = $this->image_dimensions + array( $this->get_the_real_ID() => array( 'width' => $w, 'height' => $h ) );
+				}
+			}
+		} elseif ( is_int( $size ) && function_exists( 'has_site_icon' ) && $this->wp_version( '4.3', '>=' ) ) {
 			//* Also applies (MultiSite) filters.
 			$icon = get_site_icon_url( $size );
 		}
@@ -360,4 +393,28 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 		return $icon;
 	}
 
+	/**
+	 * Returns header image URL.
+	 * Also sets image dimensions. Falls back to current post ID for index.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param bool $set_og_dimensions Whether to set size for OG image. Always falls back to the current post ID.
+	 * @return string The header image URL, not escaped.
+	 */
+	public function get_header_image( $set_og_dimensions = false ) {
+
+		$image = get_header_image();
+
+		if ( $set_og_dimensions && $image ) {
+
+			$w = (int) get_theme_support( 'custom-header', 'width' );
+			$h = (int) get_theme_support( 'custom-header', 'height' );
+
+			if ( $w && $h )
+				$this->image_dimensions = $this->image_dimensions + array( $this->get_the_real_ID() => array( 'width' => $w, 'height' => $h ) );
+		}
+
+		return $image;
+	}
 }

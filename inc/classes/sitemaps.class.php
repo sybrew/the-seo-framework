@@ -53,13 +53,25 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 	protected $doing_sitemap = false;
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor, load parent constructor and set up caches.
 	 */
 	public function __construct() {
 		parent::__construct();
 
-		// I'm not going to initialize my own rewrite engine. Causes too many problems.
-		$this->pretty_permalinks = ( '' !== $this->permalink_structure() ) ? true : false;
+		//* Whether we're using pretty permalinks.
+		$this->pretty_permalinks = '' !== $this->permalink_structure();
 
 		/**
 		 * Add query strings to rewrite
@@ -99,7 +111,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		 * Don't do anything on a deleted or spam blog.
 		 * There's nothing to find anyway. Multisite Only.
 		 */
-		return $cache = $this->pretty_permalinks && $this->is_option_checked( 'sitemaps_output' ) && false === $this->current_blog_is_spam_or_deleted() ? true : false;
+		return $cache = $this->pretty_permalinks && $this->is_option_checked( 'sitemaps_output' ) && false === $this->current_blog_is_spam_or_deleted();
 	}
 
 	/**
@@ -183,10 +195,9 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 	/**
 	 * Destroy unused $GLOBALS.
 	 *
-	 * @param bool $get_freed_memory Whether to return the freed memory in bytes.
-	 *
 	 * @since 2.6.0
 	 *
+	 * @param bool $get_freed_memory Whether to return the freed memory in bytes.
 	 * @return int $freed_memory
 	 */
 	protected function clean_up_globals( $get_freed_memory = false ) {
@@ -220,9 +231,9 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		foreach ( $remove as $key => $value ) {
 			if ( is_array( $value ) ) {
 				foreach ( $value as $v )
-					unset( $GLOBALS[$key][$v] );
+					unset( $GLOBALS[ $key ][ $v ] );
 			} else {
-				unset( $GLOBALS[$value] );
+				unset( $GLOBALS[ $value ] );
 			}
 		}
 
@@ -246,11 +257,8 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 				ob_clean();
 		}
 
-		//* Fetch sitemap content.
-		$xml_content = $this->get_sitemap_content();
-
-		//* Echo and add trailing line.
-		echo $xml_content . "\r\n";
+		//* Fetch sitemap content and add trailing line. Already escaped internally.
+		echo $this->get_sitemap_content() . "\r\n";
 
 		// We're done now.
 		die();
@@ -274,9 +282,9 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		$sitemap_content = $this->get_transient( $this->sitemap_transient );
 
 		if ( false === $sitemap_content ) {
-			$cached_content = "\r\n<!-- " . __( 'Sitemap is generated for this view', 'autodescription' ) . " -->";
+			$cached_content = "\r\n<!-- " . __( 'Sitemap is generated for this view', 'autodescription' ) . ' -->';
 		} else {
-			$cached_content = "\r\n<!-- " . __( 'Sitemap is served from cache', 'autodescription' ) . " -->";
+			$cached_content = "\r\n<!-- " . __( 'Sitemap is served from cache', 'autodescription' ) . ' -->';
 		}
 
 		$content  = '<?xml version="1.0" encoding="UTF-8"?>' . "\r\n";
@@ -291,10 +299,10 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		 * @since 2.3.7
 		 */
 		if ( $this->the_seo_framework_debug ) {
-			$content .= "\r\n<!-- Site estimated peak usage: " . ( memory_get_peak_usage() / 1024 / 1024 ) . " MB -->";
-			$content .= "\r\n<!-- System estimated peak usage: " . ( memory_get_peak_usage( true ) / 1024 / 1024 ) . " MB -->";
-			$content .= "\r\n<!-- Freed memory prior to generation: " . $this->clean_up_globals( true ) / 1024 . " kB -->";
-			$content .= "\r\n<!-- Sitemap generation time: " . ( number_format( microtime( true ) - $timer_start, 6 ) ) . " seconds -->";
+			$content .= "\r\n<!-- Site estimated peak usage: " . ( memory_get_peak_usage() / 1024 / 1024 ) . ' MB -->';
+			$content .= "\r\n<!-- System estimated peak usage: " . ( memory_get_peak_usage( true ) / 1024 / 1024 ) . ' MB -->';
+			$content .= "\r\n<!-- Freed memory prior to generation: " . $this->clean_up_globals( true ) / 1024 . ' kB -->';
+			$content .= "\r\n<!-- Sitemap generation time: " . ( number_format( microtime( true ) - $timer_start, 6 ) ) . ' seconds -->';
 		}
 
 		return $content;
@@ -394,7 +402,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		$timestamp = (bool) apply_filters( 'the_seo_framework_sitemap_timestamp', true );
 
 		if ( $timestamp )
-			$content .= '<!-- ' . __( 'Sitemap is generated on', 'autodescription' ) . ' ' . current_time( "Y-m-d H:i:s" ) . ' -->' . "\r\n";
+			$content .= '<!-- ' . __( 'Sitemap is generated on', 'autodescription' ) . ' ' . current_time( 'Y-m-d H:i:s' ) . ' -->' . "\r\n";
 
 		if ( $totalpages ) {
 			//* Ascend by the date for normal pages. Older pages get to the top of the list.
@@ -406,8 +414,11 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 				'order' 			=> 'ASC',
 				'post_status' 		=> 'publish',
 				'cache_results' 	=> false,
+				'suppress_filters'	=> true,
 			);
-			$latest_pages = get_posts( $args );
+			$get_posts = new WP_Query;
+			$latest_pages = $get_posts->query( $args );
+			unset( $get_posts );
 		}
 		$latest_pages_amount = (int) count( $latest_pages );
 
@@ -422,35 +433,35 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 				if ( isset( $page->ID ) ) {
 					$page_id = $page->ID;
 
-					if ( '' === $excluded || ! isset( $excluded[$post_id] ) ) {
+					if ( '' === $excluded || ! isset( $excluded[ $post_id ] ) ) {
 						//* Is this the front page?
-						$page_is_front = ( $page_id === $id_on_front ) ? true : false;
+						$page_is_front = $page_id === $id_on_front;
 
 						//* Fetch the noindex option, per page.
 						$noindex = (bool) $this->get_custom_field( '_genesis_noindex', $page_id );
 
 						//* Continue if indexed.
 						if ( false === $noindex ) {
-							$content .= "	<url>\r\n";
+							$content .= "\t<url>\r\n";
 							if ( $page_is_front ) {
-								$content .= '		<loc>' . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'home' => true ) ) . "</loc>\r\n";
+								$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'home' => true ) ) . "</loc>\r\n";
 							} else {
-								$content .= '		<loc>' . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $page, 'id' => $page_id ) ) . "</loc>\r\n";
+								$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $page, 'id' => $page_id ) ) . "</loc>\r\n";
 							}
 
 							// Keep it consistent. Only parse if page_lastmod is true.
 							if ( $page_lastmod || ( $page_is_front && $home_lastmod ) ) {
 								$page_modified_gmt = $page->post_modified_gmt;
 
-								if ( $page_modified_gmt !== '0000-00-00 00:00:00' )
-									$content .= '		<lastmod>' . mysql2date( $timestamp_format, $page_modified_gmt, false ) . "</lastmod>\r\n";
+								if ( '0000-00-00 00:00:00' !== $page_modified_gmt )
+									$content .= "\t\t<lastmod>" . mysql2date( $timestamp_format, $page_modified_gmt, false ) . "</lastmod>\r\n";
 							}
 
 							// Give higher priority to the home page.
 							$priority_page = $page_is_front ? 1 : 0.9;
 
-							$content .= '		<priority>' . number_format( $priority_page, 1 ) . "</priority>\r\n";
-							$content .= "	</url>\r\n";
+							$content .= "\t\t<priority>" . number_format( $priority_page, 1 ) . "</priority>\r\n";
+							$content .= "\t</url>\r\n";
 						}
 					}
 				}
@@ -470,8 +481,11 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 				'order' 			=> 'DESC',
 				'post_status' 		=> 'publish',
 				'cache_results' 	=> false,
+				'suppress_filters'	=> true,
 			);
-			$latest_posts = get_posts( $args );
+			$get_posts = new WP_Query;
+			$latest_posts = $get_posts->query( $args );
+			unset( $get_posts );
 		}
 		$latest_posts_amount = (int) count( $latest_posts );
 
@@ -508,7 +522,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 				if ( isset( $post->ID ) ) {
 					$post_id = $post->ID;
 
-					if ( '' === $excluded || ! isset( $excluded[$post_id] ) ) {
+					if ( '' === $excluded || ! isset( $excluded[ $post_id ] ) ) {
 
 						//* Fetch the noindex option, per page.
 						$noindex = (bool) $this->get_custom_field( '_genesis_noindex', $post_id );
@@ -516,20 +530,20 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 						//* Continue if indexed
 						if ( ! $noindex ) {
 
-							$content .= "	<url>\r\n";
+							$content .= "\t<url>\r\n";
 							// No need to use static vars
-							$content .= '		<loc>' . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $post, 'id' => $post_id ) ) . "</loc>\r\n";
+							$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $post, 'id' => $post_id ) ) . "</loc>\r\n";
 
 							// Keep it consistent. Only parse if page_lastmod is true.
 							if ( $post_lastmod ) {
 								$post_modified_gmt = $post->post_modified_gmt;
 
-								if ( $post_modified_gmt !== '0000-00-00 00:00:00' )
-									$content .= '		<lastmod>' . mysql2date( $timestamp_format, $post_modified_gmt, false ) . "</lastmod>\r\n";
+								if ( '0000-00-00 00:00:00' !== $post_modified_gmt )
+									$content .= "\t\t<lastmod>" . mysql2date( $timestamp_format, $post_modified_gmt, false ) . "</lastmod>\r\n";
 							}
 
-							$content .= '		<priority>' . number_format( $priority, 1 ) . "</priority>\r\n";
-							$content .= "	</url>\r\n";
+							$content .= "\t\t<priority>" . number_format( $priority, 1 ) . "</priority>\r\n";
+							$content .= "\t</url>\r\n";
 
 							// Lower the priority for the next pass.
 							$priority = $priority - $prioritydiff;
@@ -557,8 +571,8 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			$not_cpt = array( 'post', 'page', 'attachment' );
 
 			foreach ( $post_page as $post_type ) {
-				if ( false === in_array( $post_type, $not_cpt ) ) {
-					if ( empty( $excluded_cpt ) || false === in_array( $post_type, $excluded_cpt ) ) {
+				if ( false === in_array( $post_type, $not_cpt, true ) ) {
+					if ( empty( $excluded_cpt ) || false === in_array( $post_type, $excluded_cpt, true ) ) {
 						if ( $this->post_type_supports_custom_seo( $post_type ) ) {
 							$cpt[] = $post_type;
 						}
@@ -576,8 +590,11 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 					'order' 			=> 'DESC',
 					'post_status' 		=> 'publish',
 					'cache_results' 	=> false,
+					'suppress_filters' 	=> true,
 				);
-				$latest_cpt_posts = get_posts( $args );
+				$get_posts = new WP_Query;
+				$latest_cpt_posts = $get_posts->query( $args );
+				unset( $get_posts );
 			}
 		}
 		$latest_cpt_posts_amount = (int) count( $latest_cpt_posts );
@@ -608,7 +625,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 				if ( isset( $ctp_post->ID ) ) {
 					$post_id = $ctp_post->ID;
 
-					if ( '' === $excluded || ! isset( $excluded[$post_id] ) ) {
+					if ( '' === $excluded || ! isset( $excluded[ $post_id ] ) ) {
 
 						//* Fetch the noindex option, per page.
 						$noindex = (bool) $this->get_custom_field( '_genesis_noindex', $post_id );
@@ -616,21 +633,21 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 						//* Continue if indexed
 						if ( ! $noindex ) {
 
-							$content .= "	<url>\r\n";
+							$content .= "\t<url>\r\n";
 							//* No need to use static vars
-							$content .= '		<loc>' . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $ctp_post, 'id' => $post_id ) ) . "</loc>\r\n";
+							$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $ctp_post, 'id' => $post_id ) ) . "</loc>\r\n";
 
 							//* Keep it consistent. Only parse if page_lastmod is true.
 							if ( $post_lastmod ) {
 								$post_modified_gmt = $ctp_post->post_modified_gmt;
 
 								//* Some CPT don't set modified time.
-								if ( $post_modified_gmt !== '0000-00-00 00:00:00' )
-									$content .= '		<lastmod>' . mysql2date( $timestamp_format, $post_modified_gmt, false ) . "</lastmod>\r\n";
+								if ( '0000-00-00 00:00:00' !== $post_modified_gmt )
+									$content .= "\t\<lastmod>" . mysql2date( $timestamp_format, $post_modified_gmt, false ) . "</lastmod>\r\n";
 							}
 
-							$content .= '		<priority>' . number_format( $priority_cpt, 1 ) . "</priority>\r\n";
-							$content .= "	</url>\r\n";
+							$content .= "\t\t<priority>" . number_format( $priority_cpt, 1 ) . "</priority>\r\n";
+							$content .= "\t</url>\r\n";
 
 							// Lower the priority for the next pass.
 							$priority_cpt = $priority_cpt - $prioritydiff_cpt;
@@ -659,6 +676,10 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		$custom_urls = (array) apply_filters( 'the_seo_framework_sitemap_additional_urls', array() );
 
 		if ( $custom_urls ) {
+
+			//* Force ent2ncr to run, regardless of filters.
+			remove_all_filters( 'pre_ent2ncr', false );
+
 			foreach ( $custom_urls as $url => $args ) {
 
 				if ( ! is_array( $args ) ) {
@@ -666,12 +687,12 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 					$url = $args;
 				}
 
-				$content .= "	<url>\r\n";
+				$content .= "\t<url>\r\n";
 				//* No need to use static vars
-				$content .= '		<loc>' . esc_url_raw( $url ) . "</loc>\r\n";
+				$content .= "\t\t<loc>" . ent2ncr( esc_url_raw( $url ) ) . "</loc>\r\n";
 
 				if ( isset( $args['lastmod'] ) && $args['lastmod'] ) {
-					$content .= '		<lastmod>' . mysql2date( $timestamp_format, $args['lastmod'], false ) . "</lastmod>\r\n";
+					$content .= "\t\t<lastmod>" . mysql2date( $timestamp_format, $args['lastmod'], false ) . "</lastmod>\r\n";
 				}
 
 				if ( isset( $args['priority'] ) && $args['priority'] ) {
@@ -680,8 +701,8 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 					$priority = 0.9;
 				}
 
-				$content .= '		<priority>' . number_format( $priority, 1 ) . "</priority>\r\n";
-				$content .= "	</url>\r\n";
+				$content .= "\t\t<priority>" . number_format( $priority, 1 ) . "</priority>\r\n";
+				$content .= "\t</url>\r\n";
 			}
 		}
 
@@ -709,7 +730,6 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 
 		/**
 		 * Don't ping if the blog isn't public.
-		 *
 		 * @since 2.3.1
 		 */
 		if ( false === $this->is_option_checked( 'site_noindex' ) && $this->is_blog_public() ) {
@@ -732,7 +752,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 				if ( $this->is_option_checked( 'ping_yandex' ) )
 					$this->ping_yandex();
 
-				// Sorry I couldn't help myself.
+				// Sorry, I couldn't help myself.
 				$throttle = 'Bert and Ernie are weird.';
 
 				/**
@@ -759,7 +779,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 	public function ping_google() {
 
 		$pingurl = 'http://www.google.com/webmasters/sitemaps/ping?sitemap=' . urlencode( $this->the_home_url_from_cache( true ) . 'sitemap.xml' );
-		wp_remote_get( $pingurl, array( 'timeout' => 3 ) );
+		wp_safe_remote_get( $pingurl, array( 'timeout' => 3 ) );
 
 	}
 
@@ -771,7 +791,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 	public function ping_bing() {
 
 		$pingurl = 'http://www.bing.com/webmaster/ping.aspx?siteMap=' . urlencode( $this->the_home_url_from_cache( true ) . 'sitemap.xml' );
-		wp_remote_get( $pingurl, array( 'timeout' => 3 ) );
+		wp_safe_remote_get( $pingurl, array( 'timeout' => 3 ) );
 
 	}
 
@@ -783,7 +803,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 	public function ping_yandex() {
 
 		$pingurl = 'http://blogs.yandex.ru/pings/?status=success&url=' . urlencode( $this->the_home_url_from_cache( true ) . 'sitemap.xml' );
-		wp_remote_get( $pingurl, array( 'timeout' => 3 ) );
+		wp_safe_remote_get( $pingurl, array( 'timeout' => 3 ) );
 
 	}
 
@@ -827,7 +847,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			$pre = (string) apply_filters( 'the_seo_framework_robots_txt_pre', '' );
 			$pro = (string) apply_filters( 'the_seo_framework_robots_txt_pro', '' );
 
-			$site_url = parse_url( site_url() );
+			$site_url = wp_parse_url( site_url() );
 			$path = ( ! empty( $site_url['path'] ) ) ? $site_url['path'] : '';
 
 			$output .= $pre;
@@ -844,7 +864,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			 * @since 2.5.0
 			 */
 			if ( apply_filters( 'the_seo_framework_robots_disallow_queries', false ) ) {
-				$home_url = parse_url( rtrim( $this->the_home_url_from_cache(), ' /\\' ) );
+				$home_url = wp_parse_url( rtrim( $this->the_home_url_from_cache(), ' /\\' ) );
 				$home_path = ( ! empty( $home_url['path'] ) ) ? $home_url['path'] : '';
 				$output .= "Disallow: $home_path/*?*\r\n";
 			}
@@ -974,6 +994,40 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 
 		if ( $this->enqueue_rewrite_flush_other() )
 			$this->flush_rewrite_rules();
+
+	}
+
+	/**
+	 * Add and Flush rewrite rules on plugin settings change.
+	 *
+	 * @since 2.6.6.1
+	 * @access private
+	 */
+	public function flush_rewrite_rules_activation() {
+		global $wp_rewrite;
+
+		//* This function is called statically.
+		$this->rewrite_rule_sitemap( true );
+
+		$wp_rewrite->init();
+		$wp_rewrite->flush_rules( true );
+
+	}
+
+	/**
+	 * Flush rewrite rules on settings change.
+	 *
+	 * @since 2.6.6.1
+	 * @access private
+	 */
+	public function flush_rewrite_rules_deactivation() {
+		global $wp_rewrite;
+
+		$wp_rewrite->init();
+
+		unset( $wp_rewrite->extra_rules_top['sitemap\.xml$'] );
+
+		$wp_rewrite->flush_rules( true );
 
 	}
 

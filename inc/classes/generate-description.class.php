@@ -35,6 +35,18 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	protected $using_manual_excerpt = false;
 
 	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
+	 * Handle unapproachable invoked methods.
+	 */
+	public function __call( $name, $arguments ) {
+		parent::__call( $name, $arguments );
+	}
+
+	/**
 	 * Constructor, loads parent constructor.
 	 */
 	public function __construct() {
@@ -171,14 +183,14 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 		$default_args = $this->parse_description_args( '', '', true );
 
 		if ( is_array( $args ) ) {
-			 if ( empty( $args ) ) {
+			if ( empty( $args ) ) {
 				$args = $default_args;
 			} else {
 				$args = $this->parse_description_args( $args, $default_args );
 			}
 		} else {
 			//* Old style parameters are used. Doing it wrong.
-			$this->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'Use $args = array() for parameters.', '2.5.0' );
+			$this->_doing_it_wrong( __METHOD__, 'Use $args = array() for parameters.', '2.5.0' );
 			$args = $default_args;
 		}
 
@@ -196,7 +208,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	 * 		@param bool $is_home We're generating for the home page.
 	 * }
 	 * @param bool $escape Escape the output if true.
-	 * @return string|mixed The description, might be unsafe for html output.
+	 * @return string|mixed The description.
 	 */
 	public function description_from_custom_field( $args = array(), $escape = true ) {
 
@@ -210,13 +222,14 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 		$description = $this->get_custom_homepage_description( $args );
 
 		if ( empty( $description ) ) {
-			if ( $this->is_archive() )
+			if ( $this->is_archive() ) {
 				$description = $this->get_custom_archive_description( $args );
-			else
+			} else {
 				$description = $this->get_custom_singular_description( $args['id'] );
+			}
 		}
 
-		if ( $escape && $description )
+		if ( $escape )
 			$description = $this->escape_description( $description );
 
 		return $description;
@@ -284,27 +297,11 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
 
 				$term = $this->fetch_the_term( $args['id'] );
+				$data = $this->get_term_data( $term, $args['id'] );
 
-				if ( isset( $term->admeta['description'] ) ) {
-					if ( $this->is_tax() )
-						$description = empty( $term->admeta['description'] ) ? $description : wp_kses_stripslashes( wp_kses_decode_entities( $term->admeta['description'] ) );
-					else
-						$description = empty( $term->admeta['description'] ) ? $description : $term->admeta['description'];
-				}
-
-				$flag = isset( $term->admeta['saved_flag'] ) ? $this->is_checked( $term->admeta['saved_flag'] ) : false;
-
-				if ( false === $flag && empty( $description ) && isset( $term->meta['description'] ) )
-					$description = empty( $term->meta['description'] ) ? $description : $term->meta['description'];
+				$description = empty( $data['description'] ) ? $description : $data['description'];
 			}
-
-			/**
-			 * @TODO add filter.
-			 * @priority medium 2.7.0
-			 */
-			// if ( $this->is_author() ) {}
 		}
-
 
 		return $description;
 	}
@@ -326,7 +323,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	 */
 	public function generate_description_from_id( $args = array(), $escape = true ) {
 
-		if ( $this->the_seo_framework_debug ) $this->debug_init( __CLASS__, __FUNCTION__, true, $debug_key = microtime(true), get_defined_vars() );
+		if ( $this->the_seo_framework_debug ) $this->debug_init( __METHOD__, true, $debug_key = microtime( true ), get_defined_vars() );
 
 		/**
 		 * Applies filters bool 'the_seo_framework_enable_auto_description' : Enable or disable the description.
@@ -342,7 +339,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 		if ( $escape )
 			$description = $this->escape_description( $description );
 
-		if ( $this->the_seo_framework_debug ) $this->debug_init( __CLASS__, __FUNCTION__, false, $debug_key, array( 'description' => $description, 'transient_key' => $this->auto_description_transient ) );
+		if ( $this->the_seo_framework_debug ) $this->debug_init( __METHOD__, false, $debug_key, array( 'description' => $description, 'transient_key' => $this->auto_description_transient ) );
 
 		return (string) $description;
 	}
@@ -373,7 +370,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 
 		//* Home Page description
 		if ( $args['is_home'] || $this->is_front_page() || $this->is_static_frontpage( $args['id'] ) )
-			return $this->generate_home_page_description( $args['get_custom_field'] );
+			return $this->generate_home_page_description( $args['get_custom_field'], $escape );
 
 		$term = $this->fetch_the_term( $args['id'] );
 
@@ -407,7 +404,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 			$additions = trim( $title . " $on " . $blogname );
 			//* If there are additions, add a trailing space.
 			if ( $additions )
-				$additions .= " ";
+				$additions .= ' ';
 
 			$max_char_length_normal = 155 - mb_strlen( html_entity_decode( $additions ) );
 			$max_char_length_social = 200;
@@ -419,7 +416,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 			//* Put in array to be accessed later.
 			$excerpt = array(
 				'normal' => $excerpt_normal,
-				'social' => $excerpt_social
+				'social' => $excerpt_social,
 			);
 
 			/**
@@ -481,9 +478,10 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	 * @since 2.6.0
 	 *
 	 * @param bool $custom_field whether to check the Custom Field.
+	 * @param bool $escape Whether to escape the output.
 	 * @return string The description.
 	 */
-	public function generate_home_page_description( $custom_field = true ) {
+	public function generate_home_page_description( $custom_field = true, $escape = true ) {
 
 		$id = $this->get_the_front_page_ID();
 
@@ -494,8 +492,14 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 		 */
 		if ( $custom_field ) {
 			$description = $this->get_custom_homepage_description( array( 'is_home' => true ) );
-			if ( $description )
+
+			if ( $description ) {
+
+				if ( $escape )
+					$description = $this->escape_description( $description );
+
 				return $description;
+			}
 		}
 
 		$title_on_blogname = $this->generate_description_additions( $id, '', true );
@@ -503,6 +507,12 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 		$title = $title_on_blogname['title'];
 		$on = $title_on_blogname['on'];
 		$blogname = $title_on_blogname['blogname'];
+
+		if ( $escape ) {
+			$title = $this->escape_description( $title );
+			$on = $this->escape_description( $on );
+			$blogname = $this->escape_description( $blogname );
+		}
 
 		return $description = sprintf( '%s %s %s', $title, $on, $blogname );
 	}
@@ -537,7 +547,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 		$option = (bool) $this->get_option( 'description_additions' );
 		$excerpt = ! $this->using_manual_excerpt;
 
-		return $cache = $option && $filter && $excerpt ? true : false;
+		return $cache = $option && $filter && $excerpt;
 	}
 
 	/**
@@ -547,7 +557,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	 * @since 2.3.9
 	 * @staticvar string $sep
 	 *
-	 * @return string The Separator
+	 * @return string The Separator, unescaped.
 	 */
 	public function get_description_separator() {
 
@@ -556,7 +566,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 		if ( isset( $sep ) )
 			return $sep;
 
-		return $sep = (string) apply_filters( 'the_seo_framework_description_separator', $this->get_separator( 'description' ) );
+		return $sep = (string) apply_filters( 'the_seo_framework_description_separator', $this->get_separator( 'description', false ) );
 	}
 
 	/**
@@ -583,8 +593,8 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 
 		if ( $ignore || $this->add_description_additions( $id, $term ) ) {
 
-			if ( ! isset( $title[$id] ) )
-				$title[$id] = $this->generate_description_title( $id, $term, $ignore );
+			if ( ! isset( $title[ $id ] ) )
+				$title[ $id ] = $this->generate_description_title( $id, $term, $ignore );
 
 			if ( $ignore || $this->is_option_checked( 'description_blogname' ) ) {
 
@@ -604,14 +614,14 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 			//* Already cached.
 			$sep = $this->get_description_separator();
 		} else {
-			$title[$id] = '';
+			$title[ $id ] = '';
 			$on = '';
 			$blogname = '';
 			$sep = '';
 		}
 
 		return array(
-			'title' => $title[$id],
+			'title' => $title[ $id ],
 			'on' => $on,
 			'blogname' => $blogname,
 			'sep' => $sep,
@@ -655,14 +665,16 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 				 */
 				/* translators: Front-end output. */
 				$title = __( 'Latest posts:', 'autodescription' ) . ' ' . $title;
-			} else if ( $term && is_object( $term ) ) {
+			} elseif ( $term && isset( $term->term_id ) ) {
 				//* We're on a taxonomy now.
 
-				if ( isset( $term->admeta['doctitle'] ) && $term->admeta['doctitle'] ) {
-					$title = $term->admeta['doctitle'];
-				} else if ( isset( $term->name ) && $term->name ) {
+				$data = $this->get_term_data( $term, $term->term_id );
+
+				if ( ! empty( $data['doctitle'] ) ) {
+					$title = $data['doctitle'];
+				} elseif ( ! empty( $term->name ) ) {
 					$title = $term->name;
-				} else if ( isset( $term->slug ) && $term->slug ) {
+				} elseif ( ! empty( $term->slug ) ) {
 					$title = $term->slug;
 				}
 			} else {
@@ -701,35 +713,35 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 		$term_id = isset( $term->term_id ) ? $term->term_id : false;
 
 		//* Put excerpt in cache.
-		if ( ! isset( $excerpt_cache[$page_id][$term_id] ) ) {
+		if ( ! isset( $excerpt_cache[ $page_id ][ $term_id ] ) ) {
 			if ( $this->is_singular( $page_id ) ) {
 				//* We're on the blog page now.
 				$excerpt = $this->get_excerpt_by_id( '', $page_id );
-			} else if ( $term && is_object( $term ) ) {
+			} elseif ( $term_id ) {
 				//* We're on a taxonomy now.
 				$excerpt = empty( $term->description ) ? $this->get_excerpt_by_id( '', '', $page_id ) : $this->s_description( $term->description );
-			} else if ( $this->is_author() ) {
+			} elseif ( $this->is_author() ) {
 				$excerpt = $this->s_description( get_the_author_meta( 'description', (int) get_query_var( 'author' ) ) );
 			} else {
 				$excerpt = '';
 			}
 
-			$excerpt_cache[$page_id][$term_id] = $excerpt;
+			$excerpt_cache[ $page_id ][ $term_id ] = $excerpt;
 		}
 
 		//* Fetch excerpt from cache.
-		$excerpt = $excerpt_cache[$page_id][$term_id];
+		$excerpt = $excerpt_cache[ $page_id ][ $term_id ];
 
 		/**
 		 * Put excerptlength in cache.
 		 * Why cache? My tests have shown that mb_strlen is 1.03x faster than cache fetching.
 		 * However, _mb_strlen (compat) is about 1740x slower. And this is the reason it's cached!
 		 */
-		if ( ! isset( $excerptlength_cache[$page_id][$term_id] ) )
-			$excerptlength_cache[$page_id][$term_id] = mb_strlen( $excerpt );
+		if ( ! isset( $excerptlength_cache[ $page_id ][ $term_id ] ) )
+			$excerptlength_cache[ $page_id ][ $term_id ] = mb_strlen( $excerpt );
 
 		//* Fetch the length from cache.
-		$excerpt_length = $excerptlength_cache[$page_id][$term_id];
+		$excerpt_length = $excerptlength_cache[ $page_id ][ $term_id ];
 
 		//* Trunculate if the excerpt is longer than the max char length
 		$excerpt = $this->trim_excerpt( $excerpt, $excerpt_length, $max_char_length );
@@ -801,12 +813,11 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 
 			$stops = array( '.', '?', '!' );
 			//* Add three dots if there's no full stop at the end of the excerpt.
-			if ( ! in_array( $last_char, $stops ) )
+			if ( ! in_array( $last_char, $stops, true ) )
 				$excerpt .= '...';
 
 		}
 
 		return trim( $excerpt );
 	}
-
 }
