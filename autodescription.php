@@ -134,7 +134,7 @@ function the_seo_framework_locale_init() {
  * @since 1.0.0
  * @uses THE_SEO_FRAMEWORK_DIR_PATH
  */
-require_once( THE_SEO_FRAMEWORK_DIR_PATH . '/load.class.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'load.class.php' );
 
 //* Load deprecated functions.
 require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.php' );
