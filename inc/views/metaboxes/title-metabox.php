@@ -187,7 +187,10 @@ switch ( $instance ) :
 		$term_labels = $this->get_tax_labels( 'category' );
 		$label = isset( $term_labels->singular_name ) ? $term_labels->singular_name : __( 'Category', 'autodescription' );
 
-		$cats = get_terms( array( 'taxonomy' => 'category', 'fields' => 'ids', 'hide_empty' => false, 'order' => 'ASC', 'number' => 1 ) );
+		/**
+		 * @since WordPress Core 4.5.0 get_terms first parameter is converted to the latter.
+		 */
+		$cats = get_terms( array(), array( 'taxonomy' => 'category', 'fields' => 'ids', 'hide_empty' => false, 'order' => 'ASC', 'number' => 1 ) );
 		if ( is_array( $cats ) && ! empty( $cats ) ) {
 			//* Category should exist.
 			$cat = reset( $cats );

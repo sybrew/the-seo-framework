@@ -125,8 +125,13 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 */
 	public function get_the_real_admin_ID() {
 
-		//* Current posts object ID (in loop).
-		$id = get_the_ID();
+		/**
+		 * This is get_the_ID() with WordPress 3.9 compatibility.
+		 * @todo convert to get_the_ID()
+		 * @priority OMGWTFBBQ 2.7.x (I warned you.)
+		 */
+		$post = get_post();
+		$id = empty( $post ) ? 0 : $post->ID;
 
 		//* Current term ID (outside loop).
 		if ( empty( $id ) && $this->is_archive_admin() )

@@ -35,6 +35,7 @@
 	//		define( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN', true );
 	//		define( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS', true );
 	//		update_option( 'the_seo_framework_upgraded_db_version', '0' );
+	//		add_filter( 'the_seo_framework_use_object_cache', '__return_false' );
 	//}
 //}},0);
 
