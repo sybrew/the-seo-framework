@@ -56,8 +56,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 		add_action( 'template_redirect', array( $this, 'custom_field_redirect' ) );
 
 		/**
-		 * Applies filters : the_seo_framework_use_object_cache
-		 *
+		 * Applies filters 'the_seo_framework_use_object_cache' : bool
 		 * @since 2.4.3
 		 */
 		$this->use_object_cache = (bool) apply_filters( 'the_seo_framework_use_object_cache', true );
@@ -358,7 +357,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 	public function custom_field_redirect() {
 
 		//* Prevent redirect from options on uneditable pages.
-		if ( ! $this->is_singular() || $this->is_admin() )
+		if ( false === $this->is_singular() || $this->is_admin() )
 			return;
 
 		$url = $this->get_custom_field( 'redirect' );

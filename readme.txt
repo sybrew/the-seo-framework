@@ -2,7 +2,7 @@
 Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: open graph, seo, xml sitemap, breadcrumbs, meta, search engine, framework, redirect, robots, facebook, twitter, google, bing, yandex
-Requires at least: 3.8.0
+Requires at least: 4.3.4
 Tested up to: 4.6.0
 Stable tag: 2.6.6
 License: GPLv3
@@ -320,12 +320,13 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Genesis Framework 2.3.0+ term metadata upgrade and fallback compatibility.
 	* TODO The sitemap now also flushes when changing the Site URL in the General Settings of WordPress Core.
 	* TODO Notification that the Robots.txt file can't be output under specific circumstances. (or simply add it anyway?)
-	* Breadcrumbs images as per new Google requirements. Currently, archives have an empty value.
+	* Breadcrumbs images as per new Google requirements. Currently, archives contain an empty value.
 * **Improved:**
 	* TODO The title and description counter type option is now bound to the user, rather than the site.
 	* Dismissible notices are now dismissible on every admin page when called.
 	* The term meta data is now handled through WordPress 4.4 or later functionality, if present.
 		* Note: From The SEO Framework 2.8.0, backwards compatibility towards version 2.6.6.2 or lower will be removed in order to clean up the database.
+		* Note: That update will not remove support for WordPress 3.8 onwards 4.4 term metadata. It only means that you won't be able to revert to old-style SEO metadata after updating either WordPress core or The SEO Framework.
 * **Changed:**
 	* The SEO Settings page is now a submenu page, name "SEO Settings". This change is only visible when another submenu is added.
 	* The Twitter Image URL output is now wrapped in the `twitter:image` meta tag instead of `twitter:image:src`, as the latter seems to be deprecated.
@@ -351,19 +352,29 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* MSM Sitemaps (plugin no longer exists).
 		* WP Twitter Cards (hasn't recieved updates in 2 years).
 		* iG:Twitter Cards (hasn't recieved updates in 3 years).
+	* WordPress 4.3.4 and below are no longer to be supported in future updates.
+		* From this update WordPress 3.9 and later should work as indended, but there will be no more effort to keep that intact.
+		* From the next update, WordPress 4.3.3 or below could have issues with this plugin.
+		* Note: Using WordPress 4.4 and later allows your website to have significant performance benefits in combination with this plugin from this update.
+		* Note: There's one known bug with WordPress 3.9 that causes a fatal error when adding a new term. After page reload the term is correctly added.
+			* This will not be fixed.
 * **Fixed:**
 	/
 	* When saving the SEO Options, the counter type was reset. This has been fixed by placing the counter type option out of the plugins options scope.
-	* When updating the plugin, without added options, the update notification now really should no longer show up. ^related TODO confirm
+	* When updating the plugin, without added options, the update notification now really should no longer show up onwards from this update.
+		* Note: no new options have been added in this update. So it might just show up once more unintentionally.
 	* TODO When solely changing the counter type within the SEO Options, an "unsaved changes" prompt will no longer be displayed.
 	* When changing the WordPress Core tagline settings, the homepage description transient is now flushed, instead of the blog page (which could be on another page).
 	* WooCommerce Product Tag and Category IDs can no longer conflict with singular post type IDs.
 	* The LD+Json home URL output now doesn't add a trailing slash when your options don't have supplied one.
 	* When your home URL is on a subdirectory, the canonical term URL is now correct.
 	* When inputting HTML entities in the Custom Home Page Title, they're now correctly converted in the placeholder.
+	* TODO WPML's flags now display correctly again on WooCommerce product list overview.
 
 **For translators:**
 
+* **Added:**
+	* A few new sentences.
 * **Updated:**
 	* A few sentences have had a very minor adjustment to be more in line with the rest of the WordPress/plugin environment.
 * **Fixed:**
@@ -372,7 +383,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **For developers:**
 
 * **Added:**
-	/
 	* Class overloading. Certain object actions are now handled in a correcting way to prevent insecure or deprecated API actions.
 		* When acquiring a class variable, a deprecation handler is loaded.
 			* This confirms the called variable prior to returning its value. If it's deprecated, it can and will now let you know.
@@ -414,6 +424,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Sitemaps post queries are now suppressing filters.
 		* Translation strings are sanitatized when needed.
 		* Included better validation of superglobals.
+		* Better PHP 5.3 compatibility has been introduces on URL parsing.
+		* Increased usage of the WordPress core caching system so themes and other plugins can benefit from earlier calls.
+			* This reduces memory usage and increases overal performance. Although not directly notable.
 	/
 	* Transient and Object cache key generation based on type request now run earlier and bypass the static cache for improved performance and reduced memory heap size.
 	* Method `AutoDescription_DoingItRight::init_columns_ajax()` now only runs on the applicable AJAX action, right before the tag is output. Instead of `admin_init`.
@@ -445,14 +458,13 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Method `AutoDescription_Generate::get_separator()`'s second parameter (whether to escape the output) now defaults to true instead of false.
 	* Method `AutoDescription_Adminpages::make_checkbox()` now has gained an extra parameter to determine whether to escape the label and description prior to outputting. Defaults to true.
 	* Method `AutoDescription_Generate::generate_home_page_description()` now has gained an extra parameter whether to escape the description. Defaults to true.
-	* Method `AutoDescription_Generate_Url::get_relative_term_url()` now adds the home URL directory (if any) to the URL.
+	* Method `AutoDescription_Generate_Url::get_relative_term_url()` now adds the home URL directory (if any) to the URL prior to making it relative. Preventing directory installation errors.
 	* Method `AutoDescription_Admin_Init::the_counter_visualized()` has been renamed to `AutoDescription_Admin_Init::wp_ajax_update_counter_type()`. Without deprecation as it's marked private.
 	* TODO All CSS class prefixes have been set to `theseoframework`, which were prior `autodescription` or `seoframework`.
 	* Method `AutoDescription_Admin_Init::is_menu_page()` has been slightly adjusted:
 		* It no longer checks for page id's on the first parameter, but only for page hooks.
 		* It now checks for page id's on the second parameter.
 		* It has been moved to class `AutoDescription_Query`. So it's now `AutoDescription_Query::is_menu_page()`.
-	* Disabled class variable setting. Use filters instead.
 * **Fixed:**
 	* Function `the_seo_framework_dot_version()` now works as intended.
 	* Method `AutoDescription_Query::is_single()` first parameter can now be an array without crashing the site.
