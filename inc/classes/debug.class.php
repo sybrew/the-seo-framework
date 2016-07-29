@@ -882,6 +882,8 @@ class AutoDescription_Debug extends AutoDescription_Core {
 		//* Don't register this output.
 		$this->add_debug_output = false;
 
+		global $multipage, $numpages;
+
 		//* Only get true/false values.
 		$is_404 = $this->is_404();
 		$is_admin = $this->is_admin();
@@ -901,6 +903,8 @@ class AutoDescription_Debug extends AutoDescription_Core {
 		$is_home = $this->is_home();
 		$is_month = $this->is_month();
 		$is_page = $this->is_page();
+		$page = $this->page();
+		$paged = $this->paged();
 		$is_preview = $this->is_preview();
 		$is_search = $this->is_search();
 		$is_single = $this->is_single();

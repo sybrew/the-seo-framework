@@ -1021,7 +1021,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
-		$page = get_query_var( 'page' );
+		$page = $this->is_multipage() ? get_query_var( 'page' ) : 1;
+		//$page = get_query_var( 'page' );
 
 		$this->set_query_cache(
 			__METHOD__,
@@ -1029,6 +1030,65 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		);
 
 		return $page;
+	}
+
+	/**
+	 * Determines whether the current loop is a multipage.
+	 *
+	 * @since 2.7.0
+	 * @global int $pages Used as reference.
+	 *
+	 * @return bool True if multipage.
+	 */
+	protected function is_multipage() {
+		global $pages;
+
+		$_pages = $pages;
+
+		$post = $this->is_singular() || $this->is_front_page() ? get_post( $this->get_the_real_ID() ) : false;
+
+		if ( is_object( $post ) ) {
+			$content = $post->post_content;
+			if ( false !== strpos( $content, '<!--nextpage-->' ) ) {
+				$content = str_replace( "\n<!--nextpage-->\n", '<!--nextpage-->', $content );
+				$content = str_replace( "\n<!--nextpage-->", '<!--nextpage-->', $content );
+				$content = str_replace( "<!--nextpage-->\n", '<!--nextpage-->', $content );
+
+				// Ignore nextpage at the beginning of the content.
+				if ( 0 === strpos( $content, '<!--nextpage-->' ) )
+					$content = substr( $content, 15 );
+
+				$_pages = explode( '<!--nextpage-->', $content );
+			} else {
+				$_pages = array( $post->post_content );
+			}
+		} else {
+			return false;
+		}
+
+		/**
+		 * Filter the "pages" derived from splitting the post content.
+		 *
+		 * "Pages" are determined by splitting the post content based on the presence
+		 * of `<!-- nextpage -->` tags.
+		 *
+		 * @since 4.4.0 WordPress core
+		 *
+		 * @param array   $_pages Array of "pages" derived from the post content.
+		 *                       of `<!-- nextpage -->` tags..
+		 * @param WP_Post $post  Current post object.
+		 */
+		$_pages = apply_filters( 'content_pagination', $_pages, $post );
+
+		$numpages = count( $_pages );
+
+		if ( $numpages > 1 ) {
+			$multipage = true;
+		} else {
+			$multipage = false;
+		}
+
+		return $multipage;
 	}
 
 	/**

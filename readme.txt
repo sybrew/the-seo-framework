@@ -360,6 +360,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* This will not be fixed.
 * **Fixed:**
 	/
+	* Core trac ticket [37505](https://core.trac.wordpress.org/ticket/37505#ticket).
 	* When saving the SEO Options, the counter type was reset. This has been fixed by placing the counter type option out of the plugins options scope.
 	* When updating the plugin, without added options, the update notification now really should no longer show up onwards from this update.
 		* Note: no new options have been added in this update. So it might just show up once more unintentionally.
@@ -403,6 +404,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Function `the_seo_framework_options_page_slug()`, this allows you to hook into the SEO settings page.
 	* Method `AutoDescription_Query::get_the_real_admin_ID()`, this always runs within `AutoDescription_Query::get_the_real_ID()` when in admin.
 	* Method `AutoDescription_Sanitize::verify_seo_settings_nonce()`, returns true when SEO settings nonce has been verified. Always use this if you want to inject custom settings.
+	* The debugger now shows Page and Paged Query variable output.
+	* The debugger now shows Globals `multipage` and `numpages` variable output.
 	* CDATA array (JavaScript) `autodescriptionL10n` now contains a nonce string for AJAX requests, accessible through (JavaScript) `autodescriptionL10n.nonce` or (JavaScript) `autodescriptionL10n['nonce']` and (PHP) `check_ajax_referer( 'autodescription-ajax-nonce', 'nonce' ) ?>`.
 * **Improved:**
 	/
@@ -489,6 +492,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Method `AutoDescription_Core::in_array()`, as it is no longer of use.
 	* An useless easter egg in order to clean up code.
 	* (JavaScript) method `autodescription.escapeTags()` as it's no longer used internally.
+	* Compatibility functions that are also in WordPress core below version 3.9, this includes:
+		* `mb_substr` with its related function `_mb_substr`.
 * **Deprecated:**
 	* `AutoDescription_Metaboxes::homepage_metabox_general()`, use `AutoDescription_Metaboxes::homepage_metabox_general_tab()` instead.
 	* `AutoDescription_Metaboxes::homepage_metabox_additions()`, use `AutoDescription_Metaboxes::homepage_metabox_additions_tab()` instead.

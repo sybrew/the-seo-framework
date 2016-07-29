@@ -39,10 +39,9 @@ endif;
  * @uses strlen
  * @return mb_strlen
  *
- * @since 1.3.0
+ * @since 1.3.0 The SEO Framework
+ * @since 4.2.0 WordPress Core
  *
- * Rewritten
- * @since 2.3.5
  */
 if ( ! function_exists( 'mb_strlen' ) ) :
 	function mb_strlen( $str, $encoding = null ) {
@@ -105,74 +104,6 @@ endif;
 /**
  * Extended charset support
  *
- * @uses substr
- * @return mb_substr
- *
- * @since 1.3.0
- *
- * Rewritten
- * @since 2.3.5
- */
-if ( ! function_exists( 'mb_substr' ) ) :
-	function mb_substr( $str, $start, $length = null, $encoding = null ) {
-		return _mb_substr( $str, $start, $length, $encoding );
-	}
-endif;
-
-/*
- * Only understands UTF-8 and 8bit.  All other character sets will be treated as 8bit.
- * For $encoding === UTF-8, the $str input is expected to be a valid UTF-8 byte sequence.
- * The behavior of this function for invalid inputs is undefined.
- */
-if ( ! function_exists( '_mb_substr' ) ) :
-	function _mb_substr( $str, $start, $length = null, $encoding = null ) {
-		if ( null === $encoding ) {
-			$encoding = get_option( 'blog_charset' );
-		}
-
-		// The solution below works only for UTF-8,
-		// so in case of a different charset just use built-in substr()
-		if ( ! in_array( $encoding, array( 'utf8', 'utf-8', 'UTF8', 'UTF-8' ) ) ) {
-			return is_null( $length ) ? substr( $str, $start ) : substr( $str, $start, $length );
-		}
-
-		if ( _wp_can_use_pcre_u() ) {
-			// Use the regex unicode support to separate the UTF-8 characters into an array
-			preg_match_all( '/./us', $str, $match );
-			$chars = is_null( $length ) ? array_slice( $match[0], $start ) : array_slice( $match[0], $start, $length );
-			return implode( '', $chars );
-		}
-
-		$regex = '/(
-			  [\x00-\x7F]                  # single-byte sequences   0xxxxxxx
-			| [\xC2-\xDF][\x80-\xBF]       # double-byte sequences   110xxxxx 10xxxxxx
-			| \xE0[\xA0-\xBF][\x80-\xBF]   # triple-byte sequences   1110xxxx 10xxxxxx * 2
-			| [\xE1-\xEC][\x80-\xBF]{2}
-			| \xED[\x80-\x9F][\x80-\xBF]
-			| [\xEE-\xEF][\x80-\xBF]{2}
-			| \xF0[\x90-\xBF][\x80-\xBF]{2} # four-byte sequences   11110xxx 10xxxxxx * 3
-			| [\xF1-\xF3][\x80-\xBF]{3}
-			| \xF4[\x80-\x8F][\x80-\xBF]{2}
-		)/x';
-
-		$chars = array( '' ); // Start with 1 element instead of 0 since the first thing we do is pop
-		do {
-			// We had some string left over from the last round, but we counted it in that last round.
-			array_pop( $chars );
-
-			// Split by UTF-8 character, limit to 1000 characters (last array element will contain the rest of the string)
-			$pieces = preg_split( $regex, $str, 1000, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY );
-
-			$chars = array_merge( $chars, $pieces );
-		} while ( count( $pieces ) > 1 && $str = array_pop( $pieces ) ); // If there's anything left over, repeat the loop.
-
-		return join( '', array_slice( $chars, $start, $length ) );
-	}
-endif;
-
-/**
- * Extended charset support
- *
  * @see _mb_strpos()
  *
  * @param string		$haystack	The string to search in.
@@ -196,7 +127,7 @@ endif;
  * For $encoding === UTF-8, the $str input is expected to be a valid UTF-8 byte sequence.
  * The behavior of this function for invalid inputs is PHP compliant.
  *
- * @since 4.5.0
+ * @since 2.2.0 The SEO Framework
  * @license GLPv2 or later
  *
  * @param string		$haystack	The string to search in.
@@ -368,7 +299,8 @@ endif;
  * Error suppression is used as prior to PHP 5.3.3, an E_WARNING would be generated
  * when URL parsing failed.
  *
- * @since WordPress Core 4.4.0
+ * @since 2.7.0 The SEO Framework
+ * @since 4.4.0 WordPress Core
  *
  * @param string $url The URL to parse.
  * @return bool|array False on failure; Array of URL components on success;
