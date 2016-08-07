@@ -1,4 +1,7 @@
 <?php
+
+defined( 'ABSPATH' ) or die;
+
 //* Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_description_metabox', $instance );
 
@@ -92,12 +95,12 @@ switch ( $instance ) :
 		$sep_option = $this->get_option( 'description_separator' );
 		$sep_option = $sep_option ? $sep_option : 'pipe';
 
-		$recommended = ' class="recommended" title="' . esc_attr__( 'Recommended', 'autodescription' ) . '"';
+		$recommended = ' class="tsf-recommended" title="' . esc_attr__( 'Recommended', 'autodescription' ) . '"';
 
 		?>
 		<fieldset>
 			<legend><h4><?php esc_html_e( 'Description Excerpt Separator', 'autodescription' ); ?></h4></legend>
-			<p id="description-separator" class="theseoframework-fields">
+			<p id="tsf-description-separator" class="tsf-fields">
 			<?php foreach ( $description_separator as $name => $html ) { ?>
 				<input type="radio" name="<?php $this->field_name( 'description_separator' ); ?>" id="<?php $this->field_id( 'description_separator' . $name ); ?>" value="<?php echo $name ?>" <?php checked( $sep_option, $name ); ?> />
 				<label for="<?php $this->field_id( 'description_separator' . $name ); ?>" <?php echo ( 'pipe' === $name || 'dash' === $name ) ? $recommended : ''; ?>><?php echo $html ?></label>
@@ -124,7 +127,7 @@ switch ( $instance ) :
 
 		<h4><?php esc_html_e( 'Add descriptive Additions to Description', 'autodescription' ); ?></h4>
 		<p id="description-additions-toggle">
-			<label for="<?php $this->field_id( 'description_additions' ); ?>" class="toblock">
+			<label for="<?php $this->field_id( 'description_additions' ); ?>" class="tsf-toblock">
 				<input type="checkbox" name="<?php $this->field_name( 'description_additions' ); ?>" id="<?php $this->field_id( 'description_additions' ); ?>" <?php $this->is_conditional_checked( 'description_additions' ); ?> value="1" <?php checked( $this->get_field_value( 'description_additions' ) ); ?> />
 				<?php esc_html_e( 'Add Additions to automated description?', 'autodescription' ); ?>
 				<a href="<?php echo esc_url( $google_explanation ); ?>" target="_blank" class="description" title="<?php esc_attr_e( 'This creates good meta descriptions', 'autodescription' ); ?>">[?]</a>
@@ -133,7 +136,7 @@ switch ( $instance ) :
 
 		<h4><?php esc_html_e( 'Add Blogname to Additions', 'autodescription' ); ?></h4>
 		<p id="description-onblogname-toggle">
-			<label for="<?php $this->field_id( 'description_blogname' ); ?>" class="toblock">
+			<label for="<?php $this->field_id( 'description_blogname' ); ?>" class="tsf-toblock">
 				<input type="checkbox" name="<?php $this->field_name( 'description_blogname' ); ?>" id="<?php $this->field_id( 'description_blogname' ); ?>" <?php $this->is_conditional_checked( 'description_blogname' ); ?> value="1" <?php checked( $this->get_field_value( 'description_blogname' ) ); ?> />
 				<?php esc_html_e( 'Add Blogname to automated description additions?', 'autodescription' ); ?>
 			</label>

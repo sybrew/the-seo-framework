@@ -1,11 +1,11 @@
 /**
  * Dismissible Notices.
  */
-.seo-notice {
+.tsf-notice {
 	position: relative;
 }
 
-a.autodescription-dismiss {
+a.tsf-dismiss {
 	position: absolute;
 	top: 0;
 	left: 1px;
@@ -18,7 +18,7 @@ a.autodescription-dismiss {
 	text-decoration: none;
 }
 
-a.autodescription-dismiss:before {
+a.tsf-dismiss:before {
 	background: 0 0;
 	content: "\f153";
 	display: block;
@@ -31,7 +31,7 @@ a.autodescription-dismiss:before {
 	-moz-osx-font-smoothing: grayscale;
 }
 
-a.autodescription-dismiss:hover {
+a.tsf-dismiss:hover {
 	color: #c00;
 }
 
@@ -48,12 +48,12 @@ table.wp-list-table .column-price {
 	 width: 8%;
 }
 
-.ad-seo a {
+.tsf-seo-bar a {
 	text-decoration: none;
 	font-size: 13px;
 }
 
-#autodescription-title-wrap {
+#tsf-title-wrap {
 	position: relative;
 	display: block;
 	padding: 0;
@@ -61,7 +61,7 @@ table.wp-list-table .column-price {
 	width: auto;
 }
 
-#autodescription-title-offset {
+#tsf-title-offset {
 	visibility: hidden;
 	height: 0;
 	display: inline-block;
@@ -71,7 +71,7 @@ table.wp-list-table .column-price {
 	white-space: pre;
 }
 
-#autodescription-title-placeholder {
+#tsf-title-placeholder {
 	position: absolute;
 	color: #777;
 	-webkit-user-select: none;
@@ -88,7 +88,7 @@ table.wp-list-table .column-price {
 
 /* START Character Counters */
 
-.theseoframework-counter {
+.tsf-counter {
 	font-weight: 600;
 	cursor: pointer;
 	-webkit-user-select: none;
@@ -97,15 +97,15 @@ table.wp-list-table .column-price {
 	user-select: none;
 }
 
-span.ad-count-bad {
+span.tsf-count-bad {
 	color: #dd3811;
 }
 
-span.ad-count-okay {
+span.tsf-count-okay {
 	color: #ffa700;
 }
 
-span.ad-count-good {
+span.tsf-count-good {
 	color: #0cc34b;
 }
 
@@ -119,28 +119,28 @@ span.tsf-counter-one {
 	text-align: center;
 	vertical-align: baseline;
 }
-span.tsf-counter-one.ad-count-bad {
+span.tsf-counter-one.tsf-count-bad {
 	background-color: #dd3811;
 }
-span.tsf-counter-one.ad-count-okay {
+span.tsf-counter-one.tsf-count-okay {
 	background-color: #ffa700;
 }
-span.tsf-counter-one.ad-count-good {
+span.tsf-counter-one.tsf-count-good {
 	background-color: #0cc34b;
 }
 
 /* END Character Counters */
 
-#ad_seo {
+#tsf-seo-bar-wrap {
 	width: 18%;
 }
 
 /* WooCommerce fix */
-th:last-of-type#ad_seo {
+th:last-of-type#tsf-seo-bar-wrap {
 	width: 160px;
 }
 
-span.ad-seo {
+span.tsf-seo-bar {
 	display: block;
 	width: 95%;
 	max-width: 220px;
@@ -149,11 +149,11 @@ span.ad-seo {
 	text-shadow: 0 0 3px rgba(0,0,0,0.3);
 }
 
-span.ad-seo.ad-100 {
+span.tsf-seo-bar.tsf-100 {
 	width: 100%;
 }
 
-span.ad-bar-wrap {
+span.tsf-seo-bar-inner-wrap {
 	display: table;
 	width: 100%;
 	border-radius: 0;
@@ -165,12 +165,12 @@ span.ad-bar-wrap {
 }
 
 
-span.ad-sec-wrap {
+span.tsf-seo-bar-section-wrap {
 	display: table-cell;
 	border-collapse: collapse;
 }
 
-.ad-bar-wrap a {
+.tsf-seo-bar-inner-wrap a {
 	display: table;
 	width: 100%;
 	color: #fff;
@@ -183,60 +183,60 @@ span.ad-sec-wrap {
 	box-shadow: 2px 0px 0px -1px rgba(0,0,0,0.1) inset, -2px 0px 0px -1px rgba(0,0,0,0.1) inset;
 }
 
-span.ad-seo.pill,
-span.ad-seo.pill span.ad-bar-wrap {
+span.tsf-seo-bar.pill,
+span.tsf-seo-bar.pill span.tsf-seo-bar-inner-wrap {
 	border-radius: 30px;
 }
 
-span.ad-seo.pill span.ad-bar-wrap a {
+span.tsf-seo-bar.pill span.tsf-seo-bar-inner-wrap a {
 	box-shadow: 2px 6px 3px -2px rgba(255,255,255,.2) inset,-2px -6px 3px -2px rgba(41,41,41,.2) inset,0 0 1px rgba(41,41,41,.6);
 }
 
-.ad-seo.pill .ad-bar-wrap span.ad-sec-wrap:last-of-type,
-.ad-seo.pill .ad-bar-wrap span.ad-sec-wrap:last-of-type a {
+.tsf-seo-bar.pill .tsf-seo-bar-inner-wrap span.tsf-seo-bar-section-wrap:last-of-type,
+.tsf-seo-bar.pill .tsf-seo-bar-inner-wrap span.tsf-seo-bar-section-wrap:last-of-type a {
 	border-top-left-radius: 30px;
 	border-bottom-left-radius: 30px;
 }
 
-.ad-seo.pill .ad-bar-wrap span.ad-sec-wrap:first-of-type,
-.ad-seo.pill .ad-bar-wrap span.ad-sec-wrap:first-of-type a {
+.tsf-seo-bar.pill .tsf-seo-bar-inner-wrap span.tsf-seo-bar-section-wrap:first-of-type,
+.tsf-seo-bar.pill .tsf-seo-bar-inner-wrap span.tsf-seo-bar-section-wrap:first-of-type a {
 	border-top-right-radius: 30px;
 	border-bottom-right-radius: 30px;
 }
 
-.ad-100 {
+.tsf-100 {
 	width: 100%;
 }
 
-.ad-60 {
+.tsf-60 {
 	width: 60%;
 }
 
-.ad-50 {
+.tsf-50 {
 	width: 50%;
 }
 
-.ad-40 {
+.tsf-40 {
 	width: 40%;
 }
 
-.ad-33 {
+.tsf-33 {
 	width: 33.333%;
 }
 
-.ad-25 {
+.tsf-25 {
 	width: 25%;
 }
 
-.ad-20 {
+.tsf-20 {
 	width: 20%;
 }
 
-.ad-16 {
+.tsf-16 {
 	width: 16.666%;
 }
 
-.ad-12-5 {
+.tsf-12-5 {
 	width: 12.5%;
 }
 
@@ -244,27 +244,27 @@ span.ad-seo.pill span.ad-bar-wrap a {
 	width: 11.333%;
 }
 
-.ad-10 {
+.tsf-10 {
 	width: 10%;
 }
 
-.ad-seo-bad {
+.tsf-seo-bar-bad {
 	background-color: #dd3811;
 }
 
-.ad-seo-okay {
+.tsf-seo-bar-okay {
 	background-color: #ffa700;
 }
 
-.ad-seo-good {
+.tsf-seo-bar-good {
 	background-color: #0cc34b;
 }
 
-.ad-seo-unknown {
+.tsf-seo-bar-unknown {
 	background-color: #007bd2;
 }
 
-span.ad-seo .explanation-desc {
+span.tsf-seo-bar .tsf-explanation-desc {
 	position: absolute;
 	width: auto;
 	min-width: 90%;
@@ -281,11 +281,11 @@ span.ad-seo .explanation-desc {
 	text-align: left;
 }
 
-span.ad-seo .explanation-desc span {
+span.tsf-seo-bar .tsf-explanation-desc span {
 	text-decoration: underline;
 }
 
-span.ad-seo .explanation-desc div {
+span.tsf-seo-bar .tsf-explanation-desc div {
 	width: 0;
 	height: 0;
 	border-left: 12px solid transparent;
@@ -299,7 +299,7 @@ span.ad-seo .explanation-desc div {
 
 /* Mobile support */
 /* Needs more refining.... e.g. iPhone 6 = good, iPhone 6+ = offscreen */
-.ad_seo.column-ad_seo {
+.tsf-seo-bar-wrap.column-tsf-seo-bar-temp {
 	overflow: initial !important;
 	min-width: 160px;
 }
@@ -312,54 +312,54 @@ span.ad-seo .explanation-desc div {
 
 /* Site Settings */
 
-.autodescription-metaboxes {
+.tsf-metaboxes {
 	box-sizing: border-box;
 	max-width: 690px;
 	padding-bottom: 20px;
 }
 
-.autodescription-metaboxes .top-wrap {
+.tsf-metaboxes .tsf-top-wrap {
 	width: 100%;
 	display: inline-block;
 	vertical-align: top;
 }
 
-.autodescription-metaboxes .top-wrap > h1,
-.autodescription-metaboxes .top-wrap > h2 {
+.tsf-metaboxes .tsf-top-wrap > h1,
+.tsf-metaboxes .tsf-top-wrap > h2 {
 	float: left;
 }
 
-.autodescription-metaboxes .metabox-holder {
+.tsf-metaboxes .metabox-holder {
 	clear: both;
 }
 
-.autodescription-metaboxes .top-buttons {
+.tsf-metaboxes .tsf-top-buttons {
 	float: left;
 }
 
-.autodescription-metaboxes .bottom-buttons {
+.tsf-metaboxes .tsf-bottom-buttons {
 	text-align: left;
 }
 
-.autodescription-metaboxes .top-buttons input,
-.autodescription-metaboxes .bottom-buttons input {
+.tsf-metaboxes .tsf-top-buttons input,
+.tsf-metaboxes .tsf-bottom-buttons input {
 	margin-left: 10px;
 }
 
-.seo-notice {
+.tsf-notice {
 	clear: both;
 }
 
-.autodescription-metaboxes #title-separator,
-.autodescription-metaboxes #description-separator {
+.tsf-metaboxes #tsf-title-separator,
+.tsf-metaboxes #tsf-description-separator {
 	display: table;
 	width: 100%;
 	border-collapse: collapse;
 	border-spacing: 0;
 }
 
-.autodescription-metaboxes #title-separator input,
-.autodescription-metaboxes #description-separator input {
+.tsf-metaboxes #tsf-title-separator input,
+.tsf-metaboxes #tsf-description-separator input {
 	display: none;
 	float: left;
 	width: 0;
@@ -367,8 +367,8 @@ span.ad-seo .explanation-desc div {
 	opacity: 0;
 }
 
-.autodescription-metaboxes #title-separator label,
-.autodescription-metaboxes #description-separator label {
+.tsf-metaboxes #tsf-title-separator label,
+.tsf-metaboxes #tsf-description-separator label {
 	display: inline-block;
 	width: auto;
 	min-width: 28px;
@@ -385,48 +385,48 @@ span.ad-seo .explanation-desc div {
 	font-size: 16px;
 }
 
-.autodescription-metaboxes #title-separator label.recommended,
-.autodescription-metaboxes #description-separator label.recommended {
+.tsf-metaboxes #tsf-title-separator label.tsf-recommended,
+.tsf-metaboxes #tsf-description-separator label.tsf-recommended {
 	border: 1px solid #0cc34b;
 	box-shadow: -1px -1px 1px #0cc34b inset;
 }
 
-.autodescription-metaboxes #title-separator input:hover + label,
-.autodescription-metaboxes #title-separator label:hover,
-.autodescription-metaboxes #description-separator input:hover + label,
-.autodescription-metaboxes #description-separator label:hover {
+.tsf-metaboxes #tsf-title-separator input:hover + label,
+.tsf-metaboxes #tsf-title-separator label:hover,
+.tsf-metaboxes #tsf-description-separator input:hover + label,
+.tsf-metaboxes #tsf-description-separator label:hover {
 	box-shadow: 1px 1px 1px #aaa inset;
 	background-color: #fff;
 }
 
-.autodescription-metaboxes #title-separator input:checked + label,
-.autodescription-metaboxes #description-separator input:checked + label {
+.tsf-metaboxes #tsf-title-separator input:checked + label,
+.tsf-metaboxes #tsf-description-separator input:checked + label {
 	box-shadow: 1px 1px 1px #333 inset;
 	background-color: #fff;
 }
 
-.autodescription-metaboxes #title-location,
-.autodescription-metaboxes #home-title-location {
+.tsf-metaboxes #tsf-title-location,
+.tsf-metaboxes #tsf-home-title-location {
 	display: block;
 }
 
-.autodescription-metaboxes #title-location label span,
-.autodescription-metaboxes #home-title-location label span,
-.autodescription-metaboxes #twitter-cards label span {
+.tsf-metaboxes #tsf-title-location label span,
+.tsf-metaboxes #tsf-home-title-location label span,
+.tsf-metaboxes #tsf-twitter-cards label span {
 	display: inline-block;
 	min-width: 60px;
 	vertical-align: baseline;
 }
 
-.autodescription-metaboxes #twitter-cards label span {
+.tsf-metaboxes #tsf-twitter-cards label span {
 	min-width: 150px;
 }
 
-.autodescription-metaboxes #home-title-location label span.custom-title-js,
-.autodescription-metaboxes #home-title-location label span.custom-blogname-js,
-.autodescription-metaboxes #home-title-location label span.custom-tagline-js,
-.autodescription-metaboxes #title-location label .autodescription-sep-js,
-.autodescription-metaboxes #home-title-location label .autodescription-sep-js {
+.tsf-metaboxes #tsf-home-title-location label span.custom-title-js,
+.tsf-metaboxes #tsf-home-title-location label span.custom-blogname-js,
+.tsf-metaboxes #tsf-home-title-location label span.custom-tagline-js,
+.tsf-metaboxes #tsf-title-location label .autodescription-sep-js,
+.tsf-metaboxes #tsf-home-title-location label .autodescription-sep-js {
 	display: inline;
 	min-width: 0;
 	white-space: pre;
@@ -435,8 +435,8 @@ span.ad-seo .explanation-desc div {
 /**
  * Start Tabs.
  */
-.autodescription-metaboxes .seoframework-tab-no-js,
-.autodescription-metaboxes .seoframework-nav-tab-wrapper {
+.tsf-metaboxes .tsf-tab-no-js,
+.tsf-metaboxes .tsf-nav-tab-wrapper {
 	position: relative;
 	clear: both;
 	width: 100%;
@@ -447,7 +447,7 @@ span.ad-seo .explanation-desc div {
 	margin: -4px -12px;
 }
 
-.autodescription-metaboxes .seoframework-nav-tab {
+.tsf-metaboxes .tsf-nav-tab {
 	float: right;
 	border: 1px solid #ccc;
 	margin-right: .5em;
@@ -460,13 +460,13 @@ span.ad-seo .explanation-desc div {
 	font-weight: 600;
 }
 
-.autodescription-metaboxes .seoframework-dashicons-tabs {
+.tsf-metaboxes .tsf-dashicons-tabs {
 	font-size: initial;
 	display: inline;
 	vertical-align: text-bottom;
 }
 
-.autodescription-metaboxes .seoframework-tabs-radio {
+.tsf-metaboxes .tsf-tabs-radio {
 	display: none;
 	width: 0;
 	height: 0;
@@ -474,26 +474,26 @@ span.ad-seo .explanation-desc div {
 	left: -9001px;
 }
 
-.autodescription-metaboxes .seoframework-tabs-radio:checked + label,
-.autodescription-metaboxes .seoframework-active-tab {
+.tsf-metaboxes .tsf-tabs-radio:checked + label,
+.tsf-metaboxes .tsf-active-tab {
 	background-color: inherit;
 	border-bottom-color: #fff;
 	color: #000;
 }
 
-.autodescription-metaboxes .seoframework-tabs-content {
+.tsf-metaboxes .tsf-tabs-content {
 	margin: 1.33em auto 0;
 }
 
-.autodescription-metaboxes .seoframework-content-no-js {
+.tsf-metaboxes .seoframework-content-no-js {
 	margin: 1.33em auto;
 }
 
-body.js .autodescription-metaboxes .seoframework-tabs-content {
+body.js .tsf-metaboxes .tsf-tabs-content {
 	display: none;
 }
 
-body.js .autodescription-metaboxes .seoframework-tabs-content.seoframework-active-tab-content {
+body.js .tsf-metaboxes .tsf-tabs-content.tsf-active-tab-content {
 	display: block;
 }
 
@@ -501,48 +501,48 @@ body.js .autodescription-metaboxes .seoframework-tabs-content.seoframework-activ
  * End tabs.
  */
 
-.autodescription-metaboxes .seoframework-default-selected {
+.tsf-metaboxes .tsf-default-selected {
 	border-color: #1c9d38;
 }
 
-.autodescription-metaboxes .seoframework-default-selected:checked:before {
+.tsf-metaboxes .tsf-default-selected:checked:before {
 	color: #1c9d38;
 }
 
-.autodescription-metaboxes .seoframework-warning-selected {
+.tsf-metaboxes .tsf-warning-selected {
 	border-color: #dd3811;
 }
 
-.autodescription-metaboxes .seoframework-warning-selected:checked:before {
+.tsf-metaboxes .tsf-warning-selected:checked:before {
 	color: #dd3811;
 }
 
-.theseoframework-fields {
+.tsf-fields {
 	font-size: 13px;
 	line-height: 1.5;
 	margin: 1em 0;
 }
 
-.theseoframework-fields .toblock {
+.tsf-fields .tsf-toblock {
 	display: block;
 	width: 100%;
 	margin-bottom: 4px;
 }
 
-.theseoframework-fields p.description {
+.tsf-fields p.description {
 	margin: 7px 0 5px;
 	color: #666;
 }
 
-.theseoframework-option-spacer {
+.tsf-option-spacer {
 	margin: 1em 0;
 }
 
-.theseoframework-counter .theseoframework-ajax {
+.tsf-counter .tsf-ajax {
 	margin-right: 3px;
 }
 
-.theseoframework-ajax:before {
+.tsf-ajax:before {
 	display: inline-block;
 	line-height: 1;
 	font-family: dashicons;
@@ -553,26 +553,26 @@ body.js .autodescription-metaboxes .seoframework-tabs-content.seoframework-activ
 	content: "";
 }
 
-.theseoframework-ajax.theseoframework-loading:before {
+.tsf-ajax.tsf-loading:before {
 	content: "\f463";
 	color: #007bd2;
-	-webkit-animation: theseoframework-spin 1.5s linear infinite;
-	-moz-animation: theseoframework-spin 1.5s linear infinite;
-	-o-animation: theseoframework-spin 1.5s linear infinite;
-	animation: theseoframework-spin 1.5s linear infinite;
+	-webkit-animation: tsf-spin 1.5s linear infinite;
+	-moz-animation: tsf-spin 1.5s linear infinite;
+	-o-animation: tsf-spin 1.5s linear infinite;
+	animation: tsf-spin 1.5s linear infinite;
 }
 
-.theseoframework-ajax.theseoframework-error:before {
+.tsf-ajax.tsf-error:before {
 	content: "\f158";
 	color: #dd3811;
 }
 
-.theseoframework-ajax.theseoframework-success:before {
+.tsf-ajax.tsf-success:before {
 	content: "\f147";
 	color: #0cc34b;
 }
 
-@-webkit-keyframes theseoframework-spin {
+@-webkit-keyframes tsf-spin {
 	0% {
 		-webkit-transform: rotate( 0deg );
 	}
@@ -581,7 +581,7 @@ body.js .autodescription-metaboxes .seoframework-tabs-content.seoframework-activ
 	}
 }
 
-@keyframes theseoframework-spin {
+@keyframes tsf-spin {
 	0% {
 		transform: rotate( 0deg );
 	}
@@ -591,51 +591,40 @@ body.js .autodescription-metaboxes .seoframework-tabs-content.seoframework-activ
 }
 
 @media screen and (max-width: 782px) {
-	.autodescription-metaboxes p.theseoframework-fields,
-	.theseoframework-inpost-box p.theseoframework-fields {
+	.tsf-metaboxes p.tsf-fields,
+	.tsf-inpost-box p.tsf-fields {
 		line-height: 2.8
 	}
 
-	.autodescription-metaboxes #title-location label span,
-	.autodescription-metaboxes #home-title-location label span {
+	.tsf-metaboxes #tsf-title-location label span,
+	.tsf-metaboxes #tsf-home-title-location label span {
 		min-width: 40px;
 	}
 }
 
 @media screen and (max-width: 642px) {
-	.autodescription-metaboxes span.seoframework-nav-desktop {
+	.tsf-metaboxes span.tsf-nav-desktop {
 		display: none;
 	}
 }
 
-@media screen and (max-width: 600px) {
-	.autodescription-metaboxes h3.nav-tab-wrapper {
-		border-bottom: 1px solid #ccc;
-	}
-
-	.autodescription-metaboxes h3 .nav-tab {
-		margin-right: 7px;
-		margin-bottom: -1px;
-	}
-}
-
 @media screen and (max-width: 510px) {
-	span.ad-seo.ad-100 {
+	span.tsf-seo-bar.tsf-100 {
 		width: inherit;
 	}
 }
 
 /* Firefix */
 @-moz-document url-prefix() {
-	.autodescription-metaboxes .seoframework-default-selected {
+	.tsf-metaboxes .tsf-default-selected {
 		box-shadow: 0 0 2px 0 #1c9d38;
 	}
 
-	.autodescription-metaboxes .seoframework-warning-selected {
+	.tsf-metaboxes .tsf-warning-selected {
 		box-shadow: 0 0 2px 0 #dd3811;
 	}
 
-	.autodescription-metaboxes legend h4 {
+	.tsf-metaboxes legend h4 {
 		margin: 2px 0;
 	}
 }

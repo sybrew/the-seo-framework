@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+defined( 'ABSPATH' ) or die;
+
 /**
  * Class AutoDescription_Core
  *
@@ -221,8 +223,8 @@ class AutoDescription_Core {
 		if ( 'warning' === $type )
 			$type = 'notice-warning';
 
-		$notice = '<div class="notice ' . esc_attr( $type ) . ' seo-notice"><p>';
-		$notice .= '<a class="hide-if-no-js autodescription-dismiss" title="' . esc_attr__( 'Dismiss', 'AutoDescription' ) . '"></a>';
+		$notice = '<div class="notice ' . esc_attr( $type ) . ' tsf-notice"><p>';
+		$notice .= '<a class="hide-if-no-js tsf-dismiss" title="' . esc_attr__( 'Dismiss', 'AutoDescription' ) . '"></a>';
 		$notice .= '<strong>' . $message . '</strong>';
 		$notice .= '</p></div>';
 

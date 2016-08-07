@@ -1,4 +1,7 @@
 <?php
+
+defined( 'ABSPATH' ) or die;
+
 //* Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_title_metabox', $instance );
 
@@ -99,12 +102,12 @@ switch ( $instance ) :
 
 	case 'the_seo_framework_title_metabox_general' :
 		$title_separator = $this->get_separator_list();
-		$recommended = ' class="recommended" title="' . esc_attr__( 'Recommended', 'autodescription' ) . '"';
+		$recommended = ' class="tsf-recommended" title="' . esc_attr__( 'Recommended', 'autodescription' ) . '"';
 
 		?>
 		<fieldset>
 			<legend><h4><?php esc_html_e( 'Document Title Separator', 'autodescription' ); ?></h4></legend>
-			<p id="title-separator" class="theseoframework-fields">
+			<p id="tsf-title-separator" class="tsf-fields">
 			<?php foreach ( $title_separator as $name => $html ) { ?>
 				<input type="radio" name="<?php $this->field_name( 'title_seperator' ); ?>" id="<?php $this->field_id( 'title_seperator_' . $name ); ?>" value="<?php echo esc_attr( $name ); ?>" <?php checked( $this->get_field_value( 'title_seperator' ), $name ); ?> />
 				<label for="<?php $this->field_id( 'title_seperator_' . $name ); ?>" <?php echo in_array( $name, array( 'dash', 'pipe' ), true ) ? $recommended : ''; ?>><?php echo esc_html( $html ); ?></label>
@@ -130,15 +133,15 @@ switch ( $instance ) :
 
 			<?php $this->description( __( 'Determines which side the added title text will go on.', 'autodescription' ) ); ?>
 
-			<p id="title-location" class="theseoframework-fields">
-				<span class="toblock">
+			<p id="tsf-title-location" class="tsf-fields">
+				<span class="tsf-toblock">
 					<input type="radio" name="<?php $this->field_name( 'title_location' ); ?>" id="<?php $this->field_id( 'title_location_left' ); ?>" value="left" <?php checked( $this->get_field_value( 'title_location' ), 'left' ); ?> />
 					<label for="<?php $this->field_id( 'title_location_left' ); ?>">
 						<span><?php esc_html_e( 'Left:', 'autodescription' ); ?></span>
 						<?php echo $this->code_wrap_noesc( $example_left ) ?>
 					</label>
 				</span>
-				<span class="toblock">
+				<span class="tsf-toblock">
 					<input type="radio" name="<?php $this->field_name( 'title_location' ); ?>" id="<?php $this->field_id( 'title_location_right' ); ?>" value="right" <?php checked( $this->get_field_value( 'title_location' ), 'right' ); ?> />
 					<label for="<?php $this->field_id( 'title_location_right' ); ?>">
 						<span><?php esc_html_e( 'Right:', 'autodescription' ); ?></span>

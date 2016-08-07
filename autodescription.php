@@ -11,6 +11,8 @@
  * Domain Path: /language
  */
 
+defined( 'ABSPATH' ) or die;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)

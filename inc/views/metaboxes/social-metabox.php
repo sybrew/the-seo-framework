@@ -1,4 +1,7 @@
 <?php
+
+defined( 'ABSPATH' ) or die;
+
 //* Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_social_metabox', $instance );
 
@@ -193,15 +196,15 @@ switch ( $instance ) :
 		?>
 		<hr>
 
-		<fieldset id="twitter-cards">
+		<fieldset id="tsf-twitter-cards">
 			<legend><h4><?php esc_html_e( 'Twitter Card Type', 'autodescription' ); ?></h4></legend>
 			<?php $this->description_noesc( sprintf( esc_html__( 'What kind of Twitter card would you like to use? It will default to %s if no image is found.', 'autodescription' ), $this->code_wrap( 'summary' ) ) ); ?>
 
-			<p class="theseoframework-fields">
+			<p class="tsf-fields">
 			<?php
 				foreach ( $twitter_card as $type => $name ) {
 					?>
-					<span class="toblock">
+					<span class="tsf-toblock">
 						<input type="radio" name="<?php $this->field_name( 'twitter_card' ); ?>" id="<?php $this->field_id( 'twitter_card_' . $type ); ?>" value="<?php echo esc_attr( $type ); ?>" <?php checked( $this->get_field_value( 'twitter_card' ), $type ); ?> />
 						<label for="<?php $this->field_id( 'twitter_card_' . $type ); ?>">
 							<span><?php echo $this->code_wrap( $name ); ?></span>
@@ -219,7 +222,7 @@ switch ( $instance ) :
 		<?php $this->description( __( 'When the following options are filled in, Twitter might link your Twitter Site or Personal Profile when your post or page is shared.', 'autodescription' ) ); ?>
 
 		<p>
-			<label for="<?php $this->field_id( 'twitter_site' ); ?>" class="toblock">
+			<label for="<?php $this->field_id( 'twitter_site' ); ?>" class="tsf-toblock">
 				<strong><?php esc_html_e( "Your Website's Twitter Profile", 'autodescription' ); ?></strong>
 				<a href="<?php echo esc_url( 'https://twitter.com/home' ); ?>" target="_blank" class="description" title="<?php esc_html_e( 'Find your @username', 'autodescription' ); ?>">[?]</a>
 			</label>
@@ -229,7 +232,7 @@ switch ( $instance ) :
 		</p>
 
 		<p>
-			<label for="<?php $this->field_id( 'twitter_creator' ); ?>" class="toblock">
+			<label for="<?php $this->field_id( 'twitter_creator' ); ?>" class="tsf-toblock">
 				<strong><?php esc_html_e( 'Your Personal Twitter Profile', 'autodescription' ); ?></strong>
 				<a href="<?php echo esc_url( 'https://twitter.com/home' ); ?>" target="_blank" class="description" title="<?php esc_attr_e( 'Find your @username', 'autodescription' ); ?>">[?]</a>
 			</label>

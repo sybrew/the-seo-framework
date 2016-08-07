@@ -1,4 +1,7 @@
 <?php
+
+defined( 'ABSPATH' ) or die;
+
 /**
  * Returns whether PCRE/u (PCRE_UTF8 modifier) is available for use.
  *

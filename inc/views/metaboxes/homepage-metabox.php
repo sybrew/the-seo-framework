@@ -1,4 +1,7 @@
 <?php
+
+defined( 'ABSPATH' ) or die;
+
 //* Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_homepage_metabox', $instance );
 
@@ -177,7 +180,7 @@ switch ( $instance ) :
 
 		?>
 		<p>
-			<label for="<?php $this->field_id( 'homepage_title_tagline' ); ?>" class="toblock">
+			<label for="<?php $this->field_id( 'homepage_title_tagline' ); ?>" class="tsf-toblock">
 				<strong><?php printf( esc_html__( 'Custom %s Title Tagline', 'autodescription' ), $home_page_i18n ); ?></strong>
 			</label>
 		</p>
@@ -188,18 +191,18 @@ switch ( $instance ) :
 		<hr>
 
 		<p>
-			<label for="<?php $this->field_id( 'homepage_title' ); ?>" class="toblock">
+			<label for="<?php $this->field_id( 'homepage_title' ); ?>" class="tsf-toblock">
 				<strong><?php printf( esc_html__( 'Custom %s Title', 'autodescription' ), $home_page_i18n ); ?></strong>
 				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 50 to 55 characters', 'autodescription' ) ?>">[?]</a>
-				<span class="description theseoframework-counter">
+				<span class="description tsf-counter">
 					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="' . $this->field_id( 'homepage_title', false ) . '_chars">'. mb_strlen( $tit_len ) .'</span>' ); ?>
-					<span class="hide-if-no-js theseoframework-ajax"></span>
+					<span class="hide-if-no-js tsf-ajax"></span>
 				</span>
 			</label>
 		</p>
-		<p id="autodescription-title-wrap">
+		<p id="tsf-title-wrap">
 			<input type="text" name="<?php $this->field_name( 'homepage_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title' ); ?>" placeholder="<?php echo esc_attr( $home_title_placeholder ); ?>" value="<?php echo esc_attr( $home_title ); ?>" />
-			<span id="autodescription-title-offset" class="hide-if-no-js"></span><span id="autodescription-title-placeholder" class="hide-if-no-js"></span>
+			<span id="tsf-title-offset" class="hide-if-no-js"></span><span id="tsf-title-placeholder" class="hide-if-no-js"></span>
 		</p>
 		<?php
 		if ( $title_from_post_message ) {
@@ -209,12 +212,12 @@ switch ( $instance ) :
 		<hr>
 
 		<p>
-			<label for="<?php $this->field_id( 'homepage_description' ); ?>" class="toblock">
+			<label for="<?php $this->field_id( 'homepage_description' ); ?>" class="tsf-toblock">
 				<strong><?php printf( esc_html__( 'Custom %s Description', 'autodescription' ), $home_page_i18n ); ?></strong>
 				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1' ); ?>" target="_blank" title="<?php _e( 'Recommended Length: 145 to 155 characters', 'autodescription' ) ?>">[?]</a>
-				<span class="description theseoframework-counter">
+				<span class="description tsf-counter">
 					<?php printf( __( 'Characters Used: %s', 'autodescription' ), '<span id="' . $this->field_id( 'homepage_description', false ) . '_chars">'. mb_strlen( $desc_len ) .'</span>' ); ?>
-					<span class="hide-if-no-js theseoframework-ajax"></span>
+					<span class="hide-if-no-js tsf-ajax"></span>
 				</span>
 			</label>
 		</p>
@@ -247,15 +250,15 @@ switch ( $instance ) :
 			<legend><h4><?php esc_html_e( 'Document Title Additions Location', 'autodescription' ); ?></h4></legend>
 			<?php $this->description( __( 'Determines which side the added title text will go on.', 'autodescription' ) ); ?>
 
-			<p id="home-title-location" class="theseoframework-fields">
-				<span class="toblock">
+			<p id="tsf-home-title-location" class="tsf-fields">
+				<span class="tsf-toblock">
 					<input type="radio" name="<?php $this->field_name( 'home_title_location' ); ?>" id="<?php $this->field_id( 'home_title_location_left' ); ?>" value="left" <?php checked( $this->get_field_value( 'home_title_location' ), 'left' ); ?> />
 					<label for="<?php $this->field_id( 'home_title_location_left' ); ?>">
 						<span><?php esc_html_e( 'Left:', 'autodescription' ); ?></span>
 						<?php echo ( $example_left ) ? $this->code_wrap_noesc( $example_left ) : ''; ?>
 					</label>
 				</span>
-				<span class="toblock">
+				<span class="tsf-toblock">
 					<input type="radio" name="<?php $this->field_name( 'home_title_location' ); ?>" id="<?php $this->field_id( 'home_title_location_right' ); ?>" value="right" <?php checked( $this->get_field_value( 'home_title_location' ), 'right' ); ?> />
 					<label for="<?php $this->field_id( 'home_title_location_right' ); ?>">
 						<span><?php esc_html_e( 'Right:', 'autodescription' ); ?></span>
@@ -268,7 +271,7 @@ switch ( $instance ) :
 		<hr>
 		<h4><?php printf( esc_html__( '%s Tagline', 'autodescription' ), $home_page_i18n ); ?></h4>
 		<p id="title-tagline-toggle">
-			<label for="<?php $this->field_id( 'homepage_tagline' ); ?>" class="toblock">
+			<label for="<?php $this->field_id( 'homepage_tagline' ); ?>" class="tsf-toblock">
 				<input type="checkbox" name="<?php $this->field_name( 'homepage_tagline' ); ?>" id="<?php $this->field_id( 'homepage_tagline' ); ?>" <?php $this->is_conditional_checked( 'homepage_tagline' ); ?> value="1" <?php checked( $this->get_field_value( 'homepage_tagline' ) ); ?> />
 				<?php printf( esc_html__( 'Add site description (tagline) to the Title on the %s?', 'autodescription' ), $home_page_i18n ); ?>
 			</label>
@@ -296,7 +299,7 @@ switch ( $instance ) :
 		 * @since 2.2.4
 		 */
 		if ( $noindex_post || $nofollow_post || $noarchive_post ) {
-			$checked_home = ' - <a href="' . esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#theseoframework-inpost-box' ) ) . '" target="_blank" class="attention" title="' . esc_attr__( 'View Home Page Settings', 'autodescription' ) . '" >' . esc_html__( 'Checked in Page', 'autodescription' ) . '</a>';
+			$checked_home = ' - <a href="' . esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) ) . '" target="_blank" class="attention" title="' . esc_attr__( 'View Home Page Settings', 'autodescription' ) . '" >' . esc_html__( 'Checked in Page', 'autodescription' ) . '</a>';
 		}
 
 		?><h4><?php esc_html_e( 'Home Page Robots Meta Settings', 'autodescription' ); ?></h4><?php

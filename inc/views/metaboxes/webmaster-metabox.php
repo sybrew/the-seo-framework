@@ -1,4 +1,7 @@
 <?php
+
+defined( 'ABSPATH' ) or die;
+
 //* Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_webmaster_metabox', $instance );
 
@@ -20,7 +23,7 @@ switch ( $instance ) :
 		<hr>
 
 		<p>
-			<label for="<?php $this->field_id( 'google_verification' ); ?>" class="toblock">
+			<label for="<?php $this->field_id( 'google_verification' ); ?>" class="tsf-toblock">
 				<strong><?php esc_html_e( 'Google Webmaster Verification Code', 'autodescription' ); ?></strong>
 				<a href="<?php echo esc_url( $google_site_url ); ?>" target="_blank" class="description" title="<?php esc_attr_e( 'Get the Google Verification code', 'autodescription' ); ?>">[?]</a>
 			</label>
@@ -30,7 +33,7 @@ switch ( $instance ) :
 		</p>
 
 		<p>
-			<label for="<?php $this->field_id( 'bing_verification' ); ?>" class="toblock">
+			<label for="<?php $this->field_id( 'bing_verification' ); ?>" class="tsf-toblock">
 				<strong><?php esc_html_e( 'Bing Webmaster Verification Code', 'autodescription' ); ?></strong>
 				<a href="<?php echo esc_url( $bing_site_url ); ?>" target="_blank" class="description" title="<?php esc_attr_e( 'Get the Bing Verification Code', 'autodescription' ); ?>">[?]</a>
 			</label>
@@ -40,7 +43,7 @@ switch ( $instance ) :
 		</p>
 
 		<p>
-			<label for="<?php $this->field_id( 'yandex_verification' ); ?>" class="toblock">
+			<label for="<?php $this->field_id( 'yandex_verification' ); ?>" class="tsf-toblock">
 				<strong><?php esc_html_e( 'Yandex Webmaster Verification Code', 'autodescription' ); ?></strong>
 				<a href="<?php echo esc_url( $yandex_site_url ); ?>" target="_blank" class="description" title="<?php esc_attr_e( 'Get the Yandex Verification Code', 'autodescription' ); ?>">[?]</a>
 			</label>
@@ -50,7 +53,7 @@ switch ( $instance ) :
 		</p>
 
 		<p>
-			<label for="<?php $this->field_id( 'pint_verification' ); ?>" class="toblock">
+			<label for="<?php $this->field_id( 'pint_verification' ); ?>" class="tsf-toblock">
 				<strong><?php esc_html_e( 'Pinterest Analytics Verification Code', 'autodescription' ); ?></strong>
 				<a href="<?php echo esc_url( $pint_site_url ); ?>" target="_blank" class="description" title="<?php esc_attr_e( 'Get the Pinterest Verification Code', 'autodescription' ); ?>">[?]</a>
 			</label>

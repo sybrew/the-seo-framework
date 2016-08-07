@@ -1,4 +1,7 @@
 <?php
+
+defined( 'ABSPATH' ) or die;
+
 //* Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_sitemaps_metabox', $instance );
 
@@ -210,14 +213,14 @@ switch ( $instance ) :
 			<legend><h4><?php esc_html_e( 'Timestamp Format Settings', 'autodescription' ); ?></h4></legend>
 			<?php $this->description( __( 'Determines how specific the modification timestamp is.', 'autodescription' ) ); ?>
 
-			<p id="sitemaps-timestamp-format" class="theseoframework-fields">
-				<span class="toblock">
+			<p id="sitemaps-timestamp-format" class="tsf-fields">
+				<span class="tsf-toblock">
 					<input type="radio" name="<?php $this->field_name( 'sitemap_timestamps' ); ?>" id="<?php $this->field_id( 'sitemap_timestamps_0' ); ?>" value="0" <?php checked( $this->get_field_value( 'sitemap_timestamps' ), '0' ); ?> />
 					<label for="<?php $this->field_id( 'sitemap_timestamps_0' ); ?>">
 						<span title="<?php esc_attr_e( 'Complete date', 'autodescription' ); ?>"><?php echo $this->code_wrap( $timestamp_0 ); ?> [?]</span>
 					</label>
 				</span>
-				<span class="toblock">
+				<span class="tsf-toblock">
 					<input type="radio" name="<?php $this->field_name( 'sitemap_timestamps' ); ?>" id="<?php $this->field_id( 'sitemap_timestamps_1' ); ?>" value="1" <?php checked( $this->get_field_value( 'sitemap_timestamps' ), '1' ); ?> />
 					<label for="<?php $this->field_id( 'sitemap_timestamps_1' ); ?>">
 						<span title="<?php esc_attr_e( 'Complete date plus hours, minutes and timezone', 'autodescription' ); ?>"><?php echo $this->code_wrap( $timestamp_1 ); ?> [?]</span>

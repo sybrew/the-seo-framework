@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+defined( 'ABSPATH' ) or die;
+
 /**
  * This file holds functions for upgrading the plugin.
  * This file will only be called ONCE if the required version option is lower

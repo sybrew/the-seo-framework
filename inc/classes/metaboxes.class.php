@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+defined( 'ABSPATH' ) or die;
+
 /**
  * Class AutoDescription_Metaboxes
  *
@@ -122,7 +124,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 		 */
 		if ( $use_tabs ) {
 
-			?><div class="seoframework-nav-tab-wrapper hide-if-no-js" id="<?php echo esc_attr( $id . '-tabs-wrapper' ); ?>"><?php
+			?><div class="tsf-nav-tab-wrapper hide-if-no-js" id="<?php echo esc_attr( $id . '-tabs-wrapper' ); ?>"><?php
 				$count = 1;
 				foreach ( $tabs as $tab => $value ) {
 
@@ -133,14 +135,14 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 					$the_id = esc_attr( $id . '-tab-' . $tab );
 					$the_name = esc_attr( $id . '-tabs' );
 
-					$label_class = $checked ? ' seoframework-active-tab' : ''; // maybe
+					$label_class = $checked ? ' tsf-active-tab' : ''; // maybe
 
 					?>
 					<div class="seoframework-tab">
-						<input type="radio" class="seoframework-tabs-radio" id="<?php echo $the_id ?>" name="<?php echo $the_name ?>" <?php echo $checked ?>>
-						<label for="<?php echo $the_id; ?>" class="seoframework-nav-tab">
-							<?php echo $dashicon ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' seoframework-dashicons-tabs"></span>' : ''; ?>
-							<?php echo $name ? '<span class="seoframework-nav-desktop">' . esc_attr( $name ) . '</span>' : ''; ?>
+						<input type="radio" class="tsf-tabs-radio" id="<?php echo $the_id ?>" name="<?php echo $the_name ?>" <?php echo $checked ?>>
+						<label for="<?php echo $the_id; ?>" class="tsf-nav-tab">
+							<?php echo $dashicon ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' tsf-dashicons-tabs"></span>' : ''; ?>
+							<?php echo $name ? '<span class="tsf-nav-desktop">' . esc_attr( $name ) . '</span>' : ''; ?>
 						</label>
 					</div>
 					<?php
@@ -162,9 +164,9 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 			$the_name = $id . '-tabs-content';
 
 			//* Current tab for JS.
-			$current = 1 === $count ? ' seoframework-active-tab-content' : '';
+			$current = 1 === $count ? ' tsf-active-tab-content' : '';
 
-			?><div class="seoframework-tabs-content <?php echo esc_attr( $the_name . $current ); ?>" id="<?php echo esc_attr( $the_id ); ?>" ><?php
+			?><div class="tsf-tabs-content <?php echo esc_attr( $the_name . $current ); ?>" id="<?php echo esc_attr( $the_id ); ?>" ><?php
 				//* No-JS tabs.
 				if ( $use_tabs ) {
 					$dashicon = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
@@ -172,9 +174,9 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 
 					?>
 					<div class="hide-if-js seoframework-content-no-js">
-						<div class="seoframework-tab seoframework-tab-no-js">
-							<span class="seoframework-nav-tab seoframework-active-tab">
-								<?php echo $dashicon ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' seoframework-dashicons-tabs"></span>' : ''; ?>
+						<div class="seoframework-tab tsf-tab-no-js">
+							<span class="tsf-nav-tab tsf-active-tab">
+								<?php echo $dashicon ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' tsf-dashicons-tabs"></span>' : ''; ?>
 								<?php echo $name ? '<span>' . esc_attr( $name ) . '</span>' : ''; ?>
 							</span>
 						</div>

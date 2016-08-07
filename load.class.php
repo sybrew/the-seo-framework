@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+defined( 'ABSPATH' ) or die;
+
 add_action( 'admin_init', 'the_seo_framework_upgrade', 5 );
 /**
  * Determines whether the plugin needs an option upgrade.

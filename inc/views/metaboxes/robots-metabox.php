@@ -1,4 +1,7 @@
 <?php
+
+defined( 'ABSPATH' ) or die;
+
 //* Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_robots_metabox', $instance );
 
@@ -153,12 +156,12 @@ switch ( $instance ) :
 			$id = $type . '_' . $ro_value;
 
 			//* Add <hr> if it's 'site'
-			$checkboxes .= 'site' === $type ? '<hr class="theseoframework-option-spacer">' : '';
+			$checkboxes .= 'site' === $type ? '<hr class="tsf-option-spacer">' : '';
 
 			$checkboxes .= $this->make_checkbox( esc_html( $id ), $label, '', false );
 		}
 
-		?><p class="theseoframework-fields"><?php
+		?><p class="tsf-fields"><?php
 			//* Echo checkboxes.
 			$this->wrap_fields( $checkboxes, true );
 		?></p><?php

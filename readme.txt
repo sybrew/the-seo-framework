@@ -465,7 +465,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Method `AutoDescription_Generate::generate_home_page_description()` now has gained an extra parameter whether to escape the description. Defaults to true.
 	* Method `AutoDescription_Generate_Url::get_relative_term_url()` now adds the home URL directory (if any) to the URL prior to making it relative. Preventing directory installation errors.
 	* Method `AutoDescription_Admin_Init::the_counter_visualized()` has been renamed to `AutoDescription_Admin_Init::wp_ajax_update_counter_type()`. Without deprecation as it's marked private.
-	* TODO All CSS class prefixes have been set to `theseoframework`, which were prior `autodescription` or `seoframework`.
+	* TODO All CSS class prefixes have been set to `tsf`, which were prior `autodescription`, 'ad', 'theseoframework', `seoframework` or none at all.
 	* Method `AutoDescription_Admin_Init::is_menu_page()` has been slightly adjusted:
 		* It no longer checks for page id's on the first parameter, but only for page hooks.
 		* It now checks for page id's on the second parameter.
@@ -475,7 +475,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Function `the_seo_framework_dot_version()` now works as intended.
 	* Method `AutoDescription_Query::is_single()` first parameter can now be an array without crashing the site.
 	* Deprecated functions from 2.6.1 and onwards had their version and replacement notification switched. This has been fixed.
-	* TODO Try-hard hackers will now no longer cause otherwise inevitable fatal errors to pop up in your error log.
+	* Try-hard hackers will now no longer cause otherwise inevitable fatal errors to pop up in your error log.
 * **Removed:**
 	* Unused network admin methods. Network admin settings constants and filters are held intact for the future. The related changes are listed below.
 		* Method `AutoDescription_Adminpages::add_network_menu_link()`, without deprecation.

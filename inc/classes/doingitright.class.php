@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+defined( 'ABSPATH' ) or die;
+
 /**
  * Class AutoDescription_DoingItRight
  *
@@ -193,7 +195,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	 */
 	public function add_column( $columns ) {
 
-		$seocolumn = array( 'ad_seo' => 'SEO' );
+		$seocolumn = array( 'tsf-seo-bar-wrap' => 'SEO' );
 
 		$column_keys = array_keys( $columns );
 
@@ -268,7 +270,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			$post_id = $tax_id;
 		}
 
-		if ( 'ad_seo' === $column )
+		if ( 'tsf-seo-bar-wrap' === $column )
 			echo $this->post_status( $post_id, $type, true );
 
 	}
@@ -296,7 +298,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			$post_id = $tax_id;
 		}
 
-		if ( 'ad_seo' === $column ) {
+		if ( 'tsf-seo-bar-wrap' === $column ) {
 			$context = __( 'Refresh to see the SEO Bar status.', 'autodescription' );
 
 			$ajax_id = $column . $post_id;
@@ -442,7 +444,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	 */
 	protected function wrap_the_seo_bar_block( $args ) {
 
-		$wrap 	= '<span class="ad-sec-wrap ' . $args['width'] . '">'
+		$wrap 	= '<span class="tsf-seo-bar-section-wrap ' . $args['width'] . '">'
 					. '<a onclick="return false;" class="' . $args['class'] . '" aria-label="' . $args['notice'] . '" data-desc="' . $args['notice'] . '">'
 						. $args['indicator']
 					. '</a>'
@@ -476,17 +478,17 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			$width = $is_term ? ' ' . $classes['100%'] : '';
 			$pill = $this->pill_the_seo_bar() ? ' ' . $classes['pill'] : '';
 
-			$class = 'ad-seo clearfix' . $width . $pill;
+			$class = 'tsf-seo-bar clearfix' . $width . $pill;
 		}
 
 		if ( isset( $ajax_id ) ) {
 			//* Ajax handler.
 			$script = '<script>jQuery("#' . esc_js( $ajax_id ) . '").on( "hover click", autodescription.statusBarHover );</script>';
 
-			return sprintf( '<span class="%s" id="%s"><span class="ad-bar-wrap">%s</span></span>', $class, $ajax_id, $content ) . $script;
+			return sprintf( '<span class="%s" id="%s"><span class="tsf-seo-bar-inner-wrap">%s</span></span>', $class, $ajax_id, $content ) . $script;
 		}
 
-		return sprintf( '<span class="%s"><span class="ad-bar-wrap">%s</span></span>', $class, $content );
+		return sprintf( '<span class="%s"><span class="tsf-seo-bar-inner-wrap">%s</span></span>', $class, $content );
 	}
 
 	/**
@@ -1518,25 +1520,25 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	 */
 	public function get_the_seo_bar_classes() {
 		return array(
-			'bad' 		=> 'ad-seo-bad',
-			'okay' 		=> 'ad-seo-okay',
-			'good' 		=> 'ad-seo-good',
-			'unknown' 	=> 'ad-seo-unknown',
+			'bad' 		=> 'tsf-seo-bar-bad',
+			'okay' 		=> 'tsf-seo-bar-okay',
+			'good' 		=> 'tsf-seo-bar-good',
+			'unknown' 	=> 'tsf-seo-bar-unknown',
 
 			'pill' => 'pill',
 
-			'100%' 	=> 'ad-100',
-			'60%' 	=> 'ad-60',
-			'50%' 	=> 'ad-50',
-			'40%' 	=> 'ad-40',
-			'33%' 	=> 'ad-33',
-			'25%' 	=> 'ad-25',
-			'25%' 	=> 'ad-25',
-			'20%' 	=> 'ad-20',
-			'16%' 	=> 'ad-16',
-			'12.5%' => 'ad-12-5',
+			'100%' 	=> 'tsf-100',
+			'60%' 	=> 'tsf-60',
+			'50%' 	=> 'tsf-50',
+			'40%' 	=> 'tsf-40',
+			'33%' 	=> 'tsf-33',
+			'25%' 	=> 'tsf-25',
+			'25%' 	=> 'tsf-25',
+			'20%' 	=> 'tsf-20',
+			'16%' 	=> 'tsf-16',
+			'12.5%' => 'tsf-12-5',
 			'11%' 	=> 'ad-11',
-			'10%' 	=> 'ad-10',
+			'10%' 	=> 'tsf-10',
 		);
 	}
 

@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+defined( 'ABSPATH' ) or die;
+
 /**
  * Class AutoDescription_Siteoptions
  *
@@ -387,16 +389,16 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	public function admin() {
 
 		?>
-		<div class="wrap autodescription-metaboxes">
+		<div class="wrap tsf-metaboxes">
 		<form method="post" action="options.php">
 
 			<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
 			<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
 			<?php settings_fields( $this->settings_field ); ?>
 
-			<div class="top-wrap">
+			<div class="tsf-top-wrap">
 				<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-				<p class="top-buttons">
+				<p class="tsf-top-buttons">
 					<?php
 					submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
 					submit_button( $this->page_defaults['reset_button_text'], 'secondary autodescription-js-confirm-reset', $this->get_field_name( 'reset' ), false, array( 'id' => '' ) );
@@ -406,7 +408,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 
 			<?php do_action( "{$this->seo_settings_page_hook}_settings_page_boxes", $this->seo_settings_page_hook ); ?>
 
-			<div class="bottom-buttons">
+			<div class="tsf-bottom-buttons">
 				<?php
 				submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
 				submit_button( $this->page_defaults['reset_button_text'], 'secondary autodescription-js-confirm-reset', $this->get_field_name( 'reset' ), false, array( 'id' => '' ) );
@@ -551,9 +553,9 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 			$input = implode( "\r\n", $input );
 
 		if ( $echo ) {
-			echo '<div class="theseoframework-fields">' . "\r\n" . $input . "\r\n" . '</div>';
+			echo '<div class="tsf-fields">' . "\r\n" . $input . "\r\n" . '</div>';
 		} else {
-			return '<div class="theseoframework-fields">' . "\r\n" . $input . "\r\n" . '</div>';
+			return '<div class="tsf-fields">' . "\r\n" . $input . "\r\n" . '</div>';
 		}
 	}
 
@@ -574,9 +576,9 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		$description = $escape ? esc_html( $description ) : $description;
 		$label = $escape ? esc_html( $label ) : $label;
 
-		$description = $description ? '<p class="description theseoframework-option-spacer">' . $description . '</p>' : '';
+		$description = $description ? '<p class="description tsf-option-spacer">' . $description . '</p>' : '';
 
-		$output = '<span class="toblock">'
+		$output = '<span class="tsf-toblock">'
 					. '<label for="' . $this->get_field_id( $field_id ) . '">'
 						. '<input '
 							. 'type="checkbox" '
@@ -662,7 +664,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		$default = $this->get_default_settings( $key, $setting );
 
 		if ( 1 === $default )
-			$class = 'seoframework-default-selected';
+			$class = 'tsf-default-selected';
 
 		if ( $echo ) {
 			if ( $wrap ) {
@@ -696,7 +698,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		$warned = $this->get_warned_settings( $key, $setting );
 
 		if ( 1 === $warned )
-			$class = 'seoframework-warning-selected';
+			$class = 'tsf-warning-selected';
 
 		if ( $echo ) {
 			if ( $wrap ) {
@@ -789,7 +791,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		$default = $this->get_default_settings( $key, $setting );
 
 		if ( $value === $default )
-			$class = 'seoframework-default-selected';
+			$class = 'tsf-default-selected';
 
 		if ( $echo ) {
 			if ( $wrap ) {
