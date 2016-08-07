@@ -372,14 +372,14 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	}
 
 	/**
-	 * Determines if other Open Graph plugins are active.
+	 * Determines if other Open Graph or SEO plugins are active.
 	 *
 	 * @since 1.3.0
 	 *
 	 * Applies filters 'the_seo_framework_og_plugin_detected' : bool
 	 * @since 2.6.1
 	 *
-	 * @return bool OG plugin detected.
+	 * @return bool True if OG or SEO plugin detected.
 	 */
 	public function detect_og_plugin() {
 
@@ -393,7 +393,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		if ( $detected )
 			return $detected;
 
-		//* Old style filter.
+		//* Old style filter. Emits warning if used.
 		$detected = $this->has_og_plugin();
 		if ( isset( $detected ) )
 			return $detected;
@@ -618,6 +618,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 						return true;
 						break;
 					}
+					continue;
 				}
 			}
 
@@ -645,10 +646,11 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		//* Setup cache values
 		if ( is_string( $features ) ) {
-			if ( current_theme_supports( $features ) )
+			if ( current_theme_supports( $features ) ) {
 				return $cache[ $features ] = true;
-			else
+			} else {
 				return $cache[ $features ] = false;
+			}
 		} elseif ( is_array( $features ) ) {
 			foreach ( $features as $feature ) {
 				if ( current_theme_supports( $feature ) ) {
@@ -656,6 +658,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 					break;
 				} else {
 					$cache[ $feature ] = false;
+					continue;
 				}
 			}
 			return $cache[ $feature ];
@@ -732,14 +735,14 @@ class AutoDescription_Detect extends AutoDescription_Render {
 			if ( '' === $seplocation )
 				$seplocation = 'empty';
 
-			$title_output = ! isset( $title ) ? 'notset' : esc_html( $title );
-			$sep_output = ! isset( $sep ) ? 'notset' : esc_html( $sep );
-			$seplocation_output = ! isset( $seplocation ) ? 'notset' : esc_html( $seplocation );
+			$title_output = ! isset( $title ) ? 'notset' : $title;
+			$sep_output = ! isset( $sep ) ? 'notset' : $sep;
+			$seplocation_output = ! isset( $seplocation ) ? 'notset' : $seplocation;
 		}
 
 		//* Echo the HTML comment.
 		if ( $output )
-			echo '<!-- Title diw: "' . $title_output . '" : "' . $sep_output . '" : "' . $seplocation_output . '" -->' . "\r\n";
+			echo '<!-- Title diw: "' . esc_html( $title_output ) . '" : "' . esc_html( $sep_output ) . '" : "' . esc_html( $seplocation_output ) . '" -->' . "\r\n";
 
 		return;
 	}

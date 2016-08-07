@@ -274,7 +274,7 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 
 		if ( $this->is_404() ) {
 			$the_id = '_404_';
-		} elseif ( ( $this->is_front_page( $page_id ) ) || ( $this->is_admin() && $this->is_seo_settings_page() ) ) {
+		} elseif ( ( $this->is_front_page( $page_id ) ) || ( $this->is_admin() && $this->is_seo_settings_page( true ) ) ) {
 			//* Front/HomePage.
 			$the_id = $this->generate_front_page_cache_key();
 		} elseif ( $this->is_blog_page( $page_id ) ) {

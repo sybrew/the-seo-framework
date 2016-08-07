@@ -349,65 +349,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	 * @access private
 	 */
 	public function debug_output() {
-
-		if ( $this->debug_output ) {
-			if ( $this->the_seo_framework_debug_hidden ) {
-				echo "\r\n<!--\r\n:: THE SEO FRAMEWORK DEBUG :: \r\n" . $this->debug_output . "\r\n:: / THE SEO FRAMEWORK DEBUG ::\r\n-->\r\n";
-			} else {
-
-				$id = $this->get_the_real_ID();
-				$mdash = ' &mdash; ';
-				$term = $this->is_archive() ? $this->fetch_the_term( $id ) : '';
-				$taxonomy = isset( $term->taxonomy ) ? $term->taxonomy : '';
-
-				//* This will return 'Page' on all non-archive types (except the home page)
-				$type = ! $this->is_archive() && $this->is_front_page( $id ) ? 'Front Page' : $this->get_the_term_name( $term );
-				$cache_key = $this->generate_cache_key( $this->get_the_real_ID(), $taxonomy );
-
-				if ( $this->is_admin() ) {
-					?>
-					<div style="color:#444;font-family:Georgio,sans-serif;font-size:14px;clear:both;float:left;position:relative;width:calc( 100% - 200px );min-height:700px;padding:0;margin:20px 20px 40px 180px;overflow:hidden;border:1px solid #ccc;border-radius:3px;line-height:18px">
-						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom:2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">
-							SEO Debug Information
-							<?php
-							if ( $this->is_post_edit() || $this->is_term_edit() ) :
-								echo ' :: ';
-								echo 'Type: ' . $type;
-								echo $mdash . 'ID: ' . $id;
-								echo $mdash . 'Cache key: ' . $cache_key;
-							endif;
-							?>
-						</h3>
-						<div style="position:absolute;bottom:0;right:0;left:0;top:39px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;z-index:9001">
-							<?php echo $this->debug_header_output(); ?>
-							<?php echo $this->debug_query_output(); ?>
-							<?php echo $this->debug_output; ?>
-						</div>
-					</div>
-					<?php
-				} else {
-					?>
-					<style type="text/css">.wp-ui-notification{color:#fff;background-color:#d54e21}.code.highlight{font-family:Consolas,Monaco,monospace;font-size:14px;}.theseoframework-debug h3{font-size:18px;margin:18px 0}</style>
-					<div class="theseoframework-debug" style="color:#444;font-family:Georgio,sans-serif;font-size:14px;clear:both;float:left;position:relative;width:calc( 100% - 80px );min-height:700px;padding:0;margin:40px;overflow:hidden;border:1px solid #ccc;border-radius:3px;line-height:18px">
-						<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom:2px solid #aaa;position:absolute;z-index:1;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px">
-							SEO Debug Information
-							<?php
-							echo ' :: ';
-							echo 'Type: ' . $type;
-							echo $mdash . 'ID: ' . $id;
-							echo $mdash . 'Cache key: ' . $cache_key;
-							?>
-						</h3>
-						<div style="position:absolute;bottom:0;right:0;left:0;top:39px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;z-index:9001">
-							<?php echo $this->debug_header_output(); ?>
-							<?php echo $this->debug_query_output(); ?>
-							<?php echo $this->debug_output; ?>
-						</div>
-					</div>
-					<?php
-				}
-			}
-		}
+		$this->get_view( 'debug/output' );
 	}
 
 	/**
@@ -540,9 +482,9 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	public function debug_key_wrapper( $key, $ignore = false ) {
 
 		if ( $ignore || false === $this->the_seo_framework_debug_hidden )
-			return '<font color="chucknorris">' . esc_attr( (string) $key ) . '</font>';
+			return '<font color="chucknorris">' . esc_attr( $key ) . '</font>';
 
-		return esc_attr( (string) $key );
+		return esc_attr( $key );
 	}
 
 	/**
@@ -565,9 +507,9 @@ class AutoDescription_Debug extends AutoDescription_Core {
 			return html_entity_decode( $value );
 
 		if ( $ignore || false === $this->the_seo_framework_debug_hidden )
-			return '<span class="wp-ui-notification">' . esc_attr( (string) trim( $value ) ) . '</span>';
+			return '<span class="wp-ui-notification">' . esc_attr( trim( $value ) ) . '</span>';
 
-		return esc_attr( (string) $value );
+		return esc_attr( $value );
 	}
 
 	/**
@@ -622,11 +564,11 @@ class AutoDescription_Debug extends AutoDescription_Core {
 
 				if ( $this->is_admin() && 'admin_footer' !== current_action() ) {
 					echo "\r\n";
-					echo $this->the_seo_framework_debug_hidden ? $debug_key . ' action. ' : '<p>' . esc_html( $debug_key ) . '</p>';
+					echo $this->the_seo_framework_debug_hidden ? esc_html( $debug_key ) . ' action. ' : '<p>' . esc_html( $debug_key ) . '</p>';
 				}
 
 				$output .= "\r\n";
-				$output .= $this->the_seo_framework_debug_hidden ? $debug_key . ' output. ' : '<h3>' . esc_html( $debug_key ) . '</h3>';
+				$output .= $this->the_seo_framework_debug_hidden ? esc_html( $debug_key ) . ' output. ' : '<h3>' . esc_html( $debug_key ) . '</h3>';
 
 				if ( isset( $cached_args[ $method ] ) ) {
 					$args[] = array(
@@ -811,10 +753,10 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	 */
 	protected function debug_header_output() {
 
-		if ( $this->is_admin() && ! $this->is_term_edit() && ! $this->is_post_edit() && ! $this->is_seo_settings_page() )
+		if ( $this->is_admin() && ! $this->is_term_edit() && ! $this->is_post_edit() && ! $this->is_seo_settings_page( true ) )
 			return;
 
-		if ( $this->is_seo_settings_page() )
+		if ( $this->is_seo_settings_page( true ) )
 			add_filter( 'the_seo_framework_current_object_id', array( $this, 'get_the_front_page_ID' ) );
 
 		//* Start timer.
@@ -916,7 +858,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 		$is_wc_shop = $this->is_wc_shop();
 		$is_wc_product = $this->is_wc_product();
 		$is_year = $this->is_year();
-		$is_seo_settings_page = $this->is_seo_settings_page();
+		$is_seo_settings_page = $this->is_seo_settings_page( true );
 
 		//* Get all above vars, split them in two (true and false) and sort them by key names.
 		$vars = get_defined_vars();
@@ -931,10 +873,11 @@ class AutoDescription_Debug extends AutoDescription_Core {
 		foreach ( $current as $name => $value ) {
 			$type = '(' . gettype( $value ) . ')';
 
-			if ( is_bool( $value ) )
+			if ( is_bool( $value ) ) {
 				$value = $value ? 'true' : 'false';
-			else
+			} else {
 				$value = esc_attr( var_export( $value, true ) );
+			}
 
 			$value = $this->the_seo_framework_debug_hidden ? $type . ' ' . $value : '<font color="harrisonford">' . $type . ' ' . $value . '</font>';
 			$out = $name . ' => ' . $value;
@@ -944,10 +887,11 @@ class AutoDescription_Debug extends AutoDescription_Core {
 		foreach ( $not_current as $name => $value ) {
 			$type = '(' . gettype( $value ) . ')';
 
-			if ( is_bool( $value ) )
+			if ( is_bool( $value ) ) {
 				$value = $value ? 'true' : 'false';
-			else
+			} else {
 				$value = esc_attr( var_export( $value, true ) );
+			}
 
 			$value = $this->the_seo_framework_debug_hidden ? $type . ' ' . $value : '<font color="harrisonford">' . $type . ' ' . $value . '</font>';
 			$out = $name . ' => ' . $value;

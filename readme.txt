@@ -42,7 +42,7 @@ An accessible, unbranded and extremely fast SEO solution for any WordPress websi
 *Read [this guide](https://theseoframework.com/docs/seo-data-migration/) for transferring SEO Content using SEO Data Transporter.
 
 = Unbranded, Free and for the Professional =
-This plugin is unbranded! This even means that we don't even put the name "The SEO Framework" anywhere within the WordPress interface, aside from the plugin activation page.
+This plugin is unbranded! This means that we don't even put the name "The SEO Framework" anywhere within the WordPress interface, aside from the plugin activation page.
 This plugin makes great use of the default WordPress interface elements, like as if this plugin is part of WordPress. No ads, no nags.
 The small and hidden HTML comment can easily be disabled with the use of a filter.
 
@@ -327,6 +327,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* The term meta data is now handled through WordPress 4.4 or later functionality, if present.
 		* Note: From The SEO Framework 2.8.0, backwards compatibility towards version 2.6.6.2 or lower will be removed in order to clean up the database.
 		* Note: That update will not remove support for WordPress 3.8 onwards 4.4 term metadata. It only means that you won't be able to revert to old-style SEO metadata after updating either WordPress core or The SEO Framework.
+	* JavaScript performance counting characters and updating previews. TODO test (input instead of keyup/keydown/paste).
 * **Changed:**
 	* The SEO Settings page is now a submenu page, name "SEO Settings". This change is only visible when another submenu is added.
 	* The Twitter Image URL output is now wrapped in the `twitter:image` meta tag instead of `twitter:image:src`, as the latter seems to be deprecated.
@@ -454,6 +455,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* `AutoDescription_Metaboxes::sitemaps_metabox()`
 		* `AutoDescription_Metaboxes::feed_metabox()`
 	* All class `AutoDescription_Metaboxes` metabox output functions have been put into "views". These view files are included upon calling them. The files that are attached can only be used within the plugin scope. This massively reduces the plugin memory overhead.
+	* A few class `AutoDescription_Debug` output functions have been put into "views", for the same reason as above.
 	* Method `AutoDescription_TermData::get_term_data()` no longer returns `null` on author request.
 	* Method `AutoDescription_Query::get_the_real_ID()` no longer falls back to `get_the_ID()` as `get_queried_object_id()` covers that already.
 		* Note: This plugin shouldn't run within the loop on the front end. Nor should that function. It's completely cached the first time it runs (and when The SEO Framework caching engine is enabled).
@@ -469,9 +471,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* It now checks for page id's on the second parameter.
 		* It has been moved to class `AutoDescription_Query`. So it's now `AutoDescription_Query::is_menu_page()`.
 * **Fixed:**
+	/
 	* Function `the_seo_framework_dot_version()` now works as intended.
 	* Method `AutoDescription_Query::is_single()` first parameter can now be an array without crashing the site.
 	* Deprecated functions from 2.6.1 and onwards had their version and replacement notification switched. This has been fixed.
+	* TODO Try-hard hackers will now no longer cause otherwise inevitable fatal errors to pop up in your error log.
 * **Removed:**
 	* Unused network admin methods. Network admin settings constants and filters are held intact for the future. The related changes are listed below.
 		* Method `AutoDescription_Adminpages::add_network_menu_link()`, without deprecation.
@@ -548,7 +552,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 == Upgrade Notice ==
 
 = 2.7.0 =
-This version is required for the new Extension Manager plugin and includes many improvements.
+This version is required for the new [Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/) plugin and includes many improvements.
 
 = 2.6.4 =
 Highly recommended update that fixes various query checks and caches.

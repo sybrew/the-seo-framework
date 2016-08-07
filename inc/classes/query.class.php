@@ -965,26 +965,36 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 	/**
 	 * Determines whether we're on the SEO settings page.
+	 * WARNING: Do not ever use this as a safety check.
 	 *
 	 * @since 2.6.0
+	 * @since 2.7.0 Added secure parameter.
 	 *
+	 * @param bool $secure Whether to ignore the use of the second (insecure) parameter.
 	 * @return bool
 	 */
-	public function is_seo_settings_page() {
+	public function is_seo_settings_page( $secure = true ) {
 
-		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
+		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $secure ) )
 			return $cache;
+
+		if ( $secure ) {
+			$page = $this->is_menu_page( $this->seo_settings_page_hook );
+		} else {
+			$page = $this->is_menu_page( $this->seo_settings_page_hook, $this->seo_settings_page_slug );
+		}
 
 		$this->set_query_cache(
 			__METHOD__,
-			$page = $this->is_menu_page( $this->seo_settings_page_hook, $this->seo_settings_page_slug )
+			$page,
+			$secure
 		);
 
 		return $page;
 	}
 
 	/**
-	 * Checks the screen base file through global $page_hook or $_REQEUST.
+	 * Checks the screen base file through global $page_hook or $_GET.
 	 *
 	 * @since 2.2.2
 	 * @since 2.7.0 Added pageslug parameter.
@@ -1045,7 +1055,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		$_pages = $pages;
 
-		$post = $this->is_singular() || $this->is_front_page() ? get_post( $this->get_the_real_ID() ) : false;
+		$post = $this->is_singular() || $this->is_front_page() ? get_post( $this->get_the_real_ID() ) : null;
 
 		if ( is_object( $post ) ) {
 			$content = $post->post_content;
@@ -1141,10 +1151,11 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		static $can_cache_query = null;
 
 		if ( is_null( $can_cache_query ) ) {
-			if ( $this->can_cache_query() )
+			if ( $this->can_cache_query() ) {
 				$can_cache_query = true;
-			else
+			} else {
 				return null;
+			}
 		}
 
 		static $cache = array();

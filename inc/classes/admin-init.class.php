@@ -419,13 +419,11 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 
 			check_ajax_referer( 'autodescription-ajax-nonce', 'nonce' );
 
-			$post_val = intval( $_POST['val'] );
-
 			/**
 			 * Count up, reset to 0 if needed. We have 4 options: 0, 1, 2, 3
 			 * $_POST['val'] already contains updated number.
 			 */
-			$value = $post_val ? $post_val : $this->get_user_option( 0, 'counter_type', 3 ) + 1;
+			$value = isset( $_POST['val'] ) ? intval( $_POST['val'] ) : $this->get_user_option( 0, 'counter_type', 3 ) + 1;
 			$value = absint( $value );
 
 			if ( $value > 3 )

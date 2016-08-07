@@ -439,7 +439,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 */
 	protected function pre_output_site_updated_plugin_notice() {
 
-		if ( $this->is_seo_settings_page() ) {
+		if ( $this->is_seo_settings_page( false ) ) {
 			//* Redirect to current page if on options page to correct option values. Once.
 			if ( ! isset( $_REQUEST['seo-updated'] ) || 'true' !== $_REQUEST['seo-updated'] )
 				$this->admin_redirect( $this->seo_settings_page_slug, array( 'seo-updated' => 'true' ) );
@@ -471,7 +471,8 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 
 		$notice = $this->page_defaults['plugin_update_text'] . ' ' . $go_to_page;
 
-		echo $this->generate_dismissible_notice( $notice, 'updated' );
+		//* Already escaped.
+		$this->do_dismissible_notice( $notice, 'updated', false );
 
 	}
 
@@ -485,7 +486,6 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 *
 	 * @param string  $key       Option name.
 	 * @param boolean $use_cache Optional. Whether to use the cache value or not. Defaults to true.
-	 *
 	 * @return mixed The value of this $key in the database.
 	 */
 	public function get_option( $key, $use_cache = true ) {
@@ -495,11 +495,10 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	/**
 	 * Return current option array.
 	 *
-	 * Applies filters 'the_seo_framework_get_options' : boolean
-	 *
 	 * @since 2.6.0
 	 * @staticvar array $cache The option cache.
 	 *
+	 * @param string $setting The setting key.
 	 * @return array Options.
 	 */
 	public function get_all_options( $setting = null ) {
@@ -512,29 +511,28 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 		if ( is_null( $setting ) )
 			$setting = THE_SEO_FRAMEWORK_SITE_OPTIONS;
 
+		/**
+		 * Applies filters 'the_seo_framework_get_options' : boolean
+		 * @since 2.0.0
+		 */
 		return $cache[ $setting ] = apply_filters( 'the_seo_framework_get_options', get_option( $setting ), $setting );
 	}
 
 	/**
 	 * Return option from the options table and cache result.
 	 *
-	 * Applies `the_seo_framework_get_options` filters.
-	 * This filter retrieves the (previous) values from Genesis if exists.
-	 *
 	 * Values pulled from the database are cached on each request, so a second request for the same value won't cause a
 	 * second DB interaction.
-	 * @staticvar array $settings_cache
-	 * @staticvar array $options_cache
 	 *
 	 * @since 2.0.0
+	 * @staticvar array $settings_cache
+	 * @staticvar array $options_cache
+	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 *
 	 * @param string  $key        Option name.
 	 * @param string  $setting    Optional. Settings field name. Eventually defaults to null if not passed as an argument.
 	 * @param boolean $use_cache  Optional. Whether to use the cache value or not. Default is true.
-	 *
 	 * @return mixed The value of this $key in the database.
-	 *
-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 */
 	public function the_seo_framework_get_option( $key, $setting = null, $use_cache = true ) {
 
@@ -574,13 +572,11 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 * Return SEO options from the SEO options database.
 	 *
 	 * @since 2.2.2
-	 *
 	 * @uses $this->the_seo_framework_get_option() Return option from the options table and cache result.
 	 * @uses THE_SEO_FRAMEWORK_NETWORK_OPTIONS
 	 *
 	 * @param string  $key       Option name.
 	 * @param boolean $use_cache Optional. Whether to use the cache value or not. Defaults to true.
-	 *
 	 * @return mixed The value of this $key in the database.
 	 */
 	public function get_site_option( $key, $use_cache = true ) {
@@ -591,13 +587,11 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 * Return Default SEO options from the SEO options array.
 	 *
 	 * @since 2.2.5
-	 *
 	 * @uses $this->get_default_settings() Return option from the options table and cache result.
 	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 *
 	 * @param string  $key       Option name.
 	 * @param boolean $use_cache Optional. Whether to use the cache value or not. Defaults to true.
-	 *
 	 * @return mixed The value of this $key in the database.
 	 */
 	public function get_default_option( $key, $use_cache = true ) {
@@ -632,11 +626,9 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 * Return the Warned site options. Options which should be 'avoided' return true.
 	 *
 	 * @since 2.3.4
-	 *
-	 * Applies filters the_seo_framework_warned_site_options The warned site options array.
+	 * Applies filters 'the_seo_framework_warned_site_options' : array The warned site options array.
 	 *
 	 * @param array $args Additional warned options to filter.
-	 *
 	 * @return array The SEO Framework Warned Options
 	 */
 	protected function warned_site_options( $args = array() ) {
@@ -670,7 +662,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 		add_option( $this->settings_field, $this->default_site_options() );
 
 		//* If this page isn't the SEO Settings page, there's no need to check for a reset.
-		if ( false === $this->is_seo_settings_page() )
+		if ( false === $this->is_seo_settings_page( false ) )
 			return;
 
 		if ( $this->get_option( 'reset', $this->settings_field ) ) {
@@ -708,18 +700,15 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 * Get the default of any of the The SEO Framework settings.
 	 *
 	 * @since 2.2.4
-	 *
+	 * @staticvar array $defaults_cache
 	 * @uses $this->settings_field
 	 * @uses $this->default_site_options()
 	 *
 	 * @param string $key required The option name
 	 * @param string $setting optional The settings field
 	 * @param bool $use_cache optional Use the options cache or not. For debugging purposes.
-	 *
-	 * @staticvar array $defaults_cache
-	 *
-	 * @return 	int|bool|string default option
-	 *			int '-1' if option doesn't exist.
+	 * @return int|bool|string default option
+	 *         int '-1' if option doesn't exist.
 	 */
 	public function get_default_settings( $key, $setting = '', $use_cache = true ) {
 
@@ -759,18 +748,15 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 * Get the warned setting of any of the The SEO Framework settings.
 	 *
 	 * @since 2.3.4
-	 *
+	 * @staticvar array $warned_cache
 	 * @uses $this->settings_field
 	 * @uses $this->warned_site_options()
 	 *
 	 * @param string $key required The option name
 	 * @param string $setting optional The settings field
 	 * @param bool $use_cache optional Use the options cache or not. For debugging purposes.
-	 *
-	 * @staticvar array $warned_cache
-	 *
-	 * @return 	int 0|1 Whether the option is flagged as dangerous for SEO.
-	 *			int '-1' if option doesn't exist.
+	 * @return int 0|1 Whether the option is flagged as dangerous for SEO.
+	 *         int '-1' if option doesn't exist.
 	 */
 	public function get_warned_settings( $key, $setting = '', $use_cache = true ) {
 
@@ -914,7 +900,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	}
 
 	/**
-	 * Returns Facebook locales array.
+	 * Returns Facebook locales array values.
 	 *
 	 * @since 2.5.2
 	 * @see https://www.facebook.com/translations/FacebookLocales.xml

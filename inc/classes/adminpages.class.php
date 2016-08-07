@@ -438,17 +438,17 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	 */
 	public function notices() {
 
-		if ( false === $this->is_seo_settings_page() )
+		if ( false === $this->is_seo_settings_page( true ) )
 			return;
 
 		if ( isset( $_REQUEST['settings-updated'] ) && 'true' === $_REQUEST['settings-updated'] )
-			echo $this->generate_dismissible_notice( $this->page_defaults['saved_notice_text'], 'updated' );
+			$this->do_dismissible_notice( $this->page_defaults['saved_notice_text'], 'updated', true );
 		elseif ( isset( $_REQUEST['reset'] ) && 'true' === $_REQUEST['reset'] )
-			echo $this->generate_dismissible_notice( $this->page_defaults['reset_notice_text'], 'warning' );
+			$this->do_dismissible_notice( $this->page_defaults['reset_notice_text'], 'warning', true );
 		elseif ( isset( $_REQUEST['error'] ) && 'true' === $_REQUEST['error'] )
-			echo $this->generate_dismissible_notice( $this->page_defaults['error_notice_text'], 'error' );
+			$this->do_dismissible_notice( $this->page_defaults['error_notice_text'], 'error', true );
 		elseif ( isset( $_REQUEST['seo-updated'] ) && 'true' === $_REQUEST['seo-updated'] )
-			echo $this->generate_dismissible_notice( $this->page_defaults['plugin_update_text'], 'updated' );
+			$this->do_dismissible_notice( $this->page_defaults['plugin_update_text'], 'updated', true );
 
 	}
 
@@ -550,10 +550,11 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		if ( is_array( $input ) )
 			$input = implode( "\r\n", $input );
 
-		if ( $echo )
+		if ( $echo ) {
 			echo '<div class="theseoframework-fields">' . "\r\n" . $input . "\r\n" . '</div>';
-		else
+		} else {
 			return '<div class="theseoframework-fields">' . "\r\n" . $input . "\r\n" . '</div>';
+		}
 	}
 
 	/**
@@ -602,19 +603,22 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	 * @param string $description The descriptive on-hover title.
 	 * @param string $link The non-escaped link.
 	 * @param bool $echo Whether to echo or return.
-	 * @return HTML checkbox output.
+	 * @return HTML checkbox output if $echo is false.
 	 */
 	public function make_info( $description = '', $link = '', $echo = true ) {
 
-		if ( $link )
+		if ( $link ) {
 			$output = '<a href="' . esc_url( $link ) . '" target="_blank" title="' . esc_attr( $description ) . '">[?]</a>';
-		else
+		} else {
 			$output = '<span title="' . esc_attr( $description ) . '">[?]</span>';
+		}
 
-		if ( $echo )
+		if ( $echo ) {
+			//* Already escaped.
 			echo $output;
-		else
+		} else {
 			return $output;
+		}
 	}
 
 	/**
@@ -628,7 +632,7 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	}
 
 	/**
-	 * Include the necessary sortable metabox scripts.
+	 * Includes the necessary sortable metabox scripts.
 	 *
 	 * @since 2.2.2
 	 */
@@ -661,10 +665,11 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 			$class = 'seoframework-default-selected';
 
 		if ( $echo ) {
-			if ( $wrap )
-				printf( 'class="%s"', $class );
-			else
-				echo $class;
+			if ( $wrap ) {
+				printf( 'class="%s"', esc_attr( $class ) );
+			} else {
+				echo esc_attr( $class );
+			}
 		} else {
 			if ( $wrap )
 				return sprintf( 'class="%s"', $class );
@@ -694,10 +699,11 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 			$class = 'seoframework-warning-selected';
 
 		if ( $echo ) {
-			if ( $wrap )
-				printf( 'class="%s"', $class );
-			else
-				echo $class;
+			if ( $wrap ) {
+				printf( 'class="%s"', esc_attr( $class ) );
+			} else {
+				echo esc_attr( $class );
+			}
 		} else {
 			if ( $wrap )
 				return sprintf( 'class="%s"', $class );
@@ -748,10 +754,11 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		}
 
 		if ( $echo ) {
-			if ( $wrap )
-				printf( 'class="%s"', $class );
-			else
-				echo $class;
+			if ( $wrap ) {
+				printf( 'class="%s"', esc_attr( $class ) );
+			} else {
+				echo esc_attr( $class );
+			}
 		} else {
 			if ( $wrap )
 				return sprintf( 'class="%s"', $class );
@@ -785,10 +792,11 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 			$class = 'seoframework-default-selected';
 
 		if ( $echo ) {
-			if ( $wrap )
-				echo sprintf( 'class="%s"', $class );
-			else
-				echo $class;
+			if ( $wrap ) {
+				echo sprintf( 'class="%s"', esc_attr( $class ) );
+			} else {
+				echo esc_attr( $class );
+			}
 		} else {
 			if ( $wrap )
 				return sprintf( 'class="%s"', $class );
