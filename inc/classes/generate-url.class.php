@@ -378,7 +378,6 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 			if ( isset( $wp->request ) )
 				$url = trailingslashit( get_option( 'home' ) ) . $wp->request;
-
 		}
 
 		//* No permalink found.
@@ -390,15 +389,17 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 		if ( $paged ) {
 			if ( $this->pretty_permalinks ) {
-				if ( $this->is_singular() )
+				if ( $this->is_singular() ) {
 					$url = trailingslashit( $url ) . $paged;
-				else
+				} else {
 					$url = trailingslashit( $url ) . 'page/' . $paged;
+				}
 			} else {
-				if ( $this->is_singular() )
+				if ( $this->is_singular() ) {
 					$url = add_query_arg( 'page', $paged, $url );
-				else
+				} else {
 					$url = add_query_arg( 'paged', $paged, $url );
+				}
 			}
 		}
 

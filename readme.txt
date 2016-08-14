@@ -56,7 +56,7 @@ Page rendering time matters in SEO. This is where we lay focus on.
 * This plugin is written with massive and busy (multi-)sites in mind.
 * This plugin uses various caching methods which store heavy calculations in memory and the database.
 * This plugin is on average 1.49x to 1.95x faster compared to other popular SEO plugins.
-* This plugin consumes on average 1.42x more server resources than other popular SEO plugins in exchange for improved performance.
+* This plugin consumes on average 1.35x more server resources than other popular SEO plugins in exchange for improved performance.
 * This plugin has on average 1.30 to 1.60x more database interactions in exchange for improved performance.
 * And last but not least, this plugin always has 100% fewer advertisements. Let's keep it that way.
 
@@ -265,7 +265,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Announcements:**
 /
-* TODO Extension Manager.
+* TODO Extension Manager. (as promised since version 2.4.0)
 
 **The goal of this update:**
 
@@ -302,7 +302,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 1. Update to an actively supported PHP version. Did you know that PHP versions 5.5 and below are no longer updated against security vulnerabilities? Go [tell your hosting provider](https://wordpress.org/about/requirements/).
 1. Process your theme through [Theme Check](https://wordpress.org/plugins/theme-check/). If the theme you wish to use fails many of these checks, feel free to tell the theme author. Bad standards lead to bad performance, compatibility issues, and sometimes even security vulnerabilities.
 
-**Have thousands of categories and tags?**
+**Do you have thousands of categories and tags?**
 
 * No problem! After the plugin has been updated, the first admin request might take a while longer while converting all term data to the new data system.
 * After that, you're good to go. Enjoy!
@@ -314,27 +314,28 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **For everyone:**
 
 * **Added:**
-	* General compatibility and other improvements for the upcoming extension manager.
+	* General compatibility and other improvements for The SEO Framework's Extension Manager.
 	* Facebook image width and height meta tags output.
 	* Twitter image width and height meta tags output.
 	* Genesis Framework 2.3.0+ term metadata upgrade and fallback compatibility.
-	* TODO The sitemap now also flushes when changing the Site URL in the General Settings of WordPress Core.
-	* TODO Notification that the Robots.txt file can't be output under specific circumstances. (or simply add it anyway?)
 	* Breadcrumbs images as per new Google requirements. Currently, archives contain an empty value.
 * **Improved:**
-	* TODO The title and description counter type option is now bound to the user, rather than the site.
+	* The title and description counter type option is now bound to the user, rather than the site.
 	* Dismissible notices are now dismissible on every admin page when called.
 	* The term meta data is now handled through WordPress 4.4 or later functionality, if present.
 		* Note: From The SEO Framework 2.8.0, backwards compatibility towards version 2.6.6.2 or lower will be removed in order to clean up the database.
 		* Note: That update will not remove support for WordPress 3.8 onwards 4.4 term metadata. It only means that you won't be able to revert to old-style SEO metadata after updating either WordPress core or The SEO Framework.
-	* JavaScript performance counting characters and updating previews. TODO test (input instead of keyup/keydown/paste).
+	* JavaScript performance counting characters and updating previews, it's now "instant".
+	* BuddyPress' will no longer output a duplicated canonical URL.
+	* The dismissible notices created by The SEO Framework are now color-blind accessible through the addition of a small success, warning or failure icon.
+	* Removed duplicated JavaScript calls on the SEO Settings pageload for improved browser loading time.
+	* Leaving the SEO Settings page will now also generate a warning when you've pasted content into a text area.
 * **Changed:**
 	* The SEO Settings page is now a submenu page, name "SEO Settings". This change is only visible when another submenu is added.
 	* The Twitter Image URL output is now wrapped in the `twitter:image` meta tag instead of `twitter:image:src`, as the latter seems to be deprecated.
 * **Updated:**
 	/
 	* TODO POT translation file.
-	* TODO The settings metaboxes order has been reset. This ensures that the General Settings are shown first after updating. (Unless you've filtered it? TODO confirm)
 	* The counter type option has been reset as it's now handled per user instead of per site.
 	* Because the breadcrumbs have been updated, the LD+Json transient cache has been invalidated and will be built up again. Old values are cleaned up automatically by WordPress core.
 * **Removed:**
@@ -359,19 +360,19 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Note: Using WordPress 4.4 and later allows your website to have significant performance benefits in combination with this plugin from this update.
 		* Note: There's one known bug with WordPress 3.9 that causes a fatal error when adding a new term. After page reload the term is correctly added.
 			* This will not be fixed.
+	* Internet Explorer 9 and below are no longer supported.
 * **Fixed:**
-	/
 	* Core trac ticket [37505](https://core.trac.wordpress.org/ticket/37505#ticket).
 	* When saving the SEO Options, the counter type was reset. This has been fixed by placing the counter type option out of the plugins options scope.
 	* When updating the plugin, without added options, the update notification now really should no longer show up onwards from this update.
 		* Note: no new options have been added in this update. So it might just show up once more unintentionally.
-	* TODO When solely changing the counter type within the SEO Options, an "unsaved changes" prompt will no longer be displayed.
+	* When solely changing the counter type within the SEO Options, an "unsaved changes" prompt will no longer be displayed.
 	* When changing the WordPress Core tagline settings, the homepage description transient is now flushed, instead of the blog page (which could be on another page).
 	* WooCommerce Product Tag and Category IDs can no longer conflict with singular post type IDs.
 	* The LD+Json home URL output now doesn't add a trailing slash when your options don't have supplied one.
 	* When your home URL is on a subdirectory, the canonical term URL is now correct.
 	* When inputting HTML entities in the Custom Home Page Title, they're now correctly converted in the placeholder.
-	* TODO WPML's flags now display correctly again on WooCommerce product list overview.
+	* WPML's flags now display correctly again on WooCommerce product list overview.
 
 **For translators:**
 
@@ -409,10 +410,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* The debugger now shows Globals `multipage` and `numpages` variable output.
 	* CDATA array (JavaScript) `autodescriptionL10n` now contains a nonce string for AJAX requests, accessible through (JavaScript) `autodescriptionL10n.nonce` or (JavaScript) `autodescriptionL10n['nonce']` and (PHP) `check_ajax_referer( 'autodescription-ajax-nonce', 'nonce' ) ?>`.
 * **Improved:**
-	/
 	* Class contents `AutoDescription_Query` are now reworked to be much more effecient and predictable.
 	* Methods within `AutoDescription_Query` have been re-evaluated whether they use the WordPress query cache. If that holds true, the query object cache has been omitted from the said method.
-	* Reduced plugin memory usage by 16%. TODO confirm again on release version.
+	* Reduced plugin memory usage by 5% on the front-end.
 	* Shortened the transient name for the LD+Json output. This ensures high post ID number transients are working correctly on old WordPress database versions.
 	* This plugin has once more been profiled with xDebug to ensure the highest performance and eliminate culprits, even without Opcode Caching.
 	* Method that alter the term data on request will no longer run if the term data has been updated to WordPress 4.4 standards. The affected methods are:
@@ -431,16 +431,20 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Better PHP 5.3 compatibility has been introduces on URL parsing.
 		* Increased usage of the WordPress core caching system so themes and other plugins can benefit from earlier calls.
 			* This reduces memory usage and increases overal performance. Although not directly notable.
-	/
 	* Transient and Object cache key generation based on type request now run earlier and bypass the static cache for improved performance and reduced memory heap size.
 	* Method `AutoDescription_DoingItRight::init_columns_ajax()` now only runs on the applicable AJAX action, right before the tag is output. Instead of `admin_init`.
 	* Method `AutoDescription_DoingItRight::init_columns_ajax()` now adapts its capability check towards WordPress Core filters.
-	* TODO Maybe? Transform Theme DIR permanent transient into an option.
 	* Class autoloading support. Because of this, one class filenames have been changed to ease the autoload flow. This is:
 		* `admininit.class.php` is now `admin-init.class.php`. That's it!
 		* Note that autoloading, although now supported, is not implemented as it's not benefactory in terms of performance.
 	* (JavaScript) The placeholder variables are no longer escaped multiple times. Instead they're converted to `jQuery text()` so they can't run code anymore.
 	* The LD+JSon breadcrumbs now uses WordPress core cache to fetch the terms instead of a database query. Gaining 4x to 7x performance which also makes sure themes and widgets can use these findings.
+	* Method `AutoDescription_Core::generate_dismissible_notice()` has been modified:
+		* It can now escape all input.
+		* It can now show an icon in front of it depending on the notice type.
+		* It has two new parameters:
+			* `(bool) $a11y`, default true. Settings this to false will prevent adding accessibility icons in front of the notice.
+			* `(bool) $escape`, default true. Setting this to false will prevent escaping the output.
 * **Changed:**
 	* Variable 'AutoDescription_Siteoptions::seo_settings_page_slug' is now publicly accessible. Making it easier to add submenu items.
 	* All class `AutoDescription_Metaboxes` metabox output function parameters have been shifted by one to the right to conform to the `add_metabox()` function return arguments. The first parameter is now used for the (unavailable and unused) post object. The second must be an array. This change affects the following methods:
@@ -465,13 +469,12 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Method `AutoDescription_Generate::generate_home_page_description()` now has gained an extra parameter whether to escape the description. Defaults to true.
 	* Method `AutoDescription_Generate_Url::get_relative_term_url()` now adds the home URL directory (if any) to the URL prior to making it relative. Preventing directory installation errors.
 	* Method `AutoDescription_Admin_Init::the_counter_visualized()` has been renamed to `AutoDescription_Admin_Init::wp_ajax_update_counter_type()`. Without deprecation as it's marked private.
-	* TODO All CSS class prefixes have been set to `tsf`, which were prior `autodescription`, 'ad', 'theseoframework', `seoframework` or none at all.
+	* All CSS class prefixes have been set to `tsf`, which were prior `autodescription`, 'ad', 'theseoframework', `seoframework` or none at all.
 	* Method `AutoDescription_Admin_Init::is_menu_page()` has been slightly adjusted:
 		* It no longer checks for page id's on the first parameter, but only for page hooks.
 		* It now checks for page id's on the second parameter.
 		* It has been moved to class `AutoDescription_Query`. So it's now `AutoDescription_Query::is_menu_page()`.
 * **Fixed:**
-	/
 	* Function `the_seo_framework_dot_version()` now works as intended.
 	* Method `AutoDescription_Query::is_single()` first parameter can now be an array without crashing the site.
 	* Deprecated functions from 2.6.1 and onwards had their version and replacement notification switched. This has been fixed.
@@ -496,7 +499,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Method `AutoDescription_Core::in_array()`, as it is no longer of use.
 	* An useless easter egg in order to clean up code.
 	* (JavaScript) method `autodescription.escapeTags()` as it's no longer used internally.
-	* Compatibility functions that are also in WordPress core below version 3.9, this includes:
+	* PHP Compatibility functions that are also in WordPress core below version 3.9, this includes:
 		* `mb_substr` with its related function `_mb_substr`.
 * **Deprecated:**
 	* `AutoDescription_Metaboxes::homepage_metabox_general()`, use `AutoDescription_Metaboxes::homepage_metabox_general_tab()` instead.
@@ -544,6 +547,29 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * **Notes:**
 	* The SEO Framework settings page now has the slug `theseoframework-settings` instead of `autodescription-settings`. Use provided functions and variables in the `optionsapi.php` file to determine this state.
 	* Cleaned up code. A whole lot.
+
+**Planned for future releases:**
+
+Some features or improvements didn't make it in this update. The following changes are planned for future updates.
+
+* **Will Add:**
+	* The sitemap will also flush when changing the Site URL in the General Settings of WordPress Core.
+	* A general metabox will be added, which will contain timestamp output settings, sitename settings and more.
+	* A new filter for initial SEO Settings metaboxes order.
+	* A notification that the robots.txt file can't be output under very specific subdirectory circumstances and possibly added behavior.
+	* Author SEO will be placed into an extension. Basic functionality will be provided free of charge.
+	* Tabbed in-post metabox with social settings will be made available for extensions to use.
+	* Canonical URL SEO settings, like schemes (http/https) and more.
+	* SEO Bar settings (output) will be added.
+	* More title settings are planned within the on-page SEO settings.
+* **Will improve:**
+	* The option merging functionality introduced in 2.6.0 will be transformed into the plugin upgrade functionality introduced in 2.7.0.
+		* The 2.7.0 way is a more convinient and faster method of upgrading data.
+* **Will Change:**
+	* The settings metaboxes order will be reset. This ensures that the General Settings are shown first after updating.
+* **Will Fix:**
+	* `(string) the_seo_framework_site_options` will no longer negatively affect the JavaScript and CSS behavior.
+		* Instead, the option propagates through JavaScript CDATA and additional classnames have been added to prevent CSS conflict.
 
 = Full changelog =
 

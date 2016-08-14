@@ -474,7 +474,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 		$notice = $this->page_defaults['plugin_update_text'] . ' ' . $go_to_page;
 
 		//* Already escaped.
-		$this->do_dismissible_notice( $notice, 'updated', false );
+		$this->do_dismissible_notice( $notice, 'updated', true, false );
 
 	}
 

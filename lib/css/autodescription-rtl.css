@@ -5,6 +5,37 @@
 	position: relative;
 }
 
+.tsf-notice.tsf-show-icon p:before {
+	content: '';
+	margin-left: 12px;
+	background: 0 0;
+	display: inline-block;
+	font: 400 14px/16px dashicons;
+	speak: none;
+	height: 16px;
+	text-align: center;
+	vertical-align: middle;
+	width: 16px;
+	line-height: 14px;
+	-webkit-font-smoothing: antialiased;
+}
+
+.error.tsf-notice.tsf-show-icon p:before {
+	color: #dd3811;
+	content: "\f534";
+}
+
+.notice-warning.tsf-notice.tsf-show-icon p:before {
+	color: #ffa01b;
+	content: "\f227";
+}
+
+.updated.tsf-notice.tsf-show-icon p:before {
+	color: #0cc34b;
+	font-size: 16px;
+	content: "\f147";
+}
+
 a.tsf-dismiss {
 	position: absolute;
 	top: 0;
@@ -42,10 +73,14 @@ table.wp-list-table .column-name {
 	width: 15%;
 }
 
+/**
+ * WooCommerce fix
+ */
 table.wp-list-table .column-is_in_stock,
 table.wp-list-table .column-sku,
-table.wp-list-table .column-price {
-	 width: 8%;
+table.wp-list-table .column-price,
+table.wp-list-table .column-icl_translations {
+	width: 8%;
 }
 
 .tsf-seo-bar a {
@@ -423,8 +458,8 @@ span.tsf-seo-bar .tsf-explanation-desc div {
 }
 
 .tsf-metaboxes #tsf-home-title-location label span.custom-title-js,
-.tsf-metaboxes #tsf-home-title-location label span.custom-blogname-js,
-.tsf-metaboxes #tsf-home-title-location label span.custom-tagline-js,
+.tsf-metaboxes #tsf-home-title-location label span.tsf-custom-blogname-js,
+.tsf-metaboxes #tsf-home-title-location label span.tsf-custom-tagline-js,
 .tsf-metaboxes #tsf-title-location label .autodescription-sep-js,
 .tsf-metaboxes #tsf-home-title-location label .autodescription-sep-js {
 	display: inline;

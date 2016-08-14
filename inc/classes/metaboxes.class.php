@@ -138,7 +138,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 					$label_class = $checked ? ' tsf-active-tab' : ''; // maybe
 
 					?>
-					<div class="seoframework-tab">
+					<div class="tsf-tab">
 						<input type="radio" class="tsf-tabs-radio" id="<?php echo $the_id ?>" name="<?php echo $the_name ?>" <?php echo $checked ?>>
 						<label for="<?php echo $the_id; ?>" class="tsf-nav-tab">
 							<?php echo $dashicon ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' tsf-dashicons-tabs"></span>' : ''; ?>
@@ -174,7 +174,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 
 					?>
 					<div class="hide-if-js seoframework-content-no-js">
-						<div class="seoframework-tab tsf-tab-no-js">
+						<div class="tsf-tab tsf-tab-no-js">
 							<span class="tsf-nav-tab tsf-active-tab">
 								<?php echo $dashicon ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' tsf-dashicons-tabs"></span>' : ''; ?>
 								<?php echo $name ? '<span>' . esc_attr( $name ) . '</span>' : ''; ?>

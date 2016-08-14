@@ -208,14 +208,19 @@ class AutoDescription_Core {
 	 *
 	 * @since 2.6.0
 	 *
-	 * @param $message The notice message. Expected to be escaped.
-	 * @param $type The notice type : 'updated', 'error', 'warning'. Expected to be escaped.
+	 * @param string $message The notice message. Expected to be escaped if $escape is false.
+	 * @param string $type The notice type : 'updated', 'error', 'warning'. Expected to be escaped.
+	 * @param bool $a11y Whether to add an accessibility icon.
+	 * @param bool $escape Whether to escape the whole output.
 	 * @return string The dismissible error notice.
 	 */
-	public function generate_dismissible_notice( $message = '', $type = 'updated', $escape = true ) {
+	public function generate_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
 
 		if ( empty( $message ) )
 			return '';
+
+		if ( $escape )
+			$message = esc_html( $message );
 
 		//* Make sure the scripts are loaded.
 		$this->init_admin_scripts( true );
@@ -223,7 +228,9 @@ class AutoDescription_Core {
 		if ( 'warning' === $type )
 			$type = 'notice-warning';
 
-		$notice = '<div class="notice ' . esc_attr( $type ) . ' tsf-notice"><p>';
+		$a11y = $a11y ? 'tsf-show-icon' : '';
+
+		$notice = '<div class="notice ' . esc_attr( $type ) . ' tsf-notice ' . $a11y . '"><p>';
 		$notice .= '<a class="hide-if-no-js tsf-dismiss" title="' . esc_attr__( 'Dismiss', 'AutoDescription' ) . '"></a>';
 		$notice .= '<strong>' . $message . '</strong>';
 		$notice .= '</p></div>';
@@ -234,13 +241,15 @@ class AutoDescription_Core {
 	/**
 	 * Echos generated dismissible notice.
 	 *
-	 * @since 2.6.0
+	 * @since 2.7.0
 	 *
-	 * @param $message The notice message. Expected to be escaped.
+	 * @param $message The notice message. Expected to be escaped if $escape is false.
 	 * @param $type The notice type : 'updated', 'error', 'warning'. Expected to be escaped.
+	 * @param bool $a11y Whether to add an accessibility icon.
+	 * @param bool $escape Whether to escape the whole output.
 	 */
-	public function do_dismissible_notice( $message = '', $type = 'updated', $escape = true ) {
-		echo $this->generate_dismissible_notice( $message, $type, $escape );
+	public function do_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
+		echo $this->generate_dismissible_notice( $message, $type, $a11y, $escape );
 	}
 
 	/**

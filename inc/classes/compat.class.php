@@ -55,12 +55,16 @@ class AutoDescription_Compat extends AutoDescription_Debug {
 		//* Jetpack compat.
 		add_action( 'init', array( $this, 'jetpack_compat' ) );
 
+		//* BuddyPress compat.
+		add_action( 'init', array( $this, 'buddypress_compat' ) );
+
 	}
 
 	/**
 	 * Adds Genesis SEO compatibility.
 	 *
 	 * @since 2.6.0
+	 * @access private
 	 */
 	public function genesis_compat() {
 
@@ -78,6 +82,7 @@ class AutoDescription_Compat extends AutoDescription_Debug {
 	 * Removes the Genesis SEO meta boxes on the SEO Settings page
 	 *
 	 * @since 2.2.4
+	 * @access private
 	 *
 	 * @param array $plugins, overwritten as this filter will fire the
 	 * detection, regardless of other SEO plugins.
@@ -104,6 +109,7 @@ class AutoDescription_Compat extends AutoDescription_Debug {
 	 * Let's wait until everyone has updated before removing this.
 	 *
 	 * @since 2.6.0
+	 * @access private
 	 */
 	public function jetpack_compat() {
 
@@ -111,6 +117,21 @@ class AutoDescription_Compat extends AutoDescription_Debug {
 			//* Disable Jetpack Publicize's Open Graph.
 			add_filter( 'jetpack_enable_open_graph', '__return_false', 99 );
 		}
+	}
+
+	/**
+	 * Removes canonical URL from BuddyPress. Regardless of The SEO Framework settings.
+	 *
+	 * @since 2.7.0
+	 * @access private
+	 */
+	public function buddypress_compat() {
+
+		//* Nothing to do on admin.
+		if ( $this->is_admin() )
+			return;
+
+		remove_action( 'wp_head', '_bp_maybe_remove_rel_canonical', 8 );
 
 	}
 }

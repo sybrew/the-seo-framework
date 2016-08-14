@@ -240,8 +240,8 @@ switch ( $instance ) :
 		$blogname = $title_args['blogname'];
 		$sep = $this->get_separator( 'title' );
 
-		$example_left = '<em><span class="custom-title-js">' . $title . '</span><span class="custom-blogname-js"><span class="autodescription-sep-js"> ' . $sep . ' </span><span class="custom-tagline-js">' . $blogname . '</span></span></span></em>';
-		$example_right = '<em><span class="custom-blogname-js"><span class="custom-tagline-js">' . $blogname . '</span><span class="autodescription-sep-js"> ' . $sep . ' </span></span><span class="custom-title-js">' . $title . '</span></em>';
+		$example_left = '<em><span class="custom-title-js">' . $title . '</span><span class="tsf-custom-blogname-js"><span class="autodescription-sep-js"> ' . $sep . ' </span><span class="tsf-custom-tagline-js">' . $blogname . '</span></span></span></em>';
+		$example_right = '<em><span class="tsf-custom-blogname-js"><span class="tsf-custom-tagline-js">' . $blogname . '</span><span class="autodescription-sep-js"> ' . $sep . ' </span></span><span class="custom-title-js">' . $title . '</span></em>';
 
 		$home_page_i18n = esc_html__( 'Home Page', 'autodescription' );
 
@@ -270,7 +270,7 @@ switch ( $instance ) :
 
 		<hr>
 		<h4><?php printf( esc_html__( '%s Tagline', 'autodescription' ), $home_page_i18n ); ?></h4>
-		<p id="title-tagline-toggle">
+		<p id="tsf-title-tagline-toggle">
 			<label for="<?php $this->field_id( 'homepage_tagline' ); ?>" class="tsf-toblock">
 				<input type="checkbox" name="<?php $this->field_name( 'homepage_tagline' ); ?>" id="<?php $this->field_id( 'homepage_tagline' ); ?>" <?php $this->is_conditional_checked( 'homepage_tagline' ); ?> value="1" <?php checked( $this->get_field_value( 'homepage_tagline' ) ); ?> />
 				<?php printf( esc_html__( 'Add site description (tagline) to the Title on the %s?', 'autodescription' ), $home_page_i18n ); ?>

@@ -299,7 +299,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		}
 
 		if ( 'tsf-seo-bar-wrap' === $column ) {
-			$context = __( 'Refresh to see the SEO Bar status.', 'autodescription' );
+			$context = esc_html__( 'Refresh to see the SEO Bar status.', 'autodescription' );
 
 			$ajax_id = $column . $post_id;
 
@@ -395,7 +395,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 			if ( $is_term ) {
 				//* We're on a term or taxonomy. Try fetching names. Default back to "Page".
-				$term = get_term_by( 'id', $post_id, $type, OBJECT );
+				$term = $this->fetch_the_term( $post_id );
 				$post_i18n = $this->get_the_term_name( $term );
 
 				/**
@@ -404,7 +404,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 				 *
 				 * @since 2.3.1
 				 */
-				if ( $is_term && $this->is_post_type_page( $type ) )
+				if ( $this->is_post_type_page( $type ) )
 					$is_term = false;
 			}
 
@@ -419,12 +419,14 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 				'type' => $type,
 			);
 
-			if ( $is_term )
+			if ( $is_term ) {
 				return $this->the_seo_bar_term( $args );
-			else
+			} else {
 				return $this->the_seo_bar_page( $args );
+			}
 		} else {
 			$context = esc_attr__( 'Failed to fetch post ID.', 'autodescription' );
+
 			return $this->post_status_special( $context, '!', 'bad' );
 		}
 	}
@@ -478,14 +480,14 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			$width = $is_term ? ' ' . $classes['100%'] : '';
 			$pill = $this->pill_the_seo_bar() ? ' ' . $classes['pill'] : '';
 
-			$class = 'tsf-seo-bar clearfix' . $width . $pill;
+			$class = esc_attr( 'tsf-seo-bar clearfix' . $width . $pill );
 		}
 
 		if ( isset( $ajax_id ) ) {
 			//* Ajax handler.
 			$script = '<script>jQuery("#' . esc_js( $ajax_id ) . '").on( "hover click", autodescription.statusBarHover );</script>';
 
-			return sprintf( '<span class="%s" id="%s"><span class="tsf-seo-bar-inner-wrap">%s</span></span>', $class, $ajax_id, $content ) . $script;
+			return sprintf( '<span class="%s" id="%s"><span class="tsf-seo-bar-inner-wrap">%s</span></span>', $class, esc_attr( $ajax_id ), $content ) . $script;
 		}
 
 		return sprintf( '<span class="%s"><span class="tsf-seo-bar-inner-wrap">%s</span></span>', $class, $content );
@@ -520,11 +522,11 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		if ( $redirect || $noindex )
 			return $this->the_seo_bar_blocked( array( 'is_term' => $is_term, 'redirect' => $redirect, 'noindex' => $noindex, 'post_i18n' => $post ) );
 
-		$title_notice		= $this->the_seo_bar_title_notice( $args );
-		$description_notice	= $this->the_seo_bar_description_notice( $args );
-		$index_notice 		= $this->the_seo_bar_index_notice( $args );
-		$follow_notice		= $this->the_seo_bar_follow_notice( $args );
-		$archive_notice		= $this->the_seo_bar_archive_notice( $args );
+		$title_notice       = $this->the_seo_bar_title_notice( $args );
+		$description_notice = $this->the_seo_bar_description_notice( $args );
+		$index_notice       = $this->the_seo_bar_index_notice( $args );
+		$follow_notice      = $this->the_seo_bar_follow_notice( $args );
+		$archive_notice     = $this->the_seo_bar_archive_notice( $args );
 
 		$content = $title_notice . $description_notice . $index_notice . $follow_notice . $archive_notice;
 
@@ -565,12 +567,12 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		if ( $redirect || $noindex )
 			return $this->the_seo_bar_blocked( array( 'is_term' => $is_term, 'redirect' => $redirect, 'noindex' => $noindex, 'post_i18n' => $post ) );
 
-		$title_notice		= $this->the_seo_bar_title_notice( $args );
-		$description_notice	= $this->the_seo_bar_description_notice( $args );
-		$index_notice 		= $this->the_seo_bar_index_notice( $args );
-		$follow_notice		= $this->the_seo_bar_follow_notice( $args );
-		$archive_notice		= $this->the_seo_bar_archive_notice( $args );
-		$redirect_notice	= $this->the_seo_bar_redirect_notice( $args );
+		$title_notice       = $this->the_seo_bar_title_notice( $args );
+		$description_notice = $this->the_seo_bar_description_notice( $args );
+		$index_notice       = $this->the_seo_bar_index_notice( $args );
+		$follow_notice      = $this->the_seo_bar_follow_notice( $args );
+		$archive_notice     = $this->the_seo_bar_archive_notice( $args );
+		$redirect_notice    = $this->the_seo_bar_redirect_notice( $args );
 
 		$content = $title_notice . $description_notice . $index_notice . $follow_notice . $archive_notice . $redirect_notice;
 
@@ -705,16 +707,18 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		}
 
 		$title_is_from_custom_field = (bool) $title_custom_field;
-		if ( $title_is_from_custom_field )
+		if ( $title_is_from_custom_field ) {
 			$title = $this->title( '', '', '', array( 'term_id' => $post_id, 'page_on_front' => $page_on_front, 'get_custom_field' => true ) );
-		else
+		} else {
 			$title = $this->title( '', '', '', array( 'term_id' => $post_id, 'page_on_front' => $page_on_front, 'get_custom_field' => false ) );
+		}
 
 		$description_is_from_custom_field = (bool) $description_custom_field;
-		if ( $description_is_from_custom_field )
+		if ( $description_is_from_custom_field ) {
 			$description = $this->generate_description( '', array( 'id' => $post_id, 'get_custom_field' => true ) );
-		else
+		} else {
 			$description = $this->generate_description( '', array( 'id' => $post_id, 'get_custom_field' => false ) );
+		}
 
 		$nofollow = $this->is_checked( $nofollow );
 		$noarchive = $this->is_checked( $noarchive );
@@ -741,8 +745,8 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 		//* Fetch data
 		$data = $this->the_seo_bar_data( $args );
-		$title 						= $data['title'];
-		$title_is_from_custom_field	= $data['title_is_from_custom_field'];
+		$title = $data['title'];
+		$title_is_from_custom_field = $data['title_is_from_custom_field'];
 
 		//* Fetch CSS classes.
 		$classes = $this->get_the_seo_bar_classes();
@@ -750,10 +754,10 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 		//* Fetch i18n and put in vars
 		$i18n = $this->get_the_seo_bar_i18n();
-		$title_short	= $i18n['title_short'];
-		$generated		= $i18n['generated_short'];
-		$and_i18n		= $i18n['and'];
-		$but_i18n		= $i18n['but'];
+		$title_short = $i18n['title_short'];
+		$generated   = $i18n['generated_short'];
+		$and_i18n    = $i18n['and'];
+		$but_i18n    = $i18n['but'];
 
 		//* Initialize notice.
 		$notice = $i18n['title'];
@@ -994,17 +998,17 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		$data = $this->the_seo_bar_data( $args );
 
 		$classes = $this->get_the_seo_bar_classes();
-		$unknown	= $classes['unknown'];
-		$bad		= $classes['bad'];
-		$okay		= $classes['okay'];
-		$good		= $classes['good'];
-		$ad_125		= $classes['12.5%'];
+		$unknown = $classes['unknown'];
+		$bad     = $classes['bad'];
+		$okay    = $classes['okay'];
+		$good    = $classes['good'];
+		$ad_125  = $classes['12.5%'];
 
 		$i18n = $this->get_the_seo_bar_i18n();
-		$index_short	= $i18n['index_short'];
-		$but_i18n		= $i18n['but'];
-		$and_i18n		= $i18n['and'];
-		$ind_notice		= $i18n['index'];
+		$index_short = $i18n['index_short'];
+		$but_i18n    = $i18n['but'];
+		$and_i18n    = $i18n['and'];
+		$ind_notice  = $i18n['index'];
 
 		$ind_notice .= ' ' . sprintf( esc_attr__( '%s is being indexed.', 'autodescription' ), $post_i18n );
 		$ind_class = $good;
@@ -1070,9 +1074,9 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 		$ind_wrap_args = array(
 			'indicator' => $index_short,
-			'notice' => $ind_notice,
-			'width' => $ad_125,
-			'class' => $ind_class,
+			'notice'    => $ind_notice,
+			'width'     => $ad_125,
+			'class'     => $ind_class,
 		);
 
 		$index_notice = $this->wrap_the_seo_bar_block( $ind_wrap_args );
@@ -1134,17 +1138,17 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		$nofollow = $data['nofollow'];
 
 		$classes = $this->get_the_seo_bar_classes();
-		$unknown	= $classes['unknown'];
-		$bad		= $classes['bad'];
-		$okay		= $classes['okay'];
-		$good		= $classes['good'];
-		$ad_125		= $classes['12.5%'];
+		$unknown = $classes['unknown'];
+		$bad     = $classes['bad'];
+		$okay    = $classes['okay'];
+		$good    = $classes['good'];
+		$ad_125  = $classes['12.5%'];
 
 		$i18n = $this->get_the_seo_bar_i18n();
-		$follow_i18n	= $i18n['follow'];
-		$but_i18n		= $i18n['but'];
-		$and_i18n		= $i18n['and'];
-		$follow_short	= $i18n['follow_short'];
+		$follow_i18n  = $i18n['follow'];
+		$but_i18n     = $i18n['but'];
+		$and_i18n     = $i18n['and'];
+		$follow_short = $i18n['follow_short'];
 
 		if ( $nofollow ) {
 			$fol_notice = $follow_i18n . ' ' . sprintf( esc_attr__( "%s links aren't being followed.", 'autodescription' ), $post_i18n );
@@ -1212,9 +1216,9 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 		$fol_wrap_args = array(
 			'indicator' => $follow_short,
-			'notice' => $fol_notice,
-			'width' => $ad_125,
-			'class' => $fol_class,
+			'notice'    => $fol_notice,
+			'width'     => $ad_125,
+			'class'     => $fol_class,
 		);
 
 		$follow_notice = $this->wrap_the_seo_bar_block( $fol_wrap_args );
@@ -1242,17 +1246,17 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		$noarchive	= $data['noarchive'];
 
 		$classes = $this->get_the_seo_bar_classes();
-		$unknown	= $classes['unknown'];
-		$bad		= $classes['bad'];
-		$okay		= $classes['okay'];
-		$good		= $classes['good'];
-		$ad_125		= $classes['12.5%'];
+		$unknown = $classes['unknown'];
+		$bad     = $classes['bad'];
+		$okay    = $classes['okay'];
+		$good    = $classes['good'];
+		$ad_125  = $classes['12.5%'];
 
 		$i18n = $this->get_the_seo_bar_i18n();
-		$archive_i18n	= $i18n['archive'];
-		$but_i18n		= $i18n['but'];
-		$and_i18n		= $i18n['and'];
-		$archive_short	= $i18n['archive_short'];
+		$archive_i18n  = $i18n['archive'];
+		$but_i18n      = $i18n['but'];
+		$and_i18n      = $i18n['and'];
+		$archive_short = $i18n['archive_short'];
 
 		if ( $noarchive ) {
 			$arc_notice = $archive_i18n . ' ' . sprintf( esc_attr__( "Search Engine aren't allowed to archive this %s.", 'autodescription' ), $post_low );
@@ -1478,9 +1482,9 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	protected function get_the_seo_bar_title_length_warning( $tit_len, $class ) {
 
 		$classes = $this->get_the_seo_bar_classes();
-		$bad	= $classes['bad'];
-		$okay	= $classes['okay'];
-		$good	= $classes['good'];
+		$bad  = $classes['bad'];
+		$okay = $classes['okay'];
+		$good = $classes['good'];
 
 		$but = false;
 

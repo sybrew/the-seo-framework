@@ -1032,5 +1032,4 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		$wp_rewrite->flush_rules( true );
 
 	}
-
 }

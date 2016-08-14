@@ -301,17 +301,17 @@ class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
 				$h = 1500;
 			} elseif ( $w > $h ) {
 				//* Landscape, set $w to 1500.
-				$h = (int) $this->proportionate_dimensions( $h, $w, $w = 1500 );
+				$h = $this->proportionate_dimensions( $h, $w, $w = 1500 );
 			} elseif ( $h > $w ) {
 				//* Portrait, set $h to 1500.
-				$w = (int) $this->proportionate_dimensions( $w, $h, $h = 1500 );
+				$w = $this->proportionate_dimensions( $w, $h, $h = 1500 );
 			}
 
 			//* Get path of image and load it into the wp_get_image_editor
 			$i_file_path = get_attached_file( $id );
 
-			$i_file_old_name	= basename( get_attached_file( $id ) );
-			$i_file_ext			= pathinfo( $i_file_path, PATHINFO_EXTENSION );
+			$i_file_old_name = basename( get_attached_file( $id ) );
+			$i_file_ext      = pathinfo( $i_file_path, PATHINFO_EXTENSION );
 
 			if ( $i_file_ext ) {
 				$i_file_dir_name = pathinfo( $i_file_path, PATHINFO_DIRNAME );

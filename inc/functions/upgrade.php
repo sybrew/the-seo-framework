@@ -52,8 +52,8 @@ function the_seo_framework_do_upgrade() {
 	global $wp_db_version;
 
 	//* If the WordPress Database hasn't been upgraded yet, make the user upgrade first.
-	if ( get_option( 'db_version' ) != $wp_db_version ) {
-		wp_redirect( admin_url( 'upgrade.php?_wp_http_referer=' . urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) );
+	if ( (int) get_option( 'db_version' ) !== $wp_db_version ) {
+		wp_safe_redirect( admin_url( 'upgrade.php?_wp_http_referer=' . urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) );
 		exit;
 	}
 
@@ -87,7 +87,6 @@ function the_seo_framework_do_upgrade_2700() {
 	foreach ( (array) $term_meta as $term_id => $meta ) {
 		add_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $meta, true );
 	}
-
 
 	update_option( 'the_seo_framework_upgraded_db_version', '2700' );
 }

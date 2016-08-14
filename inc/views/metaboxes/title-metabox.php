@@ -20,8 +20,8 @@ switch ( $instance ) :
 		$blogname = $this->get_blogname();
 		$sep = $this->get_separator( 'title' );
 
-		$additions_left = '<span class="title-additions-js">' . $blogname . '<span class="autodescription-sep-js">' . " $sep " . '</span></span>';
-		$additions_right = '<span class="title-additions-js"><span class="autodescription-sep-js">' . " $sep " . '</span>' . $blogname . '</span>';
+		$additions_left = '<span class="tsf-title-additions-js">' . $blogname . '<span class="autodescription-sep-js">' . " $sep " . '</span></span>';
+		$additions_right = '<span class="tsf-title-additions-js"><span class="autodescription-sep-js">' . " $sep " . '</span>' . $blogname . '</span>';
 
 		$example_left = '<em>' . $additions_left . $title . '</em>';
 		$example_right = '<em>' . $title . $additions_right . '</em>';
@@ -36,8 +36,8 @@ switch ( $instance ) :
 		?>
 		<h4><?php esc_html_e( 'Example Automated Title Output', 'autodescription' ); ?></h4>
 		<p>
-			<span class="title-additions-example-left" style="display:<?php echo $showleft ? 'inline' : 'none'; ?>"><?php echo $this->code_wrap_noesc( $example_left ); ?></span>
-			<span class="title-additions-example-right" style="display:<?php echo $showleft ? 'none' : 'inline'; ?>"><?php echo $this->code_wrap_noesc( $example_right ); ?></span>
+			<span class="tsf-title-additions-example-left" style="display:<?php echo $showleft ? 'inline' : 'none'; ?>"><?php echo $this->code_wrap_noesc( $example_left ); ?></span>
+			<span class="tsf-title-additions-example-right" style="display:<?php echo $showleft ? 'none' : 'inline'; ?>"><?php echo $this->code_wrap_noesc( $example_right ); ?></span>
 		</p>
 
 		<hr>
@@ -159,7 +159,7 @@ switch ( $instance ) :
 			<hr>
 
 			<h4><?php esc_html_e( 'Remove Blogname from Title', 'autodescription' ); ?></h4>
-			<div id="title-additions-toggle">
+			<div id="tsf-title-additions-toggle">
 				<?php
 				$info = $this->make_info(
 					__( 'This might decouple your posts and pages from the rest of the website', 'autodescription' ),
@@ -207,7 +207,7 @@ switch ( $instance ) :
 		$cat_name = $cat_name ? $cat_name : __( 'Example Category', 'autodescription' );
 
 		$display_prefix = $this->is_option_checked( 'title_rem_prefixes' ) ? 'none' : 'inline';
-		$title = '<span class="title-prefix-example" style="display:' . $display_prefix . '">' . esc_html( $label ) . ': </span>' . esc_html( $cat_name );
+		$title = '<span class="tsf-title-prefix-example" style="display:' . $display_prefix . '">' . esc_html( $label ) . ': </span>' . esc_html( $cat_name );
 
 		$additions_left = $additions['left'];
 		$additions_right = $additions['right'];
@@ -228,8 +228,8 @@ switch ( $instance ) :
 		?>
 		<h4><?php esc_html_e( 'Example Automated Archive Title Output', 'autodescription' ); ?></h4>
 		<p>
-			<span class="title-additions-example-left" style="display:<?php echo $showleft ? 'inline' : 'none'; ?>"><?php echo $this->code_wrap_noesc( $example_left ); ?></span>
-			<span class="title-additions-example-right" style="display:<?php echo $showleft ? 'none' : 'inline'; ?>"><?php echo $this->code_wrap_noesc( $example_right ); ?></span>
+			<span class="tsf-title-additions-example-left" style="display:<?php echo $showleft ? 'inline' : 'none'; ?>"><?php echo $this->code_wrap_noesc( $example_left ); ?></span>
+			<span class="tsf-title-additions-example-right" style="display:<?php echo $showleft ? 'none' : 'inline'; ?>"><?php echo $this->code_wrap_noesc( $example_right ); ?></span>
 		</p>
 
 		<hr>
