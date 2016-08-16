@@ -376,15 +376,21 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 
 		$term = $this->fetch_the_term( $args['id'] );
 
-		//* Whether the post ID has a manual excerpt.
-		if ( empty( $term ) && has_excerpt( $args['id'] ) )
-			$this->using_manual_excerpt = true;
+		$title = '';
+		$on = '';
+		$blogname = '';
+		$sep = '';
 
-		$title_on_blogname = $this->generate_description_additions( $args['id'], $term, false );
-		$title = $title_on_blogname['title'];
-		$on = $title_on_blogname['on'];
-		$blogname = $title_on_blogname['blogname'];
-		$sep = $title_on_blogname['sep'];
+		//* Whether the post ID has a manual excerpt.
+		if ( empty( $term ) && has_excerpt( $args['id'] ) ) {
+			$this->using_manual_excerpt = true;
+		} else {
+			$title_on_blogname = $this->generate_description_additions( $args['id'], $term, false );
+			$title = $title_on_blogname['title'];
+			$on = $title_on_blogname['on'];
+			$blogname = $title_on_blogname['blogname'];
+			$sep = $title_on_blogname['sep'];
+		}
 
 		/**
 		 * Setup transient.
@@ -447,7 +453,6 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 
 			if ( empty( $excerpt['normal'] ) ) {
 				//* Fetch additions ignoring options.
-
 				$title_on_blogname = $this->generate_description_additions( $args['id'], $term, true );
 				$title = $title_on_blogname['title'];
 				$on = $title_on_blogname['on'];
@@ -523,18 +528,14 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	 * Determines whether to add description additions. (╯°□°）╯︵ ┻━┻
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
+	 * @since 2.7.0 Removed cache.
+	 *              Whether an excerpt is available is no longer part of this check.
 	 *
 	 * @param int $id The current page or post ID.
-	 * @param object|emptystring $term The current Term.
+	 * @param object|string $term The current Term.
 	 * @return bool Whether to add description additions.
 	 */
 	public function add_description_additions( $id = '', $term = '' ) {
-
-		static $cache = null;
-
-		if ( isset( $cache ) )
-			return $cache;
 
 		/**
 		 * Applies filters the_seo_framework_add_description_additions : {
@@ -542,14 +543,12 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 		 * 		@param int $id The Term object ID or The Page ID.
 		 * 		@param object $term The Term object.
 		 *	}
-		 *
 		 * @since 2.6.0
 		 */
-		$filter = (bool) apply_filters( 'the_seo_framework_add_description_additions', true, $id, $term );
-		$option = (bool) $this->get_option( 'description_additions' );
-		$excerpt = ! $this->using_manual_excerpt;
+		$filter = apply_filters( 'the_seo_framework_add_description_additions', true, $id, $term );
+		$option = $this->get_option( 'description_additions' );
 
-		return $cache = $option && $filter && $excerpt;
+		return $option && $filter;
 	}
 
 	/**
@@ -720,7 +719,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 				//* We're on the blog page now.
 				$excerpt = $this->get_excerpt_by_id( '', $page_id );
 			} elseif ( $term_id ) {
-				//* We're on a taxonomy now.
+				//* We're on a taxonomy now. Fetch excerpt from latest term post.
 				$excerpt = empty( $term->description ) ? $this->get_excerpt_by_id( '', '', $page_id ) : $this->s_description( $term->description );
 			} elseif ( $this->is_author() ) {
 				$excerpt = $this->s_description( get_the_author_meta( 'description', (int) get_query_var( 'author' ) ) );

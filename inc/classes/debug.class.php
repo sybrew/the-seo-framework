@@ -218,11 +218,12 @@ class AutoDescription_Debug extends AutoDescription_Core {
 
 			set_error_handler( array( $this, 'error_handler_inaccessible_call' ) );
 
-			if ( function_exists( '__' ) )
+			if ( function_exists( '__' ) ) {
 				/* translators: 1: Method or Property name, 2: Message */
 				trigger_error( sprintf( __( '%1$s is not <strong>accessible</strong>. %2$s', 'autodescription' ), $p_or_m, $message ) );
-			else
-				trigger_error( sprintf( '%1$s is not <strong>accessible</strong>. %2$s', $p_or_m, $message ) );
+			} else {
+				trigger_error( sprintf( '%s is not <strong>accessible</strong>. %s', $p_or_m, $message ) );
+			}
 
 			restore_error_handler();
 		}

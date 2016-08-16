@@ -1,6 +1,6 @@
 <?php
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
 //* Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_description_metabox', $instance );
@@ -8,7 +8,7 @@ $instance = $this->get_view_instance( 'the_seo_framework_description_metabox', $
 switch ( $instance ) :
 	case 'the_seo_framework_description_metabox_main' :
 
-		$blogname = $this->get_blogname();
+		$blogname = $this->escape_description( $this->get_blogname() );
 		$sep = $this->get_separator( 'description' );
 
 		/**

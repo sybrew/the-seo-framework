@@ -164,7 +164,7 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 	 * @param string $excerpt the Excerpt.
 	 * @param int $the_id The Post ID.
 	 * @param int $tt_id The Taxonomy Term ID.
-	 * @return string The Excerpt
+	 * @return string The escaped Excerpt.
 	 */
 	public function get_excerpt_by_id( $excerpt = '', $the_id = '', $tt_id = '' ) {
 
@@ -185,9 +185,7 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 			$excerpt = wp_strip_all_tags( strip_shortcodes( $excerpt ) );
 		}
 
-		$output = $this->s_description( $excerpt );
-
-		return $output;
+		return $this->s_description( $excerpt );
 	}
 
 	/**
@@ -213,7 +211,7 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 		 * Fetch custom excerpt, if not empty, from the post_excerpt field.
 		 * @since 2.5.2
 		 */
-		if ( isset( $post->post_excerpt ) && $post->post_excerpt ) {
+		if ( ! empty( $post->post_excerpt ) ) {
 			$excerpt = $post->post_excerpt;
 		} elseif ( isset( $post->post_content ) ) {
 			$uses_builder = $this->uses_page_builder( $post->ID );

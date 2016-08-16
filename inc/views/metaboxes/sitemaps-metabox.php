@@ -1,6 +1,6 @@
 <?php
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
 //* Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_sitemaps_metabox', $instance );

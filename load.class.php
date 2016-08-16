@@ -91,21 +91,6 @@ function the_seo_framework_load() {
  */
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'compat.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'optionsapi.php' );
-//require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'benchmark.php' );
-
-/**
- * @since 2.7.0
- * Unused, set as placeholder.
- * Do: spl_autoload_register( 'the_seo_framework_autoload' );
- */
-function the_seo_framework_autoload( $class ) {
-
-	if ( 0 !== strpos( $class, 'AutoDescription_', 0 ) )
-		return;
-
-	$_class = strtolower( str_replace( array( 'AutoDescription_', '_' ), array( '', '-' ), $class ) );
-	require( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . $_class . '.class.php' );
-}
 
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'core.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'debug.class.php' );

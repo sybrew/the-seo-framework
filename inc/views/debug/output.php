@@ -1,6 +1,6 @@
 <?php
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
 if ( $this->debug_output ) {
 	if ( $this->the_seo_framework_debug_hidden ) {

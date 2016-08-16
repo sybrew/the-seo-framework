@@ -741,7 +741,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		 *
 		 * @since 2.3.0
 		 */
-		if ( (int) (bool) $new_value ) {
+		if ( $new_value ) {
 			$this->enqueue_rewrite_activate( true );
 		} else {
 			$this->enqueue_rewrite_deactivate( true );

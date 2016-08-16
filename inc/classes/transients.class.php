@@ -201,7 +201,6 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		} else {
 			$this->auto_description_transient = 'tsf_desc_noa_' . $revision . '_' . $cache_key;
 		}
-
 	}
 
 	/**

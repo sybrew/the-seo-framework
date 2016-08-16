@@ -373,8 +373,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* When your home URL is on a subdirectory, the canonical term URL is now correct.
 	* When inputting HTML entities in the Custom Home Page Title, they're now correctly converted in the placeholder.
 	* WPML's flags now display correctly again on WooCommerce product list overview.
+	* When an excerpt is filled in, a post update now flushes the automated description correctly.
 	/
-	* TODO When an excerpt is filled in, a post update now flushes the automated description correctly.
 	* TODO Theme performance conflict https://github.com/sybrew/the-seo-framework/issues/18.
 
 **For translators:**
@@ -412,6 +412,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* The debugger now shows Page and Paged Query variable output.
 	* The debugger now shows Globals `multipage` and `numpages` variable output.
 	* CDATA array (JavaScript) `autodescriptionL10n` now contains a nonce string for AJAX requests, accessible through (JavaScript) `autodescriptionL10n.nonce` or (JavaScript) `autodescriptionL10n['nonce']` and (PHP) `check_ajax_referer( 'autodescription-ajax-nonce', 'nonce' ) ?>`.
+	* Function `the_seo_framework_class()`, this returns The SEO Framework's cached class name so you can compare instances.
 * **Improved:**
 	* Class contents `AutoDescription_Query` are now reworked to be much more effecient and predictable.
 	* Methods within `AutoDescription_Query` have been re-evaluated whether they use the WordPress query cache. If that holds true, the query object cache has been omitted from the said method.
@@ -448,6 +449,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* It has two new parameters:
 			* `(bool) $a11y`, default true. Settings this to false will prevent adding accessibility icons in front of the notice.
 			* `(bool) $escape`, default true. Setting this to false will prevent escaping the output.
+	* Method `AutoDescription_Generate_Description::add_description_additions()` has changed:
+		* The cache is now removed. This means the filter can now be freely used depending on the post parameters.
+			* This fixes a bug when using manual excerpts.
+			* This fixes potential bugs with the filter and upcoming extensions or alterations.
+		* It will no longer check for an post excerpt. This is now done in place where applicable.
 * **Changed:**
 	* Variable 'AutoDescription_Siteoptions::seo_settings_page_slug' is now publicly accessible. Making it easier to add submenu items.
 	* All class `AutoDescription_Metaboxes` metabox output function parameters have been shifted by one to the right to conform to the `add_metabox()` function return arguments. The first parameter is now used for the (unavailable and unused) post object. The second must be an array. This change affects the following methods:
@@ -520,8 +526,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* `(string) the_seo_framework_term_options`, the WordPress 4.4+ metadata option key name.
 		* `(string) the_seo_framework_user_options`, the User SEO metadata option key name.
 		* `(string) the_seo_framework_ld_json_breadcrumb_image`, the breadcrumb image. Supplies three parameters.
-		/
-		* TODO JSON search filter https://github.com/sybrew/the-seo-framework/issues/19.
+		* `(string) the_seo_framework_ld_json_search_url`, the LD+JSON search URL without search query parameters.
 	* **Changed:**
 		* `(string) the_seo_framework_description_output`, first parameter now contains expected output.
 		* `(string) the_seo_framework_ogdescription_output`, first parameter now contains expected output.
