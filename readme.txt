@@ -373,6 +373,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* When your home URL is on a subdirectory, the canonical term URL is now correct.
 	* When inputting HTML entities in the Custom Home Page Title, they're now correctly converted in the placeholder.
 	* WPML's flags now display correctly again on WooCommerce product list overview.
+	/
+	* TODO When an excerpt is filled in, a post update now flushes the automated description correctly.
+	* TODO Theme performance conflict https://github.com/sybrew/the-seo-framework/issues/18.
 
 **For translators:**
 
@@ -517,6 +520,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* `(string) the_seo_framework_term_options`, the WordPress 4.4+ metadata option key name.
 		* `(string) the_seo_framework_user_options`, the User SEO metadata option key name.
 		* `(string) the_seo_framework_ld_json_breadcrumb_image`, the breadcrumb image. Supplies three parameters.
+		/
+		* TODO JSON search filter https://github.com/sybrew/the-seo-framework/issues/19.
 	* **Changed:**
 		* `(string) the_seo_framework_description_output`, first parameter now contains expected output.
 		* `(string) the_seo_framework_ogdescription_output`, first parameter now contains expected output.

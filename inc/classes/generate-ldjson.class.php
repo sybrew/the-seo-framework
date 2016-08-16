@@ -282,8 +282,15 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 		$name = $this->schema_blog_name();
 		$actiontype = json_encode( 'SearchAction' );
 
+		/**
+		 * Applies filters 'the_seo_framework_ld_json_search_url' : string
+		 * @since 2.7.0
+		 * @param string $search_url The default WordPress search URL without query parameters.
+		 */
+		$search_url = (string) apply_filters( 'the_seo_framework_ld_json_search_url', $this->the_home_url_from_cache( true ) . '?s=' );
+
 		// Remove trailing quote and add it back.
-		$target = mb_substr( json_encode( $this->the_home_url_from_cache( true ) . '?s=' ), 0, -1 ) . '{search_term_string}"';
+		$target = mb_substr( json_encode( $search_url ), 0, -1 ) . '{search_term_string}"';
 
 		$queryaction = json_encode( 'required name=search_term_string' );
 
