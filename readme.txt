@@ -374,6 +374,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* When inputting HTML entities in the Custom Home Page Title, they're now correctly converted in the placeholder.
 	* WPML's flags now display correctly again on WooCommerce product list overview.
 	* When an excerpt is filled in, a post update now flushes the automated description correctly.
+	* Various Firefox admin layout fixes (why aren't you using a [Blink based browser](https://en.wikipedia.org/wiki/List_of_web_browsers#Blink-based)?), including:
+		* The separator selection options now fit on 1024px+ width windows.
+		* The SEO Bar now doesn't make bbPress post type overview tables (topics, forums, replies) overflow below 1450px width windows.
+			* This fix affects all widefat table titles.
+			* [6 year old official bug thread](https://bugzilla.mozilla.org/show_bug.cgi?id=587438).
 	/
 	* TODO Theme performance conflict https://github.com/sybrew/the-seo-framework/issues/18.
 
@@ -567,6 +572,7 @@ Some features or improvements didn't make it in this update. The following chang
 	* A general metabox will be added, which will contain timestamp output settings, sitename settings and more.
 	* A new filter for initial SEO Settings metaboxes order.
 	* A notification that the robots.txt file can't be output under very specific subdirectory circumstances and possibly added behavior.
+	* A notification that an actual robots.txt file has been found in the website's root folder (and link to it).
 	* Author SEO will be placed into an extension. Basic functionality will be provided free of charge.
 	* Tabbed in-post metabox with social settings will be made available for extensions to use.
 	* Canonical URL SEO settings, like schemes (http/https) and more.
@@ -575,6 +581,7 @@ Some features or improvements didn't make it in this update. The following chang
 * **Will improve:**
 	* The option merging functionality introduced in 2.6.0 will be transformed into the plugin upgrade functionality introduced in 2.7.0.
 		* The 2.7.0 way is a more convinient and faster method of upgrading data.
+	* The title example will show an active post.
 * **Will Change:**
 	* The settings metaboxes order will be reset. This ensures that the General Settings are shown first after updating.
 * **Will Fix:**

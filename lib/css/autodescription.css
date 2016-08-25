@@ -655,6 +655,27 @@ body.js .tsf-metaboxes .tsf-tabs-content.tsf-active-tab-content {
 
 /* Firefix */
 @-moz-document url-prefix() {
+	.tsf-metaboxes #tsf-title-separator label,
+	.tsf-metaboxes #tsf-description-separator label {
+		margin: 3px 1px;
+	}
+
+	@media only screen and ( min-width: 768px ) {
+		/**
+		 * https://bugzilla.mozilla.org/show_bug.cgi?id=587438
+		 * Only fix when title is second element and there are more than 6 elemnents in the table.
+		 */
+		.widefat tr th.column-title:nth-child(2):nth-last-child(n+6),
+		.widefat tr td.column-title:nth-child(2):nth-last-child(n+6),
+		.widefat tr th.title:nth-child(2):nth-last-child(n+6),
+		.widefat tr td.title:nth-child(2):nth-last-child(n+6) {
+			min-width: 1em;
+			width: 25%;
+			max-width: 100%;
+			white-space: unset;
+		}
+	}
+
 	.tsf-metaboxes .tsf-default-selected {
 		box-shadow: 0 0 2px 0 #1c9d38;
 	}

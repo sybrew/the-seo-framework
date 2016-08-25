@@ -180,6 +180,7 @@ switch ( $instance ) :
 			</div>
 			<?php
 			$this->description( __( 'Only use this option if you are aware of its SEO effects.', 'autodescription' ), false );
+			echo ' ';
 			$this->description( $home_page_has_option, false );
 		endif;
 		break;
