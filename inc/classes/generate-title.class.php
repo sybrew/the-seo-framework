@@ -95,22 +95,9 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		 */
 		if ( false === $args['meta'] && false === $this->is_admin() ) {
 			if ( false === $this->current_theme_supports_title_tag() && doing_filter( 'wp_title' ) ) {
-				if ( $seplocation ) {
+				if ( $seplocation || $sep ) {
 					//* Set doing it wrong parameters.
-					$this->tell_title_doing_it_wrong( $title, $sep, $seplocation, false );
-					//* And echo them.
-					add_action( 'wp_footer', array( $this, 'tell_title_doing_it_wrong' ), 20 );
-
-					//* Notify cache.
-					$this->title_doing_it_wrong = true;
-
-					//* Notify transients
-					$this->set_theme_dir_transient( false );
-
-					return $this->build_title_doingitwrong( $title, $sep, $seplocation, $args );
-				} elseif ( $sep ) {
-					//* Set doing it wrong parameters.
-					$this->tell_title_doing_it_wrong( $title, $sep, $seplocation, false );
+					$this->set_tell_title_doing_it_wrong( $title, $sep, $seplocation, false );
 					//* And echo them.
 					add_action( 'wp_footer', array( $this, 'tell_title_doing_it_wrong' ), 20 );
 
@@ -121,7 +108,8 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 					$this->set_theme_dir_transient( false );
 
 					//* Title is empty.
-					$args['empty_title'] = true;
+					if ( empty( $seplocation ) && $sep )
+						$args['empty_title'] = true;
 
 					return $this->build_title_doingitwrong( $title, $sep, $seplocation, $args );
 				}

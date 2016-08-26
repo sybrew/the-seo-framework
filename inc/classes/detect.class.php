@@ -695,10 +695,24 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	}
 
 	/**
-	 * Add doing it wrong html code in the footer.
+	 * Sets up doing it wrong html code for in the footer.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param null|string $title The given title
+	 * @param null|string $sep The separator
+	 * @param null|string $seplocation Whether the blogname is left or right.
+	 * @return void
+	 */
+	public function set_tell_title_doing_it_wrong( $title = null, $sep = null, $seplocation = null ) {
+		return $this->tell_title_doing_it_wrong( $title, $sep, $seplocation, false );
+	}
+
+	/**
+	 * Adds doing it wrong html code in the footer.
 	 *
 	 * @since 2.5.2.1
-	 * @staticvar bool $no_spam
+	 * @staticvar bool $run
 	 * @staticvar string $sep_output
 	 * @staticvar string $display_output
 	 * @staticvar string $seplocation_output
@@ -712,13 +726,13 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	public function tell_title_doing_it_wrong( $title = null, $sep = null, $seplocation = null, $output = true ) {
 
 		if ( $output ) {
-			//* Prevent error log spam.
-			static $no_spam = null;
+			//* Prevent multiple output.
+			static $run = null;
 
-			if ( isset( $no_spam ) )
+			if ( isset( $run ) )
 				return;
 
-			$no_spam = true;
+			$run = true;
 		}
 
 		static $title_output = null;

@@ -431,6 +431,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* `AutoDescription_TermData::term_meta_delete()`
 	* `AutoDescription_Query::get_the_real_ID()` processing time has been significantly reduced within the admin area.
 	* The theme doing it right transient has been changed into a permanent transient, this means it's autoloaded with all other options. This transient acts like an option and is flushed on theme change.
+		* This transient is flushed on theme switch.
+		* Since this version, this transient is flushed on theme update as well.
 	* WordPress VIP coding standards, including:
 		* External pinging URLs are now cleaned prior to sending the request.
 		* Sitemaps query objects are now being sent through `WP_Query`, rather than get_posts().
@@ -488,6 +490,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* It no longer checks for page id's on the first parameter, but only for page hooks.
 		* It now checks for page id's on the second parameter.
 		* It has been moved to class `AutoDescription_Query`. So it's now `AutoDescription_Query::is_menu_page()`.
+	* Theme "doing it wrong" title output is now always notified to the caches, even if it's "doing it right" the next time.
 * **Fixed:**
 	* Function `the_seo_framework_dot_version()` now works as intended.
 	* Method `AutoDescription_Query::is_single()` first parameter can now be an array without crashing the site.

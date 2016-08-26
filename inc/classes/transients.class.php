@@ -107,7 +107,8 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 		add_action( 'update_option_blogdescription', array( $this, 'delete_auto_description_frontpage_transient' ), 10, 1 );
 
 		//* Delete doing it wrong transient after theme switch.
-		add_action( 'after_switch_theme', array( $this, 'delete_theme_dir_transient' ), 10 );
+		add_action( 'after_switch_theme', array( $this, 'delete_theme_dir_transient' ), 10, 0 );
+		add_action( 'upgrader_process_complete', array( $this, 'delete_theme_dir_transient' ), 10, 2 );
 
 	}
 
@@ -633,10 +634,18 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	 * Delete transient for the Theme doing it Right bool on special requests.
 	 *
 	 * @since 2.5.2
+	 * @since 2.7.0
 	 *
-	 * @return bool true
+	 * @param string|object $value The theme directory stylesheet location, or either WP_Theme/WP_Upgrader instance.
+	 * @param array|object|null $options If set, the update options array or the Old theme WP_Theme instance.
+	 * @return bool True on success, false on failure.
 	 */
-	public function delete_theme_dir_transient() {
+	public function delete_theme_dir_transient( $value = null, $options = null ) {
+
+		if ( isset( $options['type'] ) ) {
+			if ( 'theme' !== $options['type'] )
+				return false;
+		}
 
 		delete_transient( $this->theme_doing_it_right_transient );
 
@@ -647,13 +656,15 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 	 * Sets transient for Theme doing it Right.
 	 *
 	 * @since 2.5.2
-	 * NOTE: Ignores transient constant.
+	 * @since 2.7.0 Will always set "doing it wrong" transient, even if it was "doing it right" earlier.
+	 *
+	 * @NOTE: Ignores transient debug constant.
 	 *
 	 * @param bool $doing_it_right
 	 */
-	public function set_theme_dir_transient( $dir = '' ) {
+	public function set_theme_dir_transient( $dir = null ) {
 
-		if ( is_bool( $dir ) && false === get_transient( $this->theme_doing_it_right_transient ) ) {
+		if ( is_bool( $dir ) && ( false === $dir || false === get_transient( $this->theme_doing_it_right_transient ) ) ) {
 
 			//* Convert $dir to string 1 or 0 as transients can be false on failure.
 			$dir = $dir ? '1' : '0';
