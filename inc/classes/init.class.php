@@ -345,6 +345,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 
 		do_action( 'the_seo_framework_do_after_output' );
 
+		//* Already escaped.
 		echo $output;
 
 	}

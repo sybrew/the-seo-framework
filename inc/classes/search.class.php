@@ -40,41 +40,93 @@ class AutoDescription_Search extends AutoDescription_Generate_Ldjson {
 	}
 
 	/**
-	 * Constructor, load parent constructor
-	 *
-	 * Initalizes options
+	 * Constructor, loads parent constructor and adds filters.
 	 */
 	public function __construct() {
 		parent::__construct();
 
-		add_action( 'pre_get_posts', array( $this, 'search_filter' ), 999, 1 );
+		/**
+		 * @since 2.1.7
+		 * @since 2.7.0 Changed priority from 999 to 9999.
+		 *              Now uses another method. Was: 'search_filter'.
+		 */
+		add_action( 'pre_get_posts', array( $this, 'adjust_search_filter' ), 9999, 1 );
+	}
+
+	/**
+	 * Excludes posts from search with certain metadata.
+	 * For now, it only looks at 'exclude_local_search'. If it exists, the post or
+	 * page will be excluded from the local Search Results.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param array $query The possible search query.
+	 * @return void Early if no search query is found.
+	 */
+	public function adjust_search_filter( $query ) {
+
+		// Don't exclude pages in wp-admin.
+		if ( $query->is_search && false === $this->is_admin() ) {
+
+			$q = $query->query;
+			//* Only interact with an actual Search Query.
+			if ( false === isset( $q['s'] ) )
+				return;
+
+			$meta_query = $query->get( 'meta_query' );
+
+			//* Convert to array. Unset it if it's empty.
+			if ( false === is_array( $meta_query ) )
+				$meta_query = $meta_query ? (array) $meta_query : array();
+
+			/**
+			 * Exclude posts with exclude_local_search option on.
+			 *
+			 * Query is faster when the global relation is not set. Defaults to AND.
+			 * Query is faster when secondary relation is set. Defaults to AND.
+			 * Looks for CHAR value, while it's an integer/char in when unserialized.
+			 */
+			$meta_query[] = array(
+				array(
+					'key'      => 'exclude_local_search',
+					'value'    => '1',
+					'type'     => 'CHAR',
+					'compare'  => 'NOT EXISTS',
+					'relation' => 'AND',
+				),
+			);
+
+			$query->set( 'meta_query', $meta_query );
+		}
 	}
 
 	/**
 	 * Fetches posts with exclude_local_search option on.
 	 *
 	 * @since 2.1.7
+	 * @since 2.7.0 No longer used for performance reasons.
 	 * @uses $this->exclude_search_ids()
 	 *
-	 * @param array $query The search query
+	 * @param array $query The possible search query.
+	 * @return void Early if no search query is found.
 	 */
 	public function search_filter( $query ) {
 
-		// Don't exclude pages in wp-admin
+		// Don't exclude pages in wp-admin.
 		if ( $query->is_search && false === $this->is_admin() ) {
 
 			$q = $query->query;
 			//* Only interact with an actual Search Query.
-			if ( ! isset( $q['s'] ) || ! $q['s'] )
+			if ( false === isset( $q['s'] ) )
 				return;
 
 			//* Get excluded IDs.
-			$protected_posts = $this->exclude_search_ids();
+			$protected_posts = $this->get_excluded_search_ids();
 			if ( $protected_posts ) {
 				$get = $query->get( 'post__not_in' );
 
 				//* Merge user defined query.
-				if ( $get )
+				if ( is_array( $get ) && ! empty( $get ) )
 					$protected_posts = array_merge( $protected_posts, $get );
 
 				$query->set( 'post__not_in', $protected_posts );
@@ -82,25 +134,19 @@ class AutoDescription_Search extends AutoDescription_Generate_Ldjson {
 
 			// Parse all ID's, even beyond the first page.
 			$query->set( 'no_found_rows', false );
-
 		}
-
 	}
 
 	/**
 	 * Fetches posts with exclude_local_search option on
 	 *
-	 * @param array $post_ids			The post id's which are excluded
-	 * @param array $args				Posts search arguments
-	 * @param array $protected_posts	Posts array with excluded key
-	 *
+	 * @since 2.7.0
+	 * @since 2.7.0 No longer used.
 	 * @global int $blog_id
-	 *
-	 * @since 2.1.7
 	 *
 	 * @return array Excluded Post IDs
 	 */
-	public function exclude_search_ids() {
+	public function get_excluded_search_ids() {
 		global $blog_id;
 
 		$cache_key = 'exclude_search_ids_' . $blog_id . '_' . get_locale();
@@ -110,23 +156,23 @@ class AutoDescription_Search extends AutoDescription_Generate_Ldjson {
 			$post_ids = array();
 
 			$args = array(
-				'post_type' => 'any',
-				'meta_key' => 'exclude_local_search',
-				'meta_value' => 1,
-				'posts_per_page' => 99999, // get them all! Fast enough! :D
-				'meta_compare' => '=',
+				'post_type'        => 'any',
+				'numberposts'      => -1,
+				'posts_per_page'   => -1,
+				'order'            => 'DESC',
+				'post_status'      => 'publish',
+				'meta_key'         => 'exclude_local_search',
+				'meta_value'       => 1,
+				'meta_compare'     => '=',
+				'cache_results'    => true,
+				'suppress_filters' => false,
 			);
-
-			/*
 			$get_posts = new WP_Query;
-			$protected_posts = $get_posts->query( $args );
+			$excluded_posts = $get_posts->query( $args );
 			unset( $get_posts );
-			*/
 
-			//* @TODO check if this uses cache.
-			$protected_posts = get_posts( $args );
-			if ( $protected_posts )
-				$post_ids = wp_list_pluck( $protected_posts, 'ID' );
+			if ( $excluded_posts )
+				$post_ids = wp_list_pluck( $excluded_posts, 'ID' );
 
 			$this->object_cache_set( $cache_key, $post_ids, 86400 );
 		}

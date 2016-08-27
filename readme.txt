@@ -330,6 +330,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* The dismissible notices created by The SEO Framework are now color-blind accessible through the addition of a small success, warning or failure icon.
 	* Removed duplicated JavaScript calls on the SEO Settings pageload for improved browser loading time.
 	* Leaving the SEO Settings page will now also generate a warning when you've pasted content into a text area.
+	* Local Search exclusion will now adjust the given query, instead of pre-emptively checking all posts and fetching the IDs to exclude.
+		* This massively improves Search page performance and reduces possible bugs.
 * **Changed:**
 	* The SEO Settings page is now a submenu page, name "SEO Settings". This change is only visible when another submenu is added.
 	* The Twitter Image URL output is now wrapped in the `twitter:image` meta tag instead of `twitter:image:src`, as the latter seems to be deprecated.
@@ -381,6 +383,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* [6 year old official bug thread](https://bugzilla.mozilla.org/show_bug.cgi?id=587438).
 	/
 	* TODO Theme performance conflict https://github.com/sybrew/the-seo-framework/issues/18.
+	* When an empty search query is provided, the Search Exclusion filter now also works.
 
 **For translators:**
 
@@ -485,6 +488,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Method `AutoDescription_Generate::generate_home_page_description()` now has gained an extra parameter whether to escape the description. Defaults to true.
 	* Method `AutoDescription_Generate_Url::get_relative_term_url()` now adds the home URL directory (if any) to the URL prior to making it relative. Preventing directory installation errors.
 	* Method `AutoDescription_Admin_Init::the_counter_visualized()` has been renamed to `AutoDescription_Admin_Init::wp_ajax_update_counter_type()`. Without deprecation as it's marked private.
+	* Filtering `pre_get_posts` for excluding search ID's has been moved up by tenfold. From 999 to 9999.
 	* All CSS class prefixes have been set to `tsf`, which were prior `autodescription`, 'ad', 'theseoframework', `seoframework` or none at all.
 	* Method `AutoDescription_Admin_Init::is_menu_page()` has been slightly adjusted:
 		* It no longer checks for page id's on the first parameter, but only for page hooks.
@@ -523,6 +527,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* `AutoDescription_Metaboxes::homepage_metabox_additions()`, use `AutoDescription_Metaboxes::homepage_metabox_additions_tab()` instead.
 	* `AutoDescription_Metaboxes::homepage_metabox_robots()`, use `AutoDescription_Metaboxes::homepage_metabox_robots_tab()` instead.
 	* `AutoDescription_Transients::delete_auto_description_blog_transient()`, use `AutoDescription_Metaboxes::delete_auto_description_frontpage_transient()` instead.
+	* `AutoDescription_Search::exclude_search_ids()`, use `AutoDescription_Search::get_excludeded_search_ids()` instead.
 	* `tsf_get_option()`, use `the_seo_framework_get_option()` instead.
 	* `tsf_options_pagehook()`, use `the_seo_framework_options_pagehook()` instead.
 	* `tsf_wp_version()`, use `AutoDescription_Detect::wp_version()` instead.

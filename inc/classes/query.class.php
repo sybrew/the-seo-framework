@@ -1034,7 +1034,6 @@ class AutoDescription_Query extends AutoDescription_Compat {
 			return $cache;
 
 		$page = $this->is_multipage() ? get_query_var( 'page' ) : 1;
-		//$page = get_query_var( 'page' );
 
 		$this->set_query_cache(
 			__METHOD__,
@@ -1062,9 +1061,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		if ( is_object( $post ) ) {
 			$content = $post->post_content;
 			if ( false !== strpos( $content, '<!--nextpage-->' ) ) {
-				$content = str_replace( "\n<!--nextpage-->\n", '<!--nextpage-->', $content );
 				$content = str_replace( "\n<!--nextpage-->", '<!--nextpage-->', $content );
-				$content = str_replace( "<!--nextpage-->\n", '<!--nextpage-->', $content );
 
 				// Ignore nextpage at the beginning of the content.
 				if ( 0 === strpos( $content, '<!--nextpage-->' ) )
@@ -1162,7 +1159,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 
 		static $cache = array();
 
-		if ( func_num_args() >= 3 ) {
+		if ( func_num_args() > 2 ) {
 			$hash = isset( $value_to_set ) ? serialize( (array) func_get_arg( 2 ) ) : serialize( array_slice( func_get_args(), 2 ) );
 		} else {
 			$hash = false;
@@ -1198,7 +1195,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * }
 	 */
 	public function set_query_cache( $key, $value_to_set ) {
-		if ( func_num_args() >= 3 ) {
+		if ( func_num_args() > 2 ) {
 			return $this->get_query_cache( $key, $value_to_set, array_slice( func_get_args(), 2 ) );
 		} else {
 			return $this->get_query_cache( $key, $value_to_set );

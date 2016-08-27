@@ -887,4 +887,19 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 		return false;
 	}
 
+	/**
+	 * Fetches posts with exclude_local_search option on
+	 *
+	 * @since 2.1.7
+	 * @since 2.7.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return array Excluded Post IDs
+	 */
+	public function exclude_search_ids() {
+
+		$this->_deprecated_function( 'AutoDescription_Search::' . __FUNCTION__, '2.7.0', 'AutoDescription_Search::get_excluded_search_ids()' );
+
+		return $this->get_excluded_search_ids();
+	}
 }
