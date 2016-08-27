@@ -456,7 +456,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 								$page_modified_gmt = $page->post_modified_gmt;
 
 								if ( '0000-00-00 00:00:00' !== $page_modified_gmt )
-									$content .= "\t\t<lastmod>" . mysql2date( $timestamp_format, $page_modified_gmt, false ) . "</lastmod>\r\n";
+									$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $page_modified_gmt ) . "</lastmod>\r\n";
 							}
 
 							// Give higher priority to the home page.
@@ -541,7 +541,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 								$post_modified_gmt = $post->post_modified_gmt;
 
 								if ( '0000-00-00 00:00:00' !== $post_modified_gmt )
-									$content .= "\t\t<lastmod>" . mysql2date( $timestamp_format, $post_modified_gmt, false ) . "</lastmod>\r\n";
+									$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $post_modified_gmt ) . "</lastmod>\r\n";
 							}
 
 							$content .= "\t\t<priority>" . number_format( $priority, 1 ) . "</priority>\r\n";
@@ -641,11 +641,11 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 
 							//* Keep it consistent. Only parse if page_lastmod is true.
 							if ( $post_lastmod ) {
-								$post_modified_gmt = $ctp_post->post_modified_gmt;
+								$cpt_modified_gmt = $ctp_post->post_modified_gmt;
 
 								//* Some CPT don't set modified time.
-								if ( '0000-00-00 00:00:00' !== $post_modified_gmt )
-									$content .= "\t\<lastmod>" . mysql2date( $timestamp_format, $post_modified_gmt, false ) . "</lastmod>\r\n";
+								if ( '0000-00-00 00:00:00' !== $cpt_modified_gmt )
+									$content .= "\t\<lastmod>" . $this->gmt2date( $timestamp_format, $cpt_modified_gmt ) . "</lastmod>\r\n";
 							}
 
 							$content .= "\t\t<priority>" . number_format( $priority_cpt, 1 ) . "</priority>\r\n";

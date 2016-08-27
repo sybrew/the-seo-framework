@@ -384,6 +384,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	/
 	* TODO Theme performance conflict https://github.com/sybrew/the-seo-framework/issues/18.
 	* When an empty search query is provided, the Search Exclusion filter now also works.
+	* The sitemap now correctly converts dates to the correct timezone, instead of always returning the GMT value.
 
 **For translators:**
 
@@ -421,6 +422,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* The debugger now shows Globals `multipage` and `numpages` variable output.
 	* CDATA array (JavaScript) `autodescriptionL10n` now contains a nonce string for AJAX requests, accessible through (JavaScript) `autodescriptionL10n.nonce` or (JavaScript) `autodescriptionL10n['nonce']` and (PHP) `check_ajax_referer( 'autodescription-ajax-nonce', 'nonce' ) ?>`.
 	* Function `the_seo_framework_class()`, this returns The SEO Framework's cached class name so you can compare instances.
+	* Method `AutoDescription_Core::gmt2date()`, converts GMT time/date to said format.
+		* Expects `AutoDescription_Core::set_timezone()` to be run prior to output. This function will set the timezone of PHP from WordPress' settings.
+		* Note: Always use `AutoDescription_Core::reset_timezone()`` as other themes or plugins might interact with time to prevent conflicts or unexpected behavior.
 * **Improved:**
 	* Class contents `AutoDescription_Query` are now reworked to be much more effecient and predictable.
 	* Methods within `AutoDescription_Query` have been re-evaluated whether they use the WordPress query cache. If that holds true, the query object cache has been omitted from the said method.

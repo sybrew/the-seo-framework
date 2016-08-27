@@ -647,6 +647,23 @@ class AutoDescription_Core {
 	}
 
 	/**
+	 * Converts time from GMT input to given format.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param string $format The datetime format.
+	 * @param string $time The GMT time. Expects timezone to be omitted.
+	 * @return string The converted time. Empty string if no $time is given.
+	 */
+	public function gmt2date( $format = 'Y-m-d', $time = '' ) {
+
+		if ( $time )
+			return date( $format, strtotime( $time . ' GMT' ) );
+
+		return '';
+	}
+
+	/**
 	 * Counts words encounters from input string.
 	 * Case insensitive. Returns first encounter of each word if found multiple times.
 	 *
