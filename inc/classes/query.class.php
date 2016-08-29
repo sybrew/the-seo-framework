@@ -1001,6 +1001,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * @since 2.2.2
 	 * @since 2.7.0 Added pageslug parameter.
 	 * @global string $page_hook the current page hook.
+	 * @note Usage of $pageslug might be insecure. Check all variables!
 	 *
 	 * @param string $pagehook The menu pagehook to compare to.
 	 * @param string $pagehook The menu page slug to compare to.

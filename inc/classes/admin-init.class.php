@@ -232,7 +232,8 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 		$bad = __( 'Bad', 'autodescription' );
 		$unknown = __( 'Unknown', 'autodescription' );
 
-		$separator = $this->get_separator( 'title' );
+		$title_separator = $this->get_separator( 'title' );
+		$description_separator = $this->get_separator( 'description' );
 
 		$isrtl = (bool) is_rtl();
 		$ishome = false;
@@ -316,8 +317,9 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 			'titleAdditions' => esc_html( $additions ),
 			'blogDescription' => esc_html( $description ),
 			'titleTagline' => $tagline,
-			'titleSeparator' => esc_html( $separator ),
+			'titleSeparator' => esc_html( $title_separator ),
 			'titleLocation' => esc_html( $title_location ),
+			'descriptionSeparator' => esc_html( $description_separator ),
 			'isRTL' => $isrtl,
 			'isHome' => $ishome,
 			'counterType' => absint( $counter_type ),

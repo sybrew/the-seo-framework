@@ -356,7 +356,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* MSM Sitemaps (plugin no longer exists).
 		* WP Twitter Cards (hasn't recieved updates in 2 years).
 		* iG:Twitter Cards (hasn't recieved updates in 3 years).
-	* WordPress 4.3.4 and below are no longer to be supported in future updates.
+	* WordPress 4.3.3 and below are no longer to be supported in future updates.
 		* From this update WordPress 3.9 and later should work as indended, but there will be no more effort to keep that intact.
 		* From the next update, WordPress 4.3.3 or below could have issues with this plugin.
 		* Note: Using WordPress 4.4 and later allows your website to have significant performance benefits in combination with this plugin from this update.
@@ -385,6 +385,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* TODO Theme performance conflict https://github.com/sybrew/the-seo-framework/issues/18.
 	* When an empty search query is provided, the Search Exclusion filter now also works.
 	* The sitemap now correctly converts dates to the correct timezone, instead of always returning the GMT value.
+	* On the SEO Settings page, when the title separator has been changed, it now directly reflects its value within the dynamic placeholder.
 
 **For translators:**
 
@@ -420,7 +421,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Method `AutoDescription_Sanitize::verify_seo_settings_nonce()`, returns true when SEO settings nonce has been verified. Always use this if you want to inject custom settings.
 	* The debugger now shows Page and Paged Query variable output.
 	* The debugger now shows Globals `multipage` and `numpages` variable output.
-	* CDATA array (JavaScript) `autodescriptionL10n` now contains a nonce string for AJAX requests, accessible through (JavaScript) `autodescriptionL10n.nonce` or (JavaScript) `autodescriptionL10n['nonce']` and (PHP) `check_ajax_referer( 'autodescription-ajax-nonce', 'nonce' ) ?>`.
+	* CDATA array (JavaScript) `autodescriptionL10n` now contains more values:
+		* A nonce string for AJAX requests, accessible through (JavaScript) `autodescriptionL10n.nonce` or (JavaScript) `autodescriptionL10n['nonce']` and (PHP) `check_ajax_referer( 'autodescription-ajax-nonce', 'nonce' );`.
+		* The current description separator string, escaped, accessible through (JavaScript) `autodescriptionL10n.descriptionSeparator` or (JavaScript) `autodescriptionL10n['descriptionSeparator']`.
 	* Function `the_seo_framework_class()`, this returns The SEO Framework's cached class name so you can compare instances.
 	* Method `AutoDescription_Core::gmt2date()`, converts GMT time/date to said format.
 		* Expects `AutoDescription_Core::set_timezone()` to be run prior to output. This function will set the timezone of PHP from WordPress' settings.
@@ -446,7 +449,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Sitemaps post queries are now suppressing filters.
 		* Translation strings are sanitatized when needed.
 		* Included better validation of superglobals.
-		* Better PHP 5.3 compatibility has been introduces on URL parsing.
+		* Better PHP 5.3 compatibility has been introduced to URL parsing.
 		* Increased usage of the WordPress core caching system so themes and other plugins can benefit from earlier calls.
 			* This reduces memory usage and increases overal performance. Although not directly notable.
 	* Transient and Object cache key generation based on type request now run earlier and bypass the static cache for improved performance and reduced memory heap size.
