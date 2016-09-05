@@ -568,6 +568,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* `(string) the_seo_framework_modifiedtime_output`, first parameter now contains expected output.
 	* **Deprecated:**
 		* `(bool) the_seo_framework_output_canonical`, use `(string) the_seo_framework_rel_canonical_output` instead. Return empty to achieve the same results.
+	* **Fixed:**
+		* `(array) the_seo_framework_sitemap_exclude_ids` now also works for pages.
 * **Constant notes:**
 	* **Added:**
 		* `(string) THE_SEO_FRAMEWORK_DB_VERSION`

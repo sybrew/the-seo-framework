@@ -435,15 +435,16 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 				if ( isset( $page->ID ) ) {
 					$page_id = $page->ID;
 
-					if ( '' === $excluded || ! isset( $excluded[ $post_id ] ) ) {
-						//* Is this the front page?
-						$page_is_front = $page_id === $id_on_front;
+					if ( '' === $excluded || ! isset( $excluded[ $page_id ] ) ) {
 
 						//* Fetch the noindex option, per page.
-						$noindex = (bool) $this->get_custom_field( '_genesis_noindex', $page_id );
+						$indexed = ! $this->get_custom_field( '_genesis_noindex', $page_id );
 
 						//* Continue if indexed.
-						if ( false === $noindex ) {
+						if ( $indexed ) {
+							//* Is this the front page?
+							$page_is_front = $page_id === $id_on_front;
+
 							$content .= "\t<url>\r\n";
 							if ( $page_is_front ) {
 								$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'home' => true ) ) . "</loc>\r\n";
@@ -527,10 +528,10 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 					if ( '' === $excluded || ! isset( $excluded[ $post_id ] ) ) {
 
 						//* Fetch the noindex option, per page.
-						$noindex = (bool) $this->get_custom_field( '_genesis_noindex', $post_id );
+						$indexed = ! $this->get_custom_field( '_genesis_noindex', $post_id );
 
 						//* Continue if indexed
-						if ( ! $noindex ) {
+						if ( $indexed ) {
 
 							$content .= "\t<url>\r\n";
 							// No need to use static vars
@@ -625,19 +626,19 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			 */
 			foreach ( $latest_cpt_posts as $ctp_post ) {
 				if ( isset( $ctp_post->ID ) ) {
-					$post_id = $ctp_post->ID;
+					$cpt_id = $ctp_post->ID;
 
-					if ( '' === $excluded || ! isset( $excluded[ $post_id ] ) ) {
+					if ( '' === $excluded || ! isset( $excluded[ $cpt_id ] ) ) {
 
 						//* Fetch the noindex option, per page.
-						$noindex = (bool) $this->get_custom_field( '_genesis_noindex', $post_id );
+						$indexed = ! $this->get_custom_field( '_genesis_noindex', $cpt_id );
 
 						//* Continue if indexed
-						if ( ! $noindex ) {
+						if ( $indexed ) {
 
 							$content .= "\t<url>\r\n";
 							//* No need to use static vars
-							$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $ctp_post, 'id' => $post_id ) ) . "</loc>\r\n";
+							$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $ctp_post, 'id' => $cpt_id ) ) . "</loc>\r\n";
 
 							//* Keep it consistent. Only parse if page_lastmod is true.
 							if ( $post_lastmod ) {

@@ -461,11 +461,11 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 			}
 
 			/* translators: 1: Title, 2: on, 3: Blogname */
-			$title_on_blogname = trim( sprintf( __( '%1$s %2$s %3$s', 'autodescription' ), $title, $on, $blogname ) );
+			$title_on_blogname = trim( sprintf( _x( '%1$s %2$s %3$s', '1: Title, 2: on, 3: Blogname', 'autodescription' ), $title, $on, $blogname ) );
 
 			if ( $excerpt['normal'] ) {
-				/* translators: 1: Title on Blogname, 2: Separator, 3: Excerpt */
-				$description = sprintf( __( '%1$s %2$s %3$s', 'autodescription' ), $title_on_blogname, $sep, $excerpt['normal'] );
+				/* translators: 1: Title, 2: Separator, 3: Excerpt */
+				$description = sprintf( _x( '%1$s %2$s %3$s', '1: Title, 2: Separator, 3: Excerpt', 'autodescription' ), $title_on_blogname, $sep, $excerpt['normal'] );
 			} else {
 				//* We still add the additions when no excerpt has been found.
 				// i.e. home page or empty/shortcode filled page.

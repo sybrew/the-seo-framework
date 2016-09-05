@@ -1004,7 +1004,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * @note Usage of $pageslug might be insecure. Check all variables!
 	 *
 	 * @param string $pagehook The menu pagehook to compare to.
-	 * @param string $pagehook The menu page slug to compare to.
+	 * @param string $pageslug The menu page slug to compare to.
 	 * @return bool true if screen match.
 	 */
 	public function is_menu_page( $pagehook = '', $pageslug = '' ) {
@@ -1084,8 +1084,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		 *
 		 * @since 4.4.0 WordPress core
 		 *
-		 * @param array   $_pages Array of "pages" derived from the post content.
-		 *                       of `<!-- nextpage -->` tags..
+		 * @param array $_pages Array of "pages" derived from the post content.
+		 *              of `<!-- nextpage -->` tags..
 		 * @param WP_Post $post  Current post object.
 		 */
 		$_pages = apply_filters( 'content_pagination', $_pages, $post );
@@ -1135,8 +1135,8 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * @param string $key The key to set or get.
 	 * @param mixed $value_to_set The value to set.
 	 * @param array|mixed $hash Extra arguments, that will be used to generate an alternative cache key.
-	 *			Must always be inside a single array when $value_to_set is set. @see AutoDescritpion_Query::set_query_cache()
-	 *			Must always be separated parameters otherwise.
+	 *        Must always be inside a single array when $value_to_set is set. @see AutoDescritpion_Query::set_query_cache()
+	 *        Must always be separated parameters otherwise.
 	 * @return mixed : {
 	 * 		mixed The cached value if set and $value_to_set is null.
 	 *		null If the query can't be cached yet, or when no value has been set.

@@ -183,6 +183,8 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 * Localizes admin javascript.
 	 *
 	 * @since 2.5.2.2
+	 * @staticvar bool $localized : Prevents Re-registering of the l10n.
+	 * @access private
 	 */
 	public function localize_admin_javascript() {
 
@@ -447,6 +449,5 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 			//* Kill PHP.
 			exit;
 		}
-
 	}
 }
