@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://wordpress.org/plugins/autodescription/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.
- * Version: 2.6.6dev7
+ * Version: 2.7.0
  * Author: Sybre Waaijer
  * Author URI: https://cyberwire.nl/
  * License: GPLv3
@@ -46,13 +46,13 @@ defined( 'ABSPATH' ) or die;
  * Not many caching plugins use CDN in dashboard. What a shame. Firefox does cache.
  * @since 1.0.0
  */
-define( 'THE_SEO_FRAMEWORK_VERSION', '2.7.0dev' );
+define( 'THE_SEO_FRAMEWORK_VERSION', '2.7.0' );
 
 /**
  * Plugin Database version for lightweight version comparing.
  * @since 2.7.0
  */
-define( 'THE_SEO_FRAMEWORK_DB_VERSION', '2700' );
+define( 'THE_SEO_FRAMEWORK_DB_VERSION', '2701' );
 
 /**
  * Plugin options filter.

@@ -46,7 +46,7 @@ function the_seo_framework_do_upgrade() {
 	if ( get_option( 'the_seo_framework_upgraded_db_version' ) >= THE_SEO_FRAMEWORK_DB_VERSION )
 		return;
 
-	if ( ! tsf_wp_version( '4.4' ) )
+	if ( ! the_seo_framework()->wp_version( '4.4', '>=' ) )
 		return;
 
 	global $wp_db_version;
@@ -57,8 +57,8 @@ function the_seo_framework_do_upgrade() {
 		exit;
 	}
 
-	if ( get_option( 'the_seo_framework_upgraded_db_version' ) < '2700' )
-		the_seo_framework_do_upgrade_2700();
+	if ( get_option( 'the_seo_framework_upgraded_db_version' ) < '2701' )
+		the_seo_framework_do_upgrade_2701();
 
 	do_action( 'the_seo_framework_upgraded' );
 }
@@ -76,11 +76,11 @@ function the_seo_framework_upgrade_to_current() {
 }
 
 /**
- * Upgrades term metadata for version 2700.
+ * Upgrades term metadata for version 2701.
  *
  * @since 2.7.0
  */
-function the_seo_framework_do_upgrade_2700() {
+function the_seo_framework_do_upgrade_2701() {
 
 	$term_meta = get_option( 'autodescription-term-meta' );
 
@@ -88,7 +88,7 @@ function the_seo_framework_do_upgrade_2700() {
 		add_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $meta, true );
 	}
 
-	update_option( 'the_seo_framework_upgraded_db_version', '2700' );
+	update_option( 'the_seo_framework_upgraded_db_version', '2701' );
 }
 
 /**
