@@ -106,7 +106,7 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 			$meta['nofollow']  = empty( $meta['nofollow'] ) && ! empty( $data['nofollow'] ) ? 'nofollow' : $meta['nofollow'];
 			$meta['noarchive'] = empty( $meta['noarchive'] ) && ! empty( $data['noarchive'] ) ? 'noarchive' : $meta['noarchive'];
 
-			//* If on custom Taxonomy page, but not a category or tag, then should've recieved specific term SEO settings.
+			//* If on custom Taxonomy page, but not a category or tag, then should've received specific term SEO settings.
 			if ( $this->is_category() ) {
 				$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'category_noindex' ) ? 'noindex' : $meta['noindex'];
 				$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'category_nofollow' ) ? 'nofollow' : $meta['nofollow'];

@@ -123,3 +123,12 @@
 * To know how your website is found, sign up for Google Search Console. Over a couple of days (or weeks), elegant data has been accumulated about your website.
 * When you go to the Search Analytics within the Search Console, you'll see a list of queries people have used to find your website.
 * The queries can be used as keywords, they are excellent starting points for new post titles and subjects. Go ahead, use them!
+
+	= 2.7.0 - Compatible Love =
+
+* One of the most critical aspects of SEO is being found. However, Google isn't likely to trust your website until others do. This greatly affects your website's ranking.
+* Because of this, your website needs to be linked to by trusted sources. The more trustworthy a source is, the more trust your website gains at Google.
+* Google needs to understand the relation between your website and another as well. If a site talks about hosting events, and your site is about one particular type of event, they are likely compatible.
+* If your website sells candy, be careful not to place a link towards or on an agency website when your website is new.
+* So, do not ever spread your first links across multiple websites that are completely unrelated to yours.
+* Do not forget to link to other related websites, this way Google knows what your website is about. For example, Google can then distinguish Apple (technology) from apple (fruit).
