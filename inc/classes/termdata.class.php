@@ -138,23 +138,24 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 	 *
 	 * @since 2.7.0
 	 *
-	 * @param int $term_id Term ID.
-	 * @param int $tt_id   Term Taxonomy ID.
+	 * @param int $term_id     Term ID.
+	 * @param int $tt_id       Term Taxonomy ID.
+	 * @param string $taxonomy Taxonomy Slug
 	 * @return void Early on AJAX call.
 	 */
-	public function update_term_meta( $term_id, $tt_id ) {
+	public function update_term_meta( $term_id, $tt_id, $taxonomy = '' ) {
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX )
 			return;
 
 		//* Check again against ambiguous injection.
-		check_admin_referer( 'update-tag_' . $term_id );
+		if ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'update-tag_' . $term_id ) ) {
 
-		$data = isset( $_POST['autodescription-meta'] ) ? (array) map_deep( $_POST['autodescription-meta'], 'esc_attr' ) : array();
-		$data = wp_parse_args( $data, $this->get_term_meta_defaults() );
+			$data = isset( $_POST['autodescription-meta'] ) ? (array) map_deep( $_POST['autodescription-meta'], 'esc_attr' ) : array();
+			$data = wp_parse_args( $data, $this->get_term_meta_defaults() );
 
-		update_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
-
+			update_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
+		}
 	}
 
 	/**
