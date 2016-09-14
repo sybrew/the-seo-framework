@@ -143,26 +143,20 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 	public $script_debug = false;
 
 	/**
-	 * Unserializing instances of this class is forbidden.
-	 */
-	private function __wakeup() { }
-
-	/**
-	 * Cloning of this class is forbidden.
-	 */
-	private function __clone() { }
-
-	/**
-	 * Handle unapproachable invoked methods.
-	 */
-	public function __call( $name, $arguments ) {
-		parent::__call( $name, $arguments );
-	}
-
-	/**
 	 * Constructor, setup debug vars and then load parent constructor.
+	 *
+	 * @staticvar int $count Prevents duplicated constructor loading.
 	 */
 	public function __construct() {
+
+		static $count = 0;
+
+		if ( $count > 0 ) {
+			return null;
+		}
+
+		$count++;
+
 		//* Setup debug vars before initializing parents.
 		$this->init_debug_vars();
 
@@ -229,10 +223,8 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 		/**
 		 * Fetch method/function
 		 */
-		if ( is_object( $class ) && is_string( $method ) ) {
-			$class = get_class( $class );
-
-			if ( get_class( $this ) === $class ) {
+		if ( ( is_object( $class ) || is_string( $class ) ) && $class && is_string( $method ) && $method ) {
+			if ( get_class( $this ) === get_class( $class ) ) {
 				if ( method_exists( $this, $method ) ) {
 					if ( empty( $args ) ) {
 						// In-Object calling.
@@ -242,7 +234,7 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 						$output = call_user_func_array( array( $this, $method ), $args );
 					}
 				} else {
-					$this->_doing_it_wrong( $class . '::' . $method, __( 'Class or Method not found.', 'autodescription' ), $version );
+					$this->_doing_it_wrong( esc_html( get_class( $class ) . '->' . $method . '()' ), esc_html__( 'Class or Method not found.', 'autodescription' ), esc_html( $version ) );
 				}
 			} else {
 				if ( method_exists( $class, $method ) ) {
@@ -252,21 +244,10 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 						$output = call_user_func_array( array( $class, $method ), $args );
 					}
 				} else {
-					$this->_doing_it_wrong( $class . '::' . $method, __( 'Class or Method not found.', 'autodescription' ), $version );
+					$this->_doing_it_wrong( esc_html( $class . '::' . $method . '()' ), esc_html__( 'Class or Method not found.', 'autodescription' ), esc_html( $version ) );
 				}
 			}
-		} elseif ( is_string( $class ) && is_string( $method ) ) {
-			//* This could be combined with the one above.
-			if ( method_exists( $class, $method ) ) {
-				if ( empty( $args ) ) {
-					$output = call_user_func( array( $class, $method ) );
-				} else {
-					$output = call_user_func_array( array( $class, $method ), $args );
-				}
-			} else {
-				$this->_doing_it_wrong( $class . '::' . $method, __( 'Class or Method not found.', 'autodescription' ), $version );
-			}
-		} elseif ( is_string( $class ) ) {
+		} elseif ( is_string( $class ) && $class ) {
 			//* Class is function.
 			$func = $class;
 
@@ -276,7 +257,7 @@ class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 				$output = call_user_func_array( $func, $args );
 			}
 		} else {
-			$this->_doing_it_wrong( __METHOD__, __( 'Function needs to be called as a string.', 'autodescription' ), $version );
+			$this->_doing_it_wrong( __METHOD__, esc_html__( 'Function needs to be called as a string.', 'autodescription' ), esc_html( $version ) );
 		}
 
 		return $output;

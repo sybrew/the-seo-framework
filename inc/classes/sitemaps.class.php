@@ -55,21 +55,9 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 	protected $doing_sitemap = false;
 
 	/**
-	 * Unserializing instances of this class is forbidden.
-	 */
-	private function __wakeup() { }
-
-	/**
-	 * Handle unapproachable invoked methods.
-	 */
-	public function __call( $name, $arguments ) {
-		parent::__call( $name, $arguments );
-	}
-
-	/**
 	 * Constructor, load parent constructor and set up caches.
 	 */
-	public function __construct() {
+	protected function __construct() {
 		parent::__construct();
 
 		//* Whether we're using pretty permalinks.

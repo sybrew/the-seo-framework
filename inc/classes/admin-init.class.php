@@ -56,21 +56,9 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	public $css_name = 'autodescription';
 
 	/**
-	 * Unserializing instances of this class is forbidden.
-	 */
-	private function __wakeup() { }
-
-	/**
-	 * Handle unapproachable invoked methods.
-	 */
-	public function __call( $name, $arguments ) {
-		parent::__call( $name, $arguments );
-	}
-
-	/**
 	 * Constructor. Loads parent constructor, registers script names and adds actions.
 	 */
-	public function __construct() {
+	protected function __construct() {
 		parent::__construct();
 
 		//* Enqueues admin scripts.

@@ -37,21 +37,9 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	protected $using_manual_excerpt = false;
 
 	/**
-	 * Unserializing instances of this class is forbidden.
-	 */
-	private function __wakeup() { }
-
-	/**
-	 * Handle unapproachable invoked methods.
-	 */
-	public function __call( $name, $arguments ) {
-		parent::__call( $name, $arguments );
-	}
-
-	/**
 	 * Constructor, loads parent constructor.
 	 */
-	public function __construct() {
+	protected function __construct() {
 		parent::__construct();
 	}
 

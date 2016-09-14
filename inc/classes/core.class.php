@@ -28,21 +28,24 @@ defined( 'ABSPATH' ) or die;
 class AutoDescription_Core {
 
 	/**
-	 * Unserializing instances of this class is forbidden.
+	 * Unserializing instances of this object is forbidden.
 	 */
-	private function __wakeup() { }
+	final protected function __wakeup() { }
 
 	/**
-	 * Cloning of this class is forbidden.
+	 * Cloning of this object is forbidden.
 	 */
-	private function __clone() { }
+	final protected function __clone() { }
 
 	/**
-	 * __get() deprecation handler.
+	 * Handles unapproachable invoked properties.
+	 * Makes sure deprecated properties are still accessible.
+	 *
 	 * @since 2.7.0
+	 *
 	 * @return mixed $var The object variable.
 	 */
-	public function __get( $name ) {
+	final public function __get( $name ) {
 
 		switch ( $name ) :
 			case 'pagehook' :
@@ -59,12 +62,17 @@ class AutoDescription_Core {
 	}
 
 	/**
-	 * Handle unapproachable invoked methods.
+	 * Handles unapproachable invoked methods.
+	 *
+	 * @param string $name
+	 * @param array $arguments
 	 * @return void
 	 */
-	public function __call( $name, $arguments ) {
+	final public function __call( $name, $arguments ) {
+
 		$_this = the_seo_framework();
 		$_this->_inaccessible_p_or_m( 'the_seo_framework()->' . esc_html( $name ) . '()' );
+
 		return;
 	}
 
@@ -72,7 +80,7 @@ class AutoDescription_Core {
 	 * Constructor. Loads actions and filters.
 	 * Latest Class. Doesn't have parent.
 	 */
-	public function __construct() {
+	protected function __construct() {
 
 		add_action( 'current_screen', array( $this, 'post_type_support' ), 0 );
 

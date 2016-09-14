@@ -28,21 +28,9 @@ defined( 'ABSPATH' ) or die;
 class AutoDescription_Generate_Title extends AutoDescription_Generate_Description {
 
 	/**
-	 * Unserializing instances of this class is forbidden.
-	 */
-	private function __wakeup() { }
-
-	/**
-	 * Handle unapproachable invoked methods.
-	 */
-	public function __call( $name, $arguments ) {
-		parent::__call( $name, $arguments );
-	}
-
-	/**
 	 * Constructor, load parent constructor
 	 */
-	public function __construct() {
+	protected function __construct() {
 		parent::__construct();
 	}
 
@@ -1201,14 +1189,16 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		 */
 		$post = get_post( $id, OBJECT );
 
-		if ( isset( $post->post_password ) && '' !== $post->post_password ) {
-			/* translators: Front-end output */
-			$protected_title_format = (string) apply_filters( 'protected_title_format', __( 'Protected: %s', 'autodescription' ), $post );
-			$title = sprintf( $protected_title_format, $title );
-		} elseif ( isset( $post->post_status ) && 'private' === $post->post_status ) {
-			/* translators: Front-end output */
-			$private_title_format = (string) apply_filters( 'private_title_format', __( 'Private: %s', 'autodescription' ), $post );
-			$title = sprintf( $private_title_format, $title );
+		if ( $this->is_singular() ) {
+			if ( isset( $post->post_password ) && '' !== $post->post_password ) {
+				/* translators: Front-end output */
+				$protected_title_format = (string) apply_filters( 'protected_title_format', __( 'Protected: %s', 'autodescription' ), $post );
+				$title = sprintf( $protected_title_format, $title );
+			} elseif ( isset( $post->post_status ) && 'private' === $post->post_status ) {
+				/* translators: Front-end output */
+				$private_title_format = (string) apply_filters( 'private_title_format', __( 'Private: %s', 'autodescription' ), $post );
+				$title = sprintf( $private_title_format, $title );
+			}
 		}
 
 		return $title;

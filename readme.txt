@@ -51,11 +51,10 @@ Nobody has to know about the tools you've used to create your or someone else's 
 
 * Title, with super-fast 'wrong themes' support.
 * Description, with anti-spam techniques.
-* A canonical URL.
+* A canonical URL, with full WPMUdev Domain Mapping, subdomain and HTTPS support to prevent duplicated content.
 * Various Open Graph, Facebook and Twitter tags.
 * Special Open Graph description, which organically integrates with the Facebook and Twitter snippets.
-* Extended Open Graph Images support, including image manipulation.
-* Canonical, with full WPMUdev Domain Mapping, subdomain and HTTPS support to prevent duplicated content.
+* Extended Open Graph Images support, including automated image manipulation.
 * Schema.org LD+Json script that adds extended search support for Google Search and Chrome.
 * Schema.org LD+Json script for Knowledge Graph (Personal/Business site relations, name and logo).
 * Advanced Schema.org LD+Json script for Breadcrumbs (just like the visual one) which extends page relation support in Google Search.
@@ -194,6 +193,127 @@ Please refer to this small guide: [SEO Data Migration](http://theseoframework.co
 Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
+
+= 2.7.1 - Seceded Affiliation =
+
+**Summarized:**
+
+* This maintenance release fixes ... TODO
+* Class structure ... TODO
+
+**SEO tip of the Update:**
+
+* Not all SEO techniques are actively used on Google outside of the United States.
+* For example, the Site Name Schema.org script might not have any effect.
+* This changes over time as Google updates its Search Engine all over the world.
+* Usage of experimental Schema.org scripts cause no harm to ranking.
+
+**Did you know:**
+
+* Each update name and link to the detailed log are a play on words about something in a particular event, movie, series, quote, or the update contents itself.
+* The 2.7.x version update names are all about the first Star Wars movie "Episode IV: A new Hope".
+
+**Do you mind:**
+/ TODO
+* If you have at least 30 seconds to spare, could you please fill in this anonymous survey? It will sincerely help me help you.
+	Record:
+	 * How many websites do you operate (optional),
+	 * Website with most traffic:
+	 	* PHP version (Add: "I don't know"),
+	 	* Website purpose ("Commercial (e-commerce/local store)/Hobby/Informational/Organization/Blog/News") (optional),
+	 	* User role (Author, Developer, Owner, Administrator, etc.) (optional),
+	 	* Website URL (optional),
+	 * Would you pay for professional SEO services? (optional, 'Default: I don't know./Rather not say?'),
+	 	* How much? (optional, conditional),
+	 * Feature request? (optional),
+	 * Anything else? Let me know. (optional).
+
+TODO:
+***Are you an avid developer, and have extended The SEO Framework? Please carefully read the detailed changelog. The class structure has changed.***
+
+**Detailed log:**
+/
+***That's no query; it's a [changelog](https://theseoframework.com/?p= TODO #detailed).***
+
+**For everyone:**
+
+**Improved:**
+	/
+	* TODO The post/page/term object cache is now flushed on edit/save.
+		* https://github.com/sybrew/the-seo-framework/issues/24
+**Fixed:**
+	/
+	* TODO On some themes, a fatal error was output when editing posts. (requires confirmation)
+		* https://wordpress.org/support/topic/can-not-edit-post-after-v2-7-0-update/
+	/
+	* TODO Page and post excerpts now correctly work.
+		* https://wordpress.org/support/topic/excerpt-to-meta-description-issue-screencast/
+	/
+	* TODO On some themes, the private prefix has been added (already fixed, requires confirmation)
+		* https://wordpress.org/support/topic/category-page-title-with-weird-unwanted-prefix/
+
+**For developers:**
+
+**Added:**
+	/
+	* TODO `The_SEO_Framework_Load->__set()` magic method. This prevents inaccessible property writing.
+**Changed:**
+	/
+	* TODO All the classes can't be initiated directly anymore. Always use `the_seo_framework()`. Failing to do so will result in a fatal error.
+		* This allows me (the developer) to easily change the class structure without compatibility issues in the future.
+	/
+	* TODO The main class `The_SEO_Framework_Load` can not be initiated twice anymore. Failing to do so will return `null`.
+		* Always use function `the_seo_framework()` if you wish to access a method or property.
+	/
+	* TODO Some class files have been moved.
+		* The changes:
+			* The main class file `load.class.php` has been moved to the `/autodescription/inc/classes/` folder, from the `/autodescription/` folder.
+			* The deprecation class handler `deprecated.class.php` has been moved to the `/autodescription/inc/classes/` folder, from the `/autodescription/inc/deprecated/` folder.
+		* These changes allow easy autoloading.
+	/
+	* TODO Most classes have been renamed.
+		* The changes:
+			* `AdminPages` is now `Admin_Pages`.
+		* These changes allow easy autoloading and future namespace interaction.
+	/
+	* TODO Some class files have been renamed.
+		* The changes:
+			* `adminpages.class.php`
+		* These changes allow easy autoloading and future namespace interaction.
+	/
+	* TODO Some function files have been moved.
+		* The changes:
+			* The deprecation function handler `deprecated.php` has been moved to the `/autodescription/inc/functions/` folder, from the `/autodescription/inc/deprecated/` folder.
+		* This cleans up the folders and some code.
+	/
+	* TODO Not all classes are now always available. Unless methods of such are called or required.
+		* This massively improves performance and reduces memory usage.
+		* This completely changes the architecture of the plugin.
+		* This is handled through autoloading and magic methods.
+		* Classes include:
+			* AdminPages
+			* Admin-Init
+			* Deprecated
+			* Debug
+			* Termdata?
+			* Postdata?
+			* Inpost?
+			* Compat?
+	/
+	* TODO Class The_SEO_Framework_Load is now final, and can't be extended upon anymore.
+	* TODO The `license.txt` file has been updated to improve readability. The contents have not been changed.
+**Improved:**
+	/
+	* Method `the_seo_framework()->call_function()` now passes objects, so you can use `$this` in the called function.
+	* Class overloading magic methods (`__wakeup()`, `__call()`, `__get()`, `__set()`) are now only initiated once and can't be reinitated or overloaded.
+	* TODO The old option update handler has been moved into the new 2.7.0 update handler.
+		* This prevents duplicated and constant option update checks.
+	/
+	* TODO All admin actions have been moved into an admin action handler.
+		* This massively reduces the plugin memory heap size of this plugin on the front-end.
+	/
+	* TODO All front-end actions have been moved into an admin action handler (wasn't htis already the case?)
+		* This massively reduces the plugin memory heap size of this plugin on the back-end.
 
 = 2.7.0 - Contemporary Aspiration =
 

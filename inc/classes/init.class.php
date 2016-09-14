@@ -37,21 +37,9 @@ class AutoDescription_Init extends AutoDescription_Query {
 	protected $use_object_cache = true;
 
 	/**
-	 * Unserializing instances of this class is forbidden.
-	 */
-	private function __wakeup() { }
-
-	/**
-	 * Handle unapproachable invoked methods.
-	 */
-	public function __call( $name, $arguments ) {
-		parent::__call( $name, $arguments );
-	}
-
-	/**
 	 * Constructor. Initializes actions and loads parent constructor.
 	 */
-	public function __construct() {
+	protected function __construct() {
 		parent::__construct();
 
 		add_action( 'init', array( $this, 'autodescription_run' ), 1 );
@@ -157,23 +145,28 @@ class AutoDescription_Init extends AutoDescription_Query {
 		$functions = array();
 
 		/**
+		 * @since 2.2.6
+		 *
 		 * Applies filters 'the_seo_framework_before_output' : array after functions output
 		 * Applies filters 'the_seo_framework_after_output' : array after functions output
+		 * @param array $functions {
+		 *		'callback' => string|array The function to call.
+		 *		'args'     => scalar|array Arguments. When array, each key is a new argument.
+		 * }
 		 */
 		$filter_tag = $before ? 'the_seo_framework_before_output' : 'the_seo_framework_after_output';
 		$filter = (array) apply_filters( $filter_tag, $functions );
 
 		$functions = wp_parse_args( $args, $filter );
 
-		if ( $functions && is_array( $functions ) ) {
-			foreach ( $functions as $function ) {
+		if ( $functions && is_array( $functions ) ) :
+			foreach ( $functions as $function ) :
 				$arguments = isset( $function['args'] ) ? $function['args'] : '';
 
 				if ( isset( $function['callback'] ) )
 					$output .= $this->call_function( $function['callback'], '2.2.6', $arguments );
-
-			}
-		}
+			endforeach;
+		endif;
 
 		return $output;
 	}

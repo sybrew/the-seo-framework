@@ -31,21 +31,9 @@ defined( 'ABSPATH' ) or die;
 class AutoDescription_Query extends AutoDescription_Compat {
 
 	/**
-	 * Unserializing instances of this class is forbidden.
-	 */
-	private function __wakeup() { }
-
-	/**
-	 * Handle unapproachable invoked methods.
-	 */
-	public function __call( $name, $arguments ) {
-		parent::__call( $name, $arguments );
-	}
-
-	/**
 	 * Constructor. Load parent constructor.
 	 */
-	public function __construct() {
+	protected function __construct() {
 		parent::__construct();
 	}
 

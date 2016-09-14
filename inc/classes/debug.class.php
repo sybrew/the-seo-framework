@@ -47,21 +47,9 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	protected $add_debug_output = true;
 
 	/**
-	 * Unserializing instances of this class is forbidden.
-	 */
-	private function __wakeup() { }
-
-	/**
-	 * Handle unapproachable invoked methods.
-	 */
-	public function __call( $name, $arguments ) {
-		parent::__call( $name, $arguments );
-	}
-
-	/**
 	 * Constructor, load parent constructor and add actions.
 	 */
-	public function __construct() {
+	protected function __construct() {
 		parent::__construct();
 
 		if ( $this->the_seo_framework_debug ) {

@@ -56,21 +56,9 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	protected $o_plugin_updated;
 
 	/**
-	 * Unserializing instances of this class is forbidden.
-	 */
-	private function __wakeup() { }
-
-	/**
-	 * Handle unapproachable invoked methods.
-	 */
-	public function __call( $name, $arguments ) {
-		parent::__call( $name, $arguments );
-	}
-
-	/**
 	 * Constructor, load parent constructor and set up cachable variables.
 	 */
-	public function __construct() {
+	protected function __construct() {
 		parent::__construct();
 
 		$this->settings_field = THE_SEO_FRAMEWORK_SITE_OPTIONS;

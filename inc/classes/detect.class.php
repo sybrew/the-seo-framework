@@ -28,21 +28,9 @@ defined( 'ABSPATH' ) or die;
 class AutoDescription_Detect extends AutoDescription_Render {
 
 	/**
-	 * Unserializing instances of this class is forbidden.
-	 */
-	private function __wakeup() { }
-
-	/**
-	 * Handle unapproachable invoked methods.
-	 */
-	public function __call( $name, $arguments ) {
-		parent::__call( $name, $arguments );
-	}
-
-	/**
 	 * Constructor, load parent constructor
 	 */
-	public function __construct() {
+	protected function __construct() {
 		parent::__construct();
 	}
 
@@ -510,7 +498,7 @@ class AutoDescription_Detect extends AutoDescription_Render {
 
 		$plugins = array(
 			'functions' => array(
-				'jetpack_sitemap_initialize' // Jetpack
+				'jetpack_sitemap_initialize', // Jetpack
 			),
 		);
 
@@ -567,13 +555,15 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * Determines if WP is above or below a version
 	 *
 	 * @since 2.2.1
+	 * @global string $wp_version
 	 *
 	 * @staticvar array $cache
 	 * @since 2.3.8
 	 *
 	 * @param string $version the three part version to compare to WordPress
 	 * @param string $compare the comparing operator, default "$version >= Current WP Version"
-	 * @return bool wp version is "compare" to
+	 * @return bool True if the WordPress version comparison passes.
+	 * 			Note: When using $compare = '>' it will be false when they are equal.
 	 */
 	public function wp_version( $version = '4.3.0', $compare = '>=' ) {
 
@@ -868,13 +858,11 @@ class AutoDescription_Detect extends AutoDescription_Render {
 	 * Detect WordPress language.
 	 * Considers en_UK, en_US, en, etc.
 	 *
-	 * @param string $locale Required, the locale.
-	 * @param bool $use_cache Set to false to bypass the cache.
-	 *
+	 * @since 2.6.0
 	 * @staticvar array $locale
 	 *
-	 * @since 2.6.0
-	 *
+	 * @param string $locale Required, the locale.
+	 * @param bool $use_cache Set to false to bypass the cache.
 	 * @return bool Whether the locale is in the WordPress locale.
 	 */
 	public function check_wp_locale( $locale = '', $use_cache = true ) {
@@ -882,15 +870,15 @@ class AutoDescription_Detect extends AutoDescription_Render {
 		if ( empty( $locale ) )
 			return false;
 
-		if ( true !== $use_cache )
-			return false !== strpos( get_locale(), $locale );
+		if ( ! $use_cache )
+			return is_int( strpos( get_locale(), $locale ) );
 
 		static $cache = array();
 
 		if ( isset( $cache[ $locale ] ) )
 			return $cache[ $locale ];
 
-		return $cache[ $locale ] = false !== strpos( get_locale(), $locale );
+		return $cache[ $locale ] = is_int( strpos( get_locale(), $locale ) );
 	}
 
 	/**
