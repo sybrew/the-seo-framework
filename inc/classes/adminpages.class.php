@@ -431,13 +431,15 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 		if ( false === $this->is_seo_settings_page( true ) )
 			return;
 
-		if ( isset( $_REQUEST['settings-updated'] ) && 'true' === $_REQUEST['settings-updated'] )
+		$request = isset( $_REQUEST ) ? $_REQUEST : null;
+
+		if ( isset( $request['settings-updated'] ) && 'true' === $request['settings-updated'] )
 			$this->do_dismissible_notice( $this->page_defaults['saved_notice_text'], 'updated' );
-		elseif ( isset( $_REQUEST['reset'] ) && 'true' === $_REQUEST['reset'] )
+		elseif ( isset( $request['reset'] ) && 'true' === $request['reset'] )
 			$this->do_dismissible_notice( $this->page_defaults['reset_notice_text'], 'warning' );
-		elseif ( isset( $_REQUEST['error'] ) && 'true' === $_REQUEST['error'] )
+		elseif ( isset( $request['error'] ) && 'true' === $request['error'] )
 			$this->do_dismissible_notice( $this->page_defaults['error_notice_text'], 'error' );
-		elseif ( isset( $_REQUEST['seo-updated'] ) && 'true' === $_REQUEST['seo-updated'] )
+		elseif ( isset( $request['seo-updated'] ) && 'true' === $request['seo-updated'] )
 			$this->do_dismissible_notice( $this->page_defaults['plugin_update_text'], 'updated' );
 
 	}
@@ -538,12 +540,13 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	public function wrap_fields( $input = '', $echo = false ) {
 
 		if ( is_array( $input ) )
-			$input = implode( "\r\n", $input );
+			$input = implode( PHP_EOL, $input );
 
 		if ( $echo ) {
-			echo '<div class="tsf-fields">' . "\r\n" . $input . "\r\n" . '</div>';
+			//* Already escaped.
+			echo '<div class="tsf-fields">' . PHP_EOL . $input . PHP_EOL . '</div>';
 		} else {
-			return '<div class="tsf-fields">' . "\r\n" . $input . "\r\n" . '</div>';
+			return '<div class="tsf-fields">' . PHP_EOL . $input . PHP_EOL . '</div>';
 		}
 	}
 

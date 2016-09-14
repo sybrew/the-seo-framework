@@ -251,8 +251,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 		$this->add_filter(
 			's_no_html',
 			$this->settings_field,
-			array(
-			)
+			array()
 		);
 
 		/**
@@ -497,24 +496,24 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	protected function get_available_filters() {
 
 		$default_filters = array(
-			's_left_right' 				=> array( $this, 's_left_right' 			),
-			's_left_right_home' 		=> array( $this, 's_left_right_home' 		),
-			's_title_separator' 		=> array( $this, 's_title_separator' 		),
-			's_description_separator' 	=> array( $this, 's_description_separator' 	),
-			's_description' 			=> array( $this, 's_description' 			),
-			's_title' 					=> array( $this, 's_title' 					),
-			's_knowledge_type'			=> array( $this, 's_knowledge_type'			),
-			's_one_zero' 				=> array( $this, 's_one_zero' 				),
-			's_one_zero_flush_rewrite'	=> array( $this, 's_one_zero_flush_rewrite'	),
-			's_one_zero_flush_sitemap'	=> array( $this, 's_one_zero_flush_sitemap'	),
-			's_no_html' 				=> array( $this, 's_no_html' 				),
-			's_no_html_space' 			=> array( $this, 's_no_html_space' 			),
-			's_absint' 					=> array( $this, 's_absint' 				),
-			's_safe_html' 				=> array( $this, 's_safe_html' 				),
-			's_url' 					=> array( $this, 's_url' 					),
-			's_url_query' 				=> array( $this, 's_url_query' 				),
-			's_twitter_name' 			=> array( $this, 's_twitter_name' 			),
-			's_twitter_card' 			=> array( $this, 's_twitter_card' 			),
+			's_left_right'             => array( $this, 's_left_right' ),
+			's_left_right_home'        => array( $this, 's_left_right_home' ),
+			's_title_separator'        => array( $this, 's_title_separator' ),
+			's_description_separator'  => array( $this, 's_description_separator' ),
+			's_description'            => array( $this, 's_description' ),
+			's_title'                  => array( $this, 's_title' ),
+			's_knowledge_type'         => array( $this, 's_knowledge_type' ),
+			's_one_zero'               => array( $this, 's_one_zero' ),
+			's_one_zero_flush_rewrite' => array( $this, 's_one_zero_flush_rewrite' ),
+			's_one_zero_flush_sitemap' => array( $this, 's_one_zero_flush_sitemap' ),
+			's_no_html'                => array( $this, 's_no_html' ),
+			's_no_html_space'          => array( $this, 's_no_html_space' ),
+			's_absint'                 => array( $this, 's_absint' ),
+			's_safe_html'              => array( $this, 's_safe_html' ),
+			's_url'                    => array( $this, 's_url' ),
+			's_url_query'              => array( $this, 's_url_query' ),
+			's_twitter_name'           => array( $this, 's_twitter_name' ),
+			's_twitter_card'           => array( $this, 's_twitter_card' ),
 		);
 
 		/**

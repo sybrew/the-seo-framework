@@ -51,7 +51,7 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 	 */
 	public function inpost_seo_save( $post_id, $post ) {
 
-		if ( ! isset( $_POST['autodescription'] ) )
+		if ( empty( $_POST['autodescription'] ) )
 			return;
 
 		/**
@@ -69,20 +69,19 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 			'exclude_local_search'   => 0,
 		) );
 
-		foreach ( (array) $data as $key => $value ) {
-			//* Sanitize the title
+		foreach ( (array) $data as $key => $value ) :
+			//* Sanitize the title.
 			if ( '_genesis_title' === $key )
 				$data[ $key ] = trim( strip_tags( $value ) );
 
-			//* Sanitize the description
+			//* Sanitize the description.
 			if ( '_genesis_description' === $key )
 				$data[ $key ] = $this->s_description( $value );
 
-			//* Sanitize the URL. Make sure it's an absolute URL
+			//* Sanitize the URL. Make sure it's an absolute URL.
 			if ( 'redirect' === $key )
 				$data[ $key ] = $this->s_redirect_url( $value );
-
-		}
+		endforeach;
 
 		$this->save_custom_fields( $data, $this->inpost_nonce_field, $this->inpost_nonce_name, $post );
 	}
@@ -136,12 +135,12 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 		//* Cycle through $data, insert value or delete field
 		foreach ( (array) $data as $field => $value ) {
 			//* Save $value, or delete if the $value is empty
-			if ( $value )
+			if ( $value ) {
 				update_post_meta( $post->ID, $field, $value );
-			else
+			} else {
 				delete_post_meta( $post->ID, $field );
+			}
 		}
-
 	}
 
 	/**
@@ -309,6 +308,8 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 	 * @global object $wpdb
 	 * @global int $blog_id
 	 *
+	 * @TODO use get_posts() or WP_Query.
+	 *
 	 * @return int Latest Post ID.
 	 */
 	public function get_latest_post_id() {
@@ -325,11 +326,11 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 		$page_id = $this->object_cache_get( $latest_posts_key );
 		if ( false === $page_id ) {
 
-			// Prepare array
+			//* Prepare array
 			$post_type = esc_sql( array( 'post', 'page' ) );
 			$post_type_in_string = "'" . implode( "','", $post_type ) . "'";
 
-			// Prepare array
+			//* Prepare array
 			$post_status = esc_sql( array( 'publish', 'future', 'pending' ) );
 			$post_status_in_string = "'" . implode( "','", $post_status ) . "'";
 

@@ -141,18 +141,6 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 *
 	 * @since 2.4.0
 	 *
-	 * @since 2.5.0:
-	 * Applies filters the_seo_framework_title_args : {
-	 * 		@param int term_id The Taxonomy Term ID when taxonomy is also filled in. Else post ID.
-	 * 		@param string taxonomy The Taxonomy name.
-	 * 		@param bool page_on_front Page on front condition for example generation.
-	 * 		@param bool notagline Generate title without tagline.
-	 * 		@param bool meta Ignore doing_it_wrong. Used in og:title/twitter:title
-	 * 		@param bool get_custom_field Do not fetch custom title when false.
-	 * 		@param bool description_title Fetch title for description.
-	 * 		@param bool is_front_page Fetch front page title.
-	 * }
-	 *
 	 * @param array $args required The passed arguments.
 	 * @param array $defaults The default arguments.
 	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
@@ -174,6 +162,19 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 				'escape'			=> true,
 			);
 
+			/**
+			 * Applies filters the_seo_framework_title_args : {
+			 * 		@param int term_id The Taxonomy Term ID when taxonomy is also filled in. Else post ID.
+			 * 		@param string taxonomy The Taxonomy name.
+			 * 		@param bool page_on_front Page on front condition for example generation.
+			 * 		@param bool notagline Generate title without tagline.
+			 * 		@param bool meta Ignore doing_it_wrong. Used in og:title/twitter:title
+			 * 		@param bool get_custom_field Do not fetch custom title when false.
+			 * 		@param bool description_title Fetch title for description.
+			 * 		@param bool is_front_page Fetch front page title.
+			 * }
+			 * @since 2.5.0
+			 */
 			$defaults = (array) apply_filters( 'the_seo_framework_title_args', $defaults, $args );
 		}
 
@@ -332,10 +333,8 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		$blogname = $this->get_blogname();
 
 		/**
-		 * Don't add/replace separator when false.
-		 *
-		 * @applies filters the_seo_framework_doingitwrong_add_sep
-		 *
+		 * Applies filters 'the_seo_framework_doingitwrong_add_sep' : bool
+		 * Determines additions of separator.
 		 * @since 2.4.2
 		 */
 		$add_sep = (bool) apply_filters( 'the_seo_framework_doingitwrong_add_sep', true );
@@ -372,13 +371,11 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 			 *
 			 * A separator is at least 2 long (space + separator).
 			 *
-			 * @param string $sep_to_replace Already confirmed to contain the old sep string.
+			 * @since 2.4.1 Now also considers seplocation.
 			 *
-			 * Now also considers seplocation.
-			 * @since 2.4.1
+			 * @param string $sep_to_replace Already confirmed to contain the old sep string.
 			 */
 			if ( $sep_to_replace ) {
-
 				$sep_to_replace_length = mb_strlen( $sep_to_replace );
 
 				if ( 'right' === $seplocation ) {
@@ -783,14 +780,14 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	}
 
 	/**
-	 * Get the archive Title, including filter. Also works in admin.
+	 * Gets the archive Title, including filter. Also works in admin.
 	 * @NOTE Taken from WordPress core. Altered to work in the Admin area.
 	 *
 	 * @since 2.6.0
 	 *
 	 * @param object $term The Term object.
 	 * @param array $args The Title arguments.
-	 * @return string The Archive Title.
+	 * @return string The Archive Title, not escaped.
 	 */
 	public function get_the_real_archive_title( $term = null, $args = array() ) {
 
@@ -889,12 +886,12 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	}
 
 	/**
-	 * Fetch single term title.
+	 * Fetches single term title.
 	 * @NOTE Taken from WordPress core. Altered to work in the Admin area.
 	 *
 	 * @since 2.6.0
 	 *
-	 * @return string.
+	 * @return string Single term title.
 	 */
 	public function single_term_title( $prefix = '', $display = true, $term = null ) {
 
@@ -941,10 +938,11 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 		if ( empty( $term_name ) )
 			$term_name = $this->untitled();
 
-		if ( $display )
+		if ( $display ) {
 			echo esc_attr( $prefix . $term_name );
-		else
+		} else {
 			return $prefix . $term_name;
+		}
 	}
 
 	/**
@@ -979,7 +977,7 @@ class AutoDescription_Generate_Title extends AutoDescription_Generate_Descriptio
 	 *
 	 * @since 2.6.0
 	 *
-	 * @return string Untitled.
+	 * @return string Untitled. Not escaped.
 	 */
 	public function untitled() {
 		/* translators: Front-end output. */

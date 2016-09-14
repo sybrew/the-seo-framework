@@ -431,6 +431,9 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 				'value' => $value,
 			);
 
+			//* Remove output buffer.
+			$this->clean_reponse_header();
+
 			//* Encode and echo results. Requires JSON decode within JS.
 			echo json_encode( $results );
 

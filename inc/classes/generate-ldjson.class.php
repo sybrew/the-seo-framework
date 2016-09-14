@@ -655,18 +655,15 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 	/**
 	 * Return current page item for LD Json Breadcrumbs.
 	 *
-	 * @staticvar string $last_item.
-	 *
 	 * @since 2.4.2
-	 *
-	 * @param string $item_type the breadcrumb item type.
-	 * @param int $pos Last known position.
-	 * @param int $post_id The current Post ID
-	 *
+	 * @staticvar string $last_item.
 	 * @staticvar string $type The breadcrumb item type.
 	 * @staticvar string $id The current post/page/archive url.
 	 * @staticvar string $name The current post/page/archive title.
 	 *
+	 * @param string $item_type the breadcrumb item type.
+	 * @param int $pos Last known position.
+	 * @param int $post_id The current Post ID
 	 * @return string Last Breadcrumb item
 	 */
 	public function ld_json_breadcrumb_last( $item_type = null, $pos = null, $post_id = null ) {
@@ -744,7 +741,6 @@ class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
 	 *
 	 * @param array The breadcrumb trees, with the key as parent.
 	 * @param array $previous_tree A previous set tree to compare to, if set.
-	 *
 	 * @return trees in order.
 	 */
 	protected function build_breadcrumb_trees( $kittens, array $previous_tree = array() ) {

@@ -116,7 +116,7 @@ class AutoDescription_Feed extends AutoDescription_Transients {
 						$excerpt = str_replace( $h2_content, '', $excerpt, $count );
 
 						//* Wrap h2 content in h2 tags.
-						$h2_output = '<h2>' . $h2_content . "</h2>\r\n";
+						$h2_output = '<h2>' . $h2_content . '</h2>' . PHP_EOL;
 					}
 				}
 
@@ -133,7 +133,7 @@ class AutoDescription_Feed extends AutoDescription_Transients {
 				 * @since 2.6.0
 				 */
 				$source_i18n = (string) apply_filters( 'the_seo_framework_feed_source_link_text', _x( 'Source', 'The content source', 'autodescription' ) );
-				$content .= "\r\n" . '<p><a href="' . $permalink . '" rel="external nofollow">' . $source_i18n . '</a></p>';
+				$content .= PHP_EOL . '<p><a href="' . $permalink . '" rel="external nofollow">' . $source_i18n . '</a></p>';
 			}
 		}
 

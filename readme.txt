@@ -237,11 +237,18 @@ TODO:
 
 **For everyone:**
 
-**Improved:**
+* **Improved:**
 	/
 	* TODO The post/page/term object cache is now flushed on edit/save.
 		* https://github.com/sybrew/the-seo-framework/issues/24
-**Fixed:**
+	/
+	* TODO The sitemap is now no longer stored in a buffer. (echo in-line instead of return $var)
+		* This massively reduces the memory usage.
+		* Therefore, the sitemap's maximum entry output has been increased to 9000 from 2100.
+* **Updated:**
+	/
+	* TODO Translation POT file.
+* **Fixed:**
 	/
 	* TODO On some themes, a fatal error was output when editing posts. (requires confirmation)
 		* https://wordpress.org/support/topic/can-not-edit-post-after-v2-7-0-update/
@@ -249,15 +256,20 @@ TODO:
 	* TODO Page and post excerpts now correctly work.
 		* https://wordpress.org/support/topic/excerpt-to-meta-description-issue-screencast/
 	/
-	* TODO On some themes, the private prefix has been added (already fixed, requires confirmation)
+	* TODO On some themes, the private prefix has been added to the title (already fixed, requires confirmation)
 		* https://wordpress.org/support/topic/category-page-title-with-weird-unwanted-prefix/
+
+**For translators:**
+
+* **Changed:**
+	* A few sentences have been updated slightly in order to be sanitized correctly.
 
 **For developers:**
 
-**Added:**
+* **Added:**
 	/
 	* TODO `The_SEO_Framework_Load->__set()` magic method. This prevents inaccessible property writing.
-**Changed:**
+* **Changed:**
 	/
 	* TODO All the classes can't be initiated directly anymore. Always use `the_seo_framework()`. Failing to do so will result in a fatal error.
 		* This allows me (the developer) to easily change the class structure without compatibility issues in the future.
@@ -302,7 +314,10 @@ TODO:
 	/
 	* TODO Class The_SEO_Framework_Load is now final, and can't be extended upon anymore.
 	* TODO The `license.txt` file has been updated to improve readability. The contents have not been changed.
-**Improved:**
+	* TODO The `title_seperator` option has been changed and updated to `title_separator`. Note the typo.
+* **Fixed:**
+	* Leftover CSS prefix name `seoframework-content-no-js` should've been `tsf-content-no-js`.
+* **Improved:**
 	/
 	* Method `the_seo_framework()->call_function()` now passes objects, so you can use `$this` in the called function.
 	* Class overloading magic methods (`__wakeup()`, `__call()`, `__get()`, `__set()`) are now only initiated once and can't be reinitated or overloaded.
@@ -312,8 +327,18 @@ TODO:
 	* TODO All admin actions have been moved into an admin action handler.
 		* This massively reduces the plugin memory heap size of this plugin on the front-end.
 	/
-	* TODO All front-end actions have been moved into an admin action handler (wasn't htis already the case?)
+	* TODO All front-end actions have been moved into a front-end action handler.
 		* This massively reduces the plugin memory heap size of this plugin on the back-end.
+	* The debug handlers no longer checks for function `__`, as it should already be present when The SEO Framework has been loaded.
+	/
+	* TODO The inpost metabox has been moved into a view file.
+		* This reduces memory usage on non-post edit pages.
+	/
+	* TODO The taxonomy and terms options output has been moved into a view file.
+		* This reduces memory usage on non-term edit pages.
+	* Method `get_latest_post_id()` now uses WP_Query instead of a direct database call.
+* **Other:**
+	* Cleaned up code.
 
 = 2.7.0 - Contemporary Aspiration =
 

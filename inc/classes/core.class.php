@@ -93,6 +93,23 @@ class AutoDescription_Core {
 	}
 
 	/**
+	 * Destroys output buffer, if any. To be used with AJAX and XML to clear any PHP errors or dumps.
+	 *
+	 * @since 2.7.1
+	 *
+	 * @return bool True on clear. False otherwise.
+	 */
+	protected function clean_reponse_header() {
+
+		if ( ob_get_level() && ob_get_contents() ) {
+			ob_clean();
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Fetches files based on input to reduce memory overhead.
 	 * Passes on input vars.
 	 *
@@ -310,8 +327,10 @@ class AutoDescription_Core {
 	 * @return string Content wrapped int he description wrap.
 	 */
 	public function description_noesc( $content, $block = true ) {
+
 		$output = '<span class="description">' . $content . '</span>';
 		echo $block ? '<p>' . $output . '</p>' : $output;
+
 	}
 
 	/**

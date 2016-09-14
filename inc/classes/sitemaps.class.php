@@ -197,7 +197,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 		if ( $get_freed_memory )
 			return $freed_memory;
 
-		if ( $this->the_seo_framework_debug ) $memory = memory_get_usage();
+		$this->the_seo_framework_debug and $memory = memory_get_usage();
 
 		$remove = array(
 			'wp_filter' => array(
@@ -227,7 +227,7 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			}
 		}
 
-		if ( $this->the_seo_framework_debug ) $freed_memory = $memory - memory_get_usage();
+		$this->the_seo_framework_debug and $freed_memory = $memory - memory_get_usage();
 
 	}
 
@@ -242,16 +242,13 @@ class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
 			header( 'Content-type: text/xml; charset=utf-8' );
 
 		//* Remove output, if any.
-		if ( ob_get_level() > 0 ) {
-			if ( ob_get_contents() )
-				ob_clean();
-		}
+		$this->clean_reponse_header();
 
 		//* Fetch sitemap content and add trailing line. Already escaped internally.
-		echo $this->get_sitemap_content() . "\r\n";
+		echo $this->get_sitemap_content() . PHP_EOL;
 
 		// We're done now.
-		die();
+		exit;
 	}
 
 	/**

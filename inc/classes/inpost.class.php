@@ -349,16 +349,18 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 		$description_placeholder = $generated_description;
 
 		?>
-		<h3><?php printf( esc_html__( '%s SEO Settings', 'autodescription' ), $type ); ?></h3>
+		<h3><?php printf( esc_html__( '%s SEO Settings', 'autodescription' ), esc_html( $type ) ); ?></h3>
 
 		<table class="form-table">
 			<tbody>
-
 				<?php if ( 'above' === $this->inpost_seo_bar ) : ?>
 				<tr>
 					<th scope="row" valign="top"><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
 					<td>
-						<?php echo $this->post_status( $term_id, $taxonomy, true ); ?>
+						<?php
+						//* Already escaped.
+						echo $this->post_status( $term_id, $taxonomy, true );
+						?>
 					</td>
 				</tr>
 				<?php endif; ?>
@@ -366,17 +368,17 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 				<tr class="form-field">
 					<th scope="row" valign="top">
 						<label for="autodescription-meta[doctitle]">
-							<strong><?php printf( esc_html__( '%s Title', 'autodescription' ), $type ); ?></strong>
-							<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#3" target="_blank" title="<?php esc_html_e( 'Recommended Length: 50 to 55 characters', 'autodescription' ) ?>">[?]</a>
+							<strong><?php printf( esc_html__( '%s Title', 'autodescription' ), esc_html( $type ) ); ?></strong>
+							<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 50 to 55 characters', 'autodescription' ); ?>">[?]</a>
 						</label>
 					</th>
 					<td>
 						<div id="tsf-title-wrap">
-							<input name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" type="text" placeholder="<?php echo $title_placeholder ?>" value="<?php echo esc_attr( $title ); ?>" size="40" />
+							<input name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" type="text" placeholder="<?php echo esc_attr( $title_placeholder ) ?>" value="<?php echo esc_attr( $title ); ?>" size="40" />
 							<span id="tsf-title-offset" class="hide-if-no-js"></span><span id="tsf-title-placeholder" class="hide-if-no-js"></span>
 						</div>
 						<p class="description tsf-counter">
-							<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[doctitle]_chars">'. mb_strlen( $tit_len_parsed ) .'</span>' ); ?>
+							<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[doctitle]_chars">' . esc_html( mb_strlen( $tit_len_parsed ) ) . '</span>' ); ?>
 							<span class="hide-if-no-js tsf-ajax"></span>
 						</p>
 					</td>
@@ -385,14 +387,14 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 				<tr class="form-field">
 					<th scope="row" valign="top">
 						<label for="autodescription-meta[description]">
-							<strong><?php printf( esc_html__( '%s Meta Description', 'autodescription' ), $type ); ?></strong>
-							<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#1" target="_blank" title="<?php esc_html_e( 'Recommended Length: 145 to 155 characters', 'autodescription' ) ?>">[?]</a>
+							<strong><?php printf( esc_html__( '%s Meta Description', 'autodescription' ), esc_html( $type ) ); ?></strong>
+							<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 145 to 155 characters', 'autodescription' ); ?>">[?]</a>
 						</label>
 					</th>
 					<td>
-						<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" placeholder="<?php echo $description_placeholder ?>" rows="5" cols="50" class="large-text"><?php echo esc_html( $description ); ?></textarea>
+						<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="5" cols="50" class="large-text"><?php echo esc_html( $description ); ?></textarea>
 						<p class="description tsf-counter">
-							<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[description]_chars">'. mb_strlen( $desc_len_parsed ) .'</span>' ); ?>
+							<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[description]_chars">' . esc_html( mb_strlen( $desc_len_parsed ) ) . '</span>' ); ?>
 							<span class="hide-if-no-js tsf-ajax"></span>
 						</p>
 					</td>
@@ -403,21 +405,21 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 					<td>
 						<label for="autodescription-meta[noindex]"><input name="autodescription-meta[noindex]" id="autodescription-meta[noindex]" type="checkbox" value="1" <?php checked( $noindex ); ?> />
 							<?php printf( esc_html__( 'Apply %s to this term?', 'autodescription' ), $this->code_wrap( 'noindex' ) ); ?>
-							<a href="https://support.google.com/webmasters/answer/93710?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( esc_html__( 'Tell Search Engines not to show this page in their search results', 'autodescription' ) ) ?>">[?]</a>
+							<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/93710?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Tell Search Engines not to show this page in their search results', 'autodescription' ) ); ?>">[?]</a>
 						</label>
 
 						<br>
 
 						<label for="autodescription-meta[nofollow]"><input name="autodescription-meta[nofollow]" id="autodescription-meta[nofollow]" type="checkbox" value="1" <?php checked( $nofollow ); ?> />
 							<?php printf( esc_html__( 'Apply %s to this term?', 'autodescription' ), $this->code_wrap( 'nofollow' ) ); ?>
-							<a href="https://support.google.com/webmasters/answer/96569?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( esc_html__( 'Tell Search Engines not to follow links on this page', 'autodescription' ) ) ?>">[?]</a>
+							<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/96569?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Tell Search Engines not to follow links on this page', 'autodescription' ) ); ?>">[?]</a>
 						</label>
 
 						<br>
 
 						<label for="autodescription-meta[noarchive]"><input name="autodescription-meta[noarchive]" id="autodescription-meta[noarchive]" type="checkbox" value="1" <?php checked( $noarchive ); ?> />
 							<?php printf( esc_html__( 'Apply %s to this term?', 'autodescription' ), $this->code_wrap( 'noarchive' ) ); ?>
-							<a href="https://support.google.com/webmasters/answer/79812?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( esc_html__( 'Tell Search Engines not to save a cached copy of this page', 'autodescription' ) ) ?>">[?]</a>
+							<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/79812?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Tell Search Engines not to save a cached copy of this page', 'autodescription' ) ); ?>">[?]</a>
 						</label>
 
 						<?php // Saved flag, if set then it won't fetch for Genesis meta anymore ?>
@@ -431,11 +433,13 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 				<tr>
 					<th scope="row" valign="top"><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
 					<td>
-						<?php echo $this->post_status( $term_id, $taxonomy, true ); ?>
+						<?php
+						//* Already escaped.
+						echo $this->post_status( $term_id, $taxonomy, true );
+						?>
 					</td>
 				</tr>
 				<?php endif; ?>
-
 			</tbody>
 		</table>
 		<?php
@@ -521,10 +525,11 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 		 * @since 2.3.4
 		 */
 		if ( $is_static_frontpage ) {
-			if ( $this->get_option( 'homepage_tagline' ) )
-				$tit_len_pre = $title ? $title . " | " . $this->get_blogdescription() : $generated_doctitle;
-			else
+			if ( $this->get_option( 'homepage_tagline' ) ) {
+				$tit_len_pre = $title ? $title . ' | ' . $this->get_blogdescription() : $generated_doctitle;
+			} else {
 				$tit_len_pre = $title ? $title : $generated_doctitle;
+			}
 		} else {
 			/**
 			 * Separator doesn't matter. Since html_entity_decode is used.
@@ -532,10 +537,11 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 			 *
 			 * @since 2.3.4
 			 */
-			if ( $this->add_title_additions() )
-				$tit_len_pre = $title ? $title . " | " . $this->get_blogname() : $generated_doctitle;
-			else
+			if ( $this->add_title_additions() ) {
+				$tit_len_pre = $title ? $title . ' | ' . $this->get_blogname() : $generated_doctitle;
+			} else {
 				$tit_len_pre = $title ? $title : $generated_doctitle;
+			}
 		}
 
 		//* Fetch description from option.
@@ -551,10 +557,11 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 			//* The homepage description takes precedence.
 			$homepage_description = $this->get_option( 'homepage_description' );
 
-			if ( $description )
+			if ( $description ) {
 				$desc_len_pre = $homepage_description ? $homepage_description : $description;
-			else
+			} else {
 				$desc_len_pre = $homepage_description ? $homepage_description : $generated_description;
+			}
 		} else {
 			$desc_len_pre = $description ? $description : $generated_description;
 		}
@@ -586,48 +593,53 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 		<?php if ( 'above' === $this->inpost_seo_bar ) : ?>
 		<p>
 			<strong><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></strong>
-			<div><?php echo $this->post_status( $post_id, 'inpost', true ); ?></div>
+			<div>
+				<?php
+				//* Already escaped.
+				echo $this->post_status( $post_id, 'inpost', true );
+				?>
+			</div>
 		</p>
 		<?php endif; ?>
 
 		<p>
-			<label for="autodescription_title"><strong><?php printf( esc_html__( 'Custom %s Title', 'autodescription' ), $type ); ?></strong>
-				<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#3" target="_blank" title="<?php esc_html_e( 'Recommended Length: 50 to 55 characters', 'autodescription' ); ?>">[?]</a>
+			<label for="autodescription_title"><strong><?php printf( esc_html__( 'Custom %s Title', 'autodescription' ), esc_html( $type ) ); ?></strong>
+				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 50 to 55 characters', 'autodescription' ); ?>">[?]</a>
 				<span class="description tsf-counter">
-					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_title_chars">'. mb_strlen( $tit_len_parsed ) .'</span>' ); ?>
+					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_title_chars">' . esc_html( mb_strlen( $tit_len_parsed ) ) . '</span>' ); ?>
 					<span class="hide-if-no-js tsf-ajax"></span>
 				</span>
 			</label>
 		</p>
 		<p>
 			<div id="tsf-title-wrap">
-				<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" placeholder="<?php echo $doctitle_placeholder ?>" value="<?php echo esc_attr( $this->get_custom_field( '_genesis_title' ) ); ?>" />
+				<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" placeholder="<?php echo esc_attr( $doctitle_placeholder ); ?>" value="<?php echo esc_attr( $this->get_custom_field( '_genesis_title' ) ); ?>" />
 				<span id="tsf-title-offset" class="hide-if-no-js"></span><span id="tsf-title-placeholder" class="hide-if-no-js"></span>
 			</div>
 		</p>
 
 		<p>
 			<label for="autodescription_description">
-				<strong><?php printf( esc_html__( 'Custom %s Description', 'autodescription' ), $type ); ?></strong>
-				<a href="https://support.google.com/webmasters/answer/35624?hl=<?php echo $language; ?>#1" target="_blank" title="<?php esc_html_e( 'Recommended Length: 145 to 155 characters', 'autodescription' ); ?>">[?]</a>
+				<strong><?php printf( esc_html__( 'Custom %s Description', 'autodescription' ), esc_html( $type ) ); ?></strong>
+				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 145 to 155 characters', 'autodescription' ); ?>">[?]</a>
 				<span class="description tsf-counter">
-					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_description_chars">'. mb_strlen( $desc_len_parsed ) .'</span>' ); ?>
+					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_description_chars">' . esc_html( mb_strlen( $desc_len_parsed ) ) . '</span>' ); ?>
 					<span class="hide-if-no-js tsf-ajax"></span>
 				</span>
 			</label>
 		</p>
 		<p>
-			<textarea class="large-text" name="autodescription[_genesis_description]" id="autodescription_description" placeholder="<?php echo $description_placeholder ?>" rows="4" cols="4"><?php echo esc_textarea( $this->get_custom_field( '_genesis_description' ) ); ?></textarea>
+			<textarea class="large-text" name="autodescription[_genesis_description]" id="autodescription_description" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="4" cols="4"><?php echo esc_textarea( $this->get_custom_field( '_genesis_description' ) ); ?></textarea>
 		</p>
 
 		<p>
 			<label for="autodescription_canonical">
 				<strong><?php esc_html_e( 'Custom Canonical URL', 'autodescription' ); ?></strong>
-				<a href="https://support.google.com/webmasters/answer/139066?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( esc_html__( 'Preferred %s URL location', 'autodescription' ), $type ); ?>">[?]</a>
+				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/139066?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Preferred %s URL location', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
 			</label>
 		</p>
 		<p>
-			<input class="large-text" type="text" name="autodescription[_genesis_canonical_uri]" id="autodescription_canonical" placeholder="<?php echo $canonical_placeholder ?>" value="<?php echo esc_url( $this->get_custom_field( '_genesis_canonical_uri' ) ); ?>" />
+			<input class="large-text" type="text" name="autodescription[_genesis_canonical_uri]" id="autodescription_canonical" placeholder="<?php echo esc_url( $canonical_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_genesis_canonical_uri' ) ); ?>" />
 		</p>
 
 		<p><strong><?php esc_html_e( 'Robots Meta Settings', 'autodescription' ); ?></strong></p>
@@ -635,9 +647,9 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 			<label for="autodescription_noindex"><input type="checkbox" name="autodescription[_genesis_noindex]" id="autodescription_noindex" value="1" <?php checked( $this->get_custom_field( '_genesis_noindex' ) ); ?> />
 				<?php
 					/* translators: 1: Option, 2: Post or Page */
-					printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'noindex' ), $type );
+					printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'noindex' ), esc_html( $type ) );
 				?>
-				<a href="https://support.google.com/webmasters/answer/93710?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( esc_html__( 'Tell Search Engines not to show this %s in their search results', 'autodescription' ), $type ); ?>">[?]</a>
+				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/93710?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Tell Search Engines not to show this %s in their search results', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
 			</label>
 
 			<br>
@@ -645,9 +657,9 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 			<label for="autodescription_nofollow"><input type="checkbox" name="autodescription[_genesis_nofollow]" id="autodescription_nofollow" value="1" <?php checked( $this->get_custom_field( '_genesis_nofollow' ) ); ?> />
 				<?php
 					/* translators: 1: Option, 2: Post or Page */
-					printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'nofollow' ), $type );
+					printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'nofollow' ), esc_html( $type ) );
 				?>
-				<a href="https://support.google.com/webmasters/answer/96569?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( esc_html__( 'Tell Search Engines not to follow links on this %s', 'autodescription' ), $type ); ?>">[?]</a>
+				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/96569?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Tell Search Engines not to follow links on this %s', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
 			</label>
 
 			<br>
@@ -655,24 +667,24 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 			<label for="autodescription_noarchive"><input type="checkbox" name="autodescription[_genesis_noarchive]" id="autodescription_noarchive" value="1" <?php checked( $this->get_custom_field( '_genesis_noarchive' ) ); ?> />
 				<?php
 					/* translators: 1: Option, 2: Post or Page */
-					printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'noarchive' ), $type );
+					printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'noarchive' ), esc_html( $type ) );
 				?>
-				<a href="https://support.google.com/webmasters/answer/79812?hl=<?php echo $language; ?>" target="_blank" title="<?php printf( esc_html__( 'Tell Search Engines not to save a cached copy of this %s', 'autodescription' ), $type ); ?>">[?]</a>
+				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/79812?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Tell Search Engines not to save a cached copy of this %s', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
 			</label>
 		</p>
 
 		<p><strong><?php esc_html_e( 'Local Search Settings', 'autodescription' ); ?></strong></p>
 		<p>
 			<label for="autodescription_exclude_local_search"><input type="checkbox" name="autodescription[exclude_local_search]" id="autodescription_exclude_local_search" value="1" <?php checked( $this->get_custom_field( 'exclude_local_search' ) ); ?> />
-				<?php printf( esc_html__( 'Exclude this %s from local search', 'autodescription' ), $type ); ?>
-				<span title="<?php printf( esc_html__( 'This excludes this %s from local on-site search results', 'autodescription' ), $type ); ?>">[?]</span>
+				<?php printf( esc_html__( 'Exclude this %s from local search', 'autodescription' ), esc_html( $type ) ); ?>
+				<span title="<?php printf( esc_attr__( 'This excludes this %s from local on-site search results', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</span>
 			</label>
 		</p>
 
 		<p>
 			<label for="autodescription_redirect">
 				<strong><?php esc_html_e( 'Custom 301 Redirect URL', 'autodescription' ); ?></strong>
-				<a href="https://support.google.com/webmasters/answer/93633?hl=<?php echo $language; ?>" target="_blank" title="<?php esc_html_e( 'This will force visitors to go to another URL', 'autodescription' ); ?>">[?]</a>
+				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/93633?hl=' . $language ); ?>" target="_blank" title="<?php esc_attr_e( 'This will force visitors to go to another URL', 'autodescription' ); ?>">[?]</a>
 			</label>
 		</p>
 		<p>
@@ -682,7 +694,12 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 		<?php if ( 'below' === $this->inpost_seo_bar ) : ?>
 		<p>
 			<strong><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></strong>
-			<div><?php echo $this->post_status( $post_id, 'inpost', true ); ?></div>
+			<div>
+				<?php
+				//* Already escaped.
+				echo $this->post_status( $post_id, 'inpost', true );
+				?>
+			</div>
 		</p>
 		<?php endif;
 

@@ -75,7 +75,7 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 		}
 
 		//* Still no description found? Create an auto description based on content.
-		if ( empty( $description ) || ! is_scalar( $description ) )
+		if ( empty( $description ) || false === is_scalar( $description ) )
 			$description = $this->generate_description_from_id( $args, false );
 
 		/**
@@ -151,11 +151,11 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 			return $defaults;
 
 		//* Array merge doesn't support sanitation. We're simply type casting here.
-		$args['id'] 				= isset( $args['id'] ) 					? (int) $args['id'] 				: $defaults['id'];
-		$args['taxonomy'] 			= isset( $args['taxonomy'] ) 			? (string) $args['taxonomy'] 		: $defaults['taxonomy'];
-		$args['is_home'] 			= isset( $args['is_home'] ) 			? (bool) $args['is_home'] 			: $defaults['is_home'];
-		$args['get_custom_field'] 	= isset( $args['get_custom_field'] ) 	? (bool) $args['get_custom_field'] 	: $defaults['get_custom_field'];
-		$args['social'] 			= isset( $args['social'] ) 				? (bool) $args['social'] 			: $defaults['social'];
+		$args['id']               = isset( $args['id'] )               ? (int) $args['id']                : $defaults['id'];
+		$args['taxonomy']         = isset( $args['taxonomy'] )         ? (string) $args['taxonomy']       : $defaults['taxonomy'];
+		$args['is_home']          = isset( $args['is_home'] )          ? (bool) $args['is_home']          : $defaults['is_home'];
+		$args['get_custom_field'] = isset( $args['get_custom_field'] ) ? (bool) $args['get_custom_field'] : $defaults['get_custom_field'];
+		$args['social']           = isset( $args['social'] )           ? (bool) $args['social']           : $defaults['social'];
 
 		return $args;
 	}
@@ -750,62 +750,61 @@ class AutoDescription_Generate_Description extends AutoDescription_Generate {
 	 */
 	public function trim_excerpt( $excerpt, $excerpt_length, $max_char_length ) {
 
-		if ( $excerpt_length > $max_char_length ) {
+		if ( $excerpt_length <= $max_char_length )
+			return trim( $excerpt );
 
-			//* Cut string to fit $max_char_length.
-			$sub_ex = mb_substr( $excerpt, 0, $max_char_length );
-			$sub_ex = trim( html_entity_decode( $sub_ex ) );
+		//* Cut string to fit $max_char_length.
+		$sub_ex = mb_substr( $excerpt, 0, $max_char_length );
+		$sub_ex = trim( html_entity_decode( $sub_ex ) );
 
-			//* Split words in array separated by delimiter.
-			$ex_words = explode( ' ', $sub_ex );
+		//* Split words in array separated by delimiter.
+		$ex_words = explode( ' ', $sub_ex );
 
-			//* Count to total words in the excerpt.
-			$ex_total = count( $ex_words );
+		//* Count to total words in the excerpt.
+		$ex_total = count( $ex_words );
 
-			//* Slice the complete excerpt and count the amount of words.
-			$extra_ex_words = explode( ' ', trim( $excerpt ), $ex_total + 1 );
-			$extra_ex_total = count( $extra_ex_words ) - 1;
-			unset( $extra_ex_words[ $extra_ex_total ] );
+		//* Slice the complete excerpt and count the amount of words.
+		$extra_ex_words = explode( ' ', trim( $excerpt ), $ex_total + 1 );
+		$extra_ex_total = count( $extra_ex_words ) - 1;
+		unset( $extra_ex_words[ $extra_ex_total ] );
 
-			//* Calculate if last word exceeds.
-			if ( $extra_ex_total >= $ex_total ) {
-				$ex_cut = mb_strlen( $ex_words[ $ex_total - 1 ] );
+		//* Calculate if last word exceeds.
+		if ( $extra_ex_total >= $ex_total ) {
+			$ex_cut = mb_strlen( $ex_words[ $ex_total - 1 ] );
 
-				if ( $extra_ex_total > $ex_total ) {
-					/**
-					 * There are more words in the trimmed excerpt than the compared total excerpt.
-					 * Remove the exceeding word.
-					 */
+			if ( $extra_ex_total > $ex_total ) {
+				/**
+				 * There are more words in the trimmed excerpt than the compared total excerpt.
+				 * Remove the exceeding word.
+				 */
+				$excerpt = mb_substr( $sub_ex, 0, - $ex_cut );
+			} else {
+				/**
+				 * The amount of words are the same in the comparison.
+				 * Calculate if the chacterers are exceeding.
+				 */
+				$ex_extra_cut = mb_strlen( $extra_ex_words[ $extra_ex_total - 1 ] );
+
+				if ( $ex_extra_cut > $ex_cut ) {
+					//* Final word is falling off. Remove it.
 					$excerpt = mb_substr( $sub_ex, 0, - $ex_cut );
 				} else {
-					/**
-					 * The amount of words are the same in the comparison.
-					 * Calculate if the chacterers are exceeding.
-					 */
-					$ex_extra_cut = mb_strlen( $extra_ex_words[ $extra_ex_total - 1 ] );
-
-					if ( $ex_extra_cut > $ex_cut ) {
-						//* Final word is falling off. Remove it.
-						$excerpt = mb_substr( $sub_ex, 0, - $ex_cut );
-					} else {
-						//* We're all good here, continue.
-						$excerpt = $sub_ex;
-					}
+					//* We're all good here, continue.
+					$excerpt = $sub_ex;
 				}
 			}
-
-			//* Remove trailing/leading comma's and spaces.
-			$excerpt = trim( $excerpt, ' ,' );
-
-			//* Fetch last character.
-			$last_char = substr( $excerpt, -1 );
-
-			$stops = array( '.', '?', '!' );
-			//* Add three dots if there's no full stop at the end of the excerpt.
-			if ( ! in_array( $last_char, $stops, true ) )
-				$excerpt .= '...';
-
 		}
+
+		//* Remove trailing/leading comma's and spaces.
+		$excerpt = trim( $excerpt, ' ,' );
+
+		//* Fetch last character.
+		$last_char = substr( $excerpt, -1 );
+
+		$stops = array( '.', '?', '!' );
+		//* Add three dots if there's no full stop at the end of the excerpt.
+		if ( ! in_array( $last_char, $stops, true ) )
+			$excerpt .= '...';
 
 		return trim( $excerpt );
 	}

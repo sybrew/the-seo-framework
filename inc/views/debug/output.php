@@ -4,7 +4,9 @@ defined( 'ABSPATH' ) and $_this = the_seo_framework_class() and $this instanceof
 
 if ( $this->debug_output ) {
 	if ( $this->the_seo_framework_debug_hidden ) {
-		echo "\r\n<!--\r\n:: THE SEO FRAMEWORK DEBUG :: \r\n" . $this->debug_output . "\r\n:: / THE SEO FRAMEWORK DEBUG ::\r\n-->\r\n";
+		echo "\r\n<!--\r\n:: THE SEO FRAMEWORK DEBUG :: \r\n";
+		$this->output_debug();
+		echo "\r\n:: / THE SEO FRAMEWORK DEBUG ::\r\n-->\r\n";
 	} else {
 
 		$id = $this->get_the_real_ID();
@@ -24,16 +26,16 @@ if ( $this->debug_output ) {
 					<?php
 					if ( $this->is_post_edit() || $this->is_term_edit() ) :
 						echo ' :: ';
-						echo 'Type: ' . esc_html( $type );
-						echo $mdash . 'ID: ' . esc_html( $id );
-						echo $mdash . 'Cache key: ' . esc_html( $cache_key );
+						echo esc_html( 'Type: ' . $type );
+						echo esc_html( $mdash . 'ID: ' . $id );
+						echo esc_html( $mdash . 'Cache key: ' . $cache_key );
 					endif;
 					?>
 				</h3>
 				<div style="position:absolute;bottom:0;right:0;left:0;top:39px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;z-index:9001">
-					<?php echo $this->debug_header_output(); ?>
-					<?php echo $this->debug_query_output(); ?>
-					<?php echo $this->debug_output; ?>
+					<?php $this->output_debug_header(); ?>
+					<?php $this->output_debug_query(); ?>
+					<?php $this->output_debug(); ?>
 				</div>
 			</div>
 			<?php
@@ -46,14 +48,14 @@ if ( $this->debug_output ) {
 					<?php
 					echo ' :: ';
 					echo 'Type: ' . esc_html( $type );
-					echo $mdash . 'ID: ' . esc_html( $id );
-					echo $mdash . 'Cache key: ' . esc_html( $cache_key );
+					echo esc_html( $mdash . 'ID: ' . $id );
+					echo esc_html( $mdash . 'Cache key: ' . $cache_key );
 					?>
 				</h3>
 				<div style="position:absolute;bottom:0;right:0;left:0;top:39px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;z-index:9001">
-					<?php echo $this->debug_header_output(); ?>
-					<?php echo $this->debug_query_output(); ?>
-					<?php echo $this->debug_output; ?>
+					<?php $this->output_debug_header(); ?>
+					<?php $this->output_debug_query(); ?>
+					<?php $this->output_debug(); ?>
 				</div>
 			</div>
 			<?php

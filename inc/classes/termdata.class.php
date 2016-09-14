@@ -138,7 +138,6 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 
 		//* Check again against ambiguous injection.
 		if ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'update-tag_' . $term_id ) ) {
-
 			$data = isset( $_POST['autodescription-meta'] ) ? (array) map_deep( $_POST['autodescription-meta'], 'esc_attr' ) : array();
 			$data = wp_parse_args( $data, $this->get_term_meta_defaults() );
 
@@ -166,11 +165,11 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 			}
 		}
 
-		if ( empty( $data ) )
+		if ( empty( $data ) ) {
 			delete_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS );
-		else
+		} else {
 			update_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
-
+		}
 	}
 
 	/**
@@ -190,12 +189,13 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 		if ( is_null( $term ) )
 			$term = $this->fetch_the_term( $term_id );
 
-		if ( isset( $term->term_id ) ) {
-			if ( $this->can_get_term_meta() )
+		if ( isset( $term->term_id ) ) :
+			if ( $this->can_get_term_meta() ) {
 				return $this->get_term_meta( $term->term_id );
-			else
+			} else {
 				return $this->get_old_term_data( $term );
-		}
+			}
+		endif;
 
 		//* Return null if no term can be set.
 		return null;

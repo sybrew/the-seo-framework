@@ -481,7 +481,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		if ( $hide && $current_lang === $default_lang )
 			return $path;
 
-		switch ( $q_config_mode ) {
+		switch ( $q_config_mode ) :
 			case '1' :
 				//* Negotiation type query var.
 
@@ -500,10 +500,11 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 			case '2' :
 				//* Subdirectory
-				if ( 0 === strpos( $path, '/' . $current_lang . '/' ) )
+				if ( 0 === strpos( $path, '/' . $current_lang . '/' ) ) {
 					return $path;
-				else
+				} else {
 					return $path = trailingslashit( $current_lang ) . ltrim( $path, ' \\/' );
+				}
 				break;
 
 			case '3' :
@@ -515,9 +516,8 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				break;
 
 			default :
-				return $path;
 				break;
-		}
+		endswitch;
 
 		return $path;
 	}
@@ -549,7 +549,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		if ( is_null( $gli_exists ) )
 			$gli_exists = function_exists( 'wpml_get_language_information' );
 
-		if ( ! $gli_exists )
+		if ( false === $gli_exists )
 			return $path;
 
 		if ( empty( $post_id ) )
@@ -582,7 +582,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 		}
 
 		//* If filter isn't used, bail.
-		if ( ! isset( $lang_info['language_code'] ) )
+		if ( false === isset( $lang_info['language_code'] ) )
 			return $path;
 
 		$current_lang = $lang_info['language_code'];
@@ -593,11 +593,10 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 		//* Cache negotiation type.
 		static $negotiation_type = null;
-		if ( ! isset( $negotiation_type ) )
+		if ( is_null( $negotiation_type ) )
 			$negotiation_type = $sitepress->get_setting( 'language_negotiation_type' );
 
-		switch ( $negotiation_type ) {
-
+		switch ( $negotiation_type ) :
 			case '1' :
 				//* Subdirectory
 
@@ -648,7 +647,9 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 				return user_trailingslashit( $path ) . '?lang=' . $current_lang;
 				break;
 
-		}
+			default :
+				break;
+		endswitch;
 
 		return $path;
 	}
@@ -748,14 +749,14 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	}
 
 	/**
-	 * Set url scheme.
+	 * Sets URL scheme for input URL.
 	 * WordPress core function, without filter.
+	 *
+	 * @since 2.4.2
 	 *
 	 * @param string $url Absolute url that includes a scheme.
 	 * @param string $scheme optional. Scheme to give $url. Currently 'http', 'https', 'login', 'login_post', 'admin', or 'relative'.
 	 * @param bool $use_filter Whether to parse filters.
-	 *
-	 * @since 2.4.2
 	 * @return string url with chosen scheme.
 	 */
 	public function set_url_scheme( $url, $scheme = null, $use_filter = true ) {
@@ -858,14 +859,13 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 		//* Check if the domain is mapped. Store in object cache.
 		$mapped_domain = $this->object_cache_get( $cache_key );
-		if ( false === $mapped_domain ) {
-
+		if ( false === $mapped_domain ) :
 			$mapped_domains = $wpdb->get_results( $wpdb->prepare( "SELECT id, domain, is_primary, scheme FROM {$wpdb->base_prefix}domain_mapping WHERE blog_id = %d", $blog_id ), OBJECT );
 
 			$primary_key = 0;
 			$domain_ids = array();
 
-			foreach ( $mapped_domains as $key => $domain ) {
+			foreach ( $mapped_domains as $key => $domain ) :
 				if ( isset( $domain->is_primary ) && '1' === $domain->is_primary ) {
 					$primary_key = $key;
 
@@ -876,7 +876,7 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 					if ( isset( $domain->id ) && $domain->id )
 						$domain_ids[ $key ] = $domain->id;
 				}
-			}
+			endforeach;
 
 			if ( 0 === $primary_key && ! empty( $domain_ids ) ) {
 				//* No primary ID has been found. Get the one with the lowest ID, which has been added first.
@@ -888,9 +888,9 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			$mapped_domain = isset( $mapped_domains[ $primary_key ] ) ? $mapped_domains[ $primary_key ] : 0;
 
 			$this->object_cache_set( $cache_key, $mapped_domain, 3600 );
-		}
+		endif;
 
-		if ( $mapped_domain ) {
+		if ( $mapped_domain ) :
 
 			$domain = isset( $mapped_domain->domain ) ? $mapped_domain->domain : '0';
 			$scheme = isset( $mapped_domain->scheme ) ? $mapped_domain->scheme : '';
@@ -910,11 +910,12 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 			//* Put it all together.
 			$url = trailingslashit( $scheme_full . $domain ) . ltrim( $path, ' \\/' );
 
-			if ( $get_scheme )
+			if ( $get_scheme ) {
 				return array( $url, $scheme );
-			else
+			} else {
 				return $url;
-		}
+			}
+		endif;
 
 		return '';
 	}
@@ -942,9 +943,9 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 
 		if ( $url && untrailingslashit( $scheme . '://' . $current_blog->domain . $current_blog->path ) !== $url ) {
 			if ( ( defined( 'VHOST' ) && 'yes' !== VHOST ) || ( defined( 'SUBDOMAIN_INSTALL' ) && false === SUBDOMAIN_INSTALL ) )
-				$request_uri = str_replace( $current_blog->path, '/', $_SERVER['REQUEST_URI'] );
+				$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? str_replace( $current_blog->path, '/', $_SERVER['REQUEST_URI'] ) : '';
 
-			$url = trailingslashit( $url . $request_uri ) . ltrim( $path, '\\/ ' );
+			$url = trailingslashit( $url . $request_uri ) . ltrim( $path, ' \\/' );
 
 			if ( $get_scheme ) {
 				return array( $url, $scheme );
@@ -967,107 +968,105 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	 */
 	public function get_shortlink( $post_id = 0 ) {
 
-		if ( $this->get_option( 'shortlink_tag' ) ) {
+		if ( ! $this->get_option( 'shortlink_tag' ) )
+			return '';
 
-			$path = null;
+		if ( $this->is_front_page() )
+			return '';
 
-			if ( false === $this->is_front_page() ) {
-				if ( $this->is_singular( $post_id ) ) {
-					if ( 0 === $post_id )
-						$post_id = $this->get_the_real_ID();
+		$path = '';
 
-					if ( $post_id ) {
-						if ( $this->is_static_frontpage( $post_id ) ) {
-							$path = '';
-						} else {
-							//* This will be converted to '?p' later.
-							$path = '?page_id=' . $post_id;
-						}
-					}
-				} elseif ( $this->is_archive() ) {
-					if ( $this->is_category() ) {
-						$id = get_queried_object_id();
-						$path = '?cat=' . $id;
-					} elseif ( $this->is_tag() ) {
-						$id = get_queried_object_id();
-						$path = '?post_tag=' . $id;
-					} elseif ( $this->is_date() ) {
-						global $wp_query;
+		if ( $this->is_singular( $post_id ) ) {
+			if ( 0 === $post_id )
+				$post_id = $this->get_the_real_ID();
 
-						$query = $wp_query->query;
-						$var = '';
-
-						$first = true;
-						foreach ( $query as $key => $val ) {
-							$var .= $first ? '?' : '&';
-							$var .= $key . '=' . $val;
-							$first = false;
-						}
-
-						$path = $var;
-					} elseif ( $this->is_author() ) {
-						$id = get_queried_object_id();
-						$path = '?author=' . $id;
-					} elseif ( $this->is_tax() ) {
-						//* Generate shortlink for object type and slug.
-						$object = get_queried_object();
-
-						$t = isset( $object->taxonomy ) ? urlencode( $object->taxonomy ) : '';
-
-						if ( $t ) {
-							$slug = isset( $object->slug ) ? urlencode( $object->slug ) : '';
-
-							if ( $slug )
-								$path = '?' . $t . '=' . $slug;
-						}
-					}
+			if ( $post_id ) {
+				if ( $this->is_static_frontpage( $post_id ) ) {
+					$path = '';
+				} else {
+					//* This will be converted to '?p' later.
+					$path = '?page_id=' . $post_id;
 				}
 			}
+		} elseif ( $this->is_archive() ) {
+			if ( $this->is_category() ) {
+				$id = get_queried_object_id();
+				$path = '?cat=' . $id;
+			} elseif ( $this->is_tag() ) {
+				$id = get_queried_object_id();
+				$path = '?post_tag=' . $id;
+			} elseif ( $this->is_date() ) {
+				global $wp_query;
 
-			if ( isset( $path ) ) {
-				//* Path always has something. So we can safely use .='&' instead of add_query_arg().
+				$query = $wp_query->query;
+				$var = '';
 
-				if ( 0 === $post_id )
-					$post_id = $this->get_the_real_ID();
-
-				$url = $this->the_url_from_cache( '', $post_id, false, false, false );
-				$query = parse_url( $url, PHP_URL_QUERY );
-
-				$additions = '';
-				if ( isset( $query ) ) {
-					if ( false !== strpos( $query, '&' ) ) {
-						$query = explode( '&', $query );
-					} else {
-						$query = array( $query );
-					}
-
-					foreach ( $query as $arg ) {
-						if ( false === strpos( $path, $arg ) )
-							$additions .= '&' . $arg;
-					}
+				$first = true;
+				foreach ( $query as $key => $val ) {
+					$var .= $first ? '?' : '&';
+					$var .= $key . '=' . $val;
+					$first = false;
 				}
 
-				//* We used 'page_id' to determine duplicates. Now we can convert it to a shorter form.
-				$path = str_replace( 'page_id=', 'p=', $path );
+				$path = $var;
+			} elseif ( $this->is_author() ) {
+				$id = get_queried_object_id();
+				$path = '?author=' . $id;
+			} elseif ( $this->is_tax() ) {
+				//* Generate shortlink for object type and slug.
+				$object = get_queried_object();
 
-				if ( $this->is_archive() || $this->is_home() ) {
-					$paged = $this->maybe_get_paged( $this->paged(), false, true );
-					if ( $paged )
-						$path .= '&paged=' . $paged;
-				} else {
-					$page = $this->maybe_get_paged( $this->page(), false, true );
-					if ( $page )
-						$path .= '&page=' . $page;
+				$t = isset( $object->taxonomy ) ? urlencode( $object->taxonomy ) : '';
+
+				if ( $t ) {
+					$slug = isset( $object->slug ) ? urlencode( $object->slug ) : '';
+
+					if ( $slug )
+						$path = '?' . $t . '=' . $slug;
 				}
-
-				$home_url = $this->the_home_url_from_cache( true );
-				$url = $home_url . $path . $additions;
-
-				return esc_url_raw( $url );
 			}
 		}
 
-		return '';
+		if ( empty( $path ) )
+			return '';
+
+		if ( 0 === $post_id )
+			$post_id = $this->get_the_real_ID();
+
+		$url = $this->the_url_from_cache( '', $post_id, false, false, false );
+		$query = parse_url( $url, PHP_URL_QUERY );
+
+		$additions = '';
+		if ( isset( $query ) ) {
+			if ( false !== strpos( $query, '&' ) ) {
+				$query = explode( '&', $query );
+			} else {
+				$query = array( $query );
+			}
+
+			foreach ( $query as $arg ) {
+				if ( false === strpos( $path, $arg ) )
+					$additions .= '&' . $arg;
+			}
+		}
+
+		//* We used 'page_id' to determine duplicates. Now we can convert it to a shorter form.
+		$path = str_replace( 'page_id=', 'p=', $path );
+
+		if ( $this->is_archive() || $this->is_home() ) {
+			$paged = $this->maybe_get_paged( $this->paged(), false, true );
+			if ( $paged )
+				$path .= '&paged=' . $paged;
+		} else {
+			$page = $this->maybe_get_paged( $this->page(), false, true );
+			if ( $page )
+				$path .= '&page=' . $page;
+		}
+
+		$home_url = $this->the_home_url_from_cache( true );
+		$url = $home_url . $path . $additions;
+
+		return esc_url_raw( $url );
 	}
 
 	/**
@@ -1147,13 +1146,13 @@ class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
 	}
 
 	/**
-	 * Return the special URL of a paged post.
+	 * Returns the special URL of a paged post.
 	 *
 	 * Taken from _wp_link_page() in WordPress core, but instead of anchor markup, just return the URL.
 	 * Also adds WPMUdev Domain Mapping support and is optimized for speed.
 	 *
-	 * @uses $this->the_url_from_cache();
 	 * @since 2.2.4
+	 * @uses $this->the_url_from_cache();
 	 *
 	 * @param int $i The page number to generate the URL from.
 	 * @param int $post_id The post ID

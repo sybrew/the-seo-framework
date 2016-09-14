@@ -35,53 +35,13 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	}
 
 	/**
-	 * List of title separators.
-	 *
-	 * @since 2.6.0
-	 *
-	 * @todo add filter.
-	 * @todo check if filter can propagate within all functions.
-	 *
-	 * @return array Title separators.
-	 */
-	public function get_separator_list() {
-		return array(
-			'pipe'		=> '|',
-			'dash'		=> '-',
-			'ndash'		=> '&ndash;',
-			'mdash'		=> '&mdash;',
-			'bull'		=> '&bull;',
-			'middot'	=> '&middot;',
-			'lsaquo'	=> '&lsaquo;',
-			'rsaquo'	=> '&rsaquo;',
-			'frasl'		=> '&frasl;',
-			'laquo'		=> '&laquo;',
-			'raquo'		=> '&raquo;',
-			'le'		=> '&le;',
-			'ge'		=> '&ge;',
-			'lt'		=> '&lt;',
-			'gt'		=> '&gt;',
-		);
-	}
-
-	/**
-	 * Returns array of Twitter Card Types
-	 *
-	 * @since 2.6.0
-	 *
-	 * @return array Twitter Card types.
-	 */
-	public function get_twitter_card_types() {
-		return array(
-			'summary' 				=> 'summary',
-			'summary_large_image'	=> 'summary-large-image',
-			'photo' 				=> 'photo',
-		);
-	}
-
-	/**
 	 * Setting nav tab wrappers.
 	 * Outputs Tabs and settings content.
+	 *
+	 * @since 2.3.6
+	 *
+	 * @refactored
+	 * @since 2.6.0
 	 *
 	 * @param string $id The Nav Tab ID
 	 * @param array $tabs the tab content {
@@ -94,11 +54,6 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 	 *	}
 	 * @param string $version the The SEO Framework version for debugging. May be emptied.
 	 * @param bool $use_tabs Whether to output tabs, only works when $tabs only has one count.
-	 *
-	 * @since 2.3.6
-	 *
-	 * @refactored
-	 * @since 2.6.0
 	 */
 	public function nav_tab_wrapper( $id, $tabs = array(), $version = '2.3.6', $use_tabs = true ) {
 
@@ -114,7 +69,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 
 			?><div class="tsf-nav-tab-wrapper hide-if-no-js" id="<?php echo esc_attr( $id . '-tabs-wrapper' ); ?>"><?php
 				$count = 1;
-				foreach ( $tabs as $tab => $value ) {
+				foreach ( $tabs as $tab => $value ) :
 
 					$dashicon = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
 					$name = isset( $value['name'] ) ? $value['name'] : '';
@@ -123,8 +78,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 					$the_id = esc_attr( $id . '-tab-' . $tab );
 					$the_name = esc_attr( $id . '-tabs' );
 
-					$label_class = $checked ? ' tsf-active-tab' : ''; // maybe
-
+					//* All output below is escaped.
 					?>
 					<div class="tsf-tab">
 						<input type="radio" class="tsf-tabs-radio" id="<?php echo $the_id ?>" name="<?php echo $the_name ?>" <?php echo $checked ?>>
@@ -136,7 +90,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 					<?php
 
 					$count++;
-				}
+				endforeach;
 			?></div><?php
 		}
 
@@ -156,12 +110,12 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 
 			?><div class="tsf-tabs-content <?php echo esc_attr( $the_name . $current ); ?>" id="<?php echo esc_attr( $the_id ); ?>" ><?php
 				//* No-JS tabs.
-				if ( $use_tabs ) {
+				if ( $use_tabs ) :
 					$dashicon = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
 					$name = isset( $value['name'] ) ? $value['name'] : '';
 
 					?>
-					<div class="hide-if-js seoframework-content-no-js">
+					<div class="hide-if-js tsf-content-no-js">
 						<div class="tsf-tab tsf-tab-no-js">
 							<span class="tsf-nav-tab tsf-active-tab">
 								<?php echo $dashicon ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' tsf-dashicons-tabs"></span>' : ''; ?>
@@ -170,7 +124,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 						</div>
 					</div>
 					<?php
-				}
+				endif;
 
 				$callback = isset( $value['callback'] ) ? $value['callback'] : '';
 
@@ -183,7 +137,6 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 
 			$count++;
 		}
-
 	}
 
 	/**

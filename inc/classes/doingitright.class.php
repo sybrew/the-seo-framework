@@ -110,7 +110,6 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			if ( current_user_can( $tax->cap->edit_terms ) )
 				$this->init_columns( '', true );
 		}
-
 	}
 
 	/**
@@ -258,6 +257,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			$post_id = $tax_id;
 		}
 
+		//* Already escaped.
 		if ( 'tsf-seo-bar-wrap' === $column )
 			echo $this->post_status( $post_id, $type, true );
 
@@ -291,9 +291,9 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 			$ajax_id = $column . $post_id;
 
+			//* Already escaped.
 			echo $this->post_status_special( $context, '?', 'unknown', $is_term, $ajax_id );
 		}
-
 	}
 
 	/**
@@ -349,7 +349,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		if ( isset( $post_id ) && $post_id ) {
 
 			//* Fetch Post Type.
-			if ( 'inpost' === $type || '' === $type )
+			if ( 'inpost' === $type || empty( $type ) )
 				$type = get_post_type( $post_id );
 
 			//* No need to re-evalute these.
@@ -998,6 +998,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		$and_i18n    = $i18n['and'];
 		$ind_notice  = $i18n['index'];
 
+		/* Translators: %s = Post / Page / Category, etc. */
 		$ind_notice .= ' ' . sprintf( esc_attr__( '%s is being indexed.', 'autodescription' ), $post_i18n );
 		$ind_class = $good;
 
@@ -1512,25 +1513,25 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	 */
 	public function get_the_seo_bar_classes() {
 		return array(
-			'bad' 		=> 'tsf-seo-bar-bad',
-			'okay' 		=> 'tsf-seo-bar-okay',
-			'good' 		=> 'tsf-seo-bar-good',
-			'unknown' 	=> 'tsf-seo-bar-unknown',
+			'bad'     => 'tsf-seo-bar-bad',
+			'okay'    => 'tsf-seo-bar-okay',
+			'good'    => 'tsf-seo-bar-good',
+			'unknown' => 'tsf-seo-bar-unknown',
 
 			'pill' => 'pill',
 
-			'100%' 	=> 'tsf-100',
-			'60%' 	=> 'tsf-60',
-			'50%' 	=> 'tsf-50',
-			'40%' 	=> 'tsf-40',
-			'33%' 	=> 'tsf-33',
-			'25%' 	=> 'tsf-25',
-			'25%' 	=> 'tsf-25',
-			'20%' 	=> 'tsf-20',
-			'16%' 	=> 'tsf-16',
+			'100%'  => 'tsf-100',
+			'60%'   => 'tsf-60',
+			'50%'   => 'tsf-50',
+			'40%'   => 'tsf-40',
+			'33%'   => 'tsf-33',
+			'25%'   => 'tsf-25',
+			'25%'   => 'tsf-25',
+			'20%'   => 'tsf-20',
+			'16%'   => 'tsf-16',
 			'12.5%' => 'tsf-12-5',
-			'11%' 	=> 'ad-11',
-			'10%' 	=> 'tsf-10',
+			'11%'   => 'ad-11',
+			'10%'   => 'tsf-10',
 		);
 	}
 
@@ -1550,31 +1551,31 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			return $i18n;
 
 		return $i18n = array(
-			'title'			=> esc_attr__( 'Title:', 'autodescription' ),
-			'description' 	=> esc_attr__( 'Description:', 'autodescription' ),
-			'index'			=> esc_attr__( 'Index:', 'autodescription' ),
-			'follow'		=> esc_attr__( 'Follow:', 'autodescription' ),
-			'archive'		=> esc_attr__( 'Archive:', 'autodescription' ),
-			'redirect'		=> esc_attr__( 'Redirect:', 'autodescription' ),
+			'title'       => esc_attr__( 'Title:', 'autodescription' ),
+			'description' => esc_attr__( 'Description:', 'autodescription' ),
+			'index'       => esc_attr__( 'Index:', 'autodescription' ),
+			'follow'      => esc_attr__( 'Follow:', 'autodescription' ),
+			'archive'     => esc_attr__( 'Archive:', 'autodescription' ),
+			'redirect'    => esc_attr__( 'Redirect:', 'autodescription' ),
 
 			'generated' => esc_attr__( 'Generated: Automatically generated.', 'autodescription' ),
 
-			'generated_short'	=> esc_html_x( 'G', 'Generated', 'autodescription' ),
-			'title_short'		=> esc_html_x( 'T', 'Title', 'autodescription' ),
-			'description_short'	=> esc_html_x( 'D', 'Description', 'autodescription' ),
-			'index_short'		=> esc_html_x( 'I', 'no-Index', 'autodescription' ),
-			'follow_short'		=> esc_html_x( 'F', 'no-Follow', 'autodescription' ),
-			'archive_short'		=> esc_html_x( 'A', 'no-Archive', 'autodescription' ),
-			'redirect_short'	=> esc_html_x( 'R', 'Redirect', 'autodescription' ),
+			'generated_short'   => esc_html_x( 'G', 'Generated', 'autodescription' ),
+			'title_short'       => esc_html_x( 'T', 'Title', 'autodescription' ),
+			'description_short' => esc_html_x( 'D', 'Description', 'autodescription' ),
+			'index_short'       => esc_html_x( 'I', 'no-Index', 'autodescription' ),
+			'follow_short'      => esc_html_x( 'F', 'no-Follow', 'autodescription' ),
+			'archive_short'     => esc_html_x( 'A', 'no-Archive', 'autodescription' ),
+			'redirect_short'    => esc_html_x( 'R', 'Redirect', 'autodescription' ),
 
 			'but' => esc_attr_x( 'But', 'But there are...', 'autodescription' ),
 			'and' => esc_attr_x( 'And', 'And there are...', 'autodescription' ),
 
-			'length_far_too_short'	=> ' ' . esc_attr__( 'Length is far too short.', 'autodescription' ),
-			'length_too_short'		=> ' ' . esc_attr__( 'Length is too short.', 'autodescription' ),
-			'length_too_long'		=> ' ' . esc_attr__( 'Length is too long.', 'autodescription' ),
-			'length_far_too_long'	=> ' ' . esc_attr__( 'Length is far too long.', 'autodescription' ),
-			'length_good'			=> ' ' . esc_attr__( 'Length is good.', 'autodescription' ),
+			'length_far_too_short' => ' ' . esc_attr__( 'Length is far too short.', 'autodescription' ),
+			'length_too_short'     => ' ' . esc_attr__( 'Length is too short.', 'autodescription' ),
+			'length_too_long'      => ' ' . esc_attr__( 'Length is too long.', 'autodescription' ),
+			'length_far_too_long'  => ' ' . esc_attr__( 'Length is far too long.', 'autodescription' ),
+			'length_good'          => ' ' . esc_attr__( 'Length is good.', 'autodescription' ),
 		);
 	}
 

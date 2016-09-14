@@ -1050,7 +1050,7 @@ class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
 	 * @since 2.5.2
 	 * @see https://www.facebook.com/translations/FacebookLocales.xml
 	 *
-	 * @return array Valid Facebook locales
+	 * @return array Valid Facebook locale keys
 	 */
 	public function language_keys() {
 		return array(

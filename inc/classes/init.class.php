@@ -42,8 +42,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 	protected function __construct() {
 		parent::__construct();
 
-		add_action( 'init', array( $this, 'autodescription_run' ), 1 );
-		add_action( 'template_redirect', array( $this, 'custom_field_redirect' ) );
+		add_action( 'init', array( $this, 'init_the_seo_framework' ), 1 );
 
 		/**
 		 * Applies filters 'the_seo_framework_use_object_cache' : bool
@@ -59,17 +58,28 @@ class AutoDescription_Init extends AutoDescription_Query {
 	 * @since 1.0.0
 	 */
 	public function autodescription_run() {
+		$this->init_the_seo_framework();
+	}
+
+	/**
+	 * Runs the plugin on the front-end.
+	 *
+	 * @since 2.7.1
+	 *
+	 * @TODO make this function work for both front- and back-end?
+	 * @TODO always eliminate is_preview()?
+	 */
+	public function init_the_seo_framework() {
 
 		/**
-		 * Don't run in admin.
-		 * Don't do anything on preview either.
+		 * Don't run in admin or preview.
 		 * @since 2.2.4
 		 */
 		if ( $this->is_admin() || $this->is_preview() )
 			return;
 
-		$this->init_actions();
-		$this->init_filters();
+		$this->init_front_end_actions();
+		$this->init_front_end_filters();
 
 	}
 
@@ -78,7 +88,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 	 *
 	 * @since 2.5.2
 	 */
-	protected function init_actions() {
+	protected function init_front_end_actions() {
 
 		//* Remove canonical header tag from WP
 		remove_action( 'wp_head', 'rel_canonical' );
@@ -88,6 +98,8 @@ class AutoDescription_Init extends AutoDescription_Query {
 		remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head' );
 		//* Earlier removal of the generator tag. Doesn't require filter.
 		remove_action( 'wp_head', 'wp_generator' );
+
+		add_action( 'template_redirect', array( $this, 'custom_field_redirect' ) );
 
 		if ( $this->is_theme( 'genesis' ) ) {
 			add_action( 'genesis_meta', array( $this, 'html_output' ), 5 );
@@ -101,7 +113,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 	 *
 	 * @since 2.5.2
 	 */
-	protected function init_filters() {
+	protected function init_front_end_filters() {
 
 		//* Removes all pre_get_document_title filters.
 		remove_all_filters( 'pre_get_document_title', false );
@@ -233,8 +245,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 						. $this->google_site_output()
 						. $this->bing_site_output()
 						. $this->yandex_site_output()
-						. $this->pint_site_output()
-						;
+						. $this->pint_site_output();
 			} else {
 				$output	= $this->the_description()
 						. $this->og_image()
@@ -262,8 +273,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 						. $this->google_site_output()
 						. $this->bing_site_output()
 						. $this->yandex_site_output()
-						. $this->pint_site_output()
-						;
+						. $this->pint_site_output();
 			}
 
 			$after_actions = $this->header_actions( '', false );
@@ -372,7 +382,6 @@ class AutoDescription_Init extends AutoDescription_Query {
 				exit;
 			}
 
-			//* @TODO set scheme filter, adjustable through (multisite) extensions?
 			wp_redirect( esc_url_raw( $url ), 301 );
 			exit;
 		}

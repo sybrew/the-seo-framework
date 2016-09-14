@@ -364,13 +364,12 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	/**
 	 * Returns Post Type from current screen.
 	 *
-	 * @param bool $public Whether to only get Public Post types.
-	 *
 	 * @since 2.6.0
 	 *
 	 * @deprecated
 	 * @since 2.6.1
 	 *
+	 * @param bool $public Whether to only get Public Post types.
 	 * @return bool|string The Post Type
 	 */
 	public function get_current_post_type( $public = true ) {
@@ -389,8 +388,8 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 
 				$args = $public ? array( 'public' => true ) : array();
 
-				if ( ! isset( $post_page[$public] ) )
-					$post_page[$public] = (array) get_post_types( $args );
+				if ( ! isset( $post_page[ $public ] ) )
+					$post_page[ $public ] = (array) get_post_types( $args );
 
 				//* Smart var. This elemenates the need for a foreach loop, reducing resource usage.
 				$post_type = isset( $post_page[$public][ $current_screen->post_type ] ) ? $current_screen->post_type : '';
@@ -427,10 +426,9 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 
 		$this->_deprecated_function( 'AutoDescription_Sitemaps::' . __FUNCTION__, '2.6.2' );
 
-		if ( $this->pretty_permalinks && $this->is_domainmapping_active() ) {
-			if ( $options_saved || 'init' === current_action() ) {
-
-				if ( class_exists( 'Domainmap_Module_Cdsso' ) && defined( 'Domainmap_Module_Cdsso::SSO_ENDPOINT' ) ) {
+		if ( $this->pretty_permalinks && $this->is_domainmapping_active() ) :
+			if ( $options_saved || 'init' === current_action() ) :
+				if ( class_exists( 'Domainmap_Module_Cdsso' ) && defined( 'Domainmap_Module_Cdsso::SSO_ENDPOINT' ) ) :
 					add_rewrite_endpoint( Domainmap_Module_Cdsso::SSO_ENDPOINT, EP_ALL );
 
 					$name = 'tsf_wpmudev_dm_fix';
@@ -440,27 +438,27 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 
 					if ( $options_saved ) {
 						//* Reset the flush on option change.
-						if ( isset( $option[$key] ) && $value === $option[$key] ) {
-							$option[$key] = false;
+						if ( isset( $option[ $key ] ) && $value === $option[ $key ] ) :
+							$option[ $key ] = false;
 							update_site_option( $name, $option );
-						}
+						endif;
 					} else {
-						if ( ! isset( $option[$key] ) || false === $option[$key] ) {
+						if ( ! isset( $option[ $key ] ) || false === $option[ $key ] ) :
 							//* Prevent flushing multiple times.
-							$option[$key] = $value;
+							$option[ $key ] = $value;
 							update_site_option( $name, $option );
 
 							//* Now flush
-							if ( $flush_now )
+							if ( $flush_now ) {
 								$this->flush_rewrite_rules();
-							else
+							} else {
 								$this->enqueue_rewrite_flush_other( true );
-						}
+							}
+						endif;
 					}
-				}
-			}
-		}
-
+				endif;
+			endif;
+		endif;
 	}
 
 	/**
@@ -495,10 +493,11 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 		}
 
 		if ( ! isset( $post_id ) ) {
-			if ( ! $external )
+			if ( ! $external ) {
 				$post_id = $this->get_the_real_ID();
-			else
+			} else {
 				return '';
+			}
 		}
 
 		if ( $external || ! $this->is_home() ) {
@@ -731,7 +730,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 			return $term;
 
 		$db = get_option( 'autodescription-term-meta' );
-		$term_meta = isset( $db[$term->term_id] ) ? $db[$term->term_id] : array();
+		$term_meta = isset( $db[ $term->term_id ] ) ? $db[ $term->term_id ] : array();
 
 		$term->admeta = wp_parse_args( $term_meta, $this->get_term_meta_defaults() );
 
@@ -756,7 +755,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 			 * @param object $term The Term object.
 			 * @param string $taxonomy The Taxonomy name.
 			 */
-			$term->admeta[$field] = (string) apply_filters( "the_seo_framework_term_meta_{$field}", stripslashes( wp_kses_decode_entities( $value ) ), $term, $taxonomy );
+			$term->admeta[ $field ] = (string) apply_filters( "the_seo_framework_term_meta_{$field}", stripslashes( wp_kses_decode_entities( $value ) ), $term, $taxonomy );
 		}
 
 		/**
@@ -810,11 +809,11 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 
 		$term_meta = (array) get_option( 'autodescription-term-meta' );
 
-		$term_meta[$term_id] = isset( $_POST['autodescription-meta'] ) ? (array) $_POST['autodescription-meta'] : array();
+		$term_meta[ $term_id ] = isset( $_POST['autodescription-meta'] ) ? (array) $_POST['autodescription-meta'] : array();
 
 		//* Pass through wp_kses if not super admin.
-		if ( ! current_user_can( 'unfiltered_html' ) && isset( $term_meta[$term_id]['archive_description'] ) )
-			$term_meta[$term_id]['archive_description'] = wp_kses( $term_meta[$term_id]['archive_description'] );
+		if ( ! current_user_can( 'unfiltered_html' ) && isset( $term_meta[ $term_id ]['archive_description'] ) )
+			$term_meta[ $term_id ]['archive_description'] = wp_kses( $term_meta[ $term_id ]['archive_description'] );
 
 		update_option( 'autodescription-term-meta', $term_meta );
 
@@ -837,7 +836,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 
 		$term_meta = (array) get_option( 'autodescription-term-meta' );
 
-		unset( $term_meta[$term_id] );
+		unset( $term_meta[ $term_id ] );
 
 		update_option( 'autodescription-term-meta', (array) $term_meta );
 
@@ -856,7 +855,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @param array $array The single dimensional array to search in.
 	 * @return bool true if value is in array.
 	 */
-	public function in_array( $needle, $array ) {
+	public function in_array( $needle, $array, $strict = true ) {
 
 		$this->_deprecated_function( 'AutoDescription_Core::' . __FUNCTION__, '2.7.0', 'in_array()' );
 

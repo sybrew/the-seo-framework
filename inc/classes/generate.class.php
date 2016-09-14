@@ -151,13 +151,13 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 	/**
 	 * Returns cached and parsed separator option.
 	 *
-	 * @param string $type The separator type. Used to fetch option.
-	 * @param bool $escape Escape the separator.
-	 *
+	 * @since 2.3.9
 	 * @staticvar array $sepcache The separator cache.
 	 * @staticvar array $sep_esc The escaped separator cache.
 	 *
-	 * @since 2.3.9
+	 * @param string $type The separator type. Used to fetch option.
+	 * @param bool $escape Escape the separator.
+	 * @return string The separator.
 	 */
 	public function get_separator( $type = 'title', $escape = true ) {
 
@@ -200,9 +200,9 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 	/**
 	 * Fetches blogname.
 	 *
+	 * @since 2.5.2
 	 * @staticvar string $blogname
 	 *
-	 * @since 2.5.2
 	 * @return string $blogname The trimmed and sanitized blogname.
 	 */
 	public function get_blogname() {
@@ -218,9 +218,9 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 	/**
 	 * Fetch blog description.
 	 *
+	 * @since 2.5.2
 	 * @staticvar string $description
 	 *
-	 * @since 2.5.2
 	 * @return string $blogname The trimmed and sanitized blog description.
 	 */
 	public function get_blogdescription() {
@@ -239,10 +239,9 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 	 * Matches WordPress locales.
 	 * If not matched, it will calculate a locale.
 	 *
-	 * @param $match the locale to match. Defaults to WordPress locale.
-	 *
 	 * @since 2.5.2
 	 *
+	 * @param $match the locale to match. Defaults to WordPress locale.
 	 * @return string Facebook acceptable OG locale.
 	 */
 	public function fetch_locale( $match = '' ) {
@@ -321,5 +320,50 @@ class AutoDescription_Generate extends AutoDescription_TermData {
 	 */
 	public function generate_twitter_card_type() {
 		return $this->get_image_from_cache() ? $this->get_option( 'twitter_card' ) : 'summary';
+	}
+
+	/**
+	 * List of title separators.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @todo add filter.
+	 * @todo check if filter can propagate within all functions.
+	 *
+	 * @return array Title separators.
+	 */
+	public function get_separator_list() {
+		return array(
+			'pipe'   => '|',
+			'dash'   => '-',
+			'ndash'  => '&ndash;',
+			'mdash'  => '&mdash;',
+			'bull'   => '&bull;',
+			'middot' => '&middot;',
+			'lsaquo' => '&lsaquo;',
+			'rsaquo' => '&rsaquo;',
+			'frasl'  => '&frasl;',
+			'laquo'  => '&laquo;',
+			'raquo'  => '&raquo;',
+			'le'     => '&le;',
+			'ge'     => '&ge;',
+			'lt'     => '&lt;',
+			'gt'     => '&gt;',
+		);
+	}
+
+	/**
+	 * Returns array of Twitter Card Types
+	 *
+	 * @since 2.6.0
+	 *
+	 * @return array Twitter Card types.
+	 */
+	public function get_twitter_card_types() {
+		return array(
+			'summary'             => 'summary',
+			'summary_large_image' => 'summary-large-image',
+			'photo'               => 'photo',
+		);
 	}
 }

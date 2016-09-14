@@ -96,18 +96,12 @@ class AutoDescription_Debug extends AutoDescription_Core {
 
 			set_error_handler( array( $this, 'error_handler_deprecated' ) );
 
-			if ( function_exists( '__' ) ) {
-				if ( isset( $replacement ) )
-					/* translators: 1: Function name, 2: Plugin Version notification, 3: Replacement function */
-					trigger_error( sprintf( __( '%1$s is <strong>deprecated</strong> since version %2$s of The SEO Framework! Use %3$s instead.', 'autodescription' ), $function, $version, $replacement ) );
-				else
-					/* translators: 1: Function name, 2: Plugin Version notification */
-					trigger_error( sprintf( __( '%1$s is <strong>deprecated</strong> since version %2$s of The SEO Framework with no alternative available.', 'autodescription' ), $function, $version ) );
+			if ( isset( $replacement ) ) {
+				/* translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification, 4: Replacement function */
+				trigger_error( sprintf( esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework! Use %4$s instead.', 'autodescription' ), $function, '<strong>deprecated</strong>', $version, $replacement ) );
 			} else {
-				if ( isset( $replacement ) )
-					trigger_error( sprintf( '%1$s is <strong>deprecated</strong> since version %2$s of The SEO Framework! Use %3$s instead.', $function, $version, $replacement ) );
-				else
-					trigger_error( sprintf( '%1$s is <strong>deprecated</strong> since version %2$s of The SEO Framework with no alternative available.', $function, $version ) );
+				/* translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification */
+				trigger_error( sprintf( esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework with no alternative available.', 'autodescription' ), $function, '<strong>deprecated</strong>', $version ) );
 			}
 
 			restore_error_handler();
@@ -151,22 +145,9 @@ class AutoDescription_Debug extends AutoDescription_Core {
 
 			set_error_handler( array( $this, 'error_handler_doing_it_wrong' ) );
 
-			if ( function_exists( '__' ) ) {
-				$version = is_null( $version ) ? '' : sprintf( __( '(This message was added in version %s of The SEO Framework.)' ), $version );
-				/* translators: %s: Codex URL */
-				$message .= ' ' . sprintf( __( 'Please see <a href="%s">Debugging in WordPress</a> for more information.', 'autodescription' ),
-					__( 'https://codex.wordpress.org/Debugging_in_WordPress', 'autodescription' )
-				);
-				/* translators: 1: Function name, 2: Message, 3: Plugin Version notification */
-				trigger_error( sprintf( __( '%1$s was called <strong>incorrectly</strong>. %2$s %3$s', 'autodescription' ), $function, $message, $version ) );
-			} else {
-				$version = is_null( $version ) ? '' : sprintf( '(This message was added in version %s of The SEO Framework.)', $version );
-				$message .= ' ' . sprintf( 'Please see <a href="%s">Debugging in WordPress</a> for more information.',
-					'https://codex.wordpress.org/Debugging_in_WordPress'
-				);
-
-				trigger_error( sprintf( '%1$s was called <strong>incorrectly</strong>. %2$s %3$s', $function, $message, $version ) );
-			}
+			$version = empty( $version ) ? '' : sprintf( __( '(This message was added in version %s of The SEO Framework.)' ), $version );
+			/* translators: 1: Function name, 2: 'Incorrectly', 3: Plugin Version notification */
+			trigger_error( sprintf( esc_html__( '%1$s was called %2$s. %3$s', 'autodescription' ), esc_html( $function ), '<strong>incorrectly</strong>', esc_html( $version ) ) );
 
 			restore_error_handler();
 		}
@@ -268,7 +249,6 @@ class AutoDescription_Debug extends AutoDescription_Core {
 
 			$this->error_handler( $error, $message );
 		}
-
 	}
 
 	/**
@@ -294,7 +274,6 @@ class AutoDescription_Debug extends AutoDescription_Core {
 
 			$this->error_handler( $error, $message );
 		}
-
 	}
 
 	/**
@@ -311,10 +290,10 @@ class AutoDescription_Debug extends AutoDescription_Core {
 		$line = isset( $error['line'] ) ? $error['line'] : '';
 
 		if ( isset( $message ) ) {
-			echo "\r\n" . '<strong>Notice:</strong> ' . $message;
-			echo $file ? ' In ' . $file : '';
-			echo $line ? ' on line ' . $line : '';
-			echo ".<br>\r\n";
+			echo PHP_EOL . '<strong>Notice:</strong> ' . $message;
+			echo $file ? ' In ' . esc_html( $file ) : '';
+			echo $line ? ' on line ' . esc_html( $line ) : '';
+			echo '.<br>' . PHP_EOL;
 		}
 	}
 
@@ -322,7 +301,6 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	 * Echos found screens in the admin footer when debugging is enabled.
 	 *
 	 * @since 2.5.2
-	 * @uses bool $this->the_seo_framework_debug
 	 * @access private
 	 * @global object $current_screen
 	 */
@@ -344,6 +322,16 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	}
 
 	/**
+	 * Outputs the debug_output property.
+	 *
+	 * @since 2.7.1
+	 * @access private
+	 */
+	public function output_debug() {
+		echo $this->debug_output;
+	}
+
+	/**
 	 * Parses input values and wraps them in human-readable elements.
 	 *
 	 * @since 2.6.0
@@ -358,11 +346,11 @@ class AutoDescription_Debug extends AutoDescription_Core {
 
 		if ( $this->the_seo_framework_debug ) {
 
-			$output .= "\r\n";
+			$output .= PHP_EOL;
 			$output .= $this->the_seo_framework_debug_hidden ? '' : '<span class="code highlight">';
 
 			if ( is_null( $values ) ) {
-				$output .= $this->debug_value_wrapper( "Debug message: Value isn't set." ) . "\r\n";
+				$output .= $this->debug_value_wrapper( "Debug message: Value isn't set." ) . PHP_EOL;
 				$output .= $this->the_seo_framework_debug_hidden ? '' : '</span>';
 
 				return $output;
@@ -393,18 +381,18 @@ class AutoDescription_Debug extends AutoDescription_Core {
 					if ( '' === $value ) {
 						$output .= $this->debug_key_wrapper( $key ) . ' => ';
 						$output .= $this->debug_value_wrapper( "''" );
-						$output .= "\r\n";
+						$output .= PHP_EOL;
 					} elseif ( is_string( $value ) || is_int( $value ) ) {
 						$output .= $this->debug_key_wrapper( $key ) . ' => ';
 						$output .= $this->debug_value_wrapper( $value );
-						$output .= "\r\n";
+						$output .= PHP_EOL;
 					} elseif ( is_bool( $value ) ) {
 						$output .= $this->debug_key_wrapper( $key ) . ' => ';
 						$output .= $this->debug_value_wrapper( $value ? 'true' : 'false' );
-						$output .= "\r\n";
+						$output .= PHP_EOL;
 					} elseif ( is_array( $value ) ) {
 						$output .= $this->debug_key_wrapper( $key ) . ' => ';
-						$output .= "Array[\r\n";
+						$output .= 'Array[' . PHP_EOL;
 						$output .= $this->the_seo_framework_debug_hidden ? '' : '<p style="margin:0;padding-left:12px">';
 						foreach ( $value as $k => $v ) {
 							$output .= "\t\t\t";
@@ -425,7 +413,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 								$output .= $this->debug_value_wrapper( $v );
 							}
 							$output .= ',';
-							$output .= "\r\n";
+							$output .= PHP_EOL;
 							$output .= $this->the_seo_framework_debug_hidden ? '' : '<br>';
 						}
 						$output .= $this->the_seo_framework_debug_hidden ? '' : '</p>';
@@ -433,7 +421,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 					} else {
 						$output .= $this->debug_key_wrapper( $key ) . ' => ';
 						$output .= $this->debug_value_wrapper( $value );
-						$output .= "\r\n";
+						$output .= PHP_EOL;
 					}
 					$output .= $this->the_seo_framework_debug_hidden ? '' : '<br>';
 				}
@@ -453,7 +441,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 			}
 
 			$output .= $this->the_seo_framework_debug_hidden ? '' : '</span>';
-			$output .= "\r\n";
+			$output .= PHP_EOL;
 		}
 
 		return $output;
@@ -553,13 +541,10 @@ class AutoDescription_Debug extends AutoDescription_Core {
 				$loop++;
 				$debug_key = '[Debug key: ' . $loop . ' - ' . $method . ']';
 
-				if ( $this->is_admin() && 'admin_footer' !== current_action() ) {
-					echo "\r\n";
-					echo $this->the_seo_framework_debug_hidden ? esc_html( $debug_key ) . ' action. ' : '<p>' . esc_html( $debug_key ) . '</p>';
-				}
+				if ( $this->is_admin() && 'admin_footer' !== current_action() )
+					echo $this->the_seo_framework_debug_hidden ? esc_html( PHP_EOL . $debug_key ) . ' action. ' : '<p>' . esc_html( $debug_key ) . '</p>';
 
-				$output .= "\r\n";
-				$output .= $this->the_seo_framework_debug_hidden ? esc_html( $debug_key ) . ' output. ' : '<h3>' . esc_html( $debug_key ) . '</h3>';
+				$output .= $this->the_seo_framework_debug_hidden ? esc_html( PHP_EOL . $debug_key ) . ' output. ' : '<h3>' . esc_html( $debug_key ) . '</h3>';
 
 				if ( isset( $cached_args[ $method ] ) ) {
 					$args[] = array(
@@ -591,31 +576,31 @@ class AutoDescription_Debug extends AutoDescription_Core {
 				}
 
 				$output .= ' )';
-				$output .= $this->the_seo_framework_debug_hidden ? "\r\n" : "<br>\r\n";
+				$output .= $this->the_seo_framework_debug_hidden ? PHP_EOL : '<br>' . PHP_EOL;
 
 				foreach ( $args as $num => $a ) {
 					if ( is_array( $a ) ) {
 						foreach ( $a as $k => $v ) {
 							$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:12px">';
 								$output .= "\t" . (string) $k . ': ';
-								$output .= $this->the_seo_framework_debug_hidden ? "\r\n" : '<br><div style="padding-left:12px">' . "\r\n";
+								$output .= $this->the_seo_framework_debug_hidden ? PHP_EOL : '<br><div style="padding-left:12px">' . PHP_EOL;
 									$output .= "\t  " . gettype( $v ) . ': [';
 									$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:12px">';
 										$output .= "\t\t" . $this->get_debug_information( $v );
 									$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
-									$output .= "\t  " . ']' . "\r\n";
+									$output .= "\t  " . ']' . PHP_EOL;
 								$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
 							$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
 						}
 					} else {
 						$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:12px">';
 							$output .= "\t" . (string) $num . ': ';
-							$output .= $this->the_seo_framework_debug_hidden ? "\r\n" : "<br>\r\n";
+							$output .= $this->the_seo_framework_debug_hidden ? PHP_EOL : '<br>' . PHP_EOL;
 							$output .= "\t  " . gettype( $a ) . ': [';
 							$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:12px">';
 								$output .= "\t\t" . $this->get_debug_information( $a );
-							$output .= $this->the_seo_framework_debug_hidden ? '' : "</div><br>\r\n";
-							$output .= "\t  " . ']' . "\r\n";
+							$output .= $this->the_seo_framework_debug_hidden ? '' : '</div><br>' . PHP_EOL;
+							$output .= "\t  " . ']' . PHP_EOL;
 						$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
 					}
 				}
@@ -694,22 +679,21 @@ class AutoDescription_Debug extends AutoDescription_Core {
 			}
 
 			//* Convert to string and echo if not returned yet.
-			echo (string) "\r\n" . $difference_time . "s\r\n";
-			echo (string) ( $difference_memory / 1024 ) . "kiB\r\n";
+			echo esc_html( PHP_EOL . $difference_time . 's' . PHP_EOL );
+			echo esc_html( ( $difference_memory / 1024 ) . 'kiB' . PHP_EOL );
 		} else {
 			if ( false === $echo ) {
 				//* Return early if not allowed to echo.
 				if ( 'time' === $what )
 					return number_format( $plugin_time[ $key ], 5 );
 
-				return $plugin_memory[$key];
+				return $plugin_memory[ $key ];
 			}
 
 			//* Convert to string and echo if not returned yet.
-			echo (string) "\r\n" . $plugin_time[ $key ] . "s\r\n";
-			echo (string) ( $plugin_memory[ $key ] / 1024 ) . "kiB\r\n";
+			echo esc_html( PHP_EOL . $plugin_time[ $key ] . 's' . PHP_EOL );
+			echo esc_html( ( $plugin_memory[ $key ] / 1024 ) . 'kiB' . PHP_EOL );
 		}
-
 	}
 
 	/**
@@ -735,6 +719,15 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	}
 
 	/**
+	 * Outputs the debug header.
+	 *
+	 * @since 2.7.1
+	 */
+	protected function output_debug_header() {
+		echo $this->get_debug_header_output();
+	}
+
+	/**
 	 * Wraps header output in front-end code.
 	 * This won't consider hiding the output.
 	 *
@@ -742,7 +735,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	 *
 	 * @return string Wrapped SEO meta tags output.
 	 */
-	protected function debug_header_output() {
+	protected function get_debug_header_output() {
 
 		if ( $this->is_admin() && ! $this->is_term_edit() && ! $this->is_post_edit() && ! $this->is_seo_settings_page( true ) )
 			return;
@@ -782,8 +775,7 @@ class AutoDescription_Debug extends AutoDescription_Core {
 				. $this->google_site_output()
 				. $this->bing_site_output()
 				. $this->yandex_site_output()
-				. $this->pint_site_output()
-				;
+				. $this->pint_site_output();
 
 		$timer = '<div style="display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( $this->timer(), 5 ) . ' seconds</div>' ;
 
@@ -801,13 +793,22 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	}
 
 	/**
+	 * Outputs debug query.
+	 *
+	 * @since 2.7.1
+	 */
+	protected function output_debug_query() {
+		echo $this->get_debug_query_output();
+	}
+
+	/**
 	 * Wraps query status booleans in human-readable code.
 	 *
 	 * @since 2.6.6
 	 *
 	 * @return string Wrapped Query State debug output.
 	 */
-	protected function debug_query_output() {
+	protected function get_debug_query_output() {
 
 		//* Start timer.
 		$this->timer( true );

@@ -1002,7 +1002,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 			if ( $page_hook === $pagehook )
 				return true;
 		} elseif ( $this->is_admin() && $pageslug ) {
-			if ( isset( $_GET['page'] ) && $pageslug === $_GET['page'] )
+			if ( ! empty( $_GET['page'] ) && $pageslug === $_GET['page'] )
 				return true;
 		}
 
