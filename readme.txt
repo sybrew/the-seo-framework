@@ -330,7 +330,7 @@ TODO:
 			* Compat?
 	/
 	* Class `The_SEO_Framework\Load` is now final, and can't be extended upon anymore.
-	* TODO The `license.txt` file has been updated to improve readability. The contents have not been changed.
+	* The `license.txt` file has been updated to improve readability. The contents have not been changed.
 	* TODO The `title_seperator` option has been changed and updated to `title_separator`. Note the typo.
 	* Method `post_status()`'s third parameter was unused. It's now used to echo (true) or return (false) the value, default return (false).
 	* Method `no_more_genesis_seo()` has been renamed to `disable_genesis_seo`, without deprecation as it was marked private.
