@@ -357,10 +357,7 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 				<tr>
 					<th scope="row" valign="top"><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
 					<td>
-						<?php
-						//* Already escaped.
-						echo $this->post_status( $term_id, $taxonomy, true );
-						?>
+						<?php $this->post_status( $term_id, $taxonomy, true ); ?>
 					</td>
 				</tr>
 				<?php endif; ?>
@@ -433,10 +430,7 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 				<tr>
 					<th scope="row" valign="top"><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
 					<td>
-						<?php
-						//* Already escaped.
-						echo $this->post_status( $term_id, $taxonomy, true );
-						?>
+						<?php $this->post_status( $term_id, $taxonomy, true ); ?>
 					</td>
 				</tr>
 				<?php endif; ?>
@@ -594,10 +588,7 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 		<p>
 			<strong><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></strong>
 			<div>
-				<?php
-				//* Already escaped.
-				echo $this->post_status( $post_id, 'inpost', true );
-				?>
+				<?php $this->post_status( $post_id, 'inpost', true ); ?>
 			</div>
 		</p>
 		<?php endif; ?>
@@ -695,10 +686,7 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 		<p>
 			<strong><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></strong>
 			<div>
-				<?php
-				//* Already escaped.
-				echo $this->post_status( $post_id, 'inpost', true );
-				?>
+				<?php $this->post_status( $post_id, 'inpost', true ); ?>
 			</div>
 		</p>
 		<?php endif;

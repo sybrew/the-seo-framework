@@ -257,9 +257,8 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			$post_id = $tax_id;
 		}
 
-		//* Already escaped.
 		if ( 'tsf-seo-bar-wrap' === $column )
-			echo $this->post_status( $post_id, $type, true );
+			$this->post_status( $post_id, $type, true );
 
 	}
 
@@ -291,8 +290,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 			$ajax_id = $column . $post_id;
 
-			//* Already escaped.
-			echo $this->post_status_special( $context, '?', 'unknown', $is_term, $ajax_id );
+			$this->post_status_special( $context, '?', 'unknown', $is_term, $ajax_id, true );
 		}
 	}
 
@@ -305,9 +303,10 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	 * @param string $symbol The single-character symbol.
 	 * @param string $class The SEO block color code. : 'bad', 'okay', 'good', 'unknown'.
 	 * @param int|null $ajax_id The unique Ajax ID to generate a small on-hover script for this ID. May be Arbitrary.
-	 * @return string The special block with wrap.
+	 * @param bool $echo Whether to echo the output.
+	 * @return string|void The special block with wrap. Void if $echo is true.
 	 */
-	protected function post_status_special( $context, $symbol = '?', $color = 'unknown', $is_term = '', $ajax_id = null ) {
+	protected function post_status_special( $context, $symbol = '?', $color = 'unknown', $is_term = '', $ajax_id = null, $echo = false ) {
 
 		$classes = $this->get_the_seo_bar_classes();
 
@@ -322,7 +321,14 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		if ( empty( $is_term ) )
 			$is_term = $this->is_archive();
 
-		return $this->get_the_seo_bar_wrap( $block, $is_term, $ajax_id );
+		$bar = $this->get_the_seo_bar_wrap( $block, $is_term, $ajax_id );
+
+		//* Already escaped.
+		if ( $echo ) {
+			echo $bar;
+		} else {
+			return $bar;
+		}
 	}
 
 	/**
@@ -331,13 +337,14 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	 * @since 2.1.9
 	 * @staticvar string $post_i18n The post type slug.
 	 * @staticvar bool $is_term If we're dealing with TT pages.
+	 * @since 2.7.1 Third parameter `$echo` has been put into effect.
 	 *
 	 * @param int $post_id The Post ID or taxonomy ID.
 	 * @param string $type Is fetched on edit.php, inpost, taxonomies, etc.
-	 * @param bool $html return the status in html or string.
-	 * @return string $content the post SEO status
+	 * @param bool $echo Whether to echo the value. Does not eliminate return.
+	 * @return string|void $content The post SEO status. Void if $echo is true.
 	 */
-	public function post_status( $post_id = '', $type = 'inpost', $html = true ) {
+	public function post_status( $post_id = '', $type = 'inpost', $echo = false ) {
 
 		$content = '';
 
@@ -345,9 +352,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 		if ( empty( $post_id ) )
 			$post_id = $this->get_the_real_ID();
 
-		//* Only run when post ID is found.
-		if ( isset( $post_id ) && $post_id ) {
-
+		if ( $post_id ) {
 			//* Fetch Post Type.
 			if ( 'inpost' === $type || empty( $type ) )
 				$type = get_post_type( $post_id );
@@ -408,14 +413,21 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 			);
 
 			if ( $is_term ) {
-				return $this->the_seo_bar_term( $args );
+				$bar = $this->the_seo_bar_term( $args );
 			} else {
-				return $this->the_seo_bar_page( $args );
+				$bar = $this->the_seo_bar_page( $args );
 			}
 		} else {
 			$context = esc_attr__( 'Failed to fetch post ID.', 'autodescription' );
 
-			return $this->post_status_special( $context, '!', 'bad' );
+			$bar = $this->post_status_special( $context, '!', 'bad' );
+		}
+
+		//* Already escaped.
+		if ( $echo ) {
+			echo $bar;
+		} else {
+			return $bar;
 		}
 	}
 

@@ -200,6 +200,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * This maintenance release fixes ... TODO
 * Class structure ... TODO
+* Many functions now allow to echo the output now trough variable to prevent output sanitation mistakes... TODO
+* WordPress.com VIP standards have been enforced even more.. TODO
 
 **SEO tip of the Update:**
 
@@ -315,6 +317,7 @@ TODO:
 	* TODO Class The_SEO_Framework_Load is now final, and can't be extended upon anymore.
 	* TODO The `license.txt` file has been updated to improve readability. The contents have not been changed.
 	* TODO The `title_seperator` option has been changed and updated to `title_separator`. Note the typo.
+	* Method `post_status()`'s third parameter was unused. It's now used to echo (true) or return (false) the value, default return (false).
 * **Fixed:**
 	* Leftover CSS prefix name `seoframework-content-no-js` should've been `tsf-content-no-js`.
 * **Improved:**
