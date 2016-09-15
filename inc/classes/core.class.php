@@ -84,12 +84,6 @@ class AutoDescription_Core {
 
 		add_action( 'current_screen', array( $this, 'post_type_support' ), 0 );
 
-		/**
-		 * Add plugin links to the plugin activation page.
-		 * @since 2.2.8
-		 */
-		add_filter( 'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, array( $this, 'plugin_action_links' ), 10, 2 );
-
 	}
 
 	/**
@@ -165,9 +159,6 @@ class AutoDescription_Core {
 	/**
 	 * Adds post type support for The SEO Framework.
 	 *
-	 * Applies filters the_seo_framework_supported_post_types : The supported post types.
-	 * @since 2.3.1
-	 *
 	 * @since 2.1.6
 	 */
 	public function post_type_support() {
@@ -182,6 +173,10 @@ class AutoDescription_Core {
 			'jetpack-portfolio',
 		);
 
+		/*
+		 * Applies filters the_seo_framework_supported_post_types : Array The supported post types.
+		 * @since 2.3.1
+		 */
 		$post_types = (array) apply_filters( 'the_seo_framework_supported_post_types', $defaults );
 
 		$types = wp_parse_args( $defaults, $post_types );

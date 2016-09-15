@@ -45,17 +45,20 @@ class AutoDescription_TermData extends AutoDescription_PostData {
 	public function initialize_term_meta() {
 
 		if ( $this->can_get_term_meta() ) {
-			add_action( 'edit_term', array( $this, 'update_term_meta' ), 10, 2 );
-			add_action( 'delete_term', array( $this, 'delete_term_meta' ), 10, 2 );
+			if ( $this->is_admin() ) {
+				add_action( 'edit_term', array( $this, 'update_term_meta' ), 10, 2 );
+				add_action( 'delete_term', array( $this, 'delete_term_meta' ), 10, 2 );
+			}
 		} else {
 			//* Old style term meta data through loop injections.
 			add_filter( 'get_term', array( $this, 'get_term_filter' ), 10, 2 );
 			add_filter( 'get_terms', array( $this, 'get_terms_filter' ), 10, 2 );
 
-			add_action( 'edit_term', array( $this, 'taxonomy_seo_save' ), 10, 2 );
-			add_action( 'delete_term', array( $this, 'term_meta_delete' ), 10, 2 );
+			if ( $this->is_admin() ) {
+				add_action( 'edit_term', array( $this, 'taxonomy_seo_save' ), 10, 2 );
+				add_action( 'delete_term', array( $this, 'term_meta_delete' ), 10, 2 );
+			}
 		}
-
 	}
 
 	/**

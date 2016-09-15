@@ -33,8 +33,6 @@ class AutoDescription_Feed extends AutoDescription_Transients {
 	 */
 	protected function __construct() {
 		parent::__construct();
-
-		add_action( 'template_redirect', array( $this, 'init_feed' ) );
 	}
 
 	/**
@@ -43,9 +41,6 @@ class AutoDescription_Feed extends AutoDescription_Transients {
 	 * @since 2.6.0
 	 */
 	public function init_feed() {
-
-		if ( false === $this->is_feed() )
-			return;
 
 		add_filter( 'the_content_feed', array( $this, 'the_content_feed' ), 10, 2 );
 

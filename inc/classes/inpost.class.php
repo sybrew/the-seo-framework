@@ -63,12 +63,6 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 		$this->inpost_nonce_name = 'the_seo_framework_inpost_seo_settings';
 		$this->inpost_nonce_field = 'the_seo_framework_inpost';
 
-		//* Enqueue Inpost meta boxes.
-		add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box_init' ), 5 );
-
-		//* Enqueue Taxonomy meta output.
-		add_action( 'current_screen', array( $this, 'add_taxonomy_seo_box_init' ), 10 );
-
 		/**
 		 * Applies filters bool|string the_seo_framework_inpost_seo_bar :
 		 * Whether to output the SEO bar within the inpost SEO Settings metabox.
@@ -175,19 +169,16 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 				}
 			}
 		}
-
 	}
 
 	/**
-	 * Determines which arguments should be used
+	 * Determines post type and outputs SEO box.
 	 *
 	 * @since 2.1.8
-	 *
-	 * @used by add_inpost_seo_box
+	 * @access private
 	 *
 	 * @param $object the page/post/taxonomy object
 	 * @param $args the page/post arguments or taxonomy slug.
-	 *
 	 * @return string Inpost SEO box.
 	 */
 	public function pre_seo_box( $object, $args ) {
@@ -203,8 +194,7 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 				return $this->inpost_seo_box( $object, (array) $args );
 			}
 		} else {
-			//* Note: Passes object.
-			// Empty the arguments, if any.
+			//* Empty the arguments, if any.
 			return $this->inpost_seo_box( $object, $args = '' );
 		}
 
@@ -263,7 +253,7 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 		if ( $is_term ) {
 			$this->tt_inpost_box( $type, $object );
 		} else {
-			$this->page_inpost_box( $type );
+			$this->singular_inpost_box( $type );
 		}
 	}
 
@@ -277,13 +267,9 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 	 * @param object $object The TT object.
 	 */
 	public function tt_inpost_box( $type, $object ) {
-
 		do_action( 'the_seo_framework_pre_tt_inpost_box' );
-
 		$this->get_view( 'inpost/seo-settings', get_defined_vars(), 'term' );
-
 		do_action( 'the_seo_framework_pro_tt_inpost_box' );
-
 	}
 
 	/**
@@ -294,13 +280,9 @@ class AutoDescription_Inpost extends AutoDescription_DoingItRight {
 	 *
 	 * @param string $type The post type name.
 	 */
-	public function page_inpost_box( $type ) {
-
+	public function singular_inpost_box( $type ) {
 		do_action( 'the_seo_framework_pre_page_inpost_box' );
-
 		$this->get_view( 'inpost/seo-settings', get_defined_vars(), 'singular' );
-
 		do_action( 'the_seo_framework_pro_page_inpost_box' );
-
 	}
 }

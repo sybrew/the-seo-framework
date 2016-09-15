@@ -42,7 +42,11 @@ class AutoDescription_Init extends AutoDescription_Query {
 	protected function __construct() {
 		parent::__construct();
 
-		add_action( 'init', array( $this, 'init_the_seo_framework' ), 1 );
+		/**
+		 * Applies filters 'the_seo_framework_load_options' : Boolean Allows the options page to be removed
+		 * @since 2.2.2
+		 */
+		$this->load_options = (bool) apply_filters( 'the_seo_framework_load_options', true );
 
 		/**
 		 * Applies filters 'the_seo_framework_use_object_cache' : bool
@@ -50,6 +54,7 @@ class AutoDescription_Init extends AutoDescription_Query {
 		 */
 		$this->use_object_cache = (bool) apply_filters( 'the_seo_framework_use_object_cache', true );
 
+		add_action( 'init', array( $this, 'init_the_seo_framework' ), 1 );
 	}
 
 	/**
@@ -62,29 +67,137 @@ class AutoDescription_Init extends AutoDescription_Query {
 	}
 
 	/**
-	 * Runs the plugin on the front-end.
+	 * Initializes the plugin actions and filters.
 	 *
 	 * @since 2.7.1
-	 *
-	 * @TODO make this function work for both front- and back-end?
-	 * @TODO always eliminate is_preview()?
 	 */
 	public function init_the_seo_framework() {
 
-		/**
-		 * Don't run in admin or preview.
-		 * @since 2.2.4
-		 */
-		if ( $this->is_admin() || $this->is_preview() )
+		if ( $this->is_preview() )
 			return;
 
-		$this->init_front_end_actions();
-		$this->init_front_end_filters();
+		$this->init_global_actions();
+		$this->init_global_filters();
+
+		if ( $this->is_admin() ) {
+			$this->init_admin_actions();
+		} else {
+			$this->init_front_end_actions();
+			$this->init_front_end_filters();
+		}
+	}
+
+	/**
+	 * Initializes the plugin front- and back-end actions.
+	 *
+	 * @since 2.7.1
+	 */
+	public function init_global_actions() {
+		//* Jetpack compat.
+		add_action( 'init', array( $this, 'jetpack_compat' ) );
+	}
+
+	/**
+	 * Initializes the plugin front- and back-end filters.
+	 *
+	 * @since 2.7.1
+	 */
+	public function init_global_filters() {
+
+		//* Disable Genesis SEO.
+		add_filter( 'genesis_detect_seo_plugins', array( $this, 'disable_genesis_seo' ), 10 );
+
+		//* Disable Headway SEO.
+		add_filter( 'headway_seo_disabled', '__return_true' );
 
 	}
 
 	/**
+	 * Initializes Admin Menu actions.
+	 *
+	 * @since 2.7.0
+	 */
+	public function init_admin_actions() {
+
+		//* Save post data.
+		add_action( 'save_post', array( $this, 'inpost_seo_save' ), 1, 2 );
+
+		//* Enqueues admin scripts.
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 0, 1 );
+
+		//* Add plugin links to the plugin activation page.
+		add_filter( 'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, array( $this, 'plugin_action_links' ), 10, 2 );
+
+		//* Initialize post states.
+		add_action( 'current_screen', array( $this, 'post_state' ) );
+
+		//* Initialize columns.
+		add_action( 'current_screen', array( $this, 'init_columns' ) );
+
+		//* Ajax handlers for columns.
+		add_action( 'wp_ajax_add-tag', array( $this, 'init_columns_ajax' ), -1 );
+
+		//* Sanitizes Site options
+		add_action( 'admin_init', array( $this, 'sanitizer_filters' ) );
+
+		/**
+		 * Delete Sitemap and Description transients on post publish/delete.
+		 * @see WP Core wp_transition_post_status()
+		 */
+		add_action( 'publish_post', array( $this, 'delete_transients_post' ) );
+		add_action( 'publish_page', array( $this, 'delete_transients_post' ) );
+		add_action( 'deleted_post', array( $this, 'delete_transients_post' ) );
+		add_action( 'deleted_page', array( $this, 'delete_transients_post' ) );
+		add_action( 'post_updated', array( $this, 'delete_transients_post' ) );
+		add_action( 'page_updated', array( $this, 'delete_transients_post' ) );
+
+		//* Deletes term description transient.
+		add_action( 'edit_term', array( $this, 'delete_auto_description_transients_term' ), 10, 3 );
+		add_action( 'delete_term', array( $this, 'delete_auto_description_transients_term' ), 10, 4 );
+
+		//* Deletes author transient.
+		add_action( 'profile_update', array( $this, 'delete_transients_author' ) );
+
+		//* Delete Sitemap transient on permalink structure change.
+		add_action( 'load-options-permalink.php', array( $this, 'delete_sitemap_transient_permalink_updated' ), 20 );
+
+		//* Deletes front page description transient on Tagline change.
+		add_action( 'update_option_blogdescription', array( $this, 'delete_auto_description_frontpage_transient' ), 10, 1 );
+
+		//* Delete doing it wrong transient after theme switch.
+		add_action( 'after_switch_theme', array( $this, 'delete_theme_dir_transient' ), 10, 0 );
+		add_action( 'upgrader_process_complete', array( $this, 'delete_theme_dir_transient' ), 10, 2 );
+
+		if ( $this->load_options ) {
+			//* Enqueue Inpost meta boxes.
+			add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box_init' ), 5 );
+
+			//* Enqueue Taxonomy meta output.
+			add_action( 'current_screen', array( $this, 'add_taxonomy_seo_box_init' ), 10 );
+
+			//* Admin AJAX for counter options.
+			add_action( 'wp_ajax_the_seo_framework_update_counter', array( $this, 'wp_ajax_update_counter_type' ) );
+
+			// Enqueue i18n defaults.
+			add_action( 'admin_init', array( $this, 'enqueue_page_defaults' ), 1 );
+
+			// Add menu links and register $this->seo_settings_page_hook
+			add_action( 'admin_menu', array( $this, 'add_menu_link' ) );
+
+			//* Load the page content
+			add_action( 'admin_init', array( $this, 'settings_init' ) );
+
+			// Set up notices
+			add_action( 'admin_notices', array( $this, 'notices' ) );
+
+			// Load nessecary assets
+			add_action( 'admin_init', array( $this, 'load_assets' ) );
+		}
+	}
+
+	/**
 	 * Initializes front-end actions.
+	 * Disregards other SEO plugins, the meta output does look at detection.
 	 *
 	 * @since 2.5.2
 	 */
@@ -92,16 +205,33 @@ class AutoDescription_Init extends AutoDescription_Query {
 
 		//* Remove canonical header tag from WP
 		remove_action( 'wp_head', 'rel_canonical' );
+
 		//* Remove shortlink.
 		remove_action( 'wp_head', 'wp_shortlink_wp_head' );
+
 		//* Remove adjecent rel tags.
 		remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head' );
+
 		//* Earlier removal of the generator tag. Doesn't require filter.
 		remove_action( 'wp_head', 'wp_generator' );
 
-		add_action( 'template_redirect', array( $this, 'custom_field_redirect' ) );
+		//* BuddyPress front-end compat.
+		add_action( 'init', array( $this, 'buddypress_compat' ) );
+
+		if ( $this->is_singular() ) {
+			//* Initialize 301 redirects.
+			add_action( 'template_redirect', array( $this, 'custom_field_redirect' ) );
+		}
+
+		if ( $this->is_feed() ) {
+			//* Initialize feed alteration.
+			add_action( 'template_redirect', array( $this, 'init_feed' ) );
+		}
 
 		if ( $this->is_theme( 'genesis' ) ) {
+			//* Genesis front-end compat.
+			add_action( 'init', array( $this, 'genesis_compat' ) );
+
 			add_action( 'genesis_meta', array( $this, 'html_output' ), 5 );
 		} else {
 			add_action( 'wp_head', array( $this, 'html_output' ), 1 );
@@ -136,7 +266,6 @@ class AutoDescription_Init extends AutoDescription_Query {
 			//* Override WordPress Title
 			add_filter( 'wp_title', array( $this, 'title_from_cache' ), 9, 3 );
 		}
-
 	}
 
 	/**
@@ -361,10 +490,6 @@ class AutoDescription_Init extends AutoDescription_Query {
 	 * @return void early on non-singular pages.
 	 */
 	public function custom_field_redirect() {
-
-		//* Prevent redirect from options on uneditable pages.
-		if ( false === $this->is_singular() || $this->is_admin() )
-			return;
 
 		$url = $this->get_custom_field( 'redirect' );
 

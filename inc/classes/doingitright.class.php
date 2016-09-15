@@ -34,15 +34,6 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 	 */
 	protected function __construct() {
 		parent::__construct();
-
-		//* Initialize post states.
-		add_action( 'current_screen', array( $this, 'post_state' ) );
-
-		//* Ajax handlers for columns.
-		add_action( 'wp_ajax_add-tag', array( $this, 'init_columns_ajax' ), -1 );
-		//* Initialize columns.
-		add_action( 'current_screen', array( $this, 'init_columns' ) );
-
 	}
 
 	/**
@@ -56,7 +47,6 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 		//* Only load on singular pages.
 		if ( $this->is_singular() ) {
-
 			/**
 			 * Applies filters `the_seo_framework_allow_states` : boolean Whether to allow post states output.
 			 * @since 2.1.0
@@ -65,9 +55,7 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 			if ( $allow_states )
 				add_filter( 'display_post_states', array( $this, 'add_post_state' ), 10, 2 );
-
 		}
-
 	}
 
 	/**
@@ -126,13 +114,13 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 		$show_seo_column = (bool) apply_filters( 'the_seo_framework_show_seo_column', true );
 
-		if ( $doing_ajax )
+		if ( $doing_ajax ) {
 			$post_type = isset( $_POST['post_type'] ) ? $_POST['post_type'] : '';
-		else
+		} else {
 			$post_type = isset( $screen->post_type ) ? $screen->post_type : '';
+		}
 
 		if ( $show_seo_column && $this->post_type_supports_custom_seo( $post_type ) ) {
-
 			if ( $doing_ajax ) {
 
 				$id = isset( $_POST['screen'] ) ? $_POST['screen'] : false;
@@ -143,30 +131,25 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 					add_action( 'manage_' . $taxonomy . '_custom_column', array( $this, 'seo_bar_ajax' ), 1, 3 );
 				}
 			} else {
-
 				$id = isset( $screen->id ) ? $screen->id : '';
 
-				if ( '' !== $id ) {
+				if ( '' !== $id && $this->is_wp_lists_edit() ) {
+					add_filter( 'manage_' . $id . '_columns', array( $this, 'add_column' ), 10, 1 );
 
-					if ( $this->is_wp_lists_edit() ) {
-						add_filter( 'manage_' . $id . '_columns', array( $this, 'add_column' ), 10, 1 );
+					$taxonomy = isset( $screen->taxonomy ) ? $screen->taxonomy : '';
 
-						$taxonomy = isset( $screen->taxonomy ) ? $screen->taxonomy : '';
+					if ( $taxonomy )
+						add_action( 'manage_' . $taxonomy . '_custom_column', array( $this, 'seo_bar' ), 1, 3 );
 
-						if ( $taxonomy )
-							add_action( 'manage_' . $taxonomy . '_custom_column', array( $this, 'seo_bar' ), 1, 3 );
-
-						/**
-						 * Always load pages and posts.
-						 * Many CPT plugins rely on these.
-						 */
-						add_action( 'manage_posts_custom_column', array( $this, 'seo_bar' ), 1, 3 );
-						add_action( 'manage_pages_custom_column', array( $this, 'seo_bar' ), 1, 3 );
-					}
+					/**
+					 * Always load pages and posts.
+					 * Many CPT plugins rely on these.
+					 */
+					add_action( 'manage_posts_custom_column', array( $this, 'seo_bar' ), 1, 3 );
+					add_action( 'manage_pages_custom_column', array( $this, 'seo_bar' ), 1, 3 );
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -323,8 +306,8 @@ class AutoDescription_DoingItRight extends AutoDescription_Search {
 
 		$bar = $this->get_the_seo_bar_wrap( $block, $is_term, $ajax_id );
 
-		//* Already escaped.
 		if ( $echo ) {
+			//* Already escaped.
 			echo $bar;
 		} else {
 			return $bar;

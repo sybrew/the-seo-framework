@@ -59,40 +59,6 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 	 */
 	protected function __construct() {
 		parent::__construct();
-
-		/**
-		* Applies filters the_seo_framework_load_options : Boolean Allows the options page to be removed
-		* @since 2.2.2
-		*/
-		$this->load_options = (bool) apply_filters( 'the_seo_framework_load_options', true );
-
-		add_action( 'init', array( $this, 'init_admin_actions' ), 0 );
-	}
-
-	/**
-	 * Initializes Admin Menu actions.
-	 *
-	 * @since 2.7.0
-	 */
-	public function init_admin_actions() {
-
-		if ( $this->load_options && $this->is_admin() ) {
-			// Enqueue i18n defaults.
-			add_action( 'admin_init', array( $this, 'enqueue_page_defaults' ), 1 );
-
-			// Add menu links and register $this->seo_settings_page_hook
-			add_action( 'admin_menu', array( $this, 'add_menu_link' ) );
-
-			//* Load the page content
-			add_action( 'admin_init', array( $this, 'settings_init' ) );
-
-			// Set up notices
-			add_action( 'admin_notices', array( $this, 'notices' ) );
-
-			// Load nessecary assets
-			add_action( 'admin_init', array( $this, 'load_assets' ) );
-		}
-
 	}
 
 	/**
@@ -116,7 +82,6 @@ class AutoDescription_Adminpages extends AutoDescription_Inpost {
 				'plugin_update_text' => esc_html__( 'New SEO Settings have been updated.', 'autodescription' ),
 			)
 		);
-
 	}
 
 	/**

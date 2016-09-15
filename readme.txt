@@ -318,8 +318,9 @@ TODO:
 	* TODO The `license.txt` file has been updated to improve readability. The contents have not been changed.
 	* TODO The `title_seperator` option has been changed and updated to `title_separator`. Note the typo.
 	* Method `post_status()`'s third parameter was unused. It's now used to echo (true) or return (false) the value, default return (false).
-* **Fixed:**
-	* Leftover CSS prefix name `seoframework-content-no-js` should've been `tsf-content-no-js`.
+	* Method `no_more_genesis_seo()` has been renamed to `disable_genesis_seo`, without deprecation as it was marked private.
+	* Method `page_inpost_box()` has been renamed to `singular_inpost_box`, without deprecation as it was marked private.
+	* Method `custom_field_redirect()` no longer checks for admin or front-end page status.
 * **Improved:**
 	/
 	* Method `the_seo_framework()->call_function()` now passes objects, so you can use `$this` in the called function.
@@ -329,6 +330,7 @@ TODO:
 	/
 	* TODO All admin actions have been moved into an admin action handler.
 		* This massively reduces the plugin memory heap size of this plugin on the front-end.
+		* This changes the admin `init` (not `admin_init`) action initialization from priority `0` to priority `1`.
 	/
 	* TODO All front-end actions have been moved into a front-end action handler.
 		* This massively reduces the plugin memory heap size of this plugin on the back-end.
@@ -340,6 +342,8 @@ TODO:
 	* TODO The taxonomy and terms options output has been moved into a view file.
 		* This reduces memory usage on non-term edit pages.
 	* Method `get_latest_post_id()` now uses WP_Query instead of a direct database call.
+* **Fixed:**
+	* Leftover CSS prefix name `seoframework-content-no-js` should've been `tsf-content-no-js`.
 * **Other:**
 	* Cleaned up code.
 

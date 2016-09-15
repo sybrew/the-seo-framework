@@ -43,7 +43,6 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * @since 2.6.1
 	 * @access private
 	 * @staticvar bool $cache : Always true if set.
-	 *
 	 * @global object $wp_query
 	 * @global object|null $current_screen
 	 *

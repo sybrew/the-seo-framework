@@ -60,6 +60,20 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	}
 
 	/**
+	 * Mark a filter as deprecated and inform when it has been used.
+	 *
+	 * @since 2.7.1
+	 * @see @this->_deprecated_function().
+	 *
+	 * @param string $filter		The function that was called.
+	 * @param string $version		The version of WordPress that deprecated the function.
+	 * @param string $replacement	Optional. The function that should have been called. Default null.
+	 */
+	public function _deprecated_filter( $filter, $version, $replacement = null ) {
+		$this->_deprecated_function( 'filter ' . $filter, $version, $replacement );
+	}
+
+	/**
 	 * Mark a function as deprecated and inform when it has been used.
 	 *
 	 * Taken from WordPress core, but added extra parameters and linguistic alterations.

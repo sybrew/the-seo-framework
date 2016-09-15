@@ -61,16 +61,14 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 		$use_tabs = $use_tabs && count( $tabs ) > 1;
 
 		/**
-		 * Start navigation.
+		 * Start navigational tabs.
 		 *
 		 * Don't output navigation if $use_tabs is false and the amount of tabs is 1 or lower.
 		 */
 		if ( $use_tabs ) {
-
 			?><div class="tsf-nav-tab-wrapper hide-if-no-js" id="<?php echo esc_attr( $id . '-tabs-wrapper' ); ?>"><?php
 				$count = 1;
 				foreach ( $tabs as $tab => $value ) :
-
 					$dashicon = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
 					$name = isset( $value['name'] ) ? $value['name'] : '';
 
@@ -81,7 +79,7 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 					//* All output below is escaped.
 					?>
 					<div class="tsf-tab">
-						<input type="radio" class="tsf-tabs-radio" id="<?php echo $the_id ?>" name="<?php echo $the_name ?>" <?php echo $checked ?>>
+						<input type="radio" class="tsf-tabs-radio" id="<?php echo $the_id; ?>" name="<?php echo $the_name; ?>" <?php echo $checked; ?>>
 						<label for="<?php echo $the_id; ?>" class="tsf-nav-tab">
 							<?php echo $dashicon ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' tsf-dashicons-tabs"></span>' : ''; ?>
 							<?php echo $name ? '<span class="tsf-nav-desktop">' . esc_attr( $name ) . '</span>' : ''; ?>
@@ -128,11 +126,11 @@ class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
 
 				$callback = isset( $value['callback'] ) ? $value['callback'] : '';
 
-				if ( $callback ) {
+				if ( $callback ) :
 					$params = isset( $value['args'] ) ? $value['args'] : '';
 					$output = $this->call_function( $callback, $version, $params );
 					echo $output;
-				}
+				endif;
 			?></div><?php
 
 			$count++;

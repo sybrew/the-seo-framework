@@ -71,35 +71,6 @@ class AutoDescription_Transients extends AutoDescription_Sitemaps {
 
 		//* Setup Transient names
 		add_action( 'plugins_loaded', array( $this, 'setup_transient_names' ), 10 );
-
-		//* @TODO wrap the following actions in an admin loader.
-
-		/**
-		 * Delete Sitemap and Description transients on post publish/delete.
-		 * @see WP Core wp_transition_post_status()
-		 */
-		add_action( 'publish_post', array( $this, 'delete_transients_post' ) );
-		add_action( 'publish_page', array( $this, 'delete_transients_post' ) );
-		add_action( 'deleted_post', array( $this, 'delete_transients_post' ) );
-		add_action( 'deleted_page', array( $this, 'delete_transients_post' ) );
-		add_action( 'post_updated', array( $this, 'delete_transients_post' ) );
-		add_action( 'page_updated', array( $this, 'delete_transients_post' ) );
-
-		add_action( 'profile_update', array( $this, 'delete_transients_author' ) );
-
-		add_action( 'edit_term', array( $this, 'delete_auto_description_transients_term' ), 10, 3 );
-		add_action( 'delete_term', array( $this, 'delete_auto_description_transients_term' ), 10, 4 );
-
-		//* Delete Sitemap transient on permalink structure change.
-		add_action( 'load-options-permalink.php', array( $this, 'delete_sitemap_transient_permalink_updated' ), 20 );
-
-		//* Deletes front page description transient on Tagline change.
-		add_action( 'update_option_blogdescription', array( $this, 'delete_auto_description_frontpage_transient' ), 10, 1 );
-
-		//* Delete doing it wrong transient after theme switch.
-		add_action( 'after_switch_theme', array( $this, 'delete_theme_dir_transient' ), 10, 0 );
-		add_action( 'upgrader_process_complete', array( $this, 'delete_theme_dir_transient' ), 10, 2 );
-
 	}
 
 	/**

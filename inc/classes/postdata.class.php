@@ -32,20 +32,17 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 	 */
 	protected function __construct() {
 		parent::__construct();
-
-		add_action( 'save_post', array( $this, 'inpost_seo_save' ), 1, 2 );
 	}
 
 	/**
 	 * Save the SEO settings when we save a post or page.
 	 * Some values get sanitized, the rest are pulled from identically named subkeys in the $_POST['autodescription'] array.
 	 *
-	 * @uses $this->save_custom_fields() Perform checks and saves post meta / custom field data to a post or page.
-	 *
 	 * @since 2.0.0
+	 * @uses $this->save_custom_fields() : Perform security checks and saves post meta / custom field data to a post or page.
 	 *
-	 * @param integer  $post_id  Post ID.
-	 * @param stdClass $post     Post object.
+	 * @param integer $post_id  Post ID.
+	 * @param object  $post     Post object.
 	 * @return mixed Returns post id if permissions incorrect, null if doing autosave, ajax or future post, false if update
 	 *               or delete failed, and true on success.
 	 */
@@ -83,7 +80,9 @@ class AutoDescription_PostData extends AutoDescription_Detect {
 				$data[ $key ] = $this->s_redirect_url( $value );
 		endforeach;
 
+		//* Perform nonce and save fields.
 		$this->save_custom_fields( $data, $this->inpost_nonce_field, $this->inpost_nonce_name, $post );
+
 	}
 
 	/**

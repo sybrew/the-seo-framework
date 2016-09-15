@@ -60,13 +60,6 @@ class AutoDescription_Admin_Init extends AutoDescription_Init {
 	 */
 	protected function __construct() {
 		parent::__construct();
-
-		//* Enqueues admin scripts.
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 0, 1 );
-
-		//* Admin AJAX for counter options.
-		add_action( 'wp_ajax_the_seo_framework_update_counter', array( $this, 'wp_ajax_update_counter_type' ) );
-
 	}
 
 	/**

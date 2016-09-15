@@ -294,7 +294,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 		);
 
 		if ( isset( $plugins_check ) ) {
-			$this->_deprecated_function( 'the_seo_framework_detect_seo_plugins', '2.6.1', 'the_seo_framework_conflicting_plugins' );
+			$this->_deprecated_filter( 'the_seo_framework_detect_seo_plugins', '2.6.1', 'the_seo_framework_conflicting_plugins' );
 			return $this->detect_plugin( $plugins_check );
 		}
 
@@ -337,7 +337,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 		);
 
 		if ( isset( $plugins_check ) ) {
-			$this->_deprecated_function( 'the_seo_framework_detect_og_plugins', '2.6.1', 'the_seo_framework_conflicting_plugins' );
+			$this->_deprecated_filter( 'the_seo_framework_detect_og_plugins', '2.6.1', 'the_seo_framework_conflicting_plugins' );
 			return $this->detect_plugin( $plugins_check );
 		}
 

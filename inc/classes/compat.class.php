@@ -32,20 +32,6 @@ class AutoDescription_Compat extends AutoDescription_Debug {
 	 */
 	protected function __construct() {
 		parent::__construct();
-
-		//* Genesis compat.
-		add_action( 'init', array( $this, 'genesis_compat' ) );
-		add_filter( 'genesis_detect_seo_plugins', array( $this, 'no_more_genesis_seo' ), 10 );
-
-		//* Headway compat.
-		add_filter( 'headway_seo_disabled', '__return_true' );
-
-		//* Jetpack compat.
-		add_action( 'init', array( $this, 'jetpack_compat' ) );
-
-		//* BuddyPress compat.
-		add_action( 'init', array( $this, 'buddypress_compat' ) );
-
 	}
 
 	/**
@@ -55,28 +41,22 @@ class AutoDescription_Compat extends AutoDescription_Debug {
 	 * @access private
 	 */
 	public function genesis_compat() {
-
-		//* Nothing to do on admin.
-		if ( $this->is_admin() )
-			return;
-
 		//* Reverse the removal of head attributes, this shouldn't affect SEO.
 		remove_filter( 'genesis_attr_head', 'genesis_attributes_empty_class' );
 		add_filter( 'genesis_attr_head', 'genesis_attributes_head' );
-
 	}
 
 	/**
 	 * Removes the Genesis SEO meta boxes on the SEO Settings page
 	 *
-	 * @since 2.2.4
+	 * @since 2.7.1
 	 * @access private
 	 *
 	 * @param array $plugins, overwritten as this filter will fire the
 	 * detection, regardless of other SEO plugins.
 	 * @return array Plugins to detect.
 	 */
-	public function no_more_genesis_seo( $plugins ) {
+	public function disable_genesis_seo( $plugins ) {
 
 		$plugins = array(
 				'classes' => array(
@@ -114,12 +94,6 @@ class AutoDescription_Compat extends AutoDescription_Debug {
 	 * @access private
 	 */
 	public function buddypress_compat() {
-
-		//* Nothing to do on admin.
-		if ( $this->is_admin() )
-			return;
-
 		remove_action( 'wp_head', '_bp_maybe_remove_rel_canonical', 8 );
-
 	}
 }

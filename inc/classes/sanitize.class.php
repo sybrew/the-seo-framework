@@ -32,12 +32,6 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 */
 	protected function __construct() {
 		parent::__construct();
-
-		/**
-		 * Sanitizes Site options
-		 * @see siteoptions.class.php
-		 */
-		add_action( 'admin_init', array( $this, 'sanitizer_filters' ) );
 	}
 
 	/**
