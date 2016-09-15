@@ -19,14 +19,14 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Render
+ * Class The_SEO_Framework_Render
  *
  * Puts all data into HTML valid strings
  * Returns strings
  *
  * @since 2.1.6
  */
-class AutoDescription_Render extends AutoDescription_Admin_Init {
+class The_SEO_Framework_Render extends The_SEO_Framework_Admin_Init {
 
 	/**
 	 * Theme title doing it wrong boolean.

@@ -19,13 +19,13 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Generate_Title
+ * Class The_SEO_Framework_Generate_Title
  *
  * Generates title SEO data based on content.
  *
  * @since 2.6.0
  */
-class AutoDescription_Generate_Title extends AutoDescription_Generate_Description {
+class The_SEO_Framework_Generate_Title extends The_SEO_Framework_Generate_Description {
 
 	/**
 	 * Constructor, load parent constructor

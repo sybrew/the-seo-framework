@@ -19,13 +19,13 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Sanitize
+ * Class The_SEO_Framework_Sanitize
  *
  * Sanitizes strings/arrays within the plugin.
  *
  * @since 2.2.4
  */
-class AutoDescription_Sanitize extends AutoDescription_Adminpages {
+class The_SEO_Framework_Sanitize extends The_SEO_Framework_Admin_Pages {
 
 	/**
 	 * Constructor, load parent constructor
@@ -76,7 +76,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 *
 	 * @since 2.2.2
 	 * @uses autodescription_add_option_filter() Assign filter to array of settings.
-	 * @see AutoDescription_Sanitize::add_filter() Add sanitization filters to options.
+	 * @see The_SEO_Framework_Sanitize::add_filter() Add sanitization filters to options.
 	 */
 	public function sanitizer_filters() {
 
@@ -336,7 +336,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 	 * @since 2.2.2
 	 * @since 2.7.0 : No longer used internally.
 	 *
-	 * @param string $filter The filter to call (see AutoDescription_Siteoptions::$available_filters for options)
+	 * @param string $filter The filter to call (see The_SEO_Framework_Site_Options::$available_filters for options)
 	 * @param string $option The WordPress option name
 	 * @param string|array $suboption Optional. The suboption or suboptions you want to filter
 	 *
@@ -1016,7 +1016,7 @@ class AutoDescription_Sanitize extends AutoDescription_Adminpages {
 			/**
 			 * Remove query args
 			 *
-			 * @see AutoDescription_Sanitize::s_url
+			 * @see The_SEO_Framework_Sanitize::s_url
 			 * @since 2.2.4
 			 */
 			$new_value = $this->s_url( $url );

@@ -19,14 +19,14 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_DoingItRight
+ * Class The_SEO_Framework_Doing_It_Right
  *
  * Adds data in a column to edit.php and edit-tags.php
  * Shows you if you're doing the SEO right.
  *
  * @since 2.1.9
  */
-class AutoDescription_DoingItRight extends AutoDescription_Search {
+class The_SEO_Framework_Doing_It_Right extends The_SEO_Framework_Search {
 
 	/**
 	 * Constructor, load parent constructor.

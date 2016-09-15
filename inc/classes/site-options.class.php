@@ -19,13 +19,13 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Siteoptions
+ * Class The_SEO_Framework_Site_Options
  *
  * Holds Site Options for the plugin.
  *
  * @since 2.2.2
  */
-class AutoDescription_Siteoptions extends AutoDescription_Sanitize {
+class The_SEO_Framework_Site_Options extends The_SEO_Framework_Sanitize {
 
 	/**
 	 * Site Settings field.

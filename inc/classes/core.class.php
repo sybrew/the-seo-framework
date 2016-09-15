@@ -19,13 +19,13 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Core
+ * Class The_SEO_Framework_Core
  *
  * Initializes the plugin & Holds plugin core functions.
  *
  * @since 2.6.0
  */
-class AutoDescription_Core {
+class The_SEO_Framework_Core {
 
 	/**
 	 * Unserializing instances of this object is forbidden.

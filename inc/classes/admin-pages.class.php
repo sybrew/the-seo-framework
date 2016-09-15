@@ -19,13 +19,13 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Siteoptions
+ * Class The_SEO_Framework_Site_Options
  *
  * Renders admin pages content for AutoDescription.
  *
  * @since 2.2.2
  */
-class AutoDescription_Adminpages extends AutoDescription_Inpost {
+class The_SEO_Framework_Admin_Pages extends The_SEO_Framework_Inpost {
 
 	/**
 	 * Page Defaults.

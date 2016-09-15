@@ -19,14 +19,14 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Generate
+ * Class The_SEO_Framework_Generate
  *
  * Generates SEO data based on content
  * Returns strings/arrays
  *
  * @since 2.6.0
  */
-class AutoDescription_Generate_Ldjson extends AutoDescription_Generate_Image {
+class The_SEO_Framework_Generate_Ldjson extends The_SEO_Framework_Generate_Image {
 
 	/**
 	 * Constructor, load parent constructor

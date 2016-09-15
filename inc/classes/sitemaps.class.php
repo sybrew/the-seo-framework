@@ -19,13 +19,13 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Search
+ * Class The_SEO_Framework_Search
  *
  * Generates sitemap and outputs it.
  *
  * @since 2.2.9
  */
-class AutoDescription_Sitemaps extends AutoDescription_Metaboxes {
+class The_SEO_Framework_Sitemaps extends The_SEO_Framework_Metaboxes {
 
 	/**
 	 * Maximum number of posts that show up in the sitemap.xml page.

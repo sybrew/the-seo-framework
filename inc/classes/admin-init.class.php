@@ -19,14 +19,14 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Admin_Init
+ * Class The_SEO_Framework_Admin_Init
  *
  * Initializes the plugin for the wp-admin screens.
  * Enqueues CSS and Javascript.
  *
  * @since 2.1.6
  */
-class AutoDescription_Admin_Init extends AutoDescription_Init {
+class The_SEO_Framework_Admin_Init extends The_SEO_Framework_Init {
 
 	/**
 	 * The page base file.

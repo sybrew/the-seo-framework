@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 2.3.4
  */
-class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
+class The_SEO_Framework_Deprecated extends The_SEO_Framework_Feed {
 
 	/**
 	 * Constructor. Loads parent constructor.
@@ -51,7 +51,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @return array $screens
 	 */
 	protected function supported_screens( $args = array() ) {
-		$this->_deprecated_function( 'AutoDescription_Admin_Init::' . __FUNCTION__, '2.5.2' );
+		$this->_deprecated_function( 'The_SEO_Framework_Admin_Init::' . __FUNCTION__, '2.5.2' );
 
 		/**
 		 * Instead of supporting page ID's, we support the Page base now.
@@ -79,7 +79,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @since 2.5.2.1
 	 */
 	public function title_doing_it_wrong() {
-		$this->_deprecated_function( 'AutoDescription_Detect::' . __FUNCTION__, '2.5.2.1', 'AutoDescription_Detect::tell_title_doing_it_wrong()' );
+		$this->_deprecated_function( 'The_SEO_Framework_Detect::' . __FUNCTION__, '2.5.2.1', 'The_SEO_Framework_Detect::tell_title_doing_it_wrong()' );
 
 		return;
 	}
@@ -100,7 +100,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @since 2.6.0
 	 */
 	public function current_theme_supports( $feature ) {
-		$this->_deprecated_function( 'AutoDescription_Detect::' . __FUNCTION__, '2.6.0', 'current_theme_supports()' );
+		$this->_deprecated_function( 'The_SEO_Framework_Detect::' . __FUNCTION__, '2.6.0', 'current_theme_supports()' );
 
 		return current_theme_supports();
 	}
@@ -116,7 +116,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @since 2.6.0
 	 */
 	public function echo_debug_information( $values ) {
-		$this->_deprecated_function( 'AutoDescription_Debug::' . __FUNCTION__, '2.6.0', 'AutoDescription_Debug::get_debug_information()' );
+		$this->_deprecated_function( 'The_SEO_Framework_Debug::' . __FUNCTION__, '2.6.0', 'The_SEO_Framework_Debug::get_debug_information()' );
 
 		echo $this->get_debug_information( $values );
 
@@ -133,7 +133,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @since 2.6.0
 	 */
 	public function get_the_archive_title() {
-		$this->_deprecated_function( 'AutoDescription_Generate_Description::' . __FUNCTION__, '2.6.0', 'AutoDescription_Generate_Title::get_the_real_archive_title()' );
+		$this->_deprecated_function( 'The_SEO_Framework_Generate_Description::' . __FUNCTION__, '2.6.0', 'The_SEO_Framework_Generate_Title::get_the_real_archive_title()' );
 
 		return $this->get_the_real_archive_title();
 	}
@@ -156,7 +156,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @since 2.6.0
 	 */
 	public function seo_column( $column, $post_id, $tax_id = '' ) {
-		$this->_deprecated_function( 'AutoDescription_DoingItRight::' . __FUNCTION__, '2.6.0', 'AutoDescription_DoingItRight::seo_bar()' );
+		$this->_deprecated_function( 'The_SEO_Framework_Doing_It_Right::' . __FUNCTION__, '2.6.0', 'The_SEO_Framework_Doing_It_Right::seo_bar()' );
 
 		return $this->seo_bar( $column, $post_id, $tax_id );
 	}
@@ -169,7 +169,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @since 2.6.0
 	 */
 	public function ping_yahoo() {
-		$this->_deprecated_function( 'AutoDescription_Sitemaps::' . __FUNCTION__, '2.6.0', 'AutoDescription_Sitemaps::ping_bing()' );
+		$this->_deprecated_function( 'The_SEO_Framework_Sitemaps::' . __FUNCTION__, '2.6.0', 'The_SEO_Framework_Sitemaps::ping_bing()' );
 
 		$this->ping_bing();
 	}
@@ -184,7 +184,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @since 2.6.0
 	 */
 	public function setup_sitemap_transient( $sitemap_content ) {
-		$this->_deprecated_function( 'AutoDescription_Sitemaps::' . __FUNCTION__, '2.6.0', 'AutoDescription_Sitemaps::setup_sitemap()' );
+		$this->_deprecated_function( 'The_SEO_Framework_Sitemaps::' . __FUNCTION__, '2.6.0', 'The_SEO_Framework_Sitemaps::setup_sitemap()' );
 
 		return $this->setup_sitemap( $sitemap_content );
 	}
@@ -206,7 +206,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @return bool
 	 */
 	public function is_locale( $str, $use_cache = true ) {
-		$this->_deprecated_function( 'AutoDescription_Detect::' . __FUNCTION__, '2.6.0', 'AutoDescription_Detect::check_wp_locale()' );
+		$this->_deprecated_function( 'The_SEO_Framework_Detect::' . __FUNCTION__, '2.6.0', 'The_SEO_Framework_Detect::check_wp_locale()' );
 
 		return $this->check_wp_locale( $str, $use_cache );
 	}
@@ -229,7 +229,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @return string Title without tagline.
 	 */
 	public function get_placeholder_title( $title = '', $args = array() ) {
-		$this->_deprecated_function( 'AutoDescription_Generate_Title::' . __FUNCTION__, '2.6.0', 'AutoDescription_Generate_Title::title()` with the argument $args[\'notagline\']' );
+		$this->_deprecated_function( 'The_SEO_Framework_Generate_Title::' . __FUNCTION__, '2.6.0', 'The_SEO_Framework_Generate_Title::title()` with the argument $args[\'notagline\']' );
 
 		$args['notagline'] = true;
 		return $this->title( $title, '', '', $args );
@@ -246,7 +246,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @return void
 	 */
 	public function initialize_defaults_admin() {
-		$this->_deprecated_function( 'AutoDescription_Siteoptions::' . __FUNCTION__, '2.6.0' );
+		$this->_deprecated_function( 'The_SEO_Framework_Site_Options::' . __FUNCTION__, '2.6.0' );
 		return;
 	}
 
@@ -261,7 +261,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @return void
 	 */
 	public function initialize_defaults() {
-		$this->_deprecated_function( 'AutoDescription_Siteoptions::' . __FUNCTION__, '2.6.0' );
+		$this->_deprecated_function( 'The_SEO_Framework_Site_Options::' . __FUNCTION__, '2.6.0' );
 		return;
 	}
 
@@ -356,7 +356,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @return bool
 	 */
 	public function has_sitemap_plugin() {
-		$this->_deprecated_function( 'AutoDescription_Detect::' . __FUNCTION__, '2.6.1', 'AutoDescription_Detect::detect_sitemap_plugin' );
+		$this->_deprecated_function( 'The_SEO_Framework_Detect::' . __FUNCTION__, '2.6.1', 'The_SEO_Framework_Detect::detect_sitemap_plugin' );
 
 		return $this->detect_sitemap_plugin();
 	}
@@ -374,7 +374,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 */
 	public function get_current_post_type( $public = true ) {
 
-		$this->_deprecated_function( 'AutoDescription_Detect::' . __FUNCTION__, '2.6.2', 'AutoDescription_Detect::get_supported_post_type' );
+		$this->_deprecated_function( 'The_SEO_Framework_Detect::' . __FUNCTION__, '2.6.2', 'The_SEO_Framework_Detect::get_supported_post_type' );
 
 		static $post_type = null;
 
@@ -424,7 +424,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 */
 	public function wpmudev_domainmap_flush_fix( $options_saved = false, $flush_now = true ) {
 
-		$this->_deprecated_function( 'AutoDescription_Sitemaps::' . __FUNCTION__, '2.6.2' );
+		$this->_deprecated_function( 'The_SEO_Framework_Sitemaps::' . __FUNCTION__, '2.6.2' );
 
 		if ( $this->pretty_permalinks && $this->is_domainmapping_active() ) :
 			if ( $options_saved || 'init' === current_action() ) :
@@ -479,7 +479,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 */
 	public function get_relative_url( $post = null, $external = false, $depr = null ) {
 
-		$this->_deprecated_function( 'AutoDescription_Generate_Url::' . __FUNCTION__, '2.6.5', 'AutoDescription_Generate_Url::build_singular_relative_url()' );
+		$this->_deprecated_function( 'The_SEO_Framework_Generate_Url::' . __FUNCTION__, '2.6.5', 'The_SEO_Framework_Generate_Url::build_singular_relative_url()' );
 
 		if ( isset( $depr ) ) {
 			$post_id = $depr;
@@ -533,7 +533,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 */
 	public function the_url_path_default_permalink_structure( $post = null, $paged = false, $paged_plural = true ) {
 
-		$this->_deprecated_function( 'AutoDescription_Generate_Url::' . __FUNCTION__, '2.6.5' , 'AutoDescription_Generate_Url::build_singular_relative_url()' );
+		$this->_deprecated_function( 'The_SEO_Framework_Generate_Url::' . __FUNCTION__, '2.6.5' , 'The_SEO_Framework_Generate_Url::build_singular_relative_url()' );
 
 		//* Don't slash it.
 		$this->url_slashit = false;
@@ -627,7 +627,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @since 2.7.0
 	 */
 	public function homepage_metabox_general() {
-		$this->_deprecated_function( 'AutoDescription_Metaboxes::' . __FUNCTION__, '2.7.0', 'AutoDescription_Metaboxes::homepage_metabox_general_tab()' );
+		$this->_deprecated_function( 'The_SEO_Framework_Metaboxes::' . __FUNCTION__, '2.7.0', 'The_SEO_Framework_Metaboxes::homepage_metabox_general_tab()' );
 		$this->get_view( 'metaboxes/homepage-metabox', array(), 'general' );
 	}
 
@@ -641,7 +641,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @since 2.7.0
 	 */
 	public function homepage_metabox_additions() {
-		$this->_deprecated_function( 'AutoDescription_Metaboxes::' . __FUNCTION__, '2.7.0', 'AutoDescription_Metaboxes::homepage_metabox_additions_tab()' );
+		$this->_deprecated_function( 'The_SEO_Framework_Metaboxes::' . __FUNCTION__, '2.7.0', 'The_SEO_Framework_Metaboxes::homepage_metabox_additions_tab()' );
 		$this->get_view( 'metaboxes/homepage-metabox', array(), 'additions' );
 	}
 
@@ -655,7 +655,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 * @since 2.7.0
 	 */
 	public function homepage_metabox_robots() {
-		$this->_deprecated_function( 'AutoDescription_Metaboxes::' . __FUNCTION__, '2.7.0', 'AutoDescription_Metaboxes::homepage_metabox_robots_tab()' );
+		$this->_deprecated_function( 'The_SEO_Framework_Metaboxes::' . __FUNCTION__, '2.7.0', 'The_SEO_Framework_Metaboxes::homepage_metabox_robots_tab()' );
 		$this->get_view( 'metaboxes/homepage-metabox', array(), 'robots' );
 	}
 
@@ -673,7 +673,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 */
 	public function delete_auto_description_blog_transient( $old_option ) {
 
-		$this->_deprecated_function( 'AutoDescription_Transients::' . __FUNCTION__, '2.7.0', 'AutoDescription_Transients::delete_auto_description_frontpage_transient()' );
+		$this->_deprecated_function( 'The_SEO_Framework_Transients::' . __FUNCTION__, '2.7.0', 'The_SEO_Framework_Transients::delete_auto_description_frontpage_transient()' );
 
 		$this->setup_auto_description_transient( $this->get_the_front_page_ID(), '', 'frontpage' );
 
@@ -857,7 +857,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 */
 	public function in_array( $needle, $array, $strict = true ) {
 
-		$this->_deprecated_function( 'AutoDescription_Core::' . __FUNCTION__, '2.7.0', 'in_array()' );
+		$this->_deprecated_function( 'The_SEO_Framework_Core::' . __FUNCTION__, '2.7.0', 'in_array()' );
 
 		$array = array_flip( $array );
 
@@ -885,7 +885,7 @@ class The_SEO_Framework_Deprecated extends AutoDescription_Feed {
 	 */
 	public function exclude_search_ids() {
 
-		$this->_deprecated_function( 'AutoDescription_Search::' . __FUNCTION__, '2.7.0', 'AutoDescription_Search::get_excluded_search_ids()' );
+		$this->_deprecated_function( 'The_SEO_Framework_Search::' . __FUNCTION__, '2.7.0', 'The_SEO_Framework_Search::get_excluded_search_ids()' );
 
 		return $this->get_excluded_search_ids();
 	}

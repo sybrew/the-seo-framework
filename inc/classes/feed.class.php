@@ -19,14 +19,14 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Feed
+ * Class The_SEO_Framework_Feed
  *
  * Influences WordPress feeds.
  * "Report Cybr for Feeding." - General EUW League of Legends player.
  *
  * @since 2.5.2
  */
-class AutoDescription_Feed extends AutoDescription_Transients {
+class The_SEO_Framework_Feed extends The_SEO_Framework_Transients {
 
 	/**
 	 * Constructor, load parent constructor and run functions.

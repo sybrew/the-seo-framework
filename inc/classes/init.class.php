@@ -19,13 +19,13 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Init
+ * Class The_SEO_Framework_Init
  *
  * Outputs all data in front-end header
  *
  * @since 2.1.6
  */
-class AutoDescription_Init extends AutoDescription_Query {
+class The_SEO_Framework_Init extends The_SEO_Framework_Query {
 
 	/**
 	 * Allow object caching through a filter.

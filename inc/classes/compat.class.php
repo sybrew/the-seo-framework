@@ -19,13 +19,13 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Compat
+ * Class The_SEO_Framework_Compat
  *
  * Adds theme/plugin compatibility.
  *
  * @since 2.6.0
  */
-class AutoDescription_Compat extends AutoDescription_Debug {
+class The_SEO_Framework_Compat extends The_SEO_Framework_Debug {
 
 	/**
 	 * Constructor, load parent constructor

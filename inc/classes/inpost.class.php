@@ -19,13 +19,13 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Inpost
+ * Class The_SEO_Framework_Inpost
  *
  * Outputs Taxonomy, Post and Page meta boxes
  *
  * @since 2.2.2
  */
-class AutoDescription_Inpost extends AutoDescription_DoingItRight {
+class The_SEO_Framework_Inpost extends The_SEO_Framework_Doing_It_Right {
 
 	/**
 	 * Add inpost SEO Bar through a filter.

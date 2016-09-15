@@ -19,13 +19,13 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Transients
+ * Class The_SEO_Framework_Transients
  *
  * Generates, stores and deletes common transients.
  *
  * @since 2.3.3
  */
-class AutoDescription_Transients extends AutoDescription_Sitemaps {
+class The_SEO_Framework_Transients extends The_SEO_Framework_Sitemaps {
 
 	/**
 	 * The sitemap transient name.

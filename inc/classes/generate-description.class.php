@@ -19,13 +19,13 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Generate_Description
+ * Class The_SEO_Framework_Generate_Description
  *
  * Generates Description SEO data based on content.
  *
  * @since 2.6.0
  */
-class AutoDescription_Generate_Description extends AutoDescription_Generate {
+class The_SEO_Framework_Generate_Description extends The_SEO_Framework_Generate {
 
 	/**
 	 * Determines whether we're parsing the manual content Excerpt for the automated description.

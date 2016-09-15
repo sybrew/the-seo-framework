@@ -19,13 +19,13 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Generate_Image
+ * Class The_SEO_Framework_Generate_Image
  *
  * Generates Image SEO data based on content.
  *
  * @since 2.6.0
  */
-class AutoDescription_Generate_Image extends AutoDescription_Generate_Url {
+class The_SEO_Framework_Generate_Image extends The_SEO_Framework_Generate_Url {
 
 	/**
 	 * Holds the image dimensions, if found.

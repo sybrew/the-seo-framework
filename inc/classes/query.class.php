@@ -19,7 +19,7 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Query
+ * Class The_SEO_Framework_Query
  *
  * Caches and organizes the WP Query.
  * Functions are (somewhat) in alphabetical order!
@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) or die;
  *
  * @license GPLv2+ <http://www.gnu.org/licenses/gpl-2.0.html>
  */
-class AutoDescription_Query extends AutoDescription_Compat {
+class The_SEO_Framework_Query extends The_SEO_Framework_Compat {
 
 	/**
 	 * Constructor. Load parent constructor.
@@ -99,7 +99,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 		 *
 		 * @param int $id
 		 * @param bool Whether the globals WP_Query or current_screen are set.
-		 * @see AutoDescription_Query::can_cache_query()
+		 * @see The_SEO_Framework_Query::can_cache_query()
 		 *
 		 * @since 2.6.2
 		 */
@@ -171,7 +171,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * Fetches the Term ID on admin pages.
 	 *
 	 * @since 2.6.0
-	 * @since 2.6.6 Moved from class AutoDescription_TermData.
+	 * @since 2.6.6 Moved from class The_SEO_Framework_Term_Data.
 	 *
 	 * @return int Term ID.
 	 */
@@ -673,7 +673,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 *
 	 * @since 2.6.0
 	 * @staticvar bool $cache
-	 * @uses AutoDescription_Query::is_single_admin()
+	 * @uses The_SEO_Framework_Query::is_single_admin()
 	 *
 	 * @param int|string|array $post Optional. Post ID, title, slug, or array of such. Default empty.
 	 * @return bool
@@ -703,7 +703,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 *
 	 * @since 2.6.0
 	 * @global object $current_screen
-	 * @see AutoDescription_Query::is_single()
+	 * @see The_SEO_Framework_Query::is_single()
 	 *
 	 * @return bool
 	 */
@@ -721,9 +721,9 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * Replaces and expands default WordPress is_singular().
 	 *
 	 * @since 2.5.2
-	 * @uses AutoDescription_Query::is_singular_admin()
-	 * @uses AutoDescription_Query::is_blog_page()
-	 * @uses AutoDescription_Query::is_wc_shop()
+	 * @uses The_SEO_Framework_Query::is_singular_admin()
+	 * @uses The_SEO_Framework_Query::is_blog_page()
+	 * @uses The_SEO_Framework_Query::is_wc_shop()
 	 * @access private
 	 *
 	 * @param string|array $post_types Optional. Post type or array of post types. Default empty string.
@@ -1172,7 +1172,7 @@ class AutoDescription_Query extends AutoDescription_Compat {
 	 * Object cache handler for the query class.
 	 *
 	 * @since 2.7.0
-	 * @see AutoDescription_Query::get_query_cache()
+	 * @see The_SEO_Framework_Query::get_query_cache()
 	 *
 	 * @param string $key The key to set.
 	 * @param mixed $value_to_set If null, no cache will be set.

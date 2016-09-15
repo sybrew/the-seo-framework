@@ -19,13 +19,13 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_PostData
+ * Class The_SEO_Framework_Post_Data
  *
  * Holds Post data.
  *
  * @since 2.1.6
  */
-class AutoDescription_PostData extends AutoDescription_Detect {
+class The_SEO_Framework_Post_Data extends The_SEO_Framework_Detect {
 
 	/**
 	 * Constructor, load parent constructor

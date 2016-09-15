@@ -19,13 +19,13 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Debug
+ * Class The_SEO_Framework_Debug
  *
  * Holds plugin debug functions.
  *
  * @since 2.6.0
  */
-class AutoDescription_Debug extends AutoDescription_Core {
+class The_SEO_Framework_Debug extends The_SEO_Framework_Core {
 
 	/**
 	 * Enqueue the debug output.
@@ -41,8 +41,8 @@ class AutoDescription_Debug extends AutoDescription_Core {
 	 *
 	 * @since 2.6.5
 	 *
-	 * @var bool Whether to continue adding to AutoDescription_Debug::debug_output
-	 * within AutoDescription_Debug::debug_init().
+	 * @var bool Whether to continue adding to The_SEO_Framework_Debug::debug_output
+	 * within The_SEO_Framework_Debug::debug_init().
 	 */
 	protected $add_debug_output = true;
 

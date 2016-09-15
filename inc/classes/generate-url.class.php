@@ -19,13 +19,13 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Generate_Url
+ * Class The_SEO_Framework_Generate_Url
  *
  * Generates URL and permalink SEO data based on content.
  *
  * @since 2.6.0
  */
-class AutoDescription_Generate_Url extends AutoDescription_Generate_Title {
+class The_SEO_Framework_Generate_Url extends The_SEO_Framework_Generate_Title {
 
 	/**
 	 * Whether to slash the url or not. Used when query vars are in url.

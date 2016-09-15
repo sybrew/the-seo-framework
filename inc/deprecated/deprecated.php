@@ -86,7 +86,7 @@ function tsf_wp_version( $version = '4.3.0', $compare = '>=' ) {
 	$theseoframework = the_seo_framework();
 
 	if ( isset( $theseoframework ) ) {
-		$theseoframework->_deprecated_function( __FUNCTION__, '2.7.0', 'AutoDescription_Detect::wp_version()' );
+		$theseoframework->_deprecated_function( __FUNCTION__, '2.7.0', 'The_SEO_Framework_Detect::wp_version()' );
 		return $theseoframework->wp_version( $version, $compare );
 	}
 

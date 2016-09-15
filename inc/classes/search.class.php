@@ -19,13 +19,13 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Search
+ * Class The_SEO_Framework_Search
  *
  * Excludes pages from search based on options
  *
  * @since 2.1.6
  */
-class AutoDescription_Search extends AutoDescription_Generate_Ldjson {
+class The_SEO_Framework_Search extends The_SEO_Framework_Generate_Ldjson {
 
 	/**
 	 * Constructor, loads parent constructor and adds filters.

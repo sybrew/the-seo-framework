@@ -19,13 +19,13 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Detect
+ * Class The_SEO_Framework_Detect
  *
  * Detects other plugins and themes
  *
  * @since 2.1.6
  */
-class AutoDescription_Detect extends AutoDescription_Render {
+class The_SEO_Framework_Detect extends The_SEO_Framework_Render {
 
 	/**
 	 * Constructor, load parent constructor

@@ -19,13 +19,13 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_Metaboxes
+ * Class The_SEO_Framework_Metaboxes
  *
  * Outputs Network and Site SEO settings meta boxes
  *
  * @since 2.2.2
  */
-class AutoDescription_Metaboxes extends AutoDescription_Siteoptions {
+class The_SEO_Framework_Metaboxes extends The_SEO_Framework_Site_Options {
 
 	/**
 	 * Constructor, load parent constructor.

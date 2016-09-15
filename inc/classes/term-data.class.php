@@ -19,13 +19,13 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Class AutoDescription_TermData
+ * Class The_SEO_Framework_Term_Data
  *
  * Holds Term and Taxonomy data.
  *
  * @since 2.6.0
  */
-class AutoDescription_TermData extends AutoDescription_PostData {
+class The_SEO_Framework_Term_Data extends The_SEO_Framework_Post_Data {
 
 	/**
 	 * Constructor, load parent constructor.

@@ -100,8 +100,8 @@ require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'init.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'admin-init.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'render.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'detect.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'postdata.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'termdata.class.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'post-data.class.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'term-data.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-description.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-title.class.php' );
@@ -109,11 +109,11 @@ require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-url.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-image.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-ldjson.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'search.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'doingitright.class.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'doing-it-right.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'inpost.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'adminpages.class.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'admin-pages.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'sanitize.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'siteoptions.class.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'site-options.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'metaboxes.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'sitemaps.class.php' );
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'transients.class.php' );
@@ -128,7 +128,7 @@ require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.class.php'
  *
  * @since 2.1.6
  */
-class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
+final class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
 
 	/**
 	 * Cached debug/profile constants. Initialized on plugins_loaded priority 5.
