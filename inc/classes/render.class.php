@@ -1084,6 +1084,7 @@ class Render extends Admin_Init {
 	 *
 	 * @since 2.6.0
 	 * @staticvar bool $cache
+	 * @NOTE: not used.
 	 *
 	 * @return bool
 	 */

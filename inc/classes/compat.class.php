@@ -37,6 +37,12 @@ class Compat extends Debug {
 	 */
 	protected function __construct() {
 		parent::__construct();
+
+		//* Disable Genesis SEO.
+		add_filter( 'genesis_detect_seo_plugins', array( $this, 'disable_genesis_seo' ), 10, 1 );
+
+		//* Disable Headway SEO.
+		add_filter( 'headway_seo_disabled', '__return_true' );
 	}
 
 	/**
@@ -65,10 +71,14 @@ class Compat extends Debug {
 
 		$plugins = array(
 				'classes' => array(
-					'The_SEO_Framework_Load',
+					'The_SEO_Framework\\Load',
 				),
-				'functions' => array(),
-				'constants' => array(),
+				'functions' => array(
+					'the_seo_framework',
+				),
+				'constants' => array(
+					'THE_SEO_FRAMEWORK_VERSION',
+				),
 			);
 
 		return $plugins;

@@ -107,15 +107,7 @@ class Init extends Query {
 	 *
 	 * @since 2.7.1
 	 */
-	public function init_global_filters() {
-
-		//* Disable Genesis SEO.
-		add_filter( 'genesis_detect_seo_plugins', array( $this, 'disable_genesis_seo' ), 10 );
-
-		//* Disable Headway SEO.
-		add_filter( 'headway_seo_disabled', '__return_true' );
-
-	}
+	public function init_global_filters() { }
 
 	/**
 	 * Initializes Admin Menu actions.
