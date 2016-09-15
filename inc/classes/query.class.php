@@ -1,11 +1,18 @@
 <?php
 /**
+ * @package The_SEO_Framework\Classes
+ */
+namespace The_SEO_Framework;
+
+defined( 'ABSPATH' ) or die;
+
+/**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 or later as
- * published by the Free Software Foundation.
+ * it under the terms of the GNU General Public License version 3 as published
+ * by the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,19 +23,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'ABSPATH' ) or die;
-
 /**
- * Class The_SEO_Framework_Query
+ * Class The_SEO_Framework\Query
  *
  * Caches and organizes the WP Query.
- * Functions are (somewhat) in alphabetical order!
  *
- * @since 2.6.0
- *
- * @license GPLv2+ <http://www.gnu.org/licenses/gpl-2.0.html>
+ * @since 2.7.1
  */
-class The_SEO_Framework_Query extends The_SEO_Framework_Compat {
+class Query extends Compat {
 
 	/**
 	 * Constructor. Load parent constructor.

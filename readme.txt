@@ -196,6 +196,14 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 = 2.7.1 - Seceded Affiliation =
 
+**Important Note:**
+
+* PHP 5.2 hasn't recieved updates for [over 5 years](http://php.net/eol.php) and using it is a major security risk.
+* **This maintenance release completely drops support for PHP 5.2**. So, if you're using PHP 5.2, from this update on you can no longer activate The SEO Framework.
+* For developers PHP 5.2 is a practicality and convinience hindrance and is also source for bugs. Sometimes, we have to split simple code over multiple lines just to support it.
+* WordPress is about to drop support for PHP 5.2 as well in WordPress 4.7.0. See proposed [trac ticket 36335](https://core.trac.wordpress.org/ticket/36335).
+* Inform your host to keep updated! Read more about informing your host [here](https://wordpress.org/about/requirements/).
+
 **Summarized:**
 
 * This maintenance release fixes ... TODO
@@ -271,31 +279,38 @@ TODO:
 * **Added:**
 	/
 	* TODO `The_SEO_Framework_Load->__set()` magic method. This prevents inaccessible property writing.
+	* All classes are now converted to use namespaces.
+		* Package: The_SEO_Framework
+	* Class autoloading.
+		* Now all The SEO Framework class files are required when needed, automatically.
 * **Changed:**
-	/
-	* TODO All the classes can't be initiated directly anymore. Always use `the_seo_framework()`. Failing to do so will result in a fatal error.
+	* All the classes can't be initiated directly anymore. Always use `the_seo_framework()`.
+		* Failing to do so will result in a fatal error.
 		* This allows me (the developer) to easily change the class structure without compatibility issues in the future.
-	/
-	* TODO The main class `The_SEO_Framework_Load` can not be initiated twice anymore. Failing to do so will return `null`.
+	* All classes have been renamed.
+		* They are now preceded by `The_SEO_Framework\`, in accordance to their newly acquired namespace.
+		* For example, `AutoDescription_Feed` is now `The_SEO_Framework\Feed`.
+	* The main class `The_SEO_Framework\Load` can not be initiated twice anymore. Failing to do so will return `null`.
 		* Always use function `the_seo_framework()` if you wish to access a method or property.
-	/
-	* TODO Some class files have been moved.
+	* Some class files have been moved.
 		* The changes:
 			* The main class file `load.class.php` has been moved to the `/autodescription/inc/classes/` folder, from the `/autodescription/` folder.
 			* The deprecation class handler `deprecated.class.php` has been moved to the `/autodescription/inc/classes/` folder, from the `/autodescription/inc/deprecated/` folder.
 		* These changes allow easy autoloading.
-	/
-	* TODO Most classes have been renamed.
+	* Some classes have their sub names changed.
 		* The changes:
 			* `AdminPages` is now `Admin_Pages`.
-		* These changes allow easy autoloading and future namespace interaction.
-	/
-	* TODO Some class files have been renamed.
+			* `DoingItRight` is now `Doing_It_Right`.
+		* These changes allow easy autoloading and namespace interaction.
+	* Some class files have been renamed.
 		* The changes:
-			* `adminpages.class.php`
-		* These changes allow easy autoloading and future namespace interaction.
-	/
-	* TODO Some function files have been moved.
+			* `adminpages.class.php` is now `admin-pages.php`
+			* `siteoptions.class.php` is now `site-options.php`
+			* `doingitright.class.php` is now `doing-it-right.php`
+			* `termdata.class.php` is now `term-data.php`
+			* `postdata.class.php` is now `post-data.php`
+		* These changes allow easy autoloading and namespace interaction.
+	* Some function files have been moved.
 		* The changes:
 			* The deprecation function handler `deprecated.php` has been moved to the `/autodescription/inc/functions/` folder, from the `/autodescription/inc/deprecated/` folder.
 		* This cleans up the folders and some code.
@@ -314,13 +329,14 @@ TODO:
 			* Inpost?
 			* Compat?
 	/
-	* TODO Class The_SEO_Framework_Load is now final, and can't be extended upon anymore.
+	* Class `The_SEO_Framework\Load` is now final, and can't be extended upon anymore.
 	* TODO The `license.txt` file has been updated to improve readability. The contents have not been changed.
 	* TODO The `title_seperator` option has been changed and updated to `title_separator`. Note the typo.
 	* Method `post_status()`'s third parameter was unused. It's now used to echo (true) or return (false) the value, default return (false).
 	* Method `no_more_genesis_seo()` has been renamed to `disable_genesis_seo`, without deprecation as it was marked private.
 	* Method `page_inpost_box()` has been renamed to `singular_inpost_box`, without deprecation as it was marked private.
 	* Method `custom_field_redirect()` no longer checks for admin or front-end page status.
+	* File `query.class.php` now falls under GPLv3 instead of GPLv2+.
 * **Improved:**
 	/
 	* Method `the_seo_framework()->call_function()` now passes objects, so you can use `$this` in the called function.

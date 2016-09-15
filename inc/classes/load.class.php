@@ -1,5 +1,12 @@
 <?php
 /**
+ * @package The_SEO_Framework\Classes
+ */
+namespace The_SEO_Framework;
+
+defined( 'ABSPATH' ) or die;
+
+/**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -16,119 +23,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'ABSPATH' ) or die;
-
-add_action( 'admin_init', 'the_seo_framework_upgrade', 5 );
 /**
- * Determines whether the plugin needs an option upgrade.
- *
- * @action admin_init
- * @priority 5
- *
- * @since 2.7.0
- */
-function the_seo_framework_upgrade() {
-
-	if ( false === the_seo_framework_active() )
-		return;
-
-	if ( get_option( 'the_seo_framework_upgraded_db_version' ) >= THE_SEO_FRAMEWORK_DB_VERSION )
-		return;
-
-	require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'upgrade.php' );
-}
-
-add_action( 'plugins_loaded', 'the_seo_framework_init', 5 );
-/**
- * Load The_SEO_Framework_Load class
- *
- * @action plugins_loaded
- * @priority 5 Use anything above 5, or any action later than plugins_loaded and
- * you can access the class and functions.
- *
- * @staticvar object $the_seo_framework
- *
- * @since 2.2.5
- */
-function the_seo_framework_init() {
-
-	//* Cache the class. Do not run everything more than once.
-	static $the_seo_framework = null;
-
-	if ( the_seo_framework_active() )
-		if ( ! isset( $the_seo_framework ) )
-			$the_seo_framework = new The_SEO_Framework_Load();
-
-	return $the_seo_framework;
-}
-
-/**
- * Determines whether this plugin should load.
- *
- * @since 2.3.7
- * @staticvar bool $loaded
- * Applies filters 'the_seo_framework_load' : bool
- *
- * @action plugins_loaded
- * @return bool Whether to allow loading of plugin.
- */
-function the_seo_framework_load() {
-
-	static $loaded = null;
-
-	if ( isset( $loaded ) )
-		return $loaded;
-
-	return $loaded = (bool) apply_filters( 'the_seo_framework_load', true );
-}
-
-/**
- * Load plugin files.
- * @uses THE_SEO_FRAMEWORK_DIR_PATH_FUNCT
- * @uses THE_SEO_FRAMEWORK_DIR_PATH_CLASS
- *
- * @since 2.1.6
- */
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'compat.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'optionsapi.php' );
-
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'core.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'debug.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'compat.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'query.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'init.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'admin-init.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'render.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'detect.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'post-data.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'term-data.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-description.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-title.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-url.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-image.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'generate-ldjson.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'search.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'doing-it-right.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'inpost.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'admin-pages.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'sanitize.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'site-options.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'metaboxes.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'sitemaps.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'transients.class.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'feed.class.php' );
-
-require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.class.php' );
-
-/**
- * Facade class.
+ * Facade final class The_SEO_Framework\Load
  *
  * Extending upon parent classes.
  *
- * @since 2.1.6
+ * @since 2.7.1
  */
-final class The_SEO_Framework_Load extends The_SEO_Framework_Deprecated {
+final class Load extends Deprecated {
 
 	/**
 	 * Cached debug/profile constants. Initialized on plugins_loaded priority 5.

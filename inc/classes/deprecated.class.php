@@ -1,5 +1,12 @@
 <?php
 /**
+ * @package The_SEO_Framework\Classes
+ */
+namespace The_SEO_Framework;
+
+defined( 'ABSPATH' ) or die;
+
+/**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -19,12 +26,13 @@
 defined( 'ABSPATH' ) or die;
 
 /**
- * Deprecation class.
- * Contains all deprecated functions. Is autoloaded.
+ * Class The_SEO_Framework\Deprecated
  *
- * @since 2.3.4
+ * Contains all deprecated functions.
+ *
+ * @since 2.7.1
  */
-class The_SEO_Framework_Deprecated extends The_SEO_Framework_Feed {
+class Deprecated extends Feed {
 
 	/**
 	 * Constructor. Loads parent constructor.

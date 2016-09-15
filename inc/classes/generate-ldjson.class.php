@@ -1,5 +1,12 @@
 <?php
 /**
+ * @package The_SEO_Framework\Classes
+ */
+namespace The_SEO_Framework;
+
+defined( 'ABSPATH' ) or die;
+
+/**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -16,17 +23,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'ABSPATH' ) or die;
-
 /**
- * Class The_SEO_Framework_Generate
+ * Class The_SEO_Framework\Generate_Ldjson
  *
  * Generates SEO data based on content
- * Returns strings/arrays
  *
- * @since 2.6.0
+ * @since 2.7.1
  */
-class The_SEO_Framework_Generate_Ldjson extends The_SEO_Framework_Generate_Image {
+class Generate_Ldjson extends Generate_Image {
 
 	/**
 	 * Constructor, load parent constructor

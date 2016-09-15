@@ -1,5 +1,12 @@
 <?php
 /**
+ * @package The_SEO_Framework\Classes
+ */
+namespace The_SEO_Framework;
+
+defined( 'ABSPATH' ) or die;
+
+/**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -16,17 +23,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'ABSPATH' ) or die;
-
 /**
- * Class The_SEO_Framework_Feed
+ * Class The_SEO_Framework\Feed
  *
  * Influences WordPress feeds.
  * "Report Cybr for Feeding." - General EUW League of Legends player.
  *
- * @since 2.5.2
+ * @since 2.7.1
  */
-class The_SEO_Framework_Feed extends The_SEO_Framework_Transients {
+class Feed extends Transients {
 
 	/**
 	 * Constructor, load parent constructor and run functions.

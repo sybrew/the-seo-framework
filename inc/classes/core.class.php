@@ -1,5 +1,12 @@
 <?php
 /**
+ * @package The_SEO_Framework\Classes
+ */
+namespace The_SEO_Framework;
+
+defined( 'ABSPATH' ) or die;
+
+/**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -16,16 +23,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'ABSPATH' ) or die;
-
 /**
- * Class The_SEO_Framework_Core
+ * Class The_SEO_Framework\Core
  *
  * Initializes the plugin & Holds plugin core functions.
  *
- * @since 2.6.0
+ * @since 2.7.1
  */
-class The_SEO_Framework_Core {
+class Core {
 
 	/**
 	 * Unserializing instances of this object is forbidden.

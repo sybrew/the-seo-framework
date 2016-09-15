@@ -1,5 +1,12 @@
 <?php
 /**
+ * @package The_SEO_Framework\Classes
+ */
+namespace The_SEO_Framework;
+
+defined( 'ABSPATH' ) or die;
+
+/**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -16,16 +23,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'ABSPATH' ) or die;
-
 /**
- * Class The_SEO_Framework_Generate_Url
+ * Class The_SEO_Framework\Generate_Url
  *
  * Generates URL and permalink SEO data based on content.
  *
- * @since 2.6.0
+ * @since 2.7.1
  */
-class The_SEO_Framework_Generate_Url extends The_SEO_Framework_Generate_Title {
+class Generate_Url extends Generate_Title {
 
 	/**
 	 * Whether to slash the url or not. Used when query vars are in url.

@@ -1,5 +1,12 @@
 <?php
 /**
+ * @package The_SEO_Framework\Classes
+ */
+namespace The_SEO_Framework;
+
+defined( 'ABSPATH' ) or die;
+
+/**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -16,16 +23,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'ABSPATH' ) or die;
-
 /**
- * Class The_SEO_Framework_Site_Options
+ * Class The_SEO_Framework\Site_Options
  *
- * Holds Site Options for the plugin.
+ * Handles Site Options for the plugin.
  *
- * @since 2.2.2
+ * @since 2.7.1
  */
-class The_SEO_Framework_Site_Options extends The_SEO_Framework_Sanitize {
+class Site_Options extends Sanitize {
 
 	/**
 	 * Site Settings field.

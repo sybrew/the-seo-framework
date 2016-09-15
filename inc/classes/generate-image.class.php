@@ -1,5 +1,12 @@
 <?php
 /**
+ * @package The_SEO_Framework\Classes
+ */
+namespace The_SEO_Framework;
+
+defined( 'ABSPATH' ) or die;
+
+/**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -16,16 +23,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'ABSPATH' ) or die;
-
 /**
- * Class The_SEO_Framework_Generate_Image
+ * Class The_SEO_Framework\Generate_Image
  *
  * Generates Image SEO data based on content.
  *
- * @since 2.6.0
+ * @since 2.7.1
  */
-class The_SEO_Framework_Generate_Image extends The_SEO_Framework_Generate_Url {
+class Generate_Image extends Generate_Url {
 
 	/**
 	 * Holds the image dimensions, if found.

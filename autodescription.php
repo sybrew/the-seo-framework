@@ -132,23 +132,36 @@ function the_seo_framework_locale_init() {
 	load_plugin_textdomain( 'autodescription', false, basename( dirname( __FILE__ ) ) . '/language/' );
 }
 
+register_activation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framework_check_php' );
 /**
- * Load plugin files.
- * @since 1.0.0
- * @uses THE_SEO_FRAMEWORK_DIR_PATH
+ * Checks whether the server can run this plugin on activation.
+ * If not, it will deactivate this plugin.
+ *
+ * @since 2.7.1
  */
-require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'load.class.php' );
+function the_seo_framework_check_php() {
 
-//* Load deprecated functions.
-require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'inc/deprecated/deprecated.php' );
+	//* Let's have some fun with teapots.
+	$error = floor( time() / DAY_IN_SECONDS ) === floor( strtotime( 'first day of April ' . date( 'Y', time() ) ) / DAY_IN_SECONDS ) ? 418 : 500;
 
-/**
- * FLush permalinks on activation/deactivation.
- * @since 2.6.6
- */
+	if ( ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < 50300 ) {
+		deactivate_plugins( plugin_basename( __FILE__ ) );
+		wp_die( 'The SEO Framework requires PHP 5.3 or later. Sorry about that!<br>
+				Do you want to <a onclick="window.history.back()" href="/wp-admin/plugins.php">go back</a>?',
+			'The SEO Framework &laquo; Server Requirements',
+			array( 'response' => intval( $error ) )
+		);
+	} elseif ( $GLOBALS['wp_db_version'] < 33056 ) {
+		deactivate_plugins( plugin_basename( __FILE__ ) );
+		wp_die( 'The SEO Framework requires WordPress 4.3.4 or later. Sorry about that!<br>
+				Do you want to <a onclick="window.history.back()" href="/wp-admin/plugins.php">go back</a>?',
+			'The SEO Framework &laquo; WordPress Requirements',
+			array( 'response' => intval( $error ) )
+		);
+	}
+}
+
 register_activation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framework_flush_rewrite_rules_activation' );
-register_deactivation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framework_flush_rewrite_rules_deactivation' );
-
 /**
  * Add and Flush rewrite rules on plugin activation.
  *
@@ -167,6 +180,7 @@ function the_seo_framework_flush_rewrite_rules_activation() {
 	$wp_rewrite->flush_rules( true );
 }
 
+register_deactivation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framework_flush_rewrite_rules_deactivation' );
 /**
  * Flush rewrite rules on plugin deactivation.
  *
@@ -184,3 +198,17 @@ function the_seo_framework_flush_rewrite_rules_deactivation() {
 
 	$wp_rewrite->flush_rules( true );
 }
+
+/**
+ * Load plugin files.
+ * @since 1.0.0
+ * @uses THE_SEO_FRAMEWORK_DIR_PATH
+ */
+require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'load.php' );
+
+/**
+ * Load deprecated functions.
+ * @since 2.7.0
+ * @uses THE_SEO_FRAMEWORK_DIR_PATH_FUNCT
+ */
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'deprecated.php' );

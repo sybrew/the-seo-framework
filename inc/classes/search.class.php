@@ -1,5 +1,12 @@
 <?php
 /**
+ * @package The_SEO_Framework\Classes
+ */
+namespace The_SEO_Framework;
+
+defined( 'ABSPATH' ) or die;
+
+/**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -16,16 +23,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'ABSPATH' ) or die;
-
 /**
- * Class The_SEO_Framework_Search
+ * Class The_SEO_Framework\Search
  *
- * Excludes pages from search based on options
+ * Excludes pages from search based on options.
  *
- * @since 2.1.6
+ * @since 2.7.1
  */
-class The_SEO_Framework_Search extends The_SEO_Framework_Generate_Ldjson {
+class Search extends Generate_Ldjson {
 
 	/**
 	 * Constructor, loads parent constructor and adds filters.

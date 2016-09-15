@@ -1,5 +1,12 @@
 <?php
 /**
+ * @package The_SEO_Framework\Classes
+ */
+namespace The_SEO_Framework;
+
+defined( 'ABSPATH' ) or die;
+
+/**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -16,17 +23,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'ABSPATH' ) or die;
-
 /**
- * Class The_SEO_Framework_Doing_It_Right
+ * Class The_SEO_Framework\Doing_It_Right
  *
  * Adds data in a column to edit.php and edit-tags.php
  * Shows you if you're doing the SEO right.
  *
- * @since 2.1.9
+ * @since 2.7.1
  */
-class The_SEO_Framework_Doing_It_Right extends The_SEO_Framework_Search {
+class Doing_It_Right extends Search {
 
 	/**
 	 * Constructor, load parent constructor.

@@ -1,5 +1,12 @@
 <?php
 /**
+ * @package The_SEO_Framework\Classes
+ */
+namespace The_SEO_Framework;
+
+defined( 'ABSPATH' ) or die;
+
+/**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -16,16 +23,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'ABSPATH' ) or die;
-
 /**
- * Class The_SEO_Framework_Sanitize
+ * Class The_SEO_Framework\Sanitize
  *
- * Sanitizes strings/arrays within the plugin.
+ * Sanitizes input within the plugin.
  *
- * @since 2.2.4
+ * @since 2.7.1
  */
-class The_SEO_Framework_Sanitize extends The_SEO_Framework_Admin_Pages {
+class Sanitize extends Admin_Pages {
 
 	/**
 	 * Constructor, load parent constructor

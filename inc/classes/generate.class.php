@@ -1,5 +1,12 @@
 <?php
 /**
+ * @package The_SEO_Framework\Classes
+ */
+namespace The_SEO_Framework;
+
+defined( 'ABSPATH' ) or die;
+
+/**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -16,16 +23,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'ABSPATH' ) or die;
-
 /**
- * Class The_SEO_Framework_Generate
+ * Class The_SEO_Framework\Generate
  *
  * Generates general SEO data based on content.
  *
- * @since 2.1.6
+ * @since 2.7.1
  */
-class The_SEO_Framework_Generate extends The_SEO_Framework_Term_Data {
+class Generate extends Term_Data {
 
 	/**
 	 * Constructor, load parent constructor

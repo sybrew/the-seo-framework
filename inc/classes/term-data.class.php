@@ -1,5 +1,12 @@
 <?php
 /**
+ * @package The_SEO_Framework\Classes
+ */
+namespace The_SEO_Framework;
+
+defined( 'ABSPATH' ) or die;
+
+/**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -16,16 +23,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'ABSPATH' ) or die;
-
 /**
- * Class The_SEO_Framework_Term_Data
+ * Class The_SEO_Framework\Term_Data
  *
  * Holds Term and Taxonomy data.
  *
- * @since 2.6.0
+ * @since 2.7.1
  */
-class The_SEO_Framework_Term_Data extends The_SEO_Framework_Post_Data {
+class Term_Data extends Post_Data {
 
 	/**
 	 * Constructor, load parent constructor.

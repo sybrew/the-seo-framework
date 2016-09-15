@@ -1,5 +1,12 @@
 <?php
 /**
+ * @package The_SEO_Framework\Classes
+ */
+namespace The_SEO_Framework;
+
+defined( 'ABSPATH' ) or die;
+
+/**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -16,16 +23,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'ABSPATH' ) or die;
-
 /**
- * Class The_SEO_Framework_Inpost
+ * Class The_SEO_Framework\Inpost
  *
  * Outputs Taxonomy, Post and Page meta boxes
  *
- * @since 2.2.2
+ * @since 2.7.1
  */
-class The_SEO_Framework_Inpost extends The_SEO_Framework_Doing_It_Right {
+class Inpost extends Doing_It_Right {
 
 	/**
 	 * Add inpost SEO Bar through a filter.
