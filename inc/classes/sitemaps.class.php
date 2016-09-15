@@ -408,7 +408,7 @@ class Sitemaps extends Metaboxes {
 				'cache_results' 	=> false,
 				'suppress_filters'	=> true,
 			);
-			$get_posts = new WP_Query;
+			$get_posts = new \WP_Query;
 			$latest_pages = $get_posts->query( $args );
 			unset( $get_posts );
 		}
@@ -476,7 +476,7 @@ class Sitemaps extends Metaboxes {
 				'cache_results' 	=> false,
 				'suppress_filters'	=> true,
 			);
-			$get_posts = new WP_Query;
+			$get_posts = new \WP_Query;
 			$latest_posts = $get_posts->query( $args );
 			unset( $get_posts );
 		}
@@ -585,7 +585,7 @@ class Sitemaps extends Metaboxes {
 					'cache_results' 	=> false,
 					'suppress_filters' 	=> true,
 				);
-				$get_posts = new WP_Query;
+				$get_posts = new \WP_Query;
 				$latest_cpt_posts = $get_posts->query( $args );
 				unset( $get_posts );
 			}

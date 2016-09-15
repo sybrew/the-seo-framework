@@ -160,7 +160,7 @@ class Search extends Generate_Ldjson {
 				'cache_results'    => true,
 				'suppress_filters' => false,
 			);
-			$get_posts = new WP_Query;
+			$get_posts = new \WP_Query;
 			$excluded_posts = $get_posts->query( $args );
 			unset( $get_posts );
 
