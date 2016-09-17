@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 2.7.1
  */
-class Debug extends Core {
+final class Debug implements Debug_Interface {
 
 	/**
 	 * Enqueue the debug output.
@@ -52,16 +52,64 @@ class Debug extends Core {
 	protected $add_debug_output = true;
 
 	/**
-	 * Constructor, load parent constructor and add actions.
+	 * The object instance.
+	 *
+	 * @since 2.7.1
+	 *
+	 * @var object|null This object instance.
 	 */
-	protected function __construct() {
-		parent::__construct();
+	private static $instance = null;
 
-		if ( $this->the_seo_framework_debug ) {
-			add_action( 'admin_footer', array( $this, 'debug_screens' ) );
-			add_action( 'admin_footer', array( $this, 'debug_output' ) );
-			add_action( 'wp_footer', array( $this, 'debug_output' ) );
+	public $the_seo_framework_debug = false;
+	public $the_seo_framework_debug_hidden = false;
+
+	/**
+	 * Unserializing instances of this object is forbidden.
+	 */
+	final protected function __wakeup() { }
+
+	/**
+	 * Cloning of this object is forbidden.
+	 */
+	final protected function __clone() { }
+
+	/**
+	 * Constructor.
+	 */
+	final protected function __construct() {}
+
+	/**
+	 * Sets the class instance.
+	 *
+	 * @since 2.7.1
+	 * @access private
+	 */
+	public static function set_instance( $debug = null, $hidden = null ) {
+
+		if ( is_null( static::$instance ) ) {
+			static::$instance = new static();
 		}
+
+		if ( isset( $debug ) && isset( $hidden ) ) {
+			static::$instance->the_seo_framework_debug = $debug;
+			static::$instance->the_seo_framework_debug_hidden = $hidden;
+		}
+	}
+
+	/**
+	 * Gets the class instance. It's set when it's null.
+	 *
+	 * @since 2.7.1
+	 *
+	 * @return object The current instance.
+	 */
+	public static function get_instance() {
+
+		if ( is_null( static::$instance ) ) {
+			static::set_instance();
+		}
+
+		return static::$instance;
 	}
 
 	/**
@@ -241,7 +289,6 @@ class Debug extends Core {
 
 			$this->error_handler( $error, $message );
 		}
-
 	}
 
 	/**
@@ -286,10 +333,11 @@ class Debug extends Core {
 		if ( $code >= 1024 && isset( $message ) ) {
 
 			$backtrace = debug_backtrace();
+
 			/**
-			 * 0 = This function. 1 = Debug function. 2 = debug function. 3-29 = 26 classes loop, 30 = user call.
+			 * 0 = This function. 1-3 = Debug functions. 4-5 = magic methods, 6 = user call.
 			 */
-			$error = $backtrace[30];
+			$error = $backtrace[6];
 
 			$this->error_handler( $error, $message );
 		}
@@ -334,10 +382,24 @@ class Debug extends Core {
 	 * Echos debug output.
 	 *
 	 * @since 2.6.0
+	 * @since 2.7.1 is now static.
 	 * @access private
 	 */
 	public function debug_output() {
-		$this->get_view( 'debug/output' );
+		the_seo_framework()->get_view( 'debug/output', array( 'debug_output' => $this->debug_output ) );
+	}
+
+	/**
+	 * Determines if there's debug output.
+	 *
+	 * @since 2.7.1
+	 * @access private
+	 *
+	 * @return bool True if there's output.
+	 */
+	public static function has_debug_output() {
+		$instance = static::get_instance();
+		return (bool) $instance->debug_output;
 	}
 
 	/**
@@ -346,8 +408,12 @@ class Debug extends Core {
 	 * @since 2.7.1
 	 * @access private
 	 */
-	public function output_debug() {
-		echo $this->debug_output;
+	public static function output_debug() {
+
+		$instance = static::get_instance();
+		//* Already escaped.
+		echo $instance->debug_output;
+
 	}
 
 	/**
@@ -514,7 +580,6 @@ class Debug extends Core {
 	 * Debug init. Simplified way of debugging a function, only works in admin.
 	 *
 	 * @since 2.6.0
-	 *
 	 * @access private
 	 *
 	 * @param string $method The function name.
@@ -523,7 +588,7 @@ class Debug extends Core {
 	 * @param mixed function args.
 	 * @return void early if debugging is disabled or when storing cache values.
 	 */
-	protected function debug_init( $method, $store, $debug_key ) {
+	public function debug_init( $method, $store, $debug_key ) {
 
 		if ( false === $this->the_seo_framework_debug || false === $this->add_debug_output )
 			return;
@@ -560,7 +625,7 @@ class Debug extends Core {
 				$loop++;
 				$debug_key = '[Debug key: ' . $loop . ' - ' . $method . ']';
 
-				if ( $this->is_admin() && 'admin_footer' !== current_action() )
+				if ( the_seo_framework()->is_admin() && 'admin_footer' !== current_action() )
 					echo $this->the_seo_framework_debug_hidden ? esc_html( PHP_EOL . $debug_key ) . ' action. ' : '<p>' . esc_html( $debug_key ) . '</p>';
 
 				$output .= $this->the_seo_framework_debug_hidden ? esc_html( PHP_EOL . $debug_key ) . ' output. ' : '<h3>' . esc_html( $debug_key ) . '</h3>';
@@ -581,7 +646,6 @@ class Debug extends Core {
 			}
 
 			if ( $args ) {
-
 				$output .= $method . '( ';
 
 				if ( isset( $hold_args[ $method ][0] ) ) {
@@ -627,7 +691,6 @@ class Debug extends Core {
 		}
 
 		if ( $output ) {
-
 			static $odd = false;
 			if ( $odd ) {
 				$bg = 'f1f1f1';
@@ -741,9 +804,14 @@ class Debug extends Core {
 	 * Outputs the debug header.
 	 *
 	 * @since 2.7.1
+	 * @access private
 	 */
-	protected function output_debug_header() {
-		echo $this->get_debug_header_output();
+	public static function output_debug_header() {
+
+		$instance = static::get_instance();
+		//* Already escaped.
+		echo $instance->get_debug_header_output();
+
 	}
 
 	/**
@@ -756,11 +824,13 @@ class Debug extends Core {
 	 */
 	protected function get_debug_header_output() {
 
-		if ( $this->is_admin() && ! $this->is_term_edit() && ! $this->is_post_edit() && ! $this->is_seo_settings_page( true ) )
+		$tsf = the_seo_framework();
+
+		if ( $tsf->is_admin() && ! $tsf->is_term_edit() && ! $tsf->is_post_edit() && ! $tsf->is_seo_settings_page( true ) )
 			return;
 
-		if ( $this->is_seo_settings_page( true ) )
-			add_filter( 'the_seo_framework_current_object_id', array( $this, 'get_the_front_page_ID' ) );
+		if ( $tsf->is_seo_settings_page( true ) )
+			add_filter( 'the_seo_framework_current_object_id', array( $tsf, 'get_the_front_page_ID' ) );
 
 		//* Start timer.
 		$this->timer( true );
@@ -768,37 +838,37 @@ class Debug extends Core {
 		//* Don't register this output.
 		$this->add_debug_output = false;
 
-		$output	= $this->the_description()
-				. $this->og_image()
-				. $this->og_locale()
-				. $this->og_type()
-				. $this->og_title()
-				. $this->og_description()
-				. $this->og_url()
-				. $this->og_sitename()
-				. $this->facebook_publisher()
-				. $this->facebook_author()
-				. $this->facebook_app_id()
-				. $this->article_published_time()
-				. $this->article_modified_time()
-				. $this->twitter_card()
-				. $this->twitter_site()
-				. $this->twitter_creator()
-				. $this->twitter_title()
-				. $this->twitter_description()
-				. $this->twitter_image()
-				. $this->shortlink()
-				. $this->canonical()
-				. $this->paged_urls()
-				. $this->ld_json()
-				. $this->google_site_output()
-				. $this->bing_site_output()
-				. $this->yandex_site_output()
-				. $this->pint_site_output();
+		$output = $tsf->the_description()
+				. $tsf->og_image()
+				. $tsf->og_locale()
+				. $tsf->og_type()
+				. $tsf->og_title()
+				. $tsf->og_description()
+				. $tsf->og_url()
+				. $tsf->og_sitename()
+				. $tsf->facebook_publisher()
+				. $tsf->facebook_author()
+				. $tsf->facebook_app_id()
+				. $tsf->article_published_time()
+				. $tsf->article_modified_time()
+				. $tsf->twitter_card()
+				. $tsf->twitter_site()
+				. $tsf->twitter_creator()
+				. $tsf->twitter_title()
+				. $tsf->twitter_description()
+				. $tsf->twitter_image()
+				. $tsf->shortlink()
+				. $tsf->canonical()
+				. $tsf->paged_urls()
+				. $tsf->ld_json()
+				. $tsf->google_site_output()
+				. $tsf->bing_site_output()
+				. $tsf->yandex_site_output()
+				. $tsf->pint_site_output();
 
 		$timer = '<div style="display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( $this->timer(), 5 ) . ' seconds</div>' ;
 
-		$title = $this->is_admin() ? 'Expected SEO Output' : 'Current SEO Output';
+		$title = $tsf->is_admin() ? 'Expected SEO Output' : 'Current SEO Output';
 		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #ccc;"><h2 style="color:#ddd;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
 
 		//* Escape it, replace EOL with breaks, and style everything between quotes (which are ending with space).
@@ -808,6 +878,8 @@ class Debug extends Core {
 		$output = '<div style="display:inline-block;width:100%;padding:20px;font-family:Consolas,Monaco,monospace;font-size:14px;">' . $output . '</div>';
 		$output = '<div style="display:block;width:100%;background:#23282D;color:#ddd;border-bottom:1px solid #ccc">' . $title . $timer . $output . '</div>';
 
+		$this->add_debug_output = true;
+
 		return $output;
 	}
 
@@ -815,15 +887,22 @@ class Debug extends Core {
 	 * Outputs debug query.
 	 *
 	 * @since 2.7.1
+	 * @access private
 	 */
-	protected function output_debug_query() {
-		echo $this->get_debug_query_output();
+	public static function output_debug_query() {
+
+		$instance = static::$instance;
+		//* Already escaped.
+		echo $instance->get_debug_query_output();
+
 	}
 
 	/**
 	 * Wraps query status booleans in human-readable code.
 	 *
 	 * @since 2.6.6
+	 * @global bool $multipage
+	 * @global int $numpages
 	 *
 	 * @return string Wrapped Query State debug output.
 	 */
@@ -832,44 +911,46 @@ class Debug extends Core {
 		//* Start timer.
 		$this->timer( true );
 
-		//* Don't register this output.
+		//* Don't register duplicated output invoked in this method.
 		$this->add_debug_output = false;
 
 		global $multipage, $numpages;
 
+		$tsf = the_seo_framework();
+
 		//* Only get true/false values.
-		$is_404 = $this->is_404();
-		$is_admin = $this->is_admin();
-		$is_attachment = $this->is_attachment();
-		$is_archive = $this->is_archive();
-		$is_term_edit = $this->is_term_edit();
-		$is_post_edit = $this->is_post_edit();
-		$is_wp_lists_edit = $this->is_wp_lists_edit();
-		$is_wp_lists_edit = $this->is_wp_lists_edit();
-		$is_author = $this->is_author();
-		$is_blog_page = $this->is_blog_page();
-		$is_category = $this->is_category();
-		$is_date = $this->is_date();
-		$is_day = $this->is_day();
-		$is_feed = $this->is_feed();
-		$is_front_page = $this->is_front_page();
-		$is_home = $this->is_home();
-		$is_month = $this->is_month();
-		$is_page = $this->is_page();
-		$page = $this->page();
-		$paged = $this->paged();
-		$is_preview = $this->is_preview();
-		$is_search = $this->is_search();
-		$is_single = $this->is_single();
-		$is_singular = $this->is_singular();
-		$is_static_frontpage = $this->is_static_frontpage();
-		$is_tag = $this->is_tag();
-		$is_tax = $this->is_tax();
-		$is_ultimate_member_user_page = $this->is_ultimate_member_user_page();
-		$is_wc_shop = $this->is_wc_shop();
-		$is_wc_product = $this->is_wc_product();
-		$is_year = $this->is_year();
-		$is_seo_settings_page = $this->is_seo_settings_page( true );
+		$is_404 = $tsf->is_404();
+		$is_admin = $tsf->is_admin();
+		$is_attachment = $tsf->is_attachment();
+		$is_archive = $tsf->is_archive();
+		$is_term_edit = $tsf->is_term_edit();
+		$is_post_edit = $tsf->is_post_edit();
+		$is_wp_lists_edit = $tsf->is_wp_lists_edit();
+		$is_wp_lists_edit = $tsf->is_wp_lists_edit();
+		$is_author = $tsf->is_author();
+		$is_blog_page = $tsf->is_blog_page();
+		$is_category = $tsf->is_category();
+		$is_date = $tsf->is_date();
+		$is_day = $tsf->is_day();
+		$is_feed = $tsf->is_feed();
+		$is_front_page = $tsf->is_front_page();
+		$is_home = $tsf->is_home();
+		$is_month = $tsf->is_month();
+		$is_page = $tsf->is_page();
+		$page = $tsf->page();
+		$paged = $tsf->paged();
+		$is_preview = $tsf->is_preview();
+		$is_search = $tsf->is_search();
+		$is_single = $tsf->is_single();
+		$is_singular = $tsf->is_singular();
+		$is_static_frontpage = $tsf->is_static_frontpage();
+		$is_tag = $tsf->is_tag();
+		$is_tax = $tsf->is_tax();
+		$is_ultimate_member_user_page = $tsf->is_ultimate_member_user_page();
+		$is_wc_shop = $tsf->is_wc_shop();
+		$is_wc_product = $tsf->is_wc_product();
+		$is_year = $tsf->is_year();
+		$is_seo_settings_page = $tsf->is_seo_settings_page( true );
 
 		//* Get all above vars, split them in two (true and false) and sort them by key names.
 		$vars = get_defined_vars();
@@ -891,7 +972,7 @@ class Debug extends Core {
 			}
 
 			$value = $this->the_seo_framework_debug_hidden ? $type . ' ' . $value : '<font color="harrisonford">' . $type . ' ' . $value . '</font>';
-			$out = $name . ' => ' . $value;
+			$out = esc_html( $name ) . ' => ' . $value;
 			$output .= $this->the_seo_framework_debug_hidden ? $out . PHP_EOL : '<span style="background:#dadada">' . $out . '</span>' . PHP_EOL;
 		}
 
@@ -905,17 +986,19 @@ class Debug extends Core {
 			}
 
 			$value = $this->the_seo_framework_debug_hidden ? $type . ' ' . $value : '<font color="harrisonford">' . $type . ' ' . $value . '</font>';
-			$out = $name . ' => ' . $value;
+			$out = esc_html( $name ) . ' => ' . $value;
 			$output .= $out . PHP_EOL;
 		}
 
-		$title = $this->is_admin() ? 'Current WordPress Screen + Expected WordPress Query' : 'Current WordPress Query';
+		$title = $tsf->is_admin() ? 'Current WordPress Screen + Expected WordPress Query' : 'Current WordPress Query';
 		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #666;"><h2 style="color:#222;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
 
 		$output = $this->the_seo_framework_debug_hidden ? $output : str_replace( PHP_EOL, '<br>' . PHP_EOL, $output );
 
 		$output = '<div style="display:inline-block;width:100%;padding:20px;font-family:Consolas,Monaco,monospace;font-size:14px;">' . $output . '</div>';
 		$output = '<div style="display:block;width:100%;background:#fafafa;color:#333;border-bottom:1px solid #666">' . $title . $timer . $output . '</div>';
+
+		$this->add_debug_output = true;
 
 		return $output;
 	}

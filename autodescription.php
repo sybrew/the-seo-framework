@@ -117,6 +117,12 @@ define( 'THE_SEO_FRAMEWORK_DIR_PATH_VIEWS', THE_SEO_FRAMEWORK_DIR_PATH . 'inc/vi
 define( 'THE_SEO_FRAMEWORK_DIR_PATH_CLASS', THE_SEO_FRAMEWORK_DIR_PATH . 'inc/classes/' );
 
 /**
+ * The plugin interface map absolute path.
+ * @since 2.7.1
+ */
+define( 'THE_SEO_FRAMEWORK_DIR_PATH_INTERFACE', THE_SEO_FRAMEWORK_DIR_PATH . 'inc/interfaces/' );
+
+/**
  * The plugin function map absolute path.
  * @since 2.2.9
  */

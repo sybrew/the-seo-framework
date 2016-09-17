@@ -1,11 +1,15 @@
 <?php
+/**
+ * @package The_SEO_Framework\Views
+ */
+namespace The_SEO_Framework;
 
 defined( 'ABSPATH' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
-if ( $this->debug_output ) {
+if ( Debug::has_debug_output() ) {
 	if ( $this->the_seo_framework_debug_hidden ) {
 		echo "\r\n<!--\r\n:: THE SEO FRAMEWORK DEBUG :: \r\n";
-		$this->output_debug();
+		Debug::output_debug();
 		echo "\r\n:: / THE SEO FRAMEWORK DEBUG ::\r\n-->\r\n";
 	} else {
 
@@ -33,9 +37,11 @@ if ( $this->debug_output ) {
 					?>
 				</h3>
 				<div style="position:absolute;bottom:0;right:0;left:0;top:39px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;z-index:9001">
-					<?php $this->output_debug_header(); ?>
-					<?php $this->output_debug_query(); ?>
-					<?php $this->output_debug(); ?>
+					<?php
+					Debug::output_debug_header();
+					Debug::output_debug_query();
+					Debug::output_debug();
+					?>
 				</div>
 			</div>
 			<?php
@@ -53,9 +59,11 @@ if ( $this->debug_output ) {
 					?>
 				</h3>
 				<div style="position:absolute;bottom:0;right:0;left:0;top:39px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;z-index:9001">
-					<?php $this->output_debug_header(); ?>
-					<?php $this->output_debug_query(); ?>
-					<?php $this->output_debug(); ?>
+					<?php
+					Debug::output_debug_header();
+					Debug::output_debug_query();
+					Debug::output_debug();
+					?>
 				</div>
 			</div>
 			<?php

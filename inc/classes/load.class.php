@@ -29,8 +29,9 @@ defined( 'ABSPATH' ) or die;
  * Extending upon parent classes.
  *
  * @since 2.7.1
+ * @uses interface Debug_Interface
  */
-final class Load extends Deprecated {
+final class Load extends Deprecated implements Debug_Interface {
 
 	/**
 	 * Cached debug/profile constants. Initialized on plugins_loaded priority 5.
@@ -76,6 +77,8 @@ final class Load extends Deprecated {
 		if ( $this->the_seo_framework_debug ) {
 			//* No need to set these to true if no debugging is enabled.
 			$this->the_seo_framework_debug_hidden = defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN ? true : $this->the_seo_framework_debug_hidden;
+
+			$instance = Debug::set_instance( $this->the_seo_framework_debug, $this->the_seo_framework_debug_hidden );
 		}
 
 		$this->the_seo_framework_use_transients = defined( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS' ) && THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS ? false : $this->the_seo_framework_use_transients;
@@ -164,5 +167,96 @@ final class Load extends Deprecated {
 		}
 
 		return $output;
+	}
+
+	/**
+	 * Mark a filter as deprecated and inform when it has been used.
+	 *
+	 * @since 2.7.1
+	 * @see @this->_deprecated_function().
+	 *
+	 * @param string $filter		The function that was called.
+	 * @param string $version		The version of WordPress that deprecated the function.
+	 * @param string $replacement	Optional. The function that should have been called. Default null.
+	 */
+	public function _deprecated_filter( $filter, $version, $replacement = null ) {
+		$instance = Debug::get_instance();
+		$instance->_deprecated_filter( $filter, $version, $replacement );
+	}
+
+	/**
+	 * Mark a function as deprecated and inform when it has been used.
+	 *
+	 * Taken from WordPress core, but added extra parameters and linguistic alterations.
+	 *
+	 * The current behavior is to trigger a user error if WP_DEBUG is true.
+	 *
+	 * @since 2.6.0
+	 * @access private
+	 *
+	 * @param string $function		The function that was called.
+	 * @param string $version		The version of WordPress that deprecated the function.
+	 * @param string $replacement	Optional. The function that should have been called. Default null.
+	 */
+	public function _deprecated_function( $function, $version, $replacement = null ) {
+		$instance = Debug::get_instance();
+		$instance->_deprecated_function( $function, $version, $replacement );
+	}
+
+	/**
+	 * Mark a function as deprecated and inform when it has been used.
+	 *
+	 * Taken from WordPress core, but added extra parameters and linguistic alterations.
+	 *
+	 * The current behavior is to trigger a user error if WP_DEBUG is true.
+	 *
+	 * @since 2.6.0
+	 * @access private
+	 *
+	 * @param string $function	The function that was called.
+	 * @param string $message	A message explaining what has been done incorrectly.
+	 * @param string $version	The version of WordPress where the message was added.
+	 */
+	public function _doing_it_wrong( $function, $message, $version ) {
+		$instance = Debug::get_instance();
+		$instance->_doing_it_wrong( $function, $message, $version );
+	}
+
+	/**
+	 * Mark a property or method inaccessible when it has been used.
+
+	 * The current behavior is to trigger a user error if WP_DEBUG is true.
+	 *
+	 * @since 2.7.0
+	 * @access private
+	 *
+	 * @param string $p_or_m	The Property or Method.
+	 * @param string $message	A message explaining what has been done incorrectly.
+	 */
+	public function _inaccessible_p_or_m( $p_or_m, $message = '' ) {
+		$instance = Debug::get_instance();
+		$instance->_inaccessible_p_or_m( $p_or_m, $message );
+	}
+	/**
+	 * Debug init. Simplified way of debugging a function, only works in admin.
+	 *
+	 * @since 2.6.0
+	 * @access private
+	 *
+	 * @param string $method The function name.
+	 * @param bool $store Whether to store the output in cache for next run to pick up on.
+	 * @param double $debug_key Use $debug_key as variable, it's reserved.
+	 * @param mixed function args.
+	 * @return void early if debugging is disabled or when storing cache values.
+	 */
+	public function debug_init( $method, $store, $debug_key ) {
+
+		$instance = Debug::get_instance();
+
+		if ( func_num_args() >= 4 ) {
+			$instance->debug_init( $method, $store, $debug_key, array_slice( func_get_args(), 3 ) );
+		} else {
+			$instance->debug_init( $method, $store, $debug_key );
+		}
 	}
 }

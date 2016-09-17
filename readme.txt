@@ -194,7 +194,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
-= 2.7.1 - Seceded Affiliation =
+= 2.7.1 (or 2.8.0) - Seceded Affiliation =
+
+**Release date:**
+
+* PLANNED: December 2016 ?
 
 **Important Note:**
 
@@ -221,7 +225,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **Did you know:**
 
 * Each update name and link to the detailed log are a play on words about something in a particular event, movie, series, quote, or the update contents itself.
-* The 2.7.x version update names are all about the first Star Wars movie "Episode IV: A new Hope".
+* The 2.7.x version (and 2.8.x?? TODO consider) update names are all about the first Star Wars movie "Episode IV: A new Hope".
 
 **Do you mind:**
 / TODO
@@ -273,6 +277,8 @@ TODO:
 
 **For translators:**
 
+* **Added:**
+	* One new sentence, that wasn't correctly registered before.
 * **Changed:**
 	* A few sentences have been updated slightly in order to be sanitized correctly.
 
@@ -328,14 +334,21 @@ TODO:
 		* This completely changes the architecture of the plugin.
 		* This is handled through autoloading and magic methods.
 		* Classes include:
-			* AdminPages
-			* Admin-Init
-			* Deprecated
 			* Debug
-			* Termdata?
-			* Postdata?
-			* Inpost?
-			* Compat?
+			* TODO AdminPages
+			* TODO Admin-Init
+			* TODO Deprecated
+			* TODO Termdata?
+			* TODO Postdata?
+			* TODO Inpost?
+			* TODO Compat?
+		* How this is handled:
+			* All publicly accessible (with public visibility, without "@access private" documentation) are set in [interfaces](http://php.net/manual/en/language.oop5.interfaces.php).
+			* These interfaces are autoloaded TODO (or automatically loaded?).
+			* When an interface method is accessed, it will autoload the required class and the method will propagate to default behavior.
+			* In general, this should improve performance and reduce plugin resource usage.
+			* This is also known as the Singleton approach, while maintaining the promised `the_seo_framework()` way of object interaction.
+			* These changes shouldn't affect current code. If anything goes wrong, a "_doing_it_wrong()" notice is output. Thanks to magic methods.
 	/
 	* Class `The_SEO_Framework\Load` is now final, and can't be extended upon anymore.
 	* The `license.txt` file has been updated to improve readability. The contents have not been changed.
@@ -369,6 +382,8 @@ TODO:
 	* Method `get_latest_post_id()` now uses WP_Query instead of a direct database call.
 * **Fixed:**
 	* Leftover CSS prefix name `seoframework-content-no-js` should've been `tsf-content-no-js`.
+* **Removed:**
+	* Memory profiling output in the HTML code when `THE_SEO_FRAMEWORK_DEBUG` is defined as true.
 * **Other:**
 	* Cleaned up code.
 

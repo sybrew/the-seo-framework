@@ -75,9 +75,8 @@ class Core {
 	 */
 	final public function __call( $name, $arguments ) {
 
-		$_this = the_seo_framework();
-		$_this->_inaccessible_p_or_m( 'the_seo_framework()->' . esc_html( $name ) . '()' );
-
+		$debug_instance = Debug::get_instance();
+		the_seo_framework()->_inaccessible_p_or_m( 'the_seo_framework()->' . esc_html( $name ) . '()' );
 		return;
 	}
 
@@ -89,6 +88,12 @@ class Core {
 
 		add_action( 'current_screen', array( $this, 'post_type_support' ), 0 );
 
+		if ( $this->the_seo_framework_debug ) {
+			$debug_instance = Debug::get_instance();
+			add_action( 'admin_footer', array( $debug_instance, 'debug_screens' ) );
+			add_action( 'admin_footer', array( $debug_instance, 'debug_output' ) );
+			add_action( 'wp_footer', array( $debug_instance, 'debug_output' ) );
+		}
 	}
 
 	/**
@@ -112,6 +117,9 @@ class Core {
 	 * Fetches files based on input to reduce memory overhead.
 	 * Passes on input vars.
 	 *
+	 * @since 2.7.0
+	 * @access private
+	 *
 	 * @param string $view The file name.
 	 * @param array $args The arguments to be supplied within the file name.
 	 * 		Each array key is converted to a variable with its value attached.
@@ -119,7 +127,7 @@ class Core {
 	 *
 	 * @credits Akismet For some code.
 	 */
-	protected function get_view( $view, array $args = array(), $instance = 'main' ) {
+	public function get_view( $view, array $args = array(), $instance = 'main' ) {
 
 		foreach ( $args as $key => $val )
 			$$key = $val;
@@ -131,6 +139,8 @@ class Core {
 
 	/**
 	 * Fetches view instance for switch.
+	 *
+	 * @since 2.7.0
 	 *
 	 * @param string $base The instance basename (namespace).
 	 * @param string $instance The instance suffix to call back upon.
@@ -144,12 +154,11 @@ class Core {
 	 * Proportionate dimensions based on Width and Height.
 	 * AKA Aspect Ratio.
 	 *
+	 * @since 2.6.0
+	 *
 	 * @param int $i The dimension to resize.
 	 * @param int $r1 The deminsion that determines the ratio.
 	 * @param int $r2 The dimension to proportionate to.
-	 *
-	 * @since 2.6.0
-	 *
 	 * @return int The proportional dimension, rounded.
 	 */
 	public function proportionate_dimensions( $i, $r1, $r2 ) {

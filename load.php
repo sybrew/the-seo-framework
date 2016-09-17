@@ -107,7 +107,7 @@ require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'optionsapi.php' );
  * Autoloads all class files. To be used when requiring access to all or any of
  * the plugin classes.
  *
- * @since 1.0.0
+ * @since 2.7.1
  * @uses THE_SEO_FRAMEWORK_DIR_PATH_CLASS
  * @access private
  * @staticvar array $loaded Whether $class has been loaded.
@@ -127,15 +127,17 @@ function _autoload_the_seo_framework_classes( $class ) {
 	if ( isset( $loaded[ $class ] ) )
 		return true;
 
-	if ( false !== strpos( $class, '_Abstract' ) ) {
-		$path = THE_SEO_FRAMEWORK_DIR_PATH_CLASS . 'abstract' . DIRECTORY_SEPARATOR;
+	if ( false !== strpos( $class, '_Interface' ) ) {
+		$path = THE_SEO_FRAMEWORK_DIR_PATH_INTERFACE;
+		$extension = '.interface.php';
 	} else {
 		$path = THE_SEO_FRAMEWORK_DIR_PATH_CLASS;
+		$extension = '.class.php';
 	}
 
 	$_class = strtolower( str_replace( 'The_SEO_Framework\\', '', $class ) );
-	$_class = str_replace( '_abstract', '.abstract', $_class );
+	$_class = str_replace( '_interface', '', $_class );
 	$_class = str_replace( '_', '-', $_class );
 
-	return $loaded[ $class ] = require_once( $path . $_class . '.class.php' );
+	return $loaded[ $class ] = require_once( $path . $_class . $extension );
 }

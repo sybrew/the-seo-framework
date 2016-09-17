@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 2.7.1
  */
-class Compat extends Debug {
+class Compat extends Core {
 
 	/**
 	 * Constructor, load parent constructor

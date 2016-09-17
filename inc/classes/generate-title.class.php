@@ -1180,21 +1180,22 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function add_title_protection( $title, $id ) {
 
-		/**
-		 * From WordPress core get_the_title.
-		 * Bypasses get_post() function object which causes conflict with some themes and plugins.
-		 *
-		 * Also bypasses the_title filters.
-		 * And now also works in admin. It gives you a true representation of its output.
-		 *
-		 * @since 2.4.1
-		 *
-		 * @applies filters WordPress core 'protected_title_format' : string
-		 * @applies filters WordPress core 'private_title_format' : string
-		 */
-		$post = get_post( $id, OBJECT );
-
 		if ( $this->is_singular() ) {
+			/**
+			 * This is from WordPress core get_the_title().
+			 *
+			 * Bypasses get_post() function object which causes conflict with some themes and plugins.
+			 * Also bypasses 'the_title' filters.
+			 *
+			 * And now also works in admin. It gives you a true representation of its output.
+			 *
+			 * @since 2.4.1
+			 * Applies filters WordPress core 'protected_title_format' : string The protected title format.
+			 * Applies filters WordPress core 'private_title_format' : string The private title format.
+			 */
+
+			$post = get_post( $id, OBJECT );
+
 			if ( isset( $post->post_password ) && '' !== $post->post_password ) {
 				/* translators: Front-end output */
 				$protected_title_format = (string) apply_filters( 'protected_title_format', __( 'Protected: %s', 'autodescription' ), $post );

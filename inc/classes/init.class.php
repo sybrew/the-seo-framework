@@ -325,7 +325,6 @@ class Init extends Query {
 		 * This function takes the most time anyway.
 		 */
 		$init_start = microtime( true );
-		$memory_start = $this->the_seo_framework_debug ? $this->profile( false, false, 'memory', 'html_output' ) : 0;
 
 		/**
 		 * Cache key buster
@@ -463,8 +462,7 @@ class Init extends Query {
 			 * @since 2.4.0
 			 */
 			if ( $timer ) {
-				$memory = $this->the_seo_framework_debug ? ' | ' . number_format( $this->profile( false, true, 'memory', 'html_output' ) / 1024, 2 ) . ' kiB' : '';
-				$indicatorafter = '<!-- ' . $end . $me . ' | ' . number_format( microtime( true ) - $init_start, 5 ) . 's' . $memory . ' -->' . "\r\n";
+				$indicatorafter = '<!-- ' . $end . $me . ' | ' . number_format( microtime( true ) - $init_start, 5 ) . 's' . ' -->' . "\r\n";
 			} else {
 				$indicatorafter = '<!-- ' . $end . $me . ' -->' . "\r\n";
 			}
