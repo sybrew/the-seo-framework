@@ -165,10 +165,10 @@ final class Debug implements Debug_Interface {
 
 			if ( isset( $replacement ) ) {
 				/* translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification, 4: Replacement function */
-				trigger_error( sprintf( esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework! Use %4$s instead.', 'autodescription' ), $function, '<strong>deprecated</strong>', $version, $replacement ) );
+				trigger_error( sprintf( esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework! Use %4$s instead.', 'autodescription' ), $function, __( '<strong>deprecated</strong>', 'autodescription' ), $version, $replacement ) );
 			} else {
 				/* translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification */
-				trigger_error( sprintf( esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework with no alternative available.', 'autodescription' ), $function, '<strong>deprecated</strong>', $version ) );
+				trigger_error( sprintf( esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework with no alternative available.', 'autodescription' ), $function, __( '<strong>deprecated</strong>', 'autodescription' ), $version ) );
 			}
 
 			restore_error_handler();
