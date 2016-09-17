@@ -247,6 +247,8 @@ TODO:
 
 **For everyone:**
 
+* **Changed:**
+	* The first two description separators are no longer marked "recommended". This is because the description does not need to support old browsers or old screen readers.
 * **Improved:**
 	/
 	* TODO The post/page/term object cache is now flushed on edit/save.
