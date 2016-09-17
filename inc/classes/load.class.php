@@ -89,11 +89,12 @@ final class Load extends Deprecated {
 	 * Wrapper for function calling through parameters. The golden nugget.
 	 *
 	 * @since 2.2.2
+	 * @access private
 	 * @NOTE _doing_it_wrong notices go towards the callback. Unless this
 	 * function is used wrongfully. Then the notice is about this function.
 	 *
 	 * @param array|string $callback the method array or function string.
-	 * @param string $version the version of AutoDescription the function is used.
+	 * @param string $version the version of The SEO Framework the function is used.
 	 * @param array|string $args The arguments passed to the function.
 	 * @return mixed $output The function called.
 	 */

@@ -165,10 +165,9 @@ register_activation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framework
 /**
  * Add and Flush rewrite rules on plugin activation.
  *
- * @global object $wp_rewrite
- *
  * @since 2.6.6
  * @access private
+ * @global object $wp_rewrite
  */
 function the_seo_framework_flush_rewrite_rules_activation() {
 	global $wp_rewrite;
@@ -184,10 +183,9 @@ register_deactivation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framewo
 /**
  * Flush rewrite rules on plugin deactivation.
  *
- * @global object $wp_rewrite
- *
  * @since 2.6.6
  * @access private
+ * @global object $wp_rewrite
  */
 function the_seo_framework_flush_rewrite_rules_deactivation() {
 	global $wp_rewrite;
@@ -201,6 +199,7 @@ function the_seo_framework_flush_rewrite_rules_deactivation() {
 
 /**
  * Load plugin files.
+ *
  * @since 1.0.0
  * @uses THE_SEO_FRAMEWORK_DIR_PATH
  */
@@ -208,6 +207,7 @@ require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'load.php' );
 
 /**
  * Load deprecated functions.
+ *
  * @since 2.7.0
  * @uses THE_SEO_FRAMEWORK_DIR_PATH_FUNCT
  */

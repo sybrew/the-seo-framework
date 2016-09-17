@@ -276,9 +276,15 @@ TODO:
 
 **For developers:**
 
+**Methods are no longer annotated by their classname in the changelog; instead they're now annotated with the object `the_seo_framework()->`**.
+**All methods are treated as final, this means no duplicated method names should exist within the object. Except for magic methods, like `__construct()`.**
+
 * **Added:**
 	/
-	* TODO `The_SEO_Framework_Load->__set()` magic method. This prevents inaccessible property writing.
+	* TODO `The_SEO_Framework_Load->__set()` magic method.
+		* This prevents inaccessible property writing.
+		* This allows for property deprecation handling.
+		* A warning is emited whenever this method is accessed.
 	* All classes are now converted to use namespaces.
 		* Package: The_SEO_Framework
 	* Class autoloading.
@@ -332,11 +338,12 @@ TODO:
 	* Class `The_SEO_Framework\Load` is now final, and can't be extended upon anymore.
 	* The `license.txt` file has been updated to improve readability. The contents have not been changed.
 	* TODO The `title_seperator` option has been changed and updated to `title_separator`. Note the typo.
-	* Method `post_status()`'s third parameter was unused. It's now used to echo (true) or return (false) the value, default return (false).
-	* Method `no_more_genesis_seo()` has been renamed to `disable_genesis_seo`, without deprecation as it was marked private.
-	* Method `page_inpost_box()` has been renamed to `singular_inpost_box`, without deprecation as it was marked private.
-	* Method `custom_field_redirect()` no longer checks for admin or front-end page status.
+	* Method `the_seo_framework()->post_status()`'s third parameter was unused. It's now used to echo (true) or return (false) the value, default return (false).
+	* Method `the_seo_framework()->no_more_genesis_seo()` has been renamed to `disable_genesis_seo`, without deprecation as it was marked private.
+	* Method `the_seo_framework()->page_inpost_box()` has been renamed to `singular_inpost_box`, without deprecation as it was marked private.
+	* Method `the_seo_framework()->custom_field_redirect()` no longer checks for admin or front-end page status.
 	* File `query.class.php` now falls under GPLv3 instead of GPLv2+.
+	* Method `the_seo_framework()->call_function()` is now marked private. It's written and used as an internal handler for filters.
 * **Improved:**
 	/
 	* Method `the_seo_framework()->call_function()` now passes objects, so you can use `$this` in the called function.

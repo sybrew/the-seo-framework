@@ -303,9 +303,10 @@ class Sitemaps extends Metaboxes {
 	/**
 	 * Create sitemap.xml content transient.
 	 *
-	 * @param string|bool $content required The sitemap transient content.
-	 *
 	 * @since 2.6.0
+	 *
+	 * @param string|bool $content required The sitemap transient content.
+	 * @return string The sitemap content.
 	 */
 	public function setup_sitemap( $sitemap_content ) {
 
@@ -328,9 +329,9 @@ class Sitemaps extends Metaboxes {
 	/**
 	 * Generate sitemap.xml content.
 	 *
-	 * @param bool $secure Only process when param is given.
-	 *
 	 * @since 2.2.9
+	 *
+	 * @return string The sitemap content.
 	 */
 	protected function generate_sitemap() {
 

@@ -158,15 +158,15 @@ class Generate_Title extends Generate_Description {
 		//* Passing back the defaults reduces the memory usage.
 		if ( empty( $defaults ) ) {
 			$defaults = array(
-				'term_id' 			=> $this->get_the_real_ID(),
-				'taxonomy' 			=> '',
-				'page_on_front'		=> false,
-				'notagline' 		=> false,
-				'meta' 				=> false,
-				'get_custom_field'	=> true,
-				'description_title'	=> false,
-				'is_front_page'		=> false,
-				'escape'			=> true,
+				'term_id'           => $this->get_the_real_ID(),
+				'taxonomy'          => '',
+				'page_on_front'     => false,
+				'notagline'         => false,
+				'meta'              => false,
+				'get_custom_field'  => true,
+				'description_title' => false,
+				'is_front_page'     => false,
+				'escape'            => true,
 			);
 
 			/**
@@ -190,15 +190,15 @@ class Generate_Title extends Generate_Description {
 			return $defaults;
 
 		//* Array merge doesn't support sanitation. We're simply type casting here.
-		$args['term_id'] 			= isset( $args['term_id'] ) 			? (int) $args['term_id'] 			: $defaults['term_id'];
-		$args['taxonomy'] 			= isset( $args['taxonomy'] ) 			? (string) $args['taxonomy'] 		: $defaults['taxonomy'];
-		$args['page_on_front'] 		= isset( $args['page_on_front'] ) 		? (bool) $args['page_on_front'] 	: $defaults['page_on_front'];
-		$args['notagline'] 			= isset( $args['notagline'] ) 			? (bool) $args['notagline'] 		: $defaults['notagline'];
-		$args['meta'] 				= isset( $args['meta'] ) 				? (bool) $args['meta'] 				: $defaults['meta'];
-		$args['get_custom_field'] 	= isset( $args['get_custom_field'] ) 	? (bool) $args['get_custom_field'] 	: $defaults['get_custom_field'];
-		$args['description_title'] 	= isset( $args['description_title'] ) 	? (bool) $args['description_title'] : $defaults['description_title'];
-		$args['is_front_page'] 		= isset( $args['is_front_page'] ) 		? (bool) $args['is_front_page'] 	: $defaults['is_front_page'];
-		$args['escape'] 			= isset( $args['escape'] ) 				? (bool) $args['escape'] 			: $defaults['escape'];
+		$args['term_id']           = isset( $args['term_id'] )           ? (int) $args['term_id']            : $defaults['term_id'];
+		$args['taxonomy']          = isset( $args['taxonomy'] )          ? (string) $args['taxonomy']        : $defaults['taxonomy'];
+		$args['page_on_front']     = isset( $args['page_on_front'] )     ? (bool) $args['page_on_front']     : $defaults['page_on_front'];
+		$args['notagline']         = isset( $args['notagline'] )         ? (bool) $args['notagline']         : $defaults['notagline'];
+		$args['meta']              = isset( $args['meta'] )              ? (bool) $args['meta']              : $defaults['meta'];
+		$args['get_custom_field']  = isset( $args['get_custom_field'] )  ? (bool) $args['get_custom_field']  : $defaults['get_custom_field'];
+		$args['description_title'] = isset( $args['description_title'] ) ? (bool) $args['description_title'] : $defaults['description_title'];
+		$args['is_front_page']     = isset( $args['is_front_page'] )     ? (bool) $args['is_front_page']     : $defaults['is_front_page'];
+		$args['escape']            = isset( $args['escape'] )            ? (bool) $args['escape']            : $defaults['escape'];
 
 		return $args;
 	}
