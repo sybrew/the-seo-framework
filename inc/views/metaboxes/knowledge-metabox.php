@@ -33,7 +33,7 @@ switch ( $instance ) :
 				'dashicon'	=> 'admin-home',
 			),
 			'social' => array(
-				'name'		=> 'Social Sites',
+				'name'		=> __( 'Social Sites', 'autodescription' ),
 				'callback'	=> array( $this, 'knowledge_metabox_social_tab' ),
 				'dashicon'	=> 'networking',
 			),
