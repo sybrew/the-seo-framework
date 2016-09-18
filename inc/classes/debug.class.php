@@ -214,7 +214,7 @@ final class Debug implements Debug_Interface {
 
 			$version = empty( $version ) ? '' : sprintf( __( '(This message was added in version %s of The SEO Framework.)' ), $version );
 			/* translators: 1: Function name, 2: 'Incorrectly', 3: Plugin Version notification */
-			trigger_error( sprintf( esc_html__( '%1$s was called %2$s. %3$s', 'autodescription' ), esc_html( $function ), '<strong>incorrectly</strong>', esc_html( $version ) ) );
+			trigger_error( sprintf( esc_html__( '%1$s was called %2$s. %3$s', 'autodescription' ), esc_html( $function ), __( '<strong>incorrectly</strong>', 'autodescription' ), esc_html( $version ) ) );
 
 			restore_error_handler();
 		}
