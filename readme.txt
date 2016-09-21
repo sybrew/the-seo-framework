@@ -297,6 +297,7 @@ TODO:
 		* Package: The_SEO_Framework
 	* Class autoloading.
 		* Now all The SEO Framework class files are required when needed, automatically.
+	* New JavaScript l10n and object property: 'hasInput'. Determines if the page renders The SEO Framework's input boxes, to be used to improve performance.
 * **Changed:**
 	* All the classes can't be initiated directly anymore. Always use `the_seo_framework()`.
 		* Failing to do so will result in a fatal error.

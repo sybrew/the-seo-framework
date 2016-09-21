@@ -193,6 +193,7 @@ class Admin_Init extends Init {
 	 * @since 2.6.0
 	 * @staticvar array $strings : The l10n strings.
 	 * @since 2.7.0 Added AJAX nonce: 'autodescription-ajax-nonce'
+	 * @since 2.7.1 Added input detection: 'hasInput'
 	 *
 	 * @return array $strings The l10n strings.
 	 */
@@ -316,6 +317,7 @@ class Admin_Init extends Init {
 			'bad' => esc_html( $bad ),
 			'unknown' => esc_html( $unknown ),
 			'nonce' => $nonce,
+			'hasInput' => $this->is_term_edit() || $this->is_post_edit() || $this->is_seo_settings_page(),
 		);
 	}
 
