@@ -616,6 +616,33 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
+	 * Escapes input excerpt.
+	 *
+	 * @since 2.7.1
+	 *
+	 * @param string $excerpt the Excerpt.
+	 * @return string The escaped Excerpt.
+	 */
+	public function s_excerpt( $excerpt = '' ) {
+
+		//* No need to parse an empty excerpt.
+		if ( '' === $excerpt )
+			return '';
+
+		/**
+		 * Applies filters 'the_seo_framework_allow_excerpt_shortcode_tags' : boolean
+		 * @since 2.6.6.1
+		 */
+		if ( apply_filters( 'the_seo_framework_allow_excerpt_shortcode_tags', false ) && false === $this->is_feed() ) {
+			$excerpt = wp_strip_all_tags( $excerpt );
+		} else {
+			$excerpt = wp_strip_all_tags( strip_shortcodes( $excerpt ) );
+		}
+
+		return $this->s_description( $excerpt );
+	}
+
+	/**
 	 * Returns a sanitized and trimmed title.
 	 *
 	 * @since 2.5.2

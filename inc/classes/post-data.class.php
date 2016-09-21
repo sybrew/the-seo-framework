@@ -166,17 +166,7 @@ class Post_Data extends Detect {
 		if ( '' === $excerpt )
 			return '';
 
-		/**
-		 * Applies filters 'the_seo_framework_allow_excerpt_shortcode_tags' : boolean
-		 * @since 2.6.6.1
-		 */
-		if ( apply_filters( 'the_seo_framework_allow_excerpt_shortcode_tags', false ) && false === $this->is_feed() ) {
-			$excerpt = wp_strip_all_tags( $excerpt );
-		} else {
-			$excerpt = wp_strip_all_tags( strip_shortcodes( $excerpt ) );
-		}
-
-		return $this->s_description( $excerpt );
+		return $this->s_excerpt( $excerpt );
 	}
 
 	/**

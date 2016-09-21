@@ -84,7 +84,7 @@ class Feed extends Transients {
 			 */
 			if ( isset( $feed_type ) && $this->get_option( 'excerpt_the_feed' ) ) {
 				//* Strip all code and lines.
-				$excerpt = $this->get_excerpt_by_id( $content );
+				$excerpt = $this->s_excerpt( $content );
 
 				$excerpt_len = (int) mb_strlen( $excerpt );
 				/**

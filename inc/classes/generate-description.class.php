@@ -33,15 +33,6 @@ defined( 'ABSPATH' ) or die;
 class Generate_Description extends Generate {
 
 	/**
-	 * Determines whether we're parsing the manual content Excerpt for the automated description.
-	 *
-	 * @since 2.6.0
-	 *
-	 * @var bool Using manual excerpt.
-	 */
-	protected $using_manual_excerpt = false;
-
-	/**
 	 * Constructor, loads parent constructor.
 	 */
 	protected function __construct() {
@@ -371,10 +362,7 @@ class Generate_Description extends Generate {
 		$blogname = '';
 		$sep = '';
 
-		//* Whether the post ID has a manual excerpt.
-		if ( empty( $term ) && has_excerpt( $args['id'] ) ) {
-			$this->using_manual_excerpt = true;
-		} else {
+		if ( $term || ! has_excerpt( $args['id'] ) ) {
 			$title_on_blogname = $this->generate_description_additions( $args['id'], $term, false );
 			$title = $title_on_blogname['title'];
 			$on = $title_on_blogname['on'];
@@ -404,16 +392,17 @@ class Generate_Description extends Generate {
 			if ( $additions )
 				$additions .= ' ';
 
-			$max_char_length_normal = 155 - mb_strlen( html_entity_decode( $additions ) );
+			$additions_length = mb_strlen( html_entity_decode( $additions ) );
 			/**
 			 * Determine if the title is far too long (72+, rather than 75 in the Title guidelines).
 			 * If this is the case, trim the "title on blogname" part from the description.
 			 * @since 2.7.1
 			 */
-			if ( $max_char_length_normal > 71 ) {
+			if ( $additions_length > 71 ) {
 				$max_char_length_normal = 155;
 				$trim = true;
 			} else {
+				$max_char_length_normal = 155 - $additions_length;
 				$trim = false;
 			}
 
