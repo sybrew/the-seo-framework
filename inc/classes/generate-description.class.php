@@ -234,7 +234,6 @@ class Generate_Description extends Generate {
 	 * Fetches HomePage Description from custom field.
 	 *
 	 * @since 2.6.0
-	 * @access protected
 	 * Use $this->description_from_custom_field() instead.
 	 *
 	 * @param array $args Description args.
@@ -256,7 +255,6 @@ class Generate_Description extends Generate {
 	 * Fetches Singular Description from custom field.
 	 *
 	 * @since 2.6.0
-	 * @access protected
 	 * Use $this->description_from_custom_field() instead.
 	 *
 	 * @param int $id The page ID.
@@ -278,7 +276,6 @@ class Generate_Description extends Generate {
 	 * Fetch Archive Description from custom field.
 	 *
 	 * @since 2.6.0
-	 * @access protected
 	 * Use $this->description_from_custom_field() instead.
 	 *
 	 * @param array $args
@@ -343,7 +340,6 @@ class Generate_Description extends Generate {
 	 * Generates description from content.
 	 *
 	 * @since 2.6.0
-	 * @staticvar string $title
 	 *
 	 * @param array $args description args : {
 	 * 		@param int $id the term or page id.
@@ -353,6 +349,7 @@ class Generate_Description extends Generate {
 	 * 		@param bool $social Generate Social Description when true.
 	 * }
 	 * @param bool $escape Whether to escape the description.
+	 *		NOTE: When this is false, be sure to trim the output.
 	 * @return string The description.
 	 */
 	protected function generate_the_description( $args, $escape = true ) {
@@ -408,16 +405,32 @@ class Generate_Description extends Generate {
 				$additions .= ' ';
 
 			$max_char_length_normal = 155 - mb_strlen( html_entity_decode( $additions ) );
+			/**
+			 * Determine if the title is far too long (72+, rather than 75 in the Title guidelines).
+			 * If this is the case, trim the "title on blogname" part from the description.
+			 * @since 2.7.1
+			 */
+			if ( $max_char_length_normal > 71 ) {
+				$max_char_length_normal = 155;
+				$trim = true;
+			} else {
+				$trim = false;
+			}
+
 			$max_char_length_social = 200;
 
 			//* Generate Excerpts.
 			$excerpt_normal = $this->generate_excerpt( $args['id'], $term, $max_char_length_normal );
 			$excerpt_social = $this->generate_excerpt( $args['id'], $term, $max_char_length_social );
 
-			//* Put in array to be accessed later.
+			/**
+			 * Put in array to be accessed later.
+			 * @since 2.7.1 Added trim value.
+			 */
 			$excerpt = array(
 				'normal' => $excerpt_normal,
 				'social' => $excerpt_social,
+				'trim' => $trim,
 			);
 
 			/**
@@ -443,7 +456,6 @@ class Generate_Description extends Generate {
 				$description = '';
 			}
 		} else {
-
 			if ( empty( $excerpt['normal'] ) ) {
 				//* Fetch additions ignoring options.
 				$title_on_blogname = $this->generate_description_additions( $args['id'], $term, true );
@@ -451,10 +463,16 @@ class Generate_Description extends Generate {
 				$on = $title_on_blogname['on'];
 				$blogname = $title_on_blogname['blogname'];
 				$sep = $title_on_blogname['sep'];
+				$excerpt['trim'] = false;
 			}
 
-			/* translators: 1: Title, 2: on, 3: Blogname */
-			$title_on_blogname = trim( sprintf( _x( '%1$s %2$s %3$s', '1: Title, 2: on, 3: Blogname', 'autodescription' ), $title, $on, $blogname ) );
+			if ( empty( $excerpt['trim'] ) ) {
+				/* translators: 1: Title, 2: on, 3: Blogname */
+				$title_on_blogname = trim( sprintf( _x( '%1$s %2$s %3$s', '1: Title, 2: on, 3: Blogname', 'autodescription' ), $title, $on, $blogname ) );
+			} else {
+				$title_on_blogname = '';
+				$sep = '';
+			}
 
 			if ( $excerpt['normal'] ) {
 				/* translators: 1: Title, 2: Separator, 3: Excerpt */
@@ -466,6 +484,7 @@ class Generate_Description extends Generate {
 			}
 		}
 
+		//* NOTE: If you don't escape, be sure to at least trim.
 		if ( $escape )
 			$description = $this->escape_description( $description );
 
@@ -699,7 +718,7 @@ class Generate_Description extends Generate {
 	 * @param object|null $term The Taxonomy Term.
 	 * @param int $max_char_length The maximum excerpt char length.
 	 */
-	public function generate_excerpt( $page_id, $term = '', $max_char_length = 154 ) {
+	public function generate_excerpt( $page_id, $term = '', $max_char_length = 155 ) {
 
 		static $excerpt_cache = array();
 		static $excerptlength_cache = array();

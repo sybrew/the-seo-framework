@@ -158,7 +158,7 @@ class Transients extends Sitemaps {
 		 *
 		 * @since 2.3.4
 		 */
-		$revision = '1';
+		$revision = '2';
 
 		$additions = $this->add_description_additions( $page_id, $taxonomy );
 

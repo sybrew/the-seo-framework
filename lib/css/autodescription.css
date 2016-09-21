@@ -151,10 +151,9 @@ span.tsf-count-good {
 
 span.tsf-counter-one {
 	color: #fff;
-	padding: 3px;
-	border-radius: 58px;
-	padding: 0 1px;
-	min-width: 29px;
+	border-radius: 4em;
+	padding: 0 0.5em;
+	min-width: 2em;
 	display: inline-block;
 	text-align: center;
 	vertical-align: baseline;

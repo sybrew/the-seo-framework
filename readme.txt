@@ -244,6 +244,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 TODO:
 ***Are you an avid developer, and have extended The SEO Framework? Please carefully read the detailed changelog. The class structure has changed.***
+*In essence, if you've programmed as described within the API, no changes should be made.*
 
 **Detailed log:**
 /
@@ -254,6 +255,10 @@ TODO:
 * **Changed:**
 	* The first two description separators are no longer marked "recommended". This is because the description does not need to support old browsers or old screen readers.
 * **Improved:**
+	* When the description title additions exceed 72 characters, they will no longer be included in the automated description.
+		* This is also documented as a fix, but it states 154 characters instead of 72 there.
+		* This should reduce the chance of spamdexing by keyword spamming.
+		* This change is completely in line with Google's automated description guidelines. See "[Create good meta description](https://support.google.com/webmasters/answer/35624#1)" (heading "Programmatically generate descriptions").
 	/
 	* TODO The post/page/term object cache is now flushed on edit/save.
 		* https://github.com/sybrew/the-seo-framework/issues/24
@@ -261,9 +266,13 @@ TODO:
 	* TODO The sitemap is now no longer stored in a buffer. (echo in-line instead of return $var)
 		* This massively reduces the memory usage.
 		* Therefore, the sitemap's maximum entry output has been increased to 9000 from 2100.
+	* The accessible counter type (with background color, type 1) is now a bit bolder.
 * **Updated:**
 	/
 	* TODO Translation POT file.
+	* All previous automated description transients have been invalidated.
+		* Old caches will automatically be cleaned from the database.
+		* New caches will automatically be set up. This might cause a small performance hit after the update, which should automatically be resolved.
 * **Fixed:**
 	/
 	* TODO On some themes, a fatal error was output when editing posts. (requires confirmation)
@@ -274,6 +283,8 @@ TODO:
 	/
 	* TODO On some themes, the private prefix has been added to the title (already fixed, requires confirmation)
 		* https://wordpress.org/support/topic/category-page-title-with-weird-unwanted-prefix/
+	/
+	* When the title exceeds 154 characters, the description will no longer contain the complete post's content. Instead, the title will now be omitted and the description length has been limited to 155 characters.
 
 **For translators:**
 
@@ -360,6 +371,7 @@ TODO:
 	* Method `the_seo_framework()->custom_field_redirect()` no longer checks for admin or front-end page status.
 	* File `query.class.php` now falls under GPLv3 instead of GPLv2+.
 	* Method `the_seo_framework()->call_function()` is now marked private. It's written and used as an internal handler for filters.
+	* Method `the_seo_framework()->generate_excerpt()` now has its third parameter (`$max_char_length`) default value increased by 1. From 154 to 155.
 * **Improved:**
 	/
 	* Method `the_seo_framework()->call_function()` now passes objects, so you can use `$this` in the called function.
