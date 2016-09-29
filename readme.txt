@@ -267,6 +267,8 @@ TODO:
 		* This massively reduces the memory usage.
 		* Therefore, the sitemap's maximum entry output has been increased to 9000 from 2100.
 	* The accessible counter type (with background color, type 1) is now a bit bolder.
+	* On Woocommerce list tables additional tabs injected by other plugins will likely not overflow anymore.
+	* The sitemap cache now supports multiple languages. This means more than one sitemap can be created.
 * **Updated:**
 	/
 	* TODO Translation POT file.
@@ -338,6 +340,10 @@ TODO:
 			* `termdata.class.php` is now `term-data.php`
 			* `postdata.class.php` is now `post-data.php`
 		* These changes allow easy autoloading and namespace interaction.
+	* Some classes files (and their classes) have been removed.
+		* The changes:
+			/
+			* TODO `search.class.php`
 	* Some function files have been moved.
 		* The changes:
 			* The deprecation function handler `deprecated.php` has been moved to the `/autodescription/inc/functions/` folder, from the `/autodescription/inc/deprecated/` folder.

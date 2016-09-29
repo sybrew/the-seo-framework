@@ -122,9 +122,9 @@ class Transients extends Sitemaps {
 	/**
 	 * Setup vars for general site transients.
 	 *
-	 * @global int $blog_id
-	 *
 	 * @since 2.3.3
+	 * @since 2.7.1 Added locale suffix.
+	 * @global int $blog_id
 	 */
 	public function setup_transient_names() {
 		global $blog_id;
@@ -135,8 +135,8 @@ class Transients extends Sitemaps {
 		 */
 		$revision = '0';
 
-		$this->sitemap_transient = 'tsf_sitemap_' . (string) $revision . '_' . (string) $blog_id;
-		$this->theme_doing_it_right_transient = 'tsf_tdir_' . (string) $revision . '_' . (string) $blog_id;
+		$this->sitemap_transient = $this->add_cache_key_suffix( 'tsf_sitemap_' . $revision );
+		$this->theme_doing_it_right_transient = 'tsf_tdir_' . $revision . '_' . $blog_id;
 	}
 
 	/**
@@ -368,13 +368,19 @@ class Transients extends Sitemaps {
 	 * Adds cache key suffix based on blog id and locale.
 	 *
 	 * @since 2.7.0
+	 * @since 2.7.1 $locale is now static.
+	 *				$key may now be empty.
+	 * @staticvar string $locale
 	 *
 	 * @return string the cache key.
 	 */
-	protected function add_cache_key_suffix( $key ) {
+	protected function add_cache_key_suffix( $key = '' ) {
 		global $blog_id;
 
-		$locale = strtolower( get_locale() );
+		static $locale = null;
+
+		if ( is_null( $locale ) )
+			$locale = strtolower( get_locale() );
 
 		return $key . '_' . $blog_id . '_' . $locale;
 	}

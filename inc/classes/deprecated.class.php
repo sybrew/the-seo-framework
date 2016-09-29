@@ -1,6 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes
+ * @package The_SEO_Framework\Classes\Deprecated
  */
 namespace The_SEO_Framework;
 
@@ -119,15 +119,12 @@ class Deprecated extends Feed {
 	 * @param mixed $values What to be output.
 	 *
 	 * @since 2.3.4
-	 *
+	 * @since 2.6.0 Deprecated.
+	 * @since 2.7.1 Removed output, as it's no longer available.
 	 * @deprecated
-	 * @since 2.6.0
 	 */
 	public function echo_debug_information( $values ) {
 		$this->_deprecated_function( 'The_SEO_Framework_Debug::' . __FUNCTION__, '2.6.0', 'The_SEO_Framework_Debug::get_debug_information()' );
-
-		echo $this->get_debug_information( $values );
-
 	}
 
 	/**
@@ -856,8 +853,8 @@ class Deprecated extends Feed {
 	 * @NOTE can't do type checks. Always assume the comparing value is a string.
 	 *
 	 * @since 2.5.2
+	 * @since 2.7.0 Deprecated.
 	 * @deprecated
-	 * @since 2.7.0
 	 *
 	 * @param string|array $needle The needle(s) to search for
 	 * @param array $array The single dimensional array to search in.

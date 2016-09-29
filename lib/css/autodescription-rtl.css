@@ -79,7 +79,8 @@ table.wp-list-table .column-name {
 table.wp-list-table .column-is_in_stock,
 table.wp-list-table .column-sku,
 table.wp-list-table .column-price,
-table.wp-list-table .column-icl_translations {
+table.wp-list-table .column-icl_translations,
+th.column-tsf-seo-bar-wrap ~ th {
 	width: 8%;
 }
 
