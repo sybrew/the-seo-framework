@@ -34,11 +34,14 @@ defined( 'ABSPATH' ) or die;
 final class Load extends Deprecated implements Debug_Interface {
 
 	/**
-	 * Cached debug/profile constants. Initialized on plugins_loaded priority 5.
+	 * Cached debug/profile properties. Initialized on plugins_loaded priority 5.
 	 *
 	 * @since 2.2.9
 	 *
-	 * @var bool The SEO Framework Debug/Profile states.
+	 * @var bool Whether debug is enabled.
+	 * @var bool Whether debug is hidden in HTMl.
+	 * @var bool Whether transients are enabled.
+	 * @var bool Whether script debugging is enabled.
 	 */
 	public $the_seo_framework_debug = false;
 	public $the_seo_framework_debug_hidden = false;
@@ -174,6 +177,7 @@ final class Load extends Deprecated implements Debug_Interface {
 	 *
 	 * @since 2.7.1
 	 * @see @this->_deprecated_function().
+	 * @access private
 	 *
 	 * @param string $filter		The function that was called.
 	 * @param string $version		The version of WordPress that deprecated the function.
@@ -186,9 +190,7 @@ final class Load extends Deprecated implements Debug_Interface {
 
 	/**
 	 * Mark a function as deprecated and inform when it has been used.
-	 *
 	 * Taken from WordPress core, but added extra parameters and linguistic alterations.
-	 *
 	 * The current behavior is to trigger a user error if WP_DEBUG is true.
 	 *
 	 * @since 2.6.0
@@ -205,9 +207,7 @@ final class Load extends Deprecated implements Debug_Interface {
 
 	/**
 	 * Mark a function as deprecated and inform when it has been used.
-	 *
 	 * Taken from WordPress core, but added extra parameters and linguistic alterations.
-	 *
 	 * The current behavior is to trigger a user error if WP_DEBUG is true.
 	 *
 	 * @since 2.6.0

@@ -107,10 +107,11 @@ class Inpost extends Doing_It_Right {
 	 * @since 2.1.8
 	 * @since 2.6.0 Can no longer run outside of the term edit scope.
 	 * @since 2.6.0 Can no longer run when another SEO plugin is active.
+	 * @since 2.7.1 Added show_ui argument for public taxonomy detection.
 	 */
 	public function add_taxonomy_seo_box_init() {
 
-		if ( $this->detect_seo_plugins() || ! $this->is_term_edit() )
+		if ( $this->detect_seo_plugins() || false === $this->is_term_edit() )
 			return;
 
 		/**
@@ -122,7 +123,7 @@ class Inpost extends Doing_It_Right {
 		$priority = (int) apply_filters( 'the_seo_framework_term_metabox_priority', 0 );
 
 		//* Add taxonomy meta boxes
-		foreach ( get_taxonomies( array( 'public' => true ) ) as $tax_name )
+		foreach ( get_taxonomies( array( 'public' => true, 'show_ui' => true ) ) as $tax_name )
 			add_action( $tax_name . '_edit_form', array( $this, 'pre_seo_box' ), $priority, 2 );
 
 	}

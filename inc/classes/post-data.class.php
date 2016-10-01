@@ -302,7 +302,7 @@ class Post_Data extends Detect {
 	 * @global object $wpdb
 	 * @global int $blog_id
 	 *
-	 * @TODO use get_posts() or WP_Query.
+	 * @TODO use get_post() or WP_Query.
 	 *
 	 * @return int Latest Post ID.
 	 */

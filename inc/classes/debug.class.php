@@ -60,6 +60,14 @@ final class Debug implements Debug_Interface {
 	 */
 	private static $instance = null;
 
+	/**
+	 * Cached debug/profile properties.
+	 *
+	 * @since 2.7.1
+	 *
+	 * @var bool Whether debug is enabled.
+	 * @var bool Whether debug is hidden in HTMl.
+	 */
 	public $the_seo_framework_debug = false;
 	public $the_seo_framework_debug_hidden = false;
 
@@ -365,17 +373,16 @@ final class Debug implements Debug_Interface {
 	}
 
 	/**
-	 * Echos found screens in the admin footer when debugging is enabled.
+	 * Adds found screens in the admin footer when debugging is enabled.
 	 *
 	 * @since 2.5.2
 	 * @access private
-	 * @global object $current_screen
+	 * @global object $current_screen This object is passed through get_defined_vars().
 	 */
 	public function debug_screens() {
 		global $current_screen;
 
 		$this->debug_init( __METHOD__, false, '', get_defined_vars() );
-
 	}
 
 	/**
