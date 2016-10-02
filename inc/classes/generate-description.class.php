@@ -81,13 +81,7 @@ class Generate_Description extends Generate {
 		if ( apply_filters( 'the_seo_framework_do_shortcodes_in_description', false ) )
 			$description = do_shortcode( $description );
 
-		/**
-		 * Sanitize.
-		 * @since 2.3.4 Beautifies too.
-		 */
-		$description = $this->escape_description( $description );
-
-		return $description;
+		return $this->escape_description( $description );
 	}
 
 	/**

@@ -221,8 +221,8 @@ final class Debug implements Debug_Interface {
 			set_error_handler( array( $this, 'error_handler_doing_it_wrong' ) );
 
 			$version = empty( $version ) ? '' : sprintf( __( '(This message was added in version %s of The SEO Framework.)' ), $version );
-			/* translators: 1: Function name, 2: 'Incorrectly', 3: Plugin Version notification */
-			trigger_error( sprintf( esc_html__( '%1$s was called %2$s. %3$s', 'autodescription' ), esc_html( $function ), '<strong>' . esc_html__( 'incorrectly', 'autodescription' ) . '</strong>', esc_html( $version ) ) );
+			/* translators: 1: Function name, 2: 'Incorrectly', 3: Error message 4: Plugin Version notification */
+			trigger_error( sprintf( esc_html__( '%1$s was called %2$s. %3$s %4$s', 'autodescription' ), esc_html( $function ), '<strong>' . esc_html__( 'incorrectly', 'autodescription' ) . '</strong>', esc_html( $message ), esc_html( $version ) ) );
 
 			restore_error_handler();
 		}
@@ -317,9 +317,9 @@ final class Debug implements Debug_Interface {
 
 			$backtrace = debug_backtrace();
 			/**
-			 * 0 = This function. 1 = Debug function. 2 = Error trigger.
+			 * 0 = This function. 1 = Debug function. 2 = magic methods, 3 = Error trigger.
 			 */
-			$error = $backtrace[2];
+			$error = $backtrace[3];
 
 			$this->error_handler( $error, $message );
 		}
@@ -365,10 +365,10 @@ final class Debug implements Debug_Interface {
 		$line = isset( $error['line'] ) ? $error['line'] : '';
 
 		if ( isset( $message ) ) {
-			echo PHP_EOL . '<strong>Notice:</strong> ' . $message;
+			echo PHP_EOL . '<span><strong>Notice:</strong> ' . $message;
 			echo $file ? ' In ' . esc_html( $file ) : '';
 			echo $line ? ' on line ' . esc_html( $line ) : '';
-			echo '.<br>' . PHP_EOL;
+			echo '.</span><br>' . PHP_EOL;
 		}
 	}
 
