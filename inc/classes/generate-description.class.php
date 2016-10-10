@@ -108,14 +108,6 @@ class Generate_Description extends Generate {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @applies filters the_seo_framework_description_args : {
-	 * 		@param int $id the term or page id.
-	 * 		@param string $taxonomy taxonomy name.
-	 * 		@param bool $is_home We're generating for the home page.
-	 * 		@param bool $get_custom_field Do not fetch custom title when false.
-	 * 		@param bool $social Generate Social Description when true.
-	 * }
-	 *
 	 * @param array $args required The passed arguments.
 	 * @param array $defaults The default arguments.
 	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
@@ -126,13 +118,23 @@ class Generate_Description extends Generate {
 		//* Passing back the defaults reduces the memory usage.
 		if ( empty( $defaults ) ) {
 			$defaults = array(
-				'id' 				=> $this->get_the_real_ID(),
-				'taxonomy'			=> '',
-				'is_home'			=> false,
-				'get_custom_field' 	=> true,
-				'social' 			=> false,
+				'id'               => $this->get_the_real_ID(),
+				'taxonomy'         => '',
+				'is_home'          => false,
+				'get_custom_field' => true,
+				'social'           => false,
 			);
 
+			/**
+			 * Applies filters 'the_seo_framework_description_args' : array {
+			 * 		@param int $id the term or page id.
+			 * 		@param string $taxonomy taxonomy name.
+			 * 		@param bool $is_home We're generating for the home page.
+			 * 		@param bool $get_custom_field Do not fetch custom title when false.
+			 * 		@param bool $social Generate Social Description when true.
+			 * }
+			 * @since 2.5.0
+			 */
 			$defaults = (array) apply_filters( 'the_seo_framework_description_args', $defaults, $args );
 		}
 

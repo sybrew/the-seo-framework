@@ -313,6 +313,8 @@ TODO:
 	* New JavaScript l10n and object property: 'hasInput'. Determines if the page renders The SEO Framework's input boxes, to be used to improve performance.
 	* Method `the_seo_framework()->s_excerpt()`. For escaping and prettifying (description) excerpts with consideration of shortcodes through filters.
 		* This method was extracted from `the_seo_framework()->get_excerpt_by_id()` when solely using the first parameter.
+	/
+	* TODO Sanitation functions are now all public. This allows for easier, predictable and more secure external code.
 * **Changed:**
 	* All the classes can't be initiated directly anymore. Always use `the_seo_framework()`.
 		* Failing to do so will result in a fatal error.

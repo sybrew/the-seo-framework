@@ -98,9 +98,9 @@ final class Debug implements Debug_Interface {
 			static::$instance = new static();
 		}
 
-		if ( isset( $debug ) && isset( $hidden ) ) {
-			static::$instance->the_seo_framework_debug = $debug;
-			static::$instance->the_seo_framework_debug_hidden = $hidden;
+		if ( isset( $debug ) ) {
+			static::$instance->the_seo_framework_debug = (bool) $debug;
+			static::$instance->the_seo_framework_debug_hidden = (bool) $hidden;
 		}
 	}
 
@@ -142,11 +142,13 @@ final class Debug implements Debug_Interface {
 	 * The current behavior is to trigger a user error if WP_DEBUG is true.
 	 *
 	 * @since 2.6.0
+	 * @since 2.7.1 Now escapes all input, except for $replacement.
 	 * @access private
 	 *
-	 * @param string $function		The function that was called.
-	 * @param string $version		The version of WordPress that deprecated the function.
-	 * @param string $replacement	Optional. The function that should have been called. Default null.
+	 * @param string $function     The function that was called.
+	 * @param string $version      The version of WordPress that deprecated the function.
+	 * @param string $replacement  Optional. The function that should have been called. Default null.
+	 *                             Expected to be escaped.
 	 */
 	public function _deprecated_function( $function, $version, $replacement = null ) {
 		/**
@@ -172,11 +174,24 @@ final class Debug implements Debug_Interface {
 			set_error_handler( array( $this, 'error_handler_deprecated' ) );
 
 			if ( isset( $replacement ) ) {
-				/* translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification, 4: Replacement function */
-				trigger_error( sprintf( esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework! Use %4$s instead.', 'autodescription' ), $function, '<strong>' . esc_html__( 'deprecated', 'autodescription' ) . '</strong>', $version, $replacement ) );
+				trigger_error(
+					/* translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification, 4: Replacement function */
+					sprintf( esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework! Use %4$s instead.', 'autodescription' ),
+						esc_html( $function ),
+						'<strong>' . esc_html__( 'deprecated', 'autodescription' ) . '</strong>',
+						esc_html( $version ),
+						$replacement
+					)
+				);
 			} else {
-				/* translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification */
-				trigger_error( sprintf( esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework with no alternative available.', 'autodescription' ), $function, '<strong>' . esc_html__( 'deprecated', 'autodescription' ) . '</strong>', $version ) );
+				trigger_error(
+					/* translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification */
+					sprintf( esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework with no alternative available.', 'autodescription' ),
+						esc_html( $function ),
+						'<strong>' . esc_html__( 'deprecated', 'autodescription' ) . '</strong>',
+						esc_html( $version )
+					)
+				);
 			}
 
 			restore_error_handler();
@@ -191,6 +206,7 @@ final class Debug implements Debug_Interface {
 	 * The current behavior is to trigger a user error if WP_DEBUG is true.
 	 *
 	 * @since 2.6.0
+	 * @since 2.7.1 Now escapes all input, except for $message.
 	 * @access private
 	 *
 	 * @param string $function	The function that was called.
@@ -221,8 +237,16 @@ final class Debug implements Debug_Interface {
 			set_error_handler( array( $this, 'error_handler_doing_it_wrong' ) );
 
 			$version = empty( $version ) ? '' : sprintf( __( '(This message was added in version %s of The SEO Framework.)' ), $version );
-			/* translators: 1: Function name, 2: 'Incorrectly', 3: Error message 4: Plugin Version notification */
-			trigger_error( sprintf( esc_html__( '%1$s was called %2$s. %3$s %4$s', 'autodescription' ), esc_html( $function ), '<strong>' . esc_html__( 'incorrectly', 'autodescription' ) . '</strong>', esc_html( $message ), esc_html( $version ) ) );
+			trigger_error(
+				/* translators: 1: Function name, 2: 'Incorrectly', 3: Error message 4: Plugin Version notification */
+				sprintf( esc_html__( '%1$s was called %2$s. %3$s %4$s', 'autodescription' ),
+					esc_html( $function ),
+					'<strong>' . esc_html__( 'incorrectly', 'autodescription' ) . '</strong>',
+					//* Expected to be escaped.
+					$message,
+					esc_html( $version )
+				)
+			);
 
 			restore_error_handler();
 		}
@@ -234,7 +258,10 @@ final class Debug implements Debug_Interface {
 	 * The current behavior is to trigger a user error if WP_DEBUG is true.
 	 *
 	 * @since 2.7.0
+	 * @since 2.7.1 1. Now escapes first parameter.
+	 * 				2. Removed check for gettext.
 	 * @access private
+	 * @todo Escape translation string.
 	 *
 	 * @param string $p_or_m	The Property or Method.
 	 * @param string $message	A message explaining what has been done incorrectly.
@@ -262,12 +289,8 @@ final class Debug implements Debug_Interface {
 
 			set_error_handler( array( $this, 'error_handler_inaccessible_call' ) );
 
-			if ( function_exists( '__' ) ) {
-				/* translators: 1: Method or Property name, 2: Message */
-				trigger_error( sprintf( __( '%1$s is not <strong>accessible</strong>. %2$s', 'autodescription' ), $p_or_m, $message ) );
-			} else {
-				trigger_error( sprintf( '%s is not <strong>accessible</strong>. %s', $p_or_m, $message ) );
-			}
+			/* translators: 1: Method or Property name, 2: Message */
+			trigger_error( sprintf( __( '%1$s is not <strong>accessible</strong>. %2$s', 'autodescription' ), esc_html( $p_or_m ), $message ) );
 
 			restore_error_handler();
 		}
@@ -357,7 +380,7 @@ final class Debug implements Debug_Interface {
 	 * @since 2.6.0
 	 *
 	 * @param array $error The Error location and file.
-	 * @param string $message The error message.
+	 * @param string $message The error message. Expected to be escaped.
 	 */
 	protected function error_handler( $error, $message ) {
 
@@ -442,7 +465,7 @@ final class Debug implements Debug_Interface {
 			$output .= $this->the_seo_framework_debug_hidden ? '' : '<span class="code highlight">';
 
 			if ( is_null( $values ) ) {
-				$output .= $this->debug_value_wrapper( "Debug message: Value isn't set." ) . PHP_EOL;
+				$output .= $this->debug_value_wrapper( 'null' ) . PHP_EOL;
 				$output .= $this->the_seo_framework_debug_hidden ? '' : '</span>';
 
 				return $output;
@@ -609,13 +632,16 @@ final class Debug implements Debug_Interface {
 			static $hold_args = array();
 
 			$args = array_slice( func_get_args(), 3 );
+			//* Shift array.
+			isset( $args[0][0] ) and $args = $args[0][0];
+
 			$key = $method . '_' . $debug_key;
 
 			if ( $store ) {
 				$this->profile( false, false, 'time', $key ) . ' seconds';
 				$this->profile( false, false, 'memory', $key ) . ' bytes';
 
-				unset( $args[0]['debug_key'] );
+				unset( $args['debug_key'] );
 
 				$cached_args[ $method ] = $args;
 				$hold_args[ $method ] = $args;
@@ -653,44 +679,45 @@ final class Debug implements Debug_Interface {
 			}
 
 			if ( $args ) {
-				$output .= $method . '( ';
+				$output .= $method . '(';
 
-				if ( isset( $hold_args[ $method ][0] ) ) {
-					if ( is_array( $hold_args[ $method ][0] ) ) {
-						foreach ( $hold_args[ $method ][0] as $var => $a ) {
-								$output .= gettype( $a ) . ' $' . $var . ', ';
+				if ( isset( $hold_args[ $method ] ) ) {
+					if ( is_array( $hold_args[ $method ] ) ) {
+						foreach ( $hold_args[ $method ] as $var => $a ) {
+								$output .= ' ' . gettype( $a ) . ' $' . $var . ',';
 						}
 					}
-					$output = rtrim( $output, ', ' );
+					$output = rtrim( $output, ', ' ) . ' ';
 					$hold_args[ $method ] = null;
 				}
 
-				$output .= ' )';
+				$output .= ')';
 				$output .= $this->the_seo_framework_debug_hidden ? PHP_EOL : '<br>' . PHP_EOL;
 
 				foreach ( $args as $num => $a ) {
 					if ( is_array( $a ) ) {
 						foreach ( $a as $k => $v ) {
 							$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:12px">';
-								$output .= "\t" . (string) $k . ': ';
+								$output .= $this->the_seo_framework_debug_hidden ? "\t" . (string) $k . ': {{{' : "\t" . '<font color="fredwilliamson">' . (string) $k . '</font>: {{{';
 								$output .= $this->the_seo_framework_debug_hidden ? PHP_EOL : '<br><div style="padding-left:12px">' . PHP_EOL;
-									$output .= "\t  " . gettype( $v ) . ': [';
+									$output .= "\t  " . gettype( $v ) . ': {';
 									$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:12px">';
 										$output .= "\t\t" . $this->get_debug_information( $v );
 									$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
-									$output .= "\t  " . ']' . PHP_EOL;
-								$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
+									$output .= "\t  " . '}' . PHP_EOL;
+								$output .= $this->the_seo_framework_debug_hidden ? '}}}' : '<br>}}}</div>';
 							$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
 						}
 					} else {
 						$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:12px">';
-							$output .= "\t" . (string) $num . ': ';
-							$output .= $this->the_seo_framework_debug_hidden ? PHP_EOL : '<br>' . PHP_EOL;
-							$output .= "\t  " . gettype( $a ) . ': [';
-							$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:12px">';
-								$output .= "\t\t" . $this->get_debug_information( $a );
-							$output .= $this->the_seo_framework_debug_hidden ? '' : '</div><br>' . PHP_EOL;
-							$output .= "\t  " . ']' . PHP_EOL;
+							$output .= $this->the_seo_framework_debug_hidden ? "\t" . (string) $num . ': {{{' : "\t" . '<font color="peterweller">' . (string) $num . '</font>: {{{';
+							$output .= $this->the_seo_framework_debug_hidden ? PHP_EOL : '<br><div style="padding-left:12px">' . PHP_EOL;
+								$output .= "\t  " . gettype( $a ) . ': {';
+								$output .= $this->the_seo_framework_debug_hidden ? '' : '<div style="padding-left:12px">';
+									$output .= "\t\t" . $this->get_debug_information( $a );
+								$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>' . PHP_EOL;
+								$output .= "\t  " . '}' . PHP_EOL;
+							$output .= $this->the_seo_framework_debug_hidden ? '}}}' : '<br>}}}</div>';
 						$output .= $this->the_seo_framework_debug_hidden ? '' : '</div>';
 					}
 				}
@@ -959,6 +986,9 @@ final class Debug implements Debug_Interface {
 		$is_year = $tsf->is_year();
 		$is_seo_settings_page = $tsf->is_seo_settings_page( true );
 
+		//* Don't debug the class object.
+		unset( $tsf );
+
 		//* Get all above vars, split them in two (true and false) and sort them by key names.
 		$vars = get_defined_vars();
 		$current = array_filter( $vars );
@@ -997,7 +1027,7 @@ final class Debug implements Debug_Interface {
 			$output .= $out . PHP_EOL;
 		}
 
-		$title = $tsf->is_admin() ? 'Current WordPress Screen + Expected WordPress Query' : 'Current WordPress Query';
+		$title = the_seo_framework()->is_admin() ? 'Current WordPress Screen + Expected WordPress Query' : 'Current WordPress Query';
 		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #666;"><h2 style="color:#222;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
 
 		$output = $this->the_seo_framework_debug_hidden ? $output : str_replace( PHP_EOL, '<br>' . PHP_EOL, $output );

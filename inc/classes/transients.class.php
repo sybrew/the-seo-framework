@@ -643,7 +643,6 @@ class Transients extends Sitemaps {
 
 			set_transient( $this->theme_doing_it_right_transient, $dir, 0 );
 		}
-
 	}
 
 	/**

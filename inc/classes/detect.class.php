@@ -835,11 +835,10 @@ class Detect extends Render {
 	/**
 	 * Detect if the current screen type is a page or taxonomy.
 	 *
-	 * @param string $type the Screen type
 	 * @staticvar array $is_page
-	 *
 	 * @since 2.3.1
 	 *
+	 * @param string $type the Screen type
 	 * @return bool true if post type is a page or post
 	 */
 	public function is_post_type_page( $type ) {
