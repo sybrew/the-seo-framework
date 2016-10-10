@@ -97,7 +97,7 @@ final class Load extends Deprecated implements Debug_Interface {
 	 * @since 2.2.2
 	 * @access private
 	 * @NOTE _doing_it_wrong notices go towards the callback. Unless this
-	 * function is used wrongfully. Then the notice is about this function.
+	 *      function is used wrongfully. Then the notice is about this function.
 	 *
 	 * @param array|string $callback the method array or function string.
 	 * @param string $version the version of The SEO Framework the function is used.
@@ -153,7 +153,7 @@ final class Load extends Deprecated implements Debug_Interface {
 						$output = call_user_func_array( array( $class, $method ), $args );
 					}
 				} else {
-					$this->_doing_it_wrong( esc_html( $class . '::' . $method . '()' ), esc_html__( 'Class or Method not found.', 'autodescription' ), esc_html( $version ) );
+					$this->_doing_it_wrong( esc_html( get_class( $class ) . '::' . $method . '()' ), esc_html__( 'Class or Method not found.', 'autodescription' ), esc_html( $version ) );
 				}
 			}
 		} elseif ( is_string( $class ) && $class ) {
@@ -176,12 +176,12 @@ final class Load extends Deprecated implements Debug_Interface {
 	 * Mark a filter as deprecated and inform when it has been used.
 	 *
 	 * @since 2.7.1
-	 * @see @this->_deprecated_function().
+	 * @see $this->_deprecated_function().
 	 * @access private
 	 *
-	 * @param string $filter		The function that was called.
-	 * @param string $version		The version of WordPress that deprecated the function.
-	 * @param string $replacement	Optional. The function that should have been called. Default null.
+	 * @param string $filter      The function that was called.
+	 * @param string $version     The version of WordPress that deprecated the function.
+	 * @param string $replacement Optional. The function that should have been called. Default null.
 	 */
 	public function _deprecated_filter( $filter, $version, $replacement = null ) {
 		$instance = Debug::get_instance();
@@ -196,9 +196,9 @@ final class Load extends Deprecated implements Debug_Interface {
 	 * @since 2.6.0
 	 * @access private
 	 *
-	 * @param string $function		The function that was called.
-	 * @param string $version		The version of WordPress that deprecated the function.
-	 * @param string $replacement	Optional. The function that should have been called. Default null.
+	 * @param string $function    The function that was called.
+	 * @param string $version     The version of WordPress that deprecated the function.
+	 * @param string $replacement Optional. The function that should have been called. Default null.
 	 */
 	public function _deprecated_function( $function, $version, $replacement = null ) {
 		$instance = Debug::get_instance();
@@ -213,9 +213,9 @@ final class Load extends Deprecated implements Debug_Interface {
 	 * @since 2.6.0
 	 * @access private
 	 *
-	 * @param string $function	The function that was called.
-	 * @param string $message	A message explaining what has been done incorrectly.
-	 * @param string $version	The version of WordPress where the message was added.
+	 * @param string $function The function that was called.
+	 * @param string $message  A message explaining what has been done incorrectly.
+	 * @param string $version  The version of WordPress where the message was added.
 	 */
 	public function _doing_it_wrong( $function, $message, $version ) {
 		$instance = Debug::get_instance();

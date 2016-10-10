@@ -405,6 +405,7 @@ TODO:
 	* Method `get_latest_post_id()` now uses WP_Query instead of a direct database call.
 * **Fixed:**
 	* Leftover CSS prefix name `seoframework-content-no-js` should've been `tsf-content-no-js`.
+	* Method `the_seo_framework()->call_function()` now doesn't result in a fatal error anymore if the method of an object doesn't exist in conjunction with when the class is supplied as an object instead of string.
 * **Removed:**
 	* Memory profiling output in the HTML code when `THE_SEO_FRAMEWORK_DEBUG` is defined as true.
 * **Other:**
