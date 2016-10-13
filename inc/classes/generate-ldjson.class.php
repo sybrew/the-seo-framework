@@ -441,8 +441,21 @@ class Generate_Ldjson extends Generate_Image {
 		/**
 		 * Sort by number of id's. Provides a cleaner layout, better Search Engine understanding and more consistent cache.
 		 */
-		if ( count( $trees ) > 1 )
-			array_multisort( array_map( 'count', $trees ), SORT_DESC, $trees );
+		if ( count( $trees ) > 1 ) {
+			/**
+			 * Applies filter 'the_seo_framework_breadcrumb_post_sorting_callback' : string|array
+			 * @since 2.7.1
+			 *
+			 * @param mixed $function The method or function callback. Default false.
+			 * @param array $trees The current tree list.
+			 */
+			$callback_filter = apply_filters_ref_array( 'the_seo_framework_breadcrumb_post_sorting_callback', array( false, $trees ) );
+			if ( $callback_filter ) {
+				$trees = $this->call_function( $callback_filter, '2.7.1', $trees );
+			} else {
+				array_multisort( array_map( 'count', $trees ), SORT_DESC, SORT_REGULAR, $trees );
+			}
+		}
 
 		$context = $this->schema_context();
 		$context_type = $this->schema_breadcrumblist();
@@ -739,13 +752,13 @@ class Generate_Ldjson extends Generate_Image {
 	}
 
 	/**
-	 * Build breadcrumb trees.
+	 * Builds breadcrumb trees.
 	 *
 	 * @since 2.6.0
 	 *
-	 * @param array The breadcrumb trees, with the key as parent.
+	 * @param array $kittens The breadcrumb trees, with the key as parent.
 	 * @param array $previous_tree A previous set tree to compare to, if set.
-	 * @return trees in order.
+	 * @return array Trees in order.
 	 */
 	protected function build_breadcrumb_trees( $kittens, array $previous_tree = array() ) {
 
