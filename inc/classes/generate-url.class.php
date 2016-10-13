@@ -82,7 +82,7 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function the_url( $url = '', $args = array() ) {
 
-		if ( $this->the_seo_framework_debug && false === $this->doing_sitemap ) $this->debug_init( __METHOD__, true, $debug_key = microtime( true ), get_defined_vars() );
+		$this->the_seo_framework_debug && false === $this->doing_sitemap and $this->debug_init( __METHOD__, true, $debug_key = microtime( true ), get_defined_vars() );
 
 		$args = $this->reparse_url_args( $args );
 
@@ -100,16 +100,11 @@ class Generate_Url extends Generate_Title {
 
 		$path = '';
 		$scheme = '';
-
-		/**
-		 * Trailing slash the post, or not.
-		 * @since 2.2.4
-		 */
 		$slashit = true;
 
-		if ( ! $args['home'] && empty( $url ) ) {
+		if ( false === $args['home'] && empty( $url ) ) {
 			/**
-			 * Get url from options
+			 * Get URL from options.
 			 * @since 2.2.9
 			 */
 			if ( $args['get_custom_field'] && $this->is_singular() ) {
@@ -130,8 +125,8 @@ class Generate_Url extends Generate_Title {
 		//* Translate the URL, when possible.
 		$path = $this->get_translation_path( $path, $args['id'], $args['external'] );
 
-		//* Domain Mapping canonical URL
-		if ( empty( $url ) ) {
+		//* Domain Mapping canonical URL.
+		if ( empty( $url ) && $this->is_domainmapping_active() ) {
 			$wpmu_url = $this->the_url_wpmudev_domainmap( $path, true );
 			if ( $wpmu_url && is_array( $wpmu_url ) ) {
 				$url = $wpmu_url[0];
@@ -139,8 +134,8 @@ class Generate_Url extends Generate_Title {
 			}
 		}
 
-		//* Domain Mapping canonical URL
-		if ( empty( $url ) ) {
+		//* Domain Mapping canonical URL.
+		if ( empty( $url ) && $this->is_donncha_domainmapping_active() ) {
 			$dm_url = $this->the_url_donncha_domainmap( $path, true );
 			if ( $dm_url && is_array( $dm_url ) ) {
 				$url = $dm_url[0];
@@ -160,22 +155,17 @@ class Generate_Url extends Generate_Title {
 		}
 
 		//* URL has been given manually or $args['home'] is true.
-		if ( ! isset( $scheme ) )
+		if ( empty( $scheme ) )
 			$scheme = is_ssl() ? 'https' : 'http';
 
 		$url = $this->set_url_scheme( $url, $scheme );
 
 		if ( $this->url_slashit ) {
-			/**
-			 * Slash it only if $slashit is true
-			 * @since 2.2.4
-			 */
-			if ( $slashit && ! $args['forceslash'] )
-				$url = user_trailingslashit( $url );
-
-			//* Be careful with the default permalink structure.
-			if ( $args['forceslash'] )
+			if ( $args['forceslash'] ) {
 				$url = trailingslashit( $url );
+			} elseif ( $slashit ) {
+				$url = user_trailingslashit( $url );
+			}
 		}
 
 		if ( $this->pretty_permalinks ) {
@@ -185,7 +175,7 @@ class Generate_Url extends Generate_Title {
 			$url = esc_url_raw( $url );
 		}
 
-		if ( $this->the_seo_framework_debug && false === $this->doing_sitemap ) $this->debug_init( __METHOD__, false, $debug_key, array( 'url_output' => $url ) );
+		$this->the_seo_framework_debug && false === $this->doing_sitemap and $this->debug_init( __METHOD__, false, $debug_key, array( 'url_output' => $url ) );
 
 		return $url;
 	}
@@ -218,16 +208,16 @@ class Generate_Url extends Generate_Title {
 		//* Passing back the defaults reduces the memory usage.
 		if ( empty( $defaults ) ) {
 			$defaults = array(
-				'paged' 			=> false,
-				'paged_plural' 		=> true,
-				'get_custom_field'	=> true,
-				'external'			=> false,
-				'is_term' 			=> false,
-				'post' 				=> null,
-				'term'				=> null,
-				'home'				=> false,
-				'forceslash'		=> false,
-				'id'				=> $this->get_the_real_ID(),
+				'paged'            => false,
+				'paged_plural'     => true,
+				'get_custom_field' => true,
+				'external'         => false,
+				'is_term'          => false,
+				'post'             => null,
+				'term'             => null,
+				'home'             => false,
+				'forceslash'       => false,
+				'id'               => $this->get_the_real_ID(),
 			);
 
 			$defaults = (array) apply_filters( 'the_seo_framework_url_args', $defaults, $args );
@@ -238,17 +228,17 @@ class Generate_Url extends Generate_Title {
 			return $defaults;
 
 		//* Array merge doesn't support sanitation. We're simply type casting here.
-		$args['paged'] 				= isset( $args['paged'] ) 				? (bool) $args['paged'] 			: $defaults['paged'];
-		$args['paged_plural'] 		= isset( $args['paged_plural'] ) 		? (bool) $args['paged_plural'] 		: $defaults['paged_plural'];
-		$args['get_custom_field'] 	= isset( $args['get_custom_field'] ) 	? (bool) $args['get_custom_field'] 	: $defaults['get_custom_field'];
-		$args['external'] 			= isset( $args['external'] ) 			? (bool) $args['external'] 			: $defaults['external'];
-		$args['is_term'] 			= isset( $args['is_term'] ) 			? (bool) $args['is_term'] 			: $defaults['is_term'];
-		$args['get_custom_field'] 	= isset( $args['get_custom_field'] ) 	? (bool) $args['get_custom_field'] 	: $defaults['get_custom_field'];
-		$args['post'] 				= isset( $args['post'] ) 				? (object) $args['post'] 			: $defaults['post'];
-		$args['term'] 				= isset( $args['term'] ) 				? (object) $args['term'] 			: $defaults['term'];
-		$args['home'] 				= isset( $args['home'] ) 				? (bool) $args['home'] 				: $defaults['home'];
-		$args['forceslash'] 		= isset( $args['forceslash'] ) 			? (bool) $args['forceslash'] 		: $defaults['forceslash'];
-		$args['id'] 				= isset( $args['id'] ) 					? (int) $args['id'] 				: $defaults['id'];
+		$args['paged']            = isset( $args['paged'] )            ? (bool) $args['paged']            : $defaults['paged'];
+		$args['paged_plural']     = isset( $args['paged_plural'] )     ? (bool) $args['paged_plural']     : $defaults['paged_plural'];
+		$args['get_custom_field'] = isset( $args['get_custom_field'] ) ? (bool) $args['get_custom_field'] : $defaults['get_custom_field'];
+		$args['external']         = isset( $args['external'] )         ? (bool) $args['external']         : $defaults['external'];
+		$args['is_term']          = isset( $args['is_term'] )          ? (bool) $args['is_term']          : $defaults['is_term'];
+		$args['get_custom_field'] = isset( $args['get_custom_field'] ) ? (bool) $args['get_custom_field'] : $defaults['get_custom_field'];
+		$args['post']             = isset( $args['post'] )             ? (object) $args['post']           : $defaults['post'];
+		$args['term']             = isset( $args['term'] )             ? (object) $args['term']           : $defaults['term'];
+		$args['home']             = isset( $args['home'] )             ? (bool) $args['home']             : $defaults['home'];
+		$args['forceslash']       = isset( $args['forceslash'] )       ? (bool) $args['forceslash']       : $defaults['forceslash'];
+		$args['id']               = isset( $args['id'] )               ? (int) $args['id']                : $defaults['id'];
 
 		return $args;
 	}
@@ -438,7 +428,7 @@ class Generate_Url extends Generate_Title {
 		if ( is_object( $post_id ) )
 			$post_id = isset( $post_id->ID ) ? $post_id->ID : $this->get_the_real_ID();
 
-		if ( is_null( $post_id ) )
+		if ( null === $post_id )
 			$post_id = $this->get_the_real_ID();
 
 		//* WPML support.
@@ -446,7 +436,7 @@ class Generate_Url extends Generate_Title {
 			$path = $this->get_relative_wmpl_url( $path, $post_id );
 
 		//* qTranslate X support. Can't work externally as we can't fetch the post's current language.
-		if ( ! $external && $this->is_qtranslate_active() )
+		if ( false === $external && $this->is_qtranslate_active() )
 			$path = $this->get_relative_qtranslate_url( $path, $post_id );
 
 		return $path;

@@ -252,6 +252,9 @@ TODO:
 
 **For everyone:**
 
+* **Added:**
+	/
+	* TODO MAYBE BuddyPress and bbPress image support?
 * **Changed:**
 	* The first two description separators are no longer marked "recommended". This is because the description does not need to support old browsers or old screen readers.
 * **Improved:**
@@ -384,6 +387,10 @@ TODO:
 	* Method `the_seo_framework()->generate_excerpt()` now has its third parameter (`$max_char_length`) default value increased by 1. From 154 to 155.
 * **Improved:**
 	/
+	* Reduced sitemap's generation memory usage.
+		* This means now 1200 posts, pages and custom post types can be generated without concern.
+			* This is 3600 posts in total.
+		* This means the previous sitemap transient has been invalidated. WordPress will clean this up automatically.
 	* Method `the_seo_framework()->call_function()` now passes objects, so you can use `$this` in the called function.
 	* Class overloading magic methods (`__wakeup()`, `__call()`, `__get()`, `__set()`) are now only initiated once and can't be reinitated or overloaded.
 	* TODO The old option update handler has been moved into the new 2.7.0 update handler.

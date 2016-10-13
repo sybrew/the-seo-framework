@@ -133,10 +133,11 @@ class Transients extends Sitemaps {
 		 * When the caching mechanism changes. Change this value.
 		 * Use hex. e.g. 0, 1, 2, 9, a, b
 		 */
-		$revision = '0';
+		$sitemap_revision = '1';
+		$theme_dir_revision = '0';
 
-		$this->sitemap_transient = $this->add_cache_key_suffix( 'tsf_sitemap_' . $revision );
-		$this->theme_doing_it_right_transient = 'tsf_tdir_' . $revision . '_' . $blog_id;
+		$this->sitemap_transient = $this->add_cache_key_suffix( 'tsf_sitemap_' . $sitemap_revision );
+		$this->theme_doing_it_right_transient = 'tsf_tdir_' . $theme_dir_revision . '_' . $blog_id;
 	}
 
 	/**

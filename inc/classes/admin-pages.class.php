@@ -145,10 +145,8 @@ class Admin_Pages extends Inpost {
 	 * @since 2.2.2
 	 */
 	public function settings_init() {
-
 		add_action( $this->seo_settings_page_hook . '_settings_page_boxes', array( $this, 'do_metaboxes' ) );
 		add_action( 'load-' . $this->seo_settings_page_hook, array( $this, 'metaboxes' ) );
-
 	}
 
 	/**
@@ -335,7 +333,6 @@ class Admin_Pages extends Inpost {
 				'main',
 				array()
 			);
-
 	}
 
 	/**
@@ -756,7 +753,7 @@ class Admin_Pages extends Inpost {
 
 		if ( $echo ) {
 			if ( $wrap ) {
-				echo sprintf( 'class="%s"', esc_attr( $class ) );
+				printf( 'class="%s"', esc_attr( $class ) );
 			} else {
 				echo esc_attr( $class );
 			}

@@ -171,8 +171,9 @@ class Sitemaps extends Metaboxes {
 				/**
 				 * Applies filters 'the_seo_framework_sitemap_post_limit' : int
 				 * @since 2.2.9
+				 * @since 2.7.1 Increased to 1200 from 700.
 				 */
-				$this->max_posts = (int) apply_filters( 'the_seo_framework_sitemap_post_limit', 700 );
+				$this->max_posts = (int) apply_filters( 'the_seo_framework_sitemap_post_limit', 1200 );
 
 				/**
 				 * Set at least 2000 variables free.
@@ -243,14 +244,15 @@ class Sitemaps extends Metaboxes {
 	 */
 	protected function output_sitemap() {
 
-		if ( ! headers_sent() )
-			header( 'Content-type: text/xml; charset=utf-8' );
-
 		//* Remove output, if any.
 		$this->clean_reponse_header();
 
+		if ( ! headers_sent() )
+			header( 'Content-type: text/xml; charset=utf-8' );
+
 		//* Fetch sitemap content and add trailing line. Already escaped internally.
-		echo $this->get_sitemap_content() . PHP_EOL;
+		$this->output_sitemap_content();
+		echo "\r\n";
 
 		// We're done now.
 		exit;
@@ -259,13 +261,13 @@ class Sitemaps extends Metaboxes {
 	/**
 	 * Output sitemap.xml content from transient.
 	 *
-	 * @since 2.2.9
+	 * @since 2.7.1
 	 *
 	 * @return string Sitemap XML contents.
 	 */
-	protected function get_sitemap_content() {
+	protected function output_sitemap_content() {
 
-		if ( $this->the_seo_framework_debug ) $timer_start = microtime( true );
+		$this->the_seo_framework_debug and $timer_start = microtime( true );
 
 		/**
 		 * Re-use the variable, eliminating database requests
@@ -273,31 +275,37 @@ class Sitemaps extends Metaboxes {
 		 */
 		$sitemap_content = $this->get_transient( $this->sitemap_transient );
 
-		if ( false === $sitemap_content ) {
-			$cached_content = "\r\n<!-- " . __( 'Sitemap is generated for this view', 'autodescription' ) . ' -->';
-		} else {
-			$cached_content = "\r\n<!-- " . __( 'Sitemap is served from cache', 'autodescription' ) . ' -->';
+		echo '<?xml version="1.0" encoding="UTF-8"?>' . "\r\n";
+
+		/**
+		 * Output debug prior output.
+		 * @since 2.7.1
+		 */
+		if ( $this->the_seo_framework_debug ) {
+			echo '<!-- Site estimated peak usage prior to generation: ' . number_format( memory_get_peak_usage() / 1024 / 1024, 3 ) . ' MB -->' . "\r\n";
+			echo '<!-- System estimated peak usage prior to generation: ' . number_format( memory_get_peak_usage( true ) / 1024 / 1024, 3 ) . ' MB -->' . "\r\n";
 		}
 
-		$content  = '<?xml version="1.0" encoding="UTF-8"?>' . "\r\n";
-		$content .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\r\n";
-		$content .= $this->setup_sitemap( $sitemap_content );
-		$content .= '</urlset>';
+		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\r\n";
+		echo $this->setup_sitemap( $sitemap_content );
+		echo '</urlset>';
 
-		$content .= $cached_content;
+		if ( false === $sitemap_content ) {
+			echo "\r\n" . '<!-- ' . esc_html__( 'Sitemap is generated for this view', 'autodescription' ) . ' -->';
+		} else {
+			echo "\r\n" . '<!-- ' . esc_html__( 'Sitemap is served from cache', 'autodescription' ) . ' -->';
+		}
 
 		/**
 		 * Output debug info.
 		 * @since 2.3.7
 		 */
 		if ( $this->the_seo_framework_debug ) {
-			$content .= "\r\n<!-- Site estimated peak usage: " . ( memory_get_peak_usage() / 1024 / 1024 ) . ' MB -->';
-			$content .= "\r\n<!-- System estimated peak usage: " . ( memory_get_peak_usage( true ) / 1024 / 1024 ) . ' MB -->';
-			$content .= "\r\n<!-- Freed memory prior to generation: " . $this->clean_up_globals( true ) / 1024 . ' kB -->';
-			$content .= "\r\n<!-- Sitemap generation time: " . ( number_format( microtime( true ) - $timer_start, 6 ) ) . ' seconds -->';
+			echo "\r\n" . '<!-- Site estimated peak usage: ' . number_format( memory_get_peak_usage() / 1024 / 1024, 3 ) . ' MB -->';
+			echo "\r\n" . '<!-- System estimated peak usage: ' . number_format( memory_get_peak_usage( true ) / 1024 / 1024, 3 ) . ' MB -->';
+			echo "\r\n" . '<!-- Freed memory prior to generation: ' . number_format( $this->clean_up_globals( true ) / 1024, 3 ) . ' kB -->';
+			echo "\r\n" . '<!-- Sitemap generation time: ' . ( number_format( microtime( true ) - $timer_start, 6 ) ) . ' seconds -->';
 		}
-
-		return $content;
 	}
 
 	/**
@@ -334,6 +342,8 @@ class Sitemaps extends Metaboxes {
 	 * @return string The sitemap content.
 	 */
 	protected function generate_sitemap() {
+
+		wp_is_ini_value_changeable( 'memory_limit' ) and @ini_set( 'memory_limit', WP_MAX_MEMORY_LIMIT );
 
 		$content = '';
 
@@ -395,23 +405,27 @@ class Sitemaps extends Metaboxes {
 		$timestamp = (bool) apply_filters( 'the_seo_framework_sitemap_timestamp', true );
 
 		if ( $timestamp )
-			$content .= '<!-- ' . __( 'Sitemap is generated on', 'autodescription' ) . ' ' . current_time( 'Y-m-d H:i:s' ) . ' -->' . "\r\n";
+			$content .= '<!-- ' . esc_html__( 'Sitemap is generated on', 'autodescription' ) . ' ' . current_time( 'Y-m-d H:i:s' ) . ' -->' . "\r\n";
+
+		$wp_query = new \WP_Query;
+		$wp_query->init();
+		$query = $wp_query->query = $wp_query->query_vars = array();
 
 		if ( $totalpages ) {
 			//* Ascend by the date for normal pages. Older pages get to the top of the list.
 			$args = array(
-				'numberposts' 		=> $totalpages,
-				'posts_per_page' 	=> $totalpages,
-				'post_type' 		=> 'page',
-				'orderby' 			=> 'date',
-				'order' 			=> 'ASC',
-				'post_status' 		=> 'publish',
-				'cache_results' 	=> false,
-				'suppress_filters'	=> true,
+				'posts_per_page'   => $totalpages,
+				'post_type'        => 'page',
+				'orderby'          => 'date',
+				'order'            => 'ASC',
+				'post_status'      => 'publish',
+				'fields'           => 'ids',
+				'cache_results'    => false,
+				'suppress_filters' => true,
+				'no_found_rows'    => true,
 			);
-			$get_posts = new \WP_Query;
-			$latest_pages = $get_posts->query( $args );
-			unset( $get_posts );
+			$wp_query->query = $wp_query->query_vars = wp_parse_args( $args );
+			$latest_pages = $wp_query->get_posts();
 		}
 		$latest_pages_amount = (int) count( $latest_pages );
 
@@ -422,7 +436,10 @@ class Sitemaps extends Metaboxes {
 			/**
 			 * This can be heavy.
 			 */
-			foreach ( $latest_pages as $page ) {
+			foreach ( $latest_pages as $page_id ) {
+
+				$page = get_post( $page_id );
+
 				if ( isset( $page->ID ) ) {
 					$page_id = $page->ID;
 
@@ -468,18 +485,18 @@ class Sitemaps extends Metaboxes {
 		if ( $totalposts ) {
 			//* Descend by the date for posts. The latest posts get to the top of the list after pages.
 			$args = array(
-				'numberposts' 		=> $totalposts,
-				'posts_per_page' 	=> $totalposts,
-				'post_type' 		=> 'post',
-				'orderby' 			=> 'date',
-				'order' 			=> 'DESC',
-				'post_status' 		=> 'publish',
-				'cache_results' 	=> false,
-				'suppress_filters'	=> true,
+				'posts_per_page'   => $totalposts,
+				'post_type'        => 'post',
+				'orderby'          => 'date',
+				'order'            => 'DESC',
+				'post_status'      => 'publish',
+				'fields'           => 'ids',
+				'cache_results'    => false,
+				'suppress_filters' => true,
+				'no_found_rows'    => true,
 			);
-			$get_posts = new \WP_Query;
-			$latest_posts = $get_posts->query( $args );
-			unset( $get_posts );
+			$wp_query->query = $wp_query->query_vars = wp_parse_args( $args );
+			$latest_posts = $wp_query->get_posts();
 		}
 		$latest_posts_amount = (int) count( $latest_posts );
 
@@ -512,7 +529,10 @@ class Sitemaps extends Metaboxes {
 			/**
 			 * This can be heavy.
 			 */
-			foreach ( $latest_posts as $post ) {
+			foreach ( $latest_posts as $post_id ) {
+
+				$post = get_post( $post_id );
+
 				if ( isset( $post->ID ) ) {
 					$post_id = $post->ID;
 
@@ -577,18 +597,18 @@ class Sitemaps extends Metaboxes {
 			if ( $cpt ) {
 				//* Descend by the date for CPTs. The latest posts get to the top of the list after pages.
 				$args = array(
-					'numberposts' 		=> $total_cpt_posts,
-					'posts_per_page' 	=> $total_cpt_posts,
-					'post_type' 		=> $cpt,
-					'orderby' 			=> 'date',
-					'order' 			=> 'DESC',
-					'post_status' 		=> 'publish',
-					'cache_results' 	=> false,
-					'suppress_filters' 	=> true,
+					'posts_per_page'   => $total_cpt_posts,
+					'post_type'        => $cpt,
+					'orderby'          => 'date',
+					'order'            => 'DESC',
+					'post_status'      => 'publish',
+					'fields'           => 'ids',
+					'cache_results'    => false,
+					'suppress_filters' => true,
+					'no_found_rows'    => true,
 				);
-				$get_posts = new \WP_Query;
-				$latest_cpt_posts = $get_posts->query( $args );
-				unset( $get_posts );
+				$wp_query->query = $wp_query->query_vars = wp_parse_args( $args );
+				$latest_cpt_posts = $wp_query->get_posts();
 			}
 		}
 		$latest_cpt_posts_amount = (int) count( $latest_cpt_posts );
@@ -615,7 +635,10 @@ class Sitemaps extends Metaboxes {
 			/**
 			 * This can be heavy.
 			 */
-			foreach ( $latest_cpt_posts as $ctp_post ) {
+			foreach ( $latest_cpt_posts as $ctp_post_id ) {
+
+				$ctp_post = get_post( $ctp_post_id );
+
 				if ( isset( $ctp_post->ID ) ) {
 					$cpt_id = $ctp_post->ID;
 

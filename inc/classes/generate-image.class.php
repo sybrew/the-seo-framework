@@ -142,11 +142,11 @@ class Generate_Image extends Generate_Url {
 		//* Passing back the defaults reduces the memory usage.
 		if ( empty( $defaults ) ) {
 			$defaults = array(
-				'post_id'	=> $this->get_the_real_ID(),
-				'image'		=> '',
-				'size'		=> 'full',
-				'icon'		=> false,
-				'attr'		=> array(),
+				'post_id'    => $this->get_the_real_ID(),
+				'image'      => '',
+				'size'       => 'full',
+				'icon'       => false,
+				'attr'       => array(),
 				'disallowed' => array(),
 			);
 
@@ -158,12 +158,12 @@ class Generate_Image extends Generate_Url {
 			return $defaults;
 
 		//* Array merge doesn't support sanitation. We're simply type casting here.
-		$args['post_id'] 	= isset( $args['post_id'] ) 	? (int) $args['post_id'] 		: $defaults['post_id'];
-		$args['image'] 		= isset( $args['image'] ) 		? (string) $args['image'] 		: $defaults['image'];
-		$args['size'] 		= isset( $args['size'] ) 		? $args['size'] 				: $defaults['size']; // Mixed.
-		$args['icon'] 		= isset( $args['icon'] ) 		? (bool) $args['icon'] 			: $defaults['icon'];
-		$args['attr'] 		= isset( $args['attr'] ) 		? (array) $args['attr'] 		: $defaults['attr'];
-		$args['disallowed'] = isset( $args['disallowed'] ) 	? (array) $args['disallowed'] 	: $defaults['disallowed'];
+		$args['post_id']    = isset( $args['post_id'] )    ? (int) $args['post_id']      : $defaults['post_id'];
+		$args['image']      = isset( $args['image'] )      ? (string) $args['image']     : $defaults['image'];
+		$args['size']       = isset( $args['size'] )       ? $args['size']               : $defaults['size']; // Mixed.
+		$args['icon']       = isset( $args['icon'] )       ? (bool) $args['icon']        : $defaults['icon'];
+		$args['attr']       = isset( $args['attr'] )       ? (array) $args['attr']       : $defaults['attr'];
+		$args['disallowed'] = isset( $args['disallowed'] ) ? (array) $args['disallowed'] : $defaults['disallowed'];
 
 		return $args;
 	}
