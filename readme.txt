@@ -213,7 +213,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * This maintenance release fixes ... TODO
 * Class structure ... TODO
 * Many functions now allow to echo the output now trough variable to prevent output sanitation mistakes... TODO
-* WordPress.com VIP standards have been enforced even more.. TODO
+* Google's Knowledge Graph has been updated significantly. This update makes sure all the latest standards are enforced!
 
 **SEO tip of the Update:**
 
@@ -254,7 +254,13 @@ TODO:
 
 * **Added:**
 	/
-	* TODO MAYBE BuddyPress and bbPress image support?
+	* TODO Schema.org Logo addition. This removes the Schema.org logo in the Social Profile Links markup (previously marked as "Knowledge Graph settings").
+	* TODO Site Logo detection!
+		* Only when the theme supports it. You can upload one through the customizer (Site Identity).
+		* This allows for a new fallback image! This one has priority over the Site Icon.
+		* The Knowledge Graph makes good use of this logo, it has priority over the Site Icon.
+	/
+	* TODO A new General settings metabox!
 * **Changed:**
 	* The first two description separators are no longer marked "recommended". This is because the description does not need to support old browsers or old screen readers.
 * **Improved:**
@@ -278,6 +284,10 @@ TODO:
 	* All previous automated description transients have been invalidated.
 		* Old caches will automatically be cleaned from the database.
 		* New caches will automatically be set up. This might cause a small performance hit after the update, which should automatically be resolved.
+* **Removed:**
+	/
+	* TODO Knowledge Graph Settings metabox.
+		* It has been moved inside the Schema Settings metabox.
 * **Fixed:**
 	/
 	* TODO On some themes, a fatal error was output when editing posts. (requires confirmation)
@@ -417,6 +427,10 @@ TODO:
 	* Memory profiling output in the HTML code when `THE_SEO_FRAMEWORK_DEBUG` is defined as true.
 * **Other:**
 	* Cleaned up code.
+* **Filter notes:**
+	* **Added:**
+		* `(array) the_seo_framework_ld_json_breadcrumb_terms`. Used to filter the found terms.
+		* `(array) the_seo_framework_breadcrumb_post_sorting_callback`. Used to apply your own sorting function for terms.
 
 = 2.7.0 - Contemporary Aspiration =
 

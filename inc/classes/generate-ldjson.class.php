@@ -344,7 +344,15 @@ class Generate_Ldjson extends Generate_Image {
 		if ( ! $r || is_wp_error( $r ) )
 			return '';
 
-		$cats = get_the_terms( $post_id, $cat_type );
+		/**
+		 * Applies filter 'the_seo_framework_ld_json_breadcrumb_terms' : array
+		 * @since 2.7.1
+		 *
+		 * @param array $cats The LD+Json terms that are being used
+		 * @param int $post_id The current Post ID.
+		 * @param string $cat_type The current taxonomy (either category or product_cat).
+		 */
+		$cats = (array) apply_filters_ref_array( 'the_seo_framework_ld_json_breadcrumb_terms', array( get_the_terms( $post_id, $cat_type ), $post_id, $cat_type ) );
 		$cats = wp_list_pluck( $cats, 'parent', 'term_id' );
 		asort( $cats, SORT_NUMERIC );
 
