@@ -400,6 +400,9 @@ class Admin_Pages extends Inpost {
 
 		$request = isset( $_REQUEST ) ? $_REQUEST : null;
 
+		if ( null === $request )
+			return;
+
 		if ( isset( $request['settings-updated'] ) && 'true' === $request['settings-updated'] )
 			$this->do_dismissible_notice( $this->page_defaults['saved_notice_text'], 'updated' );
 		elseif ( isset( $request['reset'] ) && 'true' === $request['reset'] )

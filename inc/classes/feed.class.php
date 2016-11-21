@@ -125,7 +125,7 @@ class Feed extends Transients {
 
 			if ( $this->get_option( 'source_the_feed' ) ) {
 
-				//* Fetch permalink and add it to the content.
+				//* Fetch permalink and add it to the content. Already escaped.
 				$permalink = $this->the_url();
 
 				/**
@@ -133,7 +133,7 @@ class Feed extends Transients {
 				 * @since 2.6.0
 				 */
 				$source_i18n = (string) apply_filters( 'the_seo_framework_feed_source_link_text', _x( 'Source', 'The content source', 'autodescription' ) );
-				$content .= PHP_EOL . '<p><a href="' . $permalink . '" rel="external nofollow">' . $source_i18n . '</a></p>';
+				$content .= PHP_EOL . '<p><a href="' . $permalink . '" rel="external nofollow">' . esc_html( $source_i18n ) . '</a></p>';
 			}
 		}
 

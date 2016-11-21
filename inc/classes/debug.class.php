@@ -213,7 +213,7 @@ final class Debug implements Debug_Interface {
 	 * @param string $message	A message explaining what has been done incorrectly.
 	 * @param string $version	The version of WordPress where the message was added.
 	 */
-	public function _doing_it_wrong( $function, $message, $version ) {
+	public function _doing_it_wrong( $function, $message, $version = null ) {
 		/**
 		* Fires when the given function is being used incorrectly.
 		*
@@ -258,13 +258,13 @@ final class Debug implements Debug_Interface {
 	 * The current behavior is to trigger a user error if WP_DEBUG is true.
 	 *
 	 * @since 2.7.0
-	 * @since 2.7.1 1. Now escapes first parameter.
-	 * 				2. Removed check for gettext.
+	 * @since 2.7.1 1. Now escapes all parameters.
+	 *              2. Removed check for gettext.
 	 * @access private
 	 * @todo Escape translation string.
 	 *
-	 * @param string $p_or_m	The Property or Method.
-	 * @param string $message	A message explaining what has been done incorrectly.
+	 * @param string $p_or_m The Property or Method.
+	 * @param string $message A message explaining what has been done incorrectly.
 	 */
 	public function _inaccessible_p_or_m( $p_or_m, $message = '' ) {
 
@@ -279,18 +279,18 @@ final class Debug implements Debug_Interface {
 		do_action( 'the_seo_framework_inaccessible_p_or_m_run', $p_or_m, $message );
 
 		/**
-		* Filter whether to trigger an error for _doing_it_wrong() calls.
-		*
-		* @since 3.1.0
-		*
-		* @param bool $trigger Whether to trigger the error for _doing_it_wrong() calls. Default true.
-		*/
+		 * Filter whether to trigger an error for _doing_it_wrong() calls.
+		 *
+		 * @since 3.1.0
+		 *
+		 * @param bool $trigger Whether to trigger the error for _doing_it_wrong() calls. Default true.
+		 */
 		if ( WP_DEBUG && apply_filters( 'the_seo_framework_inaccessible_p_or_m_trigger_error', true ) ) {
 
 			set_error_handler( array( $this, 'error_handler_inaccessible_call' ) );
 
 			/* translators: 1: Method or Property name, 2: Message */
-			trigger_error( sprintf( __( '%1$s is not <strong>accessible</strong>. %2$s', 'autodescription' ), esc_html( $p_or_m ), $message ) );
+			trigger_error( sprintf( esc_html__( '%1$s is not accessible. %2$s', 'autodescription' ), '<code>' . esc_html( $p_or_m ) . '</code>', esc_html( $message ) ) );
 
 			restore_error_handler();
 		}

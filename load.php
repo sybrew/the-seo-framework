@@ -4,6 +4,8 @@
  */
 use The_SEO_Framework\Load as Load;
 
+defined( 'ABSPATH' ) or die;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
@@ -21,15 +23,13 @@ use The_SEO_Framework\Load as Load;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'ABSPATH' ) or die;
-
 add_action( 'admin_init', 'the_seo_framework_upgrade', 5 );
 /**
  * Determines whether the plugin needs an option upgrade.
  *
  * @since 2.7.0
  * @action admin_init
- * @priority
+ * @priority 5
  */
 function the_seo_framework_upgrade() {
 
@@ -115,7 +115,7 @@ require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'optionsapi.php' );
  * @NOTE 'The_SEO_Framework' is a reserved namespace. Using it outside of this plugin's scope will result in an error.
  *
  * @param string $class The class name.
- * @return bool False if file hasn't yet been included, otherwise true.
+ * @return bool False if file couldn't be included, otherwise true.
  */
 function _autoload_the_seo_framework_classes( $class ) {
 
@@ -125,7 +125,7 @@ function _autoload_the_seo_framework_classes( $class ) {
 	static $loaded = array();
 
 	if ( isset( $loaded[ $class ] ) )
-		return true;
+		return $loaded[ $class ];
 
 	if ( false !== strpos( $class, '_Interface' ) ) {
 		$path = THE_SEO_FRAMEWORK_DIR_PATH_INTERFACE;
@@ -139,5 +139,5 @@ function _autoload_the_seo_framework_classes( $class ) {
 	$_class = str_replace( '_interface', '', $_class );
 	$_class = str_replace( '_', '-', $_class );
 
-	return $loaded[ $class ] = require_once( $path . $_class . $extension );
+	return $loaded[ $class ] = (bool) require_once( $path . $_class . $extension );
 }

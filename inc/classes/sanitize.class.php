@@ -979,26 +979,18 @@ class Sanitize extends Admin_Pages {
 			if ( ! $allow_external )
 				$url = $this->s_relative_url( $url );
 
-			//* Find a path.
-			if ( _wp_can_use_pcre_u() ) {
-				//* URL pattern excluding path.
-				$pattern 	= '/'
-							. '((((http)(s)?)?)\:)?' 	// 1: maybe http: https:
-							. '(\/\/)?'				// 2: maybe slash slash
-							. '((www.)?)'				// 3: maybe www.
-							. '(.*\.[a-zA-Z0-9]*)'	// 4: any legal domain with tld
-							. '(?:\/)?'				// 5: trailing slash
-							. '/'
-							;
-
-				$is_path = ! preg_match( $pattern, $url );
-			} else {
-				$parsed_url = wp_parse_url( $url );
-				$is_path = ! isset( $parsed_url['host'] ) && isset( $parsed_url['path'] );
-			}
+			//* URL pattern excluding path.
+			$pattern 	= '/'
+						. '((((http)(s)?)?)\:)?' // 1: maybe http: https:
+						. '(\/\/)?'              // 2: maybe slash slash
+						. '((www.)?)'            // 3: maybe www.
+						. '(.*\.[a-zA-Z0-9]*)'   // 4: any legal domain with tld
+						. '(?:\/)?'              // 5: trailing slash
+						. '/'
+						;
 
 			//* If link is relative, make it full again
-			if ( $is_path ) {
+			if ( ! preg_match( $pattern, $url ) ) {
 
 				//* The url is a relative path
 				$path = $url;

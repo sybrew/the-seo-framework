@@ -1,4 +1,4 @@
-=== The SEO Framework ===
+see=== The SEO Framework ===
 Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: google, bing, open graph, seo, xml sitemap, breadcrumbs, meta, search engine, pagerank, serp, facebook, twitter
@@ -203,9 +203,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **Important Note:**
 
 * PHP 5.2 hasn't recieved updates for [over 5 years](http://php.net/eol.php) and using it is a major security risk.
-* **This maintenance release completely drops support for PHP 5.2**. So, if you're using PHP 5.2, from this update on you can no longer activate The SEO Framework.
-* For developers PHP 5.2 is a practicality and convinience hindrance and is also source for bugs. Sometimes, we have to split simple code over multiple lines just to support it.
-* WordPress is about to drop support for PHP 5.2 as well in WordPress 4.7.0. See proposed [trac ticket 36335](https://core.trac.wordpress.org/ticket/36335).
+* **This maintenance release completely drops support for PHP 5.2**. So, if you're using PHP 5.2, from this version on you can no longer run The SEO Framework.
+* PHP 5.2 is a practicality and convinience hindrance for developers and is also source for bugs. Sometimes, we have to split otherwise simple code over multiple lines just to support it.
+* WordPress is about to drop support for PHP 5.2 as well in the near future. See proposed [trac ticket 36335](https://core.trac.wordpress.org/ticket/36335).
 * Inform your host to keep updated! Read more about informing your host [here](https://wordpress.org/about/requirements/).
 
 **Summarized:**
@@ -300,6 +300,15 @@ TODO:
 		* https://wordpress.org/support/topic/category-page-title-with-weird-unwanted-prefix/
 	/
 	* When the title exceeds 154 characters, the description will no longer contain the complete post's content. Instead, the title will now be omitted and the description length has been limited to 155 characters.
+	* WPML sitemap generated URL path now reflects the language. TODO confirm.
+	* TODO Robots.txt settings outputted incorrect notice when site is blocked from robots through WordPress reading settings.
+	* TODO bbPress forum topic ID's weren't correctly recognized. With this fix, these issues have been resolved:
+		- TODO The title is now correct.
+		- TODO The description is now correct.
+		- TODO The canonical URL is now correct.
+	* Sitemap custom post type generation now doesn't add a rogue backslash anymore, but instead correctly outputs a tab.
+	/
+	* TODO AnsPress category canonical URL is now correct on its categories. @link https://wordpress.org/support/topic/anspress-categories/
 
 **For translators:**
 
@@ -395,6 +404,7 @@ TODO:
 	* File `query.class.php` now falls under GPLv3 instead of GPLv2+.
 	* Method `the_seo_framework()->call_function()` is now marked private. It's written and used as an internal handler for filters.
 	* Method `the_seo_framework()->generate_excerpt()` now has its third parameter (`$max_char_length`) default value increased by 1. From 154 to 155.
+	* TODO Method `the_seo_framework()->robots_txt()` has been moved to `Init` from `Sitemaps`.
 * **Improved:**
 	/
 	* Reduced sitemap's generation memory usage.
@@ -423,6 +433,7 @@ TODO:
 * **Fixed:**
 	* Leftover CSS prefix name `seoframework-content-no-js` should've been `tsf-content-no-js`.
 	* Method `the_seo_framework()->call_function()` now doesn't result in a fatal error anymore if the method of an object doesn't exist in conjunction with when the class is supplied as an object instead of string.
+	* The plugin no longer crashes the site on activation when the plugin classes have been disabled through mu-filters.
 * **Removed:**
 	* Memory profiling output in the HTML code when `THE_SEO_FRAMEWORK_DEBUG` is defined as true.
 * **Other:**

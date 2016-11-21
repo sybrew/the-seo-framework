@@ -88,10 +88,10 @@ class Sitemaps extends Metaboxes {
 	}
 
 	/**
-	 * Whether we can output sitemap or not based on options.
+	 * Determines whether we can output sitemap or not based on options.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
+	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
@@ -113,14 +113,14 @@ class Sitemaps extends Metaboxes {
 	 * Adds rewrite rule to WordPress
 	 * This rule defines the sitemap.xml output
 	 *
-	 * @param bool $override add the rule anyway, regardless of setting.
-	 *
 	 * @since 2.2.9
+	 *
+	 * @param bool $force add the rule anyway, regardless of detected environment.
 	 */
-	public function rewrite_rule_sitemap( $run = false ) {
+	public function rewrite_rule_sitemap( $force = false ) {
 
 		//* Adding rewrite rules only has effect when permalink structures are active.
-		if ( $this->can_run_sitemap() || $run ) {
+		if ( $this->can_run_sitemap() || $force ) {
 
 			/**
 			 * Don't do anything if a sitemap plugin is active.
@@ -132,15 +132,15 @@ class Sitemaps extends Metaboxes {
 
 			add_rewrite_rule( 'sitemap\.xml$', 'index.php?the_seo_framework_sitemap=xml', 'top' );
 		}
-
 	}
 
 	/**
-	 * Register the_seo_framework_sitemap to wp_query
-	 *
-	 * @param array vars The WP_Query vars
+	 * Registers the_seo_framework_sitemap to WP_Query.
 	 *
 	 * @since 2.2.9
+	 *
+	 * @param array $vars The WP_Query variables.
+	 * @return array $vars The adjusted vars.
 	 */
 	public function enqueue_sitemap_query_vars( $vars ) {
 
@@ -151,7 +151,8 @@ class Sitemaps extends Metaboxes {
 	}
 
 	/**
-	 * Maybe Output sitemap.xml 'file' and header.
+	 * Outputs sitemap.xml 'file' and header on sitemap query.
+	 * Also cleans up globals and sets up variables.
 	 *
 	 * @since 2.2.9
 	 *
@@ -185,11 +186,10 @@ class Sitemaps extends Metaboxes {
 				$this->output_sitemap();
 			}
 		}
-
 	}
 
 	/**
-	 * Destroy unused $GLOBALS.
+	 * Destroys unused $GLOBALS. To be used prior to outputting sitemap.
 	 *
 	 * @since 2.6.0
 	 *
@@ -238,7 +238,7 @@ class Sitemaps extends Metaboxes {
 	}
 
 	/**
-	 * Output sitemap.xml 'file' and header.
+	 * Outputs sitemap.xml 'file' and header.
 	 *
 	 * @since 2.2.9
 	 */
@@ -660,7 +660,7 @@ class Sitemaps extends Metaboxes {
 
 								//* Some CPT don't set modified time.
 								if ( '0000-00-00 00:00:00' !== $cpt_modified_gmt )
-									$content .= "\t\<lastmod>" . $this->gmt2date( $timestamp_format, $cpt_modified_gmt ) . "</lastmod>\r\n";
+									$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $cpt_modified_gmt ) . "</lastmod>\r\n";
 							}
 
 							$content .= "\t\t<priority>" . number_format( $priority_cpt, 1 ) . "</priority>\r\n";
@@ -825,17 +825,14 @@ class Sitemaps extends Metaboxes {
 	}
 
 	/**
-	 * Edits the robots.txt output
-	 *
-	 * Requires not to have a robots.txt file in the root directory
-	 *
-	 * @uses robots_txt filter located at WP core
+	 * Edits the robots.txt output.
+	 * Requires not to have a robots.txt file in the root directory.
 	 *
 	 * @since 2.2.9
-	 *
+	 * @uses robots_txt filter located at WP core
 	 * @global int $blog_id;
 	 *
-	 * @todo maybe combine with noindex/noarchive/(nofollow) -> only when object caching?
+	 * @return string Robots.txt output.
 	 */
 	public function robots_txt( $robots_txt = '', $public = '' ) {
 		global $blog_id;

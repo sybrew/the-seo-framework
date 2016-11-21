@@ -92,10 +92,11 @@ switch ( $instance ) :
 		 * @since 2.2.4
 		 */
 		$home_title_args = $this->generate_home_title( true, '', '', true, false );
-		if ( $this->home_page_add_title_tagline() )
+		if ( $this->home_page_add_title_tagline() ) {
 			$home_title_placeholder = $this->process_title_additions( $home_title_args['blogname'], $home_title_args['title'], $home_title_args['seplocation'] );
-		else
+		} else {
 			$home_title_placeholder = $home_title_args['title'];
+		}
 
 		/**
 		 * If the home title is fetched from the post, notify about that instead.
@@ -136,7 +137,7 @@ switch ( $instance ) :
 			$description_args = array(
 				'id' => $home_id,
 				'is_home' => true,
-				'get_custom_field' => false
+				'get_custom_field' => false,
 			);
 
 			$description_placeholder = $this->generate_description( '', $description_args );
@@ -151,7 +152,6 @@ switch ( $instance ) :
 			$home_description_frompost = true;
 
 		/**
-		 *
 		 * If the HomePage Description empty, it will check for the InPost
 		 * Description set on the Home Page. And it will set the InPost
 		 * Description as placeholder.
@@ -195,7 +195,7 @@ switch ( $instance ) :
 				<strong><?php printf( esc_html__( 'Custom %s Title', 'autodescription' ), $home_page_i18n ); ?></strong>
 				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 50 to 55 characters', 'autodescription' ) ?>">[?]</a>
 				<span class="description tsf-counter">
-					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="' . $this->field_id( 'homepage_title', false ) . '_chars">'. mb_strlen( $tit_len ) .'</span>' ); ?>
+					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="' . esc_attr( $this->field_id( 'homepage_title', false ) ) . '_chars">' . (int) mb_strlen( $tit_len ) . '</span>' ); ?>
 					<span class="hide-if-no-js tsf-ajax"></span>
 				</span>
 			</label>
@@ -216,7 +216,7 @@ switch ( $instance ) :
 				<strong><?php printf( esc_html__( 'Custom %s Description', 'autodescription' ), $home_page_i18n ); ?></strong>
 				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1' ); ?>" target="_blank" title="<?php _e( 'Recommended Length: 145 to 155 characters', 'autodescription' ) ?>">[?]</a>
 				<span class="description tsf-counter">
-					<?php printf( __( 'Characters Used: %s', 'autodescription' ), '<span id="' . $this->field_id( 'homepage_description', false ) . '_chars">'. mb_strlen( $desc_len ) .'</span>' ); ?>
+					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="' . esc_attr( $this->field_id( 'homepage_description', false ) ) . '_chars">' . (int) mb_strlen( $desc_len ) . '</span>' ); ?>
 					<span class="hide-if-no-js tsf-ajax"></span>
 				</span>
 			</label>

@@ -217,7 +217,7 @@ final class Load extends Deprecated implements Debug_Interface {
 	 * @param string $message  A message explaining what has been done incorrectly.
 	 * @param string $version  The version of WordPress where the message was added.
 	 */
-	public function _doing_it_wrong( $function, $message, $version ) {
+	public function _doing_it_wrong( $function, $message, $version = null ) {
 		$instance = Debug::get_instance();
 		$instance->_doing_it_wrong( $function, $message, $version );
 	}
@@ -249,7 +249,7 @@ final class Load extends Deprecated implements Debug_Interface {
 	 * @param mixed function args.
 	 * @return void early if debugging is disabled or when storing cache values.
 	 */
-	public function debug_init( $method, $store, $debug_key ) {
+	public function debug_init( $method, $store, $debug_key = null ) {
 
 		$instance = Debug::get_instance();
 

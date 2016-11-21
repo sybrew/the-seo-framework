@@ -815,7 +815,7 @@ class Render extends Admin_Init {
 		 * @deprecated
 		 * @since 2.7.0
 		 */
-		if ( ! apply_filters( 'the_seo_framework_output_canonical', true, $this->get_the_real_ID() ) ) {
+		if ( true !== apply_filters( 'the_seo_framework_output_canonical', true, $this->get_the_real_ID() ) ) {
 			$this->_deprecated_filter( 'the_seo_framework_output_canonical', '2.7.0', "add_filter( 'the_seo_framework_rel_canonical_output', '__return_empty_string' );" );
 			return '';
 		}

@@ -1037,10 +1037,14 @@ class Query extends Compat {
 	 * Determines whether the current loop is a multipage.
 	 *
 	 * @since 2.7.0
+	 * @global int $pages Used as reference.
 	 *
 	 * @return bool True if multipage.
 	 */
 	protected function is_multipage() {
+		global $pages;
+
+		$_pages = $pages;
 
 		$post = $this->is_singular() || $this->is_front_page() ? get_post( $this->get_the_real_ID() ) : null;
 
@@ -1053,9 +1057,9 @@ class Query extends Compat {
 				if ( 0 === strpos( $content, '<!--nextpage-->' ) )
 					$content = substr( $content, 15 );
 
-				$pages = explode( '<!--nextpage-->', $content );
+				$_pages = explode( '<!--nextpage-->', $content );
 			} else {
-				$pages = array( $post->post_content );
+				$_pages = array( $post->post_content );
 			}
 		} else {
 			return false;
@@ -1069,13 +1073,13 @@ class Query extends Compat {
 		 *
 		 * @since 4.4.0 WordPress core
 		 *
-		 * @param array $pages Array of "pages" derived from the post content.
+		 * @param array $_pages Array of "pages" derived from the post content.
 		 *              of `<!-- nextpage -->` tags..
 		 * @param WP_Post $post  Current post object.
 		 */
-		$pages = apply_filters( 'content_pagination', $pages, $post );
+		$_pages = apply_filters( 'content_pagination', $_pages, $post );
 
-		$numpages = count( $pages );
+		$numpages = count( $_pages );
 
 		if ( $numpages > 1 ) {
 			$multipage = true;

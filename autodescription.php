@@ -33,11 +33,11 @@ defined( 'ABSPATH' ) or die;
 //* Debug. Not to be used on production websites as it dumps and/or disables all kinds of stuff everywhere.
 //add_action( 'plugins_loaded', function() { if ( is_super_admin() ) {
 	//if ( is_admin() ) {
-	//		define( 'THE_SEO_FRAMEWORK_DEBUG', true );
-	//		define( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN', true );
-	//		define( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS', true );
-	//		update_option( 'the_seo_framework_upgraded_db_version', '0' );
-	//		add_filter( 'the_seo_framework_use_object_cache', '__return_false' );
+		//define( 'THE_SEO_FRAMEWORK_DEBUG', true );
+		//define( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN', true );
+		//define( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS', true );
+		//update_option( 'the_seo_framework_upgraded_db_version', '0' );
+		//add_filter( 'the_seo_framework_use_object_cache', '__return_false' );
 	//}
 //}},0);
 
@@ -49,7 +49,7 @@ defined( 'ABSPATH' ) or die;
 define( 'THE_SEO_FRAMEWORK_VERSION', '2.7.0' );
 
 /**
- * Plugin Database version for lightweight version comparing.
+ * Plugin Database version for lightweight version upgrade comparing.
  * @since 2.7.0
  */
 define( 'THE_SEO_FRAMEWORK_DB_VERSION', '2701' );
@@ -179,10 +179,13 @@ function the_seo_framework_flush_rewrite_rules_activation() {
 	global $wp_rewrite;
 
 	$the_seo_framework = the_seo_framework();
-	$the_seo_framework->rewrite_rule_sitemap( true );
 
-	$wp_rewrite->init();
-	$wp_rewrite->flush_rules( true );
+	if ( isset( $the_seo_framework ) ) {
+		$the_seo_framework->rewrite_rule_sitemap( true );
+
+		$wp_rewrite->init();
+		$wp_rewrite->flush_rules( true );
+	}
 }
 
 register_deactivation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framework_flush_rewrite_rules_deactivation' );

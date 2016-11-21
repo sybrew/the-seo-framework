@@ -74,8 +74,6 @@ class Core {
 	 * @return void
 	 */
 	final public function __call( $name, $arguments ) {
-
-		$debug_instance = Debug::get_instance();
 		the_seo_framework()->_inaccessible_p_or_m( 'the_seo_framework()->' . esc_html( $name ) . '()' );
 		return;
 	}
@@ -745,7 +743,7 @@ class Core {
 					}
 
 					if ( $run ) {
-						//* The encoded word is longer or equal to the bother lenght.
+						//* The encoded word is longer or equal to the bother length.
 
 						$word_len = mb_strlen( $word );
 

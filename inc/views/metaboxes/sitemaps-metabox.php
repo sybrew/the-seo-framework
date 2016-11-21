@@ -66,7 +66,7 @@ switch ( $instance ) :
 			$tabs = wp_parse_args( $args, $defaults );
 			$use_tabs = true;
 
-			$sitemap_plugin = $this->detect_sitemap_plugin();
+			$has_sitemap_plugin = $this->detect_sitemap_plugin();
 			$sitemap_detected = $this->has_sitemap_xml();
 			$robots_detected = $this->has_robots_txt();
 
@@ -74,7 +74,7 @@ switch ( $instance ) :
 			 * Remove the timestamps and notify submenus
 			 * @since 2.5.2
 			 */
-			if ( $sitemap_plugin || $sitemap_detected ) {
+			if ( $has_sitemap_plugin || $sitemap_detected ) {
 				unset( $tabs['timestamps'] );
 				unset( $tabs['notify'] );
 			}
@@ -87,7 +87,7 @@ switch ( $instance ) :
 				unset( $tabs['robots'] );
 			}
 
-			if ( $robots_detected && ( $sitemap_plugin || $sitemap_detected ) )
+			if ( $robots_detected && ( $has_sitemap_plugin || $sitemap_detected ) )
 				$use_tabs = false;
 
 			$this->nav_tab_wrapper( 'sitemaps', $tabs, '2.2.8', $use_tabs );

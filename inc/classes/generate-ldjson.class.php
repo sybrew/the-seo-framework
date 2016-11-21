@@ -755,7 +755,9 @@ class Generate_Ldjson extends Generate_Image {
 	 * @return string The LD+Json breadcrumb.
 	 */
 	public function make_breadcrumb( $item, $comma = true ) {
+
 		$comma = $comma ? ',' : '';
+
 		return sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s,"image":%s}}%s', $item['type'], $item['pos'], $item['id'], $item['name'], $item['image'], $comma );
 	}
 
@@ -784,10 +786,10 @@ class Generate_Ldjson extends Generate_Image {
 					//* Nested categories.
 					$add = array();
 
-					foreach ( $kitten as $kit => $kat ) {
+					foreach ( $kitten as $kit_id => $child_id ) {
 						//* Only add if non-existent in $trees.
-						if ( ! in_array( $kat, $trees, true ) )
-							$add[] = $kat;
+						if ( ! in_array( $child_id, $trees, true ) )
+							$add[] = $child_id;
 					}
 
 					//* Put children in right order.

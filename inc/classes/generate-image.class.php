@@ -87,7 +87,7 @@ class Generate_Image extends Generate_Url {
 		$all_allowed = empty( $args['disallowed'] );
 
 		//* 1. Fetch image from featured
-		if ( empty( $image ) && ( $all_allowed || ! in_array( 'featured', $args['disallowed'], true ) ) )
+		if ( empty( $image ) && ( $all_allowed || false === in_array( 'featured', $args['disallowed'], true ) ) )
 			$image = $this->get_image_from_post_thumbnail( $args );
 
 		//* 2. Fetch image from fallback filter 1
@@ -95,7 +95,7 @@ class Generate_Image extends Generate_Url {
 			$image = (string) apply_filters( 'the_seo_framework_og_image_after_featured', '', $args['post_id'] );
 
 		//* 3. Fallback: Get header image if exists
-		if ( empty( $image ) && ( $all_allowed || ! in_array( 'header', $args['disallowed'], true ) ) && current_theme_supports( 'custom-header', 'default-image' ) )
+		if ( empty( $image ) && ( $all_allowed || false === in_array( 'header', $args['disallowed'], true ) ) && current_theme_supports( 'custom-header', 'default-image' ) )
 			$image = $this->get_header_image( true );
 
 		//* 4. Fetch image from fallback filter 2
@@ -103,7 +103,7 @@ class Generate_Image extends Generate_Url {
 			$image = (string) apply_filters( 'the_seo_framework_og_image_after_header', '', $args['post_id'] );
 
 		//* 5. Get the WP 4.3.0 Site Icon
-		if ( empty( $image ) && ( $all_allowed || ! in_array( 'icon', $args['disallowed'], true ) ) )
+		if ( empty( $image ) && ( $all_allowed || false === in_array( 'icon', $args['disallowed'], true ) ) )
 			$image = $this->site_icon( 'full', true );
 
 		if ( $escape && $image )
@@ -226,7 +226,7 @@ class Generate_Image extends Generate_Url {
 	 * Fetches images id's from WooCommerce gallery
 	 *
 	 * @since 2.5.0
-	 * @staticvar array $ids The image ids
+	 * @staticvar array $ids The image IDs
 	 *
 	 * @param array $args Image arguments.
 	 * @return array The image URL's.

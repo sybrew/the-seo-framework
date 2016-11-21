@@ -19,7 +19,7 @@ switch ( $instance ) :
 		$excerpt = $this->escape_description( __( 'This is an example description...', 'autodescription' ) );
 
 		//* Put it together.
-		$example 	= '<span id="tsf-description-additions-js">'
+		$example	= '<span id="tsf-description-additions-js">'
 						. $page_title
 						. '<span id="tsf-on-blogname-js">' . " $on " . $blogname . '</span>'
 						. '<span id="autodescription-descsep-js">' . " $sep " . '</span>'

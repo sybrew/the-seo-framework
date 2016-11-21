@@ -312,7 +312,7 @@ class Generate_Url extends Generate_Title {
 			 */
 			$post_id = isset( $args['post']->ID ) ? $args['post']->ID : $args['id'];
 
-			if ( $this->pretty_permalinks && $post_id && $this->is_singular() ) {
+			if ( $this->pretty_permalinks && $post_id && $this->is_singular( $post_id ) ) {
 				$post = get_post( $post_id );
 
 				//* Don't slash draft links.
@@ -323,10 +323,7 @@ class Generate_Url extends Generate_Title {
 			$path = $this->build_singular_relative_url( $post_id, $args );
 		}
 
-		if ( isset( $path ) )
-			return $path;
-
-		return '';
+		return $path;
 	}
 
 	/**
@@ -342,7 +339,7 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function build_singular_relative_url( $post_id = null, $args = array() ) {
 
-		if ( ! isset( $post_id ) ) {
+		if ( empty( $post_id ) ) {
 			//* We can't fetch the post ID when there's an external request.
 			if ( $args['external'] )
 				return '';
@@ -367,8 +364,12 @@ class Generate_Url extends Generate_Title {
 		if ( ! isset( $url ) )
 			return '';
 
-		$paged = $this->is_singular() ? $this->page() : $this->paged();
-		$paged = $this->maybe_get_paged( $paged, $args['paged'], $args['paged_plural'] );
+		$paged = false;
+
+		if ( false === $args['external'] ) {
+			$paged = $this->is_singular() ? $this->page() : $this->paged();
+			$paged = $this->maybe_get_paged( $paged, $args['paged'], $args['paged_plural'] );
+		}
 
 		if ( $paged ) {
 			if ( $this->pretty_permalinks ) {
@@ -386,9 +387,7 @@ class Generate_Url extends Generate_Title {
 			}
 		}
 
-		$path = $this->set_url_scheme( $url, 'relative' );
-
-		return $path;
+		return $this->set_url_scheme( $url, 'relative' );
 	}
 
 	/**
