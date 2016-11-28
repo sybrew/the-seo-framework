@@ -149,14 +149,14 @@ class Generate_Url extends Generate_Title {
 				$this->unset_current_subdomain();
 
 			$url = $this->add_url_host( $path );
-			$scheme = is_ssl() ? 'https' : 'http';
+			$scheme = $this->is_ssl() ? 'https' : 'http';
 
 			$url = $this->add_url_subdomain( $url );
 		}
 
 		//* URL has been given manually or $args['home'] is true.
 		if ( empty( $scheme ) )
-			$scheme = is_ssl() ? 'https' : 'http';
+			$scheme = $this->is_ssl() ? 'https' : 'http';
 
 		$url = $this->set_url_scheme( $url, $scheme );
 
@@ -756,11 +756,11 @@ class Generate_Url extends Generate_Title {
 	public function set_url_scheme( $url, $scheme = null, $use_filter = true ) {
 
 		if ( ! isset( $scheme ) ) {
-			$scheme = is_ssl() ? 'https' : 'http';
+			$scheme = $this->is_ssl() ? 'https' : 'http';
 		} elseif ( 'admin' === $scheme || 'login' === $scheme  || 'login_post' === $scheme || 'rpc' === $scheme ) {
-			$scheme = is_ssl() || force_ssl_admin() ? 'https' : 'http';
+			$scheme = $this->is_ssl() || force_ssl_admin() ? 'https' : 'http';
 		} elseif ( 'http' !== $scheme && 'https' !== $scheme && 'relative' !== $scheme ) {
-			$scheme = is_ssl() ? 'https' : 'http';
+			$scheme = $this->is_ssl() ? 'https' : 'http';
 		}
 
 		$url = $this->make_fully_qualified_url( $url );
@@ -891,7 +891,7 @@ class Generate_Url extends Generate_Title {
 
 			//* Fallback to is_ssl if no scheme has been found.
 			if ( '' === $scheme )
-				$scheme = is_ssl() ? '1' : '0';
+				$scheme = $this->is_ssl() ? '1' : '0';
 
 			if ( '1' === $scheme ) {
 				$scheme_full = 'https://';
@@ -930,7 +930,7 @@ class Generate_Url extends Generate_Title {
 
 		global $current_blog;
 
-		$scheme = is_ssl() ? 'https' : 'http';
+		$scheme = $this->is_ssl() ? 'https' : 'http';
 		$url = function_exists( 'domain_mapping_siteurl' ) ? domain_mapping_siteurl( false ) : false;
 
 		$request_uri = '';

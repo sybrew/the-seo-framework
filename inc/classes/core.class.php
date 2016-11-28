@@ -281,7 +281,7 @@ class Core {
 	 * @param bool $escape Whether to escape the whole output.
 	 */
 	public function do_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
-		echo $this->generate_dismissible_notice( $message, $type, $a11y, $escape );
+		echo $this->generate_dismissible_notice( $message, $type, (bool) $a11y, (bool) $escape );
 	}
 
 	/**

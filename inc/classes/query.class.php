@@ -955,6 +955,21 @@ class Query extends Compat {
 	}
 
 	/**
+	 * Determines if SSL is used.
+	 *
+	 * @since 2.7.1
+	 * @staticvar bool $cache
+	 *
+	 * @return bool True if SSL, false otherwise.
+	 */
+	public function is_ssl() {
+
+		static $cache = null;
+
+		return isset( $cache ) ? $cache : $cache = is_ssl();
+	}
+
+	/**
 	 * Determines whether we're on the SEO settings page.
 	 * WARNING: Do not ever use this as a safety check.
 	 *

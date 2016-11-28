@@ -496,7 +496,7 @@ class Init extends Query {
 			if ( false === $allow_external ) {
 				$url = $this->set_url_scheme( $url, 'relative' );
 				$url = $this->add_url_host( $url );
-				$scheme = is_ssl() ? 'https' : 'http';
+				$scheme = $this->is_ssl() ? 'https' : 'http';
 
 				wp_safe_redirect( esc_url_raw( $url, array( $scheme ) ), 301 );
 				exit;

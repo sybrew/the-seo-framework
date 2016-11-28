@@ -1014,7 +1014,7 @@ class Sanitize extends Admin_Pages {
 				//* Everything else.
 				if ( ! isset( $scheme ) ) {
 					$url = $this->the_home_url_from_cache( true ) . ltrim( $path, ' /' );
-					$scheme = is_ssl() ? 'https' : 'http';
+					$scheme = $this->is_ssl() ? 'https' : 'http';
 				}
 
 				//* When nothing is found, fall back on WP defaults (is_ssl).
