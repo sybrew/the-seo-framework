@@ -200,6 +200,9 @@ class Init extends Query {
 	 */
 	protected function init_front_end_actions() {
 
+		//* Edit the robots.txt file
+		add_filter( 'robots_txt', array( $this, 'robots_txt' ), 10, 2 );
+
 		//* Remove canonical header tag from WP
 		remove_action( 'wp_head', 'rel_canonical' );
 
@@ -505,5 +508,86 @@ class Init extends Query {
 			wp_redirect( esc_url_raw( $url ), 301 );
 			exit;
 		}
+	}
+
+	/**
+	 * Edits the robots.txt output.
+	 * Requires not to have a robots.txt file in the root directory.
+	 *
+	 * @since 2.2.9
+	 * @uses robots_txt filter located at WP core
+	 * @global int $blog_id;
+	 *
+	 * @return string Robots.txt output.
+	 */
+	public function robots_txt( $robots_txt = '', $public = '' ) {
+		global $blog_id;
+
+		/**
+		 * Don't do anything if the blog isn't public
+		 */
+		if ( '0' === $public )
+			return $robots_txt;
+
+		$revision = '1';
+
+		$cache_key = 'robots_txt_output_' . $revision . $blog_id;
+
+		$output = $this->object_cache_get( $cache_key );
+		if ( false === $output ) {
+			$output = '';
+
+			/**
+			 * Apply filters the_seo_framework_robots_txt_pre & the_seo_framework_robots_txt_pro
+			 * 		: Add custom cacheable lines.
+			 *		: Don't forget to add line breaks ( "\r\n" | PHP_EOL )
+			 *
+			 * @since 2.5.0
+			 */
+			$pre = (string) apply_filters( 'the_seo_framework_robots_txt_pre', '' );
+			$pro = (string) apply_filters( 'the_seo_framework_robots_txt_pro', '' );
+
+			$site_url = wp_parse_url( site_url() );
+			$path = ( ! empty( $site_url['path'] ) ) ? $site_url['path'] : '';
+
+			$output .= $pre;
+			//* Output defaults
+			$output .= "User-agent: *\r\n";
+			$output .= "Disallow: $path/wp-admin/\r\n";
+			$output .= "Allow: $path/wp-admin/admin-ajax.php\r\n";
+
+			/**
+			 * Prevents query indexing
+			 * @since 2.2.9
+			 *
+			 * Applies filters the_seo_framework_robots_disallow_queries : Whether to allow queries for robots.
+			 * @since 2.5.0
+			 */
+			if ( apply_filters( 'the_seo_framework_robots_disallow_queries', false ) ) {
+				$home_url = wp_parse_url( rtrim( $this->the_home_url_from_cache(), ' /\\' ) );
+				$home_path = ( ! empty( $home_url['path'] ) ) ? $home_url['path'] : '';
+				$output .= "Disallow: $home_path/*?*\r\n";
+			}
+
+			$output .= $pro;
+
+			if ( $this->get_option( 'sitemaps_robots' ) && $this->can_do_sitemap_robots() ) {
+				//* Add whitespace before sitemap.
+				$output .= "\r\n";
+
+				//* Add sitemap full url
+				$output .= 'Sitemap: ' . $this->the_home_url_from_cache( true ) . "sitemap.xml\r\n";
+			}
+
+			$this->object_cache_set( $cache_key, $output, 86400 );
+		}
+
+		/**
+		 * Completely override robots with output.
+		 * @since 2.5.0
+		 */
+		$robots_txt = $output;
+
+		return $robots_txt;
 	}
 }

@@ -44,11 +44,29 @@ class Core {
 
 	/**
 	 * Handles unapproachable invoked properties.
+	 * Makes sure deprecated properties are still overwritten.
+	 *
+	 * @since 2.7.1
+	 *
+	 * @param string $name The property name.
+	 * @param mixed $value The property value.
+	 * @return mixed $var The property variable.
+	 */
+	final public function __set( $name, $value ) {
+		/**
+		 * For now, no deprecation is being handled; as no properties are deprecated.
+		 */
+		$this->_deprecated_function( 'the_seo_framework()->' . esc_html( $name ), 'unknown' );
+	}
+
+	/**
+	 * Handles unapproachable invoked properties.
 	 * Makes sure deprecated properties are still accessible.
 	 *
 	 * @since 2.7.0
 	 *
-	 * @return mixed $var The object variable.
+	 * @param string $name The property name.
+	 * @return mixed $var The property name.
 	 */
 	final public function __get( $name ) {
 
@@ -69,8 +87,8 @@ class Core {
 	/**
 	 * Handles unapproachable invoked methods.
 	 *
-	 * @param string $name
-	 * @param array $arguments
+	 * @param string $name The method name.
+	 * @param array $arguments The method arguments.
 	 * @return void
 	 */
 	final public function __call( $name, $arguments ) {

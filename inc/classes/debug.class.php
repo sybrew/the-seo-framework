@@ -254,7 +254,6 @@ final class Debug implements Debug_Interface {
 
 	/**
 	 * Mark a property or method inaccessible when it has been used.
-
 	 * The current behavior is to trigger a user error if WP_DEBUG is true.
 	 *
 	 * @since 2.7.0

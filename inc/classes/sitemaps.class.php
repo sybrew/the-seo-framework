@@ -80,9 +80,6 @@ class Sitemaps extends Metaboxes {
 		 */
 		add_action( 'template_redirect', array( $this, 'maybe_output_sitemap' ), 1 );
 
-		//* Edit the robots.txt file
-		add_filter( 'robots_txt', array( $this, 'robots_txt' ), 10, 2 );
-
 		//* Enqueue rewrite flush
 		add_action( 'shutdown', array( $this, 'maybe_flush_rewrite' ), 999 );
 	}
@@ -181,7 +178,7 @@ class Sitemaps extends Metaboxes {
 				 * Freeing 0.15MB on a clean WordPress installation.
 				 * @since 2.6.0
 				 */
-				$this->clean_up_globals();
+				$this->clean_up_globals_for_sitemap();
 
 				$this->output_sitemap();
 			}
@@ -192,11 +189,12 @@ class Sitemaps extends Metaboxes {
 	 * Destroys unused $GLOBALS. To be used prior to outputting sitemap.
 	 *
 	 * @since 2.6.0
+	 * @since 2.7.1 Renamed from clean_up_globals().
 	 *
 	 * @param bool $get_freed_memory Whether to return the freed memory in bytes.
 	 * @return int $freed_memory
 	 */
-	protected function clean_up_globals( $get_freed_memory = false ) {
+	protected function clean_up_globals_for_sitemap( $get_freed_memory = false ) {
 
 		static $freed_memory = null;
 
@@ -822,87 +820,6 @@ class Sitemaps extends Metaboxes {
 		$pingurl = 'http://blogs.yandex.ru/pings/?status=success&url=' . urlencode( $this->the_home_url_from_cache( true ) . 'sitemap.xml' );
 		wp_safe_remote_get( $pingurl, array( 'timeout' => 3 ) );
 
-	}
-
-	/**
-	 * Edits the robots.txt output.
-	 * Requires not to have a robots.txt file in the root directory.
-	 *
-	 * @since 2.2.9
-	 * @uses robots_txt filter located at WP core
-	 * @global int $blog_id;
-	 *
-	 * @return string Robots.txt output.
-	 */
-	public function robots_txt( $robots_txt = '', $public = '' ) {
-		global $blog_id;
-
-		/**
-		 * Don't do anything if the blog isn't public
-		 */
-		if ( '0' === $public )
-			return $robots_txt;
-
-		$revision = '1';
-
-		$cache_key = 'robots_txt_output_' . $revision . $blog_id;
-
-		$output = $this->object_cache_get( $cache_key );
-		if ( false === $output ) {
-			$output = '';
-
-			/**
-			 * Apply filters the_seo_framework_robots_txt_pre & the_seo_framework_robots_txt_pro
-			 * 		: Add custom cacheable lines.
-			 *		: Don't forget to add line breaks ( "\r\n" | PHP_EOL )
-			 *
-			 * @since 2.5.0
-			 */
-			$pre = (string) apply_filters( 'the_seo_framework_robots_txt_pre', '' );
-			$pro = (string) apply_filters( 'the_seo_framework_robots_txt_pro', '' );
-
-			$site_url = wp_parse_url( site_url() );
-			$path = ( ! empty( $site_url['path'] ) ) ? $site_url['path'] : '';
-
-			$output .= $pre;
-			//* Output defaults
-			$output .= "User-agent: *\r\n";
-			$output .= "Disallow: $path/wp-admin/\r\n";
-			$output .= "Allow: $path/wp-admin/admin-ajax.php\r\n";
-
-			/**
-			 * Prevents query indexing
-			 * @since 2.2.9
-			 *
-			 * Applies filters the_seo_framework_robots_disallow_queries : Whether to allow queries for robots.
-			 * @since 2.5.0
-			 */
-			if ( apply_filters( 'the_seo_framework_robots_disallow_queries', false ) ) {
-				$home_url = wp_parse_url( rtrim( $this->the_home_url_from_cache(), ' /\\' ) );
-				$home_path = ( ! empty( $home_url['path'] ) ) ? $home_url['path'] : '';
-				$output .= "Disallow: $home_path/*?*\r\n";
-			}
-
-			$output .= $pro;
-
-			if ( $this->get_option( 'sitemaps_robots' ) && $this->can_do_sitemap_robots() ) {
-				//* Add whitespace before sitemap.
-				$output .= "\r\n";
-
-				//* Add sitemap full url
-				$output .= 'Sitemap: ' . $this->the_home_url_from_cache( true ) . "sitemap.xml\r\n";
-			}
-
-			$this->object_cache_set( $cache_key, $output, 86400 );
-		}
-
-		/**
-		 * Completely override robots with output.
-		 * @since 2.5.0
-		 */
-		$robots_txt = $output;
-
-		return $robots_txt;
 	}
 
 	/**

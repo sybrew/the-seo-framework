@@ -535,7 +535,7 @@ class Sanitize extends Admin_Pages {
 	 * @param mixed $new_value Should be identical to any of the $this->get_separator_list() values
 	 * @return string Title separator option
 	 */
-	protected function s_title_separator( $new_value ) {
+	public function s_title_separator( $new_value ) {
 
 		$title_separator = $this->get_separator_list();
 
@@ -557,11 +557,12 @@ class Sanitize extends Admin_Pages {
 	 * Returns the description separator value string.
 	 *
 	 * @since 2.2.2
+	 * @since 2.7.1 Method is now public.
 	 *
 	 * @param mixed $new_value Should be identical to any of the $this->description_separator values
 	 * @return string Description separator option
 	 */
-	protected function s_description_separator( $new_value ) {
+	public function s_description_separator( $new_value ) {
 
 		//* Use the same as title_separator
 		$description_separator = $this->get_separator_list();
@@ -585,6 +586,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.5.0
 	 * @since 2.6.6 Removes duplicated spaces.
+	 * @since 2.7.1 Method is now public.
 	 *
 	 * @param string $new_value The Description.
 	 * @return string One line sanitized description.
@@ -646,11 +648,12 @@ class Sanitize extends Admin_Pages {
 	 * Returns a sanitized and trimmed title.
 	 *
 	 * @since 2.5.2
+	 * @since 2.7.1 Method is now public.
 	 *
 	 * @param string $new_value The Title.
 	 * @return string Sanitized and trimmed title.
 	 */
-	protected function s_title( $new_value ) {
+	public function s_title( $new_value ) {
 
 		$title = esc_html( $new_value );
 		$title = trim( $title );
@@ -662,11 +665,12 @@ class Sanitize extends Admin_Pages {
 	 * Returns the knowledge type value string.
 	 *
 	 * @since 2.2.8
+	 * @since 2.7.1 Method is now public.
 	 *
 	 * @param mixed $new_value Should be identical to any of the $person_organization values.
 	 * @return string title Knowledge type option
 	 */
-	protected function s_knowledge_type( $new_value ) {
+	public function s_knowledge_type( $new_value ) {
 
 		if ( 'person' === $new_value || 'organization' === $new_value )
 			return (string) $new_value;
@@ -680,11 +684,12 @@ class Sanitize extends Admin_Pages {
 	 * Returns left or right, for the separator location.
 	 *
 	 * @since 2.2.2
+	 * @since 2.7.1 Method is now public.
 	 *
 	 * @param mixed $new_value Should ideally be a string 'left' or 'right' passed in.
 	 * @return string left or right
 	 */
-	protected function s_left_right( $new_value ) {
+	public function s_left_right( $new_value ) {
 
 		if ( 'left' === $new_value || 'right' === $new_value )
 			return (string) $new_value;
@@ -702,11 +707,12 @@ class Sanitize extends Admin_Pages {
 	 * Returns left or right, for the home separator location.
 	 *
 	 * @since 2.5.2
+	 * @since 2.7.1 Method is now public.
 	 *
 	 * @param mixed $new_value Should ideally be a string 'left' or 'right' passed in.
 	 * @return string left or right
 	 */
-	protected function s_left_right_home( $new_value ) {
+	public function s_left_right_home( $new_value ) {
 
 		if ( 'left' === $new_value || 'right' === $new_value )
 			return (string) $new_value;
@@ -726,19 +732,18 @@ class Sanitize extends Admin_Pages {
 	 * Uses double casting. First, we cast to bool, then to integer.
 	 *
 	 * @since 2.2.2
+	 * @since 2.7.1 Method is now public.
 	 *
 	 * @param mixed $new_value Should ideally be a 1 or 0 integer passed in.
 	 * @return integer 1 or 0.
 	 */
-	protected function s_one_zero( $new_value ) {
+	public function s_one_zero( $new_value ) {
 		return (int) (bool) $new_value;
 	}
 
 	/**
 	 * Returns a 1 or 0, for all truthy / falsy values.
-	 *
 	 * Uses double casting. First, we cast to bool, then to integer.
-	 *
 	 * Also flushes rewrite rules.
 	 *
 	 * @since 2.2.9
@@ -790,11 +795,12 @@ class Sanitize extends Admin_Pages {
 	 * Returns a positive integer value.
 	 *
 	 * @since 2.2.2
+	 * @since 2.7.1 Method is now public.
 	 *
 	 * @param mixed $new_value Should ideally be a positive integer.
 	 * @return integer Positive integer.
 	 */
-	protected function s_absint( $new_value ) {
+	public function s_absint( $new_value ) {
 		return absint( $new_value );
 	}
 
@@ -802,11 +808,12 @@ class Sanitize extends Admin_Pages {
 	 * Removes HTML tags from string.
 	 *
 	 * @since 2.2.2
+	 * @since 2.7.1 Method is now public.
 	 *
 	 * @param string $new_value String, possibly with HTML in it.
 	 * @return string String without HTML in it.
 	 */
-	protected function s_no_html( $new_value ) {
+	public function s_no_html( $new_value ) {
 		return strip_tags( $new_value );
 	}
 
@@ -814,16 +821,17 @@ class Sanitize extends Admin_Pages {
 	 * Removes HTML tags and line breaks from string.
 	 *
 	 * @since 2.5.2
+	 * @since 2.7.1 Method is now public.
 	 *
 	 * @param string $new_value String, possibly with HTML and spaces in it.
 	 * @return string String without HTML and breaks in it.
 	 */
-	protected function s_no_html_space( $new_value ) {
+	public function s_no_html_space( $new_value ) {
 		return str_replace( ' ', '', strip_tags( $new_value ) );
 	}
 
 	/**
-	 * Makes URLs safe
+	 * Makes URLs safe.
 	 *
 	 * @since 2.2.2
 	 *
@@ -863,11 +871,12 @@ class Sanitize extends Admin_Pages {
 	 * Makes Email Addresses safe, via sanitize_email()
 	 *
 	 * @since 2.2.2
+	 * @since 2.7.1 Method is now public.
 	 *
 	 * @param string $new_value String, an email address, possibly unsafe.
 	 * @return string String a safe email address
 	 */
-	protected function s_email_address( $new_value ) {
+	public function s_email_address( $new_value ) {
 		return sanitize_email( $new_value );
 	}
 
@@ -875,11 +884,12 @@ class Sanitize extends Admin_Pages {
 	 * Removes unsafe HTML tags, via wp_kses_post().
 	 *
 	 * @since 2.2.2
+	 * @since 2.7.1 Method is now public.
 	 *
 	 * @param string $new_value String with potentially unsafe HTML in it.
 	 * @return string String with only safe HTML in it
 	 */
-	protected function s_safe_html( $new_value ) {
+	public function s_safe_html( $new_value ) {
 		return wp_kses_post( $new_value );
 	}
 
@@ -888,11 +898,12 @@ class Sanitize extends Admin_Pages {
 	 * Parses URL to path and adds @ if URL is given.
 	 *
 	 * @since 2.2.2
+	 * @since 2.7.1 Method is now public.
 	 *
 	 * @param string $new_value String with potentially wrong Twitter username.
 	 * @return string String with 'correct' Twitter username
 	 */
-	protected function s_twitter_name( $new_value ) {
+	public function s_twitter_name( $new_value ) {
 
 		if ( empty( $new_value ) )
 			return (string) $new_value;
@@ -919,11 +930,12 @@ class Sanitize extends Admin_Pages {
 	 * Falls back to previous value if empty. If previous value is empty if will go to default.
 	 *
 	 * @since 2.5.2
+	 * @since 2.7.1 Method is now public.
 	 *
 	 * @param string $new_value String with potentially wrong option value.
 	 * @return string Sanitized twitter card type.
 	 */
-	protected function s_twitter_card( $new_value ) {
+	public function s_twitter_card( $new_value ) {
 
 		//* Fetch Twitter card array.
 		$card = $this->get_twitter_card_types();
@@ -948,11 +960,12 @@ class Sanitize extends Admin_Pages {
 	 * beginning, so it isn't a true relative link, but from the web root base.
 	 *
 	 * @since 2.6.5
+	 * @since 2.7.1 Method is now public.
 	 *
 	 * @param string $url Full Path URL or relative URL.
 	 * @return string Abolute path.
 	 */
-	protected function s_relative_url( $url ) {
+	public function s_relative_url( $url ) {
 		return ltrim( preg_replace( '|^(https?:)?//[^/]+(/.*)|i', '$2', $url ), ' \//' );
 	}
 
@@ -960,11 +973,12 @@ class Sanitize extends Admin_Pages {
 	 * Sanitize the Redirect URL
 	 *
 	 * @since 2.2.4
+	 * @since 2.7.1 Method is now public.
 	 *
 	 * @param string $new_value String with potentially unwanted redirect URL.
 	 * @return string The Sanitized Redirect URL
 	 */
-	protected function s_redirect_url( $new_value ) {
+	public function s_redirect_url( $new_value ) {
 
 		$url = strip_tags( $new_value );
 

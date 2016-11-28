@@ -324,7 +324,7 @@ TODO:
 
 * **Added:**
 	/
-	* TODO `The_SEO_Framework_Load->__set()` magic method.
+	* `The_SEO_Framework_Load->__set()` magic method.
 		* This prevents inaccessible property writing.
 		* This allows for property deprecation handling.
 		* A warning is emited whenever this method is accessed.
@@ -336,7 +336,7 @@ TODO:
 	* Method `the_seo_framework()->s_excerpt()`. For escaping and prettifying (description) excerpts with consideration of shortcodes through filters.
 		* This method was extracted from `the_seo_framework()->get_excerpt_by_id()` when solely using the first parameter.
 	/
-	* TODO Sanitation functions are now all public. This allows for easier, predictable and more secure external code.
+	* Most sanitation functions are now public. This allows for easier, predictable and more secure external code.
 * **Changed:**
 	* All the classes can't be initiated directly anymore. Always use `the_seo_framework()`.
 		* Failing to do so will result in a fatal error.
@@ -404,7 +404,8 @@ TODO:
 	* File `query.class.php` now falls under GPLv3 instead of GPLv2+.
 	* Method `the_seo_framework()->call_function()` is now marked private. It's written and used as an internal handler for filters.
 	* Method `the_seo_framework()->generate_excerpt()` now has its third parameter (`$max_char_length`) default value increased by 1. From 154 to 155.
-	* TODO Method `the_seo_framework()->robots_txt()` has been moved to `Init` from `Sitemaps`.
+	* Method `the_seo_framework()->robots_txt()` has been moved to `Init` from `Sitemaps`.
+	* Method `the_seo_framework()->robots_txt()` is now called on action `init`, it was 'plugins_loaded'.
 * **Improved:**
 	/
 	* Reduced sitemap's generation memory usage.
@@ -423,11 +424,9 @@ TODO:
 	* TODO All front-end actions have been moved into a front-end action handler.
 		* This massively reduces the plugin memory heap size of this plugin on the back-end.
 	* The debug handlers no longer checks for function `__`, as it should already be present when The SEO Framework has been loaded.
-	/
-	* TODO The inpost metabox has been moved into a view file.
+	* The inpost metabox has been moved into a view file.
 		* This reduces memory usage on non-post edit pages.
-	/
-	* TODO The taxonomy and terms options output has been moved into a view file.
+	* The taxonomy and terms options output has been moved into a view file.
 		* This reduces memory usage on non-term edit pages.
 	* Method `get_latest_post_id()` now uses WP_Query instead of a direct database call.
 	* WordPress' `is_ssl()` isn't cached. So now it has a cached counterpart: `the_seo_framework()->is_ssl()`.
