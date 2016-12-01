@@ -894,4 +894,90 @@ class Deprecated extends Feed {
 
 		return $this->get_excluded_search_ids();
 	}
+
+	/**
+	 * Fetches posts with exclude_local_search option on.
+	 *
+	 * @since 2.1.7
+	 * @since 2.7.0 No longer used for performance reasons.
+	 * @uses $this->exclude_search_ids()
+	 *
+	 * @param array $query The possible search query.
+	 * @return void Early if no search query is found.
+	 */
+	public function search_filter( $query ) {
+
+		$this->_deprecated_function( 'the_seo_framework()->search_filter()', '2.7.1' );
+
+		// Don't exclude pages in wp-admin.
+		if ( $query->is_search && false === $this->is_admin() ) {
+
+			$q = $query->query;
+			//* Only interact with an actual Search Query.
+			if ( false === isset( $q['s'] ) )
+				return;
+
+			//* Get excluded IDs.
+			$protected_posts = $this->get_excluded_search_ids();
+			if ( $protected_posts ) {
+				$get = $query->get( 'post__not_in' );
+
+				//* Merge user defined query.
+				if ( is_array( $get ) && ! empty( $get ) )
+					$protected_posts = array_merge( $protected_posts, $get );
+
+				$query->set( 'post__not_in', $protected_posts );
+			}
+
+			// Parse all ID's, even beyond the first page.
+			$query->set( 'no_found_rows', false );
+		}
+	}
+
+	/**
+	 * Fetches posts with exclude_local_search option on
+	 *
+	 * @since 2.7.0
+	 * @since 2.7.0 No longer used.
+	 * @global int $blog_id
+	 *
+	 * @return array Excluded Post IDs
+	 */
+	public function get_excluded_search_ids() {
+
+		$this->_deprecated_function( 'the_seo_framework()->get_excluded_search_ids()', '2.7.1' );
+
+		global $blog_id;
+
+		$cache_key = 'exclude_search_ids_' . $blog_id . '_' . get_locale();
+
+		$post_ids = $this->object_cache_get( $cache_key );
+		if ( false === $post_ids ) {
+			$post_ids = array();
+
+			$args = array(
+				'post_type'        => 'any',
+				'numberposts'      => -1,
+				'posts_per_page'   => -1,
+				'order'            => 'DESC',
+				'post_status'      => 'publish',
+				'meta_key'         => 'exclude_local_search',
+				'meta_value'       => 1,
+				'meta_compare'     => '=',
+				'cache_results'    => true,
+				'suppress_filters' => false,
+			);
+			$get_posts = new \WP_Query;
+			$excluded_posts = $get_posts->query( $args );
+			unset( $get_posts );
+
+			if ( $excluded_posts )
+				$post_ids = wp_list_pluck( $excluded_posts, 'ID' );
+
+			$this->object_cache_set( $cache_key, $post_ids, 86400 );
+		}
+
+		// return an array of exclude post IDs
+		return $post_ids;
+	}
 }

@@ -40,6 +40,45 @@ class Post_Data extends Detect {
 	}
 
 	/**
+	 * Return custom field post meta data.
+	 *
+	 * Return only the first value of custom field. Return false if field is
+	 * blank or not set.
+	 *
+	 * @since 2.0.0
+	 * @staticvar array $field_cache
+	 *
+	 * @param string $field	Custom field key.
+	 * @param int $post_id	The post ID
+	 * @return string|boolean Return value or false on failure.
+	 */
+	public function get_custom_field( $field, $post_id = null ) {
+
+		//* If field is falsy, get_post_meta() will return an array.
+		if ( ! $field )
+			return false;
+
+		static $field_cache = array();
+
+		if ( isset( $field_cache[ $field ][ $post_id ] ) )
+			return $field_cache[ $field ][ $post_id ];
+
+		if ( empty( $post_id ) )
+			$post_id = $this->get_the_real_ID();
+
+		$custom_field = get_post_meta( $post_id, $field, true );
+
+		//* If custom field is empty, empty cache..
+		if ( empty( $custom_field ) )
+			$field_cache[ $field ][ $post_id ] = '';
+
+		//* Render custom field, slashes stripped, sanitized if string
+		$field_cache[ $field ][ $post_id ] = is_array( $custom_field ) ? stripslashes_deep( $custom_field ) : stripslashes( wp_kses_decode_entities( $custom_field ) );
+
+		return $field_cache[ $field ][ $post_id ];
+	}
+
+	/**
 	 * Save the SEO settings when we save a post or page.
 	 * Some values get sanitized, the rest are pulled from identically named subkeys in the $_POST['autodescription'] array.
 	 *

@@ -358,16 +358,16 @@ TODO:
 		* These changes allow easy autoloading and namespace interaction.
 	* Some class files have been renamed.
 		* The changes:
-			* `adminpages.class.php` is now `admin-pages.php`
-			* `siteoptions.class.php` is now `site-options.php`
-			* `doingitright.class.php` is now `doing-it-right.php`
-			* `termdata.class.php` is now `term-data.php`
-			* `postdata.class.php` is now `post-data.php`
+			* `adminpages.class.php` is now `admin-pages.class.php`
+			* `siteoptions.class.php` is now `site-options.class.php`
+			* `doingitright.class.php` is now `doing-it-right.class.php`
+			* `termdata.class.php` is now `term-data.class.php`
+			* `postdata.class.php` is now `post-data.class.php`
 		* These changes allow easy autoloading and namespace interaction.
 	* Some classes files (and their classes) have been removed.
 		* The changes:
 			/
-			* TODO `search.class.php`
+			* `search.class.php`
 	* Some function files have been moved.
 		* The changes:
 			* The deprecation function handler `deprecated.php` has been moved to the `/autodescription/inc/functions/` folder, from the `/autodescription/inc/deprecated/` folder.
@@ -376,8 +376,9 @@ TODO:
 	* TODO Not all classes are now always available. Unless methods of such are called or required.
 		* This massively improves performance and reduces memory usage.
 		* This completely changes the architecture of the plugin.
-		* This is handled through autoloading and magic methods.
-		* Classes include:
+		* This is handled through autoloading, interfaces and magic methods.
+		* Classes affected:
+			/
 			* Debug
 			* TODO AdminPages
 			* TODO Admin-Init
@@ -396,7 +397,7 @@ TODO:
 	/
 	* Class `The_SEO_Framework\Load` is now final, and can't be extended upon anymore.
 	* The `license.txt` file has been updated to improve readability. The contents have not been changed.
-	* TODO The `title_seperator` option has been changed and updated to `title_separator`. Note the typo.
+	* TODO The `title_seperator` option has been changed and updated to `title_separator`. Note the typo. // TODO Is this really needed? Perfection can take its toll.
 	* Method `the_seo_framework()->post_status()`'s third parameter was unused. It's now used to echo (true) or return (false) the value, default return (false).
 	* Method `the_seo_framework()->no_more_genesis_seo()` has been renamed to `disable_genesis_seo`, without deprecation as it was marked private.
 	* Method `the_seo_framework()->page_inpost_box()` has been renamed to `singular_inpost_box`, without deprecation as it was marked private.
@@ -404,8 +405,10 @@ TODO:
 	* File `query.class.php` now falls under GPLv3 instead of GPLv2+.
 	* Method `the_seo_framework()->call_function()` is now marked private. It's written and used as an internal handler for filters.
 	* Method `the_seo_framework()->generate_excerpt()` now has its third parameter (`$max_char_length`) default value increased by 1. From 154 to 155.
-	* Method `the_seo_framework()->robots_txt()` has been moved to `Init` from `Sitemaps`.
+	* Method `the_seo_framework()->robots_txt()` has been moved to class `Init` from `Sitemaps`.
 	* Method `the_seo_framework()->robots_txt()` is now called on action `init`, it was 'plugins_loaded'.
+	* Method `the_seo_framework()->get_custom_field()` has been moved to class `Post_Data` from `Core`.
+	* Method `the_seo_framework()->adjust_search_filter()` has been moved to class `Init` from `Search`.
 * **Improved:**
 	/
 	* Reduced sitemap's generation memory usage.
@@ -420,6 +423,8 @@ TODO:
 	* TODO All admin actions have been moved into an admin action handler.
 		* This massively reduces the plugin memory heap size of this plugin on the front-end.
 		* This changes the admin `init` (not `admin_init`) action initialization from priority `0` to priority `1`.
+			/
+			* TODO consider using priority -1 rather than affecting multiple switches.
 	/
 	* TODO All front-end actions have been moved into a front-end action handler.
 		* This massively reduces the plugin memory heap size of this plugin on the back-end.
@@ -434,6 +439,9 @@ TODO:
 	* Leftover CSS prefix name `seoframework-content-no-js` should've been `tsf-content-no-js`.
 	* Method `the_seo_framework()->call_function()` now doesn't result in a fatal error anymore if the method of an object doesn't exist in conjunction with when the class is supplied as an object instead of string.
 	* The plugin no longer crashes the site on activation when the plugin classes have been disabled through mu-filters.
+* **Deprecated:**
+	* Method `the_seo_framework()->search_filter()`. It's a very slow function as it uses `get_excluded_search_ids`. There's no replacement.
+	* Method `the_seo_framework()->get_excluded_search_ids()`. It's a very slow function because it queries all posts. There's no replacement.
 * **Removed:**
 	* Memory profiling output in the HTML code when `THE_SEO_FRAMEWORK_DEBUG` is defined as true.
 * **Other:**

@@ -218,6 +218,12 @@ class Init extends Query {
 		//* BuddyPress front-end compat.
 		add_action( 'init', array( $this, 'buddypress_compat' ) );
 
+		/**
+		 * @since 2.7.0 Changed priority from 999 to 9999.
+		 *              Now uses another method. Was: 'search_filter'.
+		 */
+		add_action( 'pre_get_posts', array( $this, 'adjust_search_filter' ), 9999, 1 );
+
 		if ( $this->is_singular() ) {
 			//* Initialize 301 redirects.
 			add_action( 'template_redirect', array( $this, 'custom_field_redirect' ) );
@@ -518,6 +524,8 @@ class Init extends Query {
 	 * @uses robots_txt filter located at WP core
 	 * @global int $blog_id;
 	 *
+	 * @param string $robots_txt The current robots_txt output.
+	 * @param string $public The blog_public option value.
 	 * @return string Robots.txt output.
 	 */
 	public function robots_txt( $robots_txt = '', $public = '' ) {
@@ -589,5 +597,52 @@ class Init extends Query {
 		$robots_txt = $output;
 
 		return $robots_txt;
+	}
+
+	/**
+	 * Excludes posts from search with certain metadata.
+	 * For now, it only looks at 'exclude_local_search'. If it exists, the post or
+	 * page will be excluded from the local Search Results.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param array $query The possible search query.
+	 * @return void Early if no search query is found.
+	 */
+	public function adjust_search_filter( $query ) {
+
+		// Don't exclude pages in wp-admin.
+		if ( $query->is_search && false === $this->is_admin() ) {
+
+			$q = $query->query;
+			//* Only interact with an actual Search Query.
+			if ( false === isset( $q['s'] ) )
+				return;
+
+			$meta_query = $query->get( 'meta_query' );
+
+			//* Convert to array. Unset it if it's empty.
+			if ( false === is_array( $meta_query ) )
+				$meta_query = $meta_query ? (array) $meta_query : array();
+
+			/**
+			 * Exclude posts with exclude_local_search option on.
+			 *
+			 * Query is faster when the global relation is not set. Defaults to AND.
+			 * Query is faster when secondary relation is set. Defaults to AND.
+			 * Looks for CHAR value, while it's an integer/char in when unserialized.
+			 */
+			$meta_query[] = array(
+				array(
+					'key'      => 'exclude_local_search',
+					'value'    => '1',
+					'type'     => 'CHAR',
+					'compare'  => 'NOT EXISTS',
+					'relation' => 'AND',
+				),
+			);
+
+			$query->set( 'meta_query', $meta_query );
+		}
 	}
 }

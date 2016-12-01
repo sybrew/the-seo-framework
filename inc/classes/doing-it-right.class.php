@@ -31,7 +31,7 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 2.7.1
  */
-class Doing_It_Right extends Search {
+class Doing_It_Right extends Generate_Ldjson {
 
 	/**
 	 * Constructor, load parent constructor.

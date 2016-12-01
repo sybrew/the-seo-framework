@@ -45,28 +45,32 @@ class Core {
 	/**
 	 * Handles unapproachable invoked properties.
 	 * Makes sure deprecated properties are still overwritten.
+	 * If property never existed, default PHP behavior is invoked.
 	 *
 	 * @since 2.7.1
 	 *
 	 * @param string $name The property name.
 	 * @param mixed $value The property value.
-	 * @return mixed $var The property variable.
 	 */
 	final public function __set( $name, $value ) {
 		/**
 		 * For now, no deprecation is being handled; as no properties are deprecated.
 		 */
 		$this->_deprecated_function( 'the_seo_framework()->' . esc_html( $name ), 'unknown' );
+
+		//* Invoke default behavior.
+		$this->$name = $value;
 	}
 
 	/**
 	 * Handles unapproachable invoked properties.
 	 * Makes sure deprecated properties are still accessible.
+	 * If property never existed, default PHP behavior is invoked.
 	 *
 	 * @since 2.7.0
 	 *
 	 * @param string $name The property name.
-	 * @return mixed $var The property name.
+	 * @return mixed $var The property value.
 	 */
 	final public function __get( $name ) {
 
@@ -80,7 +84,7 @@ class Core {
 				break;
 		endswitch;
 
-		//* Invoke default error.
+		//* Invoke default behavior.
 		return $this->$name;
 	}
 
@@ -356,45 +360,6 @@ class Core {
 		$output = '<span class="description">' . $content . '</span>';
 		echo $block ? '<p>' . $output . '</p>' : $output;
 
-	}
-
-	/**
-	 * Return custom field post meta data.
-	 *
-	 * Return only the first value of custom field. Return false if field is
-	 * blank or not set.
-	 *
-	 * @since 2.0.0
-	 * @staticvar array $field_cache
-	 *
-	 * @param string $field	Custom field key.
-	 * @param int $post_id	The post ID
-	 * @return string|boolean Return value or false on failure.
-	 */
-	public function get_custom_field( $field, $post_id = null ) {
-
-		//* If field is falsy, get_post_meta() will return an array.
-		if ( ! $field )
-			return false;
-
-		static $field_cache = array();
-
-		if ( isset( $field_cache[ $field ][ $post_id ] ) )
-			return $field_cache[ $field ][ $post_id ];
-
-		if ( empty( $post_id ) )
-			$post_id = $this->get_the_real_ID();
-
-		$custom_field = get_post_meta( $post_id, $field, true );
-
-		//* If custom field is empty, empty cache..
-		if ( empty( $custom_field ) )
-			$field_cache[ $field ][ $post_id ] = '';
-
-		//* Render custom field, slashes stripped, sanitized if string
-		$field_cache[ $field ][ $post_id ] = is_array( $custom_field ) ? stripslashes_deep( $custom_field ) : stripslashes( wp_kses_decode_entities( $custom_field ) );
-
-		return $field_cache[ $field ][ $post_id ];
 	}
 
 	/**
