@@ -435,6 +435,7 @@ TODO:
 		* This reduces memory usage on non-term edit pages.
 	* Method `get_latest_post_id()` now uses WP_Query instead of a direct database call.
 	* WordPress' `is_ssl()` isn't cached. So now it has a cached counterpart: `the_seo_framework()->is_ssl()`.
+	* The excluded post type filter no longer tries to match an exact value; saving some processing power generating the query.
 * **Fixed:**
 	* Leftover CSS prefix name `seoframework-content-no-js` should've been `tsf-content-no-js`.
 	* Method `the_seo_framework()->call_function()` now doesn't result in a fatal error anymore if the method of an object doesn't exist in conjunction with when the class is supplied as an object instead of string.

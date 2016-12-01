@@ -630,17 +630,17 @@ class Init extends Query {
 			 *
 			 * Query is faster when the global relation is not set. Defaults to AND.
 			 * Query is faster when secondary relation is set. Defaults to AND.
-			 * Looks for CHAR value, while it's an integer/char in when unserialized.
 			 */
 			$meta_query[] = array(
 				array(
 					'key'      => 'exclude_local_search',
-					'value'    => '1',
-					'type'     => 'CHAR',
+					'type'     => 'NUMERIC',
 					'compare'  => 'NOT EXISTS',
-					'relation' => 'AND',
+				//	'relation' => 'AND', // Leaving this out will let the query be automatically be determined to either OR or AND.
 				),
 			);
+
+			// $meta_query['relation'] = 'AND'; // Leaving this out will save processing power.
 
 			$query->set( 'meta_query', $meta_query );
 		}
