@@ -110,6 +110,18 @@ class Site_Options extends Sanitize {
 		 * @since 2.2.7
 		 */
 		return array(
+			// General. Performance.
+			'cache_meta_description'	=> 1, 	// Description transient cache.
+			'cache_meta_schema'			=> 1,	// Schema.org transient cache.
+			'cache_sitemap'				=> 1,	// Sitemap transient cache.
+
+			// General. Layout.
+			'display_seo_bar_tables'	=> 1, 	// SEO Bar post-list tables.
+			'display_seo_bar_metabox'	=> 0, 	// SEO Bar post SEO Settings.
+
+			// General. Canonical.
+			'canonical_scheme'	=> 'automatic', // Canonical URL scheme.
+
 			// Title.
 			'title_seperator'		=> 'pipe',		// Title separator (note: TYPO), dropdown
 			'title_location'		=> $titleloc,	// Title separation location

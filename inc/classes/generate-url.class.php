@@ -154,9 +154,21 @@ class Generate_Url extends Generate_Title {
 			$url = $this->add_url_subdomain( $url );
 		}
 
-		//* URL has been given manually or $args['home'] is true.
-		if ( empty( $scheme ) )
-			$scheme = $this->is_ssl() ? 'https' : 'http';
+		switch ( $this->get_option( 'canonical_scheme' ) ) :
+			case 'https' :
+				$scheme = 'https';
+				break;
+
+			case 'http' :
+				$scheme = 'http';
+				break;
+
+			case 'automatic' :
+			default :
+				//* $scheme is empty if URL has been given manually or $args['home'] is true.
+				$scheme = $scheme ? $scheme : ( $this->is_ssl() ? 'https' : 'http' );
+				break;
+		endswitch;
 
 		$url = $this->set_url_scheme( $url, $scheme );
 
@@ -332,6 +344,7 @@ class Generate_Url extends Generate_Title {
 	 * @since 2.6.5
 	 * @global object $wp
 	 * @NOTE: Handles full path, including home directory.
+	 * @since 2.7.1: Continues on empty post ID. Handles it as HomePage.
 	 *
 	 * @param int $post_id The ID.
 	 * @param array $args The URL arguments.
@@ -341,10 +354,11 @@ class Generate_Url extends Generate_Title {
 
 		if ( empty( $post_id ) ) {
 			//* We can't fetch the post ID when there's an external request.
-			if ( $args['external'] )
-				return '';
-
-			$post_id = $this->get_the_real_ID();
+			if ( $args['external'] ) {
+				$post_id = 0;
+			} else {
+				$post_id = $this->get_the_real_ID();
+			}
 		}
 
 		$args = $this->reparse_url_args( $args );

@@ -285,7 +285,7 @@ class Generate_Image extends Generate_Url {
 		$w = $src[1]; // Width
 		$h = $src[2]; // Height
 
-		//* Prefered 1500px, resize it
+		//* Preferred 1500px, resize it
 		if ( $w > 1500 || $h > 1500 ) {
 
 			if ( $w === $h ) {

@@ -271,7 +271,7 @@ class Sitemaps extends Metaboxes {
 		 * Re-use the variable, eliminating database requests
 		 * @since 2.4.0
 		 */
-		$sitemap_content = $this->get_transient( $this->sitemap_transient );
+		$sitemap_content = $this->is_option_checked( 'cache_sitemap' ) ? $this->get_transient( $this->sitemap_transient ) : false;
 
 		echo '<?xml version="1.0" encoding="UTF-8"?>' . "\r\n";
 
@@ -336,6 +336,7 @@ class Sitemaps extends Metaboxes {
 	 * Generate sitemap.xml content.
 	 *
 	 * @since 2.2.9
+	 * @since 2.7.1 Now adjusts memory limit when possible.
 	 *
 	 * @return string The sitemap content.
 	 */

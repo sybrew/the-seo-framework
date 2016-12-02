@@ -128,11 +128,13 @@ class Init extends Query {
 		//* Initialize post states.
 		add_action( 'current_screen', array( $this, 'post_state' ) );
 
-		//* Initialize columns.
-		add_action( 'current_screen', array( $this, 'init_columns' ) );
+		if ( $this->is_option_checked( 'display_seo_bar_tables' ) ) {
+			//* Initialize columns.
+			add_action( 'current_screen', array( $this, 'init_columns' ) );
 
-		//* Ajax handlers for columns.
-		add_action( 'wp_ajax_add-tag', array( $this, 'init_columns_ajax' ), -1 );
+			//* Ajax handlers for columns.
+			add_action( 'wp_ajax_add-tag', array( $this, 'init_columns_ajax' ), -1 );
+		}
 
 		//* Sanitizes Site options
 		add_action( 'admin_init', array( $this, 'sanitizer_filters' ) );
@@ -629,18 +631,20 @@ class Init extends Query {
 			 * Exclude posts with exclude_local_search option on.
 			 *
 			 * Query is faster when the global relation is not set. Defaults to AND.
-			 * Query is faster when secondary relation is set. Defaults to AND.
+			 * Query is faster when no value is set. Defaults to 'IS NULL' because
+			 *       of 'compare'. Having no effect whatsoever as it's an exclusion.
 			 */
 			$meta_query[] = array(
 				array(
 					'key'      => 'exclude_local_search',
 					'type'     => 'NUMERIC',
 					'compare'  => 'NOT EXISTS',
-				//	'relation' => 'AND', // Leaving this out will let the query be automatically be determined to either OR or AND.
+				//	'relation' => 'AND', // Leaving this out will let the query automatically be determined to either OR or AND.
 				),
 			);
 
-			// $meta_query['relation'] = 'AND'; // Leaving this out will save processing power.
+			//* Query is faster when secondary relation is not set. Defaults to AND.
+			// $meta_query['relation'] = 'AND';
 
 			$query->set( 'meta_query', $meta_query );
 		}

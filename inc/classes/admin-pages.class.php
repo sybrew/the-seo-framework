@@ -194,16 +194,17 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @since 2.2.2
 	 *
-	 * @see $this->title_metabox()			Callback for Title Settings box.
-	 * @see $this->description_metabox()	Callback for Description Settings box.
-	 * @see $this->robots_metabox()			Callback for Robots Settings box.
-	 * @see $this->homepage_metabox()		Callback for Home Page Settings box.
-	 * @see $this->social_metabox()			Callback for Social Settings box.
-	 * @see $this->knowledge_metabox()		Callback for Knowledge Graph Settings box.
-	 * @see $this->schema_metabox()			Callback for Schema Settings box.
-	 * @see $this->webmaster_metabox()		Callback for Webmaster Settings box.
-	 * @see $this->sitemaps_metabox()		Callback for Sitemap Settings box.
-	 * @see $this->feed_metabox()			Callback for Feed Settings box.
+	 * @see $this->general_metabox()     Callback for General Settings box.
+	 * @see $this->title_metabox()       Callback for Title Settings box.
+	 * @see $this->description_metabox() Callback for Description Settings box.
+	 * @see $this->robots_metabox()      Callback for Robots Settings box.
+	 * @see $this->homepage_metabox()    Callback for Home Page Settings box.
+	 * @see $this->social_metabox()      Callback for Social Settings box.
+	 * @see $this->knowledge_metabox()   Callback for Knowledge Graph Settings box.
+	 * @see $this->schema_metabox()      Callback for Schema Settings box.
+	 * @see $this->webmaster_metabox()   Callback for Webmaster Settings box.
+	 * @see $this->sitemaps_metabox()    Callback for Sitemap Settings box.
+	 * @see $this->feed_metabox()        Callback for Feed Settings box.
 	 */
 	public function metaboxes() {
 
@@ -212,7 +213,9 @@ class Admin_Pages extends Inpost {
 		 * Set any to false if you wish the meta box to be removed.
 		 *
 		 * @since 2.2.4
+		 * @since 2.7.1: Added `the_seo_framework_general_metabox` filter.
 		 */
+		$general     = (bool) apply_filters( 'the_seo_framework_general_metabox', true );
 		$title       = (bool) apply_filters( 'the_seo_framework_title_metabox', true );
 		$description = (bool) apply_filters( 'the_seo_framework_description_metabox', true );
 		$robots      = (bool) apply_filters( 'the_seo_framework_robots_metabox', true );
@@ -223,6 +226,17 @@ class Admin_Pages extends Inpost {
 		$webmaster   = (bool) apply_filters( 'the_seo_framework_webmaster_metabox', true );
 		$sitemap     = (bool) apply_filters( 'the_seo_framework_sitemap_metabox', true );
 		$feed        = (bool) apply_filters( 'the_seo_framework_feed_metabox', true );
+
+		//* Title Meta Box
+		if ( $general )
+			add_meta_box(
+				'autodescription-general-settings',
+				esc_html__( 'General Settings', 'autodescription' ),
+				array( $this, 'general_metabox' ),
+				$this->seo_settings_page_hook,
+				'main',
+				array()
+			);
 
 		//* Title Meta Box
 		if ( $title )
@@ -534,8 +548,10 @@ class Admin_Pages extends Inpost {
 	 */
 	public function make_checkbox( $field_id = '', $label = '', $description = '', $escape = true ) {
 
-		$description = $escape ? esc_html( $description ) : $description;
-		$label = $escape ? esc_html( $label ) : $label;
+		if ( $escape ) {
+			$description = esc_html( $description );
+			$label = esc_html( $label );
+		}
 
 		$description = $description ? '<p class="description tsf-option-spacer">' . $description . '</p>' : '';
 

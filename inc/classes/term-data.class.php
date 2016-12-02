@@ -247,7 +247,7 @@ class Term_Data extends Post_Data {
 	 * @access private
 	 *
 	 * @param int $id The possible taxonomy Term ID.
-	 * @return null|object The Term object.
+	 * @return false|object The Term object.
 	 */
 	public function fetch_the_term( $id = '' ) {
 

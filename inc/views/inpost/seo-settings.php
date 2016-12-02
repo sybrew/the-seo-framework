@@ -137,7 +137,7 @@ switch ( $instance ) :
 		$canonical_placeholder = $this->the_url_from_cache( '', $post_id, false, false );
 
 		?>
-		<?php if ( 'above' === $this->inpost_seo_bar ) : ?>
+		<?php if ( 'above' === $this->inpost_seo_bar || $this->is_option_checked( 'display_seo_bar_metabox' ) ) : ?>
 		<p>
 			<strong><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></strong>
 			<div>
@@ -311,7 +311,7 @@ switch ( $instance ) :
 
 		<table class="form-table">
 			<tbody>
-				<?php if ( 'above' === $this->inpost_seo_bar ) : ?>
+				<?php if ( 'above' === $this->inpost_seo_bar || $this->is_option_checked( 'display_seo_bar_metabox' ) ) : ?>
 				<tr>
 					<th scope="row" valign="top"><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
 					<td>

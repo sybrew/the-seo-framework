@@ -254,13 +254,30 @@ TODO:
 
 * **Added:**
 	/
-	* TODO Schema.org Logo addition. This removes the Schema.org logo in the Social Profile Links markup (previously marked as "Knowledge Graph settings").
+	* TODO Schema.org Logo addition. This removes the Schema.org logo in the Social Sites Links markup (previously marked as "Knowledge Graph settings").
 	* TODO Site Logo detection!
 		* Only when the theme supports it. You can upload one through the customizer (Site Identity).
 		* This allows for a new fallback image! This one has priority over the Site Icon.
 		* The Knowledge Graph makes good use of this logo, it has priority over the Site Icon.
 	/
-	* TODO A new General settings metabox!
+	* A new General settings metabox! Containing:
+		* General Settings. Generalized general general settings, commander:
+			/
+			* TODO I have no idea what to put here. Debugging, enabling advanced view, maybe?
+		* Performance Settings.
+			* You might wish to adjust these settings, if:
+				* You use object caching. The whole SEO output is stored in object cache for each page.
+				* You use page caching. The whole SEO output is then stored within the page cache already.
+				* Unlikely, your website's PHP engine and database are extremely optimized. Disabling the options might even improve performance.
+				* You have thousands of pages and posts. Disabling these options will desaturate the database over time, which might improve performance.
+			* Did you know that you can view the SEO meta generation time within the page's source?
+		* Layout settings. You might want to take a look at these settings, if:
+			* You don't need or even dislike the SEO Bar.
+			* You want to adjust visual impairment settings. ?? This is already possible (although hidden), slightly redundant.
+		* Canonical settings. You should only change these settings, if:
+			* Your website is accessible through both HTTP and HTTPS
+			/
+			* TODO Link relationship settings have been put here.
 * **Changed:**
 	* The first two description separators are no longer marked "recommended". This is because the description does not need to support old browsers or old screen readers.
 * **Improved:**
@@ -287,7 +304,10 @@ TODO:
 * **Removed:**
 	/
 	* TODO Knowledge Graph Settings metabox.
-		* It has been moved inside the Schema Settings metabox.
+		* Its content has been moved inside the Schema Settings metabox.
+	/
+	* TODO Link Relationship Settings within the Social Meta Settings metabox.
+	 	* Its content has been moved to the General Settings metabox in the Canonical tab.
 * **Fixed:**
 	/
 	* TODO On some themes, a fatal error was output when editing posts. (requires confirmation)
@@ -309,6 +329,9 @@ TODO:
 	* Sitemap custom post type generation now doesn't add a rogue backslash anymore, but instead correctly outputs a tab.
 	/
 	* TODO AnsPress category canonical URL is now correct on its categories. @link https://wordpress.org/support/topic/anspress-categories/
+	* TODO The SEO Bar's on-hover tooltip is now once more correctly visible on mobile devices.
+	* TODO The notification that's displayed when settings are reset is no longer displayed on refresh.
+	* The website's tagline is no longer shown in the description when no excerpt can be generated.
 
 **For translators:**
 
@@ -337,6 +360,9 @@ TODO:
 		* This method was extracted from `the_seo_framework()->get_excerpt_by_id()` when solely using the first parameter.
 	/
 	* Most sanitation functions are now public. This allows for easier, predictable and more secure external code.
+	* Two new description methods:
+		1. `the_seo_framework()->get_description_excerpt_normal()`, fetches the normal description excerpt.
+		1. `the_seo_framework()->get_description_excerpt_social()`, fetches the social description excerpt.
 * **Changed:**
 	* All the classes can't be initiated directly anymore. Always use `the_seo_framework()`.
 		* Failing to do so will result in a fatal error.
@@ -409,6 +435,8 @@ TODO:
 	* Method `the_seo_framework()->robots_txt()` is now called on action `init`, it was 'plugins_loaded'.
 	* Method `the_seo_framework()->get_custom_field()` has been moved to class `Post_Data` from `Core`.
 	* Method `the_seo_framework()->adjust_search_filter()` has been moved to class `Init` from `Search`.
+	* Method `the_seo_framework()->build_singular_relative_url()` now continues to run if an empty Post ID has been suplied.
+	* Method `the_seo_framework()->generate_the_description()` now always trims the output.
 * **Improved:**
 	/
 	* Reduced sitemap's generation memory usage.
@@ -437,6 +465,7 @@ TODO:
 	* WordPress' `is_ssl()` isn't cached. So now it has a cached counterpart: `the_seo_framework()->is_ssl()`.
 	* The excluded post type filter no longer tries to match an exact value; saving some processing power generating the query.
 * **Fixed:**
+	/
 	* Leftover CSS prefix name `seoframework-content-no-js` should've been `tsf-content-no-js`.
 	* Method `the_seo_framework()->call_function()` now doesn't result in a fatal error anymore if the method of an object doesn't exist in conjunction with when the class is supplied as an object instead of string.
 	* The plugin no longer crashes the site on activation when the plugin classes have been disabled through mu-filters.
@@ -451,6 +480,13 @@ TODO:
 	* **Added:**
 		* `(array) the_seo_framework_ld_json_breadcrumb_terms`. Used to filter the found terms.
 		* `(array) the_seo_framework_breadcrumb_post_sorting_callback`. Used to apply your own sorting function for terms.
+		* `(bool) the_seo_framework_general_metabox`. Used to enable/disable the General Settings metabox.
+		* `(array) the_seo_framework_general_settings_tabs`. Used to alter or add general settings tabs.
+		* `(array) the_seo_framework_canonical_scheme_types`. Used to remove canonical URL setting options.
+* **Action notes:**
+	* **Added:**
+		* `the_seo_framework_general_metabox_before` runs before the General metabox output.
+		* `the_seo_framework_general_metabox_after` runs after the General metabox output.
 
 = 2.7.0 - Contemporary Aspiration =
 

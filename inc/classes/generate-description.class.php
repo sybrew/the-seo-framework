@@ -302,7 +302,7 @@ class Generate_Description extends Generate {
 	 */
 	public function generate_description_from_id( $args = array(), $escape = true ) {
 
-		if ( $this->the_seo_framework_debug ) $this->debug_init( __METHOD__, true, $debug_key = microtime( true ), get_defined_vars() );
+		$this->the_seo_framework_debug and $this->debug_init( __METHOD__, true, $debug_key = microtime( true ), get_defined_vars() );
 
 		/**
 		 * Applies filters bool 'the_seo_framework_enable_auto_description' : Enable or disable the description.
@@ -318,7 +318,7 @@ class Generate_Description extends Generate {
 		if ( $escape )
 			$description = $this->escape_description( $description );
 
-		if ( $this->the_seo_framework_debug ) $this->debug_init( __METHOD__, false, $debug_key, array( 'description' => $description, 'transient_key' => $this->auto_description_transient ) );
+		$this->the_seo_framework_debug and $this->debug_init( __METHOD__, false, $debug_key, array( 'description' => $description, 'transient_key' => $this->auto_description_transient ) );
 
 		return (string) $description;
 	}
@@ -327,6 +327,7 @@ class Generate_Description extends Generate {
 	 * Generates description from content.
 	 *
 	 * @since 2.6.0
+	 * @since 2.7.1 : The output is always trimmed if $escape is false.
 	 *
 	 * @param array $args description args : {
 	 * 		@param int $id the term or page id.
@@ -351,80 +352,49 @@ class Generate_Description extends Generate {
 		if ( $args['is_home'] || $this->is_front_page() || $this->is_static_frontpage( $args['id'] ) )
 			return $this->generate_home_page_description( $args['get_custom_field'], $escape );
 
-		$term = $this->fetch_the_term( $args['id'] );
-
-		$title = '';
-		$on = '';
-		$blogname = '';
-		$sep = '';
-
-		if ( $term || ! has_excerpt( $args['id'] ) ) {
-			$title_on_blogname = $this->generate_description_additions( $args['id'], $term, false );
-			$title = $title_on_blogname['title'];
-			$on = $title_on_blogname['on'];
-			$blogname = $title_on_blogname['blogname'];
-			$sep = $title_on_blogname['sep'];
-		}
-
 		/**
 		 * Setup transient.
 		 */
 		$this->setup_auto_description_transient( $args['id'], $args['taxonomy'] );
 
+		$term = $this->fetch_the_term( $args['id'] );
+
+		$use_cache = $this->is_option_checked( 'cache_meta_description' );
+
 		/**
-		 * Cache the generated description within a transient.
-		 * @since 2.3.3
-		 * @since 2.3.4 Put inside a different function.
+		 * @since 2.7.1: Added check for option 'cache_meta_description'.
 		 */
-		$excerpt = $this->get_transient( $this->auto_description_transient );
+		$excerpt = $use_cache ? $this->get_transient( $this->auto_description_transient ) : false;
 		if ( false === $excerpt ) {
+			$excerpt = array();
 
 			/**
-			 * Get max char length.
-			 * Default to 200 when $args['social'] as there are no additions.
+			 * @since 2.7.1:
+			 * 		1. Added check for option 'cache_meta_description'.
+			 * 		2. Moved generation functions in two different methods.
 			 */
-			$additions = trim( $title . " $on " . $blogname );
-			//* If there are additions, add a trailing space.
-			if ( $additions )
-				$additions .= ' ';
+			if ( $use_cache ) {
+				$excerpt_normal = $this->get_description_excerpt_normal( $args['id'], $term );
 
-			$additions_length = mb_strlen( html_entity_decode( $additions ) );
-			/**
-			 * Determine if the title is far too long (72+, rather than 75 in the Title guidelines).
-			 * If this is the case, trim the "title on blogname" part from the description.
-			 * @since 2.7.1
-			 */
-			if ( $additions_length > 71 ) {
-				$max_char_length_normal = 155;
-				$trim = true;
+				$excerpt['normal'] = $excerpt_normal['excerpt'];
+				$excerpt['trim'] = $excerpt_normal['trim'];
+				$excerpt['social'] = $this->get_description_excerpt_social( $args['id'], $term );
+
+				/**
+				 * Transient expiration: 1 week.
+				 * Keep the description for at most 1 week.
+				 */
+				$expiration = WEEK_IN_SECONDS;
+
+				$this->set_transient( $this->auto_description_transient, $excerpt, $expiration );
+			} elseif ( $args['social'] ) {
+				$excerpt['social'] = $this->get_description_excerpt_social( $args['id'], $term );
 			} else {
-				$max_char_length_normal = 155 - $additions_length;
-				$trim = false;
+				$excerpt_normal = $this->get_description_excerpt_normal( $args['id'], $term );
+
+				$excerpt['normal'] = $excerpt_normal['excerpt'];
+				$excerpt['trim'] = $excerpt_normal['trim'];
 			}
-
-			$max_char_length_social = 200;
-
-			//* Generate Excerpts.
-			$excerpt_normal = $this->generate_excerpt( $args['id'], $term, $max_char_length_normal );
-			$excerpt_social = $this->generate_excerpt( $args['id'], $term, $max_char_length_social );
-
-			/**
-			 * Put in array to be accessed later.
-			 * @since 2.7.1 Added trim value.
-			 */
-			$excerpt = array(
-				'normal' => $excerpt_normal,
-				'social' => $excerpt_social,
-				'trim' => $trim,
-			);
-
-			/**
-			 * Transient expiration: 1 week.
-			 * Keep the description for at most 1 week.
-			 */
-			$expiration = WEEK_IN_SECONDS;
-
-			$this->set_transient( $this->auto_description_transient, $excerpt, $expiration );
 		}
 
 		/**
@@ -434,46 +404,118 @@ class Generate_Description extends Generate {
 		 * @since 2.5.0
 		 */
 		if ( $args['social'] ) {
-			if ( $excerpt['social'] ) {
-				$description = $excerpt['social'];
-			} else {
-				//* No social description if nothing is found.
-				$description = '';
-			}
+			//* No social description if nothing is found.
+			$description = $excerpt['social'] ? $excerpt['social'] : '';
 		} else {
-			if ( empty( $excerpt['normal'] ) ) {
-				//* Fetch additions ignoring options.
-				$title_on_blogname = $this->generate_description_additions( $args['id'], $term, true );
-				$title = $title_on_blogname['title'];
-				$on = $title_on_blogname['on'];
-				$blogname = $title_on_blogname['blogname'];
-				$sep = $title_on_blogname['sep'];
-				$excerpt['trim'] = false;
-			}
-
-			if ( empty( $excerpt['trim'] ) ) {
-				/* translators: 1: Title, 2: on, 3: Blogname */
-				$title_on_blogname = trim( sprintf( _x( '%1$s %2$s %3$s', '1: Title, 2: on, 3: Blogname', 'autodescription' ), $title, $on, $blogname ) );
-			} else {
-				$title_on_blogname = '';
-				$sep = '';
-			}
-
 			if ( $excerpt['normal'] ) {
-				/* translators: 1: Title, 2: Separator, 3: Excerpt */
-				$description = sprintf( _x( '%1$s %2$s %3$s', '1: Title, 2: Separator, 3: Excerpt', 'autodescription' ), $title_on_blogname, $sep, $excerpt['normal'] );
+				if ( $excerpt['trim'] ) {
+					$description = $excerpt['normal'];
+				} else {
+					if ( $term || ! has_excerpt( $args['id'] ) ) {
+						$additions = $this->generate_description_additions( $args['id'], $term, false );
+
+						$title_on_blogname = $this->get_title_on_blogname( $additions );
+						$sep = $additions['sep'];
+					} else {
+						$title_on_blogname = $sep = '';
+					}
+
+					/* translators: 1: Title, 2: Separator, 3: Excerpt */
+					$description = sprintf( _x( '%1$s %2$s %3$s', '1: Title, 2: Separator, 3: Excerpt', 'autodescription' ), $title_on_blogname, $sep, $excerpt['normal'] );
+				}
 			} else {
+				//* Fetch additions ignoring options.
+				$additions = $this->generate_description_additions( $args['id'], $term, true );
+
 				//* We still add the additions when no excerpt has been found.
 				// i.e. home page or empty/shortcode filled page.
-				$description = $title_on_blogname;
+				$description = $this->get_title_on_blogname( $additions );
 			}
 		}
 
-		//* NOTE: If you don't escape, be sure to at least trim.
-		if ( $escape )
+		if ( $escape ) {
 			$description = $this->escape_description( $description );
+		} else {
+			$description = trim( $description );
+		}
 
 		return $description;
+	}
+
+	/**
+	 * Returns the generated description excerpt array for the normal description tag.
+	 *
+	 * @since 2.7.1
+	 *
+	 * @param int $id The post/term ID.
+	 * @param bool|object The term object.
+	 * @return array {
+	 *		'excerpt' => string The excerpt.
+	 *		'trim' => bool Whether to trim the additions.
+	 * }
+	 */
+	public function get_description_excerpt_normal( $id = 0, $term = false ) {
+
+		$title = '';
+		$on = '';
+		$blogname = '';
+		$sep = '';
+
+		if ( $term || ! has_excerpt( $id ) ) {
+			$title_on_blogname = $this->generate_description_additions( $id, $term, false );
+			$title = $title_on_blogname['title'];
+			$on = $title_on_blogname['on'];
+			$blogname = $title_on_blogname['blogname'];
+			$sep = $title_on_blogname['sep'];
+		}
+
+		$additions = trim( "$title $on $blogname" );
+		//* If there are additions, add a trailing space.
+		if ( $additions )
+			$additions .= ' ';
+
+		$additions_length = $additions ? mb_strlen( html_entity_decode( $additions ) ) : 0;
+		/**
+		 * Determine if the title is far too long (72+, rather than 75 in the Title guidelines).
+		 * If this is the case, trim the "title on blogname" part from the description.
+		 * @since 2.7.1
+		 */
+		if ( $additions_length > 71 ) {
+			$max_char_length = 155;
+			$trim = true;
+		} else {
+			$max_char_length = 155 - $additions_length;
+			$trim = false;
+		}
+
+		$excerpt_normal = $this->generate_excerpt( $id, $term, $max_char_length );
+
+		/**
+		 * Put in array to be accessed later.
+		 * @since 2.7.1 Added trim value.
+		 */
+		return array(
+			'excerpt' => $excerpt_normal,
+			'trim' => $trim,
+		);
+	}
+
+	/**
+	 * Returns the generated description excerpt for the social description tag.
+	 *
+	 * @since 2.7.1
+	 *
+	 * @param int $id The post/term ID.
+	 * @param bool|object The term object.
+	 * @return string The social description excerpt.
+	 */
+	public function get_description_excerpt_social( $id = 0, $term = false ) {
+
+		$max_char_length = 200;
+
+		$excerpt_social = $this->generate_excerpt( $id, $term, $max_char_length );
+
+		return $excerpt_social;
 	}
 
 	/**
@@ -568,6 +610,28 @@ class Generate_Description extends Generate {
 	}
 
 	/**
+	 * Returns translation string for "Title on Blogname".
+	 *
+	 * @since 2.7.1
+	 * @see $this->generate_description_additions()
+	 *
+	 * @param array $additions The description additions.
+	 * @return string The description additions.
+	 */
+	protected function get_title_on_blogname( $additions ) {
+
+		if ( empty( $additions ) )
+			return '';
+
+		$title = $additions['title'];
+		$on = $additions['on'];
+		$blogname = $additions['blogname'];
+
+		/* translators: 1: Title, 2: on, 3: Blogname */
+		return trim( sprintf( _x( '%1$s %2$s %3$s', '1: Title, 2: on, 3: Blogname', 'autodescription' ), $title, $on, $blogname ) );
+	}
+
+	/**
 	 * Generates description additions.
 	 *
 	 * @since 2.6.0
@@ -592,7 +656,7 @@ class Generate_Description extends Generate {
 		if ( $ignore || $this->add_description_additions( $id, $term ) ) {
 
 			if ( ! isset( $title[ $id ] ) )
-				$title[ $id ] = $this->generate_description_title( $id, $term, $ignore );
+				$title[ $id ] = $this->generate_description_title( $id, $term, $this->is_front_page() );
 
 			if ( $ignore || $this->is_option_checked( 'description_blogname' ) ) {
 

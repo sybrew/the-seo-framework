@@ -55,7 +55,9 @@ class Generate_Ldjson extends Generate_Image {
 
 		if ( $this->the_seo_framework_debug ) $this->debug_init( __METHOD__, false, $debug_key = microtime( true ), array( 'LD Json transient' => $this->ld_json_transient, 'Output from transient' => false !== $this->get_transient( $this->ld_json_transient ) ) );
 
-		$output = $this->get_transient( $this->ld_json_transient );
+		$use_cache = $this->is_option_checked( 'cache_meta_schema' );
+
+		$output = $use_cache ? $this->get_transient( $this->ld_json_transient ) : false;
 		if ( false === $output ) {
 
 			$output = '';
@@ -84,13 +86,15 @@ class Generate_Ldjson extends Generate_Image {
 					$output .= $breadcrumbhelper;
 			}
 
-			/**
-			 * Transient expiration: 1 week.
-			 * Keep the script for at most 1 week.
-			 */
-			$expiration = WEEK_IN_SECONDS;
+			if ( $use_cache ) {
+				/**
+				 * Transient expiration: 1 week.
+				 * Keep the script for at most 1 week.
+				 */
+				$expiration = WEEK_IN_SECONDS;
 
-			$this->set_transient( $this->ld_json_transient, $output, $expiration );
+				$this->set_transient( $this->ld_json_transient, $output, $expiration );
+			}
 		}
 
 		/**

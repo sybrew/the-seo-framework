@@ -54,7 +54,7 @@ switch ( $instance ) :
 	case 'the_seo_framework_knowledge_metabox_general' :
 
 		?><h4><?php esc_html_e( 'Knowledge Graph Settings', 'autodescription' ); ?></h4><?php
-		$this->description( __( "The Knowledge Graph lets Google and other Search Engines know where to find you or your organization and its relevant content.", 'autodescription' ) );
+		$this->description( __( 'The Knowledge Graph lets Google and other Search Engines know where to find you or your organization and its relevant content.', 'autodescription' ) );
 		$this->description( __( "Google is becoming more of an 'Answer Engine' than a 'Search Engine'. Setting up these options could have a positive impact on the SEO value of your website.", 'autodescription' ) );
 
 		//* Echo checkbox.
@@ -87,8 +87,6 @@ switch ( $instance ) :
 
 	case 'the_seo_framework_knowledge_metabox_about' :
 
-		$blogname = $this->get_blogname();
-
 		?><h4><?php esc_html_e( 'About this website', 'autodescription' ); ?></h4><?php
 		$this->description( __( 'Who or what is your website about?', 'autodescription' ) );
 
@@ -98,17 +96,17 @@ switch ( $instance ) :
 		<p>
 			<label for="<?php $this->field_id( 'knowledge_type' ); ?>"><?php echo esc_html_x( 'This website represents:', '...Organization or Person.', 'autodescription' ); ?></label>
 			<select name="<?php $this->field_name( 'knowledge_type' ); ?>" id="<?php $this->field_id( 'knowledge_type' ); ?>">
-			<?php
-			$knowledge_type = (array) apply_filters(
-				'the_seo_framework_knowledge_types',
-				array(
-					'organization'	=> __( 'An Organization', 'autodescription' ),
-					'person' 		=> __( 'A Person', 'autodescription' ),
-				)
-			);
-			foreach ( $knowledge_type as $value => $name )
-				echo '<option value="' . esc_attr( $value ) . '"' . selected( $this->get_field_value( 'knowledge_type' ), esc_attr( $value ), false ) . '>' . esc_html( $name ) . '</option>' . "\n";
-			?>
+				<?php
+				$knowledge_type = (array) apply_filters(
+					'the_seo_framework_knowledge_types',
+					array(
+						'organization'	=> __( 'An Organization', 'autodescription' ),
+						'person' 		=> __( 'A Person', 'autodescription' ),
+					)
+				);
+				foreach ( $knowledge_type as $value => $name )
+					echo '<option value="' . esc_attr( $value ) . '"' . selected( $this->get_field_value( 'knowledge_type' ), esc_attr( $value ), false ) . '>' . esc_html( $name ) . '</option>' . "\n";
+				?>
 			</select>
 		</p>
 
@@ -120,7 +118,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php $this->field_name( 'knowledge_name' ); ?>" class="large-text" id="<?php $this->field_id( 'knowledge_name' ); ?>" placeholder="<?php echo esc_attr( $blogname ) ?>" value="<?php echo esc_attr( $this->get_field_value( 'knowledge_name' ) ); ?>" />
+			<input type="text" name="<?php $this->field_name( 'knowledge_name' ); ?>" class="large-text" id="<?php $this->field_id( 'knowledge_name' ); ?>" placeholder="<?php echo esc_attr( $this->get_blogname() ) ?>" value="<?php echo esc_attr( $this->get_field_value( 'knowledge_name' ) ); ?>" />
 		</p>
 		<?php
 		break;

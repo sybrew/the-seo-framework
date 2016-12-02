@@ -160,7 +160,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	/**
 	 * Adds SEO column on edit(-tags).php
 	 *
-	 * Also determines where the column should be placed. Prefered before comments, then data, then tags.
+	 * Also determines where the column should be placed. Preferred before comments, then data, then tags.
 	 * If neither found, it will add the column to the end.
 	 *
 	 * @since 2.1.9

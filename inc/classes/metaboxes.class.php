@@ -143,10 +143,62 @@ class Metaboxes extends Site_Options {
 	}
 
 	/**
+	 * Outputs General Settings meta box on the Site SEO Settings page.
+	 *
+	 * @since 2.7.1
+	 *
+	 * @param object|null $post The current post object.
+	 * @param array $args The metabox arguments.
+	 */
+	public function general_metabox( $post = null, $args = array() ) {
+		do_action( 'the_seo_framework_general_metabox_before' );
+		$this->get_view( 'metaboxes/general-metabox', $args );
+		do_action( 'the_seo_framework_general_metabox_after' );
+	}
+
+	/**
+	 * Outputs General Settings meta box general tab.
+	 *
+	 * @since 2.7.1
+	 * @see $this->general_metabox() : Callback for General Settings box.
+	 */
+	public function general_metabox_general_tab() {
+		$this->get_view( 'metaboxes/general-metabox', array(), 'general' );
+	}
+
+	/**
+	 * Outputs General Settings meta box layout tab.
+	 *
+	 * @since 2.7.1
+	 * @see $this->general_metabox() : Callback for General Settings box.
+	 */
+	public function general_metabox_layout_tab() {
+		$this->get_view( 'metaboxes/general-metabox', array(), 'layout' );
+	}
+
+	/**
+	 * Outputs General Settings meta box performance tab.
+	 *
+	 * @since 2.7.1
+	 * @see $this->general_metabox() : Callback for General Settings box.
+	 */
+	public function general_metabox_performance_tab() {
+		$this->get_view( 'metaboxes/general-metabox', array(), 'performance' );
+	}
+
+	/**
+	 * Outputs General Settings meta box canonical tab.
+	 *
+	 * @since 2.7.1
+	 * @see $this->general_metabox() : Callback for General Settings box.
+	 */
+	public function general_metabox_canonical_tab() {
+		$this->get_view( 'metaboxes/general-metabox', array(), 'canonical' );
+	}
+	/**
 	 * Title meta box on the Site SEO Settings page.
 	 *
 	 * @since 2.2.2
-	 * @see $this->title_metabox()	Callback for Title Settings box.
 	 *
 	 * @param object|null $post The current post object.
 	 * @param array $args The metabox arguments.

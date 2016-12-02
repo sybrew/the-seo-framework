@@ -123,7 +123,9 @@ class Transients extends Sitemaps {
 	 * Setup vars for general site transients.
 	 *
 	 * @since 2.3.3
-	 * @since 2.7.1 Added locale suffix.
+	 * @since 2.7.1:
+	 * 		1. Added locale suffix.
+	 *		2. Added check for option 'cache_sitemap'.
 	 * @global int $blog_id
 	 */
 	public function setup_transient_names() {
@@ -136,7 +138,7 @@ class Transients extends Sitemaps {
 		$sitemap_revision = '1';
 		$theme_dir_revision = '0';
 
-		$this->sitemap_transient = $this->add_cache_key_suffix( 'tsf_sitemap_' . $sitemap_revision );
+		$this->sitemap_transient = $this->is_option_checked( 'cache_sitemap' ) ? $this->add_cache_key_suffix( 'tsf_sitemap_' . $sitemap_revision ) : '';
 		$this->theme_doing_it_right_transient = 'tsf_tdir_' . $theme_dir_revision . '_' . $blog_id;
 	}
 
@@ -144,12 +146,17 @@ class Transients extends Sitemaps {
 	 * Setup vars for transients which require $page_id.
 	 *
 	 * @since 2.3.3
+	 * @since 2.7.1: Now listens to option 'cache_meta_description'.
 	 *
 	 * @param int|string|bool $page_id the Taxonomy or Post ID. If false it will generate for the blog page.
 	 * @param string $taxonomy The taxonomy name.
-	 * @param strgin $type The Post Type
+	 * @param string $type The Post Type
+	 * @return void Early if caching is disabled.
 	 */
 	public function setup_auto_description_transient( $page_id, $taxonomy = '', $type = null ) {
+
+		if ( false === $this->is_option_checked( 'cache_meta_description' ) )
+			return;
 
 		$cache_key = $this->generate_cache_key( $page_id, $taxonomy, $type );
 
@@ -175,12 +182,17 @@ class Transients extends Sitemaps {
 	 * Setup vars for transients which require $page_id.
 	 *
 	 * @since 2.3.3
+	 * @since 2.7.1: Now listens to option 'cache_meta_schema'.
 	 *
 	 * @param int|string|bool $page_id the Taxonomy or Post ID. If false it will generate for the blog page.
 	 * @param string $taxonomy The taxonomy name.
 	 * @param string|null $type The post type.
+	 * @return void Early if caching is disabled.
 	 */
 	public function setup_ld_json_transient( $page_id, $taxonomy = '', $type = null ) {
+
+		if ( false === $this->is_option_checked( 'cache_meta_schema' ) )
+			return;
 
 		$cache_key = $this->generate_cache_key( $page_id, $taxonomy, $type );
 
@@ -527,12 +539,13 @@ class Transients extends Sitemaps {
 	 * Also ping search engines.
 	 *
 	 * @since 2.2.9
+	 * @since 2.7.1 Now listens to option 'cache_sitemap' before deleting transient.
 	 *
 	 * @return bool true
 	 */
 	public function delete_sitemap_transient() {
 
-		delete_transient( $this->sitemap_transient );
+		$this->is_option_checked( 'cache_sitemap' ) and delete_transient( $this->sitemap_transient );
 
 		$this->ping_searchengines();
 
@@ -544,6 +557,7 @@ class Transients extends Sitemaps {
 	 * Returns old option, since that's passed for sanitation within WP Core.
 	 *
 	 * @since 2.3.3
+	 * @since 2.7.1 Now listens to option 'cache_meta_description' before deleting transient.
 	 *
 	 * @param string $old_option The previous blog description option.
 	 * @return string Previous option.
@@ -552,7 +566,7 @@ class Transients extends Sitemaps {
 
 		$this->setup_auto_description_transient( $this->get_the_front_page_ID(), '', 'frontpage' );
 
-		delete_transient( $this->auto_description_transient );
+		$this->is_option_checked( 'cache_meta_description' ) and delete_transient( $this->auto_description_transient );
 
 		return $old_option;
 	}
@@ -561,6 +575,7 @@ class Transients extends Sitemaps {
 	 * Delete transient for the automatic description on requests.
 	 *
 	 * @since 2.3.3
+	 * @since 2.7.1 Now listens to option 'cache_meta_description' before deleting transient.
 	 *
 	 * @param mixed $page_id The page ID or identifier.
 	 * @param string $taxonomy The tt name.
@@ -571,7 +586,7 @@ class Transients extends Sitemaps {
 
 		$this->setup_auto_description_transient( $page_id, $taxonomy, $type );
 
-		delete_transient( $this->auto_description_transient );
+		$this->is_option_checked( 'cache_meta_description' ) and delete_transient( $this->auto_description_transient );
 
 		return true;
 	}
@@ -580,6 +595,7 @@ class Transients extends Sitemaps {
 	 * Delete transient for the LD+Json scripts on requests.
 	 *
 	 * @since 2.4.2
+	 * @since 2.7.1 Now listens to option 'cache_meta_schema' before deleting transient.
 	 *
 	 * @param mixed $page_id The page ID or identifier.
 	 * @param string $taxonomy The tt name.
@@ -593,7 +609,7 @@ class Transients extends Sitemaps {
 		if ( ! isset( $flushed ) ) {
 			$this->setup_ld_json_transient( $page_id, $taxonomy, $type );
 
-			delete_transient( $this->ld_json_transient );
+			$this->is_option_checked( 'cache_meta_schema' ) and delete_transient( $this->ld_json_transient );
 
 			$flushed = 'Oh behave!';
 

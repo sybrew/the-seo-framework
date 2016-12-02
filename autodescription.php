@@ -52,7 +52,7 @@ define( 'THE_SEO_FRAMEWORK_VERSION', '2.7.0' );
  * Plugin Database version for lightweight version upgrade comparing.
  * @since 2.7.0
  */
-define( 'THE_SEO_FRAMEWORK_DB_VERSION', '2701' );
+define( 'THE_SEO_FRAMEWORK_DB_VERSION', '2710' );
 
 /**
  * Plugin options filter.
