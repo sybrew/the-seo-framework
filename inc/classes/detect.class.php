@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Detects other plugins and themes
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Detect extends Render {
 

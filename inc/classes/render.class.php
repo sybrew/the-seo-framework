@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Puts all data into HTML valid meta tags.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Render extends Admin_Init {
 

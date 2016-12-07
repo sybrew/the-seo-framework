@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Adds theme/plugin compatibility.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Compat extends Core {
 
@@ -60,7 +60,7 @@ class Compat extends Core {
 	/**
 	 * Removes the Genesis SEO meta boxes on the SEO Settings page
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 * @access private
 	 *
 	 * @param array $plugins, overwritten as this filter will fire the

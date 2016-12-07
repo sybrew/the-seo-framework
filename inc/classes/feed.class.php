@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) or die;
  * Influences WordPress feeds.
  * "Report Cybr for Feeding." - General EUW League of Legends player.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Feed extends Transients {
 

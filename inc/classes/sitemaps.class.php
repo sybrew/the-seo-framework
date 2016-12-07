@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Handles sitemap output.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Sitemaps extends Metaboxes {
 
@@ -169,7 +169,7 @@ class Sitemaps extends Metaboxes {
 				/**
 				 * Applies filters 'the_seo_framework_sitemap_post_limit' : int
 				 * @since 2.2.9
-				 * @since 2.7.1 Increased to 1200 from 700.
+				 * @since 2.8.0 Increased to 1200 from 700.
 				 */
 				$this->max_posts = (int) apply_filters( 'the_seo_framework_sitemap_post_limit', 1200 );
 
@@ -189,7 +189,7 @@ class Sitemaps extends Metaboxes {
 	 * Destroys unused $GLOBALS. To be used prior to outputting sitemap.
 	 *
 	 * @since 2.6.0
-	 * @since 2.7.1 Renamed from clean_up_globals().
+	 * @since 2.8.0 Renamed from clean_up_globals().
 	 *
 	 * @param bool $get_freed_memory Whether to return the freed memory in bytes.
 	 * @return int $freed_memory
@@ -259,7 +259,7 @@ class Sitemaps extends Metaboxes {
 	/**
 	 * Output sitemap.xml content from transient.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 *
 	 * @return string Sitemap XML contents.
 	 */
@@ -277,7 +277,7 @@ class Sitemaps extends Metaboxes {
 
 		/**
 		 * Output debug prior output.
-		 * @since 2.7.1
+		 * @since 2.8.0
 		 */
 		if ( $this->the_seo_framework_debug ) {
 			echo '<!-- Site estimated peak usage prior to generation: ' . number_format( memory_get_peak_usage() / 1024 / 1024, 3 ) . ' MB -->' . "\r\n";
@@ -336,7 +336,7 @@ class Sitemaps extends Metaboxes {
 	 * Generate sitemap.xml content.
 	 *
 	 * @since 2.2.9
-	 * @since 2.7.1 Now adjusts memory limit when possible.
+	 * @since 2.8.0 Now adjusts memory limit when possible.
 	 *
 	 * @return string The sitemap content.
 	 */

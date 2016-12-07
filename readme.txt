@@ -194,7 +194,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
-= 2.7.1 (or 2.8.0) - Seceded Affiliation =
+= 2.8.0 - ??? =
 
 **Release date:**
 
@@ -222,11 +222,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * This changes over time as Google updates its Search Engine all over the world.
 * Usage of experimental Schema.org scripts cause no harm to ranking.
 
-**Did you know:**
-
-* Each update name and link to the detailed log are a play on words about something in a particular event, movie, series, quote, or the update contents itself.
-* The 2.7.x version (and 2.8.x?? TODO consider) update names are all about the first Star Wars movie "Episode IV: A new Hope".
-
 **Do you mind:**
 / TODO
 * If you have at least 30 seconds to spare, could you please fill in this anonymous survey? It will sincerely help me help you.
@@ -248,7 +243,7 @@ TODO:
 
 **Detailed log:**
 /
-***That's no query; it's a [changelog](https://theseoframework.com/?p= TODO #detailed).***
+***TODO something something [changelog](https://theseoframework.com/?p= TODO #detailed).***
 
 **For everyone:**
 
@@ -278,6 +273,9 @@ TODO:
 			* Your website is accessible through both HTTP and HTTPS
 			/
 			* TODO Link relationship settings have been put here.
+	/
+	* TODO Visual notification for when an actual `robots.txt` file has been found.
+		* https://wordpress.org/support/topic/sitemap-settings-1/
 * **Changed:**
 	* The first two description separators are no longer marked "recommended". This is because the description does not need to support old browsers or old screen readers.
 * **Improved:**
@@ -295,6 +293,7 @@ TODO:
 	* The accessible counter type (with background color, type 1) is now a bit bolder.
 	* On Woocommerce list tables additional tabs injected by other plugins will likely not overflow anymore.
 	* The sitemap cache now supports multiple languages. This means more than one sitemap can be created.
+	* Removed redundant and duplicated checks on the Open Graph image generation.
 * **Updated:**
 	/
 	* TODO Translation POT file.
@@ -319,14 +318,16 @@ TODO:
 	* TODO On some themes, the private prefix has been added to the title (already fixed, requires confirmation)
 		* https://wordpress.org/support/topic/category-page-title-with-weird-unwanted-prefix/
 	/
+	* TODO With PolyLang, the canonical URL failed to write the language path on the home pages.
+		* https://wordpress.org/support/topic/polylang-canonicals-failing-on-homepage/
+	/
 	* When the title exceeds 154 characters, the description will no longer contain the complete post's content. Instead, the title will now be omitted and the description length has been limited to 155 characters.
 	* WPML sitemap generated URL path now reflects the language. TODO confirm.
-	* TODO Robots.txt settings outputted incorrect notice when site is blocked from robots through WordPress reading settings.
+	* TODO Robots.txt settings outputted incorrect notice when site is blocked from robots through WordPress reading settings while the sitemap has been deactivated.
 	* TODO bbPress forum topic ID's weren't correctly recognized. With this fix, these issues have been resolved:
 		- TODO The title is now correct.
 		- TODO The description is now correct.
 		- TODO The canonical URL is now correct.
-	* Sitemap custom post type generation now doesn't add a rogue backslash anymore, but instead correctly outputs a tab.
 	/
 	* TODO AnsPress category canonical URL is now correct on its categories. @link https://wordpress.org/support/topic/anspress-categories/
 	* TODO The SEO Bar's on-hover tooltip is now once more correctly visible on mobile devices.
@@ -464,11 +465,11 @@ TODO:
 	* Method `get_latest_post_id()` now uses WP_Query instead of a direct database call.
 	* WordPress' `is_ssl()` isn't cached. So now it has a cached counterpart: `the_seo_framework()->is_ssl()`.
 	* The excluded post type filter no longer tries to match an exact value; saving some processing power generating the query.
+	* Added multiple checks in the Breadcrumb generation code to prevent empty breadcrumb output.
 * **Fixed:**
 	/
 	* Leftover CSS prefix name `seoframework-content-no-js` should've been `tsf-content-no-js`.
 	* Method `the_seo_framework()->call_function()` now doesn't result in a fatal error anymore if the method of an object doesn't exist in conjunction with when the class is supplied as an object instead of string.
-	* The plugin no longer crashes the site on activation when the plugin classes have been disabled through mu-filters.
 * **Deprecated:**
 	* Method `the_seo_framework()->search_filter()`. It's a very slow function as it uses `get_excluded_search_ids`. There's no replacement.
 	* Method `the_seo_framework()->get_excluded_search_ids()`. It's a very slow function because it queries all posts. There's no replacement.
@@ -487,99 +488,6 @@ TODO:
 	* **Added:**
 		* `the_seo_framework_general_metabox_before` runs before the General metabox output.
 		* `the_seo_framework_general_metabox_after` runs after the General metabox output.
-
-= 2.7.0 - Contemporary Aspiration =
-
-**Release date:**
-
-* September 9th 2016
-
-**Summarized:**
-
-* This is a major maintenance release. Although nothing notable has been changed, added or fixed; nevertheless, this update makes everything a lot lighter on your server.
-* As the Extension Manager is on its way, it's the first time I actually needed to make use of this plugin's application framework. With this, I noticed some things had to be improved; and with this update, a lot has been.
-* For developers, the code has been cleaned up again, massively. Enjoy!
-* For everyone, this plugin now makes use of the WordPress core term data handling. Which makes this plugin much more reliable, lighter and faster.
-* This update brings 19 new features, more than 24 bugs have been fixed and over 42 improvements have been introduced.
-
-**SEO Tip of the Update:**
-
-* One of the most critical aspects of SEO is being found. However, Google isn't likely to trust your website until others do. This greatly affects your website's ranking.
-* Because of this, your website needs to be linked to by trusted sources. The more trustworthy a source is, the more trust your website gains at Google.
-* Google needs to understand the relation between your website and another as well. If a site talks about hosting events, and your site is about one particular type of event, they are likely compatible.
-* If your website sells candy, be careful not to place a link towards or on an agency website when your website is new.
-* So, do not ever spread your first links across multiple websites that are completely unrelated to yours.
-* Do not forget to link to other related websites, this way Google knows what your website is about. For example, Google can then distinguish Apple (technology) from apple (fruit).
-
-**Announcements:**
-
-1. **The SEO Framework Extension Manager** (as promised since version 2.4.0) is now in alpha!
-	* [GitHub page](https://github.com/sybrew/The-SEO-Framework-Extension-Manager).
-	* [Get a copy](https://github.com/sybrew/The-SEO-Framework-Extension-Manager/archive/master.zip).
-	* [Open an issue](https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues).
-	* **Note:** That plugin requires PHP 5.4 or later.
-	* **Note:** That plugin requires The SEO Framework 2.7.0 and WordPress 4.4 or later.
-	* **Warning:** That plugin makes API requests to https://premium.theseoframework.com/ and https://webmasters.googleblog.com/.
-	* **Warning:** The privacy policy for these API requests have not yet been set up.
-	* **Warning:** Use at own risk.
-1. No more features will be added to The SEO Framework.
-	* **Exception:** If a feature covers a wide range of website types and is required for Google and Bing, it will be added to The SEO Framework.
-	* **Reason:** I want to keep The SEO Framework as stable, light and clean as possible.
-
-**The goal of this update:**
-
-With this update, I wanted to improve this plugin in several ways.
-Normally, this is listed as "for developers"; however, this time, I've tried to make it more understandable for everyone.
-
-1. Minimizing the plugin's load time.
-1. Reducing the plugin's database calls.
-1. Reducing the plugin's server resource usage.
-1. Increase the plugin's compatibility with other plugins and themes.
-1. Upgrading the plugin to the latest WordPress standards.
-1. Reducing future bug reports chance.
-1. Improving the code quality and readability.
-1. Helping developers out with better extensibility.
-1. Better coding standards have been introduced.
-
-How this was achieved (in order set above):
-
-1. I've removed redundant function calls and I've added more efficient caches and ways of data handling.
-1. I've removed temporarily database entries and I've exchanging them for permanent ones so they're autoloaded through WordPress.
-1. I've transferred all option metaboxes into separated files, which are then only loaded when needed on the SEO settings page.
-1. I've exchanged category and tag SEO data injection for WordPress 4.4+ term options. This will make sure premium themes can do whatever they want.
-1. Alongside the previous upgrade, I've taken a very close look at the WordPress core functions, and adjusted code accordingly to prevent conflicts.
-1. Because of all previous steps, this would follow naturally.
-1. I've read all code once more, line by line, and discovered ways for improvement. It's like a spellcheck.
-1. Throughout the code, better and more open standards have been introduced; where other developers can easily add to, disable or enable functionality.
-1. With the help of a code linter, [WordPress.com VIP best practices](https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/) have been enforced throughout the plugin. This resulted in increased security and overall performance.
-
-**How do I benefit most of this update, and other plugins in general?**
-
-This update has been writting with the future in mind. Always make sure to:
-
-1. Update to the latest WordPress version. This will make sure your website is secure and compatible.
-1. Update to an actively supported PHP version. Did you know that PHP versions 5.5 and below are no longer updated against security vulnerabilities? Go [tell your hosting provider](https://wordpress.org/about/requirements/).
-1. Process your theme through [Theme Check](https://wordpress.org/plugins/theme-check/). If the theme you wish to use fails many of these checks, feel free to tell the theme author. Bad standards lead to bad performance, compatibility issues, and sometimes even security vulnerabilities.
-
-***Note: This plugin upgrades its term metadata automatically within the admin area to WordPress 4.4 standards, if you have WordPress 4.4+ installed.***
-
-**Do you have thousands of categories and tags?**
-
-* No problem! After the plugin has been updated, the first admin request might take a while longer while converting all term data to the new data system.
-* After that, you're good to go. Enjoy!
-
-**WordPress compatibility will be changed.**
-
-* This is the last update to receive support for WordPress 3.9 and later.
-* Only WordPress 4.3.4 or later will continue to receive support after this update, until further announcement.
-
-**Are you a translation editor?**
-
-* Please check out and update the newly improved translations. It should take less than 10 minutes.
-
-**Detailed Log:**
-
-***The code is strong with [this one](https://theseoframework.com/?p=1531#detailed).***
 
 = Full changelog =
 

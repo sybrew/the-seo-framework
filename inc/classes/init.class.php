@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Outputs all data in front-end header
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Init extends Query {
 
@@ -74,7 +74,7 @@ class Init extends Query {
 	/**
 	 * Initializes the plugin actions and filters.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 */
 	public function init_the_seo_framework() {
 
@@ -95,7 +95,7 @@ class Init extends Query {
 	/**
 	 * Initializes the plugin front- and back-end actions.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 */
 	public function init_global_actions() {
 		//* Jetpack compat.
@@ -105,7 +105,7 @@ class Init extends Query {
 	/**
 	 * Initializes the plugin front- and back-end filters.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 */
 	public function init_global_filters() { }
 

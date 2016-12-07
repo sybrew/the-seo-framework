@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Handles Site Options for the plugin.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Site_Options extends Sanitize {
 
@@ -280,6 +280,13 @@ class Site_Options extends Sanitize {
 		 * Only used within the SEO Settings page.
 		 */
 		return array(
+			'cache_meta_description'	=> 0, 	// Description transient cache.
+			'cache_meta_schema'			=> 0,	// Schema.org transient cache.
+			'cache_sitemap'				=> 0,	// Sitemap transient cache.
+
+			'display_seo_bar_tables'	=> 0, 	// SEO Bar post-list tables.
+			'display_seo_bar_metabox'	=> 0, 	// SEO Bar post SEO Settings.
+
 			'title_rem_additions'	=> 1, 	// Title remove additions.
 			'title_rem_prefixes'	=> 0, 	// Title remove prefixes.
 

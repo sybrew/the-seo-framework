@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Generates Image SEO data based on content.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Generate_Image extends Generate_Url {
 
@@ -302,9 +302,7 @@ class Generate_Image extends Generate_Url {
 
 			//* Get path of image and load it into the wp_get_image_editor
 			$i_file_path = get_attached_file( $id );
-
-			$i_file_old_name = basename( get_attached_file( $id ) );
-			$i_file_ext      = pathinfo( $i_file_path, PATHINFO_EXTENSION );
+			$i_file_ext  = pathinfo( $i_file_path, PATHINFO_EXTENSION );
 
 			if ( $i_file_ext ) {
 				$i_file_dir_name = pathinfo( $i_file_path, PATHINFO_DIRNAME );
@@ -318,8 +316,8 @@ class Generate_Image extends Generate_Url {
 				$new_image_dirfile = $i_file_dir_name . $i_file_file_name . '-' . $w . 'x' . $h . '.' . $i_file_ext;
 
 				//* Generate image URL.
-				$upload_dir 	= wp_upload_dir();
-				$upload_url 	= $upload_dir['baseurl'];
+				$upload_dir     = wp_upload_dir();
+				$upload_url     = $upload_dir['baseurl'];
 				$upload_basedir = $upload_dir['basedir'];
 
 				//* We've got our image path.

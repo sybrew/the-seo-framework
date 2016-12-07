@@ -46,7 +46,7 @@ defined( 'ABSPATH' ) or die;
  * Not many caching plugins use CDN in dashboard. What a shame. Firefox does cache.
  * @since 1.0.0
  */
-define( 'THE_SEO_FRAMEWORK_VERSION', '2.7.0' );
+define( 'THE_SEO_FRAMEWORK_VERSION', '2.7.99' );
 
 /**
  * Plugin Database version for lightweight version upgrade comparing.
@@ -118,7 +118,7 @@ define( 'THE_SEO_FRAMEWORK_DIR_PATH_CLASS', THE_SEO_FRAMEWORK_DIR_PATH . 'inc/cl
 
 /**
  * The plugin interface map absolute path.
- * @since 2.7.1
+ * @since 2.8.0
  */
 define( 'THE_SEO_FRAMEWORK_DIR_PATH_INTERFACE', THE_SEO_FRAMEWORK_DIR_PATH . 'inc/interfaces/' );
 
@@ -143,7 +143,7 @@ register_activation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framework
  * Checks whether the server can run this plugin on activation.
  * If not, it will deactivate this plugin.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 function the_seo_framework_check_php() {
 
@@ -172,19 +172,18 @@ register_activation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framework
  * Add and Flush rewrite rules on plugin activation.
  *
  * @since 2.6.6
+ * @since 2.7.1: 1. Now no longer reinitializes global $wp_rewrite.
+ *               2. Now always listens to the preconditions of the sitemap addition.
+ *               3. Now flushes the rules on shutdown.
  * @access private
- * @global object $wp_rewrite
  */
 function the_seo_framework_flush_rewrite_rules_activation() {
-	global $wp_rewrite;
 
 	$the_seo_framework = the_seo_framework();
 
 	if ( isset( $the_seo_framework ) ) {
-		$the_seo_framework->rewrite_rule_sitemap( true );
-
-		$wp_rewrite->init();
-		$wp_rewrite->flush_rules( true );
+		$the_seo_framework->rewrite_rule_sitemap();
+		add_action( 'shutdown', 'flush_rewrite_rules' );
 	}
 }
 
@@ -193,17 +192,17 @@ register_deactivation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framewo
  * Flush rewrite rules on plugin deactivation.
  *
  * @since 2.6.6
+ * @since 2.7.1: 1. Now no longer reinitializes global $wp_rewrite.
+ *               2. Now flushes the rules on shutdown.
  * @access private
  * @global object $wp_rewrite
  */
 function the_seo_framework_flush_rewrite_rules_deactivation() {
 	global $wp_rewrite;
 
-	$wp_rewrite->init();
-
 	unset( $wp_rewrite->extra_rules_top['sitemap\.xml$'] );
 
-	$wp_rewrite->flush_rules( true );
+	add_action( 'shutdown', 'flush_rewrite_rules' );
 }
 
 /**

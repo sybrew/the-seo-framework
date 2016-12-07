@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Generates general SEO data based on content.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Generate extends Term_Data {
 

@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Holds plugin debug functions.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 final class Debug implements Debug_Interface {
 
@@ -54,7 +54,7 @@ final class Debug implements Debug_Interface {
 	/**
 	 * The object instance.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 *
 	 * @var object|null This object instance.
 	 */
@@ -63,7 +63,7 @@ final class Debug implements Debug_Interface {
 	/**
 	 * Cached debug/profile properties.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 *
 	 * @var bool Whether debug is enabled.
 	 * @var bool Whether debug is hidden in HTMl.
@@ -89,7 +89,7 @@ final class Debug implements Debug_Interface {
 	/**
 	 * Sets the class instance.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 * @access private
 	 */
 	public static function set_instance( $debug = null, $hidden = null ) {
@@ -107,7 +107,7 @@ final class Debug implements Debug_Interface {
 	/**
 	 * Gets the class instance. It's set when it's null.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 *
 	 * @return object The current instance.
 	 */
@@ -123,7 +123,7 @@ final class Debug implements Debug_Interface {
 	/**
 	 * Mark a filter as deprecated and inform when it has been used.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 * @see @this->_deprecated_function().
 	 *
 	 * @param string $filter		The function that was called.
@@ -142,7 +142,7 @@ final class Debug implements Debug_Interface {
 	 * The current behavior is to trigger a user error if WP_DEBUG is true.
 	 *
 	 * @since 2.6.0
-	 * @since 2.7.1 Now escapes all input, except for $replacement.
+	 * @since 2.8.0 Now escapes all input, except for $replacement.
 	 * @access private
 	 *
 	 * @param string $function     The function that was called.
@@ -206,7 +206,7 @@ final class Debug implements Debug_Interface {
 	 * The current behavior is to trigger a user error if WP_DEBUG is true.
 	 *
 	 * @since 2.6.0
-	 * @since 2.7.1 Now escapes all input, except for $message.
+	 * @since 2.8.0 Now escapes all input, except for $message.
 	 * @access private
 	 *
 	 * @param string $function	The function that was called.
@@ -257,7 +257,7 @@ final class Debug implements Debug_Interface {
 	 * The current behavior is to trigger a user error if WP_DEBUG is true.
 	 *
 	 * @since 2.7.0
-	 * @since 2.7.1 1. Now escapes all parameters.
+	 * @since 2.8.0 1. Now escapes all parameters.
 	 *              2. Removed check for gettext.
 	 * @access private
 	 * @todo Escape translation string.
@@ -411,7 +411,7 @@ final class Debug implements Debug_Interface {
 	 * Echos debug output.
 	 *
 	 * @since 2.6.0
-	 * @since 2.7.1 is now static.
+	 * @since 2.8.0 is now static.
 	 * @access private
 	 */
 	public function debug_output() {
@@ -421,7 +421,7 @@ final class Debug implements Debug_Interface {
 	/**
 	 * Determines if there's debug output.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 * @access private
 	 *
 	 * @return bool True if there's output.
@@ -434,7 +434,7 @@ final class Debug implements Debug_Interface {
 	/**
 	 * Outputs the debug_output property.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 * @access private
 	 */
 	public static function output_debug() {
@@ -836,7 +836,7 @@ final class Debug implements Debug_Interface {
 	/**
 	 * Outputs the debug header.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 * @access private
 	 */
 	public static function output_debug_header() {
@@ -919,7 +919,7 @@ final class Debug implements Debug_Interface {
 	/**
 	 * Outputs debug query.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 * @access private
 	 */
 	public static function output_debug_query() {

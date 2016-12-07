@@ -34,13 +34,13 @@ switch ( $instance ) :
 		/**
 		 * Applies filters `the_seo_framework_general_settings_tabs` : Array
 		 * Used to extend or minimize General Settings tabs
-		 * @since 2.7.1
+		 * @since 2.8.0
 		 */
 		$defaults = (array) apply_filters( 'the_seo_framework_general_settings_tabs', $default_tabs, $args );
 
 		$tabs = wp_parse_args( $args, $defaults );
 
-		$this->nav_tab_wrapper( 'general', $tabs, '2.7.1' );
+		$this->nav_tab_wrapper( 'general', $tabs, '2.8.0' );
 		break;
 
 	case 'the_seo_framework_general_metabox_general' :
@@ -63,7 +63,7 @@ switch ( $instance ) :
 				$this->make_checkbox(
 					'cache_meta_description',
 					esc_html__( 'Enable automated description output cache?', 'autodescription' )
-					. ' ' . $this->make_info( __( 'Generating a description generally uses multiple types of resources.', 'autodescription' ), '', false ),
+					. ' ' . $this->make_info( __( 'Description generation can use a lot of server resources when it reads the page content.', 'autodescription' ), '', false ),
 					'',
 					false
 				),
@@ -88,7 +88,7 @@ switch ( $instance ) :
 
 	case 'the_seo_framework_general_metabox_layout' :
 		?><h4><?php esc_html_e( 'Administrative Layout Settings', 'autodescription' ); ?></h4><?php
-		$this->description( __( 'SEO hints are visually displayed throughout the dashboard.', 'autodescription' ) );
+		$this->description( __( 'SEO hints can be visually displayed throughout the dashboard.', 'autodescription' ) );
 
 		?>
 		<hr>

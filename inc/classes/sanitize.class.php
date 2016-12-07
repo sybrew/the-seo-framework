@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Sanitizes input within the plugin.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Sanitize extends Admin_Pages {
 
@@ -557,7 +557,7 @@ class Sanitize extends Admin_Pages {
 	 * Returns the description separator value string.
 	 *
 	 * @since 2.2.2
-	 * @since 2.7.1 Method is now public.
+	 * @since 2.8.0 Method is now public.
 	 *
 	 * @param mixed $new_value Should be identical to any of the $this->description_separator values
 	 * @return string Description separator option
@@ -586,7 +586,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.5.0
 	 * @since 2.6.6 Removes duplicated spaces.
-	 * @since 2.7.1 Method is now public.
+	 * @since 2.8.0 Method is now public.
 	 *
 	 * @param string $new_value The Description.
 	 * @return string One line sanitized description.
@@ -620,7 +620,7 @@ class Sanitize extends Admin_Pages {
 	/**
 	 * Escapes input excerpt.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 *
 	 * @param string $excerpt the Excerpt.
 	 * @return string The escaped Excerpt.
@@ -648,7 +648,7 @@ class Sanitize extends Admin_Pages {
 	 * Returns a sanitized and trimmed title.
 	 *
 	 * @since 2.5.2
-	 * @since 2.7.1 Method is now public.
+	 * @since 2.8.0 Method is now public.
 	 *
 	 * @param string $new_value The Title.
 	 * @return string Sanitized and trimmed title.
@@ -665,7 +665,7 @@ class Sanitize extends Admin_Pages {
 	 * Returns the knowledge type value string.
 	 *
 	 * @since 2.2.8
-	 * @since 2.7.1 Method is now public.
+	 * @since 2.8.0 Method is now public.
 	 *
 	 * @param mixed $new_value Should be identical to any of the $person_organization values.
 	 * @return string title Knowledge type option
@@ -684,7 +684,7 @@ class Sanitize extends Admin_Pages {
 	 * Returns left or right, for the separator location.
 	 *
 	 * @since 2.2.2
-	 * @since 2.7.1 Method is now public.
+	 * @since 2.8.0 Method is now public.
 	 *
 	 * @param mixed $new_value Should ideally be a string 'left' or 'right' passed in.
 	 * @return string left or right
@@ -707,7 +707,7 @@ class Sanitize extends Admin_Pages {
 	 * Returns left or right, for the home separator location.
 	 *
 	 * @since 2.5.2
-	 * @since 2.7.1 Method is now public.
+	 * @since 2.8.0 Method is now public.
 	 *
 	 * @param mixed $new_value Should ideally be a string 'left' or 'right' passed in.
 	 * @return string left or right
@@ -732,7 +732,7 @@ class Sanitize extends Admin_Pages {
 	 * Uses double casting. First, we cast to bool, then to integer.
 	 *
 	 * @since 2.2.2
-	 * @since 2.7.1 Method is now public.
+	 * @since 2.8.0 Method is now public.
 	 *
 	 * @param mixed $new_value Should ideally be a 1 or 0 integer passed in.
 	 * @return integer 1 or 0.
@@ -795,7 +795,7 @@ class Sanitize extends Admin_Pages {
 	 * Returns a positive integer value.
 	 *
 	 * @since 2.2.2
-	 * @since 2.7.1 Method is now public.
+	 * @since 2.8.0 Method is now public.
 	 *
 	 * @param mixed $new_value Should ideally be a positive integer.
 	 * @return integer Positive integer.
@@ -808,7 +808,7 @@ class Sanitize extends Admin_Pages {
 	 * Removes HTML tags from string.
 	 *
 	 * @since 2.2.2
-	 * @since 2.7.1 Method is now public.
+	 * @since 2.8.0 Method is now public.
 	 *
 	 * @param string $new_value String, possibly with HTML in it.
 	 * @return string String without HTML in it.
@@ -821,7 +821,7 @@ class Sanitize extends Admin_Pages {
 	 * Removes HTML tags and line breaks from string.
 	 *
 	 * @since 2.5.2
-	 * @since 2.7.1 Method is now public.
+	 * @since 2.8.0 Method is now public.
 	 *
 	 * @param string $new_value String, possibly with HTML and spaces in it.
 	 * @return string String without HTML and breaks in it.
@@ -871,7 +871,7 @@ class Sanitize extends Admin_Pages {
 	 * Makes Email Addresses safe, via sanitize_email()
 	 *
 	 * @since 2.2.2
-	 * @since 2.7.1 Method is now public.
+	 * @since 2.8.0 Method is now public.
 	 *
 	 * @param string $new_value String, an email address, possibly unsafe.
 	 * @return string String a safe email address
@@ -884,7 +884,7 @@ class Sanitize extends Admin_Pages {
 	 * Removes unsafe HTML tags, via wp_kses_post().
 	 *
 	 * @since 2.2.2
-	 * @since 2.7.1 Method is now public.
+	 * @since 2.8.0 Method is now public.
 	 *
 	 * @param string $new_value String with potentially unsafe HTML in it.
 	 * @return string String with only safe HTML in it
@@ -898,7 +898,7 @@ class Sanitize extends Admin_Pages {
 	 * Parses URL to path and adds @ if URL is given.
 	 *
 	 * @since 2.2.2
-	 * @since 2.7.1 Method is now public.
+	 * @since 2.8.0 Method is now public.
 	 *
 	 * @param string $new_value String with potentially wrong Twitter username.
 	 * @return string String with 'correct' Twitter username
@@ -930,7 +930,7 @@ class Sanitize extends Admin_Pages {
 	 * Falls back to previous value if empty. If previous value is empty if will go to default.
 	 *
 	 * @since 2.5.2
-	 * @since 2.7.1 Method is now public.
+	 * @since 2.8.0 Method is now public.
 	 *
 	 * @param string $new_value String with potentially wrong option value.
 	 * @return string Sanitized twitter card type.
@@ -960,7 +960,7 @@ class Sanitize extends Admin_Pages {
 	 * beginning, so it isn't a true relative link, but from the web root base.
 	 *
 	 * @since 2.6.5
-	 * @since 2.7.1 Method is now public.
+	 * @since 2.8.0 Method is now public.
 	 *
 	 * @param string $url Full Path URL or relative URL.
 	 * @return string Abolute path.
@@ -973,7 +973,7 @@ class Sanitize extends Admin_Pages {
 	 * Sanitize the Redirect URL
 	 *
 	 * @since 2.2.4
-	 * @since 2.7.1 Method is now public.
+	 * @since 2.8.0 Method is now public.
 	 *
 	 * @param string $new_value String with potentially unwanted redirect URL.
 	 * @return string The Sanitized Redirect URL

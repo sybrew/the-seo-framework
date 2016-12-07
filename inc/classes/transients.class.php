@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Generates, stores and deletes common transients.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Transients extends Sitemaps {
 
@@ -123,7 +123,7 @@ class Transients extends Sitemaps {
 	 * Setup vars for general site transients.
 	 *
 	 * @since 2.3.3
-	 * @since 2.7.1:
+	 * @since 2.8.0:
 	 * 		1. Added locale suffix.
 	 *		2. Added check for option 'cache_sitemap'.
 	 * @global int $blog_id
@@ -146,7 +146,7 @@ class Transients extends Sitemaps {
 	 * Setup vars for transients which require $page_id.
 	 *
 	 * @since 2.3.3
-	 * @since 2.7.1: Now listens to option 'cache_meta_description'.
+	 * @since 2.8.0: Now listens to option 'cache_meta_description'.
 	 *
 	 * @param int|string|bool $page_id the Taxonomy or Post ID. If false it will generate for the blog page.
 	 * @param string $taxonomy The taxonomy name.
@@ -182,7 +182,7 @@ class Transients extends Sitemaps {
 	 * Setup vars for transients which require $page_id.
 	 *
 	 * @since 2.3.3
-	 * @since 2.7.1: Now listens to option 'cache_meta_schema'.
+	 * @since 2.8.0: Now listens to option 'cache_meta_schema'.
 	 *
 	 * @param int|string|bool $page_id the Taxonomy or Post ID. If false it will generate for the blog page.
 	 * @param string $taxonomy The taxonomy name.
@@ -381,7 +381,7 @@ class Transients extends Sitemaps {
 	 * Adds cache key suffix based on blog id and locale.
 	 *
 	 * @since 2.7.0
-	 * @since 2.7.1 $locale is now static.
+	 * @since 2.8.0 $locale is now static.
 	 *				$key may now be empty.
 	 * @staticvar string $locale
 	 *
@@ -539,7 +539,7 @@ class Transients extends Sitemaps {
 	 * Also ping search engines.
 	 *
 	 * @since 2.2.9
-	 * @since 2.7.1 Now listens to option 'cache_sitemap' before deleting transient.
+	 * @since 2.8.0 Now listens to option 'cache_sitemap' before deleting transient.
 	 *
 	 * @return bool true
 	 */
@@ -557,7 +557,7 @@ class Transients extends Sitemaps {
 	 * Returns old option, since that's passed for sanitation within WP Core.
 	 *
 	 * @since 2.3.3
-	 * @since 2.7.1 Now listens to option 'cache_meta_description' before deleting transient.
+	 * @since 2.8.0 Now listens to option 'cache_meta_description' before deleting transient.
 	 *
 	 * @param string $old_option The previous blog description option.
 	 * @return string Previous option.
@@ -575,7 +575,7 @@ class Transients extends Sitemaps {
 	 * Delete transient for the automatic description on requests.
 	 *
 	 * @since 2.3.3
-	 * @since 2.7.1 Now listens to option 'cache_meta_description' before deleting transient.
+	 * @since 2.8.0 Now listens to option 'cache_meta_description' before deleting transient.
 	 *
 	 * @param mixed $page_id The page ID or identifier.
 	 * @param string $taxonomy The tt name.
@@ -595,7 +595,7 @@ class Transients extends Sitemaps {
 	 * Delete transient for the LD+Json scripts on requests.
 	 *
 	 * @since 2.4.2
-	 * @since 2.7.1 Now listens to option 'cache_meta_schema' before deleting transient.
+	 * @since 2.8.0 Now listens to option 'cache_meta_schema' before deleting transient.
 	 *
 	 * @param mixed $page_id The page ID or identifier.
 	 * @param string $taxonomy The tt name.

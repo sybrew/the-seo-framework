@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Generates title SEO data based on content.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Generate_Title extends Generate_Description {
 

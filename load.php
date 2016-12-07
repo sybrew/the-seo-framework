@@ -107,7 +107,7 @@ require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'optionsapi.php' );
  * Autoloads all class files. To be used when requiring access to all or any of
  * the plugin classes.
  *
- * @since 2.7.1
+ * @since 2.8.0
  * @uses THE_SEO_FRAMEWORK_DIR_PATH_CLASS
  * @access private
  * @staticvar array $loaded Whether $class has been loaded.

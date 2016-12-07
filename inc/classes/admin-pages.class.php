@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Renders admin pages content for this plugin.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Admin_Pages extends Inpost {
 
@@ -213,7 +213,7 @@ class Admin_Pages extends Inpost {
 		 * Set any to false if you wish the meta box to be removed.
 		 *
 		 * @since 2.2.4
-		 * @since 2.7.1: Added `the_seo_framework_general_metabox` filter.
+		 * @since 2.8.0: Added `the_seo_framework_general_metabox` filter.
 		 */
 		$general     = (bool) apply_filters( 'the_seo_framework_general_metabox', true );
 		$title       = (bool) apply_filters( 'the_seo_framework_title_metabox', true );

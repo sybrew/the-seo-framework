@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Holds Term and Taxonomy data.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Term_Data extends Post_Data {
 

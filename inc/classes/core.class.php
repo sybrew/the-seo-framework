@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Initializes the plugin & Holds plugin core functions.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Core {
 
@@ -47,7 +47,7 @@ class Core {
 	 * Makes sure deprecated properties are still overwritten.
 	 * If property never existed, default PHP behavior is invoked.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 *
 	 * @param string $name The property name.
 	 * @param mixed $value The property value.
@@ -119,7 +119,7 @@ class Core {
 	/**
 	 * Destroys output buffer, if any. To be used with AJAX and XML to clear any PHP errors or dumps.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 *
 	 * @return bool True on clear. False otherwise.
 	 */

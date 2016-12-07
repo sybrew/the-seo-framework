@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) or die;
  * Initializes the plugin for the wp-admin screens.
  * Enqueues CSS and Javascript.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Admin_Init extends Init {
 
@@ -193,7 +193,7 @@ class Admin_Init extends Init {
 	 * @since 2.6.0
 	 * @staticvar array $strings : The l10n strings.
 	 * @since 2.7.0 Added AJAX nonce: 'autodescription-ajax-nonce'
-	 * @since 2.7.1 Added input detection: 'hasInput'
+	 * @since 2.8.0 Added input detection: 'hasInput'
 	 *
 	 * @return array $strings The l10n strings.
 	 */

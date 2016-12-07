@@ -28,14 +28,14 @@ defined( 'ABSPATH' ) or die;
  *
  * Sets public debug functions.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 interface Debug_Interface {
 
 	/**
 	 * Mark a filter as deprecated and inform when it has been used.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 * @access private
 	 * @see @this->_deprecated_function().
 	 *

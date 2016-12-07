@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Outputs Network and Site SEO settings meta boxes
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Metaboxes extends Site_Options {
 
@@ -145,7 +145,7 @@ class Metaboxes extends Site_Options {
 	/**
 	 * Outputs General Settings meta box on the Site SEO Settings page.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 *
 	 * @param object|null $post The current post object.
 	 * @param array $args The metabox arguments.
@@ -159,7 +159,7 @@ class Metaboxes extends Site_Options {
 	/**
 	 * Outputs General Settings meta box general tab.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
 	public function general_metabox_general_tab() {
@@ -169,7 +169,7 @@ class Metaboxes extends Site_Options {
 	/**
 	 * Outputs General Settings meta box layout tab.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
 	public function general_metabox_layout_tab() {
@@ -179,7 +179,7 @@ class Metaboxes extends Site_Options {
 	/**
 	 * Outputs General Settings meta box performance tab.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
 	public function general_metabox_performance_tab() {
@@ -189,7 +189,7 @@ class Metaboxes extends Site_Options {
 	/**
 	 * Outputs General Settings meta box canonical tab.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
 	public function general_metabox_canonical_tab() {

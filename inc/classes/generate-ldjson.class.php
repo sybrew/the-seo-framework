@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Generates SEO data based on content
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Generate_Ldjson extends Generate_Image {
 
@@ -350,13 +350,17 @@ class Generate_Ldjson extends Generate_Image {
 
 		/**
 		 * Applies filter 'the_seo_framework_ld_json_breadcrumb_terms' : array
-		 * @since 2.7.1
+		 * @since 2.8.0
 		 *
 		 * @param array $cats The LD+Json terms that are being used
 		 * @param int $post_id The current Post ID.
 		 * @param string $cat_type The current taxonomy (either category or product_cat).
 		 */
 		$cats = (array) apply_filters_ref_array( 'the_seo_framework_ld_json_breadcrumb_terms', array( get_the_terms( $post_id, $cat_type ), $post_id, $cat_type ) );
+
+		if ( empty( $cats ) )
+			return '';
+
 		$cats = wp_list_pluck( $cats, 'parent', 'term_id' );
 		asort( $cats, SORT_NUMERIC );
 
@@ -367,6 +371,10 @@ class Generate_Ldjson extends Generate_Image {
 
 		//* Fetch cats children id's, if any.
 		foreach ( $cats as $term_id => $parent_id ) {
+			//* Warning: This makes database calls...
+			if ( ! term_exists( $term_id, $cat_type, $parent_id ) )
+				continue;
+
 			//* Store to filter unused Cat ID's from the post.
 			$assigned_ids[] = $term_id;
 
@@ -378,6 +386,7 @@ class Generate_Ldjson extends Generate_Image {
 			$kittens[ $term_id ] = $children;
 			$parents[ $term_id ] = $ancestors;
 		}
+		unset( $cats );
 
 		foreach ( $kittens as $kit_id => $child_id ) {
 			foreach ( $child_id as $ckey => $cid ) {
@@ -456,14 +465,14 @@ class Generate_Ldjson extends Generate_Image {
 		if ( count( $trees ) > 1 ) {
 			/**
 			 * Applies filter 'the_seo_framework_breadcrumb_post_sorting_callback' : string|array
-			 * @since 2.7.1
+			 * @since 2.8.0
 			 *
 			 * @param mixed $function The method or function callback. Default false.
 			 * @param array $trees The current tree list.
 			 */
 			$callback_filter = apply_filters_ref_array( 'the_seo_framework_breadcrumb_post_sorting_callback', array( false, $trees ) );
 			if ( $callback_filter ) {
-				$trees = $this->call_function( $callback_filter, '2.7.1', $trees );
+				$trees = $this->call_function( $callback_filter, '2.8.0', $trees );
 			} else {
 				array_multisort( array_map( 'count', $trees ), SORT_DESC, SORT_REGULAR, $trees );
 			}
@@ -507,7 +516,8 @@ class Generate_Ldjson extends Generate_Image {
 
 								$id = json_encode( $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'is_term' => true, 'term' => $cat ) ) );
 
-								$cat_name = empty( $data['doctitle'] ) ? $cat->name : $data['doctitle'];
+								//* Note: WordPress Core translation.
+								$cat_name = empty( $data['doctitle'] ) ? ( empty( $cat->name ) ? __( 'Uncategorized' ) : $cat->name ) : $data['doctitle'];
 								$name = json_encode( $cat_name );
 
 								$image = $this->schema_image( $child_id );
@@ -550,7 +560,8 @@ class Generate_Ldjson extends Generate_Image {
 
 					$id = json_encode( $this->the_url( '', array( 'get_custom_field' => false, 'is_term' => true, 'external' => true, 'term' => $cat ) ) );
 
-					$cat_name = empty( $data['doctitle'] ) ? $cat->name : $data['doctitle'];
+					//* Note: WordPress Core translation.
+					$cat_name = empty( $data['doctitle'] ) ? ( empty( $cat->name ) ? __( 'Uncategorized' ) : $cat->name ) : $data['doctitle'];
 					$name = json_encode( $cat_name );
 
 					$items .= sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s,"image":%s}},', $item_type, (string) $pos, $id, $name, $image );

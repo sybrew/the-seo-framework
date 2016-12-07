@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Contains all deprecated functions.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Deprecated extends Feed {
 
@@ -120,7 +120,7 @@ class Deprecated extends Feed {
 	 *
 	 * @since 2.3.4
 	 * @since 2.6.0 Deprecated.
-	 * @since 2.7.1 Removed output, as it's no longer available.
+	 * @since 2.8.0 Removed output, as it's no longer available.
 	 * @deprecated
 	 */
 	public function echo_debug_information( $values ) {
@@ -907,7 +907,7 @@ class Deprecated extends Feed {
 	 */
 	public function search_filter( $query ) {
 
-		$this->_deprecated_function( 'the_seo_framework()->search_filter()', '2.7.1' );
+		$this->_deprecated_function( 'the_seo_framework()->search_filter()', '2.8.0' );
 
 		// Don't exclude pages in wp-admin.
 		if ( $query->is_search && false === $this->is_admin() ) {
@@ -945,7 +945,7 @@ class Deprecated extends Feed {
 	 */
 	public function get_excluded_search_ids() {
 
-		$this->_deprecated_function( 'the_seo_framework()->get_excluded_search_ids()', '2.7.1' );
+		$this->_deprecated_function( 'the_seo_framework()->get_excluded_search_ids()', '2.8.0' );
 
 		global $blog_id;
 

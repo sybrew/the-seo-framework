@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Outputs Taxonomy, Post and Page meta boxes
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Inpost extends Doing_It_Right {
 
@@ -107,7 +107,7 @@ class Inpost extends Doing_It_Right {
 	 * @since 2.1.8
 	 * @since 2.6.0 Can no longer run outside of the term edit scope.
 	 * @since 2.6.0 Can no longer run when another SEO plugin is active.
-	 * @since 2.7.1 Added show_ui argument for public taxonomy detection.
+	 * @since 2.8.0 Added show_ui argument for public taxonomy detection.
 	 */
 	public function add_taxonomy_seo_box_init() {
 

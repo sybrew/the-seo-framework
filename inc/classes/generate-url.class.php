@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Generates URL and permalink SEO data based on content.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Generate_Url extends Generate_Title {
 
@@ -344,7 +344,7 @@ class Generate_Url extends Generate_Title {
 	 * @since 2.6.5
 	 * @global object $wp
 	 * @NOTE: Handles full path, including home directory.
-	 * @since 2.7.1: Continues on empty post ID. Handles it as HomePage.
+	 * @since 2.8.0: Continues on empty post ID. Handles it as HomePage.
 	 *
 	 * @param int $post_id The ID.
 	 * @param array $args The URL arguments.

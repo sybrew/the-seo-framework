@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Caches and organizes the WP Query.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Query extends Compat {
 
@@ -957,7 +957,7 @@ class Query extends Compat {
 	/**
 	 * Determines if SSL is used.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 * @staticvar bool $cache
 	 *
 	 * @return bool True if SSL, false otherwise.

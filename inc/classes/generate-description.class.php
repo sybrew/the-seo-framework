@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) or die;
  *
  * Generates Description SEO data based on content.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Generate_Description extends Generate {
 
@@ -327,7 +327,7 @@ class Generate_Description extends Generate {
 	 * Generates description from content.
 	 *
 	 * @since 2.6.0
-	 * @since 2.7.1 : The output is always trimmed if $escape is false.
+	 * @since 2.8.0 : The output is always trimmed if $escape is false.
 	 *
 	 * @param array $args description args : {
 	 * 		@param int $id the term or page id.
@@ -362,14 +362,14 @@ class Generate_Description extends Generate {
 		$use_cache = $this->is_option_checked( 'cache_meta_description' );
 
 		/**
-		 * @since 2.7.1: Added check for option 'cache_meta_description'.
+		 * @since 2.8.0: Added check for option 'cache_meta_description'.
 		 */
 		$excerpt = $use_cache ? $this->get_transient( $this->auto_description_transient ) : false;
 		if ( false === $excerpt ) {
 			$excerpt = array();
 
 			/**
-			 * @since 2.7.1:
+			 * @since 2.8.0:
 			 * 		1. Added check for option 'cache_meta_description'.
 			 * 		2. Moved generation functions in two different methods.
 			 */
@@ -445,7 +445,7 @@ class Generate_Description extends Generate {
 	/**
 	 * Returns the generated description excerpt array for the normal description tag.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 *
 	 * @param int $id The post/term ID.
 	 * @param bool|object The term object.
@@ -478,7 +478,7 @@ class Generate_Description extends Generate {
 		/**
 		 * Determine if the title is far too long (72+, rather than 75 in the Title guidelines).
 		 * If this is the case, trim the "title on blogname" part from the description.
-		 * @since 2.7.1
+		 * @since 2.8.0
 		 */
 		if ( $additions_length > 71 ) {
 			$max_char_length = 155;
@@ -492,7 +492,7 @@ class Generate_Description extends Generate {
 
 		/**
 		 * Put in array to be accessed later.
-		 * @since 2.7.1 Added trim value.
+		 * @since 2.8.0 Added trim value.
 		 */
 		return array(
 			'excerpt' => $excerpt_normal,
@@ -503,7 +503,7 @@ class Generate_Description extends Generate {
 	/**
 	 * Returns the generated description excerpt for the social description tag.
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 *
 	 * @param int $id The post/term ID.
 	 * @param bool|object The term object.
@@ -612,7 +612,7 @@ class Generate_Description extends Generate {
 	/**
 	 * Returns translation string for "Title on Blogname".
 	 *
-	 * @since 2.7.1
+	 * @since 2.8.0
 	 * @see $this->generate_description_additions()
 	 *
 	 * @param array $additions The description additions.

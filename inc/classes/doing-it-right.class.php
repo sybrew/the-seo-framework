@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) or die;
  * Adds data in a column to edit.php and edit-tags.php
  * Shows you if you're doing the SEO right.
  *
- * @since 2.7.1
+ * @since 2.8.0
  */
 class Doing_It_Right extends Generate_Ldjson {
 
@@ -325,7 +325,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @since 2.1.9
 	 * @staticvar string $post_i18n The post type slug.
 	 * @staticvar bool $is_term If we're dealing with TT pages.
-	 * @since 2.7.1 Third parameter `$echo` has been put into effect.
+	 * @since 2.8.0 Third parameter `$echo` has been put into effect.
 	 *
 	 * @param int $post_id The Post ID or taxonomy ID.
 	 * @param string $type Is fetched on edit.php, inpost, taxonomies, etc.
