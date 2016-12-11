@@ -470,6 +470,7 @@ TODO:
 	/
 	* Leftover CSS prefix name `seoframework-content-no-js` should've been `tsf-content-no-js`.
 	* Method `the_seo_framework()->call_function()` now doesn't result in a fatal error anymore if the method of an object doesn't exist in conjunction with when the class is supplied as an object instead of string.
+	* The WordPress global `$wp_version` is now no longer overwritten when using major release versions.
 * **Deprecated:**
 	* Method `the_seo_framework()->search_filter()`. It's a very slow function as it uses `get_excluded_search_ids`. There's no replacement.
 	* Method `the_seo_framework()->get_excluded_search_ids()`. It's a very slow function because it queries all posts. There's no replacement.

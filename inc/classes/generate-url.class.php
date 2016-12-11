@@ -286,7 +286,6 @@ class Generate_Url extends Generate_Title {
 	 * Generate URL from arguments.
 	 *
 	 * @since 2.6.0
-	 * @global object $wp
 	 * @NOTE: Handles full path, including home directory.
 	 *
 	 * @param array $args the URL args.
@@ -307,10 +306,9 @@ class Generate_Url extends Generate_Title {
 			if ( isset( $term->taxonomy ) ) {
 				//* Registered Terms and Taxonomies.
 				$path = $this->get_relative_term_url( $term, $args );
-			} elseif ( ! $args['external'] ) {
+			} elseif ( ! $args['external'] && isset( $GLOBALS['wp']->request ) ) {
 				//* Everything else.
-				global $wp;
-				$path = trailingslashit( get_option( 'home' ) ) . $wp->request;
+				$path = trailingslashit( get_option( 'home' ) ) . $GLOBALS['wp']->request;
 				$path = $this->set_url_scheme( $path, 'relative' );
 			} else {
 				//* Nothing to see here...
@@ -342,7 +340,6 @@ class Generate_Url extends Generate_Title {
 	 * Generates relative URL for the Homepage and Singular Posts.
 	 *
 	 * @since 2.6.5
-	 * @global object $wp
 	 * @NOTE: Handles full path, including home directory.
 	 * @since 2.8.0: Continues on empty post ID. Handles it as HomePage.
 	 *
@@ -368,10 +365,8 @@ class Generate_Url extends Generate_Title {
 		} elseif ( $this->is_front_page() ) {
 			$url = get_home_url();
 		} elseif ( ! $args['external'] ) {
-			global $wp;
-
-			if ( isset( $wp->request ) )
-				$url = trailingslashit( get_option( 'home' ) ) . $wp->request;
+			if ( isset( $GLOBALS['wp']->request ) )
+				$url = trailingslashit( get_option( 'home' ) ) . $GLOBALS['wp']->request;
 		}
 
 		//* No permalink found.
@@ -969,7 +964,6 @@ class Generate_Url extends Generate_Title {
 	 * Generates shortlink URL.
 	 *
 	 * @since 2.2.2
-	 * @global object $wp_query
 	 *
 	 * @param int $post_id The post ID.
 	 * @return string|null Escaped site Shortlink URL.
@@ -1003,10 +997,8 @@ class Generate_Url extends Generate_Title {
 			} elseif ( $this->is_tag() ) {
 				$id = get_queried_object_id();
 				$path = '?post_tag=' . $id;
-			} elseif ( $this->is_date() ) {
-				global $wp_query;
-
-				$query = $wp_query->query;
+			} elseif ( $this->is_date() && isset( $GLOBALS['wp_query']->query ) ) {
+				$query = $GLOBALS['wp_query']->query;
 				$var = '';
 
 				$first = true;

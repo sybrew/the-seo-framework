@@ -76,6 +76,7 @@ class Admin_Init extends Init {
 	 */
 	public function enqueue_admin_scripts( $hook ) {
 
+		//* TODO var_dump() limit enqueue hooks on SEO bar prior to release. Bump to WP 4.4 requirement?
 		$enqueue_hooks = array(
 			'edit.php',
 			'post.php',
@@ -112,7 +113,6 @@ class Admin_Init extends Init {
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_css' ), 1 );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_javascript' ), 1 );
 		}
-
 	}
 
 	/**
@@ -260,16 +260,14 @@ class Admin_Init extends Init {
 				}
 			} elseif ( $this->is_archive() ) {
 				//* Category or Tag.
-				global $current_screen;
-
-				if ( isset( $current_screen->taxonomy ) ) {
+				if ( isset( $GLOBALS['current_screen']->taxonomy ) ) {
 
 					$term_id = $this->get_admin_term_id();
 
 					if ( $term_id ) {
 						$generated_doctitle_args = array(
 							'term_id' => $term_id,
-							'taxonomy' => $current_screen->taxonomy,
+							'taxonomy' => $GLOBALS['current_screen']->taxonomy,
 							'notagline' => true,
 							'get_custom_field' => false,
 						);
@@ -384,7 +382,7 @@ class Admin_Init extends Init {
 		if ( empty( $page ) )
 			return;
 
-		$url = html_entity_decode( menu_page_url( $page, 0 ) );
+		$url = html_entity_decode( menu_page_url( $page, false ) );
 
 		foreach ( $query_args as $key => $value ) {
 			if ( empty( $key ) || empty( $value ) )

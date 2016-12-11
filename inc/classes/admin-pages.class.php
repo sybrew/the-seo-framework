@@ -153,12 +153,8 @@ class Admin_Pages extends Inpost {
 	 * Echo out the do_metaboxes() and wrapping markup.
 	 *
 	 * @since 2.2.2
-	 *
-	 * @global array $wp_meta_boxes Holds all metaboxes data.
 	 */
 	public function do_metaboxes() {
-		global $wp_meta_boxes;
-
 		?>
 		<div class="metabox-holder columns-2">
 			<div class="postbox-container-1">
@@ -167,7 +163,7 @@ class Admin_Pages extends Inpost {
 
 				do_meta_boxes( $this->seo_settings_page_hook, 'main', null );
 
-				if ( isset( $wp_meta_boxes[ $this->seo_settings_page_hook ]['main_extra'] ) )
+				if ( isset( $GLOBALS['wp_meta_boxes'][ $this->seo_settings_page_hook ]['main_extra'] ) )
 					do_meta_boxes( $this->seo_settings_page_hook, 'main_extra', null );
 
 				do_action( 'the_seo_framework_after_siteadmin_metaboxes', $this->seo_settings_page_hook );

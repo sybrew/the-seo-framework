@@ -397,7 +397,7 @@ class Deprecated extends Feed {
 					$post_page[ $public ] = (array) get_post_types( $args );
 
 				//* Smart var. This elemenates the need for a foreach loop, reducing resource usage.
-				$post_type = isset( $post_page[$public][ $current_screen->post_type ] ) ? $current_screen->post_type : '';
+				$post_type = isset( $post_page[ $public ][ $current_screen->post_type ] ) ? $current_screen->post_type : '';
 			}
 		}
 

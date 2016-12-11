@@ -198,9 +198,8 @@ register_deactivation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framewo
  * @global object $wp_rewrite
  */
 function the_seo_framework_flush_rewrite_rules_deactivation() {
-	global $wp_rewrite;
 
-	unset( $wp_rewrite->extra_rules_top['sitemap\.xml$'] );
+	unset( $GLOBALS['wp_rewrite']->extra_rules_top['sitemap\.xml$'] );
 
 	add_action( 'shutdown', 'flush_rewrite_rules' );
 }

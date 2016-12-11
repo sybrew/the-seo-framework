@@ -566,7 +566,7 @@ class Core {
 		if ( $this->load_options ) {
 			//* Options are allowed to be loaded.
 
-			$url = html_entity_decode( menu_page_url( $this->seo_settings_page_slug, 0 ) );
+			$url = html_entity_decode( menu_page_url( $this->seo_settings_page_slug, false ) );
 
 			return esc_url( $url );
 		}
