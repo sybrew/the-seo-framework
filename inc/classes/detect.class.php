@@ -585,10 +585,13 @@ class Detect extends Render {
 		global $wp_version;
 
 		// Add a .0 if WP outputs something like 4.3 instead of 4.3.0
-		if ( 3 === strlen( $wp_version ) )
-			$wp_version = $wp_version . '.0';
+		if ( 3 === strlen( $wp_version ) ) {
+			$modified_wp_version = $wp_version . '.0';
+		} else {
+			$modified_wp_version = $wp_version;
+		}
 
-		return $cache[ $version ][ $compare ] = (bool) version_compare( $wp_version, $version, $compare );
+		return $cache[ $version ][ $compare ] = (bool) version_compare( $modified_wp_version, $version, $compare );
 	}
 
 	/**
