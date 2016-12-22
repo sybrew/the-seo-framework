@@ -276,6 +276,8 @@ TODO:
 	/
 	* TODO Visual notification for when an actual `robots.txt` file has been found.
 		* https://wordpress.org/support/topic/sitemap-settings-1/
+	/
+	* TODO Added Social Image URL for Posts upload with notification whether it's actually being used.
 * **Changed:**
 	* The first two description separators are no longer marked "recommended". This is because the description does not need to support old browsers or old screen readers.
 * **Improved:**
@@ -294,6 +296,17 @@ TODO:
 	* On Woocommerce list tables additional tabs injected by other plugins will likely not overflow anymore.
 	* The sitemap cache now supports multiple languages. This means more than one sitemap can be created.
 	* Removed redundant and duplicated checks on the Open Graph image generation.
+	* Method `the_seo_framework()->generate_title()`, `the_seo_framework()->get_notagline_title()` and `the_seo_framework()->title()` with `$args['page_on_front']` now supports outputting the Home Page title, instead of "Untitled".
+	* All of the post meta is now sanitized before inserted in the databse.
+		* This is not a security improvement per se, but rather a consistency improvement so you know what the output will be.
+		* Added sanitation:
+			* One/zero for all checkboxes.
+			* Canonical URL is now cleaned, query parameters are no longer allowed:
+				1. They are a source of bugs.
+				2. Google doesn't like them, they can be seen as spam.
+				3. You shouldn't be using them anyway in a stable WordPress environment.
+					* WordPress has an awesome feature called WP_Rewrite.
+			* The rest is unchanged.
 * **Updated:**
 	/
 	* TODO Translation POT file.
@@ -323,6 +336,8 @@ TODO:
 	/
 	* When the title exceeds 154 characters, the description will no longer contain the complete post's content. Instead, the title will now be omitted and the description length has been limited to 155 characters.
 	* WPML sitemap generated URL path now reflects the language. TODO confirm.
+	* TODO WPML Home Page post meta is now correctly fetched.
+		* https://wordpress.org/support/topic/seo-framework-breaks-geodirectory/ (topic title doesn't reflect complete subject)
 	* TODO Robots.txt settings outputted incorrect notice when site is blocked from robots through WordPress reading settings while the sitemap has been deactivated.
 	* TODO bbPress forum topic ID's weren't correctly recognized. With this fix, these issues have been resolved:
 		- TODO The title is now correct.

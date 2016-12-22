@@ -834,13 +834,16 @@ class Sanitize extends Admin_Pages {
 	 * Makes URLs safe.
 	 *
 	 * @since 2.2.2
+	 * @since 2.8.0 Added flush parameter... TODO move this "spaghetti code" in an actual save listener.
+	 * Stop guessing and just do it instead.
 	 *
 	 * @param string $new_value String, a URL, possibly unsafe.
+	 * @param boolean/sphaghetti $flush Whether to flush to transient.
 	 * @return string String a safe URL without Query Arguments.
 	 */
-	protected function s_url( $new_value ) {
+	protected function s_url( $new_value, $flush = true ) {
 
-		$this->delete_front_ld_json_transient();
+		$flush and $this->delete_front_ld_json_transient();
 
 		/**
 		 * If queries have been tokenized, take the value before the query args.

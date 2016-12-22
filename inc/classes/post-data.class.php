@@ -92,6 +92,7 @@ class Post_Data extends Detect {
 	 */
 	public function inpost_seo_save( $post_id, $post ) {
 
+		//* Nonce is done at the end of this function.
 		if ( empty( $_POST['autodescription'] ) )
 			return;
 
@@ -111,17 +112,39 @@ class Post_Data extends Detect {
 		) );
 
 		foreach ( (array) $data as $key => $value ) :
-			//* Sanitize the title.
-			if ( '_genesis_title' === $key )
-				$data[ $key ] = trim( strip_tags( $value ) );
+			switch ( $key ) :
+				case '_genesis_title' :
+					$data[ $key ] = trim( strip_tags( $value ) );
+					continue 2;
 
-			//* Sanitize the description.
-			if ( '_genesis_description' === $key )
-				$data[ $key ] = $this->s_description( $value );
+				case '_genesis_description' :
+					$data[ $key ] = $this->s_description( $value );
+					continue 2;
 
-			//* Sanitize the URL. Make sure it's an absolute URL.
-			if ( 'redirect' === $key )
-				$data[ $key ] = $this->s_redirect_url( $value );
+				case '_genesis_canonical_uri' :
+					/**
+					 * Remove unwanted query parameters. They're allowed by Google, but very much rather not.
+					 * Also, they will only cause bugs.
+					 * Query parameters are also only used when no pretty permalinks are used. Which is bad.
+					 */
+					$data[ $key ] = $this->s_url( $value, false );
+					continue 2;
+
+				case 'redirect' :
+					//* Let's keep this as the output really is.
+					$data[ $key ] = $this->s_redirect_url( $value );
+					continue 2;
+
+				case '_genesis_noindex' :
+				case '_genesis_nofollow' :
+				case '_genesis_noarchive' :
+				case 'exclude_local_search' :
+					$data[ $key ] = $this->s_one_zero( $value );
+					continue 2;
+
+				default :
+					break;
+			endswitch;
 		endforeach;
 
 		//* Perform nonce and save fields.
@@ -156,7 +179,12 @@ class Post_Data extends Detect {
 		if ( ! isset( $_POST[ $nonce_name ] ) || ! wp_verify_nonce( $_POST[ $nonce_name ], $nonce_action ) )
 			return;
 
-		//* Don't try to save the data under autosave, ajax, or future post.
+		/**
+		 * Don't try to save the data under autosave, ajax, or future post.
+		 * @TODO find a way to maintain revisions:
+		 * @link https://github.com/sybrew/the-seo-framework/issues/48
+		 * @link https://johnblackbourn.com/post-meta-revisions-wordpress
+		 */
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
 			return;
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX )
@@ -167,7 +195,10 @@ class Post_Data extends Detect {
 		//* Grab the post object
 		$post = get_post( $post );
 
-		//* Don't save if WP is creating a revision (same as DOING_AUTOSAVE?)
+		/**
+		 * Don't save if WP is creating a revision (same as DOING_AUTOSAVE?)
+		 * @todo @see wp_is_post_revision(), which also returns the post revision ID...
+		 */
 		if ( 'revision' === get_post_type( $post ) )
 			return;
 

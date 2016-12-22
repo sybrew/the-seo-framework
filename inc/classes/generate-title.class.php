@@ -574,7 +574,9 @@ class Generate_Title extends Generate_Description {
 
 		if ( empty( $title ) ) {
 
-			if ( $this->is_archive() ) {
+			if ( $args['page_on_front'] ) {
+				$title = $this->title_for_home( '', $args['get_custom_field'], false, true );
+			} elseif ( $this->is_archive() ) {
 				if ( ( $id && $taxonomy ) || $this->is_category() || $this->is_tag() || $this->is_tax() ) {
 					$title = $this->title_for_terms( $args, false );
 				} else {
