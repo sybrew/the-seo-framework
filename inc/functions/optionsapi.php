@@ -142,7 +142,7 @@ function the_seo_framework_options_pagehook() {
  * @param boolean $use_cache Optional. Whether to use the cache value or not. Defaults to true.
  * @return mixed The option value.
  */
-function the_seo_framework_get_option() {
+function the_seo_framework_get_option( $key, $use_cache = true ) {
 
 	$theseoframework = the_seo_framework();
 
