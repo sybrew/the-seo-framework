@@ -591,7 +591,7 @@ class Sanitize extends Admin_Pages {
 	 * @param string $new_value The Description.
 	 * @return string One line sanitized description.
 	 */
-	protected function s_description( $new_value ) {
+	public function s_description( $new_value ) {
 
 		$description = str_replace( array( "\r\n", "\r", "\n" ), "\n", $new_value );
 

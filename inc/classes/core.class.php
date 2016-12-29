@@ -96,6 +96,16 @@ class Core {
 	 * @return void
 	 */
 	final public function __call( $name, $arguments ) {
+
+		static $depr_class = null;
+
+		if ( is_null( $depr_class ) )
+			$depr_class = new Deprecated;
+
+		if ( method_exists( $depr_class, $name ) ) {
+			return call_user_func_array( array( $depr_class, $name ), $arguments );
+		}
+
 		the_seo_framework()->_inaccessible_p_or_m( 'the_seo_framework()->' . esc_html( $name ) . '()' );
 		return;
 	}

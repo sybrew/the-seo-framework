@@ -37,7 +37,6 @@ add_action( 'admin_init', 'the_seo_framework_do_upgrade', 20 );
  * Only works on WordPress 4.4 and later to ensure and force maximum compatibility.
  *
  * @since 2.7.0
- * @global int $wp_db_version
  *
  * @thanks StudioPress for some code.
  */
@@ -49,16 +48,17 @@ function the_seo_framework_do_upgrade() {
 	if ( ! the_seo_framework()->wp_version( '4.4', '>=' ) )
 		return;
 
-	global $wp_db_version;
-
 	//* If the WordPress Database hasn't been upgraded yet, make the user upgrade first.
-	if ( (int) get_option( 'db_version' ) !== $wp_db_version ) {
-		wp_safe_redirect( admin_url( 'upgrade.php?_wp_http_referer=' . urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) );
+	if ( (int) get_option( 'db_version' ) !== (int) $GLOBALS['wp_db_version'] ) {
+		wp_safe_redirect( admin_url( 'upgrade.php?_wp_http_referer=' . rawurlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) );
 		exit;
 	}
 
 	if ( get_option( 'the_seo_framework_upgraded_db_version' ) < '2701' )
 		the_seo_framework_do_upgrade_2701();
+
+	if ( get_option( 'the_seo_framework_upgraded_db_version' ) < '2800' )
+		the_seo_framework_do_upgrade_2800();
 
 	do_action( 'the_seo_framework_upgraded' );
 }
@@ -92,19 +92,14 @@ function the_seo_framework_do_upgrade_2701() {
 }
 
 /**
- * Removes term metadata for version 2800
+ * Removes term metadata for version 2800.
  *
  * @since 2.8.0
- * @TODO planned.
  */
 function the_seo_framework_do_upgrade_2800() {
 
 	//* Delete old values from database. Removes backwards compatibility.
-	// delete_option( 'autodescription-term-meta' );
+	delete_option( 'autodescription-term-meta' );
 
-	//* Set this as upgrade notice:
-	// = 2.8.0 =
-	// This version deletes all old style metadata values. This removes backwards term meta data compatibility with The SEO Framework 2.6.5.2 or lower.
-
-	// update_option( 'the_seo_framework_upgraded_db_version', '2800' );
+	update_option( 'the_seo_framework_upgraded_db_version', '2800' );
 }

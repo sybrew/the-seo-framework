@@ -70,7 +70,7 @@ class Metaboxes extends Site_Options {
 		 *
 		 * Don't output navigation if $use_tabs is false and the amount of tabs is 1 or lower.
 		 */
-		if ( $use_tabs ) {
+		if ( $use_tabs ) :
 			?><div class="tsf-nav-tab-wrapper hide-if-no-js" id="<?php echo esc_attr( $id . '-tabs-wrapper' ); ?>"><?php
 				$count = 1;
 				foreach ( $tabs as $tab => $value ) :
@@ -95,7 +95,7 @@ class Metaboxes extends Site_Options {
 					$count++;
 				endforeach;
 			?></div><?php
-		}
+		endif;
 
 		/**
 		 * Start Content.
@@ -103,7 +103,7 @@ class Metaboxes extends Site_Options {
 		 * The content is relative to the navigation, and uses CSS to become visible.
 		 */
 		$count = 1;
-		foreach ( $tabs as $tab => $value ) {
+		foreach ( $tabs as $tab => $value ) :
 
 			$the_id = $id . '-tab-' . $tab . '-content';
 			$the_name = $id . '-tabs-content';
@@ -139,7 +139,7 @@ class Metaboxes extends Site_Options {
 			?></div><?php
 
 			$count++;
-		}
+		endforeach;
 	}
 
 	/**
@@ -449,50 +449,6 @@ class Metaboxes extends Site_Options {
 	}
 
 	/**
-	 * Knowlegde Graph metabox on the Site SEO Settings page.
-	 *
-	 * @since 2.2.8
-	 *
-	 * @param object|null $post The current post object.
-	 * @param array $args the social tabs arguments.
-	 */
-	public function knowledge_metabox( $post = null, $args = array() ) {
-		do_action( 'the_seo_framework_knowledge_metabox_before' );
-		$this->get_view( 'metaboxes/knowledge-metabox', $args );
-		do_action( 'the_seo_framework_knowledge_metabox_after' );
-	}
-
-	/**
-	 * Knowledge Graph Metabox General Tab output.
-	 *
-	 * @since 2.2.8
-	 * @see $this->knowledge_metabox() Callback for Knowledge Graph Settings box.
-	 */
-	public function knowledge_metabox_general_tab() {
-		$this->get_view( 'metaboxes/knowledge-metabox', array(), 'general' );
-	}
-
-	/**
-	 * Knowledge Graph Metabox About Tab output.
-	 *
-	 * @since 2.2.8
-	 * @see $this->knowledge_metabox() Callback for Knowledge Graph Settings box.
-	 */
-	public function knowledge_metabox_about_tab() {
-		$this->get_view( 'metaboxes/knowledge-metabox', array(), 'about' );
-	}
-
-	/**
-	 * Knowledge Graph Metabox Social Tab output.
-	 *
-	 * @since 2.2.8
-	 * @see $this->knowledge_metabox() Callback for Knowledge Graph Settings box.
-	 */
-	public function knowledge_metabox_social_tab() {
-		$this->get_view( 'metaboxes/knowledge-metabox', array(), 'social' );
-	}
-
-	/**
 	 * Sitemaps meta box on the Site SEO Settings page.
 	 *
 	 * @since 2.2.9
@@ -573,5 +529,35 @@ class Metaboxes extends Site_Options {
 		do_action( 'the_seo_framework_schema_metabox_before' );
 		$this->get_view( 'metaboxes/schema-metabox', $args );
 		do_action( 'the_seo_framework_schema_metabox_after' );
+	}
+
+	/**
+	 * Schema Metabox General Tab output.
+	 *
+	 * @since 2.8.0
+	 * @see $this->schema_metabox() Callback for Schema.org Settings box.
+	 */
+	public function schema_metabox_general_tab() {
+		$this->get_view( 'metaboxes/schema-metabox', array(), 'general' );
+	}
+
+	/**
+	 * Schema Metabox Structure Tab output.
+	 *
+	 * @since 2.8.0
+	 * @see $this->schema_metabox() Callback for Schema.org Settings box.
+	 */
+	public function schema_metabox_structure_tab() {
+		$this->get_view( 'metaboxes/schema-metabox', array(), 'structure' );
+	}
+
+	/**
+	 * Schema Metabox PResence Tab output.
+	 *
+	 * @since 2.8.0
+	 * @see $this->schema_metabox() Callback for Schema.org Settings box.
+	 */
+	public function schema_metabox_presence_tab() {
+		$this->get_view( 'metaboxes/schema-metabox', array(), 'presence' );
 	}
 }

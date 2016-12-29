@@ -13,11 +13,11 @@ switch ( $instance ) :
 		 * @since 2.2.2
 		 *
 		 * @param array $default_tabs { 'id' = The identifier =>
-		 *			array(
-		 *				'name' 		=> The name
-		 *				'callback' 	=> The callback function, use array for method calling (accepts $this, but isn't used here for optimization purposes)
-		 *				'dashicon'	=> Desired dashicon
-		 *			)
+		 *		array(
+		 *			'name' 		=> The name
+		 *			'callback' 	=> The callback function, use array for method calling (accepts $this, but isn't used here for optimization purposes)
+		 *			'dashicon'	=> Desired dashicon
+		 *		)
 		 * }
 		 */
 		$default_tabs = array(

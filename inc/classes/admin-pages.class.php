@@ -196,7 +196,6 @@ class Admin_Pages extends Inpost {
 	 * @see $this->robots_metabox()      Callback for Robots Settings box.
 	 * @see $this->homepage_metabox()    Callback for Home Page Settings box.
 	 * @see $this->social_metabox()      Callback for Social Settings box.
-	 * @see $this->knowledge_metabox()   Callback for Knowledge Graph Settings box.
 	 * @see $this->schema_metabox()      Callback for Schema Settings box.
 	 * @see $this->webmaster_metabox()   Callback for Webmaster Settings box.
 	 * @see $this->sitemaps_metabox()    Callback for Sitemap Settings box.
@@ -217,7 +216,6 @@ class Admin_Pages extends Inpost {
 		$robots      = (bool) apply_filters( 'the_seo_framework_robots_metabox', true );
 		$home        = (bool) apply_filters( 'the_seo_framework_home_metabox', true );
 		$social      = (bool) apply_filters( 'the_seo_framework_social_metabox', true );
-		$knowledge   = (bool) apply_filters( 'the_seo_framework_knowledge_metabox', true );
 		$schema      = (bool) apply_filters( 'the_seo_framework_schema_metabox', true );
 		$webmaster   = (bool) apply_filters( 'the_seo_framework_webmaster_metabox', true );
 		$sitemap     = (bool) apply_filters( 'the_seo_framework_sitemap_metabox', true );
@@ -273,17 +271,6 @@ class Admin_Pages extends Inpost {
 				'autodescription-social-settings',
 				esc_html__( 'Social Meta Settings', 'autodescription' ),
 				array( $this, 'social_metabox' ),
-				$this->seo_settings_page_hook,
-				'main',
-				array()
-			);
-
-		//* Knowledge Graph Meta Box
-		if ( $knowledge )
-			add_meta_box(
-				'autodescription-knowledgegraph-settings',
-				esc_html__( 'Knowledge Graph Settings', 'autodescription' ),
-				array( $this, 'knowledge_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
 				array()

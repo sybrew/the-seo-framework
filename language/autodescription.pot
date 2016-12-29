@@ -974,7 +974,7 @@ msgid "Scheme Settings"
 msgstr ""
 
 #: inc/views/metaboxes/general-metabox.php:129
-msgid "If your website is both accessible on HTTP as HTTPS, set this to HTTPS in order to prevent duplicated content."
+msgid "If your website is accessible on both HTTP as HTTPS, set this to HTTPS in order to prevent duplicated content."
 msgstr ""
 
 #: inc/views/metaboxes/general-metabox.php:130

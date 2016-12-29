@@ -18,11 +18,11 @@ switch ( $instance ) :
 		 * @since 2.6.0
 		 *
 		 * @param array $default_tabs { 'id' = The identifier =>
-		 *			array(
-		 *				'name' 		=> The name
-		 *				'callback' 	=> The callback function, use array for method calling (accepts $this, but isn't used here for optimization purposes)
-		 *				'dashicon'	=> Desired dashicon
-		 *			)
+		 *		array(
+		 *			'name' 		=> The name
+		 *			'callback' 	=> The callback function, use array for method calling (accepts $this, but isn't used here for optimization purposes)
+		 *			'dashicon'	=> Desired dashicon
+		 *		)
 		 * }
 		 */
 		$default_tabs = array(
@@ -255,14 +255,20 @@ switch ( $instance ) :
 					<input type="radio" name="<?php $this->field_name( 'home_title_location' ); ?>" id="<?php $this->field_id( 'home_title_location_left' ); ?>" value="left" <?php checked( $this->get_field_value( 'home_title_location' ), 'left' ); ?> />
 					<label for="<?php $this->field_id( 'home_title_location_left' ); ?>">
 						<span><?php esc_html_e( 'Left:', 'autodescription' ); ?></span>
-						<?php echo ( $example_left ) ? $this->code_wrap_noesc( $example_left ) : ''; ?>
+						<?php
+						//* Already escaped.
+						echo ( $example_left ) ? $this->code_wrap_noesc( $example_left ) : '';
+						?>
 					</label>
 				</span>
 				<span class="tsf-toblock">
 					<input type="radio" name="<?php $this->field_name( 'home_title_location' ); ?>" id="<?php $this->field_id( 'home_title_location_right' ); ?>" value="right" <?php checked( $this->get_field_value( 'home_title_location' ), 'right' ); ?> />
 					<label for="<?php $this->field_id( 'home_title_location_right' ); ?>">
 						<span><?php esc_html_e( 'Right:', 'autodescription' ); ?></span>
-						<?php echo $example_right ? $this->code_wrap_noesc( $example_right ) : ''; ?>
+						<?php
+						//* Already escaped.
+						echo $example_right ? $this->code_wrap_noesc( $example_right ) : '';
+						?>
 					</label>
 				</span>
 			</p>

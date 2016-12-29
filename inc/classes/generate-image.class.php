@@ -378,7 +378,7 @@ class Generate_Image extends Generate_Url {
 					$this->image_dimensions = $this->image_dimensions + array( $this->get_the_real_ID() => array( 'width' => $w, 'height' => $h ) );
 				}
 			}
-		} elseif ( is_int( $size ) && function_exists( 'has_site_icon' ) && $this->wp_version( '4.3', '>=' ) ) {
+		} elseif ( is_int( $size ) && function_exists( 'has_site_icon' ) ) {
 			//* Also applies (MultiSite) filters.
 			$icon = get_site_icon_url( $size );
 		}

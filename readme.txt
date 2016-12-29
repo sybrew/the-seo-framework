@@ -1,10 +1,10 @@
-see=== The SEO Framework ===
+=== The SEO Framework ===
 Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: google, bing, open graph, seo, xml sitemap, breadcrumbs, meta, search engine, pagerank, serp, facebook, twitter
-Requires at least: 4.3.4
-Tested up to: 4.6.1
-Stable tag: 2.7.0
+Requires at least: 4.4.0
+Tested up to: 4.8.0
+Stable tag: 2.7.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -175,8 +175,8 @@ Please note that a free plugin is underway which will allow you to change all fi
 
 = The sitemap doesn't contain categories, images, news, etc. is this OK? =
 
-This is not a problem. Search Engines love crawling WordPress because its structure is consistent and well known.
-If a visitor can't find a page, why would a Search Engine? Don't rely on your sitemap, but on your content and website's usability.
+This is not an issue. Search Engines love crawling WordPress because its structure is consistent and well known.
+If a visitor can't find a page, then why would a Search Engine? Don't rely on your sitemap, but on your content and website's usability.
 
 = What's does the application/ld+json script do? =
 
@@ -184,8 +184,7 @@ The LD+Json scripts are Search Engine helpers which tell Search Engines how to c
 
 = The meta data is not being updated, and I'm using a caching plugin. =
 
-All The SEO Framework's metadata is put into Object cache when a caching plugin is available. The descriptions and schema.org scripts are put into Transients. Please be sure to clear your cache.
-If you're using W3 Total Cache you might be interested in [this free plugin](https://wordpress.org/plugins/w3tc-auto-pilot/) to do it for you.
+All The SEO Framework's metadata is put into Object cache when a caching plugin is available. The descriptions and Schema.org scripts are put into Transients. Please be sure to clear your cache.
 
 = I want to transport SEO data from other plugins to The SEO Framework, how do I do this? =
 
@@ -194,7 +193,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
-= 2.8.0 - ??? =
+= 2.8.0 - ??? (John F. Nash Jr. reference?) =
 
 **Release date:**
 
@@ -208,12 +207,15 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * WordPress is about to drop support for PHP 5.2 as well in the near future. See proposed [trac ticket 36335](https://core.trac.wordpress.org/ticket/36335).
 * Inform your host to keep updated! Read more about informing your host [here](https://wordpress.org/about/requirements/).
 
+***This update drops support for WordPress 4.3.x, the minimum required version for The SEO Framework now is WordPress 4.4.***
+
 **Summarized:**
 
-* This maintenance release fixes ... TODO
-* Class structure ... TODO
-* Many functions now allow to echo the output now trough variable to prevent output sanitation mistakes... TODO
-* Google's Knowledge Graph has been updated significantly. This update makes sure all the latest standards are enforced!
+* This major maintenance release not only fixes various bugs, but also introduces new options for you to fiddle with.
+* You're now able to adjust General Settings easily! These settings include options to adjust the cache, (re)move the SEO Bar, and set a Canonical Scheme.
+* Google's Knowledge Graph has been transformed into something much bigger last year, so the related settings now fall under a new name: "Authorized Presence".
+/
+* TODO You can now more granularly control your website's social images. Enjoy!
 
 **SEO tip of the Update:**
 
@@ -223,35 +225,29 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * Usage of experimental Schema.org scripts cause no harm to ranking.
 
 **Do you mind:**
-/ TODO
-* If you have at least 30 seconds to spare, could you please fill in this anonymous survey? It will sincerely help me help you.
-	Record:
-	 * How many websites do you operate (optional),
-	 * Website with most traffic:
-	 	* PHP version (Add: "I don't know"),
-	 	* Website purpose ("Commercial (e-commerce/local store)/Hobby/Informational/Organization/Blog/News") (optional),
-	 	* User role (Author, Developer, Owner, Administrator, etc.) (optional),
-	 	* Website URL (optional),
-	 * Would you pay for professional SEO services? (optional, 'Default: I don't know./Rather not say?'),
-	 	* How much? (optional, conditional),
-	 * Feature request? (optional),
-	 * Anything else? Let me know. (optional).
+If you have at least 60 seconds to spare, could you please fill in this survey? It will sincerely help me help you.
+* [The survey](https://theseoframework.com/survey/).
 
-TODO:
 ***Are you an avid developer, and have extended The SEO Framework? Please carefully read the detailed changelog. The class structure has changed.***
 *In essence, if you've programmed as described within the API, no changes should be made.*
 
 **Detailed log:**
 /
-***TODO something something [changelog](https://theseoframework.com/?p= TODO #detailed).***
+***TODO What is work without [innovation](https://theseoframework.com/?p= TODO #detailed)?***
 
 **For everyone:**
 
 * **Added:**
 	/
-	* TODO Schema.org Logo addition. This removes the Schema.org logo in the Social Sites Links markup (previously marked as "Knowledge Graph settings").
+	* TODO Social image fallback selection.
+	* TODO Added Social Image URL for Posts upload with notification whether it's actually being used.
+	* The Authorized Presence (Knowledge Graph) now outputs its script regardless of social sites being filled in. This means that the logo is always used, if present, and that the organization/person type and name will always be highlighted.
+	* [Google's Social Profile Links](https://developers.google.com/search/docs/data-types/social-profile-links), this is the same as the previously named "Knowledge Graph"; but that brand has been expanded to cover more grounds.
+		* These settings have been moved to the Schema metabox. The Schema settings cover the [Knowledge Graph](https://www.google.com/intl/bn/insidesearch/features/search/knowledge.html).
+	/
 	* TODO Site Logo detection!
 		* Only when the theme supports it. You can upload one through the customizer (Site Identity).
+			* You'll also be notified on its support at the Schema Settings metabox "Presence" tab.
 		* This allows for a new fallback image! This one has priority over the Site Icon.
 		* The Knowledge Graph makes good use of this logo, it has priority over the Site Icon.
 	/
@@ -276,10 +272,10 @@ TODO:
 	/
 	* TODO Visual notification for when an actual `robots.txt` file has been found.
 		* https://wordpress.org/support/topic/sitemap-settings-1/
-	/
-	* TODO Added Social Image URL for Posts upload with notification whether it's actually being used.
 * **Changed:**
-	* The first two description separators are no longer marked "recommended". This is because the description does not need to support old browsers or old screen readers.
+	* Knowledge Graph has been converted into "Authorized Presence". Its usage, output and effect are still the same.
+	* The first two description separator buttons are no longer marked "recommended".
+		* This is because the description does not need to support old browsers or old screen readers.
 * **Improved:**
 	* When the description title additions exceed 72 characters, they will no longer be included in the automated description.
 		* This is also documented as a fix, but it states 154 characters instead of 72 there.
@@ -302,24 +298,32 @@ TODO:
 		* Added sanitation:
 			* One/zero for all checkboxes.
 			* Canonical URL is now cleaned, query parameters are no longer allowed:
-				1. They are a source of bugs.
-				2. Google doesn't like them, they can be seen as spam.
-				3. You shouldn't be using them anyway in a stable WordPress environment.
-					* WordPress has an awesome feature called WP_Rewrite.
+				1. They are a source of bugs, not every developer considers them at all times.
+				1. Google doesn't like them, they can also be seen as spam.
+				1. You shouldn't be using them anyway in a stable WordPress environment.
+					* WordPress has an awesome feature called the Rewrite API.
+				1. They are very confusing for the end-user.
+					* They also disturb engagement for trust. Clean URLs are always preferred.
 			* The rest is unchanged.
+	/
+	* TODO When focussing on a field which is showing a placeholder, the placeholder is now blurred.
+	* TODO The sitename set in "Organization or Personal Name" is now used consistently throughout the Schema.org output settings.
 * **Updated:**
 	/
 	* TODO Translation POT file.
 	* All previous automated description transients have been invalidated.
 		* Old caches will automatically be cleaned from the database.
 		* New caches will automatically be set up. This might cause a small performance hit after the update, which should automatically be resolved.
+	* Upon updating this plugin, the old term metadata (The SEO Framework 2.6.6 and lower) will be removed.
+		* If you've upgraded from version 2.6.6 or below to this version (or any later version), it will first make sure the old metadata is transferred correctly.
 * **Removed:**
 	/
-	* TODO Knowledge Graph Settings metabox.
-		* Its content has been moved inside the Schema Settings metabox.
+	* Knowledge Graph Settings metabox.
+		* Its content has been moved inside the Schema Settings metabox under the "General" and "Presence" tabs.
 	/
 	* TODO Link Relationship Settings within the Social Meta Settings metabox.
 	 	* Its content has been moved to the General Settings metabox in the Canonical tab.
+	* WordPress 4.3.x support has been dropped. This plugin now requires WordPress 4.4 or later.
 * **Fixed:**
 	/
 	* TODO On some themes, a fatal error was output when editing posts. (requires confirmation)
@@ -338,6 +342,7 @@ TODO:
 	* WPML sitemap generated URL path now reflects the language. TODO confirm.
 	* TODO WPML Home Page post meta is now correctly fetched.
 		* https://wordpress.org/support/topic/seo-framework-breaks-geodirectory/ (topic title doesn't reflect complete subject)
+	/
 	* TODO Robots.txt settings outputted incorrect notice when site is blocked from robots through WordPress reading settings while the sitemap has been deactivated.
 	* TODO bbPress forum topic ID's weren't correctly recognized. With this fix, these issues have been resolved:
 		- TODO The title is now correct.
@@ -354,10 +359,17 @@ TODO:
 
 **For translators:**
 
+**This part of the changelog is quite redundant and reluctant in its data; nevertheless, the gist is: new translations are ready!**
+
 * **Added:**
-	* One new sentence, that wasn't correctly registered before.
+	* Quite a lot of new sentences, because two metaboxes got merged, and a new one arose.
 * **Changed:**
+	* Many sentences have changed, in order to better reflect the option usages.
 	* A few sentences have been updated slightly in order to be sanitized correctly.
+* **Fixed:**
+	* One sentence wasn't annotated correctly.
+* **Removed:**
+	* Some sentences.
 
 **For developers:**
 
@@ -417,31 +429,29 @@ TODO:
 		* The changes:
 			* The deprecation function handler `deprecated.php` has been moved to the `/autodescription/inc/functions/` folder, from the `/autodescription/inc/deprecated/` folder.
 		* This cleans up the folders and some code.
-	/
-	* TODO :: CONTINUE THIS EFFORT IN 3.0.0? :: Not all classes are now always available. Unless methods of such are called or required.
+	* Not all classes are now always available. Unless methods of such are called or required.
 		* This massively improves performance and reduces memory usage.
 		* This completely changes the architecture of the plugin.
 		* This is handled through autoloading, interfaces and magic methods.
 		* Classes affected:
-			/
 			* Debug
-			* TODO AdminPages
-			* TODO Admin-Init
-			* TODO Deprecated
-			* TODO Termdata?
-			* TODO Postdata?
-			* TODO Inpost?
-			* TODO Compat?
-		* How this is handled:
-			* All publicly accessible (with public visibility, without "@access private" documentation) are set in [interfaces](http://php.net/manual/en/language.oop5.interfaces.php).
-			* These interfaces are autoloaded TODO (or automatically loaded?).
-			* When an interface method is accessed, it will autoload the required class and the method will propagate to default behavior.
-			* In general, this should improve performance and reduce plugin resource usage.
-			* This is also known as the Singleton approach, while maintaining the promised `the_seo_framework()` way of object interaction.
-			* These changes shouldn't affect current code. If anything goes wrong, a "_doing_it_wrong()" notice is output. Thanks to magic methods.
+				* How this is handled:
+					* The common publicly accessible (with public visibility, without "@access private" documentation) methods are set in [interfaces](http://php.net/manual/en/language.oop5.interfaces.php).
+					* When an interface method is accessed, it will autoload the required class and the method will propagate to default behavior.
+					* In general, this should improve performance and reduce plugin resource usage.
+					* These changes shouldn't affect current code. If anything goes wrong, a "_doing_it_wrong()" notice is output. Thanks to magic methods.
+			* Deprecated
+				* How this is handled:
+					* When an inaccessible method is called, the magic method `the_seo_framework()->__call()` fires.
+					* Then the `The_SEO_Framework\Deprecated` class is autoloaded and cached within the magic method, quite like a singleton.
+					* If the method is found in that class, it will be called with all parameters passed to it. Otherwise, a default "method doesn't exist" notice is output, which resides in the new Debug class.
 	/
 	* Class `The_SEO_Framework\Load` is now final, and can't be extended upon anymore.
+		* I am aware that this essentially removes any possible access to protected methods.
+		* This improves plugin consistency and prevents other plugins from creating very unexpected behavior.
+		* Nevertheless, if you have a feature suggestion, you know where to find me!
 	* The `license.txt` file has been updated to improve readability. The contents have not been changed.
+	/
 	* TODO The `title_seperator` option has been changed and updated to `title_separator`. Note the typo. // TODO Is this really needed? Perfection can take its toll.
 	* Method `the_seo_framework()->post_status()`'s third parameter was unused. It's now used to echo (true) or return (false) the value, default return (false).
 	* Method `the_seo_framework()->no_more_genesis_seo()` has been renamed to `disable_genesis_seo`, without deprecation as it was marked private.
@@ -456,6 +466,7 @@ TODO:
 	* Method `the_seo_framework()->adjust_search_filter()` has been moved to class `Init` from `Search`.
 	* Method `the_seo_framework()->build_singular_relative_url()` now continues to run if an empty Post ID has been suplied.
 	* Method `the_seo_framework()->generate_the_description()` now always trims the output.
+	* Error notices types generated by The SEO Framework's Debug class are now strictly checked before outputted. This yields no effective behavioral difference.
 * **Improved:**
 	/
 	* Reduced sitemap's generation memory usage.
@@ -486,9 +497,16 @@ TODO:
 	* Added multiple checks in the Breadcrumb generation code to prevent empty breadcrumb output.
 	/
 	* TODO When saving the SEO Meta data, all front-end transients now always flushed through a new method. Instead of guessing which options have been changed.
+	* Removed several WP version checks that were aimed below the plugin WP version requirements.
+	* Correct error notice titles are now in place for The SEO Framework's debug handlers. Rather than only `Notice:`.
+	* Method `the_seo_framework()->call_function()` inaccessible method/function handler now uses the correctly assigned one, rather than using `_doing_it_wrong()`.
 * **Fixed:**
 	/
-	* Leftover CSS prefix name `seoframework-content-no-js` should've been `tsf-content-no-js`.
+	* TODO Several CSS classes didn't have a correct prefix. These were, and now are:
+		/
+		* NOTE already done: `seoframework-content-no-js`, is now `tsf-content-no-js`
+		* `autodescription-sep-js`, is now `tsf-sep-js`
+		* `custom-title-js`, is now `tsf-custom-title-js`
 	* Method `the_seo_framework()->call_function()` now doesn't result in a fatal error anymore if the method of an object doesn't exist in conjunction with when the class is supplied as an object instead of string.
 	* The WordPress global `$wp_version` is now no longer overwritten when using major WordPress release versions. Credit [ajgagnon](https://github.com/ajgagnon).
 	* Function `the_seo_framework_get_option()` now has the required input parameters. Credit [QWp6t](https://github.com/QWp6t).
@@ -496,10 +514,17 @@ TODO:
 	* The previously named "Knowledge Graph" netabox "Social Sites" tab title now is translatable. Credit [pedro-mendonca](https://github.com/pedro-mendonca).
 	* Method `the_seo_framework()->get_user_meta()` now no longer returns a string when no metadata has been initialized. Instead it will return an empty array.
 * **Deprecated:**
-	* Method `the_seo_framework()->search_filter()`. It's a very slow function as it uses `get_excluded_search_ids`. There's no replacement.
-	* Method `the_seo_framework()->get_excluded_search_ids()`. It's a very slow function because it queries all posts. There's no replacement.
+	* Method `the_seo_framework()->search_filter()`. It's a very slow method as it uses the (deprecated method) `get_excluded_search_ids()`. There's no replacement.
+		* This method was already stopped being used in 2.7.0.
 * **Removed:**
 	* Memory profiling output in the HTML code when `THE_SEO_FRAMEWORK_DEBUG` is defined as true.
+		* This was inaccurate at best.
+	* Various methods regarding the Knowledge Graph settings metabox, these include:
+		* `knowledge_metabox`
+		* `knowledge_metabox_general_tab`
+		* `knowledge_metabox_about_tab`
+		* `knowledge_metabox_social_tab`
+	* Methods deprecated in The SEO Framework 2.6.6 and below are now removed. Which gave you more than 6 months to catch up.
 * **Other:**
 	* Cleaned up code.
 * **Filter notes:**
@@ -508,11 +533,19 @@ TODO:
 		* `(array) the_seo_framework_breadcrumb_post_sorting_callback`. Used to apply your own sorting function for terms.
 		* `(bool) the_seo_framework_general_metabox`. Used to enable/disable the General Settings metabox.
 		* `(array) the_seo_framework_general_settings_tabs`. Used to alter or add general settings tabs.
+		* `(array) the_seo_framework_schema_settings_tabs`. Used to alter or add Schema settings tabs.
 		* `(array) the_seo_framework_canonical_scheme_types`. Used to remove canonical URL setting options.
+	* **Removed:**
+		* `(array) the_seo_framework_knowledgegraph_settings_tabs`. These tabs have been moved in the Schema metabox.
+		* `the_seo_framework_detect_seo_plugins`. This was previously deprecated.
+		* `the_seo_framework_supported_screens`. This was previously deprecated.
 * **Action notes:**
 	* **Added:**
 		* `the_seo_framework_general_metabox_before` runs before the General metabox output.
 		* `the_seo_framework_general_metabox_after` runs after the General metabox output.
+	* **Removed:**
+		* `the_seo_framework_knowledge_metabox_before`
+		* `the_seo_framework_knowledge_metabox_after`
 
 = Full changelog =
 
@@ -520,17 +553,11 @@ TODO:
 
 == Upgrade Notice ==
 
+= 2.8.0 =
+This version completes the 2.7.0 term metadata upgrade by removing the old-style metadata values whilte dropping WordPress 4.3 support.
+
 = 2.7.0 =
 This update is required for the upcoming Extension Manager plugin and includes many improvements.
-
-= 2.6.4 =
-Highly recommended update that fixes various query checks and caches.
-
-= 2.6.3 =
-This update resolves an issue with the Home Page (blog) Title and Description output.
-
-= 2.6.2 =
-This update resolves an issue with the WooCommerce Shop Page Canonical URL. Installing this update is therefore highly recommended.
 
 == Other Notes ==
 

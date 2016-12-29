@@ -117,8 +117,8 @@ switch ( $instance ) :
 	case 'the_seo_framework_general_metabox_canonical' :
 
 		?><h4><?php esc_html_e( 'Canonical URL Settings', 'autodescription' ); ?></h4><?php
-		$this->description( __( 'The canonical URL meta tag forces Search Engines to go to the outputted URL.', 'autodescription' ) );
-		$this->description( __( 'If the canonical URL meta tag represents the visited page, then the Search Engine will crawl the visited page. Otherwise, the Search Engine will try to go to the outputted URL.', 'autodescription' ) );
+		$this->description( __( 'The canonical URL meta tag urges Search Engines to go to the outputted URL.', 'autodescription' ) );
+		$this->description( __( 'If the canonical URL meta tag represents the visited page, then the Search Engine will crawl the visited page. Otherwise, the Search Engine might go to the outputted URL.', 'autodescription' ) );
 		$this->description( __( 'Only adjust these options if you are aware of its SEO effects.', 'autodescription' ) );
 		?>
 		<hr>
@@ -126,7 +126,7 @@ switch ( $instance ) :
 		<p>
 			<h4><?php esc_html_e( 'Scheme Settings', 'autodescription' ); ?></h4>
 			<?php
-			$this->description( __( 'If your website is both accessible on HTTP as HTTPS, set this to HTTPS in order to prevent duplicated content.', 'autodescription' ) );
+			$this->description( __( 'If your website is accessible on both HTTP as HTTPS, set this to HTTPS in order to prevent duplicated content.', 'autodescription' ) );
 			$this->description( __( 'Otherwise, automatic detection is recommended.', 'autodescription' ) );
 			?>
 			<label for="<?php $this->field_id( 'canonical_scheme' ); ?>"><?php echo esc_html_x( 'Preferred canonical URL scheme:', '= Detect Automatically, HTTPS, HTTP', 'autodescription' ); ?></label>

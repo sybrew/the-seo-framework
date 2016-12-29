@@ -76,7 +76,6 @@ class Detect extends Render {
 	/**
 	 * Filterable list of conflicting plugins.
 	 *
-	 * Applies filters 'the_seo_framework_conflicting_plugins' : array
 	 * @since 2.6.0
 	 * @credits JetPack for most code.
 	 *
@@ -140,6 +139,10 @@ class Detect extends Render {
 			),
 		);
 
+		/**
+		 * Applies filters 'the_seo_framework_conflicting_plugins' : array
+		 * @since 2.6.0
+		 */
 		return (array) apply_filters( 'the_seo_framework_conflicting_plugins', $conflicting_plugins );
 	}
 
@@ -335,20 +338,12 @@ class Detect extends Render {
 	 *
 	 * @since 1.3.0
 	 *
-	 * Applies filters 'the_seo_framework_seo_plugin_detected' : bool
-	 * @since 2.6.1
-	 *
 	 * @return bool SEO plugin detected.
 	 */
 	public function detect_seo_plugins() {
 
 		static $detected = null;
 
-		if ( isset( $detected ) )
-			return $detected;
-
-		//* Old style filter.
-		$detected = $this->detect_seo_plugins_old();
 		if ( isset( $detected ) )
 			return $detected;
 
@@ -359,6 +354,10 @@ class Detect extends Render {
 
 			foreach ( $conflicting_plugins as $plugin ) {
 				if ( in_array( $plugin, $active_plugins, true ) ) {
+					/**
+					 * Applies filters 'the_seo_framework_seo_plugin_detected' : boolean
+					 * @since 2.6.1
+					 */
 					$detected = apply_filters( 'the_seo_framework_seo_plugin_detected', true );
 					break;
 				}
@@ -372,9 +371,7 @@ class Detect extends Render {
 	 * Determines if other Open Graph or SEO plugins are active.
 	 *
 	 * @since 1.3.0
-	 *
-	 * Applies filters 'the_seo_framework_og_plugin_detected' : bool
-	 * @since 2.6.1
+	 * @since 2.8.0: No longer checks for old style filter.
 	 *
 	 * @return bool True if OG or SEO plugin detected.
 	 */
@@ -390,11 +387,6 @@ class Detect extends Render {
 		if ( $detected )
 			return $detected;
 
-		//* Old style filter. Emits warning if used.
-		$detected = $this->has_og_plugin();
-		if ( isset( $detected ) )
-			return $detected;
-
 		$active_plugins = $this->active_plugins();
 
 		if ( ! empty( $active_plugins ) ) {
@@ -402,6 +394,10 @@ class Detect extends Render {
 
 			foreach ( $conflicting_plugins as $plugin ) {
 				if ( in_array( $plugin, $active_plugins, true ) ) {
+					/**
+					 * Applies filters 'the_seo_framework_og_plugin_detected' : boolean
+					 * @since 2.6.1
+					 */
 					$detected = apply_filters( 'the_seo_framework_og_plugin_detected', true );
 					break;
 				}
@@ -438,6 +434,10 @@ class Detect extends Render {
 
 			foreach ( $conflicting_plugins as $plugin ) {
 				if ( in_array( $plugin, $active_plugins, true ) ) {
+					/**
+					 * Applies filters 'the_seo_framework_twittercard_plugin_detected' : boolean
+					 * @since 2.6.1
+					 */
 					$detected = apply_filters( 'the_seo_framework_twittercard_plugin_detected', true );
 					break;
 				}
@@ -1103,6 +1103,6 @@ class Detect extends Render {
 		if ( isset( $cache ) )
 			return $cache;
 
-		return $cache = get_option( 'db_version' ) >= 34370 && get_option( 'the_seo_framework_upgraded_db_version' ) >= '2700' && $this->wp_version( '4.4' );
+		return $cache = get_option( 'db_version' ) >= 34370 && get_option( 'the_seo_framework_upgraded_db_version' ) >= '2700' && $this->wp_version( '4.3.999', '>' );
 	}
 }

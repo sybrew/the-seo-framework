@@ -72,8 +72,8 @@ a.tsf-dismiss:hover {
 }
 
 /**
-* WooCommerce fix @TODO make this load only when admin bar is showing.
-*/
+ * WooCommerce fix @TODO make this load only when admin sidebar is showing.
+ */
 table.wp-list-table .column-name {
 	width: 15%;
 }

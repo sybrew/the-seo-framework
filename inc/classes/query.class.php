@@ -303,7 +303,7 @@ class Query extends Compat {
 	 * @since 2.6.0
 	 * @global object $current_screen
 	 *
-	 * @return bool We're on Term Edit screen.
+	 * @return bool True if on Term Edit screen. False otherwise.
 	 */
 	public function is_term_edit() {
 

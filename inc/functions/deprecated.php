@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) or die;
  * This file contains most functions that have been deprecated.
  *
  * @since 2.1.6
- * @since 2.3.5 Emptied. (~2.5 months later )
+ * @since 2.3.5 Emptied. (~2.5 months later)
  * @since 2.6.2 Emptied. (~6 months later)
  */
 

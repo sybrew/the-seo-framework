@@ -853,7 +853,7 @@ class Generate_Ldjson extends Generate_Image {
 				$logourl = esc_url_raw( $icon );
 
 				//* Add trailing comma
-				$logo = '"logo":' . json_encode( $logourl ) . ',';
+				$logo = '"logo":' . json_encode( $logourl );
 			}
 		}
 
@@ -891,8 +891,13 @@ class Generate_Ldjson extends Generate_Image {
 		$sameurls = rtrim( $sameurls, $comma );
 		$json = '';
 
-		if ( $sameurls )
-			$json = sprintf( '{"@context":%s,"@type":%s,"name":%s,"url":%s,%s"sameAs":[%s]}', $context, $type, $name, $url, $logo, $sameurls );
+		$logo = $logo ? ',' . $logo : '';
+
+		if ( $sameurls ) {
+			$json = sprintf( '{"@context":%s,"@type":%s,"name":%s,"url":%s%s,"sameAs":[%s]}', $context, $type, $name, $url, $logo, $sameurls );
+		} else {
+			$json = sprintf( '{"@context":%s,"@type":%s,"name":%s,"url":%s%s}', $context, $type, $name, $url, $logo );
+		}
 
 		$output = '';
 		if ( $json )

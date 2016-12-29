@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
- * Class The_SEO_Framework\Debug
+ * Singleton class The_SEO_Framework\Debug
  *
  * Holds plugin debug functions.
  *
@@ -289,7 +289,7 @@ final class Debug implements Debug_Interface {
 			set_error_handler( array( $this, 'error_handler_inaccessible_call' ) );
 
 			/* translators: 1: Method or Property name, 2: Message */
-			trigger_error( sprintf( esc_html__( '%1$s is not accessible. %2$s', 'autodescription' ), '<code>' . esc_html( $p_or_m ) . '</code>', esc_html( $message ) ) );
+			trigger_error( sprintf( esc_html__( '%1$s is not accessible. %2$s', 'autodescription' ), '<code>' . esc_html( $p_or_m ) . '</code>', esc_html( $message ) ), E_USER_ERROR );
 
 			restore_error_handler();
 		}
@@ -309,7 +309,7 @@ final class Debug implements Debug_Interface {
 	protected function error_handler_deprecated( $code, $message ) {
 
 		//* Only do so if E_USER_NOTICE is pased.
-		if ( $code >= 1024 && isset( $message ) ) {
+		if ( 1024 === $code && isset( $message ) ) {
 
 			$backtrace = debug_backtrace();
 			/**
@@ -335,7 +335,7 @@ final class Debug implements Debug_Interface {
 	protected function error_handler_doing_it_wrong( $code, $message ) {
 
 		//* Only do so if E_USER_NOTICE is pased.
-		if ( $code >= 1024 && isset( $message ) ) {
+		if ( 1024 === $code && isset( $message ) ) {
 
 			$backtrace = debug_backtrace();
 			/**
@@ -351,7 +351,7 @@ final class Debug implements Debug_Interface {
 	 * The SEO Framework error handler.
 	 *
 	 * Only handles notices.
-	 * @see E_USER_NOTICE
+	 * @see E_USER_ERROR
 	 *
 	 * @since 2.6.0
 	 *
@@ -360,7 +360,8 @@ final class Debug implements Debug_Interface {
 	 */
 	protected function error_handler_inaccessible_call( $code, $message ) {
 
-		if ( $code >= 1024 && isset( $message ) ) {
+		//* Only do so if E_USER_ERROR is pased.
+		if ( 256 === $code && isset( $message ) ) {
 
 			$backtrace = debug_backtrace();
 
@@ -369,7 +370,7 @@ final class Debug implements Debug_Interface {
 			 */
 			$error = $backtrace[6];
 
-			$this->error_handler( $error, $message );
+			$this->error_handler( $error, $message, $code );
 		}
 	}
 
@@ -377,17 +378,35 @@ final class Debug implements Debug_Interface {
 	 * Echos error.
 	 *
 	 * @since 2.6.0
+	 * @since 2.8.0 added $code parameter
 	 *
 	 * @param array $error The Error location and file.
 	 * @param string $message The error message. Expected to be escaped.
+	 * @param int $code The error handler code.
 	 */
-	protected function error_handler( $error, $message ) {
+	protected function error_handler( $error, $message, $code = E_USER_NOTICE ) {
 
 		$file = isset( $error['file'] ) ? $error['file'] : '';
 		$line = isset( $error['line'] ) ? $error['line'] : '';
 
 		if ( isset( $message ) ) {
-			echo PHP_EOL . '<span><strong>Notice:</strong> ' . $message;
+			switch ( $code ) :
+				case E_USER_ERROR :
+					$type = 'Error';
+					break;
+
+				case E_USER_WARNING :
+					$type = 'Warning';
+					break;
+
+				case E_USER_NOTICE :
+				default :
+					$type = 'Notice';
+					break;
+			endswitch;
+
+			//* Already escaped.
+			echo sprintf( '<span><strong>%s:</strong> ', $type ) . $message;
 			echo $file ? ' In ' . esc_html( $file ) : '';
 			echo $line ? ' on line ' . esc_html( $line ) : '';
 			echo '.</span><br>' . PHP_EOL;

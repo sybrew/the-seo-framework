@@ -31,7 +31,7 @@ defined( 'ABSPATH' ) or die;
  * @since 2.8.0
  * @uses interface Debug_Interface
  */
-final class Load extends Deprecated implements Debug_Interface {
+final class Load extends Feed implements Debug_Interface {
 
 	/**
 	 * Cached debug/profile properties. Initialized on plugins_loaded priority 5.
@@ -143,7 +143,7 @@ final class Load extends Deprecated implements Debug_Interface {
 						$output = call_user_func_array( array( $this, $method ), $args );
 					}
 				} else {
-					$this->_doing_it_wrong( esc_html( get_class( $class ) . '->' . $method . '()' ), esc_html__( 'Class or Method not found.', 'autodescription' ), esc_html( $version ) );
+					$this->_inaccessible_p_or_m( esc_html( get_class( $class ) . '->' . $method . '()' ), esc_html__( 'Class or Method not found.', 'autodescription' ), esc_html( $version ) );
 				}
 			} else {
 				if ( method_exists( $class, $method ) ) {
@@ -153,7 +153,7 @@ final class Load extends Deprecated implements Debug_Interface {
 						$output = call_user_func_array( array( $class, $method ), $args );
 					}
 				} else {
-					$this->_doing_it_wrong( esc_html( get_class( $class ) . '::' . $method . '()' ), esc_html__( 'Class or Method not found.', 'autodescription' ), esc_html( $version ) );
+					$this->_inaccessible_p_or_m( esc_html( get_class( $class ) . '::' . $method . '()' ), esc_html__( 'Class or Method not found.', 'autodescription' ), esc_html( $version ) );
 				}
 			}
 		} elseif ( is_string( $class ) && $class ) {
