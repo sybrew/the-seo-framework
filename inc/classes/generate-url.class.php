@@ -819,7 +819,7 @@ class Generate_Url extends Generate_Title {
 
 		/**
 		 * @TODO add options metabox.
-		 * @priority medium 2.6.5+
+		 * @priority medium 2.6.5+ ... Semi-done in 2.8.0
 		 */
 
 		if ( isset( $scheme_settings ) ) {

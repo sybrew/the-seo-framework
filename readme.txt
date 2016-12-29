@@ -348,6 +348,9 @@ TODO:
 	* TODO The SEO Bar's on-hover tooltip is now once more correctly visible on mobile devices.
 	* TODO The notification that's displayed when settings are reset is no longer displayed on refresh.
 	* The website's tagline is no longer shown in the description when no excerpt can be generated.
+	* The counter type now correctly updates for new user meta created after The SEO Framework 2.7.0+ is installed.
+	* TODO SEO Settings tabs now correctly show the tab's content when hitting the "back" button.
+		* This behavior is caused because browsers save form data when travelling through history. Tabs are self-contained button forms for improved performance.
 
 **For translators:**
 
@@ -415,7 +418,7 @@ TODO:
 			* The deprecation function handler `deprecated.php` has been moved to the `/autodescription/inc/functions/` folder, from the `/autodescription/inc/deprecated/` folder.
 		* This cleans up the folders and some code.
 	/
-	* TODO Not all classes are now always available. Unless methods of such are called or required.
+	* TODO :: CONTINUE THIS EFFORT IN 3.0.0? :: Not all classes are now always available. Unless methods of such are called or required.
 		* This massively improves performance and reduces memory usage.
 		* This completely changes the architecture of the plugin.
 		* This is handled through autoloading, interfaces and magic methods.
@@ -481,11 +484,17 @@ TODO:
 	* WordPress' `is_ssl()` isn't cached. So now it has a cached counterpart: `the_seo_framework()->is_ssl()`.
 	* The excluded post type filter no longer tries to match an exact value; saving some processing power generating the query.
 	* Added multiple checks in the Breadcrumb generation code to prevent empty breadcrumb output.
+	/
+	* TODO When saving the SEO Meta data, all front-end transients now always flushed through a new method. Instead of guessing which options have been changed.
 * **Fixed:**
 	/
 	* Leftover CSS prefix name `seoframework-content-no-js` should've been `tsf-content-no-js`.
 	* Method `the_seo_framework()->call_function()` now doesn't result in a fatal error anymore if the method of an object doesn't exist in conjunction with when the class is supplied as an object instead of string.
-	* The WordPress global `$wp_version` is now no longer overwritten when using major release versions.
+	* The WordPress global `$wp_version` is now no longer overwritten when using major WordPress release versions. Credit [ajgagnon](https://github.com/ajgagnon).
+	* Function `the_seo_framework_get_option()` now has the required input parameters. Credit [QWp6t](https://github.com/QWp6t).
+	* Method `the_seo_framework()->_doing_it_wrong()` now has correctly translatable notices. Credit [pedro-mendonca](https://github.com/pedro-mendonca).
+	* The previously named "Knowledge Graph" netabox "Social Sites" tab title now is translatable. Credit [pedro-mendonca](https://github.com/pedro-mendonca).
+	* Method `the_seo_framework()->get_user_meta()` now no longer returns a string when no metadata has been initialized. Instead it will return an empty array.
 * **Deprecated:**
 	* Method `the_seo_framework()->search_filter()`. It's a very slow function as it uses `get_excluded_search_ids`. There's no replacement.
 	* Method `the_seo_framework()->get_excluded_search_ids()`. It's a very slow function because it queries all posts. There's no replacement.

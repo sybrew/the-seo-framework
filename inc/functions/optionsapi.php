@@ -46,7 +46,7 @@ function the_seo_framework() {
  *
  * @since 2.7.0
  *
- * @return string The SEO Framework class name.
+ * @return string|bool The SEO Framework class name. False and PHP Warning if The SEO Framework isn't loaded.
  */
 function the_seo_framework_class() {
 
@@ -137,6 +137,7 @@ function the_seo_framework_options_pagehook() {
  * Fetch an option from The SEO Framework.
  *
  * @since 2.7.0
+ * @since 2.8.0 Now works as intended, by including the required parameters.
  *
  * @param string  $key Option name.
  * @param boolean $use_cache Optional. Whether to use the cache value or not. Defaults to true.
@@ -228,6 +229,14 @@ function the_seo_framework_is_settings_page() {
  *
  * @since 2.7.0
  *
+ * @param string|array $new_option {
+ *      if string: The string will act as a key for a new empty string option, e.g. : {
+ *           'sitemap_index' becomes ['sitemap_index' => '']
+ *      }
+ *      if array: The option name(s) and value(s), e.g. : {
+ *            ['sitemap_index' => 1]
+ *      }
+ * }
  * @return bool True on success. False on failure.
  */
 function the_seo_framework_update_option( $new_option ) {

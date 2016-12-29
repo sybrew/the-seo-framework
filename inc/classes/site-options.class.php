@@ -695,9 +695,18 @@ class Site_Options extends Sanitize {
 	 *
 	 * @since 2.7.0
 	 *
-	 * @param string|array $new The new setting(s).
+	 *
+	 * @param string|array $new_option {
+	 *      if string: The string will act as a key for a new empty string option, e.g. : {
+	 *           'sitemap_index' becomes ['sitemap_index' => '']
+	 *      }
+	 *      if array: The option name(s) and value(s), e.g. : {
+	 *            ['sitemap_index' => 1]
+	 *      }
+	 * }
 	 * @param string $settings_field The Settings Field to update. Defaults
-	 *				to The SEO Framework settings field.
+	 *               to The SEO Framework settings field.
+	 * @return bool True on success. False on failure.
 	 */
 	public function update_settings( $new = '', $settings_field = '' ) {
 
@@ -865,6 +874,7 @@ class Site_Options extends Sanitize {
 	 * Fetches The SEO Framework usermeta.
 	 *
 	 * @since 2.7.0
+	 * @since 2.8.0 Always returns array, even if no value is assigned.
 	 * @staticvar array $usermeta_cache
 	 *
 	 * @param int $user_id The user ID.
@@ -875,20 +885,21 @@ class Site_Options extends Sanitize {
 	public function get_user_meta( $user_id, $key = THE_SEO_FRAMEWORK_USER_OPTIONS, $use_cache = true ) {
 
 		if ( false === $use_cache )
-			return get_user_meta( $user_id, $key, true );
+			return ( $meta = get_user_meta( $user_id, $key, true ) ) && is_array( $meta ) ? $meta : array();
 
 		static $usermeta_cache = array();
 
 		if ( isset( $usermeta_cache[ $user_id ][ $key ] ) )
 			return $usermeta_cache[ $user_id ][ $key ];
 
-		return $usermeta_cache[ $user_id ][ $key ] = get_user_meta( $user_id, $key, true );
+		return $usermeta_cache[ $user_id ][ $key ] = ( $meta = get_user_meta( $user_id, $key, true ) ) && is_array( $meta ) ? $meta : array();
 	}
 
 	/**
 	 * Updates user SEO option.
 	 *
 	 * @since 2.7.0
+	 * @since 2.8.0 New users now get a new array assigned.
 	 *
 	 * @param int $user_id The user ID.
 	 * @param string $option The user's SEO metadata option.
@@ -907,6 +918,11 @@ class Site_Options extends Sanitize {
 			return false;
 
 		$meta = $this->get_user_meta( $user_id, THE_SEO_FRAMEWORK_USER_OPTIONS, false );
+
+		/**
+		 * @since 2.8.0 initializes new array on empty values.
+		 */
+		is_array( $meta ) or $meta = array();
 
 		$meta[ $option ] = $value;
 
