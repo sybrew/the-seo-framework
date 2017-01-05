@@ -20,8 +20,8 @@ switch ( $instance ) :
 		$blogname = $this->get_blogname();
 		$sep = $this->get_separator( 'title' );
 
-		$additions_left = '<span class="tsf-title-additions-js">' . $blogname . '<span class="autodescription-sep-js">' . " $sep " . '</span></span>';
-		$additions_right = '<span class="tsf-title-additions-js"><span class="autodescription-sep-js">' . " $sep " . '</span>' . $blogname . '</span>';
+		$additions_left = '<span class="tsf-title-additions-js">' . $blogname . '<span class="tsf-sep-js">' . " $sep " . '</span></span>';
+		$additions_right = '<span class="tsf-title-additions-js"><span class="tsf-sep-js">' . " $sep " . '</span>' . $blogname . '</span>';
 
 		$example_left = '<em>' . $additions_left . $title . '</em>';
 		$example_right = '<em>' . $title . $additions_right . '</em>';

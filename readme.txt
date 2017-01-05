@@ -308,6 +308,7 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 	/
 	* TODO When focussing on a field which is showing a placeholder, the placeholder is now blurred.
 	* TODO The sitename set in "Organization or Personal Name" is now used consistently throughout the Schema.org output settings.
+	* Description transient cache is no longer initiated on Search Pages.
 * **Updated:**
 	/
 	* TODO Translation POT file.
@@ -502,13 +503,12 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 	* Method `the_seo_framework()->call_function()` inaccessible method/function handler now uses the correctly assigned one, rather than using `_doing_it_wrong()`.
 * **Fixed:**
 	/
-	* TODO Several CSS classes didn't have a correct prefix. These were, and now are:
+	* Several CSS classes didn't have a correct prefix. These were, and now are:
 		/
-		* NOTE already done: `seoframework-content-no-js`, is now `tsf-content-no-js`
+		* `seoframework-content-no-js`, is now `tsf-content-no-js`
 		* `autodescription-sep-js`, is now `tsf-sep-js`
 		* `custom-title-js`, is now `tsf-custom-title-js`
 	* Method `the_seo_framework()->call_function()` now doesn't result in a fatal error anymore if the method of an object doesn't exist in conjunction with when the class is supplied as an object instead of string.
-	* The WordPress global `$wp_version` is now no longer overwritten when using major WordPress release versions. Credit [ajgagnon](https://github.com/ajgagnon).
 	* Function `the_seo_framework_get_option()` now has the required input parameters. Credit [QWp6t](https://github.com/QWp6t).
 	* Method `the_seo_framework()->_doing_it_wrong()` now has correctly translatable notices. Credit [pedro-mendonca](https://github.com/pedro-mendonca).
 	* The previously named "Knowledge Graph" netabox "Social Sites" tab title now is translatable. Credit [pedro-mendonca](https://github.com/pedro-mendonca).

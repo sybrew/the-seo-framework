@@ -457,11 +457,11 @@ span.tsf-seo-bar .tsf-explanation-desc div {
 	min-width: 150px;
 }
 
-.tsf-metaboxes #tsf-home-title-location label span.custom-title-js,
+.tsf-metaboxes #tsf-home-title-location label span.tsf-custom-title-js,
 .tsf-metaboxes #tsf-home-title-location label span.tsf-custom-blogname-js,
 .tsf-metaboxes #tsf-home-title-location label span.tsf-custom-tagline-js,
-.tsf-metaboxes #tsf-title-location label .autodescription-sep-js,
-.tsf-metaboxes #tsf-home-title-location label .autodescription-sep-js {
+.tsf-metaboxes #tsf-title-location label .tsf-sep-js,
+.tsf-metaboxes #tsf-home-title-location label .tsf-sep-js {
 	display: inline;
 	min-width: 0;
 	white-space: pre;

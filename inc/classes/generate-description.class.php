@@ -328,6 +328,7 @@ class Generate_Description extends Generate {
 	 *
 	 * @since 2.6.0
 	 * @since 2.8.0 : The output is always trimmed if $escape is false.
+	 *              : The cache will no longer be maintained on previews or search.
 	 *
 	 * @param array $args description args : {
 	 * 		@param int $id the term or page id.
@@ -353,13 +354,18 @@ class Generate_Description extends Generate {
 			return $this->generate_home_page_description( $args['get_custom_field'], $escape );
 
 		/**
+		 * Determines whether to prevent caching of transients.
+		 * @since 2.8.0
+		 */
+		$nocache = ( ! $this->is_admin() && $this->is_search() ) || $this->is_preview();
+		$use_cache = ! $nocache && $this->is_option_checked( 'cache_meta_description' );
+
+		/**
 		 * Setup transient.
 		 */
-		$this->setup_auto_description_transient( $args['id'], $args['taxonomy'] );
+		$use_cache and $this->setup_auto_description_transient( $args['id'], $args['taxonomy'] );
 
 		$term = $this->fetch_the_term( $args['id'] );
-
-		$use_cache = $this->is_option_checked( 'cache_meta_description' );
 
 		/**
 		 * @since 2.8.0: Added check for option 'cache_meta_description'.
@@ -370,8 +376,8 @@ class Generate_Description extends Generate {
 
 			/**
 			 * @since 2.8.0:
-			 * 		1. Added check for option 'cache_meta_description'.
-			 * 		2. Moved generation functions in two different methods.
+			 *    1. Added check for option 'cache_meta_description' and search/preview.
+			 *    2. Moved generation functions in two different methods.
 			 */
 			if ( $use_cache ) {
 				$excerpt_normal = $this->get_description_excerpt_normal( $args['id'], $term );

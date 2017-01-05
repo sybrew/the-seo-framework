@@ -275,7 +275,7 @@ class Transients extends Sitemaps {
 			$query = '';
 
 			if ( function_exists( 'get_search_query' ) ) {
-				$search_query = get_search_query();
+				$search_query = \get_search_query();
 
 				if ( $search_query )
 					$query = str_replace( ' ', '', $search_query );

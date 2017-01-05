@@ -156,7 +156,7 @@ switch ( $instance ) :
 	case 'the_seo_framework_schema_metabox_presence' :
 
 		?><h4><?php esc_html_e( 'Authorized Presence Options', 'autodescription' ); ?></h4><?php
-		$this->description( __( 'The authorized presence Schema.org output help Search Engine users find ways to interact with this website.', 'autodescription' ) );
+		$this->description( __( 'The authorized presence Schema.org output helps Search Engine users find ways to interact with this website.', 'autodescription' ) );
 
 		$info = $this->make_info( __( 'About Authorized Presence', 'autodescription' ), 'https://developers.google.com/search/docs/guides/enhance-site#add-your-sites-name-logo-and-social-links', false );
 		//* Echo checkbox.

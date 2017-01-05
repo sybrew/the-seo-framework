@@ -562,14 +562,13 @@ class Detect extends Render {
 	 * Determines if WP is above or below a version
 	 *
 	 * @since 2.2.1
-	 * @since 2.3.8
+	 * @since 2.3.8: Added caching
 	 * @since 2.8.0: No longer overwrites global $wp_version
 	 * @staticvar array $cache
 	 *
 	 * @param string $version the three part version to compare to WordPress
 	 * @param string $compare the comparing operator, default "$version >= Current WP Version"
 	 * @return bool True if the WordPress version comparison passes.
-	 * 			Note: When using $compare = '>' it will be false when they are equal.
 	 */
 	public function wp_version( $version = '4.3.0', $compare = '>=' ) {
 

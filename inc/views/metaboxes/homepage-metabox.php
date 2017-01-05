@@ -240,8 +240,8 @@ switch ( $instance ) :
 		$blogname = $title_args['blogname'];
 		$sep = $this->get_separator( 'title' );
 
-		$example_left = '<em><span class="custom-title-js">' . $title . '</span><span class="tsf-custom-blogname-js"><span class="autodescription-sep-js"> ' . $sep . ' </span><span class="tsf-custom-tagline-js">' . $blogname . '</span></span></span></em>';
-		$example_right = '<em><span class="tsf-custom-blogname-js"><span class="tsf-custom-tagline-js">' . $blogname . '</span><span class="autodescription-sep-js"> ' . $sep . ' </span></span><span class="custom-title-js">' . $title . '</span></em>';
+		$example_left = '<em><span class="tsf-custom-title-js">' . $title . '</span><span class="tsf-custom-blogname-js"><span class="tsf-sep-js"> ' . $sep . ' </span><span class="tsf-custom-tagline-js">' . $blogname . '</span></span></span></em>';
+		$example_right = '<em><span class="tsf-custom-blogname-js"><span class="tsf-custom-tagline-js">' . $blogname . '</span><span class="tsf-sep-js"> ' . $sep . ' </span></span><span class="tsf-custom-title-js">' . $title . '</span></em>';
 
 		$home_page_i18n = esc_html__( 'Home Page', 'autodescription' );
 
