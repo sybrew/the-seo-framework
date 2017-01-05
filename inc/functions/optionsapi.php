@@ -26,27 +26,15 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
- * Loads the class from cache.
- * This is recommended using this above using 'new The_SEO_Framework_Load();'
- * It also checks if the class is callable in the first place.
- *
- * @since 2.2.5
- *
- * @return object The SEO Framework Facade class.
- */
-function the_seo_framework() {
-	return the_seo_framework_init();
-}
-
-/**
  * Returns the facade class name from cache.
  *
  * CAUTION: If this is used before plugins_loaded priority 5, then the plugin
  * will fail to load views.
  *
  * @since 2.7.0
+ * @since 2.8.0: Added did_action and current_action check.
  *
- * @return string|bool The SEO Framework class name. False and PHP Warning if The SEO Framework isn't loaded.
+ * @return string|bool The SEO Framework class name. False if The SEO Framework isn't loaded.
  */
 function the_seo_framework_class() {
 
@@ -54,6 +42,9 @@ function the_seo_framework_class() {
 
 	if ( isset( $class ) )
 		return $class;
+
+	if ( ! ( did_action( 'plugins_loaded' ) || current_action( 'plugins_loaded' ) ) )
+		return false;
 
 	return $class = get_class( the_seo_framework() );
 }
@@ -66,7 +57,7 @@ function the_seo_framework_class() {
  * @return bool true if SEO framework is active
  */
 function the_seo_framework_active() {
-	return the_seo_framework_load();
+	return \The_SEO_Framework\_can_load();
 }
 
 /**

@@ -128,82 +128,6 @@ define( 'THE_SEO_FRAMEWORK_DIR_PATH_INTERFACE', THE_SEO_FRAMEWORK_DIR_PATH . 'in
  */
 define( 'THE_SEO_FRAMEWORK_DIR_PATH_FUNCT', THE_SEO_FRAMEWORK_DIR_PATH . 'inc/functions/' );
 
-add_action( 'plugins_loaded', 'the_seo_framework_locale_init', 10 );
-/**
- * Plugin locale 'autodescription'
- * File located in plugin folder autodescription/language/
- * @since 1.0.0
- */
-function the_seo_framework_locale_init() {
-	load_plugin_textdomain( 'autodescription', false, basename( dirname( __FILE__ ) ) . '/language/' );
-}
-
-register_activation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framework_check_php' );
-/**
- * Checks whether the server can run this plugin on activation.
- * If not, it will deactivate this plugin.
- *
- * @since 2.8.0
- */
-function the_seo_framework_check_php() {
-
-	//* Let's have some fun with teapots.
-	$error = floor( time() / DAY_IN_SECONDS ) === floor( strtotime( 'first day of April ' . date( 'Y', time() ) ) / DAY_IN_SECONDS ) ? 418 : 500;
-
-	if ( ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < 50300 ) {
-		deactivate_plugins( plugin_basename( __FILE__ ) );
-		wp_die( 'The SEO Framework requires PHP 5.3 or later. Sorry about that!<br>
-				Do you want to <a onclick="window.history.back()" href="/wp-admin/plugins.php">go back</a>?',
-			'The SEO Framework &laquo; Server Requirements',
-			array( 'response' => intval( $error ) )
-		);
-	} elseif ( $GLOBALS['wp_db_version'] < 33056 ) {
-		deactivate_plugins( plugin_basename( __FILE__ ) );
-		wp_die( 'The SEO Framework requires WordPress 4.3.4 or later. Sorry about that!<br>
-				Do you want to <a onclick="window.history.back()" href="/wp-admin/plugins.php">go back</a>?',
-			'The SEO Framework &laquo; WordPress Requirements',
-			array( 'response' => intval( $error ) )
-		);
-	}
-}
-
-register_activation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framework_flush_rewrite_rules_activation' );
-/**
- * Add and Flush rewrite rules on plugin activation.
- *
- * @since 2.6.6
- * @since 2.7.1: 1. Now no longer reinitializes global $wp_rewrite.
- *               2. Now always listens to the preconditions of the sitemap addition.
- *               3. Now flushes the rules on shutdown.
- * @access private
- */
-function the_seo_framework_flush_rewrite_rules_activation() {
-
-	$the_seo_framework = the_seo_framework();
-
-	if ( isset( $the_seo_framework ) ) {
-		$the_seo_framework->rewrite_rule_sitemap();
-		add_action( 'shutdown', 'flush_rewrite_rules' );
-	}
-}
-
-register_deactivation_hook( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE, 'the_seo_framework_flush_rewrite_rules_deactivation' );
-/**
- * Flush rewrite rules on plugin deactivation.
- *
- * @since 2.6.6
- * @since 2.7.1: 1. Now no longer reinitializes global $wp_rewrite.
- *               2. Now flushes the rules on shutdown.
- * @access private
- * @global object $wp_rewrite
- */
-function the_seo_framework_flush_rewrite_rules_deactivation() {
-
-	unset( $GLOBALS['wp_rewrite']->extra_rules_top['sitemap\.xml$'] );
-
-	add_action( 'shutdown', 'flush_rewrite_rules' );
-}
-
 /**
  * Load plugin files.
  *
@@ -219,3 +143,24 @@ require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'load.php' );
  * @uses THE_SEO_FRAMEWORK_DIR_PATH_FUNCT
  */
 require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'deprecated.php' );
+
+/**
+ * Load compat and API files.
+ * @since 2.1.6
+ * @uses THE_SEO_FRAMEWORK_DIR_PATH_FUNCT
+ */
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'compat.php' );
+require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'optionsapi.php' );
+
+/**
+ * Loads the class from cache.
+ * This is recommended using this above using 'new The_SEO_Framework_Load();'
+ * It also checks if the class is callable in the first place.
+ *
+ * @since 2.2.5
+ *
+ * @return object The SEO Framework Facade class.
+ */
+function the_seo_framework() {
+	return \The_SEO_Framework\_init();
+}

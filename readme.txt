@@ -379,12 +379,12 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 
 * **Added:**
 	/
-	* `The_SEO_Framework_Load->__set()` magic method.
+	* All classes and many functions are now converted to use namespaces.
+		* Package and Namespace: `The_SEO_Framework`
+	* `\The_SEO_Framework\Load->__set()` magic method.
 		* This prevents inaccessible property writing.
 		* This allows for property deprecation handling.
 		* A warning is emited whenever this method is accessed.
-	* All classes are now converted to use namespaces.
-		* Package: The_SEO_Framework
 	* Class autoloading.
 		* Now all The SEO Framework class files are required when needed, automatically.
 	* New JavaScript l10n and object property: 'hasInput'. Determines if the page renders The SEO Framework's input boxes, to be used to improve performance.
@@ -396,12 +396,21 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 		1. `the_seo_framework()->get_description_excerpt_normal()`, fetches the normal description excerpt.
 		1. `the_seo_framework()->get_description_excerpt_social()`, fetches the social description excerpt.
 * **Changed:**
-	* All the classes can't be initiated directly anymore. Always use `the_seo_framework()`.
+	* **IMPORTANT:** All the classes can't be initiated directly anymore. Always use `the_seo_framework()`.
 		* Failing to do so will result in a fatal error.
 		* This allows me (the developer) to easily change the class structure without compatibility issues in the future.
 	* All classes have been renamed.
-		* They are now preceded by `The_SEO_Framework\`, in accordance to their newly acquired namespace.
-		* For example, `AutoDescription_Feed` is now `The_SEO_Framework\Feed`.
+		* They are now preceded by `\The_SEO_Framework\`, in accordance to their newly acquired namespace.
+		* For example, class `AutoDescription_Feed` is now `\The_SEO_Framework\Feed`.
+	* Most core functions have been renamed.
+		* They now use a namespace.
+		* Affected functions:
+			* `the_seo_framework_upgrade()` is now `\The_SEO_Framework\_init_upgrade()` and is now marked private.
+			* `the_seo_framework_init()` is now `\The_SEO_Framework\_init()` and is now marked private. Use `the_seo_framework()` instead.
+			* `the_seo_framework_load()` is now `\The_SEO_Framework\can_load()` and is now marked private. Use `the_seo_framework_active()` instead.
+			* `the_seo_framework_flush_rewrite_rules_deactivation()` is now `\The_SEO_Framework\_deactivation()` and is now marked private.
+			* `the_seo_framework_flush_rewrite_rules_activation()` is now `\The_SEO_Framework\_activation()` and is now marked private.
+			* `the_seo_framework_locale_init()` is now `\The_SEO_Framework\_init_locale()` and is now marked private.
 	* The main class `The_SEO_Framework\Load` can not be initiated twice anymore. Failing to do so will return `null`.
 		* Always use function `the_seo_framework()` if you wish to access a method or property.
 	* Some class files have been moved.
@@ -422,10 +431,8 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 			* `termdata.class.php` is now `term-data.class.php`
 			* `postdata.class.php` is now `post-data.class.php`
 		* These changes allow easy autoloading and namespace interaction.
-	* Some classes files (and their classes) have been removed.
-		* The changes:
-			/
-			* `search.class.php`
+	* One class (and its file) has been removed, and its methods have been moved into `\The_SEO_Framework\Init`:
+		* `search.class.php`, which held `\The_SEO_Framework\Search`
 	* Some function files have been moved.
 		* The changes:
 			* The deprecation function handler `deprecated.php` has been moved to the `/autodescription/inc/functions/` folder, from the `/autodescription/inc/deprecated/` folder.
@@ -446,30 +453,31 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 					* When an inaccessible method is called, the magic method `the_seo_framework()->__call()` fires.
 					* Then the `The_SEO_Framework\Deprecated` class is autoloaded and cached within the magic method, quite like a singleton.
 					* If the method is found in that class, it will be called with all parameters passed to it. Otherwise, a default "method doesn't exist" notice is output, which resides in the new Debug class.
-	/
-	* Class `The_SEO_Framework\Load` is now final, and can't be extended upon anymore.
+	* Class `\The_SEO_Framework\Load` is now final, and can't be extended upon anymore.
 		* I am aware that this essentially removes any possible access to protected methods.
 		* This improves plugin consistency and prevents other plugins from creating very unexpected behavior.
 		* Nevertheless, if you have a feature suggestion, you know where to find me!
+	* Several methods have been changed, including:
+		* Method `the_seo_framework()->post_status()`'s third parameter was unused. It's now used to echo (true) or return (false) the value, default return (false).
+		* Method `the_seo_framework()->no_more_genesis_seo()` has been renamed to `disable_genesis_seo`, without deprecation as it was marked private.
+		* Method `the_seo_framework()->page_inpost_box()` has been renamed to `singular_inpost_box`, without deprecation as it was marked private.
+		* Method `the_seo_framework()->custom_field_redirect()` no longer checks for admin or front-end page status.
+		* Method `the_seo_framework()->call_function()` is now marked private. It's written and used as an internal handler for filters.
+		* Method `the_seo_framework()->generate_excerpt()` now has its third parameter (`$max_char_length`) default value increased by 1. From 154 to 155.
+		* Method `the_seo_framework()->robots_txt()` has been moved to class `Init` from `Sitemaps`.
+		* Method `the_seo_framework()->robots_txt()` is now called on action `init`, it was 'plugins_loaded'.
+		* Method `the_seo_framework()->get_custom_field()` has been moved to class `Post_Data` from `Core`.
+		* Method `the_seo_framework()->adjust_search_filter()` has been moved to class `Init` from `Search`.
+		* Method `the_seo_framework()->build_singular_relative_url()` now continues to run if an empty Post ID has been suplied.
+		* Method `the_seo_framework()->generate_the_description()` now always trims the output.
 	* The `license.txt` file has been updated to improve readability. The contents have not been changed.
 	/
-	* TODO The `title_seperator` option has been changed and updated to `title_separator`. Note the typo. // TODO Is this really needed? Perfection can take its toll.
-	* Method `the_seo_framework()->post_status()`'s third parameter was unused. It's now used to echo (true) or return (false) the value, default return (false).
-	* Method `the_seo_framework()->no_more_genesis_seo()` has been renamed to `disable_genesis_seo`, without deprecation as it was marked private.
-	* Method `the_seo_framework()->page_inpost_box()` has been renamed to `singular_inpost_box`, without deprecation as it was marked private.
-	* Method `the_seo_framework()->custom_field_redirect()` no longer checks for admin or front-end page status.
-	* File `query.class.php` now falls under GPLv3 instead of GPLv2+.
-	* Method `the_seo_framework()->call_function()` is now marked private. It's written and used as an internal handler for filters.
-	* Method `the_seo_framework()->generate_excerpt()` now has its third parameter (`$max_char_length`) default value increased by 1. From 154 to 155.
-	* Method `the_seo_framework()->robots_txt()` has been moved to class `Init` from `Sitemaps`.
-	* Method `the_seo_framework()->robots_txt()` is now called on action `init`, it was 'plugins_loaded'.
-	* Method `the_seo_framework()->get_custom_field()` has been moved to class `Post_Data` from `Core`.
-	* Method `the_seo_framework()->adjust_search_filter()` has been moved to class `Init` from `Search`.
-	* Method `the_seo_framework()->build_singular_relative_url()` now continues to run if an empty Post ID has been suplied.
-	* Method `the_seo_framework()->generate_the_description()` now always trims the output.
 	* Error notices types generated by The SEO Framework's Debug class are now strictly checked before outputted. This yields no effective behavioral difference.
+	* License changes:
+		* File `query.class.php` now falls under GPLv3 instead of GPLv2+.
 * **Improved:**
 	/
+	* Function `the_seo_framework_class()` will no longer change the plugin's flow if called before action `plugins_loaded`. Instead, it will return `false`.
 	* Reduced sitemap's generation memory usage.
 		* This means now 1200 posts, pages and custom post types can be generated without concern.
 			* This is 3600 posts in total.
