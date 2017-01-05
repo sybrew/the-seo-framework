@@ -106,7 +106,7 @@ class Core {
 			return call_user_func_array( array( $depr_class, $name ), $arguments );
 		}
 
-		the_seo_framework()->_inaccessible_p_or_m( 'the_seo_framework()->' . esc_html( $name ) . '()' );
+		\the_seo_framework()->_inaccessible_p_or_m( 'the_seo_framework()->' . \esc_html( $name ) . '()' );
 		return;
 	}
 
@@ -116,13 +116,15 @@ class Core {
 	 */
 	protected function __construct() {
 
-		add_action( 'current_screen', array( $this, 'post_type_support' ), 0 );
+		\add_action( 'current_screen', array( $this, 'post_type_support' ), 0 );
 
 		if ( $this->the_seo_framework_debug ) {
-			$debug_instance = Debug::get_instance();
-			add_action( 'admin_footer', array( $debug_instance, 'debug_screens' ) );
-			add_action( 'admin_footer', array( $debug_instance, 'debug_output' ) );
-			add_action( 'wp_footer', array( $debug_instance, 'debug_output' ) );
+
+			$debug_instance = \The_SEO_Framework\Debug::get_instance();
+
+			\add_action( 'admin_footer', array( $debug_instance, 'debug_screens' ) );
+			\add_action( 'admin_footer', array( $debug_instance, 'debug_output' ) );
+			\add_action( 'wp_footer', array( $debug_instance, 'debug_output' ) );
 		}
 	}
 
@@ -221,12 +223,12 @@ class Core {
 		 * Applies filters the_seo_framework_supported_post_types : Array The supported post types.
 		 * @since 2.3.1
 		 */
-		$post_types = (array) apply_filters( 'the_seo_framework_supported_post_types', $defaults );
+		$post_types = (array) \apply_filters( 'the_seo_framework_supported_post_types', $defaults );
 
-		$types = wp_parse_args( $defaults, $post_types );
+		$types = \wp_parse_args( $defaults, $post_types );
 
 		foreach ( $types as $type )
-			add_post_type_support( $type, array( 'autodescription-meta' ) );
+			\add_post_type_support( $type, array( 'autodescription-meta' ) );
 
 	}
 
@@ -242,9 +244,9 @@ class Core {
 		$tsf_links = array();
 
 		if ( $this->load_options )
-			$tsf_links['settings'] = '<a href="' . esc_url( admin_url( 'admin.php?page=' . $this->seo_settings_page_slug ) ) . '">' . esc_html__( 'SEO Settings', 'autodescription' ) . '</a>';
+			$tsf_links['settings'] = '<a href="' . \esc_url( \admin_url( 'admin.php?page=' . $this->seo_settings_page_slug ) ) . '">' . \esc_html__( 'SEO Settings', 'autodescription' ) . '</a>';
 
-		$tsf_links['home'] = '<a href="' . esc_url( 'https://theseoframework.com/' ) . '" target="_blank">' . esc_html_x( 'Plugin Home', 'As in: The Plugin Home Page', 'autodescription' ) . '</a>';
+		$tsf_links['home'] = '<a href="' . \esc_url( 'https://theseoframework.com/' ) . '" target="_blank">' . \esc_html_x( 'Plugin Home', 'As in: The Plugin Home Page', 'autodescription' ) . '</a>';
 
 		return array_merge( $tsf_links, $links );
 	}
@@ -263,7 +265,7 @@ class Core {
 		if ( isset( $front_id ) )
 			return $front_id;
 
-		return $front_id = $this->has_page_on_front() ? (int) get_option( 'page_on_front' ) : 0;
+		return $front_id = $this->has_page_on_front() ? (int) \get_option( 'page_on_front' ) : 0;
 	}
 
 	/**
@@ -294,8 +296,8 @@ class Core {
 
 		$a11y = $a11y ? 'tsf-show-icon' : '';
 
-		$notice = '<div class="notice ' . esc_attr( $type ) . ' tsf-notice ' . $a11y . '"><p>';
-		$notice .= '<a class="hide-if-no-js tsf-dismiss" title="' . esc_attr__( 'Dismiss', 'AutoDescription' ) . '"></a>';
+		$notice = '<div class="notice ' . \esc_attr( $type ) . ' tsf-notice ' . $a11y . '"><p>';
+		$notice .= '<a class="hide-if-no-js tsf-dismiss" title="' . \esc_attr__( 'Dismiss', 'AutoDescription' ) . '"></a>';
 		$notice .= '<strong>' . $message . '</strong>';
 		$notice .= '</p></div>';
 
@@ -326,7 +328,7 @@ class Core {
 	 * @return string Content wrapped in code tags.
 	 */
 	public function code_wrap( $content ) {
-		return $this->code_wrap_noesc( esc_html( $content ) );
+		return $this->code_wrap_noesc( \esc_html( $content ) );
 	}
 
 	/**
@@ -353,7 +355,7 @@ class Core {
 	 * @return string Content wrapped int he description wrap.
 	 */
 	public function description( $content, $block = true ) {
-		$this->description_noesc( esc_html( $content ), $block );
+		$this->description_noesc( \esc_html( $content ), $block );
 	}
 
 	/**
@@ -392,7 +394,7 @@ class Core {
 			return $language;
 
 		//* Language shorttag to be used in Google help pages.
-		$language = esc_html_x( 'en', 'e.g. en for English, nl for Dutch, fi for Finish, de for German', 'autodescription' );
+		$language = \esc_html_x( 'en', 'e.g. en for English, nl for Dutch, fi for Finish, de for German', 'autodescription' );
 
 		return $language;
 	}
@@ -416,7 +418,7 @@ class Core {
 		 * Applies filters the_seo_framework_allow_external_redirect : bool
 		 * @since 2.1.0
 		 */
-		return $allowed = (bool) apply_filters( 'the_seo_framework_allow_external_redirect', true );
+		return $allowed = (bool) \apply_filters( 'the_seo_framework_allow_external_redirect', true );
 	}
 
 	/**
@@ -433,7 +435,7 @@ class Core {
 	public function object_cache_set( $key, $data, $expire = 0, $group = 'the_seo_framework' ) {
 
 		if ( $this->use_object_cache )
-			return wp_cache_set( $key, $data, $group, $expire );
+			return \wp_cache_set( $key, $data, $group, $expire );
 
 		return false;
 	}
@@ -452,7 +454,7 @@ class Core {
 	public function object_cache_get( $key, $group = 'the_seo_framework', $force = false, &$found = null ) {
 
 		if ( $this->use_object_cache )
-			return wp_cache_get( $key, $group, $force, $found );
+			return \wp_cache_get( $key, $group, $force, $found );
 
 		return false;
 	}
@@ -506,7 +508,7 @@ class Core {
 		if ( isset( $cache ) )
 			return $cache;
 
-		if ( '1' === get_option( 'blog_public' ) )
+		if ( '1' === \get_option( 'blog_public' ) )
 			return $cache = true;
 
 		return $cache = false;
@@ -561,7 +563,7 @@ class Core {
 	 * @return string The minimum required capability for SEO Settings.
 	 */
 	public function settings_capability() {
-		return (string) apply_filters( 'the_seo_framework_settings_capability', 'manage_options' );
+		return (string) \apply_filters( 'the_seo_framework_settings_capability', 'manage_options' );
 	}
 
 	/**
@@ -576,9 +578,9 @@ class Core {
 		if ( $this->load_options ) {
 			//* Options are allowed to be loaded.
 
-			$url = html_entity_decode( menu_page_url( $this->seo_settings_page_slug, false ) );
+			$url = html_entity_decode( \menu_page_url( $this->seo_settings_page_slug, false ) );
 
-			return esc_url( $url );
+			return \esc_url( $url );
 		}
 
 		return '';
@@ -596,13 +598,13 @@ class Core {
 	 */
 	public function get_timezone_string( $guess = false ) {
 
-		$tzstring = get_option( 'timezone_string' );
+		$tzstring = \get_option( 'timezone_string' );
 
 		if ( false !== strpos( $tzstring, 'Etc/GMT' ) )
 			$tzstring = '';
 
 		if ( $guess && empty( $tzstring ) ) {
-			$offset = get_option( 'gmt_offset' );
+			$offset = \get_option( 'gmt_offset' );
 			$tzstring = $this->get_tzstring_from_offset( $offset );
 		}
 
@@ -712,13 +714,12 @@ class Core {
 
 		$words_too_many = array();
 
-		if ( is_array( $words ) ) {
-
+		if ( is_array( $words ) ) :
 			/**
 			 * Applies filters 'the_seo_framework_bother_me_desc_length' : int Min Character length to bother you with.
 			 * @since 2.6.0
 			 */
-			$bother_me_length = (int) apply_filters( 'the_seo_framework_bother_me_desc_length', $bother_length );
+			$bother_me_length = (int) \apply_filters( 'the_seo_framework_bother_me_desc_length', $bother_length );
 
 			$word_count = array_count_values( $words );
 
@@ -748,7 +749,7 @@ class Core {
 					}
 				}
 			}
-		}
+		endif;
 
 		return $words_too_many;
 	}

@@ -51,15 +51,15 @@ class Init extends Query {
 		 * Applies filters 'the_seo_framework_load_options' : Boolean Allows the options page to be removed
 		 * @since 2.2.2
 		 */
-		$this->load_options = (bool) apply_filters( 'the_seo_framework_load_options', true );
+		$this->load_options = (bool) \apply_filters( 'the_seo_framework_load_options', true );
 
 		/**
 		 * Applies filters 'the_seo_framework_use_object_cache' : bool
 		 * @since 2.4.3
 		 */
-		$this->use_object_cache = (bool) apply_filters( 'the_seo_framework_use_object_cache', true );
+		$this->use_object_cache = (bool) \apply_filters( 'the_seo_framework_use_object_cache', true );
 
-		add_action( 'init', array( $this, 'init_the_seo_framework' ), 1 );
+		\add_action( 'init', array( $this, 'init_the_seo_framework' ), 1 );
 	}
 
 	/**
@@ -99,7 +99,7 @@ class Init extends Query {
 	 */
 	public function init_global_actions() {
 		//* Jetpack compat.
-		add_action( 'init', array( $this, 'jetpack_compat' ) );
+		\add_action( 'init', array( $this, 'jetpack_compat' ) );
 	}
 
 	/**
@@ -117,80 +117,80 @@ class Init extends Query {
 	public function init_admin_actions() {
 
 		//* Save post data.
-		add_action( 'save_post', array( $this, 'inpost_seo_save' ), 1, 2 );
+		\add_action( 'save_post', array( $this, 'inpost_seo_save' ), 1, 2 );
 
 		//* Enqueues admin scripts.
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 0, 1 );
+		\add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 0, 1 );
 
 		//* Add plugin links to the plugin activation page.
-		add_filter( 'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, array( $this, 'plugin_action_links' ), 10, 2 );
+		\add_filter( 'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, array( $this, 'plugin_action_links' ), 10, 2 );
 
 		//* Initialize post states.
-		add_action( 'current_screen', array( $this, 'post_state' ) );
+		\add_action( 'current_screen', array( $this, 'post_state' ) );
 
 		if ( $this->is_option_checked( 'display_seo_bar_tables' ) ) {
 			//* Initialize columns.
-			add_action( 'current_screen', array( $this, 'init_columns' ) );
+			\add_action( 'current_screen', array( $this, 'init_columns' ) );
 
 			//* Ajax handlers for columns.
-			add_action( 'wp_ajax_add-tag', array( $this, 'init_columns_ajax' ), -1 );
+			\add_action( 'wp_ajax_add-tag', array( $this, 'init_columns_ajax' ), -1 );
 		}
 
 		//* Sanitizes Site options
-		add_action( 'admin_init', array( $this, 'sanitizer_filters' ) );
+		\add_action( 'admin_init', array( $this, 'sanitizer_filters' ) );
 
 		/**
 		 * Delete Sitemap and Description transients on post publish/delete.
 		 * @see WP Core wp_transition_post_status()
 		 */
-		add_action( 'publish_post', array( $this, 'delete_transients_post' ) );
-		add_action( 'publish_page', array( $this, 'delete_transients_post' ) );
-		add_action( 'deleted_post', array( $this, 'delete_transients_post' ) );
-		add_action( 'deleted_page', array( $this, 'delete_transients_post' ) );
-		add_action( 'post_updated', array( $this, 'delete_transients_post' ) );
-		add_action( 'page_updated', array( $this, 'delete_transients_post' ) );
+		\add_action( 'publish_post', array( $this, 'delete_transients_post' ) );
+		\add_action( 'publish_page', array( $this, 'delete_transients_post' ) );
+		\add_action( 'deleted_post', array( $this, 'delete_transients_post' ) );
+		\add_action( 'deleted_page', array( $this, 'delete_transients_post' ) );
+		\add_action( 'post_updated', array( $this, 'delete_transients_post' ) );
+		\add_action( 'page_updated', array( $this, 'delete_transients_post' ) );
 
 		//* Deletes term description transient.
-		add_action( 'edit_term', array( $this, 'delete_auto_description_transients_term' ), 10, 3 );
-		add_action( 'delete_term', array( $this, 'delete_auto_description_transients_term' ), 10, 4 );
+		\add_action( 'edit_term', array( $this, 'delete_auto_description_transients_term' ), 10, 3 );
+		\add_action( 'delete_term', array( $this, 'delete_auto_description_transients_term' ), 10, 4 );
 
 		//* Deletes author transient.
-		add_action( 'profile_update', array( $this, 'delete_transients_author' ) );
+		\add_action( 'profile_update', array( $this, 'delete_transients_author' ) );
 
 		//* Delete Sitemap transient on permalink structure change.
-		add_action( 'load-options-permalink.php', array( $this, 'delete_sitemap_transient_permalink_updated' ), 20 );
+		\add_action( 'load-options-permalink.php', array( $this, 'delete_sitemap_transient_permalink_updated' ), 20 );
 
 		//* Deletes front page description transient on Tagline change.
-		add_action( 'update_option_blogdescription', array( $this, 'delete_auto_description_frontpage_transient' ), 10, 1 );
+		\add_action( 'update_option_blogdescription', array( $this, 'delete_auto_description_frontpage_transient' ), 10, 1 );
 
 		//* Delete doing it wrong transient after theme switch.
-		add_action( 'after_switch_theme', array( $this, 'delete_theme_dir_transient' ), 10, 0 );
-		add_action( 'upgrader_process_complete', array( $this, 'delete_theme_dir_transient' ), 10, 2 );
+		\add_action( 'after_switch_theme', array( $this, 'delete_theme_dir_transient' ), 10, 0 );
+		\add_action( 'upgrader_process_complete', array( $this, 'delete_theme_dir_transient' ), 10, 2 );
 
 		if ( $this->load_options ) {
 			//* Enqueue Inpost meta boxes.
-			add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box_init' ), 5 );
+			\add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box_init' ), 5 );
 
 			//* Enqueue Taxonomy meta output.
-			add_action( 'current_screen', array( $this, 'add_taxonomy_seo_box_init' ), 10 );
+			\add_action( 'current_screen', array( $this, 'add_taxonomy_seo_box_init' ), 10 );
 
 			//* Admin AJAX for counter options.
-			add_action( 'wp_ajax_the_seo_framework_update_counter', array( $this, 'wp_ajax_update_counter_type' ) );
+			\add_action( 'wp_ajax_the_seo_framework_update_counter', array( $this, 'wp_ajax_update_counter_type' ) );
 
 			// Enqueue i18n defaults.
-			add_action( 'admin_init', array( $this, 'enqueue_page_defaults' ), 1 );
+			\add_action( 'admin_init', array( $this, 'enqueue_page_defaults' ), 1 );
 
 			// Add menu links and register $this->seo_settings_page_hook
-			add_action( 'admin_menu', array( $this, 'add_menu_link' ) );
+			\add_action( 'admin_menu', array( $this, 'add_menu_link' ) );
 
 			//* Load the page content
-			add_action( 'admin_init', array( $this, 'settings_init' ) );
+			\add_action( 'admin_init', array( $this, 'settings_init' ) );
 
 			// Set up notices
-			add_action( 'admin_notices', array( $this, 'notices' ) );
+			\add_action( 'admin_notices', array( $this, 'notices' ) );
 
 			// Load nessecary assets
-			add_action( 'admin_init', array( $this, 'load_assets' ) );
+			\add_action( 'admin_init', array( $this, 'load_assets' ) );
 		}
 	}
 
@@ -203,46 +203,46 @@ class Init extends Query {
 	protected function init_front_end_actions() {
 
 		//* Edit the robots.txt file
-		add_filter( 'robots_txt', array( $this, 'robots_txt' ), 10, 2 );
+		\add_filter( 'robots_txt', array( $this, 'robots_txt' ), 10, 2 );
 
 		//* Remove canonical header tag from WP
-		remove_action( 'wp_head', 'rel_canonical' );
+		\remove_action( 'wp_head', 'rel_canonical' );
 
 		//* Remove shortlink.
-		remove_action( 'wp_head', 'wp_shortlink_wp_head' );
+		\remove_action( 'wp_head', 'wp_shortlink_wp_head' );
 
 		//* Remove adjecent rel tags.
-		remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head' );
+		\remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head' );
 
 		//* Earlier removal of the generator tag. Doesn't require filter.
-		remove_action( 'wp_head', 'wp_generator' );
+		\remove_action( 'wp_head', 'wp_generator' );
 
 		//* BuddyPress front-end compat.
-		add_action( 'init', array( $this, 'buddypress_compat' ) );
+		\add_action( 'init', array( $this, 'buddypress_compat' ) );
 
 		/**
 		 * @since 2.7.0 Changed priority from 999 to 9999.
 		 *              Now uses another method. Was: 'search_filter'.
 		 */
-		add_action( 'pre_get_posts', array( $this, 'adjust_search_filter' ), 9999, 1 );
+		\add_action( 'pre_get_posts', array( $this, 'adjust_search_filter' ), 9999, 1 );
 
 		if ( $this->is_singular() ) {
 			//* Initialize 301 redirects.
-			add_action( 'template_redirect', array( $this, 'custom_field_redirect' ) );
+			\add_action( 'template_redirect', array( $this, 'custom_field_redirect' ) );
 		}
 
 		if ( $this->is_feed() ) {
 			//* Initialize feed alteration.
-			add_action( 'template_redirect', array( $this, 'init_feed' ) );
+			\add_action( 'template_redirect', array( $this, 'init_feed' ) );
 		}
 
 		if ( $this->is_theme( 'genesis' ) ) {
 			//* Genesis front-end compat.
-			add_action( 'init', array( $this, 'genesis_compat' ) );
+			\add_action( 'init', array( $this, 'genesis_compat' ) );
 
-			add_action( 'genesis_meta', array( $this, 'html_output' ), 5 );
+			\add_action( 'genesis_meta', array( $this, 'html_output' ), 5 );
 		} else {
-			add_action( 'wp_head', array( $this, 'html_output' ), 1 );
+			\add_action( 'wp_head', array( $this, 'html_output' ), 1 );
 		}
 	}
 
@@ -254,25 +254,25 @@ class Init extends Query {
 	protected function init_front_end_filters() {
 
 		//* Removes all pre_get_document_title filters.
-		remove_all_filters( 'pre_get_document_title', false );
+		\remove_all_filters( 'pre_get_document_title', false );
 
 		//* New WordPress 4.4.0 filter. Hurray! It's also much faster :)
-		add_filter( 'pre_get_document_title', array( $this, 'title_from_cache' ), 10 );
+		\add_filter( 'pre_get_document_title', array( $this, 'title_from_cache' ), 10 );
 		//* Override AnsPress Theme Title
-		add_filter( 'ap_title', array( $this, 'title_from_cache' ), 99, 1 );
+		\add_filter( 'ap_title', array( $this, 'title_from_cache' ), 99, 1 );
 		//* Override bbPress title
-		add_filter( 'bbp_title', array( $this, 'title_from_cache' ), 99, 3 );
+		\add_filter( 'bbp_title', array( $this, 'title_from_cache' ), 99, 3 );
 		//* Override Woo Themes Title
-		add_filter( 'woo_title', array( $this, 'title_from_cache' ), 99 );
+		\add_filter( 'woo_title', array( $this, 'title_from_cache' ), 99 );
 
 		/**
 		 * Applies filters 'the_seo_framework_manipulate_title' : boolean
 		 * Disables the title tag manipulation on old themes.
 		 * @since 2.4.1
 		 */
-		if ( (bool) apply_filters( 'the_seo_framework_manipulate_title', true ) ) {
+		if ( (bool) \apply_filters( 'the_seo_framework_manipulate_title', true ) ) {
 			//* Override WordPress Title
-			add_filter( 'wp_title', array( $this, 'title_from_cache' ), 9, 3 );
+			\add_filter( 'wp_title', array( $this, 'title_from_cache' ), 9, 3 );
 		}
 	}
 
@@ -304,9 +304,9 @@ class Init extends Query {
 		 * }
 		 */
 		$filter_tag = $before ? 'the_seo_framework_before_output' : 'the_seo_framework_after_output';
-		$filter = (array) apply_filters( $filter_tag, $functions );
+		$filter = (array) \apply_filters( $filter_tag, $functions );
 
-		$functions = wp_parse_args( $args, $filter );
+		$functions = \wp_parse_args( $args, $filter );
 
 		if ( $functions && is_array( $functions ) ) :
 			foreach ( $functions as $function ) :
@@ -327,7 +327,7 @@ class Init extends Query {
 	 */
 	public function html_output() {
 
-		do_action( 'the_seo_framework_do_before_output' );
+		\do_action( 'the_seo_framework_do_before_output' );
 
 		/**
 		 * Start the timer here. I know it doesn't calculate the initiation of
@@ -357,7 +357,7 @@ class Init extends Query {
 		$cache_key = 'seo_framework_output_' . $key . '_' . $paged . '_' . $page;
 
 		$output = $this->object_cache_get( $cache_key );
-		if ( false === $output ) {
+		if ( false === $output ) :
 
 			$robots = $this->robots();
 
@@ -366,7 +366,7 @@ class Init extends Query {
 			 * Adds content before the output.
 			 * @since 2.6.0
 			 */
-			$before = (string) apply_filters( 'the_seo_framework_pre', '' );
+			$before = (string) \apply_filters( 'the_seo_framework_pre', '' );
 
 			$before_actions = $this->header_actions( '', true );
 
@@ -419,29 +419,29 @@ class Init extends Query {
 			 * Adds content before the output.
 			 * @since 2.6.0
 			 */
-			$after = (string) apply_filters( 'the_seo_framework_pro', '' );
+			$after = (string) \apply_filters( 'the_seo_framework_pro', '' );
 
 			/**
 			 * Applies filters 'the_seo_framework_generator_tag' : String generator tag content.
 			 * @since 2.0.1
 			 * @see https://wordpress.org/plugins/generator-the-seo-framework/ For an alternative.
 			 */
-			$generator = (string) apply_filters( 'the_seo_framework_generator_tag', '' );
+			$generator = (string) \apply_filters( 'the_seo_framework_generator_tag', '' );
 
 			if ( '' !== $generator )
-				$generator = '<meta name="generator" content="' . esc_attr( $generator ) . '" />' . "\r\n";
+				$generator = '<meta name="generator" content="' . \esc_attr( $generator ) . '" />' . "\r\n";
 
 			$output = $robots . $before . $before_actions . $output . $after_actions . $after . $generator;
 
 			$this->object_cache_set( $cache_key, $output, 86400 );
-		}
+		endif;
 
 		/**
 		 * Applies filters 'the_seo_framework_indicator' : Boolean
 		 * Whether to show the indicator in HTML.
 		 * @since 2.0.0
 		 */
-		$indicator = (bool) apply_filters( 'the_seo_framework_indicator', true );
+		$indicator = (bool) \apply_filters( 'the_seo_framework_indicator', true );
 
 		$indicatorbefore = '';
 		$indicatorafter = '';
@@ -453,18 +453,18 @@ class Init extends Query {
 			 * Whether to show the hidden generation time in HTML.
 			 * @since 2.4.0
 			 */
-			$timer = (bool) apply_filters( 'the_seo_framework_indicator_timing', true );
+			$timer = (bool) \apply_filters( 'the_seo_framework_indicator_timing', true );
 
 			/**
 			 * Applies filters 'sybre_waaijer_<3' : Boolean
 			 * Whether to show the hidden author name in HTML.
 			 * @since 2.4.0
 			 */
-			$sybre = (bool) apply_filters( 'sybre_waaijer_<3', true );
+			$sybre = (bool) \apply_filters( 'sybre_waaijer_<3', true );
 
-			$start = esc_html__( 'Start The Seo Framework', 'autodescription' );
-			$end = esc_html__( 'End The Seo Framework', 'autodescription' );
-			$me = $sybre ? ' ' . esc_html__( 'by Sybre Waaijer', 'autodescription' ) : '';
+			$start = \esc_html__( 'Start The Seo Framework', 'autodescription' );
+			$end = \esc_html__( 'End The Seo Framework', 'autodescription' );
+			$me = $sybre ? ' ' . \esc_html__( 'by Sybre Waaijer', 'autodescription' ) : '';
 
 			$indicatorbefore = '<!-- ' . $start . $me . ' -->' . "\r\n";
 
@@ -481,7 +481,7 @@ class Init extends Query {
 
 		$output = "\r\n" . $indicatorbefore . $output . $indicatorafter . "\r\n";
 
-		do_action( 'the_seo_framework_do_after_output' );
+		\do_action( 'the_seo_framework_do_after_output' );
 
 		//* Already escaped.
 		echo $output;
@@ -509,11 +509,11 @@ class Init extends Query {
 				$url = $this->add_url_host( $url );
 				$scheme = $this->is_ssl() ? 'https' : 'http';
 
-				wp_safe_redirect( esc_url_raw( $url, array( $scheme ) ), 301 );
+				\wp_safe_redirect( \esc_url_raw( $url, array( $scheme ) ), 301 );
 				exit;
 			}
 
-			wp_redirect( esc_url_raw( $url ), 301 );
+			\wp_redirect( \esc_url_raw( $url ), 301 );
 			exit;
 		}
 	}
@@ -554,10 +554,10 @@ class Init extends Query {
 			 *
 			 * @since 2.5.0
 			 */
-			$pre = (string) apply_filters( 'the_seo_framework_robots_txt_pre', '' );
-			$pro = (string) apply_filters( 'the_seo_framework_robots_txt_pro', '' );
+			$pre = (string) \apply_filters( 'the_seo_framework_robots_txt_pre', '' );
+			$pro = (string) \apply_filters( 'the_seo_framework_robots_txt_pro', '' );
 
-			$site_url = wp_parse_url( site_url() );
+			$site_url = \wp_parse_url( \site_url() );
 			$path = ( ! empty( $site_url['path'] ) ) ? $site_url['path'] : '';
 
 			$output .= $pre;
@@ -573,8 +573,8 @@ class Init extends Query {
 			 * Applies filters the_seo_framework_robots_disallow_queries : Whether to allow queries for robots.
 			 * @since 2.5.0
 			 */
-			if ( apply_filters( 'the_seo_framework_robots_disallow_queries', false ) ) {
-				$home_url = wp_parse_url( rtrim( $this->the_home_url_from_cache(), ' /\\' ) );
+			if ( \apply_filters( 'the_seo_framework_robots_disallow_queries', false ) ) {
+				$home_url = \wp_parse_url( rtrim( $this->the_home_url_from_cache(), ' /\\' ) );
 				$home_path = ( ! empty( $home_url['path'] ) ) ? $home_url['path'] : '';
 				$output .= "Disallow: $home_path/*?*\r\n";
 			}

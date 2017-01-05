@@ -57,12 +57,12 @@ class Detect extends Render {
 		if ( isset( $active_plugins ) )
 			return $active_plugins;
 
-		$active_plugins = (array) get_option( 'active_plugins', array() );
+		$active_plugins = (array) \get_option( 'active_plugins', array() );
 
-		if ( is_multisite() ) {
+		if ( \is_multisite() ) {
 			// Due to legacy code, active_sitewide_plugins stores them in the keys,
 			// whereas active_plugins stores them in the values.
-			$network_plugins = array_keys( get_site_option( 'active_sitewide_plugins', array() ) );
+			$network_plugins = array_keys( \get_site_option( 'active_sitewide_plugins', array() ) );
 			if ( $network_plugins ) {
 				$active_plugins = array_merge( $active_plugins, $network_plugins );
 			}
@@ -143,7 +143,7 @@ class Detect extends Render {
 		 * Applies filters 'the_seo_framework_conflicting_plugins' : array
 		 * @since 2.6.0
 		 */
-		return (array) apply_filters( 'the_seo_framework_conflicting_plugins', $conflicting_plugins );
+		return (array) \apply_filters( 'the_seo_framework_conflicting_plugins', $conflicting_plugins );
 	}
 
 	/**
@@ -159,7 +159,7 @@ class Detect extends Render {
 		$conflicting_plugins = $this->conflicting_plugins();
 
 		if ( isset( $conflicting_plugins[ $type ] ) )
-			return (array) apply_filters( 'the_seo_framework_conflicting_plugins_type', $conflicting_plugins[ $type ], $type );
+			return (array) \apply_filters( 'the_seo_framework_conflicting_plugins_type', $conflicting_plugins[ $type ], $type );
 
 		return array();
 	}
@@ -311,7 +311,7 @@ class Detect extends Render {
 		if ( empty( $themes ) )
 			return false;
 
-		$wp_get_theme = wp_get_theme();
+		$wp_get_theme = \wp_get_theme();
 
 		$theme_parent = strtolower( $wp_get_theme->get( 'Template' ) );
 		$theme_name = strtolower( $wp_get_theme->get( 'Name' ) );
@@ -358,7 +358,7 @@ class Detect extends Render {
 					 * Applies filters 'the_seo_framework_seo_plugin_detected' : boolean
 					 * @since 2.6.1
 					 */
-					$detected = apply_filters( 'the_seo_framework_seo_plugin_detected', true );
+					$detected = \apply_filters( 'the_seo_framework_seo_plugin_detected', true );
 					break;
 				}
 			}
@@ -398,7 +398,7 @@ class Detect extends Render {
 					 * Applies filters 'the_seo_framework_og_plugin_detected' : boolean
 					 * @since 2.6.1
 					 */
-					$detected = apply_filters( 'the_seo_framework_og_plugin_detected', true );
+					$detected = \apply_filters( 'the_seo_framework_og_plugin_detected', true );
 					break;
 				}
 			}
@@ -438,7 +438,7 @@ class Detect extends Render {
 					 * Applies filters 'the_seo_framework_twittercard_plugin_detected' : boolean
 					 * @since 2.6.1
 					 */
-					$detected = apply_filters( 'the_seo_framework_twittercard_plugin_detected', true );
+					$detected = \apply_filters( 'the_seo_framework_twittercard_plugin_detected', true );
 					break;
 				}
 			}
@@ -460,7 +460,7 @@ class Detect extends Render {
 		 * Applies filters 'the_seo_framework_ldjson_plugin_detected' : boolean
 		 * @since 2.6.5
 		 */
-		return (bool) apply_filters( 'the_seo_framework_ldjson_plugin_detected', false );
+		return (bool) \apply_filters( 'the_seo_framework_ldjson_plugin_detected', false );
 	}
 
 	/**
@@ -485,7 +485,7 @@ class Detect extends Render {
 
 			foreach ( $conflicting_plugins as $plugin ) {
 				if ( in_array( $plugin, $active_plugins, true ) ) {
-					$detected = apply_filters( 'the_seo_framework_sitemap_plugin_detected', true );
+					$detected = \apply_filters( 'the_seo_framework_sitemap_plugin_detected', true );
 					break;
 				}
 			}
@@ -533,7 +533,7 @@ class Detect extends Render {
 		if ( isset( $has_robots ) )
 			return $has_robots;
 
-		$path = get_home_path() . 'robots.txt';
+		$path = \get_home_path() . 'robots.txt';
 
 		return $has_robots = file_exists( $path );
 	}
@@ -553,7 +553,7 @@ class Detect extends Render {
 		if ( isset( $has_map ) )
 			return $has_map;
 
-		$path = get_home_path() . 'sitemap.xml';
+		$path = \get_home_path() . 'sitemap.xml';
 
 		return $has_map = file_exists( $path );
 	}
@@ -606,12 +606,12 @@ class Detect extends Render {
 		if ( ! $use_cache ) {
 			//* Don't use cache.
 
-			if ( is_string( $features ) && ( current_theme_supports( $features ) ) )
+			if ( is_string( $features ) && ( \current_theme_supports( $features ) ) )
 				return true;
 
 			if ( is_array( $features ) ) {
 				foreach ( $features as $feature ) {
-					if ( current_theme_supports( $feature ) ) {
+					if ( \current_theme_supports( $feature ) ) {
 						return true;
 						break;
 					}
@@ -643,14 +643,14 @@ class Detect extends Render {
 
 		//* Setup cache values
 		if ( is_string( $features ) ) {
-			if ( current_theme_supports( $features ) ) {
+			if ( \current_theme_supports( $features ) ) {
 				return $cache[ $features ] = true;
 			} else {
 				return $cache[ $features ] = false;
 			}
 		} elseif ( is_array( $features ) ) {
 			foreach ( $features as $feature ) {
-				if ( current_theme_supports( $feature ) ) {
+				if ( \current_theme_supports( $feature ) ) {
 					return $cache[ $feature ] = true;
 					break;
 				} else {
@@ -753,7 +753,7 @@ class Detect extends Render {
 
 		//* Echo the HTML comment.
 		if ( $output )
-			echo '<!-- Title diw: "' . esc_html( $title_output ) . '" : "' . esc_html( $sep_output ) . '" : "' . esc_html( $seplocation_output ) . '" -->' . "\r\n";
+			echo '<!-- Title diw: "' . \esc_html( $title_output ) . '" : "' . \esc_html( $sep_output ) . '" : "' . \esc_html( $seplocation_output ) . '" -->' . "\r\n";
 
 		return;
 	}
@@ -875,14 +875,14 @@ class Detect extends Render {
 			return false;
 
 		if ( ! $use_cache )
-			return is_int( strpos( get_locale(), $locale ) );
+			return is_int( strpos( \get_locale(), $locale ) );
 
 		static $cache = array();
 
 		if ( isset( $cache[ $locale ] ) )
 			return $cache[ $locale ];
 
-		return $cache[ $locale ] = is_int( strpos( get_locale(), $locale ) );
+		return $cache[ $locale ] = is_int( strpos( \get_locale(), $locale ) );
 	}
 
 	/**
@@ -896,7 +896,7 @@ class Detect extends Render {
 	public function post_type_supports_inpost( $post_type = null ) {
 
 		if ( isset( $post_type ) && $post_type ) {
-			$supports = (array) apply_filters( 'the_seo_framework_custom_post_type_support',
+			$supports = (array) \apply_filters( 'the_seo_framework_custom_post_type_support',
 				array(
 					'title',
 					'editor',
@@ -904,7 +904,7 @@ class Detect extends Render {
 			);
 
 			foreach ( $supports as $support ) {
-				if ( ! post_type_supports( $post_type, $support ) ) {
+				if ( ! \post_type_supports( $post_type, $support ) ) {
 					return false;
 					break;
 				}
@@ -947,7 +947,7 @@ class Detect extends Render {
 		 *
 		 * @since 2.3.5
 		 */
-		if ( post_type_supports( $post_type, 'autodescription-meta' ) || $this->post_type_supports_inpost( $post_type ) )
+		if ( \post_type_supports( $post_type, 'autodescription-meta' ) || $this->post_type_supports_inpost( $post_type ) )
 			return $supported[ $post_type ] = true;
 
 		return $supported[ $post_type ] = false;
@@ -983,7 +983,7 @@ class Detect extends Render {
 		if ( isset( $cache[ $public ][ $post_type ] ) )
 			return $cache[ $public ][ $post_type ];
 
-		$object = get_post_type_object( $post_type );
+		$object = \get_post_type_object( $post_type );
 
 		//* Check if rewrite is enabled. Bypass builtin post types.
 		if ( isset( $object->_builtin ) && false === $object->_builtin )
@@ -1002,7 +1002,7 @@ class Detect extends Render {
 		 * @param string $post_type The supported post type. Is boolean false if not supported.
 		 * @param string $post_type_evaluated The evaluated post type.
 		 */
-		$post_type = (string) apply_filters( 'the_seo_framework_supported_post_type', $post_type, $post_type_evaluated );
+		$post_type = (string) \apply_filters( 'the_seo_framework_supported_post_type', $post_type, $post_type_evaluated );
 
 		//* No supported post type has been found.
 		if ( empty( $post_type ) )
@@ -1026,7 +1026,7 @@ class Detect extends Render {
 		if ( isset( $dir ) )
 			return $dir;
 
-		$transient = get_transient( $this->theme_doing_it_right_transient );
+		$transient = \get_transient( $this->theme_doing_it_right_transient );
 
 		if ( '0' === $transient )
 			return $dir = false;
@@ -1082,7 +1082,7 @@ class Detect extends Render {
 		if ( isset( $pof ) )
 			return $pof;
 
-		return $pof = 'page' === get_option( 'show_on_front' );
+		return $pof = 'page' === \get_option( 'show_on_front' );
 	}
 
 
@@ -1102,6 +1102,6 @@ class Detect extends Render {
 		if ( isset( $cache ) )
 			return $cache;
 
-		return $cache = get_option( 'db_version' ) >= 34370 && get_option( 'the_seo_framework_upgraded_db_version' ) >= '2700' && $this->wp_version( '4.3.999', '>' );
+		return $cache = \get_option( 'db_version' ) >= 34370 && \get_option( 'the_seo_framework_upgraded_db_version' ) >= '2700' && $this->wp_version( '4.3.999', '>' );
 	}
 }

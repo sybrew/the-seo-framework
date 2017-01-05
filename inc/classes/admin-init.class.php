@@ -110,8 +110,8 @@ class Admin_Init extends Init {
 			$this->enqueue_admin_css( $this->page_base_file );
 			$this->enqueue_admin_javascript( $this->page_base_file );
 		} else {
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_css' ), 1 );
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_javascript' ), 1 );
+			\add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_css' ), 1 );
+			\add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_javascript' ), 1 );
 		}
 	}
 
@@ -133,13 +133,13 @@ class Admin_Init extends Init {
 		//* Register the script.
 		$this->register_admin_javascript();
 
-		wp_enqueue_script( $this->js_name );
+		\wp_enqueue_script( $this->js_name );
 
 		/**
 		 * Localize JavaScript.
 		 * @since 2.5.2.2
 		 */
-		add_action( 'admin_footer', array( $this, 'localize_admin_javascript' ) );
+		\add_action( 'admin_footer', array( $this, 'localize_admin_javascript' ) );
 
 	}
 
@@ -159,7 +159,7 @@ class Admin_Init extends Init {
 
 		$suffix = $this->script_debug ? '' : '.min';
 
-		wp_register_script( $this->js_name, THE_SEO_FRAMEWORK_DIR_URL . "lib/js/autodescription{$suffix}.js", array( 'jquery' ), THE_SEO_FRAMEWORK_VERSION, true );
+		\wp_register_script( $this->js_name, THE_SEO_FRAMEWORK_DIR_URL . "lib/js/autodescription{$suffix}.js", array( 'jquery' ), THE_SEO_FRAMEWORK_VERSION, true );
 
 		$registered = true;
 
@@ -181,7 +181,7 @@ class Admin_Init extends Init {
 
 		$strings = $this->get_javascript_l10n();
 
-		wp_localize_script( $this->js_name, 'autodescriptionL10n', $strings );
+		\wp_localize_script( $this->js_name, 'autodescriptionL10n', $strings );
 
 		$localized = true;
 
@@ -224,7 +224,7 @@ class Admin_Init extends Init {
 		$title_separator = $this->get_separator( 'title' );
 		$description_separator = $this->get_separator( 'description' );
 
-		$isrtl = (bool) is_rtl();
+		$isrtl = (bool) \is_rtl();
 		$ishome = false;
 
 		if ( isset( $this->page_base_file ) && $this->page_base_file ) {
@@ -286,7 +286,7 @@ class Admin_Init extends Init {
 			// We're on our SEO settings pages.
 			if ( $this->has_page_on_front() ) {
 				// Home is a page.
-				$inpost_title = $this->get_custom_field( '_genesis_title', get_option( 'page_on_front' ) );
+				$inpost_title = $this->get_custom_field( '_genesis_title', \get_option( 'page_on_front' ) );
 			} else {
 				// Home is a blog.
 				$inpost_title = '';
@@ -295,25 +295,25 @@ class Admin_Init extends Init {
 			$additions = $home_tagline ? $home_tagline : $description;
 		}
 
-		$nonce = wp_create_nonce( 'autodescription-ajax-nonce' );
+		$nonce = \wp_create_nonce( 'autodescription-ajax-nonce' );
 
 		return $strings = array(
-			'saveAlert' => esc_html__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
-			'confirmReset' => esc_html__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
-			'siteTitle' => esc_html( $title ),
-			'titleAdditions' => esc_html( $additions ),
-			'blogDescription' => esc_html( $description ),
+			'saveAlert' => \esc_html__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
+			'confirmReset' => \esc_html__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
+			'siteTitle' => \esc_html( $title ),
+			'titleAdditions' => \esc_html( $additions ),
+			'blogDescription' => \esc_html( $description ),
 			'titleTagline' => $tagline,
-			'titleSeparator' => esc_html( $title_separator ),
-			'titleLocation' => esc_html( $title_location ),
-			'descriptionSeparator' => esc_html( $description_separator ),
+			'titleSeparator' => \esc_html( $title_separator ),
+			'titleLocation' => \esc_html( $title_location ),
+			'descriptionSeparator' => \esc_html( $description_separator ),
 			'isRTL' => $isrtl,
 			'isHome' => $ishome,
-			'counterType' => absint( $counter_type ),
-			'good' => esc_html( $good ),
-			'okay' => esc_html( $okay ),
-			'bad' => esc_html( $bad ),
-			'unknown' => esc_html( $unknown ),
+			'counterType' => \absint( $counter_type ),
+			'good' => \esc_html( $good ),
+			'okay' => \esc_html( $okay ),
+			'bad' => \esc_html( $bad ),
+			'unknown' => \esc_html( $unknown ),
 			'nonce' => $nonce,
 			'hasInput' => $this->is_term_edit() || $this->is_post_edit() || $this->is_seo_settings_page(),
 		);
@@ -340,7 +340,7 @@ class Admin_Init extends Init {
 		//* Register the script.
 		$this->register_admin_css();
 
-		wp_enqueue_style( $this->css_name );
+		\wp_enqueue_style( $this->css_name );
 
 	}
 
@@ -362,7 +362,7 @@ class Admin_Init extends Init {
 		$suffix = $this->script_debug ? '' : '.min';
 		$registered = true;
 
-		wp_register_style( $this->css_name, THE_SEO_FRAMEWORK_DIR_URL . "lib/css/autodescription{$rtl}{$suffix}.css", array(), THE_SEO_FRAMEWORK_VERSION, 'all' );
+		\wp_register_style( $this->css_name, THE_SEO_FRAMEWORK_DIR_URL . "lib/css/autodescription{$rtl}{$suffix}.css", array(), THE_SEO_FRAMEWORK_VERSION, 'all' );
 
 	}
 
@@ -382,16 +382,16 @@ class Admin_Init extends Init {
 		if ( empty( $page ) )
 			return;
 
-		$url = html_entity_decode( menu_page_url( $page, false ) );
+		$url = html_entity_decode( \menu_page_url( $page, false ) );
 
 		foreach ( $query_args as $key => $value ) {
 			if ( empty( $key ) || empty( $value ) )
 				unset( $query_args[ $key ] );
 		}
 
-		$url = add_query_arg( $query_args, $url );
+		$url = \add_query_arg( $query_args, $url );
 
-		wp_safe_redirect( esc_url_raw( $url ), 302 );
+		\wp_safe_redirect( \esc_url_raw( $url ), 302 );
 		exit;
 	}
 
@@ -406,17 +406,17 @@ class Admin_Init extends Init {
 		if ( $this->is_admin() && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 
 			//* If current user isn't allowed to edit posts, don't do anything and kill PHP.
-			if ( ! current_user_can( 'publish_posts' ) )
+			if ( ! \current_user_can( 'publish_posts' ) )
 				exit;
 
-			check_ajax_referer( 'autodescription-ajax-nonce', 'nonce' );
+			\check_ajax_referer( 'autodescription-ajax-nonce', 'nonce' );
 
 			/**
 			 * Count up, reset to 0 if needed. We have 4 options: 0, 1, 2, 3
 			 * $_POST['val'] already contains updated number.
 			 */
 			$value = isset( $_POST['val'] ) ? intval( $_POST['val'] ) : $this->get_user_option( 0, 'counter_type', 3 ) + 1;
-			$value = absint( $value );
+			$value = \absint( $value );
 
 			if ( $value > 3 )
 				$value = 0;

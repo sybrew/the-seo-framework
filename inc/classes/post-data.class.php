@@ -66,14 +66,14 @@ class Post_Data extends Detect {
 		if ( empty( $post_id ) )
 			$post_id = $this->get_the_real_ID();
 
-		$custom_field = get_post_meta( $post_id, $field, true );
+		$custom_field = \get_post_meta( $post_id, $field, true );
 
 		//* If custom field is empty, empty cache..
 		if ( empty( $custom_field ) )
 			$field_cache[ $field ][ $post_id ] = '';
 
 		//* Render custom field, slashes stripped, sanitized if string
-		$field_cache[ $field ][ $post_id ] = is_array( $custom_field ) ? stripslashes_deep( $custom_field ) : stripslashes( wp_kses_decode_entities( $custom_field ) );
+		$field_cache[ $field ][ $post_id ] = is_array( $custom_field ) ? \stripslashes_deep( $custom_field ) : stripslashes( \wp_kses_decode_entities( $custom_field ) );
 
 		return $field_cache[ $field ][ $post_id ];
 	}
@@ -100,7 +100,7 @@ class Post_Data extends Detect {
 		 * Merge user submitted options with fallback defaults
 		 * Passes through nonce at the end of the function.
 		 */
-		$data = wp_parse_args( $_POST['autodescription'], array(
+		$data = \wp_parse_args( $_POST['autodescription'], array(
 			'_genesis_title'         => '',
 			'_genesis_description'   => '',
 			'_genesis_canonical_uri' => '',
@@ -193,26 +193,26 @@ class Post_Data extends Detect {
 			return;
 
 		//* Grab the post object
-		$post = get_post( $post );
+		$post = \get_post( $post );
 
 		/**
 		 * Don't save if WP is creating a revision (same as DOING_AUTOSAVE?)
 		 * @todo @see wp_is_post_revision(), which also returns the post revision ID...
 		 */
-		if ( 'revision' === get_post_type( $post ) )
+		if ( 'revision' === \get_post_type( $post ) )
 			return;
 
 		//* Check that the user is allowed to edit the post
-		if ( ! current_user_can( 'edit_post', $post->ID ) )
+		if ( ! \current_user_can( 'edit_post', $post->ID ) )
 			return;
 
 		//* Cycle through $data, insert value or delete field
 		foreach ( (array) $data as $field => $value ) {
 			//* Save $value, or delete if the $value is empty
 			if ( $value ) {
-				update_post_meta( $post->ID, $field, $value );
+				\update_post_meta( $post->ID, $field, $value );
 			} else {
-				delete_post_meta( $post->ID, $field );
+				\delete_post_meta( $post->ID, $field );
 			}
 		}
 	}
@@ -313,9 +313,9 @@ class Post_Data extends Detect {
 					'cache_results'		=> false,
 				);
 
-				$post = get_posts( $args );
+				$post = \get_posts( $args );
 			} else {
-				$post = get_post( $the_id );
+				$post = \get_post( $the_id );
 			}
 		} elseif ( '' !== $tt_id ) {
 			/**
@@ -331,9 +331,9 @@ class Post_Data extends Detect {
 				'cache_results'		=> false,
 			);
 
-			$post = get_posts( $args );
+			$post = \get_posts( $args );
 		} else {
-			$post = get_post( $the_id );
+			$post = \get_post( $the_id );
 		}
 
 		/**
@@ -354,7 +354,7 @@ class Post_Data extends Detect {
 		 * @since 2.6.6
 		 */
 		if ( ARRAY_A === $output || ARRAY_N === $output ) {
-			$_post = WP_Post::get_instance( $post );
+			$_post = \WP_Post::get_instance( $post );
 			$post = $_post->to_array();
 
 			if ( ARRAY_N === $output )
@@ -391,11 +391,11 @@ class Post_Data extends Detect {
 		if ( false === $page_id ) {
 
 			//* Prepare array
-			$post_type = esc_sql( array( 'post', 'page' ) );
+			$post_type = \esc_sql( array( 'post', 'page' ) );
 			$post_type_in_string = "'" . implode( "','", $post_type ) . "'";
 
 			//* Prepare array
-			$post_status = esc_sql( array( 'publish', 'future', 'pending' ) );
+			$post_status = \esc_sql( array( 'publish', 'future', 'pending' ) );
 			$post_status_in_string = "'" . implode( "','", $post_status ) . "'";
 
 			$sql = $wpdb->prepare(
@@ -430,7 +430,7 @@ class Post_Data extends Detect {
 
 		$id = $id ? $id : $this->get_the_real_ID();
 
-		$content = get_post_field( 'post_content', $id );
+		$content = \get_post_field( 'post_content', $id );
 
 		if ( is_string( $content ) )
 			return $content;
@@ -455,7 +455,7 @@ class Post_Data extends Detect {
 	 */
 	public function uses_page_builder( $post_id ) {
 
-		$meta = get_post_meta( $post_id );
+		$meta = \get_post_meta( $post_id );
 
 		/**
 		 * Applies filters 'the_seo_framework_detect_page_builder' : boolean
@@ -466,7 +466,7 @@ class Post_Data extends Detect {
 		 * @param int $post_id The current Post ID.
 		 * @param array $meta The current post meta.
 		 */
-		$detected = (bool) apply_filters( 'the_seo_framework_detect_page_builder', false, $post_id, $meta );
+		$detected = (bool) \apply_filters( 'the_seo_framework_detect_page_builder', false, $post_id, $meta );
 
 		if ( $detected )
 			return true;

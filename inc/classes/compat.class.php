@@ -39,10 +39,10 @@ class Compat extends Core {
 		parent::__construct();
 
 		//* Disable Genesis SEO.
-		add_filter( 'genesis_detect_seo_plugins', array( $this, 'disable_genesis_seo' ), 10, 1 );
+		\add_filter( 'genesis_detect_seo_plugins', array( $this, 'disable_genesis_seo' ), 10, 1 );
 
 		//* Disable Headway SEO.
-		add_filter( 'headway_seo_disabled', '__return_true' );
+		\add_filter( 'headway_seo_disabled', '__return_true' );
 	}
 
 	/**
@@ -53,8 +53,8 @@ class Compat extends Core {
 	 */
 	public function genesis_compat() {
 		//* Reverse the removal of head attributes, this shouldn't affect SEO.
-		remove_filter( 'genesis_attr_head', 'genesis_attributes_empty_class' );
-		add_filter( 'genesis_attr_head', 'genesis_attributes_head' );
+		\remove_filter( 'genesis_attr_head', 'genesis_attributes_empty_class' );
+		\add_filter( 'genesis_attr_head', 'genesis_attributes_head' );
 	}
 
 	/**
@@ -98,7 +98,7 @@ class Compat extends Core {
 
 		if ( $this->use_og_tags() ) {
 			//* Disable Jetpack Publicize's Open Graph.
-			add_filter( 'jetpack_enable_open_graph', '__return_false', 99 );
+			\add_filter( 'jetpack_enable_open_graph', '__return_false', 99 );
 		}
 	}
 
@@ -109,6 +109,6 @@ class Compat extends Core {
 	 * @access private
 	 */
 	public function buddypress_compat() {
-		remove_action( 'wp_head', '_bp_maybe_remove_rel_canonical', 8 );
+		\remove_action( 'wp_head', '_bp_maybe_remove_rel_canonical', 8 );
 	}
 }

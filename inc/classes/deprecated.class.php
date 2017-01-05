@@ -49,8 +49,8 @@ final class Deprecated {
 	 * @since 2.7.0
 	 */
 	public function homepage_metabox_general() {
-		the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Metaboxes::' . __FUNCTION__, '2.7.0', 'The_SEO_Framework_Metaboxes::homepage_metabox_general_tab()' );
-		the_seo_framework()->get_view( 'metaboxes/homepage-metabox', array(), 'general' );
+		\the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Metaboxes::' . __FUNCTION__, '2.7.0', 'The_SEO_Framework_Metaboxes::homepage_metabox_general_tab()' );
+		\the_seo_framework()->get_view( 'metaboxes/homepage-metabox', array(), 'general' );
 	}
 
 	/**
@@ -63,8 +63,8 @@ final class Deprecated {
 	 * @since 2.7.0
 	 */
 	public function homepage_metabox_additions() {
-		the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Metaboxes::' . __FUNCTION__, '2.7.0', 'The_SEO_Framework_Metaboxes::homepage_metabox_additions_tab()' );
-		the_seo_framework()->get_view( 'metaboxes/homepage-metabox', array(), 'additions' );
+		\the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Metaboxes::' . __FUNCTION__, '2.7.0', 'The_SEO_Framework_Metaboxes::homepage_metabox_additions_tab()' );
+		\the_seo_framework()->get_view( 'metaboxes/homepage-metabox', array(), 'additions' );
 	}
 
 	/**
@@ -77,8 +77,8 @@ final class Deprecated {
 	 * @since 2.7.0
 	 */
 	public function homepage_metabox_robots() {
-		the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Metaboxes::' . __FUNCTION__, '2.7.0', 'The_SEO_Framework_Metaboxes::homepage_metabox_robots_tab()' );
-		the_seo_framework()->get_view( 'metaboxes/homepage-metabox', array(), 'robots' );
+		\the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Metaboxes::' . __FUNCTION__, '2.7.0', 'The_SEO_Framework_Metaboxes::homepage_metabox_robots_tab()' );
+		\the_seo_framework()->get_view( 'metaboxes/homepage-metabox', array(), 'robots' );
 	}
 
 	/**
@@ -95,9 +95,9 @@ final class Deprecated {
 	 */
 	public function delete_auto_description_blog_transient( $old_option ) {
 
-		the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Transients::' . __FUNCTION__, '2.7.0', 'The_SEO_Framework_Transients::delete_auto_description_frontpage_transient()' );
+		\the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Transients::' . __FUNCTION__, '2.7.0', 'The_SEO_Framework_Transients::delete_auto_description_frontpage_transient()' );
 
-		the_seo_framework()->delete_auto_description_transient( the_seo_framework()->get_the_front_page_ID(), '', 'frontpage' );
+		\the_seo_framework()->delete_auto_description_transient( the_seo_framework()->get_the_front_page_ID(), '', 'frontpage' );
 
 		return $old_option;
 	}
@@ -123,7 +123,7 @@ final class Deprecated {
 	 */
 	public function get_term_filter( $term, $taxonomy ) {
 
-		the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Transients::' . __FUNCTION__, '2.7.0', 'WordPress Core "get_term_meta()"' );
+		\the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Transients::' . __FUNCTION__, '2.7.0', 'WordPress Core "get_term_meta()"' );
 
 		return false;
 	}
@@ -144,7 +144,7 @@ final class Deprecated {
 	 */
 	public function get_terms_filter( array $terms, $taxonomy ) {
 
-		the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Transients::' . __FUNCTION__, '2.7.0', 'WordPress Core "get_term_meta()"' );
+		\the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Transients::' . __FUNCTION__, '2.7.0', 'WordPress Core "get_term_meta()"' );
 
 		return false;
 	}
@@ -166,7 +166,7 @@ final class Deprecated {
 	 */
 	public function taxonomy_seo_save( $term_id, $tt_id ) {
 
-		the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Transients::' . __FUNCTION__, '2.7.0', 'WordPress Core "update_term_meta()"' );
+		\the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Transients::' . __FUNCTION__, '2.7.0', 'WordPress Core "update_term_meta()"' );
 
 		return false;
 	}
@@ -187,7 +187,7 @@ final class Deprecated {
 	 */
 	public function term_meta_delete( $term_id, $tt_id ) {
 
-		the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Transients::' . __FUNCTION__, '2.7.0', 'WordPress Core "delete_term_meta()"' );
+		\the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Transients::' . __FUNCTION__, '2.7.0', 'WordPress Core "delete_term_meta()"' );
 
 		return false;
 	}
@@ -207,7 +207,7 @@ final class Deprecated {
 	 */
 	public function in_array( $needle, $array, $strict = true ) {
 
-		the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Core::' . __FUNCTION__, '2.7.0', 'in_array()' );
+		\the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Core::' . __FUNCTION__, '2.7.0', 'in_array()' );
 
 		$array = array_flip( $array );
 
@@ -235,7 +235,7 @@ final class Deprecated {
 	 */
 	public function exclude_search_ids() {
 
-		the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Search::' . __FUNCTION__, '2.7.0', 'The_SEO_Framework_Search::get_excluded_search_ids()' );
+		\the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Search::' . __FUNCTION__, '2.7.0', 'The_SEO_Framework_Search::get_excluded_search_ids()' );
 
 		return $this->get_excluded_search_ids();
 	}
@@ -254,10 +254,10 @@ final class Deprecated {
 	 */
 	public function search_filter( $query ) {
 
-		the_seo_framework()->_deprecated_function( 'the_seo_framework()->search_filter()', '2.8.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->search_filter()', '2.8.0' );
 
 		// Don't exclude pages in wp-admin.
-		if ( $query->is_search && false === the_seo_framework()->is_admin() ) {
+		if ( $query->is_search && false === \the_seo_framework()->is_admin() ) {
 
 			$q = $query->query;
 			//* Only interact with an actual Search Query.
@@ -293,13 +293,13 @@ final class Deprecated {
 	 */
 	public function get_excluded_search_ids() {
 
-		the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_excluded_search_ids()', '2.7.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_excluded_search_ids()', '2.7.0' );
 
 		global $blog_id;
 
-		$cache_key = 'exclude_search_ids_' . $blog_id . '_' . get_locale();
+		$cache_key = 'exclude_search_ids_' . $blog_id . '_' . \get_locale();
 
-		$post_ids = the_seo_framework()->object_cache_get( $cache_key );
+		$post_ids = \the_seo_framework()->object_cache_get( $cache_key );
 		if ( false === $post_ids ) {
 			$post_ids = array();
 
@@ -320,9 +320,9 @@ final class Deprecated {
 			unset( $get_posts );
 
 			if ( $excluded_posts )
-				$post_ids = wp_list_pluck( $excluded_posts, 'ID' );
+				$post_ids = \wp_list_pluck( $excluded_posts, 'ID' );
 
-			the_seo_framework()->object_cache_set( $cache_key, $post_ids, 86400 );
+			\the_seo_framework()->object_cache_set( $cache_key, $post_ids, 86400 );
 		}
 
 		// return an array of exclude post IDs

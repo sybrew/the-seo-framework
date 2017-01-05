@@ -145,7 +145,7 @@ class Generate extends Term_Data {
 		 * Applies filters the_seo_framework_robots_meta_array : array
 		 * @since 2.6.0
 		 */
-		$meta = (array) apply_filters( 'the_seo_framework_robots_meta_array', $meta );
+		$meta = (array) \apply_filters( 'the_seo_framework_robots_meta_array', $meta );
 
 		//* Strip empty array items
 		$meta = array_filter( $meta );
@@ -196,7 +196,7 @@ class Generate extends Term_Data {
 		}
 
 		if ( $escape ) {
-			return $sep_esc[ $type ][ $escape ] = esc_html( $sepcache[ $type ] );
+			return $sep_esc[ $type ][ $escape ] = \esc_html( $sepcache[ $type ] );
 		} else {
 			return $sep_esc[ $type ][ $escape ] = $sepcache[ $type ];
 		}
@@ -217,7 +217,7 @@ class Generate extends Term_Data {
 		if ( isset( $blogname ) )
 			return $blogname;
 
-		return $blogname = trim( get_bloginfo( 'name', 'display' ) );
+		return $blogname = trim( \get_bloginfo( 'name', 'display' ) );
 	}
 
 	/**
@@ -235,7 +235,7 @@ class Generate extends Term_Data {
 		if ( isset( $description ) )
 			return $description;
 
-		$description = trim( get_bloginfo( 'description', 'display' ) );
+		$description = trim( \get_bloginfo( 'description', 'display' ) );
 
 		return $description = $description ? $description : $this->untitled();
 	}
@@ -252,7 +252,7 @@ class Generate extends Term_Data {
 	public function fetch_locale( $match = '' ) {
 
 		if ( empty( $match ) )
-			$match = get_locale();
+			$match = \get_locale();
 
 		$match_len = strlen( $match );
 		$valid_locales = (array) $this->fb_locales();
@@ -282,7 +282,7 @@ class Generate extends Term_Data {
 			$locale_keys = (array) $this->language_keys();
 
 			//* No need to do for each loop. Just match the keys.
-			if ( $key = array_search( $match, $locale_keys ) ) {
+			if ( $key = array_search( $match, $locale_keys, true ) ) {
 				//* Fetch the corresponding value from key within the language array.
 				return $valid_locales[ $key ];
 			}

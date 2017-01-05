@@ -81,7 +81,7 @@ final class Load extends Feed implements Debug_Interface {
 			//* No need to set these to true if no debugging is enabled.
 			$this->the_seo_framework_debug_hidden = defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN ? true : $this->the_seo_framework_debug_hidden;
 
-			$instance = Debug::set_instance( $this->the_seo_framework_debug, $this->the_seo_framework_debug_hidden );
+			$instance = \The_SEO_Framework\Debug::set_instance( $this->the_seo_framework_debug, $this->the_seo_framework_debug_hidden );
 		}
 
 		$this->the_seo_framework_use_transients = defined( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS' ) && THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS ? false : $this->the_seo_framework_use_transients;
@@ -143,7 +143,7 @@ final class Load extends Feed implements Debug_Interface {
 						$output = call_user_func_array( array( $this, $method ), $args );
 					}
 				} else {
-					$this->_inaccessible_p_or_m( esc_html( get_class( $class ) . '->' . $method . '()' ), esc_html__( 'Class or Method not found.', 'autodescription' ), esc_html( $version ) );
+					$this->_inaccessible_p_or_m( esc_html( get_class( $class ) . '->' . $method . '()' ), \esc_html__( 'Class or Method not found.', 'autodescription' ), \esc_html( $version ) );
 				}
 			} else {
 				if ( method_exists( $class, $method ) ) {
@@ -153,7 +153,7 @@ final class Load extends Feed implements Debug_Interface {
 						$output = call_user_func_array( array( $class, $method ), $args );
 					}
 				} else {
-					$this->_inaccessible_p_or_m( esc_html( get_class( $class ) . '::' . $method . '()' ), esc_html__( 'Class or Method not found.', 'autodescription' ), esc_html( $version ) );
+					$this->_inaccessible_p_or_m( esc_html( get_class( $class ) . '::' . $method . '()' ), \esc_html__( 'Class or Method not found.', 'autodescription' ), \esc_html( $version ) );
 				}
 			}
 		} elseif ( is_string( $class ) && $class ) {
@@ -166,7 +166,7 @@ final class Load extends Feed implements Debug_Interface {
 				$output = call_user_func_array( $func, $args );
 			}
 		} else {
-			$this->_doing_it_wrong( __METHOD__, esc_html__( 'Function needs to be called as a string.', 'autodescription' ), esc_html( $version ) );
+			$this->_doing_it_wrong( __METHOD__, \esc_html__( 'Function needs to be called as a string.', 'autodescription' ), \esc_html( $version ) );
 		}
 
 		return $output;
@@ -184,7 +184,7 @@ final class Load extends Feed implements Debug_Interface {
 	 * @param string $replacement Optional. The function that should have been called. Default null.
 	 */
 	public function _deprecated_filter( $filter, $version, $replacement = null ) {
-		$instance = Debug::get_instance();
+		$instance = \The_SEO_Framework\Debug::get_instance();
 		$instance->_deprecated_filter( $filter, $version, $replacement );
 	}
 
@@ -201,7 +201,7 @@ final class Load extends Feed implements Debug_Interface {
 	 * @param string $replacement Optional. The function that should have been called. Default null.
 	 */
 	public function _deprecated_function( $function, $version, $replacement = null ) {
-		$instance = Debug::get_instance();
+		$instance = \The_SEO_Framework\Debug::get_instance();
 		$instance->_deprecated_function( $function, $version, $replacement );
 	}
 
@@ -218,7 +218,7 @@ final class Load extends Feed implements Debug_Interface {
 	 * @param string $version  The version of WordPress where the message was added.
 	 */
 	public function _doing_it_wrong( $function, $message, $version = null ) {
-		$instance = Debug::get_instance();
+		$instance = \The_SEO_Framework\Debug::get_instance();
 		$instance->_doing_it_wrong( $function, $message, $version );
 	}
 
@@ -234,7 +234,7 @@ final class Load extends Feed implements Debug_Interface {
 	 * @param string $message	A message explaining what has been done incorrectly.
 	 */
 	public function _inaccessible_p_or_m( $p_or_m, $message = '' ) {
-		$instance = Debug::get_instance();
+		$instance = \The_SEO_Framework\Debug::get_instance();
 		$instance->_inaccessible_p_or_m( $p_or_m, $message );
 	}
 	/**
@@ -251,7 +251,7 @@ final class Load extends Feed implements Debug_Interface {
 	 */
 	public function debug_init( $method, $store, $debug_key = null ) {
 
-		$instance = Debug::get_instance();
+		$instance = \The_SEO_Framework\Debug::get_instance();
 
 		if ( func_num_args() >= 4 ) {
 			$instance->debug_init( $method, $store, $debug_key, array_slice( func_get_args(), 3 ) );

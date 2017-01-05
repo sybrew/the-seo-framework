@@ -255,9 +255,9 @@ class Generate_Ldjson extends Generate_Image {
 		 * @param int $id The page, post, product or term ID.
 		 * @param bool $singular Whether the ID is singular.
 		 */
-		$image = apply_filters( 'the_seo_framework_ld_json_breadcrumb_image', $image, $id, $singular );
+		$image = \apply_filters( 'the_seo_framework_ld_json_breadcrumb_image', $image, $id, $singular );
 
-		return $images[ $id ][ $singular ] = json_encode( esc_url_raw( $image ) );
+		return $images[ $id ][ $singular ] = json_encode( \esc_url_raw( $image ) );
 	}
 
 	/**
@@ -283,7 +283,7 @@ class Generate_Ldjson extends Generate_Image {
 		 * @since 2.7.0
 		 * @param string $search_url The default WordPress search URL without query parameters.
 		 */
-		$search_url = (string) apply_filters( 'the_seo_framework_ld_json_search_url', $this->the_home_url_from_cache( true ) . '?s=' );
+		$search_url = (string) \apply_filters( 'the_seo_framework_ld_json_search_url', $this->the_home_url_from_cache( true ) . '?s=' );
 
 		// Remove trailing quote and add it back.
 		$target = mb_substr( json_encode( $search_url ), 0, -1 ) . '{search_term_string}"';
@@ -343,9 +343,9 @@ class Generate_Ldjson extends Generate_Image {
 			$cat_type = 'product_cat';
 
 		//* Test categories.
-		$r = is_object_in_term( $post_id, $cat_type, '' );
+		$r = \is_object_in_term( $post_id, $cat_type, '' );
 
-		if ( ! $r || is_wp_error( $r ) )
+		if ( ! $r || \is_wp_error( $r ) )
 			return '';
 
 		/**
@@ -356,12 +356,12 @@ class Generate_Ldjson extends Generate_Image {
 		 * @param int $post_id The current Post ID.
 		 * @param string $cat_type The current taxonomy (either category or product_cat).
 		 */
-		$cats = (array) apply_filters_ref_array( 'the_seo_framework_ld_json_breadcrumb_terms', array( get_the_terms( $post_id, $cat_type ), $post_id, $cat_type ) );
+		$cats = (array) \apply_filters_ref_array( 'the_seo_framework_ld_json_breadcrumb_terms', array( \get_the_terms( $post_id, $cat_type ), $post_id, $cat_type ) );
 
 		if ( empty( $cats ) )
 			return '';
 
-		$cats = wp_list_pluck( $cats, 'parent', 'term_id' );
+		$cats = \wp_list_pluck( $cats, 'parent', 'term_id' );
 		asort( $cats, SORT_NUMERIC );
 
 		$assigned_ids = array();
@@ -372,15 +372,15 @@ class Generate_Ldjson extends Generate_Image {
 		//* Fetch cats children id's, if any.
 		foreach ( $cats as $term_id => $parent_id ) {
 			//* Warning: This makes database calls...
-			if ( ! term_exists( $term_id, $cat_type, $parent_id ) )
+			if ( ! \term_exists( $term_id, $cat_type, $parent_id ) )
 				continue;
 
 			//* Store to filter unused Cat ID's from the post.
 			$assigned_ids[] = $term_id;
 
 			// Check if they have kittens.
-			$children = get_term_children( $term_id, $cat_type );
-			$ancestors = get_ancestors( $term_id, $cat_type );
+			$children = \get_term_children( $term_id, $cat_type );
+			$ancestors = \get_ancestors( $term_id, $cat_type );
 
 			//* Save children id's as kittens.
 			$kittens[ $term_id ] = $children;
@@ -470,7 +470,7 @@ class Generate_Ldjson extends Generate_Image {
 			 * @param mixed $function The method or function callback. Default false.
 			 * @param array $trees The current tree list.
 			 */
-			$callback_filter = apply_filters_ref_array( 'the_seo_framework_breadcrumb_post_sorting_callback', array( false, $trees ) );
+			$callback_filter = \apply_filters_ref_array( 'the_seo_framework_breadcrumb_post_sorting_callback', array( false, $trees ) );
 			if ( $callback_filter ) {
 				$trees = $this->call_function( $callback_filter, '2.8.0', $trees );
 			} else {
@@ -511,7 +511,7 @@ class Generate_Ldjson extends Generate_Image {
 							} else {
 								$pos = $position + 2;
 
-								$cat = get_term_by( 'id', $child_id, $cat_type, OBJECT, 'raw' );
+								$cat = \get_term_by( 'id', $child_id, $cat_type, OBJECT, 'raw' );
 								$data = $this->get_term_data( $cat, $child_id );
 
 								$id = json_encode( $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'is_term' => true, 'term' => $cat ) ) );
@@ -555,13 +555,13 @@ class Generate_Ldjson extends Generate_Image {
 					$image = $this->schema_image( $tree_ids );
 
 					//* $tree_ids is a single ID here.
-					$cat = get_term_by( 'id', $tree_ids, $cat_type, OBJECT, 'raw' );
+					$cat = \get_term_by( 'id', $tree_ids, $cat_type, OBJECT, 'raw' );
 					$data = $this->get_term_data( $cat, $tree_ids );
 
 					$id = json_encode( $this->the_url( '', array( 'get_custom_field' => false, 'is_term' => true, 'external' => true, 'term' => $cat ) ) );
 
 					//* Note: WordPress Core translation.
-					$cat_name = empty( $data['doctitle'] ) ? ( empty( $cat->name ) ? __( 'Uncategorized' ) : $cat->name ) : $data['doctitle'];
+					$cat_name = empty( $data['doctitle'] ) ? ( empty( $cat->name ) ? \__( 'Uncategorized' ) : $cat->name ) : $data['doctitle'];
 					$name = json_encode( $cat_name );
 
 					$items .= sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s,"image":%s}},', $item_type, (string) $pos, $id, $name, $image );
@@ -595,7 +595,7 @@ class Generate_Ldjson extends Generate_Image {
 		$page_id = $this->get_the_real_ID();
 
 		//* Get ancestors.
-		$parents = get_post_ancestors( $page_id );
+		$parents = \get_post_ancestors( $page_id );
 
 		if ( $parents ) {
 
@@ -842,7 +842,7 @@ class Generate_Ldjson extends Generate_Image {
 		$context = $this->schema_context();
 		$type = json_encode( ucfirst( $knowledge_type ) );
 		$name = json_encode( $knowledge_name );
-		$url = json_encode( esc_url( home_url( '/' ) ) );
+		$url = json_encode( \esc_url( \home_url( '/' ) ) );
 
 		$logo = '';
 
@@ -850,7 +850,7 @@ class Generate_Ldjson extends Generate_Image {
 			$icon = $this->site_icon();
 
 			if ( $icon ) {
-				$logourl = esc_url_raw( $icon );
+				$logourl = \esc_url_raw( $icon );
 
 				//* Add trailing comma
 				$logo = '"logo":' . json_encode( $logourl );
@@ -862,7 +862,7 @@ class Generate_Ldjson extends Generate_Image {
 		 * @since ???
 		 * @todo Document.
 		 */
-		$options = (array) apply_filters( 'the_seo_framework_json_options', array(
+		$options = (array) \apply_filters( 'the_seo_framework_json_options', array(
 			'knowledge_facebook',
 			'knowledge_twitter',
 			'knowledge_gplus',
@@ -951,7 +951,7 @@ class Generate_Ldjson extends Generate_Image {
 		 * Applies filters the_seo_framework_json_breadcrumb_output
 		 * @since 2.4.2
 		 */
-		$filter = (bool) apply_filters( 'the_seo_framework_json_breadcrumb_output', true );
+		$filter = (bool) \apply_filters( 'the_seo_framework_json_breadcrumb_output', true );
 		$option = $this->is_option_checked( 'ld_json_breadcrumbs' );
 
 		return $cache = $filter && $option;
@@ -976,7 +976,7 @@ class Generate_Ldjson extends Generate_Image {
 		 * Applies filters the_seo_framework_json_sitename_output
 		 * @since 2.6.0
 		 */
-		$filter = (bool) apply_filters( 'the_seo_framework_json_sitename_output', true );
+		$filter = (bool) \apply_filters( 'the_seo_framework_json_sitename_output', true );
 		$option = $this->is_option_checked( 'ld_json_sitename' );
 
 		return $cache = $filter && $option;
@@ -1001,7 +1001,7 @@ class Generate_Ldjson extends Generate_Image {
 		 * Applies filters 'the_seo_framework_json_search_output'
 		 * @since 2.3.9
 		 */
-		$filter = (bool) apply_filters( 'the_seo_framework_json_search_output', true );
+		$filter = (bool) \apply_filters( 'the_seo_framework_json_search_output', true );
 		$option = $this->is_option_checked( 'ld_json_searchbox' );
 
 		return $cache = $filter && $option;
@@ -1026,7 +1026,7 @@ class Generate_Ldjson extends Generate_Image {
 		 * Applies filters 'the_seo_framework_json_search_output'
 		 * @since 2.6.5
 		 */
-		$filter = (bool) apply_filters( 'the_seo_framework_json_knowledge_output', true );
+		$filter = (bool) \apply_filters( 'the_seo_framework_json_knowledge_output', true );
 		$option = $this->is_option_checked( 'knowledge_output' );
 
 		return $cache = $filter && $option;

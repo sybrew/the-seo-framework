@@ -76,7 +76,7 @@ class Inpost extends Doing_It_Right {
 		 * 			: bool false No output.
 		 * @since 2.5.2
 		 */
-		$this->inpost_seo_bar = apply_filters( 'the_seo_framework_inpost_seo_bar', false );
+		$this->inpost_seo_bar = \apply_filters( 'the_seo_framework_inpost_seo_bar', false );
 
 	}
 
@@ -94,10 +94,10 @@ class Inpost extends Doing_It_Right {
 		 * Applies filters the_seo_framework_seobox_output : bool
 		 * @since 2.0.0
 		 */
-		$show_seobox = (bool) apply_filters( 'the_seo_framework_seobox_output', true );
+		$show_seobox = (bool) \apply_filters( 'the_seo_framework_seobox_output', true );
 
 		if ( $show_seobox )
-			add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box' ), 10, 1 );
+			\add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box' ), 10, 1 );
 
 	}
 
@@ -120,11 +120,11 @@ class Inpost extends Doing_It_Right {
 		 *
 		 * @since 2.6.0
 		 */
-		$priority = (int) apply_filters( 'the_seo_framework_term_metabox_priority', 0 );
+		$priority = (int) \apply_filters( 'the_seo_framework_term_metabox_priority', 0 );
 
 		//* Add taxonomy meta boxes
-		foreach ( get_taxonomies( array( 'public' => true, 'show_ui' => true ) ) as $tax_name )
-			add_action( $tax_name . '_edit_form', array( $this, 'pre_seo_box' ), $priority, 2 );
+		foreach ( \get_taxonomies( array( 'public' => true, 'show_ui' => true ) ) as $tax_name )
+			\add_action( $tax_name . '_edit_form', array( $this, 'pre_seo_box' ), $priority, 2 );
 
 	}
 
@@ -143,7 +143,7 @@ class Inpost extends Doing_It_Right {
 		 */
 		if ( $this->post_type_supports_custom_seo( $post_type ) ) {
 
-			$post = get_post_type_object( $post_type );
+			$post = \get_post_type_object( $post_type );
 
 			if ( is_object( $post ) ) {
 				$labels = isset( $post->labels ) ? $post->labels : '';
@@ -160,7 +160,7 @@ class Inpost extends Doing_It_Right {
 					 * @TODO solve note.
 					 * @priority medium 2.7.0
 					 */
-					$id = (string) apply_filters( 'the_seo_framework_metabox_id', 'tsf-inpost-box' );
+					$id = (string) \apply_filters( 'the_seo_framework_metabox_id', 'tsf-inpost-box' );
 					$context = 'normal';
 
 					/**
@@ -169,9 +169,9 @@ class Inpost extends Doing_It_Right {
 					 * Accepts 'high', 'default', 'low'
 					 * @since 2.6.0
 					 */
-					$priority = (string) apply_filters( 'the_seo_framework_metabox_priority', 'high' );
+					$priority = (string) \apply_filters( 'the_seo_framework_metabox_priority', 'high' );
 
-					add_meta_box( $id, sprintf( __( '%s SEO Settings', 'autodescription' ), $title ), array( $this, 'pre_seo_box' ), $post_type, $context, $priority, $args );
+					\add_meta_box( $id, sprintf( \__( '%s SEO Settings', 'autodescription' ), $title ), array( $this, 'pre_seo_box' ), $post_type, $context, $priority, $args );
 				}
 			}
 		}
@@ -233,7 +233,7 @@ class Inpost extends Doing_It_Right {
 
 			//* Only add nonce on post/page edit screen. Nonce for terms are handled in core.
 			if ( 'is_post_page' === $page ) {
-				wp_nonce_field( $this->inpost_nonce_field, $this->inpost_nonce_name );
+				\wp_nonce_field( $this->inpost_nonce_field, $this->inpost_nonce_name );
 			} else {
 				// This shouldn't happen.
 				return;
@@ -273,9 +273,9 @@ class Inpost extends Doing_It_Right {
 	 * @param object $object The TT object.
 	 */
 	public function tt_inpost_box( $type, $object ) {
-		do_action( 'the_seo_framework_pre_tt_inpost_box' );
+		\do_action( 'the_seo_framework_pre_tt_inpost_box' );
 		$this->get_view( 'inpost/seo-settings', get_defined_vars(), 'term' );
-		do_action( 'the_seo_framework_pro_tt_inpost_box' );
+		\do_action( 'the_seo_framework_pro_tt_inpost_box' );
 	}
 
 	/**
@@ -287,8 +287,8 @@ class Inpost extends Doing_It_Right {
 	 * @param string $type The post type name.
 	 */
 	public function singular_inpost_box( $type ) {
-		do_action( 'the_seo_framework_pre_page_inpost_box' );
+		\do_action( 'the_seo_framework_pre_page_inpost_box' );
 		$this->get_view( 'inpost/seo-settings', get_defined_vars(), 'singular' );
-		do_action( 'the_seo_framework_pro_page_inpost_box' );
+		\do_action( 'the_seo_framework_pro_page_inpost_box' );
 	}
 }

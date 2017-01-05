@@ -78,7 +78,7 @@ class Generate_Description extends Generate {
 		 * Applies filters 'the_seo_framework_do_shortcodes_in_description' : Boolean
 		 * @since 2.6.6
 		 */
-		if ( apply_filters( 'the_seo_framework_do_shortcodes_in_description', false ) )
+		if ( \apply_filters( 'the_seo_framework_do_shortcodes_in_description', false ) )
 			$description = do_shortcode( $description );
 
 		return $this->escape_description( $description );
@@ -94,10 +94,10 @@ class Generate_Description extends Generate {
 	 */
 	public function escape_description( $description = '' ) {
 
-		$description = wptexturize( $description );
-		$description = convert_chars( $description );
-		$description = esc_html( $description );
-		$description = capital_P_dangit( $description );
+		$description = \wptexturize( $description );
+		$description = \convert_chars( $description );
+		$description = \esc_html( $description );
+		$description = \capital_P_dangit( $description );
 		$description = trim( $description );
 
 		return $description;
@@ -135,7 +135,7 @@ class Generate_Description extends Generate {
 			 * }
 			 * @since 2.5.0
 			 */
-			$defaults = (array) apply_filters( 'the_seo_framework_description_args', $defaults, $args );
+			$defaults = (array) \apply_filters( 'the_seo_framework_description_args', $defaults, $args );
 		}
 
 		//* Return early if it's only a default args request.
@@ -417,7 +417,7 @@ class Generate_Description extends Generate {
 				if ( $excerpt['trim'] ) {
 					$description = $excerpt['normal'];
 				} else {
-					if ( $term || ! has_excerpt( $args['id'] ) ) {
+					if ( $term || ! \has_excerpt( $args['id'] ) ) {
 						$additions = $this->generate_description_additions( $args['id'], $term, false );
 
 						$title_on_blogname = $this->get_title_on_blogname( $additions );
@@ -427,7 +427,7 @@ class Generate_Description extends Generate {
 					}
 
 					/* translators: 1: Title, 2: Separator, 3: Excerpt */
-					$description = sprintf( _x( '%1$s %2$s %3$s', '1: Title, 2: Separator, 3: Excerpt', 'autodescription' ), $title_on_blogname, $sep, $excerpt['normal'] );
+					$description = sprintf( \_x( '%1$s %2$s %3$s', '1: Title, 2: Separator, 3: Excerpt', 'autodescription' ), $title_on_blogname, $sep, $excerpt['normal'] );
 				}
 			} else {
 				//* Fetch additions ignoring options.
@@ -467,7 +467,7 @@ class Generate_Description extends Generate {
 		$blogname = '';
 		$sep = '';
 
-		if ( $term || ! has_excerpt( $id ) ) {
+		if ( $term || ! \has_excerpt( $id ) ) {
 			$title_on_blogname = $this->generate_description_additions( $id, $term, false );
 			$title = $title_on_blogname['title'];
 			$on = $title_on_blogname['on'];
@@ -590,7 +590,7 @@ class Generate_Description extends Generate {
 		 *	}
 		 * @since 2.6.0
 		 */
-		$filter = apply_filters( 'the_seo_framework_add_description_additions', true, $id, $term );
+		$filter = \apply_filters( 'the_seo_framework_add_description_additions', true, $id, $term );
 		$option = $this->get_option( 'description_additions' );
 
 		return $option && $filter;
@@ -612,7 +612,7 @@ class Generate_Description extends Generate {
 		if ( isset( $sep ) )
 			return $sep;
 
-		return $sep = (string) apply_filters( 'the_seo_framework_description_separator', $this->get_separator( 'description', false ) );
+		return $sep = (string) \apply_filters( 'the_seo_framework_description_separator', $this->get_separator( 'description', false ) );
 	}
 
 	/**
@@ -634,7 +634,7 @@ class Generate_Description extends Generate {
 		$blogname = $additions['blogname'];
 
 		/* translators: 1: Title, 2: on, 3: Blogname */
-		return trim( sprintf( _x( '%1$s %2$s %3$s', '1: Title, 2: on, 3: Blogname', 'autodescription' ), $title, $on, $blogname ) );
+		return trim( sprintf( \_x( '%1$s %2$s %3$s', '1: Title, 2: on, 3: Blogname', 'autodescription' ), $title, $on, $blogname ) );
 	}
 
 	/**
@@ -789,7 +789,7 @@ class Generate_Description extends Generate {
 				//* We're on a taxonomy now. Fetch excerpt from latest term post.
 				$excerpt = empty( $term->description ) ? $this->get_excerpt_by_id( '', '', $page_id ) : $this->s_description( $term->description );
 			} elseif ( $this->is_author() ) {
-				$excerpt = $this->s_description( get_the_author_meta( 'description', (int) get_query_var( 'author' ) ) );
+				$excerpt = $this->s_description( \get_the_author_meta( 'description', (int) get_query_var( 'author' ) ) );
 			} else {
 				$excerpt = '';
 			}

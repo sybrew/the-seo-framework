@@ -71,17 +71,17 @@ class Sitemaps extends Metaboxes {
 		/**
 		 * Add query strings to rewrite
 		 */
-		add_action( 'init', array( $this, 'rewrite_rule_sitemap' ), 1 );
-		add_filter( 'query_vars', array( $this, 'enqueue_sitemap_query_vars' ), 1 );
+		\add_action( 'init', array( $this, 'rewrite_rule_sitemap' ), 1 );
+		\add_filter( 'query_vars', array( $this, 'enqueue_sitemap_query_vars' ), 1 );
 
 		/**
 		 * Adding a higher priority will cause a trailing slash to be added.
 		 * We need to be in front of the queue to prevent this from happening.
 		 */
-		add_action( 'template_redirect', array( $this, 'maybe_output_sitemap' ), 1 );
+		\add_action( 'template_redirect', array( $this, 'maybe_output_sitemap' ), 1 );
 
 		//* Enqueue rewrite flush
-		add_action( 'shutdown', array( $this, 'maybe_flush_rewrite' ), 999 );
+		\add_action( 'shutdown', array( $this, 'maybe_flush_rewrite' ), 999 );
 	}
 
 	/**
@@ -127,7 +127,7 @@ class Sitemaps extends Metaboxes {
 			if ( $this->detect_sitemap_plugin() )
 				return;
 
-			add_rewrite_rule( 'sitemap\.xml$', 'index.php?the_seo_framework_sitemap=xml', 'top' );
+			\add_rewrite_rule( 'sitemap\.xml$', 'index.php?the_seo_framework_sitemap=xml', 'top' );
 		}
 	}
 
@@ -289,9 +289,9 @@ class Sitemaps extends Metaboxes {
 		echo '</urlset>';
 
 		if ( false === $sitemap_content ) {
-			echo "\r\n" . '<!-- ' . esc_html__( 'Sitemap is generated for this view', 'autodescription' ) . ' -->';
+			echo "\r\n" . '<!-- ' . \esc_html__( 'Sitemap is generated for this view', 'autodescription' ) . ' -->';
 		} else {
-			echo "\r\n" . '<!-- ' . esc_html__( 'Sitemap is served from cache', 'autodescription' ) . ' -->';
+			echo "\r\n" . '<!-- ' . \esc_html__( 'Sitemap is served from cache', 'autodescription' ) . ' -->';
 		}
 
 		/**
@@ -342,7 +342,7 @@ class Sitemaps extends Metaboxes {
 	 */
 	protected function generate_sitemap() {
 
-		wp_is_ini_value_changeable( 'memory_limit' ) and @ini_set( 'memory_limit', WP_MAX_MEMORY_LIMIT );
+		\wp_is_ini_value_changeable( 'memory_limit' ) and @ini_set( 'memory_limit', WP_MAX_MEMORY_LIMIT );
 
 		$content = '';
 
@@ -351,7 +351,7 @@ class Sitemaps extends Metaboxes {
 		 *
 		 * @since 2.5.2
 		 */
-		$excluded = (array) apply_filters( 'the_seo_framework_sitemap_exclude_ids', array() );
+		$excluded = (array) \apply_filters( 'the_seo_framework_sitemap_exclude_ids', array() );
 
 		if ( empty( $excluded ) ) {
 			$excluded = '';
@@ -367,9 +367,9 @@ class Sitemaps extends Metaboxes {
 		 * Applies filters the_seo_framework_sitemap_posts_count : int max posts
 		 * Applies filters the_seo_framework_sitemap_custom_posts_count : int max posts
 		 */
-		$totalpages = (int) apply_filters( 'the_seo_framework_sitemap_pages_count', $this->max_posts );
-		$totalposts = (int) apply_filters( 'the_seo_framework_sitemap_posts_count', $this->max_posts );
-		$total_cpt_posts = (int) apply_filters( 'the_seo_framework_sitemap_custom_posts_count', $this->max_posts );
+		$totalpages = (int) \apply_filters( 'the_seo_framework_sitemap_pages_count', $this->max_posts );
+		$totalposts = (int) \apply_filters( 'the_seo_framework_sitemap_posts_count', $this->max_posts );
+		$total_cpt_posts = (int) \apply_filters( 'the_seo_framework_sitemap_custom_posts_count', $this->max_posts );
 
 		$latest_pages = array();
 		$latest_posts = array();
@@ -401,10 +401,10 @@ class Sitemaps extends Metaboxes {
 		 *
 		 * Applies filter the_seo_framework_sitemap_timestamp : bool
 		 */
-		$timestamp = (bool) apply_filters( 'the_seo_framework_sitemap_timestamp', true );
+		$timestamp = (bool) \apply_filters( 'the_seo_framework_sitemap_timestamp', true );
 
 		if ( $timestamp )
-			$content .= '<!-- ' . esc_html__( 'Sitemap is generated on', 'autodescription' ) . ' ' . current_time( 'Y-m-d H:i:s' ) . ' -->' . "\r\n";
+			$content .= '<!-- ' . \esc_html__( 'Sitemap is generated on', 'autodescription' ) . ' ' . \current_time( 'Y-m-d H:i:s' ) . ' -->' . "\r\n";
 
 		$wp_query = new \WP_Query;
 		$wp_query->init();
@@ -423,23 +423,23 @@ class Sitemaps extends Metaboxes {
 				'suppress_filters' => true,
 				'no_found_rows'    => true,
 			);
-			$wp_query->query = $wp_query->query_vars = wp_parse_args( $args );
+			$wp_query->query = $wp_query->query_vars = \wp_parse_args( $args );
 			$latest_pages = $wp_query->get_posts();
 		}
 		$latest_pages_amount = (int) count( $latest_pages );
 
-		if ( $latest_pages_amount > 0 ) {
+		if ( $latest_pages_amount > 0 ) :
 
-			$id_on_front = $this->has_page_on_front() ? (int) get_option( 'page_on_front' ) : (int) get_option( 'page_for_posts' );
+			$id_on_front = $this->has_page_on_front() ? (int) \get_option( 'page_on_front' ) : (int) \get_option( 'page_for_posts' );
 
 			/**
 			 * This can be heavy.
 			 */
-			foreach ( $latest_pages as $page_id ) {
+			foreach ( $latest_pages as $page_id ) :
 
-				$page = get_post( $page_id );
+				$page = \get_post( $page_id );
 
-				if ( isset( $page->ID ) ) {
+				if ( isset( $page->ID ) ) :
 					$page_id = $page->ID;
 
 					if ( '' === $excluded || ! isset( $excluded[ $page_id ] ) ) {
@@ -474,12 +474,12 @@ class Sitemaps extends Metaboxes {
 							$content .= "\t</url>\r\n";
 						}
 					}
-				}
-			}
+				endif;
+			endforeach;
 
 			//* Free memory.
 			unset( $latest_pages );
-		}
+		endif;
 
 		if ( $totalposts ) {
 			//* Descend by the date for posts. The latest posts get to the top of the list after pages.
@@ -494,13 +494,12 @@ class Sitemaps extends Metaboxes {
 				'suppress_filters' => true,
 				'no_found_rows'    => true,
 			);
-			$wp_query->query = $wp_query->query_vars = wp_parse_args( $args );
+			$wp_query->query = $wp_query->query_vars = \wp_parse_args( $args );
 			$latest_posts = $wp_query->get_posts();
 		}
 		$latest_posts_amount = (int) count( $latest_posts );
 
-		if ( $latest_posts_amount > 0 ) {
-
+		if ( $latest_posts_amount > 0 ) :
 			/**
 			 * Setting up priorities, with pages always being important.
 			 *
@@ -528,11 +527,11 @@ class Sitemaps extends Metaboxes {
 			/**
 			 * This can be heavy.
 			 */
-			foreach ( $latest_posts as $post_id ) {
+			foreach ( $latest_posts as $post_id ) :
 
-				$post = get_post( $post_id );
+				$post = \get_post( $post_id );
 
-				if ( isset( $post->ID ) ) {
+				if ( isset( $post->ID ) ) :
 					$post_id = $post->ID;
 
 					if ( '' === $excluded || ! isset( $excluded[ $post_id ] ) ) {
@@ -565,21 +564,21 @@ class Sitemaps extends Metaboxes {
 							$priority = $priority <= (int) 0 ? (int) 0 : (float) $priority;
 						}
 					}
-				}
-			}
+				endif;
+			endforeach;
 
 			//* Free memory.
 			unset( $latest_posts );
-		}
+		endif;
 
-		if ( $total_cpt_posts ) {
-			$post_page = (array) get_post_types( array( 'public' => true ) );
+		if ( $total_cpt_posts ) :
+			$post_page = (array) \get_post_types( array( 'public' => true ) );
 
 			/**
 			 * Applies filters Array the_seo_framework_sitemap_exclude_cpt : Excludes these CPT
 			 * @since 2.5.0
 			 */
-			$excluded_cpt = (array) apply_filters( 'the_seo_framework_sitemap_exclude_cpt', array() );
+			$excluded_cpt = (array) \apply_filters( 'the_seo_framework_sitemap_exclude_cpt', array() );
 
 			$not_cpt = array( 'post', 'page', 'attachment' );
 
@@ -609,10 +608,10 @@ class Sitemaps extends Metaboxes {
 				$wp_query->query = $wp_query->query_vars = wp_parse_args( $args );
 				$latest_cpt_posts = $wp_query->get_posts();
 			}
-		}
+		endif;
 		$latest_cpt_posts_amount = (int) count( $latest_cpt_posts );
 
-		if ( $latest_cpt_posts_amount > 0 ) {
+		if ( $latest_cpt_posts_amount > 0 ) :
 
 			/**
 			 * Setting up priorities, with pages always being important.
@@ -634,11 +633,11 @@ class Sitemaps extends Metaboxes {
 			/**
 			 * This can be heavy.
 			 */
-			foreach ( $latest_cpt_posts as $ctp_post_id ) {
+			foreach ( $latest_cpt_posts as $ctp_post_id ) :
 
 				$ctp_post = get_post( $ctp_post_id );
 
-				if ( isset( $ctp_post->ID ) ) {
+				if ( isset( $ctp_post->ID ) ) :
 					$cpt_id = $ctp_post->ID;
 
 					if ( '' === $excluded || ! isset( $excluded[ $cpt_id ] ) ) {
@@ -672,12 +671,12 @@ class Sitemaps extends Metaboxes {
 							$priority_cpt = $priority_cpt <= (int) 0 ? (int) 0 : (float) $priority_cpt;
 						}
 					}
-				}
-			}
+				endif;
+			endforeach;
 
 			//* Free memory.
 			unset( $latest_cpt_posts );
-		}
+		endif;
 
 		/**
 		 * Applies filters the_seo_framework_sitemap_additional_urls : {
@@ -689,12 +688,12 @@ class Sitemaps extends Metaboxes {
 		 *
 		 * @since 2.5.2
 		 */
-		$custom_urls = (array) apply_filters( 'the_seo_framework_sitemap_additional_urls', array() );
+		$custom_urls = (array) \apply_filters( 'the_seo_framework_sitemap_additional_urls', array() );
 
 		if ( $custom_urls ) {
 
 			//* Force ent2ncr to run, regardless of filters.
-			remove_all_filters( 'pre_ent2ncr', false );
+			\remove_all_filters( 'pre_ent2ncr', false );
 
 			foreach ( $custom_urls as $url => $args ) {
 
@@ -705,10 +704,10 @@ class Sitemaps extends Metaboxes {
 
 				$content .= "\t<url>\r\n";
 				//* No need to use static vars
-				$content .= "\t\t<loc>" . ent2ncr( esc_url_raw( $url ) ) . "</loc>\r\n";
+				$content .= "\t\t<loc>" . \ent2ncr( \esc_url_raw( $url ) ) . "</loc>\r\n";
 
 				if ( isset( $args['lastmod'] ) && $args['lastmod'] ) {
-					$content .= "\t\t<lastmod>" . mysql2date( $timestamp_format, $args['lastmod'], false ) . "</lastmod>\r\n";
+					$content .= "\t\t<lastmod>" . \mysql2date( $timestamp_format, $args['lastmod'], false ) . "</lastmod>\r\n";
 				}
 
 				if ( isset( $args['priority'] ) && $args['priority'] ) {
@@ -726,7 +725,7 @@ class Sitemaps extends Metaboxes {
 		 * Applies filters the_seo_framework_sitemap_extend : string
 		 * @since 2.5.2
 		 */
-		$extend = (string) apply_filters( 'the_seo_framework_sitemap_extend', '' );
+		$extend = (string) \apply_filters( 'the_seo_framework_sitemap_extend', '' );
 
 		if ( $extend )
 			$content .= "\t" . $extend . "\r\n";
@@ -741,50 +740,47 @@ class Sitemaps extends Metaboxes {
 	 * Ping search engines on post publish.
 	 *
 	 * @since 2.2.9
+	 * @global int $blog_id
+	 *
+	 * @return void Early if blog is not public.
 	 */
 	public function ping_searchengines() {
 
-		/**
-		 * Don't ping if the blog isn't public.
-		 * @since 2.3.1
-		 */
-		if ( false === $this->is_option_checked( 'site_noindex' ) && $this->is_blog_public() ) {
-			global $blog_id;
+		if ( $this->is_option_checked( 'site_noindex' ) || $this->is_blog_public() )
+			return;
 
-			$blog_id = (string) $blog_id;
+		$blog_id = (string) $GLOBALS['blog_id'];
 
-			$transient = 'tsf_throttle_ping_' . $blog_id;
+		$transient = 'tsf_throttle_ping_' . $blog_id;
 
-			//* NOTE: Use legacy get_transient to prevent ping spam.
-			if ( false === get_transient( $transient ) ) {
-				//* Transient doesn't exist yet.
+		//* NOTE: Use legacy get_transient to prevent ping spam.
+		if ( false === \get_transient( $transient ) ) {
+			//* Transient doesn't exist yet.
 
-				if ( $this->is_option_checked( 'ping_google' ) )
-					$this->ping_google();
+			if ( $this->is_option_checked( 'ping_google' ) )
+				$this->ping_google();
 
-				if ( $this->is_option_checked( 'ping_bing' ) )
-					$this->ping_bing();
+			if ( $this->is_option_checked( 'ping_bing' ) )
+				$this->ping_bing();
 
-				if ( $this->is_option_checked( 'ping_yandex' ) )
-					$this->ping_yandex();
+			if ( $this->is_option_checked( 'ping_yandex' ) )
+				$this->ping_yandex();
 
-				// Sorry, I couldn't help myself.
-				$throttle = 'Bert and Ernie are weird.';
+			// Sorry, I couldn't help myself.
+			$throttle = 'Bert and Ernie are weird.';
 
-				/**
-				 * Limit the pinging to a maximum of 1 per hour.
-				 * Transient expiration. 1 hour.
-				 *
-				 * Applies filters the_seo_framework_sitemap_throttle_s
-				 * @since 2.5.1
-				 */
-				$expiration = (int) apply_filters( 'the_seo_framework_sitemap_throttle_s', HOUR_IN_SECONDS );
+			/**
+			 * Limit the pinging to a maximum of 1 per hour.
+			 * Transient expiration. 1 hour.
+			 *
+			 * Applies filters the_seo_framework_sitemap_throttle_s
+			 * @since 2.5.1
+			 */
+			$expiration = (int) \apply_filters( 'the_seo_framework_sitemap_throttle_s', HOUR_IN_SECONDS );
 
-				//* @NOTE: Using legacy set_transient to prevent ping spam.
-				set_transient( $transient, $throttle, $expiration );
-			}
+			//* @NOTE: Using legacy set_transient to prevent ping spam.
+			\set_transient( $transient, $throttle, $expiration );
 		}
-
 	}
 
 	/**

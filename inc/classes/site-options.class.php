@@ -71,10 +71,10 @@ class Site_Options extends Sanitize {
 		$this->seo_settings_page_slug = 'theseoframework-settings';
 
 		//* Set up site settings and save/reset them
-		add_action( 'admin_init', array( $this, 'register_settings' ), 5 );
+		\add_action( 'admin_init', array( $this, 'register_settings' ), 5 );
 
 		//* Update site options at plugin update.
-		add_action( 'admin_init', array( $this, 'site_updated_plugin_option' ), 30 );
+		\add_action( 'admin_init', array( $this, 'site_updated_plugin_option' ), 30 );
 
 	}
 
@@ -408,14 +408,14 @@ class Site_Options extends Sanitize {
 			return;
 
 		//* If current user isn't allowed to update options, don't do anything.
-		if ( ! current_user_can( $this->settings_capability() ) )
+		if ( ! \current_user_can( $this->settings_capability() ) )
 			return;
 
 		/**
 		 * Applies filters 'the_seo_framework_update_options_at_update' : bool
 		 * @since 2.6.0
 		 */
-		if ( ! apply_filters( 'the_seo_framework_update_options_at_update', true ) )
+		if ( ! \apply_filters( 'the_seo_framework_update_options_at_update', true ) )
 			return;
 
 		$updated = false;
@@ -440,7 +440,7 @@ class Site_Options extends Sanitize {
 		}
 
 		//* Updated the options. Check for updated flag and see if settings pages are loaded.
-		if ( update_option( $this->settings_field, $options ) && $updated && $this->load_options )
+		if ( \update_option( $this->settings_field, $options ) && $updated && $this->load_options )
 			$this->pre_output_site_updated_plugin_notice();
 
 	}
@@ -466,7 +466,7 @@ class Site_Options extends Sanitize {
 		$this->init_admin_scripts();
 
 		//* Output notice.
-		add_action( 'admin_notices', array( $this, 'site_updated_plugin_notice' ) );
+		\add_action( 'admin_notices', array( $this, 'site_updated_plugin_notice' ) );
 
 	}
 
@@ -480,7 +480,7 @@ class Site_Options extends Sanitize {
 	public function site_updated_plugin_notice() {
 
 		$settings_url = $this->seo_settings_page_url();
-		$link = sprintf( '<a href="%s" title="%s" target="_self">%s</a>', $settings_url, esc_attr__( 'SEO Settings', 'autodescription' ), esc_html__( 'here', 'autodescription' ) );
+		$link = sprintf( '<a href="%s" title="%s" target="_self">%s</a>', $settings_url, \esc_attr__( 'SEO Settings', 'autodescription' ), \esc_html__( 'here', 'autodescription' ) );
 		$go_to_page = sprintf( esc_html_x( 'View the new options %s.', '%s = here', 'autodescription' ), $link );
 
 		$notice = $this->page_defaults['plugin_update_text'] . ' ' . $go_to_page;
@@ -552,12 +552,12 @@ class Site_Options extends Sanitize {
 
 		//* If we need to bypass the cache
 		if ( ! $use_cache ) {
-			$options = get_option( $setting );
+			$options = \get_option( $setting );
 
 			if ( ! is_array( $options ) || ! array_key_exists( $key, $options ) )
 				return '';
 
-			return is_array( $options[ $key ] ) ? stripslashes_deep( $options[ $key ] ) : stripslashes( wp_kses_decode_entities( $options[ $key ] ) );
+			return is_array( $options[ $key ] ) ? \stripslashes_deep( $options[ $key ] ) : stripslashes( \wp_kses_decode_entities( $options[ $key ] ) );
 		}
 
 		//* Setup caches
@@ -576,7 +576,7 @@ class Site_Options extends Sanitize {
 			$options_cache[ $setting ][ $key ] = '';
 		} else {
 			//* Option has not been previously been cached, so cache now
-			$options_cache[ $setting ][ $key ] = is_array( $options[ $key ] ) ? stripslashes_deep( $options[ $key ] ) : stripslashes( wp_kses_decode_entities( $options[ $key ] ) );
+			$options_cache[ $setting ][ $key ] = is_array( $options[ $key ] ) ? \stripslashes_deep( $options[ $key ] ) : stripslashes( \wp_kses_decode_entities( $options[ $key ] ) );
 		}
 
 		return $options_cache[ $setting ][ $key ];
@@ -624,11 +624,11 @@ class Site_Options extends Sanitize {
 	 * @return array The SEO Framework Options
 	 */
 	protected function default_site_options( $args = array() ) {
-		return wp_parse_args(
+		return \wp_parse_args(
 			$args,
-			apply_filters(
+			\apply_filters(
 				'the_seo_framework_default_site_options',
-				wp_parse_args(
+				\wp_parse_args(
 					$args,
 					$this->get_default_site_options()
 				)
@@ -646,11 +646,11 @@ class Site_Options extends Sanitize {
 	 * @return array The SEO Framework Warned Options
 	 */
 	protected function warned_site_options( $args = array() ) {
-		return wp_parse_args(
+		return \wp_parse_args(
 			$args,
-			apply_filters(
+			\apply_filters(
 				'the_seo_framework_warned_site_options',
-				wp_parse_args(
+				\wp_parse_args(
 					$args,
 					$this->get_warned_site_options()
 				)
@@ -672,15 +672,15 @@ class Site_Options extends Sanitize {
 		if ( empty( $this->settings_field ) )
 			return;
 
-		register_setting( $this->settings_field, $this->settings_field );
-		add_option( $this->settings_field, $this->default_site_options() );
+		\register_setting( $this->settings_field, $this->settings_field );
+		\add_option( $this->settings_field, $this->default_site_options() );
 
 		//* If this page isn't the SEO Settings page, there's no need to check for a reset.
 		if ( false === $this->is_seo_settings_page( false ) )
 			return;
 
 		if ( $this->get_option( 'reset', $this->settings_field ) ) {
-			if ( update_option( $this->settings_field, $this->default_site_options() ) ) {
+			if ( \update_option( $this->settings_field, $this->default_site_options() ) ) {
 				$this->admin_redirect( $this->seo_settings_page_slug, array( 'reset' => 'true' ) );
 				exit;
 			} else {
@@ -694,7 +694,6 @@ class Site_Options extends Sanitize {
 	 * Allows updating of settings.
 	 *
 	 * @since 2.7.0
-	 *
 	 *
 	 * @param string|array $new_option {
 	 *      if string: The string will act as a key for a new empty string option, e.g. : {
@@ -713,10 +712,10 @@ class Site_Options extends Sanitize {
 		if ( empty( $settings_field ) )
 			$settings_field = $this->settings_field;
 
-		$old = get_option( $settings_field );
-		$settings = wp_parse_args( $new, $old );
+		$old = \get_option( $settings_field );
+		$settings = \wp_parse_args( $new, $old );
 
-		return update_option( $settings_field, $settings );
+		return \update_option( $settings_field, $settings );
 	}
 
 	/**
@@ -749,7 +748,7 @@ class Site_Options extends Sanitize {
 			if ( ! is_array( $defaults ) || ! array_key_exists( $key, $defaults ) )
 				return -1;
 
-			return is_array( $defaults[ $key ] ) ? stripslashes_deep( $defaults[ $key ] ) : stripslashes( wp_kses_decode_entities( $defaults[ $key ] ) );
+			return is_array( $defaults[ $key ] ) ? \stripslashes_deep( $defaults[ $key ] ) : stripslashes( \wp_kses_decode_entities( $defaults[ $key ] ) );
 		}
 
 		static $defaults_cache = array();
@@ -865,7 +864,7 @@ class Site_Options extends Sanitize {
 		if ( isset( $user_id ) )
 			return $user_id;
 
-		$user = wp_get_current_user();
+		$user = \wp_get_current_user();
 
 		return $user_id = $user->exists() ? (int) $user->ID : 0;
 	}
@@ -885,14 +884,14 @@ class Site_Options extends Sanitize {
 	public function get_user_meta( $user_id, $key = THE_SEO_FRAMEWORK_USER_OPTIONS, $use_cache = true ) {
 
 		if ( false === $use_cache )
-			return ( $meta = get_user_meta( $user_id, $key, true ) ) && is_array( $meta ) ? $meta : array();
+			return ( $meta = \get_user_meta( $user_id, $key, true ) ) && is_array( $meta ) ? $meta : array();
 
 		static $usermeta_cache = array();
 
 		if ( isset( $usermeta_cache[ $user_id ][ $key ] ) )
 			return $usermeta_cache[ $user_id ][ $key ];
 
-		return $usermeta_cache[ $user_id ][ $key ] = ( $meta = get_user_meta( $user_id, $key, true ) ) && is_array( $meta ) ? $meta : array();
+		return $usermeta_cache[ $user_id ][ $key ] = ( $meta = \get_user_meta( $user_id, $key, true ) ) && is_array( $meta ) ? $meta : array();
 	}
 
 	/**
@@ -926,7 +925,7 @@ class Site_Options extends Sanitize {
 
 		$meta[ $option ] = $value;
 
-		return update_user_meta( $user_id, THE_SEO_FRAMEWORK_USER_OPTIONS, $meta );
+		return \update_user_meta( $user_id, THE_SEO_FRAMEWORK_USER_OPTIONS, $meta );
 	}
 
 	/**

@@ -76,15 +76,15 @@ class Admin_Pages extends Inpost {
 	 */
 	public function enqueue_page_defaults() {
 
-		$this->page_defaults = (array) apply_filters(
+		$this->page_defaults = (array) \apply_filters(
 			'the_seo_framework_admin_page_defaults',
 			array(
-				'save_button_text'   => esc_html__( 'Save Settings', 'autodescription' ),
-				'reset_button_text'  => esc_html__( 'Reset Settings', 'autodescription' ),
-				'saved_notice_text'  => esc_html__( 'Settings are saved.', 'autodescription' ),
-				'reset_notice_text'  => esc_html__( 'Settings are reset.', 'autodescription' ),
-				'error_notice_text'  => esc_html__( 'Error saving settings.', 'autodescription' ),
-				'plugin_update_text' => esc_html__( 'New SEO Settings have been updated.', 'autodescription' ),
+				'save_button_text'   => \esc_html__( 'Save Settings', 'autodescription' ),
+				'reset_button_text'  => \esc_html__( 'Reset Settings', 'autodescription' ),
+				'saved_notice_text'  => \esc_html__( 'Settings are saved.', 'autodescription' ),
+				'reset_notice_text'  => \esc_html__( 'Settings are reset.', 'autodescription' ),
+				'error_notice_text'  => \esc_html__( 'Error saving settings.', 'autodescription' ),
+				'plugin_update_text' => \esc_html__( 'New SEO Settings have been updated.', 'autodescription' ),
 			)
 		);
 	}
@@ -99,8 +99,8 @@ class Admin_Pages extends Inpost {
 	public function add_menu_link() {
 
 		$menu = array(
-			'page_title' => esc_html__( 'SEO Settings', 'autodescription' ),
-			'menu_title' => esc_html__( 'SEO', 'autodescription' ),
+			'page_title' => \esc_html__( 'SEO Settings', 'autodescription' ),
+			'menu_title' => \esc_html__( 'SEO', 'autodescription' ),
 			'capability' => $this->settings_capability(),
 			'menu_slug'  => $this->seo_settings_page_slug,
 			'callback'   => array( $this, 'admin' ),
@@ -108,7 +108,7 @@ class Admin_Pages extends Inpost {
 			'position'   => '90.9001',
 		);
 
-		$this->seo_settings_page_hook = add_menu_page(
+		$this->seo_settings_page_hook = \add_menu_page(
 			$menu['page_title'],
 			$menu['menu_title'],
 			$menu['capability'],
@@ -122,7 +122,7 @@ class Admin_Pages extends Inpost {
 		 * Simply copy the previous, but rename the submenu entry.
 		 * The function add_submenu_page() takes care of the duplications.
 		 */
-		add_submenu_page(
+		\add_submenu_page(
 			$menu['menu_slug'],
 			$menu['page_title'],
 			$menu['page_title'],
@@ -132,10 +132,10 @@ class Admin_Pages extends Inpost {
 		);
 
 		//* Enqueue styles
-		add_action( 'admin_print_styles-' . $this->seo_settings_page_hook, array( $this, 'enqueue_admin_css' ), 11 );
+		\add_action( 'admin_print_styles-' . $this->seo_settings_page_hook, array( $this, 'enqueue_admin_css' ), 11 );
 
 		//* Enqueue scripts
-		add_action( 'admin_print_scripts-' . $this->seo_settings_page_hook, array( $this, 'enqueue_admin_javascript' ), 11 );
+		\add_action( 'admin_print_scripts-' . $this->seo_settings_page_hook, array( $this, 'enqueue_admin_javascript' ), 11 );
 
 	}
 
@@ -145,8 +145,8 @@ class Admin_Pages extends Inpost {
 	 * @since 2.2.2
 	 */
 	public function settings_init() {
-		add_action( $this->seo_settings_page_hook . '_settings_page_boxes', array( $this, 'do_metaboxes' ) );
-		add_action( 'load-' . $this->seo_settings_page_hook, array( $this, 'metaboxes' ) );
+		\add_action( $this->seo_settings_page_hook . '_settings_page_boxes', array( $this, 'do_metaboxes' ) );
+		\add_action( 'load-' . $this->seo_settings_page_hook, array( $this, 'metaboxes' ) );
 	}
 
 	/**
@@ -159,26 +159,26 @@ class Admin_Pages extends Inpost {
 		<div class="metabox-holder columns-2">
 			<div class="postbox-container-1">
 				<?php
-				do_action( 'the_seo_framework_before_siteadmin_metaboxes', $this->seo_settings_page_hook );
+				\do_action( 'the_seo_framework_before_siteadmin_metaboxes', $this->seo_settings_page_hook );
 
-				do_meta_boxes( $this->seo_settings_page_hook, 'main', null );
+				\do_meta_boxes( $this->seo_settings_page_hook, 'main', null );
 
 				if ( isset( $GLOBALS['wp_meta_boxes'][ $this->seo_settings_page_hook ]['main_extra'] ) )
-					do_meta_boxes( $this->seo_settings_page_hook, 'main_extra', null );
+					\do_meta_boxes( $this->seo_settings_page_hook, 'main_extra', null );
 
-				do_action( 'the_seo_framework_after_siteadmin_metaboxes', $this->seo_settings_page_hook );
+				\do_action( 'the_seo_framework_after_siteadmin_metaboxes', $this->seo_settings_page_hook );
 				?>
 			</div>
 			<div class="postbox-container-2">
 				<?php
-				do_action( 'the_seo_framework_before_siteadmin_metaboxes_side', $this->seo_settings_page_hook );
+				\do_action( 'the_seo_framework_before_siteadmin_metaboxes_side', $this->seo_settings_page_hook );
 
 				/**
 				 * @TODO fill this in
 				 * @priority low 2.9.0
 				 */
 
-				do_action( 'the_seo_framework_after_siteadmin_metaboxes_side', $this->seo_settings_page_hook );
+				\do_action( 'the_seo_framework_after_siteadmin_metaboxes_side', $this->seo_settings_page_hook );
 				?>
 			</div>
 		</div>
@@ -210,22 +210,22 @@ class Admin_Pages extends Inpost {
 		 * @since 2.2.4
 		 * @since 2.8.0: Added `the_seo_framework_general_metabox` filter.
 		 */
-		$general     = (bool) apply_filters( 'the_seo_framework_general_metabox', true );
-		$title       = (bool) apply_filters( 'the_seo_framework_title_metabox', true );
-		$description = (bool) apply_filters( 'the_seo_framework_description_metabox', true );
-		$robots      = (bool) apply_filters( 'the_seo_framework_robots_metabox', true );
-		$home        = (bool) apply_filters( 'the_seo_framework_home_metabox', true );
-		$social      = (bool) apply_filters( 'the_seo_framework_social_metabox', true );
-		$schema      = (bool) apply_filters( 'the_seo_framework_schema_metabox', true );
-		$webmaster   = (bool) apply_filters( 'the_seo_framework_webmaster_metabox', true );
-		$sitemap     = (bool) apply_filters( 'the_seo_framework_sitemap_metabox', true );
-		$feed        = (bool) apply_filters( 'the_seo_framework_feed_metabox', true );
+		$general     = (bool) \apply_filters( 'the_seo_framework_general_metabox', true );
+		$title       = (bool) \apply_filters( 'the_seo_framework_title_metabox', true );
+		$description = (bool) \apply_filters( 'the_seo_framework_description_metabox', true );
+		$robots      = (bool) \apply_filters( 'the_seo_framework_robots_metabox', true );
+		$home        = (bool) \apply_filters( 'the_seo_framework_home_metabox', true );
+		$social      = (bool) \apply_filters( 'the_seo_framework_social_metabox', true );
+		$schema      = (bool) \apply_filters( 'the_seo_framework_schema_metabox', true );
+		$webmaster   = (bool) \apply_filters( 'the_seo_framework_webmaster_metabox', true );
+		$sitemap     = (bool) \apply_filters( 'the_seo_framework_sitemap_metabox', true );
+		$feed        = (bool) \apply_filters( 'the_seo_framework_feed_metabox', true );
 
 		//* Title Meta Box
 		if ( $general )
-			add_meta_box(
+			\add_meta_box(
 				'autodescription-general-settings',
-				esc_html__( 'General Settings', 'autodescription' ),
+				\esc_html__( 'General Settings', 'autodescription' ),
 				array( $this, 'general_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
@@ -234,9 +234,9 @@ class Admin_Pages extends Inpost {
 
 		//* Title Meta Box
 		if ( $title )
-			add_meta_box(
+			\add_meta_box(
 				'autodescription-title-settings',
-				esc_html__( 'Title Settings', 'autodescription' ),
+				\esc_html__( 'Title Settings', 'autodescription' ),
 				array( $this, 'title_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
@@ -245,9 +245,9 @@ class Admin_Pages extends Inpost {
 
 		//* Description Meta Box
 		if ( $description )
-			add_meta_box(
+			\add_meta_box(
 				'autodescription-description-settings',
-				esc_html__( 'Description Meta Settings', 'autodescription' ),
+				\esc_html__( 'Description Meta Settings', 'autodescription' ),
 				array( $this, 'description_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
@@ -256,9 +256,9 @@ class Admin_Pages extends Inpost {
 
 		//* Home Page Meta Box
 		if ( $home )
-			add_meta_box(
+			\add_meta_box(
 				'autodescription-homepage-settings',
-				esc_html__( 'Home Page Settings', 'autodescription' ),
+				\esc_html__( 'Home Page Settings', 'autodescription' ),
 				array( $this, 'homepage_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
@@ -267,9 +267,9 @@ class Admin_Pages extends Inpost {
 
 		//* Social Meta Box
 		if ( $social )
-			add_meta_box(
+			\add_meta_box(
 				'autodescription-social-settings',
-				esc_html__( 'Social Meta Settings', 'autodescription' ),
+				\esc_html__( 'Social Meta Settings', 'autodescription' ),
 				array( $this, 'social_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
@@ -278,9 +278,9 @@ class Admin_Pages extends Inpost {
 
 		//* Title Meta Box
 		if ( $schema )
-			add_meta_box(
+			\add_meta_box(
 				'autodescription-schema-settings',
-				esc_html__( 'Schema Settings', 'autodescription' ),
+				\esc_html__( 'Schema Settings', 'autodescription' ),
 				array( $this, 'schema_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
@@ -289,9 +289,9 @@ class Admin_Pages extends Inpost {
 
 		//* Robots Meta Box
 		if ( $robots )
-			add_meta_box(
+			\add_meta_box(
 				'autodescription-robots-settings',
-				esc_html__( 'Robots Meta Settings', 'autodescription' ),
+				\esc_html__( 'Robots Meta Settings', 'autodescription' ),
 				array( $this, 'robots_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
@@ -300,9 +300,9 @@ class Admin_Pages extends Inpost {
 
 		//* Webmaster Meta Box
 		if ( $webmaster )
-			add_meta_box(
+			\add_meta_box(
 				'autodescription-webmaster-settings',
-				esc_html__( 'Webmaster Meta Settings', 'autodescription' ),
+				\esc_html__( 'Webmaster Meta Settings', 'autodescription' ),
 				array( $this, 'webmaster_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
@@ -311,9 +311,9 @@ class Admin_Pages extends Inpost {
 
 		//* Sitemaps Meta Box
 		if ( $sitemap )
-			add_meta_box(
+			\add_meta_box(
 				'autodescription-sitemap-settings',
-				esc_html__( 'Sitemap Settings', 'autodescription' ),
+				\esc_html__( 'Sitemap Settings', 'autodescription' ),
 				array( $this, 'sitemaps_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
@@ -322,9 +322,9 @@ class Admin_Pages extends Inpost {
 
 		//* Feed Meta Box
 		if ( $feed )
-			add_meta_box(
+			\add_meta_box(
 				'autodescription-feed-settings',
-				esc_html__( 'Feed Settings', 'autodescription' ),
+				\esc_html__( 'Feed Settings', 'autodescription' ),
 				array( $this, 'feed_metabox' ),
 				$this->seo_settings_page_hook,
 				'main',
@@ -344,26 +344,26 @@ class Admin_Pages extends Inpost {
 		<div class="wrap tsf-metaboxes">
 		<form method="post" action="options.php">
 
-			<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
-			<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
-			<?php settings_fields( $this->settings_field ); ?>
+			<?php \wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
+			<?php \wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
+			<?php \settings_fields( $this->settings_field ); ?>
 
 			<div class="tsf-top-wrap">
-				<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+				<h1><?php echo \esc_html( \get_admin_page_title() ); ?></h1>
 				<p class="tsf-top-buttons">
 					<?php
-					submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
-					submit_button( $this->page_defaults['reset_button_text'], 'secondary autodescription-js-confirm-reset', $this->get_field_name( 'reset' ), false, array( 'id' => '' ) );
+					\submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
+					\submit_button( $this->page_defaults['reset_button_text'], 'secondary autodescription-js-confirm-reset', $this->get_field_name( 'reset' ), false, array( 'id' => '' ) );
 					?>
 				</p>
 			</div>
 
-			<?php do_action( "{$this->seo_settings_page_hook}_settings_page_boxes", $this->seo_settings_page_hook ); ?>
+			<?php \do_action( "{$this->seo_settings_page_hook}_settings_page_boxes", $this->seo_settings_page_hook ); ?>
 
 			<div class="tsf-bottom-buttons">
 				<?php
-				submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
-				submit_button( $this->page_defaults['reset_button_text'], 'secondary autodescription-js-confirm-reset', $this->get_field_name( 'reset' ), false, array( 'id' => '' ) );
+				\submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
+				\submit_button( $this->page_defaults['reset_button_text'], 'secondary autodescription-js-confirm-reset', $this->get_field_name( 'reset' ), false, array( 'id' => '' ) );
 				?>
 			</div>
 		</form>
@@ -371,7 +371,7 @@ class Admin_Pages extends Inpost {
 		<?php // Add postbox listeners ?>
 		<script type="text/javascript">
 			//<![CDATA[
-			jQuery(document).ready( function ($) {
+			jQuery(document).ready( function($) {
 				// close postboxes that should be closed
 				$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
 				// postboxes setup
@@ -435,7 +435,7 @@ class Admin_Pages extends Inpost {
 	 * @param string $name Field name base
 	 */
 	public function field_name( $name ) {
-		echo esc_attr( $this->get_field_name( $name ) );
+		echo \esc_attr( $this->get_field_name( $name ) );
 	}
 
 	/**
@@ -463,7 +463,7 @@ class Admin_Pages extends Inpost {
 	public function field_id( $id, $echo = true ) {
 
 		if ( $echo ) {
-			echo esc_attr( $this->get_field_id( $id ) );
+			echo \esc_attr( $this->get_field_id( $id ) );
 		} else {
 			return $this->get_field_id( $id );
 		}
@@ -492,7 +492,7 @@ class Admin_Pages extends Inpost {
 	 * @param string $key Field key
 	 */
 	public function field_value( $key ) {
-		echo esc_attr( $this->get_field_value( $key ) );
+		echo \esc_attr( $this->get_field_value( $key ) );
 	}
 
 	/**
@@ -532,8 +532,8 @@ class Admin_Pages extends Inpost {
 	public function make_checkbox( $field_id = '', $label = '', $description = '', $escape = true ) {
 
 		if ( $escape ) {
-			$description = esc_html( $description );
-			$label = esc_html( $label );
+			$description = \esc_html( $description );
+			$label = \esc_html( $label );
 		}
 
 		$description = $description ? '<p class="description tsf-option-spacer">' . $description . '</p>' : '';
@@ -546,7 +546,7 @@ class Admin_Pages extends Inpost {
 							. 'id="' . $this->get_field_id( $field_id ) . '" '
 							. $this->get_is_conditional_checked( $field_id ) . ' '
 							. 'value="1" '
-							. checked( $this->get_field_value( $field_id ), true, false ) .
+							. \checked( $this->get_field_value( $field_id ), true, false ) .
 						' />'
 						. $label
 					. '</label>'
@@ -570,9 +570,9 @@ class Admin_Pages extends Inpost {
 	public function make_info( $description = '', $link = '', $echo = true ) {
 
 		if ( $link ) {
-			$output = '<a href="' . esc_url( $link ) . '" target="_blank" title="' . esc_attr( $description ) . '">[?]</a>';
+			$output = '<a href="' . \esc_url( $link ) . '" target="_blank" title="' . \esc_attr( $description ) . '">[?]</a>';
 		} else {
-			$output = '<span title="' . esc_attr( $description ) . '">[?]</span>';
+			$output = '<span title="' . \esc_attr( $description ) . '">[?]</span>';
 		}
 
 		if ( $echo ) {
@@ -590,7 +590,7 @@ class Admin_Pages extends Inpost {
 	 */
 	public function load_assets() {
 		//* Hook scripts method
-		add_action( "load-{$this->seo_settings_page_hook}", array( $this, 'metabox_scripts' ) );
+		\add_action( "load-{$this->seo_settings_page_hook}", array( $this, 'metabox_scripts' ) );
 	}
 
 	/**
@@ -599,9 +599,9 @@ class Admin_Pages extends Inpost {
 	 * @since 2.2.2
 	 */
 	public function metabox_scripts() {
-		wp_enqueue_script( 'common' );
-		wp_enqueue_script( 'wp-lists' );
-		wp_enqueue_script( 'postbox' );
+		\wp_enqueue_script( 'common' );
+		\wp_enqueue_script( 'wp-lists' );
+		\wp_enqueue_script( 'postbox' );
 	}
 
 	/**
@@ -628,9 +628,9 @@ class Admin_Pages extends Inpost {
 
 		if ( $echo ) {
 			if ( $wrap ) {
-				printf( 'class="%s"', esc_attr( $class ) );
+				printf( 'class="%s"', \esc_attr( $class ) );
 			} else {
-				echo esc_attr( $class );
+				echo \esc_attr( $class );
 			}
 		} else {
 			if ( $wrap )
@@ -662,9 +662,9 @@ class Admin_Pages extends Inpost {
 
 		if ( $echo ) {
 			if ( $wrap ) {
-				printf( 'class="%s"', esc_attr( $class ) );
+				printf( 'class="%s"', \esc_attr( $class ) );
 			} else {
-				echo esc_attr( $class );
+				echo \esc_attr( $class );
 			}
 		} else {
 			if ( $wrap )
@@ -717,9 +717,9 @@ class Admin_Pages extends Inpost {
 
 		if ( $echo ) {
 			if ( $wrap ) {
-				printf( 'class="%s"', esc_attr( $class ) );
+				printf( 'class="%s"', \esc_attr( $class ) );
 			} else {
-				echo esc_attr( $class );
+				echo \esc_attr( $class );
 			}
 		} else {
 			if ( $wrap )
@@ -755,9 +755,9 @@ class Admin_Pages extends Inpost {
 
 		if ( $echo ) {
 			if ( $wrap ) {
-				printf( 'class="%s"', esc_attr( $class ) );
+				printf( 'class="%s"', \esc_attr( $class ) );
 			} else {
-				echo esc_attr( $class );
+				echo \esc_attr( $class );
 			}
 		} else {
 			if ( $wrap )

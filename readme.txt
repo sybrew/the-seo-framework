@@ -521,6 +521,7 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 	* Method `the_seo_framework()->_doing_it_wrong()` now has correctly translatable notices. Credit [pedro-mendonca](https://github.com/pedro-mendonca).
 	* The previously named "Knowledge Graph" netabox "Social Sites" tab title now is translatable. Credit [pedro-mendonca](https://github.com/pedro-mendonca).
 	* Method `the_seo_framework()->get_user_meta()` now no longer returns a string when no metadata has been initialized. Instead it will return an empty array.
+	* Globals `$blog_id` is no longer converted to string on post/page update.
 * **Deprecated:**
 	* Method `the_seo_framework()->search_filter()`. It's a very slow method as it uses the (deprecated method) `get_excluded_search_ids()`. There's no replacement.
 		* This method was already stopped being used in 2.7.0.

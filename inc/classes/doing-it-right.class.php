@@ -56,10 +56,10 @@ class Doing_It_Right extends Generate_Ldjson {
 			 * Applies filters `the_seo_framework_allow_states` : boolean Whether to allow post states output.
 			 * @since 2.1.0
 			 */
-			$allow_states = (bool) apply_filters( 'the_seo_framework_allow_states', true );
+			$allow_states = (bool) \apply_filters( 'the_seo_framework_allow_states', true );
 
 			if ( $allow_states )
-				add_filter( 'display_post_states', array( $this, 'add_post_state' ), 10, 2 );
+				\add_filter( 'display_post_states', array( $this, 'add_post_state' ), 10, 2 );
 		}
 	}
 
@@ -79,7 +79,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			$searchexclude = (bool) $this->get_custom_field( 'exclude_local_search', $post_id );
 
 			if ( $searchexclude )
-				$states[] = esc_html__( 'No Search', 'autodescription' );
+				$states[] = \esc_html__( 'No Search', 'autodescription' );
 		}
 
 		return $states;
@@ -95,12 +95,12 @@ class Doing_It_Right extends Generate_Ldjson {
 		/**
 		 * Securely check the referrer, instead of leaving holes everywhere.
 		 */
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX && check_ajax_referer( 'add-tag', '_wpnonce_add-tag', false ) ) {
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX && \check_ajax_referer( 'add-tag', '_wpnonce_add-tag', false ) ) {
 
 			$taxonomy = ! empty( $_POST['taxonomy'] ) ? $_POST['taxonomy'] : 'post_tag';
-			$tax = get_taxonomy( $taxonomy );
+			$tax = \get_taxonomy( $taxonomy );
 
-			if ( current_user_can( $tax->cap->edit_terms ) )
+			if ( \current_user_can( $tax->cap->edit_terms ) )
 				$this->init_columns( '', true );
 		}
 	}
@@ -117,7 +117,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 */
 	public function init_columns( $screen = '', $doing_ajax = false ) {
 
-		$show_seo_column = (bool) apply_filters( 'the_seo_framework_show_seo_column', true );
+		$show_seo_column = (bool) \apply_filters( 'the_seo_framework_show_seo_column', true );
 
 		if ( $doing_ajax ) {
 			$post_type = isset( $_POST['post_type'] ) ? $_POST['post_type'] : '';
@@ -132,26 +132,26 @@ class Doing_It_Right extends Generate_Ldjson {
 				$taxonomy = isset( $_POST['taxonomy'] ) ? $_POST['taxonomy'] : false;
 
 				if ( $taxonomy && $id ) {
-					add_filter( 'manage_' . $id . '_columns', array( $this, 'add_column' ), 1 );
-					add_action( 'manage_' . $taxonomy . '_custom_column', array( $this, 'seo_bar_ajax' ), 1, 3 );
+					\add_filter( 'manage_' . $id . '_columns', array( $this, 'add_column' ), 1 );
+					\add_action( 'manage_' . $taxonomy . '_custom_column', array( $this, 'seo_bar_ajax' ), 1, 3 );
 				}
 			} else {
 				$id = isset( $screen->id ) ? $screen->id : '';
 
 				if ( '' !== $id && $this->is_wp_lists_edit() ) {
-					add_filter( 'manage_' . $id . '_columns', array( $this, 'add_column' ), 10, 1 );
+					\add_filter( 'manage_' . $id . '_columns', array( $this, 'add_column' ), 10, 1 );
 
 					$taxonomy = isset( $screen->taxonomy ) ? $screen->taxonomy : '';
 
 					if ( $taxonomy )
-						add_action( 'manage_' . $taxonomy . '_custom_column', array( $this, 'seo_bar' ), 1, 3 );
+						\add_action( 'manage_' . $taxonomy . '_custom_column', array( $this, 'seo_bar' ), 1, 3 );
 
 					/**
 					 * Always load pages and posts.
 					 * Many CPT plugins rely on these.
 					 */
-					add_action( 'manage_posts_custom_column', array( $this, 'seo_bar' ), 1, 3 );
-					add_action( 'manage_pages_custom_column', array( $this, 'seo_bar' ), 1, 3 );
+					\add_action( 'manage_posts_custom_column', array( $this, 'seo_bar' ), 1, 3 );
+					\add_action( 'manage_pages_custom_column', array( $this, 'seo_bar' ), 1, 3 );
 				}
 			}
 		}
@@ -226,10 +226,10 @@ class Doing_It_Right extends Generate_Ldjson {
 		static $type = null;
 
 		if ( ! isset( $type ) ) {
-			$type = get_post_type( $post_id );
+			$type = \get_post_type( $post_id );
 
 			if ( false === $type || '' !== $tax_id ) {
-				$screen = (object) get_current_screen();
+				$screen = (object) \get_current_screen();
 
 				if ( isset( $screen->taxonomy ) )
 					$type = $screen->taxonomy;
@@ -274,7 +274,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		}
 
 		if ( 'tsf-seo-bar-wrap' === $column ) {
-			$context = esc_html__( 'Refresh to see the SEO Bar status.', 'autodescription' );
+			$context = \esc_html__( 'Refresh to see the SEO Bar status.', 'autodescription' );
 
 			$ajax_id = $column . $post_id;
 
@@ -954,7 +954,7 @@ class Doing_It_Right extends Generate_Ldjson {
 					$desc_value = ctype_upper( $desc_value ) ? $desc_value : ucfirst( $desc_value );
 
 					/* translators: 1: Word, 2: Occurences */
-					$notice .= sprintf( esc_attr__( '%1$s is used %2$d times.', 'autodescription' ), '<span>' . $desc_value . '</span>', $desc_count );
+					$notice .= sprintf( \esc_attr__( '%1$s is used %2$d times.', 'autodescription' ), '<span>' . $desc_value . '</span>', $desc_count );
 
 					//* Don't add break at last occurence.
 					$notice .= $i === $count ? '' : '<br>';
@@ -1042,7 +1042,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		if ( false === $this->is_blog_public() ) {
 			$but_and = isset( $ind_but ) ? $and_i18n : $but_i18n;
 			/* translators: %s = But or And */
-			$ind_notice .= '<br>' . sprintf( esc_attr__( "%s the blog isn't set to public. This means WordPress discourages indexing.", 'autodescription' ), $but_and );
+			$ind_notice .= '<br>' . sprintf( \esc_attr__( "%s the blog isn't set to public. This means WordPress discourages indexing.", 'autodescription' ), $but_and );
 			$ind_class = $bad;
 			$ind_but = true;
 		}
@@ -1056,7 +1056,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			$but_and = isset( $ind_but ) ? $and_i18n : $but_i18n;
 
 			/* translators: %s = But or And */
-			$ind_notice .= '<br>' . sprintf( esc_attr__( '%s there are no posts in this term; therefore, indexing has been disabled.', 'autodescription' ), $but_and );
+			$ind_notice .= '<br>' . sprintf( \esc_attr__( '%s there are no posts in this term; therefore, indexing has been disabled.', 'autodescription' ), $but_and );
 			//* Don't make it unknown if it's not good.
 			$ind_class = $ind_class !== $good ? $ind_class : $unknown;
 		}
@@ -1140,13 +1140,13 @@ class Doing_It_Right extends Generate_Ldjson {
 		$follow_short = $i18n['follow_short'];
 
 		if ( $nofollow ) {
-			$fol_notice = $follow_i18n . ' ' . sprintf( esc_attr__( "%s links aren't being followed.", 'autodescription' ), $post_i18n );
+			$fol_notice = $follow_i18n . ' ' . sprintf( \esc_attr__( "%s links aren't being followed.", 'autodescription' ), $post_i18n );
 			$fol_class = $unknown;
 			$fol_but = true;
 
 			$followed = false;
 		} else {
-			$fol_notice = $follow_i18n . ' ' . sprintf( esc_attr__( '%s links are being followed.', 'autodescription' ), $post_i18n );
+			$fol_notice = $follow_i18n . ' ' . sprintf( \esc_attr__( '%s links are being followed.', 'autodescription' ), $post_i18n );
 			$fol_class = $good;
 		}
 
@@ -1158,7 +1158,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		if ( $this->is_option_checked( 'site_nofollow' ) ) {
 			$but_and = isset( $fol_but ) ? $and_i18n : $but_i18n;
 			/* translators: %s = But or And */
-			$fol_notice .= '<br>' . sprintf( esc_attr__( "%s you've disabled the following of links for the whole site.", 'autodescription' ), $but_and );
+			$fol_notice .= '<br>' . sprintf( \esc_attr__( "%s you've disabled the following of links for the whole site.", 'autodescription' ), $but_and );
 			$fol_class = $unknown;
 			$fol_but = true;
 
@@ -1184,7 +1184,7 @@ class Doing_It_Right extends Generate_Ldjson {
 				$label = $this->get_the_term_name( $term, false );
 
 				/* translators: 1: But or And, 2: Current taxonomy term plural label */
-				$fol_notice .= '<br>' . sprintf( esc_attr__( '%1$s following for %2$s have been disabled.', 'autodescription' ), $but_and, $label );
+				$fol_notice .= '<br>' . sprintf( \esc_attr__( '%1$s following for %2$s have been disabled.', 'autodescription' ), $but_and, $label );
 				$fol_class = $unknown;
 
 				$followed = false;
@@ -1196,7 +1196,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			$but_and = $followed || ! isset( $fol_but ) ? $and_i18n : $but_i18n;
 
 			/* translators: %s = But or And */
-			$fol_notice .= '<br>' . sprintf( esc_attr__( "%s the blog isn't set to public. This means WordPress allows the links to be followed regardless.", 'autodescription' ), $but_and );
+			$fol_notice .= '<br>' . sprintf( \esc_attr__( "%s the blog isn't set to public. This means WordPress allows the links to be followed regardless.", 'autodescription' ), $but_and );
 			$fol_class = $followed ? $fol_class : $okay;
 			$fol_but = true;
 
@@ -1248,12 +1248,12 @@ class Doing_It_Right extends Generate_Ldjson {
 		$archive_short = $i18n['archive_short'];
 
 		if ( $noarchive ) {
-			$arc_notice = $archive_i18n . ' ' . sprintf( esc_attr__( "Search Engine aren't allowed to archive this %s.", 'autodescription' ), $post_low );
+			$arc_notice = $archive_i18n . ' ' . sprintf( \esc_attr__( "Search Engine aren't allowed to archive this %s.", 'autodescription' ), $post_low );
 			$arc_class = $unknown;
 			$archived = false;
 			$arc_but = true;
 		} else {
-			$arc_notice = $archive_i18n . ' ' . sprintf( esc_attr__( 'Search Engine are allowed to archive this %s.', 'autodescription' ), $post_low );
+			$arc_notice = $archive_i18n . ' ' . sprintf( \esc_attr__( 'Search Engine are allowed to archive this %s.', 'autodescription' ), $post_low );
 			$arc_class = $good;
 		}
 
@@ -1265,7 +1265,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		if ( $this->is_option_checked( 'site_noarchive' ) ) {
 			$but_and = isset( $arc_but ) ? $and_i18n : $but_i18n;
 
-			$arc_notice .= '<br>' . sprintf( esc_attr__( "But you've disabled archiving for the whole site.", 'autodescription' ), $but_and );
+			$arc_notice .= '<br>' . sprintf( \esc_attr__( "But you've disabled archiving for the whole site.", 'autodescription' ), $but_and );
 			$arc_class = $unknown;
 			$arc_but = true;
 
@@ -1291,7 +1291,7 @@ class Doing_It_Right extends Generate_Ldjson {
 				$label = $this->get_the_term_name( $term, false );
 
 				/* translators: 1: But or And, 2: Current taxonomy term plural label */
-				$arc_notice .= '<br>' . sprintf( esc_attr__( '%1$s archiving for %2$s have been disabled.', 'autodescription' ), $but_and, $label );
+				$arc_notice .= '<br>' . sprintf( \esc_attr__( '%1$s archiving for %2$s have been disabled.', 'autodescription' ), $but_and, $label );
 				$arc_class = $unknown;
 				$arc_but = true;
 
@@ -1304,7 +1304,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			$but_and = $archived || ! isset( $arc_but ) ? $and_i18n : $but_i18n;
 
 			/* translators: %s = But or And */
-			$arc_notice .= '<br>' . sprintf( esc_attr__( "%s the blog isn't set to public. This means WordPress allows the blog to be archived regardless.", 'autodescription' ), $but_and );
+			$arc_notice .= '<br>' . sprintf( \esc_attr__( "%s the blog isn't set to public. This means WordPress allows the blog to be archived regardless.", 'autodescription' ), $but_and );
 			$arc_but = true;
 
 			$arc_class = $archived ? $arc_class : $okay;
@@ -1350,7 +1350,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			$redirect_i18n = $i18n['redirect'];
 			$redirect_short = $i18n['redirect_short'];
 
-			$red_notice = $redirect_i18n . ' ' . sprintf( esc_attr__( "%s isn't being redirected.", 'autodescription' ), $post );
+			$red_notice = $redirect_i18n . ' ' . sprintf( \esc_attr__( "%s isn't being redirected.", 'autodescription' ), $post );
 			$red_class = $classes['good'];
 
 			$red_wrap_args = array(
@@ -1392,10 +1392,10 @@ class Doing_It_Right extends Generate_Ldjson {
 		if ( $redirect && $noindex ) {
 			//* Redirect and noindex found, why bother showing SEO info?
 
-			$red_notice = $i18n['redirect'] . ' ' . sprintf( esc_attr__( '%s is being redirected. This means no SEO values have to be set.', 'autodescription' ), $post );
+			$red_notice = $i18n['redirect'] . ' ' . sprintf( \esc_attr__( '%s is being redirected. This means no SEO values have to be set.', 'autodescription' ), $post );
 			$red_class = $classes['unknown'];
 
-			$noi_notice = $i18n['index'] . ' ' . sprintf( esc_attr__( '%s is not being indexed. This means no SEO values have to be set.', 'autodescription' ), $post );
+			$noi_notice = $i18n['index'] . ' ' . sprintf( \esc_attr__( '%s is not being indexed. This means no SEO values have to be set.', 'autodescription' ), $post );
 			$noi_class = $classes['unknown'];
 
 			$red_wrap_args = array(
@@ -1421,7 +1421,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		} elseif ( $redirect && false === $noindex ) {
 			//* Redirect found, why bother showing SEO info?
 
-			$red_notice = $i18n['redirect'] . ' ' . sprintf( esc_attr__( '%s is being redirected. This means no SEO values have to be set.', 'autodescription' ), $post );
+			$red_notice = $i18n['redirect'] . ' ' . sprintf( \esc_attr__( '%s is being redirected. This means no SEO values have to be set.', 'autodescription' ), $post );
 			$red_class = $classes['unknown'];
 
 			$red_wrap_args = array(
@@ -1437,7 +1437,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		} elseif ( $noindex && false === $redirect ) {
 			//* Noindex found, why bother showing SEO info?
 
-			$noi_notice = $i18n['index'] . ' ' . sprintf( esc_attr__( '%s is not being indexed. This means no SEO values have to be set.', 'autodescription' ), $post );
+			$noi_notice = $i18n['index'] . ' ' . sprintf( \esc_attr__( '%s is not being indexed. This means no SEO values have to be set.', 'autodescription' ), $post );
 			$noi_class = $classes['unknown'];
 
 			$noi_wrap_args = array(
@@ -1551,31 +1551,31 @@ class Doing_It_Right extends Generate_Ldjson {
 			return $i18n;
 
 		return $i18n = array(
-			'title'       => esc_attr__( 'Title:', 'autodescription' ),
-			'description' => esc_attr__( 'Description:', 'autodescription' ),
-			'index'       => esc_attr__( 'Index:', 'autodescription' ),
-			'follow'      => esc_attr__( 'Follow:', 'autodescription' ),
-			'archive'     => esc_attr__( 'Archive:', 'autodescription' ),
-			'redirect'    => esc_attr__( 'Redirect:', 'autodescription' ),
+			'title'       => \esc_attr__( 'Title:', 'autodescription' ),
+			'description' => \esc_attr__( 'Description:', 'autodescription' ),
+			'index'       => \esc_attr__( 'Index:', 'autodescription' ),
+			'follow'      => \esc_attr__( 'Follow:', 'autodescription' ),
+			'archive'     => \esc_attr__( 'Archive:', 'autodescription' ),
+			'redirect'    => \esc_attr__( 'Redirect:', 'autodescription' ),
 
-			'generated' => esc_attr__( 'Generated: Automatically generated.', 'autodescription' ),
+			'generated' => \esc_attr__( 'Generated: Automatically generated.', 'autodescription' ),
 
-			'generated_short'   => esc_html_x( 'G', 'Generated', 'autodescription' ),
-			'title_short'       => esc_html_x( 'T', 'Title', 'autodescription' ),
-			'description_short' => esc_html_x( 'D', 'Description', 'autodescription' ),
-			'index_short'       => esc_html_x( 'I', 'no-Index', 'autodescription' ),
-			'follow_short'      => esc_html_x( 'F', 'no-Follow', 'autodescription' ),
-			'archive_short'     => esc_html_x( 'A', 'no-Archive', 'autodescription' ),
-			'redirect_short'    => esc_html_x( 'R', 'Redirect', 'autodescription' ),
+			'generated_short'   => \esc_html_x( 'G', 'Generated', 'autodescription' ),
+			'title_short'       => \esc_html_x( 'T', 'Title', 'autodescription' ),
+			'description_short' => \esc_html_x( 'D', 'Description', 'autodescription' ),
+			'index_short'       => \esc_html_x( 'I', 'no-Index', 'autodescription' ),
+			'follow_short'      => \esc_html_x( 'F', 'no-Follow', 'autodescription' ),
+			'archive_short'     => \esc_html_x( 'A', 'no-Archive', 'autodescription' ),
+			'redirect_short'    => \esc_html_x( 'R', 'Redirect', 'autodescription' ),
 
-			'but' => esc_attr_x( 'But', 'But there are...', 'autodescription' ),
-			'and' => esc_attr_x( 'And', 'And there are...', 'autodescription' ),
+			'but' => \esc_attr_x( 'But', 'But there are...', 'autodescription' ),
+			'and' => \esc_attr_x( 'And', 'And there are...', 'autodescription' ),
 
-			'length_far_too_short' => ' ' . esc_attr__( 'Length is far too short.', 'autodescription' ),
-			'length_too_short'     => ' ' . esc_attr__( 'Length is too short.', 'autodescription' ),
-			'length_too_long'      => ' ' . esc_attr__( 'Length is too long.', 'autodescription' ),
-			'length_far_too_long'  => ' ' . esc_attr__( 'Length is far too long.', 'autodescription' ),
-			'length_good'          => ' ' . esc_attr__( 'Length is good.', 'autodescription' ),
+			'length_far_too_short' => ' ' . \esc_attr__( 'Length is far too short.', 'autodescription' ),
+			'length_too_short'     => ' ' . \esc_attr__( 'Length is too short.', 'autodescription' ),
+			'length_too_long'      => ' ' . \esc_attr__( 'Length is too long.', 'autodescription' ),
+			'length_far_too_long'  => ' ' . \esc_attr__( 'Length is far too long.', 'autodescription' ),
+			'length_good'          => ' ' . \esc_attr__( 'Length is good.', 'autodescription' ),
 		);
 	}
 
@@ -1596,6 +1596,6 @@ class Doing_It_Right extends Generate_Ldjson {
 		if ( isset( $cache ) )
 			return $cache;
 
-		return $cache = (bool) apply_filters( 'the_seo_framework_seo_bar_pill', false );
+		return $cache = (bool) \apply_filters( 'the_seo_framework_seo_bar_pill', false );
 	}
 }

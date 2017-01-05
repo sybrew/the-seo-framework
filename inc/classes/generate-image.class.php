@@ -92,7 +92,7 @@ class Generate_Image extends Generate_Url {
 
 		//* 2. Fetch image from fallback filter 1
 		if ( empty( $image ) )
-			$image = (string) apply_filters( 'the_seo_framework_og_image_after_featured', '', $args['post_id'] );
+			$image = (string) \apply_filters( 'the_seo_framework_og_image_after_featured', '', $args['post_id'] );
 
 		//* 3. Fallback: Get header image if exists
 		if ( empty( $image ) && ( $all_allowed || false === in_array( 'header', $args['disallowed'], true ) ) && current_theme_supports( 'custom-header', 'default-image' ) )
@@ -100,14 +100,14 @@ class Generate_Image extends Generate_Url {
 
 		//* 4. Fetch image from fallback filter 2
 		if ( empty( $image ) )
-			$image = (string) apply_filters( 'the_seo_framework_og_image_after_header', '', $args['post_id'] );
+			$image = (string) \apply_filters( 'the_seo_framework_og_image_after_header', '', $args['post_id'] );
 
 		//* 5. Get the WP 4.3.0 Site Icon
 		if ( empty( $image ) && ( $all_allowed || false === in_array( 'icon', $args['disallowed'], true ) ) )
 			$image = $this->site_icon( 'full', true );
 
 		if ( $escape && $image )
-			return esc_url( $image );
+			return \esc_url( $image );
 
 		return $image;
 	}
@@ -150,7 +150,7 @@ class Generate_Image extends Generate_Url {
 				'disallowed' => array(),
 			);
 
-			$defaults = (array) apply_filters( 'the_seo_framework_og_image_args', $defaults, $args );
+			$defaults = (array) \apply_filters( 'the_seo_framework_og_image_args', $defaults, $args );
 		}
 
 		//* Return early if it's only a default args request.
@@ -213,7 +213,7 @@ class Generate_Image extends Generate_Url {
 		if ( ! isset( $args['post_id'] ) )
 			$args['post_id'] = $this->get_the_real_ID();
 
-		$id = get_post_thumbnail_id( $args['post_id'] );
+		$id = \get_post_thumbnail_id( $args['post_id'] );
 
 		$args['get_the_real_ID'] = true;
 
@@ -242,8 +242,8 @@ class Generate_Image extends Generate_Url {
 
 		$post_id = $this->get_the_real_ID();
 
-		if ( metadata_exists( 'post', $post_id, '_product_image_gallery' ) ) {
-			$product_image_gallery = get_post_meta( $post_id, '_product_image_gallery', true );
+		if ( \metadata_exists( 'post', $post_id, '_product_image_gallery' ) ) {
+			$product_image_gallery = \get_post_meta( $post_id, '_product_image_gallery', true );
 
 			$attachment_ids = array_filter( explode( ',', $product_image_gallery ) );
 		}
@@ -279,7 +279,7 @@ class Generate_Image extends Generate_Url {
 		if ( empty( $args ) )
 			$args = $this->reparse_image_args( $args );
 
-		$src = wp_get_attachment_image_src( $id, $args['size'], $args['icon'], $args['attr'] );
+		$src = \wp_get_attachment_image_src( $id, $args['size'], $args['icon'], $args['attr'] );
 
 		$i = $src[0]; // Source URL
 		$w = $src[1]; // Width
@@ -301,7 +301,7 @@ class Generate_Image extends Generate_Url {
 			}
 
 			//* Get path of image and load it into the wp_get_image_editor
-			$i_file_path = get_attached_file( $id );
+			$i_file_path = \get_attached_file( $id );
 			$i_file_ext  = pathinfo( $i_file_path, PATHINFO_EXTENSION );
 
 			if ( $i_file_ext ) {
@@ -316,7 +316,7 @@ class Generate_Image extends Generate_Url {
 				$new_image_dirfile = $i_file_dir_name . $i_file_file_name . '-' . $w . 'x' . $h . '.' . $i_file_ext;
 
 				//* Generate image URL.
-				$upload_dir     = wp_upload_dir();
+				$upload_dir     = \wp_upload_dir();
 				$upload_url     = $upload_dir['baseurl'];
 				$upload_basedir = $upload_dir['basedir'];
 
@@ -327,9 +327,9 @@ class Generate_Image extends Generate_Url {
 				// Generate file if it doesn't exists yet.
 				if ( ! file_exists( $new_image_dirfile ) ) {
 
-					$image_editor = wp_get_image_editor( $i_file_path );
+					$image_editor = \wp_get_image_editor( $i_file_path );
 
-					if ( ! is_wp_error( $image_editor ) ) {
+					if ( ! \is_wp_error( $image_editor ) ) {
 						$image_editor->resize( $w, $h, false );
 						$image_editor->set_quality( 82 ); // Let's save some bandwidth, Facebook compresses it even further anyway.
 						$image_editor->save( $new_image_dirfile );
@@ -363,11 +363,11 @@ class Generate_Image extends Generate_Url {
 		$icon = '';
 
 		if ( 'full' === $size ) {
-			$site_icon_id = get_option( 'site_icon' );
+			$site_icon_id = \get_option( 'site_icon' );
 
 			if ( $site_icon_id ) {
 				$url_data = '';
-				$url_data = wp_get_attachment_image_src( $site_icon_id, $size );
+				$url_data = \wp_get_attachment_image_src( $site_icon_id, $size );
 
 				$icon = $url_data ? $url_data[0] : '';
 
@@ -380,7 +380,7 @@ class Generate_Image extends Generate_Url {
 			}
 		} elseif ( is_int( $size ) && function_exists( 'has_site_icon' ) ) {
 			//* Also applies (MultiSite) filters.
-			$icon = get_site_icon_url( $size );
+			$icon = \get_site_icon_url( $size );
 		}
 
 		return $icon;
@@ -397,12 +397,12 @@ class Generate_Image extends Generate_Url {
 	 */
 	public function get_header_image( $set_og_dimensions = false ) {
 
-		$image = get_header_image();
+		$image = \get_header_image();
 
 		if ( $set_og_dimensions && $image ) {
 
-			$w = (int) get_theme_support( 'custom-header', 'width' );
-			$h = (int) get_theme_support( 'custom-header', 'height' );
+			$w = (int) \get_theme_support( 'custom-header', 'width' );
+			$h = (int) \get_theme_support( 'custom-header', 'height' );
 
 			if ( $w && $h )
 				$this->image_dimensions = $this->image_dimensions + array( $this->get_the_real_ID() => array( 'width' => $w, 'height' => $h ) );

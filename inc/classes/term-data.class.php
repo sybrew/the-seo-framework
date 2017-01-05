@@ -51,17 +51,17 @@ class Term_Data extends Post_Data {
 
 		if ( $this->can_get_term_meta() ) {
 			if ( $this->is_admin() ) {
-				add_action( 'edit_term', array( $this, 'update_term_meta' ), 10, 2 );
-				add_action( 'delete_term', array( $this, 'delete_term_meta' ), 10, 2 );
+				\add_action( 'edit_term', array( $this, 'update_term_meta' ), 10, 2 );
+				\add_action( 'delete_term', array( $this, 'delete_term_meta' ), 10, 2 );
 			}
 		} else {
 			//* Old style term meta data through loop injections.
-			add_filter( 'get_term', array( $this, 'get_term_filter' ), 10, 2 );
-			add_filter( 'get_terms', array( $this, 'get_terms_filter' ), 10, 2 );
+			\add_filter( 'get_term', array( $this, 'get_term_filter' ), 10, 2 );
+			\add_filter( 'get_terms', array( $this, 'get_terms_filter' ), 10, 2 );
 
 			if ( $this->is_admin() ) {
-				add_action( 'edit_term', array( $this, 'taxonomy_seo_save' ), 10, 2 );
-				add_action( 'delete_term', array( $this, 'term_meta_delete' ), 10, 2 );
+				\add_action( 'edit_term', array( $this, 'taxonomy_seo_save' ), 10, 2 );
+				\add_action( 'delete_term', array( $this, 'term_meta_delete' ), 10, 2 );
 			}
 		}
 	}
@@ -88,7 +88,7 @@ class Term_Data extends Post_Data {
 			$cache = array();
 		}
 
-		$data = get_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true );
+		$data = \get_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true );
 
 		//* Evaluate merely by presence.
 		if ( isset( $data['saved_flag'] ) )
@@ -96,11 +96,11 @@ class Term_Data extends Post_Data {
 
 		if ( $this->is_theme( 'genesis' ) ) {
 			$data = array();
-			$data['doctitle'] = get_term_meta( $term_id, 'doctitle', true );
-			$data['description'] = get_term_meta( $term_id, 'description', true );
-			$data['noindex'] = get_term_meta( $term_id, 'noindex', true );
-			$data['nofollow'] = get_term_meta( $term_id, 'nofollow', true );
-			$data['noarchive'] = get_term_meta( $term_id, 'noarchive', true );
+			$data['doctitle'] = \get_term_meta( $term_id, 'doctitle', true );
+			$data['description'] = \get_term_meta( $term_id, 'description', true );
+			$data['noindex'] = \get_term_meta( $term_id, 'noindex', true );
+			$data['nofollow'] = \get_term_meta( $term_id, 'nofollow', true );
+			$data['noarchive'] = \get_term_meta( $term_id, 'noarchive', true );
 
 			return $cache[ $term_id ] = $data;
 		}
@@ -119,13 +119,13 @@ class Term_Data extends Post_Data {
 	 * @return array The Term Metadata default options.
 	 */
 	public function get_term_meta_defaults() {
-		return (array) apply_filters( 'the_seo_framework_term_meta_defaults', array(
-			'doctitle'            => '',
-			'description'         => '',
-			'noindex'             => 0,
-			'nofollow'            => 0,
-			'noarchive'           => 0,
-			'saved_flag'          => 0, // Don't touch, used to prevent data conflict with Genesis.
+		return (array) \apply_filters( 'the_seo_framework_term_meta_defaults', array(
+			'doctitle'    => '',
+			'description' => '',
+			'noindex'     => 0,
+			'nofollow'    => 0,
+			'noarchive'   => 0,
+			'saved_flag'  => 0, // Don't touch, used to prevent data conflict with Genesis.
 		) );
 	}
 
@@ -145,11 +145,11 @@ class Term_Data extends Post_Data {
 			return;
 
 		//* Check again against ambiguous injection.
-		if ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'update-tag_' . $term_id ) ) {
-			$data = isset( $_POST['autodescription-meta'] ) ? (array) map_deep( $_POST['autodescription-meta'], 'esc_attr' ) : array();
-			$data = wp_parse_args( $data, $this->get_term_meta_defaults() );
+		if ( isset( $_POST['_wpnonce'] ) && \wp_verify_nonce( $_POST['_wpnonce'], 'update-tag_' . $term_id ) ) {
+			$data = isset( $_POST['autodescription-meta'] ) ? (array) \map_deep( $_POST['autodescription-meta'], 'esc_attr' ) : array();
+			$data = \wp_parse_args( $data, $this->get_term_meta_defaults() );
 
-			update_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
+			\update_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
 		}
 	}
 
@@ -165,7 +165,7 @@ class Term_Data extends Post_Data {
 	public function delete_term_meta( $term_id, $tt_id ) {
 
 		//* If this results in an empty data string, all data has already been removed by WP core.
-		$data = get_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true );
+		$data = \get_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true );
 
 		if ( is_array( $data ) ) {
 			foreach ( $this->get_term_meta_defaults() as $key => $value ) {
@@ -174,9 +174,9 @@ class Term_Data extends Post_Data {
 		}
 
 		if ( empty( $data ) ) {
-			delete_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS );
+			\delete_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS );
 		} else {
-			update_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
+			\update_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
 		}
 	}
 
@@ -265,13 +265,14 @@ class Term_Data extends Post_Data {
 
 			if ( isset( $current_screen->taxonomy ) ) {
 				$term_id = $id ? $id : $this->get_admin_term_id();
-				$term[ $id ] = get_term_by( 'id', $term_id, $current_screen->taxonomy );
+				$term[ $id ] = \get_term_by( 'id', $term_id, $current_screen->taxonomy );
 			}
 		} else {
-			if ( $this->is_category() || $this->is_tag() )
-				$term[ $id ] = get_queried_object();
-			elseif ( $this->is_tax() )
-				$term[ $id ] = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
+			if ( $this->is_category() || $this->is_tag() ) {
+				$term[ $id ] = \get_queried_object();
+			} elseif ( $this->is_tax() ) {
+				$term[ $id ] = \get_term_by( 'slug', \get_query_var( 'term' ), \get_query_var( 'taxonomy' ) );
+			}
 		}
 
 		if ( isset( $term[ $id ] ) )
@@ -296,7 +297,7 @@ class Term_Data extends Post_Data {
 		if ( isset( $labels ) )
 			return $labels;
 
-		$tax_object = get_taxonomy( $tax_type );
+		$tax_object = \get_taxonomy( $tax_type );
 
 		if ( is_object( $tax_object ) )
 			return $labels = (object) $tax_object->labels;
@@ -352,9 +353,9 @@ class Term_Data extends Post_Data {
 		if ( $fallback ) {
 			//* Fallback to Page as it is generic.
 			if ( $singular )
-				return $term_name[ $singular ] = esc_html__( 'Page', 'autodescription' );
+				return $term_name[ $singular ] = \esc_html__( 'Page', 'autodescription' );
 
-			return $term_name[ $singular ] = esc_html__( 'Pages', 'autodescription' );
+			return $term_name[ $singular ] = \esc_html__( 'Pages', 'autodescription' );
 		}
 
 		return $term_name[ $singular ] = '';

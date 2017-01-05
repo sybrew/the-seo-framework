@@ -92,7 +92,7 @@ class Query extends Compat {
 
 		if ( empty( $id ) ) {
 			//* This catches most ID's. Even Post IDs.
-			$id = get_queried_object_id();
+			$id = \get_queried_object_id();
 		}
 
 		/**
@@ -105,7 +105,7 @@ class Query extends Compat {
 		 *
 		 * @since 2.6.2
 		 */
-		return $id = (int) apply_filters( 'the_seo_framework_current_object_id', $id, $can_cache );
+		return $id = (int) \apply_filters( 'the_seo_framework_current_object_id', $id, $can_cache );
 	}
 
 	/**
@@ -113,16 +113,11 @@ class Query extends Compat {
 	 * Alters while in the loop. Therefore, this can't be cached and must be called within the loop.
 	 *
 	 * @since 2.7.0
+	 * @since 2.8.0 Removed WP 3.9 compat
 	 */
 	public function get_the_real_admin_ID() {
 
-		/**
-		 * This is get_the_ID() with WordPress 3.9 compatibility.
-		 * @todo convert to get_the_ID()
-		 * @priority OMGWTFBBQ 2.7.x (I warned you.)
-		 */
-		$post = get_post();
-		$id = empty( $post ) ? 0 : $post->ID;
+		$id = \get_the_ID();
 
 		//* Current term ID (outside loop).
 		if ( empty( $id ) && $this->is_archive_admin() )
@@ -150,10 +145,10 @@ class Query extends Compat {
 
 		if ( $this->is_wc_shop() ) {
 			//* WooCommerce Shop
-			$id = get_option( 'woocommerce_shop_page_id' );
-		} elseif ( function_exists( 'get_question_id' ) && did_action( 'template_redirect' ) ) {
+			$id = \get_option( 'woocommerce_shop_page_id' );
+		} elseif ( function_exists( 'get_question_id' ) && \did_action( 'template_redirect' ) ) {
 			//* AnsPress
-			$id = get_question_id();
+			$id = \get_question_id();
 		}
 
 		/**
@@ -163,7 +158,7 @@ class Query extends Compat {
 		 */
 		$this->set_query_cache(
 			__METHOD__,
-			$id = (int) apply_filters( 'the_seo_framework_real_id', $id )
+			$id = (int) \apply_filters( 'the_seo_framework_real_id', $id )
 		);
 
 		return $id;
@@ -201,7 +196,7 @@ class Query extends Compat {
 
 		$this->set_query_cache(
 			__METHOD__,
-			$term_id = intval( $term_id ) ? absint( $term_id ) : 0
+			$term_id = intval( $term_id ) ? \absint( $term_id ) : 0
 		);
 
 		return $term_id;
@@ -215,7 +210,7 @@ class Query extends Compat {
 	 * @return bool
 	 */
 	public function is_404() {
-		return is_404();
+		return \is_404();
 	}
 
 	/**
@@ -226,7 +221,7 @@ class Query extends Compat {
 	 * @return bool
 	 */
 	public function is_admin() {
-		return is_admin();
+		return \is_admin();
 	}
 
 	/**
@@ -240,14 +235,14 @@ class Query extends Compat {
 	public function is_attachment( $attachment = '' ) {
 
 		if ( empty( $attachment ) )
-			return is_attachment();
+			return \is_attachment();
 
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $attachment ) )
 			return $cache;
 
 		$this->set_query_cache(
 			__METHOD__,
-			$is_attachment = is_attachment( $attachment ),
+			$is_attachment = \is_attachment( $attachment ),
 			$attachment
 		);
 
@@ -267,7 +262,7 @@ class Query extends Compat {
 		if ( $this->is_admin() )
 			return $this->is_archive_admin();
 
-		if ( is_archive() && false === $this->is_singular() )
+		if ( \is_archive() && false === $this->is_singular() )
 			return true;
 
 		if ( $this->can_cache_query() && false === $this->is_singular() ) {
@@ -378,14 +373,14 @@ class Query extends Compat {
 	public function is_author( $author = '' ) {
 
 		if ( empty( $author ) )
-			return is_author();
+			return \is_author();
 
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $author ) )
 			return $cache;
 
 		$this->set_query_cache(
 			__METHOD__,
-			$is_author = is_author( $author ),
+			$is_author = \is_author( $author ),
 			$author
 		);
 
@@ -410,13 +405,14 @@ class Query extends Compat {
 
 		$is_blog_page = false;
 
-		$pfp = (int) get_option( 'page_for_posts' );
+		$pfp = (int) \get_option( 'page_for_posts' );
 
 		if ( $this->has_page_on_front() ) {
-			if ( $id === $pfp && false === is_archive() )
+			if ( $id === $pfp && false === \is_archive() ) {
 				$is_blog_page = true;
-			elseif ( is_home() )
+			} elseif ( \is_home() ) {
 				$is_blog_page = true;
+			}
 		}
 
 		$this->set_query_cache(
@@ -447,7 +443,7 @@ class Query extends Compat {
 
 		$this->set_query_cache(
 			__METHOD__,
-			$is_category = is_category( $category ),
+			$is_category = \is_category( $category ),
 			$category
 		);
 
@@ -476,10 +472,11 @@ class Query extends Compat {
 			$tax = $current_screen->taxonomy;
 			$len = strlen( $tax );
 
-			if ( $len >= 8 && false !== strrpos( $tax, 'category', -8 ) )
+			if ( $len >= 8 && false !== strrpos( $tax, 'category', -8 ) ) {
 				$is_category = true;
-			elseif ( $len >= 3 && false !== strrpos( $tax, 'cat', -3 ) )
+			} elseif ( $len >= 3 && false !== strrpos( $tax, 'cat', -3 ) ) {
 				$is_category = true;
+			}
 		}
 
 		$this->set_query_cache(
@@ -498,7 +495,7 @@ class Query extends Compat {
 	 * @return bool
 	 */
 	public function is_date() {
-		return is_date();
+		return \is_date();
 	}
 
 	/**
@@ -510,7 +507,7 @@ class Query extends Compat {
 	 * @return bool
 	 */
 	public function is_day() {
-		return is_day();
+		return \is_day();
 	}
 
 	/**
@@ -522,7 +519,7 @@ class Query extends Compat {
 	 * @return bool
 	 */
 	public function is_feed( $feeds = '' ) {
-		return is_feed( $feeds );
+		return \is_feed( $feeds );
 	}
 
 	/**
@@ -547,7 +544,7 @@ class Query extends Compat {
 
 		//* Elegant Themes Support.
 		if ( false === $is_front_page && empty( $id ) && $this->is_home() ) {
-			$sof = get_option( 'show_on_front' );
+			$sof = \get_option( 'show_on_front' );
 
 			if ( 'page' !== $sof && 'posts' !== $sof )
 				$is_front_page = true;
@@ -555,12 +552,12 @@ class Query extends Compat {
 
 		//* Compare against $id
 		if ( false === $is_front_page && $id ) {
-			$sof = get_option( 'show_on_front' );
+			$sof = \get_option( 'show_on_front' );
 
-			if ( 'page' === $sof && (int) get_option( 'page_on_front' ) === $id )
+			if ( 'page' === $sof && (int) \get_option( 'page_on_front' ) === $id )
 				$is_front_page = true;
 
-			if ( 'posts' === $sof && (int) get_option( 'page_for_posts' ) === $id )
+			if ( 'posts' === $sof && (int) \get_option( 'page_for_posts' ) === $id )
 				$is_front_page = true;
 		}
 
@@ -582,7 +579,7 @@ class Query extends Compat {
 	 * @return bool
 	 */
 	public function is_home() {
-		return is_home();
+		return \is_home();
 	}
 
 	/**
@@ -593,7 +590,7 @@ class Query extends Compat {
 	 * @return bool
 	 */
 	public function is_month() {
-		return is_month();
+		return \is_month();
 	}
 
 	/**
@@ -613,14 +610,14 @@ class Query extends Compat {
 			return $this->is_page_admin();
 
 		if ( empty( $page ) )
-			return is_page();
+			return \is_page();
 
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $page ) )
 			return $cache;
 
 		$this->set_query_cache(
 			__METHOD__,
-			$is_page = is_page( $page ),
+			$is_page = \is_page( $page ),
 			$page
 		);
 
@@ -654,7 +651,7 @@ class Query extends Compat {
 	 * @return bool
 	 */
 	public function is_preview() {
-		return is_preview();
+		return \is_preview();
 	}
 
 	/**
@@ -666,7 +663,7 @@ class Query extends Compat {
 	 * @return bool
 	 */
 	public function is_search() {
-		return is_search();
+		return \is_search();
 	}
 
 	/**
@@ -686,7 +683,7 @@ class Query extends Compat {
 			return $this->is_single_admin();
 
 		if ( empty( $post ) )
-			return is_single();
+			return \is_single();
 
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post ) )
 			return $cache;
@@ -746,7 +743,7 @@ class Query extends Compat {
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post_types ) )
 			return $cache;
 
-		if ( ! $is_singular = is_singular( $post_types ) ) {
+		if ( ! $is_singular = \is_singular( $post_types ) ) {
 			$id = isset( $id ) ? $id : $this->get_the_real_ID();
 
 			//* Check for somewhat singulars. We need this to adjust Meta data filled in Posts.
@@ -793,8 +790,8 @@ class Query extends Compat {
 		if ( empty( $id ) )
 			$id = $this->get_the_real_ID();
 
-		if ( 'page' === get_option( 'show_on_front' ) )
-			return (int) get_option( 'page_on_front' ) === $id;
+		if ( 'page' === \get_option( 'show_on_front' ) )
+			return (int) \get_option( 'page_on_front' ) === $id;
 
 		return false;
 	}
@@ -917,7 +914,7 @@ class Query extends Compat {
 
 		$this->set_query_cache(
 			__METHOD__,
-			$is_shop = false === $this->is_admin() && function_exists( 'is_shop' ) && is_shop()
+			$is_shop = false === $this->is_admin() && function_exists( 'is_shop' ) && \is_shop()
 		);
 
 		return $is_shop;
@@ -937,7 +934,7 @@ class Query extends Compat {
 
 		$this->set_query_cache(
 			__METHOD__,
-			$is_product = false === $this->is_admin() && function_exists( 'is_product' ) && is_product()
+			$is_product = false === $this->is_admin() && function_exists( 'is_product' ) && \is_product()
 		);
 
 		return $is_product;
@@ -951,7 +948,7 @@ class Query extends Compat {
 	 * @return bool
 	 */
 	public function is_year() {
-		return is_year();
+		return \is_year();
 	}
 
 	/**
@@ -966,7 +963,7 @@ class Query extends Compat {
 
 		static $cache = null;
 
-		return isset( $cache ) ? $cache : $cache = is_ssl();
+		return isset( $cache ) ? $cache : $cache = \is_ssl();
 	}
 
 	/**
@@ -1038,7 +1035,7 @@ class Query extends Compat {
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
-		$page = $this->is_multipage() ? get_query_var( 'page' ) : 1;
+		$page = $this->is_multipage() ? \get_query_var( 'page' ) : 1;
 
 		$this->set_query_cache(
 			__METHOD__,
@@ -1092,7 +1089,7 @@ class Query extends Compat {
 		 *              of `<!-- nextpage -->` tags..
 		 * @param WP_Post $post  Current post object.
 		 */
-		$_pages = apply_filters( 'content_pagination', $_pages, $post );
+		$_pages = \apply_filters( 'content_pagination', $_pages, $post );
 
 		$numpages = count( $_pages );
 
@@ -1118,7 +1115,7 @@ class Query extends Compat {
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
-		$paged = get_query_var( 'paged' );
+		$paged = \get_query_var( 'paged' );
 
 		$this->set_query_cache(
 			__METHOD__,

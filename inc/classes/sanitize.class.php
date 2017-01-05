@@ -71,7 +71,7 @@ class Sanitize extends Admin_Pages {
 		if ( empty( $_POST ) || ! isset( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) || ! is_array( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) )
 			return $validated = false;
 
-		check_admin_referer( $this->settings_field . '-options' );
+		\check_admin_referer( $this->settings_field . '-options' );
 
 		return $validated = true;
 	}
@@ -370,7 +370,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->set_option_filter( $filter, $option, $suboption );
 
-		add_filter( 'sanitize_option_' . $option, array( $this, 'sanitize' ), 10, 2 );
+		\add_filter( 'sanitize_option_' . $option, array( $this, 'sanitize' ), 10, 2 );
 
 		return true;
 	}
@@ -440,10 +440,10 @@ class Sanitize extends Admin_Pages {
 			return $new_value;
 		} elseif ( is_string( $filters[ $option ] ) ) {
 			//* Single option value
-			return $this->do_filter( $filters[ $option ], $new_value, get_option( $option ) );
+			return $this->do_filter( $filters[ $option ], $new_value, \get_option( $option ) );
 		} elseif ( is_array( $filters[ $option ] ) ) {
 			//* Array of suboption values to loop through
-			$old_value = get_option( $option );
+			$old_value = \get_option( $option );
 			foreach ( $filters[ $option ] as $suboption => $filter ) {
 				$old_value[ $suboption ] = isset( $old_value[ $suboption ] ) ? $old_value[ $suboption ] : '';
 				$new_value[ $suboption ] = isset( $new_value[ $suboption ] ) ? $new_value[ $suboption ] : '';
@@ -524,7 +524,7 @@ class Sanitize extends Admin_Pages {
 		 * 		@param array $default_filters Array with keys of sanitization types,
 		 *		and values of the filter function name as a callback
 		 */
-		return (array) apply_filters( 'the_seo_framework_available_sanitizer_filters', $default_filters );
+		return (array) \apply_filters( 'the_seo_framework_available_sanitizer_filters', $default_filters );
 	}
 
 	/**
@@ -635,10 +635,10 @@ class Sanitize extends Admin_Pages {
 		 * Applies filters 'the_seo_framework_allow_excerpt_shortcode_tags' : boolean
 		 * @since 2.6.6.1
 		 */
-		if ( apply_filters( 'the_seo_framework_allow_excerpt_shortcode_tags', false ) && false === $this->is_feed() ) {
-			$excerpt = wp_strip_all_tags( $excerpt );
+		if ( \apply_filters( 'the_seo_framework_allow_excerpt_shortcode_tags', false ) && false === $this->is_feed() ) {
+			$excerpt = \wp_strip_all_tags( $excerpt );
 		} else {
-			$excerpt = wp_strip_all_tags( strip_shortcodes( $excerpt ) );
+			$excerpt = \wp_strip_all_tags( \strip_shortcodes( $excerpt ) );
 		}
 
 		return $this->s_description( $excerpt );
@@ -655,7 +655,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_title( $new_value ) {
 
-		$title = esc_html( $new_value );
+		$title = \esc_html( $new_value );
 		$title = trim( $title );
 
 		return (string) strip_tags( $title );
@@ -801,7 +801,7 @@ class Sanitize extends Admin_Pages {
 	 * @return integer Positive integer.
 	 */
 	public function s_absint( $new_value ) {
-		return absint( $new_value );
+		return \absint( $new_value );
 	}
 
 	/**
@@ -880,7 +880,7 @@ class Sanitize extends Admin_Pages {
 	 * @return string String a safe email address
 	 */
 	public function s_email_address( $new_value ) {
-		return sanitize_email( $new_value );
+		return \sanitize_email( $new_value );
 	}
 
 	/**
@@ -893,7 +893,7 @@ class Sanitize extends Admin_Pages {
 	 * @return string String with only safe HTML in it
 	 */
 	public function s_safe_html( $new_value ) {
-		return wp_kses_post( $new_value );
+		return \wp_kses_post( $new_value );
 	}
 
 	/**
@@ -985,7 +985,7 @@ class Sanitize extends Admin_Pages {
 
 		$url = strip_tags( $new_value );
 
-		if ( $url ) {
+		if ( $url ) :
 
 			$allow_external = $this->allow_external_redirect();
 
@@ -1039,7 +1039,7 @@ class Sanitize extends Admin_Pages {
 
 				$url = $this->set_url_scheme( $url, $scheme );
 			}
-		}
+		endif;
 
 		/**
 		 * Applies filters the_seo_framework_301_noqueries : bool remove query args from 301
@@ -1065,7 +1065,7 @@ class Sanitize extends Admin_Pages {
 			/**
 			 * Allow query string parameters. XSS safe.
 			 */
-			$new_value = esc_url_raw( $url );
+			$new_value = \esc_url_raw( $url );
 		}
 
 		//* Save url

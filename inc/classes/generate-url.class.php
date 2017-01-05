@@ -91,7 +91,7 @@ class Generate_Url extends Generate_Title {
 		 * @since 2.5.2
 		 */
 		if ( $this->is_feed() )
-			$url = get_permalink();
+			$url = \get_permalink();
 
 		//* Reset cache.
 		$this->url_slashit = true;
@@ -174,17 +174,17 @@ class Generate_Url extends Generate_Title {
 
 		if ( $this->url_slashit ) {
 			if ( $args['forceslash'] ) {
-				$url = trailingslashit( $url );
+				$url = \trailingslashit( $url );
 			} elseif ( $slashit ) {
-				$url = user_trailingslashit( $url );
+				$url = \user_trailingslashit( $url );
 			}
 		}
 
 		if ( $this->pretty_permalinks ) {
-			$url = esc_url( $url );
+			$url = \esc_url( $url );
 		} else {
 			//* Keep the &'s more readable.
-			$url = esc_url_raw( $url );
+			$url = \esc_url_raw( $url );
 		}
 
 		$this->the_seo_framework_debug && false === $this->doing_sitemap and $this->debug_init( __METHOD__, false, $debug_key, array( 'url_output' => $url ) );
@@ -232,7 +232,7 @@ class Generate_Url extends Generate_Title {
 				'id'               => $this->get_the_real_ID(),
 			);
 
-			$defaults = (array) apply_filters( 'the_seo_framework_url_args', $defaults, $args );
+			$defaults = (array) \apply_filters( 'the_seo_framework_url_args', $defaults, $args );
 		}
 
 		//* Return early if it's only a default args request.
@@ -301,14 +301,14 @@ class Generate_Url extends Generate_Title {
 
 			//* Term or Taxonomy.
 			if ( ! isset( $term ) )
-				$term = get_queried_object();
+				$term = \get_queried_object();
 
 			if ( isset( $term->taxonomy ) ) {
 				//* Registered Terms and Taxonomies.
 				$path = $this->get_relative_term_url( $term, $args );
 			} elseif ( ! $args['external'] && isset( $GLOBALS['wp']->request ) ) {
 				//* Everything else.
-				$path = trailingslashit( get_option( 'home' ) ) . $GLOBALS['wp']->request;
+				$path = \trailingslashit( \get_option( 'home' ) ) . $GLOBALS['wp']->request;
 				$path = $this->set_url_scheme( $path, 'relative' );
 			} else {
 				//* Nothing to see here...
@@ -323,7 +323,7 @@ class Generate_Url extends Generate_Title {
 			$post_id = isset( $args['post']->ID ) ? $args['post']->ID : $args['id'];
 
 			if ( $this->pretty_permalinks && $post_id && $this->is_singular( $post_id ) ) {
-				$post = get_post( $post_id );
+				$post = \get_post( $post_id );
 
 				//* Don't slash draft links.
 				if ( isset( $post->post_status ) && ( 'auto-draft' === $post->post_status || 'draft' === $post->post_status ) )
@@ -361,12 +361,12 @@ class Generate_Url extends Generate_Title {
 		$args = $this->reparse_url_args( $args );
 
 		if ( $args['external'] || ! $this->is_front_page() ) {
-			$url = get_permalink( $post_id );
+			$url = \get_permalink( $post_id );
 		} elseif ( $this->is_front_page() ) {
-			$url = get_home_url();
+			$url = \get_home_url();
 		} elseif ( ! $args['external'] ) {
 			if ( isset( $GLOBALS['wp']->request ) )
-				$url = trailingslashit( get_option( 'home' ) ) . $GLOBALS['wp']->request;
+				$url = \trailingslashit( \get_option( 'home' ) ) . $GLOBALS['wp']->request;
 		}
 
 		//* No permalink found.
@@ -383,15 +383,15 @@ class Generate_Url extends Generate_Title {
 		if ( $paged ) {
 			if ( $this->pretty_permalinks ) {
 				if ( $this->is_singular() ) {
-					$url = trailingslashit( $url ) . $paged;
+					$url = \trailingslashit( $url ) . $paged;
 				} else {
-					$url = trailingslashit( $url ) . 'page/' . $paged;
+					$url = \trailingslashit( $url ) . 'page/' . $paged;
 				}
 			} else {
 				if ( $this->is_singular() ) {
-					$url = add_query_arg( 'page', $paged, $url );
+					$url = \add_query_arg( 'page', $paged, $url );
 				} else {
-					$url = add_query_arg( 'paged', $paged, $url );
+					$url = \add_query_arg( 'paged', $paged, $url );
 				}
 			}
 		}
@@ -416,7 +416,7 @@ class Generate_Url extends Generate_Title {
 
 		$scheme = $host ? 'http://' : '';
 
-		return $url = $scheme . trailingslashit( $host ) . ltrim( $path, ' \\/' );
+		return $url = $scheme . \trailingslashit( $host ) . ltrim( $path, ' \\/' );
 	}
 
 	/**
@@ -498,7 +498,7 @@ class Generate_Url extends Generate_Title {
 				if ( strpos( $path, '?lang=' . $current_lang ) !== false )
 					$path = str_replace( '?lang=' . $current_lang, '', $path );
 
-				return user_trailingslashit( $path ) . '?lang=' . $current_lang;
+				return \user_trailingslashit( $path ) . '?lang=' . $current_lang;
 				break;
 
 			case '2' :
@@ -506,7 +506,7 @@ class Generate_Url extends Generate_Title {
 				if ( 0 === strpos( $path, '/' . $current_lang . '/' ) ) {
 					return $path;
 				} else {
-					return $path = trailingslashit( $current_lang ) . ltrim( $path, ' \\/' );
+					return $path = \trailingslashit( $current_lang ) . ltrim( $path, ' \\/' );
 				}
 				break;
 
@@ -612,7 +612,7 @@ class Generate_Url extends Generate_Title {
 				if ( false !== $contains_path && 0 === $contains_path ) {
 					return $path;
 				} else {
-					return $path = trailingslashit( $current_lang ) . ltrim( $path, ' \\/' );
+					return $path = \trailingslashit( $current_lang ) . ltrim( $path, ' \\/' );
 				}
 				break;
 
@@ -626,10 +626,10 @@ class Generate_Url extends Generate_Title {
 					return $path;
 
 				$current_lang_setting = $this->make_fully_qualified_url( $current_lang_setting );
-				$parsed = wp_parse_url( $current_lang_setting );
+				$parsed = \wp_parse_url( $current_lang_setting );
 
 				$this->current_host = isset( $parsed['host'] ) ? $parsed['host'] : '';
-				$current_path = isset( $parsed['path'] ) ? trailingslashit( $parsed['path'] ) : '';
+				$current_path = isset( $parsed['path'] ) ? \trailingslashit( $parsed['path'] ) : '';
 
 				return $current_path . $path;
 				break;
@@ -647,7 +647,7 @@ class Generate_Url extends Generate_Title {
 				if ( false !== strpos( $path, '?lang=' . $current_lang ) )
 					$path = str_replace( '?lang=' . $current_lang, '', $path );
 
-				return user_trailingslashit( $path ) . '?lang=' . $current_lang;
+				return \user_trailingslashit( $path ) . '?lang=' . $current_lang;
 				break;
 
 			default :
@@ -693,13 +693,13 @@ class Generate_Url extends Generate_Title {
 			return '';
 
 		if ( is_null( $term ) )
-			$term = get_queried_object();
+			$term = \get_queried_object();
 
 		$taxonomy = $term->taxonomy;
 		$path = $wp_rewrite->get_extra_permastruct( $taxonomy );
 
 		$slug = $term->slug;
-		$t = get_taxonomy( $taxonomy );
+		$t = \get_taxonomy( $taxonomy );
 
 		$paged = $this->maybe_get_paged( $this->paged(), $args['paged'], $args['paged_plural'] );
 
@@ -739,13 +739,13 @@ class Generate_Url extends Generate_Title {
 			}
 
 			if ( $paged )
-				$path = trailingslashit( $path ) . 'page/' . $paged;
+				$path = \trailingslashit( $path ) . 'page/' . $paged;
 
-			$path = user_trailingslashit( $path, 'category' );
+			$path = \user_trailingslashit( $path, 'category' );
 		}
 
 		//* Add plausible domain subdirectories.
-		$url = trailingslashit( get_option( 'home' ) ) . ltrim( $path, ' \\/' );
+		$url = \trailingslashit( get_option( 'home' ) ) . ltrim( $path, ' \\/' );
 		$path = $this->set_url_scheme( $url, 'relative' );
 
 		return $path;
@@ -767,7 +767,7 @@ class Generate_Url extends Generate_Title {
 		if ( ! isset( $scheme ) ) {
 			$scheme = $this->is_ssl() ? 'https' : 'http';
 		} elseif ( 'admin' === $scheme || 'login' === $scheme  || 'login_post' === $scheme || 'rpc' === $scheme ) {
-			$scheme = $this->is_ssl() || force_ssl_admin() ? 'https' : 'http';
+			$scheme = $this->is_ssl() || \force_ssl_admin() ? 'https' : 'http';
 		} elseif ( 'http' !== $scheme && 'https' !== $scheme && 'relative' !== $scheme ) {
 			$scheme = $this->is_ssl() ? 'https' : 'http';
 		}
@@ -815,7 +815,7 @@ class Generate_Url extends Generate_Title {
 		 *
 		 * @since 2.4.2
 		 */
-		$scheme_settings = apply_filters( 'the_seo_framework_canonical_force_scheme', null, $current_scheme );
+		$scheme_settings = \apply_filters( 'the_seo_framework_canonical_force_scheme', null, $current_scheme );
 
 		/**
 		 * @TODO add options metabox.
@@ -911,7 +911,7 @@ class Generate_Url extends Generate_Title {
 			}
 
 			//* Put it all together.
-			$url = trailingslashit( $scheme_full . $domain ) . ltrim( $path, ' \\/' );
+			$url = \trailingslashit( $scheme_full . $domain ) . ltrim( $path, ' \\/' );
 
 			if ( $get_scheme ) {
 				return array( $url, $scheme );
@@ -940,7 +940,7 @@ class Generate_Url extends Generate_Title {
 		global $current_blog;
 
 		$scheme = $this->is_ssl() ? 'https' : 'http';
-		$url = function_exists( 'domain_mapping_siteurl' ) ? domain_mapping_siteurl( false ) : false;
+		$url = function_exists( 'domain_mapping_siteurl' ) ? \domain_mapping_siteurl( false ) : false;
 
 		$request_uri = '';
 
@@ -948,7 +948,7 @@ class Generate_Url extends Generate_Title {
 			if ( ( defined( 'VHOST' ) && 'yes' !== VHOST ) || ( defined( 'SUBDOMAIN_INSTALL' ) && false === SUBDOMAIN_INSTALL ) )
 				$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? str_replace( $current_blog->path, '/', $_SERVER['REQUEST_URI'] ) : '';
 
-			$url = trailingslashit( $url . $request_uri ) . ltrim( $path, ' \\/' );
+			$url = \trailingslashit( $url . $request_uri ) . ltrim( $path, ' \\/' );
 
 			if ( $get_scheme ) {
 				return array( $url, $scheme );
@@ -992,10 +992,10 @@ class Generate_Url extends Generate_Title {
 			}
 		} elseif ( $this->is_archive() ) {
 			if ( $this->is_category() ) {
-				$id = get_queried_object_id();
+				$id = \get_queried_object_id();
 				$path = '?cat=' . $id;
 			} elseif ( $this->is_tag() ) {
-				$id = get_queried_object_id();
+				$id = \get_queried_object_id();
 				$path = '?post_tag=' . $id;
 			} elseif ( $this->is_date() && isset( $GLOBALS['wp_query']->query ) ) {
 				$query = $GLOBALS['wp_query']->query;
@@ -1010,11 +1010,11 @@ class Generate_Url extends Generate_Title {
 
 				$path = $var;
 			} elseif ( $this->is_author() ) {
-				$id = get_queried_object_id();
+				$id = \get_queried_object_id();
 				$path = '?author=' . $id;
 			} elseif ( $this->is_tax() ) {
 				//* Generate shortlink for object type and slug.
-				$object = get_queried_object();
+				$object = \get_queried_object();
 
 				$t = isset( $object->taxonomy ) ? urlencode( $object->taxonomy ) : '';
 
@@ -1066,7 +1066,7 @@ class Generate_Url extends Generate_Title {
 		$home_url = $this->the_home_url_from_cache( true );
 		$url = $home_url . $path . $additions;
 
-		return esc_url_raw( $url );
+		return \esc_url_raw( $url );
 	}
 
 	/**
@@ -1124,23 +1124,23 @@ class Generate_Url extends Generate_Title {
 					if ( $paged < 1 )
 						$paged = 1;
 
-					$prev = get_pagenum_link( $paged, false );
+					$prev = \get_pagenum_link( $paged, false );
 				} elseif ( 'next' === $prev_next && $paged < $GLOBALS['wp_query']->max_num_pages ) {
 
 					if ( ! $paged )
 						$paged = 1;
 					$paged = intval( $paged ) + 1;
 
-					$next = get_pagenum_link( $paged, false );
+					$next = \get_pagenum_link( $paged, false );
 				}
 			}
 		}
 
 		if ( $prev )
-			return esc_url_raw( $prev );
+			return \esc_url_raw( $prev );
 
 		if ( $next )
-			return esc_url_raw( $next );
+			return \esc_url_raw( $next );
 
 		return '';
 	}
@@ -1169,7 +1169,7 @@ class Generate_Url extends Generate_Title {
 		if ( 1 === $i ) {
 			$url = $this->the_url_from_cache( '', $post_id, false, $from_option, false );
 		} else {
-			$post = get_post( $post_id );
+			$post = \get_post( $post_id );
 
 			$urlfromcache = $this->the_url_from_cache( '', $post_id, false, $from_option, false );
 
@@ -1201,17 +1201,17 @@ class Generate_Url extends Generate_Title {
 				if ( isset( $query_arg ) )
 					$urlfromcache = $urlfromcache . '?' . $query_arg;
 
-				$url = add_query_arg( 'page', $i, $urlfromcache );
+				$url = \add_query_arg( 'page', $i, $urlfromcache );
 			} elseif ( $this->is_static_frontpage( $post_id ) ) {
 				global $wp_rewrite;
 
-				$url = trailingslashit( $urlfromcache ) . user_trailingslashit( $wp_rewrite->pagination_base . '/' . $i, 'single_paged' );
+				$url = \trailingslashit( $urlfromcache ) . \user_trailingslashit( $wp_rewrite->pagination_base . '/' . $i, 'single_paged' );
 
 				//* Add back query arg if removed.
 				if ( isset( $query_arg ) )
 					$url = $url . '?' . $query_arg;
 			} else {
-				$url = trailingslashit( $urlfromcache ) . user_trailingslashit( $i, 'single_paged' );
+				$url = \trailingslashit( $urlfromcache ) . \user_trailingslashit( $i, 'single_paged' );
 
 				//* Add back query arg if removed.
 				if ( isset( $query_arg ) )
@@ -1347,10 +1347,11 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function make_fully_qualified_url( $url ) {
 
-		if ( '//' === substr( $url, 0, 2 ) )
+		if ( '//' === substr( $url, 0, 2 ) ) {
 			$url = 'http:' . $url;
-		elseif ( 'http' !== substr( $url, 0, 4 ) )
+		} elseif ( 'http' !== substr( $url, 0, 4 ) ) {
 			$url = 'http://' . $url;
+		}
 
 		return $url;
 	}
@@ -1371,7 +1372,7 @@ class Generate_Url extends Generate_Title {
 		if ( isset( $cache ) )
 			return $cache;
 
-		$parsed_url = wp_parse_url( get_option( 'home' ) );
+		$parsed_url = \wp_parse_url( \get_option( 'home' ) );
 
 		$host = isset( $parsed_url['host'] ) ? $parsed_url['host'] : '';
 
@@ -1395,7 +1396,7 @@ class Generate_Url extends Generate_Title {
 
 		$path = '';
 
-		$parsed_url = wp_parse_url( get_option( 'home' ) );
+		$parsed_url = \wp_parse_url( \get_option( 'home' ) );
 
 		if ( ! empty( $parsed_url['path'] ) && $path = ltrim( $parsed_url['path'], ' \\/' ) )
 			$path = '/' . $path;

@@ -47,11 +47,11 @@ class Feed extends Transients {
 	 */
 	public function init_feed() {
 
-		add_filter( 'the_content_feed', array( $this, 'the_content_feed' ), 10, 2 );
+		\add_filter( 'the_content_feed', array( $this, 'the_content_feed' ), 10, 2 );
 
 		//* Only add the feed link to the excerpt if we're only building excerpts.
 		if ( $this->rss_uses_excerpt() )
-			add_filter( 'the_excerpt_rss', array( $this, 'the_content_feed' ), 10, 1 );
+			\add_filter( 'the_excerpt_rss', array( $this, 'the_content_feed' ), 10, 1 );
 
 	}
 
@@ -63,7 +63,7 @@ class Feed extends Transients {
 	 * @return bool
 	 */
 	public function rss_uses_excerpt() {
-		return (bool) get_option( 'rss_use_excerpt' );
+		return (bool) \get_option( 'rss_use_excerpt' );
 	}
 
 	/**
@@ -76,7 +76,7 @@ class Feed extends Transients {
 	 */
 	public function the_content_feed( $content, $feed_type = null ) {
 
-		if ( $content ) {
+		if ( $content ) :
 
 			/**
 			 * Don't alter already-excerpts or descriptions.
@@ -91,7 +91,7 @@ class Feed extends Transients {
 				 * Applies filters the_seo_framework_max_content_feed_length : The max excerpt length.
 				 * @since 2.5.2
 				 */
-				$max_len = (int) apply_filters( 'the_seo_framework_max_content_feed_length', 400 );
+				$max_len = (int) \apply_filters( 'the_seo_framework_max_content_feed_length', 400 );
 
 				//* Generate excerpt.
 				$excerpt = $this->trim_excerpt( $excerpt, $excerpt_len, $max_len );
@@ -132,10 +132,10 @@ class Feed extends Transients {
 				 * Applies filters 'the_seo_framework_feed_source_link' : string
 				 * @since 2.6.0
 				 */
-				$source_i18n = (string) apply_filters( 'the_seo_framework_feed_source_link_text', _x( 'Source', 'The content source', 'autodescription' ) );
-				$content .= PHP_EOL . '<p><a href="' . $permalink . '" rel="external nofollow">' . esc_html( $source_i18n ) . '</a></p>';
+				$source_i18n = (string) apply_filters( 'the_seo_framework_feed_source_link_text', \_x( 'Source', 'The content source', 'autodescription' ) );
+				$content .= PHP_EOL . '<p><a href="' . $permalink . '" rel="external nofollow">' . \esc_html( $source_i18n ) . '</a></p>';
 			}
-		}
+		endif;
 
 		return $content;
 	}
