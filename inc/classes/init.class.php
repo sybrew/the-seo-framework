@@ -356,7 +356,12 @@ class Init extends Query {
 
 		$cache_key = 'seo_framework_output_' . $key . '_' . $paged . '_' . $page;
 
-		$output = $this->object_cache_get( $cache_key );
+		if ( apply_filters( 'the_seo_framework_output_cache', true ) ) {
+			$output = $this->object_cache_get( $cache_key );
+		} else {
+			$output = false;
+		}
+		
 		if ( false === $output ) {
 
 			$robots = $this->robots();
