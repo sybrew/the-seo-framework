@@ -268,10 +268,11 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 		* Canonical settings. You should only change these settings, if:
 			* Your website is accessible through both HTTP and HTTPS
 			* Link relationship settings have been put here.
-	/
 	* A visual notification for when an actual `robots.txt` file has been found has been put in place in the Sitemap Settings metabox.
 		* This makes the Robots tab visible once more.
 	* A visual notification of the sitemap's whereabouts has been put in place in the Sitemap Settings metabox when a sitemap.xml file has been detected.
+	* This plugin now tests PHP and WordPress compatibility. In the admin screens you'll be notified on why the plugin fails to work after you activate or update the plugin.
+		* If everything goes correctly, it'll be a smooth upgrade. Enjoy!
 * **Changed:**
 	* "Knowledge Graph" name has been converted into "Authorized Presence". Its usage, output and effect are still the same.
 	* The first two description separator buttons are no longer marked "recommended".
@@ -357,6 +358,8 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 	* The counter type now correctly updates for new user meta created after The SEO Framework 2.7.0+ is installed.
 	* TODO SEO Settings tabs now correctly show the tab's content when hitting the "back" button.
 		* This behavior is caused because browsers save form data when travelling through history. Tabs are self-contained button forms for improved performance.
+	/
+	* TODO When enabling the option "Remove Blogname from title?", the blogname is removed too from manual SEO title entries.
 
 **For translators:**
 

@@ -128,39 +128,61 @@ define( 'THE_SEO_FRAMEWORK_DIR_PATH_INTERFACE', THE_SEO_FRAMEWORK_DIR_PATH . 'in
  */
 define( 'THE_SEO_FRAMEWORK_DIR_PATH_FUNCT', THE_SEO_FRAMEWORK_DIR_PATH . 'inc/functions/' );
 
+the_seo_framework_pre_load();
 /**
- * Load plugin files.
+ * Determines whether we can "just" load the plugin, or require verification beforehand.
  *
- * @since 1.0.0
- * @uses THE_SEO_FRAMEWORK_DIR_PATH
+ * @since 2.8.0
  */
-require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'load.php' );
+function the_seo_framework_pre_load() {
+	if ( get_site_option( 'the_seo_framework_tested_upgrade_version' ) >= THE_SEO_FRAMEWORK_DB_VERSION ) {
+		the_seo_framework_load_base_files();
+	} else {
+		the_seo_framework_test_server();
+	}
+}
 
 /**
- * Load deprecated functions.
+ * Tests plugin upgrade.
  *
- * @since 2.7.0
- * @uses THE_SEO_FRAMEWORK_DIR_PATH_FUNCT
+ * @since 2.8.0
  */
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'deprecated.php' );
+function the_seo_framework_test_server() {
+
+	//* Load on init action (manual FTP upload) or after plugin has been upgraded.
+	require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'plugin-test-server.php' );
+
+	if ( get_site_option( 'the_seo_framework_tested_upgrade_version' ) >= THE_SEO_FRAMEWORK_DB_VERSION )
+		the_seo_framework_load_base_files();
+}
 
 /**
- * Load compat and API files.
- * @since 2.1.6
- * @uses THE_SEO_FRAMEWORK_DIR_PATH_FUNCT
+ * Loads plugin base files.
+ *
+ * @since 2.8.0
  */
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'compat.php' );
-require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'optionsapi.php' );
+function the_seo_framework_load_base_files() {
+	/**
+	 * Load plugin files.
+	 *
+	 * @since 1.0.0
+	 * @uses THE_SEO_FRAMEWORK_DIR_PATH
+	 */
+	require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'load.php' );
 
-/**
- * Loads the class from cache.
- * This is recommended using this above using 'new The_SEO_Framework_Load();'
- * It also checks if the class is callable in the first place.
- *
- * @since 2.2.5
- *
- * @return object The SEO Framework Facade class.
- */
-function the_seo_framework() {
-	return \The_SEO_Framework\_init();
+	/**
+	 * Load deprecated functions.
+	 *
+	 * @since 2.7.0
+	 * @uses THE_SEO_FRAMEWORK_DIR_PATH_FUNCT
+	 */
+	require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'deprecated.php' );
+
+	/**
+	 * Load compat and API files.
+	 * @since 2.1.6
+	 * @uses THE_SEO_FRAMEWORK_DIR_PATH_FUNCT
+	 */
+	require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'compat.php' );
+	require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'optionsapi.php' );
 }

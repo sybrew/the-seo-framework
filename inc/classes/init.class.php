@@ -175,7 +175,7 @@ class Init extends Query {
 		//* Deletes front page description transient on Tagline change.
 		\add_action( 'update_option_blogdescription', array( $this, 'delete_auto_description_frontpage_transient' ), 10, 1 );
 
-		//* Delete doing it wrong transient after theme switch.
+		//* Delete doing it wrong transient after theme switch or plugin upgrade.
 		\add_action( 'after_switch_theme', array( $this, 'delete_theme_dir_transient' ), 10, 0 );
 		\add_action( 'upgrader_process_complete', array( $this, 'delete_theme_dir_transient' ), 10, 2 );
 

@@ -160,7 +160,6 @@ function _autoload_classes( $class ) {
  */
 function _activation() {
 
-	\The_SEO_Framework\_activation_test_php();
 	\The_SEO_Framework\_activation_setup_sitemap();
 }
 
@@ -195,73 +194,6 @@ function _activation_setup_sitemap() {
 		$the_seo_framework->rewrite_rule_sitemap();
 		\add_action( 'shutdown', 'flush_rewrite_rules' );
 	}
-}
-
-/**
- * Checks whether the server can run this plugin on activation.
- * If not, it will deactivate this plugin.
- *
- * This function will create a parse error on PHP < 5.3 (use of goto wrappers).
- * Which makes a knowledge database entry easier to make as it won't change anytime soon.
- *
- * @since 2.8.0
- * @access private
- * @link http://php.net/eol.php
- * @link https://codex.wordpress.org/WordPress_Versions
- */
-function _activation_test_php() {
-
-	evaluate : {
-		   PHP_VERSION_ID < 50300 and $test = 1
-		or $GLOBALS['wp_db_version'] < 35700 and $test = 2
-		or $test = true;
-	}
-
-	//* All good.
-	if ( true === $test )
-		return;
-
-	deactivate : {
-		//* Not good. Deactivate plugin.
-		\deactivate_plugins( THE_SEO_FRAMEWORK_PLUGIN_BASENAME );
-	}
-
-	switch ( $test ) :
-		case 1 :
-			//* PHP requirements not met, always count up to encourage best standards.
-			$requirement = 'PHP 5.3.0 or later';
-			$issue = 'PHP version';
-			$version = phpversion();
-			$subtitle = 'Server Requirements';
-			break;
-
-		case 2 :
-			//* WordPress requirements not met.
-			$requirement = 'WordPress 4.4 or later';
-			$issue = 'WordPress version';
-			$version = $GLOBALS['wp_version'];
-			$subtitle = 'WordPress Requirements';
-			break;
-
-		default :
-			\wp_die();
-	endswitch;
-
-	//* network_admin_url() falls back to admin_url() on single. But networks can enable single too.
-	$pluginspage = $network_wide ? \network_admin_url( 'plugins.php' ) : \admin_url( $network . 'plugins.php' );
-
-	//* Let's have some fun with teapots.
-	$response = floor( time() / DAY_IN_SECONDS ) === floor( strtotime( 'first day of April ' . date( 'Y' ) ) / DAY_IN_SECONDS ) ? 418 : 500;
-
-	\wp_die(
-		sprintf(
-			'<p><strong>The SEO Framework</strong> requires <em>%s</em>. Sorry about that!<br>Your %s is: <code>%s</code></p>
-			<p>Do you want to <strong><a onclick="window.history.back()" href="%s">go back</a></strong>?</p>',
-			\esc_html( $requirement ), \esc_html( $issue ), \esc_html( $version ), \esc_url( $pluginspage )
-		),
-		sprintf( 'The SEO Framework &laquo; %s', \esc_attr( $subtitle ) ),
-		array( 'response' => intval( $response ) )
-	);
 }
 
 /**

@@ -26,6 +26,19 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
+ * Loads the class from cache.
+ * This is recommended using this above using 'new The_SEO_Framework_Load();'
+ * It also checks if the class is callable in the first place.
+ *
+ * @since 2.2.5
+ *
+ * @return object The SEO Framework Facade class.
+ */
+function the_seo_framework() {
+	return \The_SEO_Framework\_init();
+}
+
+/**
  * Returns the facade class name from cache.
  *
  * CAUTION: If this is used before plugins_loaded priority 5, then the plugin
