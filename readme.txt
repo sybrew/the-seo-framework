@@ -267,15 +267,14 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 			* You want to adjust visual impairment settings. ?? This is already possible (although hidden), slightly redundant.
 		* Canonical settings. You should only change these settings, if:
 			* Your website is accessible through both HTTP and HTTPS
-			/
-			* TODO Link relationship settings have been put here.
+			* Link relationship settings have been put here.
 	/
 	* TODO Visual notification for when an actual `robots.txt` file has been found.
 		* https://wordpress.org/support/topic/sitemap-settings-1/
 * **Changed:**
-	* Knowledge Graph has been converted into "Authorized Presence". Its usage, output and effect are still the same.
+	* "Knowledge Graph" name has been converted into "Authorized Presence". Its usage, output and effect are still the same.
 	* The first two description separator buttons are no longer marked "recommended".
-		* This is because the description does not need to support old browsers or old screen readers.
+		* This is because the description tag is less prominently used and does not need to support old browsers or old screen readers.
 * **Improved:**
 	* When the description title additions exceed 72 characters, they will no longer be included in the automated description.
 		* This is also documented as a fix, but it states 154 characters instead of 72 there.

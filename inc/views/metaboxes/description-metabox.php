@@ -64,14 +64,14 @@ switch ( $instance ) :
 		 */
 		$default_tabs = array(
 			'general' => array(
-				'name' 		=> esc_html__( 'General', 'autodescription' ),
-				'callback'	=> array( $this, 'description_metabox_general_tab' ),
-				'dashicon'	=> 'admin-generic',
+				'name'     => esc_html__( 'General', 'autodescription' ),
+				'callback' => array( $this, 'description_metabox_general_tab' ),
+				'dashicon' => 'admin-generic',
 			),
 			'additions' => array(
-				'name'		=> esc_html__( 'Additions', 'autodescription' ),
-				'callback'	=> array( $this, 'description_metabox_additions_tab' ),
-				'dashicon'	=> 'plus',
+				'name'     => esc_html__( 'Additions', 'autodescription' ),
+				'callback' => array( $this, 'description_metabox_additions_tab' ),
+				'dashicon' => 'plus',
 			),
 		);
 

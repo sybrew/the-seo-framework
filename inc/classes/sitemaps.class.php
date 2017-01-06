@@ -791,7 +791,7 @@ class Sitemaps extends Metaboxes {
 	public function ping_google() {
 
 		$pingurl = 'http://www.google.com/webmasters/sitemaps/ping?sitemap=' . urlencode( $this->the_home_url_from_cache( true ) . 'sitemap.xml' );
-		wp_safe_remote_get( $pingurl, array( 'timeout' => 3 ) );
+		\wp_safe_remote_get( $pingurl, array( 'timeout' => 3 ) );
 
 	}
 
@@ -803,7 +803,7 @@ class Sitemaps extends Metaboxes {
 	public function ping_bing() {
 
 		$pingurl = 'http://www.bing.com/webmaster/ping.aspx?siteMap=' . urlencode( $this->the_home_url_from_cache( true ) . 'sitemap.xml' );
-		wp_safe_remote_get( $pingurl, array( 'timeout' => 3 ) );
+		\wp_safe_remote_get( $pingurl, array( 'timeout' => 3 ) );
 
 	}
 
@@ -815,7 +815,7 @@ class Sitemaps extends Metaboxes {
 	public function ping_yandex() {
 
 		$pingurl = 'http://blogs.yandex.ru/pings/?status=success&url=' . urlencode( $this->the_home_url_from_cache( true ) . 'sitemap.xml' );
-		wp_safe_remote_get( $pingurl, array( 'timeout' => 3 ) );
+		\wp_safe_remote_get( $pingurl, array( 'timeout' => 3 ) );
 
 	}
 

@@ -425,16 +425,6 @@ class Metaboxes extends Site_Options {
 	}
 
 	/**
-	 * Social Metabox Relationships Tab output.
-	 *
-	 * @since 2.2.4
-	 * @see $this->social_metabox() Callback for Social Settings box.
-	 */
-	public function social_metabox_relationships_tab() {
-		$this->get_view( 'metaboxes/social-metabox', array(), 'relationships' );
-	}
-
-	/**
 	 * Webmaster meta box on the Site SEO Settings page.
 	 *
 	 * @since 2.2.4

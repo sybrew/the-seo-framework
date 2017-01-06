@@ -22,29 +22,24 @@ switch ( $instance ) :
 		 */
 		$default_tabs = array(
 			'general' => array(
-				'name' 		=> __( 'General', 'autodescription' ),
-				'callback'	=> array( $this, 'social_metabox_general_tab' ),
-				'dashicon'	=> 'admin-generic',
+				'name'     => __( 'General', 'autodescription' ),
+				'callback' => array( $this, 'social_metabox_general_tab' ),
+				'dashicon' => 'admin-generic',
 			),
 			'facebook' => array(
-				'name'		=> 'Facebook',
-				'callback'	=> array( $this, 'social_metabox_facebook_tab' ),
-				'dashicon'	=> 'facebook-alt',
+				'name'     => 'Facebook',
+				'callback' => array( $this, 'social_metabox_facebook_tab' ),
+				'dashicon' => 'facebook-alt',
 			),
 			'twitter' => array(
-				'name'		=> 'Twitter',
-				'callback'	=> array( $this, 'social_metabox_twitter_tab' ),
-				'dashicon'	=> 'twitter',
+				'name'     => 'Twitter',
+				'callback' => array( $this, 'social_metabox_twitter_tab' ),
+				'dashicon' => 'twitter',
 			),
 			'postdates' => array(
-				'name'		=> __( 'Post Dates', 'autodescription' ),
-				'callback'	=> array( $this, 'social_metabox_postdates_tab' ),
-				'dashicon'	=> 'backup',
-			),
-			'relationships' => array(
-				'name'		=> __( 'Link Relationships', 'autodescription' ),
-				'callback'	=> array( $this, 'social_metabox_relationships_tab' ),
-				'dashicon'	=> 'leftright',
+				'name'     => __( 'Post Dates', 'autodescription' ),
+				'callback' => array( $this, 'social_metabox_postdates_tab' ),
+				'dashicon' => 'backup',
 			),
 		);
 
@@ -292,30 +287,6 @@ switch ( $instance ) :
 
 		//* Echo checkboxes.
 		$this->wrap_fields( $home_publish_time_checkbox . $home_modify_time_checkbox, true );
-		break;
-
-	case 'the_seo_framework_social_metabox_relationships' :
-
-		?><h4><?php esc_html_e( 'Link Relationship Settings', 'autodescription' ); ?></h4><?php
-		$this->description( __( 'Some Search Engines look for relations between the content of your pages. If you have multiple pages for a single Post or Page, or have archives indexed, this option will help Search Engines look for the right page to display in the Search Results.', 'autodescription' ) );
-		$this->description( __( "It's recommended to turn this option on for better SEO consistency and to prevent duplicate content errors.", 'autodescription' ) );
-
-		?><hr><?php
-
-		/* translators: %s = <code>rel</code> */
-		$prev_next_posts_label = sprintf( esc_html__( 'Add %s link tags to Posts and Pages?', 'autodescription' ), $this->code_wrap( 'rel' ) );
-		$prev_next_posts_checkbox = $this->make_checkbox( 'prev_next_posts', $prev_next_posts_label, '', false );
-
-		/* translators: %s = <code>rel</code> */
-		$prev_next_archives_label = sprintf( esc_html__( 'Add %s link tags to Archives?', 'autodescription' ), $this->code_wrap( 'rel' ) );
-		$prev_next_archives_checkbox = $this->make_checkbox( 'prev_next_archives', $prev_next_archives_label, '', false );
-
-		/* translators: %s = <code>rel</code> */
-		$prev_next_frontpage_label = sprintf( esc_html__( 'Add %s link tags to the Home Page?', 'autodescription' ), $this->code_wrap( 'rel' ) );
-		$prev_next_frontpage_checkbox = $this->make_checkbox( 'prev_next_frontpage', $prev_next_frontpage_label, '', false );
-
-		//* Echo checkboxes.
-		$this->wrap_fields( $prev_next_posts_checkbox . $prev_next_archives_checkbox . $prev_next_frontpage_checkbox, true );
 		break;
 
 	default :
