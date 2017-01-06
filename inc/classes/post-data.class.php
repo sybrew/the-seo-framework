@@ -127,7 +127,7 @@ class Post_Data extends Detect {
 					 * Also, they will only cause bugs.
 					 * Query parameters are also only used when no pretty permalinks are used. Which is bad.
 					 */
-					$data[ $key ] = $this->s_url( $value, false );
+					$data[ $key ] = $this->s_url( $value );
 					continue 2;
 
 				case 'redirect' :

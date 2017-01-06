@@ -123,9 +123,9 @@ class Inpost extends Doing_It_Right {
 		$priority = (int) \apply_filters( 'the_seo_framework_term_metabox_priority', 0 );
 
 		//* Add taxonomy meta boxes
-		foreach ( \get_taxonomies( array( 'public' => true, 'show_ui' => true ) ) as $tax_name )
+		foreach ( \get_taxonomies( array( 'public' => true, 'show_ui' => true ) ) as $tax_name ) {
 			\add_action( $tax_name . '_edit_form', array( $this, 'pre_seo_box' ), $priority, 2 );
-
+		}
 	}
 
 	/**
@@ -166,8 +166,8 @@ class Inpost extends Doing_It_Right {
 					/**
 					 * High priority, this box is seen right below the post/page edit screen.
 					 * Applies filters 'the_seo_framework_metabox_priority' : string
-					 * Accepts 'high', 'default', 'low'
 					 * @since 2.6.0
+					 * @param string $default Accepts 'high', 'default', 'low'
 					 */
 					$priority = (string) \apply_filters( 'the_seo_framework_metabox_priority', 'high' );
 

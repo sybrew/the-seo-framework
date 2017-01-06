@@ -143,8 +143,15 @@ class Admin_Pages extends Inpost {
 	 * Initialize the settings page.
 	 *
 	 * @since 2.2.2
+	 * @since 2.8.0 Handled settings POST initialization.
 	 */
 	public function settings_init() {
+
+		//* Handle post-update actions. Must be initialized on admin_init and is initalized on options.php.
+		if ( 'options.php' === $GLOBALS['pagenow'] )
+			$this->handle_update_post();
+
+		//* Output metaboxes.
 		\add_action( $this->seo_settings_page_hook . '_settings_page_boxes', array( $this, 'do_metaboxes' ) );
 		\add_action( 'load-' . $this->seo_settings_page_hook, array( $this, 'metaboxes' ) );
 	}
@@ -353,7 +360,7 @@ class Admin_Pages extends Inpost {
 				<p class="tsf-top-buttons">
 					<?php
 					\submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
-					\submit_button( $this->page_defaults['reset_button_text'], 'secondary autodescription-js-confirm-reset', $this->get_field_name( 'reset' ), false, array( 'id' => '' ) );
+					\submit_button( $this->page_defaults['reset_button_text'], 'secondary tsf-js-confirm-reset', $this->get_field_name( 'reset' ), false, array( 'id' => '' ) );
 					?>
 				</p>
 			</div>
@@ -363,7 +370,7 @@ class Admin_Pages extends Inpost {
 			<div class="tsf-bottom-buttons">
 				<?php
 				\submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
-				\submit_button( $this->page_defaults['reset_button_text'], 'secondary autodescription-js-confirm-reset', $this->get_field_name( 'reset' ), false, array( 'id' => '' ) );
+				\submit_button( $this->page_defaults['reset_button_text'], 'secondary tsf-js-confirm-reset', $this->get_field_name( 'reset' ), false, array( 'id' => '' ) );
 				?>
 			</div>
 		</form>
@@ -375,7 +382,7 @@ class Admin_Pages extends Inpost {
 				// close postboxes that should be closed
 				$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
 				// postboxes setup
-				postboxes.add_postbox_toggles('<?php echo esc_js( $this->seo_settings_page_hook ); ?>');
+				postboxes.add_postbox_toggles('<?php echo \esc_js( $this->seo_settings_page_hook ); ?>');
 			});
 			//]]>
 		</script>
@@ -400,15 +407,15 @@ class Admin_Pages extends Inpost {
 		if ( null === $request )
 			return;
 
-		if ( isset( $request['settings-updated'] ) && 'true' === $request['settings-updated'] )
+		if ( isset( $request['settings-updated'] ) && 'true' === $request['settings-updated'] ) :
 			$this->do_dismissible_notice( $this->page_defaults['saved_notice_text'], 'updated' );
-		elseif ( isset( $request['reset'] ) && 'true' === $request['reset'] )
+		elseif ( isset( $request['reset'] ) && 'true' === $request['reset'] ) :
 			$this->do_dismissible_notice( $this->page_defaults['reset_notice_text'], 'warning' );
-		elseif ( isset( $request['error'] ) && 'true' === $request['error'] )
+		elseif ( isset( $request['error'] ) && 'true' === $request['error'] ) :
 			$this->do_dismissible_notice( $this->page_defaults['error_notice_text'], 'error' );
-		elseif ( isset( $request['seo-updated'] ) && 'true' === $request['seo-updated'] )
+		elseif ( isset( $request['seo-updated'] ) && 'true' === $request['seo-updated'] ) :
 			$this->do_dismissible_notice( $this->page_defaults['plugin_update_text'], 'updated' );
-
+		endif;
 	}
 
 	/**

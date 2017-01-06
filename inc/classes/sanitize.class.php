@@ -77,13 +77,13 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
-	 * Register each of the settings with a sanitization filter type.
+	 * Handles settings field update POST actions.
 	 *
-	 * @since 2.2.2
-	 * @uses autodescription_add_option_filter() Assign filter to array of settings.
-	 * @see The_SEO_Framework_Sanitize::add_filter() Add sanitization filters to options.
+	 * @since 2.8.0
+	 *
+	 * @return void Early if nonce failed.
 	 */
-	public function sanitizer_filters() {
+	public function handle_update_post() {
 
 		//* Verify update nonce.
 		if ( false === $this->verify_seo_settings_nonce() )
@@ -92,7 +92,21 @@ class Sanitize extends Admin_Pages {
 		//* Update hidden options.
 		$this->update_hidden_options_to_default();
 
-		$this->add_filter(
+		$this->init_sanitizer_filters();
+
+		//* Flush transients after option update has been completed.
+		add_action( "updated_option_{$this->settings_field}", array( $this, 'flush_main_transients' ) );
+	}
+
+	/**
+	 * Register each of the settings with a sanitization filter type.
+	 *
+	 * @since 2.8.0
+	 * @uses method add_option_filter() Assign filter to array of settings.
+	 */
+	public function init_sanitizer_filters() {
+
+		$this->add_option_filter(
 			's_title_separator',
 			$this->settings_field,
 			array(
@@ -100,7 +114,7 @@ class Sanitize extends Admin_Pages {
 			)
 		);
 
-		$this->add_filter(
+		$this->add_option_filter(
 			's_description_separator',
 			$this->settings_field,
 			array(
@@ -108,7 +122,7 @@ class Sanitize extends Admin_Pages {
 			)
 		);
 
-		$this->add_filter(
+		$this->add_option_filter(
 			's_description',
 			$this->settings_field,
 			array(
@@ -117,7 +131,7 @@ class Sanitize extends Admin_Pages {
 			)
 		);
 
-		$this->add_filter(
+		$this->add_option_filter(
 			's_title',
 			$this->settings_field,
 			array(
@@ -128,7 +142,7 @@ class Sanitize extends Admin_Pages {
 			)
 		);
 
-		$this->add_filter(
+		$this->add_option_filter(
 			's_knowledge_type',
 			$this->settings_field,
 			array(
@@ -136,7 +150,7 @@ class Sanitize extends Admin_Pages {
 			)
 		);
 
-		$this->add_filter(
+		$this->add_option_filter(
 			's_left_right',
 			$this->settings_field,
 			array(
@@ -144,7 +158,7 @@ class Sanitize extends Admin_Pages {
 			)
 		);
 
-		$this->add_filter(
+		$this->add_option_filter(
 			's_left_right_home',
 			$this->settings_field,
 			array(
@@ -152,7 +166,7 @@ class Sanitize extends Admin_Pages {
 			)
 		);
 
-		$this->add_filter(
+		$this->add_option_filter(
 			's_one_zero',
 			$this->settings_field,
 			array(
@@ -236,10 +250,14 @@ class Sanitize extends Admin_Pages {
 				'ld_json_searchbox',
 				'ld_json_sitename',
 				'ld_json_breadcrumbs',
+
+				'sitemaps_output',
+				'sitemaps_modified',
+				'sitemap_timestamps',
 			)
 		);
 
-		$this->add_filter(
+		$this->add_option_filter(
 			's_absint',
 			$this->settings_field,
 			array(
@@ -247,7 +265,7 @@ class Sanitize extends Admin_Pages {
 			)
 		);
 
-		$this->add_filter(
+		$this->add_option_filter(
 			's_no_html',
 			$this->settings_field,
 			array()
@@ -257,7 +275,7 @@ class Sanitize extends Admin_Pages {
 		 * @todo create content="code" stripper
 		 * @priority low 2.9.0+
 		 */
-		$this->add_filter(
+		$this->add_option_filter(
 			's_no_html_space',
 			$this->settings_field,
 			array(
@@ -270,7 +288,7 @@ class Sanitize extends Admin_Pages {
 			)
 		);
 
-		$this->add_filter(
+		$this->add_option_filter(
 			's_url',
 			$this->settings_field,
 			array(
@@ -289,7 +307,7 @@ class Sanitize extends Admin_Pages {
 			)
 		);
 
-		$this->add_filter(
+		$this->add_option_filter(
 			's_url_query',
 			$this->settings_field,
 			array(
@@ -297,7 +315,7 @@ class Sanitize extends Admin_Pages {
 			)
 		);
 
-		$this->add_filter(
+		$this->add_option_filter(
 			's_twitter_name',
 			$this->settings_field,
 			array(
@@ -306,49 +324,13 @@ class Sanitize extends Admin_Pages {
 			)
 		);
 
-		$this->add_filter(
+		$this->add_option_filter(
 			's_twitter_card',
 			$this->settings_field,
 			array(
 				'twitter_card',
 			)
 		);
-
-		//* Special action filter.
-		$this->add_filter(
-			's_one_zero_flush_rewrite',
-			$this->settings_field,
-			array(
-				'sitemaps_output',
-			)
-		);
-
-		//* Special action filter.
-		$this->add_filter(
-			's_one_zero_flush_sitemap',
-			$this->settings_field,
-			array(
-				'sitemaps_modified',
-				'sitemap_timestamps',
-			)
-		);
-
-	}
-
-	/**
-	 * Registers option sanitation filter
-	 *
-	 * @since 2.2.2
-	 * @since 2.7.0 : No longer used internally.
-	 *
-	 * @param string $filter The filter to call (see The_SEO_Framework_Site_Options::$available_filters for options)
-	 * @param string $option The WordPress option name
-	 * @param string|array $suboption Optional. The suboption or suboptions you want to filter
-	 *
-	 * @return true
-	 */
-	public function autodescription_add_option_filter( $filter, $option, $suboption = null ) {
-		return $this->add_filter( $filter, $option, $suboption );
 	}
 
 	/**
@@ -360,13 +342,14 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.2.2
 	 * @since 2.7.0: Uses external caching function.
+	 * @since 2.8.0 Renamed.
 	 *
 	 * @param string $filter Sanitization filter type
 	 * @param string $option Option key
 	 * @param array|string $suboption Optional. Suboption key
 	 * @return boolean Returns true when complete
 	 */
-	public function add_filter( $filter, $option, $suboption = null ) {
+	public function add_option_filter( $filter, $option, $suboption = null ) {
 
 		$this->set_option_filter( $filter, $option, $suboption );
 
@@ -389,7 +372,7 @@ class Sanitize extends Admin_Pages {
 	 * @param string $option Option key
 	 * @param array|string $suboption Optional. Suboption key
 	 * @param bool $get Whether to retrieve cache.
-	 * @return boolean Returns true when complete
+	 * @return array When $get is true, it will return the option filters.
 	 */
 	protected function set_option_filter( $filter, $option, $suboption = null, $get = false ) {
 
@@ -503,8 +486,6 @@ class Sanitize extends Admin_Pages {
 			's_title'                  => array( $this, 's_title' ),
 			's_knowledge_type'         => array( $this, 's_knowledge_type' ),
 			's_one_zero'               => array( $this, 's_one_zero' ),
-			's_one_zero_flush_rewrite' => array( $this, 's_one_zero_flush_rewrite' ),
-			's_one_zero_flush_sitemap' => array( $this, 's_one_zero_flush_sitemap' ),
 			's_no_html'                => array( $this, 's_no_html' ),
 			's_no_html_space'          => array( $this, 's_no_html_space' ),
 			's_absint'                 => array( $this, 's_absint' ),
@@ -548,7 +529,7 @@ class Sanitize extends Admin_Pages {
 
 		//* Fallback to default if empty.
 		if ( empty( $previous ) )
-			$previous = $this->get_default_option( 'title_seperator' );
+			$previous = $this->get_default_option( 'title_seperator' ); // NOTE: Typo
 
 		return (string) $previous;
 	}
@@ -742,56 +723,6 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
-	 * Returns a 1 or 0, for all truthy / falsy values.
-	 * Uses double casting. First, we cast to bool, then to integer.
-	 * Also flushes rewrite rules.
-	 *
-	 * @since 2.2.9
-	 *
-	 * @param mixed $new_value Should ideally be a 1 or 0 integer passed in.
-	 * @return integer 1 or 0.
-	 */
-	protected function s_one_zero_flush_rewrite( $new_value ) {
-
-		/**
-		 * Don't call functions anymore. Although it was after admin_init.
-		 * It was too early for some plugins.
-		 *
-		 * @since 2.3.0
-		 */
-		if ( $new_value ) {
-			$this->enqueue_rewrite_activate( true );
-		} else {
-			$this->enqueue_rewrite_deactivate( true );
-		}
-
-		return (int) (bool) $new_value;
-	}
-
-	/**
-	 * Returns a 1 or 0, for all truthy / falsy values.
-	 * Uses double casting. First, we cast to bool, then to integer.
-	 * Also flushes the sitemap.
-	 *
-	 * @since 2.2.9
-	 * @staticvar bool $flushed
-	 *
-	 * @param mixed $new_value Should ideally be a 1 or 0 integer passed in.
-	 * @return integer 1 or 0.
-	 */
-	protected function s_one_zero_flush_sitemap( $new_value ) {
-
-		static $flushed = null;
-
-		if ( ! isset( $flushed ) )
-			$this->delete_sitemap_transient();
-
-		$flushed = true;
-
-		return (int) (bool) $new_value;
-	}
-
-	/**
 	 * Returns a positive integer value.
 	 *
 	 * @since 2.2.2
@@ -834,16 +765,13 @@ class Sanitize extends Admin_Pages {
 	 * Makes URLs safe.
 	 *
 	 * @since 2.2.2
-	 * @since 2.8.0 Added flush parameter... TODO move this "spaghetti code" in an actual save listener.
-	 * Stop guessing and just do it instead.
+	 * @since 2.8.0 Method is now public.
 	 *
 	 * @param string $new_value String, a URL, possibly unsafe.
 	 * @param boolean/sphaghetti $flush Whether to flush to transient.
 	 * @return string String a safe URL without Query Arguments.
 	 */
-	protected function s_url( $new_value, $flush = true ) {
-
-		$flush and $this->delete_front_ld_json_transient();
+	public function s_url( $new_value ) {
 
 		/**
 		 * If queries have been tokenized, take the value before the query args.
@@ -852,22 +780,20 @@ class Sanitize extends Admin_Pages {
 		$no_query_url = strtok( $new_value, '?' );
 		$url = $no_query_url ? $no_query_url : $new_value;
 
-		return esc_url_raw( $url );
+		return \esc_url_raw( $url );
 	}
 
 	/**
 	 * Makes URLs safe and removes query args.
 	 *
 	 * @since 2.2.8
+	 * @since 2.8.0 Method is now public.
 	 *
 	 * @param string $new_value String, a URL, possibly unsafe.
 	 * @return string String a safe URL with Query Arguments.
 	 */
-	protected function s_url_query( $new_value ) {
-
-		$this->delete_front_ld_json_transient();
-
-		return esc_url_raw( $new_value );
+	public function s_url_query( $new_value ) {
+		return \esc_url_raw( $new_value );
 	}
 
 	/**
@@ -914,7 +840,7 @@ class Sanitize extends Admin_Pages {
 		$profile = trim( strip_tags( $new_value ) );
 
 		if ( 'http' === substr( $profile, 0, 4 ) ) {
-			$parsed_url = wp_parse_url( $profile );
+			$parsed_url = \wp_parse_url( $profile );
 			$path = isset( $parsed_url['path'] ) ? str_replace( '/', '', $parsed_url['path'] ) : '';
 			$profile = $path ? '@' . $path : '';
 
@@ -1045,7 +971,7 @@ class Sanitize extends Admin_Pages {
 		 * Applies filters the_seo_framework_301_noqueries : bool remove query args from 301
 		 * @since 2.5.0
 		 */
-		$noqueries = (bool) apply_filters( 'the_seo_framework_301_noqueries', true );
+		$noqueries = (bool) \apply_filters( 'the_seo_framework_301_noqueries', true );
 
 		/**
 		 * Remove queries from the URL

@@ -683,4 +683,24 @@ class Transients extends Sitemaps {
 
 		return $flushed = true;
 	}
+
+	/**
+	 * Flushes front-page and global transients that can be affected by options.
+	 *
+	 * @since 2.8.0
+	 * @staticvar bool $flushed Prevents second flush.
+	 *
+	 * @return bool True on success.
+	 */
+	public function flush_main_transients() {
+
+		$this->delete_front_ld_json_transient();
+		$this->delete_sitemap_transient();
+
+		if ( $this->get_option( 'sitemaps_output', false ) ) {
+			$this->enqueue_rewrite_activate( true );
+		} else {
+			$this->enqueue_rewrite_deactivate( true );
+		}
+	}
 }

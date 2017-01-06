@@ -328,4 +328,39 @@ final class Deprecated {
 		// return an array of exclude post IDs
 		return $post_ids;
 	}
+
+	/**
+	 * Registers option sanitation filter
+	 *
+	 * @since 2.2.2
+	 * @since 2.7.0 : No longer used internally.
+	 * @since 2.8.0 : Deprecated
+	 * @deprecated
+	 *
+	 * @param string $filter The filter to call (see The_SEO_Framework_Site_Options::$available_filters for options)
+	 * @param string $option The WordPress option name
+	 * @param string|array $suboption Optional. The suboption or suboptions you want to filter
+	 * @return true on completion.
+	 */
+	public function autodescription_add_option_filter( $filter, $option, $suboption = null ) {
+
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->add_option_filter()', '2.8.0' );
+
+		return $this->add_option_filter( $filter, $option, $suboption );
+	}
+
+	/**
+	 * Register each of the settings with a sanitization filter type.
+	 *
+	 * @since 2.2.2
+	 * @since 2.8.0 Deprecated.
+	 * @uses method add_filter() Assign filter to array of settings.
+	 * @see The_SEO_Framework_Sanitize::add_filter() Add sanitization filters to options.
+	 */
+	public function sanitizer_filters() {
+
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->init_sanitizer_filters()', '2.8.0' );
+
+		$this->init_sanitizer_filters();
+	}
 }

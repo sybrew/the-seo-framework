@@ -59,6 +59,9 @@ class Init extends Query {
 		 */
 		$this->use_object_cache = (bool) \apply_filters( 'the_seo_framework_use_object_cache', true );
 
+		//* Determines Whether we're using pretty permalinks.
+		$this->pretty_permalinks = '' !== $this->permalink_structure();
+
 		\add_action( 'init', array( $this, 'init_the_seo_framework' ), 1 );
 	}
 
@@ -66,6 +69,8 @@ class Init extends Query {
 	 * Runs the plugin on the front-end.
 	 *
 	 * @since 1.0.0
+	 * @since 2.8.0 Silently deprecated. Displaying legacy roots.
+	 * @deprecated
 	 */
 	public function autodescription_run() {
 		$this->init_the_seo_framework();
@@ -100,6 +105,12 @@ class Init extends Query {
 	public function init_global_actions() {
 		//* Jetpack compat.
 		\add_action( 'init', array( $this, 'jetpack_compat' ) );
+
+		//* Add query strings for sitemap rewrite.
+		\add_action( 'init', array( $this, 'rewrite_rule_sitemap' ), 1 );
+
+		//* Enqueue sitemap rewrite flush
+		\add_action( 'shutdown', array( $this, 'maybe_flush_rewrite' ), 999 );
 	}
 
 	/**
@@ -107,7 +118,11 @@ class Init extends Query {
 	 *
 	 * @since 2.8.0
 	 */
-	public function init_global_filters() { }
+	public function init_global_filters() {
+
+		//* Add query strings for sitemap rewrite.
+		\add_filter( 'query_vars', array( $this, 'enqueue_sitemap_query_vars' ), 1 );
+	}
 
 	/**
 	 * Initializes Admin Menu actions.
@@ -135,9 +150,6 @@ class Init extends Query {
 			//* Ajax handlers for columns.
 			\add_action( 'wp_ajax_add-tag', array( $this, 'init_columns_ajax' ), -1 );
 		}
-
-		//* Sanitizes Site options
-		\add_action( 'admin_init', array( $this, 'sanitizer_filters' ) );
 
 		/**
 		 * Delete Sitemap and Description transients on post publish/delete.
@@ -168,29 +180,35 @@ class Init extends Query {
 		\add_action( 'upgrader_process_complete', array( $this, 'delete_theme_dir_transient' ), 10, 2 );
 
 		if ( $this->load_options ) {
+			// Enqueue i18n defaults.
+			\add_action( 'admin_init', array( $this, 'enqueue_page_defaults' ), 1 );
+
+			//* Set up site settings and save/reset them
+			\add_action( 'admin_init', array( $this, 'register_settings' ), 5 );
+
+			//* Load the SEO admin page content and handlers.
+			\add_action( 'admin_init', array( $this, 'settings_init' ), 10 );
+
+			//* Update site options at plugin update.
+			\add_action( 'admin_init', array( $this, 'site_updated_plugin_option' ), 30 );
+
 			//* Enqueue Inpost meta boxes.
 			\add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box_init' ), 5 );
 
 			//* Enqueue Taxonomy meta output.
 			\add_action( 'current_screen', array( $this, 'add_taxonomy_seo_box_init' ), 10 );
 
-			//* Admin AJAX for counter options.
-			\add_action( 'wp_ajax_the_seo_framework_update_counter', array( $this, 'wp_ajax_update_counter_type' ) );
-
-			// Enqueue i18n defaults.
-			\add_action( 'admin_init', array( $this, 'enqueue_page_defaults' ), 1 );
-
 			// Add menu links and register $this->seo_settings_page_hook
 			\add_action( 'admin_menu', array( $this, 'add_menu_link' ) );
-
-			//* Load the page content
-			\add_action( 'admin_init', array( $this, 'settings_init' ) );
 
 			// Set up notices
 			\add_action( 'admin_notices', array( $this, 'notices' ) );
 
 			// Load nessecary assets
 			\add_action( 'admin_init', array( $this, 'load_assets' ) );
+
+			//* Admin AJAX for counter options.
+			\add_action( 'wp_ajax_the_seo_framework_update_counter', array( $this, 'wp_ajax_update_counter_type' ) );
 		}
 	}
 
@@ -225,6 +243,14 @@ class Init extends Query {
 		 *              Now uses another method. Was: 'search_filter'.
 		 */
 		\add_action( 'pre_get_posts', array( $this, 'adjust_search_filter' ), 9999, 1 );
+
+		/**
+		 * Outputs sitemap on request.
+		 *
+		 * Adding a higher priority will cause a trailing slash to be added.
+		 * We need to be in front of the queue to prevent this from happening.
+		 */
+		\add_action( 'template_redirect', array( $this, 'maybe_output_sitemap' ), 1 );
 
 		if ( $this->is_singular() ) {
 			//* Initialize 301 redirects.
@@ -492,28 +518,35 @@ class Init extends Query {
 	 * Redirects singular page to an alternate URL.
 	 *
 	 * @since 2.0.9
+	 * @since 2.8.0 Redirect status code is now filterable.
 	 *
 	 * @return void early on non-singular pages.
 	 */
 	public function custom_field_redirect() {
 
-		$url = $this->get_custom_field( 'redirect' );
-
-		if ( $url ) {
+		if ( $url = $this->get_custom_field( 'redirect' ) ) {
 
 			$allow_external = $this->allow_external_redirect();
-			$scheme = null;
+
+			/**
+			 * Applies filters 'the_seo_framework_redirect_status_code' : Absolute integer.
+			 * @since 2.8.0
+			 */
+			$redirect_type = absint( apply_filters( 'the_seo_framework_redirect_status_code', 301 ) );
+
+			if ( $redirect_type > 399 || $redirect_type < 300 )
+				$this->_doing_it_wrong( __METHOD__, 'You should use 3xx HTTP Status Codes. Recommended 301 and 302.', '2.8.0' );
 
 			if ( false === $allow_external ) {
 				$url = $this->set_url_scheme( $url, 'relative' );
 				$url = $this->add_url_host( $url );
 				$scheme = $this->is_ssl() ? 'https' : 'http';
 
-				\wp_safe_redirect( \esc_url_raw( $url, array( $scheme ) ), 301 );
+				\wp_safe_redirect( \esc_url_raw( $url, array( $scheme ) ), $redirect_type );
 				exit;
 			}
 
-			\wp_redirect( \esc_url_raw( $url ), 301 );
+			\wp_redirect( \esc_url_raw( $url ), $redirect_type );
 			exit;
 		}
 	}

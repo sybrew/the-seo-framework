@@ -70,12 +70,6 @@ class Site_Options extends Sanitize {
 		$this->o_plugin_updated = 'updated_' . THE_SEO_FRAMEWORK_DB_VERSION;
 		$this->seo_settings_page_slug = 'theseoframework-settings';
 
-		//* Set up site settings and save/reset them
-		\add_action( 'admin_init', array( $this, 'register_settings' ), 5 );
-
-		//* Update site options at plugin update.
-		\add_action( 'admin_init', array( $this, 'site_updated_plugin_option' ), 30 );
-
 	}
 
 	/**
@@ -709,8 +703,10 @@ class Site_Options extends Sanitize {
 	 */
 	public function update_settings( $new = '', $settings_field = '' ) {
 
-		if ( empty( $settings_field ) )
+		if ( empty( $settings_field ) ) {
 			$settings_field = $this->settings_field;
+			$this->init_sanitizer_filters();
+		}
 
 		$old = \get_option( $settings_field );
 		$settings = \wp_parse_args( $new, $old );

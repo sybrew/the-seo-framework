@@ -64,24 +64,6 @@ class Sitemaps extends Metaboxes {
 	 */
 	protected function __construct() {
 		parent::__construct();
-
-		//* Whether we're using pretty permalinks.
-		$this->pretty_permalinks = '' !== $this->permalink_structure();
-
-		/**
-		 * Add query strings to rewrite
-		 */
-		\add_action( 'init', array( $this, 'rewrite_rule_sitemap' ), 1 );
-		\add_filter( 'query_vars', array( $this, 'enqueue_sitemap_query_vars' ), 1 );
-
-		/**
-		 * Adding a higher priority will cause a trailing slash to be added.
-		 * We need to be in front of the queue to prevent this from happening.
-		 */
-		\add_action( 'template_redirect', array( $this, 'maybe_output_sitemap' ), 1 );
-
-		//* Enqueue rewrite flush
-		\add_action( 'shutdown', array( $this, 'maybe_flush_rewrite' ), 999 );
 	}
 
 	/**
