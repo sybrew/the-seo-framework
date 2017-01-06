@@ -269,8 +269,9 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 			* Your website is accessible through both HTTP and HTTPS
 			* Link relationship settings have been put here.
 	/
-	* TODO Visual notification for when an actual `robots.txt` file has been found.
-		* https://wordpress.org/support/topic/sitemap-settings-1/
+	* A visual notification for when an actual `robots.txt` file has been found has been put in place in the Sitemap Settings metabox.
+		* This makes the Robots tab visible once more.
+	* A visual notification of the sitemap's whereabouts has been put in place in the Sitemap Settings metabox when a sitemap.xml file has been detected.
 * **Changed:**
 	* "Knowledge Graph" name has been converted into "Authorized Presence". Its usage, output and effect are still the same.
 	* The first two description separator buttons are no longer marked "recommended".
@@ -508,6 +509,7 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 	* Removed several WP version checks that were aimed below the plugin WP version requirements.
 	* Correct error notice titles are now in place for The SEO Framework's debug handlers. Rather than only `Notice:`.
 	* Method `the_seo_framework()->call_function()` inaccessible method/function handler now uses the correctly assigned one, rather than using `_doing_it_wrong()`.
+	* The Sitemaps Settings metabox' tabs output are now automatically determined.
 * **Fixed:**
 	/
 	* Several CSS classes didn't have a correct prefix. These were, and now are:

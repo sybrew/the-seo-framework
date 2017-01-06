@@ -8,7 +8,7 @@ $instance = $this->get_view_instance( 'the_seo_framework_sitemaps_metabox', $ins
 switch ( $instance ) :
 	case 'the_seo_framework_sitemaps_metabox_main' :
 
-		if ( ! $this->pretty_permalinks ) {
+		if ( ! $this->pretty_permalinks ) :
 
 			$permalink_settings_url = admin_url( 'options-permalink.php' );
 			$here = '<a href="' . esc_url( $permalink_settings_url ) . '" target="_blank" title="' . esc_attr__( 'Permalink Settings', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
@@ -18,7 +18,7 @@ switch ( $instance ) :
 			?><hr><?php
 			$this->description_noesc( sprintf( esc_html_x( "Change your Permalink Settings %s (Recommended: 'postname').", '%s = here', 'autodescription' ), $here ) );
 
-		} else {
+		else :
 
 			/**
 			 * Parse tabs content
@@ -79,20 +79,9 @@ switch ( $instance ) :
 				unset( $tabs['notify'] );
 			}
 
-			/**
-			 * Remove the robots submenu
-			 * @since 2.5.2
-			 */
-			if ( $robots_detected ) {
-				unset( $tabs['robots'] );
-			}
+			$this->nav_tab_wrapper( 'sitemaps', $tabs, '2.2.8' );
 
-			if ( $robots_detected && ( $has_sitemap_plugin || $sitemap_detected ) )
-				$use_tabs = false;
-
-			$this->nav_tab_wrapper( 'sitemaps', $tabs, '2.2.8', $use_tabs );
-
-		}
+		endif;
 		break;
 
 	case 'the_seo_framework_sitemaps_metabox_general' :
@@ -103,7 +92,9 @@ switch ( $instance ) :
 		$has_sitemap_plugin = $this->detect_sitemap_plugin();
 		$sitemap_detected = $this->has_sitemap_xml();
 
-		?><h4><?php esc_html_e( 'Sitemap Integration Settings', 'autodescription' ); ?></h4><?php
+		?>
+		<h4><?php esc_html_e( 'Sitemap Integration Settings', 'autodescription' ); ?></h4>
+		<?php
 
 		if ( $has_sitemap_plugin ) {
 			$this->description( __( 'Another active sitemap plugin has been detected. This means that the sitemap functionality has been replaced.', 'autodescription' ) );
@@ -130,7 +121,7 @@ switch ( $instance ) :
 			);
 		}
 
-		if ( ! ( $has_sitemap_plugin || $sitemap_detected ) && $this->get_option( 'sitemaps_output' ) ) {
+		if ( ! $has_sitemap_plugin && ( $this->get_option( 'sitemaps_output' ) || $sitemap_detected ) ) {
 			$here = '<a href="' . esc_url( $sitemap_url ) . '" target="_blank" title="' . esc_attr__( 'View sitemap', 'autodescription' ) . '">' . esc_attr_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 			$this->description_noesc( sprintf( _x( 'The sitemap can be found %s.', '%s = here', 'autodescription' ), $here ) );
 		}
@@ -142,9 +133,13 @@ switch ( $instance ) :
 		$robots_url = trailingslashit( $site_url ) . 'robots.txt';
 		$here = '<a href="' . esc_url( $robots_url ) . '" target="_blank" title="' . esc_attr__( 'View robots.txt', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 
-		?><h4><?php esc_html_e( 'Robots.txt Settings', 'autodescription' ); ?></h4><?php
+		?>
+		<h4><?php esc_html_e( 'Robots.txt Settings', 'autodescription' ); ?></h4>
+		<?php
 
-		if ( $this->can_do_sitemap_robots() ) :
+		if ( $this->has_robots_txt() ) :
+			$this->description( __( 'A robots.txt file has been detected in the root folder of your website; therefore no settings are able to alter its output.', 'autodescription' ) );
+		elseif ( $this->can_do_sitemap_robots() ) :
 			$this->description( __( 'The robots.txt file is the first thing Search Engines look for. If you add the sitemap location in the robots.txt file, then Search Engines will look for and index the sitemap.', 'autodescription' ) );
 			$this->description( __( 'If you do not add the sitemap location to the robots.txt file, you will need to notify Search Engines manually through the Webmaster Console provided by the Search Engines.', 'autodescription' ) );
 
