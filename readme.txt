@@ -390,11 +390,11 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 	* New JavaScript l10n and object property: 'hasInput'. Determines if the page renders The SEO Framework's input boxes, to be used to improve performance.
 	* Method `the_seo_framework()->s_excerpt()`. For escaping and prettifying (description) excerpts with consideration of shortcodes through filters.
 		* This method was extracted from `the_seo_framework()->get_excerpt_by_id()` when solely using the first parameter.
-	/
 	* Most sanitation functions are now public. This allows for easier, predictable and more secure external code.
 	* Two new description methods:
 		1. `the_seo_framework()->get_description_excerpt_normal()`, fetches the normal description excerpt.
 		1. `the_seo_framework()->get_description_excerpt_social()`, fetches the social description excerpt.
+	* New secure `the_seo_framework()->convert_markdown()` method. To be used to ease up translation strings in the future (and past).
 * **Changed:**
 	* **IMPORTANT:** All the classes can't be initiated directly anymore. Always use `the_seo_framework()`.
 		* Failing to do so will result in a fatal error.

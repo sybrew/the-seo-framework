@@ -753,4 +753,127 @@ class Core {
 
 		return $words_too_many;
 	}
+
+	/**
+	 * Converts markdown text into HMTL.
+	 *
+	 * Does not support list or block elements. Only inline statements.
+	 *
+	 * Note: This code has been rightfully stolen from the Extension Manager plugin (sorry Sybre!).
+	 *
+	 * @since 2.8.0
+	 * @link https://wordpress.org/plugins/about/readme.txt
+	 *
+	 * @param string $text The text that might contain markdown. Expected to be escaped.
+	 * @param array $convert The markdown style types wished to be converted.
+	 * 				If left empty, it will convert all.
+	 * @return string The markdown converted text.
+	 */
+	public function convert_markdown( $text, $convert = array() ) {
+
+		preprocess : {
+			$text = str_replace( "\r\n", "\n", $text );
+			$text = str_replace( "\t", ' ', $text );
+			$text = trim( $text );
+		}
+
+		if ( '' === $text )
+			return '';
+
+		/**
+		 * The conversion list's keys are per reference only.
+		 */
+		$conversions = array(
+			'**'   => 'strong',
+			'*'    => 'em',
+			'`'    => 'code',
+			'[]()' => 'a',
+			'======'  => 'h6',
+			'====='  => 'h5',
+			'===='  => 'h4',
+			'==='  => 'h3',
+			'=='   => 'h2',
+			'='    => 'h1',
+		);
+
+		$md_types = empty( $convert ) ? $conversions : array_intersect( $conversions, $convert );
+
+		foreach ( $md_types as $type ) :
+			switch ( $type ) :
+				case 'strong' :
+					//* Considers word boundary. @TODO consider removing this?
+					$count = preg_match_all( '/(?:\*{2})\b([^\*{2}]+)(?:\*{2})/', $text, $matches, PREG_PATTERN_ORDER );
+
+					for ( $i = 0; $i < $count; $i++ ) {
+						$text = str_replace(
+							$matches[0][ $i ],
+							sprintf( '<strong>%s</strong>', \esc_html( $matches[1][ $i ] ) ),
+							$text
+						);
+					}
+					break;
+
+				case 'em' :
+					$count = preg_match_all( '/(?:\*{1})([^\*{1}]+)(?:\*{1})/', $text, $matches, PREG_PATTERN_ORDER );
+
+					for ( $i = 0; $i < $count; $i++ ) {
+						$text = str_replace(
+							$matches[0][ $i ],
+							sprintf( '<em>%s</em>', \esc_html( $matches[1][ $i ] ) ),
+							$text
+						);
+					}
+					break;
+
+				case 'code' :
+					$count = preg_match_all( '/(?:`{1})([^`{1}]+)(?:`{1})/', $text, $matches, PREG_PATTERN_ORDER );
+
+					for ( $i = 0; $i < $count; $i++ ) {
+						$text = str_replace(
+							$matches[0][ $i ],
+							sprintf( '<code>%s</code>', \esc_html( $matches[1][ $i ] ) ),
+							$text
+						);
+					}
+					break;
+
+				case 'h6' :
+				case 'h5' :
+				case 'h4' :
+				case 'h3' :
+				case 'h2' :
+				case 'h1' :
+					$amount = filter_var( $type, FILTER_SANITIZE_NUMBER_INT );
+					//* Considers word non-boundary. @TODO consider removing this?
+					$expression = "/(?:={{$amount}})\B([^={{$amount}}]+?)\B(?:={{$amount}})/";
+					$count = preg_match_all( $expression, $text, $matches, PREG_PATTERN_ORDER );
+
+					for ( $i = 0; $i < $count; $i++ ) {
+						$text = str_replace(
+							$matches[0][ $i ],
+							sprintf( '<%1$s>%2$s</%1$s>', \esc_attr( $type ), \esc_html( $matches[1][ $i ] ) ),
+							$text
+						);
+					}
+					break;
+
+				case 'a' :
+					$count = preg_match_all( '/(?:(?:\[{1})([^\]{1}]+)(?:\]{1})(?:\({1})([^\)\(]+)(?:\){1}))/', $text, $matches, PREG_PATTERN_ORDER );
+
+					for ( $i = 0; $i < $count; $i++ ) {
+						$text = str_replace(
+							$matches[0][ $i ],
+							sprintf( '<a href="%s" rel="nofollow">%s</a>', \esc_url( $matches[2][ $i ] ), \esc_html( $matches[1][ $i ] ) ),
+							$text
+						);
+					}
+					break;
+
+				default :
+					break;
+			endswitch;
+		endforeach;
+
+		return $text;
+	}
 }
