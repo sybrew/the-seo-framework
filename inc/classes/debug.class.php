@@ -131,7 +131,7 @@ final class Debug implements Debug_Interface {
 	 * @param string $replacement	Optional. The function that should have been called. Default null.
 	 */
 	public function _deprecated_filter( $filter, $version, $replacement = null ) {
-		$this->_deprecated_function( 'filter ' . $filter, $version, $replacement );
+		$this->_deprecated_function( 'Filter ' . $filter, $version, $replacement );
 	}
 
 	/**
@@ -313,9 +313,14 @@ final class Debug implements Debug_Interface {
 
 			$backtrace = debug_backtrace();
 			/**
-			 * 0 = This function. 1 = Debug function. 2 = Error trigger. 3 = Deprecated call.
+			 * 0 = This function. 1 = Debug function. 2 = Error trigger. 3 = Deprecated Class, 4 = Deprecated Method, 5 = Magic Method, 6 = Deprecated call.
+			 * 0 = This function. 1 = Debug function. 2 = Error trigger. 3 = Deprecated Class, 4 = Deprecated Filter, 5 = Deprecated call.
 			 */
-			$error = $backtrace[3];
+			if ( 'Filter ' === substr( $message, 0, 7 ) ) {
+				$error = $backtrace[5];
+			} else {
+				$error = $backtrace[6];
+			}
 
 			$this->error_handler( $error, $message );
 		}

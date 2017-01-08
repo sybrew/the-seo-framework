@@ -51,8 +51,10 @@ class Generate_Image extends Generate_Url {
 	/**
 	 * Fetches og:image URL.
 	 *
-	 * @since 2.5.2 Applies filters string the_seo_framework_og_image_after_featured
-	 * @since 2.5.2 Applies filters string the_seo_framework_og_image_after_header
+	 * @since 2.2.2
+	 * @since 2.2.8 : Added theme icon detection.
+	 * @since 2.5.2 : Added args filters.
+	 * @since 2.8.0 : Added theme logo detection.
 	 *
 	 * @todo listen to attached images within post.
 	 * @todo set archive and front page image listener, now it simply fail on some calls.
@@ -91,20 +93,34 @@ class Generate_Image extends Generate_Url {
 			$image = $this->get_image_from_post_thumbnail( $args );
 
 		//* 2. Fetch image from fallback filter 1
-		if ( empty( $image ) )
+		if ( empty( $image ) ) {
+			/**
+			 * Applies filters 'the_seo_framework_og_image_after_featured' : string
+			 * @since 2.5.2
+			 */
 			$image = (string) \apply_filters( 'the_seo_framework_og_image_after_featured', '', $args['post_id'] );
+		}
 
 		//* 3. Fallback: Get header image if exists
 		if ( empty( $image ) && ( $all_allowed || false === in_array( 'header', $args['disallowed'], true ) ) && current_theme_supports( 'custom-header', 'default-image' ) )
 			$image = $this->get_header_image( true );
 
 		//* 4. Fetch image from fallback filter 2
-		if ( empty( $image ) )
+		if ( empty( $image ) ) {
+			/**
+			 * Applies filters 'the_seo_framework_og_image_after_header' : string
+			 * @since 2.5.2
+			 */
 			$image = (string) \apply_filters( 'the_seo_framework_og_image_after_header', '', $args['post_id'] );
+		}
 
-		//* 5. Get the WP 4.3.0 Site Icon
+		//* 5. Get the WP 4.5 Site Icon
+		if ( empty( $image ) && ( $all_allowed || false === in_array( 'logo', $args['disallowed'], true ) ) && current_theme_supports( 'custom-logo' ) )
+			$image = $this->get_site_logo( true );
+
+		//* 6. Get the WP 4.3 Site Icon
 		if ( empty( $image ) && ( $all_allowed || false === in_array( 'icon', $args['disallowed'], true ) ) )
-			$image = $this->site_icon( 'full', true );
+			$image = $this->get_site_icon( 'full', true );
 
 		if ( $escape && $image )
 			return \esc_url( $image );
@@ -350,15 +366,15 @@ class Generate_Image extends Generate_Url {
 	}
 
 	/**
-	 * Fetches site icon brought in WordPress 4.3.0
+	 * Fetches site icon brought in WordPress 4.3
 	 *
-	 * @since 2.2.1
+	 * @since 2.8.0
 	 *
-	 * @param string $size The icon size, accepts 'full' and pixel values.
+	 * @param string|int $size The icon size, accepts 'full' and pixel values.
 	 * @param bool $set_og_dimensions Whether to set size for OG image. Always falls back to the current post ID.
 	 * @return string URL site icon, not escaped.
 	 */
-	public function site_icon( $size = 'full', $set_og_dimensions = false ) {
+	public function get_site_icon( $size = 'full', $set_og_dimensions = false ) {
 
 		$icon = '';
 
@@ -379,11 +395,46 @@ class Generate_Image extends Generate_Url {
 				}
 			}
 		} elseif ( is_int( $size ) && function_exists( 'has_site_icon' ) ) {
+			//* Above 512 defaults to full. Loop back.
+			if ( $size > 512 )
+				return $this->get_site_icon( 'full', $set_og_dimensions );
+
 			//* Also applies (MultiSite) filters.
 			$icon = \get_site_icon_url( $size );
 		}
 
 		return $icon;
+	}
+
+	/**
+	 * Fetches site logo brought in WordPress 4.5
+	 *
+	 * @since 2.8.0
+	 *
+	 * @param bool $set_og_dimensions Whether to set size for OG image. Always falls back to the current post ID.
+	 * @return string URL site logo, not escaped.
+	 */
+	public function get_site_logo( $set_og_dimensions = false ) {
+
+		$logo = '';
+
+		$site_logo_id = \get_theme_mod( 'custom_logo' );
+
+		if ( $site_logo_id ) {
+			$url_data = '';
+			$url_data = \wp_get_attachment_image_src( $site_logo_id, 'full' );
+
+			$logo = $url_data ? $url_data[0] : '';
+
+			if ( $set_og_dimensions && $logo ) {
+				$w = $url_data[1];
+				$h = $url_data[2];
+
+				$this->image_dimensions = $this->image_dimensions + array( $this->get_the_real_ID() => array( 'width' => $w, 'height' => $h ) );
+			}
+		}
+
+		return $logo;
 	}
 
 	/**

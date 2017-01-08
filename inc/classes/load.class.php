@@ -52,6 +52,7 @@ final class Load extends Feed implements Debug_Interface {
 	 * Constructor, setup debug vars and then load parent constructor.
 	 *
 	 * @staticvar int $count Prevents duplicated constructor loading.
+	 * @return null If called twice or more.
 	 */
 	public function __construct() {
 

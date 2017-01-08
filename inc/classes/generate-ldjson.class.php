@@ -847,10 +847,12 @@ class Generate_Ldjson extends Generate_Image {
 		$logo = '';
 
 		if ( $this->get_option( 'knowledge_logo' ) && 'organization' === $knowledge_type ) {
-			$icon = $this->site_icon();
+			$_logo = $this->get_site_logo();
+			if ( ! $_logo )
+				$_logo = $this->get_site_icon();
 
-			if ( $icon ) {
-				$logourl = \esc_url_raw( $icon );
+			if ( $_logo ) {
+				$logourl = \esc_url_raw( $_logo );
 
 				//* Add trailing comma
 				$logo = '"logo":' . json_encode( $logourl );

@@ -235,7 +235,7 @@ final class Deprecated {
 	 */
 	public function exclude_search_ids() {
 
-		\the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Search::' . __FUNCTION__, '2.7.0', 'The_SEO_Framework_Search::get_excluded_search_ids()' );
+		\the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Search::' . __FUNCTION__, '2.7.0', 'the_seo_framework()->get_excluded_search_ids()' );
 
 		return $this->get_excluded_search_ids();
 	}
@@ -346,7 +346,7 @@ final class Deprecated {
 
 		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->add_option_filter()', '2.8.0' );
 
-		return $this->add_option_filter( $filter, $option, $suboption );
+		return \the_seo_framework()->add_option_filter( $filter, $option, $suboption );
 	}
 
 	/**
@@ -359,8 +359,26 @@ final class Deprecated {
 	 */
 	public function sanitizer_filters() {
 
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->init_sanitizer_filters()', '2.8.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->sanitizer_filters()', '2.8.0', 'the_seo_framework()->init_sanitizer_filters()' );
 
-		$this->init_sanitizer_filters();
+		\the_seo_framework()->init_sanitizer_filters();
+	}
+
+	/**
+	 * Fetches site icon brought in WordPress 4.3.0
+	 *
+	 * @since 2.2.1
+	 * @since 2.8.0: Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $size The icon size, accepts 'full' and pixel values.
+	 * @param bool $set_og_dimensions Whether to set size for OG image. Always falls back to the current post ID.
+	 * @return string URL site icon, not escaped.
+	 */
+	public function site_icon( $size = 'full', $set_og_dimensions = false ) {
+
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->site_icon()', '2.8.0', 'the_seo_framework()->get_site_icon()' );
+
+		return the_seo_framework()->get_site_icon( $size, $set_og_dimensions );
 	}
 }

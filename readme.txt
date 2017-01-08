@@ -245,12 +245,11 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 	* [Google's Social Profile Links](https://developers.google.com/search/docs/data-types/social-profile-links), this is the same as the previously named "Knowledge Graph"; but that brand has been expanded to cover more grounds.
 		* These settings have been moved to the Schema metabox. The Schema settings cover the [Knowledge Graph](https://www.google.com/intl/bn/insidesearch/features/search/knowledge.html).
 	/
-	* TODO Site Logo detection!
+	* Site Logo detection! Brought to you in WordPress 4.5.
 		* Only when the theme supports it. You can upload one through the customizer (Site Identity).
 			* You'll also be notified on its support at the Schema Settings metabox "Presence" tab.
 		* This allows for a new fallback image! This one has priority over the Site Icon.
 		* The Knowledge Graph makes good use of this logo, it has priority over the Site Icon.
-	/
 	* A new General settings metabox! Containing:
 		* General Settings. Generalized general general settings, commander:
 			/
@@ -310,6 +309,7 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 	* TODO When focussing on a field which is showing a placeholder, the placeholder is now blurred.
 	* TODO The sitename set in "Organization or Personal Name" is now used consistently throughout the Schema.org output settings.
 	* Description transient cache is no longer initiated on Search Pages.
+	* TODO Site icon (and logo REMOVE THIS after implementation) are now downsized to 1500px when exceeding.
 * **Updated:**
 	/
 	* TODO Translation POT file.
@@ -409,7 +409,7 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 		* Affected functions:
 			* `the_seo_framework_upgrade()` is now `\The_SEO_Framework\_init_upgrade()` and is now marked private.
 			* `the_seo_framework_init()` is now `\The_SEO_Framework\_init()` and is now marked private. Use `the_seo_framework()` instead.
-			* `the_seo_framework_load()` is now `\The_SEO_Framework\can_load()` and is now marked private. Use `the_seo_framework_active()` instead.
+			* `the_seo_framework_load()` is now `\The_SEO_Framework\_can_load()` and is now marked private. Use `the_seo_framework_active()` instead.
 			* `the_seo_framework_flush_rewrite_rules_deactivation()` is now `\The_SEO_Framework\_deactivation()` and is now marked private.
 			* `the_seo_framework_flush_rewrite_rules_activation()` is now `\The_SEO_Framework\_activation()` and is now marked private.
 			* `the_seo_framework_locale_init()` is now `\The_SEO_Framework\_init_locale()` and is now marked private.
@@ -522,10 +522,13 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 	* The previously named "Knowledge Graph" netabox "Social Sites" tab title now is translatable. Credit [pedro-mendonca](https://github.com/pedro-mendonca).
 	* Method `the_seo_framework()->get_user_meta()` now no longer returns a string when no metadata has been initialized. Instead it will return an empty array.
 	* Globals `$blog_id` is no longer converted to string on post/page update.
+	* Deprecation (filter and method) handler line call is correct once more.
 * **Deprecated:**
 	* Method `the_seo_framework()->search_filter()`. It's a very slow method as it uses the (deprecated method) `get_excluded_search_ids()`. There's no replacement.
 		* This method was already stopped being used in 2.7.0.
 	* Method `the_seo_framework()->autodescription_add_option_filter()`. Use `the_seo_framework()->add_option_filter()` instead.
+	* Method `the_seo_framework()->site_icon()`. Use `the_seo_framework()->get_site_icon()` instead.
+		* `the_seo_framework()->get_site_icon()` can loop to itself once now if requested image size is an intval above 512, resulting it into being 'full' and then might set og image dimensions.
 * **Removed:**
 	* Memory profiling output in the HTML code when `THE_SEO_FRAMEWORK_DEBUG` is defined as true.
 		* This was inaccurate at best.
