@@ -103,6 +103,8 @@ class Admin_Init extends Init {
 	 * Registers admin scripts and styles.
 	 *
 	 * @since 2.6.0
+	 *
+	 * @param bool $direct Whether to directly include the files, or let the action handler do it.
 	 */
 	public function init_admin_scripts( $direct = false ) {
 
@@ -134,6 +136,9 @@ class Admin_Init extends Init {
 		$this->register_admin_javascript();
 
 		\wp_enqueue_script( $this->js_name );
+
+		if ( $this->is_post_edit() )
+			\wp_enqueue_media();
 
 		/**
 		 * Localize JavaScript.
@@ -300,6 +305,8 @@ class Admin_Init extends Init {
 		return $strings = array(
 			'saveAlert' => \esc_html__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
 			'confirmReset' => \esc_html__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
+			'selectSocialImage' => \esc_html__( 'Select Social Image', 'autodescription' ),
+			'useThisImage' => \esc_html__( 'Use this image', 'autodescription' ),
 			'siteTitle' => \esc_html( $title ),
 			'titleAdditions' => \esc_html( $additions ),
 			'blogDescription' => \esc_html( $description ),

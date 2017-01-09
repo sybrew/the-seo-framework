@@ -291,4 +291,26 @@ class Inpost extends Doing_It_Right {
 		$this->get_view( 'inpost/seo-settings', get_defined_vars(), 'singular' );
 		\do_action( 'the_seo_framework_pro_page_inpost_box' );
 	}
+
+	/**
+	 * Returns social image uploader form button.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @param string $input_id Required. The HTML input id to pass URL into.
+	 * @return string The image uploader button.
+	 */
+	public function get_social_image_uploader_form( $input_id ) {
+
+		if ( ! $input_id )
+			return '';
+
+		$content = sprintf( '<a href="%1$s" class="tsf-set-social-image button button-primary button-small" data-inputid_id="%2$s-id" data-inputid_url="%2$s-url">%3$s</a>',
+			esc_url( get_upload_iframe_src( 'image', $this->get_the_real_ID() ) ),
+			esc_attr( $input_id ),
+			esc_html__( 'Select image', 'autodescription' )
+		);
+
+		return $content;
+	}
 }

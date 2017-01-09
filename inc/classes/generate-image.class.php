@@ -88,11 +88,15 @@ class Generate_Image extends Generate_Url {
 		//* Check if there are no disallowed arguments.
 		$all_allowed = empty( $args['disallowed'] );
 
-		//* 1. Fetch image from featured
+		//* 1. Fetch image from SEO meta upload.
+		if ( empty( $image ) && ( $all_allowed || false === in_array( 'postmeta', $args['disallowed'], true ) ) )
+			$image = $this->get_social_image_url_from_post_meta( $args['post_id'], true );
+
+		//* 2. Fetch image from featured
 		if ( empty( $image ) && ( $all_allowed || false === in_array( 'featured', $args['disallowed'], true ) ) )
 			$image = $this->get_image_from_post_thumbnail( $args );
 
-		//* 2. Fetch image from fallback filter 1
+		//* 3. Fetch image from fallback filter 1
 		if ( empty( $image ) ) {
 			/**
 			 * Applies filters 'the_seo_framework_og_image_after_featured' : string
@@ -101,11 +105,11 @@ class Generate_Image extends Generate_Url {
 			$image = (string) \apply_filters( 'the_seo_framework_og_image_after_featured', '', $args['post_id'] );
 		}
 
-		//* 3. Fallback: Get header image if exists
+		//* 4. Fallback: Get header image if exists
 		if ( empty( $image ) && ( $all_allowed || false === in_array( 'header', $args['disallowed'], true ) ) && current_theme_supports( 'custom-header', 'default-image' ) )
 			$image = $this->get_header_image( true );
 
-		//* 4. Fetch image from fallback filter 2
+		//* 5. Fetch image from fallback filter 2
 		if ( empty( $image ) ) {
 			/**
 			 * Applies filters 'the_seo_framework_og_image_after_header' : string
@@ -114,11 +118,11 @@ class Generate_Image extends Generate_Url {
 			$image = (string) \apply_filters( 'the_seo_framework_og_image_after_header', '', $args['post_id'] );
 		}
 
-		//* 5. Get the WP 4.5 Site Icon
+		//* 6. Get the WP 4.5 Site Icon
 		if ( empty( $image ) && ( $all_allowed || false === in_array( 'logo', $args['disallowed'], true ) ) && current_theme_supports( 'custom-logo' ) )
 			$image = $this->get_site_logo( true );
 
-		//* 6. Get the WP 4.3 Site Icon
+		//* 7. Get the WP 4.3 Site Icon
 		if ( empty( $image ) && ( $all_allowed || false === in_array( 'icon', $args['disallowed'], true ) ) )
 			$image = $this->get_site_icon( 'full', true );
 
@@ -133,19 +137,6 @@ class Generate_Image extends Generate_Url {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @since 2.0.1 Applies filters the_seo_framework_og_image_args : {
-	 *		@param string $image The image url
-	 *		@param mixed $size The image size
-	 *		@param bool $icon Fetch Image icon
-	 *		@param array $attr Image attributes
-	 *		@param array $disallowed Disallowed image types : {
-	 *			array (
-	 * 				string 'featured'
-	 * 				string 'header'
-	 * 				string 'icon'
-	 *			)
-	 * 		}
-	 * }
 	 * The image set in the filter will always be used as fallback
 	 *
 	 * @param array $args required The passed arguments.
@@ -166,6 +157,22 @@ class Generate_Image extends Generate_Url {
 				'disallowed' => array(),
 			);
 
+			/**
+			 * Applies filters the_seo_framework_og_image_args : {
+			 *		@param string $image The image url
+			 *		@param mixed $size The image size
+			 *		@param bool $icon Fetch Image icon
+			 *		@param array $attr Image attributes
+			 *		@param array $disallowed Disallowed image types : {
+			 *			array (
+			 * 				string 'featured'
+			 * 				string 'header'
+			 * 				string 'icon'
+			 *			)
+			 * 		}
+			 * }
+			 * @since 2.0.1
+			 */
 			$defaults = (array) \apply_filters( 'the_seo_framework_og_image_args', $defaults, $args );
 		}
 
@@ -209,6 +216,39 @@ class Generate_Image extends Generate_Url {
 		}
 
 		return $args;
+	}
+
+	/**
+	 * Returns unescaped URL from post ID input.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @param int $id The post ID.
+	 * @param bool $set_og_dimensions Whether to set open graph and twitter dimensions.
+	 * @return string The unescaped social image URL.
+	 */
+	public function get_social_image_url_from_post_meta( $id = 0, $set_og_dimensions = false ) {
+
+		if ( empty( $id ) )
+			$id = $this->get_the_real_ID();
+
+		$src = $this->get_custom_field( '_social_image_url', $id );
+
+		if ( ! $src )
+			return '';
+
+		if ( $img_id = $this->get_custom_field( '_social_image_id', $id ) ) {
+			$_src = \wp_get_attachment_image_src( $img_id, 'full' );
+
+			$i = $_src[0]; // Source URL
+			$w = $_src[1]; // Width
+			$h = $_src[2]; // Height
+
+			if ( esc_url( $i ) === esc_url( $src ) )
+				$this->image_dimensions = $this->image_dimensions + array( $this->get_the_real_ID() => array( 'width' => $w, 'height' => $h ) );
+		}
+
+		return $src;
 	}
 
 	/**
@@ -261,7 +301,7 @@ class Generate_Image extends Generate_Url {
 		if ( \metadata_exists( 'post', $post_id, '_product_image_gallery' ) ) {
 			$product_image_gallery = \get_post_meta( $post_id, '_product_image_gallery', true );
 
-			$attachment_ids = array_filter( explode( ',', $product_image_gallery ) );
+			$attachment_ids = array_map( 'absint', array_filter( explode( ',', $product_image_gallery ) ) );
 		}
 
 		return $ids = $attachment_ids;
@@ -271,7 +311,8 @@ class Generate_Image extends Generate_Url {
 	 * Parses OG image to correct size.
 	 *
 	 * @since 2.5.0
-	 * @staticvar string $called Checks if image ID has already been fetched (to prevent duplicate output on WooCommerce).
+	 * @since 2.8.0 : 1. Removed staticvar.
+	 *                2. Now adds ID call to OG image called listener.
 	 *
 	 * @todo create formula to fetch transient.
 	 * @priority high 2.7.0
@@ -286,12 +327,6 @@ class Generate_Image extends Generate_Url {
 		if ( ! isset( $id ) || empty( $id ) )
 			return;
 
-		static $called = array();
-
-		//* Don't parse image twice. Return empty on second run.
-		if ( isset( $called[ $id ] ) )
-			return '';
-
 		if ( empty( $args ) )
 			$args = $this->reparse_image_args( $args );
 
@@ -302,7 +337,7 @@ class Generate_Image extends Generate_Url {
 		$h = $src[2]; // Height
 
 		//* Preferred 1500px, resize it
-		if ( $w > 1500 || $h > 1500 ) {
+		if ( $w > 1500 || $h > 1500 ) :
 
 			if ( $w === $h ) {
 				//* Square
@@ -355,14 +390,14 @@ class Generate_Image extends Generate_Url {
 					}
 				}
 			}
-		}
+		endif;
 
 		//* Whether to use the post ID (Post Thumbnail) or input ID (ID was known beforehand)
 		$usage_id = isset( $args['get_the_real_ID'] ) && $args['get_the_real_ID'] ? $this->get_the_real_ID() : $id;
 
 		$this->image_dimensions = $this->image_dimensions + array( $usage_id => array( 'width' => $w, 'height' => $h ) );
 
-		return $called[ $id ] = $i;
+		return $i;
 	}
 
 	/**

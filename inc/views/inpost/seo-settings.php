@@ -136,6 +136,9 @@ switch ( $instance ) :
 		//* Fetch Canonical URL Placeholder.
 		$canonical_placeholder = $this->the_url_from_cache( '', $post_id, false, false );
 
+		//* Fetch image placeholder.
+		$image_placeholder = $this->get_image( $post_id, array( 'disallowed' => array( 'postmeta' ) ) );
+
 		?>
 		<?php if ( 'above' === $this->inpost_seo_bar || $this->is_option_checked( 'display_seo_bar_metabox' ) ) : ?>
 		<p>
@@ -184,6 +187,25 @@ switch ( $instance ) :
 		</p>
 		<p>
 			<input class="large-text" type="text" name="autodescription[_genesis_canonical_uri]" id="autodescription_canonical" placeholder="<?php echo esc_url( $canonical_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_genesis_canonical_uri' ) ); ?>" />
+		</p>
+
+		<p>
+			<label for="autodescription_socialimage">
+				<strong><?php esc_html_e( 'Custom Social Image URL', 'autodescription' ); ?></strong>
+				<a href="<?php echo esc_url( 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Preferred %s Social Image URL location', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
+			</label>
+		</p>
+		<p>
+			<p class="hide-if-no-js">
+				<?php
+				//* Already escaped.
+				echo $this->get_social_image_uploader_form( 'autodescription_socialimage' );
+				?>
+			</p>
+			<input class="large-text" type="text" name="autodescription[_social_image_url]" id="autodescription_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_social_image_url' ) ); ?>" />
+			<script>
+				document.getElementById( 'autodescription_socialimage-url' ).insertAdjacentHTML( 'afterend', '<input type="hidden" name="autodescription[_social_image_id]" id="autodescription_socialimage-id" value="<?php echo absint( $this->get_custom_field( '_social_image_id' ) ); ?>" />' );
+			</script>
 		</p>
 
 		<p><strong><?php esc_html_e( 'Robots Meta Settings', 'autodescription' ); ?></strong></p>

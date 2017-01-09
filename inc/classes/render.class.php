@@ -388,7 +388,8 @@ class Render extends Admin_Init {
 	 * Renders WooCommerce Product Gallery OG images.
 	 *
 	 * @since 2.6.0
-	 * @since 2.7.0 Added image dimensions if found.
+	 * @since 2.7.0 : Added image dimensions if found.
+	 * @since 2.8.0 : Checks for featured ID internally, rather than using a far-off cache.
 	 *
 	 * @return string The rendered OG Image.
 	 */
@@ -400,8 +401,16 @@ class Render extends Admin_Init {
 
 			$images = $this->get_image_from_woocommerce_gallery();
 
+			$post_id = $this->get_the_real_ID();
+			$post_manual_og = $this->get_custom_field( '_social_image_id', $post_id );
+			$featured_id = $post_manual_og ? (int) $post_manual_og : (int) \get_post_thumbnail_id( $post_id );
+
 			if ( $images && is_array( $images ) ) {
 				foreach ( $images as $id ) {
+
+					if ( $id === $featured_id )
+						continue;
+
 					//* Parse 1500px url.
 					$img = $this->parse_og_image( $id );
 

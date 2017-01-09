@@ -105,6 +105,8 @@ class Post_Data extends Detect {
 			'_genesis_description'   => '',
 			'_genesis_canonical_uri' => '',
 			'redirect'               => '',
+			'_social_image_url'      => '',
+			'_social_image_id'       => 0,
 			'_genesis_noindex'       => 0,
 			'_genesis_nofollow'      => 0,
 			'_genesis_noarchive'     => 0,
@@ -122,12 +124,18 @@ class Post_Data extends Detect {
 					continue 2;
 
 				case '_genesis_canonical_uri' :
+				case '_social_image_url' :
 					/**
 					 * Remove unwanted query parameters. They're allowed by Google, but very much rather not.
 					 * Also, they will only cause bugs.
 					 * Query parameters are also only used when no pretty permalinks are used. Which is bad.
 					 */
 					$data[ $key ] = $this->s_url( $value );
+					continue 2;
+
+				case '_social_image_id' :
+					//* Bound to _social_image_url.
+					$data[ $key ] = $data['_social_image_url'] ? $this->s_absint( $value ) : 0;
 					continue 2;
 
 				case 'redirect' :

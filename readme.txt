@@ -240,11 +240,16 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 * **Added:**
 	/
 	* TODO Social image fallback selection.
-	* TODO Added Social Image URL for Posts upload with notification whether it's actually being used.
+	* Added Social Image URL for Posts upload.
+		* This image can get manually resized and cropped on upload to abide to Facebook's Open Graph standards.
+			* This resizer shows you Facebook's prefered dimensions by default.
+			* This resizer always crops the images in order to have a maximum size of 1500px width/height.
+		* This image is used for Facebook (Open Graph) and Twitter and has the highest priority of output, over other found images.
+		* This image also works on custom post types.
+		* There's a built-in feature that prevents duplicated output with WooCommerce gallery images. Enjoy!
 	* The Authorized Presence (Knowledge Graph) now outputs its script regardless of social sites being filled in. This means that the logo is always used, if present, and that the organization/person type and name will always be highlighted.
 	* [Google's Social Profile Links](https://developers.google.com/search/docs/data-types/social-profile-links), this is the same as the previously named "Knowledge Graph"; but that brand has been expanded to cover more grounds.
 		* These settings have been moved to the Schema metabox. The Schema settings cover the [Knowledge Graph](https://www.google.com/intl/bn/insidesearch/features/search/knowledge.html).
-	/
 	* Site Logo detection! Brought to you in WordPress 4.5.
 		* Only when the theme supports it. You can upload one through the customizer (Site Identity).
 			* You'll also be notified on its support at the Schema Settings metabox "Presence" tab.
@@ -309,7 +314,7 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 	* TODO When focussing on a field which is showing a placeholder, the placeholder is now blurred.
 	* TODO The sitename set in "Organization or Personal Name" is now used consistently throughout the Schema.org output settings.
 	* Description transient cache is no longer initiated on Search Pages.
-	* TODO Site icon (and logo REMOVE THIS after implementation) are now downsized to 1500px when exceeding.
+	* TODO Header, Site Icon and Site Logo images are now downsized if the image is exceeding 1500px in either height or width (or both).
 * **Updated:**
 	/
 	* TODO Translation POT file.
@@ -397,6 +402,8 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 		1. `the_seo_framework()->get_description_excerpt_normal()`, fetches the normal description excerpt.
 		1. `the_seo_framework()->get_description_excerpt_social()`, fetches the social description excerpt.
 	* New secure `the_seo_framework()->convert_markdown()` method. To be used to ease up translation strings in the future (and past).
+	* New post meta additions: `_social_image_url` and `_social_image_id`.
+		* The latter is JS only, as it requires WordPress' image editor.
 * **Changed:**
 	* **IMPORTANT:** All the classes can't be initiated directly anymore. Always use `the_seo_framework()`.
 		* Failing to do so will result in a fatal error.
@@ -508,6 +515,8 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 	* Correct error notice titles are now in place for The SEO Framework's debug handlers. Rather than only `Notice:`.
 	* Method `the_seo_framework()->call_function()` inaccessible method/function handler now uses the correctly assigned one, rather than using `_doing_it_wrong()`.
 	* The Sitemaps Settings metabox' tabs output are now automatically determined.
+	* Method `the_seo_framework()->parse_og_image()` no longer returns an emtpy string on second ID call.
+	* TODO Javascript: A JS extern file has been published on GitHub. This way you can overview and interact with the stated public functions there.
 * **Fixed:**
 	/
 	* Several CSS classes didn't have a correct prefix. These were, and now are:
