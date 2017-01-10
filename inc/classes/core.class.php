@@ -422,44 +422,6 @@ class Core {
 	}
 
 	/**
-	 * Object cache set wrapper.
-	 *
-	 * @since 2.4.3
-	 *
-	 * @param string $key The Object cache key.
-	 * @param mixed $data The Object cache data.
-	 * @param int $expire The Object cache expire time.
-	 * @param string $group The Object cache group.
-	 * @return bool true on set, false when disabled.
-	 */
-	public function object_cache_set( $key, $data, $expire = 0, $group = 'the_seo_framework' ) {
-
-		if ( $this->use_object_cache )
-			return \wp_cache_set( $key, $data, $group, $expire );
-
-		return false;
-	}
-
-	/**
-	 * Object cache get wrapper.
-	 *
-	 * @since 2.4.3
-	 *
-	 * @param string $key The Object cache key.
-	 * @param string $group The Object cache group.
-	 * @param bool $force Whether to force an update of the local cache.
-	 * @param bool $found Whether the key was found in the cache. Disambiguates a return of false, a storable value.
-	 * @return mixed wp_cache_get if object caching is allowed. False otherwise.
-	 */
-	public function object_cache_get( $key, $group = 'the_seo_framework', $force = false, &$found = null ) {
-
-		if ( $this->use_object_cache )
-			return \wp_cache_get( $key, $group, $force, $found );
-
-		return false;
-	}
-
-	/**
 	 * Checks if the string input is exactly '1'.
 	 *
 	 * @since 2.6.0

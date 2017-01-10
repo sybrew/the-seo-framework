@@ -108,6 +108,7 @@ class Site_Options extends Sanitize {
 			'cache_meta_description'	=> 1, 	// Description transient cache.
 			'cache_meta_schema'			=> 1,	// Schema.org transient cache.
 			'cache_sitemap'				=> 1,	// Sitemap transient cache.
+			'cache_object'				=> 1,	// Object caching.
 
 			// General. Layout.
 			'display_seo_bar_tables'	=> 1, 	// SEO Bar post-list tables.
@@ -277,6 +278,7 @@ class Site_Options extends Sanitize {
 			'cache_meta_description'	=> 0, 	// Description transient cache.
 			'cache_meta_schema'			=> 0,	// Schema.org transient cache.
 			'cache_sitemap'				=> 0,	// Sitemap transient cache.
+			'cache_object'				=> 0,	// Object caching.
 
 			'display_seo_bar_tables'	=> 0, 	// SEO Bar post-list tables.
 			'display_seo_bar_metabox'	=> 0, 	// SEO Bar post SEO Settings.
@@ -449,8 +451,8 @@ class Site_Options extends Sanitize {
 
 		if ( $this->is_seo_settings_page( false ) ) {
 			//* Redirect to current page if on options page to correct option values. Once.
-			if ( ! isset( $_REQUEST['seo-updated'] ) || 'true' !== $_REQUEST['seo-updated'] )
-				$this->admin_redirect( $this->seo_settings_page_slug, array( 'seo-updated' => 'true' ) );
+			if ( ! isset( $_REQUEST['tsf-settings-updated'] ) || 'true' !== $_REQUEST['tsf-settings-updated'] )
+				$this->admin_redirect( $this->seo_settings_page_slug, array( 'tsf-settings-updated' => 'true' ) );
 
 			//* Notice has already been sent.
 			return;
@@ -673,9 +675,9 @@ class Site_Options extends Sanitize {
 		if ( false === $this->is_seo_settings_page( false ) )
 			return;
 
-		if ( $this->get_option( 'reset', $this->settings_field ) ) {
+		if ( $this->get_option( 'tsf-settings-reset', $this->settings_field ) ) {
 			if ( \update_option( $this->settings_field, $this->default_site_options() ) ) {
-				$this->admin_redirect( $this->seo_settings_page_slug, array( 'reset' => 'true' ) );
+				$this->admin_redirect( $this->seo_settings_page_slug, array( 'tsf-settings-reset' => 'true' ) );
 				exit;
 			} else {
 				$this->admin_redirect( $this->seo_settings_page_slug, array( 'error' => 'true' ) );

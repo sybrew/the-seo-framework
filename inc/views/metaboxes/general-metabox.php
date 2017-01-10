@@ -50,7 +50,7 @@ switch ( $instance ) :
 	case 'the_seo_framework_general_metabox_performance' :
 
 		?><h4><?php esc_html_e( 'Performance Settings', 'autodescription' ); ?></h4><?php
-		$this->description( __( 'In order to improve performance, generated SEO output is stored in the database as transient cache.', 'autodescription' ) );
+		$this->description( __( 'In order to improve performance, generated SEO output can be stored in the database as transient cache.', 'autodescription' ) );
 		$this->description( __( 'If your website has thousands of pages, or if other forms of caching are used, you might wish to adjust these options.', 'autodescription' ) );
 
 		?>
@@ -84,6 +84,25 @@ switch ( $instance ) :
 			),
 			true
 		);
+
+		if ( wp_using_ext_object_cache() ) :
+			?>
+			<hr>
+
+			<h4><?php esc_html_e( 'Object Cache Settings', 'autodescription' ); ?></h4>
+			<?php
+
+			$this->wrap_fields(
+				$this->make_checkbox(
+					'cache_object',
+					esc_html__( 'Enable object cache?', 'autodescription' )
+					. ' ' . $this->make_info( __( 'Object cache generally works faster than transient cache', 'autodescription' ), '', false ),
+					esc_html__( 'An object cache handler has been detected. If you enable this option, you might wish to disable description and Schema transient caching.', 'autodescription' ),
+					false
+				),
+				true
+			);
+		endif;
 		break;
 
 	case 'the_seo_framework_general_metabox_layout' :

@@ -381,4 +381,125 @@ final class Deprecated {
 
 		return the_seo_framework()->get_site_icon( $size, $set_og_dimensions );
 	}
+
+	/**
+	 * Delete transient on post save.
+	 *
+	 * @since 2.2.9
+	 * @since 2.8.0 : Deprecated
+	 * @deprecated
+	 *
+	 * @param int $post_id The Post ID that has been updated.
+	 * @return bool|null True when sitemap is flushed. False on revision. Null
+	 * when sitemaps are deactivated.
+	 */
+	public function delete_transients_post( $post_id ) {
+
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->delete_transients_post()', '2.8.0', 'the_seo_framework()->delete_post_cache()' );
+
+		return \the_seo_framework()->delete_post_cache( $post_id );
+	}
+
+	/**
+	 * Delete transient on profile save.
+	 *
+	 * @since 2.6.4
+	 * @since 2.8.0 : Deprecated
+	 * @deprecated
+	 *
+	 * @param int $user_id The User ID that has been updated.
+	 */
+	public function delete_transients_author( $user_id ) {
+
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->delete_transients_author()', '2.8.0', 'the_seo_framework()->delete_author_cache()' );
+
+		return \the_seo_framework()->delete_author_cache( $user_id );
+	}
+
+	/**
+	 * Flushes the home page LD+Json transient.
+	 *
+	 * @since 2.6.0
+	 * @since 2.8.0 deprecated.
+	 * @staticvar bool $flushed Prevents second flush.
+	 * @deprecated
+	 *
+	 * @return bool Whether it's flushed on current call.
+	 */
+	public function delete_front_ld_json_transient() {
+
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->delete_front_ld_json_transient()', '2.8.0', 'the_seo_framework()->delete_cache( \'front\' )' );
+
+		static $flushed = null;
+
+		if ( isset( $flushed ) )
+			return false;
+
+		if ( ! \the_seo_framework()->is_option_checked( 'cache_meta_schema' ) )
+			return $flushed = false;
+
+		$front_id = \the_seo_framework()->get_the_front_page_ID();
+
+		\the_seo_framework()->delete_ld_json_transient( $front_id, '', 'frontpage' );
+
+		return $flushed = true;
+	}
+
+	/**
+	 * Determines whether we can use the new WordPress core term meta functionality.
+	 *
+	 * @since 2.7.0
+	 * @since 2.8.0: Deprecated. WordPress 4.4+ is now required.
+	 * @staticvar bool $cache
+	 * @deprecated
+	 *
+	 * @return bool True when WordPress is at version 4.4 or higher and has an
+	 *				accordingly upgraded database.
+	 */
+	public function can_get_term_meta() {
+
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->can_get_term_meta()', '2.8.0' );
+
+		static $cache = null;
+
+		if ( isset( $cache ) )
+			return $cache;
+
+		return $cache = \get_option( 'db_version' ) >= 34370 && \get_option( 'the_seo_framework_upgraded_db_version' ) >= '2700' && \the_seo_framework()->wp_version( '4.3.999', '>' );
+	}
+
+	/**
+	 * Fetches term metadata array for the inpost term metabox.
+	 *
+	 * @since 2.7.0
+	 * @since 2.8.0: Deprecated. WordPress 4.4+ is now required.
+	 * @deprecated
+	 *
+	 * @param object $term The TT object. Must be assigned.
+	 * @return array The SEO Framework TT data.
+	 */
+	protected function get_old_term_data( $term ) {
+
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_old_term_data()', '2.8.0' );
+
+		$data = array();
+
+		$data['title'] = isset( $term->admeta['doctitle'] ) ? $term->admeta['doctitle'] : '';
+		$data['description'] = isset( $term->admeta['description'] ) ? $term->admeta['description'] : '';
+		$data['noindex'] = isset( $term->admeta['noindex'] ) ? $term->admeta['noindex'] : '';
+		$data['nofollow'] = isset( $term->admeta['nofollow'] ) ? $term->admeta['nofollow'] : '';
+		$data['noarchive'] = isset( $term->admeta['noarchive'] ) ? $term->admeta['noarchive'] : '';
+		$flag = isset( $term->admeta['saved_flag'] ) ? (bool) $term->admeta['saved_flag'] : false;
+
+		//* Genesis data fetch. This will override our options with Genesis options on save.
+		if ( false === $flag && isset( $term->meta ) ) {
+			$data['title'] = empty( $data['title'] ) && isset( $term->meta['doctitle'] ) 				? $term->meta['doctitle'] : $data['noindex'];
+			$data['description'] = empty( $data['description'] ) && isset( $term->meta['description'] )	? $term->meta['description'] : $data['description'];
+			$data['noindex'] = empty( $data['noindex'] ) && isset( $term->meta['noindex'] ) 			? $term->meta['noindex'] : $data['noindex'];
+			$data['nofollow'] = empty( $data['nofollow'] ) && isset( $term->meta['nofollow'] )			? $term->meta['nofollow'] : $data['nofollow'];
+			$data['noarchive'] = empty( $data['noarchive'] ) && isset( $term->meta['noarchive'] )		? $term->meta['noarchive'] : $data['noarchive'];
+		}
+
+		return $data;
+	}
 }

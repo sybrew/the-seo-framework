@@ -360,7 +360,7 @@ class Admin_Pages extends Inpost {
 				<p class="tsf-top-buttons">
 					<?php
 					\submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
-					\submit_button( $this->page_defaults['reset_button_text'], 'secondary tsf-js-confirm-reset', $this->get_field_name( 'reset' ), false, array( 'id' => '' ) );
+					\submit_button( $this->page_defaults['reset_button_text'], 'secondary tsf-js-confirm-reset', $this->get_field_name( 'tsf-settings-reset' ), false, array( 'id' => '' ) );
 					?>
 				</p>
 			</div>
@@ -370,7 +370,7 @@ class Admin_Pages extends Inpost {
 			<div class="tsf-bottom-buttons">
 				<?php
 				\submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
-				\submit_button( $this->page_defaults['reset_button_text'], 'secondary tsf-js-confirm-reset', $this->get_field_name( 'reset' ), false, array( 'id' => '' ) );
+				\submit_button( $this->page_defaults['reset_button_text'], 'secondary tsf-js-confirm-reset', $this->get_field_name( 'tsf-settings-reset' ), false, array( 'id' => '' ) );
 				?>
 			</div>
 		</form>
@@ -409,11 +409,11 @@ class Admin_Pages extends Inpost {
 
 		if ( isset( $request['settings-updated'] ) && 'true' === $request['settings-updated'] ) :
 			$this->do_dismissible_notice( $this->page_defaults['saved_notice_text'], 'updated' );
-		elseif ( isset( $request['reset'] ) && 'true' === $request['reset'] ) :
+		elseif ( isset( $request['tsf-settings-reset'] ) && 'true' === $request['tsf-settings-reset'] ) :
 			$this->do_dismissible_notice( $this->page_defaults['reset_notice_text'], 'warning' );
 		elseif ( isset( $request['error'] ) && 'true' === $request['error'] ) :
 			$this->do_dismissible_notice( $this->page_defaults['error_notice_text'], 'error' );
-		elseif ( isset( $request['seo-updated'] ) && 'true' === $request['seo-updated'] ) :
+		elseif ( isset( $request['tsf-settings-updated'] ) && 'true' === $request['tsf-settings-updated'] ) :
 			$this->do_dismissible_notice( $this->page_defaults['plugin_update_text'], 'updated' );
 		endif;
 	}

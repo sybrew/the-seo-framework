@@ -48,21 +48,9 @@ class Term_Data extends Post_Data {
 	 * @since 2.7.0
 	 */
 	public function initialize_term_meta() {
-
-		if ( $this->can_get_term_meta() ) {
-			if ( $this->is_admin() ) {
-				\add_action( 'edit_term', array( $this, 'update_term_meta' ), 10, 2 );
-				\add_action( 'delete_term', array( $this, 'delete_term_meta' ), 10, 2 );
-			}
-		} else {
-			//* Old style term meta data through loop injections.
-			\add_filter( 'get_term', array( $this, 'get_term_filter' ), 10, 2 );
-			\add_filter( 'get_terms', array( $this, 'get_terms_filter' ), 10, 2 );
-
-			if ( $this->is_admin() ) {
-				\add_action( 'edit_term', array( $this, 'taxonomy_seo_save' ), 10, 2 );
-				\add_action( 'delete_term', array( $this, 'term_meta_delete' ), 10, 2 );
-			}
+		if ( $this->is_admin() ) {
+			\add_action( 'edit_term', array( $this, 'update_term_meta' ), 10, 2 );
+			\add_action( 'delete_term', array( $this, 'delete_term_meta' ), 10, 2 );
 		}
 	}
 
@@ -198,46 +186,11 @@ class Term_Data extends Post_Data {
 			$term = $this->fetch_the_term( $term_id );
 
 		if ( isset( $term->term_id ) ) :
-			if ( $this->can_get_term_meta() ) {
-				return $this->get_term_meta( $term->term_id );
-			} else {
-				return $this->get_old_term_data( $term );
-			}
+			return $this->get_term_meta( $term->term_id );
 		endif;
 
 		//* Return null if no term can be set.
 		return null;
-	}
-
-	/**
-	 * Fetches term metadata array for the inpost term metabox.
-	 *
-	 * @since 2.7.0
-	 *
-	 * @param object $term The TT object. Must be assigned.
-	 * @return array The SEO Framework TT data.
-	 */
-	protected function get_old_term_data( $term ) {
-
-		$data = array();
-
-		$data['title'] = isset( $term->admeta['doctitle'] ) ? $term->admeta['doctitle'] : '';
-		$data['description'] = isset( $term->admeta['description'] ) ? $term->admeta['description'] : '';
-		$data['noindex'] = isset( $term->admeta['noindex'] ) ? $term->admeta['noindex'] : '';
-		$data['nofollow'] = isset( $term->admeta['nofollow'] ) ? $term->admeta['nofollow'] : '';
-		$data['noarchive'] = isset( $term->admeta['noarchive'] ) ? $term->admeta['noarchive'] : '';
-		$flag = isset( $term->admeta['saved_flag'] ) ? (bool) $term->admeta['saved_flag'] : false;
-
-		//* Genesis data fetch. This will override our options with Genesis options on save.
-		if ( false === $flag && isset( $term->meta ) ) {
-			$data['title'] = empty( $data['title'] ) && isset( $term->meta['doctitle'] ) 				? $term->meta['doctitle'] : $data['noindex'];
-			$data['description'] = empty( $data['description'] ) && isset( $term->meta['description'] )	? $term->meta['description'] : $data['description'];
-			$data['noindex'] = empty( $data['noindex'] ) && isset( $term->meta['noindex'] ) 			? $term->meta['noindex'] : $data['noindex'];
-			$data['nofollow'] = empty( $data['nofollow'] ) && isset( $term->meta['nofollow'] )			? $term->meta['nofollow'] : $data['nofollow'];
-			$data['noarchive'] = empty( $data['noarchive'] ) && isset( $term->meta['noarchive'] )		? $term->meta['noarchive'] : $data['noarchive'];
-		}
-
-		return $data;
 	}
 
 	/**

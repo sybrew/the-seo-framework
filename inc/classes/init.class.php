@@ -56,8 +56,9 @@ class Init extends Query {
 		/**
 		 * Applies filters 'the_seo_framework_use_object_cache' : bool
 		 * @since 2.4.3
+		 * @since 2.8.0 : Uses method $this->use_object_cache() as default.
 		 */
-		$this->use_object_cache = (bool) \apply_filters( 'the_seo_framework_use_object_cache', true );
+		$this->use_object_cache = (bool) \apply_filters( 'the_seo_framework_use_object_cache', $this->use_object_cache() );
 
 		//* Determines Whether we're using pretty permalinks.
 		$this->pretty_permalinks = '' !== $this->permalink_structure();
@@ -131,6 +132,9 @@ class Init extends Query {
 	 */
 	public function init_admin_actions() {
 
+		//* Initialize caching actions.
+		$this->init_admin_caching_actions();
+
 		//* Save post data.
 		\add_action( 'save_post', array( $this, 'inpost_seo_save' ), 1, 2 );
 
@@ -150,34 +154,6 @@ class Init extends Query {
 			//* Ajax handlers for columns.
 			\add_action( 'wp_ajax_add-tag', array( $this, 'init_columns_ajax' ), -1 );
 		}
-
-		/**
-		 * Delete Sitemap and Description transients on post publish/delete.
-		 * @see WP Core wp_transition_post_status()
-		 */
-		\add_action( 'publish_post', array( $this, 'delete_transients_post' ) );
-		\add_action( 'publish_page', array( $this, 'delete_transients_post' ) );
-		\add_action( 'deleted_post', array( $this, 'delete_transients_post' ) );
-		\add_action( 'deleted_page', array( $this, 'delete_transients_post' ) );
-		\add_action( 'post_updated', array( $this, 'delete_transients_post' ) );
-		\add_action( 'page_updated', array( $this, 'delete_transients_post' ) );
-
-		//* Deletes term description transient.
-		\add_action( 'edit_term', array( $this, 'delete_auto_description_transients_term' ), 10, 3 );
-		\add_action( 'delete_term', array( $this, 'delete_auto_description_transients_term' ), 10, 4 );
-
-		//* Deletes author transient.
-		\add_action( 'profile_update', array( $this, 'delete_transients_author' ) );
-
-		//* Delete Sitemap transient on permalink structure change.
-		\add_action( 'load-options-permalink.php', array( $this, 'delete_sitemap_transient_permalink_updated' ), 20 );
-
-		//* Deletes front page description transient on Tagline change.
-		\add_action( 'update_option_blogdescription', array( $this, 'delete_auto_description_frontpage_transient' ), 10, 1 );
-
-		//* Delete doing it wrong transient after theme switch or plugin upgrade.
-		\add_action( 'after_switch_theme', array( $this, 'delete_theme_dir_transient' ), 10, 0 );
-		\add_action( 'upgrader_process_complete', array( $this, 'delete_theme_dir_transient' ), 10, 2 );
 
 		if ( $this->load_options ) {
 			// Enqueue i18n defaults.
@@ -209,6 +185,8 @@ class Init extends Query {
 
 			//* Admin AJAX for counter options.
 			\add_action( 'wp_ajax_the_seo_framework_update_counter', array( $this, 'wp_ajax_update_counter_type' ) );
+
+			\add_filter( 'removable_query_args', array( $this, 'add_removable_query_args' ) );
 		}
 	}
 
@@ -350,6 +328,7 @@ class Init extends Query {
 	 * Echos the header meta and scripts.
 	 *
 	 * @since 1.0.0
+	 * @since 2.8.0 Cache is busted on each new release.
 	 */
 	public function html_output() {
 
@@ -363,33 +342,21 @@ class Init extends Query {
 		 */
 		$init_start = microtime( true );
 
-		/**
-		 * Cache key buster
-		 * Hexadecimal revision, e.g. 0, 1, 2, e, f,
-		 *
-		 * @busted to '2' @version 2.5.2.1
-		 */
-		$revision = '2';
-		$the_id = $this->get_the_real_ID();
-		$key = $this->generate_cache_key( $the_id ) . $revision;
+		if ( $this->use_object_cache ) {
+			$cache_key = $this->get_meta_output_cache_key();
+			$output = $this->object_cache_get( $cache_key );
+		} else {
+			$cache_key = '';
+			$output = false;
+		}
 
-		/**
-		 * Give each paged pages/archives a different cache key.
-		 * @since 2.2.6
-		 */
-		$page = (string) $this->page();
-		$paged = (string) $this->paged();
-
-		$cache_key = 'seo_framework_output_' . $key . '_' . $paged . '_' . $page;
-
-		$output = $this->object_cache_get( $cache_key );
 		if ( false === $output ) :
 
 			$robots = $this->robots();
 
 			/**
 			 * Applies filters 'the_seo_framework_pre' : string
-			 * Adds content before the output.
+			 * Adds content before the output and caches it through Object caching.
 			 * @since 2.6.0
 			 */
 			$before = (string) \apply_filters( 'the_seo_framework_pre', '' );
@@ -397,7 +364,7 @@ class Init extends Query {
 			$before_actions = $this->header_actions( '', true );
 
 			//* Limit processing on 404 or search
-			if ( $this->is_404() || $this->is_search() ) {
+			if ( $this->is_404() || $this->is_search() ) :
 				$output	= $this->og_locale()
 						. $this->og_type()
 						. $this->og_title()
@@ -408,7 +375,7 @@ class Init extends Query {
 						. $this->bing_site_output()
 						. $this->yandex_site_output()
 						. $this->pint_site_output();
-			} else {
+			else :
 				$output	= $this->the_description()
 						. $this->og_image()
 						. $this->og_locale()
@@ -436,13 +403,13 @@ class Init extends Query {
 						. $this->bing_site_output()
 						. $this->yandex_site_output()
 						. $this->pint_site_output();
-			}
+			endif;
 
 			$after_actions = $this->header_actions( '', false );
 
 			/**
 			 * Applies filters 'the_seo_framework_pro' : string
-			 * Adds content before the output.
+			 * Adds content after the output and caches it through Object caching.
 			 * @since 2.6.0
 			 */
 			$after = (string) \apply_filters( 'the_seo_framework_pro', '' );
@@ -454,12 +421,12 @@ class Init extends Query {
 			 */
 			$generator = (string) \apply_filters( 'the_seo_framework_generator_tag', '' );
 
-			if ( '' !== $generator )
+			if ( $generator )
 				$generator = '<meta name="generator" content="' . \esc_attr( $generator ) . '" />' . "\r\n";
 
 			$output = $robots . $before . $before_actions . $output . $after_actions . $after . $generator;
 
-			$this->object_cache_set( $cache_key, $output, 86400 );
+			$this->use_object_cache and $this->object_cache_set( $cache_key, $output, 86400 );
 		endif;
 
 		/**
@@ -472,7 +439,7 @@ class Init extends Query {
 		$indicatorbefore = '';
 		$indicatorafter = '';
 
-		if ( $indicator ) {
+		if ( $indicator ) :
 
 			/**
 			 * Applies filters 'the_seo_framework_indicator_timing' : Boolean
@@ -503,7 +470,7 @@ class Init extends Query {
 			} else {
 				$indicatorafter = '<!-- ' . $end . $me . ' -->' . "\r\n";
 			}
-		}
+		endif;
 
 		$output = "\r\n" . $indicatorbefore . $output . $indicatorafter . "\r\n";
 
@@ -557,14 +524,12 @@ class Init extends Query {
 	 *
 	 * @since 2.2.9
 	 * @uses robots_txt filter located at WP core
-	 * @global int $blog_id;
 	 *
 	 * @param string $robots_txt The current robots_txt output.
 	 * @param string $public The blog_public option value.
 	 * @return string Robots.txt output.
 	 */
 	public function robots_txt( $robots_txt = '', $public = '' ) {
-		global $blog_id;
 
 		/**
 		 * Don't do anything if the blog isn't public
@@ -572,12 +537,14 @@ class Init extends Query {
 		if ( '0' === $public )
 			return $robots_txt;
 
-		$revision = '1';
+		if ( $this->use_object_cache ) {
+			$cache_key = $this->get_robots_txt_cache_key();
+			$output = $this->object_cache_get( $cache_key );
+		} else {
+			$output = false;
+		}
 
-		$cache_key = 'robots_txt_output_' . $revision . $blog_id;
-
-		$output = $this->object_cache_get( $cache_key );
-		if ( false === $output ) {
+		if ( false === $output ) :
 			$output = '';
 
 			/**
@@ -622,8 +589,8 @@ class Init extends Query {
 				$output .= 'Sitemap: ' . $this->the_home_url_from_cache( true ) . "sitemap.xml\r\n";
 			}
 
-			$this->object_cache_set( $cache_key, $output, 86400 );
-		}
+			$this->use_object_cache and $this->object_cache_set( $cache_key, $output, 86400 );
+		endif;
 
 		/**
 		 * Completely override robots with output.

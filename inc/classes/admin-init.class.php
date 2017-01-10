@@ -76,7 +76,6 @@ class Admin_Init extends Init {
 	 */
 	public function enqueue_admin_scripts( $hook ) {
 
-		//* TODO var_dump() limit enqueue hooks on SEO bar prior to release. Bump to WP 4.4 requirement?
 		$enqueue_hooks = array(
 			'edit.php',
 			'post.php',
@@ -84,6 +83,10 @@ class Admin_Init extends Init {
 			'edit-tags.php',
 			'term.php',
 		);
+
+		if ( ! $this->is_option_checked( 'display_seo_bar_tables' ) ) {
+			$enqueue_hooks = array_diff( $enqueue_hooks, array( 'edit.php', 'edit-tags.php' ) );
+		}
 
 		/**
 		 * Check hook first.
@@ -371,6 +374,25 @@ class Admin_Init extends Init {
 
 		\wp_register_style( $this->css_name, THE_SEO_FRAMEWORK_DIR_URL . "lib/css/autodescription{$rtl}{$suffix}.css", array(), THE_SEO_FRAMEWORK_VERSION, 'all' );
 
+	}
+
+	/**
+	 * Adds removable query args to WordPress query arg handler.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @param array $removable_query_args
+	 * @return array $removable_query_args The adjusted removable query args.
+	 */
+	public function add_removable_query_args( $removable_query_args = array() ) {
+
+		if ( ! is_array( $removable_query_args ) )
+			return $removable_query_args;
+
+		$removable_query_args[] = 'tsf-settings-reset';
+		$removable_query_args[] = 'tsf-settings-updated';
+
+		return $removable_query_args;
 	}
 
 	/**

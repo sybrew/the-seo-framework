@@ -771,10 +771,8 @@ class Sitemaps extends Metaboxes {
 	 * @since 2.2.9
 	 */
 	public function ping_google() {
-
 		$pingurl = 'http://www.google.com/webmasters/sitemaps/ping?sitemap=' . urlencode( $this->the_home_url_from_cache( true ) . 'sitemap.xml' );
 		\wp_safe_remote_get( $pingurl, array( 'timeout' => 3 ) );
-
 	}
 
 	/**
@@ -783,10 +781,8 @@ class Sitemaps extends Metaboxes {
 	 * @since 2.2.9
 	 */
 	public function ping_bing() {
-
 		$pingurl = 'http://www.bing.com/webmaster/ping.aspx?siteMap=' . urlencode( $this->the_home_url_from_cache( true ) . 'sitemap.xml' );
 		\wp_safe_remote_get( $pingurl, array( 'timeout' => 3 ) );
-
 	}
 
 	/**
@@ -795,10 +791,8 @@ class Sitemaps extends Metaboxes {
 	 * @since 2.6.0
 	 */
 	public function ping_yandex() {
-
 		$pingurl = 'http://blogs.yandex.ru/pings/?status=success&url=' . urlencode( $this->the_home_url_from_cache( true ) . 'sitemap.xml' );
 		\wp_safe_remote_get( $pingurl, array( 'timeout' => 3 ) );
-
 	}
 
 	/**
@@ -814,6 +808,20 @@ class Sitemaps extends Metaboxes {
 
 		$wp_rewrite->init();
 		$wp_rewrite->flush_rules( true );
+	}
+
+	/**
+	 * Enqueues rewrite rules flush.
+	 *
+	 * @since 2.8.0
+	 */
+	public function reinitialize_rewrite() {
+
+		if ( $this->get_option( 'sitemaps_output', false ) ) {
+			$this->enqueue_rewrite_activate( true );
+		} else {
+			$this->enqueue_rewrite_deactivate( true );
+		}
 	}
 
 	/**

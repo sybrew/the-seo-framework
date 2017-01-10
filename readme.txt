@@ -197,7 +197,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Release date:**
 
-* PLANNED: December 2016 ?
+* PLANNED: January 2017 ?
 
 **Important Note:**
 
@@ -205,17 +205,20 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * **This maintenance release completely drops support for PHP 5.2**. So, if you're using PHP 5.2, from this version on you can no longer run The SEO Framework.
 * PHP 5.2 is a practicality and convinience hindrance for developers and is also source for bugs. Sometimes, we have to split otherwise simple code over multiple lines just to support it.
 * WordPress is about to drop support for PHP 5.2 as well in the near future. See proposed [trac ticket 36335](https://core.trac.wordpress.org/ticket/36335).
-* Inform your host to keep updated! Read more about informing your host [here](https://wordpress.org/about/requirements/).
+* Inform your host to keep updated! Read more about informing your host [here](https://wordpress.org/about/requirements/). If they decline, I'd urge you to switch hosts for your website's sake.
 
 ***This update drops support for WordPress 4.3.x, the minimum required version for The SEO Framework now is WordPress 4.4.***
 
 **Summarized:**
 
-* This major maintenance release not only fixes various bugs, but also introduces new options for you to fiddle with.
+* This major release not only fixes various bugs, but also introduces new options for you to fiddle with.
 * You're now able to adjust General Settings easily! These settings include options to adjust the cache, (re)move the SEO Bar, and set a Canonical Scheme.
 * Google's Knowledge Graph has been transformed into something much bigger last year, so the related settings now fall under a new name: "Authorized Presence".
+* You can now more granularly control your website's social images. With this much asked for feature, you're now really in control.
+
+**New enhancements overview:**
 /
-* TODO You can now more granularly control your website's social images. Enjoy!
+* TODO
 
 **SEO tip of the Update:**
 
@@ -224,16 +227,12 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * This changes over time as Google updates its Search Engine all over the world.
 * Usage of experimental Schema.org scripts cause no harm to ranking.
 
-**Do you mind:**
-If you have at least 60 seconds to spare, could you please fill in this survey? It will sincerely help me help you.
-* [The survey](https://theseoframework.com/survey/).
-
 ***Are you an avid developer, and have extended The SEO Framework? Please carefully read the detailed changelog, or at least compare it to your implementations. All method, function, action and filter changes are listed there.***
 *In essence, if you've programmed as described within the API, no changes should be made.*
 
 **Detailed log:**
 /
-***TODO What is work without [innovation](https://theseoframework.com/?p= TODO #detailed)?***
+***What is work without [innovation](https://theseoframework.com/?p= TODO #detailed)?***
 
 **For everyone:**
 
@@ -258,13 +257,18 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 	* A new General settings metabox! Containing:
 		* General Settings. Generalized general general settings, commander:
 			/
-			* TODO I have no idea what to put here. Debugging, enabling advanced view, maybe?
+			* TODO This tab still needs to be filled in. So it's hidden for now.
 		* Performance Settings.
-			* You might wish to adjust these settings, if:
-				* You use object caching. The whole SEO output is stored in object cache for each page.
-				* You use page caching. The whole SEO output is then stored within the page cache already.
-				* Unlikely, your website's PHP engine and database are extremely optimized. Disabling the options might even improve performance.
-				* You have thousands of pages and posts. Disabling these options will desaturate the database over time, which might improve performance.
+			* Transient cache settings:
+				* You might wish to adjust these settings, if:
+					* You use object caching. The whole SEO output is stored in object cache for each page.
+					* You use page caching. The whole SEO output is then stored within the page cache already.
+					* Unlikely, your website's PHP engine and database are extremely optimized. Disabling the options might even improve performance.
+					* You have thousands of pages and posts. Disabling these options will desaturate the database over time, which might improve performance.
+			* Object cache settings:
+				* Only available when an object caching plugin has been detected (and it's turned on).
+				* You might wish to disable the description and Schema.org transient caches if this is in effect.
+					* These caches are leveled inside the object cache. However, these caches can be used elsewhere, like in the SEO Bar.
 			* Did you know that you can view the SEO meta generation time within the page's source?
 		* Layout settings. You might want to take a look at these settings, if:
 			* You don't need or even dislike the SEO Bar.
@@ -277,22 +281,24 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 	* A visual notification of the sitemap's whereabouts has been put in place in the Sitemap Settings metabox when a sitemap.xml file has been detected.
 	* This plugin now tests PHP and WordPress compatibility. In the admin screens you'll be notified on why the plugin fails to work after you activate or update the plugin.
 		* If everything goes correctly, it'll be a smooth upgrade. Enjoy!
+	* Improved object cache plugin support. These settings can be found in the General Settings metabox on the SEO Settings page.
+	/
+	* TODO Added stylesheet to sitemap. Now your sitemap looks much more professional.
 * **Changed:**
 	* "Knowledge Graph" name has been converted into "Authorized Presence". Its usage, output and effect are still the same.
 	* The first two description separator buttons are no longer marked "recommended".
 		* This is because the description tag is less prominently used and does not need to support old browsers or old screen readers.
+	* The sitemap rewrite rules and transient no longer flush when just hitting "save settings" on the SEO Settings page.
+		* You now have to actually change an option.
+		* This also limits pinging to search engines. So they won't be notified anymore when nothing has changed.
 * **Improved:**
 	* When the description title additions exceed 72 characters, they will no longer be included in the automated description.
 		* This is also documented as a fix, but it states 154 characters instead of 72 there.
 		* This should reduce the chance of spamdexing by keyword spamming.
 		* This change is completely in line with Google's automated description guidelines. See "[Create good meta description](https://support.google.com/webmasters/answer/35624#1)" (heading "Programmatically generate descriptions").
 	/
-	* TODO The post/page/term object cache is now flushed on edit/save.
-		* https://github.com/sybrew/the-seo-framework/issues/24
-	/
-	* TODO The sitemap is now no longer stored in a buffer. (echo in-line instead of return $var)
-		* This massively reduces the memory usage.
-		* Therefore, the sitemap's maximum entry output has been increased to 9000 from 2100.
+	* Object cache is no longer initiated on each page when no Object Caching plugin has been detected.
+	* The post/page/term object cache is now flushed on edit/save.
 	* The accessible counter type (with background color, type 1) is now a bit bolder.
 	* On Woocommerce list tables additional tabs injected by other plugins will likely not overflow anymore.
 	* The sitemap cache now supports multiple languages. This means more than one sitemap can be created.
@@ -313,11 +319,13 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 	/
 	* TODO When focussing on a field which is showing a placeholder, the placeholder is now blurred.
 	* TODO The sitename set in "Organization or Personal Name" is now used consistently throughout the Schema.org output settings.
-	* Description transient cache is no longer initiated on Search Pages.
+	* Description and schema transient cache is no longer initiated on Search Pages.
 	* TODO Header, Site Icon and Site Logo images are now downsized if the image is exceeding 1500px in either height or width (or both).
+	* When settings are reset, the notification won't show up again when refreshing the page.
 * **Updated:**
 	/
 	* TODO Translation POT file.
+	* TODO All previous Schema.org output transients have been invalidated. TODO.. note below next entry
 	* All previous automated description transients have been invalidated.
 		* Old caches will automatically be cleaned from the database.
 		* New caches will automatically be set up. This might cause a small performance hit after the update, which should automatically be resolved.
@@ -372,6 +380,7 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 
 * **Added:**
 	* Quite a lot of new sentences, because two metaboxes got merged, and a new one arose.
+	* A markdown parser has been added to the plugin. This will be used for future translations.
 * **Changed:**
 	* Many sentences have changed, in order to better reflect the option usages.
 	* A few sentences have been updated slightly in order to be sanitized correctly.
@@ -379,6 +388,7 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 	* One sentence wasn't annotated correctly.
 * **Removed:**
 	* Some sentences.
+	* Almost all debugging sentences.
 
 **For developers:**
 
@@ -440,8 +450,9 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 			* `termdata.class.php` is now `term-data.class.php`
 			* `postdata.class.php` is now `post-data.class.php`
 		* These changes allow easy autoloading and namespace interaction.
-	* One class (and its file) has been removed, and its methods have been moved into `\The_SEO_Framework\Init`:
-		* `search.class.php`, which held `\The_SEO_Framework\Search`
+	* Two classes (and its files) have been removed:
+		* `search.class.php`, which held `\The_SEO_Framework\Search` has been removed and its methods have been moved into `\The_SEO_Framework\Init`.
+		* `transients.class.php`, which held `\The_SEO_Framework\Transients`, has been remove and its methods have been moved into `\The_SEO_Framework\Cache`.
 	* Some function files have been moved.
 		* The changes:
 			* The deprecation function handler `deprecated.php` has been moved to the `/autodescription/inc/functions/` folder, from the `/autodescription/inc/deprecated/` folder.
@@ -485,8 +496,12 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 		* **Exception:** The sanitation handlers will however be initialized when using method `the_seo_framework()->update_settings()` or function `the_seo_framework_update_option()`.
 	* License changes:
 		* File `query.class.php` now falls under GPLv3 instead of GPLv2+.
-* **Improved:**
 	/
+	* The settings reset query arg has been changed from `reset` to `tsf-settings-reset` and has been added to `wp_removeable_query_args`.
+		* This also improves the canonical URL on the admin page, for whatever that's worth.
+	* The SEO Settings updated notification query arg has been changed from `seo-updated` to `tsf-settings-updated` and has been added to `wp_removable_query_args`.
+		* This as well improves the canonical URL on the admin page.
+* **Improved:**
 	* Function `the_seo_framework_class()` will no longer change the plugin's flow if called before action `plugins_loaded`. Instead, it will return `false`.
 	* Reduced sitemap's generation memory usage.
 		* This means now 1200 posts, pages and custom post types can be generated without concern.
@@ -509,18 +524,17 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 	* WordPress' `is_ssl()` isn't cached. So now it has a cached counterpart: `the_seo_framework()->is_ssl()`.
 	* The excluded post type filter no longer tries to match an exact value; saving some processing power generating the query.
 	* Added multiple checks in the Breadcrumb generation code to prevent empty breadcrumb output.
-	/
-	* TODO When saving the SEO Meta data, all front-end transients now always flushed through a new method. Instead of guessing which options have been changed.
+	* When saving the SEO Meta data, all front-end transients now always flushed through a new method. Instead of guessing which options have been changed.
 	* Removed several WP version checks that were aimed below the plugin WP version requirements.
 	* Correct error notice titles are now in place for The SEO Framework's debug handlers. Rather than only `Notice:`.
 	* Method `the_seo_framework()->call_function()` inaccessible method/function handler now uses the correctly assigned one, rather than using `_doing_it_wrong()`.
 	* The Sitemaps Settings metabox' tabs output are now automatically determined.
 	* Method `the_seo_framework()->parse_og_image()` no longer returns an emtpy string on second ID call.
+	* Caching is now disabled on search pages.
+	/
 	* TODO Javascript: A JS extern file has been published on GitHub. This way you can overview and interact with the stated public functions there.
 * **Fixed:**
-	/
 	* Several CSS classes didn't have a correct prefix. These were, and now are:
-		/
 		* `seoframework-content-no-js`, is now `tsf-content-no-js`
 		* `autodescription-sep-js`, is now `tsf-sep-js`
 		* `custom-title-js`, is now `tsf-custom-title-js`
@@ -533,11 +547,23 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 	* Globals `$blog_id` is no longer converted to string on post/page update.
 	* Deprecation (filter and method) handler line call is correct once more.
 * **Deprecated:**
+	* Several term filter methods; The metadata transfer will be completed on this update. WordPress 4.4+ is now required:
+		* Method `the_seo_framework()->get_terms_filter()`.
+		* Method `the_seo_framework()->get_term_filter()`.
+		* Method `the_seo_framework()->taxonomy_seo_save()`.
+		* Method `the_seo_framework()->term_meta_delete()`.
+		* Method `the_seo_framework()->can_get_term_meta()`.
+		* Method `the_seo_framework()->get_old_term_data()`.
 	* Method `the_seo_framework()->search_filter()`. It's a very slow method as it uses the (deprecated method) `get_excluded_search_ids()`. There's no replacement.
 		* This method was already stopped being used in 2.7.0.
 	* Method `the_seo_framework()->autodescription_add_option_filter()`. Use `the_seo_framework()->add_option_filter()` instead.
+	* Method `the_seo_framework()->sanitizer_filters()` Use `the_seo_framework()->init_sanitizer_filters()` instead.
 	* Method `the_seo_framework()->site_icon()`. Use `the_seo_framework()->get_site_icon()` instead.
 		* `the_seo_framework()->get_site_icon()` can loop to itself once now if requested image size is an intval above 512, resulting it into being 'full' and then might set og image dimensions.
+	* Method `the_seo_framework()->delete_transients_post()`. Use `the_seo_framework()->delete_post_cache()` instead.
+	* Method `the_seo_framework()->delete_transients_post()`. Use `the_seo_framework()->delete_post_cache()` instead.
+	* Method `the_seo_framework()->delete_transients_author()`. Use `the_seo_framework()->delete_author_cache()` instead.
+	* Method `the_seo_framework()->delete_front_ld_json_transient()`. Use `the_seo_framework()->delete_cache( 'front' )` instead.
 * **Removed:**
 	* Memory profiling output in the HTML code when `THE_SEO_FRAMEWORK_DEBUG` is defined as true.
 		* This was inaccurate at best.
@@ -547,7 +573,6 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 		* `knowledge_metabox_about_tab`
 		* `knowledge_metabox_social_tab`
 	* Many more methods have been removed, the default method invoking handler will notify you when called:
-		/
 		* `add_filter`, use `add_option_filter` instead.
 		* `s_one_zero_flush_rewrite`
 		* `s_one_zero_flush_sitemap`
@@ -562,6 +587,7 @@ If you have at least 60 seconds to spare, could you please fill in this survey? 
 		* `(array) the_seo_framework_general_settings_tabs`. Used to alter or add general settings tabs.
 		* `(array) the_seo_framework_schema_settings_tabs`. Used to alter or add Schema settings tabs.
 		* `(array) the_seo_framework_canonical_scheme_types`. Used to remove canonical URL setting options.
+		* `(bool) the_seo_framework_allow_transient_flush`. Barrier filter for allowing transient flush; which you need to initiate yourself. Warning: experimental.
 	* **Removed:**
 		* `(array) the_seo_framework_knowledgegraph_settings_tabs`. These tabs have been moved in the Schema metabox.
 		* `the_seo_framework_detect_seo_plugins`. This was previously deprecated.

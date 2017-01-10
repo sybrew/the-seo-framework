@@ -31,7 +31,7 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 2.8.0
  */
-class Feed extends Transients {
+class Feed extends Cache {
 
 	/**
 	 * Constructor, load parent constructor and run functions.

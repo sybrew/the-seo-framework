@@ -144,7 +144,7 @@ final class Load extends Feed implements Debug_Interface {
 						$output = call_user_func_array( array( $this, $method ), $args );
 					}
 				} else {
-					$this->_inaccessible_p_or_m( esc_html( get_class( $class ) . '->' . $method . '()' ), \esc_html__( 'Class or Method not found.', 'autodescription' ), \esc_html( $version ) );
+					$this->_inaccessible_p_or_m( \esc_html( get_class( $class ) . '->' . $method . '()' ), 'Class or Method not found.', \esc_html( $version ) );
 				}
 			} else {
 				if ( method_exists( $class, $method ) ) {
@@ -154,7 +154,7 @@ final class Load extends Feed implements Debug_Interface {
 						$output = call_user_func_array( array( $class, $method ), $args );
 					}
 				} else {
-					$this->_inaccessible_p_or_m( esc_html( get_class( $class ) . '::' . $method . '()' ), \esc_html__( 'Class or Method not found.', 'autodescription' ), \esc_html( $version ) );
+					$this->_inaccessible_p_or_m( \esc_html( get_class( $class ) . '::' . $method . '()' ), 'Class or Method not found.', \esc_html( $version ) );
 				}
 			}
 		} elseif ( is_string( $class ) && $class ) {
@@ -167,7 +167,7 @@ final class Load extends Feed implements Debug_Interface {
 				$output = call_user_func_array( $func, $args );
 			}
 		} else {
-			$this->_doing_it_wrong( __METHOD__, \esc_html__( 'Function needs to be called as a string.', 'autodescription' ), \esc_html( $version ) );
+			$this->_doing_it_wrong( __METHOD__, 'Function needs to be called as a string.', \esc_html( $version ) );
 		}
 
 		return $output;

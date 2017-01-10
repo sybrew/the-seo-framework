@@ -71,6 +71,7 @@ class Sanitize extends Admin_Pages {
 		if ( empty( $_POST ) || ! isset( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) || ! is_array( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) )
 			return $validated = false;
 
+		//* This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
 		\check_admin_referer( $this->settings_field . '-options' );
 
 		return $validated = true;
@@ -94,8 +95,9 @@ class Sanitize extends Admin_Pages {
 
 		$this->init_sanitizer_filters();
 
-		//* Flush transients after option update has been completed.
-		add_action( "updated_option_{$this->settings_field}", array( $this, 'flush_main_transients' ) );
+		//* Flush transients after options have changed.
+		\add_action( "update_option_{$this->settings_field}", array( $this, 'delete_main_cache' ) );
+		\add_action( "update_option_{$this->settings_field}", array( $this, 'reinitialize_rewrite' ), 11 );
 	}
 
 	/**
