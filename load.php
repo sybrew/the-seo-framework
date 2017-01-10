@@ -209,6 +209,7 @@ function _activation_setup_sitemap() {
 function _deactivation_unset_sitemap() {
 
 	unset( $GLOBALS['wp_rewrite']->extra_rules_top['sitemap\.xml$'] );
+	unset( $GLOBALS['wp_rewrite']->extra_rules_top['sitemap\.xsl$'] );
 
 	\add_action( 'shutdown', 'flush_rewrite_rules' );
 }

@@ -110,6 +110,7 @@ class Sitemaps extends Metaboxes {
 				return;
 
 			\add_rewrite_rule( 'sitemap\.xml$', 'index.php?the_seo_framework_sitemap=xml', 'top' );
+			\add_rewrite_rule( 'sitemap\.xsl$', 'index.php?the_seo_framework_sitemap=xsl', 'top' );
 		}
 	}
 
@@ -123,8 +124,9 @@ class Sitemaps extends Metaboxes {
 	 */
 	public function enqueue_sitemap_query_vars( $vars ) {
 
-		if ( $this->can_run_sitemap() )
+		if ( $this->can_run_sitemap() ) {
 			$vars[] = 'the_seo_framework_sitemap';
+		}
 
 		return $vars;
 	}
@@ -134,8 +136,6 @@ class Sitemaps extends Metaboxes {
 	 * Also cleans up globals and sets up variables.
 	 *
 	 * @since 2.2.9
-	 *
-	 * @return void|header+string SiteMap XML file.
 	 */
 	public function maybe_output_sitemap() {
 
@@ -163,6 +163,27 @@ class Sitemaps extends Metaboxes {
 				$this->clean_up_globals_for_sitemap();
 
 				$this->output_sitemap();
+			}
+		}
+	}
+
+	/**
+	 * Outputs sitemap.xsl 'file' and header on sitemap stylesheet query.
+	 *
+	 * @since 2.2.9
+	 */
+	public function maybe_output_sitemap_stylesheet() {
+
+		if ( $this->can_run_sitemap() ) {
+			global $wp_query;
+
+			if ( isset( $wp_query->query_vars['the_seo_framework_sitemap'] ) && 'xsl' === $wp_query->query_vars['the_seo_framework_sitemap'] ) {
+				// Don't let WordPress think this is 404.
+				$wp_query->is_404 = false;
+
+				$this->doing_sitemap = true;
+
+				$this->output_sitemap_xsl_stylesheet();
 			}
 		}
 	}
@@ -256,6 +277,7 @@ class Sitemaps extends Metaboxes {
 		$sitemap_content = $this->is_option_checked( 'cache_sitemap' ) ? $this->get_transient( $this->sitemap_transient ) : false;
 
 		echo '<?xml version="1.0" encoding="UTF-8"?>' . "\r\n";
+		echo $this->get_sitemap_xsl_stylesheet_tag() . "\r\n";
 
 		/**
 		 * Output debug prior output.
@@ -266,9 +288,9 @@ class Sitemaps extends Metaboxes {
 			echo '<!-- System estimated peak usage prior to generation: ' . number_format( memory_get_peak_usage( true ) / 1024 / 1024, 3 ) . ' MB -->' . "\r\n";
 		}
 
-		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\r\n";
+		echo $this->get_sitemap_urlset_open_tag() . "\r\n";
 		echo $this->setup_sitemap( $sitemap_content );
-		echo '</urlset>';
+		echo $this->get_sitemap_urlset_close_tag();
 
 		if ( false === $sitemap_content ) {
 			echo "\r\n" . '<!-- ' . \esc_html__( 'Sitemap is generated for this view', 'autodescription' ) . ' -->';
@@ -286,6 +308,108 @@ class Sitemaps extends Metaboxes {
 			echo "\r\n" . '<!-- Freed memory prior to generation: ' . number_format( $this->clean_up_globals( true ) / 1024, 3 ) . ' kB -->';
 			echo "\r\n" . '<!-- Sitemap generation time: ' . ( number_format( microtime( true ) - $timer_start, 6 ) ) . ' seconds -->';
 		}
+	}
+
+	/**
+	 * Returns the opening tag for the sitemap URLset.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @return string The sitemap URLset opening tag.
+	 */
+	public function get_sitemap_urlset_open_tag() {
+
+		$schemas = array(
+			'xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9',
+			'xmlns:xhtml' => 'http://www.w3.org/1999/xhtml',
+			'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+			'xsi:schemaLocation' => array(
+				'http://www.sitemaps.org/schemas/sitemap/0.9',
+				'http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd',
+			),
+		);
+
+		/**
+		 * Applies filters 'the_seo_framework_sitemap_schemas' : array
+		 * @since 2.8.0
+		 * @param array $schems The schema list. URLs are expected to be escaped.
+		 */
+		$schemas = (array) \apply_filters( 'the_seo_framework_sitemap_schemas', $schemas );
+
+		$urlset = '<urlset';
+		foreach ( $schemas as $type => $values ) {
+			$urlset .= ' ' . $type . '="';
+			if ( is_array( $values ) ) {
+				$urlset .= implode( ' ', $values );
+			} else {
+				$urlset .= $values;
+			}
+			$urlset .= '"';
+		}
+		$urlset .= '>';
+
+		return $urlset;
+	}
+
+	/**
+	 * Returns the closing tag for the sitemap URLset.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @return string The sitemap URLset closing tag.
+	 */
+	public function get_sitemap_urlset_close_tag() {
+		return '</urlset>';
+	}
+
+	/**
+	 * Returns stylesheet XSL location tag.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @return string The sitemap XSL location tag.
+	 */
+	public function get_sitemap_xsl_stylesheet_tag() {
+		return sprintf( '<?xml-stylesheet type="text/xsl" href="%s"?>', \esc_url( $this->get_sitemap_xsl_url() ) );
+	}
+
+	/**
+	 * Returns the stylesheet XSL location URL.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @return string URL location of the XSL stylesheet. Unescaped.
+	 */
+	public function get_sitemap_xsl_url() {
+		global $wp_rewrite;
+
+		if ( $wp_rewrite->using_index_permalinks() ) {
+			$xsl = \home_url( '/index.php/sitemap.xsl' );
+		} elseif ( $wp_rewrite->using_permalinks() ) {
+			$xsl = \home_url( '/sitemap.xsl' );
+		} else {
+			$xsl = \home_url( '/?the_seo_framework_sitemap-xsl=true' );
+		}
+
+		return $xsl;
+	}
+
+	/**
+	 * Sitemap XSL stylesheet output.
+	 *
+	 * @since 2.8.0
+	 */
+	public function output_sitemap_xsl_stylesheet() {
+
+		$this->clean_reponse_header();
+
+		if ( ! headers_sent() ) {
+			header( 'Content-type: text/xsl; charset=utf-8' );
+			header( 'Cache-Control: max-age=1800' );
+		}
+
+		$this->get_view( 'sitemap/xsl-stylesheet' );
+		exit;
 	}
 
 	/**

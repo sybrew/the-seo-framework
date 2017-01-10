@@ -223,12 +223,13 @@ class Init extends Query {
 		\add_action( 'pre_get_posts', array( $this, 'adjust_search_filter' ), 9999, 1 );
 
 		/**
-		 * Outputs sitemap on request.
+		 * Outputs sitemap or stylesheet on request.
 		 *
 		 * Adding a higher priority will cause a trailing slash to be added.
 		 * We need to be in front of the queue to prevent this from happening.
 		 */
 		\add_action( 'template_redirect', array( $this, 'maybe_output_sitemap' ), 1 );
+		\add_action( 'template_redirect', array( $this, 'maybe_output_sitemap_stylesheet' ), 1 );
 
 		if ( $this->is_singular() ) {
 			//* Initialize 301 redirects.

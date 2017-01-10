@@ -283,7 +283,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* If everything goes correctly, it'll be a smooth upgrade. Enjoy!
 	* Improved object cache plugin support. These settings can be found in the General Settings metabox on the SEO Settings page.
 	/
-	* TODO Added stylesheet to sitemap. Now your sitemap looks much more professional.
+	* Added stylesheet to sitemap. Now your sitemap looks much more professional.
+		* It's so professional, even the stylesheet URL is masked.
+		* It's a virtual file, just like the sitemap is. Enjoy!
 * **Changed:**
 	* "Knowledge Graph" name has been converted into "Authorized Presence". Its usage, output and effect are still the same.
 	* The first two description separator buttons are no longer marked "recommended".
@@ -322,6 +324,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Description and schema transient cache is no longer initiated on Search Pages.
 	* TODO Header, Site Icon and Site Logo images are now downsized if the image is exceeding 1500px in either height or width (or both).
 	* When settings are reset, the notification won't show up again when refreshing the page.
+	* The sitemap schemas are now more clearly defined for Search Engines and validators.
 * **Updated:**
 	/
 	* TODO Translation POT file.
@@ -588,6 +591,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* `(array) the_seo_framework_schema_settings_tabs`. Used to alter or add Schema settings tabs.
 		* `(array) the_seo_framework_canonical_scheme_types`. Used to remove canonical URL setting options.
 		* `(bool) the_seo_framework_allow_transient_flush`. Barrier filter for allowing transient flush; which you need to initiate yourself. Warning: experimental.
+		* `(array) the_seo_framework_sitemap_schemas`. Used to specify the type of sitemap schemas.
+		* `(array) the_seo_framework_sitemap_logo`. Used to adjust or remove the sitemap logo. Defaults to WP 4.5 logo.
+		* `(string) the_seo_framework_sitemap_color`. Used to adjust the sitemap's theme color. Defaults to 0ebfe9.
+		* `(bool) the_seo_framework_indicator_sitemap`. Used to allow for sitemap generation indicator.
 	* **Removed:**
 		* `(array) the_seo_framework_knowledgegraph_settings_tabs`. These tabs have been moved in the Schema metabox.
 		* `the_seo_framework_detect_seo_plugins`. This was previously deprecated.
