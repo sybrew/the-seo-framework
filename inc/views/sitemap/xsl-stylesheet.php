@@ -10,7 +10,7 @@ if ( $this->add_title_additions() )
  * @since 2.8.0
  */
 $logo = (array) apply_filters( 'the_seo_framework_sitemap_logo', wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ), array( 29, 29 ) ) );
-if ( $logo ) {
+if ( ! empty( $logo[0] ) ) {
 	$logo = sprintf( '<img src="%s" width="%s" height="%s" />', $logo[0], $logo[1], $logo[2] );
 } else {
 	$logo = '';

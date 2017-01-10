@@ -153,7 +153,7 @@ class Sitemaps extends Metaboxes {
 				 * @since 2.2.9
 				 * @since 2.8.0 Increased to 1200 from 700.
 				 */
-				$this->max_posts = (int) apply_filters( 'the_seo_framework_sitemap_post_limit', 1200 );
+				$this->max_posts = (int) \apply_filters( 'the_seo_framework_sitemap_post_limit', 1200 );
 
 				/**
 				 * Set at least 2000 variables free.
@@ -711,7 +711,7 @@ class Sitemaps extends Metaboxes {
 					'suppress_filters' => true,
 					'no_found_rows'    => true,
 				);
-				$wp_query->query = $wp_query->query_vars = wp_parse_args( $args );
+				$wp_query->query = $wp_query->query_vars = \wp_parse_args( $args );
 				$latest_cpt_posts = $wp_query->get_posts();
 			}
 		endif;
@@ -741,7 +741,7 @@ class Sitemaps extends Metaboxes {
 			 */
 			foreach ( $latest_cpt_posts as $ctp_post_id ) :
 
-				$ctp_post = get_post( $ctp_post_id );
+				$ctp_post = \get_post( $ctp_post_id );
 
 				if ( isset( $ctp_post->ID ) ) :
 					$cpt_id = $ctp_post->ID;
@@ -942,6 +942,7 @@ class Sitemaps extends Metaboxes {
 	public function reinitialize_rewrite() {
 
 		if ( $this->get_option( 'sitemaps_output', false ) ) {
+			$this->rewrite_rule_sitemap();
 			$this->enqueue_rewrite_activate( true );
 		} else {
 			$this->enqueue_rewrite_deactivate( true );
@@ -1046,13 +1047,11 @@ class Sitemaps extends Metaboxes {
 	 * @access private
 	 */
 	public function flush_rewrite_rules_activation() {
-		global $wp_rewrite;
 
 		//* This function is called statically.
 		$this->rewrite_rule_sitemap( true );
 
-		$wp_rewrite->init();
-		$wp_rewrite->flush_rules( true );
+		\flush_rewrite_rules();
 
 	}
 
@@ -1061,6 +1060,7 @@ class Sitemaps extends Metaboxes {
 	 *
 	 * @since 2.6.6.1
 	 * @access private
+	 * @global object $wp_rewrite
 	 */
 	public function flush_rewrite_rules_deactivation() {
 		global $wp_rewrite;

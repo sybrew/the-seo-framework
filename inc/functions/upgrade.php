@@ -57,8 +57,8 @@ function the_seo_framework_do_upgrade() {
 	if ( get_option( 'the_seo_framework_upgraded_db_version' ) < '2701' )
 		the_seo_framework_do_upgrade_2701();
 
-	if ( get_option( 'the_seo_framework_upgraded_db_version' ) < '2801' )
-		the_seo_framework_do_upgrade_2801();
+	if ( get_option( 'the_seo_framework_upgraded_db_version' ) < '2802' )
+		the_seo_framework_do_upgrade_2802();
 
 	do_action( 'the_seo_framework_upgraded' );
 }
@@ -92,17 +92,17 @@ function the_seo_framework_do_upgrade_2701() {
 }
 
 /**
- * Removes term metadata for version 2800.
+ * Removes term metadata for version 2802.
  * Reinitializes rewrite data for for sitemap stylesheet.
  *
  * @since 2.8.0
  */
-function the_seo_framework_do_upgrade_2801() {
+function the_seo_framework_do_upgrade_2802() {
 
 	the_seo_framework()->reinitialize_rewrite();
 
 	//* Delete old values from database. Removes backwards compatibility.
 	delete_option( 'autodescription-term-meta' );
 
-	update_option( 'the_seo_framework_upgraded_db_version', '2801' );
+	update_option( 'the_seo_framework_upgraded_db_version', '2802' );
 }
