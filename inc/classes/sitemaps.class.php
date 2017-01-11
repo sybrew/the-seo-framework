@@ -277,7 +277,7 @@ class Sitemaps extends Metaboxes {
 		$sitemap_content = $this->is_option_checked( 'cache_sitemap' ) ? $this->get_transient( $this->sitemap_transient ) : false;
 
 		echo '<?xml version="1.0" encoding="UTF-8"?>' . "\r\n";
-		echo $this->get_sitemap_xsl_stylesheet_tag() . "\r\n";
+		echo $this->get_sitemap_xsl_stylesheet_tag();
 
 		/**
 		 * Output debug prior output.
@@ -288,7 +288,7 @@ class Sitemaps extends Metaboxes {
 			echo '<!-- System estimated peak usage prior to generation: ' . number_format( memory_get_peak_usage( true ) / 1024 / 1024, 3 ) . ' MB -->' . "\r\n";
 		}
 
-		echo $this->get_sitemap_urlset_open_tag() . "\r\n";
+		echo $this->get_sitemap_urlset_open_tag();
 		echo $this->setup_sitemap( $sitemap_content );
 		echo $this->get_sitemap_urlset_close_tag();
 
@@ -348,7 +348,7 @@ class Sitemaps extends Metaboxes {
 		}
 		$urlset .= '>';
 
-		return $urlset;
+		return $urlset . "\r\n";
 	}
 
 	/**
@@ -370,7 +370,11 @@ class Sitemaps extends Metaboxes {
 	 * @return string The sitemap XSL location tag.
 	 */
 	public function get_sitemap_xsl_stylesheet_tag() {
-		return sprintf( '<?xml-stylesheet type="text/xsl" href="%s"?>', \esc_url( $this->get_sitemap_xsl_url() ) );
+
+		if ( $this->is_option_checked( 'sitemap_styles' ) )
+			return sprintf( '<?xml-stylesheet type="text/xsl" href="%s"?>', \esc_url( $this->get_sitemap_xsl_url() ) ) . "\r\n";
+
+		return '';
 	}
 
 	/**

@@ -241,7 +241,6 @@ class Sanitize extends Admin_Pages {
 
 				'knowledge_logo',
 
-				'sitemaps_robots',
 				'ping_google',
 				'ping_bing',
 				'ping_yandex',
@@ -254,6 +253,8 @@ class Sanitize extends Admin_Pages {
 				'ld_json_breadcrumbs',
 
 				'sitemaps_output',
+				'sitemap_styles',
+				'sitemaps_robots',
 				'sitemaps_modified',
 				'sitemap_timestamps',
 			)

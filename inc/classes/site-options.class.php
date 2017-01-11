@@ -236,6 +236,7 @@ class Site_Options extends Sanitize {
 
 			// Sitemaps.
 			'sitemaps_output'		=> 1,	// Output of sitemaps
+			'sitemap_styles'		=> 1,	// Whether to style the sitemap
 			'sitemaps_modified'		=> 1,	// Add sitemaps modified time
 			'sitemap_timestamps'	=> '1',	// Sitemaps modified time format, dropdown
 			'sitemaps_robots'		=> 1,	// Add sitemaps location to robots.txt
@@ -349,6 +350,7 @@ class Site_Options extends Sanitize {
 			'knowledge_logo'		=> 0,	// Fetch logo from WP Favicon
 
 			'sitemaps_output'		=> 0,	// Output of sitemaps
+			'sitemap_styles'		=> 0,	// Whether to style the sitemap
 			'sitemaps_modified'		=> 0,	// Add sitemaps modified time
 			'sitemaps_robots'		=> 0,	// Add sitemaps location to robots.txt
 			'ping_google'			=> 0,	// Ping Google
