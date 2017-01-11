@@ -325,6 +325,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* TODO Header, Site Icon and Site Logo images are now downsized if the image is exceeding 1500px in either height or width (or both).
 	* When settings are reset, the notification won't show up again when refreshing the page.
 	* The sitemap schemas are now more clearly defined for Search Engines and validators.
+	* The description example field now better reflects the actual output.
 * **Updated:**
 	/
 	* TODO Translation POT file.

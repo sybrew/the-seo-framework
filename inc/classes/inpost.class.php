@@ -249,7 +249,7 @@ class Inpost extends Doing_It_Right {
 
 			if ( empty( $type ) ) {
 				// Fallback to Page as it is generic.
-				$type = __( 'Page', 'autodescription' );
+				$type = \__( 'Page', 'autodescription' );
 			}
 
 			$is_term = true;
@@ -306,9 +306,9 @@ class Inpost extends Doing_It_Right {
 			return '';
 
 		$content = sprintf( '<a href="%1$s" class="tsf-set-social-image button button-primary button-small" data-inputid_id="%2$s-id" data-inputid_url="%2$s-url">%3$s</a>',
-			esc_url( get_upload_iframe_src( 'image', $this->get_the_real_ID() ) ),
-			esc_attr( $input_id ),
-			esc_html__( 'Select image', 'autodescription' )
+			\esc_url( \get_upload_iframe_src( 'image', $this->get_the_real_ID() ) ),
+			\esc_attr( $input_id ),
+			\esc_html__( 'Select image', 'autodescription' )
 		);
 
 		return $content;

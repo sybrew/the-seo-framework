@@ -597,7 +597,7 @@ class Sanitize extends Admin_Pages {
 			$i++;
 		} while ( strpos( $description, '  ' ) && $i <= 2 );
 
-		return (string) strip_tags( $description );
+		return (string) $this->escape_description( $description );
 	}
 
 	/**
