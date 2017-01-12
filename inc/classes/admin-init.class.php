@@ -46,19 +46,21 @@ class Admin_Init extends Init {
 	 * JavaScript name identifier to be used with enqueuing.
 	 *
 	 * @since 2.5.2.2
+	 * @since 2.8.0 Renamed
 	 *
 	 * @var string JavaScript name identifier.
 	 */
-	public $js_name = 'autodescription';
+	public $js_name = 'tsf';
 
 	/**
 	 * CSS script name identifier to be used with enqueuing.
 	 *
 	 * @since 2.6.0
+	 * @since 2.8.0 Renamed
 	 *
 	 * @var string CSS name identifier.
 	 */
-	public $css_name = 'autodescription';
+	public $css_name = 'tsf';
 
 	/**
 	 * Constructor. Loads parent constructor, registers script names and adds actions.
@@ -167,7 +169,7 @@ class Admin_Init extends Init {
 
 		$suffix = $this->script_debug ? '' : '.min';
 
-		\wp_register_script( $this->js_name, THE_SEO_FRAMEWORK_DIR_URL . "lib/js/autodescription{$suffix}.js", array( 'jquery' ), THE_SEO_FRAMEWORK_VERSION, true );
+		\wp_register_script( $this->js_name, THE_SEO_FRAMEWORK_DIR_URL . "lib/js/{$this->js_name}{$suffix}.js", array( 'jquery' ), THE_SEO_FRAMEWORK_VERSION, true );
 
 		$registered = true;
 
@@ -189,7 +191,7 @@ class Admin_Init extends Init {
 
 		$strings = $this->get_javascript_l10n();
 
-		\wp_localize_script( $this->js_name, 'autodescriptionL10n', $strings );
+		\wp_localize_script( $this->js_name, "{$this->js_name}L10n", $strings );
 
 		$localized = true;
 
@@ -232,7 +234,6 @@ class Admin_Init extends Init {
 		$title_separator = $this->get_separator( 'title' );
 		$description_separator = $this->get_separator( 'description' );
 
-		$isrtl = (bool) \is_rtl();
 		$ishome = false;
 
 		if ( isset( $this->page_base_file ) && $this->page_base_file ) {
@@ -306,26 +307,32 @@ class Admin_Init extends Init {
 		$nonce = \wp_create_nonce( 'autodescription-ajax-nonce' );
 
 		return $strings = array(
-			'saveAlert' => \esc_html__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
-			'confirmReset' => \esc_html__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
-			'selectSocialImage' => \esc_html__( 'Select Social Image', 'autodescription' ),
-			'useThisImage' => \esc_html__( 'Use this image', 'autodescription' ),
-			'siteTitle' => \esc_html( $title ),
-			'titleAdditions' => \esc_html( $additions ),
-			'blogDescription' => \esc_html( $description ),
-			'titleTagline' => $tagline,
-			'titleSeparator' => \esc_html( $title_separator ),
-			'titleLocation' => \esc_html( $title_location ),
-			'descriptionSeparator' => \esc_html( $description_separator ),
-			'isRTL' => $isrtl,
-			'isHome' => $ishome,
-			'counterType' => \absint( $counter_type ),
-			'good' => \esc_html( $good ),
-			'okay' => \esc_html( $okay ),
-			'bad' => \esc_html( $bad ),
-			'unknown' => \esc_html( $unknown ),
 			'nonce' => $nonce,
-			'hasInput' => $this->is_term_edit() || $this->is_post_edit() || $this->is_seo_settings_page(),
+			'i18n' => array(
+				'saveAlert' => \esc_html__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
+				'confirmReset' => \esc_html__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
+				'selectSocialImage' => \esc_html__( 'Select Social Image', 'autodescription' ),
+				'useThisImage' => \esc_html__( 'Use this image', 'autodescription' ),
+				'good' => \esc_html( $good ),
+				'okay' => \esc_html( $okay ),
+				'bad' => \esc_html( $bad ),
+				'unknown' => \esc_html( $unknown ),
+			),
+			'states' => array(
+				'isRTL' => (bool) \is_rtl(),
+				'isHome' => $ishome,
+				'hasInput' => $this->is_term_edit() || $this->is_post_edit() || $this->is_seo_settings_page(),
+				'counterType' => \absint( $counter_type ),
+				'titleTagline' => $tagline,
+			),
+			'params' => array(
+				'siteTitle' => \esc_html( $title ),
+				'titleAdditions' => \esc_html( $additions ),
+				'blogDescription' => \esc_html( $description ),
+				'titleSeparator' => \esc_html( $title_separator ),
+				'descriptionSeparator' => \esc_html( $description_separator ),
+				'titleLocation' => \esc_html( $title_location ),
+			),
 		);
 	}
 
@@ -335,9 +342,6 @@ class Admin_Init extends Init {
 	 * @since 2.1.9
 	 *
 	 * @param $hook the current page
-	 *
-	 * @todo get_network_option
-	 * @priority low 3.0.0
 	 */
 	public function enqueue_admin_css( $hook ) {
 
@@ -368,11 +372,11 @@ class Admin_Init extends Init {
 		if ( isset( $registered ) )
 			return;
 
-		$rtl = is_rtl() ? '-rtl' : '';
+		$rtl = \is_rtl() ? '-rtl' : '';
 		$suffix = $this->script_debug ? '' : '.min';
 		$registered = true;
 
-		\wp_register_style( $this->css_name, THE_SEO_FRAMEWORK_DIR_URL . "lib/css/autodescription{$rtl}{$suffix}.css", array(), THE_SEO_FRAMEWORK_VERSION, 'all' );
+		\wp_register_style( $this->css_name, THE_SEO_FRAMEWORK_DIR_URL . "lib/css/{$this->css_name}{$rtl}{$suffix}.css", array(), THE_SEO_FRAMEWORK_VERSION, 'all' );
 
 	}
 

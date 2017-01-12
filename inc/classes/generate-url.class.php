@@ -570,9 +570,9 @@ class Generate_Url extends Generate_Title {
 		 * This should be put inside a callable function.
 		 * @since 2.6.0
 		 */
-		$lang_info = apply_filters( 'wpml_post_language_details', null, $post_id );
+		$lang_info = \apply_filters( 'wpml_post_language_details', null, $post_id );
 
-		if ( is_wp_error( $lang_info ) ) {
+		if ( \is_wp_error( $lang_info ) ) {
 			//* Terms and Taxonomies.
 			$lang_info = array();
 
@@ -703,7 +703,7 @@ class Generate_Url extends Generate_Title {
 
 		$paged = $this->maybe_get_paged( $this->paged(), $args['paged'], $args['paged_plural'] );
 
-		if ( empty( $path ) ) {
+		if ( empty( $path ) ) :
 			//* Default permalink structure.
 
 			if ( 'category' === $taxonomy ) {
@@ -720,7 +720,7 @@ class Generate_Url extends Generate_Title {
 			//* Don't slash it.
 			$this->url_slashit = false;
 
-		} else {
+		else :
 			if ( $t->rewrite['hierarchical'] ) {
 				$hierarchical_slugs = array();
 				$ancestors = get_ancestors( $term->term_id, $taxonomy, 'taxonomy' );
@@ -742,13 +742,42 @@ class Generate_Url extends Generate_Title {
 				$path = \trailingslashit( $path ) . 'page/' . $paged;
 
 			$path = \user_trailingslashit( $path, 'category' );
-		}
+		endif;
 
 		//* Add plausible domain subdirectories.
 		$url = \trailingslashit( get_option( 'home' ) ) . ltrim( $path, ' \\/' );
 		$path = $this->set_url_scheme( $url, 'relative' );
 
 		return $path;
+	}
+
+	/**
+	 * Sets URL to preferred URL scheme.
+	 * Does not sanitize output.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @param string $url The URL to set scheme for.
+	 * @return string The URL with the preferred scheme.
+	 */
+	public function set_preferred_url_scheme( $url ) {
+
+		switch ( $this->get_option( 'canonical_scheme' ) ) :
+			case 'https' :
+				$scheme = 'https';
+				break;
+
+			case 'http' :
+				$scheme = 'http';
+				break;
+
+			case 'automatic' :
+			default :
+				return $url;
+				break;
+		endswitch;
+
+		return $this->set_url_scheme( $url, $scheme, false );
 	}
 
 	/**
@@ -1137,10 +1166,10 @@ class Generate_Url extends Generate_Title {
 		}
 
 		if ( $prev )
-			return \esc_url_raw( $prev );
+			return $this->set_preferred_url_scheme( \esc_url_raw( $prev ) );
 
 		if ( $next )
-			return \esc_url_raw( $next );
+			return $this->set_preferred_url_scheme( \esc_url_raw( $next ) );
 
 		return '';
 	}
@@ -1166,9 +1195,9 @@ class Generate_Url extends Generate_Title {
 		if ( empty( $post_id ) )
 			$post_id = $this->get_the_real_ID();
 
-		if ( 1 === $i ) {
+		if ( 1 === $i ) :
 			$url = $this->the_url_from_cache( '', $post_id, false, $from_option, false );
-		} else {
+		else :
 			$post = \get_post( $post_id );
 
 			$urlfromcache = $this->the_url_from_cache( '', $post_id, false, $from_option, false );
@@ -1217,7 +1246,7 @@ class Generate_Url extends Generate_Title {
 				if ( isset( $query_arg ) )
 					$url = $url . '?' . $query_arg;
 			}
-		}
+		endif;
 
 		return $url;
 	}
@@ -1236,7 +1265,7 @@ class Generate_Url extends Generate_Title {
 
 		//* Add subdomain, if set.
 		if ( $subdomain = $this->get_current_subdomain() ) {
-			$parsed_url = wp_parse_url( $url );
+			$parsed_url = \wp_parse_url( $url );
 			$scheme = isset( $parsed_url['scheme'] ) ? $parsed_url['scheme'] : 'http';
 			$url = str_replace( $scheme . '://', '', $url );
 

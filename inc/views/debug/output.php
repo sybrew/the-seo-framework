@@ -1,17 +1,16 @@
 <?php
 /**
- * @package The_SEO_Framework\Views
+ * @package The_SEO_Framework\Views\Debug
  */
-namespace The_SEO_Framework;
 
 defined( 'ABSPATH' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
-if ( Debug::has_debug_output() ) {
-	if ( $this->the_seo_framework_debug_hidden ) {
+if ( \The_SEO_Framework\Debug::has_debug_output() ) :
+	if ( $this->the_seo_framework_debug_hidden ) :
 		echo "\r\n<!--\r\n:: THE SEO FRAMEWORK DEBUG :: \r\n";
-		Debug::output_debug();
+		\The_SEO_Framework\Debug::output_debug();
 		echo "\r\n:: / THE SEO FRAMEWORK DEBUG ::\r\n-->\r\n";
-	} else {
+	else :
 
 		$id = $this->get_the_real_ID();
 		$mdash = ' &mdash; ';
@@ -33,14 +32,16 @@ if ( Debug::has_debug_output() ) {
 						echo esc_html( 'Type: ' . $type );
 						echo esc_html( $mdash . 'ID: ' . $id );
 						echo esc_html( $mdash . 'Cache key: ' . $cache_key );
+						echo esc_html( $mdash . 'Plugin version: ' . THE_SEO_FRAMEWORK_VERSION );
+						echo esc_html( $mdash . 'Plugin DB version: c' . get_option( 'the_seo_framework_upgraded_db_version' ) . ' | e' . THE_SEO_FRAMEWORK_DB_VERSION );
 					endif;
 					?>
 				</h3>
 				<div style="position:absolute;bottom:0;right:0;left:0;top:39px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;z-index:9001">
 					<?php
-					Debug::output_debug_header();
-					Debug::output_debug_query();
-					Debug::output_debug();
+					\The_SEO_Framework\Debug::output_debug_header();
+					\The_SEO_Framework\Debug::output_debug_query();
+					\The_SEO_Framework\Debug::output_debug();
 					?>
 				</div>
 			</div>
@@ -56,17 +57,19 @@ if ( Debug::has_debug_output() ) {
 					echo 'Type: ' . esc_html( $type );
 					echo esc_html( $mdash . 'ID: ' . $id );
 					echo esc_html( $mdash . 'Cache key: ' . $cache_key );
+					echo esc_html( $mdash . 'Plugin version: ' . THE_SEO_FRAMEWORK_VERSION );
+					echo esc_html( $mdash . 'Plugin DB version: c' . get_option( 'the_seo_framework_upgraded_db_version' ) . ' | e' . THE_SEO_FRAMEWORK_DB_VERSION );
 					?>
 				</h3>
 				<div style="position:absolute;bottom:0;right:0;left:0;top:39px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;z-index:9001">
 					<?php
-					Debug::output_debug_header();
-					Debug::output_debug_query();
-					Debug::output_debug();
+					\The_SEO_Framework\Debug::output_debug_header();
+					\The_SEO_Framework\Debug::output_debug_query();
+					\The_SEO_Framework\Debug::output_debug();
 					?>
 				</div>
 			</div>
 			<?php
 		}
-	}
-}
+	endif;
+endif;

@@ -63,7 +63,7 @@ class Init extends Query {
 		//* Determines Whether we're using pretty permalinks.
 		$this->pretty_permalinks = '' !== $this->permalink_structure();
 
-		\add_action( 'init', array( $this, 'init_the_seo_framework' ), 1 );
+		\add_action( 'init', array( $this, 'init_the_seo_framework' ), 0 );
 	}
 
 	/**
@@ -84,6 +84,7 @@ class Init extends Query {
 	 */
 	public function init_the_seo_framework() {
 
+		//* Don't initialize cache or cause other issues on preview.
 		if ( $this->is_preview() )
 			return;
 
@@ -122,7 +123,7 @@ class Init extends Query {
 	public function init_global_filters() {
 
 		//* Add query strings for sitemap rewrite.
-		\add_filter( 'query_vars', array( $this, 'enqueue_sitemap_query_vars' ), 1 );
+		\add_filter( 'query_vars', array( $this, 'enqueue_sitemap_query_vars' ), 1, 1 );
 	}
 
 	/**

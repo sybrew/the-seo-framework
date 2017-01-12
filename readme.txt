@@ -326,6 +326,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* When settings are reset, the notification won't show up again when refreshing the page.
 	* The sitemap schemas are now more clearly defined for Search Engines and validators.
 	* The description example field now better reflects the actual output.
+	* The admin JS file is now much smaller (~30%) and includes several performance optimizations.
 * **Updated:**
 	/
 	* TODO Translation POT file.
@@ -340,9 +341,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Knowledge Graph Settings metabox.
 		* Its content has been moved inside the Schema Settings metabox under the "General" and "Presence" tabs.
 	/
-	* TODO Link Relationship Settings within the Social Meta Settings metabox.
+	* Link Relationship Settings within the Social Meta Settings metabox.
 	 	* Its content has been moved to the General Settings metabox in the Canonical tab.
 	* WordPress 4.3.x support has been dropped. This plugin now requires WordPress 4.4 or later.
+	* WordPress 4.3.x and lower backwards compatibility functions have been removed.
 * **Fixed:**
 	/
 	* TODO On some themes, a fatal error was output when editing posts. (requires confirmation)
@@ -385,6 +387,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * **Added:**
 	* Quite a lot of new sentences, because two metaboxes got merged, and a new one arose.
 	* A markdown parser has been added to the plugin. This will be used for future translations.
+		* Some strings already use this.
 * **Changed:**
 	* Many sentences have changed, in order to better reflect the option usages.
 	* A few sentences have been updated slightly in order to be sanitized correctly.
@@ -466,13 +469,13 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* This completely changes the architecture of the plugin.
 		* This is handled through autoloading, interfaces and magic methods.
 		* Classes affected:
-			* Debug
+			* `Debug`
 				* How this is handled:
 					* The common publicly accessible (with public visibility, without "@access private" documentation) methods are set in [interfaces](http://php.net/manual/en/language.oop5.interfaces.php).
 					* When an interface method is accessed, it will autoload the required class and the method will propagate to default behavior.
 					* In general, this should improve performance and reduce plugin resource usage.
 					* These changes shouldn't affect current code. If anything goes wrong, a "_doing_it_wrong()" notice is output. Thanks to magic methods.
-			* Deprecated
+			* `Deprecated`
 				* How this is handled:
 					* When an inaccessible method is called, the magic method `the_seo_framework()->__call()` fires.
 					* Then the `The_SEO_Framework\Deprecated` class is autoloaded and cached within the magic method, quite like a singleton.
@@ -505,6 +508,30 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* This also improves the canonical URL on the admin page, for whatever that's worth.
 	* The SEO Settings updated notification query arg has been changed from `seo-updated` to `tsf-settings-updated` and has been added to `wp_removable_query_args`.
 		* This as well improves the canonical URL on the admin page.
+	/
+	* Library changes:
+		* `autodescription.{min.}js` is now `tsf.{min.}js`.
+		* `autodescription.{min.}css` is now `tsf.{min.}css`.
+		* `autodescription-rtl.{min.}css` is now `tsf-rtl.{min.}css`.
+		* `the_seo_framework()->js_name` and `the_seo_framework()->css_name` now directly alter the called file.
+			* Changing these public parameters would create 404 errors.
+		* Added `tsf.externs.js` file, for closure compiler advanced optimizations.
+		* Added `tsf.externs.protected.js` file, for closure compiler advanced optimizations when you require protected methods.
+	* JS changes:
+		* Constructor `autodescription` is now `tsf`.
+		* Constant `autodescriptionL10n` is now `tsfL10n`.
+		* Several Javascript constants are now publicly accessible, including:
+			* `tsf.nonce`
+			* `tsf.i18n`
+			* `tsf.states`
+			* `tsf.params`
+			* `tsf.settingsChanged`
+			* `tsf.hasInput`
+			* `tsf.cropper`, which is only public for internal reasons.
+	* Javascript l10n changes:
+	 	* All translation strings are now captured in an object: `i18n`.
+		* All page states are now captured in an object: `state`.
+		* All parameter strings are now captured in an object: `params`.
 * **Improved:**
 	* Function `the_seo_framework_class()` will no longer change the plugin's flow if called before action `plugins_loaded`. Instead, it will return `false`.
 	* Reduced sitemap's generation memory usage.
@@ -515,8 +542,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Class overloading magic methods (`__wakeup()`, `__call()`, `__get()`, `__set()`) are now only initiated once and can't be reinitated or overloaded.
 	* All admin actions have been moved into an admin action handler.
 		* This massively reduces the plugin memory heap size of this plugin on the front-end.
-		* This changes the admin `init` (not `admin_init`) action initialization (through method `the_seo_framework()->init_admin_actions()`) from priority `0` to priority `1`.
-			* This should not yield any effect. However, it has beeen moved outside a WordPress "action" call.
 	* All front-end actions have been moved into a front-end action handler.
 		* This massively reduces the plugin memory heap size of this plugin on the back-end.
 	* The debug handlers no longer checks for function `__`, as it should already be present when The SEO Framework has been loaded.
@@ -535,8 +560,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* The Sitemaps Settings metabox' tabs output are now automatically determined.
 	* Method `the_seo_framework()->parse_og_image()` no longer returns an emtpy string on second ID call.
 	* Caching is now disabled on search pages.
-	/
-	* TODO Javascript: A JS extern file has been published on GitHub. This way you can overview and interact with the stated public functions there.
+	* Javascript: A JS extern file has been published on GitHub. This way you can overview the publicly stated functions there.
 * **Fixed:**
 	* Several CSS classes didn't have a correct prefix. These were, and now are:
 		* `seoframework-content-no-js`, is now `tsf-content-no-js`
@@ -615,7 +639,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 == Upgrade Notice ==
 
 = 2.8.0 =
-This version completes the 2.7.0 term metadata upgrade by removing the old-style metadata values whilte dropping WordPress 4.3 support.
+In this update WordPress 4.3 and PHP 5.2 support have been dropped for better code quality.
 
 = 2.7.0 =
 This update is required for the upcoming Extension Manager plugin and includes many improvements.

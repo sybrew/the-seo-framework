@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package The_SEO_Framework\Views\Inpost
+ */
 
 defined( 'ABSPATH' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 

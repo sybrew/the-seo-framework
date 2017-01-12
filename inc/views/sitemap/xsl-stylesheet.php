@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package The_SEO_Framework\Views\Sitemap
+ */
+
 defined( 'ABSPATH' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
 $title = __( 'XML Sitemap', 'autodescription' );
@@ -109,7 +113,7 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?>
 			</head>
 			<body>
 				<div id="description">
-					<a href="' . esc_url( get_home_url() ) . '"><h1>' .
+					<a href="' . esc_url( ent2ncr( get_home_url() ) ) . '"><h1>' .
 						ent2ncr( $logo ) .
 						esc_html( ent2ncr( $this->get_blogname() . ' &mdash; ' . __( 'XML Sitemap', 'autodescription' ) ) ) . '</h1></a>
 					<p>' .
