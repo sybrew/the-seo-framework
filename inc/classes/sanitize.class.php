@@ -941,24 +941,20 @@ class Sanitize extends Admin_Pages {
 				//* The url is a relative path
 				$path = $url;
 
-				//* Try WPMUdev Domain Mapping.
-				$wpmu_url = $this->the_url_wpmudev_domainmap( $path, true );
-				if ( $wpmu_url && is_array( $wpmu_url ) ) {
-					$url = $wpmu_url[0];
-					$scheme = $wpmu_url[1];
-				}
+				/**
+				 * Applies filters 'the_seo_framework_sanitize_redirect_url' : array
+				 *
+				 * @since 2.8.0
+				 *
+				 * @param array : { 'url' => The full URL built from $path, 'scheme' => The preferred scheme }
+				 * @param string $path the URL path.
+				 */
+				$filter = (array) \apply_filters( 'the_seo_framework_sanitize_redirect_args', array(), $path );
 
-				//* Try Donncha Domain Mapping.
-				if ( ! isset( $scheme ) ) {
-					$dm_url = $this->the_url_donncha_domainmap( $path, true );
-					if ( $dm_url && is_array( $dm_url ) ) {
-						$url = $dm_url[0];
-						$scheme = $dm_url[1];
-					}
-				}
-
-				//* Everything else.
-				if ( ! isset( $scheme ) ) {
+				if ( $filter ) {
+					$url = $filter['url'];
+					$scheme = $filter['scheme'];
+				} else {
 					$url = $this->the_home_url_from_cache( true ) . ltrim( $path, ' /' );
 					$scheme = $this->is_ssl() ? 'https' : 'http';
 				}

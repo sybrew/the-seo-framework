@@ -380,6 +380,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* TODO WPML Home Page post meta is now correctly fetched.
 		* https://wordpress.org/support/topic/seo-framework-breaks-geodirectory/ (topic title doesn't reflect complete subject)
 	/
+	* TODO qTranslateX canonical homepage URL doesn't output double paths anymore.
 	* Robots.txt settings outputted incorrect notice when site is blocked from robots through WordPress reading settings while the sitemap has been deactivated.
 	* TODO bbPress forum topic ID's weren't correctly recognized. With this fix, these issues have been resolved:
 		- TODO The title is now correct.
@@ -553,6 +554,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	 	* All translation strings are now captured in an object: `i18n`.
 		* All page states are now captured in an object: `state`.
 		* All parameter strings are now captured in an object: `params`.
+	* The SEO Framework's generated SEO meta is no longer injected into `genesis_meta`, but is instead relying on `wp_head`, as otherwise.
 * **Improved:**
 	* Function `the_seo_framework_class()` will no longer change the plugin's flow if called before action `plugins_loaded`. Instead, it will return `false`.
 	* Reduced sitemap's generation memory usage.
@@ -583,6 +585,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Caching is now disabled on search pages.
 	* Javascript: A JS extern file has been published on GitHub. This way you can overview the publicly stated functions there.
 	* Method `the_seo_framework()->detect_sitemap_plugin()` now also checks for SEO plugins beforehand.
+	* Dedicated plugin compatibility has been moved into aptly named files.
+		* Compatibility files can be loaded per request. See method `_include_compat()`.
 * **Fixed:**
 	* Several CSS classes didn't have a correct prefix. These were, and now are:
 		* `seoframework-content-no-js`, is now `tsf-content-no-js`
@@ -626,6 +630,16 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* `add_filter`, use `add_option_filter` instead.
 		* `s_one_zero_flush_rewrite`
 		* `s_one_zero_flush_sitemap`
+		* `is_domainmapping_active`
+		* `is_donncha_domainmapping_active`
+		* `is_wpml_active`
+		* `is_qtranslate_active`
+		* `disable_genesis_seo`
+		* `get_translation_path`
+		* `get_relative_qtranslate_url`
+		* `get_relative_wmpl_url`
+		* `the_url_wpmudev_domainmap`
+		* `the_url_donncha_domainmap`
 	* Methods deprecated in The SEO Framework 2.6.6 and below are now removed. Which gave you more than 6 months to catch up.
 * **Other:**
 	* Cleaned up code.
@@ -642,10 +656,17 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* `(array) the_seo_framework_sitemap_logo`. Used to adjust or remove the sitemap logo. Defaults to WP 4.5 logo.
 		* `(string) the_seo_framework_sitemap_color`. Used to adjust the sitemap's theme color. Defaults to 0ebfe9.
 		* `(bool) the_seo_framework_indicator_sitemap`. Used to allow for sitemap generation indicator.
+		* `(array) the_seo_framework_sanitize_redirect_args`. Used to filter redirection URL path inputs.
+			* Awesome in combination with filter `(bool) the_seo_framework_allow_external_redirect`; Which, when set to false, will always invoke the previous filter.
+			* Can therefore prevent untrusted admin redirect spam. E.g. in multisite environments.
+		* `(array) the_seo_framework_url_path`. Used to filter the URL path.
+		* `(array) the_seo_framework_url_output_args`. Used to filter the output URL, including scheme.
 	* **Removed:**
 		* `(array) the_seo_framework_knowledgegraph_settings_tabs`. These tabs have been moved in the Schema metabox.
 		* `the_seo_framework_detect_seo_plugins`. This was previously deprecated.
 		* `the_seo_framework_supported_screens`. This was previously deprecated.
+	* **Deprecated:**
+		* `(mixed) the_seo_framework_canonical_force_scheme` use `(string) the_seo_framework_preferred_url_scheme` instead.
 * **Action notes:**
 	* **Added:**
 		* `the_seo_framework_general_metabox_before` runs before the General metabox output.
@@ -653,6 +674,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Removed:**
 		* `the_seo_framework_knowledge_metabox_before`
 		* `the_seo_framework_knowledge_metabox_after`
+* **Constant notes:**
+	* **Added:**
+		* `(string) THE_SEO_FRAMEWORK_DIR_PATH_COMPAT`, the compatibility files class.
 
 = Full changelog =
 

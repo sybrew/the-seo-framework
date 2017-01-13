@@ -38,56 +38,70 @@ class Compat extends Core {
 	protected function __construct() {
 		parent::__construct();
 
-		//* Disable Genesis SEO.
-		\add_filter( 'genesis_detect_seo_plugins', array( $this, 'disable_genesis_seo' ), 10, 1 );
-
 		//* Disable Headway SEO.
 		\add_filter( 'headway_seo_disabled', '__return_true' );
 	}
 
 	/**
-	 * Adds Genesis SEO compatibility.
+	 * Requires compatibility files which are needed early or on every page.
+	 * Mostly requires premium plugins/themes, so we check actual PHP instances,
+	 * rather than common paths. As they can require manual FTP upload.
 	 *
-	 * @since 2.6.0
-	 * @access private
+	 * @since 2.8.0
 	 */
-	public function genesis_compat() {
-		//* Reverse the removal of head attributes, this shouldn't affect SEO.
-		\remove_filter( 'genesis_attr_head', 'genesis_attributes_empty_class' );
-		\add_filter( 'genesis_attr_head', 'genesis_attributes_head' );
+	protected function load_early_compat_files() {
+
+		if ( ! extension_loaded( 'mbstring' ) ) {
+			$this->include_compat( 'mbstring', 'php' );
+		}
+
+		if ( $this->is_theme( 'genesis' ) ) {
+			//* Genesis Framework
+			$this->_include_compat( 'genesis', 'theme' );
+		}
+
+		if ( $this->detect_plugin( array( 'functions' => array( 'redirect_to_mapped_domain' ) ) ) ) {
+			//* Donncha domain mapping.
+			$this->_include_compat( 'donncha-dm', 'plugin' );
+		} elseif ( $this->detect_plugin( array( 'classes' => array( 'domain_map' ) ) ) ) {
+			//* WPMUdev domain mapping.
+			$this->_include_compat( 'wpmudev-dm', 'plugin' );
+		}
+
+		if ( $this->detect_plugin( array( 'constants' => array( 'ICL_LANGUAGE_CODE' ) ) ) ) {
+			//* WPML
+			$this->_include_compat( 'wpml', 'plugin' );
+		} elseif ( $this->detect_plugin( array( 'constants' => array( 'QTX_VERSION' ) ) ) ) {
+			//* qTranslate X
+			$this->_include_compat( 'qtranslatex', 'plugin' );
+		}
 	}
 
 	/**
-	 * Removes the Genesis SEO meta boxes on the SEO Settings page
+	 * Includes compatibility files.
 	 *
 	 * @since 2.8.0
 	 * @access private
+	 * @staticvar array $included Maintains cache of whether files have been loaded.
 	 *
-	 * @param array $plugins, overwritten as this filter will fire the
-	 * detection, regardless of other SEO plugins.
-	 * @return array Plugins to detect.
+	 * @param string $what The vendor/plugin/theme name for the compatibilty.
+	 * @param string $type The compatibility type. Be it 'plugin' or 'theme'.
+	 * @return bool True on success, false on failure. Files are expected not to return any values.
 	 */
-	public function disable_genesis_seo( $plugins ) {
+	public function _include_compat( $what, $type = 'plugin' ) {
 
-		$plugins = array(
-				'classes' => array(
-					'The_SEO_Framework\\Load',
-				),
-				'functions' => array(
-					'the_seo_framework',
-				),
-				'constants' => array(
-					'THE_SEO_FRAMEWORK_VERSION',
-				),
-			);
+		static $included = array();
 
-		return $plugins;
+		isset( $included[ $what ][ $type ] )
+		or $included[ $what ][ $type ] = (bool) require_once( THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . $type . '-' . $what . '.php' );
+
+		return $included[ $what ][ $type ];
 	}
 
 	/**
 	 * Adds compatibility with various JetPack modules.
 	 *
-	 * Recently, JetPack made sure this filter doesn't run when The SEO Framework
+	 * Recently, JetPack (4.0) made sure this filter doesn't run when The SEO Framework
 	 * is active as they've added their own compatibility check towards this plugin.
 	 * Let's wait until everyone has updated before removing this.
 	 *

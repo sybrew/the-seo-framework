@@ -36,19 +36,21 @@ class Generate_Url extends Generate_Title {
 	 * Whether to slash the url or not. Used when query vars are in url.
 	 *
 	 * @since 2.6.0
+	 * @since 2.8.0 : Made public.
 	 *
 	 * @var bool Whether to slash the url.
 	 */
-	protected $url_slashit;
+	public $url_slashit;
 
 	/**
 	 * Holds current HTTP host.
 	 *
 	 * @since 2.6.5
+	 * @since 2.8.0 : Made public.
 	 *
 	 * @var string The current HTTP host.
 	 */
-	protected $current_host;
+	public $current_host;
 
 	/**
 	 * Constructor, load parent constructor and set up variables.
@@ -60,9 +62,11 @@ class Generate_Url extends Generate_Title {
 	/**
 	 * Creates canonical URL.
 	 *
-	 * @param string $url the url
+	 * @since 2.0.0
+	 * @since 2.4.2 : Refactored arguments
+	 * @since 2.8.0 : No longer tolerates $id as Post object.
 	 *
-	 * @since 2.4.2
+	 * @param string $url the url
 	 * @param array $args : accepted args : {
 	 * 		@param bool $paged Return current page URL without pagination if false
 	 * 		@param bool $paged_plural Whether to add pagination for the second or later page.
@@ -75,9 +79,6 @@ class Generate_Url extends Generate_Title {
 	 * 		@param bool $forceslash Fetch home URL and slash it, always.
 	 *		@param int $id The Page or Term ID.
 	 * }
-	 *
-	 * @since 2.0.0
-	 *
 	 * @return string Escape url.
 	 */
 	public function the_url( $url = '', $args = array() ) {
@@ -113,7 +114,7 @@ class Generate_Url extends Generate_Title {
 				if ( $custom_url ) {
 					$url = $custom_url;
 					$this->url_slashit = false;
-					$parsed_url = wp_parse_url( $custom_url );
+					$parsed_url = \wp_parse_url( $custom_url );
 					$scheme = isset( $parsed_url['scheme'] ) ? $parsed_url['scheme'] : 'http';
 				}
 			}
@@ -122,25 +123,32 @@ class Generate_Url extends Generate_Title {
 				$path = $this->generate_url_path( $args );
 		}
 
-		//* Translate the URL, when possible.
-		$path = $this->get_translation_path( $path, $args['id'], $args['external'] );
+		/**
+		 * Applies filters 'the_seo_framework_url_path' : array
+		 *
+		 * @since 2.8.0
+		 *
+		 * @param string $path the URL path.
+		 * @param int $id The current post, page or term ID.
+		 * @param bool $external Whether the call is made from outside the current ID scope. Like from the Sitemap.
+		 */
+		$path = (string) \apply_filters( 'the_seo_framework_url_path', $path, $args['id'], $args['external'] );
 
-		//* Domain Mapping canonical URL.
-		if ( empty( $url ) && $this->is_domainmapping_active() ) {
-			$wpmu_url = $this->the_url_wpmudev_domainmap( $path, true );
-			if ( $wpmu_url && is_array( $wpmu_url ) ) {
-				$url = $wpmu_url[0];
-				$scheme = $wpmu_url[1];
-			}
-		}
+		/**
+		 * Applies filters 'the_seo_framework_sanitize_redirect_url' : array
+		 *
+		 * @since 2.8.0
+		 *
+		 * @param array : { 'url' => The full URL built from $path, 'scheme' => The preferred scheme }
+		 * @param string $path the URL path.
+		 * @param int $id The current post, page or term ID.
+		 * @param bool $external Whether the call is made from outside the current ID scope. Like from the Sitemap.
+		 */
+		$filter = (array) \apply_filters( 'the_seo_framework_url_output_args', array(), $path, $args['id'], $args['external'] );
 
-		//* Domain Mapping canonical URL.
-		if ( empty( $url ) && $this->is_donncha_domainmapping_active() ) {
-			$dm_url = $this->the_url_donncha_domainmap( $path, true );
-			if ( $dm_url && is_array( $dm_url ) ) {
-				$url = $dm_url[0];
-				$scheme = $dm_url[1];
-			}
+		if ( $filter ) {
+			$url = $filter['url'];
+			$scheme = $filter['scheme'];
 		}
 
 		//* Non-domainmap URL
@@ -154,21 +162,7 @@ class Generate_Url extends Generate_Title {
 			$url = $this->add_url_subdomain( $url );
 		}
 
-		switch ( $this->get_option( 'canonical_scheme' ) ) :
-			case 'https' :
-				$scheme = 'https';
-				break;
-
-			case 'http' :
-				$scheme = 'http';
-				break;
-
-			case 'automatic' :
-			default :
-				//* $scheme is empty if URL has been given manually or $args['home'] is true.
-				$scheme = $scheme ? $scheme : ( $this->is_ssl() ? 'https' : 'http' );
-				break;
-		endswitch;
+		$scheme = $scheme ? $scheme : $this->get_prefered_scheme();
 
 		$url = $this->set_url_scheme( $url, $scheme );
 
@@ -295,7 +289,7 @@ class Generate_Url extends Generate_Title {
 
 		$args = $this->reparse_url_args( $args );
 
-		if ( $this->is_archive() || $args['is_term'] ) {
+		if ( $this->is_archive() || $args['is_term'] ) :
 
 			$term = $args['term'];
 
@@ -314,7 +308,7 @@ class Generate_Url extends Generate_Title {
 				//* Nothing to see here...
 				$path = '';
 			}
-		} else {
+		else :
 
 			/**
 			 * Reworked to use the $args['id'] check based on get_the_real_ID.
@@ -331,7 +325,7 @@ class Generate_Url extends Generate_Title {
 			}
 
 			$path = $this->build_singular_relative_url( $post_id, $args );
-		}
+		endif;
 
 		return $path;
 	}
@@ -417,244 +411,6 @@ class Generate_Url extends Generate_Title {
 		$scheme = $host ? 'http://' : '';
 
 		return $url = $scheme . \trailingslashit( $host ) . ltrim( $path, ' \\/' );
-	}
-
-	/**
-	 * Generates relative URL for current post_ID for translation plugins.
-	 *
-	 * @since 2.6.0
-	 * @global object $post
-	 * @NOTE: Handles full path, including home directory.
-	 *
-	 * @param string $path the current URL path.
-	 * @param int $post_id The post ID.
-	 * @param bool $external Whether the request for URL generation is external.
-	 * @return relative Post or Page url.
-	 */
-	public function get_translation_path( $path = '', $post_id = null, $external = false ) {
-
-		if ( is_object( $post_id ) )
-			$post_id = isset( $post_id->ID ) ? $post_id->ID : $this->get_the_real_ID();
-
-		if ( null === $post_id )
-			$post_id = $this->get_the_real_ID();
-
-		//* WPML support.
-		if ( $this->is_wpml_active() )
-			$path = $this->get_relative_wmpl_url( $path, $post_id );
-
-		//* qTranslate X support. Can't work externally as we can't fetch the post's current language.
-		if ( false === $external && $this->is_qtranslate_active() )
-			$path = $this->get_relative_qtranslate_url( $path, $post_id );
-
-		return $path;
-	}
-
-	/**
-	 * Generates qtranslate URL.
-	 *
-	 * @since 2.6.0
-	 * @staticvar int $q_config_mode
-	 * @global array $q_config
-	 * @NOTE: Handles full path, including home directory.
-	 *
-	 * @param string $path The current path.
-	 * @param int $post_id The Post ID. Unused until qTranslate provides external URL forgery.
-	 */
-	public function get_relative_qtranslate_url( $path = '', $post_id = '' ) {
-
-		//* Reset cache.
-		$this->url_slashit = true;
-		$this->unset_current_subdomain();
-
-		static $q_config_mode = null;
-
-		if ( ! isset( $q_config ) ) {
-			global $q_config;
-			$q_config_mode = $q_config['url_mode'];
-		}
-
-		//* If false, change canonical URL for every page.
-		$hide = isset( $q_config['hide_default_language'] ) ? $q_config['hide_default_language'] : true;
-
-		$current_lang = isset( $q_config['language'] ) ? $q_config['language'] : false;
-		$default_lang = isset( $q_config['default_language'] ) ? $q_config['default_language'] : false;
-
-		//* Don't to anything on default language when path is hidden.
-		if ( $hide && $current_lang === $default_lang )
-			return $path;
-
-		switch ( $q_config_mode ) :
-			case '1' :
-				//* Negotiation type query var.
-
-				//* Don't slash it further.
-				$this->url_slashit = false;
-
-				/**
-				 * Path must have trailing slash for pagination permalinks to work.
-				 * So we remove the query string and add it back with slash.
-				 */
-				if ( strpos( $path, '?lang=' . $current_lang ) !== false )
-					$path = str_replace( '?lang=' . $current_lang, '', $path );
-
-				return \user_trailingslashit( $path ) . '?lang=' . $current_lang;
-				break;
-
-			case '2' :
-				//* Subdirectory
-				if ( 0 === strpos( $path, '/' . $current_lang . '/' ) ) {
-					return $path;
-				} else {
-					return $path = \trailingslashit( $current_lang ) . ltrim( $path, ' \\/' );
-				}
-				break;
-
-			case '3' :
-				//* Notify cache of subdomain addition.
-				$this->set_current_subdomain( $current_lang );
-
-				//* No need to alter the path.
-				return $path;
-				break;
-
-			default :
-				break;
-		endswitch;
-
-		return $path;
-	}
-
-	/**
-	 * Generate relative WPML url.
-	 *
-	 * @since 2.4.3
-	 * @staticvar bool $gli_exists
-	 * @staticvar string $default_lang
-	 * @global object $sitepress
-	 * @NOTE: Handles full path, including home directory.
-	 *
-	 * @param string $path The current path.
-	 * @param int $post_id The Post ID.
-	 * @return relative path for WPML urls.
-	 */
-	public function get_relative_wmpl_url( $path = '', $post_id = '' ) {
-		global $sitepress;
-
-		//* Reset cache.
-		$this->url_slashit = true;
-		$this->unset_current_subdomain();
-
-		if ( ! isset( $sitepress ) )
-			return $path;
-
-		static $gli_exists = null;
-		if ( is_null( $gli_exists ) )
-			$gli_exists = function_exists( 'wpml_get_language_information' );
-
-		if ( false === $gli_exists )
-			return $path;
-
-		if ( empty( $post_id ) )
-			$post_id = $this->get_the_real_ID();
-
-		//* Cache default language.
-		static $default_lang = null;
-		if ( is_null( $default_lang ) )
-			$default_lang = $sitepress->get_default_language();
-
-		/**
-		 * Applies filters wpml_post_language_details : array|wp_error
-		 *
-		 * ... Somehow WPML thought this would be great and understandable.
-		 * This should be put inside a callable function.
-		 * @since 2.6.0
-		 */
-		$lang_info = \apply_filters( 'wpml_post_language_details', null, $post_id );
-
-		if ( \is_wp_error( $lang_info ) ) {
-			//* Terms and Taxonomies.
-			$lang_info = array();
-
-			//* Cache the code.
-			static $lang_code = null;
-			if ( is_null( $lang_code ) && defined( 'ICL_LANGUAGE_CODE' ) )
-				$lang_code = ICL_LANGUAGE_CODE;
-
-			$lang_info['language_code'] = $lang_code;
-		}
-
-		//* If filter isn't used, bail.
-		if ( false === isset( $lang_info['language_code'] ) )
-			return $path;
-
-		$current_lang = $lang_info['language_code'];
-
-		//* No need to alter URL if we're on default lang.
-		if ( $current_lang === $default_lang )
-			return $path;
-
-		//* Cache negotiation type.
-		static $negotiation_type = null;
-		if ( is_null( $negotiation_type ) )
-			$negotiation_type = $sitepress->get_setting( 'language_negotiation_type' );
-
-		switch ( $negotiation_type ) :
-			case '1' :
-				//* Subdirectory
-
-				/**
-				 * Might not always work.
-				 * @TODO Fix.
-				 * @priority OMG WTF BBQ
-				 */
-				$contains_path = strpos( $path, '/' . $current_lang . '/' );
-				if ( false !== $contains_path && 0 === $contains_path ) {
-					return $path;
-				} else {
-					return $path = \trailingslashit( $current_lang ) . ltrim( $path, ' \\/' );
-				}
-				break;
-
-			case '2' :
-				//* Custom domain.
-
-				$langsettings = $sitepress->get_setting( 'language_domains' );
-				$current_lang_setting = isset( $langsettings[ $current_lang ] ) ? $langsettings[ $current_lang ] : '';
-
-				if ( empty( $current_lang_setting ) )
-					return $path;
-
-				$current_lang_setting = $this->make_fully_qualified_url( $current_lang_setting );
-				$parsed = \wp_parse_url( $current_lang_setting );
-
-				$this->current_host = isset( $parsed['host'] ) ? $parsed['host'] : '';
-				$current_path = isset( $parsed['path'] ) ? \trailingslashit( $parsed['path'] ) : '';
-
-				return $current_path . $path;
-				break;
-
-			case '3' :
-				//* Negotiation type query var.
-
-				//* Don't slash it further.
-				$this->url_slashit = false;
-
-				/**
-				 * Path must have trailing slash for pagination permalinks to work.
-				 * So we remove the query string and add it back with slash.
-				 */
-				if ( false !== strpos( $path, '?lang=' . $current_lang ) )
-					$path = str_replace( '?lang=' . $current_lang, '', $path );
-
-				return \user_trailingslashit( $path ) . '?lang=' . $current_lang;
-				break;
-
-			default :
-				break;
-		endswitch;
-
-		return $path;
 	}
 
 	/**
@@ -752,17 +508,20 @@ class Generate_Url extends Generate_Title {
 	}
 
 	/**
-	 * Sets URL to preferred URL scheme.
-	 * Does not sanitize output.
+	 * Returns preferred $url scheme.
+	 * Can be automatically be detected.
 	 *
 	 * @since 2.8.0
+	 * @staticvar string $scheme
 	 *
-	 * @param string $url The URL to set scheme for.
-	 * @return string The URL with the preferred scheme.
+	 * @return string The preferred URl scheme.
 	 */
-	public function set_preferred_url_scheme( $url ) {
+	public function get_prefered_scheme() {
 
-		$scheme = '';
+		static $scheme;
+
+		if ( isset( $scheme ) )
+			return $scheme;
 
 		switch ( $this->get_option( 'canonical_scheme' ) ) :
 			case 'https' :
@@ -775,11 +534,31 @@ class Generate_Url extends Generate_Title {
 
 			case 'automatic' :
 			default :
-				return $url;
+				$scheme = $this->is_ssl() ? 'https' : 'http';
 				break;
 		endswitch;
 
-		return $this->set_url_scheme( $url, $scheme, false );
+		/**
+		 * Applies filters 'the_seo_framework_preferred_url_scheme' : string
+		 *
+		 * @since 2.8.0
+		 *
+		 * @param string $scheme The current URL scheme.
+		 */
+		return $scheme = (string) apply_filters( 'the_seo_framework_preferred_url_scheme', $scheme );
+	}
+
+	/**
+	 * Sets URL to preferred URL scheme.
+	 * Does not sanitize output.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @param string $url The URL to set scheme for.
+	 * @return string The URL with the preferred scheme.
+	 */
+	public function set_preferred_url_scheme( $url ) {
+		return $this->set_url_scheme( $url, $this->get_prefered_scheme(), false );
 	}
 
 	/**
@@ -845,15 +624,14 @@ class Generate_Url extends Generate_Title {
 		 * @param string $current_scheme the current used scheme.
 		 *
 		 * @since 2.4.2
+		 * @since 2.8.0 Deprecated.
 		 */
 		$scheme_settings = \apply_filters( 'the_seo_framework_canonical_force_scheme', null, $current_scheme );
 
-		/**
-		 * @TODO add options metabox.
-		 * @priority medium 2.6.5+ ... Semi-done in 2.8.0.. move this? 2.9.0..
-		 */
-
 		if ( isset( $scheme_settings ) ) {
+
+			$this->_deprecated_filter( 'the_seo_framework_canonical_force_scheme', '2.8.0', 'the_seo_framework_preferred_url_scheme' );
+
 			if ( 'https' === $scheme_settings || 'http' === $scheme_settings || 'relative' === $scheme_settings ) {
 				$url = $this->set_url_scheme( $url, $scheme_settings, false );
 			} elseif ( ! $scheme_settings ) {
@@ -864,131 +642,6 @@ class Generate_Url extends Generate_Title {
 		}
 
 		return $url;
-	}
-
-	/**
-	 * Creates a full canonical URL when WPMUdev Domain Mapping is active from path.
-	 *
-	 * @since 2.3.0
-	 * @since 2.4.0 Added $get_scheme parameter.
-	 *
-	 * @param string $path The post relative path.
-	 * @param bool $get_scheme Output array with scheme.
-	 * @return string|array|void The unescaped URL, the scheme
-	 */
-	public function the_url_wpmudev_domainmap( $path, $get_scheme = false ) {
-
-		if ( false === $this->is_domainmapping_active() )
-			return '';
-
-		global $wpdb, $blog_id;
-
-		/**
-		 * Cache revisions. Hexadecimal.
-		 * @since 2.6.0
-		 */
-		$revision = '1';
-
-		$cache_key = 'wpmudev_mapped_domain_' . $revision . '_' . $blog_id;
-
-		//* Check if the domain is mapped. Store in object cache.
-		$mapped_domain = $this->object_cache_get( $cache_key );
-		if ( false === $mapped_domain ) :
-			$mapped_domains = $wpdb->get_results( $wpdb->prepare( "SELECT id, domain, is_primary, scheme FROM {$wpdb->base_prefix}domain_mapping WHERE blog_id = %d", $blog_id ), OBJECT );
-
-			$primary_key = 0;
-			$domain_ids = array();
-
-			foreach ( $mapped_domains as $key => $domain ) :
-				if ( isset( $domain->is_primary ) && '1' === $domain->is_primary ) {
-					$primary_key = $key;
-
-					//* We've found the primary key, break loop.
-					break;
-				} else {
-					//* Save IDs.
-					if ( isset( $domain->id ) && $domain->id )
-						$domain_ids[ $key ] = $domain->id;
-				}
-			endforeach;
-
-			if ( 0 === $primary_key && ! empty( $domain_ids ) ) {
-				//* No primary ID has been found. Get the one with the lowest ID, which has been added first.
-				$primary_key = array_keys( $domain_ids, min( $domain_ids ), true );
-				$primary_key = reset( $primary_key );
-			}
-
-			//* Set 0, as we check for false to begin with.
-			$mapped_domain = isset( $mapped_domains[ $primary_key ] ) ? $mapped_domains[ $primary_key ] : 0;
-
-			$this->object_cache_set( $cache_key, $mapped_domain, 3600 );
-		endif;
-
-		if ( $mapped_domain ) :
-
-			$domain = isset( $mapped_domain->domain ) ? $mapped_domain->domain : '0';
-			$scheme = isset( $mapped_domain->scheme ) ? $mapped_domain->scheme : '';
-
-			//* Fallback to is_ssl if no scheme has been found.
-			if ( '' === $scheme )
-				$scheme = $this->is_ssl() ? '1' : '0';
-
-			if ( '1' === $scheme ) {
-				$scheme_full = 'https://';
-				$scheme = 'https';
-			} else {
-				$scheme_full = 'http://';
-				$scheme = 'http';
-			}
-
-			//* Put it all together.
-			$url = \trailingslashit( $scheme_full . $domain ) . ltrim( $path, ' \\/' );
-
-			if ( $get_scheme ) {
-				return array( $url, $scheme );
-			} else {
-				return $url;
-			}
-		endif;
-
-		return '';
-	}
-
-	/**
-	 * Try to get an canonical URL when Donncha Domain Mapping is active.
-	 *
-	 * @since 2.4.0
-	 *
-	 * @param string $path The post relative path.
-	 * @param bool $get_scheme Output array with scheme.
-	 * @return string|array|void The unescaped URL, the scheme
-	 */
-	public function the_url_donncha_domainmap( $path, $get_scheme = false ) {
-
-		if ( false === $this->is_donncha_domainmapping_active() )
-			return '';
-
-		global $current_blog;
-
-		$scheme = $this->is_ssl() ? 'https' : 'http';
-		$url = function_exists( 'domain_mapping_siteurl' ) ? \domain_mapping_siteurl( false ) : false;
-
-		$request_uri = '';
-
-		if ( $url && \untrailingslashit( $scheme . '://' . $current_blog->domain . $current_blog->path ) !== $url ) {
-			if ( ( defined( 'VHOST' ) && 'yes' !== VHOST ) || ( defined( 'SUBDOMAIN_INSTALL' ) && false === SUBDOMAIN_INSTALL ) )
-				$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? str_replace( $current_blog->path, '/', $_SERVER['REQUEST_URI'] ) : '';
-
-			$url = \trailingslashit( $url . $request_uri ) . ltrim( $path, ' \\/' );
-
-			if ( $get_scheme ) {
-				return array( $url, $scheme );
-			} else {
-				return $url;
-			}
-		}
-
-		return '';
 	}
 
 	/**

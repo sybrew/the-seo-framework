@@ -108,25 +108,31 @@ define( 'THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE', __FILE__ );
  * The plugin views map absolute path.
  * @since 2.7.0
  */
-define( 'THE_SEO_FRAMEWORK_DIR_PATH_VIEWS', THE_SEO_FRAMEWORK_DIR_PATH . 'inc/views/' );
+define( 'THE_SEO_FRAMEWORK_DIR_PATH_VIEWS', THE_SEO_FRAMEWORK_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR );
 
 /**
  * The plugin class map absolute path.
  * @since 2.2.9
  */
-define( 'THE_SEO_FRAMEWORK_DIR_PATH_CLASS', THE_SEO_FRAMEWORK_DIR_PATH . 'inc/classes/' );
+define( 'THE_SEO_FRAMEWORK_DIR_PATH_CLASS', THE_SEO_FRAMEWORK_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
 
 /**
  * The plugin interface map absolute path.
  * @since 2.8.0
  */
-define( 'THE_SEO_FRAMEWORK_DIR_PATH_INTERFACE', THE_SEO_FRAMEWORK_DIR_PATH . 'inc/interfaces/' );
+define( 'THE_SEO_FRAMEWORK_DIR_PATH_INTERFACE', THE_SEO_FRAMEWORK_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'interfaces' . DIRECTORY_SEPARATOR );
 
 /**
  * The plugin function map absolute path.
  * @since 2.2.9
  */
-define( 'THE_SEO_FRAMEWORK_DIR_PATH_FUNCT', THE_SEO_FRAMEWORK_DIR_PATH . 'inc/functions/' );
+define( 'THE_SEO_FRAMEWORK_DIR_PATH_FUNCT', THE_SEO_FRAMEWORK_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'functions' . DIRECTORY_SEPARATOR );
+
+/**
+ * The plugin function map absolute path.
+ * @since 2.8.0
+ */
+define( 'THE_SEO_FRAMEWORK_DIR_PATH_COMPAT', THE_SEO_FRAMEWORK_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'compat' . DIRECTORY_SEPARATOR );
 
 the_seo_framework_pre_load();
 /**
@@ -179,10 +185,9 @@ function the_seo_framework_load_base_files() {
 	require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'deprecated.php' );
 
 	/**
-	 * Load compat and API files.
+	 * Load API files.
 	 * @since 2.1.6
 	 * @uses THE_SEO_FRAMEWORK_DIR_PATH_FUNCT
 	 */
-	require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'compat.php' );
 	require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'optionsapi.php' );
 }

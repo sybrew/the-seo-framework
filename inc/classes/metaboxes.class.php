@@ -71,7 +71,9 @@ class Metaboxes extends Site_Options {
 		 * Don't output navigation if $use_tabs is false and the amount of tabs is 1 or lower.
 		 */
 		if ( $use_tabs ) :
-			?><div class="tsf-nav-tab-wrapper hide-if-no-js" id="<?php echo esc_attr( $id . '-tabs-wrapper' ); ?>"><?php
+			?>
+			<div class="tsf-nav-tab-wrapper hide-if-no-js" id="<?php echo esc_attr( $id . '-tabs-wrapper' ); ?>">
+				<?php
 				$count = 1;
 				foreach ( $tabs as $tab => $value ) :
 					$dashicon = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
@@ -94,7 +96,9 @@ class Metaboxes extends Site_Options {
 
 					$count++;
 				endforeach;
-			?></div><?php
+				?>
+			</div>
+			<?php
 		endif;
 
 		/**
@@ -111,7 +115,9 @@ class Metaboxes extends Site_Options {
 			//* Current tab for JS.
 			$current = 1 === $count ? ' tsf-active-tab-content' : '';
 
-			?><div class="tsf-tabs-content <?php echo esc_attr( $the_name . $current ); ?>" id="<?php echo esc_attr( $the_id ); ?>" ><?php
+			?>
+			<div class="tsf-tabs-content <?php echo esc_attr( $the_name . $current ); ?>" id="<?php echo esc_attr( $the_id ); ?>" >
+				<?php
 				//* No-JS tabs.
 				if ( $use_tabs ) :
 					$dashicon = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
@@ -136,7 +142,9 @@ class Metaboxes extends Site_Options {
 					$output = $this->call_function( $callback, $version, $params );
 					echo $output;
 				endif;
-			?></div><?php
+				?>
+			</div>
+			<?php
 
 			$count++;
 		endforeach;

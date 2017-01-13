@@ -64,6 +64,8 @@ class Init extends Query {
 		$this->pretty_permalinks = '' !== $this->permalink_structure();
 
 		\add_action( 'init', array( $this, 'init_the_seo_framework' ), 0 );
+
+		$this->load_early_compat_files();
 	}
 
 	/**
@@ -242,14 +244,7 @@ class Init extends Query {
 			\add_action( 'template_redirect', array( $this, 'init_feed' ) );
 		}
 
-		if ( $this->is_theme( 'genesis' ) ) {
-			//* Genesis front-end compat.
-			\add_action( 'init', array( $this, 'genesis_compat' ) );
-
-			\add_action( 'genesis_meta', array( $this, 'html_output' ), 5 );
-		} else {
-			\add_action( 'wp_head', array( $this, 'html_output' ), 1 );
-		}
+		\add_action( 'wp_head', array( $this, 'html_output' ), 1 );
 	}
 
 	/**
@@ -641,12 +636,8 @@ class Init extends Query {
 					'key'      => 'exclude_local_search',
 					'type'     => 'NUMERIC',
 					'compare'  => 'NOT EXISTS',
-				//	'relation' => 'AND', // Leaving this out will let the query automatically be determined to either OR or AND.
 				),
 			);
-
-			//* Query is faster when secondary relation is not set. Defaults to AND.
-			// $meta_query['relation'] = 'AND';
 
 			$query->set( 'meta_query', $meta_query );
 		}

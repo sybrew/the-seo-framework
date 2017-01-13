@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package The_SEO_Framework\Compat\PHP\mbstring
+ */
 
 defined( 'ABSPATH' ) or die;
 
