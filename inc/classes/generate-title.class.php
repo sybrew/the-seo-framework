@@ -1175,12 +1175,13 @@ class Generate_Title extends Generate_Description {
 	 * Adds title protection prefixes.
 	 *
 	 * @since 2.6.0
+	 * @since 2.8.0 Now first checks if is singular.
 	 *
 	 * @param $title The current Title.
 	 * @param $id The page ID.
 	 * @return string $title with possible affixes.
 	 */
-	public function add_title_protection( $title, $id ) {
+	public function add_title_protection( $title, $id = 0 ) {
 
 		if ( $this->is_singular() ) {
 			/**
@@ -1200,11 +1201,11 @@ class Generate_Title extends Generate_Description {
 
 			if ( isset( $post->post_password ) && '' !== $post->post_password ) {
 				/* translators: Front-end output */
-				$protected_title_format = (string) \apply_filters( 'protected_title_format', __( 'Protected: %s', 'autodescription' ), $post );
+				$protected_title_format = (string) \apply_filters( 'protected_title_format', \__( 'Protected: %s', 'autodescription' ), $post );
 				$title = sprintf( $protected_title_format, $title );
 			} elseif ( isset( $post->post_status ) && 'private' === $post->post_status ) {
 				/* translators: Front-end output */
-				$private_title_format = (string) \apply_filters( 'private_title_format', __( 'Private: %s', 'autodescription' ), $post );
+				$private_title_format = (string) \apply_filters( 'private_title_format', \__( 'Private: %s', 'autodescription' ), $post );
 				$title = sprintf( $private_title_format, $title );
 			}
 		}

@@ -319,7 +319,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 					* They also disturb engagement for trust. Clean URLs are always preferred.
 			* The rest is unchanged.
 	/
-	* TODO When focussing on a field which is showing a placeholder, the placeholder is now blurred.
+	* When focussing on a field which is showing a placeholder, the placeholder is now blurred.
 	* TODO The sitename set in "Organization or Personal Name" is now used consistently throughout the Schema.org output settings.
 	* Description and schema transient cache is no longer initiated on Search Pages.
 	* TODO Header, Site Icon and Site Logo images are now downsized if the image is exceeding 1500px in either height or width (or both).
@@ -363,24 +363,24 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Twitter Cards Meta, authors seem to have abandoned plugin.
 * **Fixed:**
 	/
-	* TODO On some themes, a fatal error was output when editing posts. (requires confirmation)
-		* https://wordpress.org/support/topic/can-not-edit-post-after-v2-7-0-update/
-	/
 	* TODO Page and post excerpts now correctly work.
-		* https://wordpress.org/support/topic/excerpt-to-meta-description-issue-screencast/
+		/
+		* @link https://wordpress.org/support/topic/excerpt-to-meta-description-issue-screencast/
+		* Inconclusive.
 	/
-	* TODO On some themes, the private prefix has been added to the title (already fixed, requires confirmation)
-		* https://wordpress.org/support/topic/category-page-title-with-weird-unwanted-prefix/
+	* On some themes, the private prefix has been added to the title.
+	* TODO Protected and Private title prefixes are now calculated towards title character count.
+		* Should I? I'm afraid this requires a rework... move to 3.0.0?
 	/
-	* TODO With PolyLang, the canonical URL failed to write the language path on the home pages.
-		* https://wordpress.org/support/topic/polylang-canonicals-failing-on-homepage/
+	* TODO (This is "improved") Protected and Private title prefixes are now added before the manual title input.
+		* Should I? I'm afraid this requires a rework... move to 3.0.0?
 	/
 	* When the title exceeds 154 characters, the description will no longer contain the complete post's content. Instead, the title will now be omitted and the description length has been limited to 155 characters.
 	* WPML sitemap generated URL path now reflects the language. TODO confirm.
 	* TODO WPML Home Page post meta is now correctly fetched.
 		* https://wordpress.org/support/topic/seo-framework-breaks-geodirectory/ (topic title doesn't reflect complete subject)
 	/
-	* TODO Robots.txt settings outputted incorrect notice when site is blocked from robots through WordPress reading settings while the sitemap has been deactivated.
+	* Robots.txt settings outputted incorrect notice when site is blocked from robots through WordPress reading settings while the sitemap has been deactivated.
 	* TODO bbPress forum topic ID's weren't correctly recognized. With this fix, these issues have been resolved:
 		- TODO The title is now correct.
 		- TODO The description is now correct.
@@ -388,13 +388,18 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	/
 	* TODO AnsPress category canonical URL is now correct on its categories. @link https://wordpress.org/support/topic/anspress-categories/
 	* The SEO Bar's on-hover tooltip is now once more correctly visible on mobile devices.
-	* TODO The notification that's displayed when settings are reset is no longer displayed on refresh.
+	* The notification that's displayed when settings are reset is no longer displayed on refresh.
 	* The website's tagline is no longer shown in the description when no excerpt can be generated.
 	* The counter type now correctly updates for new user meta created after The SEO Framework 2.7.0+ is installed.
 	* TODO SEO Settings tabs now correctly show the tab's content when hitting the "back" button.
+		/
 		* This behavior is caused because browsers save form data when travelling through history. Tabs are self-contained button forms for improved performance.
+		* NOTE Is this even worth fixing? It's merely an unlikely nuisance which, when fixed, will greatly affect performance as all tab-states have to be re-checked.
 	/
 	* TODO When enabling the option "Remove Blogname from title?", the blogname is removed too from manual SEO title entries.
+		/
+		* @link https://github.com/sybrew/the-seo-framework/issues/38#issuecomment-270920124
+		* Inconclusive.
 
 **For translators:**
 

@@ -273,8 +273,7 @@ class Post_Data extends Detect {
 		if ( ! empty( $post->post_excerpt ) ) {
 			$excerpt = $post->post_excerpt;
 		} elseif ( isset( $post->post_content ) ) {
-			$uses_builder = $this->uses_page_builder( $post->ID );
-			$excerpt = $uses_builder ? '' : $post->post_content;
+			$excerpt = $this->uses_page_builder( $post->ID ) ? '' : $post->post_content;
 		} else {
 			$excerpt = '';
 		}
@@ -482,18 +481,19 @@ class Post_Data extends Detect {
 		if ( empty( $meta ) )
 			return false;
 
-		if ( isset( $meta['_et_pb_use_builder'][0] ) && 'on' === $meta['_et_pb_use_builder'][0] && defined( 'ET_BUILDER_VERSION' ) )
+		if ( isset( $meta['_et_pb_use_builder'][0] ) && 'on' === $meta['_et_pb_use_builder'][0] && defined( 'ET_BUILDER_VERSION' ) ) :
 			//* Divi Builder by Elegant Themes
 			return true;
-		elseif ( isset( $meta['_wpb_vc_js_status'][0] ) && 'true' === $meta['_wpb_vc_js_status'][0] && defined( 'WPB_VC_VERSION' ) )
+		elseif ( isset( $meta['_wpb_vc_js_status'][0] ) && 'true' === $meta['_wpb_vc_js_status'][0] && defined( 'WPB_VC_VERSION' ) ) :
 			//* Visual Composer by WPBakery
 			return true;
-		elseif ( isset( $meta['panels_data'][0] ) && '' !== $meta['panels_data'][0] && defined( 'SITEORIGIN_PANELS_VERSION' ) )
+		elseif ( isset( $meta['panels_data'][0] ) && '' !== $meta['panels_data'][0] && defined( 'SITEORIGIN_PANELS_VERSION' ) ) :
 			//* Page Builder by SiteOrigin
 			return true;
-		elseif ( isset( $meta['_fl_builder_enabled'][0] ) && '1' === $meta['_fl_builder_enabled'][0] && defined( 'FL_BUILDER_VERSION' ) )
+		elseif ( isset( $meta['_fl_builder_enabled'][0] ) && '1' === $meta['_fl_builder_enabled'][0] && defined( 'FL_BUILDER_VERSION' ) ) :
 			//* Beaver Builder by Fastline Media
 			return true;
+		endif;
 
 		return false;
 	}

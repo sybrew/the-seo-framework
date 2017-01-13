@@ -486,10 +486,12 @@ class Detect extends Render {
 	 * Determines whether to add a line within robots based by plugin detection, or sitemap output option.
 	 *
 	 * @since 2.6.0
+	 * @since 2.8.0 Added check_option parameter.
 	 *
+	 * @param bool $check_option Whether to check for sitemap option.
 	 * @return bool True when no conflicting plugins are detected or when The SEO Framework's Sitemaps are output.
 	 */
-	public function can_do_sitemap_robots() {
+	public function can_do_sitemap_robots( $check_option = true ) {
 
 		$plugins = array(
 			'functions' => array(
@@ -500,10 +502,12 @@ class Detect extends Render {
 		if ( $this->detect_plugin( $plugins ) )
 			return false;
 
-		if ( $this->is_option_checked( 'sitemaps_output' ) )
-			return true;
+		if ( $check_option ) {
+			if ( ! $this->is_option_checked( 'sitemaps_output' ) )
+				return false;
+		}
 
-		return false;
+		return true;
 	}
 
 	/**

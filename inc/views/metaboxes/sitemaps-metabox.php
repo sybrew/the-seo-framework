@@ -124,7 +124,7 @@ switch ( $instance ) :
 			$this->wrap_fields(
 				$this->make_checkbox(
 					'sitemap_styles',
-					esc_html__( 'Style Sitemap?', 'autodescription' ) . ' ' . $this->make_info( esc_html__( 'This makes the sitemap more readable for humans', 'autodescription' ), '', false ),
+					esc_html__( 'Style Sitemap?', 'autodescription' ) . ' ' . $this->make_info( __( 'This makes the sitemap more readable for humans', 'autodescription' ), '', false ),
 					'',
 					false
 				), true
@@ -149,7 +149,7 @@ switch ( $instance ) :
 
 		if ( $this->has_robots_txt() ) :
 			$this->description( __( 'A robots.txt file has been detected in the root folder of your website; therefore no settings are able to alter its output.', 'autodescription' ) );
-		elseif ( $this->can_do_sitemap_robots() ) :
+		elseif ( $this->can_do_sitemap_robots( false ) ) :
 			$this->description( __( 'The robots.txt file is the first thing Search Engines look for. If you add the sitemap location in the robots.txt file, then Search Engines will look for and index the sitemap.', 'autodescription' ) );
 			$this->description( __( 'If you do not add the sitemap location to the robots.txt file, you will need to notify Search Engines manually through the Webmaster Console provided by the Search Engines.', 'autodescription' ) );
 
@@ -163,9 +163,9 @@ switch ( $instance ) :
 			$this->wrap_fields(
 				$this->make_checkbox(
 					'sitemaps_robots',
-					__( 'Add sitemap location in robots?', 'autodescription' ),
+					esc_html__( 'Add sitemap location in robots?', 'autodescription' ) . ' ' . $this->make_info( __( 'This only has effect if the sitemap is active', 'autodescription' ), '', false ),
 					'',
-					true
+					false
 				), true
 			);
 		else :
