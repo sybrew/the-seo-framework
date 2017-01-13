@@ -97,45 +97,30 @@ class Detect extends Render {
 				'Google XML Sitemaps for qTranslate'   => 'google-xml-sitemaps-v3-for-qtranslate/sitemap.php',
 				'XML Sitemap & Google News feeds'      => 'xml-sitemap-feed/xml-sitemap.php',
 				'Google Sitemap by BestWebSoft'        => 'google-sitemap-plugin/google-sitemap-plugin.php',
-				'Yoast SEO'                            => 'wordpress-seo/wp-seo.php',
-				'Yoast SEO Premium'                    => 'wordpress-seo-premium/wp-seo-premium.php',
-				'All in One SEO Pack'                  => 'all-in-one-seo-pack/all_in_one_seo_pack.php',
-				'Sitemap'                              => 'sitemap/sitemap.php',
 				'Simple Wp Sitemap'                    => 'simple-wp-sitemap/simple-wp-sitemap.php',
 				'Simple Sitemap'                       => 'simple-sitemap/simple-sitemap.php',
 				'XML Sitemaps'                         => 'xml-sitemaps/xml-sitemaps.php',
 			),
 			'open_graph' => array(
-				'2 Click Social Media Buttons'         => '2-click-socialmedia-buttons/2-click-socialmedia-buttons.php',
 				'Add Link to Facebook'                 => 'add-link-to-facebook/add-link-to-facebook.php',
-				'Add Meta Tags'                        => 'add-meta-tags/add-meta-tags.php',
-				'Facebook'                             => 'facebook/facebook.php',
 				'Facebook AWD All in one'              => 'facebook-awd/AWD_facebook.php',
 				'Facebook Featured Image & OG Meta Tags' => 'facebook-featured-image-and-open-graph-meta-tags/fb-featured-image.php',
 				'Facebook Meta Tags'                   => 'facebook-meta-tags/facebook-metatags.php',
 				'Facebook Open Graph Meta Tags for WordPress' => 'wonderm00ns-simple-facebook-open-graph-tags/wonderm00n-open-graph.php',
-				'Facebook Revised Open Graph Meta Tag' => 'facebook-revised-open-graph-meta-tag/index.php',
 				'Facebook Thumb Fixer'                 => 'facebook-thumb-fixer/_facebook-thumb-fixer.php',
 				'Fedmichs Facebook Open Graph Meta'    => 'facebook-and-digg-thumbnail-generator/facebook-and-digg-thumbnail-generator.php',
 				'Header and Footer'                    => 'header-footer/plugin.php',
-				'Network Publisher'                    => 'network-publisher/networkpub.php',
 				'NextGEN Facebook OG'                  => 'nextgen-facebook/nextgen-facebook.php',
 				'NextScripts SNAP'                     => 'social-networks-auto-poster-facebook-twitter-g/NextScripts_SNAP.php',
 				'Open Graph'                           => 'opengraph/opengraph.php',
 				'Open Graph Protocol Framework'        => 'open-graph-protocol-framework/open-graph-protocol-framework.php',
-				'Shareaholic'                          => 'sexybookmarks/sexy-bookmarks.php',
 				'Shareaholic2'                         => 'shareaholic/sexy-bookmarks.php',
-				'SharePress'                           => 'sharepress/sharepress.php',
 				'Social Sharing Toolkit'               => 'social-sharing-toolkit/social_sharing_toolkit.php',
-				'Tweet, Like, Google +1 and Share'     => 'only-tweet-like-share-and-google-1/tweet-like-plusone.php',
 				'WordPress Social Sharing Optimization' => 'wpsso/wpsso.php',
 				'WP Facebook Open Graph protocol'      => 'wp-facebook-open-graph-protocol/wp-facebook-ogp.php',
 			),
 			'twitter_card' => array(
 				'Twitter'                              => 'twitter/twitter.php',
-				'Eewee Twitter Card'                   => 'eewee-twitter-card/index.php',
-				'Twitter Cards'                        => 'twitter-cards/twitter-cards.php',
-				'Twitter Cards Meta'                   => 'twitter-cards-meta/twitter-cards-meta.php',
 			),
 		);
 
@@ -337,6 +322,7 @@ class Detect extends Render {
 	 * Determines if other SEO plugins are active.
 	 *
 	 * @since 1.3.0
+	 * @since 2.6.0 Uses new style detection.
 	 *
 	 * @return bool SEO plugin detected.
 	 */
@@ -383,8 +369,7 @@ class Detect extends Render {
 			return $detected;
 
 		//* Detect SEO plugins beforehand.
-		$detected = $this->detect_seo_plugins();
-		if ( $detected )
+		if ( $detected = $this->detect_seo_plugins() )
 			return $detected;
 
 		$active_plugins = $this->active_plugins();
@@ -423,8 +408,7 @@ class Detect extends Render {
 			return $detected;
 
 		//* Detect SEO plugins beforehand.
-		$detected = $this->detect_seo_plugins();
-		if ( $detected )
+		if ( $detected = $this->detect_seo_plugins() )
 			return $detected;
 
 		$active_plugins = $this->active_plugins();
@@ -476,6 +460,10 @@ class Detect extends Render {
 		static $detected = null;
 
 		if ( isset( $detected ) )
+			return $detected;
+
+		//* Detect SEO plugins beforehand.
+		if ( $detected = $this->detect_seo_plugins() )
 			return $detected;
 
 		$active_plugins = $this->active_plugins();

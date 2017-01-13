@@ -762,6 +762,8 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function set_preferred_url_scheme( $url ) {
 
+		$scheme = '';
+
 		switch ( $this->get_option( 'canonical_scheme' ) ) :
 			case 'https' :
 				$scheme = 'https';
@@ -793,7 +795,7 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function set_url_scheme( $url, $scheme = null, $use_filter = true ) {
 
-		if ( ! isset( $scheme ) ) {
+		if ( empty( $scheme ) ) {
 			$scheme = $this->is_ssl() ? 'https' : 'http';
 		} elseif ( 'admin' === $scheme || 'login' === $scheme  || 'login_post' === $scheme || 'rpc' === $scheme ) {
 			$scheme = $this->is_ssl() || \force_ssl_admin() ? 'https' : 'http';
@@ -848,7 +850,7 @@ class Generate_Url extends Generate_Title {
 
 		/**
 		 * @TODO add options metabox.
-		 * @priority medium 2.6.5+ ... Semi-done in 2.8.0
+		 * @priority medium 2.6.5+ ... Semi-done in 2.8.0.. move this? 2.9.0..
 		 */
 
 		if ( isset( $scheme_settings ) ) {
@@ -973,7 +975,7 @@ class Generate_Url extends Generate_Title {
 
 		$request_uri = '';
 
-		if ( $url && untrailingslashit( $scheme . '://' . $current_blog->domain . $current_blog->path ) !== $url ) {
+		if ( $url && \untrailingslashit( $scheme . '://' . $current_blog->domain . $current_blog->path ) !== $url ) {
 			if ( ( defined( 'VHOST' ) && 'yes' !== VHOST ) || ( defined( 'SUBDOMAIN_INSTALL' ) && false === SUBDOMAIN_INSTALL ) )
 				$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? str_replace( $current_blog->path, '/', $_SERVER['REQUEST_URI'] ) : '';
 

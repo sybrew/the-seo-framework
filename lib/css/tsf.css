@@ -639,6 +639,10 @@ body.js .tsf-metaboxes .tsf-tabs-content.tsf-active-tab-content {
 	.tsf-metaboxes #tsf-home-title-location label span {
 		min-width: 40px;
 	}
+
+	.wp-list-table .is-expanded td.tsf-seo-bar-wrap:not(.hidden) {
+		overflow: initial !important;
+	}
 }
 
 @media screen and (max-width: 642px) {

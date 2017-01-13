@@ -345,6 +345,22 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	 	* Its content has been moved to the General Settings metabox in the Canonical tab.
 	* WordPress 4.3.x support has been dropped. This plugin now requires WordPress 4.4 or later.
 	* WordPress 4.3.x and lower backwards compatibility functions have been removed.
+	* Several plugins have been removed from detection, to improve performance:
+		* Sitemap:
+			* Sitemap, does not output xml sitemap.
+		* Open Graph:
+			* Add Meta Tags, author abandoned plugin.
+			* Facebook, authors seem to have abandoned plugin.
+			* 2 Click Social Media Buttons, authors seem to have abandoned plugin.
+			* Shareaholic, the old version is removed from repository.
+			* SharePress, removed from repository.
+			* Facebook Revised Open Graph Meta Tag, removed from repository.
+			* Tweet, Like, Google +1 and Share, doesn't output Open Graph.
+			* Network Publisher, doesn't output Open Graph.
+		* Twitter:
+			* Eewee Twitter Card, authors seem to have abandoned plugin.
+			* Twitter Cards, authors seem to have abandoned plugin.
+			* Twitter Cards Meta, authors seem to have abandoned plugin.
 * **Fixed:**
 	/
 	* TODO On some themes, a fatal error was output when editing posts. (requires confirmation)
@@ -371,7 +387,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		- TODO The canonical URL is now correct.
 	/
 	* TODO AnsPress category canonical URL is now correct on its categories. @link https://wordpress.org/support/topic/anspress-categories/
-	* TODO The SEO Bar's on-hover tooltip is now once more correctly visible on mobile devices.
+	* The SEO Bar's on-hover tooltip is now once more correctly visible on mobile devices.
 	* TODO The notification that's displayed when settings are reset is no longer displayed on refresh.
 	* The website's tagline is no longer shown in the description when no excerpt can be generated.
 	* The counter type now correctly updates for new user meta created after The SEO Framework 2.7.0+ is installed.
@@ -561,6 +577,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Method `the_seo_framework()->parse_og_image()` no longer returns an emtpy string on second ID call.
 	* Caching is now disabled on search pages.
 	* Javascript: A JS extern file has been published on GitHub. This way you can overview the publicly stated functions there.
+	* Method `the_seo_framework()->detect_sitemap_plugin()` now also checks for SEO plugins beforehand.
 * **Fixed:**
 	* Several CSS classes didn't have a correct prefix. These were, and now are:
 		* `seoframework-content-no-js`, is now `tsf-content-no-js`
@@ -634,7 +651,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 = Full changelog =
 
-**The full changelog can be found [here](http://theseoframework.com/?cat=3).**
+**The full changelog can be found [here](http://theseoframework.com/?cat=2).**
 
 == Upgrade Notice ==
 
