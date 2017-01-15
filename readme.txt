@@ -413,9 +413,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	/
 	* On some themes, the private prefix has been added to the title.
 	* When the title exceeds 154 characters, the description will no longer contain the complete post's content. Instead, the title will now be omitted and the description length has been limited to 155 characters.
-	* WPML sitemap generated URL path now reflects the language. TODO confirm.
+	* WPML sitemap generated URL path now reflects the language.
 	* TODO WPML Home Page post meta is now correctly fetched.
 		* https://wordpress.org/support/topic/seo-framework-breaks-geodirectory/ (topic title doesn't reflect complete subject)
+		* Inconclusive.
 	/
 	* qTranslateX canonical homepage URL doesn't output double paths anymore.
 	* Robots.txt settings outputted incorrect notice when site is blocked from robots through WordPress reading settings while the sitemap has been deactivated.

@@ -101,12 +101,24 @@ function _get_relative_wmpl_url( $path = '', $post_id = '' ) {
 		case '1' :
 			//* Subdirectory
 
-			$contains_path = strpos( \trailingslashit( $path ), '/' . $current_lang . '/' );
-			if ( false !== $contains_path && 0 === $contains_path ) {
+			$t_path = \trailingslashit( $path );
+
+			if ( 0 === strpos( $t_path, '/' . $current_lang . '/' ) ) {
+				//* Link is already good.
 				return $path;
-			} else {
-				return $path = \trailingslashit( $current_lang ) . ltrim( $path, ' \\/' );
+			} elseif ( 0 === strpos( $t_path, '/' . $default_lang . '/' ) ) {
+				//* Link contains default lang. Strip.
+				$t_path = substr( $t_path, strlen( '/' . $default_lang ) );
+
+				if ( 0 === strpos( $t_path, '/' . $current_lang . '/' ) ) {
+					//* New link contains current lang correctly.
+					return \user_trailingslashit( $t_path );
+				} else {
+					return $path = \trailingslashit( $current_lang ) . ltrim( \user_trailingslashit( $t_path ), ' \\/' );
+				}
 			}
+
+			return $path = \trailingslashit( $current_lang ) . ltrim( \user_trailingslashit( $path ), ' \\/' );
 			break;
 
 		case '2' :

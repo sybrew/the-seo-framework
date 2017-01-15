@@ -927,15 +927,16 @@ class Sitemaps extends Metaboxes {
 	 * Initialize and flush rewrite rules.
 	 *
 	 * @since 2.6.0
+	 * @since 2.8.0 : Deprecated?
 	 * @access private
+	 * @deprecated silently.
 	 */
 	public function flush_rewrite_rules() {
 		global $wp_rewrite;
 
 		$this->rewrite_rule_sitemap();
 
-		$wp_rewrite->init();
-		$wp_rewrite->flush_rules( true );
+		\flush_rewrite_rules();
 	}
 
 	/**

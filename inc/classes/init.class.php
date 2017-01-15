@@ -540,9 +540,9 @@ class Init extends Query {
 			$output = '';
 
 			/**
-			 * Apply filters the_seo_framework_robots_txt_pre & the_seo_framework_robots_txt_pro
-			 * 		: Add custom cacheable lines.
-			 *		: Don't forget to add line breaks ( "\r\n" | PHP_EOL )
+			 * Apply filters the_seo_framework_robots_txt_pre & the_seo_framework_robots_txt_pro : string
+			 * Adds custom cacheable lines.
+			 * Don't forget to add line breaks ( "\r\n" || PHP_EOL )
 			 *
 			 * @since 2.5.0
 			 */
