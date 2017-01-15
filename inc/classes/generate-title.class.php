@@ -180,7 +180,11 @@ class Generate_Title extends Generate_Description {
 			 * 		@param bool description_title Fetch title for description.
 			 * 		@param bool is_front_page Fetch front page title.
 			 * }
+			 *
 			 * @since 2.5.0
+			 *
+			 * @param array $defaults The title defaults.
+			 * @param array $args The input args.
 			 */
 			$defaults = (array) \apply_filters( 'the_seo_framework_title_args', $defaults, $args );
 		}
@@ -267,9 +271,9 @@ class Generate_Title extends Generate_Description {
 	 * @since 2.6.0
 	 *
 	 * @param array $args : accepted args : {
-	 * 		@param int term_id The Taxonomy Term ID
-	 * 		@param bool placeholder Generate placeholder, ignoring options.
-	 * 		@param bool page_on_front Page on front condition for example generation
+	 *   @param int $term_id The Taxonomy Term ID
+	 *   @param bool $placeholder Generate placeholder, ignoring options.
+	 *   @param bool $page_on_front Page on front condition for example generation
 	 * }
 	 * @return string Title without tagline.
 	 */
@@ -277,7 +281,7 @@ class Generate_Title extends Generate_Description {
 
 		$title = '';
 
-		//* Fetch title from custom fields.
+		//* Fetch title from custom fields or filter.
 		if ( $args['get_custom_field'] )
 			$title = $this->get_custom_field_title( $title, $args['term_id'], $args['taxonomy'] );
 
@@ -528,28 +532,6 @@ class Generate_Title extends Generate_Description {
 	}
 
 	/**
-	 * Fetches title from special fields, like other plugins with special queries.
-	 * Used before and has priority over custom fields.
-	 * Front end only.
-	 *
-	 * @since 2.5.2
-	 *
-	 * @return string $title Title from Special Field.
-	 */
-	public function title_from_special_fields() {
-
-		$title = '';
-
-		if ( false === $this->is_admin() ) {
-			if ( $this->is_ultimate_member_user_page() && um_is_core_page( 'user' ) && um_get_requested_user() ) {
-				$title = um_user( 'display_name' );
-			}
-		}
-
-		return $title;
-	}
-
-	/**
 	 * Generate the title based on query conditions.
 	 *
 	 * @since 2.3.4
@@ -658,12 +640,29 @@ class Generate_Title extends Generate_Description {
 			$blogname = $this->escape_title( $blogname, false );
 		}
 
-		return array(
+		$defaults = array(
 			'title' => $title,
 			'blogname' => $blogname,
 			'add_tagline' => $add_tagline,
 			'seplocation' => $seplocation,
 		);
+
+		/**
+		 * Applies filters 'the_seo_framework_home_title_args' : array {
+		 *   @param string $title : NOTE: This is the blogname
+		 *   @param string $blogname : NOTE: This is the tagline.
+		 *   @param bool $add_tagline
+		 *   @param string $seplocation : 'left' or 'right'
+		 * }
+		 *
+		 * @since 2.8.0
+		 *
+		 * @param array $args
+		 * @param array $defaults
+		 */
+		$args = (array) \apply_filters( 'the_seo_framework_home_title_args', array(), $defaults );
+
+		return \wp_parse_args( $args, $defaults );
 	}
 
 	/**
@@ -696,8 +695,21 @@ class Generate_Title extends Generate_Description {
 		 * Only from page on front.
 		 */
 		if ( $get_custom_field && empty( $home_title ) && $this->has_page_on_front() ) {
-			$custom_field = $this->get_custom_field( '_genesis_title', $this->get_the_front_page_ID() );
-			$home_title = $custom_field ? $custom_field : $this->get_blogname();
+
+			/**
+			 * Applies filters 'the_seo_framework_custom_field_home_title' : string
+			 * @see filter 'the_seo_framework_custom_field_title'
+			 *
+			 * @since 2.8.0
+			 *
+			 * @param string $title The special title.
+			 */
+			if ( $filter_title = (string) \apply_filters( 'the_seo_framework_custom_field_home_title', '' ) ) {
+				$home_title = $filter_title;
+			} else {
+				$custom_field = $this->get_custom_field( '_genesis_title', $this->get_the_front_page_ID() );
+				$home_title = $custom_field ? $custom_field : $this->get_blogname();
+			}
 		} else {
 			$home_title = $home_title ? $home_title : $this->get_blogname();
 		}
@@ -804,12 +816,12 @@ class Generate_Title extends Generate_Description {
 			$term = \get_queried_object();
 
 		/**
-		 * Applies filters the_seo_framework_the_archive_title : {
-		 *		@param string empty short circuit the function.
-		 * 		@param object $term The Term object.
-		 *	}
+		 * Applies filters 'the_seo_framework_the_archive_title' : string
 		 *
 		 * @since 2.6.0
+		 *
+		 * @param string $title The short circuit title.
+		 * @param object $term The Term object.
 		 */
 		$title = (string) \apply_filters( 'the_seo_framework_the_archive_title', '', $term );
 
@@ -966,13 +978,19 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_custom_field_title( $title = '', $id = '', $taxonomy = '' ) {
 
-		$title_special = '';
-
-		if ( $this->is_singular() )
-			$title_special = $this->title_from_special_fields();
-
-		if ( $title_special ) {
-			$title = $title_special;
+		/**
+		 * Applies filters 'the_seo_framework_custom_field_title' : string
+		 * NOTE: This does NOT filter the title for the HOMEpage.
+		 * @see filter 'the_seo_framework_custom_field_home_title'
+		 *
+		 * @since 2.8.0
+		 *
+		 * @param string $title The special title.
+		 * @param int $id The post or TT ID.
+		 * @param string $axonomy the TT name.
+		 */
+		if ( $filter_title = (string) \apply_filters( 'the_seo_framework_custom_field_title', '', $id, $taxonomy ) ) {
+			$title = $filter_title;
 		} else {
 			$title_from_custom_field = $this->title_from_custom_field( $title, false, $id, $taxonomy );
 			$title = $title_from_custom_field ? $title_from_custom_field : $title;

@@ -152,17 +152,30 @@ class Detect extends Render {
 	/**
 	 * Detect active plugin by constant, class or function existence.
 	 *
+	 * Note: Class check is 3 times as slow as defined check. Function check is 2 times as slow.
+	 *
 	 * @since 1.3.0
+	 * @since 2.8.0 : 1. Can now check for globals.
+	 *                2. Switched order from FAST to SLOW.
 	 *
 	 * @param array $plugins Array of array for constants, classes and / or functions to check for plugin existence.
 	 * @return boolean True if plugin exists or false if plugin constant, class or function not detected.
 	 */
 	public function detect_plugin( $plugins ) {
 
-		//* Check for classes
-		if ( isset( $plugins['classes'] ) ) {
-			foreach ( $plugins['classes'] as $name ) {
-				if ( class_exists( $name ) ) {
+		if ( isset( $plugins['globals'] ) ) {
+			foreach ( $plugins['globals'] as $name ) {
+				if ( isset( $GLOBALS[ $name ] ) ) {
+					return true;
+					break;
+				}
+			}
+		}
+
+		//* Check for constants
+		if ( isset( $plugins['constants'] ) ) {
+			foreach ( $plugins['constants'] as $name ) {
+				if ( defined( $name ) ) {
 					return true;
 					break;
 				}
@@ -179,10 +192,10 @@ class Detect extends Render {
 			}
 		}
 
-		//* Check for constants
-		if ( isset( $plugins['constants'] ) ) {
-			foreach ( $plugins['constants'] as $name ) {
-				if ( defined( $name ) ) {
+		//* Check for classes
+		if ( isset( $plugins['classes'] ) ) {
+			foreach ( $plugins['classes'] as $name ) {
+				if ( class_exists( $name ) ) {
 					return true;
 					break;
 				}

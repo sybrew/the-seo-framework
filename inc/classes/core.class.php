@@ -102,7 +102,7 @@ class Core {
 		if ( is_null( $depr_class ) )
 			$depr_class = new Deprecated;
 
-		if ( method_exists( $depr_class, $name ) ) {
+		if ( is_callable( array( $depr_class, $name ) ) ) {
 			return call_user_func_array( array( $depr_class, $name ), $arguments );
 		}
 

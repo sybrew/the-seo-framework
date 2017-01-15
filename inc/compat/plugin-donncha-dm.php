@@ -2,8 +2,9 @@
 /**
  * @package The_SEO_Framework\Compat\Plugin\Donncha-dm
  */
+namespace The_SEO_Framework;
 
-defined( 'ABSPATH' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
+defined( 'ABSPATH' ) and $_this = \the_seo_framework_class() and $this instanceof $_this or die;
 
 \add_filter( 'the_seo_framework_sanitize_redirect_args', __NAMESPACE__ . '\\_donncha_domainmap_sanitize_redirect_url', 10, 2 );
 \add_filter( 'the_seo_framework_url_output_args', __NAMESPACE__ . '\\_donncha_domainmap_sanitize_redirect_url', 10, 2 );

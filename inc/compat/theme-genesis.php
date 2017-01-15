@@ -4,7 +4,7 @@
  */
 namespace The_SEO_Framework;
 
-defined( 'ABSPATH' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
+defined( 'ABSPATH' ) and $_this = \the_seo_framework_class() and $this instanceof $_this or die;
 
 //* Disable Genesis SEO.
 \add_filter( 'genesis_detect_seo_plugins', __NAMESPACE__ . '\\_disable_genesis_seo', 10, 1 );

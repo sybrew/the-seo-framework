@@ -45,7 +45,7 @@ class Compat extends Core {
 		\add_action( 'init', array( $this, 'jetpack_compat' ) );
 
 		//* BuddyPress front-end compat.
-		\add_action( 'init', array( $this, 'buddypress_compat' ) );
+		\remove_action( 'wp_head', '_bp_maybe_remove_rel_canonical', 8 );
 	}
 
 	/**
@@ -66,12 +66,14 @@ class Compat extends Core {
 			$this->_include_compat( 'genesis', 'theme' );
 		}
 
-		if ( $this->detect_plugin( array( 'functions' => array( 'redirect_to_mapped_domain' ) ) ) ) {
-			//* Donncha domain mapping.
-			$this->_include_compat( 'donncha-dm', 'plugin' );
-		} elseif ( $this->detect_plugin( array( 'classes' => array( 'domain_map' ) ) ) ) {
-			//* WPMUdev domain mapping.
-			$this->_include_compat( 'wpmudev-dm', 'plugin' );
+		if ( defined( 'DOMAIN_MAPPING' ) ) {
+			if ( $this->detect_plugin( array( 'functions' => array( 'redirect_to_mapped_domain' ) ) ) ) {
+				//* Donncha domain mapping.
+				$this->_include_compat( 'donncha-dm', 'plugin' );
+			} elseif ( $this->detect_plugin( array( 'functions' => array( 'domainmap_launch' ) ) ) ) {
+				//* WPMUdev domain mapping.
+				$this->_include_compat( 'wpmudev-dm', 'plugin' );
+			}
 		}
 
 		if ( $this->detect_plugin( array( 'constants' => array( 'ICL_LANGUAGE_CODE' ) ) ) ) {
@@ -80,6 +82,10 @@ class Compat extends Core {
 		} elseif ( $this->detect_plugin( array( 'constants' => array( 'QTX_VERSION' ) ) ) ) {
 			//* qTranslate X
 			$this->_include_compat( 'qtranslatex', 'plugin' );
+		}
+
+		if ( $this->detect_plugin( array( 'globals' => array( 'ultimatemember' ) ) ) ) {
+			$this->_include_compat( 'ultimatemember', 'plugin' );
 		}
 	}
 
@@ -120,15 +126,5 @@ class Compat extends Core {
 			//* Disable Jetpack Publicize's Open Graph.
 			\add_filter( 'jetpack_enable_open_graph', '__return_false', 99 );
 		}
-	}
-
-	/**
-	 * Removes canonical URL from BuddyPress. Regardless of The SEO Framework settings.
-	 *
-	 * @since 2.7.0
-	 * @access private
-	 */
-	public function buddypress_compat() {
-		\remove_action( 'wp_head', '_bp_maybe_remove_rel_canonical', 8 );
 	}
 }

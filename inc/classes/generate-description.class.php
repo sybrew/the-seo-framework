@@ -133,7 +133,11 @@ class Generate_Description extends Generate {
 			 * 		@param bool $get_custom_field Do not fetch custom title when false.
 			 * 		@param bool $social Generate Social Description when true.
 			 * }
+			 *
 			 * @since 2.5.0
+			 *
+			 * @param array $defaults The description defaults.
+			 * @param array $args The input args.
 			 */
 			$defaults = (array) \apply_filters( 'the_seo_framework_description_args', $defaults, $args );
 		}

@@ -878,28 +878,6 @@ class Query extends Compat {
 	}
 
 	/**
-	 * Determines if the page is a Ulimate Member's plugin User page.
-	 * Checks for function availability: um_user, um_is_core_page, um_get_requested_user
-	 *
-	 * @since 2.5.2
-	 * @uses $this->can_i_use()
-	 *
-	 * @return bool Whether we're on a Ultimate Member page.
-	 */
-	public function is_ultimate_member_user_page() {
-
-		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
-			return $cache;
-
-		$this->set_query_cache(
-			__METHOD__,
-			$is_um_user_page = $this->can_i_use( array( 'functions' => array( 'um_user', 'um_is_core_page', 'um_get_requested_user' ) ), false )
-		);
-
-		return $is_um_user_page;
-	}
-
-	/**
 	 * Determines if the page is the WooCommerce plugin Shop page.
 	 *
 	 * @since 2.5.2

@@ -171,7 +171,11 @@ class Generate_Image extends Generate_Url {
 			 *			)
 			 * 		}
 			 * }
+			 *
 			 * @since 2.0.1
+			 *
+			 * @param array $defaults The image defaults.
+			 * @param array $args The input args.
 			 */
 			$defaults = (array) \apply_filters( 'the_seo_framework_og_image_args', $defaults, $args );
 		}

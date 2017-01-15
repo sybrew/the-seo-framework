@@ -4,7 +4,7 @@
  */
 namespace The_SEO_Framework;
 
-defined( 'ABSPATH' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
+defined( 'ABSPATH' ) and $_this = \the_seo_framework_class() and $this instanceof $_this or die;
 
 \add_filter( 'the_seo_framework_url_path', __NAMESPACE__ . '\\_qtranslatex_filter_url_path', 10, 3 );
 /**

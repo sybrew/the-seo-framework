@@ -199,7 +199,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * PLANNED: January 2017 ?
 
-**Important Note:**
+**Upgrade Notes:**
+
+***1: PHP 5.2 support has been dropped. Here's why:***
 
 * PHP 5.2 hasn't recieved updates for [over 5 years](http://php.net/eol.php) and using it is a major security risk.
 * **This maintenance release completely drops support for PHP 5.2**. So, if you're using PHP 5.2, from this version on you can no longer run The SEO Framework.
@@ -207,7 +209,15 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * WordPress is about to drop support for PHP 5.2 as well in the near future. See proposed [trac ticket 36335](https://core.trac.wordpress.org/ticket/36335).
 * Inform your host to keep updated! Read more about informing your host [here](https://wordpress.org/about/requirements/). If they decline, I'd urge you to switch hosts for your website's sake.
 
-***This update drops support for WordPress 4.3.x, the minimum required version for The SEO Framework now is WordPress 4.4.***
+***2: The minimum required WordPress version is now 4.4. Here's why:***
+
+* The SEO Framework uses lots of functionality given by WordPress. All this functionality will be fixed internally by WordPress.
+* If we require functionality of WordPress that hasn't been included yet, we need to check for its existence or copy its functionality within this plugin.
+* This not only slows down the plugin, but it also makes the plugin much more complex and prone to annoying bugs.
+* The WordPress Core team constantly provides updates to give you the best blogging and CMS experience, and The SEO Framework follows their footsteps.
+* If we constantly require to do multiple version testing, then this slows down the progression we wish to make.
+
+*If, for whatever reason, you still wish to use PHP 5.2 and/or WordPress 4.3, The SEO Framework 2.7.3 still supports them.*
 
 **Summarized:**
 
@@ -215,20 +225,52 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * You're now able to adjust General Settings easily! These settings include options to adjust the cache, (re)move the SEO Bar, and set a Canonical Scheme.
 * Google's Knowledge Graph has been transformed into something much bigger last year, so the related settings now fall under a new name: "Authorized Presence".
 * You can now more granularly control your website's social images. With this much asked for feature, you're now really in control.
+* You can now also control the style of your sitemap. The sitemap title will link back to your homepage when clicked upon.
 
 **New enhancements overview:**
 /
 * TODO
+
+**For everyone - About Canonical SEO:**
+
+* A new setting has been added to adjust the preferred URL scheme of your website.
+* This new setting influences which pages Search Engines might index. The default setting is Detect Automatically.
+* This new setting doesn't affect scheme redirection of pages and posts, which should be done using `.htaccess`, when applicable.
+* Contact your hosting provider if you have any doubts on changing this option.
+
+**For everyone - About Sitemap styling:**
+/
+* TODO A few new settings have been added that allow you to style your sitemap.
+* These styles aren't seen by Search Engines. But it's a very nice addition for your human visitors.
+
+**For everyone - About the Performance settings:**
+
+* A few new settings have been added that allows you to adjust the plugin's caching mechanism.
+* There's a hidden option, only available when you use a dedicated object caching plugin. This option allows you to turn on Object Caching of the plugin.
+* If the object caching option is enabled, we recommend disabling the Description and Schema output cache. Because otherwise you'll get three times as many cache entries.
+* Feel free to play with these settings: By default, The SEO Framework outputs its generation time after its meta output to which you can compare.
+
+**For everyone - About Social Image selection:**
+
+* A new settings has been added to every post, page and applicable custom post type that allows you to select your social image.
+* This social image automatically gets cropped according to Facebook's Open Graph Guidelines.
+* The default "aspect ratio" for the cropper is automatically set, we recommend not changing this aspect ratio.
+* You can manually fill in the image URL as well. However, this will disable pre-emptively caching of the image on the Social Site as we then can't calculate the size.
 
 **SEO tip of the Update:**
 
 * Not all SEO techniques are actively used on Google outside of the United States.
 * For example, the Site Name Schema.org script might not have any effect.
 * This changes over time as Google updates its Search Engine all over the world.
-* Usage of experimental Schema.org scripts cause no harm to ranking.
+* Usage of experimental Schema.org scripts with The SEO Framework cause no harm to ranking.
 
-***Are you an avid developer, and have extended The SEO Framework? Please carefully read the detailed changelog, or at least compare it to your implementations. All method, function, action and filter changes are listed there.***
-*In essence, if you've programmed as described within the API, no changes should be made.*
+** For developers - About the structural changes:**
+
+* ***Are you an avid developer, and have extended The SEO Framework? Please carefully read the detailed changelog, or at least compare it to your implementations. All method, function, action and filter changes are listed there.***
+	* *In essence, if you've programmed as described within the API, no changes should be made.*
+* This plugin is now using PHP 5.3+ namespaces and an autoloader.
+* This plugin now has magic methods that prevent the site from crashing if inaccessible methods or properties have been called.
+	* This allowed me to easily remove redundant public methods and properties without ramification.
 
 **Detailed log:**
 /
@@ -282,10 +324,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* This plugin now tests PHP and WordPress compatibility. In the admin screens you'll be notified on why the plugin fails to work after you activate or update the plugin.
 		* If everything goes correctly, it'll be a smooth upgrade. Enjoy!
 	* Improved object cache plugin support. These settings can be found in the General Settings metabox on the SEO Settings page.
-	/
 	* Added stylesheet to sitemap. Now your sitemap looks much more professional.
 		* It's so professional, even the stylesheet URL is masked.
-		* It's a virtual file, just like the sitemap is. Enjoy!
+		* It's a virtual file, just like the sitemap is.
+		* This file is cached in the user's browser on request by default.
 * **Changed:**
 	* "Knowledge Graph" name has been converted into "Authorized Presence". Its usage, output and effect are still the same.
 	* The first two description separator buttons are no longer marked "recommended".
@@ -632,6 +674,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* `get_relative_wmpl_url`
 		* `the_url_wpmudev_domainmap`
 		* `the_url_donncha_domainmap`
+		* `is_ultimate_member_user_page`
+		* `title_from_special_fields`
+		* `buddypress_compat`
 	* Methods deprecated in The SEO Framework 2.6.6 and below are now removed. Which gave you more than 6 months to catch up.
 * **Other:**
 	* Cleaned up code.
@@ -654,6 +699,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* `(array) the_seo_framework_url_path`. Used to filter the URL path.
 		* `(array) the_seo_framework_url_output_args`. Used to filter the output URL, including scheme.
 		* `(array) the_seo_framework_get_term_meta`. Used to filter the term metadata if none is filled in by the user.
+		* `(string) the_seo_framework_custom_field_title`. Used to filter the title prior to generation or even getting it from the custom field.
+		* `(string) the_seo_framework_custom_field_home_title`. Used to filter the title prior to generation or even getting it from the custom field.
+		* `(array) the_seo_framework_home_title_args`. Used to filter the title prior to generation or even getting it from the custom field.
 	* **Removed:**
 		* `(array) the_seo_framework_knowledgegraph_settings_tabs`. These tabs have been moved in the Schema metabox.
 		* `the_seo_framework_detect_seo_plugins`. This was previously deprecated.

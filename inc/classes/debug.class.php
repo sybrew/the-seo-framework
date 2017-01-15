@@ -1003,7 +1003,6 @@ final class Debug implements Debug_Interface {
 		$is_static_frontpage = $tsf->is_static_frontpage();
 		$is_tag = $tsf->is_tag();
 		$is_tax = $tsf->is_tax();
-		$is_ultimate_member_user_page = $tsf->is_ultimate_member_user_page();
 		$is_wc_shop = $tsf->is_wc_shop();
 		$is_wc_product = $tsf->is_wc_product();
 		$is_year = $tsf->is_year();
