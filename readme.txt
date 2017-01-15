@@ -369,6 +369,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* The sitemap schemas are now more clearly defined for Search Engines and validators.
 	* The description example field now better reflects the actual output.
 	* The admin JS file is now much smaller (~30%) and includes several performance optimizations.
+	* Added a notification in the Home Page metabox when WPML is active that it should be configured on the applicable pages.
 * **Updated:**
 	/
 	* TODO Translation POT file.
@@ -406,18 +407,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Redundant sanitation when fetching post meta.
 * **Fixed:**
 	/
-	* TODO Page and post excerpts now correctly work.
-		/
-		* @link https://wordpress.org/support/topic/excerpt-to-meta-description-issue-screencast/
-		* Inconclusive.
-	/
 	* On some themes, the private prefix has been added to the title.
 	* When the title exceeds 154 characters, the description will no longer contain the complete post's content. Instead, the title will now be omitted and the description length has been limited to 155 characters.
 	* WPML sitemap generated URL path now reflects the language.
-	* TODO WPML Home Page post meta is now correctly fetched.
-		* https://wordpress.org/support/topic/seo-framework-breaks-geodirectory/ (topic title doesn't reflect complete subject)
-		* Inconclusive.
-	/
 	* qTranslateX canonical homepage URL doesn't output double paths anymore.
 	* Robots.txt settings outputted incorrect notice when site is blocked from robots through WordPress reading settings while the sitemap has been deactivated.
 	* TODO bbPress forum topic ID's weren't correctly recognized. With this fix, these issues have been resolved:
@@ -430,12 +422,13 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* The notification that's displayed when settings are reset is no longer displayed on refresh.
 	* The website's tagline is no longer shown in the description when no excerpt can be generated.
 	* The counter type now correctly updates for new user meta created after The SEO Framework 2.7.0+ is installed.
+	* HTML entities in custom post meta is now allowed.
+		* Note: The counter doesn't reflect this allowance yet. This will be fixed when we upgrade to use pixel counters, rather than character counters.
+/
+* TODO Invalid bugs? (check again later):
 	* TODO When enabling the option "Remove Blogname from title?", the blogname is removed too from manual SEO title entries.
 		/
 		* @link https://github.com/sybrew/the-seo-framework/issues/38#issuecomment-270920124
-		* Inconclusive.
-	* HTML entities in custom post meta is now allowed.
-		* Note: The counter doesn't reflect this allowance yet. This will be fixed when we upgrade to use pixel counters, rather than character counters.
 
 **For translators:**
 
@@ -703,6 +696,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* `(string) the_seo_framework_custom_field_title`. Used to filter the title prior to generation or even getting it from the custom field.
 		* `(string) the_seo_framework_custom_field_home_title`. Used to filter the title prior to generation or even getting it from the custom field.
 		* `(array) the_seo_framework_home_title_args`. Used to filter the title prior to generation or even getting it from the custom field.
+		* `(array) the_seo_framework_sitemap_pages_query_args`. Used to filter the sitemap WP_Query query arguments for pages.
+		* `(array) the_seo_framework_sitemap_posts_query_args`. Used to filter the sitemap WP_Query query arguments for posts.
+		* `(array) the_seo_framework_sitemap_cpt_query_args`. Used to filter the sitemap WP_Query query arguments for cpt.
+		* `(bool) the_seo_framework_warn_homepage_global_title`. Used to add a notification in the homepage metabox. Ideal for translation plugins.
+		* `(bool) the_seo_framework_warn_homepage_global_description`. Used to add a notification in the homepage metabox. Ideal for translation plugins.
 	* **Removed:**
 		* `(array) the_seo_framework_knowledgegraph_settings_tabs`. These tabs have been moved in the Schema metabox.
 		* `the_seo_framework_detect_seo_plugins`. This was previously deprecated.

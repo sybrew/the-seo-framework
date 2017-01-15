@@ -208,6 +208,23 @@ switch ( $instance ) :
 		if ( $title_from_post_message ) {
 			$this->description( $title_from_post_message );
 		}
+		/**
+		 * Applies filters 'the_seo_framework_warn_homepage_global_title' : bool
+		 *
+		 * @since 2.8.0
+		 */
+		if ( apply_filters( 'the_seo_framework_warn_homepage_global_title', false ) && $this->has_page_on_front() ) {
+			printf( '<p class="attention">%s</p>',
+				$this->convert_markdown(
+					sprintf(
+						/* translators: %s = Home page URL markdown */
+						esc_html__( 'A plugin has been detected that suggests to maintain this option on the [Home Page](%s).', 'autodescription' ),
+						esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) )
+					),
+					array( 'a' )
+				)
+			);
+		}
 		?>
 		<hr>
 
@@ -228,7 +245,25 @@ switch ( $instance ) :
 		$this->description( __( 'The meta description can be used to determine the text used under the title on Search Engine results pages.', 'autodescription' ) );
 
 		if ( $description_from_post_message ) {
-			echo '<p class="description">' . esc_html( $description_from_post_message ) . '</p>';
+			$this->description( $description_from_post_message );
+		}
+
+		/**
+		 * Applies filters 'the_seo_framework_warn_homepage_global_description' : bool
+		 *
+		 * @since 2.8.0
+		 */
+		if ( apply_filters( 'the_seo_framework_warn_homepage_global_description', false ) && $this->has_page_on_front() ) {
+			printf( '<p class="attention">%s</p>',
+				$this->convert_markdown(
+					sprintf(
+						/* translators: %s = Home page URL markdown */
+						esc_html__( 'A plugin has been detected that suggests to maintain this option on the [Home Page](%s).', 'autodescription' ),
+						esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) )
+					),
+					array( 'a' )
+				)
+			);
 		}
 		break;
 

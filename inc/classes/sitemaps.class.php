@@ -522,7 +522,7 @@ class Sitemaps extends Metaboxes {
 
 		if ( $totalpages ) {
 			//* Ascend by the date for normal pages. Older pages get to the top of the list.
-			$args = array(
+			$defaults = array(
 				'posts_per_page'   => $totalpages,
 				'post_type'        => 'page',
 				'orderby'          => 'date',
@@ -533,7 +533,18 @@ class Sitemaps extends Metaboxes {
 				'suppress_filters' => true,
 				'no_found_rows'    => true,
 			);
-			$wp_query->query = $wp_query->query_vars = \wp_parse_args( $args );
+
+			/**
+			 * Applies filters 'the_seo_framework_sitemap_pages_query_args' : array
+			 *
+			 * @since 2.8.0
+			 *
+			 * @param array $args The new query arguments.
+			 * @param array $defaults The default query arguments
+			 */
+			$args = \apply_filters( 'the_seo_framework_sitemap_pages_query_args', array(), $defaults );
+
+			$wp_query->query = $wp_query->query_vars = \wp_parse_args( $args, $defaults );
 			$latest_pages = $wp_query->get_posts();
 		}
 		$latest_pages_amount = (int) count( $latest_pages );
@@ -593,7 +604,7 @@ class Sitemaps extends Metaboxes {
 
 		if ( $totalposts ) {
 			//* Descend by the date for posts. The latest posts get to the top of the list after pages.
-			$args = array(
+			$defaults = array(
 				'posts_per_page'   => $totalposts,
 				'post_type'        => 'post',
 				'orderby'          => 'date',
@@ -604,7 +615,18 @@ class Sitemaps extends Metaboxes {
 				'suppress_filters' => true,
 				'no_found_rows'    => true,
 			);
-			$wp_query->query = $wp_query->query_vars = \wp_parse_args( $args );
+
+			/**
+			 * Applies filters 'the_seo_framework_sitemap_posts_query_args' : array
+			 *
+			 * @since 2.8.0
+			 *
+			 * @param array $args The new query arguments.
+			 * @param array $defaults The default query arguments
+			 */
+			$args = \apply_filters( 'the_seo_framework_sitemap_posts_query_args', array(), $defaults );
+
+			$wp_query->query = $wp_query->query_vars = \wp_parse_args( $args, $defaults );
 			$latest_posts = $wp_query->get_posts();
 		}
 		$latest_posts_amount = (int) count( $latest_posts );
@@ -704,7 +726,7 @@ class Sitemaps extends Metaboxes {
 
 			if ( $cpt ) {
 				//* Descend by the date for CPTs. The latest posts get to the top of the list after pages.
-				$args = array(
+				$defaults = array(
 					'posts_per_page'   => $total_cpt_posts,
 					'post_type'        => $cpt,
 					'orderby'          => 'date',
@@ -715,7 +737,18 @@ class Sitemaps extends Metaboxes {
 					'suppress_filters' => true,
 					'no_found_rows'    => true,
 				);
-				$wp_query->query = $wp_query->query_vars = \wp_parse_args( $args );
+
+				/**
+				 * Applies filters 'the_seo_framework_sitemap_posts_query_args' : array
+				 *
+				 * @since 2.8.0
+				 *
+				 * @param array $args The new query arguments.
+				 * @param array $defaults The default query arguments
+				 */
+				$args = \apply_filters( 'the_seo_framework_sitemap_cpt_query_args', array(), $defaults );
+
+				$wp_query->query = $wp_query->query_vars = \wp_parse_args( $args, $defaults );
 				$latest_cpt_posts = $wp_query->get_posts();
 			}
 		endif;

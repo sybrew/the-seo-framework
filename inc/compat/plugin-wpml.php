@@ -6,6 +6,14 @@ namespace The_SEO_Framework;
 
 defined( 'ABSPATH' ) and $_this = \the_seo_framework_class() and $this instanceof $_this or die;
 
+/**
+ * Warns homepage global title and description about recieving input.
+ *
+ * @since 1.0.0
+ */
+\add_filter( 'the_seo_framework_warn_homepage_global_title', '__return_true' );
+\add_filter( 'the_seo_framework_warn_homepage_global_description', '__return_true' );
+
 \add_filter( 'the_seo_framework_url_path', __NAMESPACE__ . '\\_wpml_filter_url_path', 10, 3 );
 /**
  * Filters the canonical URL path.
