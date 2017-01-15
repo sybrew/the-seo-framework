@@ -73,7 +73,7 @@ class Post_Data extends Detect {
 			$field_cache[ $field ][ $post_id ] = '';
 
 		//* Render custom field, slashes stripped, sanitized if string
-		$field_cache[ $field ][ $post_id ] = is_array( $custom_field ) ? \stripslashes_deep( $custom_field ) : stripslashes( \wp_kses_decode_entities( $custom_field ) );
+		$field_cache[ $field ][ $post_id ] = is_array( $custom_field ) ? \stripslashes_deep( $custom_field ) : stripslashes( $custom_field );
 
 		return $field_cache[ $field ][ $post_id ];
 	}

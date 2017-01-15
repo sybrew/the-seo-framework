@@ -91,7 +91,7 @@ class Term_Data extends Post_Data {
 		 * @param array $data The term data.
 		 * @param int $term_id The current Term ID.
 		 */
-		$data = apply_filters( 'the_seo_framework_get_term_meta', array(), $term_id );
+		$data = \apply_filters( 'the_seo_framework_get_term_meta', array(), $term_id );
 
 		return $cache[ $term_id ] = $data;
 	}

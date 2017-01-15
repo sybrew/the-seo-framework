@@ -361,6 +361,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Eewee Twitter Card, authors seem to have abandoned plugin.
 			* Twitter Cards, authors seem to have abandoned plugin.
 			* Twitter Cards Meta, authors seem to have abandoned plugin.
+	* Redundant sanitation when fetching post meta.
 * **Fixed:**
 	/
 	* TODO Page and post excerpts now correctly work.
@@ -390,6 +391,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		/
 		* @link https://github.com/sybrew/the-seo-framework/issues/38#issuecomment-270920124
 		* Inconclusive.
+	* HTML entities in custom post meta is now allowed.
+		* Note: The counter doesn't reflect this allowance yet. This will be fixed when we upgrade to use pixel counters, rather than character counters.
 
 **For translators:**
 

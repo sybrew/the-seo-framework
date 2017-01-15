@@ -49,7 +49,7 @@ function _genesis_add_head_attributes() {
 	\add_filter( 'genesis_attr_head', 'genesis_attributes_head' );
 }
 
-add_filter( 'the_seo_framework_get_term_meta', __NAMESPACE__ . '\\_genesis_get_term_meta', 10, 2 );
+\add_filter( 'the_seo_framework_get_term_meta', __NAMESPACE__ . '\\_genesis_get_term_meta', 10, 2 );
 /**
  * Returns Genesis term meta.
  *
