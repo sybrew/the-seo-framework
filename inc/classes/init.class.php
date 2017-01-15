@@ -107,8 +107,6 @@ class Init extends Query {
 	 * @since 2.8.0
 	 */
 	public function init_global_actions() {
-		//* Jetpack compat.
-		\add_action( 'init', array( $this, 'jetpack_compat' ) );
 
 		//* Add query strings for sitemap rewrite.
 		\add_action( 'init', array( $this, 'rewrite_rule_sitemap' ), 1 );
@@ -215,9 +213,6 @@ class Init extends Query {
 
 		//* Earlier removal of the generator tag. Doesn't require filter.
 		\remove_action( 'wp_head', 'wp_generator' );
-
-		//* BuddyPress front-end compat.
-		\add_action( 'init', array( $this, 'buddypress_compat' ) );
 
 		/**
 		 * @since 2.7.0 Changed priority from 999 to 9999.

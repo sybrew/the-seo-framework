@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) and $_this = \the_seo_framework_class() and $this instanceo
  * @param string $path the URL path.
  * @param int $id The current post, page or term ID.
  * @param bool $external Whether the call is made from outside the current ID scope. Like from the Sitemap.
+ * @return string The URL path.
  */
 function _wpml_filter_url_path( $path = '', $id = 0, $external = false ) {
 	return \The_SEO_Framework\_get_relative_wmpl_url( $path, $id );
@@ -100,12 +101,7 @@ function _get_relative_wmpl_url( $path = '', $post_id = '' ) {
 		case '1' :
 			//* Subdirectory
 
-			/**
-			 * Might not always work.
-			 * @TODO Fix.
-			 * @priority OMG WTF BBQ
-			 */
-			$contains_path = strpos( $path, '/' . $current_lang . '/' );
+			$contains_path = strpos( \trailingslashit( $path ), '/' . $current_lang . '/' );
 			if ( false !== $contains_path && 0 === $contains_path ) {
 				return $path;
 			} else {

@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) and $_this = the_seo_framework_class() and $this instanceof
  * @param string $path the URL path.
  * @param int $id The current post, page or term ID.
  * @param bool $external Whether the call is made from outside the current ID scope. Like from the Sitemap.
+ * @return string The URL path.
  */
 function _qtranslatex_filter_url_path( $path = '', $id = 0, $external = false ) {
 	return \The_SEO_Framework\_get_relative_qtranslate_url( $path, $id );

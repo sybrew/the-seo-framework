@@ -59,6 +59,7 @@ class Term_Data extends Post_Data {
 	 * Returns Genesis 2.3.0+ data if no term meta data is set.
 	 *
 	 * @since 2.7.0
+	 * @since 2.8.0 : Added filter.
 	 * @staticvar array $cache
 	 *
 	 * @param int $term_id The Term ID.
@@ -82,18 +83,17 @@ class Term_Data extends Post_Data {
 		if ( isset( $data['saved_flag'] ) )
 			return $cache[ $term_id ] = $data;
 
-		if ( $this->is_theme( 'genesis' ) ) {
-			$data = array();
-			$data['doctitle'] = \get_term_meta( $term_id, 'doctitle', true );
-			$data['description'] = \get_term_meta( $term_id, 'description', true );
-			$data['noindex'] = \get_term_meta( $term_id, 'noindex', true );
-			$data['nofollow'] = \get_term_meta( $term_id, 'nofollow', true );
-			$data['noarchive'] = \get_term_meta( $term_id, 'noarchive', true );
+		/**
+		 * Applies filters 'the_seo_framework_get_term_meta'
+		 *
+		 * @since 2.8.0
+		 *
+		 * @param array $data The term data.
+		 * @param int $term_id The current Term ID.
+		 */
+		$data = apply_filters( 'the_seo_framework_get_term_meta', array(), $term_id );
 
-			return $cache[ $term_id ] = $data;
-		}
-
-		return $cache[ $term_id ] = array();
+		return $cache[ $term_id ] = $data;
 	}
 
 	/**

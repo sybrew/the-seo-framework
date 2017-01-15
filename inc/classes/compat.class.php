@@ -40,6 +40,12 @@ class Compat extends Core {
 
 		//* Disable Headway SEO.
 		\add_filter( 'headway_seo_disabled', '__return_true' );
+
+		//* Jetpack compat.
+		\add_action( 'init', array( $this, 'jetpack_compat' ) );
+
+		//* BuddyPress front-end compat.
+		\add_action( 'init', array( $this, 'buddypress_compat' ) );
 	}
 
 	/**

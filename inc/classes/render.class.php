@@ -401,11 +401,12 @@ class Render extends Admin_Init {
 
 			$images = $this->get_image_from_woocommerce_gallery();
 
-			$post_id = $this->get_the_real_ID();
-			$post_manual_og = $this->get_custom_field( '_social_image_id', $post_id );
-			$featured_id = $post_manual_og ? (int) $post_manual_og : (int) \get_post_thumbnail_id( $post_id );
-
 			if ( $images && is_array( $images ) ) {
+
+				$post_id = $this->get_the_real_ID();
+				$post_manual_og = $this->get_custom_field( '_social_image_id', $post_id );
+				$featured_id = $post_manual_og ? (int) $post_manual_og : (int) \get_post_thumbnail_id( $post_id );
+
 				foreach ( $images as $id ) {
 
 					if ( $id === $featured_id )

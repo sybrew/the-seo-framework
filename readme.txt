@@ -369,18 +369,12 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Inconclusive.
 	/
 	* On some themes, the private prefix has been added to the title.
-	* TODO Protected and Private title prefixes are now calculated towards title character count.
-		* Should I? I'm afraid this requires a rework... move to 3.0.0?
-	/
-	* TODO (This is "improved") Protected and Private title prefixes are now added before the manual title input.
-		* Should I? I'm afraid this requires a rework... move to 3.0.0?
-	/
 	* When the title exceeds 154 characters, the description will no longer contain the complete post's content. Instead, the title will now be omitted and the description length has been limited to 155 characters.
 	* WPML sitemap generated URL path now reflects the language. TODO confirm.
 	* TODO WPML Home Page post meta is now correctly fetched.
 		* https://wordpress.org/support/topic/seo-framework-breaks-geodirectory/ (topic title doesn't reflect complete subject)
 	/
-	* TODO qTranslateX canonical homepage URL doesn't output double paths anymore.
+	* qTranslateX canonical homepage URL doesn't output double paths anymore.
 	* Robots.txt settings outputted incorrect notice when site is blocked from robots through WordPress reading settings while the sitemap has been deactivated.
 	* TODO bbPress forum topic ID's weren't correctly recognized. With this fix, these issues have been resolved:
 		- TODO The title is now correct.
@@ -392,11 +386,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* The notification that's displayed when settings are reset is no longer displayed on refresh.
 	* The website's tagline is no longer shown in the description when no excerpt can be generated.
 	* The counter type now correctly updates for new user meta created after The SEO Framework 2.7.0+ is installed.
-	* TODO SEO Settings tabs now correctly show the tab's content when hitting the "back" button.
-		/
-		* This behavior is caused because browsers save form data when travelling through history. Tabs are self-contained button forms for improved performance.
-		* NOTE Is this even worth fixing? It's merely an unlikely nuisance which, when fixed, will greatly affect performance as all tab-states have to be re-checked.
-	/
 	* TODO When enabling the option "Remove Blogname from title?", the blogname is removed too from manual SEO title entries.
 		/
 		* @link https://github.com/sybrew/the-seo-framework/issues/38#issuecomment-270920124
@@ -661,6 +650,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Can therefore prevent untrusted admin redirect spam. E.g. in multisite environments.
 		* `(array) the_seo_framework_url_path`. Used to filter the URL path.
 		* `(array) the_seo_framework_url_output_args`. Used to filter the output URL, including scheme.
+		* `(array) the_seo_framework_get_term_meta`. Used to filter the term metadata if none is filled in by the user.
 	* **Removed:**
 		* `(array) the_seo_framework_knowledgegraph_settings_tabs`. These tabs have been moved in the Schema metabox.
 		* `the_seo_framework_detect_seo_plugins`. This was previously deprecated.
