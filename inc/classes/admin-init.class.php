@@ -138,7 +138,7 @@ class Admin_Init extends Init {
 		$this->page_base_file = $this->page_base_file ? $this->page_base_file : $hook;
 
 		//* Register the script.
-		$this->register_admin_javascript();
+		$this->_register_admin_javascript();
 
 		\wp_enqueue_script( $this->js_name );
 
@@ -149,7 +149,7 @@ class Admin_Init extends Init {
 		 * Localize JavaScript.
 		 * @since 2.5.2.2
 		 */
-		\add_action( 'admin_footer', array( $this, 'localize_admin_javascript' ) );
+		\add_action( 'admin_footer', array( $this, '_localize_admin_javascript' ) );
 
 	}
 
@@ -160,7 +160,7 @@ class Admin_Init extends Init {
 	 * @staticvar bool $registered : Prevents Re-registering of the style.
 	 * @access private
 	 */
-	public function register_admin_javascript() {
+	public function _register_admin_javascript() {
 
 		static $registered = null;
 
@@ -182,7 +182,7 @@ class Admin_Init extends Init {
 	 * @staticvar bool $localized : Prevents Re-registering of the l10n.
 	 * @access private
 	 */
-	public function localize_admin_javascript() {
+	public function _localize_admin_javascript() {
 
 		static $localized = null;
 
@@ -203,16 +203,14 @@ class Admin_Init extends Init {
 	 * @since 2.6.0
 	 * @staticvar array $strings : The l10n strings.
 	 * @since 2.7.0 Added AJAX nonce: 'autodescription-ajax-nonce'
-	 * @since 2.8.0 Added input detection: 'hasInput'
+	 * @since 2.8.0 1. Added input detection: 'hasInput'
+	 *              2. Reworked output.
+	 *              3. Removed unused caching.
+	 *              4. Added dynamic output control.
 	 *
 	 * @return array $strings The l10n strings.
 	 */
 	protected function get_javascript_l10n() {
-
-		static $strings = null;
-
-		if ( isset( $strings ) )
-			return $strings;
 
 		$blog_name = $this->get_blogname();
 		$description = $this->get_blogdescription();
@@ -306,13 +304,11 @@ class Admin_Init extends Init {
 
 		$nonce = \wp_create_nonce( 'autodescription-ajax-nonce' );
 
-		return $strings = array(
+		return array(
 			'nonce' => $nonce,
 			'i18n' => array(
 				'saveAlert' => \esc_html__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
 				'confirmReset' => \esc_html__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
-				'selectSocialImage' => \esc_html__( 'Select Social Image', 'autodescription' ),
-				'useThisImage' => \esc_html__( 'Use this image', 'autodescription' ),
 				'good' => \esc_html( $good ),
 				'okay' => \esc_html( $okay ),
 				'bad' => \esc_html( $bad ),
@@ -333,7 +329,41 @@ class Admin_Init extends Init {
 				'descriptionSeparator' => \esc_html( $description_separator ),
 				'titleLocation' => \esc_html( $title_location ),
 			),
+			'other' => $this->additional_js_l10n( null, array(), true ),
 		);
+	}
+
+	/**
+	 * Maintains and Returns additional JS l10n.
+	 *
+	 * They are put under object 'tsfemL10n.other.$key.[ $val ]'.
+	 *
+	 * @since 2.8.0
+	 * @staticvar object $strings The cached strings object.
+	 *
+	 * @param null|string $key The object key. Requires escape.
+	 * @param null|array $val The object val. Requires escape.
+	 * @param bool $get Whether to return the cached strings.
+	 * @param bool $escape Whether to escape the input.
+	 * @return object Early when $get is true
+	 */
+	public function additional_js_l10n( $key = null, array $val = array(), $get = false, $escape = true ) {
+
+		static $strings = null;
+
+		if ( null === $strings )
+			$strings = new \stdClass();
+
+		if ( $get )
+			return $strings;
+
+		if ( $escape ) {
+			$key = \esc_attr( $key );
+			$val = \map_deep( $val, 'esc_attr' );
+		}
+
+		if ( $key )
+			$strings->$key = $val;
 	}
 
 	/**

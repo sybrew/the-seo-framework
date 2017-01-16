@@ -264,13 +264,18 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * This changes over time as Google updates its Search Engine all over the world.
 * Usage of experimental Schema.org scripts with The SEO Framework cause no harm to ranking.
 
-** For developers - About the structural changes:**
+**For developers - About the structural changes:**
 
 * ***Are you an avid developer, and have extended The SEO Framework? Please carefully read the detailed changelog, or at least compare it to your implementations. All method, function, action and filter changes are listed there.***
 	* *In essence, if you've programmed as described within the API, no changes should be made.*
 * This plugin is now using PHP 5.3+ namespaces and an autoloader.
 * This plugin now has magic methods that prevent the site from crashing if inaccessible methods or properties have been called.
 	* This allowed me to easily remove redundant public methods and properties without ramification.
+
+**For developers - Many new filters:**
+
+* Because we've pulled out most of the plugin and theme compatibility from the interal class scope, we've added filters where they previously applied.
+* Documentation for these new filters will be added soon. Stay tuned!
 
 **Detailed log:**
 /

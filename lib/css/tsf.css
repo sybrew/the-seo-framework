@@ -611,6 +611,10 @@ body.js .tsf-metaboxes .tsf-tabs-content.tsf-active-tab-content {
 	color: #0cc34b;
 }
 
+#tsf-inpost-box .tsf-set-social-image {
+	margin-right: 7px;
+}
+
 #tsf-inpost-box input[type="text"]::-webkit-input-placeholder,
 #tsf-inpost-box textarea::-webkit-input-placeholder,
 .tsf-metaboxes input[type="text"]::-webkit-input-placeholder,

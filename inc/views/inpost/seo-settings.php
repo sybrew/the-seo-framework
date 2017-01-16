@@ -198,14 +198,20 @@ switch ( $instance ) :
 				<a href="<?php echo esc_url( 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Preferred %s Social Image URL location', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
 			</label>
 		</p>
+		<p class="hide-if-no-js">
+			<?php
+			//* Already escaped.
+			echo $this->get_social_image_uploader_form( 'autodescription_socialimage' );
+			?>
+		</p>
 		<p>
-			<p class="hide-if-no-js">
-				<?php
-				//* Already escaped.
-				echo $this->get_social_image_uploader_form( 'autodescription_socialimage' );
-				?>
-			</p>
 			<input class="large-text" type="text" name="autodescription[_social_image_url]" id="autodescription_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_social_image_url' ) ); ?>" />
+			<?php
+			/**
+			 * Insert form element only if JS is active. If JS is inactive, then this will cause it to be emptied on $_POST
+			 * @TODO use disabled and jQuery.removeprop( 'disabled' )?
+			 */
+			?>
 			<script>
 				document.getElementById( 'autodescription_socialimage-url' ).insertAdjacentHTML( 'afterend', '<input type="hidden" name="autodescription[_social_image_id]" id="autodescription_socialimage-id" value="<?php echo absint( $this->get_custom_field( '_social_image_id' ) ); ?>" />' );
 			</script>
