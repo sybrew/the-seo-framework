@@ -285,7 +285,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * **Added:**
 	/
-	* TODO Social image fallback selection.
 	* Added Social Image URL for Posts upload.
 		* This image can get manually resized and cropped on upload to abide to Facebook's Open Graph standards.
 			* This resizer shows you Facebook's prefered dimensions by default.

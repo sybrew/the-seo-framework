@@ -172,7 +172,7 @@ function _get_relative_wmpl_url( $path = '', $post_id = '' ) {
 
 \add_action( 'current_screen', __NAMESPACE__ . '\\_wpml_do_current_screen_action' );
 /**
- * Add filters only on SEO plugin page.
+ * Adds WPML filters only on SEO plugin page.
  *
  * @since 2.8.0
  * @access private
@@ -187,7 +187,7 @@ function _wpml_do_current_screen_action( $current_screen = '' ) {
 }
 
 /**
- * Remove "All languages" option from WPML admin switcher.
+ * Removes "All languages" option from WPML admin switcher.
  *
  * @since 2.8.0
  * @access private

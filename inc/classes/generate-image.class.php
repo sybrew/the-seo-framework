@@ -118,7 +118,7 @@ class Generate_Image extends Generate_Url {
 			$image = (string) \apply_filters( 'the_seo_framework_og_image_after_header', '', $args['post_id'] );
 		}
 
-		//* 6. Get the WP 4.5 Site Icon
+		//* 6. Get the WP 4.5 Site Logo
 		if ( empty( $image ) && ( $all_allowed || false === in_array( 'logo', $args['disallowed'], true ) ) && current_theme_supports( 'custom-logo' ) )
 			$image = $this->get_site_logo( true );
 
@@ -226,6 +226,7 @@ class Generate_Image extends Generate_Url {
 	 * Returns unescaped URL from post ID input.
 	 *
 	 * @since 2.8.0
+	 * @uses $this->image_dimensions
 	 *
 	 * @param int $id The post ID.
 	 * @param bool $set_og_dimensions Whether to set open graph and twitter dimensions.
@@ -241,6 +242,7 @@ class Generate_Image extends Generate_Url {
 		if ( ! $src )
 			return '';
 
+		//* Calculate image sizes.
 		if ( $img_id = $this->get_custom_field( '_social_image_id', $id ) ) {
 			$_src = \wp_get_attachment_image_src( $img_id, 'full' );
 
@@ -248,8 +250,8 @@ class Generate_Image extends Generate_Url {
 			$w = $_src[1]; // Width
 			$h = $_src[2]; // Height
 
-			if ( esc_url( $i ) === esc_url( $src ) )
-				$this->image_dimensions = $this->image_dimensions + array( $this->get_the_real_ID() => array( 'width' => $w, 'height' => $h ) );
+			if ( \esc_url( $i ) === \esc_url( $src ) )
+				$this->image_dimensions = $this->image_dimensions + array( $id => array( 'width' => $w, 'height' => $h ) );
 		}
 
 		return $src;
