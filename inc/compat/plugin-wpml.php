@@ -170,28 +170,34 @@ function _get_relative_wmpl_url( $path = '', $post_id = '' ) {
 	return $path;
 }
 
-/**
- * Remove "All languages" option from WPML admin switcher.
- *
- * @param $languages_links
- *
- * @return array
- */
-function _wpml_all_languages_remove( $languages_links ) {
-    unset( $languages_links['all'] );
-
-    return $languages_links;
-}
-
+\add_action( 'current_screen', __NAMESPACE__ . '\\_wpml_do_current_screen_action' );
 /**
  * Add filters only on SEO plugin page.
  *
- * @param $current_screen
+ * @since 2.8.0
+ * @access private
+ *
+ * @param object $current_screen
  */
-function _wpml_current_screen_action( $current_screen ) {
-    if ( $current_screen->id === 'toplevel_page_theseoframework-settings' ) {
-        \add_filter( 'wpml_admin_language_switcher_items', __NAMESPACE__ . '\\_wpml_all_languages_remove' );
-    }
+function _wpml_do_current_screen_action( $current_screen = '' ) {
+
+	if ( \the_seo_framework()->is_seo_settings_page() ) {
+		\add_filter( 'wpml_admin_language_switcher_items', __NAMESPACE__ . '\\_wpml_remove_all_languages' );
+	}
 }
 
-\add_action( 'current_screen', __NAMESPACE__ . '\\_wpml_current_screen_action' );
+/**
+ * Remove "All languages" option from WPML admin switcher.
+ *
+ * @since 2.8.0
+ * @access private
+ *
+ * @param array $languages_links
+ * @return array
+ */
+function _wpml_remove_all_languages( $languages_links = array() ) {
+
+	unset( $languages_links['all'] );
+
+	return $languages_links;
+}
