@@ -169,3 +169,35 @@ function _get_relative_wmpl_url( $path = '', $post_id = '' ) {
 
 	return $path;
 }
+
+\add_action( 'current_screen', __NAMESPACE__ . '\\_wpml_do_current_screen_action' );
+/**
+ * Add filters only on SEO plugin page.
+ *
+ * @since 2.8.0
+ * @access private
+ *
+ * @param object $current_screen
+ */
+function _wpml_do_current_screen_action( $current_screen = '' ) {
+
+	if ( \the_seo_framework()->is_seo_settings_page() ) {
+		\add_filter( 'wpml_admin_language_switcher_items', __NAMESPACE__ . '\\_wpml_remove_all_languages' );
+	}
+}
+
+/**
+ * Remove "All languages" option from WPML admin switcher.
+ *
+ * @since 2.8.0
+ * @access private
+ *
+ * @param array $languages_links
+ * @return array
+ */
+function _wpml_remove_all_languages( $languages_links = array() ) {
+
+	unset( $languages_links['all'] );
+
+	return $languages_links;
+}
