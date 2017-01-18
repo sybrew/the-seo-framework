@@ -90,6 +90,8 @@ class Init extends Query {
 		if ( $this->is_preview() )
 			return;
 
+		\do_action( 'the_seo_framework_init' );
+
 		$this->init_global_actions();
 		$this->init_global_filters();
 
@@ -132,6 +134,8 @@ class Init extends Query {
 	 * @since 2.7.0
 	 */
 	public function init_admin_actions() {
+
+		\do_action( 'the_seo_framework_admin_init' );
 
 		//* Initialize caching actions.
 		$this->init_admin_caching_actions();
@@ -199,6 +203,8 @@ class Init extends Query {
 	 */
 	protected function init_front_end_actions() {
 
+		\do_action( 'the_seo_framework_front_init' );
+
 		//* Edit the robots.txt file
 		\add_filter( 'robots_txt', array( $this, 'robots_txt' ), 10, 2 );
 
@@ -256,8 +262,6 @@ class Init extends Query {
 		\add_filter( 'pre_get_document_title', array( $this, 'title_from_cache' ), 10 );
 		//* Override AnsPress Theme Title
 		\add_filter( 'ap_title', array( $this, 'title_from_cache' ), 99, 1 );
-		//* Override bbPress title
-		\add_filter( 'bbp_title', array( $this, 'title_from_cache' ), 99, 3 );
 		//* Override Woo Themes Title
 		\add_filter( 'woo_title', array( $this, 'title_from_cache' ), 99 );
 
@@ -466,10 +470,10 @@ class Init extends Query {
 
 		$output = "\r\n" . $indicatorbefore . $output . $indicatorafter . "\r\n";
 
-		\do_action( 'the_seo_framework_do_after_output' );
-
 		//* Already escaped.
 		echo $output;
+
+		\do_action( 'the_seo_framework_do_after_output' );
 
 	}
 

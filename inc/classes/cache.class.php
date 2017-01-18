@@ -322,7 +322,7 @@ class Cache extends Sitemaps {
 	public function set_transient( $transient, $value, $expiration = '' ) {
 
 		if ( $this->the_seo_framework_use_transients )
-			set_transient( $transient, $value, $expiration );
+			\set_transient( $transient, $value, $expiration );
 	}
 
 	/**
@@ -341,7 +341,7 @@ class Cache extends Sitemaps {
 	public function get_transient( $transient ) {
 
 		if ( $this->the_seo_framework_use_transients )
-			return get_transient( $transient );
+			return \get_transient( $transient );
 
 		return false;
 	}
@@ -807,7 +807,7 @@ class Cache extends Sitemaps {
 	 * Checks whether the permalink structure is updated.
 	 *
 	 * @since 2.3.0
-	 * @since 2.7.0 Added admin referer check.
+	 * @since 2.7.0 : Added admin referer check.
 	 *
 	 * @return bool Whether if sitemap transient is deleted.
 	 */
@@ -815,9 +815,8 @@ class Cache extends Sitemaps {
 
 		if ( isset( $_POST['permalink_structure'] ) || isset( $_POST['category_base'] ) ) {
 
-			check_admin_referer( 'update-permalink' );
-
-			return $this->delete_cache( 'sitemap' );
+			if ( check_admin_referer( 'update-permalink' ) )
+				return $this->delete_cache( 'sitemap' );
 		}
 
 		return false;
@@ -828,7 +827,7 @@ class Cache extends Sitemaps {
 	 * Also ping search engines.
 	 *
 	 * @since 2.2.9
-	 * @since 2.8.0 Mow listens to option 'cache_sitemap' before deleting transient.
+	 * @since 2.8.0 : Mow listens to option 'cache_sitemap' before deleting transient.
 	 *
 	 * @return bool true
 	 */
@@ -845,7 +844,7 @@ class Cache extends Sitemaps {
 	 * Returns old option, since that's passed for sanitation within WP Core.
 	 *
 	 * @since 2.3.3
-	 * @since 2.8.0 Now listens to option 'cache_meta_description' before deleting transient.
+	 * @since 2.8.0 : Now listens to option 'cache_meta_description' before deleting transient.
 	 *
 	 * @param string $old_option The previous blog description option.
 	 * @return string Previous option.
@@ -863,7 +862,7 @@ class Cache extends Sitemaps {
 	 * Delete transient for the automatic description on requests.
 	 *
 	 * @since 2.3.3
-	 * @since 2.8.0 Now listens to option 'cache_meta_description' before deleting transient.
+	 * @since 2.8.0 : Now listens to option 'cache_meta_description' before deleting transient.
 	 *
 	 * @param mixed $page_id The page ID or identifier.
 	 * @param string $taxonomy The tt name.
@@ -883,7 +882,7 @@ class Cache extends Sitemaps {
 	 * Delete transient for the LD+Json scripts on requests.
 	 *
 	 * @since 2.4.2
-	 * @since 2.8.0 Now listens to option 'cache_meta_schema' before deleting transient.
+	 * @since 2.8.0 : Now listens to option 'cache_meta_schema' before deleting transient.
 	 *
 	 * @param mixed $page_id The page ID or identifier.
 	 * @param string $taxonomy The tt name.
@@ -913,6 +912,8 @@ class Cache extends Sitemaps {
 	 * @since 2.5.2
 	 * @since 2.7.0 : ???
 	 *
+	 * @NOTE: Ignores transient debug constant and options.
+	 *
 	 * @param string|object $value The theme directory stylesheet location, or either WP_Theme/WP_Upgrader instance.
 	 * @param array|object|null $options If set, the update options array or the Old theme WP_Theme instance.
 	 * @return bool True on success, false on failure.
@@ -933,9 +934,9 @@ class Cache extends Sitemaps {
 	 * Sets transient for Theme doing it Right.
 	 *
 	 * @since 2.5.2
-	 * @since 2.7.0 Will always set "doing it wrong" transient, even if it was "doing it right" earlier.
+	 * @since 2.7.0 : Will always set "doing it wrong" transient, even if it was "doing it right" earlier.
 	 *
-	 * @NOTE: Ignores transient debug constant.
+	 * @NOTE: Ignores transient debug constant and options.
 	 *
 	 * @param bool $doing_it_right
 	 */

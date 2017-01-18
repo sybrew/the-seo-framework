@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) and $_this = \the_seo_framework_class() and $this instanceo
  * @return string The URL path.
  */
 function _qtranslatex_filter_url_path( $path = '', $id = 0, $external = false ) {
-	return \The_SEO_Framework\_get_relative_qtranslate_url( $path, $id );
+	return \The_SEO_Framework\_qtranslate_get_relative_url( $path, $id );
 }
 
 /**
@@ -35,7 +35,7 @@ function _qtranslatex_filter_url_path( $path = '', $id = 0, $external = false ) 
  * @param string $path The current path.
  * @param int $post_id The Post ID. Unused until qTranslate provides external URL forgery.
  */
-function _get_relative_qtranslate_url( $path = '', $post_id = '' ) {
+function _qtranslate_get_relative_url( $path = '', $post_id = '' ) {
 
 	//* Reset cache.
 	\the_seo_framework()->url_slashit = true;

@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) and $_this = \the_seo_framework_class() and $this instanceo
  * @return string The URL path.
  */
 function _wpml_filter_url_path( $path = '', $id = 0, $external = false ) {
-	return \The_SEO_Framework\_get_relative_wmpl_url( $path, $id );
+	return \The_SEO_Framework\_wmpl_get_relative_url( $path, $id );
 }
 
 /**
@@ -44,7 +44,7 @@ function _wpml_filter_url_path( $path = '', $id = 0, $external = false ) {
  * @param int $post_id The Post ID.
  * @return relative path for WPML urls.
  */
-function _get_relative_wmpl_url( $path = '', $post_id = '' ) {
+function _wmpl_get_relative_url( $path = '', $post_id = '' ) {
 	global $sitepress;
 
 	//* Reset cache.

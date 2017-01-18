@@ -85,7 +85,13 @@ class Compat extends Core {
 		}
 
 		if ( $this->detect_plugin( array( 'globals' => array( 'ultimatemember' ) ) ) ) {
+			//* Ultimate Member
 			$this->_include_compat( 'ultimatemember', 'plugin' );
+		}
+
+		if ( $this->detect_plugin( array( 'functions' => array( 'bbpress' ) ) ) ) {
+			//* bbPress
+			$this->_include_compat( 'bbpress', 'plugin' );
 		}
 	}
 

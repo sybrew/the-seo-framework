@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) and $_this = \the_seo_framework_class() and $this instanceo
  */
 function _wpmudev_sanitize_redirect_url( $args = array(), $path = '' ) {
 
-	$args = \The_SEO_Framework\_the_url_wpmudev_domainmap( $path, true );
+	$args = \The_SEO_Framework\_wpmudev_domainmap_get_url( $path, true );
 
 	return array(
 		'url' => $args[0],
@@ -43,7 +43,7 @@ function _wpmudev_sanitize_redirect_url( $args = array(), $path = '' ) {
  * @param bool $get_scheme Output array with scheme.
  * @return string|array|void The unescaped URL, the scheme
  */
-function _the_url_wpmudev_domainmap( $path, $get_scheme = false ) {
+function _wpmudev_domainmap_get_url( $path, $get_scheme = false ) {
 	global $wpdb, $blog_id;
 
 	/**

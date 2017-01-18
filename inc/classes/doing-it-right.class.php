@@ -180,14 +180,20 @@ class Doing_It_Right extends Generate_Ldjson {
 			'posts',
 			'date',
 			'tags',
-			'bbp_topic_freshness',
-			'bbp_forum_freshness',
-			'bbp_reply_created',
 		);
+
+		/**
+		 * Applies filters 'the_seo_framework_seo_column_keys_order' : array
+		 *
+		 * @since 2.8.0
+		 *
+		 * @param array $order_keys
+		 */
+		$order_keys = (array) \apply_filters( 'the_seo_framework_seo_column_keys_order', $order_keys );
 
 		foreach ( $order_keys as $key ) {
 			//* Put value in $offset, if not false, break loop.
-			if ( false !== ( $offset = array_search( $key, $column_keys ) ) )
+			if ( false !== ( $offset = array_search( $key, $column_keys, true ) ) )
 				break;
 		}
 

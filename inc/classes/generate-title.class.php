@@ -535,6 +535,7 @@ class Generate_Title extends Generate_Description {
 	 * Generate the title based on query conditions.
 	 *
 	 * @since 2.3.4
+	 * @since 2.8.0 : Cache now works.
 	 * @staticvar array $cache : contains $title strings.
 	 *
 	 * @param array $args The Title Args.
@@ -549,10 +550,14 @@ class Generate_Title extends Generate_Description {
 		$id = $args['term_id'];
 		$taxonomy = $args['taxonomy'];
 
-		static $cache = array();
+		if ( $this->is_admin() ) {
+			$cache = array();
+		} else {
+			static $cache = array();
 
-		if ( isset( $cache[ $id ][ $taxonomy ] ) )
-			$title = $cache[ $id ][ $taxonomy ];
+			if ( isset( $cache[ $id ][ $taxonomy ] ) )
+				$title = $cache[ $id ][ $taxonomy ];
+		}
 
 		if ( empty( $title ) ) {
 
@@ -587,7 +592,7 @@ class Generate_Title extends Generate_Description {
 		if ( $escape )
 			$title = $this->escape_title( $title, false );
 
-		return $title;
+		return $cache[ $id ][ $taxonomy ] = $title;
 	}
 
 	/**
@@ -737,7 +742,7 @@ class Generate_Title extends Generate_Description {
 		$term = null;
 
 		if ( $args['term_id'] && $args['taxonomy'] )
-			$term = get_term( $args['term_id'], $args['taxonomy'], OBJECT, 'raw' );
+			$term = \get_term( $args['term_id'], $args['taxonomy'], OBJECT, 'raw' );
 
 		if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
 			if ( ! isset( $term ) && $this->is_tax() )

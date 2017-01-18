@@ -539,7 +539,7 @@ class Query extends Compat {
 
 		$is_front_page = false;
 
-		if ( is_front_page() && empty( $id ) )
+		if ( \is_front_page() && empty( $id ) )
 			$is_front_page = true;
 
 		//* Elegant Themes Support.
@@ -690,7 +690,7 @@ class Query extends Compat {
 
 		$this->set_query_cache(
 			__METHOD__,
-			$is_single = is_single( $post ),
+			$is_single = \is_single( $post ),
 			$post
 		);
 
@@ -817,7 +817,7 @@ class Query extends Compat {
 
 		$this->set_query_cache(
 			__METHOD__,
-			$is_tag = is_tag( $tag ),
+			$is_tag = \is_tag( $tag ),
 			$tag
 		);
 
@@ -870,7 +870,7 @@ class Query extends Compat {
 
 		$this->set_query_cache(
 			__METHOD__,
-			$is_tax = is_tax( $taxonomy, $term ),
+			$is_tax = \is_tax( $taxonomy, $term ),
 			$taxonomy, $term
 		);
 

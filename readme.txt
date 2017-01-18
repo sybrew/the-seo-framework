@@ -55,10 +55,10 @@ Nobody has to know about the tools you've used to create your or someone else's 
 * Various Open Graph, Facebook and Twitter tags.
 * Special Open Graph description, which organically integrates with the Facebook and Twitter snippets.
 * Extended Open Graph Images support, including automated image manipulation.
-* Schema.org LD+Json script that adds extended search support for Google Search and Chrome.
-* Schema.org LD+Json script for Knowledge Graph (Personal/Business site relations, name and logo).
-* Advanced Schema.org LD+Json script for Breadcrumbs (just like the visual one) which extends page relation support in Google Search.
-* Schema.org LD+Json script to show the correct site name in Google Breadcrumbs.
+* Schema.org JSON-LD script that adds extended search support for Google Search and Chrome.
+* Schema.org JSON-LD script for Knowledge Graph (Personal/Business site relations, name and logo).
+* Advanced Schema.org JSON-LD script for Breadcrumbs (just like the visual one) which extends page relation support in Google Search.
+* Schema.org JSON-LD script to show the correct site name in Google Breadcrumbs.
 * Publishing and editing dates, accurate to the day.
 * Link relationships, with full WPMUdev Domain Mapping and HTTPS support.
 * Simple Sitemap with Pages, Posts and Custom Post Types (CPT), which listens to the in-post settings.
@@ -180,7 +180,7 @@ If a visitor can't find a page, then why would a Search Engine? Don't rely on yo
 
 = What's does the application/ld+json script do? =
 
-The LD+Json scripts are Search Engine helpers which tell Search Engines how to connect and index the site. They tell the Search Engine if your site contains an internal search engine, what sites you're socially connected to and what page structure you're using.
+The JSON-LD scripts are Search Engine helpers which tell Search Engines how to connect and index the site. They can tell the Search Engine if your site contains an internal search engine, what sites you're socially connected to and what page structure you're using.
 
 = The meta data is not being updated, and I'm using a caching plugin. =
 
@@ -377,8 +377,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * **Updated:**
 	/
 	* TODO Translation POT file.
-	* TODO All previous Schema.org output transients have been invalidated. TODO.. note below next entry
-	* All previous automated description transients have been invalidated.
+	* All previous automated description and TODO Schema.org transients have been invalidated.
 		* Old caches will automatically be cleaned from the database.
 		* New caches will automatically be set up. This might cause a small performance hit after the update, which should automatically be resolved.
 	* Upon updating this plugin, the old term metadata (The SEO Framework 2.6.6 and lower) will be removed.
@@ -416,11 +415,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* WPML sitemap generated URL path now reflects the language.
 	* qTranslateX canonical homepage URL doesn't output double paths anymore.
 	* Robots.txt settings outputted incorrect notice when site is blocked from robots through WordPress reading settings while the sitemap has been deactivated.
-	* TODO bbPress forum topic ID's weren't correctly recognized. With this fix, these issues have been resolved:
-		- TODO The title is now correct.
-		- TODO The description is now correct.
-		- TODO The canonical URL is now correct.
-	/
+	* TODO Special taxonomies (like bbPress Topic Tags) now correctly fetch the title.
 	* TODO AnsPress category canonical URL is now correct on its categories. @link https://wordpress.org/support/topic/anspress-categories/
 	* The SEO Bar's on-hover tooltip is now once more correctly visible on mobile devices.
 	* The notification that's displayed when settings are reset is no longer displayed on refresh.
@@ -557,12 +552,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* **Exception:** The sanitation handlers will however be initialized when using method `the_seo_framework()->update_settings()` or function `the_seo_framework_update_option()`.
 	* License changes:
 		* File `query.class.php` now falls under GPLv3 instead of GPLv2+.
-	/
 	* The settings reset query arg has been changed from `reset` to `tsf-settings-reset` and has been added to `wp_removeable_query_args`.
 		* This also improves the canonical URL on the admin page, for whatever that's worth.
 	* The SEO Settings updated notification query arg has been changed from `seo-updated` to `tsf-settings-updated` and has been added to `wp_removable_query_args`.
 		* This as well improves the canonical URL on the admin page.
-	/
 	* Library changes:
 		* `autodescription.{min.}js` is now `tsf.{min.}js`.
 		* `autodescription.{min.}css` is now `tsf.{min.}css`.
@@ -705,6 +698,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* `(array) the_seo_framework_sitemap_cpt_query_args`. Used to filter the sitemap WP_Query query arguments for cpt.
 		* `(bool) the_seo_framework_warn_homepage_global_title`. Used to add a notification in the homepage metabox. Ideal for translation plugins.
 		* `(bool) the_seo_framework_warn_homepage_global_description`. Used to add a notification in the homepage metabox. Ideal for translation plugins.
+		* `(array) the_seo_framework_seo_column_keys_order`. Used to add or filter the order in which The SEO Framework determines the placement of The SEO Bar.
 	* **Removed:**
 		* `(array) the_seo_framework_knowledgegraph_settings_tabs`. These tabs have been moved in the Schema metabox.
 		* `the_seo_framework_detect_seo_plugins`. This was previously deprecated.
@@ -713,8 +707,13 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* `(mixed) the_seo_framework_canonical_force_scheme` use `(string) the_seo_framework_preferred_url_scheme` instead.
 * **Action notes:**
 	* **Added:**
-		* `the_seo_framework_general_metabox_before` runs before the General metabox output.
-		* `the_seo_framework_general_metabox_after` runs after the General metabox output.
+		* `the_seo_framework_general_metabox_before`. Runs before the General metabox output.
+		* `the_seo_framework_general_metabox_after`. Runs after the General metabox output.
+		* `the_seo_framework_init`. Runs before when The SEO Framework alters global stuff.
+		* `the_seo_framework_admin_init`. Runs before when The SEO Framework alters admin stuff.
+		* `the_seo_framework_front_init`. Runs before when The SEO Framework alters front-end stuff.
+	* **Changed:
+		* `the_seo_framework_do_after_output`. Now moved 2 lines down to be after the output echo.
 	* **Removed:**
 		* `the_seo_framework_knowledge_metabox_before`
 		* `the_seo_framework_knowledge_metabox_after`
