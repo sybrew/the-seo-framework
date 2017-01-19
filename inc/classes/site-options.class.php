@@ -479,7 +479,7 @@ class Site_Options extends Sanitize {
 
 		$settings_url = $this->seo_settings_page_url();
 		$link = sprintf( '<a href="%s" title="%s" target="_self">%s</a>', $settings_url, \esc_attr__( 'SEO Settings', 'autodescription' ), \esc_html__( 'here', 'autodescription' ) );
-		$go_to_page = sprintf( esc_html_x( 'View the new options %s.', '%s = here', 'autodescription' ), $link );
+		$go_to_page = sprintf( \esc_html_x( 'View the new options %s.', '%s = here', 'autodescription' ), $link );
 
 		$notice = $this->page_defaults['plugin_update_text'] . ' ' . $go_to_page;
 

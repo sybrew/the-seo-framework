@@ -56,7 +56,7 @@ class Core {
 		/**
 		 * For now, no deprecation is being handled; as no properties are deprecated.
 		 */
-		$this->_deprecated_function( 'the_seo_framework()->' . esc_html( $name ), 'unknown' );
+		$this->_deprecated_function( 'the_seo_framework()->' . \esc_html( $name ), 'unknown' );
 
 		//* Invoke default behavior.
 		$this->$name = $value;
@@ -76,7 +76,7 @@ class Core {
 
 		switch ( $name ) :
 			case 'pagehook' :
-				$this->_deprecated_function( 'the_seo_framework()->' . esc_html( $name ), '2.7.0', 'the_seo_framework()->seo_settings_page_hook' );
+				$this->_deprecated_function( 'the_seo_framework()->' . \esc_html( $name ), '2.7.0', 'the_seo_framework()->seo_settings_page_hook' );
 				return $this->seo_settings_page_hook;
 				break;
 
@@ -287,7 +287,7 @@ class Core {
 			return '';
 
 		if ( $escape )
-			$message = esc_html( $message );
+			$message = \esc_html( $message );
 
 		//* Make sure the scripts are loaded.
 		$this->init_admin_scripts( true );

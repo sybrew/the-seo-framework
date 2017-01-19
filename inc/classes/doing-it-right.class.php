@@ -412,7 +412,7 @@ class Doing_It_Right extends Generate_Ldjson {
 				$bar = $this->the_seo_bar_page( $args );
 			}
 		} else {
-			$context = esc_attr__( 'Failed to fetch post ID.', 'autodescription' );
+			$context = \esc_attr__( 'Failed to fetch post ID.', 'autodescription' );
 
 			$bar = $this->post_status_special( $context, '!', 'bad' );
 		}
@@ -474,14 +474,14 @@ class Doing_It_Right extends Generate_Ldjson {
 			$width = $is_term ? ' ' . $classes['100%'] : '';
 			$pill = $this->pill_the_seo_bar() ? ' ' . $classes['pill'] : '';
 
-			$class = esc_attr( 'tsf-seo-bar clearfix' . $width . $pill );
+			$class = \esc_attr( 'tsf-seo-bar clearfix' . $width . $pill );
 		}
 
 		if ( isset( $ajax_id ) ) {
 			//* Ajax handler.
-			$script = '<script>jQuery("#' . esc_js( $ajax_id ) . '").on( "hover click", autodescription.statusBarHover );</script>';
+			$script = '<script>jQuery("#' . \esc_js( $ajax_id ) . '").on( "hover click", autodescription.statusBarHover );</script>';
 
-			return sprintf( '<span class="%s" id="%s"><span class="tsf-seo-bar-inner-wrap">%s</span></span>', $class, esc_attr( $ajax_id ), $content ) . $script;
+			return sprintf( '<span class="%s" id="%s"><span class="tsf-seo-bar-inner-wrap">%s</span></span>', $class, \esc_attr( $ajax_id ), $content ) . $script;
 		}
 
 		return sprintf( '<span class="%s"><span class="tsf-seo-bar-inner-wrap">%s</span></span>', $class, $content );
@@ -789,7 +789,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			$but_and = $title_length_warning['but'] ? $but_i18n : $and_i18n;
 
 			/* translators: %s = But or And */
-			$notice .= '<br>' . sprintf( esc_attr__( '%s the Title contains the Blogname multiple times.', 'autodescription' ), $but_and );
+			$notice .= '<br>' . sprintf( \esc_attr__( '%s the Title contains the Blogname multiple times.', 'autodescription' ), $but_and );
 			$class = $classes['bad'];
 		}
 
@@ -1005,7 +1005,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		$ind_notice  = $i18n['index'];
 
 		/* Translators: %s = Post / Page / Category, etc. */
-		$ind_notice .= ' ' . sprintf( esc_attr__( '%s is being indexed.', 'autodescription' ), $post_i18n );
+		$ind_notice .= ' ' . sprintf( \esc_attr__( '%s is being indexed.', 'autodescription' ), $post_i18n );
 		$ind_class = $good;
 
 		/**
@@ -1014,7 +1014,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		 * @since 2.2.2
 		 */
 		if ( $this->is_option_checked( 'site_noindex' ) ) {
-			$ind_notice .= '<br>' . esc_attr__( "But you've disabled indexing for the whole site.", 'autodescription' );
+			$ind_notice .= '<br>' . \esc_attr__( "But you've discouraged indexing for the whole site.", 'autodescription' );
 			$ind_class = $unknown;
 			$ind_but = true;
 		}
@@ -1038,10 +1038,22 @@ class Doing_It_Right extends Generate_Ldjson {
 				$label = $this->get_the_term_name( $term, false );
 
 				/* translators: 1: But or And, 2: Current taxonomy term plural label */
-				$ind_notice .= '<br>' . sprintf( esc_attr__( '%1$s indexing for %2$s have been disabled.', 'autodescription' ), $but_and, $label );
+				$ind_notice .= '<br>' . sprintf( \esc_attr__( '%1$s indexing for %2$s have been discouraged.', 'autodescription' ), $but_and, $label );
 				$ind_class = $unknown;
 				$ind_but = true;
 			}
+		}
+
+		/**
+		 * Adds post protection notice
+		 * @since 2.8.0
+		 */
+		if ( ! $is_term && $this->is_protected( $args['post_id'] ) ) {
+			$but_and = isset( $ind_but ) ? $and_i18n : $but_i18n;
+			/* translators: 1 = But or And, 1 = Post/Page  */
+			$ind_notice .= '<br>' . sprintf( \esc_attr__( '%1$s the %2$s is protected from public visibility. This means indexing is discouraged.', 'autodescription' ), $but_and, $post_i18n );
+			$ind_class = $unknown;
+			$ind_but = true;
 		}
 
 		//* Adds notice for WordPress blog public indexing.
@@ -1062,7 +1074,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			$but_and = isset( $ind_but ) ? $and_i18n : $but_i18n;
 
 			/* translators: %s = But or And */
-			$ind_notice .= '<br>' . sprintf( \esc_attr__( '%s there are no posts in this term; therefore, indexing has been disabled.', 'autodescription' ), $but_and );
+			$ind_notice .= '<br>' . sprintf( \esc_attr__( '%s there are no posts in this term; therefore, indexing has been discouraged.', 'autodescription' ), $but_and );
 			//* Don't make it unknown if it's not good.
 			$ind_class = $ind_class !== $good ? $ind_class : $unknown;
 		}
@@ -1164,7 +1176,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		if ( $this->is_option_checked( 'site_nofollow' ) ) {
 			$but_and = isset( $fol_but ) ? $and_i18n : $but_i18n;
 			/* translators: %s = But or And */
-			$fol_notice .= '<br>' . sprintf( \esc_attr__( "%s you've disabled the following of links for the whole site.", 'autodescription' ), $but_and );
+			$fol_notice .= '<br>' . sprintf( \esc_attr__( "%s you've discouraged the following of links for the whole site.", 'autodescription' ), $but_and );
 			$fol_class = $unknown;
 			$fol_but = true;
 
@@ -1190,7 +1202,7 @@ class Doing_It_Right extends Generate_Ldjson {
 				$label = $this->get_the_term_name( $term, false );
 
 				/* translators: 1: But or And, 2: Current taxonomy term plural label */
-				$fol_notice .= '<br>' . sprintf( \esc_attr__( '%1$s following for %2$s have been disabled.', 'autodescription' ), $but_and, $label );
+				$fol_notice .= '<br>' . sprintf( \esc_attr__( '%1$s following for %2$s have been discouraged.', 'autodescription' ), $but_and, $label );
 				$fol_class = $unknown;
 
 				$followed = false;
@@ -1198,7 +1210,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		}
 
 		if ( false === $this->is_blog_public() ) {
-			//* Make it "and" if following has not been disabled otherwise.
+			//* Make it "and" if following has not been discouraged otherwise.
 			$but_and = $followed || ! isset( $fol_but ) ? $and_i18n : $but_i18n;
 
 			/* translators: %s = But or And */
@@ -1254,12 +1266,12 @@ class Doing_It_Right extends Generate_Ldjson {
 		$archive_short = $i18n['archive_short'];
 
 		if ( $noarchive ) {
-			$arc_notice = $archive_i18n . ' ' . sprintf( \esc_attr__( "Search Engine aren't allowed to archive this %s.", 'autodescription' ), $post_low );
+			$arc_notice = $archive_i18n . ' ' . sprintf( \esc_attr__( "Search Engines aren't allowed to archive this %s.", 'autodescription' ), $post_low );
 			$arc_class = $unknown;
 			$archived = false;
 			$arc_but = true;
 		} else {
-			$arc_notice = $archive_i18n . ' ' . sprintf( \esc_attr__( 'Search Engine are allowed to archive this %s.', 'autodescription' ), $post_low );
+			$arc_notice = $archive_i18n . ' ' . sprintf( \esc_attr__( 'Search Engines are allowed to archive this %s.', 'autodescription' ), $post_low );
 			$arc_class = $good;
 		}
 
@@ -1271,7 +1283,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		if ( $this->is_option_checked( 'site_noarchive' ) ) {
 			$but_and = isset( $arc_but ) ? $and_i18n : $but_i18n;
 
-			$arc_notice .= '<br>' . sprintf( \esc_attr__( "But you've disabled archiving for the whole site.", 'autodescription' ), $but_and );
+			$arc_notice .= '<br>' . sprintf( \esc_attr__( "But you've discouraged archiving for the whole site.", 'autodescription' ), $but_and );
 			$arc_class = $unknown;
 			$arc_but = true;
 
@@ -1297,7 +1309,7 @@ class Doing_It_Right extends Generate_Ldjson {
 				$label = $this->get_the_term_name( $term, false );
 
 				/* translators: 1: But or And, 2: Current taxonomy term plural label */
-				$arc_notice .= '<br>' . sprintf( \esc_attr__( '%1$s archiving for %2$s have been disabled.', 'autodescription' ), $but_and, $label );
+				$arc_notice .= '<br>' . sprintf( \esc_attr__( '%1$s archiving for %2$s have been discouraged.', 'autodescription' ), $but_and, $label );
 				$arc_class = $unknown;
 				$arc_but = true;
 
@@ -1306,7 +1318,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		}
 
 		if ( false === $this->is_blog_public() ) {
-			//* Make it "and" if archiving has not been disabled otherwise.
+			//* Make it "and" if archiving has not been discouraged otherwise.
 			$but_and = $archived || ! isset( $arc_but ) ? $and_i18n : $but_i18n;
 
 			/* translators: %s = But or And */

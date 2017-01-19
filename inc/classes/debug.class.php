@@ -186,7 +186,7 @@ final class Debug implements Debug_Interface {
 			} else {
 				trigger_error(
 					/* translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification */
-					sprintf( esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework with no alternative available.', 'autodescription' ),
+					sprintf( \esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework with no alternative available.', 'autodescription' ),
 						\esc_html( $function ),
 						'<strong>' . \esc_html__( 'deprecated', 'autodescription' ) . '</strong>',
 						\esc_html( $version )
@@ -1017,7 +1017,7 @@ final class Debug implements Debug_Interface {
 
 		global $multipage, $numpages;
 
-		$tsf = the_seo_framework();
+		$tsf = \the_seo_framework();
 
 		//* Only get true/false values.
 		$is_404 = $tsf->is_404();

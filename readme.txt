@@ -433,6 +433,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * **Changed:**
 	* Many sentences have changed, in order to better reflect the option usages.
 	* A few sentences have been updated slightly in order to be sanitized correctly.
+	* Robots don't always follow the Robots Exclusion Protocol, so "disabled" is now "discouraged".
 * **Fixed:**
 	* One sentence wasn't annotated correctly.
 * **Removed:**

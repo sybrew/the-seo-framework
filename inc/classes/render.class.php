@@ -217,10 +217,10 @@ class Render extends Admin_Init {
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
 		 */
-		$description = (string) apply_filters( 'the_seo_framework_description_output', $this->description_from_cache(), $this->get_the_real_ID() );
+		$description = (string) \apply_filters( 'the_seo_framework_description_output', $this->description_from_cache(), $this->get_the_real_ID() );
 
 		if ( $description )
-			return '<meta name="description" content="' . esc_attr( $description ) . '" />' . "\r\n";
+			return '<meta name="description" content="' . \esc_attr( $description ) . '" />' . "\r\n";
 
 		return '';
 	}

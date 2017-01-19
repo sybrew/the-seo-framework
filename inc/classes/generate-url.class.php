@@ -952,7 +952,7 @@ class Generate_Url extends Generate_Title {
 		static $subdomain = null;
 
 		if ( isset( $set ) )
-			$subdomain = esc_html( $set );
+			$subdomain = \esc_html( $set );
 
 		if ( $unset )
 			unset( $subdomain );
