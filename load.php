@@ -150,7 +150,7 @@ function _autoload_classes( $class ) {
 	return $loaded[ $class ] = (bool) require_once( $path . $_class . $extension );
 }
 
-\add_action( 'activate_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, __NAMESPACE__ . '\\_activation' );
+\add_action( 'activate_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, __NAMESPACE__ . '\\_do_plugin_activation' );
 /**
  * Performs plugin activation actions.
  *
@@ -158,12 +158,12 @@ function _autoload_classes( $class ) {
  * @since 2.8.0: Added namespace and renamed function. Also performs PHP tests now.
  * @access private
  */
-function _activation() {
+function _do_plugin_activation() {
 
 	\The_SEO_Framework\_activation_setup_sitemap();
 }
 
-\add_action( 'deactivate_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, __NAMESPACE__ . '\\_deactivation' );
+\add_action( 'deactivate_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, __NAMESPACE__ . '\\_do_plugin_deactivation' );
 /**
  * Performs plugin deactivation actions.
  *
@@ -171,7 +171,7 @@ function _activation() {
  * @since 2.8.0: Added namespace and renamed function.
  * @access private
  */
-function _deactivation() {
+function _do_plugin_deactivation() {
 
 	\The_SEO_Framework\_deactivation_unset_sitemap();
 }

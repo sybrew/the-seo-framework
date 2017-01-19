@@ -302,8 +302,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* The Knowledge Graph makes good use of this logo, it has priority over the Site Icon.
 	* A new General settings metabox! Containing:
 		* General Settings. Generalized general general settings, commander:
-			/
-			* TODO This tab still needs to be filled in. So it's hidden for now.
+			* Houston, this tab still needs to be filled in. So it's hidden for now.
 		* Performance Settings.
 			* Transient cache settings:
 				* You might wish to adjust these settings, if:
@@ -344,7 +343,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* This is also documented as a fix, but it states 154 characters instead of 72 there.
 		* This should reduce the chance of spamdexing by keyword spamming.
 		* This change is completely in line with Google's automated description guidelines. See "[Create good meta description](https://support.google.com/webmasters/answer/35624#1)" (heading "Programmatically generate descriptions").
-	/
 	* Object cache is no longer initiated on each page when no Object Caching plugin has been detected.
 	* The post/page/term object cache is now flushed on edit/save.
 	* The accessible counter type (with background color, type 1) is now a bit bolder.
@@ -364,16 +362,21 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 				1. They are very confusing for the end-user.
 					* They also disturb engagement for trust. Clean URLs are always preferred.
 			* The rest is unchanged.
-	/
 	* When focussing on a field which is showing a placeholder, the placeholder is now blurred.
-	* TODO The sitename set in "Organization or Personal Name" is now used consistently throughout the Schema.org output settings.
 	* Description and schema transient cache is no longer initiated on Search Pages.
-	* TODO Header, Site Icon and Site Logo images are now downsized if the image is exceeding 1500px in either height or width (or both).
 	* When settings are reset, the notification won't show up again when refreshing the page.
 	* The sitemap schemas are now more clearly defined for Search Engines and validators.
 	* The description example field now better reflects the actual output.
 	* The admin JS file is now much smaller (~30%) and includes several performance optimizations.
 	* Added a notification in the Home Page metabox when WPML is active that it should be configured on the applicable pages.
+	/
+	* Private and Password Protected posts and pages now recieve special treatment:
+		1. They're always marked "noindex".
+		1. Their auto-generated description is now disabled.
+	* TODO Header, Site Icon and Site Logo images are now downsized if the image is exceeding 1500px in either height or width (or both).
+	/	* 2.9.0
+	* TODO The sitename set in "Organization or Personal Name" is now used consistently throughout the Schema.org output settings.
+		* 2.9.0
 * **Updated:**
 	/
 	* TODO Translation POT file.
@@ -383,10 +386,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Upon updating this plugin, the old term metadata (The SEO Framework 2.6.6 and lower) will be removed.
 		* If you've upgraded from version 2.6.6 or below to this version (or any later version), it will first make sure the old metadata is transferred correctly.
 * **Removed:**
-	/
 	* Knowledge Graph Settings metabox.
 		* Its content has been moved inside the Schema Settings metabox under the "General" and "Presence" tabs.
-	/
 	* Link Relationship Settings within the Social Meta Settings metabox.
 	 	* Its content has been moved to the General Settings metabox in the Canonical tab.
 	* WordPress 4.3.x support has been dropped. This plugin now requires WordPress 4.4 or later.
@@ -409,25 +410,17 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Twitter Cards Meta, authors seem to have abandoned plugin.
 	* Redundant sanitation when fetching post meta.
 * **Fixed:**
-	/
 	* On some themes, the private prefix has been added to the title.
 	* When the title exceeds 154 characters, the description will no longer contain the complete post's content. Instead, the title will now be omitted and the description length has been limited to 155 characters.
 	* WPML sitemap generated URL path now reflects the language.
 	* qTranslateX canonical homepage URL doesn't output double paths anymore.
 	* Robots.txt settings outputted incorrect notice when site is blocked from robots through WordPress reading settings while the sitemap has been deactivated.
-	* TODO Special taxonomies (like bbPress Topic Tags) now correctly fetch the title.
-	* TODO AnsPress category canonical URL is now correct on its categories. @link https://wordpress.org/support/topic/anspress-categories/
 	* The SEO Bar's on-hover tooltip is now once more correctly visible on mobile devices.
 	* The notification that's displayed when settings are reset is no longer displayed on refresh.
 	* The website's tagline is no longer shown in the description when no excerpt can be generated.
 	* The counter type now correctly updates for new user meta created after The SEO Framework 2.7.0+ is installed.
 	* HTML entities in custom post meta is now allowed.
 		* Note: The counter doesn't reflect this allowance yet. This will be fixed when we upgrade to use pixel counters, rather than character counters.
-/
-* TODO Invalid bugs? (check again later):
-	* TODO When enabling the option "Remove Blogname from title?", the blogname is removed too from manual SEO title entries.
-		/
-		* @link https://github.com/sybrew/the-seo-framework/issues/38#issuecomment-270920124
 
 **For translators:**
 
@@ -612,6 +605,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Method `the_seo_framework()->detect_sitemap_plugin()` now also checks for SEO plugins beforehand.
 	* Dedicated plugin compatibility has been moved into aptly named files.
 		* Compatibility files can be loaded per request. See method `_include_compat()`.
+	* SEO Debugger now captures the query state at generation time.
 * **Fixed:**
 	* Several CSS classes didn't have a correct prefix. These were, and now are:
 		* `seoframework-content-no-js`, is now `tsf-content-no-js`

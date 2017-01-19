@@ -461,7 +461,7 @@ final class Debug implements Debug_Interface {
 	 * @since 2.8.0
 	 * @access private
 	 */
-	public static function output_debug() {
+	public static function _output_debug() {
 
 		$instance = static::get_instance();
 		//* Already escaped.
@@ -863,7 +863,7 @@ final class Debug implements Debug_Interface {
 	 * @since 2.8.0
 	 * @access private
 	 */
-	public static function output_debug_header() {
+	public static function _output_debug_header() {
 
 		$instance = static::get_instance();
 		//* Already escaped.
@@ -946,12 +946,36 @@ final class Debug implements Debug_Interface {
 	 * @since 2.8.0
 	 * @access private
 	 */
-	public static function output_debug_query() {
+	public static function _output_debug_query() {
 
 		$instance = static::$instance;
 		//* Already escaped.
 		echo $instance->get_debug_query_output();
 
+	}
+
+	/**
+	 * Outputs debug query from cache.
+	 *
+	 * @since 2.8.0
+	 * @access private
+	 */
+	public static function _output_debug_query_from_cache() {
+
+		$instance = static::$instance;
+		//* Already escaped.
+		echo $instance->get_debug_query_output_from_cache();
+
+	}
+
+	/**
+	 * Sets debug query cache.
+	 *
+	 * @since 2.8.0
+	 * @access private
+	 */
+	public function set_debug_query_output_cache() {
+		$this->get_debug_query_output_from_cache();
 	}
 
 	/**
@@ -963,7 +987,27 @@ final class Debug implements Debug_Interface {
 	 *
 	 * @return string Wrapped Query State debug output.
 	 */
-	protected function get_debug_query_output() {
+	protected function get_debug_query_output_from_cache() {
+
+		static $cache = null;
+
+		if ( isset( $cache ) )
+			return $cache;
+
+		return $cache = $this->get_debug_query_output( 'yup' );
+	}
+
+	/**
+	 * Wraps query status booleans in human-readable code.
+	 *
+	 * @since 2.6.6
+	 * @global bool $multipage
+	 * @global int $numpages
+	 *
+	 * @param string $cache_version 'Yes/no'
+	 * @return string Wrapped Query State debug output.
+	 */
+	protected function get_debug_query_output( $cache_version = 'nope' ) {
 
 		//* Start timer.
 		$this->timer( true );
@@ -1049,7 +1093,11 @@ final class Debug implements Debug_Interface {
 			$output .= $out . PHP_EOL;
 		}
 
-		$title = \the_seo_framework()->is_admin() ? 'Current WordPress Screen + Expected WordPress Query' : 'Current WordPress Query';
+		if ( 'yes' === $cache_version || 'yup' === $cache_version ) {
+			$title = 'WordPress Query at Meta Generation';
+		} else {
+			$title = \the_seo_framework()->is_admin() ? 'Current WordPress Screen + Expected WordPress Query' : 'Current WordPress Query';
+		}
 		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #666;"><h2 style="color:#222;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
 
 		$output = $this->the_seo_framework_debug_hidden ? $output : str_replace( PHP_EOL, '<br>' . PHP_EOL, $output );

@@ -313,8 +313,8 @@ class Generate_Description extends Generate {
 		 *
 		 * @since 2.5.0
 		 */
-		$autodescription = (bool) apply_filters( 'the_seo_framework_enable_auto_description', true );
-		if ( false === $autodescription )
+		$autodescription = (bool) \apply_filters( 'the_seo_framework_enable_auto_description', true );
+		if ( false === $autodescription || $this->is_protected( $args['id'] ) )
 			return '';
 
 		$description = $this->generate_the_description( $args, false );
@@ -715,10 +715,10 @@ class Generate_Description extends Generate {
 		if ( '' === $id )
 			$id = $this->get_the_real_ID();
 
-		if ( $page_on_front || $this->is_static_frontpage( $id ) ) {
+		if ( $page_on_front || $this->is_static_frontpage( $id ) ) :
 			$tagline = $this->get_option( 'homepage_title_tagline' );
 			$title = $tagline ? $tagline : $this->get_blogdescription();
-		} else {
+		else :
 			/**
 			 * No need to parse these when generating social description.
 			 *
@@ -753,7 +753,7 @@ class Generate_Description extends Generate {
 				//* We're on a page now.
 				$title = $this->title( '', '', '', array( 'term_id' => $id, 'notagline' => true, 'description_title' => true, 'escape' => false ) );
 			}
-		}
+		endif;
 
 		/**
 		 * Use Untitled on empty titles.
@@ -793,7 +793,7 @@ class Generate_Description extends Generate {
 				//* We're on a taxonomy now. Fetch excerpt from latest term post.
 				$excerpt = empty( $term->description ) ? $this->get_excerpt_by_id( '', '', $page_id ) : $this->s_description( $term->description );
 			} elseif ( $this->is_author() ) {
-				$excerpt = $this->s_description( \get_the_author_meta( 'description', (int) get_query_var( 'author' ) ) );
+				$excerpt = $this->s_description( \get_the_author_meta( 'description', (int) \get_query_var( 'author' ) ) );
 			} else {
 				$excerpt = '';
 			}

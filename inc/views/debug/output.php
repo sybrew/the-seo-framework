@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) and $_this = the_seo_framework_class() and $this instanceof
 if ( \The_SEO_Framework\Debug::has_debug_output() ) :
 	if ( $this->the_seo_framework_debug_hidden ) :
 		echo "\r\n<!--\r\n:: THE SEO FRAMEWORK DEBUG :: \r\n";
-		\The_SEO_Framework\Debug::output_debug();
+		\The_SEO_Framework\Debug::_output_debug();
 		echo "\r\n:: / THE SEO FRAMEWORK DEBUG ::\r\n-->\r\n";
 	else :
 
@@ -39,9 +39,9 @@ if ( \The_SEO_Framework\Debug::has_debug_output() ) :
 				</h3>
 				<div style="position:absolute;bottom:0;right:0;left:0;top:39px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;z-index:9001">
 					<?php
-					\The_SEO_Framework\Debug::output_debug_header();
-					\The_SEO_Framework\Debug::output_debug_query();
-					\The_SEO_Framework\Debug::output_debug();
+					\The_SEO_Framework\Debug::_output_debug_header();
+					\The_SEO_Framework\Debug::_output_debug_query();
+					\The_SEO_Framework\Debug::_output_debug();
 					?>
 				</div>
 			</div>
@@ -63,9 +63,19 @@ if ( \The_SEO_Framework\Debug::has_debug_output() ) :
 				</h3>
 				<div style="position:absolute;bottom:0;right:0;left:0;top:39px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;z-index:9001">
 					<?php
-					\The_SEO_Framework\Debug::output_debug_header();
-					\The_SEO_Framework\Debug::output_debug_query();
-					\The_SEO_Framework\Debug::output_debug();
+					\The_SEO_Framework\Debug::_output_debug_header();
+					?>
+					<div style="width:50%;float:left;">
+						<?php
+						\The_SEO_Framework\Debug::_output_debug_query_from_cache();
+						?>
+					</div><div style="width:50%;float:right;">
+						<?php
+						\The_SEO_Framework\Debug::_output_debug_query();
+						?>
+					</div>
+					<?php
+					\The_SEO_Framework\Debug::_output_debug();
 					?>
 				</div>
 			</div>

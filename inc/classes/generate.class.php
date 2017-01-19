@@ -43,9 +43,9 @@ class Generate extends Term_Data {
 	 * Output the `index`, `follow`, `noodp`, `noydir`, `noarchive` robots meta code in array
 	 *
 	 * @since 2.2.2
-	 *
-	 * @uses genesis_get_seo_option()   Get SEO setting value.
-	 * @uses genesis_get_custom_field() Get custom field value.
+	 * @since 2.2.4 Added robots SEO settings check.
+	 * @since 2.2.8 Added check for empty archives.
+	 * @since 2.8.0 Added check for protected/private posts.
 	 *
 	 * @global object $wp_query
 	 *
@@ -139,6 +139,10 @@ class Generate extends Term_Data {
 			$meta['noindex']   = empty( $meta['noindex'] ) && $this->get_custom_field( '_genesis_noindex' ) ? 'noindex' : $meta['noindex'];
 			$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->get_custom_field( '_genesis_nofollow' ) ? 'nofollow' : $meta['nofollow'];
 			$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->get_custom_field( '_genesis_noarchive' ) ? 'noarchive' : $meta['noarchive'];
+
+			if ( $this->is_protected( $this->get_the_real_ID() ) ) {
+				$meta['noindex'] = 'noindex';
+			}
 		}
 
 		/**

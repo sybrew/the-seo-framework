@@ -122,6 +122,7 @@ class Core {
 
 			$debug_instance = \The_SEO_Framework\Debug::get_instance();
 
+			\add_action( 'the_seo_framework_do_before_output', array( $debug_instance, 'set_debug_query_output_cache' ) );
 			\add_action( 'admin_footer', array( $debug_instance, 'debug_screens' ) );
 			\add_action( 'admin_footer', array( $debug_instance, 'debug_output' ) );
 			\add_action( 'wp_footer', array( $debug_instance, 'debug_output' ) );

@@ -497,4 +497,29 @@ class Post_Data extends Detect {
 
 		return false;
 	}
+
+	/**
+	 * Determines if the current post is protected or private.
+	 * Only works on singular pages.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @param int|object The post ID or WP Post object.
+	 * @return bool True if private, false otherwise.
+	 */
+	public function is_protected( $id = 0 ) {
+
+		if ( false === $this->is_singular() )
+			return false;
+
+		$post = \get_post( $id, OBJECT );
+
+		if ( isset( $post->post_password ) && '' !== $post->post_password ) {
+			return true;
+		} elseif ( isset( $post->post_status ) && 'private' === $post->post_status ) {
+			return true;
+		}
+
+		return false;
+	}
 }
