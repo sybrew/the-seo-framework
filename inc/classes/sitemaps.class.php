@@ -460,6 +460,7 @@ class Sitemaps extends Metaboxes {
 		 * Applies filters the_seo_framework_sitemap_exclude_ids : array of id's
 		 *
 		 * @since 2.5.2
+		 * @since 2.8.0 : No longer accepts '0' as entry.
 		 */
 		$excluded = (array) \apply_filters( 'the_seo_framework_sitemap_exclude_ids', array() );
 
@@ -563,7 +564,7 @@ class Sitemaps extends Metaboxes {
 				if ( isset( $page->ID ) ) :
 					$page_id = $page->ID;
 
-					if ( '' === $excluded || ! isset( $excluded[ $page_id ] ) ) {
+					if ( '' === $excluded || empty( $excluded[ $page_id ] ) ) {
 
 						//* Fetch the noindex option, per page.
 						$indexed = ! $this->get_custom_field( '_genesis_noindex', $page_id );
@@ -666,7 +667,7 @@ class Sitemaps extends Metaboxes {
 				if ( isset( $post->ID ) ) :
 					$post_id = $post->ID;
 
-					if ( '' === $excluded || ! isset( $excluded[ $post_id ] ) ) {
+					if ( '' === $excluded || empty( $excluded[ $post_id ] ) ) {
 
 						//* Fetch the noindex option, per page.
 						$indexed = ! $this->get_custom_field( '_genesis_noindex', $post_id );
@@ -783,7 +784,7 @@ class Sitemaps extends Metaboxes {
 				if ( isset( $ctp_post->ID ) ) :
 					$cpt_id = $ctp_post->ID;
 
-					if ( '' === $excluded || ! isset( $excluded[ $cpt_id ] ) ) {
+					if ( '' === $excluded || empty( $excluded[ $cpt_id ] ) ) {
 
 						//* Fetch the noindex option, per page.
 						$indexed = ! $this->get_custom_field( '_genesis_noindex', $cpt_id );
@@ -1109,5 +1110,37 @@ class Sitemaps extends Metaboxes {
 
 		$wp_rewrite->flush_rules( true );
 
+	}
+
+	/**
+	 * Returns sitemap color scheme.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @param bool $get_defaults Whether to get the default colors.
+	 * @return array The sitemap colors.
+	 */
+	public function get_sitemap_colors( $get_defaults = false ) {
+
+		if ( $get_defaults ) {
+			$retval = array(
+				'main'   => '#333',
+				'accent' => '#00cd98',
+			);
+		} else {
+			$main = $this->s_color_hex( $this->get_option( 'sitemap_color_main' ) );
+			$accent = $this->s_color_hex( $this->get_option( 'sitemap_color_accent' ) );
+
+			$options = array(
+				'main'   => $main ? '#' . $main : '',
+				'accent' => $accent ? '#' . $accent : '',
+			);
+
+			$options = array_filter( $options );
+
+			$retval = array_merge( $this->get_sitemap_colors( true ), $options );
+		}
+
+		return $retval;
 	}
 }

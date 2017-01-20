@@ -119,7 +119,7 @@ class Generate_Image extends Generate_Url {
 		}
 
 		//* 6. Get the WP 4.5 Site Logo
-		if ( empty( $image ) && ( $all_allowed || false === in_array( 'logo', $args['disallowed'], true ) ) && current_theme_supports( 'custom-logo' ) )
+		if ( empty( $image ) && ( $all_allowed || false === in_array( 'logo', $args['disallowed'], true ) ) && $this->can_use_logo() )
 			$image = $this->get_site_logo( true );
 
 		//* 7. Get the WP 4.3 Site Icon
@@ -456,6 +456,9 @@ class Generate_Image extends Generate_Url {
 	 * @return string URL site logo, not escaped.
 	 */
 	public function get_site_logo( $set_og_dimensions = false ) {
+
+		if ( false === $this->can_use_logo() )
+			return '';
 
 		$logo = '';
 

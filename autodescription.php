@@ -46,13 +46,13 @@ defined( 'ABSPATH' ) or die;
  * Not many caching plugins use CDN in dashboard. What a shame. Firefox does cache.
  * @since 1.0.0
  */
-define( 'THE_SEO_FRAMEWORK_VERSION', '2.7.99' );
+define( 'THE_SEO_FRAMEWORK_VERSION', '2.8.0-RC1' );
 
 /**
  * Plugin Database version for lightweight version upgrade comparing.
  * @since 2.7.0
  */
-define( 'THE_SEO_FRAMEWORK_DB_VERSION', '2803' );
+define( 'THE_SEO_FRAMEWORK_DB_VERSION', '2804' );
 
 /**
  * Plugin options filter.

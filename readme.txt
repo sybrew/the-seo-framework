@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: google, bing, open graph, seo, xml sitemap, breadcrumbs, meta, search engine, pagerank, serp, facebook, twitter
 Requires at least: 4.4.0
 Tested up to: 4.8.0
-Stable tag: 2.7.2
+Stable tag: 2.8.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -193,13 +193,17 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
-= 2.8.0 - ??? (John F. Nash Jr. reference?) =
+= 2.8.0 - Ventricular Perspicacity =
+
+*In a dream it's typical not to be rational. - John Forbes Nash, Jr.*
 
 **Release date:**
 
-* PLANNED: January 2017 ?
+* January 23rd 2017? Earlier?
 
 **Upgrade Notes:**
+
+***WordPress recommends using PHP 7.0+, we recommend using PHP 7.1***
 
 ***1: PHP 5.2 support has been dropped. Here's why:***
 
@@ -219,6 +223,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 *If, for whatever reason, you still wish to use PHP 5.2 and/or WordPress 4.3, The SEO Framework 2.7.3 still supports them.*
 
+***Note: PHP 5.3 and PHP 5.4 support will be dropped in the future. I want TSF to become much more modular, which isn't possible now.***
+
 **Summarized:**
 
 * This major release not only fixes various bugs, but also introduces new options for you to fiddle with.
@@ -227,9 +233,34 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * You can now more granularly control your website's social images. With this much asked for feature, you're now really in control.
 * You can now also control the style of your sitemap. The sitemap title will link back to your homepage when clicked upon.
 
-**New enhancements overview:**
-/
-* TODO
+**Feature highlights:**
+
+* **Added:**
+	* Canonical SEO settings
+	* Sitemap styling settings
+	* Performance settings
+	* Layout settings
+	* Social image upload
+	* Site logo detection
+* **Improved:**
+	* Cache validation
+	* Compatibility stability
+	* Security and sanitation
+	* Post status detection
+	* Readability of placeholders
+
+**New developer technology overview:**
+
+* Markdown conversion
+* RGB luminance detection and conversion
+* JavaScript compilation prototyping
+* Namespaces
+* Magic methods
+* Class autoloader
+* Debug autoloader
+* Object interfaces
+* Crop ratio conversion
+* Plugin/Server compatibility autoloading
 
 **For everyone - About Canonical SEO:**
 
@@ -239,9 +270,13 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * Contact your hosting provider if you have any doubts on changing this option.
 
 **For everyone - About Sitemap styling:**
-/
-* TODO A few new settings have been added that allow you to style your sitemap.
-* These styles aren't seen by Search Engines. But it's a very nice addition for your human visitors.
+
+* New settings have been added that allow you to style your sitemap!
+* The colors are automatically calculated based on what you put in. This is the most advanced sitemap styling to date!
+* If your theme supports it, you can also insert a logo for it through WordPress Customizer.
+* The sitemap title links back to your homepage. All other external links are set to "nofollow".
+* These styles aren't seen by Search Engines. But it's a very nice addition for your fellow human visitors.
+* The styles are cached! To refresh this cache, simply hit `CRTL+SHIFT+R` or `CMD+SHIFT+R`.
 
 **For everyone - About the Performance settings:**
 
@@ -272,10 +307,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * This plugin now has magic methods that prevent the site from crashing if inaccessible methods or properties have been called.
 	* This allowed me to easily remove redundant public methods and properties without ramification.
 
-**For developers - Many new filters:**
+**For developers - Many new filters and actions:**
 
-* Because we've pulled out most of the plugin and theme compatibility from the interal class scope, we've added filters where they previously applied.
-* Documentation for these new filters will be added soon. Stay tuned!
+* Because we've pulled out most of the plugin and theme compatibility from the interal class scope, we've added filters and actions where they previously applied.
+* Documentation for these new filters and actions will be added soon. Stay tuned!
 
 **Detailed log:**
 /
@@ -284,7 +319,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **For everyone:**
 
 * **Added:**
-	/
 	* Added Social Image URL for Posts upload.
 		* This image can get manually resized and cropped on upload to abide to Facebook's Open Graph standards.
 			* This resizer shows you Facebook's prefered dimensions by default.
@@ -317,7 +351,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Did you know that you can view the SEO meta generation time within the page's source?
 		* Layout settings. You might want to take a look at these settings, if:
 			* You don't need or even dislike the SEO Bar.
-			* You want to adjust visual impairment settings. ?? This is already possible (although hidden), slightly redundant.
+			* You want to adjust visual impairment settings.
 		* Canonical settings. You should only change these settings, if:
 			* Your website is accessible through both HTTP and HTTPS
 			* Link relationship settings have been put here.
@@ -331,6 +365,13 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* It's so professional, even the stylesheet URL is masked.
 		* It's a virtual file, just like the sitemap is.
 		* This file is cached in the user's browser on request by default.
+			* To clear the cache, hit `CRTL+SHIFT+R` or `CMD+SHIFT+R`.
+		* This stylesheet can be customized:
+			1. You can set a background and accent color.
+				* The font color is automatically generated based on the background color input.
+			1. You can select whether to display the site logo.
+				* Logo will be squared.
+				* Requires WordPress 4.5+ theme logo support.
 * **Changed:**
 	* "Knowledge Graph" name has been converted into "Authorized Presence". Its usage, output and effect are still the same.
 	* The first two description separator buttons are no longer marked "recommended".
@@ -350,7 +391,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* The sitemap cache now supports multiple languages. This means more than one sitemap can be created.
 	* Removed redundant and duplicated checks on the Open Graph image generation.
 	* Method `the_seo_framework()->generate_title()`, `the_seo_framework()->get_notagline_title()` and `the_seo_framework()->title()` with `$args['page_on_front']` now supports outputting the Home Page title, instead of "Untitled".
-	* All of the post meta is now sanitized before inserted in the databse.
+	* All of the post meta is now sanitized before inserted in the database.
 		* This is not a security improvement per se, but rather a consistency improvement so you know what the output will be.
 		* Added sanitation:
 			* One/zero for all checkboxes.
@@ -369,18 +410,13 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* The description example field now better reflects the actual output.
 	* The admin JS file is now much smaller (~30%) and includes several performance optimizations.
 	* Added a notification in the Home Page metabox when WPML is active that it should be configured on the applicable pages.
-	/
 	* Private and Password Protected posts and pages now recieve special treatment:
 		1. They're always marked "noindex".
 		1. Their auto-generated description is now disabled.
-	* TODO Header, Site Icon and Site Logo images are now downsized if the image is exceeding 1500px in either height or width (or both).
-	/	* 2.9.0
-	* TODO The sitename set in "Organization or Personal Name" is now used consistently throughout the Schema.org output settings.
-		* 2.9.0
 * **Updated:**
 	/
 	* TODO Translation POT file.
-	* All previous automated description and TODO Schema.org transients have been invalidated.
+	* All previous automated description, sitemap and Schema.org transients have been invalidated.
 		* Old caches will automatically be cleaned from the database.
 		* New caches will automatically be set up. This might cause a small performance hit after the update, which should automatically be resolved.
 	* Upon updating this plugin, the old term metadata (The SEO Framework 2.6.6 and lower) will be removed.
@@ -445,6 +481,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **Methods are no longer annotated by their classname in the changelog; instead they're now annotated with the object `the_seo_framework()->`**.
 **All methods are treated as final, this means no duplicated method names should exist within the object. Except for magic methods, like `__construct()`.**
 
+* **Updated:**
+	* Plugin version is now at 2.8.0.
+	* Plugin database version is now at 2804.
 * **Added:**
 	* All classes and many functions are now converted to use namespaces.
 		* Package and Namespace: `The_SEO_Framework`
@@ -566,6 +605,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* `tsf.i18n`
 			* `tsf.states`
 			* `tsf.params`
+			* `tsf.other`
 			* `tsf.settingsChanged`
 			* `tsf.hasInput`
 			* `tsf.cropper`, which is only public for internal reasons.
@@ -677,7 +717,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* `(bool) the_seo_framework_allow_transient_flush`. Barrier filter for allowing transient flush; which you need to initiate yourself. Warning: experimental.
 		* `(array) the_seo_framework_sitemap_schemas`. Used to specify the type of sitemap schemas.
 		* `(array) the_seo_framework_sitemap_logo`. Used to adjust or remove the sitemap logo. Defaults to WP 4.5 logo.
-		* `(string) the_seo_framework_sitemap_color`. Used to adjust the sitemap's theme color. Defaults to 0ebfe9.
+		* `(string) the_seo_framework_sitemap_color_main`. Used to adjust the sitemap's theme color. Defaults to 333 (from option).
+		* `(string) the_seo_framework_sitemap_color_accent`. Used to adjust the sitemap's theme color. Defaults to 0ebfe9 (from option).
+		* `(string) the_seo_framework_sitemap_relative_font_color`. Used to adjust the sitemap's relative font color. Calculated from `the_seo_framework_sitemap_color_main`.
 		* `(bool) the_seo_framework_indicator_sitemap`. Used to allow for sitemap generation indicator.
 		* `(array) the_seo_framework_sanitize_redirect_args`. Used to filter redirection URL path inputs.
 			* Awesome in combination with filter `(bool) the_seo_framework_allow_external_redirect`; Which, when set to false, will always invoke the previous filter.
@@ -694,6 +736,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* `(bool) the_seo_framework_warn_homepage_global_title`. Used to add a notification in the homepage metabox. Ideal for translation plugins.
 		* `(bool) the_seo_framework_warn_homepage_global_description`. Used to add a notification in the homepage metabox. Ideal for translation plugins.
 		* `(array) the_seo_framework_seo_column_keys_order`. Used to add or filter the order in which The SEO Framework determines the placement of The SEO Bar.
+	* **Changed:**
+		* `(array) the_seo_framework_sitemap_exclude_ids` will no longer exclude page ID 0 for performance reasons (3 checks instead of 6).
 	* **Removed:**
 		* `(array) the_seo_framework_knowledgegraph_settings_tabs`. These tabs have been moved in the Schema metabox.
 		* `the_seo_framework_detect_seo_plugins`. This was previously deprecated.
@@ -707,7 +751,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* `the_seo_framework_init`. Runs before when The SEO Framework alters global stuff.
 		* `the_seo_framework_admin_init`. Runs before when The SEO Framework alters admin stuff.
 		* `the_seo_framework_front_init`. Runs before when The SEO Framework alters front-end stuff.
-	* **Changed:
+	* **Changed:**
 		* `the_seo_framework_do_after_output`. Now moved 2 lines down to be after the output echo.
 	* **Removed:**
 		* `the_seo_framework_knowledge_metabox_before`
@@ -723,10 +767,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 == Upgrade Notice ==
 
 = 2.8.0 =
-In this update WordPress 4.3 and PHP 5.2 support have been dropped for better code quality.
+In the 2.8.0 update WordPress 4.3 and PHP 5.2 support have been dropped for better code quality.
 
 = 2.7.0 =
-This update is required for the upcoming Extension Manager plugin and includes many improvements.
+The 2.7.0 update is required for the upcoming Extension Manager plugin and includes many improvements.
 
 == Other Notes ==
 

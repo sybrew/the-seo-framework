@@ -71,21 +71,10 @@ switch ( $instance ) :
 
 		$home_id = $this->get_the_front_page_ID();
 		$home_title = $this->escape_title( $this->get_option( 'homepage_title' ) );
-		$blog_description = $this->get_blogdescription();
 
-		/**
-		 * Home Page Tagline settings.
-		 * @since 2.3.8
-		 *
-		 * @param string $home_tagline The tagline option.
-		 * @param string $home_tagline_placeholder The option placeholder. Always defaults to description.
-		 * @param string|void $home_tagline_value The tagline input value.
-		 * @param string $blog_description Override blog description with option if applicable.
-		 */
 		$home_tagline = $this->get_field_value( 'homepage_title_tagline' );
-		$home_tagline_placeholder = $blog_description;
+		$home_tagline_placeholder = $this->escape_title( $this->get_blogdescription() );
 		$home_tagline_value = $home_tagline ? $home_tagline : '';
-		$blog_description = $home_tagline_value ? $home_tagline_value : $blog_description;
 
 		/**
 		 * Create a placeholder for when there's no custom HomePage title found.
@@ -185,7 +174,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php $this->field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title_tagline' ); ?>" placeholder="<?php echo $home_tagline_placeholder ?>" value="<?php echo esc_attr( $home_tagline_value ); ?>" />
+			<input type="text" name="<?php $this->field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title_tagline' ); ?>" placeholder="<?php echo esc_attr( $home_tagline_placeholder ); ?>" value="<?php echo esc_attr( $home_tagline_value ); ?>" />
 		</p>
 
 		<hr>
@@ -215,6 +204,7 @@ switch ( $instance ) :
 		 */
 		if ( apply_filters( 'the_seo_framework_warn_homepage_global_title', false ) && $this->has_page_on_front() ) {
 			printf( '<p class="attention">%s</p>',
+				//* Markdown escapes.
 				$this->convert_markdown(
 					sprintf(
 						/* translators: %s = Home page URL markdown */
@@ -343,7 +333,9 @@ switch ( $instance ) :
 			$checked_home = ' - <a href="' . esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) ) . '" target="_blank" class="attention" title="' . esc_attr__( 'View Home Page Settings', 'autodescription' ) . '" >' . esc_html__( 'Checked in Page', 'autodescription' ) . '</a>';
 		}
 
-		?><h4><?php esc_html_e( 'Home Page Robots Meta Settings', 'autodescription' ); ?></h4><?php
+		?>
+		<h4><?php esc_html_e( 'Home Page Robots Meta Settings', 'autodescription' ); ?></h4>
+		<?php
 
 		$noindex_note = $noindex_post ? $checked_home : '';
 		$nofollow_note = $nofollow_post ? $checked_home : '';

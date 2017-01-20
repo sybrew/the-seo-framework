@@ -587,7 +587,10 @@ class Detect extends Render {
 
 		$wp_version = $GLOBALS['wp_version'];
 
-		// Add a .0 if WP outputs something like 4.3 instead of 4.3.0
+		/**
+		 * Add a .0 if WP outputs something like 4.3 instead of 4.3.0
+		 * Does not consider 4.10.x, but that's OK with the way WP handles updates.
+		 */
 		if ( 3 === strlen( $wp_version ) )
 			$wp_version = $wp_version . '.0';
 
@@ -1016,5 +1019,21 @@ class Detect extends Render {
 			return $pof;
 
 		return $pof = 'page' === \get_option( 'show_on_front' );
+	}
+
+	/**
+	 * Determines if the current theme supports the custom logo addition.
+	 * Also checks WP version.
+	 *
+	 * @since 2.8.0
+	 * @staticvar $bool $cache
+	 *
+	 * @return bool
+	 */
+	public function can_use_logo() {
+
+		static $cache = null;
+
+		return isset( $cache ) ? $cache : $this->wp_version( '4.5.0', '>=' ) && current_theme_supports( 'custom-logo' );
 	}
 }

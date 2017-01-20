@@ -502,6 +502,16 @@ class Metaboxes extends Site_Options {
 	}
 
 	/**
+	 * Sitemaps Metabox Style Tab output.
+	 *
+	 * @since 2.8.0
+	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
+	 */
+	public function sitemaps_metabox_style_tab() {
+		$this->get_view( 'metaboxes/sitemaps-metabox', array(), 'style' );
+	}
+
+	/**
 	 * Feed Metabox on the Site SEO Settings page.
 	 *
 	 * @since 2.5.2

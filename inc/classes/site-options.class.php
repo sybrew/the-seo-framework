@@ -236,13 +236,16 @@ class Site_Options extends Sanitize {
 
 			// Sitemaps.
 			'sitemaps_output'		=> 1,	// Output of sitemaps
-			'sitemap_styles'		=> 1,	// Whether to style the sitemap
 			'sitemaps_modified'		=> 1,	// Add sitemaps modified time
 			'sitemap_timestamps'	=> '1',	// Sitemaps modified time format, dropdown
 			'sitemaps_robots'		=> 1,	// Add sitemaps location to robots.txt
 			'ping_google'			=> 1,	// Ping Google
 			'ping_bing'				=> 1,	// Ping Bing
 			'ping_yandex'			=> 1,	// Ping Yandex
+			'sitemap_styles'		=> 1,	// Whether to style the sitemap
+			'sitemap_logo'			=> 1,	// Whether to add logo to sitemap
+			'sitemap_color_main'	=> '333',		// Sitemap main color
+			'sitemap_color_accent'	=> '00cd98',	// Sitemap accent color
 
 			// Feed.
 			'excerpt_the_feed'		=> 1,	// Generate feed Excerpts
@@ -350,12 +353,13 @@ class Site_Options extends Sanitize {
 			'knowledge_logo'		=> 0,	// Fetch logo from WP Favicon
 
 			'sitemaps_output'		=> 0,	// Output of sitemaps
-			'sitemap_styles'		=> 0,	// Whether to style the sitemap
 			'sitemaps_modified'		=> 0,	// Add sitemaps modified time
 			'sitemaps_robots'		=> 0,	// Add sitemaps location to robots.txt
 			'ping_google'			=> 0,	// Ping Google
 			'ping_bing'				=> 0,	// Ping Bing
 			'ping_yandex'			=> 0,	// Ping Yandex
+			'sitemap_styles'		=> 0,	// Whether to style the sitemap
+			'sitemap_logo'			=> 0,	// Whether to add a logo to the sitemap
 
 			'excerpt_the_feed'		=> 0,	// Generate feed Excerpts
 			'source_the_feed'		=> 0,	// Add backlink at the end of the feed

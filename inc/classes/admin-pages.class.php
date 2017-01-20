@@ -518,9 +518,9 @@ class Admin_Pages extends Inpost {
 
 		if ( $echo ) {
 			//* Already escaped.
-			echo '<div class="tsf-fields">' . PHP_EOL . $input . PHP_EOL . '</div>';
+			echo '<div class="tsf-fields">' . $input . '</div>';
 		} else {
-			return '<div class="tsf-fields">' . PHP_EOL . $input . PHP_EOL . '</div>';
+			return '<div class="tsf-fields">' . $input . '</div>';
 		}
 	}
 
@@ -558,6 +558,48 @@ class Admin_Pages extends Inpost {
 						. $label
 					. '</label>'
 				. '</span>'
+				. $description
+				;
+
+		return $output;
+	}
+
+	/**
+	 * Return a text field wrapper.
+	 *
+	 * @since 2.8.0
+	 * @ignore Unused.
+	 * @access private
+	 *
+	 * @param string $field_id The option ID. Must be within the Autodescription settings.
+	 * @param string $label The checkbox description label.
+	 * @param string $description Addition description to place beneath the checkbox.
+	 * @param string $placeholder The text field placeholder.
+	 * @param bool $escape Whether to escape the label and description.
+	 * @return HTML text field output.
+	 */
+	public function make_textfield( $field_id = '', $label = '', $description = '', $placeholder = '', $escape = true ) {
+
+		if ( $escape ) {
+			$description = \esc_html( $description );
+			$label = \esc_html( $label );
+			$placeholder = \esc_attr( $placeholder );
+		}
+
+		$description = $description ? '<p class="description tsf-option-spacer">' . $description . '</p>' : '';
+
+		$output = '<p>'
+					. '<label for="' . $this->field_id( $field_id ) . '" class="tsf-toblock">'
+						. '<strong>' . $label . '</strong>'
+					. '</label>'
+				. '</p>'
+				. '<p>'
+					. '<input type="text" name="' . $this->field_name( $field_id ) . '"'
+						. ' class="large-text" id="' . $this->field_id( $field_id ) . '"'
+						. ' placeholder="' . $placeholder . '"'
+						. ' value="' . $this->get_field_value( $field_id ) . '"'
+					. ' />'
+				. '</p>'
 				. $description
 				;
 

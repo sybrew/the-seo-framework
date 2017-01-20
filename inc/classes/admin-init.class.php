@@ -140,10 +140,14 @@ class Admin_Init extends Init {
 		//* Register the script.
 		$this->_register_admin_javascript();
 
-		\wp_enqueue_script( $this->js_name );
-
 		if ( $this->is_post_edit() )
 			\wp_enqueue_media();
+
+		if ( $this->is_seo_settings_page() ) {
+			\wp_enqueue_script( 'wp-color-picker' );
+		}
+
+		\wp_enqueue_script( $this->js_name );
 
 		/**
 		 * Localize JavaScript.
@@ -383,6 +387,10 @@ class Admin_Init extends Init {
 
 		//* Register the script.
 		$this->register_admin_css();
+
+		if ( $this->is_seo_settings_page() ) {
+			\wp_enqueue_style( 'wp-color-picker' );
+		}
 
 		\wp_enqueue_style( $this->css_name );
 

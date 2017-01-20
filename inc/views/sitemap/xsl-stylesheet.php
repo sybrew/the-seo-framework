@@ -13,20 +13,39 @@ if ( $this->add_title_additions() )
  * Applies filters 'the_seo_framework_sitemap_logo' : array
  * @since 2.8.0
  */
-$logo = (array) apply_filters( 'the_seo_framework_sitemap_logo', wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ), array( 29, 29 ) ) );
-if ( ! empty( $logo[0] ) ) {
-	$logo = sprintf( '<img src="%s" width="%s" height="%s" />', esc_url( $logo[0] ), esc_attr( $logo[1] ), esc_attr( $logo[2] ) );
+if ( $this->is_option_checked( 'sitemap_logo' ) ) {
+
+	$logo = $this->can_use_logo() ? wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ), array( 29, 29 ) ) : array();
+	$logo = (array) apply_filters( 'the_seo_framework_sitemap_logo', $logo );
+
+	if ( ! empty( $logo[0] ) ) {
+		$logo = sprintf( '<img src="%s" width="%s" height="%s" />', esc_url( $logo[0] ), esc_attr( $logo[1] ), esc_attr( $logo[2] ) );
+	} else {
+		$logo = '';
+	}
 } else {
 	$logo = '';
 }
 
+$colors = $this->get_sitemap_colors();
+
 /**
- * Applies filters 'the_seo_framework_sitemap_color' : string
+ * Applies filters 'the_seo_framework_sitemap_color_main' : string
  * @since 2.8.0
- * @see https://github.com/EastDesire/jscolor for option? It's GPLv3 :)
- * Or... use a dropdown of common WP/TSF colors.
  */
-$sitemap_color = (string) ltrim( apply_filters( 'the_seo_framework_sitemap_color', '00cd98' ), '#' );
+$sitemap_color_main = '#' . $this->s_color_hex( (string) apply_filters( 'the_seo_framework_sitemap_color_accent', $colors['main'] ) );
+
+/**
+ * Applies filters 'the_seo_framework_sitemap_color_accent' : string
+ * @since 2.8.0
+ */
+$sitemap_color_accent = '#' . $this->s_color_hex( (string) apply_filters( 'the_seo_framework_sitemap_color_main', $colors['accent'] ) );
+
+/**
+ * Applies filters 'the_seo_framework_sitemap_relative_font_color' : string
+ * @since 2.8.0
+ */
+$relative_font_color = '#' . $this->s_color_hex( (string) apply_filters( 'the_seo_framework_sitemap_relative_font_color', $this->get_relatitve_fontcolor( $sitemap_color_main ) ) );
 
 /**
  * Applies filters 'the_seo_framework_indicator_sitemap' : boolean
@@ -47,7 +66,8 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?>
 				<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 				<style type="text/css">
 					body {
-						font: 14px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+						font-size: 14px;
+						font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
 						margin: 0;
 					}
 					a {
@@ -55,22 +75,24 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?>
 						text-decoration: none;
 					}
 					h1 {
-						font: 24px Verdana,Geneva,sans-serif;
+						font-size: 24px;
+						font-family: Verdana,Geneva,sans-serif;
+						font-weight: normal;
 						margin: 0;
-						color: #' . $sitemap_color . ';
+						color: ' . $sitemap_color_accent . ';
 					}
 					h1 img {
 						vertical-align: bottom;
 						margin-right: 14px;
 					}
 					#description {
-						background-color: #333;
-						border-bottom: 7px solid #' . $sitemap_color . ';
-						color: #f1f1f1;
+						background-color: ' . $sitemap_color_main . ';
+						border-bottom: 7px solid ' . $sitemap_color_accent . ';
+						color: ' . $relative_font_color . ';
 						padding: 30px 30px 20px;
 					}
 					#description a {
-						color: #f1f1f1;
+						color: ' . $relative_font_color . ';
 					}
 					#content {
 						padding: 10px 30px 30px;
@@ -81,19 +103,19 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?>
 					}
 					table {
 						min-width: 600px;
+						border-spacing: 0;
 					}
 					th, td {
 						font-size: 12px;
+						border: 0px solid;
+						padding: 10px 15px;
 					}
 					th {
 						text-align: left;
-						border-bottom: 1px solid #ccc;
-					}
-					th, td {
-						padding: 10px 15px;
+						border-bottom: 1px solid ' . $sitemap_color_accent . ';
 					}
 					.odd {
-						background-color: #f1f1f1;
+						background-color: #eaeaea;
 					}
 					#footer {
 						margin: 20px 30px;

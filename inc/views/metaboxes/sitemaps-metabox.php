@@ -35,24 +35,29 @@ switch ( $instance ) :
 			 */
 			$default_tabs = array(
 				'general' => array(
-					'name' 		=> __( 'General', 'autodescription' ),
-					'callback'	=> array( $this, 'sitemaps_metabox_general_tab' ),
-					'dashicon'	=> 'admin-generic',
+					'name'     => __( 'General', 'autodescription' ),
+					'callback' => array( $this, 'sitemaps_metabox_general_tab' ),
+					'dashicon' => 'admin-generic',
 				),
 				'robots' => array(
-					'name'		=> 'Robots.txt',
-					'callback'	=> array( $this, 'sitemaps_metabox_robots_tab' ),
-					'dashicon'	=> 'share-alt2',
+					'name'     => 'Robots.txt',
+					'callback' => array( $this, 'sitemaps_metabox_robots_tab' ),
+					'dashicon' => 'share-alt2',
 				),
 				'timestamps' => array(
-					'name'		=> __( 'Timestamps', 'autodescription' ),
-					'callback'	=> array( $this, 'sitemaps_metabox_timestamps_tab' ),
-					'dashicon'	=> 'backup',
+					'name'     => __( 'Timestamps', 'autodescription' ),
+					'callback' => array( $this, 'sitemaps_metabox_timestamps_tab' ),
+					'dashicon' => 'backup',
 				),
 				'notify' => array(
-					'name'		=> _x( 'Ping', 'Ping or notify Search Engine', 'autodescription' ),
-					'callback'	=> array( $this, 'sitemaps_metabox_notify_tab' ),
-					'dashicon'	=> 'megaphone',
+					'name'     => _x( 'Ping', 'Ping or notify Search Engine', 'autodescription' ),
+					'callback' => array( $this, 'sitemaps_metabox_notify_tab' ),
+					'dashicon' => 'megaphone',
+				),
+				'style' => array(
+					'name'     => __( 'Style', 'autodescription' ),
+					'callback' => array( $this, 'sitemaps_metabox_style_tab' ),
+					'dashicon' => 'art',
 				),
 			);
 
@@ -117,16 +122,6 @@ switch ( $instance ) :
 					__( 'Output Sitemap?', 'autodescription' ),
 					'',
 					true
-				), true
-			);
-
-			//* Echo checkbox.
-			$this->wrap_fields(
-				$this->make_checkbox(
-					'sitemap_styles',
-					esc_html__( 'Style Sitemap?', 'autodescription' ) . ' ' . $this->make_info( __( 'This makes the sitemap more readable for humans', 'autodescription' ), '', false ),
-					'',
-					false
 				), true
 			);
 		endif;
@@ -249,9 +244,9 @@ switch ( $instance ) :
 		<?php
 
 		$engines = array(
-			'ping_google'	=> 'Google',
-			'ping_bing' 	=> 'Bing',
-			'ping_yandex'	=> 'Yandex',
+			'ping_google' => 'Google',
+			'ping_bing'   => 'Bing',
+			'ping_yandex' => 'Yandex',
 		);
 
 		$ping_checkbox = '';
@@ -263,6 +258,73 @@ switch ( $instance ) :
 
 		//* Echo checkbox.
 		$this->wrap_fields( $ping_checkbox, true );
+		break;
+
+	case 'the_seo_framework_sitemaps_metabox_style' :
+
+		?>
+		<h4><?php esc_html_e( 'Sitemap Styling Settings', 'autodescription' ); ?></h4>
+		<?php
+
+		$this->description( __( 'You can style the sitemap to give it a more personal look. Styling the sitemap has no SEO value whatsoever.', 'autodescription' ) );
+
+		?>
+		<hr>
+
+		<h4><?php esc_html_e( 'Enable styling', 'autodescription' ); ?></h4>
+		<?php
+
+		//* Echo checkboxes.
+		$this->wrap_fields(
+			$this->make_checkbox(
+				'sitemap_styles',
+				esc_html__( 'Style Sitemap?', 'autodescription' ) . ' ' . $this->make_info( __( 'This makes the sitemap more readable for humans', 'autodescription' ), '', false ),
+				'',
+				false
+			), true
+		);
+
+		?>
+		<hr>
+
+		<h4><?php esc_html_e( 'Style configuration', 'autodescription' ); ?></h4>
+		<?php
+
+		if ( $this->can_use_logo() ) :
+			//* Echo checkbox.
+			$this->wrap_fields(
+				$this->make_checkbox(
+					'sitemap_logo',
+					esc_html__( 'Add site logo?', 'autodescription' ) . ' ' . $this->make_info( __( 'The logo is set in Customizer', 'autodescription' ), '', false ),
+					'',
+					false
+				), true
+			);
+		endif;
+
+		$current_colors = $this->get_sitemap_colors();
+		$default_colors = $this->get_sitemap_colors( true );
+
+		?>
+		<p>
+			<label for="<?php $this->field_id( 'sitemap_color_main' ); ?>">
+				<strong><?php esc_html_e( 'Sitemap header background color', 'autodescription' ); ?></strong>
+			</label>
+		</p>
+		<p>
+			<input type="text" name="<?php $this->field_name( 'sitemap_color_main' ); ?>" class="tsf-color-picker" id="<?php $this->field_id( 'sitemap_color_main' ); ?>" placeholder="<?php echo esc_attr( $default_colors['main'] ); ?>" value="<?php echo esc_attr( $current_colors['main'] ); ?>" data-tsf-default-color="<?php echo esc_attr( $default_colors['main'] ); ?>" />
+		</p>
+
+		<p>
+			<label for="<?php $this->field_id( 'sitemap_color_accent' ); ?>">
+				<strong><?php esc_html_e( 'Sitemap title and lines color', 'autodescription' ); ?></strong>
+			</label>
+		</p>
+		<p>
+			<input type="text" name="<?php $this->field_name( 'sitemap_color_accent' ); ?>" class="tsf-color-picker" id="<?php $this->field_id( 'sitemap_color_accent' ); ?>" placeholder="<?php echo esc_attr( $default_colors['accent'] ); ?>" value="<?php echo esc_attr( $current_colors['accent'] ); ?>" data-tsf-default-color="<?php echo esc_attr( $default_colors['accent'] ); ?>" />
+		</p>
+		<?php
+
 		break;
 
 	default :

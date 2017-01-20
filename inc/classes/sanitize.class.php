@@ -253,10 +253,11 @@ class Sanitize extends Admin_Pages {
 				'ld_json_breadcrumbs',
 
 				'sitemaps_output',
-				'sitemap_styles',
 				'sitemaps_robots',
 				'sitemaps_modified',
 				'sitemap_timestamps',
+				'sitemap_styles',
+				'sitemap_logo',
 			)
 		);
 
@@ -332,6 +333,15 @@ class Sanitize extends Admin_Pages {
 			$this->settings_field,
 			array(
 				'twitter_card',
+			)
+		);
+
+		$this->add_option_filter(
+			's_color_hex',
+			$this->settings_field,
+			array(
+				'sitemap_color_main',
+				'sitemap_color_accent',
 			)
 		);
 	}
@@ -902,7 +912,7 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
-	 * Sanitize the Redirect URL
+	 * Sanitizes the Redirect URL
 	 *
 	 * @since 2.2.4
 	 * @since 2.8.0 Method is now public.
@@ -995,5 +1005,28 @@ class Sanitize extends Admin_Pages {
 
 		//* Save url
 		return $new_value;
+	}
+
+	/**
+	 * Sanitizes color hexadecimals.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @param string $new_value String with potentially unwanted hex values.
+	 * @return string The sanitized color hex.
+	 */
+	public function s_color_hex( $new_value ) {
+
+		$color = trim( $new_value, '# ' );
+
+		if ( '' === $color )
+			return '';
+
+		$color = $color;
+
+		if ( preg_match( '|^([A-Fa-f0-9]{3}){1,2}$|', $color ) )
+			return $color;
+
+		return '';
 	}
 }
