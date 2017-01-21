@@ -102,9 +102,6 @@ Take a look at the API documentation located at [The SEO Framework API Docs](htt
 
 **We call this The SEO Bar. Check out the [Screenshots](https://wordpress.org/plugins/autodescription/screenshots/#plugin-info) to see how it helps you!**
 
-> This plugin is fully compatible with the [Domain Mapping plugin by WPMUdev](https://premium.wpmudev.org/project/domain-mapping/) and the [Domain Mapping plugin by Donncha](https://wordpress.org/plugins/wordpress-mu-domain-mapping/).<br>
-> This compatibility ensures **prevention of canonical errors**. This way your site will always be correctly indexed, no matter what you use!<br>
-
 = Hardcore caching =
 This plugin's code is highly optimized on PHP-level and uses variable, object and transient caching. This means that there's little extra page load time from this plugin, even with more Meta tags used.
 A caching plugin isn't even needed for this plugin as you won't notice a difference, however it's supported wherever best suited.
@@ -232,6 +229,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * Google's Knowledge Graph has been transformed into something much bigger last year, so the related settings now fall under a new name: "Authorized Presence".
 * You can now more granularly control your website's social images. With this much asked for feature, you're now really in control.
 * You can now also control the style of your sitemap. The sitemap title will link back to your homepage when clicked upon.
+
+**Survey:**
+
+* After updating, please fill in our [Update Survey](https://theseoframework.com/?p=1781): tell us what can be done better.
 
 **Feature highlights:**
 

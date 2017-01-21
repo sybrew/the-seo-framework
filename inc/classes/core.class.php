@@ -734,64 +734,52 @@ class Core {
 			$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
 		}
 
+		$hex = str_split( $hex, 2 );
+
 		//* Convert to numerical values.
 		$r = hexdec( $hex[0] );
 		$g = hexdec( $hex[1] );
 		$b = hexdec( $hex[2] );
 
-		//* Convert to sRGB for luminance.
+		//* Convert to sRGB for relative luminance.
 		$sr = 0.2125 * $r;
 		$sg = 0.7154 * $g;
 		$sb = 0.0721 * $b;
+		$rel_lum = 1 - ( $sr + $sg + $sb ) / 256;
 
-		//* Get relative luminance.
-		$rel_lum = $sr + $sg + $sb;
-
-		//* Convert to relative intvals between 1 and 0 for HSL
+		//* Convert to relative intvals between 1 and 0 for L from HSL
+		/*
 		$rr = $r / 255;
 		$rg = $g / 255;
 		$rb = $b / 255;
-
-		//* Get the L from HSL.
 		$luminance = ( min( $rr, $rg, $rb ) + max( $rr, $rg, $rb ) ) / 2;
+		*/
 
-		//* Get relative greyscale according to W3C.
+		//* Get perceptive luminance (greyscale) according to W3C.
 		$gr = 0.2989 * $r;
 		$gg = 0.5870 * $g;
 		$gb = 0.1140 * $b;
-
-		//* Fix 8 bit overflow and underflow.
-		if ( $gr < 0 ) {
-			$gr = 0;
-		} elseif ( $gr > 255 ) {
-			$gr = 255;
-		}
-
-		if ( $gg < 0 ) {
-			$gg = 0;
-		} elseif ( $gg > 255 ) {
-			$gg = 255;
-		}
-
-		if ( $gb < 0 ) {
-			$gb = 0;
-		} elseif ( $gb > 255 ) {
-			$gb = 255;
-		}
+		$per_lum = 1 - ( $gr + $gg + $gb ) / 255;
 
 		//* Invert colors if they hit luminance boundaries.
-		if ( $luminance < 0.033 ) {
-			$gr = 255 - $gr;
-			$gg = 255 - $gg;
-			$gb = 255 - $gb;
+		if ( $rel_lum < 0.5 ) {
+			//* Build dark. Add softness.
+			$gr = $gr * $per_lum / 8 / 0.2989 + 8 * 0.2989;
+			$gg = $gg * $per_lum / 8 / 0.5870 + 8 * 0.5870;
+			$gb = $gb * $per_lum / 8 / 0.1140 + 8 * 0.1140;
+		} else {
+			//* Build light. Add (subtract) softness.
+			$gr = 255 - $gr * $per_lum / 8 * 0.2989 - 8 * 0.2989;
+			$gg = 255 - $gg * $per_lum / 8 * 0.5870 - 8 * 0.5870;
+			$gb = 255 - $gb * $per_lum / 8 * 0.1140 - 8 * 0.1140;
 		}
 
 		//* Complete hexvals.
-		$dgr = str_pad( dechex( $gr ), 2, '0', STR_PAD_LEFT );
-		$dgg = str_pad( dechex( $gg ), 2, '0', STR_PAD_LEFT );
-		$dgb = str_pad( dechex( $gb ), 2, '0', STR_PAD_LEFT );
+		$retr = str_pad( dechex( $gr ), 2, '0', STR_PAD_LEFT );
+		$retg = str_pad( dechex( $gg ), 2, '0', STR_PAD_LEFT );
+		$retb = str_pad( dechex( $gb ), 2, '0', STR_PAD_LEFT );
 
-		return $dgr . $dgg . $dgb;
+		return $retr . $retg . $retb;
 	}
 
 	/**
