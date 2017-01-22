@@ -608,7 +608,7 @@ body.js .tsf-metaboxes .tsf-tabs-content.tsf-active-tab-content {
 }
 
 #tsf-inpost-box .tsf-set-social-image {
-	margin-right: 7px;
+	margin-left: 7px;
 }
 
 #tsf-inpost-box input[type="text"]::-webkit-input-placeholder,

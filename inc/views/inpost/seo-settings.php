@@ -183,16 +183,6 @@ switch ( $instance ) :
 		</p>
 
 		<p>
-			<label for="autodescription_canonical">
-				<strong><?php esc_html_e( 'Custom Canonical URL', 'autodescription' ); ?></strong>
-				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/139066?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Preferred %s URL location', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
-			</label>
-		</p>
-		<p>
-			<input class="large-text" type="text" name="autodescription[_genesis_canonical_uri]" id="autodescription_canonical" placeholder="<?php echo esc_url( $canonical_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_genesis_canonical_uri' ) ); ?>" />
-		</p>
-
-		<p>
 			<label for="autodescription_socialimage">
 				<strong><?php esc_html_e( 'Custom Social Image URL', 'autodescription' ); ?></strong>
 				<a href="<?php echo esc_url( 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Preferred %s Social Image URL location', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
@@ -215,6 +205,16 @@ switch ( $instance ) :
 			<script>
 				document.getElementById( 'autodescription_socialimage-url' ).insertAdjacentHTML( 'afterend', '<input type="hidden" name="autodescription[_social_image_id]" id="autodescription_socialimage-id" value="<?php echo absint( $this->get_custom_field( '_social_image_id' ) ); ?>" />' );
 			</script>
+		</p>
+
+		<p>
+			<label for="autodescription_canonical">
+				<strong><?php esc_html_e( 'Custom Canonical URL', 'autodescription' ); ?></strong>
+				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/139066?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Preferred %s URL location', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
+			</label>
+		</p>
+		<p>
+			<input class="large-text" type="text" name="autodescription[_genesis_canonical_uri]" id="autodescription_canonical" placeholder="<?php echo esc_url( $canonical_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_genesis_canonical_uri' ) ); ?>" />
 		</p>
 
 		<p><strong><?php esc_html_e( 'Robots Meta Settings', 'autodescription' ); ?></strong></p>

@@ -261,9 +261,9 @@ class Doing_It_Right extends Generate_Ldjson {
 	 *
 	 * @since 2.1.9
 	 *
-	 * @param string $column the current column    : If it's a taxonomy, this is empty
-	 * @param int $post_id the post id             : If it's a taxonomy, this is the column name
-	 * @param string $tax_id this is empty         : If it's a taxonomy, this is the taxonomy id
+	 * @param string $column the current column : If it's a taxonomy, this is empty
+	 * @param int $post_id the post id          : If it's a taxonomy, this is the column name
+	 * @param string $tax_id this is empty      : If it's a taxonomy, this is the taxonomy id
 	 */
 	public function seo_bar_ajax( $column, $post_id, $tax_id = '' ) {
 
@@ -479,7 +479,7 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		if ( isset( $ajax_id ) ) {
 			//* Ajax handler.
-			$script = '<script>jQuery("#' . \esc_js( $ajax_id ) . '").on( "hover click", autodescription.statusBarHover );</script>';
+			$script = '<script>jQuery("#' . \esc_js( $ajax_id ) . '").on( "hover click", tsf.statusBarHover );</script>';
 
 			return sprintf( '<span class="%s" id="%s"><span class="tsf-seo-bar-inner-wrap">%s</span></span>', $class, \esc_attr( $ajax_id ), $content ) . $script;
 		}

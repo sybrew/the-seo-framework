@@ -67,7 +67,7 @@ Nobody has to know about the tools you've used to create your or someone else's 
 **This plugin goes further, behind the screens it:**
 
 * Prevents canonical errors with categories, pages, subdomains and Multisite Domain Mapping.
-* Disables 404 pages and empty categories from being indexed, even if they don't send a 404 response.
+* Discourages 404 pages and empty categories from being indexed, even if they don't send a 404 response.
 * Automatically notifies Google, Bing and Yandex on Post or Page update and deletion when sitemaps are enabled.
 
 = Generously personal =
@@ -196,17 +196,17 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Release date:**
 
-* January 23rd 2017? Earlier?
+* January 22nd 2017
 
 **Upgrade Notes:**
 
-***WordPress recommends using PHP 7.0+, we recommend using PHP 7.1***
+***WordPress recommends using PHP 7.0+***
 
 ***1: PHP 5.2 support has been dropped. Here's why:***
 
-* PHP 5.2 hasn't recieved updates for [over 5 years](http://php.net/eol.php) and using it is a major security risk.
+* PHP 5.2 hasn't received updates for [over 5 years](http://php.net/eol.php) and using it is a major security risk.
 * **This maintenance release completely drops support for PHP 5.2**. So, if you're using PHP 5.2, from this version on you can no longer run The SEO Framework.
-* PHP 5.2 is a practicality and convinience hindrance for developers and is also source for bugs. Sometimes, we have to split otherwise simple code over multiple lines just to support it.
+* PHP 5.2 is a practicality and convenience hindrance for developers and is also source for bugs. Sometimes, we have to split otherwise simple code over multiple lines just to support it.
 * WordPress is about to drop support for PHP 5.2 as well in the near future. See proposed [trac ticket 36335](https://core.trac.wordpress.org/ticket/36335).
 * Inform your host to keep updated! Read more about informing your host [here](https://wordpress.org/about/requirements/). If they decline, I'd urge you to switch hosts for your website's sake.
 
@@ -220,19 +220,25 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 *If, for whatever reason, you still wish to use PHP 5.2 and/or WordPress 4.3, The SEO Framework 2.7.3 still supports them.*
 
-***Note: PHP 5.3 and PHP 5.4 support will be dropped in the future. I want TSF to become much more modular, which isn't possible now.***
-
 **Summarized:**
 
 * This major release not only fixes various bugs, but also introduces new options for you to fiddle with.
 * You're now able to adjust General Settings easily! These settings include options to adjust the cache, (re)move the SEO Bar, and set a Canonical Scheme.
 * Google's Knowledge Graph has been transformed into something much bigger last year, so the related settings now fall under a new name: "Authorized Presence".
-* You can now more granularly control your website's social images. With this much asked for feature, you're now really in control.
+* You can now select your website's social images. With this much asked for feature, you're now really in control.
 * You can now also control the style of your sitemap. The sitemap title will link back to your homepage when clicked upon.
 
 **Survey:**
 
 * After updating, please fill in our [Update Survey](https://theseoframework.com/?p=1781): tell us what can be done better.
+
+**Love this plugin?**
+
+* Please consider [making a donation](https://theseoframework.com/donate/). Or, even better: [get yourself an Early Bird premium license](https://premium.theseoframework.com/shop/).
+
+**New plugin logo!**
+
+* Thank you so much [Terence](https://profiles.wordpress.org/pubdirltd/) for making this!
 
 **Feature highlights:**
 
@@ -289,11 +295,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **For everyone - About Social Image selection:**
 
 * A new settings has been added to every post, page and applicable custom post type that allows you to select your social image.
-* This social image automatically gets cropped according to Facebook's Open Graph Guidelines.
+* This social image automatically gets cropped per Facebook's Open Graph Guidelines.
 * The default "aspect ratio" for the cropper is automatically set, we recommend not changing this aspect ratio.
 * You can manually fill in the image URL as well. However, this will disable pre-emptively caching of the image on the Social Site as we then can't calculate the size.
 
-**SEO tip of the Update:**
+**SEO tip of the Update - Know your Knowledge:**
 
 * Not all SEO techniques are actively used on Google outside of the United States.
 * For example, the Site Name Schema.org script might not have any effect.
@@ -310,459 +316,12 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **For developers - Many new filters and actions:**
 
-* Because we've pulled out most of the plugin and theme compatibility from the interal class scope, we've added filters and actions where they previously applied.
+* Because we've pulled out most of the plugin and theme compatibility from the internal class scope, we've added filters and actions where they previously applied.
 * Documentation for these new filters and actions will be added soon. Stay tuned!
 
 **Detailed log:**
-/
-***What is work without [innovation](https://theseoframework.com/?p= TODO #detailed)?***
 
-**For everyone:**
-
-* **Added:**
-	* Added Social Image URL for Posts upload.
-		* This image can get manually resized and cropped on upload to abide to Facebook's Open Graph standards.
-			* This resizer shows you Facebook's prefered dimensions by default.
-			* This resizer always crops the images in order to have a maximum size of 1500px width/height.
-		* This image is used for Facebook (Open Graph) and Twitter and has the highest priority of output, over other found images.
-		* This image also works on custom post types.
-		* There's a built-in feature that prevents duplicated output with WooCommerce gallery images. Enjoy!
-	* The Authorized Presence (Knowledge Graph) now outputs its script regardless of social sites being filled in. This means that the logo is always used, if present, and that the organization/person type and name will always be highlighted.
-	* [Google's Social Profile Links](https://developers.google.com/search/docs/data-types/social-profile-links), this is the same as the previously named "Knowledge Graph"; but that brand has been expanded to cover more grounds.
-		* These settings have been moved to the Schema metabox. The Schema settings cover the [Knowledge Graph](https://www.google.com/intl/bn/insidesearch/features/search/knowledge.html).
-	* Site Logo detection! Brought to you in WordPress 4.5.
-		* Only when the theme supports it. You can upload one through the customizer (Site Identity).
-			* You'll also be notified on its support at the Schema Settings metabox "Presence" tab.
-		* This allows for a new fallback image! This one has priority over the Site Icon.
-		* The Knowledge Graph makes good use of this logo, it has priority over the Site Icon.
-	* A new General settings metabox! Containing:
-		* General Settings. Generalized general general settings, commander:
-			* Houston, this tab still needs to be filled in. So it's hidden for now.
-		* Performance Settings.
-			* Transient cache settings:
-				* You might wish to adjust these settings, if:
-					* You use object caching. The whole SEO output is stored in object cache for each page.
-					* You use page caching. The whole SEO output is then stored within the page cache already.
-					* Unlikely, your website's PHP engine and database are extremely optimized. Disabling the options might even improve performance.
-					* You have thousands of pages and posts. Disabling these options will desaturate the database over time, which might improve performance.
-			* Object cache settings:
-				* Only available when an object caching plugin has been detected (and it's turned on).
-				* You might wish to disable the description and Schema.org transient caches if this is in effect.
-					* These caches are leveled inside the object cache. However, these caches can be used elsewhere, like in the SEO Bar.
-			* Did you know that you can view the SEO meta generation time within the page's source?
-		* Layout settings. You might want to take a look at these settings, if:
-			* You don't need or even dislike the SEO Bar.
-			* You want to adjust visual impairment settings.
-		* Canonical settings. You should only change these settings, if:
-			* Your website is accessible through both HTTP and HTTPS
-			* Link relationship settings have been put here.
-	* A visual notification for when an actual `robots.txt` file has been found has been put in place in the Sitemap Settings metabox.
-		* This makes the Robots tab visible once more.
-	* A visual notification of the sitemap's whereabouts has been put in place in the Sitemap Settings metabox when a sitemap.xml file has been detected.
-	* This plugin now tests PHP and WordPress compatibility. In the admin screens you'll be notified on why the plugin fails to work after you activate or update the plugin.
-		* If everything goes correctly, it'll be a smooth upgrade. Enjoy!
-	* Improved object cache plugin support. These settings can be found in the General Settings metabox on the SEO Settings page.
-	* Added stylesheet to sitemap. Now your sitemap looks much more professional.
-		* It's so professional, even the stylesheet URL is masked.
-		* It's a virtual file, just like the sitemap is.
-		* This file is cached in the user's browser on request by default.
-			* To clear the cache, hit `CRTL+SHIFT+R` or `CMD+SHIFT+R`.
-		* This stylesheet can be customized:
-			1. You can set a background and accent color.
-				* The font color is automatically generated based on the background color input.
-			1. You can select whether to display the site logo.
-				* Logo will be squared.
-				* Requires WordPress 4.5+ theme logo support.
-* **Changed:**
-	* "Knowledge Graph" name has been converted into "Authorized Presence". Its usage, output and effect are still the same.
-	* The first two description separator buttons are no longer marked "recommended".
-		* This is because the description tag is less prominently used and does not need to support old browsers or old screen readers.
-	* The sitemap rewrite rules and transient no longer flush when just hitting "save settings" on the SEO Settings page.
-		* You now have to actually change an option.
-		* This also limits pinging to search engines. So they won't be notified anymore when nothing has changed.
-* **Improved:**
-	* When the description title additions exceed 72 characters, they will no longer be included in the automated description.
-		* This is also documented as a fix, but it states 154 characters instead of 72 there.
-		* This should reduce the chance of spamdexing by keyword spamming.
-		* This change is completely in line with Google's automated description guidelines. See "[Create good meta description](https://support.google.com/webmasters/answer/35624#1)" (heading "Programmatically generate descriptions").
-	* Object cache is no longer initiated on each page when no Object Caching plugin has been detected.
-	* The post/page/term object cache is now flushed on edit/save.
-	* The accessible counter type (with background color, type 1) is now a bit bolder.
-	* On Woocommerce list tables additional tabs injected by other plugins will likely not overflow anymore.
-	* The sitemap cache now supports multiple languages. This means more than one sitemap can be created.
-	* Removed redundant and duplicated checks on the Open Graph image generation.
-	* Method `the_seo_framework()->generate_title()`, `the_seo_framework()->get_notagline_title()` and `the_seo_framework()->title()` with `$args['page_on_front']` now supports outputting the Home Page title, instead of "Untitled".
-	* All of the post meta is now sanitized before inserted in the database.
-		* This is not a security improvement per se, but rather a consistency improvement so you know what the output will be.
-		* Added sanitation:
-			* One/zero for all checkboxes.
-			* Canonical URL is now cleaned, query parameters are no longer allowed:
-				1. They are a source of bugs, not every developer considers them at all times.
-				1. Google doesn't like them, they can also be seen as spam.
-				1. You shouldn't be using them anyway in a stable WordPress environment.
-					* WordPress has an awesome feature called the Rewrite API.
-				1. They are very confusing for the end-user.
-					* They also disturb engagement for trust. Clean URLs are always preferred.
-			* The rest is unchanged.
-	* When focussing on a field which is showing a placeholder, the placeholder is now blurred.
-	* Description and schema transient cache is no longer initiated on Search Pages.
-	* When settings are reset, the notification won't show up again when refreshing the page.
-	* The sitemap schemas are now more clearly defined for Search Engines and validators.
-	* The description example field now better reflects the actual output.
-	* The admin JS file is now much smaller (~30%) and includes several performance optimizations.
-	* Added a notification in the Home Page metabox when WPML is active that it should be configured on the applicable pages.
-	* Private and Password Protected posts and pages now recieve special treatment:
-		1. They're always marked "noindex".
-		1. Their auto-generated description is now disabled.
-	* `article:author` is no longer ouput on `og:type` website or product.
-	* `article:published_time` is no longer ouput on `og:type` product.
-	* `article:modified_time` is no longer ouput on `og:type` product.
-* **Updated:**
-	/
-	* TODO Translation POT file.
-	* All previous automated description, sitemap and Schema.org transients have been invalidated.
-		* Old caches will automatically be cleaned from the database.
-		* New caches will automatically be set up. This might cause a small performance hit after the update, which should automatically be resolved.
-	* Upon updating this plugin, the old term metadata (The SEO Framework 2.6.6 and lower) will be removed.
-		* If you've upgraded from version 2.6.6 or below to this version (or any later version), it will first make sure the old metadata is transferred correctly.
-* **Removed:**
-	* Knowledge Graph Settings metabox.
-		* Its content has been moved inside the Schema Settings metabox under the "General" and "Presence" tabs.
-	* Link Relationship Settings within the Social Meta Settings metabox.
-	 	* Its content has been moved to the General Settings metabox in the Canonical tab.
-	* WordPress 4.3.x support has been dropped. This plugin now requires WordPress 4.4 or later.
-	* WordPress 4.3.x and lower backwards compatibility functions have been removed.
-	* Several plugins have been removed from detection, to improve performance:
-		* Sitemap:
-			* Sitemap, does not output xml sitemap.
-		* Open Graph:
-			* Add Meta Tags, author abandoned plugin.
-			* Facebook, authors seem to have abandoned plugin.
-			* 2 Click Social Media Buttons, authors seem to have abandoned plugin.
-			* Shareaholic, the old version is removed from repository.
-			* SharePress, removed from repository.
-			* Facebook Revised Open Graph Meta Tag, removed from repository.
-			* Tweet, Like, Google +1 and Share, doesn't output Open Graph.
-			* Network Publisher, doesn't output Open Graph.
-		* Twitter:
-			* Eewee Twitter Card, authors seem to have abandoned plugin.
-			* Twitter Cards, authors seem to have abandoned plugin.
-			* Twitter Cards Meta, authors seem to have abandoned plugin.
-	* Redundant sanitation when fetching post meta.
-* **Fixed:**
-	* On some themes, the private prefix has been added to the title.
-	* When the title exceeds 154 characters, the description will no longer contain the complete post's content. Instead, the title will now be omitted and the description length has been limited to 155 characters.
-	* WPML sitemap generated URL path now reflects the language.
-	* qTranslateX canonical homepage URL doesn't output double paths anymore.
-	* Robots.txt settings outputted incorrect notice when site is blocked from robots through WordPress reading settings while the sitemap has been deactivated.
-	* The SEO Bar's on-hover tooltip is now once more correctly visible on mobile devices.
-	* The notification that's displayed when settings are reset is no longer displayed on refresh.
-	* The website's tagline is no longer shown in the description when no excerpt can be generated.
-	* The counter type now correctly updates for new user meta created after The SEO Framework 2.7.0+ is installed.
-	* HTML entities in custom post meta is now allowed.
-		* Note: The counter doesn't reflect this allowance yet. This will be fixed when we upgrade to use pixel counters, rather than character counters.
-
-**For translators:**
-
-**This part of the changelog is quite redundant and reluctant in its data; nevertheless, the gist is: new translations are ready!**
-
-* **Added:**
-	* Quite a lot of new sentences, because two metaboxes got merged, and a new one arose.
-	* A markdown parser has been added to the plugin. This will be used for future translations.
-		* Some strings already use this.
-* **Changed:**
-	* Many sentences have changed, in order to better reflect the option usages.
-	* A few sentences have been updated slightly in order to be sanitized correctly.
-	* Robots don't always follow the Robots Exclusion Protocol, so "disabled" is now "discouraged".
-* **Fixed:**
-	* One sentence wasn't annotated correctly.
-* **Removed:**
-	* Some sentences.
-	* Almost all debugging sentences.
-
-**For developers:**
-
-**Methods are no longer annotated by their classname in the changelog; instead they're now annotated with the object `the_seo_framework()->`**.
-**All methods are treated as final, this means no duplicated method names should exist within the object. Except for magic methods, like `__construct()`.**
-
-* **Updated:**
-	* Plugin version is now at 2.8.0.
-	* Plugin database version is now at 2804.
-* **Added:**
-	* All classes and many functions are now converted to use namespaces.
-		* Package and Namespace: `The_SEO_Framework`
-	* `\The_SEO_Framework\Load->__set()` magic method.
-		* This prevents inaccessible property writing.
-		* This allows for property deprecation handling.
-		* A warning is emited whenever this method is accessed.
-	* Class autoloading.
-		* Now all The SEO Framework class files are required when needed, automatically.
-	* New JavaScript l10n and object property: 'hasInput'. Determines if the page renders The SEO Framework's input boxes, to be used to improve performance.
-	* Method `the_seo_framework()->s_excerpt()`. For escaping and prettifying (description) excerpts with consideration of shortcodes through filters.
-		* This method was extracted from `the_seo_framework()->get_excerpt_by_id()` when solely using the first parameter.
-	* Most sanitation functions are now public. This allows for easier, predictable and more secure external code.
-	* Two new description methods:
-		1. `the_seo_framework()->get_description_excerpt_normal()`, fetches the normal description excerpt.
-		1. `the_seo_framework()->get_description_excerpt_social()`, fetches the social description excerpt.
-	* New secure `the_seo_framework()->convert_markdown()` method. To be used to ease up translation strings in the future (and past).
-	* New post meta additions: `_social_image_url` and `_social_image_id`.
-		* The latter is JS only, as it requires WordPress' image editor.
-* **Changed:**
-	* **IMPORTANT:** All the classes can't be initiated directly anymore. Always use `the_seo_framework()`.
-		* Failing to do so will result in a fatal error.
-		* This allows me (the developer) to easily change the class structure without compatibility issues in the future.
-	* All classes have been renamed.
-		* They are now preceded by `\The_SEO_Framework\`, in accordance to their newly acquired namespace.
-		* For example, class `AutoDescription_Feed` is now `\The_SEO_Framework\Feed`.
-	* Most core functions have been renamed.
-		* They now use a namespace.
-		* Affected functions:
-			* `the_seo_framework_upgrade()` is now `\The_SEO_Framework\_init_upgrade()` and is now marked private.
-			* `the_seo_framework_init()` is now `\The_SEO_Framework\_init()` and is now marked private. Use `the_seo_framework()` instead.
-			* `the_seo_framework_load()` is now `\The_SEO_Framework\_can_load()` and is now marked private. Use `the_seo_framework_active()` instead.
-			* `the_seo_framework_flush_rewrite_rules_deactivation()` is now `\The_SEO_Framework\_deactivation()` and is now marked private.
-			* `the_seo_framework_flush_rewrite_rules_activation()` is now `\The_SEO_Framework\_activation()` and is now marked private.
-			* `the_seo_framework_locale_init()` is now `\The_SEO_Framework\_init_locale()` and is now marked private.
-	* The main class `The_SEO_Framework\Load` can not be initiated twice anymore. Failing to do so will return `null`.
-		* Always use function `the_seo_framework()` if you wish to access a method or property.
-	* Some class files have been moved.
-		* The changes:
-			* The main class file `load.class.php` has been moved to the `/autodescription/inc/classes/` folder, from the `/autodescription/` folder.
-			* The deprecation class handler `deprecated.class.php` has been moved to the `/autodescription/inc/classes/` folder, from the `/autodescription/inc/deprecated/` folder.
-		* These changes allow easy autoloading.
-	* Some classes have their sub names changed.
-		* The changes:
-			* `AdminPages` is now `Admin_Pages`.
-			* `DoingItRight` is now `Doing_It_Right`.
-		* These changes allow easy autoloading and namespace interaction.
-	* Some class files have been renamed.
-		* The changes:
-			* `adminpages.class.php` is now `admin-pages.class.php`
-			* `siteoptions.class.php` is now `site-options.class.php`
-			* `doingitright.class.php` is now `doing-it-right.class.php`
-			* `termdata.class.php` is now `term-data.class.php`
-			* `postdata.class.php` is now `post-data.class.php`
-		* These changes allow easy autoloading and namespace interaction.
-	* Two classes (and its files) have been removed:
-		* `search.class.php`, which held `\The_SEO_Framework\Search` has been removed and its methods have been moved into `\The_SEO_Framework\Init`.
-		* `transients.class.php`, which held `\The_SEO_Framework\Transients`, has been remove and its methods have been moved into `\The_SEO_Framework\Cache`.
-	* Some function files have been moved.
-		* The changes:
-			* The deprecation function handler `deprecated.php` has been moved to the `/autodescription/inc/functions/` folder, from the `/autodescription/inc/deprecated/` folder.
-		* This cleans up the folders and some code.
-	* Not all classes are now always available. Unless methods of such are called or required.
-		* This massively improves performance and reduces memory usage.
-		* This completely changes the architecture of the plugin.
-		* This is handled through autoloading, interfaces and magic methods.
-		* Classes affected:
-			* `Debug`
-				* How this is handled:
-					* The common publicly accessible (with public visibility, without "@access private" documentation) methods are set in [interfaces](http://php.net/manual/en/language.oop5.interfaces.php).
-					* When an interface method is accessed, it will autoload the required class and the method will propagate to default behavior.
-					* In general, this should improve performance and reduce plugin resource usage.
-					* These changes shouldn't affect current code. If anything goes wrong, a "_doing_it_wrong()" notice is output. Thanks to magic methods.
-			* `Deprecated`
-				* How this is handled:
-					* When an inaccessible method is called, the magic method `the_seo_framework()->__call()` fires.
-					* Then the `The_SEO_Framework\Deprecated` class is autoloaded and cached within the magic method, quite like a singleton.
-					* If the method is found in that class, it will be called with all parameters passed to it. Otherwise, a default "method doesn't exist" notice is output, which resides in the new Debug class.
-	* Class `\The_SEO_Framework\Load` is now final, and can't be extended upon anymore.
-		* I am aware that this essentially removes any possible access to protected methods.
-		* This improves plugin consistency and prevents other plugins from creating very unexpected behavior.
-		* Nevertheless, if you have a feature suggestion, you know where to find me!
-	* Several methods have been changed, including:
-		* Method `the_seo_framework()->post_status()`'s third parameter was unused. It's now used to echo (true) or return (false) the value, default return (false).
-		* Method `the_seo_framework()->no_more_genesis_seo()` has been renamed to `disable_genesis_seo`, without deprecation as it was marked private.
-		* Method `the_seo_framework()->page_inpost_box()` has been renamed to `singular_inpost_box`, without deprecation as it was marked private.
-		* Method `the_seo_framework()->custom_field_redirect()` no longer checks for admin or front-end page status.
-		* Method `the_seo_framework()->call_function()` is now marked private. It's written and used as an internal handler for filters.
-		* Method `the_seo_framework()->generate_excerpt()` now has its third parameter (`$max_char_length`) default value increased by 1. From 154 to 155.
-		* Method `the_seo_framework()->robots_txt()` has been moved to class `Init` from `Sitemaps`.
-		* Method `the_seo_framework()->robots_txt()` is now called on action `init`, it was 'plugins_loaded'.
-		* Method `the_seo_framework()->get_custom_field()` has been moved to class `Post_Data` from `Core`.
-		* Method `the_seo_framework()->adjust_search_filter()` has been moved to class `Init` from `Search`.
-		* Method `the_seo_framework()->build_singular_relative_url()` now continues to run if an empty Post ID has been suplied.
-		* Method `the_seo_framework()->generate_the_description()` now always trims the output.
-	* The `license.txt` file has been updated to improve readability. The contents have not been changed.
-	* Error notices types generated by The SEO Framework's Debug class are now strictly checked before outputted. This yields no effective behavioral difference.
-	* **Warning:** Settings sanitation handlers are no longer initiated on every admin page. This means that if you were to manually update the settings, the output will not be sanitized.
-		* **Exception:** The sanitation handlers will however be initialized when using method `the_seo_framework()->update_settings()` or function `the_seo_framework_update_option()`.
-	* License changes:
-		* File `query.class.php` now falls under GPLv3 instead of GPLv2+.
-	* The settings reset query arg has been changed from `reset` to `tsf-settings-reset` and has been added to `wp_removeable_query_args`.
-		* This also improves the canonical URL on the admin page, for whatever that's worth.
-	* The SEO Settings updated notification query arg has been changed from `seo-updated` to `tsf-settings-updated` and has been added to `wp_removable_query_args`.
-		* This as well improves the canonical URL on the admin page.
-	* Library changes:
-		* `autodescription.{min.}js` is now `tsf.{min.}js`.
-		* `autodescription.{min.}css` is now `tsf.{min.}css`.
-		* `autodescription-rtl.{min.}css` is now `tsf-rtl.{min.}css`.
-		* `the_seo_framework()->js_name` and `the_seo_framework()->css_name` now directly alter the called file.
-			* Changing these public parameters would create 404 errors.
-		* Added `tsf.externs.js` file, for closure compiler advanced optimizations.
-		* Added `tsf.externs.protected.js` file, for closure compiler advanced optimizations when you require protected methods.
-	* JS changes:
-		* Constructor `autodescription` is now `tsf`.
-		* Constant `autodescriptionL10n` is now `tsfL10n`.
-		* Several Javascript constants are now publicly accessible, including:
-			* `tsf.nonce`
-			* `tsf.i18n`
-			* `tsf.states`
-			* `tsf.params`
-			* `tsf.other`
-			* `tsf.settingsChanged`
-			* `tsf.hasInput`
-			* `tsf.cropper`, which is only public for internal reasons.
-	* Javascript l10n changes:
-	 	* All translation strings are now captured in an object: `i18n`.
-		* All page states are now captured in an object: `state`.
-		* All parameter strings are now captured in an object: `params`.
-	* The SEO Framework's generated SEO meta is no longer injected into `genesis_meta`, but is instead relying on `wp_head`, as otherwise.
-* **Improved:**
-	* Function `the_seo_framework_class()` will no longer change the plugin's flow if called before action `plugins_loaded`. Instead, it will return `false`.
-	* Reduced sitemap's generation memory usage.
-		* This means now 1200 posts, pages and custom post types can be generated without concern.
-			* This is 3600 posts in total.
-		* This means the previous sitemap transient has been invalidated. WordPress will clean this up automatically.
-	* Method `the_seo_framework()->call_function()` now passes objects, so you can use `$this` in the called function.
-	* Class overloading magic methods (`__wakeup()`, `__call()`, `__get()`, `__set()`) are now only initiated once and can't be reinitated or overloaded.
-	* All admin actions have been moved into an admin action handler.
-		* This massively reduces the plugin memory heap size of this plugin on the front-end.
-	* All front-end actions have been moved into a front-end action handler.
-		* This massively reduces the plugin memory heap size of this plugin on the back-end.
-	* The debug handlers no longer checks for function `__`, as it should already be present when The SEO Framework has been loaded.
-	* The inpost metabox has been moved into a view file.
-		* This reduces memory usage on non-post edit pages.
-	* The taxonomy and terms options output has been moved into a view file.
-		* This reduces memory usage on non-term edit pages.
-	* Method `get_latest_post_id()` now uses WP_Query instead of a direct database call.
-	* WordPress' `is_ssl()` isn't cached. So now it has a cached counterpart: `the_seo_framework()->is_ssl()`.
-	* The excluded post type filter no longer tries to match an exact value; saving some processing power generating the query.
-	* Added multiple checks in the Breadcrumb generation code to prevent empty breadcrumb output.
-	* When saving the SEO Meta data, all front-end transients now always flushed through a new method. Instead of guessing which options have been changed.
-	* Removed several WP version checks that were aimed below the plugin WP version requirements.
-	* Correct error notice titles are now in place for The SEO Framework's debug handlers. Rather than only `Notice:`.
-	* Method `the_seo_framework()->call_function()` inaccessible method/function handler now uses the correctly assigned one, rather than using `_doing_it_wrong()`.
-	* The Sitemaps Settings metabox' tabs output are now automatically determined.
-	* Method `the_seo_framework()->parse_og_image()` no longer returns an emtpy string on second ID call.
-	* Caching is now disabled on search pages.
-	* Javascript: A JS extern file has been published on GitHub. This way you can overview the publicly stated functions there.
-	* Method `the_seo_framework()->detect_sitemap_plugin()` now also checks for SEO plugins beforehand.
-	* Dedicated plugin compatibility has been moved into aptly named files.
-		* Compatibility files can be loaded per request. See method `_include_compat()`.
-	* SEO Debugger now captures the query state at generation time.
-* **Fixed:**
-	* Several CSS classes didn't have a correct prefix. These were, and now are:
-		* `seoframework-content-no-js`, is now `tsf-content-no-js`
-		* `autodescription-sep-js`, is now `tsf-sep-js`
-		* `custom-title-js`, is now `tsf-custom-title-js`
-		* `autodescription-js-confirm-reset`, is now `tsf-js-confirm-reset`
-	* Method `the_seo_framework()->call_function()` now doesn't result in a fatal error anymore if the method of an object doesn't exist in conjunction with when the class is supplied as an object instead of string.
-	* Function `the_seo_framework_get_option()` now has the required input parameters. Credit [QWp6t](https://github.com/QWp6t).
-	* Method `the_seo_framework()->_doing_it_wrong()` now has correctly translatable notices. Credit [pedro-mendonca](https://github.com/pedro-mendonca).
-	* The previously named "Knowledge Graph" netabox "Social Sites" tab title now is translatable. Credit [pedro-mendonca](https://github.com/pedro-mendonca).
-	* Method `the_seo_framework()->get_user_meta()` now no longer returns a string when no metadata has been initialized. Instead it will return an empty array.
-	* Globals `$blog_id` is no longer converted to string on post/page update.
-	* Deprecation (filter and method) handler line call is correct once more.
-* **Deprecated:**
-	* Several term filter methods; The metadata transfer will be completed on this update. WordPress 4.4+ is now required:
-		* Method `the_seo_framework()->get_terms_filter()`.
-		* Method `the_seo_framework()->get_term_filter()`.
-		* Method `the_seo_framework()->taxonomy_seo_save()`.
-		* Method `the_seo_framework()->term_meta_delete()`.
-		* Method `the_seo_framework()->can_get_term_meta()`.
-		* Method `the_seo_framework()->get_old_term_data()`.
-	* Method `the_seo_framework()->search_filter()`. It's a very slow method as it uses the (deprecated method) `get_excluded_search_ids()`. There's no replacement.
-		* This method was already stopped being used in 2.7.0.
-	* Method `the_seo_framework()->autodescription_add_option_filter()`. Use `the_seo_framework()->add_option_filter()` instead.
-	* Method `the_seo_framework()->sanitizer_filters()` Use `the_seo_framework()->init_sanitizer_filters()` instead.
-	* Method `the_seo_framework()->site_icon()`. Use `the_seo_framework()->get_site_icon()` instead.
-		* `the_seo_framework()->get_site_icon()` can loop to itself once now if requested image size is an intval above 512, resulting it into being 'full' and then might set og image dimensions.
-	* Method `the_seo_framework()->delete_transients_post()`. Use `the_seo_framework()->delete_post_cache()` instead.
-	* Method `the_seo_framework()->delete_transients_post()`. Use `the_seo_framework()->delete_post_cache()` instead.
-	* Method `the_seo_framework()->delete_transients_author()`. Use `the_seo_framework()->delete_author_cache()` instead.
-	* Method `the_seo_framework()->delete_front_ld_json_transient()`. Use `the_seo_framework()->delete_cache( 'front' )` instead.
-* **Removed:**
-	* Memory profiling output in the HTML code when `THE_SEO_FRAMEWORK_DEBUG` is defined as true.
-		* This was inaccurate at best.
-	* Various methods regarding the Knowledge Graph settings metabox, these include:
-		* `knowledge_metabox`
-		* `knowledge_metabox_general_tab`
-		* `knowledge_metabox_about_tab`
-		* `knowledge_metabox_social_tab`
-	* Many more methods have been removed, the default method invoking handler will notify you when called:
-		* `add_filter`, use `add_option_filter` instead.
-		* `s_one_zero_flush_rewrite`
-		* `s_one_zero_flush_sitemap`
-		* `is_domainmapping_active`
-		* `is_donncha_domainmapping_active`
-		* `is_wpml_active`
-		* `is_qtranslate_active`
-		* `disable_genesis_seo`
-		* `get_translation_path`
-		* `get_relative_qtranslate_url`
-		* `get_relative_wmpl_url`
-		* `the_url_wpmudev_domainmap`
-		* `the_url_donncha_domainmap`
-		* `is_ultimate_member_user_page`
-		* `title_from_special_fields`
-		* `buddypress_compat`
-	* Methods deprecated in The SEO Framework 2.6.6 and below are now removed. Which gave you more than 6 months to catch up.
-* **Other:**
-	* Cleaned up code.
-* **Filter notes:**
-	* **Added:**
-		* `(array) the_seo_framework_ld_json_breadcrumb_terms`. Used to filter the found terms.
-		* `(array) the_seo_framework_breadcrumb_post_sorting_callback`. Used to apply your own sorting function for terms.
-		* `(bool) the_seo_framework_general_metabox`. Used to enable/disable the General Settings metabox.
-		* `(array) the_seo_framework_general_settings_tabs`. Used to alter or add general settings tabs.
-		* `(array) the_seo_framework_schema_settings_tabs`. Used to alter or add Schema settings tabs.
-		* `(array) the_seo_framework_canonical_scheme_types`. Used to remove canonical URL setting options.
-		* `(bool) the_seo_framework_allow_transient_flush`. Barrier filter for allowing transient flush; which you need to initiate yourself. Warning: experimental.
-		* `(array) the_seo_framework_sitemap_schemas`. Used to specify the type of sitemap schemas.
-		* `(array) the_seo_framework_sitemap_logo`. Used to adjust or remove the sitemap logo. Defaults to WP 4.5 logo.
-		* `(string) the_seo_framework_sitemap_color_main`. Used to adjust the sitemap's theme color. Defaults to 333 (from option).
-		* `(string) the_seo_framework_sitemap_color_accent`. Used to adjust the sitemap's theme color. Defaults to 0ebfe9 (from option).
-		* `(string) the_seo_framework_sitemap_relative_font_color`. Used to adjust the sitemap's relative font color. Calculated from `the_seo_framework_sitemap_color_main`.
-		* `(bool) the_seo_framework_indicator_sitemap`. Used to allow for sitemap generation indicator.
-		* `(array) the_seo_framework_sanitize_redirect_args`. Used to filter redirection URL path inputs.
-			* Awesome in combination with filter `(bool) the_seo_framework_allow_external_redirect`; Which, when set to false, will always invoke the previous filter.
-			* Can therefore prevent untrusted admin redirect spam. E.g. in multisite environments.
-		* `(array) the_seo_framework_url_path`. Used to filter the URL path.
-		* `(array) the_seo_framework_url_output_args`. Used to filter the output URL, including scheme.
-		* `(array) the_seo_framework_get_term_meta`. Used to filter the term metadata if none is filled in by the user.
-		* `(string) the_seo_framework_custom_field_title`. Used to filter the title prior to generation or even getting it from the custom field.
-		* `(string) the_seo_framework_custom_field_home_title`. Used to filter the title prior to generation or even getting it from the custom field.
-		* `(array) the_seo_framework_home_title_args`. Used to filter the title prior to generation or even getting it from the custom field.
-		* `(array) the_seo_framework_sitemap_pages_query_args`. Used to filter the sitemap WP_Query query arguments for pages.
-		* `(array) the_seo_framework_sitemap_posts_query_args`. Used to filter the sitemap WP_Query query arguments for posts.
-		* `(array) the_seo_framework_sitemap_cpt_query_args`. Used to filter the sitemap WP_Query query arguments for cpt.
-		* `(bool) the_seo_framework_warn_homepage_global_title`. Used to add a notification in the homepage metabox. Ideal for translation plugins.
-		* `(bool) the_seo_framework_warn_homepage_global_description`. Used to add a notification in the homepage metabox. Ideal for translation plugins.
-		* `(array) the_seo_framework_seo_column_keys_order`. Used to add or filter the order in which The SEO Framework determines the placement of The SEO Bar.
-	* **Changed:**
-		* `(array) the_seo_framework_sitemap_exclude_ids` will no longer exclude page ID 0 for performance reasons (3 checks instead of 6).
-	* **Removed:**
-		* `(array) the_seo_framework_knowledgegraph_settings_tabs`. These tabs have been moved in the Schema metabox.
-		* `the_seo_framework_detect_seo_plugins`. This was previously deprecated.
-		* `the_seo_framework_supported_screens`. This was previously deprecated.
-	* **Deprecated:**
-		* `(mixed) the_seo_framework_canonical_force_scheme` use `(string) the_seo_framework_preferred_url_scheme` instead.
-* **Action notes:**
-	* **Added:**
-		* `the_seo_framework_general_metabox_before`. Runs before the General metabox output.
-		* `the_seo_framework_general_metabox_after`. Runs after the General metabox output.
-		* `the_seo_framework_init`. Runs before when The SEO Framework alters global stuff.
-		* `the_seo_framework_admin_init`. Runs before when The SEO Framework alters admin stuff.
-		* `the_seo_framework_front_init`. Runs before when The SEO Framework alters front-end stuff.
-	* **Changed:**
-		* `the_seo_framework_do_after_output`. Now moved 2 lines down to be after the output echo.
-	* **Removed:**
-		* `the_seo_framework_knowledge_metabox_before`
-		* `the_seo_framework_knowledge_metabox_after`
-* **Constant notes:**
-	* **Added:**
-		* `(string) THE_SEO_FRAMEWORK_DIR_PATH_COMPAT`, the compatibility files class.
+***What is work without [innovation](https://theseoframework.com/?p=1792#detailed)?***
 
 = Full changelog =
 
@@ -783,12 +342,6 @@ The 2.7.0 update is required for the upcoming Extension Manager plugin and inclu
 = Add any of the filters to your theme's functions.php or a plugin to change this plugin's output. =
 
 Learn about them here: [The SEO Framework filters](http://theseoframework.com/docs/api/filters/)
-
-= Constants =
-
-= Overwrite any of these constants in your theme's functions.php or a plugin to change this plugin's output by simply defining the constants. =
-
-View them here: [The SEO Framework constants](http://theseoframework.com/docs/api/constants/)
 
 = Actions =
 

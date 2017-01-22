@@ -132,3 +132,10 @@
 * If your website sells candy, be careful not to place a link towards or on an agency website when your website is new.
 * So, do not ever spread your first links across multiple websites that are completely unrelated to yours.
 * Do not forget to link to other related websites, this way Google knows what your website is about. For example, Google can then distinguish Apple (technology) from apple (fruit).
+
+	= 2.8.0 - Know your Knowledge =
+
+* Not all SEO techniques are actively used on Google outside of the United States.
+* For example, the Site Name Schema.org script might not have any effect.
+* This changes over time as Google updates its Search Engine all over the world.
+* Usage of experimental Schema.org scripts with The SEO Framework cause no harm to ranking.

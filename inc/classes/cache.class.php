@@ -115,7 +115,7 @@ class Cache extends Sitemaps {
 		\add_action( 'delete_term', array( $this, 'delete_auto_description_transients_term' ), 10, 4 );
 
 		//* Deletes author transient.
-		\add_action( 'profile_update', array( $this, 'delete_transients_author' ) );
+		\add_action( 'profile_update', array( $this, 'delete_author_cache' ) );
 
 		//* Delete Sitemap transient on permalink structure change.
 		\add_action( 'load-options-permalink.php', array( $this, 'delete_sitemap_transient_permalink_updated' ), 20 );
