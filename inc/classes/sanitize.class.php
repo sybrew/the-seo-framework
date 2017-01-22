@@ -791,7 +791,7 @@ class Sanitize extends Admin_Pages {
 		 * Otherwise it's empty, so take the current value.
 		 */
 		$no_query_url = strtok( $new_value, '?' );
-		$url = $no_query_url ? $no_query_url : $new_value;
+		$url = $no_query_url ?: $new_value;
 
 		return \esc_url_raw( $url );
 	}

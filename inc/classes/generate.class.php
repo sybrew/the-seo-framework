@@ -241,7 +241,7 @@ class Generate extends Term_Data {
 
 		$description = trim( \get_bloginfo( 'description', 'display' ) );
 
-		return $description = $description ? $description : $this->untitled();
+		return $description = $description ?: $this->untitled();
 	}
 
 	/**
@@ -317,6 +317,29 @@ class Generate extends Term_Data {
 		}
 
 		return $type;
+	}
+
+	/**
+	 * Returns OG Type
+	 *
+	 * @since 2.8.0
+	 * @staticvar string $type
+	 *
+	 * @return string
+	 */
+	public function get_og_type() {
+
+		static $type = null;
+
+		if ( isset( $type ) )
+			return $type;
+
+		/**
+		 * Applies filters 'the_seo_framework_ogtype_output' : string
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 */
+		return $type = (string) \apply_filters( 'the_seo_framework_ogtype_output', $this->generate_og_type(), $this->get_the_real_ID() );
 	}
 
 	/**

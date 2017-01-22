@@ -690,10 +690,8 @@ class Generate_Title extends Generate_Description {
 		 * Get blogname title based on option
 		 * @since 2.2.2
 		 */
-		if ( $get_option ) {
-			$home_title_option = $this->get_option( 'homepage_title' ) ? $this->get_option( 'homepage_title' ) : $home_title;
-			$home_title = $home_title_option ? $home_title_option : $home_title;
-		}
+		if ( $get_option )
+			$home_title = $this->get_option( 'homepage_title' ) ?: $home_title;
 
 		/**
 		 * Fetch from Home Page InPost SEO Box if available.
@@ -787,10 +785,10 @@ class Generate_Title extends Generate_Description {
 		 */
 		if ( $this->is_singular() ) {
 			//* Get title from custom field, empty it if it's not there to override the default title
-			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : $title;
+			$title = $this->get_custom_field( '_genesis_title', $id ) ?: $title;
 		} elseif ( $this->is_blog_page( $id ) ) {
 			//* Posts page title.
-			$title = $this->get_custom_field( '_genesis_title', $id ) ? $this->get_custom_field( '_genesis_title', $id ) : \get_the_title( $id );
+			$title = $this->get_custom_field( '_genesis_title', $id ) ?: \get_the_title( $id );
 		} elseif ( $this->is_archive() || ( $id && $taxonomy ) ) {
 			//* Get the custom title for terms.
 			$term = \get_term( $id, $taxonomy, OBJECT, 'raw' );
@@ -997,8 +995,7 @@ class Generate_Title extends Generate_Description {
 		if ( $filter_title = (string) \apply_filters( 'the_seo_framework_custom_field_title', '', $id, $taxonomy ) ) {
 			$title = $filter_title;
 		} else {
-			$title_from_custom_field = $this->title_from_custom_field( $title, false, $id, $taxonomy );
-			$title = $title_from_custom_field ? $title_from_custom_field : $title;
+			$title = $this->title_from_custom_field( $title, false, $id, $taxonomy ) ?: $title;
 		}
 
 		return $title;

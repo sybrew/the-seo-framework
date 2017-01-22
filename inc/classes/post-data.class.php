@@ -435,7 +435,7 @@ class Post_Data extends Detect {
 	 */
 	public function get_post_content( $id = 0 ) {
 
-		$id = $id ? $id : $this->get_the_real_ID();
+		$id = $id ?: $this->get_the_real_ID();
 
 		$content = \get_post_field( 'post_content', $id );
 

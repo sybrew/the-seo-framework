@@ -162,7 +162,7 @@ class Generate_Url extends Generate_Title {
 			$url = $this->add_url_subdomain( $url );
 		}
 
-		$scheme = $scheme ? $scheme : $this->get_prefered_scheme();
+		$scheme = $scheme ?: $this->get_prefered_scheme();
 
 		$url = $this->set_url_scheme( $url, $scheme );
 
@@ -412,7 +412,7 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function add_url_host( $path = '' ) {
 
-		$host = $this->current_host ? $this->current_host : $this->get_home_host();
+		$host = $this->current_host ?: $this->get_home_host();
 
 		$scheme = $host ? 'http://' : '';
 

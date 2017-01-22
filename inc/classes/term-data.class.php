@@ -185,9 +185,8 @@ class Term_Data extends Post_Data {
 		if ( is_null( $term ) )
 			$term = $this->fetch_the_term( $term_id );
 
-		if ( isset( $term->term_id ) ) :
+		if ( isset( $term->term_id ) )
 			return $this->get_term_meta( $term->term_id );
-		endif;
 
 		//* Return null if no term can be set.
 		return null;

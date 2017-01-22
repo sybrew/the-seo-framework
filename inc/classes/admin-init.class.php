@@ -135,7 +135,7 @@ class Admin_Init extends Init {
 		 * Put hook and js name in class vars.
 		 * @since 2.5.2.2
 		 */
-		$this->page_base_file = $this->page_base_file ? $this->page_base_file : $hook;
+		$this->page_base_file = $this->page_base_file ?: $hook;
 
 		//* Register the script.
 		$this->_register_admin_javascript();
@@ -302,8 +302,8 @@ class Admin_Init extends Init {
 				// Home is a blog.
 				$inpost_title = '';
 			}
-			$title = $inpost_title ? $inpost_title : $blog_name;
-			$additions = $home_tagline ? $home_tagline : $description;
+			$title = $inpost_title ?: $blog_name;
+			$additions = $home_tagline ?: $description;
 		}
 
 		$nonce = \wp_create_nonce( 'autodescription-ajax-nonce' );
@@ -383,7 +383,7 @@ class Admin_Init extends Init {
 		 * Put hook and js name in class vars.
 		 * @since 2.5.2.2
 		 */
-		$this->page_base_file = $this->page_base_file ? $this->page_base_file : $hook;
+		$this->page_base_file = $this->page_base_file ?: $hook;
 
 		//* Register the script.
 		$this->register_admin_css();

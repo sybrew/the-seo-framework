@@ -314,14 +314,7 @@ class Render extends Admin_Init {
 		if ( ! $this->use_og_tags() )
 			return '';
 
-		/**
-		 * Applies filters 'the_seo_framework_ogtype_output' : string
-		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
-		 */
-		$type = (string) \apply_filters( 'the_seo_framework_ogtype_output', $this->generate_og_type(), $this->get_the_real_ID() );
-
-		if ( $type )
+		if ( $type = $this->get_og_type() )
 			return '<meta property="og:type" content="' . \esc_attr( $type ) . '" />' . "\r\n";
 
 		return '';
@@ -645,12 +638,16 @@ class Render extends Admin_Init {
 	 * Renders Facebook Author meta tag.
 	 *
 	 * @since 2.2.2
+	 * @since 2.8.0 : Return empty on og:type 'website' or 'product'
 	 *
 	 * @return string The Facebook Author meta tag.
 	 */
 	public function facebook_author() {
 
 		if ( ! $this->use_facebook_tags() )
+			return '';
+
+		if ( in_array( $this->get_og_type(), array( 'website', 'product' ), true ) )
 			return '';
 
 		/**
@@ -720,6 +717,7 @@ class Render extends Admin_Init {
 	 * Renders Article Publishing Time meta tag.
 	 *
 	 * @since 2.2.2
+	 * @since 2.8.0 Returns empty on product pages.
 	 *
 	 * @return string The Article Publishing Time meta tag.
 	 */
@@ -727,6 +725,9 @@ class Render extends Admin_Init {
 
 		//* Don't do anything if it's not a page or post.
 		if ( false === $this->is_singular() )
+			return '';
+
+		if ( 'product' === $this->get_og_type() )
 			return '';
 
 		if ( $this->is_front_page() ) {
@@ -764,13 +765,17 @@ class Render extends Admin_Init {
 	 *
 	 * @since 2.2.2
 	 * @since 2.7.0 Listens to $this->get_the_real_ID() instead of WordPress Core ID determination.
+	 * @since 2.8.0 Returns empty on product pages.
 	 *
 	 * @return string The Article Modified Time meta tag, and optionally the Open Graph Updated Time.
 	 */
 	public function article_modified_time() {
 
-		// Don't do anything if it's not a page or post, or if both options are disabled
+		// Don't do anything if it's not a page or post.
 		if ( false === $this->is_singular() )
+			return '';
+
+		if ( 'product' === $this->get_og_type() )
 			return '';
 
 		if ( $this->is_front_page() ) {

@@ -282,7 +282,7 @@ class Cache extends Sitemaps {
 	 */
 	protected function parse_delete_cache_keys( &$type, &$id, &$args ) {
 
-		$id = $id ? $id : $this->get_the_real_ID();
+		$id = $id ?: $this->get_the_real_ID();
 
 		$defaults = array(
 			'type' => $type,
@@ -511,7 +511,7 @@ class Cache extends Sitemaps {
 	 */
 	public function generate_cache_key( $page_id, $taxonomy = '', $type = null ) {
 
-		$page_id = $page_id ? $page_id : $this->get_the_real_ID();
+		$page_id = $page_id ?: $this->get_the_real_ID();
 
 		if ( isset( $type ) ) {
 			if ( 'author' === $type ) {
@@ -798,7 +798,7 @@ class Cache extends Sitemaps {
 	 */
 	public function delete_auto_description_transients_term( $term_id, $tt_id, $taxonomy, $deleted_term = '' ) {
 
-		$term_id = $term_id ? $term_id : $tt_id;
+		$term_id = $term_id ?: $tt_id;
 
 		$this->delete_cache( 'term', $term_id, array( 'term' => $taxonomy ) );
 	}

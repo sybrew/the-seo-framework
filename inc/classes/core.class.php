@@ -722,17 +722,16 @@ class Core {
 	 *
 	 * @since 2.8.0
 	 *
-	 * @param string $hex The 3 to 6 character hex. '#' prefix is supported.
-	 * @return string The hexadecimal relative font color, without '#' prefix.
+	 * @param string $hex The 3 to 6 character RGB hex. '#' prefix is supported.
+	 * @return string The hexadecimal RGB relative font color, without '#' prefix.
 	 */
 	public function get_relatitve_fontcolor( $hex = '' ) {
 
 		$hex = ltrim( $hex, '#' );
 
 		//* #rgb = #rrggbb
-		if ( 3 === strlen( $hex ) ) {
+		if ( 3 === strlen( $hex ) )
 			$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
-		}
 
 		$hex = str_split( $hex, 2 );
 
@@ -745,7 +744,7 @@ class Core {
 		$sr = 0.2125 * $r;
 		$sg = 0.7154 * $g;
 		$sb = 0.0721 * $b;
-		$rel_lum = 1 - ( $sr + $sg + $sb ) / 256;
+		$rel_lum = 1 - ( $sr + $sg + $sb ) / 255;
 
 		//* Convert to relative intvals between 1 and 0 for L from HSL
 		/*
@@ -784,7 +783,6 @@ class Core {
 
 	/**
 	 * Converts markdown text into HMTL.
-	 *
 	 * Does not support list or block elements. Only inline statements.
 	 *
 	 * Note: This code has been rightfully stolen from the Extension Manager plugin (sorry Sybre!).

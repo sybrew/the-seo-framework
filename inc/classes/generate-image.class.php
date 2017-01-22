@@ -106,7 +106,7 @@ class Generate_Image extends Generate_Url {
 		}
 
 		//* 4. Fallback: Get header image if exists
-		if ( empty( $image ) && ( $all_allowed || false === in_array( 'header', $args['disallowed'], true ) ) && current_theme_supports( 'custom-header', 'default-image' ) )
+		if ( empty( $image ) && ( $all_allowed || false === in_array( 'header', $args['disallowed'], true ) ) && \current_theme_supports( 'custom-header', 'default-image' ) )
 			$image = $this->get_header_image( true );
 
 		//* 5. Fetch image from fallback filter 2
@@ -250,7 +250,7 @@ class Generate_Image extends Generate_Url {
 			$w = $_src[1]; // Width
 			$h = $_src[2]; // Height
 
-			if ( \esc_url( $i ) === \esc_url( $src ) )
+			if ( \esc_url( $this->set_preferred_url_scheme( $i ) ) === \esc_url( $this->set_preferred_url_scheme( $src ) ) )
 				$this->image_dimensions = $this->image_dimensions + array( $id => array( 'width' => $w, 'height' => $h ) );
 		}
 

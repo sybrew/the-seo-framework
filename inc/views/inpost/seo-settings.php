@@ -78,7 +78,7 @@ switch ( $instance ) :
 			if ( $this->get_option( 'homepage_tagline' ) ) {
 				$tit_len_pre = $title ? $title . ' | ' . $this->get_blogdescription() : $generated_doctitle;
 			} else {
-				$tit_len_pre = $title ? $title : $generated_doctitle;
+				$tit_len_pre = $title ?: $generated_doctitle;
 			}
 		} else {
 			/**
@@ -90,7 +90,7 @@ switch ( $instance ) :
 			if ( $this->add_title_additions() ) {
 				$tit_len_pre = $title ? $title . ' | ' . $this->get_blogname() : $generated_doctitle;
 			} else {
-				$tit_len_pre = $title ? $title : $generated_doctitle;
+				$tit_len_pre = $title ?: $generated_doctitle;
 			}
 		}
 
@@ -108,12 +108,12 @@ switch ( $instance ) :
 			$homepage_description = $this->get_option( 'homepage_description' );
 
 			if ( $description ) {
-				$desc_len_pre = $homepage_description ? $homepage_description : $description;
+				$desc_len_pre = $homepage_description ?: $description;
 			} else {
-				$desc_len_pre = $homepage_description ? $homepage_description : $generated_description;
+				$desc_len_pre = $homepage_description ?: $generated_description;
 			}
 		} else {
-			$desc_len_pre = $description ? $description : $generated_description;
+			$desc_len_pre = $description ?: $generated_description;
 		}
 
 		/**
@@ -318,7 +318,7 @@ switch ( $instance ) :
 		 */
 		$doc_pre_rem = $add_additions ? $title . ' | ' . $blog_name : $title;
 		$title_len = $title ? $doc_pre_rem : $generated_doctitle;
-		$description_len = $description	? $description : $generated_description;
+		$description_len = $description	?: $generated_description;
 
 		/**
 		 * Convert to what Google outputs.

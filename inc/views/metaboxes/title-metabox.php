@@ -205,7 +205,7 @@ switch ( $instance ) :
 
 		//* If cat is found, it will return its name. Otherwise it's an empty string.
 		$cat_name = get_cat_name( $cat );
-		$cat_name = $cat_name ? $cat_name : __( 'Example Category', 'autodescription' );
+		$cat_name = $cat_name ?: __( 'Example Category', 'autodescription' );
 
 		$display_prefix = $this->is_option_checked( 'title_rem_prefixes' ) ? 'none' : 'inline';
 		$title = '<span class="tsf-title-prefix-example" style="display:' . $display_prefix . '">' . esc_html( $label ) . ': </span>' . esc_html( $cat_name );

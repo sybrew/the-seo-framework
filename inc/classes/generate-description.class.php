@@ -236,7 +236,7 @@ class Generate_Description extends Generate {
 
 		if ( $args['is_home'] || $this->is_front_page() || ( empty( $args['taxonomy'] ) && $this->is_static_frontpage( $args['id'] ) ) ) {
 			$homedesc = $this->get_option( 'homepage_description' );
-			$description = $homedesc ? $homedesc : '';
+			$description = $homedesc ?: '';
 		}
 
 		return $description;

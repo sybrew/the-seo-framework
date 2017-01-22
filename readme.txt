@@ -248,7 +248,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Compatibility stability
 	* Security and sanitation
 	* Post status detection
-	* Readability of placeholders
+	* Detection of placeholders
 
 **New developer technology overview:**
 
@@ -414,6 +414,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Private and Password Protected posts and pages now recieve special treatment:
 		1. They're always marked "noindex".
 		1. Their auto-generated description is now disabled.
+	* `article:author` is no longer ouput on `og:type` website or product.
+	* `article:published_time` is no longer ouput on `og:type` product.
+	* `article:modified_time` is no longer ouput on `og:type` product.
 * **Updated:**
 	/
 	* TODO Translation POT file.
