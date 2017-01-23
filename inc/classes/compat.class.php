@@ -58,7 +58,7 @@ class Compat extends Core {
 	protected function load_early_compat_files() {
 
 		if ( ! extension_loaded( 'mbstring' ) ) {
-			$this->include_compat( 'mbstring', 'php' );
+			$this->_include_compat( 'mbstring', 'php' );
 		}
 
 		if ( $this->is_theme( 'genesis' ) ) {
