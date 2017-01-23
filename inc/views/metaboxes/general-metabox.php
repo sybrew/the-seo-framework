@@ -145,7 +145,7 @@ switch ( $instance ) :
 		<p>
 			<h4><?php esc_html_e( 'Scheme Settings', 'autodescription' ); ?></h4>
 			<?php
-			$this->description( __( 'If your website is accessible on both HTTP as HTTPS, set this to HTTPS in order to prevent duplicated content.', 'autodescription' ) );
+			$this->description( __( 'If your website is accessible on both HTTP as HTTPS, set this to HTTPS in order to prevent duplicate content.', 'autodescription' ) );
 			$this->description( __( 'Otherwise, automatic detection is recommended.', 'autodescription' ) );
 			?>
 			<label for="<?php $this->field_id( 'canonical_scheme' ); ?>"><?php echo esc_html_x( 'Preferred canonical URL scheme:', '= Detect Automatically, HTTPS, HTTP', 'autodescription' ); ?></label>

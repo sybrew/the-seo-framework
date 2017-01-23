@@ -10,7 +10,9 @@ switch ( $instance ) :
 
 		$this->description( __( 'These settings will take precedence over the settings set within the Home Page edit screen, if any.', 'autodescription' ) );
 
-		?><hr><?php
+		?>
+		<hr>
+		<?php
 
 		/**
 		 * Parse tabs content.
@@ -19,27 +21,27 @@ switch ( $instance ) :
 		 *
 		 * @param array $default_tabs { 'id' = The identifier =>
 		 *		array(
-		 *			'name' 		=> The name
-		 *			'callback' 	=> The callback function, use array for method calling (accepts $this, but isn't used here for optimization purposes)
-		 *			'dashicon'	=> Desired dashicon
+		 *			'name'     => The name
+		 *			'callback' => The callback function, use array for method calling
+		 *			'dashicon' => Desired dashicon
 		 *		)
 		 * }
 		 */
 		$default_tabs = array(
 			'general' => array(
-				'name' 		=> __( 'General', 'autodescription' ),
-				'callback'	=> array( $this, 'homepage_metabox_general_tab' ),
-				'dashicon'	=> 'admin-generic',
+				'name'     => __( 'General', 'autodescription' ),
+				'callback' => array( $this, 'homepage_metabox_general_tab' ),
+				'dashicon' => 'admin-generic',
 			),
 			'additions' => array(
-				'name'		=> __( 'Additions', 'autodescription' ),
-				'callback'	=> array( $this, 'homepage_metabox_additions_tab' ),
-				'dashicon'	=> 'plus',
+				'name'     => __( 'Additions', 'autodescription' ),
+				'callback' => array( $this, 'homepage_metabox_additions_tab' ),
+				'dashicon' => 'plus',
 			),
 			'robots' => array(
-				'name'		=> __( 'Robots', 'autodescription' ),
-				'callback'	=> array( $this, 'homepage_metabox_robots_tab' ),
-				'dashicon'	=> 'visibility',
+				'name'     => __( 'Robots', 'autodescription' ),
+				'callback' => array( $this, 'homepage_metabox_robots_tab' ),
+				'dashicon' => 'visibility',
 			),
 		);
 

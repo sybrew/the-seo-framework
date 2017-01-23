@@ -990,7 +990,7 @@ class Generate_Title extends Generate_Description {
 		 *
 		 * @param string $title The special title.
 		 * @param int $id The post or TT ID.
-		 * @param string $axonomy the TT name.
+		 * @param string $taxonomy the TT name.
 		 */
 		if ( $filter_title = (string) \apply_filters( 'the_seo_framework_custom_field_title', '', $id, $taxonomy ) ) {
 			$title = $filter_title;

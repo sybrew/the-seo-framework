@@ -50,36 +50,36 @@ switch ( $instance ) :
 		 *
 		 * @param array $default_tabs { 'id' = The identifier =>
 		 *		array(
-		 *			'name' 		=> The name
-		 *			'callback' 	=> The callback function, use array for method calling (accepts $this, but isn't used here for optimization purposes)
-		 *			'dashicon'	=> Desired dashicon
+		 *			'name'     => The name
+		 *			'callback' => The callback function, use array for method calling
+		 *			'dashicon' => Desired dashicon
 		 *		)
 		 * }
 		 */
 		$default_tabs = array(
 			'general' => array(
-				'name' 		=> __( 'General', 'autodescription' ),
-				'callback'	=> array( $this, 'title_metabox_general_tab' ),
-				'dashicon'	=> 'admin-generic',
+				'name'     => __( 'General', 'autodescription' ),
+				'callback' => array( $this, 'title_metabox_general_tab' ),
+				'dashicon' => 'admin-generic',
 			),
 			'additions' => array(
-				'name'		=> __( 'Additions', 'autodescription' ),
-				'callback'	=> array( $this, 'title_metabox_additions_tab' ),
-				'dashicon'	=> 'plus',
-				'args'		=> array(
+				'name'     => __( 'Additions', 'autodescription' ),
+				'callback' => array( $this, 'title_metabox_additions_tab' ),
+				'dashicon' => 'plus',
+				'args'     => array(
 					'examples' => array(
-						'left'	=> $example_left,
+						'left'  => $example_left,
 						'right' => $example_right,
 					),
 				),
 			),
 			'prefixes' => array(
-				'name'		=> __( 'Prefixes', 'autodescription' ),
-				'callback'	=> array( $this, 'title_metabox_prefixes_tab' ),
-				'dashicon'	=> 'plus-alt',
-				'args'		=> array(
+				'name'     => __( 'Prefixes', 'autodescription' ),
+				'callback' => array( $this, 'title_metabox_prefixes_tab' ),
+				'dashicon' => 'plus-alt',
+				'args'     => array(
 					'additions' => array(
-						'left'	=> $additions_left,
+						'left'  => $additions_left,
 						'right' => $additions_right,
 					),
 					'showleft' => $showleft,
