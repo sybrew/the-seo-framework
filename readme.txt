@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: google, bing, open graph, seo, xml sitemap, breadcrumbs, meta, search engine, pagerank, serp, facebook, twitter
 Requires at least: 4.4.0
 Tested up to: 4.8.0
-Stable tag: 2.8.0
+Stable tag: 2.8.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -190,6 +190,18 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
+= 2.8.1 - Integral Adroitness =
+
+**Release date:**
+
+* January 23rd 2017
+
+*This update fixes a corner case bug with mbstring compatibility. If you haven't read the [2.8.0 upgrade notes](https://theseoframework.com/?p=1792) yet, please do.*
+
+**Detailed log:**
+
+***What truly is [logic](https://theseoframework.com/?p=1812)?***
+
 = 2.8.0 - Ventricular Perspicacity =
 
 *In a dream it's typical not to be rational. - John Forbes Nash, Jr.*
@@ -327,6 +339,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **The full changelog can be found [here](http://theseoframework.com/?cat=2).**
 
 == Upgrade Notice ==
+
+= 2.8.1 =
+In the 2.8.0 update WordPress 4.3 and PHP 5.2 support have been dropped for better code quality.
 
 = 2.8.0 =
 In the 2.8.0 update WordPress 4.3 and PHP 5.2 support have been dropped for better code quality.

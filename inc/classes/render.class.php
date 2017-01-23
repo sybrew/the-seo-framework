@@ -52,9 +52,9 @@ class Render extends Admin_Init {
 	 * Cache description in static variable
 	 * Must be called inside the loop
 	 *
+	 * @since 2.2.2
 	 * @staticvar array $description_cache
 	 *
-	 * @since 2.2.2
 	 * @return string The description
 	 */
 	public function description_from_cache( $social = false ) {
@@ -71,15 +71,14 @@ class Render extends Admin_Init {
 	 * Cache current URL in static variable
 	 * Must be called inside the loop
 	 *
+	 * @since 2.2.2
+	 * @staticvar array $url_cache
+	 *
 	 * @param string $url the url
 	 * @param int $post_id the page id, if empty it will fetch the requested ID, else the page uri
 	 * @param bool $paged Return current page URL with pagination
 	 * @param bool $from_option Get the canonical uri option
 	 * @param bool $paged_plural Whether to allow pagination on second or later pages.
-	 *
-	 * @staticvar array $url_cache
-	 *
-	 * @since 2.2.2
 	 * @return string The url
 	 */
 	public function the_url_from_cache( $url = '', $post_id = null, $paged = false, $from_option = true, $paged_plural = true ) {
@@ -98,11 +97,10 @@ class Render extends Admin_Init {
 	/**
 	 * Cache home URL in static variable
 	 *
-	 * @param bool $force_slash Force slash
-	 *
+	 * @since 2.5.0
 	 * @staticvar array $url_cache
 	 *
-	 * @since 2.5.0
+	 * @param bool $force_slash Force slash
 	 * @return string The url
 	 */
 	public function the_home_url_from_cache( $force_slash = false ) {
@@ -119,14 +117,14 @@ class Render extends Admin_Init {
 	 * Cache current Title in static variable
 	 * Must be called inside the loop
 	 *
+	 * @since 2.2.2
+	 * @since 2.4.0 : If the theme is doing it right, override cache parameters to speed things up.
+	 * @staticvar array $title_cache
+	 *
 	 * @param string $title The Title to return
 	 * @param string $sep The Title sepeartor
 	 * @param string $seplocation The Title sepeartor location ( accepts 'left' or 'right' )
 	 * @param bool $meta Ignore theme doing it wrong.
-	 *
-	 * @staticvar array $title_cache
-	 *
-	 * @since 2.2.2
 	 * @return string The title
 	 */
 	public function title_from_cache( $title = '', $sep = '', $seplocation = '', $meta = false ) {
@@ -143,7 +141,7 @@ class Render extends Admin_Init {
 		static $seplocation_param_cache = null;
 
 		if ( ! isset( $setup_cache ) ) {
-			if ( doing_filter( 'pre_get_document_title' ) || \doing_filter( 'wp_title' ) ) {
+			if ( \doing_filter( 'pre_get_document_title' ) || \doing_filter( 'wp_title' ) ) {
 				$title_param_cache = $title;
 				$sep_param_cache = $sep;
 				$seplocation_param_cache = $seplocation;
@@ -152,11 +150,6 @@ class Render extends Admin_Init {
 			}
 		}
 
-		/**
-		 * If the theme is doing it right, override parameters to speed things up.
-		 *
-		 * @since 2.4.0
-		 */
 		if ( isset( $this->title_doing_it_wrong ) && false === $this->title_doing_it_wrong ) {
 			$title = $title_param_cache;
 			$sep = $sep_param_cache;
@@ -176,10 +169,9 @@ class Render extends Admin_Init {
 	 * Caches current Image URL in static variable.
 	 * Must be called inside the loop.
 	 *
-	 * @staticvar string $image_cache
-	 *
 	 * @since 2.2.2
 	 * @since 2.7.0 $get_id parameter has been added.
+	 * @staticvar string $image_cache
 	 *
 	 * @return string The image URL.
 	 */
@@ -200,10 +192,9 @@ class Render extends Admin_Init {
 	/**
 	 * Renders the description meta tag.
 	 *
+	 * @since 1.3.0
 	 * @uses $this->description_from_cache()
 	 * @uses $this->detect_seo_plugins()
-	 *
-	 * @since 1.3.0
 	 *
 	 * @return string The description meta tag.
 	 */
@@ -215,7 +206,7 @@ class Render extends Admin_Init {
 		/**
 		 * Applies filters 'the_seo_framework_description_output' : string
 		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
+		 * @since 2.7.0 : Added output within filter.
 		 */
 		$description = (string) \apply_filters( 'the_seo_framework_description_output', $this->description_from_cache(), $this->get_the_real_ID() );
 
@@ -228,8 +219,8 @@ class Render extends Admin_Init {
 	/**
 	 * Renders og:description meta tag
 	 *
-	 * @uses $this->description_from_cache()
 	 * @since 1.3.0
+	 * @uses $this->description_from_cache()
 	 *
 	 * @return string The Open Graph description meta tag.
 	 */
@@ -243,7 +234,7 @@ class Render extends Admin_Init {
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
 		 */
-		$description = (string) apply_filters( 'the_seo_framework_ogdescription_output', $this->description_from_cache( true ), $this->get_the_real_ID() );
+		$description = (string) \apply_filters( 'the_seo_framework_ogdescription_output', $this->description_from_cache( true ), $this->get_the_real_ID() );
 
 		if ( $description )
 			return '<meta property="og:description" content="' . \esc_attr( $description ) . '" />' . "\r\n";
@@ -323,11 +314,9 @@ class Render extends Admin_Init {
 	/**
 	 * Renders Open Graph image meta tag.
 	 *
-	 * @param string $image url for image
-	 *
 	 * @since 1.3.0
-	 * @since 2.6.0 Added WooCommerce gallery images.
-	 * @since 2.7.0 Added image dimensions if found.
+	 * @since 2.6.0 : Added WooCommerce gallery images.
+	 * @since 2.7.0 : Added image dimensions if found.
 	 *
 	 * @return string The Open Graph image meta tag.
 	 */
@@ -347,7 +336,7 @@ class Render extends Admin_Init {
 		 * @todo Place in listener cache.
 		 * @priority medium 2.8.0+
 		 */
-		$image = apply_filters( 'the_seo_framework_ogimage_output', $this->get_image_from_cache(), $id = $this->get_the_real_ID() );
+		$image = \apply_filters( 'the_seo_framework_ogimage_output', $this->get_image_from_cache(), $id = $this->get_the_real_ID() );
 
 		/**
 		 * Now returns empty string on false.
