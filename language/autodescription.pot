@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the The SEO Framework package.
 msgid ""
 msgstr ""
-"Project-Id-Version: The SEO Framework 2.8.0\n"
+"Project-Id-Version: The SEO Framework 2.8.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/autodescription\n"
-"POT-Creation-Date: 2017-01-22 02:29:45+00:00\n"
+"POT-Creation-Date: 2017-01-23 21:47:42+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -660,29 +660,29 @@ msgid "Doing it Right"
 msgstr ""
 
 #: inc/views/inpost/seo-settings.php:156
-#: inc/views/metaboxes/homepage-metabox.php:184
+#: inc/views/metaboxes/homepage-metabox.php:186
 msgid "Custom %s Title"
 msgstr ""
 
 #: inc/views/inpost/seo-settings.php:157 inc/views/inpost/seo-settings.php:358
-#: inc/views/metaboxes/homepage-metabox.php:185
+#: inc/views/metaboxes/homepage-metabox.php:187
 msgid "Recommended Length: 50 to 55 characters"
 msgstr ""
 
 #: inc/views/inpost/seo-settings.php:159 inc/views/inpost/seo-settings.php:176
 #: inc/views/inpost/seo-settings.php:367 inc/views/inpost/seo-settings.php:383
-#: inc/views/metaboxes/homepage-metabox.php:187
-#: inc/views/metaboxes/homepage-metabox.php:226
+#: inc/views/metaboxes/homepage-metabox.php:189
+#: inc/views/metaboxes/homepage-metabox.php:228
 msgid "Characters Used: %s"
 msgstr ""
 
 #: inc/views/inpost/seo-settings.php:173
-#: inc/views/metaboxes/homepage-metabox.php:223
+#: inc/views/metaboxes/homepage-metabox.php:225
 msgid "Custom %s Description"
 msgstr ""
 
 #: inc/views/inpost/seo-settings.php:174 inc/views/inpost/seo-settings.php:377
-#: inc/views/metaboxes/homepage-metabox.php:224
+#: inc/views/metaboxes/homepage-metabox.php:226
 msgid "Recommended Length: 145 to 155 characters"
 msgstr ""
 
@@ -755,17 +755,17 @@ msgid "Apply %s to this term?"
 msgstr ""
 
 #: inc/views/inpost/seo-settings.php:394
-#: inc/views/metaboxes/homepage-metabox.php:349
+#: inc/views/metaboxes/homepage-metabox.php:351
 msgid "Tell Search Engines not to show this page in their search results"
 msgstr ""
 
 #: inc/views/inpost/seo-settings.php:401
-#: inc/views/metaboxes/homepage-metabox.php:359
+#: inc/views/metaboxes/homepage-metabox.php:361
 msgid "Tell Search Engines not to follow links on this page"
 msgstr ""
 
 #: inc/views/inpost/seo-settings.php:408
-#: inc/views/metaboxes/homepage-metabox.php:369
+#: inc/views/metaboxes/homepage-metabox.php:371
 msgid "Tell Search Engines not to save a cached copy of this page"
 msgstr ""
 
@@ -782,7 +782,7 @@ msgid "Automated Description Settings"
 msgstr ""
 
 #: inc/views/metaboxes/description-metabox.php:42
-#: inc/views/metaboxes/homepage-metabox.php:235
+#: inc/views/metaboxes/homepage-metabox.php:237
 msgid "The meta description can be used to determine the text used under the title on Search Engine results pages."
 msgstr ""
 
@@ -791,7 +791,7 @@ msgid "Example Automated Description Output"
 msgstr ""
 
 #: inc/views/metaboxes/description-metabox.php:67
-#: inc/views/metaboxes/homepage-metabox.php:30
+#: inc/views/metaboxes/homepage-metabox.php:32
 #: inc/views/metaboxes/robots-metabox.php:57
 #: inc/views/metaboxes/schema-metabox.php:37
 #: inc/views/metaboxes/sitemaps-metabox.php:38
@@ -801,7 +801,7 @@ msgid "General"
 msgstr ""
 
 #: inc/views/metaboxes/description-metabox.php:72
-#: inc/views/metaboxes/homepage-metabox.php:35
+#: inc/views/metaboxes/homepage-metabox.php:37
 #: inc/views/metaboxes/title-metabox.php:66
 msgid "Additions"
 msgstr ""
@@ -1010,7 +1010,7 @@ msgid "Scheme Settings"
 msgstr ""
 
 #: inc/views/metaboxes/general-metabox.php:148
-msgid "If your website is accessible on both HTTP as HTTPS, set this to HTTPS in order to prevent duplicated content."
+msgid "If your website is accessible on both HTTP as HTTPS, set this to HTTPS in order to prevent duplicate content."
 msgstr ""
 
 #: inc/views/metaboxes/general-metabox.php:149
@@ -1060,21 +1060,21 @@ msgstr ""
 msgid "These settings will take precedence over the settings set within the Home Page edit screen, if any."
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:40
+#: inc/views/metaboxes/homepage-metabox.php:42
 msgid "Robots"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:68
+#: inc/views/metaboxes/homepage-metabox.php:70
 msgid "Title"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:69
+#: inc/views/metaboxes/homepage-metabox.php:71
 msgid "Description"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:70
-#: inc/views/metaboxes/homepage-metabox.php:271
-#: inc/views/metaboxes/homepage-metabox.php:316
+#: inc/views/metaboxes/homepage-metabox.php:72
+#: inc/views/metaboxes/homepage-metabox.php:273
+#: inc/views/metaboxes/homepage-metabox.php:318
 #: inc/views/metaboxes/social-metabox.php:245
 #: inc/views/metaboxes/social-metabox.php:276
 msgid "Home Page"
@@ -1082,90 +1082,90 @@ msgstr ""
 
 #. translators: 1: Option, 2: Page SEO Settings, 3: Home Page
 
-#: inc/views/metaboxes/homepage-metabox.php:98
-#: inc/views/metaboxes/homepage-metabox.php:156
+#: inc/views/metaboxes/homepage-metabox.php:100
+#: inc/views/metaboxes/homepage-metabox.php:158
 msgid "Note: The %1$s is fetched from the %2$s on the %3$s."
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:98
-#: inc/views/metaboxes/homepage-metabox.php:154
+#: inc/views/metaboxes/homepage-metabox.php:100
+#: inc/views/metaboxes/homepage-metabox.php:156
 msgid "Page SEO Settings"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:173
+#: inc/views/metaboxes/homepage-metabox.php:175
 msgid "Custom %s Title Tagline"
 msgstr ""
 
 #. translators: %s = Home page URL markdown
 
-#: inc/views/metaboxes/homepage-metabox.php:211
-#: inc/views/metaboxes/homepage-metabox.php:251
+#: inc/views/metaboxes/homepage-metabox.php:213
+#: inc/views/metaboxes/homepage-metabox.php:253
 msgid "A plugin has been detected that suggests to maintain this option on the [Home Page](%s)."
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:275
+#: inc/views/metaboxes/homepage-metabox.php:277
 #: inc/views/metaboxes/title-metabox.php:132
 msgid "Document Title Additions Location"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:276
+#: inc/views/metaboxes/homepage-metabox.php:278
 #: inc/views/metaboxes/title-metabox.php:134
 msgid "Determines which side the added title text will go on."
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:282
+#: inc/views/metaboxes/homepage-metabox.php:284
 #: inc/views/metaboxes/title-metabox.php:140
 msgid "Left:"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:292
+#: inc/views/metaboxes/homepage-metabox.php:294
 #: inc/views/metaboxes/title-metabox.php:147
 msgid "Right:"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:303
+#: inc/views/metaboxes/homepage-metabox.php:305
 msgid "%s Tagline"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:307
+#: inc/views/metaboxes/homepage-metabox.php:309
 msgid "Add site description (tagline) to the Title on the %s?"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:333
+#: inc/views/metaboxes/homepage-metabox.php:335
 msgid "View Home Page Settings"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:333
+#: inc/views/metaboxes/homepage-metabox.php:335
 msgid "Checked in Page"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:337
+#: inc/views/metaboxes/homepage-metabox.php:339
 msgid "Home Page Robots Meta Settings"
 msgstr ""
 
 #. translators: 1: Option, 2: Location
 
-#: inc/views/metaboxes/homepage-metabox.php:346
-#: inc/views/metaboxes/homepage-metabox.php:356
-#: inc/views/metaboxes/homepage-metabox.php:366
+#: inc/views/metaboxes/homepage-metabox.php:348
+#: inc/views/metaboxes/homepage-metabox.php:358
+#: inc/views/metaboxes/homepage-metabox.php:368
 msgid "Apply %1$s to the %2$s?"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:401
+#: inc/views/metaboxes/homepage-metabox.php:403
 msgid "Note: If any of these options are unchecked, but are checked on the Home Page, they will be outputted regardless."
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:407
+#: inc/views/metaboxes/homepage-metabox.php:409
 msgid "Home Page Pagination Robots Settings"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:408
+#: inc/views/metaboxes/homepage-metabox.php:410
 msgid "If your Home Page is paginated and outputs content that's also found elsewhere on the website, enabling this option might prevent duplicate content."
 msgstr ""
 
 #. translators: 1: Option, 2: Location
 
-#: inc/views/metaboxes/homepage-metabox.php:416
+#: inc/views/metaboxes/homepage-metabox.php:418
 msgid "Apply %1$s to every second or later page on the %2$s?"
 msgstr ""
 
