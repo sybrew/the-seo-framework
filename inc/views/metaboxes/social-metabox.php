@@ -78,7 +78,9 @@ switch ( $instance ) :
 		<?php
 		$this->description( __( 'Output various meta tags for social site integration, among other 3rd party services.', 'autodescription' ) );
 
-		?><hr><?php
+		?>
+		<hr>
+		<?php
 
 		//* Echo Open Graph Tags checkboxes.
 		$this->wrap_fields(
@@ -94,7 +96,9 @@ switch ( $instance ) :
 		if ( $this->detect_og_plugin() )
 			$this->description( __( 'Note: Another Open Graph plugin has been detected.', 'autodescription' ) );
 
-		?><hr><?php
+		?>
+		<hr>
+		<?php
 
 		//* Echo Facebook Tags checkbox.
 		$this->wrap_fields(
@@ -107,7 +111,9 @@ switch ( $instance ) :
 			true
 		);
 
-		?><hr><?php
+		?>
+		<hr>
+		<?php
 
 		//* Echo Twitter Tags checkboxes.
 		$this->wrap_fields(
@@ -120,9 +126,8 @@ switch ( $instance ) :
 			true
 		);
 
-		if ( $this->detect_twitter_card_plugin() ) {
+		if ( $this->detect_twitter_card_plugin() )
 			$this->description( __( 'Note: Another Twitter Card plugin has been detected.', 'autodescription' ) );
-		}
 		break;
 
 	case 'the_seo_framework_social_metabox_facebook' :

@@ -347,11 +347,32 @@ class Generate extends Term_Data {
 	 * take the said option. Otherwise, it will fall back to 'summary'.
 	 *
 	 * @since 2.7.0
+	 * @since 2.8.2 : Now considers description output.
 	 *
 	 * @return string The Twitter Card type.
 	 */
 	public function generate_twitter_card_type() {
-		return $this->get_image_from_cache() ? $this->get_option( 'twitter_card' ) : 'summary';
+
+		if ( $this->get_image_from_cache() ) {
+
+			$option = $this->get_option( 'twitter_card' );
+
+			//* Photo Will always work.
+			if ( 'photo' === $option )
+				return $option;
+
+			//* Only output 'summary' or 'summary_large_image' if there's a description.
+			if ( $this->description_from_cache( true ) )
+				return $option;
+
+			//* Output photo otherwise.
+			return 'photo';
+		}
+
+		if ( $this->description_from_cache( true ) )
+			return 'summary';
+
+		return '';
 	}
 
 	/**

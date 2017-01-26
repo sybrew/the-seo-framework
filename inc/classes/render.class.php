@@ -171,22 +171,30 @@ class Render extends Admin_Init {
 	 *
 	 * @since 2.2.2
 	 * @since 2.7.0 $get_id parameter has been added.
-	 * @staticvar string $image_cache
+	 * @staticvar string $cache
 	 *
 	 * @return string The image URL.
 	 */
 	public function get_image_from_cache() {
 
-		static $image_cache = null;
+		static $cache = null;
 
-		if ( isset( $image_cache ) )
-			return $image_cache;
+		return isset( $cache ) ? $cache : $cache = $this->get_image( $this->get_the_real_ID() );
+	}
 
-		$post_id = $this->get_the_real_ID();
+	/**
+	 * Returns the current Twitter card type.
+	 *
+	 * @since 2.8.2
+	 * @staticvar string $cache
+	 *
+	 * @return string The cached Twitter card.
+	 */
+	public function get_current_twitter_card_type() {
 
-		$image_cache = $this->get_image( $post_id );
+		static $cache = null;
 
-		return $image_cache;
+		return isset( $cache ) ? $cache : $cache = $this->generate_twitter_card_type();
 	}
 
 	/**
@@ -470,7 +478,7 @@ class Render extends Admin_Init {
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
 		 */
-		$card = (string) \apply_filters( 'the_seo_framework_twittercard_output', $this->generate_twitter_card_type(), $this->get_the_real_ID() );
+		$card = (string) \apply_filters( 'the_seo_framework_twittercard_output', $this->get_current_twitter_card_type(), $this->get_the_real_ID() );
 
 		if ( $card )
 			return '<meta name="twitter:card" content="' . \esc_attr( $card ) . '" />' . "\r\n";
@@ -1069,6 +1077,7 @@ class Render extends Admin_Init {
 	 * Determines whether we can use Twitter tags.
 	 *
 	 * @since 2.6.0
+	 * @since 2.8.2 : Now also considers Twitter card type output.
 	 * @staticvar bool $cache
 	 *
 	 * @return bool
@@ -1080,7 +1089,7 @@ class Render extends Admin_Init {
 		if ( isset( $cache ) )
 			return $cache;
 
-		return $cache = $this->is_option_checked( 'twitter_tags' ) && false === $this->detect_twitter_card_plugin();
+		return $cache = $this->is_option_checked( 'twitter_tags' ) && false === $this->detect_twitter_card_plugin() && $this->get_current_twitter_card_type();
 	}
 
 	/**

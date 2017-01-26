@@ -215,6 +215,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Accidental (or even intentional) duplicated spaces are now omitted from descriptions and titles.
 * **Fixed:**
 	* HTML entities were shown as unencoded in the custom post description value.
+	* Twitter card type `photo` is now considered when no social description can be generated.
+	* All Twitter metadata will now be removed if no social image or description can be found or generated.
+		* It's then up to Twitter to use Open Graph.
 
 **For developers:**
 
