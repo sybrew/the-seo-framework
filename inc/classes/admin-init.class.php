@@ -327,7 +327,7 @@ class Admin_Init extends Init {
 			),
 			'params' => array(
 				'siteTitle' => \esc_html( \wp_kses_decode_entities( $title ) ),
-				'titleAdditions' => \esc_html( $additions ),
+				'titleAdditions' => \esc_html( \wp_kses_decode_entities( $additions ) ),
 				'blogDescription' => \esc_html( \wp_kses_decode_entities( $description ) ),
 				'titleSeparator' => \esc_html( $title_separator ),
 				'descriptionSeparator' => \esc_html( $description_separator ),

@@ -134,8 +134,30 @@ class Term_Data extends Post_Data {
 
 		//* Check again against ambiguous injection.
 		if ( isset( $_POST['_wpnonce'] ) && \wp_verify_nonce( $_POST['_wpnonce'], 'update-tag_' . $term_id ) ) {
-			$data = isset( $_POST['autodescription-meta'] ) ? (array) \map_deep( $_POST['autodescription-meta'], 'esc_attr' ) : array();
+			$data = isset( $_POST['autodescription-meta'] ) ? (array) \stripslashes_deep( $_POST['autodescription-meta'] ) : array();
 			$data = \wp_parse_args( $data, $this->get_term_meta_defaults() );
+
+			foreach ( (array) $data as $key => $value ) :
+				switch ( $key ) :
+					case 'doctitle' :
+						$data[ $key ] = $this->s_real_title( $value );
+						continue 2;
+
+					case 'description' :
+						$data[ $key ] = $this->s_description( $value );
+						continue 2;
+
+					case 'noindex' :
+					case 'nofollow' :
+					case 'noarchive' :
+					case 'saved_flag' :
+						$data[ $key ] = $this->s_one_zero( $value );
+						continue 2;
+
+					default :
+						break;
+				endswitch;
+			endforeach;
 
 			\update_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
 		}

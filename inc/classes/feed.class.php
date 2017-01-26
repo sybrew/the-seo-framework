@@ -84,7 +84,7 @@ class Feed extends Cache {
 			 */
 			if ( isset( $feed_type ) && $this->get_option( 'excerpt_the_feed' ) ) {
 				//* Strip all code and lines.
-				$excerpt = $this->s_excerpt( $content );
+				$excerpt = $this->s_excerpt( $content, false );
 
 				$excerpt_len = (int) mb_strlen( $excerpt );
 				/**

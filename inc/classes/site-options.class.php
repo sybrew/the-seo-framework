@@ -85,7 +85,7 @@ class Site_Options extends Sanitize {
 		 * Switch when RTL is active;
 		 * @since 2.5.0
 		 */
-		if ( is_rtl() ) {
+		if ( \is_rtl() ) {
 			$titleloc = 'left';
 			$h_titleloc = 'right';
 		} else {
@@ -531,7 +531,7 @@ class Site_Options extends Sanitize {
 		 * Applies filters 'the_seo_framework_get_options' : boolean
 		 * @since 2.0.0
 		 */
-		return $cache[ $setting ] = apply_filters( 'the_seo_framework_get_options', get_option( $setting ), $setting );
+		return $cache[ $setting ] = \apply_filters( 'the_seo_framework_get_options', \get_option( $setting ), $setting );
 	}
 
 	/**
@@ -541,6 +541,7 @@ class Site_Options extends Sanitize {
 	 * second DB interaction.
 	 *
 	 * @since 2.0.0
+	 * @since 2.8.2 : No longer decodes entities on request.
 	 * @staticvar array $settings_cache
 	 * @staticvar array $options_cache
 	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
@@ -559,7 +560,7 @@ class Site_Options extends Sanitize {
 			if ( ! is_array( $options ) || ! array_key_exists( $key, $options ) )
 				return '';
 
-			return is_array( $options[ $key ] ) ? \stripslashes_deep( $options[ $key ] ) : stripslashes( \wp_kses_decode_entities( $options[ $key ] ) );
+			return is_array( $options[ $key ] ) ? \stripslashes_deep( $options[ $key ] ) : stripslashes( $options[ $key ] );
 		}
 
 		//* Setup caches
@@ -578,7 +579,7 @@ class Site_Options extends Sanitize {
 			$options_cache[ $setting ][ $key ] = '';
 		} else {
 			//* Option has not been previously been cached, so cache now
-			$options_cache[ $setting ][ $key ] = is_array( $options[ $key ] ) ? \stripslashes_deep( $options[ $key ] ) : stripslashes( \wp_kses_decode_entities( $options[ $key ] ) );
+			$options_cache[ $setting ][ $key ] = is_array( $options[ $key ] ) ? \stripslashes_deep( $options[ $key ] ) : stripslashes( $options[ $key ] );
 		}
 
 		return $options_cache[ $setting ][ $key ];
@@ -619,13 +620,14 @@ class Site_Options extends Sanitize {
 	 *
 	 * @since 2.2.7
 	 *
-	 * Applies filters the_seo_framework_default_site_options : The default site options array.
-	 *
 	 * @param array $args Additional default options to filter.
-	 *
 	 * @return array The SEO Framework Options
 	 */
 	protected function default_site_options( $args = array() ) {
+		/**
+		 * Applies filters the_seo_framework_default_site_options : array
+		 * @since 2.2.7
+		 */
 		return \wp_parse_args(
 			$args,
 			\apply_filters(
@@ -641,13 +643,14 @@ class Site_Options extends Sanitize {
 	/**
 	 * Return the Warned site options. Options which should be 'avoided' return true.
 	 *
-	 * @since 2.3.4
-	 * Applies filters 'the_seo_framework_warned_site_options' : array The warned site options array.
-	 *
 	 * @param array $args Additional warned options to filter.
 	 * @return array The SEO Framework Warned Options
 	 */
 	protected function warned_site_options( $args = array() ) {
+		/**
+		 * Applies filters the_seo_framework_warned_site_options : array
+		 * @since 2.3.4
+		 */
 		return \wp_parse_args(
 			$args,
 			\apply_filters(
@@ -666,7 +669,7 @@ class Site_Options extends Sanitize {
 	 * @since 2.2.2
 	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 *
-	 * @return void
+	 * @return void Early if settings can't be registered.
 	 */
 	public function register_settings() {
 
@@ -726,6 +729,7 @@ class Site_Options extends Sanitize {
 	 * Get the default of any of the The SEO Framework settings.
 	 *
 	 * @since 2.2.4
+	 * @since 2.8.2 : No longer decodes entities on request.
 	 * @staticvar array $defaults_cache
 	 * @uses $this->settings_field
 	 * @uses $this->default_site_options()
@@ -752,7 +756,7 @@ class Site_Options extends Sanitize {
 			if ( ! is_array( $defaults ) || ! array_key_exists( $key, $defaults ) )
 				return -1;
 
-			return is_array( $defaults[ $key ] ) ? \stripslashes_deep( $defaults[ $key ] ) : stripslashes( \wp_kses_decode_entities( $defaults[ $key ] ) );
+			return is_array( $defaults[ $key ] ) ? \stripslashes_deep( $defaults[ $key ] ) : stripslashes( $defaults[ $key ] );
 		}
 
 		static $defaults_cache = array();

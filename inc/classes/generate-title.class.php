@@ -134,6 +134,8 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function escape_title( $title = '', $trim = true ) {
 
+		$title = $this->s_nbsp( $title );
+		$title = $this->s_bsol( $title );
 		$title = \wptexturize( $title );
 		$title = \convert_chars( $title );
 		$title = \esc_html( $title );

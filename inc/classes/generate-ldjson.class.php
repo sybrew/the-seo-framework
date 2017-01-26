@@ -597,7 +597,7 @@ class Generate_Ldjson extends Generate_Image {
 		//* Get ancestors.
 		$parents = \get_post_ancestors( $page_id );
 
-		if ( $parents ) {
+		if ( $parents ) :
 
 			$context = $this->schema_context();
 			$context_type = $this->schema_breadcrumblist();
@@ -612,8 +612,7 @@ class Generate_Ldjson extends Generate_Image {
 
 				$id = json_encode( $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'id' => $parent_id ) ) );
 
-				$custom_field_name = $this->get_custom_field( '_genesis_title', $parent_id );
-				$parent_name = $custom_field_name ? $custom_field_name : $this->title( '', '', '', array( 'term_id' => $parent_id, 'meta' => true, 'get_custom_field' => false, 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
+				$parent_name = $this->get_custom_field( '_genesis_title', $parent_id ) ?: $this->title( '', '', '', array( 'term_id' => $parent_id, 'meta' => true, 'get_custom_field' => false, 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
 
 				$name = json_encode( $parent_name );
 				$image = $this->schema_image( $parent_id );
@@ -637,7 +636,7 @@ class Generate_Ldjson extends Generate_Image {
 				$breadcrumbhelper = sprintf( '{"@context":%s,"@type":%s,"itemListElement":[%s]}', $context, $context_type, $items );
 				$output = '<script type="application/ld+json">' . $breadcrumbhelper . '</script>' . "\r\n";
 			}
-		}
+		endif;
 
 		return $output;
 	}
@@ -672,8 +671,7 @@ class Generate_Ldjson extends Generate_Image {
 		} elseif ( $this->has_page_on_front() ) {
 			$home_id = (int) get_option( 'page_on_front' );
 
-			$custom_name = $this->get_custom_field( '_genesis_title', $home_id );
-			$custom_name = $custom_name ? $custom_name : $this->get_blogname();
+			$custom_name = $this->get_custom_field( '_genesis_title', $home_id ) ?: $this->get_blogname();
 		} else {
 			$custom_name = $this->get_blogname();
 		}
@@ -737,8 +735,7 @@ class Generate_Ldjson extends Generate_Image {
 			$id = json_encode( $this->the_url_from_cache() );
 
 		if ( ! isset( $name ) ) {
-			$custom_field = $this->get_custom_field( '_genesis_title', $post_id );
-			$name = $custom_field ? $custom_field : $this->title( '', '', '', array( 'term_id' => $post_id, 'placeholder' => true, 'meta' => true, 'notagline' => true, 'description_title' => true ) );
+			$name = $this->get_custom_field( '_genesis_title', $post_id ) ?: $this->title( '', '', '', array( 'term_id' => $post_id, 'placeholder' => true, 'meta' => true, 'notagline' => true, 'description_title' => true ) );
 			$name = json_encode( $name );
 		}
 
@@ -836,8 +833,7 @@ class Generate_Ldjson extends Generate_Image {
 		 * Forgot to add this.
 		 * @since 2.4.3
 		 */
-		$knowledge_name = $this->get_option( 'knowledge_name' );
-		$knowledge_name = $knowledge_name ? $knowledge_name : $this->get_blogname();
+		$knowledge_name = $this->get_option( 'knowledge_name' ) ?: $this->get_blogname();
 
 		$context = $this->schema_context();
 		$type = json_encode( ucfirst( $knowledge_type ) );

@@ -205,9 +205,6 @@ class Init extends Query {
 
 		\do_action( 'the_seo_framework_front_init' );
 
-		//* Edit the robots.txt file
-		\add_filter( 'robots_txt', array( $this, 'robots_txt' ), 10, 2 );
-
 		//* Remove canonical header tag from WP
 		\remove_action( 'wp_head', 'rel_canonical' );
 
@@ -254,6 +251,9 @@ class Init extends Query {
 	 * @since 2.5.2
 	 */
 	protected function init_front_end_filters() {
+
+		//* Edit the robots.txt file
+		\add_filter( 'robots_txt', array( $this, 'robots_txt' ), 10, 2 );
 
 		//* Removes all pre_get_document_title filters.
 		\remove_all_filters( 'pre_get_document_title', false );

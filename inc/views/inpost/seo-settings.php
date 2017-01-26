@@ -156,7 +156,7 @@ switch ( $instance ) :
 			<label for="autodescription_title"><strong><?php printf( esc_html__( 'Custom %s Title', 'autodescription' ), esc_html( $type ) ); ?></strong>
 				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 50 to 55 characters', 'autodescription' ); ?>">[?]</a>
 				<span class="description tsf-counter">
-					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_title_chars">' . esc_html( mb_strlen( $tit_len_parsed ) ) . '</span>' ); ?>
+					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_title_chars">' . (int) mb_strlen( $tit_len_parsed ) . '</span>' ); ?>
 					<span class="hide-if-no-js tsf-ajax"></span>
 				</span>
 			</label>
@@ -173,13 +173,13 @@ switch ( $instance ) :
 				<strong><?php printf( esc_html__( 'Custom %s Description', 'autodescription' ), esc_html( $type ) ); ?></strong>
 				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 145 to 155 characters', 'autodescription' ); ?>">[?]</a>
 				<span class="description tsf-counter">
-					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_description_chars">' . esc_html( mb_strlen( $desc_len_parsed ) ) . '</span>' ); ?>
+					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_description_chars">' . (int) mb_strlen( $desc_len_parsed ) . '</span>' ); ?>
 					<span class="hide-if-no-js tsf-ajax"></span>
 				</span>
 			</label>
 		</p>
 		<p>
-			<textarea class="large-text" name="autodescription[_genesis_description]" id="autodescription_description" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="4" cols="4"><?php echo esc_textarea( $this->get_custom_field( '_genesis_description' ) ); ?></textarea>
+			<textarea class="large-text" name="autodescription[_genesis_description]" id="autodescription_description" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="4" cols="4"><?php echo esc_attr( $this->get_custom_field( '_genesis_description' ) ); ?></textarea>
 		</p>
 
 		<p>

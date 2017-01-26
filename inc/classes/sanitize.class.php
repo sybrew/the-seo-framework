@@ -137,10 +137,16 @@ class Sanitize extends Admin_Pages {
 			's_title',
 			$this->settings_field,
 			array(
+				'knowledge_name',
+			)
+		);
+
+		$this->add_option_filter(
+			's_real_title',
+			$this->settings_field,
+			array(
 				'homepage_title',
 				'homepage_title_tagline',
-
-				'knowledge_name',
 			)
 		);
 
@@ -462,8 +468,7 @@ class Sanitize extends Admin_Pages {
 	 * @param string $filter Sanitization filter type
 	 * @param string $new_value New value
 	 * @param string $old_value Previous value
-	 * @return mixed Returns filtered value, or submitted value if value is
-	 * unfiltered.
+	 * @return mixed Returns filtered value, or submitted value if value is unfiltered.
 	 */
 	protected function do_filter( $filter, $new_value, $old_value ) {
 
@@ -491,22 +496,23 @@ class Sanitize extends Admin_Pages {
 	protected function get_available_filters() {
 
 		$default_filters = array(
-			's_left_right'             => array( $this, 's_left_right' ),
-			's_left_right_home'        => array( $this, 's_left_right_home' ),
-			's_title_separator'        => array( $this, 's_title_separator' ),
-			's_description_separator'  => array( $this, 's_description_separator' ),
-			's_description'            => array( $this, 's_description' ),
-			's_title'                  => array( $this, 's_title' ),
-			's_knowledge_type'         => array( $this, 's_knowledge_type' ),
-			's_one_zero'               => array( $this, 's_one_zero' ),
-			's_no_html'                => array( $this, 's_no_html' ),
-			's_no_html_space'          => array( $this, 's_no_html_space' ),
-			's_absint'                 => array( $this, 's_absint' ),
-			's_safe_html'              => array( $this, 's_safe_html' ),
-			's_url'                    => array( $this, 's_url' ),
-			's_url_query'              => array( $this, 's_url_query' ),
-			's_twitter_name'           => array( $this, 's_twitter_name' ),
-			's_twitter_card'           => array( $this, 's_twitter_card' ),
+			's_left_right'            => array( $this, 's_left_right' ),
+			's_left_right_home'       => array( $this, 's_left_right_home' ),
+			's_title_separator'       => array( $this, 's_title_separator' ),
+			's_description_separator' => array( $this, 's_description_separator' ),
+			's_description'           => array( $this, 's_description' ),
+			's_title'                 => array( $this, 's_title' ),
+			's_real_title'            => array( $this, 's_real_title' ),
+			's_knowledge_type'        => array( $this, 's_knowledge_type' ),
+			's_one_zero'              => array( $this, 's_one_zero' ),
+			's_no_html'               => array( $this, 's_no_html' ),
+			's_no_html_space'         => array( $this, 's_no_html_space' ),
+			's_absint'                => array( $this, 's_absint' ),
+			's_safe_html'             => array( $this, 's_safe_html' ),
+			's_url'                   => array( $this, 's_url' ),
+			's_url_query'             => array( $this, 's_url_query' ),
+			's_twitter_name'          => array( $this, 's_twitter_name' ),
+			's_twitter_card'          => array( $this, 's_twitter_card' ),
 		);
 
 		/**
@@ -587,9 +593,27 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_description( $new_value ) {
 
-		$description = str_replace( array( "\r\n", "\r", "\n" ), "\n", $new_value );
+		$new_value = $this->s_singleline( $new_value );
+		$new_value = $this->s_nbsp( $new_value );
+		$new_value = $this->s_dupe_space( $new_value );
+		$new_value = $this->escape_description( $new_value );
 
-		$lines = explode( "\n", $description );
+		return (string) $new_value;
+	}
+
+	/**
+	 * Converts multilines to single lines.
+	 *
+	 * @since 2.8.2
+	 *
+	 * @param string $new_value The input value with possible multiline.
+	 * @return string The input string without multiple lines.
+	 */
+	public function s_singleline( $new_value ) {
+
+		$new_value = str_replace( array( "\r\n", "\r", "\n" ), "\n", $new_value );
+
+		$lines = explode( "\n", $new_value );
 		$new_lines = array();
 
 		//* Remove line breaks
@@ -599,27 +623,41 @@ class Sanitize extends Admin_Pages {
 				$new_lines[] = trim( $line ) . ' ';
 		}
 
-		$description = trim( implode( $new_lines ) );
+		return trim( implode( $new_lines ) );
+	}
+
+	/**
+	 * Removes duplicated spaces from the input value.
+	 *
+	 * @since 2.8.2
+	 * @see $this->s_nsbp() For converting other spaces prior to using this method.
+	 *
+	 * @param string $new_value The input value with possible multispaces.
+	 * @return string The input string without duplicated spaces.
+	 */
+	public function s_dupe_space( $new_value ) {
 
 		$i = 0;
 		//* Run twice at most, to catch uneven multiple spaces.
 		do {
-			$description = str_replace( '  ', ' ', $description );
+			$new_value = str_replace( '  ', ' ', $new_value );
 			$i++;
-		} while ( strpos( $description, '  ' ) && $i <= 2 );
+		} while ( $i <= 2 && strpos( $new_value, '  ' ) );
 
-		return (string) $this->escape_description( $description );
+		return $new_value;
 	}
 
 	/**
 	 * Escapes input excerpt.
 	 *
 	 * @since 2.8.0
+	 * @since 2.8.2 : Added allow_shortcodes parameter.
 	 *
 	 * @param string $excerpt the Excerpt.
+	 * @param bool $allow_shortcodes Whether to maintain shortcodes from excerpt.
 	 * @return string The escaped Excerpt.
 	 */
-	public function s_excerpt( $excerpt = '' ) {
+	public function s_excerpt( $excerpt = '', $allow_shortcodes = true ) {
 
 		//* No need to parse an empty excerpt.
 		if ( '' === $excerpt )
@@ -629,7 +667,7 @@ class Sanitize extends Admin_Pages {
 		 * Applies filters 'the_seo_framework_allow_excerpt_shortcode_tags' : boolean
 		 * @since 2.6.6.1
 		 */
-		if ( \apply_filters( 'the_seo_framework_allow_excerpt_shortcode_tags', false ) && false === $this->is_feed() ) {
+		if ( $allow_shortcodes && \apply_filters( 'the_seo_framework_allow_excerpt_shortcode_tags', false ) ) {
 			$excerpt = \wp_strip_all_tags( $excerpt );
 		} else {
 			$excerpt = \wp_strip_all_tags( \strip_shortcodes( $excerpt ) );
@@ -644,7 +682,7 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.5.2
 	 * @since 2.8.0 Method is now public.
 	 *
-	 * @param string $new_value The Title.
+	 * @param string $new_value The input Title.
 	 * @return string Sanitized and trimmed title.
 	 */
 	public function s_title( $new_value ) {
@@ -653,6 +691,23 @@ class Sanitize extends Admin_Pages {
 		$title = trim( $title );
 
 		return (string) strip_tags( $title );
+	}
+
+	/**
+	 * Sanitizes input title as output.
+	 *
+	 * @since 2.8.2
+	 *
+	 * @param string $new_value The input Title.
+	 * @return string Sanitized, beautified and trimmed title.
+	 */
+	public function s_real_title( $new_value ) {
+
+		$new_value = $this->s_nbsp( $new_value );
+		$new_value = $this->s_dupe_space( $new_value );
+		$new_value = $this->escape_title( $new_value );
+
+		return (string) $new_value;
 	}
 
 	/**
@@ -1028,5 +1083,29 @@ class Sanitize extends Admin_Pages {
 			return $color;
 
 		return '';
+	}
+
+	/**
+	 * Replaces non-break spaces with regular spaces.
+	 *
+	 * @since 2.8.2
+	 *
+	 * @param string $new_value String with potentially unwanted nbsp values.
+	 * @return string A spacy string.
+	 */
+	public function s_nbsp( $new_value ) {
+		return str_replace( array( '%c2%a0', '&nbsp;' ), ' ', $new_value );
+	}
+
+	/**
+	 * Replaces backslash with entity backslash.
+	 *
+	 * @since 2.8.2
+	 *
+	 * @param string $new_value String with potentially unwanted \ values.
+	 * @return string A string with safe backslashes.
+	 */
+	public function s_bsol( $new_value ) {
+		return str_replace( '\\', '&#92;', $new_value );
 	}
 }

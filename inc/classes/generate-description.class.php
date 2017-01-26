@@ -79,7 +79,7 @@ class Generate_Description extends Generate {
 		 * @since 2.6.6
 		 */
 		if ( \apply_filters( 'the_seo_framework_do_shortcodes_in_description', false ) )
-			$description = do_shortcode( $description );
+			$description = \do_shortcode( $description );
 
 		return $this->escape_description( $description );
 	}
@@ -94,6 +94,8 @@ class Generate_Description extends Generate {
 	 */
 	public function escape_description( $description = '' ) {
 
+		$description = $this->s_nbsp( $description );
+		$description = $this->s_bsol( $description );
 		$description = \wptexturize( $description );
 		$description = \convert_chars( $description );
 		$description = \esc_html( $description );

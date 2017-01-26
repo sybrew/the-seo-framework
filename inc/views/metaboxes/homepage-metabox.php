@@ -61,22 +61,13 @@ switch ( $instance ) :
 
 		$language = $this->google_language();
 
-		$page_on_front = $this->has_page_on_front();
-		$home_description_frompost = false;
-
-		$description_from_post_message = '';
-		$title_from_post_message  = '';
+		$description_from_post_message = $title_from_post_message = '';
 
 		$title_i18n = esc_html__( 'Title', 'autodescription' );
 		$description_i18n = esc_html__( 'Description', 'autodescription' );
 		$home_page_i18n = esc_html__( 'Home Page', 'autodescription' );
 
 		$home_id = $this->get_the_front_page_ID();
-		$home_title = $this->escape_title( $this->get_option( 'homepage_title' ) );
-
-		$home_tagline = $this->get_field_value( 'homepage_title_tagline' );
-		$home_tagline_placeholder = $this->escape_title( $this->get_blogdescription() );
-		$home_tagline_value = $home_tagline ? $home_tagline : '';
 
 		/**
 		 * Create a placeholder for when there's no custom HomePage title found.
@@ -90,22 +81,11 @@ switch ( $instance ) :
 		}
 
 		/**
-		 * If the home title is fetched from the post, notify about that instead.
-		 * @since 2.2.4
-		 *
-		 * Nesting often used translations
-		 */
-		if ( empty( $home_title ) && $page_on_front && $this->get_custom_field( '_genesis_title', $home_id ) ) {
-			/* translators: 1: Option, 2: Page SEO Settings, 3: Home Page */
-			$title_from_post_message = sprintf( __( 'Note: The %1$s is fetched from the %2$s on the %3$s.', 'autodescription' ), $title_i18n, __( 'Page SEO Settings', 'autodescription' ), $home_page_i18n );
-		}
-
-		/**
 		 * Check for options to calculate title length.
 		 *
 		 * @since 2.3.4
 		 */
-		if ( $home_title ) {
+		if ( $this->get_option( 'homepage_title' ) ) {
 			$home_title_args = $this->generate_home_title();
 			$tit_len_pre = $this->process_title_additions( $home_title_args['title'], $home_title_args['blogname'], $home_title_args['seplocation'] );
 		} else {
@@ -113,10 +93,7 @@ switch ( $instance ) :
 		}
 
 		//* Fetch the description from the home page.
-		$frompost_description = $page_on_front ? $this->get_custom_field( '_genesis_description', $home_id ) : '';
-
-		//* Fetch the HomePage Description option.
-		$home_description = $this->get_field_value( 'homepage_description' );
+		$frompost_description = $this->has_page_on_front() ? $this->get_custom_field( '_genesis_description', $home_id ) : '';
 
 		/**
 		 * Create a placeholder.
@@ -138,9 +115,14 @@ switch ( $instance ) :
 		 * Checks if the home is blog, the Home Page Metabox description and
 		 * the frompost description.
 		 * @since 2.3.4
+		 *
+		 * @TODO make function.
 		 */
-		if ( empty( $home_description ) && $page_on_front && $frompost_description )
+		if ( ! $this->get_field_value( 'homepage_description' ) && $this->has_page_on_front() && $frompost_description ) {
 			$home_description_frompost = true;
+		} else {
+			$home_description_frompost = false;
+		}
 
 		/**
 		 * If the HomePage Description empty, it will check for the InPost
@@ -158,7 +140,7 @@ switch ( $instance ) :
 			$description_from_post_message = sprintf( __( 'Note: The %1$s is fetched from the %2$s on the %3$s.', 'autodescription' ), $description_i18n, $page_seo_settings_i18n, $home_page_i18n );
 		}
 
-		$desc_len_pre = $home_description ? $home_description : $description_placeholder;
+		$desc_len_pre = $this->get_field_value( 'homepage_description' ) ?: $description_placeholder;
 
 		/**
 		 * Convert to what Google outputs.
@@ -167,7 +149,7 @@ switch ( $instance ) :
 		 * @since 2.3.4
 		 */
 		$tit_len = html_entity_decode( $this->escape_title( $tit_len_pre ) );
-		$desc_len = html_entity_decode( $this->escape_title( $desc_len_pre ) );
+		$desc_len = html_entity_decode( $this->escape_description( $desc_len_pre ) );
 
 		?>
 		<p>
@@ -176,7 +158,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php $this->field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title_tagline' ); ?>" placeholder="<?php echo esc_attr( $home_tagline_placeholder ); ?>" value="<?php echo esc_attr( $home_tagline_value ); ?>" />
+			<input type="text" name="<?php $this->field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title_tagline' ); ?>" placeholder="<?php echo esc_attr( $this->escape_title( $this->get_blogdescription() ) ); ?>" value="<?php echo esc_attr( $this->get_field_value( 'homepage_title_tagline' ) ); ?>" />
 		</p>
 
 		<hr>
@@ -192,13 +174,25 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p id="tsf-title-wrap">
-			<input type="text" name="<?php $this->field_name( 'homepage_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title' ); ?>" placeholder="<?php echo esc_attr( $home_title_placeholder ); ?>" value="<?php echo esc_attr( $home_title ); ?>" />
+			<input type="text" name="<?php $this->field_name( 'homepage_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title' ); ?>" placeholder="<?php echo esc_attr( $home_title_placeholder ); ?>" value="<?php echo esc_attr( $this->get_field_value( 'homepage_title' ) ); ?>" />
 			<span id="tsf-title-offset" class="hide-if-no-js"></span><span id="tsf-title-placeholder" class="hide-if-no-js"></span>
 		</p>
 		<?php
-		if ( $title_from_post_message ) {
-			$this->description( $title_from_post_message );
+		/**
+		 * If the home title is fetched from the post, notify about that instead.
+		 * @since 2.2.4
+		 *
+		 * Nesting often used translations
+		 */
+		if ( $this->has_page_on_front() && ! $this->get_option( 'homepage_title' ) && $this->get_custom_field( '_genesis_title', $home_id ) ) {
+			/* translators: 1: Option, 2: Page SEO Settings, 3: Home Page */
+			printf( esc_html__( 'Note: The %1$s is fetched from the %2$s on the %3$s.', 'autodescription' ),
+				esc_html( $title_i18n ),
+				esc_html__( 'Page SEO Settings', 'autodescription' ),
+				esc_html( $home_page_i18n )
+			);
 		}
+
 		/**
 		 * Applies filters 'the_seo_framework_warn_homepage_global_title' : bool
 		 *
@@ -223,7 +217,7 @@ switch ( $instance ) :
 		<p>
 			<label for="<?php $this->field_id( 'homepage_description' ); ?>" class="tsf-toblock">
 				<strong><?php printf( esc_html__( 'Custom %s Description', 'autodescription' ), $home_page_i18n ); ?></strong>
-				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1' ); ?>" target="_blank" title="<?php _e( 'Recommended Length: 145 to 155 characters', 'autodescription' ) ?>">[?]</a>
+				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 145 to 155 characters', 'autodescription' ) ?>">[?]</a>
 				<span class="description tsf-counter">
 					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="' . esc_attr( $this->field_id( 'homepage_description', false ) ) . '_chars">' . (int) mb_strlen( $desc_len ) . '</span>' ); ?>
 					<span class="hide-if-no-js tsf-ajax"></span>
@@ -231,7 +225,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<textarea name="<?php $this->field_name( 'homepage_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_description' ); ?>" rows="3" cols="70"  placeholder="<?php echo $description_placeholder ?>"><?php echo esc_textarea( $home_description ); ?></textarea>
+			<textarea name="<?php $this->field_name( 'homepage_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_description' ); ?>" rows="3" cols="70"  placeholder="<?php echo $description_placeholder ?>"><?php echo esc_attr( $this->get_field_value( 'homepage_description' ) ); ?></textarea>
 		</p>
 		<?php
 		$this->description( __( 'The meta description can be used to determine the text used under the title on Search Engine results pages.', 'autodescription' ) );
@@ -284,7 +278,7 @@ switch ( $instance ) :
 						<span><?php esc_html_e( 'Left:', 'autodescription' ); ?></span>
 						<?php
 						//* Already escaped.
-						echo ( $example_left ) ? $this->code_wrap_noesc( $example_left ) : '';
+						echo $this->code_wrap_noesc( $example_left );
 						?>
 					</label>
 				</span>
@@ -294,7 +288,7 @@ switch ( $instance ) :
 						<span><?php esc_html_e( 'Right:', 'autodescription' ); ?></span>
 						<?php
 						//* Already escaped.
-						echo $example_right ? $this->code_wrap_noesc( $example_right ) : '';
+						echo $this->code_wrap_noesc( $example_right );
 						?>
 					</label>
 				</span>

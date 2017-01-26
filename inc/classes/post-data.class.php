@@ -116,7 +116,7 @@ class Post_Data extends Detect {
 		foreach ( (array) $data as $key => $value ) :
 			switch ( $key ) :
 				case '_genesis_title' :
-					$data[ $key ] = trim( strip_tags( $value ) );
+					$data[ $key ] = $this->s_real_title( $value );
 					continue 2;
 
 				case '_genesis_description' :
