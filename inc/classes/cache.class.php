@@ -99,16 +99,7 @@ class Cache extends Sitemaps {
 	 */
 	public function init_admin_caching_actions() {
 
-		/**
-		 * Delete Sitemap and Description transients on post publish/delete.
-		 * @see WP Core wp_transition_post_status()
-		 */
-		\add_action( 'publish_post', array( $this, 'delete_post_cache' ) );
-		\add_action( 'publish_page', array( $this, 'delete_post_cache' ) );
-		\add_action( 'deleted_post', array( $this, 'delete_post_cache' ) );
-		\add_action( 'deleted_page', array( $this, 'delete_post_cache' ) );
-		\add_action( 'post_updated', array( $this, 'delete_post_cache' ) );
-		\add_action( 'page_updated', array( $this, 'delete_post_cache' ) );
+		$this->init_post_cache_actions();
 
 		//* Deletes term description transient.
 		\add_action( 'edit_term', array( $this, 'delete_auto_description_transients_term' ), 10, 3 );
@@ -126,6 +117,38 @@ class Cache extends Sitemaps {
 		//* Delete doing it wrong transient after theme switch or plugin upgrade.
 		\add_action( 'after_switch_theme', array( $this, 'delete_theme_dir_transient' ), 10, 0 );
 		\add_action( 'upgrader_process_complete', array( $this, 'delete_theme_dir_transient' ), 10, 2 );
+	}
+
+	/**
+	 * Deletes Sitemap and Description transients on post publish/delete.
+	 *
+	 * @see WP Core wp_transition_post_status()
+	 * @since 2.8.2
+	 * @staticvar bool $run
+	 * @action init priority 1
+	 * @see $this->init_admin_actions();
+	 * @see $this->init_cron_actions();
+	 *
+	 * @return void Early if already called.
+	 */
+	public function init_post_cache_actions() {
+
+		static $run = false;
+
+		if ( $run )
+			return;
+
+		//* Can-be cron actions.
+		\add_action( 'publish_post', array( $this, 'delete_post_cache' ) );
+		\add_action( 'publish_page', array( $this, 'delete_post_cache' ) );
+
+		//* Other actions.
+		\add_action( 'deleted_post', array( $this, 'delete_post_cache' ) );
+		\add_action( 'deleted_page', array( $this, 'delete_post_cache' ) );
+		\add_action( 'post_updated', array( $this, 'delete_post_cache' ) );
+		\add_action( 'page_updated', array( $this, 'delete_post_cache' ) );
+
+		$run = true;
 	}
 
 	/**
@@ -828,15 +851,22 @@ class Cache extends Sitemaps {
 	 *
 	 * @since 2.2.9
 	 * @since 2.8.0 : Mow listens to option 'cache_sitemap' before deleting transient.
+	 * @since 2.8.2 : Added cache to prevent duplicated flushes.
+	 * @staticvar bool $run
 	 *
-	 * @return bool true
+	 * @return bool True on success, false on failure.
 	 */
 	public function delete_sitemap_transient() {
+
+		static $run = false;
+
+		if ( $run )
+			return false;
 
 		$this->is_option_checked( 'cache_sitemap' ) and \delete_transient( $this->sitemap_transient );
 		$this->ping_searchengines();
 
-		return true;
+		return $run = true;
 	}
 
 	/**

@@ -110,6 +110,10 @@ class Init extends Query {
 	 */
 	public function init_global_actions() {
 
+		if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
+			$this->init_cron_actions();
+		}
+
 		//* Add query strings for sitemap rewrite.
 		\add_action( 'init', array( $this, 'rewrite_rule_sitemap' ), 1 );
 
@@ -126,6 +130,18 @@ class Init extends Query {
 
 		//* Add query strings for sitemap rewrite.
 		\add_filter( 'query_vars', array( $this, 'enqueue_sitemap_query_vars' ), 1, 1 );
+	}
+
+	/**
+	 * Initializes cron actions.
+	 *
+	 * @since 2.8.0
+	 */
+	public function init_cron_actions() {
+
+		//* Flush post cache.
+		$this->init_post_cache_actions();
+
 	}
 
 	/**

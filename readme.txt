@@ -199,7 +199,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **Summarized:**
 /
 * New features in a minor release? Yes!
-* TODO Schedules posts, when posted, now also trigger sitemap cache flush pinging.
+* Schedules posts, when posted, now also trigger sitemap cache flush pinging.
 * TODO There's now a fallback image uploader.
 * This update also fixes a few bugs, namely with character encoding in the admin area.
 
@@ -207,7 +207,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * **Added:**
 	/
-	* TODO Scheduled posts now trigger sitemap cache flush and search engine pinging on publish.
+	* Scheduled posts now trigger sitemap cache flush and search engine pinging on publish.
 	* TODO Fallback social image uploader. (Hug me, brother!)
 * **Improved:**
 	* Homepage, Term and Post Title and Tagline values now shows actual output after save, including converted entities.
