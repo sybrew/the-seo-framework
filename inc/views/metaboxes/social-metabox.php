@@ -57,7 +57,9 @@ switch ( $instance ) :
 
 	case 'the_seo_framework_social_metabox_general' :
 
-		?><h4><?php esc_html_e( 'Site Shortlink Settings', 'autodescription' ); ?></h4><?php
+		?>
+		<h4><?php esc_html_e( 'Site Shortlink Settings', 'autodescription' ); ?></h4>
+		<?php
 		$this->description( __( 'The shortlink tag might have some use for 3rd party service discoverability, but it has little to no SEO value whatsoever.', 'autodescription' ) );
 
 		//* Echo checkboxes.
@@ -96,10 +98,6 @@ switch ( $instance ) :
 		if ( $this->detect_og_plugin() )
 			$this->description( __( 'Note: Another Open Graph plugin has been detected.', 'autodescription' ) );
 
-		?>
-		<hr>
-		<?php
-
 		//* Echo Facebook Tags checkbox.
 		$this->wrap_fields(
 			$this->make_checkbox(
@@ -110,10 +108,6 @@ switch ( $instance ) :
 			),
 			true
 		);
-
-		?>
-		<hr>
-		<?php
 
 		//* Echo Twitter Tags checkboxes.
 		$this->wrap_fields(
@@ -128,6 +122,44 @@ switch ( $instance ) :
 
 		if ( $this->detect_twitter_card_plugin() )
 			$this->description( __( 'Note: Another Twitter Card plugin has been detected.', 'autodescription' ) );
+
+		?>
+		<hr>
+
+		<h4><?php esc_html_e( 'Social Image Settings', 'autodescription' ); ?></h4>
+		<?php
+		$this->description( __( 'A social image can be displayed when your website is shared. They are a great way to grab attention.', 'autodescription' ) );
+
+		$image_placeholder = $this->get_image( 0, array( 'disallowed' => array( 'postmeta', 'featured' ) ), false );
+
+		?>
+		<hr>
+
+		<p>
+			<label for="tsf_fb_socialimage">
+				<strong><?php esc_html_e( 'Social Image Fallback URL', 'autodescription' ); ?></strong>
+				<a href="<?php echo esc_url( 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>" target="_blank" title="<?php echo esc_attr__( 'Preferred Social Image fallback URL location', 'autodescription' ); ?>">[?]</a>
+			</label>
+		</p>
+		<p class="hide-if-no-js">
+			<?php
+			//* Already escaped.
+			echo $this->get_social_image_uploader_form( 'tsf_fb_socialimage' );
+			?>
+		</p>
+		<p>
+			<input class="large-text" type="text" name="<?php $this->field_name( 'social_image_fb_url' ); ?>" id="tsf_fb_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_field_value( 'social_image_fb_url' ) ); ?>" />
+			<?php
+			/**
+			 * Insert form element only if JS is active. If JS is inactive, then this will cause it to be emptied on $_POST
+			 * @TODO use disabled and jQuery.removeprop( 'disabled' )?
+			 */
+			?>
+			<script>
+				document.getElementById( 'tsf_fb_socialimage-url' ).insertAdjacentHTML( 'afterend', '<input type="hidden" name="<?php $this->field_name( 'social_image_fb_id' ); ?>" id="tsf_fb_socialimage-id" value="<?php echo absint( $this->get_field_value( 'social_image_fb_id' ) ); ?>" />' );
+			</script>
+		</p>
+		<?php
 		break;
 
 	case 'the_seo_framework_social_metabox_facebook' :
@@ -202,17 +234,17 @@ switch ( $instance ) :
 
 			<p class="tsf-fields">
 			<?php
-				foreach ( $twitter_card as $type => $name ) {
-					?>
-					<span class="tsf-toblock">
-						<input type="radio" name="<?php $this->field_name( 'twitter_card' ); ?>" id="<?php $this->field_id( 'twitter_card_' . $type ); ?>" value="<?php echo esc_attr( $type ); ?>" <?php checked( $this->get_field_value( 'twitter_card' ), $type ); ?> />
-						<label for="<?php $this->field_id( 'twitter_card_' . $type ); ?>">
-							<span><?php echo $this->code_wrap( $name ); ?></span>
-							<a class="description" href="<?php echo esc_url( 'https://dev.twitter.com/cards/types/' . $name ); ?>" target="_blank" title="Twitter Card <?php echo esc_attr( $name ) . ' ' . esc_attr__( 'Example', 'autodescription' ); ?>"><?php esc_html_e( 'Example', 'autodescription' ); ?></a>
-						</label>
-					</span>
-					<?php
-				}
+			foreach ( $twitter_card as $type => $name ) {
+				?>
+				<span class="tsf-toblock">
+					<input type="radio" name="<?php $this->field_name( 'twitter_card' ); ?>" id="<?php $this->field_id( 'twitter_card_' . $type ); ?>" value="<?php echo esc_attr( $type ); ?>" <?php checked( $this->get_field_value( 'twitter_card' ), $type ); ?> />
+					<label for="<?php $this->field_id( 'twitter_card_' . $type ); ?>">
+						<span><?php echo $this->code_wrap( $name ); ?></span>
+						<a class="description" href="<?php echo esc_url( 'https://dev.twitter.com/cards/types/' . $name ); ?>" target="_blank" title="Twitter Card <?php echo esc_attr( $name ) . ' ' . esc_attr__( 'Example', 'autodescription' ); ?>"><?php esc_html_e( 'Example', 'autodescription' ); ?></a>
+					</label>
+				</span>
+				<?php
+			}
 			?>
 			</p>
 		</fieldset>

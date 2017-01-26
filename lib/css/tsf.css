@@ -100,6 +100,7 @@ th.column-tsf-seo-bar-wrap ~ th {
 	padding: 0;
 	height: auto;
 	width: auto;
+	overflow: hidden;
 }
 
 #tsf-title-offset {
@@ -611,7 +612,7 @@ body.js .tsf-metaboxes .tsf-tabs-content.tsf-active-tab-content {
 	color: #0cc34b;
 }
 
-#tsf-inpost-box .tsf-set-social-image {
+a.tsf-set-social-image.button {
 	margin-right: 7px;
 }
 

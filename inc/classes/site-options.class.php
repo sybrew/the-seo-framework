@@ -206,7 +206,11 @@ class Site_Options extends Sanitize {
 			'og_tags' 				=> 1,	// Output of Open Graph meta tags
 			'facebook_tags'			=> 1, 	// Output the Facebook meta tags
 			'twitter_tags'			=> 1, 	// Output the Twitter meta tags
-			'googleplus_tags'		=> 1, 	// Output the Google+ meta tags
+		//	'googleplus_tags'		=> 1, 	// Output the Google+ meta tags
+
+			// Social FallBack images
+			'social_image_fb_url'   => '',
+			'social_image_fb_id'    => 0,
 
 			// Webmasters.
 			'google_verification'	=> '', 	// Google Verification Code
@@ -347,7 +351,7 @@ class Site_Options extends Sanitize {
 			'og_tags' 				=> 0,	// Output of Open Graph meta tags
 			'facebook_tags'			=> 0, 	// Output the Facebook meta tags
 			'twitter_tags'			=> 0, 	// Output the Twitter meta tags
-			'googleplus_tags'		=> 0, 	// Output the Google+ meta tags
+		//	'googleplus_tags'		=> 0, 	// Output the Google+ meta tags
 
 			'knowledge_output'		=> 0,	// Default for outputing the Knowledge SEO.
 			'knowledge_logo'		=> 0,	// Fetch logo from WP Favicon

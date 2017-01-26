@@ -1103,6 +1103,8 @@ class Render extends Admin_Init {
 	 */
 	public function use_googleplus_tags() {
 
+		return false;
+
 		static $cache = null;
 
 		if ( isset( $cache ) )

@@ -140,7 +140,7 @@ switch ( $instance ) :
 		$canonical_placeholder = $this->the_url_from_cache( '', $post_id, false, false );
 
 		//* Fetch image placeholder.
-		$image_placeholder = $this->get_image( $post_id, array( 'disallowed' => array( 'postmeta' ) ) );
+		$image_placeholder = $this->get_image( $post_id, array( 'disallowed' => array( 'postmeta' ) ), false );
 
 		?>
 		<?php if ( 'above' === $this->inpost_seo_bar || $this->is_option_checked( 'display_seo_bar_metabox' ) ) : ?>

@@ -357,7 +357,7 @@ class Generate extends Term_Data {
 
 			$option = $this->get_option( 'twitter_card' );
 
-			//* Photo Will always work.
+			//* Photo will always work with an image.
 			if ( 'photo' === $option )
 				return $option;
 

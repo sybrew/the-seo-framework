@@ -229,7 +229,7 @@ class Sanitize extends Admin_Pages {
 				'og_tags',
 				'facebook_tags',
 				'twitter_tags',
-				'googleplus_tags',
+			//	'googleplus_tags',
 
 				'knowledge_output',
 
@@ -271,6 +271,7 @@ class Sanitize extends Admin_Pages {
 			's_absint',
 			$this->settings_field,
 			array(
+				'social_image_fb_id',
 			//	'home_author', @TODO
 			)
 		);
@@ -322,6 +323,7 @@ class Sanitize extends Admin_Pages {
 			$this->settings_field,
 			array(
 				'knowledge_linkedin',
+				'social_image_fb_id',
 			)
 		);
 

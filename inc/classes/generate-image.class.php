@@ -54,7 +54,10 @@ class Generate_Image extends Generate_Url {
 	 * @since 2.2.2
 	 * @since 2.2.8 : Added theme icon detection.
 	 * @since 2.5.2 : Added args filters.
-	 * @since 2.8.0 : Added theme logo detection.
+	 * @since 2.8.0 : 1. Added theme logo detection.
+	 *                2. Added inpost image selection detection.
+	 * @since 2.8.2 : 1. Now returns something on post ID 0.
+	 *                2. Added SEO settings fallback image selection detection.
 	 *
 	 * @todo listen to attached images within post.
 	 * @todo set archive and front page image listener, now it simply fail on some calls.
@@ -67,64 +70,83 @@ class Generate_Image extends Generate_Url {
 	 */
 	public function get_image( $post_id = '', $args = array(), $escape = true ) {
 
-		if ( empty( $post_id ) )
-			$post_id = $this->get_the_real_ID();
-
-		if ( empty( $post_id ) )
-			return '';
-
 		/**
 		 * Backwards compat with parse args.
 		 * @since 2.5.0
 		 */
 		if ( ! isset( $args['post_id'] ) )
-			$args['post_id'] = $post_id;
+			$args['post_id'] = $post_id ?: ( $this->is_singular() ? $this->get_the_real_ID() : 0 );
 
 		$args = $this->reparse_image_args( $args );
 
 		//* 0. Image from argument.
-		$image = $args['image'];
+		pre_0 : {
+			if ( $image = $args['image'] )
+				goto end;
+		}
 
 		//* Check if there are no disallowed arguments.
 		$all_allowed = empty( $args['disallowed'] );
 
-		//* 1. Fetch image from SEO meta upload.
-		if ( empty( $image ) && ( $all_allowed || false === in_array( 'postmeta', $args['disallowed'], true ) ) )
-			$image = $this->get_social_image_url_from_post_meta( $args['post_id'], true );
+		if ( $args['post_id'] ) {
+			//* 1. Fetch image from SEO meta upload.
+			if ( $all_allowed || false === in_array( 'postmeta', $args['disallowed'], true ) ) {
+				if ( $image = $this->get_social_image_url_from_post_meta( $args['post_id'], true ) )
+				 	goto end;
+			}
 
-		//* 2. Fetch image from featured
-		if ( empty( $image ) && ( $all_allowed || false === in_array( 'featured', $args['disallowed'], true ) ) )
-			$image = $this->get_image_from_post_thumbnail( $args );
-
-		//* 3. Fetch image from fallback filter 1
-		if ( empty( $image ) ) {
-			/**
-			 * Applies filters 'the_seo_framework_og_image_after_featured' : string
-			 * @since 2.5.2
-			 */
-			$image = (string) \apply_filters( 'the_seo_framework_og_image_after_featured', '', $args['post_id'] );
+			//* 2. Fetch image from featured
+			if ( $all_allowed || false === in_array( 'featured', $args['disallowed'], true ) ) {
+				if ( $image = $this->get_image_from_post_thumbnail( $args ) )
+					goto end;
+			}
 		}
 
-		//* 4. Fallback: Get header image if exists
-		if ( empty( $image ) && ( $all_allowed || false === in_array( 'header', $args['disallowed'], true ) ) && \current_theme_supports( 'custom-header', 'default-image' ) )
-			$image = $this->get_header_image( true );
-
-		//* 5. Fetch image from fallback filter 2
-		if ( empty( $image ) ) {
-			/**
-			 * Applies filters 'the_seo_framework_og_image_after_header' : string
-			 * @since 2.5.2
-			 */
-			$image = (string) \apply_filters( 'the_seo_framework_og_image_after_header', '', $args['post_id'] );
+		//* 3. Fetch image from SEO settings
+		if ( $all_allowed || false === in_array( 'option', $args['disallowed'], true ) ) {
+			if ( $image = $this->get_social_image_url_from_seo_settings( true ) )
+				goto end;
 		}
 
-		//* 6. Get the WP 4.5 Site Logo
-		if ( empty( $image ) && ( $all_allowed || false === in_array( 'logo', $args['disallowed'], true ) ) && $this->can_use_logo() )
-			$image = $this->get_site_logo( true );
+		//* 4. Fetch image from fallback filter 1
+		/**
+		 * Applies filters 'the_seo_framework_og_image_after_featured' : string
+		 * @since 2.5.2
+		 */
+		fallback_1 : {
+			if ( $image = (string) \apply_filters( 'the_seo_framework_og_image_after_featured', '', $args['post_id'] ) )
+				goto end;
+		}
 
-		//* 7. Get the WP 4.3 Site Icon
-		if ( empty( $image ) && ( $all_allowed || false === in_array( 'icon', $args['disallowed'], true ) ) )
-			$image = $this->get_site_icon( 'full', true );
+		//* 5. Fallback: Get header image if exists
+		if ( ( $all_allowed || false === in_array( 'header', $args['disallowed'], true ) ) && \current_theme_supports( 'custom-header', 'default-image' ) ) {
+			if ( $image = $this->get_header_image( true ) )
+				goto end;
+		}
+
+		//* 6. Fetch image from fallback filter 2
+		/**
+		 * Applies filters 'the_seo_framework_og_image_after_header' : string
+		 * @since 2.5.2
+		 */
+		fallback_2 : {
+			if ( $image = (string) \apply_filters( 'the_seo_framework_og_image_after_header', '', $args['post_id'] ) )
+				goto end;
+		}
+
+		//* 7. Get the WP 4.5 Site Logo
+		if ( ( $all_allowed || false === in_array( 'logo', $args['disallowed'], true ) ) && $this->can_use_logo() ) {
+			if ( $image = $this->get_site_logo( true ) )
+				goto end;
+		}
+
+		//* 8. Get the WP 4.3 Site Icon
+		if ( $all_allowed || false === in_array( 'icon', $args['disallowed'], true ) ) {
+			if ( $image = $this->get_site_icon( 'full', true ) )
+				goto end;
+		}
+
+		end :;
 
 		if ( $escape && $image )
 			return \esc_url( $image );
@@ -252,6 +274,37 @@ class Generate_Image extends Generate_Url {
 
 			if ( \esc_url( $this->set_preferred_url_scheme( $i ) ) === \esc_url( $this->set_preferred_url_scheme( $src ) ) )
 				$this->image_dimensions = $this->image_dimensions + array( $id => array( 'width' => $w, 'height' => $h ) );
+		}
+
+		return $src;
+	}
+
+	/**
+	 * Returns unescaped URL from options input.
+	 *
+	 * @since 2.8.2
+	 * @uses $this->image_dimensions
+	 *
+	 * @param bool $set_og_dimensions Whether to set open graph and twitter dimensions.
+	 * @return string The unescaped social image fallback URL.
+	 */
+	public function get_social_image_url_from_seo_settings( $set_og_dimensions = false ) {
+
+		$src = $this->get_option( 'social_image_fb_url' );
+
+		if ( ! $src )
+			return '';
+
+		//* Calculate image sizes.
+		if ( $img_id = $this->get_option( 'social_image_fb_id' ) ) {
+			$_src = \wp_get_attachment_image_src( $img_id, 'full' );
+
+			$i = $_src[0]; // Source URL
+			$w = $_src[1]; // Width
+			$h = $_src[2]; // Height
+
+			if ( \esc_url( $this->set_preferred_url_scheme( $i ) ) === \esc_url( $this->set_preferred_url_scheme( $src ) ) )
+				$this->image_dimensions = $this->image_dimensions + array( $this->get_the_real_ID() => array( 'width' => $w, 'height' => $h ) );
 		}
 
 		return $src;
