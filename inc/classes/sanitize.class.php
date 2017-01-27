@@ -323,7 +323,7 @@ class Sanitize extends Admin_Pages {
 			$this->settings_field,
 			array(
 				'knowledge_linkedin',
-				'social_image_fb_id',
+				'social_image_fb_url',
 			)
 		);
 

@@ -58,24 +58,6 @@ switch ( $instance ) :
 	case 'the_seo_framework_social_metabox_general' :
 
 		?>
-		<h4><?php esc_html_e( 'Site Shortlink Settings', 'autodescription' ); ?></h4>
-		<?php
-		$this->description( __( 'The shortlink tag might have some use for 3rd party service discoverability, but it has little to no SEO value whatsoever.', 'autodescription' ) );
-
-		//* Echo checkboxes.
-		$this->wrap_fields(
-			$this->make_checkbox(
-				'shortlink_tag',
-				__( 'Output shortlink tag?', 'autodescription' ),
-				'',
-				true
-			),
-			true
-		);
-
-		?>
-		<hr>
-
 		<h4><?php esc_html_e( 'Social Meta Tags Settings', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'Output various meta tags for social site integration, among other 3rd party services.', 'autodescription' ) );
@@ -133,8 +115,6 @@ switch ( $instance ) :
 		$image_placeholder = $this->get_image( 0, array( 'disallowed' => array( 'postmeta', 'featured' ) ), false );
 
 		?>
-		<hr>
-
 		<p>
 			<label for="tsf_fb_socialimage">
 				<strong><?php esc_html_e( 'Social Image Fallback URL', 'autodescription' ); ?></strong>
@@ -159,7 +139,23 @@ switch ( $instance ) :
 				document.getElementById( 'tsf_fb_socialimage-url' ).insertAdjacentHTML( 'afterend', '<input type="hidden" name="<?php $this->field_name( 'social_image_fb_id' ); ?>" id="tsf_fb_socialimage-id" value="<?php echo absint( $this->get_field_value( 'social_image_fb_id' ) ); ?>" />' );
 			</script>
 		</p>
+
+		<hr>
+
+		<h4><?php esc_html_e( 'Site Shortlink Settings', 'autodescription' ); ?></h4>
 		<?php
+		$this->description( __( 'The shortlink tag might have some use for 3rd party service discoverability, but it has little to no SEO value whatsoever.', 'autodescription' ) );
+
+		//* Echo checkboxes.
+		$this->wrap_fields(
+			$this->make_checkbox(
+				'shortlink_tag',
+				__( 'Output shortlink tag?', 'autodescription' ),
+				'',
+				true
+			),
+			true
+		);
 		break;
 
 	case 'the_seo_framework_social_metabox_facebook' :

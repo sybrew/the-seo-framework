@@ -200,9 +200,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Summarized:**
 
-* The 2.8.0 release didn't contain everything I wanted. So, new features in a minor release? Certainly!
-* There's now a fallback Social Image uploader.
-* Also, when scheduled posts are published they now trigger sitemap cache flush pinging.
+* The 2.8.0 release didn't contain everything I wanted. So, two new features in a minor release? Certainly!
+* First, there's now a fallback Social Image uploader.
+* Second, when scheduled posts are published they now trigger sitemap cache flush pinging.
 * Moreover, this update fixes a few bugs: namely ones that caused character encoding issues in the admin area.
 
 **For everyone:**
