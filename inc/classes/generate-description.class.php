@@ -216,8 +216,7 @@ class Generate_Description extends Generate {
 		$description = '';
 
 		if ( $args['is_home'] || $this->is_front_page() || ( empty( $args['taxonomy'] ) && $this->is_static_frontpage( $args['id'] ) ) ) {
-			$homedesc = $this->get_option( 'homepage_description' );
-			$description = $homedesc ?: '';
+			$description = $this->get_option( 'homepage_description' ) ?: '';
 		}
 
 		return $description;
@@ -237,8 +236,7 @@ class Generate_Description extends Generate {
 		$description = '';
 
 		if ( $this->is_singular( $id ) ) {
-			$custom_desc = $this->get_custom_field( '_genesis_description', $id );
-			$description = $custom_desc ? $custom_desc : $description;
+			$description = $this->get_custom_field( '_genesis_description', $id ) ?: '';
 		}
 
 		return $description;

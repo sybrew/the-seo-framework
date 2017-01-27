@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the The SEO Framework package.
 msgid ""
 msgstr ""
-"Project-Id-Version: The SEO Framework 2.8.2-beta\n"
+"Project-Id-Version: The SEO Framework 2.8.2-RC2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/autodescription\n"
-"POT-Creation-Date: 2017-01-26 07:16:30+00:00\n"
+"POT-Creation-Date: 2017-01-27 08:25:27+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -93,8 +93,8 @@ msgstr ""
 msgid "Schema Settings"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:301 inc/views/inpost/seo-settings.php:220
-#: inc/views/inpost/seo-settings.php:390
+#: inc/classes/admin-pages.class.php:301 inc/views/inpost/seo-settings.php:210
+#: inc/views/inpost/seo-settings.php:380
 msgid "Robots Meta Settings"
 msgstr ""
 
@@ -395,21 +395,21 @@ msgstr ""
 
 #. translators: 1: Title, 2: Separator, 3: Excerpt
 
-#: inc/classes/generate-description.class.php:436
+#: inc/classes/generate-description.class.php:413
 msgctxt "1: Title, 2: Separator, 3: Excerpt"
 msgid "%1$s %2$s %3$s"
 msgstr ""
 
 #. translators: 1: Title, 2: on, 3: Blogname
 
-#: inc/classes/generate-description.class.php:643
+#: inc/classes/generate-description.class.php:620
 msgctxt "1: Title, 2: on, 3: Blogname"
 msgid "%1$s %2$s %3$s"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-description.class.php:678
+#: inc/classes/generate-description.class.php:655
 #: inc/views/metaboxes/description-metabox.php:18
 msgctxt "Placement. e.g. Post Title \"on\" Blog Name"
 msgid "on"
@@ -417,7 +417,7 @@ msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-description.class.php:741
+#: inc/classes/generate-description.class.php:717
 msgid "Latest posts:"
 msgstr ""
 
@@ -429,158 +429,158 @@ msgstr ""
 #. translators: Front-end output. 1: Taxonomy singular name, 2: Current
 #. taxonomy term
 
-#: inc/classes/generate-title.class.php:844
-#: inc/classes/generate-title.class.php:904
+#: inc/classes/generate-title.class.php:822
+#: inc/classes/generate-title.class.php:882
 msgid "%1$s: %2$s"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:848
+#: inc/classes/generate-title.class.php:826
 msgid "Author: %s"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:852
+#: inc/classes/generate-title.class.php:830
 msgctxt "yearly archives date format"
 msgid "Y"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:854
+#: inc/classes/generate-title.class.php:832
 msgid "Year: %s"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:857
+#: inc/classes/generate-title.class.php:835
 msgctxt "monthly archives date format"
 msgid "F Y"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:859
+#: inc/classes/generate-title.class.php:837
 msgid "Month: %s"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:862
+#: inc/classes/generate-title.class.php:840
 msgctxt "daily archives date format"
 msgid "F j, Y"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:864
+#: inc/classes/generate-title.class.php:842
 msgid "Day: %s"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:869
+#: inc/classes/generate-title.class.php:847
 msgctxt "post format archive title"
 msgid "Asides"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:872
+#: inc/classes/generate-title.class.php:850
 msgctxt "post format archive title"
 msgid "Galleries"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:875
+#: inc/classes/generate-title.class.php:853
 msgctxt "post format archive title"
 msgid "Images"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:878
+#: inc/classes/generate-title.class.php:856
 msgctxt "post format archive title"
 msgid "Videos"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:881
+#: inc/classes/generate-title.class.php:859
 msgctxt "post format archive title"
 msgid "Quotes"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:884
+#: inc/classes/generate-title.class.php:862
 msgctxt "post format archive title"
 msgid "Links"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:887
+#: inc/classes/generate-title.class.php:865
 msgctxt "post format archive title"
 msgid "Statuses"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:890
+#: inc/classes/generate-title.class.php:868
 msgctxt "post format archive title"
 msgid "Audio"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:893
+#: inc/classes/generate-title.class.php:871
 msgctxt "post format archive title"
 msgid "Chats"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:898
+#: inc/classes/generate-title.class.php:876
 msgid "Archives: %s"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:908
+#: inc/classes/generate-title.class.php:886
 msgid "Archives"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:1015
+#: inc/classes/generate-title.class.php:993
 msgid "Untitled"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:1050
+#: inc/classes/generate-title.class.php:1028
 msgid "Search results for:"
 msgstr ""
 
 #. translators: Front-end output
 
-#: inc/classes/generate-title.class.php:1226
+#: inc/classes/generate-title.class.php:1204
 msgid "Protected: %s"
 msgstr ""
 
 #. translators: Front-end output
 
-#: inc/classes/generate-title.class.php:1230
+#: inc/classes/generate-title.class.php:1208
 msgid "Private: %s"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:1263
+#: inc/classes/generate-title.class.php:1241
 msgid "Page %s"
 msgstr ""
 
@@ -596,7 +596,7 @@ msgstr ""
 msgid "by Sybre Waaijer"
 msgstr ""
 
-#: inc/classes/inpost.class.php:174 inc/views/inpost/seo-settings.php:341
+#: inc/classes/inpost.class.php:174 inc/views/inpost/seo-settings.php:331
 msgid "%s SEO Settings"
 msgstr ""
 
@@ -650,121 +650,121 @@ msgid "Sitemap is generated on"
 msgstr ""
 
 #: inc/classes/term-data.class.php:332
-#: inc/views/metaboxes/social-metabox.php:280
+#: inc/views/metaboxes/social-metabox.php:276
 msgid "Pages"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:148 inc/views/inpost/seo-settings.php:271
-#: inc/views/inpost/seo-settings.php:347 inc/views/inpost/seo-settings.php:420
+#: inc/views/inpost/seo-settings.php:138 inc/views/inpost/seo-settings.php:261
+#: inc/views/inpost/seo-settings.php:337 inc/views/inpost/seo-settings.php:410
 msgid "Doing it Right"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:156
+#: inc/views/inpost/seo-settings.php:146
 #: inc/views/metaboxes/homepage-metabox.php:168
 msgid "Custom %s Title"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:157 inc/views/inpost/seo-settings.php:358
+#: inc/views/inpost/seo-settings.php:147 inc/views/inpost/seo-settings.php:348
 #: inc/views/metaboxes/homepage-metabox.php:169
 msgid "Recommended Length: 50 to 55 characters"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:159 inc/views/inpost/seo-settings.php:176
-#: inc/views/inpost/seo-settings.php:367 inc/views/inpost/seo-settings.php:383
+#: inc/views/inpost/seo-settings.php:149 inc/views/inpost/seo-settings.php:166
+#: inc/views/inpost/seo-settings.php:357 inc/views/inpost/seo-settings.php:373
 #: inc/views/metaboxes/homepage-metabox.php:171
 #: inc/views/metaboxes/homepage-metabox.php:222
 msgid "Characters Used: %s"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:173
+#: inc/views/inpost/seo-settings.php:163
 #: inc/views/metaboxes/homepage-metabox.php:219
 msgid "Custom %s Description"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:174 inc/views/inpost/seo-settings.php:377
+#: inc/views/inpost/seo-settings.php:164 inc/views/inpost/seo-settings.php:367
 #: inc/views/metaboxes/homepage-metabox.php:220
 msgid "Recommended Length: 145 to 155 characters"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:187
+#: inc/views/inpost/seo-settings.php:177
 msgid "Custom Social Image URL"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:188
+#: inc/views/inpost/seo-settings.php:178
 msgid "Preferred %s Social Image URL location"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:212
+#: inc/views/inpost/seo-settings.php:202
 msgid "Custom Canonical URL"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:213
+#: inc/views/inpost/seo-settings.php:203
 msgid "Preferred %s URL location"
 msgstr ""
 
 #. translators: 1: Option, 2: Post or Page
 
-#: inc/views/inpost/seo-settings.php:225 inc/views/inpost/seo-settings.php:235
-#: inc/views/inpost/seo-settings.php:245
+#: inc/views/inpost/seo-settings.php:215 inc/views/inpost/seo-settings.php:225
+#: inc/views/inpost/seo-settings.php:235
 msgid "Apply %1$s to this %2$s"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:227
+#: inc/views/inpost/seo-settings.php:217
 msgid "Tell Search Engines not to show this %s in their search results"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:237
+#: inc/views/inpost/seo-settings.php:227
 msgid "Tell Search Engines not to follow links on this %s"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:247
+#: inc/views/inpost/seo-settings.php:237
 msgid "Tell Search Engines not to save a cached copy of this %s"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:251
+#: inc/views/inpost/seo-settings.php:241
 msgid "Local Search Settings"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:254
+#: inc/views/inpost/seo-settings.php:244
 msgid "Exclude this %s from local search"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:255
+#: inc/views/inpost/seo-settings.php:245
 msgid "This excludes this %s from local on-site search results"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:261
+#: inc/views/inpost/seo-settings.php:251
 msgid "Custom 301 Redirect URL"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:262
+#: inc/views/inpost/seo-settings.php:252
 msgid "This will force visitors to go to another URL"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:357
+#: inc/views/inpost/seo-settings.php:347
 msgid "%s Title"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:376
+#: inc/views/inpost/seo-settings.php:366
 msgid "%s Meta Description"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:393 inc/views/inpost/seo-settings.php:400
-#: inc/views/inpost/seo-settings.php:407
+#: inc/views/inpost/seo-settings.php:383 inc/views/inpost/seo-settings.php:390
+#: inc/views/inpost/seo-settings.php:397
 msgid "Apply %s to this term?"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:394
+#: inc/views/inpost/seo-settings.php:384
 #: inc/views/metaboxes/homepage-metabox.php:345
 msgid "Tell Search Engines not to show this page in their search results"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:401
+#: inc/views/inpost/seo-settings.php:391
 #: inc/views/metaboxes/homepage-metabox.php:355
 msgid "Tell Search Engines not to follow links on this page"
 msgstr ""
 
-#: inc/views/inpost/seo-settings.php:408
+#: inc/views/inpost/seo-settings.php:398
 #: inc/views/metaboxes/homepage-metabox.php:365
 msgid "Tell Search Engines not to save a cached copy of this page"
 msgstr ""
@@ -1075,8 +1075,8 @@ msgstr ""
 #: inc/views/metaboxes/homepage-metabox.php:68
 #: inc/views/metaboxes/homepage-metabox.php:267
 #: inc/views/metaboxes/homepage-metabox.php:312
-#: inc/views/metaboxes/social-metabox.php:282
-#: inc/views/metaboxes/social-metabox.php:313
+#: inc/views/metaboxes/social-metabox.php:278
+#: inc/views/metaboxes/social-metabox.php:309
 msgid "Home Page"
 msgstr ""
 
@@ -1673,191 +1673,191 @@ msgid "Post Dates"
 msgstr ""
 
 #: inc/views/metaboxes/social-metabox.php:61
-msgid "Site Shortlink Settings"
-msgstr ""
-
-#: inc/views/metaboxes/social-metabox.php:63
-msgid "The shortlink tag might have some use for 3rd party service discoverability, but it has little to no SEO value whatsoever."
-msgstr ""
-
-#: inc/views/metaboxes/social-metabox.php:69
-msgid "Output shortlink tag?"
-msgstr ""
-
-#: inc/views/metaboxes/social-metabox.php:79
 msgid "Social Meta Tags Settings"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:81
+#: inc/views/metaboxes/social-metabox.php:63
 msgid "Output various meta tags for social site integration, among other 3rd party services."
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:91
+#: inc/views/metaboxes/social-metabox.php:73
 msgid "Output Open Graph meta tags?"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:92
+#: inc/views/metaboxes/social-metabox.php:74
 msgid "Facebook, Twitter, Pinterest and many other social sites make use of these tags."
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:99
+#: inc/views/metaboxes/social-metabox.php:81
 msgid "Note: Another Open Graph plugin has been detected."
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:105
+#: inc/views/metaboxes/social-metabox.php:87
 msgid "Output Facebook meta tags?"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:106
-#: inc/views/metaboxes/social-metabox.php:117
+#: inc/views/metaboxes/social-metabox.php:88
+#: inc/views/metaboxes/social-metabox.php:99
 msgid "Output various tags targetted at %s."
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:116
+#: inc/views/metaboxes/social-metabox.php:98
 msgid "Output Twitter meta tags?"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:124
+#: inc/views/metaboxes/social-metabox.php:106
 msgid "Note: Another Twitter Card plugin has been detected."
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:129
+#: inc/views/metaboxes/social-metabox.php:111
 msgid "Social Image Settings"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:131
+#: inc/views/metaboxes/social-metabox.php:113
 msgid "A social image can be displayed when your website is shared. They are a great way to grab attention."
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:140
+#: inc/views/metaboxes/social-metabox.php:120
 msgid "Social Image Fallback URL"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:141
+#: inc/views/metaboxes/social-metabox.php:121
 msgid "Preferred Social Image fallback URL location"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:168
+#: inc/views/metaboxes/social-metabox.php:145
+msgid "Site Shortlink Settings"
+msgstr ""
+
+#: inc/views/metaboxes/social-metabox.php:147
+msgid "The shortlink tag might have some use for 3rd party service discoverability, but it has little to no SEO value whatsoever."
+msgstr ""
+
+#: inc/views/metaboxes/social-metabox.php:153
+msgid "Output shortlink tag?"
+msgstr ""
+
+#: inc/views/metaboxes/social-metabox.php:164
 msgctxt "Example Facebook Personal URL"
 msgid "http://www.facebook.com/YourPersonalProfile"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:171
+#: inc/views/metaboxes/social-metabox.php:167
 msgctxt "Example Verified Facebook Business URL"
 msgid "http://www.facebook.com/YourVerifiedBusinessProfile"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:176
+#: inc/views/metaboxes/social-metabox.php:172
 msgid "Default Facebook Integration Settings"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:177
+#: inc/views/metaboxes/social-metabox.php:173
 msgid "Facebook post sharing works mostly through Open Graph. However, you can also link your Business and Personal Facebook pages, among various other options."
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:178
+#: inc/views/metaboxes/social-metabox.php:174
 msgid "When these options are filled in, Facebook might link your Facebook profile to be followed and liked when your post or page is shared."
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:185
+#: inc/views/metaboxes/social-metabox.php:181
 msgid "Article Author Facebook URL"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:186
+#: inc/views/metaboxes/social-metabox.php:182
 msgid "Your Facebook Profile"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:195
+#: inc/views/metaboxes/social-metabox.php:191
 msgid "Article Publisher Facebook URL"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:196
+#: inc/views/metaboxes/social-metabox.php:192
 msgid "To use this, you need to be a verified business"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:205
+#: inc/views/metaboxes/social-metabox.php:201
 msgid "Facebook App ID"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:206
+#: inc/views/metaboxes/social-metabox.php:202
 msgid "Get Facebook App ID"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:218
+#: inc/views/metaboxes/social-metabox.php:214
 msgctxt "Twitter @username"
 msgid "@your-site-username"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:221
+#: inc/views/metaboxes/social-metabox.php:217
 msgctxt "Twitter @username"
 msgid "@your-personal-username"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:225
+#: inc/views/metaboxes/social-metabox.php:221
 msgid "Default Twitter Integration Settings"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:226
+#: inc/views/metaboxes/social-metabox.php:222
 msgid "Twitter post sharing works mostly through Open Graph. However, you can also link your Business and Personal Twitter pages, among various other options."
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:232
+#: inc/views/metaboxes/social-metabox.php:228
 msgid "Twitter Card Type"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:233
+#: inc/views/metaboxes/social-metabox.php:229
 msgid "What kind of Twitter card would you like to use? It will default to %s if no image is found."
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:243
+#: inc/views/metaboxes/social-metabox.php:239
 msgid "Example"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:254
+#: inc/views/metaboxes/social-metabox.php:250
 msgid "When the following options are filled in, Twitter might link your Twitter Site or Personal Profile when your post or page is shared."
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:258
+#: inc/views/metaboxes/social-metabox.php:254
 msgid "Your Website's Twitter Profile"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:259
-#: inc/views/metaboxes/social-metabox.php:269
+#: inc/views/metaboxes/social-metabox.php:255
+#: inc/views/metaboxes/social-metabox.php:265
 msgid "Find your @username"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:268
+#: inc/views/metaboxes/social-metabox.php:264
 msgid "Your Personal Twitter Profile"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:281
+#: inc/views/metaboxes/social-metabox.php:277
 msgid "Posts"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:284
+#: inc/views/metaboxes/social-metabox.php:280
 msgid "Post Date Settings"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:285
+#: inc/views/metaboxes/social-metabox.php:281
 msgid "Some Search Engines output the publishing date and modified date next to the search results. These help Search Engines find new content and could impact the SEO value."
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:286
+#: inc/views/metaboxes/social-metabox.php:282
 msgid "It's recommended on posts, but it's not recommended on pages unless you modify or create new pages frequently."
 msgstr ""
 
 #. translators: 1: Option, 2: Post Type
 
+#: inc/views/metaboxes/social-metabox.php:285
 #: inc/views/metaboxes/social-metabox.php:289
-#: inc/views/metaboxes/social-metabox.php:293
+#: inc/views/metaboxes/social-metabox.php:296
 #: inc/views/metaboxes/social-metabox.php:300
-#: inc/views/metaboxes/social-metabox.php:304
+#: inc/views/metaboxes/social-metabox.php:314
 #: inc/views/metaboxes/social-metabox.php:318
-#: inc/views/metaboxes/social-metabox.php:322
 msgid "Add %1$s to %2$s?"
 msgstr ""
 
-#: inc/views/metaboxes/social-metabox.php:315
+#: inc/views/metaboxes/social-metabox.php:311
 msgid "Because you only publish the Home Page once, Search Engines might think your website is outdated. This can be prevented by disabling the following options."
 msgstr ""
 
