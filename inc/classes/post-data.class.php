@@ -116,11 +116,11 @@ class Post_Data extends Detect {
 		foreach ( (array) $data as $key => $value ) :
 			switch ( $key ) :
 				case '_genesis_title' :
-					$data[ $key ] = $this->s_real_title( $value );
+					$data[ $key ] = $this->s_title_raw( $value );
 					continue 2;
 
 				case '_genesis_description' :
-					$data[ $key ] = $this->s_description( $value );
+					$data[ $key ] = $this->s_description_raw( $value );
 					continue 2;
 
 				case '_genesis_canonical_uri' :
@@ -229,13 +229,15 @@ class Post_Data extends Detect {
 	 * Fetches or parses the excerpt of the post.
 	 *
 	 * @since 1.0.0
+	 * @since 2.8.2 : Added 4th parameter for escaping.
 	 *
 	 * @param string $excerpt the Excerpt.
 	 * @param int $the_id The Post ID.
 	 * @param int $tt_id The Taxonomy Term ID.
+	 * @param int $tt_id The Taxonomy Term ID.
 	 * @return string The escaped Excerpt.
 	 */
-	public function get_excerpt_by_id( $excerpt = '', $the_id = '', $tt_id = '' ) {
+	public function get_excerpt_by_id( $excerpt = '', $the_id = '', $tt_id = '', $escape = true ) {
 
 		if ( empty( $excerpt ) )
 			$excerpt = $this->fetch_excerpt( $the_id, $tt_id );
@@ -244,7 +246,10 @@ class Post_Data extends Detect {
 		if ( '' === $excerpt )
 			return '';
 
-		return $this->s_excerpt( $excerpt );
+		if ( $escape )
+			return $this->s_excerpt( $excerpt );
+
+		return $this->s_excerpt_raw( $excerpt );
 	}
 
 	/**

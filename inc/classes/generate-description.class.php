@@ -85,27 +85,6 @@ class Generate_Description extends Generate {
 	}
 
 	/**
-	 * Escapes and beautifies description.
-	 *
-	 * @since 2.5.2
-	 *
-	 * @param string $description The description to escape and beautify.
-	 * @return string Escaped and beautified description.
-	 */
-	public function escape_description( $description = '' ) {
-
-		$description = $this->s_nbsp( $description );
-		$description = $this->s_bsol( $description );
-		$description = \wptexturize( $description );
-		$description = \convert_chars( $description );
-		$description = \esc_html( $description );
-		$description = \capital_P_dangit( $description );
-		$description = trim( $description );
-
-		return $description;
-	}
-
-	/**
 	 * Parses and sanitizes description arguments.
 	 *
 	 * @since 2.5.0
@@ -462,7 +441,7 @@ class Generate_Description extends Generate {
 	 * @param int $id The post/term ID.
 	 * @param bool|object The term object.
 	 * @return array {
-	 *		'excerpt' => string The excerpt.
+	 *		'excerpt' => string The excerpt. Unescaped.
 	 *		'trim' => bool Whether to trim the additions.
 	 * }
 	 */
@@ -519,7 +498,7 @@ class Generate_Description extends Generate {
 	 *
 	 * @param int $id The post/term ID.
 	 * @param bool|object The term object.
-	 * @return string The social description excerpt.
+	 * @return string The social description excerpt. Unescaped.
 	 */
 	public function get_description_excerpt_social( $id = 0, $term = false ) {
 
@@ -718,8 +697,7 @@ class Generate_Description extends Generate {
 			$id = $this->get_the_real_ID();
 
 		if ( $page_on_front || $this->is_static_frontpage( $id ) ) :
-			$tagline = $this->get_option( 'homepage_title_tagline' );
-			$title = $tagline ? $tagline : $this->get_blogdescription();
+			$title = $this->get_option( 'homepage_title_tagline' ) ?: $this->get_blogdescription();
 		else :
 			/**
 			 * No need to parse these when generating social description.
@@ -738,7 +716,7 @@ class Generate_Description extends Generate {
 				 * @priority medium 2.8.0+
 				 */
 				/* translators: Front-end output. */
-				$title = __( 'Latest posts:', 'autodescription' ) . ' ' . $title;
+				$title = \__( 'Latest posts:', 'autodescription' ) . ' ' . $title;
 			} elseif ( $term && isset( $term->term_id ) ) {
 				//* We're on a taxonomy now.
 
@@ -772,12 +750,14 @@ class Generate_Description extends Generate {
 	 * @NOTE Supply calculated $max_char_length to reflect actual output.
 	 *
 	 * @since 2.3.4
+	 * @since 2.8.2 Now no longer escapes excerpt by accident in processing, preventing "too short" output.
 	 * @staticvar array $excerpt_cache Holds the excerpt
 	 * @staticvar array $excerptlength_cache Holds the excerpt length
 	 *
 	 * @param int|string $page_id required : The Page ID
 	 * @param object|null $term The Taxonomy Term.
 	 * @param int $max_char_length The maximum excerpt char length.
+	 * @return string $excerpt The excerpt, not escaped.
 	 */
 	public function generate_excerpt( $page_id, $term = '', $max_char_length = 155 ) {
 
@@ -790,12 +770,12 @@ class Generate_Description extends Generate {
 		if ( ! isset( $excerpt_cache[ $page_id ][ $term_id ] ) ) {
 			if ( $this->is_singular( $page_id ) ) {
 				//* We're on the blog page now.
-				$excerpt = $this->get_excerpt_by_id( '', $page_id );
+				$excerpt = $this->get_excerpt_by_id( '', $page_id, '', false );
 			} elseif ( $term_id ) {
 				//* We're on a taxonomy now. Fetch excerpt from latest term post.
-				$excerpt = empty( $term->description ) ? $this->get_excerpt_by_id( '', '', $page_id ) : $this->s_description( $term->description );
+				$excerpt = empty( $term->description ) ? $this->get_excerpt_by_id( '', '', $page_id, false ) : $this->s_description_raw( $term->description );
 			} elseif ( $this->is_author() ) {
-				$excerpt = $this->s_description( \get_the_author_meta( 'description', (int) \get_query_var( 'author' ) ) );
+				$excerpt = $this->s_description_raw( \get_the_author_meta( 'description', (int) \get_query_var( 'author' ) ) );
 			} else {
 				$excerpt = '';
 			}
@@ -880,16 +860,20 @@ class Generate_Description extends Generate {
 			}
 		}
 
-		//* Remove trailing/leading comma's and spaces.
+		//* Remove trailing/leading commas and spaces.
 		$excerpt = trim( $excerpt, ' ,' );
 
 		//* Fetch last character.
 		$last_char = substr( $excerpt, -1 );
 
-		$stops = array( '.', '?', '!' );
-		//* Add three dots if there's no full stop at the end of the excerpt.
-		if ( ! in_array( $last_char, $stops, true ) )
-			$excerpt .= '...';
+		if ( ';' === $last_char ) {
+			$excerpt = rtrim( $excerpt, ' ,.?!;' ) . '.';
+		} else {
+			$stops = array( '.', '?', '!' );
+			//* Add three dots if there's no full stop at the end of the excerpt.
+			if ( ! in_array( $last_char, $stops, true ) )
+				$excerpt .= '...';
+		}
 
 		return trim( $excerpt );
 	}

@@ -127,7 +127,7 @@ class Site_Options extends Sanitize {
 			'description_separator'	=> 'pipe',	// Description separator, dropdown
 			'description_additions'	=> 1,		// "Title on Blogname" within Description
 			'description_blogname'	=> 1, 		// "on Blogname" within Description
-			'description_custom'	=> '',		// Custom prefix
+		//	'description_custom'	=> '',		// Custom prefix
 
 			// Robots directory.
 			'noodp'					=> 1, 	// Site noopd robots settings

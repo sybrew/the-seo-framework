@@ -782,7 +782,7 @@ class Detect extends Render {
 		if ( isset( $is_page[ $type ] ) )
 			return $is_page[ $type ];
 
-		$post_page = (array) get_post_types( array( 'public' => true ) );
+		$post_page = (array) \get_post_types( array( 'public' => true ) );
 
 		foreach ( $post_page as $screen ) {
 			if ( $type === $screen ) {
@@ -858,9 +858,7 @@ class Detect extends Render {
 	 * Doesn't work on admin_init.
 	 *
 	 * @since 2.3.9
-	 * @staticvar string $post_type
 	 * @staticvar bool $supported
-	 * @staticvar array $post_page
 	 *
 	 * @param string $post_type The current post type.
 	 * @return bool true of post type is supported.
@@ -892,12 +890,11 @@ class Detect extends Render {
 	/**
 	 * Checks (current) Post Type for if this plugin may use it.
 	 *
-	 * @param bool $public Whether to only get Public Post types.
-	 * @param string $post_type Optional. The post type to check.
-	 *
 	 * @since 2.6.0
 	 * @staticvar string $cache
 	 *
+	 * @param bool $public Whether to only get Public Post types.
+	 * @param string $post_type Optional. The post type to check.
 	 * @return bool|string The Allowed Post Type.
 	 */
 	public function get_supported_post_type( $public = true, $post_type = '' ) {
@@ -1034,6 +1031,6 @@ class Detect extends Render {
 
 		static $cache = null;
 
-		return isset( $cache ) ? $cache : $this->wp_version( '4.5.0', '>=' ) && current_theme_supports( 'custom-logo' );
+		return isset( $cache ) ? $cache : $this->wp_version( '4.5.0', '>=' ) && \current_theme_supports( 'custom-logo' );
 	}
 }

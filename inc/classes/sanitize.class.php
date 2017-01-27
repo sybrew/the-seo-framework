@@ -128,8 +128,14 @@ class Sanitize extends Admin_Pages {
 			's_description',
 			$this->settings_field,
 			array(
+			)
+		);
+
+		$this->add_option_filter(
+			's_description_raw',
+			$this->settings_field,
+			array(
 				'homepage_description',
-				'description_custom',
 			)
 		);
 
@@ -142,7 +148,7 @@ class Sanitize extends Admin_Pages {
 		);
 
 		$this->add_option_filter(
-			's_real_title',
+			's_title_raw',
 			$this->settings_field,
 			array(
 				'homepage_title',
@@ -503,8 +509,9 @@ class Sanitize extends Admin_Pages {
 			's_title_separator'       => array( $this, 's_title_separator' ),
 			's_description_separator' => array( $this, 's_description_separator' ),
 			's_description'           => array( $this, 's_description' ),
+			's_description_raw'       => array( $this, 's_description_raw' ),
 			's_title'                 => array( $this, 's_title' ),
-			's_real_title'            => array( $this, 's_real_title' ),
+			's_title_raw'             => array( $this, 's_title_raw' ),
 			's_knowledge_type'        => array( $this, 's_knowledge_type' ),
 			's_one_zero'              => array( $this, 's_one_zero' ),
 			's_no_html'               => array( $this, 's_no_html' ),
@@ -584,23 +591,61 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
-	 * Returns a one-line sanitized description
+	 * Escapes and beautifies description.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @param string $description The description to escape and beautify.
+	 * @return string Escaped and beautified description.
+	 */
+	public function escape_description( $description = '' ) {
+
+		$description = \wptexturize( $description );
+		$description = \convert_chars( $description );
+		$description = \esc_html( $description );
+		$description = \capital_P_dangit( $description );
+		$description = trim( $description );
+
+		return $description;
+	}
+
+	/**
+	 * Returns a one-line sanitized description.
 	 *
 	 * @since 2.5.0
-	 * @since 2.6.6 Removes duplicated spaces.
-	 * @since 2.8.0 Method is now public.
+	 * @since 2.6.6 : Removes duplicated spaces.
+	 * @since 2.8.0 : Method is now public.
+	 * @since 2.8.2 : Added extra sanitation.
 	 *
 	 * @param string $new_value The Description.
 	 * @return string One line sanitized description.
 	 */
 	public function s_description( $new_value ) {
 
-		$new_value = $this->s_singleline( $new_value );
-		$new_value = $this->s_nbsp( $new_value );
-		$new_value = $this->s_dupe_space( $new_value );
+		$new_value = $this->s_description_raw( $new_value );
 		$new_value = $this->escape_description( $new_value );
 
-		return (string) $new_value;
+		return $new_value;
+	}
+
+	/**
+	 * Returns a one-line sanitized description without nbsp and tabs.
+	 * Does NOT escape.
+	 *
+	 * @since 2.8.2
+	 *
+	 * @param string $new_value The Description.
+	 * @return string One line sanitized description.
+	 */
+	public function s_description_raw( $new_value ) {
+
+		$new_value = $this->s_singleline( $new_value );
+		$new_value = $this->s_nbsp( $new_value );
+		$new_value = $this->s_tabs( $new_value );
+		$new_value = $this->s_dupe_space( $new_value );
+		$new_value = $this->s_bsol( $new_value );
+
+		return $new_value;
 	}
 
 	/**
@@ -650,16 +695,31 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
-	 * Escapes input excerpt.
+	 * Removes tabs and replaces it with spaces.
+	 *
+	 * @since 2.8.2
+	 * @see $this->s_dupe_space() For removing duplicates spaces.
+	 *
+	 * @param string $new_value The input value with possible tabs.
+	 * @return string The input string without tabs.
+	 */
+	public function s_tabs( $new_value ) {
+		return str_replace( "\t", ' ', $new_value );
+	}
+
+	/**
+	 * Sanitizes input excerpt.
 	 *
 	 * @since 2.8.0
-	 * @since 2.8.2 : Added allow_shortcodes parameter.
+	 * @since 2.8.2 : 1. Added allow_shortcodes parameter.
+	 *                2. Added escape parameter
 	 *
 	 * @param string $excerpt the Excerpt.
 	 * @param bool $allow_shortcodes Whether to maintain shortcodes from excerpt.
+	 * @param bool $escape Whether to escape the excerpt.
 	 * @return string The escaped Excerpt.
 	 */
-	public function s_excerpt( $excerpt = '', $allow_shortcodes = true ) {
+	public function s_excerpt( $excerpt = '', $allow_shortcodes = true, $escape = true ) {
 
 		//* No need to parse an empty excerpt.
 		if ( '' === $excerpt )
@@ -675,7 +735,44 @@ class Sanitize extends Admin_Pages {
 			$excerpt = \wp_strip_all_tags( \strip_shortcodes( $excerpt ) );
 		}
 
-		return $this->s_description( $excerpt );
+		if ( $escape )
+			return $this->s_description( $excerpt );
+
+		return $this->s_description_raw( $excerpt );
+	}
+
+	/**
+	 * Cleans input excerpt. Does NOT escape excerpt for output.
+	 *
+	 * @since 2.8.2
+	 * @see $this->s_excerpt - This is basically a copy without sanitation.
+	 *
+	 * @param string $excerpt the Excerpt.
+	 * @param bool $allow_shortcodes Whether to maintain shortcodes from excerpt.
+	 * @return string The unescaped Excerpt.
+	 */
+	public function s_excerpt_raw( $excerpt = '', $allow_shortcodes = true ) {
+		return $this->s_excerpt( $excerpt, $allow_shortcodes, false );
+	}
+
+	/**
+	 * Escapes and beautifies title.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @param string $title The title to escape and beautify.
+	 * @param bool $trim Whether to trim the title from whitespaces.
+	 * @return string Escaped and beautified title.
+	 */
+	public function escape_title( $title = '', $trim = true ) {
+
+		$title = \wptexturize( $title );
+		$title = \convert_chars( $title );
+		$title = \esc_html( $title );
+		$title = \capital_P_dangit( $title );
+		$title = $trim ? trim( $title ) : $title;
+
+		return $title;
 	}
 
 	/**
@@ -689,10 +786,10 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_title( $new_value ) {
 
-		$title = \esc_html( $new_value );
-		$title = trim( $title );
+		$new_value = $this->s_title_raw( $new_value );
+		$new_value = $this->escape_title( $new_value );
 
-		return (string) strip_tags( $title );
+		return $new_value;
 	}
 
 	/**
@@ -703,11 +800,13 @@ class Sanitize extends Admin_Pages {
 	 * @param string $new_value The input Title.
 	 * @return string Sanitized, beautified and trimmed title.
 	 */
-	public function s_real_title( $new_value ) {
+	public function s_title_raw( $new_value ) {
 
+		$new_value = $this->s_singleline( $new_value );
 		$new_value = $this->s_nbsp( $new_value );
+		$new_value = $this->s_tabs( $new_value );
+		$new_value = $this->s_bsol( $new_value );
 		$new_value = $this->s_dupe_space( $new_value );
-		$new_value = $this->escape_title( $new_value );
 
 		return (string) $new_value;
 	}
@@ -1105,9 +1204,9 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.8.2
 	 *
 	 * @param string $new_value String with potentially unwanted \ values.
-	 * @return string A string with safe backslashes.
+	 * @return string A string with safe HTML encoded backslashes.
 	 */
 	public function s_bsol( $new_value ) {
-		return str_replace( '\\', '&#92;', $new_value );
+		return str_replace( '\\', '&#92;', stripslashes( $new_value ) );
 	}
 }

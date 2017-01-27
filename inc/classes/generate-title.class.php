@@ -124,28 +124,6 @@ class Generate_Title extends Generate_Description {
 	}
 
 	/**
-	 * Escapes and beautifies title.
-	 *
-	 * @since 2.5.2
-	 *
-	 * @param string $title The title to escape and beautify.
-	 * @param bool $trim Whether to trim the title from whitespaces.
-	 * @return string Escaped and beautified title.
-	 */
-	public function escape_title( $title = '', $trim = true ) {
-
-		$title = $this->s_nbsp( $title );
-		$title = $this->s_bsol( $title );
-		$title = \wptexturize( $title );
-		$title = \convert_chars( $title );
-		$title = \esc_html( $title );
-		$title = \capital_P_dangit( $title );
-		$title = $trim ? trim( $title ) : $title;
-
-		return $title;
-	}
-
-	/**
 	 * Parse and sanitize title args.
 	 *
 	 * @since 2.4.0

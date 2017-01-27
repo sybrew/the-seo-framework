@@ -19,22 +19,14 @@ switch ( $instance ) :
 		$title = $this->get_custom_field( '_genesis_title', $post_id );
 
 		/**
-		 * Generate static placeholder for when title or description is emptied
-		 *
-		 * @since 2.2.4
-		 *
-		 * Fetch description from Home Page SEO Settings placeholder if it exists.
-		 * @since 2.2.5
-		 *
-		 * Generate description for Posts Page if selected in customizer.
-		 * @since 2.2.8
+		 * Generate static placeholder
 		 */
 		if ( $is_static_frontpage ) {
 			//* Front page.
 			$generated_doctitle_args = array(
 				'page_on_front' => true,
 				'placeholder' => true,
-				'meta'	=> true,
+				'meta' => true,
 				'get_custom_field' => false,
 			);
 
@@ -47,7 +39,7 @@ switch ( $instance ) :
 			//* Page for posts.
 			$generated_doctitle_args = array(
 				'placeholder' => true,
-				'meta'	=> true,
+				'meta' => true,
 				'get_custom_field' => false,
 			);
 
@@ -58,7 +50,7 @@ switch ( $instance ) :
 		} else {
 			$generated_doctitle_args = array(
 				'placeholder' => true,
-				'meta'	=> true,
+				'meta' => true,
 				'get_custom_field' => false,
 			);
 
@@ -105,12 +97,10 @@ switch ( $instance ) :
 		 */
 		if ( $is_static_frontpage ) {
 			//* The homepage description takes precedence.
-			$homepage_description = $this->get_option( 'homepage_description' );
-
 			if ( $description ) {
-				$desc_len_pre = $homepage_description ?: $description;
+				$desc_len_pre = $this->get_option( 'homepage_description' ) ?: $description;
 			} else {
-				$desc_len_pre = $homepage_description ?: $generated_description;
+				$desc_len_pre = $this->get_option( 'homepage_description' ) ?: $generated_description;
 			}
 		} else {
 			$desc_len_pre = $description ?: $generated_description;
@@ -318,7 +308,7 @@ switch ( $instance ) :
 		 */
 		$doc_pre_rem = $add_additions ? $title . ' | ' . $blog_name : $title;
 		$title_len = $title ? $doc_pre_rem : $generated_doctitle;
-		$description_len = $description	?: $generated_description;
+		$description_len = $description ?: $generated_description;
 
 		/**
 		 * Convert to what Google outputs.

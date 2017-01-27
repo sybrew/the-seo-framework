@@ -140,11 +140,11 @@ class Term_Data extends Post_Data {
 			foreach ( (array) $data as $key => $value ) :
 				switch ( $key ) :
 					case 'doctitle' :
-						$data[ $key ] = $this->s_real_title( $value );
+						$data[ $key ] = $this->s_title_raw( $value );
 						continue 2;
 
 					case 'description' :
-						$data[ $key ] = $this->s_description( $value );
+						$data[ $key ] = $this->s_description_raw( $value );
 						continue 2;
 
 					case 'noindex' :
