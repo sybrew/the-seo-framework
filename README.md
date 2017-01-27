@@ -8,6 +8,6 @@
 
 > A free WordPress SEO plugin by Sybre Waaijer. [Get it from WordPress.org](https://wordpress.org/plugins/autodescription/).
 
-## GitHub master version: 2.8.2-RC2 ##
+## GitHub master version: 2.8.2-RC3 ##
 
 [Download ZIP](https://github.com/sybrew/the-seo-framework/archive/master.zip)
