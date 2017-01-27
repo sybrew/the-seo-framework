@@ -542,7 +542,7 @@ class Query extends Compat {
 		if ( \is_front_page() && empty( $id ) )
 			$is_front_page = true;
 
-		//* Elegant Themes Support.
+		//* Elegant Themes Support. Yay.
 		if ( false === $is_front_page && empty( $id ) && $this->is_home() ) {
 			$sof = \get_option( 'show_on_front' );
 
@@ -559,6 +559,8 @@ class Query extends Compat {
 
 			if ( 'posts' === $sof && (int) \get_option( 'page_for_posts' ) === $id )
 				$is_front_page = true;
+		} elseif ( empty( $id ) && $this->is_seo_settings_page() ) {
+			$is_front_page = true;
 		}
 
 		$this->set_query_cache(

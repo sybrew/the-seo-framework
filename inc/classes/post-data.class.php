@@ -314,15 +314,15 @@ class Post_Data extends Detect {
 		if ( '' !== $the_id ) {
 			if ( $this->is_blog_page( $the_id ) ) {
 				$args = array(
-					'posts_per_page'	=> 1,
-					'offset'			=> 0,
-					'category'			=> '',
-					'category_name'		=> '',
-					'orderby'			=> 'date',
-					'order'				=> 'DESC',
-					'post_type'			=> 'post',
-					'post_status'		=> 'publish',
-					'cache_results'		=> false,
+					'posts_per_page' => 1,
+					'offset'         => 0,
+					'category'       => '',
+					'category_name'  => '',
+					'orderby'        => 'date',
+					'order'          => 'DESC',
+					'post_type'      => 'post',
+					'post_status'    => 'publish',
+					'cache_results'  => false,
 				);
 
 				$post = \get_posts( $args );
@@ -334,13 +334,13 @@ class Post_Data extends Detect {
 			 * @since 2.3.3 Match the descriptions in admin as on the front end.
 			 */
 			$args = array(
-				'posts_per_page'	=> 1,
-				'offset'			=> 0,
-				'category'			=> $tt_id,
-				'category_name'		=> '',
-				'post_type'			=> 'post',
-				'post_status'		=> 'publish',
-				'cache_results'		=> false,
+				'posts_per_page' => 1,
+				'offset'         => 0,
+				'category'       => $tt_id,
+				'category_name'  => '',
+				'post_type'      => 'post',
+				'post_status'    => 'publish',
+				'cache_results'  => false,
 			);
 
 			$post = \get_posts( $args );

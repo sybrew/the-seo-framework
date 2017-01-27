@@ -127,8 +127,7 @@ class Sanitize extends Admin_Pages {
 		$this->add_option_filter(
 			's_description',
 			$this->settings_field,
-			array(
-			)
+			array()
 		);
 
 		$this->add_option_filter(
@@ -278,7 +277,6 @@ class Sanitize extends Admin_Pages {
 			$this->settings_field,
 			array(
 				'social_image_fb_id',
-			//	'home_author', @TODO
 			)
 		);
 
@@ -642,8 +640,8 @@ class Sanitize extends Admin_Pages {
 		$new_value = $this->s_singleline( $new_value );
 		$new_value = $this->s_nbsp( $new_value );
 		$new_value = $this->s_tabs( $new_value );
-		$new_value = $this->s_dupe_space( $new_value );
 		$new_value = $this->s_bsol( $new_value );
+		$new_value = $this->s_dupe_space( $new_value );
 
 		return $new_value;
 	}

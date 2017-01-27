@@ -644,8 +644,9 @@ class Generate_Description extends Generate {
 
 		if ( $ignore || $this->add_description_additions( $id, $term ) ) {
 
-			if ( ! isset( $title[ $id ] ) )
-				$title[ $id ] = $this->generate_description_title( $id, $term, $this->is_front_page() );
+			if ( ! isset( $title[ $id ] ) ) {
+				$title[ $id ] = $this->generate_description_title( $id, $term, $this->is_front_page( $id ) );
+			}
 
 			if ( $ignore || $this->is_option_checked( 'description_blogname' ) ) {
 
