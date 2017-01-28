@@ -72,7 +72,7 @@ class Metaboxes extends Site_Options {
 		 */
 		if ( $use_tabs ) :
 			?>
-			<div class="tsf-nav-tab-wrapper hide-if-no-js" id="<?php echo esc_attr( $id . '-tabs-wrapper' ); ?>">
+			<div class="tsf-nav-tab-wrapper hide-if-no-js" id="<?php echo \esc_attr( $id . '-tabs-wrapper' ); ?>">
 				<?php
 				$count = 1;
 				foreach ( $tabs as $tab => $value ) :
@@ -116,7 +116,7 @@ class Metaboxes extends Site_Options {
 			$current = 1 === $count ? ' tsf-active-tab-content' : '';
 
 			?>
-			<div class="tsf-tabs-content <?php echo esc_attr( $the_name . $current ); ?>" id="<?php echo esc_attr( $the_id ); ?>" >
+			<div class="tsf-tabs-content <?php echo \esc_attr( $the_name . $current ); ?>" id="<?php echo \esc_attr( $the_id ); ?>" >
 				<?php
 				//* No-JS tabs.
 				if ( $use_tabs ) :

@@ -506,7 +506,7 @@ class Cache extends Sitemaps {
 		 *
 		 * Use hex. e.g. 0, 1, 2, 9, a, b
 		 */
-		$revision = '2';
+		$revision = '3';
 
 		/**
 		 * Change key based on options.

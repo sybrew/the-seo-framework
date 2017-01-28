@@ -653,7 +653,7 @@ class Generate_Description extends Generate {
 				static $on = null;
 				if ( is_null( $on ) ) {
 					/* translators: Front-end output. */
-					$on = _x( 'on', 'Placement. e.g. Post Title "on" Blog Name', 'autodescription' );
+					$on = \_x( 'on', 'Placement. e.g. Post Title "on" Blog Name', 'autodescription' );
 				}
 
 				//* Already cached.

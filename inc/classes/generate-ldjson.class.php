@@ -82,8 +82,10 @@ class Generate_Ldjson extends Generate_Image {
 				$breadcrumbhelper = $this->ld_json_breadcrumbs();
 
 				//* No wrapper, is done within script generator.
-				if ( $breadcrumbhelper )
+				if ( $breadcrumbhelper ) {
 					$output .= $breadcrumbhelper;
+					$output .= $this->ld_json_name();
+				}
 			}
 
 			if ( $use_cache ) {

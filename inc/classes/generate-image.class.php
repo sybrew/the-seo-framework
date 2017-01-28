@@ -92,7 +92,7 @@ class Generate_Image extends Generate_Url {
 			//* 1. Fetch image from SEO meta upload.
 			if ( $all_allowed || false === in_array( 'postmeta', $args['disallowed'], true ) ) {
 				if ( $image = $this->get_social_image_url_from_post_meta( $args['post_id'], true ) )
-				 	goto end;
+					goto end;
 			}
 
 			//* 2. Fetch image from featured

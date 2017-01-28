@@ -359,11 +359,11 @@ class Generate extends Term_Data {
 
 			//* Photo will always work with an image.
 			if ( 'photo' === $option )
-				return $option;
+				return 'photo';
 
 			//* Only output 'summary' or 'summary_large_image' if there's a description.
 			if ( $this->description_from_cache( true ) )
-				return $option;
+				return trim( \esc_attr( $option ) );
 
 			//* Output photo otherwise.
 			return 'photo';

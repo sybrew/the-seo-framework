@@ -349,7 +349,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		if ( $post_id ) {
 			//* Fetch Post Type.
 			if ( 'inpost' === $type || empty( $type ) )
-				$type = get_post_type( $post_id );
+				$type = \get_post_type( $post_id );
 
 			//* No need to re-evalute these.
 			static $post_i18n = null;
@@ -364,11 +364,11 @@ class Doing_It_Right extends Generate_Ldjson {
 
 				//* Setup i18n values for posts and pages.
 				if ( 'post' === $type ) {
-					$post_i18n = __( 'Post', 'autodescription' );
+					$post_i18n = \__( 'Post', 'autodescription' );
 					$is_term = false;
 					$term = false;
 				} elseif ( 'page' === $type ) {
-					$post_i18n = __( 'Page', 'autodescription' );
+					$post_i18n = \__( 'Page', 'autodescription' );
 					$is_term = false;
 					$term = false;
 				} else {
@@ -821,13 +821,13 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		//* Fetch data
 		$data = $this->the_seo_bar_data( $args );
-		$description 						= $data['description'];
-		$description_is_from_custom_field 	= $data['description_is_from_custom_field'];
+		$description                      = $data['description'];
+		$description_is_from_custom_field = $data['description_is_from_custom_field'];
 
 		//* Fetch i18n and put in vars
 		$i18n = $this->get_the_seo_bar_i18n();
-		$description_short 	= $i18n['description_short'];
-		$generated_short 	= $i18n['generated_short'];
+		$description_short = $i18n['description_short'];
+		$generated_short   = $i18n['generated_short'];
 
 		//* Description length. Convert &#8230; to a single character as well.
 		$desc_len = mb_strlen( html_entity_decode( $description ) );

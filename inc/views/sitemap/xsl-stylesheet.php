@@ -9,13 +9,13 @@ $title = __( 'XML Sitemap', 'autodescription' );
 if ( $this->add_title_additions() )
 	$title = $this->process_title_additions( $title, $this->get_blogname(), $this->get_title_seplocation( '', false ) );
 
-/**
- * Applies filters 'the_seo_framework_sitemap_logo' : array
- * @since 2.8.0
- */
 if ( $this->is_option_checked( 'sitemap_logo' ) ) {
 
 	$logo = $this->can_use_logo() ? wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ), array( 29, 29 ) ) : array();
+	/**
+	 * Applies filters 'the_seo_framework_sitemap_logo' : array
+	 * @since 2.8.0
+	 */
 	$logo = (array) apply_filters( 'the_seo_framework_sitemap_logo', $logo );
 
 	if ( ! empty( $logo[0] ) ) {

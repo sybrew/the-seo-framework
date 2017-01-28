@@ -186,11 +186,11 @@ switch ( $instance ) :
 		 */
 		if ( $this->has_page_on_front() && ! $this->get_option( 'homepage_title' ) && $this->get_custom_field( '_genesis_title', $home_id ) ) {
 			/* translators: 1: Option, 2: Page SEO Settings, 3: Home Page */
-			printf( esc_html__( 'Note: The %1$s is fetched from the %2$s on the %3$s.', 'autodescription' ),
+			$this->description( sprintf( esc_html__( 'Note: The %1$s is fetched from the %2$s on the %3$s.', 'autodescription' ),
 				esc_html( $title_i18n ),
 				esc_html__( 'Page SEO Settings', 'autodescription' ),
 				esc_html( $home_page_i18n )
-			);
+			) );
 		}
 
 		/**
@@ -225,7 +225,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<textarea name="<?php $this->field_name( 'homepage_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_description' ); ?>" rows="3" cols="70"  placeholder="<?php echo $description_placeholder ?>"><?php echo esc_attr( $this->get_field_value( 'homepage_description' ) ); ?></textarea>
+			<textarea name="<?php $this->field_name( 'homepage_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_description' ); ?>" rows="3" cols="70"  placeholder="<?php echo esc_attr( $description_placeholder ); ?>"><?php echo esc_attr( $this->get_field_value( 'homepage_description' ) ); ?></textarea>
 		</p>
 		<?php
 		$this->description( __( 'The meta description can be used to determine the text used under the title on Search Engine results pages.', 'autodescription' ) );
