@@ -1,6 +1,6 @@
 # [The SEO Framework](https://theseoframework.com) #
 
-## WordPress.org trunk version: 2.8.1 ##
+## WordPress.org trunk version: 2.8.2 ##
 
 [![WordPress plugin](https://img.shields.io/wordpress/plugin/v/autodescription.svg)](https://wordpress.org/plugins/autodescription/developers/)
 [![WordPress](https://img.shields.io/wordpress/plugin/dt/autodescription.svg)](https://wordpress.org/plugins/autodescription/stats/)
