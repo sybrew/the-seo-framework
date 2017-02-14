@@ -195,7 +195,7 @@ class Post_Data extends Detect {
 		 */
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
 			return;
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX )
+		if ( $this->doing_ajax() )
 			return;
 		if ( defined( 'DOING_CRON' ) && DOING_CRON )
 			return;

@@ -227,10 +227,10 @@ class Admin_Init extends Init {
 		$counter_type = (int) $this->get_user_option( 0, 'counter_type', 3 );
 
 		//* Enunciate the lenghts of Titles and Descriptions.
-		$good = __( 'Good', 'autodescription' );
-		$okay = __( 'Okay', 'autodescription' );
-		$bad = __( 'Bad', 'autodescription' );
-		$unknown = __( 'Unknown', 'autodescription' );
+		$good = \__( 'Good', 'autodescription' );
+		$okay = \__( 'Okay', 'autodescription' );
+		$bad = \__( 'Bad', 'autodescription' );
+		$unknown = \__( 'Unknown', 'autodescription' );
 
 		$title_separator = $this->get_separator( 'title' );
 		$description_separator = $this->get_separator( 'description' );
@@ -442,9 +442,9 @@ class Admin_Init extends Init {
 	 *
 	 * @since 2.2.2
 	 *
-	 * @param string $page			Menu slug.
-	 * @param array  $query_args 	Optional. Associative array of query string arguments
-	 * 								(key => value). Default is an empty array.
+	 * @param string $page Menu slug.
+	 * @param array  $query_args Optional. Associative array of query string arguments
+	 *               (key => value). Default is an empty array.
 	 * @return null Return early if first argument is false.
 	 */
 	public function admin_redirect( $page, array $query_args = array() ) {
@@ -473,7 +473,7 @@ class Admin_Init extends Init {
 	 */
 	public function wp_ajax_update_counter_type() {
 
-		if ( $this->is_admin() && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		if ( $this->is_admin() && $this->doing_ajax() ) {
 
 			//* If current user isn't allowed to edit posts, don't do anything and kill PHP.
 			if ( ! \current_user_can( 'publish_posts' ) )

@@ -214,8 +214,8 @@ class Inpost extends Doing_It_Right {
 	 * @access private
 	 * @uses $this->get_custom_field() Get custom field value.
 	 *
-	 * @param object $object 	the page/post/taxonomy object
-	 * @param array $args 		the page/post arguments or taxonomy slug
+	 * @param object $object the page/post/taxonomy object
+	 * @param array $args    the page/post arguments or taxonomy slug
 	 */
 	public function inpost_seo_box( $object, $args ) {
 

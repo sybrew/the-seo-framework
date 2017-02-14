@@ -158,6 +158,7 @@ class Generate_Image extends Generate_Url {
 	 * Parse and sanitize image args.
 	 *
 	 * @since 2.5.0
+	 * @since 2.9.0 : Removed 'attr' index, it was unused.
 	 *
 	 * The image set in the filter will always be used as fallback
 	 *
@@ -175,7 +176,6 @@ class Generate_Image extends Generate_Url {
 				'image'      => '',
 				'size'       => 'full',
 				'icon'       => false,
-				'attr'       => array(),
 				'disallowed' => array(),
 			);
 
@@ -184,7 +184,6 @@ class Generate_Image extends Generate_Url {
 			 *		@param string $image The image url
 			 *		@param mixed $size The image size
 			 *		@param bool $icon Fetch Image icon
-			 *		@param array $attr Image attributes
 			 *		@param array $disallowed Disallowed image types : {
 			 *			array (
 			 * 				string 'featured'
@@ -211,7 +210,6 @@ class Generate_Image extends Generate_Url {
 		$args['image']      = isset( $args['image'] )      ? (string) $args['image']     : $defaults['image'];
 		$args['size']       = isset( $args['size'] )       ? $args['size']               : $defaults['size']; // Mixed.
 		$args['icon']       = isset( $args['icon'] )       ? (bool) $args['icon']        : $defaults['icon'];
-		$args['attr']       = isset( $args['attr'] )       ? (array) $args['attr']       : $defaults['attr'];
 		$args['disallowed'] = isset( $args['disallowed'] ) ? (array) $args['disallowed'] : $defaults['disallowed'];
 
 		return $args;
@@ -389,7 +387,7 @@ class Generate_Image extends Generate_Url {
 		if ( empty( $args ) )
 			$args = $this->reparse_image_args( $args );
 
-		$src = \wp_get_attachment_image_src( $id, $args['size'], $args['icon'], $args['attr'] );
+		$src = \wp_get_attachment_image_src( $id, $args['size'], $args['icon'] );
 
 		$i = $src[0]; // Source URL
 		$w = $src[1]; // Width

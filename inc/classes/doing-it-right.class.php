@@ -95,7 +95,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		/**
 		 * Securely check the referrer, instead of leaving holes everywhere.
 		 */
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX && \check_ajax_referer( 'add-tag', '_wpnonce_add-tag', false ) ) {
+		if ( $this->doing_ajax() && \check_ajax_referer( 'add-tag', '_wpnonce_add-tag', false ) ) {
 
 			$taxonomy = ! empty( $_POST['taxonomy'] ) ? $_POST['taxonomy'] : 'post_tag';
 			$tax = \get_taxonomy( $taxonomy );

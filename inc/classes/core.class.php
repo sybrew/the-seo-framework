@@ -721,6 +721,7 @@ class Core {
 	 * Calculates the relative font color according to the background.
 	 *
 	 * @since 2.8.0
+	 * @since 2.9.0 Now adds a little more relative softness based on rel_lum.
 	 *
 	 * @param string $hex The 3 to 6 character RGB hex. '#' prefix is supported.
 	 * @return string The hexadecimal RGB relative font color, without '#' prefix.
@@ -747,12 +748,10 @@ class Core {
 		$rel_lum = 1 - ( $sr + $sg + $sb ) / 255;
 
 		//* Convert to relative intvals between 1 and 0 for L from HSL
-		/*
-		$rr = $r / 255;
-		$rg = $g / 255;
-		$rb = $b / 255;
-		$luminance = ( min( $rr, $rg, $rb ) + max( $rr, $rg, $rb ) ) / 2;
-		*/
+		// $rr = $r / 255;
+		// $rg = $g / 255;
+		// $rb = $b / 255;
+		// $luminance = ( min( $rr, $rg, $rb ) + max( $rr, $rg, $rb ) ) / 2;
 
 		//* Get perceptive luminance (greyscale) according to W3C.
 		$gr = 0.2989 * $r;
@@ -763,14 +762,14 @@ class Core {
 		//* Invert colors if they hit luminance boundaries.
 		if ( $rel_lum < 0.5 ) {
 			//* Build dark. Add softness.
-			$gr = $gr * $per_lum / 8 / 0.2989 + 8 * 0.2989;
-			$gg = $gg * $per_lum / 8 / 0.5870 + 8 * 0.5870;
-			$gb = $gb * $per_lum / 8 / 0.1140 + 8 * 0.1140;
+			$gr = $gr * $per_lum / 8 / 0.2989 + 8 * 0.2989 / $rel_lum;
+			$gg = $gg * $per_lum / 8 / 0.5870 + 8 * 0.5870 / $rel_lum;
+			$gb = $gb * $per_lum / 8 / 0.1140 + 8 * 0.1140 / $rel_lum;
 		} else {
 			//* Build light. Add (subtract) softness.
-			$gr = 255 - $gr * $per_lum / 8 * 0.2989 - 8 * 0.2989;
-			$gg = 255 - $gg * $per_lum / 8 * 0.5870 - 8 * 0.5870;
-			$gb = 255 - $gb * $per_lum / 8 * 0.1140 - 8 * 0.1140;
+			$gr = 255 - $gr * $per_lum / 8 * 0.2989 - 8 * 0.2989 / $rel_lum;
+			$gg = 255 - $gg * $per_lum / 8 * 0.5870 - 8 * 0.5870 / $rel_lum;
+			$gb = 255 - $gb * $per_lum / 8 * 0.1140 - 8 * 0.1140 / $rel_lum;
 		}
 
 		//* Complete hexvals.

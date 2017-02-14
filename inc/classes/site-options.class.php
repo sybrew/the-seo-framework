@@ -226,6 +226,10 @@ class Site_Options extends Sanitize {
 			'knowledge_logo'		=> 1,	// Fetch logo from WP Favicon
 			'knowledge_name'		=> '',	// Person or Organization name
 
+			// Knowledge Logo image
+		//	'knowledge_logo_url'   => '', // TODO
+		//	'knowledge_logo_id'    => 0, // TODO
+
 			// Knowledge sameas locations
 			'knowledge_facebook'	=> '',	// Facebook Account
 			'knowledge_twitter'		=> '',	// Twitter Account

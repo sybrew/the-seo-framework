@@ -190,11 +190,33 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
+= 2.9.0 - ??? =
+
+**Release date:**
+/ TODO
+
+**Summarized:**
+/ TODO
+
+* **For everyone:**
+	/ TODO
+
+* **For developers:**
+	* **Fixed:**
+		/
+		* TODO Method `the_seo_framework()->get_social_image_url_from_post_meta()` second parameter now works.
+	* **Filter Notes:**
+		* **Added:**
+			/
+			* `(bool) TODO` https://wordpress.org/support/topic/breadcrumbs-root-name/#post-8798025
+			* `(string) TODO` https://github.com/sybrew/the-seo-framework/issues/85
+
+
 = 2.8.2 - Immaculated Perception =
 
 **Release date:**
 
-* January 27th 2017
+* January 28th 2017
 
 *If you haven't read the [2.8.0 upgrade notes](https://theseoframework.com/?p=1792) yet, please do.*
 

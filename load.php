@@ -53,17 +53,17 @@ function _init() {
 	return $tsf;
 }
 
-add_action( 'plugins_loaded', __NAMESPACE__ . '\\_init_locale', 10 );
+\add_action( 'plugins_loaded', __NAMESPACE__ . '\\_init_locale', 10 );
 /**
  * Plugin locale 'autodescription'
  * File located in plugin folder autodescription/language/
  * @since 1.0.0
  */
 function _init_locale() {
-	load_plugin_textdomain( 'autodescription', false, basename( dirname( __FILE__ ) ) . '/language/' );
+	\load_plugin_textdomain( 'autodescription', false, basename( dirname( __FILE__ ) ) . '/language/' );
 }
 
-add_action( 'admin_init', __NAMESPACE__ . '\\_init_upgrade', 5 );
+\add_action( 'admin_init', __NAMESPACE__ . '\\_init_upgrade', 5 );
 /**
  * Determines whether the plugin needs an option upgrade.
  *

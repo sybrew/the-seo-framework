@@ -42,6 +42,23 @@ class Detect extends Render {
 	}
 
 	/**
+	 * Determines if we're doing ajax.
+	 *
+	 * @since 2.9.0
+	 * @staticvar bool $cache
+	 *
+	 * @return bool True if AJAX
+	 */
+	public function doing_ajax() {
+
+		static $cache = null;
+
+		null === $cache and $cache = defined( 'DOING_AJAX' ) && DOING_AJAX;
+
+		return $cache;
+	}
+
+	/**
 	 * Returns list of active plugins.
 	 *
 	 * @since 2.6.1

@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://theseoframework.com/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.
- * Version: 2.8.2
+ * Version: 2.9.0-dev2017.02.14.0
  * Author: Sybre Waaijer
  * Author URI: https://cyberwire.nl/
  * License: GPLv3
@@ -46,7 +46,7 @@ defined( 'ABSPATH' ) or die;
  * Not many caching plugins use CDN in dashboard. What a shame. Firefox does cache.
  * @since 1.0.0
  */
-define( 'THE_SEO_FRAMEWORK_VERSION', '2.8.2' );
+define( 'THE_SEO_FRAMEWORK_VERSION', '2.8.99' );
 
 /**
  * Plugin Database version for lightweight version upgrade comparing.

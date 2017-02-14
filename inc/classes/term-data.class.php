@@ -101,12 +101,13 @@ class Term_Data extends Post_Data {
 	 *
 	 * @since 2.7.0
 	 *
-	 * @since 2.1.8:
-	 * Applies filters array the_seo_framework_term_meta_defaults : Array of default term SEO options
-	 *
 	 * @return array The Term Metadata default options.
 	 */
 	public function get_term_meta_defaults() {
+		/**
+		 * Applies filters 'the_seo_framework_term_meta_defaults' : Array
+		 * @since 2.1.8
+		 */
 		return (array) \apply_filters( 'the_seo_framework_term_meta_defaults', array(
 			'doctitle'    => '',
 			'description' => '',
@@ -129,11 +130,12 @@ class Term_Data extends Post_Data {
 	 */
 	public function update_term_meta( $term_id, $tt_id, $taxonomy = '' ) {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX )
+		if ( $this->doing_ajax() )
 			return;
 
 		//* Check again against ambiguous injection.
-		if ( isset( $_POST['_wpnonce'] ) && \wp_verify_nonce( $_POST['_wpnonce'], 'update-tag_' . $term_id ) ) {
+		if ( isset( $_POST['_wpnonce'] ) && \wp_verify_nonce( $_POST['_wpnonce'], 'update-tag_' . $term_id ) ) :
+
 			$data = isset( $_POST['autodescription-meta'] ) ? (array) $_POST['autodescription-meta'] : array();
 			$data = \wp_parse_args( $data, $this->get_term_meta_defaults() );
 
@@ -160,7 +162,7 @@ class Term_Data extends Post_Data {
 			endforeach;
 
 			\update_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
-		}
+		endif;
 	}
 
 	/**

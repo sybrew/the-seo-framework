@@ -58,7 +58,7 @@ class Generate_Ldjson extends Generate_Image {
 		$use_cache = $this->is_option_checked( 'cache_meta_schema' );
 
 		$output = $use_cache ? $this->get_transient( $this->ld_json_transient ) : false;
-		if ( false === $output ) {
+		if ( false === $output ) :
 
 			$output = '';
 
@@ -97,7 +97,7 @@ class Generate_Ldjson extends Generate_Image {
 
 				$this->set_transient( $this->ld_json_transient, $output, $expiration );
 			}
-		}
+		endif;
 
 		/**
 		 * Debug output.
@@ -372,7 +372,7 @@ class Generate_Ldjson extends Generate_Image {
 		$parents_merge = array();
 
 		//* Fetch cats children id's, if any.
-		foreach ( $cats as $term_id => $parent_id ) {
+		foreach ( $cats as $term_id => $parent_id ) :
 			//* Warning: This makes database calls...
 			if ( ! \term_exists( $term_id, $cat_type, $parent_id ) )
 				continue;
@@ -387,11 +387,11 @@ class Generate_Ldjson extends Generate_Image {
 			//* Save children id's as kittens.
 			$kittens[ $term_id ] = $children;
 			$parents[ $term_id ] = $ancestors;
-		}
+		endforeach;
 		unset( $cats );
 
-		foreach ( $kittens as $kit_id => $child_id ) {
-			foreach ( $child_id as $ckey => $cid ) {
+		foreach ( $kittens as $kit_id => $child_id ) :
+			foreach ( $child_id as $ckey => $cid ) :
 
 				/**
 				 * Seed out children that aren't assigned.
@@ -421,8 +421,8 @@ class Generate_Ldjson extends Generate_Image {
 					$parents_merge[ $kit_id ] = $parents[ $kit_id ];
 					unset( $kittens[ $kit_id ] );
 				}
-			}
-		}
+			endforeach;
+		endforeach;
 
 		/**
 		 * Build category ID trees for kittens.
@@ -432,7 +432,7 @@ class Generate_Ldjson extends Generate_Image {
 		//* Empty parents.
 		$parents = array();
 
-		if ( ! empty( $parents_merge ) ) {
+		if ( ! empty( $parents_merge ) ) :
 			foreach ( $parents_merge as $child_id => $parents_ids ) {
 
 				//* Reset kitten.
@@ -459,12 +459,12 @@ class Generate_Ldjson extends Generate_Image {
 					$trees = $this->build_breadcrumb_trees( $parents_ids, $trees );
 				}
 			}
-		}
+		endif;
 
 		/**
 		 * Sort by number of id's. Provides a cleaner layout, better Search Engine understanding and more consistent cache.
 		 */
-		if ( count( $trees ) > 1 ) {
+		if ( count( $trees ) > 1 ) :
 			/**
 			 * Applies filter 'the_seo_framework_breadcrumb_post_sorting_callback' : string|array
 			 * @since 2.8.0
@@ -478,15 +478,15 @@ class Generate_Ldjson extends Generate_Image {
 			} else {
 				array_multisort( array_map( 'count', $trees ), SORT_DESC, SORT_REGULAR, $trees );
 			}
-		}
+		endif;
 
 		$context = $this->schema_context();
 		$context_type = $this->schema_breadcrumblist();
 		$item_type = $this->schema_listitem();
 
 		//* For each of the tree items, create a separated script.
-		if ( $trees ) {
-			foreach ( $trees as $tree_ids ) {
+		if ( $trees ) :
+			foreach ( $trees as $tree_ids ) :
 
 				if ( is_array( $tree_ids ) ) {
 					//* Term has assigned children.
@@ -501,7 +501,7 @@ class Generate_Ldjson extends Generate_Image {
 					//* Put the children in the right order.
 					$tree_ids = array_reverse( $tree_ids, false );
 
-					foreach ( $tree_ids as $position => $child_id ) {
+					foreach ( $tree_ids as $position => $child_id ) :
 						if ( in_array( $child_id, $assigned_ids, true ) ) {
 							//* Cat has been assigned, continue.
 
@@ -536,7 +536,7 @@ class Generate_Ldjson extends Generate_Image {
 								$items .= $this->make_breadcrumb( $item_cache[ $child_id ], true );
 							}
 						}
-					}
+					endforeach;
 
 					if ( $items ) {
 
@@ -577,8 +577,8 @@ class Generate_Ldjson extends Generate_Image {
 						$output .= '<script type="application/ld+json">' . $breadcrumbhelper . '</script>' . "\r\n";
 					}
 				}
-			}
-		}
+			endforeach;
+		endif;
 
 		return $output;
 	}
@@ -646,12 +646,10 @@ class Generate_Ldjson extends Generate_Image {
 	/**
 	 * Return home page item for LD Json Breadcrumbs.
 	 *
+	 * @since 2.4.2
 	 * @staticvar string $first_item.
 	 *
-	 * @since 2.4.2
-	 *
 	 * @param string|null $item_type the breadcrumb item type.
-	 *
 	 * @return string Home Breadcrumb item
 	 */
 	public function ld_json_breadcrumb_first( $item_type = null ) {
@@ -671,7 +669,7 @@ class Generate_Ldjson extends Generate_Image {
 		if ( $home_title ) {
 			$custom_name = $home_title;
 		} elseif ( $this->has_page_on_front() ) {
-			$home_id = (int) get_option( 'page_on_front' );
+			$home_id = (int) \get_option( 'page_on_front' );
 
 			$custom_name = $this->get_custom_field( '_genesis_title', $home_id ) ?: $this->get_blogname();
 		} else {
@@ -759,13 +757,12 @@ class Generate_Ldjson extends Generate_Image {
 	 *
 	 * @since 2.6.0
 	 * @param array $item : {
-	 *		'type',
-	 *		'pos',
-	 *		'id',
-	 *		'name'
+	 *  'type',
+	 *  'pos',
+	 *  'id',
+	 *  'name'
 	 * }
 	 * @param bool $comma Whether to add a trailing comma.
-	 *
 	 * @return string The LD+Json breadcrumb.
 	 */
 	public function make_breadcrumb( $item, $comma = true ) {
@@ -845,9 +842,7 @@ class Generate_Ldjson extends Generate_Image {
 		$logo = '';
 
 		if ( $this->get_option( 'knowledge_logo' ) && 'organization' === $knowledge_type ) {
-			$_logo = $this->get_site_logo();
-			if ( ! $_logo )
-				$_logo = $this->get_site_icon();
+			$_logo = $this->get_site_logo() ?: $this->get_site_icon();
 
 			if ( $_logo ) {
 				$logourl = \esc_url_raw( $_logo );

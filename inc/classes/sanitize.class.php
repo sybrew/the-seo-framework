@@ -277,14 +277,17 @@ class Sanitize extends Admin_Pages {
 			$this->settings_field,
 			array(
 				'social_image_fb_id',
+				'knowledge_logo_id',
 			)
 		);
 
+		/*
 		$this->add_option_filter(
 			's_no_html',
 			$this->settings_field,
 			array()
 		);
+		*/
 
 		/**
 		 * @todo create content="code" stripper
@@ -328,6 +331,7 @@ class Sanitize extends Admin_Pages {
 			array(
 				'knowledge_linkedin',
 				'social_image_fb_url',
+				'knowledge_logo_url',
 			)
 		);
 
