@@ -415,8 +415,7 @@ class Generate extends Term_Data {
 	public function get_twitter_card_types() {
 		return array(
 			'summary'             => 'summary',
-			'summary_large_image' => 'summary-large-image',
-			'photo'               => 'photo',
+			'summary_large_image' => 'summary-large-image'
 		);
 	}
 }
