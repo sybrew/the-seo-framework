@@ -204,6 +204,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Fixed:**
 		* The terms and taxonomies SEO bar now correctly displays robots values again.
 		/
+		* When emptying the Home Page Custom title, the Additions are now correctly updated once again.
 		* RTL: When Title additions have been set to "Right", the indentation of the title no longer shifts all the way to the left.
 		* RTL: The Dynamic Title for the home page was reversed.
 
