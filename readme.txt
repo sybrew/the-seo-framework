@@ -200,14 +200,13 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * **For everyone:**
 	* **Added:**
-		* [Schema.org sitename](https://developers.google.com/search/docs/data-types/sitename) `alternateName`
+		* [Schema.org sitename](https://developers.google.com/search/docs/data-types/sitename) `alternateName` output.
 			* This name is now also considered by Google.
-			* This name is only set if the Organization or Personal Name option is filled in and is not idential to the site name.
+			* This name is only set if the Organization or Personal Name option is filled in and when it's not idential to the site name.
 	* **Improved:**
 		* Post overview SEO Bar data rendering is a lot lighter now.
 	* **Fixed:**
 		* The terms and taxonomies SEO bar now correctly displays robots values again.
-		/
 		* When emptying the Home Page Custom title, the Additions are now correctly updated once again.
 		* RTL: When Title additions have been set to "Right", the indentation of the title no longer shifts all the way to the left.
 		* RTL: The Dynamic Title for the home page was reversed.
@@ -215,7 +214,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * **For developers:**
 	* **Added:**
 		/
-		* TODO (JavaScript) A triggered event after The SEO Framework's jQuery code has been initiatlized: `tsf-ready`.
+		* (JavaScript) A triggered event after The SEO Framework's jQuery code has been initiatlized: `tsf-ready`.
 	* **Improved:**
 		* (JavaScript) `tsf.dynamicPlaceholderOnLoad` has been removed and is no longer called. It caused a duplicated method call.
 			* It has been removed from the protected externs file too.
