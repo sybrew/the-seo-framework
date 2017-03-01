@@ -205,7 +205,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* The terms and taxonomies SEO bar now correctly displays robots values again.
 		/
 		* RTL: When Title additions have been set to "Right", the indentation of the title no longer shifts all the way to the left.
-		* TODO The Admin Page Titles were reversed on RTL.
+		* RTL: The Dynamic Title for the home page was reversed.
 
 * **For developers:**
 	* **Added:**
