@@ -199,6 +199,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 / TODO
 
 * **For everyone:**
+	* **Added:**
+		* [Schema.org sitename](https://developers.google.com/search/docs/data-types/sitename) `alternateName`
+			* This name is now also considered by Google.
+			* This name is only set if the Organization or Personal Name option is filled in and is not idential to the site name.
 	* **Improved:**
 		* Post overview SEO Bar data rendering is a lot lighter now.
 	* **Fixed:**

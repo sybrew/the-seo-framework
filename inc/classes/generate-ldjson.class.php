@@ -987,8 +987,20 @@ class Generate_Ldjson extends Generate_Image {
 		$webtype = $this->schema_type();
 		$url = $this->schema_home_url();
 		$name = $this->schema_blog_name();
+		$alternate = '';
 
-		$json = sprintf( '{"@context":%s,"@type":%s,"name":%s,"url":%s}', $context, $webtype, $name, $url );
+		$blogname = $this->get_blogname();
+		$knowledge_name = $this->get_option( 'knowledge_name' );
+
+		if ( $knowledge_name && $knowledge_name !== $blogname ) {
+			$alternate = json_encode( \esc_html( $knowledge_name ) );
+		}
+
+		if ( $alternate ) {
+			$json = sprintf( '{"@context":%s,"@type":%s,"name":%s,"alternateName":%s,"url":%s}', $context, $webtype, $name, $alternate, $url );
+		} else {
+			$json = sprintf( '{"@context":%s,"@type":%s,"name":%s,"url":%s}', $context, $webtype, $name, $url );
+		}
 
 		$output = '';
 		if ( $json )
