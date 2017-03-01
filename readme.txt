@@ -200,6 +200,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * **For everyone:**
 	/ TODO
+	* **Improved:**
+		* Post overview SEO Bar data rendering is a lot lighter now.
+	* **Fixed:**
+		* The terms and taxonomies SEO bar now correctly displays robots values again.
 
 * **For developers:**
 	* **Added:**

@@ -509,7 +509,7 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		$data = $this->get_term_data( $term, $term->term_id );
 
-		$noindex = isset( $data['noindex'] ) && $this->is_checked( $data['noindex'] );
+		$noindex = isset( $data['noindex'] ) && $data['noindex'];
 		$redirect = false; // We don't apply redirect on taxonomies (yet)
 
 		//* Blocked SEO, return simple bar.
@@ -549,14 +549,11 @@ class Doing_It_Right extends Generate_Ldjson {
 		$is_term = false;
 		$is_front_page = $this->is_static_frontpage( $post_id );
 
-		$redirect = $this->get_custom_field( 'redirect', $post_id );
-		$redirect = empty( $redirect ) ? false : true;
-
-		$noindex = $this->get_custom_field( '_genesis_noindex', $post_id );
-		$noindex = $this->is_checked( $noindex );
+		$redirect = (bool) $this->get_custom_field( 'redirect', $post_id );
+		$noindex = (bool) $this->get_custom_field( '_genesis_noindex', $post_id );
 
 		if ( $is_front_page )
-			$noindex = $this->is_option_checked( 'homepage_noindex' ) ? true : $noindex;
+			$noindex = $this->is_option_checked( 'homepage_noindex' ) ?: $noindex;
 
 		if ( $redirect || $noindex )
 			return $this->the_seo_bar_blocked( array( 'is_term' => $is_term, 'redirect' => $redirect, 'noindex' => $noindex, 'post_i18n' => $post ) );
@@ -609,6 +606,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * Fetch the term data for The SEO Bar.
 	 *
 	 * @since 2.6.0
+	 * @since 2.9.0 Now also returns noindex value.
 	 * @staticvar array $data
 	 *
 	 * @param array $args The term args.
@@ -617,6 +615,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 *	 'title_is_from_custom_field' => $title_is_from_custom_field,
 	 *	 'description' => $description,
 	 *	 'description_is_from_custom_field' => $description_is_from_custom_field,
+	 *	 'noindex' => $noindex,
 	 *	 'nofollow' => $nofollow,
 	 *	 'noarchive' => $noarchive
 	 * }
@@ -631,6 +630,7 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		$title_custom_field = isset( $data['doctitle'] ) ? $data['doctitle'] : '';
 		$description_custom_field = isset( $data['description'] ) ? $data['description'] : '';
+		$noindex = isset( $data['noindex'] ) ? $data['noindex'] : '';
 		$nofollow = isset( $data['nofollow'] ) ? $data['nofollow'] : '';
 		$noarchive = isset( $data['noarchive'] ) ? $data['noarchive'] : '';
 
@@ -654,14 +654,19 @@ class Doing_It_Right extends Generate_Ldjson {
 			$description = $this->generate_description( '', $description_args );
 		}
 
-		$nofollow = $this->is_checked( $nofollow );
-		$noarchive = $this->is_checked( $noarchive );
+		/**
+		 * No longer uses is_checked. As it strict checks 1/0 strings.
+		 */
+		$noindex = (bool) $noindex;
+		$nofollow = (bool) $nofollow;
+		$noarchive = (bool) $noarchive;
 
 		return array(
 			'title' => $title,
 			'title_is_from_custom_field' => $title_is_from_custom_field,
 			'description' => $description,
 			'description_is_from_custom_field' => $description_is_from_custom_field,
+			'noindex' => $noindex,
 			'nofollow' => $nofollow,
 			'noarchive' => $noarchive,
 		);
@@ -671,6 +676,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * Fetch the post data for The SEO Bar.
 	 *
 	 * @since 2.6.0
+	 * @since 2.9.0 Now also returns noindex value.
 	 * @staticvar array $data
 	 *
 	 * @param array $args The post args.
@@ -679,6 +685,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 *	 'title_is_from_custom_field' => $title_is_from_custom_field,
 	 *	 'description' => $description,
 	 *	 'description_is_from_custom_field' => $description_is_from_custom_field,
+	 *	 'noindex' => $noindex,
 	 *	 'nofollow' => $nofollow,
 	 *	 'noarchive' => $noarchive
 	 * }
@@ -690,14 +697,16 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		$title_custom_field = $this->get_custom_field( '_genesis_title', $post_id );
 		$description_custom_field = $this->get_custom_field( '_genesis_description', $post_id );
+		$noindex = $this->get_custom_field( '_genesis_noindex', $post_id );
 		$nofollow = $this->get_custom_field( '_genesis_nofollow', $post_id );
 		$noarchive = $this->get_custom_field( '_genesis_noarchive', $post_id );
 
 		if ( $page_on_front ) {
-			$title_custom_field = $this->get_option( 'homepage_title' ) ? $this->get_option( 'homepage_title' ) : $title_custom_field;
-			$description_custom_field = $this->get_option( 'homepage_description' ) ? $this->get_option( 'homepage_description' ) : $description_custom_field;
-			$nofollow = $this->get_option( 'homepage_nofollow' ) ? $this->get_option( 'homepage_nofollow' ) : $nofollow;
-			$noarchive = $this->get_option( 'homepage_noarchive' ) ? $this->get_option( 'homepage_noarchive' ) : $noarchive;
+			$title_custom_field = $this->get_option( 'homepage_title' ) ?: $title_custom_field;
+			$description_custom_field = $this->get_option( 'homepage_description' ) ?: $description_custom_field;
+			$noindex = $this->get_option( 'homepage_noindex' ) ?: $nofollow;
+			$nofollow = $this->get_option( 'homepage_nofollow' ) ?: $nofollow;
+			$noarchive = $this->get_option( 'homepage_noarchive' ) ?: $noarchive;
 		}
 
 		$title_is_from_custom_field = (bool) $title_custom_field;
@@ -714,14 +723,16 @@ class Doing_It_Right extends Generate_Ldjson {
 			$description = $this->generate_description( '', array( 'id' => $post_id, 'get_custom_field' => false ) );
 		}
 
-		$nofollow = $this->is_checked( $nofollow );
-		$noarchive = $this->is_checked( $noarchive );
+		$noindex = (bool) $noindex;
+		$nofollow = (bool) $nofollow;
+		$noarchive = (bool) $noarchive;
 
 		return array(
 			'title' => $title,
 			'title_is_from_custom_field' => $title_is_from_custom_field,
 			'description' => $description,
 			'description_is_from_custom_field' => $description_is_from_custom_field,
+			'noindex' => $noindex,
 			'nofollow' => $nofollow,
 			'noarchive' => $noarchive,
 		);
