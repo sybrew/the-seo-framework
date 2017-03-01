@@ -43,6 +43,7 @@ class Generate_Description extends Generate {
 	 * Creates description. Base function.
 	 *
 	 * @since 1.0.0
+	 * @since 2.9.0 Added two filters.
 	 *
 	 * @param string $description The optional description to simply parse.
 	 * @param array $args description args : {
@@ -64,15 +65,40 @@ class Generate_Description extends Generate {
 
 		if ( $args['get_custom_field'] && empty( $description ) ) {
 			//* Fetch from options, if any.
-			$description = (string) $this->description_from_custom_field( $args, false );
+			$description = $this->description_from_custom_field( $args, false );
+
+			/**
+			 * Applies filters 'the_seo_framework_custom_field_description' : string
+			 *
+			 * Filters the description from custom field, if any.
+			 *
+			 * @since 2.9.0
+			 *
+			 * @param string $description The description.
+			 * @param array $args The description arguments.
+			 */
+			$description = (string) \apply_filters( 'the_seo_framework_custom_field_description', $description, $args );
 
 			//* We've already checked the custom fields, so let's remove the check in the generation.
 			$args['get_custom_field'] = false;
 		}
 
 		//* Still no description found? Create an auto description based on content.
-		if ( empty( $description ) || false === is_scalar( $description ) )
+		if ( empty( $description ) || false === is_scalar( $description ) ) {
 			$description = $this->generate_description_from_id( $args, false );
+
+			/**
+			 * Applies filters 'the_seo_framework_generated_description' : string
+			 *
+			 * Filters the generated description, if any.
+			 *
+			 * @since 2.9.0
+			 *
+			 * @param string $description The description.
+			 * @param array $args The description arguments.
+			 */
+			$description = (string) \apply_filters( 'the_seo_framework_generated_description', $description, $args );
+		}
 
 		/**
 		 * Applies filters 'the_seo_framework_do_shortcodes_in_description' : Boolean
@@ -778,6 +804,18 @@ class Generate_Description extends Generate {
 			} else {
 				$excerpt = '';
 			}
+
+			/**
+			 * Applies filters 'the_seo_framework_fetched_description_excerpt' : string
+			 *
+			 * @since 2.9.0
+			 *
+			 * @param string $excerpt The excerpt to use.
+			 * @param bool $page_id The current page/term ID
+			 * @param object|mixed $term The current term.
+			 * @param int $max_char_length Determines the maximum length of excerpt after trimming.
+			 */
+			$excerpt = (string) \apply_filters( 'the_seo_framework_fetched_description_excerpt', $excerpt, $page_id, $term, $max_char_length );
 
 			$excerpt_cache[ $page_id ][ $term_id ] = $excerpt;
 		}

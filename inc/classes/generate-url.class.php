@@ -144,11 +144,11 @@ class Generate_Url extends Generate_Title {
 		 * @param int $id The current post, page or term ID.
 		 * @param bool $external Whether the call is made from outside the current ID scope. Like from the Sitemap.
 		 */
-		$filter = (array) \apply_filters( 'the_seo_framework_url_output_args', array(), $path, $args['id'], $args['external'] );
+		$url_filter = (array) \apply_filters( 'the_seo_framework_url_output_args', array(), $path, $args['id'], $args['external'] );
 
-		if ( $filter ) {
-			$url = $filter['url'];
-			$scheme = $filter['scheme'];
+		if ( $url_filter ) {
+			$url = $url_filter['url'];
+			$scheme = $url_filter['scheme'];
 		}
 
 		//* Non-domainmap URL
@@ -999,7 +999,7 @@ class Generate_Url extends Generate_Title {
 		if ( isset( $structure ) )
 			return $structure;
 
-		return $structure = get_option( 'permalink_structure' );
+		return $structure = \get_option( 'permalink_structure' );
 	}
 
 	/**

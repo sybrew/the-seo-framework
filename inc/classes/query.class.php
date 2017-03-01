@@ -114,6 +114,8 @@ class Query extends Compat {
 	 *
 	 * @since 2.7.0
 	 * @since 2.8.0 Removed WP 3.9 compat
+	 *
+	 * @return int The admin ID.
 	 */
 	public function get_the_real_admin_ID() {
 
@@ -123,7 +125,7 @@ class Query extends Compat {
 		if ( empty( $id ) && $this->is_archive_admin() )
 			$id = $this->get_admin_term_id();
 
-		return $id;
+		return (int) \apply_filters( 'the_seo_framework_current_admin_id', $id );
 	}
 
 	/**
@@ -134,7 +136,7 @@ class Query extends Compat {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @return int|empty the ID.
+	 * @return int The admin ID.
 	 */
 	public function check_the_real_ID() {
 

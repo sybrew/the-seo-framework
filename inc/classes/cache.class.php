@@ -965,6 +965,8 @@ class Cache extends Sitemaps {
 	 *
 	 * @since 2.5.2
 	 * @since 2.7.0 : Will always set "doing it wrong" transient, even if it was "doing it right" earlier.
+	 *                WordPress get_all_options will prevent multiple DB writes.
+	 *                Returning false on set_transient() as it was already set to '0'.
 	 *
 	 * @NOTE: Ignores transient debug constant and options.
 	 *

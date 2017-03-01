@@ -223,6 +223,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			/
 			* `(bool) TODO` https://wordpress.org/support/topic/breadcrumbs-root-name/#post-8798025
 			* `(string) TODO` https://github.com/sybrew/the-seo-framework/issues/85
+			* `(string) the_seo_framework_custom_field_description`, alters the Description from custom field.
+			* `(string) the_seo_framework_generated_description`, alters the generated Description.
+			* `(string) the_seo_framework_fetched_description_excerpt`, alters the excerpt to use for generating a description.
+			* `(int) the_seo_framework_current_admin_id`, allows changing of the admin query ID.
 
 
 = 2.8.2 - Immaculated Perception =
