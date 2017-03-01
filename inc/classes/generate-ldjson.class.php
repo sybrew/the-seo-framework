@@ -329,6 +329,7 @@ class Generate_Ldjson extends Generate_Image {
 	 * Generate post breadcrumb.
 	 *
 	 * @since 2.6.0
+	 * @since 2.9.0 Now uses $this->ld_json_breadcrumbs_use_seo_title()
 	 *
 	 * @return string $output The breadcrumb script.
 	 */
@@ -502,7 +503,7 @@ class Generate_Ldjson extends Generate_Image {
 					$tree_ids = array_reverse( $tree_ids, false );
 
 					foreach ( $tree_ids as $position => $child_id ) :
-						if ( in_array( $child_id, $assigned_ids, true ) ) {
+						if ( in_array( $child_id, $assigned_ids, true ) ) :
 							//* Cat has been assigned, continue.
 
 							//* Fetch item from cache if available.
@@ -518,8 +519,13 @@ class Generate_Ldjson extends Generate_Image {
 
 								$id = json_encode( $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'is_term' => true, 'term' => $cat ) ) );
 
-								//* Note: WordPress Core translation.
-								$cat_name = empty( $data['doctitle'] ) ? ( empty( $cat->name ) ? __( 'Uncategorized' ) : $cat->name ) : $data['doctitle'];
+								if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
+									//* Note: WordPress Core translation.
+									$cat_name = empty( $data['doctitle'] ) ? ( empty( $cat->name ) ? \__( 'Uncategorized' ) : $cat->name ) : $data['doctitle'];
+								} else {
+									//* Note: WordPress Core translation.
+									$cat_name = empty( $cat->name ) ? \__( 'Uncategorized' ) : $cat->name;
+								}
 								$name = json_encode( $cat_name );
 
 								$image = $this->schema_image( $child_id );
@@ -535,7 +541,7 @@ class Generate_Ldjson extends Generate_Image {
 
 								$items .= $this->make_breadcrumb( $item_cache[ $child_id ], true );
 							}
-						}
+						endif;
 					endforeach;
 
 					if ( $items ) {
@@ -562,8 +568,13 @@ class Generate_Ldjson extends Generate_Image {
 
 					$id = json_encode( $this->the_url( '', array( 'get_custom_field' => false, 'is_term' => true, 'external' => true, 'term' => $cat ) ) );
 
-					//* Note: WordPress Core translation.
-					$cat_name = empty( $data['doctitle'] ) ? ( empty( $cat->name ) ? \__( 'Uncategorized' ) : $cat->name ) : $data['doctitle'];
+					if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
+						//* Note: WordPress Core translation.
+						$cat_name = empty( $data['doctitle'] ) ? ( empty( $cat->name ) ? \__( 'Uncategorized' ) : $cat->name ) : $data['doctitle'];
+					} else {
+						//* Note: WordPress Core translation.
+						$cat_name = empty( $cat->name ) ? \__( 'Uncategorized' ) : $cat->name;
+					}
 					$name = json_encode( $cat_name );
 
 					$items .= sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s,"image":%s}},', $item_type, (string) $pos, $id, $name, $image );
@@ -587,6 +598,7 @@ class Generate_Ldjson extends Generate_Image {
 	 * Generate page breadcrumb.
 	 *
 	 * @since 2.6.0
+	 * @since 2.9.0 Now uses $this->ld_json_breadcrumbs_use_seo_title()
 	 *
 	 * @return string $output The breadcrumb script.
 	 */
@@ -614,7 +626,20 @@ class Generate_Ldjson extends Generate_Image {
 
 				$id = json_encode( $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'id' => $parent_id ) ) );
 
-				$parent_name = $this->get_custom_field( '_genesis_title', $parent_id ) ?: $this->title( '', '', '', array( 'term_id' => $parent_id, 'meta' => true, 'get_custom_field' => false, 'placeholder' => true, 'notagline' => true, 'description_title' => true ) );
+				$title_args = array(
+					'term_id' => $parent_id,
+					'meta' => true,
+					'placeholder' => true,
+					'notagline' => true,
+					'description_title' => true,
+					'get_custom_field' => false,
+				);
+
+				if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
+					$parent_name = $this->get_custom_field( '_genesis_title', $parent_id ) ?: $this->title( '', '', '', $title_args );
+				} else {
+					$parent_name = $this->title( '', '', '', $title_args );
+				}
 
 				$name = json_encode( $parent_name );
 				$image = $this->schema_image( $parent_id );
@@ -647,6 +672,7 @@ class Generate_Ldjson extends Generate_Image {
 	 * Return home page item for LD Json Breadcrumbs.
 	 *
 	 * @since 2.4.2
+	 * @since 2.9.0 Now uses $this->ld_json_breadcrumbs_use_seo_title()
 	 * @staticvar string $first_item.
 	 *
 	 * @param string|null $item_type the breadcrumb item type.
@@ -664,14 +690,19 @@ class Generate_Ldjson extends Generate_Image {
 
 		$id = json_encode( $this->the_home_url_from_cache() );
 
-		$home_title = $this->get_option( 'homepage_title' );
+		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
 
-		if ( $home_title ) {
-			$custom_name = $home_title;
-		} elseif ( $this->has_page_on_front() ) {
-			$home_id = (int) \get_option( 'page_on_front' );
+			$home_title = $this->get_option( 'homepage_title' );
 
-			$custom_name = $this->get_custom_field( '_genesis_title', $home_id ) ?: $this->get_blogname();
+			if ( $home_title ) {
+				$custom_name = $home_title;
+			} elseif ( $this->has_page_on_front() ) {
+				$home_id = (int) \get_option( 'page_on_front' );
+
+				$custom_name = $this->get_custom_field( '_genesis_title', $home_id ) ?: $this->get_blogname();
+			} else {
+				$custom_name = $this->get_blogname();
+			}
 		} else {
 			$custom_name = $this->get_blogname();
 		}
@@ -694,6 +725,7 @@ class Generate_Ldjson extends Generate_Image {
 	 * Return current page item for LD Json Breadcrumbs.
 	 *
 	 * @since 2.4.2
+	 * @since 2.9.0 Now uses $this->ld_json_breadcrumbs_use_seo_title()
 	 * @staticvar string $last_item.
 	 * @staticvar string $type The breadcrumb item type.
 	 * @staticvar string $id The current post/page/archive url.
@@ -734,8 +766,21 @@ class Generate_Ldjson extends Generate_Image {
 		if ( ! isset( $id ) )
 			$id = json_encode( $this->the_url_from_cache() );
 
+		$title_args = array(
+			'term_id' => $post_id,
+			'placeholder' => true,
+			'meta' => true,
+			'notagline' => true,
+			'description_title' => true,
+			'get_custom_field' => false,
+		);
+
 		if ( ! isset( $name ) ) {
-			$name = $this->get_custom_field( '_genesis_title', $post_id ) ?: $this->title( '', '', '', array( 'term_id' => $post_id, 'placeholder' => true, 'meta' => true, 'notagline' => true, 'description_title' => true ) );
+			if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
+				$name = $this->get_custom_field( '_genesis_title', $post_id ) ?: $this->title( '', '', '', $title_args );
+			} else {
+				$name = $this->title( '', '', '', $title_args );
+			}
 			$name = json_encode( $name );
 		}
 
@@ -812,6 +857,31 @@ class Generate_Ldjson extends Generate_Image {
 		}
 
 		return $trees;
+	}
+
+	/**
+	 * Determines whether to use the SEO title or only the fallback page title.
+	 *
+	 * Does not affect cache.
+	 *
+	 * @since 2.9.0
+	 * @staticvar bool $cache
+	 *
+	 * @return bool
+	 */
+	public function ld_json_breadcrumbs_use_seo_title() {
+
+		static $cache = null;
+
+		/**
+		 * Applies filters 'the_seo_framework_use_breadcrumb_seo_title' : boolean
+		 *
+		 * Determines whether to use the SEO title or only the fallback page title
+		 * in breadcrumbs.
+		 *
+		 * @param $retval bool
+		 */
+		return isset( $cache ) ? $cache : $cache = (bool) \apply_filters( 'the_seo_framework_use_breadcrumb_seo_title', true );
 	}
 
 	/**

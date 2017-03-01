@@ -42,6 +42,9 @@ function _bbpress_filter_order_keys( $current_keys = array() ) {
  * Reasons unknown.
  * This function fixes the Title part.
  *
+ * @since 2.9.0
+ * @access private
+ *
  * @param string $title The filter title.
  * @param array $args The title arguments.
  * @param bool $escape Whether the output will be sanitized.
@@ -76,6 +79,7 @@ function _bbpress_filter_pre_title( $title = '', $args = array(), $escape = true
  * This function fixes the URl path part.
  *
  * @since 2.9.0
+ * @access private
  *
  * @param string $path The current path.
  * @param int $id The page/post ID.
@@ -142,6 +146,7 @@ function _bbpress_filter_url_path( $path, $id = 0, $external = false ) {
  * This function fixes the Excerpt part.
  *
  * @since 2.9.0
+ * @access private
  *
  * @param string $excerpt The excerpt to use.
  * @param bool $page_id The current page/term ID
@@ -176,12 +181,13 @@ function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $term 
  * This function fixes the Custom Description part.
  *
  * @since 2.9.0
+ * @access private
  *
  * @param string $description The description.
  * @param array $args The description arguments.
  * @return string The custom description.
  */
-function _bbpress_filter_custom_field_description() {
+function _bbpress_filter_custom_field_description( $description = '', $args = array() ) {
 
 	if ( \is_bbpress() ) {
 

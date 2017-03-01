@@ -221,8 +221,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Filter Notes:**
 		* **Added:**
 			/
-			* `(bool) TODO` https://wordpress.org/support/topic/breadcrumbs-root-name/#post-8798025
-			* `(string) TODO` https://github.com/sybrew/the-seo-framework/issues/85
+			* `(bool) the_seo_framework_use_breadcrumb_seo_title`, determines whether to use custom SEO titles or WordPress set only.
 			* `(string) the_seo_framework_custom_field_description`, alters the Description from custom field.
 			* `(string) the_seo_framework_generated_description`, alters the generated Description.
 			* `(string) the_seo_framework_fetched_description_excerpt`, alters the excerpt to use for generating a description.
