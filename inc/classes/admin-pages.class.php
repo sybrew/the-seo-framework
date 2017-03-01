@@ -344,6 +344,7 @@ class Admin_Pages extends Inpost {
 	 * Create a 'settings_boxes' method to add metaboxes.
 	 *
 	 * @since 2.2.2
+	 * @todo deprecate (method name is arbitrary) and convert to view.
 	 */
 	public function admin() {
 
@@ -394,6 +395,7 @@ class Admin_Pages extends Inpost {
 	 * Display notices on the save or reset of settings.
 	 *
 	 * @since 2.2.2
+	 * @todo convert the "request" into secure "error_notice" option. See TSF Extension Manager.
 	 *
 	 * @return void
 	 */

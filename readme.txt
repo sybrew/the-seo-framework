@@ -202,6 +202,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	/ TODO
 
 * **For developers:**
+	* **Added:**
+		/
+		* TODO (JavaScript) A triggered event after The SEO Framework's jQuery code has been initiatlized: `tsf-ready`.
 	* **Fixed:**
 		/
 		* TODO Method `the_seo_framework()->get_social_image_url_from_post_meta()` second parameter now works.

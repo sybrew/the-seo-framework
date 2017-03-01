@@ -298,7 +298,7 @@ class Init extends Query {
 	 * @since 2.2.6
 	 * @uses The_SEO_Framework_Load::call_function()
 	 *
-	 * @param string|array $args the arguments that will be passed
+	 * @param string|array $args the arguments that will be passed onto the callback.
 	 * @param bool $before if the header actions should be before or after the SEO Frameworks output
 	 * @return string|empty The filter output.
 	 */

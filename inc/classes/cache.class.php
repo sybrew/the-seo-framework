@@ -838,7 +838,7 @@ class Cache extends Sitemaps {
 
 		if ( isset( $_POST['permalink_structure'] ) || isset( $_POST['category_base'] ) ) {
 
-			if ( check_admin_referer( 'update-permalink' ) )
+			if ( \check_admin_referer( 'update-permalink' ) )
 				return $this->delete_cache( 'sitemap' );
 		}
 
