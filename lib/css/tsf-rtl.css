@@ -117,7 +117,7 @@ th.column-tsf-seo-bar-wrap ~ th {
 	user-select: none;
 	box-sizing: content-box;
 	top: 0;
-	left: 0;
+	right: 0;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;

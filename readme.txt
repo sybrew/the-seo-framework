@@ -199,16 +199,21 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 / TODO
 
 * **For everyone:**
-	/ TODO
 	* **Improved:**
 		* Post overview SEO Bar data rendering is a lot lighter now.
 	* **Fixed:**
 		* The terms and taxonomies SEO bar now correctly displays robots values again.
+		/
+		* RTL: When Title additions have been set to "Right", the indentation of the title no longer shifts all the way to the left.
+		* TODO The Admin Page Titles were reversed on RTL.
 
 * **For developers:**
 	* **Added:**
 		/
 		* TODO (JavaScript) A triggered event after The SEO Framework's jQuery code has been initiatlized: `tsf-ready`.
+	* **Improved:**
+		* (JavaScript) `tsf.dynamicPlaceholderOnLoad` has been removed and is no longer called. It caused a duplicated method call.
+			* It has been removed from the protected externs file too.
 	* **Fixed:**
 		/
 		* TODO Method `the_seo_framework()->get_social_image_url_from_post_meta()` second parameter now works.

@@ -210,6 +210,7 @@ class Admin_Init extends Init {
 	 *              2. Reworked output.
 	 *              3. Removed unused caching.
 	 *              4. Added dynamic output control.
+	 * @since 2.9.0 Added boolean $returnValue['states']['isSettingsPage']
 	 *
 	 * @return array $strings The l10n strings.
 	 */
@@ -323,6 +324,7 @@ class Admin_Init extends Init {
 				'hasInput' => $this->is_term_edit() || $this->is_post_edit() || $this->is_seo_settings_page(),
 				'counterType' => \absint( $counter_type ),
 				'titleTagline' => $tagline,
+				'isSettingsPage' => $this->is_seo_settings_page(),
 			),
 			'params' => array(
 				'siteTitle' => \esc_html( \wp_kses_decode_entities( $title ) ),
