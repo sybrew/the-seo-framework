@@ -93,6 +93,7 @@ class Sanitize extends Admin_Pages {
 		//* Update hidden options.
 		$this->update_hidden_options_to_default();
 
+		//* Initialize sanitation filters parsed on each option update.
 		$this->init_sanitizer_filters();
 
 		//* Flush transients after options have changed.

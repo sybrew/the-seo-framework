@@ -77,10 +77,10 @@ final class Load extends Feed implements Debug_Interface {
 	 */
 	public function init_debug_vars() {
 
-		$this->the_seo_framework_debug = defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ? true : $this->the_seo_framework_debug;
+		$this->the_seo_framework_debug = defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ?: $this->the_seo_framework_debug;
 		if ( $this->the_seo_framework_debug ) {
 			//* No need to set these to true if no debugging is enabled.
-			$this->the_seo_framework_debug_hidden = defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN ? true : $this->the_seo_framework_debug_hidden;
+			$this->the_seo_framework_debug_hidden = defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN ?: $this->the_seo_framework_debug_hidden;
 
 			$instance = \The_SEO_Framework\Debug::set_instance( $this->the_seo_framework_debug, $this->the_seo_framework_debug_hidden );
 		}
@@ -88,7 +88,7 @@ final class Load extends Feed implements Debug_Interface {
 		$this->the_seo_framework_use_transients = defined( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS' ) && THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS ? false : $this->the_seo_framework_use_transients;
 
 		//* WP Core definition.
-		$this->script_debug = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? true : $this->script_debug;
+		$this->script_debug = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ?: $this->script_debug;
 
 	}
 
@@ -231,8 +231,8 @@ final class Load extends Feed implements Debug_Interface {
 	 * @since 2.7.0
 	 * @access private
 	 *
-	 * @param string $p_or_m	The Property or Method.
-	 * @param string $message	A message explaining what has been done incorrectly.
+	 * @param string $p_or_m  The Property or Method.
+	 * @param string $message A message explaining what has been done incorrectly.
 	 */
 	public function _inaccessible_p_or_m( $p_or_m, $message = '' ) {
 		$instance = \The_SEO_Framework\Debug::get_instance();

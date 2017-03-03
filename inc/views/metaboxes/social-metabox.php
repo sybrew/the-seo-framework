@@ -144,7 +144,7 @@ switch ( $instance ) :
 
 		<h4><?php esc_html_e( 'Site Shortlink Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'The shortlink tag might have some use for 3rd party service discoverability, but it has little to no SEO value whatsoever.', 'autodescription' ) );
+		$this->description( __( 'The shortlink tag can be manually used for microblogging services like Twitter, but it has no SEO value whatsoever.', 'autodescription' ) );
 
 		//* Echo checkboxes.
 		$this->wrap_fields(

@@ -675,6 +675,7 @@ class Site_Options extends Sanitize {
 	 * Register the database settings for storage.
 	 *
 	 * @since 2.2.2
+	 * @since 2.9.0 Removed reset options check, see check_options_reset().
 	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 *
 	 * @return void Early if settings can't be registered.
@@ -688,11 +689,23 @@ class Site_Options extends Sanitize {
 		\register_setting( $this->settings_field, $this->settings_field );
 		\add_option( $this->settings_field, $this->default_site_options() );
 
-		//* If this page isn't the SEO Settings page, there's no need to check for a reset.
+		//* Check whether the Options Reset initialization has been added.
+		$this->check_options_reset();
+	}
+
+	/**
+	 * Checks for options reset, and reset them.
+	 *
+	 * @since 2.9.0
+	 *
+	 * @return void Early if not on SEO settings page.
+	 */
+	protected function check_options_reset() {
+
 		if ( false === $this->is_seo_settings_page( false ) )
 			return;
 
-		if ( $this->get_option( 'tsf-settings-reset', $this->settings_field ) ) {
+		if ( $this->get_option( 'tsf-settings-reset', false ) ) {
 			if ( \update_option( $this->settings_field, $this->default_site_options() ) ) {
 				$this->admin_redirect( $this->seo_settings_page_slug, array( 'tsf-settings-reset' => 'true' ) );
 				exit;

@@ -200,27 +200,73 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * **For everyone:**
 	* **Added:**
+		/
+		* TODO The inpost SEO settings are now devided in tabs.
+			* This allows me to add more options in the near future, either through this plugin or even extensions.
+			* Stay tuned on its enhanced implementation!
 		* [Schema.org sitename](https://developers.google.com/search/docs/data-types/sitename) `alternateName` output.
 			* This name is now also considered by Google.
 			* This name is only set if the Organization or Personal Name option is filled in and when it's not idential to the site name.
+		/
+		* TODO The home page has a new tab: Social Settings.
+			* In which you can set your favorite social image.
+			* This image is used on Open Graph, Twitter and Schema metadata.
 	* **Improved:**
 		* Post overview SEO Bar data rendering is a lot lighter now.
+	* **Changed:**
+		* A source link is no longer generated on feed entries without content.
 	* **Fixed:**
+		/
 		* The terms and taxonomies SEO bar now correctly displays robots values again.
-		* When emptying the Home Page Custom title, the Additions are now correctly updated once again.
+		* When emptying the Home Page Custom title, the Additions are now correctly updates once again.
+		* The feed excerpt generation and original content link generation work again.
+			* The call was misplaced. Sorry about that!
+		/
+		* TODO When emptying the floating title (while it's being on the right), the placeholder no longer jumps or animates.
+		* TODO When the Home Page Settings metabox is closed on load, the dynamic placeholder is now no longer stacked when opened.
+		* TODO When moving your mouse up fast over The SEO Bar, some tooltips could've possibly hung.
+		* TODO When on mobile, when you tap on a second or later SEO Bar, the arrow could've been moved off-screen when the first entry was closed.
 		* RTL: When Title additions have been set to "Right", the indentation of the title no longer shifts all the way to the left.
 		* RTL: The Dynamic Title for the home page was reversed.
+		* bbPress topic tags now (mostly) output the correct data.
+
+* **For translators:**
+	* **Updated:**
+		* POT translation file.
+			* Translations are handled through [WordPress.org](https://translate.wordpress.org/projects/wp-plugins/autodescription).
+	* **Changed:**
+		* "Adding a backlink below the feed's content will also let the visitors know where the content came from."
+			* Now is: "Adding a backlink below the feed entries will also let the visitors know where the content came from."
+			* Clarity: A feed is a list, a feed entry is a part.
+		* "Convert feed content into excerpts?"
+			* Now is: "Convert feed entries into excerpts?"
+			* Clarity: A feed is a list, a feed entry is a part.
+		* "Add backlinks below the feed content?"
+			* Now is: "Add link to source below the feed content?"
+			* Vague: Backlinks are an SEO term (which the option doesn't affect), rather than a litterally implied thing (which it actually is).
+		* "The shortlink tag might have some use for 3rd party service discoverability, but it has little to no SEO value whatsoever."
+			* Now is: "The shortlink tag can be manually used for microblogging services like Twitter, but it has no SEO value whatsoever."
+			* Vague: Even I couldn't explain it. Also, no prominently known services use the tag (anymore).
+			* Altered: Added the word "manually", because you're better off manually copying it from the source code for shortening the URL; e.g. for Twitter.
+			* Altered: "little to no" now is "no", because it really has no SEO value.
 
 * **For developers:**
 	* **Added:**
-		/
 		* (JavaScript) A triggered event after The SEO Framework's jQuery code has been initiatlized: `tsf-ready`.
+		* Method `do_redirect()`. Only use this on action `template_redirect`.
 	* **Improved:**
 		* (JavaScript) `tsf.dynamicPlaceholderOnLoad` has been removed and is no longer called. It caused a duplicated method call.
 			* It has been removed from the protected externs file too.
+		* A doing it wrong notice is now displayed when a query-capable method is called too early, which is therefore error-prone.
+			* All internal methods that did it wrong have been adjusted accordingly.
+			* This is mainly added for internal debugging purposes, but might eliminate external plugin errors.
+	* **Removed:**
+		* Method `init_feed()`, it's now `_init_feed_output()` and is now marked private.
+		* Method `custom_field_redirect()`, it's now `_init_custom_field_redirect()` and is now marked private.
 	* **Fixed:**
 		/
 		* TODO Method `the_seo_framework()->get_social_image_url_from_post_meta()` second parameter now works.
+		* TODO Method `is_blog_page()` (effectively `is_singular()`) no longer returns true when no object ID can be generated. ???
 	* **Filter Notes:**
 		* **Added:**
 			/
@@ -229,170 +275,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* `(string) the_seo_framework_generated_description`, alters the generated Description.
 			* `(string) the_seo_framework_fetched_description_excerpt`, alters the excerpt to use for generating a description.
 			* `(int) the_seo_framework_current_admin_id`, allows changing of the admin query ID.
-
-
-= 2.8.2 - Immaculated Perception =
-
-**Release date:**
-
-* January 28th 2017
-
-*If you haven't read the [2.8.0 upgrade notes](https://theseoframework.com/?p=1792) yet, please do.*
-
-**Summarized:**
-
-* The 2.8.0 release didn't contain everything I wanted. So, two new features in a minor release? Certainly!
-* First, there's now a fallback Social Image uploader.
-* Second, when scheduled posts are published they now trigger a sitemap cache flush and Search Engine pinging.
-* Moreover, this update fixes a few bugs: namely ones that caused character encoding issues in the admin area.
-
-**Detailed log:**
-
-***I don't believe in luck, but I do believe in assigning [value to things](https://theseoframework.com/?p=1832#detailed).***
-
-= 2.8.1 - Integral Adroitness =
-
-**Release date:**
-
-* January 23rd 2017
-
-*This update fixes a corner case bug with mbstring compatibility. If you haven't read the [2.8.0 upgrade notes](https://theseoframework.com/?p=1792) yet, please do.*
-
-**Detailed log:**
-
-***What truly is [logic](https://theseoframework.com/?p=1812)?***
-
-= 2.8.0 - Ventricular Perspicacity =
-
-*In a dream it's typical not to be rational. - John Forbes Nash, Jr.*
-
-**Release date:**
-
-* January 22nd 2017
-
-**Upgrade Notes:**
-
-***WordPress recommends using PHP 7.0+***
-
-***1: PHP 5.2 support has been dropped. Here's why:***
-
-* PHP 5.2 hasn't received updates for [over 6 years](http://php.net/eol.php) and using it is a major security risk.
-* **This major release completely drops support for PHP 5.2**. So, if you're using PHP 5.2, from this version on you can no longer run The SEO Framework.
-* PHP 5.2 is a practicality and convenience hindrance for developers and is also source for bugs. Sometimes, we have to split otherwise simple code over multiple lines just to support it.
-* Inform your host to keep updated! Read more about informing your host [here](https://wordpress.org/about/requirements/). If they decline, I'd urge you to switch hosts for your website's sake.
-
-***2: The minimum required WordPress version is now 4.4. Here's why:***
-
-* The SEO Framework uses lots of functionality given by WordPress. All this functionality will be maintained internally by WordPress.
-* If we require functionality of WordPress that hasn't been included yet, we need to check for its existence or copy its functionality within this plugin.
-* This not only slows down the plugin, but it also makes the plugin much more complex and prone to annoying bugs.
-* The WordPress Core team constantly provides updates to give you the best blogging and CMS experience, and The SEO Framework follows their footsteps.
-* If we constantly require to do multiple version testing, then this slows down the progression we wish to make.
-
-*If, for whatever reason, you still wish to use PHP 5.2 and/or WordPress 4.3, The SEO Framework 2.7.3 still supports them.*
-
-**Summarized:**
-
-* This major release not only fixes various bugs, but also introduces new options for you to fiddle with.
-* You're now able to adjust General Settings easily! These settings include options to adjust the cache, (re)move the SEO Bar, and set a Canonical Scheme.
-* Google's Knowledge Graph has been transformed into something much bigger last year, so the related settings now fall under a new name: "Authorized Presence".
-* You can now select your website's social images. With this much asked for feature, you're now really in control.
-* You can now also control the style of your sitemap. The sitemap title will link back to your homepage when clicked upon.
-
-**Survey:**
-
-* After updating, please fill in our [Update Survey](https://theseoframework.com/?p=1781): tell us what can be done better.
-
-**Love this plugin?**
-
-* Please consider [making a donation](https://theseoframework.com/donate/). Or, even better: [get yourself an Early Bird premium license](https://premium.theseoframework.com/shop/).
-
-**New plugin logo!**
-
-* Thank you so much [Terence](https://profiles.wordpress.org/pubdirltd/) for making this!
-
-**Feature highlights:**
-
-* **Added:**
-	* Canonical SEO settings
-	* Sitemap styling settings
-	* Performance settings
-	* Layout settings
-	* Social image upload
-	* Site logo detection
-* **Improved:**
-	* Cache validation
-	* Compatibility stability
-	* Security and sanitation
-	* Post status detection
-	* Detection of placeholders
-
-**New development technology overview:**
-
-* Markdown conversion
-* RGB luminance detection and conversion
-* JavaScript compilation prototyping
-* Namespaces
-* Magic methods
-* Class autoloader
-* Debug autoloader
-* Object interfaces
-* Crop ratio conversion
-* Plugin/Server compatibility autoloading
-
-**For everyone - About Canonical SEO:**
-
-* A new setting has been added that allows you to adjust the preferred URL scheme of your website.
-* This new setting influences which pages Search Engines might index. The default setting is Detect Automatically.
-* This new setting doesn't affect scheme redirection of pages and posts, which should be done using `.htaccess`, when applicable.
-* Contact your hosting provider if you have any doubts on changing this option.
-
-**For everyone - About Sitemap styling:**
-
-* New settings have been added that allow you to style your sitemap!
-* The colors are automatically calculated based on what you put in. This is the most advanced sitemap styling to date!
-* If your theme supports it, you can also insert a logo for it through WordPress Customizer.
-* The sitemap title links back to your homepage. All other external links are set to "nofollow".
-* These styles aren't seen by Search Engines. But it's a very nice addition for your fellow human visitors.
-* The styles are cached! To refresh this cache, simply hit `CRTL+SHIFT+R` or `CMD+SHIFT+R`.
-
-**For everyone - About the Performance settings:**
-
-* A few new settings have been added that allow you to adjust the plugin's caching mechanism.
-* There's a hidden option, only available when you use a dedicated object caching plugin. This option allows you to turn on Object Caching of the plugin.
-* If the object caching option is enabled, we recommend disabling the Description and Schema output cache. Because otherwise you'll get three times as many cache entries.
-* Feel free to play with these settings: By default, The SEO Framework outputs its generation time after its meta output to which you can compare.
-
-**For everyone - About Social Image selection:**
-
-* A new settings has been added to every post, page and applicable custom post type that allows you to select your social image.
-* This social image automatically gets cropped per Facebook's Open Graph Guidelines.
-* The default "aspect ratio" for the cropper is automatically set, we recommend not changing this aspect ratio.
-* You can manually fill in the image URL as well. However, this will disable preemptively caching of the image on the Social Site as we then can't calculate the size.
-
-**SEO tip of the Update - Know your Knowledge:**
-
-* Not all SEO techniques are actively used on Google outside of the United States.
-* For example, the Site Name Schema.org script might not have any effect.
-* This changes over time as Google updates its Search Engine all over the world.
-* Usage of experimental Schema.org scripts with The SEO Framework cause no harm to ranking.
-
-**For developers - About the structural changes:**
-
-* ***Are you an avid developer, and have extended The SEO Framework? Please carefully read the detailed changelog, or at least compare it to your implementations. All method, function, action and filter changes are listed there.***
-	* *In essence, if you've programmed as described within the API, no changes should be made.*
-* This plugin is now using PHP 5.3+ namespaces and an autoloader.
-* This plugin now has magic methods that prevent the site from crashing if inaccessible methods or properties have been called.
-	* This allowed me to easily remove redundant public methods and properties without ramification.
-
-**For developers - Many new filters and actions:**
-
-* Because we've pulled out most of the plugin and theme compatibility from the internal class scope, we've added filters and actions where they previously applied.
-* Documentation for these new filters and actions will be added soon. Stay tuned!
-
-**Detailed log:**
-
-***What is work without [innovation](https://theseoframework.com/?p=1792#detailed)?***
 
 = Full changelog =
 

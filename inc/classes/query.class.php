@@ -43,6 +43,7 @@ class Query extends Compat {
 	 * Checks whether $wp_query or $current_screen is set.
 	 *
 	 * @since 2.6.1
+	 * @since 2.9.0: Added doing it wrong notice.
 	 * @access private
 	 * @staticvar bool $cache : Always true if set.
 	 * @global object $wp_query
@@ -59,6 +60,9 @@ class Query extends Compat {
 
 		if ( isset( $GLOBALS['wp_query']->query ) || isset( $GLOBALS['current_screen'] ) )
 			return $cache = true;
+
+		$this->_doing_it_wrong( __METHOD__, "You've initiated a method that uses queries too early.", '2.9.0' );
+		debug_print_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, 5 );
 
 		return false;
 	}
@@ -954,25 +958,24 @@ class Query extends Compat {
 	 *
 	 * @since 2.6.0
 	 * @since 2.7.0 Added secure parameter.
+	 * @since 2.9.0 If $secure is false, the cache is no longer used.
 	 *
 	 * @param bool $secure Whether to ignore the use of the second (insecure) parameter.
 	 * @return bool
 	 */
 	public function is_seo_settings_page( $secure = true ) {
 
-		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $secure ) )
+		if ( ! $secure )
+			return $this->is_menu_page( $this->seo_settings_page_hook, $this->seo_settings_page_slug );
+
+		if ( null !== $cache = $this->get_query_cache( __METHOD__, null ) )
 			return $cache;
 
-		if ( $secure ) {
-			$page = $this->is_menu_page( $this->seo_settings_page_hook );
-		} else {
-			$page = $this->is_menu_page( $this->seo_settings_page_hook, $this->seo_settings_page_slug );
-		}
+		$page = $this->is_menu_page( $this->seo_settings_page_hook );
 
 		$this->set_query_cache(
 			__METHOD__,
-			$page,
-			$secure
+			$page
 		);
 
 		return $page;

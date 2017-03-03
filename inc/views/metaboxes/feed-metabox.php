@@ -9,17 +9,17 @@ switch ( $instance ) :
 	case 'the_seo_framework_feed_metabox_main' :
 		?><h4><?php esc_html_e( 'Content Feed Settings', 'autodescription' ); ?></h4><?php
 		$this->description( __( "Sometimes, your content can get stolen by robots through the WordPress feeds. This can cause duplicate content issues. To prevent this from happening, it's recommended to convert the feed's content into an excerpt.", 'autodescription' ) );
-		$this->description( __( "Adding a backlink below the feed's content will also let the visitors know where the content came from.", 'autodescription' ) );
+		$this->description( __( 'Adding a backlink below the feed entries will also let the visitors know where the content came from.', 'autodescription' ) );
 
 		?>
 		<hr>
 
 		<h4><?php esc_html_e( 'Change Feed Settings', 'autodescription' ); ?></h4>
 		<?php
-		$excerpt_the_feed_label = esc_html__( 'Convert feed content into excerpts?', 'autodescription' );
+		$excerpt_the_feed_label = esc_html__( 'Convert feed entries into excerpts?', 'autodescription' );
 		$excerpt_the_feed_label .= ' ' . $this->make_info( __( 'By default the excerpt will be at most 400 characters long', 'autodescription' ), '', false );
 
-		$source_the_feed_label = esc_html__( 'Add backlinks below the feed content?', 'autodescription' );
+		$source_the_feed_label = esc_html__( 'Add link to source below the feed entry content?', 'autodescription' );
 		$source_the_feed_label .= ' ' . $this->make_info( __( 'This link will not be followed by Search Engines', 'autodescription' ), '', false );
 
 		//* Echo checkboxes.

@@ -43,9 +43,15 @@ class Feed extends Cache {
 	/**
 	 * Initializes feed actions and hooks.
 	 *
-	 * @since 2.6.0
+	 * @since 2.9.0
+	 * @access private
+	 *
+	 * @return void Early if this request isn't for a feed.
 	 */
-	public function init_feed() {
+	public function _init_feed_output() {
+
+		if ( ! $this->is_feed() )
+			return;
 
 		\add_filter( 'the_content_feed', array( $this, 'the_content_feed' ), 10, 2 );
 
@@ -67,75 +73,110 @@ class Feed extends Cache {
 	}
 
 	/**
-	 * Changes feed's content.
+	 * Changes feed's content based on options.
+	 *
+	 * This method converts the input $content to an excerpt and is able to add
+	 * a nofollow backlink at the end of the feed.
+	 *
+	 * @since 2.5.2
 	 *
 	 * @param $content The feed's content.
 	 * @param $feed_type The feed type (not used in excerpted content)
-	 *
-	 * @since 2.5.2
+	 * @return string The modified feed entry.
 	 */
-	public function the_content_feed( $content, $feed_type = null ) {
+	public function the_content_feed( $content = '', $feed_type = null ) {
 
-		if ( $content ) :
+		if ( ! $content )
+			return '';
 
-			/**
-			 * Don't alter already-excerpts or descriptions.
-			 * $feed_type is only set on 'the_content_feed' filter.
-			 */
-			if ( isset( $feed_type ) && $this->get_option( 'excerpt_the_feed' ) ) {
-				//* Strip all code and lines.
-				$excerpt = $this->s_excerpt_raw( $content, false );
+		/**
+		 * Don't alter already-excerpts or descriptions.
+		 * $feed_type is only set on 'the_content_feed' filter.
+		 */
+		if ( isset( $feed_type ) && $this->get_option( 'excerpt_the_feed' ) ) {
+			$content = $this->convert_feed_entry_to_excerpt( $content );
+		}
 
-				$excerpt_len = (int) mb_strlen( $excerpt );
-				/**
-				 * Applies filters the_seo_framework_max_content_feed_length : The max excerpt length.
-				 * @since 2.5.2
-				 */
-				$max_len = (int) \apply_filters( 'the_seo_framework_max_content_feed_length', 400 );
+		if ( $this->get_option( 'source_the_feed' ) ) {
+			$content .= PHP_EOL . $this->get_feed_entry_source_link();
+		}
 
-				//* Generate excerpt.
-				$excerpt = $this->trim_excerpt( $excerpt, $excerpt_len, $max_len );
+		return $content;
+	}
 
-				$h2_output = '';
+	/**
+	 * Converts feed content to excerpt.
+	 *
+	 * @since 2.9.0
+	 *
+	 * @param string $content The full feed entry content.
+	 * @return string The excerpted feed.
+	 */
+	protected function convert_feed_entry_to_excerpt( $content = '' ) {
 
-				if ( 0 === strpos( $content, '<h2>' ) ) {
-					//* Add the h2 title back
-					$h2_end = mb_strpos( $content, '</h2>' );
+		if ( ! $content )
+			return '';
 
-					if ( false !== $h2_end ) {
-						//* Start of content, plus <h2>
-						$h2_start = 4;
-						//* Remove the length of <h2>, again.
-						$h2_end = $h2_end - $h2_start;
+		//* Strip all code and lines.
+		$excerpt = $this->s_excerpt_raw( $content, false );
 
-						//* Fetch h2 content.
-						$h2_content = mb_substr( $content, $h2_start, $h2_end );
+		$excerpt_len = (int) mb_strlen( $excerpt );
+		/**
+		 * Applies filters the_seo_framework_max_content_feed_length : The max excerpt length.
+		 * @since 2.5.2
+		 */
+		$max_len = (int) \apply_filters( 'the_seo_framework_max_content_feed_length', 400 );
 
-						//* Remove the H2 content from the excerpt.
-						$count = 1;
-						$excerpt = str_replace( $h2_content, '', $excerpt, $count );
+		//* Generate excerpt.
+		$excerpt = $this->trim_excerpt( $excerpt, $excerpt_len, $max_len );
 
-						//* Wrap h2 content in h2 tags.
-						$h2_output = '<h2>' . $h2_content . '</h2>' . PHP_EOL;
-					}
-				}
+		$h2_output = '';
 
-				$content = $h2_output . '<p>' . trim( $excerpt ) . '</p>';
+		if ( 0 === strpos( $content, '<h2>' ) ) {
+			//* Add the h2 title back
+			$h2_end = mb_strpos( $content, '</h2>' );
+
+			if ( false !== $h2_end ) {
+				//* Start of content, plus <h2>
+				$h2_start = 4;
+				//* Remove the length of <h2>, again.
+				$h2_end = $h2_end - $h2_start;
+
+				//* Fetch h2 content.
+				$h2_content = mb_substr( $content, $h2_start, $h2_end );
+
+				//* Remove the H2 content from the excerpt.
+				$count = 1;
+				$excerpt = str_replace( $h2_content, '', $excerpt, $count );
+
+				//* Wrap h2 content in h2 tags.
+				$h2_output = '<h2>' . $h2_content . '</h2>' . PHP_EOL;
 			}
+		}
 
-			if ( $this->get_option( 'source_the_feed' ) ) {
+		$content = $h2_output . '<p>' . trim( $excerpt ) . '</p>';
 
-				//* Fetch permalink and add it to the content. Already escaped.
-				$permalink = $this->the_url();
+		return $content;
+	}
 
-				/**
-				 * Applies filters 'the_seo_framework_feed_source_link' : string
-				 * @since 2.6.0
-				 */
-				$source_i18n = (string) apply_filters( 'the_seo_framework_feed_source_link_text', \_x( 'Source', 'The content source', 'autodescription' ) );
-				$content .= PHP_EOL . '<p><a href="' . $permalink . '" rel="external nofollow">' . \esc_html( $source_i18n ) . '</a></p>';
-			}
-		endif;
+	/**
+	 * Generates and returns feed source link.
+	 *
+	 * @since 2.9.0
+	 *
+	 * @return string The translatable feed entry source link.
+	 */
+	protected function get_feed_entry_source_link() {
+
+		//* Fetch permalink and add it to the content. Already escaped.
+		$permalink = $this->the_url();
+
+		/**
+		 * Applies filters 'the_seo_framework_feed_source_link' : string
+		 * @since 2.6.0
+		 */
+		$source_i18n = (string) \apply_filters( 'the_seo_framework_feed_source_link_text', \_x( 'Source', 'The content source', 'autodescription' ) );
+		$content = '<p><a href="' . $permalink . '" rel="external nofollow">' . \esc_html( $source_i18n ) . '</a></p>';
 
 		return $content;
 	}

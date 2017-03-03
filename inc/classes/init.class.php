@@ -215,6 +215,8 @@ class Init extends Query {
 	 * Initializes front-end actions.
 	 * Disregards other SEO plugins, the meta output does look at detection.
 	 *
+	 * WARNING: Do not use query functions here.
+	 *
 	 * @since 2.5.2
 	 */
 	protected function init_front_end_actions() {
@@ -248,15 +250,11 @@ class Init extends Query {
 		\add_action( 'template_redirect', array( $this, 'maybe_output_sitemap' ), 1 );
 		\add_action( 'template_redirect', array( $this, 'maybe_output_sitemap_stylesheet' ), 1 );
 
-		if ( $this->is_singular() ) {
-			//* Initialize 301 redirects.
-			\add_action( 'template_redirect', array( $this, 'custom_field_redirect' ) );
-		}
+		//* Initialize 301 redirects.
+		\add_action( 'template_redirect', array( $this, '_init_custom_field_redirect' ) );
 
-		if ( $this->is_feed() ) {
-			//* Initialize feed alteration.
-			\add_action( 'template_redirect', array( $this, 'init_feed' ) );
-		}
+		//* Initialize feed alteration.
+		\add_action( 'template_redirect', array( $this, '_init_feed_output' ) );
 
 		\add_action( 'wp_head', array( $this, 'html_output' ), 1 );
 	}
@@ -438,7 +436,7 @@ class Init extends Query {
 
 			$output = $robots . $before . $before_actions . $output . $after_actions . $after . $generator;
 
-			$this->use_object_cache and $this->object_cache_set( $cache_key, $output, 86400 );
+			$this->use_object_cache and $this->object_cache_set( $cache_key, $output, DAY_IN_SECONDS );
 		endif;
 
 		/**
@@ -496,38 +494,62 @@ class Init extends Query {
 	/**
 	 * Redirects singular page to an alternate URL.
 	 *
-	 * @since 2.0.9
-	 * @since 2.8.0 Redirect status code is now filterable.
+	 * @since 2.9.0
+	 * @access private
 	 *
 	 * @return void early on non-singular pages.
 	 */
-	public function custom_field_redirect() {
+	public function _init_custom_field_redirect() {
 
-		if ( $url = $this->get_custom_field( 'redirect' ) ) {
+		if ( $this->is_singular() && $url = $this->get_custom_field( 'redirect' ) )
+			$this->do_redirect( $url );
 
-			$allow_external = $this->allow_external_redirect();
+	}
 
-			/**
-			 * Applies filters 'the_seo_framework_redirect_status_code' : Absolute integer.
-			 * @since 2.8.0
-			 */
-			$redirect_type = absint( apply_filters( 'the_seo_framework_redirect_status_code', 301 ) );
+	/**
+	 * Redirects vistor to input $url.
+	 *
+	 * @since 2.9.0
+	 *
+	 * @param string $url The redirection URL
+	 * @return void Early if no URL is supplied.
+	 */
+	public function do_redirect( $url = '' ) {
 
-			if ( $redirect_type > 399 || $redirect_type < 300 )
-				$this->_doing_it_wrong( __METHOD__, 'You should use 3xx HTTP Status Codes. Recommended 301 and 302.', '2.8.0' );
+		if ( 'template_redirect' !== \current_action() ) {
+			$this->_doing_it_wrong( __METHOD__, 'Only use this method on action "template_redirect".', '2.9.0' );
+			return;
+		}
 
-			if ( false === $allow_external ) {
-				$url = $this->set_url_scheme( $url, 'relative' );
-				$url = $this->add_url_host( $url );
-				$scheme = $this->is_ssl() ? 'https' : 'http';
+		$url = \esc_url_raw( $url );
 
-				\wp_safe_redirect( \esc_url_raw( $url, array( $scheme ) ), $redirect_type );
-				exit;
-			}
+		if ( empty( $url ) ) {
+			$this->_doing_it_wrong( __METHOD__, 'You need to supply an input URL.', '2.9.0' );
+			return;
+		}
 
-			\wp_redirect( \esc_url_raw( $url ), $redirect_type );
+		$allow_external = $this->allow_external_redirect();
+
+		/**
+		 * Applies filters 'the_seo_framework_redirect_status_code' : Absolute integer.
+		 * @since 2.8.0
+		 */
+		$redirect_type = \absint( \apply_filters( 'the_seo_framework_redirect_status_code', 301 ) );
+
+		if ( $redirect_type > 399 || $redirect_type < 300 )
+			$this->_doing_it_wrong( __METHOD__, 'You should use 3xx HTTP Status Codes. Recommended 301 and 302.', '2.8.0' );
+
+		if ( false === $allow_external ) {
+			$url = $this->set_url_scheme( $url, 'relative' );
+			$url = $this->add_url_host( $url );
+			$scheme = $this->is_ssl() ? 'https' : 'http';
+
+			\wp_safe_redirect( $this->set_url_scheme( $url, $scheme ), $redirect_type );
 			exit;
 		}
+
+		\wp_redirect( $url, $redirect_type );
+		exit;
 	}
 
 	/**
