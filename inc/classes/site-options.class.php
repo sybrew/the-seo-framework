@@ -288,94 +288,11 @@ class Site_Options extends Sanitize {
 		 * Only used within the SEO Settings page.
 		 */
 		return array(
-			'cache_meta_description'	=> 0, 	// Description transient cache.
-			'cache_meta_schema'			=> 0,	// Schema.org transient cache.
-			'cache_sitemap'				=> 0,	// Sitemap transient cache.
-			'cache_object'				=> 0,	// Object caching.
-
-			'display_seo_bar_tables'	=> 0, 	// SEO Bar post-list tables.
-			'display_seo_bar_metabox'	=> 0, 	// SEO Bar post SEO Settings.
-
-			'title_rem_additions'	=> 1, 	// Title remove additions.
-			'title_rem_prefixes'	=> 0, 	// Title remove prefixes.
-
-			'noodp'					=> 0, 	// Site noopd robots settings
-			'noydir'				=> 0, 	// Site noydir robots settings
-
-			'description_additions'	=> 0,	// "Title on Blogname" within Description
-			'description_blogname'	=> 0, 	// "on Blogname" within Description
-
-			'category_noindex'		=> 0,	// Category Archive robots noindex
-			'tag_noindex'			=> 0,	// Tag Archive robots noindex
-			'author_noindex'		=> 0,	// Author Archive robots noindex
-			'date_noindex'			=> 0,	// Date Archive robots noindex
-			'search_noindex'		=> 0,	// Search Page robots noindex
-			'attachment_noindex'	=> 0,	// Attachment Pages robots noindex
-			'site_noindex'			=> 1,	// Site Page robots noindex
-
-			'category_nofollow'		=> 0,	// Category Archive robots nofollow
-			'tag_nofollow'			=> 0,	// Tag Archive robots nofollow
-			'author_nofollow'		=> 0,	// Author Archive robots nofollow
-			'date_nofollow'			=> 0,	// Date Archive robots nofollow
-			'search_nofollow'		=> 0,	// Search Page robots nofollow
-			'attachment_nofollow'	=> 0,	// Attachment Pages robots noindex
-			'site_nofollow'			=> 1,	// Site Page robots nofollow
-
-			'category_noarchive'	=> 0,	// Category Archive robots noarchive
-			'tag_noarchive'			=> 0,	// Tag Archive robots noarchive
-			'author_noarchive'		=> 0,	// Author Archive robots noarchive
-			'date_noarchive'		=> 0,	// Date Archive robots noarchive
-			'search_noarchive'		=> 0,	// Search Page robots noarchive
-			'attachment_noarchive'	=> 0,	// Attachment Page robots noarchive
-			'site_noarchive'		=> 0,	// Site Page robots noarchive
-
-			'paged_noindex'			=> 0,	// Every second or later page noindex
-			'home_paged_noindex'	=> 0,	// Every second or later homepage noindex
-
-			'homepage_noindex'		=> 1,	// Home Page robots noindex
-			'homepage_nofollow'		=> 1,	// Home Page robots noarchive
-			'homepage_noarchive'	=> 0,	// Home Page robots nofollow
-
-			'homepage_tagline'		=> 0,	// Home Page add blog Tagline
-
-			'shortlink_tag'			=> 0,	// Adds shortlink tag
-
-			'prev_next_posts'		=> 0,	// Adds next/prev tags
-			'prev_next_archives'	=> 0,	// Adds next/prev tags
-			'prev_next_frontpage'	=> 0,	// Adds next/prev tags
-
-			'post_publish_time'		=> 0,	// Article Published Time
-			'post_modify_time'		=> 0,	// Article Modified Time
-
-			'page_publish_time'		=> 0,	// Article Published Time
-			'page_modify_time'		=> 0,	// Article Modified Time
-
-			'home_publish_time'		=> 0,	// Article Modified Time
-			'home_modify_time'		=> 0,	// Article Modified Time
-
-			'og_tags' 				=> 0,	// Output of Open Graph meta tags
-			'facebook_tags'			=> 0, 	// Output the Facebook meta tags
-			'twitter_tags'			=> 0, 	// Output the Twitter meta tags
-		//	'googleplus_tags'		=> 0, 	// Output the Google+ meta tags
-
-			'knowledge_output'		=> 0,	// Default for outputing the Knowledge SEO.
-			'knowledge_logo'		=> 0,	// Fetch logo from WP Favicon
-
-			'sitemaps_output'		=> 0,	// Output of sitemaps
-			'sitemaps_modified'		=> 0,	// Add sitemaps modified time
-			'sitemaps_robots'		=> 0,	// Add sitemaps location to robots.txt
-			'ping_google'			=> 0,	// Ping Google
-			'ping_bing'				=> 0,	// Ping Bing
-			'ping_yandex'			=> 0,	// Ping Yandex
-			'sitemap_styles'		=> 0,	// Whether to style the sitemap
-			'sitemap_logo'			=> 0,	// Whether to add a logo to the sitemap
-
-			'excerpt_the_feed'		=> 0,	// Generate feed Excerpts
-			'source_the_feed'		=> 0,	// Add backlink at the end of the feed
-
-			'ld_json_searchbox'		=> 0,	// LD+Json Sitelinks Searchbox
-			'ld_json_sitename'		=> 0,	// LD+Json Sitename
-			'ld_json_breadcrumbs'	=> 0,	// LD+Json Breadcrumbs
+			'title_rem_additions' => 1, // Title remove additions.
+			'site_noindex' => 1, // Site Page robots noindex
+			'site_nofollow' => 1, // Site Page robots nofollow
+			'homepage_noindex'  => 1, // Home Page robots noindex
+			'homepage_nofollow' => 1, // Home Page robots noarchive
 		);
 	}
 
@@ -441,17 +358,10 @@ class Site_Options extends Sanitize {
 		$new_options[ $plugin_updated ] = 1;
 		$options[ $plugin_updated ] = 1;
 
-		$excluded_options = array(
-			'cache_object',
-		);
-
 		//* Merge the options. Add to if it's non-existent.
 		foreach ( $new_options as $key => $value ) {
 			if ( ! isset( $options[ $key ] ) ) {
 				$options[ $key ] = $value;
-
-				if ( in_array( $key, $excluded_options, true ) )
-					continue;
 
 				if ( ! empty( $value ) )
 					$updated = true;
@@ -868,10 +778,11 @@ class Site_Options extends Sanitize {
 
 		$warned_options = $this->warned_site_options();
 
-		if ( ! is_array( $warned_options ) || ! array_key_exists( $key, (array) $warned_options ) )
-			$warned_cache[ $key ] = -1;
-
-		$warned_cache[ $key ] = $this->s_one_zero( $warned_options[ $key ] );
+		if ( ! array_key_exists( $key, (array) $warned_options ) ) {
+			$warned_cache[ $key ] = 0;
+		} else {
+			$warned_cache[ $key ] = $this->s_one_zero( $warned_options[ $key ] );
+		}
 
 		return $warned_cache[ $key ];
 	}

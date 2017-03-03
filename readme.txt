@@ -239,7 +239,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* RTL: When Title additions have been set to "Right", the indentation of the title no longer shifts all the way to the left.
 		* RTL: The Dynamic Title for the home page was reversed.
 		* bbPress topic tags now (mostly) output the correct data.
-		* The hidden option `cache_object` (visible when using object caching) no longer causes an upgrade notification.
 
 * **For translators:**
 	* **Updated:**
@@ -279,8 +278,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Method `custom_field_redirect()`, it's now `_init_custom_field_redirect()` and is now marked private.
 	* **Changed:**
 		* Method `delete_main_cache()` now flushes SEO Meta object cache too.
-		/
-		* TODO Method `get_warned_site_options()` no longer returns non-warned settings keys. This reduces plugin memory usage.
+		* Method `get_warned_site_options()` no longer returns non-warned settings keys. This reduces plugin memory usage.
 	* **Fixed:**
 		* Method `the_seo_framework()->get_social_image_url_from_post_meta()` second parameter now works.
 	* **Filter Notes:**
