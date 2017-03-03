@@ -62,7 +62,6 @@ class Query extends Compat {
 			return $cache = true;
 
 		$this->_doing_it_wrong( __METHOD__, "You've initiated a method that uses queries too early.", '2.9.0' );
-		debug_print_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, 5 );
 
 		return false;
 	}
