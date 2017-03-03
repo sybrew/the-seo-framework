@@ -273,6 +273,7 @@ class Site_Options extends Sanitize {
 	 * Holds warned site options array.
 	 *
 	 * @since 2.6.0
+	 * @since 2.9.0 Removed all non-warned settings.
 	 *
 	 * @return array $options.
 	 */
@@ -376,13 +377,13 @@ class Site_Options extends Sanitize {
 			'ld_json_sitename'		=> 0,	// LD+Json Sitename
 			'ld_json_breadcrumbs'	=> 0,	// LD+Json Breadcrumbs
 		);
-
 	}
 
 	/**
 	 * Updates special hidden values to default on settings save.
 	 *
 	 * @since 2.6.0
+	 * @TODO REMOVE THIS and use a better upgrade handler. Source for code debt.
 	 */
 	protected function update_hidden_options_to_default() {
 
@@ -399,6 +400,7 @@ class Site_Options extends Sanitize {
 	 * Updates option from default options at plugin update.
 	 *
 	 * @since 2.6.0
+	 * @since 2.9.0 Added excluded options check.
 	 * @access private
 	 *
 	 * @return void early if already has been updated.
@@ -439,10 +441,17 @@ class Site_Options extends Sanitize {
 		$new_options[ $plugin_updated ] = 1;
 		$options[ $plugin_updated ] = 1;
 
+		$excluded_options = array(
+			'cache_object',
+		);
+
 		//* Merge the options. Add to if it's non-existent.
 		foreach ( $new_options as $key => $value ) {
 			if ( ! isset( $options[ $key ] ) ) {
 				$options[ $key ] = $value;
+
+				if ( in_array( $key, $excluded_options, true ) )
+					continue;
 
 				if ( ! empty( $value ) )
 					$updated = true;
@@ -520,6 +529,7 @@ class Site_Options extends Sanitize {
 	 * Return current option array.
 	 *
 	 * @since 2.6.0
+	 * @since 2.9.0 Added $use_cache parameter.
 	 * @staticvar array $cache The option cache.
 	 *
 	 * @param string $setting The setting key.
@@ -714,6 +724,27 @@ class Site_Options extends Sanitize {
 				exit;
 			}
 		}
+	}
+
+	/**
+	 * Updates a single option.
+	 *
+	 * Can return false if option is unchanged.
+	 *
+	 * @since 2.9.0
+	 *
+	 * @param string $key The option key.
+	 * @param string $vlaue The option value.
+	 * @return bool True on success, false on failure.
+	 */
+	public function update_option( $key = '', $value = '' ) {
+
+		if ( ! $key ) {
+			$this->_doing_it_wrong( __METHOD__, 'No option key has been specified.', '2.9.0' );
+			return false;
+		}
+
+		return $this->update_settings( array( $key => $value ) );
 	}
 
 	/**

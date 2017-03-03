@@ -60,19 +60,61 @@ function the_seo_framework_do_upgrade() {
 	if ( get_option( 'the_seo_framework_upgraded_db_version' ) < '2802' )
 		the_seo_framework_do_upgrade_2802();
 
+	if ( get_option( 'the_seo_framework_upgraded_db_version' ) < '2900' )
+		the_seo_framework_do_upgrade_2900();
+
 	do_action( 'the_seo_framework_upgraded' );
 }
 
+
 add_action( 'the_seo_framework_upgraded', 'the_seo_framework_upgrade_to_current' );
 /**
- * Upgrades the Database version to the latest version if all iterations have been
- * executed. This ensure this file will no longer be required.
+ * Upgrades the Database version to the latest version.
+ *
+ * This happens if all iterations have been executed. This ensure this file will
+ * no longer be required.
  * This should run once after every plugin update.
  *
  * @since 2.7.0
  */
 function the_seo_framework_upgrade_to_current() {
 	update_option( 'the_seo_framework_upgraded_db_version', THE_SEO_FRAMEWORK_DB_VERSION );
+}
+
+/**
+ * Lists and returns upgrade notices to be outputted in admin.
+ *
+ * @since 2.9.0
+ * @staticvar array $cache The cached notice strings.
+ *
+ * @param string $notice The upgrade notice.
+ * @param bool $get Whether to return the upgrade notices.
+ * @return array|void The notices when $get is true.
+ */
+function the_seo_framework_add_upgrade_notice( $notice = '', $get = false ) {
+
+	static $cache = array();
+
+	if ( $get )
+		return $cache;
+
+	$cache[] = $notice;
+}
+
+add_action( 'admin_notices', 'the_seo_framework_output_upgrade_notices' );
+/**
+ * Outputs available upgrade notices.
+ *
+ * @since 2.9.0
+ * @uses the_seo_framework_add_upgrade_notice()
+ */
+function the_seo_framework_output_upgrade_notices() {
+
+	$notices = the_seo_framework_add_upgrade_notice( '', true );
+
+	foreach ( $notices as $notice ) {
+		the_seo_framework()->do_dismissible_notice( $notice, 'updated' );
+	}
 }
 
 /**
@@ -105,4 +147,28 @@ function the_seo_framework_do_upgrade_2802() {
 	delete_option( 'autodescription-term-meta' );
 
 	update_option( 'the_seo_framework_upgraded_db_version', '2802' );
+}
+
+
+/**
+ * Updates Twitter 'photo' card option to 'summary_large_image'.
+ * Invalidates object cache if changed.
+ *
+ * @since 2.8.0
+ */
+function the_seo_framework_do_upgrade_2900() {
+
+	$tsf = the_seo_framework();
+
+	$card_type = trim( esc_attr( $tsf->get_option( 'twitter_card', false ) ) );
+
+	if ( 'photo' === $card_type ) {
+		$tsf->update_option( 'twitter_card', 'summary_large_image' );
+		$tsf->delete_object_cache();
+		the_seo_framework_add_upgrade_notice(
+			esc_html__( 'Twitter Photo Cards has been deprecated. Your site now uses Summary Cards when applicable.', 'autodescription' )
+		);
+	}
+
+	update_option( 'the_seo_framework_upgraded_db_version', '2800' );
 }

@@ -211,14 +211,24 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* TODO The home page has a new tab: Social Settings.
 			* In which you can set your favorite social image.
 			* This image is used on Open Graph, Twitter and Schema metadata.
+		* The SEO meta object cache is now flushed on SEO settings save, when available and enabled.
 	* **Improved:**
 		* Post overview SEO Bar data rendering is a lot lighter now.
 	* **Changed:**
 		* A source link is no longer generated on feed entries without content.
+	* **Updated:**
+		/
+		* TODO Several Google documentation links have changed, including:
+			/
+			* TODO
+	* **Removed:**
+		* Twitter `photo` card. This has been deprecated and has been replaced with `summary_large_image`.
+			* All related options and outputs have been updated.
+			* When updating the plugin the upgrade handler will scan for the photo card option, and will change it to `summar_large_image` if it's `photo`.
 	* **Fixed:**
 		/
 		* The terms and taxonomies SEO bar now correctly displays robots values again.
-		* When emptying the Home Page Custom title, the Additions are now correctly updates once again.
+		* When emptying the Home Page Custom title, the Additions are now correctly updated once again.
 		* The feed excerpt generation and original content link generation work again.
 			* The call was misplaced. Sorry about that!
 		/
@@ -229,10 +239,12 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* RTL: When Title additions have been set to "Right", the indentation of the title no longer shifts all the way to the left.
 		* RTL: The Dynamic Title for the home page was reversed.
 		* bbPress topic tags now (mostly) output the correct data.
+		* The hidden option `cache_object` (visible when using object caching) no longer causes an upgrade notification.
 
 * **For translators:**
 	* **Updated:**
-		* POT translation file.
+		/
+		* TODO POT translation file.
 			* Translations are handled through [WordPress.org](https://translate.wordpress.org/projects/wp-plugins/autodescription).
 	* **Changed:**
 		* "Adding a backlink below the feed's content will also let the visitors know where the content came from."
@@ -254,6 +266,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Added:**
 		* (JavaScript) A triggered event after The SEO Framework's jQuery code has been initiatlized: `tsf-ready`.
 		* Method `do_redirect()`. Only use this on action `template_redirect`.
+		* Method `update_option`, allows for easily updating single SEO options. Use `update_settings` if you wish to update multiple option values at once.
+		* Method `delete_object_cache`, allows for easily deleting The SEO Framework object cache.
 	* **Improved:**
 		* (JavaScript) `tsf.dynamicPlaceholderOnLoad` has been removed and is no longer called. It caused a duplicated method call.
 			* It has been removed from the protected externs file too.
@@ -263,10 +277,12 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Removed:**
 		* Method `init_feed()`, it's now `_init_feed_output()` and is now marked private.
 		* Method `custom_field_redirect()`, it's now `_init_custom_field_redirect()` and is now marked private.
-	* **Fixed:**
+	* **Changed:**
+		* Method `delete_main_cache()` now flushes SEO Meta object cache too.
 		/
-		* TODO Method `the_seo_framework()->get_social_image_url_from_post_meta()` second parameter now works.
-		* TODO Method `is_blog_page()` (effectively `is_singular()`) no longer returns true when no object ID can be generated. ???
+		* TODO Method `get_warned_site_options()` no longer returns non-warned settings keys. This reduces plugin memory usage.
+	* **Fixed:**
+		* Method `the_seo_framework()->get_social_image_url_from_post_meta()` second parameter now works.
 	* **Filter Notes:**
 		* **Added:**
 			/
@@ -275,6 +291,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* `(string) the_seo_framework_generated_description`, alters the generated Description.
 			* `(string) the_seo_framework_fetched_description_excerpt`, alters the excerpt to use for generating a description.
 			* `(int) the_seo_framework_current_admin_id`, allows changing of the admin query ID.
+			* `(array) the_seo_framework_available_twitter_cards`, lists the available Twitter cards. Not index sensitive.
 
 = Full changelog =
 

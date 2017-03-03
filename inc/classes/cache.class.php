@@ -155,11 +155,13 @@ class Cache extends Sitemaps {
 	 * Flushes front-page and global transients that can be affected by options.
 	 *
 	 * @since 2.8.0
+	 * @since 2.9.0 : Added object cache flush.
 	 */
 	public function delete_main_cache() {
 		$this->delete_cache( 'front' );
 		$this->delete_cache( 'sitemap' );
 		$this->delete_cache( 'robots' );
+		$this->delete_cache( 'objectflush' );
 	}
 
 	/**
@@ -191,9 +193,21 @@ class Cache extends Sitemaps {
 	 * @since 2.8.0
 	 *
 	 * @param int $user_id The User ID that has been updated.
+	 * @return bool True on success, false on failure.
 	 */
 	public function delete_author_cache( $user_id ) {
 		return $this->delete_cache( 'author', $user_id );
+	}
+
+	/**
+	 * Deletes object cache.
+	 *
+	 * @since 2.9.0
+	 *
+	 * @return bool True on success, false on failure.
+	 */
+	public function delete_object_cache() {
+		return $this->delete_cache( 'objectflush' );
 	}
 
 	/**

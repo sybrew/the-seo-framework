@@ -246,6 +246,7 @@ class Generate_Image extends Generate_Url {
 	 * Returns unescaped URL from post ID input.
 	 *
 	 * @since 2.8.0
+	 * @since 2.9.0 The second parameter now works.
 	 * @uses $this->image_dimensions
 	 *
 	 * @param int $id The post ID.
@@ -263,7 +264,7 @@ class Generate_Image extends Generate_Url {
 			return '';
 
 		//* Calculate image sizes.
-		if ( $img_id = $this->get_custom_field( '_social_image_id', $id ) ) {
+		if ( $set_og_dimensions && $img_id = $this->get_custom_field( '_social_image_id', $id ) ) {
 			$_src = \wp_get_attachment_image_src( $img_id, 'full' );
 
 			$i = $_src[0]; // Source URL

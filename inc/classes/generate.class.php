@@ -343,36 +343,75 @@ class Generate extends Term_Data {
 	}
 
 	/**
-	 * Generates the Twitter Card type. When there's an image found, it will
-	 * take the said option. Otherwise, it will fall back to 'summary'.
+	 * Generates the Twitter Card type.
+	 *
+	 * When there's an image found, it will take the said option.
+	 * Otherwise, it will return 'summary' or ''.
 	 *
 	 * @since 2.7.0
 	 * @since 2.8.2 : Now considers description output.
+	 * @since 2.9.0 : Now listens to $this->get_available_twitter_cards().
 	 *
 	 * @return string The Twitter Card type.
 	 */
 	public function generate_twitter_card_type() {
 
-		if ( $this->get_image_from_cache() ) {
+		$available_cards = $this->get_available_twitter_cards();
 
-			$option = $this->get_option( 'twitter_card' );
+		//* No valid Twitter cards have been found.
+		if ( false === $available_cards )
+			return '';
 
-			//* Photo will always work with an image.
-			if ( 'photo' === $option )
-				return 'photo';
+		$option = $this->get_option( 'twitter_card' );
+		$option = trim( \esc_attr( $option ) );
 
-			//* Only output 'summary' or 'summary_large_image' if there's a description.
-			if ( $this->description_from_cache( true ) )
-				return trim( \esc_attr( $option ) );
+		//* Option is equal to found cards. Output option.
+		if ( in_array( $option, $available_cards, true ) ) {
+			if ( 'summary_large_image' === $option )
+				return 'summary_large_image';
 
-			//* Output photo otherwise.
-			return 'photo';
+			if ( 'summary' === $option )
+				return 'summary';
 		}
 
-		if ( $this->description_from_cache( true ) )
-			return 'summary';
+		return 'summary';
+	}
 
-		return '';
+	/**
+	 * Determines which Twitter cards can be used.
+	 *
+	 * @since 2.9.0
+	 * @staticvar bool|array $cache
+	 *
+	 * @return bool|array False when it shouldn't be used. True otherwise.
+	 */
+	public function get_available_twitter_cards() {
+
+		static $cache = null;
+
+		if ( isset( $cache ) )
+			return $cache;
+
+		if ( ! $this->description_from_cache( true ) ) {
+			$retval = array();
+		} elseif ( ! $this->title_from_cache( '', '', '', true ) ) {
+			$retval = array();
+		} else {
+			$retval = $this->get_image_from_cache() ? array( 'summary_large_image', 'summary' ) : array( 'summary' );
+		}
+
+		/**
+		 * Applies filters 'the_seo_framework_available_twitter_cards' : array()
+		 *
+		 * The available Twitter cards.
+		 *
+		 * @since 2.9.0
+		 *
+		 * @param array $retval Use empty array to invalidate Twitter card.
+		 */
+		$retval = (array) \apply_filters( 'the_seo_framework_available_twitter_cards', $retval );
+
+		return $cache = $retval ?: false;
 	}
 
 	/**
@@ -416,7 +455,6 @@ class Generate extends Term_Data {
 		return array(
 			'summary'             => 'summary',
 			'summary_large_image' => 'summary-large-image',
-			'photo'               => 'photo',
 		);
 	}
 }
