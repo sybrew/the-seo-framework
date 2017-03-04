@@ -620,24 +620,24 @@ a.tsf-set-social-image.button {
 #tsf-inpost-box textarea::-webkit-input-placeholder,
 .tsf-metaboxes input[type="text"]::-webkit-input-placeholder,
 .tsf-metaboxes textarea::-webkit-input-placeholder {
-	-webkit-transition: all 0.33s ease-in;
-	-o-transition: all 0.33s ease-in;
-	transition: all 0.33s ease-in;
+	-webkit-transition: color 0.33s ease-in, text-shadow 0.33s ease-in;
+	-o-transition: color 0.33s ease-in, text-shadow 0.33s ease-in;
+	transition: color 0.33s ease-in, text-shadow 0.33s ease-in;
 }
 
 #tsf-inpost-box input[type="text"]::-moz-placeholder,
 #tsf-inpost-box textarea::-moz-placeholder,
 .tsf-metaboxes input[type="text"]::-moz-placeholder,
 .tsf-metaboxes textarea::-moz-placeholder {
-	-moz-transition: all 0.33s ease-in;
-	transition: all 0.33s ease-in;
+	-moz-transition: color 0.33s ease-in, text-shadow 0.33s ease-in;
+	transition: color 0.33s ease-in, text-shadow 0.33s ease-in;
 }
 
 #tsf-inpost-box input[type="text"]:-ms-input-placeholder,
 #tsf-inpost-box textarea:-ms-input-placeholder,
 .tsf-metaboxes input[type="text"]:-ms-input-placeholder,
 .tsf-metaboxes textarea:-ms-input-placeholder {
-	transition: all 0.33s ease-in;
+	transition: color 0.33s ease-in, text-shadow 0.33s ease-in;
 }
 
 #tsf-inpost-box input[type="text"]:focus::-webkit-input-placeholder,

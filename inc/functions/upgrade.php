@@ -166,9 +166,9 @@ function the_seo_framework_do_upgrade_2900() {
 		$tsf->update_option( 'twitter_card', 'summary_large_image' );
 		$tsf->delete_object_cache();
 		the_seo_framework_add_upgrade_notice(
-			esc_html__( 'Twitter Photo Cards has been deprecated. Your site now uses Summary Cards when applicable.', 'autodescription' )
+			esc_html__( 'Twitter Photo Cards have been deprecated. Your site now uses Summary Cards when applicable.', 'autodescription' )
 		);
 	}
 
-	update_option( 'the_seo_framework_upgraded_db_version', '2800' );
+	update_option( 'the_seo_framework_upgraded_db_version', '2900' );
 }
