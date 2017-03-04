@@ -233,7 +233,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* The call was misplaced. Sorry about that!
 		/
 		* When emptying the floating title (while it's being on the right), the placeholder no longer jumps or animates.
-		* TODO When the Home Page Settings metabox is closed on load, the dynamic placeholder is now no longer stacked when opened.
+		* When the Home Page Settings metabox is closed on load, the dynamic placeholder is now no longer stacked when opened.
 		* TODO When moving your mouse up fast over The SEO Bar, some tooltips could've possibly hung.
 		* TODO When on mobile, when you tap on a second or later SEO Bar, the arrow could've been moved off-screen when the first entry was closed.
 		* RTL: When Title additions have been set to "Right", the indentation of the title no longer shifts all the way to the left.
