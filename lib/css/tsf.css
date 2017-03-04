@@ -319,6 +319,7 @@ span.tsf-seo-bar .tsf-explanation-desc {
 	left: 0;
 	right: 0;
 	text-align: left;
+	pointer-events: none;
 }
 
 span.tsf-seo-bar .tsf-explanation-desc span {
