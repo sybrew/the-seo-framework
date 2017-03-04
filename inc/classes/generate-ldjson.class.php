@@ -217,8 +217,10 @@ class Generate_Ldjson extends Generate_Image {
 	 *
 	 * @staticvar array $images
 	 * @since 2.7.0
+	 * @since 2.9.0 : 1. No longer uses image from cache, instead: it skips fallback images.
+	 *                2. @TODO Can now fetch home-page as blog set image.
 	 * @todo implement blog page image.
-	 * @priority low 2.7.0+ extension.
+	 * @priority low 2.7.0+ extension -> @since @TODO 2.9.0 internal
 	 *
 	 * @param int|string $id The page, post, product or term ID.
 	 * @param bool $singular Whether the ID is singular.
@@ -236,10 +238,10 @@ class Generate_Ldjson extends Generate_Image {
 
 		if ( $singular ) {
 			if ( $id === $this->get_the_real_ID() ) {
-				$image = $this->get_image_from_cache( $id );
+				$image = $this->get_image( $id, array( 'skip_fallback' => true ) );
 			} elseif ( $id ) {
-				//* No ID (0) results in the home page being a blog. This will be handled in the future.
-				$image = $this->get_image( $id );
+				//* No ID (0) results in the home page being a blog. This will be handled in the future. TODO var_dump() remove this message @ 2.9.0 and mix if/elseif
+				$image = $this->get_image( $id, array( 'skip_fallback' => true ) );
 			}
 		} else {
 			//* Placeholder.
@@ -632,7 +634,7 @@ class Generate_Ldjson extends Generate_Image {
 				}
 
 				$name = json_encode( $parent_name );
-				$image = $this->schema_image( $parent_id );
+				$image = $this->schema_image( $parent_id, true );
 
 				$breadcrumb = array(
 					'type'  => $item_type,

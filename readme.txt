@@ -214,10 +214,15 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* The SEO meta object cache is now flushed on SEO settings save, when available and enabled.
 	* **Improved:**
 		* Post overview SEO Bar data rendering is a lot lighter now.
-		* Breadcrumb images are no longer output when there's none present in the crumb.
-			* Breadcrumbs' cache isn't invalidated, because this wasn't incorrect nor does it change the behavior; the output is just cleaner.
-			* Its presence used to be required (a few months ago), this is no longer the case.
-			* As stated various times: Schema.org usage is under heavy development and I'm trying my best to keep up.
+		* Breadcrumbs have been improved:
+		 	1. Breadcrumb images are no longer output when there's none present in the crumb.
+				* Breadcrumbs' cache isn't invalidated, because this wasn't incorrect nor does it change the behavior; the output is just cleaner.
+				* Its presence used to be required (a few months ago), this is no longer the case.
+				* As stated various times: Schema.org usage is under heavy development and I'm trying my best to keep up.
+			2. Breadcrumbs no longer use fallback images, only set page/post images.
+				* Breadcrumbs' cache isn't invalidated, because this doesn't change the current usage behavior.
+			3. Parent pages' breadcrumbs now output social image, when applicable.
+			4. TODO The Blogpage-as-Homepage can now output a breadcrumb image, because you can now set an image in the homepage settings.
 	* **Changed:**
 		* A source link is no longer generated on feed entries without content.
 	* **Removed:**
@@ -230,7 +235,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* When emptying the Home Page Custom title, the Additions are now correctly updated once again.
 		* The feed excerpt generation and original content link generation work again.
 			* The call was misplaced. Sorry about that!
-		/
 		* When emptying the floating title (while it's being on the right), the placeholder no longer jumps or animates.
 		* When the Home Page Settings metabox is closed on load, the dynamic placeholder is now no longer stacked when opened.
 		* When the Inpost SEO Settings metabox is closed on load, the dynamic placeholder is now no longer stacked when opened.
@@ -267,6 +271,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Method `do_redirect()`. Only use this on action `template_redirect`.
 		* Method `update_option`, allows for easily updating single SEO options. Use `update_settings` if you wish to update multiple option values at once.
 		* Method `delete_object_cache`, allows for easily deleting The SEO Framework object cache.
+		* Method `get_image()` now has a new argument for the second parameter: `skip_fallback`. Useful in some scenarios.
 	* **Improved:**
 		* (JavaScript) `tsf.dynamicPlaceholderOnLoad` has been removed and is no longer called. It caused a duplicated method call.
 			* It has been removed from the protected externs file too.

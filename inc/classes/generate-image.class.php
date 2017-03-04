@@ -58,6 +58,7 @@ class Generate_Image extends Generate_Url {
 	 *                2. Added inpost image selection detection.
 	 * @since 2.8.2 : 1. Now returns something on post ID 0.
 	 *                2. Added SEO settings fallback image selection detection.
+	 * @since 2.9.0 : Added 'skip_fallback' option to second parameter.
 	 *
 	 * @todo listen to attached images within post.
 	 * @todo set archive and front page image listener, now it simply fail on some calls.
@@ -88,6 +89,8 @@ class Generate_Image extends Generate_Url {
 		//* Check if there are no disallowed arguments.
 		$all_allowed = empty( $args['disallowed'] );
 
+		//* TODO set home page upload here.
+
 		if ( $args['post_id'] ) {
 			//* 1. Fetch image from SEO meta upload.
 			if ( $all_allowed || false === in_array( 'postmeta', $args['disallowed'], true ) ) {
@@ -95,12 +98,15 @@ class Generate_Image extends Generate_Url {
 					goto end;
 			}
 
-			//* 2. Fetch image from featured
+			//* 2. Fetch image from featured.
 			if ( $all_allowed || false === in_array( 'featured', $args['disallowed'], true ) ) {
 				if ( $image = $this->get_image_from_post_thumbnail( $args ) )
 					goto end;
 			}
 		}
+
+		if ( $args['skip_fallback'] )
+			goto end;
 
 		//* 3. Fetch image from SEO settings
 		if ( $all_allowed || false === in_array( 'option', $args['disallowed'], true ) ) {
@@ -158,7 +164,8 @@ class Generate_Image extends Generate_Url {
 	 * Parse and sanitize image args.
 	 *
 	 * @since 2.5.0
-	 * @since 2.9.0 : Removed 'attr' index, it was unused.
+	 * @since 2.9.0 : 1. Removed 'attr' index, it was unused.
+	 *                2. Added 'skip_fallback' option.
 	 *
 	 * The image set in the filter will always be used as fallback
 	 *
@@ -176,6 +183,7 @@ class Generate_Image extends Generate_Url {
 				'image'      => '',
 				'size'       => 'full',
 				'icon'       => false,
+				'skip_fallback' => false,
 				'disallowed' => array(),
 			);
 
@@ -206,11 +214,12 @@ class Generate_Image extends Generate_Url {
 			return $defaults;
 
 		//* Array merge doesn't support sanitation. We're simply type casting here.
-		$args['post_id']    = isset( $args['post_id'] )    ? (int) $args['post_id']      : $defaults['post_id'];
-		$args['image']      = isset( $args['image'] )      ? (string) $args['image']     : $defaults['image'];
-		$args['size']       = isset( $args['size'] )       ? $args['size']               : $defaults['size']; // Mixed.
-		$args['icon']       = isset( $args['icon'] )       ? (bool) $args['icon']        : $defaults['icon'];
-		$args['disallowed'] = isset( $args['disallowed'] ) ? (array) $args['disallowed'] : $defaults['disallowed'];
+		$args['post_id']       = isset( $args['post_id'] )       ? (int) $args['post_id']        : $defaults['post_id'];
+		$args['image']         = isset( $args['image'] )         ? (string) $args['image']       : $defaults['image'];
+		$args['size']          = isset( $args['size'] )          ? $args['size']                 : $defaults['size']; // Mixed.
+		$args['icon']          = isset( $args['icon'] )          ? (bool) $args['icon']          : $defaults['icon'];
+		$args['skip_fallback'] = isset( $args['skip_fallback'] ) ? (bool) $args['skip_fallback'] : $defaults['skip_fallback'];
+		$args['disallowed']    = isset( $args['disallowed'] )    ? (array) $args['disallowed']   : $defaults['disallowed'];
 
 		return $args;
 	}
