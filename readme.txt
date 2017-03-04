@@ -214,13 +214,12 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* The SEO meta object cache is now flushed on SEO settings save, when available and enabled.
 	* **Improved:**
 		* Post overview SEO Bar data rendering is a lot lighter now.
+		* Breadcrumb images are no longer output when there's none present in the crumb.
+			* Breadcrumbs' cache isn't invalidated, because this wasn't incorrect nor does it change the behavior; the output is just cleaner.
+			* Its presence used to be required (a few months ago), this is no longer the case.
+			* As stated various times: Schema.org usage is under heavy development and I'm trying my best to keep up.
 	* **Changed:**
 		* A source link is no longer generated on feed entries without content.
-	* **Updated:**
-		/
-		* TODO Several Google documentation links have changed, including:
-			/
-			* TODO
 	* **Removed:**
 		* Twitter `photo` card. This has been deprecated and has been replaced with `summary_large_image`.
 			* All related options and outputs have been updated.

@@ -53,7 +53,7 @@ class Generate_Ldjson extends Generate_Image {
 
 		$this->setup_ld_json_transient( $this->get_the_real_ID() );
 
-		if ( $this->the_seo_framework_debug ) $this->debug_init( __METHOD__, false, $debug_key = microtime( true ), array( 'LD Json transient' => $this->ld_json_transient, 'Output from transient' => false !== $this->get_transient( $this->ld_json_transient ) ) );
+		$this->the_seo_framework_debug and $this->debug_init( __METHOD__, false, $debug_key = microtime( true ), array( 'LD Json transient' => $this->ld_json_transient, 'Output from transient' => false !== $this->get_transient( $this->ld_json_transient ) ) );
 
 		$use_cache = $this->is_option_checked( 'cache_meta_schema' );
 
@@ -99,11 +99,7 @@ class Generate_Ldjson extends Generate_Image {
 			}
 		endif;
 
-		/**
-		 * Debug output.
-		 * @since 2.4.2
-		 */
-		if ( $this->the_seo_framework_debug ) $this->debug_init( __METHOD__, false, $debug_key, array( 'LD Json transient output' => $output ) );
+		$this->the_seo_framework_debug and $this->debug_init( __METHOD__, false, $debug_key, array( 'LD Json transient output' => $output ) );
 
 		return $output;
 	}
@@ -481,8 +477,6 @@ class Generate_Ldjson extends Generate_Image {
 			}
 		endif;
 
-		$context = $this->schema_context();
-		$context_type = $this->schema_breadcrumblist();
 		$item_type = $this->schema_listitem();
 
 		//* For each of the tree items, create a separated script.
@@ -545,17 +539,11 @@ class Generate_Ldjson extends Generate_Image {
 					endforeach;
 
 					if ( $items ) {
-
 						$items = $this->ld_json_breadcrumb_first( $item_type ) . $items . $this->ld_json_breadcrumb_last( $item_type, $pos, $post_id );
-
-						//* Put it all together.
-						$breadcrumbhelper = sprintf( '{"@context":%s,"@type":%s,"itemListElement":[%s]}', $context, $context_type, $items );
-						$output .= '<script type="application/ld+json">' . $breadcrumbhelper . '</script>' . "\r\n";
+						$output .= $this->make_breadcrumb_script( $items );
 					}
 				} else {
 					//* No assigned children, single term item.
-
-					$items = '';
 
 					//* The position of the current item is always static here.
 					$pos = '2';
@@ -577,15 +565,19 @@ class Generate_Ldjson extends Generate_Image {
 					}
 					$name = json_encode( $cat_name );
 
-					$items .= sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s,"image":%s}},', $item_type, (string) $pos, $id, $name, $image );
+					$item = array(
+						'type'  => $item_type,
+						'pos'   => (string) $pos,
+						'id'    => $id,
+						'name'  => $name,
+						'image' => $image,
+					);
+
+					$items = $this->make_breadcrumb( $item, true );
 
 					if ( $items ) {
-
 						$items = $this->ld_json_breadcrumb_first( $item_type ) . $items . $this->ld_json_breadcrumb_last( $item_type, $pos, $post_id );
-
-						//* Put it all together.
-						$breadcrumbhelper = sprintf( '{"@context":%s,"@type":%s,"itemListElement":[%s]}', $context, $context_type, $items );
-						$output .= '<script type="application/ld+json">' . $breadcrumbhelper . '</script>' . "\r\n";
+						$output .= $this->make_breadcrumb_script( $items );
 					}
 				}
 			endforeach;
@@ -613,8 +605,6 @@ class Generate_Ldjson extends Generate_Image {
 
 		if ( $parents ) :
 
-			$context = $this->schema_context();
-			$context_type = $this->schema_breadcrumblist();
 			$item_type = $this->schema_listitem();
 
 			$items = '';
@@ -658,10 +648,7 @@ class Generate_Ldjson extends Generate_Image {
 			if ( $items ) {
 
 				$items = $this->ld_json_breadcrumb_first( $item_type ) . $items . $this->ld_json_breadcrumb_last( $item_type, $pos, $page_id );
-
-				//* Put it all together.
-				$breadcrumbhelper = sprintf( '{"@context":%s,"@type":%s,"itemListElement":[%s]}', $context, $context_type, $items );
-				$output = '<script type="application/ld+json">' . $breadcrumbhelper . '</script>' . "\r\n";
+				$output = $this->make_breadcrumb_script( $items );
 			}
 		endif;
 
@@ -801,6 +788,7 @@ class Generate_Ldjson extends Generate_Image {
 	 * Builds a breadcrumb.
 	 *
 	 * @since 2.6.0
+	 * @since 2.9.0 : No longer outputs image if it's not present.
 	 * @param array $item : {
 	 *  'type',
 	 *  'pos',
@@ -814,7 +802,35 @@ class Generate_Ldjson extends Generate_Image {
 
 		$comma = $comma ? ',' : '';
 
-		return sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s,"image":%s}}%s', $item['type'], $item['pos'], $item['id'], $item['name'], $item['image'], $comma );
+		if ( $item['image'] && '""' !== $item['image'] ) {
+			$retval = sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s,"image":%s}}%s', $item['type'], $item['pos'], $item['id'], $item['name'], $item['image'], $comma );
+		} else {
+			$retval = sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}}%s', $item['type'], $item['pos'], $item['id'], $item['name'], $comma );
+		}
+
+		return $retval;
+	}
+
+	/**
+	 * Puts breadcrumb items in script wrapper.
+	 *
+	 * @since 2.9.0
+	 *
+	 * @param string $items The breadcrumb items
+	 * @return string The breadcrumb script tag.
+	 */
+	protected function make_breadcrumb_script( $items = '' ) {
+
+		if ( $items ) {
+			$context = $this->schema_context();
+			$context_type = $this->schema_breadcrumblist();
+
+			//* Put it all together.
+			$breadcrumbhelper = sprintf( '{"@context":%s,"@type":%s,"itemListElement":[%s]}', $context, $context_type, $items );
+			return '<script type="application/ld+json">' . $breadcrumbhelper . '</script>' . "\r\n";
+		}
+
+		return '';
 	}
 
 	/**
