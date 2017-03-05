@@ -378,6 +378,16 @@ class Metaboxes extends Site_Options {
 	}
 
 	/**
+	 * HomePage Metabox Social Tab Output
+	 *
+	 * @since 2.9.0
+	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
+	 */
+	public function homepage_metabox_social_tab() {
+		$this->get_view( 'metaboxes/homepage-metabox', array(), 'social' );
+	}
+
+	/**
 	 * Social meta box on the Site SEO Settings page.
 	 *
 	 * @since 2.2.2

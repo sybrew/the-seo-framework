@@ -291,42 +291,4 @@ class Inpost extends Doing_It_Right {
 		$this->get_view( 'inpost/seo-settings', get_defined_vars(), 'singular' );
 		\do_action( 'the_seo_framework_pro_page_inpost_box' );
 	}
-
-	/**
-	 * Returns social image uploader form button.
-	 * Also registers additional i18n strings for JS.
-	 *
-	 * @since 2.8.0
-	 * @todo optimize? Sanitation and translations are duplicated -> microseconds...
-	 *
-	 * @param string $input_id Required. The HTML input id to pass URL into.
-	 * @return string The image uploader button.
-	 */
-	public function get_social_image_uploader_form( $input_id ) {
-
-		if ( ! $input_id )
-			return '';
-
-		$content = sprintf( '<a href="%1$s" class="tsf-set-social-image button button-primary button-small" title="%2$s" id="%3$s-select" data-inputid="%3$s">%4$s</a>',
-			\esc_url( \get_upload_iframe_src( 'image', $this->get_the_real_ID() ) ),
-			\esc_attr__( 'Select social image', 'autodescription' ),
-			\esc_attr( $input_id ),
-			\esc_html__( 'Select Image', 'autodescription' )
-		);
-
-		$button_labels = array(
-			'select' => \esc_attr__( 'Select Image', 'autodescription' ),
-			'select_title' => \esc_attr__( 'Select social image', 'autodescription' ),
-			'change' => \esc_attr__( 'Change Image', 'autodescription' ),
-			'remove' => \esc_attr__( 'Remove Image', 'autodescription' ),
-			'remove_title' => \esc_attr__( 'Remove selected social image', 'autodescription' ),
-			'frame_title' => \esc_attr__( 'Select Social Image', 'autodescription' ),
-			'frame_button' => \esc_attr__( 'Use this image', 'autodescription' ),
-		);
-
-		//* Already escaped. Turn off escaping.
-		$this->additional_js_l10n( \esc_attr( $input_id ), $button_labels, false, false );
-
-		return $content;
-	}
 }

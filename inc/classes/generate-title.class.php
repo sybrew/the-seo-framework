@@ -302,7 +302,7 @@ class Generate_Title extends Generate_Description {
 		 * Moved up and return early to reduce processing.
 		 * @since 2.3.8
 		 */
-		if ( $this->is_front_page() )
+		if ( $this->is_real_front_page() )
 			return $title = '';
 
 		$args = $this->reparse_title_args( $args );
@@ -442,7 +442,7 @@ class Generate_Title extends Generate_Description {
 		$title = $this->do_title_pre_filter( '', $args, false );
 		$blogname = '';
 
-		$is_front_page = $this->is_front_page() || $args['page_on_front'] || $this->is_static_frontpage( $args['term_id'] );
+		$is_front_page = $this->is_real_front_page() || $args['page_on_front'] || $this->is_front_page_by_id( $args['term_id'] );
 
 		$seplocation = $this->get_title_seplocation( $seplocation );
 

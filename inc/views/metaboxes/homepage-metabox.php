@@ -43,6 +43,11 @@ switch ( $instance ) :
 				'callback' => array( $this, 'homepage_metabox_robots_tab' ),
 				'dashicon' => 'visibility',
 			),
+			'social' => array(
+				'name'     => __( 'Social', 'autodescription' ),
+				'callback' => array( $this, 'homepage_metabox_social_tab' ),
+				'dashicon' => 'share',
+			),
 		);
 
 		/**
@@ -415,6 +420,64 @@ switch ( $instance ) :
 			),
 			true
 		);
+		break;
+
+	case 'the_seo_framework_homepage_metabox_social' :
+		?>
+		<h4><?php esc_html_e( 'Social Image Settings', 'autodescription' ); ?></h4>
+		<?php
+		$this->description( __( 'A social image can be displayed when your homepage is shared. It is a great way to grab attention.', 'autodescription' ) );
+
+		//* Get the front-page ID. It's 0 if front page is blog.
+		$page_id = $this->get_the_front_page_ID();
+
+		if ( $this->has_page_on_front() ) {
+			$image_args = array(
+				'post_id' => $page_id,
+				'disallowed' => array(
+					'homemeta',
+				),
+				'escape' => false,
+			);
+		} else {
+			$image_args = array(
+				'post_id' => $page_id,
+				'disallowed' => array(
+					'homemeta',
+					'postmeta',
+					'featured',
+				),
+				'escape' => false,
+			);
+		}
+		$image_placeholder = $this->get_social_image( $image_args );
+
+		?>
+		<p>
+			<label for="tsf_homepage_socialimage">
+				<strong><?php esc_html_e( 'Custom Home Page Image URL', 'autodescription' ); ?></strong>
+				<?php $this->make_info( __( 'Preferred Home Page Social Image URL location', 'autodescription' ), 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>
+			</label>
+		</p>
+		<p class="hide-if-no-js">
+			<?php
+			//* Already escaped.
+			echo $this->get_social_image_uploader_form( 'tsf_homepage_socialimage' );
+			?>
+		</p>
+		<p>
+			<input class="large-text" type="text" name="<?php $this->field_name( 'homepage_social_image_url' ); ?>" id="tsf_homepage_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_field_value( 'homepage_social_image_url' ) ); ?>" />
+			<?php
+			/**
+			 * Insert form element only if JS is active. If JS is inactive, then this will cause it to be emptied on $_POST
+			 * @TODO use disabled and jQuery.removeprop( 'disabled' )?
+			 */
+			?>
+			<script>
+				document.getElementById( 'tsf_homepage_socialimage-url' ).insertAdjacentHTML( 'afterend', '<input type="hidden" name="<?php $this->field_name( 'homepage_social_image_id' ); ?>" id="tsf_homepage_socialimage-id" value="<?php echo absint( $this->get_field_value( 'homepage_social_image_id' ) ); ?>" />' );
+			</script>
+		</p>
+		<?php
 		break;
 
 	default :

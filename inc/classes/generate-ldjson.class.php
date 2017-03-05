@@ -63,7 +63,7 @@ class Generate_Ldjson extends Generate_Image {
 			$output = '';
 
 			//* Only display search helper and knowledge graph on front page.
-			if ( $this->is_front_page() ) {
+			if ( $this->is_real_front_page() ) {
 
 				$sitename = $this->ld_json_name();
 				$sitelinks = $this->ld_json_search();
@@ -218,9 +218,7 @@ class Generate_Ldjson extends Generate_Image {
 	 * @staticvar array $images
 	 * @since 2.7.0
 	 * @since 2.9.0 : 1. No longer uses image from cache, instead: it skips fallback images.
-	 *                2. @TODO Can now fetch home-page as blog set image.
-	 * @todo implement blog page image.
-	 * @priority low 2.7.0+ extension -> @since @TODO 2.9.0 internal
+	 *                2. Can now fetch home-page as blog set image.
 	 *
 	 * @param int|string $id The page, post, product or term ID.
 	 * @param bool $singular Whether the ID is singular.
@@ -237,12 +235,32 @@ class Generate_Ldjson extends Generate_Image {
 		$image = '';
 
 		if ( $singular ) {
-			if ( $id === $this->get_the_real_ID() ) {
-				$image = $this->get_image( $id, array( 'skip_fallback' => true ) );
-			} elseif ( $id ) {
-				//* No ID (0) results in the home page being a blog. This will be handled in the future. TODO var_dump() remove this message @ 2.9.0 and mix if/elseif
-				$image = $this->get_image( $id, array( 'skip_fallback' => true ) );
+			if ( $id === $this->get_the_front_page_ID() ) {
+				if ( $this->has_page_on_front() ) {
+					$image_args = array(
+						'post_id' => $id,
+						'skip_fallback' => true,
+					);
+				} else {
+					$image_args = array(
+						'post_id' => $id,
+						'skip_fallback' => true,
+						'disallowed' => array(
+							'postmeta',
+							'featured',
+						),
+					);
+				}
+			} else {
+				$image_args = array(
+					'post_id' => $id,
+					'skip_fallback' => true,
+					'disallowed' => array(
+						'homemeta'
+					),
+				);
 			}
+			$image = $this->get_social_image( $image_args );
 		} else {
 			//* Placeholder.
 			$image = '';
@@ -316,7 +334,7 @@ class Generate_Ldjson extends Generate_Image {
 
 		if ( $this->is_single() || $this->is_wc_product() ) {
 			$output = $this->ld_json_breadcrumbs_post();
-		} elseif ( false === $this->is_front_page() && $this->is_page() ) {
+		} elseif ( false === $this->is_real_front_page() && $this->is_page() ) {
 			$output = $this->ld_json_breadcrumbs_page();
 		}
 

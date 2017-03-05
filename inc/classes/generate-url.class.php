@@ -360,9 +360,9 @@ class Generate_Url extends Generate_Title {
 
 		$args = $this->reparse_url_args( $args );
 
-		if ( $args['external'] || ! $this->is_front_page() ) {
+		if ( $args['external'] || ! $this->is_real_front_page() || ! $this->is_front_page_by_id( $post_id ) ) {
 			$url = \get_permalink( $post_id );
-		} elseif ( $this->is_front_page() ) {
+		} elseif ( $this->is_real_front_page() || $this->is_front_page_by_id( $post_id ) ) {
 			$url = \get_home_url();
 		} elseif ( ! $args['external'] ) {
 			if ( isset( $GLOBALS['wp']->request ) )
@@ -663,7 +663,7 @@ class Generate_Url extends Generate_Title {
 		if ( ! $this->get_option( 'shortlink_tag' ) )
 			return '';
 
-		if ( $this->is_front_page() )
+		if ( $this->is_real_front_page() || $this->is_front_page_by_id( $post_id ) )
 			return '';
 
 		$path = '';
@@ -777,8 +777,11 @@ class Generate_Url extends Generate_Title {
 		$next = '';
 
 		if ( $this->is_singular() ) {
-
-			$output_singular_paged = $this->is_front_page() ? $this->is_option_checked( 'prev_next_frontpage' ) : $this->is_option_checked( 'prev_next_posts' );
+			if ( $this->is_real_front_page() || $this->is_front_page_by_id( $post_id ) ) {
+				$output_singular_paged = $this->is_option_checked( 'prev_next_frontpage' );
+			} else {
+				$output_singular_paged = $this->is_option_checked( 'prev_next_posts' );
+			}
 
 			if ( $output_singular_paged ) {
 
@@ -797,7 +800,7 @@ class Generate_Url extends Generate_Title {
 		} elseif ( $this->is_archive() || $this->is_home() ) {
 
 			$output_archive_paged = false;
-			if ( $this->is_front_page() ) {
+			if ( $this->is_real_front_page() || $this->is_front_page_by_id( $post_id ) ) {
 				//* Only home.
 				$output_archive_paged = $this->is_option_checked( 'prev_next_frontpage' );
 			} else {

@@ -198,6 +198,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **Summarized:**
 / TODO
 
+**Important note:**
+	* A few options weren't correctly saved in the database.
+	* Because of this, the options might be automatically set to the default values upon update.
+
 * **For everyone:**
 	* **Added:**
 		/
@@ -207,8 +211,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* [Schema.org sitename](https://developers.google.com/search/docs/data-types/sitename) `alternateName` output.
 			* This name is now also considered by Google.
 			* This name is only set if the Organization or Personal Name option is filled in and when it's not idential to the site name.
-		/
-		* TODO The home page has a new tab: Social Settings.
+		* The home page has a new tab: Social Settings.
 			* In which you can set your favorite social image.
 			* This image is used on Open Graph, Twitter and Schema metadata.
 		* The SEO meta object cache is now flushed on SEO settings save, when available and enabled.
@@ -243,6 +246,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* RTL: When Title additions have been set to "Right", the indentation of the title no longer shifts all the way to the left.
 		* RTL: The Dynamic Title for the home page was reversed.
 		* bbPress topic tags now (mostly) output the correct data.
+		/
+		* TODO Some options were incorrectly set to default upon plugin update.
+			* This has been handled correctly, so you won't notice anything from this bug upon upgrade.
 
 * **For translators:**
 	* **Updated:**
@@ -264,6 +270,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Vague: Even I couldn't explain it. Also, no prominently known services use the tag (anymore).
 			* Altered: Added the word "manually", because you're better off manually copying it from the source code for shortening the URL; e.g. for Twitter.
 			* Altered: "little to no" now is "no", because it really has no SEO value.
+		* "A social image can be displayed when your website is shared. They are a great way to grab attention."
+			* Now is: A social image can be displayed when your website is shared. It is a great way to grab attention.
+			* Grammar: It's one image.
 
 * **For developers:**
 	* **Added:**
@@ -281,9 +290,26 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Removed:**
 		* Method `init_feed()`, it's now `_init_feed_output()` and is now marked private.
 		* Method `custom_field_redirect()`, it's now `_init_custom_field_redirect()` and is now marked private.
+		* Deprecation handler of method `reparse_image_args()`, introduced in 2.5.0
 	* **Changed:**
 		* Method `delete_main_cache()` now flushes SEO Meta object cache too.
 		* Method `get_warned_site_options()` no longer returns non-warned settings keys. This reduces plugin memory usage.
+		* Method `get_image()` parameters have been changed.
+			* First parameter is now used for arguments.
+			* Second parameter is now deprecated.
+			* Backwards compatibility has been put in placed with a doing_it_wrong notice.
+			* Warning: Method has been deprecated.
+		* Method `get_social_image_url_from_post_meta()`
+		 	1. It no longer checks for fallback page ID.
+		 	2. The first parameter is now required.
+		* Method `get_image_from_post_thumbnail()` no longer checks for fallback page ID.
+		* Method `parse_og_image()` now has a third parameter: `$set_og_dimensions`, whether to set OG image dimensions for output, default `false`.
+	* **Deprecated:**
+		* Method `get_image()`, use `get_social_image()` instead.
+		* Method `get_image_from_post_thumbnail()`, use `get_social_image_from_post_thumbnail()` instead.
+		* Method `is_front_page()`, use `is_real_front_page()` instead.
+			* Warning: The input parameter has been removed. It will ONLY check for the current page.
+			* Use method `is_front_page_by_id()` if you wish to check ONLY for the ID.
 	* **Fixed:**
 		* Method `the_seo_framework()->get_social_image_url_from_post_meta()` second parameter now works.
 	* **Filter Notes:**

@@ -69,11 +69,11 @@ class Generate extends Term_Data {
 		if ( $this->is_archive() && $this->paged() > 1 )
 			$meta['noindex'] = $this->get_option( 'paged_noindex' ) ? 'noindex' : $meta['noindex'];
 
-		if ( $this->is_front_page() && ( $this->page() > 1 || $this->paged() > 1 ) )
+		if ( $this->is_real_front_page() && ( $this->page() > 1 || $this->paged() > 1 ) )
 			$meta['noindex'] = $this->get_option( 'home_paged_noindex' ) ? 'noindex' : $meta['noindex'];
 
 		//* Check home page SEO settings, set noindex, nofollow and noarchive
-		if ( $this->is_front_page() ) {
+		if ( $this->is_real_front_page() ) {
 			$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'homepage_noindex' ) ? 'noindex' : $meta['noindex'];
 			$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'homepage_nofollow' ) ? 'nofollow' : $meta['nofollow'];
 			$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'homepage_noarchive' ) ? 'noarchive' : $meta['noarchive'];
@@ -310,7 +310,7 @@ class Generate extends Term_Data {
 			$type = 'article';
 		} elseif ( $this->is_author() ) {
 			$type = 'profile';
-		} elseif ( $this->is_blog_page() || ( $this->is_front_page() && ! $this->has_page_on_front() ) ) {
+		} elseif ( $this->is_blog_page() || ( $this->is_real_front_page() && ! $this->has_page_on_front() ) ) {
 			$type = 'blog';
 		} else {
 			$type = 'website';

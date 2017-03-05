@@ -530,25 +530,57 @@ class Query extends Compat {
 	/**
 	 * Detects front page.
 	 *
-	 * @since 2.6.0
+	 * @since 2.9.0
 	 *
-	 * @param int $id The Page or Post ID.
 	 * @return bool
 	 */
-	public function is_front_page( $id = 0 ) {
+	public function is_real_front_page() {
 
-		static $cache = array();
+		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
+			return $cache;
+
+		$is_front_page = false;
+
+		if ( \is_front_page() )
+			$is_front_page = true;
+
+		//* Elegant Themes Support. Yay.
+		if ( false === $is_front_page && 0 === $this->get_the_real_ID() && $this->is_home() ) {
+			$sof = \get_option( 'show_on_front' );
+
+			if ( 'page' !== $sof && 'posts' !== $sof )
+				$is_front_page = true;
+		}
+
+		$this->set_query_cache(
+			__METHOD__,
+			$is_front_page
+		);
+
+		return $is_front_page;
+	}
+
+	/**
+	 * Checks for front page by input ID.
+	 *
+	 * Returns true if on SEO settings page and when ID is 0.
+	 *
+	 * @since 2.9.0
+	 *
+	 * @param int The page ID, required.
+	 * @return bool True if ID if for the home page.
+	 */
+	public function is_front_page_by_id( $id ) {
+
+		$id = (int) $id;
 
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $id ) )
 			return $cache;
 
 		$is_front_page = false;
 
-		if ( \is_front_page() && empty( $id ) )
-			$is_front_page = true;
-
 		//* Elegant Themes Support. Yay.
-		if ( false === $is_front_page && empty( $id ) && $this->is_home() ) {
+		if ( 0 === $id && $this->is_home() ) {
 			$sof = \get_option( 'show_on_front' );
 
 			if ( 'page' !== $sof && 'posts' !== $sof )
@@ -556,7 +588,7 @@ class Query extends Compat {
 		}
 
 		//* Compare against $id
-		if ( false === $is_front_page && $id ) {
+		if ( false === $is_front_page ) {
 			$sof = \get_option( 'show_on_front' );
 
 			if ( 'page' === $sof && (int) \get_option( 'page_on_front' ) === $id )
@@ -564,9 +596,10 @@ class Query extends Compat {
 
 			if ( 'posts' === $sof && (int) \get_option( 'page_for_posts' ) === $id )
 				$is_front_page = true;
-		} elseif ( empty( $id ) && $this->is_seo_settings_page() ) {
-			$is_front_page = true;
 		}
+
+		if ( false === $is_front_page && 0 === $id && $this->is_seo_settings_page() )
+			$is_front_page = true;
 
 		$this->set_query_cache(
 			__METHOD__,
@@ -792,9 +825,9 @@ class Query extends Compat {
 	 * @param int $id the Page ID to check. If empty, the current ID will be fetched.
 	 * @return bool true if is blog page. Always false if the homepage is a blog.
 	 */
-	public function is_static_frontpage( $id = '' ) {
+	public function is_static_frontpage( $id = 0 ) {
 
-		if ( empty( $id ) )
+		if ( ! $id )
 			$id = $this->get_the_real_ID();
 
 		if ( 'page' === \get_option( 'show_on_front' ) )
@@ -1042,7 +1075,7 @@ class Query extends Compat {
 
 		$_pages = $pages;
 
-		$post = $this->is_singular() || $this->is_front_page() ? get_post( $this->get_the_real_ID() ) : null;
+		$post = $this->is_singular() || $this->is_real_front_page() ? \get_post( $this->get_the_real_ID() ) : null;
 
 		if ( is_object( $post ) ) {
 			$content = $post->post_content;
@@ -1115,12 +1148,12 @@ class Query extends Compat {
 	 * @since 2.7.0
 	 * @staticvar bool $can_cache_query : True when this function can run.
 	 * @staticvar mixed $cache : The cached query.
-	 * @see AutoDescritpion_Query::set_query_cache(); to set query cache.
+	 * @see $this->set_query_cache(); to set query cache.
 	 *
 	 * @param string $key The key to set or get.
 	 * @param mixed $value_to_set The value to set.
 	 * @param array|mixed $hash Extra arguments, that will be used to generate an alternative cache key.
-	 *        Must always be inside a single array when $value_to_set is set. @see AutoDescritpion_Query::set_query_cache()
+	 *        Must always be inside a single array when $value_to_set is set. @see $this->set_query_cache()
 	 *        Must always be separated parameters otherwise.
 	 * @return mixed : {
 	 * 		mixed The cached value if set and $value_to_set is null.
@@ -1170,7 +1203,7 @@ class Query extends Compat {
 	 * Object cache handler for the query class.
 	 *
 	 * @since 2.7.0
-	 * @see The_SEO_Framework_Query::get_query_cache()
+	 * @see $this->get_query_cache()
 	 *
 	 * @param string $key The key to set.
 	 * @param mixed $value_to_set If null, no cache will be set.

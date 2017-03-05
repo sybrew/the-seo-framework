@@ -179,7 +179,7 @@ class Render extends Admin_Init {
 
 		static $cache = null;
 
-		return isset( $cache ) ? $cache : $cache = $this->get_image( $this->get_the_real_ID() );
+		return isset( $cache ) ? $cache : $cache = $this->get_social_image( array(), true );
 	}
 
 	/**
@@ -403,7 +403,7 @@ class Render extends Admin_Init {
 						continue;
 
 					//* Parse 1500px url.
-					$img = $this->parse_og_image( $id );
+					$img = $this->parse_og_image( $id, array(), true );
 
 					if ( $img ) {
 						$output .= '<meta property="og:image" content="' . \esc_attr( $img ) . '" />' . "\r\n";
@@ -727,7 +727,7 @@ class Render extends Admin_Init {
 		if ( 'product' === $this->get_og_type() )
 			return '';
 
-		if ( $this->is_front_page() ) {
+		if ( $this->is_real_front_page() ) {
 			//* If it's the frontpage, but the option is disabled, don't do anything.
 			if ( ! $this->get_option( 'home_publish_time' ) )
 				return '';
@@ -775,7 +775,7 @@ class Render extends Admin_Init {
 		if ( 'product' === $this->get_og_type() )
 			return '';
 
-		if ( $this->is_front_page() ) {
+		if ( $this->is_real_front_page() ) {
 			//* If it's the frontpage, but the option is disabled, don't do anything.
 			if ( ! $this->get_option( 'home_modify_time' ) )
 				return '';

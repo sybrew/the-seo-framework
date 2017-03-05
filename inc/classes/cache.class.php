@@ -574,7 +574,7 @@ class Cache extends Sitemaps {
 
 		if ( $this->is_404() ) {
 			$the_id = '_404_';
-		} elseif ( ( $this->is_front_page( $page_id ) ) || ( $this->is_admin() && $this->is_seo_settings_page( true ) ) ) {
+		} elseif ( ( $this->is_real_front_page() || $this->is_front_page_by_id( $page_id ) ) || ( $this->is_admin() && $this->is_seo_settings_page( true ) ) ) {
 			//* Front/HomePage.
 			$the_id = $this->generate_front_page_cache_key();
 		} elseif ( $this->is_blog_page( $page_id ) ) {

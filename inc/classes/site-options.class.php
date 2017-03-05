@@ -170,11 +170,15 @@ class Site_Options extends Sanitize {
 			'homepage_noarchive'	=> 0,	// Home Page robots nofollow
 
 			// Home meta.
-			'homepage_title'		=> '',	// Home Page Title string
-			'homepage_tagline'		=> 1,	// Home Page add blog Tagline
-			'homepage_description'	=> '',	// Home Page Description string
-			'homepage_title_tagline' => '',	// Home Page Tagline string
-			'home_title_location'	=> $h_titleloc,	// Title separation location
+			'homepage_title'         => '', // Home Page Title string
+			'homepage_tagline'       => 1,  // Home Page add blog Tagline
+			'homepage_description'   => '', // Home Page Description string
+			'homepage_title_tagline' => '', // Home Page Tagline string
+			'home_title_location'    => $h_titleloc, // Title separation location
+
+			// Homepage Social FallBack image
+			'homepage_social_image_url' => '',
+			'homepage_social_image_id'  => 0,
 
 			// Relationships
 			'shortlink_tag'			=> 0,	// Adds shortlink tag
@@ -198,7 +202,7 @@ class Site_Options extends Sanitize {
 			'home_modify_time'		=> 0,	// Article Modified Time
 
 			// Twitter.
-			'twitter_card' 			=> 'summary_large_image',	// Twitter Card layout. If no twitter:image image is found, it'll change to 'summary', dropdown
+			'twitter_card' 			=> 'summary_large_image',	// Twitter Card layout. If no twitter:image image is found, it'll change to 'summary', radio
 			'twitter_site' 			=> '', 	// Twitter business @username
 			'twitter_creator' 		=> '', 	// Twitter user @username
 
@@ -208,39 +212,39 @@ class Site_Options extends Sanitize {
 			'twitter_tags'			=> 1, 	// Output the Twitter meta tags
 		//	'googleplus_tags'		=> 1, 	// Output the Google+ meta tags
 
-			// Social FallBack images
-			'social_image_fb_url'   => '',
-			'social_image_fb_id'    => 0,
+			// Social FallBack images (fb = fallback)
+			'social_image_fb_url'   => '', // Fallback image URL
+			'social_image_fb_id'    => 0, // Fallback image ID
 
 			// Webmasters.
-			'google_verification'	=> '', 	// Google Verification Code
-			'bing_verification'		=> '', 	// Bing Verification Code
-			'yandex_verification'	=> '', 	// Yandex Verification Code
-			'pint_verification'		=> '', 	// Pinterest Verification Code
+			'google_verification' => '', // Google Verification Code
+			'bing_verification'   => '', // Bing Verification Code
+			'yandex_verification' => '', // Yandex Verification Code
+			'pint_verification'   => '', // Pinterest Verification Code
 
 			// Knowledge general. https://developers.google.com/structured-data/customize/contact-points - This is extremely extended and valuable. Expect a premium version.
-			'knowledge_output'		=> 1,				// Default for outputing the Knowledge SEO.
-			'knowledge_type'		=> 'organization',	// Organization or Person, dropdown
+			'knowledge_output' => 1,              // Default for outputing the Knowledge SEO.
+			'knowledge_type'   => 'organization', // Organization or Person, dropdown
 
 			// Knowledge business. https://developers.google.com/structured-data/customize/logos
-			'knowledge_logo'		=> 1,	// Fetch logo from WP Favicon
-			'knowledge_name'		=> '',	// Person or Organization name
+			'knowledge_logo' => 1,  // Fetch logo from WP Favicon
+			'knowledge_name' => '', // Person or Organization name
 
 			// Knowledge Logo image
 		//	'knowledge_logo_url'   => '', // TODO
 		//	'knowledge_logo_id'    => 0, // TODO
 
 			// Knowledge sameas locations
-			'knowledge_facebook'	=> '',	// Facebook Account
-			'knowledge_twitter'		=> '',	// Twitter Account
-			'knowledge_gplus'		=> '',	// Google Plus Account
-			'knowledge_instagram'	=> '',	// Instagram Account
-			'knowledge_youtube'		=> '',	// Youtube Account
-			'knowledge_linkedin'	=> '',	// Linkedin Account
-		//	'knowledge_myspace'		=> '',	// MySpace Account // meh.
-			'knowledge_pinterest'	=> '',	// Pinterest Account
-			'knowledge_soundcloud'	=> '',	// SoundCloud Account
-			'knowledge_tumblr'		=> '',	// Tumblr Account
+			'knowledge_facebook'   => '', // Facebook Account
+			'knowledge_twitter'    => '', // Twitter Account
+			'knowledge_gplus'      => '', // Google Plus Account
+			'knowledge_instagram'  => '', // Instagram Account
+			'knowledge_youtube'    => '', // Youtube Account
+			'knowledge_linkedin'   => '', // Linkedin Account
+		//	'knowledge_myspace'    => '', // MySpace Account // meh.
+			'knowledge_pinterest'  => '', // Pinterest Account
+			'knowledge_soundcloud' => '', // SoundCloud Account
+			'knowledge_tumblr'     => '', // Tumblr Account
 
 			// Sitemaps.
 			'sitemaps_output'		=> 1,	// Output of sitemaps
@@ -256,16 +260,16 @@ class Site_Options extends Sanitize {
 			'sitemap_color_accent'	=> '00cd98',	// Sitemap accent color
 
 			// Feed.
-			'excerpt_the_feed'		=> 1,	// Generate feed Excerpts
-			'source_the_feed'		=> 1,	// Add backlink at the end of the feed
+			'excerpt_the_feed' => 1, // Generate feed Excerpts
+			'source_the_feed'  => 1, // Add backlink at the end of the feed
 
 			// Schema
-			'ld_json_searchbox'		=> 1,	// LD+Json Sitelinks Searchbox
-			'ld_json_sitename'		=> 1,	// LD+Json Sitename
-			'ld_json_breadcrumbs'	=> 1,	// LD+Json Breadcrumbs
+			'ld_json_searchbox'   => 1, // LD+Json Sitelinks Searchbox
+			'ld_json_sitename'    => 1, // LD+Json Sitename
+			'ld_json_breadcrumbs' => 1, // LD+Json Breadcrumbs
 
 			// Cache.
-			$this->o_plugin_updated => 1,	// Plugin update cache.
+			$this->o_plugin_updated => 1, // Plugin update cache.
 		);
 	}
 
@@ -327,6 +331,13 @@ class Site_Options extends Sanitize {
 		if ( false === $this->is_admin() )
 			return;
 
+		/**
+		 * Applies filters 'the_seo_framework_update_options_at_update' : bool
+		 * @since 2.6.0
+		 */
+		if ( ! \apply_filters( 'the_seo_framework_update_options_at_update', true ) )
+			return;
+
 		$plugin_updated = $this->o_plugin_updated;
 
 		/**
@@ -338,13 +349,6 @@ class Site_Options extends Sanitize {
 
 		//* If current user isn't allowed to update options, don't do anything.
 		if ( ! \current_user_can( $this->settings_capability() ) )
-			return;
-
-		/**
-		 * Applies filters 'the_seo_framework_update_options_at_update' : bool
-		 * @since 2.6.0
-		 */
-		if ( ! \apply_filters( 'the_seo_framework_update_options_at_update', true ) )
 			return;
 
 		$updated = false;

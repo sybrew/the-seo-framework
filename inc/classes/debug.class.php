@@ -925,7 +925,7 @@ final class Debug implements Debug_Interface {
 
 		$timer = '<div style="display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( $this->timer(), 5 ) . ' seconds</div>' ;
 
-		$title = $tsf->is_admin() ? 'Expected SEO Output' : 'Current SEO Output';
+		$title = $tsf->is_admin() ? 'Expected SEO Output' : 'Determined SEO Output';
 		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #ccc;"><h2 style="color:#ddd;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
 
 		//* Escape it, replace EOL with breaks, and style everything between quotes (which are ending with space).
@@ -1020,6 +1020,7 @@ final class Debug implements Debug_Interface {
 		$tsf = \the_seo_framework();
 
 		//* Only get true/false values.
+		$page_id = $tsf->get_the_real_ID();
 		$is_404 = $tsf->is_404();
 		$is_admin = $tsf->is_admin();
 		$is_attachment = $tsf->is_attachment();
@@ -1034,7 +1035,8 @@ final class Debug implements Debug_Interface {
 		$is_date = $tsf->is_date();
 		$is_day = $tsf->is_day();
 		$is_feed = $tsf->is_feed();
-		$is_front_page = $tsf->is_front_page();
+		$is_real_front_page = $tsf->is_real_front_page();
+		$is_front_page_by_id = $tsf->is_front_page_by_id( $tsf->get_the_real_ID() );
 		$is_home = $tsf->is_home();
 		$is_month = $tsf->is_month();
 		$is_page = $tsf->is_page();

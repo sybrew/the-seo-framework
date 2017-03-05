@@ -241,9 +241,8 @@ class Generate_Description extends Generate {
 
 		$description = '';
 
-		if ( $args['is_home'] || $this->is_front_page() || ( empty( $args['taxonomy'] ) && $this->is_static_frontpage( $args['id'] ) ) ) {
+		if ( $args['is_home'] || $this->is_real_front_page() || ( empty( $args['taxonomy'] ) && $this->is_static_frontpage( $args['id'] ) ) )
 			$description = $this->get_option( 'homepage_description' ) ?: '';
-		}
 
 		return $description;
 	}
@@ -359,7 +358,7 @@ class Generate_Description extends Generate {
 		$args = $this->reparse_description_args( $args );
 
 		//* Home Page description
-		if ( $args['is_home'] || $this->is_front_page() || $this->is_static_frontpage( $args['id'] ) )
+		if ( $args['is_home'] || $this->is_real_front_page() || $this->is_front_page_by_id( $args['id'] ) )
 			return $this->generate_home_page_description( $args['get_custom_field'], $escape );
 
 		/**
@@ -664,14 +663,14 @@ class Generate_Description extends Generate {
 	 *		$sep		=> The separator
 	 * }
 	 */
-	public function generate_description_additions( $id = '', $term = '', $ignore = false ) {
+	public function generate_description_additions( $id = 0, $term = '', $ignore = false ) {
 
 		static $title = array();
 
 		if ( $ignore || $this->add_description_additions( $id, $term ) ) {
 
 			if ( ! isset( $title[ $id ] ) ) {
-				$title[ $id ] = $this->generate_description_title( $id, $term, $this->is_front_page( $id ) );
+				$title[ $id ] = $this->generate_description_title( $id, $term, $this->is_real_front_page() );
 			}
 
 			if ( $ignore || $this->is_option_checked( 'description_blogname' ) ) {
@@ -721,7 +720,7 @@ class Generate_Description extends Generate {
 		if ( '' === $id )
 			$id = $this->get_the_real_ID();
 
-		if ( $page_on_front || $this->is_static_frontpage( $id ) ) :
+		if ( $page_on_front || $this->is_front_page_by_id( $id ) ) :
 			$title = $this->get_option( 'homepage_title_tagline' ) ?: $this->get_blogdescription();
 		else :
 			/**

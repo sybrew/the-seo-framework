@@ -18,7 +18,7 @@ if ( The_SEO_Framework\Debug::has_debug_output() ) :
 		$taxonomy = isset( $term->taxonomy ) ? $term->taxonomy : '';
 
 		//* This will return 'Page' on all non-archive types (except the home page)
-		$type = ! $this->is_archive() && $this->is_front_page( $id ) ? 'Front Page' : $this->get_the_term_name( $term );
+		$type = ! $this->is_archive() && $this->is_real_front_page() || $this->is_front_page_by_id( $id ) ? 'Front Page' : $this->get_the_term_name( $term );
 		$cache_key = $this->generate_cache_key( $this->get_the_real_ID(), $taxonomy );
 
 		if ( $this->is_admin() ) {

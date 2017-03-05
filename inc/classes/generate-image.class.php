@@ -49,34 +49,18 @@ class Generate_Image extends Generate_Url {
 	}
 
 	/**
-	 * Fetches og:image URL.
+	 * Returns social image URL and sets $this->image_dimensions.
 	 *
-	 * @since 2.2.2
-	 * @since 2.2.8 : Added theme icon detection.
-	 * @since 2.5.2 : Added args filters.
-	 * @since 2.8.0 : 1. Added theme logo detection.
-	 *                2. Added inpost image selection detection.
-	 * @since 2.8.2 : 1. Now returns something on post ID 0.
-	 *                2. Added SEO settings fallback image selection detection.
-	 * @since 2.9.0 : Added 'skip_fallback' option to second parameter.
+	 * @since 2.9.0
 	 *
 	 * @todo listen to attached images within post.
-	 * @todo set archive and front page image listener, now it simply fail on some calls.
-	 * @priority medium 2.7.0+
+	 * @todo listen to archive images.
 	 *
-	 * @param string $post_id The post ID.
 	 * @param array $args The image arguments.
-	 * @param bool $escape Whether to escape the image URL.
-	 * @return string the image URL.
+	 * @param bool $set_og_dimension Whether to set open graph dimensions.
+	 * @return string The social image.
 	 */
-	public function get_image( $post_id = '', $args = array(), $escape = true ) {
-
-		/**
-		 * Backwards compat with parse args.
-		 * @since 2.5.0
-		 */
-		if ( ! isset( $args['post_id'] ) )
-			$args['post_id'] = $post_id ?: ( $this->is_singular() ? $this->get_the_real_ID() : 0 );
+	public function get_social_image( $args = array(), $set_og_dimension = false ) {
 
 		$args = $this->reparse_image_args( $args );
 
@@ -89,18 +73,22 @@ class Generate_Image extends Generate_Url {
 		//* Check if there are no disallowed arguments.
 		$all_allowed = empty( $args['disallowed'] );
 
-		//* TODO set home page upload here.
+		//* 1. Fetch image from homepage SEO meta upload.
+		if ( $all_allowed || false === in_array( 'homemeta', $args['disallowed'], true ) ) {
+			if ( $image = $this->get_social_image_url_from_home_meta( $args['post_id'], true ) )
+				goto end;
+		}
 
 		if ( $args['post_id'] ) {
-			//* 1. Fetch image from SEO meta upload.
+			//* 2. Fetch image from SEO meta upload.
 			if ( $all_allowed || false === in_array( 'postmeta', $args['disallowed'], true ) ) {
 				if ( $image = $this->get_social_image_url_from_post_meta( $args['post_id'], true ) )
 					goto end;
 			}
 
-			//* 2. Fetch image from featured.
+			//* 3. Fetch image from featured.
 			if ( $all_allowed || false === in_array( 'featured', $args['disallowed'], true ) ) {
-				if ( $image = $this->get_image_from_post_thumbnail( $args ) )
+				if ( $image = $this->get_social_image_url_from_post_thumbnail( $args['post_id'], $args, true ) )
 					goto end;
 			}
 		}
@@ -108,13 +96,13 @@ class Generate_Image extends Generate_Url {
 		if ( $args['skip_fallback'] )
 			goto end;
 
-		//* 3. Fetch image from SEO settings
+		//* 4. Fetch image from SEO settings
 		if ( $all_allowed || false === in_array( 'option', $args['disallowed'], true ) ) {
 			if ( $image = $this->get_social_image_url_from_seo_settings( true ) )
 				goto end;
 		}
 
-		//* 4. Fetch image from fallback filter 1
+		//* 5. Fetch image from fallback filter 1
 		/**
 		 * Applies filters 'the_seo_framework_og_image_after_featured' : string
 		 * @since 2.5.2
@@ -124,13 +112,13 @@ class Generate_Image extends Generate_Url {
 				goto end;
 		}
 
-		//* 5. Fallback: Get header image if exists
+		//* 6. Fallback: Get header image if exists
 		if ( ( $all_allowed || false === in_array( 'header', $args['disallowed'], true ) ) && \current_theme_supports( 'custom-header', 'default-image' ) ) {
 			if ( $image = $this->get_header_image( true ) )
 				goto end;
 		}
 
-		//* 6. Fetch image from fallback filter 2
+		//* 7. Fetch image from fallback filter 2
 		/**
 		 * Applies filters 'the_seo_framework_og_image_after_header' : string
 		 * @since 2.5.2
@@ -140,13 +128,13 @@ class Generate_Image extends Generate_Url {
 				goto end;
 		}
 
-		//* 7. Get the WP 4.5 Site Logo
+		//* 8. Get the WP 4.5 Site Logo
 		if ( ( $all_allowed || false === in_array( 'logo', $args['disallowed'], true ) ) && $this->can_use_logo() ) {
 			if ( $image = $this->get_site_logo( true ) )
 				goto end;
 		}
 
-		//* 8. Get the WP 4.3 Site Icon
+		//* 9. Get the WP 4.3 Site Icon
 		if ( $all_allowed || false === in_array( 'icon', $args['disallowed'], true ) ) {
 			if ( $image = $this->get_site_icon( 'full', true ) )
 				goto end;
@@ -154,10 +142,10 @@ class Generate_Image extends Generate_Url {
 
 		end :;
 
-		if ( $escape && $image )
-			return \esc_url( $image );
+		if ( $args['escape'] && $image )
+			$image = \esc_url( $image );
 
-		return $image;
+		return (string) $image;
 	}
 
 	/**
@@ -166,6 +154,7 @@ class Generate_Image extends Generate_Url {
 	 * @since 2.5.0
 	 * @since 2.9.0 : 1. Removed 'attr' index, it was unused.
 	 *                2. Added 'skip_fallback' option.
+	 *                3. Added 'escape' option.
 	 *
 	 * The image set in the filter will always be used as fallback
 	 *
@@ -185,6 +174,7 @@ class Generate_Image extends Generate_Url {
 				'icon'       => false,
 				'skip_fallback' => false,
 				'disallowed' => array(),
+				'escape'     => true,
 			);
 
 			/**
@@ -192,6 +182,7 @@ class Generate_Image extends Generate_Url {
 			 *		@param string $image The image url
 			 *		@param mixed $size The image size
 			 *		@param bool $icon Fetch Image icon
+			 *		@param bool 'skip_fallback' Whether to skip fallback images.
 			 *		@param array $disallowed Disallowed image types : {
 			 *			array (
 			 * 				string 'featured'
@@ -199,6 +190,7 @@ class Generate_Image extends Generate_Url {
 			 * 				string 'icon'
 			 *			)
 			 * 		}
+			 *		@param bool 'escape' Whether to escape output.
 			 * }
 			 *
 			 * @since 2.0.1
@@ -220,6 +212,7 @@ class Generate_Image extends Generate_Url {
 		$args['icon']          = isset( $args['icon'] )          ? (bool) $args['icon']          : $defaults['icon'];
 		$args['skip_fallback'] = isset( $args['skip_fallback'] ) ? (bool) $args['skip_fallback'] : $defaults['skip_fallback'];
 		$args['disallowed']    = isset( $args['disallowed'] )    ? (array) $args['disallowed']   : $defaults['disallowed'];
+		$args['escape']        = isset( $args['escape'] )        ? (bool) $args['escape']        : $defaults['escape'];
 
 		return $args;
 	}
@@ -236,38 +229,66 @@ class Generate_Image extends Generate_Url {
 
 		$default_args = $this->parse_image_args( '', '', true );
 
-		if ( is_array( $args ) ) {
-			if ( empty( $args ) ) {
-				$args = $default_args;
-			} else {
-				$args = $this->parse_image_args( $args, $default_args );
-			}
-		} else {
-			//* Old style parameters are used. Doing it wrong.
-			$this->_doing_it_wrong( __METHOD__, 'Use $args = array() for parameters.', '2.5.0' );
+		if ( empty( $args ) ) {
 			$args = $default_args;
+		} else {
+			$args = $this->parse_image_args( $args, $default_args );
 		}
 
 		return $args;
 	}
 
 	/**
-	 * Returns unescaped URL from post ID input.
+	 * Returns unescaped HomePage settings image URL from post ID input.
 	 *
-	 * @since 2.8.0
-	 * @since 2.9.0 The second parameter now works.
+	 * @since 2.9.0
 	 * @uses $this->image_dimensions
 	 *
 	 * @param int $id The post ID.
-	 * @param bool $set_og_dimensions Whether to set open graph and twitter dimensions.
+	 * @param bool $set_og_dimensions Whether to set Open Graph and Twitter dimensions.
+	 * @return string The unescaped HomePage social image URL.
+	 */
+	public function get_social_image_url_from_home_meta( $id = 0, $set_og_dimensions = false ) {
+
+		//* Don't output if not front page.
+		if ( false === $this->is_front_page_by_id( $id ) )
+			return '';
+
+		$src = $this->get_option( 'homepage_social_image_url' );
+
+		if ( ! $src )
+			return '';
+
+		//* Calculate image sizes.
+		if ( $set_og_dimensions && $img_id = $this->get_option( 'homepage_social_image_id' ) ) {
+			$_src = \wp_get_attachment_image_src( $img_id, 'full' );
+
+			$i = $_src[0]; // Source URL
+			$w = $_src[1]; // Width
+			$h = $_src[2]; // Height
+
+			if ( \esc_url( $this->set_preferred_url_scheme( $i ) ) === \esc_url( $this->set_preferred_url_scheme( $src ) ) )
+				$this->image_dimensions = $this->image_dimensions + array( $id => array( 'width' => $w, 'height' => $h ) );
+		}
+
+		return $src;
+	}
+
+	/**
+	 * Returns unescaped Post settings image URL from post ID input.
+	 *
+	 * @since 2.8.0
+	 * @since 2.9.0 1. The second parameter now works.
+	 *              2. Fallback image ID has been removed.
+	 * @uses $this->image_dimensions
+	 *
+	 * @param int $id The post ID. Required.
+	 * @param bool $set_og_dimensions Whether to set Open Graph and Twitter dimensions.
 	 * @return string The unescaped social image URL.
 	 */
-	public function get_social_image_url_from_post_meta( $id = 0, $set_og_dimensions = false ) {
+	public function get_social_image_url_from_post_meta( $id, $set_og_dimensions = false ) {
 
-		if ( empty( $id ) )
-			$id = $this->get_the_real_ID();
-
-		$src = $this->get_custom_field( '_social_image_url', $id );
+		$src = $id ? $this->get_custom_field( '_social_image_url', $id ) : '';
 
 		if ( ! $src )
 			return '';
@@ -320,27 +341,28 @@ class Generate_Image extends Generate_Url {
 
 	/**
 	 * Fetches image from post thumbnail.
+	 *
 	 * Resizes the image between 1500px if bigger. Then it saves the image and
 	 * Keeps dimensions relative.
 	 *
-	 * @since 2.3.0
+	 * @since 2.9.0
 	 *
-	 * @param array $args Image arguments.
-	 * @return string|null the image url.
+	 * @param int $id The post ID. Required.
+	 * @param array $args The image args.
+	 * @param bool $set_og_dimensions Whether to set Open Graph image dimensions.
+	 * @return string The social image URL.
 	 */
-	public function get_image_from_post_thumbnail( $args = array() ) {
+	public function get_social_image_url_from_post_thumbnail( $id, $args = array(), $set_og_dimensions = false ) {
 
-		if ( empty( $args ) )
-			$args = $this->reparse_image_args( $args );
+		$image_id = $id ? \get_post_thumbnail_id( $id ) : '';
 
-		if ( ! isset( $args['post_id'] ) )
-			$args['post_id'] = $this->get_the_real_ID();
+		if ( ! $image_id )
+			return '';
 
-		$id = \get_post_thumbnail_id( $args['post_id'] );
-
+		$args = $this->reparse_image_args( $args );
 		$args['get_the_real_ID'] = true;
 
-		$image = $id ? $this->parse_og_image( $id, $args ) : '';
+		$image = $this->parse_og_image( $image_id, $args, $set_og_dimensions );
 
 		return $image;
 	}
@@ -380,18 +402,20 @@ class Generate_Image extends Generate_Url {
 	 * @since 2.5.0
 	 * @since 2.8.0 : 1. Removed staticvar.
 	 *                2. Now adds ID call to OG image called listener.
+	 * @since 2.9.0 : Added $set_og_dimension parameter
 	 *
 	 * @todo create formula to fetch transient.
 	 * @priority high 2.7.0
 	 *
 	 * @param int $id The attachment ID.
 	 * @param array $args The image args
+	 * @param bool $set_og_dimensions Whether to set OG dimensions.
 	 * @return string|empty Parsed image url or empty if already called
 	 */
-	public function parse_og_image( $id, $args = array() ) {
+	public function parse_og_image( $id, $args = array(), $set_og_dimensions = false ) {
 
 		//* Don't do anything if $id isn't given.
-		if ( ! isset( $id ) || empty( $id ) )
+		if ( empty( $id ) )
 			return;
 
 		if ( empty( $args ) )
@@ -459,10 +483,12 @@ class Generate_Image extends Generate_Url {
 			}
 		endif;
 
-		//* Whether to use the post ID (Post Thumbnail) or input ID (ID was known beforehand)
-		$usage_id = isset( $args['get_the_real_ID'] ) && $args['get_the_real_ID'] ? $this->get_the_real_ID() : $id;
+		if ( $set_og_dimensions ) {
+			//* Whether to use the post ID (Post Thumbnail) or input ID (ID was known beforehand)
+			$usage_id = ! empty( $args['get_the_real_ID'] ) ? $this->get_the_real_ID() : $id;
 
-		$this->image_dimensions = $this->image_dimensions + array( $usage_id => array( 'width' => $w, 'height' => $h ) );
+			$this->image_dimensions = $this->image_dimensions + array( $usage_id => array( 'width' => $w, 'height' => $h ) );
+		}
 
 		return $i;
 	}

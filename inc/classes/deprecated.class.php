@@ -502,4 +502,243 @@ final class Deprecated {
 
 		return $data;
 	}
+
+	/**
+	 * Fetches og:image URL.
+	 *
+	 * @since 2.2.2
+	 * @since 2.2.8 : Added theme icon detection.
+	 * @since 2.5.2 : Added args filters.
+	 * @since 2.8.0 : 1. Added theme logo detection.
+	 *                2. Added inpost image selection detection.
+	 * @since 2.8.2 : 1. Now returns something on post ID 0.
+	 *                2. Added SEO settings fallback image selection detection.
+	 * @since 2.9.0 : 1. Added 'skip_fallback' option to arguments.
+	 *                2. Added 'escape' option to arguments.
+	 *                3. First parameter is now arguments. Fallback for integer is added.
+	 *                4. Second parameter is now deprecated.
+	 *                5. Deprecated.
+	 * @deprecated Use get_social_image instead.
+	 *
+	 * @param int|array $args The image arguments.
+	 *                  Was: $post_id.
+	 *                  Warning: Integer usage is only used for backwards compat.
+	 * @param array $depr_args, Deprecated;
+	 *              Was $args The image arguments.
+	 * @param bool $escape Whether to escape the image URL.
+	 *             Deprecated: You should use $args['escape'].
+	 * @return string the image URL.
+	 */
+	public function get_image( $args = array(), $depr_args = '', $depr_escape = true ) {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->get_image()', '2.9.0', 'the_seo_framework()->get_social_image()' );
+
+		if ( is_int( $args ) || is_array( $depr_args ) ) {
+			$tsf->_doing_it_wrong( __METHOD__, 'First parameter is now used for arguments. Second parameter is deprecated.', '2.9.0' );
+
+			$post_id = $args;
+			$args = array();
+
+			/**
+			 * Backwards compat with parse args.
+			 * @since 2.5.0
+			 */
+			if ( ! isset( $depr_args['post_id'] ) ) {
+				$args['post_id'] = $post_id ?: ( $tsf->is_singular( $post_id ) ? $tsf->get_the_real_ID() : 0 );
+			}
+
+			if ( is_array( $depr_args ) ) {
+				$args = \wp_parse_args( $depr_args, $args );
+			}
+		}
+
+		if ( false === $depr_escape ) {
+			$tsf->_doing_it_wrong( __METHOD__, 'Third parameter has been deprecated. Use `$args["escape"] => false` instead.', '2.9.0' );
+			$args['escape'] = false;
+		}
+
+		$args = $tsf->reparse_image_args( $args );
+
+		//* 0. Image from argument.
+		pre_0 : {
+			if ( $image = $args['image'] )
+				goto end;
+		}
+
+		//* Check if there are no disallowed arguments.
+		$all_allowed = empty( $args['disallowed'] );
+
+		//* 1. Fetch image from homepage SEO meta upload.
+		if ( $all_allowed || false === in_array( 'homemeta', $args['disallowed'], true ) ) {
+			if ( $image = $tsf->get_social_image_url_from_home_meta( $args['post_id'], true ) )
+				goto end;
+		}
+
+		if ( $args['post_id'] ) {
+			//* 2. Fetch image from SEO meta upload.
+			if ( $all_allowed || false === in_array( 'postmeta', $args['disallowed'], true ) ) {
+				if ( $image = $tsf->get_social_image_url_from_post_meta( $args['post_id'], true ) )
+					goto end;
+			}
+
+			//* 3. Fetch image from featured.
+			if ( $all_allowed || false === in_array( 'featured', $args['disallowed'], true ) ) {
+				if ( $image = $tsf->get_image_from_post_thumbnail( $args, true ) )
+					goto end;
+			}
+		}
+
+		if ( $args['skip_fallback'] )
+			goto end;
+
+		//* 4. Fetch image from SEO settings
+		if ( $all_allowed || false === in_array( 'option', $args['disallowed'], true ) ) {
+			if ( $image = $tsf->get_social_image_url_from_seo_settings( true ) )
+				goto end;
+		}
+
+		//* 5. Fetch image from fallback filter 1
+		/**
+		 * Applies filters 'the_seo_framework_og_image_after_featured' : string
+		 * @since 2.5.2
+		 */
+		fallback_1 : {
+			if ( $image = (string) \apply_filters( 'the_seo_framework_og_image_after_featured', '', $args['post_id'] ) )
+				goto end;
+		}
+
+		//* 6. Fallback: Get header image if exists
+		if ( ( $all_allowed || false === in_array( 'header', $args['disallowed'], true ) ) && \current_theme_supports( 'custom-header', 'default-image' ) ) {
+			if ( $image = $tsf->get_header_image( true ) )
+				goto end;
+		}
+
+		//* 7. Fetch image from fallback filter 2
+		/**
+		 * Applies filters 'the_seo_framework_og_image_after_header' : string
+		 * @since 2.5.2
+		 */
+		fallback_2 : {
+			if ( $image = (string) \apply_filters( 'the_seo_framework_og_image_after_header', '', $args['post_id'] ) )
+				goto end;
+		}
+
+		//* 8. Get the WP 4.5 Site Logo
+		if ( ( $all_allowed || false === in_array( 'logo', $args['disallowed'], true ) ) && $tsf->can_use_logo() ) {
+			if ( $image = $tsf->get_site_logo( true ) )
+				goto end;
+		}
+
+		//* 9. Get the WP 4.3 Site Icon
+		if ( $all_allowed || false === in_array( 'icon', $args['disallowed'], true ) ) {
+			if ( $image = $tsf->get_site_icon( 'full', true ) )
+				goto end;
+		}
+
+		end :;
+
+		if ( $args['escape'] && $image )
+			$image = \esc_url( $image );
+
+		return (string) $image;
+	}
+
+	/**
+	 * Fetches image from post thumbnail.
+	 * Resizes the image between 1500px if bigger. Then it saves the image and
+	 * Keeps dimensions relative.
+	 *
+	 * @since 2.3.0
+	 * @since 2.9.0 Changed parameters.
+	 * @since 2.9.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array $args The image args.
+	 *              Was: int $id The post/page ID.
+	 * @param bool $set_og_dimensions Whether to set Open Graph image dimensions.
+	 *             Was: array $depr_args Deprecated. Image arguments.
+	 * @return string|null the image url.
+	 */
+	public function get_image_from_post_thumbnail( $args = array(), $set_og_dimensions = false ) {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->get_image_from_post_thumbnail()', '2.9.0', 'the_seo_framework()->get_social_image_url_from_post_thumbnail()' );
+
+		if ( is_array( $set_og_dimensions ) ) {
+			$tsf->_doing_it_wrong( __METHOD__, 'First parameter are now arguments, second parameter is for setting og dimensions.', '2.9.0' );
+			$args = $set_og_dimensions;
+			$set_og_dimensions = false;
+		}
+
+		$args = $tsf->reparse_image_args( $args );
+
+		$id = \get_post_thumbnail_id( $args['post_id'] );
+
+		$args['get_the_real_ID'] = true;
+
+		$image = $id ? $tsf->parse_og_image( $id, $args, $set_og_dimensions ) : '';
+
+		return $image;
+	}
+
+	/**
+	 * Detects front page.
+	 *
+	 * Returns true on SEO settings page if ID is 0.
+	 *
+	 * @since 2.6.0
+	 * @since 2.9.0: Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $id The Page or Post ID.
+	 * @return bool
+	 */
+	public function is_front_page( $id = 0 ) {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->is_front_page()', '2.9.0', 'the_seo_framework()->is_real_front_page() or the_seo_framework()->is_front_page_by_id()' );
+
+		static $cache = array();
+
+		if ( null !== $cache = $tsf->get_query_cache( __METHOD__, null, $id ) )
+			return $cache;
+
+		$is_front_page = false;
+
+		if ( \is_front_page() && empty( $id ) )
+			$is_front_page = true;
+
+		//* Elegant Themes Support. Yay.
+		if ( false === $is_front_page && empty( $id ) && $tsf->is_home() ) {
+			$sof = \get_option( 'show_on_front' );
+
+			if ( 'page' !== $sof && 'posts' !== $sof )
+				$is_front_page = true;
+		}
+
+		//* Compare against $id
+		if ( false === $is_front_page && $id ) {
+			$sof = \get_option( 'show_on_front' );
+
+			if ( 'page' === $sof && (int) \get_option( 'page_on_front' ) === $id )
+				$is_front_page = true;
+
+			if ( 'posts' === $sof && (int) \get_option( 'page_for_posts' ) === $id )
+				$is_front_page = true;
+		} elseif ( empty( $id ) && $tsf->is_seo_settings_page() ) {
+			$is_front_page = true;
+		}
+
+		$tsf->set_query_cache(
+			__METHOD__,
+			$is_front_page,
+			$id
+		);
+
+		return $is_front_page;
+	}
 }

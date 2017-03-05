@@ -47,6 +47,11 @@ switch ( $instance ) :
 		 * Applies filters the_seo_framework_social_settings_tabs : array see $default_tabs
 		 *
 		 * Used to extend Social tabs
+		 *
+		 * @since 2.2.2
+		 *
+		 * @param array $default_tabs The default tabs
+		 * @param array $args The method's input arguments
 		 */
 		$defaults = (array) apply_filters( 'the_seo_framework_social_settings_tabs', $default_tabs, $args );
 
@@ -110,15 +115,15 @@ switch ( $instance ) :
 
 		<h4><?php esc_html_e( 'Social Image Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'A social image can be displayed when your website is shared. They are a great way to grab attention.', 'autodescription' ) );
+		$this->description( __( 'A social image can be displayed when your website is shared. It is a great way to grab attention.', 'autodescription' ) );
 
-		$image_placeholder = $this->get_image( 0, array( 'disallowed' => array( 'postmeta', 'featured' ) ), false );
+		$image_placeholder = $this->get_social_image( array( 'post_id' => 0, 'disallowed' => array( 'homemeta', 'postmeta', 'featured' ), 'escape' => false ) );
 
 		?>
 		<p>
 			<label for="tsf_fb_socialimage">
 				<strong><?php esc_html_e( 'Social Image Fallback URL', 'autodescription' ); ?></strong>
-				<a href="<?php echo esc_url( 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>" target="_blank" title="<?php echo esc_attr__( 'Preferred Social Image fallback URL location', 'autodescription' ); ?>">[?]</a>
+				<?php $this->make_info( __( 'Preferred Social Image fallback URL location', 'autodescription' ), 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>
 			</label>
 		</p>
 		<p class="hide-if-no-js">

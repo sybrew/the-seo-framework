@@ -130,7 +130,7 @@ switch ( $instance ) :
 		$canonical_placeholder = $this->the_url_from_cache( '', $post_id, false, false );
 
 		//* Fetch image placeholder.
-		$image_placeholder = $this->get_image( $post_id, array( 'disallowed' => array( 'postmeta' ) ), false );
+		$image_placeholder = $this->get_social_image( array( 'post_id' => $post_id, 'disallowed' => array( 'postmeta' ), 'escape' => false ) );
 
 		?>
 		<?php if ( 'above' === $this->inpost_seo_bar || $this->is_option_checked( 'display_seo_bar_metabox' ) ) : ?>
@@ -175,7 +175,7 @@ switch ( $instance ) :
 		<p>
 			<label for="autodescription_socialimage">
 				<strong><?php esc_html_e( 'Custom Social Image URL', 'autodescription' ); ?></strong>
-				<a href="<?php echo esc_url( 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Preferred %s Social Image URL location', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
+				<?php $this->make_info( sprintf( __( 'Preferred %s Social Image URL location', 'autodescription' ), esc_attr( $type ) ), 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>
 			</label>
 		</p>
 		<p class="hide-if-no-js">
