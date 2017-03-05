@@ -185,6 +185,14 @@ class Sanitize extends Admin_Pages {
 			's_one_zero',
 			$this->settings_field,
 			array(
+				'cache_meta_description',
+				'cache_meta_schema',
+				'cache_sitemap',
+				'cache_object',
+
+				'display_seo_bar_tables',
+				'display_seo_bar_metabox',
+
 				'title_rem_additions',
 				'title_rem_prefixes',
 
@@ -279,6 +287,7 @@ class Sanitize extends Admin_Pages {
 			$this->settings_field,
 			array(
 				'social_image_fb_id',
+				'homepage_social_image_id',
 				'knowledge_logo_id',
 			)
 		);
@@ -333,6 +342,7 @@ class Sanitize extends Admin_Pages {
 			array(
 				'knowledge_linkedin',
 				'social_image_fb_url',
+				'homepage_social_image_url',
 				'knowledge_logo_url',
 			)
 		);
@@ -351,6 +361,14 @@ class Sanitize extends Admin_Pages {
 			$this->settings_field,
 			array(
 				'twitter_card',
+			)
+		);
+
+		$this->add_option_filter(
+			's_canonical_scheme',
+			$this->settings_field,
+			array(
+				'canonical_scheme',
 			)
 		);
 
@@ -526,6 +544,7 @@ class Sanitize extends Admin_Pages {
 			's_url_query'             => array( $this, 's_url_query' ),
 			's_twitter_name'          => array( $this, 's_twitter_name' ),
 			's_twitter_card'          => array( $this, 's_twitter_card' ),
+			's_canonical_scheme'      => array( $this, 's_canonical_scheme' ),
 		);
 
 		/**
@@ -1214,5 +1233,27 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_bsol( $new_value ) {
 		return str_replace( '\\', '&#92;', stripslashes( $new_value ) );
+	}
+
+	/**
+	 * Sanitizes canonical scheme settings.
+	 *
+	 * @since 2.9.0
+	 *
+	 * @param string $new_value String with potentially unwanted values.
+	 * @return string A correct canonical scheme setting value.
+	 */
+	public function s_canonical_scheme( $new_value ) {
+
+		$values = array(
+			'automatic',
+			'https',
+			'http',
+		);
+
+		if ( in_array( $new_value, $values, true ) )
+			return (string) $new_value;
+
+		return 'automatic';
 	}
 }

@@ -105,69 +105,69 @@ class Site_Options extends Sanitize {
 		 */
 		return array(
 			// General. Performance.
-			'cache_meta_description'	=> 1, 	// Description transient cache.
-			'cache_meta_schema'			=> 1,	// Schema.org transient cache.
-			'cache_sitemap'				=> 1,	// Sitemap transient cache.
-			'cache_object'				=> 1,	// Object caching.
+			'cache_meta_description' => 1, // Description transient cache.
+			'cache_meta_schema'      => 1, // Schema.org transient cache.
+			'cache_sitemap'          => 1, // Sitemap transient cache.
+			'cache_object'           => 1, // Object caching.
 
 			// General. Layout.
-			'display_seo_bar_tables'	=> 1, 	// SEO Bar post-list tables.
-			'display_seo_bar_metabox'	=> 0, 	// SEO Bar post SEO Settings.
+			'display_seo_bar_tables'  => 1, // SEO Bar post-list tables.
+			'display_seo_bar_metabox' => 0, // SEO Bar post SEO Settings.
 
 			// General. Canonical.
-			'canonical_scheme'	=> 'automatic', // Canonical URL scheme.
+			'canonical_scheme' => 'automatic', // Canonical URL scheme.
 
 			// Title.
-			'title_seperator'		=> 'pipe',		// Title separator (note: TYPO), dropdown
-			'title_location'		=> $titleloc,	// Title separation location
-			'title_rem_additions'	=> 0,			// Remove title additions
-			'title_rem_prefixes'	=> 0, 			// Remove title prefixes
+			'title_seperator'     => 'pipe',    // Title separator (note: TYPO), dropdown
+			'title_location'      => $titleloc, // Title separation location
+			'title_rem_additions' => 0,         // Remove title additions
+			'title_rem_prefixes'  => 0,         // Remove title prefixes
 
 			// Description.
-			'description_separator'	=> 'pipe',	// Description separator, dropdown
-			'description_additions'	=> 1,		// "Title on Blogname" within Description
-			'description_blogname'	=> 1, 		// "on Blogname" within Description
-		//	'description_custom'	=> '',		// Custom prefix
+			'description_separator' => 'pipe', // Description separator, dropdown
+			'description_additions' => 1,  // "Title on Blogname" within Description
+			'description_blogname'  => 1,  // "on Blogname" within Description
+		//	'description_custom'    => '', // Custom prefix
 
 			// Robots directory.
-			'noodp'					=> 1, 	// Site noopd robots settings
-			'noydir'				=> 1, 	// Site noydir robots settings
+			'noodp'  => 1, // Site noopd robots settings
+			'noydir' => 1, // Site noydir robots settings
 
 			// Robots index.
-			'category_noindex'		=> 0,	// Category Archive robots noindex
-			'tag_noindex'			=> 0,	// Tag Archive robots noindex
-			'author_noindex'		=> 0,	// Author Archive robots noindex
-			'date_noindex'			=> 1,	// Date Archive robots noindex
-			'search_noindex'		=> 1,	// Search Page robots noindex
-			'attachment_noindex'	=> 1,	// Attachment Pages robots noindex
-			'site_noindex'			=> 0,	// Site Page robots noindex
+			'category_noindex'   => 0, // Category Archive robots noindex
+			'tag_noindex'        => 0, // Tag Archive robots noindex
+			'author_noindex'     => 0, // Author Archive robots noindex
+			'date_noindex'       => 1, // Date Archive robots noindex
+			'search_noindex'     => 1, // Search Page robots noindex
+			'attachment_noindex' => 1, // Attachment Pages robots noindex
+			'site_noindex'       => 0, // Site Page robots noindex
 
 			// Robots follow.
-			'category_nofollow'		=> 0,	// Category Archive robots nofollow
-			'tag_nofollow'			=> 0,	// Tag Archive robots nofollow
-			'author_nofollow'		=> 0,	// Author Archive robots nofollow
-			'date_nofollow'			=> 0,	// Date Archive robots nofollow
-			'search_nofollow'		=> 0,	// Search Page robots nofollow
-			'attachment_nofollow'	=> 0,	// Attachment Pages robots noindex
-			'site_nofollow'			=> 0,	// Site Page robots nofollow
+			'category_nofollow'   => 0, // Category Archive robots nofollow
+			'tag_nofollow'        => 0, // Tag Archive robots nofollow
+			'author_nofollow'     => 0, // Author Archive robots nofollow
+			'date_nofollow'       => 0, // Date Archive robots nofollow
+			'search_nofollow'     => 0, // Search Page robots nofollow
+			'attachment_nofollow' => 0, // Attachment Pages robots noindex
+			'site_nofollow'       => 0, // Site Page robots nofollow
 
 			// Robots archive.
-			'category_noarchive'	=> 0,	// Category Archive robots noarchive
-			'tag_noarchive'			=> 0,	// Tag Archive robots noarchive
-			'author_noarchive'		=> 0,	// Author Archive robots noarchive
-			'date_noarchive'		=> 0,	// Date Archive robots noarchive
-			'search_noarchive'		=> 0,	// Search Page robots noarchive
-			'attachment_noarchive'	=> 0,	// Attachment Page robots noarchive
-			'site_noarchive'		=> 0,	// Site Page robots noarchive
+			'category_noarchive'   => 0, // Category Archive robots noarchive
+			'tag_noarchive'        => 0, // Tag Archive robots noarchive
+			'author_noarchive'     => 0, // Author Archive robots noarchive
+			'date_noarchive'       => 0, // Date Archive robots noarchive
+			'search_noarchive'     => 0, // Search Page robots noarchive
+			'attachment_noarchive' => 0, // Attachment Page robots noarchive
+			'site_noarchive'       => 0, // Site Page robots noarchive
 
 			// Robots pagination index.
-			'paged_noindex'			=> 1,	// Every second or later page noindex
-			'home_paged_noindex'	=> 0,	// Every second or later homepage noindex
+			'paged_noindex'      => 1, // Every second or later page noindex
+			'home_paged_noindex' => 0, // Every second or later homepage noindex
 
 			// Robots home.
-			'homepage_noindex'		=> 0,	// Home Page robots noindex
-			'homepage_nofollow'		=> 0,	// Home Page robots noarchive
-			'homepage_noarchive'	=> 0,	// Home Page robots nofollow
+			'homepage_noindex'   => 0, // Home Page robots noindex
+			'homepage_nofollow'  => 0, // Home Page robots noarchive
+			'homepage_noarchive' => 0, // Home Page robots nofollow
 
 			// Home meta.
 			'homepage_title'         => '', // Home Page Title string
@@ -181,36 +181,36 @@ class Site_Options extends Sanitize {
 			'homepage_social_image_id'  => 0,
 
 			// Relationships
-			'shortlink_tag'			=> 0,	// Adds shortlink tag
-			'prev_next_posts'		=> 0,	// Adds next/prev tags
-			'prev_next_archives'	=> 1,	// Adds next/prev tags
-			'prev_next_frontpage'	=> 1,	// Adds next/prev tags
+			'shortlink_tag'       => 0, // Adds shortlink tag
+			'prev_next_posts'     => 0, // Adds next/prev tags
+			'prev_next_archives'  => 1, // Adds next/prev tags
+			'prev_next_frontpage' => 1, // Adds next/prev tags
 
 			// Facebook.
-			'facebook_publisher'	=> '',	// Facebook Business Url
-			'facebook_author'		=> '',	// Facebook User URl
-			'facebook_appid'		=> '',	// Facebook App ID
+			'facebook_publisher' => '',	// Facebook Business Url
+			'facebook_author'    => '',	// Facebook User URl
+			'facebook_appid'     => '',	// Facebook App ID
 
 			// Dates.
-			'post_publish_time'		=> 1,	// Article Published Time
-			'post_modify_time'		=> 1,	// Article Modified Time
+			'post_publish_time' => 1, // Article Published Time
+			'post_modify_time'  => 1, // Article Modified Time
 
-			'page_publish_time'		=> 0,	// Article Published Time
-			'page_modify_time'		=> 0,	// Article Modified Time
+			'page_publish_time' => 0, // Article Published Time
+			'page_modify_time'  => 0, // Article Modified Time
 
-			'home_publish_time'		=> 0,	// Article Modified Time
-			'home_modify_time'		=> 0,	// Article Modified Time
+			'home_publish_time' => 0, // Article Modified Time
+			'home_modify_time'  => 0, // Article Modified Time
 
 			// Twitter.
-			'twitter_card' 			=> 'summary_large_image',	// Twitter Card layout. If no twitter:image image is found, it'll change to 'summary', radio
-			'twitter_site' 			=> '', 	// Twitter business @username
-			'twitter_creator' 		=> '', 	// Twitter user @username
+			'twitter_card'    => 'summary_large_image', // Twitter Card layout. If no twitter:image image is found, it'll change to 'summary', radio
+			'twitter_site'    => '', // Twitter business @username
+			'twitter_creator' => '', // Twitter user @username
 
 			// Social on/off.
-			'og_tags' 				=> 1,	// Output of Open Graph meta tags
-			'facebook_tags'			=> 1, 	// Output the Facebook meta tags
-			'twitter_tags'			=> 1, 	// Output the Twitter meta tags
-		//	'googleplus_tags'		=> 1, 	// Output the Google+ meta tags
+			'og_tags'         => 1, // Output of Open Graph meta tags
+			'facebook_tags'   => 1, // Output the Facebook meta tags
+			'twitter_tags'    => 1, // Output the Twitter meta tags
+		//	'googleplus_tags' => 1, // Output the Google+ meta tags
 
 			// Social FallBack images (fb = fallback)
 			'social_image_fb_url'   => '', // Fallback image URL
@@ -247,17 +247,17 @@ class Site_Options extends Sanitize {
 			'knowledge_tumblr'     => '', // Tumblr Account
 
 			// Sitemaps.
-			'sitemaps_output'		=> 1,	// Output of sitemaps
-			'sitemaps_modified'		=> 1,	// Add sitemaps modified time
-			'sitemap_timestamps'	=> '1',	// Sitemaps modified time format, dropdown
-			'sitemaps_robots'		=> 1,	// Add sitemaps location to robots.txt
-			'ping_google'			=> 1,	// Ping Google
-			'ping_bing'				=> 1,	// Ping Bing
-			'ping_yandex'			=> 1,	// Ping Yandex
-			'sitemap_styles'		=> 1,	// Whether to style the sitemap
-			'sitemap_logo'			=> 1,	// Whether to add logo to sitemap
-			'sitemap_color_main'	=> '333',		// Sitemap main color
-			'sitemap_color_accent'	=> '00cd98',	// Sitemap accent color
+			'sitemaps_output'      => 1,   // Output of sitemaps
+			'sitemaps_modified'    => 1,   // Add sitemaps modified time
+			'sitemap_timestamps'   => '1', // Sitemaps modified time format, dropdown
+			'sitemaps_robots'      => 1,   // Add sitemaps location to robots.txt
+			'ping_google'          => 1,   // Ping Google
+			'ping_bing'            => 1,   // Ping Bing
+			'ping_yandex'          => 1,   // Ping Yandex
+			'sitemap_styles'       => 1,   // Whether to style the sitemap
+			'sitemap_logo'         => 1,   // Whether to add logo to sitemap
+			'sitemap_color_main'   => '333',    // Sitemap main color
+			'sitemap_color_accent' => '00cd98', // Sitemap accent color
 
 			// Feed.
 			'excerpt_the_feed' => 1, // Generate feed Excerpts
@@ -362,10 +362,23 @@ class Site_Options extends Sanitize {
 		$new_options[ $plugin_updated ] = 1;
 		$options[ $plugin_updated ] = 1;
 
+		$plausible_missing_options = array(
+			'cache_meta_description',
+			'cache_meta_schema',
+			'cache_sitemap',
+			'cache_object',
+			'display_seo_bar_tables',
+			'display_seo_bar_metabox',
+		);
+
 		//* Merge the options. Add to if it's non-existent.
 		foreach ( $new_options as $key => $value ) {
 			if ( ! isset( $options[ $key ] ) ) {
-				$options[ $key ] = $value;
+				if ( in_array( $key, $plausible_missing_options, true ) ) {
+					$options[ $key ] = 0;
+				} else {
+					$options[ $key ] = $value;
+				}
 
 				if ( ! empty( $value ) )
 					$updated = true;

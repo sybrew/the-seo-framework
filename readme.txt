@@ -198,10 +198,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **Summarized:**
 / TODO
 
-**Important note:**
-	* A few options weren't correctly saved in the database.
-	* Because of this, the options might be automatically set to the default values upon update.
-
 * **For everyone:**
 	* **Added:**
 		/
@@ -247,7 +243,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* RTL: The Dynamic Title for the home page was reversed.
 		* bbPress topic tags now (mostly) output the correct data.
 		/
-		* TODO Some options were incorrectly set to default upon plugin update.
+		* Some options were incorrectly set to default upon plugin update.
 			* This has been handled correctly, so you won't notice anything from this bug upon upgrade.
 
 * **For translators:**
