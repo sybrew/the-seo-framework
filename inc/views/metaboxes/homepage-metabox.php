@@ -454,7 +454,7 @@ switch ( $instance ) :
 
 		?>
 		<p>
-			<label for="tsf_homepage_socialimage">
+			<label for="tsf_homepage_socialimage-url">
 				<strong><?php esc_html_e( 'Custom Home Page Image URL', 'autodescription' ); ?></strong>
 				<?php $this->make_info( __( 'Preferred Home Page Social Image URL location', 'autodescription' ), 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>
 			</label>

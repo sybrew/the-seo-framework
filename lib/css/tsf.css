@@ -590,13 +590,31 @@ body.js .tsf-metaboxes .tsf-tabs-content.tsf-active-tab-content {
 	padding: 15px 12px;
 	-webkit-flex: 10 1 350px;
 	flex: 10 1 350px;
-	box-shadow: 0 -1px 0 0 #e1e1e1;
+	box-shadow: 0 -1px 1px 0 #e1e1e1;
 }
 
 .tsf-singular-setting-label {
 	background-color: #f9f9f9;
 	-webkit-flex: 1 1 200px;
 	flex: 1 1 200px;
+}
+
+.tsf-singular-setting-label-item {
+	-webkit-flex-wrap: nowrap;
+	-ms-flex-wrap: nowrap;
+	flex-wrap: nowrap;
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	-webkit-justify-content: space-between;
+	justify-content: space-between;
+}
+
+.tsf-singular-setting-label-item > * {
+	margin-right: 4px;
+}
+
+.tsf-singular-setting-label-item > *:last-child {
+	margin-right: 0;
 }
 
 .tsf-singular-setting-label .tsf-counter {

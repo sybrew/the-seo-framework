@@ -249,6 +249,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* The preferred URL scheme selection now works, rather than always detecting it automatically. Sorry for that!
 			/
 			* TODO check out https://wordpress.org/support/topic/canonical-redirect-2/ parameters.
+		* Social Images labels now correctly focus on the input field when clicked.
+		* 301 redirect labels now correctly focus on the input field when clicked.
 
 * **For translators:**
 	* **Updated:**
