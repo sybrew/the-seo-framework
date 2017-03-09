@@ -101,9 +101,16 @@ function _wpmudev_domainmap_get_url( $path, $get_scheme = false ) {
 			$scheme = \the_seo_framework()->is_ssl() ? '1' : '0';
 
 		if ( '1' === $scheme ) {
+			//* HTTPS
 			$scheme_full = 'https://';
 			$scheme = 'https';
+		} elseif ( '2' === $scheme ) {
+			//* HTTP/HTTPS, use preferred scheme and build URL expected (https).
+			// This will be converted back anyway later if preferred is http.
+			$scheme_full = 'https://';
+			$scheme = '';
 		} else {
+			//* HTTP
 			$scheme_full = 'http://';
 			$scheme = 'http';
 		}

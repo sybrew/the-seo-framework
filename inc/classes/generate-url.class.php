@@ -151,13 +151,14 @@ class Generate_Url extends Generate_Title {
 			$scheme = $url_filter['scheme'];
 		}
 
-		//* Non-domainmap URL
+		//* Non-custom URL
 		if ( empty( $url ) ) {
+			//* Reset cache if request is for the home URL.
 			if ( $args['home'] )
 				$this->unset_current_subdomain();
 
 			$url = $this->add_url_host( $path );
-			$scheme = $this->is_ssl() ? 'https' : 'http';
+			$scheme = '';
 
 			$url = $this->add_url_subdomain( $url );
 		}

@@ -235,8 +235,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* The call was misplaced. Sorry about that!
 		* When emptying the floating title (while it's being on the right), the placeholder no longer jumps or animates.
 		* When the Home Page Settings metabox is closed on load, the dynamic placeholder is now no longer stacked when opened.
-		/
-		* TODO When you switch between other tabs and the General tab in the Home Page Settings metabox, the "are you sure you want to leave" is no longer triggered by accident.
+		* When you switch between other tabs and the General tab in the Home Page Settings metabox, the "are you sure you want to leave" is no longer triggered by accident.
 		* When the Inpost SEO Settings metabox is closed on load, the dynamic placeholder is now no longer stacked when opened.
 		* When moving your mouse up fast over The SEO Bar, some tooltips could've possibly hung.
 		* When on mobile, when you tap on a second or later SEO Bar while the first bar was hidden from visibility, the arrow could've been moved off-tap when the first entry was closed.
@@ -245,8 +244,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* bbPress topic tags now (mostly) output the correct data.
 		* Some options were incorrectly set to default upon plugin update.
 			* This has been handled correctly, so you won't notice anything from this bug upon upgrade.
-		/
-		* TODO With WPMUdev Domain Mapping, when no scheme has been preferred in mapping selection, the SEO settings preferred scheme now kicks in.
+		* With WPMUdev Domain Mapping, when no scheme has been preferred in mapping selection, the SEO settings preferred scheme now kicks in.
+		* The preferred URL scheme selection now works, rather than always detecting it automatically. Sorry for that!
 
 * **For translators:**
 	* **Updated:**
