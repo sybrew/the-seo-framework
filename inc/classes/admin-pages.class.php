@@ -465,8 +465,8 @@ class Admin_Pages extends Inpost {
 	 * @since 2.2.2
 	 * @uses $this->get_field_id() Constructs id attributes for use in form fields.
 	 *
-	 * @param string $id Field id base
-	 * @param boolean $echo echo or return
+	 * @param string $id Field id base.
+	 * @param boolean $echo Whether to escape echo or just return.
 	 * @return string Full field id
 	 */
 	public function field_id( $id, $echo = true ) {
@@ -510,7 +510,7 @@ class Admin_Pages extends Inpost {
 	 * @since 2.6.0
 	 *
 	 * @param string $input The input to wrap. Should already be escaped.
-	 * @param bool $echo Whether to echo or return.
+	 * @param boolean $echo Whether to escape echo or just return.
 	 * @return Wrapped $input.
 	 */
 	public function wrap_fields( $input = '', $echo = false ) {

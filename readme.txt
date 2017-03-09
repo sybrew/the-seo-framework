@@ -221,7 +221,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			2. Breadcrumbs no longer use fallback images, only set page/post images.
 				* Breadcrumbs' cache isn't invalidated, because this doesn't change the current usage behavior.
 			3. Parent pages' breadcrumbs now output social image, when applicable.
-			4. TODO The Blogpage-as-Homepage can now output a breadcrumb image, because you can now set an image in the homepage settings.
+			4. The Blogpage-as-Homepage can now output a breadcrumb image, because you can now set an image in the homepage settings.
 	* **Changed:**
 		* A source link is no longer generated on feed entries without content.
 	* **Removed:**
@@ -229,22 +229,24 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* All related options and outputs have been updated.
 			* When updating the plugin the upgrade handler will scan for the photo card option, and will change it to `summar_large_image` if it's `photo`.
 	* **Fixed:**
-		/
 		* The terms and taxonomies SEO bar now correctly displays robots values again.
 		* When emptying the Home Page Custom title, the Additions are now correctly updated once again.
 		* The feed excerpt generation and original content link generation work again.
 			* The call was misplaced. Sorry about that!
 		* When emptying the floating title (while it's being on the right), the placeholder no longer jumps or animates.
 		* When the Home Page Settings metabox is closed on load, the dynamic placeholder is now no longer stacked when opened.
+		/
+		* TODO When you switch between other tabs and the General tab in the Home Page Settings metabox, the "are you sure you want to leave" is no longer triggered by accident.
 		* When the Inpost SEO Settings metabox is closed on load, the dynamic placeholder is now no longer stacked when opened.
 		* When moving your mouse up fast over The SEO Bar, some tooltips could've possibly hung.
 		* When on mobile, when you tap on a second or later SEO Bar while the first bar was hidden from visibility, the arrow could've been moved off-tap when the first entry was closed.
 		* RTL: When Title additions have been set to "Right", the indentation of the title no longer shifts all the way to the left.
 		* RTL: The Dynamic Title for the home page was reversed.
 		* bbPress topic tags now (mostly) output the correct data.
-		/
 		* Some options were incorrectly set to default upon plugin update.
 			* This has been handled correctly, so you won't notice anything from this bug upon upgrade.
+		/
+		* TODO With WPMUdev Domain Mapping, when no scheme has been preferred in mapping selection, the SEO settings preferred scheme now kicks in.
 
 * **For translators:**
 	* **Updated:**
@@ -304,13 +306,14 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Method `get_image()`, use `get_social_image()` instead.
 		* Method `get_image_from_post_thumbnail()`, use `get_social_image_from_post_thumbnail()` instead.
 		* Method `is_front_page()`, use `is_real_front_page()` instead.
-			* Warning: The input parameter has been removed. It will ONLY check for the current page.
-			* Use method `is_front_page_by_id()` if you wish to check ONLY for the ID.
+			* **Warning**: The input parameter has been removed. It will check **only for the current page**.
+			* **Alternative**: Use the new method `is_front_page_by_id()` if you wish to check **only for the input ID**.
+			* This change has been introduced because the query would otherwise always return true on the frontpage. This way it's split.
+			* More of these query changes will be introduced in the future.
 	* **Fixed:**
 		* Method `the_seo_framework()->get_social_image_url_from_post_meta()` second parameter now works.
 	* **Filter Notes:**
 		* **Added:**
-			/
 			* `(bool) the_seo_framework_use_breadcrumb_seo_title`, determines whether to use custom SEO titles or WordPress set only.
 			* `(string) the_seo_framework_custom_field_description`, alters the Description from custom field.
 			* `(string) the_seo_framework_generated_description`, alters the generated Description.

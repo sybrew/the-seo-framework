@@ -895,7 +895,8 @@ final class Debug implements Debug_Interface {
 		//* Don't register this output.
 		$this->add_debug_output = false;
 
-		$output = $tsf->the_description()
+		$output = $tsf->robots()
+				. $tsf->the_description()
 				. $tsf->og_image()
 				. $tsf->og_locale()
 				. $tsf->og_type()
