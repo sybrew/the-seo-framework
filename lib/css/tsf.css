@@ -538,6 +538,60 @@ body.js .tsf-metaboxes .tsf-tabs-content.tsf-active-tab-content {
 	display: block;
 }
 
+#tsf-inpost-box .inside {
+	margin: 0;
+	padding: 0;
+}
+
+#tsf-inpost-box .inside:after,
+.tsf-singular-metabox:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.tsf-singular-metabox {
+	position: relative;
+	border-bottom: 1px solid #eee;
+}
+
+.tsf-singular-metabox:before {
+	display: block;
+	position: absolute;
+	content: '';
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: 24%;
+	background-color: #f9f9f9;
+	border-right: 1px solid #e1e1e1;
+}
+
+.tsf-singular-metabox-label,
+.tsf-singular-metabox-input {
+	float: left;
+	padding: 15px 12px;
+	-webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.tsf-singular-metabox-label {
+	width: 24%;
+	position: relative;
+	z-index: 2;
+}
+
+.tsf-singular-metabox-label .tsf-counter {
+	display: block;
+	font-weight: 400;
+	color: #666;
+}
+
+.tsf-singular-metabox-input {
+	width: 76%;
+}
+
 /**
  * End tabs.
  */
@@ -696,6 +750,24 @@ a.tsf-set-social-image.button {
 
 	.wp-list-table .is-expanded td.tsf-seo-bar-wrap:not(.hidden) {
 		overflow: initial !important;
+	}
+
+	.tsf-singular-metabox {
+		padding: 15px 12px;
+	}
+
+	.tsf-singular-metabox:before {
+		display: none;
+	}
+
+	.tsf-singular-metabox-label,
+	.tsf-singular-metabox-input {
+		padding: 0;
+		width: 100%;
+	}
+
+	.tsf-singular-metabox-label {
+		margin-bottom: 10px;
 	}
 }
 

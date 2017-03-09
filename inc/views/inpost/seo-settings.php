@@ -134,135 +134,162 @@ switch ( $instance ) :
 
 		?>
 		<?php if ( 'above' === $this->inpost_seo_bar || $this->is_option_checked( 'display_seo_bar_metabox' ) ) : ?>
-		<p>
-			<strong><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></strong>
-			<div>
-				<?php $this->post_status( $post_id, 'inpost', true ); ?>
+		<div class="tsf-singular-metabox">
+			<div class="tsf-singular-metabox-label">
+				<strong><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></strong>
 			</div>
-		</p>
+			<div class="tsf-singular-metabox-input">
+				<div>
+					<?php $this->post_status( $post_id, 'inpost', true ); ?>
+				</div>
+			</div>
+		</div>
 		<?php endif; ?>
 
-		<p>
-			<label for="autodescription_title"><strong><?php printf( esc_html__( 'Custom %s Title', 'autodescription' ), esc_html( $type ) ); ?></strong>
-				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 50 to 55 characters', 'autodescription' ); ?>">[?]</a>
-				<span class="description tsf-counter">
-					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_title_chars">' . (int) mb_strlen( $tit_len_parsed ) . '</span>' ); ?>
-					<span class="hide-if-no-js tsf-ajax"></span>
-				</span>
-			</label>
-		</p>
-		<p>
-			<div id="tsf-title-wrap">
-				<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" placeholder="<?php echo esc_attr( $doctitle_placeholder ); ?>" value="<?php echo esc_attr( $this->get_custom_field( '_genesis_title' ) ); ?>" />
-				<span id="tsf-title-offset" class="hide-if-no-js"></span><span id="tsf-title-placeholder" class="hide-if-no-js"></span>
+		<div class="tsf-singular-metabox">
+			<div class="tsf-singular-metabox-label">
+				<label for="autodescription_title"><strong><?php printf( esc_html__( 'Custom %s Title', 'autodescription' ), esc_html( $type ) ); ?></strong>
+					<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 50 to 55 characters', 'autodescription' ); ?>">[?]</a>
+					<span class="description tsf-counter">
+						<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_title_chars">' . (int) mb_strlen( $tit_len_parsed ) . '</span>' ); ?>
+						<span class="hide-if-no-js tsf-ajax"></span>
+					</span>
+				</label>
 			</div>
-		</p>
+			<div class="tsf-singular-metabox-input">
+				<div id="tsf-title-wrap">
+					<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" placeholder="<?php echo esc_attr( $doctitle_placeholder ); ?>" value="<?php echo esc_attr( $this->get_custom_field( '_genesis_title' ) ); ?>" />
+					<span id="tsf-title-offset" class="hide-if-no-js"></span><span id="tsf-title-placeholder" class="hide-if-no-js"></span>
+				</div>
+			</div>
+		</div>
 
-		<p>
-			<label for="autodescription_description">
-				<strong><?php printf( esc_html__( 'Custom %s Description', 'autodescription' ), esc_html( $type ) ); ?></strong>
-				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 145 to 155 characters', 'autodescription' ); ?>">[?]</a>
-				<span class="description tsf-counter">
-					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_description_chars">' . (int) mb_strlen( $desc_len_parsed ) . '</span>' ); ?>
-					<span class="hide-if-no-js tsf-ajax"></span>
-				</span>
-			</label>
-		</p>
-		<p>
-			<textarea class="large-text" name="autodescription[_genesis_description]" id="autodescription_description" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="4" cols="4"><?php echo esc_attr( $this->get_custom_field( '_genesis_description' ) ); ?></textarea>
-		</p>
 
-		<p>
-			<label for="autodescription_socialimage">
-				<strong><?php esc_html_e( 'Custom Social Image URL', 'autodescription' ); ?></strong>
-				<?php $this->make_info( sprintf( __( 'Preferred %s Social Image URL location', 'autodescription' ), esc_attr( $type ) ), 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>
-			</label>
-		</p>
-		<p class="hide-if-no-js">
-			<?php
-			//* Already escaped.
-			echo $this->get_social_image_uploader_form( 'autodescription_socialimage' );
-			?>
-		</p>
-		<p>
-			<input class="large-text" type="text" name="autodescription[_social_image_url]" id="autodescription_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_social_image_url' ) ); ?>" />
-			<?php
-			/**
-			 * Insert form element only if JS is active. If JS is inactive, then this will cause it to be emptied on $_POST
-			 * @TODO use disabled and jQuery.removeprop( 'disabled' )?
-			 */
-			?>
-			<script>
-				document.getElementById( 'autodescription_socialimage-url' ).insertAdjacentHTML( 'afterend', '<input type="hidden" name="autodescription[_social_image_id]" id="autodescription_socialimage-id" value="<?php echo absint( $this->get_custom_field( '_social_image_id' ) ); ?>" />' );
-			</script>
-		</p>
+		<div class="tsf-singular-metabox">
+			<div class="tsf-singular-metabox-label">
+				<label for="autodescription_description">
+					<strong><?php printf( esc_html__( 'Custom %s Description', 'autodescription' ), esc_html( $type ) ); ?></strong>
+					<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 145 to 155 characters', 'autodescription' ); ?>">[?]</a>
+					<span class="description tsf-counter">
+						<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_description_chars">' . (int) mb_strlen( $desc_len_parsed ) . '</span>' ); ?>
+						<span class="hide-if-no-js tsf-ajax"></span>
+					</span>
+				</label>
+			</div>
+			<div class="tsf-singular-metabox-input">
+				<textarea class="large-text" name="autodescription[_genesis_description]" id="autodescription_description" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="4" cols="4"><?php echo esc_attr( $this->get_custom_field( '_genesis_description' ) ); ?></textarea>
+			</div>
+		</div>
 
-		<p>
-			<label for="autodescription_canonical">
-				<strong><?php esc_html_e( 'Custom Canonical URL', 'autodescription' ); ?></strong>
-				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/139066?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Preferred %s URL location', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
-			</label>
-		</p>
-		<p>
-			<input class="large-text" type="text" name="autodescription[_genesis_canonical_uri]" id="autodescription_canonical" placeholder="<?php echo esc_url( $canonical_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_genesis_canonical_uri' ) ); ?>" />
-		</p>
-
-		<p><strong><?php esc_html_e( 'Robots Meta Settings', 'autodescription' ); ?></strong></p>
-		<p>
-			<label for="autodescription_noindex"><input type="checkbox" name="autodescription[_genesis_noindex]" id="autodescription_noindex" value="1" <?php checked( $this->get_custom_field( '_genesis_noindex' ) ); ?> />
+		<div class="tsf-singular-metabox">
+			<div class="tsf-singular-metabox-label">
+				<label for="autodescription_socialimage">
+					<strong><?php esc_html_e( 'Custom Social Image URL', 'autodescription' ); ?></strong>
+					<?php $this->make_info( sprintf( __( 'Preferred %s Social Image URL location', 'autodescription' ), esc_attr( $type ) ), 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>
+				</label>
+			</div>
+			<div class="tsf-singular-metabox-input">
+				<p class="hide-if-no-js">
+					<?php
+					//* Already escaped.
+					echo $this->get_social_image_uploader_form( 'autodescription_socialimage' );
+					?>
+				</p>
+				<input class="large-text" type="text" name="autodescription[_social_image_url]" id="autodescription_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_social_image_url' ) ); ?>" />
 				<?php
-					/* translators: 1: Option, 2: Post or Page */
-					printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'noindex' ), esc_html( $type ) );
+				/**
+				* Insert form element only if JS is active. If JS is inactive, then this will cause it to be emptied on $_POST
+				* @TODO use disabled and jQuery.removeprop( 'disabled' )?
+				*/
 				?>
-				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/93710?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Tell Search Engines not to show this %s in their search results', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
-			</label>
+				<script>
+					document.getElementById( 'autodescription_socialimage-url' ).insertAdjacentHTML( 'afterend', '<input type="hidden" name="autodescription[_social_image_id]" id="autodescription_socialimage-id" value="<?php echo absint( $this->get_custom_field( '_social_image_id' ) ); ?>" />' );
+				</script>
+			</div>
+		</div>
 
-			<br>
+		<div class="tsf-singular-metabox">
+			<div class="tsf-singular-metabox-label">
+				<label for="autodescription_canonical">
+					<strong><?php esc_html_e( 'Custom Canonical URL', 'autodescription' ); ?></strong>
+					<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/139066?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Preferred %s URL location', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
+				</label>
+			</div>
+			<div class="tsf-singular-metabox-input">
+				<input class="large-text" type="text" name="autodescription[_genesis_canonical_uri]" id="autodescription_canonical" placeholder="<?php echo esc_url( $canonical_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_genesis_canonical_uri' ) ); ?>" />
+			</div>
+		</div>
 
-			<label for="autodescription_nofollow"><input type="checkbox" name="autodescription[_genesis_nofollow]" id="autodescription_nofollow" value="1" <?php checked( $this->get_custom_field( '_genesis_nofollow' ) ); ?> />
-				<?php
-					/* translators: 1: Option, 2: Post or Page */
-					printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'nofollow' ), esc_html( $type ) );
-				?>
-				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/96569?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Tell Search Engines not to follow links on this %s', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
-			</label>
+		<div class="tsf-singular-metabox">
+			<div class="tsf-singular-metabox-label">
+				<strong><?php esc_html_e( 'Robots Meta Settings', 'autodescription' ); ?></strong>
+			</div>
+			<div class="tsf-singular-metabox-input">
+				<label for="autodescription_noindex"><input type="checkbox" name="autodescription[_genesis_noindex]" id="autodescription_noindex" value="1" <?php checked( $this->get_custom_field( '_genesis_noindex' ) ); ?> />
+					<?php
+						/* translators: 1: Option, 2: Post or Page */
+						printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'noindex' ), esc_html( $type ) );
+					?>
+					<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/93710?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Tell Search Engines not to show this %s in their search results', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
+				</label>
 
-			<br>
+				<br>
 
-			<label for="autodescription_noarchive"><input type="checkbox" name="autodescription[_genesis_noarchive]" id="autodescription_noarchive" value="1" <?php checked( $this->get_custom_field( '_genesis_noarchive' ) ); ?> />
-				<?php
-					/* translators: 1: Option, 2: Post or Page */
-					printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'noarchive' ), esc_html( $type ) );
-				?>
-				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/79812?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Tell Search Engines not to save a cached copy of this %s', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
-			</label>
-		</p>
+				<label for="autodescription_nofollow"><input type="checkbox" name="autodescription[_genesis_nofollow]" id="autodescription_nofollow" value="1" <?php checked( $this->get_custom_field( '_genesis_nofollow' ) ); ?> />
+					<?php
+						/* translators: 1: Option, 2: Post or Page */
+						printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'nofollow' ), esc_html( $type ) );
+					?>
+					<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/96569?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Tell Search Engines not to follow links on this %s', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
+				</label>
 
-		<p><strong><?php esc_html_e( 'Local Search Settings', 'autodescription' ); ?></strong></p>
-		<p>
-			<label for="autodescription_exclude_local_search"><input type="checkbox" name="autodescription[exclude_local_search]" id="autodescription_exclude_local_search" value="1" <?php checked( $this->get_custom_field( 'exclude_local_search' ) ); ?> />
-				<?php printf( esc_html__( 'Exclude this %s from local search', 'autodescription' ), esc_html( $type ) ); ?>
-				<span title="<?php printf( esc_attr__( 'This excludes this %s from local on-site search results', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</span>
-			</label>
-		</p>
+				<br>
 
-		<p>
-			<label for="autodescription_redirect">
-				<strong><?php esc_html_e( 'Custom 301 Redirect URL', 'autodescription' ); ?></strong>
-				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/93633?hl=' . $language ); ?>" target="_blank" title="<?php esc_attr_e( 'This will force visitors to go to another URL', 'autodescription' ); ?>">[?]</a>
-			</label>
-		</p>
-		<p>
-			<input class="large-text" type="text" name="autodescription[redirect]" id="genesis_redirect" value="<?php echo esc_url( $this->get_custom_field( 'redirect' ) ); ?>" />
-		</p>
+				<label for="autodescription_noarchive"><input type="checkbox" name="autodescription[_genesis_noarchive]" id="autodescription_noarchive" value="1" <?php checked( $this->get_custom_field( '_genesis_noarchive' ) ); ?> />
+					<?php
+						/* translators: 1: Option, 2: Post or Page */
+						printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'noarchive' ), esc_html( $type ) );
+					?>
+					<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/79812?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Tell Search Engines not to save a cached copy of this %s', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
+				</label>
+			</div>
+		</div>
+
+		<div class="tsf-singular-metabox">
+			<div class="tsf-singular-metabox-label">
+				<strong><?php esc_html_e( 'Local Search Settings', 'autodescription' ); ?></strong>
+			</div>
+			<div class="tsf-singular-metabox-input">
+				<label for="autodescription_exclude_local_search"><input type="checkbox" name="autodescription[exclude_local_search]" id="autodescription_exclude_local_search" value="1" <?php checked( $this->get_custom_field( 'exclude_local_search' ) ); ?> />
+					<?php printf( esc_html__( 'Exclude this %s from local search', 'autodescription' ), esc_html( $type ) ); ?>
+					<span title="<?php printf( esc_attr__( 'This excludes this %s from local on-site search results', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</span>
+				</label>
+			</div>
+		</div>
+
+		<div class="tsf-singular-metabox">
+			<div class="tsf-singular-metabox-label">
+				<label for="autodescription_redirect">
+					<strong><?php esc_html_e( 'Custom 301 Redirect URL', 'autodescription' ); ?></strong>
+					<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/93633?hl=' . $language ); ?>" target="_blank" title="<?php esc_attr_e( 'This will force visitors to go to another URL', 'autodescription' ); ?>">[?]</a>
+				</label>
+			</div>
+			<div class="tsf-singular-metabox-input">
+				<input class="large-text" type="text" name="autodescription[redirect]" id="genesis_redirect" value="<?php echo esc_url( $this->get_custom_field( 'redirect' ) ); ?>" />
+			</div>
+		</div>
 
 		<?php if ( 'below' === $this->inpost_seo_bar ) : ?>
-		<p>
-			<strong><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></strong>
-			<div>
-				<?php $this->post_status( $post_id, 'inpost', true ); ?>
+		<div class="tsf-singular-metabox">
+			<div class="tsf-singular-metabox-label">
+				<strong><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></strong>
 			</div>
-		</p>
+			<div class="tsf-singular-metabox-input">
+				<div>
+					<?php $this->post_status( $post_id, 'inpost', true ); ?>
+				</div>
+			</div>
+		</div>
 		<?php endif;
 		break;
 
