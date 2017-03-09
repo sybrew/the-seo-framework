@@ -552,7 +552,7 @@ class Generate_Url extends Generate_Title {
 		 *
 		 * @param string $scheme The current URL scheme.
 		 */
-		return $scheme = (string) apply_filters( 'the_seo_framework_preferred_url_scheme', $scheme );
+		return $scheme = (string) \apply_filters( 'the_seo_framework_preferred_url_scheme', $scheme );
 	}
 
 	/**

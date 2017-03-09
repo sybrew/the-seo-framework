@@ -223,6 +223,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			3. Parent pages' breadcrumbs now output social image, when applicable.
 			4. The Blogpage-as-Homepage can now output a breadcrumb image, because you can now set an image in the homepage settings.
 	* **Changed:**
+		* Redesigned In-Post SEO Settings layout. Thank you [Daniel](https://github.com/danielpost)!
 		* A source link is no longer generated on feed entries without content.
 	* **Removed:**
 		* Twitter `photo` card. This has been deprecated and has been replaced with `summary_large_image`.
@@ -246,6 +247,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* This has been handled correctly, so you won't notice anything from this bug upon upgrade.
 		* With WPMUdev Domain Mapping, when no scheme has been preferred in mapping selection, the SEO settings preferred scheme now kicks in.
 		* The preferred URL scheme selection now works, rather than always detecting it automatically. Sorry for that!
+			/
+			* TODO check out https://wordpress.org/support/topic/canonical-redirect-2/ parameters.
 
 * **For translators:**
 	* **Updated:**
