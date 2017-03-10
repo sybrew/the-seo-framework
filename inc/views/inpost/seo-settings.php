@@ -136,8 +136,10 @@ switch ( $instance ) :
 		<?php if ( 'above' === $this->inpost_seo_bar || $this->is_option_checked( 'display_seo_bar_metabox' ) ) : ?>
 		<div class="tsf-singular-setting tsf-inpost-flex">
 			<div class="tsf-singular-setting-label tsf-inpost-flex">
-				<div class="tsf-singular-setting-label-item tsf-inpost-flex">
-					<strong><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></strong>
+				<div class="tsf-singular-setting-label-inner-wrap tsf-inpost-flex">
+					<div class="tsf-singular-setting-label-item tsf-inpost-flex">
+						<div><strong><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></strong></div>
+					</div>
 				</div>
 			</div>
 			<div class="tsf-singular-setting-input tsf-inpost-flex">
@@ -150,14 +152,16 @@ switch ( $instance ) :
 
 		<div class="tsf-singular-setting tsf-inpost-flex">
 			<div class="tsf-singular-setting-label tsf-inpost-flex">
-				<label for="autodescription_title" class="tsf-singular-setting-label-item tsf-inpost-flex">
-					<strong><?php printf( esc_html__( 'Custom %s Title', 'autodescription' ), esc_html( $type ) ); ?></strong>
-					<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 50 to 55 characters', 'autodescription' ); ?>">[?]</a>
-				</label>
-				<span class="description tsf-counter">
-					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_title_chars">' . (int) mb_strlen( $tit_len_parsed ) . '</span>' ); ?>
-					<span class="hide-if-no-js tsf-ajax"></span>
-				</span>
+				<div class="tsf-singular-setting-label-inner-wrap tsf-inpost-flex">
+					<label for="autodescription_title" class="tsf-singular-setting-label-item tsf-inpost-flex">
+						<div><strong><?php printf( esc_html__( 'Custom %s Title', 'autodescription' ), esc_html( $type ) ); ?></strong></div>
+						<div><?php $this->make_info( __( 'Recommended Length: 50 to 55 characters', 'autodescription' ), 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3' ); ?></div>
+					</label>
+					<span class="description tsf-counter">
+						<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_title_chars">' . (int) mb_strlen( $tit_len_parsed ) . '</span>' ); ?>
+						<span class="hide-if-no-js tsf-ajax"></span>
+					</span>
+				</div>
 			</div>
 			<div class="tsf-singular-setting-input tsf-inpost-flex">
 				<div id="tsf-title-wrap">
@@ -170,14 +174,16 @@ switch ( $instance ) :
 
 		<div class="tsf-singular-setting tsf-inpost-flex">
 			<div class="tsf-singular-setting-label tsf-inpost-flex">
-				<label for="autodescription_description" class="tsf-singular-setting-label-item tsf-inpost-flex">
-					<strong><?php printf( esc_html__( 'Custom %s Description', 'autodescription' ), esc_html( $type ) ); ?></strong>
-					<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 145 to 155 characters', 'autodescription' ); ?>">[?]</a>
-				</label>
-				<span class="description tsf-counter">
-					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_description_chars">' . (int) mb_strlen( $desc_len_parsed ) . '</span>' ); ?>
-					<span class="hide-if-no-js tsf-ajax"></span>
-				</span>
+				<div class="tsf-singular-setting-label-inner-wrap tsf-inpost-flex">
+					<label for="autodescription_description" class="tsf-singular-setting-label-item tsf-inpost-flex">
+						<div><strong><?php printf( esc_html__( 'Custom %s Description', 'autodescription' ), esc_html( $type ) ); ?></strong></div>
+						<div><?php $this->make_info( __( 'Recommended Length: 145 to 155 characters', 'autodescription' ), 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1' ); ?></div>
+					</label>
+					<span class="description tsf-counter">
+						<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription_description_chars">' . (int) mb_strlen( $desc_len_parsed ) . '</span>' ); ?>
+						<span class="hide-if-no-js tsf-ajax"></span>
+					</span>
+				</div>
 			</div>
 			<div class="tsf-singular-setting-input tsf-inpost-flex">
 				<textarea class="large-text" name="autodescription[_genesis_description]" id="autodescription_description" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="4" cols="4"><?php echo esc_attr( $this->get_custom_field( '_genesis_description' ) ); ?></textarea>
@@ -186,18 +192,20 @@ switch ( $instance ) :
 
 		<div class="tsf-singular-setting tsf-inpost-flex">
 			<div class="tsf-singular-setting-label tsf-inpost-flex">
-				<label for="autodescription_socialimage-url" class="tsf-singular-setting-label-item tsf-inpost-flex">
-					<strong><?php esc_html_e( 'Custom Social Image URL', 'autodescription' ); ?></strong>
-					<?php $this->make_info( sprintf( __( 'Preferred %s Social Image URL location', 'autodescription' ), esc_attr( $type ) ), 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>
-				</label>
+				<div class="tsf-singular-setting-label-inner-wrap tsf-inpost-flex">
+					<label for="autodescription_socialimage-url" class="tsf-singular-setting-label-item tsf-inpost-flex">
+						<div><strong><?php esc_html_e( 'Custom Social Image URL', 'autodescription' ); ?></strong></div>
+						<div><?php $this->make_info( sprintf( __( 'Preferred %s Social Image URL location', 'autodescription' ), esc_attr( $type ) ), 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?></div>
+					</label>
+				</div>
 			</div>
 			<div class="tsf-singular-setting-input tsf-inpost-flex">
-				<p class="hide-if-no-js">
+				<div class="hide-if-no-js tsf-social-image-buttons">
 					<?php
 					//* Already escaped.
 					echo $this->get_social_image_uploader_form( 'autodescription_socialimage' );
 					?>
-				</p>
+				</div>
 				<input class="large-text" type="text" name="autodescription[_social_image_url]" id="autodescription_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_social_image_url' ) ); ?>" />
 				<?php
 				/**
@@ -213,10 +221,12 @@ switch ( $instance ) :
 
 		<div class="tsf-singular-setting tsf-inpost-flex">
 			<div class="tsf-singular-setting-label tsf-inpost-flex">
-				<label for="autodescription_canonical" class="tsf-singular-setting-label-item tsf-inpost-flex">
-					<strong><?php esc_html_e( 'Custom Canonical URL', 'autodescription' ); ?></strong>
-					<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/139066?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Preferred %s URL location', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
-				</label>
+				<div class="tsf-singular-setting-label-inner-wrap tsf-inpost-flex">
+					<label for="autodescription_canonical" class="tsf-singular-setting-label-item tsf-inpost-flex">
+						<div><strong><?php esc_html_e( 'Custom Canonical URL', 'autodescription' ); ?></strong></div>
+						<div><?php $this->make_info( sprintf( __( 'Preferred %s URL location', 'autodescription' ), $type ), 'https://support.google.com/webmasters/answer/139066?hl=' . $language ); ?></div>
+					</label>
+				</div>
 			</div>
 			<div class="tsf-singular-setting-input tsf-inpost-flex">
 				<input class="large-text" type="text" name="autodescription[_genesis_canonical_uri]" id="autodescription_canonical" placeholder="<?php echo esc_url( $canonical_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_genesis_canonical_uri' ) ); ?>" />
@@ -225,8 +235,10 @@ switch ( $instance ) :
 
 		<div class="tsf-singular-setting tsf-inpost-flex">
 			<div class="tsf-singular-setting-label tsf-inpost-flex">
-				<div class="tsf-singular-setting-label-item tsf-inpost-flex">
-					<strong><?php esc_html_e( 'Robots Meta Settings', 'autodescription' ); ?></strong>
+				<div class="tsf-singular-setting-label-inner-wrap tsf-inpost-flex">
+					<div class="tsf-singular-setting-label-item tsf-inpost-flex">
+						<div><strong><?php esc_html_e( 'Robots Meta Settings', 'autodescription' ); ?></strong></div>
+					</div>
 				</div>
 			</div>
 			<div class="tsf-singular-setting-input tsf-inpost-flex">
@@ -234,8 +246,9 @@ switch ( $instance ) :
 					<?php
 						/* translators: 1: Option, 2: Post or Page */
 						printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'noindex' ), esc_html( $type ) );
+						echo ' ';
+						$this->make_info( sprintf( __( 'Tell Search Engines not to show this %s in their search results', 'autodescription' ), $type ), 'https://support.google.com/webmasters/answer/93710?hl=' . $language );
 					?>
-					<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/93710?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Tell Search Engines not to show this %s in their search results', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
 				</label>
 
 				<br>
@@ -244,8 +257,9 @@ switch ( $instance ) :
 					<?php
 						/* translators: 1: Option, 2: Post or Page */
 						printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'nofollow' ), esc_html( $type ) );
+						echo ' ';
+						$this->make_info( sprintf( __( 'Tell Search Engines not to follow links on this %s', 'autodescription' ), $type ), 'https://support.google.com/webmasters/answer/96569?hl=' . $language );
 					?>
-					<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/96569?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Tell Search Engines not to follow links on this %s', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
 				</label>
 
 				<br>
@@ -254,16 +268,19 @@ switch ( $instance ) :
 					<?php
 						/* translators: 1: Option, 2: Post or Page */
 						printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'noarchive' ), esc_html( $type ) );
+						echo ' ';
+						$this->make_info( sprintf( __( 'Tell Search Engines not to save a cached copy of this %s', 'autodescription' ), $type ), 'https://support.google.com/webmasters/answer/79812?hl=' . $language );
 					?>
-					<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/79812?hl=' . $language ); ?>" target="_blank" title="<?php printf( esc_attr__( 'Tell Search Engines not to save a cached copy of this %s', 'autodescription' ), esc_attr( $type ) ); ?>">[?]</a>
 				</label>
 			</div>
 		</div>
 
 		<div class="tsf-singular-setting tsf-inpost-flex">
 			<div class="tsf-singular-setting-label tsf-inpost-flex">
-				<div class="tsf-singular-setting-label-item tsf-inpost-flex">
-					<strong><?php esc_html_e( 'Local Search Settings', 'autodescription' ); ?></strong>
+				<div class="tsf-singular-setting-label-inner-wrap tsf-inpost-flex">
+					<div class="tsf-singular-setting-label-item tsf-inpost-flex">
+						<div><strong><?php esc_html_e( 'Local Search Settings', 'autodescription' ); ?></strong></div>
+					</div>
 				</div>
 			</div>
 			<div class="tsf-singular-setting-input tsf-inpost-flex">
@@ -276,10 +293,12 @@ switch ( $instance ) :
 
 		<div class="tsf-singular-setting tsf-inpost-flex">
 			<div class="tsf-singular-setting-label tsf-inpost-flex">
-				<label for="autodescription_redirect" class="tsf-singular-setting-label-item tsf-inpost-flex">
-					<strong><?php esc_html_e( 'Custom 301 Redirect URL', 'autodescription' ); ?></strong>
-					<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/93633?hl=' . $language ); ?>" target="_blank" title="<?php esc_attr_e( 'This will force visitors to go to another URL', 'autodescription' ); ?>">[?]</a>
-				</label>
+				<div class="tsf-singular-setting-label-inner-wrap tsf-inpost-flex">
+					<label for="autodescription_redirect" class="tsf-singular-setting-label-item tsf-inpost-flex">
+						<div><strong><?php esc_html_e( 'Custom 301 Redirect URL', 'autodescription' ); ?></strong></div>
+						<div><a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/93633?hl=' . $language ); ?>" target="_blank" title="<?php esc_attr_e( 'This will force visitors to go to another URL', 'autodescription' ); ?>">[?]</a></div>
+					</label>
+				</div>
 			</div>
 			<div class="tsf-singular-setting-input tsf-inpost-flex">
 				<input class="large-text" type="text" name="autodescription[redirect]" id="autodescription_redirect" value="<?php echo esc_url( $this->get_custom_field( 'redirect' ) ); ?>" />
@@ -289,8 +308,10 @@ switch ( $instance ) :
 		<?php if ( 'below' === $this->inpost_seo_bar ) : ?>
 		<div class="tsf-singular-setting tsf-inpost-flex">
 			<div class="tsf-singular-setting-label tsf-inpost-flex">
-				<div class="tsf-singular-setting-label-item tsf-inpost-flex">
-					<strong><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></strong>
+				<div class="tsf-singular-setting-label-inner-wrap tsf-inpost-flex">
+					<div class="tsf-singular-setting-label-item tsf-inpost-flex">
+						<div><strong><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></strong></div>
+					</div>
 				</div>
 			</div>
 			<div class="tsf-singular-setting-input tsf-inpost-flex">

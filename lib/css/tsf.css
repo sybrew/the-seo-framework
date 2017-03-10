@@ -538,6 +538,14 @@ body.js .tsf-metaboxes .tsf-tabs-content.tsf-active-tab-content {
 	display: block;
 }
 
+/**
+ * End tabs.
+ */
+
+/**
+ * Start Inpost.
+ */
+
 #tsf-inpost-box .inside {
 	margin: 0;
 	padding: 0;
@@ -599,6 +607,11 @@ body.js .tsf-metaboxes .tsf-tabs-content.tsf-active-tab-content {
 	flex: 1 1 200px;
 }
 
+.tsf-singular-setting-input {
+	-webkit-justify-content: center;
+	justify-content: center;
+}
+
 .tsf-singular-setting-label-item {
 	-webkit-flex-wrap: nowrap;
 	-ms-flex-wrap: nowrap;
@@ -607,6 +620,13 @@ body.js .tsf-metaboxes .tsf-tabs-content.tsf-active-tab-content {
 	flex-direction: row;
 	-webkit-justify-content: space-between;
 	justify-content: space-between;
+	-webkit-flex-grow: 0;
+	flex-grow: 0;
+}
+
+.tsf-singular-setting-label-inner-wrap {
+	-webkit-justify-content: center;
+	justify-content: center;
 }
 
 .tsf-singular-setting-label-item > * {
@@ -618,13 +638,17 @@ body.js .tsf-metaboxes .tsf-tabs-content.tsf-active-tab-content {
 }
 
 .tsf-singular-setting-label .tsf-counter {
-	display: block;
 	font-weight: 400;
 	color: #666;
+	margin-top: 15px;
+}
+
+.tsf-social-image-buttons {
+	margin-bottom: 15px;
 }
 
 /**
- * End tabs.
+ * End inpost.
  */
 
 .tsf-metaboxes .tsf-default-selected {
