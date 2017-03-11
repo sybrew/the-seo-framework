@@ -126,24 +126,24 @@ switch ( $instance ) :
 				<?php $this->make_info( __( 'Preferred Social Image fallback URL location', 'autodescription' ), 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>
 			</label>
 		</p>
+		<p>
+			<input class="large-text" type="text" name="<?php $this->field_name( 'social_image_fb_url' ); ?>" id="tsf_fb_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_field_value( 'social_image_fb_url' ) ); ?>" />
+		</p>
 		<p class="hide-if-no-js">
 			<?php
 			//* Already escaped.
 			echo $this->get_social_image_uploader_form( 'tsf_fb_socialimage' );
 			?>
 		</p>
-		<p>
-			<input class="large-text" type="text" name="<?php $this->field_name( 'social_image_fb_url' ); ?>" id="tsf_fb_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_field_value( 'social_image_fb_url' ) ); ?>" />
-			<?php
-			/**
-			 * Insert form element only if JS is active. If JS is inactive, then this will cause it to be emptied on $_POST
-			 * @TODO use disabled and jQuery.removeprop( 'disabled' )?
-			 */
-			?>
-			<script>
-				document.getElementById( 'tsf_fb_socialimage-url' ).insertAdjacentHTML( 'afterend', '<input type="hidden" name="<?php $this->field_name( 'social_image_fb_id' ); ?>" id="tsf_fb_socialimage-id" value="<?php echo absint( $this->get_field_value( 'social_image_fb_id' ) ); ?>" />' );
-			</script>
-		</p>
+		<?php
+		/**
+		 * Insert form element only if JS is active. If JS is inactive, then this will cause it to be emptied on $_POST
+		 * @TODO use disabled and jQuery.removeprop( 'disabled' )?
+		 */
+		?>
+		<script>
+			document.getElementById( 'tsf_fb_socialimage-url' ).insertAdjacentHTML( 'afterend', '<input type="hidden" name="<?php $this->field_name( 'social_image_fb_id' ); ?>" id="tsf_fb_socialimage-id" value="<?php echo absint( $this->get_field_value( 'social_image_fb_id' ) ); ?>" />' );
+		</script>
 
 		<hr>
 

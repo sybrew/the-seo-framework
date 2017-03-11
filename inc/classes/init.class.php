@@ -465,8 +465,8 @@ class Init extends Query {
 			 */
 			$sybre = (bool) \apply_filters( 'sybre_waaijer_<3', true );
 
-			$start = \esc_html__( 'Start The Seo Framework', 'autodescription' );
-			$end = \esc_html__( 'End The Seo Framework', 'autodescription' );
+			$start = \esc_html__( 'Start The SEO Framework', 'autodescription' );
+			$end = \esc_html__( 'End The SEO Framework', 'autodescription' );
 			$me = $sybre ? ' ' . \esc_html__( 'by Sybre Waaijer', 'autodescription' ) : '';
 
 			$indicatorbefore = '<!-- ' . $start . $me . ' -->' . "\r\n";

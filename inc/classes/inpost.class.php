@@ -141,7 +141,7 @@ class Inpost extends Doing_It_Right {
 		 * @uses $this->post_type_supports_custom_seo()
 		 * @since 2.3.9
 		 */
-		if ( $this->post_type_supports_custom_seo( $post_type ) ) {
+		if ( $this->post_type_supports_custom_seo( $post_type ) ) :
 
 			$post = \get_post_type_object( $post_type );
 
@@ -154,14 +154,29 @@ class Inpost extends Doing_It_Right {
 					$args = array( $title, 'is_post_page' );
 
 					/**
-					 * Applies filters the_seo_framework_metabox_id : string The metabox priority and class ID.
+					 * Applies filters 'the_seo_framework_metabox_id' : string
+					 *
+					 * Alters The metabox class and ID.
+					 *
 					 * @since 2.6.0
 					 * @NOTE warning: might cause CSS and JS conflicts.
 					 * @TODO solve note.
 					 * @priority medium 2.7.0
+					 *
+					 * @param string $id The metabox class/ID.
 					 */
 					$id = (string) \apply_filters( 'the_seo_framework_metabox_id', 'tsf-inpost-box' );
-					$context = 'normal';
+
+					/**
+					 * Applies filters 'the_seo_framework_metabox_id' : string
+					 *
+					 * Alters the inpost metabox priority and class ID.
+					 *
+					 * @since 2.9.0
+					 *
+					 * @param string $context, default 'normal'. Accepts 'normal', 'side' and 'advanced'.
+					 */
+					$context = (string) \apply_filters( 'the_seo_framework_metabox_context', 'normal' );
 
 					/**
 					 * High priority, this box is seen right below the post/page edit screen.
@@ -174,7 +189,7 @@ class Inpost extends Doing_It_Right {
 					\add_meta_box( $id, sprintf( \__( '%s SEO Settings', 'autodescription' ), $title ), array( $this, 'pre_seo_box' ), $post_type, $context, $priority, $args );
 				}
 			}
-		}
+		endif;
 	}
 
 	/**

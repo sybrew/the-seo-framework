@@ -459,24 +459,25 @@ switch ( $instance ) :
 				<?php $this->make_info( __( 'Preferred Home Page Social Image URL location', 'autodescription' ), 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>
 			</label>
 		</p>
+		<p>
+			<input class="large-text" type="text" name="<?php $this->field_name( 'homepage_social_image_url' ); ?>" id="tsf_homepage_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_field_value( 'homepage_social_image_url' ) ); ?>" />
+
+		</p>
 		<p class="hide-if-no-js">
 			<?php
 			//* Already escaped.
 			echo $this->get_social_image_uploader_form( 'tsf_homepage_socialimage' );
 			?>
 		</p>
-		<p>
-			<input class="large-text" type="text" name="<?php $this->field_name( 'homepage_social_image_url' ); ?>" id="tsf_homepage_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_field_value( 'homepage_social_image_url' ) ); ?>" />
-			<?php
-			/**
-			 * Insert form element only if JS is active. If JS is inactive, then this will cause it to be emptied on $_POST
-			 * @TODO use disabled and jQuery.removeprop( 'disabled' )?
-			 */
-			?>
-			<script>
-				document.getElementById( 'tsf_homepage_socialimage-url' ).insertAdjacentHTML( 'afterend', '<input type="hidden" name="<?php $this->field_name( 'homepage_social_image_id' ); ?>" id="tsf_homepage_socialimage-id" value="<?php echo absint( $this->get_field_value( 'homepage_social_image_id' ) ); ?>" />' );
-			</script>
-		</p>
+		<?php
+		/**
+		 * Insert form element only if JS is active. If JS is inactive, then this will cause it to be emptied on $_POST
+		 * @TODO use disabled and jQuery.removeprop( 'disabled' )?
+		 */
+		?>
+		<script>
+			document.getElementById( 'tsf_homepage_socialimage-url' ).insertAdjacentHTML( 'afterend', '<input type="hidden" name="<?php $this->field_name( 'homepage_social_image_id' ); ?>" id="tsf_homepage_socialimage-id" value="<?php echo absint( $this->get_field_value( 'homepage_social_image_id' ) ); ?>" />' );
+		</script>
 		<?php
 		break;
 

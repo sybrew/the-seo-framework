@@ -225,6 +225,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Changed:**
 		* Redesigned In-Post SEO Settings layout. Thank you [Daniel](https://github.com/danielpost)!
 		* A source link is no longer generated on feed entries without content.
+		* The social image selection buttons have been moved below the bound text input.
 	* **Removed:**
 		* Twitter `photo` card. This has been deprecated and has been replaced with `summary_large_image`.
 			* All related options and outputs have been updated.
@@ -251,6 +252,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* TODO check out https://wordpress.org/support/topic/canonical-redirect-2/ parameters.
 		* Social Images labels now correctly focus on the input field when clicked.
 		* 301 redirect labels now correctly focus on the input field when clicked.
+		/
+		* TODO The floating title placeholder is now correctly recalculated on resize.
+			* See https://github.com/sybrew/The-SEO-Framework-Extension-Manager/blob/master/lib/js/tsfem.js#L768-L785 for correct implementation to prevent lag.
 
 * **For translators:**
 	* **Updated:**
@@ -273,8 +277,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Altered: Added the word "manually", because you're better off manually copying it from the source code for shortening the URL; e.g. for Twitter.
 			* Altered: "little to no" now is "no", because it really has no SEO value.
 		* "A social image can be displayed when your website is shared. They are a great way to grab attention."
-			* Now is: A social image can be displayed when your website is shared. It is a great way to grab attention.
+			* Now is: "A social image can be displayed when your website is shared. It is a great way to grab attention.""
 			* Grammar: It's one image.
+		* "Start The Seo Framework" / "End The Seo Framework"
+			* Now is: "Start The SEO Framework" and "End The SEO Framework".
+			* Typo: "Seo" should've been SEO.
 
 * **For developers:**
 	* **Added:**
@@ -324,6 +331,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* `(string) the_seo_framework_fetched_description_excerpt`, alters the excerpt to use for generating a description.
 			* `(int) the_seo_framework_current_admin_id`, allows changing of the admin query ID.
 			* `(array) the_seo_framework_available_twitter_cards`, lists the available Twitter cards. Not index sensitive.
+			* `(string) the_seo_framework_metabox_context`, alters the metabox screen context.
 
 = Full changelog =
 

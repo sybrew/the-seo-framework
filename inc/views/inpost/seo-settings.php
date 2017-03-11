@@ -200,13 +200,13 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-singular-setting-input tsf-inpost-flex">
+				<input class="large-text" type="text" name="autodescription[_social_image_url]" id="autodescription_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_social_image_url' ) ); ?>" />
 				<div class="hide-if-no-js tsf-social-image-buttons">
 					<?php
 					//* Already escaped.
 					echo $this->get_social_image_uploader_form( 'autodescription_socialimage' );
 					?>
 				</div>
-				<input class="large-text" type="text" name="autodescription[_social_image_url]" id="autodescription_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_social_image_url' ) ); ?>" />
 				<?php
 				/**
 				* Insert form element only if JS is active. If JS is inactive, then this will cause it to be emptied on $_POST
