@@ -1559,7 +1559,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			'20%'   => 'tsf-20',
 			'16%'   => 'tsf-16',
 			'12.5%' => 'tsf-12-5',
-			'11%'   => 'ad-11',
+			'11%'   => 'tsf-11',
 			'10%'   => 'tsf-10',
 		);
 	}

@@ -200,8 +200,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * **For everyone:**
 	* **Added:**
-		/
-		* TODO The inpost SEO settings are now devided in tabs.
+		* The inpost SEO settings are now devided in tabs.
 			* This allows me to add more options in the near future, either through this plugin or even extensions.
 			* Stay tuned on its enhanced implementation!
 		* [Schema.org sitename](https://developers.google.com/search/docs/data-types/sitename) `alternateName` output.
@@ -222,6 +221,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 				* Breadcrumbs' cache isn't invalidated, because this doesn't change the current usage behavior.
 			3. Parent pages' breadcrumbs now output social image, when applicable.
 			4. The Blogpage-as-Homepage can now output a breadcrumb image, because you can now set an image in the homepage settings.
+		* Navigational tabs in on the SEO settings page now quickly fade, rather than "instantly" change.
+			* This subtly initiates a guided focus and hints you subconciously to what has changed. Yes, TSF invades your mind.
+		* When you use browser navigation (go back/forward), the navigational tabs are now corresponding to the previous selection.
+			* Yes, this is glitchy because browsers are slow, but it's not common for this to happen.
+			* No, this can't work on the new In-post tabs. Because WordPress resets all radio buttons on navigation.
 	* **Changed:**
 		* Redesigned In-Post SEO Settings layout. Thank you [Daniel](https://github.com/danielpost)!
 		* A source link is no longer generated on feed entries without content.
@@ -285,7 +289,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * **For developers:**
 	* **Added:**
-		* (JavaScript) A triggered event after The SEO Framework's jQuery code has been initiatlized: `tsf-ready`.
+		* (JavaScript) A triggered event after The SEO Framework's jQuery code has been initiatlized on `document.body`: `tsf-ready`.
+		* (JavaScript) A triggered event after an SEO settings tab has been toggled and when the content is visible (i.e. `display:block;`) on the tab's radio button: `tsf-tab-toggled`.
+		* (JavaScript) A triggered event after an inpost SEO settings tab has been toggled and when the content is visible (i.e. `display:flex;`) on the tab's radio button: `tsf-flex-tab-toggled`.
+		* (JavaScript) A triggered event that runs on any call that can affect the flexbox' size, like window resize, or admin menu collapse: `tsf-flex-resize`. Only runs when tsf-flex is found.
 		* Method `do_redirect()`. Only use this on action `template_redirect`.
 		* Method `update_option`, allows for easily updating single SEO options. Use `update_settings` if you wish to update multiple option values at once.
 		* Method `delete_object_cache`, allows for easily deleting The SEO Framework object cache.
@@ -332,6 +339,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* `(int) the_seo_framework_current_admin_id`, allows changing of the admin query ID.
 			* `(array) the_seo_framework_available_twitter_cards`, lists the available Twitter cards. Not index sensitive.
 			* `(string) the_seo_framework_metabox_context`, alters the metabox screen context.
+			* `(array) the_seo_framework_inpost_settings_tabs`, allows for inpost metabox manipulation.
+		* **Changed:**
+			* `(bool|string) the_seo_framework_inpost_seo_bar` no longer has effect on Singular post types.
 
 = Full changelog =
 

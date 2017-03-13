@@ -44,9 +44,7 @@ class Metaboxes extends Site_Options {
 	 * Outputs Tabs and settings content.
 	 *
 	 * @since 2.3.6
-	 *
-	 * @refactored
-	 * @since 2.6.0
+	 * @since 2.6.0 Refactored.
 	 *
 	 * @param string $id The Nav Tab ID
 	 * @param array $tabs the tab content {
@@ -58,7 +56,7 @@ class Metaboxes extends Site_Options {
 	 *		)
 	 *	}
 	 * @param string $version the The SEO Framework version for debugging. May be emptied.
-	 * @param bool $use_tabs Whether to output tabs, only works when $tabs only has one count.
+	 * @param bool $use_tabs Whether to output tabs, only works when $tabs is greater than 1.
 	 */
 	public function nav_tab_wrapper( $id, $tabs = array(), $version = '2.3.6', $use_tabs = true ) {
 
@@ -104,7 +102,7 @@ class Metaboxes extends Site_Options {
 		/**
 		 * Start Content.
 		 *
-		 * The content is relative to the navigation, and uses CSS to become visible.
+		 * The content is relative to the navigation and outputs navigational tabs too, but uses CSS to become invisible on JS.
 		 */
 		$count = 1;
 		foreach ( $tabs as $tab => $value ) :
@@ -137,11 +135,11 @@ class Metaboxes extends Site_Options {
 
 				$callback = isset( $value['callback'] ) ? $value['callback'] : '';
 
-				if ( $callback ) :
+				if ( $callback ) {
 					$params = isset( $value['args'] ) ? $value['args'] : '';
-					$output = $this->call_function( $callback, $version, $params );
-					echo $output;
-				endif;
+					//* Should already be escaped.
+					echo $this->call_function( $callback, $version, $params );
+				}
 				?>
 			</div>
 			<?php
