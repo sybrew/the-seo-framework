@@ -668,16 +668,22 @@ input[type="radio"].tsf-flex-nav-tab-radio {
 	/* IE11 fix */
 	-webkit-flex: 1 1 100%;
 	flex: 1 1 100%;
+	/* Firefox fix, don't use overflow:hidden because that could cause more issues. */
+	-webkit-flex-wrap: nowrap;
+	-ms-flex-wrap: nowrap;
+	flex-wrap: nowrap;
+	max-width: 100%;
 }
 
 .tsf-flex-nav-tab-inner {
 	-webkit-flex-direction: row;
 	flex-direction: row;
-	-webkit-flex-basis: 100%;
-	flex-basis: 100%;
 	-webkit-flex-wrap: nowrap;
 	-ms-flex-wrap: nowrap;
 	flex-wrap: nowrap;
+	/* IE11 reverse fix for newer browsers */
+	-webkit-flex: 1 0 auto;
+	flex: 1 0 auto;
 }
 
 .tsf-flex-nav-tab {
@@ -686,10 +692,13 @@ input[type="radio"].tsf-flex-nav-tab-radio {
 	/* Edge bug */
 	-webkit-flex: 0 1 125px;
 	flex: 0 1 125px;
-	/* Edge fix */
+	/* IE11 bug */
+	-webkit-flex: 1 1 100%;
+	flex: 1 1 100%;
+	/* Edge/IE11 fix */
 	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
-	max-width: 125px; /* I wanted this to be min-width */
+	max-width: 125px; /* I wanted this to be flex-basis */
 }
 
 .tsf-flex-nav-tab-label {

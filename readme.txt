@@ -198,6 +198,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **Summarized:**
 / TODO
 
+// NOTE: Dropped IE 9 support. Has acccidental IE 10 support (woohoo... closure compiler should fix the "let" usage. Script debug version is broken). IE 11 is still supported.
+
 * **For everyone:**
 	* **Added:**
 		* The inpost SEO settings are now devided in tabs.
