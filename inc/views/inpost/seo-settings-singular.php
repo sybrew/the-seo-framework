@@ -88,7 +88,9 @@ switch ( $instance ) :
 		 */
 		$tabs = (array) apply_filters( 'the_seo_framework_inpost_settings_tabs', $default_tabs, $type );
 
+		echo '<div class="tsf-flex tsf-flex-inside-wrap">';
 		$this->inpost_flex_nav_tab_wrapper( 'inpost', $tabs, '2.6.0' );
+		echo '</div>';
 		break;
 
 	case 'inpost_general' :

@@ -200,7 +200,6 @@ span.tsf-seo-bar-inner-wrap {
 	position: relative;
 }
 
-
 span.tsf-seo-bar-section-wrap {
 	display: table-cell;
 	border-collapse: collapse;
@@ -574,6 +573,14 @@ body.js .tsf-metaboxes .tsf-tabs-content.tsf-active-tab-content {
 	display: none;
 }
 
+.tsf-flex-inside-wrap {
+	/* IE11 wrapper fix */
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
+}
+
 .tsf-flex-setting {
 	width: 100%;
 	-webkit-flex-direction: row;
@@ -658,6 +665,9 @@ input[type="radio"].tsf-flex-nav-tab-radio {
 	align-items: baseline;
 	-webkit-flex-direction: row;
 	flex-direction: row;
+	/* IE11 fix */
+	-webkit-flex: 1 1 100%;
+	flex: 1 1 100%;
 }
 
 .tsf-flex-nav-tab-inner {
@@ -949,7 +959,7 @@ a.tsf-set-social-image.button {
 	@media only screen and ( min-width: 768px ) {
 		/**
 		 * https://bugzilla.mozilla.org/show_bug.cgi?id=587438
-		 * Only fix when title is second element and there are more than 6 elemnents in the table.
+		 * Only fix when title is second element and there are more than 6 elements in the table.
 		 */
 		.widefat tr th.column-title:nth-child(2):nth-last-child(n+6),
 		.widefat tr td.column-title:nth-child(2):nth-last-child(n+6),
