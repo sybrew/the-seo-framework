@@ -486,7 +486,7 @@ class Generate_Url extends Generate_Title {
 		else :
 			if ( $t->rewrite['hierarchical'] ) {
 				$hierarchical_slugs = array();
-				$ancestors = get_ancestors( $term->term_id, $taxonomy, 'taxonomy' );
+				$ancestors = \get_ancestors( $term->term_id, $taxonomy, 'taxonomy' );
 
 				foreach ( (array) $ancestors as $ancestor ) {
 					$ancestor_term = get_term( $ancestor, $taxonomy );
@@ -508,7 +508,7 @@ class Generate_Url extends Generate_Title {
 		endif;
 
 		//* Add plausible domain subdirectories.
-		$url = \trailingslashit( get_option( 'home' ) ) . ltrim( $path, ' \\/' );
+		$url = \trailingslashit( \get_option( 'home' ) ) . ltrim( $path, ' \\/' );
 		$path = $this->set_url_scheme( $url, 'relative' );
 
 		return $path;
@@ -610,6 +610,8 @@ class Generate_Url extends Generate_Title {
 	 * Set URL scheme based on filter.
 	 *
 	 * @since 2.6.0
+	 * @since 2.8.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @param string $url The url with scheme.
 	 * @param string $scheme The current scheme.
@@ -628,10 +630,12 @@ class Generate_Url extends Generate_Title {
 		 * (string) 'relative' 	: Scheme relative
 		 * (void) null			: Do nothing
 		 *
-		 * @param string $current_scheme the current used scheme.
 		 *
 		 * @since 2.4.2
 		 * @since 2.8.0 Deprecated.
+		 * @deprecated
+		 *
+		 * @param string $current_scheme the current used scheme.
 		 */
 		$scheme_settings = \apply_filters( 'the_seo_framework_canonical_force_scheme', null, $current_scheme );
 

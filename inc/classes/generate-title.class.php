@@ -442,7 +442,7 @@ class Generate_Title extends Generate_Description {
 		$title = $this->do_title_pre_filter( '', $args, false );
 		$blogname = '';
 
-		$is_front_page = $this->is_real_front_page() || $args['page_on_front'] || $this->is_front_page_by_id( $args['term_id'] );
+		$is_front_page = $args['page_on_front'] || $this->is_real_front_page() || ( $this->is_front_page_by_id( $args['term_id'] ) && ! $this->is_archive() );
 
 		$seplocation = $this->get_title_seplocation( $seplocation );
 

@@ -666,14 +666,20 @@ input[type="radio"].tsf-flex-nav-tab-radio {
 	-webkit-flex-basis: 100%;
 	flex-basis: 100%;
 	-webkit-flex-wrap: nowrap;
+	-ms-flex-wrap: nowrap;
 	flex-wrap: nowrap;
 }
 
 .tsf-flex-nav-tab {
 	-webkit-flex-direction: row;
 	flex-direction: row;
+	/* Edge bug */
 	-webkit-flex: 0 1 125px;
 	flex: 0 1 125px;
+	/* Edge fix */
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
+	max-width: 125px; /* I wanted this to be min-width */
 }
 
 .tsf-flex-nav-tab-label {
@@ -709,6 +715,9 @@ input[type="radio"].tsf-flex-nav-tab-radio {
 .tsf-flex-tab-content {
 	-webkit-flex: 1 0 100%;
 	flex: 1 0 100%;
+	-webkit-flex-wrap: nowrap;
+	-ms-flex-wrap: nowrap;
+	flex-wrap: nowrap;
 }
 
 body.js .tsf-flex-tab-content {
