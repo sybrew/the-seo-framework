@@ -68,12 +68,6 @@ switch ( $instance ) :
 				'dashicon' => 'admin-settings',
 				'args' => array( $type ),
 			),
-			'dummy4' => array(
-				'name'     => __( 'Dummy yon', 'autodescription' ),
-				'callback' => '__return_empty_string',
-				'dashicon' => 'filter',
-				'args' => array( $type ),
-			),
 		);
 
 		/**

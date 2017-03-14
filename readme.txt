@@ -200,6 +200,64 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 // NOTE: Dropped IE 9 support. Has acccidental IE 10 support (woohoo... closure compiler should fix the "let" usage. Script debug version is broken). IE 11 is still supported.
 
+
+**For everyone: Tabbed In-post SEO layout**
+/
+* This release brings tabbed layout to the in-post SEO settings.
+* With this change I've also altered the overal looks, with the help from [Daniel](https://github.com/danielpost).
+* This look is based on [Advanced Custom Fields](https://wordpress.org/plugins/advanced-custom-fields/)' administrative layout.
+* This layout allows extensions from the [Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/) to be implemented much easier.
+* This layout is self-responsive! This means it's not dependent on the browser-size, but on how much content will fit.
+* This layout therefore allows the SEO settings to be placed in the right sidebar! Take a look at the [new screenshots](https://wordpress.org/plugins/autodescription/screenshots/). TODO Add screenshots and link to it.
+
+**For everyone: Browser support**
+
+* This release brings [CSS Flexbox](https://www.w3.org/TR/css-flexbox-1/) to the new in-post SEO settings metabox.
+* The flexbox module is still experimental, in a way that not all browsers correctly support this to the fullest extend.
+* Support for as many browsers feasible has been implemented. Enjoy!
+
+/ TODO move this to detailed with notice.
+* **Confirmed browser support:**
+	* Internet Explorer:
+		* IE11 (glitchy on resize, but fine at all other times)
+		* IE10 (leave page bug, wont-fix -- support is not maintained)
+	* Edge:
+		* Edge 14
+		* Edge 13
+		* Edge 12 or lower unconfirmed
+	* Safari:
+		* Safari 10
+		* Safari 9.1
+		* Safari 8
+		* Safari 7.1
+		* Safari 6.2
+	* iOS:
+		* iOS 9+ Chrome/Safari
+		* iOS 7+ Chrome/Safari (box shadow glitch on menu)
+	* Chrome:
+		* Chrome 57 (dev)
+		* Chrome 49+,
+		* Chrome 48 or lower unconfirmed
+	* Android:
+		* Android 4.3+ (Chrome)
+		* Android 4.2 or lower unconfirmed
+	* Firefox:
+		* Firefox 54 (dev)
+		* Firefox 45+ (displays menu callouts in wrap, as was originally intended)
+		* Firefox 44 or lower unconfirmed
+	* Opera:
+		* Opera 44
+		* Opera 35+
+		* Opera 34 or lower unconfirmed
+	* Yandex:
+		* Yandex 14.12
+		* Yandex 14.11 or lower unconfirmed
+
+* **Confirmed not to work:**
+	* IE9 or lower
+	* iOS 6 or lower
+	* Safari 5 or lower
+
 * **For everyone:**
 	* **Added:**
 		* The inpost SEO settings are now devided in tabs.

@@ -702,7 +702,7 @@ input[type="radio"].tsf-flex-nav-tab-radio {
 }
 
 .tsf-flex-nav-tab-label {
-	padding: 12px 15px;
+	padding: 12px;
 	text-align: center;
 	-webkit-flex-direction: row;
 	flex-direction: row;
