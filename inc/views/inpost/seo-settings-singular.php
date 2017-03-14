@@ -234,6 +234,7 @@ switch ( $instance ) :
 					<label for="autodescription_exclude_local_search"><input type="checkbox" name="autodescription[exclude_local_search]" id="autodescription_exclude_local_search" value="1" <?php checked( $this->get_custom_field( 'exclude_local_search' ) ); ?> />
 						<?php
 						printf( esc_html__( 'Exclude this %s from local search', 'autodescription' ), esc_html( $type ) );
+						echo ' ';
 						$this->make_info( sprintf( __( 'This excludes this %s from local on-site search results', 'autodescription' ), $type ) );
 						?>
 					</label>
