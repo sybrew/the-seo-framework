@@ -316,9 +316,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* TODO check out https://wordpress.org/support/topic/canonical-redirect-2/ parameters.
 		* Social Images labels now correctly focus on the input field when clicked.
 		* 301 redirect labels now correctly focus on the input field when clicked.
-		/
-		* TODO The floating title placeholder is now correctly recalculated on resize.
-			* See https://github.com/sybrew/The-SEO-Framework-Extension-Manager/blob/master/lib/js/tsfem.js#L768-L785 for correct implementation to prevent lag.
+		* The floating title placeholder is now correctly recalculated on resize.
+		* The floating title placeholder's offset is now perfectly calculated and no longer uses the padding of the input box, but an actual typographic space instead.
 
 * **For translators:**
 	* **Updated:**

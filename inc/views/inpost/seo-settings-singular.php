@@ -50,24 +50,6 @@ switch ( $instance ) :
 				'dashicon' => 'share',
 				'args' => array( $type ),
 			),
-			'dummy1' => array(
-				'name'     => __( 'Dummy ichi', 'autodescription' ),
-				'callback' => '__return_empty_string',
-				'dashicon' => 'format-status',
-				'args' => array( $type ),
-			),
-			'dummy2' => array(
-				'name'     => __( 'Dummy ni', 'autodescription' ),
-				'callback' => '__return_empty_string',
-				'dashicon' => 'admin-media',
-				'args' => array( $type ),
-			),
-			'dummy3' => array(
-				'name'     => __( 'Dummy san', 'autodescription' ),
-				'callback' => '__return_empty_string',
-				'dashicon' => 'admin-settings',
-				'args' => array( $type ),
-			),
 		);
 
 		/**

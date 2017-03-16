@@ -124,7 +124,7 @@ th.column-tsf-seo-bar-wrap ~ th {
 	top: 0;
 	left: 0;
 	overflow: hidden;
-	white-space: nowrap;
+	white-space: pre;
 	text-overflow: ellipsis;
 }
 
@@ -755,10 +755,13 @@ body.js .tsf-flex-tab-content.tsf-flex-tab-content-active {
 	display: flex;
 }
 
-.tsf-flex-tab-no-js {
+.tsf-flex-tabs-content-no-js {
 	background-color: #f3f3f3;
 	border-bottom: 1px solid #dadada;
 	box-shadow: 0 2px 0 0 #dadada inset;
+}
+
+.tsf-flex-tab-no-js {
 	-webkit-align-items: baseline;
 	align-items: baseline;
 	-webkit-flex-direction: row;
