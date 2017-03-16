@@ -517,6 +517,7 @@ class Detect extends Render {
 	 *
 	 * @since 2.6.0
 	 * @since 2.8.0 Added check_option parameter.
+	 * @since 2.9.0 Now also checks for subdirectory installations.
 	 *
 	 * @param bool $check_option Whether to check for sitemap option.
 	 * @return bool True when no conflicting plugins are detected or when The SEO Framework's Sitemaps are output.
@@ -536,6 +537,9 @@ class Detect extends Render {
 			if ( ! $this->is_option_checked( 'sitemaps_output' ) )
 				return false;
 		}
+
+		if ( $this->is_subdirectory_installation() )
+			return false;
 
 		return true;
 	}
@@ -1049,5 +1053,20 @@ class Detect extends Render {
 		static $cache = null;
 
 		return isset( $cache ) ? $cache : $this->wp_version( '4.5.0', '>=' ) && \current_theme_supports( 'custom-logo' );
+	}
+
+	/**
+	 * Determines if the current installation is on a subdirectory.
+	 *
+	 * @since 2.9.0-
+	 * @staticvar $bool $cache
+	 *
+	 * @return bool
+	 */
+	public function is_subdirectory_installation() {
+
+		static $cache = null;
+
+		return isset( $cache ) ? $cache : '' !== $this->get_home_path();
 	}
 }

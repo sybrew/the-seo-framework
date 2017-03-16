@@ -134,9 +134,7 @@ switch ( $instance ) :
 
 	case 'the_seo_framework_sitemaps_metabox_robots' :
 
-		$site_url = $this->the_home_url_from_cache( true );
-		$robots_url = trailingslashit( $site_url ) . 'robots.txt';
-		$here = '<a href="' . esc_url( $robots_url ) . '" target="_blank" title="' . esc_attr__( 'View robots.txt', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
+		$locate_url = true;
 
 		?>
 		<h4><?php esc_html_e( 'Robots.txt Settings', 'autodescription' ); ?></h4>
@@ -164,10 +162,21 @@ switch ( $instance ) :
 				), true
 			);
 		else :
-			$this->description( __( 'Another robots.txt sitemap Location addition has been detected.', 'autodescription' ) );
+			if ( $this->is_subdirectory_installation() ) {
+				$this->description( __( 'No robots.txt file can be generated on subdirectory installations.', 'autodescription' ) );
+				$locate_url = false;
+			} else {
+				$this->description( __( 'Another robots.txt sitemap location addition has been detected.', 'autodescription' ) );
+			}
 		endif;
 
-		$this->description_noesc( sprintf( esc_html_x( 'The robots.txt file can be found %s.', '%s = here', 'autodescription' ), $here ) );
+		if ( $locate_url ) {
+			$site_url = $this->the_home_url_from_cache( true );
+			$robots_url = trailingslashit( $site_url ) . 'robots.txt';
+			$here = '<a href="' . esc_url( $robots_url ) . '" target="_blank" title="' . esc_attr__( 'View robots.txt', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
+
+			$this->description_noesc( sprintf( esc_html_x( 'The robots.txt file can be found %s.', '%s = here', 'autodescription' ), $here ) );
+		}
 		break;
 
 	case 'the_seo_framework_sitemaps_metabox_timestamps' :

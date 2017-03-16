@@ -305,7 +305,7 @@ class Sitemaps extends Metaboxes {
 		if ( $this->the_seo_framework_debug ) {
 			echo "\r\n" . '<!-- Site estimated peak usage: ' . number_format( memory_get_peak_usage() / 1024 / 1024, 3 ) . ' MB -->';
 			echo "\r\n" . '<!-- System estimated peak usage: ' . number_format( memory_get_peak_usage( true ) / 1024 / 1024, 3 ) . ' MB -->';
-			echo "\r\n" . '<!-- Freed memory prior to generation: ' . number_format( $this->clean_up_globals( true ) / 1024, 3 ) . ' kB -->';
+			echo "\r\n" . '<!-- Freed memory prior to generation: ' . number_format( $this->clean_up_globals_for_sitemap( true ) / 1024, 3 ) . ' kB -->';
 			echo "\r\n" . '<!-- Sitemap generation time: ' . ( number_format( microtime( true ) - $timer_start, 6 ) ) . ' seconds -->';
 		}
 	}
@@ -474,6 +474,8 @@ class Sitemaps extends Metaboxes {
 		 * Maximum pages and posts to fetch.
 		 * A total of 2100, consisting of 3 times $max_posts
 		 *
+		 * @since 2.2.9
+		 *
 		 * Applies filters the_seo_framework_sitemap_pages_count : int max pages
 		 * Applies filters the_seo_framework_sitemap_posts_count : int max posts
 		 * Applies filters the_seo_framework_sitemap_custom_posts_count : int max posts
@@ -548,11 +550,107 @@ class Sitemaps extends Metaboxes {
 			$wp_query->query = $wp_query->query_vars = \wp_parse_args( $args, $defaults );
 			$latest_pages = $wp_query->get_posts();
 		}
-		$latest_pages_amount = (int) count( $latest_pages );
+		$latest_pages_amount = count( $latest_pages );
 
 		if ( $latest_pages_amount > 0 ) :
 
-			$id_on_front = $this->has_page_on_front() ? (int) \get_option( 'page_on_front' ) : (int) \get_option( 'page_for_posts' );
+			$page_on_front = $this->has_page_on_front();
+			$page_on_front_id = (int) \get_option( 'page_on_front' );
+			$page_for_posts_id = (int) \get_option( 'page_for_posts' );
+
+			$id_on_front = $page_on_front ? $page_on_front_id : (int) $page_for_posts_id;
+
+			//* Remove ID on front from list and add frontpage to list.
+			if ( $page_on_front && false !== $key_on_front = array_search( $id_on_front, $latest_pages, true ) ) {
+				unset( $latest_pages[ $key_on_front ] );
+			}
+
+			if ( '' === $excluded || empty( $excluded[ $id_on_front ] ) ) :
+				//* Fetch the noindex option from the page and homepage.
+				$indexed = ! $this->get_option( 'homepage_noindex' ) && ( ! $id_on_front || ! $this->get_custom_field( '_genesis_noindex', $id_on_front ) );
+
+				//* Continue if indexed.
+				if ( $indexed ) {
+					$content .= "\t<url>\r\n";
+					$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'home' => true ) ) . "</loc>\r\n";
+
+					// Keep it consistent. Only parse if page_lastmod is true.
+					if ( $home_lastmod ) {
+						if ( $page_on_front ) {
+							$front_object = \get_post( $id_on_front );
+						} else {
+							$args = array(
+								'numberposts' => 1,
+								'post_type' => 'post',
+								'post_status' => 'publish',
+								'orderby' => 'post_date',
+								'order' => 'DESC',
+								'offset' => 0,
+							);
+							$post = \wp_get_recent_posts( $args, OBJECT );
+							$front_object = isset( $post[0] ) ? $post[0] : null;
+							unset( $post );
+						}
+						$front_modified_gmt = isset( $front_object->post_modified_gmt ) ? $front_object->post_modified_gmt : '0000-00-00 00:00:00';
+
+						if ( '0000-00-00 00:00:00' !== $front_modified_gmt )
+							$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $front_modified_gmt ) . "</lastmod>\r\n";
+					}
+
+					$content .= "\t\t<priority>1.0</priority>\r\n";
+					$content .= "\t</url>\r\n";
+				}
+			endif;
+
+			//* Render the page for posts.
+			if ( $page_on_front && $page_for_posts_id ) :
+
+				//* Remove ID for blog from list and add frontpage to list.
+				if ( false !== $key_for_posts = array_search( $page_for_posts_id, $latest_pages, true ) ) {
+					unset( $latest_pages[ $key_for_posts ] );
+				}
+
+				if ( '' === $excluded || empty( $excluded[ $page_for_posts_id ] ) ) :
+					//* Fetch the noindex option from the page and homepage.
+					$indexed = ! $this->get_custom_field( '_genesis_noindex', $page_for_posts_id );
+					$page = \get_post( $page_for_posts_id );
+
+					//* Continue if indexed.
+					if ( $indexed && isset( $page->ID ) ) {
+						$content .= "\t<url>\r\n";
+						$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $page, 'id' => $page_for_posts_id ) ) . "</loc>\r\n";
+
+						// Keep it consistent. Only parse if page_lastmod is true.
+						if ( $page_lastmod ) {
+							$args = array(
+								'numberposts' => 1,
+								'post_type' => 'post',
+								'post_status' => 'publish',
+								'orderby' => 'post_date',
+								'order' => 'DESC',
+								'offset' => 0,
+							);
+							$post = \wp_get_recent_posts( $args, OBJECT );
+							$lastest_post = isset( $post[0] ) ? $post[0] : null;
+							$latest_post_modified_gmt = isset( $lastest_post->post_modified_gmt ) ? $lastest_post->post_modified_gmt : '0000-00-00 00:00:00';
+							$page_for_posts_modified_gmt = $page->post_modified_gmt;
+
+							if ( strtotime( $latest_post_modified_gmt ) > strtotime( $page_for_posts_modified_gmt ) ) {
+								$page_modified_gmt = $latest_post_modified_gmt;
+							} else {
+								$page_modified_gmt = $page_for_posts_modified_gmt;
+							}
+
+							if ( '0000-00-00 00:00:00' !== $page_modified_gmt )
+								$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $page_modified_gmt ) . "</lastmod>\r\n";
+						}
+
+						$content .= "\t\t<priority>0.9</priority>\r\n";
+						$content .= "\t</url>\r\n";
+					}
+				endif;
+
+			endif;
 
 			/**
 			 * This can be heavy.
@@ -571,28 +669,18 @@ class Sitemaps extends Metaboxes {
 
 						//* Continue if indexed.
 						if ( $indexed ) {
-							//* Is this the front page?
-							$page_is_front = $page_id === $id_on_front;
-
 							$content .= "\t<url>\r\n";
-							if ( $page_is_front ) {
-								$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'home' => true ) ) . "</loc>\r\n";
-							} else {
-								$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $page, 'id' => $page_id ) ) . "</loc>\r\n";
-							}
+							$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $page, 'id' => $page_id ) ) . "</loc>\r\n";
 
 							// Keep it consistent. Only parse if page_lastmod is true.
-							if ( $page_lastmod || ( $page_is_front && $home_lastmod ) ) {
+							if ( $page_lastmod ) {
 								$page_modified_gmt = $page->post_modified_gmt;
 
 								if ( '0000-00-00 00:00:00' !== $page_modified_gmt )
 									$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $page_modified_gmt ) . "</lastmod>\r\n";
 							}
 
-							// Give higher priority to the home page.
-							$priority_page = $page_is_front ? 1 : 0.9;
-
-							$content .= "\t\t<priority>" . number_format( $priority_page, 1 ) . "</priority>\r\n";
+							$content .= "\t\t<priority>0.9</priority>\r\n";
 							$content .= "\t</url>\r\n";
 						}
 					}
@@ -630,7 +718,7 @@ class Sitemaps extends Metaboxes {
 			$wp_query->query = $wp_query->query_vars = \wp_parse_args( $args, $defaults );
 			$latest_posts = $wp_query->get_posts();
 		}
-		$latest_posts_amount = (int) count( $latest_posts );
+		$latest_posts_amount = count( $latest_posts );
 
 		if ( $latest_posts_amount > 0 ) :
 			/**
@@ -650,11 +738,11 @@ class Sitemaps extends Metaboxes {
 			 */
 			$prioritydiff = 0;
 
-			if ( $latest_posts_amount > (int) 1 )
+			if ( $latest_posts_amount > 1 )
 				$prioritydiff = 0.9 / $latest_posts_amount;
 
 			// Keep it consistent. Only remove 0.1 when we only have a few posts.
-			if ( $latest_posts_amount <= (int) 9 && $latest_posts_amount > (int) 1 )
+			if ( $latest_posts_amount <= 9 && $latest_posts_amount > 1 )
 				$prioritydiff = 0.1;
 
 			/**
@@ -694,7 +782,7 @@ class Sitemaps extends Metaboxes {
 							$priority = $priority - $prioritydiff;
 
 							// Cast away negative numbers.
-							$priority = $priority <= (int) 0 ? (int) 0 : (float) $priority;
+							$priority = $priority <= 0 ? 0 : (float) $priority;
 						}
 					}
 				endif;
@@ -753,7 +841,7 @@ class Sitemaps extends Metaboxes {
 				$latest_cpt_posts = $wp_query->get_posts();
 			}
 		endif;
-		$latest_cpt_posts_amount = (int) count( $latest_cpt_posts );
+		$latest_cpt_posts_amount = count( $latest_cpt_posts );
 
 		if ( $latest_cpt_posts_amount > 0 ) :
 
@@ -767,11 +855,11 @@ class Sitemaps extends Metaboxes {
 
 			$prioritydiff_cpt = 0;
 
-			if ( $latest_cpt_posts_amount > (int) 1 )
+			if ( $latest_cpt_posts_amount > 1 )
 				$prioritydiff_cpt = 0.9 / $latest_cpt_posts_amount;
 
 			// Keep it consistent. Only remove 0.1 when we only have a few posts.
-			if ( $latest_cpt_posts_amount <= (int) 9 && $latest_cpt_posts_amount > (int) 1 )
+			if ( $latest_cpt_posts_amount <= 9 && $latest_cpt_posts_amount > 1 )
 				$prioritydiff_cpt = 0.1;
 
 			/**
@@ -812,7 +900,7 @@ class Sitemaps extends Metaboxes {
 							$priority_cpt = $priority_cpt - $prioritydiff_cpt;
 
 							// Cast away negative numbers.
-							$priority_cpt = $priority_cpt <= (int) 0 ? (int) 0 : (float) $priority_cpt;
+							$priority_cpt = $priority_cpt <= 0 ? 0 : (float) $priority_cpt;
 						}
 					}
 				endif;

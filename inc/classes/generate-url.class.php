@@ -65,6 +65,7 @@ class Generate_Url extends Generate_Title {
 	 * @since 2.0.0
 	 * @since 2.4.2 : Refactored arguments
 	 * @since 2.8.0 : No longer tolerates $id as Post object.
+	 * @since 2.9.0 : When using 'home => true' args parameter, the home path is added when set.
 	 *
 	 * @param string $url the url
 	 * @param array $args : accepted args : {
@@ -121,6 +122,8 @@ class Generate_Url extends Generate_Title {
 
 			if ( empty( $url ) )
 				$path = $this->generate_url_path( $args );
+		} elseif ( $args['home'] ) {
+			$path = $this->get_home_path();
 		}
 
 		/**
@@ -246,7 +249,6 @@ class Generate_Url extends Generate_Title {
 		$args['get_custom_field'] = isset( $args['get_custom_field'] ) ? (bool) $args['get_custom_field'] : $defaults['get_custom_field'];
 		$args['external']         = isset( $args['external'] )         ? (bool) $args['external']         : $defaults['external'];
 		$args['is_term']          = isset( $args['is_term'] )          ? (bool) $args['is_term']          : $defaults['is_term'];
-		$args['get_custom_field'] = isset( $args['get_custom_field'] ) ? (bool) $args['get_custom_field'] : $defaults['get_custom_field'];
 		$args['post']             = isset( $args['post'] )             ? (object) $args['post']           : $defaults['post'];
 		$args['term']             = isset( $args['term'] )             ? (object) $args['term']           : $defaults['term'];
 		$args['home']             = isset( $args['home'] )             ? (bool) $args['home']             : $defaults['home'];

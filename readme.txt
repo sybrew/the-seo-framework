@@ -286,6 +286,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* When you use browser navigation (go back/forward), the navigational tabs are now corresponding to the previous selection.
 			* Yes, this is glitchy because browsers are slow, but it's not common for this to happen.
 			* No, this can't work on the new In-post tabs. Because WordPress resets all radio buttons on navigation.
+		/
+		* The "homepage as blog" page can now be included in the sitemap, when present.
+		* When the homepage is a blog, and a new post has been posted; the sitemap lastmod entry now also updates for it.
+		* The blogpage now outputs the lastmod date as either the latest post entry, or the latest blog page update; whichever was most recent.
 	* **Changed:**
 		* Redesigned In-Post SEO Settings layout. Thank you [Daniel](https://github.com/danielpost)!
 		* A source link is no longer generated on feed entries without content.
@@ -312,12 +316,14 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* This has been handled correctly, so you won't notice anything from this bug upon upgrade.
 		* With WPMUdev Domain Mapping, when no scheme has been preferred in mapping selection, the SEO settings preferred scheme now kicks in.
 		* The preferred URL scheme selection now works, rather than always detecting it automatically. Sorry for that!
-			/
-			* TODO check out https://wordpress.org/support/topic/canonical-redirect-2/ parameters.
 		* Social Images labels now correctly focus on the input field when clicked.
 		* 301 redirect labels now correctly focus on the input field when clicked.
 		* The floating title placeholder is now correctly recalculated on resize.
 		* The floating title placeholder's offset is now perfectly calculated and no longer uses the padding of the input box, but an actual typographic space instead.
+		* The sitemap location URLs are now correct on subdirectory installations.
+			* This now makes pinging of the sitemap work on those installations too.
+		* The robots.txt file isn't generated on subdirectory installations. This is intended, and the link has now been omitted from the settings.
+		* The homepage noindex option is now also considered for its sitemap entry addition.
 
 * **For translators:**
 	* **Updated:**
@@ -345,6 +351,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* "Start The Seo Framework" / "End The Seo Framework"
 			* Now is: "Start The SEO Framework" and "End The SEO Framework".
 			* Typo: "Seo" should've been SEO.
+		* "Another robots.txt sitemap location addition has been detected."
+			* Now is: Another robots.txt sitemap Location addition has been detected.
+			* Ugly capitalization: I tend to add capitalization on words that carry the most important subject at hand. This should be done differently in the future.
+			* More of these fixes will take place in the future.
 
 * **For developers:**
 	* **Added:**

@@ -98,6 +98,7 @@ class Render extends Admin_Init {
 	 * Cache home URL in static variable
 	 *
 	 * @since 2.5.0
+	 * @since 2.9.0 Now returns subdirectory installations paths too.
 	 * @staticvar array $url_cache
 	 *
 	 * @param bool $force_slash Force slash
