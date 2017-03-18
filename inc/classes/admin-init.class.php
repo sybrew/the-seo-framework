@@ -314,7 +314,7 @@ class Admin_Init extends Init {
 			 * Use $this->settings_capability() ?... might conflict with other nonces.
 			 */
 			// 'manage_options' => \current_user_can( 'manage_options' ) ? \wp_create_nonce( 'tsf-ajax-manage_options' ) : false,
-			'publish_posts' => \current_user_can( 'publish_posts' ) ? \wp_create_nonce( 'tsf-ajax-publish_posts' ) : false,
+			'upload_files' => \current_user_can( 'upload_files' ) ? \wp_create_nonce( 'tsf-ajax-upload_files' ) : false,
 			'edit_posts' => \current_user_can( 'edit_posts' ) ? \wp_create_nonce( 'tsf-ajax-edit_posts' ) : false,
 		) );
 
