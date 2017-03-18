@@ -184,7 +184,7 @@ class Post_Data extends Detect {
 	public function save_custom_fields( array $data, $nonce_action, $nonce_name, $post ) {
 
 		//* Verify the nonce
-		if ( ! isset( $_POST[ $nonce_name ] ) || ! wp_verify_nonce( $_POST[ $nonce_name ], $nonce_action ) )
+		if ( ! isset( $_POST[ $nonce_name ] ) || ! \wp_verify_nonce( $_POST[ $nonce_name ], $nonce_action ) )
 			return;
 
 		/**

@@ -97,7 +97,7 @@ final class Deprecated {
 
 		\the_seo_framework()->_deprecated_function( 'The_SEO_Framework_Transients::' . __FUNCTION__, '2.7.0', 'The_SEO_Framework_Transients::delete_auto_description_frontpage_transient()' );
 
-		\the_seo_framework()->delete_auto_description_transient( the_seo_framework()->get_the_front_page_ID(), '', 'frontpage' );
+		\the_seo_framework()->delete_auto_description_transient( \the_seo_framework()->get_the_front_page_ID(), '', 'frontpage' );
 
 		return $old_option;
 	}

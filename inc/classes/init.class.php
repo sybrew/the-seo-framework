@@ -176,7 +176,7 @@ class Init extends Query {
 			\add_action( 'wp_ajax_add-tag', array( $this, 'init_columns_ajax' ), -1 );
 		}
 
-		if ( $this->load_options ) {
+		if ( $this->load_options ) :
 			// Enqueue i18n defaults.
 			\add_action( 'admin_init', array( $this, 'enqueue_page_defaults' ), 1 );
 
@@ -207,8 +207,12 @@ class Init extends Query {
 			//* Admin AJAX for counter options.
 			\add_action( 'wp_ajax_the_seo_framework_update_counter', array( $this, 'wp_ajax_update_counter_type' ) );
 
+			//* Admin AJAX for TSF Cropper
+			\add_action( 'wp_ajax_tsf-crop-image', array( $this, 'wp_ajax_crop_image' ) );
+
+			// Add extra removable query arguments to the list.
 			\add_filter( 'removable_query_args', array( $this, 'add_removable_query_args' ) );
-		}
+		endif;
 	}
 
 	/**

@@ -286,7 +286,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* When you use browser navigation (go back/forward), the navigational tabs are now corresponding to the previous selection.
 			* Yes, this is glitchy because browsers are slow, but it's not common for this to happen.
 			* No, this can't work on the new In-post tabs. Because WordPress resets all radio buttons on navigation.
-		/
 		* The "homepage as blog" page can now be included in the sitemap, when present.
 		* When the homepage is a blog, and a new post has been posted; the sitemap lastmod entry now also updates for it.
 		* The blogpage now outputs the lastmod date as either the latest post entry, or the latest blog page update; whichever was most recent.
@@ -294,12 +293,14 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Redesigned In-Post SEO Settings layout. Thank you [Daniel](https://github.com/danielpost)!
 		* A source link is no longer generated on feed entries without content.
 		* The social image selection buttons have been moved below the bound text input.
+		* Contributors (capability: `edit_posts`) can now select their own counter type, rather than only Authors (capability: `publish_posts`) and above.
 	* **Removed:**
 		* Twitter `photo` card. This has been deprecated and has been replaced with `summary_large_image`.
 			* All related options and outputs have been updated.
 			* When updating the plugin the upgrade handler will scan for the photo card option, and will change it to `summar_large_image` if it's `photo`.
 	* **Fixed:**
-		* The terms and taxonomies SEO bar now correctly displays robots values again.
+		* Authors (capability: `upload_files`) and above can now crop social images, rather than only Administrators (capability: `customize`) and above.
+		* The terms and taxonomies SEO bar now correctly display the robots values again.
 		* When emptying the Home Page Custom title, the Additions are now correctly updated once again.
 		* The feed excerpt generation and original content link generation work again.
 			* The call was misplaced. Sorry about that!
@@ -316,10 +317,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* This has been handled correctly, so you won't notice anything from this bug upon upgrade.
 		* With WPMUdev Domain Mapping, when no scheme has been preferred in mapping selection, the SEO settings preferred scheme now kicks in.
 		* The preferred URL scheme selection now works, rather than always detecting it automatically. Sorry for that!
-		* Social Images labels now correctly focus on the input field when clicked.
+		* Social Image selection labels now correctly focus on the input field when clicked.
 		* 301 redirect labels now correctly focus on the input field when clicked.
-		* The floating title placeholder is now correctly recalculated on resize.
 		* The floating title placeholder's offset is now perfectly calculated and no longer uses the padding of the input box, but an actual typographic space instead.
+		* The floating title placeholder is now also correctly recalculated on resize.
 		* The sitemap location URLs are now correct on subdirectory installations.
 			* This now makes pinging of the sitemap work on those installations too.
 		* The robots.txt file isn't generated on subdirectory installations. This is intended, and the link has now been omitted from the settings.
@@ -362,6 +363,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* (JavaScript) A triggered event after an SEO settings tab has been toggled and when the content is visible (i.e. `display:block;`) on the tab's radio button: `tsf-tab-toggled`.
 		* (JavaScript) A triggered event after an inpost SEO settings tab has been toggled and when the content is visible (i.e. `display:flex;`) on the tab's radio button: `tsf-flex-tab-toggled`.
 		* (JavaScript) A triggered event that runs on any call that can affect the flexbox' size, like window resize, or admin menu collapse: `tsf-flex-resize`. Only runs when tsf-flex is found.
+		* (JavaScript) A new object parameter: `nonces`, this replaces `nonce` (which still exists) and can be easily expanded in the future for enhanced security. A few defaults are automatically set for currently used roles.
 		* Method `do_redirect()`. Only use this on action `template_redirect`.
 		* Method `update_option`, allows for easily updating single SEO options. Use `update_settings` if you wish to update multiple option values at once.
 		* Method `delete_object_cache`, allows for easily deleting The SEO Framework object cache.
@@ -399,6 +401,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* More of these query changes will be introduced in the future.
 	* **Fixed:**
 		* Method `the_seo_framework()->get_social_image_url_from_post_meta()` second parameter now works.
+		* Method `the_seo_framework()->convert_markdown()` had some fixes implemented:
+			* Header markdown now works (h1 to h6).
+			* Numeric values `2` now no longer stops strong from working.
+			* Numeric values `1` now no longer stops emphasis from working.
+			* Numeric values `1` now no longer stops code from working.
 	* **Filter Notes:**
 		* **Added:**
 			* `(bool) the_seo_framework_use_breadcrumb_seo_title`, determines whether to use custom SEO titles or WordPress set only.

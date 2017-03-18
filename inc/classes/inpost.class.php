@@ -406,6 +406,8 @@ class Inpost extends Doing_It_Right {
 	}
 
 	/**
+	 * Outputs the singular inpost SEO box.
+	 *
 	 * Callback function for Post and Pages inpost metabox.
 	 *
 	 * @since 2.9.0
@@ -419,18 +421,48 @@ class Inpost extends Doing_It_Right {
 		\do_action( 'the_seo_framework_pro_page_inpost_box' );
 	}
 
+	/**
+	 * Outputs the singular inpost SEO box general tab.
+	 *
+	 * Callback function for Post and Pages inpost metabox.
+	 *
+	 * @since 2.9.0
+	 * @access private
+	 *
+	 * @param string $type The post type name.
+	 */
 	public function singular_inpost_box_general_tab( $type ) {
 		\do_action( 'the_seo_framework_pre_page_inpost_general_box' );
 		$this->get_view( 'inpost/seo-settings-singular', get_defined_vars(), 'general' );
 		\do_action( 'the_seo_framework_pro_page_inpost_general_box' );
 	}
 
+	/**
+	 * Outputs the singular inpost SEO box visibility tab.
+	 *
+	 * Callback function for Post and Pages inpost metabox.
+	 *
+	 * @since 2.9.0
+	 * @access private
+	 *
+	 * @param string $type The post type name.
+	 */
 	public function singular_inpost_box_visibility_tab( $type ) {
 		\do_action( 'the_seo_framework_pre_page_inpost_general_box' );
 		$this->get_view( 'inpost/seo-settings-singular', get_defined_vars(), 'visibility' );
 		\do_action( 'the_seo_framework_pro_page_inpost_general_box' );
 	}
 
+	/**
+	 * Outputs the singular inpost SEO box social tab.
+	 *
+	 * Callback function for Post and Pages inpost metabox.
+	 *
+	 * @since 2.9.0
+	 * @access private
+	 *
+	 * @param string $type The post type name.
+	 */
 	public function singular_inpost_box_social_tab( $type ) {
 		\do_action( 'the_seo_framework_pre_page_inpost_general_box' );
 		$this->get_view( 'inpost/seo-settings-singular', get_defined_vars(), 'social' );

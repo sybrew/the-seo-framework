@@ -133,13 +133,17 @@ class Core {
 	 * Destroys output buffer, if any. To be used with AJAX and XML to clear any PHP errors or dumps.
 	 *
 	 * @since 2.8.0
+	 * @since 2.9.0 : Now flushes all levels rather than just the latest one.
 	 *
 	 * @return bool True on clear. False otherwise.
 	 */
 	protected function clean_reponse_header() {
 
-		if ( ob_get_level() && ob_get_contents() ) {
-			ob_clean();
+		if ( $level = ob_get_level() ) {
+			while ( $level ) {
+				ob_end_clean();
+				$level--;
+			}
 			return true;
 		}
 
@@ -786,6 +790,9 @@ class Core {
 	 * Note: This code has been rightfully stolen from the Extension Manager plugin (sorry Sybre!).
 	 *
 	 * @since 2.8.0
+	 * @since 2.9.0 : 1. Removed word boundary requirement for strong.
+	 *                2. Now accepts regex count their numeric values in string.
+	 *                3. Fixed header 1~6 calculation.
 	 * @link https://wordpress.org/plugins/about/readme.txt
 	 *
 	 * @param string $text The text that might contain markdown. Expected to be escaped.
@@ -825,8 +832,7 @@ class Core {
 		foreach ( $md_types as $type ) :
 			switch ( $type ) :
 				case 'strong' :
-					//* Considers word boundary. @TODO consider removing this?
-					$count = preg_match_all( '/(?:\*{2})\b([^\*{2}]+)(?:\*{2})/', $text, $matches, PREG_PATTERN_ORDER );
+					$count = preg_match_all( '/(?:\*{2})([^\*{\2}]+)(?:\*{2})/', $text, $matches, PREG_PATTERN_ORDER );
 
 					for ( $i = 0; $i < $count; $i++ ) {
 						$text = str_replace(
@@ -838,7 +844,7 @@ class Core {
 					break;
 
 				case 'em' :
-					$count = preg_match_all( '/(?:\*{1})([^\*{1}]+)(?:\*{1})/', $text, $matches, PREG_PATTERN_ORDER );
+					$count = preg_match_all( '/(?:\*{1})([^\*{\1}]+)(?:\*{1})/', $text, $matches, PREG_PATTERN_ORDER );
 
 					for ( $i = 0; $i < $count; $i++ ) {
 						$text = str_replace(
@@ -850,7 +856,7 @@ class Core {
 					break;
 
 				case 'code' :
-					$count = preg_match_all( '/(?:`{1})([^`{1}]+)(?:`{1})/', $text, $matches, PREG_PATTERN_ORDER );
+					$count = preg_match_all( '/(?:`{1})([^`{\1}]+)(?:`{1})/', $text, $matches, PREG_PATTERN_ORDER );
 
 					for ( $i = 0; $i < $count; $i++ ) {
 						$text = str_replace(
@@ -869,7 +875,7 @@ class Core {
 				case 'h1' :
 					$amount = filter_var( $type, FILTER_SANITIZE_NUMBER_INT );
 					//* Considers word non-boundary. @TODO consider removing this?
-					$expression = "/(?:={{$amount}})\B([^={{$amount}}]+?)\B(?:={{$amount}})/";
+					$expression = sprintf( '/(?:\={%1$s})\B([^\={\%1$s}]+)\B(?:\={%1$s})/', $amount );
 					$count = preg_match_all( $expression, $text, $matches, PREG_PATTERN_ORDER );
 
 					for ( $i = 0; $i < $count; $i++ ) {

@@ -232,6 +232,8 @@ class Generate_Description extends Generate {
 	 * Fetches HomePage Description from custom field.
 	 *
 	 * @since 2.6.0
+	 * @since 2.9.0 1. Removed $args['taxonomy'] check.
+	 *              2. Added $this->is_archive() check.
 	 * Use $this->description_from_custom_field() instead.
 	 *
 	 * @param array $args Description args.
@@ -241,7 +243,7 @@ class Generate_Description extends Generate {
 
 		$description = '';
 
-		if ( $args['is_home'] || $this->is_real_front_page() || ( empty( $args['taxonomy'] ) && $this->is_static_frontpage( $args['id'] ) ) )
+		if ( $args['is_home'] || $this->is_real_front_page() || ( ! $this->is_archive() && $this->is_static_frontpage( $args['id'] ) ) )
 			$description = $this->get_option( 'homepage_description' ) ?: '';
 
 		return $description;

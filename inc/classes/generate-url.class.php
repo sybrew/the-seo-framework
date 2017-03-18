@@ -491,7 +491,7 @@ class Generate_Url extends Generate_Title {
 				$ancestors = \get_ancestors( $term->term_id, $taxonomy, 'taxonomy' );
 
 				foreach ( (array) $ancestors as $ancestor ) {
-					$ancestor_term = get_term( $ancestor, $taxonomy );
+					$ancestor_term = \get_term( $ancestor, $taxonomy );
 					$hierarchical_slugs[] = $ancestor_term->slug;
 				}
 

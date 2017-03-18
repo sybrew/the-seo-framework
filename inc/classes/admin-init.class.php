@@ -306,10 +306,21 @@ class Admin_Init extends Init {
 			$additions = $home_tagline ?: $description;
 		}
 
+		//* @TODO deprecate
 		$nonce = \wp_create_nonce( 'autodescription-ajax-nonce' );
+
+		$this->set_js_nonces( array(
+			/**
+			 * Use $this->settings_capability() ?... might conflict with other nonces.
+			 */
+			// 'manage_options' => \current_user_can( 'manage_options' ) ? \wp_create_nonce( 'tsf-ajax-manage_options' ) : false,
+			'publish_posts' => \current_user_can( 'publish_posts' ) ? \wp_create_nonce( 'tsf-ajax-publish_posts' ) : false,
+			'edit_posts' => \current_user_can( 'edit_posts' ) ? \wp_create_nonce( 'tsf-ajax-edit_posts' ) : false,
+		) );
 
 		return array(
 			'nonce' => $nonce,
+			'nonces' => $this->get_js_nonces(),
 			'i18n' => array(
 				'saveAlert' => \esc_html__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
 				'confirmReset' => \esc_html__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
@@ -341,13 +352,13 @@ class Admin_Init extends Init {
 	/**
 	 * Maintains and Returns additional JS l10n.
 	 *
-	 * They are put under object 'tsfemL10n.other.$key.[ $val ]'.
+	 * They are put under object 'tsfemL10n.other[ $key ] = $val'.
 	 *
 	 * @since 2.8.0
 	 * @staticvar object $strings The cached strings object.
 	 *
-	 * @param null|string $key The object key. Requires escape.
-	 * @param null|array $val The object val. Requires escape.
+	 * @param null|string $key The object key.
+	 * @param array $val The object val.
 	 * @param bool $get Whether to return the cached strings.
 	 * @param bool $escape Whether to escape the input.
 	 * @return object Early when $get is true
@@ -369,6 +380,73 @@ class Admin_Init extends Init {
 
 		if ( $key )
 			$strings->$key = $val;
+	}
+
+	/**
+	 * Sets up additional JS l10n values for nonces.
+	 *
+	 * They are put under object 'tsfemL10n.nonces[ $key ] = $val'.
+	 *
+	 * @since 2.9.0
+	 *
+	 * @param null|string $key The object key. Requires escape.
+	 * @param null|array $val The object val. Requires escape.
+	 */
+	public function set_js_nonces( $key = null, array $val = array() ) {
+		$this->get_js_nonces( $key, $val, false );
+	}
+
+	/**
+	 * Maintains and Returns additional JS l10n.
+	 *
+	 * They are put under object 'tsfemL10n.nonces[ $key ] = $val'.
+	 *
+	 * If $key is an array, $val is ignored and $key's values are used instead.
+	 *
+	 * @since 2.9.0
+	 * @staticvar object $nonces The cached nonces object.
+	 *
+	 * @param null|string|array $key The object key.
+	 * @param array $val The object val.
+	 * @param bool $get Whether to return the cached nonces.
+	 * @return object Early when $get is true
+	 */
+	public function get_js_nonces( $key = null, array $val = array(), $get = true ) {
+
+		static $nonces = null;
+
+		if ( null === $nonces )
+			$nonces = new \stdClass();
+
+		if ( $get )
+			return $nonces;
+
+		if ( is_string( $key ) ) {
+			$nonces->$key = $val;
+		} elseif ( is_array( $key ) ) {
+			foreach ( $key as $k => $v ) {
+				$nonces->$k = $v;
+			}
+		}
+	}
+
+	/**
+	 * Checks ajax referred set by set_js_nonces based on capability.
+	 *
+	 * Performs die() on fail.
+	 *
+	 * @since 2.9.0
+	 * @access private
+	 *         It uses an internally and manually created prefix.
+	 * @uses WP Core check_ajax_referer()
+	 * @see @link https://developer.wordpress.org/reference/functions/check_ajax_referer/
+	 *
+	 * @return false|int False if the nonce is invalid, 1 if the nonce is valid
+	 *                   and generated between 0-12 hours ago, 2 if the nonce is
+	 *                   valid and generated between 12-24 hours ago.
+	 */
+	public function check_tsf_ajax_referer( $capability ) {
+		return \check_ajax_referer( 'tsf-ajax-' . $capability, 'nonce' );
 	}
 
 	/**
@@ -471,17 +549,24 @@ class Admin_Init extends Init {
 	 * Handles counter option update on AJAX request.
 	 *
 	 * @since 2.6.0
+	 * @since 2.9.0 : 1. Changed capability from 'publish_posts' to 'edit_posts'.
+	 *                2. Added json header.
 	 * @access private
 	 */
 	public function wp_ajax_update_counter_type() {
 
-		if ( $this->is_admin() && $this->doing_ajax() ) {
+		if ( $this->is_admin() && $this->doing_ajax() ) :
 
+			$this->check_tsf_ajax_referer( 'edit_posts' );
 			//* If current user isn't allowed to edit posts, don't do anything and kill PHP.
-			if ( ! \current_user_can( 'publish_posts' ) )
-				exit;
+			if ( ! \current_user_can( 'edit_posts' ) ) {
+				//* Remove output buffer.
+				$this->clean_reponse_header();
 
-			\check_ajax_referer( 'autodescription-ajax-nonce', 'nonce' );
+				//* Encode and echo results. Requires JSON decode within JS.
+				echo json_encode( array( 'type' => 'failure', 'value' => '' ) );
+				exit;
+			}
 
 			/**
 			 * Count up, reset to 0 if needed. We have 4 options: 0, 1, 2, 3
@@ -509,6 +594,100 @@ class Admin_Init extends Init {
 
 			//* Kill PHP.
 			exit;
-		}
+		endif;
+	}
+
+	/**
+	 * Handles cropping of images on AJAX request.
+	 *
+	 * Copied from WordPress Core wp_ajax_crop_image.
+	 * Adjusted: 1. It accepts capability 'upload_files', instead of 'customize'.
+	 *           2. It now only accepts TSF own AJAX nonces.
+	 *           3. It now only accepts context 'tsf-image'
+	 *           4. It no longer accepts a default context.
+	 *
+	 * @since 2.9.0
+	 * @access private
+	 */
+	public function wp_ajax_crop_image() {
+
+		$this->check_tsf_ajax_referer( 'upload_files' );
+		if ( ! \current_user_can( 'upload_files' ) )
+			\wp_send_json_error();
+
+		$attachment_id = \absint( $_POST['id'] );
+
+		$context = str_replace( '_', '-', $_POST['context'] );
+		$data    = array_map( 'absint', $_POST['cropDetails'] );
+		$cropped = \wp_crop_image( $attachment_id, $data['x1'], $data['y1'], $data['width'], $data['height'], $data['dst_width'], $data['dst_height'] );
+
+		if ( ! $cropped || \is_wp_error( $cropped ) )
+			\wp_send_json_error( array( 'message' => \esc_js__( 'Image could not be processed.', 'autodescription' ) ) );
+
+		switch ( $context ) :
+			case 'tsf-image':
+
+				/**
+				 * Fires before a cropped image is saved.
+				 *
+				 * Allows to add filters to modify the way a cropped image is saved.
+				 *
+				 * @since 4.3.0 WordPress Core
+				 *
+				 * @param string $context       The Customizer control requesting the cropped image.
+				 * @param int    $attachment_id The attachment ID of the original image.
+				 * @param string $cropped       Path to the cropped image file.
+				 */
+				\do_action( 'wp_ajax_crop_image_pre_save', $context, $attachment_id, $cropped );
+
+				/** This filter is documented in wp-admin/custom-header.php */
+				$cropped = \apply_filters( 'wp_create_file_in_uploads', $cropped, $attachment_id ); // For replication.
+
+				$parent_url = \wp_get_attachment_url( $attachment_id );
+				$url        = str_replace( basename( $parent_url ), basename( $cropped ), $parent_url );
+
+				$size       = @getimagesize( $cropped );
+				$image_type = ( $size ) ? $size['mime'] : 'image/jpeg';
+
+				$object = array(
+					'post_title'     => basename( $cropped ),
+					'post_content'   => $url,
+					'post_mime_type' => $image_type,
+					'guid'           => $url,
+					'context'        => $context,
+				);
+
+				$attachment_id = \wp_insert_attachment( $object, $cropped );
+				$metadata = \wp_generate_attachment_metadata( $attachment_id, $cropped );
+
+				/**
+				 * Filters the cropped image attachment metadata.
+				 *
+				 * @since 4.3.0 WordPress Core
+				 *
+				 * @see wp_generate_attachment_metadata()
+				 *
+				 * @param array $metadata Attachment metadata.
+				 */
+				$metadata = \apply_filters( 'wp_ajax_cropped_attachment_metadata', $metadata );
+				\wp_update_attachment_metadata( $attachment_id, $metadata );
+
+				/**
+				 * Filters the attachment ID for a cropped image.
+				 *
+				 * @since 4.3.0 WordPress Core
+				 *
+				 * @param int    $attachment_id The attachment ID of the cropped image.
+				 * @param string $context       The Customizer control requesting the cropped image.
+				 */
+				$attachment_id = \apply_filters( 'wp_ajax_cropped_attachment_id', $attachment_id, $context );
+				break;
+
+			default :
+				\wp_send_json_error( array( 'message' => \esc_js__( 'Image could not be processed.', 'autodescription' ) ) );
+				break;
+		endswitch;
+
+		\wp_send_json_success( \wp_prepare_attachment_for_js( $attachment_id ) );
 	}
 }
