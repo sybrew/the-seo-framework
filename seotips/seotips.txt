@@ -139,3 +139,11 @@
 * For example, the Site Name Schema.org script might not have any effect.
 * This changes over time as Google updates its Search Engine all over the world.
 * Usage of experimental Schema.org scripts with The SEO Framework cause no harm to ranking.
+
+	= 2.9.0 - Trust in layout =
+
+* Is your website glitchy and has placeholder images, unmatched colors or weirdly contrasting borders all over the place?
+* Consider going for a more modern and clean layout. Strip out what isn't necessary. A clean layout implies professionalism and increases visitors' trust.
+* Even if you're just starting out with your website, remove all that could be but really isn't. Because if you leave in placeholders for the future, it implies amateurism.
+* People want their truth to be confirmed or their problems to be solved. If you can't confirm or solve the layout of your website, then they won't trust you to do so for their issues.
+* Simply put: It doesn't have to be perfect, it just must be done.

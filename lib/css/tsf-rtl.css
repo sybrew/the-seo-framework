@@ -936,7 +936,7 @@ a.tsf-set-social-image.button {
 @media screen and (max-width: 782px) {
 	.tsf-metaboxes p.tsf-fields,
 	.tsf-inpost-box p.tsf-fields {
-		line-height: 2.8
+		line-height: 2.8;
 	}
 
 	.tsf-metaboxes #tsf-title-location label span,

@@ -565,6 +565,7 @@ class Sitemaps extends Metaboxes {
 				unset( $latest_pages[ $key_on_front ] );
 			}
 
+			//* Render frontpage.
 			if ( '' === $excluded || empty( $excluded[ $id_on_front ] ) ) :
 				//* Fetch the noindex option from the page and homepage.
 				$indexed = ! $this->get_option( 'homepage_noindex' ) && ( ! $id_on_front || ! $this->get_custom_field( '_genesis_noindex', $id_on_front ) );
@@ -578,6 +579,7 @@ class Sitemaps extends Metaboxes {
 					if ( $home_lastmod ) {
 						if ( $page_on_front ) {
 							$front_object = \get_post( $id_on_front );
+							$front_modified_gmt = isset( $front_object->post_modified_gmt ) ? $front_object->post_modified_gmt : '0000-00-00 00:00:00';
 						} else {
 							$args = array(
 								'numberposts' => 1,
@@ -590,9 +592,8 @@ class Sitemaps extends Metaboxes {
 							$post = \wp_get_recent_posts( $args, OBJECT );
 							$front_object = isset( $post[0] ) ? $post[0] : null;
 							unset( $post );
+							$front_modified_gmt = isset( $front_object->post_date_gmt ) ? $front_object->post_date_gmt : '0000-00-00 00:00:00';
 						}
-						//	var_dump() change this to post_published...??
-						$front_modified_gmt = isset( $front_object->post_modified_gmt ) ? $front_object->post_modified_gmt : '0000-00-00 00:00:00';
 
 						if ( '0000-00-00 00:00:00' !== $front_modified_gmt )
 							$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $front_modified_gmt ) . "</lastmod>\r\n";
@@ -633,11 +634,11 @@ class Sitemaps extends Metaboxes {
 							);
 							$post = \wp_get_recent_posts( $args, OBJECT );
 							$lastest_post = isset( $post[0] ) ? $post[0] : null;
-							$latest_post_modified_gmt = isset( $lastest_post->post_modified_gmt ) ? $lastest_post->post_modified_gmt : '0000-00-00 00:00:00';
+							$latest_post_published_gmt = isset( $lastest_post->post_date_gmt ) ? $lastest_post->post_date_gmt : '0000-00-00 00:00:00';
 							$page_for_posts_modified_gmt = $page->post_modified_gmt;
 
-							if ( strtotime( $latest_post_modified_gmt ) > strtotime( $page_for_posts_modified_gmt ) ) {
-								$page_modified_gmt = $latest_post_modified_gmt;
+							if ( strtotime( $latest_post_published_gmt ) > strtotime( $page_for_posts_modified_gmt ) ) {
+								$page_modified_gmt = $latest_post_published_gmt;
 							} else {
 								$page_modified_gmt = $page_for_posts_modified_gmt;
 							}

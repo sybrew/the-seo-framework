@@ -432,9 +432,9 @@ class Inpost extends Doing_It_Right {
 	 * @param string $type The post type name.
 	 */
 	public function singular_inpost_box_general_tab( $type ) {
-		\do_action( 'the_seo_framework_pre_page_inpost_general_box' );
+		\do_action( 'the_seo_framework_pre_page_inpost_general_tab' );
 		$this->get_view( 'inpost/seo-settings-singular', get_defined_vars(), 'general' );
-		\do_action( 'the_seo_framework_pro_page_inpost_general_box' );
+		\do_action( 'the_seo_framework_pro_page_inpost_general_tab' );
 	}
 
 	/**
@@ -448,9 +448,9 @@ class Inpost extends Doing_It_Right {
 	 * @param string $type The post type name.
 	 */
 	public function singular_inpost_box_visibility_tab( $type ) {
-		\do_action( 'the_seo_framework_pre_page_inpost_general_box' );
+		\do_action( 'the_seo_framework_pre_page_inpost_visibility_tab' );
 		$this->get_view( 'inpost/seo-settings-singular', get_defined_vars(), 'visibility' );
-		\do_action( 'the_seo_framework_pro_page_inpost_general_box' );
+		\do_action( 'the_seo_framework_pro_page_inpost_visibility_tab' );
 	}
 
 	/**
@@ -464,9 +464,9 @@ class Inpost extends Doing_It_Right {
 	 * @param string $type The post type name.
 	 */
 	public function singular_inpost_box_social_tab( $type ) {
-		\do_action( 'the_seo_framework_pre_page_inpost_general_box' );
+		\do_action( 'the_seo_framework_pre_page_inpost_social_tab' );
 		$this->get_view( 'inpost/seo-settings-singular', get_defined_vars(), 'social' );
-		\do_action( 'the_seo_framework_pro_page_inpost_general_box' );
+		\do_action( 'the_seo_framework_pro_page_inpost_social_tab' );
 	}
 
 	/**
