@@ -591,6 +591,7 @@ class Sitemaps extends Metaboxes {
 							$front_object = isset( $post[0] ) ? $post[0] : null;
 							unset( $post );
 						}
+						//	var_dump() change this to post_published...??
 						$front_modified_gmt = isset( $front_object->post_modified_gmt ) ? $front_object->post_modified_gmt : '0000-00-00 00:00:00';
 
 						if ( '0000-00-00 00:00:00' !== $front_modified_gmt )

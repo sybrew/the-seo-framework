@@ -156,12 +156,13 @@ class Cache extends Sitemaps {
 	 *
 	 * @since 2.8.0
 	 * @since 2.9.0 : Added object cache flush.
+	 * @TODO make 2.9 note work.
 	 */
 	public function delete_main_cache() {
 		$this->delete_cache( 'front' );
 		$this->delete_cache( 'sitemap' );
 		$this->delete_cache( 'robots' );
-		$this->delete_cache( 'objectflush' );
+		// $this->delete_cache( 'objectflush' );
 	}
 
 	/**
@@ -203,11 +204,13 @@ class Cache extends Sitemaps {
 	 * Deletes object cache.
 	 *
 	 * @since 2.9.0
+	 * @TODO make this work.
 	 *
 	 * @return bool True on success, false on failure.
 	 */
 	public function delete_object_cache() {
-		return $this->delete_cache( 'objectflush' );
+		return false;
+		// return $this->delete_cache( 'objectflush' );
 	}
 
 	/**
@@ -289,9 +292,14 @@ class Cache extends Sitemaps {
 			/**
 			 * Flush whole object cache group.
 			 * Set here for external functions to use. It works because of magic methods.
+			 *
+			 * @NOTE Other caching plugins can override these groups. Therefore this
+			 * does NOT work.
+			 * @TODO make this work.
 			 */
 			case 'objectflush' :
-				if ( $this->use_object_cache ) {
+				//* @NOTE false can't pass.
+				if ( false && $this->use_object_cache ) {
 					if ( isset( $GLOBALS['wp_object_cache']->cache['the_seo_framework'] ) ) {
 						$_cache = $GLOBALS['wp_object_cache']->cache;
 						unset( $_cache['the_seo_framework'] );

@@ -389,10 +389,10 @@ class Admin_Init extends Init {
 	 *
 	 * @since 2.9.0
 	 *
-	 * @param null|string $key The object key. Requires escape.
-	 * @param null|array $val The object val. Requires escape.
+	 * @param string|array $key Required. The object key or array of keys and values. Requires escape.
+	 * @param mixed $val The object value if $key is string. Requires escape.
 	 */
-	public function set_js_nonces( $key = null, array $val = array() ) {
+	public function set_js_nonces( $key, $val = null ) {
 		$this->get_js_nonces( $key, $val, false );
 	}
 
@@ -406,12 +406,12 @@ class Admin_Init extends Init {
 	 * @since 2.9.0
 	 * @staticvar object $nonces The cached nonces object.
 	 *
-	 * @param null|string|array $key The object key.
-	 * @param array $val The object val.
+	 * @param string|array $key The object key or array of keys and values. Requires escape.
+	 * @param mixed $val The object value if $key is string. Requires escape.
 	 * @param bool $get Whether to return the cached nonces.
 	 * @return object Early when $get is true
 	 */
-	public function get_js_nonces( $key = null, array $val = array(), $get = true ) {
+	public function get_js_nonces( $key = null, $val = null, $get = true ) {
 
 		static $nonces = null;
 

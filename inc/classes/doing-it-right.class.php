@@ -106,18 +106,27 @@ class Doing_It_Right extends Generate_Ldjson {
 	}
 
 	/**
-	 * Initializes columns
-	 *
-	 * Applies filter the_seo_framework_show_seo_column : Boolean Show the SEO column in edit.php
+	 * Initializes SEO bar columns.
 	 *
 	 * @since 2.1.9
 	 *
 	 * @param object|empty $screen WP_Screen
 	 * @param bool $doing_ajax Whether we're doing an AJAX response.
+	 * @return void If filter is set to false.
 	 */
 	public function init_columns( $screen = '', $doing_ajax = false ) {
 
+		/**
+		 * Applies filters 'the_seo_framework_show_seo_column' : bool
+		 *
+		 * @since ???
+		 *
+		 * @param bool $show_seo_column
+		 */
 		$show_seo_column = (bool) \apply_filters( 'the_seo_framework_show_seo_column', true );
+
+		if ( false === $show_seo_column )
+			return;
 
 		if ( $doing_ajax ) {
 			$post_type = isset( $_POST['post_type'] ) ? $_POST['post_type'] : '';
@@ -125,9 +134,10 @@ class Doing_It_Right extends Generate_Ldjson {
 			$post_type = isset( $screen->post_type ) ? $screen->post_type : '';
 		}
 
-		if ( $show_seo_column && $this->post_type_supports_custom_seo( $post_type ) ) {
+		if ( $this->post_type_supports_custom_seo( $post_type ) ) {
 			if ( $doing_ajax ) {
 
+				//* Nonce is done in $this->init_columns_ajax()
 				$id = isset( $_POST['screen'] ) ? $_POST['screen'] : false;
 				$taxonomy = isset( $_POST['taxonomy'] ) ? $_POST['taxonomy'] : false;
 
