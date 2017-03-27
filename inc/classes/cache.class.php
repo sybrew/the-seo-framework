@@ -232,17 +232,20 @@ class Cache extends Sitemaps {
 			case 'front' :
 				$front_id = $this->get_the_front_page_ID();
 
+				//* Code debt!:
 				$this->setup_auto_description_transient( $front_id, '', 'frontpage' );
 
-				$this->object_cache_delete( $this->get_meta_output_cache_key( $this->get_the_front_page_ID() ) );
+				$this->object_cache_delete( $this->get_meta_output_cache_key_by_type( $this->get_the_front_page_ID(), '', 'frontpage' ) );
 				$this->is_option_checked( 'cache_meta_schema' ) and $this->delete_ld_json_transient( $front_id, '', 'frontpage' );
 				$this->is_option_checked( 'cache_meta_description' ) and delete_transient( $this->auto_description_transient );
 				break;
 
 			case 'post' :
-				$this->object_cache_delete( $this->get_meta_output_cache_key( $id ) );
-				$this->delete_auto_description_transient( $id );
-				$this->delete_ld_json_transient( $id );
+				if ( ! $post_type = \get_post_type( $id ) )
+					return false;
+				$this->object_cache_delete( $this->get_meta_output_cache_key_by_type( $id, $post_type ) );
+				$this->delete_auto_description_transient( $id, '', $post_type );
+				$this->delete_ld_json_transient( $id, '', $post_type );
 				return true;
 				break;
 
@@ -541,40 +544,55 @@ class Cache extends Sitemaps {
 	}
 
 	/**
-	 * Generate transient key based on query vars.
+	 * Generate transient key based on query vars or input variables.
 	 *
-	 * @global int $blog_id;
+	 * Warning: This can generate errors when used too early if no type has been set.
 	 *
 	 * @since 2.3.3
 	 * @since 2.6.0 Refactored.
-	 * @staticvar array $cached_id : contains cache strings.
+	 * @since 2.9.1 : 1. Added early singular type detection.
+	 *                2. Moved generation into $this->generate_cache_key_by_query().
+	 * @see $this->generate_cache_key_by_query() to get cache key from the query.
+	 * @see $this->generate_cache_key_by_type() to get cache key outside of the query.
 	 *
 	 * @param int|string|bool $page_id the Taxonomy or Post ID.
 	 * @param string $taxonomy The Taxonomy name.
 	 * @param string $type The Post Type
-	 * @return string The generated page id key.
+	 * @return string The generated cache key by query or type.
 	 */
 	public function generate_cache_key( $page_id, $taxonomy = '', $type = null ) {
 
-		$page_id = $page_id ?: $this->get_the_real_ID();
+		if ( isset( $type ) )
+			return $this->generate_cache_key_by_type( $page_id, $taxonomy, $type );
 
-		if ( isset( $type ) ) {
-			if ( 'author' === $type ) {
-				//* Author page.
-				return $this->add_cache_key_suffix( 'author_' . $page_id );
-			} elseif ( 'frontpage' === $type ) {
-				//* Front/HomePage.
-				return $this->add_cache_key_suffix( $this->generate_front_page_cache_key() );
-			} else {
-				$this->_doing_it_wrong( __METHOD__, 'Third parameter must be a known type.', '2.6.5' );
-				return $this->add_cache_key_suffix( \esc_sql( $type . '_' . $page_id . '_' . $taxonomy ) );
-			}
-		}
+		return $this->generate_cache_key_by_query( $page_id, $taxonomy );
+	}
+
+	/**
+	 * Generate transient key based on query vars.
+	 *
+	 * Warning: This can generate errors when used too early if no type has been set.
+	 *
+	 * @since 2.9.1
+	 * @staticvar array $cached_id : contains cache strings.
+	 * @see $this->generate_cache_key_by_type() to get cache key outside of the query.
+	 *
+	 * @param int|string|bool $page_id the Taxonomy or Post ID.
+	 * @param string $taxonomy The Taxonomy name.
+	 * @param string $type The Post Type
+	 * @return string The generated cache key by query.
+	 */
+	public function generate_cache_key_by_query( $page_id, $taxonomy = '' ) {
+
+		$page_id = $page_id ?: $this->get_the_real_ID();
 
 		static $cached_id = array();
 
 		if ( isset( $cached_id[ $page_id ][ $taxonomy ] ) )
 			return $cached_id[ $page_id ][ $taxonomy ];
+
+		// var_dump(): debugging.
+		$this->can_cache_query();
 
 		//* Placeholder ID.
 		$the_id = '';
@@ -709,6 +727,49 @@ class Cache extends Sitemaps {
 	}
 
 	/**
+	 * Generate transient key based on input.
+	 *
+	 * Use this method if you wish to evade the query usage.
+	 *
+	 * @since 2.9.1
+	 * @staticvar array $cached_id : contains cache strings.
+	 * @see $this->generate_cache_key().
+	 * @see $this->generate_cache_key_by_query() to get cache key from the query.
+	 *
+	 * @param int|string|bool $page_id the Taxonomy or Post ID.
+	 * @param string $taxonomy The Taxonomy name.
+	 * @param string $type The Post Type
+	 * @return string The generated cache key by type.
+	 */
+	public function generate_cache_key_by_type( $page_id, $taxonomy = '', $type = null ) {
+
+		switch ( $type ) :
+			case 'author' :
+				return $this->add_cache_key_suffix( 'author_' . $page_id );
+				break;
+			case 'frontpage' :
+				return $this->add_cache_key_suffix( $this->generate_front_page_cache_key() );
+				break;
+			case 'page' :
+				return $this->add_cache_key_suffix( 'page_' . $page_id );
+				break;
+			case 'post' :
+				return $this->add_cache_key_suffix( 'post_' . $page_id );
+				break;
+			case 'attachment' :
+				return $this->add_cache_key_suffix( 'attach_' . $page_id );
+				break;
+			case 'singular' :
+				return $this->add_cache_key_suffix( 'singular_' . $page_id );
+				break;
+			default :
+				$this->_doing_it_wrong( __METHOD__, 'Third parameter must be a known type.', '2.6.5' );
+				return $this->add_cache_key_suffix( \esc_sql( $type . '_' . $page_id . '_' . $taxonomy ) );
+				break;
+		endswitch;
+	}
+
+	/**
 	 * Adds cache key suffix based on blog id and locale.
 	 *
 	 * @since 2.7.0
@@ -810,6 +871,7 @@ class Cache extends Sitemaps {
 	 *
 	 * @since 2.8.0
 	 * @uses THE_SEO_FRAMEWORK_DB_VERSION as cache key buster.
+	 * @see $this->get_meta_output_cache_key_by_type();
 	 *
 	 * @param int $id The ID. Defaults to $this->get_the_real_ID();
 	 * @return string The TSF meta output cache key.
@@ -827,6 +889,29 @@ class Cache extends Sitemaps {
 		 */
 		$page = (string) $this->page();
 		$paged = (string) $this->paged();
+
+		return $cache_key = 'seo_framework_output_' . $key . '_' . $paged . '_' . $page;
+	}
+
+	/**
+	 * Returns the TSF meta output Object cache key.
+	 *
+	 * @since 2.9.1
+	 * @uses THE_SEO_FRAMEWORK_DB_VERSION as cache key buster.
+	 *
+	 * @param int $id The ID. Defaults to $this->get_the_real_ID();
+	 * @param string $type The post type.
+	 * @return string The TSF meta output cache key.
+	 */
+	public function get_meta_output_cache_key_by_type( $id = 0, $type = '' ) {
+		/**
+		 * Cache key buster.
+		 * Busts cache on each new db version.
+		 */
+		$key = $this->generate_cache_key_by_type( $id, '', $type ) . '_' . THE_SEO_FRAMEWORK_DB_VERSION;
+
+		$page = '1';
+		$paged = '1';
 
 		return $cache_key = 'seo_framework_output_' . $key . '_' . $paged . '_' . $page;
 	}

@@ -61,5 +61,9 @@ function _donncha_domainmap_get_url( $path, $get_scheme = false ) {
 		}
 	}
 
-	return '';
+	if ( $get_scheme ) {
+		return array( '', '' );
+	} else {
+		return '';
+	}
 }

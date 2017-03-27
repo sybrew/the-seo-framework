@@ -206,6 +206,30 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
+= 2.9.1 - ??? (something about wizard characteristics) =
+
+**Release date:**
+
+* 27th March 2017
+
+**Summarized:**
+/
+* TODO This release patches a few bugs that were brought with the 2.9.0 release related to debugging and cache clearing.
+* TODO If you liked to use quick edit a lot, the SEO Bar will now also re-render on save.
+
+**Detailed log:**
+/
+***TODO confirm Gandalf quote: All we have to decide is what to do with [the time that is given us](https://theseoframework.com/?p= TODO #detailed)***
+
+* **For everyone:**
+	* **Fixed:**
+		/
+		* TODO The SEO Bar now re-renders on quick edit.
+		* TODO When debugging, a doing it wrong notice is no longer displayed when clearing the cache, so:
+			/
+			* TODO Quick Edit no longer fails to render.
+			* TODO You can now save posts again when using WordPress heartbeat.
+
 = 2.9.0 - Equitable Erudition =
 
 *Courage is found in unlikely places - J.R.R. Tolkien*
@@ -249,7 +273,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * However, support for as many browsers feasible has been implemented. Check out [the list](https://theseoframework.com/?p=1903#browser-support). Enjoy!
 * The gist is that Chrome, Firefox, IE10 and Safari 6 or later are supported.
 
-**SEO Tip of the Update - Trust in layout **
+**SEO Tip of the Update - Trust in layout**
 
 * Is your website glitchy and has placeholder images, unmatched colors or weirdly contrasting borders all over the place?
 * Consider going for a more modern and clean layout. Strip out what isn't necessary. A clean layout implies professionalism and increases visitors' trust.
