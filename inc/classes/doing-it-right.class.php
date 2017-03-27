@@ -114,8 +114,6 @@ class Doing_It_Right extends Generate_Ldjson {
 	 */
 	public function _init_columns_wp_ajax_inline_save() {
 
-		error_log( var_export( $_POST, true ) );
-
 		/**
 		 * Securely check the referrer, instead of leaving holes everywhere.
 		 */

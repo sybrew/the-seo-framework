@@ -232,8 +232,6 @@ class Cache extends Sitemaps {
 			case 'front' :
 				$front_id = $this->get_the_front_page_ID();
 
-				$this->setup_auto_description_transient( $front_id, '', 'frontpage' );
-
 				$this->object_cache_delete( $this->get_meta_output_cache_key_by_type( $front_id, '', 'frontpage' ) );
 				$this->delete_auto_description_transient( $front_id, '', 'frontpage' );
 				$this->delete_ld_json_transient( $front_id, '', 'frontpage' );
@@ -243,7 +241,6 @@ class Cache extends Sitemaps {
 				if ( ! $post_type = \get_post_type( $id ) )
 					return false;
 
-				//* Temporarily: Generic key.
 				switch ( $post_type ) {
 					case 'page' :
 					case 'post' :
@@ -251,6 +248,7 @@ class Cache extends Sitemaps {
 						break;
 
 					default :
+						//* Generic key for CPT.
 						$post_type = 'singular';
 						break;
 				}

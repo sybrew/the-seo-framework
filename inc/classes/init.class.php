@@ -262,6 +262,7 @@ class Init extends Query {
 		//* Initialize feed alteration.
 		\add_action( 'template_redirect', array( $this, '_init_feed_output' ) );
 
+		//* Output meta tags.
 		\add_action( 'wp_head', array( $this, 'html_output' ), 1 );
 	}
 

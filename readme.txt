@@ -206,29 +206,30 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
-= 2.9.1 - ??? (something about wizard characteristics) =
+= 2.9.1 - Sovereign Comprehension =
 
 **Release date:**
 
 * 27th March 2017
 
 **Summarized:**
-/
+
 * This release patches a few bugs that were brought with the 2.9.0 release related to debugging and cache clearing.
-* If you liked to use quick edit a lot, the SEO Bar will now also re-render on save.
+* And if you like to use quick edit a lot, the SEO Bar will now also re-render on save.
 
 **Detailed log:**
-/
-***TODO confirm Gandalf quote: All we have to decide is what to do with [the time that is given us](https://theseoframework.com/?p= TODO #detailed)***
+
+***All we have to decide is what to do with [the time that is given us](https://theseoframework.com/?p=1912#detailed)***
 
 * **For everyone:**
 	* **Fixed:**
-		/
 		* The SEO Bar now re-renders on quick edit.
-		* When debugging, a doing it wrong notice is no longer displayed when clearing the cache, so:
+		* When WordPress debugging is turned on, a doing it wrong notice is no longer displayed when clearing the cache, so:
 			* Quick Edit no longer fails to render.
 			* You can now update and create posts again when using WordPress heartbeat.
 		* Custom Post Type auto-descriptions and JSON+LD output no longer create a duplicated cache key entry.
+		* Custom Post Type entries in the back-end are now correctly flushed on update.
+			* This means that the automated description previews update correctly once more.
 
 = 2.9.0 - Equitable Erudition =
 
