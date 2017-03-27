@@ -225,10 +225,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Fixed:**
 		/
 		* TODO The SEO Bar now re-renders on quick edit.
-		* TODO When debugging, a doing it wrong notice is no longer displayed when clearing the cache, so:
-			/
-			* TODO Quick Edit no longer fails to render.
-			* TODO You can now save posts again when using WordPress heartbeat.
+		* When debugging, a doing it wrong notice is no longer displayed when clearing the cache, so:
+			* Quick Edit no longer fails to render.
+			* You can now update and create posts again when using WordPress heartbeat.
 
 = 2.9.0 - Equitable Erudition =
 

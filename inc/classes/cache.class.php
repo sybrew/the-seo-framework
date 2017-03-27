@@ -235,15 +235,15 @@ class Cache extends Sitemaps {
 				//* Code debt!:
 				$this->setup_auto_description_transient( $front_id, '', 'frontpage' );
 
-				$this->object_cache_delete( $this->get_meta_output_cache_key_by_type( $this->get_the_front_page_ID(), '', 'frontpage' ) );
-				$this->is_option_checked( 'cache_meta_schema' ) and $this->delete_ld_json_transient( $front_id, '', 'frontpage' );
-				$this->is_option_checked( 'cache_meta_description' ) and delete_transient( $this->auto_description_transient );
+				$this->object_cache_delete( $this->get_meta_output_cache_key_by_type( $front_id, '', 'frontpage' ) );
+				$this->delete_auto_description_transient( $front_id, '', 'frontpage' );
+				$this->delete_ld_json_transient( $front_id, '', 'frontpage' );
 				break;
 
 			case 'post' :
 				if ( ! $post_type = \get_post_type( $id ) )
 					return false;
-				$this->object_cache_delete( $this->get_meta_output_cache_key_by_type( $id, $post_type ) );
+				$this->object_cache_delete( $this->get_meta_output_cache_key_by_type( $id, '', $post_type ) );
 				$this->delete_auto_description_transient( $id, '', $post_type );
 				$this->delete_ld_json_transient( $id, '', $post_type );
 				return true;
@@ -251,15 +251,16 @@ class Cache extends Sitemaps {
 
 			//* Careful, this can only run on archive pages. For now.
 			case 'term' :
-				$this->object_cache_delete( $this->get_meta_output_cache_key( $id ) );
-				$this->delete_auto_description_transient( $id, $args['term'] );
-				$this->delete_ld_json_transient( $id, $args['term'] );
+				$this->object_cache_delete( $this->get_meta_output_cache_key_by_type( $id, $args['term'], 'term' ) );
+				$this->delete_auto_description_transient( $id, $args['term'], 'term' );
+				$this->delete_ld_json_transient( $id, $args['term'], 'term' );
 				return true;
 				break;
 
 			case 'author' :
-				$this->object_cache_delete( $this->get_meta_output_cache_key( $id ) );
+				$this->object_cache_delete( $this->get_meta_output_cache_key_by_type( $id, 'author', 'author' ) );
 				$this->delete_auto_description_transient( $id, 'author', 'author' );
+				$this->delete_ld_json_transient( $id, 'author', 'author' );
 				return true;
 				break;
 
@@ -473,10 +474,11 @@ class Cache extends Sitemaps {
 	}
 
 	/**
-	 * Setup vars for transients which require $page_id.
+	 * Sets up property for autodescription transient.
 	 *
 	 * @since 2.3.3
 	 * @since 2.8.0: Now listens to option 'cache_meta_description'.
+	 * @see $this->get_auto_description_transient().
 	 *
 	 * @param int|string|bool $page_id the Taxonomy or Post ID. If false it will generate for the blog page.
 	 * @param string $taxonomy The taxonomy name.
@@ -488,28 +490,36 @@ class Cache extends Sitemaps {
 		if ( false === $this->is_option_checked( 'cache_meta_description' ) )
 			return;
 
+		$this->auto_description_transient = $this->get_auto_description_transient( $page_id, $taxonomy, $type );
+	}
+
+	/**
+	 * Returns autodescription transients key by page ID.
+	 *
+	 * @since 2.9.1
+	 *
+	 * @param int|string|bool $page_id the Taxonomy or Post ID.
+	 * @param string $taxonomy The taxonomy name.
+	 * @param string $type The Post Type.
+	 * @return string The auto description transient key.
+	 */
+	public function get_auto_description_transient( $page_id = 0, $taxonomy = '', $type = null ) {
+
 		$cache_key = $this->generate_cache_key( $page_id, $taxonomy, $type );
 
-		/**
-		 * When the caching mechanism changes. Change this value.
-		 * Use hex. e.g. 0, 1, 2, 9, a, b
-		 *
-		 * @since 2.3.4
-		 */
 		$revision = '2';
-
 		$additions = $this->add_description_additions( $page_id, $taxonomy );
 
 		if ( $additions ) {
 			$option = $this->get_option( 'description_blogname' ) ? '1' : '0';
-			$this->auto_description_transient = 'tsf_desc_' . $option . '_' . $revision . '_' . $cache_key;
+			return 'tsf_desc_' . $option . '_' . $revision . '_' . $cache_key;
 		} else {
-			$this->auto_description_transient = 'tsf_desc_noa_' . $revision . '_' . $cache_key;
+			return 'tsf_desc_noa_' . $revision . '_' . $cache_key;
 		}
 	}
 
 	/**
-	 * Setup vars for transients which require $page_id.
+	 * Sets up property for ld_json transient.
 	 *
 	 * @since 2.3.3
 	 * @since 2.8.0: Now listens to option 'cache_meta_schema'.
@@ -524,13 +534,23 @@ class Cache extends Sitemaps {
 		if ( false === $this->is_option_checked( 'cache_meta_schema' ) )
 			return;
 
+		$this->ld_json_transient = $this->get_ld_json_transient( $page_id, $taxonomy, $type );
+	}
+
+	/**
+	 * Returns ld_json transients for page ID.
+	 *
+	 * @since 2.9.1
+	 *
+	 * @param int|string|bool $page_id the Taxonomy or Post ID. If false it will generate for the blog page.
+	 * @param string $taxonomy The taxonomy name.
+	 * @param string|null $type The post type.
+	 * @return string The ld_json cache key.
+	 */
+	public function get_ld_json_transient( $page_id, $taxonomy = '', $type = null ) {
+
 		$cache_key = $this->generate_cache_key( $page_id, $taxonomy, $type );
 
-		/**
-		 * When the caching mechanism changes. Change this value.
-		 *
-		 * Use hex. e.g. 0, 1, 2, 9, a, b
-		 */
 		$revision = '3';
 
 		/**
@@ -540,7 +560,7 @@ class Cache extends Sitemaps {
 		$options .= $this->enable_ld_json_sitename() ? '1' : '0';
 		$options .= $this->enable_ld_json_searchbox() ? '1' : '0';
 
-		$this->ld_json_transient = 'tsf_' . $revision . '_' . $options . '_ldjs_' . $cache_key;
+		return 'tsf_' . $revision . '_' . $options . '_ldjs_' . $cache_key;
 	}
 
 	/**
@@ -565,7 +585,7 @@ class Cache extends Sitemaps {
 		if ( isset( $type ) )
 			return $this->generate_cache_key_by_type( $page_id, $taxonomy, $type );
 
-		return $this->generate_cache_key_by_query( $page_id, $taxonomy );
+		return $this->generate_cache_key_by_query( $page_id, $taxonomy, $type );
 	}
 
 	/**
@@ -582,7 +602,7 @@ class Cache extends Sitemaps {
 	 * @param string $type The Post Type
 	 * @return string The generated cache key by query.
 	 */
-	public function generate_cache_key_by_query( $page_id, $taxonomy = '' ) {
+	public function generate_cache_key_by_query( $page_id, $taxonomy = '', $type = null ) {
 
 		$page_id = $page_id ?: $this->get_the_real_ID();
 
@@ -741,7 +761,7 @@ class Cache extends Sitemaps {
 	 * @param string $type The Post Type
 	 * @return string The generated cache key by type.
 	 */
-	public function generate_cache_key_by_type( $page_id, $taxonomy = '', $type = null ) {
+	public function generate_cache_key_by_type( $page_id, $taxonomy = '', $type = '' ) {
 
 		switch ( $type ) :
 			case 'author' :
@@ -761,6 +781,9 @@ class Cache extends Sitemaps {
 				break;
 			case 'singular' :
 				return $this->add_cache_key_suffix( 'singular_' . $page_id );
+				break;
+			case 'term' :
+				return $this->add_cache_key_suffix( $this->generate_taxonomial_cache_key( $page_id, $taxonomy ) );
 				break;
 			default :
 				$this->_doing_it_wrong( __METHOD__, 'Third parameter must be a known type.', '2.6.5' );
@@ -793,7 +816,9 @@ class Cache extends Sitemaps {
 	/**
 	 * Returns the front page partial transient key.
 	 *
-	 * @param string $type
+	 * @since ??? (2.8+)
+	 *
+	 * @param string $type Either blog or page.
 	 * @return string the front page transient key.
 	 */
 	public function generate_front_page_cache_key( $type = '' ) {
@@ -872,6 +897,7 @@ class Cache extends Sitemaps {
 	 * @since 2.8.0
 	 * @uses THE_SEO_FRAMEWORK_DB_VERSION as cache key buster.
 	 * @see $this->get_meta_output_cache_key_by_type();
+	 * @todo deprecate.
 	 *
 	 * @param int $id The ID. Defaults to $this->get_the_real_ID();
 	 * @return string The TSF meta output cache key.
@@ -903,12 +929,35 @@ class Cache extends Sitemaps {
 	 * @param string $type The post type.
 	 * @return string The TSF meta output cache key.
 	 */
-	public function get_meta_output_cache_key_by_type( $id = 0, $type = '' ) {
+	public function get_meta_output_cache_key_by_query() {
 		/**
 		 * Cache key buster.
 		 * Busts cache on each new db version.
 		 */
-		$key = $this->generate_cache_key_by_type( $id, '', $type ) . '_' . THE_SEO_FRAMEWORK_DB_VERSION;
+		$key = $this->generate_cache_key_by_query() . '_' . THE_SEO_FRAMEWORK_DB_VERSION;
+
+		$page = (string) $this->page();
+		$paged = (string) $this->paged();
+
+		return $cache_key = 'seo_framework_output_' . $key . '_' . $paged . '_' . $page;
+	}
+
+	/**
+	 * Returns the TSF meta output Object cache key.
+	 *
+	 * @since 2.9.1
+	 * @uses THE_SEO_FRAMEWORK_DB_VERSION as cache key buster.
+	 *
+	 * @param int $id The ID. Defaults to $this->get_the_real_ID();
+	 * @param string $type The post type.
+	 * @return string The TSF meta output cache key.
+	 */
+	public function get_meta_output_cache_key_by_type( $id = 0, $taxonomy = '', $type = '' ) {
+		/**
+		 * Cache key buster.
+		 * Busts cache on each new db version.
+		 */
+		$key = $this->generate_cache_key_by_type( $id, $taxonomy, $type ) . '_' . THE_SEO_FRAMEWORK_DB_VERSION;
 
 		$page = '1';
 		$paged = '1';
@@ -981,25 +1030,25 @@ class Cache extends Sitemaps {
 	 * Returns old option, since that's passed for sanitation within WP Core.
 	 *
 	 * @since 2.3.3
-	 * @since 2.8.0 : Now listens to option 'cache_meta_description' before deleting transient.
+	 * @since 2.8.0 Now listens to option 'cache_meta_description' before deleting transient.
+	 * @since 2.9.1 Now no longer sets object property $this->auto_description_transient.
 	 *
 	 * @param string $old_option The previous blog description option.
 	 * @return string Previous option.
 	 */
 	public function delete_auto_description_frontpage_transient( $old_option ) {
 
-		$this->setup_auto_description_transient( $this->get_the_front_page_ID(), '', 'frontpage' );
-
-		$this->is_option_checked( 'cache_meta_description' ) and \delete_transient( $this->auto_description_transient );
+		$this->delete_auto_description_transient( $this->get_the_front_page_ID(), '', 'frontpage' );
 
 		return $old_option;
 	}
 
 	/**
-	 * Delete transient for the automatic description on requests.
+	 * Deletes transient for the automatic description on requests.
 	 *
 	 * @since 2.3.3
 	 * @since 2.8.0 : Now listens to option 'cache_meta_description' before deleting transient.
+	 * @since 2.9.1 Now no longer sets object property $this->auto_description_transient.
 	 *
 	 * @param mixed $page_id The page ID or identifier.
 	 * @param string $taxonomy The tt name.
@@ -1008,18 +1057,20 @@ class Cache extends Sitemaps {
 	 */
 	public function delete_auto_description_transient( $page_id, $taxonomy = '', $type = null ) {
 
-		$this->setup_auto_description_transient( $page_id, $taxonomy, $type );
-
-		$this->is_option_checked( 'cache_meta_description' ) and \delete_transient( $this->auto_description_transient );
+		if ( $this->is_option_checked( 'cache_meta_description' ) ) {
+			$transient = $this->get_auto_description_transient( $page_id, $taxonomy, $type );
+			\delete_transient( $transient );
+		}
 
 		return true;
 	}
 
 	/**
-	 * Delete transient for the LD+Json scripts on requests.
+	 * Deletes transient for the LD+Json scripts on requests.
 	 *
 	 * @since 2.4.2
-	 * @since 2.8.0 : Now listens to option 'cache_meta_schema' before deleting transient.
+	 * @since 2.8.0 Now listens to option 'cache_meta_schema' before deleting transient.
+	 * @since 2.9.1 Now no longer sets object property $this->ld_json_transient.
 	 *
 	 * @param mixed $page_id The page ID or identifier.
 	 * @param string $taxonomy The tt name.
@@ -1031,9 +1082,10 @@ class Cache extends Sitemaps {
 		static $flushed = null;
 
 		if ( ! isset( $flushed ) ) {
-			$this->setup_ld_json_transient( $page_id, $taxonomy, $type );
-
-			$this->is_option_checked( 'cache_meta_schema' ) and \delete_transient( $this->ld_json_transient );
+			if ( $this->is_option_checked( 'cache_meta_schema' ) ) {
+				$transient = $this->get_ld_json_transient( $page_id, $taxonomy, $type );
+				\delete_transient( $transient );
+			}
 
 			$flushed = 'Oh behave!';
 
