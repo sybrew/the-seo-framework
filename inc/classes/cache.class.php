@@ -623,9 +623,6 @@ class Cache extends Sitemaps {
 		if ( isset( $cached_id[ $page_id ][ $taxonomy ] ) )
 			return $cached_id[ $page_id ][ $taxonomy ];
 
-		// var_dump(): debugging.
-		$this->can_cache_query();
-
 		//* Placeholder ID.
 		$the_id = '';
 		$t = $taxonomy;
@@ -780,7 +777,7 @@ class Cache extends Sitemaps {
 	 *
 	 * @param int|string|bool $page_id the Taxonomy or Post ID.
 	 * @param string $taxonomy The term taxonomy.
-	 * @param string $type The Post Type
+	 * @param string $type The Post Type.
 	 * @return string The generated cache key by type.
 	 */
 	public function generate_cache_key_by_type( $page_id, $taxonomy = '', $type = '' ) {

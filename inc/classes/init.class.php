@@ -173,7 +173,9 @@ class Init extends Query {
 			\add_action( 'current_screen', array( $this, 'init_columns' ) );
 
 			//* Ajax handlers for columns.
-			\add_action( 'wp_ajax_add-tag', array( $this, 'init_columns_ajax' ), -1 );
+			\add_action( 'wp_ajax_add-tag', array( $this, '_init_columns_wp_ajax_add_tag' ), -1 );
+			\add_action( 'wp_ajax_inline-save', array( $this, '_init_columns_wp_ajax_inline_save' ), -1 );
+			\add_action( 'wp_ajax_inline-save-tax', array( $this, '_init_columns_wp_ajax_inline_save_tax' ), -1 );
 		}
 
 		if ( $this->load_options ) :

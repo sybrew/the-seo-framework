@@ -86,18 +86,19 @@ class Doing_It_Right extends Generate_Ldjson {
 	}
 
 	/**
-	 * AJAX wrapper for $this->init_columns
+	 * Initializes SEO columns for adding a tag or category.
 	 *
-	 * @since 2.6.0
+	 * @since 2.9.1
+	 * @access private
 	 */
-	public function init_columns_ajax() {
+	public function _init_columns_wp_ajax_add_tag() {
 
 		/**
 		 * Securely check the referrer, instead of leaving holes everywhere.
 		 */
 		if ( $this->doing_ajax() && \check_ajax_referer( 'add-tag', '_wpnonce_add-tag', false ) ) {
 
-			$taxonomy = ! empty( $_POST['taxonomy'] ) ? $_POST['taxonomy'] : 'post_tag';
+			$taxonomy = ! empty( $_POST['taxonomy'] ) ? \sanitize_key( $_POST['taxonomy'] ) : 'post_tag';
 			$tax = \get_taxonomy( $taxonomy );
 
 			if ( \current_user_can( $tax->cap->edit_terms ) )
@@ -106,9 +107,64 @@ class Doing_It_Right extends Generate_Ldjson {
 	}
 
 	/**
+	 * Initializes SEO columns for adding a tag or category.
+	 *
+	 * @since 2.9.1
+	 * @access private
+	 */
+	public function _init_columns_wp_ajax_inline_save() {
+
+		error_log( var_export( $_POST, true ) );
+
+		/**
+		 * Securely check the referrer, instead of leaving holes everywhere.
+		 */
+		if ( $this->doing_ajax() && \check_ajax_referer( 'inlineeditnonce', '_inline_edit', false ) ) {
+			$post_type = isset( $_POST['post_type'] ) ? \sanitize_key( $_POST['post_type'] ) : false;
+
+			if ( $post_type && isset( $_POST['post_ID'] ) ) {
+				$post_id = (int) $_POST['post_ID'];
+				$access = false;
+
+				$pto = \get_post_type_object( $post_type );
+				if ( isset( $pto->capability_type ) )
+					$access = \current_user_can( 'edit_' . $pto->capability_type, $post_id );
+
+				if ( $access )
+					$this->init_columns( '', true );
+			}
+		}
+	}
+
+	/**
+	 * Initializes SEO columns for adding a tag or category.
+	 *
+	 * @since 2.9.1
+	 * @access private
+	 */
+	public function _init_columns_wp_ajax_inline_save_tax() {
+
+		/**
+		 * Securely check the referrer, instead of leaving holes everywhere.
+		 */
+		if ( $this->doing_ajax() && \check_ajax_referer( 'taxinlineeditnonce', '_inline_edit', false ) ) {
+			$taxonomy = \sanitize_key( $_POST['taxonomy'] );
+			$tax = \get_taxonomy( $taxonomy );
+
+			if ( $tax && isset( $_POST['tax_ID'] ) ) {
+				$tax_id = (int) $_POST['tax_ID'];
+
+				if ( \current_user_can( 'edit_term', $tax_id ) )
+					$this->init_columns( '', true );
+			}
+		}
+	}
+
+	/**
 	 * Initializes SEO bar columns.
 	 *
 	 * @since 2.1.9
+	 * @since 2.9.1 Now supports inline edit AJAX.
 	 *
 	 * @param object|empty $screen WP_Screen
 	 * @param bool $doing_ajax Whether we're doing an AJAX response.
@@ -129,22 +185,36 @@ class Doing_It_Right extends Generate_Ldjson {
 			return;
 
 		if ( $doing_ajax ) {
-			$post_type = isset( $_POST['post_type'] ) ? $_POST['post_type'] : '';
+			$post_type = isset( $_POST['post_type'] ) ? \sanitize_key( $_POST['post_type'] ) : '';
+			$post_type = $post_type ?: ( isset( $_POST['tax_type'] ) ? \sanitize_key( $_POST['tax_type'] ) : '' );
 		} else {
 			$post_type = isset( $screen->post_type ) ? $screen->post_type : '';
 		}
 
-		if ( $this->post_type_supports_custom_seo( $post_type ) ) {
+		if ( $this->post_type_supports_custom_seo( $post_type ) ) :
 			if ( $doing_ajax ) {
-
 				//* Nonce is done in $this->init_columns_ajax()
-				$id = isset( $_POST['screen'] ) ? $_POST['screen'] : false;
-				$taxonomy = isset( $_POST['taxonomy'] ) ? $_POST['taxonomy'] : false;
+				$id = isset( $_POST['screen'] ) ? \sanitize_key( $_POST['screen'] ) : false;
+				$taxonomy = isset( $_POST['taxonomy'] ) ? \sanitize_key( $_POST['taxonomy'] ) : false;
 
-				if ( $taxonomy && $id ) {
+				if ( $id ) {
+					//* Everything but inline-save-tax action.
 					\add_filter( 'manage_' . $id . '_columns', array( $this, 'add_column' ), 1 );
-					\add_action( 'manage_' . $taxonomy . '_custom_column', array( $this, 'seo_bar_ajax' ), 1, 3 );
+
+					/**
+					 * Always load pages and posts.
+					 * Many CPT plugins rely on these.
+					 */
+					\add_action( 'manage_posts_custom_column', array( $this, 'seo_bar_ajax' ), 1, 3 );
+					\add_action( 'manage_pages_custom_column', array( $this, 'seo_bar_ajax' ), 1, 3 );
+				} elseif ( $taxonomy ) {
+					//* Action: inline-save-tax does not POST screen.
+					\add_filter( 'manage_edit-' . $taxonomy . '_columns', array( $this, 'add_column' ), 1 );
 				}
+
+				if ( $taxonomy )
+					\add_action( 'manage_' . $taxonomy . '_custom_column', array( $this, 'seo_bar_ajax' ), 1, 3 );
+
 			} else {
 				$id = isset( $screen->id ) ? $screen->id : '';
 
@@ -164,7 +234,7 @@ class Doing_It_Right extends Generate_Ldjson {
 					\add_action( 'manage_pages_custom_column', array( $this, 'seo_bar' ), 1, 3 );
 				}
 			}
-		}
+		endif;
 	}
 
 	/**
