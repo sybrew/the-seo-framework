@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: google, bing, open graph, seo, xml sitemap, breadcrumbs, meta, search engine, pagerank, serp, facebook, twitter
 Requires at least: 4.4.0
 Tested up to: 4.8.0
-Stable tag: 2.9.0
+Stable tag: 2.9.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -220,16 +220,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **Detailed log:**
 
 ***All we have to decide is what to do with [the time that is given us](https://theseoframework.com/?p=1912#detailed)***
-
-* **For everyone:**
-	* **Fixed:**
-		* The SEO Bar now re-renders on quick edit.
-		* When WordPress debugging is turned on, a doing it wrong notice is no longer displayed when clearing the cache, so:
-			* Quick Edit no longer fails to render.
-			* You can now update and create posts again when using WordPress heartbeat.
-		* Custom Post Type auto-descriptions and JSON+LD output no longer create a duplicated cache key entry.
-		* Custom Post Type entries in the back-end are now correctly flushed on update.
-			* This means that the automated description previews update correctly once more.
 
 = 2.9.0 - Equitable Erudition =
 
