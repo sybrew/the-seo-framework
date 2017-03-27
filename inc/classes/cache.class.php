@@ -232,7 +232,6 @@ class Cache extends Sitemaps {
 			case 'front' :
 				$front_id = $this->get_the_front_page_ID();
 
-				//* Code debt!:
 				$this->setup_auto_description_transient( $front_id, '', 'frontpage' );
 
 				$this->object_cache_delete( $this->get_meta_output_cache_key_by_type( $front_id, '', 'frontpage' ) );
@@ -243,6 +242,19 @@ class Cache extends Sitemaps {
 			case 'post' :
 				if ( ! $post_type = \get_post_type( $id ) )
 					return false;
+
+				//* Temporarily: Generic key.
+				switch ( $post_type ) {
+					case 'page' :
+					case 'post' :
+					case 'attachment' :
+						break;
+
+					default :
+						$post_type = 'singular';
+						break;
+				}
+
 				$this->object_cache_delete( $this->get_meta_output_cache_key_by_type( $id, '', $post_type ) );
 				$this->delete_auto_description_transient( $id, '', $post_type );
 				$this->delete_ld_json_transient( $id, '', $post_type );
@@ -576,8 +588,8 @@ class Cache extends Sitemaps {
 	 * @see $this->generate_cache_key_by_type() to get cache key outside of the query.
 	 *
 	 * @param int|string|bool $page_id the Taxonomy or Post ID.
-	 * @param string $taxonomy The Taxonomy name.
-	 * @param string $type The Post Type
+	 * @param string $taxonomy The taxonomy name.
+	 * @param string $type The Post Type.
 	 * @return string The generated cache key by query or type.
 	 */
 	public function generate_cache_key( $page_id, $taxonomy = '', $type = null ) {
@@ -626,16 +638,26 @@ class Cache extends Sitemaps {
 		} elseif ( $this->is_blog_page( $page_id ) ) {
 			$the_id = 'blog_' . $page_id;
 		} elseif ( $this->is_singular() ) {
-			if ( $this->is_page( $page_id ) ) {
-				$the_id = 'page_' . $page_id;
-			} elseif ( $this->is_single( $page_id ) ) {
-				$the_id = 'post_' . $page_id;
-			} elseif ( $this->is_attachment( $page_id ) ) {
-				$the_id = 'attach_' . $page_id;
-			} else {
-				//* Other.
-				$the_id = 'singular_' . $page_id;
-			}
+
+			$post_type = \get_post_type( $page_id );
+
+			switch ( $post_type ) :
+				case 'page' :
+					$the_id = 'page_' . $page_id;
+					break;
+
+				case 'post' :
+					$the_id = 'post_' . $page_id;
+					break;
+
+				case 'attachment' :
+					$the_id = 'attach_' . $page_id;
+					break;
+
+				default :
+					$the_id = 'singular_' . $page_id;
+					break;
+			endswitch;
 		} elseif ( $this->is_search() ) {
 			$query = '';
 
@@ -757,7 +779,7 @@ class Cache extends Sitemaps {
 	 * @see $this->generate_cache_key_by_query() to get cache key from the query.
 	 *
 	 * @param int|string|bool $page_id the Taxonomy or Post ID.
-	 * @param string $taxonomy The Taxonomy name.
+	 * @param string $taxonomy The term taxonomy.
 	 * @param string $type The Post Type
 	 * @return string The generated cache key by type.
 	 */
@@ -949,6 +971,7 @@ class Cache extends Sitemaps {
 	 * @uses THE_SEO_FRAMEWORK_DB_VERSION as cache key buster.
 	 *
 	 * @param int $id The ID. Defaults to $this->get_the_real_ID();
+	 * @param string $taxonomy The term taxonomy
 	 * @param string $type The post type.
 	 * @return string The TSF meta output cache key.
 	 */

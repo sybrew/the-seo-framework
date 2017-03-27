@@ -64,12 +64,12 @@ class Query extends Compat {
 		$this->_doing_it_wrong( __METHOD__, "You've initiated a method that uses queries too early.", '2.9.0' );
 
 		//* Backtrace debugging. Set to true for logging.
-		$backtrace = true;
+		$debug = $this->the_seo_framework_debug || false;
+		$catch_all = false;
 		$depth = 10;
-		$all = false;
-		if ( $backtrace ) {
+		if ( $debug ) {
 			static $_more = true;
-			if ( $all || $_more ) {
+			if ( $catch_all || $_more ) {
 				error_log( var_export( debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, $depth ), true ) );
 				$_more = false;
 			}

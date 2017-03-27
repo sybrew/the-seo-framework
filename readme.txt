@@ -228,6 +228,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* When debugging, a doing it wrong notice is no longer displayed when clearing the cache, so:
 			* Quick Edit no longer fails to render.
 			* You can now update and create posts again when using WordPress heartbeat.
+		* Custom Post Type descriptions no longer create a duplicated cache key entry.
 
 = 2.9.0 - Equitable Erudition =
 
