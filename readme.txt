@@ -206,6 +206,35 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
+= 2.9.2 - ??? (dwarves thing) =
+
+* **For everyone:**
+	* **Improved:**
+		* If an admin redirect initiated by TSF causes a white screen of death, a helping message is now output instead.
+	* **Fixed:**
+		/
+		* TODO https://wordpress.org/support/topic/author-archives-title-changes-with-recent-updates/
+		* TODO https://wordpress.org/support/topic/incorrect-ogurl-with-wc-vendors-plugin/
+		* TODO https://wordpress.org/support/topic/noindex-on-paginated-home-or-archives-not-working/
+		* TODO https://wordpress.org/support/topic/strange-seo-yoast-or-die/#post-9006202
+		* TODO https://wordpress.org/support/topic/noindex-on-paginated-home-or-archives-not-working/
+* **For developers:**
+	* **Improved:**
+		* Method `add_menu_link()` can now be called multiple times without issues.
+		* Method `get_all_options()` now has an extra method parameter that allows to overwrite the cache.
+	* **Updated:**
+		* Extended file copyright by a year. Awesome.
+	* **Filter notes:**
+		* **Fixed:**
+			* `the_seo_framework_description_args` second parameter now works.
+			* `the_seo_framework_og_image_args` second parameter now works.
+			* `the_seo_framework_title_args` second parameter now works.
+			* `the_seo_framework_url_args` second parameter now works.
+
+**Detailed log:**
+
+***thingy***
+
 = 2.9.1 - Sovereign Comprehension =
 
 **Release date:**

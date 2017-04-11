@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2017 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -317,7 +317,7 @@ class Init extends Query {
 		/**
 		 * @since 2.2.6
 		 *
-		 * Applies filters 'the_seo_framework_before_output' : array after functions output
+		 * Applies filters 'the_seo_framework_before_output' : array before functions output
 		 * Applies filters 'the_seo_framework_after_output' : array after functions output
 		 * @param array $functions {
 		 *		'callback' => string|array The function to call.

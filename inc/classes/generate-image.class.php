@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2017 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -221,13 +221,14 @@ class Generate_Image extends Generate_Url {
 	 * Reparses image args.
 	 *
 	 * @since 2.6.6
+	 * @since 2.9.2 Now passes args to filter.
 	 *
 	 * @param array $args required The passed arguments.
 	 * @return array $args parsed args.
 	 */
 	public function reparse_image_args( $args = array() ) {
 
-		$default_args = $this->parse_image_args( '', '', true );
+		$default_args = $this->parse_image_args( $args, '', true );
 
 		if ( empty( $args ) ) {
 			$args = $default_args;

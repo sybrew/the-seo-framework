@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2017 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -456,17 +456,19 @@ class Site_Options extends Sanitize {
 	 * Return current option array.
 	 *
 	 * @since 2.6.0
-	 * @since 2.9.0 Added $use_cache parameter.
+	 * @since 2.9.2 Added $use_current parameter.
 	 * @staticvar array $cache The option cache.
 	 *
 	 * @param string $setting The setting key.
+	 * @param bool $use_current Whether to use WordPress' version and update the cache
+	 *             or use locally the cached version.
 	 * @return array Options.
 	 */
-	public function get_all_options( $setting = null ) {
+	public function get_all_options( $setting = null, $use_current = false ) {
 
 		static $cache = array();
 
-		if ( isset( $cache[ $setting ] ) )
+		if ( ! $use_current && isset( $cache[ $setting ] ) )
 			return $cache[ $setting ];
 
 		if ( is_null( $setting ) )
@@ -536,6 +538,9 @@ class Site_Options extends Sanitize {
 	 * @since 2.2.2
 	 * @uses $this->the_seo_framework_get_option() Return option from the options table and cache result.
 	 * @uses THE_SEO_FRAMEWORK_NETWORK_OPTIONS
+	 *
+	 * Unused.
+	 * @todo deprecate.
 	 *
 	 * @param string  $key       Option name.
 	 * @param boolean $use_cache Optional. Whether to use the cache value or not. Defaults to true.

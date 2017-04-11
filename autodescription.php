@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://theseoframework.com/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.
- * Version: 2.9.1
+ * Version: 2.9.2-dev-2017.04.11.0
  * Author: Sybre Waaijer
  * Author URI: https://cyberwire.nl/
  * License: GPLv3
@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2017 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -42,26 +42,43 @@ defined( 'ABSPATH' ) or die;
 //}},0);
 
 /**
- * CDN Cache buster. 3 to 4 point.
- * Not many caching plugins use CDN in dashboard. What a shame. Firefox does cache.
+ * The plugin version.
+ *
+ * Used as a CDN and Browser Cache buster.
+ * Chrome and Firefox cache admin scripts.
+ *
+ * 3 point: x.x.y; x.x is major; y is minor.
+ *
  * @since 1.0.0
  */
 define( 'THE_SEO_FRAMEWORK_VERSION', '2.9.1' );
 
 /**
- * Plugin Database version for lightweight version upgrade comparing.
+ * The plugin Database version.
+ *
+ * Used for lightweight version upgrade comparing.
+ *
  * @since 2.7.0
  */
 define( 'THE_SEO_FRAMEWORK_DB_VERSION', '2903' );
 
 /**
- * Plugin options filter.
+ * The plugin options database option_name.
+ *
+ * Used for storing the SEO options array.
+ *
+ * @todo document filter.
+ *
  * @since 2.2.2
  */
 define( 'THE_SEO_FRAMEWORK_SITE_OPTIONS', (string) apply_filters( 'the_seo_framework_site_options', 'autodescription-site-settings' ) );
 
 /**
- * Plugin options filter.
+ * The plugin network options.
+ *
+ * @todo document filter.
+ * Unused. @todo remove
+ *
  * @since 2.2.2
  */
 define( 'THE_SEO_FRAMEWORK_NETWORK_OPTIONS', (string) apply_filters( 'the_seo_framework_network_settings', 'autodescription-network-settings' ) );

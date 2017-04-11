@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2017 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -261,14 +261,15 @@ class Generate_Url extends Generate_Title {
 	/**
 	 * Reparse URL args.
 	 *
-	 * @param array $args required The passed arguments.
-	 *
 	 * @since 2.6.2
+	 * @since 2.9.2 Now passes args to filter.
+	 *
+	 * @param array $args required The passed arguments.
 	 * @return array $args parsed args.
 	 */
 	public function reparse_url_args( $args = array() ) {
 
-		$default_args = $this->parse_url_args( '', '', true );
+		$default_args = $this->parse_url_args( $args, '', true );
 
 		if ( is_array( $args ) ) {
 			if ( empty( $args ) ) {

@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 - 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2017 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -93,10 +93,17 @@ class Admin_Pages extends Inpost {
 	 * Adds menu links under "settings" in the wp-admin dashboard
 	 *
 	 * @since 2.2.2
+	 * @since 2.9.2 Added static cache so the method can only run once.
+	 * @staticvar bool $run True if already run.
 	 *
-	 * @return void
+	 * @return void Early if method is already called.
 	 */
 	public function add_menu_link() {
+
+		static $run = false;
+
+		if ( $run )
+			return;
 
 		$menu = array(
 			'page_title' => \esc_html__( 'SEO Settings', 'autodescription' ),
@@ -137,6 +144,7 @@ class Admin_Pages extends Inpost {
 		//* Enqueue scripts
 		\add_action( 'admin_print_scripts-' . $this->seo_settings_page_hook, array( $this, 'enqueue_admin_javascript' ), 11 );
 
+		$run = true;
 	}
 
 	/**
