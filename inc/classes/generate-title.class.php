@@ -1269,9 +1269,9 @@ class Generate_Title extends Generate_Description {
 
 		/**
 		 * Applies filters the_seo_framework_use_archive_title_prefix : {
-		 *		@param bool true to add prefix.
-		 * 		@param object $term The Term object.
-		 *	}
+		 *   @param bool true to add prefix.
+		 *   @param object $term The Term object.
+		 * }
 		 *
 		 * @since 2.6.0
 		 */

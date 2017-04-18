@@ -186,7 +186,8 @@ switch ( $instance ) :
 		?>
 		<hr>
 
-		<h4><?php esc_html_e( 'Social Pages connected to this website', 'autodescription' ); ?></h4><?php
+		<h4><?php esc_html_e( 'Social Pages connected to this website', 'autodescription' ); ?></h4>
+		<?php
 		$this->description( __( "Don't have a page at a site or is the profile only privately accessible? Leave that field empty. Unsure? Fill it in anyway.", 'autodescription' ) );
 		$this->description( __( 'Add the link that leads directly to the social page of this website.', 'autodescription' ) );
 
@@ -201,14 +202,14 @@ switch ( $instance ) :
 				'option'		=> 'knowledge_facebook',
 				'dashicon'		=> 'dashicons-facebook',
 				'desc' 			=> 'Facebook ' . __( 'Page', 'autodescription' ),
-				'placeholder'	=> 'http://www.facebook.com/' . $connectedi18n,
-				'examplelink'	=> esc_url( 'https://facebook.com/me' ),
+				'placeholder'	=> 'https://www.facebook.com/' . $connectedi18n,
+				'examplelink'	=> esc_url( 'https://www.facebook.com/me' ),
 			),
 			'twitter' => array(
 				'option'		=> 'knowledge_twitter',
 				'dashicon'		=> 'dashicons-twitter',
 				'desc' 			=> 'Twitter ' . $profile18n,
-				'placeholder'	=> 'http://www.twitter.com/' . $connectedi18n,
+				'placeholder'	=> 'https://twitter.com/' . $connectedi18n,
 				'examplelink'	=> esc_url( 'https://twitter.com/home' ), // No example link available.
 			),
 			'gplus' => array(
@@ -222,22 +223,22 @@ switch ( $instance ) :
 				'option'		=> 'knowledge_instagram',
 				'dashicon'		=> 'genericon-instagram',
 				'desc' 			=> 'Instagram ' . $profile18n,
-				'placeholder'	=> 'http://instagram.com/' . $connectedi18n,
+				'placeholder'	=> 'https://instagram.com/' . $connectedi18n,
 				'examplelink'	=> esc_url( 'https://instagram.com/' ), // No example link available.
 			),
 			'youtube' => array(
 				'option'		=> 'knowledge_youtube',
 				'dashicon'		=> 'genericon-youtube',
 				'desc' 			=> 'Youtube ' . $profile18n,
-				'placeholder'	=> 'http://www.youtube.com/' . $connectedi18n,
+				'placeholder'	=> 'https://www.youtube.com/channel/' . $connectedi18n,
 				'examplelink'	=> esc_url( 'https://www.youtube.com/user/%2f' ), // Yes a double slash.
 			),
 			'linkedin' => array(
 				'option'		=> 'knowledge_linkedin',
 				'dashicon'		=> 'genericon-linkedin-alt',
 				'desc' 			=> 'LinkedIn ' . $profile18n . ' ID',
-				'placeholder'	=> 'http://www.linkedin.com/profile/view?id=' . $connectedi18n,
-				'examplelink'	=> esc_url( 'https://www.linkedin.com/profile/view' ), // This generates a query arg. We should allow that.
+				'placeholder'	=> 'https://www.linkedin.com/in/' . $connectedi18n,
+				'examplelink'	=> esc_url( 'https://www.linkedin.com/profile/view' ),
 			),
 			'pinterest' => array(
 				'option'		=> 'knowledge_pinterest',
@@ -257,7 +258,7 @@ switch ( $instance ) :
 				'option'		=> 'knowledge_tumblr',
 				'dashicon'		=> 'genericon-tumblr',
 				'desc' 			=> 'Tumblr ' . __( 'Blog', 'autodescription' ),
-				'placeholder'	=> 'https://tumblr.com/blog/' . $connectedi18n,
+				'placeholder'	=> 'https://www.tumblr.com/blog/' . $connectedi18n,
 				'examplelink'	=> esc_url( 'https://www.tumblr.com/dashboard' ),  // No example link available.
 			),
 		);

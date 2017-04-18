@@ -211,6 +211,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * **For everyone:**
 	* **Improved:**
 		* If an admin redirect initiated by TSF causes a white screen of death, a helping message is now output instead.
+	* **Updated:**
+		* Knowledge Graph Social Profile links' placeholders and example profile redirect links.
 	* **Fixed:**
 		/
 		* TODO https://wordpress.org/support/topic/author-archives-title-changes-with-recent-updates/
@@ -218,6 +220,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* TODO https://wordpress.org/support/topic/noindex-on-paginated-home-or-archives-not-working/
 		* TODO https://wordpress.org/support/topic/strange-seo-yoast-or-die/#post-9006202
 		* TODO https://wordpress.org/support/topic/noindex-on-paginated-home-or-archives-not-working/
+		* TODO https://wordpress.org/support/topic/saving-draft-hangs-errors-since-update/#post-9037756
 * **For developers:**
 	* **Improved:**
 		* Method `add_menu_link()` can now be called multiple times without issues.
