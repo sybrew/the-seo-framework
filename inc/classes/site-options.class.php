@@ -127,7 +127,7 @@ class Site_Options extends Sanitize {
 			'description_separator' => 'pipe', // Description separator, dropdown
 			'description_additions' => 1,  // "Title on Blogname" within Description
 			'description_blogname'  => 1,  // "on Blogname" within Description
-		//	'description_custom'    => '', // Custom prefix
+		//	'description_custom'    => '', // Custom prefix TODO
 
 			// Robots directory.
 			'noodp'  => 1, // Site noopd robots settings
@@ -926,6 +926,7 @@ class Site_Options extends Sanitize {
 	 *
 	 * @since 2.5.2
 	 * @see https://www.facebook.com/translations/FacebookLocales.xml
+	 * @see $this->language_keys() for the associative array keys.
 	 *
 	 * @return array Valid Facebook locales
 	 */
@@ -1075,7 +1076,8 @@ class Site_Options extends Sanitize {
 	}
 
 	/**
-	 * Returns Facebook locales array keys.
+	 * Returns Facebook locales' associative array keys.
+	 *
 	 * This is apart from the fb_locales array since there are "duplicated" keys.
 	 * Use this to compare the numeric key position.
 	 *

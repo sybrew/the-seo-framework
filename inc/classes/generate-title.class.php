@@ -786,9 +786,11 @@ class Generate_Title extends Generate_Description {
 
 	/**
 	 * Gets the archive Title, including filter. Also works in admin.
+	 *
 	 * @NOTE Taken from WordPress core. Altered to work in the Admin area.
 	 *
 	 * @since 2.6.0
+	 * @since 2.9.2 : Added WordPress core filter 'get_the_archive_title'
 	 *
 	 * @param object $term The Term object.
 	 * @param array $args The Title arguments.
@@ -823,7 +825,7 @@ class Generate_Title extends Generate_Description {
 			$title = $use_prefix ? sprintf( \__( '%1$s: %2$s', 'autodescription' ), $this->get_the_term_name( $term ), $title ) : $title;
 		} elseif ( $this->is_author() ) {
 			$title = \get_the_author();
-				/* translators: Front-end output. */
+			/* translators: Front-end output. */
 			$title = $use_prefix ? sprintf( \__( 'Author: %s', 'autodescription' ), $title ) : $title;
 		} elseif ( $this->is_date() ) {
 			if ( $this->is_year() ) {
@@ -887,7 +889,14 @@ class Generate_Title extends Generate_Description {
 			$title = \__( 'Archives', 'autodescription' );
 		}
 
-		return $title;
+		/**
+		 * Filters the archive title.
+		 *
+		 * @since WordPress Core 4.1.0
+		 *
+		 * @param string $title Archive title to be displayed.
+		 */
+		return \apply_filters( 'get_the_archive_title', $title );
 	}
 
 	/**

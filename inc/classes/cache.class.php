@@ -656,8 +656,9 @@ class Cache extends Sitemaps {
 		} elseif ( $this->is_search() ) {
 			$query = '';
 
+			//* TODO figure out why this check is here... admin compat maybe?
 			if ( function_exists( 'get_search_query' ) ) {
-				$search_query = \get_search_query();
+				$search_query = \get_search_query( $_escaped = true );
 
 				if ( $search_query )
 					$query = str_replace( ' ', '', $search_query );
@@ -714,7 +715,7 @@ class Cache extends Sitemaps {
 					static $unix = null;
 
 					if ( ! isset( $unix ) )
-						$unix = date( 'U' );
+						$unix = time();
 
 					//* Temporarily disable caches to prevent database spam.
 					$this->the_seo_framework_use_transients = false;
@@ -769,6 +770,7 @@ class Cache extends Sitemaps {
 	 * Use this method if you wish to evade the query usage.
 	 *
 	 * @since 2.9.1
+	 * @since 2.9.2 Now returns false when an incorrect $type is supplied.
 	 * @staticvar array $cached_id : contains cache strings.
 	 * @see $this->generate_cache_key().
 	 * @see $this->generate_cache_key_by_query() to get cache key from the query.
@@ -776,7 +778,7 @@ class Cache extends Sitemaps {
 	 * @param int|string|bool $page_id the Taxonomy or Post ID.
 	 * @param string $taxonomy The term taxonomy.
 	 * @param string $type The Post Type.
-	 * @return string The generated cache key by type.
+	 * @return string|bool String the generated cache key. Bool false on failure.
 	 */
 	public function generate_cache_key_by_type( $page_id, $taxonomy = '', $type = '' ) {
 
@@ -807,6 +809,8 @@ class Cache extends Sitemaps {
 				return $this->add_cache_key_suffix( \esc_sql( $type . '_' . $page_id . '_' . $taxonomy ) );
 				break;
 		endswitch;
+
+		return false;
 	}
 
 	/**

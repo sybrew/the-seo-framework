@@ -725,11 +725,12 @@ class Core {
 	 *
 	 * @since 2.8.0
 	 * @since 2.9.0 Now adds a little more relative softness based on rel_lum.
+	 * @since 2.9.2 (Typo): Renamed from 'get_relatitve_fontcolor' to 'get_relative_fontcolor'.
 	 *
 	 * @param string $hex The 3 to 6 character RGB hex. '#' prefix is supported.
 	 * @return string The hexadecimal RGB relative font color, without '#' prefix.
 	 */
-	public function get_relatitve_fontcolor( $hex = '' ) {
+	public function get_relative_fontcolor( $hex = '' ) {
 
 		$hex = ltrim( $hex, '#' );
 

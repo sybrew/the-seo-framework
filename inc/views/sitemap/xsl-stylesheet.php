@@ -45,7 +45,7 @@ $sitemap_color_accent = '#' . $this->s_color_hex( (string) apply_filters( 'the_s
  * Applies filters 'the_seo_framework_sitemap_relative_font_color' : string
  * @since 2.8.0
  */
-$relative_font_color = '#' . $this->s_color_hex( (string) apply_filters( 'the_seo_framework_sitemap_relative_font_color', $this->get_relatitve_fontcolor( $sitemap_color_main ) ) );
+$relative_font_color = '#' . $this->s_color_hex( (string) apply_filters( 'the_seo_framework_sitemap_relative_font_color', $this->get_relative_fontcolor( $sitemap_color_main ) ) );
 
 /**
  * Applies filters 'the_seo_framework_indicator_sitemap' : boolean

@@ -210,21 +210,33 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * **For everyone:**
 	* **Improved:**
-		* If an admin redirect initiated by TSF causes a white screen of death, a helping message is now output instead.
+		* If an admin redirect initiated by TSF causes a white screen of death, a helping message is now outputted on the white screen.
+		/
+		* TODO On plugin activation and deactivation, the options are now automatically toggled from options autoload.
+		 	* For non-developers, this means that this plugin won't stack up on your website's memory after deactivation. Unlike many other plugins.
 	* **Updated:**
 		* Knowledge Graph Social Profile links' placeholders and example profile redirect links.
 	* **Fixed:**
 		/
-		* TODO https://wordpress.org/support/topic/author-archives-title-changes-with-recent-updates/
+		* TODO (third party issue) https://wordpress.org/support/topic/author-archives-title-changes-with-recent-updates/
 		* TODO https://wordpress.org/support/topic/incorrect-ogurl-with-wc-vendors-plugin/
-		* TODO https://wordpress.org/support/topic/noindex-on-paginated-home-or-archives-not-working/
-		* TODO https://wordpress.org/support/topic/strange-seo-yoast-or-die/#post-9006202
-		* TODO https://wordpress.org/support/topic/noindex-on-paginated-home-or-archives-not-working/
-		* TODO https://wordpress.org/support/topic/saving-draft-hangs-errors-since-update/#post-9037756
+		* TODO (invalid) https://wordpress.org/support/topic/strange-seo-yoast-or-die/#post-9006202
+		* TODO (third party issue) https://wordpress.org/support/topic/noindex-on-paginated-home-or-archives-not-working/
+		* TODO (regression, invalid) https://wordpress.org/support/topic/saving-draft-hangs-errors-since-update/#post-9037756
+		* TODO walk through https://github.com/sybrew/the-seo-framework/issues?q=is%3Aopen+is%3Aissue+label%3Abug
 * **For developers:**
+	* **Added:**
+		/
+		* TODO Two methods that output the plugin output indication, so they can be used in custom scenarios (like AMP). These are:
+			* method one
+			* method two
 	* **Improved:**
 		* Method `add_menu_link()` can now be called multiple times without issues.
 		* Method `get_all_options()` now has an extra method parameter that allows to overwrite the cache.
+		* Incorporated WordPress Core filter `get_the_archive_title` in method `get_the_real_archive_title()`.
+			* This method is a copy of WordPress function `get_the_archive_title()` with admin capabilities.
+	* **Changed:**
+		* (Typo) Renamed method `get_relatitve_fontcolor` to `get_relative_fontcolor`.
 	* **Updated:**
 		* Extended file copyright by a year. Awesome.
 	* **Filter notes:**

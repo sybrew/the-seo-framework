@@ -162,6 +162,8 @@ class Admin_Init extends Init {
 	 * @since 2.6.0
 	 * @staticvar bool $registered : Prevents Re-registering of the style.
 	 * @access private
+	 *
+	 * @return void Early if already registered.
 	 */
 	public function _register_admin_javascript() {
 
@@ -567,7 +569,7 @@ class Admin_Init extends Init {
 	 * @since 2.9.2
 	 * @link https://developer.wordpress.org/reference/functions/wp_redirect/
 	 *
-	 * @param string $target The redirect target location.
+	 * @param string $target The redirect target location. Should be escaped.
 	 * @return void
 	 */
 	protected function handle_admin_redirect_error( $target = '' ) {
@@ -578,7 +580,7 @@ class Admin_Init extends Init {
 		$headers_list = headers_list();
 		$location = sprintf( 'Location: %s', \wp_sanitize_redirect( $target ) );
 
-		//* Test if WordPress' header is sent. Bail if true.
+		//* Test if WordPress' redirect header is sent. Bail if true.
 		if ( in_array( $location, $headers_list, true ) )
 			return;
 
@@ -589,7 +591,7 @@ class Admin_Init extends Init {
 				sprintf(
 					/* translators: %s = Redirect URL markdown */
 					\esc_html__( 'There has been an error redirecting. Refresh the page or follow [this link](%s).', 'autodescription' ),
-					\esc_url( $target )
+					$target
 				),
 				array( 'a' )
 			)
@@ -668,7 +670,7 @@ class Admin_Init extends Init {
 
 		$attachment_id = \absint( $_POST['id'] );
 
-		$context = str_replace( '_', '-', $_POST['context'] );
+		$context = \sanitize_key( str_replace( '_', '-', $_POST['context'] ) );
 		$data    = array_map( 'absint', $_POST['cropDetails'] );
 		$cropped = \wp_crop_image( $attachment_id, $data['x1'], $data['y1'], $data['width'], $data['height'], $data['dst_width'], $data['dst_height'] );
 
