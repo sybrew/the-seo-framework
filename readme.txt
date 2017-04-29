@@ -214,12 +214,15 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* When using WPML, the URLs are now converted much faster than before.
 		* TODO On plugin activation and deactivation, the options are now automatically toggled from options autoload.
 		 	* For non-developers, this means that this plugin won't stack up on your website's memory after deactivation. Unlike many other plugins.
+	* **Changed:**
+		* The URL generation now uses WordPress default home URL generation, rather than our own.
 	* **Updated:**
 		* Knowledge Graph Social Profile links' placeholders and example profile redirect links.
 	* **Fixed:**
 		* When using WPML, alternative languages' terms and taxonomies URLs are now correct.
 		* wpForo plugin compatibility has been implemented, so canonical URLs, titles and descriptions are always correct on wpForo pages.
 			* This only works if bbPress isn't active.
+		* Home URL ports are now also considered.
 		/
 		* TODO EdgeHTML in-post metabox' contents overflowed when placed in the sidebar.
 		* TODO (third party issue) https://wordpress.org/support/topic/author-archives-title-changes-with-recent-updates/
@@ -236,6 +239,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* TODO Two methods that output the plugin output indication, so they can be used in custom scenarios (like AMP). These are:
 			* method one
 			* method two
+	* **Changed:**
+		* Method `get_home_host()`:
+			1. It now uses function `get_home_url()`, rather than `get_option( 'home' )`.
+			2. It now adds ports, if any (likely found on local development environments).
 	* **Improved:**
 		* Method `add_menu_link()` can now be called multiple times without issues.
 		* Method `get_all_options()` now has an extra method parameter that allows to overwrite the cache.

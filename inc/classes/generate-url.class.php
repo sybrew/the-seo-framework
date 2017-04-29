@@ -312,8 +312,8 @@ class Generate_Url extends Generate_Title {
 				$path = $this->get_relative_term_url( $term, $args );
 			} elseif ( ! $args['external'] && isset( $GLOBALS['wp']->request ) ) {
 				//* Everything else.
-				$path = \trailingslashit( \get_option( 'home' ) ) . $GLOBALS['wp']->request;
-				$path = $this->set_url_scheme( $path, 'relative' );
+				$_url = \trailingslashit( \get_option( 'home' ) ) . $GLOBALS['wp']->request;
+				$path = $this->set_url_scheme( $_url, 'relative' );
 			} else {
 				//* Nothing to see here...
 				$path = '';
@@ -1018,11 +1018,11 @@ class Generate_Url extends Generate_Title {
 	 *
 	 * @since 2.6.0
 	 *
-	 * @param int $paged
+	 * @param int $paged The current page number.
 	 * @param bool $singular Whether to allow plural and singular.
 	 * @param bool $plural Whether to allow plural regardless.
 	 *
-	 * @return int|bool $paged. False if not allowed. Int if allowed.
+	 * @return int|bool $paged. False if not allowed or on page 0. int if allowed.
 	 */
 	protected function maybe_get_paged( $paged = 0, $singular = false, $plural = true ) {
 
@@ -1062,6 +1062,8 @@ class Generate_Url extends Generate_Title {
 	 * If this fails, you're going to have a bad time.
 	 *
 	 * @since 2.7.0
+	 * @since 2.9.2 : Now considers port too.
+	 *              : Now uses get_home_url, rather than get_option('home').
 	 * @staticvar string $cache
 	 *
 	 * @return string The home URL host.
@@ -1073,9 +1075,11 @@ class Generate_Url extends Generate_Title {
 		if ( isset( $cache ) )
 			return $cache;
 
-		$parsed_url = \wp_parse_url( \get_option( 'home' ) );
+		// $parsed_url = \wp_parse_url( \get_option( 'home' ) );
+		$parsed_url = \wp_parse_url( \get_home_url() );
 
 		$host = isset( $parsed_url['host'] ) ? $parsed_url['host'] : '';
+		$host .= isset( $parsed_url['port'] ) ? ':' . $parsed_url['port'] : '';
 
 		return $cache = $host;
 	}
