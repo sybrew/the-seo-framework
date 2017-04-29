@@ -217,8 +217,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Updated:**
 		* Knowledge Graph Social Profile links' placeholders and example profile redirect links.
 	* **Fixed:**
-		/
 		* When using WPML, alternative languages' terms and taxonomies URLs are now correct.
+		* wpForo plugin compatibility has been implemented, so canonical URLs, titles and descriptions are always correct on wpForo pages.
+			* This only works if bbPress isn't active.
+		/
 		* TODO EdgeHTML in-post metabox' contents overflowed when placed in the sidebar.
 		* TODO (third party issue) https://wordpress.org/support/topic/author-archives-title-changes-with-recent-updates/
 		* TODO https://wordpress.org/support/topic/incorrect-ogurl-with-wc-vendors-plugin/
@@ -226,7 +228,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* TODO (third party issue) https://wordpress.org/support/topic/noindex-on-paginated-home-or-archives-not-working/
 		* TODO (regression, invalid) https://wordpress.org/support/topic/saving-draft-hangs-errors-since-update/#post-9037756
 		* TODO walk through https://github.com/sybrew/the-seo-framework/issues?q=is%3Aopen+is%3Aissue+label%3Abug
-		* TODO implement https://wordpress.org/support/topic/canonicals-2/#post-8966279 (wpForo).
 		* TODO check out jquery.on and jquery.off, as they can stack (and lag).
 * **For developers:**
 	* **Added:**

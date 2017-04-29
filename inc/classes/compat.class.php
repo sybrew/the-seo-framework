@@ -92,6 +92,9 @@ class Compat extends Core {
 		if ( $this->detect_plugin( array( 'functions' => array( 'bbpress' ) ) ) ) {
 			//* bbPress
 			$this->_include_compat( 'bbpress', 'plugin' );
+		} elseif ( $this->detect_plugin( array( 'constants' => array( 'WPFORO_BASENAME' ) ) ) ) {
+			//* wpForo
+			$this->_include_compat( 'wpforo', 'plugin' );
 		}
 	}
 
