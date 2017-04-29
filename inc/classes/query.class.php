@@ -1154,6 +1154,17 @@ class Query extends Compat {
 	}
 
 	/**
+	 * Determines whether we're on The SEO Framework's sitemap or not.
+	 *
+	 * @since 2.9.2
+	 *
+	 * @return bool
+	 */
+	public function is_sitemap() {
+		return (bool) $this->doing_sitemap;
+	}
+
+	/**
 	 * Handles object cache for the query class.
 	 *
 	 * @since 2.7.0

@@ -3,9 +3,9 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://theseoframework.com/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.
- * Version: 2.9.2-dev-2017.04.21.0
+ * Version: 2.9.2-dev-2017.04.29.0
  * Author: Sybre Waaijer
- * Author URI: https://cyberwire.nl/
+ * Author URI: https://theseoframework.com/
  * License: GPLv3
  * Text Domain: autodescription
  * Domain Path: /language
@@ -156,6 +156,7 @@ the_seo_framework_pre_load();
  * Determines whether we can "just" load the plugin, or require verification beforehand.
  *
  * @since 2.8.0
+ * @uses get_site_option(), so it will only test once per WordPress installation; multisite included.
  */
 function the_seo_framework_pre_load() {
 	if ( get_site_option( 'the_seo_framework_tested_upgrade_version' ) >= THE_SEO_FRAMEWORK_DB_VERSION ) {

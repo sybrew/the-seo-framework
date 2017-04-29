@@ -223,7 +223,7 @@ class Core {
 			'jetpack-portfolio',
 		);
 
-		/*
+		/**
 		 * Applies filters the_seo_framework_supported_post_types : Array The supported post types.
 		 * @since 2.3.1
 		 */

@@ -211,22 +211,27 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * **For everyone:**
 	* **Improved:**
 		* If an admin redirect initiated by TSF causes a white screen of death, a helping message is now outputted on the white screen.
-		/
+		* When using WPML, the URLs are now converted much faster than before.
 		* TODO On plugin activation and deactivation, the options are now automatically toggled from options autoload.
 		 	* For non-developers, this means that this plugin won't stack up on your website's memory after deactivation. Unlike many other plugins.
 	* **Updated:**
 		* Knowledge Graph Social Profile links' placeholders and example profile redirect links.
 	* **Fixed:**
 		/
+		* When using WPML, alternative languages' terms and taxonomies URLs are now correct.
+		* TODO EdgeHTML in-post metabox' contents overflowed when placed in the sidebar.
 		* TODO (third party issue) https://wordpress.org/support/topic/author-archives-title-changes-with-recent-updates/
 		* TODO https://wordpress.org/support/topic/incorrect-ogurl-with-wc-vendors-plugin/
 		* TODO (invalid) https://wordpress.org/support/topic/strange-seo-yoast-or-die/#post-9006202
 		* TODO (third party issue) https://wordpress.org/support/topic/noindex-on-paginated-home-or-archives-not-working/
 		* TODO (regression, invalid) https://wordpress.org/support/topic/saving-draft-hangs-errors-since-update/#post-9037756
 		* TODO walk through https://github.com/sybrew/the-seo-framework/issues?q=is%3Aopen+is%3Aissue+label%3Abug
+		* TODO implement https://wordpress.org/support/topic/canonicals-2/#post-8966279 (wpForo).
+		* TODO check out jquery.on and jquery.off, as they can stack (and lag).
 * **For developers:**
 	* **Added:**
 		/
+		* Method `is_sitemap()`, determines whether the request is rendering the sitemap output of The SEO Framework.
 		* TODO Two methods that output the plugin output indication, so they can be used in custom scenarios (like AMP). These are:
 			* method one
 			* method two
