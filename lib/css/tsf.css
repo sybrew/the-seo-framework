@@ -739,6 +739,8 @@ input[type="radio"].tsf-flex-nav-tab-radio {
 .tsf-flex-tab-content {
 	-webkit-flex: 1 0 100%;
 	flex: 1 0 100%;
+	/* EdgeHTML overflow fix */
+	max-width: 100%;
 	-webkit-flex-wrap: nowrap;
 	-ms-flex-wrap: nowrap;
 	flex-wrap: nowrap;

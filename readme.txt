@@ -223,8 +223,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* wpForo plugin compatibility has been implemented, so canonical URLs, titles and descriptions are always correct on wpForo pages.
 			* This only works if bbPress isn't active.
 		* Home URL ports are now also considered.
+		* EdgeHTML in-post metabox' contents overflowed when placed in the sidebar or on a mobile-sized screen.
 		/
-		* TODO EdgeHTML in-post metabox' contents overflowed when placed in the sidebar.
 		* TODO (third party issue) https://wordpress.org/support/topic/author-archives-title-changes-with-recent-updates/
 		* TODO https://wordpress.org/support/topic/incorrect-ogurl-with-wc-vendors-plugin/
 		* TODO (invalid) https://wordpress.org/support/topic/strange-seo-yoast-or-die/#post-9006202

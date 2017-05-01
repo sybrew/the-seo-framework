@@ -1079,7 +1079,9 @@ class Generate_Url extends Generate_Title {
 		$parsed_url = \wp_parse_url( \get_home_url() );
 
 		$host = isset( $parsed_url['host'] ) ? $parsed_url['host'] : '';
-		$host .= isset( $parsed_url['port'] ) ? ':' . $parsed_url['port'] : '';
+
+		if ( $host && isset( $parsed_url['port'] ) )
+			$host .= ':' . $parsed_url['port'];
 
 		return $cache = $host;
 	}
