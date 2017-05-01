@@ -53,6 +53,8 @@ $relative_font_color = '#' . $this->s_color_hex( (string) apply_filters( 'the_se
  */
 $indicator = (bool) apply_filters( 'the_seo_framework_indicator_sitemap', true );
 
+$output_modified = $this->is_option_checked( 'sitemaps_modified' );
+
 $xml = '<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="2.0"
 				xmlns:html="http://www.w3.org/TR/REC-html40"
@@ -102,7 +104,7 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?>
 						border-bottom: 1px solid;
 					}
 					table {
-						min-width: 600px;
+						min-width: ' . ( $output_modified ? '600' : '450' ) . 'px;
 						border-spacing: 0;
 					}
 					th, td {
@@ -142,7 +144,7 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?>
 					wp_kses(
 						ent2ncr(
 							$this->convert_markdown(
-								/* translators: URLs are in Markdown. */
+								/* translators: URLs are in Markdown. Don't forget to localize the URLs. */
 								__( 'This is a generated XML Sitemap, meant to be consumed by search engines like [Google](https://www.google.com/) or [Bing](https://www.bing.com/).', 'autodescription' ),
 								array( 'a' )
 						 	)
@@ -158,7 +160,7 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?>
 					wp_kses(
 						ent2ncr(
 							$this->convert_markdown(
-								/* translators: URLs are in Markdown. */
+								/* translators: URLs are in Markdown. Don't localize this URL. */
 								__( 'You can find more information on XML sitemaps at [sitemaps.org](https://www.sitemaps.org/).', 'autodescription' ),
 								array( 'a' )
 							)
@@ -176,7 +178,7 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?>
 						<tr>
 							<th>' . esc_html( ent2ncr( __( 'URL', 'autodescription' ) ) ) . '</th>';
 
-if ( $this->is_option_checked( 'sitemaps_modified' ) ) :
+if ( $output_modified ) :
 	$xml .= '
 							<th>' . esc_html( ent2ncr( __( 'Last Updated', 'autodescription' ) ) ) . '</th>';
 endif;
@@ -202,7 +204,7 @@ $xml .= '
 									</a>
 								</td>';
 
-if ( $this->is_option_checked( 'sitemaps_modified' ) ) :
+if ( $output_modified ) :
 	$xml .= '
 								<td>
 									<xsl:value-of select="concat(substring(sitemap:lastmod,0,11),concat(\' \', substring(sitemap:lastmod,12,5)))"/>

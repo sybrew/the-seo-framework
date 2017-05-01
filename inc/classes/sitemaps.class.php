@@ -246,7 +246,7 @@ class Sitemaps extends Metaboxes {
 	protected function output_sitemap() {
 
 		//* Remove output, if any.
-		$this->clean_reponse_header();
+		$this->clean_response_header();
 
 		if ( ! headers_sent() )
 			header( 'Content-type: text/xml; charset=utf-8' );
@@ -405,7 +405,7 @@ class Sitemaps extends Metaboxes {
 	 */
 	public function output_sitemap_xsl_stylesheet() {
 
-		$this->clean_reponse_header();
+		$this->clean_response_header();
 
 		if ( ! headers_sent() ) {
 			header( 'Content-type: text/xsl; charset=utf-8' );
@@ -424,7 +424,7 @@ class Sitemaps extends Metaboxes {
 	 * @param string|bool $content required The sitemap transient content.
 	 * @return string The sitemap content.
 	 */
-	public function setup_sitemap( $sitemap_content ) {
+	public function setup_sitemap( $sitemap_content = false ) {
 
 		if ( false === $sitemap_content ) {
 			//* Transient doesn't exist yet.

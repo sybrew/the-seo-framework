@@ -1075,15 +1075,15 @@ class Render extends Admin_Init {
 			 */
 			$sybre = (bool) \apply_filters( 'sybre_waaijer_<3', true );
 
+			// Plugin name can't be translated. Yay.
+			$tsf = 'The SEO Framework';
+
 			/**
 			 * Applies filters 'the_seo_framework_indicator_timing' : Boolean
 			 * Whether to show the hidden generation time in HTML.
 			 * @since 2.4.0
 			 */
-			$_cache['timer'] = (bool) \apply_filters( 'the_seo_framework_indicator_timing', true );
-
-			// Plugin name can't be translated. Yay.
-			$tsf = 'The SEO Framework';
+			$_cache['show_timer'] = (bool) \apply_filters( 'the_seo_framework_indicator_timing', true );
 
 			/* translators: %s = 'The SEO Framework' */
 			$_cache['start'] = sprintf( \esc_html__( 'Start %s', 'autodescription' ), $tsf );
@@ -1093,16 +1093,17 @@ class Render extends Admin_Init {
 		}
 
 		if ( 'before' === $where ) {
-			return sprintf( '<!-- %s -->',  $_cache['start'] . $_cache['author'] ) . PHP_EOL;
-		}
-
-		if ( $_cache['timer'] && $timing ) {
-			$timer = ' | ' . number_format( microtime( true ) - $timing, 5 ) . 's';
+			$output = $_cache['start'] . $_cache['author'];
 		} else {
-			$timer = '';
+			if ( $_cache['show_timer'] && $timing ) {
+				$timer = ' | ' . number_format( microtime( true ) - $timing, 5 ) . 's';
+			} else {
+				$timer = '';
+			}
+			$output = $_cache['end'] . $_cache['author'] . $timer;
 		}
 
-		return sprintf( '<!-- %s -->',  $_cache['end'] . $_cache['author'] . $timer ) . PHP_EOL;
+		return sprintf( '<!-- %s -->', $output ) . PHP_EOL;
 	}
 
 	/**

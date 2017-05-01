@@ -137,7 +137,7 @@ class Core {
 	 *
 	 * @return bool True on clear. False otherwise.
 	 */
-	protected function clean_reponse_header() {
+	protected function clean_response_header() {
 
 		if ( $level = ob_get_level() ) {
 			while ( $level ) {

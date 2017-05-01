@@ -614,7 +614,7 @@ class Admin_Init extends Init {
 			//* If current user isn't allowed to edit posts, don't do anything and kill PHP.
 			if ( ! \current_user_can( 'edit_posts' ) ) {
 				//* Remove output buffer.
-				$this->clean_reponse_header();
+				$this->clean_response_header();
 
 				//* Encode and echo results. Requires JSON decode within JS.
 				echo json_encode( array( 'type' => 'failure', 'value' => '' ) );
@@ -640,7 +640,7 @@ class Admin_Init extends Init {
 			);
 
 			//* Remove output buffer.
-			$this->clean_reponse_header();
+			$this->clean_response_header();
 
 			//* Encode and echo results. Requires JSON decode within JS.
 			echo json_encode( $results );

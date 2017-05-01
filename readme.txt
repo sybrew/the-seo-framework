@@ -212,8 +212,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Improved:**
 		* If an admin redirect initiated by TSF causes a white screen of death, a helping message is now outputted on the white screen.
 		* When using WPML, the URLs are now converted much faster than before.
+		/
 		* TODO On plugin activation and deactivation, the options are now automatically toggled from options autoload.
 		 	* For non-developers, this means that this plugin won't stack up on your website's memory after deactivation. Unlike many other plugins.
+		* The sitemap's stylesheet is now a bit neater when `lastmod` output is disabled.
 	* **Changed:**
 		* The URL generation now uses WordPress default home URL generation, rather than our own.
 	* **Updated:**
@@ -226,11 +228,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* EdgeHTML in-post metabox' contents overflowed when placed in the sidebar or on a mobile-sized screen.
 		* Prevented memory leak when re-selecting social images.
 		/
-		* TODO (third party issue) https://wordpress.org/support/topic/author-archives-title-changes-with-recent-updates/
 		* TODO https://wordpress.org/support/topic/incorrect-ogurl-with-wc-vendors-plugin/
-		* TODO (invalid) https://wordpress.org/support/topic/strange-seo-yoast-or-die/#post-9006202
-		* TODO (third party issue) https://wordpress.org/support/topic/noindex-on-paginated-home-or-archives-not-working/
-		* TODO (regression, invalid) https://wordpress.org/support/topic/saving-draft-hangs-errors-since-update/#post-9037756
+		* TODO (home page on amp detection issue, rare use-case waiting for report) https://wordpress.org/support/topic/strange-seo-yoast-or-die/#post-9006202
 		* TODO walk through https://github.com/sybrew/the-seo-framework/issues?q=is%3Aopen+is%3Aissue+label%3Abug
 
 * **For translators:**
