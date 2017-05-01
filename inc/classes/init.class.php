@@ -355,7 +355,7 @@ class Init extends Query {
 		 * Start the timer here. I know it doesn't calculate the initiation of
 		 * the plugin, but it will make the code smelly if I were to do so.
 		 * A static array cache counter function would make it possible, but meh.
-		 * This function takes the most time anyway.
+		 * This function presumably takes the most time anyway.
 		 */
 		$init_start = microtime( true );
 
@@ -439,60 +439,19 @@ class Init extends Query {
 			$generator = (string) \apply_filters( 'the_seo_framework_generator_tag', '' );
 
 			if ( $generator )
-				$generator = '<meta name="generator" content="' . \esc_attr( $generator ) . '" />' . "\r\n";
+				$generator = '<meta name="generator" content="' . \esc_attr( $generator ) . '" />' . PHP_EOL;
 
 			$output = $robots . $before . $before_actions . $output . $after_actions . $after . $generator;
 
 			$this->use_object_cache and $this->object_cache_set( $cache_key, $output, DAY_IN_SECONDS );
 		endif;
 
-		/**
-		 * Applies filters 'the_seo_framework_indicator' : Boolean
-		 * Whether to show the indicator in HTML.
-		 * @since 2.0.0
-		 */
-		$indicator = (bool) \apply_filters( 'the_seo_framework_indicator', true );
-
-		$indicatorbefore = '';
-		$indicatorafter = '';
-
-		if ( $indicator ) :
-
-			/**
-			 * Applies filters 'the_seo_framework_indicator_timing' : Boolean
-			 * Whether to show the hidden generation time in HTML.
-			 * @since 2.4.0
-			 */
-			$timer = (bool) \apply_filters( 'the_seo_framework_indicator_timing', true );
-
-			/**
-			 * Applies filters 'sybre_waaijer_<3' : Boolean
-			 * Whether to show the hidden author name in HTML.
-			 * @since 2.4.0
-			 */
-			$sybre = (bool) \apply_filters( 'sybre_waaijer_<3', true );
-
-			$start = \esc_html__( 'Start The SEO Framework', 'autodescription' );
-			$end = \esc_html__( 'End The SEO Framework', 'autodescription' );
-			$me = $sybre ? ' ' . \esc_html__( 'by Sybre Waaijer', 'autodescription' ) : '';
-
-			$indicatorbefore = '<!-- ' . $start . $me . ' -->' . "\r\n";
-
-			/**
-			 * Calculate the plugin load time.
-			 * @since 2.4.0
-			 */
-			if ( $timer ) {
-				$indicatorafter = '<!-- ' . $end . $me . ' | ' . number_format( microtime( true ) - $init_start, 5 ) . 's' . ' -->' . "\r\n";
-			} else {
-				$indicatorafter = '<!-- ' . $end . $me . ' -->' . "\r\n";
-			}
-		endif;
-
-		$output = "\r\n" . $indicatorbefore . $output . $indicatorafter . "\r\n";
+		$output = $this->get_plugin_indicator( 'before' )
+				. $output
+				. $this->get_plugin_indicator( 'after', $init_start );
 
 		//* Already escaped.
-		echo $output;
+		echo "\r\n" . $output . "\r\n";
 
 		\do_action( 'the_seo_framework_do_after_output' );
 

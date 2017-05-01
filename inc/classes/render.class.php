@@ -1039,6 +1039,73 @@ class Render extends Admin_Init {
 	}
 
 	/**
+	 * Returns the plugin hidden HTML indicators.
+	 *
+	 * @since 2.9.2
+	 *
+	 * @param string $where Determines the position of the indicator.
+	 *               Accepts 'before' for before, anything else for after.
+	 * @param int $timing Determines when the output started.
+	 * @return string The SEO Framework's HTML plugin indicator.
+	 */
+	public function get_plugin_indicator( $where = 'before', $timing = 0 ) {
+
+		static $run, $_cache = null;
+
+		if ( ! isset( $run ) ) {
+			/**
+			 * Applies filters 'the_seo_framework_indicator' : Boolean
+			 * Whether to show the indicator in HTML.
+			 * @since 2.0.0
+			 */
+			$run = (bool) \apply_filters( 'the_seo_framework_indicator', true );
+		}
+
+		if ( false === $run )
+			return '';
+
+		if ( null === $_cache ) {
+
+			$_cache = array();
+
+			/**
+			 * Applies filters 'sybre_waaijer_<3' : Boolean
+			 * Whether to show the hidden author name in HTML.
+			 * @since 2.4.0
+			 */
+			$sybre = (bool) \apply_filters( 'sybre_waaijer_<3', true );
+
+			/**
+			 * Applies filters 'the_seo_framework_indicator_timing' : Boolean
+			 * Whether to show the hidden generation time in HTML.
+			 * @since 2.4.0
+			 */
+			$_cache['timer'] = (bool) \apply_filters( 'the_seo_framework_indicator_timing', true );
+
+			// Plugin name can't be translated. Yay.
+			$tsf = 'The SEO Framework';
+
+			/* translators: %s = 'The SEO Framework' */
+			$_cache['start'] = sprintf( \esc_html__( 'Start %s', 'autodescription' ), $tsf );
+			/* translators: %s = 'The SEO Framework' */
+			$_cache['end'] = sprintf( \esc_html__( 'End %s', 'autodescription' ), $tsf );
+			$_cache['author'] = $sybre ? ' ' . \esc_html__( 'by Sybre Waaijer', 'autodescription' ) : '';
+		}
+
+		if ( 'before' === $where ) {
+			return sprintf( '<!-- %s -->',  $_cache['start'] . $_cache['author'] ) . PHP_EOL;
+		}
+
+		if ( $_cache['timer'] && $timing ) {
+			$timer = ' | ' . number_format( microtime( true ) - $timing, 5 ) . 's';
+		} else {
+			$timer = '';
+		}
+
+		return sprintf( '<!-- %s -->',  $_cache['end'] . $_cache['author'] . $timer ) . PHP_EOL;
+	}
+
+	/**
 	 * Determines whether we can use Open Graph tags.
 	 *
 	 * @since 2.6.0

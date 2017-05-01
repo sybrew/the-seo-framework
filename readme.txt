@@ -224,6 +224,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* This only works if bbPress isn't active.
 		* Home URL ports are now also considered.
 		* EdgeHTML in-post metabox' contents overflowed when placed in the sidebar or on a mobile-sized screen.
+		* Prevented memory leak when re-selecting social images.
 		/
 		* TODO (third party issue) https://wordpress.org/support/topic/author-archives-title-changes-with-recent-updates/
 		* TODO https://wordpress.org/support/topic/incorrect-ogurl-with-wc-vendors-plugin/
@@ -231,14 +232,18 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* TODO (third party issue) https://wordpress.org/support/topic/noindex-on-paginated-home-or-archives-not-working/
 		* TODO (regression, invalid) https://wordpress.org/support/topic/saving-draft-hangs-errors-since-update/#post-9037756
 		* TODO walk through https://github.com/sybrew/the-seo-framework/issues?q=is%3Aopen+is%3Aissue+label%3Abug
-		* TODO check out jquery.on and jquery.off, as they can stack (and lag).
+
+* **For translators:**
+	* The plugin indication strings have been adjusted.
+		* So, "Start/End The SEO Framework" now is "Start/End %s".
+		* Many translators translated a brand name, which shouldn't be.
+			* This means "The SEO Framework" should always stay "The SEO Framework".
+			* Not e.g. "De SEO Lijstwerk" (Dutch).
+
 * **For developers:**
 	* **Added:**
-		/
 		* Method `is_sitemap()`, determines whether the request is rendering the sitemap output of The SEO Framework.
-		* TODO Two methods that output the plugin output indication, so they can be used in custom scenarios (like AMP). These are:
-			* method one
-			* method two
+		* Method `get_plugin_indicator()`, it returns the plugin output indication, so they can be used in custom scenarios (like AMP).
 	* **Changed:**
 		* Method `get_home_host()`:
 			1. It now uses function `get_home_url()`, rather than `get_option( 'home' )`.
@@ -250,6 +255,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* This method is a copy of WordPress function `get_the_archive_title()` with admin capabilities.
 	* **Changed:**
 		* (Typo) Renamed method `get_relatitve_fontcolor` to `get_relative_fontcolor`.
+			* No fallback (backwards compatible) method has been put in place. A warning is displayed instead.
 	* **Updated:**
 		* Extended file copyright by a year. Awesome.
 	* **Filter notes:**
