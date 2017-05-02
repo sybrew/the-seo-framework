@@ -54,6 +54,8 @@ class Compat extends Core {
 	 * rather than common paths. As they can require manual FTP upload.
 	 *
 	 * @since 2.8.0
+	 * @TODO Add transients that will bypass all these checks.
+	 *       Careful, recheck on each activation -- and even FTP deletion.
 	 */
 	protected function load_early_compat_files() {
 
@@ -76,7 +78,10 @@ class Compat extends Core {
 			}
 		}
 
-		if ( $this->detect_plugin( array( 'constants' => array( 'ICL_LANGUAGE_CODE' ) ) ) ) {
+		if ( $this->detect_plugin( array( 'globals' => array( 'polylang' ) ) ) ) {
+			//* PolyLang... it includes compat for WPML, but let's see how this works for now.
+			$this->_include_compat( 'polylang', 'plugin' );
+		} elseif ( $this->detect_plugin( array( 'constants' => array( 'ICL_LANGUAGE_CODE' ) ) ) ) {
 			//* WPML
 			$this->_include_compat( 'wpml', 'plugin' );
 		} elseif ( $this->detect_plugin( array( 'constants' => array( 'QTX_VERSION' ) ) ) ) {

@@ -7,7 +7,7 @@ namespace The_SEO_Framework;
 defined( 'ABSPATH' ) and $_this = \the_seo_framework_class() and $this instanceof $_this or die;
 
 /**
- * Warns homepage global title and description about recieving input.
+ * Warns homepage global title and description about receiving input.
  *
  * @since 1.0.0
  */
@@ -38,7 +38,6 @@ function _wpml_filter_url_path( $path = '', $id = 0, $external = false ) {
  *              : 2. Added $current_language staticvar
  *              : 3. Cached $current_language through WPML determination, improving performance.
  *
- *
  * @staticvar bool $is_sitemap
  * @staticvar bool $gli_exists
  * @staticvar string $default_lang
@@ -55,6 +54,9 @@ function _wpml_filter_url_path( $path = '', $id = 0, $external = false ) {
 function _wmpl_get_relative_url( $path = '', $post_id = '' ) {
 	global $sitepress;
 
+	if ( ! is_object( $sitepress ) )
+		return $path;
+
 	static $is_sitemap = null;
 	if ( null === $is_sitemap )
 		$is_sitemap = \the_seo_framework()->is_sitemap();
@@ -62,9 +64,6 @@ function _wmpl_get_relative_url( $path = '', $post_id = '' ) {
 	//* Reset cache.
 	\the_seo_framework()->url_slashit = true;
 	\the_seo_framework()->unset_current_subdomain();
-
-	if ( ! is_object( $sitepress ) )
-		return $path;
 
 	static $gli_exists = null;
 	if ( null === $gli_exists )

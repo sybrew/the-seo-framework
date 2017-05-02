@@ -173,7 +173,7 @@ class Detect extends Render {
 	 *
 	 * @since 1.3.0
 	 * @since 2.8.0 : 1. Can now check for globals.
-	 *                2. Switched order from FAST to SLOW.
+	 *                2. Switched detection order from FAST to SLOW.
 	 *
 	 * @param array $plugins Array of array for constants, classes and / or functions to check for plugin existence.
 	 * @return boolean True if plugin exists or false if plugin constant, class or function not detected.
@@ -231,7 +231,8 @@ class Detect extends Render {
 	 * @staticvar array $cache
 	 * @uses $this->detect_plugin_multi()
 	 *
-	 * @param array $plugins Array of array for constants, classes and / or functions to check for plugin existence.
+	 * @param array $plugins Array of array for globals, constants, classes
+	 *              and/or functions to check for plugin existence.
 	 * @param bool $use_cache Bypasses cache if false
 	 */
 	public function can_i_use( array $plugins = array(), $use_cache = true ) {

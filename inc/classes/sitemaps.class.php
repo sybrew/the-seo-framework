@@ -387,12 +387,18 @@ class Sitemaps extends Metaboxes {
 	public function get_sitemap_xsl_url() {
 		global $wp_rewrite;
 
+		$home = \trailingslashit( $this->set_url_scheme( $this->the_home_url_from_cache() ) );
+		if ( ! $this->is_subdirectory_installation() ) {
+			$path = $this->set_url_scheme( $home, 'relative' );
+			$home = \trailingslashit( rtrim( $home, $path ) );
+		}
+
 		if ( $wp_rewrite->using_index_permalinks() ) {
-			$xsl = \home_url( '/index.php/sitemap.xsl' );
+			$xsl = $home . 'index.php/sitemap.xsl';
 		} elseif ( $wp_rewrite->using_permalinks() ) {
-			$xsl = \home_url( '/sitemap.xsl' );
+			$xsl = $home . 'sitemap.xsl';
 		} else {
-			$xsl = \home_url( '/?the_seo_framework_sitemap-xsl=true' );
+			$xsl = $home . '?the_seo_framework_sitemap-xsl=true';
 		}
 
 		return $xsl;

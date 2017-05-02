@@ -91,9 +91,7 @@ switch ( $instance ) :
 
 	case 'the_seo_framework_sitemaps_metabox_general' :
 
-		$site_url = $this->the_home_url_from_cache( true );
-
-		$sitemap_url = $site_url . 'sitemap.xml';
+		$sitemap_url = home_url( 'sitemap.xml' );
 		$has_sitemap_plugin = $this->detect_sitemap_plugin();
 		$sitemap_detected = $this->has_sitemap_xml();
 
@@ -171,8 +169,7 @@ switch ( $instance ) :
 		endif;
 
 		if ( $locate_url ) {
-			$site_url = $this->the_home_url_from_cache( true );
-			$robots_url = trailingslashit( $site_url ) . 'robots.txt';
+			$robots_url = home_url( 'robots.txt' );
 			$here = '<a href="' . esc_url( $robots_url ) . '" target="_blank" title="' . esc_attr__( 'View robots.txt', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 
 			$this->description_noesc( sprintf( esc_html_x( 'The robots.txt file can be found %s.', '%s = here', 'autodescription' ), $here ) );

@@ -370,7 +370,7 @@ class Generate_Url extends Generate_Title {
 			$url = \get_home_url();
 		} elseif ( ! $args['external'] ) {
 			if ( isset( $GLOBALS['wp']->request ) )
-				$url = \trailingslashit( \get_option( 'home' ) ) . $GLOBALS['wp']->request;
+				$url = \trailingslashit( \get_home_url() ) . $GLOBALS['wp']->request;
 		}
 
 		//* No permalink found.

@@ -924,6 +924,7 @@ class Generate_Ldjson extends Generate_Image {
 	 * Return LD+Json Knowledge Graph helper.
 	 *
 	 * @since 2.2.8
+	 * @since 2.9.2 : Now grabs home URL from cache.
 	 *
 	 * @return string LD+json Knowledge Graph helper.
 	 */
@@ -943,7 +944,7 @@ class Generate_Ldjson extends Generate_Image {
 		$context = $this->schema_context();
 		$type = json_encode( ucfirst( $knowledge_type ) );
 		$name = json_encode( $knowledge_name );
-		$url = json_encode( \esc_url( \home_url( '/' ) ) );
+		$url = $this->schema_home_url();
 
 		$logo = '';
 

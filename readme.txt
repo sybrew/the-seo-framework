@@ -216,6 +216,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* TODO On plugin activation and deactivation, the options are now automatically toggled from options autoload.
 		 	* For non-developers, this means that this plugin won't stack up on your website's memory after deactivation. Unlike many other plugins.
 		* The sitemap's stylesheet is now a bit neater when `lastmod` output is disabled.
+		* PolyLang canonical URL compatibility.
+		* TODO A little link in plugin activation page to the companion plugin to inform wary users about its existence, which next to the deactivation link.
+			* This link is only added if the plugin isn't found to be installed.
+			* This link is super non-intrusive; most won't even spot it.
 	* **Changed:**
 		* The URL generation now uses WordPress default home URL generation, rather than our own.
 	* **Updated:**
@@ -227,9 +231,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Home URL ports are now also considered.
 		* EdgeHTML in-post metabox' contents overflowed when placed in the sidebar or on a mobile-sized screen.
 		* Prevented memory leak when re-selecting social images.
+		* The sitemap's stylesheet now works on translated (alternative) domains.
+		* When using PolyLang, the Canonical URLs no longer mismatches.
 		/
 		* TODO https://wordpress.org/support/topic/incorrect-ogurl-with-wc-vendors-plugin/
-		* TODO (home page on amp detection issue, rare use-case waiting for report) https://wordpress.org/support/topic/strange-seo-yoast-or-die/#post-9006202
 		* TODO walk through https://github.com/sybrew/the-seo-framework/issues?q=is%3Aopen+is%3Aissue+label%3Abug
 
 * **For translators:**
