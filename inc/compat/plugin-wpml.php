@@ -19,6 +19,7 @@ defined( 'ABSPATH' ) and $_this = \the_seo_framework_class() and $this instanceo
  * Filters the canonical URL path.
  *
  * @since 2.8.0
+ * @since 2.9.2 : Now passes $external paramerer
  * @access private
  *
  * @param string $path the URL path.
@@ -27,18 +28,19 @@ defined( 'ABSPATH' ) and $_this = \the_seo_framework_class() and $this instanceo
  * @return string The URL path.
  */
 function _wpml_filter_url_path( $path = '', $id = 0, $external = false ) {
-	return \The_SEO_Framework\_wmpl_get_relative_url( $path, $id );
+	return \The_SEO_Framework\_wmpl_get_relative_url( $path, $id, $external );
 }
 
 /**
  * Generate relative WPML url.
  *
  * @since 2.4.3
- * @since 2.9.2 : 1. Added $is_sitemap staticvar
- *              : 2. Added $current_language staticvar
+ * @since 2.9.2 : 1. Added $is_external staticvar.
+ *              : 2. Added $current_language staticvar.
  *              : 3. Cached $current_language through WPML determination, improving performance.
+ *              : 4. Can now receive $external parameter.
  *
- * @staticvar bool $is_sitemap
+ * @staticvar bool $is_external
  * @staticvar bool $gli_exists
  * @staticvar string $default_lang
  * @staticvar string $current_language
@@ -49,17 +51,18 @@ function _wpml_filter_url_path( $path = '', $id = 0, $external = false ) {
  *
  * @param string $path The current path.
  * @param int $post_id The Post ID.
+ * @param bool $external Whether the call is made from outside the current ID scope.
  * @return relative path for WPML urls.
  */
-function _wmpl_get_relative_url( $path = '', $post_id = '' ) {
+function _wmpl_get_relative_url( $path = '', $post_id = '', $external = false ) {
 	global $sitepress;
 
 	if ( ! is_object( $sitepress ) )
 		return $path;
 
-	static $is_sitemap = null;
-	if ( null === $is_sitemap )
-		$is_sitemap = \the_seo_framework()->is_sitemap();
+	static $is_external = null;
+	if ( null === $is_external )
+		$is_external = \the_seo_framework()->is_sitemap() || \the_seo_framework()->is_robots();
 
 	//* Reset cache.
 	\the_seo_framework()->url_slashit = true;
@@ -83,7 +86,7 @@ function _wmpl_get_relative_url( $path = '', $post_id = '' ) {
 	//* Cache current language.
 	static $current_language = null;
 	if ( null === $current_language )
-		$current_language = ! $is_sitemap && is_callable( array( $sitepress, 'get_current_language' ) ) ? $sitepress->get_current_language() : '';
+		$current_language = ! ( $is_external || $external ) && is_callable( array( $sitepress, 'get_current_language' ) ) ? $sitepress->get_current_language() : '';
 
 	if ( empty( $current_language ) ) {
 		/**

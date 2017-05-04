@@ -1165,6 +1165,17 @@ class Query extends Compat {
 	}
 
 	/**
+	 * Determines whether we're on the robots.txt file output.
+	 *
+	 * @since 2.9.2
+	 *
+	 * @return bool
+	 */
+	public function is_robots() {
+		return \is_robots();
+	}
+
+	/**
 	 * Handles object cache for the query class.
 	 *
 	 * @since 2.7.0

@@ -208,6 +208,30 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 = 2.9.2 - ??? (dwarves thing) =
 
+**Release date:**
+
+* May 7th 2017
+
+**Summarized:**
+/
+* Now, PolyLang is officially supported by The SEO Framework :)
+* TODO more...
+
+**We're looking for translation editors:**
+
+* First, thank you so much to all the translation [contributors](https://translate.wordpress.org/projects/wp-plugins/autodescription/contributors).
+* Now, if you want to see The SEO Framwork in your language, head over to [this page](https://translate.wordpress.org/projects/wp-plugins/autodescription) and feel free to contribute.
+* If you wish to easily maintain and keep a close eye on all the contributions for your language, [ask us](https://theseoframework.com/contact/) to ask WordPress Polyglots to add you as a contributor.
+* Ultimately, it's up to the WordPress Polyglots team to fulfill your request. It generally depends on how well you've submitted translations for you to be accepted.
+
+**A few notes about translations:**
+
+* If you use a machine to translate for you, note that they can generate out-of-context strings. So keep an eye out for those!
+* If you notice that strings are very hard to translate, e.g. because of grammatical gender, [let us know](https://github.com/sybrew/the-seo-framework/issues/new)!
+* Please don't translate "The SEO Framework", it's a registered brand-name.
+* Please don't add spaces if you see backticks, asterix, or brackets. They're used for language construction.
+* In TSF, you generally can't use UTF character codes like `&#x2661;`, as they're automatically removed for added security. Add them as displayed instead.
+
 * **For everyone:**
 	* **Improved:**
 		* If an admin redirect initiated by TSF causes a white screen of death, a helping message is now outputted on the white screen.
@@ -224,6 +248,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* The URL generation now uses WordPress default home URL generation, rather than our own.
 	* **Updated:**
 		* Knowledge Graph Social Profile links' placeholders and example profile redirect links.
+		/
+		* TODO The sitemap cache will be cleared on update, because of the URL fixes.
+		* TODO Fix last 2 images in Screenshots
+		* TODO remove "Other Notes"... temporarily until w.org knows what to do with it
 	* **Fixed:**
 		* When using WPML, alternative languages' terms and taxonomies URLs are now correct.
 		* wpForo plugin compatibility has been implemented, so canonical URLs, titles and descriptions are always correct on wpForo pages.
@@ -234,6 +262,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* The sitemap's stylesheet now works on translated (alternative) domains.
 		* When using PolyLang, the Canonical URLs no longer mismatches.
 		/
+		* TODO test wpml sitemap URL location @ robots.txt
 		* TODO https://wordpress.org/support/topic/incorrect-ogurl-with-wc-vendors-plugin/
 		* TODO walk through https://github.com/sybrew/the-seo-framework/issues?q=is%3Aopen+is%3Aissue+label%3Abug
 
@@ -277,7 +306,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Release date:**
 
-* 27th March 2017
+* March 27th 2017
 
 **Summarized:**
 
@@ -294,7 +323,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Release date:**
 
-* 25th March 2017
+* March 25th 2017
 
 **Summarized:**
 
