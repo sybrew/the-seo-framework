@@ -244,8 +244,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* If an admin redirect initiated by TSF causes a white screen of death, a helping message is now outputted on the white screen.
 		* When using WPML, the URLs are now converted much faster than before.
 		/
-		* TODO On plugin activation and deactivation, the options are now automatically toggled from options autoload.
-		 	* For non-developers, this means that this plugin won't stack up on your website's memory after deactivation. Unlike many other plugins.
+		* On plugin activation and deactivation, the options are now automatically toggled from options autoload.
+		 	* For non-developers, this means that this plugin won't stock up on your website's memory after deactivation. Unlike many, many other plugins.
 		* The sitemap's stylesheet is now a bit neater when `lastmod` output is disabled.
 		* PolyLang canonical URL compatibility.
 		/
@@ -281,7 +281,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* The sitemap's stylesheet now works on translated (alternative) domains.
 		* When using PolyLang, the Canonical URLs no longer mismatches.
 		/
-		* TODO TEST The sitemap now works when not using pretty permalinks.
 		* TODO https://wordpress.org/support/topic/incorrect-ogurl-with-wc-vendors-plugin/
 		* TODO walk through https://github.com/sybrew/the-seo-framework/issues?q=is%3Aopen+is%3Aissue+label%3Abug
 

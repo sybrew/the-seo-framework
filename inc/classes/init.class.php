@@ -522,6 +522,11 @@ class Init extends Query {
 	 * Edits the robots.txt output.
 	 * Requires not to have a robots.txt file in the root directory.
 	 *
+	 * This methods completely hijacks default output, intentionally.
+	 * The robots.txt file should be left as default, so to improve SEO.
+	 * The Robots Exclusion Protocol encourages you not to use this file for
+	 * non-administrative endpoints.
+	 *
 	 * @since 2.2.9
 	 * @uses robots_txt filter located at WP core
 	 *
@@ -532,7 +537,7 @@ class Init extends Query {
 	public function robots_txt( $robots_txt = '', $public = '' ) {
 
 		/**
-		 * Don't do anything if the blog isn't public
+		 * Don't do anything if the blog isn't public.
 		 */
 		if ( '0' === $public )
 			return $robots_txt;
@@ -587,7 +592,7 @@ class Init extends Query {
 			$output .= $pro;
 
 			//* Add extra whitespace and sitemap full URL
-			if ( $this->get_option( 'sitemaps_robots' ) && $this->can_do_sitemap_robots() )
+			if ( $this->can_do_sitemap_robots( true ) )
 				$output .= "\r\nSitemap: " . \esc_url( $this->get_sitemap_xml_url() ) . "\r\n";
 
 			$this->use_object_cache and $this->object_cache_set( $cache_key, $output, 86400 );

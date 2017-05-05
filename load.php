@@ -161,6 +161,7 @@ function _autoload_classes( $class ) {
 function _do_plugin_activation() {
 
 	\The_SEO_Framework\_activation_setup_sitemap();
+	\The_SEO_Framework\_activation_set_options_autoload();
 }
 
 \add_action( 'deactivate_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, __NAMESPACE__ . '\\_do_plugin_deactivation' );
@@ -173,6 +174,7 @@ function _do_plugin_activation() {
  */
 function _do_plugin_deactivation() {
 
+	\The_SEO_Framework\_deactivation_unset_options_autoload();
 	\The_SEO_Framework\_deactivation_unset_sitemap();
 }
 
@@ -212,4 +214,54 @@ function _deactivation_unset_sitemap() {
 	unset( $GLOBALS['wp_rewrite']->extra_rules_top['sitemap\.xsl$'] );
 
 	\add_action( 'shutdown', 'flush_rewrite_rules' );
+}
+
+/**
+ * Turns on autoloading for The SEO Framework main options.
+ *
+ * @since 2.9.2
+ * @access private
+ */
+function _activation_set_options_autoload() {
+
+	$the_seo_framework = \the_seo_framework();
+
+	if ( isset( $the_seo_framework ) ) {
+		$options = $the_seo_framework->get_all_options();
+		$setting = THE_SEO_FRAMEWORK_SITE_OPTIONS;
+
+		\remove_all_filters( "pre_update_option_{$setting}" );
+		\remove_all_actions( "update_option_{$setting}" );
+		\remove_all_filters( "sanitize_option_{$setting}" );
+
+		// Set to false, so we can reset the options.
+		$_success = \update_option( $setting, false );
+		if ( $_success )
+			\update_option( $setting, $options, 'yes' );
+	}
+}
+
+/**
+ * Turns off autoloading for The SEO Framework main options.
+ *
+ * @since 2.9.2
+ * @access private
+ */
+function _deactivation_unset_options_autoload() {
+
+	$the_seo_framework = \the_seo_framework();
+
+	if ( isset( $the_seo_framework ) ) {
+		$options = $the_seo_framework->get_all_options();
+		$setting = THE_SEO_FRAMEWORK_SITE_OPTIONS;
+
+		\remove_all_filters( "pre_update_option_{$setting}" );
+		\remove_all_actions( "update_option_{$setting}" );
+		\remove_all_filters( "sanitize_option_{$setting}" );
+
+		// Set to false, so we can reset the options.
+		$_success = \update_option( $setting, false );
+		if ( $_success )
+			\update_option( $setting, $options, 'no' );
+	}
 }
