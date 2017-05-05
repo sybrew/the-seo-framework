@@ -476,7 +476,7 @@ class Cache extends Sitemaps {
 		 * When the caching mechanism changes. Change this value.
 		 * Use hex. e.g. 0, 1, 2, 9, a, b
 		 */
-		$sitemap_revision = '2';
+		$sitemap_revision = '3';
 		$theme_dir_revision = '0';
 
 		$this->sitemap_transient = $this->is_option_checked( 'cache_sitemap' ) ? $this->add_cache_key_suffix( 'tsf_sitemap_' . $sitemap_revision ) : '';

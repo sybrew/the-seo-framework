@@ -233,8 +233,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * If you use a machine to translate for you, note that they can generate out-of-context strings. So keep an eye out for those!
 * If you notice that strings are very hard to translate, e.g. because of grammatical gender, [let us know](https://github.com/sybrew/the-seo-framework/issues/new)!
 * Please don't translate "The SEO Framework", it's a registered brand-name.
-* Please don't add spaces if you see backticks, asterix, or brackets. They're used for language construction.
-* In TSF, you generally can't use UTF character codes like `&#x2661;`, as they're automatically removed for added security. Add them as displayed instead.
+* Please don't add spaces if you see backticks, asterisks, or brackets. They're used for Markdown language construction.
+* In TSF, you generally can't use UTF character codes like `&#x2661;`, as they're automatically removed or rendered unreadable for added security. Add them as displayed instead: ♡
 
 * **For everyone:**
 	* **Added:**
@@ -243,15 +243,14 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Improved:**
 		* If an admin redirect initiated by TSF causes a white screen of death, a helping message is now outputted on the white screen.
 		* When using WPML, the URLs are now converted much faster than before.
-		/
 		* On plugin activation and deactivation, the options are now automatically toggled from options autoload.
 		 	* For non-developers, this means that this plugin won't stock up on your website's memory after deactivation. Unlike many, many other plugins.
 		* The sitemap's stylesheet is now a bit neater when `lastmod` output is disabled.
 		* PolyLang canonical URL compatibility.
-		/
-		* TODO A little link in plugin activation page to the companion plugin to inform wary users about its existence, which next to the deactivation link.
+		* A little link in plugin activation page to the companion plugin to inform wary users about its existence, which next to the deactivation link.
 			* This link is only added if the plugin isn't found to be installed.
 			* This link is super non-intrusive; most won't even spot it.
+			* This link is named "Extensions".
 		* When using a translation plugin, the plugin now pings Search Engines with your current admin language's sitemap, rather than the default one.
 		* When using a translation plugin, the robots.txt output now directs Search Engines to the current language's sitemap location.
 			* This only works when using domain or subdomain translation URLs. Subdomain translation URLs are highly discouraged, and this is another reason.
@@ -259,7 +258,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* The robots.txt file will now show a notification when it's at an invalid location, whilst pointing you to the "supposed" location.
 			* It can't check whether that location is a valid robots.txt file without using excessive server resources.
 			* For that, please sign up with [The SEO Framework - Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/)'s Monitor, which allows you to excessively use my servers' resources.
-				* An update that checks for this is on its way.
+				/
+				* TODO (update is already written) An update that checks for this has recently been implemented.
 			* For more information, visit [robotstxt.org](http://www.robotstxt.org/robotstxt.html).
 	* **Changed:**
 		* The URL generation now uses WordPress default home URL generation, rather than our own.
@@ -268,8 +268,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Instead, the Robots.txt tab will now show a notice. Because that does require pretty permalinks.
 	* **Updated:**
 		* Knowledge Graph Social Profile links' placeholders and example profile redirect links.
+		* The sitemap cache will be cleared on update, because of the URL fixes.
 		/
-		* TODO The sitemap cache will be cleared on update, because of the URL fixes.
 		* TODO Fix last 2 images in Screenshots
 	* **Fixed:**
 		* When using WPML, alternative languages' terms and taxonomies URLs are now correct.
@@ -292,6 +292,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Added:**
 		/
 		* TODO a few sentences.. (list them)
+		* "Extensions".
+			* Yes, there are official plugin extensions.
+		* "https://wordpress.org/plugins/the-seo-framework-extension-manager/".
+			* Please translate it to your WordPress.org language's location. Like "nl.wordpress.org".
+			* This account for many other WordPress.org links.
 	* **Changed:**
 		* The plugin indication strings have been adjusted.
 			* So, "Start/End The SEO Framework" now is "Start/End %s".

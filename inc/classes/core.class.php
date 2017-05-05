@@ -231,17 +231,19 @@ class Core {
 
 		$types = \wp_parse_args( $defaults, $post_types );
 
-		foreach ( $types as $type )
+		foreach ( $types as $type ) {
 			\add_post_type_support( $type, array( 'autodescription-meta' ) );
-
+		}
 	}
 
 	/**
 	 * Adds link from plugins page to SEO Settings page.
 	 *
-	 * @param array $links The current links.
-	 *
 	 * @since 2.2.8
+	 * @since 2.9.2 : Added TSFEM link.
+	 *
+	 * @param array $links The current links.
+	 * @return array The plugin links.
 	 */
 	public function plugin_action_links( $links = array() ) {
 
@@ -250,7 +252,13 @@ class Core {
 		if ( $this->load_options )
 			$tsf_links['settings'] = '<a href="' . \esc_url( \admin_url( 'admin.php?page=' . $this->seo_settings_page_slug ) ) . '">' . \esc_html__( 'SEO Settings', 'autodescription' ) . '</a>';
 
-		$tsf_links['home'] = '<a href="' . \esc_url( 'https://theseoframework.com/' ) . '" target="_blank">' . \esc_html_x( 'Plugin Home', 'As in: The Plugin Home Page', 'autodescription' ) . '</a>';
+		$tsf_links['home'] = '<a href="' . \esc_url( 'https://theseoframework.com/' ) . '" rel="noopener" target="_blank">' . \esc_html_x( 'Plugin Home', 'As in: The Plugin Home Page', 'autodescription' ) . '</a>';
+
+		if ( ! defined( 'TSF_EXTENSION_MANAGER_VERSION' ) ) {
+			$tsfem = \get_plugins( '/the-seo-framework-extension-manager' );
+			if ( empty( $tsfem ) )
+				$tsf_links['tsfem'] = '<a href="' . \esc_url( \__( 'https://wordpress.org/plugins/the-seo-framework-extension-manager/', 'autodescription' ) ) . '" rel="noopener" target="_blank">' . \esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' ) . '</a>';
+		}
 
 		return array_merge( $tsf_links, $links );
 	}
