@@ -8,90 +8,76 @@ $instance = $this->get_view_instance( 'the_seo_framework_sitemaps_metabox', $ins
 switch ( $instance ) :
 	case 'the_seo_framework_sitemaps_metabox_main' :
 
-		if ( ! $this->pretty_permalinks ) :
+		/**
+		 * Parse tabs content
+		 *
+		 * @param array $default_tabs { 'id' = The identifier =>
+		 *		array(
+		 *			'name'     => The name
+		 *			'callback' => The callback function, use array for method calling
+		 *			'dashicon' => Desired dashicon
+		 *		)
+		 * }
+		 *
+		 * @since 2.2.9
+		 */
+		$default_tabs = array(
+			'general' => array(
+				'name'     => __( 'General', 'autodescription' ),
+				'callback' => array( $this, 'sitemaps_metabox_general_tab' ),
+				'dashicon' => 'admin-generic',
+			),
+			'robots' => array(
+				'name'     => 'Robots.txt',
+				'callback' => array( $this, 'sitemaps_metabox_robots_tab' ),
+				'dashicon' => 'share-alt2',
+			),
+			'timestamps' => array(
+				'name'     => __( 'Timestamps', 'autodescription' ),
+				'callback' => array( $this, 'sitemaps_metabox_timestamps_tab' ),
+				'dashicon' => 'backup',
+			),
+			'notify' => array(
+				'name'     => _x( 'Ping', 'Ping or notify Search Engine', 'autodescription' ),
+				'callback' => array( $this, 'sitemaps_metabox_notify_tab' ),
+				'dashicon' => 'megaphone',
+			),
+			'style' => array(
+				'name'     => __( 'Style', 'autodescription' ),
+				'callback' => array( $this, 'sitemaps_metabox_style_tab' ),
+				'dashicon' => 'art',
+			),
+		);
 
-			$permalink_settings_url = admin_url( 'options-permalink.php' );
-			$here = '<a href="' . esc_url( $permalink_settings_url ) . '" target="_blank" title="' . esc_attr__( 'Permalink Settings', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
+		/**
+		 * Applies filters the_seo_framework_sitemaps_settings_tabs : array see $default_tabs
+		 *
+		 * Used to extend Knowledge Graph tabs
+		 */
+		$defaults = (array) apply_filters( 'the_seo_framework_sitemaps_settings_tabs', $default_tabs, $args );
 
-			?><h4><?php esc_html_e( "You're using the plain permalink structure.", 'autodescription' ); ?></h4><?php
-			$this->description( __( "This means we can't output the sitemap through the WordPress rewrite rules.", 'autodescription' ) );
-			?><hr><?php
-			$this->description_noesc( sprintf( esc_html_x( "Change your Permalink Settings %s (Recommended: 'postname').", '%s = here', 'autodescription' ), $here ) );
+		$tabs = wp_parse_args( $args, $defaults );
+		$use_tabs = true;
 
-		else :
+		$has_sitemap_plugin = $this->detect_sitemap_plugin();
+		$sitemap_detected = $this->has_sitemap_xml();
+		$robots_detected = $this->has_robots_txt();
 
-			/**
-			 * Parse tabs content
-			 *
-			 * @param array $default_tabs { 'id' = The identifier =>
-			 *		array(
-			 *			'name'     => The name
-			 *			'callback' => The callback function, use array for method calling
-			 *			'dashicon' => Desired dashicon
-			 *		)
-			 * }
-			 *
-			 * @since 2.2.9
-			 */
-			$default_tabs = array(
-				'general' => array(
-					'name'     => __( 'General', 'autodescription' ),
-					'callback' => array( $this, 'sitemaps_metabox_general_tab' ),
-					'dashicon' => 'admin-generic',
-				),
-				'robots' => array(
-					'name'     => 'Robots.txt',
-					'callback' => array( $this, 'sitemaps_metabox_robots_tab' ),
-					'dashicon' => 'share-alt2',
-				),
-				'timestamps' => array(
-					'name'     => __( 'Timestamps', 'autodescription' ),
-					'callback' => array( $this, 'sitemaps_metabox_timestamps_tab' ),
-					'dashicon' => 'backup',
-				),
-				'notify' => array(
-					'name'     => _x( 'Ping', 'Ping or notify Search Engine', 'autodescription' ),
-					'callback' => array( $this, 'sitemaps_metabox_notify_tab' ),
-					'dashicon' => 'megaphone',
-				),
-				'style' => array(
-					'name'     => __( 'Style', 'autodescription' ),
-					'callback' => array( $this, 'sitemaps_metabox_style_tab' ),
-					'dashicon' => 'art',
-				),
-			);
+		/**
+		 * Remove the timestamps and notify submenus
+		 * @since 2.5.2
+		 */
+		if ( $has_sitemap_plugin || $sitemap_detected ) {
+			unset( $tabs['timestamps'] );
+			unset( $tabs['notify'] );
+		}
 
-			/**
-			 * Applies filters the_seo_framework_sitemaps_settings_tabs : array see $default_tabs
-			 *
-			 * Used to extend Knowledge Graph tabs
-			 */
-			$defaults = (array) apply_filters( 'the_seo_framework_sitemaps_settings_tabs', $default_tabs, $args );
-
-			$tabs = wp_parse_args( $args, $defaults );
-			$use_tabs = true;
-
-			$has_sitemap_plugin = $this->detect_sitemap_plugin();
-			$sitemap_detected = $this->has_sitemap_xml();
-			$robots_detected = $this->has_robots_txt();
-
-			/**
-			 * Remove the timestamps and notify submenus
-			 * @since 2.5.2
-			 */
-			if ( $has_sitemap_plugin || $sitemap_detected ) {
-				unset( $tabs['timestamps'] );
-				unset( $tabs['notify'] );
-			}
-
-			$this->nav_tab_wrapper( 'sitemaps', $tabs, '2.2.8' );
-
-		endif;
+		$this->nav_tab_wrapper( 'sitemaps', $tabs, '2.2.8' );
 		break;
 
 	case 'the_seo_framework_sitemaps_metabox_general' :
 
-		$sitemap_url = home_url( 'sitemap.xml' );
+		$sitemap_url = $this->get_sitemap_xml_url();
 		$has_sitemap_plugin = $this->detect_sitemap_plugin();
 		$sitemap_detected = $this->has_sitemap_xml();
 
@@ -140,6 +126,17 @@ switch ( $instance ) :
 
 		if ( $this->has_robots_txt() ) :
 			$this->description( __( 'A robots.txt file has been detected in the root folder of your website; therefore no settings are able to alter its output.', 'autodescription' ) );
+		elseif ( ! $this->pretty_permalinks ) :
+
+			$permalink_settings_url = admin_url( 'options-permalink.php' );
+			$here = '<a href="' . esc_url( $permalink_settings_url ) . '" target="_blank" title="' . esc_attr__( 'Permalink Settings', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
+
+			?><h4><?php esc_html_e( "You're using the plain permalink structure.", 'autodescription' ); ?></h4><?php
+			$this->description( __( "This means the robots.txt file can't be outputted through the WordPress rewrite rules.", 'autodescription' ) );
+			?><hr><?php
+			$this->description_noesc( sprintf( esc_html_x( 'Change your Permalink Settings %s (Recommended: "Post name").', '%s = here', 'autodescription' ), $here ) );
+
+			$locate_url = false;
 		elseif ( $this->can_do_sitemap_robots( false ) ) :
 			$this->description( __( 'The robots.txt file is the first thing Search Engines look for. If you add the sitemap location in the robots.txt file, then Search Engines will look for and index the sitemap.', 'autodescription' ) );
 			$this->description( __( 'If you do not add the sitemap location to the robots.txt file, you will need to notify Search Engines manually through the Webmaster Console provided by the Search Engines.', 'autodescription' ) );
@@ -169,7 +166,7 @@ switch ( $instance ) :
 		endif;
 
 		if ( $locate_url ) {
-			$robots_url = home_url( 'robots.txt' );
+			$robots_url = $this->get_robots_txt_url();
 			$here = '<a href="' . esc_url( $robots_url ) . '" target="_blank" title="' . esc_attr__( 'View robots.txt', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 
 			$this->description_noesc( sprintf( esc_html_x( 'The robots.txt file can be found %s.', '%s = here', 'autodescription' ), $here ) );

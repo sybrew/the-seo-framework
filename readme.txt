@@ -1,7 +1,7 @@
 === The SEO Framework ===
 Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
-Tags: google, bing, open graph, seo, xml sitemap, breadcrumbs, meta, search engine, pagerank, serp, facebook, twitter
+Tags: google, bing, open graph, seo, xml sitemap, breadcrumbs, meta, search engine, woocommerce, cpt, facebook, twitter
 Requires at least: 4.4.0
 Tested up to: 4.8.0
 Stable tag: 2.9.1
@@ -110,17 +110,19 @@ A caching plugin isn't even needed for this plugin as you won't notice a differe
 
 = Compatibility =
 
-* PHP 5.3 and later
-* WordPress 4.4 and later
+* PHP 5.3 and higher.
+* WordPress 4.4 and higher.
 * Full internationalization support through WordPress.org.
 * Extended Multibyte support (CJK).
-* Full Right to Left (RTL) language support.
+* Right to Left (RTL) language support in every possible way.
 * Extended Color vision deficiency accessibility.
 * Screen reader accessibility.
-* Full MultiSite support, this plugin is in fact built upon one.
+* Complete MultiSite support, this plugin is in fact built upon one.
 * Detection of robots.txt and sitemap.xml files.
 * Detection of theme Title output "doing it right" (or wrong).
 * Automatic detection of various other popular SEO tools.
+* Translation plugins WPML, Polylang and qTranslate X are also fully supported.
+* WooCommerce is completely supported, for free.
 
 **If you have other popular SEO plugins activated, this plugin will automatically prevent SEO mistakes by deactivating itself on almost every part.**
 
@@ -215,7 +217,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **Summarized:**
 /
 * Now, PolyLang is officially supported by The SEO Framework :)
-* TODO more...
+* Plain (ugly) permalinks are now also fully supported. So even the sitemap output will work.
+* The robots.txt file has been enhanced, so it now informs you when the output location is incorrect.
+* TODO
 
 **We're looking for translation editors:**
 
@@ -233,6 +237,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * In TSF, you generally can't use UTF character codes like `&#x2661;`, as they're automatically removed for added security. Add them as displayed instead.
 
 * **For everyone:**
+	* **Added:**
+		* The sitemap and its stylesheet can now be output when using plain permalinks.
+			* This doesn't mean that you should use permalinks in the first place.
 	* **Improved:**
 		* If an admin redirect initiated by TSF causes a white screen of death, a helping message is now outputted on the white screen.
 		* When using WPML, the URLs are now converted much faster than before.
@@ -241,17 +248,29 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		 	* For non-developers, this means that this plugin won't stack up on your website's memory after deactivation. Unlike many other plugins.
 		* The sitemap's stylesheet is now a bit neater when `lastmod` output is disabled.
 		* PolyLang canonical URL compatibility.
+		/
 		* TODO A little link in plugin activation page to the companion plugin to inform wary users about its existence, which next to the deactivation link.
 			* This link is only added if the plugin isn't found to be installed.
 			* This link is super non-intrusive; most won't even spot it.
+		* When using a translation plugin, the plugin now pings Search Engines with your current admin language's sitemap, rather than the default one.
+		* When using a translation plugin, the robots.txt output now directs Search Engines to the current language's sitemap location.
+			* This only works when using domain or subdomain translation URLs. Subdomain translation URLs are highly discouraged, and this is another reason.
+			* For more information, visit [robotstxt.org](http://www.robotstxt.org/robotstxt.html).
+		* The robots.txt file will now show a notification when it's at an invalid location, whilst pointing you to the "supposed" location.
+			* It can't check whether that location is a valid robots.txt file without using excessive server resources.
+			* For that, please sign up with [The SEO Framework - Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/)'s Monitor, which allows you to excessively use my servers' resources.
+				* An update that checks for this is on its way.
+			* For more information, visit [robotstxt.org](http://www.robotstxt.org/robotstxt.html).
 	* **Changed:**
 		* The URL generation now uses WordPress default home URL generation, rather than our own.
+		* The General Settings metabox tabs have been reordered, so new users won't be overwhelmed with advanced options at first sight.
+		* The sitemap settings are now output when using Plain permalinks.
+			* Instead, the Robots.txt tab will now show a notice. Because that does require pretty permalinks.
 	* **Updated:**
 		* Knowledge Graph Social Profile links' placeholders and example profile redirect links.
 		/
 		* TODO The sitemap cache will be cleared on update, because of the URL fixes.
 		* TODO Fix last 2 images in Screenshots
-		* TODO remove "Other Notes"... temporarily until w.org knows what to do with it
 	* **Fixed:**
 		* When using WPML, alternative languages' terms and taxonomies URLs are now correct.
 		* wpForo plugin compatibility has been implemented, so canonical URLs, titles and descriptions are always correct on wpForo pages.
@@ -262,21 +281,44 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* The sitemap's stylesheet now works on translated (alternative) domains.
 		* When using PolyLang, the Canonical URLs no longer mismatches.
 		/
-		* TODO test wpml sitemap URL location @ robots.txt
+		* TODO TEST The sitemap now works when not using pretty permalinks.
 		* TODO https://wordpress.org/support/topic/incorrect-ogurl-with-wc-vendors-plugin/
 		* TODO walk through https://github.com/sybrew/the-seo-framework/issues?q=is%3Aopen+is%3Aissue+label%3Abug
 
 * **For translators:**
-	* The plugin indication strings have been adjusted.
-		* So, "Start/End The SEO Framework" now is "Start/End %s".
-		* Many translators translated a brand name, which shouldn't be.
-			* This means "The SEO Framework" should always stay "The SEO Framework".
-			* Not e.g. "De SEO Lijstwerk" (Dutch).
+	* **Updated:**
+		/
+		* TODO POT translation file.
+			* Translated are handled through [WordPress.org](https://translate.wordpress.org/projects/wp-plugins/autodescription).
+	* **Added:**
+		/
+		* TODO a few sentences.. (list them)
+	* **Changed:**
+		* The plugin indication strings have been adjusted.
+			* So, "Start/End The SEO Framework" now is "Start/End %s".
+			* Many translators translated a brand name, which shouldn't be.
+				* This means "The SEO Framework" should always stay "The SEO Framework".
+				* Not e.g. "De SEO Lijstwerk" (Dutch).
+		* "Only adjust these options if you are aware of its SEO effects."
+			* Now is: "Only adjust these options if you are aware of their SEO effects."
+			* Grammar: The subject (options) is plural.
+		* "Change your Permalink Settings %s (Recommended: 'postname')."
+			* Now is: 'Change your Permalink Settings %s (Recommended: "Post name").'
+			* Style: Using double quotes rather than single quotes.
+			* Name: WordPress has changed "postname" to "Post name".
+		* "This means we can't output the sitemap through the WordPress rewrite rules."
+			* Now is: "This means the robots.txt file can't be outputted through the WordPress rewrite rules."
+			* Updated: We can now output sitemap.xml, but it's impossible (by robots specification) to output the robots.txt file.
+			* Anthropomorphism: We shouldn't use "we", it's an integrated and automated "it" system.
+				* More updates like this will follow in the future.
 
 * **For developers:**
 	* **Added:**
 		* Method `is_sitemap()`, determines whether the request is rendering the sitemap output of The SEO Framework.
+		* Method `is_robots()`, a copy of WordPress' Core function `is_robots()`.
 		* Method `get_plugin_indicator()`, it returns the plugin output indication, so they can be used in custom scenarios (like AMP).
+		* Method `get_sitemap_xml_url()`, it returns the correct URL in any situation.
+		* Method `get_robots_txt_url()`, it returns the correct URL in any situation.
 	* **Changed:**
 		* Method `get_home_host()`:
 			1. It now uses function `get_home_url()`, rather than `get_option( 'home' )`.
@@ -286,6 +328,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Method `get_all_options()` now has an extra method parameter that allows to overwrite the cache.
 		* Incorporated WordPress Core filter `get_the_archive_title` in method `get_the_real_archive_title()`.
 			* This method is a copy of WordPress function `get_the_archive_title()` with admin capabilities.
+		* Method `get_sitemap_xsl_url()`, it now returns the correct URL in any situation.
+		* Method `can_do_sitemap_robots()` now also checks for permalink settings.
 	* **Changed:**
 		* (Typo) Renamed method `get_relatitve_fontcolor` to `get_relative_fontcolor`.
 			* No fallback (backwards compatible) method has been put in place. A warning is displayed instead.

@@ -547,6 +547,15 @@ class Init extends Query {
 		if ( false === $output ) :
 			$output = '';
 
+			$parsed_home_url = \wp_parse_url( rtrim( $this->the_home_url_from_cache(), ' /\\' ) );
+			$home_path = ! empty( $parsed_home_url['path'] ) ? \esc_attr( $parsed_home_url['path'] ) : '';
+
+			if ( $this->is_subdirectory_installation() || $home_path ) {
+				$output .= '# This is an invalid robots.txt location.' . "\r\n";
+				$output .= '# Please visit: ' . \esc_url( trailingslashit( $this->set_preferred_url_scheme( $this->get_home_host() ) ) . 'robots.txt' ) . "\r\n";
+				$output .= "\r\n";
+			}
+
 			/**
 			 * Apply filters the_seo_framework_robots_txt_pre & the_seo_framework_robots_txt_pro : string
 			 * Adds custom cacheable lines.
@@ -558,36 +567,28 @@ class Init extends Query {
 			$pro = (string) \apply_filters( 'the_seo_framework_robots_txt_pro', '' );
 
 			$site_url = \wp_parse_url( \site_url() );
-			$path = ( ! empty( $site_url['path'] ) ) ? $site_url['path'] : '';
+			$site_path = ( ! empty( $site_url['path'] ) ) ? \esc_attr( $site_url['path'] ) : '';
 
 			$output .= $pre;
 			//* Output defaults
 			$output .= "User-agent: *\r\n";
-			$output .= "Disallow: $path/wp-admin/\r\n";
-			$output .= "Allow: $path/wp-admin/admin-ajax.php\r\n";
+			$output .= "Disallow: $site_path/wp-admin/\r\n";
+			$output .= "Allow: $site_path/wp-admin/admin-ajax.php\r\n";
 
 			/**
-			 * Prevents query indexing
-			 * @since 2.2.9
-			 *
-			 * Applies filters the_seo_framework_robots_disallow_queries : Whether to allow queries for robots.
+			 * Applies filters the_seo_framework_robots_disallow_queries : boolean
+			 * Determines whether to allow queries for robots.
 			 * @since 2.5.0
 			 */
 			if ( \apply_filters( 'the_seo_framework_robots_disallow_queries', false ) ) {
-				$home_url = \wp_parse_url( rtrim( $this->the_home_url_from_cache(), ' /\\' ) );
-				$home_path = ( ! empty( $home_url['path'] ) ) ? $home_url['path'] : '';
 				$output .= "Disallow: $home_path/*?*\r\n";
 			}
 
 			$output .= $pro;
 
-			if ( $this->get_option( 'sitemaps_robots' ) && $this->can_do_sitemap_robots() ) {
-				//* Add whitespace before sitemap.
-				$output .= "\r\n";
-
-				//* Add sitemap full url
-				$output .= 'Sitemap: ' . $this->the_home_url_from_cache( true ) . "sitemap.xml\r\n";
-			}
+			//* Add extra whitespace and sitemap full URL
+			if ( $this->get_option( 'sitemaps_robots' ) && $this->can_do_sitemap_robots() )
+				$output .= "\r\nSitemap: " . \esc_url( $this->get_sitemap_xml_url() ) . "\r\n";
 
 			$this->use_object_cache and $this->object_cache_set( $cache_key, $output, 86400 );
 		endif;

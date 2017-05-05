@@ -14,15 +14,15 @@ switch ( $instance ) :
 		//		'callback' => array( $this, 'general_metabox_general_tab' ),
 		//		'dashicon' => 'admin-generic',
 		//	),
-			'performance' => array(
-				'name'     => __( 'Performance', 'autodescription' ),
-				'callback' => array( $this, 'general_metabox_performance_tab' ),
-				'dashicon' => 'performance',
-			),
 			'layout' => array(
 				'name'     => __( 'Layout', 'autodescription' ),
 				'callback' => array( $this, 'general_metabox_layout_tab' ),
 				'dashicon' => 'screenoptions',
+			),
+			'performance' => array(
+				'name'     => __( 'Performance', 'autodescription' ),
+				'callback' => array( $this, 'general_metabox_performance_tab' ),
+				'dashicon' => 'performance',
 			),
 			'canonical' => array(
 				'name'     => __( 'Canonical', 'autodescription' ),
@@ -45,6 +45,34 @@ switch ( $instance ) :
 
 	case 'the_seo_framework_general_metabox_general' :
 		echo 'Nothing to see here yet.';
+		break;
+
+	case 'the_seo_framework_general_metabox_layout' :
+		?><h4><?php esc_html_e( 'Administrative Layout Settings', 'autodescription' ); ?></h4><?php
+		$this->description( __( 'SEO hints can be visually displayed throughout the dashboard.', 'autodescription' ) );
+
+		?>
+		<hr>
+
+		<h4><?php esc_html_e( 'SEO Bar Settings', 'autodescription' ); ?></h4>
+		<?php
+		$this->wrap_fields(
+			array(
+				$this->make_checkbox(
+					'display_seo_bar_tables',
+					esc_html__( 'Display the SEO Bar in overview tables?', 'autodescription' ),
+					'',
+					false
+				),
+				$this->make_checkbox(
+					'display_seo_bar_metabox',
+					esc_html__( 'Display the SEO Bar in the SEO Settings metabox?', 'autodescription' ),
+					'',
+					false
+				),
+			),
+			true
+		);
 		break;
 
 	case 'the_seo_framework_general_metabox_performance' :
@@ -105,40 +133,12 @@ switch ( $instance ) :
 		endif;
 		break;
 
-	case 'the_seo_framework_general_metabox_layout' :
-		?><h4><?php esc_html_e( 'Administrative Layout Settings', 'autodescription' ); ?></h4><?php
-		$this->description( __( 'SEO hints can be visually displayed throughout the dashboard.', 'autodescription' ) );
-
-		?>
-		<hr>
-
-		<h4><?php esc_html_e( 'SEO Bar Settings', 'autodescription' ); ?></h4>
-		<?php
-		$this->wrap_fields(
-			array(
-				$this->make_checkbox(
-					'display_seo_bar_tables',
-					esc_html__( 'Display the SEO Bar in overview tables?', 'autodescription' ),
-					'',
-					false
-				),
-				$this->make_checkbox(
-					'display_seo_bar_metabox',
-					esc_html__( 'Display the SEO Bar in the SEO Settings metabox?', 'autodescription' ),
-					'',
-					false
-				),
-			),
-			true
-		);
-		break;
-
 	case 'the_seo_framework_general_metabox_canonical' :
 
 		?><h4><?php esc_html_e( 'Canonical URL Settings', 'autodescription' ); ?></h4><?php
 		$this->description( __( 'The canonical URL meta tag urges Search Engines to go to the outputted URL.', 'autodescription' ) );
 		$this->description( __( 'If the canonical URL meta tag represents the visited page, then the Search Engine will crawl the visited page. Otherwise, the Search Engine might go to the outputted URL.', 'autodescription' ) );
-		$this->description( __( 'Only adjust these options if you are aware of its SEO effects.', 'autodescription' ) );
+		$this->description( __( 'Only adjust these options if you are aware of their SEO effects.', 'autodescription' ) );
 		?>
 		<hr>
 

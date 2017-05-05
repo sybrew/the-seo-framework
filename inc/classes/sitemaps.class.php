@@ -67,9 +67,10 @@ class Sitemaps extends Metaboxes {
 	}
 
 	/**
-	 * Determines whether we can output sitemap or not based on options.
+	 * Determines whether we can output sitemap or not based on options and blog status.
 	 *
 	 * @since 2.6.0
+	 * @since 2.9.2 : Now returns true when using plain and ugly permalinks.
 	 * @staticvar bool $cache
 	 *
 	 * @return bool
@@ -82,10 +83,10 @@ class Sitemaps extends Metaboxes {
 			return $cache;
 
 		/**
-		 * Don't do anything on a deleted or spam blog.
-		 * There's nothing to find anyway. Multisite Only.
+		 * Don't do anything on a deleted or spam blog on MultiSite.
+		 * There's nothing to find anyway.
 		 */
-		return $cache = $this->pretty_permalinks && $this->is_option_checked( 'sitemaps_output' ) && false === $this->current_blog_is_spam_or_deleted();
+		return $cache = $this->is_option_checked( 'sitemaps_output' ) && false === $this->current_blog_is_spam_or_deleted();
 	}
 
 	/**
@@ -381,6 +382,7 @@ class Sitemaps extends Metaboxes {
 	 * Returns the stylesheet XSL location URL.
 	 *
 	 * @since 2.8.0
+	 * @global object $wp_rewrite
 	 *
 	 * @return string URL location of the XSL stylesheet. Unescaped.
 	 */
@@ -388,20 +390,84 @@ class Sitemaps extends Metaboxes {
 		global $wp_rewrite;
 
 		$home = \trailingslashit( $this->set_url_scheme( $this->the_home_url_from_cache() ) );
+		/** Figure out if this is helpful...
 		if ( ! $this->is_subdirectory_installation() ) {
-			$path = $this->set_url_scheme( $home, 'relative' );
-			$home = \trailingslashit( rtrim( $home, $path ) );
+			//= 1. $home = \trailingslashit( $this->set_url_scheme( $this->get_home_host() ) );
+
+			//= 2.:
+			$_path = $this->set_url_scheme( $home, 'relative' );
+			if ( false !== ( $_pos = strrpos( $home, $_path ) ) ) {
+				$home = \trailingslashit( substr_replace( $home, '', $_pos, strlen( $_path ) ) );
+			}
 		}
+		*/
 
 		if ( $wp_rewrite->using_index_permalinks() ) {
-			$xsl = $home . 'index.php/sitemap.xsl';
+			$loc = $home . 'index.php/sitemap.xsl';
 		} elseif ( $wp_rewrite->using_permalinks() ) {
-			$xsl = $home . 'sitemap.xsl';
+			$loc = $home . 'sitemap.xsl';
 		} else {
-			$xsl = $home . '?the_seo_framework_sitemap-xsl=true';
+			$loc = $home . '?the_seo_framework_sitemap=xsl';
 		}
 
-		return $xsl;
+		return $loc;
+	}
+
+	/**
+	 * Returns the sitemap XML location URL.
+	 *
+	 * @since 2.9.2
+	 * @global object $wp_rewrite
+	 *
+	 * @return string URL location of the XML sitemap. Unescaped.
+	 */
+	public function get_sitemap_xml_url() {
+		global $wp_rewrite;
+
+		$home = \trailingslashit( $this->set_url_scheme( $this->the_home_url_from_cache() ) );
+		/** Figure out if this is helpful...
+		if ( ! $this->is_subdirectory_installation() ) {
+			//= 1. $home = \trailingslashit( $this->set_url_scheme( $this->get_home_host() ) );
+
+			//= 2.:
+			$_path = $this->set_url_scheme( $home, 'relative' );
+			if ( false !== ( $_pos = strrpos( $home, $_path ) ) ) {
+				$home = \trailingslashit( substr_replace( $home, '', $_pos, strlen( $_path ) ) );
+			}
+		}
+		*/
+
+		if ( $wp_rewrite->using_index_permalinks() ) {
+			$loc = $home . 'index.php/sitemap.xml';
+		} elseif ( $wp_rewrite->using_permalinks() ) {
+			$loc = $home . 'sitemap.xml';
+		} else {
+			$loc = $home . '?the_seo_framework_sitemap=xml';
+		}
+
+		return $loc;
+	}
+
+	/**
+	 * Returns the robots.txt location URL.
+	 * Only allows root domains.
+	 *
+	 * @since 2.9.2
+	 * @global object $wp_rewrite
+	 *
+	 * @return string URL location of robots.txt. Unescaped.
+	 */
+	public function get_robots_txt_url() {
+		global $wp_rewrite;
+
+		if ( $wp_rewrite->using_permalinks() && ! $this->is_subdirectory_installation() ) {
+			$home = \trailingslashit( $this->set_url_scheme( $this->get_home_host() ) );
+			$loc = $home . 'robots.txt';
+		} else {
+			$loc = '';
+		}
+
+		return $loc;
 	}
 
 	/**
@@ -1029,7 +1095,7 @@ class Sitemaps extends Metaboxes {
 	 * @since 2.2.9
 	 */
 	public function ping_google() {
-		$pingurl = 'http://www.google.com/webmasters/sitemaps/ping?sitemap=' . urlencode( $this->the_home_url_from_cache( true ) . 'sitemap.xml' );
+		$pingurl = 'http://www.google.com/webmasters/sitemaps/ping?sitemap=' . urlencode( $this->get_sitemap_xml_url() );
 		\wp_safe_remote_get( $pingurl, array( 'timeout' => 3 ) );
 	}
 
@@ -1039,7 +1105,7 @@ class Sitemaps extends Metaboxes {
 	 * @since 2.2.9
 	 */
 	public function ping_bing() {
-		$pingurl = 'http://www.bing.com/webmaster/ping.aspx?siteMap=' . urlencode( $this->the_home_url_from_cache( true ) . 'sitemap.xml' );
+		$pingurl = 'http://www.bing.com/webmaster/ping.aspx?siteMap=' . urlencode( $this->get_sitemap_xml_url() );
 		\wp_safe_remote_get( $pingurl, array( 'timeout' => 3 ) );
 	}
 
@@ -1049,7 +1115,7 @@ class Sitemaps extends Metaboxes {
 	 * @since 2.6.0
 	 */
 	public function ping_yandex() {
-		$pingurl = 'http://blogs.yandex.ru/pings/?status=success&url=' . urlencode( $this->the_home_url_from_cache( true ) . 'sitemap.xml' );
+		$pingurl = 'http://blogs.yandex.ru/pings/?status=success&url=' . urlencode( $this->get_sitemap_xml_url() );
 		\wp_safe_remote_get( $pingurl, array( 'timeout' => 3 ) );
 	}
 

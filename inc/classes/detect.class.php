@@ -519,6 +519,7 @@ class Detect extends Render {
 	 * @since 2.6.0
 	 * @since 2.8.0 Added check_option parameter.
 	 * @since 2.9.0 Now also checks for subdirectory installations.
+	 * @since 2.9.2 Now also checks for permalinks.
 	 *
 	 * @param bool $check_option Whether to check for sitemap option.
 	 * @return bool True when no conflicting plugins are detected or when The SEO Framework's Sitemaps are output.
@@ -540,6 +541,9 @@ class Detect extends Render {
 		}
 
 		if ( $this->is_subdirectory_installation() )
+			return false;
+
+		if ( ! $this->pretty_permalinks )
 			return false;
 
 		return true;
