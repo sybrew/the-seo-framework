@@ -247,7 +247,7 @@ final class Deprecated {
 	 * @since 2.7.0 No longer used for performance reasons.
 	 * @uses $this->exclude_search_ids()
 	 * @deprecated
-	 * @since 2.8.0
+	 * @since 2.8.0 deprecated.
 	 *
 	 * @param array $query The possible search query.
 	 * @return void Early if no search query is found.

@@ -259,8 +259,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* It can't check whether that location is a valid robots.txt file without using excessive server resources.
 			* For that, please sign up with [The SEO Framework - Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/)'s Monitor, which allows you to excessively use my servers' resources.
 				/
-				* TODO (update is already written) An update that checks for this has recently been implemented.
+				* TODO (update is already written) An update that checks for this has recently been implemented on the Monitor server.
 			* For more information, visit [robotstxt.org](http://www.robotstxt.org/robotstxt.html).
+		* Paginated URLs generation performance has been vastly improved.
+			* There were heavy things calculated that were unused half of the time.
 	* **Changed:**
 		* The URL generation now uses WordPress default home URL generation, rather than our own.
 		* The General Settings metabox tabs have been reordered, so new users won't be overwhelmed with advanced options at first sight.
@@ -280,23 +282,20 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Prevented memory leak when re-selecting social images.
 		* The sitemap's stylesheet now works on translated (alternative) domains.
 		* When using PolyLang, the Canonical URLs no longer mismatches.
-		/
-		* TODO https://wordpress.org/support/topic/incorrect-ogurl-with-wc-vendors-plugin/
-		* TODO walk through https://github.com/sybrew/the-seo-framework/issues?q=is%3Aopen+is%3Aissue+label%3Abug
 
 * **For translators:**
 	* **Updated:**
-		/
-		* TODO POT translation file.
-			* Translated are handled through [WordPress.org](https://translate.wordpress.org/projects/wp-plugins/autodescription).
+		* POT translation file.
+			* Translations are handled through [WordPress.org](https://translate.wordpress.org/projects/wp-plugins/autodescription).
 	* **Added:**
-		/
-		* TODO a few sentences.. (list them)
-		* "Extensions".
+		* "There has been an error redirecting. Refresh the page or follow [this link](%s)."
+			* This is shown when admin redirection fails because of PHP debugging issues.
+			* It uses Markdown.
+		* "Extensions"
 			* Yes, there are official plugin extensions.
-		* "https://wordpress.org/plugins/the-seo-framework-extension-manager/".
+		* "https://wordpress.org/plugins/the-seo-framework-extension-manager/"
 			* Please translate it to your WordPress.org language's location. Like "nl.wordpress.org".
-			* This account for many other WordPress.org links.
+			* This accounts for many other WordPress.org links.
 	* **Changed:**
 		* The plugin indication strings have been adjusted.
 			* So, "Start/End The SEO Framework" now is "Start/End %s".
@@ -327,6 +326,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Method `get_home_host()`:
 			1. It now uses function `get_home_url()`, rather than `get_option( 'home' )`.
 			2. It now adds ports, if any (likely found on local development environments).
+		* (Typo) Renamed method `get_relatitve_fontcolor` to `get_relative_fontcolor`.
+			* No fallback (backwards compatible) method has been put in place. A warning is displayed instead.
 	* **Improved:**
 		* Method `add_menu_link()` can now be called multiple times without issues.
 		* Method `get_all_options()` now has an extra method parameter that allows to overwrite the cache.
@@ -334,11 +335,12 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* This method is a copy of WordPress function `get_the_archive_title()` with admin capabilities.
 		* Method `get_sitemap_xsl_url()`, it now returns the correct URL in any situation.
 		* Method `can_do_sitemap_robots()` now also checks for permalink settings.
-	* **Changed:**
-		* (Typo) Renamed method `get_relatitve_fontcolor` to `get_relative_fontcolor`.
-			* No fallback (backwards compatible) method has been put in place. A warning is displayed instead.
+		* The Markdown URL parser now adds `nofollow noopener noreferrer`, rather than only `nofollow`.
+			* This unbinds threads in Chromium, for enhanced performance and debatable security.
 	* **Updated:**
-		* Extended file copyright by a year. Awesome.
+		* Extended file copyrights by a year. Awesome.
+	* **Removed:**
+		* Functions that were deprecated since version 2.7.0; therefore, the `inc/functions/deprecated.php` file could and has been unloaded.
 	* **Filter notes:**
 		* **Fixed:**
 			* `the_seo_framework_description_args` second parameter now works.
@@ -347,8 +349,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* `the_seo_framework_url_args` second parameter now works.
 
 **Detailed log:**
-
-***thingy***
+/
+***TODO thingy***
 
 = 2.9.1 - Sovereign Comprehension =
 

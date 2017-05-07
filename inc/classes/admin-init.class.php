@@ -435,7 +435,7 @@ class Admin_Init extends Init {
 	/**
 	 * Checks ajax referred set by set_js_nonces based on capability.
 	 *
-	 * Performs die() on fail.
+	 * Performs die() on failure.
 	 *
 	 * @since 2.9.0
 	 * @access private

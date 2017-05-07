@@ -198,9 +198,10 @@ function the_seo_framework_load_base_files() {
 	 * Load deprecated functions.
 	 *
 	 * @since 2.7.0
+	 * @since 2.9.2 No longer called to improve performance.
 	 * @uses THE_SEO_FRAMEWORK_DIR_PATH_FUNCT
 	 */
-	require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'deprecated.php' );
+	// require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'deprecated.php' );
 
 	/**
 	 * Load API files.

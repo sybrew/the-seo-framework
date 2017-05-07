@@ -254,6 +254,10 @@ class Core {
 
 		$tsf_links['home'] = '<a href="' . \esc_url( 'https://theseoframework.com/' ) . '" rel="noopener" target="_blank">' . \esc_html_x( 'Plugin Home', 'As in: The Plugin Home Page', 'autodescription' ) . '</a>';
 
+		/**
+		 * These are weak checks.
+		 * But it has minimum to no UX/performance impact on failure.
+		 */
 		if ( ! defined( 'TSF_EXTENSION_MANAGER_VERSION' ) ) {
 			$tsfem = \get_plugins( '/the-seo-framework-extension-manager' );
 			if ( empty( $tsfem ) )
@@ -458,13 +462,7 @@ class Core {
 	 * @return bool Option is checked.
 	 */
 	public function is_option_checked( $option ) {
-
-		$option = $this->get_option( $option );
-
-		if ( $this->is_checked( $option ) )
-			return true;
-
-		return false;
+		return $this->is_checked( $this->get_option( $option ) );
 	}
 
 	/**
@@ -600,7 +598,7 @@ class Core {
 		//* Try Daylight savings.
 		$tzstring = timezone_name_from_abbr( '', $seconds, 1 );
 		/**
-		 * PHP bug workaround.
+		 * PHP bug workaround. Disable the DST check.
 		 * @link https://bugs.php.net/bug.php?id=44780
 		 */
 		if ( false === $tzstring )
@@ -673,9 +671,14 @@ class Core {
 	 * @since 2.7.0
 	 *
 	 * @param string $string Required. The string to count words in.
-	 * @param int $amount Minimum amount of words to encounter in the string. Set to 0 to count all words longer than $bother_length.
-	 * @param int $amount_bother Minimum amount of words to encounter in the string that fall under the $bother_length. Set to 0 to count all words shorter than $bother_length.
-	 * @param int $bother_length The maximum string length of a word to pass for $amount_bother instead of $amount. Set to 0 to pass all words through $amount_bother
+	 * @param int $amount Minimum amount of words to encounter in the string.
+	 *            Set to 0 to count all words longer than $bother_length.
+	 * @param int $amount_bother Minimum amount of words to encounter in the string
+	 *            that fall under the $bother_length. Set to 0 to count all words
+	 *            shorter than $bother_length.
+	 * @param int $bother_length The maximum string length of a word to pass for
+	 *            $amount_bother instead of $amount. Set to 0 to pass all words
+	 *            through $amount_bother
 	 * @return array Containing arrays of words with their count.
 	 */
 	public function get_word_count( $string, $amount = 3, $amount_bother = 5, $bother_length = 3 ) {
@@ -902,7 +905,7 @@ class Core {
 					for ( $i = 0; $i < $count; $i++ ) {
 						$text = str_replace(
 							$matches[0][ $i ],
-							sprintf( '<a href="%s" rel="nofollow">%s</a>', \esc_url( $matches[2][ $i ] ), \esc_html( $matches[1][ $i ] ) ),
+							sprintf( '<a href="%s" rel="nofollow noreferrer noopener">%s</a>', \esc_url( $matches[2][ $i ] ), \esc_html( $matches[1][ $i ] ) ),
 							$text
 						);
 					}

@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the The SEO Framework package.
 msgid ""
 msgstr ""
-"Project-Id-Version: The SEO Framework 2.9.0-RC-1-2017.03.25.1\n"
+"Project-Id-Version: The SEO Framework 2.9.2-dev-2017.05.05.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/autodescription\n"
-"POT-Creation-Date: 2017-03-25 04:37:16+00:00\n"
+"POT-Creation-Date: 2017-05-07 05:43:12+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,28 +12,34 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: inc/classes/admin-init.class.php:231
+#: inc/classes/admin-init.class.php:233
 msgid "Good"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:232
+#: inc/classes/admin-init.class.php:234
 msgid "Okay"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:233
+#: inc/classes/admin-init.class.php:235
 msgid "Bad"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:234
+#: inc/classes/admin-init.class.php:236
 msgid "Unknown"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:325
+#: inc/classes/admin-init.class.php:327
 msgid "The changes you made will be lost if you navigate away from this page."
 msgstr ""
 
-#: inc/classes/admin-init.class.php:326
+#: inc/classes/admin-init.class.php:328
 msgid "Are you sure you want to reset all SEO settings to their defaults?"
+msgstr ""
+
+#. translators: %s = Redirect URL markdown
+
+#: inc/classes/admin-init.class.php:593
+msgid "There has been an error redirecting. Refresh the page or follow [this link](%s)."
 msgstr ""
 
 #: inc/classes/admin-pages.class.php:82
@@ -60,97 +66,106 @@ msgstr ""
 msgid "New SEO Settings have been updated."
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:102 inc/classes/core.class.php:251
+#: inc/classes/admin-pages.class.php:109 inc/classes/core.class.php:253
 #: inc/classes/site-options.class.php:429
 msgid "SEO Settings"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:103
+#: inc/classes/admin-pages.class.php:110
 msgid "SEO"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:235
+#: inc/classes/admin-pages.class.php:243
 msgid "General Settings"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:246
+#: inc/classes/admin-pages.class.php:254
 msgid "Title Settings"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:257
+#: inc/classes/admin-pages.class.php:265
 msgid "Description Meta Settings"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:268
+#: inc/classes/admin-pages.class.php:276
 msgid "Home Page Settings"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:279
+#: inc/classes/admin-pages.class.php:287
 msgid "Social Meta Settings"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:290
+#: inc/classes/admin-pages.class.php:298
 msgid "Schema Settings"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:301
+#: inc/classes/admin-pages.class.php:309
 #: inc/views/inpost/seo-settings-singular.php:167
 #: inc/views/inpost/seo-settings-tt.php:119
 msgid "Robots Meta Settings"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:312
+#: inc/classes/admin-pages.class.php:320
 msgid "Webmaster Meta Settings"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:323
+#: inc/classes/admin-pages.class.php:331
 msgid "Sitemap Settings"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:334
+#: inc/classes/admin-pages.class.php:342
 msgid "Feed Settings"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:838 inc/classes/admin-pages.class.php:845
+#: inc/classes/admin-pages.class.php:846 inc/classes/admin-pages.class.php:853
 msgctxt "Button hover"
 msgid "Select social image"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:840 inc/classes/admin-pages.class.php:844
+#: inc/classes/admin-pages.class.php:848 inc/classes/admin-pages.class.php:852
 msgid "Select Image"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:846
+#: inc/classes/admin-pages.class.php:854
 msgid "Change Image"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:847
+#: inc/classes/admin-pages.class.php:855
 msgid "Remove Image"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:848
+#: inc/classes/admin-pages.class.php:856
 msgid "Remove selected social image"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:849
+#: inc/classes/admin-pages.class.php:857
 msgctxt "Frame title"
 msgid "Select Social Image"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:850
+#: inc/classes/admin-pages.class.php:858
 msgid "Use this image"
 msgstr ""
 
-#: inc/classes/core.class.php:253
+#: inc/classes/core.class.php:255
 msgctxt "As in: The Plugin Home Page"
 msgid "Plugin Home"
 msgstr ""
 
-#: inc/classes/core.class.php:304
+#: inc/classes/core.class.php:264
+msgid "https://wordpress.org/plugins/the-seo-framework-extension-manager/"
+msgstr ""
+
+#: inc/classes/core.class.php:264
+msgctxt "Plugin extensions"
+msgid "Extensions"
+msgstr ""
+
+#: inc/classes/core.class.php:316
 msgid "Dismiss"
 msgstr ""
 
-#: inc/classes/core.class.php:401
+#: inc/classes/core.class.php:413
 msgctxt "e.g. en for English, nl for Dutch, fi for Finish, de for German"
 msgid "en"
 msgstr ""
@@ -198,224 +213,224 @@ msgstr ""
 msgid "No Search"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:293
+#: inc/classes/doing-it-right.class.php:361
 msgid "Refresh to see the SEO Bar status."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:377
+#: inc/classes/doing-it-right.class.php:445
 msgid "Post"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:381 inc/classes/inpost.class.php:379
+#: inc/classes/doing-it-right.class.php:449 inc/classes/inpost.class.php:379
 #: inc/classes/term-data.class.php:332
-#: inc/views/metaboxes/schema-metabox.php:203
+#: inc/views/metaboxes/schema-metabox.php:204
 msgid "Page"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:425
+#: inc/classes/doing-it-right.class.php:493
 msgid "Failed to fetch post ID."
 msgstr ""
 
 #. translators: %s = But or And
 
-#: inc/classes/doing-it-right.class.php:813
+#: inc/classes/doing-it-right.class.php:881
 msgid "%s the Title contains the Blogname multiple times."
 msgstr ""
 
 #. translators: 1: Word, 2: Occurences
 
-#: inc/classes/doing-it-right.class.php:984
+#: inc/classes/doing-it-right.class.php:1052
 msgid "%1$s is used %2$d times."
 msgstr ""
 
 #. Translators: %s = Post / Page / Category, etc.
 
-#: inc/classes/doing-it-right.class.php:1029
+#: inc/classes/doing-it-right.class.php:1097
 msgid "%s is being indexed."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1038
+#: inc/classes/doing-it-right.class.php:1106
 msgid "But you've discouraged indexing for the whole site."
 msgstr ""
 
 #. translators: 1: But or And, 2: Current taxonomy term plural label
 
-#: inc/classes/doing-it-right.class.php:1062
+#: inc/classes/doing-it-right.class.php:1130
 msgid "%1$s indexing for %2$s have been discouraged."
 msgstr ""
 
 #. translators: 1 = But or And, 1 = Post/Page
 
-#: inc/classes/doing-it-right.class.php:1075
+#: inc/classes/doing-it-right.class.php:1143
 msgid "%1$s the %2$s is protected from public visibility. This means indexing is discouraged."
 msgstr ""
 
 #. translators: %s = But or And
 
-#: inc/classes/doing-it-right.class.php:1084
+#: inc/classes/doing-it-right.class.php:1152
 msgid "%s the blog isn't set to public. This means WordPress discourages indexing."
 msgstr ""
 
 #. translators: %s = But or And
 
-#: inc/classes/doing-it-right.class.php:1098
+#: inc/classes/doing-it-right.class.php:1166
 msgid "%s there are no posts in this term; therefore, indexing has been discouraged."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1182
+#: inc/classes/doing-it-right.class.php:1250
 msgid "%s links aren't being followed."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1188
+#: inc/classes/doing-it-right.class.php:1256
 msgid "%s links are being followed."
 msgstr ""
 
 #. translators: %s = But or And
 
-#: inc/classes/doing-it-right.class.php:1200
+#: inc/classes/doing-it-right.class.php:1268
 msgid "%s you've discouraged the following of links for the whole site."
 msgstr ""
 
 #. translators: 1: But or And, 2: Current taxonomy term plural label
 
-#: inc/classes/doing-it-right.class.php:1226
+#: inc/classes/doing-it-right.class.php:1294
 msgid "%1$s following for %2$s have been discouraged."
 msgstr ""
 
 #. translators: %s = But or And
 
-#: inc/classes/doing-it-right.class.php:1238
+#: inc/classes/doing-it-right.class.php:1306
 msgid "%s the blog isn't set to public. This means WordPress allows the links to be followed regardless."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1290
+#: inc/classes/doing-it-right.class.php:1358
 msgid "Search Engines aren't allowed to archive this %s."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1295
+#: inc/classes/doing-it-right.class.php:1363
 msgid "Search Engines are allowed to archive this %s."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1307
+#: inc/classes/doing-it-right.class.php:1375
 msgid "But you've discouraged archiving for the whole site."
 msgstr ""
 
 #. translators: 1: But or And, 2: Current taxonomy term plural label
 
-#: inc/classes/doing-it-right.class.php:1333
+#: inc/classes/doing-it-right.class.php:1401
 msgid "%1$s archiving for %2$s have been discouraged."
 msgstr ""
 
 #. translators: %s = But or And
 
-#: inc/classes/doing-it-right.class.php:1346
+#: inc/classes/doing-it-right.class.php:1414
 msgid "%s the blog isn't set to public. This means WordPress allows the blog to be archived regardless."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1392
+#: inc/classes/doing-it-right.class.php:1460
 msgid "%s isn't being redirected."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1434
-#: inc/classes/doing-it-right.class.php:1463
+#: inc/classes/doing-it-right.class.php:1502
+#: inc/classes/doing-it-right.class.php:1531
 msgid "%s is being redirected. This means no SEO values have to be set."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1437
-#: inc/classes/doing-it-right.class.php:1479
+#: inc/classes/doing-it-right.class.php:1505
+#: inc/classes/doing-it-right.class.php:1547
 msgid "%s is not being indexed. This means no SEO values have to be set."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1593
+#: inc/classes/doing-it-right.class.php:1661
 msgid "Title:"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1594
+#: inc/classes/doing-it-right.class.php:1662
 msgid "Description:"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1595
+#: inc/classes/doing-it-right.class.php:1663
 msgid "Index:"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1596
+#: inc/classes/doing-it-right.class.php:1664
 msgid "Follow:"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1597
+#: inc/classes/doing-it-right.class.php:1665
 msgid "Archive:"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1598
+#: inc/classes/doing-it-right.class.php:1666
 msgid "Redirect:"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1600
+#: inc/classes/doing-it-right.class.php:1668
 msgid "Generated: Automatically generated."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1602
+#: inc/classes/doing-it-right.class.php:1670
 msgctxt "Generated"
 msgid "G"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1603
+#: inc/classes/doing-it-right.class.php:1671
 msgctxt "Title"
 msgid "T"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1604
+#: inc/classes/doing-it-right.class.php:1672
 msgctxt "Description"
 msgid "D"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1605
+#: inc/classes/doing-it-right.class.php:1673
 msgctxt "no-Index"
 msgid "I"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1606
+#: inc/classes/doing-it-right.class.php:1674
 msgctxt "no-Follow"
 msgid "F"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1607
+#: inc/classes/doing-it-right.class.php:1675
 msgctxt "no-Archive"
 msgid "A"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1608
+#: inc/classes/doing-it-right.class.php:1676
 msgctxt "Redirect"
 msgid "R"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1610
+#: inc/classes/doing-it-right.class.php:1678
 msgctxt "But there are..."
 msgid "But"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1611
+#: inc/classes/doing-it-right.class.php:1679
 msgctxt "And there are..."
 msgid "And"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1613
+#: inc/classes/doing-it-right.class.php:1681
 msgid "Length is far too short."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1614
+#: inc/classes/doing-it-right.class.php:1682
 msgid "Length is too short."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1615
+#: inc/classes/doing-it-right.class.php:1683
 msgid "Length is too long."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1616
+#: inc/classes/doing-it-right.class.php:1684
 msgid "Length is far too long."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1617
+#: inc/classes/doing-it-right.class.php:1685
 msgid "Length is good."
 msgstr ""
 
@@ -426,21 +441,21 @@ msgstr ""
 
 #. translators: 1: Title, 2: Separator, 3: Excerpt
 
-#: inc/classes/generate-description.class.php:440
+#: inc/classes/generate-description.class.php:441
 msgctxt "1: Title, 2: Separator, 3: Excerpt"
 msgid "%1$s %2$s %3$s"
 msgstr ""
 
 #. translators: 1: Title, 2: on, 3: Blogname
 
-#: inc/classes/generate-description.class.php:647
+#: inc/classes/generate-description.class.php:648
 msgctxt "1: Title, 2: on, 3: Blogname"
 msgid "%1$s %2$s %3$s"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-description.class.php:683
+#: inc/classes/generate-description.class.php:684
 #: inc/views/metaboxes/description-metabox.php:18
 msgctxt "Placement. e.g. Post Title \"on\" Blog Name"
 msgid "on"
@@ -448,7 +463,7 @@ msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-description.class.php:745
+#: inc/classes/generate-description.class.php:746
 msgid "Latest posts:"
 msgstr ""
 
@@ -462,175 +477,179 @@ msgstr ""
 #. translators: Front-end output. 1: Taxonomy singular name, 2: Current
 #. taxonomy term
 
-#: inc/classes/generate-title.class.php:822
-#: inc/classes/generate-title.class.php:882
+#: inc/classes/generate-title.class.php:825
+#: inc/classes/generate-title.class.php:885
 msgid "%1$s: %2$s"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:826
+#: inc/classes/generate-title.class.php:829
 msgid "Author: %s"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:830
+#: inc/classes/generate-title.class.php:833
 msgctxt "yearly archives date format"
 msgid "Y"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:832
+#: inc/classes/generate-title.class.php:835
 msgid "Year: %s"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:835
+#: inc/classes/generate-title.class.php:838
 msgctxt "monthly archives date format"
 msgid "F Y"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:837
+#: inc/classes/generate-title.class.php:840
 msgid "Month: %s"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:840
+#: inc/classes/generate-title.class.php:843
 msgctxt "daily archives date format"
 msgid "F j, Y"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:842
+#: inc/classes/generate-title.class.php:845
 msgid "Day: %s"
-msgstr ""
-
-#. translators: Front-end output.
-
-#: inc/classes/generate-title.class.php:847
-msgctxt "post format archive title"
-msgid "Asides"
 msgstr ""
 
 #. translators: Front-end output.
 
 #: inc/classes/generate-title.class.php:850
 msgctxt "post format archive title"
-msgid "Galleries"
+msgid "Asides"
 msgstr ""
 
 #. translators: Front-end output.
 
 #: inc/classes/generate-title.class.php:853
 msgctxt "post format archive title"
-msgid "Images"
+msgid "Galleries"
 msgstr ""
 
 #. translators: Front-end output.
 
 #: inc/classes/generate-title.class.php:856
 msgctxt "post format archive title"
-msgid "Videos"
+msgid "Images"
 msgstr ""
 
 #. translators: Front-end output.
 
 #: inc/classes/generate-title.class.php:859
 msgctxt "post format archive title"
-msgid "Quotes"
+msgid "Videos"
 msgstr ""
 
 #. translators: Front-end output.
 
 #: inc/classes/generate-title.class.php:862
 msgctxt "post format archive title"
-msgid "Links"
+msgid "Quotes"
 msgstr ""
 
 #. translators: Front-end output.
 
 #: inc/classes/generate-title.class.php:865
 msgctxt "post format archive title"
-msgid "Statuses"
+msgid "Links"
 msgstr ""
 
 #. translators: Front-end output.
 
 #: inc/classes/generate-title.class.php:868
 msgctxt "post format archive title"
-msgid "Audio"
+msgid "Statuses"
 msgstr ""
 
 #. translators: Front-end output.
 
 #: inc/classes/generate-title.class.php:871
 msgctxt "post format archive title"
+msgid "Audio"
+msgstr ""
+
+#. translators: Front-end output.
+
+#: inc/classes/generate-title.class.php:874
+msgctxt "post format archive title"
 msgid "Chats"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:876
+#: inc/classes/generate-title.class.php:879
 msgid "Archives: %s"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:886
+#: inc/classes/generate-title.class.php:889
 msgid "Archives"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:993
+#: inc/classes/generate-title.class.php:1003
 msgid "Untitled"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:1028
+#: inc/classes/generate-title.class.php:1038
 msgid "Search results for:"
 msgstr ""
 
 #. translators: Front-end output
 
-#: inc/classes/generate-title.class.php:1204
+#: inc/classes/generate-title.class.php:1214
 msgid "Protected: %s"
 msgstr ""
 
 #. translators: Front-end output
 
-#: inc/classes/generate-title.class.php:1208
+#: inc/classes/generate-title.class.php:1218
 msgid "Private: %s"
 msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-title.class.php:1241
+#: inc/classes/generate-title.class.php:1251
 msgid "Page %s"
-msgstr ""
-
-#: inc/classes/init.class.php:472
-msgid "Start The SEO Framework"
-msgstr ""
-
-#: inc/classes/init.class.php:473
-msgid "End The SEO Framework"
-msgstr ""
-
-#: inc/classes/init.class.php:474
-msgid "by Sybre Waaijer"
 msgstr ""
 
 #: inc/classes/inpost.class.php:302 inc/views/inpost/seo-settings-tt.php:70
 msgid "%s SEO Settings"
+msgstr ""
+
+#. translators: %s = 'The SEO Framework'
+
+#: inc/classes/render.class.php:1089
+msgid "Start %s"
+msgstr ""
+
+#. translators: %s = 'The SEO Framework'
+
+#: inc/classes/render.class.php:1091
+msgid "End %s"
+msgstr ""
+
+#: inc/classes/render.class.php:1092
+msgid "by Sybre Waaijer"
 msgstr ""
 
 #: inc/classes/site-options.class.php:429
@@ -642,15 +661,15 @@ msgctxt "%s = here"
 msgid "View the new options %s."
 msgstr ""
 
-#: inc/classes/sitemaps.class.php:296
+#: inc/classes/sitemaps.class.php:297
 msgid "Sitemap is generated for this view"
 msgstr ""
 
-#: inc/classes/sitemaps.class.php:298
+#: inc/classes/sitemaps.class.php:299
 msgid "Sitemap is served from cache"
 msgstr ""
 
-#: inc/classes/sitemaps.class.php:520
+#: inc/classes/sitemaps.class.php:592
 msgid "Sitemap is generated on"
 msgstr ""
 
@@ -668,7 +687,7 @@ msgstr ""
 #: inc/views/metaboxes/homepage-metabox.php:32
 #: inc/views/metaboxes/robots-metabox.php:57
 #: inc/views/metaboxes/schema-metabox.php:37
-#: inc/views/metaboxes/sitemaps-metabox.php:38
+#: inc/views/metaboxes/sitemaps-metabox.php:26
 #: inc/views/metaboxes/social-metabox.php:25
 #: inc/views/metaboxes/title-metabox.php:61
 msgid "General"
@@ -928,91 +947,91 @@ msgid "The feed can be found %s."
 msgstr ""
 
 #: inc/views/metaboxes/general-metabox.php:18
-msgid "Performance"
+msgid "Layout"
 msgstr ""
 
 #: inc/views/metaboxes/general-metabox.php:23
-msgid "Layout"
+msgid "Performance"
 msgstr ""
 
 #: inc/views/metaboxes/general-metabox.php:28
 msgid "Canonical"
 msgstr ""
 
-#: inc/views/metaboxes/general-metabox.php:52
-msgid "Performance Settings"
-msgstr ""
-
-#: inc/views/metaboxes/general-metabox.php:53
-msgid "In order to improve performance, generated SEO output can be stored in the database as transient cache."
-msgstr ""
-
-#: inc/views/metaboxes/general-metabox.php:54
-msgid "If your website has thousands of pages, or if other forms of caching are used, you might wish to adjust these options."
-msgstr ""
-
-#: inc/views/metaboxes/general-metabox.php:59
-msgid "Transient Cache Settings"
-msgstr ""
-
-#: inc/views/metaboxes/general-metabox.php:65
-msgid "Enable automated description output cache?"
-msgstr ""
-
-#: inc/views/metaboxes/general-metabox.php:66
-msgid "Description generation can use a lot of server resources when it reads the page content."
-msgstr ""
-
-#: inc/views/metaboxes/general-metabox.php:72
-msgid "Enable automated Schema output cache?"
-msgstr ""
-
-#: inc/views/metaboxes/general-metabox.php:73
-msgid "Schema.org output generally makes multiple calls to the database."
-msgstr ""
-
-#: inc/views/metaboxes/general-metabox.php:79
-msgid "Enable sitemap generation cache?"
-msgstr ""
-
-#: inc/views/metaboxes/general-metabox.php:80
-msgid "Generating the sitemap can use a lot of server resources."
-msgstr ""
-
-#: inc/views/metaboxes/general-metabox.php:92
-msgid "Object Cache Settings"
-msgstr ""
-
-#: inc/views/metaboxes/general-metabox.php:98
-msgid "Enable object cache?"
-msgstr ""
-
-#: inc/views/metaboxes/general-metabox.php:99
-msgid "Object cache generally works faster than transient cache"
-msgstr ""
-
-#: inc/views/metaboxes/general-metabox.php:100
-msgid "An object cache handler has been detected. If you enable this option, you might wish to disable description and Schema transient caching."
-msgstr ""
-
-#: inc/views/metaboxes/general-metabox.php:109
+#: inc/views/metaboxes/general-metabox.php:51
 msgid "Administrative Layout Settings"
 msgstr ""
 
-#: inc/views/metaboxes/general-metabox.php:110
+#: inc/views/metaboxes/general-metabox.php:52
 msgid "SEO hints can be visually displayed throughout the dashboard."
 msgstr ""
 
-#: inc/views/metaboxes/general-metabox.php:115
+#: inc/views/metaboxes/general-metabox.php:57
 msgid "SEO Bar Settings"
 msgstr ""
 
-#: inc/views/metaboxes/general-metabox.php:121
+#: inc/views/metaboxes/general-metabox.php:63
 msgid "Display the SEO Bar in overview tables?"
 msgstr ""
 
-#: inc/views/metaboxes/general-metabox.php:127
+#: inc/views/metaboxes/general-metabox.php:69
 msgid "Display the SEO Bar in the SEO Settings metabox?"
+msgstr ""
+
+#: inc/views/metaboxes/general-metabox.php:80
+msgid "Performance Settings"
+msgstr ""
+
+#: inc/views/metaboxes/general-metabox.php:81
+msgid "In order to improve performance, generated SEO output can be stored in the database as transient cache."
+msgstr ""
+
+#: inc/views/metaboxes/general-metabox.php:82
+msgid "If your website has thousands of pages, or if other forms of caching are used, you might wish to adjust these options."
+msgstr ""
+
+#: inc/views/metaboxes/general-metabox.php:87
+msgid "Transient Cache Settings"
+msgstr ""
+
+#: inc/views/metaboxes/general-metabox.php:93
+msgid "Enable automated description output cache?"
+msgstr ""
+
+#: inc/views/metaboxes/general-metabox.php:94
+msgid "Description generation can use a lot of server resources when it reads the page content."
+msgstr ""
+
+#: inc/views/metaboxes/general-metabox.php:100
+msgid "Enable automated Schema output cache?"
+msgstr ""
+
+#: inc/views/metaboxes/general-metabox.php:101
+msgid "Schema.org output generally makes multiple calls to the database."
+msgstr ""
+
+#: inc/views/metaboxes/general-metabox.php:107
+msgid "Enable sitemap generation cache?"
+msgstr ""
+
+#: inc/views/metaboxes/general-metabox.php:108
+msgid "Generating the sitemap can use a lot of server resources."
+msgstr ""
+
+#: inc/views/metaboxes/general-metabox.php:120
+msgid "Object Cache Settings"
+msgstr ""
+
+#: inc/views/metaboxes/general-metabox.php:126
+msgid "Enable object cache?"
+msgstr ""
+
+#: inc/views/metaboxes/general-metabox.php:127
+msgid "Object cache generally works faster than transient cache"
+msgstr ""
+
+#: inc/views/metaboxes/general-metabox.php:128
+msgid "An object cache handler has been detected. If you enable this option, you might wish to disable description and Schema transient caching."
 msgstr ""
 
 #: inc/views/metaboxes/general-metabox.php:138
@@ -1028,7 +1047,7 @@ msgid "If the canonical URL meta tag represents the visited page, then the Searc
 msgstr ""
 
 #: inc/views/metaboxes/general-metabox.php:141
-msgid "Only adjust these options if you are aware of its SEO effects."
+msgid "Only adjust these options if you are aware of their SEO effects."
 msgstr ""
 
 #: inc/views/metaboxes/general-metabox.php:146
@@ -1478,240 +1497,240 @@ msgstr ""
 msgid "Social Pages connected to this website"
 msgstr ""
 
-#: inc/views/metaboxes/schema-metabox.php:190
+#: inc/views/metaboxes/schema-metabox.php:191
 msgid "Don't have a page at a site or is the profile only privately accessible? Leave that field empty. Unsure? Fill it in anyway."
 msgstr ""
 
-#: inc/views/metaboxes/schema-metabox.php:191
+#: inc/views/metaboxes/schema-metabox.php:192
 msgid "Add the link that leads directly to the social page of this website."
 msgstr ""
 
-#: inc/views/metaboxes/schema-metabox.php:193
+#: inc/views/metaboxes/schema-metabox.php:194
 msgctxt "No spaces. E.g. https://facebook.com/RelatedProfile"
 msgid "RelatedProfile"
 msgstr ""
 
-#: inc/views/metaboxes/schema-metabox.php:194
+#: inc/views/metaboxes/schema-metabox.php:195
 msgctxt "Social Profile"
 msgid "Profile"
 msgstr ""
 
-#: inc/views/metaboxes/schema-metabox.php:259
+#: inc/views/metaboxes/schema-metabox.php:260
 msgid "Blog"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:14
-msgid "Permalink Settings"
-msgstr ""
-
-#: inc/views/metaboxes/sitemaps-metabox.php:14
-#: inc/views/metaboxes/sitemaps-metabox.php:130
-#: inc/views/metaboxes/sitemaps-metabox.php:176
-msgctxt "The sitemap can be found %s."
-msgid "here"
-msgstr ""
-
-#: inc/views/metaboxes/sitemaps-metabox.php:16
-msgid "You're using the plain permalink structure."
-msgstr ""
-
-#: inc/views/metaboxes/sitemaps-metabox.php:17
-msgid "This means we can't output the sitemap through the WordPress rewrite rules."
-msgstr ""
-
-#: inc/views/metaboxes/sitemaps-metabox.php:19
-msgctxt "%s = here"
-msgid "Change your Permalink Settings %s (Recommended: 'postname')."
-msgstr ""
-
-#: inc/views/metaboxes/sitemaps-metabox.php:48
+#: inc/views/metaboxes/sitemaps-metabox.php:36
 msgid "Timestamps"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:53
+#: inc/views/metaboxes/sitemaps-metabox.php:41
 msgctxt "Ping or notify Search Engine"
 msgid "Ping"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:58
+#: inc/views/metaboxes/sitemaps-metabox.php:46
 msgid "Style"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:101
+#: inc/views/metaboxes/sitemaps-metabox.php:85
 msgid "Sitemap Integration Settings"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:105
+#: inc/views/metaboxes/sitemaps-metabox.php:89
 msgid "Another active sitemap plugin has been detected. This means that the sitemap functionality has been replaced."
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:107
+#: inc/views/metaboxes/sitemaps-metabox.php:91
 msgid "A sitemap has been detected in the root folder of your website. This means that the sitemap functionality has no effect."
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:109
+#: inc/views/metaboxes/sitemaps-metabox.php:93
 msgid "The Sitemap is an XML file that lists pages and posts for your website along with optional metadata about each post or page. This helps Search Engines crawl your website more easily."
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:110
+#: inc/views/metaboxes/sitemaps-metabox.php:94
 msgid "The optional metadata include the post and page modified time and a page priority indication, which is automated."
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:115
+#: inc/views/metaboxes/sitemaps-metabox.php:99
 msgid "Sitemap Output"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:122
+#: inc/views/metaboxes/sitemaps-metabox.php:106
 msgid "Output Sitemap?"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:130
+#: inc/views/metaboxes/sitemaps-metabox.php:114
 msgid "View sitemap"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:131
+#: inc/views/metaboxes/sitemaps-metabox.php:114
+#: inc/views/metaboxes/sitemaps-metabox.php:132
+#: inc/views/metaboxes/sitemaps-metabox.php:170
+msgctxt "The sitemap can be found %s."
+msgid "here"
+msgstr ""
+
+#: inc/views/metaboxes/sitemaps-metabox.php:115
 msgctxt "%s = here"
 msgid "The sitemap can be found %s."
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:140
+#: inc/views/metaboxes/sitemaps-metabox.php:124
 msgid "Robots.txt Settings"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:144
+#: inc/views/metaboxes/sitemaps-metabox.php:128
 msgid "A robots.txt file has been detected in the root folder of your website; therefore no settings are able to alter its output."
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:146
+#: inc/views/metaboxes/sitemaps-metabox.php:132
+msgid "Permalink Settings"
+msgstr ""
+
+#: inc/views/metaboxes/sitemaps-metabox.php:134
+msgid "You're using the plain permalink structure."
+msgstr ""
+
+#: inc/views/metaboxes/sitemaps-metabox.php:135
+msgid "This means the robots.txt file can't be outputted through the WordPress rewrite rules."
+msgstr ""
+
+#: inc/views/metaboxes/sitemaps-metabox.php:137
+msgctxt "%s = here"
+msgid "Change your Permalink Settings %s (Recommended: \"Post name\")."
+msgstr ""
+
+#: inc/views/metaboxes/sitemaps-metabox.php:141
 msgid "The robots.txt file is the first thing Search Engines look for. If you add the sitemap location in the robots.txt file, then Search Engines will look for and index the sitemap."
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:147
+#: inc/views/metaboxes/sitemaps-metabox.php:142
 msgid "If you do not add the sitemap location to the robots.txt file, you will need to notify Search Engines manually through the Webmaster Console provided by the Search Engines."
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:152
+#: inc/views/metaboxes/sitemaps-metabox.php:147
 msgid "Add sitemap location in robots.txt"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:159
+#: inc/views/metaboxes/sitemaps-metabox.php:154
 msgid "Add sitemap location in robots?"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:159
+#: inc/views/metaboxes/sitemaps-metabox.php:154
 msgid "This only has effect if the sitemap is active"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:166
+#: inc/views/metaboxes/sitemaps-metabox.php:161
 msgid "No robots.txt file can be generated on subdirectory installations."
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:169
+#: inc/views/metaboxes/sitemaps-metabox.php:164
 msgid "Another robots.txt sitemap location addition has been detected."
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:176
+#: inc/views/metaboxes/sitemaps-metabox.php:170
 msgid "View robots.txt"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:178
+#: inc/views/metaboxes/sitemaps-metabox.php:172
 msgctxt "%s = here"
 msgid "The robots.txt file can be found %s."
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:198
+#: inc/views/metaboxes/sitemaps-metabox.php:192
 msgid "Timestamps Settings"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:199
+#: inc/views/metaboxes/sitemaps-metabox.php:193
 msgid "The modified time suggests to Search Engines where to look for content changes. It has no impact on the SEO value unless you drastically change pages or posts. It then depends on how well your content is constructed."
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:200
+#: inc/views/metaboxes/sitemaps-metabox.php:194
 msgid "By default, the sitemap only outputs the modified date if you've enabled them within the Social Metabox. This setting overrides those settings for the Sitemap."
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:205
+#: inc/views/metaboxes/sitemaps-metabox.php:199
 msgid "Output Modified Date"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:212
+#: inc/views/metaboxes/sitemaps-metabox.php:206
 msgid "Add %s to the sitemap?"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:222
+#: inc/views/metaboxes/sitemaps-metabox.php:216
 msgid "Timestamp Format Settings"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:223
+#: inc/views/metaboxes/sitemaps-metabox.php:217
 msgid "Determines how specific the modification timestamp is."
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:229
+#: inc/views/metaboxes/sitemaps-metabox.php:223
 msgid "Complete date"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:235
+#: inc/views/metaboxes/sitemaps-metabox.php:229
 msgid "Complete date plus hours, minutes and timezone"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:245
+#: inc/views/metaboxes/sitemaps-metabox.php:239
 msgid "Ping Settings"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:246
+#: inc/views/metaboxes/sitemaps-metabox.php:240
 msgid "Notifying Search Engines of a sitemap change is helpful to get your content indexed as soon as possible."
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:247
+#: inc/views/metaboxes/sitemaps-metabox.php:241
 msgid "By default this will happen at most once an hour."
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:252
+#: inc/views/metaboxes/sitemaps-metabox.php:246
 msgid "Notify Search Engines"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:264
+#: inc/views/metaboxes/sitemaps-metabox.php:258
 msgid "Notify %s about sitemap changes?"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:275
+#: inc/views/metaboxes/sitemaps-metabox.php:269
 msgid "Sitemap Styling Settings"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:278
+#: inc/views/metaboxes/sitemaps-metabox.php:272
 msgid "You can style the sitemap to give it a more personal look. Styling the sitemap has no SEO value whatsoever."
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:283
+#: inc/views/metaboxes/sitemaps-metabox.php:277
 msgid "Enable styling"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:290
+#: inc/views/metaboxes/sitemaps-metabox.php:284
 msgid "Style Sitemap?"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:290
+#: inc/views/metaboxes/sitemaps-metabox.php:284
 msgid "This makes the sitemap more readable for humans"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:299
+#: inc/views/metaboxes/sitemaps-metabox.php:293
 msgid "Style configuration"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:307
+#: inc/views/metaboxes/sitemaps-metabox.php:301
 msgid "Add site logo?"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:307
+#: inc/views/metaboxes/sitemaps-metabox.php:301
 msgid "The logo is set in Customizer"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:320
+#: inc/views/metaboxes/sitemaps-metabox.php:314
 msgid "Sitemap header background color"
 msgstr ""
 
-#: inc/views/metaboxes/sitemaps-metabox.php:329
+#: inc/views/metaboxes/sitemaps-metabox.php:323
 msgid "Sitemap title and lines color"
 msgstr ""
 
@@ -2029,37 +2048,37 @@ msgid "Get the Pinterest Verification Code"
 msgstr ""
 
 #: inc/views/sitemap/xsl-stylesheet.php:8
-#: inc/views/sitemap/xsl-stylesheet.php:140
+#: inc/views/sitemap/xsl-stylesheet.php:142
 msgid "XML Sitemap"
 msgstr ""
 
-#. translators: URLs are in Markdown.
+#. translators: URLs are in Markdown. Don't forget to localize the URLs.
 
-#: inc/views/sitemap/xsl-stylesheet.php:146
+#: inc/views/sitemap/xsl-stylesheet.php:148
 msgid "This is a generated XML Sitemap, meant to be consumed by search engines like [Google](https://www.google.com/) or [Bing](https://www.bing.com/)."
 msgstr ""
 
-#. translators: URLs are in Markdown.
+#. translators: URLs are in Markdown. Don't localize this URL.
 
-#: inc/views/sitemap/xsl-stylesheet.php:162
+#: inc/views/sitemap/xsl-stylesheet.php:164
 msgid "You can find more information on XML sitemaps at [sitemaps.org](https://www.sitemaps.org/)."
 msgstr ""
 
-#: inc/views/sitemap/xsl-stylesheet.php:177
+#: inc/views/sitemap/xsl-stylesheet.php:179
 msgid "URL"
 msgstr ""
 
-#: inc/views/sitemap/xsl-stylesheet.php:181
+#: inc/views/sitemap/xsl-stylesheet.php:183
 msgid "Last Updated"
 msgstr ""
 
-#: inc/views/sitemap/xsl-stylesheet.php:185
+#: inc/views/sitemap/xsl-stylesheet.php:187
 msgid "Priority"
 msgstr ""
 
 #. translators: URLs are in Markdown.
 
-#: inc/views/sitemap/xsl-stylesheet.php:229
+#: inc/views/sitemap/xsl-stylesheet.php:231
 msgid "Generated by [The SEO Framework](https://wordpress.org/plugins/autodescription/)"
 msgstr ""
 #. Plugin Name of the plugin/theme
@@ -2079,5 +2098,5 @@ msgid "Sybre Waaijer"
 msgstr ""
 
 #. Author URI of the plugin/theme
-msgid "https://cyberwire.nl/"
+msgid "https://theseoframework.com/"
 msgstr ""

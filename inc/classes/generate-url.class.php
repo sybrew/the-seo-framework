@@ -784,17 +784,16 @@ class Generate_Url extends Generate_Title {
 		$prev = '';
 		$next = '';
 
-		if ( $this->is_singular() ) {
+		if ( $this->is_singular() ) :
 			if ( $this->is_real_front_page() || $this->is_front_page_by_id( $post_id ) ) {
 				$output_singular_paged = $this->is_option_checked( 'prev_next_frontpage' );
 			} else {
 				$output_singular_paged = $this->is_option_checked( 'prev_next_posts' );
 			}
 
-			if ( $output_singular_paged ) {
+			if ( $output_singular_paged ) :
 
 				$page = $this->page();
-				$numpages = substr_count( $this->get_post_content( $post_id ), '<!--nextpage-->' ) + 1;
 
 				if ( ! $page )
 					$page = 1;
@@ -802,10 +801,11 @@ class Generate_Url extends Generate_Title {
 				if ( 'prev' === $prev_next ) {
 					$prev = $page > 1 ? $this->get_paged_post_url( $page - 1, $post_id, 'prev' ) : '';
 				} elseif ( 'next' === $prev_next ) {
-					$next = $page < $numpages ? $this->get_paged_post_url( $page + 1, $post_id, 'next' ) : '';
+					$_numpages = substr_count( $this->get_post_content( $post_id ), '<!--nextpage-->' ) + 1;
+					$next = $page < $_numpages ? $this->get_paged_post_url( $page + 1, $post_id, 'next' ) : '';
 				}
-			}
-		} elseif ( $this->is_archive() || $this->is_home() ) {
+			endif;
+		elseif ( $this->is_archive() || $this->is_home() ) :
 
 			$output_archive_paged = false;
 			if ( $this->is_real_front_page() || $this->is_front_page_by_id( $post_id ) ) {
@@ -835,7 +835,7 @@ class Generate_Url extends Generate_Title {
 					$next = \get_pagenum_link( $paged, false );
 				}
 			}
-		}
+		endif;
 
 		if ( $prev )
 			return $this->set_preferred_url_scheme( \esc_url_raw( $prev ) );
@@ -882,17 +882,16 @@ class Generate_Url extends Generate_Title {
 				if ( isset( $query_arg ) )
 					$urlfromcache = str_replace( '?' . $query_arg, '', $urlfromcache );
 
-				// Calculate current page number.
-				$current = 'next' === $pos ? ( $i - 1 ) : ( $i + 1 );
-				$current = (string) $current;
-
 				//* Continue if still bigger than or equal to 2.
 				if ( $i >= 2 ) {
-					//* We're adding a page.
-					$last_occurence = strrpos( $urlfromcache, '/' . $current . '/' );
+					// Calculate current page number.
+					$_current = 'next' === $pos ? (string) ( $i - 1 ) : (string) ( $i + 1 );
 
-					if ( false !== $last_occurence )
-						$urlfromcache = substr_replace( $urlfromcache, '/', $last_occurence, strlen( '/' . $current . '/' ) );
+					//* We're adding a page.
+					$_last_occurence = strrpos( $urlfromcache, '/' . $_current . '/' );
+
+					if ( false !== $_last_occurence )
+						$urlfromcache = substr_replace( $urlfromcache, '/', $_last_occurence, strlen( '/' . $_current . '/' ) );
 				}
 			}
 
@@ -1063,7 +1062,7 @@ class Generate_Url extends Generate_Title {
 	 *
 	 * @since 2.7.0
 	 * @since 2.9.2 : Now considers port too.
-	 *              : Now uses get_home_url, rather than get_option('home').
+	 *              : Now uses get_home_url(), rather than get_option('home').
 	 * @staticvar string $cache
 	 *
 	 * @return string The home URL host.
@@ -1075,7 +1074,6 @@ class Generate_Url extends Generate_Title {
 		if ( isset( $cache ) )
 			return $cache;
 
-		// $parsed_url = \wp_parse_url( \get_option( 'home' ) );
 		$parsed_url = \wp_parse_url( \get_home_url() );
 
 		$host = isset( $parsed_url['host'] ) ? $parsed_url['host'] : '';
