@@ -237,7 +237,7 @@ msgstr ""
 msgid "%s the Title contains the Blogname multiple times."
 msgstr ""
 
-#. translators: 1: Word, 2: Occurences
+#. translators: 1: Word, 2: Occurrences
 
 #: inc/classes/doing-it-right.class.php:1052
 msgid "%1$s is used %2$d times."

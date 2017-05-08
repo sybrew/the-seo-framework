@@ -828,14 +828,20 @@ class Render extends Admin_Init {
 		 * @deprecated
 		 * @since 2.7.0
 		 */
-		if ( true !== \apply_filters( 'the_seo_framework_output_canonical', true, $this->get_the_real_ID() ) ) {
+		if ( \has_filter( 'the_seo_framework_output_canonical' ) ) {
 			$this->_deprecated_filter( 'the_seo_framework_output_canonical', '2.7.0', "add_filter( 'the_seo_framework_rel_canonical_output', '__return_empty_string' );" );
-			return '';
+			if ( true !== \apply_filters( 'the_seo_framework_output_canonical', true, $this->get_the_real_ID() ) )
+				return '';
 		}
 
 		/**
-		 * Applies filters 'the_seo_framework_rel_canonical_output' : Change canonical URL output.
+		 * Applies filters 'the_seo_framework_rel_canonical_output' : string
+		 * Changes canonical URL output.
+		 *
 		 * @since 2.6.5
+		 *
+		 * @param string $url The canonical URL. Must be escaped.
+		 * @param int    $id  The current page or term ID.
 		 */
 		$url = (string) \apply_filters( 'the_seo_framework_rel_canonical_output', $this->the_url_from_cache(), $this->get_the_real_ID() );
 
@@ -864,7 +870,11 @@ class Render extends Admin_Init {
 
 		/**
 		 * Applies filters 'the_seo_framework_ldjson_scripts' : string
+		 *
 		 * @since 2.6.0
+		 *
+		 * @param string $json The JSON output. Must be escaped.
+		 * @param int    $id   The current page or term ID.
 		 */
 		$json = (string) \apply_filters( 'the_seo_framework_ldjson_scripts', $this->render_ld_json_scripts(), $this->get_the_real_ID() );
 

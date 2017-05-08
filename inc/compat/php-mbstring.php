@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) or die;
  * @param string|null	$encoding	Optional. Character encoding to use. Default null.
  *
  * @license GLPv2 or later
- * @return int Position of first occurence found of $haystack of `$needle`.
+ * @return int Position of first occurrence found of $haystack of `$needle`.
  */
 if ( ! function_exists( 'mb_strpos' ) ) :
 	function mb_strpos( $haystack, $needle, $offset = 0, $encoding = null ) {
@@ -40,7 +40,7 @@ endif;
  * @param string|null	$encoding	Optional. Character encoding to use. Default null.
  *
  * @license GLPv2 or later
- * @return int Position of first occurence found of $haystack of `$needle`.
+ * @return int Position of first occurrence found of $haystack of `$needle`.
  */
 if ( ! function_exists( '_mb_strpos' ) ) :
 	function _mb_strpos( $haystack, $needle, $offset = 0, $encoding = null ) {
@@ -92,7 +92,7 @@ if ( ! function_exists( '_mb_strpos' ) ) :
 			//* Prevent bugs, (re)assign var.
 			$pos = null;
 
-			// Find first occurence greater than or equal to offset
+			// Find first occurrence greater than or equal to offset
 			foreach ( $inter as $key => $value ) {
 				if ( $key >= $offset ) {
 					$pos = $key;
@@ -174,7 +174,7 @@ if ( ! function_exists( '_mb_strpos' ) ) :
 			//* Prevent bugs, (re)assign var.
 			$pos = null;
 
-			// Find first occurence greater than or equal to offset
+			// Find first occurrence greater than or equal to offset
 			foreach ( $inter as $key => $value ) {
 				if ( $key >= $offset ) {
 					$pos = $key;

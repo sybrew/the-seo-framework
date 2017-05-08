@@ -652,6 +652,7 @@ class Generate_Description extends Generate {
 	 * Generates description additions.
 	 *
 	 * @since 2.6.0
+	 * @since 2.9.2 Added filter.
 	 * @staticvar array $title string of titles.
 	 * @staticvar string $on
 	 * @access private
@@ -700,12 +701,38 @@ class Generate_Description extends Generate {
 			$sep = '';
 		}
 
-		return array(
-			'title' => $title[ $id ],
-			'on' => $on,
-			'blogname' => $blogname,
-			'sep' => $sep,
-		);
+		if ( \has_filter( 'the_seo_framework_generated_description_additions' ) ) {
+			/**
+			 * Applies filters 'the_seo_framework_generated_description_additions'
+			 *
+			 * @since 2.9.2
+			 *
+			 * @param array $data   The description data.
+			 * @param int   $id     The object ID.
+			 * @param mixed $term   The term object, or empty (falsy).
+			 * @param bool  $ignore Whether the settings have been ignored.
+			 */
+			$data = \apply_filters_ref_array( 'the_seo_framework_generated_description_additions', array(
+				array(
+					'title' => $title[ $id ],
+					'on' => $on,
+					'blogname' => $blogname,
+					'sep' => $sep,
+				),
+				$id,
+				$term,
+				$ignore,
+			) );
+		} else {
+			$data = array(
+				'title' => $title[ $id ],
+				'on' => $on,
+				'blogname' => $blogname,
+				'sep' => $sep,
+			);
+		}
+
+		return $data;
 	}
 
 	/**

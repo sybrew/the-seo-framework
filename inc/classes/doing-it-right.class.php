@@ -1048,10 +1048,10 @@ class Doing_It_Right extends Generate_Ldjson {
 					 */
 					$desc_value = ctype_upper( $desc_value ) ? $desc_value : ucfirst( $desc_value );
 
-					/* translators: 1: Word, 2: Occurences */
+					/* translators: 1: Word, 2: Occurrences */
 					$notice .= sprintf( \esc_attr__( '%1$s is used %2$d times.', 'autodescription' ), '<span>' . $desc_value . '</span>', $desc_count );
 
-					//* Don't add break at last occurence.
+					//* Don't add break at last occurrence.
 					$notice .= $i === $count ? '' : '<br>';
 					$i++;
 				}

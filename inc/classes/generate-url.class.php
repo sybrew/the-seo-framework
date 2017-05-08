@@ -888,10 +888,10 @@ class Generate_Url extends Generate_Title {
 					$_current = 'next' === $pos ? (string) ( $i - 1 ) : (string) ( $i + 1 );
 
 					//* We're adding a page.
-					$_last_occurence = strrpos( $urlfromcache, '/' . $_current . '/' );
+					$_last_occurrence = strrpos( $urlfromcache, '/' . $_current . '/' );
 
-					if ( false !== $_last_occurence )
-						$urlfromcache = substr_replace( $urlfromcache, '/', $_last_occurence, strlen( '/' . $_current . '/' ) );
+					if ( false !== $_last_occurrence )
+						$urlfromcache = substr_replace( $urlfromcache, '/', $_last_occurrence, strlen( '/' . $_current . '/' ) );
 				}
 			}
 
