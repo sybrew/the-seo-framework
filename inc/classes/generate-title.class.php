@@ -1210,11 +1210,11 @@ class Generate_Title extends Generate_Description {
 			$post = \get_post( $id, OBJECT );
 
 			if ( isset( $post->post_password ) && '' !== $post->post_password ) {
-				/* translators: Front-end output */
+				/* translators: Front-end output. */
 				$protected_title_format = (string) \apply_filters( 'protected_title_format', \__( 'Protected: %s', 'autodescription' ), $post );
 				$title = sprintf( $protected_title_format, $title );
 			} elseif ( isset( $post->post_status ) && 'private' === $post->post_status ) {
-				/* translators: Front-end output */
+				/* translators: Front-end output. */
 				$private_title_format = (string) \apply_filters( 'private_title_format', \__( 'Private: %s', 'autodescription' ), $post );
 				$title = sprintf( $private_title_format, $title );
 			}

@@ -254,7 +254,7 @@ class Sitemaps extends Metaboxes {
 
 		//* Fetch sitemap content and add trailing line. Already escaped internally.
 		$this->output_sitemap_content();
-		echo "\r\n";
+		echo "\n";
 
 		// We're done now.
 		exit;
@@ -277,7 +277,7 @@ class Sitemaps extends Metaboxes {
 		 */
 		$sitemap_content = $this->is_option_checked( 'cache_sitemap' ) ? $this->get_transient( $this->sitemap_transient ) : false;
 
-		echo '<?xml version="1.0" encoding="UTF-8"?>' . "\r\n";
+		echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 		echo $this->get_sitemap_xsl_stylesheet_tag();
 
 		/**
@@ -285,8 +285,8 @@ class Sitemaps extends Metaboxes {
 		 * @since 2.8.0
 		 */
 		if ( $this->the_seo_framework_debug ) {
-			echo '<!-- Site estimated peak usage prior to generation: ' . number_format( memory_get_peak_usage() / 1024 / 1024, 3 ) . ' MB -->' . "\r\n";
-			echo '<!-- System estimated peak usage prior to generation: ' . number_format( memory_get_peak_usage( true ) / 1024 / 1024, 3 ) . ' MB -->' . "\r\n";
+			echo '<!-- Site estimated peak usage prior to generation: ' . number_format( memory_get_peak_usage() / 1024 / 1024, 3 ) . ' MB -->' . "\n";
+			echo '<!-- System estimated peak usage prior to generation: ' . number_format( memory_get_peak_usage( true ) / 1024 / 1024, 3 ) . ' MB -->' . "\n";
 		}
 
 		echo $this->get_sitemap_urlset_open_tag();
@@ -294,9 +294,9 @@ class Sitemaps extends Metaboxes {
 		echo $this->get_sitemap_urlset_close_tag();
 
 		if ( false === $sitemap_content ) {
-			echo "\r\n" . '<!-- ' . \esc_html__( 'Sitemap is generated for this view', 'autodescription' ) . ' -->';
+			echo "\n" . '<!-- ' . \esc_html__( 'Sitemap is generated for this view', 'autodescription' ) . ' -->';
 		} else {
-			echo "\r\n" . '<!-- ' . \esc_html__( 'Sitemap is served from cache', 'autodescription' ) . ' -->';
+			echo "\n" . '<!-- ' . \esc_html__( 'Sitemap is served from cache', 'autodescription' ) . ' -->';
 		}
 
 		/**
@@ -304,10 +304,10 @@ class Sitemaps extends Metaboxes {
 		 * @since 2.3.7
 		 */
 		if ( $this->the_seo_framework_debug ) {
-			echo "\r\n" . '<!-- Site estimated peak usage: ' . number_format( memory_get_peak_usage() / 1024 / 1024, 3 ) . ' MB -->';
-			echo "\r\n" . '<!-- System estimated peak usage: ' . number_format( memory_get_peak_usage( true ) / 1024 / 1024, 3 ) . ' MB -->';
-			echo "\r\n" . '<!-- Freed memory prior to generation: ' . number_format( $this->clean_up_globals_for_sitemap( true ) / 1024, 3 ) . ' kB -->';
-			echo "\r\n" . '<!-- Sitemap generation time: ' . ( number_format( microtime( true ) - $timer_start, 6 ) ) . ' seconds -->';
+			echo "\n" . '<!-- Site estimated peak usage: ' . number_format( memory_get_peak_usage() / 1024 / 1024, 3 ) . ' MB -->';
+			echo "\n" . '<!-- System estimated peak usage: ' . number_format( memory_get_peak_usage( true ) / 1024 / 1024, 3 ) . ' MB -->';
+			echo "\n" . '<!-- Freed memory prior to generation: ' . number_format( $this->clean_up_globals_for_sitemap( true ) / 1024, 3 ) . ' kB -->';
+			echo "\n" . '<!-- Sitemap generation time: ' . ( number_format( microtime( true ) - $timer_start, 6 ) ) . ' seconds -->';
 		}
 	}
 
@@ -349,7 +349,7 @@ class Sitemaps extends Metaboxes {
 		}
 		$urlset .= '>';
 
-		return $urlset . "\r\n";
+		return $urlset . "\n";
 	}
 
 	/**
@@ -373,7 +373,7 @@ class Sitemaps extends Metaboxes {
 	public function get_sitemap_xsl_stylesheet_tag() {
 
 		if ( $this->is_option_checked( 'sitemap_styles' ) )
-			return sprintf( '<?xml-stylesheet type="text/xsl" href="%s"?>', \esc_url( $this->get_sitemap_xsl_url() ) ) . "\r\n";
+			return sprintf( '<?xml-stylesheet type="text/xsl" href="%s"?>', \esc_url( $this->get_sitemap_xsl_url() ) ) . "\n";
 
 		return '';
 	}
@@ -589,7 +589,7 @@ class Sitemaps extends Metaboxes {
 		$timestamp = (bool) \apply_filters( 'the_seo_framework_sitemap_timestamp', true );
 
 		if ( $timestamp )
-			$content .= '<!-- ' . \esc_html__( 'Sitemap is generated on', 'autodescription' ) . ' ' . \current_time( 'Y-m-d H:i:s' ) . ' -->' . "\r\n";
+			$content .= '<!-- ' . \esc_html__( 'Sitemap is generated on', 'autodescription' ) . ' ' . \current_time( 'Y-m-d H:i:s' ) . ' GMT -->' . "\n";
 
 		$wp_query = new \WP_Query;
 		$wp_query->init();
@@ -644,8 +644,8 @@ class Sitemaps extends Metaboxes {
 
 				//* Continue if indexed.
 				if ( $indexed ) {
-					$content .= "\t<url>\r\n";
-					$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'home' => true ) ) . "</loc>\r\n";
+					$content .= "\t<url>\n";
+					$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'home' => true ) ) . "</loc>\n";
 
 					// Keep it consistent. Only parse if page_lastmod is true.
 					if ( $home_lastmod ) {
@@ -668,11 +668,11 @@ class Sitemaps extends Metaboxes {
 						}
 
 						if ( '0000-00-00 00:00:00' !== $front_modified_gmt )
-							$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $front_modified_gmt ) . "</lastmod>\r\n";
+							$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $front_modified_gmt ) . "</lastmod>\n";
 					}
 
-					$content .= "\t\t<priority>1.0</priority>\r\n";
-					$content .= "\t</url>\r\n";
+					$content .= "\t\t<priority>1.0</priority>\n";
+					$content .= "\t</url>\n";
 				}
 			endif;
 
@@ -691,8 +691,8 @@ class Sitemaps extends Metaboxes {
 
 					//* Continue if indexed.
 					if ( $indexed && isset( $page->ID ) ) {
-						$content .= "\t<url>\r\n";
-						$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $page, 'id' => $page_for_posts_id ) ) . "</loc>\r\n";
+						$content .= "\t<url>\n";
+						$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $page, 'id' => $page_for_posts_id ) ) . "</loc>\n";
 
 						// Keep it consistent. Only parse if page_lastmod is true.
 						if ( $page_lastmod ) {
@@ -716,11 +716,11 @@ class Sitemaps extends Metaboxes {
 							}
 
 							if ( '0000-00-00 00:00:00' !== $page_modified_gmt )
-								$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $page_modified_gmt ) . "</lastmod>\r\n";
+								$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $page_modified_gmt ) . "</lastmod>\n";
 						}
 
-						$content .= "\t\t<priority>0.9</priority>\r\n";
-						$content .= "\t</url>\r\n";
+						$content .= "\t\t<priority>0.9</priority>\n";
+						$content .= "\t</url>\n";
 					}
 				endif;
 
@@ -743,19 +743,19 @@ class Sitemaps extends Metaboxes {
 
 						//* Continue if indexed.
 						if ( $indexed ) {
-							$content .= "\t<url>\r\n";
-							$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $page, 'id' => $page_id ) ) . "</loc>\r\n";
+							$content .= "\t<url>\n";
+							$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $page, 'id' => $page_id ) ) . "</loc>\n";
 
 							// Keep it consistent. Only parse if page_lastmod is true.
 							if ( $page_lastmod ) {
 								$page_modified_gmt = $page->post_modified_gmt;
 
 								if ( '0000-00-00 00:00:00' !== $page_modified_gmt )
-									$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $page_modified_gmt ) . "</lastmod>\r\n";
+									$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $page_modified_gmt ) . "</lastmod>\n";
 							}
 
-							$content .= "\t\t<priority>0.9</priority>\r\n";
-							$content .= "\t</url>\r\n";
+							$content .= "\t\t<priority>0.9</priority>\n";
+							$content .= "\t</url>\n";
 						}
 					}
 				endif;
@@ -837,20 +837,20 @@ class Sitemaps extends Metaboxes {
 						//* Continue if indexed
 						if ( $indexed ) {
 
-							$content .= "\t<url>\r\n";
+							$content .= "\t<url>\n";
 							// No need to use static vars
-							$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $post, 'id' => $post_id ) ) . "</loc>\r\n";
+							$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $post, 'id' => $post_id ) ) . "</loc>\n";
 
 							// Keep it consistent. Only parse if page_lastmod is true.
 							if ( $post_lastmod ) {
 								$post_modified_gmt = $post->post_modified_gmt;
 
 								if ( '0000-00-00 00:00:00' !== $post_modified_gmt )
-									$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $post_modified_gmt ) . "</lastmod>\r\n";
+									$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $post_modified_gmt ) . "</lastmod>\n";
 							}
 
-							$content .= "\t\t<priority>" . number_format( $priority, 1 ) . "</priority>\r\n";
-							$content .= "\t</url>\r\n";
+							$content .= "\t\t<priority>" . number_format( $priority, 1 ) . "</priority>\n";
+							$content .= "\t</url>\n";
 
 							// Lower the priority for the next pass.
 							$priority = $priority - $prioritydiff;
@@ -954,9 +954,9 @@ class Sitemaps extends Metaboxes {
 						//* Continue if indexed
 						if ( $indexed ) {
 
-							$content .= "\t<url>\r\n";
+							$content .= "\t<url>\n";
 							//* No need to use static vars
-							$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $ctp_post, 'id' => $cpt_id ) ) . "</loc>\r\n";
+							$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $ctp_post, 'id' => $cpt_id ) ) . "</loc>\n";
 
 							//* Keep it consistent. Only parse if page_lastmod is true.
 							if ( $post_lastmod ) {
@@ -964,11 +964,11 @@ class Sitemaps extends Metaboxes {
 
 								//* Some CPT don't set modified time.
 								if ( '0000-00-00 00:00:00' !== $cpt_modified_gmt )
-									$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $cpt_modified_gmt ) . "</lastmod>\r\n";
+									$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $cpt_modified_gmt ) . "</lastmod>\n";
 							}
 
-							$content .= "\t\t<priority>" . number_format( $priority_cpt, 1 ) . "</priority>\r\n";
-							$content .= "\t</url>\r\n";
+							$content .= "\t\t<priority>" . number_format( $priority_cpt, 1 ) . "</priority>\n";
+							$content .= "\t</url>\n";
 
 							// Lower the priority for the next pass.
 							$priority_cpt = $priority_cpt - $prioritydiff_cpt;
@@ -1008,12 +1008,12 @@ class Sitemaps extends Metaboxes {
 					$url = $args;
 				}
 
-				$content .= "\t<url>\r\n";
+				$content .= "\t<url>\n";
 				//* No need to use static vars
-				$content .= "\t\t<loc>" . \ent2ncr( \esc_url_raw( $url ) ) . "</loc>\r\n";
+				$content .= "\t\t<loc>" . \ent2ncr( \esc_url_raw( $url ) ) . "</loc>\n";
 
 				if ( isset( $args['lastmod'] ) && $args['lastmod'] ) {
-					$content .= "\t\t<lastmod>" . \mysql2date( $timestamp_format, $args['lastmod'], false ) . "</lastmod>\r\n";
+					$content .= "\t\t<lastmod>" . \mysql2date( $timestamp_format, $args['lastmod'], false ) . "</lastmod>\n";
 				}
 
 				if ( isset( $args['priority'] ) && $args['priority'] ) {
@@ -1022,8 +1022,8 @@ class Sitemaps extends Metaboxes {
 					$priority = 0.9;
 				}
 
-				$content .= "\t\t<priority>" . number_format( $priority, 1 ) . "</priority>\r\n";
-				$content .= "\t</url>\r\n";
+				$content .= "\t\t<priority>" . number_format( $priority, 1 ) . "</priority>\n";
+				$content .= "\t</url>\n";
 			}
 		}
 
@@ -1034,7 +1034,7 @@ class Sitemaps extends Metaboxes {
 		$extend = (string) \apply_filters( 'the_seo_framework_sitemap_extend', '' );
 
 		if ( $extend )
-			$content .= "\t" . $extend . "\r\n";
+			$content .= "\t" . $extend . "\n";
 
 		//* Reset timezone to default.
 		$this->reset_timezone();

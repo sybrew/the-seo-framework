@@ -35,13 +35,14 @@ function _wpmudev_sanitize_redirect_url( $args = array(), $path = '' ) {
  * @since 2.3.0
  * @since 2.4.0 Added $get_scheme parameter.
  * @since 2.8.0 Moved to compat file.
+ * @since 2.9.2 Now also returns an array if $get_scheme is true when no output is found.
  * @global object $wpdb
  * @global int $blog_id
  * @access private
  *
  * @param string $path The post relative path.
  * @param bool $get_scheme Output array with scheme.
- * @return string|array|void The unescaped URL, the scheme
+ * @return string|array The unescaped URL, or the URL and the Scheme.
  */
 function _wpmudev_domainmap_get_url( $path, $get_scheme = false ) {
 	global $wpdb, $blog_id;
@@ -125,5 +126,9 @@ function _wpmudev_domainmap_get_url( $path, $get_scheme = false ) {
 		}
 	endif;
 
-	return '';
+	if ( $get_scheme ) {
+		return array( '', '' );
+	} else {
+		return '';
+	}
 }

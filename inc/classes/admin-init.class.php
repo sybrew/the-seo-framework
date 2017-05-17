@@ -593,7 +593,8 @@ class Admin_Init extends Init {
 					\esc_html__( 'There has been an error redirecting. Refresh the page or follow [this link](%s).', 'autodescription' ),
 					$target
 				),
-				array( 'a' )
+				array( 'a' ),
+				array( 'a_internal' => true )
 			)
 		);
 	}

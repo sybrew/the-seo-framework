@@ -38,7 +38,7 @@ function _donncha_domainmap_sanitize_redirect_url( $args = array(), $path = '' )
  *
  * @param string $path The post relative path.
  * @param bool $get_scheme Output array with scheme.
- * @return string|array|void The unescaped URL, the scheme
+ * @return string|array The unescaped URL, or the URL and the Scheme.
  */
 function _donncha_domainmap_get_url( $path, $get_scheme = false ) {
 	global $current_blog;

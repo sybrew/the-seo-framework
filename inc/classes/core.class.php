@@ -805,14 +805,17 @@ class Core {
 	 * @since 2.9.0 : 1. Removed word boundary requirement for strong.
 	 *                2. Now accepts regex count their numeric values in string.
 	 *                3. Fixed header 1~6 calculation.
+	 * @since 2.9.3 : 1. Added $args parameter.
+	 *                2. TODO It now uses substr_replace instead of str_replace to prevent duplicated replacements.
 	 * @link https://wordpress.org/plugins/about/readme.txt
 	 *
 	 * @param string $text The text that might contain markdown. Expected to be escaped.
 	 * @param array $convert The markdown style types wished to be converted.
-	 * 				If left empty, it will convert all.
+	 *              If left empty, it will convert all.
+	 * @param array $args The function arguments.
 	 * @return string The markdown converted text.
 	 */
-	public function convert_markdown( $text, $convert = array() ) {
+	public function convert_markdown( $text, $convert = array(), $args = array() ) {
 
 		preprocess : {
 			$text = str_replace( "\r\n", "\n", $text );
@@ -822,6 +825,11 @@ class Core {
 
 		if ( '' === $text )
 			return '';
+
+		$defaults = array(
+			'a_internal' => false,
+		);
+		$args = \wp_parse_args( $args, $defaults );
 
 		/**
 		 * The conversion list's keys are per reference only.
@@ -902,10 +910,12 @@ class Core {
 				case 'a' :
 					$count = preg_match_all( '/(?:(?:\[{1})([^\]{1}]+)(?:\]{1})(?:\({1})([^\)\(]+)(?:\){1}))/', $text, $matches, PREG_PATTERN_ORDER );
 
+					$_string = $args['a_internal'] ? '<a href="%s">%s</a>' : '<a href="%s" target="_blank" rel="nofollow noreferrer noopener">%s</a>';
+
 					for ( $i = 0; $i < $count; $i++ ) {
 						$text = str_replace(
 							$matches[0][ $i ],
-							sprintf( '<a href="%s" rel="nofollow noreferrer noopener">%s</a>', \esc_url( $matches[2][ $i ] ), \esc_html( $matches[1][ $i ] ) ),
+							sprintf( $_string, \esc_url( $matches[2][ $i ] ), \esc_html( $matches[1][ $i ] ) ),
 							$text
 						);
 					}

@@ -212,7 +212,8 @@ switch ( $instance ) :
 						esc_html__( 'A plugin has been detected that suggests to maintain this option on the [Home Page](%s).', 'autodescription' ),
 						esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) )
 					),
-					array( 'a' )
+					array( 'a' ),
+					array( 'a_internal' => false )
 				)
 			);
 		}
@@ -252,7 +253,8 @@ switch ( $instance ) :
 						esc_html__( 'A plugin has been detected that suggests to maintain this option on the [Home Page](%s).', 'autodescription' ),
 						esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) )
 					),
-					array( 'a' )
+					array( 'a' ),
+					array( 'a_internal' => false )
 				)
 			);
 		}

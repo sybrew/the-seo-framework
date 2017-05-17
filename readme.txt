@@ -115,7 +115,7 @@ A caching plugin isn't even needed for this plugin as you won't notice a differe
 * Internationalization through WordPress.org.
 * Multibyte calculation and rendering, including Emoji and CJK.
 * Right to Left (RTL) languages, through its interface and generation.
-* Extended Color vision deficiency accessibility.
+* Extended color vision deficiency accessibility.
 * Screen reader accessibility.
 * MultiSite, this plugin is in fact built upon one.
 * Detection of robots.txt and sitemap.xml files.
@@ -224,6 +224,52 @@ Please refer to this small guide: [SEO Data Migration](http://theseoframework.co
 Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
+
+= 2.9.3 - TODO =
+
+**Release date:**
+
+* Month dayth, 2017
+
+**Summarized:**
+
+TODO
+
+**Detailed log:**
+
+***Something something [dark side](https://theseoframework.com/?p= TODO #detailed).***
+
+* **For everyone:**
+	* **Added:**
+	* **Changed:**
+			* Sitemap explanation URLs now open in a new window.
+	* **Improved:**
+		* The schema metabox now renders faster.
+		* The Facebook Social Settings placeholder URLs are now HTTPS, rather than HTTP.
+		* TODO The sitemaps no longer get flushed and Search Engines no longer get pinged when updating a post set to noindex...
+			* Note to self: This has to check before/after values -- i.e. unchanged and action type "publish" vs "update"?
+		* TODO LinkedIn profile title now no longer indicates that it must be an ID.
+	* **Fixed:**
+		* TODO WPML subdirectory category URLs are now correct.
+
+* **For translators:**
+	* **Added:**
+	* **Changed:**
+	* **Improved:**
+	* **Fixed:**
+
+* **For developers:**
+	* **Added:**
+		* Links outputted through Markdown can now open in a new window when marked external.
+	* **Changed:**
+	* **Improved:**
+		* The sitemap now outputs less data, because CRLF ("\r\n") has been exchanged for LF ("\n") only.
+			* This only lowers XML `view-source:` readability support for very old browsers (IE8 or lower).
+		* `\The_SEO_Framework\_wpmudev_domainmap_get_url()` now returns an array with two empty keys if no settings have been found. Instead of an empty string.
+	* **Fixed:**
+	* **Other:**
+		* Cleaned up code, i.e. improved documentation and writing style.
+
 
 = 2.9.2 - Diminutive Consolidation =
 

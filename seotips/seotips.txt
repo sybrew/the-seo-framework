@@ -86,7 +86,7 @@
 
 	= 2.6.0 - Redirects & Canonical =
 
-* A change in the Canonical URL or the use of a 301 Redirect URL indicate that your page has moved.
+* A change in the Canonical URL or the use of a 301 Redirect URL indicates that your page has moved.
 * These can be seen by Search Engines as the same. However, the 301 Redirect enforces the relocation of the page to everyone, whereas the Canonical URL softly indicates.
 * When changing the Canonical URL of a Page, you're telling robots to look and elsewhere, be sure to include a link to the new Page on the canonicalized Page to indicate where everything has moved to.
 * However, it's even better to enforce a 301 redirect. This makes sure both your visitors as Search Engines know where to be instantaneously.

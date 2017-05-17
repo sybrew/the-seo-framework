@@ -166,10 +166,10 @@ switch ( $instance ) :
 	case 'the_seo_framework_social_metabox_facebook' :
 
 		$fb_author = $this->get_field_value( 'facebook_author' );
-		$fb_author_placeholder = empty( $fb_publisher ) ? _x( 'http://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' ) : '';
+		$fb_author_placeholder = empty( $fb_publisher ) ? _x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' ) : '';
 
 		$fb_publisher = $this->get_field_value( 'facebook_publisher' );
-		$fb_publisher_placeholder = empty( $fb_publisher ) ? _x( 'http://www.facebook.com/YourVerifiedBusinessProfile', 'Example Verified Facebook Business URL', 'autodescription' ) : '';
+		$fb_publisher_placeholder = empty( $fb_publisher ) ? _x( 'https://www.facebook.com/YourVerifiedBusinessProfile', 'Example Verified Facebook Business URL', 'autodescription' ) : '';
 
 		$fb_appid = $this->get_field_value( 'facebook_appid' );
 		$fb_appid_placeholder = empty( $fb_appid ) ? '123456789012345' : '';

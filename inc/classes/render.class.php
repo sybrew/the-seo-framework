@@ -1064,9 +1064,11 @@ class Render extends Admin_Init {
 
 		if ( ! isset( $run ) ) {
 			/**
-			 * Applies filters 'the_seo_framework_indicator' : Boolean
-			 * Whether to show the indicator in HTML.
+			 * Applies filters 'the_seo_framework_indicator'
+			 *
 			 * @since 2.0.0
+			 *
+			 * @param bool $run Whether to run and show the indicator.
 			 */
 			$run = (bool) \apply_filters( 'the_seo_framework_indicator', true );
 		}
@@ -1079,9 +1081,11 @@ class Render extends Admin_Init {
 			$_cache = array();
 
 			/**
-			 * Applies filters 'sybre_waaijer_<3' : Boolean
-			 * Whether to show the hidden author name in HTML.
+			 * Applies filters 'sybre_waaijer_<3'
+			 *
 			 * @since 2.4.0
+			 *
+			 * @param bool $sybre Whether to show the hidden author name in HTML.
 			 */
 			$sybre = (bool) \apply_filters( 'sybre_waaijer_<3', true );
 
@@ -1089,9 +1093,11 @@ class Render extends Admin_Init {
 			$tsf = 'The SEO Framework';
 
 			/**
-			 * Applies filters 'the_seo_framework_indicator_timing' : Boolean
-			 * Whether to show the hidden generation time in HTML.
+			 * Applies filters 'the_seo_framework_indicator_timing'
+			 *
 			 * @since 2.4.0
+			 *
+			 * @param bool $show_timer Whether to show the hidden generation time in HTML.
 			 */
 			$_cache['show_timer'] = (bool) \apply_filters( 'the_seo_framework_indicator_timing', true );
 

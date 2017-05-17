@@ -203,63 +203,63 @@ switch ( $instance ) :
 				'dashicon'		=> 'dashicons-facebook',
 				'desc' 			=> 'Facebook ' . __( 'Page', 'autodescription' ),
 				'placeholder'	=> 'https://www.facebook.com/' . $connectedi18n,
-				'examplelink'	=> esc_url( 'https://www.facebook.com/me' ),
+				'examplelink'	=> 'https://www.facebook.com/me',
 			),
 			'twitter' => array(
 				'option'		=> 'knowledge_twitter',
 				'dashicon'		=> 'dashicons-twitter',
 				'desc' 			=> 'Twitter ' . $profile18n,
 				'placeholder'	=> 'https://twitter.com/' . $connectedi18n,
-				'examplelink'	=> esc_url( 'https://twitter.com/home' ), // No example link available.
+				'examplelink'	=> 'https://twitter.com/home', // No example link available.
 			),
 			'gplus' => array(
 				'option'		=> 'knowledge_gplus',
 				'dashicon'		=> 'dashicons-googleplus',
 				'desc' 			=> 'Google+ ' . $profile18n,
 				'placeholder'	=> 'https://plus.google.com/' . $connectedi18n,
-				'examplelink'	=> esc_url( 'https://plus.google.com/me' ),
+				'examplelink'	=> 'https://plus.google.com/me',
 			),
 			'instagram' => array(
 				'option'		=> 'knowledge_instagram',
 				'dashicon'		=> 'genericon-instagram',
 				'desc' 			=> 'Instagram ' . $profile18n,
 				'placeholder'	=> 'https://instagram.com/' . $connectedi18n,
-				'examplelink'	=> esc_url( 'https://instagram.com/' ), // No example link available.
+				'examplelink'	=> 'https://instagram.com/', // No example link available.
 			),
 			'youtube' => array(
 				'option'		=> 'knowledge_youtube',
 				'dashicon'		=> 'genericon-youtube',
 				'desc' 			=> 'Youtube ' . $profile18n,
 				'placeholder'	=> 'https://www.youtube.com/channel/' . $connectedi18n,
-				'examplelink'	=> esc_url( 'https://www.youtube.com/user/%2f' ), // Yes a double slash.
+				'examplelink'	=> 'https://www.youtube.com/user/%2f', // Yes a double slash.
 			),
 			'linkedin' => array(
 				'option'		=> 'knowledge_linkedin',
 				'dashicon'		=> 'genericon-linkedin-alt',
 				'desc' 			=> 'LinkedIn ' . $profile18n . ' ID',
 				'placeholder'	=> 'https://www.linkedin.com/in/' . $connectedi18n,
-				'examplelink'	=> esc_url( 'https://www.linkedin.com/profile/view' ),
+				'examplelink'	=> 'https://www.linkedin.com/profile/view',
 			),
 			'pinterest' => array(
 				'option'		=> 'knowledge_pinterest',
 				'dashicon'		=> 'genericon-pinterest-alt',
 				'desc' 			=> 'Pinterest ' . $profile18n,
 				'placeholder'	=> 'https://www.pinterest.com/' . $connectedi18n . '/',
-				'examplelink'	=> esc_url( 'https://www.pinterest.com/me/' ),
+				'examplelink'	=> 'https://www.pinterest.com/me/',
 			),
 			'soundcloud' => array(
 				'option'		=> 'knowledge_soundcloud',
 				'dashicon'		=> 'genericon-cloud', // I know, it's not the real one. D:
 				'desc' 			=> 'SoundCloud ' . $profile18n,
 				'placeholder'	=> 'https://soundcloud.com/' . $connectedi18n,
-				'examplelink'	=> esc_url( 'https://soundcloud.com/you' ),
+				'examplelink'	=> 'https://soundcloud.com/you',
 			),
 			'tumblr' => array(
 				'option'		=> 'knowledge_tumblr',
 				'dashicon'		=> 'genericon-tumblr',
 				'desc' 			=> 'Tumblr ' . __( 'Blog', 'autodescription' ),
 				'placeholder'	=> 'https://www.tumblr.com/blog/' . $connectedi18n,
-				'examplelink'	=> esc_url( 'https://www.tumblr.com/dashboard' ),  // No example link available.
+				'examplelink'	=> 'https://www.tumblr.com/dashboard',  // No example link available.
 			),
 		);
 
