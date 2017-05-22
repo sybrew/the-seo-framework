@@ -536,7 +536,7 @@ class Detect extends Render {
 			return false;
 
 		if ( $check_option ) {
-			if ( ! $this->is_option_checked( 'sitemaps_output' ) )
+			if ( ! $this->is_option_checked( 'sitemaps_output' ) || ! $this->is_option_checked( 'sitemaps_robots' ) )
 				return false;
 		}
 
