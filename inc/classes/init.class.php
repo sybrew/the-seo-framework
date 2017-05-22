@@ -539,7 +539,7 @@ class Init extends Query {
 		/**
 		 * Don't do anything if the blog isn't public.
 		 */
-		if ( '0' === $public )
+		if ( '0' == $public )
 			return $robots_txt;
 
 		if ( $this->use_object_cache ) {
