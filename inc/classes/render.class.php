@@ -749,7 +749,7 @@ class Render extends Admin_Init {
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
 		 */
-		$time = (string) \apply_filters( 'the_seo_framework_publishedtime_output', \get_the_date( 'Y-m-d', $id ), $id );
+		$time = (string) \apply_filters( 'the_seo_framework_publishedtime_output', \get_the_date( DATE_W3C, $id ), $id );
 
 		if ( $time )
 			return '<meta property="article:published_time" content="' . \esc_attr( $time ) . '" />' . "\r\n";
@@ -797,7 +797,7 @@ class Render extends Admin_Init {
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
 		 */
-		$time = (string) \apply_filters( 'the_seo_framework_modifiedtime_output', \get_post_modified_time( 'Y-m-d', false, $id, false ), $id );
+		$time = (string) \apply_filters( 'the_seo_framework_modifiedtime_output', \get_post_modified_time( DATE_W3C, false, $id, false ), $id );
 
 		if ( $time ) {
 			$output = '<meta property="article:modified_time" content="' . \esc_attr( $time ) . '" />' . "\r\n";
