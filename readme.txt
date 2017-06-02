@@ -262,6 +262,7 @@ TODO
 		* TODO When TSFEM asks for activation, other notifications invoked by REQUEST (like reset settings) aren't supressed anymore.
 			* Maybe, we should make this more secure, i.e. through the new update cache option??
 		* The 404 title now works when the front-page is a blog.
+		* The Canonical URL is now correct on Search Pages.
 
 * **For translators:**
 	* **Added:**

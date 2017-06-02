@@ -339,8 +339,10 @@ class Generate_Url extends Generate_Title {
 				//* Nothing to see here...
 				$path = '';
 			}
+		elseif ( $this->is_search() ) :
+			$_url = \get_search_link();
+			$path = $this->set_url_scheme( $_url, 'relative' );
 		else :
-
 			/**
 			 * Reworked to use the $args['id'] check based on get_the_real_ID.
 			 * @since 2.6.0 & 2.6.2
