@@ -343,10 +343,11 @@ class Generate_Image extends Generate_Url {
 	/**
 	 * Fetches image from post thumbnail.
 	 *
-	 * Resizes the image between 1500px if bigger. Then it saves the image and
+	 * Resizes the image between 4096px if bigger. Then it saves the image and
 	 * Keeps dimensions relative.
 	 *
 	 * @since 2.9.0
+	 * @since 2.9.3 Now supports 4K.
 	 *
 	 * @param int $id The post ID. Required.
 	 * @param array $args The image args.
@@ -404,9 +405,11 @@ class Generate_Image extends Generate_Url {
 	 * @since 2.8.0 : 1. Removed staticvar.
 	 *                2. Now adds ID call to OG image called listener.
 	 * @since 2.9.0 : Added $set_og_dimension parameter
+	 * @since 2.9.3 : 4k baby.
 	 *
 	 * @todo create formula to fetch transient.
 	 * @priority high 2.7.0
+	 * @prioerity lowered with 4K @ 2.9.3
 	 *
 	 * @param int $id The attachment ID.
 	 * @param array $args The image args
@@ -428,19 +431,19 @@ class Generate_Image extends Generate_Url {
 		$w = $src[1]; // Width
 		$h = $src[2]; // Height
 
-		//* Preferred 1500px, resize it
-		if ( $w > 1500 || $h > 1500 ) :
+		//* Preferred 4096px, resize it
+		if ( $w > 4096 || $h > 4096 ) :
 
 			if ( $w === $h ) {
 				//* Square
-				$w = 1500;
-				$h = 1500;
+				$w = 4096;
+				$h = 4096;
 			} elseif ( $w > $h ) {
-				//* Landscape, set $w to 1500.
-				$h = $this->proportionate_dimensions( $h, $w, $w = 1500 );
+				//* Landscape, set $w to 4096.
+				$h = $this->proportionate_dimensions( $h, $w, $w = 4096 );
 			} elseif ( $h > $w ) {
-				//* Portrait, set $h to 1500.
-				$w = $this->proportionate_dimensions( $w, $h, $h = 1500 );
+				//* Portrait, set $h to 4096.
+				$w = $this->proportionate_dimensions( $w, $h, $h = 4096 );
 			}
 
 			//* Get path of image and load it into the wp_get_image_editor

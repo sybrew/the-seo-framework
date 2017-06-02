@@ -403,7 +403,7 @@ class Render extends Admin_Init {
 					if ( $id === $featured_id )
 						continue;
 
-					//* Parse 1500px url.
+					//* Parse 4096px url.
 					$img = $this->parse_og_image( $id, array(), true );
 
 					if ( $img ) {

@@ -243,6 +243,9 @@ TODO
 	* **Added:**
 	* **Changed:**
 		* Sitemap explanation URLs now open in a new window.
+		* Automated Image Cropper now starts cropping at 4K+, rather than 1500px/1500px.
+		* Social Image uploader now accepts up to 4K images, before forcing a crop.
+			* This is according to [Twitter Card guidelines](https://dev.twitter.com/cards/types/summary-large-image).
 	* **Improved:**
 		* The schema metabox now renders faster.
 		* The Facebook Social Settings placeholder URLs are now HTTPS, rather than HTTP.

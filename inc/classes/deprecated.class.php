@@ -647,12 +647,13 @@ final class Deprecated {
 
 	/**
 	 * Fetches image from post thumbnail.
-	 * Resizes the image between 1500px if bigger. Then it saves the image and
+	 * Resizes the image between 4096px if bigger. Then it saves the image and
 	 * Keeps dimensions relative.
 	 *
 	 * @since 2.3.0
 	 * @since 2.9.0 Changed parameters.
 	 * @since 2.9.0 Deprecated.
+	 * @since 2.9.3 Now supports 4K, rather than 1500px.
 	 * @deprecated
 	 *
 	 * @param array $args The image args.
