@@ -261,8 +261,7 @@ TODO
 		* TODO Fix reset settings notification.
 		* TODO When TSFEM asks for activation, other notifications invoked by REQUEST (like reset settings) aren't supressed anymore.
 			* Maybe, we should make this more secure, i.e. through the new update cache option??
-		* TODO The 404 title now works on non-Genesis themes.
-			* TODO confirm why and if Genesis is the only one succeeding.
+		* The 404 title now works when the front-page is a blog.
 
 * **For translators:**
 	* **Added:**
