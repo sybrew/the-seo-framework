@@ -381,8 +381,8 @@ class Init extends Query {
 			$before_actions = $this->header_actions( '', true );
 
 			//* Limit processing on 404 or search
-			if ( $this->is_404() || $this->is_search() ) :
-				$output	= $this->og_locale()
+			if ( $this->is_search() ) :
+				$output = $this->og_locale()
 						. $this->og_type()
 						. $this->og_title()
 						. $this->og_url()
@@ -392,8 +392,13 @@ class Init extends Query {
 						. $this->bing_site_output()
 						. $this->yandex_site_output()
 						. $this->pint_site_output();
+			elseif ( $this->is_404() ) :
+				$output = $this->google_site_output()
+						. $this->bing_site_output()
+						. $this->yandex_site_output()
+						. $this->pint_site_output();
 			else :
-				$output	= $this->the_description()
+				$output = $this->the_description()
 						. $this->og_image()
 						. $this->og_locale()
 						. $this->og_type()

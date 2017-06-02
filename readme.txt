@@ -246,6 +246,8 @@ TODO
 		* Automated Image Cropper now starts cropping at 4K+, rather than 1500px/1500px.
 		* Social Image uploader now accepts up to 4K images, before forcing a crop.
 			* This is according to [Twitter Card guidelines](https://dev.twitter.com/cards/types/summary-large-image).
+		* Removed Open Graph and Canonical URL output on 404 pages.
+			* Title, Robots and Webmaster Verification output are to stay.
 	* **Improved:**
 		* The schema metabox now renders faster.
 		* The Facebook Social Settings placeholder URLs are now HTTPS, rather than HTTP.
@@ -259,6 +261,8 @@ TODO
 		* TODO Fix reset settings notification.
 		* TODO When TSFEM asks for activation, other notifications invoked by REQUEST (like reset settings) aren't supressed anymore.
 			* Maybe, we should make this more secure, i.e. through the new update cache option??
+		* TODO The 404 title now works on non-Genesis themes.
+			* TODO confirm why and if Genesis is the only one succeeding.
 
 * **For translators:**
 	* **Added:**
