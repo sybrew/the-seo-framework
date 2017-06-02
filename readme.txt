@@ -242,15 +242,20 @@ TODO
 * **For everyone:**
 	* **Added:**
 	* **Changed:**
-			* Sitemap explanation URLs now open in a new window.
+		* Sitemap explanation URLs now open in a new window.
 	* **Improved:**
 		* The schema metabox now renders faster.
 		* The Facebook Social Settings placeholder URLs are now HTTPS, rather than HTTP.
 		* TODO The sitemaps no longer get flushed and Search Engines no longer get pinged when updating a post set to noindex...
 			* Note to self: This has to check before/after values -- i.e. unchanged and action type "publish" vs "update"?
-		* TODO LinkedIn profile title now no longer indicates that it must be an ID.
+		* LinkedIn profile title now no longer indicates that it must be an ID.
 	* **Fixed:**
+		* Windows Touch now works on the SEO Bar, as was always intended (MT race condition).
+		* When touching an active SEO Bar or the tooltip thereof, the SEO Bar Tooltip no longer disappears (regression).
 		* TODO WPML subdirectory category URLs are now correct.
+		* TODO Fix reset settings notification.
+		* TODO When TSFEM asks for activation, other notifications invoked by REQUEST (like reset settings) aren't supressed anymore.
+			* Maybe, we should make this more secure, i.e. through the new update cache option??
 
 * **For translators:**
 	* **Added:**
@@ -266,6 +271,9 @@ TODO
 		* The sitemap now outputs less data, because CRLF ("\r\n") has been exchanged for LF ("\n") only.
 			* This only lowers XML `view-source:` readability support for very old browsers (IE8 or lower).
 		* `\The_SEO_Framework\_wpmudev_domainmap_get_url()` now returns an array with two empty keys if no settings have been found. Instead of an empty string.
+		* Method `get_latest_post_id()` has been rewritten; it's now family friendly.
+			* It no longer uses object caching.
+			* It now uses `WP_Query`, rather than `wpdb`.
 	* **Fixed:**
 	* **Other:**
 		* Cleaned up code, i.e. improved documentation and writing style.

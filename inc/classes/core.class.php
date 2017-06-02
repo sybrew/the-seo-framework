@@ -335,6 +335,47 @@ class Core {
 	}
 
 	/**
+	 * Generates dismissible notice that stick until the user dismisses it.
+	 * Also loads scripts and styles if out of The SEO Framework's context.
+	 *
+	 * @since 2.9.3
+	 *
+	 * @param string $message The notice message. Expected to be escaped if $escape is false.
+	 * @param string $key     The notice key. Must be unique and tied to the stored updates cache option.
+	 * @param array $args : {
+	 *    'type'   => string Optional. The notification type. Default 'updated'.
+	 *    'a11y'   => bool   Optional. Whether to enable accessibility. Default true.
+	 *    'escape' => bool   Optional. Whether to escape the $message. Default true.
+	 *    'color'  => string Optional. If filled in, it will output the selected color. Default ''.
+	 *    'icon'   => string Optional. If filled in, it will output the selected icon. Default ''.
+	 * }
+	 * @return string The dismissible error notice.
+	 */
+	public function generate_dismissible_sticky_notice( $message, $key, $args = array() ) {
+		return '';
+	}
+
+	/**
+	 * Echos generated dismissible sticky notice.
+	 *
+	 * @since 2.9.3
+	 *
+	 * @param string $message The notice message. Expected to be escaped if $escape is false.
+	 * @param string $key     The notice key. Must be unique and tied to the stored updates cache option.
+	 * @param array $args : {
+	 *    'type'   => string Optional. The notification type. Default 'updated'.
+	 *    'a11y'   => bool   Optional. Whether to enable accessibility. Default true.
+	 *    'escape' => bool   Optional. Whether to escape the $message. Default true.
+	 *    'color'  => string Optional. If filled in, it will output the selected color. Default ''.
+	 *    'icon'   => string Optional. If filled in, it will output the selected icon. Default ''.
+	 * }
+	 * @return string The dismissible error notice.
+	 */
+	public function do_dismissible_sticky_notice( $message, $key, $args = array() ) {
+		echo $this->generate_dismissible_sticky_notice( $message, $key, $args );
+	}
+
+	/**
 	 * Mark up content with code tags.
 	 * Escapes all HTML, so `<` gets changed to `&lt;` and displays correctly.
 	 *

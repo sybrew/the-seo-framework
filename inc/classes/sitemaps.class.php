@@ -1055,9 +1055,7 @@ class Sitemaps extends Metaboxes {
 		if ( $this->is_option_checked( 'site_noindex' ) || $this->is_blog_public() )
 			return;
 
-		$blog_id = (string) $GLOBALS['blog_id'];
-
-		$transient = 'tsf_throttle_ping_' . $blog_id;
+		$transient = 'tsf_throttle_ping_' . $GLOBALS['blog_id'];
 
 		//* NOTE: Use legacy get_transient to prevent ping spam.
 		if ( false === \get_transient( $transient ) ) {

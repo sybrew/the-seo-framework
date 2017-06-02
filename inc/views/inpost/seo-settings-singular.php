@@ -271,9 +271,9 @@ switch ( $instance ) :
 				</div>
 				<?php
 				/**
-				* Insert form element only if JS is active. If JS is inactive, then this will cause it to be emptied on $_POST
-				* @TODO use disabled and jQuery.removeprop( 'disabled' )?
-				*/
+				 * Insert form element only if JS is active. If JS is inactive, then this will cause it to be emptied on $_POST
+				 * @TODO use disabled and jQuery.removeprop( 'disabled' )?
+				 */
 				?>
 				<script>
 					document.getElementById( 'autodescription_socialimage-url' ).insertAdjacentHTML( 'afterend', '<input type="hidden" name="autodescription[_social_image_id]" id="autodescription_socialimage-id" value="<?php echo absint( $this->get_custom_field( '_social_image_id' ) ); ?>" />' );
