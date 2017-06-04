@@ -577,6 +577,7 @@ class Query extends Compat {
 	 * Returns true if on SEO settings page and when ID is 0.
 	 *
 	 * @since 2.9.0
+	 * @since 2.9.3 Now tests for archive before testing home page as blog.
 	 *
 	 * @param int The page ID, required.
 	 * @return bool True if ID if for the home page.
@@ -605,8 +606,9 @@ class Query extends Compat {
 			if ( 'page' === $sof && (int) \get_option( 'page_on_front' ) === $id )
 				$is_front_page = true;
 
-			if ( 'posts' === $sof && (int) \get_option( 'page_for_posts' ) === $id )
-				$is_front_page = true;
+			if ( ! $this->is_archive() )
+				if ( 'posts' === $sof && (int) \get_option( 'page_for_posts' ) === $id )
+					$is_front_page = true;
 		}
 
 		if ( false === $is_front_page && 0 === $id && $this->is_seo_settings_page() )

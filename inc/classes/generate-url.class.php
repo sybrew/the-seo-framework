@@ -826,7 +826,7 @@ class Generate_Url extends Generate_Title {
 		$next = '';
 
 		if ( $this->is_singular() ) :
-			if ( $this->is_real_front_page() || $this->is_front_page_by_id( $post_id ) ) {
+			if ( $this->is_real_front_page() || $this->is_static_frontpage( $post_id ) ) {
 				$output_singular_paged = $this->is_option_checked( 'prev_next_frontpage' );
 			} else {
 				$output_singular_paged = $this->is_option_checked( 'prev_next_posts' );

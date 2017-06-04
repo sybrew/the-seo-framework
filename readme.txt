@@ -255,14 +255,23 @@ TODO
 			* Note to self: This has to check before/after values -- i.e. unchanged and action type "publish" vs "update"?
 		* LinkedIn profile title now no longer indicates that it must be an ID.
 	* **Fixed:**
+		* When the home page is a blog, these fixes have been implemented:
+			1. Archives no longer share the same cache key as the home page.
+				* This fixes numerous object caching issues.
+			1. Shortlink output now works.
+			1. `rel=next/prev` links output now listen to the archive option, instead of the home page option.
+			1. Archives no longer use the home page Open Graph image.
+			1. Archives no longer use the auto-generated description meant for the home page.
+			1. The 404 title now works.
 		* Windows Touch now works on the SEO Bar, as was always intended (MT race condition).
 		* When touching an active SEO Bar or the tooltip thereof, the SEO Bar Tooltip no longer disappears (regression).
 		* TODO WPML subdirectory category URLs are now correct.
 		* TODO Fix reset settings notification.
 		* TODO When TSFEM asks for activation, other notifications invoked by REQUEST (like reset settings) aren't supressed anymore.
 			* Maybe, we should make this more secure, i.e. through the new update cache option??
-		* The 404 title now works when the front-page is a blog.
 		* The Canonical URL is now correct on Search Pages.
+		* Dismissible notices now get correctly removed from the DOM when dismissed.
+
 
 * **For translators:**
 	* **Added:**
@@ -282,6 +291,8 @@ TODO
 			* It no longer uses object caching.
 			* It now uses `WP_Query`, rather than `wpdb`.
 	* **Fixed:**
+		* Method `is_front_page_by_id()` no longer returns true on archives when home page is a blog. This fixes numerous issues listed in the "For everyone:" detailed log.
+
 	* **Other:**
 		* Cleaned up code, i.e. improved documentation and writing style.
 
@@ -393,6 +404,9 @@ TODO
 **The full changelog can be found [here](http://theseoframework.com/?cat=2).**
 
 == Upgrade Notice ==
+
+= 2.9.3 =
+A highly recommended update that fixes "Home Page as Blog" query issues.
 
 = 2.8.0 =
 In the 2.8.0 update WordPress 4.3 and PHP 5.2 support have been dropped for better code quality.

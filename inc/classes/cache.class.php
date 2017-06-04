@@ -627,54 +627,6 @@ class Cache extends Sitemaps {
 
 		if ( $this->is_404() ) {
 			$the_id = '_404_';
-		} elseif ( ( $this->is_real_front_page() || $this->is_front_page_by_id( $page_id ) ) || ( $this->is_admin() && $this->is_seo_settings_page( true ) ) ) {
-			//* Front/HomePage.
-			$the_id = $this->generate_front_page_cache_key();
-		} elseif ( $this->is_blog_page( $page_id ) ) {
-			$the_id = 'blog_' . $page_id;
-		} elseif ( $this->is_singular() ) {
-
-			$post_type = \get_post_type( $page_id );
-
-			switch ( $post_type ) :
-				case 'page' :
-					$the_id = 'page_' . $page_id;
-					break;
-
-				case 'post' :
-					$the_id = 'post_' . $page_id;
-					break;
-
-				case 'attachment' :
-					$the_id = 'attach_' . $page_id;
-					break;
-
-				default :
-					$the_id = 'singular_' . $page_id;
-					break;
-			endswitch;
-		} elseif ( $this->is_search() ) {
-			$query = '';
-
-			//* TODO figure out why this check is here... admin compat maybe?
-			if ( function_exists( 'get_search_query' ) ) {
-				$search_query = \get_search_query( $_escaped = true );
-
-				if ( $search_query )
-					$query = str_replace( ' ', '', $search_query );
-
-				//* Limit to 10 chars.
-				if ( mb_strlen( $query ) > 10 )
-					$query = mb_substr( $query, 0, 10 );
-
-				$query = \esc_sql( $query );
-			}
-
-			//* Temporarily disable caches to prevent database spam.
-			$this->the_seo_framework_use_transients = false;
-			$this->use_object_cache = false;
-
-			$the_id = $page_id . '_s_' . $query;
 		} elseif ( $this->is_archive() ) {
 			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
 
@@ -747,6 +699,54 @@ class Cache extends Sitemaps {
 
 				$the_id = 'archives_' . $the_id;
 			}
+		} elseif ( ( $this->is_real_front_page() || $this->is_front_page_by_id( $page_id ) ) || ( $this->is_admin() && $this->is_seo_settings_page( true ) ) ) {
+			//* Front/HomePage.
+			$the_id = $this->generate_front_page_cache_key();
+		} elseif ( $this->is_blog_page( $page_id ) ) {
+			$the_id = 'blog_' . $page_id;
+		} elseif ( $this->is_singular() ) {
+
+			$post_type = \get_post_type( $page_id );
+
+			switch ( $post_type ) :
+				case 'page' :
+					$the_id = 'page_' . $page_id;
+					break;
+
+				case 'post' :
+					$the_id = 'post_' . $page_id;
+					break;
+
+				case 'attachment' :
+					$the_id = 'attach_' . $page_id;
+					break;
+
+				default :
+					$the_id = 'singular_' . $page_id;
+					break;
+			endswitch;
+		} elseif ( $this->is_search() ) {
+			$query = '';
+
+			//* TODO figure out why this check is here... admin compat maybe?
+			if ( function_exists( 'get_search_query' ) ) {
+				$search_query = \get_search_query( $_escaped = true );
+
+				if ( $search_query )
+					$query = str_replace( ' ', '', $search_query );
+
+				//* Limit to 10 chars.
+				if ( mb_strlen( $query ) > 10 )
+					$query = mb_substr( $query, 0, 10 );
+
+				$query = \esc_sql( $query );
+			}
+
+			//* Temporarily disable caches to prevent database spam.
+			$this->the_seo_framework_use_transients = false;
+			$this->use_object_cache = false;
+
+			$the_id = $page_id . '_s_' . $query;
 		}
 
 		/**

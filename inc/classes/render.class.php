@@ -995,17 +995,20 @@ class Render extends Admin_Init {
 	 * Renders Shortlink meta tag
 	 *
 	 * @since 2.2.2
+	 * @since 2.9.3 : Now work when home page is a blog.
 	 * @uses $this->get_shortlink()
 	 *
 	 * @return string The Shortlink meta tag.
 	 */
 	public function shortlink() {
 
+		$id = $this->get_the_real_ID();
+
 		/**
 		 * Applies filters 'the_seo_framework_shortlink_output' : string
 		 * @since 2.6.0
 		 */
-		$url = (string) \apply_filters( 'the_seo_framework_shortlink_output', $this->get_shortlink(), $this->get_the_real_ID() );
+		$url = (string) \apply_filters( 'the_seo_framework_shortlink_output', $this->get_shortlink( $id ), $this->get_the_real_ID( $id ) );
 
 		if ( $url )
 			return sprintf( '<link rel="shortlink" href="%s" />' . "\r\n", $url );
