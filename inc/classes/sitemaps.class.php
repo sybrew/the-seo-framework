@@ -367,13 +367,27 @@ class Sitemaps extends Metaboxes {
 	 * Returns stylesheet XSL location tag.
 	 *
 	 * @since 2.8.0
+	 * @since 2.9.3 Now checks against request to see if there's a domain mismatch.
 	 *
 	 * @return string The sitemap XSL location tag.
 	 */
 	public function get_sitemap_xsl_stylesheet_tag() {
 
-		if ( $this->is_option_checked( 'sitemap_styles' ) )
-			return sprintf( '<?xml-stylesheet type="text/xsl" href="%s"?>', \esc_url( $this->get_sitemap_xsl_url() ) ) . "\n";
+		if ( $this->is_option_checked( 'sitemap_styles' ) ) {
+
+			$url = \esc_url( $this->get_sitemap_xsl_url() );
+
+			if ( ! empty( $_SERVER['HTTP_HOST'] ) ) {
+				$_parsed = \wp_parse_url( $url );
+				$_r_parsed = \wp_parse_url( \esc_url( \wp_unslash( $_SERVER['HTTP_HOST'] ) ) );
+
+				if ( isset( $_parsed['host'] ) && isset( $_r_parsed['host'] ) )
+					if ( $_parsed['host'] !== $_r_parsed['host'] )
+						return '';
+			}
+
+			return sprintf( '<?xml-stylesheet type="text/xsl" href="%s"?>', $url ) . "\n";
+		}
 
 		return '';
 	}

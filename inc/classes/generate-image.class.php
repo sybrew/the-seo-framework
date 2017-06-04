@@ -431,19 +431,22 @@ class Generate_Image extends Generate_Url {
 		$w = $src[1]; // Width
 		$h = $src[2]; // Height
 
+		//* @TODO add filter that can lower it?
+		$_size = 4096;
+
 		//* Preferred 4096px, resize it
-		if ( $w > 4096 || $h > 4096 ) :
+		if ( $w > $_size || $h > $_size ) :
 
 			if ( $w === $h ) {
 				//* Square
-				$w = 4096;
-				$h = 4096;
+				$w = $_size;
+				$h = $_size;
 			} elseif ( $w > $h ) {
 				//* Landscape, set $w to 4096.
-				$h = $this->proportionate_dimensions( $h, $w, $w = 4096 );
+				$h = $this->proportionate_dimensions( $h, $w, $w = $_size );
 			} elseif ( $h > $w ) {
 				//* Portrait, set $h to 4096.
-				$w = $this->proportionate_dimensions( $w, $h, $h = 4096 );
+				$w = $this->proportionate_dimensions( $w, $h, $h = $_size );
 			}
 
 			//* Get path of image and load it into the wp_get_image_editor

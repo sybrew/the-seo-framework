@@ -254,6 +254,8 @@ TODO
 		* TODO The sitemaps no longer get flushed and Search Engines no longer get pinged when updating a post set to noindex...
 			* Note to self: This has to check before/after values -- i.e. unchanged and action type "publish" vs "update"?
 		* LinkedIn profile title now no longer indicates that it must be an ID.
+		* The sitemap stylesheet no longer outputs on domain mismatch, so you won't see a blank page anymore.
+			* This is a mitigated browser security feature.
 	* **Fixed:**
 		* When the home page is a blog, these fixes have been implemented:
 			1. Archives no longer share the same cache key as the home page.
