@@ -253,27 +253,29 @@ TODO
 		* The Facebook Social Settings placeholder URLs are now HTTPS, rather than HTTP.
 		* TODO The sitemaps no longer get flushed and Search Engines no longer get pinged when updating a post set to noindex...
 			* Note to self: This has to check before/after values -- i.e. unchanged and action type "publish" vs "update"?
+			* Too much work, too little gain. -- The fixes below are more important.
 		* LinkedIn profile title now no longer indicates that it must be an ID.
 		* The sitemap stylesheet no longer outputs on domain mismatch, so you won't see a blank page anymore.
 			* This is a mitigated browser security feature.
+			* This does not affect security nor validity of the sitemap.
 	* **Fixed:**
 		* When the home page is a blog, these fixes have been implemented:
-			1. Archives no longer share the same cache key as the home page.
-				* This fixes numerous object caching issues.
-			1. Shortlink output now works.
-			1. `rel=next/prev` links output now listen to the archive option, instead of the home page option.
-			1. Archives no longer use the home page Open Graph image.
-			1. Archives no longer use the auto-generated description meant for the home page.
 			1. The 404 title now works.
+			1. Shortlink output now works.
+			1. Various fixes across non-taxonomial archives, i.e. ones that you can't edit, have noindex set by default, and have no ID assigned:
+				* These no longer share the same cache key as the home page.
+					* This fixes numerous object caching issues.
+				* These no longer use the home page Open Graph image.
+				* These no longer use the auto-generated description meant for the home page.
+				* These now listen to the archive option for `rel=next/prev` links, instead of the home page option.
 		* Windows Touch now works on the SEO Bar, as was always intended (MT race condition).
 		* When touching an active SEO Bar or the tooltip thereof, the SEO Bar Tooltip no longer disappears (regression).
-		* TODO WPML subdirectory category URLs are now correct.
 		* TODO Fix reset settings notification.
 		* TODO When TSFEM asks for activation, other notifications invoked by REQUEST (like reset settings) aren't supressed anymore.
 			* Maybe, we should make this more secure, i.e. through the new update cache option??
 		* The Canonical URL is now correct on Search Pages.
 		* Dismissible notices now get correctly removed from the DOM when dismissed.
-
+		* `twitter:creator` is no longer omitted and overshadowed by the `twitter:site:id` meta tag when both Twitter Site and Creator options are filled in.
 
 * **For translators:**
 	* **Added:**

@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://theseoframework.com/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.
- * Version: 2.9.3-dev2017.06.04.1
+ * Version: 2.9.3-dev2017.06.05.0
  * Author: Sybre Waaijer
  * Author URI: https://theseoframework.com/
  * License: GPLv3
@@ -31,15 +31,15 @@ defined( 'ABSPATH' ) or die;
  */
 
 //* Debug. Not to be used on production websites as it dumps and/or disables all kinds of stuff everywhere.
-//add_action( 'plugins_loaded', function() { if ( is_super_admin() ) {
-	//if ( is_admin() ) {
-		//define( 'THE_SEO_FRAMEWORK_DEBUG', true );
-		//define( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN', true );
-		//define( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS', true );
-		//update_option( 'the_seo_framework_upgraded_db_version', '0' );
-		//add_filter( 'the_seo_framework_use_object_cache', '__return_false' );
-	//}
-//}},0);
+// add_action( 'plugins_loaded', function() { if ( is_super_admin() ) {
+// 	if ( is_admin() ) {
+// 		define( 'THE_SEO_FRAMEWORK_DEBUG', true );
+// 		define( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN', true );
+// 		define( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS', true );
+// 		update_option( 'the_seo_framework_upgraded_db_version', '0' );
+// 		add_filter( 'the_seo_framework_use_object_cache', '__return_false' );
+// 	}
+// }},0);
 
 /**
  * The plugin version.

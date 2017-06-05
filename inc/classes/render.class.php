@@ -514,9 +514,10 @@ class Render extends Admin_Init {
 
 	/**
 	 * Renders The Twitter Creator meta tag.
-	 * If no Twitter Site is found, it will render the Twitter Site ID meta tag.
 	 *
 	 * @since 2.2.2
+	 * @since 2.9.3 No longer has a fallback to twitter:site:id
+	 * @link https://dev.twitter.com/cards/getting-started
 	 *
 	 * @return string The Twitter Creator or Twitter Site ID meta tag.
 	 */
@@ -532,17 +533,8 @@ class Render extends Admin_Init {
 		 */
 		$creator = (string) \apply_filters( 'the_seo_framework_twittercreator_output', $this->get_option( 'twitter_creator' ), $this->get_the_real_ID() );
 
-		if ( $creator ) {
-			/**
-			 * Return site:id instead of creator is no twitter:site is found.
-			 * Per Twitter requirements.
-			 */
-			if ( $this->get_option( 'twitter_site' ) ) {
-				return '<meta name="twitter:site:id" content="' . \esc_attr( $creator ) . '" />' . "\r\n";
-			} else {
-				return '<meta name="twitter:creator" content="' . \esc_attr( $creator ) . '" />' . "\r\n";
-			}
-		}
+		if ( $creator )
+			return '<meta name="twitter:creator" content="' . \esc_attr( $creator ) . '" />' . "\r\n";
 
 		return '';
 	}
