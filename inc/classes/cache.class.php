@@ -561,7 +561,7 @@ class Cache extends Sitemaps {
 
 		$cache_key = $this->generate_cache_key( $page_id, $taxonomy, $type );
 
-		$revision = '3';
+		$revision = '5';
 
 		/**
 		 * Change key based on options.

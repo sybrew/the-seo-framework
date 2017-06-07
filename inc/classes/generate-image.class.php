@@ -49,6 +49,85 @@ class Generate_Image extends Generate_Url {
 	}
 
 	/**
+	 * Returns image URL suitable for Schema items.
+	 *
+	 * These are images that are strictly assigned to the Post or Page.
+	 * Themes should compliment these. If not, then Open Graph should at least
+	 * compliment these.
+	 * If that's not even true, then I don't know what happens. But then you're
+	 * in a grey area... @TODO make images optional for Schema?
+	 *
+	 * @since 2.9.3
+	 * @uses $this->get_social_image()
+	 * @staticvar array $images
+	 *
+	 * @TODO support Terms.
+	 *
+	 * @param int|string $id The page, post, product or term ID.
+	 * @param bool $singular Whether the ID is singular or archival.
+	 * @return string $url The Schema.org safe image.
+	 */
+	public function get_schema_image( $id = 0, $singular = false ) {
+
+		//= TODO remove htis.
+		if ( ! $singular )
+			return '';
+
+		static $images = array();
+
+		$id = (int) $id;
+
+		if ( isset( $images[ $id ][ $singular ] ) )
+			return $images[ $id ][ $singular ];
+
+		if ( $singular ) {
+			if ( $id === $this->get_the_front_page_ID() ) {
+				if ( $this->has_page_on_front() ) {
+					$image_args = array(
+						'post_id' => $id,
+						'skip_fallback' => true,
+						'escape' => false,
+					);
+				} else {
+					$image_args = array(
+						'post_id' => $id,
+						'skip_fallback' => true,
+						'disallowed' => array(
+							'postmeta',
+							'featured',
+						),
+						'escape' => false,
+					);
+				}
+			} else {
+				$image_args = array(
+					'post_id' => $id,
+					'skip_fallback' => true,
+					'disallowed' => array(
+						'homemeta',
+					),
+					'escape' => false,
+				);
+			}
+			$url = $this->get_social_image( $image_args, false );
+		} else {
+			//* Placeholder for when Terms get image uploads.
+			$url = '';
+		}
+
+		/**
+		 * Applies filters 'the_seo_framework_ld_json_breadcrumb_image' : string
+		 * @since 2.7.0
+		 * @param string $image The current image.
+		 * @param int $id The page, post, product or term ID.
+		 * @param bool $singular Whether the ID is singular.
+		 */
+		$url = \apply_filters( 'the_seo_framework_ld_json_breadcrumb_image', $url, $id, $singular );
+
+		return $images[ $id ][ $singular ] = \esc_url_raw( $url );
+	}
+
+	/**
 	 * Returns social image URL and sets $this->image_dimensions.
 	 *
 	 * @since 2.9.0

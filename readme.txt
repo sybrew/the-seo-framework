@@ -242,10 +242,30 @@ TODO
 * **For everyone:**
 	* **Changed:**
 		* Structured Data has output been revisited, so:
-			* TODO
+			* Sitename + Sitelinks Searchbox:
+				* The output of Sitename has been merged into Sitelinks Searchbox.
+					* They're marked as `@type` "Website".
+				* The options still work as intended:
+					* When both options are activated, the merged script emerges.
+					* When only Sitelinks Searchbox is activated, only Sitelinks Searchbox will be output.
+					* The previous applies to Sitename too.
+				* This is now only output on the homepage.
+					* When breadcrumbs are found, the Sitename script will no longer be output.
+			* Sitelinks Searchbox:
+				* The Search Link now is `example.com/search/{query}` instead of `example.com/?s={query}`. Where supported.
+				* The Sitename output has been merged into this one.
+			* Breadcrumbs:
+				* No more database calls are initiated for term existence checks.
+					* This means the generation is much faster on posts.
+					* Instead, it now uses WordPress' term cache to validate.
+				* No more database calls are initiated for term object fetching.
+					* This means the generation is much faster on posts and pages.
+					* Instead, it now uses WordPress' term cache to fetch.
+			* Because some of the above mentioned changes affect the output, the Schema transient cache has been invalidated.
+			* All output is now calculated once, rather than in multitude of items. This increases maintainabilty.
 		* Sitemap explanation URLs now open in a new window.
 		* Automated Image Cropper now starts cropping when images exceed 4K (4096px/4096px), rather than 1500px/1500px.
-		* Social Image uploader now accepts up to 4K images, before forcing a crop.
+		* Social Image uploader now accepts image sizes up to 4K, before forcing a crop.
 			* This is according to [Twitter Card guidelines](https://dev.twitter.com/cards/types/summary-large-image).
 		* Removed Open Graph and Canonical URL output on 404 pages.
 			* Title, Robots and Webmaster Verification output are to stay.
@@ -281,19 +301,54 @@ TODO
 		* The Canonical URL is now correct on Search Pages.
 		* Dismissible notices now get correctly removed from the DOM when dismissed.
 		* `twitter:creator` is no longer omitted and overshadowed by the `twitter:site:id` meta tag when both Twitter Site and Creator options are filled in.
+		* TODO When the Home Page Title floating placeholder overflows on load, it will no longer stack, but will look like intended.
 
 * **For developers:**
 	* **Added:**
 		* Links outputted through Markdown can now open in a new window when marked external.
+		* An JSON-LD generator. Taken from [The SEO Framework - Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/) and reworked to support PHP 5.3.
+			* See method `build_json_data()`. It builds the input data.
+			* See method `receive_json_data()`. It recieves the built data.
+		* Method `get_schema_image()`. A Schema.org Google-guideline aware image fetcher with caching powers.
+			* It basically bypasses filters and fallbacks to prevent globally repeated image URLs.
+			* Reduced image replication use is fine. But, don't overdo it; it's at most bland.
+			* It works for both singular as term items. However, Terms don't have image uploaders yet, so that returns empty for now.
 	* **Improved:**
-		* The sitemap now outputs less data, because CRLF ("\r\n") has been exchanged for LF ("\n") only.
-			* This only lowers XML `view-source:` readability support for very old browsers (IE8 or lower).
-		* `\The_SEO_Framework\_wpmudev_domainmap_get_url()` now returns an array with two empty keys if no settings have been found. Instead of an empty string.
+		* The sitemap now outputs less data, because CRLF (`\r\n`) has been exchanged for LF (`\n`) only.
+			* This removes XML `view-source:` readability support for very old browsers (IE8 or lower).
+		* Function `\The_SEO_Framework\_wpmudev_domainmap_get_url()` now returns an array with two empty keys if no settings have been found. Instead of an empty string.
 		* Method `get_latest_post_id()` has been rewritten; it's now family friendly.
 			* It no longer uses object caching.
 			* It now uses `WP_Query`, rather than `wpdb`.
 	* **Fixed:**
 		* Method `is_front_page_by_id()` no longer returns true on archives when home page is a blog. This fixes numerous issues listed in the "For everyone:" detailed log.
+	* **Deprecated:**
+		* A multitude of Schema generation methods, use `build_json_data()` and `receive_json_data()` instead.
+			1. Get methods:
+				* Method `schema_context()`, without an alternative.
+				* Method `schema_type()`, without an alternative.
+				* Method `schema_home_url()`, without an alternative.
+				* Method `schema_blog_name()`, without an alternative.
+				* Method `schema_breadcrumblist()`, without an alternative.
+				* Method `schema_listitem()`, without an alternative.
+				* Method `schema_image()`, without an alternative.
+				* Method `make_breadcrumb()`, without an alternative.
+				* Method `ld_json_breadcrumbs()`, use `get_ld_json_breadcrumbs()`.
+				* Method `ld_json_breadcrumbs_post()`, use `get_ld_json_breadcrumbs_post()`.
+				* Method `ld_json_breadcrumbs_page()`, use `get_ld_json_breadcrumbs_page()`.
+			1. Build methods:
+				* Method `ld_json_search()`, without an alternative.
+				* Method `ld_json_name()`, without an alternative.
+				* Method `ld_json_knowledge()`, use `get_ld_json_links()`.
+				* Method `ld_json_breadcrumb_first()`, without an alternative.
+				* Method `ld_json_breadcrumb_last()`, without an alternative.
+				* Method `ld_json_knowledge()`, without an alternative.
+	* **Filter notes:**
+		* **Added:**
+			* `(array) the_seo_framework_receive_json_data`, for altering passed JSON `$data` (arg 1) by `$key` (arg 2).
+		* **Deprecated:**
+			TODO
+			* the_seo_framework_ld_json_breadcrumb_image ?? reintroduce?
 	* **Other:**
 		* Cleaned up code, i.e. improved documentation and writing style.
 

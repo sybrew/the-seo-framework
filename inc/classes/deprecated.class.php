@@ -742,4 +742,549 @@ final class Deprecated {
 
 		return $is_front_page;
 	}
+
+	/**
+	 * Returns http://schema.org json encoded context URL.
+	 *
+	 * @staticvar string $context
+	 * @since 2.6.0
+	 * @since 2.9.3 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The json encoded context url.
+	 */
+	public function schema_context() {
+
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->schema_context()', '2.9.3' );
+
+		static $context;
+
+		if ( isset( $context ) )
+			return $context;
+
+		return $context = json_encode( 'http://schema.org' );
+	}
+
+
+	/**
+	 * Returns 'WebSite' json encoded type name.
+	 *
+	 * @staticvar string $context
+	 * @since 2.6.0
+	 * @since 2.9.3 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The json encoded type name.
+	 */
+	public function schema_type() {
+
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->schema_type()', '2.9.3' );
+
+		static $type;
+
+		if ( isset( $type ) )
+			return $type;
+
+		return $type = json_encode( 'WebSite' );
+	}
+
+	/**
+	 * Returns json encoded home url.
+	 *
+	 * @staticvar string $url
+	 * @since 2.6.0
+	 * @since 2.9.3 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The json encoded home url.
+	 */
+	public function schema_home_url() {
+
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->schema_home_url()', '2.9.3' );
+
+		static $type;
+
+		if ( isset( $type ) )
+			return $type;
+
+		return $type = json_encode( \the_seo_framework()->the_home_url_from_cache() );
+	}
+
+	/**
+	 * Returns json encoded blogname.
+	 *
+	 * @staticvar string $name
+	 * @since 2.6.0
+	 * @since 2.9.3 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The json encoded blogname.
+	 */
+	public function schema_blog_name() {
+
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->schema_blog_name()', '2.9.3' );
+
+		static $name;
+
+		if ( isset( $name ) )
+			return $name;
+
+		return $name = json_encode( \the_seo_framework()->get_blogname() );
+	}
+
+	/**
+	 * Returns 'BreadcrumbList' json encoded type name.
+	 *
+	 * @staticvar string $crumblist
+	 * @since 2.6.0
+	 * @since 2.9.3 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The json encoded 'BreadcrumbList'.
+	 */
+	public function schema_breadcrumblist() {
+
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->schema_breadcrumblist()', '2.9.3' );
+
+		static $crumblist;
+
+		if ( isset( $crumblist ) )
+			return $crumblist;
+
+		return $crumblist = json_encode( 'BreadcrumbList' );
+	}
+
+	/**
+	 * Returns 'ListItem' json encoded type name.
+	 *
+	 * @staticvar string $listitem
+	 * @since 2.6.0
+	 * @since 2.9.3 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The json encoded 'ListItem'.
+	 */
+	public function schema_listitem() {
+
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->schema_listitem()', '2.9.3' );
+
+		static $listitem;
+
+		if ( isset( $listitem ) )
+			return $listitem;
+
+		return $listitem = json_encode( 'ListItem' );
+	}
+
+	/**
+	 * Returns 'image' json encoded value.
+	 *
+	 * @staticvar array $images
+	 * @since 2.7.0
+	 * @since 2.9.0 : 1. No longer uses image from cache, instead: it skips fallback images.
+	 *                2. Can now fetch home-page as blog set image.
+	 * @since 2.9.3 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int|string $id The page, post, product or term ID.
+	 * @param bool $singular Whether the ID is singular.
+	 */
+	public function schema_image( $id = 0, $singular = false ) {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->schema_image()', '2.9.3' );
+
+		static $images = array();
+
+		$id = (int) $id;
+
+		if ( isset( $images[ $id ][ $singular ] ) )
+			return $images[ $id ][ $singular ];
+
+		$image = '';
+
+		if ( $singular ) {
+			if ( $id === $tsf->get_the_front_page_ID() ) {
+				if ( $tsf->has_page_on_front() ) {
+					$image_args = array(
+						'post_id' => $id,
+						'skip_fallback' => true,
+					);
+				} else {
+					$image_args = array(
+						'post_id' => $id,
+						'skip_fallback' => true,
+						'disallowed' => array(
+							'postmeta',
+							'featured',
+						),
+					);
+				}
+			} else {
+				$image_args = array(
+					'post_id' => $id,
+					'skip_fallback' => true,
+					'disallowed' => array(
+						'homemeta'
+					),
+				);
+			}
+			$image = $tsf->get_social_image( $image_args );
+		} else {
+			//* Placeholder.
+			$image = '';
+		}
+
+		/**
+		 * Applies filters 'the_seo_framework_ld_json_breadcrumb_image' : string
+		 * @since 2.7.0
+		 * @param string $image The current image.
+		 * @param int $id The page, post, product or term ID.
+		 * @param bool $singular Whether the ID is singular.
+		 */
+		$image = \apply_filters( 'the_seo_framework_ld_json_breadcrumb_image', $image, $id, $singular );
+
+		return $images[ $id ][ $singular ] = json_encode( \esc_url_raw( $image ) );
+	}
+
+	/**
+	 * Generate LD+Json search helper.
+	 *
+	 * @since 2.2.8
+	 * @since 2.9.3 Deprecated.
+	 * @deprecated
+	 *
+	 * @return escaped LD+json search helper string.
+	 */
+	public function ld_json_search() {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->ld_json_search()', '2.9.3' );
+
+		if ( false === $tsf->enable_ld_json_searchbox() )
+			return '';
+
+		$context = $this->schema_context();
+		$webtype = $this->schema_type();
+		$url = $this->schema_home_url();
+		$name = $this->schema_blog_name();
+		$actiontype = json_encode( 'SearchAction' );
+
+		/**
+		 * Applies filters 'the_seo_framework_ld_json_search_url' : string
+		 * @since 2.7.0
+		 * @param string $search_url The default WordPress search URL without query parameters.
+		 */
+		$search_url = (string) \apply_filters( 'the_seo_framework_ld_json_search_url', $tsf->the_home_url_from_cache( true ) . '?s=' );
+
+		// Remove trailing quote and add it back.
+		$target = mb_substr( json_encode( $search_url ), 0, -1 ) . '{search_term_string}"';
+
+		$queryaction = json_encode( 'required name=search_term_string' );
+
+		$json = sprintf( '{"@context":%s,"@type":%s,"url":%s,"name":%s,"potentialAction":{"@type":%s,"target":%s,"query-input":%s}}', $context, $webtype, $url, $name, $actiontype, $target, $queryaction );
+
+		$output = '';
+
+		if ( $json )
+			$output = '<script type="application/ld+json">' . $json . '</script>' . "\r\n";
+
+		return $output;
+	}
+
+	/**
+	 * Generate Site Name LD+Json script.
+	 *
+	 * @since 2.6.0
+	 * @since 2.9.3 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The LD+JSon Site Name script.
+	 */
+	public function ld_json_name() {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->ld_json_name()', '2.9.3' );
+
+		if ( false === $tsf->enable_ld_json_sitename() )
+			return '';
+
+		$context = $this->schema_context();
+		$webtype = $this->schema_type();
+		$url = $this->schema_home_url();
+		$name = $this->schema_blog_name();
+		$alternate = '';
+
+		$blogname = $tsf->get_blogname();
+		$knowledge_name = $tsf->get_option( 'knowledge_name' );
+
+		if ( $knowledge_name && $knowledge_name !== $blogname ) {
+			$alternate = json_encode( \esc_html( $knowledge_name ) );
+		}
+
+		if ( $alternate ) {
+			$json = sprintf( '{"@context":%s,"@type":%s,"name":%s,"alternateName":%s,"url":%s}', $context, $webtype, $name, $alternate, $url );
+		} else {
+			$json = sprintf( '{"@context":%s,"@type":%s,"name":%s,"url":%s}', $context, $webtype, $name, $url );
+		}
+
+		$output = '';
+		if ( $json )
+			$output = '<script type="application/ld+json">' . $json . '</script>' . "\r\n";
+
+		return $output;
+	}
+
+	/**
+	 * Return LD+Json Knowledge Graph helper.
+	 *
+	 * @since 2.2.8
+	 * @since 2.9.2 : Now grabs home URL from cache.
+	 * @since 2.9.3 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string LD+json Knowledge Graph helper.
+	 */
+	public function ld_json_knowledge() {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->ld_json_name()', '2.9.3', 'the_seo_framework()->get_ld_json_links()' );
+
+		return $tsf->get_ld_json_links();
+	}
+
+	/**
+	 * Generate LD+Json breadcrumb helper.
+	 *
+	 * @since 2.4.2
+	 * @since 2.9.3 Deprecated.
+	 * @deprecated
+	 *
+	 * @return escaped LD+json search helper string.
+	 */
+	public function ld_json_breadcrumbs() {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->ld_json_breadcrumbs()', '2.9.3', 'the_seo_framework()->get_ld_json_breadcrumbs()' );
+
+		return $tsf->get_ld_json_breadcrumbs();
+	}
+
+	/**
+	 * Generate post breadcrumb.
+	 *
+	 * @since 2.6.0
+	 * @since 2.9.0 Now uses $this->ld_json_breadcrumbs_use_seo_title()
+	 * @since 2.9.3 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string $output The breadcrumb script.
+	 */
+	public function ld_json_breadcrumbs_post() {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->ld_json_breadcrumbs_post()', '2.9.3', 'the_seo_framework()->get_ld_json_breadcrumbs_post()' );
+
+		return $tsf->get_ld_json_breadcrumbs_post();
+	}
+
+	/**
+	 * Generate page breadcrumb.
+	 *
+	 * @since 2.6.0
+	 * @since 2.9.0 Now uses $this->ld_json_breadcrumbs_use_seo_title()
+	 * @since 2.9.3 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string $output The breadcrumb script.
+	 */
+	public function ld_json_breadcrumbs_page() {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->ld_json_breadcrumbs_page()', '2.9.3', 'the_seo_framework()->get_ld_json_breadcrumbs_page()' );
+
+		return $tsf->get_ld_json_breadcrumbs_page();
+	}
+
+	/**
+	 * Return home page item for LD Json Breadcrumbs.
+	 *
+	 * @since 2.4.2
+	 * @since 2.9.0 Now uses $this->ld_json_breadcrumbs_use_seo_title()
+	 * @since 2.9.3 Deprecated.
+	 * @deprecated
+	 * @staticvar string $first_item.
+	 *
+	 * @param string|null $item_type the breadcrumb item type.
+	 * @return string Home Breadcrumb item
+	 */
+	public function ld_json_breadcrumb_first( $item_type = null ) {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->ld_json_breadcrumb_first()', '2.9.3' );
+
+		static $first_item = null;
+
+		if ( isset( $first_item ) )
+			return $first_item;
+
+		if ( is_null( $item_type ) )
+			$item_type = json_encode( 'ListItem' );
+
+		$id = json_encode( $tsf->the_home_url_from_cache() );
+
+		if ( $tsf->ld_json_breadcrumbs_use_seo_title() ) {
+
+			$home_title = $tsf->get_option( 'homepage_title' );
+
+			if ( $home_title ) {
+				$custom_name = $home_title;
+			} elseif ( $tsf->has_page_on_front() ) {
+				$home_id = (int) \get_option( 'page_on_front' );
+
+				$custom_name = $tsf->get_custom_field( '_genesis_title', $home_id ) ?: $tsf->get_blogname();
+			} else {
+				$custom_name = $tsf->get_blogname();
+			}
+		} else {
+			$custom_name = $tsf->get_blogname();
+		}
+
+		$custom_name = json_encode( $custom_name );
+		$image = $this->schema_image( $tsf->get_the_front_page_ID(), true );
+
+		$breadcrumb = array(
+			'type'  => $item_type,
+			'pos'   => '1',
+			'id'    => $id,
+			'name'  => $custom_name,
+			'image' => $image,
+		);
+
+		return $first_item = $tsf->make_breadcrumb( $breadcrumb, true );
+	}
+
+	/**
+	 * Return current page item for LD Json Breadcrumbs.
+	 *
+	 * @since 2.4.2
+	 * @since 2.9.0 Now uses $this->ld_json_breadcrumbs_use_seo_title()
+	 * @since 2.9.3 Deprecated.
+	 * @deprecated
+	 * @staticvar string $last_item.
+	 * @staticvar string $type The breadcrumb item type.
+	 * @staticvar string $id The current post/page/archive url.
+	 * @staticvar string $name The current post/page/archive title.
+	 *
+	 * @param string $item_type the breadcrumb item type.
+	 * @param int $pos Last known position.
+	 * @param int $post_id The current Post ID
+	 * @return string Last Breadcrumb item
+	 */
+	public function ld_json_breadcrumb_last( $item_type = null, $pos = null, $post_id = null ) {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->ld_json_breadcrumb_last()', '2.9.3' );
+
+		/**
+		 * 2 (becomes 3) holds mostly true for single term items.
+		 * This shouldn't run anyway. Pos should always be provided.
+		 */
+		if ( is_null( $pos ) )
+			$pos = 2;
+
+		//* Add current page.
+		$pos = $pos + 1;
+
+		if ( is_null( $item_type ) ) {
+			static $type = null;
+
+			if ( ! isset( $type ) )
+				$type = json_encode( 'ListItem' );
+
+			$item_type = $type;
+		}
+
+		if ( empty( $post_id ) )
+			$post_id = $tsf->get_the_real_ID();
+
+		static $id = null;
+		static $name = null;
+
+		if ( ! isset( $id ) )
+			$id = json_encode( $tsf->the_url_from_cache() );
+
+		$title_args = array(
+			'term_id' => $post_id,
+			'placeholder' => true,
+			'meta' => true,
+			'notagline' => true,
+			'description_title' => true,
+			'get_custom_field' => false,
+		);
+
+		if ( ! isset( $name ) ) {
+			if ( $tsf->ld_json_breadcrumbs_use_seo_title() ) {
+				$name = $tsf->get_custom_field( '_genesis_title', $post_id ) ?: $tsf->title( '', '', '', $title_args );
+			} else {
+				$name = $tsf->title( '', '', '', $title_args );
+			}
+			$name = json_encode( $name );
+		}
+
+		$image = $this->schema_image( $post_id, true );
+
+		$breadcrumb = array(
+			'type'  => $item_type,
+			'pos'   => (string) $pos,
+			'id'    => $id,
+			'name'  => $name,
+			'image' => $image,
+		);
+
+		return $this->make_breadcrumb( $breadcrumb, false );
+	}
+
+	/**
+	 * Builds a breadcrumb.
+	 *
+	 * @since 2.6.0
+	 * @since 2.9.0 : No longer outputs image if it's not present.
+	 * @since 2.9.3 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array $item : {
+	 *  'type',
+	 *  'pos',
+	 *  'id',
+	 *  'name'
+	 * }
+	 * @param bool $comma Whether to add a trailing comma.
+	 * @return string The LD+Json breadcrumb.
+	 */
+	public function make_breadcrumb( $item, $comma = true ) {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->make_breadcrumb()', '2.9.3' );
+
+		$comma = $comma ? ',' : '';
+
+		if ( $item['image'] && '""' !== $item['image'] ) {
+			$retval = sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s,"image":%s}}%s', $item['type'], $item['pos'], $item['id'], $item['name'], $item['image'], $comma );
+		} else {
+			$retval = sprintf( '{"@type":%s,"position":%s,"item":{"@id":%s,"name":%s}}%s', $item['type'], $item['pos'], $item['id'], $item['name'], $comma );
+		}
+
+		return $retval;
+	}
 }
