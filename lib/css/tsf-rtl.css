@@ -121,6 +121,7 @@ th.column-tsf-seo-bar-wrap ~ th {
 	overflow: hidden;
 	white-space: pre;
 	text-overflow: ellipsis;
+	will-change: left, right;
 }
 
 /* START Character Counters */
@@ -132,6 +133,7 @@ th.column-tsf-seo-bar-wrap ~ th {
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+	will-change: contents;
 }
 
 span.tsf-count-bad {

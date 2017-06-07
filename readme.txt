@@ -240,10 +240,11 @@ TODO
 ***Something something [dark side](https://theseoframework.com/?p= TODO #detailed).***
 
 * **For everyone:**
-	* **Added:**
 	* **Changed:**
+		* Structured Data has output been revisited, so:
+			* TODO
 		* Sitemap explanation URLs now open in a new window.
-		* Automated Image Cropper now starts cropping at 4K+, rather than 1500px/1500px.
+		* Automated Image Cropper now starts cropping when images exceed 4K (4096px/4096px), rather than 1500px/1500px.
 		* Social Image uploader now accepts up to 4K images, before forcing a crop.
 			* This is according to [Twitter Card guidelines](https://dev.twitter.com/cards/types/summary-large-image).
 		* Removed Open Graph and Canonical URL output on 404 pages.
@@ -258,6 +259,10 @@ TODO
 		* The sitemap stylesheet no longer outputs on domain mismatch, so you won't see a blank page anymore.
 			* This is a mitigated browser security feature.
 			* This does not affect security nor validity of the sitemap.
+		* Improved SEO input rendering performance, by:
+			1. Adding rendering hinting to the character counters for Gecko, Webkit and Blink based browsers.
+			1. Reducing description character counter calculation CPU overhead.
+			1. Removing expectation of autocompletion on title input fields.
 	* **Fixed:**
 		* When the home page is a blog, these fixes have been implemented:
 			1. The 404 title now works.
@@ -277,16 +282,9 @@ TODO
 		* Dismissible notices now get correctly removed from the DOM when dismissed.
 		* `twitter:creator` is no longer omitted and overshadowed by the `twitter:site:id` meta tag when both Twitter Site and Creator options are filled in.
 
-* **For translators:**
-	* **Added:**
-	* **Changed:**
-	* **Improved:**
-	* **Fixed:**
-
 * **For developers:**
 	* **Added:**
 		* Links outputted through Markdown can now open in a new window when marked external.
-	* **Changed:**
 	* **Improved:**
 		* The sitemap now outputs less data, because CRLF ("\r\n") has been exchanged for LF ("\n") only.
 			* This only lowers XML `view-source:` readability support for very old browsers (IE8 or lower).
@@ -296,7 +294,6 @@ TODO
 			* It now uses `WP_Query`, rather than `wpdb`.
 	* **Fixed:**
 		* Method `is_front_page_by_id()` no longer returns true on archives when home page is a blog. This fixes numerous issues listed in the "For everyone:" detailed log.
-
 	* **Other:**
 		* Cleaned up code, i.e. improved documentation and writing style.
 

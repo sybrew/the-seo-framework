@@ -163,7 +163,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php $this->field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title_tagline' ); ?>" placeholder="<?php echo esc_attr( $this->escape_title( $this->get_blogdescription() ) ); ?>" value="<?php echo esc_attr( $this->get_field_value( 'homepage_title_tagline' ) ); ?>" />
+			<input type="text" name="<?php $this->field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title_tagline' ); ?>" placeholder="<?php echo esc_attr( $this->escape_title( $this->get_blogdescription() ) ); ?>" value="<?php echo esc_attr( $this->get_field_value( 'homepage_title_tagline' ) ); ?>" autocomplete=off />
 		</p>
 
 		<hr>
@@ -179,7 +179,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p id="tsf-title-wrap">
-			<input type="text" name="<?php $this->field_name( 'homepage_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title' ); ?>" placeholder="<?php echo esc_attr( $home_title_placeholder ); ?>" value="<?php echo esc_attr( $this->get_field_value( 'homepage_title' ) ); ?>" />
+			<input type="text" name="<?php $this->field_name( 'homepage_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title' ); ?>" placeholder="<?php echo esc_attr( $home_title_placeholder ); ?>" value="<?php echo esc_attr( $this->get_field_value( 'homepage_title' ) ); ?>" autocomplete=off />
 			<span id="tsf-title-offset" class="hide-if-no-js"></span><span id="tsf-title-placeholder" class="hide-if-no-js"></span>
 		</p>
 		<?php
@@ -231,7 +231,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<textarea name="<?php $this->field_name( 'homepage_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_description' ); ?>" rows="3" cols="70"  placeholder="<?php echo esc_attr( $description_placeholder ); ?>"><?php echo esc_attr( $this->get_field_value( 'homepage_description' ) ); ?></textarea>
+			<textarea name="<?php $this->field_name( 'homepage_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $description_placeholder ); ?>"><?php echo esc_attr( $this->get_field_value( 'homepage_description' ) ); ?></textarea>
 		</p>
 		<?php
 		$this->description( __( 'The meta description can be used to determine the text used under the title on Search Engine results pages.', 'autodescription' ) );
