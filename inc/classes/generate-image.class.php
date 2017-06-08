@@ -69,7 +69,7 @@ class Generate_Image extends Generate_Url {
 	 */
 	public function get_schema_image( $id = 0, $singular = false ) {
 
-		//= TODO remove htis.
+		//= TODO remove this when term images are introduced.
 		if ( ! $singular )
 			return '';
 

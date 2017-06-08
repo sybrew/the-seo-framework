@@ -524,6 +524,8 @@ class Admin_Init extends Init {
 	 *
 	 * @since 2.2.2
 	 * @since 2.9.2 : Added user-friendly exception handling.
+	 * @since 2.9.3 : 1. Query arguments work again (regression 2.9.2).
+	 *                2. Now only accepts http and https protocols.
 	 *
 	 * @param string $page Menu slug.
 	 * @param array  $query_args Optional. Associative array of query string arguments
@@ -543,7 +545,7 @@ class Admin_Init extends Init {
 		}
 
 		$target = \add_query_arg( $query_args, $url );
-		$target = \esc_url_raw( $url );
+		$target = \esc_url_raw( $target, array( 'http', 'https' ) );
 
 		//* Predict white screen:
 		$headers_sent = headers_sent();

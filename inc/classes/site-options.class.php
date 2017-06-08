@@ -399,7 +399,12 @@ class Site_Options extends Sanitize {
 	 */
 	protected function pre_output_site_updated_plugin_notice() {
 
-		if ( $this->is_seo_settings_page( false ) ) {
+		/**
+		 * Security check:
+		 * Only checks for extra parameters. Then redirects further to only output
+		 * notice. User capability is checked beforehand.
+		 */
+		if ( \current_user_can( $this->settings_capability() ) && $this->is_seo_settings_page( false ) ) {
 			//* Redirect to current page if on options page to correct option values. Once.
 			if ( ! isset( $_REQUEST['tsf-settings-updated'] ) || 'true' !== $_REQUEST['tsf-settings-updated'] )
 				$this->admin_redirect( $this->seo_settings_page_slug, array( 'tsf-settings-updated' => 'true' ) );
@@ -624,8 +629,8 @@ class Site_Options extends Sanitize {
 	 */
 	public function register_settings() {
 
-		//* If this page doesn't store settings, no need to register them
-		if ( empty( $this->settings_field ) )
+		//* If the settings field doesn't exist, we can't register it.
+		if ( ! $this->settings_field )
 			return;
 
 		\register_setting( $this->settings_field, $this->settings_field );
@@ -644,7 +649,13 @@ class Site_Options extends Sanitize {
 	 */
 	protected function check_options_reset() {
 
-		if ( false === $this->is_seo_settings_page( false ) )
+		/**
+		 * Security check:
+		 * Further checks are based on previously set options.
+		 * These can only be set when one has access to the Settings Page or database.
+		 * Also checks for capabilities.
+		 */
+		if ( ! \current_user_can( $this->settings_capability() ) || ! $this->is_seo_settings_page( false ) )
 			return;
 
 		if ( $this->get_option( 'tsf-settings-reset', false ) ) {

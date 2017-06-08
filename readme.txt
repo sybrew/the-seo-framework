@@ -269,12 +269,11 @@ TODO
 			* This is according to [Twitter Card guidelines](https://dev.twitter.com/cards/types/summary-large-image).
 		* Removed Open Graph and Canonical URL output on 404 pages.
 			* Title, Robots and Webmaster Verification output are to stay.
+		* Robots.txt sitemap location output now isn't forced anymore when TSF's sitemap is used.
+			* This means the option now always works as intended, and doesn't predict anymore (expectations).
 	* **Improved:**
 		* The schema metabox now renders faster.
 		* The Facebook Social Settings placeholder URLs are now HTTPS, rather than HTTP.
-		* TODO The sitemaps no longer get flushed and Search Engines no longer get pinged when updating a post set to noindex...
-			* Note to self: This has to check before/after values -- i.e. unchanged and action type "publish" vs "update"?
-			* Too much work, too little gain. -- The fixes below are more important.
 		* LinkedIn profile title now no longer indicates that it must be an ID.
 		* The sitemap stylesheet no longer outputs on domain mismatch, so you won't see a blank page anymore.
 			* This is a mitigated browser security feature.
@@ -296,13 +295,13 @@ TODO
 		* Windows Touch now works on the SEO Bar, as was always intended (MT race condition).
 		* Sitemap PNG logos aren't blurry anymore on Webkit/Blink based browsers.
 		* When touching an active SEO Bar or the tooltip thereof, the SEO Bar Tooltip no longer disappears (regression).
-		* TODO Fix reset settings notification.
-		* TODO When TSFEM asks for activation, other notifications invoked by REQUEST (like reset settings) aren't supressed anymore.
-			* Maybe, we should make this more secure, i.e. through the new update cache option??
+		* A few notifications now work again:
+			1. Reset settings notification.
+			2. New settings notification.
+			3. Settings error notification.
 		* The Canonical URL is now correct on Search Pages.
 		* Dismissible notices now get correctly removed from the DOM when dismissed.
 		* `twitter:creator` is no longer omitted and overshadowed by the `twitter:site:id` meta tag when both Twitter Site and Creator options are filled in.
-		* TODO When the Home Page Title floating placeholder overflows on load, it will no longer stack, but will look like intended.
 
 * **For developers:**
 	* **Added:**
@@ -321,8 +320,13 @@ TODO
 		* Method `get_latest_post_id()` has been rewritten; it's now family friendly.
 			* It no longer uses object caching.
 			* It now uses `WP_Query`, rather than `wpdb`.
+		* Method `admin_redirect()` now only accepts `http` and `https` protocols.
+			* Rather than all of `wp_allowed_protocols()`. This improves performance, not notably.
 	* **Fixed:**
 		* Method `is_front_page_by_id()` no longer returns true on archives when home page is a blog. This fixes numerous issues listed in the "For everyone:" detailed log.
+		* Robots.txt output can now better detect for public when the `blog_public` option has somehow been cast to integer.
+		* Method `admin_redirect()` now processes query arguments again (regression in 2.9.2).
+			* The Extension Manager's URL debugging was depending on this. Only affected when using `WP_DEBUG`.
 	* **Deprecated:**
 		* A multitude of Schema generation methods, use `build_json_data()` and `receive_json_data()` instead.
 			1. Get methods:
@@ -347,9 +351,10 @@ TODO
 	* **Filter notes:**
 		* **Added:**
 			* `(array) the_seo_framework_receive_json_data`, for altering passed JSON `$data` (arg 1) by `$key` (arg 2).
-		* **Deprecated:**
-			TODO
-			* the_seo_framework_ld_json_breadcrumb_image ?? reintroduce?
+			* `(string) the_seo_framework_updates_cache`, for altering the updates cache option name. For future use.
+	* **Constant notes:**
+		* **Added:**
+			* `(string) THE_SEO_FRAMEWORK_UPDATES_CACHE`, maintains updates cache options. For future use.
 	* **Other:**
 		* Cleaned up code, i.e. improved documentation and writing style.
 

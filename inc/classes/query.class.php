@@ -1004,6 +1004,7 @@ class Query extends Compat {
 	 * @since 2.6.0
 	 * @since 2.7.0 Added secure parameter.
 	 * @since 2.9.0 If $secure is false, the cache is no longer used.
+	 * @see $this->is_menu_page() for security notification.
 	 *
 	 * @param bool $secure Whether to ignore the use of the second (insecure) parameter.
 	 * @return bool
@@ -1029,13 +1030,23 @@ class Query extends Compat {
 	/**
 	 * Checks the screen base file through global $page_hook or $_GET.
 	 *
+	 * NOTE: Usage of $pageslug might be insecure. Check all variables and don't
+	 * perform lasting actions like saving to the database before `admin_init`!
+	 *
+	 * The second "insecure" parameter is actually secured by WordPress (read on...).
+	 * However, we can't verify its integrity, WordPress has to. It's also checked
+	 * against too late.
+	 * It's secure enough for loading files; nevertheless, it shouldn't be used
+	 * when passing sensitive data.
+	 *
 	 * @since 2.2.2
 	 * @since 2.7.0 Added pageslug parameter.
 	 * @global string $page_hook the current page hook.
-	 * @note Usage of $pageslug might be insecure. Check all variables!
 	 *
 	 * @param string $pagehook The menu pagehook to compare to.
+	 *               To be used after `admin_init`.
 	 * @param string $pageslug The menu page slug to compare to.
+	 *               To be used before `admin_init`.
 	 * @return bool true if screen match.
 	 */
 	public function is_menu_page( $pagehook = '', $pageslug = '' ) {

@@ -339,6 +339,10 @@ class Core {
 	 * Also loads scripts and styles if out of The SEO Framework's context.
 	 *
 	 * @since 2.9.3
+	 * @see $this->do_dismissible_sticky_notice()
+	 * @uses THE_SEO_FRAMEWORK_UPDATES_CACHE
+	 * @todo make this do something.
+	 * NOTE: This method is a placeholder.
 	 *
 	 * @param string $message The notice message. Expected to be escaped if $escape is false.
 	 * @param string $key     The notice key. Must be unique and tied to the stored updates cache option.
@@ -359,6 +363,7 @@ class Core {
 	 * Echos generated dismissible sticky notice.
 	 *
 	 * @since 2.9.3
+	 * @uses $this->generate_dismissible_sticky_notice()
 	 *
 	 * @param string $message The notice message. Expected to be escaped if $escape is false.
 	 * @param string $key     The notice key. Must be unique and tied to the stored updates cache option.

@@ -403,7 +403,7 @@ class Admin_Pages extends Inpost {
 	 * Display notices on the save or reset of settings.
 	 *
 	 * @since 2.2.2
-	 * @todo convert the "request" into secure "error_notice" option. See TSF Extension Manager.
+	 * @todo convert the "get" into secure "error_notice" option. See TSF Extension Manager.
 	 *
 	 * @return void
 	 */
@@ -412,18 +412,18 @@ class Admin_Pages extends Inpost {
 		if ( false === $this->is_seo_settings_page( true ) )
 			return;
 
-		$request = isset( $_REQUEST ) ? $_REQUEST : null;
+		$get = empty( $_GET ) ? null : $_GET;
 
-		if ( null === $request )
+		if ( null === $get )
 			return;
 
-		if ( isset( $request['settings-updated'] ) && 'true' === $request['settings-updated'] ) :
+		if ( isset( $get['settings-updated'] ) && 'true' === $get['settings-updated'] ) :
 			$this->do_dismissible_notice( $this->page_defaults['saved_notice_text'], 'updated' );
-		elseif ( isset( $request['tsf-settings-reset'] ) && 'true' === $request['tsf-settings-reset'] ) :
+		elseif ( isset( $get['tsf-settings-reset'] ) && 'true' === $get['tsf-settings-reset'] ) :
 			$this->do_dismissible_notice( $this->page_defaults['reset_notice_text'], 'warning' );
-		elseif ( isset( $request['error'] ) && 'true' === $request['error'] ) :
+		elseif ( isset( $get['error'] ) && 'true' === $get['error'] ) :
 			$this->do_dismissible_notice( $this->page_defaults['error_notice_text'], 'error' );
-		elseif ( isset( $request['tsf-settings-updated'] ) && 'true' === $request['tsf-settings-updated'] ) :
+		elseif ( isset( $get['tsf-settings-updated'] ) && 'true' === $get['tsf-settings-updated'] ) :
 			$this->do_dismissible_notice( $this->page_defaults['plugin_update_text'], 'updated' );
 		endif;
 	}
