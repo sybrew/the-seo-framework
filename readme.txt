@@ -294,6 +294,7 @@ TODO
 				* These no longer use the auto-generated description meant for the home page.
 				* These now listen to the archive option for `rel=next/prev` links, instead of the home page option.
 		* Windows Touch now works on the SEO Bar, as was always intended (MT race condition).
+		* Sitemap PNG logos aren't blurry anymore on Webkit/Blink based browsers.
 		* When touching an active SEO Bar or the tooltip thereof, the SEO Bar Tooltip no longer disappears (regression).
 		* TODO Fix reset settings notification.
 		* TODO When TSFEM asks for activation, other notifications invoked by REQUEST (like reset settings) aren't supressed anymore.

@@ -86,6 +86,7 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?>
 					h1 img {
 						vertical-align: bottom;
 						margin-right: 14px;
+						image-rendering: -webkit-optimize-contrast;
 					}
 					#description {
 						background-color: ' . $sitemap_color_main . ';
@@ -254,4 +255,5 @@ $xml .= '
 	</xsl:template>
 </xsl:stylesheet>';
 
+//* Already escaped.
 echo $xml;
