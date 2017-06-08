@@ -533,6 +533,7 @@ class Init extends Query {
 	 * non-administrative endpoints.
 	 *
 	 * @since 2.2.9
+	 * @since 2.9.3 Casts $public to string for check.
 	 * @uses robots_txt filter located at WP core
 	 *
 	 * @param string $robots_txt The current robots_txt output.
