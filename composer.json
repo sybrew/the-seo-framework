@@ -1,0 +1,37 @@
+{
+	"name": "sybrew/the-seo-framework",
+	"description": "An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.",
+	"type": "wordpress-plugin",
+	"keywords": [
+		"seo",
+		"wordpress",
+		"plugin"
+	],
+	"homepage": "https://theseoframework.com/",
+	"license": "GPL-3.0",
+	"authors": [
+		{
+			"name": "Sybre Waaijer",
+			"email": "sybre@theseoframework.com",
+			"homepage": "https://cyberwire.nl/",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/sybrew/the-seo-framework/issues",
+		"forum": "https://wordpress.org/support/plugin/autodescription",
+		"docs": "https://theseoframework.com/docs/",
+		"wiki": "https://github.com/sybrew/the-seo-framework/wiki",
+		"source": "https://github.com/sybrew/the-seo-framework"
+	},
+	"require": {
+		"composer/installers": "~1.0"
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"autoload": {
+		"psr-4": {
+			"The_SEO_Framework\\": "inc/classes/"
+		}
+	}
+}
