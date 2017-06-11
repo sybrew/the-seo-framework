@@ -286,7 +286,7 @@ TODO
 		* When the home page is a blog, these fixes have been implemented:
 			1. The 404 title now works.
 			1. Shortlink output now works.
-			1. Various fixes across non-taxonomial archives, i.e. ones that you can't edit, have noindex set by default, and have no ID assigned:
+			1. Various fixes across non-taxonomical archives, i.e. ones that you can't edit, have noindex set by default, and have no ID assigned:
 				* These no longer share the same cache key as the home page.
 					* This fixes numerous object caching issues.
 				* These no longer use the home page Open Graph image.
@@ -352,6 +352,7 @@ TODO
 		* **Added:**
 			* `(array) the_seo_framework_receive_json_data`, for altering passed JSON `$data` (arg 1) by `$key` (arg 2).
 			* `(string) the_seo_framework_updates_cache`, for altering the updates cache option name. For future use.
+			* `(bool) the_seo_framework_overwrite_titles`, for disabling The SEO Framework's Title overwriting.
 	* **Constant notes:**
 		* **Added:**
 			* `(string) THE_SEO_FRAMEWORK_UPDATES_CACHE`, maintains updates cache options. For future use.
