@@ -1,7 +1,11 @@
 {
 	"name": "sybrew/the-seo-framework",
 	"description": "An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.",
-	"keywords": ["seo", "wordpress", "plugin"],
+	"keywords": [
+		"seo", 
+		"wordpress", 
+		"plugin"
+	],
 	"type": "wordpress-plugin",
 	"license": "GPL-3.0",
 	"homepage": "https://theseoframework.com/",
