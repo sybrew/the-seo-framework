@@ -683,7 +683,7 @@ class Init extends Query {
 	public function adjust_archive_query( $query ) {
 
 		// Don't exclude pages in wp-admin.
-		if ( $query->is_archive || $query->is_home && ! $this->is_admin() ) {
+		if ( ( $query->is_archive || $query->is_home ) && ! $this->is_admin() ) {
 
 			$meta_query = $query->get( 'meta_query' );
 
