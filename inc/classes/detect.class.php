@@ -915,16 +915,23 @@ class Detect extends Render {
 	}
 
 	/**
-	 * Checks (current) Post Type for if this plugin may use it.
+	 * Checks (current) Post Type for if this plugin may use it for customizable SEO.
 	 *
 	 * @since 2.6.0
-	 * @staticvar string $cache
+	 * @since 2.9.3 : Improved caching structure. i.e. it's faster now when no $post_type is supplied.
+	 * @staticvar array $cache
+	 * @global object $current_screen
 	 *
 	 * @param bool $public Whether to only get Public Post types.
 	 * @param string $post_type Optional. The post type to check.
 	 * @return bool|string The Allowed Post Type.
 	 */
 	public function get_supported_post_type( $public = true, $post_type = '' ) {
+
+		static $cache = array();
+
+		if ( isset( $cache[ $public ][ $post_type ] ) )
+			return $cache[ $public ][ $post_type ];
 
 		if ( empty( $post_type ) ) {
 			global $current_screen;
@@ -937,11 +944,6 @@ class Detect extends Render {
 		}
 
 		$post_type_evaluated = $post_type;
-
-		static $cache = array();
-
-		if ( isset( $cache[ $public ][ $post_type ] ) )
-			return $cache[ $public ][ $post_type ];
 
 		$object = \get_post_type_object( $post_type );
 
@@ -969,6 +971,39 @@ class Detect extends Render {
 			return $cache[ $public ][ $post_type ] = false;
 
 		return $cache[ $public ][ $post_type ] = $post_type;
+	}
+
+	/**
+	 * Checks (current) Post Type for taxonomial archives.
+	 *
+	 * @since 2.9.3
+	 * @staticvar array $cache
+	 * @global object $current_screen
+	 *
+	 * @param string $post_type Optional. The post type to check.
+	 * @return bool True when the post type has taxonomies.
+	 */
+	public function post_type_supports_taxonomies( $post_type = '' ) {
+
+		static $cache = array();
+
+		if ( isset( $cache[ $post_type ] ) )
+			return $cache[ $post_type ];
+
+		if ( empty( $post_type ) ) {
+			global $current_screen;
+
+			if ( isset( $current_screen->post_type ) ) {
+				$post_type = $current_screen->post_type;
+			} else {
+				return false;
+			}
+		}
+
+		if ( \get_object_taxonomies( $post_type, 'names' ) )
+			return $cache[ $post_type ] = true;
+
+		return $cache[ $post_type ] = false;
 	}
 
 	/**

@@ -83,6 +83,7 @@ class Post_Data extends Detect {
 	 * Some values get sanitized, the rest are pulled from identically named subkeys in the $_POST['autodescription'] array.
 	 *
 	 * @since 2.0.0
+	 * @since 2.9.3 : Added 'exclude_from_archive'.
 	 * @uses $this->save_custom_fields() : Perform security checks and saves post meta / custom field data to a post or page.
 	 *
 	 * @param integer $post_id  Post ID.
@@ -111,6 +112,7 @@ class Post_Data extends Detect {
 			'_genesis_nofollow'      => 0,
 			'_genesis_noarchive'     => 0,
 			'exclude_local_search'   => 0,
+			'exclude_from_archive'   => 0,
 		) );
 
 		foreach ( (array) $data as $key => $value ) :
@@ -147,6 +149,7 @@ class Post_Data extends Detect {
 				case '_genesis_nofollow' :
 				case '_genesis_noarchive' :
 				case 'exclude_local_search' :
+				case 'exclude_from_archive' :
 					$data[ $key ] = $this->s_one_zero( $value );
 					continue 2;
 

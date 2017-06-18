@@ -207,7 +207,7 @@ switch ( $instance ) :
 			<div class="tsf-flex-setting-label tsf-flex">
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 					<div class="tsf-flex-setting-label-item tsf-flex">
-						<div><strong><?php esc_html_e( 'Local Search Settings', 'autodescription' ); ?></strong></div>
+						<div><strong><?php esc_html_e( 'Archive Settings', 'autodescription' ); ?></strong></div>
 					</div>
 				</div>
 			</div>
@@ -221,6 +221,17 @@ switch ( $instance ) :
 						?>
 					</label>
 				</div>
+				<?php if ( $this->post_type_supports_taxonomies() ) : ?>
+				<div class="tsf-checkbox-wrapper">
+					<label for="autodescription_exclude_from_archive"><input type="checkbox" name="autodescription[exclude_from_archive]" id="autodescription_exclude_from_archive" value="1" <?php checked( $this->get_custom_field( 'exclude_from_archive' ) ); ?> />
+						<?php
+						printf( esc_html__( 'Exclude this %s from archive listing', 'autodescription' ), esc_html( $type ) );
+						echo ' ';
+						$this->make_info( sprintf( __( 'This excludes this %s from on-site archive pages', 'autodescription' ), $type ) );
+						?>
+					</label>
+				</div>
+				<?php endif; ?>
 			</div>
 		</div>
 

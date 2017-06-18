@@ -35,12 +35,13 @@ function _disable_genesis_seo( $plugins ) {
 	return $plugins;
 }
 
-\add_action( 'init', __NAMESPACE__ . '\\_genesis_add_head_attributes' );
+// \add_action( 'init', 'The_SEO_Framework\\_genesis_add_head_attributes' );
 /**
  * Adds Genesis SEO compatibility.
  *
  * @since 2.6.0
  * @since 2.8.0 Moved to compat file and renamed.
+ * @since 2.9.3 No longer used. It is conflicting with the homepage Schema output.
  * @access private
  */
 function _genesis_add_head_attributes() {

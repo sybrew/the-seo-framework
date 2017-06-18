@@ -76,10 +76,14 @@ class Doing_It_Right extends Generate_Ldjson {
 		$post_id = isset( $post->ID ) ? $post->ID : false;
 
 		if ( $post_id ) {
-			$searchexclude = (bool) $this->get_custom_field( 'exclude_local_search', $post_id );
+			$search_exclude = (bool) $this->get_custom_field( 'exclude_local_search', $post_id );
+			$archive_exclude = (bool) $this->get_custom_field( 'exclude_from_archive', $post_id );
 
-			if ( $searchexclude )
+			if ( $search_exclude )
 				$states[] = \esc_html__( 'No Search', 'autodescription' );
+
+			if ( $archive_exclude )
+				$states[] = \esc_html__( 'No Archive', 'autodescription' );
 		}
 
 		return $states;

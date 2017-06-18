@@ -247,6 +247,9 @@ class Init extends Query {
 		 */
 		\add_action( 'pre_get_posts', array( $this, 'adjust_search_filter' ), 9999, 1 );
 
+		//* Adjusts archives output based on options.
+		\add_action( 'pre_get_posts', array( $this, 'adjust_archive_query' ), 9999, 1 );
+
 		/**
 		 * Outputs sitemap or stylesheet on request.
 		 *
@@ -636,17 +639,16 @@ class Init extends Query {
 	public function adjust_search_filter( $query ) {
 
 		// Don't exclude pages in wp-admin.
-		if ( $query->is_search && false === $this->is_admin() ) {
+		if ( $query->is_search && ! $this->is_admin() ) {
 
-			$q = $query->query;
 			//* Only interact with an actual Search Query.
-			if ( false === isset( $q['s'] ) )
+			if ( ! isset( $query->query['s'] ) )
 				return;
 
 			$meta_query = $query->get( 'meta_query' );
 
 			//* Convert to array. Unset it if it's empty.
-			if ( false === is_array( $meta_query ) )
+			if ( ! is_array( $meta_query ) )
 				$meta_query = $meta_query ? (array) $meta_query : array();
 
 			/**
@@ -659,6 +661,46 @@ class Init extends Query {
 			$meta_query[] = array(
 				array(
 					'key'      => 'exclude_local_search',
+					'type'     => 'NUMERIC',
+					'compare'  => 'NOT EXISTS',
+				),
+			);
+
+			$query->set( 'meta_query', $meta_query );
+		}
+	}
+
+	/**
+	 * Excludes posts from Archive results with certain metadata.
+	 * For now, it only looks at 'exclude_from_archive'. If it exists, the post or
+	 * page will be excluded from the Archive Results.
+	 *
+	 * @since 2.9.3
+	 *
+	 * @param array $query The possible archive query.
+	 * @return void Early if no archive query is found.
+	 */
+	public function adjust_archive_query( $query ) {
+
+		// Don't exclude pages in wp-admin.
+		if ( $query->is_archive || $query->is_home && ! $this->is_admin() ) {
+
+			$meta_query = $query->get( 'meta_query' );
+
+			//* Convert to array. Unset it if it's empty.
+			if ( ! is_array( $meta_query ) )
+				$meta_query = $meta_query ? (array) $meta_query : array();
+
+			/**
+			 * Exclude posts with exclude_from_archive option on.
+			 *
+			 * Query is faster when the global relation is not set. Defaults to AND.
+			 * Query is faster when no value is set. Defaults to 'IS NULL' because
+			 *       of 'compare'. Having no effect whatsoever as it's an exclusion.
+			 */
+			$meta_query[] = array(
+				array(
+					'key'      => 'exclude_from_archive',
 					'type'     => 'NUMERIC',
 					'compare'  => 'NOT EXISTS',
 				),

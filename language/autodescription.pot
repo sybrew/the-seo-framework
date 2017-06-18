@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the The SEO Framework package.
 msgid ""
 msgstr ""
-"Project-Id-Version: The SEO Framework 2.9.2-dev-2017.05.05.2\n"
+"Project-Id-Version: The SEO Framework 2.9.3-RC2-2017.06.18.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/autodescription\n"
-"POT-Creation-Date: 2017-05-07 05:43:12+00:00\n"
+"POT-Creation-Date: 2017-06-18 07:44:51+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -38,7 +38,7 @@ msgstr ""
 
 #. translators: %s = Redirect URL markdown
 
-#: inc/classes/admin-init.class.php:593
+#: inc/classes/admin-init.class.php:595
 msgid "There has been an error redirecting. Refresh the page or follow [this link](%s)."
 msgstr ""
 
@@ -67,7 +67,7 @@ msgid "New SEO Settings have been updated."
 msgstr ""
 
 #: inc/classes/admin-pages.class.php:109 inc/classes/core.class.php:253
-#: inc/classes/site-options.class.php:429
+#: inc/classes/site-options.class.php:434
 msgid "SEO Settings"
 msgstr ""
 
@@ -165,7 +165,7 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-#: inc/classes/core.class.php:413
+#: inc/classes/core.class.php:459
 msgctxt "e.g. en for English, nl for Dutch, fi for Finish, de for German"
 msgid "en"
 msgstr ""
@@ -209,228 +209,232 @@ msgstr ""
 msgid "%1$s is not accessible. %2$s"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:82
+#: inc/classes/doing-it-right.class.php:83
 msgid "No Search"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:361
+#: inc/classes/doing-it-right.class.php:86
+msgid "No Archive"
+msgstr ""
+
+#: inc/classes/doing-it-right.class.php:365
 msgid "Refresh to see the SEO Bar status."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:445
+#: inc/classes/doing-it-right.class.php:449
 msgid "Post"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:449 inc/classes/inpost.class.php:379
+#: inc/classes/doing-it-right.class.php:453 inc/classes/inpost.class.php:379
 #: inc/classes/term-data.class.php:332
 #: inc/views/metaboxes/schema-metabox.php:204
 msgid "Page"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:493
+#: inc/classes/doing-it-right.class.php:497
 msgid "Failed to fetch post ID."
 msgstr ""
 
 #. translators: %s = But or And
 
-#: inc/classes/doing-it-right.class.php:881
+#: inc/classes/doing-it-right.class.php:885
 msgid "%s the Title contains the Blogname multiple times."
 msgstr ""
 
 #. translators: 1: Word, 2: Occurrences
 
-#: inc/classes/doing-it-right.class.php:1052
+#: inc/classes/doing-it-right.class.php:1056
 msgid "%1$s is used %2$d times."
 msgstr ""
 
 #. Translators: %s = Post / Page / Category, etc.
 
-#: inc/classes/doing-it-right.class.php:1097
+#: inc/classes/doing-it-right.class.php:1101
 msgid "%s is being indexed."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1106
+#: inc/classes/doing-it-right.class.php:1110
 msgid "But you've discouraged indexing for the whole site."
 msgstr ""
 
 #. translators: 1: But or And, 2: Current taxonomy term plural label
 
-#: inc/classes/doing-it-right.class.php:1130
+#: inc/classes/doing-it-right.class.php:1134
 msgid "%1$s indexing for %2$s have been discouraged."
 msgstr ""
 
 #. translators: 1 = But or And, 1 = Post/Page
 
-#: inc/classes/doing-it-right.class.php:1143
+#: inc/classes/doing-it-right.class.php:1147
 msgid "%1$s the %2$s is protected from public visibility. This means indexing is discouraged."
 msgstr ""
 
 #. translators: %s = But or And
 
-#: inc/classes/doing-it-right.class.php:1152
+#: inc/classes/doing-it-right.class.php:1156
 msgid "%s the blog isn't set to public. This means WordPress discourages indexing."
 msgstr ""
 
 #. translators: %s = But or And
 
-#: inc/classes/doing-it-right.class.php:1166
+#: inc/classes/doing-it-right.class.php:1170
 msgid "%s there are no posts in this term; therefore, indexing has been discouraged."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1250
+#: inc/classes/doing-it-right.class.php:1254
 msgid "%s links aren't being followed."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1256
+#: inc/classes/doing-it-right.class.php:1260
 msgid "%s links are being followed."
 msgstr ""
 
 #. translators: %s = But or And
 
-#: inc/classes/doing-it-right.class.php:1268
+#: inc/classes/doing-it-right.class.php:1272
 msgid "%s you've discouraged the following of links for the whole site."
 msgstr ""
 
 #. translators: 1: But or And, 2: Current taxonomy term plural label
 
-#: inc/classes/doing-it-right.class.php:1294
+#: inc/classes/doing-it-right.class.php:1298
 msgid "%1$s following for %2$s have been discouraged."
 msgstr ""
 
 #. translators: %s = But or And
 
-#: inc/classes/doing-it-right.class.php:1306
+#: inc/classes/doing-it-right.class.php:1310
 msgid "%s the blog isn't set to public. This means WordPress allows the links to be followed regardless."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1358
+#: inc/classes/doing-it-right.class.php:1362
 msgid "Search Engines aren't allowed to archive this %s."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1363
+#: inc/classes/doing-it-right.class.php:1367
 msgid "Search Engines are allowed to archive this %s."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1375
+#: inc/classes/doing-it-right.class.php:1379
 msgid "But you've discouraged archiving for the whole site."
 msgstr ""
 
 #. translators: 1: But or And, 2: Current taxonomy term plural label
 
-#: inc/classes/doing-it-right.class.php:1401
+#: inc/classes/doing-it-right.class.php:1405
 msgid "%1$s archiving for %2$s have been discouraged."
 msgstr ""
 
 #. translators: %s = But or And
 
-#: inc/classes/doing-it-right.class.php:1414
+#: inc/classes/doing-it-right.class.php:1418
 msgid "%s the blog isn't set to public. This means WordPress allows the blog to be archived regardless."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1460
+#: inc/classes/doing-it-right.class.php:1464
 msgid "%s isn't being redirected."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1502
-#: inc/classes/doing-it-right.class.php:1531
+#: inc/classes/doing-it-right.class.php:1506
+#: inc/classes/doing-it-right.class.php:1535
 msgid "%s is being redirected. This means no SEO values have to be set."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1505
-#: inc/classes/doing-it-right.class.php:1547
+#: inc/classes/doing-it-right.class.php:1509
+#: inc/classes/doing-it-right.class.php:1551
 msgid "%s is not being indexed. This means no SEO values have to be set."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1661
+#: inc/classes/doing-it-right.class.php:1665
 msgid "Title:"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1662
+#: inc/classes/doing-it-right.class.php:1666
 msgid "Description:"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1663
+#: inc/classes/doing-it-right.class.php:1667
 msgid "Index:"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1664
+#: inc/classes/doing-it-right.class.php:1668
 msgid "Follow:"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1665
+#: inc/classes/doing-it-right.class.php:1669
 msgid "Archive:"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1666
+#: inc/classes/doing-it-right.class.php:1670
 msgid "Redirect:"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1668
+#: inc/classes/doing-it-right.class.php:1672
 msgid "Generated: Automatically generated."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1670
+#: inc/classes/doing-it-right.class.php:1674
 msgctxt "Generated"
 msgid "G"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1671
+#: inc/classes/doing-it-right.class.php:1675
 msgctxt "Title"
 msgid "T"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1672
+#: inc/classes/doing-it-right.class.php:1676
 msgctxt "Description"
 msgid "D"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1673
+#: inc/classes/doing-it-right.class.php:1677
 msgctxt "no-Index"
 msgid "I"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1674
+#: inc/classes/doing-it-right.class.php:1678
 msgctxt "no-Follow"
 msgid "F"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1675
+#: inc/classes/doing-it-right.class.php:1679
 msgctxt "no-Archive"
 msgid "A"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1676
+#: inc/classes/doing-it-right.class.php:1680
 msgctxt "Redirect"
 msgid "R"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1678
+#: inc/classes/doing-it-right.class.php:1682
 msgctxt "But there are..."
 msgid "But"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1679
+#: inc/classes/doing-it-right.class.php:1683
 msgctxt "And there are..."
 msgid "And"
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1681
+#: inc/classes/doing-it-right.class.php:1685
 msgid "Length is far too short."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1682
+#: inc/classes/doing-it-right.class.php:1686
 msgid "Length is too short."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1683
+#: inc/classes/doing-it-right.class.php:1687
 msgid "Length is too long."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1684
+#: inc/classes/doing-it-right.class.php:1688
 msgid "Length is far too long."
 msgstr ""
 
-#: inc/classes/doing-it-right.class.php:1685
+#: inc/classes/doing-it-right.class.php:1689
 msgid "Length is good."
 msgstr ""
 
@@ -455,7 +459,7 @@ msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-description.class.php:684
+#: inc/classes/generate-description.class.php:685
 #: inc/views/metaboxes/description-metabox.php:18
 msgctxt "Placement. e.g. Post Title \"on\" Blog Name"
 msgid "on"
@@ -463,14 +467,12 @@ msgstr ""
 
 #. translators: Front-end output.
 
-#: inc/classes/generate-description.class.php:746
+#: inc/classes/generate-description.class.php:773
 msgid "Latest posts:"
 msgstr ""
 
-#: inc/classes/generate-ldjson.class.php:538
-#: inc/classes/generate-ldjson.class.php:541
-#: inc/classes/generate-ldjson.class.php:581
-#: inc/classes/generate-ldjson.class.php:584
+#: inc/classes/generate-ldjson.class.php:605
+#: inc/classes/generate-ldjson.class.php:608
 msgid "Uncategorized"
 msgstr ""
 
@@ -614,13 +616,13 @@ msgstr ""
 msgid "Search results for:"
 msgstr ""
 
-#. translators: Front-end output
+#. translators: Front-end output.
 
 #: inc/classes/generate-title.class.php:1214
 msgid "Protected: %s"
 msgstr ""
 
-#. translators: Front-end output
+#. translators: Front-end output.
 
 #: inc/classes/generate-title.class.php:1218
 msgid "Private: %s"
@@ -638,25 +640,25 @@ msgstr ""
 
 #. translators: %s = 'The SEO Framework'
 
-#: inc/classes/render.class.php:1089
+#: inc/classes/render.class.php:1100
 msgid "Start %s"
 msgstr ""
 
 #. translators: %s = 'The SEO Framework'
 
-#: inc/classes/render.class.php:1091
+#: inc/classes/render.class.php:1102
 msgid "End %s"
 msgstr ""
 
-#: inc/classes/render.class.php:1092
+#: inc/classes/render.class.php:1103
 msgid "by Sybre Waaijer"
 msgstr ""
 
-#: inc/classes/site-options.class.php:429
+#: inc/classes/site-options.class.php:434
 msgid "here"
 msgstr ""
 
-#: inc/classes/site-options.class.php:430
+#: inc/classes/site-options.class.php:435
 msgctxt "%s = here"
 msgid "View the new options %s."
 msgstr ""
@@ -669,7 +671,7 @@ msgstr ""
 msgid "Sitemap is served from cache"
 msgstr ""
 
-#: inc/classes/sitemaps.class.php:592
+#: inc/classes/sitemaps.class.php:606
 msgid "Sitemap is generated on"
 msgstr ""
 
@@ -724,18 +726,18 @@ msgstr ""
 #: inc/views/inpost/seo-settings-tt.php:96
 #: inc/views/inpost/seo-settings-tt.php:112
 #: inc/views/metaboxes/homepage-metabox.php:176
-#: inc/views/metaboxes/homepage-metabox.php:227
+#: inc/views/metaboxes/homepage-metabox.php:228
 msgid "Characters Used: %s"
 msgstr ""
 
 #: inc/views/inpost/seo-settings-singular.php:126
-#: inc/views/metaboxes/homepage-metabox.php:224
+#: inc/views/metaboxes/homepage-metabox.php:225
 msgid "Custom %s Description"
 msgstr ""
 
 #: inc/views/inpost/seo-settings-singular.php:127
 #: inc/views/inpost/seo-settings-tt.php:106
-#: inc/views/metaboxes/homepage-metabox.php:225
+#: inc/views/metaboxes/homepage-metabox.php:226
 msgid "Recommended Length: 145 to 155 characters"
 msgstr ""
 
@@ -768,7 +770,7 @@ msgid "Tell Search Engines not to save a cached copy of this %s"
 msgstr ""
 
 #: inc/views/inpost/seo-settings-singular.php:210
-msgid "Local Search Settings"
+msgid "Archive Settings"
 msgstr ""
 
 #: inc/views/inpost/seo-settings-singular.php:218
@@ -779,19 +781,27 @@ msgstr ""
 msgid "This excludes this %s from local on-site search results"
 msgstr ""
 
-#: inc/views/inpost/seo-settings-singular.php:232
+#: inc/views/inpost/seo-settings-singular.php:228
+msgid "Exclude this %s from archive listing"
+msgstr ""
+
+#: inc/views/inpost/seo-settings-singular.php:230
+msgid "This excludes this %s from on-site archive pages"
+msgstr ""
+
+#: inc/views/inpost/seo-settings-singular.php:243
 msgid "Custom 301 Redirect URL"
 msgstr ""
 
-#: inc/views/inpost/seo-settings-singular.php:236
+#: inc/views/inpost/seo-settings-singular.php:247
 msgid "This will force visitors to go to another URL"
 msgstr ""
 
-#: inc/views/inpost/seo-settings-singular.php:259
+#: inc/views/inpost/seo-settings-singular.php:270
 msgid "Custom Social Image URL"
 msgstr ""
 
-#: inc/views/inpost/seo-settings-singular.php:260
+#: inc/views/inpost/seo-settings-singular.php:271
 msgid "Preferred %s Social Image URL location"
 msgstr ""
 
@@ -810,17 +820,17 @@ msgid "Apply %s to this term?"
 msgstr ""
 
 #: inc/views/inpost/seo-settings-tt.php:123
-#: inc/views/metaboxes/homepage-metabox.php:350
+#: inc/views/metaboxes/homepage-metabox.php:352
 msgid "Tell Search Engines not to show this page in their search results"
 msgstr ""
 
 #: inc/views/inpost/seo-settings-tt.php:130
-#: inc/views/metaboxes/homepage-metabox.php:360
+#: inc/views/metaboxes/homepage-metabox.php:362
 msgid "Tell Search Engines not to follow links on this page"
 msgstr ""
 
 #: inc/views/inpost/seo-settings-tt.php:137
-#: inc/views/metaboxes/homepage-metabox.php:370
+#: inc/views/metaboxes/homepage-metabox.php:372
 msgid "Tell Search Engines not to save a cached copy of this page"
 msgstr ""
 
@@ -837,7 +847,7 @@ msgid "Automated Description Settings"
 msgstr ""
 
 #: inc/views/metaboxes/description-metabox.php:42
-#: inc/views/metaboxes/homepage-metabox.php:236
+#: inc/views/metaboxes/homepage-metabox.php:237
 msgid "The meta description can be used to determine the text used under the title on Search Engine results pages."
 msgstr ""
 
@@ -1118,8 +1128,8 @@ msgid "Description"
 msgstr ""
 
 #: inc/views/metaboxes/homepage-metabox.php:73
-#: inc/views/metaboxes/homepage-metabox.php:272
-#: inc/views/metaboxes/homepage-metabox.php:317
+#: inc/views/metaboxes/homepage-metabox.php:274
+#: inc/views/metaboxes/homepage-metabox.php:319
 #: inc/views/metaboxes/social-metabox.php:283
 #: inc/views/metaboxes/social-metabox.php:314
 msgid "Home Page"
@@ -1144,90 +1154,90 @@ msgstr ""
 #. translators: %s = Home page URL markdown
 
 #: inc/views/metaboxes/homepage-metabox.php:212
-#: inc/views/metaboxes/homepage-metabox.php:252
+#: inc/views/metaboxes/homepage-metabox.php:253
 msgid "A plugin has been detected that suggests to maintain this option on the [Home Page](%s)."
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:276
+#: inc/views/metaboxes/homepage-metabox.php:278
 #: inc/views/metaboxes/title-metabox.php:132
 msgid "Document Title Additions Location"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:277
+#: inc/views/metaboxes/homepage-metabox.php:279
 #: inc/views/metaboxes/title-metabox.php:134
 msgid "Determines which side the added title text will go on."
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:283
+#: inc/views/metaboxes/homepage-metabox.php:285
 #: inc/views/metaboxes/title-metabox.php:140
 msgid "Left:"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:293
+#: inc/views/metaboxes/homepage-metabox.php:295
 #: inc/views/metaboxes/title-metabox.php:147
 msgid "Right:"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:304
+#: inc/views/metaboxes/homepage-metabox.php:306
 msgid "%s Tagline"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:308
+#: inc/views/metaboxes/homepage-metabox.php:310
 msgid "Add site description (tagline) to the Title on the %s?"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:334
+#: inc/views/metaboxes/homepage-metabox.php:336
 msgid "View Home Page Settings"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:334
+#: inc/views/metaboxes/homepage-metabox.php:336
 msgid "Checked in Page"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:338
+#: inc/views/metaboxes/homepage-metabox.php:340
 msgid "Home Page Robots Meta Settings"
 msgstr ""
 
 #. translators: 1: Option, 2: Location
 
-#: inc/views/metaboxes/homepage-metabox.php:347
-#: inc/views/metaboxes/homepage-metabox.php:357
-#: inc/views/metaboxes/homepage-metabox.php:367
+#: inc/views/metaboxes/homepage-metabox.php:349
+#: inc/views/metaboxes/homepage-metabox.php:359
+#: inc/views/metaboxes/homepage-metabox.php:369
 msgid "Apply %1$s to the %2$s?"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:402
+#: inc/views/metaboxes/homepage-metabox.php:404
 msgid "Note: If any of these options are unchecked, but are checked on the Home Page, they will be outputted regardless."
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:408
+#: inc/views/metaboxes/homepage-metabox.php:410
 msgid "Home Page Pagination Robots Settings"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:409
+#: inc/views/metaboxes/homepage-metabox.php:411
 msgid "If your Home Page is paginated and outputs content that's also found elsewhere on the website, enabling this option might prevent duplicate content."
 msgstr ""
 
 #. translators: 1: Option, 2: Location
 
-#: inc/views/metaboxes/homepage-metabox.php:417
+#: inc/views/metaboxes/homepage-metabox.php:419
 msgid "Apply %1$s to every second or later page on the %2$s?"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:427
+#: inc/views/metaboxes/homepage-metabox.php:429
 #: inc/views/metaboxes/social-metabox.php:116
 msgid "Social Image Settings"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:429
+#: inc/views/metaboxes/homepage-metabox.php:431
 msgid "A social image can be displayed when your homepage is shared. It is a great way to grab attention."
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:458
+#: inc/views/metaboxes/homepage-metabox.php:460
 msgid "Custom Home Page Image URL"
 msgstr ""
 
-#: inc/views/metaboxes/homepage-metabox.php:459
+#: inc/views/metaboxes/homepage-metabox.php:461
 msgid "Preferred Home Page Social Image URL location"
 msgstr ""
 
@@ -1801,12 +1811,12 @@ msgstr ""
 
 #: inc/views/metaboxes/social-metabox.php:169
 msgctxt "Example Facebook Personal URL"
-msgid "http://www.facebook.com/YourPersonalProfile"
+msgid "https://www.facebook.com/YourPersonalProfile"
 msgstr ""
 
 #: inc/views/metaboxes/social-metabox.php:172
 msgctxt "Example Verified Facebook Business URL"
-msgid "http://www.facebook.com/YourVerifiedBusinessProfile"
+msgid "https://www.facebook.com/YourVerifiedBusinessProfile"
 msgstr ""
 
 #: inc/views/metaboxes/social-metabox.php:177
@@ -2048,37 +2058,37 @@ msgid "Get the Pinterest Verification Code"
 msgstr ""
 
 #: inc/views/sitemap/xsl-stylesheet.php:8
-#: inc/views/sitemap/xsl-stylesheet.php:142
+#: inc/views/sitemap/xsl-stylesheet.php:143
 msgid "XML Sitemap"
 msgstr ""
 
 #. translators: URLs are in Markdown. Don't forget to localize the URLs.
 
-#: inc/views/sitemap/xsl-stylesheet.php:148
+#: inc/views/sitemap/xsl-stylesheet.php:149
 msgid "This is a generated XML Sitemap, meant to be consumed by search engines like [Google](https://www.google.com/) or [Bing](https://www.bing.com/)."
 msgstr ""
 
 #. translators: URLs are in Markdown. Don't localize this URL.
 
-#: inc/views/sitemap/xsl-stylesheet.php:164
+#: inc/views/sitemap/xsl-stylesheet.php:167
 msgid "You can find more information on XML sitemaps at [sitemaps.org](https://www.sitemaps.org/)."
 msgstr ""
 
-#: inc/views/sitemap/xsl-stylesheet.php:179
+#: inc/views/sitemap/xsl-stylesheet.php:184
 msgid "URL"
 msgstr ""
 
-#: inc/views/sitemap/xsl-stylesheet.php:183
+#: inc/views/sitemap/xsl-stylesheet.php:188
 msgid "Last Updated"
 msgstr ""
 
-#: inc/views/sitemap/xsl-stylesheet.php:187
+#: inc/views/sitemap/xsl-stylesheet.php:192
 msgid "Priority"
 msgstr ""
 
 #. translators: URLs are in Markdown.
 
-#: inc/views/sitemap/xsl-stylesheet.php:231
+#: inc/views/sitemap/xsl-stylesheet.php:236
 msgid "Generated by [The SEO Framework](https://wordpress.org/plugins/autodescription/)"
 msgstr ""
 #. Plugin Name of the plugin/theme

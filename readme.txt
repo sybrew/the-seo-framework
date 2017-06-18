@@ -240,6 +240,8 @@ TODO
 ***Something something [dark side](https://theseoframework.com/?p= TODO #detailed).***
 
 * **For everyone:**
+	* **Added:**
+		* A new option in the in-post Visibility tab that allows you to exclude the post from being listed in archives.
 	* **Changed:**
 		* Structured Data has output been revisited, so:
 			* Sitename + Sitelinks Searchbox:
@@ -282,6 +284,7 @@ TODO
 			1. Adding rendering hinting to the character counters for Gecko, Webkit and Blink based browsers.
 			1. Reducing description character counter calculation CPU overhead.
 			1. Removing expectation of autocompletion on title input fields.
+		* Genesis Theme head Microdata attributes were incomplete with The SEO Framework active; so, we removed its output again.
 	* **Fixed:**
 		* When the home page is a blog, these fixes have been implemented:
 			1. The 404 title now works.
@@ -303,6 +306,29 @@ TODO
 		* Dismissible notices now get correctly removed from the DOM when dismissed.
 		* `twitter:creator` is no longer omitted and overshadowed by the `twitter:site:id` meta tag when both Twitter Site and Creator options are filled in.
 
+* **For translators:**
+	* **Added:**
+		* "No Archive":
+			* Location: List archives.
+			* It's a post state, implying that Archive listing has been disabled.
+		* "Archive Settings"
+			* Location: In-post SEO Box, Visibility bab.
+			* Option list title.
+		* "Exclude this %s from archive listing":
+			* Location: In-post SEO Box, Visibility bab.
+			* It's a checkbox option label.
+			* `%s = post type name`.
+		* "This excludes this %s from on-site archive pages":
+			* Location: In-post SEO Box, Visibility bab.
+			* It's the label title, for a11y (accessibility).
+			* `%s = post type name`.
+	* **Updated:**
+		* Translation POT file.
+	* **Removed:**
+		* "Local Search Settings"
+			* Replaced by "Archive Settings".
+
+
 * **For developers:**
 	* **Added:**
 		* Links outputted through Markdown can now open in a new window when marked external.
@@ -313,6 +339,9 @@ TODO
 			* It basically bypasses filters and fallbacks to prevent globally repeated image URLs.
 			* Reduced image replication use is fine. But, don't overdo it; it's at most bland.
 			* It works for both singular as term items. However, Terms don't have image uploaders yet, so that returns empty for now.
+		* Method `post_type_supports_taxonomies()`, determines whether the current or input post type support taxonomical archives.
+		* New post metadata entry:
+			* `exclude_from_archive`.
 	* **Improved:**
 		* The sitemap now outputs less data, because CRLF (`\r\n`) has been exchanged for LF (`\n`) only.
 			* This removes XML `view-source:` readability support for very old browsers (IE8 or lower).
