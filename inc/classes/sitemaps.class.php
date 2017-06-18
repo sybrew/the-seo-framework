@@ -533,12 +533,13 @@ class Sitemaps extends Metaboxes {
 	 *
 	 * @since 2.2.9
 	 * @since 2.8.0 Now adjusts memory limit when possible.
+	 * @since 2.9.3 No longer crashes on WordPress sites below WP 4.6.
 	 *
 	 * @return string The sitemap content.
 	 */
 	protected function generate_sitemap() {
 
-		\wp_is_ini_value_changeable( 'memory_limit' ) and @ini_set( 'memory_limit', WP_MAX_MEMORY_LIMIT );
+		function_exists( '\wp_is_ini_value_changeable' ) and \wp_is_ini_value_changeable( 'memory_limit' ) and @ini_set( 'memory_limit', WP_MAX_MEMORY_LIMIT );
 
 		$content = '';
 

@@ -97,7 +97,7 @@
 * Do you use Images in your Posts and Pages? Be sure to describe them! This way people are able to find your website through the Image Results.
 * This can be easily done when editing the Image through WordPress' Media Library or when inserting an Image in the content. When you click on an Image, you can define various details.
 * The Alt Text is to be used. If that's not found, the Image Caption is used. And if that's also not found, then the Image Title will be used.
-* Make sure it clearly describes the Image, and be aware that it will fall back to it when the browser can't render the Image. It's also a great additions for people who are vision impaired.
+* Make sure it clearly describes the Image, and be aware that it will fall back to it when the browser can't render the Image. It's also a great addition for people who are vision impaired.
 
 	= 2.6.2 - Geo Targetting =
 

@@ -305,6 +305,7 @@ TODO
 		* The Canonical URL is now correct on Search Pages.
 		* Dismissible notices now get correctly removed from the DOM when dismissed.
 		* `twitter:creator` is no longer omitted and overshadowed by the `twitter:site:id` meta tag when both Twitter Site and Creator options are filled in.
+		* The sitemap now works again on WordPress 4.4 and 4.5. Sorry about that!
 
 * **For translators:**
 	* **Added:**
