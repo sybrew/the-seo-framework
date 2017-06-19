@@ -577,9 +577,9 @@ class Query extends Compat {
 	 * Returns true if on SEO settings page and when ID is 0.
 	 *
 	 * @since 2.9.0
-	 * @since 2.9.3 Now tests for archive before testing home page as blog.
+	 * @since 2.9.3 Now tests for archive and 404 before testing home page as blog.
 	 *
-	 * @param int The page ID, required.
+	 * @param int The page ID, required. Can be 0.
 	 * @return bool True if ID if for the home page.
 	 */
 	public function is_front_page_by_id( $id ) {
@@ -590,25 +590,30 @@ class Query extends Compat {
 			return $cache;
 
 		$is_front_page = false;
+		$sof = \get_option( 'show_on_front' );
 
 		//* Elegant Themes Support. Yay.
 		if ( 0 === $id && $this->is_home() ) {
-			$sof = \get_option( 'show_on_front' );
-
 			if ( 'page' !== $sof && 'posts' !== $sof )
 				$is_front_page = true;
 		}
 
 		//* Compare against $id
 		if ( false === $is_front_page ) {
-			$sof = \get_option( 'show_on_front' );
-
-			if ( 'page' === $sof && (int) \get_option( 'page_on_front' ) === $id )
-				$is_front_page = true;
-
-			if ( ! $this->is_archive() )
-				if ( 'posts' === $sof && (int) \get_option( 'page_for_posts' ) === $id )
+			if ( 'page' === $sof ) {
+				if ( (int) \get_option( 'page_on_front' ) === $id ) {
 					$is_front_page = true;
+				}
+			} elseif ( 'posts' === $sof ) {
+				if ( 0 === $id ) {
+					//* 0 as ID causes a lot of issues. Just test for is_home().
+					if ( $this->is_home() ) {
+						$is_front_page = true;
+					}
+				} elseif ( (int) \get_option( 'page_for_posts' ) === $id ) {
+					$is_front_page = true;
+				}
+			}
 		}
 
 		if ( false === $is_front_page && 0 === $id && $this->is_seo_settings_page() )
@@ -1010,6 +1015,9 @@ class Query extends Compat {
 	 * @return bool
 	 */
 	public function is_seo_settings_page( $secure = true ) {
+
+		if ( ! $this->is_admin() )
+			return false;
 
 		if ( ! $secure )
 			return $this->is_menu_page( $this->seo_settings_page_hook, $this->seo_settings_page_slug );
