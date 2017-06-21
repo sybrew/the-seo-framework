@@ -218,6 +218,7 @@ class Cache extends Sitemaps {
 	 * Main cache deletion function handler.
 	 *
 	 * @since 2.8.0
+	 * @since 2.9.3 $type = 'front' now also returns true.
 	 *
 	 * @param string $type The type
 	 * @param int $id The post, page or TT ID. Defaults to $this->get_the_real_ID().
@@ -235,6 +236,7 @@ class Cache extends Sitemaps {
 				$this->object_cache_delete( $this->get_meta_output_cache_key_by_type( $front_id, '', 'frontpage' ) );
 				$this->delete_auto_description_transient( $front_id, '', 'frontpage' );
 				$this->delete_ld_json_transient( $front_id, '', 'frontpage' );
+				return true;
 				break;
 
 			case 'post' :

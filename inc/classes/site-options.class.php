@@ -45,7 +45,7 @@ class Site_Options extends Sanitize {
 	 * Hold the SEO Settings Page ID for this plugin.
 	 *
 	 * @since 2.2.2
-	 * @since 2.70 Renamed var from page_id and made public.
+	 * @since 2.7.0 Renamed var from page_id and made public.
 	 *
 	 * @var string The page ID
 	 */
@@ -105,8 +105,8 @@ class Site_Options extends Sanitize {
 		 */
 		return array(
 			// General. Performance.
-			'cache_meta_description' => 1, // Description transient cache.
-			'cache_meta_schema'      => 1, // Schema.org transient cache.
+			'cache_meta_description' => 0, // Description transient cache.
+			'cache_meta_schema'      => 0, // Schema.org transient cache.
 			'cache_sitemap'          => 1, // Sitemap transient cache.
 			'cache_object'           => 1, // Object caching.
 

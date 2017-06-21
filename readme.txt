@@ -235,6 +235,18 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 TODO
 
+**For everyone: A small yet impactful change:**
+
+* Descriptions and Schema.org output transients are no longer enabled by default.
+* This has been done to reduce database calls. The performance benefits of using the transients is use-case specific.
+
+**For high-traffic webmasters and Google Analytics integration plugin authors: About the Search URL change:**
+
+* From this update, new canonical URLs will be generated for search queries to comply to the pretty permalink structure.
+* WordPress natively supports the `/search/{search_term}` endpoint; however, Google Analytics does not.
+* To enable support, please visit [this page](https://support.google.com/analytics/answer/1012264?hl=en&ref_topic=1031951#Post) for more information.
+* I've created a plugin that will fix this for you. You can download it [here](https://gist.github.com/sybrew/ab5553dd8a06e73794680c4a2cc24661). However, it's best to adjust the Analytics send caller yourself.
+
 **Detailed log:**
 
 ***Something something [dark side](https://theseoframework.com/?p= TODO #detailed).***
@@ -265,6 +277,8 @@ TODO
 					* Instead, it now uses WordPress' term cache to fetch.
 			* Because some of the above mentioned changes affect the output, the Schema transient cache has been invalidated.
 			* All output is now calculated once, rather than in multitude of items. This increases maintainabilty.
+		* Description transient usage is no longer enabled by default.
+		* Schema.org transient usage is no longer enabled by default.
 		* Sitemap explanation URLs now open in a new window.
 		* Automated Image Cropper now starts cropping when images exceed 4K (4096px/4096px), rather than 1500px/1500px.
 		* Social Image uploader now accepts image sizes up to 4K, before forcing a crop.
