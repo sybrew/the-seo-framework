@@ -450,14 +450,32 @@ class Render extends Admin_Init {
 	 * Renders Open Graph URL meta tag.
 	 *
 	 * @since 1.3.0
+	 * @since 2.9.3 Added filter
 	 * @uses $this->the_url_from_cache()
 	 *
 	 * @return string The Open Graph URL meta tag.
 	 */
 	public function og_url() {
 
-		if ( $this->use_og_tags() )
-			return '<meta property="og:url" content="' . $this->the_url_from_cache() . '" />' . "\r\n";
+		if ( $this->use_og_tags() ) {
+
+			/**
+			 * Applies filters 'the_seo_framework_ogurl_output' : string
+			 * Changes og:url output.
+			 *
+			 * @since 2.9.3
+			 *
+			 * @param string $url The canonical/Open Graph URL. Must be escaped.
+			 * @param int    $id  The current page or term ID.
+			 */
+			$url = (string) \apply_filters( 'the_seo_framework_ogurl_output', $this->the_url_from_cache(), $this->get_the_real_ID() );
+
+			/**
+			 * @since 2.7.0 Listens to the second filter.
+			 */
+			if ( $url )
+				return '<meta property="og:url" content="' . $url . '" />' . "\r\n";
+		}
 
 		return '';
 	}

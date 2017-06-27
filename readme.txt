@@ -397,6 +397,7 @@ TODO
 			* `(array) the_seo_framework_receive_json_data`, for altering passed JSON `$data` (arg 1) by `$key` (arg 2).
 			* `(string) the_seo_framework_updates_cache`, for altering the updates cache option name. For future use.
 			* `(bool) the_seo_framework_overwrite_titles`, for disabling The SEO Framework's Title overwriting.
+			* `(string) the_seo_framework_ogurl_output`, for adjusting the Open Graph URL output.
 	* **Constant notes:**
 		* **Added:**
 			* `(string) THE_SEO_FRAMEWORK_UPDATES_CACHE`, maintains updates cache options. For future use.
