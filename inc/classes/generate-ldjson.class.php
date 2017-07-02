@@ -296,7 +296,7 @@ class Generate_Ldjson extends Generate_Image {
 			$_ov = $this->get_option( $_o ) ?: '';
 			//* Sublevel array entries aren't getting caught by array_filter().
 			if ( $_ov )
-				$sameurls[] = \esc_url_raw( $_ov );
+				$sameurls[] = \esc_url_raw( $_ov, array( 'https', 'http' ) );
 		}
 
 		if ( $sameurls ) {

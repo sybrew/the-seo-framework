@@ -639,7 +639,7 @@ class Cache extends Sitemaps {
 						$t = $o->taxonomy;
 				}
 
-				$the_id = $this->generate_taxonomial_cache_key( $page_id, $t );
+				$the_id = $this->generate_taxonomical_cache_key( $page_id, $t );
 
 				if ( $this->is_tax() )
 					$the_id = 'archives_' . $the_id;
@@ -678,7 +678,7 @@ class Cache extends Sitemaps {
 					$the_id = 'unix_' . $unix;
 				}
 			} else {
-				//* Other taxonomial archives.
+				//* Other taxonomical archives.
 
 				if ( empty( $t ) ) {
 					$post_type = \get_query_var( 'post_type' );
@@ -697,7 +697,7 @@ class Cache extends Sitemaps {
 				if ( empty( $t ) )
 					$t = \get_query_var( 'taxonomy' );
 
-				$the_id = $this->generate_taxonomial_cache_key( $page_id, $t );
+				$the_id = $this->generate_taxonomical_cache_key( $page_id, $t );
 
 				$the_id = 'archives_' . $the_id;
 			}
@@ -804,7 +804,7 @@ class Cache extends Sitemaps {
 				return $this->add_cache_key_suffix( 'singular_' . $page_id );
 				break;
 			case 'term' :
-				return $this->add_cache_key_suffix( $this->generate_taxonomial_cache_key( $page_id, $taxonomy ) );
+				return $this->add_cache_key_suffix( $this->generate_taxonomical_cache_key( $page_id, $taxonomy ) );
 				break;
 			default :
 				$this->_doing_it_wrong( __METHOD__, 'Third parameter must be a known type.', '2.6.5' );
@@ -860,16 +860,16 @@ class Cache extends Sitemaps {
 	}
 
 	/**
-	 * Generates Cache key for taxonomial archives.
+	 * Generates Cache key for taxonomical archives.
 	 *
 	 * @since 2.6.0
 	 *
 	 * @param int $page_id The taxonomy or page ID.
 	 * @param string $taxonomy The taxonomy name.
 	 *
-	 * @return string The Taxonomial Archive cache key.
+	 * @return string The Taxonomical Archive cache key.
 	 */
-	protected function generate_taxonomial_cache_key( $page_id = '', $taxonomy = '' ) {
+	protected function generate_taxonomical_cache_key( $page_id = '', $taxonomy = '' ) {
 
 		$the_id = '';
 

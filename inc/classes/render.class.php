@@ -666,7 +666,7 @@ class Render extends Admin_Init {
 		$author = (string) \apply_filters( 'the_seo_framework_facebookauthor_output', $this->get_option( 'facebook_author' ), $this->get_the_real_ID() );
 
 		if ( $author )
-			return '<meta property="article:author" content="' . \esc_attr( \esc_url_raw( $author ) ) . '" />' . "\r\n";
+			return '<meta property="article:author" content="' . \esc_attr( \esc_url_raw( $author, array( 'http', 'https' ) ) ) . '" />' . "\r\n";
 
 		return '';
 	}
@@ -691,7 +691,7 @@ class Render extends Admin_Init {
 		$publisher = (string) \apply_filters( 'the_seo_framework_facebookpublisher_output', $this->get_option( 'facebook_publisher' ), $this->get_the_real_ID() );
 
 		if ( $publisher )
-			return '<meta property="article:publisher" content="' . \esc_attr( \esc_url_raw( $publisher ) ) . '" />' . "\r\n";
+			return '<meta property="article:publisher" content="' . \esc_attr( \esc_url_raw( $publisher, array( 'http', 'https' ) ) ) . '" />' . "\r\n";
 
 		return '';
 	}

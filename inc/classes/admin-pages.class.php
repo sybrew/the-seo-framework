@@ -629,7 +629,7 @@ class Admin_Pages extends Inpost {
 	public function make_info( $description = '', $link = '', $echo = true ) {
 
 		if ( $link ) {
-			$output = '<a href="' . \esc_url( $link ) . '" target="_blank" title="' . \esc_attr( $description ) . '">[?]</a>';
+			$output = '<a href="' . \esc_url( $link, array( 'http', 'https' ) ) . '" target="_blank" title="' . \esc_attr( $description ) . '">[?]</a>';
 		} else {
 			$output = '<span title="' . \esc_attr( $description ) . '">[?]</span>';
 		}

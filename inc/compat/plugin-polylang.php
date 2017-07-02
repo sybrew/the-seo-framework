@@ -69,7 +69,7 @@ function _polylang_external_filter_url_args( $args = array(), $path = '', $id = 
 	static $home_url = null;
 	//* We don't want to fire internal filters that lead to this function.
 	if ( null === $home_url )
-		$home_url = \untrailingslashit( \esc_url_raw( \the_seo_framework()->set_preferred_url_scheme( \the_seo_framework()->get_home_host() ) ) );
+		$home_url = \untrailingslashit( \esc_url_raw( \the_seo_framework()->set_preferred_url_scheme( \the_seo_framework()->get_home_host() ), array( 'http', 'https' ) ) );
 
 	$_post = \get_post( $id );
 	$_link = $home_url . $path;
@@ -109,7 +109,7 @@ function _polylang_admin_filter_url_args( $args = array(), $path = '', $id = 0, 
 	global $polylang;
 
 	//* We don't want to fire internal filters that lead to this function.
-	$home_url = \untrailingslashit( \esc_url_raw( \the_seo_framework()->set_preferred_url_scheme( \the_seo_framework()->get_home_host() ) ) );
+	$home_url = \untrailingslashit( \esc_url_raw( \the_seo_framework()->set_preferred_url_scheme( \the_seo_framework()->get_home_host() ), array( 'http', 'https' ) ) );
 
 	if ( \the_seo_framework()->is_real_front_page() || \the_seo_framework()->is_front_page_by_id( $id ) || \the_seo_framework()->is_404() ) {
 		if ( isset( $polylang->links ) && method_exists( $polylang->links, 'get_home_url' ) ) {
@@ -155,7 +155,7 @@ function _polylang_frontend_filter_url_args( $args = array(), $path = '', $id = 
 	global $polylang;
 
 	//* We don't want to fire internal filters that lead to this function.
-	$home_url = \untrailingslashit( \esc_url_raw( \the_seo_framework()->set_preferred_url_scheme( \the_seo_framework()->get_home_host() ) ) );
+	$home_url = \untrailingslashit( \esc_url_raw( \the_seo_framework()->set_preferred_url_scheme( \the_seo_framework()->get_home_host() ), array( 'http', 'https' ) ) );
 
 	if ( \the_seo_framework()->is_real_front_page() || \the_seo_framework()->is_404() || \the_seo_framework()->is_search() ) {
 		if ( isset( $polylang->links ) && method_exists( $polylang->links, 'get_home_url' ) ) {

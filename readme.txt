@@ -229,33 +229,51 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Release date:**
 
-* Month dayth, 2017
+* July 2nd, 2017
+
+**Announcement: Local SEO Beta**
+
+* Local SEO is a premium extension, and it's almost ready for testing.
+* As we do not want to spam your WordPress dashboard, I've created a new [Twitter account](https://twitter.com/TheSEOFramework) for future announcements.
+* Feel free to follow us to receive the latest updates. As we're planning a test-run prior to release, further details for beta-access will also follow in a tweet.
 
 **Summarized:**
 
-TODO
+* Social images can now scale up to 4K resolution. This means (manual and automated) forced cropping no longer initiates at 1500px, but at 4096px.
+* A new option has been added for every taxonomical post type in the Visibility tab. It allows you to prevent the annotated pages from showing up in Archives.
+* Structured Data output has been revisited. This includes merging of output, removal of misplaced output, and performance improvements.
+* When your home page is a blog, pages without an ID (404, search, date archives, etc.) had several output and caching issues. These issues have been resolved.
+* Several security concerns have also been addressed. Although, none of them could be verified as the coding environment is already well protected.
 
-**For everyone: A small yet impactful change:**
+**For everyone: Caching changes:**
 
-* Descriptions and Schema.org output transients are no longer enabled by default.
-* This has been done to reduce database calls. The performance benefits of using the transients is use-case specific.
+* Descriptions and Schema.org output transients are no longer enabled by default. Because for most sites, it's better left disabled.
+* This has been done to reduce database calls. Ultimately, the performance benefits of using the transients are use-case specific.
+
+**For developers: Schema.org output code changes:**
+
+* The Schema.org output code has been [rewritten](https://github.com/sybrew/the-seo-framework/issues/97). This improves reliability, performance and extensibility.
+* If you've extended or altered the Schema.org generation output, you might wish to revisit your coding implementations.
+* All affronted methods have been correctly deprecated and tested once more. So, 500 errors shouldn't occur.
+* To be certain, visit the detailed changelog and compare your code.
 
 **For high-traffic webmasters and Google Analytics integration plugin authors: About the Search URL change:**
 
 * From this update, new canonical URLs will be generated for search queries to comply to the pretty permalink structure.
 * WordPress natively supports the `/search/{search_term}` endpoint; however, Google Analytics does not.
 * To enable support, please visit [this page](https://support.google.com/analytics/answer/1012264?hl=en&ref_topic=1031951#Post) for more information.
-* I've created a plugin that will fix this for you. You can download it [here](https://gist.github.com/sybrew/ab5553dd8a06e73794680c4a2cc24661). However, it's best to adjust the Analytics send caller yourself.
+* I've created a plugin that will enhance support for you. You can download it [here](https://gist.github.com/sybrew/ab5553dd8a06e73794680c4a2cc24661).
+* An extension is planned that will implement Google Analytics for you, complying to those guidelines.
 
 **Detailed log:**
 
-***Something something [dark side](https://theseoframework.com/?p= TODO #detailed).***
+***Already the Sun is climbing to noon, and I feel the need of [something to strengthen me](https://theseoframework.com/?p= TODO #detailed).***
 
 * **For everyone:**
 	* **Added:**
 		* A new option in the in-post Visibility tab that allows you to exclude the post from being listed in archives.
 	* **Changed:**
-		* Structured Data has output been revisited, so:
+		* Structured Data output has been revisited, so:
 			* Sitename + Sitelinks Searchbox:
 				* The output of Sitename has been merged into Sitelinks Searchbox.
 					* They're marked as `@type` "Website".
@@ -276,7 +294,7 @@ TODO
 					* This means the generation is much faster on posts and pages.
 					* Instead, it now uses WordPress' term cache to fetch.
 			* Because some of the above mentioned changes affect the output, the Schema transient cache has been invalidated.
-			* All output is now calculated once, rather than in multitude of items. This increases maintainabilty.
+			* All output is now calculated once, rather than in multitude of items. This increases maintainability.
 		* Description transient usage is no longer enabled by default.
 		* Schema.org transient usage is no longer enabled by default.
 		* Sitemap explanation URLs now open in a new window.
@@ -320,7 +338,6 @@ TODO
 		* Dismissible notices now get correctly removed from the DOM when dismissed.
 		* `twitter:creator` is no longer omitted and overshadowed by the `twitter:site:id` meta tag when both Twitter Site and Creator options are filled in.
 		* The sitemap now works again on WordPress 4.4 and 4.5. Sorry about that!
-
 * **For translators:**
 	* **Added:**
 		* "No Archive":
@@ -342,14 +359,12 @@ TODO
 	* **Removed:**
 		* "Local Search Settings"
 			* Replaced by "Archive Settings".
-
-
 * **For developers:**
 	* **Added:**
 		* Links outputted through Markdown can now open in a new window when marked external.
 		* An JSON-LD generator. Taken from [The SEO Framework - Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/) and reworked to support PHP 5.3.
 			* See method `build_json_data()`. It builds the input data.
-			* See method `receive_json_data()`. It recieves the built data.
+			* See method `receive_json_data()`. It receives the built data.
 		* Method `get_schema_image()`. A Schema.org Google-guideline aware image fetcher with caching powers.
 			* It basically bypasses filters and fallbacks to prevent globally repeated image URLs.
 			* Reduced image replication use is fine. But, don't overdo it; it's at most bland.
@@ -371,6 +386,7 @@ TODO
 		* Robots.txt output can now better detect for public when the `blog_public` option has somehow been cast to integer.
 		* Method `admin_redirect()` now processes query arguments again (regression in 2.9.2).
 			* The Extension Manager's URL debugging was depending on this. Only affected when using `WP_DEBUG`.
+		* The shortlink generation no longer creates a PHP warning on questionable preview queries.
 	* **Deprecated:**
 		* A multitude of Schema generation methods, use `build_json_data()` and `receive_json_data()` instead.
 			1. Get methods:
@@ -403,7 +419,6 @@ TODO
 			* `(string) THE_SEO_FRAMEWORK_UPDATES_CACHE`, maintains updates cache options. For future use.
 	* **Other:**
 		* Cleaned up code, i.e. improved documentation and writing style.
-
 
 = 2.9.2 - Diminutive Consolidation =
 

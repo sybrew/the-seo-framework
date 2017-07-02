@@ -598,7 +598,7 @@ class Core {
 
 			$url = html_entity_decode( \menu_page_url( $this->seo_settings_page_slug, false ) );
 
-			return \esc_url( $url );
+			return \esc_url( $url, array( 'http', 'https' ) );
 		}
 
 		return '';

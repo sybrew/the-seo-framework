@@ -375,11 +375,11 @@ class Sitemaps extends Metaboxes {
 
 		if ( $this->is_option_checked( 'sitemap_styles' ) ) {
 
-			$url = \esc_url( $this->get_sitemap_xsl_url() );
+			$url = \esc_url( $this->get_sitemap_xsl_url(), array( 'http', 'https' ) );
 
 			if ( ! empty( $_SERVER['HTTP_HOST'] ) ) {
 				$_parsed = \wp_parse_url( $url );
-				$_r_parsed = \wp_parse_url( \esc_url( \wp_unslash( $_SERVER['HTTP_HOST'] ) ) );
+				$_r_parsed = \wp_parse_url( \esc_url( \wp_unslash( $_SERVER['HTTP_HOST'] ), array( 'http', 'https' ) ) );
 
 				if ( isset( $_parsed['host'] ) && isset( $_r_parsed['host'] ) )
 					if ( $_parsed['host'] !== $_r_parsed['host'] )
@@ -1025,7 +1025,7 @@ class Sitemaps extends Metaboxes {
 
 				$content .= "\t<url>\n";
 				//* No need to use static vars
-				$content .= "\t\t<loc>" . \ent2ncr( \esc_url_raw( $url ) ) . "</loc>\n";
+				$content .= "\t\t<loc>" . \ent2ncr( \esc_url_raw( $url, array( 'http', 'https' ) ) ) . "</loc>\n";
 
 				if ( isset( $args['lastmod'] ) && $args['lastmod'] ) {
 					$content .= "\t\t<lastmod>" . \mysql2date( $timestamp_format, $args['lastmod'], false ) . "</lastmod>\n";

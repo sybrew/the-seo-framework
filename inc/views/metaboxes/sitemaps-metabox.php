@@ -111,7 +111,7 @@ switch ( $instance ) :
 		endif;
 
 		if ( ! $has_sitemap_plugin && ( $this->get_option( 'sitemaps_output' ) || $sitemap_detected ) ) {
-			$here = '<a href="' . esc_url( $sitemap_url ) . '" target="_blank" title="' . esc_attr__( 'View sitemap', 'autodescription' ) . '">' . esc_attr_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
+			$here = '<a href="' . esc_url( $sitemap_url, array( 'http', 'https' ) ) . '" target="_blank" title="' . esc_attr__( 'View sitemap', 'autodescription' ) . '">' . esc_attr_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 			$this->description_noesc( sprintf( _x( 'The sitemap can be found %s.', '%s = here', 'autodescription' ), $here ) );
 		}
 		break;
@@ -129,7 +129,7 @@ switch ( $instance ) :
 		elseif ( ! $this->pretty_permalinks ) :
 
 			$permalink_settings_url = admin_url( 'options-permalink.php' );
-			$here = '<a href="' . esc_url( $permalink_settings_url ) . '" target="_blank" title="' . esc_attr__( 'Permalink Settings', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
+			$here = '<a href="' . esc_url( $permalink_settings_url, array( 'http', 'https' ) ) . '" target="_blank" title="' . esc_attr__( 'Permalink Settings', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 
 			?><h4><?php esc_html_e( "You're using the plain permalink structure.", 'autodescription' ); ?></h4><?php
 			$this->description( __( "This means the robots.txt file can't be outputted through the WordPress rewrite rules.", 'autodescription' ) );
@@ -167,7 +167,7 @@ switch ( $instance ) :
 
 		if ( $locate_url ) {
 			$robots_url = $this->get_robots_txt_url();
-			$here = '<a href="' . esc_url( $robots_url ) . '" target="_blank" title="' . esc_attr__( 'View robots.txt', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
+			$here = '<a href="' . esc_url( $robots_url, array( 'http', 'https' ) ) . '" target="_blank" title="' . esc_attr__( 'View robots.txt', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 
 			$this->description_noesc( sprintf( esc_html_x( 'The robots.txt file can be found %s.', '%s = here', 'autodescription' ), $here ) );
 		}

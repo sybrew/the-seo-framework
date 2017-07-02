@@ -974,7 +974,7 @@ class Detect extends Render {
 	}
 
 	/**
-	 * Checks (current) Post Type for taxonomial archives.
+	 * Checks (current) Post Type for taxonomical archives.
 	 *
 	 * @since 2.9.3
 	 * @staticvar array $cache

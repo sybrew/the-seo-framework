@@ -138,7 +138,7 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?>
 			</head>
 			<body>
 				<div id="description">
-					<a href="' . esc_url( ent2ncr( get_home_url() ) ) . '"><h1>' .
+					<a href="' . esc_url( ent2ncr( get_home_url() ), array( 'http', 'https' ) ) . '"><h1>' .
 						ent2ncr( $logo ) .
 						esc_html( ent2ncr( $this->get_blogname() . ' &mdash; ' . __( 'XML Sitemap', 'autodescription' ) ) ) . '</h1></a>
 					<p>' .

@@ -192,10 +192,10 @@ class Generate_Url extends Generate_Title {
 		}
 
 		if ( $this->pretty_permalinks ) {
-			$url = \esc_url( $url );
+			$url = \esc_url( $url, array( 'http', 'https' ) );
 		} else {
 			//* Keep the &'s more readable.
-			$url = \esc_url_raw( $url );
+			$url = \esc_url_raw( $url, array( 'http', 'https' ) );
 		}
 
 		$this->the_seo_framework_debug && false === $this->doing_sitemap and $this->debug_init( __METHOD__, false, $debug_key, array( 'url_output' => $url ) );
@@ -772,11 +772,13 @@ class Generate_Url extends Generate_Title {
 		if ( 0 === $post_id )
 			$post_id = $this->get_the_real_ID();
 
+		//* Get additional public queries from the page URL.
 		$url = $this->the_url_from_cache( '', $post_id, false, false, false );
 		$query = parse_url( $url, PHP_URL_QUERY );
 
 		$additions = '';
-		if ( isset( $query ) ) {
+		if ( ! empty( $query ) ) {
+
 			if ( false !== strpos( $query, '&' ) ) {
 				$query = explode( '&', $query );
 			} else {
@@ -805,7 +807,7 @@ class Generate_Url extends Generate_Title {
 		$home_url = $this->the_home_url_from_cache( true );
 		$url = $home_url . $path . $additions;
 
-		return \esc_url_raw( $url );
+		return \esc_url_raw( $url, array( 'http', 'https' ) );
 	}
 
 	/**
@@ -879,10 +881,10 @@ class Generate_Url extends Generate_Title {
 		endif;
 
 		if ( $prev )
-			return $this->set_preferred_url_scheme( \esc_url_raw( $prev ) );
+			return $this->set_preferred_url_scheme( \esc_url_raw( $prev, array( 'http', 'https' ) ) );
 
 		if ( $next )
-			return $this->set_preferred_url_scheme( \esc_url_raw( $next ) );
+			return $this->set_preferred_url_scheme( \esc_url_raw( $next, array( 'http', 'https' ) ) );
 
 		return '';
 	}
