@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the The SEO Framework package.
 msgid ""
 msgstr ""
-"Project-Id-Version: The SEO Framework 2.9.3-RC2-2017.06.18.0\n"
+"Project-Id-Version: The SEO Framework 2.9.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/autodescription\n"
-"POT-Creation-Date: 2017-06-18 07:44:51+00:00\n"
+"POT-Creation-Date: 2017-07-03 03:25:56+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -640,17 +640,17 @@ msgstr ""
 
 #. translators: %s = 'The SEO Framework'
 
-#: inc/classes/render.class.php:1100
+#: inc/classes/render.class.php:1118
 msgid "Start %s"
 msgstr ""
 
 #. translators: %s = 'The SEO Framework'
 
-#: inc/classes/render.class.php:1102
+#: inc/classes/render.class.php:1120
 msgid "End %s"
 msgstr ""
 
-#: inc/classes/render.class.php:1103
+#: inc/classes/render.class.php:1121
 msgid "by Sybre Waaijer"
 msgstr ""
 
@@ -671,7 +671,7 @@ msgstr ""
 msgid "Sitemap is served from cache"
 msgstr ""
 
-#: inc/classes/sitemaps.class.php:606
+#: inc/classes/sitemaps.class.php:607
 msgid "Sitemap is generated on"
 msgstr ""
 
