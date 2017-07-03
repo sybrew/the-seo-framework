@@ -225,11 +225,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
-= 2.9.3 - TODO =
+= 2.9.3 - Assidious Substratum =
 
 **Release date:**
 
-* July 2nd, 2017
+* July 3rd, 2017
 
 **Announcement: Local SEO Beta**
 
@@ -237,12 +237,16 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * As we do not want to spam your WordPress dashboard, I've created a new [Twitter account](https://twitter.com/TheSEOFramework) for future announcements.
 * Feel free to follow us to receive the latest updates. As we're planning a test-run prior to release, further details for beta-access will also follow in a tweet.
 
+***Local SEO technology teaser video***
+
+[youtube https://www.youtube.com/?v=q_ZnBuU1BwY&w=611&h=642&showinfo=0]
+
 **Summarized:**
 
-* Social images can now scale up to 4K resolution. This means (manual and automated) forced cropping no longer initiates at 1500px, but at 4096px.
+* Social images can now scale up to 4K resolution. This means (manual and automated) forced cropping no longer initiates at 1500px but at 4096px.
 * A new option has been added for every taxonomical post type in the Visibility tab. It allows you to prevent the annotated pages from showing up in Archives.
 * Structured Data output has been revisited. This includes merging of output, removal of misplaced output, and performance improvements.
-* When your home page is a blog, pages without an ID (404, search, date archives, etc.) had several output and caching issues. These issues have been resolved.
+* When your home page is a blog, pages without an ID (404, search, date archives, etc.) had output and caching issues. These issues have been resolved.
 * Several security concerns have also been addressed. Although, none of them could be verified as the coding environment is already well protected.
 
 **For everyone: Caching changes:**
@@ -267,158 +271,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Detailed log:**
 
-***Already the Sun is climbing to noon, and I feel the need of [something to strengthen me](https://theseoframework.com/?p= TODO #detailed).***
-
-* **For everyone:**
-	* **Added:**
-		* A new option in the in-post Visibility tab that allows you to exclude the post from being listed in archives.
-	* **Changed:**
-		* Structured Data output has been revisited, so:
-			* Sitename + Sitelinks Searchbox:
-				* The output of Sitename has been merged into Sitelinks Searchbox.
-					* They're marked as `@type` "Website".
-				* The options still work as intended:
-					* When both options are activated, the merged script emerges.
-					* When only Sitelinks Searchbox is activated, only Sitelinks Searchbox will be output.
-					* The previous applies to Sitename too.
-				* This is now only output on the homepage.
-					* When breadcrumbs are found, the Sitename script will no longer be output.
-			* Sitelinks Searchbox:
-				* The Search Link now is `example.com/search/{query}` instead of `example.com/?s={query}`. Where supported.
-				* The Sitename output has been merged into this one.
-			* Breadcrumbs:
-				* No more database calls are initiated for term existence checks.
-					* This means the generation is much faster on posts.
-					* Instead, it now uses WordPress' term cache to validate.
-				* No more database calls are initiated for term object fetching.
-					* This means the generation is much faster on posts and pages.
-					* Instead, it now uses WordPress' term cache to fetch.
-			* Because some of the above mentioned changes affect the output, the Schema transient cache has been invalidated.
-			* All output is now calculated once, rather than in multitude of items. This increases maintainability.
-		* Description transient usage is no longer enabled by default.
-		* Schema.org transient usage is no longer enabled by default.
-		* Sitemap explanation URLs now open in a new window.
-		* Automated Image Cropper now starts cropping when images exceed 4K (4096px/4096px), rather than 1500px/1500px.
-		* Social Image uploader now accepts image sizes up to 4K, before forcing a crop.
-			* This is according to [Twitter Card guidelines](https://dev.twitter.com/cards/types/summary-large-image).
-		* Removed Open Graph and Canonical URL output on 404 pages.
-			* Title, Robots and Webmaster Verification output are to stay.
-		* Robots.txt sitemap location output now isn't forced anymore when TSF's sitemap is used.
-			* This means the option now always works as intended, and doesn't predict anymore (expectations).
-	* **Improved:**
-		* The schema metabox now renders faster.
-		* The Facebook Social Settings placeholder URLs are now HTTPS, rather than HTTP.
-		* LinkedIn profile title now no longer indicates that it must be an ID.
-		* The sitemap stylesheet no longer outputs on domain mismatch, so you won't see a blank page anymore.
-			* This is a mitigated browser security feature.
-			* This does not affect security nor validity of the sitemap.
-		* Improved SEO input rendering performance, by:
-			1. Adding rendering hinting to the character counters for Gecko, Webkit and Blink based browsers.
-			1. Reducing description character counter calculation CPU overhead.
-			1. Removing expectation of autocompletion on title input fields.
-		* Genesis Theme head Microdata attributes were incomplete with The SEO Framework active; so, we removed its output again.
-	* **Fixed:**
-		* When the home page is a blog, these fixes have been implemented:
-			1. The 404 title now works.
-			1. Shortlink output now works.
-			1. Various fixes across non-taxonomical archives, i.e. ones that you can't edit, have noindex set by default, and have no ID assigned:
-				* These no longer share the same cache key as the home page.
-					* This fixes numerous object caching issues.
-				* These no longer use the home page Open Graph image.
-				* These no longer use the auto-generated description meant for the home page.
-				* These now listen to the archive option for `rel=next/prev` links, instead of the home page option.
-		* Windows Touch now works on the SEO Bar, as was always intended (MT race condition).
-		* Sitemap PNG logos aren't blurry anymore on Webkit/Blink based browsers.
-		* When touching an active SEO Bar or the tooltip thereof, the SEO Bar Tooltip no longer disappears (regression).
-		* A few notifications now work again:
-			1. Reset settings notification.
-			2. New settings notification.
-			3. Settings error notification.
-		* The Canonical URL is now correct on Search Pages.
-		* Dismissible notices now get correctly removed from the DOM when dismissed.
-		* `twitter:creator` is no longer omitted and overshadowed by the `twitter:site:id` meta tag when both Twitter Site and Creator options are filled in.
-		* The sitemap now works again on WordPress 4.4 and 4.5. Sorry about that!
-* **For translators:**
-	* **Added:**
-		* "No Archive":
-			* Location: List archives.
-			* It's a post state, implying that Archive listing has been disabled.
-		* "Archive Settings"
-			* Location: In-post SEO Box, Visibility bab.
-			* Option list title.
-		* "Exclude this %s from archive listing":
-			* Location: In-post SEO Box, Visibility bab.
-			* It's a checkbox option label.
-			* `%s = post type name`.
-		* "This excludes this %s from on-site archive pages":
-			* Location: In-post SEO Box, Visibility bab.
-			* It's the label title, for a11y (accessibility).
-			* `%s = post type name`.
-	* **Updated:**
-		* Translation POT file.
-	* **Removed:**
-		* "Local Search Settings"
-			* Replaced by "Archive Settings".
-* **For developers:**
-	* **Added:**
-		* Links outputted through Markdown can now open in a new window when marked external.
-		* An JSON-LD generator. Taken from [The SEO Framework - Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/) and reworked to support PHP 5.3.
-			* See method `build_json_data()`. It builds the input data.
-			* See method `receive_json_data()`. It receives the built data.
-		* Method `get_schema_image()`. A Schema.org Google-guideline aware image fetcher with caching powers.
-			* It basically bypasses filters and fallbacks to prevent globally repeated image URLs.
-			* Reduced image replication use is fine. But, don't overdo it; it's at most bland.
-			* It works for both singular as term items. However, Terms don't have image uploaders yet, so that returns empty for now.
-		* Method `post_type_supports_taxonomies()`, determines whether the current or input post type support taxonomical archives.
-		* New post metadata entry:
-			* `exclude_from_archive`.
-	* **Improved:**
-		* The sitemap now outputs less data, because CRLF (`\r\n`) has been exchanged for LF (`\n`) only.
-			* This removes XML `view-source:` readability support for very old browsers (IE8 or lower).
-		* Function `\The_SEO_Framework\_wpmudev_domainmap_get_url()` now returns an array with two empty keys if no settings have been found. Instead of an empty string.
-		* Method `get_latest_post_id()` has been rewritten; it's now family friendly.
-			* It no longer uses object caching.
-			* It now uses `WP_Query`, rather than `wpdb`.
-		* Method `admin_redirect()` now only accepts `http` and `https` protocols.
-			* Rather than all of `wp_allowed_protocols()`. This improves performance, not notably.
-	* **Fixed:**
-		* Method `is_front_page_by_id()` no longer returns true on archives when home page is a blog. This fixes numerous issues listed in the "For everyone:" detailed log.
-		* Robots.txt output can now better detect for public when the `blog_public` option has somehow been cast to integer.
-		* Method `admin_redirect()` now processes query arguments again (regression in 2.9.2).
-			* The Extension Manager's URL debugging was depending on this. Only affected when using `WP_DEBUG`.
-		* The shortlink generation no longer creates a PHP warning on questionable preview queries.
-	* **Deprecated:**
-		* A multitude of Schema generation methods, use `build_json_data()` and `receive_json_data()` instead.
-			1. Get methods:
-				* Method `schema_context()`, without an alternative.
-				* Method `schema_type()`, without an alternative.
-				* Method `schema_home_url()`, without an alternative.
-				* Method `schema_blog_name()`, without an alternative.
-				* Method `schema_breadcrumblist()`, without an alternative.
-				* Method `schema_listitem()`, without an alternative.
-				* Method `schema_image()`, without an alternative.
-				* Method `make_breadcrumb()`, without an alternative.
-				* Method `ld_json_breadcrumbs()`, use `get_ld_json_breadcrumbs()`.
-				* Method `ld_json_breadcrumbs_post()`, use `get_ld_json_breadcrumbs_post()`.
-				* Method `ld_json_breadcrumbs_page()`, use `get_ld_json_breadcrumbs_page()`.
-			1. Build methods:
-				* Method `ld_json_search()`, without an alternative.
-				* Method `ld_json_name()`, without an alternative.
-				* Method `ld_json_knowledge()`, use `get_ld_json_links()`.
-				* Method `ld_json_breadcrumb_first()`, without an alternative.
-				* Method `ld_json_breadcrumb_last()`, without an alternative.
-				* Method `ld_json_knowledge()`, without an alternative.
-	* **Filter notes:**
-		* **Added:**
-			* `(array) the_seo_framework_receive_json_data`, for altering passed JSON `$data` (arg 1) by `$key` (arg 2).
-			* `(string) the_seo_framework_updates_cache`, for altering the updates cache option name. For future use.
-			* `(bool) the_seo_framework_overwrite_titles`, for disabling The SEO Framework's Title overwriting.
-			* `(string) the_seo_framework_ogurl_output`, for adjusting the Open Graph URL output.
-	* **Constant notes:**
-		* **Added:**
-			* `(string) THE_SEO_FRAMEWORK_UPDATES_CACHE`, maintains updates cache options. For future use.
-	* **Other:**
-		* Cleaned up code, i.e. improved documentation and writing style.
+***Already the Sun is climbing to noon, and I feel the need of [something to strengthen me](https://theseoframework.com/?p=2064#detailed).***
 
 = 2.9.2 - Diminutive Consolidation =
 

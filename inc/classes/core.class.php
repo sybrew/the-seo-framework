@@ -875,7 +875,7 @@ class Core {
 		$defaults = array(
 			'a_internal' => false,
 		);
-		$args = \wp_parse_args( $args, $defaults );
+		$args = array_merge( $defaults, $args );
 
 		/**
 		 * The conversion list's keys are per reference only.
@@ -961,7 +961,7 @@ class Core {
 					for ( $i = 0; $i < $count; $i++ ) {
 						$text = str_replace(
 							$matches[0][ $i ],
-							sprintf( $_string, \esc_url( $matches[2][ $i ] ), \esc_html( $matches[1][ $i ] ) ),
+							sprintf( $_string, \esc_url( $matches[2][ $i ], array( 'http', 'https' ) ), \esc_html( $matches[1][ $i ] ) ),
 							$text
 						);
 					}
