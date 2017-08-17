@@ -252,6 +252,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Filter notes:**
 		* **Added:**
 			* `(string) the_seo_framework_title_pagination`, allows you to adjust the title pagination.
+			* `(bool) the_seo_framework_do_adjust_archive_query`, allows other plugin authors to prevent query adjustment.
 	* **Action notes:**
 		* **Added:**
 			* `the_seo_framework_after_front_init`. This allows you to easily alter hooks on the front-end.

@@ -545,7 +545,7 @@ class Init extends Query {
 			$this->_doing_it_wrong( __METHOD__, 'You should use 3xx HTTP Status Codes. Recommended 301 and 302.', '2.8.0' );
 
 		if ( false === $allow_external ) {
-			//= Only HTTP/HTTPS is allowed.
+			//= Only HTTP/HTTPS and internal URLs are allowed.
 			$url = $this->set_url_scheme( $url, 'relative' );
 			$url = $this->add_url_host( $url );
 			$scheme = $this->is_ssl() ? 'https' : 'http';
@@ -655,7 +655,7 @@ class Init extends Query {
 	 *
 	 * @since 2.7.0
 	 *
-	 * @param array $query The possible search query.
+	 * @param object $query The possible search query.
 	 * @return void Early if no search query is found.
 	 */
 	public function adjust_search_filter( $query ) {
@@ -702,13 +702,31 @@ class Init extends Query {
 	 *
 	 * @since 2.9.3
 	 *
-	 * @param array $query The possible archive query.
+	 * @param object $query The possible archive query.
 	 * @return void Early if no archive query is found.
 	 */
 	public function adjust_archive_query( $query ) {
 
 		if ( ! $this->is_option_checked( 'alter_archive_query' ) )
 			return;
+
+		static $has_filter = null;
+
+		if ( null === $has_filter ) {
+			$has_filter = \has_filter( 'the_seo_framework_do_adjust_archive_query' );
+		}
+		if ( $has_filter ) {
+			/**
+			 * Applies filters 'the_seo_framework_do_adjust_archive_query' : boolean
+			 *
+			 * @since 2.9.4
+			 *
+			 * @param bool   $do Whether to execute adjustment.
+			 * @param object $query The current query.
+			 */
+			if ( ! \apply_filters( 'the_seo_framework_do_adjust_archive_query', true, $query ) )
+				return;
+		}
 
 		// Don't exclude pages in wp-admin.
 		if ( ( $query->is_archive || $query->is_home ) && ! $this->is_admin() ) {
