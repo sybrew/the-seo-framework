@@ -227,15 +227,18 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 = 2.9.4 - ??? =
 
-* **Fixed:**
-	/
-	* When an image can't be cropped for any reason, no more 500 errors will occur, but a correct notice will be outputted instead.
-	* Titles and Descriptions starting with two spaces now get their duplicated spaces correctly removed.
-	* TODO FIX: https://wordpress.org/support/topic/cronjob-returns-a-notice-related-to-the-seo-framework/
-	* TODO FIX: https://github.com/sybrew/the-seo-framework/issues/167
-	* TODO FIX: Search URL in schema needs to be forced trailing slash.
-	* TODO "Exclude this %s from archive listing" => "Exclude this %s from all local archive listing"
-	* TODO IMPROVE: the_seo_framework_tested_upgrade_version => is_multisite && get_site_option || get_option
+* **For everyone:**
+	* **Improved:**
+		* When using PHP 5.4 or later, slashes are no longer escaped in JSON-LD data. So `http://schema.org` no longer becomes `http:\/\/schema.org`.
+	* **Fixed:**
+		/
+		* When an image can't be cropped for any reason, no more 500 errors will occur, but a correct notice will be outputted instead.
+		* Titles and Descriptions starting with two spaces now get their duplicated spaces correctly removed.
+		* TODO FIX: https://wordpress.org/support/topic/cronjob-returns-a-notice-related-to-the-seo-framework/
+		* TODO FIX: https://github.com/sybrew/the-seo-framework/issues/167
+		* Search URL in JSON-LD is now correct when slashes are omitted from pretty permalinks.
+		* TODO "Exclude this %s from archive listing" => "Exclude this %s from all local archive listing"
+		* TODO IMPROVE: the_seo_framework_tested_upgrade_version => is_multisite && get_site_option || get_option
 
 * **For developers:**
 	* **Filter notes:**

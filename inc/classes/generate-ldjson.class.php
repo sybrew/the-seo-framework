@@ -70,6 +70,7 @@ class Generate_Ldjson extends Generate_Image {
 	 * May return empty values if data is invalid.
 	 *
 	 * @since 2.9.3
+	 * @since 2.9.4 No longer escapes slashes on PHP 5.4+.
 	 * @see $this->build_json_data()
 	 * @uses $this->cache_json_data()
 	 *
@@ -94,8 +95,14 @@ class Generate_Ldjson extends Generate_Image {
 			$data = (array) \apply_filters_ref_array( 'the_seo_framework_receive_json_data', array( $data, $key ) );
 		}
 
-		if ( $encode )
-			return $data ? (string) json_encode( $data ) : '';
+
+		if ( $encode ) {
+			$options = 0;
+			//= PHP 5.4+ ( JSON_UNESCAPED_SLASHES === 64 )
+			$options |= defined( 'JSON_UNESCAPED_SLASHES' ) ? JSON_UNESCAPED_SLASHES : 0;
+
+			return $data ? (string) json_encode( $data, $options ) : '';
+		}
 
 		return $data ?: array();
 	}
@@ -220,12 +227,13 @@ class Generate_Ldjson extends Generate_Image {
 
 		if ( $use_searchbox ) {
 			$action_name = 'search_term_string';
+			$search_link = $this->pretty_permalinks ? \trailingslashit( \get_search_link() ) : \get_search_link();
 			/**
 			 * Applies filters 'the_seo_framework_ld_json_search_url' : string
 			 * @since 2.7.0
 			 * @param string $search_url The default WordPress search URL without query parameters.
 			 */
-			$search_url = (string) \apply_filters( 'the_seo_framework_ld_json_search_url', \get_search_link() );
+			$search_url = (string) \apply_filters( 'the_seo_framework_ld_json_search_url', $search_link );
 
 			$data += array(
 				'potentialAction' => array(
