@@ -1246,8 +1246,29 @@ class Generate_Title extends Generate_Description {
 			if ( $paged >= 2 || $page >= 2 ) {
 				$sep = $this->get_title_separator();
 
-				/* translators: Front-end output. */
-				$title .= " $sep " . sprintf( __( 'Page %s', 'autodescription' ), max( $paged, $page ) );
+				$page_number = max( $paged, $page );
+
+				/**
+				 * Applies filters 'the_seo_framework_title_pagination' : string
+				 *
+				 * @since 2.9.4
+				 *
+				 * @param string $pagination  The pagination addition.
+				 * @param string $title       The old title.
+				 * @param int    $page_number The page number.
+				 * @param string $sep         The separator used.
+				 */
+				$pagination = \apply_filters_ref_array(
+					'the_seo_framework_title_pagination',
+					array(
+						/* translators: %d = page number. Front-end output. */
+						" $sep " . sprintf( \__( 'Page %d', 'autodescription' ), $page_number ),
+						$title,
+						$page_number,
+						$sep,
+					)
+				);
+				$title .= $pagination;
 			}
 		}
 

@@ -238,8 +238,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* TODO IMPROVE: the_seo_framework_tested_upgrade_version => is_multisite && get_site_option || get_option
 
 * **For developers:**
+	* **Filter notes:**
+		* **Added:**
+			* `(string) the_seo_framework_title_pagination`, allows you to adjust the title pagination.
 	* **Action notes:**
-		* *Added:**
+		* **Added:**
 			* `the_seo_framework_after_front_init`. This allows you to easily alter hooks on the front-end.
 			* `the_seo_framework_after_admin_init`. This allows you to easily alter hooks on the back-end.
 
