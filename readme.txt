@@ -228,6 +228,12 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 = 2.9.4 - ??? =
 
 * **For everyone:**
+	* **Added:**
+		* Two new options regarding performance:
+			1. "Enable search query alteration".
+				* When disabled, this might improve search result pages' performance.
+			2. "Enable archive query alteration".
+				* When disabled, this might improve overall site performance.
 	* **Improved:**
 		* When using PHP 5.4 or later, slashes are no longer escaped in JSON-LD data. So `http://schema.org` no longer becomes `http:\/\/schema.org`.
 	* **Fixed:**
@@ -241,6 +247,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* TODO IMPROVE: the_seo_framework_tested_upgrade_version => is_multisite && get_site_option || get_option
 
 * **For developers:**
+	* **Updated:**
+		* Database version: `'2940'`.
 	* **Filter notes:**
 		* **Added:**
 			* `(string) the_seo_framework_title_pagination`, allows you to adjust the title pagination.

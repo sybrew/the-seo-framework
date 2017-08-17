@@ -185,6 +185,9 @@ class Sanitize extends Admin_Pages {
 			's_one_zero',
 			$this->settings_field,
 			array(
+				'alter_search_query',
+				'alter_archive_query',
+
 				'cache_meta_description',
 				'cache_meta_schema',
 				'cache_sitemap',

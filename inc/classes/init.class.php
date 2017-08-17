@@ -660,6 +660,9 @@ class Init extends Query {
 	 */
 	public function adjust_search_filter( $query ) {
 
+		if ( ! $this->is_option_checked( 'alter_search_query' ) )
+			return;
+
 		// Don't exclude pages in wp-admin.
 		if ( $query->is_search && ! $this->is_admin() ) {
 
@@ -703,6 +706,9 @@ class Init extends Query {
 	 * @return void Early if no archive query is found.
 	 */
 	public function adjust_archive_query( $query ) {
+
+		if ( ! $this->is_option_checked( 'alter_archive_query' ) )
+			return;
 
 		// Don't exclude pages in wp-admin.
 		if ( ( $query->is_archive || $query->is_home ) && ! $this->is_admin() ) {

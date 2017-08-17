@@ -255,6 +255,12 @@ switch ( $instance ) :
 			</div>
 		</div>
 
+		<?php
+		$can_do_archive_query = $this->is_option_checked( 'alter_archive_query' ) && $this->post_type_supports_taxonomies();
+		$can_do_search_query = $this->is_option_checked( 'alter_search_query' );
+		?>
+
+	<?php if ( $can_do_archive_query || $can_do_search_query ) : ?>
 		<div class="tsf-flex-setting tsf-flex">
 			<div class="tsf-flex-setting-label tsf-flex">
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
@@ -264,6 +270,7 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
+				<?php if ( $can_do_search_query ) : ?>
 				<div class="tsf-checkbox-wrapper">
 					<label for="autodescription_exclude_local_search"><input type="checkbox" name="autodescription[exclude_local_search]" id="autodescription_exclude_local_search" value="1" <?php checked( $this->get_custom_field( 'exclude_local_search' ) ); ?> />
 						<?php
@@ -275,7 +282,8 @@ switch ( $instance ) :
 						?>
 					</label>
 				</div>
-				<?php if ( $this->post_type_supports_taxonomies() ) : ?>
+				<?php endif; ?>
+				<?php if ( $can_do_archive_query ) : ?>
 				<div class="tsf-checkbox-wrapper">
 					<label for="autodescription_exclude_from_archive"><input type="checkbox" name="autodescription[exclude_from_archive]" id="autodescription_exclude_from_archive" value="1" <?php checked( $this->get_custom_field( 'exclude_from_archive' ) ); ?> />
 						<?php
@@ -290,6 +298,7 @@ switch ( $instance ) :
 				<?php endif; ?>
 			</div>
 		</div>
+	<?php endif; ?>
 
 		<div class="tsf-flex-setting tsf-flex">
 			<div class="tsf-flex-setting-label tsf-flex">
