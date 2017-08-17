@@ -678,7 +678,7 @@ class Admin_Init extends Init {
 		$cropped = \wp_crop_image( $attachment_id, $data['x1'], $data['y1'], $data['width'], $data['height'], $data['dst_width'], $data['dst_height'] );
 
 		if ( ! $cropped || \is_wp_error( $cropped ) )
-			\wp_send_json_error( array( 'message' => \esc_js__( 'Image could not be processed.', 'autodescription' ) ) );
+			\wp_send_json_error( array( 'message' => \esc_js( \__( 'Image could not be processed.', 'autodescription' ) ) ) );
 
 		switch ( $context ) :
 			case 'tsf-image':
@@ -740,7 +740,7 @@ class Admin_Init extends Init {
 				break;
 
 			default :
-				\wp_send_json_error( array( 'message' => \esc_js__( 'Image could not be processed.', 'autodescription' ) ) );
+				\wp_send_json_error( array( 'message' => \esc_js( \__( 'Image could not be processed.', 'autodescription' ) ) ) );
 				break;
 		endswitch;
 

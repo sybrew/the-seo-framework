@@ -99,7 +99,7 @@
 * The Alt Text is to be used. If that's not found, the Image Caption is used. And if that's also not found, then the Image Title will be used.
 * Make sure it clearly describes the Image, and be aware that it will fall back to it when the browser can't render the Image. It's also a great addition for people who are vision impaired.
 
-	= 2.6.2 - Geo Targetting =
+	= 2.6.2 - Geo Targeting =
 
 * Is your website about a local business? Then be sure to sign up for Google Businesses. This will massively increase your search presence, by an artificial result.
 * It also greatly helps to have your server located near your target audience's location. The website will not only respond faster, but Search Engines can pick up descriptive signals from it.

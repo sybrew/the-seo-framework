@@ -819,8 +819,8 @@ class Cache extends Sitemaps {
 	 * Adds cache key suffix based on blog id and locale.
 	 *
 	 * @since 2.7.0
-	 * @since 2.8.0 $locale is now static.
-	 *				$key may now be empty.
+	 * @since 2.8.0 1: $locale is now static.
+	 *              2: $key may now be empty.
 	 * @staticvar string $locale
 	 *
 	 * @return string the cache key.

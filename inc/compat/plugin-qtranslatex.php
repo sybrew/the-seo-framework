@@ -69,7 +69,7 @@ function _qtranslate_get_relative_url( $path = '', $post_id = '' ) {
 			 * Path must have trailing slash for pagination permalinks to work.
 			 * So we remove the query string and add it back with slash.
 			 */
-			if ( strpos( $path, '?lang=' . $current_lang ) !== false )
+			if ( false !== strpos( $path, '?lang=' . $current_lang ) )
 				$path = str_replace( '?lang=' . $current_lang, '', $path );
 
 			return \user_trailingslashit( $path ) . '?lang=' . $current_lang;

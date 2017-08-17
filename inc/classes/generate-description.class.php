@@ -47,11 +47,11 @@ class Generate_Description extends Generate {
 	 *
 	 * @param string $description The optional description to simply parse.
 	 * @param array $args description args : {
-	 * 		@param int $id the term or page id.
-	 * 		@param string $taxonomy taxonomy name.
-	 * 		@param bool $is_home We're generating for the home page.
-	 * 		@param bool $get_custom_field Do not fetch custom title when false.
-	 * 		@param bool $social Generate Social Description when true.
+	 *    @param int $id the term or page id.
+	 *    @param string $taxonomy taxonomy name.
+	 *    @param bool $is_home We're generating for the home page.
+	 *    @param bool $get_custom_field Do not fetch custom title when false.
+	 *    @param bool $social Generate Social Description when true.
 	 * }
 	 * @return string The description
 	 */
@@ -134,11 +134,11 @@ class Generate_Description extends Generate {
 
 			/**
 			 * Applies filters 'the_seo_framework_description_args' : array {
-			 * 		@param int $id the term or page id.
-			 * 		@param string $taxonomy taxonomy name.
-			 * 		@param bool $is_home We're generating for the home page.
-			 * 		@param bool $get_custom_field Do not fetch custom title when false.
-			 * 		@param bool $social Generate Social Description when true.
+			 *    @param int $id the term or page id.
+			 *    @param string $taxonomy taxonomy name.
+			 *    @param bool $is_home We're generating for the home page.
+			 *    @param bool $get_custom_field Do not fetch custom title when false.
+			 *    @param bool $social Generate Social Description when true.
 			 * }
 			 *
 			 * @since 2.5.0
@@ -197,9 +197,9 @@ class Generate_Description extends Generate {
 	 * @since 2.4.1
 	 *
 	 * @param array $args description args : {
-	 * 		@param int $id the term or page id.
-	 * 		@param string $taxonomy taxonomy name.
-	 * 		@param bool $is_home We're generating for the home page.
+	 *    @param int $id the term or page id.
+	 *    @param string $taxonomy taxonomy name.
+	 *    @param bool $is_home We're generating for the home page.
 	 * }
 	 * @param bool $escape Escape the output if true.
 	 * @return string|mixed The description.
@@ -302,11 +302,11 @@ class Generate_Description extends Generate {
 	 * @since 2.3.3
 	 *
 	 * @param array $args description args : {
-	 * 		@param int $id the term or page id.
-	 * 		@param string $taxonomy taxonomy name.
-	 * 		@param bool $is_home We're generating for the home page.
-	 * 		@param bool $get_custom_field Do not fetch custom title when false.
-	 * 		@param bool $social Generate Social Description when true.
+	 *    @param int $id the term or page id.
+	 *    @param string $taxonomy taxonomy name.
+	 *    @param bool $is_home We're generating for the home page.
+	 *    @param bool $get_custom_field Do not fetch custom title when false.
+	 *    @param bool $social Generate Social Description when true.
 	 * }
 	 * @param bool $escape Escape output when true.
 	 * @return string $output The description.
@@ -342,14 +342,14 @@ class Generate_Description extends Generate {
 	 *              : The cache will no longer be maintained on previews or search.
 	 *
 	 * @param array $args description args : {
-	 * 		@param int $id the term or page id.
-	 * 		@param string $taxonomy taxonomy name.
-	 * 		@param bool $is_home We're generating for the home page.
-	 * 		@param bool $get_custom_field Do not fetch custom title when false.
-	 * 		@param bool $social Generate Social Description when true.
+	 *    @param int $id the term or page id.
+	 *    @param string $taxonomy taxonomy name.
+	 *    @param bool $is_home We're generating for the home page.
+	 *    @param bool $get_custom_field Do not fetch custom title when false.
+	 *    @param bool $social Generate Social Description when true.
 	 * }
 	 * @param bool $escape Whether to escape the description.
-	 *		NOTE: When this is false, be sure to trim the output.
+	 *        NOTE: When this is false, be sure to trim the output.
 	 * @return string The description.
 	 */
 	protected function generate_the_description( $args, $escape = true ) {
@@ -467,8 +467,8 @@ class Generate_Description extends Generate {
 	 * @param int $id The post/term ID.
 	 * @param bool|object The term object.
 	 * @return array {
-	 *		'excerpt' => string The excerpt. Unescaped.
-	 *		'trim' => bool Whether to trim the additions.
+	 *    'excerpt' => string The excerpt. Unescaped.
+	 *    'trim' => bool Whether to trim the additions.
 	 * }
 	 */
 	public function get_description_excerpt_normal( $id = 0, $term = false ) {
@@ -595,10 +595,10 @@ class Generate_Description extends Generate {
 
 		/**
 		 * Applies filters the_seo_framework_add_description_additions : {
-		 *		@param bool true to add prefix.
-		 * 		@param int $id The Term object ID or The Page ID.
-		 * 		@param object $term The Term object.
-		 *	}
+		 *    @param bool true to add prefix.
+		 *    @param int $id The Term object ID or The Page ID.
+		 *    @param object $term The Term object.
+		 * }
 		 * @since 2.6.0
 		 */
 		$filter = \apply_filters( 'the_seo_framework_add_description_additions', true, $id, $term );
@@ -661,10 +661,10 @@ class Generate_Description extends Generate {
 	 * @param object|empty $term The term object
 	 * @param bool $ignore Whether to ignore options and filters.
 	 * @return array : {
-	 *		$title		=> The title
-	 *		$on 		=> The word separator
-	 *		$blogname	=> The blogname
-	 *		$sep		=> The separator
+	 *    $title    => The title
+	 *    $on       => The word separator
+	 *    $blogname => The blogname
+	 *    $sep      => The separator
 	 * }
 	 */
 	public function generate_description_additions( $id = 0, $term = '', $ignore = false ) {

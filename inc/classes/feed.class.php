@@ -173,10 +173,14 @@ class Feed extends Cache {
 
 		/**
 		 * Applies filters 'the_seo_framework_feed_source_link' : string
+		 *
 		 * @since 2.6.0
+		 * @since 2.7.2 or 2.7.3: Escaped output.
+		 *
+		 * @param string $source The source indication string.
 		 */
 		$source_i18n = (string) \apply_filters( 'the_seo_framework_feed_source_link_text', \_x( 'Source', 'The content source', 'autodescription' ) );
-		$content = '<p><a href="' . $permalink . '" rel="external nofollow">' . \esc_html( $source_i18n ) . '</a></p>';
+		$content = '<p><a href="' . $permalink . '" rel="nofollow">' . \esc_html( $source_i18n ) . '</a></p>';
 
 		return $content;
 	}

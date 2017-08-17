@@ -702,6 +702,7 @@ class Sanitize extends Admin_Pages {
 	 * Removes duplicated spaces from the input value.
 	 *
 	 * @since 2.8.2
+	 * @since 2.9.4 Now no longer fails when first two characters are spaces.
 	 * @see $this->s_nsbp() For converting other spaces prior to using this method.
 	 *
 	 * @param string $new_value The input value with possible multispaces.
@@ -714,7 +715,7 @@ class Sanitize extends Admin_Pages {
 		do {
 			$new_value = str_replace( '  ', ' ', $new_value );
 			$i++;
-		} while ( $i <= 2 && strpos( $new_value, '  ' ) );
+		} while ( $i <= 2 && false !== strpos( $new_value, '  ' ) );
 
 		return $new_value;
 	}

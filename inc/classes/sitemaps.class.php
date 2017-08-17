@@ -917,7 +917,7 @@ class Sitemaps extends Metaboxes {
 				);
 
 				/**
-				 * Applies filters 'the_seo_framework_sitemap_posts_query_args' : array
+				 * Applies filters 'the_seo_framework_sitemap_cpt_query_args' : array
 				 *
 				 * @since 2.8.0
 				 *

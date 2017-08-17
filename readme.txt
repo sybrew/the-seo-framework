@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: google, bing, open graph, seo, xml sitemap, breadcrumbs, meta, search engine, woocommerce, cpt, facebook, twitter
 Requires at least: 4.4.0
 Tested up to: 4.8.0
-Stable tag: 2.9.2
+Stable tag: 2.9.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -225,7 +225,25 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
-= 2.9.3 - Assidious Substratum =
+= 2.9.4 - ??? =
+
+* **Fixed:**
+	/
+	* When an image can't be cropped for any reason, no more 500 errors will occur, but a correct notice will be outputted instead.
+	* Titles and Descriptions starting with two spaces now get their duplicated spaces correctly removed.
+	* TODO FIX: https://wordpress.org/support/topic/cronjob-returns-a-notice-related-to-the-seo-framework/
+	* TODO FIX: https://github.com/sybrew/the-seo-framework/issues/167
+	* TODO FIX: Search URL in schema needs to be forced trailing slash.
+	* TODO "Exclude this %s from archive listing" => "Exclude this %s from all local archive listing"
+	* TODO IMPROVE: the_seo_framework_tested_upgrade_version => is_multisite && get_site_option || get_option
+
+* **For developers:**
+	* **Action notes:**
+		* *Added:**
+			* `the_seo_framework_after_front_init`. This allows you to easily alter hooks on the front-end.
+			* `the_seo_framework_after_admin_init`. This allows you to easily alter hooks on the back-end.
+
+= 2.9.3 - Assiduous Substratum =
 
 **Release date:**
 
@@ -237,9 +255,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * As we do not want to spam your WordPress dashboard, I've created a new [Twitter account](https://twitter.com/TheSEOFramework) for future announcements.
 * Feel free to follow us to receive the latest updates. As we're planning a test-run prior to release, further details for beta-access will also follow in a tweet.
 
-***Local SEO technology teaser video***
-
-[youtube https://www.youtube.com/?v=q_ZnBuU1BwY&w=611&h=642&showinfo=0]
+[youtube https://www.youtube.com/?v=q_ZnBuU1BwY&w=611&h=642&showinfo=0&rel=0&showsearch=0]
 
 **Summarized:**
 

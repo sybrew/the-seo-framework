@@ -151,6 +151,9 @@ class Init extends Query {
 	 */
 	public function init_admin_actions() {
 
+		/**
+		 * @since 2.8.0
+		 */
 		\do_action( 'the_seo_framework_admin_init' );
 
 		//* Initialize caching actions.
@@ -215,6 +218,11 @@ class Init extends Query {
 			// Add extra removable query arguments to the list.
 			\add_filter( 'removable_query_args', array( $this, 'add_removable_query_args' ) );
 		endif;
+
+		/**
+		 * @since 2.9.4
+		 */
+		\do_action( 'the_seo_framework_after_admin_init' );
 	}
 
 	/**
@@ -227,6 +235,9 @@ class Init extends Query {
 	 */
 	protected function init_front_end_actions() {
 
+		/**
+		 * @since 2.8.0
+		 */
 		\do_action( 'the_seo_framework_front_init' );
 
 		//* Remove canonical header tag from WP
@@ -267,6 +278,11 @@ class Init extends Query {
 
 		//* Output meta tags.
 		\add_action( 'wp_head', array( $this, 'html_output' ), 1 );
+
+		/**
+		 * @since 2.9.4
+		 */
+		\do_action( 'the_seo_framework_after_front_init' );
 	}
 
 	/**
@@ -333,8 +349,8 @@ class Init extends Query {
 		 * Applies filters 'the_seo_framework_before_output' : array before functions output
 		 * Applies filters 'the_seo_framework_after_output' : array after functions output
 		 * @param array $functions {
-		 *		'callback' => string|array The function to call.
-		 *		'args'     => scalar|array Arguments. When array, each key is a new argument.
+		 *    'callback' => string|array The function to call.
+		 *    'args'     => scalar|array Arguments. When array, each key is a new argument.
 		 * }
 		 */
 		$filter_tag = $before ? 'the_seo_framework_before_output' : 'the_seo_framework_after_output';
@@ -469,7 +485,7 @@ class Init extends Query {
 				. $this->get_plugin_indicator( 'after', $init_start );
 
 		//* Already escaped.
-		echo "\r\n" . $output . "\r\n";
+		echo PHP_EOL . $output . PHP_EOL;
 
 		\do_action( 'the_seo_framework_do_after_output' );
 
@@ -485,9 +501,10 @@ class Init extends Query {
 	 */
 	public function _init_custom_field_redirect() {
 
-		if ( $this->is_singular() && $url = $this->get_custom_field( 'redirect' ) )
-			$this->do_redirect( $url );
-
+		if ( $this->is_singular() ) {
+			$url = $this->get_custom_field( 'redirect' );
+			$url && $this->do_redirect( $url );
+		}
 	}
 
 	/**
@@ -505,6 +522,7 @@ class Init extends Query {
 			return;
 		}
 
+		//= All WP defined protocols are allowed.
 		$url = \esc_url_raw( $url );
 
 		if ( empty( $url ) ) {
@@ -516,7 +534,10 @@ class Init extends Query {
 
 		/**
 		 * Applies filters 'the_seo_framework_redirect_status_code' : Absolute integer.
+		 *
 		 * @since 2.8.0
+		 *
+		 * @param unsigned int $redirect_type
 		 */
 		$redirect_type = \absint( \apply_filters( 'the_seo_framework_redirect_status_code', 301 ) );
 
@@ -524,6 +545,7 @@ class Init extends Query {
 			$this->_doing_it_wrong( __METHOD__, 'You should use 3xx HTTP Status Codes. Recommended 301 and 302.', '2.8.0' );
 
 		if ( false === $allow_external ) {
+			//= Only HTTP/HTTPS is allowed.
 			$url = $this->set_url_scheme( $url, 'relative' );
 			$url = $this->add_url_host( $url );
 			$scheme = $this->is_ssl() ? 'https' : 'http';
