@@ -236,6 +236,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 				* When disabled, this might improve overall site performance.
 	* **Improved:**
 		* When using PHP 5.4 or later, slashes are no longer escaped in JSON-LD data. So `http://schema.org` no longer becomes `http:\/\/schema.org`.
+		/
+		* Open Graph image size source comparison now performs a weaker preparation for comparison, improving performance.
+		* Image URLS from input can now convert between HTTP and HTTPS when host name match.
+			* This will also work with CDN plugins when your input URL matches your site hostname.
+			* The preferred URL scheme will be set (SEO Settings -> Canonical -> Scheme Settings).
 	* **Fixed:**
 		/
 		* When an image can't be cropped for any reason, no more 500 errors will occur, but a correct notice will be outputted instead.
@@ -247,8 +252,12 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* TODO IMPROVE: the_seo_framework_tested_upgrade_version => is_multisite && get_site_option || get_option
 
 * **For developers:**
+	* **Added:**
+		* Method `matches_this_domain`, where the input URL gets compared to the website's domain.
 	* **Updated:**
 		* Database version: `'2940'`.
+	* **Fixed:**
+		* Method `get_social_image_url_from_seo_settings` first parameter now works.
 	* **Filter notes:**
 		* **Added:**
 			* `(string) the_seo_framework_title_pagination`, allows you to adjust the title pagination.

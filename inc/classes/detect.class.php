@@ -59,6 +59,38 @@ class Detect extends Render {
 	}
 
 	/**
+	 * Tests if input URL matches current domain.
+	 *
+	 * @since 2.9.4
+	 *
+	 * @param string $url The URL to test.
+	 * @return bool true on match, false otherwise.
+	 */
+	public function matches_this_domain( $url = '' ) {
+
+		if ( ! $url )
+			return false;
+
+		static $home_domain;
+
+		if ( ! $home_domain ) {
+			$home_domain = \esc_url_raw( \get_home_url(), array( 'http', 'https' ) );
+			//= Simply convert to HTTPS/HTTP based on is_ssl()
+			$home_domain = $this->set_url_scheme( $home_domain, null, false );
+		}
+
+		$url = \esc_url_raw( $url, array( 'http', 'https' ) );
+		//= Simply convert to HTTPS/HTTP based on is_ssl()
+		$url = $this->set_url_scheme( $url, null, false );
+
+		//= If they start with the same, we can assume it's the same domain.
+		if ( 0 === stripos( $url, $home_domain ) )
+			return true;
+
+		return false;
+	}
+
+	/**
 	 * Returns list of active plugins.
 	 *
 	 * @since 2.6.1
