@@ -108,6 +108,9 @@ class Site_Options extends Sanitize {
 			'alter_search_query' => 1, // Search query adjustments.
 			'alter_archive_query' => 1, // Archive query adjustments.
 
+			'alter_archive_query_type' => 'in_query', // Archive query type.
+			'alter_search_query_type' => 'in_query', // Search query type.
+
 			'cache_meta_description' => 0, // Description transient cache.
 			'cache_meta_schema'      => 0, // Schema.org transient cache.
 			'cache_sitemap'          => 1, // Sitemap transient cache.

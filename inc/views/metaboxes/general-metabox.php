@@ -85,6 +85,62 @@ switch ( $instance ) :
 		<?php
 		$this->description( __( "Altering the query allows for more control of the site's hierarchy.", 'autodescription' ) );
 		$this->description( __( 'If your website has thousands of pages, these options can greatly affect database performance.', 'autodescription' ) );
+		$this->description( __( 'Altering the query in the database is more accurate, but can affter down database performance.', 'autodescription' ) );
+		$this->description( __( 'Altering the query on the site is much faster, but can lead to inconsistent pagination. It can even lead to 404 output if all queried pages have been excluded.', 'autodescription' ) );
+
+		$query_types = (array) apply_filters(
+			'the_seo_framework_query_alteration_types',
+			array(
+				'in_query'   => _x( 'In the database', 'Perform query alteration...', 'autodescription' ),
+				'post_query' => _x( 'On the site', 'Perform query alteration...', 'autodescription' ),
+			)
+		);
+
+		$search_query_select_options = '';
+		$_current = $this->get_field_value( 'alter_search_query_type' );
+		foreach ( $query_types as $value => $name ) {
+			$search_query_select_options .= vsprintf(
+				'<option value="%s" %s>%s</option>',
+				array(
+					esc_attr( $value ),
+					selected( $_current, esc_attr( $value ), false ),
+					esc_html( $name ),
+				)
+			);
+		}
+		$archive_query_select_options = '';
+		$_current = $this->get_field_value( 'alter_archive_query_type' );
+		foreach ( $query_types as $value => $name ) {
+			$archive_query_select_options .= vsprintf(
+				'<option value="%s" %s>%s</option>',
+				array(
+					esc_attr( $value ),
+					selected( $_current, esc_attr( $value ), false ),
+					esc_html( $name ),
+				)
+			);
+		}
+
+		$search_query_select_field = vsprintf(
+			'<label for="%1$s">%2$s</label>
+			<select name="%3$s" id="%1$s">%4$s</select>',
+			array(
+				$this->get_field_id( 'alter_search_query_type' ),
+				esc_html__( 'Perform alteration:', 'autodescription' ),
+				$this->get_field_name( 'alter_search_query_type' ),
+				$search_query_select_options,
+			)
+		);
+		$archive_query_select_field = vsprintf(
+			'<label for="%1$s">%2$s</label>
+			<select name="%3$s" id="%1$s">%4$s</select>',
+			array(
+				$this->get_field_id( 'alter_archive_query_type' ),
+				esc_html__( 'Perform alteration:', 'autodescription' ),
+				$this->get_field_name( 'alter_archive_query_type' ),
+				$archive_query_select_options,
+			)
+		);
 
 		$this->wrap_fields(
 			array(
@@ -95,6 +151,13 @@ switch ( $instance ) :
 					'',
 					false
 				),
+				$search_query_select_field,
+			),
+			true
+		);
+
+		$this->wrap_fields(
+			array(
 				$this->make_checkbox(
 					'alter_archive_query',
 					esc_html__( 'Enable archive query alteration?', 'autodescription' )
@@ -102,6 +165,7 @@ switch ( $instance ) :
 					'',
 					false
 				),
+				$archive_query_select_field,
 			),
 			true
 		);

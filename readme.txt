@@ -229,11 +229,17 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * **For everyone:**
 	* **Added:**
-		* Two new options regarding performance:
+		* Four new options regarding performance:
 			1. "Enable search query alteration".
 				* When disabled, this might improve search result pages' performance.
-			2. "Enable archive query alteration".
+			2. "Peform (search query) alteration:"
+				* When set to "In the database", it will tell the database to filter the posts. This is more accurate, but slower.
+				* When set to "On the site", PHP will filter the posts. This can lead to 404 errors.
+			3. "Enable archive query alteration".
 				* When disabled, this might improve overall site performance.
+			4. "Peform (archive query) alteration:"
+				* When set to "In the database", it will tell the database to filter the posts. This is more accurate, but slower.
+				* When set to "On the site", PHP will filter the posts. This can lead to 404 errors.
 	* **Improved:**
 		* When using PHP 5.4 or later, slashes are no longer escaped in JSON-LD data. So `http://schema.org` no longer becomes `http:\/\/schema.org`.
 		/
@@ -250,6 +256,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Search URL in JSON-LD is now correct when slashes are omitted from pretty permalinks.
 		* TODO "Exclude this %s from archive listing" => "Exclude this %s from all local archive listing"
 		* TODO IMPROVE: the_seo_framework_tested_upgrade_version => is_multisite && get_site_option || get_option
+		* TODO "Custom redirect URL", "Exclude from Archive" and "Exclude from Local Search" option values no longer show up in the "Custom Fields" metabox when filled in.
 
 * **For developers:**
 	* **Added:**
@@ -258,10 +265,14 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Database version: `'2940'`.
 	* **Fixed:**
 		* Method `get_social_image_url_from_seo_settings` first parameter now works.
+	* **Removed:**
+		* Method `the_seo_framework()->adjust_archive_query()`, without deprecation.
+		* Method `the_seo_framework()->adjust_search_filter()`, without deprecation.
 	* **Filter notes:**
 		* **Added:**
 			* `(string) the_seo_framework_title_pagination`, allows you to adjust the title pagination.
 			* `(bool) the_seo_framework_do_adjust_archive_query`, allows other plugin authors to prevent query adjustment.
+			* `(array) the_seo_framework_query_alteration_types`, allows you to limit query adjustment types.
 	* **Action notes:**
 		* **Added:**
 			* `the_seo_framework_after_front_init`. This allows you to easily alter hooks on the front-end.

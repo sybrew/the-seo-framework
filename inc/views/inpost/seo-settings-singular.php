@@ -288,7 +288,7 @@ switch ( $instance ) :
 					<label for="autodescription_exclude_from_archive"><input type="checkbox" name="autodescription[exclude_from_archive]" id="autodescription_exclude_from_archive" value="1" <?php checked( $this->get_custom_field( 'exclude_from_archive' ) ); ?> />
 						<?php
 						/* translators: %s = Post type name */
-						printf( esc_html__( 'Exclude this %s from archive all listings', 'autodescription' ), esc_html( $type ) );
+						printf( esc_html__( 'Exclude this %s from all archive listings', 'autodescription' ), esc_html( $type ) );
 						echo ' ';
 						/* translators: %s = Post type name */
 						$this->make_info( sprintf( __( 'This excludes this %s from on-site archive pages', 'autodescription' ), $type ) );

@@ -182,6 +182,15 @@ class Sanitize extends Admin_Pages {
 		);
 
 		$this->add_option_filter(
+			's_alter_query_type',
+			$this->settings_field,
+			array(
+				'alter_archive_query_type',
+				'alter_search_query_type',
+			)
+		);
+
+		$this->add_option_filter(
 			's_one_zero',
 			$this->settings_field,
 			array(
@@ -538,6 +547,7 @@ class Sanitize extends Admin_Pages {
 			's_title'                 => array( $this, 's_title' ),
 			's_title_raw'             => array( $this, 's_title_raw' ),
 			's_knowledge_type'        => array( $this, 's_knowledge_type' ),
+			's_alter_query_type'      => array( $this, 's_alter_query_type' ),
 			's_one_zero'              => array( $this, 's_one_zero' ),
 			's_no_html'               => array( $this, 's_no_html' ),
 			's_no_html_space'         => array( $this, 's_no_html_space' ),
@@ -903,6 +913,26 @@ class Sanitize extends Admin_Pages {
 			$previous = $this->get_default_option( 'home_title_location' );
 
 		return (string) $previous;
+	}
+
+	/**
+	 * Sanitizes alter query type.
+	 *
+	 * @since 2.9.4
+	 *
+	 * @param mixed $new_value Should ideally be a string 'in_query' or 'post_query' passed in.
+	 * @return string 'in_query' or 'post_query'
+	 */
+	public function s_alter_query_type( $new_value ) {
+
+		switch ( $new_value ) {
+			case 'in_query' :
+			case 'post_query' :
+				return (string) $new_value;
+
+			default :
+				return 'in_query';
+		}
 	}
 
 	/**
