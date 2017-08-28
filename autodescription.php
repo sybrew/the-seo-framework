@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://theseoframework.com/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.
- * Version: 2.9.4-dev-2017.08.24.0
+ * Version: 2.9.4-dev-2017.08.28.0
  * Author: Sybre Waaijer
  * Author URI: https://theseoframework.com/
  * License: GPLv3
@@ -60,7 +60,7 @@ define( 'THE_SEO_FRAMEWORK_VERSION', '2.9.3' );
  *
  * @since 2.7.0
  */
-define( 'THE_SEO_FRAMEWORK_DB_VERSION', '2940' );
+define( 'THE_SEO_FRAMEWORK_DB_VERSION', '2941' );
 
 /**
  * The plugin options database option_name.
@@ -162,11 +162,12 @@ the_seo_framework_pre_load();
  * Determines whether we can "just" load the plugin, or require verification beforehand.
  *
  * @since 2.8.0
+ * @since 2.9.4 The option is now autoloaded.
  * @uses get_site_option(), so it will only test once per WordPress installation; multisite included.
  * @todo This option isn't autoloaded... use is_multisite() condition?
  */
 function the_seo_framework_pre_load() {
-	if ( get_site_option( 'the_seo_framework_tested_upgrade_version' ) >= THE_SEO_FRAMEWORK_DB_VERSION ) {
+	if ( get_option( 'the_seo_framework_tested_upgrade_version' ) >= THE_SEO_FRAMEWORK_DB_VERSION ) {
 		the_seo_framework_load_base_files();
 	} else {
 		the_seo_framework_test_server();
@@ -183,7 +184,7 @@ function the_seo_framework_test_server() {
 	//* Load on init action (manual FTP upload) or after plugin has been upgraded.
 	require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'plugin-test-server.php' );
 
-	if ( get_site_option( 'the_seo_framework_tested_upgrade_version' ) >= THE_SEO_FRAMEWORK_DB_VERSION )
+	if ( get_option( 'the_seo_framework_tested_upgrade_version' ) >= THE_SEO_FRAMEWORK_DB_VERSION )
 		the_seo_framework_load_base_files();
 }
 

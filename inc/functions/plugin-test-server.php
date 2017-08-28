@@ -32,11 +32,41 @@ the_seo_framework_test_server_phase();
  * Tests plugin upgrade.
  *
  * @since 2.8.0
+ * @since 2.9.4 Changed the testing option from a site option to a blog option.
  * @access private
  * @link http://php.net/eol.php
  * @link https://codex.wordpress.org/WordPress_Versions
  */
 function the_seo_framework_test_server_phase() {
+
+	$ms = is_multisite();
+
+	//* @TODO clean this up @ 4.6 requirement. i.e. only check for `get_network()` and $nw->site_id.
+	//= WP_Network is WP > 4.4.
+	if ( $ms && class_exists( '\\WP_Network', false ) ) {
+		//* Try bypassing testing and deactivation gaming when the main blog has already been tested.
+
+		/**
+		 * @since 2.9.4
+		 * Delete old and redundant network option.
+		 */
+		delete_site_option( 'the_seo_framework_tested_upgrade_version' );
+
+		//= WP < 4.6 doesn't have get_network().
+		$nw = function_exists( 'get_network' ) ? get_network() : $GLOBALS['current_site'];
+		if ( $nw instanceof \WP_Network ) {
+			//= WP < 4.6 doesn't have property 'site_id'.
+			$site_id = isset( $nw->site_id ) ? $nw->site_id : (int) $nw->blog_id;
+
+			//= Free memory. Var is not passed by reference, so it's safe.
+			unset( $nw );
+
+			if ( get_blog_option( $site_id, 'the_seo_framework_tested_upgrade_version' ) ) {
+				update_option( 'the_seo_framework_tested_upgrade_version', THE_SEO_FRAMEWORK_DB_VERSION );
+				return;
+			}
+		}
+	}
 
 	$requirements = array(
 		'php' => '50300',
@@ -49,11 +79,11 @@ function the_seo_framework_test_server_phase() {
 
 	//* All good.
 	if ( true === $test ) {
-		update_site_option( 'the_seo_framework_tested_upgrade_version', THE_SEO_FRAMEWORK_DB_VERSION );
+		update_option( 'the_seo_framework_tested_upgrade_version', THE_SEO_FRAMEWORK_DB_VERSION );
 		return;
 	}
 
-	if ( is_multisite() ) {
+	if ( $ms ) {
 		$plugins = get_site_option( 'active_sitewide_plugins' );
 		$network_mode = isset( $plugins[ THE_SEO_FRAMEWORK_PLUGIN_BASENAME ] );
 	} else {

@@ -247,22 +247,35 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Image URLS from input can now convert between HTTP and HTTPS when host name match.
 			* This will also work with CDN plugins when your input URL matches your site hostname.
 			* The preferred URL scheme will be set (SEO Settings -> Canonical -> Scheme Settings).
+		/
+		* Multisite: Removed PHP and WP version testing completion option from site options to blog options.
+			* For multisite, this means the option is now autoloaded on networks, so there will be fewer database calls.
 	* **Fixed:**
 		/
 		* When an image can't be cropped for any reason, no more 500 errors will occur, but a correct notice will be outputted instead.
 		* Titles and Descriptions starting with two spaces now get their duplicated spaces correctly removed.
 		* TODO FIX: https://wordpress.org/support/topic/cronjob-returns-a-notice-related-to-the-seo-framework/
-		* TODO FIX: https://github.com/sybrew/the-seo-framework/issues/167
 		* Search URL in JSON-LD is now correct when slashes are omitted from pretty permalinks.
-		* TODO "Exclude this %s from archive listing" => "Exclude this %s from all local archive listing"
-		* TODO IMPROVE: the_seo_framework_tested_upgrade_version => is_multisite && get_site_option || get_option
 		* TODO "Custom redirect URL", "Exclude from Archive" and "Exclude from Local Search" option values no longer show up in the "Custom Fields" metabox when filled in.
+
+* **For translators:**
+	* **Added:**
+		/
+		* TODO a few sentences...
+	* **Changed:**
+		* "Exclude this %s from archive listing":
+			* Location: In-post SEO metabox.
+			* Now is: "Exclude this %s from all archive listings".
+			* Reason: Clarity.
+	* **Updated:**
+		/
+		* TODO POT translation file.
 
 * **For developers:**
 	* **Added:**
 		* Method `matches_this_domain`, where the input URL gets compared to the website's domain.
 	* **Updated:**
-		* Database version: `'2940'`.
+		* Database version: `'2941'`.
 	* **Fixed:**
 		* Method `get_social_image_url_from_seo_settings` first parameter now works.
 	* **Removed:**

@@ -37,15 +37,13 @@ add_action( 'admin_init', 'the_seo_framework_do_upgrade', 20 );
  * Only works on WordPress 4.4 and later to ensure and force maximum compatibility.
  *
  * @since 2.7.0
+ * @since 2.9.4 No longer tests WP version. This file won't be loaded anyway if rendered incompatible.
  *
  * @thanks StudioPress for some code.
  */
 function the_seo_framework_do_upgrade() {
 
 	if ( get_option( 'the_seo_framework_upgraded_db_version' ) >= THE_SEO_FRAMEWORK_DB_VERSION )
-		return;
-
-	if ( ! the_seo_framework()->wp_version( '4.4', '>=' ) )
 		return;
 
 	//* If the WordPress Database hasn't been upgraded yet, make the user upgrade first.
@@ -65,7 +63,6 @@ function the_seo_framework_do_upgrade() {
 
 	do_action( 'the_seo_framework_upgraded' );
 }
-
 
 add_action( 'the_seo_framework_upgraded', 'the_seo_framework_upgrade_to_current' );
 /**
@@ -148,7 +145,6 @@ function the_seo_framework_do_upgrade_2802() {
 
 	update_option( 'the_seo_framework_upgraded_db_version', '2802' );
 }
-
 
 /**
  * Updates Twitter 'photo' card option to 'summary_large_image'.
