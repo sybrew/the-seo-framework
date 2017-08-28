@@ -77,16 +77,25 @@ switch ( $instance ) :
 
 	case 'the_seo_framework_general_metabox_performance' :
 
-		?><h4><?php esc_html_e( 'Performance Settings', 'autodescription' ); ?></h4>
+		?><h4><?php esc_html_e( 'Performance Settings', 'autodescription' ); ?></h4><?php
+		$this->description( __( "Depending on your server's configuration, adjusting these settings can affect performance.", 'autodescription' ) );
 
+		?>
 		<hr>
 
 		<h4><?php esc_html_e( 'Query alteration Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( "Altering the query allows for more control of the site's hierarchy.", 'autodescription' ) );
-		$this->description( __( 'If your website has thousands of pages, these options can greatly affect database performance.', 'autodescription' ) );
-		$this->description( __( 'Altering the query in the database is more accurate, but can affter down database performance.', 'autodescription' ) );
-		$this->description( __( 'Altering the query on the site is much faster, but can lead to inconsistent pagination. It can even lead to 404 output if all queried pages have been excluded.', 'autodescription' ) );
+		$this->description_noesc(
+			esc_html__( "Altering the query allows for more control of the site's hierarchy.", 'autodescription' )
+			. '<br>' .
+			esc_html__( 'If your website has thousands of pages, these options can greatly affect database performance.', 'autodescription' )
+		);
+
+		$this->description_noesc(
+			esc_html__( 'Altering the query in the database is more accurate, but can increase database query time.', 'autodescription' )
+			. '<br>' .
+			esc_html__( 'Altering the query on the site is much faster, but can lead to inconsistent pagination. It can also lead to 404 error messages if all queried pages have been excluded.', 'autodescription' )
+		);
 
 		$query_types = (array) apply_filters(
 			'the_seo_framework_query_alteration_types',
@@ -120,13 +129,14 @@ switch ( $instance ) :
 				)
 			);
 		}
+		$perform_alteration_i18n = esc_html__( 'Perform alteration:', 'autodescription' );
 
 		$search_query_select_field = vsprintf(
 			'<label for="%1$s">%2$s</label>
 			<select name="%3$s" id="%1$s">%4$s</select>',
 			array(
 				$this->get_field_id( 'alter_search_query_type' ),
-				esc_html__( 'Perform alteration:', 'autodescription' ),
+				$perform_alteration_i18n,
 				$this->get_field_name( 'alter_search_query_type' ),
 				$search_query_select_options,
 			)
@@ -136,7 +146,7 @@ switch ( $instance ) :
 			<select name="%3$s" id="%1$s">%4$s</select>',
 			array(
 				$this->get_field_id( 'alter_archive_query_type' ),
-				esc_html__( 'Perform alteration:', 'autodescription' ),
+				$perform_alteration_i18n,
 				$this->get_field_name( 'alter_archive_query_type' ),
 				$archive_query_select_options,
 			)

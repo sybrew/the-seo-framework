@@ -261,10 +261,36 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * **For translators:**
 	* **Added:**
 		/
-		* TODO a few sentences...
+		* Location: SEO Settings, General Settings, Performance tab.
+			* "Depending on your server's configuration, adjusting these settings can affect performance":
+				* Settings description.
+			* "Query alteration Settings"
+				* Settings title.
+			* "Altering the query allows for more control of the site's hierarchy."
+				* Settings description.
+			* "If your website has thousands of pages, these options can greatly affect database performance."
+				* Settings description.
+			* "Altering the query in the database is more accurate, but can increase database query time."
+				* Settings description.
+			* "Altering the query on the site is much faster, but can lead to inconsistent pagination. It can also lead to 404 error messages if all queried pages have been excluded."
+				* Settings description.
+			* "Perform alteration:":
+				* Option selection prefix.
+			* "In the database":
+				* Option selection.
+			* "On the site":
+				* Option selection.
+			* "Enable search query alteration?":
+				* Option checkbox label.
+			* "This allows you to exclude pages from on-site search results":
+				* Option checkbox label question mark title.
+			* "Enable archive query alteration?":
+				* Option checkbox label.
+			* "This allows you to exclude pages from on-site archive listings":
+				* Option checkbox label question mark title.
 	* **Changed:**
 		* "Exclude this %s from archive listing":
-			* Location: In-post SEO metabox.
+			* Location: In-post SEO Box.
 			* Now is: "Exclude this %s from all archive listings".
 			* Reason: Clarity.
 	* **Updated:**
@@ -274,6 +300,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * **For developers:**
 	* **Added:**
 		* Method `matches_this_domain`, where the input URL gets compared to the website's domain.
+		* Option `alter_search_query_type`.
+		* Option `alter_archive_query_type`.
+		* Option `alter_search_query`.
+		* Option `alter_archive_query`.
 	* **Updated:**
 		* Database version: `'2941'`.
 	* **Fixed:**

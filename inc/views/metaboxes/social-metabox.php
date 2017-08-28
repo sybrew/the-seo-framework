@@ -231,7 +231,15 @@ switch ( $instance ) :
 
 		<fieldset id="tsf-twitter-cards">
 			<legend><h4><?php esc_html_e( 'Twitter Card Type', 'autodescription' ); ?></h4></legend>
-			<?php $this->description_noesc( sprintf( esc_html__( 'What kind of Twitter card would you like to use? It will default to %s if no image is found.', 'autodescription' ), $this->code_wrap( 'summary' ) ) ); ?>
+			<?php
+			$this->description_noesc(
+				sprintf(
+					/* translators: %s = "summary" Twitter card type */
+					esc_html__( 'What kind of Twitter card would you like to use? It will default to %s if no image is found.', 'autodescription' ),
+					$this->code_wrap( 'summary' )
+				)
+			);
+			?>
 
 			<p class="tsf-fields">
 			<?php
