@@ -693,13 +693,13 @@ class Doing_It_Right extends Generate_Ldjson {
 	 *
 	 * @param array $args The term args.
 	 * @return array $data {
-	 *	 'title' => $title,
-	 *	 'title_is_from_custom_field' => $title_is_from_custom_field,
-	 *	 'description' => $description,
-	 *	 'description_is_from_custom_field' => $description_is_from_custom_field,
-	 *	 'noindex' => $noindex,
-	 *	 'nofollow' => $nofollow,
-	 *	 'noarchive' => $noarchive
+	 *    $title,
+	 *    $title_is_from_custom_field,
+	 *    $description,
+	 *    $description_is_from_custom_field,
+	 *    $noindex,
+	 *    $nofollow,
+	 *    $noarchive
 	 * }
 	 */
 	protected function the_seo_bar_term_data( $args ) {
@@ -743,14 +743,14 @@ class Doing_It_Right extends Generate_Ldjson {
 		$nofollow = (bool) $nofollow;
 		$noarchive = (bool) $noarchive;
 
-		return array(
-			'title' => $title,
-			'title_is_from_custom_field' => $title_is_from_custom_field,
-			'description' => $description,
-			'description_is_from_custom_field' => $description_is_from_custom_field,
-			'noindex' => $noindex,
-			'nofollow' => $nofollow,
-			'noarchive' => $noarchive,
+		return compact(
+			'title',
+			'title_is_from_custom_field',
+			'description',
+			'description_is_from_custom_field',
+			'noindex',
+			'nofollow',
+			'noarchive'
 		);
 	}
 
@@ -763,13 +763,13 @@ class Doing_It_Right extends Generate_Ldjson {
 	 *
 	 * @param array $args The post args.
 	 * @return array $data {
-	 *	 'title' => $title,
-	 *	 'title_is_from_custom_field' => $title_is_from_custom_field,
-	 *	 'description' => $description,
-	 *	 'description_is_from_custom_field' => $description_is_from_custom_field,
-	 *	 'noindex' => $noindex,
-	 *	 'nofollow' => $nofollow,
-	 *	 'noarchive' => $noarchive
+	 *    $title,
+	 *    $title_is_from_custom_field,
+	 *    $description,
+	 *    $description_is_from_custom_field,
+	 *    $noindex,
+	 *    $nofollow,
+	 *    $noarchive
 	 * }
 	 */
 	protected function the_seo_bar_post_data( $args ) {
@@ -809,14 +809,14 @@ class Doing_It_Right extends Generate_Ldjson {
 		$nofollow = (bool) $nofollow;
 		$noarchive = (bool) $noarchive;
 
-		return array(
-			'title' => $title,
-			'title_is_from_custom_field' => $title_is_from_custom_field,
-			'description' => $description,
-			'description_is_from_custom_field' => $description_is_from_custom_field,
-			'noindex' => $noindex,
-			'nofollow' => $nofollow,
-			'noarchive' => $noarchive,
+		return compact(
+			'title',
+			'title_is_from_custom_field',
+			'description',
+			'description_is_from_custom_field',
+			'noindex',
+			'nofollow',
+			'noarchive'
 		);
 	}
 

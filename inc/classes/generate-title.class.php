@@ -557,6 +557,10 @@ class Generate_Title extends Generate_Description {
 			}
 
 			$title = $this->get_the_404_title( $title );
+
+			/**
+			 * @since 2.9.4 This no longer affects post filters on admin pages.
+			 */
 			$title = $this->get_the_search_title( $title, false );
 
 			//* Fetch the post title if no title is found.

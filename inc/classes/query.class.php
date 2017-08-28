@@ -713,19 +713,19 @@ class Query extends Compat {
 	}
 
 	/**
-	 * Detects preview.
+	 * Detects search.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
+	 * @since 2.9.4 Now always returns false in admin.
 	 *
 	 * @return bool
 	 */
 	public function is_search() {
-		return \is_search();
+		return \is_search() && ! is_admin();
 	}
 
 	/**
-	 * Detects posts.
+	 * Detects single post pages.
 	 * When $post is supplied, it will check against the current object. So it will not work in the admin screens.
 	 *
 	 * @since 2.6.0

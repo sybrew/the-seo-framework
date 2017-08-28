@@ -254,6 +254,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		/
 		* When an image can't be cropped for any reason, no more 500 errors will occur, but a correct notice will be outputted instead.
 		* Titles and Descriptions starting with two spaces now get their duplicated spaces correctly removed.
+		* When performing search actions in the admin dashboard, like filtering products by category, the SEO Bar is now correct.
 		* TODO FIX: https://wordpress.org/support/topic/cronjob-returns-a-notice-related-to-the-seo-framework/
 		* Search URL in JSON-LD is now correct when slashes are omitted from pretty permalinks.
 		* TODO "Custom redirect URL", "Exclude from Archive" and "Exclude from Local Search" option values no longer show up in the "Custom Fields" metabox when filled in.
@@ -306,8 +307,26 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Option `alter_archive_query`.
 	* **Updated:**
 		* Database version: `'2941'`.
+	* **Changed:**
+		* Method `the_seo_framework()->is_search()` now always returns `false` in the admin area.
+			* Methods affected at runtime:
+				* Class `The_SEO_Framework\Load`:
+					* `get_the_search_title()`
+						* Tree:
+							1. `get_the_search_title()`
+							2. `generate_title()`
+							3. `get_notagline_title()`
+							4. `build_title_notagline()`
+							5. `build_title()`
+							6. `title()`
+						* Therefore, these output different data:
+							* `get_javascript_l10n()`
+							* `the_seo_bar_term_data()`
+							* `the_seo_bar_post_data()`
+							* `generate_description_title()`
+				* `The_SEO_Framework\Debug::get_debug_query_output()`
 	* **Fixed:**
-		* Method `get_social_image_url_from_seo_settings` first parameter now works.
+		* Method `the_seo_framework()->get_social_image_url_from_seo_settings()` first parameter now works.
 	* **Removed:**
 		* Method `the_seo_framework()->adjust_archive_query()`, without deprecation.
 		* Method `the_seo_framework()->adjust_search_filter()`, without deprecation.

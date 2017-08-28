@@ -695,18 +695,18 @@ class Init extends Query {
 	 * @param WP_Query $wp_query The WP_Query instance.
 	 * @return void Early if no search query is found.
 	 */
-	public function _alter_search_query_in( $query ) {
+	public function _alter_search_query_in( $wp_query ) {
 
 		// Don't exclude pages in wp-admin.
-		if ( $query->is_search ) {
+		if ( $wp_query->is_search ) {
 			//* Only interact with an actual Search Query.
-			if ( ! isset( $query->query['s'] ) )
+			if ( ! isset( $wp_query->query['s'] ) )
 				return;
 
 			if ( $this->is_archive_query_adjustment_blocked( $wp_query ) )
 				return;
 
-			$meta_query = $query->get( 'meta_query' );
+			$meta_query = $wp_query->get( 'meta_query' );
 
 			//* Convert to array. Unset it if it's empty.
 			if ( ! is_array( $meta_query ) )
@@ -725,7 +725,7 @@ class Init extends Query {
 				'compare'  => 'NOT EXISTS',
 			);
 
-			$query->set( 'meta_query', $meta_query );
+			$wp_query->set( 'meta_query', $meta_query );
 		}
 	}
 
