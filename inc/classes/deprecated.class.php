@@ -282,7 +282,7 @@ final class Deprecated {
 	}
 
 	/**
-	 * Fetches posts with exclude_local_search option on
+	 * Fetches posts with exclude_local_search option on.
 	 *
 	 * @since 2.7.0
 	 * @since 2.7.0 No longer used.
