@@ -71,10 +71,14 @@ class Inpost extends Doing_It_Right {
 		/**
 		 * Applies filters bool|string the_seo_framework_inpost_seo_bar :
 		 * Whether to output the SEO bar within the inpost SEO Settings metabox.
-		 * @param 	: string 'above' Outputs it above the Settings
-		 * 			: string 'below' Outputs it below the Settings
-		 * 			: bool false No output.
+		 *
 		 * @since 2.5.2
+		 *
+		 * @param $inpost_seo_bar : {
+		 *    string 'above' : Outputs it above the Settings
+		 *    string 'below' : Outputs it below the Settings
+		 *    bool false     : No output.
+		 * }
 		 */
 		$this->inpost_seo_bar = \apply_filters( 'the_seo_framework_inpost_seo_bar', false );
 
@@ -88,13 +92,13 @@ class Inpost extends Doing_It_Right {
 	 *
 	 * @param string $id The Nav Tab ID
 	 * @param array $tabs the tab content {
-	 *		$tabs = tab ID key = array(
-	 *			$tabs['name'] => tab name
-	 *			$tabs['callback'] => string|array callback function
-	 *			$tabs['dashicon'] => string Dashicon
-	 *			$tabs['args'] => mixed optional callback function args
-	 *		)
-	 *	}
+	 *    $tabs = tab ID key = array(
+	 *       $tabs['name'] => tab name
+	 *       $tabs['callback'] => string|array callback function
+	 *       $tabs['dashicon'] => string Dashicon
+	 *       $tabs['args'] => mixed optional callback function args
+	 *    )
+	 * }
 	 * @param string $version the The SEO Framework version for debugging. May be emptied.
 	 * @param bool $use_tabs Whether to output tabs, only works when $tabs is greater than 1.
 	 */
@@ -125,9 +129,9 @@ class Inpost extends Doing_It_Right {
 						$input_id = \esc_attr( 'tsf-flex-' . $id . '-tab-' . $tab );
 						$input_name = \esc_attr( 'tsf-flex-' . $id . '-tabs' );
 
-						//* All output below is escaped.
+						//= All output below is escaped.
 						?>
-						<div class="tsf-flex tsf-flex-nav-tab tsf-flex<?php echo $wrapper_active ?>" id="<?php echo $wrapper_id ?>">
+						<div class="tsf-flex tsf-flex-nav-tab tsf-flex<?php echo $wrapper_active; ?>" id="<?php echo $wrapper_id; ?>">
 							<input type="radio" class="tsf-flex-nav-tab-radio" id="<?php echo $input_id; ?>" name="<?php echo $input_name; ?>" <?php echo $input_checked; ?>>
 							<label for="<?php echo $input_id; ?>" class="tsf-flex tsf-flex-nav-tab-label">
 								<?php
@@ -299,6 +303,7 @@ class Inpost extends Doing_It_Right {
 				 */
 				$priority = (string) \apply_filters( 'the_seo_framework_metabox_priority', 'high' );
 
+				/* translators: %s = Post type name */
 				\add_meta_box( $id, sprintf( \__( '%s SEO Settings', 'autodescription' ), $title ), array( $this, 'pre_seo_box' ), $post_type, $context, $priority, $args );
 			endif;
 		endif;
@@ -310,8 +315,8 @@ class Inpost extends Doing_It_Right {
 	 * @since 2.1.8
 	 * @access private
 	 *
-	 * @param $object the page/post/taxonomy object
-	 * @param $args the page/post arguments or taxonomy slug.
+	 * @param object $object the page/post/taxonomy object
+	 * @param array $args the page/post arguments or taxonomy slug.
 	 * @return string Inpost SEO box.
 	 */
 	public function pre_seo_box( $object, $args ) {
@@ -327,8 +332,7 @@ class Inpost extends Doing_It_Right {
 				return $this->inpost_seo_box( $object, (array) $args );
 			}
 		} else {
-			//* Empty the arguments, if any.
-			return $this->inpost_seo_box( $object, $args = '' );
+			return $this->inpost_seo_box( $object, '' );
 		}
 
 		return '';
@@ -341,8 +345,8 @@ class Inpost extends Doing_It_Right {
 	 * @access private
 	 * @uses $this->get_custom_field() Get custom field value.
 	 *
-	 * @param object $object the page/post/taxonomy object
-	 * @param array $args    the page/post arguments or taxonomy slug
+	 * @param object $object The page/post/taxonomy object
+	 * @param array  $args   The page/post arguments or taxonomy slug
 	 */
 	public function inpost_seo_box( $object, $args ) {
 
@@ -474,11 +478,6 @@ class Inpost extends Doing_It_Right {
 	 *
 	 * Placeholder method that's used prior to upgrade merge 2.9 -> 3.0+.
 	 * Do not use. It will take a little too much time to perfect this.
-	 *
-	 * Will anyone even notice this?
-	 * If so: Hi there, do not forget to smile!
-	 * Do send me an email @ sybre at theseoframework.com.
-	 * Subject: CAUGHT! Content: Hi Sybre :D, noob.
 	 *
 	 * @since 2.9.0
 	 * @access private

@@ -286,6 +286,7 @@ class Term_Data extends Post_Data {
 	 * Get the current screen term labels.
 	 *
 	 * @since 2.6.0
+	 * @since 2.9.4 Added $term->label and $term->labels->singular_name as additional fallbacks.
 	 * @staticvar string $term_name : Caution: This function only runs once per screen and doesn't check the term type more than once.
 	 *
 	 * @param object $term The Taxonomy Term object.
@@ -324,6 +325,10 @@ class Term_Data extends Post_Data {
 				if ( isset( $term_labels->name ) )
 					return $term_name[ $singular ] = $term_labels[ $tax_type ]->name;
 			}
+		} elseif ( isset( $term->label ) ) {
+			return $term->label;
+		} elseif ( isset( $term->labels->singular_name ) ) {
+			return $term->labels->singular_name;
 		}
 
 		if ( $fallback ) {

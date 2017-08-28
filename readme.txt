@@ -242,22 +242,19 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 				* When set to "On the site", PHP will filter the posts. This can lead to 404 errors.
 	* **Improved:**
 		* When using PHP 5.4 or later, slashes are no longer escaped in JSON-LD data. So `http://schema.org` no longer becomes `http:\/\/schema.org`.
-		/
 		* Open Graph image size source comparison now performs a weaker preparation for comparison, improving performance.
 		* Image URLS from input can now convert between HTTP and HTTPS when host name match.
 			* This will also work with CDN plugins when your input URL matches your site hostname.
 			* The preferred URL scheme will be set (SEO Settings -> Canonical -> Scheme Settings).
-		/
 		* Multisite: Removed PHP and WP version testing completion option from site options to blog options.
 			* For multisite, this means the option is now autoloaded on networks, so there will be fewer database calls.
 	* **Fixed:**
-		/
 		* When an image can't be cropped for any reason, no more 500 errors will occur, but a correct notice will be outputted instead.
 		* Titles and Descriptions starting with two spaces now get their duplicated spaces correctly removed.
 		* When performing search actions in the admin dashboard, like filtering products by category, the SEO Bar is now correct.
-		* TODO FIX: https://wordpress.org/support/topic/cronjob-returns-a-notice-related-to-the-seo-framework/
 		* Search URL in JSON-LD is now correct when slashes are omitted from pretty permalinks.
-		* TODO "Custom redirect URL", "Exclude from Archive" and "Exclude from Local Search" option values no longer show up in the "Custom Fields" metabox when filled in.
+		* When CPT archives aren't registered with a label, they are tried for their deeper listed singular label.
+			* Notably, The Events Calendar works correctly now with The SEO Framework.
 
 * **For translators:**
 	* **Added:**
@@ -319,7 +316,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 							4. `build_title_notagline()`
 							5. `build_title()`
 							6. `title()`
-						* Therefore, these output different data:
+						* Therefore, these output different data on admin search pages:
 							* `get_javascript_l10n()`
 							* `the_seo_bar_term_data()`
 							* `the_seo_bar_post_data()`
@@ -327,6 +324,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 				* `The_SEO_Framework\Debug::get_debug_query_output()`
 	* **Fixed:**
 		* Method `the_seo_framework()->get_social_image_url_from_seo_settings()` first parameter now works.
+		* Method `the_seo_framework()->delete_ld_json_transient()` no longer uses run-once cache. Therefore, it can clear multiple LD JSON transients.
 	* **Removed:**
 		* Method `the_seo_framework()->adjust_archive_query()`, without deprecation.
 		* Method `the_seo_framework()->adjust_search_filter()`, without deprecation.

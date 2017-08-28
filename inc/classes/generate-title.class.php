@@ -877,7 +877,7 @@ class Generate_Title extends Generate_Description {
 				$title = \_x( 'Chats', 'post format archive title', 'autodescription' );
 			}
 		} elseif ( \is_post_type_archive() ) {
-			$title = \post_type_archive_title( '', false );
+			$title = \post_type_archive_title( '', false ) ?: $this->get_the_term_name( $term, true, false );
 			/* translators: Front-end output. */
 			$title = $use_prefix ? sprintf( __( 'Archives: %s' ), $title ) : $title;
 		} elseif ( isset( $term ) ) {
