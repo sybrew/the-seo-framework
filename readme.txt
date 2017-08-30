@@ -1,10 +1,10 @@
 === The SEO Framework ===
 Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
-Tags: google, bing, open graph, seo, xml sitemap, breadcrumbs, meta, search engine, woocommerce, cpt, facebook, twitter
+Tags: google, bing, open graph, seo, xml sitemap, schema, local, meta, search engine, woocommerce, amp, facebook, twitter
 Requires at least: 4.4.0
-Tested up to: 4.8.0
-Stable tag: 2.9.3
+Tested up to: 4.8.1
+Stable tag: 2.9.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -17,7 +17,7 @@ The SEO Framework plugin provides an automated and advanced SEO solution for you
 
 This plugin provides an automated, accessible, unbranded and extremely fast SEO solution for any WordPress website.
 
-For optional advanced SEO options and output, check out our free companion plugin [Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/).
+For optional advanced SEO tools and output, check out our free companion plugin [Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/).
 
 > <strong>This plugin strongly helps you create better SEO value for your content.</strong><br>
 > But at the end of the day, it all depends on how entertaining or well-constructed your content or product is.
@@ -225,118 +225,27 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
-= 2.9.4 - ??? =
+= 2.9.4 - Terminal Queries =
 
-* **For everyone:**
-	* **Added:**
-		* Four new options regarding performance:
-			1. "Enable search query alteration".
-				* When disabled, this might improve search result pages' performance.
-			2. "Peform (search query) alteration:"
-				* When set to "In the database", it will tell the database to filter the posts. This is more accurate, but slower.
-				* When set to "On the site", PHP will filter the posts. This can lead to 404 errors.
-			3. "Enable archive query alteration".
-				* When disabled, this might improve overall site performance.
-			4. "Peform (archive query) alteration:"
-				* When set to "In the database", it will tell the database to filter the posts. This is more accurate, but slower.
-				* When set to "On the site", PHP will filter the posts. This can lead to 404 errors.
-	* **Improved:**
-		* When using PHP 5.4 or later, slashes are no longer escaped in JSON-LD data. So `http://schema.org` no longer becomes `http:\/\/schema.org`.
-		* Open Graph image size source comparison now performs a weaker preparation for comparison, improving performance.
-		* Image URLS from input can now convert between HTTP and HTTPS when host name match.
-			* This will also work with CDN plugins when your input URL matches your site hostname.
-			* The preferred URL scheme will be set (SEO Settings -> Canonical -> Scheme Settings).
-		* Multisite: Removed PHP and WP version testing completion option from site options to blog options.
-			* For multisite, this means the option is now autoloaded on networks, so there will be fewer database calls.
-	* **Fixed:**
-		* When an image can't be cropped for any reason, no more 500 errors will occur, but a correct notice will be outputted instead.
-		* Titles and Descriptions starting with two spaces now get their duplicated spaces correctly removed.
-		* When performing search actions in the admin dashboard, like filtering products by category, the SEO Bar is now correct.
-		* Search URL in JSON-LD is now correct when slashes are omitted from pretty permalinks.
-		* When CPT archives aren't registered with a label, they are tried for their deeper listed singular label.
-			* Notably, The Events Calendar works correctly now with The SEO Framework.
+**Release date:**
 
-* **For translators:**
-	* **Added:**
-		/
-		* Location: SEO Settings, General Settings, Performance tab.
-			* "Depending on your server's configuration, adjusting these settings can affect performance":
-				* Settings description.
-			* "Query alteration Settings"
-				* Settings title.
-			* "Altering the query allows for more control of the site's hierarchy."
-				* Settings description.
-			* "If your website has thousands of pages, these options can greatly affect database performance."
-				* Settings description.
-			* "Altering the query in the database is more accurate, but can increase database query time."
-				* Settings description.
-			* "Altering the query on the site is much faster, but can lead to inconsistent pagination. It can also lead to 404 error messages if all queried pages have been excluded."
-				* Settings description.
-			* "Perform alteration:":
-				* Option selection prefix.
-			* "In the database":
-				* Option selection.
-			* "On the site":
-				* Option selection.
-			* "Enable search query alteration?":
-				* Option checkbox label.
-			* "This allows you to exclude pages from on-site search results":
-				* Option checkbox label question mark title.
-			* "Enable archive query alteration?":
-				* Option checkbox label.
-			* "This allows you to exclude pages from on-site archive listings":
-				* Option checkbox label question mark title.
-	* **Changed:**
-		* "Exclude this %s from archive listing":
-			* Location: In-post SEO Box.
-			* Now is: "Exclude this %s from all archive listings".
-			* Reason: Clarity.
-	* **Updated:**
-		/
-		* TODO POT translation file.
+* August 30th, 2017
 
-* **For developers:**
-	* **Added:**
-		* Method `matches_this_domain`, where the input URL gets compared to the website's domain.
-		* Option `alter_search_query_type`.
-		* Option `alter_archive_query_type`.
-		* Option `alter_search_query`.
-		* Option `alter_archive_query`.
-	* **Updated:**
-		* Database version: `'2941'`.
-	* **Changed:**
-		* Method `the_seo_framework()->is_search()` now always returns `false` in the admin area.
-			* Methods affected at runtime:
-				* Class `The_SEO_Framework\Load`:
-					* `get_the_search_title()`
-						* Tree:
-							1. `get_the_search_title()`
-							2. `generate_title()`
-							3. `get_notagline_title()`
-							4. `build_title_notagline()`
-							5. `build_title()`
-							6. `title()`
-						* Therefore, these output different data on admin search pages:
-							* `get_javascript_l10n()`
-							* `the_seo_bar_term_data()`
-							* `the_seo_bar_post_data()`
-							* `generate_description_title()`
-				* `The_SEO_Framework\Debug::get_debug_query_output()`
-	* **Fixed:**
-		* Method `the_seo_framework()->get_social_image_url_from_seo_settings()` first parameter now works.
-		* Method `the_seo_framework()->delete_ld_json_transient()` no longer uses run-once cache. Therefore, it can clear multiple LD JSON transients.
-	* **Removed:**
-		* Method `the_seo_framework()->adjust_archive_query()`, without deprecation.
-		* Method `the_seo_framework()->adjust_search_filter()`, without deprecation.
-	* **Filter notes:**
-		* **Added:**
-			* `(string) the_seo_framework_title_pagination`, allows you to adjust the title pagination.
-			* `(bool) the_seo_framework_do_adjust_archive_query`, allows other plugin authors to prevent query adjustment.
-			* `(array) the_seo_framework_query_alteration_types`, allows you to limit query adjustment types.
-	* **Action notes:**
-		* **Added:**
-			* `the_seo_framework_after_front_init`. This allows you to easily alter hooks on the front-end.
-			* `the_seo_framework_after_admin_init`. This allows you to easily alter hooks on the back-end.
+**Summarized:**
+
+* New performance options have been added. They allow you to optimize Search and Archive query alterations.
+* Schema.org JSON-LD data is now cleaner when you run PHP 5.4 or later.
+* Custom input image URLs can now dynamically switch between HTTP and HTTPS and the dimensions are always set, regardless of input.
+* Multisite networks no longer initiate new database connections on every page for plugin compatibility checks.
+
+**Did you know?**
+
+* Local SEO has been added to the [Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/).
+* It increases location-aware search presence in Google Search, Google Maps, and even Google Images.
+
+**Detailed log:**
+
+***I had not overlooked them, and [they shall be answered](https://theseoframework.com/?p=2135#detailed).***
 
 = 2.9.3 - Assiduous Substratum =
 

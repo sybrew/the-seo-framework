@@ -778,15 +778,21 @@ class Generate_Url extends Generate_Title {
 
 		$additions = '';
 		if ( ! empty( $query ) ) {
-
 			if ( false !== strpos( $query, '&' ) ) {
+				//= This can fail on malformed URLs
 				$query = explode( '&', $query );
 			} else {
 				$query = array( $query );
 			}
 
 			foreach ( $query as $arg ) {
-				if ( false === strpos( $path, $arg ) )
+				/**
+				 * @since 2.9.4 Added $args availability check.
+				 * This is a band-aid, not a fix.
+				 * @TODO inspect prior explode().
+				 * @link https://wordpress.org/support/topic/error-when-previewing-a-draft-of-knowledge-base-article/#post-9452791
+				 */
+				if ( $arg && false === strpos( $path, $arg ) )
 					$additions .= '&' . $arg;
 			}
 		}
