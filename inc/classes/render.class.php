@@ -314,7 +314,9 @@ class Render extends Admin_Init {
 		if ( ! $this->use_og_tags() )
 			return '';
 
-		if ( $type = $this->get_og_type() )
+		$type = $this->get_og_type();
+
+		if ( $type )
 			return '<meta property="og:type" content="' . \esc_attr( $type ) . '" />' . "\r\n";
 
 		return '';
@@ -675,12 +677,16 @@ class Render extends Admin_Init {
 	 * Renders Facebook Publisher meta tag.
 	 *
 	 * @since 2.2.2
+	 * @since 3.0.0 No longer outputs tag when "og:type" isn't 'article'.
 	 *
 	 * @return string The Facebook Publisher meta tag.
 	 */
 	public function facebook_publisher() {
 
 		if ( ! $this->use_facebook_tags() )
+			return '';
+
+		if ( 'article' !== $this->get_og_type() )
 			return '';
 
 		/**
@@ -1018,7 +1024,7 @@ class Render extends Admin_Init {
 		 * Applies filters 'the_seo_framework_shortlink_output' : string
 		 * @since 2.6.0
 		 */
-		$url = (string) \apply_filters( 'the_seo_framework_shortlink_output', $this->get_shortlink( $id ), $this->get_the_real_ID( $id ) );
+		$url = (string) \apply_filters( 'the_seo_framework_shortlink_output', $this->get_shortlink( $id ), $id );
 
 		if ( $url )
 			return sprintf( '<link rel="shortlink" href="%s" />' . "\r\n", $url );

@@ -879,7 +879,7 @@ class Generate_Title extends Generate_Description {
 		} elseif ( \is_post_type_archive() ) {
 			$title = \post_type_archive_title( '', false ) ?: $this->get_the_term_name( $term, true, false );
 			/* translators: Front-end output. */
-			$title = $use_prefix ? sprintf( __( 'Archives: %s' ), $title ) : $title;
+			$title = $use_prefix ? sprintf( \__( 'Archives: %s' ), $title ) : $title;
 		} elseif ( isset( $term ) ) {
 			$title = $this->single_term_title( '', false, $term );
 

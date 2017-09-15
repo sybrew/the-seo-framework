@@ -197,7 +197,7 @@ class Generate_Ldjson extends Generate_Image {
 	 *
 	 * @since 2.9.3
 	 *
-	 * @return escaped LD+JSON Search and Sitename script.
+	 * @return string escaped LD+JSON Search and Sitename script.
 	 */
 	public function get_ld_json_website() {
 

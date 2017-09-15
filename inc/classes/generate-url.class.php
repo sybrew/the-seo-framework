@@ -239,16 +239,16 @@ class Generate_Url extends Generate_Title {
 			if ( $_has_filter ) {
 				/**
 				 * @applies filters the_seo_framework_url_args : {
-				 *  	@param bool $paged Return current page URL without pagination if false
-				 *  	@param bool $paged_plural Whether to add pagination for the second or later page.
-				 *  	@param bool $from_option Get the canonical uri option
-				 *  	@param object $post The Post Object.
-				 *  	@param bool $external Whether to fetch the current WP Request or get the permalink by Post Object.
-				 *  	@param bool $is_term Fetch url for term.
-				 *  	@param object $term The term object.
-				 *  	@param bool $home Fetch home URL.
-				 *  	@param bool $forceslash Fetch home URL and slash it, always.
-				 *  	@param int $id The Page or Term ID.
+				 *    @param bool $paged Return current page URL without pagination if false
+				 *    @param bool $paged_plural Whether to add pagination for the second or later page.
+				 *    @param bool $from_option Get the canonical uri option
+				 *    @param object $post The Post Object.
+				 *    @param bool $external Whether to fetch the current WP Request or get the permalink by Post Object.
+				 *    @param bool $is_term Fetch url for term.
+				 *    @param object $term The term object.
+				 *    @param bool $home Fetch home URL.
+				 *    @param bool $forceslash Fetch home URL and slash it, always.
+				 *    @param int $id The Page or Term ID.
 				 * }
 				 *
 				 * @since 2.5.0
