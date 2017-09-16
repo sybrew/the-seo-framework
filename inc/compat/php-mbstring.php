@@ -10,10 +10,10 @@ defined( 'ABSPATH' ) or die;
  *
  * @see _mb_strpos()
  *
- * @param string		$haystack	The string to search in.
- * @param mixed 		$needle		If needle is not a string, it is converted to an integer and applied as the ordinal value of a character.
- * @param int			$offset		Optional, search will start this number of characters counted from the beginning of the string. The offset cannot be negative.
- * @param string|null	$encoding	Optional. Character encoding to use. Default null.
+ * @param string      $haystack The string to search in.
+ * @param mixed       $needle   If needle is not a string, it is converted to an integer and applied as the ordinal value of a character.
+ * @param int         $offset   Optional, search will start this number of characters counted from the beginning of the string. The offset cannot be negative.
+ * @param string|null $encoding Optional. Character encoding to use. Default null.
  *
  * @license GLPv2 or later
  * @return int Position of first occurrence found of $haystack of `$needle`.
@@ -34,10 +34,10 @@ endif;
  * @since 2.2.0 The SEO Framework
  * @license GLPv2 or later
  *
- * @param string		$haystack	The string to search in.
- * @param mixed 		$needle		If needle is not a string, it is converted to an integer and applied as the ordinal value of a character.
- * @param int			$offset		Optional, search will start this number of characters counted from the beginning of the string. The offset cannot be negative.
- * @param string|null	$encoding	Optional. Character encoding to use. Default null.
+ * @param string      $haystack The string to search in.
+ * @param mixed       $needle   If needle is not a string, it is converted to an integer and applied as the ordinal value of a character.
+ * @param int         $offset   Optional, search will start this number of characters counted from the beginning of the string. The offset cannot be negative.
+ * @param string|null $encoding Optional. Character encoding to use. Default null.
  *
  * @license GLPv2 or later
  * @return int Position of first occurrence found of $haystack of `$needle`.
@@ -51,7 +51,7 @@ if ( ! function_exists( '_mb_strpos' ) ) :
 
 		// The solution below works only for UTF-8,
 		// So in case of a different charset just use built-in strpos()
-		if ( ! in_array( $encoding, array( 'utf8', 'utf-8', 'UTF8', 'UTF-8' ) ) ) {
+		if ( ! in_array( $encoding, array( 'utf8', 'utf-8', 'UTF8', 'UTF-8' ), true ) ) {
 			return 0 === $offset ? strpos( $haystack, $needle ) : strpos( $haystack, $needle, $offset );
 		}
 
@@ -81,7 +81,7 @@ if ( ! function_exists( '_mb_strpos' ) ) :
 
 		if ( _wp_can_use_pcre_u() ) {
 			// Use the regex unicode support to separate the UTF-8 characters into an array
-			preg_match_all( "/./us", $haystack, $match_h );
+			preg_match_all( '/./us', $haystack, $match_h );
 			preg_match_all( "/$needle/us", $haystack_sub, $match_n );
 
 			$inter = array_intersect( $match_h[0], $match_n[0] );
@@ -165,7 +165,7 @@ if ( ! function_exists( '_mb_strpos' ) ) :
 		 * Compute match of haystack offset with needle
 		 * If passed, return the array key number within the full haystack.
 		 */
-		if ( false !== in_array( $match_n[0], $match_hs ) ) {
+		if ( false !== in_array( $match_n[0], $match_hs, true ) ) {
 			$inter = array_intersect( $match_h, $match_n );
 
 			if ( ! isset( $inter ) )

@@ -422,7 +422,7 @@ class Site_Options extends Sanitize {
 		$this->init_admin_scripts();
 
 		//* Output notice.
-		\add_action( 'admin_notices', array( $this, 'site_updated_plugin_notice' ) );
+		\add_action( 'admin_notices', array( $this, 'do_settings_updated_notice' ) );
 
 	}
 
@@ -433,7 +433,7 @@ class Site_Options extends Sanitize {
 	 *
 	 * @access private
 	 */
-	public function site_updated_plugin_notice() {
+	public function do_settings_updated_notice() {
 
 		$settings_url = $this->seo_settings_page_url();
 		$link = sprintf( '<a href="%s" title="%s" target="_self">%s</a>', $settings_url, \esc_attr__( 'SEO Settings', 'autodescription' ), \esc_html__( 'here', 'autodescription' ) );
