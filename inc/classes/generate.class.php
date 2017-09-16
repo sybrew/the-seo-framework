@@ -40,12 +40,13 @@ class Generate extends Term_Data {
 	}
 
 	/**
-	 * Output the `index`, `follow`, `noodp`, `noydir`, `noarchive` robots meta code in array
+	 * Returns the `index`, `follow`, `noydir`, `noarchive` robots meta code array.
 	 *
 	 * @since 2.2.2
 	 * @since 2.2.4 Added robots SEO settings check.
 	 * @since 2.2.8 Added check for empty archives.
 	 * @since 2.8.0 Added check for protected/private posts.
+	 * @since 3.0.0 Removed noodp.
 	 *
 	 * @global object $wp_query
 	 *
@@ -58,7 +59,6 @@ class Generate extends Term_Data {
 			'noindex'   => $this->get_option( 'site_noindex' ) ? 'noindex' : '',
 			'nofollow'  => $this->get_option( 'site_nofollow' ) ? 'nofollow' : '',
 			'noarchive' => $this->get_option( 'site_noarchive' ) ? 'noarchive' : '',
-			'noodp'     => $this->get_option( 'noodp' ) ? 'noodp' : '',
 			'noydir'    => $this->get_option( 'noydir' ) ? 'noydir' : '',
 		);
 

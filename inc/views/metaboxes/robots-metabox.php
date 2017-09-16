@@ -96,22 +96,14 @@ switch ( $instance ) :
 
 		?><h4><?php esc_html_e( 'Open Directory Settings', 'autodescription' ); ?></h4><?php
 		$this->description( __( "Sometimes, Search Engines use resources from certain Directories to find titles and descriptions for your content. You generally don't want them to. Turn these options on to prevent them from doing so.", 'autodescription' ) );
-		$this->description( __( "The Open Directory Project and the Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave these options checked.", 'autodescription' ) );
+		$this->description( __( "The Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave the option checked.", 'autodescription' ) );
 
 		$fields = $this->wrap_fields(
-			array(
-				$this->make_checkbox(
-					'noodp',
-					sprintf( esc_html__( 'Apply %s to the entire site?', 'autodescription' ), $this->code_wrap( 'noodp' ) ),
-					'',
-					false
-				),
-				$this->make_checkbox(
-					'noydir',
-					sprintf( esc_html__( 'Apply %s to the entire site?', 'autodescription' ), $this->code_wrap( 'noydir' ) ),
-					'',
-					false
-				),
+			$this->make_checkbox(
+				'noydir',
+				sprintf( esc_html__( 'Apply %s to the entire site?', 'autodescription' ), $this->code_wrap( 'noydir' ) ),
+				'',
+				false
 			), true
 		);
 		?>

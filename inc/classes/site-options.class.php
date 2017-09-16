@@ -136,7 +136,6 @@ class Site_Options extends Sanitize {
 		//	'description_custom'    => '', // Custom prefix TODO
 
 			// Robots directory.
-			'noodp'  => 1, // Site noopd robots settings
 			'noydir' => 1, // Site noydir robots settings
 
 			// Robots index.

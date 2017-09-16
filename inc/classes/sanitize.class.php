@@ -211,7 +211,6 @@ class Sanitize extends Admin_Pages {
 				'description_additions',
 				'description_blogname',
 
-				'noodp',
 				'noydir',
 
 				'category_noindex',
@@ -269,7 +268,6 @@ class Sanitize extends Admin_Pages {
 				'home_modify_time',
 				'home_publish_time',
 
-				'noodp',
 				'noydir',
 
 				'knowledge_logo',

@@ -235,11 +235,20 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * TODO
 
 * **For everyone:**
+	* **Removed:**
+		* `noodp` and all its settings. The DMOZ project that it influenced is no longer available nor used.
 	* **Fixed:**
 		/
+		* `article:publisher` is now only output on `article` types.
 		* TODO Category SEO settings character counter length + SEO Bar compatibility with https://wordpress.org/plugins/visual-term-description-editor/ (check mail inbox keyword: Visual Term Description Editor).
 		* TODO check W3TC canonical issues https://wordpress.org/support/topic/canonical-https-detection-not-working/
 
+* **For translators:**
+	* **Changed:**
+		* "The Open Directory Project and the Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave these options checked."
+			* Now is: "The Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave the option checked."
+			* Removed: Open Directory Project.
+			* Changed: From plural to singular.
 
 **Detailed log:**
 /
