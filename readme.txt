@@ -237,6 +237,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * **For everyone:**
 	* **Improved:**
 		* Password protected posts and pages no longer show up in the sitemap.
+		* The homepage in-post SEO settings box now links to the settings page when the user can view those options.
 	* **Removed:**
 		* `noodp` and all its settings. The DMOZ project that it influenced is no longer available nor used.
 	* **Fixed:**
@@ -247,6 +248,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* TSF no longer outputs canonical URLs on BuddyPress pages. Instead, it lets BuddyPress output it.
 
 * **For translators:**
+	* **Added:**
+		* "Homepage SEO Settings"
+			* Location: In-post SEO Settings metabox title, when editing the home page.
 	* **Changed:**
 		* "The Open Directory Project and the Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave these options checked."
 			* Now is: "The Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave the option checked."

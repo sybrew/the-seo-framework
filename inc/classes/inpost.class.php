@@ -267,8 +267,8 @@ class Inpost extends Doing_It_Right {
 
 			if ( $labels ) :
 				//* Title and type are used interchangeably.
-				$title = isset( $labels->singular_name ) ? $labels->singular_name : $labels->name;
-				$args = array( $title, 'is_post_page' );
+				$label = isset( $labels->singular_name ) ? $labels->singular_name : $labels->name;
+				$args = array( $label, 'is_post_page' );
 
 				/**
 				 * Applies filters 'the_seo_framework_metabox_id' : string
@@ -303,8 +303,28 @@ class Inpost extends Doing_It_Right {
 				 */
 				$priority = (string) \apply_filters( 'the_seo_framework_metabox_priority', 'high' );
 
+				if ( $this->is_front_page_by_id( $this->get_the_real_ID() ) ) {
+					if ( \current_user_can( $this->settings_capability() ) ) {
+						$schema = \is_rtl() ? '%2$s - %1$s' : '%1$s - %2$s';
+						$title = sprintf(
+							$schema,
+							\__( 'Homepage SEO Settings', 'autodescription' ),
+							sprintf(
+								'<a href="%s">%s</a>',
+								$this->seo_settings_page_url(),
+								\__( 'SEO Settings Page', 'autodescription' )
+							)
+						);
+					} else {
+						$title = \__( 'Homepage SEO Settings', 'autodescription' );
+					}
+				} else {
+					/* translators: %s = Post Type */
+					$title = sprintf( \__( '%s SEO Settings', 'autodescription' ), $label );
+				}
+
 				/* translators: %s = Post type name */
-				\add_meta_box( $id, sprintf( \__( '%s SEO Settings', 'autodescription' ), $title ), array( $this, 'pre_seo_box' ), $post_type, $context, $priority, $args );
+				\add_meta_box( $id, $title, array( $this, 'pre_seo_box' ), $post_type, $context, $priority, $args );
 			endif;
 		endif;
 	}
