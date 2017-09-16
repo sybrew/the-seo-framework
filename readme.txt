@@ -235,6 +235,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * TODO
 
 * **For everyone:**
+	* **Improved:**
+		* Password protected posts and pages no longer show up in the sitemap.
 	* **Removed:**
 		* `noodp` and all its settings. The DMOZ project that it influenced is no longer available nor used.
 	* **Fixed:**
