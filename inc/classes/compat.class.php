@@ -43,9 +43,6 @@ class Compat extends Core {
 
 		//* Jetpack compat.
 		\add_action( 'init', array( $this, 'jetpack_compat' ) );
-
-		//* BuddyPress front-end compat.
-		\remove_action( 'wp_head', '_bp_maybe_remove_rel_canonical', 8 );
 	}
 
 	/**
@@ -92,6 +89,11 @@ class Compat extends Core {
 		if ( $this->detect_plugin( array( 'globals' => array( 'ultimatemember' ) ) ) ) {
 			//* Ultimate Member
 			$this->_include_compat( 'ultimatemember', 'plugin' );
+		}
+		if ( $this->detect_plugin( array( 'globals' => array( 'bp' ) ) ) ) {
+			//* BuddyPress
+			$this->_include_compat( 'buddypress', 'plugin' );
+
 		}
 
 		if ( $this->detect_plugin( array( 'functions' => array( 'bbpress' ) ) ) ) {

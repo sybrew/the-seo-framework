@@ -244,6 +244,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* `article:publisher` is now only output on `article` types.
 		* TODO Category SEO settings character counter length + SEO Bar compatibility with https://wordpress.org/plugins/visual-term-description-editor/ (check mail inbox keyword: Visual Term Description Editor).
 		* TODO check W3TC canonical issues https://wordpress.org/support/topic/canonical-https-detection-not-working/
+		* TSF no longer outputs canonical URLs on BuddyPress pages. Instead, it lets BuddyPress output it.
 
 * **For translators:**
 	* **Changed:**
@@ -251,6 +252,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Now is: "The Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave the option checked."
 			* Removed: Open Directory Project.
 			* Changed: From plural to singular.
+
+* **For developers:**
+	* **Updated:**
+		/
+		* TODO Database version: `3000`.
 
 **Detailed log:**
 /
