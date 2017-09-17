@@ -147,7 +147,6 @@ class Detect extends Render {
 				'XML Sitemap & Google News feeds'      => 'xml-sitemap-feed/xml-sitemap.php',
 				'Google Sitemap by BestWebSoft'        => 'google-sitemap-plugin/google-sitemap-plugin.php',
 				'Simple Wp Sitemap'                    => 'simple-wp-sitemap/simple-wp-sitemap.php',
-				'Simple Sitemap'                       => 'simple-sitemap/simple-sitemap.php',
 				'XML Sitemaps'                         => 'xml-sitemaps/xml-sitemaps.php',
 			),
 			'open_graph' => array(

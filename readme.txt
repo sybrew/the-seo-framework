@@ -246,6 +246,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* TODO Category SEO settings character counter length + SEO Bar compatibility with https://wordpress.org/plugins/visual-term-description-editor/ (check mail inbox keyword: Visual Term Description Editor).
 		* TODO check W3TC canonical issues https://wordpress.org/support/topic/canonical-https-detection-not-working/
 		* TSF no longer outputs canonical URLs on BuddyPress pages. Instead, it lets BuddyPress output it.
+		* [Simple Sitemap](https://wordpress.org/plugins/simple-sitemap/) is no longer detected as a conflicting sitemap plugin.
 
 * **For translators:**
 	* **Added:**
