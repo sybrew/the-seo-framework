@@ -304,7 +304,7 @@ class Inpost extends Doing_It_Right {
 				$priority = (string) \apply_filters( 'the_seo_framework_metabox_priority', 'high' );
 
 				if ( $this->is_front_page_by_id( $this->get_the_real_ID() ) ) {
-					if ( \current_user_can( $this->settings_capability() ) ) {
+					if ( $this->can_access_settings() ) {
 						$schema = \is_rtl() ? '%2$s - %1$s' : '%1$s - %2$s';
 						$title = sprintf(
 							$schema,

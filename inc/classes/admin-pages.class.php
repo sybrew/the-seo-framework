@@ -108,9 +108,9 @@ class Admin_Pages extends Inpost {
 		$menu = array(
 			'page_title' => \esc_html__( 'SEO Settings', 'autodescription' ),
 			'menu_title' => \esc_html__( 'SEO', 'autodescription' ),
-			'capability' => $this->settings_capability(),
+			'capability' => $this->get_settings_capability(),
 			'menu_slug'  => $this->seo_settings_page_slug,
-			'callback'   => array( $this, 'admin' ),
+			'callback'   => array( $this, '_output_seo_settings_wrap' ),
 			'icon'       => 'dashicons-search',
 			'position'   => '90.9001',
 		);
@@ -160,50 +160,36 @@ class Admin_Pages extends Inpost {
 			$this->handle_update_post();
 
 		//* Output metaboxes.
-		\add_action( $this->seo_settings_page_hook . '_settings_page_boxes', array( $this, 'do_metaboxes' ) );
-		\add_action( 'load-' . $this->seo_settings_page_hook, array( $this, 'metaboxes' ) );
+		\add_action( $this->seo_settings_page_hook . '_settings_page_boxes', array( $this, '_output_seo_settings_columns' ) );
+		\add_action( 'load-' . $this->seo_settings_page_hook, array( $this, '_register_seo_settings_metaboxes' ) );
 	}
 
 	/**
-	 * Echo out the do_metaboxes() and wrapping markup.
+	 * Outputs SEO Settings page wrap.
 	 *
-	 * @since 2.2.2
+	 * @since 3.0.0
+	 * @access private
 	 */
-	public function do_metaboxes() {
-		?>
-		<div class="metabox-holder columns-2">
-			<div class="postbox-container-1">
-				<?php
-				\do_action( 'the_seo_framework_before_siteadmin_metaboxes', $this->seo_settings_page_hook );
-
-				\do_meta_boxes( $this->seo_settings_page_hook, 'main', null );
-
-				if ( isset( $GLOBALS['wp_meta_boxes'][ $this->seo_settings_page_hook ]['main_extra'] ) )
-					\do_meta_boxes( $this->seo_settings_page_hook, 'main_extra', null );
-
-				\do_action( 'the_seo_framework_after_siteadmin_metaboxes', $this->seo_settings_page_hook );
-				?>
-			</div>
-			<div class="postbox-container-2">
-				<?php
-				\do_action( 'the_seo_framework_before_siteadmin_metaboxes_side', $this->seo_settings_page_hook );
-
-				/**
-				 * @TODO fill this in
-				 * @priority low 2.9.0
-				 */
-
-				\do_action( 'the_seo_framework_after_siteadmin_metaboxes_side', $this->seo_settings_page_hook );
-				?>
-			</div>
-		</div>
-		<?php
+	public function _output_seo_settings_wrap() {
+		\do_action( 'the_seo_framework_pre_seo_settings' );
+		$this->get_view( 'admin/seo-settings-wrap', get_defined_vars() );
+		\do_action( 'the_seo_framework_pro_seo_settings' );
 	}
 
 	/**
-	 * Register meta boxes on the Site SEO Settings page.
+	 * Outputs SEO Settings columns.
 	 *
-	 * @since 2.2.2
+	 * @since 3.0.0
+	 * @access private
+	 */
+	public function _output_seo_settings_columns() {
+		$this->get_view( 'admin/seo-settings-columns', get_defined_vars() );
+	}
+
+	/**
+	 * Registers meta boxes on the Site SEO Settings page.
+	 *
+	 * @since 3.0.0
 	 *
 	 * @see $this->general_metabox()     Callback for General Settings box.
 	 * @see $this->title_metabox()       Callback for Title Settings box.
@@ -216,7 +202,7 @@ class Admin_Pages extends Inpost {
 	 * @see $this->sitemaps_metabox()    Callback for Sitemap Settings box.
 	 * @see $this->feed_metabox()        Callback for Feed Settings box.
 	 */
-	public function metaboxes() {
+	public function _register_seo_settings_metaboxes() {
 
 		/**
 		 * Various metabox filters.
@@ -345,58 +331,6 @@ class Admin_Pages extends Inpost {
 				'main',
 				array()
 			);
-	}
-
-	/**
-	 * Use this as the settings admin callback to create an admin page with sortable metaboxes.
-	 * Create a 'settings_boxes' method to add metaboxes.
-	 *
-	 * @since 2.2.2
-	 * @todo deprecate (method name is arbitrary) and convert to view.
-	 */
-	public function admin() {
-
-		?>
-		<div class="wrap tsf-metaboxes">
-		<form method="post" action="options.php">
-
-			<?php \wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
-			<?php \wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
-			<?php \settings_fields( $this->settings_field ); ?>
-
-			<div class="tsf-top-wrap">
-				<h1><?php echo \esc_html( \get_admin_page_title() ); ?></h1>
-				<p class="tsf-top-buttons">
-					<?php
-					\submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
-					\submit_button( $this->page_defaults['reset_button_text'], 'secondary tsf-js-confirm-reset', $this->get_field_name( 'tsf-settings-reset' ), false, array( 'id' => '' ) );
-					?>
-				</p>
-			</div>
-
-			<?php \do_action( "{$this->seo_settings_page_hook}_settings_page_boxes", $this->seo_settings_page_hook ); ?>
-
-			<div class="tsf-bottom-buttons">
-				<?php
-				\submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
-				\submit_button( $this->page_defaults['reset_button_text'], 'secondary tsf-js-confirm-reset', $this->get_field_name( 'tsf-settings-reset' ), false, array( 'id' => '' ) );
-				?>
-			</div>
-		</form>
-		</div>
-		<?php // Add postbox listeners ?>
-		<script type="text/javascript">
-			//<![CDATA[
-			jQuery(document).ready( function($) {
-				// close postboxes that should be closed
-				$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
-				// postboxes setup
-				postboxes.add_postbox_toggles('<?php echo \esc_js( $this->seo_settings_page_hook ); ?>');
-			});
-			//]]>
-		</script>
-		<?php
-
 	}
 
 	/**

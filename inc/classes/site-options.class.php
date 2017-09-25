@@ -70,6 +70,8 @@ class Site_Options extends Sanitize {
 		$this->o_plugin_updated = 'updated_' . THE_SEO_FRAMEWORK_DB_VERSION;
 		$this->seo_settings_page_slug = 'theseoframework-settings';
 
+	//var_dump();
+		// \add_filter( "option_page_capability_{$this->seo_settings_page_slug}", array( $this, 'get_settings_capability' ) );
 	}
 
 	/**
@@ -353,7 +355,7 @@ class Site_Options extends Sanitize {
 			return;
 
 		//* If current user isn't allowed to update options, don't do anything.
-		if ( ! \current_user_can( $this->settings_capability() ) )
+		if ( ! $this->can_access_settings() )
 			return;
 
 		$updated = false;
@@ -409,7 +411,7 @@ class Site_Options extends Sanitize {
 		 * Only checks for extra parameters. Then redirects further to only output
 		 * notice. User capability is checked beforehand.
 		 */
-		if ( \current_user_can( $this->settings_capability() ) && $this->is_seo_settings_page( false ) ) {
+		if ( $this->can_access_settings() && $this->is_seo_settings_page( false ) ) {
 			//* Redirect to current page if on options page to correct option values. Once.
 			if ( ! isset( $_REQUEST['tsf-settings-updated'] ) || 'true' !== $_REQUEST['tsf-settings-updated'] )
 				$this->admin_redirect( $this->seo_settings_page_slug, array( 'tsf-settings-updated' => 'true' ) );
@@ -660,7 +662,7 @@ class Site_Options extends Sanitize {
 		 * These can only be set when one has access to the Settings Page or database.
 		 * Also checks for capabilities.
 		 */
-		if ( ! \current_user_can( $this->settings_capability() ) || ! $this->is_seo_settings_page( false ) )
+		if ( ! $this->can_access_settings() || ! $this->is_seo_settings_page( false ) )
 			return;
 
 		if ( $this->get_option( 'tsf-settings-reset', false ) ) {

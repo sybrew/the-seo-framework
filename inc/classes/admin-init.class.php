@@ -313,7 +313,7 @@ class Admin_Init extends Init {
 
 		$this->set_js_nonces( array(
 			/**
-			 * Use $this->settings_capability() ?... might conflict with other nonces.
+			 * Use $this->get_settings_capability() ?... might conflict with other nonces.
 			 */
 			// 'manage_options' => \current_user_can( 'manage_options' ) ? \wp_create_nonce( 'tsf-ajax-manage_options' ) : false,
 			'upload_files' => \current_user_can( 'upload_files' ) ? \wp_create_nonce( 'tsf-ajax-upload_files' ) : false,
@@ -505,7 +505,7 @@ class Admin_Init extends Init {
 	 * @since 2.8.0
 	 *
 	 * @param array $removable_query_args
-	 * @return array $removable_query_args The adjusted removable query args.
+	 * @return array The adjusted removable query args.
 	 */
 	public function add_removable_query_args( $removable_query_args = array() ) {
 
@@ -569,7 +569,7 @@ class Admin_Init extends Init {
 	 * Provides an accessible error for when redirecting fails.
 	 *
 	 * @since 2.9.2
-	 * @link https://developer.wordpress.org/reference/functions/wp_redirect/
+	 * @see https://developer.wordpress.org/reference/functions/wp_redirect/
 	 *
 	 * @param string $target The redirect target location. Should be escaped.
 	 * @return void

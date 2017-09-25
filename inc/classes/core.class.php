@@ -572,16 +572,30 @@ class Core {
 	/**
 	 * Returns the minimum role required to adjust settings.
 	 *
-	 * Applies filter 'the_seo_framework_settings_capability' : string
+	 * Applies filter 'the_seo_framework_get_settings_capability' : string
 	 * This filter changes the minimum role for viewing and editing the plugin's settings.
 	 *
-	 * @since 2.6.0
+	 * @since 3.0.0
 	 * @access private
 	 *
 	 * @return string The minimum required capability for SEO Settings.
 	 */
-	public function settings_capability() {
-		return (string) \apply_filters( 'the_seo_framework_settings_capability', 'manage_options' );
+	public function get_settings_capability() {
+		// return (string) \apply_filters( 'the_seo_framework_get_settings_capability', 'publish_posts' );
+		// var_dump();
+		return (string) \apply_filters( 'the_seo_framework_get_settings_capability', 'manage_options' );
+	}
+
+	/**
+	 * Determines if the current user can do settings.
+	 * Not cached as it's imposing security functionality.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return bool
+	 */
+	public function can_access_settings() {
+		return \current_user_can( $this->get_settings_capability() );
 	}
 
 	/**

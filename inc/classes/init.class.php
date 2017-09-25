@@ -48,15 +48,23 @@ class Init extends Query {
 		parent::__construct();
 
 		/**
-		 * Applies filters 'the_seo_framework_load_options' : Boolean Allows the options page to be removed
+		 * Applies filters 'the_seo_framework_load_options'
+		 * Allows the options page to be removed
+		 *
 		 * @since 2.2.2
+		 *
+		 * @param bool $load_options
 		 */
 		$this->load_options = (bool) \apply_filters( 'the_seo_framework_load_options', true );
 
 		/**
-		 * Applies filters 'the_seo_framework_use_object_cache' : bool
+		 * Applies filters 'the_seo_framework_use_object_cache'
+		 * Enables object caching usage.
+		 *
 		 * @since 2.4.3
 		 * @since 2.8.0 : Uses method $this->use_object_cache() as default.
+		 *
+		 * @param bool $use_object_cache
 		 */
 		$this->use_object_cache = (bool) \apply_filters( 'the_seo_framework_use_object_cache', $this->use_object_cache() );
 
@@ -331,7 +339,7 @@ class Init extends Query {
 	 *
 	 * @param string|array $args the arguments that will be passed onto the callback.
 	 * @param bool $before if the header actions should be before or after the SEO Frameworks output
-	 * @return string|empty The filter output.
+	 * @return string The filter output.
 	 */
 	public function header_actions( $args = '', $before = true ) {
 
@@ -534,7 +542,7 @@ class Init extends Query {
 		 *
 		 * @since 2.8.0
 		 *
-		 * @param unsigned int $redirect_type
+		 * @param int <unsigned> $redirect_type
 		 */
 		$redirect_type = \absint( \apply_filters( 'the_seo_framework_redirect_status_code', 301 ) );
 
@@ -599,20 +607,19 @@ class Init extends Query {
 				$output .= "\r\n";
 			}
 
-			/**
-			 * Apply filters the_seo_framework_robots_txt_pre & the_seo_framework_robots_txt_pro : string
-			 * Adds custom cacheable lines.
-			 * Don't forget to add line breaks ( "\r\n" || PHP_EOL )
-			 *
-			 * @since 2.5.0
-			 */
-			$pre = (string) \apply_filters( 'the_seo_framework_robots_txt_pre', '' );
-			$pro = (string) \apply_filters( 'the_seo_framework_robots_txt_pro', '' );
-
 			$site_url = \wp_parse_url( \site_url() );
 			$site_path = ( ! empty( $site_url['path'] ) ) ? \esc_attr( $site_url['path'] ) : '';
 
-			$output .= $pre;
+			/**
+			 * Applies filters 'the_seo_framework_robots_txt_pre'
+			 * Don't forget to add line breaks ( "\r\n" || PHP_EOL )
+			 *
+			 * @since 2.5.0
+			 *
+			 * @param string $pre
+			 */
+			$output .= (string) \apply_filters( 'the_seo_framework_robots_txt_pre', '' );
+
 			//* Output defaults
 			$output .= "User-agent: *\r\n";
 			$output .= "Disallow: $site_path/wp-admin/\r\n";
@@ -627,7 +634,13 @@ class Init extends Query {
 				$output .= "Disallow: $home_path/*?*\r\n";
 			}
 
-			$output .= $pro;
+			/**
+			 * Applies filters 'the_seo_framework_robots_txt_pro'
+			 * Don't forget to add line breaks ( "\r\n" || PHP_EOL )
+			 *
+			 * @param string $pro
+			 */
+			$output .= (string) \apply_filters( 'the_seo_framework_robots_txt_pro', '' );
 
 			//* Add extra whitespace and sitemap full URL
 			if ( $this->can_do_sitemap_robots( true ) )

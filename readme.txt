@@ -260,11 +260,22 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Changed: From plural to singular.
 
 * **For developers:**
+	* **Added:**
+		* Method `can_access_settings()`.
 	* **Changed:**
 		* Method `is_protected()` no longer checks for query, i.e. `is_singular()`, before parsing.
+		* Method `settings_capability()` now is `get_settings_capability()`, without deprecation; it was marked private.
+	* **Removed:**
+		* Method `admin()`, it has been converted into a file to reduce memory usage.
+		* Method `do_metaboxes()`, it has been converted into a file to reduce memory usage.
+		* Method `metaboxes()`, now is `_register_seo_settings_metaboxes()` without deprecation; it shouldn't be used out of context.
 	* **Updated:**
 		/
 		* TODO Database version: `3000`.
+	* **Action notes:**
+		* **Added:**
+			* `the_seo_framework_pre_seo_settings`
+			* `the_seo_framework_pro_seo_settings`
 
 **Detailed log:**
 /
