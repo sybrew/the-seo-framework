@@ -247,6 +247,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* TODO check W3TC canonical issues https://wordpress.org/support/topic/canonical-https-detection-not-working/
 		* TSF no longer outputs canonical URLs on BuddyPress pages. Instead, it lets BuddyPress output it.
 		* [Simple Sitemap](https://wordpress.org/plugins/simple-sitemap/) is no longer detected as a conflicting sitemap plugin.
+		* [NextScripts Snap](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) is no longer detected as a conflicting Open Graph plugin, they now inform you about this.
 
 * **For translators:**
 	* **Added:**
@@ -259,6 +260,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Changed: From plural to singular.
 
 * **For developers:**
+	* **Changed:**
+		* Method `is_protected()` no longer checks for query, i.e. `is_singular()`, before parsing.
 	* **Updated:**
 		/
 		* TODO Database version: `3000`.

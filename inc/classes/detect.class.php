@@ -159,7 +159,6 @@ class Detect extends Render {
 				'Fedmichs Facebook Open Graph Meta'    => 'facebook-and-digg-thumbnail-generator/facebook-and-digg-thumbnail-generator.php',
 				'Header and Footer'                    => 'header-footer/plugin.php',
 				'NextGEN Facebook OG'                  => 'nextgen-facebook/nextgen-facebook.php',
-				'NextScripts SNAP'                     => 'social-networks-auto-poster-facebook-twitter-g/NextScripts_SNAP.php',
 				'Open Graph'                           => 'opengraph/opengraph.php',
 				'Open Graph Protocol Framework'        => 'open-graph-protocol-framework/open-graph-protocol-framework.php',
 				'Shareaholic2'                         => 'shareaholic/sexy-bookmarks.php',

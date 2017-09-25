@@ -489,14 +489,12 @@ class Post_Data extends Detect {
 	 * Only works on singular pages.
 	 *
 	 * @since 2.8.0
+	 * @since 3.0.0 No longer checks for current query.
 	 *
 	 * @param int|object The post ID or WP Post object.
 	 * @return bool True if private, false otherwise.
 	 */
 	public function is_protected( $id = 0 ) {
-
-		if ( false === $this->is_singular() )
-			return false;
 
 		$post = \get_post( $id, OBJECT );
 

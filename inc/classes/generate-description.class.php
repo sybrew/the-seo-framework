@@ -321,7 +321,7 @@ class Generate_Description extends Generate {
 		 * @since 2.5.0
 		 */
 		$autodescription = (bool) \apply_filters( 'the_seo_framework_enable_auto_description', true );
-		if ( false === $autodescription || $this->is_protected( $args['id'] ) )
+		if ( false === $autodescription || ( empty( $args['taxonomy'] ) && $this->is_protected( $args['id'] ) ) )
 			return '';
 
 		$description = $this->generate_the_description( $args, false );
