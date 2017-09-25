@@ -120,8 +120,8 @@ class Compat extends Core {
 
 		static $included = array();
 
-		isset( $included[ $what ][ $type ] )
-		or $included[ $what ][ $type ] = (bool) require_once( THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . $type . '-' . $what . '.php' );
+		if ( ! isset( $included[ $what ][ $type ] ) )
+			$included[ $what ][ $type ] = (bool) require THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . $type . '-' . $what . '.php';
 
 		return $included[ $what ][ $type ];
 	}

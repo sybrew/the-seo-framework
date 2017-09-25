@@ -32,6 +32,14 @@ defined( 'ABSPATH' ) or die;
  */
 class Generate_Ldjson extends Generate_Image {
 
+	/**
+	 * Maintains Schema IDs.
+	 *
+	 * @since 3.0.0
+	 * @see $this->setup_default_schema_ids()
+	 *
+	 * @var array
+	 */
 	public $schema_ids = array();
 
 	/**

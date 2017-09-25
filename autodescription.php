@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://theseoframework.com/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.
- * Version: 3.0.0-dev2017.9.25.3
+ * Version: 3.0.0-dev2017.9.25.4
  * Author: Sybre Waaijer
  * Author URI: https://theseoframework.com/
  * License: GPLv3
@@ -182,7 +182,7 @@ function the_seo_framework_pre_load() {
 function the_seo_framework_test_server() {
 
 	//* Load on init action (manual FTP upload) or after plugin has been upgraded.
-	require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'plugin-test-server.php' );
+	require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'plugin-test-server.php';
 
 	if ( get_option( 'the_seo_framework_tested_upgrade_version' ) >= THE_SEO_FRAMEWORK_DB_VERSION )
 		the_seo_framework_load_base_files();
@@ -200,7 +200,7 @@ function the_seo_framework_load_base_files() {
 	 * @since 1.0.0
 	 * @uses THE_SEO_FRAMEWORK_DIR_PATH
 	 */
-	require_once( THE_SEO_FRAMEWORK_DIR_PATH . 'load.php' );
+	require THE_SEO_FRAMEWORK_DIR_PATH . 'load.php';
 
 	/**
 	 * Load deprecated functions.
@@ -209,12 +209,12 @@ function the_seo_framework_load_base_files() {
 	 * @since 2.9.2 No longer called to improve performance.
 	 * @uses THE_SEO_FRAMEWORK_DIR_PATH_FUNCT
 	 */
-	// require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'deprecated.php' );
+	// require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'deprecated.php';
 
 	/**
 	 * Load API files.
 	 * @since 2.1.6
 	 * @uses THE_SEO_FRAMEWORK_DIR_PATH_FUNCT
 	 */
-	require_once( THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'optionsapi.php' );
+	require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'optionsapi.php';
 }

@@ -91,7 +91,7 @@ function the_seo_framework_test_server_phase() {
 	}
 
 	if ( ! function_exists( 'deactivate_plugins' ) )
-		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 	$admin = is_admin();
 	$silent = ! $admin;

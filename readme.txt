@@ -271,6 +271,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Changed:**
 		* Method `is_protected()` no longer checks for query, i.e. `is_singular()`, before parsing.
 		* Method `settings_capability()` now is `get_settings_capability()`, without deprecation; it was marked private.
+		* All plugin files required (aside from WordPress files) no longer check for `_once`.
+			* This saves resources, but can invoke fatal errors when you use TSF's private loader functions outside of TSF's bound API.
+	* **Improved:**
+		* Plugin (de)activation functions are no created when the plugin isn't being (de)activated.
+			* Instead, they've been moved in `inc/functions/plugin-(de)activation.php` and run directly as the files are called.
 	* **Removed:**
 		* Method `admin()`, it has been converted into a file to reduce memory usage.
 		* Method `do_metaboxes()`, it has been converted into a file to reduce memory usage.

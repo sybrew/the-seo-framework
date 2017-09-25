@@ -159,7 +159,7 @@ class Core {
 	 *
 	 * @param string $view The file name.
 	 * @param array $args The arguments to be supplied within the file name.
-	 * 		Each array key is converted to a variable with its value attached.
+	 *              Each array key is converted to a variable with its value attached.
 	 * @param string $instance The instance suffix to call back upon.
 	 */
 	public function get_view( $view, array $args = array(), $instance = 'main' ) {
@@ -169,7 +169,7 @@ class Core {
 
 		$file = THE_SEO_FRAMEWORK_DIR_PATH_VIEWS . $view . '.php';
 
-		include( $file );
+		include $file;
 	}
 
 	/**
