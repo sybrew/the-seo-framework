@@ -32,11 +32,26 @@ defined( 'ABSPATH' ) or die;
  */
 class Generate_Ldjson extends Generate_Image {
 
+	public $schema_ids = array();
+
 	/**
-	 * Constructor, load parent constructor
+	 * Constructor, load parent constructor and inits class.
 	 */
 	protected function __construct() {
+		$this->setup_default_schema_ids();
+
 		parent::__construct();
+	}
+
+	/**
+	 * Sets up Schema.org item IDs to be used within the scripts.
+	 *
+	 * @since 3.0.0
+	 */
+	public function setup_default_schema_ids() {
+		$this->schema_ids = array(
+			'breadcrumb' => 'schemaorg-bcl',
+		);
 	}
 
 	/**
@@ -328,7 +343,7 @@ class Generate_Ldjson extends Generate_Image {
 	 *
 	 * @since 2.9.3
 	 *
-	 * @return escaped LD+JSON Breadcrumbs script.
+	 * @return string LD+JSON Breadcrumbs script.
 	 */
 	public function get_ld_json_breadcrumbs() {
 
@@ -352,7 +367,7 @@ class Generate_Ldjson extends Generate_Image {
 	 *
 	 * @since 2.9.3
 	 *
-	 * @return escaped LD+JSON breadcrumbs script for Pages.
+	 * @return string LD+JSON breadcrumbs script for Pages.
 	 */
 	public function get_ld_json_breadcrumbs_page() {
 
@@ -381,7 +396,11 @@ class Generate_Ldjson extends Generate_Image {
 				'@type'    => 'ListItem',
 				'position' => $position,
 				'item'     => array(
-					'@id'   => $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'id' => $parent_id ) ),
+					'@id'  => $this->get_schema_url_id(
+						'breadcrumb',
+						'create',
+						array( 'get_custom_field' => false, 'external' => true, 'id' => $parent_id )
+					),
 					'name'  => $this->escape_title( $parent_name ),
 				),
 			);
@@ -406,7 +425,7 @@ class Generate_Ldjson extends Generate_Image {
 	 *
 	 * @since 2.9.3
 	 *
-	 * @return escaped LD+JSON breadcrumbs script for Posts.
+	 * @return string LD+JSON breadcrumbs script for Posts.
 	 */
 	public function get_ld_json_breadcrumbs_post() {
 
@@ -621,8 +640,12 @@ class Generate_Ldjson extends Generate_Image {
 						'@type'    => 'ListItem',
 						'position' => $position,
 						'item'     => array(
-							'@id'   => $this->the_url( '', array( 'get_custom_field' => false, 'is_term' => true, 'external' => true, 'term' => $cat ) ),
-							'name'  => $this->escape_title( $cat_name ),
+							'@id'  => $this->get_schema_url_id(
+								'breadcrumb',
+								'create',
+								array( 'get_custom_field' => false, 'is_term' => true, 'external' => true, 'term' => $cat )
+							),
+							'name' => $this->escape_title( $cat_name ),
 							// 'image' => $this->get_schema_image( $child_id ),
 						),
 					);
@@ -718,8 +741,8 @@ class Generate_Ldjson extends Generate_Image {
 			'@type'    => 'ListItem',
 			'position' => 1,
 			'item'     => array(
-				'@id'   => $this->the_home_url_from_cache(),
-				'name'  => $custom_name,
+				'@id'  => $this->get_schema_url_id( 'breadcrumb', 'homepage' ),
+				'name' => $custom_name,
 			),
 		);
 
@@ -761,8 +784,8 @@ class Generate_Ldjson extends Generate_Image {
 			'@type'    => 'ListItem',
 			'position' => $position,
 			'item'     => array(
-				'@id'   => $this->the_url_from_cache(),
-				'name'  => $name,
+				'@id'  => $this->get_schema_url_id( 'breadcrumb', 'currentpage' ),
+				'name' => $name,
 			),
 		);
 
@@ -806,6 +829,54 @@ class Generate_Ldjson extends Generate_Image {
 			return '<script type="application/ld+json">' . $json . '</script>' . "\r\n";
 
 		return '';
+	}
+
+	/**
+	 * Returns Schema.org '@id' part from URL.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $id The type of script. Must be escaped.
+	 * @param string $from Where to generate from.
+	 * @param array $args The URL generation args.
+	 * @return string The JSON URL '@id'
+	 */
+	public function get_schema_url_id( $id, $from, $args = array() ) {
+
+		switch ( $from ) {
+			case 'currentpage' :
+				$url = $this->the_url_from_cache();
+				break;
+
+			case 'homepage' :
+				$url = $this->the_home_url_from_cache();
+				break;
+
+			case 'create' :
+				$url = $this->the_url( '', $args );
+				break;
+
+			default :
+				$url = '';
+				break;
+		}
+
+		$key = isset( $this->schema_ids[ $id ] ) ? $this->schema_ids[ $id ] : $id;
+
+		$parsed = parse_url( $url );
+		$fragment = ! empty( $parsed['fragment'] ) ? $parsed['fragment'] : '';
+
+		if ( $fragment ) {
+			$url = str_replace(
+				'#' . $fragment,
+				'#' . $fragment . '-' . $key,
+				$url
+			);
+		} else {
+			$url .= '#' . $key;
+		}
+
+		return $url;
 	}
 
 	/**

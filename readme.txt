@@ -235,6 +235,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * TODO
 
 * **For everyone:**
+	* **Changed:**
+		* Schema breadcrumbs now have their IDs reset. They have have an URL fragment attached (e.g. `example.com/#schemaorg-bcl`).
+			* This is to prevent ID collision with generated scripts from other plugins, like WooCommerce 3.0+.
+			* This might affect search presence of the pages until the new IDs have been processed by the search engine, like Google and Bing.
 	* **Improved:**
 		* Password protected posts and pages no longer show up in the sitemap.
 		* The homepage in-post SEO settings box now links to the settings page when the user can view those options.
@@ -263,6 +267,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * **For developers:**
 	* **Added:**
 		* Method `can_access_settings()`.
+		* Property `$schema_ids`. It allows you to adjust used Schema.org JSON-LD script IDs.
 	* **Changed:**
 		* Method `is_protected()` no longer checks for query, i.e. `is_singular()`, before parsing.
 		* Method `settings_capability()` now is `get_settings_capability()`, without deprecation; it was marked private.
