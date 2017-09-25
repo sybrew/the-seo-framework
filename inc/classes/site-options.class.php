@@ -70,8 +70,7 @@ class Site_Options extends Sanitize {
 		$this->o_plugin_updated = 'updated_' . THE_SEO_FRAMEWORK_DB_VERSION;
 		$this->seo_settings_page_slug = 'theseoframework-settings';
 
-	//var_dump();
-		// \add_filter( "option_page_capability_{$this->seo_settings_page_slug}", array( $this, 'get_settings_capability' ) );
+		\add_filter( "option_page_capability_{$this->settings_field}", array( $this, 'get_settings_capability' ) );
 	}
 
 	/**

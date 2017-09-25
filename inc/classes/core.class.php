@@ -54,7 +54,7 @@ class Core {
 	 */
 	final public function __set( $name, $value ) {
 		/**
-		 * For now, no deprecation is being handled; as no properties are deprecated.
+		 * For now, no deprecation is being handled; as no properties have been deprecated.
 		 */
 		$this->_deprecated_function( 'the_seo_framework()->' . \esc_html( $name ), 'unknown' );
 
@@ -76,7 +76,7 @@ class Core {
 
 		switch ( $name ) :
 			case 'pagehook' :
-				$this->_deprecated_function( 'the_seo_framework()->' . \esc_html( $name ), '2.7.0', 'the_seo_framework()->seo_settings_page_hook' );
+				$this->_deprecated_function( 'the_seo_framework()->pagehook', '2.7.0', 'the_seo_framework()->seo_settings_page_hook' );
 				return $this->seo_settings_page_hook;
 				break;
 
@@ -120,7 +120,7 @@ class Core {
 
 		if ( $this->the_seo_framework_debug ) {
 
-			$debug_instance = \The_SEO_Framework\Debug::get_instance();
+			$debug_instance = Debug::get_instance();
 
 			\add_action( 'the_seo_framework_do_before_output', array( $debug_instance, 'set_debug_query_output_cache' ) );
 			\add_action( 'admin_footer', array( $debug_instance, 'debug_screens' ) );
@@ -140,9 +140,8 @@ class Core {
 	protected function clean_response_header() {
 
 		if ( $level = ob_get_level() ) {
-			while ( $level ) {
+			while ( $level-- ) {
 				ob_end_clean();
-				$level--;
 			}
 			return true;
 		}
@@ -581,8 +580,6 @@ class Core {
 	 * @return string The minimum required capability for SEO Settings.
 	 */
 	public function get_settings_capability() {
-		// return (string) \apply_filters( 'the_seo_framework_get_settings_capability', 'publish_posts' );
-		// var_dump();
 		return (string) \apply_filters( 'the_seo_framework_get_settings_capability', 'manage_options' );
 	}
 

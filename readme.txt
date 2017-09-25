@@ -248,6 +248,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* TSF no longer outputs canonical URLs on BuddyPress pages. Instead, it lets BuddyPress output it.
 		* [Simple Sitemap](https://wordpress.org/plugins/simple-sitemap/) is no longer detected as a conflicting sitemap plugin.
 		* [NextScripts Snap](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) is no longer detected as a conflicting Open Graph plugin, they now inform you about this.
+		* TODO Odd database call on front-end looking for image... while custom is set...?
 
 * **For translators:**
 	* **Added:**
@@ -272,6 +273,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Updated:**
 		/
 		* TODO Database version: `3000`.
+	* **Fixed:**
+		* When using filter `the_seo_framework_settings_capability`, the set capability can now save SEO settings too.
 	* **Action notes:**
 		* **Added:**
 			* `the_seo_framework_pre_seo_settings`
