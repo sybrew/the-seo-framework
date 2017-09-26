@@ -623,7 +623,7 @@ class Core {
 	 *
 	 * @param bool $guess : If true, the timezone will be guessed from the
 	 * WordPress core gmt_offset option.
-	 * @return string|empty PHP Timezone String.
+	 * @return string PHP Timezone String.
 	 */
 	public function get_timezone_string( $guess = false ) {
 
@@ -719,6 +719,28 @@ class Core {
 			return date( $format, strtotime( $time . ' GMT' ) );
 
 		return '';
+	}
+
+	/**
+	 * Returns timestamp format based on timestamp settings.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string The timestamp format used in PHP date.
+	 */
+	public function get_timestamp_format() {
+		return '1' === $this->get_option( 'timestamps_format' ) ? 'Y-m-d\TH:iP' : 'Y-m-d';
+	}
+
+	/**
+	 * Determines if time is used in the timestamp format.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return bool True if time is used. False otherwise.
+	 */
+	public function uses_time_in_timestamp_format() {
+		return '1' === $this->get_option( 'timestamps_format' );
 	}
 
 	/**

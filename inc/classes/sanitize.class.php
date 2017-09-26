@@ -286,7 +286,6 @@ class Sanitize extends Admin_Pages {
 				'sitemaps_output',
 				'sitemaps_robots',
 				'sitemaps_modified',
-				'sitemap_timestamps',
 				'sitemap_styles',
 				'sitemap_logo',
 			)
@@ -299,6 +298,14 @@ class Sanitize extends Admin_Pages {
 				'social_image_fb_id',
 				'homepage_social_image_id',
 				'knowledge_logo_id',
+			)
+		);
+
+		$this->add_option_filter(
+			's_numeric_string',
+			$this->settings_field,
+			array(
+				'timestamps_format',
 			)
 		);
 
@@ -547,6 +554,7 @@ class Sanitize extends Admin_Pages {
 			's_knowledge_type'        => array( $this, 's_knowledge_type' ),
 			's_alter_query_type'      => array( $this, 's_alter_query_type' ),
 			's_one_zero'              => array( $this, 's_one_zero' ),
+			's_numeric_string'        => array( $this, 's_numeric_string' ),
 			's_no_html'               => array( $this, 's_no_html' ),
 			's_no_html_space'         => array( $this, 's_no_html_space' ),
 			's_absint'                => array( $this, 's_absint' ),
@@ -946,6 +954,21 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_one_zero( $new_value ) {
 		return (int) (bool) $new_value;
+	}
+
+	/**
+	 * Returns a numeric string, like '0', '1', '2'.
+	 *
+	 * Uses double casting. First, we cast to integer, then to string.
+	 * Rounds floats down. Converts non-numeric inputs to '0'.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param mixed $new_value Should ideally be an integer.
+	 * @return string An integer as string.
+	 */
+	public function s_numeric_string( $new_value ) {
+		return (string) (int) $new_value;
 	}
 
 	/**

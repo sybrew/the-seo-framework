@@ -29,6 +29,11 @@ switch ( $instance ) :
 				'callback' => array( $this, 'general_metabox_canonical_tab' ),
 				'dashicon' => 'external',
 			),
+			'timestamps' => array(
+				'name'     => __( 'Timestamps', 'autodescription' ),
+				'callback' => array( $this, 'general_metabox_timestamps_tab' ),
+				'dashicon' => 'clock',
+			),
 		);
 
 		/**
@@ -286,6 +291,49 @@ switch ( $instance ) :
 
 		//* Echo checkboxes.
 		$this->wrap_fields( $prev_next_posts_checkbox . $prev_next_archives_checkbox . $prev_next_frontpage_checkbox, true );
+		break;
+
+
+	case 'the_seo_framework_general_metabox_timestamps' :
+		//* Sets timezone according to WordPress settings.
+		$this->set_timezone();
+
+		$timestamp_0 = date( 'Y-m-d' );
+
+		/**
+		 * @link https://www.w3.org/TR/NOTE-datetime
+		 * We use the second expression of the time zone offset handling.
+		 */
+		$timestamp_1 = date( 'Y-m-d\TH:iP' );
+
+		//* Reset timezone to previous value.
+		$this->reset_timezone();
+
+		?><h4><?php esc_html_e( 'Timestamp Settings', 'autodescription' ); ?></h4><?php
+		$this->description( __( 'Timestamps indicate when a page has been published and modified.', 'autodescription' ) );
+		?>
+		<hr>
+
+		<fieldset>
+			<legend><h4><?php esc_html_e( 'Timestamp Format Settings', 'autodescription' ); ?></h4></legend>
+			<?php $this->description( __( 'This setting determines how specific the timestamp is.', 'autodescription' ) ); ?>
+
+			<p id="sitemaps-timestamp-format" class="tsf-fields">
+				<span class="tsf-toblock">
+					<input type="radio" name="<?php $this->field_name( 'timestamps_format' ); ?>" id="<?php $this->field_id( 'timestamps_format_0' ); ?>" value="0" <?php checked( $this->get_field_value( 'timestamps_format' ), '0' ); ?> />
+					<label for="<?php $this->field_id( 'timestamps_format_0' ); ?>">
+						<span title="<?php esc_attr_e( 'Complete date', 'autodescription' ); ?>"><?php echo $this->code_wrap( $timestamp_0 ); ?> [?]</span>
+					</label>
+				</span>
+				<span class="tsf-toblock">
+					<input type="radio" name="<?php $this->field_name( 'timestamps_format' ); ?>" id="<?php $this->field_id( 'timestamps_format_1' ); ?>" value="1" <?php checked( $this->get_field_value( 'timestamps_format' ), '1' ); ?> />
+					<label for="<?php $this->field_id( 'timestamps_format_1' ); ?>">
+						<span title="<?php esc_attr_e( 'Complete date plus hours, minutes and timezone', 'autodescription' ); ?>"><?php echo $this->code_wrap( $timestamp_1 ); ?> [?]</span>
+					</label>
+				</span>
+			</p>
+		</fieldset>
+		<?php
 		break;
 
 	default :

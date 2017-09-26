@@ -275,8 +275,8 @@ switch ( $instance ) :
 
 		?>
 		<fieldset>
-			<legend><h4><?php esc_html_e( 'Document Title Additions Location', 'autodescription' ); ?></h4></legend>
-			<?php $this->description( __( 'Determines which side the added title text will go on.', 'autodescription' ) ); ?>
+			<legend><h4><?php esc_html_e( 'Title Additions Location', 'autodescription' ); ?></h4></legend>
+			<?php $this->description( __( 'This setting determines which side the added title text will go on.', 'autodescription' ) ); ?>
 
 			<p id="tsf-home-title-location" class="tsf-fields">
 				<span class="tsf-toblock">

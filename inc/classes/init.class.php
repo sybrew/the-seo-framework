@@ -380,6 +380,7 @@ class Init extends Query {
 	 *
 	 * @since 1.0.0
 	 * @since 2.8.0 Cache is busted on each new release.
+	 * @since 3.0.0 Now converts timezone if needed.
 	 */
 	public function html_output() {
 
@@ -432,6 +433,9 @@ class Init extends Query {
 						. $this->yandex_site_output()
 						. $this->pint_site_output();
 			else :
+				$set_timezone = $this->uses_time_in_timestamp_format() && $this->output_published_time() || $this->output_modified_time();
+				$set_timezone and $this->set_timezone();
+
 				$output = $this->the_description()
 						. $this->og_image()
 						. $this->og_locale()
@@ -459,6 +463,8 @@ class Init extends Query {
 						. $this->bing_site_output()
 						. $this->yandex_site_output()
 						. $this->pint_site_output();
+
+				$set_timezone and $this->reset_timezone();
 			endif;
 
 			$after_actions = $this->header_actions( '', false );

@@ -201,6 +201,17 @@ class Metaboxes extends Site_Options {
 	public function general_metabox_canonical_tab() {
 		$this->get_view( 'metaboxes/general-metabox', array(), 'canonical' );
 	}
+
+	/**
+	 * Outputs General Settings meta box timestamps tab.
+	 *
+	 * @since 3.0.0
+	 * @see $this->general_metabox() : Callback for General Settings box.
+	 */
+	public function general_metabox_timestamps_tab() {
+		$this->get_view( 'metaboxes/general-metabox', array(), 'timestamps' );
+	}
+
 	/**
 	 * Title meta box on the Site SEO Settings page.
 	 *

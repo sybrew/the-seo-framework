@@ -732,40 +732,31 @@ class Render extends Admin_Init {
 	 *
 	 * @since 2.2.2
 	 * @since 2.8.0 Returns empty on product pages.
+	 * @since 3.0.0: 1. Now checks for 0000 timestamps.
+	 *               2. Now uses timestamp formats.
+	 *               3. Now uses GMT time.
 	 *
 	 * @return string The Article Publishing Time meta tag.
 	 */
 	public function article_published_time() {
 
-		//* Don't do anything if it's not a page or post.
-		if ( false === $this->is_singular() )
+		if ( ! $this->output_published_time() )
 			return '';
-
-		if ( 'product' === $this->get_og_type() )
-			return '';
-
-		if ( $this->is_real_front_page() ) {
-			//* If it's the frontpage, but the option is disabled, don't do anything.
-			if ( ! $this->get_option( 'home_publish_time' ) )
-				return '';
-		} else {
-			//* If it's a post, but the option is disabled, don't do anything.
-			if ( $this->is_single() && ! $this->get_option( 'post_publish_time' ) )
-				return '';
-
-			//* If it's a page, but the option is disabled, don't do anything.
-			if ( $this->is_page() && ! $this->get_option( 'page_publish_time' ) )
-				return '';
-		}
 
 		$id = $this->get_the_real_ID();
+
+		$post = \get_post( $id );
+		$post_date_gmt = $post->post_date_gmt;
+
+		if ( '0000-00-00 00:00:00' === $post_date_gmt )
+			return '';
 
 		/**
 		 * Applies filters 'the_seo_framework_publishedtime_output' : string
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
 		 */
-		$time = (string) \apply_filters( 'the_seo_framework_publishedtime_output', \get_the_date( 'Y-m-d', $id ), $id );
+		$time = (string) \apply_filters( 'the_seo_framework_publishedtime_output', $this->gmt2date( $this->get_timestamp_format(), $post_date_gmt ), $id );
 
 		if ( $time )
 			return '<meta property="article:published_time" content="' . \esc_attr( $time ) . '" />' . "\r\n";
@@ -780,40 +771,30 @@ class Render extends Admin_Init {
 	 * @since 2.2.2
 	 * @since 2.7.0 Listens to $this->get_the_real_ID() instead of WordPress Core ID determination.
 	 * @since 2.8.0 Returns empty on product pages.
+	 * @since 3.0.0: 1. Now checks for 0000 timestamps.
+	 *               2. Now uses timestamp formats.
 	 *
 	 * @return string The Article Modified Time meta tag, and optionally the Open Graph Updated Time.
 	 */
 	public function article_modified_time() {
 
-		// Don't do anything if it's not a page or post.
-		if ( false === $this->is_singular() )
+		if ( ! $this->output_modified_time() )
 			return '';
-
-		if ( 'product' === $this->get_og_type() )
-			return '';
-
-		if ( $this->is_real_front_page() ) {
-			//* If it's the frontpage, but the option is disabled, don't do anything.
-			if ( ! $this->get_option( 'home_modify_time' ) )
-				return '';
-		} else {
-			//* If it's a post, but the option is disabled, don't do anyhting.
-			if ( $this->is_single() && ! $this->get_option( 'post_modify_time' ) )
-				return '';
-
-			//* If it's a page, but the option is disabled, don't do anything.
-			if ( $this->is_page() && ! $this->get_option( 'page_modify_time' ) )
-				return '';
-		}
 
 		$id = $this->get_the_real_ID();
+
+		$post = \get_post( $id );
+		$post_modified_gmt = $post->post_modified_gmt;
+
+		if ( '0000-00-00 00:00:00' === $post_modified_gmt )
+			return '';
 
 		/**
 		 * Applies filters 'the_seo_framework_modifiedtime_output' : string
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
 		 */
-		$time = (string) \apply_filters( 'the_seo_framework_modifiedtime_output', \get_post_modified_time( 'Y-m-d', false, $id, false ), $id );
+		$time = (string) \apply_filters( 'the_seo_framework_modifiedtime_output', $this->gmt2date( $this->get_timestamp_format(), $post_modified_gmt ), $id );
 
 		if ( $time ) {
 			$output = '<meta property="article:modified_time" content="' . \esc_attr( $time ) . '" />' . "\r\n";
@@ -1139,6 +1120,82 @@ class Render extends Admin_Init {
 		}
 
 		return sprintf( '<!-- %s -->', $output ) . PHP_EOL;
+	}
+
+	/**
+	 * Determines if modified time should be used in the current query.
+	 *
+	 * @since 3.0.0
+	 * @staticvar bool $cache
+	 *
+	 * @return bool
+	 */
+	public function output_modified_time() {
+
+		static $cache;
+
+		if ( isset( $cache ) )
+			return $cache;
+
+		if ( false === $this->is_singular() )
+			return $cache = false;
+
+		if ( 'product' === $this->get_og_type() )
+			return $cache = false;
+
+		if ( $this->is_real_front_page() ) {
+			//* If it's the frontpage, but the option is disabled, return false.
+			if ( ! $this->get_option( 'home_modify_time' ) )
+				return $cache = false;
+		} else {
+			//* If it's a post, but the option is disabled, return false.
+			if ( $this->is_single() && ! $this->get_option( 'post_modify_time' ) )
+				return $cache = false;
+
+			//* If it's a page, but the option is disabled, return false.
+			if ( $this->is_page() && ! $this->get_option( 'page_modify_time' ) )
+				return $cache = false;
+		}
+
+		return $cache = true;
+	}
+
+	/**
+	 * Determines if published time should be used in the current query.
+	 *
+	 * @since 3.0.0
+	 * @staticvar bool $cache
+	 *
+	 * @return bool
+	 */
+	public function output_published_time() {
+
+		static $cache;
+
+		if ( isset( $cache ) )
+			return $cache;
+
+		if ( false === $this->is_singular() )
+			return $cache = false;
+
+		if ( 'product' === $this->get_og_type() )
+			return $cache = false;
+
+		if ( $this->is_real_front_page() ) {
+			//* If it's the frontpage, but the option is disabled, return false.
+			if ( ! $this->get_option( 'home_publish_time' ) )
+				return $cache = false;
+		} else {
+			//* If it's a post, but the option is disabled, return false.
+			if ( $this->is_single() && ! $this->get_option( 'post_publish_time' ) )
+				return $cache = false;
+
+			//* If it's a page, but the option is disabled, return false.
+			if ( $this->is_page() && ! $this->get_option( 'page_publish_time' ) )
+				return $cache = false;
+		}
+
+		return $cache = true;
 	}
 
 	/**

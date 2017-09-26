@@ -7,16 +7,15 @@ $instance = $this->get_view_instance( 'the_seo_framework_sitemaps_metabox', $ins
 
 switch ( $instance ) :
 	case 'the_seo_framework_sitemaps_metabox_main' :
-
 		/**
 		 * Parse tabs content
 		 *
-		 * @param array $default_tabs { 'id' = The identifier =>
-		 *		array(
-		 *			'name'     => The name
-		 *			'callback' => The callback function, use array for method calling
-		 *			'dashicon' => Desired dashicon
-		 *		)
+		 * @param array $default_tabs {
+		 *    'id' = The identifier => array(
+		 *       'name'     => The name
+		 *       'callback' => The callback function, use array for method calling
+		 *       'dashicon' => Desired dashicon
+		 *    )
 		 * }
 		 *
 		 * @since 2.2.9
@@ -35,7 +34,7 @@ switch ( $instance ) :
 			'timestamps' => array(
 				'name'     => __( 'Timestamps', 'autodescription' ),
 				'callback' => array( $this, 'sitemaps_metabox_timestamps_tab' ),
-				'dashicon' => 'backup',
+				'dashicon' => 'clock',
 			),
 			'notify' => array(
 				'name'     => _x( 'Ping', 'Ping or notify Search Engine', 'autodescription' ),
@@ -76,7 +75,6 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_sitemaps_metabox_general' :
-
 		$sitemap_url = $this->get_sitemap_xml_url();
 		$has_sitemap_plugin = $this->detect_sitemap_plugin();
 		$sitemap_detected = $this->has_sitemap_xml();
@@ -117,7 +115,6 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_sitemaps_metabox_robots' :
-
 		$locate_url = true;
 
 		?>
@@ -131,9 +128,13 @@ switch ( $instance ) :
 			$permalink_settings_url = admin_url( 'options-permalink.php' );
 			$here = '<a href="' . esc_url( $permalink_settings_url, array( 'http', 'https' ) ) . '" target="_blank" title="' . esc_attr__( 'Permalink Settings', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 
-			?><h4><?php esc_html_e( "You're using the plain permalink structure.", 'autodescription' ); ?></h4><?php
+			?>
+			<h4><?php esc_html_e( "You're using the plain permalink structure.", 'autodescription' ); ?></h4>
+			<?php
 			$this->description( __( "This means the robots.txt file can't be outputted through the WordPress rewrite rules.", 'autodescription' ) );
-			?><hr><?php
+			?>
+			<hr>
+			<?php
 			$this->description_noesc( sprintf( esc_html_x( 'Change your Permalink Settings %s (Recommended: "Post name").', '%s = here', 'autodescription' ), $here ) );
 
 			$locate_url = false;
@@ -174,31 +175,17 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_sitemaps_metabox_timestamps' :
-
-		//* Sets timezone according to WordPress settings.
-		$this->set_timezone();
-
-		$timestamp_0 = date( 'Y-m-d' );
-
-		/**
-		 * @link https://www.w3.org/TR/NOTE-datetime
-		 * We use the second expression of the time zone offset handling.
-		 */
-		$timestamp_1 = date( 'Y-m-d\TH:iP' );
-
-		//* Reset timezone to previous value.
-		$this->reset_timezone();
-
-		?><h4><?php esc_html_e( 'Timestamps Settings', 'autodescription' ); ?></h4><?php
+		?>
+		<h4><?php esc_html_e( 'Timestamps Settings', 'autodescription' ); ?></h4>
+		<?php
 		$this->description( __( 'The modified time suggests to Search Engines where to look for content changes. It has no impact on the SEO value unless you drastically change pages or posts. It then depends on how well your content is constructed.', 'autodescription' ) );
-		$this->description( __( "By default, the sitemap only outputs the modified date if you've enabled them within the Social Metabox. This setting overrides those settings for the Sitemap.", 'autodescription' ) );
-
 		?>
 		<hr>
 
 		<h4><?php esc_html_e( 'Output Modified Date', 'autodescription' ); ?></h4>
 		<?php
 
+		$this->description( __( "By default, the sitemap only outputs the modified date if you've enabled them within the Social Metabox. This setting overrides those settings for the Sitemap.", 'autodescription' ) );
 		//* Echo checkbox.
 		$this->wrap_fields(
 			$this->make_checkbox(
@@ -208,35 +195,12 @@ switch ( $instance ) :
 				false
 			), true
 		);
-
-		?>
-		<hr>
-
-		<fieldset>
-			<legend><h4><?php esc_html_e( 'Timestamp Format Settings', 'autodescription' ); ?></h4></legend>
-			<?php $this->description( __( 'Determines how specific the modification timestamp is.', 'autodescription' ) ); ?>
-
-			<p id="sitemaps-timestamp-format" class="tsf-fields">
-				<span class="tsf-toblock">
-					<input type="radio" name="<?php $this->field_name( 'sitemap_timestamps' ); ?>" id="<?php $this->field_id( 'sitemap_timestamps_0' ); ?>" value="0" <?php checked( $this->get_field_value( 'sitemap_timestamps' ), '0' ); ?> />
-					<label for="<?php $this->field_id( 'sitemap_timestamps_0' ); ?>">
-						<span title="<?php esc_attr_e( 'Complete date', 'autodescription' ); ?>"><?php echo $this->code_wrap( $timestamp_0 ); ?> [?]</span>
-					</label>
-				</span>
-				<span class="tsf-toblock">
-					<input type="radio" name="<?php $this->field_name( 'sitemap_timestamps' ); ?>" id="<?php $this->field_id( 'sitemap_timestamps_1' ); ?>" value="1" <?php checked( $this->get_field_value( 'sitemap_timestamps' ), '1' ); ?> />
-					<label for="<?php $this->field_id( 'sitemap_timestamps_1' ); ?>">
-						<span title="<?php esc_attr_e( 'Complete date plus hours, minutes and timezone', 'autodescription' ); ?>"><?php echo $this->code_wrap( $timestamp_1 ); ?> [?]</span>
-					</label>
-				</span>
-			</p>
-		</fieldset>
-		<?php
 		break;
 
 	case 'the_seo_framework_sitemaps_metabox_notify' :
-
-		?><h4><?php esc_html_e( 'Ping Settings', 'autodescription' ); ?></h4><?php
+		?>
+		<h4><?php esc_html_e( 'Ping Settings', 'autodescription' ); ?></h4>
+		<?php
 		$this->description( __( 'Notifying Search Engines of a sitemap change is helpful to get your content indexed as soon as possible.', 'autodescription' ) );
 		$this->description( __( 'By default this will happen at most once an hour.', 'autodescription' ) );
 
@@ -264,7 +228,6 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_sitemaps_metabox_style' :
-
 		?>
 		<h4><?php esc_html_e( 'Sitemap Styling Settings', 'autodescription' ); ?></h4>
 		<?php
@@ -327,7 +290,6 @@ switch ( $instance ) :
 			<input type="text" name="<?php $this->field_name( 'sitemap_color_accent' ); ?>" class="tsf-color-picker" id="<?php $this->field_id( 'sitemap_color_accent' ); ?>" placeholder="<?php echo esc_attr( $default_colors['accent'] ); ?>" value="<?php echo esc_attr( $current_colors['accent'] ); ?>" data-tsf-default-color="<?php echo esc_attr( $default_colors['accent'] ); ?>" />
 		</p>
 		<?php
-
 		break;
 
 	default :

@@ -124,6 +124,9 @@ class Site_Options extends Sanitize {
 			// General. Canonical.
 			'canonical_scheme' => 'automatic', // Canonical URL scheme.
 
+			// General. Timestamps.
+			'timestamps_format'   => '1',   // Timestamp format, numeric string
+
 			// Title.
 			'title_seperator'     => 'pipe',    // Title separator (note: TYPO), dropdown
 			'title_location'      => $titleloc, // Title separation location
@@ -255,7 +258,6 @@ class Site_Options extends Sanitize {
 			// Sitemaps.
 			'sitemaps_output'      => 1,   // Output of sitemaps
 			'sitemaps_modified'    => 1,   // Add sitemaps modified time
-			'sitemap_timestamps'   => '1', // Sitemaps modified time format, dropdown
 			'sitemaps_robots'      => 1,   // Add sitemaps location to robots.txt
 			'ping_google'          => 1,   // Ping Google
 			'ping_bing'            => 1,   // Ping Bing

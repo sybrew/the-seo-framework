@@ -578,8 +578,7 @@ class Sitemaps extends Metaboxes {
 
 		//* Sets timezone according to WordPress settings.
 		$this->set_timezone();
-		$timestamp_format = $this->get_option( 'sitemap_timestamps' );
-		$timestamp_format = '1' === $timestamp_format ? 'Y-m-d\TH:iP' : 'Y-m-d';
+		$timestamp_format = $this->get_timestamp_format();
 
 		/**
 		 * Fetch the page/post modified options.

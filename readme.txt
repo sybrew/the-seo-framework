@@ -235,6 +235,12 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * TODO
 
 * **For everyone:**
+	* **Added:**
+		* A global timestamp format option. It affects:
+			/
+			* Sitemap's `lastmod` output.
+			* Article published and modified time.
+			* Open Graph updated time.
 	* **Changed:**
 		* Schema breadcrumbs now have their IDs reset. They have have an URL fragment attached (e.g. `example.com/#schemaorg-bcl`).
 			* This is to prevent ID collision with generated scripts from other plugins, like WooCommerce 3.0+.
@@ -242,8 +248,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Improved:**
 		* Password protected posts and pages no longer show up in the sitemap.
 		* The homepage in-post SEO settings box now links to the settings page when the user can view those options.
+		* When TSF's database needs upgrading, it now requires fewer database calls.
+		* After-upgrade notifications now have "SEO: " prefixed.
 	* **Removed:**
 		* `noodp` and all its settings. The DMOZ project that it influenced is no longer available nor used.
+		* Sitemaps timestamp format option. It will be converted to the new global timestamp format option upon upgrade.
 	* **Fixed:**
 		/
 		* `article:publisher` is now only output on `article` types.
@@ -258,16 +267,32 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Added:**
 		* "Homepage SEO Settings"
 			* Location: In-post SEO Settings metabox title, when editing the home page.
+		* "The previous sitemap timestamp settings have been converted into new global timestamp settings."
+			* Location: Upgrade notification.
 	* **Changed:**
 		* "The Open Directory Project and the Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave these options checked."
 			* Now is: "The Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave the option checked."
 			* Removed: Open Directory Project.
 			* Changed: From plural to singular.
+		* "Determines how specific the modification timestamp is."
+			* Now is: "This setting determines how specific the timestamp is."
+			* Clarity: It points to what's below.
+			* Global: The setting isn't only for modifications anymore.
+		* "Determines which side the added title text will go on."
+			* Now is: "This setting determines which side the added title text will go on."
+			* Clarity: It points to what's below.
+		* "Document Title Additions Location"
+			* Now is: "Title Additions Location"
+			* Spread: If affects more than just the document title.
+		* "Document Title Separator"
+			* Now is: "Title Separator"
+			* Spread: If affects more than just the document title.
 
 * **For developers:**
 	* **Added:**
 		* Method `can_access_settings()`.
 		* Property `$schema_ids`. It allows you to adjust used Schema.org JSON-LD script IDs.
+		* Method `s_numeric_string`, creates a string from integers. Rounds float down. Converts non-numeric input to `'0'`, arrays and objects to `'1'`.
 	* **Changed:**
 		* Method `is_protected()` no longer checks for query, i.e. `is_singular()`, before parsing.
 		* Method `settings_capability()` now is `get_settings_capability()`, without deprecation; it was marked private.
