@@ -153,7 +153,6 @@ class Admin_Init extends Init {
 		 * @since 2.5.2.2
 		 */
 		\add_action( 'admin_footer', array( $this, '_localize_admin_javascript' ) );
-
 	}
 
 	/**
@@ -177,7 +176,6 @@ class Admin_Init extends Init {
 		\wp_register_script( $this->js_name, THE_SEO_FRAMEWORK_DIR_URL . "lib/js/{$this->js_name}{$suffix}.js", array( 'jquery' ), THE_SEO_FRAMEWORK_VERSION, true );
 
 		$registered = true;
-
 	}
 
 	/**
@@ -199,7 +197,6 @@ class Admin_Init extends Init {
 		\wp_localize_script( $this->js_name, "{$this->js_name}L10n", $strings );
 
 		$localized = true;
-
 	}
 
 	/**
@@ -474,7 +471,6 @@ class Admin_Init extends Init {
 		}
 
 		\wp_enqueue_style( $this->css_name );
-
 	}
 
 	/**
@@ -496,7 +492,6 @@ class Admin_Init extends Init {
 		$registered = true;
 
 		\wp_register_style( $this->css_name, THE_SEO_FRAMEWORK_DIR_URL . "lib/css/{$this->css_name}{$rtl}{$suffix}.css", array(), THE_SEO_FRAMEWORK_VERSION, 'all' );
-
 	}
 
 	/**
@@ -614,11 +609,12 @@ class Admin_Init extends Init {
 		if ( $this->is_admin() && $this->doing_ajax() ) :
 
 			$this->check_tsf_ajax_referer( 'edit_posts' );
+
+			//* Remove output buffer.
+			$this->clean_response_header();
+
 			//* If current user isn't allowed to edit posts, don't do anything and kill PHP.
 			if ( ! \current_user_can( 'edit_posts' ) ) {
-				//* Remove output buffer.
-				$this->clean_response_header();
-
 				//* Encode and echo results. Requires JSON decode within JS.
 				echo json_encode( array( 'type' => 'failure', 'value' => '' ) );
 				exit;
@@ -641,9 +637,6 @@ class Admin_Init extends Init {
 				'type' => $type,
 				'value' => $value,
 			);
-
-			//* Remove output buffer.
-			$this->clean_response_header();
 
 			//* Encode and echo results. Requires JSON decode within JS.
 			echo json_encode( $results );

@@ -86,8 +86,8 @@ class Post_Data extends Detect {
 	 * @since 2.9.3 : Added 'exclude_from_archive'.
 	 * @uses $this->save_custom_fields() : Perform security checks and saves post meta / custom field data to a post or page.
 	 *
-	 * @param integer $post_id  Post ID.
-	 * @param object  $post     Post object.
+	 * @param integer  $post_id Post ID.
+	 * @param \WP_Post $post    Post object.
 	 * @return mixed Returns post id if permissions incorrect, null if doing autosave, ajax or future post, false if update
 	 *               or delete failed, and true on success.
 	 */
@@ -105,14 +105,14 @@ class Post_Data extends Detect {
 			'_genesis_title'         => '',
 			'_genesis_description'   => '',
 			'_genesis_canonical_uri' => '',
-			'redirect'               => '',
+			'redirect'               => '', // Will be displayed in custom fields when set...
 			'_social_image_url'      => '',
 			'_social_image_id'       => 0,
 			'_genesis_noindex'       => 0,
 			'_genesis_nofollow'      => 0,
 			'_genesis_noarchive'     => 0,
-			'exclude_local_search'   => 0,
-			'exclude_from_archive'   => 0,
+			'exclude_local_search'   => 0, // Will be displayed in custom fields when set...
+			'exclude_from_archive'   => 0, // Will be displayed in custom fields when set...
 		) );
 
 		foreach ( (array) $data as $key => $value ) :
@@ -180,7 +180,7 @@ class Post_Data extends Detect {
 	 * @param array    $data         Key/Value pairs of data to save in '_field_name' => 'value' format.
 	 * @param string   $nonce_action Nonce action for use with wp_verify_nonce().
 	 * @param string   $nonce_name   Name of the nonce to check for permissions.
-	 * @param WP_Post|integer $post  Post object or ID.
+	 * @param \WP_Post|integer $post  Post object or ID.
 	 * @return mixed Return null if permissions incorrect, doing autosave, ajax or future post, false if update or delete
 	 *               failed, and true on success.
 	 */
@@ -265,7 +265,7 @@ class Post_Data extends Detect {
 	 *
 	 * @param int $the_id The Post ID.
 	 * @param int $tt_id The Taxonomy Term ID.
-	 * @return string|empty excerpt.
+	 * @return string The excerpt.
 	 */
 	public function fetch_excerpt( $the_id = '', $tt_id = '' ) {
 
@@ -299,7 +299,7 @@ class Post_Data extends Detect {
 	 * @param int $the_id The Post ID.
 	 * @param int $tt_id The Taxonomy Term ID
 	 * @param mixed $output The value type to return. Accepts OBJECT, ARRAY_A, or ARRAY_N
-	 * @return empty|array The Post Array.
+	 * @return string|array The Post Array.
 	 */
 	protected function fetch_post_by_id( $the_id = '', $tt_id = '', $output = ARRAY_A ) {
 
@@ -491,7 +491,7 @@ class Post_Data extends Detect {
 	 * @since 2.8.0
 	 * @since 3.0.0 No longer checks for current query.
 	 *
-	 * @param int|object The post ID or WP Post object.
+	 * @param int|\WP_Post The post ID or WP Post object.
 	 * @return bool True if private, false otherwise.
 	 */
 	public function is_protected( $id = 0 ) {

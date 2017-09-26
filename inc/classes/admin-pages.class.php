@@ -453,7 +453,7 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @param string $input The input to wrap. Should already be escaped.
 	 * @param boolean $echo Whether to escape echo or just return.
-	 * @return Wrapped $input.
+	 * @return string|void Wrapped $input.
 	 */
 	public function wrap_fields( $input = '', $echo = false ) {
 
@@ -478,7 +478,7 @@ class Admin_Pages extends Inpost {
 	 * @param string $label The checkbox description label.
 	 * @param string $description Addition description to place beneath the checkbox.
 	 * @param bool $escape Whether to escape the label and description.
-	 * @return HTML checkbox output.
+	 * @return string HTML checkbox output.
 	 */
 	public function make_checkbox( $field_id = '', $label = '', $description = '', $escape = true ) {
 
@@ -520,7 +520,7 @@ class Admin_Pages extends Inpost {
 	 * @param string $description Addition description to place beneath the checkbox.
 	 * @param string $placeholder The text field placeholder.
 	 * @param bool $escape Whether to escape the label and description.
-	 * @return HTML text field output.
+	 * @return string HTML text field output.
 	 */
 	public function make_textfield( $field_id = '', $label = '', $description = '', $placeholder = '', $escape = true ) {
 
@@ -775,10 +775,12 @@ class Admin_Pages extends Inpost {
 		if ( ! $input_id )
 			return '';
 
+		$s_input_id = \esc_attr( $input_id );
+
 		$content = sprintf( '<a href="%1$s" class="tsf-set-social-image button button-primary button-small" title="%2$s" id="%3$s-select" data-inputid="%3$s">%4$s</a>',
 			\esc_url( \get_upload_iframe_src( 'image', $this->get_the_real_ID() ) ),
 			\esc_attr_x( 'Select social image', 'Button hover', 'autodescription' ),
-			\esc_attr( $input_id ),
+			$s_input_id,
 			\esc_html__( 'Select Image', 'autodescription' )
 		);
 
@@ -793,7 +795,7 @@ class Admin_Pages extends Inpost {
 		);
 
 		//* Already escaped. Turn off escaping.
-		$this->additional_js_l10n( \esc_attr( $input_id ), $button_labels, false, false );
+		$this->additional_js_l10n( $s_input_id, $button_labels, false, false );
 
 		return $content;
 	}

@@ -451,8 +451,7 @@ final class Debug implements Debug_Interface {
 	 * @return bool True if there's output.
 	 */
 	public static function has_debug_output() {
-		$instance = static::get_instance();
-		return (bool) $instance->debug_output;
+		return (bool) static::get_instance()->debug_output;
 	}
 
 	/**
@@ -462,11 +461,8 @@ final class Debug implements Debug_Interface {
 	 * @access private
 	 */
 	public static function _output_debug() {
-
-		$instance = static::get_instance();
 		//* Already escaped.
-		echo $instance->debug_output;
-
+		echo static::get_instance()->debug_output;
 	}
 
 	/**
@@ -864,11 +860,8 @@ final class Debug implements Debug_Interface {
 	 * @access private
 	 */
 	public static function _output_debug_header() {
-
-		$instance = static::get_instance();
 		//* Already escaped.
-		echo $instance->get_debug_header_output();
-
+		echo static::get_instance()->get_debug_header_output();
 	}
 
 	/**

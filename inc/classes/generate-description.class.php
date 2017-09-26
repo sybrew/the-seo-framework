@@ -658,7 +658,7 @@ class Generate_Description extends Generate {
 	 * @access private
 	 *
 	 * @param int $id The post or term ID
-	 * @param object|empty $term The term object
+	 * @param object|string $term The term object
 	 * @param bool $ignore Whether to ignore options and filters.
 	 * @return array : {
 	 *    $title    => The title
@@ -741,7 +741,7 @@ class Generate_Description extends Generate {
 	 * @since 2.5.2
 	 *
 	 * @param int $id The page ID.
-	 * @param void|object $term The term object.
+	 * @param object|string $term The term object.
 	 * @param bool $page_on_front If front page.
 	 * @return string The description title.
 	 */

@@ -276,6 +276,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Improved:**
 		* Plugin (de)activation functions are no created when the plugin isn't being (de)activated.
 			* Instead, they've been moved in `inc/functions/plugin-(de)activation.php` and run directly as the files are called.
+		* Various admin page wrappers have been moved into views:
+			* SEO Settings page wrap
+			* SEO Settings page columns
+			* Inpost-SEO box navigational wrapper.
 	* **Removed:**
 		* Method `admin()`, it has been converted into a file to reduce memory usage.
 		* Method `do_metaboxes()`, it has been converted into a file to reduce memory usage.
@@ -284,7 +288,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		/
 		* TODO Database version: `3000`.
 	* **Fixed:**
+		/
 		* When using filter `the_seo_framework_settings_capability`, the set capability can now save SEO settings too.
+		* TODO check why this is happening: https://wordpress.org/support/topic/sitemap-55/
 	* **Action notes:**
 		* **Added:**
 			* `the_seo_framework_pre_seo_settings`

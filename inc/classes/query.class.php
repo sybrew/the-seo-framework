@@ -1210,12 +1210,12 @@ class Query extends Compat {
 	 *        Must always be inside a single array when $value_to_set is set. @see $this->set_query_cache()
 	 *        Must always be separated parameters otherwise.
 	 * @return mixed : {
-	 * 		mixed The cached value if set and $value_to_set is null.
-	 *		null If the query can't be cached yet, or when no value has been set.
-	 *		If $value_to_set is set : {
-	 *			true If the value is being set for the first time.
-	 *			false If the value has been set and $value_to_set is being overwritten.
-	 * 		}
+	 *    mixed The cached value if set and $value_to_set is null.
+	 *       null If the query can't be cached yet, or when no value has been set.
+	 *       If $value_to_set is set : {
+	 *          true If the value is being set for the first time.
+	 *          false If the value has been set and $value_to_set is being overwritten.
+	 *       }
 	 * }
 	 */
 	public function get_query_cache( $key, $value_to_set = null ) {
@@ -1263,8 +1263,8 @@ class Query extends Compat {
 	 * @param mixed $value_to_set If null, no cache will be set.
 	 * @param mixed $hash Extra arguments, that will be used to generate an alternative cache key.
 	 * @return bool : {
-	 *		true If the value is being set for the first time.
-	 *		false If the value has been set and $value_to_set is being overwritten.
+	 *    true If the value is being set for the first time.
+	 *    false If the value has been set and $value_to_set is being overwritten.
 	 * }
 	 */
 	public function set_query_cache( $key, $value_to_set ) {

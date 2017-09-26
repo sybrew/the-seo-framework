@@ -23,6 +23,7 @@ defined( 'THE_SEO_FRAMEWORK_DIR_PATH' ) or die;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+//! @php7+ convert to IIFE
 \The_SEO_Framework\_deactivation_unset_options_autoload();
 \The_SEO_Framework\_deactivation_unset_sitemap();
 
