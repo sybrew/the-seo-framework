@@ -433,7 +433,7 @@ class Init extends Query {
 						. $this->yandex_site_output()
 						. $this->pint_site_output();
 			else :
-				$set_timezone = $this->uses_time_in_timestamp_format() && $this->output_published_time() || $this->output_modified_time();
+				$set_timezone = $this->uses_time_in_timestamp_format() && ( $this->output_published_time() || $this->output_modified_time() );
 				$set_timezone and $this->set_timezone();
 
 				$output = $this->the_description()
