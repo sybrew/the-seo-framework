@@ -167,6 +167,9 @@ class Init extends Query {
 		//* Initialize caching actions.
 		$this->init_admin_caching_actions();
 
+		//= Initialize profile fields.
+		$this->init_profile_fields();
+
 		//* Save post data.
 		\add_action( 'save_post', array( $this, 'inpost_seo_save' ), 1, 2 );
 

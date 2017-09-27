@@ -106,14 +106,16 @@ switch ( $instance ) :
 
 		?>
 		<fieldset>
-			<legend><h4><?php esc_html_e( 'Title Separator', 'autodescription' ); ?></h4></legend>
+			<legend>
+				<h4><?php esc_html_e( 'Title Separator', 'autodescription' ); ?></h4>
+				<?php $this->description( __( 'If the title consists of two parts (original title and optional addition), then the separator will go in-between them.', 'autodescription' ) ); ?>
+			</legend>
 			<p id="tsf-title-separator" class="tsf-fields">
 			<?php foreach ( $title_separator as $name => $html ) { ?>
 				<input type="radio" name="<?php $this->field_name( 'title_seperator' ); ?>" id="<?php $this->field_id( 'title_seperator_' . $name ); ?>" value="<?php echo esc_attr( $name ); ?>" <?php checked( $this->get_field_value( 'title_seperator' ), $name ); ?> />
 				<label for="<?php $this->field_id( 'title_seperator_' . $name ); ?>" <?php echo in_array( $name, array( 'dash', 'pipe' ), true ) ? $recommended : ''; ?>><?php echo esc_html( $html ); ?></label>
 			<?php } ?>
 			</p>
-			<?php $this->description( __( 'If the title consists of two parts (original title and optional addition), then the separator will go in-between them.', 'autodescription' ) ); ?>
 		</fieldset>
 		<?php
 		break;
@@ -129,10 +131,10 @@ switch ( $instance ) :
 
 		?>
 		<fieldset>
-			<legend><h4><?php esc_html_e( 'Title Additions Location', 'autodescription' ); ?></h4></legend>
-
-			<?php $this->description( __( 'This setting determines which side the added title text will go on.', 'autodescription' ) ); ?>
-
+			<legend>
+				<h4><?php esc_html_e( 'Title Additions Location', 'autodescription' ); ?></h4>
+				<?php $this->description( __( 'This setting determines which side the added title text will go on.', 'autodescription' ) ); ?>
+			</legend>
 			<p id="tsf-title-location" class="tsf-fields">
 				<span class="tsf-toblock">
 					<input type="radio" name="<?php $this->field_name( 'title_location' ); ?>" id="<?php $this->field_id( 'title_location_left' ); ?>" value="left" <?php checked( $this->get_field_value( 'title_location' ), 'left' ); ?> />

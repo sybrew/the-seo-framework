@@ -97,7 +97,10 @@ switch ( $instance ) :
 
 		?>
 		<fieldset>
-			<legend><h4><?php esc_html_e( 'Description Excerpt Separator', 'autodescription' ); ?></h4></legend>
+			<legend>
+				<h4><?php esc_html_e( 'Description Excerpt Separator', 'autodescription' ); ?></h4>
+				<?php $this->description( __( 'If the Automated Description consists of two parts (title and excerpt), then the separator will go in-between them.', 'autodescription' ) ); ?>
+			</legend>
 			<p id="tsf-description-separator" class="tsf-fields">
 			<?php foreach ( $description_separator as $name => $html ) { ?>
 				<input type="radio" name="<?php $this->field_name( 'description_separator' ); ?>" id="<?php $this->field_id( 'description_separator' . $name ); ?>" value="<?php echo esc_attr( $name ); ?>" <?php checked( $sep_option, $name ); ?> />
@@ -106,7 +109,6 @@ switch ( $instance ) :
 				</label>
 			<?php } ?>
 			</p>
-			<span class="description"><?php esc_html_e( 'If the Automated Description consists of two parts (title and excerpt), then the separator will go in-between them.', 'autodescription' ); ?></span>
 		</fieldset>
 		<?php
 		break;

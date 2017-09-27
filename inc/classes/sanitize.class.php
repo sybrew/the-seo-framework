@@ -338,15 +338,12 @@ class Sanitize extends Admin_Pages {
 			's_url',
 			$this->settings_field,
 			array(
-				'facebook_publisher',
-				'facebook_author',
-
 				'knowledge_facebook',
 				'knowledge_twitter',
 				'knowledge_gplus',
 				'knowledge_instagram',
 				'knowledge_youtube',
-			//	'knowledge_myspace',
+				//	'knowledge_myspace',
 				'knowledge_pinterest',
 				'knowledge_soundcloud',
 				'knowledge_tumblr',
@@ -361,6 +358,15 @@ class Sanitize extends Admin_Pages {
 				'social_image_fb_url',
 				'homepage_social_image_url',
 				'knowledge_logo_url',
+			)
+		);
+
+		$this->add_option_filter(
+			's_facebook_profile',
+			$this->settings_field,
+			array(
+				'facebook_publisher',
+				'facebook_author',
 			)
 		);
 
@@ -561,19 +567,18 @@ class Sanitize extends Admin_Pages {
 			's_safe_html'             => array( $this, 's_safe_html' ),
 			's_url'                   => array( $this, 's_url' ),
 			's_url_query'             => array( $this, 's_url_query' ),
+			's_facebook_profile'      => array( $this, 's_facebook_profile' ),
 			's_twitter_name'          => array( $this, 's_twitter_name' ),
 			's_twitter_card'          => array( $this, 's_twitter_card' ),
 			's_canonical_scheme'      => array( $this, 's_canonical_scheme' ),
 		);
 
 		/**
-		 * Filter the available sanitization filter types.
+		 * Applies filters the_seo_framework_available_sanitizer_filters
 		 *
 		 * @since 2.2.2
-		 *
-		 * Applies filters the_seo_framework_available_sanitizer_filters : array
-		 * 		@param array $default_filters Array with keys of sanitization types,
-		 *		and values of the filter function name as a callback
+		 * @param array $default_filters Array with keys of sanitization types,
+		 *              and values of the filter function name as a callback
 		 */
 		return (array) \apply_filters( 'the_seo_framework_available_sanitizer_filters', $default_filters );
 	}
@@ -1017,7 +1022,6 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.8.0 Method is now public.
 	 *
 	 * @param string $new_value String, a URL, possibly unsafe.
-	 * @param boolean/sphaghetti $flush Whether to flush to transient.
 	 * @return string String a safe URL without Query Arguments.
 	 */
 	public function s_url( $new_value ) {
@@ -1077,6 +1081,8 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
+	 * @since 3.0.0: 1. Now removes '@' from the URL path.
+	 *               2. Now removes spaces and tabs.
 	 *
 	 * @param string $new_value String with potentially wrong Twitter username.
 	 * @return string String with 'correct' Twitter username
@@ -1084,23 +1090,39 @@ class Sanitize extends Admin_Pages {
 	public function s_twitter_name( $new_value ) {
 
 		if ( empty( $new_value ) )
-			return (string) $new_value;
+			return '';
 
 		$profile = trim( strip_tags( $new_value ) );
+		$profile = $this->s_relative_url( $profile );
+		$profile = rtrim( $profile, ' /' );
 
-		if ( 'http' === substr( $profile, 0, 4 ) ) {
-			$parsed_url = \wp_parse_url( $profile );
-			$path = isset( $parsed_url['path'] ) ? str_replace( '/', '', $parsed_url['path'] ) : '';
-			$profile = $path ? '@' . $path : '';
-
-			return (string) $profile;
-		}
-
-		if ( '@' !== substr( $profile, 0, 1 ) ) {
+		if ( '@' !== substr( $profile, 0, 1 ) )
 			$profile = '@' . $profile;
-		}
 
-		return (string) $profile;
+		return str_replace( array( ' ', "\t" ), '', $profile );
+	}
+
+	/**
+	 * Parses Facebook profile URLs. Exchanges URLs for Facebook's.
+	 *
+	 * @since 2.2.2
+	 * @since 2.8.0 Method is now public.
+	 * @since 3.0.0 Now removed '@' from the URL path.
+	 *
+	 * @param string $new_value String with potentially wrong Twitter username.
+	 * @return string String with 'correct' Twitter username
+	 */
+	public function s_facebook_profile( $new_value ) {
+
+		if ( empty( $new_value ) )
+			return '';
+
+		$link = trim( strip_tags( $new_value ) );
+
+		$link = 'https://www.facebook.com/' . $this->s_relative_url( $link );
+		$link = rtrim( $link, ' /' );
+
+		return $this->s_url( $link );
 	}
 
 	/**

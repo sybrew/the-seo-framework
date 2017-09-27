@@ -166,31 +166,21 @@ switch ( $instance ) :
 	case 'the_seo_framework_social_metabox_facebook' :
 
 		$fb_author = $this->get_field_value( 'facebook_author' );
-		$fb_author_placeholder = empty( $fb_publisher ) ? _x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' ) : '';
+		$fb_author_placeholder = _x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' );
 
 		$fb_publisher = $this->get_field_value( 'facebook_publisher' );
-		$fb_publisher_placeholder = empty( $fb_publisher ) ? _x( 'https://www.facebook.com/YourVerifiedBusinessProfile', 'Example Verified Facebook Business URL', 'autodescription' ) : '';
+		$fb_publisher_placeholder = _x( 'https://www.facebook.com/YourVerifiedBusinessProfile', 'Example Verified Facebook Business URL', 'autodescription' );
 
 		$fb_appid = $this->get_field_value( 'facebook_appid' );
-		$fb_appid_placeholder = empty( $fb_appid ) ? '123456789012345' : '';
-
-		?><h4><?php esc_html_e( 'Default Facebook Integration Settings', 'autodescription' ); ?></h4><?php
-		$this->description( __( 'Facebook post sharing works mostly through Open Graph. However, you can also link your Business and Personal Facebook pages, among various other options.', 'autodescription' ) );
-		$this->description( __( 'When these options are filled in, Facebook might link your Facebook profile to be followed and liked when your post or page is shared.', 'autodescription' ) );
+		$fb_appid_placeholder = '123456789012345';
 
 		?>
+		<h4><?php esc_html_e( 'Default Facebook Integration Settings', 'autodescription' ); ?></h4>
+		<?php
+		$this->description( __( 'Facebook post sharing works mostly through Open Graph. However, you can also link your Business and Personal Facebook pages, among various other options.', 'autodescription' ) );
+		$this->description( __( 'When these options are filled in, Facebook might link your Facebook profile to be followed and liked when your post or page is shared.', 'autodescription' ) );
+		?>
 		<hr>
-
-		<p>
-			<label for="<?php $this->field_id( 'facebook_author' ); ?>">
-				<strong><?php esc_html_e( 'Article Author Facebook URL', 'autodescription' ); ?></strong>
-				<a href="<?php echo esc_url( 'https://facebook.com/me' ); ?>" class="description" target="_blank" title="<?php esc_attr_e( 'Your Facebook Profile', 'autodescription' ); ?>">[?]</a>
-			</label>
-		</p>
-		<p>
-			<input type="text" name="<?php $this->field_name( 'facebook_author' ); ?>" class="large-text" id="<?php $this->field_id( 'facebook_author' ); ?>" placeholder="<?php echo esc_attr( $fb_author_placeholder ); ?>" value="<?php echo esc_attr( $fb_author ); ?>" />
-		</p>
-
 		<p>
 			<label for="<?php $this->field_id( 'facebook_publisher' ); ?>">
 				<strong><?php esc_html_e( 'Article Publisher Facebook URL', 'autodescription' ); ?></strong>
@@ -200,7 +190,6 @@ switch ( $instance ) :
 		<p>
 			<input type="text" name="<?php $this->field_name( 'facebook_publisher' ); ?>" class="large-text" id="<?php $this->field_id( 'facebook_publisher' ); ?>" placeholder="<?php echo esc_attr( $fb_publisher_placeholder ); ?>" value="<?php echo esc_attr( $fb_publisher ); ?>" />
 		</p>
-
 		<p>
 			<label for="<?php $this->field_id( 'facebook_appid' ); ?>">
 				<strong><?php esc_html_e( 'Facebook App ID', 'autodescription' ); ?></strong>
@@ -210,16 +199,26 @@ switch ( $instance ) :
 		<p>
 			<input type="text" name="<?php $this->field_name( 'facebook_appid' ); ?>" class="large-text" id="<?php $this->field_id( 'facebook_appid' ); ?>" placeholder="<?php echo esc_attr( $fb_appid_placeholder ); ?>" value="<?php echo esc_attr( $fb_appid ); ?>" />
 		</p>
+		<p>
+			<label for="<?php $this->field_id( 'facebook_author' ); ?>">
+				<strong><?php esc_html_e( 'Article Author Facebook Fallback URL', 'autodescription' ); ?></strong>
+				<a href="<?php echo esc_url( 'https://facebook.com/me' ); ?>" class="description" target="_blank" title="<?php esc_attr_e( 'Your Facebook Profile', 'autodescription' ); ?>">[?]</a>
+			</label>
+		</p>
+		<?php $this->description( __( 'Authors can override this option on their profile page.', 'autodescription' ) ); ?>
+		<p>
+			<input type="text" name="<?php $this->field_name( 'facebook_author' ); ?>" class="large-text" id="<?php $this->field_id( 'facebook_author' ); ?>" placeholder="<?php echo esc_attr( $fb_author_placeholder ); ?>" value="<?php echo esc_attr( $fb_author ); ?>" />
+		</p>
 		<?php
 		break;
 
 	case 'the_seo_framework_social_metabox_twitter' :
 
 		$tw_site = $this->get_field_value( 'twitter_site' );
-		$tw_site_placeholder = empty( $tw_site ) ? _x( '@your-site-username', 'Twitter @username', 'autodescription' ) : '';
+		$tw_site_placeholder = _x( '@your-site-username', 'Twitter @username', 'autodescription' );
 
 		$tw_creator = $this->get_field_value( 'twitter_creator' );
-		$tw_creator_placeholder = empty( $tw_creator ) ? _x( '@your-personal-username', 'Twitter @username', 'autodescription' ) : '';
+		$tw_creator_placeholder = _x( '@your-personal-username', 'Twitter @username', 'autodescription' );
 
 		$twitter_card = $this->get_twitter_card_types();
 
@@ -260,11 +259,13 @@ switch ( $instance ) :
 
 		<hr>
 
-		<?php $this->description( __( 'When the following options are filled in, Twitter might link your Twitter Site or Personal Profile when your post or page is shared.', 'autodescription' ) ); ?>
+		<?php
+		$this->description( __( 'When the following options are filled in, Twitter might link your Twitter Site or Personal Profile when your post or page is shared.', 'autodescription' ) );
+		?>
 
 		<p>
 			<label for="<?php $this->field_id( 'twitter_site' ); ?>" class="tsf-toblock">
-				<strong><?php esc_html_e( "Your Website's Twitter Profile", 'autodescription' ); ?></strong>
+				<strong><?php esc_html_e( 'Website Twitter Profile', 'autodescription' ); ?></strong>
 				<a href="<?php echo esc_url( 'https://twitter.com/home' ); ?>" target="_blank" class="description" title="<?php esc_html_e( 'Find your @username', 'autodescription' ); ?>">[?]</a>
 			</label>
 		</p>
@@ -274,10 +275,11 @@ switch ( $instance ) :
 
 		<p>
 			<label for="<?php $this->field_id( 'twitter_creator' ); ?>" class="tsf-toblock">
-				<strong><?php esc_html_e( 'Your Personal Twitter Profile', 'autodescription' ); ?></strong>
+				<strong><?php esc_html_e( 'Twitter Author Fallback Profile', 'autodescription' ); ?></strong>
 				<a href="<?php echo esc_url( 'https://twitter.com/home' ); ?>" target="_blank" class="description" title="<?php esc_attr_e( 'Find your @username', 'autodescription' ); ?>">[?]</a>
 			</label>
 		</p>
+		<?php $this->description( __( 'Authors can override this option on their profile page.', 'autodescription' ) ); ?>
 		<p>
 			<input type="text" name="<?php $this->field_name( 'twitter_creator' ); ?>" class="large-text" id="<?php $this->field_id( 'twitter_creator' ); ?>" placeholder="<?php echo esc_attr( $tw_creator_placeholder ); ?>" value="<?php echo esc_attr( $tw_creator ); ?>" />
 		</p>

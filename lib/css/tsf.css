@@ -835,6 +835,14 @@ body.js .tsf-flex-tab-content.tsf-flex-tab-content-active {
 	margin-top: 0;
 }
 
+.tsf-metaboxes legend h4 {
+	margin: 2px 0;
+}
+
+.tsf-metaboxes legend p:last-of-type {
+	margin-bottom: 0;
+}
+
 /**
  * Start AJAX
  */
@@ -999,10 +1007,6 @@ a.tsf-set-social-image.button {
 
 	.tsf-metaboxes .tsf-warning-selected {
 		box-shadow: 0 0 2px 0 #dd3811;
-	}
-
-	.tsf-metaboxes legend h4 {
-		margin: 2px 0;
 	}
 }
 

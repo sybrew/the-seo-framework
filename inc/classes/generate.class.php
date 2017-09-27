@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 2.8.0
  */
-class Generate extends Term_Data {
+class Generate extends User_Data {
 
 	/**
 	 * Constructor, load parent constructor

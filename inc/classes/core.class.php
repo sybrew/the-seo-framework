@@ -575,7 +575,6 @@ class Core {
 	 * This filter changes the minimum role for viewing and editing the plugin's settings.
 	 *
 	 * @since 3.0.0
-	 * @access private
 	 *
 	 * @return string The minimum required capability for SEO Settings.
 	 */

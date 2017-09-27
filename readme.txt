@@ -236,13 +236,17 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * **For everyone:**
 	* **Added:**
+		* Author SEO options. This is great for websites that utilize multiple authors.
+			* They take precedence over the global authorial (now fallback) options, when filled in.
+			* On every profile page, if the user can publish posts, these options are found under "Author Info":
+				* "Facebook profile page"
+				* "Twitter profile page"
 		* A global timestamp format option. It affects:
-			/
 			* Sitemap's `lastmod` output.
 			* Article published and modified time.
 			* Open Graph updated time.
 	* **Changed:**
-		* Schema breadcrumbs now have their IDs reset. They have have an URL fragment attached (e.g. `example.com/#schemaorg-bcl`).
+		* Schema breadcrumbs now have their IDs reset. They have an URL fragment attached (e.g. `example.com/#schemaorg-bcl`).
 			* This is to prevent ID collision with generated scripts from other plugins, like WooCommerce 3.0+.
 			* This might affect search presence of the pages until the new IDs have been processed by the search engine, like Google and Bing.
 	* **Improved:**
@@ -250,6 +254,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* The homepage in-post SEO settings box now links to the settings page when the user can view those options.
 		* When TSF's database needs upgrading, it now requires fewer database calls.
 		* After-upgrade notifications now have "SEO: " prefixed.
+		* Facebook and Twitter Social Meta Settings input now show initial placeholders when emptied.
 	* **Removed:**
 		* `noodp` and all its settings. The DMOZ project that it influenced is no longer available nor used.
 		* Sitemaps timestamp format option. It will be converted to the new global timestamp format option upon upgrade.
@@ -262,13 +267,19 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* [Simple Sitemap](https://wordpress.org/plugins/simple-sitemap/) is no longer detected as a conflicting sitemap plugin.
 		* [NextScripts Snap](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) is no longer detected as a conflicting Open Graph plugin, they now inform you about this.
 		* TODO Odd database call on front-end looking for image... while custom is set...?
+		* When an empty description is supplied, the counter will now display `0` instead of nothing.
 
 * **For translators:**
 	* **Added:**
 		* "Homepage SEO Settings"
-			* Location: In-post SEO Settings metabox title, when editing the home page.
+			* Location: In-post SEO Settings meta box title, when editing the home page.
 		* "The previous sitemap timestamp settings have been converted into new global timestamp settings."
 			* Location: Upgrade notification.
+		* "Author Info"
+			* Location: User profile edit page.
+		* "Authors can override this option on their profile page."
+			* Location: SEO Settings -> Social Meta Box -> Twitter Tab
+			* Location: SEO Settings -> Social Meta Box -> Facebook Tab
 	* **Changed:**
 		* "The Open Directory Project and the Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave these options checked."
 			* Now is: "The Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave the option checked."
@@ -287,12 +298,28 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* "Document Title Separator"
 			* Now is: "Title Separator"
 			* Spread: If affects more than just the document title.
+		* "Article Author Facebook URL"
+			* Now is: "Article Author Facebook Fallback URL"
+			* Author SEO: It's now a fallback option.
+		* "Your Personal Twitter Profile"
+			* Now is: "Twitter Author Fallback Profile"
+			* Author SEO: It's now a fallback option.
+			* Not personal: It's a general option.
+			* Consistency: "Your" isn't used in Facebook's options either.
+		* "Your Website's Twitter Profile"
+			* Now is: "Website Twitter Profile"
+			* Author SEO: It's now a fallback option.
+			* Consistency: "Your" isn't used in Facebook's options either.
 
 * **For developers:**
 	* **Added:**
-		* Method `can_access_settings()`.
-		* Property `$schema_ids`. It allows you to adjust used Schema.org JSON-LD script IDs.
-		* Method `s_numeric_string`, creates a string from integers. Rounds float down. Converts non-numeric input to `'0'`, arrays and objects to `'1'`.
+		* Class `The_SEO_Framework\User_Data`. Maintains user data.
+		* Class `The_SEO_Framework\Profile`. Maintains admin profile pages.
+		* Method `can_access_settings()`, to easily determine if the current user has rights to edit global SEO settings.
+		* Property `$schema_ids`, it allows you to adjust used Schema.org JSON-LD script IDs.
+		* Method `s_numeric_string`, it creates a string from integers. Rounds float down. Converts non-numeric input to `'0'`, arrays and objects to `'1'`.
+		* Method `s_facebook_profile`, it converts any URL or string-input into a Facebook profile URL.
+		* `index.php` file in the classes folder stating the class structure.
 	* **Changed:**
 		* Method `is_protected()` no longer checks for query, i.e. `is_singular()`, before parsing.
 		* Method `settings_capability()` now is `get_settings_capability()`, without deprecation; it was marked private.
@@ -304,7 +331,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Various admin page wrappers have been moved into views:
 			* SEO Settings page wrap
 			* SEO Settings page columns
-			* Inpost-SEO box navigational wrapper.
+			* In-Post SEO box navigational wrapper.
 	* **Removed:**
 		* Method `admin()`, it has been converted into a file to reduce memory usage.
 		* Method `do_metaboxes()`, it has been converted into a file to reduce memory usage.
@@ -316,6 +343,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		/
 		* When using filter `the_seo_framework_settings_capability`, the set capability can now save SEO settings too.
 		* TODO check why this is happening: https://wordpress.org/support/topic/sitemap-55/
+		* Method `get_user_option()` no longer caches default input value.
 	* **Action notes:**
 		* **Added:**
 			* `the_seo_framework_pre_seo_settings`

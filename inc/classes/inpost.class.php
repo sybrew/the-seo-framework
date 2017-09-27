@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 2.8.0
  */
-class Inpost extends Doing_It_Right {
+class Inpost extends Profile {
 
 	/**
 	 * Add inpost SEO Bar through a filter.
@@ -60,7 +60,7 @@ class Inpost extends Doing_It_Right {
 	public $inpost_nonce_field;
 
 	/**
-	 * Constructor, load parent constructor
+	 * Constructor, load parent constructor and sets up variables.
 	 */
 	protected function __construct() {
 		parent::__construct();
@@ -81,7 +81,6 @@ class Inpost extends Doing_It_Right {
 		 * }
 		 */
 		$this->inpost_seo_bar = \apply_filters( 'the_seo_framework_inpost_seo_bar', false );
-
 	}
 
 	/**

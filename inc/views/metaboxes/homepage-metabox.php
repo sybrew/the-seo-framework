@@ -275,8 +275,10 @@ switch ( $instance ) :
 
 		?>
 		<fieldset>
-			<legend><h4><?php esc_html_e( 'Title Additions Location', 'autodescription' ); ?></h4></legend>
-			<?php $this->description( __( 'This setting determines which side the added title text will go on.', 'autodescription' ) ); ?>
+			<legend>
+				<h4><?php esc_html_e( 'Title Additions Location', 'autodescription' ); ?></h4>
+				<?php $this->description( __( 'This setting determines which side the added title text will go on.', 'autodescription' ) ); ?>
+			</legend>
 
 			<p id="tsf-home-title-location" class="tsf-fields">
 				<span class="tsf-toblock">

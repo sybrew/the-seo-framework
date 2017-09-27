@@ -537,7 +537,8 @@ class Render extends Admin_Init {
 	 *
 	 * @since 2.2.2
 	 * @since 2.9.3 No longer has a fallback to twitter:site:id
-	 * @link https://dev.twitter.com/cards/getting-started
+	 *              @link https://dev.twitter.com/cards/getting-started
+	 * @since 3.0.0 Now uses author meta data.
 	 *
 	 * @return string The Twitter Creator or Twitter Site ID meta tag.
 	 */
@@ -546,15 +547,21 @@ class Render extends Admin_Init {
 		if ( ! $this->use_twitter_tags() )
 			return '';
 
+		$twitter_page = $this->get_current_author_option( 'twitter_page' ) ?: $this->get_option( 'twitter_creator' );
+
 		/**
 		 * Applies filters 'the_seo_framework_twittercreator_output' : string
+		 *
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
+		 *
+		 * @param string $twitter_page
+		 * @param int    $id
 		 */
-		$creator = (string) \apply_filters( 'the_seo_framework_twittercreator_output', $this->get_option( 'twitter_creator' ), $this->get_the_real_ID() );
+		$twitter_page = (string) \apply_filters( 'the_seo_framework_twittercreator_output', $twitter_page, $this->get_the_real_ID() );
 
-		if ( $creator )
-			return '<meta name="twitter:creator" content="' . \esc_attr( $creator ) . '" />' . "\r\n";
+		if ( $twitter_page )
+			return '<meta name="twitter:creator" content="' . \esc_attr( $twitter_page ) . '" />' . "\r\n";
 
 		return '';
 	}
@@ -648,7 +655,8 @@ class Render extends Admin_Init {
 	 * Renders Facebook Author meta tag.
 	 *
 	 * @since 2.2.2
-	 * @since 2.8.0 : Return empty on og:type 'website' or 'product'
+	 * @since 2.8.0 Returns empty on og:type 'website' or 'product'
+	 * @since 3.0.0 Fetches Author meta data.
 	 *
 	 * @return string The Facebook Author meta tag.
 	 */
@@ -660,15 +668,17 @@ class Render extends Admin_Init {
 		if ( in_array( $this->get_og_type(), array( 'website', 'product' ), true ) )
 			return '';
 
+		$facebook_page = $this->get_current_author_option( 'facebook_page' ) ?: $this->get_option( 'facebook_author' );
+
 		/**
 		 * Applies filters 'the_seo_framework_facebookauthor_output' : string
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
 		 */
-		$author = (string) \apply_filters( 'the_seo_framework_facebookauthor_output', $this->get_option( 'facebook_author' ), $this->get_the_real_ID() );
+		$facebook_page = (string) \apply_filters( 'the_seo_framework_facebookauthor_output', $facebook_page, $this->get_the_real_ID() );
 
-		if ( $author )
-			return '<meta property="article:author" content="' . \esc_attr( \esc_url_raw( $author, array( 'http', 'https' ) ) ) . '" />' . "\r\n";
+		if ( $facebook_page )
+			return '<meta property="article:author" content="' . \esc_attr( \esc_url_raw( $facebook_page, array( 'http', 'https' ) ) ) . '" />' . "\r\n";
 
 		return '';
 	}
