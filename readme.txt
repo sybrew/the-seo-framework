@@ -238,7 +238,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Added:**
 		* Author SEO options. This is great for websites that utilize multiple authors.
 			* They take precedence over the global authorial (now fallback) options, when filled in.
-			* On every profile page, if the user can publish posts, these options are found under "Author Info":
+			* On every profile page, if the user can publish posts, these options are found under "Authorial Info":
 				* "Facebook profile page"
 				* "Twitter profile page"
 		* A global timestamp format option. It affects:
@@ -255,19 +255,27 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* When TSF's database needs upgrading, it now requires fewer database calls.
 		* After-upgrade notifications now have "SEO: " prefixed.
 		* Facebook and Twitter Social Meta Settings input now show initial placeholders when emptied.
+		* In-post SEO box active tab's shadow now has the same color as the used admin button color scheme.
+			/
+			* TODO test RTL.
+		* Slightly improved CSS render performance by eliminating clause-calls; i.e. we now use `.class` instead of `div.class`.
+			/
+			* TODO RTL.
 	* **Removed:**
 		* `noodp` and all its settings. The DMOZ project that it influenced is no longer available nor used.
 		* Sitemaps timestamp format option. It will be converted to the new global timestamp format option upon upgrade.
 	* **Fixed:**
 		/
+		* TODO In-post SEO box icons no longer look out-of-place on some browsers (Safari 7 or Firefox cropped?).
 		* `article:publisher` is now only output on `article` types.
 		* TODO Category SEO settings character counter length + SEO Bar compatibility with https://wordpress.org/plugins/visual-term-description-editor/ (check mail inbox keyword: Visual Term Description Editor).
 		* TODO check W3TC canonical issues https://wordpress.org/support/topic/canonical-https-detection-not-working/
-		* TSF no longer outputs canonical URLs on BuddyPress pages. Instead, it lets BuddyPress output it.
+		* TSF no longer outputs canonical URLs on BuddyPress pages. Instead, it lets BuddyPress output them.
 		* [Simple Sitemap](https://wordpress.org/plugins/simple-sitemap/) is no longer detected as a conflicting sitemap plugin.
 		* [NextScripts Snap](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) is no longer detected as a conflicting Open Graph plugin, they now inform you about this.
 		* TODO Odd database call on front-end looking for image... while custom is set...?
 		* When an empty description is supplied, the counter will now display `0` instead of nothing.
+		* TODO Tapping tooltips on Edge no longer makes them go away instantly. MSPointer + Click events clash? => Set buffer??
 
 * **For translators:**
 	* **Added:**
@@ -275,7 +283,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Location: In-post SEO Settings meta box title, when editing the home page.
 		* "The previous sitemap timestamp settings have been converted into new global timestamp settings."
 			* Location: Upgrade notification.
-		* "Author Info"
+		* "Authorial Info"
+			* Location: User profile edit page.
+		* "Twitter profile"
 			* Location: User profile edit page.
 		* "Authors can override this option on their profile page."
 			* Location: SEO Settings -> Social Meta Box -> Twitter Tab
@@ -288,7 +298,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* "Determines how specific the modification timestamp is."
 			* Now is: "This setting determines how specific the timestamp is."
 			* Clarity: It points to what's below.
-			* Global: The setting isn't only for modifications anymore.
+			* Global: The setting isn't only for sitemap's `lastmod` output anymore.
 		* "Determines which side the added title text will go on."
 			* Now is: "This setting determines which side the added title text will go on."
 			* Clarity: It points to what's below.
@@ -308,8 +318,13 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Consistency: "Your" isn't used in Facebook's options either.
 		* "Your Website's Twitter Profile"
 			* Now is: "Website Twitter Profile"
-			* Author SEO: It's now a fallback option.
 			* Consistency: "Your" isn't used in Facebook's options either.
+		* "When the following options are filled in, Twitter might link your Twitter Site or Personal Profile when your post or page is shared."
+			* Now is: "When the following options are filled in, Twitter might link your Twitter Site or Author Profile when your post or page is shared."
+			* Not personal: They're now general options.
+		* "When these options are filled in, Facebook might link your Facebook profile to be followed and liked when your post or page is shared."
+			* Now is: "When these options are filled in, Facebook might link the Facebook profile to be followed and liked when your post or page is shared."
+			* Not yours: They're now general options.
 
 * **For developers:**
 	* **Added:**
@@ -344,6 +359,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* When using filter `the_seo_framework_settings_capability`, the set capability can now save SEO settings too.
 		* TODO check why this is happening: https://wordpress.org/support/topic/sitemap-55/
 		* Method `get_user_option()` no longer caches default input value.
+	* **Filter notes:**
+		* **Added:**
+			* `the_seo_framework_admin_color_css`, used to adjust admin-color conforming colors.
 	* **Action notes:**
 		* **Added:**
 			* `the_seo_framework_pre_seo_settings`

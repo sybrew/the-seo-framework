@@ -452,6 +452,7 @@ class Admin_Init extends Init {
 	 * CSS for the AutoDescription Bar
 	 *
 	 * @since 2.1.9
+	 * @since 3.0.0 Now also outputs colors.
 	 *
 	 * @param $hook the current page
 	 */
@@ -471,6 +472,9 @@ class Admin_Init extends Init {
 		}
 
 		\wp_enqueue_style( $this->css_name );
+
+		$color_css = $this->get_admin_color_css()
+			and \wp_add_inline_style( $this->css_name, $color_css );
 	}
 
 	/**
@@ -492,6 +496,62 @@ class Admin_Init extends Init {
 		$registered = true;
 
 		\wp_register_style( $this->css_name, THE_SEO_FRAMEWORK_DIR_URL . "lib/css/{$this->css_name}{$rtl}{$suffix}.css", array(), THE_SEO_FRAMEWORK_VERSION, 'all' );
+	}
+
+	/**
+	 * Outputs additional CSS based on admin theme colors.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string Additional admin CSS.
+	 */
+	protected function get_admin_color_css() {
+
+		//* @see wp_style_loader_src()
+		$scheme = \get_user_option( 'admin_color' ) ?: 'fresh';
+
+		$_colors = $GLOBALS['_wp_admin_css_colors'];
+
+		if ( ! isset( $_colors[ $scheme ]->colors ) || ! is_array( $_colors[ $scheme ]->colors ) )
+			return '';
+
+		$_scheme = $_colors[ $scheme ]->colors;
+
+		$bg = $_scheme[0];
+		$bg_accent = $_scheme[1];
+		$color = $_scheme[2];
+		$color_accent = $_scheme[3];
+
+		$bg_alt_font = '#' . $this->get_relative_fontcolor( $bg );
+		// $bg_accent_alt_font = '#' . $this->get_relative_fontcolor( $bg_accent );
+
+		$css = array(
+			'.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:checked + .tsf-flex-nav-tab-label' => array(
+				"box-shadow:0 -2px 0 0 $color inset",
+			),
+			'.tsf-seo-bar .tsf-explanation-desc' => array(
+				"background-color:$bg_accent",
+				"color:$bg_alt_font",
+			),
+			'.tsf-seo-bar .tsf-explanation-desc div:after' => array(
+				"border-top-color:$bg_accent",
+			),
+		);
+
+		/**
+		 * Applies filters 'the_seo_framework_admin_color_css'
+		 *
+		 * @since 3.0.0
+		 * @param array $css The current styles.
+		 * @param string $scheme The current admin scheme.
+		 */
+		$css = (array) \apply_filters( 'the_seo_framework_admin_color_css', $css, $scheme );
+
+		$out = '';
+		foreach ( $css as $attr => $style )
+			$out .= $attr . '{' . implode( ';', $style ) . '}';
+
+		return $out;
 	}
 
 	/**

@@ -178,18 +178,10 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Default Facebook Integration Settings', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'Facebook post sharing works mostly through Open Graph. However, you can also link your Business and Personal Facebook pages, among various other options.', 'autodescription' ) );
-		$this->description( __( 'When these options are filled in, Facebook might link your Facebook profile to be followed and liked when your post or page is shared.', 'autodescription' ) );
+		$this->description( __( 'When these options are filled in, Facebook might link the Facebook profile to be followed and liked when your post or page is shared.', 'autodescription' ) );
 		?>
 		<hr>
-		<p>
-			<label for="<?php $this->field_id( 'facebook_publisher' ); ?>">
-				<strong><?php esc_html_e( 'Article Publisher Facebook URL', 'autodescription' ); ?></strong>
-				<a href="<?php echo esc_url( 'https://instantarticles.fb.com/' ); ?>" class="description" target="_blank" title="<?php esc_html_e( 'To use this, you need to be a verified business', 'autodescription' ); ?>">[?]</a>
-			</label>
-		</p>
-		<p>
-			<input type="text" name="<?php $this->field_name( 'facebook_publisher' ); ?>" class="large-text" id="<?php $this->field_id( 'facebook_publisher' ); ?>" placeholder="<?php echo esc_attr( $fb_publisher_placeholder ); ?>" value="<?php echo esc_attr( $fb_publisher ); ?>" />
-		</p>
+
 		<p>
 			<label for="<?php $this->field_id( 'facebook_appid' ); ?>">
 				<strong><?php esc_html_e( 'Facebook App ID', 'autodescription' ); ?></strong>
@@ -199,6 +191,17 @@ switch ( $instance ) :
 		<p>
 			<input type="text" name="<?php $this->field_name( 'facebook_appid' ); ?>" class="large-text" id="<?php $this->field_id( 'facebook_appid' ); ?>" placeholder="<?php echo esc_attr( $fb_appid_placeholder ); ?>" value="<?php echo esc_attr( $fb_appid ); ?>" />
 		</p>
+
+		<p>
+			<label for="<?php $this->field_id( 'facebook_publisher' ); ?>">
+				<strong><?php esc_html_e( 'Article Publisher Facebook URL', 'autodescription' ); ?></strong>
+				<a href="<?php echo esc_url( 'https://instantarticles.fb.com/' ); ?>" class="description" target="_blank" title="<?php esc_html_e( 'To use this, you need to be a verified business', 'autodescription' ); ?>">[?]</a>
+			</label>
+		</p>
+		<p>
+			<input type="text" name="<?php $this->field_name( 'facebook_publisher' ); ?>" class="large-text" id="<?php $this->field_id( 'facebook_publisher' ); ?>" placeholder="<?php echo esc_attr( $fb_publisher_placeholder ); ?>" value="<?php echo esc_attr( $fb_publisher ); ?>" />
+		</p>
+
 		<p>
 			<label for="<?php $this->field_id( 'facebook_author' ); ?>">
 				<strong><?php esc_html_e( 'Article Author Facebook Fallback URL', 'autodescription' ); ?></strong>
@@ -260,7 +263,7 @@ switch ( $instance ) :
 		<hr>
 
 		<?php
-		$this->description( __( 'When the following options are filled in, Twitter might link your Twitter Site or Personal Profile when your post or page is shared.', 'autodescription' ) );
+		$this->description( __( 'When the following options are filled in, Twitter might link your Twitter Site or Author Profile when your post or page is shared.', 'autodescription' ) );
 		?>
 
 		<p>

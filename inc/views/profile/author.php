@@ -6,7 +6,7 @@
 defined( 'ABSPATH' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
 ?>
-<h2><?php esc_html_e( 'Author Info', 'autodescription' ); ?></h2>
+<h2><?php esc_html_e( 'Authorial Info', 'autodescription' ); ?></h2>
 <table class="form-table">
 <?php
 foreach ( $fields as $field => $labels ) :

@@ -90,7 +90,7 @@ class Profile extends Doing_It_Right {
 				'value'       => $this->get_user_option( $user->ID, 'facebook_page' ),
 			),
 			$this->profile_settings->keys['twitter_page'] => (object) array(
-				'name'        => \__( 'Twitter profile page', 'autodescription' ),
+				'name'        => \__( 'Twitter profile', 'autodescription' ),
 				'placeholder' => \_x( '@your-personal-username', 'Twitter @username', 'autodescription' ),
 				'value'       => $this->get_user_option( $user->ID, 'twitter_page' ),
 			),

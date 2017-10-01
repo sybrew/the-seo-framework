@@ -141,19 +141,19 @@ th.column-tsf-seo-bar-wrap ~ th {
 	will-change: contents;
 }
 
-span.tsf-count-bad {
+.tsf-count-bad {
 	color: #dd3811;
 }
 
-span.tsf-count-okay {
+.tsf-count-okay {
 	color: #ffa700;
 }
 
-span.tsf-count-good {
+.tsf-count-good {
 	color: #0cc34b;
 }
 
-span.tsf-counter-one {
+.tsf-counter-one {
 	color: #fff;
 	border-radius: 4em;
 	padding: 0 0.5em;
@@ -162,13 +162,13 @@ span.tsf-counter-one {
 	text-align: center;
 	vertical-align: baseline;
 }
-span.tsf-counter-one.tsf-count-bad {
+.tsf-counter-one.tsf-count-bad {
 	background-color: #dd3811;
 }
-span.tsf-counter-one.tsf-count-okay {
+.tsf-counter-one.tsf-count-okay {
 	background-color: #ffa700;
 }
-span.tsf-counter-one.tsf-count-good {
+.tsf-counter-one.tsf-count-good {
 	background-color: #0cc34b;
 }
 
@@ -183,7 +183,7 @@ th:last-of-type#tsf-seo-bar-wrap {
 	width: 160px;
 }
 
-span.tsf-seo-bar {
+.tsf-seo-bar {
 	display: block;
 	width: 95%;
 	max-width: 220px;
@@ -192,11 +192,11 @@ span.tsf-seo-bar {
 	text-shadow: 0 0 3px rgba(0,0,0,0.3);
 }
 
-span.tsf-seo-bar.tsf-100 {
+.tsf-seo-bar.tsf-100 {
 	width: 100%;
 }
 
-span.tsf-seo-bar-inner-wrap {
+.tsf-seo-bar-inner-wrap {
 	display: table;
 	width: 100%;
 	border-radius: 0;
@@ -207,7 +207,7 @@ span.tsf-seo-bar-inner-wrap {
 	position: relative;
 }
 
-span.tsf-seo-bar-section-wrap {
+.tsf-seo-bar-section-wrap {
 	display: table-cell;
 	border-collapse: collapse;
 }
@@ -306,7 +306,7 @@ span.tsf-seo-bar.pill span.tsf-seo-bar-inner-wrap a {
 	background-color: #007bd2;
 }
 
-span.tsf-seo-bar .tsf-explanation-desc {
+.tsf-seo-bar .tsf-explanation-desc {
 	position: absolute;
 	width: auto;
 	min-width: 90%;
@@ -318,25 +318,43 @@ span.tsf-seo-bar .tsf-explanation-desc {
 	border-radius: 0px;
 	z-index: 900142;
 	box-shadow: 0px 0px 2px rgba(0,0,0,0.6);
+	text-shadow: none;
 	left: 0;
 	right: 0;
 	text-align: left;
 	pointer-events: none;
 }
 
-span.tsf-seo-bar .tsf-explanation-desc span {
+.tsf-seo-bar .tsf-explanation-desc span {
 	text-decoration: underline;
 }
 
-span.tsf-seo-bar .tsf-explanation-desc div {
-	width: 0;
-	height: 0;
-	border-left: 12px solid transparent;
-	border-right: 12px solid transparent;
-	border-top: 12px solid #007bd2;
+.tsf-seo-bar .tsf-explanation-desc div {
 	position: absolute;
 	bottom: -8px;
 	z-index: 9999999;
+	left: 0;
+	width: 0;
+	height: 0;
+}
+
+.tsf-seo-bar .tsf-explanation-desc div:before {
+	content: "";
+	border-left: 9px solid transparent;
+	border-right: 9px solid transparent;
+	border-top: 9px solid rgba(0,0,0,.45);
+	position: absolute;
+	bottom: -1px;
+	left: -1px;
+}
+
+.tsf-seo-bar .tsf-explanation-desc div:after {
+	content: "";
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+	border-top: 8px solid #007bd2;
+	position: absolute;
+	bottom: 0;
 	left: 0;
 }
 
