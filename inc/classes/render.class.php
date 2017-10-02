@@ -99,19 +99,20 @@ class Render extends Admin_Init {
 	 *
 	 * @since 2.5.0
 	 * @since 2.9.0 Now returns subdirectory installations paths too.
-	 * @staticvar array $url_cache
+	 * @since 3.0.0 Now no longer regenerates home URL when parameters differ.
+	 * @staticvar string $url
 	 *
 	 * @param bool $force_slash Force slash
 	 * @return string The url
 	 */
 	public function the_home_url_from_cache( $force_slash = false ) {
 
-		static $url_cache = array();
+		static $url;
 
-		if ( isset( $url_cache[ $force_slash ] ) )
-			return $url_cache[ $force_slash ];
+		if ( ! $url )
+			$url = $this->the_url( '', array( 'home' => true ) );
 
-		return $url_cache[ $force_slash ] = $this->the_url( '', array( 'home' => true, 'forceslash' => $force_slash ) );
+		return $force_slash ? \trailingslashit( $url ) : $url;
 	}
 
 	/**
@@ -124,7 +125,7 @@ class Render extends Admin_Init {
 	 *
 	 * @param string $title The Title to return
 	 * @param string $sep The Title sepeartor
-	 * @param string $seplocation The Title sepeartor location ( accepts 'left' or 'right' )
+	 * @param string $seplocation The Title sepeartor location, accepts 'left' or 'right'.
 	 * @param bool $meta Ignore theme doing it wrong.
 	 * @return string The title
 	 */
@@ -136,12 +137,12 @@ class Render extends Admin_Init {
 		 *
 		 * @since 2.4.0
 		 */
-		static $setup_cache = null;
-		static $title_param_cache = null;
-		static $sep_param_cache = null;
-		static $seplocation_param_cache = null;
+		static $setup_cache,
+		       $title_param_cache,
+		       $sep_param_cache,
+		       $seplocation_param_cache;
 
-		if ( ! isset( $setup_cache ) ) {
+		if ( ! $setup_cache ) {
 			if ( \doing_filter( 'pre_get_document_title' ) || \doing_filter( 'wp_title' ) ) {
 				$title_param_cache = $title;
 				$sep_param_cache = $sep;

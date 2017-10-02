@@ -1157,4 +1157,37 @@ class Generate_Url extends Generate_Title {
 
 		return $cache = $path;
 	}
+
+	/**
+	 * Appends given query to given URL.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $url A fully qualified URL.
+	 * @param string $query A fully qualified query taken from parse_url( $url, PHP_URL_QUERY );
+	 * @return string A fully qualified URL with appended $query.
+	 */
+	public function append_php_query( $url, $query = '' ) {
+
+		if ( ! $query )
+			return $url;
+
+		$p = parse_url( $url );
+		$_fragment = ! empty( $p['fragment'] ) ? $p['fragment'] : '';
+		$_query = ! empty( $p['query'] ) ? $p['query'] : '';
+
+		if ( $_fragment )
+			$url = str_replace( '#' . $_fragment, '', $url );
+
+		if ( $_query ) {
+			$url .= '&' . $query;
+		} else {
+			$url .= '?' . $query;
+		}
+
+		if ( $_fragment )
+			$url .= '#' . $_fragment;
+
+		return $url;
+	}
 }

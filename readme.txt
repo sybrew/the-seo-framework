@@ -266,7 +266,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Sitemaps timestamp format option. It will be converted to the new global timestamp format option upon upgrade.
 	* **Fixed:**
 		/
-		* TODO In-post SEO box icons no longer look out-of-place on some browsers (Safari 7 or Firefox cropped?).
+		* XSL stylesheet no longer prepends query arguments, but instead appends them. This fixes, for example, issues when using WPML query string parameters.
+		* TODO In-post SEO box icons no longer look out-of-place on some browsers (Safari 7 or Firefox-cropped?).
 		* `article:publisher` is now only output on `article` types.
 		* TODO Category SEO settings character counter length + SEO Bar compatibility with https://wordpress.org/plugins/visual-term-description-editor/ (check mail inbox keyword: Visual Term Description Editor).
 		* TODO check W3TC canonical issues https://wordpress.org/support/topic/canonical-https-detection-not-working/

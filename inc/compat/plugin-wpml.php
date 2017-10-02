@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) and $_this = \the_seo_framework_class() and $this instanceo
 /**
  * Warns homepage global title and description about receiving input.
  *
- * @since 1.0.0
+ * @since 2.8.0
  */
 \add_filter( 'the_seo_framework_warn_homepage_global_title', '__return_true' );
 \add_filter( 'the_seo_framework_warn_homepage_global_description', '__return_true' );

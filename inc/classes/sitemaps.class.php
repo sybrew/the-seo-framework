@@ -396,6 +396,8 @@ class Sitemaps extends Metaboxes {
 	 * Returns the stylesheet XSL location URL.
 	 *
 	 * @since 2.8.0
+	 * @since 3.0.0 1: No longer uses home URL from cache. But now uses `get_home_url()`.
+	 *              2: Now takes query parameters (if any) and restores them correctly.
 	 * @global object $wp_rewrite
 	 *
 	 * @return string URL location of the XSL stylesheet. Unescaped.
@@ -403,18 +405,15 @@ class Sitemaps extends Metaboxes {
 	public function get_sitemap_xsl_url() {
 		global $wp_rewrite;
 
-		$home = \trailingslashit( $this->set_url_scheme( $this->the_home_url_from_cache() ) );
-		/** Figure out if this is helpful...
-		if ( ! $this->is_subdirectory_installation() ) {
-			//= 1. $home = \trailingslashit( $this->set_url_scheme( $this->get_home_host() ) );
+		$home = $this->set_url_scheme( \get_home_url() );
 
-			//= 2.:
-			$_path = $this->set_url_scheme( $home, 'relative' );
-			if ( false !== ( $_pos = strrpos( $home, $_path ) ) ) {
-				$home = \trailingslashit( substr_replace( $home, '', $_pos, strlen( $_path ) ) );
-			}
-		}
-		*/
+		$parsed = parse_url( $home );
+		$query = isset( $parsed['query'] ) ? $parsed['query'] : '';
+
+		if ( $query )
+			$home = str_replace( '?' . $query, '', $home );
+
+		$home = \trailingslashit( $home );
 
 		if ( $wp_rewrite->using_index_permalinks() ) {
 			$loc = $home . 'index.php/sitemap.xsl';
@@ -424,6 +423,9 @@ class Sitemaps extends Metaboxes {
 			$loc = $home . '?the_seo_framework_sitemap=xsl';
 		}
 
+		if ( $query )
+			$loc = $this->append_php_query( $loc, $query );
+
 		return $loc;
 	}
 
@@ -431,6 +433,8 @@ class Sitemaps extends Metaboxes {
 	 * Returns the sitemap XML location URL.
 	 *
 	 * @since 2.9.2
+	 * @since 3.0.0 1: No longer uses home URL from cache. But now uses `get_home_url()`.
+	 *              2: Now takes query parameters (if any) and restores them correctly.
 	 * @global object $wp_rewrite
 	 *
 	 * @return string URL location of the XML sitemap. Unescaped.
@@ -438,18 +442,18 @@ class Sitemaps extends Metaboxes {
 	public function get_sitemap_xml_url() {
 		global $wp_rewrite;
 
-		$home = \trailingslashit( $this->set_url_scheme( $this->the_home_url_from_cache() ) );
-		/** Figure out if this is helpful...
-		if ( ! $this->is_subdirectory_installation() ) {
-			//= 1. $home = \trailingslashit( $this->set_url_scheme( $this->get_home_host() ) );
+		$home = $this->set_url_scheme( \get_home_url() );
 
-			//= 2.:
-			$_path = $this->set_url_scheme( $home, 'relative' );
-			if ( false !== ( $_pos = strrpos( $home, $_path ) ) ) {
-				$home = \trailingslashit( substr_replace( $home, '', $_pos, strlen( $_path ) ) );
-			}
-		}
-		*/
+		$parsed = parse_url( $home );
+		$query = isset( $parsed['query'] ) ? $parsed['query'] : '';
+
+		if ( $query )
+			$home = str_replace( '?' . $query, '', $home );
+
+		$home = \trailingslashit( $home );
+
+		if ( $query )
+			$home = str_replace( '?' . $query, '', $home );
 
 		if ( $wp_rewrite->using_index_permalinks() ) {
 			$loc = $home . 'index.php/sitemap.xml';
@@ -458,6 +462,9 @@ class Sitemaps extends Metaboxes {
 		} else {
 			$loc = $home . '?the_seo_framework_sitemap=xml';
 		}
+
+		if ( $query )
+			$loc = $this->append_php_query( $loc, $query );
 
 		return $loc;
 	}
@@ -539,7 +546,9 @@ class Sitemaps extends Metaboxes {
 	 */
 	protected function generate_sitemap() {
 
-		function_exists( '\wp_is_ini_value_changeable' ) and \wp_is_ini_value_changeable( 'memory_limit' ) and @ini_set( 'memory_limit', WP_MAX_MEMORY_LIMIT );
+		function_exists( '\wp_is_ini_value_changeable' )
+			and \wp_is_ini_value_changeable( 'memory_limit' )
+			and @ini_set( 'memory_limit', WP_MAX_MEMORY_LIMIT );
 
 		$content = '';
 
