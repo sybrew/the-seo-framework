@@ -233,7 +233,7 @@ class Generate_Ldjson extends Generate_Image {
 		$data = array(
 			'@context' => 'http://schema.org',
 			'@type' => 'WebSite',
-			'url' => $this->the_home_url_from_cache(),
+			'url' => $this->get_homepage_canonical_url(),
 		);
 
 		if ( $use_sitename ) {
@@ -295,7 +295,7 @@ class Generate_Ldjson extends Generate_Image {
 		$data = array(
 			'@context' => 'http://schema.org',
 			'@type' => ucfirst( \esc_attr( $knowledge_type ) ),
-			'url' => $this->the_home_url_from_cache(),
+			'url' => $this->get_homepage_canonical_url(),
 			'name' => $this->escape_title( $knowledge_name ),
 		);
 
@@ -407,7 +407,7 @@ class Generate_Ldjson extends Generate_Image {
 					'@id'  => $this->get_schema_url_id(
 						'breadcrumb',
 						'create',
-						array( 'get_custom_field' => false, 'external' => true, 'id' => $parent_id )
+						array( 'id' => $parent_id )
 					),
 					'name'  => $this->escape_title( $parent_name ),
 				),
@@ -650,8 +650,8 @@ class Generate_Ldjson extends Generate_Image {
 						'item'     => array(
 							'@id'  => $this->get_schema_url_id(
 								'breadcrumb',
-								'create',
-								array( 'get_custom_field' => false, 'is_term' => true, 'external' => true, 'term' => $cat )
+								'create_archival',
+								array( 'id' => $child_id, 'taxonomy' => $cat_type )
 							),
 							'name' => $this->escape_title( $cat_name ),
 							// 'image' => $this->get_schema_image( $child_id ),
@@ -853,15 +853,19 @@ class Generate_Ldjson extends Generate_Image {
 
 		switch ( $from ) {
 			case 'currentpage' :
-				$url = $this->the_url_from_cache();
+				$url = $this->get_current_canonical_url();
 				break;
 
 			case 'homepage' :
-				$url = $this->the_home_url_from_cache();
+				$url = $this->get_homepage_canonical_url();
 				break;
 
 			case 'create' :
-				$url = $this->the_url( '', $args );
+				$url = $this->create_canonical_url( $args );
+				break;
+
+			case 'create_archival' :
+				$url = $this->get_archival_canonical_url( $args['id'], $args['taxonomy'] );
 				break;
 
 			default :

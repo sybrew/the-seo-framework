@@ -21,33 +21,18 @@ defined( 'ABSPATH' ) and $_this = \the_seo_framework_class() and $this instanceo
 function _disable_genesis_seo( $plugins ) {
 
 	$plugins = array(
-			'classes' => array(
-				'\The_SEO_Framework\\Load',
-			),
-			'functions' => array(
-				'the_seo_framework',
-			),
-			'constants' => array(
-				'THE_SEO_FRAMEWORK_VERSION',
-			),
-		);
+		'classes' => array(
+			'\The_SEO_Framework\\Load',
+		),
+		'functions' => array(
+			'the_seo_framework',
+		),
+		'constants' => array(
+			'THE_SEO_FRAMEWORK_VERSION',
+		),
+	);
 
 	return $plugins;
-}
-
-// \add_action( 'init', 'The_SEO_Framework\\_genesis_add_head_attributes' );
-/**
- * Adds Genesis SEO compatibility.
- *
- * @since 2.6.0
- * @since 2.8.0 Moved to compat file and renamed.
- * @since 2.9.3 No longer used. It is conflicting with the homepage Schema output.
- * @access private
- */
-function _genesis_add_head_attributes() {
-	//* Reverse the removal of head attributes, this shouldn't affect SEO.
-	\remove_filter( 'genesis_attr_head', 'genesis_attributes_empty_class' );
-	\add_filter( 'genesis_attr_head', 'genesis_attributes_head' );
 }
 
 \add_filter( 'the_seo_framework_get_term_meta', __NAMESPACE__ . '\\_genesis_get_term_meta', 10, 2 );

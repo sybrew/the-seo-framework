@@ -169,7 +169,7 @@ class Feed extends Cache {
 	protected function get_feed_entry_source_link() {
 
 		//* Fetch permalink and add it to the content. Already escaped.
-		$permalink = $this->the_url();
+		$permalink = $this->get_canonical_url();
 
 		/**
 		 * Applies filters 'the_seo_framework_feed_source_link' : string

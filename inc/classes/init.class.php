@@ -562,9 +562,9 @@ class Init extends Query {
 			$this->_doing_it_wrong( __METHOD__, 'You should use 3xx HTTP Status Codes. Recommended 301 and 302.', '2.8.0' );
 
 		if ( false === $allow_external ) {
-			//= Only HTTP/HTTPS and internal URLs are allowed.
-			$url = $this->set_url_scheme( $url, 'relative' );
-			$url = $this->add_url_host( $url );
+			//= Only HTTP/HTTPS and home URLs are allowed.
+			$path = $this->set_url_scheme( $url, 'relative' );
+			$url = \trailingslashit( $this->get_home_host() ) . ltrim( $path, ' /' );
 			$scheme = $this->is_ssl() ? 'https' : 'http';
 
 			\wp_safe_redirect( $this->set_url_scheme( $url, $scheme ), $redirect_type );
@@ -610,7 +610,7 @@ class Init extends Query {
 		if ( false === $output ) :
 			$output = '';
 
-			$parsed_home_url = \wp_parse_url( rtrim( $this->the_home_url_from_cache(), ' /\\' ) );
+			$parsed_home_url = \wp_parse_url( rtrim( $this->get_homepage_canonical_url(), ' /\\' ) );
 			$home_path = ! empty( $parsed_home_url['path'] ) ? \esc_attr( $parsed_home_url['path'] ) : '';
 
 			if ( $this->is_subdirectory_installation() || $home_path ) {

@@ -136,7 +136,6 @@ function the_seo_framework_options_pagehook() {
 	return null;
 }
 
-
 /**
  * Fetch an option from The SEO Framework.
  *
@@ -205,7 +204,7 @@ function the_seo_framework_the_url_from_cache() {
 	$theseoframework = the_seo_framework();
 
 	if ( isset( $theseoframework ) )
-		return $theseoframework->the_url_from_cache();
+		return $theseoframework->get_current_canonical_url();
 
 	return null;
 }

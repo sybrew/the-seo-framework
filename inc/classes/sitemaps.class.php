@@ -669,7 +669,7 @@ class Sitemaps extends Metaboxes {
 				//* Continue if indexed.
 				if ( $indexed ) {
 					$content .= "\t<url>\n";
-					$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'home' => true ) ) . "</loc>\n";
+					$content .= "\t\t<loc>" . $this->get_home_canonical_url() . "</loc>\n";
 
 					// Keep it consistent. Only parse if page_lastmod is true.
 					if ( $home_lastmod ) {
@@ -717,7 +717,7 @@ class Sitemaps extends Metaboxes {
 					//* Continue if indexed.
 					if ( $indexed && isset( $page->ID ) ) {
 						$content .= "\t<url>\n";
-						$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $page, 'id' => $page_for_posts_id ) ) . "</loc>\n";
+						$content .= "\t\t<loc>" . $this->create_canonical_url( array( 'id' => $page->ID ) ) . "</loc>\n";
 
 						// Keep it consistent. Only parse if page_lastmod is true.
 						if ( $page_lastmod ) {
@@ -756,21 +756,18 @@ class Sitemaps extends Metaboxes {
 			 * This can be heavy.
 			 */
 			foreach ( $latest_pages as $page_id ) :
-
 				$page = \get_post( $page_id );
 
 				if ( isset( $page->ID ) ) :
 					$page_id = $page->ID;
-
 					if ( '' === $excluded || empty( $excluded[ $page_id ] ) ) {
-
 						//* Fetch the noindex option, per page.
 						$indexed = ! $this->get_custom_field( '_genesis_noindex', $page_id );
 
 						//* Continue if indexed.
 						if ( $indexed ) {
 							$content .= "\t<url>\n";
-							$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $page, 'id' => $page_id ) ) . "</loc>\n";
+							$content .= "\t\t<loc>" . $this->create_canonical_url( array( 'id' => $page_id ) ) . "</loc>\n";
 
 							// Keep it consistent. Only parse if page_lastmod is true.
 							if ( $page_lastmod ) {
@@ -850,14 +847,11 @@ class Sitemaps extends Metaboxes {
 			 * This can be heavy.
 			 */
 			foreach ( $latest_posts as $post_id ) :
-
 				$post = \get_post( $post_id );
 
 				if ( isset( $post->ID ) ) :
 					$post_id = $post->ID;
-
 					if ( '' === $excluded || empty( $excluded[ $post_id ] ) ) {
-
 						//* Fetch the noindex option, per page.
 						$indexed = ! $this->get_custom_field( '_genesis_noindex', $post_id );
 
@@ -866,7 +860,7 @@ class Sitemaps extends Metaboxes {
 
 							$content .= "\t<url>\n";
 							// No need to use static vars
-							$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $post, 'id' => $post_id ) ) . "</loc>\n";
+							$content .= "\t\t<loc>" . $this->create_canonical_url( array( 'id' => $post_id ) ) . "</loc>\n";
 
 							// Keep it consistent. Only parse if page_lastmod is true.
 							if ( $post_lastmod ) {
@@ -984,7 +978,7 @@ class Sitemaps extends Metaboxes {
 
 							$content .= "\t<url>\n";
 							//* No need to use static vars
-							$content .= "\t\t<loc>" . $this->the_url( '', array( 'get_custom_field' => false, 'external' => true, 'post' => $ctp_post, 'id' => $cpt_id ) ) . "</loc>\n";
+							$content .= "\t\t<loc>" . $this->create_canonical_url( array( 'id' => $cpt_id ) ) . "</loc>\n";
 
 							//* Keep it consistent. Only parse if page_lastmod is true.
 							if ( $post_lastmod ) {

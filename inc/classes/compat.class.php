@@ -60,30 +60,21 @@ class Compat extends Core {
 			$this->_include_compat( 'mbstring', 'php' );
 		}
 
+		$wp_db_version = $GLOBALS['wp_db_version'];
+
+		if ( $wp_db_version < 37965 ) {
+			//= WP 4.6.0
+			$this->include_compat( 'wp', '460' );
+		}
+
 		if ( $this->is_theme( 'genesis' ) ) {
 			//* Genesis Framework
 			$this->_include_compat( 'genesis', 'theme' );
 		}
 
-		if ( defined( 'DOMAIN_MAPPING' ) ) {
-			if ( $this->detect_plugin( array( 'functions' => array( 'redirect_to_mapped_domain' ) ) ) ) {
-				//* Donncha domain mapping.
-				$this->_include_compat( 'donncha-dm', 'plugin' );
-			} elseif ( $this->detect_plugin( array( 'functions' => array( 'domainmap_launch' ) ) ) ) {
-				//* WPMUdev domain mapping.
-				$this->_include_compat( 'wpmudev-dm', 'plugin' );
-			}
-		}
-
-		if ( $this->detect_plugin( array( 'globals' => array( 'polylang' ) ) ) ) {
-			//* PolyLang... it includes compat for WPML, but let's see how this works for now.
-			$this->_include_compat( 'polylang', 'plugin' );
-		} elseif ( $this->detect_plugin( array( 'constants' => array( 'ICL_LANGUAGE_CODE' ) ) ) ) {
+		if ( $this->detect_plugin( array( 'constants' => array( 'ICL_LANGUAGE_CODE' ) ) ) ) {
 			//* WPML
 			$this->_include_compat( 'wpml', 'plugin' );
-		} elseif ( $this->detect_plugin( array( 'constants' => array( 'QTX_VERSION' ) ) ) ) {
-			//* qTranslate X
-			$this->_include_compat( 'qtranslatex', 'plugin' );
 		}
 
 		if ( $this->detect_plugin( array( 'globals' => array( 'ultimatemember' ) ) ) ) {

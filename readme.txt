@@ -250,6 +250,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* This is to prevent ID collision with generated scripts from other plugins, like WooCommerce 3.0+.
 			* This might affect search presence of the pages until the new IDs have been processed by the search engine, like Google and Bing.
 	* **Improved:**
+		* Sped up URL generation two-fold. We've rewritten the code from the ground up.
+		* The Canonical URL should now always be compatible with any plugin, out of the box.
 		* Password protected posts and pages no longer show up in the sitemap.
 		* The homepage in-post SEO settings box now links to the settings page when the user can view those options.
 		* When TSF's database needs upgrading, it now requires fewer database calls.
@@ -264,6 +266,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Removed:**
 		* `noodp` and all its settings. The DMOZ project that it influenced is no longer available nor used.
 		* Sitemaps timestamp format option. It will be converted to the new global timestamp format option upon upgrade.
+		* Polylang URL enhancements and compatibility file. It now works without them.
+		* WPML URL enhancements. It now works without these.
+		* qTranslate X URL enhancements and compatibility file. It now works without them.
+		* Donncha Domain Mapping URL generation enhancements and compatibility file. They're no longer needed.
+		* WPMUdev Mapping URL generation enhancements and compatibility file. Be sure to set a preferred canonical scheme.
 	* **Fixed:**
 		/
 		* XSL stylesheet no longer prepends query arguments, but instead appends them. This fixes, for example, issues when using WPML query string parameters.
@@ -357,6 +364,20 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* TODO Database version: `3000`.
 	* **Deprecated:**
 		* Method `get_term_data( $term, $term_id )`, use method `get_term_meta( $term_id )` instead.
+		* Method `the_url()`, use method `get_canonical_url()` instead.
+		* Method `parse_url_args()`.
+		* Method `reparse_url_args()`.
+		* Method `generate_url_path()`.
+		* Method `build_singular_relative_url()`.
+		* Method `get_relative_term_url()`.
+		* Method `add_url_subdomain()`.
+		* Method `get_current_subdomain()`.
+		* Method `set_current_subdomain()`.
+		* Method `unset_current_subdomain()`.
+		* Method `add_url_host()`.
+		* Method `get_home_path()`.
+		* Method `the_url_from_cache()`, use method `get_current_canonical_url()` instead.
+		* Method `the_home_url_from_cache()`, use method `get_homepage_canonical_url()` instead.
 	* **Fixed:**
 		/
 		* When using filter `the_seo_framework_settings_capability`, the set capability can now save SEO settings too.
@@ -367,6 +388,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* `the_seo_framework_admin_color_css`, used to adjust admin-color conforming colors.
 			* `the_seo_framework_current_term_meta`, used to adjust term meta after it's set.
 				* Do not confuse this with filter `the_seo_framework_get_term_meta`, which only fires when no term meta has been set.
+		* **Deprecated:**
+			 * `the_seo_framework_url_path`, use WordPress filters instead. This filter no longer runs by default.
+			 * `the_seo_framework_url_output_args`. This filter no longer runs by default.
+			 * `the_seo_framework_url_args`. This filter no longer runs by default.
 	* **Action notes:**
 		* **Added:**
 			* `the_seo_framework_pre_seo_settings`

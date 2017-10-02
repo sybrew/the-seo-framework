@@ -1223,7 +1223,7 @@ class Sanitize extends Admin_Pages {
 					$url = $filter['url'];
 					$scheme = $filter['scheme'];
 				} else {
-					$url = $this->the_home_url_from_cache( true ) . ltrim( $path, ' /' );
+					$url = \trailingslashit( $this->get_homepage_canonical_url() ) . ltrim( $path, ' /' );
 					$scheme = $this->is_ssl() ? 'https' : 'http';
 				}
 
@@ -1235,8 +1235,10 @@ class Sanitize extends Admin_Pages {
 		endif;
 
 		/**
-		 * Applies filters the_seo_framework_301_noqueries : bool remove query args from 301
+		 * Applies filters 'the_seo_framework_301_noqueries'
+		 *
 		 * @since 2.5.0
+		 * @param bool $noqueries
 		 */
 		$noqueries = (bool) \apply_filters( 'the_seo_framework_301_noqueries', true );
 
@@ -1250,7 +1252,7 @@ class Sanitize extends Admin_Pages {
 			/**
 			 * Remove query args
 			 *
-			 * @see The_SEO_Framework_Sanitize::s_url
+			 * @see The_SEO_Framework\Sanitize::s_url
 			 * @since 2.2.4
 			 */
 			$new_value = $this->s_url( $url );

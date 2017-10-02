@@ -49,6 +49,36 @@ class Render extends Admin_Init {
 	}
 
 	/**
+	 * Caches and returns the current URL.
+	 *
+	 * @since 3.0.0
+	 * @staticvar string $cache
+	 *
+	 * @return string The current URL.
+	 */
+	public function get_current_canonical_url() {
+
+		static $cache;
+
+		return isset( $cache ) ? $cache : $cache = $this->get_canonical_url();
+	}
+
+	/**
+	 * Caches and returns the homepage URL.
+	 *
+	 * @since 3.0.0
+	 * @staticvar string $cache
+	 *
+	 * @return string The home URL.
+	 */
+	public function get_homepage_canonical_url() {
+
+		static $cache;
+
+		return isset( $cache ) ? $cache : $cache = $this->create_canonical_url( array( 'id' => $this->get_the_front_page_ID() ) );
+	}
+
+	/**
 	 * Cache description in static variable
 	 * Must be called inside the loop
 	 *
@@ -65,54 +95,6 @@ class Render extends Admin_Init {
 			return $description_cache[ $social ];
 
 		return $description_cache[ $social ] = $this->generate_description( '', array( 'social' => $social ) );
-	}
-
-	/**
-	 * Cache current URL in static variable
-	 * Must be called inside the loop
-	 *
-	 * @since 2.2.2
-	 * @staticvar array $url_cache
-	 *
-	 * @param string $url the url
-	 * @param int $post_id the page id, if empty it will fetch the requested ID, else the page uri
-	 * @param bool $paged Return current page URL with pagination
-	 * @param bool $from_option Get the canonical uri option
-	 * @param bool $paged_plural Whether to allow pagination on second or later pages.
-	 * @return string The url
-	 */
-	public function the_url_from_cache( $url = '', $post_id = null, $paged = false, $from_option = true, $paged_plural = true ) {
-
-		static $url_cache = array();
-
-		if ( empty( $post_id ) )
-			$post_id = $this->get_the_real_ID();
-
-		if ( isset( $url_cache[ $url ][ $post_id ][ $paged ][ $from_option ][ $paged_plural ] ) )
-			return $url_cache[ $url ][ $post_id ][ $paged ][ $from_option ][ $paged_plural ];
-
-		return $url_cache[ $url ][ $post_id ][ $paged ][ $from_option ][ $paged_plural ] = $this->the_url( $url, array( 'paged' => $paged, 'get_custom_field' => $from_option, 'id' => $post_id, 'paged_plural' => $paged_plural ) );
-	}
-
-	/**
-	 * Cache home URL in static variable
-	 *
-	 * @since 2.5.0
-	 * @since 2.9.0 Now returns subdirectory installations paths too.
-	 * @since 3.0.0 Now no longer regenerates home URL when parameters differ.
-	 * @staticvar string $url
-	 *
-	 * @param bool $force_slash Force slash
-	 * @return string The url
-	 */
-	public function the_home_url_from_cache( $force_slash = false ) {
-
-		static $url;
-
-		if ( ! $url )
-			$url = $this->the_url( '', array( 'home' => true ) );
-
-		return $force_slash ? \trailingslashit( $url ) : $url;
 	}
 
 	/**
@@ -454,7 +436,7 @@ class Render extends Admin_Init {
 	 *
 	 * @since 1.3.0
 	 * @since 2.9.3 Added filter
-	 * @uses $this->the_url_from_cache()
+	 * @uses $this->get_current_canonical_url()
 	 *
 	 * @return string The Open Graph URL meta tag.
 	 */
@@ -471,11 +453,8 @@ class Render extends Admin_Init {
 			 * @param string $url The canonical/Open Graph URL. Must be escaped.
 			 * @param int    $id  The current page or term ID.
 			 */
-			$url = (string) \apply_filters( 'the_seo_framework_ogurl_output', $this->the_url_from_cache(), $this->get_the_real_ID() );
+			$url = (string) \apply_filters( 'the_seo_framework_ogurl_output', $this->get_current_canonical_url(), $this->get_the_real_ID() );
 
-			/**
-			 * @since 2.7.0 Listens to the second filter.
-			 */
 			if ( $url )
 				return '<meta property="og:url" content="' . $url . '" />' . "\r\n";
 		}
@@ -823,24 +802,12 @@ class Render extends Admin_Init {
 	 * Renders Canonical URL meta tag.
 	 *
 	 * @since 2.0.6
-	 * @uses $this->the_url_from_cache()
+	 * @since 3.0.0 Deleted filter `the_seo_framework_output_canonical`.
+	 * @uses $this->get_current_canonical_url()
 	 *
 	 * @return string The Canonical URL meta tag.
 	 */
 	public function canonical() {
-
-		/**
-		 * Applies filters the_seo_framework_output_canonical : Don't output canonical if false.
-		 * @since 2.4.2
-		 *
-		 * @deprecated
-		 * @since 2.7.0
-		 */
-		if ( \has_filter( 'the_seo_framework_output_canonical' ) ) {
-			$this->_deprecated_filter( 'the_seo_framework_output_canonical', '2.7.0', "add_filter( 'the_seo_framework_rel_canonical_output', '__return_empty_string' );" );
-			if ( true !== \apply_filters( 'the_seo_framework_output_canonical', true, $this->get_the_real_ID() ) )
-				return '';
-		}
 
 		/**
 		 * Applies filters 'the_seo_framework_rel_canonical_output' : string
@@ -851,13 +818,13 @@ class Render extends Admin_Init {
 		 * @param string $url The canonical URL. Must be escaped.
 		 * @param int    $id  The current page or term ID.
 		 */
-		$url = (string) \apply_filters( 'the_seo_framework_rel_canonical_output', $this->the_url_from_cache(), $this->get_the_real_ID() );
+		$url = (string) \apply_filters( 'the_seo_framework_rel_canonical_output', $this->get_current_canonical_url(), $this->get_the_real_ID() );
 
 		/**
 		 * @since 2.7.0 Listens to the second filter.
 		 */
 		if ( $url )
-			return '<link rel="canonical" href="' . $url . '" />' . "\r\n";
+			return '<link rel="canonical" href="' . $url . '" />' . PHP_EOL;
 
 		return '';
 	}
@@ -905,7 +872,7 @@ class Render extends Admin_Init {
 		$code = (string) \apply_filters( 'the_seo_framework_googlesite_output', $this->get_option( 'google_verification' ), $this->get_the_real_ID() );
 
 		if ( $code )
-			return '<meta name="google-site-verification" content="' . \esc_attr( $code ) . '" />' . "\r\n";
+			return '<meta name="google-site-verification" content="' . \esc_attr( $code ) . '" />' . PHP_EOL;
 
 		return '';
 	}
@@ -926,7 +893,7 @@ class Render extends Admin_Init {
 		$code = (string) \apply_filters( 'the_seo_framework_bingsite_output', $this->get_option( 'bing_verification' ), $this->get_the_real_ID() );
 
 		if ( $code )
-			return '<meta name="msvalidate.01" content="' . \esc_attr( $code ) . '" />' . "\r\n";
+			return '<meta name="msvalidate.01" content="' . \esc_attr( $code ) . '" />' . PHP_EOL;
 
 		return '';
 	}
@@ -947,7 +914,7 @@ class Render extends Admin_Init {
 		$code = (string) \apply_filters( 'the_seo_framework_yandexsite_output', $this->get_option( 'yandex_verification' ), $this->get_the_real_ID() );
 
 		if ( $code )
-			return '<meta name="yandex-verification" content="' . \esc_attr( $code ) . '" />' . "\r\n";
+			return '<meta name="yandex-verification" content="' . \esc_attr( $code ) . '" />' . PHP_EOL;
 
 		return '';
 	}
@@ -968,7 +935,7 @@ class Render extends Admin_Init {
 		$code = (string) \apply_filters( 'the_seo_framework_pintsite_output', $this->get_option( 'pint_verification' ), $this->get_the_real_ID() );
 
 		if ( $code )
-			return '<meta name="p:domain_verify" content="' . \esc_attr( $code ) . '" />' . "\r\n";
+			return '<meta name="p:domain_verify" content="' . \esc_attr( $code ) . '" />' . PHP_EOL;
 
 		return '';
 	}
@@ -996,7 +963,7 @@ class Render extends Admin_Init {
 		if ( empty( $meta ) )
 			return '';
 
-		return sprintf( '<meta name="robots" content="%s" />' . "\r\n", implode( ',', $meta ) );
+		return sprintf( '<meta name="robots" content="%s" />' . PHP_EOL, implode( ',', $meta ) );
 	}
 
 	/**
@@ -1019,7 +986,7 @@ class Render extends Admin_Init {
 		$url = (string) \apply_filters( 'the_seo_framework_shortlink_output', $this->get_shortlink( $id ), $id );
 
 		if ( $url )
-			return sprintf( '<link rel="shortlink" href="%s" />' . "\r\n", $url );
+			return '<link rel="shortlink" href="' . $url . '" />' . PHP_EOL;
 
 		return '';
 	}
@@ -1051,10 +1018,10 @@ class Render extends Admin_Init {
 		$output = '';
 
 		if ( $prev )
-			$output .= sprintf( '<link rel="prev" href="%s" />' . "\r\n", $prev );
+			$output .= '<link rel="prev" href="' . $prev . '" />' . PHP_EOL;
 
 		if ( $next )
-			$output .= sprintf( '<link rel="next" href="%s" />' . "\r\n", $next );
+			$output .= '<link rel="next" href="' . $next . '" />' . PHP_EOL;
 
 		return $output;
 	}
@@ -1071,7 +1038,7 @@ class Render extends Admin_Init {
 	 */
 	public function get_plugin_indicator( $where = 'before', $timing = 0 ) {
 
-		static $run, $_cache = null;
+		static $run, $_cache;
 
 		if ( ! isset( $run ) ) {
 			/**
@@ -1087,10 +1054,8 @@ class Render extends Admin_Init {
 		if ( false === $run )
 			return '';
 
-		if ( null === $_cache ) {
-
+		if ( ! isset( $_cache ) ) {
 			$_cache = array();
-
 			/**
 			 * Applies filters 'sybre_waaijer_<3'
 			 *

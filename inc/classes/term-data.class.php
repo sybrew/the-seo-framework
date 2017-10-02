@@ -237,6 +237,7 @@ class Term_Data extends Post_Data {
 	 * Try to fetch a term if none can be found.
 	 *
 	 * @since 2.6.0
+	 * @since 3.0.0 Can now get custom post type objects.
 	 * @access private
 	 * @todo deprecate
 	 *
@@ -266,6 +267,8 @@ class Term_Data extends Post_Data {
 				$term[ $id ] = \get_queried_object();
 			} elseif ( $this->is_tax() ) {
 				$term[ $id ] = \get_term_by( 'slug', \get_query_var( 'term' ), \get_query_var( 'taxonomy' ) );
+			} elseif ( \is_post_type_archive() ) {
+				$term[ $id ] = \get_post_type_object( \get_query_var( 'post_type' ) );
 			}
 		}
 

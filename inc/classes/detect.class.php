@@ -1138,6 +1138,13 @@ class Detect extends Render {
 
 		static $cache = null;
 
-		return isset( $cache ) ? $cache : '' !== $this->get_home_path();
+		if ( isset( $cache ) )
+			return $cache;
+
+		$parsed_url = \wp_parse_url( \get_option( 'home' ) );
+		if ( ! empty( $parsed_url['path'] ) && ltrim( $parsed_url['path'], ' \\/' ) )
+			$cache = true;
+
+		return $cache ?: $cache = false;
 	}
 }
