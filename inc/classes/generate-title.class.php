@@ -544,6 +544,7 @@ class Generate_Title extends Generate_Description {
 			if ( $args['page_on_front'] ) {
 				$title = $this->title_for_home( '', $args['get_custom_field'], false, true );
 			} elseif ( $this->is_archive() ) {
+				//= @CODEDEBT
 				if ( ( $id && $taxonomy ) || $this->is_category() || $this->is_tag() || $this->is_tax() ) {
 					$title = $this->title_for_terms( $args, false );
 				} else {
@@ -723,18 +724,22 @@ class Generate_Title extends Generate_Description {
 		$title = '';
 		$term = null;
 
+		//= @CODEDEBT
 		if ( $args['term_id'] && $args['taxonomy'] )
 			$term = \get_term( $args['term_id'], $args['taxonomy'], OBJECT, 'raw' );
 
-		if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
+		if ( $this->is_term_meta_capable() ) {
+			//= @CODEDEBT
 			if ( ! isset( $term ) && $this->is_tax() )
 				$term = \get_term_by( 'slug', \get_query_var( 'term' ), \get_query_var( 'taxonomy' ) );
 
+			//= @CODEDEBT
 			if ( ! isset( $term ) )
 				$term = $this->fetch_the_term( $args['term_id'] );
 
-			if ( $args['get_custom_field'] ) {
-				$data = $this->get_term_data( $term, $args['term_id'] );
+			//= @CODEDEBT
+			if ( $args['get_custom_field'] && $term ) {
+				$data = $this->get_term_meta( $term->term_id );
 				$title = empty( $data['doctitle'] ) ? $title : $data['doctitle'];
 			}
 		}
@@ -773,10 +778,14 @@ class Generate_Title extends Generate_Description {
 		} elseif ( $this->is_blog_page( $id ) ) {
 			//* Posts page title.
 			$title = $this->get_custom_field( '_genesis_title', $id ) ?: \get_the_title( $id );
-		} elseif ( $this->is_archive() || ( $id && $taxonomy ) ) {
+		} elseif ( $this->is_term_meta_capable() || ( $id && $taxonomy ) ) {
+			//= @CODEDEBT
+
 			//* Get the custom title for terms.
 			$term = \get_term( $id, $taxonomy, OBJECT, 'raw' );
-			$data = $this->get_term_data( $term, $id );
+
+			if ( $term && isset( $term->term_id ) )
+				$data = $this->get_term_meta( $term->term_id );
 
 			$title = empty( $data['doctitle'] ) ? $title : $data['doctitle'];
 		}

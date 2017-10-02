@@ -636,7 +636,7 @@ class Generate_Ldjson extends Generate_Image {
 
 					if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
 						//* Note: WordPress Core translation.
-						$data = $this->get_term_data( $cat, $child_id );
+						$data = $this->get_term_meta( $child_id );
 						$cat_name = empty( $data['doctitle'] ) ? ( empty( $cat->name ) ? \__( 'Uncategorized' ) : $cat->name ) : $data['doctitle'];
 					} else {
 						//* Note: WordPress Core translation.

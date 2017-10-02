@@ -454,7 +454,7 @@ final class Deprecated {
 	 * @deprecated
 	 *
 	 * @return bool True when WordPress is at version 4.4 or higher and has an
-	 *				accordingly upgraded database.
+	 *              accordingly upgraded database.
 	 */
 	public function can_get_term_meta() {
 
@@ -1286,5 +1286,34 @@ final class Deprecated {
 		}
 
 		return $retval;
+	}
+
+	/**
+	 * Fetch set Term data.
+	 *
+	 * @since 2.6.0
+	 * @since 2.7.0 Handles term object differently for upgraded database.
+	 * @since 3.0.0 Deprecated.
+	 *
+	 * @deprecated.
+	 *
+	 * @param object|null $term The TT object, if it isn't set, one is fetched.
+	 * @param int         $term_id The term object.
+	 * @return array The SEO Framework TT data.
+	 */
+	public function get_term_data( $term = null, $term_id = 0 ) {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->get_term_data( $term, $term_id )', '3.0.0', 'the_seo_framework()->get_term_meta( $term_id )' );
+
+		if ( is_null( $term ) )
+			$term = $tsf->fetch_the_term( $term_id );
+
+		if ( isset( $term->term_id ) )
+			return $tsf->get_term_meta( $term->term_id );
+
+		//* Return null if no term can be set.
+		return null;
 	}
 }

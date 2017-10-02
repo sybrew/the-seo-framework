@@ -11,7 +11,7 @@ $language = $this->google_language();
 //* Fetch Term ID and taxonomy.
 $term_id = $object->term_id;
 $taxonomy = $object->taxonomy;
-$data = $this->get_term_data( $object, $term_id );
+$data = $this->get_term_meta( $object->term_id );
 
 $title = isset( $data['doctitle'] ) ? $data['doctitle'] : '';
 $description = isset( $data['description'] ) ? $data['description'] : '';

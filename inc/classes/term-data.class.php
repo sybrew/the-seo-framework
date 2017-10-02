@@ -37,21 +37,52 @@ class Term_Data extends Post_Data {
 	 */
 	protected function __construct() {
 		parent::__construct();
-
-		//* Initialize term meta filters and actions.
-		$this->initialize_term_meta();
 	}
 
 	/**
 	 * Initializes term meta data filters and functions.
 	 *
 	 * @since 2.7.0
+	 * @since 3.0.0 No longer checks for admin query.
 	 */
 	public function initialize_term_meta() {
-		if ( $this->is_admin() ) {
-			\add_action( 'edit_term', array( $this, 'update_term_meta' ), 10, 2 );
-			\add_action( 'delete_term', array( $this, 'delete_term_meta' ), 10, 2 );
+		\add_action( 'edit_term', array( $this, 'update_term_meta' ), 10, 2 );
+		\add_action( 'delete_term', array( $this, 'delete_term_meta' ), 10, 2 );
+	}
+
+	/**
+	 * Determines if current query handles term meta.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return bool
+	 */
+	public function is_term_meta_capable() {
+		return $this->is_category() || $this->is_tag() || $this->is_tax() || \is_post_type_archive();
+	}
+
+	/**
+	 * Returns and caches term meta for the current query.
+	 *
+	 * @since 3.0.0
+	 * @staticvar array $cache
+	 *
+	 * @return array The current term meta.
+	 */
+	public function get_current_term_meta() {
+
+		static $cache;
+
+		if ( isset( $cache ) )
+			return $cache ?: array();
+
+		if ( $this->is_term_meta_capable() ) {
+			$cache = $this->get_term_meta( \get_queried_object_id() ) ?: false;
+		} else {
+			$cache = false;
 		}
+
+		return $cache ?: array();
 	}
 
 	/**
@@ -80,11 +111,21 @@ class Term_Data extends Post_Data {
 		$data = \get_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true );
 
 		//* Evaluate merely by presence.
-		if ( isset( $data['saved_flag'] ) )
-			return $cache[ $term_id ] = $data;
+		if ( isset( $data['saved_flag'] ) ) {
+			/**
+			 * Applies filters 'the_seo_framework_current_term_meta'.
+			 *
+			 * @since 3.0.0
+			 *
+			 * @param array $data The current term data.
+			 * @param int   $term_id The term ID.
+			 */
+			return $cache[ $term_id ] = \apply_filters( 'the_seo_framework_current_term_meta', $data, $term_id );
+		}
 
 		/**
-		 * Applies filters 'the_seo_framework_get_term_meta'
+		 * Applies filters 'the_seo_framework_get_term_meta'.
+		 * NOTE: Only works before TSF sets its saved - flag. To be used prior to migration.
 		 *
 		 * @since 2.8.0
 		 *
@@ -193,34 +234,11 @@ class Term_Data extends Post_Data {
 	}
 
 	/**
-	 * Fetch set Term data.
-	 *
-	 * @since 2.6.0
-	 * @since 2.7.0 Handles term object differently for upgraded database.
-	 *
-	 * @todo @since 2.8.0 Will no longer use $term.
-	 *
-	 * @param object|null $term The TT object, if it isn't set, one is fetched.
-	 * @param object|null $term_id The term object.
-	 * @return array The SEO Framework TT data.
-	 */
-	public function get_term_data( $term = null, $term_id = 0 ) {
-
-		if ( is_null( $term ) )
-			$term = $this->fetch_the_term( $term_id );
-
-		if ( isset( $term->term_id ) )
-			return $this->get_term_meta( $term->term_id );
-
-		//* Return null if no term can be set.
-		return null;
-	}
-
-	/**
 	 * Try to fetch a term if none can be found.
 	 *
 	 * @since 2.6.0
 	 * @access private
+	 * @todo deprecate
 	 *
 	 * @param int $id The possible taxonomy Term ID.
 	 * @return false|object The Term object.

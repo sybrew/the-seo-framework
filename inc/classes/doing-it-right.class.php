@@ -576,28 +576,27 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @since 2.6.0
 	 *
 	 * @param array $args {
-	 *	 'is_term' => bool $is_term,
-	 *	 'term' => object $term,
-	 *	 'post_i18n' => string $post_i18n,
-	 *	 'post_low' => string $post_low,
-	 *	 'type' => string $type,
+	 *    'is_term'   => bool $is_term,
+	 *    'term'      => object $term,
+	 *    'post_i18n' => string $post_i18n,
+	 *    'post_low'  => string $post_low,
+	 *    'type'      => string $type,
 	 * }
 	 * @return string $content The SEO bar.
 	 */
 	protected function the_seo_bar_term( $args ) {
 
-		$term = $args['term'];
-		$post = $args['post_i18n'];
+		$i18n = $args['post_i18n'];
 		$is_term = true;
 
-		$data = $this->get_term_data( $term, $term->term_id );
+		$data = $this->get_term_meta( $args['term']->term_id );
 
 		$noindex = isset( $data['noindex'] ) && $data['noindex'];
 		$redirect = false; // We don't apply redirect on taxonomies (yet)
 
 		//* Blocked SEO, return simple bar.
 		if ( $redirect || $noindex )
-			return $this->the_seo_bar_blocked( array( 'is_term' => $is_term, 'redirect' => $redirect, 'noindex' => $noindex, 'post_i18n' => $post ) );
+			return $this->the_seo_bar_blocked( array( 'is_term' => $is_term, 'redirect' => $redirect, 'noindex' => $noindex, 'post_i18n' => $i18n ) );
 
 		$title_notice       = $this->the_seo_bar_title_notice( $args );
 		$description_notice = $this->the_seo_bar_description_notice( $args );
@@ -616,12 +615,12 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @since 2.6.0
 	 *
 	 * @param array $args {
-	 *	 'is_term' => $is_term,
-	 *	 'term' => $term,
-	 *	 'post_id' => $post_id,
-	 *	 'post_i18n' => $post_i18n,
-	 *	 'post_low' => $post_low,
-	 *	 'type' => $type,
+	 *    'is_term'   => $is_term,
+	 *    'term'      => $term,
+	 *    'post_id'   => $post_id,
+	 *    'post_i18n' => $post_i18n,
+	 *    'post_low'  => $post_low,
+	 *    'type'      => $type,
 	 * }
 	 * @return string $content The SEO bar.
 	 */
@@ -661,12 +660,12 @@ class Doing_It_Right extends Generate_Ldjson {
 	 *
 	 * @param array $args The term/post args.
 	 * @return array $data {
-	 *	 'title' => $title,
-	 *	 'title_is_from_custom_field' => $title_is_from_custom_field,
-	 *	 'description' => $description,
-	 *	 'description_is_from_custom_field' => $description_is_from_custom_field,
-	 *	 'nofollow' => $nofollow,
-	 *	 'noarchive' => $noarchive
+	 *    'title' => $title,
+	 *    'title_is_from_custom_field' => $title_is_from_custom_field,
+	 *    'description' => $description,
+	 *    'description_is_from_custom_field' => $description_is_from_custom_field,
+	 *    'nofollow' => $nofollow,
+	 *    'noarchive' => $noarchive
 	 * }
 	 */
 	protected function the_seo_bar_data( $args ) {
@@ -709,7 +708,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		$term_id = $args['post_id'];
 		$taxonomy = $args['type'];
 
-		$data = $this->get_term_data( $term, $term_id );
+		$data = $this->get_term_meta( $term_id );
 
 		$title_custom_field = isset( $data['doctitle'] ) ? $data['doctitle'] : '';
 		$description_custom_field = isset( $data['description'] ) ? $data['description'] : '';

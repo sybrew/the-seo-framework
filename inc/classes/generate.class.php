@@ -46,7 +46,8 @@ class Generate extends User_Data {
 	 * @since 2.2.4 Added robots SEO settings check.
 	 * @since 2.2.8 Added check for empty archives.
 	 * @since 2.8.0 Added check for protected/private posts.
-	 * @since 3.0.0 Removed noodp.
+	 * @since 3.0.0 1: Removed noodp.
+	 *              2: Improved efficiency by grouping if statements.
 	 *
 	 * @global object $wp_query
 	 *
@@ -62,18 +63,21 @@ class Generate extends User_Data {
 			'noydir'    => $this->get_option( 'noydir' ) ? 'noydir' : '',
 		);
 
+		$is_archive = $this->is_archive();
+		$is_front_page = $this->is_real_front_page();
+
 		/**
 		 * Check the Robots SEO settings, set noindex for paged archives.
 		 * @since 2.2.4
 		 */
-		if ( $this->is_archive() && $this->paged() > 1 )
+		if ( $is_archive && $this->paged() > 1 )
 			$meta['noindex'] = $this->get_option( 'paged_noindex' ) ? 'noindex' : $meta['noindex'];
 
-		if ( $this->is_real_front_page() && ( $this->page() > 1 || $this->paged() > 1 ) )
+		if ( $is_front_page && ( $this->page() > 1 || $this->paged() > 1 ) )
 			$meta['noindex'] = $this->get_option( 'home_paged_noindex' ) ? 'noindex' : $meta['noindex'];
 
 		//* Check home page SEO settings, set noindex, nofollow and noarchive
-		if ( $this->is_real_front_page() ) {
+		if ( $is_front_page ) {
 			$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'homepage_noindex' ) ? 'noindex' : $meta['noindex'];
 			$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'homepage_nofollow' ) ? 'nofollow' : $meta['nofollow'];
 			$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'homepage_noarchive' ) ? 'noarchive' : $meta['noarchive'];
@@ -91,13 +95,14 @@ class Generate extends User_Data {
 				$meta['noindex'] = 'noindex';
 		}
 
-		if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
+		if ( $is_archive ) :
+			$term_data = $this->get_current_term_meta();
 
-			$data = $this->get_term_data();
-
-			$meta['noindex']   = empty( $meta['noindex'] ) && ! empty( $data['noindex'] ) ? 'noindex' : $meta['noindex'];
-			$meta['nofollow']  = empty( $meta['nofollow'] ) && ! empty( $data['nofollow'] ) ? 'nofollow' : $meta['nofollow'];
-			$meta['noarchive'] = empty( $meta['noarchive'] ) && ! empty( $data['noarchive'] ) ? 'noarchive' : $meta['noarchive'];
+			if ( $term_data ) {
+				$meta['noindex']   = empty( $meta['noindex'] ) && ! empty( $term_data['noindex'] ) ? 'noindex' : $meta['noindex'];
+				$meta['nofollow']  = empty( $meta['nofollow'] ) && ! empty( $term_data['nofollow'] ) ? 'nofollow' : $meta['nofollow'];
+				$meta['noarchive'] = empty( $meta['noarchive'] ) && ! empty( $term_data['noarchive'] ) ? 'noarchive' : $meta['noarchive'];
+			}
 
 			//* If on custom Taxonomy page, but not a category or tag, then should've received specific term SEO settings.
 			if ( $this->is_category() ) {
@@ -108,32 +113,20 @@ class Generate extends User_Data {
 				$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'tag_noindex' ) ? 'noindex' : $meta['noindex'];
 				$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'tag_nofollow' ) ? 'nofollow' : $meta['nofollow'];
 				$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'tag_noindex' ) ? 'noarchive' : $meta['noarchive'];
+			} elseif ( $this->is_author() ) {
+				$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'author_noindex' ) ? 'noindex' : $meta['noindex'];
+				$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'author_nofollow' ) ? 'nofollow' : $meta['nofollow'];
+				$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'author_noarchive' ) ? 'noarchive' : $meta['noarchive'];
+			} elseif ( $this->is_date() ) {
+				$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'date_noindex' ) ? 'noindex' : $meta['noindex'];
+				$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'date_nofollow' ) ? 'nofollow' : $meta['nofollow'];
+				$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'date_noarchive' ) ? 'noarchive' : $meta['noarchive'];
+			} elseif ( $this->is_search() ) {
+				$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'search_noindex' ) ? 'noindex' : $meta['noindex'];
+				$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'search_nofollow' ) ? 'nofollow' : $meta['nofollow'];
+				$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'search_noarchive' ) ? 'noarchive' : $meta['noarchive'];
 			}
-		}
-
-		if ( $this->is_author() ) {
-			$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'author_noindex' ) ? 'noindex' : $meta['noindex'];
-			$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'author_nofollow' ) ? 'nofollow' : $meta['nofollow'];
-			$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'author_noarchive' ) ? 'noarchive' : $meta['noarchive'];
-		}
-
-		if ( $this->is_date() ) {
-			$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'date_noindex' ) ? 'noindex' : $meta['noindex'];
-			$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'date_nofollow' ) ? 'nofollow' : $meta['nofollow'];
-			$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'date_noarchive' ) ? 'noarchive' : $meta['noarchive'];
-		}
-
-		if ( $this->is_search() ) {
-			$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'search_noindex' ) ? 'noindex' : $meta['noindex'];
-			$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'search_nofollow' ) ? 'nofollow' : $meta['nofollow'];
-			$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'search_noarchive' ) ? 'noarchive' : $meta['noarchive'];
-		}
-
-		if ( $this->is_attachment() ) {
-			$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'attachment_noindex' ) ? 'noindex' : $meta['noindex'];
-			$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'attachment_nofollow' ) ? 'nofollow' : $meta['nofollow'];
-			$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'attachment_noarchive' ) ? 'noarchive' : $meta['noarchive'];
-		}
+		endif;
 
 		if ( $this->is_singular() ) {
 			$meta['noindex']   = empty( $meta['noindex'] ) && $this->get_custom_field( '_genesis_noindex' ) ? 'noindex' : $meta['noindex'];
@@ -143,11 +136,20 @@ class Generate extends User_Data {
 			if ( $this->is_protected( $this->get_the_real_ID() ) ) {
 				$meta['noindex'] = 'noindex';
 			}
+
+			if ( $this->is_attachment() ) {
+				$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'attachment_noindex' ) ? 'noindex' : $meta['noindex'];
+				$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'attachment_nofollow' ) ? 'nofollow' : $meta['nofollow'];
+				$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'attachment_noarchive' ) ? 'noarchive' : $meta['noarchive'];
+			}
 		}
 
 		/**
-		 * Applies filters the_seo_framework_robots_meta_array : array
+		 * Applies filters the_seo_framework_robots_meta_array
+		 *
 		 * @since 2.6.0
+		 *
+		 * @param array $meta The current term meta.
 		 */
 		$meta = (array) \apply_filters( 'the_seo_framework_robots_meta_array', $meta );
 

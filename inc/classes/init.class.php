@@ -170,6 +170,9 @@ class Init extends Query {
 		//= Initialize profile fields.
 		$this->init_profile_fields();
 
+		//= Initialize term meta filters and actions.
+		$this->initialize_term_meta();
+
 		//* Save post data.
 		\add_action( 'save_post', array( $this, 'inpost_seo_save' ), 1, 2 );
 
@@ -714,7 +717,7 @@ class Init extends Query {
 	 *
 	 * @since 2.9.4
 	 *
-	 * @param WP_Query $wp_query The WP_Query instance.
+	 * @param \WP_Query $wp_query The WP_Query instance.
 	 * @return void Early if no search query is found.
 	 */
 	public function _alter_search_query_in( $wp_query ) {
@@ -757,7 +760,7 @@ class Init extends Query {
 	 * @since 2.9.4
 	 * @access private
 	 *
-	 * @param WP_Query $wp_query The WP_Query instance.
+	 * @param \WP_Query $wp_query The WP_Query instance.
 	 * @return void Early if query alteration is useless or blocked.
 	 */
 	public function _alter_archive_query_in( $wp_query ) {
@@ -815,7 +818,7 @@ class Init extends Query {
 	 * @access private
 	 *
 	 * @param array    $posts The array of retrieved posts.
-	 * @param WP_Query $wp_query The WP_Query instance.
+	 * @param \WP_Query $wp_query The WP_Query instance.
 	 * @return array $posts
 	 */
 	public function _alter_search_query_post( $posts, $wp_query ) {
@@ -843,7 +846,7 @@ class Init extends Query {
 	 * @access private
 	 *
 	 * @param array    $posts The array of retrieved posts.
-	 * @param WP_Query $wp_query The WP_Query instance.
+	 * @param \WP_Query $wp_query The WP_Query instance.
 	 * @return array $posts
 	 */
 	public function _alter_archive_query_post( $posts, $wp_query ) {
@@ -869,7 +872,7 @@ class Init extends Query {
 	 *
 	 * @since 2.9.4
 	 *
-	 * @param WP_Query $wp_query WP_Query object. Passed by reference.
+	 * @param \WP_Query $wp_query WP_Query object. Passed by reference.
 	 * @return bool
 	 */
 	protected function is_archive_query_adjustment_blocked( &$wp_query ) {

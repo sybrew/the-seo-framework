@@ -527,7 +527,7 @@ class Admin_Init extends Init {
 
 		$css = array(
 			'.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:checked + .tsf-flex-nav-tab-label' => array(
-				"box-shadow:0 -2px 0 0 $color inset",
+				"box-shadow:0 -2px 0 0 $color_accent inset",
 			),
 			'.tsf-seo-bar .tsf-explanation-desc' => array(
 				"background-color:$bg_accent",
@@ -773,7 +773,6 @@ class Admin_Init extends Init {
 				 * Filters the cropped image attachment metadata.
 				 *
 				 * @since 4.3.0 WordPress Core
-				 *
 				 * @see wp_generate_attachment_metadata()
 				 *
 				 * @param array $metadata Attachment metadata.

@@ -53,7 +53,7 @@ class Query extends Compat {
 	 */
 	public function can_cache_query() {
 
-		static $cache = null;
+		static $cache;
 
 		if ( isset( $cache ) )
 			return $cache;
@@ -61,7 +61,29 @@ class Query extends Compat {
 		if ( isset( $GLOBALS['wp_query']->query ) || isset( $GLOBALS['current_screen'] ) )
 			return $cache = true;
 
-		$this->_doing_it_wrong( __METHOD__, "You've initiated a method that uses queries too early.", '2.9.0' );
+		$this->do_query_error_notice( __METHOD__ );
+
+		return false;
+	}
+
+	/**
+	 * Outputs a doing it wrong notice if an error occurs in the current query.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $method The original error method, from 2.9.0.
+	 */
+	protected function do_query_error_notice( $method ) {
+
+		$message = "You've initiated a method that uses queries too early.";
+
+		$trace = @debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, 4 );
+		if ( ! empty( $trace[3] ) ) {
+			$message .= ' - In file: ' . $trace[3]['file'];
+			$message .= ' - On line: ' . $trace[3]['line'];
+		}
+
+		$this->_doing_it_wrong( $method, \esc_html( $message ), '2.9.0' );
 
 		//* Backtrace debugging.
 		if ( $this->the_seo_framework_debug ) {
@@ -73,8 +95,6 @@ class Query extends Compat {
 				$_more = false;
 			}
 		}
-
-		return false;
 	}
 
 	/**

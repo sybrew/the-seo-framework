@@ -282,15 +282,15 @@ class Generate_Description extends Generate {
 	protected function get_custom_archive_description( $args ) {
 
 		$description = '';
+		$is_term = false;
 
-		if ( $this->is_archive() ) {
-			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
+		if ( $args['taxonomy'] && $args['id'] ) {
+			$is_term = (bool) \get_term( $args['id'], $args['taxonomy'] );
+		}
 
-				$term = $this->fetch_the_term( $args['id'] );
-				$data = $this->get_term_data( $term, $args['id'] );
-
-				$description = empty( $data['description'] ) ? $description : $data['description'];
-			}
+		if ( $is_term || $this->is_archive() ) {
+			$data = $this->get_term_meta( $args['id'] );
+			$description = empty( $data['description'] ) ? '' : $data['description'];
 		}
 
 		return $description;
@@ -774,7 +774,7 @@ class Generate_Description extends Generate {
 			} elseif ( $term && isset( $term->term_id ) ) {
 				//* We're on a taxonomy now.
 
-				$data = $this->get_term_data( $term, $term->term_id );
+				$data = $this->get_term_meta( $term->term_id );
 
 				if ( ! empty( $data['doctitle'] ) ) {
 					$title = $data['doctitle'];

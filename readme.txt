@@ -267,9 +267,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Fixed:**
 		/
 		* XSL stylesheet no longer prepends query arguments, but instead appends them. This fixes, for example, issues when using WPML query string parameters.
-		* TODO In-post SEO box icons no longer look out-of-place on some browsers (Safari 7 or Firefox-cropped?).
 		* `article:publisher` is now only output on `article` types.
-		* TODO Category SEO settings character counter length + SEO Bar compatibility with https://wordpress.org/plugins/visual-term-description-editor/ (check mail inbox keyword: Visual Term Description Editor).
+		* Custom Post Type archives now fetch and render custom SEO data.
 		* TODO check W3TC canonical issues https://wordpress.org/support/topic/canonical-https-detection-not-working/
 		* TSF no longer outputs canonical URLs on BuddyPress pages. Instead, it lets BuddyPress output them.
 		* [Simple Sitemap](https://wordpress.org/plugins/simple-sitemap/) is no longer detected as a conflicting sitemap plugin.
@@ -333,9 +332,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Class `The_SEO_Framework\Profile`. Maintains admin profile pages.
 		* Method `can_access_settings()`, to easily determine if the current user has rights to edit global SEO settings.
 		* Property `$schema_ids`, it allows you to adjust used Schema.org JSON-LD script IDs.
-		* Method `s_numeric_string`, it creates a string from integers. Rounds float down. Converts non-numeric input to `'0'`, arrays and objects to `'1'`.
-		* Method `s_facebook_profile`, it converts any URL or string-input into a Facebook profile URL.
+		* Method `s_numeric_string()`, it creates a string from integers. Rounds float down. Converts non-numeric input to `'0'`, arrays and objects to `'1'`.
+		* Method `s_facebook_profile()`, it converts any URL or string-input into a Facebook profile URL.
 		* `index.php` file in the classes folder stating the class structure.
+		* Method `get_current_term_meta()`, which fetches the current term's meta.
 	* **Changed:**
 		* Method `is_protected()` no longer checks for query, i.e. `is_singular()`, before parsing.
 		* Method `settings_capability()` now is `get_settings_capability()`, without deprecation; it was marked private.
@@ -355,6 +355,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Updated:**
 		/
 		* TODO Database version: `3000`.
+	* **Deprecated:**
+		* Method `get_term_data( $term, $term_id )`, use method `get_term_meta( $term_id )` instead.
 	* **Fixed:**
 		/
 		* When using filter `the_seo_framework_settings_capability`, the set capability can now save SEO settings too.
@@ -363,6 +365,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Filter notes:**
 		* **Added:**
 			* `the_seo_framework_admin_color_css`, used to adjust admin-color conforming colors.
+			* `the_seo_framework_current_term_meta`, used to adjust term meta after it's set.
+				* Do not confuse this with filter `the_seo_framework_get_term_meta`, which only fires when no term meta has been set.
 	* **Action notes:**
 		* **Added:**
 			* `the_seo_framework_pre_seo_settings`

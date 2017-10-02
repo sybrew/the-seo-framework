@@ -53,15 +53,13 @@ function _bbpress_filter_order_keys( $current_keys = array() ) {
 function _bbpress_filter_pre_title( $title = '', $args = array(), $escape = true ) {
 
 	if ( \is_bbpress() ) {
-
 		if ( \bbp_is_topic_tag() ) {
-
-			$term = \get_queried_object();
-			$data = \the_seo_framework()->get_term_data( $term, $term->term_id );
+			$data = \the_seo_framework()->get_term_meta( \get_queried_object_id() );
 
 			if ( ! empty( $data['doctitle'] ) ) {
 				$title = $data['doctitle'];
 			} else {
+				$term = \get_queried_object();
 				$title = $term->name ?: \the_seo_framework()->untitled();
 			}
 		}
@@ -157,11 +155,8 @@ function _bbpress_filter_url_path( $path, $id = 0, $external = false ) {
 function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $term = '', $max_char_length = 155 ) {
 
 	if ( \is_bbpress() ) {
-
 		if ( \bbp_is_topic_tag() ) {
-
 			$term = \get_queried_object();
-
 			$description = $term->description ?: '';
 
 			//* Always overwrite.
@@ -190,12 +185,8 @@ function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $term 
 function _bbpress_filter_custom_field_description( $description = '', $args = array() ) {
 
 	if ( \is_bbpress() ) {
-
 		if ( \bbp_is_topic_tag() ) {
-
-			$term = \get_queried_object();
-			$data = \the_seo_framework()->get_term_data( $term, $term->term_id );
-
+			$data = \the_seo_framework()->get_term_meta( \get_queried_object_id() );
 			if ( ! empty( $data['description'] ) ) {
 				$description = $data['description'];
 			} else {
