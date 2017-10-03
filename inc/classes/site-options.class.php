@@ -204,9 +204,6 @@ class Site_Options extends Sanitize {
 			'post_publish_time' => 1, // Article Published Time
 			'post_modify_time'  => 1, // Article Modified Time
 
-			'page_publish_time' => 0, // Article Published Time
-			'page_modify_time'  => 0, // Article Modified Time
-
 			'home_publish_time' => 0, // Article Modified Time
 			'home_modify_time'  => 0, // Article Modified Time
 

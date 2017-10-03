@@ -684,9 +684,6 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function make_fully_qualified_url( $url ) {
 
-
-		if ( $url instanceof \WP_Error ) debug_print_backtrace( 0, 9 );
-
 		if ( '//' === substr( $url, 0, 2 ) ) {
 			$url = 'http:' . $url;
 		} elseif ( 'http' !== substr( $url, 0, 4 ) ) {

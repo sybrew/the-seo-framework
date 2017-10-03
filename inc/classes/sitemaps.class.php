@@ -595,13 +595,7 @@ class Sitemaps extends Metaboxes {
 		 */
 		$sitemaps_modified = $this->is_option_checked( 'sitemaps_modified' );
 		if ( $sitemaps_modified ) {
-			$page_lastmod = true;
-			$post_lastmod = true;
-			$home_lastmod = true;
-		} else {
-			$page_lastmod = $this->is_option_checked( 'page_modify_time' );
-			$post_lastmod = $this->is_option_checked( 'post_modify_time' );
-			$home_lastmod = $page_lastmod ?: $this->is_option_checked( 'home_modify_time' );
+			$page_lastmod = $post_lastmod = $home_lastmod = true;
 		}
 
 		/**

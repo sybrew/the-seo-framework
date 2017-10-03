@@ -249,6 +249,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Schema breadcrumbs now have their IDs reset. They have an URL fragment attached (e.g. `example.com/#schemaorg-bcl`).
 			* This is to prevent ID collision with generated scripts from other plugins, like WooCommerce 3.0+.
 			* This might affect search presence of the pages until the new IDs have been processed by the search engine, like Google and Bing.
+		* The sitemap `lastmod` option no longer listens to Post Dates settings. But now only to its own specific setting.
 	* **Improved:**
 		* Sped up URL generation two-fold. We've rewritten the code from the ground up.
 		* The Canonical URL should now always be compatible with any plugin, out of the box.
@@ -265,6 +266,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* TODO RTL.
 	* **Removed:**
 		* `noodp` and all its settings. The DMOZ project that it influenced is no longer available nor used.
+		/
+		* `page_publish_time` and all its settings. The Open Graph protocol no longer allows `article:published_time` on `website` types.
+		* `page_modify_time` and all its settings. The Open Graph protocol no longer allows `article:modified_time` on `website` types.
+		* TODO check `home_modify_time` and `home_publish_time` in regards to "blog" type. See above 2 lines.
 		* Sitemaps timestamp format option. It will be converted to the new global timestamp format option upon upgrade.
 		* Polylang URL enhancements and compatibility file. It now works without them.
 		* WPML URL enhancements. It now works without these.
@@ -332,6 +337,14 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* "When these options are filled in, Facebook might link your Facebook profile to be followed and liked when your post or page is shared."
 			* Now is: "When these options are filled in, Facebook might link the Facebook profile to be followed and liked when your post or page is shared."
 			* Not yours: They're now general options.
+		* "Some Search Engines output the publishing date and modified date next to the search results. These help Search Engines find new content and could impact the SEO value."
+			* Now is: "Some social sites output the published date and modified date in the sharing snippet."
+			* Inaccurate: Search Engines don't use this, at all. They use Structured Data.
+	* **Removed:**
+		* "It's recommended on posts, but it's not recommended on pages unless you modify or create new pages frequently."
+			* No longer applicable.
+		/
+		* TODO? also inaccurate! "Because you only publish the Home Page once, Search Engines might think your website is outdated. This can be prevented by disabling the following options".
 
 * **For developers:**
 	* **Added:**

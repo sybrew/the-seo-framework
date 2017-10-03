@@ -291,35 +291,24 @@ switch ( $instance ) :
 
 	case 'the_seo_framework_social_metabox_postdates' :
 
-		$pages_i18n = esc_html__( 'Pages', 'autodescription' );
 		$posts_i18n = esc_html__( 'Posts', 'autodescription' );
 		$home_i18n = esc_html__( 'Home Page', 'autodescription' );
 
-		?><h4><?php esc_html_e( 'Post Date Settings', 'autodescription' ); ?></h4><?php
-		$this->description( __( 'Some Search Engines output the publishing date and modified date next to the search results. These help Search Engines find new content and could impact the SEO value.', 'autodescription' ) );
-		$this->description( __( "It's recommended on posts, but it's not recommended on pages unless you modify or create new pages frequently.", 'autodescription' ) );
+		?>
+		<h4><?php esc_html_e( 'Post Date Settings', 'autodescription' ); ?></h4>
+		<?php
+		$this->description( __( 'Some social sites output the published date and modified date in the sharing snippet.', 'autodescription' ) );
 
 		/* translators: 1: Option, 2: Post Type */
 		$post_publish_time_label = sprintf( esc_html__( 'Add %1$s to %2$s?', 'autodescription' ), $this->code_wrap( 'article:published_time' ), $posts_i18n );
 		$post_publish_time_checkbox = $this->make_checkbox( 'post_publish_time', $post_publish_time_label, '', false );
 
 		/* translators: 1: Option, 2: Post Type */
-		$page_publish_time_label = sprintf( esc_html__( 'Add %1$s to %2$s?', 'autodescription' ), $this->code_wrap( 'article:published_time' ), $pages_i18n );
-		$page_publish_time_checkbox = $this->make_checkbox( 'page_publish_time', $page_publish_time_label, '', false );
-
-		//* Echo checkboxes.
-		$this->wrap_fields( $post_publish_time_checkbox . $page_publish_time_checkbox, true );
-
-		/* translators: 1: Option, 2: Post Type */
 		$post_modify_time_label = sprintf( esc_html__( 'Add %1$s to %2$s?', 'autodescription' ), $this->code_wrap( 'article:modified_time' ), $posts_i18n );
 		$post_modify_time_checkbox = $this->make_checkbox( 'post_modify_time', $post_modify_time_label, '', false );
 
-		/* translators: 1: Option, 2: Post Type */
-		$page_modify_time_label = sprintf( esc_html__( 'Add %1$s to %2$s?', 'autodescription' ), $this->code_wrap( 'article:modified_time' ), $pages_i18n );
-		$page_modify_time_checkbox = $this->make_checkbox( 'page_modify_time', $page_modify_time_label, '', false );
-
 		//* Echo checkboxes.
-		$this->wrap_fields( $post_modify_time_checkbox . $page_modify_time_checkbox, true );
+		$this->wrap_fields( $post_publish_time_checkbox . $post_modify_time_checkbox, true );
 
 		?>
 		<hr>

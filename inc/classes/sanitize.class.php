@@ -262,9 +262,6 @@ class Sanitize extends Admin_Pages {
 				'post_publish_time',
 				'post_modify_time',
 
-				'page_publish_time',
-				'page_modify_time',
-
 				'home_modify_time',
 				'home_publish_time',
 
