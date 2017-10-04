@@ -7,7 +7,7 @@ $instance = $this->get_view_instance( 'the_seo_framework_webmaster_metabox', $in
 
 switch ( $instance ) :
 	case 'the_seo_framework_webmaster_metabox_main' :
-		$site_url = $this->get_homepage_canonical_url();
+		$site_url = $this->get_homepage_permalink();
 		$language = $this->google_language();
 
 		$bing_site_url = 'https://www.bing.com/webmaster/configure/verify/ownership?url=' . urlencode( $site_url );

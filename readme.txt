@@ -394,7 +394,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Method `add_url_host()`.
 		* Method `get_home_path()`.
 		* Method `the_url_from_cache()`, use method `get_current_canonical_url()` instead.
-		* Method `the_home_url_from_cache()`, use method `get_homepage_canonical_url()` instead.
+		* Method `the_home_url_from_cache()`, use method `get_homepage_permalink()` instead.
 		* Method `get_prefered_scheme()`, use method `get_preferred_scheme()` instead (typo).
 	* **Fixed:**
 		/

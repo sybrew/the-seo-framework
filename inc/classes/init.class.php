@@ -610,7 +610,7 @@ class Init extends Query {
 		if ( false === $output ) :
 			$output = '';
 
-			$parsed_home_url = \wp_parse_url( rtrim( $this->get_homepage_canonical_url(), ' /\\' ) );
+			$parsed_home_url = \wp_parse_url( rtrim( $this->get_homepage_permalink(), ' /\\' ) );
 			$home_path = ! empty( $parsed_home_url['path'] ) ? \esc_attr( $parsed_home_url['path'] ) : '';
 
 			if ( $this->is_subdirectory_installation() || $home_path ) {

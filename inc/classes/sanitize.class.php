@@ -1220,7 +1220,7 @@ class Sanitize extends Admin_Pages {
 					$url = $filter['url'];
 					$scheme = $filter['scheme'];
 				} else {
-					$url = \trailingslashit( $this->get_homepage_canonical_url() ) . ltrim( $path, ' /' );
+					$url = \trailingslashit( $this->get_homepage_permalink() ) . ltrim( $path, ' /' );
 					$scheme = $this->is_ssl() ? 'https' : 'http';
 				}
 
