@@ -163,14 +163,11 @@ class Feed extends Cache {
 	 * Generates and returns feed source link.
 	 *
 	 * @since 2.9.0
+	 * @since 3.0.0 Now uses plain permalink, rather than enhanced canonical URL.
 	 *
 	 * @return string The translatable feed entry source link.
 	 */
 	protected function get_feed_entry_source_link() {
-
-		//* Fetch permalink and add it to the content. Already escaped.
-		$permalink = $this->get_canonical_url();
-
 		/**
 		 * Applies filters 'the_seo_framework_feed_source_link' : string
 		 *
@@ -180,7 +177,7 @@ class Feed extends Cache {
 		 * @param string $source The source indication string.
 		 */
 		$source_i18n = (string) \apply_filters( 'the_seo_framework_feed_source_link_text', \_x( 'Source', 'The content source', 'autodescription' ) );
-		$content = '<p><a href="' . $permalink . '" rel="nofollow">' . \esc_html( $source_i18n ) . '</a></p>';
+		$content = '<p><a href="' . \esc_url( \get_permalink() ) . '" rel="nofollow">' . \esc_html( $source_i18n ) . '</a></p>';
 
 		return $content;
 	}

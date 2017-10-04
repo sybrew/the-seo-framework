@@ -1173,11 +1173,11 @@ class Query extends Compat {
 
 	/**
 	 * Fetches the number of the current page.
-	 * Fetches global $paged through Query Var to prevent conflicts.
+	 * Fetches global $paged through Query var to prevent conflicts.
 	 *
 	 * @since 2.6.0
 	 *
-	 * @return int $paged
+	 * @return int $paged Always a positive number.
 	 */
 	public function paged() {
 

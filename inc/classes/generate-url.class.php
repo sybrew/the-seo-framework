@@ -40,11 +40,17 @@ class Generate_Url extends Generate_Title {
 	}
 
 	/**
-	 * Returns a custom canonical URL.
+	 * Returns a canonical URL based on parameters.
+	 * The URL will never be paginated.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param array $args The canonical URL arguments.
+	 * @param array $args The canonical URL arguments : {
+	 *    int  $id               The Post, Page or Term ID to generate the URL for.
+	 *    bool $is_term          Whether the query type is a term. Can auto-determine current
+	 *                           loop's term. Otherwise, use $this->get_archival_canonical_url()
+	 *    bool $get_custom_field Whether to get custom canonical URLs from user settings.
+	 * }
 	 * @return string The canonical URL, if any.
 	 */
 	public function create_canonical_url( $args = array() ) {
@@ -74,10 +80,12 @@ class Generate_Url extends Generate_Title {
 		if ( is_array( $args ) ) {
 			//= See $this->create_canonical_url().
 			extract( $args );
+			$paginate = false;
 		} else {
 			$id = $this->get_the_real_ID();
 			$is_term = $this->is_archive();
 			$get_custom_field = true;
+			$paginate = true;
 		}
 
 		$canonical_url = '';
@@ -90,7 +98,7 @@ class Generate_Url extends Generate_Title {
 			}
 
 			if ( ! $canonical_url ) {
-				if ( $this->is_front_page_by_id( $id ) ) {
+				if ( ! $this->has_page_on_front() && $this->is_front_page_by_id( $id ) ) {
 					$canonical_url = $this->get_home_canonical_url();
 				} elseif ( $id ) {
 					$canonical_url = $this->get_singular_canonical_url( $id );
@@ -101,14 +109,12 @@ class Generate_Url extends Generate_Title {
 		if ( ! $canonical_url )
 			return '';
 
-		$canonical_url = $this->set_preferred_url_scheme( $canonical_url );
-
-		if ( $this->pretty_permalinks ) {
-			$canonical_url = \esc_url( $canonical_url, array( 'http', 'https' ) );
-		} else {
-			//= Keep the &'s more readable.
-			$canonical_url = \esc_url_raw( $canonical_url, array( 'http', 'https' ) );
+		if ( ! $paginate && $id === $this->get_the_real_ID() ) {
+			$canonical_url = $this->remove_pagination_from_url( $canonical_url );
 		}
+
+		$canonical_url = $this->set_preferred_url_scheme( $canonical_url );
+		$canonical_url = $this->clean_canonical_url( $canonical_url );
 
 		$this->the_seo_framework_debug && false === $this->doing_sitemap and $this->debug_init( __METHOD__, false, $debug_key, compact( 'canonical_url' ) );
 
@@ -116,7 +122,29 @@ class Generate_Url extends Generate_Title {
 	}
 
 	/**
+	 * Cleans canonical URL.
+	 * Looks at permalink settings to determine roughness of escaping.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $url A fully qualified URL.
+	 * @return string A fully qualified clean URL.
+	 */
+	public function clean_canonical_url( $url ) {
+
+		if ( $this->pretty_permalinks ) {
+			$url = \esc_url( $url, array( 'http', 'https' ) );
+		} else {
+			//= Keep the &'s more readable.
+			$url = \esc_url_raw( $url, array( 'http', 'https' ) );
+		}
+
+		return $url;
+	}
+
+	/**
 	 * Returns home canonical URL.
+	 * Automatically adds pagination if the ID matches the query.
 	 *
 	 * @since 3.0.0
 	 *
@@ -124,10 +152,16 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_home_canonical_url() {
 
-		$url = \get_home_url();
+		//= Prevent admin bias by passing preferred scheme.
+		$url = \get_home_url( null, '', $this->get_preferred_scheme() );
 
-		if ( $url )
+		if ( $url ) {
+			if ( $this->get_the_real_ID() === (int) \get_option( 'page_for_posts' ) ) {
+				$url = $this->add_url_pagination( $url, $this->paged(), true );
+			}
+
 			return \user_trailingslashit( $url );
+		}
 
 		return '';
 	}
@@ -146,6 +180,7 @@ class Generate_Url extends Generate_Title {
 
 	/**
 	 * Returns singular canonical URL.
+	 * Automatically adds pagination if the ID matches the query.
 	 *
 	 * @since 3.0.0
 	 *
@@ -158,6 +193,7 @@ class Generate_Url extends Generate_Title {
 
 	/**
 	 * Returns archival canonical URL.
+	 * Automatically adds pagination if the ID matches the query.
 	 *
 	 * @since 3.0.0
 	 *
@@ -178,24 +214,47 @@ class Generate_Url extends Generate_Title {
 			$link = \get_term_link( $term_id, $taxonomy );
 		}
 
-		//= It can be of type \WP_Error.
-		if ( is_string( $link ) )
-			return $link ?: '';
+		if ( is_string( $link ) && $link ) {
+			//= It can be of type \WP_Error.
+
+			if ( $term_id === $this->get_the_real_ID() ) {
+				//= Adds pagination if ID matches query.
+				$link = $this->add_url_pagination( $link, $this->paged(), true );
+			}
+
+			return $link;
+		}
 
 		return '';
 	}
 
 	/**
-	 * Returns preferred $url scheme.
-	 * Can be automatically be detected.
+	 * Alias of $this->get_preferred_scheme().
+	 * Typo.
 	 *
 	 * @since 2.8.0
 	 * @since 2.9.2 Added filter usage cache.
+	 * @since 3.0.0 Silently deprecated.
+	 * @TODO deprecate visually
+	 * @deprecated
 	 * @staticvar string $scheme
 	 *
 	 * @return string The preferred URl scheme.
 	 */
 	public function get_prefered_scheme() {
+		return $this->get_preferred_scheme();
+	}
+
+	/**
+	 * Returns preferred $url scheme.
+	 * Can automatically be detected.
+	 *
+	 * @since 3.0.0
+	 * @staticvar string $scheme
+	 *
+	 * @return string The preferred URl scheme.
+	 */
+	public function get_preferred_scheme() {
 
 		static $scheme;
 
@@ -238,7 +297,7 @@ class Generate_Url extends Generate_Title {
 	 * @return string The URL with the preferred scheme.
 	 */
 	public function set_preferred_url_scheme( $url ) {
-		return $this->set_url_scheme( $url, $this->get_prefered_scheme(), false );
+		return $this->set_url_scheme( $url, $this->get_preferred_scheme(), false );
 	}
 
 	/**
@@ -328,6 +387,87 @@ class Generate_Url extends Generate_Title {
 					$url = $this->set_url_scheme( $url, 'https', false );
 				}
 			}
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Adds pagination to input URL.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $url      The fully qualified URL.
+	 * @param int    $page     The page number. Must be bigger than 1.
+	 * @param bool   $use_base Whether to use pagination base. True on archives, false on pages.
+	 * @return string The fully qualified URL with pagination.
+	 */
+	public function add_url_pagination( $url, $page, $use_base ) {
+
+		if ( $page < 2 )
+			return $url;
+
+		if ( $this->pretty_permalinks ) {
+			if ( $use_base ) {
+				static $base;
+				$base = $base ?: $GLOBALS['wp_rewrite']->pagination_base;
+
+				$url = \user_trailingslashit( \trailingslashit( $url ) . $base . '/' . $page, 'single_paged' );
+			} else {
+				$url = \user_trailingslashit( \trailingslashit( $url ) . $page, 'single_paged' );
+			}
+		} else {
+			if ( $use_base ) {
+				$url = \add_query_arg( 'paged', $page, $url );
+			} else {
+				$url = \add_query_arg( 'page', $page, $url );
+			}
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Removes pagination from input URL.
+	 * The URL must match this query.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $url The fully qualified URL to remove pagination from.
+	 * @return string $url The fully qualified URL without pagination.
+	 */
+	protected function remove_pagination_from_url( $url ) {
+
+		if ( $this->pretty_permalinks ) {
+			//* Defensive programming...
+			static $user_slash;
+			$user_slash = isset( $user_slash ) ? $user_slash :
+				( $GLOBALS['wp_rewrite']->use_trailing_slashes ? '/' : '' );
+
+			$paged = $this->paged();
+			$page = $this->page();
+			$find = '';
+
+			if ( $paged > 1 ) {
+				static $base;
+				$base = $base ?: $GLOBALS['wp_rewrite']->pagination_base;
+
+				$find = '/' . $base . '/' . $paged . $user_slash;
+			} elseif ( $page > 1 ) {
+				$find = '/' . $page . $user_slash;
+			}
+
+			if ( $find ) {
+				$pos = strrpos( $url, $find );
+				//* Defensive programming...
+				$continue = $pos && $pos + strlen( $find ) === strlen( $url );
+				if ( $continue ) {
+					$url = substr( $url, 0, $pos );
+					$url = \user_trailingslashit( $url );
+				}
+			}
+		} else {
+			$url = remove_query_args( array( 'page', 'paged', 'cpage' ), $url );
 		}
 
 		return $url;
@@ -444,7 +584,7 @@ class Generate_Url extends Generate_Title {
 				$path .= '&page=' . $page;
 		}
 
-		$home_url = $this->get_homepage_canonical_url();
+		$home_url = $this->get_homepage_permalink();
 		$url = \trailingslashit( $home_url ) . $path . $additions;
 
 		return \esc_url_raw( $url, array( 'http', 'https' ) );
@@ -454,6 +594,7 @@ class Generate_Url extends Generate_Title {
 	 * Generates Previous and Next links.
 	 *
 	 * @since 2.2.4
+	 * @TODO rewrite to use the new 3.0.0+ URL generation.
 	 *
 	 * @param string $prev_next Previous or next page link.
 	 * @param int $post_id The post ID.
@@ -536,6 +677,7 @@ class Generate_Url extends Generate_Title {
 	 *
 	 * @since 2.2.4
 	 * @since 3.0.0 Now uses WordPress permalinks.
+	 * @TODO deprecate.
 	 *
 	 * @param int $i The page number to generate the URL from.
 	 * @param int $post_id The post ID.

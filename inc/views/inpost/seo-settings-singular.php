@@ -173,7 +173,7 @@ switch ( $instance ) :
 		//* Fetch Canonical URL.
 		$canonical = $this->get_custom_field( '_genesis_canonical_uri' );
 		//* Fetch Canonical URL Placeholder.
-		$canonical_placeholder = $this->create_canonical_url( array( 'post_id' => $post_id ) );
+		$canonical_placeholder = $this->create_canonical_url( array( 'id' => $post_id ) );
 
 		?>
 		<div class="tsf-flex-setting tsf-flex">

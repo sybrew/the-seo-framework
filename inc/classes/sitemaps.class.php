@@ -663,7 +663,7 @@ class Sitemaps extends Metaboxes {
 				//* Continue if indexed.
 				if ( $indexed ) {
 					$content .= "\t<url>\n";
-					$content .= "\t\t<loc>" . $this->get_home_canonical_url() . "</loc>\n";
+					$content .= "\t\t<loc>" . $this->get_homepage_permalink() . "</loc>\n";
 
 					// Keep it consistent. Only parse if page_lastmod is true.
 					if ( $home_lastmod ) {

@@ -233,7 +233,7 @@ class Generate_Ldjson extends Generate_Image {
 		$data = array(
 			'@context' => 'http://schema.org',
 			'@type' => 'WebSite',
-			'url' => $this->get_homepage_canonical_url(),
+			'url' => $this->get_homepage_permalink(),
 		);
 
 		if ( $use_sitename ) {
@@ -295,7 +295,7 @@ class Generate_Ldjson extends Generate_Image {
 		$data = array(
 			'@context' => 'http://schema.org',
 			'@type' => ucfirst( \esc_attr( $knowledge_type ) ),
-			'url' => $this->get_homepage_canonical_url(),
+			'url' => $this->get_homepage_permalink(),
 			'name' => $this->escape_title( $knowledge_name ),
 		);
 
@@ -853,11 +853,11 @@ class Generate_Ldjson extends Generate_Image {
 
 		switch ( $from ) {
 			case 'currentpage' :
-				$url = $this->get_current_canonical_url();
+				$url = $this->get_current_permalink();
 				break;
 
 			case 'homepage' :
-				$url = $this->get_homepage_canonical_url();
+				$url = $this->get_homepage_permalink();
 				break;
 
 			case 'create' :
@@ -876,6 +876,8 @@ class Generate_Ldjson extends Generate_Image {
 		$key = isset( $this->schema_ids[ $id ] ) ? $this->schema_ids[ $id ] : $id;
 
 		$parsed = parse_url( $url );
+
+		//* Defensive programming... This can't yield without odd filters.
 		$fragment = ! empty( $parsed['fragment'] ) ? $parsed['fragment'] : '';
 
 		if ( $fragment ) {

@@ -1441,7 +1441,7 @@ final class Deprecated {
 			$url = $tsf->add_url_subdomain( $url );
 		}
 
-		$scheme = $scheme ?: $tsf->get_prefered_scheme();
+		$scheme = $scheme ?: $tsf->get_preferred_scheme();
 
 		$url = $tsf->set_url_scheme( $url, $scheme );
 
@@ -2003,12 +2003,12 @@ final class Deprecated {
 	public function the_home_url_from_cache( $force_slash = false ) {
 
 		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->the_home_url_from_cache()', '3.0.0', 'the_seo_framework()->get_homepage_canonical_url()' );
+		$tsf->_deprecated_function( 'the_seo_framework()->the_home_url_from_cache()', '3.0.0', 'the_seo_framework()->get_homepage_permalink()' );
 
 		static $url;
 
 		if ( ! $url )
-			$url = $tsf->get_homepage_canonical_url();
+			$url = $tsf->get_homepage_permalink();
 
 		return $force_slash ? \trailingslashit( $url ) : $url;
 	}

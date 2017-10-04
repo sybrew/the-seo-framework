@@ -250,6 +250,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* This is to prevent ID collision with generated scripts from other plugins, like WooCommerce 3.0+.
 			* This might affect search presence of the pages until the new IDs have been processed by the search engine, like Google and Bing.
 		* The sitemap `lastmod` option no longer listens to Post Dates settings. But now only to its own specific setting.
+		* Default link back to source in feed content no longer check settings. Instead, it uses the default WordPress permalink.
 	* **Improved:**
 		* Sped up URL generation two-fold. We've rewritten the code from the ground up.
 		* The Canonical URL should now always be compatible with any plugin, out of the box.
@@ -288,6 +289,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* TODO Odd database call on front-end looking for image... while custom is set...?
 		* When an empty description is supplied, the counter will now display `0` instead of nothing.
 		* TODO Tapping tooltips on Edge no longer makes them go away instantly. MSPointer + Click events clash? => Set buffer??
+		* TODO When latest post is protect or private, no description could've been generated on the blogpage (and other archives?).
+		* TODO - New bug: Homepage as blog's paginated canonical URL no longer points to the first page.
+		* TODO Separator selection description no longer overflows on EdgeHTML.
 
 * **For translators:**
 	* **Added:**
@@ -377,7 +381,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* TODO Database version: `3000`.
 	* **Deprecated:**
 		* Method `get_term_data( $term, $term_id )`, use method `get_term_meta( $term_id )` instead.
-		* Method `the_url()`, use method `get_canonical_url()` instead.
+		* Method `the_url()`, use method `get_canonical_url()` or `create_canonical_url()` instead.
 		* Method `parse_url_args()`.
 		* Method `reparse_url_args()`.
 		* Method `generate_url_path()`.
@@ -391,6 +395,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Method `get_home_path()`.
 		* Method `the_url_from_cache()`, use method `get_current_canonical_url()` instead.
 		* Method `the_home_url_from_cache()`, use method `get_homepage_canonical_url()` instead.
+		* Method `get_prefered_scheme()`, use method `get_preferred_scheme()` instead (typo).
 	* **Fixed:**
 		/
 		* When using filter `the_seo_framework_settings_capability`, the set capability can now save SEO settings too.

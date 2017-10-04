@@ -64,6 +64,24 @@ class Render extends Admin_Init {
 	}
 
 	/**
+	 * Caches and returns the current permalink.
+	 * This link excludes any pagination. Great for structured data.
+	 *
+	 * @since 3.0.0
+	 * @staticvar string $cache
+	 *
+	 * @return string The current permalink.
+	 */
+	public function get_current_permalink() {
+
+		static $cache;
+
+		return isset( $cache ) ? $cache : $cache = $this->create_canonical_url(
+			array( 'id' => $this->get_the_real_ID(), 'is_term' => $this->is_archive() )
+		);
+	}
+
+	/**
 	 * Caches and returns the homepage URL.
 	 *
 	 * @since 3.0.0
@@ -71,7 +89,7 @@ class Render extends Admin_Init {
 	 *
 	 * @return string The home URL.
 	 */
-	public function get_homepage_canonical_url() {
+	public function get_homepage_permalink() {
 
 		static $cache;
 
