@@ -267,9 +267,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* TODO RTL.
 	* **Removed:**
 		* `noodp` and all its settings. The DMOZ project that it influenced is no longer available nor used.
-		/
 		* `page_publish_time` and all its settings. The Open Graph protocol no longer allows `article:published_time` on `website` types.
 		* `page_modify_time` and all its settings. The Open Graph protocol no longer allows `article:modified_time` on `website` types.
+		/
 		* TODO check `home_modify_time` and `home_publish_time` in regards to "blog" type. See above 2 lines.
 		* Sitemaps timestamp format option. It will be converted to the new global timestamp format option upon upgrade.
 		* Polylang URL enhancements and compatibility file. It now works without them.
@@ -282,7 +282,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* XSL stylesheet no longer prepends query arguments, but instead appends them. This fixes, for example, issues when using WPML query string parameters.
 		* `article:publisher` is now only output on `article` types.
 		* Custom Post Type archives now fetch and render custom SEO data.
-		* TODO check W3TC canonical issues https://wordpress.org/support/topic/canonical-https-detection-not-working/
+		* Now all image URLs convert to the correct scheme when the image URL contains the site's domain.
 		* TSF no longer outputs canonical URLs on BuddyPress pages. Instead, it lets BuddyPress output them.
 		* [Simple Sitemap](https://wordpress.org/plugins/simple-sitemap/) is no longer detected as a conflicting sitemap plugin.
 		* [NextScripts Snap](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) is no longer detected as a conflicting Open Graph plugin, they now inform you about this.
@@ -365,6 +365,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Method `settings_capability()` now is `get_settings_capability()`, without deprecation; it was marked private.
 		* All plugin files required (aside from WordPress files) no longer check for `_once`.
 			* This saves resources, but can invoke fatal errors when you use TSF's private loader functions outside of TSF's bound API.
+		* Deprecated filter `the_seo_framework_canonical_force_scheme` (deprecated in 2.8.0) is no longer called by default.
 	* **Improved:**
 		* Plugin (de)activation functions are no created when the plugin isn't being (de)activated.
 			* Instead, they've been moved in `inc/functions/plugin-(de)activation.php` and run directly as the files are called.
@@ -418,154 +419,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **Detailed log:**
 /
 * ***TODO [TODO](https://theseoframework.com/?p= TODO #detailed).***
-
-= 2.9.3 - Assiduous Substratum =
-
-**Release date:**
-
-* July 3rd, 2017
-
-**Announcement: Local SEO Beta**
-
-* Local SEO is a premium extension, and it's almost ready for testing.
-* As we do not want to spam your WordPress dashboard, I've created a new [Twitter account](https://twitter.com/TheSEOFramework) for future announcements.
-* Feel free to follow us to receive the latest updates. As we're planning a test-run prior to release, further details for beta-access will also follow in a tweet.
-
-[youtube https://www.youtube.com/?v=q_ZnBuU1BwY&w=611&h=642&showinfo=0&rel=0&showsearch=0]
-
-**Summarized:**
-
-* Social images can now scale up to 4K resolution. This means (manual and automated) forced cropping no longer initiates at 1500px but at 4096px.
-* A new option has been added for every taxonomical post type in the Visibility tab. It allows you to prevent the annotated pages from showing up in Archives.
-* Structured Data output has been revisited. This includes merging of output, removal of misplaced output, and performance improvements.
-* When your home page is a blog, pages without an ID (404, search, date archives, etc.) had output and caching issues. These issues have been resolved.
-* Several security concerns have also been addressed. Although, none of them could be verified as the coding environment is already well protected.
-
-**For everyone: Caching changes:**
-
-* Descriptions and Schema.org output transients are no longer enabled by default. Because for most sites, it's better left disabled.
-* This has been done to reduce database calls. Ultimately, the performance benefits of using the transients are use-case specific.
-
-**For developers: Schema.org output code changes:**
-
-* The Schema.org output code has been [rewritten](https://github.com/sybrew/the-seo-framework/issues/97). This improves reliability, performance and extensibility.
-* If you've extended or altered the Schema.org generation output, you might wish to revisit your coding implementations.
-* All affronted methods have been correctly deprecated and tested once more. So, 500 errors shouldn't occur.
-* To be certain, visit the detailed changelog and compare your code.
-
-**For high-traffic webmasters and Google Analytics integration plugin authors: About the Search URL change:**
-
-* From this update, new canonical URLs will be generated for search queries to comply to the pretty permalink structure.
-* WordPress natively supports the `/search/{search_term}` endpoint; however, Google Analytics does not.
-* To enable support, please visit [this page](https://support.google.com/analytics/answer/1012264?hl=en&ref_topic=1031951#Post) for more information.
-* I've created a plugin that will enhance support for you. You can download it [here](https://gist.github.com/sybrew/ab5553dd8a06e73794680c4a2cc24661).
-* An extension is planned that will implement Google Analytics for you, complying to those guidelines.
-
-**Detailed log:**
-
-* ***Already the Sun is climbing to noon, and I feel the need of [something to strengthen me](https://theseoframework.com/?p=2064#detailed).***
-
-= 2.9.2 - Diminutive Consolidation =
-
-**Release date:**
-
-* May 8th, 2017
-
-**Summarized:**
-
-* Now, Polylang is officially supported by The SEO Framework.
-* The sitemap now supports plain permalinks. That means it now literally works for every website.
-* The robots.txt file has been enhanced, so it now informs you when the output location is incorrect.
-* Moreover, various bugs have been fixed, mainly concerning third party plugins.
-
-**We're looking for translation editors:**
-
-* First, thank you so much to all the translation [contributors](https://translate.wordpress.org/projects/wp-plugins/autodescription/contributors).
-* Now, if you want to see The SEO Framework in your language, head over to [this page](https://translate.wordpress.org/projects/wp-plugins/autodescription) and feel free to contribute.
-* If you wish to easily maintain and keep a close eye on all the contributions for your language, [ask us](https://theseoframework.com/contact/) to ask WordPress Polyglots to add you as a contributor.
-* Ultimately, it's up to the WordPress Polyglots team to fulfill your request. It generally depends on how well you've submitted translations for you to be accepted.
-
-**A few notes about translations:**
-
-* If you use a machine to translate for you, note that they can generate out-of-context strings. So keep an eye out for those!
-* If you notice that strings are very hard to translate, e.g. because of grammatical gender, [let us know](https://github.com/sybrew/the-seo-framework/issues/new)!
-* Please don't translate "The SEO Framework", it's a registered brand-name.
-* Be sure not to add spaces if you see backticks, asterisks, or brackets. They're used for Markdown language construction.
-* In TSF, you generally can't use UTF character codes like `&#38;#x2661;`, as they're automatically removed or rendered unreadable for added security. Add them as displayed instead: **♡**.
-
-**Detailed log:**
-
-* ***If you are a friend, speak the password, and the doors will open, and [you can enter](https://theseoframework.com/?p=1982#detailed).***
-
-= 2.9.1 - Sovereign Comprehension =
-
-**Release date:**
-
-* March 27th, 2017
-
-**Summarized:**
-
-* This release patches a few bugs that were brought with the 2.9.0 release related to debugging and cache clearing.
-* And if you like to use quick edit a lot, the SEO Bar will now also re-render on save.
-
-**Detailed log:**
-
-* ***All we have to decide is what to do with [the time that is given us](https://theseoframework.com/?p=1912#detailed).***
-
-= 2.9.0 - Equitable Erudition =
-
-*Courage is found in unlikely places - J.R.R. Tolkien*
-
-**Release date:**
-
-* March 25th, 2017
-
-**Summarized:**
-
-* This update focuses on fixing bugs and expanding the API for developers.
-* To expand the API for per page (in-post) SEO settings, tabs had to be added in the SEO settings meta box.
-* The JavaScript code has also been overhauled to improve performance and allow third party implementation.
-* Moreover, the home page settings now allow you to upload a social image.
-* Structured data markup has also been improved, like the inclusion of an alternative Sitename and fixes for Breadcrumb images.
-* The sitemap can now include the blog page. The lastmod value of which listens to multiple pages to automatically determines what's best.
-* Unfortunately, Twitter has removed support for photo cards. This update makes sure that the regarding settings correctly convert to the current format.
-
-**Only one week left for the earliest of early-bird discounts:**
-
-* With [The SEO Framework - Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/)'s release, a celebratory discount has been introduced.
-* If you wish to benefit from this lifetime discount, [visit the shop](https://premium.theseoframework.com/shop/) for more information.
-* More awesome extensions are coming soon!
-
-**Survey:**
-
-* After updating, please fill in our [Update Survey](https://theseoframework.com/?p=1781): tell us what you like or can be done better.
-
-**For everyone: Tabbed In-post SEO layout**
-
-* This release brings tabbed layout to the in-post SEO settings.
-* With this change I've also altered the overall looks, with the help from [Daniel](https://github.com/danielpost).
-* This layout allows extensions from the [Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/) to be implemented much easier.
-* This layout is self-responsive! This means it's not dependent on the browser size, but on how much content will fit.
-* Therefore, this layout allows the SEO settings to be placed in the right sidebar! Take a look at the [new screenshots](https://wordpress.org/plugins/autodescription/#screenshots).
-
-**For everyone: Browser support**
-
-* This release brings [CSS Flexbox](https://www.w3.org/TR/css-flexbox-1/) to the new in-post SEO settings meta box.
-* The flexbox module is still experimental, in a way that not all browsers correctly support this to the fullest extend.
-* However, support for as many browsers feasible has been implemented. Check out [the list](https://theseoframework.com/?p=1903#browser-support). Enjoy!
-* The gist is that Chrome, Firefox, IE10 and Safari 6 or later are supported.
-
-**SEO Tip of the Update - Trust in layout**
-
-* Is your website glitchy and has placeholder images, unmatched colors or weirdly contrasting borders all over the place?
-* Consider going for a more modern and clean layout. Strip out what isn't necessary. A clean layout implies professionalism and increases visitors' trust.
-* Even if you're just starting out with your website, remove all that could be but really isn't. Because if you leave in placeholders for the future, it implies amateurism.
-* People want their truth to be confirmed or their problems to be solved. If you can't confirm or solve the layout of your website, then they won't trust you to do so for their issues.
-* Simply put: It doesn't have to be perfect, it just must be done.
-
-**Detailed log:**
-
-* ***It is some miles, but [it will shorten your journey tomorrow](https://theseoframework.com/?p=1903#detailed).***
 
 = Full changelog =
 

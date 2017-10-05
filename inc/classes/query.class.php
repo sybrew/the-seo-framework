@@ -239,6 +239,18 @@ class Query extends Compat {
 	}
 
 	/**
+	 * Returns the current taxonomy, if any.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string The queried taxonomy type.
+	 */
+	public function get_current_taxonomy() {
+		$_object = \get_queried_object();
+		return ! empty( $_object->taxonomy ) ? $_object->taxonomy : '';
+	}
+
+	/**
 	 * Detects 404.
 	 *
 	 * @since 2.6.0

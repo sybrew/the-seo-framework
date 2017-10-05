@@ -650,7 +650,7 @@ class Generate_Ldjson extends Generate_Image {
 						'item'     => array(
 							'@id'  => $this->get_schema_url_id(
 								'breadcrumb',
-								'create_archival',
+								'create',
 								array( 'id' => $child_id, 'taxonomy' => $cat_type )
 							),
 							'name' => $this->escape_title( $cat_name ),
@@ -862,10 +862,6 @@ class Generate_Ldjson extends Generate_Image {
 
 			case 'create' :
 				$url = $this->create_canonical_url( $args );
-				break;
-
-			case 'create_archival' :
-				$url = $this->get_archival_canonical_url( $args['id'], $args['taxonomy'] );
 				break;
 
 			default :

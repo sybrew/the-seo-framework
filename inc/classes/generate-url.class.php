@@ -46,10 +46,9 @@ class Generate_Url extends Generate_Title {
 	 * @since 3.0.0
 	 *
 	 * @param array $args The canonical URL arguments : {
-	 *    int  $id               The Post, Page or Term ID to generate the URL for.
-	 *    bool $is_term          Whether the query type is a term. Can auto-determine current
-	 *                           loop's term. Otherwise, use $this->get_archival_canonical_url()
-	 *    bool $get_custom_field Whether to get custom canonical URLs from user settings.
+	 *    int    $id               The Post, Page or Term ID to generate the URL for.
+	 *    string $taxonomy         The taxonomy.
+	 *    bool   $get_custom_field Whether to get custom canonical URLs from user settings.
 	 * }
 	 * @return string The canonical URL, if any.
 	 */
@@ -57,7 +56,7 @@ class Generate_Url extends Generate_Title {
 
 		$defaults = array(
 			'id' => 0,
-			'is_term' => false,
+			'taxonomy' => '',
 			'get_custom_field' => false,
 		);
 		$args = array_merge( $defaults, $args );
@@ -77,21 +76,49 @@ class Generate_Url extends Generate_Title {
 
 		$this->the_seo_framework_debug && false === $this->doing_sitemap and $this->debug_init( __METHOD__, true, $debug_key = microtime( true ), get_defined_vars() );
 
-		if ( is_array( $args ) ) {
+		if ( $args ) {
 			//= See $this->create_canonical_url().
-			extract( $args );
-			$paginate = false;
+			$canonical_url = $this->build_canonical_url( $args );
+			$query = false;
 		} else {
-			$id = $this->get_the_real_ID();
-			$is_term = $this->is_archive();
-			$get_custom_field = true;
-			$paginate = true;
+			$canonical_url = $this->generate_canonical_url();
+			$query = true;
 		}
+
+		if ( ! $canonical_url )
+			return '';
+
+		if ( ! $query && $args['id'] === $this->get_the_real_ID() ) {
+			$canonical_url = $this->remove_pagination_from_url( $canonical_url );
+		}
+		if ( $this->matches_this_domain( $canonical_url ) ) {
+			$canonical_url = $this->set_preferred_url_scheme( $canonical_url );
+		}
+		$canonical_url = $this->clean_canonical_url( $canonical_url );
+
+		$this->the_seo_framework_debug && false === $this->doing_sitemap and $this->debug_init( __METHOD__, false, $debug_key, compact( 'canonical_url' ) );
+
+		return $canonical_url;
+	}
+
+	/**
+	 * Builds canonical URL from input arguments.
+	 *
+	 * @since 3.0.0
+	 * @see $this->create_canonical_url()
+	 *
+	 * @param array $args. Use $this->create_canonical_url().
+	 * @return string The canonical URL.
+	 */
+	protected function build_canonical_url( $args ) {
+
+		//* See $this->create_canonical_url().
+		extract( $args );
 
 		$canonical_url = '';
 
-		if ( $is_term ) {
-			$canonical_url = $this->get_archival_canonical_url( $id );
+		if ( $taxonomy ) {
+			$canonical_url = $this->get_taxonomial_canonical_url( $id, $taxonomy );
 		} else {
 			if ( $get_custom_field ) {
 				$canonical_url = $this->get_singular_custom_canonical_url( $id );
@@ -106,17 +133,48 @@ class Generate_Url extends Generate_Title {
 			}
 		}
 
-		if ( ! $canonical_url )
-			return '';
+		return $canonical_url;
+	}
 
-		if ( ! $paginate && $id === $this->get_the_real_ID() ) {
-			$canonical_url = $this->remove_pagination_from_url( $canonical_url );
+	/**
+	 * Generates canonical URL from current query.
+	 *
+	 * @since 3.0.0
+	 * @see $this->get_canonical_url()
+	 *
+	 * @return string The canonical URL.
+	 */
+	protected function generate_canonical_url() {
+
+		$id = $this->get_the_real_ID();
+		$canonical_url = '';
+
+		if ( $this->is_real_front_page() ) {
+			if ( $this->has_page_on_front() ) {
+				$canonical_url = $this->get_singular_custom_canonical_url( $id );
+			}
+			$canonical_url = $this->get_home_canonical_url();
+		} elseif ( $this->is_singular() ) {
+			$canonical_url = $this->get_singular_canonical_url( $id );
+		} elseif ( $this->is_archive() ) {
+			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
+				$canonical_url = $this->get_taxonomial_canonical_url( $id, $this->get_current_taxonomy() );
+			} elseif ( \is_post_type_archive() ) {
+				$canonical_url = $this->get_post_type_archive_canonical_url( $id );
+			} elseif ( $this->is_author() ) {
+				$canonical_url = $this->get_author_canonical_url( $id );
+			} elseif ( $this->is_date() ) {
+				if ( $this->is_day() ) {
+					$canonical_url = $this->get_date_canonical_url( \get_query_var( 'year' ), \get_query_var( 'monthnum' ), \get_query_var( 'day' ) );
+				} elseif ( $this->is_month() ) {
+					$canonical_url = $this->get_date_canonical_url( \get_query_var( 'year' ), \get_query_var( 'monthnum' ) );
+				} elseif ( $this->is_year() ) {
+					$canonical_url = $this->get_date_canonical_url( \get_query_var( 'year' ) );
+				}
+			}
+		} elseif ( $this->is_search() ) {
+			$canonical_url = $this->get_search_canonical_url();
 		}
-
-		$canonical_url = $this->set_preferred_url_scheme( $canonical_url );
-		$canonical_url = $this->clean_canonical_url( $canonical_url );
-
-		$this->the_seo_framework_debug && false === $this->doing_sitemap and $this->debug_init( __METHOD__, false, $debug_key, compact( 'canonical_url' ) );
 
 		return $canonical_url;
 	}
@@ -182,50 +240,181 @@ class Generate_Url extends Generate_Title {
 	 * Returns singular canonical URL.
 	 * Automatically adds pagination if the ID matches the query.
 	 *
+	 * Prevents SEO attacks regarding pagination.
+	 *
 	 * @since 3.0.0
 	 *
 	 * @param int|null $id The page ID.
 	 * @return string The custom canonical URL, if any.
 	 */
 	public function get_singular_canonical_url( $id = null ) {
-		return \wp_get_canonical_url( $id ) ?: '';
+
+		$canonical_url = \wp_get_canonical_url( $id );
+
+		if ( ! $canonical_url )
+			return '';
+
+		$_page = \get_query_var( 'page', 0 );
+		if ( $_page !== $this->page() ) {
+			$canonical_url = $this->remove_pagination_from_url( $canonical_url, $_page );
+		}
+
+		return $canonical_url;
 	}
 
 	/**
-	 * Returns archival canonical URL.
+	 * Returns taxonomial canonical URL.
 	 * Automatically adds pagination if the ID matches the query.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param int $term_id The term ID.
-	 * @param string|null $taxonomy The taxonomy. When null, the current loop must be archival.
-	 * @return string The custom canonical URL, if any.
+	 * @param string $taxonomy The taxonomy.
+	 * @return string The taxonomial canonical URL, if any.
 	 */
-	public function get_archival_canonical_url( $term_id, $taxonomy = null ) {
+	public function get_taxonomial_canonical_url( $term_id, $taxonomy ) {
 
-		if ( null === $taxonomy ) {
+		$link = \get_term_link( $term_id, $taxonomy );
+
+		if ( \is_wp_error( $link ) )
+			return '';
+
+		if ( $term_id === $this->get_the_real_ID() ) {
+			//= Adds pagination if ID matches query.
+			$link = $this->add_url_pagination( $link, $this->paged(), true );
+		}
+
+		return $link;
+	}
+
+	/**
+	 * Returns post type archive canonical URL.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int|string $post_type The post type archive ID or post type.
+	 * @return string The post type archive canonical URL, if any.
+	 */
+	public function get_post_type_archive_canonical_url( $post_type ) {
+
+		if ( is_int( $post_type ) ) {
+			$term_id = (int) $post_type;
 			$term = $this->fetch_the_term( $term_id );
+
 			if ( $term instanceof \WP_Post_Type ) {
 				$link = \get_post_type_archive_link( $term->name );
-			} else {
-				$link = \get_term_link( $term );
+
+				if ( $term_id === $this->get_the_real_ID() ) {
+					//= Adds pagination if ID matches query.
+					$link = $this->add_url_pagination( $link, $this->paged(), true );
+				}
 			}
 		} else {
-			$link = \get_term_link( $term_id, $taxonomy );
+			$link = \get_post_type_archive_link( $post_type );
 		}
 
-		if ( is_string( $link ) && $link ) {
-			//= It can be of type \WP_Error.
+		return $link ?: '';
+	}
 
-			if ( $term_id === $this->get_the_real_ID() ) {
-				//= Adds pagination if ID matches query.
-				$link = $this->add_url_pagination( $link, $this->paged(), true );
-			}
+	/**
+	 * Returns author canonical URL.
+	 * Automatically adds pagination if the ID matches the query.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int $author_id The author ID.
+	 * @return string The author canonical URL, if any.
+	 */
+	public function get_author_canonical_url( $author_id ) {
 
-			return $link;
+		$link = \get_author_posts_url( $author_id );
+
+		if ( ! $link )
+			return '';
+
+		if ( $author_id === $this->get_the_real_ID() ) {
+			//= Adds pagination if ID matches query.
+			$link = $this->add_url_pagination( $link, $this->paged(), true );
 		}
 
-		return '';
+		return $link;
+	}
+
+	/**
+	 * Returns date canonical URL.
+	 * Automatically adds pagination if the date input matches the query.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int $year  The year.
+	 * @param int $month The month.
+	 * @param int $day   The day.
+	 * @return string The author canonical URL, if any.
+	 */
+	public function get_date_canonical_url( $year, $month = null, $day = null ) {
+
+		if ( $day ) {
+			$link = \get_day_link( $year, $month, $day );
+			$_get = 'day';
+		} elseif ( $month ) {
+			$link = \get_month_link( $year, $month );
+			$_get = 'month';
+			$_get = 1;
+		} else {
+			$link = \get_year_link( $year );
+			$_get = 'year';
+		}
+
+		//* Determine whether the input matches query.
+		$_paginate = true;
+		switch ( $_get ) {
+			case 'day' :
+				$_day = \get_query_var( 'day' );
+				$_paginate = $_paginate && $_day == $day;
+				$_get = 'month';
+				// Continue switch.
+
+			case 'month' :
+				$_month = \get_query_var( 'monthnum' );
+				$_paginate = $_paginate && $_month == $month;
+				$_get = 'year';
+				// Continue switch.
+
+			case 'year' :
+				$_year = \get_query_var( 'year' );
+				$_paginate = $_paginate && $_year == $year;
+		}
+
+		if ( $_paginate ) {
+			//= Adds pagination if input matches query.
+			$link = $this->add_url_pagination( $link, $this->paged(), true );
+		}
+
+		return $link;
+	}
+
+	/**
+	 * Returns search canonical URL.
+	 * Automatically adds pagination if the input matches the query.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $query The search query. Mustn't be escaped.
+	 *                      When left empty, the current query will be used.
+	 * @return string The search link.
+	 */
+	public function get_search_canonical_url( $query = '' ) {
+
+		$_query = \get_search_query( false );
+		$query = $query ?: $_query;
+		$link = \get_search_link( $query );
+
+		if ( $_query === $query ) {
+			//= Adds pagination if input matches query.
+			$link = $this->add_url_pagination( $link, $this->paged(), true );
+		}
+
+		return $link;
 	}
 
 	/**
@@ -305,13 +494,14 @@ class Generate_Url extends Generate_Title {
 	 * WordPress core function, without filter.
 	 *
 	 * @since 2.4.2
+	 * @since 3.0.0 $use_filter now defaults to false.
 	 *
 	 * @param string $url Absolute url that includes a scheme.
 	 * @param string $scheme optional. Scheme to give $url. Currently 'http', 'https', 'login', 'login_post', 'admin', or 'relative'.
 	 * @param bool $use_filter Whether to parse filters.
 	 * @return string url with chosen scheme.
 	 */
-	public function set_url_scheme( $url, $scheme = null, $use_filter = true ) {
+	public function set_url_scheme( $url, $scheme = null, $use_filter = false ) {
 
 		if ( empty( $scheme ) ) {
 			$scheme = $this->is_ssl() ? 'https' : 'http';
@@ -433,10 +623,12 @@ class Generate_Url extends Generate_Title {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $url The fully qualified URL to remove pagination from.
+	 * @param string $url   The fully qualified URL to remove pagination from.
+	 * @param int    $page  The page number to remove. If empty, it will get query.
+	 * @param int    $paged The page number to remove. If empty, it will get query.
 	 * @return string $url The fully qualified URL without pagination.
 	 */
-	protected function remove_pagination_from_url( $url ) {
+	protected function remove_pagination_from_url( $url, $page = 0, $paged = 0 ) {
 
 		if ( $this->pretty_permalinks ) {
 			//* Defensive programming...
@@ -444,8 +636,8 @@ class Generate_Url extends Generate_Title {
 			$user_slash = isset( $user_slash ) ? $user_slash :
 				( $GLOBALS['wp_rewrite']->use_trailing_slashes ? '/' : '' );
 
-			$paged = $this->paged();
-			$page = $this->page();
+			$paged = $paged ?: $this->paged();
+			$page = $page ?: $this->page();
 			$find = '';
 
 			if ( $paged > 1 ) {
@@ -467,7 +659,7 @@ class Generate_Url extends Generate_Title {
 				}
 			}
 		} else {
-			$url = remove_query_args( array( 'page', 'paged', 'cpage' ), $url );
+			$url = \remove_query_args( array( 'page', 'paged', 'cpage' ), $url );
 		}
 
 		return $url;

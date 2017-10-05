@@ -517,6 +517,7 @@ class Generate_Image extends Generate_Url {
 	 *                2. Now adds ID call to OG image called listener.
 	 * @since 2.9.0 : Added $set_og_dimension parameter
 	 * @since 2.9.3 : 4k baby.
+	 * @since 3.0.0 : Now sets preferred canonical URL scheme.
 	 *
 	 * @todo create formula to fetch transient.
 	 * @priority high 2.7.0
@@ -525,7 +526,7 @@ class Generate_Image extends Generate_Url {
 	 * @param int $id The attachment ID.
 	 * @param array $args The image args
 	 * @param bool $set_og_dimensions Whether to set OG dimensions.
-	 * @return string|empty Parsed image url or empty if already called
+	 * @return string Parsed image url or empty if already called
 	 */
 	public function parse_og_image( $id, $args = array(), $set_og_dimensions = false ) {
 
@@ -608,6 +609,9 @@ class Generate_Image extends Generate_Url {
 			$this->image_dimensions = $this->image_dimensions + array( $usage_id => array( 'width' => $w, 'height' => $h ) );
 		}
 
+		if ( $i && $this->matches_this_domain( $i ) )
+			$i = $this->set_preferred_url_scheme( $i );
+
 		return $i;
 	}
 
@@ -615,6 +619,7 @@ class Generate_Image extends Generate_Url {
 	 * Fetches site icon brought in WordPress 4.3
 	 *
 	 * @since 2.8.0
+	 * @since 3.0.0 : Now sets preferred canonical URL scheme.
 	 *
 	 * @param string|int $size The icon size, accepts 'full' and pixel values.
 	 * @param bool $set_og_dimensions Whether to set size for OG image. Always falls back to the current post ID.
@@ -649,6 +654,9 @@ class Generate_Image extends Generate_Url {
 			$icon = \get_site_icon_url( $size );
 		}
 
+		if ( $icon && $this->matches_this_domain( $icon ) )
+			$icon = $this->set_preferred_url_scheme( $icon );
+
 		return $icon;
 	}
 
@@ -656,6 +664,7 @@ class Generate_Image extends Generate_Url {
 	 * Fetches site logo brought in WordPress 4.5
 	 *
 	 * @since 2.8.0
+	 * @since 3.0.0 : Now sets preferred canonical URL scheme.
 	 *
 	 * @param bool $set_og_dimensions Whether to set size for OG image. Always falls back to the current post ID.
 	 * @return string URL site logo, not escaped.
@@ -683,6 +692,9 @@ class Generate_Image extends Generate_Url {
 			}
 		}
 
+		if ( $logo && $this->matches_this_domain( $logo ) )
+			$logo = $this->set_preferred_url_scheme( $logo );
+
 		return $logo;
 	}
 
@@ -691,6 +703,7 @@ class Generate_Image extends Generate_Url {
 	 * Also sets image dimensions. Falls back to current post ID for index.
 	 *
 	 * @since 2.7.0
+	 * @since 3.0.0 : Now sets preferred canonical URL scheme.
 	 *
 	 * @param bool $set_og_dimensions Whether to set size for OG image. Always falls back to the current post ID.
 	 * @return string The header image URL, not escaped.
@@ -707,6 +720,9 @@ class Generate_Image extends Generate_Url {
 			if ( $w && $h )
 				$this->image_dimensions = $this->image_dimensions + array( $this->get_the_real_ID() => array( 'width' => $w, 'height' => $h ) );
 		}
+
+		if ( $image && $this->matches_this_domain( $image ) )
+			$image = $this->set_preferred_url_scheme( $image );
 
 		return $image;
 	}

@@ -16,7 +16,9 @@ function _wpforo_fix_page() {
 
 	if ( function_exists( '\\is_wpforo_page' ) && \is_wpforo_page() ) {
 		\add_filter( 'the_seo_framework_pre_add_title', __NAMESPACE__ . '\\_wpforo_filter_pre_title', 10, 3 );
-		\add_filter( 'the_seo_framework_url_path', __NAMESPACE__ . '\\_wpforo_filter_url_path', 10, 3 );
+		\add_filter( 'get_canonical_url', function( $canonical_url, $post ) {
+			return \wpforo_get_request_uri();
+		} );
 		\add_filter( 'the_seo_framework_description_args', __NAMESPACE__ . '\\_wpforo_filter_description_arguments', 10, 3 );
 
 		//* Remove wpforo SEO meta output.
@@ -38,28 +40,6 @@ function _wpforo_fix_page() {
 function _wpforo_filter_pre_title( $title, $args, $escape ) {
 	$wpforo_title = \wpforo_meta_title( '' );
 	return $wpforo_title[0] ?: $title;
-}
-
-/**
- * Fixes wpForo page URL paths.
- *
- * @since 2.9.2
- * @access private
- *
- * @param string $path The current path.
- * @param int $id The page/post ID.
- * @param bool $external Whether the request is external (i.e. sitemap)
- * @return string The URL path.
- */
-function _wpforo_filter_url_path( $path, $id, $external ) {
-
-	if ( $external )
-		return $path;
-
-	if ( '' === \the_seo_framework()->permalink_structure() )
-		return $path;
-
-	return \the_seo_framework()->set_url_scheme( \wpforo_get_request_uri(), 'relative' );
 }
 
 /**
