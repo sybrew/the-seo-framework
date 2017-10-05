@@ -1131,29 +1131,13 @@ class Render extends Admin_Init {
 		if ( isset( $cache ) )
 			return $cache;
 
-		if ( false === $this->is_singular() )
+		if ( false === $this->is_single() )
 			return $cache = false;
 
-		switch ( $this->get_og_type() ) {
-			case 'product' :
-			case 'website' :
-				return $cache = false;
+		if ( 'article' !== $this->get_og_type() )
+			return $cache = false;
 
-			default :
-				;
-		}
-
-		if ( $this->is_real_front_page() ) {
-			//* If it's the frontpage, but the option is disabled, return false.
-			if ( ! $this->get_option( 'home_modify_time' ) )
-				return $cache = false;
-		} else {
-			//* If it's a post, but the option is disabled, return false.
-			if ( $this->is_single() && ! $this->get_option( 'post_modify_time' ) )
-				return $cache = false;
-		}
-
-		return $cache = true;
+		return $cache = (bool) $this->get_option( 'post_modify_time' );
 	}
 
 	/**
@@ -1171,29 +1155,13 @@ class Render extends Admin_Init {
 		if ( isset( $cache ) )
 			return $cache;
 
-		if ( false === $this->is_singular() )
+		if ( false === $this->is_single() )
 			return $cache = false;
 
-		switch ( $this->get_og_type() ) {
-			case 'product' :
-			case 'website' :
-				return $cache = false;
+		if ( 'article' !== $this->get_og_type() )
+			return $cache = false;
 
-			default :
-				;
-		}
-
-		if ( $this->is_real_front_page() ) {
-			//* If it's the frontpage, but the option is disabled, return false.
-			if ( ! $this->get_option( 'home_publish_time' ) )
-				return $cache = false;
-		} else {
-			//* If it's a post, but the option is disabled, return false.
-			if ( $this->is_single() && ! $this->get_option( 'post_publish_time' ) )
-				return $cache = false;
-		}
-
-		return $cache = true;
+		return $cache = (bool) $this->get_option( 'post_publish_time' );
 	}
 
 	/**

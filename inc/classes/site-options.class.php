@@ -204,9 +204,6 @@ class Site_Options extends Sanitize {
 			'post_publish_time' => 1, // Article Published Time
 			'post_modify_time'  => 1, // Article Modified Time
 
-			'home_publish_time' => 0, // Article Modified Time
-			'home_modify_time'  => 0, // Article Modified Time
-
 			// Twitter.
 			'twitter_card'    => 'summary_large_image', // Twitter Card layout. If no twitter:image image is found, it'll change to 'summary', radio
 			'twitter_site'    => '', // Twitter business @username

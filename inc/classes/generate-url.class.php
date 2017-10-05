@@ -150,12 +150,14 @@ class Generate_Url extends Generate_Title {
 		$canonical_url = '';
 
 		if ( $this->is_real_front_page() ) {
-			if ( $this->has_page_on_front() ) {
+			if ( $this->has_page_on_front() )
 				$canonical_url = $this->get_singular_custom_canonical_url( $id );
-			}
-			$canonical_url = $this->get_home_canonical_url();
+			if ( ! $canonical_url )
+				$canonical_url = $this->get_home_canonical_url();
 		} elseif ( $this->is_singular() ) {
-			$canonical_url = $this->get_singular_canonical_url( $id );
+			$canonical_url = $this->get_singular_custom_canonical_url( $id );
+			if ( ! $canonical_url )
+				$canonical_url = $this->get_singular_canonical_url( $id );
 		} elseif ( $this->is_archive() ) {
 			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
 				$canonical_url = $this->get_taxonomial_canonical_url( $id, $this->get_current_taxonomy() );
@@ -254,6 +256,7 @@ class Generate_Url extends Generate_Title {
 		if ( ! $canonical_url )
 			return '';
 
+		//* @link https://core.trac.wordpress.org/ticket/37505
 		$_page = \get_query_var( 'page', 0 );
 		if ( $_page !== $this->page() ) {
 			$canonical_url = $this->remove_pagination_from_url( $canonical_url, $_page );

@@ -245,12 +245,19 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Sitemap's `lastmod` output.
 			* Article published and modified time.
 			* Open Graph updated time.
+		/
+		* TODO Primary category settings have been added to each post.
+		* TODO Logo upload has been added for Open Graph.
+			* Current customizer logo settings are still (too) theme-specific.
+			* The output will still fall back to the customizer logo when not set.
 	* **Changed:**
 		* Schema breadcrumbs now have their IDs reset. They have an URL fragment attached (e.g. `example.com/#schemaorg-bcl`).
 			* This is to prevent ID collision with generated scripts from other plugins, like WooCommerce 3.0+.
 			* This might affect search presence of the pages until the new IDs have been processed by the search engine, like Google and Bing.
 		* The sitemap `lastmod` option no longer listens to Post Dates settings. But now only to its own specific setting.
 		* Default link back to source in feed content no longer check settings. Instead, it uses the default WordPress permalink.
+		/
+		* TODO Only one breadcrumb script is now generated, and it listens to the new primary category settings.
 	* **Improved:**
 		* Sped up URL generation two-fold. We've rewritten the code from the ground up.
 		* The Canonical URL should now always be compatible with any plugin, out of the box.
@@ -268,14 +275,15 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Removed:**
 		* `noodp` and all its settings. The DMOZ project that it influenced is no longer available nor used.
 		* `page_publish_time` and all its settings. The Open Graph protocol no longer allows `article:published_time` on `website` types.
+		* `home_publish_time` and all its settings. The Open Graph protocol no longer allows `article:published_time` on `website` types.
 		* `page_modify_time` and all its settings. The Open Graph protocol no longer allows `article:modified_time` on `website` types.
-		/
-		* TODO check `home_modify_time` and `home_publish_time` in regards to "blog" type. See above 2 lines.
+		* `home_modify_time` and all its settings. The Open Graph protocol no longer allows `article:modified_time` on `website` types.
+		* Open graph type `blog`. It's no longer supported.
 		* Sitemaps timestamp format option. It will be converted to the new global timestamp format option upon upgrade.
-		* Polylang URL enhancements and compatibility file. It now works without them.
+		* Polylang URL compatibility file. It now works without it.
 		* WPML URL enhancements. It now works without these.
-		* qTranslate X URL enhancements and compatibility file. It now works without them.
-		* Donncha Domain Mapping URL generation enhancements and compatibility file. They're no longer needed.
+		* qTranslate X URL compatibility file. It now works without it.
+		* Donncha Domain Mapping URL compatibility file. Be sure to set a preferred canonical scheme.
 		* WPMUdev Mapping URL generation enhancements and compatibility file. Be sure to set a preferred canonical scheme.
 	* **Fixed:**
 		/
@@ -347,8 +355,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Removed:**
 		* "It's recommended on posts, but it's not recommended on pages unless you modify or create new pages frequently."
 			* No longer applicable.
-		/
-		* TODO? also inaccurate! "Because you only publish the Home Page once, Search Engines might think your website is outdated. This can be prevented by disabling the following options".
+		* "Because you only publish the Home Page once, Search Engines might think your website is outdated. This can be prevented by disabling the following options".
+			* Inaccurate: Search Engines don't use this, at all. They use Structured Data.
+			* Removed: This data wasn't allowed in the first place.
 
 * **For developers:**
 	* **Added:**

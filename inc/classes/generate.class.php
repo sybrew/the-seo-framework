@@ -312,8 +312,6 @@ class Generate extends User_Data {
 			$type = 'article';
 		} elseif ( $this->is_author() ) {
 			$type = 'profile';
-		} elseif ( $this->is_blog_page() || ( $this->is_real_front_page() && ! $this->has_page_on_front() ) ) {
-			$type = 'blog';
 		} else {
 			$type = 'website';
 		}

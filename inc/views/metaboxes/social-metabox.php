@@ -309,24 +309,6 @@ switch ( $instance ) :
 
 		//* Echo checkboxes.
 		$this->wrap_fields( $post_publish_time_checkbox . $post_modify_time_checkbox, true );
-
-		?>
-		<hr>
-
-		<h4><?php esc_html_e( 'Home Page', 'autodescription' ); ?></h4>
-		<?php
-		$this->description( __( 'Because you only publish the Home Page once, Search Engines might think your website is outdated. This can be prevented by disabling the following options.', 'autodescription' ) );
-
-		/* translators: 1: Option, 2: Post Type */
-		$home_publish_time_label = sprintf( esc_html__( 'Add %1$s to %2$s?', 'autodescription' ), $this->code_wrap( 'article:published_time' ), $home_i18n );
-		$home_publish_time_checkbox = $this->make_checkbox( 'home_publish_time', $home_publish_time_label, '', false );
-
-		/* translators: 1: Option, 2: Post Type */
-		$home_modify_time_label = sprintf( esc_html__( 'Add %1$s to %2$s?', 'autodescription' ), $this->code_wrap( 'article:modified_time' ), $home_i18n );
-		$home_modify_time_checkbox = $this->make_checkbox( 'home_modify_time', $home_modify_time_label, '', false );
-
-		//* Echo checkboxes.
-		$this->wrap_fields( $home_publish_time_checkbox . $home_modify_time_checkbox, true );
 		break;
 
 	default :
