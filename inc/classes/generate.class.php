@@ -121,12 +121,14 @@ class Generate extends User_Data {
 				$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'date_noindex' ) ? 'noindex' : $meta['noindex'];
 				$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'date_nofollow' ) ? 'nofollow' : $meta['nofollow'];
 				$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'date_noarchive' ) ? 'noarchive' : $meta['noarchive'];
-			} elseif ( $this->is_search() ) {
-				$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'search_noindex' ) ? 'noindex' : $meta['noindex'];
-				$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'search_nofollow' ) ? 'nofollow' : $meta['nofollow'];
-				$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'search_noarchive' ) ? 'noarchive' : $meta['noarchive'];
 			}
 		endif;
+
+		if ( $this->is_search() ) {
+			$meta['noindex']   = empty( $meta['noindex'] ) && $this->is_option_checked( 'search_noindex' ) ? 'noindex' : $meta['noindex'];
+			$meta['nofollow']  = empty( $meta['nofollow'] ) && $this->is_option_checked( 'search_nofollow' ) ? 'nofollow' : $meta['nofollow'];
+			$meta['noarchive'] = empty( $meta['noarchive'] ) && $this->is_option_checked( 'search_noarchive' ) ? 'noarchive' : $meta['noarchive'];
+		}
 
 		if ( $this->is_singular() ) {
 			$meta['noindex']   = empty( $meta['noindex'] ) && $this->get_custom_field( '_genesis_noindex' ) ? 'noindex' : $meta['noindex'];

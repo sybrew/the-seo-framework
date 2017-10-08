@@ -1131,9 +1131,6 @@ class Render extends Admin_Init {
 		if ( isset( $cache ) )
 			return $cache;
 
-		if ( false === $this->is_single() )
-			return $cache = false;
-
 		if ( 'article' !== $this->get_og_type() )
 			return $cache = false;
 
@@ -1154,9 +1151,6 @@ class Render extends Admin_Init {
 
 		if ( isset( $cache ) )
 			return $cache;
-
-		if ( false === $this->is_single() )
-			return $cache = false;
 
 		if ( 'article' !== $this->get_og_type() )
 			return $cache = false;
