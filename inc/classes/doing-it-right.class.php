@@ -512,21 +512,22 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * Outputs a part of the SEO Bar based on parameters.
 	 *
 	 * @since 2.6.0
+	 * @since 3.0.0 Now uses spans instead of a's
 	 *
 	 * @param array $args : {
-	 *		string $indicator
-	 *		string $notice
-	 *		string $width
-	 *		string $class
+	 *    string $indicator
+	 *    string $notice
+	 *    string $width
+	 *    string $class
 	 * }
 	 * @return string The SEO Bar block part.
 	 */
 	protected function wrap_the_seo_bar_block( $args ) {
 
 		$wrap 	= '<span class="tsf-seo-bar-section-wrap ' . $args['width'] . '">'
-					. '<a onclick="return false;" class="' . $args['class'] . '" aria-label="' . $args['notice'] . '" data-desc="' . $args['notice'] . '">'
+					. '<span class="tsf-seo-bar-item ' . $args['class'] . '" aria-label="' . $args['notice'] . '" data-desc="' . $args['notice'] . '">'
 						. $args['indicator']
-					. '</a>'
+					. '</span>'
 				. '</span>'
 				;
 

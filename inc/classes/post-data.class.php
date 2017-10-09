@@ -113,6 +113,7 @@ class Post_Data extends Detect {
 			'_genesis_noarchive'     => 0,
 			'exclude_local_search'   => 0, // Will be displayed in custom fields when set...
 			'exclude_from_archive'   => 0, // Will be displayed in custom fields when set...
+			'_default_category'      => 0,
 		) );
 
 		foreach ( (array) $data as $key => $value ) :
@@ -144,6 +145,9 @@ class Post_Data extends Detect {
 					//* Let's keep this as the output really is.
 					$data[ $key ] = $this->s_redirect_url( $value );
 					continue 2;
+
+				case '_default_category' :
+					$data[ $key ] = \absint( $value );
 
 				case '_genesis_noindex' :
 				case '_genesis_nofollow' :

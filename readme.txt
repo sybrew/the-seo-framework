@@ -266,6 +266,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* When TSF's database needs upgrading, it now requires fewer database calls.
 		* After-upgrade notifications now have "SEO: " prefixed.
 		* Facebook and Twitter Social Meta Settings input now show initial placeholders when emptied.
+		* Sped up admin JavaScript initialization by combining jQuery overhead calls.
 		* In-post SEO box active tab's shadow now has the same color as the used admin button color scheme.
 			/
 			* TODO test RTL.
