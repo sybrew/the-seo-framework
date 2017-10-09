@@ -1,0 +1,6 @@
+# Set text to auto. So synchronization won't mess things up.
+* text=auto
+
+.gitattributes export-ignore
+.editorconfig export-ignore
+README.md export-ignore
