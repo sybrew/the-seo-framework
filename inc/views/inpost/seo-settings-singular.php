@@ -137,7 +137,6 @@ switch ( $instance ) :
 			</div>
 		</div>
 
-
 		<div class="tsf-flex-setting tsf-flex">
 			<div class="tsf-flex-setting-label tsf-flex">
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">

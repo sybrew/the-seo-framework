@@ -476,7 +476,12 @@ class Inpost extends Profile {
 		 */
 		if ( $is_static_frontpage ) {
 			if ( $this->get_option( 'homepage_tagline' ) ) {
-				$tit_len_pre = $title ? $title . ' | ' . $this->get_blogdescription() : $generated_doctitle;
+				$_blogdescription = $this->get_blogdescription();
+				if ( $_blogdescription ) {
+					$tit_len_pre = $title ? $title . ' | ' . $_blogdescription : $generated_doctitle;
+				} else {
+					$tit_len_pre = $title ? $title : $generated_doctitle;
+				}
 			} else {
 				$tit_len_pre = $title ?: $generated_doctitle;
 			}

@@ -232,6 +232,7 @@ class Generate extends User_Data {
 	 * Fetch blog description.
 	 *
 	 * @since 2.5.2
+	 * @since 3.0.0 No longer returns untitled when empty, instead, it just returns an empty string.
 	 * @staticvar string $description
 	 *
 	 * @return string $blogname The trimmed and sanitized blog description.
@@ -245,7 +246,7 @@ class Generate extends User_Data {
 
 		$description = trim( \get_bloginfo( 'description', 'display' ) );
 
-		return $description = $description ?: $this->untitled();
+		return $description = $description ?: '';
 	}
 
 	/**

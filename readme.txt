@@ -256,6 +256,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* This might affect search presence of the pages until the new IDs have been processed by the search engine, like Google and Bing.
 		* The sitemap `lastmod` option no longer listens to Post Dates settings. But now only to its own specific setting.
 		* Default link back to source in feed content no longer check settings. Instead, it uses the default WordPress permalink.
+		* When no blog tagline is set, in either WordPress' General Settings or in TSF's Home Page settings, no longer is "Untitled" used.
 		/
 		* TODO Only one breadcrumb script is now generated, and it listens to the new primary category settings.
 	* **Improved:**
@@ -267,6 +268,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* After-upgrade notifications now have "SEO: " prefixed.
 		* Facebook and Twitter Social Meta Settings input now show initial placeholders when emptied.
 		* Sped up admin JavaScript initialization by combining jQuery overhead calls.
+		* Refactored "floating title placeholder"'s code, this means it no longer "glues" every part together based on assumption to perform calculations and placements.
+			/
+			* This made way for new features, it improved performance, and it lowered overall lower maintenance cost.
+			* TODO test RTL.
 		* In-post SEO box active tab's shadow now has the same color as the used admin button color scheme.
 			/
 			* TODO test RTL.
@@ -274,18 +279,27 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			/
 			* TODO RTL.
 	* **Removed:**
-		* `noodp` and all its settings. The DMOZ project that it influenced is no longer available nor used.
-		* `page_publish_time` and all its settings. The Open Graph protocol no longer allows `article:published_time` on `website` types.
-		* `home_publish_time` and all its settings. The Open Graph protocol no longer allows `article:published_time` on `website` types.
-		* `page_modify_time` and all its settings. The Open Graph protocol no longer allows `article:modified_time` on `website` types.
-		* `home_modify_time` and all its settings. The Open Graph protocol no longer allows `article:modified_time` on `website` types.
-		* Open graph type `blog`. It's no longer supported.
+		* The DMOZ project that it influenced is no longer available nor used, so:
+			* `noodp` and all its settings.
+		* The Open Graph protocol no longer allows `article:published_time` on `website` types, so:
+			* `page_publish_time` and all its settings.
+			* `home_publish_time` and all its settings.
+		*  The Open Graph protocol no longer allows `article:modified_time` on `website` types, so:
+			* `page_modify_time` and all its settings.
+			* `home_modify_time` and all its settings.
+		* Open graph type `blog`. It's no longer supported. `website` is used instead.
 		* Sitemaps timestamp format option. It will be converted to the new global timestamp format option upon upgrade.
 		* Polylang URL compatibility file. It now works without it.
 		* WPML URL enhancements. It now works without these.
 		* qTranslate X URL compatibility file. It now works without it.
 		* Donncha Domain Mapping URL compatibility file. Be sure to set a preferred canonical scheme.
 		* WPMUdev Mapping URL generation enhancements and compatibility file. Be sure to set a preferred canonical scheme.
+		* The following browsers are no longer supported:
+			* Internet explorer 10 and below.
+			* Safari 10 and below.
+			* All on iOS 9 and below.
+			* Chrome 53 and below.
+			* Firefox 48 and below.
 	* **Fixed:**
 		/
 		* XSL stylesheet no longer prepends query arguments, but instead appends them. This fixes, for example, issues when using WPML query string parameters.
@@ -412,6 +426,33 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* When using filter `the_seo_framework_settings_capability`, the set capability can now save SEO settings too.
 		* TODO check why this is happening: https://wordpress.org/support/topic/sitemap-55/
 		* Method `get_user_option()` no longer caches default input value.
+	* **Javascript notes:**
+		* **Removed methods and properties, `window.tsf.{}`:**
+			* Title related:
+				* `titleTagline` (property)
+				* `_initTitlepropListener`
+				* `selectTitleInput`
+				* `dynamicPlaceholder`
+				* `titleToggle`
+				* `titleProp`
+				* `taglineProp`
+				* `taglinePropTrigger`
+				* `taglinePropTriggerResize`
+				* `titlePrefixToggle`
+				* `titleLocationToggle`
+				* `taglineToggleDesc`
+				* `taglineToggleTitle`
+				* `taglineToggleOnload`
+				* `updateCharacterCountTitle`
+				* `triggerTitleOnLoad`
+				* `separatorSwitchTitle`
+				* `docTitles`
+			* Tooltip related:
+				* `statusBarHover`
+				* `statusBarHoverEnter`
+				* `statusBarHoverMove`
+				* `statusBarHoverLeave`
+				* `touchRemoveDesc`
 	* **Filter notes:**
 		* **Added:**
 			* `the_seo_framework_admin_color_css`, used to adjust admin-color conforming colors.
