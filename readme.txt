@@ -250,6 +250,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* TODO Logo upload has been added for Open Graph.
 			* Current customizer logo settings are still (too) theme-specific.
 			* The output will still fall back to the customizer logo when not set.
+		* SEO title placeholders and counters now update when:
+		 	* Changing post visibility (private, protected, public).
+			* Changing the page title.
+			* Note that the example is not a perfect analogy. Sanitation is a complex process and sending it back-and-forth through AJAX can be heavy on the server.
 	* **Changed:**
 		* Schema breadcrumbs now have their IDs reset. They have an URL fragment attached (e.g. `example.com/#schemaorg-bcl`).
 			* This is to prevent ID collision with generated scripts from other plugins, like WooCommerce 3.0+.
@@ -268,6 +272,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* After-upgrade notifications now have "SEO: " prefixed.
 		* Facebook and Twitter Social Meta Settings input now show initial placeholders when emptied.
 		* Sped up admin JavaScript initialization by combining jQuery overhead calls.
+		* "Floating title placeholders" now move smoother on resize.
+		* The counter type update buttons on taxonomial edit screens no longer stretch to the adjacent input length.
 		* Refactored "floating title placeholder"'s code, this means it no longer "glues" every part together based on assumption to perform calculations and placements.
 			/
 			* This made way for new features, it improved performance, and it lowered overall lower maintenance cost.
@@ -294,12 +300,15 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* qTranslate X URL compatibility file. It now works without it.
 		* Donncha Domain Mapping URL compatibility file. Be sure to set a preferred canonical scheme.
 		* WPMUdev Mapping URL generation enhancements and compatibility file. Be sure to set a preferred canonical scheme.
-		* The following browsers are no longer supported:
+		* The following browsers are no longer supported, and your admin experience might be degraded using them:
+			/
+			* TODO confirm this list, this is based on assumptions.
 			* Internet explorer 10 and below.
-			* Safari 10 and below.
-			* All on iOS 9 and below.
+			* Safari 9 and below.
+			* All browsers on iOS 9 and below.
 			* Chrome 53 and below.
 			* Firefox 48 and below.
+			* NOTE: This only accounts for the WordPress administrative dashboard. This change doesn't affect your website visitors.
 	* **Fixed:**
 		/
 		* XSL stylesheet no longer prepends query arguments, but instead appends them. This fixes, for example, issues when using WPML query string parameters.
@@ -311,8 +320,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* [NextScripts Snap](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) is no longer detected as a conflicting Open Graph plugin, they now inform you about this.
 		* TODO Odd database call on front-end looking for image... while custom is set...?
 		* When an empty description is supplied, the counter will now display `0` instead of nothing.
-		* TODO Tapping tooltips on Edge no longer makes them go away instantly. MSPointer + Click events clash? => Set buffer??
-		* TODO When latest post is protect or private, no description could've been generated on the blogpage (and other archives?).
+		* Tapping tooltips in Edge no longer makes them go away instantly.
+		* TODO When latest post is protect or private, no description could've been generated on the blog page (and other archives?).
 		* TODO - New bug: Homepage as blog's paginated canonical URL no longer points to the first page.
 		* TODO Separator selection description no longer overflows on EdgeHTML.
 
@@ -329,6 +338,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* "Authors can override this option on their profile page."
 			* Location: SEO Settings -> Social Meta Box -> Twitter Tab
 			* Location: SEO Settings -> Social Meta Box -> Facebook Tab
+		* "Private:"
+			* Location: Private page title placeholder. Shown in the custom SEO title edit input field.
+		* "Protected:"
+			* Location: Password protected page title placeholder. Shown in the custom SEO title edit input field.
 	* **Changed:**
 		* "The Open Directory Project and the Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave these options checked."
 			* Now is: "The Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave the option checked."
@@ -390,6 +403,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* All plugin files required (aside from WordPress files) no longer check for `_once`.
 			* This saves resources, but can invoke fatal errors when you use TSF's private loader functions outside of TSF's bound API.
 		* Deprecated filter `the_seo_framework_canonical_force_scheme` (deprecated in 2.8.0) is no longer called by default.
+		* Method `use_archive_prefix` no longer uses the second `$args` parameter, and it no longer checks for the title state.
 	* **Improved:**
 		* Plugin (de)activation functions are no created when the plugin isn't being (de)activated.
 			* Instead, they've been moved in `inc/functions/plugin-(de)activation.php` and run directly as the files are called.
@@ -427,32 +441,50 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* TODO check why this is happening: https://wordpress.org/support/topic/sitemap-55/
 		* Method `get_user_option()` no longer caches default input value.
 	* **Javascript notes:**
-		* **Removed methods and properties, `window.tsf.{}`:**
-			* Title related:
-				* `titleTagline` (property)
-				* `_initTitlepropListener`
-				* `selectTitleInput`
-				* `dynamicPlaceholder`
-				* `titleToggle`
-				* `titleProp`
-				* `taglineProp`
-				* `taglinePropTrigger`
-				* `taglinePropTriggerResize`
-				* `titlePrefixToggle`
-				* `titleLocationToggle`
-				* `taglineToggleDesc`
-				* `taglineToggleTitle`
-				* `taglineToggleOnload`
-				* `updateCharacterCountTitle`
-				* `triggerTitleOnLoad`
-				* `separatorSwitchTitle`
-				* `docTitles`
-			* Tooltip related:
-				* `statusBarHover`
-				* `statusBarHoverEnter`
-				* `statusBarHoverMove`
-				* `statusBarHoverLeave`
-				* `touchRemoveDesc`
+		* **Reworked:**
+			* Title rendering: They're now contained within a single state holder, lowering CPU usage.
+			* Tooltips: They're now contained within a single state holder, lowering memory footprint.
+		* **Trigger notes:**
+			* **Added:**
+				* `tsf-counter-updated`, triggers after the counter state has been updated, before it's sent through AJAX.
+				* `tsf-update-title-counter`, manual trigger to update the title counters. Used internally.
+		* **Removed:**
+			* **Methods and properties, `window.tsf.{}`:**
+				* Title related:
+					* string `titleTagline` (property)
+					* `_initTitlepropListener`
+					* `selectTitleInput`
+					* `dynamicPlaceholder`
+					* `titleToggle`
+					* `titleProp`
+					* `taglineProp`
+					* `taglinePropTrigger`
+					* `taglinePropTriggerResize`
+					* `titlePrefixToggle`
+					* `titleLocationToggle`
+					* `taglineToggleDesc`
+					* `taglineToggleTitle`
+					* `taglineToggleOnload`
+					* `updateCharacterCountTitle`
+					* `triggerTitleOnLoad`
+					* `separatorSwitchTitle`
+					* `docTitles`
+				* Description related:
+					* `triggerDescriptionOnLoad`
+				* Tooltip related:
+					* `statusBarHover`
+					* `statusBarHoverEnter`
+					* `statusBarHoverMove`
+					* `statusBarHoverLeave`
+					* `touchRemoveDesc`
+				* Counter related:
+					* `updateCounters`
+					* `additionsClassInit`
+				* Other:
+					* string `nonce` (property), use object `nonces` instead.
+			* **State values, `window.tsfL10n.{}`:**
+				* `params.siteTitle`, use `params.objectTitle` instead.
+				* `states.titleTagline`, use `states.useTagline` instead.
 	* **Filter notes:**
 		* **Added:**
 			* `the_seo_framework_admin_color_css`, used to adjust admin-color conforming colors.

@@ -799,4 +799,17 @@ class Admin_Pages extends Inpost {
 
 		return $content;
 	}
+
+	/**
+	 * Outputs floating title HTML for JavaScript.
+	 *
+	 * @since 3.0.0
+	 */
+	public function output_floating_title_html() {
+		?>
+		<span id="tsf-title-offset" class="hide-if-no-js"></span>
+		<span id="tsf-title-placeholder" class="hide-if-no-js"></span>
+		<span id="tsf-title-placeholder-prefix" class="hide-if-no-js"></span>
+		<?php
+	}
 }

@@ -202,6 +202,8 @@ class Admin_Init extends Init {
 	/**
 	 * Generate Javascript Localization.
 	 *
+	 * @TODO rewrite, it's slow and a mess.
+	 *
 	 * @since 2.6.0
 	 * @staticvar array $strings : The l10n strings.
 	 * @since 2.7.0 Added AJAX nonce: 'autodescription-ajax-nonce'
@@ -215,98 +217,81 @@ class Admin_Init extends Init {
 	 */
 	protected function get_javascript_l10n() {
 
+		$id = $this->get_the_real_ID();
 		$blog_name = $this->get_blogname();
 		$description = $this->get_blogdescription();
-		$title = '';
+		$object_title = '';
 		$additions = '';
 
-		$tagline = (bool) $this->get_option( 'homepage_tagline' );
+		$use_additions = (bool) $this->get_option( 'homepage_tagline' );
 		$home_tagline = $this->get_option( 'homepage_title_tagline' );
 		$title_location = $this->get_option( 'title_location' );
 		$title_add_additions = $this->add_title_additions();
 		$counter_type = (int) $this->get_user_option( 0, 'counter_type', 3 );
 
-		//* Enunciate the lenghts of Titles and Descriptions.
-		$good = \__( 'Good', 'autodescription' );
-		$okay = \__( 'Okay', 'autodescription' );
-		$bad = \__( 'Bad', 'autodescription' );
-		$unknown = \__( 'Unknown', 'autodescription' );
-
 		$title_separator = $this->get_separator( 'title' );
 		$description_separator = $this->get_separator( 'description' );
 
 		$ishome = false;
+		$is_settings_page = $this->is_seo_settings_page();
+		$is_post_edit = $this->is_post_edit();
+		$is_term_edit = $this->is_term_edit();
+		$has_input = $is_settings_page || $is_post_edit || $is_term_edit;
 
 		if ( isset( $this->page_base_file ) && $this->page_base_file ) {
 			// We're somewhere within default WordPress pages.
-			$post_id = $this->get_the_real_ID();
-
-			if ( $this->is_static_frontpage( $post_id ) ) {
-				$title = $blog_name;
+			if ( $this->is_static_frontpage( $id ) ) {
+				$object_title = $blog_name;
 				$title_location = $this->get_option( 'home_title_location' );
 				$ishome = true;
 
-				if ( $tagline ) {
+				if ( $use_additions ) {
 					$additions = $home_tagline ? $home_tagline : $description;
 				} else {
 					$additions = '';
 				}
-			} elseif ( $post_id ) {
+			} elseif ( $is_post_edit ) {
 				//* We're on post.php
 				$generated_doctitle_args = array(
-					'term_id' => $post_id,
+					'term_id' => $id,
 					'notagline' => true,
 					'get_custom_field' => false,
 				);
 
-				$title = $this->title( '', '', '', $generated_doctitle_args );
+				$object_title = $this->title( '', '', '', $generated_doctitle_args );
 
 				if ( $title_add_additions ) {
 					$additions = $blog_name;
-					$tagline = true;
+					$use_additions = true;
 				} else {
 					$additions = '';
-					$tagline = false;
+					$use_additions = false;
 				}
-			} elseif ( $this->is_archive() ) {
+			} elseif ( $is_term_edit ) {
 				//* Category or Tag.
-				if ( isset( $GLOBALS['current_screen']->taxonomy ) ) {
-
-					$term_id = $this->get_admin_term_id();
-
-					if ( $term_id ) {
-						$generated_doctitle_args = array(
-							'term_id' => $term_id,
-							'taxonomy' => $GLOBALS['current_screen']->taxonomy,
-							'notagline' => true,
-							'get_custom_field' => false,
-						);
-
-						$title = $this->title( '', '', '', $generated_doctitle_args );
-						$additions = $title_add_additions ? $blog_name : '';
-					}
+				if ( isset( $GLOBALS['current_screen']->taxonomy ) && $id ) {
+					$object_title = $this->single_term_title( '', false, $this->fetch_the_term( $id ) );
+					$additions = $title_add_additions ? $blog_name : '';
 				}
 			} else {
 				//* We're in a special place.
 				// Can't fetch title.
-				$title = '';
+				$object_title = '';
 				$additions = $title_add_additions ? $blog_name : '';
 			}
-		} else {
+		} elseif ( $is_settings_page ) {
 			// We're on our SEO settings pages.
 			if ( $this->has_page_on_front() ) {
 				// Home is a page.
-				$inpost_title = $this->get_custom_field( '_genesis_title', \get_option( 'page_on_front' ) );
+				$id = \get_option( 'page_on_front' );
+				$inpost_title = $this->get_custom_field( '_genesis_title', $id );
 			} else {
 				// Home is a blog.
 				$inpost_title = '';
 			}
-			$title = $inpost_title ?: $blog_name;
+			$object_title = $inpost_title ?: $blog_name;
 			$additions = $home_tagline ?: $description;
 		}
-
-		//* @TODO deprecate
-		$nonce = \wp_create_nonce( 'autodescription-ajax-nonce' );
 
 		$this->set_js_nonces( array(
 			/**
@@ -317,29 +302,45 @@ class Admin_Init extends Init {
 			'edit_posts' => \current_user_can( 'edit_posts' ) ? \wp_create_nonce( 'tsf-ajax-edit_posts' ) : false,
 		) );
 
+		$term_name = '';
+		$use_term_prefix = false;
+		if ( $is_term_edit ) {
+			$_term = $this->fetch_the_term( $id );
+			$term_name = $this->get_the_term_name( $_term, true, false );
+			$use_term_prefix = $this->use_archive_prefix( $_term );
+		}
+
 		return array(
-			'nonce' => $nonce,
 			'nonces' => $this->get_js_nonces(),
 			'i18n' => array(
 				'saveAlert' => \esc_html__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
 				'confirmReset' => \esc_html__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
-				'good' => \esc_html( $good ),
-				'okay' => \esc_html( $okay ),
-				'bad' => \esc_html( $bad ),
-				'unknown' => \esc_html( $unknown ),
+				'good' => \esc_html__( 'Good', 'autodescription' ),
+				'okay' => \esc_html__( 'Okay', 'autodescription' ),
+				'bad' => \esc_html__( 'Bad', 'autodescription' ),
+				'unknown' => \esc_html__( 'Unknown', 'autodescription' ),
+				'privateTitle' => $has_input && $id ? \esc_html__( 'Private:', 'autodescription' ) : '',
+				'protectedTitle' => $has_input && $id ? \esc_html__( 'Protected:', 'autodescription' ) : '',
 			),
 			'states' => array(
 				'isRTL' => (bool) \is_rtl(),
 				'isHome' => $ishome,
-				'hasInput' => $this->is_term_edit() || $this->is_post_edit() || $this->is_seo_settings_page(),
+				'hasInput' => $has_input,
 				'counterType' => \absint( $counter_type ),
-				'titleTagline' => $tagline,
-				'isSettingsPage' => $this->is_seo_settings_page(),
+				'useTagline' => $use_additions,
+				'useTermPrefix' => $use_term_prefix,
+				'isSettingsPage' => $is_settings_page,
+				'isPostEdit' => $is_post_edit,
+				'isTermEdit' => $is_term_edit,
+				'isPrivate' => $has_input && $id && $this->is_private( $id ),
+				'isPasswordProtected' => $has_input && $id && $this->is_password_protected( $id ),
 			),
 			'params' => array(
-				'siteTitle' => \esc_html( \wp_kses_decode_entities( $title ) ),
+				'objectTitle' => \esc_html( \wp_kses_decode_entities( $object_title ) ),
 				'titleAdditions' => \esc_html( \wp_kses_decode_entities( $additions ) ),
 				'blogDescription' => \esc_html( \wp_kses_decode_entities( $description ) ),
+				'termName' => \esc_html( \wp_kses_decode_entities( $term_name ) ),
+				'untitledTitle' => \esc_html( \wp_kses_decode_entities( $this->untitled() ) ),
 				'titleSeparator' => \esc_html( $title_separator ),
 				'descriptionSeparator' => \esc_html( $description_separator ),
 				'titleLocation' => \esc_html( $title_location ),

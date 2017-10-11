@@ -493,21 +493,62 @@ class Post_Data extends Detect {
 	 * Only works on singular pages.
 	 *
 	 * @since 2.8.0
-	 * @since 3.0.0 No longer checks for current query.
+	 * @since 3.0.0 1. No longer checks for current query.
+	 *              2. Input parameter now default to null.
+	 *                 This currently doesn't affect how it works.
 	 *
-	 * @param int|\WP_Post The post ID or WP Post object.
-	 * @return bool True if private, false otherwise.
+	 * @param int|null|\WP_Post The post ID or WP Post object.
+	 * @return bool True if protected, false otherwise.
 	 */
-	public function is_protected( $id = 0 ) {
+	public function is_protected( $id = null ) {
 
 		$post = \get_post( $id, OBJECT );
+		$ret = false;
 
 		if ( isset( $post->post_password ) && '' !== $post->post_password ) {
-			return true;
+			$ret = true;
 		} elseif ( isset( $post->post_status ) && 'private' === $post->post_status ) {
-			return true;
+			$ret = true;
 		}
 
-		return false;
+		return $ret;
+	}
+
+	/**
+	 * Determines if the current post has a password.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int|null|\WP_Post The post ID or WP Post object.
+	 * @return bool True if private, false otherwise.
+	 */
+	public function is_password_protected( $id = null ) {
+
+		$post = \get_post( $id, OBJECT );
+		$ret = false;
+
+		if ( isset( $post->post_password ) && '' !== $post->post_password )
+			$ret = true;
+
+		return $ret;
+	}
+
+	/**
+	 * Determines if the current post is private.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int|null|\WP_Post The post ID or WP Post object.
+	 * @return bool True if private, false otherwise.
+	 */
+	public function is_private( $id = null ) {
+
+		$post = \get_post( $id, OBJECT );
+		$ret = false;
+
+		if ( isset( $post->post_status ) && 'private' === $post->post_status )
+			$ret = true;
+
+		return $ret;
 	}
 }

@@ -108,7 +108,8 @@ th.column-tsf-seo-bar-wrap ~ th {
 	white-space: pre;
 }
 
-#tsf-title-placeholder {
+#tsf-title-placeholder,
+#tsf-title-placeholder-prefix {
 	position: absolute;
 	color: #777;
 	-webkit-user-select: none;

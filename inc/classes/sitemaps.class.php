@@ -307,7 +307,7 @@ class Sitemaps extends Metaboxes {
 			echo "\n" . '<!-- Site estimated peak usage: ' . number_format( memory_get_peak_usage() / 1024 / 1024, 3 ) . ' MB -->';
 			echo "\n" . '<!-- System estimated peak usage: ' . number_format( memory_get_peak_usage( true ) / 1024 / 1024, 3 ) . ' MB -->';
 			echo "\n" . '<!-- Freed memory prior to generation: ' . number_format( $this->clean_up_globals_for_sitemap( true ) / 1024, 3 ) . ' kB -->';
-			echo "\n" . '<!-- Sitemap generation time: ' . ( number_format( microtime( true ) - $timer_start, 6 ) ) . ' seconds -->';
+			echo "\n" . '<!-- Sitemap generation time: ' . number_format( microtime( true ) - $timer_start, 6 ) . ' seconds -->';
 		}
 	}
 
@@ -1001,14 +1001,17 @@ class Sitemaps extends Metaboxes {
 		endif;
 
 		/**
-		 * Applies filters the_seo_framework_sitemap_additional_urls : {
-		 * 		@param string url The absolute url to the page. : {
-		 * 			@param string lastmod UNIXTIME Last modified date, e.g. "2016-01-26 13:04:55"
-		 * 			@param float|int|string priority URL Priority
-		 *		}
-		 * }
+		 * Applies filters the_seo_framework_sitemap_additional_urls :
 		 *
 		 * @since 2.5.2
+		 * @param array $custom_urls : {
+		 *    @param string (key) $url The absolute url to the page. : array {
+		 *       @param string           $lastmod  UNIXTIME Last modified date, e.g. "2016-01-26 13:04:55"
+		 *       @param float|int|string $priority URL Priority
+		 *    }
+		 * }
+		 *
+		 * @example return value: [ 'http://example.com' => [ 'lastmod' => '14-01-2018', 'priority' => 0.9 ] ]
 		 */
 		$custom_urls = (array) \apply_filters( 'the_seo_framework_sitemap_additional_urls', array() );
 

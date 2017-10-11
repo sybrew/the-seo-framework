@@ -829,7 +829,7 @@ class Generate_Title extends Generate_Description {
 		/**
 		 * @since 2.6.0
 		 */
-		$use_prefix = $this->use_archive_prefix( $term, $args );
+		$use_prefix = ! empty( $args['meta'] ) ? false : $this->use_archive_prefix( $term );
 
 		if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
 			$title = $this->single_term_title( '', false, $term );
@@ -1292,17 +1292,14 @@ class Generate_Title extends Generate_Description {
 	 * Determines whether to use a title prefix or not.
 	 *
 	 * @since 2.6.0
+	 * @since 3.0.0 Removed second parameter.
 	 * @staticvar bool $cache
 	 *
 	 * @param object $term The Term object.
 	 * @param array $args The title arguments.
 	 * @return bool
 	 */
-	public function use_archive_prefix( $term = null, $args = array() ) {
-
-		//* Don't add prefix in meta.
-		if ( $args['meta'] )
-			return false;
+	public function use_archive_prefix( $term = null ) {
 
 		static $cache = null;
 
