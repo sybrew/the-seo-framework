@@ -324,6 +324,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* TODO When latest post is protect or private, no description could've been generated on the blog page (and other archives?).
 		* TODO - New bug: Homepage as blog's paginated canonical URL no longer points to the first page.
 		* TODO Separator selection description no longer overflows on EdgeHTML.
+		* Cyrillic texts JavaScript compatibility. TODO confirm.
 
 * **For translators:**
 	* **Added:**
@@ -481,6 +482,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 					* `updateCounters`
 					* `additionsClassInit`
 				* Other:
+					* `getSep`, used for both titles and descriptions.
 					* string `nonce` (property), use object `nonces` instead.
 			* **State values, `window.tsfL10n.{}`:**
 				* `params.siteTitle`, use `params.objectTitle` instead.

@@ -310,18 +310,8 @@ class Admin_Init extends Init {
 			$use_term_prefix = $this->use_archive_prefix( $_term );
 		}
 
-		return array(
+		$l10n = array(
 			'nonces' => $this->get_js_nonces(),
-			'i18n' => array(
-				'saveAlert' => \esc_html__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
-				'confirmReset' => \esc_html__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
-				'good' => \esc_html__( 'Good', 'autodescription' ),
-				'okay' => \esc_html__( 'Okay', 'autodescription' ),
-				'bad' => \esc_html__( 'Bad', 'autodescription' ),
-				'unknown' => \esc_html__( 'Unknown', 'autodescription' ),
-				'privateTitle' => $has_input && $id ? \esc_html__( 'Private:', 'autodescription' ) : '',
-				'protectedTitle' => $has_input && $id ? \esc_html__( 'Protected:', 'autodescription' ) : '',
-			),
 			'states' => array(
 				'isRTL' => (bool) \is_rtl(),
 				'isHome' => $ishome,
@@ -335,18 +325,38 @@ class Admin_Init extends Init {
 				'isPrivate' => $has_input && $id && $this->is_private( $id ),
 				'isPasswordProtected' => $has_input && $id && $this->is_password_protected( $id ),
 			),
+			'i18n' => array(
+				'saveAlert' => \__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
+				'confirmReset' => \__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
+				'good' => \__( 'Good', 'autodescription' ),
+				'okay' => \__( 'Okay', 'autodescription' ),
+				'bad' => \__( 'Bad', 'autodescription' ),
+				'unknown' => \__( 'Unknown', 'autodescription' ),
+				'privateTitle' => $has_input && $id ? \__( 'Private:', 'autodescription' ) : '',
+				'protectedTitle' => $has_input && $id ? \__( 'Protected:', 'autodescription' ) : '',
+			),
 			'params' => array(
-				'objectTitle' => \esc_html( \wp_kses_decode_entities( $object_title ) ),
-				'titleAdditions' => \esc_html( \wp_kses_decode_entities( $additions ) ),
-				'blogDescription' => \esc_html( \wp_kses_decode_entities( $description ) ),
-				'termName' => \esc_html( \wp_kses_decode_entities( $term_name ) ),
-				'untitledTitle' => \esc_html( \wp_kses_decode_entities( $this->untitled() ) ),
-				'titleSeparator' => \esc_html( $title_separator ),
-				'descriptionSeparator' => \esc_html( $description_separator ),
-				'titleLocation' => \esc_html( $title_location ),
+				'objectTitle' => $object_title,
+				'titleAdditions' => $additions,
+				'blogDescription' => $description,
+				'termName' => $term_name,
+				'untitledTitle' => $this->untitled(),
+				'titleSeparator' => $title_separator,
+				'descriptionSeparator' => $description_separator,
+				'titleLocation' => $title_location,
 			),
 			'other' => $this->additional_js_l10n( null, array(), true ),
 		);
+
+		$decode = array( 'i18n', 'params' );
+		$flags = ENT_COMPAT;
+		foreach ( $decode as $key ) {
+			foreach ( $l10n[ $key ] as $k => $v ) {
+				$l10n[ $key ][ $k ] = \esc_js( \html_entity_decode( $v, $flags, 'UTF-8' ) );
+			}
+		}
+
+		return $l10n;
 	}
 
 	/**
