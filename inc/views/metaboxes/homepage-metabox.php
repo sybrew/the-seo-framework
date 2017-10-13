@@ -176,11 +176,12 @@ switch ( $instance ) :
 					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="' . esc_attr( $this->field_id( 'homepage_title', false ) ) . '_chars">' . (int) mb_strlen( $tit_len ) . '</span>' ); ?>
 					<span class="hide-if-no-js tsf-ajax"></span>
 				</span>
+				<?php $this->output_pixel_counter_wrap( $this->get_field_id( 'homepage_title' ), 'title' ); ?>
 			</label>
 		</p>
 		<p id="tsf-title-wrap">
 			<input type="text" name="<?php $this->field_name( 'homepage_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title' ); ?>" placeholder="<?php echo esc_attr( $home_title_placeholder ); ?>" value="<?php echo esc_attr( $this->get_field_value( 'homepage_title' ) ); ?>" autocomplete=off />
-			<?php $this->output_floating_title_html(); ?>
+			<?php $this->output_floating_title_elements(); ?>
 		</p>
 		<?php
 		/**
@@ -225,9 +226,10 @@ switch ( $instance ) :
 				<strong><?php printf( esc_html__( 'Custom %s Description', 'autodescription' ), $home_page_i18n ); ?></strong>
 				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 145 to 155 characters', 'autodescription' ) ?>">[?]</a>
 				<span class="description tsf-counter">
-					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="' . esc_attr( $this->field_id( 'homepage_description', false ) ) . '_chars">' . (int) mb_strlen( $desc_len ) . '</span>' ); ?>
+					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="' . esc_attr( $this->get_field_id( 'homepage_description' ) ) . '_chars">' . (int) mb_strlen( $desc_len ) . '</span>' ); ?>
 					<span class="hide-if-no-js tsf-ajax"></span>
 				</span>
+				<?php $this->output_pixel_counter_wrap( $this->get_field_id( 'homepage_description' ), 'description' ); ?>
 			</label>
 		</p>
 		<p>

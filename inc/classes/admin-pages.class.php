@@ -805,11 +805,30 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @since 3.0.0
 	 */
-	public function output_floating_title_html() {
+	public function output_floating_title_elements() {
 		?>
 		<span id="tsf-title-offset" class="hide-if-no-js"></span>
 		<span id="tsf-title-placeholder" class="hide-if-no-js"></span>
 		<span id="tsf-title-placeholder-prefix" class="hide-if-no-js"></span>
+		<?php
+	}
+
+	/**
+	 * Outputs pixel counter wrap for javascript.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $for  The input ID it's for.
+	 * @param string $type Whether it's a title or description counter. Must be escaped.
+	 */
+	public function output_pixel_counter_wrap( $for, $type ) {
+		?>
+		<div class="tsf-pixel-counter-wrap hide-if-no-js">
+			<span id="<?php echo \esc_attr( $for ); ?>_pixels">
+				<span class="tsf-pixel-counter-bar"><span></span></span>
+			</span>
+			<span class="tsf-pixel-counter-shadow tsf-<?php echo $type; ?>-pixel-counter-shadow"></span>
+		</div>
 		<?php
 	}
 }

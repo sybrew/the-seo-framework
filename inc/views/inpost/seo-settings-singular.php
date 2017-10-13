@@ -127,12 +127,13 @@ switch ( $instance ) :
 						?>
 						<span class="hide-if-no-js tsf-ajax"></span>
 					</span>
+					<?php $this->output_pixel_counter_wrap( 'autodescription_title', 'title' ); ?>
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id="tsf-title-wrap">
 					<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" placeholder="<?php echo esc_attr( $doctitle_placeholder ); ?>" value="<?php echo esc_attr( $this->get_custom_field( '_genesis_title' ) ); ?>" autocomplete=off />
-					<?php echo $this->output_floating_title_html(); ?>
+					<?php echo $this->output_floating_title_elements(); ?>
 				</div>
 			</div>
 		</div>
@@ -159,6 +160,7 @@ switch ( $instance ) :
 						?>
 						<span class="hide-if-no-js tsf-ajax"></span>
 					</span>
+					<?php $this->output_pixel_counter_wrap( 'autodescription_description', 'description' ); ?>
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">

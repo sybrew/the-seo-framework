@@ -86,18 +86,17 @@ $description_placeholder = $generated_description;
 					<strong><?php printf( esc_html__( '%s Title', 'autodescription' ), esc_html( $type ) ); ?></strong>
 					<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 50 to 55 characters', 'autodescription' ); ?>">[?]</a>
 				</label>
+				<p class="description tsf-counter">
+					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[doctitle]_chars">' . esc_html( mb_strlen( $tit_len_parsed ) ) . '</span>' ); ?>
+					<span class="hide-if-no-js tsf-ajax"></span>
+				</p>
+				<?php $this->output_pixel_counter_wrap( 'autodescription-meta[doctitle]', 'title' ); ?>
 			</th>
 			<td>
 				<div id="tsf-title-wrap">
 					<input name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" type="text" placeholder="<?php echo esc_attr( $title_placeholder ) ?>" value="<?php echo esc_attr( $title ); ?>" size="40" autocomplete=off />
-					<?php $this->output_floating_title_html(); ?>
+					<?php $this->output_floating_title_elements(); ?>
 				</div>
-				<p class="description">
-					<span class="tsf-counter">
-						<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[doctitle]_chars">' . esc_html( mb_strlen( $tit_len_parsed ) ) . '</span>' ); ?>
-						<span class="hide-if-no-js tsf-ajax"></span>
-					</span>
-				</p>
 			</td>
 		</tr>
 
@@ -107,15 +106,14 @@ $description_placeholder = $generated_description;
 					<strong><?php printf( esc_html__( '%s Meta Description', 'autodescription' ), esc_html( $type ) ); ?></strong>
 					<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 145 to 155 characters', 'autodescription' ); ?>">[?]</a>
 				</label>
+				<p class="description tsf-counter">
+					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[description]_chars">' . esc_html( mb_strlen( $desc_len_parsed ) ) . '</span>' ); ?>
+					<span class="hide-if-no-js tsf-ajax"></span>
+				</p>
+				<?php $this->output_pixel_counter_wrap( 'autodescription-meta[description]', 'description' ); ?>
 			</th>
 			<td>
 				<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="5" cols="50" class="large-text"><?php echo esc_html( $description ); ?></textarea>
-				<p class="description">
-					<span class="tsf-counter">
-						<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="autodescription-meta[description]_chars">' . esc_html( mb_strlen( $desc_len_parsed ) ) . '</span>' ); ?>
-						<span class="hide-if-no-js tsf-ajax"></span>
-					</span>
-				</p>
 			</td>
 		</tr>
 

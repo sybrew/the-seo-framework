@@ -3,7 +3,7 @@ Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org
 Requires at least: 4.4.0
-Tested up to: 4.8.1
+Tested up to: 4.9
 Requires PHP: 5.3.0
 Stable tag: 2.9.4
 License: GPLv3
@@ -254,6 +254,14 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		 	* Changing post visibility (private, protected, public).
 			* Changing the page title.
 			* Note that the example is not a perfect analogy. Sanitation is a complex process and sending it back-and-forth through AJAX can be heavy on the server.
+		* Pixel counters!
+			/
+			* A pixel counter is like a character counter, but it's far more accurate. This is because not all characters have the same length. e.g. A `W` is much wider than an `i`.
+			* These counters show the true length of what Google renders, represented through a bar.
+			* If the bar is green, your title or description will likely fit.
+			* If the bar is red, your title or description will likely be truncated.
+			* The bar grows as more space is filled in.
+			* The bar shrinks as more characters are truncated.
 	* **Changed:**
 		* Schema breadcrumbs now have their IDs reset. They have an URL fragment attached (e.g. `example.com/#schemaorg-bcl`).
 			* This is to prevent ID collision with generated scripts from other plugins, like WooCommerce 3.0+.
@@ -261,6 +269,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* The sitemap `lastmod` option no longer listens to Post Dates settings. But now only to its own specific setting.
 		* Default link back to source in feed content no longer check settings. Instead, it uses the default WordPress permalink.
 		* When no blog tagline is set, in either WordPress' General Settings or in TSF's Home Page settings, no longer is "Untitled" used.
+		* Character counters on term edit pages have been moved to the left.
 		/
 		* TODO Only one breadcrumb script is now generated, and it listens to the new primary category settings.
 	* **Improved:**
@@ -451,8 +460,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 				* `tsf-update-title-counter`, manual trigger to update the title counters. Used internally.
 		* **Removed:**
 			* **Methods and properties, `window.tsf.{}`:**
-				* Title related:
+				* Title related, these have been reworked and put in a method container:
 					* string `titleTagline` (property)
+					* string `titleSeparator` (property)
 					* `_initTitlepropListener`
 					* `selectTitleInput`
 					* `dynamicPlaceholder`
@@ -470,15 +480,19 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 					* `triggerTitleOnLoad`
 					* `separatorSwitchTitle`
 					* `docTitles`
-				* Description related:
+				* Description related, these have been reworked and put in a method container:
+					* string `descriptionSeparator` (property)
+					* `docDescriptions`
 					* `triggerDescriptionOnLoad`
-				* Tooltip related:
+					* `updateCharacterCountDescription`
+					* `separatorSwitchDesc`
+				* Tooltip related, these have been reworked and put in a method container:
 					* `statusBarHover`
 					* `statusBarHoverEnter`
 					* `statusBarHoverMove`
 					* `statusBarHoverLeave`
 					* `touchRemoveDesc`
-				* Counter related:
+				* Counter related, these have been put into the respective containers:
 					* `updateCounters`
 					* `additionsClassInit`
 				* Other:

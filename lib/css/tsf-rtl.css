@@ -128,7 +128,7 @@ th.column-tsf-seo-bar-wrap ~ th {
 /* START Character Counters */
 
 .tsf-counter {
-	font-weight: 600;
+	font-weight: 400;
 	cursor: pointer;
 	-webkit-user-select: none;
 	-moz-user-select: none;
@@ -635,6 +635,7 @@ body.js .tsf-metaboxes .tsf-tabs-content.tsf-active-tab-content {
 	margin-right: 0;
 }
 
+.form-field .tsf-counter,
 .tsf-flex-setting-label .tsf-counter {
 	font-weight: 400;
 	color: #666;
