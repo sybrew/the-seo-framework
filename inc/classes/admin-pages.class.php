@@ -563,7 +563,7 @@ class Admin_Pages extends Inpost {
 	public function make_info( $description = '', $link = '', $echo = true ) {
 
 		if ( $link ) {
-			$output = '<a href="' . \esc_url( $link, array( 'http', 'https' ) ) . '" target="_blank" title="' . \esc_attr( $description ) . '">[?]</a>';
+			$output = '<a href="' . \esc_url( $link, array( 'http', 'https' ) ) . '" target="_blank" rel="nofollow noopener" title="' . \esc_attr( $description ) . '">[?]</a>';
 		} else {
 			$output = '<span title="' . \esc_attr( $description ) . '">[?]</span>';
 		}
@@ -814,20 +814,41 @@ class Admin_Pages extends Inpost {
 	}
 
 	/**
+	 * Outputs character counter wrap for both JavaScript and no-Javascript.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $for     The input ID it's for.
+	 * @param int    $current The initial value for no-JS.
+	 */
+	public function output_character_counter_wrap( $for, $initial = 0 ) {
+		printf(
+			'<div class="tsf-counter-wrap"><span class="description tsf-counter">%s</span><span class="hide-if-no-js tsf-ajax"></span></div>',
+			sprintf(
+				/* translators: %s = number */
+				esc_html__( 'Characters Used: %s', 'autodescription' ),
+				'<span id="' . esc_attr( $for ) . '_chars">' . (int) mb_strlen( $initial ) . '</span>'
+			)
+		);
+	}
+
+	/**
 	 * Outputs pixel counter wrap for javascript.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param string $for  The input ID it's for.
-	 * @param string $type Whether it's a title or description counter. Must be escaped.
+	 * @param string $type Whether it's a 'title' or 'description' counter. Must be escaped.
 	 */
 	public function output_pixel_counter_wrap( $for, $type ) {
 		?>
 		<div class="tsf-pixel-counter-wrap hide-if-no-js">
-			<span id="<?php echo \esc_attr( $for ); ?>_pixels">
-				<span class="tsf-pixel-counter-bar"><span></span></span>
-			</span>
-			<span class="tsf-pixel-counter-shadow tsf-<?php echo $type; ?>-pixel-counter-shadow"></span>
+			<div id="<?php echo \esc_attr( $for ); ?>_pixels" class="tsf-tooltip-wrap">
+				<span class="tsf-pixel-counter-bar tsf-tooltip-item" aria-label="" data-desc=""><span class="tsf-pixel-counter-fluid"></span></span>
+			</div>
+			<div class="tsf-pixel-shadow-wrap">
+				<span class="tsf-pixel-counter-shadow tsf-<?php echo $type; ?>-pixel-counter-shadow"></span>
+			</div>
 		</div>
 		<?php
 	}

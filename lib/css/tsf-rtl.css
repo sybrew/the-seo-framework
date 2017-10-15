@@ -302,7 +302,7 @@ span.tsf-seo-bar.pill span.tsf-seo-bar-inner-wrap a {
 	background-color: #007bd2;
 }
 
-span.tsf-seo-bar .tsf-explanation-desc {
+span.tsf-seo-bar .tsf-tooltip {
 	position: absolute;
 	width: auto;
 	min-width: 90%;
@@ -320,11 +320,11 @@ span.tsf-seo-bar .tsf-explanation-desc {
 	pointer-events: none;
 }
 
-span.tsf-seo-bar .tsf-explanation-desc span {
+span.tsf-seo-bar .tsf-tooltip span {
 	text-decoration: underline;
 }
 
-span.tsf-seo-bar .tsf-explanation-desc div {
+span.tsf-seo-bar .tsf-tooltip div {
 	width: 0;
 	height: 0;
 	border-left: 12px solid transparent;

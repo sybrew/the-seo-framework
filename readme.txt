@@ -283,6 +283,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Sped up admin JavaScript initialization by combining jQuery overhead calls.
 		* "Floating title placeholders" now move smoother on resize.
 		* The counter type update buttons on taxonomial edit screens no longer stretch to the adjacent input length.
+		* Informational links (e.g. to Google's webmaster pages) are no longer tracked.
 		* Refactored "floating title placeholder"'s code, this means it no longer "glues" every part together based on assumption to perform calculations and placements.
 			/
 			* This made way for new features, it improved performance, and it lowered overall lower maintenance cost.
@@ -352,6 +353,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Location: Private page title placeholder. Shown in the custom SEO title edit input field.
 		* "Protected:"
 			* Location: Password protected page title placeholder. Shown in the custom SEO title edit input field.
+		* "%1$d out of %2$d pixels are used.:"
+			* Location: Pixel counter's tooltip.
+			* 1: Pixels used.
+			* 2: Guideline pixels.
 	* **Changed:**
 		* "The Open Directory Project and the Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave these options checked."
 			* Now is: "The Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave the option checked."
@@ -390,12 +395,18 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* "Some Search Engines output the publishing date and modified date next to the search results. These help Search Engines find new content and could impact the SEO value."
 			* Now is: "Some social sites output the published date and modified date in the sharing snippet."
 			* Inaccurate: Search Engines don't use this, at all. They use Structured Data.
+		* "Add Blogname to automated description additions?"
+			* Now is: "Add the blog name to the automated description?"
+			* Clarity: "Additions" is contextual.
+			* Terminology: "Blogname" is an internal name. "A blog name" is the user term.
 	* **Removed:**
 		* "It's recommended on posts, but it's not recommended on pages unless you modify or create new pages frequently."
 			* No longer applicable.
 		* "Because you only publish the Home Page once, Search Engines might think your website is outdated. This can be prevented by disabling the following options".
 			* Inaccurate: Search Engines don't use this, at all. They use Structured Data.
 			* Removed: This data wasn't allowed in the first place.
+		* "By default, the sitemap only outputs the modified date if you've enabled them within the Social Metabox. This setting overrides those settings for the Sitemap."
+			* Removed: No longer applicable.
 
 * **For developers:**
 	* **Added:**
@@ -458,6 +469,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* **Added:**
 				* `tsf-counter-updated`, triggers after the counter state has been updated, before it's sent through AJAX.
 				* `tsf-update-title-counter`, manual trigger to update the title counters. Used internally.
+				* `tsf-reset-tooltips`, manual trigger to reset tooltips on DOM update. Used internally.
+				* `tsf-tooltip-update`, manual trigger to update tooltip when they have an on-hover state on DOM item update. Used internally.
 		* **Removed:**
 			* **Methods and properties, `window.tsf.{}`:**
 				* Title related, these have been reworked and put in a method container:

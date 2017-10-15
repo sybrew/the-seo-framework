@@ -184,8 +184,6 @@ switch ( $instance ) :
 
 		<h4><?php esc_html_e( 'Output Modified Date', 'autodescription' ); ?></h4>
 		<?php
-
-		$this->description( __( "By default, the sitemap only outputs the modified date if you've enabled them within the Social Metabox. This setting overrides those settings for the Sitemap.", 'autodescription' ) );
 		//* Echo checkbox.
 		$this->wrap_fields(
 			$this->make_checkbox(

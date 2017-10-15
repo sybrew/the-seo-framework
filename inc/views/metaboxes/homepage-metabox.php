@@ -20,11 +20,11 @@ switch ( $instance ) :
 		 * @since 2.6.0
 		 *
 		 * @param array $default_tabs { 'id' = The identifier =>
-		 *		array(
-		 *			'name'     => The name
-		 *			'callback' => The callback function, use array for method calling
-		 *			'dashicon' => Desired dashicon
-		 *		)
+		 *    array(
+		 *       'name'     => The name
+		 *       'callback' => The callback function, use array for method calling
+		 *       'dashicon' => Desired dashicon
+		 *    )
 		 * }
 		 */
 		$default_tabs = array(
@@ -170,13 +170,20 @@ switch ( $instance ) :
 
 		<p>
 			<label for="<?php $this->field_id( 'homepage_title' ); ?>" class="tsf-toblock">
-				<strong><?php printf( esc_html__( 'Custom %s Title', 'autodescription' ), $home_page_i18n ); ?></strong>
-				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 50 to 55 characters', 'autodescription' ) ?>">[?]</a>
-				<span class="description tsf-counter">
-					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="' . esc_attr( $this->field_id( 'homepage_title', false ) ) . '_chars">' . (int) mb_strlen( $tit_len ) . '</span>' ); ?>
-					<span class="hide-if-no-js tsf-ajax"></span>
-				</span>
-				<?php $this->output_pixel_counter_wrap( $this->get_field_id( 'homepage_title' ), 'title' ); ?>
+				<strong>
+					<?php
+					/* translators: %s = Post type */
+					printf( esc_html__( 'Custom %s Title', 'autodescription' ), $home_page_i18n );
+					?>
+				</strong>
+				<?php
+				$this->make_info(
+					__( 'Recommended Length: 50 to 55 characters', 'autodescription' ),
+					'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3'
+				);
+				$this->output_character_counter_wrap( $this->get_field_id( 'homepage_title' ), $tit_len );
+				$this->output_pixel_counter_wrap( $this->get_field_id( 'homepage_title' ), 'title' );
+				?>
 			</label>
 		</p>
 		<p id="tsf-title-wrap">
@@ -223,13 +230,19 @@ switch ( $instance ) :
 
 		<p>
 			<label for="<?php $this->field_id( 'homepage_description' ); ?>" class="tsf-toblock">
-				<strong><?php printf( esc_html__( 'Custom %s Description', 'autodescription' ), $home_page_i18n ); ?></strong>
-				<a href="<?php echo esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1' ); ?>" target="_blank" title="<?php esc_attr_e( 'Recommended Length: 145 to 155 characters', 'autodescription' ) ?>">[?]</a>
-				<span class="description tsf-counter">
-					<?php printf( esc_html__( 'Characters Used: %s', 'autodescription' ), '<span id="' . esc_attr( $this->get_field_id( 'homepage_description' ) ) . '_chars">' . (int) mb_strlen( $desc_len ) . '</span>' ); ?>
-					<span class="hide-if-no-js tsf-ajax"></span>
-				</span>
-				<?php $this->output_pixel_counter_wrap( $this->get_field_id( 'homepage_description' ), 'description' ); ?>
+				<strong>
+					<?php
+					printf( esc_html__( 'Custom %s Description', 'autodescription' ), $home_page_i18n );
+					?>
+				</strong>
+				<?php
+				$this->make_info(
+					__( 'Recommended Length: 145 to 155 characters', 'autodescription' ),
+					'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1'
+				);
+				$this->output_character_counter_wrap( $this->get_field_id( 'homepage_description' ), $desc_len );
+				$this->output_pixel_counter_wrap( $this->get_field_id( 'homepage_description' ), 'description' );
+				?>
 			</label>
 		</p>
 		<p>

@@ -117,17 +117,10 @@ switch ( $instance ) :
 							?>
 						</div>
 					</label>
-					<span class="description tsf-counter">
-						<?php
-						printf(
-							/* translators: %s = number */
-							esc_html__( 'Characters Used: %s', 'autodescription' ),
-							'<span id="autodescription_title_chars">' . (int) mb_strlen( $tit_len_parsed ) . '</span>'
-						);
-						?>
-						<span class="hide-if-no-js tsf-ajax"></span>
-					</span>
-					<?php $this->output_pixel_counter_wrap( 'autodescription_title', 'title' ); ?>
+					<?php
+					$this->output_character_counter_wrap( 'autodescription_title', $tit_len_parsed );
+					$this->output_pixel_counter_wrap( 'autodescription_title', 'title' );
+					?>
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
@@ -148,19 +141,19 @@ switch ( $instance ) :
 							printf( esc_html__( 'Custom %s Description', 'autodescription' ), esc_html( $type ) );
 							?>
 						</strong></div>
-						<div><?php $this->make_info( __( 'Recommended Length: 145 to 155 characters', 'autodescription' ), 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1' ); ?></div>
+						<div>
+							<?php
+							$this->make_info(
+								__( 'Recommended Length: 145 to 155 characters', 'autodescription' ),
+								'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1'
+							);
+							?>
+						</div>
 					</label>
-					<span class="description tsf-counter">
-						<?php
-						printf(
-							/* translators: %s = number */
-							esc_html__( 'Characters Used: %s', 'autodescription' ),
-							'<span id="autodescription_description_chars">' . (int) mb_strlen( $desc_len_parsed ) . '</span>'
-						);
-						?>
-						<span class="hide-if-no-js tsf-ajax"></span>
-					</span>
-					<?php $this->output_pixel_counter_wrap( 'autodescription_description', 'description' ); ?>
+					<?php
+					$this->output_character_counter_wrap( 'autodescription_description', $desc_len_parsed );
+					$this->output_pixel_counter_wrap( 'autodescription_description', 'description' );
+					?>
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
@@ -234,7 +227,10 @@ switch ( $instance ) :
 						/* translators: 1: Option, 2: Post or Page */
 						printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'nofollow' ), esc_html( $type ) );
 						echo ' ';
-						$this->make_info( sprintf( __( 'Tell Search Engines not to follow links on this %s', 'autodescription' ), $type ), 'https://support.google.com/webmasters/answer/96569?hl=' . $language );
+						$this->make_info(
+							sprintf( __( 'Tell Search Engines not to follow links on this %s', 'autodescription' ), $type ),
+							'https://support.google.com/webmasters/answer/96569?hl=' . $language
+						);
 					?>
 					</label>
 				</div>
@@ -249,7 +245,13 @@ switch ( $instance ) :
 						);
 						echo ' ';
 						/* translators: %s = Post type name */
-						$this->make_info( sprintf( __( 'Tell Search Engines not to save a cached copy of this %s', 'autodescription' ), $type ), 'https://support.google.com/webmasters/answer/79812?hl=' . $language );
+						$this->make_info(
+							sprintf(
+								__( 'Tell Search Engines not to save a cached copy of this %s', 'autodescription' ),
+								$type
+							),
+							'https://support.google.com/webmasters/answer/79812?hl=' . $language
+						);
 					?>
 					</label>
 				</div>

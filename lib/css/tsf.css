@@ -136,8 +136,13 @@ th.column-tsf-seo-bar-wrap ~ th {
 
 /* START Character Counters */
 
+.tsf-counter-wrap {
+	margin-top: 15px;
+}
+
 .tsf-counter {
 	font-weight: 400;
+	color: #666;
 	cursor: pointer;
 	-webkit-user-select: none;
 	-moz-user-select: none;
@@ -186,31 +191,43 @@ th.column-tsf-seo-bar-wrap ~ th {
 	max-width: 99%;
 }
 
+.tsf-pixel-shadow-wrap {
+	position: relative;
+	overflow: hidden;
+	width: 0;
+	height: 0;
+}
+
+.tsf-pixel-counter-wrap {
+	border-bottom: 1px solid #ccc;
+}
+
 .tsf-pixel-counter-bar {
-	margin-top: 15px;
+	padding-top: 7px;
+	margin-top: 3px;
 	display: block;
 	height: 3px;
 	width: 100%;
-	-webkit-box-shadow: 0px 1px 3px 0px #ccc;
-	box-shadow: 0px 1px 3px 0px #ccc;
 }
 
-.tsf-pixel-counter-bar span {
+.tsf-pixel-counter-fluid {
 	display: block;
+	pointer-events: none;
 	height: 3px;
 	width: 0%;
 	max-width: 100%;
 	background: #007bd2;
+	box-shadow: 0px 1px 3px 0px #ccc;
 	-webkit-transition: width .15s cubic-bezier(0.4, 0, 0.75, 1);
 	-o-transition: width .15s cubic-bezier(0.4, 0, 0.75, 1);
 	transition: width .15s cubic-bezier(0.4, 0, 0.75, 1);
 }
 
-.tsf-pixel-counter-overflown span {
+.tsf-pixel-counter-overflown .tsf-pixel-counter-fluid {
 	background-color: #dd3811;
 }
 
-.tsf-pixel-counter-fit span {
+.tsf-pixel-counter-fit .tsf-pixel-counter-fluid {
 	background-color: #0cc34b;
 }
 
@@ -277,7 +294,6 @@ th:last-of-type#tsf-seo-bar-wrap {
 	border-collapse: separate;
 	border-spacing: 0;
 	vertical-align: middle;
-	position: relative;
 }
 
 .tsf-seo-bar-section-wrap {
@@ -290,12 +306,15 @@ th:last-of-type#tsf-seo-bar-wrap {
 	width: 100%;
 	color: #fff;
 	text-align: center;
-	cursor: help;
 	height: 100%;
 	min-width: 12px;
 	vertical-align: top;
 	line-height: 1.625em;
 	box-shadow: 2px 0px 0px -1px rgba(0,0,0,0.1) inset, -2px 0px 0px -1px rgba(0,0,0,0.1) inset;
+}
+
+body.no-js .tsf-seo-bar-item {
+	cursor: default;
 }
 
 .tsf-seo-bar.pill,
@@ -379,30 +398,41 @@ th:last-of-type#tsf-seo-bar-wrap {
 	background-color: #007bd2;
 }
 
-.tsf-seo-bar .tsf-explanation-desc {
+/* # Start tooltips */
+
+.tsf-tooltip-wrap {
+	position: relative;
+}
+
+.tsf-tooltip-item {
+	cursor: help;
+}
+
+.tsf-tooltip {
 	position: absolute;
-	width: auto;
+	width: 150px;
 	min-width: 90%;
 	max-width: 220px;
 	font-weight: 600;
 	background: #007bd2;
 	padding: 8px 12px;
 	color: #fdfdfd;
-	border-radius: 0px;
+	border-radius: 3px;
 	z-index: 900142;
 	box-shadow: 0px 0px 2px rgba(0,0,0,0.6);
 	text-shadow: none;
+	top: 0;
 	left: 0;
 	right: 0;
 	text-align: left;
 	pointer-events: none;
 }
 
-.tsf-seo-bar .tsf-explanation-desc span {
+.tsf-tooltip-text span {
 	text-decoration: underline;
 }
 
-.tsf-seo-bar .tsf-explanation-desc div {
+.tsf-tooltip-arrow {
 	position: absolute;
 	bottom: -8px;
 	z-index: 9999999;
@@ -411,7 +441,7 @@ th:last-of-type#tsf-seo-bar-wrap {
 	height: 0;
 }
 
-.tsf-seo-bar .tsf-explanation-desc div:before {
+.tsf-tooltip-arrow:before {
 	content: "";
 	border-left: 9px solid transparent;
 	border-right: 9px solid transparent;
@@ -421,7 +451,7 @@ th:last-of-type#tsf-seo-bar-wrap {
 	left: -1px;
 }
 
-.tsf-seo-bar .tsf-explanation-desc div:after {
+.tsf-tooltip-arrow:after {
 	content: "";
 	border-left: 8px solid transparent;
 	border-right: 8px solid transparent;
@@ -430,6 +460,8 @@ th:last-of-type#tsf-seo-bar-wrap {
 	bottom: 0;
 	left: 0;
 }
+
+/* # End tooltips */
 
 /* Mobile support */
 /* Needs more refining.... e.g. iPhone 6 = good, iPhone 6+ = offscreen */
@@ -728,13 +760,6 @@ body.js .tsf-metaboxes .tsf-tabs-content.tsf-active-tab-content {
 
 .tsf-flex-setting-label-item > *:last-child {
 	margin-right: 0;
-}
-
-.form-field .tsf-counter,
-.tsf-flex-setting-label .tsf-counter {
-	font-weight: 400;
-	color: #666;
-	margin-top: 15px;
 }
 
 .tsf-social-image-buttons {

@@ -324,6 +324,7 @@ class Admin_Init extends Init {
 				'isTermEdit' => $is_term_edit,
 				'isPrivate' => $has_input && $id && $this->is_private( $id ),
 				'isPasswordProtected' => $has_input && $id && $this->is_password_protected( $id ),
+				'debug' => $this->script_debug,
 			),
 			'i18n' => array(
 				'saveAlert' => \__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
@@ -334,6 +335,8 @@ class Admin_Init extends Init {
 				'unknown' => \__( 'Unknown', 'autodescription' ),
 				'privateTitle' => $has_input && $id ? \__( 'Private:', 'autodescription' ) : '',
 				'protectedTitle' => $has_input && $id ? \__( 'Protected:', 'autodescription' ) : '',
+				/* translators: Pixel counter. 1: width, 2: guideline */
+				'pixelsUsed' => $has_input ? \__( '%1$d out of %2$d pixels are used.', 'autodescription' ) : '',
 			),
 			'params' => array(
 				'objectTitle' => $object_title,
@@ -540,11 +543,11 @@ class Admin_Init extends Init {
 			'.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:checked + .tsf-flex-nav-tab-label' => array(
 				"box-shadow:0 -2px 0 0 $color_accent inset",
 			),
-			'.tsf-seo-bar .tsf-explanation-desc' => array(
+			'.tsf-seo-bar .tsf-tooltip' => array(
 				"background-color:$bg_accent",
 				"color:$bg_alt_font",
 			),
-			'.tsf-seo-bar .tsf-explanation-desc div:after' => array(
+			'.tsf-seo-bar .tsf-tooltip div:after' => array(
 				"border-top-color:$bg_accent",
 			),
 		);

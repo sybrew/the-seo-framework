@@ -324,13 +324,25 @@ switch ( $instance ) :
 				<span class="tsf-toblock">
 					<input type="radio" name="<?php $this->field_name( 'timestamps_format' ); ?>" id="<?php $this->field_id( 'timestamps_format_0' ); ?>" value="0" <?php checked( $this->get_field_value( 'timestamps_format' ), '0' ); ?> />
 					<label for="<?php $this->field_id( 'timestamps_format_0' ); ?>">
-						<span title="<?php esc_attr_e( 'Complete date', 'autodescription' ); ?>"><?php echo $this->code_wrap( $timestamp_0 ); ?> [?]</span>
+						<?php
+						echo $this->code_wrap( $timestamp_0 );
+						echo ' ';
+						$this->make_info(
+							__( 'Complete date', 'autodescription' )
+						);
+						?>
 					</label>
 				</span>
 				<span class="tsf-toblock">
 					<input type="radio" name="<?php $this->field_name( 'timestamps_format' ); ?>" id="<?php $this->field_id( 'timestamps_format_1' ); ?>" value="1" <?php checked( $this->get_field_value( 'timestamps_format' ), '1' ); ?> />
 					<label for="<?php $this->field_id( 'timestamps_format_1' ); ?>">
-						<span title="<?php esc_attr_e( 'Complete date plus hours, minutes and timezone', 'autodescription' ); ?>"><?php echo $this->code_wrap( $timestamp_1 ); ?> [?]</span>
+						<?php
+						echo $this->code_wrap( $timestamp_1 );
+						echo ' ';
+						$this->make_info(
+							__( 'Complete date plus hours, minutes and timezone', 'autodescription' )
+						);
+						?>
 					</label>
 				</span>
 			</p>
