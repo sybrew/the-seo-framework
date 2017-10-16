@@ -307,6 +307,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Updated:**
 		/
 		* TODO All transient caches for The SEO Framework have been invalidated.
+			* Done: LD-JSON.
+			* TODO: Description, sitemap.
 	* **Removed:**
 		* The DMOZ project that it influenced is no longer available nor used, so:
 			* `noodp` and all its settings.

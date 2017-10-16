@@ -198,7 +198,8 @@ function the_seo_framework_do_upgrade_2900() {
 
 /**
  * Converts sitemap timestamp settings to global timestamp settings.
- * Invalidates object cache if changed.
+ * Adds new character counter settings.
+ * Invalidates object cache.
  *
  * @since 3.0.0
  */
@@ -210,7 +211,6 @@ function the_seo_framework_do_upgrade_3001() {
 	//= Only change if option exists. Falls back to default upgrader instead.
 	if ( '' !== $timestamp_format ) {
 		$tsf->update_option( 'timestamps_format', (string) (int) $timestamp_format );
-		$tsf->delete_object_cache();
 		//= Only set notice if an actual upgrade took place. (redundancy check)
 		if ( the_seo_framework_previous_db_version() > '0' ) {
 			the_seo_framework_add_upgrade_notice(
@@ -226,6 +226,8 @@ function the_seo_framework_do_upgrade_3001() {
 		$tsf->update_option( 'display_character_counter', 0 );
 		$tsf->update_option( 'display_pixel_counter', 1 );
 	}
+
+	$tsf->delete_object_cache();
 
 	update_option( 'the_seo_framework_upgraded_db_version', '3001' );
 }
