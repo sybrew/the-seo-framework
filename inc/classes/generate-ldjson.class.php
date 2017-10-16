@@ -224,31 +224,24 @@ class Generate_Ldjson extends Generate_Image {
 	 */
 	public function get_ld_json_website() {
 
-		$use_sitename  = $this->enable_ld_json_sitename();
-		$use_searchbox = $this->enable_ld_json_searchbox();
-
-		if ( false === $use_sitename && false === $use_searchbox )
-			return '';
-
+		// var_dump() this used to be a conditional output.... Must we reimplement this feature?
 		$data = array(
 			'@context' => 'http://schema.org',
 			'@type' => 'WebSite',
 			'url' => $this->get_homepage_permalink(),
 		);
 
-		if ( $use_sitename ) {
-			$name = $this->get_blogname();
-			$kn = $this->get_option( 'knowledge_name' );
+		$name = $this->get_blogname();
+		$kn = $this->get_option( 'knowledge_name' );
 
-			$alternate_name = $kn && $kn !== $name ? $kn : '';
+		$alternate_name = $kn && $kn !== $name ? $kn : '';
 
-			$data += array(
-				'name' => $this->escape_title( $name ),
-				'alternateName' => $this->escape_title( $alternate_name ),
-			);
-		}
+		$data += array(
+			'name' => $this->escape_title( $name ),
+			'alternateName' => $this->escape_title( $alternate_name ),
+		);
 
-		if ( $use_searchbox ) {
+		if ( $this->enable_ld_json_searchbox() ) {
 			$action_name = 'search_term_string';
 			$search_link = $this->pretty_permalinks ? \trailingslashit( \get_search_link() ) : \get_search_link();
 			/**
@@ -936,31 +929,6 @@ class Generate_Ldjson extends Generate_Image {
 		 */
 		$filter = (bool) \apply_filters( 'the_seo_framework_json_breadcrumb_output', true );
 		$option = $this->is_option_checked( 'ld_json_breadcrumbs' );
-
-		return $cache = $filter && $option;
-	}
-
-	/**
-	 * Determines if sitename script is enabled.
-	 *
-	 * @since 2.6.0
-	 * @staticvar bool $cache
-	 *
-	 * @return bool
-	 */
-	public function enable_ld_json_sitename() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) )
-			return $cache;
-
-		/**
-		 * Applies filters the_seo_framework_json_sitename_output
-		 * @since 2.6.0
-		 */
-		$filter = (bool) \apply_filters( 'the_seo_framework_json_sitename_output', true );
-		$option = $this->is_option_checked( 'ld_json_sitename' );
 
 		return $cache = $filter && $option;
 	}

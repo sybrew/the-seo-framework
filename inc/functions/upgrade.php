@@ -81,9 +81,9 @@ function the_seo_framework_do_upgrade() {
 		the_seo_framework_do_upgrade_2900();
 		$version = '2900';
 	}
-	if ( $version < '3000' ) {
-		the_seo_framework_do_upgrade_3000();
-		$version = '3000';
+	if ( $version < '3001' ) {
+		the_seo_framework_do_upgrade_3001();
+		$version = '3001';
 	}
 
 	do_action( 'the_seo_framework_upgraded' );
@@ -202,7 +202,7 @@ function the_seo_framework_do_upgrade_2900() {
  *
  * @since 3.0.0
  */
-function the_seo_framework_do_upgrade_3000() {
+function the_seo_framework_do_upgrade_3001() {
 
 	$tsf = the_seo_framework();
 
@@ -219,5 +219,13 @@ function the_seo_framework_do_upgrade_3000() {
 		}
 	}
 
-	update_option( 'the_seo_framework_upgraded_db_version', '3000' );
+	if ( the_seo_framework_previous_db_version() > '0' ) {
+		$tsf->update_option( 'display_character_counter', 1 );
+		$tsf->update_option( 'display_pixel_counter', 1 );
+	} else {
+		$tsf->update_option( 'display_character_counter', 0 );
+		$tsf->update_option( 'display_pixel_counter', 1 );
+	}
+
+	update_option( 'the_seo_framework_upgraded_db_version', '3001' );
 }

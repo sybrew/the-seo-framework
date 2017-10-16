@@ -563,10 +563,19 @@ class Admin_Pages extends Inpost {
 	public function make_info( $description = '', $link = '', $echo = true ) {
 
 		if ( $link ) {
-			$output = '<a href="' . \esc_url( $link, array( 'http', 'https' ) ) . '" target="_blank" rel="nofollow noopener" title="' . \esc_attr( $description ) . '">[?]</a>';
+			$output = sprintf(
+				'<a href="%1$s" class="tsf-tooltip-item" target="_blank" rel="nofollow noopener" title="%2$s" data-desc="%2$s">[?]</a>',
+				\esc_url( $link, array( 'http', 'https' ) ),
+				\esc_attr( $description )
+			);
 		} else {
-			$output = '<span title="' . \esc_attr( $description ) . '">[?]</span>';
+			$output = sprintf(
+				'<span class="tsf-tooltip-item" title="%1$s" data-desc="%1$s">[?]</span>',
+				\esc_attr( $description )
+			);
 		}
+
+		$output = sprintf( '<span class="tsf-tooltip-wrap">%s</span>', $output );
 
 		if ( $echo ) {
 			//* Already escaped.
@@ -819,7 +828,7 @@ class Admin_Pages extends Inpost {
 	 * @since 3.0.0
 	 *
 	 * @param string $for     The input ID it's for.
-	 * @param int    $current The initial value for no-JS.
+	 * @param string $initial The initial value for no-JS.
 	 */
 	public function output_character_counter_wrap( $for, $initial = 0 ) {
 		printf(

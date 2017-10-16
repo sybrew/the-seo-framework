@@ -23,18 +23,18 @@ switch ( $instance ) :
 		$robots = array(
 			'noindex' => array(
 				'value' => 'noindex',
-				'name' 	=> __( 'NoIndex', 'autodescription' ),
-				'desc' 	=> __( 'These options prevent indexing of the selected archives and pages. If you enable this, the selected archives or pages will be removed from Search Engine results pages.', 'autodescription' ),
+				'name'  => __( 'NoIndex', 'autodescription' ),
+				'desc'  => __( 'These options prevent indexing of the selected archives and pages. If you enable this, the selected archives or pages will be removed from Search Engine results pages.', 'autodescription' ),
 			),
 			'nofollow' => array(
 				'value' => 'nofollow',
-				'name'	=> __( 'NoFollow', 'autodescription' ),
-				'desc'	=> __( 'These options prevent links from being followed on the selected archives and pages. If you enable this, the selected archives or pages in-page links will gain no SEO value, including your own links.', 'autodescription' ),
+				'name'  => __( 'NoFollow', 'autodescription' ),
+				'desc'  => __( 'These options prevent links from being followed on the selected archives and pages. If you enable this, the selected archives or pages in-page links will gain no SEO value, including your own links.', 'autodescription' ),
 			),
 			'noarchive' => array(
 				'value' => 'noarchive',
-				'name'	=> __( 'NoArchive', 'autodescription' ),
-				'desc'	=> __( 'These options prevent caching of the selected archives and pages. If you enable this, Search Engines will not create a cached copy of the selected archives or pages.', 'autodescription' ),
+				'name'  => __( 'NoArchive', 'autodescription' ),
+				'desc'  => __( 'These options prevent caching of the selected archives and pages. If you enable this, search engines will not create a cached copy of the selected archives or pages.', 'autodescription' ),
 			),
 		);
 
@@ -44,40 +44,40 @@ switch ( $instance ) :
 		 * @since 2.2.2
 		 *
 		 * @param array $default_tabs { 'id' = The identifier =>
-		 *			array(
-		 *				'name' 		=> The name
-		 *				'callback'	=> function callback
-		 *				'dashicon'	=> WordPress Dashicon
-		 *				'args'		=> function args
-		 *			)
+		 *    array(
+		 *       'name'     => The name
+		 *       'callback' => function callback
+		 *       'dashicon' => WordPress Dashicon
+		 *       'args'     => function args
+		 *    )
 		 * }
 		 */
 		$default_tabs = array(
-				'general' => array(
-					'name' 		=> __( 'General', 'autodescription' ),
-					'callback'	=> array( $this, 'robots_metabox_general_tab' ),
-					'dashicon'	=> 'admin-generic',
-					'args'		=> '',
-				),
-				'index' => array(
-					'name' 		=> __( 'Indexing', 'autodescription' ),
-					'callback'	=> array( $this, 'robots_metabox_no_tab' ),
-					'dashicon'	=> 'filter',
-					'args'		=> array( $types, $robots['noindex'] ),
-				),
-				'follow' => array(
-					'name'		=> __( 'Following', 'autodescription' ),
-					'callback'	=> array( $this, 'robots_metabox_no_tab' ),
-					'dashicon'	=> 'editor-unlink',
-					'args'		=> array( $types, $robots['nofollow'] ),
-				),
-				'archive' => array(
-					'name'		=> __( 'Archiving', 'autodescription' ),
-					'callback'	=> array( $this, 'robots_metabox_no_tab' ),
-					'dashicon'	=> 'download',
-					'args'		=> array( $types, $robots['noarchive'] ),
-				),
-			);
+			'general' => array(
+				'name'     => __( 'General', 'autodescription' ),
+				'callback' => array( $this, 'robots_metabox_general_tab' ),
+				'dashicon' => 'admin-generic',
+				'args'     => '',
+			),
+			'index' => array(
+				'name'     => __( 'Indexing', 'autodescription' ),
+				'callback' => array( $this, 'robots_metabox_no_tab' ),
+				'dashicon' => 'filter',
+				'args'     => array( $types, $robots['noindex'] ),
+			),
+			'follow' => array(
+				'name'     => __( 'Following', 'autodescription' ),
+				'callback' => array( $this, 'robots_metabox_no_tab' ),
+				'dashicon' => 'editor-unlink',
+				'args'     => array( $types, $robots['nofollow'] ),
+			),
+			'archive' => array(
+				'name'     => __( 'Archiving', 'autodescription' ),
+				'callback' => array( $this, 'robots_metabox_no_tab' ),
+				'dashicon' => 'download',
+				'args'     => array( $types, $robots['noarchive'] ),
+			),
+		);
 
 		/**
 		 * Applies filters 'the_seo_framework_robots_settings_tabs' : array see $default_tabs
@@ -94,8 +94,10 @@ switch ( $instance ) :
 
 	case 'the_seo_framework_robots_metabox_general' :
 
-		?><h4><?php esc_html_e( 'Open Directory Settings', 'autodescription' ); ?></h4><?php
-		$this->description( __( "Sometimes, Search Engines use resources from certain Directories to find titles and descriptions for your content. You generally don't want them to. Turn these options on to prevent them from doing so.", 'autodescription' ) );
+		?>
+		<h4><?php esc_html_e( 'Open Directory Settings', 'autodescription' ); ?></h4>
+		<?php
+		$this->description( __( "Sometimes, search engines use resources from certain Directories to find titles and descriptions for your content. You generally don't want them to. Turn these options on to prevent them from doing so.", 'autodescription' ) );
 		$this->description( __( "The Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave the option checked.", 'autodescription' ) );
 
 		$fields = $this->wrap_fields(
@@ -110,7 +112,15 @@ switch ( $instance ) :
 		<hr>
 
 		<h4><?php esc_html_e( 'Paginated Archive Settings', 'autodescription' ); ?></h4>
-		<p class="description"><?php printf( esc_html__( "Indexing the second or later page of any archive might cause duplication errors. Search Engines look down upon them; therefore, it's recommended to disable indexing of those pages.", 'autodescription' ), $this->code_wrap( 'noodp' ), $this->code_wrap( 'noydir' ) ); ?></p>
+		<p class="description">
+			<?php
+			printf(
+				esc_html__( "Indexing the second or later page of any archive might cause duplication errors. Search engines look down upon them; therefore, it's recommended to disable indexing of those pages.", 'autodescription' ),
+				$this->code_wrap( 'noodp' ),
+				$this->code_wrap( 'noydir' )
+			);
+			?>
+		</p>
 		<?php
 
 		$this->wrap_fields(

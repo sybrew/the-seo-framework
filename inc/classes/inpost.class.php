@@ -411,9 +411,9 @@ class Inpost extends Profile {
 	 * @ignore
 	 * @todo Remove and refactor caller.
 	 *
-	 * @param int $tit_len_parsed. Passed by reference.
+	 * @param string $tit_len_parsed. Passed by reference.
 	 * @param string $doctitle_placeholder. Passed by reference.
-	 * @param int $desc_len_parsed. Passed by reference.
+	 * @param string $desc_len_parsed. Passed by reference.
 	 * @param string $description_placeholder. Passed by reference.
 	 */
 	public function _get_inpost_general_tab_vars( &$tit_len_parsed, &$doctitle_placeholder, &$desc_len_parsed, &$description_placeholder ) {

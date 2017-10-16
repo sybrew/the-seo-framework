@@ -247,7 +247,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Open Graph updated time.
 		/
 		* TODO Primary category settings have been added to each post.
-		* TODO Logo upload has been added for Open Graph.
+		* TODO New sitename options, that are now named Organization options.
+		* TODO Split Person/Organization SEO?
+		* TODO Logo upload has been added for Organization Schema.org.
 			* Current customizer logo settings are still (too) theme-specific.
 			* The output will still fall back to the customizer logo when not set.
 		* SEO title placeholders and counters now update when:
@@ -255,13 +257,19 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Changing the page title.
 			* Note that the example is not a perfect analogy. Sanitation is a complex process and sending it back-and-forth through AJAX can be heavy on the server.
 		* Pixel counters!
-			/
 			* A pixel counter is like a character counter, but it's far more accurate. This is because not all characters have the same length. e.g. A `W` is much wider than an `i`.
 			* These counters show the true length of what Google renders, represented through a bar.
 			* If the bar is green, your title or description will likely fit.
 			* If the bar is red, your title or description will likely be truncated.
 			* The bar grows as more space is filled in.
 			* The bar shrinks as more characters are truncated.
+		* Counter settings:
+			* The character and pixel counters can be enabled and disabled in the General meta box, under the Layout settings.
+			* For new sites, by default:
+				* The character counter is disabled.
+				* The pixel counter is enabled.
+			* For sites that have been upgraded from earlier TSF versions, by default:
+				* Both counters are enabled.
 	* **Changed:**
 		* Schema breadcrumbs now have their IDs reset. They have an URL fragment attached (e.g. `example.com/#schemaorg-bcl`).
 			* This is to prevent ID collision with generated scripts from other plugins, like WooCommerce 3.0+.
@@ -284,6 +292,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* "Floating title placeholders" now move smoother on resize.
 		* The counter type update buttons on taxonomial edit screens no longer stretch to the adjacent input length.
 		* Informational links (e.g. to Google's webmaster pages) are no longer tracked.
+		* `[?]` help tooltips now pop up instantly through our improved tooltips.
+		* Polished many admin sentences, to try conveying what options do with increased understanding.
 		* Refactored "floating title placeholder"'s code, this means it no longer "glues" every part together based on assumption to perform calculations and placements.
 			/
 			* This made way for new features, it improved performance, and it lowered overall lower maintenance cost.
@@ -291,9 +301,12 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* In-post SEO box active tab's shadow now has the same color as the used admin button color scheme.
 			/
 			* TODO test RTL.
-		* Slightly improved CSS render performance by eliminating clause-calls; i.e. we now use `.class` instead of `div.class`.
+		* Slightly improved CSS render performance by eliminating clause-calls; i.e. we now use `.class` instead of `div.class` and derivatives thereof.
 			/
 			* TODO RTL.
+	* **Updated:**
+		/
+		* TODO All transient caches for The SEO Framework have been invalidated.
 	* **Removed:**
 		* The DMOZ project that it influenced is no longer available nor used, so:
 			* `noodp` and all its settings.
@@ -303,6 +316,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		*  The Open Graph protocol no longer allows `article:modified_time` on `website` types, so:
 			* `page_modify_time` and all its settings.
 			* `home_modify_time` and all its settings.
+		/
+		* TODO The Site Name project has been abandoned, and this data is now accumulated automatically, so:
+			* `ld_json_sitename` and all its settings.
 		* Open graph type `blog`. It's no longer supported. `website` is used instead.
 		* Sitemaps timestamp format option. It will be converted to the new global timestamp format option upon upgrade.
 		* Polylang URL compatibility file. It now works without it.
@@ -347,8 +363,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* "Twitter profile"
 			* Location: User profile edit page.
 		* "Authors can override this option on their profile page."
-			* Location: SEO Settings -> Social Meta Box -> Twitter Tab
-			* Location: SEO Settings -> Social Meta Box -> Facebook Tab
+			* Location: SEO Settings -> Social meta box -> Twitter tab
+			* Location: SEO Settings -> Social meta box -> Facebook tab
 		* "Private:"
 			* Location: Private page title placeholder. Shown in the custom SEO title edit input field.
 		* "Protected:"
@@ -357,6 +373,21 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Location: Pixel counter's tooltip.
 			* 1: Pixels used.
 			* 2: Guideline pixels.
+		* Location: SEO Setting -> General meta box -> Layout tab
+			* "Counter Settings"
+			* "Display character counters?"
+			* "The character counter is based on guidelines."
+			* "Display pixel counters?"
+			* "The pixel counter computes whether the input will fit on Search Engine Result Pages."
+		* "View your profile."
+			* Location: SEO Setting -> Schema meta box -> Presence tab
+		* "Learn how this data is used."
+			* Location: SEO Setting -> Schema meta box
+			* This is a general sentence for the `[?]` links.
+	* **Updated:**
+		/
+		* TODO Many sentences now have a dot attached, because all the "help titles" have been converted into tooltips.
+		* TODO Checkboxes now always have a question mark at the end.
 	* **Changed:**
 		* "The Open Directory Project and the Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave these options checked."
 			* Now is: "The Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave the option checked."
@@ -399,6 +430,25 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Now is: "Add the blog name to the automated description?"
 			* Clarity: "Additions" is contextual.
 			* Terminology: "Blogname" is an internal name. "A blog name" is the user term.
+		* "Preferred %s URL location"
+			* Now is: "This urges search engines to go to the outputted URL."
+			* Clarity: It now tells what it does.
+		* "Social Pages connected to this website"
+			* Now is: "Connected Social Pages"
+			* Title: The norm is to capitalize it, and to convert verbs into adjectives.
+		* "Query alteration Settings"
+			* Now is: "Query Alteration Settings"
+			* Oops: Forgot to capitalize.
+		* "This creates good meta descriptions"
+			* Now is: "This creates better automated meta descriptions."
+			* Not necessarily good: It's just better.
+			* Verbatim: It's automated.
+		* "...Search Engines..."
+			* Now are: "...search engines..."
+			* Normalize: It's not a title, it's a term.
+		* "Tell..."
+			* Now are: "This tells..."
+			* Objective: These point to a nearby setting.
 	* **Removed:**
 		* "It's recommended on posts, but it's not recommended on pages unless you modify or create new pages frequently."
 			* No longer applicable.
@@ -407,6 +457,12 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Removed: This data wasn't allowed in the first place.
 		* "By default, the sitemap only outputs the modified date if you've enabled them within the Social Metabox. This setting overrides those settings for the Sitemap."
 			* Removed: No longer applicable.
+		* "Recommended Length: 145 to 155 characters"
+			* Removed: Overshadowed by the pixel counter.
+		* "Recommended Length: 50 to 55 characters"
+			* Removed: Overshadowed by the pixel counter.
+		/
+		* TODO "Multiple trails can be outputted. The longest trail is prioritized."
 
 * **For developers:**
 	* **Added:**
@@ -523,6 +579,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			 * `the_seo_framework_url_path`, use WordPress filters instead. This filter no longer runs by default.
 			 * `the_seo_framework_url_output_args`. This filter no longer runs by default.
 			 * `the_seo_framework_url_args`. This filter no longer runs by default.
+		* **Removed:**
+			* `the_seo_framework_json_sitename_output`, this output type is no longer supported directly.
+			/
+			* TODO more have been removed...
 	* **Action notes:**
 		* **Added:**
 			* `the_seo_framework_pre_seo_settings`
@@ -537,6 +597,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * **The full changelog can be found [here](http://theseoframework.com/?cat=2).**
 
 == Upgrade Notice ==
+
+= 3.0.0 =
+A major update. Make a backup of your database before upgrading.
 
 = 2.9.3 =
 A highly recommended update that fixes "Home Page as Blog" query issues.

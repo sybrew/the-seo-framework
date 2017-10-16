@@ -197,6 +197,9 @@ class Sanitize extends Admin_Pages {
 				'alter_search_query',
 				'alter_archive_query',
 
+				'display_pixel_counter',
+				'display_character_counter',
+
 				'cache_meta_description',
 				'cache_meta_schema',
 				'cache_sitemap',
@@ -274,7 +277,6 @@ class Sanitize extends Admin_Pages {
 				'source_the_feed',
 
 				'ld_json_searchbox',
-				'ld_json_sitename',
 				'ld_json_breadcrumbs',
 
 				'sitemaps_output',

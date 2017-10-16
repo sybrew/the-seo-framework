@@ -94,16 +94,12 @@ $description_placeholder = $generated_description;
 						printf( esc_html__( '%s Title', 'autodescription' ), esc_html( $type ) );
 						?>
 					</strong>
-					<?php
-					$this->make_info(
-						__( 'Recommended Length: 50 to 55 characters', 'autodescription' ),
-						'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3'
-					);
-					?>
 				</label>
 				<?php
-				$this->output_character_counter_wrap( 'autodescription-meta[doctitle]', $tit_len_parsed );
-				$this->output_pixel_counter_wrap( 'autodescription-meta[doctitle]', 'title' );
+				$this->get_option( 'display_character_counter' )
+					and $this->output_character_counter_wrap( 'autodescription-meta[doctitle]', $tit_len_parsed );
+				$this->get_option( 'display_pixel_counter' )
+					and $this->output_pixel_counter_wrap( 'autodescription-meta[doctitle]', 'title' );
 				?>
 			</th>
 			<td>
@@ -123,16 +119,12 @@ $description_placeholder = $generated_description;
 						printf( esc_html__( '%s Meta Description', 'autodescription' ), esc_html( $type ) );
 						?>
 					</strong>
-					<?php
-					$this->make_info(
-						__( 'Recommended Length: 145 to 155 characters', 'autodescription' ),
-						'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1'
-					);
-					?>
 				</label>
 				<?php
-				$this->output_character_counter_wrap( 'autodescription-meta[description]', $desc_len_parsed );
-				$this->output_pixel_counter_wrap( 'autodescription-meta[description]', 'description' );
+				$this->get_option( 'display_character_counter' )
+					and $this->output_character_counter_wrap( 'autodescription-meta[description]', $desc_len_parsed );
+				$this->get_option( 'display_pixel_counter' )
+					and $this->output_pixel_counter_wrap( 'autodescription-meta[description]', 'description' );
 				?>
 			</th>
 			<td>
@@ -151,7 +143,7 @@ $description_placeholder = $generated_description;
 						$this->code_wrap( 'noindex' )
 					);
 					$this->make_info(
-						__( 'Tell Search Engines not to show this page in their search results', 'autodescription' ),
+						__( 'This tells search engines not to show this page in their search results.', 'autodescription' ),
 						'https://support.google.com/webmasters/answer/93710?hl=' . $language
 					);
 					?>
@@ -167,7 +159,7 @@ $description_placeholder = $generated_description;
 						$this->code_wrap( 'nofollow' )
 					);
 					$this->make_info(
-						__( 'Tell Search Engines not to follow links on this page', 'autodescription' ),
+						__( 'This tells search engines not to follow links on this page.', 'autodescription' ),
 						'https://support.google.com/webmasters/answer/96569?hl=' . $language
 					);
 					?>
@@ -183,8 +175,8 @@ $description_placeholder = $generated_description;
 						$this->code_wrap( 'noarchive' )
 					);
 					$this->make_info(
-						__( 'Tell Search Engines not to follow links on this page', 'autodescription' ),
-						'Tell Search Engines not to save a cached copy of this page' . $language
+						__( 'This tells search engines not to follow links on this page.', 'autodescription' ),
+						'https://support.google.com/webmasters/answer/79812?hl=' . $language
 					);
 					?>
 				</label>

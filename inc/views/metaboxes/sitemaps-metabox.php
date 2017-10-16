@@ -88,7 +88,7 @@ switch ( $instance ) :
 		elseif ( $sitemap_detected ) :
 			$this->description( __( 'A sitemap has been detected in the root folder of your website. This means that the sitemap functionality has no effect.', 'autodescription' ) );
 		else :
-			$this->description( __( 'The Sitemap is an XML file that lists pages and posts for your website along with optional metadata about each post or page. This helps Search Engines crawl your website more easily.', 'autodescription' ) );
+			$this->description( __( 'The Sitemap is an XML file that lists pages and posts for your website along with optional metadata about each post or page. This helps search engines crawl your website more easily.', 'autodescription' ) );
 			$this->description( __( 'The optional metadata include the post and page modified time and a page priority indication, which is automated.', 'autodescription' ) );
 
 			?>
@@ -139,8 +139,8 @@ switch ( $instance ) :
 
 			$locate_url = false;
 		elseif ( $this->can_do_sitemap_robots( false ) ) :
-			$this->description( __( 'The robots.txt file is the first thing Search Engines look for. If you add the sitemap location in the robots.txt file, then Search Engines will look for and index the sitemap.', 'autodescription' ) );
-			$this->description( __( 'If you do not add the sitemap location to the robots.txt file, you will need to notify Search Engines manually through the Webmaster Console provided by the Search Engines.', 'autodescription' ) );
+			$this->description( __( 'The robots.txt file is the first thing search engines look for. If you add the sitemap location in the robots.txt file, then search engines will look for and index the sitemap.', 'autodescription' ) );
+			$this->description( __( 'If you do not add the sitemap location to the robots.txt file, you will need to notify search engines manually through the Webmaster Console provided by the Search Engines.', 'autodescription' ) );
 
 			?>
 			<hr>
@@ -152,7 +152,7 @@ switch ( $instance ) :
 			$this->wrap_fields(
 				$this->make_checkbox(
 					'sitemaps_robots',
-					esc_html__( 'Add sitemap location in robots?', 'autodescription' ) . ' ' . $this->make_info( __( 'This only has effect if the sitemap is active', 'autodescription' ), '', false ),
+					esc_html__( 'Add sitemap location in robots?', 'autodescription' ) . ' ' . $this->make_info( __( 'This only has effect if the sitemap is active.', 'autodescription' ), '', false ),
 					'',
 					false
 				), true
@@ -178,7 +178,7 @@ switch ( $instance ) :
 		?>
 		<h4><?php esc_html_e( 'Timestamps Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'The modified time suggests to Search Engines where to look for content changes. It has no impact on the SEO value unless you drastically change pages or posts. It then depends on how well your content is constructed.', 'autodescription' ) );
+		$this->description( __( 'The modified time suggests to search engines where to look for content changes. It has no impact on the SEO value unless you drastically change pages or posts. It then depends on how well your content is constructed.', 'autodescription' ) );
 		?>
 		<hr>
 
@@ -199,7 +199,7 @@ switch ( $instance ) :
 		?>
 		<h4><?php esc_html_e( 'Ping Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'Notifying Search Engines of a sitemap change is helpful to get your content indexed as soon as possible.', 'autodescription' ) );
+		$this->description( __( 'Notifying search engines of a sitemap change is helpful to get your content indexed as soon as possible.', 'autodescription' ) );
 		$this->description( __( 'By default this will happen at most once an hour.', 'autodescription' ) );
 
 		?>
@@ -242,7 +242,7 @@ switch ( $instance ) :
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'sitemap_styles',
-				esc_html__( 'Style Sitemap?', 'autodescription' ) . ' ' . $this->make_info( __( 'This makes the sitemap more readable for humans', 'autodescription' ), '', false ),
+				esc_html__( 'Style Sitemap?', 'autodescription' ) . ' ' . $this->make_info( __( 'This makes the sitemap more readable for humans.', 'autodescription' ), '', false ),
 				'',
 				false
 			), true
@@ -259,7 +259,7 @@ switch ( $instance ) :
 			$this->wrap_fields(
 				$this->make_checkbox(
 					'sitemap_logo',
-					esc_html__( 'Add site logo?', 'autodescription' ) . ' ' . $this->make_info( __( 'The logo is set in Customizer', 'autodescription' ), '', false ),
+					esc_html__( 'Add site logo?', 'autodescription' ) . ' ' . $this->make_info( __( 'The logo is set in Customizer.', 'autodescription' ), '', false ),
 					'',
 					false
 				), true

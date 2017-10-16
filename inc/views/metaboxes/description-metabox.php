@@ -129,12 +129,13 @@ switch ( $instance ) :
 
 		<h4><?php esc_html_e( 'Add descriptive Additions to Description', 'autodescription' ); ?></h4>
 		<p id="tsf-description-additions-toggle">
-			<label for="<?php $this->field_id( 'description_additions' ); ?>" class="tsf-toblock">
+			<label for="<?php $this->field_id( 'description_additions' ); ?>">
 				<input type="checkbox" name="<?php $this->field_name( 'description_additions' ); ?>" id="<?php $this->field_id( 'description_additions' ); ?>" <?php $this->is_conditional_checked( 'description_additions' ); ?> value="1" <?php checked( $this->get_field_value( 'description_additions' ) ); ?> />
 				<?php
 				esc_html_e( 'Add Additions to automated description?', 'autodescription' );
+				echo ' ';
 				$this->make_info(
-					__( 'This creates good meta descriptions', 'autodescription' ),
+					__( 'This creates better automated meta descriptions.', 'autodescription' ),
 					$google_explanation
 				);
 				?>
@@ -143,9 +144,9 @@ switch ( $instance ) :
 
 		<h4><?php esc_html_e( 'Add Blogname to Additions', 'autodescription' ); ?></h4>
 		<p id="tsf-description-onblogname-toggle">
-			<label for="<?php $this->field_id( 'description_blogname' ); ?>" class="tsf-toblock">
+			<label for="<?php $this->field_id( 'description_blogname' ); ?>">
 				<input type="checkbox" name="<?php $this->field_name( 'description_blogname' ); ?>" id="<?php $this->field_id( 'description_blogname' ); ?>" <?php $this->is_conditional_checked( 'description_blogname' ); ?> value="1" <?php checked( $this->get_field_value( 'description_blogname' ) ); ?> />
-				<?php esc_html_e( 'Add the blog name to the automated description', 'autodescription' ); ?>
+				<?php esc_html_e( 'Add the blog name to the automated description?', 'autodescription' ); ?>
 			</label>
 		</p>
 		<?php

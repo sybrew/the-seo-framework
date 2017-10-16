@@ -73,7 +73,7 @@ switch ( $instance ) :
 
 	case 'inpost_general' :
 		//* Temporarily. TODO refactor.
-		$tit_len_parsed = $desc_len_parsed = 0;
+		$tit_len_parsed = $desc_len_parsed = '';
 		$doctitle_placeholder = $description_placeholder = '';
 		$this->_get_inpost_general_tab_vars( $tit_len_parsed, $doctitle_placeholder, $desc_len_parsed, $description_placeholder );
 		//= End temporarily.
@@ -108,18 +108,12 @@ switch ( $instance ) :
 							printf( esc_html__( 'Custom %s Title', 'autodescription' ), esc_html( $type ) );
 							?>
 						</strong></div>
-						<div>
-							<?php
-							$this->make_info(
-								__( 'Recommended Length: 50 to 55 characters', 'autodescription' ),
-								'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3'
-							);
-							?>
-						</div>
 					</label>
 					<?php
-					$this->output_character_counter_wrap( 'autodescription_title', $tit_len_parsed );
-					$this->output_pixel_counter_wrap( 'autodescription_title', 'title' );
+					$this->get_option( 'display_character_counter' )
+						and $this->output_character_counter_wrap( 'autodescription_title', $tit_len_parsed );
+					$this->get_option( 'display_pixel_counter' )
+						and $this->output_pixel_counter_wrap( 'autodescription_title', 'title' );
 					?>
 				</div>
 			</div>
@@ -141,18 +135,12 @@ switch ( $instance ) :
 							printf( esc_html__( 'Custom %s Description', 'autodescription' ), esc_html( $type ) );
 							?>
 						</strong></div>
-						<div>
-							<?php
-							$this->make_info(
-								__( 'Recommended Length: 145 to 155 characters', 'autodescription' ),
-								'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1'
-							);
-							?>
-						</div>
 					</label>
 					<?php
-					$this->output_character_counter_wrap( 'autodescription_description', $desc_len_parsed );
-					$this->output_pixel_counter_wrap( 'autodescription_description', 'description' );
+					$this->get_option( 'display_character_counter' )
+						and $this->output_character_counter_wrap( 'autodescription_description', $desc_len_parsed );
+					$this->get_option( 'display_pixel_counter' )
+						and $this->output_pixel_counter_wrap( 'autodescription_description', 'description' );
 					?>
 				</div>
 			</div>
@@ -178,11 +166,7 @@ switch ( $instance ) :
 						<div>
 						<?php
 						$this->make_info(
-							sprintf(
-								/* translators: %s = Post type name */
-								__( 'Preferred %s URL location', 'autodescription' ),
-								$type
-							),
+							__( 'This urges search engines to go to the outputted URL.', 'autodescription' ),
 							'https://support.google.com/webmasters/answer/139066?hl=' . $language
 						);
 						?>
@@ -213,7 +197,7 @@ switch ( $instance ) :
 						echo ' ';
 						$this->make_info(
 							sprintf(
-								__( 'Tell Search Engines not to show this %s in their search results', 'autodescription' ),
+								__( 'This tells search engines not to show this %s in their search results.', 'autodescription' ),
 								$type
 							),
 							'https://support.google.com/webmasters/answer/93710?hl=' . $language
@@ -228,7 +212,7 @@ switch ( $instance ) :
 						printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'nofollow' ), esc_html( $type ) );
 						echo ' ';
 						$this->make_info(
-							sprintf( __( 'Tell Search Engines not to follow links on this %s', 'autodescription' ), $type ),
+							sprintf( __( 'This tells search engines not to follow links on this %s.', 'autodescription' ), $type ),
 							'https://support.google.com/webmasters/answer/96569?hl=' . $language
 						);
 					?>
@@ -247,7 +231,7 @@ switch ( $instance ) :
 						/* translators: %s = Post type name */
 						$this->make_info(
 							sprintf(
-								__( 'Tell Search Engines not to save a cached copy of this %s', 'autodescription' ),
+								__( 'This tells search engines not to save a cached copy of this %s.', 'autodescription' ),
 								$type
 							),
 							'https://support.google.com/webmasters/answer/79812?hl=' . $language
@@ -281,7 +265,7 @@ switch ( $instance ) :
 						printf( esc_html__( 'Exclude this %s from local search', 'autodescription' ), esc_html( $type ) );
 						echo ' ';
 						/* translators: %s = Post type name */
-						$this->make_info( sprintf( __( 'This excludes this %s from local on-site search results', 'autodescription' ), $type ) );
+						$this->make_info( sprintf( __( 'This excludes this %s from local on-site search results.', 'autodescription' ), $type ) );
 						?>
 					</label>
 				</div>
@@ -291,10 +275,10 @@ switch ( $instance ) :
 					<label for="autodescription_exclude_from_archive"><input type="checkbox" name="autodescription[exclude_from_archive]" id="autodescription_exclude_from_archive" value="1" <?php checked( $this->get_custom_field( 'exclude_from_archive' ) ); ?> />
 						<?php
 						/* translators: %s = Post type name */
-						printf( esc_html__( 'Exclude this %s from all archive listings', 'autodescription' ), esc_html( $type ) );
+						printf( esc_html__( 'Exclude this %s from all archive listings.', 'autodescription' ), esc_html( $type ) );
 						echo ' ';
 						/* translators: %s = Post type name */
-						$this->make_info( sprintf( __( 'This excludes this %s from on-site archive pages', 'autodescription' ), $type ) );
+						$this->make_info( sprintf( __( 'This excludes this %s from on-site archive pages.', 'autodescription' ), $type ) );
 						?>
 					</label>
 				</div>
@@ -313,7 +297,7 @@ switch ( $instance ) :
 						<div>
 							<?php
 							$this->make_info(
-								__( 'This will force visitors to go to another URL', 'autodescription' ),
+								__( 'This will force visitors to go to another URL.', 'autodescription' ),
 								'https://support.google.com/webmasters/answer/93633?hl=' . $language
 							);
 							?>
@@ -343,7 +327,7 @@ switch ( $instance ) :
 						$this->make_info(
 							sprintf(
 								/* translators: %s = Post type name */
-								__( 'Preferred %s Social Image URL location', 'autodescription' ),
+								__( 'Set preferred %s Social Image URL location.', 'autodescription' ),
 								$type
 							),
 							'https://developers.facebook.com/docs/sharing/best-practices#images'

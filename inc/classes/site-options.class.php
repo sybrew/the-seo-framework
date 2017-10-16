@@ -121,6 +121,9 @@ class Site_Options extends Sanitize {
 			'display_seo_bar_tables'  => 1, // SEO Bar post-list tables.
 			'display_seo_bar_metabox' => 0, // SEO Bar post SEO Settings.
 
+			'display_pixel_counter'     => 1, // Pixel counter.
+			'display_character_counter' => 0, // Character counter.
+
 			// General. Canonical.
 			'canonical_scheme' => 'automatic', // Canonical URL scheme.
 
@@ -267,7 +270,6 @@ class Site_Options extends Sanitize {
 
 			// Schema
 			'ld_json_searchbox'   => 1, // LD+Json Sitelinks Searchbox
-			'ld_json_sitename'    => 1, // LD+Json Sitename
 			'ld_json_breadcrumbs' => 1, // LD+Json Breadcrumbs
 
 			// Cache.

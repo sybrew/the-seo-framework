@@ -1009,9 +1009,6 @@ final class Deprecated {
 
 		$tsf->_deprecated_function( 'the_seo_framework()->ld_json_name()', '2.9.3' );
 
-		if ( false === $tsf->enable_ld_json_sitename() )
-			return '';
-
 		$context = $this->schema_context();
 		$webtype = $this->schema_type();
 		$url = $this->schema_home_url();

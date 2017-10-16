@@ -13,11 +13,11 @@ switch ( $instance ) :
 		 * @since 2.2.2
 		 *
 		 * @param array $default_tabs { 'id' = The identifier =>
-		 *		array(
-		 *			'name'     => The name
-		 *			'callback' => The callback function, use array for method calling
-		 *			'dashicon' => Desired dashicon
-		 *		)
+		 *   array(
+		 *       'name'     => The name
+		 *       'callback' => The callback function, use array for method calling
+		 *       'dashicon' => Desired dashicon
+		 *   )
 		 * }
 		 */
 		$default_tabs = array(
@@ -61,7 +61,6 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_social_metabox_general' :
-
 		?>
 		<h4><?php esc_html_e( 'Social Meta Tags Settings', 'autodescription' ); ?></h4>
 		<?php
@@ -123,7 +122,7 @@ switch ( $instance ) :
 		<p>
 			<label for="tsf_fb_socialimage-url">
 				<strong><?php esc_html_e( 'Social Image Fallback URL', 'autodescription' ); ?></strong>
-				<?php $this->make_info( __( 'Preferred Social Image fallback URL location', 'autodescription' ), 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>
+				<?php $this->make_info( __( 'Set preferred Social Image fallback URL location.', 'autodescription' ), 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>
 			</label>
 		</p>
 		<p>
@@ -164,7 +163,6 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_social_metabox_facebook' :
-
 		$fb_author = $this->get_field_value( 'facebook_author' );
 		$fb_author_placeholder = _x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' );
 
@@ -185,8 +183,13 @@ switch ( $instance ) :
 		<p>
 			<label for="<?php $this->field_id( 'facebook_appid' ); ?>">
 				<strong><?php esc_html_e( 'Facebook App ID', 'autodescription' ); ?></strong>
-				<a href="<?php echo esc_url( 'https://developers.facebook.com/apps' ); ?>" target="_blank" class="description" title="<?php esc_html_e( 'Get Facebook App ID', 'autodescription' ); ?>">[?]</a>
 			</label>
+			<?php
+			$this->make_info(
+				__( 'Get Facebook App ID.', 'autodescription' ),
+				'https://developers.facebook.com/apps'
+			);
+			?>
 		</p>
 		<p>
 			<input type="text" name="<?php $this->field_name( 'facebook_appid' ); ?>" class="large-text" id="<?php $this->field_id( 'facebook_appid' ); ?>" placeholder="<?php echo esc_attr( $fb_appid_placeholder ); ?>" value="<?php echo esc_attr( $fb_appid ); ?>" />
@@ -195,8 +198,13 @@ switch ( $instance ) :
 		<p>
 			<label for="<?php $this->field_id( 'facebook_publisher' ); ?>">
 				<strong><?php esc_html_e( 'Article Publisher Facebook URL', 'autodescription' ); ?></strong>
-				<a href="<?php echo esc_url( 'https://instantarticles.fb.com/' ); ?>" class="description" target="_blank" title="<?php esc_html_e( 'To use this, you need to be a verified business', 'autodescription' ); ?>">[?]</a>
 			</label>
+			<?php
+			$this->make_info(
+				__( 'To use this, you need to be a verified business.', 'autodescription' ),
+				'https://instantarticles.fb.com/'
+			);
+			?>
 		</p>
 		<p>
 			<input type="text" name="<?php $this->field_name( 'facebook_publisher' ); ?>" class="large-text" id="<?php $this->field_id( 'facebook_publisher' ); ?>" placeholder="<?php echo esc_attr( $fb_publisher_placeholder ); ?>" value="<?php echo esc_attr( $fb_publisher ); ?>" />
@@ -205,8 +213,13 @@ switch ( $instance ) :
 		<p>
 			<label for="<?php $this->field_id( 'facebook_author' ); ?>">
 				<strong><?php esc_html_e( 'Article Author Facebook Fallback URL', 'autodescription' ); ?></strong>
-				<a href="<?php echo esc_url( 'https://facebook.com/me' ); ?>" class="description" target="_blank" title="<?php esc_attr_e( 'Your Facebook Profile', 'autodescription' ); ?>">[?]</a>
 			</label>
+			<?php
+			$this->make_info(
+				__( 'Your Facebook Profile.', 'autodescription' ),
+				'https://facebook.com/me'
+			);
+			?>
 		</p>
 		<?php $this->description( __( 'Authors can override this option on their profile page.', 'autodescription' ) ); ?>
 		<p>
@@ -216,7 +229,6 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_social_metabox_twitter' :
-
 		$tw_site = $this->get_field_value( 'twitter_site' );
 		$tw_site_placeholder = _x( '@your-site-username', 'Twitter @username', 'autodescription' );
 
@@ -225,7 +237,9 @@ switch ( $instance ) :
 
 		$twitter_card = $this->get_twitter_card_types();
 
-		?><h4><?php esc_html_e( 'Default Twitter Integration Settings', 'autodescription' ); ?></h4><?php
+		?>
+		<h4><?php esc_html_e( 'Default Twitter Integration Settings', 'autodescription' ); ?></h4>
+		<?php
 		$this->description( __( 'Twitter post sharing works mostly through Open Graph. However, you can also link your Business and Personal Twitter pages, among various other options.', 'autodescription' ) );
 
 		?>
@@ -269,8 +283,13 @@ switch ( $instance ) :
 		<p>
 			<label for="<?php $this->field_id( 'twitter_site' ); ?>" class="tsf-toblock">
 				<strong><?php esc_html_e( 'Website Twitter Profile', 'autodescription' ); ?></strong>
-				<a href="<?php echo esc_url( 'https://twitter.com/home' ); ?>" target="_blank" class="description" title="<?php esc_html_e( 'Find your @username', 'autodescription' ); ?>">[?]</a>
 			</label>
+			<?php
+			$this->make_info(
+				__( 'Find your @username.', 'autodescription' ),
+				'https://twitter.com/home'
+			);
+			?>
 		</p>
 		<p>
 			<input type="text" name="<?php $this->field_name( 'twitter_site' ); ?>" class="large-text" id="<?php $this->field_id( 'twitter_site' ); ?>" placeholder="<?php echo esc_attr( $tw_site_placeholder ); ?>" value="<?php echo esc_attr( $tw_site ); ?>" />
@@ -279,8 +298,13 @@ switch ( $instance ) :
 		<p>
 			<label for="<?php $this->field_id( 'twitter_creator' ); ?>" class="tsf-toblock">
 				<strong><?php esc_html_e( 'Twitter Author Fallback Profile', 'autodescription' ); ?></strong>
-				<a href="<?php echo esc_url( 'https://twitter.com/home' ); ?>" target="_blank" class="description" title="<?php esc_attr_e( 'Find your @username', 'autodescription' ); ?>">[?]</a>
 			</label>
+			<?php
+			$this->make_info(
+				__( 'Find your @username.', 'autodescription' ),
+				'https://twitter.com/home'
+			);
+			?>
 		</p>
 		<?php $this->description( __( 'Authors can override this option on their profile page.', 'autodescription' ) ); ?>
 		<p>
@@ -290,7 +314,6 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_social_metabox_postdates' :
-
 		$posts_i18n = esc_html__( 'Posts', 'autodescription' );
 		$home_i18n = esc_html__( 'Home Page', 'autodescription' );
 

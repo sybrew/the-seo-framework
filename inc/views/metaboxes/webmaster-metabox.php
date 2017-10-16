@@ -23,40 +23,60 @@ switch ( $instance ) :
 		<hr>
 
 		<p>
-			<label for="<?php $this->field_id( 'google_verification' ); ?>" class="tsf-toblock">
+			<label for="<?php $this->field_id( 'google_verification' ); ?>">
 				<strong><?php esc_html_e( 'Google Webmaster Verification Code', 'autodescription' ); ?></strong>
-				<a href="<?php echo esc_url( $google_site_url ); ?>" target="_blank" class="description" title="<?php esc_attr_e( 'Get the Google Verification code', 'autodescription' ); ?>">[?]</a>
 			</label>
+			<?php
+			$this->make_info(
+				__( 'Get the Google verification code.', 'autodescription' ),
+				$google_site_url
+			);
+			?>
 		</p>
 		<p>
 			<input type="text" name="<?php $this->field_name( 'google_verification' ); ?>" class="large-text" id="<?php $this->field_id( 'google_verification' ); ?>" placeholder="ABC1d2eFg34H5iJ6klmNOp7qRstUvWXyZaBc8dEfG9" value="<?php echo esc_attr( $this->get_field_value( 'google_verification' ) ); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php $this->field_id( 'bing_verification' ); ?>" class="tsf-toblock">
+			<label for="<?php $this->field_id( 'bing_verification' ); ?>">
 				<strong><?php esc_html_e( 'Bing Webmaster Verification Code', 'autodescription' ); ?></strong>
-				<a href="<?php echo esc_url( $bing_site_url ); ?>" target="_blank" class="description" title="<?php esc_attr_e( 'Get the Bing Verification Code', 'autodescription' ); ?>">[?]</a>
 			</label>
+			<?php
+			$this->make_info(
+				__( 'Get the Bing verification code.', 'autodescription' ),
+				$bing_site_url
+			);
+			?>
 		</p>
 		<p>
 			<input type="text" name="<?php $this->field_name( 'bing_verification' ); ?>" class="large-text" id="<?php $this->field_id( 'bing_verification' ); ?>" placeholder="123A456B78901C2D3456E7890F1A234D" value="<?php echo esc_attr( $this->get_field_value( 'bing_verification' ) ); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php $this->field_id( 'yandex_verification' ); ?>" class="tsf-toblock">
+			<label for="<?php $this->field_id( 'yandex_verification' ); ?>">
 				<strong><?php esc_html_e( 'Yandex Webmaster Verification Code', 'autodescription' ); ?></strong>
-				<a href="<?php echo esc_url( $yandex_site_url ); ?>" target="_blank" class="description" title="<?php esc_attr_e( 'Get the Yandex Verification Code', 'autodescription' ); ?>">[?]</a>
 			</label>
+			<?php
+			$this->make_info(
+				__( 'Get the Yandex verification code.', 'autodescription' ),
+				$yandex_site_url
+			);
+			?>
 		</p>
 		<p>
 			<input type="text" name="<?php $this->field_name( 'yandex_verification' ); ?>" class="large-text" id="<?php $this->field_id( 'yandex_verification' ); ?>" placeholder="12345abc678901d2" value="<?php echo esc_attr( $this->get_field_value( 'yandex_verification' ) ); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php $this->field_id( 'pint_verification' ); ?>" class="tsf-toblock">
+			<label for="<?php $this->field_id( 'pint_verification' ); ?>">
 				<strong><?php esc_html_e( 'Pinterest Analytics Verification Code', 'autodescription' ); ?></strong>
-				<a href="<?php echo esc_url( $pint_site_url ); ?>" target="_blank" class="description" title="<?php esc_attr_e( 'Get the Pinterest Verification Code', 'autodescription' ); ?>">[?]</a>
 			</label>
+			<?php
+			$this->make_info(
+				__( 'Get the Pinterest verification code.', 'autodescription' ),
+				$pint_site_url
+			);
+			?>
 		</p>
 		<p>
 			<input type="text" name="<?php $this->field_name( 'pint_verification' ); ?>" class="large-text" id="<?php $this->field_id( 'pint_verification' ); ?>" placeholder="123456a7b8901de2fa34bcdef5a67b98" value="<?php echo esc_attr( $this->get_field_value( 'pint_verification' ) ); ?>" />

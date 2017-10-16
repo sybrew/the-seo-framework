@@ -543,11 +543,11 @@ class Admin_Init extends Init {
 			'.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:checked + .tsf-flex-nav-tab-label' => array(
 				"box-shadow:0 -2px 0 0 $color_accent inset",
 			),
-			'.tsf-seo-bar .tsf-tooltip' => array(
+			'.tsf-tooltip-text' => array(
 				"background-color:$bg_accent",
 				"color:$bg_alt_font",
 			),
-			'.tsf-seo-bar .tsf-tooltip div:after' => array(
+			'.tsf-tooltip div:after' => array(
 				"border-top-color:$bg_accent",
 			),
 		);
