@@ -829,14 +829,20 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @param string $for     The input ID it's for.
 	 * @param string $initial The initial value for no-JS.
+	 * @param bool   $display Whether to display the counter.
 	 */
-	public function output_character_counter_wrap( $for, $initial = 0 ) {
+	public function output_character_counter_wrap( $for, $initial = 0, $display = true ) {
 		printf(
-			'<div class="tsf-counter-wrap"><span class="description tsf-counter">%s</span><span class="hide-if-no-js tsf-ajax"></span></div>',
+			'<div class="tsf-counter-wrap" %s><span class="description tsf-counter">%s</span><span class="hide-if-no-js tsf-ajax"></span></div>',
+			$display ? '' : 'style="display:none;"',
 			sprintf(
 				/* translators: %s = number */
-				esc_html__( 'Characters Used: %s', 'autodescription' ),
-				'<span id="' . esc_attr( $for ) . '_chars">' . (int) mb_strlen( $initial ) . '</span>'
+				\esc_html__( 'Characters Used: %s', 'autodescription' ),
+				sprintf(
+					'<span id="%s_chars">%s</span>',
+					\esc_attr( $for ),
+					(int) mb_strlen( $initial )
+				)
 			)
 		);
 	}
@@ -847,18 +853,22 @@ class Admin_Pages extends Inpost {
 	 * @since 3.0.0
 	 *
 	 * @param string $for  The input ID it's for.
-	 * @param string $type Whether it's a 'title' or 'description' counter. Must be escaped.
+	 * @param string $type Whether it's a 'title' or 'description' counter.
+	 * @param bool   $display Whether to display the counter.
 	 */
-	public function output_pixel_counter_wrap( $for, $type ) {
-		?>
-		<div class="tsf-pixel-counter-wrap hide-if-no-js">
-			<div id="<?php echo \esc_attr( $for ); ?>_pixels" class="tsf-tooltip-wrap">
-				<span class="tsf-pixel-counter-bar tsf-tooltip-item" aria-label="" data-desc=""><span class="tsf-pixel-counter-fluid"></span></span>
-			</div>
-			<div class="tsf-pixel-shadow-wrap">
-				<span class="tsf-pixel-counter-shadow tsf-<?php echo $type; ?>-pixel-counter-shadow"></span>
-			</div>
-		</div>
-		<?php
+	public function output_pixel_counter_wrap( $for, $type, $display = true ) {
+		printf(
+			'<div class="tsf-pixel-counter-wrap hide-if-no-js" %s>%s%s</div>',
+			$display ? '' : 'style="display:none;"',
+			sprintf(
+				'<div id="%s_pixels" class="tsf-tooltip-wrap">%s</div>',
+				\esc_attr( $for ),
+				'<span class="tsf-pixel-counter-bar tsf-tooltip-item" aria-label="" data-desc=""><span class="tsf-pixel-counter-fluid"></span></span>'
+			),
+			sprintf(
+				'<div class="tsf-pixel-shadow-wrap"><span class="tsf-pixel-counter-shadow tsf-%s-pixel-counter-shadow"></span></div>',
+				\esc_attr( $type )
+			)
+		);
 	}
 }

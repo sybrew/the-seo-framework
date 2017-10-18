@@ -565,7 +565,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 					* `touchRemoveDesc`
 				* Counter related, these have been put into the respective containers:
 					* `updateCounters`
+					* `counterUpdate`
 					* `additionsClassInit`
+					* `getCounterName`
+					* `counterUpdatedResponse`
 				* Other:
 					* `getSep`, used for both titles and descriptions.
 					* string `nonce` (property), use object `nonces` instead.

@@ -178,10 +178,9 @@ switch ( $instance ) :
 				</strong>
 			</label>
 			<?php
-			$this->get_option( 'display_character_counter' )
-				and $this->output_character_counter_wrap( $this->get_field_id( 'homepage_title' ), $tit_len );
-			$this->get_option( 'display_pixel_counter' )
-				and $this->output_pixel_counter_wrap( $this->get_field_id( 'homepage_title' ), 'title' );
+			//* Output these unconditionally, with inline CSS attached to allow reacting on settings.
+			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_title' ), $tit_len, (bool) $this->get_option( 'display_character_counter' ) );
+			$this->output_pixel_counter_wrap( $this->get_field_id( 'homepage_title' ), 'title', (bool) $this->get_option( 'display_pixel_counter' ) );
 			?>
 		</div>
 		<p id="tsf-title-wrap">
@@ -235,10 +234,9 @@ switch ( $instance ) :
 				</strong>
 			</label>
 			<?php
-			$this->get_option( 'display_character_counter' )
-				and $this->output_character_counter_wrap( $this->get_field_id( 'homepage_description' ), $desc_len );
-			$this->get_option( 'display_pixel_counter' )
-				and $this->output_pixel_counter_wrap( $this->get_field_id( 'homepage_description' ), 'description' );
+			//* Output these unconditionally, with inline CSS attached to allow reacting on settings.
+			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_description' ), $desc_len, (bool) $this->get_option( 'display_character_counter' ) );
+			$this->output_pixel_counter_wrap( $this->get_field_id( 'homepage_description' ), 'description', (bool) $this->get_option( 'display_pixel_counter' ) );
 			?>
 		</div>
 		<p>
