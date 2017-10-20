@@ -619,25 +619,21 @@ class Generate_Ldjson extends Generate_Image {
 	 */
 	protected function filter_ld_json_breadcrumb_trees( $trees, $until ) {
 
-		$found = [];
+		$found = array();
 
-		if ( is_array( $trees ) ) {
-			if ( in_array( $until, $trees, true ) ) {
-				$found = array( $until );
-			} else {
-				foreach ( $trees as $tree ) {
-					if ( $this->filter_ld_json_breadcrumb_trees( $tree, $until ) ) {
-						$found = array_splice(
-							$tree,
-							0,
-							array_search( $until, $tree, true ) + 1
-						);
-						break;
-					}
+		if ( in_array( $until, (array) $trees, true ) ) {
+			$found = array( $until );
+		} elseif ( is_array( $trees ) ) {
+			foreach ( $trees as $tree ) {
+				if ( $this->filter_ld_json_breadcrumb_trees( $tree, $until ) ) {
+					$found = array_splice(
+						$tree,
+						0,
+						array_search( $until, $tree, true ) + 1
+					);
+					break;
 				}
 			}
-		} elseif ( $trees === $until ) {
-			$found = array( $until );
 		}
 
 		return $found;

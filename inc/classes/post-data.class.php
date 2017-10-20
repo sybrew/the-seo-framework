@@ -88,8 +88,7 @@ class Post_Data extends Detect {
 	 *
 	 * @param integer  $post_id Post ID.
 	 * @param \WP_Post $post    Post object.
-	 * @return mixed Returns post id if permissions incorrect, null if doing autosave, ajax or future post, false if update
-	 *               or delete failed, and true on success.
+	 * @return void
 	 */
 	public function inpost_seo_save( $post_id, $post ) {
 
@@ -97,11 +96,7 @@ class Post_Data extends Detect {
 		if ( empty( $_POST['autodescription'] ) )
 			return;
 
-		/**
-		 * Merge user submitted options with fallback defaults
-		 * Passes through nonce at the end of the function.
-		 */
-		$data = \wp_parse_args( $_POST['autodescription'], array(
+		$defaults = array(
 			'_genesis_title'         => '',
 			'_genesis_description'   => '',
 			'_genesis_canonical_uri' => '',
@@ -113,8 +108,13 @@ class Post_Data extends Detect {
 			'_genesis_noarchive'     => 0,
 			'exclude_local_search'   => 0, // Will be displayed in custom fields when set...
 			'exclude_from_archive'   => 0, // Will be displayed in custom fields when set...
-			'_primary_term'          => 0,
-		) );
+		);
+
+		/**
+		 * Merge user submitted options with fallback defaults
+		 * Passes through nonce at the end of the function.
+		 */
+		$data = \wp_parse_args( $_POST['autodescription'], $defaults );
 
 		foreach ( (array) $data as $key => $value ) :
 			switch ( $key ) :
@@ -144,10 +144,6 @@ class Post_Data extends Detect {
 				case 'redirect' :
 					//* Let's keep this as the output really is.
 					$data[ $key ] = $this->s_redirect_url( $value );
-					continue 2;
-
-				case '_primary_term' :
-					$data[ $key ] = \absint( $value ) ?: 0;
 					continue 2;
 
 				case '_genesis_noindex' :
@@ -229,6 +225,56 @@ class Post_Data extends Detect {
 				\update_post_meta( $post->ID, $field, $value );
 			} else {
 				\delete_post_meta( $post->ID, $field );
+			}
+		}
+	}
+
+	/**
+	 * Saves primary term data for posts.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param integer  $post_id Post ID.
+	 * @param \WP_Post $post    Post object.
+	 * @return void
+	 */
+	public function _save_inpost_primary_term( $post_id, $post ) {
+
+		//* Nonce is done at the end of this function.
+		if ( empty( $_POST['autodescription'] ) )
+			return;
+
+		$post_type = \get_post_type( $post_id ) ?: false;
+
+		if ( ! $post_type )
+			return;
+
+		/**
+		 * Don't save if WP is creating a revision (same as DOING_AUTOSAVE?)
+		 * @todo @see wp_is_post_revision(), which also returns the post revision ID...
+		 */
+		if ( 'revision' === $post_type )
+			return;
+
+		//* Check that the user is allowed to edit the post
+		if ( ! \current_user_can( 'edit_post', $post_id ) )
+			return;
+
+		$_taxonomies = $this->get_hierarchical_taxonomies_as( 'names', $post_type );
+		$values = array();
+
+		foreach ( $_taxonomies as $_taxonomy ) {
+			$_post_key = '_primary_term_' . $_taxonomy;
+			$values[ $_taxonomy ] = array(
+				'action' => $this->inpost_nonce_field . '_pt',
+				'name' => $this->inpost_nonce_name . '_pt_' . $_taxonomy,
+				'value' => isset( $_POST['autodescription'][ $_post_key ] ) ? \absint( $_POST['autodescription'][ $_post_key ] ) : false,
+			);
+		}
+
+		foreach ( $values as $t => $v ) {
+			if ( \wp_verify_nonce( $v['name'], $v['action'] ) ) {
+				$this->update_primary_term_id( $post_id, $t, $v['value'] );
 			}
 		}
 	}
@@ -564,7 +610,7 @@ class Post_Data extends Detect {
 	 */
 	public function get_primary_term( $post_id = null, $taxonomy = '' ) {
 
-		$primary_id = (int) $this->get_custom_field( '_primary_term', $post_id );
+		$primary_id = $this->get_primary_term_id( $post_id, $taxonomy );
 
 		if ( ! $primary_id )
 			return false;
@@ -580,5 +626,37 @@ class Post_Data extends Detect {
 		}
 
 		return $primary_term;
+	}
+
+	/**
+	 * Returns the primary term ID for post.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int|null $post_id The post ID.
+	 * @param string   $taxonomy The taxonomy name.
+	 * @return int     The primary term ID. 0 if not set.
+	 */
+	public function get_primary_term_id( $post_id = null, $taxonomy = '' ) {
+		return (int) $this->get_custom_field( '_primary_term_' . $taxonomy, $post_id ) ?: 0;
+	}
+
+	/**
+	 * Updates the primary term ID for post.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int|null $post_id  The post ID.
+	 * @param string   $taxonomy The taxonomy name.
+	 * @param int      $value    The new value. If empty, it will delete the entry.
+	 * @return bool True on success, false on failure.
+	 */
+	public function update_primary_term_id( $post_id = null, $taxonomy = '', $value = 0 ) {
+		if ( empty( $value ) ) {
+			$success = \delete_post_meta( $post_id, '_primary_term_' . $taxonomy );
+		} else {
+			$success = \update_post_meta( $post_id, '_primary_term_' . $taxonomy, $value );
+		}
+		return $success;
 	}
 }

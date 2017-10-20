@@ -65,8 +65,8 @@ class Inpost extends Profile {
 	protected function __construct() {
 		parent::__construct();
 
-		$this->inpost_nonce_name = 'the_seo_framework_inpost_seo_settings';
-		$this->inpost_nonce_field = 'the_seo_framework_inpost';
+		$this->inpost_nonce_name = 'tsf_inpost_seo_settings';
+		$this->inpost_nonce_field = 'tsf_inpost_nonce';
 
 		/**
 		 * Applies filters bool|string the_seo_framework_inpost_seo_bar :
@@ -216,10 +216,10 @@ class Inpost extends Profile {
 						$title = sprintf(
 							$schema,
 							\__( 'Homepage SEO Settings', 'autodescription' ),
-							sprintf(
-								'<a href="%s">%s</a>',
+							$this->make_info(
+								\__( 'The SEO Settings take precedence over these settings.', 'autodescription' ),
 								$this->seo_settings_page_url(),
-								\__( 'SEO Settings Page', 'autodescription' )
+								false
 							)
 						);
 					} else {
@@ -398,6 +398,17 @@ class Inpost extends Profile {
 		\do_action( 'the_seo_framework_pre_page_inpost_social_tab' );
 		$this->get_view( 'inpost/seo-settings-singular', get_defined_vars(), 'social' );
 		\do_action( 'the_seo_framework_pro_page_inpost_social_tab' );
+	}
+
+	/**
+	 * Outputs Primary Term nonce tempalte.
+	 *
+	 * @since 3.0.0
+	 * @access private
+	 */
+	public function _include_primary_term_selector_template() {
+		if ( $this->is_post_edit() )
+			$this->get_view( 'templates/inpost/primary-term-selector', array() );
 	}
 
 	/**

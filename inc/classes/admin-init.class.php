@@ -239,7 +239,25 @@ class Admin_Init extends Init {
 		$has_input = $is_settings_page || $is_post_edit || $is_term_edit;
 
 		$post_type = $is_post_edit ? \get_post_type( $id ) : false;
-		$taxonomies = $post_type ? $this->get_hierarchical_taxonomies_as( 'names', $post_type ) : false;
+		$_taxonomies = $post_type ? $this->get_hierarchical_taxonomies_as( 'objects', $post_type ) : array();
+
+		$taxonomies = array();
+
+		foreach ( $_taxonomies as $_t ) {
+			$_i18n_name = strtolower( $_t->labels->singular_name );
+			$taxonomies[ $_t->name ] = array(
+				'name' => $_t->name,
+				'i18n' => array(
+					/* translators: %s = term name */
+					'makePrimary' => sprintf( \esc_html__( 'Make primary %s', 'autodescription' ), $_i18n_name ),
+					/* translators: %s = term name */
+					'primary' => sprintf( \esc_html__( 'Primary %s', 'autodescription' ), $_i18n_name ),
+					/* translators: %s = term name */
+					'help' => sprintf( \esc_html__( 'You can set the primary %s through the buttons below.', 'autodescription' ), $_i18n_name ),
+				),
+				'primary' => $this->get_primary_term_id( $id, $_t->name ) ?: 0,
+			);
+		}
 
 		if ( isset( $this->page_base_file ) && $this->page_base_file ) {
 			// We're somewhere within default WordPress pages.
@@ -342,8 +360,6 @@ class Admin_Init extends Init {
 				'protectedTitle' => $has_input && $id ? \__( 'Protected:', 'autodescription' ) : '',
 				/* translators: Pixel counter. 1: width, 2: guideline */
 				'pixelsUsed' => $has_input ? \__( '%1$d out of %2$d pixels are used.', 'autodescription' ) : '',
-				'makePrimary' => $has_input ? \__( 'Make primary', 'autodescription' ) : '',
-				'primary' => $has_input ? \__( 'Primary', 'autodescription' ) : '',
 			),
 			'params' => array(
 				'objectTitle' => $object_title,
@@ -559,9 +575,6 @@ class Admin_Init extends Init {
 			),
 			'.tsf-tooltip-down .tsf-tooltip-arrow:after' => array(
 				"border-bottom-color:$bg_accent",
-			),
-			'.tsf-primary-term-selector-circle' => array(
-				"color:$color",
 			),
 		);
 

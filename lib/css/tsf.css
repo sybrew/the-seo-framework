@@ -503,7 +503,7 @@ a.tsf-tooltip-item {
 	content: "";
 	border-left: 9px solid transparent;
 	border-right: 9px solid transparent;
-	border-top: 9px solid rgba(0,0,0,.45);
+	border-top: 9px solid rgba(0,0,0,.25);
 	position: absolute;
 	bottom: -1px;
 	left: -1px;
@@ -523,14 +523,14 @@ a.tsf-tooltip-item {
 	bottom: auto;
 	top: 0;
 	border-top: 0;
-	border-bottom: 8px solid rgba(0,0,0,.45);
+	border-bottom: 9px solid rgba(0,0,0,.25);
 }
 
 .tsf-tooltip-down .tsf-tooltip-arrow:after {
 	bottom: auto;
-	top: -1px;
+	top: 1px;
 	border-top: 0;
-	border-bottom: 9px solid #007bd2;
+	border-bottom: 8px solid #007bd2;
 }
 
 /* # End tooltips */
@@ -579,8 +579,8 @@ a.tsf-tooltip-item {
 	text-align: right;
 }
 
-.tsf-top-buttons input,
-.tsf-bottom-buttons input {
+.tsf-metaboxes .tsf-top-buttons input,
+.tsf-metaboxes .tsf-bottom-buttons input {
 	margin-left: 10px;
 }
 
@@ -972,6 +972,11 @@ body.js .tsf-flex-tab-content.tsf-flex-tab-content-active {
 	flex: 0 1 auto;
 }
 
+#tsf-inpost-box .hndle .tsf-tooltip-wrap a {
+	font-size: 14px;
+	line-height: 1em;
+}
+
 /**
  * Primary category selectors.
  */
@@ -982,42 +987,31 @@ body.js .tsf-flex-tab-content.tsf-flex-tab-content-active {
 .tsf-primary-term-selector {
 	margin: 0;
 	padding: 0;
-	width: 16px;
-	height: 100%;
-	line-height: inherit;
-	color: inherit;
-	display: inline-block;
 	float: right;
-	cursor: pointer;
-	text-decoration: underline;
-	border: none;
-	outline: none;
-	background: none;
-	box-shadow: none;
-	-webkit-appearance: none;
-	appearance: none;
-}
-
-.tsf-primary-term-selector:focus {
-	outline: none;
-}
-
-.tsf-primary-term-selector-circle {
+	line-height: inherit;
 	display: inline-block;
-	vertical-align: middle;
-	color: #0073aa;
-	width: 8px;
-	height: 8px;
-	margin: 0 auto;
-	border-radius: 50%;
-	border: 2px solid currentColor;
 }
 
-.tsf-is-primary-term .tsf-primary-term-selector-circle {
-	background: currentColor;
-	text-decoration: none;
-	cursor: default;
-	color: inherit;
+.tsf-primary-term-selector input {
+	vertical-align: middle;
+	height: 14px;
+	width: 14px;
+	min-width: 14px;
+	line-height: inherit;
+	margin: 0;
+	padding: 0;
+	pointer-events: none;
+}
+
+.tsf-primary-term-selector input:checked:before {
+	margin: 3px;
+	line-height: inherit;
+}
+
+.tsf-primary-term-selector-help {
+	position: absolute;
+	top: 0;
+	right: 25px;
 }
 
 /**

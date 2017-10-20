@@ -669,6 +669,20 @@ class Generate_Url extends Generate_Title {
 	}
 
 	/**
+	 * Adjusts category post link.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param \WP_Term  $term  The category to use in the permalink.
+	 * @param array     $terms Array of all categories (WP_Term objects) associated with the post.
+	 * @param \WP_Post  $post  The post in question.
+	 * @return \WP_Term The primary term.
+	 */
+	public function _adjust_post_link_category( $term, $terms = null, $post = null ) {
+		return $this->get_primary_term( $post->ID, $term->taxonomy ) ?: $term;
+	}
+
+	/**
 	 * Generates shortlink URL.
 	 *
 	 * @since 2.2.2

@@ -245,9 +245,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Sitemap's `lastmod` output.
 			* Article published and modified time.
 			* Open Graph updated time.
-		/
 		* Primary term settings have been added to each post supporting hierarchical taxonomies.
-			* This was a much requested feature.
+			* This setting is represented through buttons within the category selection meta box.
+			* This setting affects the URL structure of the post.
+			* This setting affects the breadcrumb structure of the post.
 		/
 		* TODO New sitename options, that are now named Organization options.
 		* TODO Split Person/Organization SEO?
@@ -312,7 +313,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* In-post SEO box active tab's shadow now has the same color as the used admin button color scheme.
 			/
 			* TODO test RTL.
-		* Slightly improved CSS render performance by eliminating clause-calls; i.e. we now use `.class` instead of `div.class` and derivatives thereof.
+		* Slightly improved CSS rendering performance by eliminating clause-calls; i.e. we now use `.class` instead of `div.class` and derivatives thereof.
 			/
 			* TODO RTL.
 	* **Updated:**
@@ -362,12 +363,15 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* When an empty description is supplied, the counter will now display `0` instead of nothing.
 		* TODO When latest post is protect or private, no description could've been generated on the blog page (and other archives?).
 		* TODO - New bug: Homepage as blog's paginated canonical URL no longer points to the first page.
+		* TODO - New bug: Homepage SEO settings metabox title is odd? and doesn't comply to the SEO Bar.
 		* TODO Separator selection description no longer overflows on EdgeHTML.
 		* Cyrillic texts JavaScript compatibility. TODO confirm.
 
 * **For translators:**
 	* **Added:**
 		* "Homepage SEO Settings"
+			* Location: In-post SEO Settings meta box title, when editing the home page.
+		* "The SEO Settings take precedence over these settings."
 			* Location: In-post SEO Settings meta box title, when editing the home page.
 		* "The previous sitemap timestamp settings have been converted into new global timestamp settings."
 			* Location: Upgrade notification.
@@ -384,8 +388,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Location: Password protected page title placeholder. Shown in the custom SEO title edit input field.
 		* "%1$d out of %2$d pixels are used.:"
 			* Location: Pixel counter's tooltip.
-			* 1: Pixels used.
-			* 2: Guideline pixels.
+			* `%1$d`: Pixels used.
+			* `%2$d`: Guideline pixels.
 		* Location: SEO Setting -> General meta box -> Layout tab
 			* "Counter Settings"
 			* "Display character counters?"
@@ -397,14 +401,19 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* "Learn how this data is used."
 			* Location: SEO Setting -> Schema meta box
 			* This is a general sentence for the `[?]` links.
-		* "Primary"
-			* Location: Post term selection.
-		* "Make primary"
-			* Location: Post term selection.
+		* "Primary %s"
+			* Location: Post term selection on-hover title.
+			* `%s`: Term name.
+		* "Make primary %s"
+			* Location: Post term selection on-hover title.
+			* `%s`: Term name.
+		* "You can set the primary %s through the buttons below."
+			* Location: Post term selection help mark (`[?]`).
+			* `%s`: Term name.
 	* **Updated:**
 		/
 		* TODO Many sentences now have a dot attached, because all the "help titles" have been converted into tooltips.
-		* TODO Checkboxes now always have a question mark at the end.
+		* TODO Checkbox labels now always have a question mark at the end.
 	* **Changed:**
 		* "The Open Directory Project and the Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave these options checked."
 			* Now is: "The Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave the option checked."
@@ -490,8 +499,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Property `$schema_ids`, it allows you to adjust used Schema.org JSON-LD script IDs.
 		* Method `s_numeric_string()`, it creates a string from integers. Rounds float down. Converts non-numeric input to `'0'`, arrays and objects to `'1'`.
 		* Method `s_facebook_profile()`, it converts any URL or string-input into a Facebook profile URL.
-		* `index.php` file in the classes folder stating the class structure.
 		* Method `get_current_term_meta()`, which fetches the current term's meta.
+		* Method `get_primary_term_id()`, which fetches the post's primary term ID.
+		* Method `get_primary_term()`, which fetches the post's primary term, but only if it exists.
+		* `index.php` file in the classes folder stating the class structure.
 	* **Changed:**
 		* Method `is_protected()` no longer checks for query, i.e. `is_singular()`, before parsing.
 		* Method `settings_capability()` now is `get_settings_capability()`, without deprecation; it was marked private.
@@ -499,6 +510,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* This saves resources, but can invoke fatal errors when you use TSF's private loader functions outside of TSF's bound API.
 		* Deprecated filter `the_seo_framework_canonical_force_scheme` (deprecated in 2.8.0) is no longer called by default.
 		* Method `use_archive_prefix` no longer uses the second `$args` parameter, and it no longer checks for the title state.
+		* Inpost-settings nonce name has been changed from `the_seo_framework_inpost_seo_settings` to `tsf_inpost_seo_settings`.
+		* Inpost-settings nonce field has been changed from `the_seo_framework_inpost` to `tsf_inpost_nonce`.
 	* **Improved:**
 		* Plugin (de)activation functions are no created when the plugin isn't being (de)activated.
 			* Instead, they've been moved in `inc/functions/plugin-(de)activation.php` and run directly as the files are called.

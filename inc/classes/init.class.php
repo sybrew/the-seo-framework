@@ -138,6 +138,9 @@ class Init extends Query {
 
 		//* Add query strings for sitemap rewrite.
 		\add_filter( 'query_vars', array( $this, 'enqueue_sitemap_query_vars' ), 1, 1 );
+
+		//* Adjust category link to accommodate primary term.
+		\add_filter( 'post_link_category', array( $this, '_adjust_post_link_category' ), 10, 3 );
 	}
 
 	/**
@@ -175,6 +178,7 @@ class Init extends Query {
 
 		//* Save post data.
 		\add_action( 'save_post', array( $this, 'inpost_seo_save' ), 1, 2 );
+		\add_action( 'save_post', array( $this, '_save_inpost_primary_term' ), 1, 2 );
 
 		//* Enqueues admin scripts.
 		\add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 0, 1 );
@@ -210,6 +214,9 @@ class Init extends Query {
 
 			//* Enqueue Inpost meta boxes.
 			\add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box_init' ), 5 );
+
+			//* Enqueue Inpost primary term template.
+			\add_action( 'admin_footer', array( $this, '_include_primary_term_selector_template' ) );
 
 			//* Enqueue Taxonomy meta output.
 			\add_action( 'current_screen', array( $this, 'add_taxonomy_seo_box_init' ), 10 );
