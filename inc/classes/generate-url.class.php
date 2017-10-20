@@ -125,7 +125,7 @@ class Generate_Url extends Generate_Title {
 			}
 
 			if ( ! $canonical_url ) {
-				if ( ! $this->has_page_on_front() && $this->is_front_page_by_id( $id ) ) {
+				if ( ! $id || ( $this->has_page_on_front() && $this->is_front_page_by_id( $id ) ) ) {
 					$canonical_url = $this->get_home_canonical_url();
 				} elseif ( $id ) {
 					$canonical_url = $this->get_singular_canonical_url( $id );

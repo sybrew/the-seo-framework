@@ -47,7 +47,6 @@ class Generate_Ldjson extends Generate_Image {
 	 */
 	protected function __construct() {
 		$this->setup_default_schema_ids();
-
 		parent::__construct();
 	}
 
@@ -406,7 +405,8 @@ class Generate_Ldjson extends Generate_Image {
 				),
 			);
 
-			if ( $image = $this->get_schema_image( $parent_id ) )
+			$image = $this->get_schema_image( $parent_id );
+			if ( $image )
 				$crumb['item']['image'] = $image;
 
 			$items[] = $crumb;
@@ -425,6 +425,8 @@ class Generate_Ldjson extends Generate_Image {
 	 * Generates LD+JSON Breadcrumbs script for Posts.
 	 *
 	 * @since 2.9.3
+	 * @since 3.0.0 1: Now only returns one crumb.
+	 *              2: Now listens to primary term ID.
 	 *
 	 * @return string LD+JSON breadcrumbs script for Posts.
 	 */
@@ -456,211 +458,110 @@ class Generate_Ldjson extends Generate_Image {
 			return '';
 
 		$cats = \wp_list_pluck( $cats, 'parent', 'term_id' );
-		asort( $cats, SORT_NUMERIC );
 
-		$assigned_ids = array();
-		$kittens = array();
 		$parents = array();
-		$parents_merge = array();
+		$assigned_ids = array();
 
 		//* Fetch cats children id's, if any.
 		foreach ( $cats as $term_id => $parent_id ) :
-
-			//* Store all used IDs to compare and filter stray Cat ID's later.
-			//= i.e. $kittens => $term_id_1 => $term_id_maybe_unassigned_to_post.
-			$assigned_ids[] = $term_id;
-
-			// Check if they have kittens (gets them all).
-			$children = \get_term_children( $term_id, $cat_type );
-			if ( ! \is_wp_error( $children ) ) {
-				/**
-				 * Save children id's as kittens.
-				 * Although stray terms don't have children, we assign them as
-				 * $kittens are also the latest version (even if $children === 0).
-				 *
-				 * This gets filtered later.
-				 */
-				$kittens[ $term_id ] = $children;
-			}
-
+			$assigned_ids[ $term_id ] = $parent_id;
 			// Check if they have parents (gets them all).
 			$ancestors = \get_ancestors( $term_id, $cat_type );
 			if ( $ancestors ) {
 				//= Save parents to find duplicates.
 				$parents[ $term_id ] = $ancestors;
+			} else {
+				//= Save current only with empty parent id..
+				$parents[ $term_id ] = array();
 			}
 		endforeach;
 		//= Circle of life...
 		unset( $cats );
 
-		if ( ! $kittens )
-			return '';
+		if ( ! $parents )
+			return;
 
-		foreach ( $kittens as $kit_id => $child_id ) :
+		//* Seed out parents that have multiple assigned children.
+		foreach ( $parents as $pa_id => $child_id ) :
 			foreach ( $child_id as $ckey => $cid ) :
-
-				/**
-				 * Seed out children that aren't assigned.
-				 * (from levels too deep as get_term_children gets them all).
-				 */
-				if ( $cid && ! in_array( $cid, $assigned_ids, true ) )
-					unset( $kittens[ $kit_id ][ $ckey ] );
-
-				/**
-				 * Make the tree count down multiple children are assigned.
-				 * This fetches the array from the ancestors.
-				 *
-				 * What we want is that the latest child ID gets its own single tree.
-				 * All ancestors should be a representation of the previous assigned trees.
-				 *
-				 * E.g. We have this structure, all assigned:
-				 *	- Cat 1
-				 *		- Cat 2
-				 *			- Cat 3
-				 *
-				 * We want a tree for "Cat 1+2+3", "Cat 1+2", and "Cat 3".
-				 *
-				 * We could add Cat 1 as well, but that's will give two single category lines, which could be misinterperted.
-				 * So we only use what we know: The kittens (child tree).
-				 */
-				if ( isset( $parents[ $cid ] ) && ! empty( $parents[ $kit_id ] ) ) {
-					$parents_merge[ $kit_id ] = $parents[ $kit_id ];
-					unset( $kittens[ $kit_id ] );
+				if ( isset( $parents[ $cid ] ) ) {
+					unset( $parents[ $cid ] );
 				}
 			endforeach;
 		endforeach;
 
-		/**
-		 * Build category ID trees for kittens.
-		 */
-		$trees = $this->build_ld_json_breadcrumb_trees( $kittens );
+		//* Merge tree list.
+		$tree_ids = $this->build_ld_json_breadcrumb_trees( $parents );
 
-		//* Empty parents.
-		$parents = array();
-
-		if ( ! empty( $parents_merge ) ) :
-			foreach ( $parents_merge as $child_id => $parents_ids ) {
-
-				//* Reset kitten.
-				$kitten = array();
-
-				//* Last element should be parent.
-				$pid = array_pop( $parents_ids );
-
-				if ( isset( $pid ) ) {
-					//* Parents are reversed children. Let's fix that.
-					$parents_ids = array_reverse( $parents_ids );
-
-					//* Add previous parent at the end of the rest.
-					array_push( $parents_ids, $child_id );
-
-					//* Temporarily array.
-					$kitten[ $pid ] = $parents_ids;
-
-					$trees = $this->build_ld_json_breadcrumb_trees( $kitten, $trees );
-				} else {
-					//* Parents are reversed children. Let's fix that.
-					$parents_ids = array_reverse( $parents_ids );
-
-					$trees = $this->build_ld_json_breadcrumb_trees( $parents_ids, $trees );
-				}
-			}
-		endif;
-
-		if ( ! $trees )
+		if ( ! $tree_ids )
 			return '';
 
+		$primary_term = $this->get_primary_term( $post_id, $cat_type );
+		$primary_term_id = $primary_term ? (int) $primary_term->term_id : 0;
+
+		$filtered = false;
 		/**
-		 * Sort by number of id's. Provides a cleaner layout, better Search Engine understanding and more consistent cache.
+		 * Only get one crumb.
+		 * If a category has multiple trees, it will filter until found.
+		 * @since 3.0.0
 		 */
-		if ( count( $trees ) > 1 ) :
-			$cb_filter = null;
-			if ( \has_filter( 'the_seo_framework_breadcrumb_post_sorting_callback' ) ) {
-				/**
-				 * Applies filter 'the_seo_framework_breadcrumb_post_sorting_callback' : string|array
-				 * @since 2.8.0
-				 *
-				 * @param mixed $function The method or function callback. Default false.
-				 * @param array $trees The current tree list.
-				 */
-				$cb_filter = \apply_filters_ref_array( 'the_seo_framework_breadcrumb_post_sorting_callback', array( false, $trees ) );
+		if ( $primary_term_id ) {
+			$_trees = $this->filter_ld_json_breadcrumb_trees( $tree_ids, $primary_term_id );
+			if ( $_trees ) {
+				$tree_ids = $_trees;
+				$filtered = true;
 			}
+		}
+		if ( ! $filtered ) {
+			//= Only get the first tree through numeric ordering.
+			ksort( $assigned_ids, SORT_NUMERIC );
+			$tree_ids = $this->filter_ld_json_breadcrumb_trees( $tree_ids, key( $assigned_ids ) );
+		}
 
-			if ( $cb_filter ) {
-				$trees = $this->call_function( $callback_filter, '2.8.0', $trees );
-			} else {
-				array_multisort( array_map( 'count', $trees ), SORT_DESC, SORT_REGULAR, $trees );
-			}
-		endif;
+		if ( is_scalar( $tree_ids ) )
+			$tree_ids = array( $tree_ids );
 
-		if ( ! $trees )
-			return '';
+		$items = array();
 
-		//* For each of the tree items, create a separated script.
-		foreach ( $trees as $tree_ids ) :
+		foreach ( $tree_ids as $pos => $child_id ) :
+			$position = $pos + 2;
 
-			if ( is_scalar( $tree_ids ) )
-				$tree_ids = array( $tree_ids );
-
-			/**
-			 * @staticvar int $item_cache
-			 * Used to prevent duplicated item re-generation.
-			 */
-			static $item_cache = array();
-
-			$items = array();
-
-			//* Put the children in the right order.
-			$tree_ids = array_reverse( $tree_ids, false );
-
-			foreach ( $tree_ids as $pos => $child_id ) :
-				if ( ! in_array( $child_id, $assigned_ids, true ) )
-					continue;
-
-				$position = $pos + 2;
-
-				//* Fetch item from cache if available.
-				if ( isset( $item_cache[ $child_id ] ) ) {
-					//* Adjust postition.
-					$item_cache[ $child_id ]['position'] = $position;
-					$items[] = $item_cache[ $child_id ];
-				} else {
+			if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
+				//* Note: WordPress Core translation.
+				$data = $this->get_term_meta( $child_id );
+				if ( empty( $data['doctitle'] ) ) {
 					$cat = \get_term( $child_id, $cat_type );
-
-					if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-						//* Note: WordPress Core translation.
-						$data = $this->get_term_meta( $child_id );
-						$cat_name = empty( $data['doctitle'] ) ? ( empty( $cat->name ) ? \__( 'Uncategorized' ) : $cat->name ) : $data['doctitle'];
-					} else {
-						//* Note: WordPress Core translation.
-						$cat_name = empty( $cat->name ) ? \__( 'Uncategorized' ) : $cat->name;
-					}
-
-					//* Store in cache.
-					$item_cache[ $child_id ] = array(
-						'@type'    => 'ListItem',
-						'position' => $position,
-						'item'     => array(
-							'@id'  => $this->get_schema_url_id(
-								'breadcrumb',
-								'create',
-								array( 'id' => $child_id, 'taxonomy' => $cat_type )
-							),
-							'name' => $this->escape_title( $cat_name ),
-							// 'image' => $this->get_schema_image( $child_id ),
-						),
-					);
-
-					$items[] = $item_cache[ $child_id ];
+					$cat_name = empty( $cat->name ) ? \__( 'Uncategorized' ) : $cat->name;
+				} else {
+					$cat_name = $data['doctitle'];
 				}
-			endforeach;
-
-			if ( $items ) {
-				array_unshift( $items, $this->get_ld_json_breadcrumb_home_crumb() );
-				array_push( $items, $this->get_ld_json_breadcrumb_current( $position ) );
-				$output .= $this->make_breadcrumb_script( $items );
+			} else {
+				//* Note: WordPress Core translation.
+				$cat = \get_term( $child_id, $cat_type );
+				$cat_name = empty( $cat->name ) ? \__( 'Uncategorized' ) : $cat->name;
 			}
+
+			//* Store in cache.
+			$items[] = array(
+				'@type'    => 'ListItem',
+				'position' => $position,
+				'item'     => array(
+					'@id'  => $this->get_schema_url_id(
+						'breadcrumb',
+						'create',
+						array( 'id' => $child_id, 'taxonomy' => $cat_type )
+					),
+					'name' => $this->escape_title( $cat_name ),
+					// 'image' => $this->get_schema_image( $child_id ),
+				),
+			);
 		endforeach;
+
+		if ( $items ) {
+			array_unshift( $items, $this->get_ld_json_breadcrumb_home_crumb() );
+			array_push( $items, $this->get_ld_json_breadcrumb_current( $position ) );
+			$output .= $this->make_breadcrumb_script( $items );
+		}
 
 		return $output;
 	}
@@ -708,6 +609,41 @@ class Generate_Ldjson extends Generate_Image {
 	}
 
 	/**
+	 * Filters breadcrumb tree until $until is found.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param array|int $trees
+	 * @param int       $until
+	 * @return array    $trees. Empty if $until is nowhere to be found.
+	 */
+	protected function filter_ld_json_breadcrumb_trees( $trees, $until ) {
+
+		$found = [];
+
+		if ( is_array( $trees ) ) {
+			if ( in_array( $until, $trees, true ) ) {
+				$found = array( $until );
+			} else {
+				foreach ( $trees as $tree ) {
+					if ( $this->filter_ld_json_breadcrumb_trees( $tree, $until ) ) {
+						$found = array_splice(
+							$tree,
+							0,
+							array_search( $until, $tree, true ) + 1
+						);
+						break;
+					}
+				}
+			}
+		} elseif ( $trees === $until ) {
+			$found = array( $until );
+		}
+
+		return $found;
+	}
+
+	/**
 	 * Generates homepage LD+JSON breadcrumb.
 	 *
 	 * @since 2.9.3
@@ -743,7 +679,7 @@ class Generate_Ldjson extends Generate_Image {
 			'position' => 1,
 			'item'     => array(
 				'@id'  => $this->get_schema_url_id( 'breadcrumb', 'homepage' ),
-				'name' => $custom_name,
+				'name' => $this->escape_title( $custom_name ),
 			),
 		);
 
@@ -786,7 +722,7 @@ class Generate_Ldjson extends Generate_Image {
 			'position' => $position,
 			'item'     => array(
 				'@id'  => $this->get_schema_url_id( 'breadcrumb', 'currentpage' ),
-				'name' => $name,
+				'name' => $this->escape_title( $name ),
 			),
 		);
 

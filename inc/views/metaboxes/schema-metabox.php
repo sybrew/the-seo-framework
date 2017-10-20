@@ -114,7 +114,7 @@ switch ( $instance ) :
 		$this->wrap_fields( $this->make_checkbox(
 			'ld_json_breadcrumbs',
 			esc_html__( 'Enable Breadcrumbs?', 'autodescription' ) . ' ' . $info,
-			esc_html__( 'Multiple trails can be outputted. The longest trail is prioritized.', 'autodescription' ),
+			'',
 			false
 		), true );
 

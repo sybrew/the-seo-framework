@@ -440,10 +440,16 @@ a.tsf-tooltip-item {
 	justify-content: flex-start;
 }
 
-.tsf-tooltip-text {
+.tsf-tooltip-down {
+	bottom: auto;
+	top: 0;
+}
+
+.tsf-tooltip-text-wrap {
 	padding: 10px 12px;
 	font-size: 1em;
 	font-weight: 500;
+	line-height: 1.625em;
 	border-radius: 3px;
 	background: #007bd2;
 	color: #fdfdfd;
@@ -451,8 +457,8 @@ a.tsf-tooltip-item {
 	text-shadow: none;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
-	white-space: pre-line;
 	word-break: break-word;
+	white-space: pre-line;
 	display: -webkit-box;
 	display: -webkit-flex;
 	display: -ms-flexbox;
@@ -488,6 +494,11 @@ a.tsf-tooltip-item {
 	height: 0;
 }
 
+.tsf-tooltip-down .tsf-tooltip-arrow {
+	bottom: auto;
+	top: -8px;
+}
+
 .tsf-tooltip-arrow:before {
 	content: "";
 	border-left: 9px solid transparent;
@@ -506,6 +517,20 @@ a.tsf-tooltip-item {
 	position: absolute;
 	bottom: 0;
 	left: 0;
+}
+
+.tsf-tooltip-down .tsf-tooltip-arrow:before {
+	bottom: auto;
+	top: 0;
+	border-top: 0;
+	border-bottom: 8px solid rgba(0,0,0,.45);
+}
+
+.tsf-tooltip-down .tsf-tooltip-arrow:after {
+	bottom: auto;
+	top: -1px;
+	border-top: 0;
+	border-bottom: 9px solid #007bd2;
 }
 
 /* # End tooltips */
@@ -945,6 +970,54 @@ body.js .tsf-flex-tab-content.tsf-flex-tab-content-active {
 	flex-direction: row;
 	-webkit-flex: 0 1 auto;
 	flex: 0 1 auto;
+}
+
+/**
+ * Primary category selectors.
+ */
+.tsf-is-primary-term {
+	font-weight: 600;
+}
+
+.tsf-primary-term-selector {
+	margin: 0;
+	padding: 0;
+	width: 16px;
+	height: 100%;
+	line-height: inherit;
+	color: inherit;
+	display: inline-block;
+	float: right;
+	cursor: pointer;
+	text-decoration: underline;
+	border: none;
+	outline: none;
+	background: none;
+	box-shadow: none;
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+.tsf-primary-term-selector:focus {
+	outline: none;
+}
+
+.tsf-primary-term-selector-circle {
+	display: inline-block;
+	vertical-align: middle;
+	color: #0073aa;
+	width: 8px;
+	height: 8px;
+	margin: 0 auto;
+	border-radius: 50%;
+	border: 2px solid currentColor;
+}
+
+.tsf-is-primary-term .tsf-primary-term-selector-circle {
+	background: currentColor;
+	text-decoration: none;
+	cursor: default;
+	color: inherit;
 }
 
 /**

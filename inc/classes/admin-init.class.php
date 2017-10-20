@@ -238,6 +238,9 @@ class Admin_Init extends Init {
 		$is_term_edit = $this->is_term_edit();
 		$has_input = $is_settings_page || $is_post_edit || $is_term_edit;
 
+		$post_type = $is_post_edit ? \get_post_type( $id ) : false;
+		$taxonomies = $post_type ? $this->get_hierarchical_taxonomies_as( 'names', $post_type ) : false;
+
 		if ( isset( $this->page_base_file ) && $this->page_base_file ) {
 			// We're somewhere within default WordPress pages.
 			if ( $this->is_static_frontpage( $id ) ) {
@@ -322,6 +325,8 @@ class Admin_Init extends Init {
 				'isSettingsPage' => $is_settings_page,
 				'isPostEdit' => $is_post_edit,
 				'isTermEdit' => $is_term_edit,
+				'postType' => $post_type,
+				'taxonomies' => $taxonomies,
 				'isPrivate' => $has_input && $id && $this->is_private( $id ),
 				'isPasswordProtected' => $has_input && $id && $this->is_password_protected( $id ),
 				'debug' => $this->script_debug,
@@ -337,6 +342,8 @@ class Admin_Init extends Init {
 				'protectedTitle' => $has_input && $id ? \__( 'Protected:', 'autodescription' ) : '',
 				/* translators: Pixel counter. 1: width, 2: guideline */
 				'pixelsUsed' => $has_input ? \__( '%1$d out of %2$d pixels are used.', 'autodescription' ) : '',
+				'makePrimary' => $has_input ? \__( 'Make primary', 'autodescription' ) : '',
+				'primary' => $has_input ? \__( 'Primary', 'autodescription' ) : '',
 			),
 			'params' => array(
 				'objectTitle' => $object_title,
@@ -543,12 +550,18 @@ class Admin_Init extends Init {
 			'.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:checked + .tsf-flex-nav-tab-label' => array(
 				"box-shadow:0 -2px 0 0 $color_accent inset",
 			),
-			'.tsf-tooltip-text' => array(
+			'.tsf-tooltip-text-wrap' => array(
 				"background-color:$bg_accent",
 				"color:$bg_alt_font",
 			),
-			'.tsf-tooltip div:after' => array(
+			'.tsf-tooltip-arrow:after' => array(
 				"border-top-color:$bg_accent",
+			),
+			'.tsf-tooltip-down .tsf-tooltip-arrow:after' => array(
+				"border-bottom-color:$bg_accent",
+			),
+			'.tsf-primary-term-selector-circle' => array(
+				"color:$color",
 			),
 		);
 

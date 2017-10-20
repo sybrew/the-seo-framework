@@ -113,7 +113,7 @@ class Post_Data extends Detect {
 			'_genesis_noarchive'     => 0,
 			'exclude_local_search'   => 0, // Will be displayed in custom fields when set...
 			'exclude_from_archive'   => 0, // Will be displayed in custom fields when set...
-			'_default_category'      => 0,
+			'_primary_term'          => 0,
 		) );
 
 		foreach ( (array) $data as $key => $value ) :
@@ -146,8 +146,9 @@ class Post_Data extends Detect {
 					$data[ $key ] = $this->s_redirect_url( $value );
 					continue 2;
 
-				case '_default_category' :
-					$data[ $key ] = \absint( $value );
+				case '_primary_term' :
+					$data[ $key ] = \absint( $value ) ?: 0;
+					continue 2;
 
 				case '_genesis_noindex' :
 				case '_genesis_nofollow' :
@@ -550,5 +551,34 @@ class Post_Data extends Detect {
 			$ret = true;
 
 		return $ret;
+	}
+
+	/**
+	 * Returns the primary term for post.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int|null $post_id The post ID.
+	 * @param string   $taxonomy The taxonomy name.
+	 * @return \WP_Term|false The primary term. False if not set.
+	 */
+	public function get_primary_term( $post_id = null, $taxonomy = '' ) {
+
+		$primary_id = (int) $this->get_custom_field( '_primary_term', $post_id );
+
+		if ( ! $primary_id )
+			return false;
+
+		$terms = \get_the_terms( $post_id, $taxonomy );
+		$primary_term = false;
+
+		foreach ( $terms as $term ) {
+			if ( $primary_id === (int) $term->term_id ) {
+				$primary_term = $term;
+				break;
+			}
+		}
+
+		return $primary_term;
 	}
 }

@@ -362,4 +362,39 @@ class Term_Data extends Post_Data {
 
 		return $term_name[ $singular ] = '';
 	}
+
+	/**
+	 * Returns hierarchical taxonomies for post type.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $get       Whether to get the names or objects.
+	 * @param string $post_type The post type. Will default to current post type.
+	 * @return array The post type objects or names.
+	 */
+	public function get_hierarchical_taxonomies_as( $get = 'objects', $post_type = '' ) {
+
+		if ( ! $post_type )
+			$post_type = \get_post_type( $this->get_the_real_ID() );
+
+		if ( ! $post_type )
+			return array();
+
+		$taxonomies = \get_object_taxonomies( $post_type, 'objects' );
+		$taxonomies = array_filter( $taxonomies, function( $t ) {
+			return $t->hierarchical;
+		} );
+
+		switch ( $get ) {
+			case 'names' :
+				$taxonomies = array_keys( $taxonomies );
+				break;
+
+			default :
+			case 'objects' :
+				break;
+		}
+
+		return $taxonomies;
+	}
 }

@@ -246,7 +246,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Article published and modified time.
 			* Open Graph updated time.
 		/
-		* TODO Primary category settings have been added to each post.
+		* Primary term settings have been added to each post supporting hierarchical taxonomies.
+			* This was a much requested feature.
+		/
 		* TODO New sitename options, that are now named Organization options.
 		* TODO Split Person/Organization SEO?
 		* TODO Logo upload has been added for Organization Schema.org.
@@ -278,9 +280,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Default link back to source in feed content no longer check settings. Instead, it uses the default WordPress permalink.
 		* When no blog tagline is set, in either WordPress' General Settings or in TSF's Home Page settings, no longer is "Untitled" used.
 		* Character counters on term edit pages have been moved to the left.
-		/
-		* TODO Only one breadcrumb script is now generated, and it listens to the new primary category settings.
+		* Only one breadcrumb script is now generated, and it listens to the new primary category settings.
+			* If a primary category is set, the tree related to the category is used and will stop at the primary category.
+			* Otherwise, the longest tree of the first base category found is used (numerical).
 	* **Improved:**
+		/
 		* Sped up URL generation two-fold. We've rewritten the code from the ground up.
 		* The Canonical URL should now always be compatible with any plugin, out of the box.
 		* Password protected posts and pages no longer show up in the sitemap.
@@ -290,9 +294,16 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Facebook and Twitter Social Meta Settings input now show initial placeholders when emptied.
 		* Sped up admin JavaScript initialization by combining jQuery overhead calls.
 		* "Floating title placeholders" now move smoother on resize.
-		* The counter type update buttons on taxonomial edit screens no longer stretch to the adjacent input length.
+		* The counter type update buttons on taxonomical edit screens no longer stretch to the adjacent input length.
 		* Informational links (e.g. to Google's webmaster pages) are no longer tracked.
-		* `[?]` help tooltips now pop up instantly through our improved tooltips.
+		* Tooltips have been reworked and expanded:
+			* `[?]` help tooltips now pop up instantly through these.
+			* Tapping tooltips in Edge no longer makes them go away instantly.
+			* Tooltips no longer look super-slim on smaller screens, and now have a minimum-width assigned.
+			* Tooltips no longer overflow the screen, instead they'll find boundaries.
+			* We are aware that these tooltips invoke various Chrome browser "violations".
+				* These violations are a warning sign preventing bad practices hindering user experience, which are alleviated.
+				* In practice, WordPress Core needs to update to a future jQuery version to stop these warnings from showing up.
 		* Polished many admin sentences, to try conveying what options do with increased understanding.
 		* Refactored "floating title placeholder"'s code, this means it no longer "glues" every part together based on assumption to perform calculations and placements.
 			/
@@ -307,7 +318,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Updated:**
 		/
 		* TODO All transient caches for The SEO Framework have been invalidated.
-			* Done: LD-JSON.
+			* Done (recheck as we add new options): LD-JSON.
 			* TODO: Description, sitemap.
 	* **Removed:**
 		* The DMOZ project that it influenced is no longer available nor used, so:
@@ -339,6 +350,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* NOTE: This only accounts for the WordPress administrative dashboard. This change doesn't affect your website visitors.
 	* **Fixed:**
 		/
+		* An XSS issue has been resolved.
 		* XSL stylesheet no longer prepends query arguments, but instead appends them. This fixes, for example, issues when using WPML query string parameters.
 		* `article:publisher` is now only output on `article` types.
 		* Custom Post Type archives now fetch and render custom SEO data.
@@ -348,7 +360,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* [NextScripts Snap](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) is no longer detected as a conflicting Open Graph plugin, they now inform you about this.
 		* TODO Odd database call on front-end looking for image... while custom is set...?
 		* When an empty description is supplied, the counter will now display `0` instead of nothing.
-		* Tapping tooltips in Edge no longer makes them go away instantly.
 		* TODO When latest post is protect or private, no description could've been generated on the blog page (and other archives?).
 		* TODO - New bug: Homepage as blog's paginated canonical URL no longer points to the first page.
 		* TODO Separator selection description no longer overflows on EdgeHTML.
@@ -386,6 +397,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* "Learn how this data is used."
 			* Location: SEO Setting -> Schema meta box
 			* This is a general sentence for the `[?]` links.
+		* "Primary"
+			* Location: Post term selection.
+		* "Make primary"
+			* Location: Post term selection.
 	* **Updated:**
 		/
 		* TODO Many sentences now have a dot attached, because all the "help titles" have been converted into tooltips.
@@ -463,8 +478,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Removed: Overshadowed by the pixel counter.
 		* "Recommended Length: 50 to 55 characters"
 			* Removed: Overshadowed by the pixel counter.
-		/
-		* TODO "Multiple trails can be outputted. The longest trail is prioritized."
+		* "Multiple trails can be outputted. The longest trail is prioritized."
+			/
+			* Removed: No longer applicable and TODO: it should now be intuitive through the URL generation.
 
 * **For developers:**
 	* **Added:**
@@ -586,6 +602,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			 * `the_seo_framework_url_args`. This filter no longer runs by default.
 		* **Removed:**
 			* `the_seo_framework_json_sitename_output`, this output type is no longer supported directly.
+			* `the_seo_framework_breadcrumb_post_sorting_callback`, the sorting now is simpler and stricter, and can be controlled by the user.
 			/
 			* TODO more have been removed...
 	* **Action notes:**
