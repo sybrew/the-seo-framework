@@ -435,12 +435,27 @@ class Generate_Ldjson extends Generate_Image {
 		$output = '';
 
 		$post_id = $this->get_the_real_ID();
+		$post_type = \get_post_type( $post_id );
+		$taxonomies = $this->get_hierarchical_taxonomies_as( 'names', \get_post_type( $post_id ) );
 
-		//* WooCommerce support.
-		$cat_type = $this->is_wc_product() ? 'product_cat' : 'category';
+		/**
+		 * Applies filters 'the_seo_framework_ld_json_breadcrumb_terms'
+		 *
+		 * @since 3.0.0
+		 * @param array  $taxonomies The assigned hierarchical taxonomies.
+		 * @param string $post_type  The current post type.
+		 * @param int    $post_id    The current Post ID.
+		 */
+		$taxonomies = \apply_filters( 'the_seo_framework_ld_json_breadcrumb_taxonomies', $taxonomies, $post_type, $post_id );
+
+		if ( is_array( $taxonomies ) ) {
+			$taxonomy = reset( $taxonomies );
+		} else {
+			$taxonomy = $taxonomies;
+		}
 
 		//* Test categories.
-		$r = \is_object_in_term( $post_id, $cat_type, '' );
+		$r = \is_object_in_term( $post_id, $taxonomy, '' );
 		if ( ! $r || \is_wp_error( $r ) )
 			return '';
 
@@ -448,25 +463,25 @@ class Generate_Ldjson extends Generate_Image {
 		 * Applies filter 'the_seo_framework_ld_json_breadcrumb_terms' : array
 		 * @since 2.8.0
 		 *
-		 * @param array  $cats The LD+JSON terms that are being used
+		 * @param array  $terms The LD+JSON terms that are being used
 		 * @param int    $post_id  The current Post ID.
-		 * @param string $cat_type The current taxonomy (either category or product_cat).
+		 * @param string $taxonomy The current taxonomy (either category or product_cat).
 		 */
-		$cats = (array) \apply_filters_ref_array( 'the_seo_framework_ld_json_breadcrumb_terms', array( \get_the_terms( $post_id, $cat_type ), $post_id, $cat_type ) );
+		$terms = (array) \apply_filters_ref_array( 'the_seo_framework_ld_json_breadcrumb_terms', array( \get_the_terms( $post_id, $taxonomy ), $post_id, $taxonomy ) );
 
-		if ( empty( $cats ) )
+		if ( empty( $terms ) )
 			return '';
 
-		$cats = \wp_list_pluck( $cats, 'parent', 'term_id' );
+		$terms = \wp_list_pluck( $terms, 'parent', 'term_id' );
 
 		$parents = array();
 		$assigned_ids = array();
 
 		//* Fetch cats children id's, if any.
-		foreach ( $cats as $term_id => $parent_id ) :
+		foreach ( $terms as $term_id => $parent_id ) :
 			$assigned_ids[ $term_id ] = $parent_id;
 			// Check if they have parents (gets them all).
-			$ancestors = \get_ancestors( $term_id, $cat_type );
+			$ancestors = \get_ancestors( $term_id, $taxonomy );
 			if ( $ancestors ) {
 				//= Save parents to find duplicates.
 				$parents[ $term_id ] = $ancestors;
@@ -476,7 +491,7 @@ class Generate_Ldjson extends Generate_Image {
 			}
 		endforeach;
 		//= Circle of life...
-		unset( $cats );
+		unset( $terms );
 
 		if ( ! $parents )
 			return;
@@ -496,7 +511,7 @@ class Generate_Ldjson extends Generate_Image {
 		if ( ! $tree_ids )
 			return '';
 
-		$primary_term = $this->get_primary_term( $post_id, $cat_type );
+		$primary_term = $this->get_primary_term( $post_id, $taxonomy );
 		$primary_term_id = $primary_term ? (int) $primary_term->term_id : 0;
 
 		$filtered = false;
@@ -530,14 +545,14 @@ class Generate_Ldjson extends Generate_Image {
 				//* Note: WordPress Core translation.
 				$data = $this->get_term_meta( $child_id );
 				if ( empty( $data['doctitle'] ) ) {
-					$cat = \get_term( $child_id, $cat_type );
+					$cat = \get_term( $child_id, $taxonomy );
 					$cat_name = empty( $cat->name ) ? \__( 'Uncategorized' ) : $cat->name;
 				} else {
 					$cat_name = $data['doctitle'];
 				}
 			} else {
 				//* Note: WordPress Core translation.
-				$cat = \get_term( $child_id, $cat_type );
+				$cat = \get_term( $child_id, $taxonomy );
 				$cat_name = empty( $cat->name ) ? \__( 'Uncategorized' ) : $cat->name;
 			}
 
@@ -549,7 +564,7 @@ class Generate_Ldjson extends Generate_Image {
 					'@id'  => $this->get_schema_url_id(
 						'breadcrumb',
 						'create',
-						array( 'id' => $child_id, 'taxonomy' => $cat_type )
+						array( 'id' => $child_id, 'taxonomy' => $taxonomy )
 					),
 					'name' => $this->escape_title( $cat_name ),
 					// 'image' => $this->get_schema_image( $child_id ),

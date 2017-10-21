@@ -273,6 +273,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 				* The pixel counter is enabled.
 			* For sites that have been upgraded from earlier TSF versions, by default:
 				* Both counters are enabled.
+		* Super singular breadcrumbs:
+			* Breadcrumbs now automatically support all hierarchical post types. Like WooCommerce products.
+			* These breadcrumbs will listen to the new primary term settings.
 	* **Changed:**
 		* Schema breadcrumbs now have their IDs reset. They have an URL fragment attached (e.g. `example.com/#schemaorg-bcl`).
 			* This is to prevent ID collision with generated scripts from other plugins, like WooCommerce 3.0+.
@@ -363,7 +366,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* When an empty description is supplied, the counter will now display `0` instead of nothing.
 		* TODO When latest post is protect or private, no description could've been generated on the blog page (and other archives?).
 		* TODO - New bug: Homepage as blog's paginated canonical URL no longer points to the first page.
-		* TODO - New bug: Homepage SEO settings metabox title is odd? and doesn't comply to the SEO Bar.
+		* TODO - New bug: Homepage SEO settings inpost-metabox title field is odd? and doesn't comply to the SEO Bar.
+		* TODO - New bug: Primary category selector with Genesis active (and scrollbar), must move the `[?]`. Also, the deselect "all" button doesn't affect the radio buttons.
 		* TODO Separator selection description no longer overflows on EdgeHTML.
 		* Cyrillic texts JavaScript compatibility. TODO confirm.
 
@@ -606,6 +610,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 				* `states.titleTagline`, use `states.useTagline` instead.
 	* **Filter notes:**
 		* **Added:**
+			* `the_seo_framework_ld_json_breadcrumb_taxonomies`, used to filter, add or adjust the found taxonomies. The first array value is always used.
 			* `the_seo_framework_admin_color_css`, used to adjust admin-color conforming colors.
 			* `the_seo_framework_current_term_meta`, used to adjust term meta after it's set.
 				* Do not confuse this with filter `the_seo_framework_get_term_meta`, which only fires when no term meta has been set.

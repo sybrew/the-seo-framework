@@ -243,13 +243,11 @@ switch ( $instance ) :
 		</div>
 
 		<?php
-		$post_type_supports_taxonomies = $this->post_type_supports_taxonomies();
-		$has_hierarchical_taxonomies = $post_type_supports_taxonomies && ! empty( $this->get_hierarchical_taxonomies_as( 'names' ) );
-		$can_do_archive_query = $post_type_supports_taxonomies && $this->is_option_checked( 'alter_archive_query' );
+		$can_do_archive_query = $this->post_type_supports_taxonomies() && $this->is_option_checked( 'alter_archive_query' );
 		$can_do_search_query = $this->is_option_checked( 'alter_search_query' );
 		?>
 
-	<?php if ( $has_hierarchical_taxonomies || $can_do_archive_query || $can_do_search_query ) : ?>
+	<?php if ( $can_do_archive_query || $can_do_search_query ) : ?>
 		<div class="tsf-flex-setting tsf-flex">
 			<div class="tsf-flex-setting-label tsf-flex">
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
