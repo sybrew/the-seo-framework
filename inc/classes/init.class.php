@@ -723,6 +723,9 @@ class Init extends Query {
 	 * Alters search query.
 	 *
 	 * @since 2.9.4
+	 * @since 3.0.0 Exchanged meta query for post__not_in query.
+	 * @see WordPress Core @source \Featured_Content::pre_get_posts()
+	 * @access private
 	 *
 	 * @param \WP_Query $wp_query The WP_Query instance.
 	 * @return void Early if no search query is found.
@@ -738,70 +741,7 @@ class Init extends Query {
 			if ( $this->is_archive_query_adjustment_blocked( $wp_query ) )
 				return;
 
-			$meta_query = $wp_query->get( 'meta_query' );
-
-			//* Convert to array. Unset it if it's empty.
-			if ( ! is_array( $meta_query ) )
-				$meta_query = $meta_query ? (array) $meta_query : array();
-
-			/**
-			 * Exclude posts with exclude_local_search option on.
-			 *
-			 * Query is faster when the global relation is not set. Defaults to AND.
-			 * Query is faster when no value is set. Defaults to 'IS NULL' because
-			 *       of 'compare'. Having no effect whatsoever as it's an exclusion.
-			 */
-			$meta_query[] = array(
-				'key'      => 'exclude_local_search',
-				'type'     => 'NUMERIC',
-				'compare'  => 'NOT EXISTS',
-			);
-
-			$wp_query->set( 'meta_query', $meta_query );
-		}
-	}
-
-	/**
-	 * Alters archive query.
-	 *
-	 * @since 2.9.4
-	 * @access private
-	 *
-	 * @param \WP_Query $wp_query The WP_Query instance.
-	 * @return void Early if query alteration is useless or blocked.
-	 */
-	public function _alter_archive_query_in( $wp_query ) {
-
-		if ( $wp_query->is_archive || $wp_query->is_home ) {
-			if ( $this->is_archive_query_adjustment_blocked( $wp_query ) )
-				return;
-
-			$meta_query = $wp_query->get( 'meta_query' );
-
-			//* Convert to array. Unset it if it's empty.
-			if ( ! is_array( $meta_query ) )
-				$meta_query = $meta_query ? (array) $meta_query : array();
-
-			/**
-			 * Exclude posts with exclude_from_archive option on.
-			 *
-			 * Query is faster when the global relation is not set. Defaults to AND.
-			 * Query is faster when no value is set. Defaults to 'IS NULL' because
-			 *       of 'compare'. Having no effect whatsoever as it's an exclusion.
-			 */
-			$meta_query[] = array(
-				'key'      => 'exclude_from_archive',
-				'type'     => 'NUMERIC',
-				'compare'  => 'NOT EXISTS',
-			);
-
-			$wp_query->set( 'meta_query', $meta_query );
-		}
-
-		/* @TODO exchange above with this 3.0+
-		if ( ! empty( $wp_query->is_archive ) || ! empty( $wp_query->is_home ) ) {
-
-			$excluded = $this->get_exclude_from_archive_ids_cache();
+			$excluded = $this->get_ids_excluded_from_search();
 
 			if ( ! $excluded )
 				return;
@@ -815,7 +755,39 @@ class Init extends Query {
 
 			$wp_query->set( 'post__not_in', $excluded );
 		}
-		*/
+	}
+
+	/**
+	 * Alters archive query.
+	 *
+	 * @since 2.9.4
+	 * @since 3.0.0 Exchanged meta query for post__not_in query.
+	 * @see WordPress Core @source \Featured_Content::pre_get_posts()
+	 * @access private
+	 *
+	 * @param \WP_Query $wp_query The WP_Query instance.
+	 * @return void Early if query alteration is useless or blocked.
+	 */
+	public function _alter_archive_query_in( $wp_query ) {
+
+		if ( $wp_query->is_archive || $wp_query->is_home ) {
+			if ( $this->is_archive_query_adjustment_blocked( $wp_query ) )
+				return;
+
+			$excluded = $this->get_ids_excluded_from_archive();
+
+			if ( ! $excluded )
+				return;
+
+			$post__not_in = $wp_query->get( 'post__not_in' );
+
+			if ( ! empty( $post__not_in ) ) {
+				$excluded = array_merge( (array) $post__not_in, $excluded );
+				$excluded = array_unique( $excluded );
+			}
+
+			$wp_query->set( 'post__not_in', $excluded );
+		}
 	}
 
 	/**

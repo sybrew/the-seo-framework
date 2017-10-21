@@ -600,6 +600,44 @@ class Post_Data extends Detect {
 	}
 
 	/**
+	 * Returns list of post IDs that are excluded from search.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return array The excluded post IDs.
+	 */
+	public function get_ids_excluded_from_search() {
+
+		$cache = $this->get_excluded_ids_from_cache();
+		$ids = array();
+
+		if ( ! empty( $cache['search'] ) ) {
+			$ids = $cache['search'];
+		}
+
+		return $ids;
+	}
+
+	/**
+	 * Returns list of post IDs that are excluded from archive.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return array The excluded post IDs.
+	 */
+	public function get_ids_excluded_from_archive() {
+
+		$cache = $this->get_excluded_ids_from_cache();
+		$ids = array();
+
+		if ( ! empty( $cache['archive'] ) ) {
+			$ids = $cache['archive'];
+		}
+
+		return $ids;
+	}
+
+	/**
 	 * Returns the primary term for post.
 	 *
 	 * @since 3.0.0

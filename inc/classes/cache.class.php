@@ -64,9 +64,18 @@ class Cache extends Sitemaps {
 	 *
 	 * @since 2.5.2
 	 *
-	 * @var string The Theme Doing It Right Transient Name.
+	 * @var string
 	 */
 	protected $theme_doing_it_right_transient;
+
+	/**
+	 * The excluded Post IDs transient name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	protected $excluded_post_ids_transient;
 
 	/**
 	 * Constructor, load parent constructor and set up caches.
@@ -148,6 +157,9 @@ class Cache extends Sitemaps {
 		\add_action( 'post_updated', array( $this, 'delete_post_cache' ) );
 		\add_action( 'page_updated', array( $this, 'delete_post_cache' ) );
 
+		//* Excluded IDs cache.
+		\add_action( 'save_post', array( $this, 'delete_excluded_ids_cache' ) );
+
 		$run = true;
 	}
 
@@ -186,6 +198,30 @@ class Cache extends Sitemaps {
 		}
 
 		return ! in_array( false, $success, true );
+	}
+
+	/**
+	 * Deletes excluded post IDs cache.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return bool True on success, false on failure.
+	 */
+	public function delete_excluded_ids_cache() {
+		return $this->delete_cache( 'excluded_post_ids' );
+	}
+
+	/**
+	 * Deletes excluded post IDs transient cache.
+	 *
+	 * @since 3.0.0
+	 * @see $this->delete_excluded_ids_cache()
+	 *
+	 * @return bool True
+	 */
+	public function delete_excluded_post_ids_transient() {
+		\delete_transient( $this->excluded_post_ids_transient );
+		return true;
 	}
 
 	/**
@@ -284,6 +320,10 @@ class Cache extends Sitemaps {
 				return $this->object_cache_delete( $this->get_robots_txt_cache_key() );
 				break;
 
+			case 'excluded_post_ids' :
+				return $this->delete_excluded_post_ids_transient();
+				break;
+
 			case 'detection' :
 				return $this->delete_theme_dir_transient();
 				break;
@@ -380,7 +420,7 @@ class Cache extends Sitemaps {
 	 * @param string $value Transient value. Expected to not be SQL-escaped.
 	 * @param int $expiration Optional Transient expiration date, optional. Expected to not be SQL-escaped.
 	 */
-	public function set_transient( $transient, $value, $expiration = '' ) {
+	public function set_transient( $transient, $value, $expiration = 0 ) {
 
 		if ( $this->the_seo_framework_use_transients )
 			\set_transient( $transient, $value, $expiration );
@@ -480,9 +520,11 @@ class Cache extends Sitemaps {
 		 */
 		$sitemap_revision = '3';
 		$theme_dir_revision = '0';
+		$exclude_revision = '0';
 
 		$this->sitemap_transient = $this->is_option_checked( 'cache_sitemap' ) ? $this->add_cache_key_suffix( 'tsf_sitemap_' . $sitemap_revision ) : '';
 		$this->theme_doing_it_right_transient = 'tsf_tdir_' . $theme_dir_revision . '_' . $blog_id;
+		$this->excluded_post_ids_transient = 'tsf_exclude_' . $exclude_revision . '_' . $blog_id;
 	}
 
 	/**
@@ -1156,5 +1198,45 @@ class Cache extends Sitemaps {
 
 			\set_transient( $this->theme_doing_it_right_transient, $dir, 0 );
 		}
+	}
+
+	/**
+	 * Builds and returns the excluded post IDs transient.
+	 *
+	 * @since 3.0.0
+	 * @staticvar array $cache
+	 *
+	 * @return array : { 'archive', 'search' }
+	 */
+	public function get_excluded_ids_from_cache() {
+
+		static $cache = null;
+
+		if ( null === $cache )
+			$cache = $this->get_transient( $this->excluded_post_ids_transient );
+
+		if ( false === $cache ) {
+			global $wpdb;
+			$cache = array();
+
+			//= Two separated equals queries are faster than a single IN with 'meta_key'.
+			$cache['archive'] = $wpdb->get_results(
+				$wpdb->prepare( "SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = '%s'", 'exclude_from_archive' )
+			);
+			$cache['search'] = $wpdb->get_results(
+				$wpdb->prepare( "SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = '%s'", 'exclude_local_search' )
+			);
+
+			foreach ( array( 'archive', 'search' ) as $key ) {
+				array_walk( $cache[ $key ], function( &$v ) {
+					$v = $v->meta_value ? (int) $v->post_id : false;
+				} );
+				$cache[ $key ] = array_filter( $cache[ $key ] );
+			}
+
+			$this->set_transient( $this->excluded_post_ids_transient, $cache );
+		}
+
+		return $cache;
 	}
 }

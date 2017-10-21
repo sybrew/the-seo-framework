@@ -442,9 +442,9 @@ class Generate_Ldjson extends Generate_Image {
 		 * Applies filters 'the_seo_framework_ld_json_breadcrumb_terms'
 		 *
 		 * @since 3.0.0
-		 * @param array  $taxonomies The assigned hierarchical taxonomies.
-		 * @param string $post_type  The current post type.
-		 * @param int    $post_id    The current Post ID.
+		 * @param array|string  $taxonomies The assigned hierarchical taxonomies.
+		 * @param string        $post_type  The current post type.
+		 * @param int           $post_id    The current Post ID.
 		 */
 		$taxonomies = \apply_filters( 'the_seo_framework_ld_json_breadcrumb_taxonomies', $taxonomies, $post_type, $post_id );
 

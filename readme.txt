@@ -277,29 +277,59 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Breadcrumbs now automatically support all hierarchical post types. Like WooCommerce products.
 			* These breadcrumbs will listen to the new primary term settings.
 	* **Changed:**
-		* Schema breadcrumbs now have their IDs reset. They have an URL fragment attached (e.g. `example.com/#schemaorg-bcl`).
-			* This is to prevent ID collision with generated scripts from other plugins, like WooCommerce 3.0+.
-			* This might affect search presence of the pages until the new IDs have been processed by the search engine, like Google and Bing.
-		* The sitemap `lastmod` option no longer listens to Post Dates settings. But now only to its own specific setting.
-		* Default link back to source in feed content no longer check settings. Instead, it uses the default WordPress permalink.
-		* When no blog tagline is set, in either WordPress' General Settings or in TSF's Home Page settings, no longer is "Untitled" used.
-		* Character counters on term edit pages have been moved to the left.
-		* Only one breadcrumb script is now generated, and it listens to the new primary category settings.
-			* If a primary category is set, the tree related to the category is used and will stop at the primary category.
-			* Otherwise, the longest tree of the first base category found is used (numerical).
+		* Titles:
+			* When no blog tagline is set, in either WordPress' General Settings or in TSF's Home Page settings, "Untitled" is no longer used for the Home Page.
+		* Structured Data:
+			* Schema breadcrumbs now have their IDs reset. They have an URL fragment attached (e.g. `example.com/#schemaorg-bcl`).
+				* This is to prevent ID collision with generated scripts from other plugins, like WooCommerce 3.0+.
+				* This might affect search presence of the pages until the new IDs have been processed by the search engine, like Google and Bing.
+			* Only one breadcrumb script is now generated, and it listens to the new primary category settings.
+				* If a primary category is set, the tree related to the category is used and will stop at the primary category.
+				* Otherwise, the longest tree of the first base category found is used (numerical).
+		* Sitemap:
+			* The sitemap `lastmod` option no longer listens to Post Dates settings. But now only to its own specific setting.
+		* Feeds:
+			* Default link back to source in feed content no longer check settings. Instead, it uses the default WordPress permalink.
+		* Layout:
+			* Character counters on term edit pages have been moved to the left.
 	* **Improved:**
-		/
-		* Sped up URL generation two-fold. We've rewritten the code from the ground up.
-		* The Canonical URL should now always be compatible with any plugin, out of the box.
-		* Password protected posts and pages no longer show up in the sitemap.
-		* The homepage in-post SEO settings box now links to the settings page when the user can view those options.
-		* When TSF's database needs upgrading, it now requires fewer database calls.
-		* After-upgrade notifications now have "SEO: " prefixed.
-		* Facebook and Twitter Social Meta Settings input now show initial placeholders when emptied.
-		* Sped up admin JavaScript initialization by combining jQuery overhead calls.
-		* "Floating title placeholders" now move smoother on resize.
-		* The counter type update buttons on taxonomical edit screens no longer stretch to the adjacent input length.
-		* Informational links (e.g. to Google's webmaster pages) are no longer tracked.
+		* Titles:
+			* Refactored "floating title placeholder"'s code, this means it no longer "glues" every part together based on assumption to perform calculations and placements.
+				/
+				* This made way for new features, it improved performance, and it lowered overall lower maintenance cost.
+				* TODO test RTL.
+		* Canonical URLS:
+			* Sped up URL generation two-fold. We've rewritten the code from the ground up.
+			* The Canonical URL should now always be compatible with any plugin, out of the box.
+			* Note that these URLs no longer output anything on private posts, and some layout elements have been affected.
+			* If a query isn't registered incorrectly, the URL will also stay empty.
+			* The canonical URLs now listen to the new "Primary Term" options.
+		* Sitemaps:
+			* Password protected posts and pages no longer show up in the sitemap.
+		* Upgrade:
+			* When TSF's database needs upgrading, it now requires fewer database calls.
+			* After-upgrade notifications now have "SEO: " prefixed.
+		* Layout:
+			* The homepage in-post SEO settings box now links to the settings page when the user can view those options.
+			* Facebook and Twitter Social Meta Settings input now show initial placeholders when emptied.
+			* The counter type update buttons on taxonomical edit screens no longer stretch to the adjacent input length.
+			* In-post SEO box active tab's shadow now has the same color as the used admin button color scheme.
+				/
+				* TODO test RTL.
+			* Polished many admin sentences, improving verbatim and expounding better of what options do.
+		* Admin performance:
+			* Sped up admin JavaScript initialization by combining jQuery overhead calls.
+			* "Floating title placeholders" now move smoother on resize.
+			* Slightly improved CSS rendering performance by eliminating clause-calls; i.e. we now use `.class` instead of `div.class` and derivatives thereof.
+				/
+				* TODO RTL.
+		* Archives:
+			* Adjusted the archive exclusion database query.
+				* This speeds this process up marginally for small and significantly for large sites.
+				* This improves compatibility with themes and plugins that don't merge these queries, or when they adjust the query comparator.
+				* How it works: Instead of a demanding in-database joining-then-excluding comparison, it now uses a cached and lightweight preemptive-exclusive comparison.
+		* Privacy:
+			* Informational links (e.g. to Google's webmaster pages) are no longer tracked.
 		* Tooltips have been reworked and expanded:
 			* `[?]` help tooltips now pop up instantly through these.
 			* Tapping tooltips in Edge no longer makes them go away instantly.
@@ -308,68 +338,69 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* We are aware that these tooltips invoke various Chrome browser "violations".
 				* These violations are a warning sign preventing bad practices hindering user experience, which are alleviated.
 				* In practice, WordPress Core needs to update to a future jQuery version to stop these warnings from showing up.
-		* Polished many admin sentences, to try conveying what options do with increased understanding.
-		* Refactored "floating title placeholder"'s code, this means it no longer "glues" every part together based on assumption to perform calculations and placements.
-			/
-			* This made way for new features, it improved performance, and it lowered overall lower maintenance cost.
-			* TODO test RTL.
-		* In-post SEO box active tab's shadow now has the same color as the used admin button color scheme.
-			/
-			* TODO test RTL.
-		* Slightly improved CSS rendering performance by eliminating clause-calls; i.e. we now use `.class` instead of `div.class` and derivatives thereof.
-			/
-			* TODO RTL.
 	* **Updated:**
 		/
 		* TODO All transient caches for The SEO Framework have been invalidated.
 			* Done (recheck as we add new options): LD-JSON.
 			* TODO: Description, sitemap.
 	* **Removed:**
-		* The DMOZ project that it influenced is no longer available nor used, so:
-			* `noodp` and all its settings.
-		* The Open Graph protocol no longer allows `article:published_time` on `website` types, so:
-			* `page_publish_time` and all its settings.
-			* `home_publish_time` and all its settings.
-		*  The Open Graph protocol no longer allows `article:modified_time` on `website` types, so:
-			* `page_modify_time` and all its settings.
-			* `home_modify_time` and all its settings.
+		* Robots:
+			* The DMOZ project that it influenced is no longer available nor used, so:
+				* `noodp` and all its settings.
 		/
 		* TODO The Site Name project has been abandoned, and this data is now accumulated automatically, so:
 			* `ld_json_sitename` and all its settings.
-		* Open graph type `blog`. It's no longer supported. `website` is used instead.
-		* Sitemaps timestamp format option. It will be converted to the new global timestamp format option upon upgrade.
-		* Polylang URL compatibility file. It now works without it.
-		* WPML URL enhancements. It now works without these.
-		* qTranslate X URL compatibility file. It now works without it.
-		* Donncha Domain Mapping URL compatibility file. Be sure to set a preferred canonical scheme.
-		* WPMUdev Mapping URL generation enhancements and compatibility file. Be sure to set a preferred canonical scheme.
-		* The following browsers are no longer supported, and your admin experience might be degraded using them:
-			/
-			* TODO confirm this list, this is based on assumptions.
-			* Internet explorer 10 and below.
-			* Safari 9 and below.
-			* All browsers on iOS 9 and below.
-			* Chrome 53 and below.
-			* Firefox 48 and below.
-			* NOTE: This only accounts for the WordPress administrative dashboard. This change doesn't affect your website visitors.
+		* Open Graph:
+			* Open graph type `blog`. It's no longer supported. `website` is used instead.
+			* The Open Graph protocol no longer allows `article:published_time` on `website` types, so:
+				* `page_publish_time` and all its settings.
+				* `home_publish_time` and all its settings.
+			*  The Open Graph protocol no longer allows `article:modified_time` on `website` types, so:
+				* `page_modify_time` and all its settings.
+				* `home_modify_time` and all its settings.
+		* Sitemaps:
+			* Sitemaps timestamp format option. It will be converted to the new global timestamp format option upon upgrade.
+		* Compatibility:
+			* Polylang URL compatibility file. It now works without it.
+			* WPML URL enhancements. It now works without these.
+			* qTranslate X URL compatibility file. It now works without it.
+			* Donncha Domain Mapping URL compatibility file. Be sure to set a preferred canonical scheme.
+			* WPMUdev Mapping URL generation enhancements and compatibility file. Be sure to set a preferred canonical scheme.
+			* The following browsers are no longer supported, and your admin experience might be degraded using them:
+				/
+				* TODO confirm this list, this is based on assumptions.
+				* Internet explorer 10 and below.
+				* Safari 9 and below.
+				* All browsers on iOS 9 and below.
+				* Chrome 53 and below.
+				* Firefox 48 and below.
+				* NOTE: This only accounts for the WordPress administrative dashboard. This change doesn't affect your website visitors.
 	* **Fixed:**
+		* Security:
+			* An XSS issue has been resolved.
+		* Sitemaps:
+			* XSL stylesheet no longer prepends query arguments, but instead appends them. This fixes, for example, issues when using WPML query string parameters.
+		* Open Graph:
+			* `article:publisher` is now only output on `article` types.
+		* CPT:
+			* Custom Post Type archives now fetch and render custom SEO data.
+		* Images:
+			* Now all image URLs convert to the correct scheme when the image URL contains the site's domain.
+		* Compatibility:
+			* TSF no longer outputs canonical URLs on BuddyPress pages. Instead, it lets BuddyPress output them.
+			* [Simple Sitemap](https://wordpress.org/plugins/simple-sitemap/) is no longer detected as a conflicting sitemap plugin.
+			* [NextScripts Snap](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) is no longer detected as a conflicting Open Graph plugin, they now inform you about this.
+		* Layout:
+			/
+			* When an empty description is supplied, the counter will now display `0` instead of nothing.
+			* Cyrillic texts JavaScript compatibility. TODO confirm.
 		/
-		* An XSS issue has been resolved.
-		* XSL stylesheet no longer prepends query arguments, but instead appends them. This fixes, for example, issues when using WPML query string parameters.
-		* `article:publisher` is now only output on `article` types.
-		* Custom Post Type archives now fetch and render custom SEO data.
-		* Now all image URLs convert to the correct scheme when the image URL contains the site's domain.
-		* TSF no longer outputs canonical URLs on BuddyPress pages. Instead, it lets BuddyPress output them.
-		* [Simple Sitemap](https://wordpress.org/plugins/simple-sitemap/) is no longer detected as a conflicting sitemap plugin.
-		* [NextScripts Snap](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) is no longer detected as a conflicting Open Graph plugin, they now inform you about this.
 		* TODO Odd database call on front-end looking for image... while custom is set...?
-		* When an empty description is supplied, the counter will now display `0` instead of nothing.
 		* TODO When latest post is protect or private, no description could've been generated on the blog page (and other archives?).
 		* TODO - New bug: Homepage as blog's paginated canonical URL no longer points to the first page.
 		* TODO - New bug: Homepage SEO settings inpost-metabox title field is odd? and doesn't comply to the SEO Bar.
 		* TODO - New bug: Primary category selector with Genesis active (and scrollbar), must move the `[?]`. Also, the deselect "all" button doesn't affect the radio buttons.
 		* TODO Separator selection description no longer overflows on EdgeHTML.
-		* Cyrillic texts JavaScript compatibility. TODO confirm.
 
 * **For translators:**
 	* **Added:**
