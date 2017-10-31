@@ -403,6 +403,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* TODO Odd database call on front-end looking for image... while custom is set...?
 		* TODO - New bug: Primary category selector with Genesis active (and scrollbar), must move the `[?]`. Also, the deselect "all" button doesn't affect the radio buttons.
 		* TODO Separator selection description no longer overflows on EdgeHTML.
+	* **Noted:**
+		* Ticket [42390](https://core.trac.wordpress.org/ticket/42390#ticket) also affects TSF input fields.
 
 * **For translators:**
 	* **Added:**
