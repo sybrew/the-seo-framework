@@ -12,4 +12,18 @@ defined( 'ABSPATH' ) and $_this = the_seo_framework_class() and $this instanceof
 	);
 	?>
 </script>
+
+<script type="text/html" id="tmpl-tsf-primary-term-selector-help">
+	<span class="tsf-primary-term-selector-help-wrap">
+		<?php
+		$this->make_info(
+			sprintf(
+				/* translators: %s = term name */
+				\esc_html__( 'You can set the primary %s through the buttons below.', 'autodescription' ),
+				'{{data.taxonomy.name}}'
+			)
+		);
+		?>
+	</span>
+</script>
 <?php

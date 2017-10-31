@@ -252,8 +252,6 @@ class Admin_Init extends Init {
 					'makePrimary' => sprintf( \esc_html__( 'Make primary %s', 'autodescription' ), $_i18n_name ),
 					/* translators: %s = term name */
 					'primary' => sprintf( \esc_html__( 'Primary %s', 'autodescription' ), $_i18n_name ),
-					/* translators: %s = term name */
-					'help' => sprintf( \esc_html__( 'You can set the primary %s through the buttons below.', 'autodescription' ), $_i18n_name ),
 				),
 				'primary' => $this->get_primary_term_id( $id, $_t->name ) ?: 0,
 			);

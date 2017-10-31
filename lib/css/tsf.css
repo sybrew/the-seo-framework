@@ -1008,7 +1008,7 @@ body.js .tsf-flex-tab-content.tsf-flex-tab-content-active {
 	line-height: inherit;
 }
 
-.tsf-primary-term-selector-help {
+.tsf-primary-term-selector-help-wrap {
 	position: absolute;
 	top: 0;
 	right: 25px;
