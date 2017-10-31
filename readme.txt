@@ -324,7 +324,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 				/
 				* TODO RTL.
 		* Archives:
-			* Adjusted the archive exclusion database query.
+			* Adjusted the search and archive query alteration database query.
 				* This speeds this process up marginally for small and significantly for large sites.
 				* This improves compatibility with themes and plugins that don't merge these queries, or when they adjust the query comparator.
 				* How it works: Instead of a demanding in-database joining-then-excluding comparison, it now uses a cached and lightweight preemptive-exclusive comparison.
@@ -335,6 +335,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Tapping tooltips in Edge no longer makes them go away instantly.
 			* Tooltips no longer look super-slim on smaller screens, and now have a minimum-width assigned.
 			* Tooltips no longer overflow the screen, instead they'll find boundaries.
+				* This automatically ensures compatibility with the new Gutenberg editor.
 			* We are aware that these tooltips invoke various Chrome browser "violations".
 				* These violations are a warning sign preventing bad practices hindering user experience, which are alleviated.
 				* In practice, WordPress Core needs to update to a future jQuery version to stop these warnings from showing up.
@@ -366,15 +367,19 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* qTranslate X URL compatibility file. It now works without it.
 			* Donncha Domain Mapping URL compatibility file. Be sure to set a preferred canonical scheme.
 			* WPMUdev Mapping URL generation enhancements and compatibility file. Be sure to set a preferred canonical scheme.
-			* The following browsers are no longer supported, and your admin experience might be degraded using them:
-				/
-				* TODO confirm this list, this is based on assumptions.
-				* Internet explorer 10 and below.
-				* Safari 9 and below.
-				* All browsers on iOS 9 and below.
-				* Chrome 53 and below.
-				* Firefox 48 and below.
-				* NOTE: This only accounts for the WordPress administrative dashboard. This change doesn't affect your website visitors.
+			/
+			* TSF uses newer JavaScript and CSS techniques. TODO: We now use ES5.1 and CSS3 snapshot 2015.
+				* This improves admin performance and lowers memory consumption: less jQuery, more vanilla.
+				* To evade polyfilling and massive spaghetti, older browsers are therefore abandoned in support.
+				* The following browsers are no longer supported:
+					/
+					* TODO confirm this list, this is based on assumptions.
+					* Internet explorer 10 and below.
+					* Safari 9 and below.
+					* All browsers on iOS 9 and below.
+					* Chrome 53 and below.
+					* Firefox 48 and below.
+					* NOTE: This only accounts for the WordPress administrative dashboard. This change doesn't affect your website visitors.
 	* **Fixed:**
 		* Security:
 			* An XSS issue has been resolved.
@@ -396,7 +401,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Cyrillic texts JavaScript compatibility. TODO confirm.
 		/
 		* TODO Odd database call on front-end looking for image... while custom is set...?
-		* TODO When latest post is protect or private, no description could've been generated on the blog page (and other archives?).
 		* TODO - New bug: Homepage as blog's paginated canonical URL no longer points to the first page.
 		* TODO - New bug: Homepage SEO settings inpost-metabox title field is odd? and doesn't comply to the SEO Bar.
 		* TODO - New bug: Primary category selector with Genesis active (and scrollbar), must move the `[?]`. Also, the deselect "all" button doesn't affect the radio buttons.
@@ -560,7 +564,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Method `metaboxes()`, now is `_register_seo_settings_metaboxes()` without deprecation; it shouldn't be used out of context.
 	* **Updated:**
 		/
-		* TODO Database version: `3000`.
+		* TODO Database version: `3001`.
 	* **Deprecated:**
 		* Method `get_term_data( $term, $term_id )`, use method `get_term_meta( $term_id )` instead.
 		* Method `the_url()`, use method `get_canonical_url()` or `create_canonical_url()` instead.

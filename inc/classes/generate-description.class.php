@@ -300,6 +300,8 @@ class Generate_Description extends Generate {
 	 * Generates description from content while parsing filters.
 	 *
 	 * @since 2.3.3
+	 * @since 3.0.0 No longer checks for protected posts.
+	 *              Check is moved to $this->generate_the_description().
 	 *
 	 * @param array $args description args : {
 	 *    @param int $id the term or page id.
@@ -316,12 +318,13 @@ class Generate_Description extends Generate {
 		$this->the_seo_framework_debug and $this->debug_init( __METHOD__, true, $debug_key = microtime( true ), get_defined_vars() );
 
 		/**
-		 * Applies filters bool 'the_seo_framework_enable_auto_description' : Enable or disable the description.
+		 * Applies filters bool 'the_seo_framework_enable_auto_description'
 		 *
 		 * @since 2.5.0
+		 * @param bool $autodescription Enable or disable the automated descriptions.
 		 */
 		$autodescription = (bool) \apply_filters( 'the_seo_framework_enable_auto_description', true );
-		if ( false === $autodescription || ( empty( $args['taxonomy'] ) && $this->is_protected( $args['id'] ) ) )
+		if ( false === $autodescription )
 			return '';
 
 		$description = $this->generate_the_description( $args, false );
@@ -340,6 +343,7 @@ class Generate_Description extends Generate {
 	 * @since 2.6.0
 	 * @since 2.8.0 : The output is always trimmed if $escape is false.
 	 *              : The cache will no longer be maintained on previews or search.
+	 * @since 3.0.0 : Now checks for protected posts.
 	 *
 	 * @param array $args description args : {
 	 *    @param int $id the term or page id.
@@ -363,6 +367,10 @@ class Generate_Description extends Generate {
 		//* Home Page description
 		if ( $args['is_home'] || $this->is_real_front_page() || $this->is_front_page_by_id( $args['id'] ) )
 			return $this->generate_home_page_description( $args['get_custom_field'], $escape );
+
+		//* If the post is protected, don't generate a description.
+		if ( $this->is_protected( $args['id'] ) )
+			return '';
 
 		/**
 		 * Determines whether to prevent caching of transients.
