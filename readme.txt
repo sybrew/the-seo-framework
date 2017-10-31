@@ -401,8 +401,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Cyrillic texts JavaScript compatibility. TODO confirm.
 		/
 		* TODO Odd database call on front-end looking for image... while custom is set...?
-		* TODO - New bug: Homepage as blog's paginated canonical URL no longer points to the first page.
-		* TODO - New bug: Homepage SEO settings inpost-metabox title field is odd? and doesn't comply to the SEO Bar.
 		* TODO - New bug: Primary category selector with Genesis active (and scrollbar), must move the `[?]`. Also, the deselect "all" button doesn't affect the radio buttons.
 		* TODO Separator selection description no longer overflows on EdgeHTML.
 

@@ -262,7 +262,7 @@ class Admin_Init extends Init {
 		if ( isset( $this->page_base_file ) && $this->page_base_file ) {
 			// We're somewhere within default WordPress pages.
 			if ( $this->is_static_frontpage( $id ) ) {
-				$object_title = $blog_name;
+				$object_title = $this->get_option( 'homepage_title' ) ?: $blog_name;
 				$title_location = $this->get_option( 'home_title_location' );
 				$ishome = true;
 
