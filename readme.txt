@@ -329,13 +329,15 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 				* This improves compatibility with themes and plugins that don't merge these queries, or when they adjust the query comparator.
 				* How it works: Instead of a demanding in-database joining-then-excluding comparison, it now uses a cached and lightweight preemptive-exclusive comparison.
 		* Privacy:
-			* Informational links (e.g. to Google's webmaster pages) are no longer tracked.
+			* Informational links (e.g. to Google's webmaster pages) no longer carry traceable information.
 		* Tooltips have been reworked and expanded:
 			* `[?]` help tooltips now pop up instantly through these.
 			* Tapping tooltips in Edge no longer makes them go away instantly.
 			* Tooltips no longer look super-slim on smaller screens, and now have a minimum-width assigned.
 			* Tooltips no longer overflow the screen, instead they'll find boundaries.
 				* This automatically ensures compatibility with the new Gutenberg editor.
+			* Tooltips are location aware, and will try to center in regards to your mouse entry point.
+				* This ensures compatibility with Edge and IE11, where the tooltips are smaller than intended.
 			* We are aware that these tooltips invoke various Chrome browser "violations".
 				* These violations are a warning sign preventing bad practices hindering user experience, which are alleviated.
 				* In practice, WordPress Core needs to update to a future jQuery version to stop these warnings from showing up.
@@ -368,18 +370,18 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Donncha Domain Mapping URL compatibility file. Be sure to set a preferred canonical scheme.
 			* WPMUdev Mapping URL generation enhancements and compatibility file. Be sure to set a preferred canonical scheme.
 			/
-			* TSF uses newer JavaScript and CSS techniques. TODO: We now use ES5.1 and CSS3 snapshot 2015.
+			* TSF uses newer JavaScript and CSS techniques in the dashboard. We now use ES6 and CSS3 snapshot 2015.
 				* This improves admin performance and lowers memory consumption: less jQuery, more vanilla.
 				* To evade polyfilling and massive spaghetti, older browsers are therefore abandoned in support.
 				* The following browsers are no longer supported:
 					/
 					* TODO confirm this list, this is based on assumptions.
 					* Internet explorer 10 and below.
+					* Edge 40 and below.
 					* Safari 9 and below.
 					* All browsers on iOS 9 and below.
 					* Chrome 53 and below.
 					* Firefox 48 and below.
-					* NOTE: This only accounts for the WordPress administrative dashboard. This change doesn't affect your website visitors.
 	* **Fixed:**
 		* Security:
 			* An XSS issue has been resolved.
@@ -401,7 +403,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Cyrillic texts JavaScript compatibility. TODO confirm.
 		/
 		* TODO Odd database call on front-end looking for image... while custom is set...?
-		* TODO - New bug: Primary category selector with Genesis active (and scrollbar), must move the `[?]`. Also, the deselect "all" button doesn't affect the radio buttons.
 		* TODO Separator selection description no longer overflows on EdgeHTML.
 	* **Noted:**
 		* Ticket [42390](https://core.trac.wordpress.org/ticket/42390#ticket) also affects TSF input fields.
