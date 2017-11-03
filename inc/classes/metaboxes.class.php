@@ -562,6 +562,7 @@ class Metaboxes extends Site_Options {
 	 * Schema Metabox General Tab output.
 	 *
 	 * @since 2.8.0
+	 * @since 3.0.0 No longer used.
 	 * @see $this->schema_metabox() Callback for Schema.org Settings box.
 	 */
 	public function schema_metabox_general_tab() {

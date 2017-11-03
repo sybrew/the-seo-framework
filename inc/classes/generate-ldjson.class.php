@@ -218,10 +218,14 @@ class Generate_Ldjson extends Generate_Image {
 	 * Generates LD+JSON Search and Sitename script.
 	 *
 	 * @since 2.9.3
+	 * @since 3.0.0 This whole functions now only listens to the searchbox option.
 	 *
 	 * @return string escaped LD+JSON Search and Sitename script.
 	 */
 	public function get_ld_json_website() {
+
+		if ( ! $this->enable_ld_json_searchbox() )
+			return '';
 
 		// var_dump() this used to be a conditional output.... Must we reimplement this feature?
 		$data = array(
@@ -230,17 +234,18 @@ class Generate_Ldjson extends Generate_Image {
 			'url' => $this->get_homepage_permalink(),
 		);
 
-		$name = $this->get_blogname();
+		$blogname = $this->get_blogname();
 		$kn = $this->get_option( 'knowledge_name' );
 
-		$alternate_name = $kn && $kn !== $name ? $kn : '';
+		$alternate_name = $kn && $kn !== $blogname ? $kn : '';
 
 		$data += array(
-			'name' => $this->escape_title( $name ),
+			'name' => $this->escape_title( $blogname ),
 			'alternateName' => $this->escape_title( $alternate_name ),
 		);
 
-		if ( $this->enable_ld_json_searchbox() ) {
+		//= The actual searchbox part.
+		searchbox : {
 			$action_name = 'search_term_string';
 			$search_link = $this->pretty_permalinks ? \trailingslashit( \get_search_link() ) : \get_search_link();
 			/**

@@ -250,8 +250,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* This setting affects the URL structure of the post.
 			* This setting affects the breadcrumb structure of the post.
 		/
-		* TODO New sitename options, that are now named Organization options.
-		* TODO Split Person/Organization SEO?
 		* TODO Logo upload has been added for Organization Schema.org.
 			* Current customizer logo settings are still (too) theme-specific.
 			* The output will still fall back to the customizer logo when not set.
@@ -286,6 +284,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Only one breadcrumb script is now generated, and it listens to the new primary category settings.
 				* If a primary category is set, the tree related to the category is used and will stop at the primary category.
 				* Otherwise, the longest tree of the first base category found is used (numerical).
+			* The "Enable Sitelinks Searchbox?" checkbox now affects the whole "website" script.
+				* Before, this script output was controlled by "Convert URL to Site Name?", and expanded by "Enable Sitelinks Searchbox?".
 		* Sitemap:
 			* The sitemap `lastmod` option no longer listens to Post Dates settings. But now only to its own specific setting.
 		* Feeds:
@@ -342,17 +342,14 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 				* These violations are a warning sign preventing bad practices hindering user experience, which are alleviated.
 				* In practice, WordPress Core needs to update to a future jQuery version to stop these warnings from showing up.
 	* **Updated:**
-		/
-		* TODO All transient caches for The SEO Framework have been invalidated.
-			* Done (recheck as we add new options): LD-JSON.
-			* TODO: Description, sitemap.
+		* All transient caches for The SEO Framework have been invalidated.
 	* **Removed:**
 		* Robots:
 			* The DMOZ project that it influenced is no longer available nor used, so:
 				* `noodp` and all its settings.
-		/
-		* TODO The Site Name project has been abandoned, and this data is now accumulated automatically, so:
+		* The Site Name project has been abandoned, and this data is now accumulated automatically, so:
 			* `ld_json_sitename` and all its settings.
+			* Note: The output still exists, and still has its uses. But its output is controlled by the "Sitelinks Searchbox" setting, for now.
 		* Open Graph:
 			* Open graph type `blog`. It's no longer supported. `website` is used instead.
 			* The Open Graph protocol no longer allows `article:published_time` on `website` types, so:
@@ -515,6 +512,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* "Tell..."
 			* Now are: "This tells..."
 			* Objective: These point to a nearby setting.
+		* "Breadcrumb trails indicate the page's position in the site hierarchy..."
+			* Now is: "Breadcrumb trails indicate page positions in the site's hierarchy..."
+			* Grammar: It missed a reference.
+			* Clarity: It referred to something readily available, but it's general.
 	* **Removed:**
 		* "It's recommended on posts, but it's not recommended on pages unless you modify or create new pages frequently."
 			* No longer applicable.

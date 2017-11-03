@@ -7,7 +7,6 @@ $instance = $this->get_view_instance( 'the_seo_framework_schema_metabox', $insta
 
 switch ( $instance ) :
 	case 'the_seo_framework_schema_metabox_main' :
-
 		?>
 		<h4><?php esc_html_e( 'Schema.org Output Settings', 'autodescription' ); ?></h4>
 		<?php
@@ -33,11 +32,11 @@ switch ( $instance ) :
 			 * }
 			 */
 			$default_tabs = array(
-				'general' => array(
-					'name'     => __( 'General', 'autodescription' ),
-					'callback' => array( $this, 'schema_metabox_general_tab' ),
-					'dashicon' => 'admin-generic',
-				),
+				// 'general' => array(
+				// 	'name'     => __( 'General', 'autodescription' ),
+				// 	'callback' => array( $this, 'schema_metabox_general_tab' ),
+				// 	'dashicon' => 'admin-generic',
+				// ),
 				'structure' => array(
 					'name'     => __( 'Structure', 'autodescription' ),
 					'callback' => array( $this, 'schema_metabox_structure_tab' ),
@@ -64,10 +63,62 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_schema_metabox_general' :
+		//* Emptied @ 3.0.0
+		break;
+
+	case 'the_seo_framework_schema_metabox_structure' :
+		?>
+		<h4><?php esc_html_e( 'Site Structure Options', 'autodescription' ); ?></h4>
+		<?php
+		$this->description( __( 'The site structure Schema.org output allows search engines to gain knowledge on how your website is built.', 'autodescription' ) );
+		$this->description( __( "For example, search engines display your pages' URLs when listed in the Search Results. These options allow you to enhance those URLs output.", 'autodescription' ) );
+		?>
+		<hr>
+		<h4><?php esc_html_e( 'Breadcrumbs', 'autodescription' ); ?></h4>
+		<?php
+		$this->description( __( "Breadcrumb trails indicate page positions in the site's hierarchy. Using the following option will show the hierarchy within the Search Results when available.", 'autodescription' ) );
+
+		$info = $this->make_info( __( 'Learn how this data is used.', 'autodescription' ), 'https://developers.google.com/search/docs/data-types/breadcrumbs', false );
+		$this->wrap_fields( $this->make_checkbox(
+			'ld_json_breadcrumbs',
+			esc_html__( 'Enable Breadcrumbs?', 'autodescription' ) . ' ' . $info,
+			'',
+			false
+		), true );
 
 		?>
-		<h4><?php esc_html_e( 'About this website', 'autodescription' ); ?></h4>
+		<hr>
+		<h4><?php echo esc_html( _x( 'Sitelinks Searchbox', 'Product name', 'autodescription' ) ); ?></h4>
+		<?php
+		$this->description( __( 'When Search users search for your brand name, the following option allows them to search through this website directly from the Search Results.', 'autodescription' ) );
 
+		$info = $this->make_info( __( 'Learn how this data is used.', 'autodescription' ), 'https://developers.google.com/search/docs/data-types/sitelinks-searchbox', false );
+		$this->wrap_fields( $this->make_checkbox(
+			'ld_json_searchbox',
+			esc_html_x( 'Enable Sitelinks Searchbox?', 'Sitelinks Searchbox is a Product name', 'autodescription' ) . ' ' . $info,
+			'',
+			false
+		), true );
+		break;
+
+	case 'the_seo_framework_schema_metabox_presence' :
+		?>
+		<h4><?php esc_html_e( 'Authorized Presence Options', 'autodescription' ); ?></h4>
+		<?php
+		$this->description( __( 'The authorized presence Schema.org output helps Search Engine users find ways to interact with this website.', 'autodescription' ) );
+
+		$info = $this->make_info( __( 'Learn how this data is used.', 'autodescription' ), 'https://developers.google.com/search/docs/guides/enhance-site#add-your-sites-name-logo-and-social-links', false );
+		//* Echo checkbox.
+		$this->wrap_fields( $this->make_checkbox(
+			'knowledge_output',
+			esc_html__( 'Output Authorized Presence?', 'autodescription' ) . ' ' . $info,
+			'',
+			false
+		), true );
+		?>
+		<hr>
+
+		<h4><?php esc_html_e( 'About this website', 'autodescription' ); ?></h4>
 		<p>
 			<label for="<?php $this->field_id( 'knowledge_type' ); ?>"><?php echo esc_html_x( 'This website represents:', '...Organization or Person.', 'autodescription' ); ?></label>
 			<select name="<?php $this->field_name( 'knowledge_type' ); ?>" id="<?php $this->field_id( 'knowledge_type' ); ?>">
@@ -94,62 +145,6 @@ switch ( $instance ) :
 		<p>
 			<input type="text" name="<?php $this->field_name( 'knowledge_name' ); ?>" class="large-text" id="<?php $this->field_id( 'knowledge_name' ); ?>" placeholder="<?php echo esc_attr( $this->get_blogname() ) ?>" value="<?php echo esc_attr( $this->get_field_value( 'knowledge_name' ) ); ?>" />
 		</p>
-		<?php
-		break;
-
-	case 'the_seo_framework_schema_metabox_structure' :
-
-		?><h4><?php esc_html_e( 'Site Structure Options', 'autodescription' ); ?></h4><?php
-		$this->description( __( 'The site structure Schema.org output allows search engines to gain knowledge on how your website is built.', 'autodescription' ) );
-		$this->description( __( "For example, search engines display your pages' URLs when listed in the Search Results. These options allow you to enhance those URLs output.", 'autodescription' ) );
-
-		?>
-		<hr>
-
-		<h4><?php esc_html_e( 'Breadcrumbs', 'autodescription' ); ?></h4>
-		<?php
-		$this->description( __( "Breadcrumb trails indicate the page's position in the site hierarchy. Using the following option will show the hierarchy within the Search Results when available.", 'autodescription' ) );
-
-		$info = $this->make_info( __( 'Learn how this data is used.', 'autodescription' ), 'https://developers.google.com/search/docs/data-types/breadcrumbs', false );
-		$this->wrap_fields( $this->make_checkbox(
-			'ld_json_breadcrumbs',
-			esc_html__( 'Enable Breadcrumbs?', 'autodescription' ) . ' ' . $info,
-			'',
-			false
-		), true );
-
-		?>
-		<hr>
-
-		<h4><?php echo esc_html( _x( 'Sitelinks Searchbox', 'Product name', 'autodescription' ) ); ?></h4>
-		<?php
-		$this->description( __( 'When Search users search for your brand name, the following option allows them to search through this website directly from the Search Results.', 'autodescription' ) );
-
-		$info = $this->make_info( _x( 'Learn how this data is used.', 'Sitelinks Searchbox is a Product name', 'autodescription' ), 'https://developers.google.com/search/docs/data-types/sitelinks-searchbox', false );
-		$this->wrap_fields( $this->make_checkbox(
-			'ld_json_searchbox',
-			esc_html_x( 'Enable Sitelinks Searchbox?', 'Product name', 'autodescription' ) . ' ' . $info,
-			'',
-			false
-		), true );
-		break;
-
-	case 'the_seo_framework_schema_metabox_presence' :
-		?>
-		<h4><?php esc_html_e( 'Authorized Presence Options', 'autodescription' ); ?></h4>
-		<?php
-		$this->description( __( 'The authorized presence Schema.org output helps Search Engine users find ways to interact with this website.', 'autodescription' ) );
-
-		$info = $this->make_info( __( 'Learn how this data is used.', 'autodescription' ), 'https://developers.google.com/search/docs/guides/enhance-site#add-your-sites-name-logo-and-social-links', false );
-		//* Echo checkbox.
-		$this->wrap_fields( $this->make_checkbox(
-			'knowledge_output',
-			esc_html__( 'Output Authorized Presence?', 'autodescription' ) . ' ' . $info,
-			'',
-			false
-		), true );
-
-		?>
 		<hr>
 
 		<h4><?php esc_html_e( 'Website logo', 'autodescription' ); ?></h4>

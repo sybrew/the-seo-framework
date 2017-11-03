@@ -509,6 +509,7 @@ class Cache extends Sitemaps {
 	 * @since 2.8.0:
 	 *    1. Added locale suffix.
 	 *    2. Added check for option 'cache_sitemap'.
+	 * @since 3.0.0 Now also sets up $excluded_post_ids_transient
 	 * @global int $blog_id
 	 */
 	public function setup_transient_names() {
@@ -518,8 +519,8 @@ class Cache extends Sitemaps {
 		 * When the caching mechanism changes. Change this value.
 		 * Use hex. e.g. 0, 1, 2, 9, a, b
 		 */
-		$sitemap_revision = '3';
-		$theme_dir_revision = '0';
+		$sitemap_revision = '4';
+		$theme_dir_revision = '1';
 		$exclude_revision = '0';
 
 		$this->sitemap_transient = $this->is_option_checked( 'cache_sitemap' ) ? $this->add_cache_key_suffix( 'tsf_sitemap_' . $sitemap_revision ) : '';
@@ -561,7 +562,7 @@ class Cache extends Sitemaps {
 
 		$cache_key = $this->generate_cache_key( $page_id, $taxonomy, $type );
 
-		$revision = '2';
+		$revision = '3';
 		$additions = $this->add_description_additions( $page_id, $taxonomy );
 
 		if ( $additions ) {
@@ -605,7 +606,7 @@ class Cache extends Sitemaps {
 
 		$cache_key = $this->generate_cache_key( $page_id, $taxonomy, $type );
 
-		$revision = '5';
+		$revision = '6';
 
 		/**
 		 * Change key based on options.
@@ -863,18 +864,18 @@ class Cache extends Sitemaps {
 	 * @since 2.8.0 1: $locale is now static.
 	 *              2: $key may now be empty.
 	 * @staticvar string $locale
+	 * @global string $blog_id
 	 *
 	 * @return string the cache key.
 	 */
 	protected function add_cache_key_suffix( $key = '' ) {
-		global $blog_id;
 
 		static $locale = null;
 
 		if ( is_null( $locale ) )
 			$locale = strtolower( \get_locale() );
 
-		return $key . '_' . $blog_id . '_' . $locale;
+		return $key . '_' . $GLOBALS['blog_id'] . '_' . $locale;
 	}
 
 	/**
@@ -1011,6 +1012,8 @@ class Cache extends Sitemaps {
 	 *
 	 * @since 2.9.1
 	 * @uses THE_SEO_FRAMEWORK_DB_VERSION as cache key buster.
+	 * @uses $this->generate_cache_key_by_type()
+	 * @see $this->get_meta_output_cache_key_by_query()
 	 *
 	 * @param int $id The ID. Defaults to $this->get_the_real_ID();
 	 * @param string $taxonomy The term taxonomy
@@ -1024,10 +1027,10 @@ class Cache extends Sitemaps {
 		 */
 		$key = $this->generate_cache_key_by_type( $id, $taxonomy, $type ) . '_' . THE_SEO_FRAMEWORK_DB_VERSION;
 
-		$page = '1';
-		$paged = '1';
+		//= Refers to the first page, always.
+		$_page = $_paged = '1';
 
-		return $cache_key = 'seo_framework_output_' . $key . '_' . $paged . '_' . $page;
+		return $cache_key = 'seo_framework_output_' . $key . '_' . $_paged . '_' . $_page;
 	}
 
 	/**
@@ -1058,7 +1061,6 @@ class Cache extends Sitemaps {
 	public function delete_sitemap_transient_permalink_updated() {
 
 		if ( isset( $_POST['permalink_structure'] ) || isset( $_POST['category_base'] ) ) {
-
 			if ( \check_admin_referer( 'update-permalink' ) )
 				return $this->delete_cache( 'sitemap' );
 		}
@@ -1167,10 +1169,8 @@ class Cache extends Sitemaps {
 	 */
 	public function delete_theme_dir_transient( $value = null, $options = null ) {
 
-		if ( isset( $options['type'] ) ) {
-			if ( 'theme' !== $options['type'] )
-				return false;
-		}
+		if ( isset( $options['type'] ) && 'theme' !== $options['type'] )
+			return false;
 
 		\delete_transient( $this->theme_doing_it_right_transient );
 
