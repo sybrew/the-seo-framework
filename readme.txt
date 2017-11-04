@@ -249,10 +249,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* This setting is represented through buttons within the category selection meta box.
 			* This setting affects the URL structure of the post.
 			* This setting affects the breadcrumb structure of the post.
-		/
-		* TODO Logo upload has been added for Organization Schema.org.
-			* Current customizer logo settings are still (too) theme-specific.
-			* The output will still fall back to the customizer logo when not set.
+		* Logo upload has been added for Organization Schema.org.
+			* You can only select one when using JavaScript for future-proofing.
+			* Like before, it will fall back to the Customizer logo, and then the Customizer icon.
 		* SEO title placeholders and counters now update when:
 		 	* Changing post visibility (private, protected, public).
 			* Changing the page title.
@@ -427,12 +426,22 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Location: Pixel counter's tooltip.
 			* `%1$d`: Pixels used.
 			* `%2$d`: Guideline pixels.
-		* Location: SEO Setting -> General meta box -> Layout tab
+		* **Location:** SEO Setting -> General meta box -> Layout tab
 			* "Counter Settings"
 			* "Display character counters?"
 			* "The character counter is based on guidelines."
 			* "Display pixel counters?"
 			* "The pixel counter computes whether the input will fit on Search Engine Result Pages."
+		* **Location:** SEO Settings -> Schema Settings -> Presence tab
+			* "Select Logo" (button)
+			* "Change Logo" (button)
+			* "Remove Logo" (button)
+			* "Unset selected logo" (a11y title)
+			* "Enable logo?" (option checkbox)
+			* "Setting a logo requires JavaScript."
+				* We must know the dimensions for various (planned) implementations.
+			* "The logo image must be square."
+				* For AMP support.
 		* "View your profile."
 			* Location: SEO Setting -> Schema meta box -> Presence tab
 		* "Learn how this data is used."
@@ -516,6 +525,13 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Now is: "Breadcrumb trails indicate page positions in the site's hierarchy..."
 			* Grammar: It missed a reference.
 			* Clarity: It referred to something readily available, but it's general.
+		* "This option only has an effect when this site represents an Organization. If left disabled, search engines will look elsewhere for a logo, if it exists and is assigned as a logo."
+			* Now is: "These options are used when this site represents an organization. When no logo is outputted, search engine will look elsewhere."
+			* Grammar: Full sentences.
+			* Clarity: Shorter sentences.
+			* Less verbatim: Unnecessary words have been removed.
+			* Chrono: When not if.
+			* Plural: More options are present.
 	* **Removed:**
 		* "It's recommended on posts, but it's not recommended on pages unless you modify or create new pages frequently."
 			* No longer applicable.
@@ -543,6 +559,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Method `get_current_term_meta()`, which fetches the current term's meta.
 		* Method `get_primary_term_id()`, which fetches the post's primary term ID.
 		* Method `get_primary_term()`, which fetches the post's primary term, but only if it exists.
+		* Method `get_knowledge_logo()`, which returns the used knowledge graph logo URL.
 		* `index.php` file in the classes folder stating the class structure.
 	* **Changed:**
 		* Method `is_protected()` no longer checks for query, i.e. `is_singular()`, before parsing.
@@ -651,6 +668,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* `the_seo_framework_admin_color_css`, used to adjust admin-color conforming colors.
 			* `the_seo_framework_current_term_meta`, used to adjust term meta after it's set.
 				* Do not confuse this with filter `the_seo_framework_get_term_meta`, which only fires when no term meta has been set.
+			* `the_seo_framework_knowledge_logo`, used to adjust the current knowledge logo URL.
+				* Caution: This does not adjust the logo ID and might break future implementation.
+				* So, it should only be filled in when non-user-input is used.
 		* **Deprecated:**
 			 * `the_seo_framework_url_path`, use WordPress filters instead. This filter no longer runs by default.
 			 * `the_seo_framework_url_output_args`. This filter no longer runs by default.

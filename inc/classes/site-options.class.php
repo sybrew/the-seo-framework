@@ -233,12 +233,12 @@ class Site_Options extends Sanitize {
 			'knowledge_type'   => 'organization', // Organization or Person, dropdown
 
 			// Knowledge business. https://developers.google.com/structured-data/customize/logos
-			'knowledge_logo' => 1,  // Fetch logo from WP Favicon
+			'knowledge_logo' => 1,  // Use Knowledge Logo from anywhere.
 			'knowledge_name' => '', // Person or Organization name
 
 			// Knowledge Logo image
-		//	'knowledge_logo_url'   => '', // TODO
-		//	'knowledge_logo_id'    => 0, // TODO
+			'knowledge_logo_url'   => '',
+			'knowledge_logo_id'    => 0,
 
 			// Knowledge sameas locations
 			'knowledge_facebook'   => '', // Facebook Account

@@ -7,9 +7,7 @@ $instance = $this->get_view_instance( 'the_seo_framework_homepage_metabox', $ins
 
 switch ( $instance ) :
 	case 'the_seo_framework_homepage_metabox_main' :
-
 		$this->description( __( 'These settings will take precedence over the settings set within the Home Page edit screen, if any.', 'autodescription' ) );
-
 		?>
 		<hr>
 		<?php

@@ -774,7 +774,6 @@ class Admin_Pages extends Inpost {
 	 * Also registers additional i18n strings for JS.
 	 *
 	 * @since 2.8.0
-	 * @todo optimize? Sanitation and translations are duplicated -> microseconds...
 	 *
 	 * @param string $input_id Required. The HTML input id to pass URL into.
 	 * @return string The image uploader button.
@@ -786,11 +785,18 @@ class Admin_Pages extends Inpost {
 
 		$s_input_id = \esc_attr( $input_id );
 
-		$content = sprintf( '<a href="%1$s" class="tsf-set-social-image button button-primary button-small" title="%2$s" id="%3$s-select" data-inputid="%3$s">%4$s</a>',
-			\esc_url( \get_upload_iframe_src( 'image', $this->get_the_real_ID() ) ),
-			\esc_attr_x( 'Select social image', 'Button hover', 'autodescription' ),
-			$s_input_id,
-			\esc_html__( 'Select Image', 'autodescription' )
+		$content = vsprintf(
+			'<a href="%1$s" class="tsf-set-social-image button button-primary button-small" title="%2$s" id="%3$s-select"
+				data-inputid="%3$s" data-width="%4$s" data-height="%5$s" data-flex="%6$d">%7$s</a>',
+			array(
+				\esc_url( \get_upload_iframe_src( 'image', $this->get_the_real_ID() ) ),
+				\esc_attr_x( 'Select social image', 'Button hover', 'autodescription' ),
+				$s_input_id,
+				'1200',
+				'630',
+				true,
+				\esc_html__( 'Select Image', 'autodescription' ),
+			)
 		);
 
 		$button_labels = array(
@@ -800,6 +806,52 @@ class Admin_Pages extends Inpost {
 			'remove' => \esc_attr__( 'Remove Image', 'autodescription' ),
 			'remove_title' => \esc_attr__( 'Remove selected social image', 'autodescription' ),
 			'frame_title' => \esc_attr_x( 'Select Social Image', 'Frame title', 'autodescription' ),
+			'frame_button' => \esc_attr__( 'Use this image', 'autodescription' ),
+		);
+
+		//* Already escaped. Turn off escaping.
+		$this->additional_js_l10n( $s_input_id, $button_labels, false, false );
+
+		return $content;
+	}
+
+	/**
+	 * Returns logo uploader form buttons.
+	 * Also registers additional i18n strings for JS.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $input_id Required. The HTML input id to pass URL into.
+	 * @return string The image uploader button.
+	 */
+	public function get_logo_uploader_form( $input_id ) {
+
+		if ( ! $input_id )
+			return '';
+
+		$s_input_id = \esc_attr( $input_id );
+
+		$content = vsprintf(
+			'<a href="%1$s" class="tsf-set-social-image button button-primary button-small" title="%2$s" id="%3$s-select"
+				data-inputid="%3$s" data-width="%4$s" data-height="%5$s" data-flex="%6$d">%7$s</a>',
+			array(
+				\esc_url( \get_upload_iframe_src( 'image', $this->get_the_real_ID() ) ),
+				'',
+				$s_input_id,
+				'512',
+				'512',
+				false,
+				\esc_html__( 'Select Logo', 'autodescription' ),
+			)
+		);
+
+		$button_labels = array(
+			'select' => \esc_attr__( 'Select Logo', 'autodescription' ),
+			'select_title' => '',
+			'change' => \esc_attr__( 'Change Logo', 'autodescription' ),
+			'remove' => \esc_attr__( 'Remove Logo', 'autodescription' ),
+			'remove_title' => \esc_attr__( 'Unset selected logo', 'autodescription' ),
+			'frame_title' => \esc_attr_x( 'Select Logo', 'Frame title', 'autodescription' ),
 			'frame_button' => \esc_attr__( 'Use this image', 'autodescription' ),
 		);
 

@@ -297,9 +297,8 @@ class Generate_Ldjson extends Generate_Image {
 		);
 
 		if ( $this->get_option( 'knowledge_logo' ) && 'organization' === $knowledge_type ) {
-			$logo = $this->get_site_logo() ?: $this->get_site_icon();
 			$data += array(
-				'logo' => \esc_url_raw( $logo ),
+				'logo' => \esc_url_raw( $this->get_knowledge_logo() ),
 			);
 		}
 
@@ -341,6 +340,32 @@ class Generate_Ldjson extends Generate_Image {
 			return '<script type="application/ld+json">' . $json . '</script>' . "\r\n";
 
 		return '';
+	}
+
+	/**
+	 * Returns knowledge logo URL.
+	 * It first tries to get the option, then the Customizer logo, then the Customizer icon.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param bool $get_option Whether to fetch the option.
+	 * @return string The logo URL.
+	 */
+	public function get_knowledge_logo( $get_option = true ) {
+		/**
+		 * Applies filters 'the_seo_framework_knowledge_logo'
+		 *
+		 * @since 3.0.0
+		 * @param string $logo       The current logo URL.
+		 * @param bool   $get_option Whether to test the option or just the fallbacks.
+		 */
+		return \apply_filters_ref_array( 'the_seo_framework_knowledge_logo', array(
+			( $get_option ? $this->get_option( 'knowledge_logo_url' ) : false )
+				?: $this->get_site_logo()
+				?: $this->get_site_icon()
+				?: '',
+			$get_option,
+		) );
 	}
 
 	/**

@@ -149,18 +149,34 @@ switch ( $instance ) :
 
 		<h4><?php esc_html_e( 'Website logo', 'autodescription' ); ?></h4>
 		<?php
-		//* @TODO @priority OMGWTFBBQ 2.8.0 this logo MUST prefer "Site Icon". State that.
-		// if ( $this->theme_supports_site_icon() )
-		// $this->description( __( 'If your theme supports', 'autodescription' ) );
+		$this->description( esc_html__( 'These options are used when this site represents an organization. When no logo is outputted, search engine will look elsewhere.', 'autodescription' ) );
 		$info = $this->make_info( __( 'Learn how this data is used.', 'autodescription' ), 'https://developers.google.com/search/docs/data-types/logo', false );
 		$this->wrap_fields( $this->make_checkbox(
 			'knowledge_logo',
-			esc_html__( 'Use the favicon from Customizer as the Organization Logo?', 'autodescription' ) . ' ' . $info,
-			esc_html__( 'This option only has an effect when this site represents an Organization. If left disabled, search engines will look elsewhere for a logo, if it exists and is assigned as a logo.', 'autodescription' ),
+			esc_html__( 'Enable logo?', 'autodescription' ) . ' ' . $info,
+			'',
 			false
 		), true );
 
+		$logo_placeholder = $this->get_knowledge_logo( false );
 		?>
+		<p>
+			<label for="knowledge_logo-url">
+				<strong><?php esc_html_e( 'Logo URL', 'autodescription' ); ?></strong>
+				<?php $this->make_info( __( 'The logo image must be square.', 'autodescription' ) ); ?>
+			</label>
+		</p>
+		<p>
+			<span class="hide-if-js attention"><?php esc_html_e( 'Setting a logo requires JavaScript.', 'autodescription' ); ?></span>
+			<input class="large-text" type="text" readonly="readonly" data-readonly="1" name="<?php $this->field_name( 'knowledge_logo_url' ); ?>" id="knowledge_logo-url" placeholder="<?php echo esc_url( $logo_placeholder ); ?>" value="<?php echo esc_url( $this->get_field_value( 'knowledge_logo_url' ) ); ?>" />
+			<input type="hidden" name="<?php $this->field_name( 'knowledge_logo_id' ); ?>" id="knowledge_logo-id" value="<?php echo absint( $this->get_field_value( 'knowledge_logo_id' ) ); ?>" />
+		</p>
+		<p class="hide-if-no-js">
+			<?php
+			//* Already escaped.
+			echo $this->get_logo_uploader_form( 'knowledge_logo' );
+			?>
+		</p>
 		<hr>
 
 		<h4><?php esc_html_e( 'Connected Social Pages', 'autodescription' ); ?></h4>
