@@ -724,7 +724,7 @@ class Init extends Query {
 	 *
 	 * @since 2.9.4
 	 * @since 3.0.0 Exchanged meta query for post__not_in query.
-	 * @see WordPress Core @source \Featured_Content::pre_get_posts()
+	 * @see Twenty Fourteen theme @source \Featured_Content::pre_get_posts()
 	 * @access private
 	 *
 	 * @param \WP_Query $wp_query The WP_Query instance.
@@ -762,7 +762,7 @@ class Init extends Query {
 	 *
 	 * @since 2.9.4
 	 * @since 3.0.0 Exchanged meta query for post__not_in query.
-	 * @see WordPress Core @source \Featured_Content::pre_get_posts()
+	 * @see Twenty Fourteen theme @source \Featured_Content::pre_get_posts()
 	 * @access private
 	 *
 	 * @param \WP_Query $wp_query The WP_Query instance.

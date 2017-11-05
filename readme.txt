@@ -295,13 +295,13 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Titles:
 			* Refactored "floating title placeholder"'s code, this means it no longer "glues" every part together based on assumption to perform calculations and placements.
 				/
-				* This made way for new features, it improved performance, and it lowered overall lower maintenance cost.
+				* This made way for new features, it improved performance, and it lowered overall maintenance cost.
 				* TODO test RTL.
 		* Canonical URLS:
-			* Sped up URL generation two-fold. We've rewritten the code from the ground up.
+			* Sped up URL generation two-fold. The code has been rewritten from the ground up.
 			* The Canonical URL should now always be compatible with any plugin, out of the box.
-			* Note that these URLs no longer output anything on private posts, and some layout elements have been affected.
-			* If a query isn't registered incorrectly, the URL will also stay empty.
+			* Note that these URLs no longer output anything on private posts, and some administrative layout elements have been affected.
+			* If a query isn't registered incorrectly, the URL will also stay empty. Or, in unlikely cases, it will link to the home page.
 			* The canonical URLs now listen to the new "Primary Term" options.
 		* Sitemaps:
 			* Password protected posts and pages no longer show up in the sitemap.
@@ -319,7 +319,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Admin performance:
 			* Sped up admin JavaScript initialization by combining jQuery overhead calls.
 			* "Floating title placeholders" now move smoother on resize.
-			* Slightly improved CSS rendering performance by eliminating clause-calls; i.e. we now use `.class` instead of `div.class` and derivatives thereof.
+			* Slightly improved CSS rendering performance by eliminating clause-calls; i.e. it now uses `.class` instead of `div.class` and derivatives thereof.
 				/
 				* TODO RTL.
 		* Archives:
@@ -337,11 +337,12 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 				* This automatically ensures compatibility with the new Gutenberg editor.
 			* Tooltips are location aware, and will try to center in regards to your mouse entry point.
 				* This ensures compatibility with Edge and IE11, where the tooltips are smaller than intended.
-			* We are aware that these tooltips invoke various Chrome browser "violations".
+			* We are aware that these tooltips invoke various Chromium browser "violations".
 				* These violations are a warning sign preventing bad practices hindering user experience, which are alleviated.
 				* In practice, WordPress Core needs to update to a future jQuery version to stop these warnings from showing up.
 	* **Updated:**
 		* All transient caches for The SEO Framework have been invalidated.
+		* All object caches for The SEO Framework have been invalidated.
 	* **Removed:**
 		* Robots:
 			* The DMOZ project that it influenced is no longer available nor used, so:
@@ -365,8 +366,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* qTranslate X URL compatibility file. It now works without it.
 			* Donncha Domain Mapping URL compatibility file. Be sure to set a preferred canonical scheme.
 			* WPMUdev Mapping URL generation enhancements and compatibility file. Be sure to set a preferred canonical scheme.
-			/
-			* TSF uses newer JavaScript and CSS techniques in the dashboard. We now use ES6 and CSS3 snapshot 2015.
+			* TSF uses newer JavaScript and CSS techniques in the dashboard. TSF now uses ES6 and CSS3 snapshot 2015.
 				* This improves admin performance and lowers memory consumption: less jQuery, more vanilla.
 				* To evade polyfilling and massive spaghetti, older browsers are therefore abandoned in support.
 				* The following browsers are no longer supported:
@@ -439,7 +439,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* "Unset selected logo" (a11y title)
 			* "Enable logo?" (option checkbox)
 			* "Setting a logo requires JavaScript."
-				* We must know the dimensions for various (planned) implementations.
+				* The dimensions must be known for various (planned) implementations.
 			* "The logo image must be square."
 				* For AMP support.
 		* "View your profile."
@@ -574,8 +574,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Plugin (de)activation functions are no created when the plugin isn't being (de)activated.
 			* Instead, they've been moved in `inc/functions/plugin-(de)activation.php` and run directly as the files are called.
 		* Various admin page wrappers have been moved into views:
-			* SEO Settings page wrap
-			* SEO Settings page columns
+			* SEO Settings page wrap.
+			* SEO Settings page columns.
 			* In-Post SEO box navigational wrapper.
 	* **Removed:**
 		* Method `admin()`, it has been converted into a file to reduce memory usage.
