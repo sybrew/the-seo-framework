@@ -251,7 +251,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* This setting affects the breadcrumb structure of the post.
 		* Logo upload has been added for Organization Schema.org.
 			* You can only select one when using JavaScript for future-proofing.
-			* Like before, it will fall back to the Customizer logo, and then the Customizer icon.
+			* Unlike before, it will no longer fall back to the Customizer logo.
+			* Like before, it will fall back to the Customizer icon.
+			* You can skip cropping if the image is square; otherwise, you'd have to crop it to make it square.
 		* SEO title placeholders and counters now update when:
 		 	* Changing post visibility (private, protected, public).
 			* Changing the page title.
@@ -277,9 +279,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Titles:
 			* When no blog tagline is set, in either WordPress' General Settings or in TSF's Home Page settings, "Untitled" is no longer used for the Home Page.
 		* Structured Data:
-			* Schema breadcrumbs now have their IDs reset. They have an URL fragment attached (e.g. `example.com/#schemaorg-bcl`).
+			* Schema breadcrumbs no longer output the ID for the current page.
+				* The current page is implied automatically.
 				* This is to prevent ID collision with generated scripts from other plugins, like WooCommerce 3.0+.
-				* This might affect search presence of the pages until the new IDs have been processed by the search engine, like Google and Bing.
 			* Only one breadcrumb script is now generated, and it listens to the new primary category settings.
 				* If a primary category is set, the tree related to the category is used and will stop at the primary category.
 				* Otherwise, the longest tree of the first base category found is used (numerical).

@@ -33,32 +33,10 @@ defined( 'ABSPATH' ) or die;
 class Generate_Ldjson extends Generate_Image {
 
 	/**
-	 * Maintains Schema IDs.
-	 *
-	 * @since 3.0.0
-	 * @see $this->setup_default_schema_ids()
-	 *
-	 * @var array
-	 */
-	public $schema_ids = array();
-
-	/**
 	 * Constructor, load parent constructor and inits class.
 	 */
 	protected function __construct() {
-		$this->setup_default_schema_ids();
 		parent::__construct();
-	}
-
-	/**
-	 * Sets up Schema.org item IDs to be used within the scripts.
-	 *
-	 * @since 3.0.0
-	 */
-	public function setup_default_schema_ids() {
-		$this->schema_ids = array(
-			'breadcrumb' => 'schemaorg-bcl',
-		);
 	}
 
 	/**
@@ -227,22 +205,23 @@ class Generate_Ldjson extends Generate_Image {
 		if ( ! $this->enable_ld_json_searchbox() )
 			return '';
 
-		// var_dump() this used to be a conditional output.... Must we reimplement this feature?
 		$data = array(
 			'@context' => 'http://schema.org',
 			'@type' => 'WebSite',
 			'url' => $this->get_homepage_permalink(),
 		);
 
-		$blogname = $this->get_blogname();
-		$kn = $this->get_option( 'knowledge_name' );
+		name : {
+			$blogname = $this->get_blogname();
+			$kn = $this->get_option( 'knowledge_name' );
 
-		$alternate_name = $kn && $kn !== $blogname ? $kn : '';
+			$alternate_name = $kn && $kn !== $blogname ? $kn : '';
 
-		$data += array(
-			'name' => $this->escape_title( $blogname ),
-			'alternateName' => $this->escape_title( $alternate_name ),
-		);
+			$data += array(
+				'name' => $this->escape_title( $blogname ),
+				'alternateName' => $this->escape_title( $alternate_name ),
+			);
+		}
 
 		//= The actual searchbox part.
 		searchbox : {
@@ -344,7 +323,7 @@ class Generate_Ldjson extends Generate_Image {
 
 	/**
 	 * Returns knowledge logo URL.
-	 * It first tries to get the option, then the Customizer logo, then the Customizer icon.
+	 * It first tries to get the option and then the Customizer icon.
 	 *
 	 * @since 3.0.0
 	 *
@@ -361,7 +340,6 @@ class Generate_Ldjson extends Generate_Image {
 		 */
 		return \apply_filters_ref_array( 'the_seo_framework_knowledge_logo', array(
 			( $get_option ? $this->get_option( 'knowledge_logo_url' ) : false )
-				?: $this->get_site_logo()
 				?: $this->get_site_icon()
 				?: '',
 			$get_option,
@@ -734,6 +712,7 @@ class Generate_Ldjson extends Generate_Image {
 	 * Generates current Page/Post LD+JSON breadcrumb.
 	 *
 	 * @since 2.9.3
+	 * @since 3.0.0 Removed @id output to allow for more same-page schema items.
 	 * @staticvar array $crumb
 	 *
 	 * @param int $position The previous crumb position.
@@ -762,7 +741,7 @@ class Generate_Ldjson extends Generate_Image {
 			'@type'    => 'ListItem',
 			'position' => $position,
 			'item'     => array(
-				'@id'  => $this->get_schema_url_id( 'breadcrumb', 'currentpage' ),
+				// '@id'  => $this->get_schema_url_id( 'breadcrumb', 'currentpage' ),
 				'name' => $this->escape_title( $name ),
 			),
 		);
@@ -837,23 +816,6 @@ class Generate_Ldjson extends Generate_Image {
 			default :
 				$url = '';
 				break;
-		}
-
-		$key = isset( $this->schema_ids[ $id ] ) ? $this->schema_ids[ $id ] : $id;
-
-		$parsed = parse_url( $url );
-
-		//* Defensive programming... This can't yield without odd filters.
-		$fragment = ! empty( $parsed['fragment'] ) ? $parsed['fragment'] : '';
-
-		if ( $fragment ) {
-			$url = str_replace(
-				'#' . $fragment,
-				'#' . $fragment . '-' . $key,
-				$url
-			);
-		} else {
-			$url .= '#' . $key;
 		}
 
 		return $url;
