@@ -181,11 +181,15 @@ class Cache extends Sitemaps {
 	 * Delete transient on post save.
 	 *
 	 * @since 2.8.0
+	 * @since 3.0.0 Process is halted when no valid $post_id is supplied.
 	 *
 	 * @param int $post_id The Post ID that has been updated.
 	 * @return bool True on success, false on failure.
 	 */
 	public function delete_post_cache( $post_id ) {
+
+		if ( ! $post_id )
+			return false;
 
 		$success = array();
 
