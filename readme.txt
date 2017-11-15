@@ -608,7 +608,21 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* When using filter `the_seo_framework_settings_capability`, the set capability can now save SEO settings too.
 		* TODO check why this is happening: https://wordpress.org/support/topic/sitemap-55/
 		* Method `get_user_option()` no longer caches default input value.
-	* **Javascript notes:**
+	* **JavaScript notes:**
+		* **Added:**
+			* Many new `tsfL10n` parameters, including (but not limited to):
+				* `tsfL10n.params.titlePixels`
+				* `tsfL10n.params.descriptionPixels`
+				* `tsfL10n.params.termName`
+				* `tsfL10n.params.objectTitle`
+				* `tsfL10n.params.untitledTitle`
+				* `tsfL10n.states.debug`
+				* `tsfL10n.states.isPasswordProtected`
+				* `tsfL10n.states.isPrivate`
+				* `tsfL10n.states.postType`
+				* `tsfL10n.states.taxonomies`
+				* `tsfL10n.states.isPostEdit`
+				* `tsfL10n.states.isTermEdit`
 		* **Reworked:**
 			* Title rendering: They're now contained within a single state holder, lowering CPU usage.
 			* Tooltips: They're now contained within a single state holder, lowering memory footprint.
@@ -673,6 +687,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* `the_seo_framework_knowledge_logo`, used to adjust the current knowledge logo URL.
 				* Caution: This does not adjust the logo ID and might break future implementation.
 				* So, it should only be filled in when non-user-input is used.
+			* `the_seo_framework_js_l10n`, used to adjust parameters and strings for JS.
 		* **Improved:**
 			* `the_seo_framework_enable_auto_description` now passes generation arguments as the second parameter.
 		* **Deprecated:**

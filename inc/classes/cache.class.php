@@ -178,7 +178,7 @@ class Cache extends Sitemaps {
 	}
 
 	/**
-	 * Delete transient on post save.
+	 * Deletes transient on post save.
 	 *
 	 * @since 2.8.0
 	 * @since 3.0.0 Process is halted when no valid $post_id is supplied.

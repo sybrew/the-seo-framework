@@ -368,6 +368,8 @@ class Admin_Init extends Init {
 				'titleSeparator' => $title_separator,
 				'descriptionSeparator' => $description_separator,
 				'titleLocation' => $title_location,
+				'titlePixels' => 600,
+				'descriptionPixels' => $this->is_page() ? 920 : 820,
 			),
 			'other' => $this->additional_js_l10n( null, array(), true ),
 		);
@@ -380,7 +382,13 @@ class Admin_Init extends Init {
 			}
 		}
 
-		return $l10n;
+		/**
+		 * Applies filters 'the_seo_framework_js_l10n'
+		 *
+		 * @since 3.0.0
+		 * @param array $l10n
+		 */
+		return (array) \apply_filters( 'the_seo_framework_js_l10n', $l10n );
 	}
 
 	/**
