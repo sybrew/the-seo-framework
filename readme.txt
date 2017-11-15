@@ -611,8 +611,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **JavaScript notes:**
 		* **Added:**
 			* Many new `tsfL10n` parameters, including (but not limited to):
-				* `tsfL10n.params.titlePixels`
-				* `tsfL10n.params.descriptionPixels`
+				* `tsfL10n.params.titlePixelGuideline`
+				* `tsfL10n.params.descPixelGuideline`
 				* `tsfL10n.params.termName`
 				* `tsfL10n.params.objectTitle`
 				* `tsfL10n.params.untitledTitle`

@@ -368,8 +368,8 @@ class Admin_Init extends Init {
 				'titleSeparator' => $title_separator,
 				'descriptionSeparator' => $description_separator,
 				'titleLocation' => $title_location,
-				'titlePixels' => 600,
-				'descriptionPixels' => $this->is_page() ? 920 : 820,
+				'titlePixelGuideline' => 600,
+				'descPixelGuideline' => $this->is_page() ? 920 : 820,
 			),
 			'other' => $this->additional_js_l10n( null, array(), true ),
 		);

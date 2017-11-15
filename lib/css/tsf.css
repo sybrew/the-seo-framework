@@ -1004,6 +1004,8 @@ body.js .tsf-flex-tab-content.tsf-flex-tab-content-active {
 }
 
 .tsf-primary-term-selector input:checked:before {
+	width: 6px;
+	height: 6px;
 	margin: 3px;
 	line-height: inherit;
 }
@@ -1194,6 +1196,18 @@ a.tsf-set-social-image.button {
 
 	.wp-list-table .is-expanded td.tsf-seo-bar-wrap:not(.hidden) {
 		overflow: initial !important;
+	}
+
+	.tsf-primary-term-selector input {
+		height: 18px;
+		width: 18px;
+		min-width: 18px;
+	}
+
+	.tsf-primary-term-selector input:checked:before {
+		width: 8px;
+		height: 8px;
+		margin: 4px;
 	}
 }
 
