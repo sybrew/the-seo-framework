@@ -673,6 +673,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* `the_seo_framework_knowledge_logo`, used to adjust the current knowledge logo URL.
 				* Caution: This does not adjust the logo ID and might break future implementation.
 				* So, it should only be filled in when non-user-input is used.
+		* **Improved:**
+			* `the_seo_framework_enable_auto_description` now passes generation arguments as the second parameter.
 		* **Deprecated:**
 			 * `the_seo_framework_url_path`, use WordPress filters instead. This filter no longer runs by default.
 			 * `the_seo_framework_url_output_args`. This filter no longer runs by default.

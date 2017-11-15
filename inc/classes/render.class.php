@@ -663,7 +663,7 @@ class Render extends Admin_Init {
 		if ( ! $this->use_facebook_tags() )
 			return '';
 
-		if ( in_array( $this->get_og_type(), array( 'website', 'product' ), true ) )
+		if ( 'article' !== $this->get_og_type() )
 			return '';
 
 		$facebook_page = $this->get_current_author_option( 'facebook_page' ) ?: $this->get_option( 'facebook_author' );

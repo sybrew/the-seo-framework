@@ -321,9 +321,11 @@ class Generate_Description extends Generate {
 		 * Applies filters bool 'the_seo_framework_enable_auto_description'
 		 *
 		 * @since 2.5.0
-		 * @param bool $autodescription Enable or disable the automated descriptions.
+		 * @since 3.0.0 Now passes $args as the second parameter.
+		 * @param bool  $autodescription Enable or disable the automated descriptions.
+		 * @param array $args            The description arguments.
 		 */
-		$autodescription = (bool) \apply_filters( 'the_seo_framework_enable_auto_description', true );
+		$autodescription = (bool) \apply_filters( 'the_seo_framework_enable_auto_description', true, $args );
 		if ( false === $autodescription )
 			return '';
 

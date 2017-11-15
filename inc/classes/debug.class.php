@@ -209,29 +209,29 @@ final class Debug implements Debug_Interface {
 	 * @since 2.8.0 Now escapes all input, except for $message.
 	 * @access private
 	 *
-	 * @param string $function	The function that was called.
-	 * @param string $message	A message explaining what has been done incorrectly.
-	 * @param string $version	The version of WordPress where the message was added.
+	 * @param string $function The function that was called.
+	 * @param string $message  A message explaining what has been done incorrectly.
+	 * @param string $version  The version of WordPress where the message was added.
 	 */
 	public function _doing_it_wrong( $function, $message, $version = null ) {
 		/**
-		* Fires when the given function is being used incorrectly.
-		*
-		* @since WP Core 3.1.0
-		*
-		* @param string $function The function that was called.
-		* @param string $message  A message explaining what has been done incorrectly.
-		* @param string $version  The version of WordPress where the message was added.
-		*/
+		 * Fires when the given function is being used incorrectly.
+		 *
+		 * @since WP Core 3.1.0
+		 *
+		 * @param string $function The function that was called.
+		 * @param string $message  A message explaining what has been done incorrectly.
+		 * @param string $version  The version of WordPress where the message was added.
+		 */
 		\do_action( 'doing_it_wrong_run', $function, $message, $version );
 
 		/**
-		* Filter whether to trigger an error for _doing_it_wrong() calls.
-		*
-		* @since 3.1.0
-		*
-		* @param bool $trigger Whether to trigger the error for _doing_it_wrong() calls. Default true.
-		*/
+		 * Filter whether to trigger an error for _doing_it_wrong() calls.
+		 *
+		 * @since 3.1.0
+		 *
+		 * @param bool $trigger Whether to trigger the error for _doing_it_wrong() calls. Default true.
+		 */
 		if ( WP_DEBUG && \apply_filters( 'doing_it_wrong_trigger_error', true ) ) {
 
 			set_error_handler( array( $this, 'error_handler_doing_it_wrong' ) );
@@ -272,8 +272,8 @@ final class Debug implements Debug_Interface {
 		 *
 		 * @since 2.7.0
 		 *
-		 * @param string $p_or_m	The Property or Method.
-		 * @param string $message	A message explaining what has been done incorrectly.
+		 * @param string $p_or_m  The Property or Method.
+		 * @param string $message A message explaining what has been done incorrectly.
 		 */
 		\do_action( 'the_seo_framework_inaccessible_p_or_m_run', $p_or_m, $message );
 
