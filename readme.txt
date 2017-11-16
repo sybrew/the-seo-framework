@@ -315,15 +315,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Facebook and Twitter Social Meta Settings input now show initial placeholders when emptied.
 			* The counter type update buttons on taxonomical edit screens no longer stretch to the adjacent input length.
 			* In-post SEO box active tab's shadow now has the same color as the used admin button color scheme.
-				/
-				* TODO test RTL.
 			* Polished many admin sentences, improving verbatim and expounding better of what options do.
 		* Admin performance:
 			* Sped up admin JavaScript initialization by combining jQuery overhead calls.
 			* "Floating title placeholders" now move smoother on resize.
 			* Slightly improved CSS rendering performance by eliminating clause-calls; i.e. it now uses `.class` instead of `div.class` and derivatives thereof.
-				/
-				* TODO RTL.
 		* Archives:
 			* Adjusted the search and archive query alteration database query.
 				* This speeds this process up marginally for small and significantly for large sites.
@@ -370,16 +366,14 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* WPMUdev Mapping URL generation enhancements and compatibility file. Be sure to set a preferred canonical scheme.
 			* TSF uses newer JavaScript and CSS techniques in the dashboard. TSF now uses ES6 and CSS3 snapshot 2015.
 				* This improves admin performance and lowers memory consumption: less jQuery, more vanilla.
-				* To evade polyfilling and massive spaghetti, older browsers are therefore abandoned in support.
+				* To prevent polyfilling and massive spaghetti, older browsers are therefore abandoned in support.
 				* The following browsers are no longer supported:
-					/
-					* TODO confirm this list, this is based on assumptions.
 					* Internet explorer 10 and below.
-					* Edge 40 and below.
-					* Safari 9 and below.
+					* Edge 28 and below.
+					* Safari 9.1 and below.
 					* All browsers on iOS 9 and below.
-					* Chrome 53 and below.
-					* Firefox 48 and below.
+					* Chrome 42 and below.
+					* Firefox 44 and below.
 	* **Fixed:**
 		* Security:
 			* An XSS issue has been resolved.
@@ -396,12 +390,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* [Simple Sitemap](https://wordpress.org/plugins/simple-sitemap/) is no longer detected as a conflicting sitemap plugin.
 			* [NextScripts Snap](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) is no longer detected as a conflicting Open Graph plugin, they now inform you about this.
 		* Layout:
-			/
 			* When an empty description is supplied, the counter will now display `0` instead of nothing.
-			* Cyrillic texts JavaScript compatibility. TODO confirm.
-		/
-		* TODO Odd database call on front-end looking for image... while custom is set...?
-		* TODO Separator selection description no longer overflows on EdgeHTML.
+			* Cyrillic texts JavaScript compatibility.
+			* Separator selection description no longer overflows on EdgeHTML.
 	* **Noted:**
 		* Ticket [42390](https://core.trac.wordpress.org/ticket/42390#ticket) also affects TSF input fields.
 

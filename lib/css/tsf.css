@@ -1,7 +1,7 @@
 /**
-* See, for colors:
-* https://color.adobe.com/create/color-wheel/?base=2&rule=Custom&selected=1&name=Mijn%20Color-thema&mode=rgb&rgbvalues=0,0,0,1,0.6289566724811484,0.10577297701442445,0.04724043389094745,0.7647058823529411,0.2945255209368204,0,0.4806705005377058,0.8235294117647058,0.8666666666666667,0.2196078431372549,0.06666666666666667&swatchOrder=0,1,2,3,4
-*/
+ * See, for colors:
+ * https://color.adobe.com/create/color-wheel/?base=2&rule=Custom&selected=1&name=Mijn%20Color-thema&mode=rgb&rgbvalues=0,0,0,1,0.6289566724811484,0.10577297701442445,0.04724043389094745,0.7647058823529411,0.2945255209368204,0,0.4806705005377058,0.8235294117647058,0.8666666666666667,0.2196078431372549,0.06666666666666667&swatchOrder=0,1,2,3,4
+ */
 
 /**
  * Dismissible Notices.
@@ -704,7 +704,7 @@ a.tsf-tooltip-item {
 	vertical-align: text-bottom;
 }
 
-.tsf-tabs-radio {
+input.tsf-tabs-radio {
 	display: none;
 	width: 0;
 	height: 0;
@@ -1023,19 +1023,19 @@ body.js .tsf-flex-tab-content.tsf-flex-tab-content-active {
 /**
  * General fields.
  */
-.tsf-metaboxes .tsf-default-selected {
+.tsf-default-selected {
 	border-color: #1c9d38;
 }
 
-.tsf-metaboxes .tsf-default-selected:checked:before {
+.tsf-default-selected:checked:before {
 	color: #1c9d38;
 }
 
-.tsf-metaboxes .tsf-warning-selected {
+.tsf-warning-selected {
 	border-color: #dd3811;
 }
 
-.tsf-metaboxes .tsf-warning-selected:checked:before {
+.tsf-warning-selected:checked:before {
 	color: #dd3811;
 }
 
@@ -1189,8 +1189,8 @@ a.tsf-set-social-image.button {
 		line-height: 2.8;
 	}
 
-	.tsf-metaboxes #tsf-title-location label span,
-	.tsf-metaboxes #tsf-home-title-location label span {
+	#tsf-title-location label span,
+	#tsf-home-title-location label span {
 		min-width: 40px;
 	}
 
@@ -1212,21 +1212,21 @@ a.tsf-set-social-image.button {
 }
 
 @media screen and (max-width: 642px) {
-	.tsf-metaboxes span.tsf-nav-desktop {
+	.tsf-nav-desktop {
 		display: none;
 	}
 }
 
 @media screen and (max-width: 510px) {
-	span.tsf-seo-bar.tsf-100 {
+	.tsf-seo-bar.tsf-100 {
 		width: inherit;
 	}
 }
 
 /* Firefix */
 @-moz-document url-prefix() {
-	.tsf-metaboxes #tsf-title-separator label,
-	.tsf-metaboxes #tsf-description-separator label {
+	#tsf-title-separator label,
+	#tsf-description-separator label {
 		margin: 3px 1px;
 	}
 
@@ -1246,11 +1246,11 @@ a.tsf-set-social-image.button {
 		}
 	}
 
-	.tsf-metaboxes .tsf-default-selected {
+	.tsf-default-selected {
 		box-shadow: 0 0 2px 0 #1c9d38;
 	}
 
-	.tsf-metaboxes .tsf-warning-selected {
+	.tsf-warning-selected {
 		box-shadow: 0 0 2px 0 #dd3811;
 	}
 }

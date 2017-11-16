@@ -169,7 +169,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @since 2.1.9
 	 * @since 2.9.1 Now supports inline edit AJAX.
 	 *
-	 * @param object|empty $screen WP_Screen
+	 * @param \WP_Screen|string $screen \WP_Screen
 	 * @param bool $doing_ajax Whether we're doing an AJAX response.
 	 * @return void If filter is set to false.
 	 */
