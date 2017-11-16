@@ -369,7 +369,7 @@ class Admin_Init extends Init {
 				'descriptionSeparator' => $description_separator,
 				'titleLocation' => $title_location,
 				'titlePixelGuideline' => 600,
-				'descPixelGuideline' => $this->is_page() ? 920 : 820,
+				'descPixelGuideline' => $is_post_edit ? ( $this->is_page() ? 920 : 820 ) : 920,
 			),
 			'other' => $this->additional_js_l10n( null, array(), true ),
 		);

@@ -60,11 +60,11 @@ class Compat extends Core {
 			$this->_include_compat( 'mbstring', 'php' );
 		}
 
-		$wp_db_version = $GLOBALS['wp_db_version'];
+		$wp_version = $GLOBALS['wp_version'];
 
-		if ( $wp_db_version < 37965 ) {
-			//= WP 4.6.0
-			$this->include_compat( 'wp', '460' );
+		if ( version_compare( $wp_version, '4.6', '<' ) ) {
+			//* WP 4.6.0
+			$this->_include_compat( '460', 'wp' );
 		}
 
 		if ( $this->is_theme( 'genesis' ) ) {
