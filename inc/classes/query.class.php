@@ -205,6 +205,7 @@ class Query extends Compat {
 	 *
 	 * @since 2.6.0
 	 * @since 2.6.6 Moved from class The_SEO_Framework_Term_Data.
+	 * @securitycheck 3.0.0 OK.
 	 *
 	 * @return int Term ID.
 	 */
@@ -223,7 +224,7 @@ class Query extends Compat {
 		 * through global $current_screen. Will output 'Invalid taxonomy' on try.
 		 */
 		if ( ! empty( $_GET['tag_ID'] ) ) {
-			//* WordPress 4.5+
+			//* WordPress 4.5+.
 			$term_id = $_GET['tag_ID'];
 		} elseif ( ! empty( $_GET['term_id'] ) ) {
 			//* Older WordPress versions.

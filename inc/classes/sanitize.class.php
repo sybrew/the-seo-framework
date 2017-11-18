@@ -46,6 +46,7 @@ class Sanitize extends Admin_Pages {
 	 * Never run a sensitive function when it's returning false. This means no nonce can be verified.
 	 *
 	 * @since 2.7.0
+	 * @securitycheck 3.0.0 OK.
 	 * @staticvar bool $verified.
 	 *
 	 * @return bool True if verified and matches. False if can't verify.

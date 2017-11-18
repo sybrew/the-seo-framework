@@ -308,6 +308,7 @@ class Site_Options extends Sanitize {
 	 * Updates special hidden values to default on settings save.
 	 *
 	 * @since 2.6.0
+	 * @securitycheck 3.0.0 OK.
 	 * @TODO REMOVE THIS and use a better upgrade handler. Source for code debt.
 	 */
 	protected function update_hidden_options_to_default() {

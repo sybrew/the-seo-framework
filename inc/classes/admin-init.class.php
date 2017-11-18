@@ -488,7 +488,7 @@ class Admin_Init extends Init {
 	 *                   valid and generated between 12-24 hours ago.
 	 */
 	public function check_tsf_ajax_referer( $capability ) {
-		return \check_ajax_referer( 'tsf-ajax-' . $capability, 'nonce' );
+		return \check_ajax_referer( 'tsf-ajax-' . $capability, 'nonce', true );
 	}
 
 	/**
@@ -708,6 +708,7 @@ class Admin_Init extends Init {
 	 * @since 2.6.0
 	 * @since 2.9.0 : 1. Changed capability from 'publish_posts' to 'edit_posts'.
 	 *                2. Added json header.
+	 * @securitycheck 3.0.0 OK.
 	 * @access private
 	 */
 	public function wp_ajax_update_counter_type() {
@@ -762,6 +763,7 @@ class Admin_Init extends Init {
 	 *           4. It no longer accepts a default context.
 	 *
 	 * @since 2.9.0
+	 * @securitycheck 3.0.0 OK.
 	 * @access private
 	 */
 	public function wp_ajax_crop_image() {

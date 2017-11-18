@@ -163,6 +163,7 @@ class Term_Data extends Post_Data {
 	 * Sanitizes and saves term meta data when a term is altered.
 	 *
 	 * @since 2.7.0
+	 * @securitycheck 3.0.0 OK.
 	 *
 	 * @param int $term_id     Term ID.
 	 * @param int $tt_id       Term Taxonomy ID.
@@ -198,6 +199,8 @@ class Term_Data extends Post_Data {
 						continue 2;
 
 					default :
+						// Not implemented for compatibility reasons.
+						// unset( $data[ $key ] );
 						break;
 				endswitch;
 			endforeach;

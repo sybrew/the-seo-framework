@@ -84,6 +84,7 @@ class Post_Data extends Detect {
 	 *
 	 * @since 2.0.0
 	 * @since 2.9.3 : Added 'exclude_from_archive'.
+	 * @securitycheck 3.0.0 OK. NOTE: Check is done at save_custom_fields().
 	 * @uses $this->save_custom_fields() : Perform security checks and saves post meta / custom field data to a post or page.
 	 *
 	 * @param integer  $post_id Post ID.
@@ -175,6 +176,7 @@ class Post_Data extends Detect {
 	 * repeated checks against the nonce, request and permissions are avoided.
 	 *
 	 * @since 2.0.0
+	 * @securitycheck 3.0.0 OK.
 	 *
 	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 *
@@ -233,6 +235,7 @@ class Post_Data extends Detect {
 	 * Saves primary term data for posts.
 	 *
 	 * @since 3.0.0
+	 * @securitycheck 3.0.0 OK.
 	 *
 	 * @param integer  $post_id Post ID.
 	 * @param \WP_Post $post    Post object.

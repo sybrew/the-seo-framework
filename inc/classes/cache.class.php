@@ -1059,6 +1059,7 @@ class Cache extends Sitemaps {
 	 *
 	 * @since 2.3.0
 	 * @since 2.7.0 : Added admin referer check.
+	 * @securitycheck 3.0.0 OK.
 	 *
 	 * @return bool Whether if sitemap transient is deleted.
 	 */

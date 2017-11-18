@@ -102,9 +102,9 @@ class Profile extends Doing_It_Right {
 	/**
 	 * Saves user profile fields.
 	 *
-	 * NOTE: Nonces and refer(r)ers have been checked prior to the action bound to this mehtod.
-	 *
 	 * @since 3.0.0
+	 * @securitycheck 3.0.0 OK. NOTE: Nonces and refer(r)ers have been checked prior
+	 *                          to the actions bound to this method.
 	 * @access private
 	 *
 	 * @param int $user_id The user ID.

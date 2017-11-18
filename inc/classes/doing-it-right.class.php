@@ -94,6 +94,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * Initializes SEO columns for adding a tag or category.
 	 *
 	 * @since 2.9.1
+	 * @securitycheck 3.0.0 OK.
 	 * @access private
 	 */
 	public function _init_columns_wp_ajax_add_tag() {
@@ -115,6 +116,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * Initializes SEO columns for adding a tag or category.
 	 *
 	 * @since 2.9.1
+	 * @securitycheck 3.0.0 OK.
 	 * @access private
 	 */
 	public function _init_columns_wp_ajax_inline_save() {
@@ -143,6 +145,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * Initializes SEO columns for adding a tag or category.
 	 *
 	 * @since 2.9.1
+	 * @securitycheck 3.0.0 OK.
 	 * @access private
 	 */
 	public function _init_columns_wp_ajax_inline_save_tax() {
@@ -168,6 +171,8 @@ class Doing_It_Right extends Generate_Ldjson {
 	 *
 	 * @since 2.1.9
 	 * @since 2.9.1 Now supports inline edit AJAX.
+	 * @securitycheck 3.0.0 OK. NOTE: Sanity check is done in _init_columns_wp_ajax_inline_save_tax()
+	 *                          & _init_columns_wp_ajax_inline_save()
 	 *
 	 * @param \WP_Screen|string $screen \WP_Screen
 	 * @param bool $doing_ajax Whether we're doing an AJAX response.

@@ -296,9 +296,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Improved:**
 		* Titles:
 			* Refactored "floating title placeholder"'s code, this means it no longer "glues" every part together based on assumption to perform calculations and placements.
-				/
 				* This made way for new features, it improved performance, and it lowered overall maintenance cost.
-				* TODO test RTL.
 		* Canonical URLS:
 			* Sped up URL generation two-fold. The code has been rewritten from the ground up.
 			* The Canonical URL should now always be compatible with any plugin, out of the box.
@@ -376,7 +374,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 					* Firefox 44 and below.
 	* **Fixed:**
 		* Security:
-			* An XSS issue has been resolved.
+			* An XSS issue has been resolved which required administrative privileges.
+			* A full security review has been performed.
 		* Sitemaps:
 			* XSL stylesheet no longer prepends query arguments, but instead appends them. This fixes, for example, issues when using WPML query string parameters.
 		* Open Graph:
@@ -450,9 +449,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Location: Post term selection help mark (`[?]`).
 			* `%s`: Term name.
 	* **Updated:**
-		/
-		* TODO Many sentences now have a dot attached, because all the "help titles" have been converted into tooltips.
-		* TODO Checkbox labels now always have a question mark at the end.
+		* Because all the "help titles" have been converted into tooltips, many sentences now have a dot attached.
+		* Checkbox labels now always have a question mark at the end.
 	* **Changed:**
 		* "The Open Directory Project and the Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave these options checked."
 			* Now is: "The Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave the option checked."
@@ -575,8 +573,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Method `do_metaboxes()`, it has been converted into a file to reduce memory usage.
 		* Method `metaboxes()`, now is `_register_seo_settings_metaboxes()` without deprecation; it shouldn't be used out of context.
 	* **Updated:**
-		/
-		* TODO Database version: `3001`.
+		* Database version: `3001`.
 	* **Deprecated:**
 		* Method `get_term_data( $term, $term_id )`, use method `get_term_meta( $term_id )` instead.
 		* Method `the_url()`, use method `get_canonical_url()` or `create_canonical_url()` instead.
@@ -595,9 +592,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Method `the_home_url_from_cache()`, use method `get_homepage_permalink()` instead.
 		* Method `get_prefered_scheme()`, use method `get_preferred_scheme()` instead (typo).
 	* **Fixed:**
-		/
 		* When using filter `the_seo_framework_settings_capability`, the set capability can now save SEO settings too.
-		* TODO check why this is happening: https://wordpress.org/support/topic/sitemap-55/
 		* Method `get_user_option()` no longer caches default input value.
 	* **JavaScript notes:**
 		* **Added:**
@@ -698,7 +693,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **Detailed log:**
 /
 * ***TODO [TODO](https://theseoframework.com/?p= TODO #detailed).***
-
+todo
 = Full changelog =
 
 * **The full changelog can be found [here](http://theseoframework.com/?cat=2).**

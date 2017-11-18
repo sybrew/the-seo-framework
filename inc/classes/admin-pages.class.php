@@ -337,7 +337,9 @@ class Admin_Pages extends Inpost {
 	 * Display notices on the save or reset of settings.
 	 *
 	 * @since 2.2.2
+	 * @securitycheck 3.0.0 OK. NOTE: Users can however MANUALLY trigger these on the SEO settings page.
 	 * @todo convert the "get" into secure "error_notice" option. See TSF Extension Manager.
+	 * @todo convert $this->page_defaults to inline texts. It's now uselessly rendering.
 	 *
 	 * @return void
 	 */
