@@ -571,15 +571,18 @@ class Core {
 	/**
 	 * Returns the minimum role required to adjust settings.
 	 *
-	 * Applies filter 'the_seo_framework_get_settings_capability' : string
-	 * This filter changes the minimum role for viewing and editing the plugin's settings.
-	 *
 	 * @since 3.0.0
 	 *
 	 * @return string The minimum required capability for SEO Settings.
 	 */
 	public function get_settings_capability() {
-		return (string) \apply_filters( 'the_seo_framework_get_settings_capability', 'manage_options' );
+		/**
+		 * Applies filters 'the_seo_framework_settings_capability'
+		 *
+		 * @since 2.6.0
+		 * @string $capability The user capability required to adjust settings.
+		 */
+		return (string) \apply_filters( 'the_seo_framework_settings_capability', 'manage_options' );
 	}
 
 	/**

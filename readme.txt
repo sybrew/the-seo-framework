@@ -536,8 +536,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* "Recommended Length: 50 to 55 characters"
 			* Removed: Overshadowed by the pixel counter.
 		* "Multiple trails can be outputted. The longest trail is prioritized."
-			/
-			* Removed: No longer applicable and TODO: it should now be intuitive through the URL generation.
+			* Removed: No longer applicable.
 
 * **For developers:**
 	* **Added:**
@@ -683,8 +682,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* **Removed:**
 			* `the_seo_framework_json_sitename_output`, this output type is no longer supported directly.
 			* `the_seo_framework_breadcrumb_post_sorting_callback`, the sorting now is simpler and stricter, and can be controlled by the user.
-			/
-			* TODO more have been removed...
 	* **Action notes:**
 		* **Added:**
 			* `the_seo_framework_pre_seo_settings`
@@ -693,7 +690,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **Detailed log:**
 /
 * ***TODO [TODO](https://theseoframework.com/?p= TODO #detailed).***
-todo
+
 = Full changelog =
 
 * **The full changelog can be found [here](http://theseoframework.com/?cat=2).**
