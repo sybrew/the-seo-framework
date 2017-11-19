@@ -51,7 +51,7 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 1.0.0
  */
-define( 'THE_SEO_FRAMEWORK_VERSION', '3.0.0-RC' );
+define( 'THE_SEO_FRAMEWORK_VERSION', '3.0.0' );
 
 /**
  * The plugin Database version.
