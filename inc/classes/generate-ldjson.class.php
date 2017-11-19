@@ -550,17 +550,17 @@ class Generate_Ldjson extends Generate_Image {
 			$position = $pos + 2;
 
 			if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-				//* Note: WordPress Core translation.
 				$data = $this->get_term_meta( $child_id );
 				if ( empty( $data['doctitle'] ) ) {
 					$cat = \get_term( $child_id, $taxonomy );
+					//* Note: WordPress Core translation.
 					$cat_name = empty( $cat->name ) ? \__( 'Uncategorized' ) : $cat->name;
 				} else {
 					$cat_name = $data['doctitle'];
 				}
 			} else {
-				//* Note: WordPress Core translation.
 				$cat = \get_term( $child_id, $taxonomy );
+				//* Note: WordPress Core translation.
 				$cat_name = empty( $cat->name ) ? \__( 'Uncategorized' ) : $cat->name;
 			}
 

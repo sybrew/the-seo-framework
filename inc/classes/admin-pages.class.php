@@ -556,17 +556,18 @@ class Admin_Pages extends Inpost {
 	 * Return a wrapped question mark.
 	 *
 	 * @since 2.6.0
+	 * @since 3.0.0 Links are now no longer followed, referred or bound to opener.
 	 *
 	 * @param string $description The descriptive on-hover title.
 	 * @param string $link The non-escaped link.
 	 * @param bool $echo Whether to echo or return.
-	 * @return HTML checkbox output if $echo is false.
+	 * @return string HTML checkbox output if $echo is false.
 	 */
 	public function make_info( $description = '', $link = '', $echo = true ) {
 
 		if ( $link ) {
 			$output = sprintf(
-				'<a href="%1$s" class="tsf-tooltip-item" target="_blank" rel="nofollow noopener" title="%2$s" data-desc="%2$s">[?]</a>',
+				'<a href="%1$s" class="tsf-tooltip-item" target="_blank" rel="nofollow noreferrer noopener" title="%2$s" data-desc="%2$s">[?]</a>',
 				\esc_url( $link, array( 'http', 'https' ) ),
 				\esc_attr( $description )
 			);

@@ -224,15 +224,88 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
-= 3.0.0 - TODO =
+= 3.0.0 - Eminence =
 
 **Release date:**
-/
-* TODO TODO-th, 2017
+
+* November 19th, 2017
+
+**Did you know?**
+
+* Since about a week ago, 3 new free extensions are available in the [Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/).
 
 **Summarized:**
-/
-* TODO
+
+* Finally, after 8 months of preparation, experimenting, testing, and coding, TSF 3.0 is here.
+* This update focuses on improved social site interaction, WordPress' API coherence, and optimizing UX.
+* To improve social site interaction, social site links can be added to author profile pages, and the Open Graph protocol output has been tweaked.
+* The canonical URL generation has been revised, and it now works mostly through WordPress' API.
+* For improved UX we've added pixel counters, better tooltips, and admin color scheme adherence.
+* Oh, you can also select the primary term for each hierarchical post type.
+
+**New Primary terms:**
+
+* *In WordPress, terms are generally known as categories.*
+* The primary term influences how canonical URLs are generated for the post, and how breadcrumbs are constructed.
+* Next to each term selection list, you'll now see radio buttons pop up aside each selected term.
+* The selected term will be assigned as the primary term.
+* If no primary term is selected, an assigned term that has been implemented earliest on the site will be used.
+* Note that this feature requires JavaScript to be enabled. Authors without JavaScript can't change the primary term.
+
+**Revised Canonical URLs:**
+
+* The canonical URL generation has been completely rewritten. Most users won't notice anything from this.
+* It now uses WordPress' 4.6+ canonical URL generation (backward-compatibility is provided), instead of an in-house "guessing" version.
+* **So, the Canonical URL should now always be compatible with any plugin, out of the box.** This is great news for translation plugin users!
+* Note that canonical URLs are no longer outputted on private or unpublished posts.
+* Note that if a query isn't registered correctly, the URL will also stay empty. Or, in unlikely cases, it will link to the home page.
+	* Contact the respective plugin author on such issues. I'd love to help them correct this.
+
+**Finally, Author SEO:**
+
+* On profile pages of users with Author capabilities (or higher), two new settings have been added under heading **"Authorial Info"**.
+* Here, authors can set their Facebook profile page and Twitter profile page.
+* These links will be used in Open Graph and Twitter meta output.
+* Note that the author's profile must be public for it to be used when sharing links.
+* When no author links are set, the "new" fallback URLs from the Social Meta Settings will be used.
+
+**A better admin experience:**
+
+* This plugin now uses your chosen admin color scheme, subtly. You can see it being used as highlights and tooltips.
+* About tooltips, they've been completely rewritten:
+	* They now look for boundaries, so they won't fall off the page or bound box. They can also face down when needed.
+	* They try to center themselves based on your initial pointer position.
+	* They work perfectly on any touch screen, also using Windows Touch.
+	* They no longer gulp down RAM, they use cutlery. Basically, fewer DOM items initiate them and they self-destruct as they disappear.
+	* Tooltips are now used on every `[?]` mark, so you can instantly see what those marks convey.
+* Title input and preview generation has also been completely rewritten, and this was big challenge to implement:
+	* Titles now update on various actions, like updating the visibility or name of the page.
+	* Titles now show prefixes, like "Private:" or "Protected:". They'll try to fit neatly, wherever.
+	* Character counters are now always correct; they no longer "guess", they "know".
+	* Pixel counters have been added too. More on that below.
+* The CSS and JS scripts implemented by TSF have been optimized even further. So your admin experience should be a little speedier.
+
+**The pixel counter:**
+
+* A character-count guideline is nice to have. But it remains a guideline, and you want facts... correct?
+* So, we've added a pixel counter. This pixel counter knows exactly how much space your titles and descriptions take up in Google's SERP.
+* To explain this difference visually: Five characters of "WWWWW" take up more space than five of "IIIII".
+* Hover over the pixel counter to see how many pixels you've used.
+* Through testing we found that time-sensitive items (i.e. articles) have less space available for descriptions.
+* You can enable and disable the character and pixel counters at the Layout settings.
+* Note that new installations won't get to see the character counter by default anymore.
+* Note that the pixel counter isn't represented (yet) by the SEO Bar. So, you shouldn't have to worry about yellow or even red items.
+
+**AI good structure:**
+
+* You can now upload a square website logo. This is used in the [Articles Extension](https://theseoframework.com/extensions/articles/), too.
+* The "Site Name" project has been dropped, and this data is now fetched through other means, like the "Sitelinks Searchbox".
+* Breadcrumbs have been revised, too. The generation is now smarter in tree selection, and only one breadcrumb is outputted, which uses your primary term selection.
+* WooCommerce 3.0+ products are recognized correctly by search engines, once more.
+
+**Privacy everywhere:**
+
+* When you click on any link outputted by TSF on your domain, you can be certain it no longer carries any traceable information.
 
 * **For everyone:**
 	* **Added:**
@@ -290,7 +363,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Sitemap:
 			* The sitemap `lastmod` option no longer listens to Post Dates settings. But now only to its own specific setting.
 		* Feeds:
-			* Default link back to source in feed content no longer check settings. Instead, it uses the default WordPress permalink.
+			* Default link back to source in feed content no longer checks settings. Instead, it uses the default WordPress permalink.
 		* Layout:
 			* Character counters on term edit pages have been moved to the left.
 	* **Improved:**
@@ -394,6 +467,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* Separator selection description no longer overflows on EdgeHTML.
 	* **Noted:**
 		* Ticket [42390](https://core.trac.wordpress.org/ticket/42390#ticket) also affects TSF input fields.
+		* We don't support Gutenberg, yet. The way for meta box implementation is still under consideration.
 
 * **For translators:**
 	* **Added:**

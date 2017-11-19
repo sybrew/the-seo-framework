@@ -240,6 +240,8 @@ class Core {
 	 *
 	 * @since 2.2.8
 	 * @since 2.9.2 : Added TSFEM link.
+	 * @since 3.0.0 : 1. Shortened names.
+	 *                2. Added noreferrer to the external links.
 	 *
 	 * @param array $links The current links.
 	 * @return array The plugin links.
@@ -249,9 +251,9 @@ class Core {
 		$tsf_links = array();
 
 		if ( $this->load_options )
-			$tsf_links['settings'] = '<a href="' . \esc_url( \admin_url( 'admin.php?page=' . $this->seo_settings_page_slug ) ) . '">' . \esc_html__( 'SEO Settings', 'autodescription' ) . '</a>';
+			$tsf_links['settings'] = '<a href="' . \esc_url( \admin_url( 'admin.php?page=' . $this->seo_settings_page_slug ) ) . '">' . \esc_html__( 'Settings', 'autodescription' ) . '</a>';
 
-		$tsf_links['home'] = '<a href="' . \esc_url( 'https://theseoframework.com/' ) . '" rel="noopener" target="_blank">' . \esc_html_x( 'Plugin Home', 'As in: The Plugin Home Page', 'autodescription' ) . '</a>';
+		$tsf_links['home'] = '<a href="' . \esc_url( 'https://theseoframework.com/' ) . '" rel="noreferrer noopener" target="_blank">' . \esc_html_x( 'Home', 'As in: The Plugin Home Page', 'autodescription' ) . '</a>';
 
 		/**
 		 * These are weak checks.
@@ -260,7 +262,7 @@ class Core {
 		if ( ! defined( 'TSF_EXTENSION_MANAGER_VERSION' ) ) {
 			$tsfem = \get_plugins( '/the-seo-framework-extension-manager' );
 			if ( empty( $tsfem ) )
-				$tsf_links['tsfem'] = '<a href="' . \esc_url( \__( 'https://wordpress.org/plugins/the-seo-framework-extension-manager/', 'autodescription' ) ) . '" rel="noopener" target="_blank">' . \esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' ) . '</a>';
+				$tsf_links['tsfem'] = '<a href="' . \esc_url( \__( 'https://wordpress.org/plugins/the-seo-framework-extension-manager/', 'autodescription' ) ) . '" rel="noreferrer noopener" target="_blank">' . \esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' ) . '</a>';
 		}
 
 		return array_merge( $tsf_links, $links );
