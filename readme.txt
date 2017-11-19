@@ -1,11 +1,11 @@
 === The SEO Framework ===
 Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
-Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org
+Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
 Requires at least: 4.4.0
 Tested up to: 4.9
 Requires PHP: 5.3.0
-Stable tag: 2.9.4
+Stable tag: 3.0.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -238,7 +238,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * Finally, after 8 months of preparation, experimenting, testing, and coding, TSF 3.0 is here.
 * This update focuses on improved social site interaction, WordPress' API coherence, and optimizing UX.
-* To improve social site interaction, social site links can be added to author profile pages, and the Open Graph protocol output has been tweaked.
+* To improve social site interaction, social site links can be added to author profile pages.
+* The Open Graph protocol has been updated, so will your meta output.
 * The canonical URL generation has been revised, and it now works mostly through WordPress' API.
 * For improved UX we've added pixel counters, better tooltips, and admin color scheme adherence.
 * Oh, you can also select the primary term for each hierarchical post type.
@@ -268,6 +269,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * These links will be used in Open Graph and Twitter meta output.
 * Note that the author's profile must be public for it to be used when sharing links.
 * When no author links are set, the "new" fallback URLs from the Social Meta Settings will be used.
+* Expand your authorial presence using the free [Articles Extension](https://theseoframework.com/extensions/articles/).
 
 **A better admin experience:**
 
@@ -278,7 +280,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* They work perfectly on any touch screen, also using Windows Touch.
 	* They no longer gulp down RAM, they use cutlery. Basically, fewer DOM items initiate them and they self-destruct as they disappear.
 	* Tooltips are now used on every `[?]` mark, so you can instantly see what those marks convey.
-* Title input and preview generation has also been completely rewritten, and this was big challenge to implement:
+* Title input and preview generation has also been completely rewritten, and this was a big challenge to implement:
 	* Titles now update on various actions, like updating the visibility or name of the page.
 	* Titles now show prefixes, like "Private:" or "Protected:". They'll try to fit neatly, wherever.
 	* Character counters are now always correct; they no longer "guess", they "know".
@@ -307,463 +309,20 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * When you click on any link outputted by TSF on your domain, you can be certain it no longer carries any traceable information.
 
-* **For everyone:**
-	* **Added:**
-		* Author SEO options. This is great for websites that utilize multiple authors.
-			* They take precedence over the global authorial (now fallback) options, when filled in.
-			* On every profile page, if the user can publish posts, these options are found under "Authorial Info":
-				* "Facebook profile page"
-				* "Twitter profile page"
-		* A global timestamp format option. It affects:
-			* Sitemap's `lastmod` output.
-			* Article published and modified time.
-			* Open Graph updated time.
-		* Primary term settings have been added to each post supporting hierarchical taxonomies.
-			* This setting is represented through buttons within the category selection meta box.
-			* This setting affects the URL structure of the post.
-			* This setting affects the breadcrumb structure of the post.
-		* Logo upload has been added for Organization Schema.org.
-			* You can only select one when using JavaScript for future-proofing.
-			* Unlike before, it will no longer fall back to the Customizer logo.
-			* Like before, it will fall back to the Customizer icon.
-			* You can skip cropping if the image is square; otherwise, you'd have to crop it to make it square.
-		* SEO title placeholders and counters now update when:
-		 	* Changing post visibility (private, protected, public).
-			* Changing the page title.
-			* Note that the example is not a perfect analogy. Sanitation is a complex process and sending it back-and-forth through AJAX can be heavy on the server.
-		* Pixel counters!
-			* A pixel counter is like a character counter, but it's far more accurate. This is because not all characters have the same length. e.g. A `W` is much wider than an `i`.
-			* These counters show the true length of what Google renders, represented through a bar.
-			* If the bar is green, your title or description will likely fit.
-			* If the bar is red, your title or description will likely be truncated.
-			* The bar grows as more space is filled in.
-			* The bar shrinks as more characters are truncated.
-		* Counter settings:
-			* The character and pixel counters can be enabled and disabled in the General meta box, under the Layout settings.
-			* For new sites, by default:
-				* The character counter is disabled.
-				* The pixel counter is enabled.
-			* For sites that have been upgraded from earlier TSF versions, by default:
-				* Both counters are enabled.
-		* Super singular breadcrumbs:
-			* Breadcrumbs now automatically support all hierarchical post types. Like WooCommerce products.
-			* These breadcrumbs will listen to the new primary term settings.
-	* **Changed:**
-		* Titles:
-			* When no blog tagline is set, in either WordPress' General Settings or in TSF's Home Page settings, "Untitled" is no longer used for the Home Page.
-		* Structured Data:
-			* Schema breadcrumbs no longer output the ID for the current page.
-				* The current page is implied automatically.
-				* This is to prevent ID collision with generated scripts from other plugins, like WooCommerce 3.0+.
-			* Only one breadcrumb script is now generated, and it listens to the new primary category settings.
-				* If a primary category is set, the tree related to the category is used and will stop at the primary category.
-				* Otherwise, the longest tree of the first base category found is used (numerical).
-			* The "Enable Sitelinks Searchbox?" checkbox now affects the whole "website" script.
-				* Before, this script output was controlled by "Convert URL to Site Name?", and expanded by "Enable Sitelinks Searchbox?".
-		* Sitemap:
-			* The sitemap `lastmod` option no longer listens to Post Dates settings. But now only to its own specific setting.
-		* Feeds:
-			* Default link back to source in feed content no longer checks settings. Instead, it uses the default WordPress permalink.
-		* Layout:
-			* Character counters on term edit pages have been moved to the left.
-	* **Improved:**
-		* Titles:
-			* Refactored "floating title placeholder"'s code, this means it no longer "glues" every part together based on assumption to perform calculations and placements.
-				* This made way for new features, it improved performance, and it lowered overall maintenance cost.
-		* Canonical URLS:
-			* Sped up URL generation two-fold. The code has been rewritten from the ground up.
-			* The Canonical URL should now always be compatible with any plugin, out of the box.
-			* Note that these URLs no longer output anything on private posts, and some administrative layout elements have been affected.
-			* If a query isn't registered incorrectly, the URL will also stay empty. Or, in unlikely cases, it will link to the home page.
-			* The canonical URLs now listen to the new "Primary Term" options.
-		* Sitemaps:
-			* Password protected posts and pages no longer show up in the sitemap.
-		* Upgrade:
-			* When TSF's database needs upgrading, it now requires fewer database calls.
-			* After-upgrade notifications now have "SEO: " prefixed.
-		* Layout:
-			* The homepage in-post SEO settings box now links to the settings page when the user can view those options.
-			* Facebook and Twitter Social Meta Settings input now show initial placeholders when emptied.
-			* The counter type update buttons on taxonomical edit screens no longer stretch to the adjacent input length.
-			* In-post SEO box active tab's shadow now has the same color as the used admin button color scheme.
-			* Polished many admin sentences, improving verbatim and expounding better of what options do.
-		* Admin performance:
-			* Sped up admin JavaScript initialization by combining jQuery overhead calls.
-			* "Floating title placeholders" now move smoother on resize.
-			* Slightly improved CSS rendering performance by eliminating clause-calls; i.e. it now uses `.class` instead of `div.class` and derivatives thereof.
-		* Archives:
-			* Adjusted the search and archive query alteration database query.
-				* This speeds this process up marginally for small and significantly for large sites.
-				* This improves compatibility with themes and plugins that don't merge these queries, or when they adjust the query comparator.
-				* How it works: Instead of a demanding in-database joining-then-excluding comparison, it now uses a cached and lightweight preemptive-exclusive comparison.
-		* Privacy:
-			* Informational links (e.g. to Google's webmaster pages) no longer carry traceable information.
-		* Tooltips have been reworked and expanded:
-			* `[?]` help tooltips now pop up instantly through these.
-			* Tapping tooltips in Edge no longer makes them go away instantly.
-			* Tooltips no longer look super-slim on smaller screens, and now have a minimum-width assigned.
-			* Tooltips no longer overflow the screen, instead they'll find boundaries.
-				* This automatically ensures compatibility with the new Gutenberg editor.
-			* Tooltips are location aware, and will try to center in regards to your mouse entry point.
-				* This ensures compatibility with Edge and IE11, where the tooltips are smaller than intended.
-			* We are aware that these tooltips invoke various Chromium browser "violations".
-				* These violations are a warning sign preventing bad practices hindering user experience, which are alleviated.
-				* In practice, WordPress Core needs to update to a future jQuery version to stop these warnings from showing up.
-	* **Updated:**
-		* All transient caches for The SEO Framework have been invalidated.
-		* All object caches for The SEO Framework have been invalidated.
-	* **Removed:**
-		* Robots:
-			* The DMOZ project that it influenced is no longer available nor used, so:
-				* `noodp` and all its settings.
-		* The Site Name project has been abandoned, and this data is now accumulated automatically, so:
-			* `ld_json_sitename` and all its settings.
-			* Note: The output still exists, and still has its uses. But its output is controlled by the "Sitelinks Searchbox" setting, for now.
-		* Open Graph:
-			* Open graph type `blog`. It's no longer supported. `website` is used instead.
-			* The Open Graph protocol no longer allows `article:published_time` on `website` types, so:
-				* `page_publish_time` and all its settings.
-				* `home_publish_time` and all its settings.
-			*  The Open Graph protocol no longer allows `article:modified_time` on `website` types, so:
-				* `page_modify_time` and all its settings.
-				* `home_modify_time` and all its settings.
-		* Sitemaps:
-			* Sitemaps timestamp format option. It will be converted to the new global timestamp format option upon upgrade.
-		* Compatibility:
-			* Polylang URL compatibility file. It now works without it.
-			* WPML URL enhancements. It now works without these.
-			* qTranslate X URL compatibility file. It now works without it.
-			* Donncha Domain Mapping URL compatibility file. Be sure to set a preferred canonical scheme.
-			* WPMUdev Mapping URL generation enhancements and compatibility file. Be sure to set a preferred canonical scheme.
-			* TSF uses newer JavaScript and CSS techniques in the dashboard. TSF now uses ES6 and CSS3 snapshot 2015.
-				* This improves admin performance and lowers memory consumption: less jQuery, more vanilla.
-				* To prevent polyfilling and massive spaghetti, older browsers are therefore abandoned in support.
-				* The following browsers are no longer supported:
-					* Internet explorer 10 and below.
-					* Edge 28 and below.
-					* Safari 9.1 and below.
-					* All browsers on iOS 9 and below.
-					* Chrome 42 and below.
-					* Firefox 44 and below.
-	* **Fixed:**
-		* Security:
-			* An XSS issue has been resolved which required administrative privileges.
-			* A full security review has been performed.
-		* Sitemaps:
-			* XSL stylesheet no longer prepends query arguments, but instead appends them. This fixes, for example, issues when using WPML query string parameters.
-		* Open Graph:
-			* `article:publisher` is now only output on `article` types.
-		* CPT:
-			* Custom Post Type archives now fetch and render custom SEO data.
-		* Images:
-			* Now all image URLs convert to the correct scheme when the image URL contains the site's domain.
-		* Compatibility:
-			* TSF no longer outputs canonical URLs on BuddyPress pages. Instead, it lets BuddyPress output them.
-			* [Simple Sitemap](https://wordpress.org/plugins/simple-sitemap/) is no longer detected as a conflicting sitemap plugin.
-			* [NextScripts Snap](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) is no longer detected as a conflicting Open Graph plugin, they now inform you about this.
-		* Layout:
-			* When an empty description is supplied, the counter will now display `0` instead of nothing.
-			* Cyrillic texts JavaScript compatibility.
-			* Separator selection description no longer overflows on EdgeHTML.
-	* **Noted:**
-		* Ticket [42390](https://core.trac.wordpress.org/ticket/42390#ticket) also affects TSF input fields.
-		* We don't support Gutenberg, yet. The way for meta box implementation is still under consideration.
+**A note on browser compatibility:**
 
-* **For translators:**
-	* **Added:**
-		* "Homepage SEO Settings"
-			* Location: In-post SEO Settings meta box title, when editing the home page.
-		* "The SEO Settings take precedence over these settings."
-			* Location: In-post SEO Settings meta box title, when editing the home page.
-		* "The previous sitemap timestamp settings have been converted into new global timestamp settings."
-			* Location: Upgrade notification.
-		* "Authorial Info"
-			* Location: User profile edit page.
-		* "Twitter profile"
-			* Location: User profile edit page.
-		* "Authors can override this option on their profile page."
-			* Location: SEO Settings -> Social meta box -> Twitter tab
-			* Location: SEO Settings -> Social meta box -> Facebook tab
-		* "Private:"
-			* Location: Private page title placeholder. Shown in the custom SEO title edit input field.
-		* "Protected:"
-			* Location: Password protected page title placeholder. Shown in the custom SEO title edit input field.
-		* "%1$d out of %2$d pixels are used.:"
-			* Location: Pixel counter's tooltip.
-			* `%1$d`: Pixels used.
-			* `%2$d`: Guideline pixels.
-		* **Location:** SEO Setting -> General meta box -> Layout tab
-			* "Counter Settings"
-			* "Display character counters?"
-			* "The character counter is based on guidelines."
-			* "Display pixel counters?"
-			* "The pixel counter computes whether the input will fit on Search Engine Result Pages."
-		* **Location:** SEO Settings -> Schema Settings -> Presence tab
-			* "Select Logo" (button)
-			* "Change Logo" (button)
-			* "Remove Logo" (button)
-			* "Unset selected logo" (a11y title)
-			* "Enable logo?" (option checkbox)
-			* "Setting a logo requires JavaScript."
-				* The dimensions must be known for various (planned) implementations.
-			* "The logo image must be square."
-				* For AMP support.
-		* "View your profile."
-			* Location: SEO Setting -> Schema meta box -> Presence tab
-		* "Learn how this data is used."
-			* Location: SEO Setting -> Schema meta box
-			* This is a general sentence for the `[?]` links.
-		* "Primary %s"
-			* Location: Post term selection on-hover title.
-			* `%s`: Term name.
-		* "Make primary %s"
-			* Location: Post term selection on-hover title.
-			* `%s`: Term name.
-		* "You can set the primary %s through the buttons below."
-			* Location: Post term selection help mark (`[?]`).
-			* `%s`: Term name.
-	* **Updated:**
-		* Because all the "help titles" have been converted into tooltips, many sentences now have a dot attached.
-		* Checkbox labels now always have a question mark at the end.
-	* **Changed:**
-		* "The Open Directory Project and the Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave these options checked."
-			* Now is: "The Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave the option checked."
-			* Removed: Open Directory Project.
-			* Changed: From plural to singular.
-		* "Determines how specific the modification timestamp is."
-			* Now is: "This setting determines how specific the timestamp is."
-			* Clarity: It points to what's below.
-			* Global: The setting isn't only for sitemap's `lastmod` output anymore.
-		* "Determines which side the added title text will go on."
-			* Now is: "This setting determines which side the added title text will go on."
-			* Clarity: It points to what's below.
-		* "Document Title Additions Location"
-			* Now is: "Title Additions Location"
-			* Spread: If affects more than just the document title.
-		* "Document Title Separator"
-			* Now is: "Title Separator"
-			* Spread: If affects more than just the document title.
-		* "Article Author Facebook URL"
-			* Now is: "Article Author Facebook Fallback URL"
-			* Author SEO: It's now a fallback option.
-		* "Your Personal Twitter Profile"
-			* Now is: "Twitter Author Fallback Profile"
-			* Author SEO: It's now a fallback option.
-			* Not personal: It's a general option.
-			* Consistency: "Your" isn't used in Facebook's options either.
-		* "Your Website's Twitter Profile"
-			* Now is: "Website Twitter Profile"
-			* Consistency: "Your" isn't used in Facebook's options either.
-		* "When the following options are filled in, Twitter might link your Twitter Site or Personal Profile when your post or page is shared."
-			* Now is: "When the following options are filled in, Twitter might link your Twitter Site or Author Profile when your post or page is shared."
-			* Not personal: They're now general options.
-		* "When these options are filled in, Facebook might link your Facebook profile to be followed and liked when your post or page is shared."
-			* Now is: "When these options are filled in, Facebook might link the Facebook profile to be followed and liked when your post or page is shared."
-			* Not yours: They're now general options.
-		* "Some Search Engines output the publishing date and modified date next to the search results. These help Search Engines find new content and could impact the SEO value."
-			* Now is: "Some social sites output the published date and modified date in the sharing snippet."
-			* Inaccurate: Search Engines don't use this, at all. They use Structured Data.
-		* "Add Blogname to automated description additions?"
-			* Now is: "Add the blog name to the automated description?"
-			* Clarity: "Additions" is contextual.
-			* Terminology: "Blogname" is an internal name. "A blog name" is the user term.
-		* "Preferred %s URL location"
-			* Now is: "This urges search engines to go to the outputted URL."
-			* Clarity: It now tells what it does.
-		* "Social Pages connected to this website"
-			* Now is: "Connected Social Pages"
-			* Title: The norm is to capitalize it, and to convert verbs into adjectives.
-		* "Query alteration Settings"
-			* Now is: "Query Alteration Settings"
-			* Oops: Forgot to capitalize.
-		* "This creates good meta descriptions"
-			* Now is: "This creates better automated meta descriptions."
-			* Not necessarily good: It's just better.
-			* Verbatim: It's automated.
-		* "...Search Engines..."
-			* Now are: "...search engines..."
-			* Normalize: It's not a title, it's a term.
-		* "Tell..."
-			* Now are: "This tells..."
-			* Objective: These point to a nearby setting.
-		* "Breadcrumb trails indicate the page's position in the site hierarchy..."
-			* Now is: "Breadcrumb trails indicate page positions in the site's hierarchy..."
-			* Grammar: It missed a reference.
-			* Clarity: It referred to something readily available, but it's general.
-		* "This option only has an effect when this site represents an Organization. If left disabled, search engines will look elsewhere for a logo, if it exists and is assigned as a logo."
-			* Now is: "These options are used when this site represents an organization. When no logo is outputted, search engine will look elsewhere."
-			* Grammar: Full sentences.
-			* Clarity: Shorter sentences.
-			* Less verbatim: Unnecessary words have been removed.
-			* Chrono: When not if.
-			* Plural: More options are present.
-	* **Removed:**
-		* "It's recommended on posts, but it's not recommended on pages unless you modify or create new pages frequently."
-			* No longer applicable.
-		* "Because you only publish the Home Page once, Search Engines might think your website is outdated. This can be prevented by disabling the following options".
-			* Inaccurate: Search Engines don't use this, at all. They use Structured Data.
-			* Removed: This data wasn't allowed in the first place.
-		* "By default, the sitemap only outputs the modified date if you've enabled them within the Social Metabox. This setting overrides those settings for the Sitemap."
-			* Removed: No longer applicable.
-		* "Recommended Length: 145 to 155 characters"
-			* Removed: Overshadowed by the pixel counter.
-		* "Recommended Length: 50 to 55 characters"
-			* Removed: Overshadowed by the pixel counter.
-		* "Multiple trails can be outputted. The longest trail is prioritized."
-			* Removed: No longer applicable.
+* As we want to move forward, we don't believe we should be supporting insecure browsers.
+* So, your admin experience will be degraded when using an outdated browser.
+* Be sure to use at least IE 11, Safari 10, iOS 10, or better.
+* We expect only a few users to be negatively affected. For everyone else, we welcome you to the future of browsing.
 
-* **For developers:**
-	* **Added:**
-		* Class `The_SEO_Framework\User_Data`. Maintains user data.
-		* Class `The_SEO_Framework\Profile`. Maintains admin profile pages.
-		* Method `can_access_settings()`, to easily determine if the current user has rights to edit global SEO settings.
-		* Property `$schema_ids`, it allows you to adjust used Schema.org JSON-LD script IDs.
-		* Method `s_numeric_string()`, it creates a string from integers. Rounds float down. Converts non-numeric input to `'0'`, arrays and objects to `'1'`.
-		* Method `s_facebook_profile()`, it converts any URL or string-input into a Facebook profile URL.
-		* Method `get_current_term_meta()`, which fetches the current term's meta.
-		* Method `get_primary_term_id()`, which fetches the post's primary term ID.
-		* Method `get_primary_term()`, which fetches the post's primary term, but only if it exists.
-		* Method `get_knowledge_logo()`, which returns the used knowledge graph logo URL.
-		* `index.php` file in the classes folder stating the class structure.
-	* **Changed:**
-		* Method `is_protected()` no longer checks for query, i.e. `is_singular()`, before parsing.
-		* Method `settings_capability()` now is `get_settings_capability()`, without deprecation; it was marked private.
-		* All plugin files required (aside from WordPress files) no longer check for `_once`.
-			* This saves resources, but can invoke fatal errors when you use TSF's private loader functions outside of TSF's bound API.
-		* Deprecated filter `the_seo_framework_canonical_force_scheme` (deprecated in 2.8.0) is no longer called by default.
-		* Method `use_archive_prefix` no longer uses the second `$args` parameter, and it no longer checks for the title state.
-		* Inpost-settings nonce name has been changed from `the_seo_framework_inpost_seo_settings` to `tsf_inpost_seo_settings`.
-		* Inpost-settings nonce field has been changed from `the_seo_framework_inpost` to `tsf_inpost_nonce`.
-	* **Improved:**
-		* Plugin (de)activation functions are no created when the plugin isn't being (de)activated.
-			* Instead, they've been moved in `inc/functions/plugin-(de)activation.php` and run directly as the files are called.
-		* Various admin page wrappers have been moved into views:
-			* SEO Settings page wrap.
-			* SEO Settings page columns.
-			* In-Post SEO box navigational wrapper.
-	* **Removed:**
-		* Method `admin()`, it has been converted into a file to reduce memory usage.
-		* Method `do_metaboxes()`, it has been converted into a file to reduce memory usage.
-		* Method `metaboxes()`, now is `_register_seo_settings_metaboxes()` without deprecation; it shouldn't be used out of context.
-	* **Updated:**
-		* Database version: `3001`.
-	* **Deprecated:**
-		* Method `get_term_data( $term, $term_id )`, use method `get_term_meta( $term_id )` instead.
-		* Method `the_url()`, use method `get_canonical_url()` or `create_canonical_url()` instead.
-		* Method `parse_url_args()`.
-		* Method `reparse_url_args()`.
-		* Method `generate_url_path()`.
-		* Method `build_singular_relative_url()`.
-		* Method `get_relative_term_url()`.
-		* Method `add_url_subdomain()`.
-		* Method `get_current_subdomain()`.
-		* Method `set_current_subdomain()`.
-		* Method `unset_current_subdomain()`.
-		* Method `add_url_host()`.
-		* Method `get_home_path()`.
-		* Method `the_url_from_cache()`, use method `get_current_canonical_url()` instead.
-		* Method `the_home_url_from_cache()`, use method `get_homepage_permalink()` instead.
-		* Method `get_prefered_scheme()`, use method `get_preferred_scheme()` instead (typo).
-	* **Fixed:**
-		* When using filter `the_seo_framework_settings_capability`, the set capability can now save SEO settings too.
-		* Method `get_user_option()` no longer caches default input value.
-	* **JavaScript notes:**
-		* **Added:**
-			* Many new `tsfL10n` parameters, including (but not limited to):
-				* `tsfL10n.params.titlePixelGuideline`
-				* `tsfL10n.params.descPixelGuideline`
-				* `tsfL10n.params.termName`
-				* `tsfL10n.params.objectTitle`
-				* `tsfL10n.params.untitledTitle`
-				* `tsfL10n.states.debug`
-				* `tsfL10n.states.isPasswordProtected`
-				* `tsfL10n.states.isPrivate`
-				* `tsfL10n.states.postType`
-				* `tsfL10n.states.taxonomies`
-				* `tsfL10n.states.isPostEdit`
-				* `tsfL10n.states.isTermEdit`
-		* **Reworked:**
-			* Title rendering: They're now contained within a single state holder, lowering CPU usage.
-			* Tooltips: They're now contained within a single state holder, lowering memory footprint.
-		* **Trigger notes:**
-			* **Added:**
-				* `tsf-counter-updated`, triggers after the counter state has been updated, before it's sent through AJAX.
-				* `tsf-update-title-counter`, manual trigger to update the title counters. Used internally.
-				* `tsf-reset-tooltips`, manual trigger to reset tooltips on DOM update. Used internally.
-				* `tsf-tooltip-update`, manual trigger to update tooltip when they have an on-hover state on DOM item update. Used internally.
-		* **Removed:**
-			* **Methods and properties, `window.tsf.{}`:**
-				* Title related, these have been reworked and put in a method container:
-					* string `titleTagline` (property)
-					* string `titleSeparator` (property)
-					* `_initTitlepropListener`
-					* `selectTitleInput`
-					* `dynamicPlaceholder`
-					* `titleToggle`
-					* `titleProp`
-					* `taglineProp`
-					* `taglinePropTrigger`
-					* `taglinePropTriggerResize`
-					* `titlePrefixToggle`
-					* `titleLocationToggle`
-					* `taglineToggleDesc`
-					* `taglineToggleTitle`
-					* `taglineToggleOnload`
-					* `updateCharacterCountTitle`
-					* `triggerTitleOnLoad`
-					* `separatorSwitchTitle`
-					* `docTitles`
-				* Description related, these have been reworked and put in a method container:
-					* string `descriptionSeparator` (property)
-					* `docDescriptions`
-					* `triggerDescriptionOnLoad`
-					* `updateCharacterCountDescription`
-					* `separatorSwitchDesc`
-				* Tooltip related, these have been reworked and put in a method container:
-					* `statusBarHover`
-					* `statusBarHoverEnter`
-					* `statusBarHoverMove`
-					* `statusBarHoverLeave`
-					* `touchRemoveDesc`
-				* Counter related, these have been put into the respective containers:
-					* `updateCounters`
-					* `counterUpdate`
-					* `additionsClassInit`
-					* `getCounterName`
-					* `counterUpdatedResponse`
-				* Other:
-					* `getSep`, used for both titles and descriptions.
-					* string `nonce` (property), use object `nonces` instead.
-			* **State values, `window.tsfL10n.{}`:**
-				* `params.siteTitle`, use `params.objectTitle` instead.
-				* `states.titleTagline`, use `states.useTagline` instead.
-	* **Filter notes:**
-		* **Added:**
-			* `the_seo_framework_ld_json_breadcrumb_taxonomies`, used to filter, add or adjust the found taxonomies. The first array value is always used.
-			* `the_seo_framework_admin_color_css`, used to adjust admin-color conforming colors.
-			* `the_seo_framework_current_term_meta`, used to adjust term meta after it's set.
-				* Do not confuse this with filter `the_seo_framework_get_term_meta`, which only fires when no term meta has been set.
-			* `the_seo_framework_knowledge_logo`, used to adjust the current knowledge logo URL.
-				* Caution: This does not adjust the logo ID and might break future implementation.
-				* So, it should only be filled in when non-user-input is used.
-			* `the_seo_framework_js_l10n`, used to adjust parameters and strings for JS.
-		* **Improved:**
-			* `the_seo_framework_enable_auto_description` now passes generation arguments as the second parameter.
-		* **Deprecated:**
-			 * `the_seo_framework_url_path`, use WordPress filters instead. This filter no longer runs by default.
-			 * `the_seo_framework_url_output_args`. This filter no longer runs by default.
-			 * `the_seo_framework_url_args`. This filter no longer runs by default.
-		* **Removed:**
-			* `the_seo_framework_json_sitename_output`, this output type is no longer supported directly.
-			* `the_seo_framework_breadcrumb_post_sorting_callback`, the sorting now is simpler and stricter, and can be controlled by the user.
-	* **Action notes:**
-		* **Added:**
-			* `the_seo_framework_pre_seo_settings`
-			* `the_seo_framework_pro_seo_settings`
+**Survey:**
+
+* After updating and playing around with the update, feel free to fill in our [update survey](https://theseoframework.com/?p=1781). Tell us what you like or what could've been done better.
 
 **Detailed log:**
-/
-* ***TODO [TODO](https://theseoframework.com/?p= TODO #detailed).***
+
+* ***Before anything else, preparation is the [key to success](https://theseoframework.com/?p=2210#detailed).***
 
 = Full changelog =
 
