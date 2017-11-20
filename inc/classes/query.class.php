@@ -457,7 +457,7 @@ class Query extends Compat {
 		$pfp = (int) \get_option( 'page_for_posts' );
 
 		if ( $this->has_page_on_front() ) {
-			if ( $id === $pfp && false === \is_archive() ) {
+			if ( $id && $id === $pfp && false === \is_archive() ) {
 				$is_blog_page = true;
 			} elseif ( \is_home() ) {
 				$is_blog_page = true;

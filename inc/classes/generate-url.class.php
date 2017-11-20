@@ -662,7 +662,7 @@ class Generate_Url extends Generate_Title {
 				}
 			}
 		} else {
-			$url = \remove_query_args( array( 'page', 'paged', 'cpage' ), $url );
+			$url = \remove_query_arg( array( 'page', 'paged', 'cpage' ), $url );
 		}
 
 		return $url;

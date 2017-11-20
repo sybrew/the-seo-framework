@@ -5,7 +5,7 @@ Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
 Requires at least: 4.4.0
 Tested up to: 4.9
 Requires PHP: 5.3.0
-Stable tag: 3.0.0
+Stable tag: 3.0.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -224,6 +224,17 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
+= 3.0.1 - Renown =
+
+**Release date:**
+
+* November 20th, 2017
+
+* **Fixed:**
+	* A fatal error no longer occurs on pages when using plain permalinks.
+	* On-site search canonical URLs are now correct when no blog page is assigned.
+	* Title placeholders can now render HTML characters correctly.
+
 = 3.0.0 - Eminence =
 
 **Release date:**
@@ -244,7 +255,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * For improved UX we've added pixel counters, better tooltips, and admin color scheme adherence.
 * Oh, you can also select the primary term for each hierarchical post type.
 
-**New Primary terms:**
+**New primary terms:**
 
 * *In WordPress, terms are generally known as categories.*
 * The primary term influences how canonical URLs are generated for the post, and how breadcrumbs are constructed.
@@ -253,7 +264,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * If no primary term is selected, an assigned term that has been implemented earliest on the site will be used.
 * Note that this feature requires JavaScript to be enabled. Authors without JavaScript can't change the primary term.
 
-**Revised Canonical URLs:**
+**Revised canonical URLs:**
 
 * The canonical URL generation has been completely rewritten. Most users won't notice anything from this.
 * It now uses WordPress' 4.6+ canonical URL generation (backward-compatibility is provided), instead of an in-house "guessing" version.
@@ -262,7 +273,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * Note that if a query isn't registered correctly, the URL will also stay empty. Or, in unlikely cases, it will link to the home page.
 	* Contact the respective plugin author on such issues. I'd love to help them correct this.
 
-**Finally, Author SEO:**
+**Finally, author SEO:**
 
 * On profile pages of users with Author capabilities (or higher), two new settings have been added under heading **"Authorial Info"**.
 * Here, authors can set their Facebook profile page and Twitter profile page.
@@ -273,7 +284,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **A better admin experience:**
 
-* This plugin now uses your chosen admin color scheme, subtly. You can see it being used as highlights and tooltips.
+* This plugin now uses your chosen admin color scheme, subtly. You can see it being used as highlights and for tooltips.
 * About tooltips, they've been completely rewritten:
 	* They now look for boundaries, so they won't fall off the page or bound box. They can also face down when needed.
 	* They try to center themselves based on your initial pointer position.
