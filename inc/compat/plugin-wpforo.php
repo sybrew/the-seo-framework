@@ -18,7 +18,7 @@ function _wpforo_fix_page() {
 		\add_filter( 'the_seo_framework_pre_add_title', __NAMESPACE__ . '\\_wpforo_filter_pre_title', 10, 3 );
 		\add_filter( 'get_canonical_url', function( $canonical_url, $post ) {
 			return \wpforo_get_request_uri();
-		} );
+		}, 10, 2 );
 		\add_filter( 'the_seo_framework_description_args', __NAMESPACE__ . '\\_wpforo_filter_description_arguments', 10, 3 );
 
 		//* Remove wpforo SEO meta output.

@@ -224,16 +224,27 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
+= 3.0.2 - Esteem =
+
+**Release date:**
+
+* November 23rd, 2017
+
+**Fixed:**
+
+* A fatal error no longer occurs on the wpForo Forum plugin pages.
+
 = 3.0.1 - Renown =
 
 **Release date:**
 
 * November 20th, 2017
 
-* **Fixed:**
-	* A fatal error no longer occurs on pages when using plain permalinks.
-	* On-site search canonical URLs are now correct when no blog page is assigned.
-	* Title placeholders can now render HTML characters correctly.
+**Fixed:**
+
+* A fatal error no longer occurs on pages when using plain permalinks.
+* On-site search canonical URLs are now correct when no blog page is assigned.
+* Title placeholders can now render HTML characters correctly.
 
 = 3.0.0 - Eminence =
 
