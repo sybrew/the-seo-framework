@@ -234,6 +234,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * Adjusted incorrect spacing on term edit screen's "Robots Meta Settings".
 * Default and warned options are color-coded again.
+* bbPress topic replies can show up again when search alteration is turned on.
+	* We've implemented a workaround for [bbPress/#2607](https://bbpress.trac.wordpress.org/ticket/2607).
 
 = 3.0.2 - Esteem =
 

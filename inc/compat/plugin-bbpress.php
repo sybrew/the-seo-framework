@@ -197,3 +197,30 @@ function _bbpress_filter_custom_field_description( $description = '', $args = ar
 
 	return $description;
 }
+
+\add_filter( 'the_seo_framework_do_adjust_archive_query', __NAMESPACE__ . '\_bbpress_filter_do_adjust_query', 10, 2 );
+/**
+ * Fixes bbPress exclusion of first reply.
+ *
+ * bbPress has a hard time maintaining WordPress' query after the original query.
+ * Reasons unknown.
+ * This function fixes the query alteration part.
+ *
+ * @since 3.0.3
+ * @access private
+ * @link <https://bbpress.trac.wordpress.org/ticket/2607> (regression)
+ *
+ * @param bool      $do       Whether to adjust the query.
+ * @param \WP_Query $wp_query The query. Passed by reference.
+ * @return bool
+ */
+function _bbpress_filter_do_adjust_query( $do, &$wp_query ) {
+
+	if ( \is_bbpress() && isset( $wp_query->query['post_type'] ) ) {
+		if ( in_array( 'reply', (array) $wp_query->query['post_type'], true ) ) {
+			$do = false;
+		}
+	}
+
+	return $do;
+}
