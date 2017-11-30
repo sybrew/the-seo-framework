@@ -66,6 +66,33 @@ $desc_len_parsed = html_entity_decode( $description_len );
 $title_placeholder = $generated_doctitle;
 $description_placeholder = $generated_description;
 
+$robots_settings = array(
+	'noindex' => array(
+		'value' => $noindex,
+		'info' => $this->make_info(
+			__( 'This tells search engines not to show this page in their search results.', 'autodescription' ),
+			'https://support.google.com/webmasters/answer/93710?hl=' . $language,
+			false
+		),
+	),
+	'nofollow' => array(
+		'value' => $nofollow,
+		'info' => $this->make_info(
+			__( 'This tells search engines not to follow links on this page.', 'autodescription' ),
+			'https://support.google.com/webmasters/answer/96569?hl=' . $language,
+			false
+		),
+	),
+	'noarchive' => array(
+		'value' => $noarchive,
+		'info' => $this->make_info(
+			__( 'This tells search engines not to follow links on this page.', 'autodescription' ),
+			'https://support.google.com/webmasters/answer/79812?hl=' . $language,
+			false
+		),
+	),
+);
+
 ?>
 <h3>
 	<?php
@@ -135,54 +162,37 @@ $description_placeholder = $generated_description;
 		<tr>
 			<th scope="row" valign="top"><?php esc_html_e( 'Robots Meta Settings', 'autodescription' ); ?></th>
 			<td>
-				<label for="autodescription-meta[noindex]"><input name="autodescription-meta[noindex]" id="autodescription-meta[noindex]" type="checkbox" value="1" <?php checked( $noindex ); ?> />
-					<?php
-					printf(
-						/* translators: %s = noindex/nofollow/noarchive */
-						esc_html__( 'Apply %s to this term?', 'autodescription' ),
-						$this->code_wrap( 'noindex' )
-					);
-					$this->make_info(
-						__( 'This tells search engines not to show this page in their search results.', 'autodescription' ),
-						'https://support.google.com/webmasters/answer/93710?hl=' . $language
-					);
-					?>
-				</label>
-
-				<br>
-
-				<label for="autodescription-meta[nofollow]"><input name="autodescription-meta[nofollow]" id="autodescription-meta[nofollow]" type="checkbox" value="1" <?php checked( $nofollow ); ?> />
-					<?php
-					printf(
-						/* translators: %s = noindex/nofollow/noarchive */
-						esc_html__( 'Apply %s to this term?', 'autodescription' ),
-						$this->code_wrap( 'nofollow' )
-					);
-					$this->make_info(
-						__( 'This tells search engines not to follow links on this page.', 'autodescription' ),
-						'https://support.google.com/webmasters/answer/96569?hl=' . $language
-					);
-					?>
-				</label>
-
-				<br>
-
-				<label for="autodescription-meta[noarchive]"><input name="autodescription-meta[noarchive]" id="autodescription-meta[noarchive]" type="checkbox" value="1" <?php checked( $noarchive ); ?> />
-					<?php
-					printf(
-						/* translators: %s = noindex/nofollow/noarchive */
-						esc_html__( 'Apply %s to this term?', 'autodescription' ),
-						$this->code_wrap( 'noarchive' )
-					);
-					$this->make_info(
-						__( 'This tells search engines not to follow links on this page.', 'autodescription' ),
-						'https://support.google.com/webmasters/answer/79812?hl=' . $language
-					);
-					?>
-				</label>
-
 				<?php
-				// Saved flag, if set then it won't fetch for Genesis meta anymore
+				foreach ( $robots_settings as $type => $data ) :
+					?>
+					<p>
+						<?php
+						vprintf(
+							'<label for="%1$s"><input name="%1$s" id="%1$s" type="checkbox" value="1" %2$s />%3$s</label>',
+							array(
+								sprintf( 'autodescription-meta[%s]', esc_attr( $type ) ),
+								checked( $data['value'], true, false ),
+								vsprintf(
+									'%s %s',
+									array(
+										sprintf(
+											/* translators: %s = noindex/nofollow/noarchive */
+											esc_html__( 'Apply %s to this term?', 'autodescription' ),
+											//= Already escaped.
+											$this->code_wrap( $type )
+										),
+										//= Already escaped.
+										$data['info'],
+									)
+								),
+							)
+						);
+						?>
+					</p>
+					<?php
+				endforeach;
+
+				// Output saved flag, if set then it won't fetch alternative meta anymore.
 				?>
 				<label class="hidden" for="autodescription-meta[saved_flag]">
 					<input name="autodescription-meta[saved_flag]" id="autodescription-meta[saved_flag]" type="checkbox" value="1" checked='checked' />

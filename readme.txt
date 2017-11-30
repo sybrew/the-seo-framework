@@ -224,6 +224,16 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
+= 3.0.3 - Diligence =
+
+**Release date:**
+
+* TODO
+
+**Fixed:**
+
+* Adjusted incorrect spacing on term edit screen's "Robots Meta Settings".
+
 = 3.0.2 - Esteem =
 
 **Release date:**
