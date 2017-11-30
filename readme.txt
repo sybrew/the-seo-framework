@@ -233,6 +233,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **Fixed:**
 
 * Adjusted incorrect spacing on term edit screen's "Robots Meta Settings".
+* Default and warned options are color-coded again.
 
 = 3.0.2 - Esteem =
 

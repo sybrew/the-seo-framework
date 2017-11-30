@@ -1023,19 +1023,19 @@ body.js .tsf-flex-tab-content.tsf-flex-tab-content-active {
 /**
  * General fields.
  */
-.tsf-default-selected {
+input.tsf-default-selected {
 	border-color: #1c9d38;
 }
 
-.tsf-default-selected:checked:before {
+input.tsf-default-selected:checked:before {
 	color: #1c9d38;
 }
 
-.tsf-warning-selected {
+input.tsf-warning-selected {
 	border-color: #dd3811;
 }
 
-.tsf-warning-selected:checked:before {
+input.tsf-warning-selected:checked:before {
 	color: #dd3811;
 }
 
