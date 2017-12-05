@@ -249,7 +249,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* When the title addition overflows to the right, padding is now considered.
 	* The homepage title and in-post title length is no longer calculated twice on load.
 	* The description pixel counter now updates correctly when opening a container-meta-box from an initially-closed state.
-	* On RTL, correct spacing is now used for the title prefix.
 
 = 3.0.2 - Esteem =
 
