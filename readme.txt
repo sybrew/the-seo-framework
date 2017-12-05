@@ -3,7 +3,7 @@ Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
 Requires at least: 4.4.0
-Tested up to: 4.9
+Tested up to: 4.9.1
 Requires PHP: 5.3.0
 Stable tag: 3.0.2
 License: GPLv3
@@ -121,7 +121,7 @@ A caching plugin isn't even needed for this plugin as you won't notice a differe
 * Detection of robots.txt and sitemap.xml files.
 * Both up-to-date and outdated themes.
 * Detection of various other popular SEO tools to prevent duplicated output.
-* Translation plugins WPML, Polylang and qTranslate X.
+* Translation plugins like WPML, Polylang and qTranslate X.
 * WooCommerce, for free, in all its glory.
 
 = An additional sitemap =
@@ -232,10 +232,24 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Fixed:**
 
-* Adjusted incorrect spacing on term edit screen's "Robots Meta Settings".
-* Default and warned options are color-coded again.
-* bbPress topic replies can show up again when search alteration is turned on.
-	* We've implemented a workaround for [bbPress/#2607](https://bbpress.trac.wordpress.org/ticket/2607).
+* **Compatibility:**
+	* bbPress topic replies can show up again when search query alteration is turned on.
+		* We've implemented a workaround for [bbPress/#2607](https://bbpress.trac.wordpress.org/ticket/2607).
+	* The "Remove Blogname from title?" option is now visible to everyone, but it's disabled when it's not available.
+		* Use the [Title Fix extension](https://theseoframework.com/extensions/title-fix/) to easily enable it when needed.
+* **Interface:**
+	* The term edit screen's "Robots Meta Settings" had incorrect spacing for the tooltip additions.
+	* Default and warned options are color-coded again.
+		* Not on Firefox, which doesn't support input styling.
+	* When the floating title is placed on the left-hand side, then opening a container-meta-box--or having a huge title at on-load--will no longer cause the titles to overlap.
+	* When the title additions are on the left-hand side, and there's a prefix (like "Private:"):
+		1. The prefixes and additions no longer overlap on input overflow.
+		2. The prefix' calculated width no longer gets rounded down nor truncated unintentionally.
+	* The floating title no longer overlaps the prefix every subsequent input entry.
+	* When the title addition overflows to the right, padding is now considered.
+	* The homepage title and in-post title length is no longer calculated twice on load.
+	* The description pixel counter now updates correctly when opening a container-meta-box from an initially-closed state.
+	* On RTL, correct spacing is now used for the title prefix.
 
 = 3.0.2 - Esteem =
 

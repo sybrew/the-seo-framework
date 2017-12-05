@@ -1026,7 +1026,6 @@ body.js .tsf-flex-tab-content.tsf-flex-tab-content-active {
 input.tsf-default-selected {
 	border-color: #1c9d38;
 }
-
 input.tsf-default-selected:checked:before {
 	color: #1c9d38;
 }
@@ -1034,9 +1033,16 @@ input.tsf-default-selected:checked:before {
 input.tsf-warning-selected {
 	border-color: #dd3811;
 }
-
 input.tsf-warning-selected:checked:before {
 	color: #dd3811;
+}
+
+label.tsf-disabled {
+	color: #999;
+}
+label.tsf-disabled,
+input.tsf-disabled {
+	cursor: default;
 }
 
 .tsf-fields {

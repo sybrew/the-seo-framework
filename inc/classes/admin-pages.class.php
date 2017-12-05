@@ -471,18 +471,20 @@ class Admin_Pages extends Inpost {
 	}
 
 	/**
-	 * Return a chechbox wrapper.
+	 * Returns a chechbox wrapper.
 	 *
 	 * @since 2.6.0
 	 * @since 2.7.0 Added escape parameter. Defaults to true.
+	 * @since 3.0.3 Added $disabled parameter. Defaults to false.
 	 *
-	 * @param string $field_id The option ID. Must be within the Autodescription settings.
-	 * @param string $label The checkbox description label.
+	 * @param string $field_id    The option ID. Must be within the Autodescription settings.
+	 * @param string $label       The checkbox description label.
 	 * @param string $description Addition description to place beneath the checkbox.
-	 * @param bool $escape Whether to escape the label and description.
+	 * @param bool   $escape      Whether to escape the label and description.
+	 * @param bool   $disabled    Whether to disable the input.
 	 * @return string HTML checkbox output.
 	 */
-	public function make_checkbox( $field_id = '', $label = '', $description = '', $escape = true ) {
+	public function make_checkbox( $field_id = '', $label = '', $description = '', $escape = true, $disabled = false ) {
 
 		if ( $escape ) {
 			$description = \esc_html( $description );
@@ -492,12 +494,16 @@ class Admin_Pages extends Inpost {
 		$description = $description ? '<p class="description tsf-option-spacer">' . $description . '</p>' : '';
 
 		$output = '<span class="tsf-toblock">'
-					. '<label for="' . $this->get_field_id( $field_id ) . '">'
+					. '<label for="'
+						. $this->get_field_id( $field_id ) . '" '
+						. ( $disabled ? 'class=tsf-disabled ' : '' )
+					. '>'
 						. '<input '
 							. 'type="checkbox" '
+							. ( $disabled ? 'class=tsf-disabled disabled ' : '' )
 							. 'name="' . $this->get_field_name( $field_id ) . '" '
 							. 'id="' . $this->get_field_id( $field_id ) . '" '
-							. $this->get_is_conditional_checked( $field_id ) . ' '
+							. ( $disabled ? '' : $this->get_is_conditional_checked( $field_id ) . ' ' )
 							. 'value="1" '
 							. \checked( $this->get_field_value( $field_id ), true, false ) .
 						' />'

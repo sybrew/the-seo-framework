@@ -401,6 +401,7 @@ class Site_Options extends Sanitize {
 	 * Run before headers are sent.
 	 *
 	 * @since 2.6.0
+	 * @securitycheck 3.0.3 OK.
 	 */
 	protected function pre_output_site_updated_plugin_notice() {
 

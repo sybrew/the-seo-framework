@@ -2,8 +2,8 @@
 	"name": "sybrew/the-seo-framework",
 	"description": "An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.",
 	"keywords": [
-		"seo", 
-		"wordpress", 
+		"seo",
+		"wordpress",
 		"plugin"
 	],
 	"type": "wordpress-plugin",

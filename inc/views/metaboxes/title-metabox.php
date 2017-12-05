@@ -153,42 +153,37 @@ switch ( $instance ) :
 			</p>
 			<?php $this->description( $home_page_has_option ); ?>
 		</fieldset>
-		<?php
 
-		//* Only add this option if the theme is doing it right.
-		if ( $this->can_manipulate_title() ) :
-			?>
-			<hr>
+		<hr>
 
-			<h4><?php esc_html_e( 'Remove Blogname from Title', 'autodescription' ); ?></h4>
-			<div id="tsf-title-additions-toggle">
-				<?php
-				$info = $this->make_info(
-					__( 'This might decouple your posts and pages from the rest of the website.', 'autodescription' ),
-					'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3',
-					false
-				);
-
-				$this->wrap_fields(
-					$this->make_checkbox(
-						'title_rem_additions',
-						esc_html__( 'Remove Blogname from title?', 'autodescription' ) . ' ' . $info,
-						'',
-						false
-					),
-					true
-				);
-				?>
-			</div>
+		<h4><?php esc_html_e( 'Remove Blogname from Title', 'autodescription' ); ?></h4>
+		<div id="tsf-title-additions-toggle">
 			<?php
-			$this->description( __( 'Only use this option if you are aware of its SEO effects.', 'autodescription' ), false );
-			echo ' ';
-			$this->description( $home_page_has_option, false );
-		endif;
+			$info = $this->make_info(
+				__( 'This might decouple your posts and pages from the rest of the website.', 'autodescription' ),
+				'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3',
+				false
+			);
+
+			$this->wrap_fields(
+				$this->make_checkbox(
+					'title_rem_additions',
+					esc_html__( 'Remove Blogname from title?', 'autodescription' ) . ' ' . $info,
+					'',
+					false,
+					! $this->can_manipulate_title() // Only add this option if the theme is doing it right.
+				),
+				true
+			);
+			?>
+		</div>
+		<?php
+		$this->description( __( 'Only use this option if you are aware of its SEO effects.', 'autodescription' ), false );
+		echo ' ';
+		$this->description( $home_page_has_option, false );
 		break;
 
 	case 'the_seo_framework_title_metabox_prefixes' :
-
 		//* Get translated category label, if it exists. Otherwise, fallback to translation.
 		$term_labels = $this->get_tax_labels( 'category' );
 		$label = isset( $term_labels->singular_name ) ? $term_labels->singular_name : __( 'Category', 'autodescription' );
