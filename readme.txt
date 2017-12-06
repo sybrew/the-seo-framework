@@ -5,7 +5,7 @@ Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
 Requires at least: 4.4.0
 Tested up to: 4.9.1
 Requires PHP: 5.3.0
-Stable tag: 3.0.2
+Stable tag: 3.0.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -228,27 +228,13 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Release date:**
 
-* TODO
+* December 6th, 2017
 
-**Fixed:**
+**Summarized:**
 
-* **Compatibility:**
-	* bbPress topic replies can show up again when search query alteration is turned on.
-		* We've implemented a workaround for [bbPress/#2607](https://bbpress.trac.wordpress.org/ticket/2607).
-	* The "Remove Blogname from title?" option is now visible to everyone, but it's disabled when it's not available.
-		* Use the [Title Fix extension](https://theseoframework.com/extensions/title-fix/) to easily enable it when needed.
-* **Interface:**
-	* The term edit screen's "Robots Meta Settings" had incorrect spacing for the tooltip additions.
-	* Default and warned options are color-coded again.
-		* Not on Firefox, which doesn't support input styling.
-	* When the floating title is placed on the left-hand side, then opening a container-meta-box--or having a huge title at on-load--will no longer cause the titles to overlap.
-	* When the title additions are on the left-hand side, and there's a prefix (like "Private:"):
-		1. The prefixes and additions no longer overlap on input overflow.
-		2. The prefix' calculated width no longer gets rounded down nor truncated unintentionally.
-	* The floating title no longer overlaps the prefix every subsequent input entry.
-	* When the title addition overflows to the right, padding is now considered.
-	* The homepage title and in-post title length is no longer calculated twice on load.
-	* The description pixel counter now updates correctly when opening a container-meta-box from an initially-closed state.
+* This update implements a workaround for an issue with bbPress, and various UI bugs have been fixed as well.
+
+[View the detailed log](https://theseoframework.com/?p=2236#detailed).
 
 = 3.0.2 - Esteem =
 
@@ -256,9 +242,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * November 23rd, 2017
 
-**Fixed:**
+**Summarized:**
 
-* A fatal error no longer occurs on the wpForo Forum plugin pages.
+* This update fixes an issue with wpForo found in the 3.0 release of TSF.
+
+[View the detailed log](https://theseoframework.com/?p=2231#detailed).
 
 = 3.0.1 - Renown =
 
@@ -266,11 +254,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * November 20th, 2017
 
-**Fixed:**
+**Summarized:**
 
-* A fatal error no longer occurs on pages when using plain permalinks.
-* On-site search canonical URLs are now correct when no blog page is assigned.
-* Title placeholders can now render HTML characters correctly.
+* This update fixes a few issues found in the 3.0 release of TSF.
+
+[View the detailed log](https://theseoframework.com/?p=2225#detailed).
 
 = 3.0.0 - Eminence =
 
@@ -286,7 +274,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * Finally, after 8 months of preparation, experimenting, testing, and coding, TSF 3.0 is here.
 * This update focuses on improved social site interaction, WordPress' API coherence, and optimizing UX.
-* To improve social site interaction, social site links can be added to author profile pages.
+* To improve social site interaction, social site links can be added through author profile pages.
 * The Open Graph protocol has been updated, so will your meta output.
 * The canonical URL generation has been revised, and it now works mostly through WordPress' API.
 * For improved UX we've added pixel counters, better tooltips, and admin color scheme adherence.
