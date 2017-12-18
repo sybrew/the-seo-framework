@@ -908,8 +908,8 @@ input[type="radio"].tsf-flex-nav-tab-radio {
 	transition: box-shadow 0.15s ease-out;
 	-webkit-align-items: center;
 	align-items: center;
-	-webkit-align-content: space-between;
-	align-content: space-between;
+	-webkit-align-content: space-around;
+	align-content: space-around;
 }
 
 .tsf-flex-nav-dashicon,

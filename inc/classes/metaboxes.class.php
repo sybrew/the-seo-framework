@@ -48,13 +48,13 @@ class Metaboxes extends Site_Options {
 	 *
 	 * @param string $id The Nav Tab ID
 	 * @param array $tabs the tab content {
-	 *		$tabs = tab ID key = array(
-	 *			$tabs['name'] => tab name
-	 *			$tabs['callback'] => string|array callback function
-	 *			$tabs['dashicon'] => string Dashicon
-	 *			$tabs['args'] => mixed optional callback function args
-	 *		)
-	 *	}
+	 *    $tabs = tab ID key = array(
+	 *       $tabs['name'] => tab name
+	 *       $tabs['callback'] => string|array callback function
+	 *       $tabs['dashicon'] => string Dashicon
+	 *       $tabs['args'] => mixed optional callback function args
+	 *    )
+	 * }
 	 * @param string $version the The SEO Framework version for debugging. May be emptied.
 	 * @param bool $use_tabs Whether to output tabs, only works when $tabs is greater than 1.
 	 */

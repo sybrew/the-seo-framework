@@ -91,6 +91,7 @@ class Term_Data extends Post_Data {
 	 *
 	 * @since 2.7.0
 	 * @since 2.8.0 : Added filter.
+	 * @since 3.0.0 : Added filter.
 	 * @staticvar array $cache
 	 *
 	 * @param int $term_id The Term ID.

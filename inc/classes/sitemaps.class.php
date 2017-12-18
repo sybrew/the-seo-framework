@@ -594,9 +594,7 @@ class Sitemaps extends Metaboxes {
 		 * We can't get specific on the home page, unfortunately.
 		 */
 		$sitemaps_modified = $this->is_option_checked( 'sitemaps_modified' );
-		if ( $sitemaps_modified ) {
-			$page_lastmod = $post_lastmod = $home_lastmod = true;
-		}
+		$page_lastmod = $post_lastmod = $home_lastmod = (bool) $sitemaps_modified;
 
 		/**
 		 * Generation time output
