@@ -312,6 +312,8 @@ class Term_Data extends Post_Data {
 	 *
 	 * @since 2.6.0
 	 * @since 2.9.4 Added $term->label and $term->labels->singular_name as additional fallbacks.
+	 * @since 3.1.0 : 1. Now caches labels and names.
+	 *                2. No longer caches fallbacks.
 	 * @staticvar string $term_name : Caution: This function only runs once per screen and doesn't check the term type more than once.
 	 *
 	 * @param object $term The Taxonomy Term object.
@@ -331,6 +333,8 @@ class Term_Data extends Post_Data {
 			$term_name = array();
 		}
 
+		$ret = '';
+
 		if ( isset( $term->taxonomy ) ) {
 			$tax_type = $term->taxonomy;
 
@@ -345,26 +349,27 @@ class Term_Data extends Post_Data {
 
 			if ( $singular ) {
 				if ( isset( $term_labels[ $tax_type ]->singular_name ) )
-					return $term_name[ $singular ] = $term_labels[ $tax_type ]->singular_name;
+					$ret = $term_labels[ $tax_type ]->singular_name;
 			} else {
 				if ( isset( $term_labels->name ) )
-					return $term_name[ $singular ] = $term_labels[ $tax_type ]->name;
+					$ret = $term_labels[ $tax_type ]->name;
 			}
 		} elseif ( isset( $term->label ) ) {
-			return $term->label;
+			$ret = $term->label;
 		} elseif ( isset( $term->labels->singular_name ) ) {
-			return $term->labels->singular_name;
+			$ret = $term->labels->singular_name;
 		}
 
-		if ( $fallback ) {
+		if ( $fallback && ! $ret ) {
 			//* Fallback to Page as it is generic.
-			if ( $singular )
-				return $term_name[ $singular ] = \esc_html__( 'Page', 'autodescription' );
-
-			return $term_name[ $singular ] = \esc_html__( 'Pages', 'autodescription' );
+			if ( $singular ) {
+				return \esc_html__( 'Page', 'autodescription' );
+			} else {
+				return \esc_html__( 'Pages', 'autodescription' );
+			}
 		}
 
-		return $term_name[ $singular ] = '';
+		return $term_name[ $singular ] = $ret;
 	}
 
 	/**

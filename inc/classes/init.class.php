@@ -79,6 +79,9 @@ class Init extends Query {
 	/**
 	 * Runs the plugin on the front-end.
 	 *
+	 * To overwrite any of the filters, use (n>0):
+	 * `add_action( 'init', callback, n );`
+	 *
 	 * @since 1.0.0
 	 * @since 2.8.0 Silently deprecated. Displaying legacy roots.
 	 * @deprecated

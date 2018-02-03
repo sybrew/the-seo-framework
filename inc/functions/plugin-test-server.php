@@ -43,7 +43,7 @@ function the_seo_framework_test_server_phase() {
 
 	//* @TODO clean this up @ 4.6 requirement. i.e. only check for `get_network()` and $nw->site_id.
 	//= WP_Network is WP > 4.4.
-	if ( $ms && class_exists( '\\WP_Network', false ) ) {
+	if ( $ms && class_exists( 'WP_Network', false ) ) {
 		//* Try bypassing testing and deactivation gaming when the main blog has already been tested.
 
 		/**
@@ -54,7 +54,7 @@ function the_seo_framework_test_server_phase() {
 
 		//= WP < 4.6 doesn't have get_network().
 		$nw = function_exists( 'get_network' ) ? get_network() : $GLOBALS['current_site'];
-		if ( $nw instanceof \WP_Network ) {
+		if ( $nw instanceof WP_Network ) {
 			//= WP < 4.6 doesn't have property 'site_id'.
 			$site_id = isset( $nw->site_id ) ? $nw->site_id : (int) $nw->blog_id;
 
@@ -104,7 +104,6 @@ function the_seo_framework_test_server_phase() {
 		return;
 
 	switch ( $test ) :
-		case 0 :
 		case 1 :
 			//* PHP requirements not met, always count up to encourage best standards.
 			$requirement = 'PHP 5.3.0 or later';
@@ -123,6 +122,7 @@ function the_seo_framework_test_server_phase() {
 
 		default :
 			wp_die();
+			break;
 	endswitch;
 
 	//* network_admin_url() falls back to admin_url() on single. But networks can enable single too.

@@ -231,6 +231,15 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* When the sitemap `lastmod` option is disabled, no more PHP notices will appear when debugging is enabled.
 		* This didn't affect the output logic, so without debugging all was somewhat good.
 
+* **For developers:**
+	* **Filter notes:**
+		**Added:**
+			/
+			* TODO <https://wordpress.org/support/topic/set-the-primary-category/>
+		**Fixed:**
+			/
+			* TODO `the_seo_framework_generated_description` now shows its presence in the admin fields.
+
 = Full changelog =
 
 * **The full changelog can be found [here](http://theseoframework.com/?cat=2).**

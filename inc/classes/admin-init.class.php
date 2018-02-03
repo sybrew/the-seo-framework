@@ -555,8 +555,11 @@ class Admin_Init extends Init {
 
 		$_colors = $GLOBALS['_wp_admin_css_colors'];
 
-		if ( ! isset( $_colors[ $scheme ]->colors ) || ! is_array( $_colors[ $scheme ]->colors ) )
-			return '';
+		if (
+		   ! isset( $_colors[ $scheme ]->colors )
+		|| ! is_array( $_colors[ $scheme ]->colors )
+		|| count( $_colors[ $scheme ]->colors ) < 4
+		   ) return '';
 
 		$_scheme = $_colors[ $scheme ]->colors;
 
@@ -565,6 +568,7 @@ class Admin_Init extends Init {
 		$color = $_scheme[2];
 		$color_accent = $_scheme[3];
 
+		// TODO fix this.
 		$bg_alt_font = '#' . $this->get_relative_fontcolor( $bg );
 		// $bg_accent_alt_font = '#' . $this->get_relative_fontcolor( $bg_accent );
 
@@ -574,7 +578,7 @@ class Admin_Init extends Init {
 			),
 			'.tsf-tooltip-text-wrap' => array(
 				"background-color:$bg_accent",
-				"color:$bg_alt_font",
+				"color:$bg_alt_font", // TODO fix this.
 			),
 			'.tsf-tooltip-arrow:after' => array(
 				"border-top-color:$bg_accent",
@@ -588,7 +592,7 @@ class Admin_Init extends Init {
 		 * Applies filters 'the_seo_framework_admin_color_css'
 		 *
 		 * @since 3.0.0
-		 * @param array $css The current styles.
+		 * @param array $css The current styles. Empty it to disable conditional styling.
 		 * @param string $scheme The current admin scheme.
 		 */
 		$css = (array) \apply_filters( 'the_seo_framework_admin_color_css', $css, $scheme );

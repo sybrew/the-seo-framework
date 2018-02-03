@@ -374,14 +374,12 @@ class Generate_Url extends Generate_Title {
 			case 'day' :
 				$_day = \get_query_var( 'day' );
 				$_paginate = $_paginate && $_day == $day;
-				$_get = 'month';
-				// Continue switch.
+				// No break. Get month too.
 
 			case 'month' :
 				$_month = \get_query_var( 'monthnum' );
 				$_paginate = $_paginate && $_month == $month;
-				$_get = 'year';
-				// Continue switch.
+				// No break. Get year too.
 
 			case 'year' :
 				$_year = \get_query_var( 'year' );

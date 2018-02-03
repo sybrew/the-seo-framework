@@ -249,7 +249,7 @@ class Detect extends Render {
 			}
 		}
 
-		//* No class, function or constant found to exist
+		//* No globals, constant, function, or class found to exist
 		return false;
 	}
 
@@ -799,7 +799,7 @@ class Detect extends Render {
 		static $sep_output = null;
 		static $seplocation_output = null;
 
-		if ( ! isset( $title_output ) || ! isset( $sep_output ) || ! isset( $seplocation_output ) ) {
+		if ( ! isset( $title_output, $sep_output, $seplocation_output ) ) {
 			//* Initiate caches, set up variables.
 
 			if ( '' === $title )
@@ -882,6 +882,7 @@ class Detect extends Render {
 	 * Determines if the post type is compatible with The SEO Framework inpost metabox.
 	 *
 	 * @since 2.3.5
+	 * TODO Remove editor requirement.
 	 *
 	 * @param string|null $post_type
 	 * @return bool True if post type is supported.
@@ -991,7 +992,7 @@ class Detect extends Render {
 		 * Applies filters 'the_seo_framework_supported_post_type' : string
 		 * @since 2.6.2
 		 *
-		 * @param string $post_type The supported post type. Is boolean false if not supported.
+		 * @param string|bool $post_type The supported post type. Is boolean false if not supported.
 		 * @param string $post_type_evaluated The evaluated post type.
 		 */
 		$post_type = (string) \apply_filters( 'the_seo_framework_supported_post_type', $post_type, $post_type_evaluated );

@@ -281,7 +281,7 @@ class Inpost extends Profile {
 		$is_term = false;
 
 		// Args are passed.
-		if ( is_array( $args ) && isset( $args['args'] ) ) {
+		if ( isset( $args['args'] ) ) {
 			$args_split = $args['args'];
 
 			//* The post type callback arg (translated)
