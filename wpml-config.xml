@@ -1,0 +1,9 @@
+<wpml-config>
+  <custom-fields>
+    <custom-field action="translate">_genesis_title</custom-field>
+    <custom-field action="translate">_genesis_description</custom-field>
+    <custom-field action="translate">_social_image_url</custom-field>
+    <custom-field action="translate">_genesis_canonical_uri</custom-field>
+    <custom-field action="translate">redirect</custom-field>
+  </custom-fields>
+</wpml-config>
