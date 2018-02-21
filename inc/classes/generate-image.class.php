@@ -118,6 +118,7 @@ class Generate_Image extends Generate_Url {
 		/**
 		 * Applies filters 'the_seo_framework_ld_json_breadcrumb_image' : string
 		 * @since 2.7.0
+		 * TODO deprecate filter and exchange with a suiting name.
 		 * @param string $image The current image.
 		 * @param int $id The page, post, product or term ID.
 		 * @param bool $singular Whether the ID is singular.

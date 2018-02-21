@@ -248,6 +248,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* When the sitemap `lastmod` option is disabled, no more PHP notices will appear when debugging is enabled.
 		* This didn't affect the output logic, so without debugging there we no issues.
 	* Auto generated term titles no longer show used HTML.
+	* In the sitemap, entries without an URL no longer occur, for any reason whatsoever.
+	* When the blog page is pending, password protected, or private, it's no longer included in the sitemap.
 	/
 	* TODO Title example tag no longer escapes HTML when it shouldn't. See https://github.com/sybrew/the-seo-framework/issues/265#issuecomment-367153351.
 	* TODO The pixel counters now use the correct font and weight. The pixel counter had an error margin of around 3%.

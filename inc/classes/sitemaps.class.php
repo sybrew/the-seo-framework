@@ -541,6 +541,7 @@ class Sitemaps extends Metaboxes {
 	 * @since 2.2.9
 	 * @since 2.8.0 Now adjusts memory limit when possible.
 	 * @since 2.9.3 No longer crashes on WordPress sites below WP 4.6.
+	 * @since 3.0.4 No longer outputs empty URL entries.
 	 *
 	 * @return string The sitemap content.
 	 */
@@ -551,20 +552,6 @@ class Sitemaps extends Metaboxes {
 			and @ini_set( 'memory_limit', WP_MAX_MEMORY_LIMIT );
 
 		$content = '';
-
-		/**
-		 * Applies filters the_seo_framework_sitemap_exclude_ids : array of id's
-		 *
-		 * @since 2.5.2
-		 * @since 2.8.0 : No longer accepts '0' as entry.
-		 */
-		$excluded = (array) \apply_filters( 'the_seo_framework_sitemap_exclude_ids', array() );
-
-		if ( empty( $excluded ) ) {
-			$excluded = '';
-		} else {
-			$excluded = array_flip( $excluded );
-		}
 
 		/**
 		 * Maximum pages and posts to fetch.
@@ -653,21 +640,28 @@ class Sitemaps extends Metaboxes {
 				unset( $latest_pages[ $key_on_front ] );
 			}
 
-			//* Render frontpage.
-			if ( '' === $excluded || empty( $excluded[ $id_on_front ] ) ) :
-				//* Fetch the noindex option from the page and homepage.
-				$indexed = ! $this->get_option( 'homepage_noindex' ) && ( ! $id_on_front || ! $this->get_custom_field( '_genesis_noindex', $id_on_front ) );
-
-				//* Continue if indexed.
-				if ( $indexed ) {
+			//= Render frontpage.
+			$front_page = $page_on_front ? \get_post( $id_on_front ) : null;
+			$render_front = false;
+			if ( ! $this->get_option( 'homepage_noindex' ) ) {
+				if ( $page_on_front ) {
+					$render_front = isset( $front_page->ID )
+						&& $this->is_post_included_in_sitemap( $front_page->ID )
+						&& ! $this->is_protected( $front_page->ID );
+				} else {
+					$render_front = $this->is_post_included_in_sitemap( $id_on_front );
+				}
+			}
+			if ( $render_front ) {
+				$_url = $this->get_homepage_permalink();
+				if ( $_url ) {
 					$content .= "\t<url>\n";
-					$content .= "\t\t<loc>" . $this->get_homepage_permalink() . "</loc>\n";
+					$content .= "\t\t<loc>" . $_url . "</loc>\n";
 
 					// Keep it consistent. Only parse if page_lastmod is true.
 					if ( $home_lastmod ) {
 						if ( $page_on_front ) {
-							$front_object = \get_post( $id_on_front );
-							$front_modified_gmt = isset( $front_object->post_modified_gmt ) ? $front_object->post_modified_gmt : '0000-00-00 00:00:00';
+							$front_modified_gmt = isset( $front_page->post_modified_gmt ) ? $front_page->post_modified_gmt : '0000-00-00 00:00:00';
 						} else {
 							$args = array(
 								'numberposts' => 1,
@@ -678,10 +672,9 @@ class Sitemaps extends Metaboxes {
 								'order' => 'DESC',
 								'offset' => 0,
 							);
-							$post = \wp_get_recent_posts( $args, OBJECT );
-							$front_object = isset( $post[0] ) ? $post[0] : null;
-							unset( $post );
-							$front_modified_gmt = isset( $front_object->post_date_gmt ) ? $front_object->post_date_gmt : '0000-00-00 00:00:00';
+							$latests_posts = \wp_get_recent_posts( $args, OBJECT );
+							$latest_post = isset( $latests_posts[0] ) ? $latests_posts[0] : null;
+							$front_modified_gmt = isset( $latest_post->post_date_gmt ) ? $latest_post->post_date_gmt : '0000-00-00 00:00:00';
 						}
 
 						if ( '0000-00-00 00:00:00' !== $front_modified_gmt )
@@ -691,27 +684,29 @@ class Sitemaps extends Metaboxes {
 					$content .= "\t\t<priority>1.0</priority>\n";
 					$content .= "\t</url>\n";
 				}
-			endif;
+				//* Free memory.
+				unset( $latests_posts, $latest_post, $front_page );
+			}
 
-			//* Render the page for posts.
+			//= Render the page for posts.
 			if ( $page_on_front && $page_for_posts_id ) :
-
 				//* Remove ID for blog from list and add frontpage to list.
 				if ( false !== $key_for_posts = array_search( $page_for_posts_id, $latest_pages, true ) ) {
 					unset( $latest_pages[ $key_for_posts ] );
 				}
 
-				if ( '' === $excluded || empty( $excluded[ $page_for_posts_id ] ) ) :
-					//* Fetch the noindex option from the page and homepage.
-					$indexed = ! $this->get_custom_field( '_genesis_noindex', $page_for_posts_id );
-					$page = \get_post( $page_for_posts_id );
+				$blog_page = \get_post( $page_for_posts_id );
+				$render_blog = isset( $blog_page->ID )
+					&& $this->is_post_included_in_sitemap( $blog_page->ID )
+					&& ! $this->is_protected( $blog_page->ID );
 
-					//* Continue if indexed.
-					if ( $indexed && isset( $page->ID ) ) {
+				if ( $render_blog ) {
+					$_url = $this->create_canonical_url( array( 'id' => $blog_page->ID ) );
+					if ( $_url ) {
 						$content .= "\t<url>\n";
-						$content .= "\t\t<loc>" . $this->create_canonical_url( array( 'id' => $page->ID ) ) . "</loc>\n";
+						$content .= "\t\t<loc>" . $_url . "</loc>\n";
 
-						// Keep it consistent. Only parse if page_lastmod is true.
+						// Keep it consistent. Only parse if $page_lastmod is true.
 						if ( $page_lastmod ) {
 							$args = array(
 								'numberposts' => 1,
@@ -722,10 +717,10 @@ class Sitemaps extends Metaboxes {
 								'order' => 'DESC',
 								'offset' => 0,
 							);
-							$post = \wp_get_recent_posts( $args, OBJECT );
-							$lastest_post = isset( $post[0] ) ? $post[0] : null;
+							$lastest_posts = \wp_get_recent_posts( $args, OBJECT );
+							$lastest_post = isset( $lastest_posts[0] ) ? $lastest_posts[0] : null;
 							$latest_post_published_gmt = isset( $lastest_post->post_date_gmt ) ? $lastest_post->post_date_gmt : '0000-00-00 00:00:00';
-							$page_for_posts_modified_gmt = $page->post_modified_gmt;
+							$page_for_posts_modified_gmt = $blog_page->post_modified_gmt;
 
 							if ( strtotime( $latest_post_published_gmt ) > strtotime( $page_for_posts_modified_gmt ) ) {
 								$page_modified_gmt = $latest_post_published_gmt;
@@ -740,44 +735,38 @@ class Sitemaps extends Metaboxes {
 						$content .= "\t\t<priority>0.9</priority>\n";
 						$content .= "\t</url>\n";
 					}
-				endif;
+				}
 
+				//* Free memory.
+				unset( $latest_posts, $latest_post, $blog_page );
 			endif;
 
-			/**
-			 * This can be heavy.
-			 */
 			foreach ( $latest_pages as $page_id ) :
 				$page = \get_post( $page_id );
+				if ( empty( $page->ID ) || ! $this->is_post_included_in_sitemap( $page->ID ) )
+					continue;
 
-				if ( isset( $page->ID ) ) :
-					$page_id = $page->ID;
-					if ( '' === $excluded || empty( $excluded[ $page_id ] ) ) {
-						//* Fetch the noindex option, per page.
-						$indexed = ! $this->get_custom_field( '_genesis_noindex', $page_id );
+				$_url = $this->create_canonical_url( array( 'id' => $page->ID ) );
+				if ( ! $_url )
+					continue;
 
-						//* Continue if indexed.
-						if ( $indexed ) {
-							$content .= "\t<url>\n";
-							$content .= "\t\t<loc>" . $this->create_canonical_url( array( 'id' => $page_id ) ) . "</loc>\n";
+				$content .= "\t<url>\n";
+				$content .= "\t\t<loc>" . $_url . "</loc>\n";
 
-							// Keep it consistent. Only parse if page_lastmod is true.
-							if ( $page_lastmod ) {
-								$page_modified_gmt = $page->post_modified_gmt;
+				// Keep it consistent. Only parse if page_lastmod is true.
+				if ( $page_lastmod ) {
+					$page_modified_gmt = $page->post_modified_gmt;
 
-								if ( '0000-00-00 00:00:00' !== $page_modified_gmt )
-									$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $page_modified_gmt ) . "</lastmod>\n";
-							}
+					if ( '0000-00-00 00:00:00' !== $page_modified_gmt )
+						$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $page_modified_gmt ) . "</lastmod>\n";
+				}
 
-							$content .= "\t\t<priority>0.9</priority>\n";
-							$content .= "\t</url>\n";
-						}
-					}
-				endif;
+				$content .= "\t\t<priority>0.9</priority>\n";
+				$content .= "\t</url>\n";
 			endforeach;
 
 			//* Free memory.
-			unset( $latest_pages );
+			unset( $latest_pages, $page );
 		endif;
 
 		if ( $totalposts ) {
@@ -840,43 +829,37 @@ class Sitemaps extends Metaboxes {
 			 */
 			foreach ( $latest_posts as $post_id ) :
 				$post = \get_post( $post_id );
+				if ( empty( $post->ID ) || ! $this->is_post_included_in_sitemap( $post->ID ) )
+					continue;
 
-				if ( isset( $post->ID ) ) :
-					$post_id = $post->ID;
-					if ( '' === $excluded || empty( $excluded[ $post_id ] ) ) {
-						//* Fetch the noindex option, per page.
-						$indexed = ! $this->get_custom_field( '_genesis_noindex', $post_id );
+				$_url = $this->create_canonical_url( array( 'id' => $post->ID ) );
+				if ( ! $_url )
+					continue;
 
-						//* Continue if indexed
-						if ( $indexed ) {
+				$content .= "\t<url>\n";
+				// No need to use static vars
+				$content .= "\t\t<loc>" . $_url . "</loc>\n";
 
-							$content .= "\t<url>\n";
-							// No need to use static vars
-							$content .= "\t\t<loc>" . $this->create_canonical_url( array( 'id' => $post_id ) ) . "</loc>\n";
+				// Keep it consistent. Only parse if page_lastmod is true.
+				if ( $post_lastmod ) {
+					$post_modified_gmt = $post->post_modified_gmt;
 
-							// Keep it consistent. Only parse if page_lastmod is true.
-							if ( $post_lastmod ) {
-								$post_modified_gmt = $post->post_modified_gmt;
+					if ( '0000-00-00 00:00:00' !== $post_modified_gmt )
+						$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $post_modified_gmt ) . "</lastmod>\n";
+				}
 
-								if ( '0000-00-00 00:00:00' !== $post_modified_gmt )
-									$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $post_modified_gmt ) . "</lastmod>\n";
-							}
+				$content .= "\t\t<priority>" . number_format( $priority, 1 ) . "</priority>\n";
+				$content .= "\t</url>\n";
 
-							$content .= "\t\t<priority>" . number_format( $priority, 1 ) . "</priority>\n";
-							$content .= "\t</url>\n";
+				// Lower the priority for the next pass.
+				$priority = $priority - $prioritydiff;
 
-							// Lower the priority for the next pass.
-							$priority = $priority - $prioritydiff;
-
-							// Cast away negative numbers.
-							$priority = $priority <= 0 ? 0 : (float) $priority;
-						}
-					}
-				endif;
+				// Cast away negative numbers.
+				$priority = $priority <= 0 ? 0 : (float) $priority;
 			endforeach;
 
 			//* Free memory.
-			unset( $latest_posts );
+			unset( $latest_posts, $post );
 		endif;
 
 		if ( $total_cpt_posts ) :
@@ -954,48 +937,38 @@ class Sitemaps extends Metaboxes {
 			 * This can be heavy.
 			 */
 			foreach ( $latest_cpt_posts as $ctp_post_id ) :
-
 				$ctp_post = \get_post( $ctp_post_id );
+				if ( empty( $ctp_post->ID ) || ! $this->is_post_included_in_sitemap( $ctp_post->ID ) )
+					continue;
 
-				if ( isset( $ctp_post->ID ) ) :
-					$cpt_id = $ctp_post->ID;
+				$_url = $this->create_canonical_url( array( 'id' => $ctp_post->ID ) );
+				if ( ! $_url )
+					continue;
 
-					if ( '' === $excluded || empty( $excluded[ $cpt_id ] ) ) {
+				$content .= "\t<url>\n";
+				//* No need to use static vars
+				$content .= "\t\t<loc>" . $_url . "</loc>\n";
 
-						//* Fetch the noindex option, per page.
-						$indexed = ! $this->get_custom_field( '_genesis_noindex', $cpt_id );
+				//* Keep it consistent. Only parse if $post_lastmod is true.
+				if ( $post_lastmod ) {
+					$cpt_modified_gmt = $ctp_post->post_modified_gmt;
+					//* Some CPT don't set modified time.
+					if ( '0000-00-00 00:00:00' !== $cpt_modified_gmt )
+						$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $cpt_modified_gmt ) . "</lastmod>\n";
+				}
 
-						//* Continue if indexed
-						if ( $indexed ) {
+				$content .= "\t\t<priority>" . number_format( $priority_cpt, 1 ) . "</priority>\n";
+				$content .= "\t</url>\n";
 
-							$content .= "\t<url>\n";
-							//* No need to use static vars
-							$content .= "\t\t<loc>" . $this->create_canonical_url( array( 'id' => $cpt_id ) ) . "</loc>\n";
+				// Lower the priority for the next pass.
+				$priority_cpt = $priority_cpt - $prioritydiff_cpt;
 
-							//* Keep it consistent. Only parse if page_lastmod is true.
-							if ( $post_lastmod ) {
-								$cpt_modified_gmt = $ctp_post->post_modified_gmt;
-
-								//* Some CPT don't set modified time.
-								if ( '0000-00-00 00:00:00' !== $cpt_modified_gmt )
-									$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $cpt_modified_gmt ) . "</lastmod>\n";
-							}
-
-							$content .= "\t\t<priority>" . number_format( $priority_cpt, 1 ) . "</priority>\n";
-							$content .= "\t</url>\n";
-
-							// Lower the priority for the next pass.
-							$priority_cpt = $priority_cpt - $prioritydiff_cpt;
-
-							// Cast away negative numbers.
-							$priority_cpt = $priority_cpt <= 0 ? 0 : (float) $priority_cpt;
-						}
-					}
-				endif;
+				// Cast away negative numbers.
+				$priority_cpt = $priority_cpt <= 0 ? 0 : (float) $priority_cpt;
 			endforeach;
 
 			//* Free memory.
-			unset( $latest_cpt_posts );
+			unset( $latest_cpt_posts, $ctp_post );
 		endif;
 
 		/**
@@ -1057,6 +1030,45 @@ class Sitemaps extends Metaboxes {
 		$this->reset_timezone();
 
 		return $content;
+	}
+
+	/**
+	 * Determines if post is possibly included in the sitemap.
+	 *
+	 * This is a weak check, as the filter might not be present outside of the
+	 * sitemap's scope.
+	 * The URL also isn't checked, nor the position.
+	 *
+	 * @since 3.0.4
+	 *
+	 * @param int $id The post ID to check. When 0, the custom field will not be checked.
+	 * @return bool True if included, false otherwise.
+	 */
+	public function is_post_included_in_sitemap( $id ) {
+
+		static $excluded = null;
+		if ( null === $excluded ) {
+			/**
+			 * Applies filters the_seo_framework_sitemap_exclude_ids : array of id's
+			 *
+			 * @since 2.5.2
+			 * @since 2.8.0 : No longer accepts '0' as entry.
+			 */
+			$excluded = (array) \apply_filters( 'the_seo_framework_sitemap_exclude_ids', array() );
+
+			if ( empty( $excluded ) ) {
+				$excluded = array();
+			} else {
+				$excluded = array_flip( $excluded );
+			}
+		}
+
+		$included = empty( $excluded[ $id ] );
+		if ( $included && $id ) {
+			$included = ! $this->get_custom_field( '_genesis_noindex', $id );
+		}
+
+		return $included;
 	}
 
 	/**
