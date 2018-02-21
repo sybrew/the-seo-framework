@@ -226,18 +226,31 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 = 3.0.4 - ??? =
 
+**Notice for developers, a filter removal:**
+
+* The `get_the_archive_title` filter is a WordPress filter, and it's used for theming, but not for metadata.
+* Because it's used for theming, it may expect HTML. Therefore, this is something TSF shouldn't use, yet we did.
+* We could've "simply" stripped all HTML tags, but that would be patching rather than fixing (adding code debt).
+* So, if you've used the filter before to adjust archive titles in TSF, consider replacing it with `the_seo_framework_generated_archive_title`.
+
+**Detailed log:**
+
 * **Added:**
 	* WPML translation editor support. Thanks [Vuk](https://github.com/vukvukovich)!
+	/
+	* TODO Focus extension support additions.
 * **Improved:**
 	/
 	* TODO On slow networks, the in-post SEO settings tabs are correctly switched on-load when necessary.
 	* TODO State that authorized presence options don't affect social/open graph settings.
 * **Fixed:**
-	* On IE, Edge, and Firefox, inpost navigational texts no longer align to the top on adjacent-item overflow; instead, they're now vertically centered.
+	* On IE, Edge, and Firefox, in-post navigational texts no longer align to the top on adjacent-item overflow; instead, they're now vertically centered.
 	* When the sitemap `lastmod` option is disabled, no more PHP notices will appear when debugging is enabled.
-		* This didn't affect the output logic, so without debugging all was somewhat good.
+		* This didn't affect the output logic, so without debugging there we no issues.
+	* Auto generated term titles no longer show used HTML.
 	/
 	* TODO Title example tag no longer escapes HTML when it shouldn't. See https://github.com/sybrew/the-seo-framework/issues/265#issuecomment-367153351.
+	* TODO The pixel counters now use the correct font and weight. The pixel counter had an error margin of around 3%.
 
 * **For developers:**
 	* **Improved:**
@@ -246,9 +259,13 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		**Added:**
 			/
 			* TODO <https://wordpress.org/support/topic/set-the-primary-category/>
+			* `(string) the_seo_framework_generated_archive_title`
 		**Fixed:**
 			/
 			* TODO `the_seo_framework_generated_description` now shows its presence in the admin fields.
+		**Removed:**
+			* WordPress Core filter `get_the_archive_title` is no longer used.
+				* Use `the_seo_framework_generated_archive_title` instead.
 
 = 3.0.3 - Diligence =
 

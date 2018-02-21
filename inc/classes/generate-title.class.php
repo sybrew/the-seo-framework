@@ -803,8 +803,10 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 2.6.0
 	 * @since 2.9.2 : Added WordPress core filter 'get_the_archive_title'
+	 * @since 3.0.4 : 1. Removed WordPress core filter 'get_the_archive_title'
+	 *                2. Added filter 'the_seo_framework_generated_archive_title'
 	 *
-	 * @param object $term The Term object.
+	 * @param \WP_Term|null $term The Term object.
 	 * @param array $args The Title arguments.
 	 * @return string The Archive Title, not escaped.
 	 */
@@ -904,11 +906,12 @@ class Generate_Title extends Generate_Description {
 		/**
 		 * Filters the archive title.
 		 *
-		 * @since WordPress Core 4.1.0
+		 * @since 3.0.4
 		 *
 		 * @param string $title Archive title to be displayed.
+		 * @param \WP_Term $term The term object.
 		 */
-		return \apply_filters( 'get_the_archive_title', $title );
+		return \apply_filters( 'the_seo_framework_generated_archive_title', $title, $term );
 	}
 
 	/**
