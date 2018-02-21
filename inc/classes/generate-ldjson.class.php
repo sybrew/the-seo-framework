@@ -865,6 +865,7 @@ class Generate_Ldjson extends Generate_Image {
 		/**
 		 * Applies filters the_seo_framework_json_breadcrumb_output
 		 * @since 2.4.2
+		 * @param bool $output
 		 */
 		$filter = (bool) \apply_filters( 'the_seo_framework_json_breadcrumb_output', true );
 		$option = $this->is_option_checked( 'ld_json_breadcrumbs' );

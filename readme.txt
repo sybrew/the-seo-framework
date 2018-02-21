@@ -224,14 +224,24 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
-= 3.1.0 - ??? =
+= 3.0.4 - ??? =
 
+* **Added:**
+	* WPML translation editor support. Thanks [Vuk](https://github.com/vukvukovich)!
+* **Improved:**
+	/
+	* TODO On slow networks, the in-post SEO settings tabs are correctly switched on-load when necessary.
+	* TODO State that authorized presence options don't affect social/open graph settings.
 * **Fixed:**
 	* On IE, Edge, and Firefox, inpost navigational texts no longer align to the top on adjacent-item overflow; instead, they're now vertically centered.
 	* When the sitemap `lastmod` option is disabled, no more PHP notices will appear when debugging is enabled.
 		* This didn't affect the output logic, so without debugging all was somewhat good.
+	/
+	* TODO Title example tag no longer escapes HTML when it shouldn't. See https://github.com/sybrew/the-seo-framework/issues/265#issuecomment-367153351.
 
 * **For developers:**
+	* **Improved:**
+		* Term label guessing is now cached.
 	* **Filter notes:**
 		**Added:**
 			/
@@ -239,6 +249,142 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		**Fixed:**
 			/
 			* TODO `the_seo_framework_generated_description` now shows its presence in the admin fields.
+
+= 3.0.3 - Diligence =
+
+**Release date:**
+
+* December 6th, 2017
+
+**Summarized:**
+
+* This update implements a workaround for an issue with bbPress, and various UI bugs have been fixed as well.
+
+[View the detailed log](https://theseoframework.com/?p=2236#detailed).
+
+= 3.0.2 - Esteem =
+
+**Release date:**
+
+* November 23rd, 2017
+
+**Summarized:**
+
+* This update fixes an issue with wpForo found in the 3.0 release of TSF.
+
+[View the detailed log](https://theseoframework.com/?p=2231#detailed).
+
+= 3.0.1 - Renown =
+
+**Release date:**
+
+* November 20th, 2017
+
+**Summarized:**
+
+* This update fixes a few issues found in the 3.0 release of TSF.
+
+[View the detailed log](https://theseoframework.com/?p=2225#detailed).
+
+= 3.0.0 - Eminence =
+
+**Release date:**
+
+* November 19th, 2017
+
+**Did you know?**
+
+* Since about a week ago, 3 new free extensions are available in the [Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/).
+
+**Summarized:**
+
+* Finally, after 8 months of preparation, experimenting, testing, and coding, TSF 3.0 is here.
+* This update focuses on improved social site interaction, WordPress' API coherence, and optimizing UX.
+* To improve social site interaction, social site links can be added through author profile pages.
+* The Open Graph protocol has been updated, so will your meta output.
+* The canonical URL generation has been revised, and it now works mostly through WordPress' API.
+* For improved UX we've added pixel counters, better tooltips, and admin color scheme adherence.
+* Oh, you can also select the primary term for each hierarchical post type.
+
+**New primary terms:**
+
+* *In WordPress, terms are generally known as categories.*
+* The primary term influences how canonical URLs are generated for the post, and how breadcrumbs are constructed.
+* Next to each term selection list, you'll now see radio buttons pop up aside each selected term.
+* The selected term will be assigned as the primary term.
+* If no primary term is selected, an assigned term that has been implemented earliest on the site will be used.
+* Note that this feature requires JavaScript to be enabled. Authors without JavaScript can't change the primary term.
+
+**Revised canonical URLs:**
+
+* The canonical URL generation has been completely rewritten. Most users won't notice anything from this.
+* It now uses WordPress' 4.6+ canonical URL generation (backward-compatibility is provided), instead of an in-house "guessing" version.
+* **So, the Canonical URL should now always be compatible with any plugin, out of the box.** This is great news for translation plugin users!
+* Note that canonical URLs are no longer outputted on private or unpublished posts.
+* Note that if a query isn't registered correctly, the URL will also stay empty. Or, in unlikely cases, it will link to the home page.
+	* Contact the respective plugin author on such issues. I'd love to help them correct this.
+
+**Finally, author SEO:**
+
+* On profile pages of users with Author capabilities (or higher), two new settings have been added under heading **"Authorial Info"**.
+* Here, authors can set their Facebook profile page and Twitter profile page.
+* These links will be used in Open Graph and Twitter meta output.
+* Note that the author's profile must be public for it to be used when sharing links.
+* When no author links are set, the "new" fallback URLs from the Social Meta Settings will be used.
+* Expand your authorial presence using the free [Articles Extension](https://theseoframework.com/extensions/articles/).
+
+**A better admin experience:**
+
+* This plugin now uses your chosen admin color scheme, subtly. You can see it being used as highlights and for tooltips.
+* About tooltips, they've been completely rewritten:
+	* They now look for boundaries, so they won't fall off the page or bound box. They can also face down when needed.
+	* They try to center themselves based on your initial pointer position.
+	* They work perfectly on any touch screen, also using Windows Touch.
+	* They no longer gulp down RAM, they use cutlery. Basically, fewer DOM items initiate them and they self-destruct as they disappear.
+	* Tooltips are now used on every `[?]` mark, so you can instantly see what those marks convey.
+* Title input and preview generation has also been completely rewritten, and this was a big challenge to implement:
+	* Titles now update on various actions, like updating the visibility or name of the page.
+	* Titles now show prefixes, like "Private:" or "Protected:". They'll try to fit neatly, wherever.
+	* Character counters are now always correct; they no longer "guess", they "know".
+	* Pixel counters have been added too. More on that below.
+* The CSS and JS scripts implemented by TSF have been optimized even further. So your admin experience should be a little speedier.
+
+**The pixel counter:**
+
+* A character-count guideline is nice to have. But it remains a guideline, and you want facts... correct?
+* So, we've added a pixel counter. This pixel counter knows exactly how much space your titles and descriptions take up in Google's SERP.
+* To explain this difference visually: Five characters of "WWWWW" take up more space than five of "IIIII".
+* Hover over the pixel counter to see how many pixels you've used.
+* Through testing we found that time-sensitive items (i.e. articles) have less space available for descriptions.
+* You can enable and disable the character and pixel counters at the Layout settings.
+* Note that new installations won't get to see the character counter by default anymore.
+* Note that the pixel counter isn't represented (yet) by the SEO Bar. So, you shouldn't have to worry about yellow or even red items.
+
+**AI good structure:**
+
+* You can now upload a square website logo. This is used in the [Articles Extension](https://theseoframework.com/extensions/articles/), too.
+* The "Site Name" project has been dropped, and this data is now fetched through other means, like the "Sitelinks Searchbox".
+* Breadcrumbs have been revised, too. The generation is now smarter in tree selection, and only one breadcrumb is outputted, which uses your primary term selection.
+* WooCommerce 3.0+ products are recognized correctly by search engines, once more.
+
+**Privacy everywhere:**
+
+* When you click on any link outputted by TSF on your domain, you can be certain it no longer carries any traceable information.
+
+**A note on browser compatibility:**
+
+* As we want to move forward, we don't believe we should be supporting insecure browsers.
+* So, your admin experience will be degraded when using an outdated browser.
+* Be sure to use at least IE 11, Safari 10, iOS 10, or better.
+* We expect only a few users to be negatively affected. For everyone else, we welcome you to the future of browsing.
+
+**Survey:**
+
+* After updating and playing around with the update, feel free to fill in our [update survey](https://theseoframework.com/?p=1781). Tell us what you like or what could've been done better.
+
+**Detailed log:**
+
+* ***Before anything else, preparation is the [key to success](https://theseoframework.com/?p=2210#detailed).***
 
 = Full changelog =
 

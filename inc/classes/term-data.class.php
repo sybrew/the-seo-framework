@@ -312,7 +312,7 @@ class Term_Data extends Post_Data {
 	 *
 	 * @since 2.6.0
 	 * @since 2.9.4 Added $term->label and $term->labels->singular_name as additional fallbacks.
-	 * @since 3.1.0 : 1. Now caches labels and names.
+	 * @since 3.0.4 : 1. Now caches ->label and ->singular_name.
 	 *                2. No longer caches fallbacks.
 	 * @staticvar string $term_name : Caution: This function only runs once per screen and doesn't check the term type more than once.
 	 *

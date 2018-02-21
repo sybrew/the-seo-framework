@@ -932,7 +932,7 @@ class Generate_Title extends Generate_Description {
 				/**
 				* Filter the category archive page title.
 				*
-				* @since 2.0.10 WP CORE
+				* @since WP Core 2.0.10
 				*
 				* @param string $term_name Category name for archive being displayed.
 				*/
@@ -941,7 +941,7 @@ class Generate_Title extends Generate_Description {
 				/**
 				* Filter the tag archive page title.
 				*
-				* @since 2.3.0 WP CORE
+				* @since WP Core 2.3.0
 				*
 				* @param string $term_name Tag name for archive being displayed.
 				*/
@@ -950,7 +950,7 @@ class Generate_Title extends Generate_Description {
 				/**
 				* Filter the custom taxonomy archive page title.
 				*
-				* @since 3.1.0 WP CORE
+				* @since WP Core 3.1.0
 				*
 				* @param string $term_name Term name for archive being displayed.
 				*/

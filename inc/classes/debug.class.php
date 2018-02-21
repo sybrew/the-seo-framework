@@ -228,7 +228,7 @@ final class Debug implements Debug_Interface {
 		/**
 		 * Filter whether to trigger an error for _doing_it_wrong() calls.
 		 *
-		 * @since 3.1.0
+		 * @since WP Core 3.1.0
 		 *
 		 * @param bool $trigger Whether to trigger the error for _doing_it_wrong() calls. Default true.
 		 */
@@ -280,7 +280,7 @@ final class Debug implements Debug_Interface {
 		/**
 		 * Filter whether to trigger an error for _doing_it_wrong() calls.
 		 *
-		 * @since 3.1.0
+		 * @since WP Core 3.1.0
 		 *
 		 * @param bool $trigger Whether to trigger the error for _doing_it_wrong() calls. Default true.
 		 */
