@@ -256,13 +256,13 @@ th.column-tsf-seo-bar-wrap ~ th {
 	-o-transition: none;
 	-ms-transition: none;
 	transition: none;
+	font-family: arial,helvetica,sans-serif;
 	font-size: 18px;
-	font-weight: 600;
+	font-weight: 400;
 }
 
 .tsf-description-pixel-counter-shadow {
 	font-size: 13px;
-	font-weight: 400;
 }
 
 /* END Pixel Counters */

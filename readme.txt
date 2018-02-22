@@ -248,6 +248,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* TODO On slow networks, the in-post SEO settings tabs are correctly switched on-load when necessary.
 	* TODO State that authorized presence options don't affect social/open graph settings.
 * **Fixed:**
+	* The pixel counter had an calculation error of plus/minus 1~3% (estimated via Chrome 64, Windows 10), because the wrong font was used.
 	* Some text colors in the sitemap are no longer incorrectly calculated. Your sitemap may look slightly different now.
 	* The text colors in tooltips are now correctly assigned and calculated.
 	* On IE, Edge, and Firefox, in-post navigational texts no longer align to the top on adjacent-item overflow; instead, they're now vertically centered.
