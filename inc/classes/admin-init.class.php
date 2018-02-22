@@ -561,16 +561,16 @@ class Admin_Init extends Init {
 		|| count( $_colors[ $scheme ]->colors ) < 4
 		   ) return '';
 
-		$_scheme = $_colors[ $scheme ]->colors;
+		$colors = $_colors[ $scheme ]->colors;
 
-		$bg = $_scheme[0];
-		$bg_accent = $_scheme[1];
-		$color = $_scheme[2];
-		$color_accent = $_scheme[3];
+		$bg = $colors[0];
+		$bg_accent = $colors[1];
+		$color = $colors[2];
+		$color_accent = $colors[3];
 
 		// TODO fix this.
-		$bg_alt_font = '#' . $this->get_relative_fontcolor( $bg );
-		// $bg_accent_alt_font = '#' . $this->get_relative_fontcolor( $bg_accent );
+		// $bg_alt_font = '#' . $this->get_relative_fontcolor( $bg );
+		$bg_accent_alt_font = '#' . $this->get_relative_fontcolor( $bg_accent );
 
 		$css = array(
 			'.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:checked + .tsf-flex-nav-tab-label' => array(
@@ -578,7 +578,7 @@ class Admin_Init extends Init {
 			),
 			'.tsf-tooltip-text-wrap' => array(
 				"background-color:$bg_accent",
-				"color:$bg_alt_font", // TODO fix this.
+				"color:$bg_accent_alt_font",
 			),
 			'.tsf-tooltip-arrow:after' => array(
 				"border-top-color:$bg_accent",
@@ -592,10 +592,12 @@ class Admin_Init extends Init {
 		 * Applies filters 'the_seo_framework_admin_color_css'
 		 *
 		 * @since 3.0.0
+		 * @since 3.0.4 Now passes $colors.
 		 * @param array $css The current styles. Empty it to disable conditional styling.
-		 * @param string $scheme The current admin scheme.
+		 * @param string $scheme The current admin scheme name.
+		 * @param array $colors The current admin scheme values.
 		 */
-		$css = (array) \apply_filters( 'the_seo_framework_admin_color_css', $css, $scheme );
+		$css = (array) \apply_filters( 'the_seo_framework_admin_color_css', $css, $scheme, $colors );
 
 		$out = '';
 		foreach ( $css as $attr => $style )

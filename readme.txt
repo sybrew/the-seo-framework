@@ -238,12 +238,16 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * **Added:**
 	* WPML translation editor support. Thanks [Vuk](https://github.com/vukvukovich)!
 	/
-	* TODO Focus extension support additions.
+	* TODO Focus extension improved support, including:
+		/
+		* TODO A new hidden field has been added for titles which inherits the expected title output.
 * **Improved:**
 	/
 	* TODO On slow networks, the in-post SEO settings tabs are correctly switched on-load when necessary.
 	* TODO State that authorized presence options don't affect social/open graph settings.
 * **Fixed:**
+	* Some text colors in the sitemap are no longer incorrectly calculated. Your sitemap may look slightly different now.
+	* The text colors in tooltips are now correctly assigned and calculated.
 	* On IE, Edge, and Firefox, in-post navigational texts no longer align to the top on adjacent-item overflow; instead, they're now vertically centered.
 	* When the sitemap `lastmod` option is disabled, no more PHP notices will appear when debugging is enabled.
 		* This didn't affect the output logic, so without debugging there we no issues.
@@ -256,16 +260,20 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 * **For developers:**
 	* **Improved:**
-		* Term label guessing is now cached.
+		* Term label name determination is now cached.
+		/
+		* TODO The title floating DOM placeholders now empty correctly when the input field is emptied.
 	* **Filter notes:**
-		**Added:**
+		* **Added:**
 			/
 			* TODO <https://wordpress.org/support/topic/set-the-primary-category/>
 			* `(string) the_seo_framework_generated_archive_title`
-		**Fixed:**
+		* **Changed:**
+			* `(array) the_seo_framework_admin_color_css` now has an extra parameter, passing the used scheme colors.
+		* **Fixed:**
 			/
 			* TODO `the_seo_framework_generated_description` now shows its presence in the admin fields.
-		**Removed:**
+		* **Removed:**
 			* WordPress Core filter `get_the_archive_title` is no longer used.
 				* Use `the_seo_framework_generated_archive_title` instead.
 

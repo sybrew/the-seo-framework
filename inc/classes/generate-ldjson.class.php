@@ -447,7 +447,7 @@ class Generate_Ldjson extends Generate_Image {
 		$taxonomies = $this->get_hierarchical_taxonomies_as( 'names', \get_post_type( $post_id ) );
 
 		/**
-		 * Applies filters 'the_seo_framework_ld_json_breadcrumb_terms'
+		 * Applies filters 'the_seo_framework_ld_json_breadcrumb_taxonomies'
 		 *
 		 * @since 3.0.0
 		 * @param array|string  $taxonomies The assigned hierarchical taxonomies.

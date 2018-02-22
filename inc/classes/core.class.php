@@ -820,6 +820,9 @@ class Core {
 	 * @since 2.8.0
 	 * @since 2.9.0 Now adds a little more relative softness based on rel_lum.
 	 * @since 2.9.2 (Typo): Renamed from 'get_relatitve_fontcolor' to 'get_relative_fontcolor'.
+	 * @since 3.0.4 : Now uses WCAG's relative luminance formula
+	 * @link https://www.w3.org/TR/2008/REC-WCAG20-20081211/#visual-audio-contrast-contrast
+	 * @link https://www.w3.org/WAI/GL/wiki/Relative_luminance
 	 *
 	 * @param string $hex The 3 to 6 character RGB hex. '#' prefix is supported.
 	 * @return string The hexadecimal RGB relative font color, without '#' prefix.
@@ -839,43 +842,43 @@ class Core {
 		$g = hexdec( $hex[1] );
 		$b = hexdec( $hex[2] );
 
-		//* Convert to sRGB for relative luminance.
-		$sr = 0.2125 * $r;
-		$sg = 0.7154 * $g;
-		$sb = 0.0721 * $b;
-		$rel_lum = 1 - ( $sr + $sg + $sb ) / 255;
+		$get_relative_luminance = function( $v ) {
+			//= Convert to 0~1 value.
+			$v = $v / 255;
 
-		//* Convert to relative intvals between 1 and 0 for L from HSL
-		// $rr = $r / 255;
-		// $rg = $g / 255;
-		// $rb = $b / 255;
-		// $luminance = ( min( $rr, $rg, $rb ) + max( $rr, $rg, $rb ) ) / 2;
+			if ( $v <= 0.03928 ) {
+				$lum = $v / 12.92;
+			} else {
+				$lum = pow( ( $v + 0.055 ) / 1.055, 2.4 );
+			}
+			return $lum;
+		};
 
-		//* Get perceptive luminance (greyscale) according to W3C.
-		$gr = 0.2989 * $r;
-		$gg = 0.5870 * $g;
-		$gb = 0.1140 * $b;
-		$per_lum = 1 - ( $gr + $gg + $gb ) / 255;
+		//* Use sRGB for relative luminance.
+		$sr = 0.2126 * $get_relative_luminance( $r );
+		$sg = 0.7152 * $get_relative_luminance( $g );
+		$sb = 0.0722 * $get_relative_luminance( $b );
+		$rel_lum = ( $sr + $sg + $sb );
 
-		//* Invert colors if they hit luminance boundaries.
+		//= Invert colors if they hit luminance boundaries.
 		if ( $rel_lum < 0.5 ) {
-			//* Build dark. Add softness.
-			$gr = $gr * $per_lum / 8 / 0.2989 + 8 * 0.2989 / $rel_lum;
-			$gg = $gg * $per_lum / 8 / 0.5870 + 8 * 0.5870 / $rel_lum;
-			$gb = $gb * $per_lum / 8 / 0.1140 + 8 * 0.1140 / $rel_lum;
+			//* Build dark greyscale.
+			$gr = 255 - ( $r * 0.2989 / 8 ) * $rel_lum;
+			$gg = 255 - ( $g * 0.5870 / 8 ) * $rel_lum;
+			$gb = 255 - ( $b * 0.1140 / 8 ) * $rel_lum;
 		} else {
-			//* Build light. Add (subtract) softness.
-			$gr = 255 - $gr * $per_lum / 8 * 0.2989 - 8 * 0.2989 / $rel_lum;
-			$gg = 255 - $gg * $per_lum / 8 * 0.5870 - 8 * 0.5870 / $rel_lum;
-			$gb = 255 - $gb * $per_lum / 8 * 0.1140 - 8 * 0.1140 / $rel_lum;
+			//* Build light greyscale.
+			$gr = ( $r * 0.2989 / 8 ) * $rel_lum;
+			$gg = ( $g * 0.5870 / 8 ) * $rel_lum;
+			$gb = ( $b * 0.1140 / 8 ) * $rel_lum;
 		}
 
-		//* Complete hexvals.
-		$retr = str_pad( dechex( $gr ), 2, '0', STR_PAD_LEFT );
-		$retg = str_pad( dechex( $gg ), 2, '0', STR_PAD_LEFT );
-		$retb = str_pad( dechex( $gb ), 2, '0', STR_PAD_LEFT );
+		//* Build RGB hex.
+		$retr = str_pad( dechex( round( $gr ) ), 2, '0', STR_PAD_LEFT );
+		$retg = str_pad( dechex( round( $gg ) ), 2, '0', STR_PAD_LEFT );
+		$retb = str_pad( dechex( round( $gb ) ), 2, '0', STR_PAD_LEFT );
 
-		return $retr . $retg . $retb;
+		return '#' . $retr . $retg . $retb;
 	}
 
 	/**
@@ -888,8 +891,7 @@ class Core {
 	 * @since 2.9.0 : 1. Removed word boundary requirement for strong.
 	 *                2. Now accepts regex count their numeric values in string.
 	 *                3. Fixed header 1~6 calculation.
-	 * @since 2.9.3 : 1. Added $args parameter.
-	 *                2. TODO It now uses substr_replace instead of str_replace to prevent duplicated replacements.
+	 * @since 2.9.3 : Added $args parameter.
 	 * @link https://wordpress.org/plugins/about/readme.txt
 	 *
 	 * @param string $text The text that might contain markdown. Expected to be escaped.
