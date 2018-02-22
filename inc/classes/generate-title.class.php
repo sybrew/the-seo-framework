@@ -799,7 +799,8 @@ class Generate_Title extends Generate_Description {
 	/**
 	 * Gets the archive Title, including filter. Also works in admin.
 	 *
-	 * @NOTE Taken from WordPress core. Altered to work in the Admin area.
+	 * @NOTE Taken from WordPress core. Altered to work for metadata.
+	 * @see WP Core get_the_archive_title()
 	 *
 	 * @since 2.6.0
 	 * @since 2.9.2 : Added WordPress core filter 'get_the_archive_title'

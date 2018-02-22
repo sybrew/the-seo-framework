@@ -241,6 +241,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* TODO Focus extension improved support, including:
 		/
 		* TODO A new hidden field has been added for titles which inherits the expected title output.
+* **Changed:**
+	* The SEO settings now show up on every publicly queryable post type. Title and editor fields are no longer required.
 * **Improved:**
 	/
 	* TODO On slow networks, the in-post SEO settings tabs are correctly switched on-load when necessary.
@@ -263,6 +265,9 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* Term label name determination is now cached.
 		/
 		* TODO The title floating DOM placeholders now empty correctly when the input field is emptied.
+	* **Changed:**
+		* Post types no longer check for `autodescription-meta` support.
+			* Instead, they now completely rely on filter `the_seo_framework_custom_post_type_support`.
 	* **Filter notes:**
 		* **Added:**
 			/
@@ -270,6 +275,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* `(string) the_seo_framework_generated_archive_title`
 		* **Changed:**
 			* `(array) the_seo_framework_admin_color_css` now has an extra parameter, passing the used scheme colors.
+			* `(array) the_seo_framework_custom_post_type_support` default parameter is now `[]`, instead of `[ 'title', 'editor' ]`.
 		* **Fixed:**
 			/
 			* TODO `the_seo_framework_generated_description` now shows its presence in the admin fields.

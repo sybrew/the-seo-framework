@@ -882,7 +882,6 @@ class Detect extends Render {
 	 * Determines if the post type is compatible with The SEO Framework inpost metabox.
 	 *
 	 * @since 2.3.5
-	 * TODO Remove editor requirement.
 	 *
 	 * @param string|null $post_type
 	 * @return bool True if post type is supported.
@@ -890,12 +889,13 @@ class Detect extends Render {
 	public function post_type_supports_inpost( $post_type = null ) {
 
 		if ( isset( $post_type ) && $post_type ) {
-			$supports = (array) \apply_filters( 'the_seo_framework_custom_post_type_support',
-				array(
-					'title',
-					'editor',
-				)
-			);
+			/**
+			 * Applies filters 'the_seo_framework_custom_post_type_support'
+			 * @since 2.3.5
+			 * @since 3.0.4 Default parameter now is `[]` instead of `['title','editor']`.
+			 * @param array $supports The required post type support, like 'title', 'editor'.
+			 */
+			$supports = (array) \apply_filters( 'the_seo_framework_custom_post_type_support', array() );
 
 			foreach ( $supports as $support ) {
 				if ( ! \post_type_supports( $post_type, $support ) ) {
@@ -923,15 +923,15 @@ class Detect extends Render {
 	 */
 	public function post_type_supports_custom_seo( $post_type = '' ) {
 
-		$post_type = $this->get_supported_post_type( true, $post_type );
-
-		if ( empty( $post_type ) )
-			return false;
-
 		static $supported = array();
 
 		if ( isset( $supported[ $post_type ] ) )
 			return $supported[ $post_type ];
+
+		$post_type = $this->get_supported_post_type( true, $post_type );
+
+		if ( empty( $post_type ) )
+			return $supported[ $post_type ] = false;
 
 		/**
 		 * We now support all posts that allow a title, content editor and excerpt.
@@ -939,7 +939,7 @@ class Detect extends Render {
 		 *
 		 * @since 2.3.5
 		 */
-		if ( \post_type_supports( $post_type, 'autodescription-meta' ) || $this->post_type_supports_inpost( $post_type ) )
+		if ( $this->post_type_supports_inpost( $post_type ) )
 			return $supported[ $post_type ] = true;
 
 		return $supported[ $post_type ] = false;

@@ -846,10 +846,10 @@ class Core {
 			//= Convert to 0~1 value.
 			$v = $v / 255;
 
-			if ( $v <= 0.03928 ) {
-				$lum = $v / 12.92;
+			if ( $v > .03928 ) {
+				$lum = pow( ( $v + .055 ) / 1.055, 2.4 );
 			} else {
-				$lum = pow( ( $v + 0.055 ) / 1.055, 2.4 );
+				$lum = $v / 12.92;
 			}
 			return $lum;
 		};
