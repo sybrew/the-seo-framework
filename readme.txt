@@ -248,7 +248,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* TODO On slow networks, the in-post SEO settings tabs are correctly switched on-load when necessary.
 	* TODO State that authorized presence options don't affect social/open graph settings.
 * **Fixed:**
-	* The pixel counter had an calculation error of plus/minus 1~3% (estimated via Chrome 64, Windows 10), because the wrong font was used.
+	* The pixel counter had an calculation error of plus/minus 1~3% (estimated via Chrome 64, Windows 10), because the wrong font and weight was used.
 	* Some text colors in the sitemap are no longer incorrectly calculated. Your sitemap may look slightly different now.
 	* The text colors in tooltips are now correctly assigned and calculated.
 	* On IE, Edge, and Firefox, in-post navigational texts no longer align to the top on adjacent-item overflow; instead, they're now vertically centered.
@@ -258,9 +258,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* In the sitemap, entries without an URL no longer occur, for any reason whatsoever.
 	* When the blog page is pending, password protected, or private, it's no longer included in the sitemap.
 	* When there's no tagline set for the site nor a tagline title tagline are set, and then the tagline additions are enabled, the correct title is used now.
-	/
-	* TODO Title example tag no longer escapes HTML when it shouldn't. See https://github.com/sybrew/the-seo-framework/issues/265#issuecomment-367153351.
-	* TODO The pixel counters now use the correct font and weight. The pixel counter had an error margin of around 3%.
+	* The SEO title placeholder no longer removes expected HTML tags when updated.
 
 * **For developers:**
 	* **Improved:**
