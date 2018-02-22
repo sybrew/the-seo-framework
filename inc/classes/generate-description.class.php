@@ -761,7 +761,7 @@ class Generate_Description extends Generate {
 			$id = $this->get_the_real_ID();
 
 		if ( $page_on_front || $this->is_front_page_by_id( $id ) ) :
-			$title = $this->get_option( 'homepage_title_tagline' ) ?: $this->get_blogdescription();
+			$title = $this->get_home_page_tagline();
 		else :
 			/**
 			 * No need to parse these when generating social description.

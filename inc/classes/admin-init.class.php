@@ -265,7 +265,7 @@ class Admin_Init extends Init {
 				$ishome = true;
 
 				if ( $use_additions ) {
-					$additions = $home_tagline ? $home_tagline : $description;
+					$additions = $home_tagline ?: $description;
 				} else {
 					$additions = '';
 				}

@@ -256,6 +256,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Auto generated term titles no longer show used HTML.
 	* In the sitemap, entries without an URL no longer occur, for any reason whatsoever.
 	* When the blog page is pending, password protected, or private, it's no longer included in the sitemap.
+	* When there's no tagline set for the site nor a tagline title tagline are set, and then the tagline additions are enabled, the correct title is used now.
 	/
 	* TODO Title example tag no longer escapes HTML when it shouldn't. See https://github.com/sybrew/the-seo-framework/issues/265#issuecomment-367153351.
 	* TODO The pixel counters now use the correct font and weight. The pixel counter had an error margin of around 3%.

@@ -584,6 +584,7 @@ class Generate_Title extends Generate_Description {
 	 * Generate the title based on conditions for the home page.
 	 *
 	 * @since 2.3.4
+	 * @since 2.3.8 Now checks tagline option.
 	 * @access private
 	 *
 	 * @param bool $get_custom_field Fetch Title from Custom Fields.
@@ -592,8 +593,8 @@ class Generate_Title extends Generate_Description {
 	 * @param bool $escape Parse Title through saninitation calls.
 	 * @param bool $get_option Whether to fetch the SEO Settings option.
 	 * @return array {
-	 *    'title'       => (string) $title : The Generated Title
-	 *    'blogname'    => (string) $blogname : The Generated Blogname
+	 *    'title'       => (string) $title : The Generated "Title"
+	 *    'blogname'    => (string) $blogname : The Generated "Blogname"
 	 *    'add_tagline' => (bool) $add_tagline : Whether to add the tagline
 	 *    'seplocation' => (string) $seplocation : The Separator Location
 	 * }
@@ -601,22 +602,7 @@ class Generate_Title extends Generate_Description {
 	public function generate_home_title( $get_custom_field = true, $seplocation = '', $deprecated = '', $escape = true, $get_option = true ) {
 
 		$add_tagline = $this->home_page_add_title_tagline();
-
-		/**
-		 * Add tagline or not based on option
-		 *
-		 * @since 2.2.2
-		 */
-		if ( $add_tagline ) {
-			/**
-			 * Tagline based on option.
-			 * @since 2.3.8
-			 */
-			$blogname = $this->get_option( 'homepage_title_tagline' );
-			$blogname = $blogname ? $blogname : $this->get_blogdescription();
-		} else {
-			$blogname = '';
-		}
+		$blogname = $add_tagline ? $this->get_home_page_tagline() : '';
 
 		/**
 		 * Render from function
@@ -638,17 +624,17 @@ class Generate_Title extends Generate_Description {
 		);
 
 		/**
-		 * Applies filters 'the_seo_framework_home_title_args' : array {
-		 *   @param string $title : NOTE: This is the blogname
-		 *   @param string $blogname : NOTE: This is the tagline.
-		 *   @param bool $add_tagline
-		 *   @param string $seplocation : 'left' or 'right'
-		 * }
+		 * Applies filters 'the_seo_framework_home_title_args'
 		 *
 		 * @since 2.8.0
 		 *
 		 * @param array $args
-		 * @param array $defaults
+		 * @param array $defaults : {
+		 *   string $title : NOTE: This is the blogname or homepage title option.
+		 *   string $blogname : NOTE: This is the tagline.
+		 *   bool $add_tagline
+		 *   string $seplocation : 'left' or 'right'
+		 * }
 		 */
 		$args = (array) \apply_filters( 'the_seo_framework_home_title_args', array(), $defaults );
 
@@ -1381,13 +1367,26 @@ class Generate_Title extends Generate_Description {
 	}
 
 	/**
+	 * Returns the home page tagline from option or bloginfo, when set.
+	 *
+	 * @since 3.0.4
+	 * @uses $this->get_blogdescription(), this method already trims.
+	 *
+	 * @return string The trimmed tagline.
+	 */
+	public function get_home_page_tagline() {
+		return trim( $this->get_option( 'homepage_title_tagline' ) ) ?: $this->get_blogdescription() ?: '';
+	}
+
+	/**
 	 * Determines whether to add home page tagline.
 	 *
 	 * @since 2.6.0
+	 * @since 3.0.4 Now checks for custom tagline or blogname existence.
 	 *
 	 * @return bool
 	 */
 	public function home_page_add_title_tagline() {
-		return $this->is_option_checked( 'homepage_tagline' );
+		return $this->is_option_checked( 'homepage_tagline' ) && $this->get_home_page_tagline();
 	}
 }
