@@ -471,7 +471,7 @@ class Generate_Ldjson extends Generate_Image {
 		 * Applies filter 'the_seo_framework_ld_json_breadcrumb_terms' : array
 		 * @since 2.8.0
 		 *
-		 * @param array  $terms The LD+JSON terms that are being used
+		 * @param array  $terms The candidate terms.
 		 * @param int    $post_id  The current Post ID.
 		 * @param string $taxonomy The current taxonomy (either category or product_cat).
 		 */

@@ -878,7 +878,7 @@ class Core {
 		$retg = str_pad( dechex( round( $gg ) ), 2, '0', STR_PAD_LEFT );
 		$retb = str_pad( dechex( round( $gb ) ), 2, '0', STR_PAD_LEFT );
 
-		return '#' . $retr . $retg . $retb;
+		return $retr . $retg . $retb;
 	}
 
 	/**
