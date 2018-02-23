@@ -871,15 +871,27 @@ class Admin_Pages extends Inpost {
 	}
 
 	/**
-	 * Outputs floating title HTML for JavaScript.
+	 * Outputs floating and reference title HTML elements for JavaScript.
 	 *
-	 * @since 3.0.0
+	 * @since 3.0.4
 	 */
-	public function output_floating_title_elements() {
+	public function output_js_title_elements() {
 		?>
+		<span id="tsf-title-reference" style="display:none"></span>
 		<span id="tsf-title-offset" class="hide-if-no-js"></span>
 		<span id="tsf-title-placeholder" class="hide-if-no-js"></span>
 		<span id="tsf-title-placeholder-prefix" class="hide-if-no-js"></span>
+		<?php
+	}
+
+	/**
+	 * Outputs reference description HTML elements for JavaScript.
+	 *
+	 * @since 3.0.4
+	 */
+	public function output_js_description_elements() {
+		?>
+		<span id="tsf-description-reference" style="display:none"></span>
 		<?php
 	}
 

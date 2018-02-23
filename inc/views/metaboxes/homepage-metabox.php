@@ -183,7 +183,7 @@ switch ( $instance ) :
 		</div>
 		<p id="tsf-title-wrap">
 			<input type="text" name="<?php $this->field_name( 'homepage_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title' ); ?>" placeholder="<?php echo esc_attr( $home_title_placeholder ); ?>" value="<?php echo esc_attr( $this->get_field_value( 'homepage_title' ) ); ?>" autocomplete=off />
-			<?php $this->output_floating_title_elements(); ?>
+			<?php $this->output_js_title_elements(); ?>
 		</p>
 		<?php
 		/**
@@ -239,6 +239,7 @@ switch ( $instance ) :
 		</div>
 		<p>
 			<textarea name="<?php $this->field_name( 'homepage_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $description_placeholder ); ?>"><?php echo esc_attr( $this->get_field_value( 'homepage_description' ) ); ?></textarea>
+			<?php echo $this->output_js_description_elements(); ?>
 		</p>
 		<?php
 		$this->description( __( 'The meta description can be used to determine the text used under the title on Search Engine results pages.', 'autodescription' ) );

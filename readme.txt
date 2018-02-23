@@ -3,7 +3,7 @@ Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
 Requires at least: 4.4.0
-Tested up to: 4.9.1
+Tested up to: 4.9.4
 Requires PHP: 5.3.0
 Stable tag: 3.0.3
 License: GPLv3
@@ -226,6 +226,17 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 = 3.0.4 - ??? =
 
+**Summarized:**
+
+* Over 10 bugs have been fixed, most notoriously were the pixel calculation errors and home page title errors.
+* Open Graph and Twitter custom title and description options have been added to every post, page, and CPT.
+* The automated description guidelines have been updated. We recommend enforcing these new guidelines for new pages, cornerstone pages, and the home page.
+
+**About auto-generated descriptions:**
+
+* Although the description and title lengths have been updated, the transient cache isn't invalidated.
+* Over time the cache will refresh itself, this is done automatically by WordPress, or via your caching plugin's transients handler (if applicable).
+
 **Notice for developers, a filter removal:**
 
 * The `get_the_archive_title` filter is a WordPress filter, and it's used for theming, but not for metadata.
@@ -233,22 +244,29 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * We could've "simply" stripped all HTML tags, but that would be patching rather than fixing (adding code debt).
 * So, if you've used the filter before to adjust archive titles in TSF, consider replacing it with `the_seo_framework_generated_archive_title`.
 
+**Did you know?**
+
+* ...
+
 **Detailed log:**
 
 * **Added:**
+	* Open Graph and Twitter custom title and description fields have been added to the in-post Social tab.
+	* Focus extension support, including:
+		* New hidden fields have been added for titles and descriptions which inherit the expected output.
 	* WPML translation editor support. Thanks [Vuk](https://github.com/vukvukovich)!
-	/
-	* TODO Focus extension improved support, including:
-		/
-		* TODO A new hidden field has been added for titles which inherits the expected title output.
 * **Changed:**
 	* The SEO settings now show up on every publicly queryable post type. Title and editor fields are no longer required.
+	* The Visibility and Social in-post-edit SEO settings tabs have switched places.
+	* The character counter is enabled by default again.
 * **Improved:**
 	/
 	* TODO On slow networks, the in-post SEO settings tabs are correctly switched on-load when necessary.
-	* TODO State that authorized presence options don't affect social/open graph settings.
+	* TODO It's now stated that the authorized presence options don't affect social/open graph settings. Those options are unrelated.
+	* TODO When the in-post SEO Settings meta box is placed in the sidebar, with TSFEM 1.5 (next release), the tabs no longer slowly overflow then collapses.
 * **Fixed:**
 	* The pixel counter had an calculation error of plus/minus 1~3% (estimated via Chrome 64, Windows 10), because the wrong font and weight was used.
+	* For the home page, when there's no tagline set for the site nor a tagline title tagline are set, and then the tagline additions are enabled, the correct title is used now.
 	* Some text colors in the sitemap are no longer incorrectly calculated. Your sitemap may look slightly different now.
 	* The text colors in tooltips are now correctly assigned and calculated.
 	* On IE, Edge, and Firefox, in-post navigational texts no longer align to the top on adjacent-item overflow; instead, they're now vertically centered.
@@ -257,14 +275,27 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* Auto generated term titles no longer show used HTML.
 	* In the sitemap, entries without an URL no longer occur, for any reason whatsoever.
 	* When the blog page is pending, password protected, or private, it's no longer included in the sitemap.
-	* When there's no tagline set for the site nor a tagline title tagline are set, and then the tagline additions are enabled, the correct title is used now.
 	* The SEO title placeholder no longer removes expected HTML tags when updated.
+	* The cursor on question links now defaults to pointer again.
+
+* **For translators:**
+	* **Added:**
+		* Location: In-post SEO Settings Social Tab
+			* "Open Graph Title"
+			* "Open Graph Description"
+			* "Twitter Title"
+			* "Twitter Description"
 
 * **For developers:**
+	* **Added:**
+		* Four new custom post fields:
+			* `_open_graph_title`,
+			* `_twitter_title`,
+			* `_open_graph_description`,
+			* `_twitter_description`,
 	* **Improved:**
 		* Term label name determination is now cached.
 		/
-		* TODO The title floating DOM placeholders are now emptied correctly when the input field is emptied.
 		* On-AJAX filter adjustment for `"manage_{$screen->id}_columns"`, with callback method `the_seo_framework()->add_column()`, now uses action `10` instead of `1` to be in par with the non-AJAX version.
 			* This means the bar won't suddenly appear on AJAX when it should've been filtered out on non-AJAX.
 	* **Changed:**
@@ -275,6 +306,18 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* With this, the calling names have been adjusted on terms:
 				1. Method `seo_bar_ajax` has been exchanged for `get_taxonomy_seo_bar_ajax`.
 				2. Method `seo_bar` has been exchanged for `get_taxonomy_seo_bar`.
+	* **Method notes:**
+		* **Added:**
+			* `get_open_graph_title()`
+			* `get_open_graph_description()`
+			* `get_generated_open_graph_description()`
+			* `get_twitter_title()`
+			* `get_twitter_description()`
+			* `get_generated_twitter_description()`
+			* `output_js_title_elements()`
+			* `output_js_description_elements()`
+		* **Removed:**
+			* `output_floating_title_elements()`, use `output_js_title_elements()` instead.
 	* **Filter notes:**
 		* **Added:**
 			/
@@ -289,6 +332,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* **Removed:**
 			* WordPress Core filter `get_the_archive_title` is no longer used.
 				* Use `the_seo_framework_generated_archive_title` instead.
+	* **Legal:**
+		* Copyright years have been increased from 2017 to 2018.
 
 = 3.0.3 - Diligence =
 

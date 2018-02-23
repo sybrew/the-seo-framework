@@ -1039,6 +1039,8 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * Description Length notices.
 	 *
 	 * @since 2.6.0
+	 * @since 3.0.4 : 1. Threshold "too long" has been increased from 155 to 300.
+	 *                2. Threshold "far too long" has been increased to 330 from 175.
 	 *
 	 * @param int $desc_len The Title length
 	 * @param string $class The current color class.
@@ -1064,12 +1066,12 @@ class Doing_It_Right extends Generate_Ldjson {
 
 			// Don't make it okay if it's already bad.
 			$class = $bad === $class ? $class : $okay;
-		} elseif ( $desc_len > 155 && $desc_len < 175 ) {
+		} elseif ( $desc_len > 300 && $desc_len < 330 ) {
 			$notice = $i18n['length_too_long'];
 
 			// Don't make it okay if it's already bad.
 			$class = $bad === $class ? $class : $okay;
-		} elseif ( $desc_len >= 175 ) {
+		} elseif ( $desc_len >= 330 ) {
 			$notice = $i18n['length_far_too_long'];
 			$class = $bad;
 		} else {

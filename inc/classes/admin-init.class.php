@@ -212,6 +212,7 @@ class Admin_Init extends Init {
 	 *              3. Removed unused caching.
 	 *              4. Added dynamic output control.
 	 * @since 2.9.0 Added boolean $returnValue['states']['isSettingsPage']
+	 * @since 3.0.4 `descPixelGuideline` has been increased from "920 and 820" to "1820 and 1720" respectively.
 	 *
 	 * @return array $strings The l10n strings.
 	 */
@@ -369,7 +370,7 @@ class Admin_Init extends Init {
 				'descriptionSeparator' => $description_separator,
 				'titleLocation' => $title_location,
 				'titlePixelGuideline' => 600,
-				'descPixelGuideline' => $is_post_edit ? ( $this->is_page() ? 920 : 820 ) : 920,
+				'descPixelGuideline' => $is_post_edit ? ( $this->is_page() ? 1820 : 1720 ) : 1820,
 			),
 			'other' => $this->additional_js_l10n( null, array(), true ),
 		);

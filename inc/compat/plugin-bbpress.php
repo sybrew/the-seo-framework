@@ -144,6 +144,7 @@ function _bbpress_filter_url_path( $path, $id = 0, $external = false ) {
  * This function fixes the Excerpt part.
  *
  * @since 2.9.0
+ * @since 3.0.4 : Default value for $max_char_length has been increased from 155 to 300.
  * @access private
  *
  * @param string $excerpt The excerpt to use.
@@ -152,7 +153,7 @@ function _bbpress_filter_url_path( $path, $id = 0, $external = false ) {
  * @param int $max_char_length Determines the maximum length of excerpt after trimming.
  * @return string The excerpt.
  */
-function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $term = '', $max_char_length = 155 ) {
+function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $term = '', $max_char_length = 300 ) {
 
 	if ( \is_bbpress() ) {
 		if ( \bbp_is_topic_tag() ) {

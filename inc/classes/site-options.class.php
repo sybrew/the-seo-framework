@@ -122,7 +122,7 @@ class Site_Options extends Sanitize {
 			'display_seo_bar_metabox' => 0, // SEO Bar post SEO Settings.
 
 			'display_pixel_counter'     => 1, // Pixel counter.
-			'display_character_counter' => 0, // Character counter.
+			'display_character_counter' => 1, // Character counter.
 
 			// General. Canonical.
 			'canonical_scheme' => 'automatic', // Canonical URL scheme.

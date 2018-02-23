@@ -5,5 +5,9 @@
     <custom-field action="translate">_social_image_url</custom-field>
     <custom-field action="translate">_genesis_canonical_uri</custom-field>
     <custom-field action="translate">redirect</custom-field>
+    <custom-field action="translate">_open_graph_title</custom-field>
+    <custom-field action="translate">_twitter_title</custom-field>
+    <custom-field action="translate">_open_graph_description</custom-field>
+    <custom-field action="translate">_twitter_description</custom-field>
   </custom-fields>
 </wpml-config>

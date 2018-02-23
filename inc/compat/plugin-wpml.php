@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) and $_this = \the_seo_framework_class() and $this instanceo
 
 \add_action( 'current_screen', __NAMESPACE__ . '\\_wpml_do_current_screen_action' );
 /**
- * Adds WPML filters only on SEO plugin page.
+ * Adds WPML filters based on current screen.
  *
  * @since 2.8.0
  * @access private

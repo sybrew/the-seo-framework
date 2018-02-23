@@ -418,7 +418,9 @@ class Inpost extends Profile {
 	 * Do not use. It will take a little too much time to perfect this.
 	 *
 	 * @since 2.9.0
+	 * @since 3.0.4 Added caching.
 	 * @access private
+	 * @staticvar $cache
 	 * @ignore
 	 * @todo Remove and refactor caller.
 	 *
@@ -426,8 +428,19 @@ class Inpost extends Profile {
 	 * @param string $doctitle_placeholder. Passed by reference.
 	 * @param string $desc_len_parsed. Passed by reference.
 	 * @param string $description_placeholder. Passed by reference.
+	 * @return void
 	 */
 	public function _get_inpost_general_tab_vars( &$tit_len_parsed, &$doctitle_placeholder, &$desc_len_parsed, &$description_placeholder ) {
+
+		static $cache = array();
+
+		if ( ! empty( $cache ) ) {
+			//! Overwrites variables passed by reference via variable variables.
+			foreach ( $cache as $k => $v ) {
+				$$k = $v;
+			}
+			return;
+		}
 
 		$post_id = $this->get_the_real_ID();
 		$is_static_frontpage = $this->is_static_frontpage( $post_id );
@@ -551,5 +564,7 @@ class Inpost extends Profile {
 		 */
 		$doctitle_placeholder = $generated_doctitle;
 		$description_placeholder = $generated_description;
+
+		$cache = compact( 'tit_len_parsed', 'doctitle_placeholder', 'desc_len_parsed', 'description_placeholder' );
 	}
 }

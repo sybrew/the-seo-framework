@@ -230,7 +230,8 @@ class Render extends Admin_Init {
 	 * Renders og:description meta tag
 	 *
 	 * @since 1.3.0
-	 * @uses $this->description_from_cache()
+	 * @since 3.0.4 No longer uses $this->description_from_cache()
+	 * @uses $this->get_open_graph_title()
 	 *
 	 * @return string The Open Graph description meta tag.
 	 */
@@ -244,7 +245,7 @@ class Render extends Admin_Init {
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
 		 */
-		$description = (string) \apply_filters( 'the_seo_framework_ogdescription_output', $this->description_from_cache( true ), $this->get_the_real_ID() );
+		$description = (string) \apply_filters( 'the_seo_framework_ogdescription_output', $this->get_open_graph_description(), $this->get_the_real_ID() );
 
 		if ( $description )
 			return '<meta property="og:description" content="' . \esc_attr( $description ) . '" />' . "\r\n";
@@ -280,8 +281,9 @@ class Render extends Admin_Init {
 	/**
 	 * Renders the Open Graph title meta tag.
 	 *
-	 * @uses $this->title_from_cache()
 	 * @since 2.0.3
+	 * @since 3.0.4 No longer uses $this->title_from_cache()
+	 * @uses $this->get_open_graph_title()
 	 *
 	 * @return string The Open Graph title meta tag.
 	 */
@@ -295,7 +297,7 @@ class Render extends Admin_Init {
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
 		 */
-		$title = (string) \apply_filters( 'the_seo_framework_ogtitle_output', $this->title_from_cache( '', '', '', true ), $this->get_the_real_ID() );
+		$title = (string) \apply_filters( 'the_seo_framework_ogtitle_output', $this->get_open_graph_title(), $this->get_the_real_ID() );
 
 		if ( $title )
 			return '<meta property="og:title" content="' . \esc_attr( $title ) . '" />' . "\r\n";
@@ -567,8 +569,9 @@ class Render extends Admin_Init {
 	/**
 	 * Renders Twitter Title meta tag.
 	 *
-	 * @uses $this->title_from_cache()
+	 * @uses $this->get_twitter_title()
 	 * @since 2.2.2
+	 * @since 3.0.4 No longer uses $this->title_from_cache()
 	 *
 	 * @return string The Twitter Title meta tag.
 	 */
@@ -582,7 +585,7 @@ class Render extends Admin_Init {
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
 		 */
-		$title = (string) \apply_filters( 'the_seo_framework_twittertitle_output', $this->title_from_cache( '', '', '', true ), $this->get_the_real_ID() );
+		$title = (string) \apply_filters( 'the_seo_framework_twittertitle_output', $this->get_twitter_title(), $this->get_the_real_ID() );
 
 		if ( $title )
 			return '<meta name="twitter:title" content="' . \esc_attr( $title ) . '" />' . "\r\n";
@@ -593,8 +596,9 @@ class Render extends Admin_Init {
 	/**
 	 * Renders Twitter Description meta tag.
 	 *
-	 * @uses $this->description_from_cache()
 	 * @since 2.2.2
+	 * @since 3.0.4 No longer uses $this->description_from_cache()
+	 * @uses $this->get_twitter_description()
 	 *
 	 * @return string The Twitter Descritpion meta tag.
 	 */
@@ -608,7 +612,7 @@ class Render extends Admin_Init {
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
 		 */
-		$description = (string) \apply_filters( 'the_seo_framework_twitterdescription_output', $this->description_from_cache( true ), $this->get_the_real_ID() );
+		$description = (string) \apply_filters( 'the_seo_framework_twitterdescription_output', $this->get_twitter_description(), $this->get_the_real_ID() );
 
 		if ( $description )
 			return '<meta name="twitter:description" content="' . \esc_attr( $description ) . '" />' . "\r\n";
@@ -1159,7 +1163,7 @@ class Render extends Admin_Init {
 	}
 
 	/**
-	 * Determines whether we can use Open Graph tags.
+	 * Determines whether we can use Open Graph tags on the front-end.
 	 *
 	 * @since 2.6.0
 	 * @staticvar bool $cache
@@ -1177,7 +1181,7 @@ class Render extends Admin_Init {
 	}
 
 	/**
-	 * Determines whether we can use Facebook tags.
+	 * Determines whether we can use Facebook tags on the front-end.
 	 *
 	 * @since 2.6.0
 	 * @staticvar bool $cache
@@ -1195,7 +1199,7 @@ class Render extends Admin_Init {
 	}
 
 	/**
-	 * Determines whether we can use Twitter tags.
+	 * Determines whether we can use Twitter tags on the front-end.
 	 *
 	 * @since 2.6.0
 	 * @since 2.8.2 : Now also considers Twitter card type output.
@@ -1214,7 +1218,7 @@ class Render extends Admin_Init {
 	}
 
 	/**
-	 * Determines whether we can use Google+ tags.
+	 * Determines whether we can use Google+ tags on the front-end.
 	 *
 	 * @since 2.6.0
 	 * @staticvar bool $cache

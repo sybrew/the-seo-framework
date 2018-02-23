@@ -132,7 +132,7 @@ $robots_settings = array(
 			<td>
 				<div id="tsf-title-wrap">
 					<input name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" type="text" placeholder="<?php echo esc_attr( $title_placeholder ); ?>" value="<?php echo esc_attr( $title ); ?>" size="40" autocomplete=off />
-					<?php $this->output_floating_title_elements(); ?>
+					<?php $this->output_js_title_elements(); ?>
 				</div>
 			</td>
 		</tr>
@@ -156,6 +156,7 @@ $robots_settings = array(
 			</th>
 			<td>
 				<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="5" cols="50" class="large-text"><?php echo esc_html( $description ); ?></textarea>
+				<?php echo $this->output_js_description_elements(); ?>
 			</td>
 		</tr>
 

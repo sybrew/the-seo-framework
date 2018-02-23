@@ -412,7 +412,7 @@ body.no-js .tsf-seo-bar-item {
 }
 
 a.tsf-tooltip-item {
-	cursor: auto;
+	cursor: pointer;
 }
 
 .tsf-tooltip {

@@ -98,17 +98,21 @@ class Post_Data extends Detect {
 			return;
 
 		$defaults = array(
-			'_genesis_title'         => '',
-			'_genesis_description'   => '',
-			'_genesis_canonical_uri' => '',
-			'redirect'               => '', // Will be displayed in custom fields when set...
-			'_social_image_url'      => '',
-			'_social_image_id'       => 0,
-			'_genesis_noindex'       => 0,
-			'_genesis_nofollow'      => 0,
-			'_genesis_noarchive'     => 0,
-			'exclude_local_search'   => 0, // Will be displayed in custom fields when set...
-			'exclude_from_archive'   => 0, // Will be displayed in custom fields when set...
+			'_genesis_title'          => '',
+			'_genesis_description'    => '',
+			'_genesis_canonical_uri'  => '',
+			'redirect'                => '', // Will be displayed in custom fields when set...
+			'_social_image_url'       => '',
+			'_social_image_id'        => 0,
+			'_genesis_noindex'        => 0,
+			'_genesis_nofollow'       => 0,
+			'_genesis_noarchive'      => 0,
+			'exclude_local_search'    => 0, // Will be displayed in custom fields when set...
+			'exclude_from_archive'    => 0, // Will be displayed in custom fields when set...
+			'_open_graph_title'       => '',
+			'_open_graph_description' => '',
+			'_twitter_title'          => '',
+			'_twitter_description'    => '',
 		);
 
 		/**
@@ -120,10 +124,14 @@ class Post_Data extends Detect {
 		foreach ( (array) $data as $key => $value ) :
 			switch ( $key ) :
 				case '_genesis_title' :
+				case '_open_graph_title' :
+				case '_twitter_title' :
 					$data[ $key ] = $this->s_title_raw( $value );
 					continue 2;
 
 				case '_genesis_description' :
+				case '_open_graph_description' :
+				case '_twitter_description' :
 					$data[ $key ] = $this->s_description_raw( $value );
 					continue 2;
 
