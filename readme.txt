@@ -264,10 +264,17 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* **Improved:**
 		* Term label name determination is now cached.
 		/
-		* TODO The title floating DOM placeholders now empty correctly when the input field is emptied.
+		* TODO The title floating DOM placeholders are now emptied correctly when the input field is emptied.
+		* On-AJAX filter adjustment for `"manage_{$screen->id}_columns"`, with callback method `the_seo_framework()->add_column()`, now uses action `10` instead of `1` to be in par with the non-AJAX version.
+			* This means the bar won't suddenly appear on AJAX when it should've been filtered out on non-AJAX.
 	* **Changed:**
 		* Post types no longer check for `autodescription-meta` support.
 			* Instead, they now completely rely on filter `the_seo_framework_custom_post_type_support`.
+	* **Fixed:**
+		* `manage_{$this->screen->taxonomy}_custom_column` is a filter, not an action. This didn't really matter, as it's called on output (sequentially: print bar, print empty).
+			* With this, the calling names have been adjusted on terms:
+				1. Method `seo_bar_ajax` has been exchanged for `get_taxonomy_seo_bar_ajax`.
+				2. Method `seo_bar` has been exchanged for `get_taxonomy_seo_bar`.
 	* **Filter notes:**
 		* **Added:**
 			/

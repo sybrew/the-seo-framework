@@ -207,7 +207,7 @@ class Doing_It_Right extends Generate_Ldjson {
 
 				if ( $id ) {
 					//* Everything but inline-save-tax action.
-					\add_filter( 'manage_' . $id . '_columns', array( $this, 'add_column' ), 1 );
+					\add_filter( 'manage_' . $id . '_columns', array( $this, 'add_column' ), 10, 1 );
 
 					/**
 					 * Always load pages and posts.
@@ -217,11 +217,11 @@ class Doing_It_Right extends Generate_Ldjson {
 					\add_action( 'manage_pages_custom_column', array( $this, 'seo_bar_ajax' ), 1, 3 );
 				} elseif ( $taxonomy ) {
 					//* Action: inline-save-tax does not POST screen.
-					\add_filter( 'manage_edit-' . $taxonomy . '_columns', array( $this, 'add_column' ), 1 );
+					\add_filter( 'manage_edit-' . $taxonomy . '_columns', array( $this, 'add_column' ), 1, 1 );
 				}
 
 				if ( $taxonomy )
-					\add_action( 'manage_' . $taxonomy . '_custom_column', array( $this, 'seo_bar_ajax' ), 1, 3 );
+					\add_filter( 'manage_' . $taxonomy . '_custom_column', array( $this, 'get_taxonomy_seo_bar_ajax' ), 1, 3 );
 
 			} else {
 				$id = isset( $screen->id ) ? $screen->id : '';
@@ -232,7 +232,7 @@ class Doing_It_Right extends Generate_Ldjson {
 					$taxonomy = isset( $screen->taxonomy ) ? $screen->taxonomy : '';
 
 					if ( $taxonomy )
-						\add_action( 'manage_' . $taxonomy . '_custom_column', array( $this, 'seo_bar' ), 1, 3 );
+						\add_filter( 'manage_' . $taxonomy . '_custom_column', array( $this, 'get_taxonomy_seo_bar' ), 1, 3 );
 
 					/**
 					 * Always load pages and posts.
@@ -306,7 +306,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	}
 
 	/**
-	 * Echo's the SEO Bar.
+	 * Echos the SEO Bar.
 	 *
 	 * @since 2.6.0
 	 * @staticvar string $type
@@ -316,6 +316,34 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @param string $tax_id this is empty         : If it's a taxonomy, this is the taxonomy id
 	 */
 	public function seo_bar( $column, $post_id, $tax_id = '' ) {
+		echo $this->get_seo_bar( $column, $post_id, $tax_id );
+	}
+
+	/**
+	 * Returns the SEO Bar for taxonomies.
+	 *
+	 * @since 3.0.4
+	 * @staticvar string $type
+	 *
+	 * @param string $string      The current column string.
+	 * @param string $column_name Name of the column.
+	 * @param string $term_id     Term ID.
+	 */
+	public function get_taxonomy_seo_bar( $string, $column_name, $term_id ) {
+		return $string . $this->get_seo_bar( '', $column_name, $term_id );
+	}
+
+	/**
+	 * Returns the SEO Bar.
+	 *
+	 * @since 3.0.4
+	 * @staticvar string $type
+	 *
+	 * @param string $column the current column    : If it's a taxonomy, this is empty
+	 * @param int $post_id the post id             : If it's a taxonomy, this is the column name
+	 * @param string $tax_id this is empty         : If it's a taxonomy, this is the taxonomy id
+	 */
+	public function get_seo_bar( $column, $post_id, $tax_id = '' ) {
 
 		static $type = null;
 
@@ -340,12 +368,13 @@ class Doing_It_Right extends Generate_Ldjson {
 		}
 
 		if ( 'tsf-seo-bar-wrap' === $column )
-			$this->post_status( $post_id, $type, true );
+			return $this->post_status( $post_id, $type );
 
+		return '';
 	}
 
 	/**
-	 * Echo's the SEO column in edit screens on Ajax call.
+	 * Echos the SEO column in edit screens on AJAX.
 	 *
 	 * @since 2.1.9
 	 *
@@ -354,6 +383,33 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @param string $tax_id this is empty      : If it's a taxonomy, this is the taxonomy id
 	 */
 	public function seo_bar_ajax( $column, $post_id, $tax_id = '' ) {
+		echo $this->get_seo_bar_ajax( $column, $post_id, $tax_id );
+	}
+
+	/**
+	 * Returns the SEO Bar for taxonomies on AJAX.
+	 *
+	 * @since 3.0.4
+	 * @staticvar string $type
+	 *
+	 * @param string $string      The current column string.
+	 * @param string $column_name Name of the column.
+	 * @param string $term_id     Term ID.
+	 */
+	public function get_taxonomy_seo_bar_ajax( $string, $column_name, $term_id ) {
+		return $string . $this->get_seo_bar_ajax( '', $column_name, $term_id );
+	}
+
+	/**
+	 * Returns the SEO column in edit screens on AJAX.
+	 *
+	 * @since 3.0.4
+	 *
+	 * @param string $column the current column : If it's a taxonomy, this is empty
+	 * @param int $post_id the post id          : If it's a taxonomy, this is the column name
+	 * @param string $tax_id this is empty      : If it's a taxonomy, this is the taxonomy id
+	 */
+	public function get_seo_bar_ajax( $column, $post_id, $tax_id = '' ) {
 
 		$is_term = false;
 
@@ -372,8 +428,10 @@ class Doing_It_Right extends Generate_Ldjson {
 
 			$ajax_id = $column . $post_id;
 
-			$this->post_status_special( $context, '?', 'unknown', $is_term, $ajax_id, true );
+			return $this->post_status_special( $context, '?', 'unknown', $is_term, $ajax_id );
 		}
+
+		return '';
 	}
 
 	/**
