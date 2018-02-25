@@ -183,6 +183,7 @@ switch ( $instance ) :
 		<?php
 		$this->description( __( "Don't have a page at a site or is the profile only privately accessible? Leave that field empty. Unsure? Fill it in anyway.", 'autodescription' ) );
 		$this->description( __( 'Add the link that leads directly to the social page of this website.', 'autodescription' ) );
+		$this->description( __( 'These settings do not affect sharing behavior with the social networks.', 'autodescription' ) );
 
 		$connectedi18n = _x( 'RelatedProfile', 'No spaces. E.g. https://facebook.com/RelatedProfile', 'autodescription' );
 		$profile18n = _x( 'Profile', 'Social Profile', 'autodescription' );

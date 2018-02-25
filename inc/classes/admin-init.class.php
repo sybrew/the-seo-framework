@@ -207,10 +207,10 @@ class Admin_Init extends Init {
 	 * @since 2.6.0
 	 * @staticvar array $strings : The l10n strings.
 	 * @since 2.7.0 Added AJAX nonce: 'autodescription-ajax-nonce'
-	 * @since 2.8.0 1. Added input detection: 'hasInput'
-	 *              2. Reworked output.
-	 *              3. Removed unused caching.
-	 *              4. Added dynamic output control.
+	 * @since 2.8.0 1 : Added input detection: 'hasInput'
+	 *              2 : Reworked output.
+	 *              3 : Removed unused caching.
+	 *              4 : Added dynamic output control.
 	 * @since 2.9.0 Added boolean $returnValue['states']['isSettingsPage']
 	 * @since 3.0.4 `descPixelGuideline` has been increased from "920 and 820" to "1820 and 1720" respectively.
 	 *

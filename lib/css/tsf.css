@@ -864,11 +864,12 @@ input[type="radio"].tsf-flex-nav-tab-radio {
 	/* IE11 fix */
 	-webkit-flex: 1 1 100%;
 	flex: 1 1 100%;
-	/* Firefox fix, don't use overflow:hidden because that could cause more issues. */
+	/* Firefox fix */
 	-webkit-flex-wrap: nowrap;
 	-ms-flex-wrap: nowrap;
 	flex-wrap: nowrap;
 	max-width: 100%;
+	overflow: hidden;
 }
 
 .tsf-flex-nav-tab-inner {

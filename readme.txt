@@ -237,11 +237,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 * Although the description and title lengths have been updated, the transient cache isn't invalidated.
 * Over time the cache will refresh itself, this is done automatically by WordPress, or via your caching plugin's transients handler (if applicable).
 
-**Notice for developers, a filter removal:**
+**Notice for developers, a filter change:**
 
 * The `get_the_archive_title` filter is a WordPress filter, and it's used for theming, but not for metadata.
-* Because it's used for theming, it may expect HTML. Therefore, this is something TSF shouldn't use, yet we did.
-* We could've "simply" stripped all HTML tags, but that would be patching rather than fixing (adding code debt).
+* Because it's used for theming, it may expect HTML. Therefore, this is something TSF shouldn't use, yet it did.
+* We could've "simply" stripped all HTML tags, but that would break instances where tags are expected to be shown as-is.
 * So, if you've used the filter before to adjust archive titles in TSF, consider replacing it with `the_seo_framework_generated_archive_title`.
 
 **Did you know?**
@@ -251,7 +251,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 **Detailed log:**
 
 * **Added:**
-	* Open Graph and Twitter custom title and description fields have been added to the in-post Social tab.
+	* For Open Graph and Twitter, custom title and description fields have been added to the in-post Social tab.
+		* The social titles, when filled in, will exclude additions (like the site name) automatically.
+		* Twitter, by default, uses what Open Graph uses.
+		* Open Graph, by default, uses the fallback social meta.
 	* Focus extension support, including:
 		* New hidden fields have been added for titles and descriptions which inherit the expected output.
 	* WPML translation editor support. Thanks [Vuk](https://github.com/vukvukovich)!
@@ -260,10 +263,10 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* The Visibility and Social in-post-edit SEO settings tabs have switched places.
 	* The character counter is enabled by default again.
 * **Improved:**
-	/
-	* TODO On slow networks, the in-post SEO settings tabs are correctly switched on-load when necessary.
-	* TODO It's now stated that the authorized presence options don't affect social/open graph settings. Those options are unrelated.
-	* TODO When the in-post SEO Settings meta box is placed in the sidebar, with TSFEM 1.5 (next release), the tabs no longer slowly overflow then collapses.
+	* The in-post SEO settings tabs are correctly switched on-load when necessary, improving UX on slow networks.
+	* It's now stated that the authorized presence options don't affect social/open graph settings. Those options are unrelated.
+	* When the in-post SEO Settings meta box is placed in the sidebar, with TSFEM 1.5 (next release), the tabs no longer overflow the page before the page is loaded, causing unnecessary painting reflows.
+	* When the blog page is pending, password protected, or private, it's no longer included in the sitemap.
 * **Fixed:**
 	* The pixel counter had an calculation error of plus/minus 1~3% (estimated via Chrome 64, Windows 10), because the wrong font and weight was used.
 	* For the home page, when there's no tagline set for the site nor a tagline title tagline are set, and then the tagline additions are enabled, the correct title is used now.
@@ -274,9 +277,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* This didn't affect the output logic, so without debugging there we no issues.
 	* Auto generated term titles no longer show used HTML.
 	* In the sitemap, entries without an URL no longer occur, for any reason whatsoever.
-	* When the blog page is pending, password protected, or private, it's no longer included in the sitemap.
 	* The SEO title placeholder no longer removes expected HTML tags when updated.
-	* The cursor on question links now defaults to pointer again.
+	* The cursor on question links now defaults to pointer again, instead of the wrapper's.
 
 * **For translators:**
 	* **Added:**
@@ -285,6 +287,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* "Open Graph Description"
 			* "Twitter Title"
 			* "Twitter Description"
+		* Location: SEO Settings -> Schema Settings -> Presence Tab
+			* "These settings do not affect sharing behavior with the social networks."
 
 * **For developers:**
 	* **Added:**
@@ -295,7 +299,6 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 			* `_twitter_description`,
 	* **Improved:**
 		* Term label name determination is now cached.
-		/
 		* On-AJAX filter adjustment for `"manage_{$screen->id}_columns"`, with callback method `the_seo_framework()->add_column()`, now uses action `10` instead of `1` to be in par with the non-AJAX version.
 			* This means the bar won't suddenly appear on AJAX when it should've been filtered out on non-AJAX.
 	* **Changed:**
@@ -322,7 +325,8 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 		* **Added:**
 			/
 			* TODO <https://wordpress.org/support/topic/set-the-primary-category/>
-			* `(string) the_seo_framework_generated_archive_title`
+			* `(bool) the_seo_framework_show_primary_term_selection`, this allows you to disable the primary term selection fields.
+			* `(string) the_seo_framework_generated_archive_title`, this allows you to change the auto-generated archive title.
 		* **Changed:**
 			* `(array) the_seo_framework_admin_color_css` now has an extra parameter, passing the used scheme colors.
 			* `(array) the_seo_framework_custom_post_type_support` default parameter is now `[]`, instead of `[ 'title', 'editor' ]`.
