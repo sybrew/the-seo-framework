@@ -279,6 +279,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 	* In the sitemap, entries without an URL no longer occur, for any reason whatsoever.
 	* The SEO title placeholder no longer removes expected HTML tags when updated.
 	* The cursor on question links now defaults to pointer again, instead of the wrapper's.
+	* When the term selection box is closed on load, no more JS errors occur when correcting the primary term selection's helper position.
 
 * **For translators:**
 	* **Added:**
