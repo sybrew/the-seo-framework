@@ -486,7 +486,7 @@ class Inpost extends Profile {
 			);
 		}
 		$generated_doctitle = $this->title( '', '', '', $generated_doctitle_args );
-		$generated_description = $this->generate_description_from_id( $generated_description_args );
+		$generated_description = $this->generate_description( '', $generated_description_args );
 
 		/**
 		 * Start Title vars
