@@ -5,7 +5,7 @@ Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
 Requires at least: 4.4.0
 Tested up to: 4.9.4
 Requires PHP: 5.3.0
-Stable tag: 3.0.3
+Stable tag: 3.0.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -117,7 +117,7 @@ A caching plugin isn't even needed for this plugin as you won't notice a differe
 * Right to Left (RTL) languages, through its interface and generation.
 * Extended color vision deficiency accessibility.
 * Screen reader accessibility.
-* MultiSite, this plugin is in fact built upon one.
+* Multisite, this plugin is in fact built upon one.
 * Detection of robots.txt and sitemap.xml files.
 * Both up-to-date and outdated themes.
 * Detection of various other popular SEO tools to prevent duplicated output.
@@ -188,7 +188,7 @@ We'll try to get back to you within 72 hours. :)
 
 = I am a developer; how can I help? =
 
-Any input is greatly appreciated and everything will be considered.
+Any input is greatly appreciated, and everything will be considered.
 Please visit the [GitHub project page](https://github.com/sybrew/the-seo-framework) to submit issues or even pull requests.
 
 = I want to modify how this plugin works =
@@ -222,7 +222,7 @@ This is also referred to as "Structured Data".
 
 All The SEO Framework's metadata is put into Object cache when a caching plugin is available.
 The descriptions and Schema.org scripts are put into Transients.
-Please be sure to clear your cache, or adjust the plugin's caching settings if deemed necessary.
+Please be sure to clear your cache or adjust the plugin's caching settings if deemed necessary.
 
 = I want to transport SEO data from other plugins to The SEO Framework, how do I do this? =
 
@@ -232,6 +232,10 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 == Changelog ==
 
 = 3.0.4 - Illustrious =
+
+**Release date:**
+
+* February 25th, 2017
 
 **Did you know?**
 
@@ -245,7 +249,6 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 * Open Graph and Twitter custom title and description options have been added to every post, page, and CPT.
 * The description character count and pixel length guidelines have been updated.
 * All publicly queryable CPT posts and pages now support SEO settings and are included in the sitemap. No more messing with filters is needed.
-* If you find posts in the sitemap that shouldn't be there, please refer to [our renewed FAQ](https://wordpress.org/plugins/autodescription/#faq).
 
 **About the new description guidelines:**
 
@@ -254,108 +257,19 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 * Although the description lengths have been updated, the transient cache isn't invalidated.
 * Over time the cache will refresh itself, this is done automatically by WordPress, or via your caching plugin's transients handler (if applicable).
 
-**About the social input:**
+**About the social meta input:**
 
 * There are new Open Graph and Twitter inputs in the SEO Settings.
 * The Twitter settings, when left empty, will use the Open Graph output.
 * The Open Graph settings, when left empty, will use the SEO meta output.
 * As always, auto-generated Open Graph and Twitter descriptions won't use prefixes.
 
-**For developers, a filter change:**
+**Found unwanted links in the sitemap?**
 
-* The `get_the_archive_title` filter is a WordPress filter, and it's used for theming, but not for metadata.
-* Because it's used for theming, it may expect HTML. Therefore, this is something TSF shouldn't use, yet it did.
-* We could've "simply" stripped all HTML tags, but that would break instances where tags are expected to be shown as-is.
-* So, if you've used the filter before to adjust archive titles in TSF, consider replacing it with `the_seo_framework_generated_archive_title`.
+* If you find posts in the sitemap that shouldn't be there, please refer to [our renewed FAQ](https://wordpress.org/plugins/autodescription/#faq).
+* The FAQ entry title is "The sitemap contains unwanted links".
 
-**Detailed log:**
-
-* **Added:**
-	* For Open Graph and Twitter, custom title and description fields have been added to the in-post Social tab.
-		* The social titles, when filled in, will exclude additions (like the site name) automatically.
-		* Twitter, by default, uses what Open Graph uses.
-		* Open Graph, by default, uses the fallback social meta.
-	* Focus extension support, including:
-		* New hidden fields have been added for titles and descriptions which inherit the expected output.
-	* WPML translation editor support. Thanks [Vuk](https://github.com/vukvukovich)!
-* **Changed:**
-	* The SEO settings now show up on every publicly queryable post type. Title and editor fields are no longer required.
-	* The Visibility and Social in-post-edit SEO settings tabs have switched places.
-	* The character counter is enabled by default again.
-* **Improved:**
-	* The in-post SEO settings tabs are correctly switched on-load when necessary, improving UX on slow networks.
-	* It's now stated that the authorized presence options don't affect social/open graph settings. Those options are unrelated.
-	* When the in-post SEO Settings meta box is placed in the sidebar, with TSFEM 1.5 (next release), the tabs no longer overflow the page before the page is loaded, causing unnecessary painting reflows.
-	* When the blog page is pending, password protected, or private, it's no longer included in the sitemap.
-* **Fixed:**
-	* The pixel counter had an calculation error of plus/minus 1~3% (estimated via Chrome 64, Windows 10), because the wrong font and weight was used.
-	* For the home page, when there's no tagline set for the site nor a tagline title tagline are set, and then the tagline additions are enabled, the correct title is used now.
-	* Some text colors in the sitemap are no longer incorrectly calculated. Your sitemap may look slightly different now.
-	* The text colors in tooltips are now correctly assigned and calculated.
-	* On IE, Edge, and Firefox, in-post navigational texts no longer align to the top on adjacent-item overflow; instead, they're now vertically centered.
-	* When the sitemap `lastmod` option is disabled, no more PHP notices will appear when debugging is enabled.
-		* This didn't affect the output logic, so without debugging there we no issues.
-	* Auto generated term titles no longer show used HTML.
-	* In the sitemap, entries without an URL no longer occur, for any reason whatsoever.
-	* The SEO title placeholder no longer removes expected HTML tags when updated.
-	* The cursor on question links now defaults to pointer again, instead of the wrapper's.
-	* When the term selection box is closed on load, no more JS errors occur when correcting the primary term selection's helper position.
-
-* **For translators:**
-	* **Added:**
-		* Location: In-post SEO Settings Social Tab
-			* "Open Graph Title"
-			* "Open Graph Description"
-			* "Twitter Title"
-			* "Twitter Description"
-		* Location: SEO Settings -> Schema Settings -> Presence Tab
-			* "These settings do not affect sharing behavior with the social networks."
-
-* **For developers:**
-	* **Added:**
-		* Four new custom post fields:
-			* `_open_graph_title`,
-			* `_twitter_title`,
-			* `_open_graph_description`,
-			* `_twitter_description`,
-	* **Improved:**
-		* Term label name determination is now cached.
-		* On-AJAX filter adjustment for `"manage_{$screen->id}_columns"`, with callback method `the_seo_framework()->add_column()`, now uses action `10` instead of `1` to be in par with the non-AJAX version.
-			* This means the bar won't suddenly appear on AJAX when it should've been filtered out on non-AJAX.
-	* **Changed:**
-		* Post types no longer check for `autodescription-meta` support.
-			* Instead, they now completely rely on filter `the_seo_framework_custom_post_type_support`.
-	* **Fixed:**
-		* `manage_{$this->screen->taxonomy}_custom_column` is a filter, not an action. This didn't really matter, as it's called on output (sequentially: print bar, print empty).
-			* With this, the calling names have been adjusted on terms:
-				1. Method `seo_bar_ajax` has been exchanged for `get_taxonomy_seo_bar_ajax`.
-				2. Method `seo_bar` has been exchanged for `get_taxonomy_seo_bar`.
-	* **Method notes:**
-		* **Added:**
-			* `get_open_graph_title()`
-			* `get_open_graph_description()`
-			* `get_generated_open_graph_description()`
-			* `get_twitter_title()`
-			* `get_twitter_description()`
-			* `get_generated_twitter_description()`
-			* `output_js_title_elements()`
-			* `output_js_description_elements()`
-		* **Removed:**
-			* `output_floating_title_elements()`, use `output_js_title_elements()` instead.
-	* **Filter notes:**
-		* **Added:**
-			* `(bool) the_seo_framework_show_primary_term_selection`, this allows you to disable the primary term selection fields.
-			* `(string) the_seo_framework_generated_archive_title`, this allows you to change the auto-generated archive title.
-		* **Changed:**
-			* `(array) the_seo_framework_admin_color_css` now has an extra parameter, passing the used scheme colors.
-			* `(array) the_seo_framework_custom_post_type_support` default parameter is now `[]`, instead of `[ 'title', 'editor' ]`.
-		* **Fixed:**
-			* `(string) the_seo_framework_generated_description` now shows its presence in the admin fields.
-		* **Removed:**
-			* WordPress Core filter `get_the_archive_title` is no longer used.
-				* Use `the_seo_framework_generated_archive_title` instead.
-	* **Legal:**
-		* Copyright years have been increased from 2017 to 2018.
+[View the detailed log](https://theseoframework.com/?p=2264#detailed).
 
 = 3.0.3 - Diligence =
 
