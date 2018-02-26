@@ -231,6 +231,21 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 
 == Changelog ==
 
+= 3.0.5 - ??? =
+
+**Release date:**
+
+* February ??th, 2017
+
+**Summarized:**
+
+* An issue with outdated browsers not rendering TSF's admin JavaScript has been resolved.
+
+* **Fixed:**
+	* ECMAScript 2016 wasn't converted correctly to ECMAScript 2015.
+
+[View the detailed log](https://theseoframework.com/?p= TODO #detailed).
+
 = 3.0.4 - Illustrious =
 
 **Release date:**
