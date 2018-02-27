@@ -5,7 +5,7 @@ Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
 Requires at least: 4.4.0
 Tested up to: 4.9.4
 Requires PHP: 5.3.0
-Stable tag: 3.0.4
+Stable tag: 3.0.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -191,7 +191,7 @@ We'll try to get back to you within 72 hours. :)
 Any input is greatly appreciated, and everything will be considered.
 Please visit the [GitHub project page](https://github.com/sybrew/the-seo-framework) to submit issues or even pull requests.
 
-= I want to modify how this plugin works =
+= I want to modify how this plugin works. =
 
 The SEO Framework is very pluggable in many fields. Please refer to the [API documentation](https://theseoframework.com/docs/api/).
 
@@ -203,7 +203,7 @@ If a visitor can't find a page, then why would a search engine? Don't rely on yo
 Check out our [Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/).
 It contains extensions, like Articles, that fill in the gaps with newer techniques.
 
-= The sitemap contains unwanted links =
+= The sitemap contains unwanted links. =
 
 The SEO Framework takes all publicly queryable posts, pages, and CPT and puts them in the sitemap.
 
@@ -231,20 +231,17 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 
 == Changelog ==
 
-= 3.0.5 - ??? =
+= 3.0.5 - Rectified =
 
 **Release date:**
 
-* February ??th, 2017
+* February 27th, 2017
 
 **Summarized:**
 
-* An issue with outdated browsers not rendering TSF's admin JavaScript has been resolved.
+* An issue with outdated browsers not parsing TSF's admin JavaScript has been resolved.
 
-* **Fixed:**
-	* ECMAScript 2016 wasn't converted correctly to ECMAScript 2015.
-
-[View the detailed log](https://theseoframework.com/?p= TODO #detailed).
+[View the detailed log](https://theseoframework.com/?p=2272#detailed).
 
 = 3.0.4 - Illustrious =
 
