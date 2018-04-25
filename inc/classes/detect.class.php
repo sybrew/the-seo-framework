@@ -44,6 +44,7 @@ class Detect extends Render {
 	/**
 	 * Determines if we're doing ajax.
 	 *
+	 * @todo use wp_doing_ajax() in a future version. Requires WP 4.7+.
 	 * @since 2.9.0
 	 * @staticvar bool $cache
 	 *
@@ -126,6 +127,7 @@ class Detect extends Render {
 	 * Filterable list of conflicting plugins.
 	 *
 	 * @since 2.6.0
+	 * @TODO consider removing "Header and Footer"
 	 * @credits JetPack for most code.
 	 *
 	 * @return array List of conflicting plugins.

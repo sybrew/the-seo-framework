@@ -569,7 +569,6 @@ class Admin_Init extends Init {
 		$color = $colors[2];
 		$color_accent = $colors[3];
 
-		// TODO fix this.
 		// $bg_alt_font = '#' . $this->get_relative_fontcolor( $bg );
 		$bg_accent_alt_font = '#' . $this->get_relative_fontcolor( $bg_accent );
 

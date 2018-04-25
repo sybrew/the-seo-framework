@@ -58,11 +58,8 @@ final class Load extends Feed implements Debug_Interface {
 
 		static $count = 0;
 
-		if ( $count > 0 ) {
+		if ( $count++ )
 			return null;
-		}
-
-		$count++;
 
 		//* Setup debug vars before initializing parents.
 		$this->init_debug_vars();

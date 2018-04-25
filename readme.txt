@@ -231,11 +231,53 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 
 == Changelog ==
 
+= 3.0.6 - ??? =
+
+**Release date**
+
+* April TODOth, 2018
+
+**Summarized:**
+/
+* TODO
+
+[View the detailed log](https://theseoframework.com/?p= TODO #detailed).
+
+**Detailed log**
+
+> View code changes.
+> View closed tickets.
+
+* **For everyone:**
+	* **Added:**
+		/
+		* TODO
+	* **Fixed:**
+		/
+		* TODO: https://wordpress.org/support/topic/auto-generated-description-not-working-with-beaver-builder/#post-10075230
+
+* **For translators:**
+	* **Changed:**
+		* ""But you've discouraged archiving for the whole site."
+			* Now is: "%s you've discouraged archiving for the whole site."
+			* %s is "but" or "and".
+			* Location: SEO Bar, archive tooltip.
+			* Reason: Discrepancy, bug.
+
+* **For developers:**
+	* **Changed:**
+		/
+		* TODO
+		* TODO: Set search and taxonomy keys to unique hashed ones to reduce cache collision.
+	* **Removed:**
+		* TODO: Remove function `post_type_support`.
+		* TODO: Remove filter `the_seo_framework_supported_post_types`.
+
 = 3.0.5 - Rectified =
 
 **Release date:**
 
-* February 27th, 2017
+* February 27th, 2018
 
 **Summarized:**
 
@@ -247,7 +289,7 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 
 **Release date:**
 
-* February 25th, 2017
+* February 25th, 2018
 
 **Did you know?**
 

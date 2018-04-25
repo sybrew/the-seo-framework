@@ -202,31 +202,26 @@ function the_seo_framework_do_upgrade_2900() {
  * Invalidates object cache.
  *
  * @since 3.0.0
+ * @since 3.0.6 'display_character_counter' option now correctly defaults to 1.
  */
 function the_seo_framework_do_upgrade_3001() {
 
 	$tsf = the_seo_framework();
-	$previous_version = the_seo_framework_previous_db_version();
 
 	$timestamp_format = $tsf->get_option( 'sitemap_timestamps', false );
 	//= Only change if option exists. Falls back to default upgrader instead.
 	if ( '' !== $timestamp_format ) {
 		$tsf->update_option( 'timestamps_format', (string) (int) $timestamp_format );
 		//= Only set notice if an actual upgrade took place. (redundancy check)
-		if ( $previous_version > '0' ) {
+		if ( the_seo_framework_previous_db_version() > '0' ) {
 			the_seo_framework_add_upgrade_notice(
 				esc_html__( 'The previous sitemap timestamp settings have been converted into new global timestamp settings.', 'autodescription' )
 			);
 		}
 	}
 
-	if ( $previous_version > '0' ) {
-		$tsf->update_option( 'display_character_counter', 1 );
-		$tsf->update_option( 'display_pixel_counter', 1 );
-	} else {
-		$tsf->update_option( 'display_character_counter', 0 );
-		$tsf->update_option( 'display_pixel_counter', 1 );
-	}
+	$tsf->update_option( 'display_character_counter', 1 );
+	$tsf->update_option( 'display_pixel_counter', 1 );
 
 	$tsf->delete_object_cache();
 

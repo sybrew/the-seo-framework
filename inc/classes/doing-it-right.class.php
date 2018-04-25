@@ -1435,10 +1435,10 @@ class Doing_It_Right extends Generate_Ldjson {
 			$arc_notice = $archive_i18n . ' ' . sprintf( \esc_attr__( "Search Engines aren't allowed to archive this %s.", 'autodescription' ), $post_low );
 			$arc_class = $unknown;
 			$archived = false;
-			$arc_but = true;
 		} else {
 			$arc_notice = $archive_i18n . ' ' . sprintf( \esc_attr__( 'Search Engines are allowed to archive this %s.', 'autodescription' ), $post_low );
 			$arc_class = $good;
+			$arc_but = true;
 		}
 
 		/**
@@ -1449,7 +1449,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		if ( $this->is_option_checked( 'site_noarchive' ) ) {
 			$but_and = isset( $arc_but ) ? $and_i18n : $but_i18n;
 
-			$arc_notice .= '<br>' . sprintf( \esc_attr__( "But you've discouraged archiving for the whole site.", 'autodescription' ), $but_and );
+			$arc_notice .= '<br>' . sprintf( \esc_attr__( "%s you've discouraged archiving for the whole site.", 'autodescription' ), $but_and );
 			$arc_class = $unknown;
 			$arc_but = true;
 

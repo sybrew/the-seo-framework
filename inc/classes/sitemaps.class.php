@@ -633,7 +633,7 @@ class Sitemaps extends Metaboxes {
 			$page_on_front_id = (int) \get_option( 'page_on_front' );
 			$page_for_posts_id = (int) \get_option( 'page_for_posts' );
 
-			$id_on_front = $page_on_front ? $page_on_front_id : (int) $page_for_posts_id;
+			$id_on_front = $page_on_front ? $page_on_front_id : $page_for_posts_id;
 
 			//* Remove ID on front from list and add frontpage to list.
 			if ( $page_on_front && false !== $key_on_front = array_search( $id_on_front, $latest_pages, true ) ) {
@@ -1040,6 +1040,7 @@ class Sitemaps extends Metaboxes {
 	 * The URL also isn't checked, nor the position.
 	 *
 	 * @since 3.0.4
+	 * @since 3.1.0 : First filter value now works as intended.
 	 *
 	 * @param int $id The post ID to check. When 0, the custom field will not be checked.
 	 * @return bool True if included, false otherwise.
@@ -1049,7 +1050,7 @@ class Sitemaps extends Metaboxes {
 		static $excluded = null;
 		if ( null === $excluded ) {
 			/**
-			 * Applies filters the_seo_framework_sitemap_exclude_ids : array of id's
+			 * Applies filters the_seo_framework_sitemap_exclude_ids : sequential array of id's
 			 *
 			 * @since 2.5.2
 			 * @since 2.8.0 : No longer accepts '0' as entry.
@@ -1063,8 +1064,7 @@ class Sitemaps extends Metaboxes {
 			}
 		}
 
-		$included = empty( $excluded[ $id ] );
-		if ( $included && $id ) {
+		if ( ! isset( $excluded[ $id ] ) && $id ) {
 			$included = ! $this->get_custom_field( '_genesis_noindex', $id );
 		}
 
