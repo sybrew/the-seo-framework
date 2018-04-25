@@ -159,6 +159,7 @@ class Cache extends Sitemaps {
 
 		//* Excluded IDs cache.
 		\add_action( 'save_post', array( $this, 'delete_excluded_ids_cache' ) );
+		\add_action( 'edit_attachment', array( $this, 'delete_excluded_ids_cache' ) );
 
 		$run = true;
 	}

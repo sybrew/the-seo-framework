@@ -181,6 +181,7 @@ class Init extends Query {
 
 		//* Save post data.
 		\add_action( 'save_post', array( $this, 'inpost_seo_save' ), 1, 2 );
+		\add_action( 'edit_attachment', array( $this, 'inattachment_seo_save' ), 1 );
 		\add_action( 'save_post', array( $this, '_save_inpost_primary_term' ), 1, 2 );
 
 		//* Enqueues admin scripts.

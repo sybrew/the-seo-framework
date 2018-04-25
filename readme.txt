@@ -245,15 +245,24 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 
 **Detailed log**
 
-> View code changes.
-> View closed tickets.
+> [View code changes.]()
+> [View closed tickets.]()
 
 * **For everyone:**
 	* **Added:**
 		/
+		* Media (attachment) pages are now truly integrated and compatible with TSF, and all SEO settings and the auto-generation thereof work as intended.
+			* Note that media pages don't have auto-generated "Canonical URLs".
+				* This is because their post status is always set to `inherit` via WordPress Core.
+				* Although we could technically generate them, they won't get expected extended support via WP Core filters, which will cause complications.
+			* So, **if don't like media pages polluting your business site**, get the [Origin extension](https://theseoframework.com/extensions/origin/) for free.
+	* **Improved:**
+		/
 		* TODO
 	* **Fixed:**
 		/
+		* The social image uploader of TSF no longer hijacks media saving of third party code. Thanks [@pandulu](https://profiles.wordpress.org/pandulu)!
+		* TODO: Automated social descriptions no longer shows incorrect values when no content from the "editor" is provided.
 		* TODO: https://wordpress.org/support/topic/auto-generated-description-not-working-with-beaver-builder/#post-10075230
 
 * **For translators:**
@@ -272,10 +281,22 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 	* **Fixed:**
 		* When a "timezonestring" can't be forged from WordPress settings (negative manual UTC offset), no more PHP errors are outputted.
 			* This didn't affect the outcome of the timestamps the plugin generated, they were correct regardless.
-	* **Removed:**
-		/
-		* TODO: Remove function `post_type_support`.
-		* TODO: Remove filter `the_seo_framework_supported_post_types`.
+	* **Methods notes:**
+		* **Added:**
+			* `get_social_image_url_from_attachment()`
+				* Returns the social image URL from an attachment page.
+			* `inattachment_seo_save()`
+				* Saves the SEO settings when we save an attachment.
+		* **Removed:**
+			/
+			* TODO `post_type_support()`
+	* **Filter notes:**
+		* **Updated:**
+			* `(array) the_seo_framework_og_image_args`
+				* Now supports return value `$args['disallowed']['attachment']` for attachment pages.
+		* **Removed:**
+			/
+			* TODO `the_seo_framework_supported_post_types`
 
 = 3.0.5 - Rectified =
 

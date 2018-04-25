@@ -79,7 +79,23 @@ class Post_Data extends Detect {
 	}
 
 	/**
-	 * Save the SEO settings when we save a post or page.
+	 * Saves the SEO settings when we save an attachment.
+	 *
+	 * This is a passthrough method for `inpost_seo_save()`.
+	 * Sanity check is handled at `save_custom_fields()`, which `inpost_seo_save()` uses.
+	 *
+	 * @since 3.0.6
+	 * @uses $this->inpost_seo_save()
+	 *
+	 * @param integer $post_id Post ID.
+	 * @return void
+	 */
+	public function inattachment_seo_save( $post_id ) {
+		$this->inpost_seo_save( $post_id, \get_post( $post_id ) );
+	}
+
+	/**
+	 * Saves the SEO settings when we save a post or page.
 	 * Some values get sanitized, the rest are pulled from identically named subkeys in the $_POST['autodescription'] array.
 	 *
 	 * @since 2.0.0

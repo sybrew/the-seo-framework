@@ -132,6 +132,7 @@ class Generate_Image extends Generate_Url {
 	 * Returns social image URL and sets $this->image_dimensions.
 	 *
 	 * @since 2.9.0
+	 * @since 3.0.6 Added attachment page compatibility.
 	 *
 	 * @todo listen to attached images within post.
 	 * @todo listen to archive images.
@@ -166,9 +167,14 @@ class Generate_Image extends Generate_Url {
 					goto end;
 			}
 
-			//* 3. Fetch image from featured.
+			//* 3.a. Fetch image from featured.
 			if ( $all_allowed || false === in_array( 'featured', $args['disallowed'], true ) ) {
 				if ( $image = $this->get_social_image_url_from_post_thumbnail( $args['post_id'], $args, true ) )
+					goto end;
+			}
+			//* 3.b. Fetch image from attachment page.
+			if ( $all_allowed || false === in_array( 'attachment', $args['disallowed'], true ) ) {
+				if ( $image = $this->get_social_image_url_from_attachment( $args['post_id'], $args, true ) )
 					goto end;
 			}
 		}
@@ -273,11 +279,16 @@ class Generate_Image extends Generate_Url {
 			 *    @param mixed $size The image size
 			 *    @param bool $icon Fetch Image icon
 			 *    @param bool 'skip_fallback' Whether to skip fallback images.
-			 *    @param array $disallowed Disallowed image types : {
+			 *    @param array $disallowed Disallowed image types : Allowed values {
 			 *        array (
-			 *            string 'featured'
-			 *            string 'header'
-			 *            string 'icon'
+			 *            'homemeta',
+			 *            'postmeta',
+			 *            'featured',
+			 *            'attachment',
+			 *            'option',
+			 *            'header',
+			 *            'logo',
+			 *            'icon',
 			 *        )
 			 *    }
 			 *    @param bool 'escape' Whether to escape output.
@@ -474,6 +485,32 @@ class Generate_Image extends Generate_Url {
 		$args['get_the_real_ID'] = true;
 
 		$src = $this->parse_og_image( $image_id, $args, $set_og_dimensions );
+
+		if ( $src && $this->matches_this_domain( $src ) )
+			$src = $this->set_preferred_url_scheme( $src );
+
+		return $src;
+	}
+
+	/**
+	 * Returns the social image URL from an attachment page.
+	 *
+	 * @since 3.0.6
+	 *
+	 * @param int $id The post ID. Required.
+	 * @param array $args The image args.
+	 * @param bool $set_og_dimensions Whether to set Open Graph image dimensions.
+	 * @return string The attachment URL.
+	 */
+	public function get_social_image_url_from_attachment( $id, $args = array(), $set_og_dimensions = false ) {
+
+		if ( ! \wp_attachment_is_image( $id ) )
+			return '';
+
+		$args = $this->reparse_image_args( $args );
+		$args['get_the_real_ID'] = true;
+
+		$src = $this->parse_og_image( $id, $args, $set_og_dimensions );
 
 		if ( $src && $this->matches_this_domain( $src ) )
 			$src = $this->set_preferred_url_scheme( $src );

@@ -126,6 +126,7 @@ class Admin_Init extends Init {
 	 * Enqueues scripts.
 	 *
 	 * @since 2.0.2
+	 * @since 3.0.6 Now attaches the post ID to `wp_enqueue_media` on post edit.
 	 *
 	 * @param string $hook The current page hook.
 	 */
@@ -140,8 +141,11 @@ class Admin_Init extends Init {
 		//* Register the script.
 		$this->_register_admin_javascript();
 
-		if ( $this->is_post_edit() || $this->is_seo_settings_page() )
+		if ( $this->is_post_edit() ) {
+			\wp_enqueue_media( array( 'post' => $this->get_the_real_admin_ID() ) );
+		} elseif ( $this->is_seo_settings_page() ) {
 			\wp_enqueue_media();
+		}
 
 		if ( $this->is_seo_settings_page() )
 			\wp_enqueue_script( 'wp-color-picker' );
