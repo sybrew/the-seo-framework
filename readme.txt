@@ -269,7 +269,11 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 		/
 		* TODO
 		* TODO: Set search and taxonomy keys to unique hashed ones to reduce cache collision.
+	* **Fixed:**
+		* When a "timezonestring" can't be forged from WordPress settings (negative manual UTC offset), no more PHP errors are outputted.
+			* This didn't affect the outcome of the timestamps the plugin generated, they were correct regardless.
 	* **Removed:**
+		/
 		* TODO: Remove function `post_type_support`.
 		* TODO: Remove filter `the_seo_framework_supported_post_types`.
 

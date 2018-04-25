@@ -627,7 +627,7 @@ class Core {
 	 *
 	 * @param bool $guess : If true, the timezone will be guessed from the
 	 * WordPress core gmt_offset option.
-	 * @return string PHP Timezone String.
+	 * @return string PHP Timezone String. May be empty (thus invalid).
 	 */
 	public function get_timezone_string( $guess = false ) {
 
@@ -672,6 +672,7 @@ class Core {
 	 * Sets and resets the timezone.
 	 *
 	 * @since 2.6.0
+	 * @since 3.0.6 Now uses the old timezone string when a new one can't be generated.
 	 *
 	 * @param string $tzstring Optional. The PHP Timezone string. Best to leave empty to always get a correct one.
 	 * @link http://php.net/manual/en/timezones.php
@@ -692,7 +693,7 @@ class Core {
 			return date_default_timezone_set( $old_tz );
 
 		if ( empty( $tzstring ) )
-			$tzstring = $this->get_timezone_string( true );
+			$tzstring = $this->get_timezone_string( true ) ?: $old_tz;
 
 		return date_default_timezone_set( $tzstring );
 	}
