@@ -26,15 +26,9 @@ $generated_doctitle_args = array(
 	'get_custom_field' => false,
 );
 
-$generated_description_args = array(
-	'id' => $term_id,
-	'taxonomy' => $taxonomy,
-	'get_custom_field' => false,
-);
-
 //* Generate title and description.
 $generated_doctitle = $this->title( '', '', '', $generated_doctitle_args );
-$generated_description = $this->generate_description( '', $generated_description_args );
+$generated_description = $this->get_generated_description( $term_id );
 
 $blog_name = $this->get_blogname();
 $add_additions = $this->add_title_additions();

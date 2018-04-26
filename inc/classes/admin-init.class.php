@@ -225,7 +225,7 @@ class Admin_Init extends Init {
 		$id = $this->get_the_real_ID();
 		$blog_name = $this->get_blogname();
 		$description = $this->get_blogdescription();
-		$object_title = '';
+		$default_title = '';
 		$additions = '';
 
 		$use_additions = (bool) $this->get_option( 'homepage_tagline' );
@@ -265,7 +265,7 @@ class Admin_Init extends Init {
 		if ( isset( $this->page_base_file ) && $this->page_base_file ) {
 			// We're somewhere within default WordPress pages.
 			if ( $this->is_static_frontpage( $id ) ) {
-				$object_title = $this->get_option( 'homepage_title' ) ?: $blog_name;
+				$default_title = $this->get_option( 'homepage_title' ) ?: $blog_name;
 				$title_location = $this->get_option( 'home_title_location' );
 				$ishome = true;
 
@@ -282,7 +282,7 @@ class Admin_Init extends Init {
 					'get_custom_field' => false,
 				);
 
-				$object_title = $this->title( '', '', '', $generated_doctitle_args );
+				$default_title = $this->title( '', '', '', $generated_doctitle_args );
 
 				if ( $title_add_additions ) {
 					$additions = $blog_name;
@@ -294,13 +294,13 @@ class Admin_Init extends Init {
 			} elseif ( $is_term_edit ) {
 				//* Category or Tag.
 				if ( isset( $GLOBALS['current_screen']->taxonomy ) && $id ) {
-					$object_title = $this->single_term_title( '', false, $this->fetch_the_term( $id ) );
+					$default_title = $this->single_term_title( '', false, $this->fetch_the_term( $id ) );
 					$additions = $title_add_additions ? $blog_name : '';
 				}
 			} else {
 				//* We're in a special place.
 				// Can't fetch title.
-				$object_title = '';
+				$default_title = '';
 				$additions = $title_add_additions ? $blog_name : '';
 			}
 		} elseif ( $is_settings_page ) {
@@ -313,7 +313,7 @@ class Admin_Init extends Init {
 				// Home is a blog.
 				$inpost_title = '';
 			}
-			$object_title = $inpost_title ?: $blog_name;
+			$default_title = $inpost_title ?: $blog_name;
 			$additions = $home_tagline ?: $description;
 		}
 
@@ -365,7 +365,8 @@ class Admin_Init extends Init {
 				'pixelsUsed' => $has_input ? \__( '%1$d out of %2$d pixels are used.', 'autodescription' ) : '',
 			),
 			'params' => array(
-				'objectTitle' => $object_title,
+				'objectTitle' => $default_title,
+				'defaultTitle' => $default_title,
 				'titleAdditions' => $additions,
 				'blogDescription' => $description,
 				'termName' => $term_name,

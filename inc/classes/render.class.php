@@ -101,6 +101,8 @@ class Render extends Admin_Init {
 	 * Must be called inside the loop
 	 *
 	 * @since 2.2.2
+	 * @deprecated
+	 * @since 3.0.6 Silently deprecated.
 	 * @staticvar array $description_cache
 	 *
 	 * @return string The description
@@ -203,7 +205,8 @@ class Render extends Admin_Init {
 	 * Renders the description meta tag.
 	 *
 	 * @since 1.3.0
-	 * @uses $this->description_from_cache()
+	 * @since 3.0.6 No longer uses $this->description_from_cache()
+	 * @uses $this->get_description()
 	 * @uses $this->detect_seo_plugins()
 	 *
 	 * @return string The description meta tag.
@@ -218,7 +221,7 @@ class Render extends Admin_Init {
 		 * @since 2.3.0
 		 * @since 2.7.0 : Added output within filter.
 		 */
-		$description = (string) \apply_filters( 'the_seo_framework_description_output', $this->description_from_cache(), $this->get_the_real_ID() );
+		$description = (string) \apply_filters( 'the_seo_framework_description_output', $this->get_description(), $this->get_the_real_ID() );
 
 		if ( $description )
 			return '<meta name="description" content="' . \esc_attr( $description ) . '" />' . "\r\n";

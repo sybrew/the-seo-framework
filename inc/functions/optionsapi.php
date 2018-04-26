@@ -178,6 +178,8 @@ function the_seo_framework_title_from_cache( $title = null ) {
  * Fetch description from cache. Only works within Loop.
  *
  * @since 2.4.2
+ * @deprecated
+ * @since 3.0.6 Silently deprecated.
  *
  * @param bool $social Fetch social description.
  * @return string|null The current page description.

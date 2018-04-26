@@ -395,7 +395,7 @@ class Generate extends User_Data {
 		if ( isset( $cache ) )
 			return $cache;
 
-		if ( ! $this->description_from_cache( true ) ) {
+		if ( ! $this->get_twitter_description() ) {
 			$retval = array();
 		} elseif ( ! $this->title_from_cache( '', '', '', true ) ) {
 			$retval = array();

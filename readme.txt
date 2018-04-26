@@ -18,7 +18,17 @@ The SEO Framework plugin provides an automated and advanced SEO solution for you
 
 This plugin provides an automated, accessible, unbranded and extremely fast SEO solution for any WordPress website.
 
-For optional advanced SEO tools and output, check out our free companion plugin [Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/). Visit our recently published [Extensions overview page](https://theseoframework.com/extensions/) for more information about our extensions.
+= Extensions =
+
+For more advanced SEO tools and output, check out our free companion plugin [Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/).
+Many extensions are included, among others are:
+
+* **[Focus](https://theseoframework.com/extensions/focus/)** helps you write targeted content with **focus keywords**, their inflections, and their synonyms. A great addition for bloggers and businesses alike.
+* **[Local](https://theseoframework.com/extensions/local/)** helps you set up local SEO business information. This could expand your business' "Knowledge Graph" card for local search listings.
+
+Visit our [Extensions overview page](https://theseoframework.com/extensions/) for more information.
+
+= Foreword =
 
 > <strong>This plugin strongly helps you create better SEO value for your content.</strong><br>
 > But at the end of the day, it all depends on how entertaining or well-constructed your content or product is.
@@ -26,8 +36,8 @@ For optional advanced SEO tools and output, check out our free companion plugin 
 > No SEO plugin does the magic thing to be found instantly. But doing it right helps a lot.<br>
 > The SEO Framework helps you doing it right. Give it a try!
 >
-> The default settings are recommended within the SEO Settings page. If you know what you're doing, go ahead and change them! Each option is also vastly documented.
-> Don't forget to set up the social meta settings and a home page description; those can greatly increase conversion.
+> The default settings, found within the SEO Settings page, are recommended. If you know what you're doing, go ahead and change them! Each option is also vastly documented.
+> Don't forget to set up the Social Meta Settings and a homepage description; those can greatly increase conversion.
 
 = This plugin: =
 
@@ -252,17 +262,22 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 	* **Added:**
 		/
 		* Media (attachment) pages are now truly integrated and compatible with TSF, and all SEO settings and the auto-generation thereof work as intended.
+			* v3.0.4 accidentally added support for attachment pages, so this can be seen as a fix.
 			* Note that media pages don't have auto-generated "Canonical URLs".
 				* This is because their post status is always set to `inherit` via WordPress Core.
 				* Although we could technically generate them, they won't get expected extended support via WP Core filters, which will cause complications.
 			* So, **if don't like media pages polluting your business site**, get the [Origin extension](https://theseoframework.com/extensions/origin/) for free.
 	* **Improved:**
 		/
-		* TODO
+		* Description generation has been streamlined, and should result in less performance overhead.
 	* **Fixed:**
-		/
 		* The social image uploader of TSF no longer hijacks media saving of third party code. Thanks [@pandulu](https://profiles.wordpress.org/pandulu)!
-		* TODO: Automated social descriptions no longer shows incorrect values when no content from the "editor" is provided.
+		* A description input bug that has been around since v2.0.0 where, when the input is emptied, the previously saved description was shown.
+			* It now shows the real generated description.
+		/
+		* Automated descriptions show their original value after being emptied again.
+			* Social descriptions were also indirectly affected.
+		/
 		* TODO: https://wordpress.org/support/topic/auto-generated-description-not-working-with-beaver-builder/#post-10075230
 
 * **For translators:**
@@ -274,9 +289,10 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 			* Reason: Discrepancy, bug.
 
 * **For developers:**
+	* **Note:**
+		* We've updated the description generation callbacks. See [this issue](https://github.com/sybrew/the-seo-framework/issues/297) for more information.
 	* **Changed:**
 		/
-		* TODO
 		* TODO: Set search and taxonomy keys to unique hashed ones to reduce cache collision.
 	* **Fixed:**
 		* When a "timezonestring" can't be forged from WordPress settings (negative manual UTC offset), no more PHP errors are outputted.
@@ -287,16 +303,58 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 				* Returns the social image URL from an attachment page.
 			* `inattachment_seo_save()`
 				* Saves the SEO settings when we save an attachment.
+			* `get_description( $id = null, $escape = true )`
+			* `get_twitter_description( $id = null, $escape = true )`
+			* `get_open_graph_description( $id = null, $escape = true )`
+			* `get_generated_description( $id = null, $escape = true )`
+			* `get_generated_twitter_description( $id = null, $escape = true )`
+			* `get_generated_open_graph_description( $id = null, $escape = true )`
+			* `get_description_from_custom_field( $id = null, $escape = true )`
+		* **Silently deprecated:**
+			* `generate_description()`
+				* Use `get_description()` instead.
+				* Use `get_generated_description()` instead.
+			* `parse_description_args()`
+			* `reparse_description_args()`
+			* `description_from_custom_field()`
+				* Use `get_description_from_custom_field()` instead.
+			* `get_custom_homepage_description()`
+				* Use `get_description_from_custom_field()` instead.
+			* `get_custom_singular_description()`
+				* Use `get_description_from_custom_field()` instead.
+			* `get_custom_archive_description()`
+				* Use `get_description_from_custom_field()` instead.
+			* `generate_description_from_id()`
+				* Use `get_generated_description()` instead.
+			* `generate_home_page_description()`
+				* Use `get_generated_description()` in combination with `get_custom_field( '_genesis_description' )` instead.
+			* `description_from_cache()`
+				* Use `get_description()` instead.
 		* **Removed:**
 			/
 			* TODO `post_type_support()`
 	* **Filter notes:**
+		* **Changed:**
+			* `(string) the_seo_framework_custom_field_description`
+				* The second parameter is now only expected to have the `'id'` index key.
 		* **Updated:**
 			* `(array) the_seo_framework_og_image_args`
 				* Now supports return value `$args['disallowed']['attachment']` for attachment pages.
+		* **Deprecated:**
+			* `(array) the_seo_framework_description_args`
+				* Silently deprecated. There's no replacement, and no notice (yet).
 		* **Removed:**
 			/
 			* TODO `the_seo_framework_supported_post_types`
+	* **JavaScript notes:**
+		* **Added:**
+			* `window` variable:
+				* `tsfL10n.params.defaultTitle`, this variable is needed to capture the fallback title on load, as we manage four title objects.
+					* The description doesn't utilize such value, as it's "simply" one block.
+		* **Deprecated:**
+			* `tsfL10n.params.objectTitle`, silently.
+				* Use `tsfL10n.params.defaultTitle` instead.
+				* The replacement is a carbon-copy, and nothing has changed but the naming to prevent confusion.
 
 = 3.0.5 - Rectified =
 

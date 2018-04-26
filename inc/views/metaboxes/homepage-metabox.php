@@ -105,13 +105,7 @@ switch ( $instance ) :
 		if ( $frompost_description ) {
 			$description_placeholder = $frompost_description;
 		} else {
-			$description_args = array(
-				'id' => $home_id,
-				'is_home' => true,
-				'get_custom_field' => false,
-			);
-
-			$description_placeholder = $this->generate_description( '', $description_args );
+			$description_placeholder = $this->get_generated_description( $home_id );
 		}
 
 		/**

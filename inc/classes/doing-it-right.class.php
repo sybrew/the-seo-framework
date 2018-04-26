@@ -795,21 +795,13 @@ class Doing_It_Right extends Generate_Ldjson {
 		}
 
 		$description_is_from_custom_field = (bool) $description_custom_field;
+		//= Call sanitized version.
 		if ( $description_is_from_custom_field ) {
-			$taxonomy = ! empty( $term->taxonomy ) ? $term->taxonomy : '';
-			$description_args = $taxonomy ? array( 'id' => $term_id, 'taxonomy' => $term->taxonomy, 'get_custom_field' => true ) : array( 'get_custom_field' => true );
-
-			$description = $this->generate_description( '', $description_args );
+			$description = $this->get_description_from_custom_field( $term_id );
 		} else {
-			$taxonomy = ! empty( $term->taxonomy ) ? $term->taxonomy : '';
-			$description_args = $taxonomy ? array( 'id' => $term_id, 'taxonomy' => $term->taxonomy, 'get_custom_field' => false ) : array( 'get_custom_field' => false );
-
-			$description = $this->generate_description( '', $description_args );
+			$description = $this->get_generated_description( $term_id );
 		}
 
-		/**
-		 * No longer uses is_checked. As it strict checks 1/0 strings.
-		 */
 		$noindex = (bool) $noindex;
 		$nofollow = (bool) $nofollow;
 		$noarchive = (bool) $noarchive;
@@ -870,10 +862,11 @@ class Doing_It_Right extends Generate_Ldjson {
 		}
 
 		$description_is_from_custom_field = (bool) $description_custom_field;
+		//= Call sanitized version.
 		if ( $description_is_from_custom_field ) {
-			$description = $this->generate_description( '', array( 'id' => $post_id, 'get_custom_field' => true ) );
+			$description = $this->get_description_from_custom_field( $post_id );
 		} else {
-			$description = $this->generate_description( '', array( 'id' => $post_id, 'get_custom_field' => false ) );
+			$description = $this->get_generated_description( $post_id );
 		}
 
 		$noindex = (bool) $noindex;

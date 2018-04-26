@@ -457,11 +457,12 @@ class Inpost extends Profile {
 				'get_custom_field' => false,
 			);
 
-			$generated_description_args = array(
-				'id' => $post_id,
-				'is_home' => true,
-				'get_custom_field' => true,
-			);
+			$_home_desc_from_option = $this->get_option( 'homepage_description' );
+			if ( $_home_desc_from_option ) {
+				$generated_description = $this->escape_description( $_home_desc_from_option );
+			} else {
+				$generated_description = $this->get_generated_description( $post_id );
+			}
 		} elseif ( $this->is_blog_page( $post_id ) ) {
 			//* Page for posts.
 			$generated_doctitle_args = array(
@@ -469,24 +470,16 @@ class Inpost extends Profile {
 				'meta' => true,
 				'get_custom_field' => false,
 			);
-
-			$generated_description_args = array(
-				'id' => $post_id,
-				'page_for_posts' => true,
-			);
+			$generated_description = $this->get_generated_description( $post_id );
 		} else {
 			$generated_doctitle_args = array(
 				'placeholder' => true,
 				'meta' => true,
 				'get_custom_field' => false,
 			);
-
-			$generated_description_args = array(
-				'id' => $post_id,
-			);
+			$generated_description = $this->get_generated_description( $post_id );
 		}
 		$generated_doctitle = $this->title( '', '', '', $generated_doctitle_args );
-		$generated_description = $this->generate_description( '', $generated_description_args );
 
 		/**
 		 * Start Title vars
@@ -524,37 +517,13 @@ class Inpost extends Profile {
 		}
 
 		/**
-		 * Start Description vars
-		 */
-
-		//* Fetch description from option.
-		$description = $this->get_custom_field( '_genesis_description' );
-
-		/**
-		 * Calculate current description length
-		 *
-		 * Reworked.
-		 * @since 2.3.4
-		 */
-		if ( $is_static_frontpage ) {
-			//* The homepage description takes precedence.
-			if ( $description ) {
-				$desc_len_pre = $this->get_option( 'homepage_description' ) ?: $description;
-			} else {
-				$desc_len_pre = $this->get_option( 'homepage_description' ) ?: $generated_description;
-			}
-		} else {
-			$desc_len_pre = $description ?: $generated_description;
-		}
-
-		/**
 		 * Convert to what Google outputs.
 		 *
 		 * This will convert e.g. &raquo; to a single length character.
 		 * @since 2.3.4
 		 */
 		$tit_len_parsed = html_entity_decode( $tit_len_pre );
-		$desc_len_parsed = html_entity_decode( $desc_len_pre );
+		$desc_len_parsed = html_entity_decode( $this->get_description( $post_id ) );
 
 		/**
 		 * Generate static placeholder for when title or description is emptied
