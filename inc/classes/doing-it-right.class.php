@@ -760,6 +760,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 *
 	 * @since 2.6.0
 	 * @since 2.9.0 Now also returns noindex value.
+	 * @since 3.0.6 Now considers custom field filters for the description.
 	 * @staticvar array $data
 	 *
 	 * @param array $args The term args.
@@ -782,7 +783,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		$data = $this->get_term_meta( $term_id );
 
 		$title_custom_field = isset( $data['doctitle'] ) ? $data['doctitle'] : '';
-		$description_custom_field = isset( $data['description'] ) ? $data['description'] : '';
+		$description_custom_field = $this->get_description_from_custom_field( $term_id );
 		$noindex = isset( $data['noindex'] ) ? $data['noindex'] : '';
 		$nofollow = isset( $data['nofollow'] ) ? $data['nofollow'] : '';
 		$noarchive = isset( $data['noarchive'] ) ? $data['noarchive'] : '';
@@ -822,6 +823,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 *
 	 * @since 2.6.0
 	 * @since 2.9.0 Now also returns noindex value.
+	 * @since 3.0.6 Now considers custom field filters for the description.
 	 * @staticvar array $data
 	 *
 	 * @param array $args The post args.
@@ -841,14 +843,14 @@ class Doing_It_Right extends Generate_Ldjson {
 		$page_on_front = $this->is_static_frontpage( $post_id );
 
 		$title_custom_field = $this->get_custom_field( '_genesis_title', $post_id );
-		$description_custom_field = $this->get_custom_field( '_genesis_description', $post_id );
+		$description_custom_field = $this->get_description_from_custom_field( $post_id );
 		$noindex = $this->get_custom_field( '_genesis_noindex', $post_id );
 		$nofollow = $this->get_custom_field( '_genesis_nofollow', $post_id );
 		$noarchive = $this->get_custom_field( '_genesis_noarchive', $post_id );
 
 		if ( $page_on_front ) {
 			$title_custom_field = $this->get_option( 'homepage_title' ) ?: $title_custom_field;
-			$description_custom_field = $this->get_option( 'homepage_description' ) ?: $description_custom_field;
+			// $description_custom_field = $description_custom_field; // We already got this.
 			$noindex = $this->get_option( 'homepage_noindex' ) ?: $nofollow;
 			$nofollow = $this->get_option( 'homepage_nofollow' ) ?: $nofollow;
 			$noarchive = $this->get_option( 'homepage_noarchive' ) ?: $noarchive;

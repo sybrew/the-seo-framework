@@ -343,6 +343,7 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 		* **Changed:**
 			* `(string) the_seo_framework_custom_field_description`
 				* The second parameter is now only expected to have the `'id'` index key.
+				* This filter is now applied to the SEO Bar, too.
 			* `(array) the_seo_framework_sitemap_pages_query_args`, `(array) the_seo_framework_sitemap_posts_query_args`, `(array) the_seo_framework_sitemap_cpt_query_args`
 				* The `suppress_filters` argument from the first parameter now defaults to `false`, instead of `true`.
 			* `(bool) the_seo_framework_301_noqueries`
