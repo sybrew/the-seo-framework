@@ -100,7 +100,7 @@ class Generate_Description extends Generate {
 		 *              2. Removed all arguments but the 'id' argument.
 		 *
 		 * @param string $desc The description.
-		 * @param array $args  The description arguments.
+		 * @param array  $args  The description arguments.
 		 */
 		$desc = (string) \apply_filters( 'the_seo_framework_custom_field_description', $desc, array( 'id' => $id ) );
 

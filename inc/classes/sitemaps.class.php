@@ -513,6 +513,7 @@ class Sitemaps extends Metaboxes {
 	 * Create sitemap.xml content transient.
 	 *
 	 * @since 2.6.0
+	 * @since 3.0.6 Now only sets transient when the option is checked.
 	 *
 	 * @param string|bool $content required The sitemap transient content.
 	 * @return string The sitemap content.
@@ -529,7 +530,8 @@ class Sitemaps extends Metaboxes {
 			 */
 			$expiration = WEEK_IN_SECONDS;
 
-			$this->set_transient( $this->sitemap_transient, $sitemap_content, $expiration );
+			if ( $this->is_option_checked( 'cache_sitemap' ) )
+				$this->set_transient( $this->sitemap_transient, $sitemap_content, $expiration );
 		}
 
 		return $sitemap_content;
@@ -608,7 +610,7 @@ class Sitemaps extends Metaboxes {
 				'has_password'     => false,
 				'fields'           => 'ids',
 				'cache_results'    => false,
-				'suppress_filters' => true,
+				'suppress_filters' => false,
 				'no_found_rows'    => true,
 			);
 
@@ -616,6 +618,7 @@ class Sitemaps extends Metaboxes {
 			 * Applies filters 'the_seo_framework_sitemap_pages_query_args' : array
 			 *
 			 * @since 2.8.0
+			 * @since 3.0.6: $args['suppress_filters'] now defaults to false.
 			 *
 			 * @param array $args The new query arguments.
 			 * @param array $defaults The default query arguments
@@ -780,7 +783,7 @@ class Sitemaps extends Metaboxes {
 				'has_password'     => false,
 				'fields'           => 'ids',
 				'cache_results'    => false,
-				'suppress_filters' => true,
+				'suppress_filters' => false,
 				'no_found_rows'    => true,
 			);
 
@@ -788,6 +791,7 @@ class Sitemaps extends Metaboxes {
 			 * Applies filters 'the_seo_framework_sitemap_posts_query_args' : array
 			 *
 			 * @since 2.8.0
+			 * @since 3.0.6: $args['suppress_filters'] now defaults to false.
 			 *
 			 * @param array $args The new query arguments.
 			 * @param array $defaults The default query arguments
@@ -894,7 +898,7 @@ class Sitemaps extends Metaboxes {
 					'has_password'     => false,
 					'fields'           => 'ids',
 					'cache_results'    => false,
-					'suppress_filters' => true,
+					'suppress_filters' => false,
 					'no_found_rows'    => true,
 				);
 
@@ -902,6 +906,7 @@ class Sitemaps extends Metaboxes {
 				 * Applies filters 'the_seo_framework_sitemap_cpt_query_args' : array
 				 *
 				 * @since 2.8.0
+				 * @since 3.0.6: $args['suppress_filters'] now defaults to false.
 				 *
 				 * @param array $args The new query arguments.
 				 * @param array $defaults The default query arguments

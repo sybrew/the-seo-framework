@@ -270,6 +270,9 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 	* **Improved:**
 		/
 		* Description generation has been streamlined, and should result in less performance overhead.
+		* On the generation of the sitemap, we gave back control to other plugins when fetching the posts.
+			* This means that plugins like WPML can sort out posts better.
+			* This also speeds up sitemap generation by twofold, for unknown reasons.
 	* **Fixed:**
 		* The social image uploader of TSF no longer hijacks media saving of third party code. Thanks [@pandulu](https://profiles.wordpress.org/pandulu)!
 		* A description input bug that has been around since v2.0.0 where, when the input is emptied, the previously saved description was shown.
@@ -277,6 +280,7 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 		/
 		* Automated descriptions show their original value after being emptied again.
 			* Social descriptions were also indirectly affected.
+		* The sitemap transient is no longer set when its related caching option is disabled.
 		/
 		* TODO: https://wordpress.org/support/topic/auto-generated-description-not-working-with-beaver-builder/#post-10075230
 
@@ -337,6 +341,8 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 		* **Changed:**
 			* `(string) the_seo_framework_custom_field_description`
 				* The second parameter is now only expected to have the `'id'` index key.
+			* `(array) the_seo_framework_sitemap_pages_query_args`, `(array) the_seo_framework_sitemap_posts_query_args`, `(array) the_seo_framework_sitemap_cpt_query_args`
+				* The `suppress_filters` argument from the first parameter now defaults to `false`, instead of `true`.
 		* **Updated:**
 			* `(array) the_seo_framework_og_image_args`
 				* Now supports return value `$args['disallowed']['attachment']` for attachment pages.
