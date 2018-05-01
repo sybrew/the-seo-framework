@@ -1014,7 +1014,7 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
-	 * Makes URLs safe.
+	 * Makes URLs safe and removes query args.
 	 *
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
@@ -1035,7 +1035,7 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
-	 * Makes URLs safe and removes query args.
+	 * Makes URLs safe, maintaining queries.
 	 *
 	 * @since 2.2.8
 	 * @since 2.8.0 Method is now public.
@@ -1105,10 +1105,10 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
-	 * @since 3.0.0 Now removed '@' from the URL path.
+	 * @since 3.0.6 Now allows a sole query argument when profile.php is used.
 	 *
-	 * @param string $new_value String with potentially wrong Twitter username.
-	 * @return string String with 'correct' Twitter username
+	 * @param string $new_value String with potentially wrong Facebook profile URL.
+	 * @return string String with 'correct' Facebook profile URL.
 	 */
 	public function s_facebook_profile( $new_value ) {
 
@@ -1120,7 +1120,21 @@ class Sanitize extends Admin_Pages {
 		$link = 'https://www.facebook.com/' . $this->s_relative_url( $link );
 		$link = rtrim( $link, ' /' );
 
-		return $this->s_url( $link );
+		if ( strpos( $link, 'profile.php' ) ) {
+			//= Gets query parameters.
+			$q = strtok( substr( $link, strpos( $link, '?' ) ), '?' );
+			parse_str( $q, $r );
+			if ( isset( $r['id'] ) ) {
+				$link = 'https://www.facebook.com/profile.php?id=' . \absint( $r['id'] );
+				$link = $this->s_url_query( $link );
+			} else {
+				$link = '';
+			}
+		} else {
+			$link = $this->s_url( $link );
+		}
+
+		return $link;
 	}
 
 	/**
@@ -1172,6 +1186,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.2.4
 	 * @since 2.8.0 Method is now public.
+	 * @since 3.0.6 Noqueries is now disabled by default.
 	 *
 	 * @param string $new_value String with potentially unwanted redirect URL.
 	 * @return string The Sanitized Redirect URL
@@ -1182,24 +1197,22 @@ class Sanitize extends Admin_Pages {
 
 		if ( $url ) :
 
-			$allow_external = $this->allow_external_redirect();
-
 			/**
 			 * Sanitize the redirect URL to only a relative link and removes first slash
 			 * @requires WP 4.1.0 and up to prevent adding upon itself.
 			 */
-			if ( ! $allow_external )
+			if ( ! $this->allow_external_redirect() )
 				$url = $this->s_relative_url( $url );
 
 			//* URL pattern excluding path.
-			$pattern 	= '/'
-						. '((((http)(s)?)?)\:)?' // 1: maybe http: https:
-						. '(\/\/)?'              // 2: maybe slash slash
-						. '((www.)?)'            // 3: maybe www.
-						. '(.*\.[a-zA-Z0-9]*)'   // 4: any legal domain with tld
-						. '(?:\/)?'              // 5: trailing slash
-						. '/'
-						;
+			$pattern = '/'
+			         . '((((http)(s)?)?)\:)?' // 1: maybe http: https:
+			         . '(\/\/)?'              // 2: maybe slash slash
+			         . '((www.)?)'            // 3: maybe www.
+			         . '(.*\.[a-zA-Z0-9]*)'   // 4: any legal domain with tld
+			         . '(?:\/)?'              // 5: maybe trailing slash
+			         . '/'
+			         ;
 
 			//* If link is relative, make it full again
 			if ( ! preg_match( $pattern, $url ) ) {
@@ -1215,11 +1228,11 @@ class Sanitize extends Admin_Pages {
 				 * @param array : { 'url' => The full URL built from $path, 'scheme' => The preferred scheme }
 				 * @param string $path the URL path.
 				 */
-				$filter = (array) \apply_filters( 'the_seo_framework_sanitize_redirect_args', array(), $path );
+				$custom_sanitize = (array) \apply_filters( 'the_seo_framework_sanitize_redirect_args', array(), $path );
 
-				if ( $filter ) {
-					$url = $filter['url'];
-					$scheme = $filter['scheme'];
+				if ( $custom_sanitize ) {
+					$url = $custom_sanitize['url'];
+					$scheme = $custom_sanitize['scheme'];
 				} else {
 					$url = \trailingslashit( $this->get_homepage_permalink() ) . ltrim( $path, ' /' );
 					$scheme = $this->is_ssl() ? 'https' : 'http';
@@ -1236,14 +1249,15 @@ class Sanitize extends Admin_Pages {
 		 * Applies filters 'the_seo_framework_301_noqueries'
 		 *
 		 * @since 2.5.0
+		 * @since 3.0.6 Now false by default.
 		 * @param bool $noqueries
 		 */
-		$noqueries = (bool) \apply_filters( 'the_seo_framework_301_noqueries', true );
+		$noqueries = (bool) \apply_filters( 'the_seo_framework_301_noqueries', false );
 
 		/**
 		 * Remove queries from the URL
 		 *
-		 * Returns plain Home URL if $allow_external is set to false and only a query has been supplied
+		 * Returns plain Home URL if $this->allow_external_redirect() is set to false and only a query has been supplied
 		 * But that's okay. The URL was rogue anyway :)
 		 */
 		if ( $noqueries ) {
@@ -1258,7 +1272,7 @@ class Sanitize extends Admin_Pages {
 			/**
 			 * Allow query string parameters. XSS safe.
 			 */
-			$new_value = \esc_url_raw( $url );
+			$new_value = $this->s_url_query( $url );
 		}
 
 		//* Save url

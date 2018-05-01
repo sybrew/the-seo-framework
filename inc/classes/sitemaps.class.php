@@ -236,7 +236,6 @@ class Sitemaps extends Metaboxes {
 		}
 
 		$this->the_seo_framework_debug and $freed_memory = $memory - memory_get_usage();
-
 	}
 
 	/**

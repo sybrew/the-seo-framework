@@ -245,7 +245,7 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 
 **Release date**
 
-* April TODOth, 2018
+* May TODOth, 2018
 
 **Summarized:**
 /
@@ -267,8 +267,10 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 				* This is because their post status is always set to `inherit` via WordPress Core.
 				* Although we could technically generate them, they won't get expected extended support via WP Core filters, which will cause complications.
 			* So, **if don't like media pages polluting your business site**, get the [Origin extension](https://theseoframework.com/extensions/origin/) for free.
+	* **Changed:**
+		* Canonical URLs, Redirect URLs and Social Image URLs are now allowed to have query arguments.
+		* Facebook profile URLs now (solely) accept 'id' query parameters when "https://facebook.com/profile.php" is used.
 	* **Improved:**
-		/
 		* Description generation has been streamlined, and should result in less performance overhead.
 		* On the generation of the sitemap, we gave back control to other plugins when fetching the posts.
 			* This means that plugins like WPML can sort out posts better.
@@ -343,6 +345,8 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 				* The second parameter is now only expected to have the `'id'` index key.
 			* `(array) the_seo_framework_sitemap_pages_query_args`, `(array) the_seo_framework_sitemap_posts_query_args`, `(array) the_seo_framework_sitemap_cpt_query_args`
 				* The `suppress_filters` argument from the first parameter now defaults to `false`, instead of `true`.
+			* `(bool) the_seo_framework_301_noqueries`
+				* Now defaults to `false`, instead of `true`.
 		* **Updated:**
 			* `(array) the_seo_framework_og_image_args`
 				* Now supports return value `$args['disallowed']['attachment']` for attachment pages.

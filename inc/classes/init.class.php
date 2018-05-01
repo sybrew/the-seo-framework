@@ -558,8 +558,6 @@ class Init extends Query {
 			return;
 		}
 
-		$allow_external = $this->allow_external_redirect();
-
 		/**
 		 * Applies filters 'the_seo_framework_redirect_status_code' : Absolute integer.
 		 *
@@ -572,7 +570,7 @@ class Init extends Query {
 		if ( $redirect_type > 399 || $redirect_type < 300 )
 			$this->_doing_it_wrong( __METHOD__, 'You should use 3xx HTTP Status Codes. Recommended 301 and 302.', '2.8.0' );
 
-		if ( false === $allow_external ) {
+		if ( ! $this->allow_external_redirect() ) {
 			//= Only HTTP/HTTPS and home URLs are allowed.
 			$path = $this->set_url_scheme( $url, 'relative' );
 			$url = \trailingslashit( $this->get_home_host() ) . ltrim( $path, ' /' );
@@ -626,7 +624,7 @@ class Init extends Query {
 
 			if ( $this->is_subdirectory_installation() || $home_path ) {
 				$output .= '# This is an invalid robots.txt location.' . "\r\n";
-				$output .= '# Please visit: ' . \esc_url( trailingslashit( $this->set_preferred_url_scheme( $this->get_home_host() ) ) . 'robots.txt' ) . "\r\n";
+				$output .= '# Please visit: ' . \esc_url( \trailingslashit( $this->set_preferred_url_scheme( $this->get_home_host() ) ) . 'robots.txt' ) . "\r\n";
 				$output .= "\r\n";
 			}
 
