@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://theseoframework.com/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.
- * Version: 3.0.6-dev.2018.05.01.2
+ * Version: 3.0.6-dev.2018.05.02.0
  * Author: Sybre Waaijer
  * Author URI: https://theseoframework.com/
  * License: GPLv3
@@ -37,6 +37,7 @@ defined( 'ABSPATH' ) or die;
 // 		define( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN', true );
 // 		define( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS', true );
 // 		update_option( 'the_seo_framework_upgraded_db_version', '0' );
+// 		update_option( 'the_seo_framework_tested_upgrade_version', '0' );
 // 		add_filter( 'the_seo_framework_use_object_cache', '__return_false' );
 // 	}
 // }},0);
@@ -60,7 +61,7 @@ define( 'THE_SEO_FRAMEWORK_VERSION', '3.0.5' );
  *
  * @since 2.7.0
  */
-define( 'THE_SEO_FRAMEWORK_DB_VERSION', '3001' );
+define( 'THE_SEO_FRAMEWORK_DB_VERSION', '3060' );
 
 /**
  * The plugin options database option_name.

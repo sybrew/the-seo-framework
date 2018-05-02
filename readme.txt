@@ -267,9 +267,11 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 				* This is because their post status is always set to `inherit` via WordPress Core.
 				* Although we could technically generate them, they won't get expected extended support via WP Core filters, which will cause complications.
 			* So, **if don't like media pages polluting your business site**, get the [Origin extension](https://theseoframework.com/extensions/origin/) for free.
+		* A one-time self-hiding installation notification showing the admin that you can use focus keywords via the Extension Manager.
 	* **Changed:**
 		* Canonical URLs, Redirect URLs and Social Image URLs are now allowed to have query arguments.
 		* Facebook profile URLs now (solely) accept 'id' query parameters when "https://facebook.com/profile.php" is used.
+		* Notification's font-weight isn't bold by default anymore.
 	* **Improved:**
 		* Description generation has been streamlined, and should result in less performance overhead.
 		* On the generation of the sitemap, we gave back control to other plugins when fetching the posts.
@@ -283,6 +285,8 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 		* Automated descriptions show their original value after being emptied again.
 			* Social descriptions were also indirectly affected.
 		* The sitemap transient is no longer set when its related caching option is disabled.
+		* The character counter option is no longer automatically set to a disabled state, when updating from below 3.0.0.
+			* Sites that already use 3.0.0 or later are not affected by this change.
 		/
 		* TODO: https://wordpress.org/support/topic/auto-generated-description-not-working-with-beaver-builder/#post-10075230
 
@@ -300,6 +304,7 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 	* **Changed:**
 		/
 		* TODO: Set search and taxonomy keys to unique hashed ones to reduce cache collision.
+		* Notice messages are no longer encapsulated in "strong".
 	* **Fixed:**
 		* When a "timezonestring" can't be forged from WordPress settings (negative manual UTC offset), no more PHP errors are outputted.
 			* This didn't affect the outcome of the timestamps the plugin generated, they were correct regardless.
