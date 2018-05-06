@@ -126,6 +126,8 @@ function the_seo_framework_suggest_extension_manager() {
 	 * @see The closest bowl of spaghetti. Or WordPress\Administration\wp.updates/updates.js
 	 * This joke was brought to you by the incomplete API of WP Shiny Updates, where
 	 * WP's import.php has been directly injected into, rather than "calling" it via its API.
+	 * Therefore, leaving the incompleteness undiscovered internally.
+	 * @TODO Open core track ticket.
 	 */
 	$url = wp_nonce_url( add_query_arg( array(
 		'action' => 'install-plugin',

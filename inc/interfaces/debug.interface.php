@@ -39,9 +39,9 @@ interface Debug_Interface {
 	 * @access private
 	 * @see @this->_deprecated_function().
 	 *
-	 * @param string $filter		The function that was called.
-	 * @param string $version		The version of WordPress that deprecated the function.
-	 * @param string $replacement	Optional. The function that should have been called. Default null.
+	 * @param string $filter      The function that was called.
+	 * @param string $version     The version of WordPress that deprecated the function.
+	 * @param string $replacement Optional. The function that should have been called. Default null.
 	 */
 	public function _deprecated_filter( $filter, $version, $replacement = null );
 
@@ -55,9 +55,9 @@ interface Debug_Interface {
 	 * @since 2.6.0
 	 * @access private
 	 *
-	 * @param string $function		The function that was called.
-	 * @param string $version		The version of WordPress that deprecated the function.
-	 * @param string $replacement	Optional. The function that should have been called. Default null.
+	 * @param string $function    The function that was called.
+	 * @param string $version     The version of WordPress that deprecated the function.
+	 * @param string $replacement Optional. The function that should have been called. Default null.
 	 */
 	public function _deprecated_function( $function, $version, $replacement = null );
 
@@ -71,9 +71,9 @@ interface Debug_Interface {
 	 * @since 2.6.0
 	 * @access private
 	 *
-	 * @param string $function	The function that was called.
-	 * @param string $message	A message explaining what has been done incorrectly.
-	 * @param string $version	The version of WordPress where the message was added.
+	 * @param string $function The function that was called.
+	 * @param string $message  A message explaining what has been done incorrectly.
+	 * @param string $version  he version of WordPress where the message was added.
 	 */
 	public function _doing_it_wrong( $function, $message, $version );
 
@@ -85,8 +85,8 @@ interface Debug_Interface {
 	 * @since 2.7.0
 	 * @access private
 	 *
-	 * @param string $p_or_m	The Property or Method.
-	 * @param string $message	A message explaining what has been done incorrectly.
+	 * @param string $p_or_m  The Property or Method.
+	 * @param string $message A message explaining what has been done incorrectly.
 	 */
 	public function _inaccessible_p_or_m( $p_or_m, $message = '' );
 

@@ -269,9 +269,9 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 			* So, **if don't like media pages polluting your business site**, get the [Origin extension](https://theseoframework.com/extensions/origin/) for free.
 		* A one-time self-hiding installation notification showing the admin that you can use focus keywords via the Extension Manager.
 	* **Changed:**
-		* Canonical URLs, Redirect URLs and Social Image URLs are now allowed to have query arguments.
-		* Facebook profile URLs now (solely) accept 'id' query parameters when "https://facebook.com/profile.php" is used.
-		* Notification's font-weight isn't bold by default anymore.
+		* Canonical URLs, Redirect URLs and Social Image URLs are now allowed to have query arguments by default.
+		* Facebook profile URLs now (solely) accept the 'id' query parameters when "https://facebook.com/profile.php" is used.
+		* Notification's font-weight isn't bold by default anymore. This allows for highlighting.
 	* **Improved:**
 		* Description generation has been streamlined, and should result in less performance overhead.
 		* On the generation of the sitemap, we gave back control to other plugins when fetching the posts.
@@ -291,6 +291,9 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 		* TODO: https://wordpress.org/support/topic/auto-generated-description-not-working-with-beaver-builder/#post-10075230
 
 * **For translators:**
+	* **Added:**
+		* Location: The new "get TSFEM" suggesting notification.
+			*
 	* **Changed:**
 		* ""But you've discouraged archiving for the whole site."
 			* Now is: "%s you've discouraged archiving for the whole site."
@@ -348,7 +351,7 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 		* **Changed:**
 			* `(string) the_seo_framework_custom_field_description`
 				* The second parameter is now only expected to have the `'id'` index key.
-				* This filter is now applied to the SEO Bar, too.
+				* Internally, this filter is now applied to the SEO Bar, too.
 			* `(array) the_seo_framework_sitemap_pages_query_args`, `(array) the_seo_framework_sitemap_posts_query_args`, `(array) the_seo_framework_sitemap_cpt_query_args`
 				* The `suppress_filters` argument from the first parameter now defaults to `false`, instead of `true`.
 			* `(bool) the_seo_framework_301_noqueries`
