@@ -5,7 +5,7 @@ Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
 Requires at least: 4.4.0
 Tested up to: 4.9.4
 Requires PHP: 5.3.0
-Stable tag: 3.0.5
+Stable tag: 3.0.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -250,7 +250,7 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 **Summarized:**
 
 * TSF now integrates completely with attachment pages.
-* Non-custom Facebook profile links can now be set via the Social SEO settings and user's Authorial Info settings.
+* Non-personalized Facebook profile links can now be set via the Social SEO settings and user's Authorial Info settings.
 * Seven bugs have been fixed, mainly involving descriptions and the sitemap.
 * The plugin now suggests, **once**, that you can use Focus keywords via the Extension Manager.
 
@@ -269,7 +269,7 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 
 **For developers, about titles ETA July 2018:**
 
-* In the next major release, we're going to change how we handle them.
+* In the next major release, we're going to change how we handle titles.
 * This change won't affect users directly. But it will allow us to manipulate the titles better.
 * For more information, [view and subscribe to issue 202](https://github.com/sybrew/the-seo-framework/issues/202).
 
