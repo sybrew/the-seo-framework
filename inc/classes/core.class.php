@@ -115,9 +115,6 @@ class Core {
 	 * Latest Class. Doesn't have parent.
 	 */
 	protected function __construct() {
-
-		\add_action( 'current_screen', array( $this, 'post_type_support' ), 0 );
-
 		if ( $this->the_seo_framework_debug ) {
 
 			$debug_instance = Debug::get_instance();
@@ -203,36 +200,6 @@ class Core {
 
 		$i = $i / $ar;
 		return round( $i );
-	}
-
-	/**
-	 * Adds post type support for The SEO Framework.
-	 *
-	 * @since 2.1.6
-	 */
-	public function post_type_support() {
-
-		$defaults = array(
-			'post',
-			'page',
-			'product',
-			'forum',
-			'topic',
-			'jetpack-testimonial',
-			'jetpack-portfolio',
-		);
-
-		/**
-		 * Applies filters the_seo_framework_supported_post_types : Array The supported post types.
-		 * @since 2.3.1
-		 */
-		$post_types = (array) \apply_filters( 'the_seo_framework_supported_post_types', $defaults );
-
-		$types = \wp_parse_args( $defaults, $post_types );
-
-		foreach ( $types as $type ) {
-			\add_post_type_support( $type, array( 'autodescription-meta' ) );
-		}
 	}
 
 	/**

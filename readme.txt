@@ -241,11 +241,11 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 
 == Changelog ==
 
-= 3.0.6 - ??? =
+= 3.0.6 - Lionize =
 
 **Release date**
 
-* May TODOth, 2018
+* May 6th, 2018
 
 **Summarized:**
 /
@@ -260,14 +260,13 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 
 * **For everyone:**
 	* **Added:**
-		/
 		* Media (attachment) pages are now truly integrated and compatible with TSF, and all SEO settings and the auto-generation thereof work as intended.
 			* v3.0.4 accidentally added support for attachment pages, so this can be seen as a fix.
 			* Note that media pages don't have auto-generated "Canonical URLs".
 				* This is because their post status is always set to `inherit` via WordPress Core.
 				* Although we could technically generate them, they won't get expected extended support via WP Core filters, which will cause complications.
 			* So, **if don't like media pages polluting your business site**, get the [Origin extension](https://theseoframework.com/extensions/origin/) for free.
-		* A one-time self-hiding installation notification showing the admin that you can use focus keywords via the Extension Manager.
+		* A one-time self-hiding installation notification showing the administrator that focus keywords are available via the Extension Manager.
 	* **Changed:**
 		* Canonical URLs, Redirect URLs and Social Image URLs are now allowed to have query arguments by default.
 		* Facebook profile URLs now (solely) accept the 'id' query parameters when "https://facebook.com/profile.php" is used.
@@ -281,14 +280,12 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 		* The social image uploader of TSF no longer hijacks media saving of third party code. Thanks [@pandulu](https://profiles.wordpress.org/pandulu)!
 		* A description input bug that has been around since v2.0.0 where, when the input is emptied, the previously saved description was shown.
 			* It now shows the real generated description.
-		/
 		* Automated descriptions show their original value after being emptied again.
 			* Social descriptions were also indirectly affected.
 		* The sitemap transient is no longer set when its related caching option is disabled.
 		* The character counter option is no longer automatically set to a disabled state, when updating from below 3.0.0.
 			* Sites that already use 3.0.0 or later are not affected by this change.
-		/
-		* TODO: https://wordpress.org/support/topic/auto-generated-description-not-working-with-beaver-builder/#post-10075230
+		* When a page builder is used, and when description prefixes are disabled, the auto-generated description no longer returns a "forced" empty title prefix.
 
 * **For translators:**
 	* **Added:**
@@ -305,12 +302,19 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 	* **Note:**
 		* We've updated the description generation callbacks. See [this issue](https://github.com/sybrew/the-seo-framework/issues/297) for more information.
 	* **Changed:**
-		/
-		* TODO: Set search and taxonomy keys to unique hashed ones to reduce cache collision.
 		* Notice messages are no longer encapsulated in "strong".
 	* **Fixed:**
-		* When a "timezonestring" can't be forged from WordPress settings (negative manual UTC offset), no more PHP errors are outputted.
+		* When a "time-zone string" can't be forged from WordPress settings (negative manual UTC offset), no more PHP errors are outputted.
 			* This didn't affect the outcome of the timestamps the plugin generated, they were correct regardless.
+	* **Removed:**
+		* `autodescription-meta` support is no longer used. It's also no longer introduced on these post types:
+			* post
+			* page
+			* product
+			* forum
+			* topic
+			* jetpack-testimonial
+			* jetpack-portfolio
 	* **Methods notes:**
 		* **Added:**
 			* `get_social_image_url_from_attachment()`
@@ -345,8 +349,7 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 			* `description_from_cache()`
 				* Use `get_description()` instead.
 		* **Removed:**
-			/
-			* TODO `post_type_support()`
+			* `post_type_support()`, it's no longer used.
 	* **Filter notes:**
 		* **Changed:**
 			* `(string) the_seo_framework_custom_field_description`
@@ -363,8 +366,7 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 			* `(array) the_seo_framework_description_args`
 				* Silently deprecated. There's no replacement, and no notice (yet).
 		* **Removed:**
-			/
-			* TODO `the_seo_framework_supported_post_types`
+			* `the_seo_framework_supported_post_types`, it's no longer used.
 	* **JavaScript notes:**
 		* **Added:**
 			* `window` variable:

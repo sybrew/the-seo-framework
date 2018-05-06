@@ -868,9 +868,12 @@ class Generate_Description extends Generate {
 	 *
 	 * @since 2.6.0
 	 * @since 2.9.2 Added filter.
+	 * @since 3.0.6 The $ignore parameter is now considered in caching.
 	 * @staticvar array $title string of titles.
 	 * @staticvar string $on
 	 * @access private
+	 * @TODO deprecate and rewrite -- or completely remove.
+	 * @see https://github.com/sybrew/the-seo-framework/issues/282
 	 *
 	 * @param int $id The post or term ID
 	 * @param object|string $term The term object
@@ -888,8 +891,8 @@ class Generate_Description extends Generate {
 
 		if ( $ignore || $this->add_description_additions( $id, $term ) ) {
 
-			if ( ! isset( $title[ $id ] ) ) {
-				$title[ $id ] = $this->generate_description_title( $id, $term, $this->is_real_front_page() );
+			if ( ! isset( $title[ $id ][ $ignore ] ) ) {
+				$title[ $id ][ $ignore ] = $this->generate_description_title( $id, $term, $this->is_real_front_page() );
 			}
 
 			if ( $ignore || $this->is_option_checked( 'description_blogname' ) ) {
@@ -910,7 +913,7 @@ class Generate_Description extends Generate {
 			//* Already cached.
 			$sep = $this->get_description_separator();
 		} else {
-			$title[ $id ] = '';
+			$title[ $id ][ $ignore ] = '';
 			$on = '';
 			$blogname = '';
 			$sep = '';
@@ -929,7 +932,7 @@ class Generate_Description extends Generate {
 			 */
 			$data = \apply_filters_ref_array( 'the_seo_framework_generated_description_additions', array(
 				array(
-					'title' => $title[ $id ],
+					'title' => $title[ $id ][ $ignore ],
 					'on' => $on,
 					'blogname' => $blogname,
 					'sep' => $sep,
@@ -940,7 +943,7 @@ class Generate_Description extends Generate {
 			) );
 		} else {
 			$data = array(
-				'title' => $title[ $id ],
+				'title' => $title[ $id ][ $ignore ],
 				'on' => $on,
 				'blogname' => $blogname,
 				'sep' => $sep,
@@ -966,6 +969,8 @@ class Generate_Description extends Generate {
 
 		if ( '' === $id )
 			$id = $this->get_the_real_ID();
+
+		$title = '';
 
 		if ( $page_on_front || $this->is_front_page_by_id( $id ) ) :
 			$title = $this->get_home_page_tagline();
@@ -1011,7 +1016,7 @@ class Generate_Description extends Generate {
 		 * @since 2.2.8
 		 */
 		/* translators: Front-end output. */
-		$title = empty( $title ) ? $this->untitled() : trim( $title );
+		$title = trim( $title ) ?: $this->untitled();
 
 		return $title;
 	}
