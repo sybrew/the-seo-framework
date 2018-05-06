@@ -82,6 +82,7 @@ class Sanitize extends Admin_Pages {
 	 * Handles settings field update POST actions.
 	 *
 	 * @since 2.8.0
+	 * @since 3.0.6 Now updates db version, too.
 	 *
 	 * @return void Early if nonce failed.
 	 */
@@ -101,6 +102,19 @@ class Sanitize extends Admin_Pages {
 		//* Flush transients after options have changed.
 		\add_action( "update_option_{$this->settings_field}", array( $this, 'delete_main_cache' ) );
 		\add_action( "update_option_{$this->settings_field}", array( $this, 'reinitialize_rewrite' ), 11 );
+		\add_action( "update_option_{$this->settings_field}", array( $this, 'update_db_version' ), 12 );
+	}
+
+	/**
+	 * Updates the database version to the defined one.
+	 *
+	 * This prevents errors when users go back to an earlier version, where options
+	 * might be different from a future one.
+	 *
+	 * @since 3.0.6
+	 */
+	public function update_db_version() {
+		\update_option( 'the_seo_framework_upgraded_db_version', THE_SEO_FRAMEWORK_DB_VERSION );
 	}
 
 	/**

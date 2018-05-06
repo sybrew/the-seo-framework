@@ -158,8 +158,6 @@ function the_seo_framework_suggest_extension_manager() {
  */
 function the_seo_framework_enqueue_installer_scripts() {
 
-	add_thickbox();
-
 	$deps = array(
 		'plugin-install',
 		'updates',
@@ -179,7 +177,9 @@ function the_seo_framework_enqueue_installer_scripts() {
 	add_action( 'admin_footer', 'wp_print_request_filesystem_credentials_modal' );
 	add_action( 'admin_footer', 'wp_print_admin_notice_templates' );
 
+	wp_enqueue_style( 'plugin-install' );
 	wp_enqueue_script( $scriptname );
+	add_thickbox();
 }
 
 /**
