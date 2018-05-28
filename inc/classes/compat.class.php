@@ -62,10 +62,10 @@ class Compat extends Core {
 
 		$wp_version = $GLOBALS['wp_version'];
 
-		if ( version_compare( $wp_version, '4.6', '<' ) ) {
-			//* WP 4.6.0
-			$this->_include_compat( '460', 'wp' );
-		}
+		// if ( version_compare( $wp_version, '4.7', '<' ) ) {
+		// 	//* WP 4.7.0
+		// 	$this->_include_compat( '470', 'wp' );
+		// }
 
 		if ( $this->is_theme( 'genesis' ) ) {
 			//* Genesis Framework

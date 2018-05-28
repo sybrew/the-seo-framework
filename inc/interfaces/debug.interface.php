@@ -73,7 +73,7 @@ interface Debug_Interface {
 	 *
 	 * @param string $function The function that was called.
 	 * @param string $message  A message explaining what has been done incorrectly.
-	 * @param string $version  he version of WordPress where the message was added.
+	 * @param string $version  The version of WordPress where the message was added.
 	 */
 	public function _doing_it_wrong( $function, $message, $version );
 

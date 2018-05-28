@@ -33,6 +33,16 @@ defined( 'ABSPATH' ) or die;
 class Core {
 
 	/**
+	 * Tells the this plugin is loaded.
+	 *
+	 * @since 3.1.0
+	 * @access protected
+	 *         Don't alter this variable.
+	 * @property true
+	 */
+	public $loaded = true;
+
+	/**
 	 * Unserializing instances of this object is forbidden.
 	 */
 	final protected function __wakeup() { }

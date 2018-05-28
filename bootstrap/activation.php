@@ -4,7 +4,7 @@
 */
 namespace The_SEO_Framework;
 
-defined( 'THE_SEO_FRAMEWORK_DIR_PATH' ) or die;
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * The SEO Framework plugin
@@ -51,6 +51,7 @@ function _activation_setup_sitemap() {
  * Turns on autoloading for The SEO Framework main options.
  *
  * @since 2.9.2
+ * @since 3.1.0 No longer deletes the whole option array, trying to reactivate autoloading.
  * @access private
  */
 function _activation_set_options_autoload() {
@@ -65,8 +66,13 @@ function _activation_set_options_autoload() {
 		\remove_all_actions( "update_option_{$setting}" );
 		\remove_all_filters( "sanitize_option_{$setting}" );
 
-		// Set to false, so we can reset the options.
-		$_success = \update_option( $setting, false );
+		//? Write a small difference, so the change will be forwarded to the database.
+		$temp_options = $options;
+		if ( is_array( $temp_options ) ) {
+			$temp_options['update_buster'] = time();
+		}
+
+		$_success = \update_option( $setting, $temp_options, 'yes' );
 		if ( $_success )
 			\update_option( $setting, $options, 'yes' );
 	}

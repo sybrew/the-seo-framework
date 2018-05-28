@@ -1,7 +1,13 @@
 <?php
 /**
+ * @package The_SEO_Framework/Bootstrap
+ */
+
+defined( 'THE_SEO_FRAMEWORK_DB_VERSION' ) or die;
+
+/**
  * The SEO Framework plugin
- * Copyright (C) 2015 - 2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -16,34 +22,32 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'THE_SEO_FRAMEWORK_PLUGIN_BASENAME' ) or die;
-
 /**
  * This file holds functions for testing the plugin after upgrade.
  * This file will only be called ONCE if the required version option is lower
  * compared to The SEO Framework version constant.
  *
- * @since 2.8.0
+ * @NOTE This file MUST be written according to WordPress' minimum PHP requirements.
+ *       Which is PHP 5.2.
+ *
+ * @since 3.1.0
  * @access private
  */
 
-the_seo_framework_test_server_phase();
+the_seo_framework_pre_boot_test();
 /**
  * Tests plugin upgrade.
  *
- * @since 2.8.0
- * @since 2.9.4 Changed the testing option from a site option to a blog option.
+ * @since 3.1.0
  * @access private
  * @link http://php.net/eol.php
  * @link https://codex.wordpress.org/WordPress_Versions
  */
-function the_seo_framework_test_server_phase() {
+function the_seo_framework_pre_boot_test() {
 
 	$ms = is_multisite();
 
-	//* @TODO clean this up @ 4.6 requirement. i.e. only check for `get_network()` and $nw->site_id.
-	//= WP_Network is WP > 4.4.
-	if ( $ms && class_exists( 'WP_Network', false ) ) {
+	if ( $ms && function_exists( 'get_network' ) ) {
 		//* Try bypassing testing and deactivation gaming when the main blog has already been tested.
 
 		/**
@@ -52,25 +56,20 @@ function the_seo_framework_test_server_phase() {
 		 */
 		delete_site_option( 'the_seo_framework_tested_upgrade_version' );
 
-		//= WP < 4.6 doesn't have get_network().
-		$nw = function_exists( 'get_network' ) ? get_network() : $GLOBALS['current_site'];
+		$nw = get_network();
 		if ( $nw instanceof WP_Network ) {
-			//= WP < 4.6 doesn't have property 'site_id'.
-			$site_id = isset( $nw->site_id ) ? $nw->site_id : (int) $nw->blog_id;
-
-			//= Free memory. Var is not passed by reference, so it's safe.
-			unset( $nw );
-
-			if ( get_blog_option( $site_id, 'the_seo_framework_tested_upgrade_version' ) ) {
+			if ( get_blog_option( $nw->site_id, 'the_seo_framework_tested_upgrade_version' ) ) {
 				update_option( 'the_seo_framework_tested_upgrade_version', THE_SEO_FRAMEWORK_DB_VERSION );
 				return;
 			}
 		}
+		//= Free memory.
+		unset( $nw );
 	}
 
 	$requirements = array(
-		'php' => '50300',
-		'wp' => '35700',
+		'php' => '50400',
+		'wp' => '37965',
 	);
 
 	   ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < $requirements['php'] and $test = 1
@@ -93,7 +92,7 @@ function the_seo_framework_test_server_phase() {
 	if ( ! function_exists( 'deactivate_plugins' ) )
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
-	$admin = is_admin();
+	$admin  = is_admin();
 	$silent = ! $admin;
 
 	//* Not good. Deactivate plugin.
@@ -106,7 +105,7 @@ function the_seo_framework_test_server_phase() {
 	switch ( $test ) :
 		case 1 :
 			//* PHP requirements not met, always count up to encourage best standards.
-			$requirement = 'PHP 5.3.0 or later';
+			$requirement = 'PHP 5.4.0 or later';
 			$issue = 'PHP version';
 			$version = phpversion();
 			$subtitle = 'Server Requirements';
@@ -114,7 +113,7 @@ function the_seo_framework_test_server_phase() {
 
 		case 2 :
 			//* WordPress requirements not met.
-			$requirement = 'WordPress 4.4 or later';
+			$requirement = 'WordPress 4.6 or later';
 			$issue = 'WordPress version';
 			$version = $GLOBALS['wp_version'];
 			$subtitle = 'WordPress Requirements';
