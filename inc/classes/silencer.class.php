@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) or die;
  * @since 3.1.0
  * @ignore
  */
-class Silencer {
+final class Silencer {
 
 	public function __construct() {}
 

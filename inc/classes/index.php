@@ -12,6 +12,10 @@
  *          -  Debug_Interface
  *       |-> Final
  *
+ * ## Failsafe:
+ *    - Silencer
+ *       |-> Final
+ *
  * ## Façade (bottom is called first):
  *    -  | Core
  *       | Compat

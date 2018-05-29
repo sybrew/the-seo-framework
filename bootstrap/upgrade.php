@@ -53,6 +53,7 @@ add_action( 'admin_init', 'the_seo_framework_do_upgrade', 20 );
  * @since 2.7.0
  * @since 2.9.4 No longer tests WP version. This file won't be loaded anyway if rendered incompatible.
  * @since 3.0.0 Fewer option calls are now made when version is higher than former checks.
+ * @since 3.1.0 Now always updates the database version to the current version, even if it's ahead.
  *
  * @thanks StudioPress for some code.
  */
@@ -60,8 +61,10 @@ function the_seo_framework_do_upgrade() {
 
 	$version = the_seo_framework_previous_db_version();
 
-	if ( $version >= THE_SEO_FRAMEWORK_DB_VERSION )
+	if ( $version >= THE_SEO_FRAMEWORK_DB_VERSION ) {
+		the_seo_framework_upgrade_to_current();
 		return;
+	}
 
 	//* If the WordPress Database hasn't been upgraded yet, make the user upgrade first.
 	if ( (int) get_option( 'db_version' ) !== (int) $GLOBALS['wp_db_version'] ) {
@@ -88,6 +91,9 @@ function the_seo_framework_do_upgrade() {
 	if ( $version < '3060' ) {
 		the_seo_framework_do_upgrade_3060();
 		$version = '3060';
+	}
+	//! From here, the upgrade procedures should be backward compatible.
+	if ( $version < '3100' ) {
 	}
 
 	do_action( 'the_seo_framework_upgraded' );

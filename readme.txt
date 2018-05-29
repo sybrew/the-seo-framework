@@ -260,6 +260,7 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 	* **Improved:**
 		/
 		* TODO
+		* The plugin can now downgrade its database version to the currently installed version. This makes sure necessary future upgrade procedures are reinstated when you choose to downgrade (for any reason).
 	* **Changed:**
 		/
 		* TSF now requires WordPress 4.6, from WordPress 4.4.
@@ -301,12 +302,16 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 		* TODO
 	* **Changed:**
 		/
-		* We added a `bootstrap` folder, where you can easily see where what's loaded.
+		* The plugin now loads within the `/bootstrap/*` folder via the initial `autodescription.php` file, where you can more easily discern how the plugin's loaded.
+		* TODO
 	* **Removed:**
 		/
 		* We removed the `seotips` folder and their contents. They were a gimmick, accumulating SEO tips brought over past plugin update changelogs.
+		* Many deprecated methods, which were deprecated on or before TSF v2.9.4 (August 30, 2017).
+		* TODO
 	* **Fixed:**
 		/
+		* The wpForo title compatibility filter no longer emits a PHP notice when no title is generated from their plugin.
 		* TODO
 	* **Class notes:**
 		 * **Added:**

@@ -30,6 +30,7 @@ function _wpforo_fix_page() {
  * Fixes wpForo page Titles.
  *
  * @since 2.9.2
+ * @since 3.1.0 No longer emits an error when no wpForo title is presented.
  * @access private
  *
  * @param string $title The filter title.
@@ -38,8 +39,8 @@ function _wpforo_fix_page() {
  * @return string $title The wpForo title.
  */
 function _wpforo_filter_pre_title( $title, $args, $escape ) {
-	$wpforo_title = \wpforo_meta_title( '' );
-	return $wpforo_title[0] ?: $title;
+	$wpforo_title = \wpforo_meta_title( '' ); //= Either &$title or [ $title, ... ];
+	return is_array( $wpforo_title ) && ! empty( $wpforo_title[0] ) ? $wpforo_title[0] : $title;
 }
 
 /**

@@ -7,5 +7,5 @@
 
 defined( 'ABSPATH' ) or die;
 
-if ( ! function_exists( '_' ) ) :
-endif;
+// if ( ! function_exists( '_' ) ) :
+// endif;
