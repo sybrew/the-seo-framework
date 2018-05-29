@@ -171,8 +171,14 @@ class Admin_Pages extends Inpost {
 	 * @access private
 	 */
 	public function _output_seo_settings_wrap() {
+		/**
+		 * @since 3.0.0
+		 */
 		\do_action( 'the_seo_framework_pre_seo_settings' );
 		$this->get_view( 'admin/seo-settings-wrap', get_defined_vars() );
+		/**
+		 * @since 3.0.0
+		 */
 		\do_action( 'the_seo_framework_pro_seo_settings' );
 	}
 
@@ -190,7 +196,7 @@ class Admin_Pages extends Inpost {
 	 * Registers meta boxes on the Site SEO Settings page.
 	 *
 	 * @since 3.0.0
-	 *
+	 * @access private
 	 * @see $this->general_metabox()     Callback for General Settings box.
 	 * @see $this->title_metabox()       Callback for Title Settings box.
 	 * @see $this->description_metabox() Callback for Description Settings box.

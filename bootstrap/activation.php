@@ -69,7 +69,7 @@ function _activation_set_options_autoload() {
 		//? Write a small difference, so the change will be forwarded to the database.
 		$temp_options = $options;
 		if ( is_array( $temp_options ) ) {
-			$temp_options['update_buster'] = time();
+			$temp_options['update_buster'] = (int) time();
 		}
 
 		$_success = \update_option( $setting, $temp_options, 'yes' );

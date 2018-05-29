@@ -531,16 +531,19 @@ class Post_Data extends Detect {
 		/**
 		 * Applies filters 'the_seo_framework_detect_page_builder' : boolean
 		 * Determines whether a page builder has been detected.
-		 * @since 2.6.6
 		 *
-		 * @param boolean The current state.
-		 * @param int $post_id The current Post ID.
-		 * @param array $meta The current post meta.
+		 * @since 2.6.6
+		 * @since 3.1.0 1: Now defaults to `null`
+		 *              2: Now, when a boolean (either true or false) is defined, it'll short-circuit this function.
+		 *
+		 * @param boolean|null $detected Whether a builder should be detected.
+		 * @param int          $post_id The current Post ID.
+		 * @param array        $meta The current post meta.
 		 */
-		$detected = (bool) \apply_filters( 'the_seo_framework_detect_page_builder', false, $post_id, $meta );
+		$detected = \apply_filters( 'the_seo_framework_detect_page_builder', null, $post_id, $meta );
 
-		if ( $detected )
-			return true;
+		if ( is_bool( $detected ) )
+			return $detected;
 
 		if ( empty( $meta ) )
 			return false;

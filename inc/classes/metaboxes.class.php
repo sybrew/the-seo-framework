@@ -77,8 +77,8 @@ class Metaboxes extends Site_Options {
 					$dashicon = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
 					$name = isset( $value['name'] ) ? $value['name'] : '';
 
-					$checked = 1 === $count ? 'checked' : '';
-					$the_id = \esc_attr( $id . '-tab-' . $tab );
+					$checked  = 1 === $count ? 'checked' : '';
+					$the_id   = \esc_attr( $id . '-tab-' . $tab );
 					$the_name = \esc_attr( $id . '-tabs' );
 
 					//* All output below is escaped.
@@ -107,7 +107,7 @@ class Metaboxes extends Site_Options {
 		$count = 1;
 		foreach ( $tabs as $tab => $value ) :
 
-			$the_id = $id . '-tab-' . $tab . '-content';
+			$the_id   = $id . '-tab-' . $tab . '-content';
 			$the_name = $id . '-tabs-content';
 
 			//* Current tab for JS.
@@ -157,8 +157,14 @@ class Metaboxes extends Site_Options {
 	 * @param array $args The metabox arguments.
 	 */
 	public function general_metabox( $post = null, $args = array() ) {
+		/**
+		 * @since 2.8.0
+		 */
 		\do_action( 'the_seo_framework_general_metabox_before' );
 		$this->get_view( 'metaboxes/general-metabox', $args );
+		/**
+		 * @since 2.8.0
+		 */
 		\do_action( 'the_seo_framework_general_metabox_after' );
 	}
 
@@ -221,8 +227,14 @@ class Metaboxes extends Site_Options {
 	 * @param array $args The metabox arguments.
 	 */
 	public function title_metabox( $post = null, $args = array() ) {
+		/**
+		 * @since 2.5.0 or earlier.
+		 */
 		\do_action( 'the_seo_framework_title_metabox_before' );
 		$this->get_view( 'metaboxes/title-metabox', $args );
+		/**
+		 * @since 2.5.0 or earlier.
+		 */
 		\do_action( 'the_seo_framework_title_metabox_after' );
 	}
 
@@ -243,8 +255,8 @@ class Metaboxes extends Site_Options {
 	 * @see $this->title_metabox() : Callback for Title Settings box.
 	 *
 	 * @param array $examples : array {
-	 * 		'left'	=> Left Example
-	 * 		'right'	=> Right Example
+	 *   'left'  => Left Example
+	 *   'right' => Right Example
 	 * }
 	 */
 	public function title_metabox_additions_tab( $examples = array() ) {
@@ -258,8 +270,8 @@ class Metaboxes extends Site_Options {
 	 * @see $this->title_metabox() : Callback for Title Settings box.
 	 *
 	 * @param array $additions : array {
-	 * 		'left'	=> Left Example Addtitions
-	 * 		'right'	=> Right Example Additions
+	 *   'left'  => Left Example Addtitions
+	 *   'right' => Right Example Additions
 	 * }
 	 * @param bool $showleft The example location.
 	 */
@@ -276,8 +288,14 @@ class Metaboxes extends Site_Options {
 	 * @param array $args The metabox arguments.
 	 */
 	public function description_metabox( $post = null, $args = array() ) {
+		/**
+		 * @since 2.5.0 or earlier.
+		 */
 		\do_action( 'the_seo_framework_description_metabox_before' );
 		$this->get_view( 'metaboxes/description-metabox', $args );
+		/**
+		 * @since 2.5.0 or earlier.
+		 */
 		\do_action( 'the_seo_framework_description_metabox_after' );
 	}
 
@@ -310,8 +328,14 @@ class Metaboxes extends Site_Options {
 	 * @param array $args The metabox arguments.
 	 */
 	public function robots_metabox( $post = null, $args = array() ) {
+		/**
+		 * @since 2.5.0 or earlier.
+		 */
 		\do_action( 'the_seo_framework_robots_metabox_before' );
 		$this->get_view( 'metaboxes/robots-metabox', $args );
+		/**
+		 * @since 2.5.0 or earlier.
+		 */
 		\do_action( 'the_seo_framework_robots_metabox_after' );
 	}
 
@@ -333,9 +357,9 @@ class Metaboxes extends Site_Options {
 	 *
 	 * @param array $types The post types
 	 * @param array $robots The robots option values : {
-	 *		'value' string The robots option value.
-	 *		'name' string The robots name.
-	 *		'desc' string Explains what the robots type does.
+	 *   'value' string The robots option value.
+	 *   'name' string The robots name.
+	 *   'desc' string Explains what the robots type does.
 	 * }
 	 */
 	protected function robots_metabox_no_tab( $types, $robots ) {
@@ -351,8 +375,14 @@ class Metaboxes extends Site_Options {
 	 * @param array $args The navigation tabs args.
 	 */
 	public function homepage_metabox( $post = null, $args = array() ) {
+		/**
+		 * @since 2.5.0 or earlier.
+		 */
 		\do_action( 'the_seo_framework_homepage_metabox_before' );
 		$this->get_view( 'metaboxes/homepage-metabox', $args );
+		/**
+		 * @since 2.5.0 or earlier.
+		 */
 		\do_action( 'the_seo_framework_homepage_metabox_after' );
 	}
 
@@ -405,8 +435,14 @@ class Metaboxes extends Site_Options {
 	 * @param array $args the social tabs arguments.
 	 */
 	public function social_metabox( $post = null, $args = array() ) {
+		/**
+		 * @since 2.5.0 or earlier.
+		 */
 		\do_action( 'the_seo_framework_social_metabox_before' );
 		$this->get_view( 'metaboxes/social-metabox', $args );
+		/**
+		 * @since 2.5.0 or earlier.
+		 */
 		\do_action( 'the_seo_framework_social_metabox_after' );
 	}
 
@@ -460,8 +496,14 @@ class Metaboxes extends Site_Options {
 	 * @param array $args the social tabs arguments.
 	 */
 	public function webmaster_metabox( $post = null, $args = array() ) {
+		/**
+		 * @since 2.5.0 or earlier.
+		 */
 		\do_action( 'the_seo_framework_webmaster_metabox_before' );
 		$this->get_view( 'metaboxes/webmaster-metabox', $args );
+		/**
+		 * @since 2.5.0 or earlier.
+		 */
 		\do_action( 'the_seo_framework_webmaster_metabox_after' );
 	}
 
@@ -475,8 +517,14 @@ class Metaboxes extends Site_Options {
 	 * @param array $args the social tabs arguments.
 	 */
 	public function sitemaps_metabox( $post = null, $args = array() ) {
+		/**
+		 * @since 2.5.0 or earlier.
+		 */
 		\do_action( 'the_seo_framework_sitemaps_metabox_before' );
 		$this->get_view( 'metaboxes/sitemaps-metabox', $args );
+		/**
+		 * @since 2.5.0 or earlier.
+		 */
 		\do_action( 'the_seo_framework_sitemaps_metabox_after' );
 	}
 
@@ -539,8 +587,14 @@ class Metaboxes extends Site_Options {
 	 * @param array $args the social tabs arguments.
 	 */
 	public function feed_metabox( $post = null, $args = array() ) {
+		/**
+		 * @since 2.5.2
+		 */
 		\do_action( 'the_seo_framework_feed_metabox_before' );
 		$this->get_view( 'metaboxes/feed-metabox', $args );
+		/**
+		 * @since 2.5.2
+		 */
 		\do_action( 'the_seo_framework_feed_metabox_after' );
 	}
 
@@ -553,8 +607,14 @@ class Metaboxes extends Site_Options {
 	 * @param array $args the social tabs arguments.
 	 */
 	public function schema_metabox( $post = null, $args = array() ) {
+		/**
+		 * @since 2.6.0
+		 */
 		\do_action( 'the_seo_framework_schema_metabox_before' );
 		$this->get_view( 'metaboxes/schema-metabox', $args );
+		/**
+		 * @since 2.6.0
+		 */
 		\do_action( 'the_seo_framework_schema_metabox_after' );
 	}
 

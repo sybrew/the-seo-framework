@@ -96,6 +96,9 @@ function the_seo_framework_do_upgrade() {
 	if ( $version < '3100' ) {
 	}
 
+	/**
+	 * @since 2.7.0
+	 */
 	do_action( 'the_seo_framework_upgraded' );
 }
 

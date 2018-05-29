@@ -48,7 +48,9 @@ function _init_locale() {
  *
  * @since 3.1.0
  * @access private
+ * @see function the_seo_framework().
  * @staticvar object $tsf
+ * @factory
  *
  * @return object|null The SEO Framework Facade class object. Null on failure.
  */
@@ -61,30 +63,32 @@ function _init_tsf() {
 		return $tsf;
 
 	if ( false === \doing_action( 'plugins_loaded' ) )
-		\wp_die( 'Use the_seo_framework() after action `plugins_loaded` priority 5.' );
+		\_doing_it_wrong( 'the_seo_framework() || ' . __FUNCTION__, 'Use <code>the_seo_framework()</code> after action <code>plugins_loaded</code> priority 5.' );
 
 	/**
 	 * @package The_SEO_Framework
 	 */
 	if ( \The_SEO_Framework\_can_load() ) {
 		if ( \is_admin() ) {
-			//! TODO: admin loader.
+			//! TODO: admin-only loader.
 			$tsf = new \The_SEO_Framework\Load();
+			$tsf->loaded = true;
 
 			/**
-			 * Runs after TSF is initialized in the admin.
+			 * Runs after TSF is loaded in the admin.
 			 * @since 3.1.0
 			 */
-			\do_action( 'the_seo_framework_admin_initialized' );
+			\do_action( 'the_seo_framework_admin_loaded' );
 		} else {
 			$tsf = new \The_SEO_Framework\Load();
+			$tsf->loaded = true;
 		}
 
 		/**
-		 * Runs after TSF is initialized.
+		 * Runs after TSF is loaded.
 		 * @since 3.1.0
 		 */
-		\do_action( 'the_seo_framework_initialized' );
+		\do_action( 'the_seo_framework_loaded' );
 	} else {
 		$tsf = new \The_SEO_Framework\Silencer();
 	}

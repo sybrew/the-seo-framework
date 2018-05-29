@@ -331,8 +331,14 @@ class Inpost extends Profile {
 	 * @param object $object The TT object.
 	 */
 	public function tt_inpost_box( $type, $object ) {
+		/**
+		 * @since 2.9.0
+		 */
 		\do_action( 'the_seo_framework_pre_tt_inpost_box' );
 		$this->get_view( 'inpost/seo-settings-tt', get_defined_vars() );
+		/**
+		 * @since 2.9.0
+		 */
 		\do_action( 'the_seo_framework_pro_tt_inpost_box' );
 	}
 
@@ -347,8 +353,14 @@ class Inpost extends Profile {
 	 * @param string $type The post type name.
 	 */
 	public function singular_inpost_box( $type ) {
+		/**
+		 * @since 2.9.0
+		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_box' );
 		$this->get_view( 'inpost/seo-settings-singular', get_defined_vars() );
+		/**
+		 * @since 2.9.0
+		 */
 		\do_action( 'the_seo_framework_pro_page_inpost_box' );
 	}
 
@@ -363,8 +375,14 @@ class Inpost extends Profile {
 	 * @param string $type The post type name.
 	 */
 	public function singular_inpost_box_general_tab( $type ) {
+		/**
+		 * @since 2.9.0
+		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_general_tab' );
 		$this->get_view( 'inpost/seo-settings-singular', get_defined_vars(), 'general' );
+		/**
+		 * @since 2.9.0
+		 */
 		\do_action( 'the_seo_framework_pro_page_inpost_general_tab' );
 	}
 
@@ -379,8 +397,14 @@ class Inpost extends Profile {
 	 * @param string $type The post type name.
 	 */
 	public function singular_inpost_box_visibility_tab( $type ) {
+		/**
+		 * @since 2.9.0
+		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_visibility_tab' );
 		$this->get_view( 'inpost/seo-settings-singular', get_defined_vars(), 'visibility' );
+		/**
+		 * @since 2.9.0
+		 */
 		\do_action( 'the_seo_framework_pro_page_inpost_visibility_tab' );
 	}
 
@@ -395,8 +419,14 @@ class Inpost extends Profile {
 	 * @param string $type The post type name.
 	 */
 	public function singular_inpost_box_social_tab( $type ) {
+		/**
+		 * @since 2.9.0
+		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_social_tab' );
 		$this->get_view( 'inpost/seo-settings-singular', get_defined_vars(), 'social' );
+		/**
+		 * @since 2.9.0
+		 */
 		\do_action( 'the_seo_framework_pro_page_inpost_social_tab' );
 	}
 

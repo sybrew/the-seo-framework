@@ -763,4 +763,37 @@ final class Deprecated {
 
 		return $force_slash ? \trailingslashit( $url ) : $url;
 	}
+
+	/**
+	 * Returns the TSF meta output Object cache key.
+	 *
+	 * @since 2.8.0
+	 * @since 3.1.0 Deprecated.
+	 * @deprecated
+	 * @uses THE_SEO_FRAMEWORK_DB_VERSION as cache key buster.
+	 * @see $this->get_meta_output_cache_key_by_type();
+	 *
+	 * @param int $id The ID. Defaults to $this->get_the_real_ID();
+	 * @return string The TSF meta output cache key.
+	 */
+	public function get_meta_output_cache_key( $id = 0 ) {
+
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->get_meta_output_cache_key()', '3.1.0', 'the_seo_framework()->get_meta_output_cache_key_by_query()' );
+
+		/**
+		 * Cache key buster.
+		 * Busts cache on each new db version.
+		 */
+		$key = $tsf->generate_cache_key( $id ) . '_' . THE_SEO_FRAMEWORK_DB_VERSION;
+
+		/**
+		 * Give each paged pages/archives a different cache key.
+		 * @since 2.2.6
+		 */
+		$page = (string) $tsf->page();
+		$paged = (string) $tsf->paged();
+
+		return $cache_key = 'seo_framework_output_' . $key . '_' . $paged . '_' . $page;
+	}
 }

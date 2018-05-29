@@ -33,14 +33,16 @@ defined( 'ABSPATH' ) or die;
 class Core {
 
 	/**
-	 * Tells the this plugin is loaded.
+	 * Tells if this plugin is loaded.
+	 *
+	 * @NOTE: Only `\The_SEO_Framework\_init_tsf()` should adjust this.
 	 *
 	 * @since 3.1.0
 	 * @access protected
-	 *         Don't alter this variable.
-	 * @property true
+	 *         Don't alter this variable!!!
+	 * @var true
 	 */
-	public $loaded = true;
+	public $loaded = false;
 
 	/**
 	 * Unserializing instances of this object is forbidden.

@@ -101,6 +101,9 @@ class Init extends Query {
 		if ( $this->is_preview() )
 			return;
 
+		/**
+		 * @since 2.8.0
+		 */
 		\do_action( 'the_seo_framework_init' );
 
 		$this->init_global_actions();
@@ -112,6 +115,11 @@ class Init extends Query {
 			$this->init_front_end_actions();
 			$this->init_front_end_filters();
 		}
+
+		/**
+		 * @since 3.1.0
+		 */
+		\do_action( 'the_seo_framework_after_init' );
 	}
 
 	/**
@@ -401,6 +409,9 @@ class Init extends Query {
 	 */
 	public function html_output() {
 
+		/**
+		 * @since 2.6.0
+		 */
 		\do_action( 'the_seo_framework_do_before_output' );
 
 		/**
@@ -412,7 +423,7 @@ class Init extends Query {
 		$init_start = microtime( true );
 
 		if ( $this->use_object_cache ) {
-			$cache_key = $this->get_meta_output_cache_key();
+			$cache_key = $this->get_meta_output_cache_key_by_query();
 			$output = $this->object_cache_get( $cache_key );
 		} else {
 			$cache_key = '';
@@ -515,8 +526,10 @@ class Init extends Query {
 		//* Already escaped.
 		echo PHP_EOL . $output . PHP_EOL;
 
+		/**
+		 * @since 2.6.0
+		 */
 		\do_action( 'the_seo_framework_do_after_output' );
-
 	}
 
 	/**

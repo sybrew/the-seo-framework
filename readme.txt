@@ -300,18 +300,21 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 	* **Improved:**
 		/
 		* TODO
+		* A "doing it wrong" notice is now supplied when calling `the_seo_framework()` too early.
 	* **Changed:**
 		/
-		* The plugin now loads within the `/bootstrap/*` folder via the initial `autodescription.php` file, where you can more easily discern how the plugin's loaded.
+		* The plugin now loads within the `/bootstrap/` folder via the plugin's initial `autodescription.php` file, where you can more easily discern how the plugin's loaded.
 		* TODO
 	* **Removed:**
 		/
 		* We removed the `seotips` folder and their contents. They were a gimmick, accumulating SEO tips brought over past plugin update changelogs.
 		* Many deprecated methods, which were deprecated on or before TSF v2.9.4 (August 30, 2017).
+		* TODO `the_seo_framework()->theme_doing_it_right_transient` and all that's related.
 		* TODO
 	* **Fixed:**
 		/
 		* The wpForo title compatibility filter no longer emits a PHP notice when no title is generated from their plugin.
+		* A highly unlikely PHP error now won't occur when `$wpdb` returns incomplete data on excluded archive/search IDs.
 		* TODO
 	* **Class notes:**
 		 * **Added:**
@@ -348,10 +351,20 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 			* `the_seo_framework_is_settings_page()`. Use expression `the_seo_framework()->is_seo_settings_page()` instead.
 			* `the_seo_framework_update_option()`. Use expression `the_seo_framework()->update_settings()` instead.
 			* `the_seo_framework_options_page_slug()`. Use expression `the_seo_framework()->seo_settings_page_slug` instead.
+	* **Method notes:**
+		* **Deprecated:**
+			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
+				* `get_meta_output_cache_key()`, use `get_meta_output_cache_key_by_query()` (without Page ID) or `get_meta_output_cache_key_by_type()` (with page ID) instead.
 	* **Action notes:**
 		* **Added:**
-			* `the_seo_framework_admin_initialized`. Runs after the plugin factory is loaded in the admin-end.
-			* `the_seo_framework_initialized`. Runs after the plugin factory is loaded on any end. Not to be confused with `the_seo_framework_init`.
+			* `the_seo_framework_admin_loaded`. Runs after the plugin factory is loaded in the admin-end.
+			* `the_seo_framework_loaded`. Runs after the plugin factory is loaded on any end.
+			* `the_seo_framework_after_init`. Runs after the plugin has initialized its admin or front-end hooks. See also, the admin-only hook: `the_seo_framework_after_admin_init`.
+	* **Filter notes:**
+		* **Changed:**
+			* `the_seo_framework_detect_page_builder`.
+				1. Now returns `null` by default.
+				2. Now, when a boolean (either true or false) is defined, it'll short-circuit this function. See [this comment](https://github.com/sybrew/the-seo-framework/issues/279#issuecomment-392735509) for more information.
 	* **Structural notes:**
 		* **Added:**
 			* Folder `/bootstrap/`, with:

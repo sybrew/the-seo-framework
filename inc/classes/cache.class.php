@@ -914,7 +914,6 @@ class Cache extends Sitemaps {
 	 *
 	 * @param int $page_id The taxonomy or page ID.
 	 * @param string $taxonomy The taxonomy name.
-	 *
 	 * @return string The Taxonomical Archive cache key.
 	 */
 	protected function generate_taxonomical_cache_key( $page_id = '', $taxonomy = '' ) {
@@ -960,34 +959,6 @@ class Cache extends Sitemaps {
 		$revision = '1';
 
 		return $cache_key = 'robots_txt_output_' . $revision . $GLOBALS['blog_id'];
-	}
-
-	/**
-	 * Returns the TSF meta output Object cache key.
-	 *
-	 * @since 2.8.0
-	 * @uses THE_SEO_FRAMEWORK_DB_VERSION as cache key buster.
-	 * @see $this->get_meta_output_cache_key_by_type();
-	 * @todo deprecate.
-	 *
-	 * @param int $id The ID. Defaults to $this->get_the_real_ID();
-	 * @return string The TSF meta output cache key.
-	 */
-	public function get_meta_output_cache_key( $id = 0 ) {
-		/**
-		 * Cache key buster.
-		 * Busts cache on each new db version.
-		 */
-		$key = $this->generate_cache_key( $id ) . '_' . THE_SEO_FRAMEWORK_DB_VERSION;
-
-		/**
-		 * Give each paged pages/archives a different cache key.
-		 * @since 2.2.6
-		 */
-		$page = (string) $this->page();
-		$paged = (string) $this->paged();
-
-		return $cache_key = 'seo_framework_output_' . $key . '_' . $paged . '_' . $page;
 	}
 
 	/**
@@ -1211,6 +1182,7 @@ class Cache extends Sitemaps {
 	 * Builds and returns the excluded post IDs transient.
 	 *
 	 * @since 3.0.0
+	 * @since 3.1.0 Now no longer crashes on database errors.
 	 * @staticvar array $cache
 	 *
 	 * @return array : { 'archive', 'search' }
@@ -1236,7 +1208,7 @@ class Cache extends Sitemaps {
 
 			foreach ( array( 'archive', 'search' ) as $key ) {
 				array_walk( $cache[ $key ], function( &$v ) {
-					$v = $v->meta_value ? (int) $v->post_id : false;
+					$v = isset( $v->meta_value, $v->post_id ) && $v->meta_value ? (int) $v->post_id : false;
 				} );
 				$cache[ $key ] = array_filter( $cache[ $key ] );
 			}
