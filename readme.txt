@@ -260,7 +260,9 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 	* **Improved:**
 		/
 		* TODO
-		* The plugin can now downgrade its database version to the currently installed version. This makes sure necessary future upgrade procedures are reinstated when you choose to downgrade (for any reason).
+		* The plugin can now downgrade its database version to the currently installed version automatically. This makes sure necessary future upgrade procedures are reinstated when you choose to downgrade (for any reason).
+			* Since TSF v3.0.6 this happens when the user saved the options, but this could lead to inconsistent behavior on WordPress Multisite installations.
+		* We removed a lot of redundant code (like option upgrade checks), which have long been superseded by better standards.
 	* **Changed:**
 		/
 		* TSF now requires WordPress 4.6, from WordPress 4.4.
@@ -287,7 +289,7 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 		* TODO
 	* **Removed:**
 		/
-		* TODO
+		* "New SEO Settings have been updated"
 
 * **For developers:**
 	* **Tips:**
@@ -309,6 +311,7 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 		/
 		* We removed the `seotips` folder and their contents. They were a gimmick, accumulating SEO tips brought over past plugin update changelogs.
 		* Many deprecated methods, which were deprecated on or before TSF v2.9.4 (August 30, 2017).
+		* The plugin's automagic-upgrader has been removed, which has been replaced with a static, ordered and semantic plugin upgrader since TSF v2.7.0.
 		* TODO `the_seo_framework()->theme_doing_it_right_transient` and all that's related.
 		* TODO
 	* **Fixed:**
@@ -352,6 +355,10 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 			* `the_seo_framework_update_option()`. Use expression `the_seo_framework()->update_settings()` instead.
 			* `the_seo_framework_options_page_slug()`. Use expression `the_seo_framework()->seo_settings_page_slug` instead.
 	* **Method notes:**
+		* **Removed:**
+			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
+				* `site_updated_plugin_option()`.
+				* `do_settings_updated_notice()`.
 		* **Deprecated:**
 			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
 				* `get_meta_output_cache_key()`, use `get_meta_output_cache_key_by_query()` (without Page ID) or `get_meta_output_cache_key_by_type()` (with page ID) instead.
@@ -365,6 +372,8 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 			* `the_seo_framework_detect_page_builder`.
 				1. Now returns `null` by default.
 				2. Now, when a boolean (either true or false) is defined, it'll short-circuit this function. See [this comment](https://github.com/sybrew/the-seo-framework/issues/279#issuecomment-392735509) for more information.
+		* **Removed:**
+			* `the_seo_framework_update_options_at_update`
 	* **Structural notes:**
 		* **Added:**
 			* Folder `/bootstrap/`, with:

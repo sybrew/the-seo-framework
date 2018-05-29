@@ -92,10 +92,6 @@ class Sanitize extends Admin_Pages {
 		if ( false === $this->verify_seo_settings_nonce() )
 			return;
 
-		//* Update hidden options.
-		//* @TODO remove this and use a better upgrade handler.
-		$this->update_hidden_options_to_default();
-
 		//* Initialize sanitation filters parsed on each option update.
 		$this->init_sanitizer_filters();
 

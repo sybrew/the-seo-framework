@@ -52,22 +52,12 @@ class Site_Options extends Sanitize {
 	public $seo_settings_page_slug;
 
 	/**
-	 * Holds the update option.
-	 *
-	 * @since 2.6.0
-	 *
-	 * @var string The Updated option name.
-	 */
-	protected $o_plugin_updated;
-
-	/**
 	 * Constructor, load parent constructor and set up cachable variables.
 	 */
 	protected function __construct() {
 		parent::__construct();
 
 		$this->settings_field = THE_SEO_FRAMEWORK_SITE_OPTIONS;
-		$this->o_plugin_updated = 'updated_' . THE_SEO_FRAMEWORK_DB_VERSION;
 		$this->seo_settings_page_slug = 'theseoframework-settings';
 
 		\add_filter( "option_page_capability_{$this->settings_field}", array( $this, 'get_settings_capability' ) );
@@ -271,9 +261,6 @@ class Site_Options extends Sanitize {
 			// Schema
 			'ld_json_searchbox'   => 1, // LD+Json Sitelinks Searchbox
 			'ld_json_breadcrumbs' => 1, // LD+Json Breadcrumbs
-
-			// Cache.
-			$this->o_plugin_updated => 1, // Plugin update cache.
 		);
 	}
 
@@ -297,154 +284,11 @@ class Site_Options extends Sanitize {
 		 */
 		return array(
 			'title_rem_additions' => 1, // Title remove additions.
-			'site_noindex' => 1, // Site Page robots noindex
-			'site_nofollow' => 1, // Site Page robots nofollow
-			'homepage_noindex'  => 1, // Home Page robots noindex
-			'homepage_nofollow' => 1, // Home Page robots noarchive
+			'site_noindex'        => 1, // Site Page robots noindex
+			'site_nofollow'       => 1, // Site Page robots nofollow
+			'homepage_noindex'    => 1, // Home Page robots noindex
+			'homepage_nofollow'   => 1, // Home Page robots noarchive
 		);
-	}
-
-	/**
-	 * Updates special hidden values to default on settings save.
-	 *
-	 * @since 2.6.0
-	 * @securitycheck 3.0.0 OK.
-	 * @TODO REMOVE THIS and use a better upgrade handler. Source for code debt.
-	 */
-	protected function update_hidden_options_to_default() {
-
-		if ( false === $this->verify_seo_settings_nonce() )
-			return;
-
-		//* Disables the New SEO Settings Updated notification.
-		$plugin_updated = $this->o_plugin_updated;
-		$_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ][ $plugin_updated ] = 1;
-
-	}
-
-	/**
-	 * Updates option from default options at plugin update.
-	 *
-	 * @since 2.6.0
-	 * @since 2.9.0 Added excluded options check.
-	 * @access private
-	 *
-	 * @return void early if already has been updated.
-	 */
-	public function site_updated_plugin_option() {
-
-		if ( false === $this->is_admin() )
-			return;
-
-		/**
-		 * Applies filters 'the_seo_framework_update_options_at_update' : bool
-		 * @since 2.6.0
-		 */
-		if ( ! \apply_filters( 'the_seo_framework_update_options_at_update', true ) )
-			return;
-
-		$plugin_updated = $this->o_plugin_updated;
-
-		/**
-		 * Prevent this function from running more than once after update.
-		 * Also prevent running if no settings field is found.
-		 */
-		if ( $this->get_option( $plugin_updated ) || empty( $this->settings_field ) )
-			return;
-
-		//* If current user isn't allowed to update options, don't do anything.
-		if ( ! $this->can_access_settings() )
-			return;
-
-		$updated = false;
-		$options = $this->get_all_options();
-		$new_options = $this->default_site_options();
-
-		/**
-		 * Stop this madness from happening again until next update.
-		 * Also prevent $updated to become true on this call.
-		 */
-		$new_options[ $plugin_updated ] = 1;
-		$options[ $plugin_updated ] = 1;
-
-		$plausible_missing_options = array(
-			'cache_meta_description',
-			'cache_meta_schema',
-			'cache_sitemap',
-			'cache_object',
-			'display_seo_bar_tables',
-			'display_seo_bar_metabox',
-		);
-
-		//* Merge the options. Add to if it's non-existent.
-		foreach ( $new_options as $key => $value ) {
-			if ( ! isset( $options[ $key ] ) ) {
-				if ( in_array( $key, $plausible_missing_options, true ) ) {
-					$options[ $key ] = 0;
-				} else {
-					$options[ $key ] = $value;
-				}
-
-				if ( ! empty( $value ) )
-					$updated = true;
-			}
-		}
-
-		//* Updated the options. Check for updated flag and see if settings pages are loaded.
-		if ( \update_option( $this->settings_field, $options ) && $updated && $this->load_options )
-			$this->pre_output_site_updated_plugin_notice();
-
-	}
-
-	/**
-	 * Determine whether to output update notice directly or on refresh.
-	 * Run before headers are sent.
-	 *
-	 * @since 2.6.0
-	 * @securitycheck 3.0.3 OK.
-	 */
-	protected function pre_output_site_updated_plugin_notice() {
-
-		/**
-		 * Security check:
-		 * Only checks for extra parameters. Then redirects further to only output
-		 * notice. User capability is checked beforehand.
-		 */
-		if ( $this->can_access_settings() && $this->is_seo_settings_page( false ) ) {
-			//* Redirect to current page if on options page to correct option values. Once.
-			if ( ! isset( $_REQUEST['tsf-settings-updated'] ) || 'true' !== $_REQUEST['tsf-settings-updated'] )
-				$this->admin_redirect( $this->seo_settings_page_slug, array( 'tsf-settings-updated' => 'true' ) );
-
-			//* Notice has already been sent.
-			return;
-		}
-
-		//* Make sure this plugin's scripts are being loaded.
-		$this->init_admin_scripts();
-
-		//* Output notice.
-		\add_action( 'admin_notices', array( $this, 'do_settings_updated_notice' ) );
-
-	}
-
-	/**
-	 * Echos plugin updated notification.
-	 *
-	 * @since 2.6.0
-	 *
-	 * @access private
-	 */
-	public function do_settings_updated_notice() {
-
-		$settings_url = $this->seo_settings_page_url();
-		$link = sprintf( '<a href="%s" title="%s" target="_self">%s</a>', $settings_url, \esc_attr__( 'SEO Settings', 'autodescription' ), \esc_html__( 'here', 'autodescription' ) );
-		$go_to_page = sprintf( \esc_html_x( 'View the new options %s.', '%s = here', 'autodescription' ), $link );
-
-		$notice = $this->page_defaults['plugin_update_text'] . ' ' . $go_to_page;
-
-		//* Already escaped.
-		$this->do_dismissible_notice( $notice, 'updated', true, false );
-
 	}
 
 	/**

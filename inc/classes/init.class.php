@@ -221,9 +221,6 @@ class Init extends Query {
 			//* Load the SEO admin page content and handlers.
 			\add_action( 'admin_init', array( $this, 'settings_init' ), 10 );
 
-			//* Update site options at plugin update.
-			\add_action( 'admin_init', array( $this, 'site_updated_plugin_option' ), 30 );
-
 			//* Enqueue Inpost meta boxes.
 			\add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box_init' ), 5 );
 
