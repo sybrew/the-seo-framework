@@ -4,7 +4,7 @@
  */
 namespace The_SEO_Framework;
 
-defined( 'ABSPATH' ) or die;
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * The SEO Framework plugin
@@ -559,7 +559,7 @@ class Core {
 		 * Applies filters 'the_seo_framework_settings_capability'
 		 *
 		 * @since 2.6.0
-		 * @string $capability The user capability required to adjust settings.
+		 * @param string $capability The user capability required to adjust settings.
 		 */
 		return (string) \apply_filters( 'the_seo_framework_settings_capability', 'manage_options' );
 	}

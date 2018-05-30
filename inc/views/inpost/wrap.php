@@ -3,7 +3,7 @@
  * @package The_SEO_Framework\Views\Inpost
  */
 
-defined( 'ABSPATH' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
 //* Whether tabs are active.
 $use_tabs = $use_tabs && count( $tabs ) > 1;

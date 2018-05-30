@@ -5,7 +5,7 @@
  * @license GPLv2+
  */
 
-defined( 'ABSPATH' ) or die;
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 // if ( ! function_exists( '_' ) ) :
 // endif;

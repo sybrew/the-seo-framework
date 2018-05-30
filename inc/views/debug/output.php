@@ -3,7 +3,7 @@
  * @package The_SEO_Framework\Views\Debug
  */
 
-defined( 'ABSPATH' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
 if ( The_SEO_Framework\Debug::has_debug_output() ) :
 	if ( $this->the_seo_framework_debug_hidden ) :

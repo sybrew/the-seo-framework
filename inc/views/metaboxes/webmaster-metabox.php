@@ -1,6 +1,10 @@
 <?php
+/**
+ * @package The_SEO_Framework\Views\Admin
+ * @subpackage The_SEO_Framework\Views\Metaboxes
+ */
 
-defined( 'ABSPATH' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
 //* Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_webmaster_metabox', $instance );

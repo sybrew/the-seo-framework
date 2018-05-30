@@ -3,7 +3,7 @@
  * @package The_SEO_Framework\Views\Inpost
  */
 
-defined( 'ABSPATH' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
 //* Get the language the Google page should assume.
 $language = $this->google_language();

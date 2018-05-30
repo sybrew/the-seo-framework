@@ -1,6 +1,6 @@
 <?php
 
-defined( 'ABSPATH' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
 ?>
 <script type="text/html" id="tmpl-tsf-primary-term-selector">

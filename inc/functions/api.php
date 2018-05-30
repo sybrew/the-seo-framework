@@ -4,7 +4,7 @@
  */
 
 namespace {
-	defined( 'THE_SEO_FRAMEWORK_DIR_PATH' ) or die;
+	defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 }
 
 /**

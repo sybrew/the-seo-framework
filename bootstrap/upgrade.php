@@ -1,5 +1,9 @@
 <?php
 /**
+ * @package The_SEO_Framework/Bootstrap
+ */
+
+/**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -16,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'THE_SEO_FRAMEWORK_PLUGIN_BASENAME' ) or die;
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * This file holds functions for upgrading the plugin.
