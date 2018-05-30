@@ -470,8 +470,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input class="large-text" type="text" name="<?php $this->field_name( 'homepage_social_image_url' ); ?>" id="tsf_homepage_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_field_value( 'homepage_social_image_url' ) ); ?>" />
-
+			<input class="large-text" type="url" name="<?php $this->field_name( 'homepage_social_image_url' ); ?>" id="tsf_homepage_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_field_value( 'homepage_social_image_url' ) ); ?>" />
 		</p>
 		<p class="hide-if-no-js">
 			<?php

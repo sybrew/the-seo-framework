@@ -86,13 +86,17 @@ class Profile extends Doing_It_Right {
 		$fields = array(
 			$this->profile_settings->keys['facebook_page'] => (object) array(
 				'name'        => \__( 'Facebook profile page', 'autodescription' ),
+				'type'        => 'url',
 				'placeholder' => \_x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' ),
 				'value'       => $this->get_user_option( $user->ID, 'facebook_page' ),
+				'class'       => '',
 			),
 			$this->profile_settings->keys['twitter_page'] => (object) array(
 				'name'        => \__( 'Twitter profile', 'autodescription' ),
+				'type'        => 'text',
 				'placeholder' => \_x( '@your-personal-username', 'Twitter @username', 'autodescription' ),
 				'value'       => $this->get_user_option( $user->ID, 'twitter_page' ),
+				'class'       => 'ltr',
 			),
 		);
 

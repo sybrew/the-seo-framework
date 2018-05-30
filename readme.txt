@@ -263,10 +263,12 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 		* The plugin can now downgrade its database version to the currently installed version automatically. This makes sure necessary future upgrade procedures are reinstated when you choose to downgrade (for any reason).
 			* Since TSF v3.0.6 this happens when the user saved the options, but this could lead to inconsistent behavior on WordPress Multisite installations.
 		* We removed a lot of redundant code (like option upgrade checks), which have long been superseded by better standards.
+		* Code and URL input types (Twitter profile, Webmasters' verification codes) now always flow from left to right, even if your site's written language setting is otherwise.
 	* **Changed:**
 		/
 		* TSF now requires WordPress 4.6, from WordPress 4.4.
 		* TSF now requires PHP 5.4, from PHP 5.6.
+		* URL input types (Canonical, Redirect) are now `url` instead of `text`. This means you need to supply a correct URL according to the browser, instead that only TSF checks for correctness after it's being saved.
 	* **Removed:**
 		/
 		* TODO
@@ -274,6 +276,7 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 		/
 		* When reactivating the plugin, there's no longer a chance for your SEO options to be wiped on a random database error.
 			* We used to delete the options, so we could reactivate option-auto-loading; now we add a buster-timestamp.
+		* Various RTL UI elements are now aligned correctly.
 		* TODO
 
 * **For translators:**

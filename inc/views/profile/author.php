@@ -11,12 +11,18 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 <?php
 foreach ( $fields as $field => $labels ) :
 	?>
-	<tr class="user-<?php echo $field; ?>-wrap">
-		<th><label for="<?php echo $field; ?>">
+	<tr class="user-<?php echo esc_attr( $field ); ?>-wrap">
+		<th><label for="<?php echo esc_attr( $field ); ?>">
 			<?php echo esc_html( $labels->name ); ?>
 		</label></th>
 		<td>
-			<input type="text" name="<?php echo $field; ?>" id="<?php echo $field; ?>" value="<?php echo esc_attr( $labels->value ) ?>" placeholder="<?php echo esc_attr( $labels->placeholder ) ?>" class="regular-text" />
+			<input
+				type="<?php echo esc_attr( $labels->type ); ?>"
+				name="<?php echo esc_attr( $field ); ?>"
+				id="<?php echo esc_attr( $field ); ?>"
+				value="<?php echo esc_attr( $labels->value ); ?>"
+				placeholder="<?php echo esc_attr( $labels->placeholder ); ?>"
+				class="regular-text <?php echo esc_attr( $labels->class ); ?>" />
 		</td>
 	</tr>
 	<?php

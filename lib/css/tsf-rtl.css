@@ -564,7 +564,7 @@ a.tsf-tooltip-item {
 
 .tsf-top-wrap > h1,
 .tsf-top-wrap > h2 {
-	float: left;
+	float: right;
 }
 
 .tsf-metaboxes .metabox-holder {

@@ -172,7 +172,7 @@ switch ( $instance ) :
 		</p>
 		<p>
 			<span class="hide-if-js attention"><?php esc_html_e( 'Setting a logo requires JavaScript.', 'autodescription' ); ?></span>
-			<input class="large-text" type="text" readonly="readonly" data-readonly="1" name="<?php $this->field_name( 'knowledge_logo_url' ); ?>" id="knowledge_logo-url" placeholder="<?php echo esc_url( $logo_placeholder ); ?>" value="<?php echo esc_url( $this->get_field_value( 'knowledge_logo_url' ) ); ?>" />
+			<input class="large-text" type="url" readonly="readonly" data-readonly="1" name="<?php $this->field_name( 'knowledge_logo_url' ); ?>" id="knowledge_logo-url" placeholder="<?php echo esc_url( $logo_placeholder ); ?>" value="<?php echo esc_url( $this->get_field_value( 'knowledge_logo_url' ) ); ?>" />
 			<input type="hidden" name="<?php $this->field_name( 'knowledge_logo_id' ); ?>" id="knowledge_logo-id" value="<?php echo absint( $this->get_field_value( 'knowledge_logo_id' ) ); ?>" />
 		</p>
 		<p class="hide-if-no-js">
@@ -277,7 +277,7 @@ switch ( $instance ) :
 				</label>
 			</p>
 			<p>
-				<input type="text" name="<?php $this->field_name( $v['option'] ); ?>" class="large-text" id="<?php $this->field_id( $v['option'] ); ?>" placeholder="<?php echo esc_attr( $v['placeholder'] ); ?>" value="<?php echo esc_attr( $this->get_field_value( $v['option'] ) ); ?>" />
+				<input type="url" name="<?php $this->field_name( $v['option'] ); ?>" class="large-text" id="<?php $this->field_id( $v['option'] ); ?>" placeholder="<?php echo esc_attr( $v['placeholder'] ); ?>" value="<?php echo esc_attr( $this->get_field_value( $v['option'] ) ); ?>" />
 			</p>
 			<?php
 		}

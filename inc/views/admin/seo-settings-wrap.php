@@ -8,26 +8,26 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 ?>
 <div class="wrap tsf-metaboxes">
 	<form method="post" action="options.php">
-		<?php \wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
-		<?php \wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
-		<?php \settings_fields( $this->settings_field ); ?>
+		<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
+		<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
+		<?php settings_fields( $this->settings_field ); ?>
 
 		<div class="tsf-top-wrap">
-			<h1><?php echo \esc_html( \get_admin_page_title() ); ?></h1>
+			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 			<p class="tsf-top-buttons">
 				<?php
-				\submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
-				\submit_button( $this->page_defaults['reset_button_text'], 'secondary tsf-js-confirm-reset', $this->get_field_name( 'tsf-settings-reset' ), false, array( 'id' => '' ) );
+				submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
+				submit_button( $this->page_defaults['reset_button_text'], 'secondary tsf-js-confirm-reset', $this->get_field_name( 'tsf-settings-reset' ), false, array( 'id' => '' ) );
 				?>
 			</p>
 		</div>
 
-		<?php \do_action( "{$this->seo_settings_page_hook}_settings_page_boxes", $this->seo_settings_page_hook ); ?>
+		<?php do_action( "{$this->seo_settings_page_hook}_settings_page_boxes", $this->seo_settings_page_hook ); ?>
 
 		<div class="tsf-bottom-buttons">
 			<?php
-			\submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
-			\submit_button( $this->page_defaults['reset_button_text'], 'secondary tsf-js-confirm-reset', $this->get_field_name( 'tsf-settings-reset' ), false, array( 'id' => '' ) );
+			submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
+			submit_button( $this->page_defaults['reset_button_text'], 'secondary tsf-js-confirm-reset', $this->get_field_name( 'tsf-settings-reset' ), false, array( 'id' => '' ) );
 			?>
 		</div>
 	</form>

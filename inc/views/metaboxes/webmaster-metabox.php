@@ -38,7 +38,7 @@ switch ( $instance ) :
 			?>
 		</p>
 		<p>
-			<input type="text" name="<?php $this->field_name( 'google_verification' ); ?>" class="large-text" id="<?php $this->field_id( 'google_verification' ); ?>" placeholder="ABC1d2eFg34H5iJ6klmNOp7qRstUvWXyZaBc8dEfG9" value="<?php echo esc_attr( $this->get_field_value( 'google_verification' ) ); ?>" />
+			<input type="text" name="<?php $this->field_name( 'google_verification' ); ?>" class="large-text ltr" id="<?php $this->field_id( 'google_verification' ); ?>" placeholder="ABC1d2eFg34H5iJ6klmNOp7qRstUvWXyZaBc8dEfG9" value="<?php echo esc_attr( $this->get_field_value( 'google_verification' ) ); ?>" />
 		</p>
 
 		<p>
@@ -53,7 +53,7 @@ switch ( $instance ) :
 			?>
 		</p>
 		<p>
-			<input type="text" name="<?php $this->field_name( 'bing_verification' ); ?>" class="large-text" id="<?php $this->field_id( 'bing_verification' ); ?>" placeholder="123A456B78901C2D3456E7890F1A234D" value="<?php echo esc_attr( $this->get_field_value( 'bing_verification' ) ); ?>" />
+			<input type="text" name="<?php $this->field_name( 'bing_verification' ); ?>" class="large-text ltr" id="<?php $this->field_id( 'bing_verification' ); ?>" placeholder="123A456B78901C2D3456E7890F1A234D" value="<?php echo esc_attr( $this->get_field_value( 'bing_verification' ) ); ?>" />
 		</p>
 
 		<p>
@@ -68,7 +68,7 @@ switch ( $instance ) :
 			?>
 		</p>
 		<p>
-			<input type="text" name="<?php $this->field_name( 'yandex_verification' ); ?>" class="large-text" id="<?php $this->field_id( 'yandex_verification' ); ?>" placeholder="12345abc678901d2" value="<?php echo esc_attr( $this->get_field_value( 'yandex_verification' ) ); ?>" />
+			<input type="text" name="<?php $this->field_name( 'yandex_verification' ); ?>" class="large-text ltr" id="<?php $this->field_id( 'yandex_verification' ); ?>" placeholder="12345abc678901d2" value="<?php echo esc_attr( $this->get_field_value( 'yandex_verification' ) ); ?>" />
 		</p>
 
 		<p>
@@ -83,7 +83,7 @@ switch ( $instance ) :
 			?>
 		</p>
 		<p>
-			<input type="text" name="<?php $this->field_name( 'pint_verification' ); ?>" class="large-text" id="<?php $this->field_id( 'pint_verification' ); ?>" placeholder="123456a7b8901de2fa34bcdef5a67b98" value="<?php echo esc_attr( $this->get_field_value( 'pint_verification' ) ); ?>" />
+			<input type="text" name="<?php $this->field_name( 'pint_verification' ); ?>" class="large-text ltr" id="<?php $this->field_id( 'pint_verification' ); ?>" placeholder="123456a7b8901de2fa34bcdef5a67b98" value="<?php echo esc_attr( $this->get_field_value( 'pint_verification' ) ); ?>" />
 		</p>
 		<?php
 		break;
