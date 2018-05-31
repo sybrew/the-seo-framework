@@ -1151,22 +1151,6 @@ class Sitemaps extends Metaboxes {
 	}
 
 	/**
-	 * Initialize and flush rewrite rules.
-	 *
-	 * @since 2.6.0
-	 * @since 2.8.0 : Deprecated?
-	 * @access private
-	 * @deprecated silently.
-	 */
-	public function flush_rewrite_rules() {
-		global $wp_rewrite;
-
-		$this->rewrite_rule_sitemap();
-
-		\flush_rewrite_rules();
-	}
-
-	/**
 	 * Enqueues rewrite rules flush.
 	 *
 	 * @since 2.8.0
@@ -1266,10 +1250,6 @@ class Sitemaps extends Metaboxes {
 
 		if ( $this->enqueue_rewrite_deactivate() )
 			$this->flush_rewrite_rules_deactivation();
-
-		if ( $this->enqueue_rewrite_flush_other() )
-			$this->flush_rewrite_rules();
-
 	}
 
 	/**
@@ -1284,7 +1264,6 @@ class Sitemaps extends Metaboxes {
 		$this->rewrite_rule_sitemap( true );
 
 		\flush_rewrite_rules();
-
 	}
 
 	/**
@@ -1302,7 +1281,6 @@ class Sitemaps extends Metaboxes {
 		unset( $wp_rewrite->extra_rules_top['sitemap\.xml$'] );
 
 		$wp_rewrite->flush_rules( true );
-
 	}
 
 	/**

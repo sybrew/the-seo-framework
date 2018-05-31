@@ -40,10 +40,59 @@ class Generate_Url extends Generate_Title {
 	}
 
 	/**
+	 * Caches and returns the current URL.
+	 *
+	 * @since 3.0.0
+	 * @staticvar string $cache
+	 *
+	 * @return string The current URL.
+	 */
+	public function get_current_canonical_url() {
+
+		static $cache;
+
+		return isset( $cache ) ? $cache : $cache = $this->get_canonical_url();
+	}
+
+	/**
+	 * Caches and returns the current permalink.
+	 * This link excludes any pagination. Great for structured data.
+	 *
+	 * @since 3.0.0
+	 * @staticvar string $cache
+	 *
+	 * @return string The current permalink.
+	 */
+	public function get_current_permalink() {
+
+		static $cache;
+
+		return isset( $cache ) ? $cache : $cache = $this->create_canonical_url(
+			array( 'id' => $this->get_the_real_ID(), 'is_term' => $this->is_archive() )
+		);
+	}
+
+	/**
+	 * Caches and returns the homepage URL.
+	 *
+	 * @since 3.0.0
+	 * @staticvar string $cache
+	 *
+	 * @return string The home URL.
+	 */
+	public function get_homepage_permalink() {
+
+		static $cache;
+
+		return isset( $cache ) ? $cache : $cache = $this->create_canonical_url( array( 'id' => $this->get_the_front_page_ID() ) );
+	}
+
+	/**
 	 * Returns a canonical URL based on parameters.
 	 * The URL will never be paginated.
 	 *
 	 * @since 3.0.0
+	 * @uses $this->get_canonical_url()
 	 *
 	 * @param array $args The canonical URL arguments : {
 	 *    int    $id               The Post, Page or Term ID to generate the URL for.
@@ -55,8 +104,8 @@ class Generate_Url extends Generate_Title {
 	public function create_canonical_url( $args = array() ) {
 
 		$defaults = array(
-			'id' => 0,
-			'taxonomy' => '',
+			'id'               => 0,
+			'taxonomy'         => '',
 			'get_custom_field' => false,
 		);
 		$args = array_merge( $defaults, $args );
@@ -68,8 +117,9 @@ class Generate_Url extends Generate_Title {
 	 * Returns the current canonical URL.
 	 *
 	 * @since 3.0.0
+	 * @see $this->create_canonical_url()
 	 *
-	 * @param array $args : Private variable. Use $this->create_canonical_url() instead.
+	 * @param array|null $args : Private variable. Use $this->create_canonical_url() instead.
 	 * @return string The canonical URL, if any.
 	 */
 	public function get_canonical_url( $args = null ) {
@@ -384,6 +434,7 @@ class Generate_Url extends Generate_Title {
 			case 'year' :
 				$_year = \get_query_var( 'year' );
 				$_paginate = $_paginate && $_year == $year;
+				break;
 		}
 
 		if ( $_paginate ) {
@@ -416,23 +467,6 @@ class Generate_Url extends Generate_Title {
 		}
 
 		return $link;
-	}
-
-	/**
-	 * Alias of $this->get_preferred_scheme().
-	 * Typo.
-	 *
-	 * @since 2.8.0
-	 * @since 2.9.2 Added filter usage cache.
-	 * @since 3.0.0 Silently deprecated.
-	 * @TODO deprecate visually
-	 * @deprecated
-	 * @staticvar string $scheme
-	 *
-	 * @return string The preferred URl scheme.
-	 */
-	public function get_prefered_scheme() {
-		return $this->get_preferred_scheme();
 	}
 
 	/**
@@ -487,7 +521,7 @@ class Generate_Url extends Generate_Title {
 	 * @return string The URL with the preferred scheme.
 	 */
 	public function set_preferred_url_scheme( $url ) {
-		return $this->set_url_scheme( $url, $this->get_preferred_scheme(), false );
+		return $this->set_url_scheme( $url, $this->get_preferred_scheme() );
 	}
 
 	/**
@@ -496,13 +530,17 @@ class Generate_Url extends Generate_Title {
 	 *
 	 * @since 2.4.2
 	 * @since 3.0.0 $use_filter now defaults to false.
+	 * @since 3.1.0 The third parameter ($use_filter) is now $deprecated.
 	 *
 	 * @param string $url Absolute url that includes a scheme.
 	 * @param string $scheme optional. Scheme to give $url. Currently 'http', 'https', 'login', 'login_post', 'admin', or 'relative'.
-	 * @param bool $use_filter Whether to parse filters.
+	 * @param null|bool $deprecated Deprecated
 	 * @return string url with chosen scheme.
 	 */
-	public function set_url_scheme( $url, $scheme = null, $use_filter = false ) {
+	public function set_url_scheme( $url, $scheme = null, $deprecated = null ) {
+
+		if ( null !== $deprecated )
+			$this->_deprecated_function( __METHOD__, '3.1.0', 'Third parameter is deprecated.' );
 
 		if ( empty( $scheme ) ) {
 			$scheme = $this->is_ssl() ? 'https' : 'http';
@@ -517,67 +555,10 @@ class Generate_Url extends Generate_Title {
 		if ( 'relative' === $scheme ) {
 			$url = ltrim( preg_replace( '#^\w+://[^/]*#', '', $url ) );
 			if ( '' !== $url && '/' === $url[0] )
-				$url = '/' . ltrim( $url , "/ \t\n\r\0\x0B" );
+				$url = '/' . ltrim( $url, "/ \t\n\r\0\x0B" );
 		} else {
 			//* This will break if $scheme is set to false.
 			$url = preg_replace( '#^\w+://#', $scheme . '://', $url );
-		}
-
-		if ( $use_filter )
-			return $this->set_url_scheme_filter( $url, $scheme );
-
-		return $url;
-	}
-
-	/**
-	 * Set URL scheme based on filter.
-	 *
-	 * @since 2.6.0
-	 * @since 2.8.0 Deprecated.
-	 * @since 2.9.2 Added filter usage cache.
-	 * @staticvar $_has_filter;
-	 * @deprecated
-	 *
-	 * @param string $url The url with scheme.
-	 * @param string $scheme The current scheme.
-	 * @return $url with applied filters.
-	 */
-	public function set_url_scheme_filter( $url, $current_scheme ) {
-
-		static $_has_filter = null;
-		if ( null === $_has_filter )
-			$_has_filter = \has_filter( 'the_seo_framework_canonical_force_scheme' );
-
-		if ( $_has_filter ) {
-			$this->_deprecated_filter( 'the_seo_framework_canonical_force_scheme', '2.8.0', 'the_seo_framework_preferred_url_scheme' );
-			/**
-			 * Applies filters the_seo_framework_canonical_force_scheme : Changes scheme.
-			 *
-			 * Accepted variables:
-			 * (string) 'https'    : Force https
-			 * (bool) true         : Force https
-			 * (bool) false        : Force http
-			 * (string) 'http'     : Force http
-			 * (string) 'relative' : Scheme relative
-			 * (void) null         : Do nothing
-			 *
-			 * @since 2.4.2
-			 * @since 2.8.0 Deprecated.
-			 * @deprecated
-			 *
-			 * @param string $current_scheme the current used scheme.
-			 */
-			$scheme_settings = \apply_filters( 'the_seo_framework_canonical_force_scheme', null, $current_scheme );
-
-			if ( null !== $scheme_settings ) {
-				if ( 'https' === $scheme_settings || 'http' === $scheme_settings || 'relative' === $scheme_settings ) {
-					$url = $this->set_url_scheme( $url, $scheme_settings, false );
-				} elseif ( ! $scheme_settings ) {
-					$url = $this->set_url_scheme( $url, 'http', false );
-				} elseif ( $scheme_setting ) {
-					$url = $this->set_url_scheme( $url, 'https', false );
-				}
-			}
 		}
 
 		return $url;

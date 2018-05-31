@@ -1,6 +1,7 @@
 <?php
 /**
  * @package The_SEO_Framework
+ * @subpackage The_SEO_Framework\API
  */
 
 namespace {

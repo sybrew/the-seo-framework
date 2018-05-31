@@ -129,7 +129,7 @@ function _bbpress_filter_url_path( $path, $id = 0, $external = false ) {
 		}
 
 		if ( isset( $base ) )
-			$path = \the_seo_framework()->set_url_scheme( $base, 'relative', true );
+			$path = \the_seo_framework()->set_url_scheme( $base, 'relative' );
 	endif;
 
 	return $path;

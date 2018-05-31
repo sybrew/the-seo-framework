@@ -75,12 +75,12 @@ class Detect extends Render {
 		if ( ! $home_domain ) {
 			$home_domain = \esc_url_raw( \get_home_url(), array( 'http', 'https' ) );
 			//= Simply convert to HTTPS/HTTP based on is_ssl()
-			$home_domain = $this->set_url_scheme( $home_domain, null, false );
+			$home_domain = $this->set_url_scheme( $home_domain );
 		}
 
 		$url = \esc_url_raw( $url, array( 'http', 'https' ) );
 		//= Simply convert to HTTPS/HTTP based on is_ssl()
-		$url = $this->set_url_scheme( $url, null, false );
+		$url = $this->set_url_scheme( $url );
 
 		//= If they start with the same, we can assume it's the same domain.
 		if ( 0 === stripos( $url, $home_domain ) )

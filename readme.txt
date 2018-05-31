@@ -251,6 +251,13 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 
 * TODO
 
+**For developers: About the API**
+
+* We've removed or otherwise deprecated most API functions. We've done this to lower maintenance time drastically.
+* We encourage you to always use the factory function `the_seo_framework()`. Via this factory function, you can access all API methods when needed.
+* The factory function yields many failsafe capturers so we can make future changes with peace of mind. This isn't possible with PHP functions.
+* As more than three quarters the plugin's code is dormant on most pages, in future major releases we're going to cut off the "façade" class loading (where everything's accessible via `$this`), and split them into interfacing factories, e.g.: `the_seo_framework()->generate( 'url' )::set( 'id', 1 )::get( 'relative' )`. More on this will follow for 3.2 or later after a class-map draft is set up. Or goal is to minimize performance overhead; aiming to improve it further.
+
 ## Detailed log
 
 * **For everyone:**
@@ -360,11 +367,29 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 	* **Method notes:**
 		* **Removed:**
 			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
-				* `site_updated_plugin_option()`.
-				* `do_settings_updated_notice()`.
+				* `site_updated_plugin_option()`
+				* `do_settings_updated_notice()`
+			* In class: `\The_SEO_Framework\Generate_Url` -- Factory: `the_seo_framework()`
+				* `set_url_scheme_filter()`
+			* In class: `\The_SEO_Framework\Sitemaps` -- Factory: `the_seo_framework()`
+				* `enqueue_rewrite_flush_other()`, was marked private.
+				* `flush_rewrite_rules()`, was marked private.
 		* **Deprecated:**
 			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
 				* `get_meta_output_cache_key()`, use `get_meta_output_cache_key_by_query()` (without Page ID) or `get_meta_output_cache_key_by_type()` (with page ID) instead.
+			* In class: `\The_SEO_Framework\Generate_Url` -- Factory: `the_seo_framework()`
+				* `get_prefered_scheme()`, use `get_preferred_scheme()` instead. (typo)
+			* In class: `\The_SEO_Framework\Render` -- factory: `the_seo_framework()`
+				* `description_from_cache()`, use `get_description()` instead.
+		* **Moved:**
+			* **Note:** All deprecated methods are automatically moved to `\The_SEO_Framework\Deprecated`. This class is auto-loaded whenever a non-existing or deprecated method is called.
+			* **Note:** The changes below (currently) don't affect the factory method: `the_seo_framework()`.
+			* `get_current_canonical_url()`. `\The_SEO_Framework\Render => \The_SEO_Framework\Generate_Url`.
+			* `get_current_permalink()`. `\The_SEO_Framework\Render => \The_SEO_Framework\Generate_Url`.
+			* `get_homepage_permalink()`. `\The_SEO_Framework\Render => \The_SEO_Framework\Generate_Url`.
+		* **Changed:**
+			* In class: `\The_SEO_Framework\Generate_Url` -- Factory: `the_seo_framework()`
+				* `set_url_scheme()`, the third parameter is now deprecated and shouldn't be used.
 	* **Action notes:**
 		* **Added:**
 			* `the_seo_framework_admin_loaded`. Runs after the plugin factory is loaded in the admin-end.
@@ -372,11 +397,12 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 			* `the_seo_framework_after_init`. Runs after the plugin has initialized its admin or front-end hooks. See also, the admin-only hook: `the_seo_framework_after_admin_init`.
 	* **Filter notes:**
 		* **Changed:**
-			* `the_seo_framework_detect_page_builder`.
+			* `the_seo_framework_detect_page_builder`
 				1. Now returns `null` by default.
 				2. Now, when a boolean (either true or false) is defined, it'll short-circuit this function. See [this comment](https://github.com/sybrew/the-seo-framework/issues/279#issuecomment-392735509) for more information.
 		* **Removed:**
 			* `the_seo_framework_update_options_at_update`
+			* `the_seo_framework_canonical_force_scheme` (was deprecated since 2.8.0). Use `the_seo_framework_preferred_url_scheme` instead.
 	* **Structural notes:**
 		* **Added:**
 			* Folder `/bootstrap/`, with:

@@ -85,6 +85,7 @@ class Init extends Query {
 	 * @since 1.0.0
 	 * @since 2.8.0 Silently deprecated. Displaying legacy roots.
 	 * @deprecated
+	 * @ignore
 	 */
 	public function autodescription_run() {
 		$this->init_the_seo_framework();

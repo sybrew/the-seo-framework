@@ -1,5 +1,10 @@
 <?php
 /**
+ * @package The_SEO_Framework
+ * @subpackage The_SEO_Framework\TSFEM\Suggestion
+ */
+
+/**
  * The SEO Framework plugin
  * Copyright (C) 2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *

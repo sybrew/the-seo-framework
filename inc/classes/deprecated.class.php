@@ -29,6 +29,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * Contains all deprecated functions.
  *
  * @since 2.8.0
+ * @ignore
  */
 final class Deprecated {
 
@@ -793,5 +794,43 @@ final class Deprecated {
 		$paged = (string) $tsf->paged();
 
 		return $cache_key = 'seo_framework_output_' . $key . '_' . $paged . '_' . $page;
+	}
+
+	/**
+	 * Alias of $this->get_preferred_scheme().
+	 * Typo.
+	 *
+	 * @since 2.8.0
+	 * @since 2.9.2 Added filter usage cache.
+	 * @since 3.0.0 Silently deprecated.
+	 * @since 3.1.0 Hard deprecated.
+	 * @deprecated
+	 * @staticvar string $scheme
+	 *
+	 * @return string The preferred URl scheme.
+	 */
+	public function get_prefered_scheme() {
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->get_prefered_scheme()', '3.1.0', 'the_seo_framework()->get_preferred_scheme()' );
+		return $tsf->get_preferred_scheme();
+	}
+
+	/**
+	 * Cache description in static variable
+	 * Must be called inside the loop
+	 *
+	 * @since 2.2.2
+	 * @deprecated
+	 * @since 3.0.6 Silently deprecated.
+	 * @since 3.1.0 1. Hard deprecated.
+	 *              2. Removed caching.
+	 *
+	 * @param bool $social Determines whether the description is social.
+	 * @return string The description
+	 */
+	public function description_from_cache( $social = false ) {
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->description_from_cache()', '3.1.0', 'the_seo_framework()->get_description()' );
+		return $tsf->generate_description( '', array( 'social' => $social ) );
 	}
 }
