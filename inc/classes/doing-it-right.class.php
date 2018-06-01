@@ -59,7 +59,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			$allow_states = (bool) \apply_filters( 'the_seo_framework_allow_states', true );
 
 			if ( $allow_states )
-				\add_filter( 'display_post_states', array( $this, 'add_post_state' ), 10, 2 );
+				\add_filter( 'display_post_states', [ $this, 'add_post_state' ], 10, 2 );
 		}
 	}
 
@@ -72,12 +72,12 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @param array $states The current post states array
 	 * @param object $post The Post Object.
 	 */
-	public function add_post_state( $states = array(), $post ) {
+	public function add_post_state( $states = [], $post ) {
 
 		$post_id = isset( $post->ID ) ? $post->ID : false;
 
 		if ( $post_id ) {
-			$search_exclude = $this->get_option( 'alter_search_query' ) && $this->get_custom_field( 'exclude_local_search', $post_id );
+			$search_exclude  = $this->get_option( 'alter_search_query' ) && $this->get_custom_field( 'exclude_local_search', $post_id );
 			$archive_exclude = $this->get_option( 'alter_archive_query' ) && $this->get_custom_field( 'exclude_from_archive', $post_id );
 
 			if ( $search_exclude )
@@ -105,9 +105,8 @@ class Doing_It_Right extends Generate_Ldjson {
 		if ( $this->doing_ajax() && \check_ajax_referer( 'add-tag', '_wpnonce_add-tag', false ) ) {
 
 			$taxonomy = ! empty( $_POST['taxonomy'] ) ? \sanitize_key( $_POST['taxonomy'] ) : 'post_tag';
-			$tax = \get_taxonomy( $taxonomy );
 
-			if ( \current_user_can( $tax->cap->edit_terms ) )
+			if ( \current_user_can( \get_taxonomy( $taxonomy )->cap->edit_terms ) )
 				$this->init_columns( '', true );
 		}
 	}
@@ -207,39 +206,39 @@ class Doing_It_Right extends Generate_Ldjson {
 
 				if ( $id ) {
 					//* Everything but inline-save-tax action.
-					\add_filter( 'manage_' . $id . '_columns', array( $this, 'add_column' ), 10, 1 );
+					\add_filter( 'manage_' . $id . '_columns', [ $this, 'add_column' ], 10, 1 );
 
 					/**
 					 * Always load pages and posts.
 					 * Many CPT plugins rely on these.
 					 */
-					\add_action( 'manage_posts_custom_column', array( $this, 'seo_bar_ajax' ), 1, 3 );
-					\add_action( 'manage_pages_custom_column', array( $this, 'seo_bar_ajax' ), 1, 3 );
+					\add_action( 'manage_posts_custom_column', [ $this, 'seo_bar_ajax' ], 1, 3 );
+					\add_action( 'manage_pages_custom_column', [ $this, 'seo_bar_ajax' ], 1, 3 );
 				} elseif ( $taxonomy ) {
 					//* Action: inline-save-tax does not POST screen.
-					\add_filter( 'manage_edit-' . $taxonomy . '_columns', array( $this, 'add_column' ), 1, 1 );
+					\add_filter( 'manage_edit-' . $taxonomy . '_columns', [ $this, 'add_column' ], 1, 1 );
 				}
 
 				if ( $taxonomy )
-					\add_filter( 'manage_' . $taxonomy . '_custom_column', array( $this, 'get_taxonomy_seo_bar_ajax' ), 1, 3 );
+					\add_filter( 'manage_' . $taxonomy . '_custom_column', [ $this, 'get_taxonomy_seo_bar_ajax' ], 1, 3 );
 
 			} else {
 				$id = isset( $screen->id ) ? $screen->id : '';
 
 				if ( '' !== $id && $this->is_wp_lists_edit() ) {
-					\add_filter( 'manage_' . $id . '_columns', array( $this, 'add_column' ), 10, 1 );
+					\add_filter( 'manage_' . $id . '_columns', [ $this, 'add_column' ], 10, 1 );
 
 					$taxonomy = isset( $screen->taxonomy ) ? $screen->taxonomy : '';
 
 					if ( $taxonomy )
-						\add_filter( 'manage_' . $taxonomy . '_custom_column', array( $this, 'get_taxonomy_seo_bar' ), 1, 3 );
+						\add_filter( 'manage_' . $taxonomy . '_custom_column', [ $this, 'get_taxonomy_seo_bar' ], 1, 3 );
 
 					/**
 					 * Always load pages and posts.
 					 * Many CPT plugins rely on these.
 					 */
-					\add_action( 'manage_posts_custom_column', array( $this, 'seo_bar' ), 1, 3 );
-					\add_action( 'manage_pages_custom_column', array( $this, 'seo_bar' ), 1, 3 );
+					\add_action( 'manage_posts_custom_column', [ $this, 'seo_bar' ], 1, 3 );
+					\add_action( 'manage_pages_custom_column', [ $this, 'seo_bar' ], 1, 3 );
 				}
 			}
 		endif;
@@ -258,17 +257,17 @@ class Doing_It_Right extends Generate_Ldjson {
 	 */
 	public function add_column( $columns ) {
 
-		$seocolumn = array( 'tsf-seo-bar-wrap' => 'SEO' );
+		$seocolumn = [ 'tsf-seo-bar-wrap' => 'SEO' ];
 
 		$column_keys = array_keys( $columns );
 
 		//* Column keys to look for, in order of appearance.
-		$order_keys = array(
+		$order_keys = [
 			'comments',
 			'posts',
 			'date',
 			'tags',
-		);
+		];
 
 		/**
 		 * Applies filters 'the_seo_framework_seo_column_keys_order' : array
@@ -450,7 +449,8 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		$classes = $this->get_the_seo_bar_classes();
 
-		$args = array();
+		$args = [];
+
 		$args['class'] = $classes[ $color ];
 		$args['width'] = $classes['100%'];
 		$args['notice'] = $context;
@@ -466,6 +466,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		if ( $echo ) {
 			//* Already escaped.
 			echo $bar;
+			return;
 		} else {
 			return $bar;
 		}
@@ -543,14 +544,14 @@ class Doing_It_Right extends Generate_Ldjson {
 
 			$post_low = $this->maybe_lowercase_noun( $post_i18n );
 
-			$args = array(
-				'is_term' => $is_term,
-				'term' => $term,
-				'post_id' => $post_id,
+			$args = [
+				'is_term'   => $is_term,
+				'term'      => $term,
+				'post_id'   => $post_id,
 				'post_i18n' => $post_i18n,
-				'post_low' => $post_low,
-				'type' => $type,
-			);
+				'post_low'  => $post_low,
+				'type'      => $type,
+			];
 
 			if ( $is_term ) {
 				$bar = $this->the_seo_bar_term( $args );
@@ -566,6 +567,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		if ( $echo ) {
 			//* Already escaped.
 			echo $bar;
+			return;
 		} else {
 			return $bar;
 		}
@@ -588,17 +590,17 @@ class Doing_It_Right extends Generate_Ldjson {
 	protected function wrap_the_seo_bar_block( $args ) {
 		return vsprintf(
 			'<span class="tsf-seo-bar-section-wrap %s">%s</span>',
-			array(
+			[
 				$args['width'],
 				vsprintf(
 					'<span class="tsf-seo-bar-item tsf-tooltip-item %1$s" aria-label="%2$s" data-desc="%2$s">%3$s</span>',
-					array(
+					[
 						$args['class'],
 						$args['notice'],
 						$args['indicator'],
-					)
+					]
 				),
-			)
+			]
 		);
 	}
 
@@ -609,7 +611,8 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * DOM element for the status bar hover.
 	 *
 	 * @since 2.6.0
-	 * @staticvar string $class
+	 * @since 3.1.0 1. No longer maintains cache.
+	 *              2. No longer can create pill-shaped bars.
 	 *
 	 * @param string $content The SEO Bar content.
 	 * @param bool $is_term Whether the bar is for a term.
@@ -620,13 +623,9 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		static $class = null;
 
-		if ( is_null( $class ) ) {
-			$classes = $this->get_the_seo_bar_classes();
-
-			$width = $is_term ? ' ' . $classes['100%'] : '';
-			$pill = $this->pill_the_seo_bar() ? ' ' . $classes['pill'] : '';
-
-			$class = \esc_attr( 'tsf-seo-bar clearfix' . $width . $pill );
+		if ( ! $class ) {
+			$width = $is_term ? $this->get_the_seo_bar_classes()['100%'] : '';
+			$class = 'tsf-seo-bar clearfix ' . $width;
 		}
 
 		if ( isset( $ajax_id ) ) {
@@ -635,10 +634,10 @@ class Doing_It_Right extends Generate_Ldjson {
 			//* Resets tooltips.
 			$script = '<script>tsf._triggerTooltipReset();</script>';
 
-			return sprintf( '<span class="%s" id="%s"><span class="tsf-seo-bar-inner-wrap tsf-tooltip-wrap">%s</span></span>', $class, \esc_attr( $ajax_id ), $content ) . $script;
+			return sprintf( '<span class="%s" id="%s"><span class="tsf-seo-bar-inner-wrap tsf-tooltip-wrap">%s</span></span>', \esc_attr( $class ), \esc_attr( $ajax_id ), $content ) . $script;
 		}
 
-		return sprintf( '<span class="%s"><span class="tsf-seo-bar-inner-wrap tsf-tooltip-wrap">%s</span></span>', $class, $content );
+		return sprintf( '<span class="%s"><span class="tsf-seo-bar-inner-wrap tsf-tooltip-wrap">%s</span></span>', \esc_attr( $class ), $content );
 	}
 
 	/**
@@ -657,17 +656,17 @@ class Doing_It_Right extends Generate_Ldjson {
 	 */
 	protected function the_seo_bar_term( $args ) {
 
-		$i18n = $args['post_i18n'];
+		$post_i18n = $args['post_i18n'];
 		$is_term = true;
 
 		$data = $this->get_term_meta( $args['term']->term_id );
 
-		$noindex = isset( $data['noindex'] ) && $data['noindex'];
+		$noindex  = isset( $data['noindex'] ) && $data['noindex'];
 		$redirect = false; // We don't apply redirect on taxonomies (yet)
 
 		//* Blocked SEO, return simple bar.
 		if ( $redirect || $noindex )
-			return $this->the_seo_bar_blocked( array( 'is_term' => $is_term, 'redirect' => $redirect, 'noindex' => $noindex, 'post_i18n' => $i18n ) );
+			return $this->the_seo_bar_blocked( compact( 'is_term', 'redirect', 'noindex', 'post_i18n' ) );
 
 		$title_notice       = $this->the_seo_bar_title_notice( $args );
 		$description_notice = $this->the_seo_bar_description_notice( $args );
@@ -698,18 +697,19 @@ class Doing_It_Right extends Generate_Ldjson {
 	protected function the_seo_bar_page( $args ) {
 
 		$post_id = $args['post_id'];
-		$post = $args['post_i18n'];
+		$post_i18n = $args['post_i18n'];
+
 		$is_term = false;
 		$is_front_page = $this->is_static_frontpage( $post_id );
 
 		$redirect = (bool) $this->get_custom_field( 'redirect', $post_id );
-		$noindex = (bool) $this->get_custom_field( '_genesis_noindex', $post_id );
+		$noindex  = (bool) $this->get_custom_field( '_genesis_noindex', $post_id );
 
 		if ( $is_front_page )
 			$noindex = $this->is_option_checked( 'homepage_noindex' ) ?: $noindex;
 
 		if ( $redirect || $noindex )
-			return $this->the_seo_bar_blocked( array( 'is_term' => $is_term, 'redirect' => $redirect, 'noindex' => $noindex, 'post_i18n' => $post ) );
+			return $this->the_seo_bar_blocked( compact( 'is_term', 'redirect', 'noindex', 'post_i18n' ) );
 
 		$title_notice       = $this->the_seo_bar_title_notice( $args );
 		$description_notice = $this->the_seo_bar_description_notice( $args );
@@ -743,7 +743,7 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		$post_id = $args['post_id'];
 
-		static $data = array();
+		static $data = [];
 
 		if ( isset( $data[ $post_id ] ) )
 			return $data[ $post_id ];
@@ -790,8 +790,10 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		$title_is_from_custom_field = (bool) $title_custom_field;
 		if ( $title_is_from_custom_field ) {
+			//! TODO Kill this line with fire.
 			$title = $this->title( '', '', '', array( 'term_id' => $term_id, 'taxonomy' => $taxonomy, 'get_custom_field' => true ) );
 		} else {
+			//! TODO Kill this line with fire.
 			$title = $this->title( '', '', '', array( 'term_id' => $term_id, 'taxonomy' => $taxonomy, 'get_custom_field' => false ) );
 		}
 
@@ -803,8 +805,8 @@ class Doing_It_Right extends Generate_Ldjson {
 			$description = $this->get_generated_description( $term_id );
 		}
 
-		$noindex = (bool) $noindex;
-		$nofollow = (bool) $nofollow;
+		$noindex   = (bool) $noindex;
+		$nofollow  = (bool) $nofollow;
 		$noarchive = (bool) $noarchive;
 
 		return compact(
@@ -844,22 +846,24 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		$title_custom_field = $this->get_custom_field( '_genesis_title', $post_id );
 		$description_custom_field = $this->get_description_from_custom_field( $post_id );
-		$noindex = $this->get_custom_field( '_genesis_noindex', $post_id );
-		$nofollow = $this->get_custom_field( '_genesis_nofollow', $post_id );
+		$noindex   = $this->get_custom_field( '_genesis_noindex', $post_id );
+		$nofollow  = $this->get_custom_field( '_genesis_nofollow', $post_id );
 		$noarchive = $this->get_custom_field( '_genesis_noarchive', $post_id );
 
 		if ( $page_on_front ) {
 			$title_custom_field = $this->get_option( 'homepage_title' ) ?: $title_custom_field;
 			// $description_custom_field = $description_custom_field; // We already got this.
-			$noindex = $this->get_option( 'homepage_noindex' ) ?: $nofollow;
-			$nofollow = $this->get_option( 'homepage_nofollow' ) ?: $nofollow;
+			$noindex   = $this->get_option( 'homepage_noindex' ) ?: $nofollow;
+			$nofollow  = $this->get_option( 'homepage_nofollow' ) ?: $nofollow;
 			$noarchive = $this->get_option( 'homepage_noarchive' ) ?: $noarchive;
 		}
 
 		$title_is_from_custom_field = (bool) $title_custom_field;
 		if ( $title_is_from_custom_field ) {
+			//! TODO Kill this line with fire.
 			$title = $this->title( '', '', '', array( 'term_id' => $post_id, 'page_on_front' => $page_on_front, 'get_custom_field' => true ) );
 		} else {
+			//! TODO Kill this line with fire.
 			$title = $this->title( '', '', '', array( 'term_id' => $post_id, 'page_on_front' => $page_on_front, 'get_custom_field' => false ) );
 		}
 
@@ -871,8 +875,8 @@ class Doing_It_Right extends Generate_Ldjson {
 			$description = $this->get_generated_description( $post_id );
 		}
 
-		$noindex = (bool) $noindex;
-		$nofollow = (bool) $nofollow;
+		$noindex   = (bool) $noindex;
+		$nofollow  = (bool) $nofollow;
 		$noarchive = (bool) $noarchive;
 
 		return compact(
@@ -937,7 +941,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			$blogname = $this->get_blogname();
 
 			$first = stripos( $title, $blogname );
-			$last = strripos( $title, $blogname );
+			$last  = strripos( $title, $blogname );
 
 			if ( $first !== $last )
 				$title_duplicated = true;
@@ -956,12 +960,12 @@ class Doing_It_Right extends Generate_Ldjson {
 		$notice = $notice . $gen_t_notice;
 		$title_short = $title_short . $gen_t;
 
-		$tit_wrap_args = array(
+		$tit_wrap_args = [
 			'indicator' => $title_short,
-			'notice' => $notice,
-			'width' => $ad25,
-			'class' => $class,
-		);
+			'notice'    => $notice,
+			'width'     => $ad25,
+			'class'     => $class,
+		];
 
 		$title_notice = $this->wrap_the_seo_bar_block( $tit_wrap_args );
 
@@ -1018,12 +1022,12 @@ class Doing_It_Right extends Generate_Ldjson {
 		$notice = $notice . $gen_d_notice;
 		$description_short = $description_short . $gen_d;
 
-		$desc_wrap_args = array(
+		$desc_wrap_args = [
 			'indicator' => $description_short,
-			'notice' => $notice,
-			'width' => $ad25,
-			'class' => $class,
-		);
+			'notice'    => $notice,
+			'width'     => $ad25,
+			'class'     => $class,
+		];
 
 		$description_notice = $this->wrap_the_seo_bar_block( $desc_wrap_args );
 
@@ -1047,7 +1051,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	protected function get_the_seo_bar_description_length_warning( $desc_len, $class ) {
 
 		$classes = $this->get_the_seo_bar_classes();
-		$bad = $classes['bad'];
+		$bad  = $classes['bad'];
 		$okay = $classes['okay'];
 		$good = $classes['good'];
 
@@ -1055,7 +1059,7 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		if ( $desc_len < 100 ) {
 			$notice = $i18n['length_far_too_short'];
-			$class = $bad;
+			$class  = $bad;
 		} elseif ( $desc_len < 137 ) {
 			$notice = $i18n['length_too_short'];
 
@@ -1068,7 +1072,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			$class = $bad === $class ? $class : $okay;
 		} elseif ( $desc_len >= 330 ) {
 			$notice = $i18n['length_far_too_long'];
-			$class = $bad;
+			$class  = $bad;
 		} else {
 			$notice = $i18n['length_good'];
 
@@ -1076,10 +1080,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			$class = $good !== $class ? $class : $good;
 		}
 
-		return array(
-			'notice' => $notice,
-			'class' => $class,
-		);
+		return compact( 'notice', 'class' );
 	}
 
 	/**
@@ -1101,7 +1102,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		if ( ! empty( $words_too_many ) ) {
 
 			$classes = $this->get_the_seo_bar_classes();
-			$bad = $classes['bad'];
+			$bad  = $classes['bad'];
 			$okay = $classes['okay'];
 
 			$words_count = count( $words_too_many );
@@ -1130,10 +1131,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			}
 		}
 
-		return array(
-			'notice' => $notice,
-			'class' => $class,
-		);
+		return compact( 'notice', 'class' );
 	}
 
 	/**
@@ -1240,12 +1238,12 @@ class Doing_It_Right extends Generate_Ldjson {
 			$ind_class = $ind_class !== $good ? $ind_class : $unknown;
 		}
 
-		$ind_wrap_args = array(
+		$ind_wrap_args = [
 			'indicator' => $index_short,
-			'notice' => $ind_notice,
-			'width' => $ad_125,
-			'class' => $ind_class,
-		);
+			'notice'    => $ind_notice,
+			'width'     => $ad_125,
+			'class'     => $ind_class,
+		];
 
 		$index_notice = $this->wrap_the_seo_bar_block( $ind_wrap_args );
 
@@ -1272,7 +1270,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			$taxonomy = 'tag';
 
 		if ( $taxonomy ) {
-			static $cache = array();
+			static $cache = [];
 
 			if ( isset( $cache[ $type ] ) )
 				return $cache[ $type ];
@@ -1382,12 +1380,12 @@ class Doing_It_Right extends Generate_Ldjson {
 			$followed = false;
 		}
 
-		$fol_wrap_args = array(
+		$fol_wrap_args = [
 			'indicator' => $follow_short,
-			'notice' => $fol_notice,
-			'width' => $ad_125,
-			'class' => $fol_class,
-		);
+			'notice'    => $fol_notice,
+			'width'     => $ad_125,
+			'class'     => $fol_class,
+		];
 
 		$follow_notice = $this->wrap_the_seo_bar_block( $fol_wrap_args );
 
@@ -1490,12 +1488,12 @@ class Doing_It_Right extends Generate_Ldjson {
 			$archived = true;
 		}
 
-		$arc_wrap_args = array(
+		$arc_wrap_args = [
 			'indicator' => $archive_short,
-			'notice' => $arc_notice,
-			'width' => $ad_125,
-			'class' => $arc_class,
-		);
+			'notice'    => $arc_notice,
+			'width'     => $ad_125,
+			'class'     => $arc_class,
+		];
 
 		$archive_notice = $this->wrap_the_seo_bar_block( $arc_wrap_args );
 
@@ -1529,15 +1527,16 @@ class Doing_It_Right extends Generate_Ldjson {
 			$redirect_i18n = $i18n['redirect'];
 			$redirect_short = $i18n['redirect_short'];
 
+			/* translators:* %s = post type name */
 			$red_notice = $redirect_i18n . ' ' . sprintf( \esc_attr__( "%s isn't being redirected.", 'autodescription' ), $post );
 			$red_class = $classes['good'];
 
-			$red_wrap_args = array(
+			$red_wrap_args = [
 				'indicator' => $redirect_short,
-				'notice' => $red_notice,
-				'width' => $ad_125,
-				'class' => $red_class,
-			);
+				'notice'    => $red_notice,
+				'width'     => $ad_125,
+				'class'     => $red_class,
+			];
 
 			$redirect_notice = $this->wrap_the_seo_bar_block( $red_wrap_args );
 		}
@@ -1561,38 +1560,38 @@ class Doing_It_Right extends Generate_Ldjson {
 	protected function the_seo_bar_blocked( $args ) {
 
 		$classes = $this->get_the_seo_bar_classes();
-		$i18n = $this->get_the_seo_bar_i18n();
+		$i18n    = $this->get_the_seo_bar_i18n();
 
-		$is_term = $args['is_term'];
-		$redirect = $args['redirect'];
-		$noindex = $args['noindex'];
-		$post = $args['post_i18n'];
+		//? extract().
+		foreach ( $args as $k => $v ) $$k = $v;
 
 		if ( $redirect && $noindex ) {
 			//* Redirect and noindex found, why bother showing SEO info?
 
-			$red_notice = $i18n['redirect'] . ' ' . sprintf( \esc_attr__( '%s is being redirected. This means no SEO values have to be set.', 'autodescription' ), $post );
-			$red_class = $classes['unknown'];
+			/* translators:* %s = post type name */
+			$red_notice = $i18n['redirect'] . ' ' . sprintf( \esc_attr__( '%s is being redirected. This means no SEO values have to be set.', 'autodescription' ), $post_i18n );
+			$red_class  = $classes['unknown'];
 
-			$noi_notice = $i18n['index'] . ' ' . sprintf( \esc_attr__( '%s is not being indexed. This means no SEO values have to be set.', 'autodescription' ), $post );
-			$noi_class = $classes['unknown'];
+			/* translators:* %s = post type name */
+			$noi_notice = $i18n['index'] . ' ' . sprintf( \esc_attr__( '%s is not being indexed. This means no SEO values have to be set.', 'autodescription' ), $post_i18n );
+			$noi_class  = $classes['unknown'];
 
-			$red_wrap_args = array(
+			$red_wrap_args = [
 				'indicator' => $i18n['redirect_short'],
-				'notice' => $red_notice,
-				'width' => $classes['50%'],
-				'class' => $red_class,
-			);
+				'notice'    => $red_notice,
+				'width'     => $classes['50%'],
+				'class'     => $red_class,
+			];
 
-			$noi_wrap_args = array(
+			$noi_wrap_args = [
 				'indicator' => $i18n['index_short'],
-				'notice' => $noi_notice,
-				'width' => $classes['50%'],
-				'class' => $noi_class,
-			);
+				'notice'    => $noi_notice,
+				'width'     => $classes['50%'],
+				'class'     => $noi_class,
+			];
 
 			$redirect_notice = $this->wrap_the_seo_bar_block( $red_wrap_args );
-			$noindex_notice = $this->wrap_the_seo_bar_block( $noi_wrap_args );
+			$noindex_notice  = $this->wrap_the_seo_bar_block( $noi_wrap_args );
 
 			$content = $redirect_notice . $noindex_notice;
 
@@ -1600,15 +1599,16 @@ class Doing_It_Right extends Generate_Ldjson {
 		} elseif ( $redirect && false === $noindex ) {
 			//* Redirect found, why bother showing SEO info?
 
-			$red_notice = $i18n['redirect'] . ' ' . sprintf( \esc_attr__( '%s is being redirected. This means no SEO values have to be set.', 'autodescription' ), $post );
-			$red_class = $classes['unknown'];
+			/* translators:* %s = post type name */
+			$red_notice = $i18n['redirect'] . ' ' . sprintf( \esc_attr__( '%s is being redirected. This means no SEO values have to be set.', 'autodescription' ), $post_i18n );
+			$red_class  = $classes['unknown'];
 
-			$red_wrap_args = array(
+			$red_wrap_args = [
 				'indicator' => $i18n['redirect_short'],
-				'notice' => $red_notice,
-				'width' => $classes['100%'],
-				'class' => $red_class,
-			);
+				'notice'    => $red_notice,
+				'width'     => $classes['100%'],
+				'class'     => $red_class,
+			];
 
 			$redirect_notice = $this->wrap_the_seo_bar_block( $red_wrap_args );
 
@@ -1616,15 +1616,16 @@ class Doing_It_Right extends Generate_Ldjson {
 		} elseif ( $noindex && false === $redirect ) {
 			//* Noindex found, why bother showing SEO info?
 
-			$noi_notice = $i18n['index'] . ' ' . sprintf( \esc_attr__( '%s is not being indexed. This means no SEO values have to be set.', 'autodescription' ), $post );
-			$noi_class = $classes['unknown'];
+			/* translators:* %s = post type name */
+			$noi_notice = $i18n['index'] . ' ' . sprintf( \esc_attr__( '%s is not being indexed. This means no SEO values have to be set.', 'autodescription' ), $post_i18n );
+			$noi_class  = $classes['unknown'];
 
-			$noi_wrap_args = array(
+			$noi_wrap_args = [
 				'indicator' => $i18n['index_short'],
-				'notice' => $noi_notice,
-				'width' => $classes['100%'],
-				'class' => $noi_class,
-			);
+				'notice'    => $noi_notice,
+				'width'     => $classes['100%'],
+				'class'     => $noi_class,
+			];
 
 			$noindex_notice = $this->wrap_the_seo_bar_block( $noi_wrap_args );
 
@@ -1643,16 +1644,13 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @param string $class The Current Title notification class.
 	 * @return array {
 	 *    string $notice => The notice,
-	 *    string $class => The class,
-	 *    bool $but => Whether we should use but or and,
+	 *    string $class  => The class,
+	 *    bool   $but    => Whether we should use but or and,
 	 * }
 	 */
 	protected function get_the_seo_bar_title_length_warning( $tit_len, $class ) {
 
 		$classes = $this->get_the_seo_bar_classes();
-		$bad  = $classes['bad'];
-		$okay = $classes['okay'];
-		$good = $classes['good'];
 
 		$but = false;
 
@@ -1660,44 +1658,39 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		if ( $tit_len < 25 ) {
 			$notice = $i18n['length_far_too_short'];
-			$class = $bad;
+			$class  = $classes['bad'];
 		} elseif ( $tit_len < 42 ) {
 			$notice = $i18n['length_too_short'];
-			$class = $okay;
+			$class  = $classes['okay'];
 		} elseif ( $tit_len > 55 && $tit_len < 75 ) {
 			$notice = $i18n['length_too_long'];
-			$class = $okay;
+			$class  = $classes['okay'];
 		} elseif ( $tit_len >= 75 ) {
 			$notice = $i18n['length_far_too_long'];
-			$class = $bad;
+			$class  = $classes['bad'];
 		} else {
 			$notice = $i18n['length_good'];
-			$class = $good;
-			$but = true;
+			$class  = $classes['good'];
+			$but    = true;
 		}
 
-		return array(
-			'notice' => $notice,
-			'class' => $class,
-			'but' => $but,
-		);
+		return compact( 'notice', 'class', 'but' );
 	}
 
 	/**
 	 * Returns an array of the classes used for CSS within The SEO Bar.
 	 *
 	 * @since 2.6.0
+	 * @since 3.1.0 Removed 'pill' index.
 	 *
 	 * @return array The class names.
 	 */
 	public function get_the_seo_bar_classes() {
-		return array(
+		return [
 			'bad'     => 'tsf-seo-bar-bad',
 			'okay'    => 'tsf-seo-bar-okay',
 			'good'    => 'tsf-seo-bar-good',
 			'unknown' => 'tsf-seo-bar-unknown',
-
-			'pill' => 'pill',
 
 			'100%'  => 'tsf-100',
 			'60%'   => 'tsf-60',
@@ -1711,7 +1704,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			'12.5%' => 'tsf-12-5',
 			'11%'   => 'tsf-11',
 			'10%'   => 'tsf-10',
-		);
+		];
 	}
 
 	/**
@@ -1729,7 +1722,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		if ( isset( $i18n ) )
 			return $i18n;
 
-		return $i18n = array(
+		return $i18n = [
 			'title'       => \esc_attr__( 'Title:', 'autodescription' ),
 			'description' => \esc_attr__( 'Description:', 'autodescription' ),
 			'index'       => \esc_attr__( 'Index:', 'autodescription' ),
@@ -1755,26 +1748,6 @@ class Doing_It_Right extends Generate_Ldjson {
 			'length_too_long'      => ' ' . \esc_attr__( 'Length is too long.', 'autodescription' ),
 			'length_far_too_long'  => ' ' . \esc_attr__( 'Length is far too long.', 'autodescription' ),
 			'length_good'          => ' ' . \esc_attr__( 'Length is good.', 'autodescription' ),
-		);
-	}
-
-	/**
-	 * Whether to square or pill the seo bar.
-	 *
-	 * Applies filters 'the_seo_framework_seo_bar_pill' : boolean
-	 *
-	 * @staticvar bool $cache
-	 * @since 2.6.0
-	 *
-	 * @return bool
-	 */
-	protected function pill_the_seo_bar() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) )
-			return $cache;
-
-		return $cache = (bool) \apply_filters( 'the_seo_framework_seo_bar_pill', false );
+		];
 	}
 }

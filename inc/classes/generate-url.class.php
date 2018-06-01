@@ -162,8 +162,8 @@ class Generate_Url extends Generate_Title {
 	 */
 	protected function build_canonical_url( $args ) {
 
-		//* See $this->create_canonical_url().
-		extract( $args );
+		//? extract(). See $this->create_canonical_url()
+		foreach ( $args as $k => $v ) $$k = $v;
 
 		$canonical_url = '';
 
