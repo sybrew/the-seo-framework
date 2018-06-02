@@ -37,7 +37,6 @@ function _init_locale() {
 	);
 }
 
-
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\_init_tsf', 5 );
 /**
  * Load The_SEO_Framework_Load class
@@ -91,6 +90,7 @@ function _init_tsf() {
 		\do_action( 'the_seo_framework_loaded' );
 	} else {
 		$tsf = new \The_SEO_Framework\Silencer();
+		$tsf->loaded = false;
 	}
 
 	return $tsf;
@@ -128,16 +128,24 @@ function _autoload_classes( $class ) {
 	if ( 0 !== strpos( $class, 'The_SEO_Framework\\', 0 ) )
 		return;
 
+	$strip = __NAMESPACE__ . '\\';
+
 	if ( strpos( $class, '_Interface' ) ) {
 		$path = THE_SEO_FRAMEWORK_DIR_PATH_INTERFACE;
 		$extension = '.interface.php';
+		$class = str_replace( '_Interface', '', $class );
 	} else {
 		$path = THE_SEO_FRAMEWORK_DIR_PATH_CLASS;
 		$extension = '.class.php';
+
+		//: substr_count( $class, '\\', 2 ) >= 2 // strrpos... str_split...
+		if ( 0 === strpos( $class, 'The_SEO_Framework\\Builders\\' ) ) {
+			$path  .= 'builders' . DIRECTORY_SEPARATOR;
+			$strip .= 'Builders\\';
+		}
 	}
 
-	$class = strtolower( str_replace( __NAMESPACE__ . '\\', '', $class ) );
-	$class = str_replace( '_interface', '', $class );
+	$class = strtolower( str_replace( $strip, '', $class ) );
 	$class = str_replace( '_', '-', $class );
 
 	require $path . $class . $extension;

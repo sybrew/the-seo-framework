@@ -103,6 +103,8 @@ class Core {
 	/**
 	 * Handles unapproachable invoked methods.
 	 *
+	 * @since 2.7.0
+	 *
 	 * @param string $name The method name.
 	 * @param array $arguments The method arguments.
 	 * @return void
@@ -114,8 +116,8 @@ class Core {
 		if ( is_null( $depr_class ) )
 			$depr_class = new Deprecated;
 
-		if ( is_callable( array( $depr_class, $name ) ) ) {
-			return call_user_func_array( array( $depr_class, $name ), $arguments );
+		if ( is_callable( [ $depr_class, $name ] ) ) {
+			return call_user_func_array( [ $depr_class, $name ], $arguments );
 		}
 
 		\the_seo_framework()->_inaccessible_p_or_m( 'the_seo_framework()->' . \esc_html( $name ) . '()' );
@@ -171,14 +173,25 @@ class Core {
 	 *              Each array key is converted to a variable with its value attached.
 	 * @param string $instance The instance suffix to call back upon.
 	 */
-	public function get_view( $view, array $args = array(), $instance = 'main' ) {
+	public function get_view( $view, array $args = [], $instance = 'main' ) {
 
-		foreach ( $args as $key => $val )
-			$$key = $val;
+		foreach ( $args as $_key => $_val )
+			$$_key = $_val;
+		unset( $_key, $_val );
 
-		$file = THE_SEO_FRAMEWORK_DIR_PATH_VIEWS . $view . '.php';
+		include $this->get_view_location( $view );
+	}
 
-		include $file;
+	/**
+	 * Gets view location.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param string $file The file name.
+	 * @return string The view location.
+	 */
+	public function get_view_location( $file ) {
+		return THE_SEO_FRAMEWORK_DIR_PATH_VIEWS . $file . '.php';
 	}
 
 	/**

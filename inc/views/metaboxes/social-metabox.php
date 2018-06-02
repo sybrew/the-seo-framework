@@ -325,6 +325,9 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Post Date Settings', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'Some social sites output the published date and modified date in the sharing snippet.', 'autodescription' ) );
+		?>
+		<hr>
+		<?php
 
 		/* translators: 1: Option, 2: Post Type */
 		$post_publish_time_label = sprintf( esc_html__( 'Add %1$s to %2$s?', 'autodescription' ), $this->code_wrap( 'article:published_time' ), $posts_i18n );

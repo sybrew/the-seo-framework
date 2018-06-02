@@ -797,8 +797,8 @@ final class Debug implements Debug_Interface {
 		$difference_memory = $memory_usage_now - $memory_start[ $key ];
 
 		//* Add difference to total.
-		$plugin_time[ $key ] = $plugin_time[ $key ] + $difference_time;
-		$plugin_memory[ $key ] = $plugin_memory[ $key ] + $difference_memory;
+		$plugin_time[ $key ] += $difference_time;
+		$plugin_memory[ $key ] += $difference_memory;
 
 		//* Reset timer and memory
 		$timer_start[ $key ] = $time_now;

@@ -138,11 +138,8 @@ class Admin_Pages extends Inpost {
 			$menu['callback']
 		);
 
-		//* Enqueue styles
-		\add_action( 'admin_print_styles-' . $this->seo_settings_page_hook, array( $this, 'enqueue_admin_css' ), 11 );
-
 		//* Enqueue scripts
-		\add_action( 'admin_print_scripts-' . $this->seo_settings_page_hook, array( $this, 'enqueue_admin_javascript' ), 11 );
+		\add_action( 'admin_print_scripts-' . $this->seo_settings_page_hook, array( $this, 'init_admin_scripts' ), 11 );
 
 		$run = true;
 	}
@@ -789,6 +786,7 @@ class Admin_Pages extends Inpost {
 	 * Also registers additional i18n strings for JS.
 	 *
 	 * @since 2.8.0
+	 * @since 3.1.0 No longer prepares media l10n data.
 	 *
 	 * @param string $input_id Required. The HTML input id to pass URL into.
 	 * @return string The image uploader button.
@@ -801,9 +799,9 @@ class Admin_Pages extends Inpost {
 		$s_input_id = \esc_attr( $input_id );
 
 		$content = vsprintf(
-			'<a href="%1$s" class="tsf-set-social-image button button-primary button-small" title="%2$s" id="%3$s-select"
-				data-inputid="%3$s" data-width="%4$s" data-height="%5$s" data-flex="%6$d">%7$s</a>',
-			array(
+			'<button type=button data-href="%1$s" class="tsf-set-image-button button button-primary button-small" title="%2$s" id="%3$s-select"
+				data-input-id="%3$s" data-input-type="social" data-width="%4$s" data-height="%5$s" data-flex="%6$d">%7$s</button>',
+			[
 				\esc_url( \get_upload_iframe_src( 'image', $this->get_the_real_ID() ) ),
 				\esc_attr_x( 'Select social image', 'Button hover', 'autodescription' ),
 				$s_input_id,
@@ -811,21 +809,8 @@ class Admin_Pages extends Inpost {
 				'630',
 				true,
 				\esc_html__( 'Select Image', 'autodescription' ),
-			)
+			]
 		);
-
-		$button_labels = array(
-			'select' => \esc_attr__( 'Select Image', 'autodescription' ),
-			'select_title' => \esc_attr_x( 'Select social image', 'Button hover', 'autodescription' ),
-			'change' => \esc_attr__( 'Change Image', 'autodescription' ),
-			'remove' => \esc_attr__( 'Remove Image', 'autodescription' ),
-			'remove_title' => \esc_attr__( 'Remove selected social image', 'autodescription' ),
-			'frame_title' => \esc_attr_x( 'Select Social Image', 'Frame title', 'autodescription' ),
-			'frame_button' => \esc_attr__( 'Use this image', 'autodescription' ),
-		);
-
-		//* Already escaped. Turn off escaping.
-		$this->additional_js_l10n( $s_input_id, $button_labels, false, false );
 
 		return $content;
 	}
@@ -835,6 +820,7 @@ class Admin_Pages extends Inpost {
 	 * Also registers additional i18n strings for JS.
 	 *
 	 * @since 3.0.0
+	 * @since 3.1.0 No longer prepares media l10n data.
 	 *
 	 * @param string $input_id Required. The HTML input id to pass URL into.
 	 * @return string The image uploader button.
@@ -847,9 +833,9 @@ class Admin_Pages extends Inpost {
 		$s_input_id = \esc_attr( $input_id );
 
 		$content = vsprintf(
-			'<a href="%1$s" class="tsf-set-social-image button button-primary button-small" title="%2$s" id="%3$s-select"
-				data-inputid="%3$s" data-width="%4$s" data-height="%5$s" data-flex="%6$d">%7$s</a>',
-			array(
+			'<button type=button data-href="%1$s" class="tsf-set-image-button button button-primary button-small" title="%2$s" id="%3$s-select"
+				data-input-id="%3$s" data-input-type="logo" data-width="%4$s" data-height="%5$s" data-flex="%6$d">%7$s</button>',
+			[
 				\esc_url( \get_upload_iframe_src( 'image', $this->get_the_real_ID() ) ),
 				'',
 				$s_input_id,
@@ -857,21 +843,8 @@ class Admin_Pages extends Inpost {
 				'512',
 				false,
 				\esc_html__( 'Select Logo', 'autodescription' ),
-			)
+			]
 		);
-
-		$button_labels = array(
-			'select' => \esc_attr__( 'Select Logo', 'autodescription' ),
-			'select_title' => '',
-			'change' => \esc_attr__( 'Change Logo', 'autodescription' ),
-			'remove' => \esc_attr__( 'Remove Logo', 'autodescription' ),
-			'remove_title' => \esc_attr__( 'Unset selected logo', 'autodescription' ),
-			'frame_title' => \esc_attr_x( 'Select Logo', 'Frame title', 'autodescription' ),
-			'frame_button' => \esc_attr__( 'Use this image', 'autodescription' ),
-		);
-
-		//* Already escaped. Turn off escaping.
-		$this->additional_js_l10n( $s_input_id, $button_labels, false, false );
 
 		return $content;
 	}

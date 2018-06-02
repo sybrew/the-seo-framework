@@ -31,8 +31,11 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  *
  * @since 3.1.0
  * @ignore
+ * @property false $loaded
  */
 final class Silencer {
+
+	public $loaded = false;
 
 	public function __construct() {}
 

@@ -258,6 +258,13 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 * The factory function yields many failsafe capturers so we can make future changes with peace of mind. This isn't possible with PHP functions.
 * As more than three quarters the plugin's code is dormant on most pages, in future major releases we're going to cut off the "façade" class loading (where everything's accessible via `$this`), and split them into interfacing factories, e.g.: `the_seo_framework()->generate( 'url' )::set( 'id', 1 )::get( 'relative' )`. More on this will follow for 3.2 or later after a class-map draft is set up. Or goal is to minimize performance overhead; aiming to improve it further.
 
+**For developers: HTML Script changes:**
+
+* The original JS file (stemming from August 2015) was a God Object container, which grew over 3000 lines of code. So, we split the code over multiple objects, thus files, to improve maintainability and added a script loader.
+* Theoretically, we could've auto-combined the files in the loader (like WP `load-scripts.php` does), but we figured most servers use HTTP/2 now. And, if they don't, they should.
+* With this introduction, most of the split-off code's API has been dropped, without deprecation. We plan to incorporate the new API into the Extension Manager, which now maintains its own versions of almost everything.
+* We've also removed the externs file, as we long moved to Babel instead of Closure Compiler.
+
 ## Detailed log
 
 * **For everyone:**
@@ -271,6 +278,8 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 			* Since TSF v3.0.6 this happens when the user saved the options, but this could lead to inconsistent behavior on WordPress Multisite installations.
 		* We removed a lot of redundant code (like option upgrade checks), which have long been superseded by better standards.
 		* Code and URL input types (Twitter profile, Webmasters' verification codes) now always flow from left to right, even if your site's written language setting is otherwise.
+		* Tooltip arrows now always follow your mouse, for a more natural look.
+		* Tooltips now support RTL screens without the arrow overflowing.
 	* **Changed:**
 		/
 		* TSF now requires WordPress 4.6, from WordPress 4.4.
@@ -278,12 +287,14 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 		* URL input types (Canonical, Redirect) are now `url` instead of `text`. This means you need to supply a correct URL according to the browser, instead that only TSF checks for correctness after it's being saved.
 	* **Removed:**
 		/
-		* TODO
+		* Firefox post list table compatibility and fixes that account for the wide SEO Bar; they don't work anymore as intended, and they cause issues on other well-built browsers.
 	* **Fixed:**
 		/
 		* When reactivating the plugin, there's no longer a chance for your SEO options to be wiped on a random database error.
 			* We used to delete the options, so we could reactivate option-auto-loading; now we add a buster-timestamp.
 		* Various RTL UI elements are now aligned correctly.
+		* On Firefox, checkbox options marked "default" (recommended) or "warned" (use at own risk) are now color-coded again.
+		* The SEO Bar will no longer overflow, but it will now wrap automatically when needed.
 		* TODO
 
 * **For translators:**
@@ -309,14 +320,21 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 	* **Added:**
 		/
 		* TODO
+		* Singleton class '\The_SEO_Framework\Builders\Scripts', via a "Builder Pattern", callable as e.g. `the_seo_framework()->Scripts()::function_name()`.
+			* This is the first class of this kind in The SEO Framework plugin.
 	* **Improved:**
 		/
 		* TODO
 		* A "doing it wrong" notice is now supplied when calling `the_seo_framework()` too early.
+		* Fixed all "non-passive event listener" warnings caused by jQuery, by using our own event handlers.
 	* **Changed:**
 		/
-		* The plugin now loads within the `/bootstrap/` folder via the plugin's initial `autodescription.php` file, where you can more easily discern how the plugin's loaded.
 		* TODO
+		* The plugin now loads within the `/bootstrap/` folder via the plugin's initial `autodescription.php` file, where you can more easily discern how the plugin's loaded.
+		* [JavaScript]: Tooltips are now instanced via their own object named `window.tsfTT`, eliminating the previous JS API.
+			* The auto-invoked API still works as intended, via CSS.
+		* [JavaScript]: Media handlers are now instanced via their own object named `window.tsfMedia`, eliminating the previous JS API.
+		* [JavaScript]: Primary Term handlers are now instanced via their own object named `window.tsfPT`, eliminating the previous JS API.
 	* **Removed:**
 		/
 		* We removed the `seotips` folder and their contents. They were a gimmick, accumulating SEO tips brought over past plugin update changelogs.
@@ -365,6 +383,13 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 			* `the_seo_framework_update_option()`. Use expression `the_seo_framework()->update_settings()` instead.
 			* `the_seo_framework_options_page_slug()`. Use expression `the_seo_framework()->seo_settings_page_slug` instead.
 	* **Method notes:**
+		* **Added:**
+			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
+				* `get_view_location()`
+			* In class: `\The_SEO_Framework\Admin_Init` -- Factory: `the_seo_framework()`
+				* `Scripts()`
+				* `enqueue_media_scripts()`
+				* `enqueue_primaryterm_scripts()`
 		* **Removed:**
 			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
 				* `site_updated_plugin_option()`
@@ -374,6 +399,17 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 			* In class: `\The_SEO_Framework\Sitemaps` -- Factory: `the_seo_framework()`
 				* `enqueue_rewrite_flush_other()`, was marked private.
 				* `flush_rewrite_rules()`, was marked private.
+			* In class: `\The_SEO_Framework\Admin_Init` -- Factory: `the_seo_framework()`
+				* `enqueue_admin_javascript()`
+				* `additional_js_l10n()`
+				* `enqueue_admin_css()`
+				* `_register_admin_javascript()`, was marked private.
+				* `_localize_admin_javascript()`, was marked private.
+				/
+				* TODO `set_js_nonces()`
+				* TODO `get_js_nonces()`
+			* In class: `\The_SEO_Framework\Inpost` -- Factory: `the_seo_framework()`
+				* `_include_primary_term_selector_template()`, was marked private.
 		* **Deprecated:**
 			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
 				* `get_meta_output_cache_key()`, use `get_meta_output_cache_key_by_query()` (without Page ID) or `get_meta_output_cache_key_by_type()` (with page ID) instead.
@@ -390,12 +426,20 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 		* **Changed:**
 			* In class: `\The_SEO_Framework\Generate_Url` -- Factory: `the_seo_framework()`
 				* `set_url_scheme()`, the third parameter is now deprecated and shouldn't be used.
+	* **Property notes:**
+		* **Removed:**
+			* In class: `\The_SEO_Framework\Admin_Init` -- Factory: `the_seo_framework()`
+				* `css_name`
+				* `js_name`
+				* `page_base_file`
 	* **Action notes:**
 		* **Added:**
 			* `the_seo_framework_admin_loaded`. Runs after the plugin factory is loaded in the admin-end.
 			* `the_seo_framework_loaded`. Runs after the plugin factory is loaded on any end.
 			* `the_seo_framework_after_init`. Runs after the plugin has initialized its admin or front-end hooks. See also, the admin-only hook: `the_seo_framework_after_admin_init`.
 	* **Filter notes:**
+		* **Added:**
+			* `(array) the_seo_framework_scripts`, allows you to adjust (or add to) the default script parameters.
 		* **Changed:**
 			* `the_seo_framework_detect_page_builder`
 				1. Now returns `null` by default.

@@ -225,9 +225,6 @@ class Init extends Query {
 			//* Enqueue Inpost meta boxes.
 			\add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box_init' ), 5 );
 
-			//* Enqueue Inpost primary term template.
-			\add_action( 'admin_footer', array( $this, '_include_primary_term_selector_template' ) );
-
 			//* Enqueue Taxonomy meta output.
 			\add_action( 'current_screen', array( $this, 'add_taxonomy_seo_box_init' ), 10 );
 

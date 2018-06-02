@@ -431,17 +431,6 @@ class Inpost extends Profile {
 	}
 
 	/**
-	 * Outputs Primary Term nonce tempalte.
-	 *
-	 * @since 3.0.0
-	 * @access private
-	 */
-	public function _include_primary_term_selector_template() {
-		if ( $this->is_post_edit() )
-			$this->get_view( 'templates/inpost/primary-term-selector', array() );
-	}
-
-	/**
 	 * Fills in input variables by call for general tabs.
 	 *
 	 * Placeholder method that's used prior to upgrade merge 2.9 -> 3.0+.

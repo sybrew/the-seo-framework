@@ -71,24 +71,6 @@ a.tsf-dismiss:hover {
 	color: #c00;
 }
 
-/**
- * WooCommerce fix @TODO make this load only when admin sidebar is showing.
- */
-table.wp-list-table .column-name {
-	width: 15%;
-}
-
-/**
- * WooCommerce fix
- */
-table.wp-list-table .column-is_in_stock,
-table.wp-list-table .column-sku,
-table.wp-list-table .column-price,
-table.wp-list-table .column-icl_translations,
-th.column-tsf-seo-bar-wrap ~ th {
-	width: 8%;
-}
-
 .tsf-seo-bar-item {
 	text-decoration: none;
 	font-size: 13px;
@@ -281,8 +263,7 @@ th:last-of-type#tsf-seo-bar-wrap {
 	width: 95%;
 	max-width: 220px;
 	border-radius: 0;
-	padding: 3px;
-	text-shadow: 0 0 3px rgba(0,0,0,0.3);
+	padding: 0;
 }
 
 .tsf-seo-bar.tsf-100 {
@@ -290,30 +271,30 @@ th:last-of-type#tsf-seo-bar-wrap {
 }
 
 .tsf-seo-bar-inner-wrap {
-	display: table;
-	width: 100%;
-	border-radius: 0;
-	margin: 0 auto;
-	border-collapse: separate;
-	border-spacing: 0;
-	vertical-align: middle;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
+	-webkit-flex-wrap: wrap;
+	flex-wrap: wrap;
+	-webkit-justify-content: flex-start;
+	justify-content: flex-start;
 }
 
 .tsf-seo-bar-section-wrap {
-	display: table-cell;
-	border-collapse: collapse;
+	min-width: 2em;
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
 }
 
 .tsf-seo-bar-item {
-	display: table;
-	width: 100%;
+	display: block;
 	color: #fff;
 	text-align: center;
-	height: 100%;
-	min-width: 12px;
-	vertical-align: top;
-	line-height: 1.625em;
-	box-shadow: 2px 0px 0px -1px rgba(0,0,0,0.1) inset, -2px 0px 0px -1px rgba(0,0,0,0.1) inset;
+	border: 1px solid rgba(0,0,0,.1);
+	text-shadow: 0 0 3px rgba(0,0,0,0.5);
 }
 
 body.no-js .tsf-seo-bar-item {
@@ -323,43 +304,33 @@ body.no-js .tsf-seo-bar-item {
 .tsf-100 {
 	width: 100%;
 }
-
 .tsf-60 {
 	width: 60%;
 }
-
 .tsf-50 {
 	width: 50%;
 }
-
 .tsf-40 {
 	width: 40%;
 }
-
 .tsf-33 {
 	width: 33.333%;
 }
-
 .tsf-25 {
 	width: 25%;
 }
-
 .tsf-20 {
 	width: 20%;
 }
-
 .tsf-16 {
 	width: 16.666%;
 }
-
 .tsf-12-5 {
 	width: 12.5%;
 }
-
 .tsf-11 {
 	width: 11.333%;
 }
-
 .tsf-10 {
 	width: 10%;
 }
@@ -379,140 +350,6 @@ body.no-js .tsf-seo-bar-item {
 .tsf-seo-bar-unknown {
 	background-color: #007bd2;
 }
-
-/* # Start tooltips */
-
-.tsf-tooltip-wrap {
-	position: relative;
-}
-
-.tsf-tooltip-item {
-	cursor: help;
-}
-
-a.tsf-tooltip-item {
-	cursor: pointer;
-}
-
-.tsf-tooltip {
-	position: absolute;
-	padding: 0;
-	margin: 0;
-	bottom: 0;
-	left: 0;
-	z-index: 900142;
-	text-align: left;
-	pointer-events: none;
-	box-sizing: border-box;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-flex: 1 1 auto;
-	flex: 1 1 auto;
-	-webkit-flex-wrap: wrap;
-	-ms-flex-wrap: wrap;
-	flex-wrap: wrap;
-	-webkit-flex-direction: row;
-	flex-direction: row;
-	-webkit-justify-content: flex-start;
-	justify-content: flex-start;
-}
-
-.tsf-tooltip-down {
-	bottom: auto;
-	top: 0;
-}
-
-.tsf-tooltip-text-wrap {
-	padding: 10px 12px;
-	font-size: 1em;
-	font-weight: 500;
-	line-height: 1.625em;
-	border-radius: 3px;
-	background: #007bd2;
-	color: #fdfdfd;
-	box-shadow: 0px 0px 2px rgba(0,0,0,.6);
-	text-shadow: none;
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	word-break: break-word;
-	white-space: pre-line;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-flex: 1 0 150px;
-	flex: 1 0 150px;
-	-webkit-flex-wrap: wrap;
-	-ms-flex-wrap: wrap;
-	flex-wrap: wrap;
-	-webkit-flex-direction: row;
-	flex-direction: row;
-	-webkit-justify-content: flex-start;
-	justify-content: flex-start;
-}
-
-.tsf-tooltip-text span {
-	text-decoration: underline;
-}
-
-/* fix breaks */
-.tsf-tooltip-text br {
-	display: block;
-	width: 100%;
-	content: "\A";
-}
-
-.tsf-tooltip-arrow {
-	position: absolute;
-	bottom: -8px;
-	z-index: 9999999;
-	left: 0;
-	width: 0;
-	height: 0;
-}
-
-.tsf-tooltip-down .tsf-tooltip-arrow {
-	bottom: auto;
-	top: -8px;
-}
-
-.tsf-tooltip-arrow:before {
-	content: "";
-	border-left: 9px solid transparent;
-	border-right: 9px solid transparent;
-	border-top: 9px solid rgba(0,0,0,.25);
-	position: absolute;
-	bottom: -1px;
-	left: -1px;
-}
-
-.tsf-tooltip-arrow:after {
-	content: "";
-	border-left: 8px solid transparent;
-	border-right: 8px solid transparent;
-	border-top: 8px solid #007bd2;
-	position: absolute;
-	bottom: 0;
-	left: 0;
-}
-
-.tsf-tooltip-down .tsf-tooltip-arrow:before {
-	bottom: auto;
-	top: 0;
-	border-top: 0;
-	border-bottom: 9px solid rgba(0,0,0,.25);
-}
-
-.tsf-tooltip-down .tsf-tooltip-arrow:after {
-	bottom: auto;
-	top: 1px;
-	border-top: 0;
-	border-bottom: 8px solid #007bd2;
-}
-
-/* # End tooltips */
 
 /* Mobile support */
 /* Needs more refining.... e.g. iPhone 6 = good, iPhone 6+ = offscreen */
@@ -786,6 +623,8 @@ body.js .tsf-tabs-content.tsf-active-tab-content {
 .tsf-flex-setting-input {
 	-webkit-justify-content: center;
 	justify-content: center;
+	-webkit-flex-wrap: nowrap;
+	flex-wrap: nowrap;
 }
 
 .tsf-flex-setting-label-item {
@@ -958,45 +797,6 @@ body.js .tsf-flex-tab-content.tsf-flex-tab-content-active {
 }
 
 /**
- * Primary category selectors.
- */
-.tsf-is-primary-term {
-	font-weight: 600;
-}
-
-.tsf-primary-term-selector {
-	margin: 0;
-	padding: 0;
-	float: right;
-	line-height: inherit;
-	display: inline-block;
-}
-
-.tsf-primary-term-selector input {
-	vertical-align: middle;
-	height: 14px;
-	width: 14px;
-	min-width: 14px;
-	line-height: inherit;
-	margin: 0;
-	padding: 0;
-	pointer-events: none;
-}
-
-.tsf-primary-term-selector input:checked:before {
-	width: 6px;
-	height: 6px;
-	margin: 3px;
-	line-height: inherit;
-}
-
-.tsf-primary-term-selector-help-wrap {
-	position: absolute;
-	top: 0;
-	right: 25px;
-}
-
-/**
  * End inpost.
  */
 
@@ -1099,7 +899,7 @@ input.tsf-disabled {
 	color: #0cc34b;
 }
 
-a.tsf-set-social-image.button {
+.tsf-set-image-button.button {
 	margin-right: 7px;
 }
 
@@ -1183,18 +983,6 @@ a.tsf-set-social-image.button {
 	.wp-list-table .is-expanded td.tsf-seo-bar-wrap:not(.hidden) {
 		overflow: initial !important;
 	}
-
-	.tsf-primary-term-selector input {
-		height: 18px;
-		width: 18px;
-		min-width: 18px;
-	}
-
-	.tsf-primary-term-selector input:checked:before {
-		width: 8px;
-		height: 8px;
-		margin: 4px;
-	}
 }
 
 @media screen and (max-width: 642px) {
@@ -1211,33 +999,12 @@ a.tsf-set-social-image.button {
 
 /* Firefix */
 @-moz-document url-prefix() {
-	#tsf-title-separator label,
-	#tsf-description-separator label {
-		margin: 3px 1px;
+	input.tsf-default-selected {
+		box-shadow: 0 0 0 1px #1c9d38;
 	}
 
-	@media only screen and ( min-width: 768px ) {
-		/**
-		 * https://bugzilla.mozilla.org/show_bug.cgi?id=587438
-		 * Only fix when title is second element and there are more than 6 elements in the table.
-		 */
-		.widefat tr th.column-title:nth-child(2):nth-last-child(n+6),
-		.widefat tr td.column-title:nth-child(2):nth-last-child(n+6),
-		.widefat tr th.title:nth-child(2):nth-last-child(n+6),
-		.widefat tr td.title:nth-child(2):nth-last-child(n+6) {
-			min-width: 1em;
-			width: 25%;
-			max-width: 100%;
-			white-space: unset;
-		}
-	}
-
-	.tsf-default-selected {
-		box-shadow: 0 0 2px 0 #1c9d38;
-	}
-
-	.tsf-warning-selected {
-		box-shadow: 0 0 2px 0 #dd3811;
+	input.tsf-warning-selected {
+		box-shadow: 0 0 0 1px #dd3811;
 	}
 }
 

@@ -68,14 +68,14 @@ define( 'THE_SEO_FRAMEWORK_USER_OPTIONS', (string) apply_filters( 'the_seo_frame
 define( 'THE_SEO_FRAMEWORK_UPDATES_CACHE', (string) apply_filters( 'the_seo_framework_updates_cache', 'autodescription-updates-cache' ) );
 
 /**
- * The plugin map url.
+ * The plugin map URL. Has a trailing slash.
  * Used for calling browser files.
  * @since 2.2.2
  */
 define( 'THE_SEO_FRAMEWORK_DIR_URL', plugin_dir_url( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE ) );
 
 /**
- * The plugin file relative to the plugins dir.
+ * The plugin file relative to the plugins dir. Does not have a trailing slash.
  * @since 2.2.8
  */
 define( 'THE_SEO_FRAMEWORK_PLUGIN_BASENAME', plugin_basename( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE ) );

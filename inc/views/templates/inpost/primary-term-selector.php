@@ -1,14 +1,16 @@
 <?php
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and The_SEO_Framework\Builders\Scripts::verify( $_secret ) or die;
+
+$tsf = the_seo_framework();
 
 ?>
 <script type="text/html" id="tmpl-tsf-primary-term-selector">
 	<input type="hidden" id="autodescription[_primary_term_{{data.taxonomy.name}}]" name="autodescription[_primary_term_{{data.taxonomy.name}}]" value="{{data.taxonomy.primary}}">
 	<?php
 	wp_nonce_field(
-		$this->inpost_nonce_field . '_pt',
-		$this->inpost_nonce_name . '_pt_{{data.taxonomy.name}}'
+		$tsf->inpost_nonce_field . '_pt',
+		$tsf->inpost_nonce_name . '_pt_{{data.taxonomy.name}}'
 	);
 	?>
 </script>
@@ -16,7 +18,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 <script type="text/html" id="tmpl-tsf-primary-term-selector-help">
 	<span class="tsf-primary-term-selector-help-wrap">
 		<?php
-		$this->make_info(
+		$tsf->make_info(
 			sprintf(
 				/* translators: %s = term name */
 				\esc_html__( 'You can set the primary %s through the buttons below.', 'autodescription' ),

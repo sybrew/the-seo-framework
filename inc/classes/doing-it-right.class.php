@@ -632,7 +632,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			//= Ajax handler.
 
 			//* Resets tooltips.
-			$script = '<script>tsf._triggerTooltipReset();</script>';
+			$script = '<script>tsfTT.triggerReset();</script>';
 
 			return sprintf( '<span class="%s" id="%s"><span class="tsf-seo-bar-inner-wrap tsf-tooltip-wrap">%s</span></span>', \esc_attr( $class ), \esc_attr( $ajax_id ), $content ) . $script;
 		}
@@ -1697,7 +1697,6 @@ class Doing_It_Right extends Generate_Ldjson {
 			'50%'   => 'tsf-50',
 			'40%'   => 'tsf-40',
 			'33%'   => 'tsf-33',
-			'25%'   => 'tsf-25',
 			'25%'   => 'tsf-25',
 			'20%'   => 'tsf-20',
 			'16%'   => 'tsf-16',

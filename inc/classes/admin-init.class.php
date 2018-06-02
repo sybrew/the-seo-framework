@@ -34,35 +34,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Admin_Init extends Init {
 
 	/**
-	 * The page base file.
-	 *
-	 * @since 2.5.2.2
-	 *
-	 * @var string Holds Admin page base file.
-	 */
-	protected $page_base_file;
-
-	/**
-	 * JavaScript name identifier to be used with enqueuing.
-	 *
-	 * @since 2.5.2.2
-	 * @since 2.8.0 Renamed
-	 *
-	 * @var string JavaScript name identifier.
-	 */
-	public $js_name = 'tsf';
-
-	/**
-	 * CSS script name identifier to be used with enqueuing.
-	 *
-	 * @since 2.6.0
-	 * @since 2.8.0 Renamed
-	 *
-	 * @var string CSS name identifier.
-	 */
-	public $css_name = 'tsf';
-
-	/**
 	 * Constructor. Loads parent constructor, registers script names and adds actions.
 	 */
 	protected function __construct() {
@@ -78,129 +49,229 @@ class Admin_Init extends Init {
 	 */
 	public function enqueue_admin_scripts( $hook ) {
 
-		$enqueue_hooks = array(
-			'edit.php',
-			'post.php',
-			'post-new.php',
-			'edit-tags.php',
-			'term.php',
-		);
+		$enqueue = false;
 
-		if ( ! $this->is_option_checked( 'display_seo_bar_tables' ) ) {
-			$enqueue_hooks = array_diff( $enqueue_hooks, array( 'edit.php', 'edit-tags.php' ) );
+		if ( $this->is_seo_settings_page() ) {
+			$enqueue = true;
+		} else {
+			$enqueue_hooks = [
+				'edit.php',
+				'post.php',
+				'post-new.php',
+				'edit-tags.php',
+				'term.php',
+			];
+
+			if ( ! $this->is_option_checked( 'display_seo_bar_tables' ) ) {
+				$enqueue_hooks = array_diff( $enqueue_hooks, [ 'edit.php', 'edit-tags.php' ] );
+			}
+
+			if ( isset( $hook ) && $hook && in_array( $hook, $enqueue_hooks, true ) ) {
+				if ( $this->post_type_supports_custom_seo() )
+					$enqueue = true;
+			}
 		}
 
-		/**
-		 * Check hook first.
-		 * @since 2.3.9
-		 */
-		if ( isset( $hook ) && $hook && in_array( $hook, $enqueue_hooks, true ) ) {
-			/**
-			 * @uses $this->post_type_supports_custom_seo()
-			 * @since 2.3.9
-			 */
-			if ( $this->post_type_supports_custom_seo() )
-				$this->init_admin_scripts();
-		}
+		$enqueue and $this->init_admin_scripts();
+	}
+
+	/**
+	 * Returns the static scripts class object.
+	 *
+	 * The first letter of the method is capitalized, to indicate it's a class caller.
+	 *
+	 * @since 3.1.0
+	 * @builder
+	 *
+	 * @return string The scripts class name.
+	 */
+	public function Scripts() {
+		// return Builder\Scripts::class; //= PHP 5.5+
+		return '\\The_SEO_Framework\\Builders\\Scripts';
 	}
 
 	/**
 	 * Registers admin scripts and styles.
 	 *
 	 * @since 2.6.0
+	 * @since 3.1.0 Rewritten, same functionality.
 	 *
 	 * @param bool $direct Whether to directly include the files, or let the action handler do it.
 	 */
 	public function init_admin_scripts( $direct = false ) {
 
-		if ( $direct ) {
-			$this->enqueue_admin_css( $this->page_base_file );
-			$this->enqueue_admin_javascript( $this->page_base_file );
-		} else {
-			\add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_css' ), 1 );
-			\add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_javascript' ), 1 );
-		}
-	}
-
-	/**
-	 * Enqueues scripts.
-	 *
-	 * @since 2.0.2
-	 * @since 3.0.6 Now attaches the post ID to `wp_enqueue_media` on post edit.
-	 *
-	 * @param string $hook The current page hook.
-	 */
-	public function enqueue_admin_javascript( $hook ) {
-
+		$scripts = $this->Scripts();
 		/**
-		 * Put hook and js name in class vars.
-		 * @since 2.5.2.2
+		 * Applies filter 'the_seo_framework_scripts'.
+		 *
+		 * @since 3.1.0
+		 *
+		 * @param array  $scripts The default CSS and JS loader settings.
+		 * @param string $scripts The \The_SEO_Framework\Builders\Scripts builder class name.
 		 */
-		$this->page_base_file = $this->page_base_file ?: $hook;
-
-		//* Register the script.
-		$this->_register_admin_javascript();
+		$scripts::register( (array) \apply_filters_ref_array( 'the_seo_framework_scripts', [
+			[
+				[
+					'id'     => 'tsf',
+					'type'   => 'css',
+					'deps'   => [ 'tsf-tt' ],
+					'hasrtl' => true,
+					'name'   => 'tsf',
+					'base'   => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+					'ver'    => THE_SEO_FRAMEWORK_VERSION,
+				],
+				[
+					'id'   => 'tsf',
+					'type' => 'js',
+					'deps' => [ 'jquery', 'tsf-tt' ],
+					'name' => 'tsf',
+					'base' => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+					'ver'  => THE_SEO_FRAMEWORK_VERSION,
+					'l10n' => [
+						'name' => 'tsfL10n',
+						'data' => $this->get_javascript_l10n(),
+					],
+				],
+				[
+					'id'     => 'tsf-tt',
+					'type'   => 'css',
+					'deps'   => [],
+					'hasrtl' => false,
+					'name'   => 'tt',
+					'base'   => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+					'ver'    => THE_SEO_FRAMEWORK_VERSION,
+				],
+				[
+					'id'   => 'tsf-tt',
+					'type' => 'js',
+					'deps' => [ 'jquery' ],
+					'name' => 'tt',
+					'base' => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+					'ver'  => THE_SEO_FRAMEWORK_VERSION,
+				],
+			],
+			$scripts,
+		] ) );
 
 		if ( $this->is_post_edit() ) {
-			\wp_enqueue_media( array( 'post' => $this->get_the_real_admin_ID() ) );
+			$this->enqueue_media_scripts();
+			$this->enqueue_primaryterm_scripts();
 		} elseif ( $this->is_seo_settings_page() ) {
-			\wp_enqueue_media();
+			$this->enqueue_media_scripts();
+			\wp_enqueue_style( 'wp-color-picker' );
+			\wp_enqueue_script( 'wp-color-picker' );
 		}
 
-		if ( $this->is_seo_settings_page() )
-			\wp_enqueue_script( 'wp-color-picker' );
-
-		\wp_enqueue_script( $this->js_name );
-
-		/**
-		 * Localize JavaScript.
-		 * @since 2.5.2.2
-		 */
-		\add_action( 'admin_footer', array( $this, '_localize_admin_javascript' ) );
+		//= The $scripts class autoinvokes the scripts. $direct helps when it's invoked too late.
+		if ( $direct ) {
+			$scripts::enqueue();
+		}
 	}
 
 	/**
-	 * Registers admin CSS.
+	 * Enqueues Media Upload and Cropping scripts.
 	 *
-	 * @since 2.6.0
-	 * @staticvar bool $registered : Prevents Re-registering of the style.
-	 * @access private
-	 *
-	 * @return void Early if already registered.
+	 * @since 3.1.0
 	 */
-	public function _register_admin_javascript() {
+	public function enqueue_media_scripts() {
 
-		static $registered = null;
+		$args = [];
+		if ( $this->is_post_edit() ) {
+			$args['post'] = $this->get_the_real_admin_ID();
+		}
+		\wp_enqueue_media( $args );
 
-		if ( isset( $registered ) )
-			return;
-
-		$suffix = $this->script_debug ? '' : '.min';
-
-		\wp_register_script( $this->js_name, THE_SEO_FRAMEWORK_DIR_URL . "lib/js/{$this->js_name}{$suffix}.js", array( 'jquery' ), THE_SEO_FRAMEWORK_VERSION, true );
-
-		$registered = true;
+		$this->Scripts()::register( [
+			'id'   => 'tsf-media',
+			'type' => 'js',
+			'deps' => [ 'jquery', 'tsf' ],
+			'name' => 'media',
+			'base' => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+			'ver'  => THE_SEO_FRAMEWORK_VERSION,
+			'l10n' => [
+				'name' => 'tsfMediaL10n',
+				'data' => [
+					'labels' => [
+						'social' => [
+							'imgSelect'      => \esc_attr__( 'Select Image', 'autodescription' ),
+							'imgSelectTitle' => \esc_attr_x( 'Select social image', 'Button hover', 'autodescription' ),
+							'imgChange'      => \esc_attr__( 'Change Image', 'autodescription' ),
+							'imgRemove'      => \esc_attr__( 'Remove Image', 'autodescription' ),
+							'imgRemoveTitle' => \esc_attr__( 'Remove selected social image', 'autodescription' ),
+							'imgFrameTitle'  => \esc_attr_x( 'Select Social Image', 'Frame title', 'autodescription' ),
+							'imgFrameButton' => \esc_attr__( 'Use this image', 'autodescription' ),
+						],
+						'logo'   => [
+							'imgSelect'      => \esc_attr__( 'Select Logo', 'autodescription' ),
+							'imgSelectTitle' => '',
+							'imgChange'      => \esc_attr__( 'Change Logo', 'autodescription' ),
+							'imgRemove'      => \esc_attr__( 'Remove Logo', 'autodescription' ),
+							'imgRemoveTitle' => \esc_attr__( 'Unset selected logo', 'autodescription' ),
+							'imgFrameTitle'  => \esc_attr_x( 'Select Logo', 'Frame title', 'autodescription' ),
+							'imgFrameButton' => \esc_attr__( 'Use this image', 'autodescription' ),
+						],
+					],
+				],
+			],
+		] );
 	}
 
 	/**
-	 * Localizes admin javascript.
+	 * Enqueues Primary Term Selection scripts.
 	 *
-	 * @since 2.5.2.2
-	 * @staticvar bool $localized : Prevents Re-registering of the l10n.
-	 * @access private
+	 * @since 3.1.0
 	 */
-	public function _localize_admin_javascript() {
+	public function enqueue_primaryterm_scripts() {
 
-		static $localized = null;
+		$id = $this->get_the_real_admin_ID();
 
-		if ( isset( $localized ) )
-			return;
+		$post_type   = \get_post_type( $id );
+		$_taxonomies = $post_type ? $this->get_hierarchical_taxonomies_as( 'objects', $post_type ) : [];
 
-		$strings = $this->get_javascript_l10n();
+		$taxonomies = [];
 
-		\wp_localize_script( $this->js_name, "{$this->js_name}L10n", $strings );
+		foreach ( $_taxonomies as $_t ) {
+			$_i18n_name = strtolower( $_t->labels->singular_name );
+			$taxonomies[ $_t->name ] = [
+				'name'    => $_t->name,
+				'i18n'    => [
+					/* translators: %s = term name */
+					'makePrimary' => sprintf( \esc_html__( 'Make primary %s', 'autodescription' ), $_i18n_name ),
+					/* translators: %s = term name */
+					'primary' => sprintf( \esc_html__( 'Primary %s', 'autodescription' ), $_i18n_name ),
+				],
+				'primary' => $this->get_primary_term_id( $id, $_t->name ) ?: 0,
+			];
+		}
 
-		$localized = true;
+		$this->Scripts()::register( [
+			[
+				'id'   => 'tsf-pt',
+				'type' => 'js',
+				'deps' => [ 'jquery', 'tsf', 'tsf-tt' ],
+				'name' => 'pt',
+				'base' => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+				'ver'  => THE_SEO_FRAMEWORK_VERSION,
+				'l10n' => [
+					'name' => 'tsfPTL10n',
+					'data' => [
+						'taxonomies' => $taxonomies,
+					],
+				],
+				'tmpl' => [
+					'file' => $this->get_view_location( 'templates/inpost/primary-term-selector' ),
+				],
+			],
+			[
+				'id'     => 'tsf-pt',
+				'type'   => 'css',
+				'deps'   => [ 'tsf-tt' ],
+				'hasrtl' => true,
+				'name'   => 'pt',
+				'base'   => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+				'ver'    => THE_SEO_FRAMEWORK_VERSION,
+			],
+		] );
 	}
 
 	/**
@@ -244,25 +315,20 @@ class Admin_Init extends Init {
 		$has_input = $is_settings_page || $is_post_edit || $is_term_edit;
 
 		$post_type = $is_post_edit ? \get_post_type( $id ) : false;
-		$_taxonomies = $post_type ? $this->get_hierarchical_taxonomies_as( 'objects', $post_type ) : array();
 
-		$taxonomies = array();
-
-		foreach ( $_taxonomies as $_t ) {
-			$_i18n_name = strtolower( $_t->labels->singular_name );
-			$taxonomies[ $_t->name ] = array(
-				'name' => $_t->name,
-				'i18n' => array(
-					/* translators: %s = term name */
-					'makePrimary' => sprintf( \esc_html__( 'Make primary %s', 'autodescription' ), $_i18n_name ),
-					/* translators: %s = term name */
-					'primary' => sprintf( \esc_html__( 'Primary %s', 'autodescription' ), $_i18n_name ),
-				),
-				'primary' => $this->get_primary_term_id( $id, $_t->name ) ?: 0,
-			);
-		}
-
-		if ( isset( $this->page_base_file ) && $this->page_base_file ) {
+		if ( $is_settings_page ) {
+			// We're on our SEO settings pages.
+			if ( $this->has_page_on_front() ) {
+				// Home is a page.
+				$id = \get_option( 'page_on_front' );
+				$inpost_title = $this->get_custom_field( '_genesis_title', $id );
+			} else {
+				// Home is a blog.
+				$inpost_title = '';
+			}
+			$default_title = $inpost_title ?: $blog_name;
+			$additions = $home_tagline ?: $description;
+		} else {
 			// We're somewhere within default WordPress pages.
 			if ( $this->is_static_frontpage( $id ) ) {
 				$default_title = $this->get_option( 'homepage_title' ) ?: $blog_name;
@@ -303,28 +369,17 @@ class Admin_Init extends Init {
 				$default_title = '';
 				$additions = $title_add_additions ? $blog_name : '';
 			}
-		} elseif ( $is_settings_page ) {
-			// We're on our SEO settings pages.
-			if ( $this->has_page_on_front() ) {
-				// Home is a page.
-				$id = \get_option( 'page_on_front' );
-				$inpost_title = $this->get_custom_field( '_genesis_title', $id );
-			} else {
-				// Home is a blog.
-				$inpost_title = '';
-			}
-			$default_title = $inpost_title ?: $blog_name;
-			$additions = $home_tagline ?: $description;
 		}
 
-		$this->set_js_nonces( array(
+		$this->set_js_nonces( [
 			/**
 			 * Use $this->get_settings_capability() ?... might conflict with other nonces.
+			 * @augments tsfMedia 'upload_files'
 			 */
 			// 'manage_options' => \current_user_can( 'manage_options' ) ? \wp_create_nonce( 'tsf-ajax-manage_options' ) : false,
 			'upload_files' => \current_user_can( 'upload_files' ) ? \wp_create_nonce( 'tsf-ajax-upload_files' ) : false,
-			'edit_posts' => \current_user_can( 'edit_posts' ) ? \wp_create_nonce( 'tsf-ajax-edit_posts' ) : false,
-		) );
+			'edit_posts'   => \current_user_can( 'edit_posts' ) ? \wp_create_nonce( 'tsf-ajax-edit_posts' ) : false,
+		] );
 
 		$term_name = '';
 		$use_term_prefix = false;
@@ -347,7 +402,6 @@ class Admin_Init extends Init {
 				'isPostEdit' => $is_post_edit,
 				'isTermEdit' => $is_term_edit,
 				'postType' => $post_type,
-				'taxonomies' => $taxonomies,
 				'isPrivate' => $has_input && $id && $this->is_private( $id ),
 				'isPasswordProtected' => $has_input && $id && $this->is_password_protected( $id ),
 				'debug' => $this->script_debug,
@@ -377,7 +431,6 @@ class Admin_Init extends Init {
 				'titlePixelGuideline' => 600,
 				'descPixelGuideline' => $is_post_edit ? ( $this->is_page() ? 1820 : 1720 ) : 1820,
 			),
-			'other' => $this->additional_js_l10n( null, array(), true ),
 		);
 
 		$decode = array( 'i18n', 'params' );
@@ -395,39 +448,6 @@ class Admin_Init extends Init {
 		 * @param array $l10n
 		 */
 		return (array) \apply_filters( 'the_seo_framework_js_l10n', $l10n );
-	}
-
-	/**
-	 * Maintains and Returns additional JS l10n.
-	 *
-	 * They are put under object 'tsfemL10n.other[ $key ] = $val'.
-	 *
-	 * @since 2.8.0
-	 * @staticvar object $strings The cached strings object.
-	 *
-	 * @param null|string $key The object key.
-	 * @param array $val The object val.
-	 * @param bool $get Whether to return the cached strings.
-	 * @param bool $escape Whether to escape the input.
-	 * @return object Early when $get is true
-	 */
-	public function additional_js_l10n( $key = null, array $val = array(), $get = false, $escape = true ) {
-
-		static $strings = null;
-
-		if ( null === $strings )
-			$strings = new \stdClass();
-
-		if ( $get )
-			return $strings;
-
-		if ( $escape ) {
-			$key = \esc_attr( $key );
-			$val = \map_deep( $val, 'esc_attr' );
-		}
-
-		if ( $key )
-			$strings->$key = $val;
 	}
 
 	/**
@@ -498,120 +518,6 @@ class Admin_Init extends Init {
 	}
 
 	/**
-	 * CSS for the AutoDescription Bar
-	 *
-	 * @since 2.1.9
-	 * @since 3.0.0 Now also outputs colors.
-	 *
-	 * @param $hook the current page
-	 */
-	public function enqueue_admin_css( $hook ) {
-
-		/**
-		 * Put hook and js name in class vars.
-		 * @since 2.5.2.2
-		 */
-		$this->page_base_file = $this->page_base_file ?: $hook;
-
-		//* Register the script.
-		$this->register_admin_css();
-
-		if ( $this->is_seo_settings_page() ) {
-			\wp_enqueue_style( 'wp-color-picker' );
-		}
-
-		\wp_enqueue_style( $this->css_name );
-
-		$color_css = $this->get_admin_color_css()
-			and \wp_add_inline_style( $this->css_name, $color_css );
-	}
-
-	/**
-	 * Registers Admin CSS.
-	 *
-	 * @since 2.6.0
-	 * @staticvar bool $registered : Prevents Re-registering of the style.
-	 * @access private
-	 */
-	protected function register_admin_css() {
-
-		static $registered = null;
-
-		if ( isset( $registered ) )
-			return;
-
-		$rtl = \is_rtl() ? '-rtl' : '';
-		$suffix = $this->script_debug ? '' : '.min';
-		$registered = true;
-
-		\wp_register_style( $this->css_name, THE_SEO_FRAMEWORK_DIR_URL . "lib/css/{$this->css_name}{$rtl}{$suffix}.css", array(), THE_SEO_FRAMEWORK_VERSION, 'all' );
-	}
-
-	/**
-	 * Outputs additional CSS based on admin theme colors.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return string Additional admin CSS.
-	 */
-	protected function get_admin_color_css() {
-
-		//* @see wp_style_loader_src()
-		$scheme = \get_user_option( 'admin_color' ) ?: 'fresh';
-
-		$_colors = $GLOBALS['_wp_admin_css_colors'];
-
-		if (
-		   ! isset( $_colors[ $scheme ]->colors )
-		|| ! is_array( $_colors[ $scheme ]->colors )
-		|| count( $_colors[ $scheme ]->colors ) < 4
-		   ) return '';
-
-		$colors = $_colors[ $scheme ]->colors;
-
-		$bg = $colors[0];
-		$bg_accent = $colors[1];
-		$color = $colors[2];
-		$color_accent = $colors[3];
-
-		// $bg_alt_font = '#' . $this->get_relative_fontcolor( $bg );
-		$bg_accent_alt_font = '#' . $this->get_relative_fontcolor( $bg_accent );
-
-		$css = array(
-			'.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:checked + .tsf-flex-nav-tab-label' => array(
-				"box-shadow:0 -2px 0 0 $color_accent inset",
-			),
-			'.tsf-tooltip-text-wrap' => array(
-				"background-color:$bg_accent",
-				"color:$bg_accent_alt_font",
-			),
-			'.tsf-tooltip-arrow:after' => array(
-				"border-top-color:$bg_accent",
-			),
-			'.tsf-tooltip-down .tsf-tooltip-arrow:after' => array(
-				"border-bottom-color:$bg_accent",
-			),
-		);
-
-		/**
-		 * Applies filters 'the_seo_framework_admin_color_css'
-		 *
-		 * @since 3.0.0
-		 * @since 3.0.4 Now passes $colors.
-		 * @param array $css The current styles. Empty it to disable conditional styling.
-		 * @param string $scheme The current admin scheme name.
-		 * @param array $colors The current admin scheme values.
-		 */
-		$css = (array) \apply_filters( 'the_seo_framework_admin_color_css', $css, $scheme, $colors );
-
-		$out = '';
-		foreach ( $css as $attr => $style )
-			$out .= $attr . '{' . implode( ';', $style ) . '}';
-
-		return $out;
-	}
-
-	/**
 	 * Adds removable query args to WordPress query arg handler.
 	 *
 	 * @since 2.8.0
@@ -619,7 +525,7 @@ class Admin_Init extends Init {
 	 * @param array $removable_query_args
 	 * @return array The adjusted removable query args.
 	 */
-	public function add_removable_query_args( $removable_query_args = array() ) {
+	public function add_removable_query_args( $removable_query_args = [] ) {
 
 		if ( ! is_array( $removable_query_args ) )
 			return $removable_query_args;
@@ -707,8 +613,8 @@ class Admin_Init extends Init {
 					\esc_html__( 'There has been an error redirecting. Refresh the page or follow [this link](%s).', 'autodescription' ),
 					$target
 				),
-				array( 'a' ),
-				array( 'a_internal' => true )
+				[ 'a' ],
+				[ 'a_internal' => true ]
 			)
 		);
 	}
@@ -734,8 +640,10 @@ class Admin_Init extends Init {
 			//* If current user isn't allowed to edit posts, don't do anything and kill PHP.
 			if ( ! \current_user_can( 'edit_posts' ) ) {
 				//* Encode and echo results. Requires JSON decode within JS.
-				echo json_encode( array( 'type' => 'failure', 'value' => '' ) );
-				exit;
+				\wp_send_json( [
+					'type' => 'failure',
+					'value' => '',
+				] );
 			}
 
 			/**
@@ -751,16 +659,13 @@ class Admin_Init extends Init {
 			//* Update the option and get results of action.
 			$type = $this->update_user_option( 0, 'counter_type', $value ) ? 'success' : 'error';
 
-			$results = array(
-				'type' => $type,
+			$results = [
+				'type'  => $type,
 				'value' => $value,
-			);
+			];
 
 			//* Encode and echo results. Requires JSON decode within JS.
-			echo json_encode( $results );
-
-			//* Kill PHP.
-			exit;
+			\wp_send_json( $results );
 		endif;
 	}
 
@@ -790,11 +695,10 @@ class Admin_Init extends Init {
 		$cropped = \wp_crop_image( $attachment_id, $data['x1'], $data['y1'], $data['width'], $data['height'], $data['dst_width'], $data['dst_height'] );
 
 		if ( ! $cropped || \is_wp_error( $cropped ) )
-			\wp_send_json_error( array( 'message' => \esc_js( \__( 'Image could not be processed.', 'autodescription' ) ) ) );
+			\wp_send_json_error( [ 'message' => \esc_js( \__( 'Image could not be processed.', 'autodescription' ) ) ] );
 
 		switch ( $context ) :
 			case 'tsf-image':
-
 				/**
 				 * Fires before a cropped image is saved.
 				 *
@@ -851,7 +755,7 @@ class Admin_Init extends Init {
 				break;
 
 			default :
-				\wp_send_json_error( array( 'message' => \esc_js( \__( 'Image could not be processed.', 'autodescription' ) ) ) );
+				\wp_send_json_error( [ 'message' => \esc_js( \__( 'Image could not be processed.', 'autodescription' ) ) ] );
 				break;
 		endswitch;
 
