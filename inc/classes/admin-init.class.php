@@ -119,6 +119,11 @@ class Admin_Init extends Init {
 					'name'   => 'tsf',
 					'base'   => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 					'ver'    => THE_SEO_FRAMEWORK_VERSION,
+					'inline' => [
+						'.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:checked + .tsf-flex-nav-tab-label' => [
+							'box-shadow:0 -2px 0 0 {{$color_accent}} inset',
+						],
+					],
 				],
 				[
 					'id'   => 'tsf',
@@ -140,6 +145,18 @@ class Admin_Init extends Init {
 					'name'   => 'tt',
 					'base'   => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 					'ver'    => THE_SEO_FRAMEWORK_VERSION,
+					'inline' => [
+						'.tsf-tooltip-text-wrap' => [
+							'background-color:{{$bg_accent}}',
+							'color:{{$rel_bg_accent}}',
+						],
+						'.tsf-tooltip-arrow:after' => [
+							'border-top-color:{{$bg_accent}}',
+						],
+						'.tsf-tooltip-down .tsf-tooltip-arrow:after' => [
+							'border-bottom-color:{{$bg_accent}}',
+						],
+					],
 				],
 				[
 					'id'   => 'tsf-tt',

@@ -849,6 +849,7 @@ class Core {
 		$sr = 0.2126 * $get_relative_luminance( $r );
 		$sg = 0.7152 * $get_relative_luminance( $g );
 		$sb = 0.0722 * $get_relative_luminance( $b );
+
 		$rel_lum = ( $sr + $sg + $sb );
 
 		//= Invert colors if they hit luminance boundaries.
@@ -902,10 +903,10 @@ class Core {
 		if ( '' === $text )
 			return '';
 
-		$defaults = array(
+		// Merge defaults with $args.
+		$args = array_merge( [
 			'a_internal' => false,
-		);
-		$args = array_merge( $defaults, $args );
+		], $args );
 
 		/**
 		 * The conversion list's keys are per reference only.

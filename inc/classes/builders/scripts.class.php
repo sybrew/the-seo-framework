@@ -194,7 +194,7 @@ final class Scripts {
 	 * @param array $type Either 'js' or 'css'.
 	 * @return string The file URL.
 	 */
-	final private function generate_file_url( array $script, $type = 'js' ) {
+	private function generate_file_url( array $script, $type = 'js' ) {
 
 		static $min, $rtl;
 
@@ -250,37 +250,46 @@ final class Scripts {
 			$_scheme = \get_user_option( 'admin_color' ) ?: 'fresh';
 			$_colors = $GLOBALS['_wp_admin_css_colors'];
 
+			$tsf = \the_seo_framework();
+
 			if (
 			   ! isset( $_colors[ $_scheme ]->colors )
 			|| ! is_array( $_colors[ $_scheme ]->colors )
 			|| count( $_colors[ $_scheme ]->colors ) < 4
 			) {
-				//= Default 'fresh' table.
-				$_table = [
-					'{{$bg}}'           => '#222',
-					'{{$bg_accent}}'    => '#333',
-					'{{$color}}'        => '#0073aa',
-					'{{$color_accent}}' => '#00a0d2',
+				$_colors = [
+					'#222',
+					'#333',
+					'#0073aa',
+					'#00a0d2',
 				];
-				$c_ck = array_keys( $_table );
-				$c_cv = array_values( $_table );
 			} else {
 				$_colors = $_colors[ $_scheme ]->colors;
-
-				$_bg           = $_colors[0];
-				$_bg_accent    = $_colors[1];
-				$_color        = $_colors[2];
-				$_color_accent = $_colors[3];
-
-				$_table = [
-					'{{$bg}}'           => $_bg,
-					'{{$bg_accent}}'    => $_bg_accent,
-					'{{$color}}'        => $_color,
-					'{{$color_accent}}' => $_color_accent,
-				];
-				$c_ck = array_keys( $_table );
-				$c_cv = array_values( $_table );
 			}
+
+			$_bg           = $_colors[0];
+			$_bg_accent    = $_colors[1];
+			$_color        = $_colors[2];
+			$_color_accent = $_colors[3];
+
+			$_rel_bg           = $tsf->get_relative_fontcolor( $_colors[0] );
+			$_rel_bg_accent    = $tsf->get_relative_fontcolor( $_colors[1] );
+			$_rel_color        = $tsf->get_relative_fontcolor( $_colors[2] );
+			$_rel_color_accent = $tsf->get_relative_fontcolor( $_colors[3] );
+
+			$_table = [
+				'{{$bg}}'               => $_bg,
+				'{{$rel_bg}}'           => $_rel_bg,
+				'{{$bg_accent}}'        => $_bg_accent,
+				'{{$rel_bg_accent}}'    => $_rel_bg_accent,
+				'{{$color}}'            => $_color,
+				'{{$rel_color}}'        => $_color,
+				'{{$color_accent}}'     => $_color_accent,
+				'{{$rel_color_accent}}' => $_rel_color_accent,
+			];
+
+			$c_ck = array_keys( $_table );
+			$c_cv = array_values( $_table );
 		}
 
 		return str_replace( $c_ck, $c_cv, $css );

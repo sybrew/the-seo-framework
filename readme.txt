@@ -448,6 +448,7 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 			* `the_seo_framework_update_options_at_update`
 			* `the_seo_framework_canonical_force_scheme` (was deprecated since 2.8.0). Use `the_seo_framework_preferred_url_scheme` instead.
 			* `the_seo_framework_seo_bar_pill`
+			* `the_seo_framework_admin_color_css`
 	* **Structural notes:**
 		* **Added:**
 			* Folder `/bootstrap/`, with:
