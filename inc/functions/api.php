@@ -124,4 +124,20 @@ namespace The_SEO_Framework {
 
 		return $loaded[ $file ] = (bool) require( THE_SEO_FRAMEWORK_DIR_PATH_TRAIT . $_file . '.trait.php' );
 	}
+
+	/**
+	 * Determines if the method or function has already run.
+	 *
+	 * @since 3.1.0
+	 * @staticvar array $cache
+	 *
+	 * @param string $caller The method or function that calls this.
+	 * @return bool True if already called, false otherwise.
+	 */
+	function _has_run( $caller ) {
+
+		static $cache = [];
+
+		return isset( $cache[ $caller ] ) ?: ( ( $cache[ $caller ] = true ) && false );
+	}
 }

@@ -41,18 +41,19 @@ class Admin_Init extends Init {
 	}
 
 	/**
-	 * Enqueues scripts in the admin area on the supported screens.
+	 * Prepares scripts in the admin area.
 	 *
-	 * @since 2.3.3
+	 * @since 3.1.0
+	 * @access private
 	 *
-	 * @param string $hook The current page hook.
+	 * @param string|null $hook The current page hook.
 	 */
-	public function enqueue_admin_scripts( $hook ) {
+	public function _init_admin_scripts( $hook = null ) {
 
-		$enqueue = false;
+		$autoenqueue = false;
 
 		if ( $this->is_seo_settings_page() ) {
-			$enqueue = true;
+			$autoenqueue = true;
 		} else {
 			$enqueue_hooks = [
 				'edit.php',
@@ -68,11 +69,11 @@ class Admin_Init extends Init {
 
 			if ( isset( $hook ) && $hook && in_array( $hook, $enqueue_hooks, true ) ) {
 				if ( $this->post_type_supports_custom_seo() )
-					$enqueue = true;
+					$autoenqueue = true;
 			}
 		}
 
-		$enqueue and $this->init_admin_scripts();
+		$autoenqueue and $this->init_admin_scripts();
 	}
 
 	/**
@@ -94,11 +95,16 @@ class Admin_Init extends Init {
 	 * Registers admin scripts and styles.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 Rewritten, same functionality.
+	 * @since 3.1.0 First parameter is now deprecated.
 	 *
-	 * @param bool $direct Whether to directly include the files, or let the action handler do it.
+	 * @param bool|null $dpr Deprecated.
+	 * @return void Early if already enqueued.
 	 */
-	public function init_admin_scripts( $direct = false ) {
+	public function init_admin_scripts( $dpr = null ) {
+
+		if ( null !== $dpr ) $this->_doing_it_wrong( __METHOD__, 'The first argument is deprecated. Use <code>the_seo_framework()->Scripts()::enqueue()</code> after instead.', '3.1.0' );
+
+		if ( _has_run( __METHOD__ ) ) return;
 
 		$scripts = $this->Scripts();
 		/**
@@ -112,40 +118,43 @@ class Admin_Init extends Init {
 		$scripts::register( (array) \apply_filters_ref_array( 'the_seo_framework_scripts', [
 			[
 				[
-					'id'     => 'tsf',
-					'type'   => 'css',
-					'deps'   => [ 'tsf-tt' ],
-					'hasrtl' => true,
-					'name'   => 'tsf',
-					'base'   => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
-					'ver'    => THE_SEO_FRAMEWORK_VERSION,
-					'inline' => [
+					'id'       => 'tsf',
+					'type'     => 'css',
+					'deps'     => [ 'tsf-tt' ],
+					'autoload' => true,
+					'hasrtl'   => true,
+					'name'     => 'tsf',
+					'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+					'ver'      => THE_SEO_FRAMEWORK_VERSION,
+					'inline'   => [
 						'.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:checked + .tsf-flex-nav-tab-label' => [
 							'box-shadow:0 -2px 0 0 {{$color_accent}} inset',
 						],
 					],
 				],
 				[
-					'id'   => 'tsf',
-					'type' => 'js',
-					'deps' => [ 'jquery', 'tsf-tt' ],
-					'name' => 'tsf',
-					'base' => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
-					'ver'  => THE_SEO_FRAMEWORK_VERSION,
-					'l10n' => [
+					'id'       => 'tsf',
+					'type'     => 'js',
+					'deps'     => [ 'jquery', 'tsf-tt' ],
+					'autoload' => true,
+					'name'     => 'tsf',
+					'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+					'ver'      => THE_SEO_FRAMEWORK_VERSION,
+					'l10n'     => [
 						'name' => 'tsfL10n',
 						'data' => $this->get_javascript_l10n(),
 					],
 				],
 				[
-					'id'     => 'tsf-tt',
-					'type'   => 'css',
-					'deps'   => [],
-					'hasrtl' => false,
-					'name'   => 'tt',
-					'base'   => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
-					'ver'    => THE_SEO_FRAMEWORK_VERSION,
-					'inline' => [
+					'id'       => 'tsf-tt',
+					'type'     => 'css',
+					'deps'     => [],
+					'autoload' => true,
+					'hasrtl'   => false,
+					'name'     => 'tt',
+					'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+					'ver'      => THE_SEO_FRAMEWORK_VERSION,
+					'inline'   => [
 						'.tsf-tooltip-text-wrap' => [
 							'background-color:{{$bg_accent}}',
 							'color:{{$rel_bg_accent}}',
@@ -159,12 +168,13 @@ class Admin_Init extends Init {
 					],
 				],
 				[
-					'id'   => 'tsf-tt',
-					'type' => 'js',
-					'deps' => [ 'jquery' ],
-					'name' => 'tt',
-					'base' => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
-					'ver'  => THE_SEO_FRAMEWORK_VERSION,
+					'id'       => 'tsf-tt',
+					'type'     => 'js',
+					'deps'     => [ 'jquery' ],
+					'autoload' => true,
+					'name'     => 'tt',
+					'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+					'ver'      => THE_SEO_FRAMEWORK_VERSION,
 				],
 			],
 			$scripts,
@@ -178,19 +188,17 @@ class Admin_Init extends Init {
 			\wp_enqueue_style( 'wp-color-picker' );
 			\wp_enqueue_script( 'wp-color-picker' );
 		}
-
-		//= The $scripts class autoinvokes the scripts. $direct helps when it's invoked too late.
-		if ( $direct ) {
-			$scripts::enqueue();
-		}
 	}
 
 	/**
 	 * Enqueues Media Upload and Cropping scripts.
 	 *
 	 * @since 3.1.0
+	 * @staticvar bool|null $registered Prevents duplicate calls.
 	 */
 	public function enqueue_media_scripts() {
+
+		if ( _has_run( __METHOD__ ) ) return;
 
 		$args = [];
 		if ( $this->is_post_edit() ) {
@@ -199,13 +207,14 @@ class Admin_Init extends Init {
 		\wp_enqueue_media( $args );
 
 		$this->Scripts()::register( [
-			'id'   => 'tsf-media',
-			'type' => 'js',
-			'deps' => [ 'jquery', 'tsf' ],
-			'name' => 'media',
-			'base' => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
-			'ver'  => THE_SEO_FRAMEWORK_VERSION,
-			'l10n' => [
+			'id'       => 'tsf-media',
+			'type'     => 'js',
+			'deps'     => [ 'jquery', 'tsf' ],
+			'autoload' => true,
+			'name'     => 'media',
+			'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+			'ver'      => THE_SEO_FRAMEWORK_VERSION,
+			'l10n'     => [
 				'name' => 'tsfMediaL10n',
 				'data' => [
 					'labels' => [
@@ -237,8 +246,12 @@ class Admin_Init extends Init {
 	 * Enqueues Primary Term Selection scripts.
 	 *
 	 * @since 3.1.0
+	 *
+	 * @return void Early if already enqueued.
 	 */
 	public function enqueue_primaryterm_scripts() {
+
+		if ( _has_run( __METHOD__ ) ) return;
 
 		$id = $this->get_the_real_admin_ID();
 
@@ -255,7 +268,7 @@ class Admin_Init extends Init {
 					/* translators: %s = term name */
 					'makePrimary' => sprintf( \esc_html__( 'Make primary %s', 'autodescription' ), $_i18n_name ),
 					/* translators: %s = term name */
-					'primary' => sprintf( \esc_html__( 'Primary %s', 'autodescription' ), $_i18n_name ),
+					'primary'     => sprintf( \esc_html__( 'Primary %s', 'autodescription' ), $_i18n_name ),
 				],
 				'primary' => $this->get_primary_term_id( $id, $_t->name ) ?: 0,
 			];
@@ -263,30 +276,32 @@ class Admin_Init extends Init {
 
 		$this->Scripts()::register( [
 			[
-				'id'   => 'tsf-pt',
-				'type' => 'js',
-				'deps' => [ 'jquery', 'tsf', 'tsf-tt' ],
-				'name' => 'pt',
-				'base' => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
-				'ver'  => THE_SEO_FRAMEWORK_VERSION,
-				'l10n' => [
+				'id'       => 'tsf-pt',
+				'type'     => 'js',
+				'deps'     => [ 'jquery', 'tsf', 'tsf-tt' ],
+				'autoload' => true,
+				'name'     => 'pt',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+				'l10n'     => [
 					'name' => 'tsfPTL10n',
 					'data' => [
 						'taxonomies' => $taxonomies,
 					],
 				],
-				'tmpl' => [
+				'tmpl'     => [
 					'file' => $this->get_view_location( 'templates/inpost/primary-term-selector' ),
 				],
 			],
 			[
-				'id'     => 'tsf-pt',
-				'type'   => 'css',
-				'deps'   => [ 'tsf-tt' ],
-				'hasrtl' => true,
-				'name'   => 'pt',
-				'base'   => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
-				'ver'    => THE_SEO_FRAMEWORK_VERSION,
+				'id'       => 'tsf-pt',
+				'type'     => 'css',
+				'deps'     => [ 'tsf-tt' ],
+				'autoload' => true,
+				'hasrtl'   => true,
+				'name'     => 'pt',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
 			],
 		] );
 	}

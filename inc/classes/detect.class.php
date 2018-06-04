@@ -915,7 +915,7 @@ class Detect extends Render {
 	 * Doesn't work on admin_init.
 	 *
 	 * @since 2.3.9
-	 * @staticvar bool $supported
+	 * @staticvar array $supported
 	 *
 	 * @param string $post_type The current post type.
 	 * @return bool true of post type is supported.

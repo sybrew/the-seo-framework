@@ -20,26 +20,42 @@ $_load_scripts_class = function() {
 /**
  * Registers and outputs inpost GUI scripts. Auto-invokes everything the moment
  * this file is required.
+ * Relies on \WP_Dependencies to prevent duplicate loading, and autoloading.
  *
- * This handles admin-only scripts ONLY for now.
+ * This handles admin-ONLY scripts for now.
  *
  * @since 3.1.0
  * @see the_seo_framework()->Scripts()
+ * @see \WP_Styles
+ * @see \WP_Scripts
+ * @see \WP_Dependencies
  * @access private
  * @final Can't be extended.
  */
 final class Scripts {
 
 	/**
+	 * Codes to maintain the internal state of the scripts. This state might not reflect
+	 * the actual load state. See \WP_Dependencies instead.
 	 * @since 3.1.0
-	 * @param array $scripts   The registered scripts.
-	 * @param array $templates The registered templates.
+	 * @param int <bit 1>  REGISTERED
+	 * @param int <bit 10> LOADED     (enqueued)
+	 */
+	const REGISTERED = 0b1;
+	const LOADED     = 0b10;
+
+	/**
+	 * @since 3.1.0
+	 * @param array $scripts    The registered scripts.
+	 * @param array $templates  The registered templates.
+	 * @param array $queue      The queued scripts state.
 	 */
 	private static $scripts   = [];
 	private static $templates = [];
+	private static $queue     = [];
 
 	/**
-	 * Internal singleton object holder.
+	 * The internal singleton object holder.
 	 * @since 3.1.0
 	 * @param The_SEO_Framework\Builders\Scripts $instance The instance.
 	 */
@@ -47,7 +63,7 @@ final class Scripts {
 
 	/**
 	 * @since 3.1.0
-	 * @param string $include_secret The inclusion secret generated on tab load.
+	 * @param string|null $include_secret The inclusion secret generated on tab load.
 	 */
 	public static $include_secret;
 
@@ -75,7 +91,22 @@ final class Scripts {
 		static::$instance = &$this;
 
 		\add_action( 'admin_enqueue_scripts', [ $this, '_prepare_admin_scripts' ], 1 );
-		\add_action( 'admin_footer', [ $this, '_output_templates' ] );
+		\add_action( 'admin_footer', [ $this, '_output_templates' ], 999 );
+	}
+
+	/**
+	 * Returns the script status of $id for $type.
+	 *
+	 * @since 3.1.0
+	 * @see static::REGISTERED
+	 * @see static::LOADED
+	 *
+	 * @param string $id   The script ID.
+	 * @param string $type The script type, albeit 'js' or 'css'.
+	 * @return int <bit>
+	 */
+	public static function get_status_of( $id, $type ) {
+		return isset( static::$queue[ $type ][ $id ] ) ? static::$queue[ $type ][ $id ] : 0b0;
 	}
 
 	/**
@@ -101,9 +132,8 @@ final class Scripts {
 	 * @param array $script The script : {
 	 *   'id'   => string The script ID,
 	 *   'type' => string 'css|js',
-	 *   'autoload' => boolean|void If void|null|true, the script will be loaded.
-	 *                              If false, it'll only be registered for dependencies.
-	 *                              Templates are always outputted,
+	 *   'autoload' => boolean If true, the script will be loaded directly.
+	 *                         If false, it'll only be registered for dependencies.
 	 *   'name' => string The unique script name, which is also the file name,
 	 *   'deps' => array  Dependencies,
 	 *   'ver'  => string Script version,
@@ -153,6 +183,8 @@ final class Scripts {
 
 		//= Register them first to accomodate for dependencies.
 		foreach ( static::$scripts as $s ) {
+			if ( static::get_status_of( $s['id'], $s['type'] ) & static::REGISTERED ) continue;
+
 			switch ( $s['type'] ) {
 				case 'css' :
 					\wp_register_style( $s['id'], $this->generate_file_url( $s, 'css' ), $s['deps'], $s['ver'], 'all' );
@@ -164,13 +196,17 @@ final class Scripts {
 					isset( $s['l10n'] )
 						and \wp_localize_script( $s['id'], $s['l10n']['name'], $s['l10n']['data'] );
 					isset( $s['tmpl'] )
-						and $this->register_template( $s['tmpl'] );
+						and $this->register_template( $s['id'], $s['tmpl'] );
 					break;
 			}
+			static::$queue[ $s['type'] ][ $s['id'] ] = static::REGISTERED;
 		}
 
 		foreach ( static::$scripts as $s ) {
-			if ( ! isset( $s['autoload'] ) || $s['autoload'] ) {
+			if ( static::get_status_of( $s['id'], $s['type'] ) & static::LOADED ) continue;
+
+
+			if ( $s['autoload'] ) {
 				switch ( $s['type'] ) {
 					case 'css' :
 						\wp_enqueue_style( $s['id'] );
@@ -180,6 +216,7 @@ final class Scripts {
 						break;
 				}
 			}
+			static::$queue[ $s['type'] ][ $s['id'] ] |= static::LOADED;
 		}
 	}
 
@@ -302,34 +339,39 @@ final class Scripts {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @param array $templates, single or multi-dimensional : {
+	 * @param string $id, the related script handle/ID.
+	 * @param array $templates, associative-&-singul-, or sequential-&-multi-dimensional : {
 	 *   'file' => string $file. The full file location,
 	 *   'args' => array $args. Optional,
 	 * }
 	 */
-	private function register_template( array $templates ) {
+	private function register_template( $id, array $templates ) {
 		//= Wrap template if it's only one on the base.
 		if ( isset( $templates['file'] ) )
 			$templates = [ $templates ];
 
-		foreach ( $templates as $t )
-			static::$templates[] = [
+		foreach ( $templates as $t ) {
+			static::$templates[ $id ][] = [
 				$t['file'],
 				isset( $t['args'] ) ? $t['args'] : [],
 			];
+		}
 	}
 
 	/**
 	 * Outputs template views.
 	 *
+	 * The template will only be outputted when the related script is too.
 	 * The loop will only run when templates are registered.
-	 * @see $this->enqueue_scripts()
 	 *
+	 * @see $this->enqueue_scripts()
 	 * @since 3.1.0
 	 */
 	public function _output_templates() {
-		foreach ( static::$templates as $template )
-			$this->output_view( $template[0], $template[1] );
+		foreach ( static::$templates as $id => $templates )
+			if ( \wp_script_is( $id, 'enqueued' ) ) // This list retains scripts after they're outputted.
+				foreach ( $templates as $t )
+					$this->output_view( $t[0], $t[1] );
 	}
 
 	/**

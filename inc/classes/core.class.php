@@ -292,11 +292,11 @@ class Core {
 	 */
 	public function generate_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
 
-		if ( empty( $message ) )
-			return '';
+		if ( empty( $message ) ) return '';
 
 		//* Make sure the scripts are loaded.
-		$this->init_admin_scripts( true );
+		$this->init_admin_scripts();
+		$this->Scripts()::enqueue();
 
 		if ( 'warning' === $type )
 			$type = 'notice-warning';

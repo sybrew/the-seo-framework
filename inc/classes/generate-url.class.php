@@ -540,7 +540,7 @@ class Generate_Url extends Generate_Title {
 	public function set_url_scheme( $url, $scheme = null, $deprecated = null ) {
 
 		if ( null !== $deprecated )
-			$this->_deprecated_function( __METHOD__, '3.1.0', 'Third parameter is deprecated.' );
+			$this->_doing_it_wrong( __METHOD__, 'Third parameter is deprecated.', '3.1.0' );
 
 		if ( empty( $scheme ) ) {
 			$scheme = $this->is_ssl() ? 'https' : 'http';

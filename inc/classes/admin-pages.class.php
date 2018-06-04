@@ -139,7 +139,7 @@ class Admin_Pages extends Inpost {
 		);
 
 		//* Enqueue scripts
-		\add_action( 'admin_print_scripts-' . $this->seo_settings_page_hook, array( $this, 'init_admin_scripts' ), 11 );
+		\add_action( 'admin_print_scripts-' . $this->seo_settings_page_hook, array( $this, '_init_admin_scripts' ), 11 );
 
 		$run = true;
 	}

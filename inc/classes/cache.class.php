@@ -133,7 +133,6 @@ class Cache extends Sitemaps {
 	 *
 	 * @see WP Core wp_transition_post_status()
 	 * @since 2.8.2
-	 * @staticvar bool $run
 	 * @action init priority 1
 	 * @see $this->init_admin_actions();
 	 * @see $this->init_cron_actions();
@@ -142,10 +141,7 @@ class Cache extends Sitemaps {
 	 */
 	public function init_post_cache_actions() {
 
-		static $run = false;
-
-		if ( $run )
-			return;
+		if ( _has_run( __METHOD__ ) ) return;
 
 		//* Can-be cron actions.
 		\add_action( 'publish_post', array( $this, 'delete_post_cache' ) );
@@ -160,8 +156,6 @@ class Cache extends Sitemaps {
 		//* Excluded IDs cache.
 		\add_action( 'save_post', array( $this, 'delete_excluded_ids_cache' ) );
 		\add_action( 'edit_attachment', array( $this, 'delete_excluded_ids_cache' ) );
-
-		$run = true;
 	}
 
 	/**

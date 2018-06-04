@@ -295,7 +295,9 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 		* Various RTL UI elements are now aligned correctly.
 		* On Firefox, checkbox options marked "default" (recommended) or "warned" (use at own risk) are now color-coded again.
 		* The SEO Bar will no longer overflow, but it will now wrap automatically when needed.
-		* TODO
+		/
+		* TODO When adding a new category when no category is selected, the primary term is now correctly selected.
+		* TODO Links with [?] now show a pointer... (explain)
 
 * **For translators:**
 	* **Added:**
@@ -390,6 +392,7 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 				* `Scripts()`
 				* `enqueue_media_scripts()`
 				* `enqueue_primaryterm_scripts()`
+				* `_init_admin_scripts()`, private. Use `init_admin_scripts()` instead.
 		* **Removed:**
 			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
 				* `site_updated_plugin_option()`
@@ -403,6 +406,7 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 				* `enqueue_admin_javascript()`
 				* `additional_js_l10n()`
 				* `enqueue_admin_css()`
+				* `enqueue_admin_scripts()`
 				* `_register_admin_javascript()`, was marked private.
 				* `_localize_admin_javascript()`, was marked private.
 				/

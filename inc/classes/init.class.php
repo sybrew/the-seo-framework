@@ -194,7 +194,7 @@ class Init extends Query {
 		\add_action( 'save_post', array( $this, '_save_inpost_primary_term' ), 1, 2 );
 
 		//* Enqueues admin scripts.
-		\add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 0, 1 );
+		\add_action( 'admin_enqueue_scripts', array( $this, '_init_admin_scripts' ), 0, 1 );
 
 		//* Add plugin links to the plugin activation page.
 		\add_filter( 'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, array( $this, 'plugin_action_links' ), 10, 2 );
