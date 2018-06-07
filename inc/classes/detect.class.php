@@ -623,8 +623,10 @@ class Detect extends Render {
 	 * Determines if WP is above or below a version
 	 *
 	 * @since 2.2.1
-	 * @since 2.3.8: Added caching
-	 * @since 2.8.0: No longer overwrites global $wp_version
+	 * @since 2.3.8 Added caching
+	 * @since 2.8.0 No longer overwrites global $wp_version
+	 * @since 3.1.0 1. No longer caches.
+	 *              2. Removed redundant parameter checks.
 	 * @staticvar array $cache
 	 *
 	 * @param string $version the three part version to compare to WordPress
@@ -632,14 +634,6 @@ class Detect extends Render {
 	 * @return bool True if the WordPress version comparison passes.
 	 */
 	public function wp_version( $version = '4.3.0', $compare = '>=' ) {
-
-		static $cache = array();
-
-		if ( empty( $compare ) )
-			$compare = '>=';
-
-		if ( isset( $cache[ $version ][ $compare ] ) )
-			return $cache[ $version ][ $compare ];
 
 		$wp_version = $GLOBALS['wp_version'];
 
@@ -650,7 +644,7 @@ class Detect extends Render {
 		if ( 3 === strlen( $wp_version ) )
 			$wp_version = $wp_version . '.0';
 
-		return $cache[ $version ][ $compare ] = (bool) version_compare( $wp_version, $version, $compare );
+		return (bool) version_compare( $wp_version, $version, $compare );
 	}
 
 	/**
@@ -890,11 +884,12 @@ class Detect extends Render {
 		if ( isset( $post_type ) && $post_type ) {
 			/**
 			 * Applies filters 'the_seo_framework_custom_post_type_support'
+			 * Determines the required post type features before TSF supports it.
 			 * @since 2.3.5
 			 * @since 3.0.4 Default parameter now is `[]` instead of `['title','editor']`.
 			 * @param array $supports The required post type support, like 'title', 'editor'.
 			 */
-			$supports = (array) \apply_filters( 'the_seo_framework_custom_post_type_support', array() );
+			$supports = (array) \apply_filters( 'the_seo_framework_custom_post_type_support', [] );
 
 			foreach ( $supports as $support ) {
 				if ( ! \post_type_supports( $post_type, $support ) ) {
@@ -915,33 +910,16 @@ class Detect extends Render {
 	 * Doesn't work on admin_init.
 	 *
 	 * @since 2.3.9
-	 * @staticvar array $supported
+	 * @since 3.1.0 Removed caching.
 	 *
 	 * @param string $post_type The current post type.
 	 * @return bool true of post type is supported.
 	 */
 	public function post_type_supports_custom_seo( $post_type = '' ) {
 
-		static $supported = array();
-
-		if ( isset( $supported[ $post_type ] ) )
-			return $supported[ $post_type ];
-
 		$post_type = $this->get_supported_post_type( true, $post_type );
 
-		if ( empty( $post_type ) )
-			return $supported[ $post_type ] = false;
-
-		/**
-		 * We now support all posts that allow a title, content editor and excerpt.
-		 * To ease the flow, we have our basic list to check first.
-		 *
-		 * @since 2.3.5
-		 */
-		if ( $this->post_type_supports_inpost( $post_type ) )
-			return $supported[ $post_type ] = true;
-
-		return $supported[ $post_type ] = false;
+		return $post_type && $this->post_type_supports_inpost( $post_type );
 	}
 
 	/**
@@ -954,7 +932,7 @@ class Detect extends Render {
 	 *
 	 * @param bool $public Whether to only get Public Post types.
 	 * @param string $post_type Optional. The post type to check.
-	 * @return bool|string The Allowed Post Type.
+	 * @return bool|string The allowed Post Type. False if it's not supported.
 	 */
 	public function get_supported_post_type( $public = true, $post_type = '' ) {
 
@@ -997,7 +975,7 @@ class Detect extends Render {
 		$post_type = (string) \apply_filters( 'the_seo_framework_supported_post_type', $post_type, $post_type_evaluated );
 
 		//* No supported post type has been found.
-		if ( empty( $post_type ) )
+		if ( ! $post_type )
 			return $cache[ $public ][ $post_type ] = false;
 
 		return $cache[ $public ][ $post_type ] = $post_type;

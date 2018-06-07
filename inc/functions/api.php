@@ -129,6 +129,7 @@ namespace The_SEO_Framework {
 	 * Determines if the method or function has already run.
 	 *
 	 * @since 3.1.0
+	 * @access private
 	 * @staticvar array $cache
 	 *
 	 * @param string $caller The method or function that calls this.
