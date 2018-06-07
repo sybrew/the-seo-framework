@@ -1,6 +1,23 @@
-# Set text to auto. So synchronization won't mess things up.
+# Set the default behavior, in case people don't have core.autocrlf set.
 * text=auto
+
+# Declare files that will always have CRLF line endings on checkout.
+*.php text eol=lf
+*.js text eol=lf
+*.css text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.svg text eol=lf
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary
+*.eot binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
 
 .gitattributes export-ignore
 .editorconfig export-ignore
 README.md export-ignore
+composer.json export-ignore
