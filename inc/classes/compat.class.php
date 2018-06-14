@@ -84,7 +84,6 @@ class Compat extends Core {
 		if ( $this->detect_plugin( array( 'globals' => array( 'bp' ) ) ) ) {
 			//* BuddyPress
 			$this->_include_compat( 'buddypress', 'plugin' );
-
 		}
 
 		if ( $this->detect_plugin( array( 'functions' => array( 'bbpress' ) ) ) ) {

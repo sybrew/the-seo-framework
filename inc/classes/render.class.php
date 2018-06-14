@@ -70,10 +70,7 @@ class Render extends Admin_Init {
 		 *
 		 * @since 2.4.0
 		 */
-		static $setup_cache,
-		       $title_param_cache,
-		       $sep_param_cache,
-		       $seplocation_param_cache;
+		static $setup_cache, $title_param_cache, $sep_param_cache, $seplocation_param_cache;
 
 		if ( ! $setup_cache ) {
 			if ( \doing_filter( 'pre_get_document_title' ) || \doing_filter( 'wp_title' ) ) {
@@ -114,7 +111,7 @@ class Render extends Admin_Init {
 
 		static $cache = null;
 
-		return isset( $cache ) ? $cache : $cache = $this->get_social_image( array(), true );
+		return isset( $cache ) ? $cache : $cache = $this->get_social_image( [], true );
 	}
 
 	/**
@@ -614,7 +611,7 @@ class Render extends Admin_Init {
 		$facebook_page = (string) \apply_filters( 'the_seo_framework_facebookauthor_output', $facebook_page, $this->get_the_real_ID() );
 
 		if ( $facebook_page )
-			return '<meta property="article:author" content="' . \esc_attr( \esc_url_raw( $facebook_page, array( 'http', 'https' ) ) ) . '" />' . "\r\n";
+			return '<meta property="article:author" content="' . \esc_attr( \esc_url_raw( $facebook_page, [ 'http', 'https' ] ) ) . '" />' . "\r\n";
 
 		return '';
 	}
@@ -643,7 +640,7 @@ class Render extends Admin_Init {
 		$publisher = (string) \apply_filters( 'the_seo_framework_facebookpublisher_output', $this->get_option( 'facebook_publisher' ), $this->get_the_real_ID() );
 
 		if ( $publisher )
-			return '<meta property="article:publisher" content="' . \esc_attr( \esc_url_raw( $publisher, array( 'http', 'https' ) ) ) . '" />' . "\r\n";
+			return '<meta property="article:publisher" content="' . \esc_attr( \esc_url_raw( $publisher, [ 'http', 'https' ] ) ) . '" />' . "\r\n";
 
 		return '';
 	}
@@ -1149,26 +1146,5 @@ class Render extends Admin_Init {
 			return $cache;
 
 		return $cache = $this->is_option_checked( 'twitter_tags' ) && false === $this->detect_twitter_card_plugin() && $this->get_current_twitter_card_type();
-	}
-
-	/**
-	 * Determines whether we can use Google+ tags on the front-end.
-	 *
-	 * @since 2.6.0
-	 * @staticvar bool $cache
-	 * @NOTE: not used.
-	 *
-	 * @return bool
-	 */
-	public function use_googleplus_tags() {
-
-		return false;
-
-		static $cache = null;
-
-		if ( isset( $cache ) )
-			return $cache;
-
-		return $cache = $this->is_option_checked( 'googleplus_tags' );
 	}
 }

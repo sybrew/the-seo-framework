@@ -374,11 +374,16 @@ class Sitemaps extends Metaboxes {
 
 		if ( $this->is_option_checked( 'sitemap_styles' ) ) {
 
-			$url = \esc_url( $this->get_sitemap_xsl_url(), array( 'http', 'https' ) );
+			$url = \esc_url( $this->get_sitemap_xsl_url(), [ 'http', 'https' ] );
 
 			if ( ! empty( $_SERVER['HTTP_HOST'] ) ) {
 				$_parsed = \wp_parse_url( $url );
-				$_r_parsed = \wp_parse_url( \esc_url( \wp_unslash( $_SERVER['HTTP_HOST'] ), array( 'http', 'https' ) ) );
+				$_r_parsed = \wp_parse_url(
+					\esc_url(
+						\wp_unslash( $_SERVER['HTTP_HOST'] ), // sanitization ok: esc_url is esc_url_raw with a bowtie.
+						[ 'http', 'https' ]
+					)
+				);
 
 				if ( isset( $_parsed['host'] ) && isset( $_r_parsed['host'] ) )
 					if ( $_parsed['host'] !== $_r_parsed['host'] )
@@ -543,13 +548,13 @@ class Sitemaps extends Metaboxes {
 	 * @since 2.8.0 Now adjusts memory limit when possible.
 	 * @since 2.9.3 No longer crashes on WordPress sites below WP 4.6.
 	 * @since 3.0.4 No longer outputs empty URL entries.
+	 * @since 3.1.0 Removed the WP<4.6 function_exists check.
 	 *
 	 * @return string The sitemap content.
 	 */
 	protected function generate_sitemap() {
 
-		function_exists( '\wp_is_ini_value_changeable' )
-			and \wp_is_ini_value_changeable( 'memory_limit' )
+		\wp_is_ini_value_changeable( 'memory_limit' )
 			and @ini_set( 'memory_limit', WP_MAX_MEMORY_LIMIT );
 
 		$content = '';
@@ -1004,7 +1009,7 @@ class Sitemaps extends Metaboxes {
 
 				$content .= "\t<url>\n";
 				//* No need to use static vars
-				$content .= "\t\t<loc>" . \ent2ncr( \esc_url_raw( $url, array( 'http', 'https' ) ) ) . "</loc>\n";
+				$content .= "\t\t<loc>" . \ent2ncr( \esc_url_raw( $url, [ 'http', 'https' ] ) ) . "</loc>\n";
 
 				if ( isset( $args['lastmod'] ) && $args['lastmod'] ) {
 					$content .= "\t\t<lastmod>" . \mysql2date( $timestamp_format, $args['lastmod'], false ) . "</lastmod>\n";

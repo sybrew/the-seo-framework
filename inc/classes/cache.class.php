@@ -284,7 +284,7 @@ class Cache extends Sitemaps {
 					case 'attachment' :
 						break;
 
-					default :
+					default:
 						//* Generic key for CPT.
 						$post_type = 'singular';
 						break;
@@ -364,7 +364,7 @@ class Cache extends Sitemaps {
 				}
 				break;
 
-			default :
+			default:
 				break;
 		endswitch;
 
@@ -384,11 +384,11 @@ class Cache extends Sitemaps {
 
 		$id = $id ?: $this->get_the_real_ID();
 
-		$defaults = array(
+		$defaults = [
 			'type' => $type,
-			'id' => $id,
+			'id'   => $id,
 			'term' => '',
-		);
+		];
 
 		/**
 		 * Applies filters 'the_seo_framework_delete_cache_args' : array
@@ -404,7 +404,7 @@ class Cache extends Sitemaps {
 		$args = \wp_parse_args( $args, $defaults );
 
 		$type = $args['type'];
-		$id = $args['id'];
+		$id   = $args['id'];
 	}
 
 	/**
@@ -518,12 +518,14 @@ class Cache extends Sitemaps {
 		 * When the caching mechanism changes. Change this value.
 		 * Use hex. e.g. 0, 1, 2, 9, a, b
 		 */
-		$sitemap_revision = '4';
+		$sitemap_revision   = '4';
 		$theme_dir_revision = '1';
-		$exclude_revision = '0';
+		$exclude_revision   = '0';
 
 		$this->sitemap_transient = $this->is_option_checked( 'cache_sitemap' ) ? $this->add_cache_key_suffix( 'tsf_sitemap_' . $sitemap_revision ) : '';
+
 		$this->theme_doing_it_right_transient = 'tsf_tdir_' . $theme_dir_revision . '_' . $blog_id;
+
 		$this->excluded_post_ids_transient = 'tsf_exclude_' . $exclude_revision . '_' . $blog_id;
 	}
 
@@ -560,11 +562,9 @@ class Cache extends Sitemaps {
 	public function get_auto_description_transient( $page_id = 0, $taxonomy = '', $type = null ) {
 
 		$cache_key = $this->generate_cache_key( $page_id, $taxonomy, $type );
+		$revision  = '3';
 
-		$revision = '3';
-		$additions = $this->add_description_additions( $page_id, $taxonomy );
-
-		if ( $additions ) {
+		if ( $this->add_description_additions( $page_id, $taxonomy ) ) {
 			$option = $this->get_option( 'description_blogname' ) ? '1' : '0';
 			return 'tsf_desc_' . $option . '_' . $revision . '_' . $cache_key;
 		} else {
@@ -585,7 +585,7 @@ class Cache extends Sitemaps {
 	 */
 	public function setup_ld_json_transient( $page_id, $taxonomy = '', $type = null ) {
 
-		if ( false === $this->is_option_checked( 'cache_meta_schema' ) )
+		if ( ! $this->is_option_checked( 'cache_meta_schema' ) )
 			return;
 
 		$this->ld_json_transient = $this->get_ld_json_transient( $page_id, $taxonomy, $type );
@@ -666,21 +666,21 @@ class Cache extends Sitemaps {
 
 		//* Placeholder ID.
 		$the_id = '';
-		$t = $taxonomy;
+		$_t = $taxonomy;
 
 		if ( $this->is_404() ) {
 			$the_id = '_404_';
 		} elseif ( $this->is_archive() ) {
 			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
 
-				if ( empty( $t ) ) {
+				if ( empty( $_t ) ) {
 					$o = \get_queried_object();
 
 					if ( isset( $o->taxonomy ) )
-						$t = $o->taxonomy;
+						$_t = $o->taxonomy;
 				}
 
-				$the_id = $this->generate_taxonomical_cache_key( $page_id, $t );
+				$the_id = $this->generate_taxonomical_cache_key( $page_id, $_t );
 
 				if ( $this->is_tax() )
 					$the_id = 'archives_' . $the_id;
@@ -721,7 +721,7 @@ class Cache extends Sitemaps {
 			} else {
 				//* Other taxonomical archives.
 
-				if ( empty( $t ) ) {
+				if ( empty( $_t ) ) {
 					$post_type = \get_query_var( 'post_type' );
 
 					if ( is_array( $post_type ) )
@@ -731,14 +731,14 @@ class Cache extends Sitemaps {
 						$post_type_obj = \get_post_type_object( $post_type );
 
 					if ( isset( $post_type_obj->labels->name ) )
-						$t = $post_type_obj->labels->name;
+						$_t = $post_type_obj->labels->name;
 				}
 
 				//* Still empty? Try this.
-				if ( empty( $t ) )
-					$t = \get_query_var( 'taxonomy' );
+				if ( empty( $_t ) )
+					$_t = \get_query_var( 'taxonomy' );
 
-				$the_id = $this->generate_taxonomical_cache_key( $page_id, $t );
+				$the_id = $this->generate_taxonomical_cache_key( $page_id, $_t );
 
 				$the_id = 'archives_' . $the_id;
 			}
@@ -764,7 +764,7 @@ class Cache extends Sitemaps {
 					$the_id = 'attach_' . $page_id;
 					break;
 
-				default :
+				default:
 					$the_id = 'singular_' . $page_id;
 					break;
 			endswitch;
@@ -848,7 +848,7 @@ class Cache extends Sitemaps {
 			case 'term' :
 				return $this->add_cache_key_suffix( $this->generate_taxonomical_cache_key( $page_id, $taxonomy ) );
 				break;
-			default :
+			default:
 				$this->_doing_it_wrong( __METHOD__, 'Third parameter must be a known type.', '2.6.5' );
 				return $this->add_cache_key_suffix( \esc_sql( $type . '_' . $page_id . '_' . $taxonomy ) );
 				break;
@@ -1174,6 +1174,7 @@ class Cache extends Sitemaps {
 
 	/**
 	 * Builds and returns the excluded post IDs transient.
+	 * The transients are autoloaded, as no expiration is set.
 	 *
 	 * @since 3.0.0
 	 * @since 3.1.0 Now no longer crashes on database errors.
@@ -1190,24 +1191,24 @@ class Cache extends Sitemaps {
 
 		if ( false === $cache ) {
 			global $wpdb;
-			$cache = array();
+			$cache = [];
 
 			//= Two separated equals queries are faster than a single IN with 'meta_key'.
 			$cache['archive'] = $wpdb->get_results(
-				$wpdb->prepare( "SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = '%s'", 'exclude_from_archive' )
-			);
+				"SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = exclude_from_archive"
+			); // cache ok, set in autoloaded transient.
 			$cache['search'] = $wpdb->get_results(
-				$wpdb->prepare( "SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = '%s'", 'exclude_local_search' )
-			);
+				"SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = exclude_from_archive"
+			); // cache ok, set in autoloaded transient.
 
-			foreach ( array( 'archive', 'search' ) as $key ) {
+			foreach ( [ 'archive', 'search' ] as $key ) {
 				array_walk( $cache[ $key ], function( &$v ) {
 					$v = isset( $v->meta_value, $v->post_id ) && $v->meta_value ? (int) $v->post_id : false;
 				} );
 				$cache[ $key ] = array_filter( $cache[ $key ] );
 			}
 
-			$this->set_transient( $this->excluded_post_ids_transient, $cache );
+			$this->set_transient( $this->excluded_post_ids_transient, $cache, 0 );
 		}
 
 		return $cache;

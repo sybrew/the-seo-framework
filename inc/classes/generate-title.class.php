@@ -55,7 +55,7 @@ class Generate_Title extends Generate_Description {
 			$id = $this->get_the_real_ID();
 
 		$title = $this->get_custom_field( '_twitter_title', $id )
-		      ?: $this->get_open_graph_title( $id, false );
+			   ?: $this->get_open_graph_title( $id, false );
 
 		return $escape ? $this->escape_title( $title ) : $title;
 	}
@@ -76,7 +76,7 @@ class Generate_Title extends Generate_Description {
 			$id = $this->get_the_real_ID();
 
 		$title = $this->get_custom_field( '_open_graph_title', $id )
-		      ?: $this->get_generated_open_graph_title( $id, false );
+			  ?: $this->get_generated_open_graph_title( $id, false );
 
 		return $escape ? $this->escape_title( $title ) : $title;
 	}
@@ -111,11 +111,11 @@ class Generate_Title extends Generate_Description {
 		if ( is_null( $id ) )
 			$id = $this->get_the_real_ID();
 
-		static $cache = array();
+		static $cache = [];
 
 		$title = isset( $cache[ $id ] )
-		       ? $cache[ $id ]
-		       : $cache[ $id ] = $this->build_title( '', '', array( 'meta' => true, 'term_id' => $id, 'escape' => false ) );
+			   ? $cache[ $id ]
+			   : $cache[ $id ] = $this->build_title( '', '', [ 'meta' => true, 'term_id' => $id, 'escape' => false ] );
 
 		return $escape ? $this->escape_title( $title ) : $title;
 	}
@@ -254,6 +254,7 @@ class Generate_Title extends Generate_Description {
 			return $defaults;
 
 		//* Array merge doesn't support sanitation. We're simply type casting here.
+		// phpcs:disable -- It's ok.
 		$args['term_id']           = isset( $args['term_id'] )           ? (int) $args['term_id']            : $defaults['term_id'];
 		$args['taxonomy']          = isset( $args['taxonomy'] )          ? (string) $args['taxonomy']        : $defaults['taxonomy'];
 		$args['page_on_front']     = isset( $args['page_on_front'] )     ? (bool) $args['page_on_front']     : $defaults['page_on_front'];
@@ -263,6 +264,7 @@ class Generate_Title extends Generate_Description {
 		$args['description_title'] = isset( $args['description_title'] ) ? (bool) $args['description_title'] : $defaults['description_title'];
 		$args['is_front_page']     = isset( $args['is_front_page'] )     ? (bool) $args['is_front_page']     : $defaults['is_front_page'];
 		$args['escape']            = isset( $args['escape'] )            ? (bool) $args['escape']            : $defaults['escape'];
+		// phpcs:enable
 
 		return $args;
 	}

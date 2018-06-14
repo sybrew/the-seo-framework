@@ -204,10 +204,10 @@ final class Deprecated {
 		}
 
 		if ( $tsf->pretty_permalinks ) {
-			$url = \esc_url( $url, array( 'http', 'https' ) );
+			$url = \esc_url( $url, [ 'http', 'https' ] );
 		} else {
 			//* Keep the &'s more readable.
-			$url = \esc_url_raw( $url, array( 'http', 'https' ) );
+			$url = \esc_url_raw( $url, [ 'http', 'https' ] );
 		}
 
 		return $url;
@@ -282,6 +282,7 @@ final class Deprecated {
 		if ( $get_defaults )
 			return $defaults;
 
+		// phpcs:disable -- whitespace OK.
 		//* Array merge doesn't support sanitation. We're simply type casting here.
 		$args['paged']            = isset( $args['paged'] )            ? (bool) $args['paged']            : $defaults['paged'];
 		$args['paged_plural']     = isset( $args['paged_plural'] )     ? (bool) $args['paged_plural']     : $defaults['paged_plural'];
@@ -293,6 +294,7 @@ final class Deprecated {
 		$args['home']             = isset( $args['home'] )             ? (bool) $args['home']             : $defaults['home'];
 		$args['forceslash']       = isset( $args['forceslash'] )       ? (bool) $args['forceslash']       : $defaults['forceslash'];
 		$args['id']               = isset( $args['id'] )               ? (int) $args['id']                : $defaults['id'];
+		// phpcs:enable
 
 		return $args;
 	}
@@ -475,7 +477,7 @@ final class Deprecated {
 	 * @param object $term The term object.
 	 * @param array|bool $args {
 	 *    'external' : Whether to fetch the WP Request or get the permalink by Post Object.
-	 *    'paged'	: Whether to add pagination for all types.
+	 *    'paged'    : Whether to add pagination for all types.
 	 *    'paged_plural' : Whether to add pagination for the second or later page.
 	 * }
 	 * @return string Relative term or taxonomy URL.
@@ -732,7 +734,7 @@ final class Deprecated {
 	public function the_url_from_cache( $url = '', $post_id = null, $paged = false, $from_option = true, $paged_plural = true ) {
 
 		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->the_url_from_cache()', '3.0.0', `the_seo_framework()->get_current_canonical_url()` );
+		$tsf->_deprecated_function( 'the_seo_framework()->the_url_from_cache()', '3.0.0', 'the_seo_framework()->get_current_canonical_url()' );
 
 		return $tsf->get_current_canonical_url();
 	}

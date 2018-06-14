@@ -1,7 +1,7 @@
 # Set the default behavior, in case people don't have core.autocrlf set.
 * text=auto
 
-# Declare files that will always have CRLF line endings on checkout.
+# Declare files that will otherwise have CRLF line endings on checkout.
 *.php text eol=lf
 *.js text eol=lf
 *.css text eol=lf
@@ -22,3 +22,4 @@
 .editorconfig export-ignore
 README.md export-ignore
 composer.json export-ignore
+phpcs.xml export-ignore

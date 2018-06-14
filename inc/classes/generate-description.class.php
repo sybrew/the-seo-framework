@@ -56,7 +56,7 @@ class Generate_Description extends Generate {
 			$id = $this->get_the_real_ID();
 
 		$desc = $this->get_description_from_custom_field( $id )
-		      ?: $this->get_generated_description( $id, false );
+			  ?: $this->get_generated_description( $id, false );
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -123,7 +123,7 @@ class Generate_Description extends Generate {
 			$id = $this->get_the_real_ID();
 
 		$desc = $this->get_custom_field( '_twitter_description', $id )
-		      ?: $this->get_open_graph_description( $id, false );
+			  ?: $this->get_open_graph_description( $id, false );
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -144,7 +144,7 @@ class Generate_Description extends Generate {
 			$id = $this->get_the_real_ID();
 
 		$desc = $this->get_custom_field( '_open_graph_description', $id )
-		      ?: $this->get_generated_open_graph_description( $id, false );
+			  ?: $this->get_generated_open_graph_description( $id, false );
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -165,11 +165,11 @@ class Generate_Description extends Generate {
 		if ( is_null( $id ) )
 			$id = $this->get_the_real_ID();
 
-		static $cache = array();
+		static $cache = [];
 
 		$desc = isset( $cache[ $id ] )
-		      ? $cache[ $id ]
-		      : $cache[ $id ] = $this->generate_description( '', array( 'id' => $id, 'social' => false, 'get_custom_field' => false, 'escape' => false ) );
+			  ? $cache[ $id ]
+			  : $cache[ $id ] = $this->generate_description( '', [ 'id' => $id, 'social' => false, 'get_custom_field' => false, 'escape' => false ] );
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -204,11 +204,11 @@ class Generate_Description extends Generate {
 		if ( is_null( $id ) )
 			$id = $this->get_the_real_ID();
 
-		static $cache = array();
+		static $cache = [];
 
 		$desc = isset( $cache[ $id ] )
-		      ? $cache[ $id ]
-		      : $cache[ $id ] = $this->generate_description( '', array( 'id' => $id, 'social' => true, 'escape' => false ) );
+			  ? $cache[ $id ]
+			  : $cache[ $id ] = $this->generate_description( '', [ 'id' => $id, 'social' => true, 'escape' => false ] );
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -343,12 +343,14 @@ class Generate_Description extends Generate {
 			return $defaults;
 
 		//* Array merge doesn't support sanitation. We're simply type casting here.
+		// phpcs:disable -- it's ok.
 		$args['id']               = isset( $args['id'] )               ? (int) $args['id']                : $defaults['id'];
 		$args['taxonomy']         = isset( $args['taxonomy'] )         ? (string) $args['taxonomy']       : $defaults['taxonomy'];
 		$args['is_home']          = isset( $args['is_home'] )          ? (bool) $args['is_home']          : $defaults['is_home'];
 		$args['get_custom_field'] = isset( $args['get_custom_field'] ) ? (bool) $args['get_custom_field'] : $defaults['get_custom_field'];
 		$args['social']           = isset( $args['social'] )           ? (bool) $args['social']           : $defaults['social'];
 		$args['escape']           = isset( $args['escape'] )           ? (bool) $args['escape']           : $defaults['escape'];
+		// phpcs:enable
 
 		return $args;
 	}
@@ -514,8 +516,6 @@ class Generate_Description extends Generate {
 	 */
 	public function generate_description_from_id( $args = array(), $escape = true ) {
 
-		$this->the_seo_framework_debug and $this->debug_init( __METHOD__, true, $debug_key = microtime( true ), get_defined_vars() );
-
 		/**
 		 * Applies filters bool 'the_seo_framework_enable_auto_description'
 		 *
@@ -532,8 +532,6 @@ class Generate_Description extends Generate {
 
 		if ( $escape )
 			$description = $this->escape_description( $description );
-
-		$this->the_seo_framework_debug and $this->debug_init( __METHOD__, false, $debug_key, array( 'description' => $description, 'transient_key' => $this->auto_description_transient ) );
 
 		return (string) $description;
 	}
@@ -958,6 +956,7 @@ class Generate_Description extends Generate {
 	 *
 	 * @since 2.5.2
 	 * @since 3.0.6 Silently deprecated.
+	 * @TODO remove this feature?
 	 * @deprecated
 	 *
 	 * @param int $id The page ID.
@@ -985,6 +984,7 @@ class Generate_Description extends Generate {
 				 * We're on the blog page now.
 				 * @since 2.2.8
 				 */
+				// @TODO kill this.
 				$title = $this->title( '', '', '', array( 'term_id' => $id, 'notagline' => true, 'description_title' => true, 'escape' => false ) );
 
 				/**
@@ -1007,6 +1007,7 @@ class Generate_Description extends Generate {
 				}
 			} else {
 				//* We're on a page now.
+				//! TODO kill this
 				$title = $this->title( '', '', '', array( 'term_id' => $id, 'notagline' => true, 'description_title' => true, 'escape' => false ) );
 			}
 		endif;

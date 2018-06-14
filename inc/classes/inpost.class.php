@@ -147,8 +147,13 @@ class Inpost extends Profile {
 		 */
 		$priority = (int) \apply_filters( 'the_seo_framework_term_metabox_priority', 0 );
 
+		$taxonomy_args = [
+			'public'  => true,
+			'show_ui' => true,
+		];
+
 		//* Add taxonomy meta boxes
-		foreach ( \get_taxonomies( array( 'public' => true, 'show_ui' => true ) ) as $tax_name ) {
+		foreach ( \get_taxonomies( $taxonomy_args ) as $tax_name ) {
 			\add_action( $tax_name . '_edit_form', array( $this, 'pre_seo_box' ), $priority, 2 );
 		}
 	}

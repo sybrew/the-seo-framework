@@ -47,11 +47,11 @@ class User_Data extends Term_Data {
 	 * @return array The default user meta index and values.
 	 */
 	public function get_default_user_data() {
-		return array(
-			'counter_type' => 3,
+		return [
+			'counter_type'  => 3,
 			'facebook_page' => '',
-			'twitter_page' => '',
-		);
+			'twitter_page'  => '',
+		];
 	}
 
 	/**
@@ -109,14 +109,14 @@ class User_Data extends Term_Data {
 	public function get_user_meta( $user_id, $key = THE_SEO_FRAMEWORK_USER_OPTIONS, $use_cache = true ) {
 
 		if ( false === $use_cache )
-			return ( $meta = \get_user_meta( $user_id, $key, true ) ) && is_array( $meta ) ? $meta : array();
+			return ( $meta = \get_user_meta( $user_id, $key, true ) ) && is_array( $meta ) ? $meta : [];
 
-		static $usermeta_cache = array();
+		static $usermeta_cache = [];
 
 		if ( isset( $usermeta_cache[ $user_id ][ $key ] ) )
 			return $usermeta_cache[ $user_id ][ $key ];
 
-		return $usermeta_cache[ $user_id ][ $key ] = ( $meta = \get_user_meta( $user_id, $key, true ) ) && is_array( $meta ) ? $meta : array();
+		return $usermeta_cache[ $user_id ][ $key ] = ( $meta = \get_user_meta( $user_id, $key, true ) ) && is_array( $meta ) ? $meta : [];
 	}
 
 	/**
@@ -179,8 +179,7 @@ class User_Data extends Term_Data {
 		if ( ! $user_id )
 			return $default;
 
-		static $options_cache = array(),
-		       $notfound_cache = array();
+		static $options_cache = [], $notfound_cache = [];
 
 		if ( isset( $options_cache[ $user_id ][ $option ] ) )
 			return $options_cache[ $user_id ][ $option ];
@@ -226,7 +225,7 @@ class User_Data extends Term_Data {
 		/**
 		 * @since 2.8.0 initializes new array on empty values.
 		 */
-		is_array( $meta ) or $meta = array();
+		is_array( $meta ) or $meta = [];
 
 		$meta[ $option ] = $value;
 

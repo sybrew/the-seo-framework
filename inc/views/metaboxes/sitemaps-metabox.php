@@ -10,7 +10,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 $instance = $this->get_view_instance( 'the_seo_framework_sitemaps_metabox', $instance );
 
 switch ( $instance ) :
-	case 'the_seo_framework_sitemaps_metabox_main' :
+	case 'the_seo_framework_sitemaps_metabox_main':
 		/**
 		 * Parse tabs content
 		 *
@@ -60,11 +60,10 @@ switch ( $instance ) :
 		$defaults = (array) apply_filters( 'the_seo_framework_sitemaps_settings_tabs', $default_tabs, $args );
 
 		$tabs = wp_parse_args( $args, $defaults );
-		$use_tabs = true;
 
 		$has_sitemap_plugin = $this->detect_sitemap_plugin();
-		$sitemap_detected = $this->has_sitemap_xml();
-		$robots_detected = $this->has_robots_txt();
+		$sitemap_detected   = $this->has_sitemap_xml();
+		$robots_detected    = $this->has_robots_txt();
 
 		/**
 		 * Remove the timestamps and notify submenus
@@ -78,7 +77,7 @@ switch ( $instance ) :
 		$this->nav_tab_wrapper( 'sitemaps', $tabs, '2.2.8' );
 		break;
 
-	case 'the_seo_framework_sitemaps_metabox_general' :
+	case 'the_seo_framework_sitemaps_metabox_general':
 		$sitemap_url = $this->get_sitemap_xml_url();
 		$has_sitemap_plugin = $this->detect_sitemap_plugin();
 		$sitemap_detected = $this->has_sitemap_xml();
@@ -113,12 +112,12 @@ switch ( $instance ) :
 		endif;
 
 		if ( ! $has_sitemap_plugin && ( $this->get_option( 'sitemaps_output' ) || $sitemap_detected ) ) {
-			$here = '<a href="' . esc_url( $sitemap_url, array( 'http', 'https' ) ) . '" target="_blank" title="' . esc_attr__( 'View sitemap', 'autodescription' ) . '">' . esc_attr_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
+			$here = '<a href="' . esc_url( $sitemap_url, [ 'http', 'https' ] ) . '" target="_blank" title="' . esc_attr__( 'View sitemap', 'autodescription' ) . '">' . esc_attr_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 			$this->description_noesc( sprintf( _x( 'The sitemap can be found %s.', '%s = here', 'autodescription' ), $here ) );
 		}
 		break;
 
-	case 'the_seo_framework_sitemaps_metabox_robots' :
+	case 'the_seo_framework_sitemaps_metabox_robots':
 		$locate_url = true;
 
 		?>
@@ -130,7 +129,7 @@ switch ( $instance ) :
 		elseif ( ! $this->pretty_permalinks ) :
 
 			$permalink_settings_url = admin_url( 'options-permalink.php' );
-			$here = '<a href="' . esc_url( $permalink_settings_url, array( 'http', 'https' ) ) . '" target="_blank" title="' . esc_attr__( 'Permalink Settings', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
+			$here = '<a href="' . esc_url( $permalink_settings_url, [ 'http', 'https' ] ) . '" target="_blank" title="' . esc_attr__( 'Permalink Settings', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 
 			?>
 			<h4><?php esc_html_e( "You're using the plain permalink structure.", 'autodescription' ); ?></h4>
@@ -172,13 +171,13 @@ switch ( $instance ) :
 
 		if ( $locate_url ) {
 			$robots_url = $this->get_robots_txt_url();
-			$here = '<a href="' . esc_url( $robots_url, array( 'http', 'https' ) ) . '" target="_blank" title="' . esc_attr__( 'View robots.txt', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
+			$here = '<a href="' . esc_url( $robots_url, [ 'http', 'https' ] ) . '" target="_blank" title="' . esc_attr__( 'View robots.txt', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 
 			$this->description_noesc( sprintf( esc_html_x( 'The robots.txt file can be found %s.', '%s = here', 'autodescription' ), $here ) );
 		}
 		break;
 
-	case 'the_seo_framework_sitemaps_metabox_timestamps' :
+	case 'the_seo_framework_sitemaps_metabox_timestamps':
 		?>
 		<h4><?php esc_html_e( 'Timestamps Settings', 'autodescription' ); ?></h4>
 		<?php
@@ -199,7 +198,7 @@ switch ( $instance ) :
 		);
 		break;
 
-	case 'the_seo_framework_sitemaps_metabox_notify' :
+	case 'the_seo_framework_sitemaps_metabox_notify':
 		?>
 		<h4><?php esc_html_e( 'Ping Settings', 'autodescription' ); ?></h4>
 		<?php
@@ -229,7 +228,7 @@ switch ( $instance ) :
 		$this->wrap_fields( $ping_checkbox, true );
 		break;
 
-	case 'the_seo_framework_sitemaps_metabox_style' :
+	case 'the_seo_framework_sitemaps_metabox_style':
 		?>
 		<h4><?php esc_html_e( 'Sitemap Styling Settings', 'autodescription' ); ?></h4>
 		<?php
@@ -294,6 +293,6 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	default :
+	default:
 		break;
 endswitch;

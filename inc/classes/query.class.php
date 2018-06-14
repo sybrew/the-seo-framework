@@ -83,7 +83,7 @@ class Query extends Compat {
 			$message .= ' - On line: ' . $trace[3]['line'];
 		}
 
-		$this->_doing_it_wrong( $method, \esc_html( $message ), '2.9.0' );
+		$this->_doing_it_wrong( \esc_html( $method ), \esc_html( $message ), '2.9.0' );
 
 		//* Backtrace debugging.
 		if ( $this->the_seo_framework_debug ) {
@@ -205,7 +205,9 @@ class Query extends Compat {
 	 *
 	 * @since 2.6.0
 	 * @since 2.6.6 Moved from class The_SEO_Framework_Term_Data.
+	 * @since 3.1.0 Removed WP 4.5 compat. Now uses global $tag_ID.
 	 * @securitycheck 3.0.0 OK.
+	 * @global int $tag_ID
 	 *
 	 * @return int Term ID.
 	 */
@@ -217,19 +219,7 @@ class Query extends Compat {
 		if ( false === $this->is_archive_admin() )
 			return 0;
 
-		$term_id = 0;
-
-		/**
-		 * is_archive_admin() determines if admin referer checks have run
-		 * through global $current_screen. Will output 'Invalid taxonomy' on try.
-		 */
-		if ( ! empty( $_GET['tag_ID'] ) ) {
-			//* WordPress 4.5+.
-			$term_id = $_GET['tag_ID'];
-		} elseif ( ! empty( $_GET['term_id'] ) ) {
-			//* Older WordPress versions.
-			$term_id = $_GET['term_id'];
-		}
+		$term_id = ! empty( $GLOBALS['tag_ID'] ) ? $GLOBALS['tag_ID'] : 0;
 
 		$this->set_query_cache(
 			__METHOD__,

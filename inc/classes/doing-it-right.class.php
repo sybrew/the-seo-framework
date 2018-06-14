@@ -153,6 +153,8 @@ class Doing_It_Right extends Generate_Ldjson {
 		 * Securely check the referrer, instead of leaving holes everywhere.
 		 */
 		if ( $this->doing_ajax() && \check_ajax_referer( 'taxinlineeditnonce', '_inline_edit', false ) ) {
+			if ( empty( $_POST['taxonomy'] ) ) return;
+
 			$taxonomy = \sanitize_key( $_POST['taxonomy'] );
 			$tax = \get_taxonomy( $taxonomy );
 
@@ -192,17 +194,18 @@ class Doing_It_Right extends Generate_Ldjson {
 			return;
 
 		if ( $doing_ajax ) {
-			$post_type = isset( $_POST['post_type'] ) ? \sanitize_key( $_POST['post_type'] ) : '';
-			$post_type = $post_type ?: ( isset( $_POST['tax_type'] ) ? \sanitize_key( $_POST['tax_type'] ) : '' );
+			/** For CSRF @see $this->_init_columns_wp_ajax_inline_save_tax(). */
+			$post_type = isset( $_POST['post_type'] ) ? \sanitize_key( $_POST['post_type'] ) : ''; // CSRF ok
+			$post_type = $post_type ?: ( isset( $_POST['tax_type'] ) ? \sanitize_key( $_POST['tax_type'] ) : '' ); // CSRF ok
 		} else {
 			$post_type = isset( $screen->post_type ) ? $screen->post_type : '';
 		}
 
 		if ( $this->post_type_supports_custom_seo( $post_type ) ) :
 			if ( $doing_ajax ) {
-				//* Nonce is done in $this->init_columns_ajax()
-				$id = isset( $_POST['screen'] ) ? \sanitize_key( $_POST['screen'] ) : false;
-				$taxonomy = isset( $_POST['taxonomy'] ) ? \sanitize_key( $_POST['taxonomy'] ) : false;
+				/** For CSRF @see $this->init_columns_ajax(). */
+				$id = isset( $_POST['screen'] ) ? \sanitize_key( $_POST['screen'] ) : false; // CSRF ok
+				$taxonomy = isset( $_POST['taxonomy'] ) ? \sanitize_key( $_POST['taxonomy'] ) : false; // CSRF ok
 
 				if ( $id ) {
 					//* Everything but inline-save-tax action.
@@ -464,8 +467,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		$bar = $this->get_the_seo_bar_wrap( $block, $is_term, $ajax_id );
 
 		if ( $echo ) {
-			//* Already escaped.
-			echo $bar;
+			echo $bar; // xss ok, already escaped.
 			return;
 		} else {
 			return $bar;
@@ -565,8 +567,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		}
 
 		if ( $echo ) {
-			//* Already escaped.
-			echo $bar;
+			echo $bar; // xss ok, already escaped.
 			return;
 		} else {
 			return $bar;

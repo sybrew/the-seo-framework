@@ -58,6 +58,7 @@ class Site_Options extends Sanitize {
 		parent::__construct();
 
 		$this->settings_field = THE_SEO_FRAMEWORK_SITE_OPTIONS;
+
 		$this->seo_settings_page_slug = 'theseoframework-settings';
 
 		\add_filter( "option_page_capability_{$this->settings_field}", array( $this, 'get_settings_capability' ) );
@@ -77,10 +78,10 @@ class Site_Options extends Sanitize {
 		 * @since 2.5.0
 		 */
 		if ( \is_rtl() ) {
-			$titleloc = 'left';
+			$titleloc   = 'left';
 			$h_titleloc = 'right';
 		} else {
-			$titleloc = 'right';
+			$titleloc   = 'right';
 			$h_titleloc = 'left';
 		}
 
@@ -130,7 +131,7 @@ class Site_Options extends Sanitize {
 			'description_separator' => 'pipe', // Description separator, dropdown
 			'description_additions' => 1,  // "Title on Blogname" within Description
 			'description_blogname'  => 1,  // "on Blogname" within Description
-		//	'description_custom'    => '', // Custom prefix TODO
+			//	'description_custom'    => '', // Custom prefix TODO
 
 			// Robots directory.
 			'noydir' => 1, // Site noydir robots settings
@@ -189,9 +190,9 @@ class Site_Options extends Sanitize {
 			'prev_next_frontpage' => 1, // Adds next/prev tags
 
 			// Facebook.
-			'facebook_publisher' => '',	// Facebook Business Url
-			'facebook_author'    => '',	// Facebook User URl
-			'facebook_appid'     => '',	// Facebook App ID
+			'facebook_publisher' => '', // Facebook Business Url
+			'facebook_author'    => '', // Facebook User URl
+			'facebook_appid'     => '', // Facebook App ID
 
 			// Dates.
 			'post_publish_time' => 1, // Article Published Time
@@ -206,7 +207,6 @@ class Site_Options extends Sanitize {
 			'og_tags'         => 1, // Output of Open Graph meta tags
 			'facebook_tags'   => 1, // Output the Facebook meta tags
 			'twitter_tags'    => 1, // Output the Twitter meta tags
-		//	'googleplus_tags' => 1, // Output the Google+ meta tags
 
 			// Social FallBack images (fb = fallback)
 			'social_image_fb_url'   => '', // Fallback image URL
@@ -237,7 +237,7 @@ class Site_Options extends Sanitize {
 			'knowledge_instagram'  => '', // Instagram Account
 			'knowledge_youtube'    => '', // Youtube Account
 			'knowledge_linkedin'   => '', // Linkedin Account
-		//	'knowledge_myspace'    => '', // MySpace Account // meh.
+			//	'knowledge_myspace'    => '', // MySpace Account // meh.
 			'knowledge_pinterest'  => '', // Pinterest Account
 			'knowledge_soundcloud' => '', // SoundCloud Account
 			'knowledge_tumblr'     => '', // Tumblr Account
@@ -282,13 +282,13 @@ class Site_Options extends Sanitize {
 		 *
 		 * Only used within the SEO Settings page.
 		 */
-		return array(
+		return [
 			'title_rem_additions' => 1, // Title remove additions.
 			'site_noindex'        => 1, // Site Page robots noindex
 			'site_nofollow'       => 1, // Site Page robots nofollow
 			'homepage_noindex'    => 1, // Home Page robots noindex
 			'homepage_nofollow'   => 1, // Home Page robots noarchive
-		);
+		];
 	}
 
 	/**
@@ -564,8 +564,7 @@ class Site_Options extends Sanitize {
 			$this->init_sanitizer_filters();
 		}
 
-		$old = \get_option( $settings_field );
-		$settings = \wp_parse_args( $new, $old );
+		$settings = \wp_parse_args( $new, \get_option( $settings_field ) );
 
 		return \update_option( $settings_field, $settings );
 	}

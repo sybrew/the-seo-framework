@@ -518,8 +518,7 @@ class Init extends Query {
 				. $output
 				. $this->get_plugin_indicator( 'after', $init_start );
 
-		//* Already escaped.
-		echo PHP_EOL . $output . PHP_EOL;
+		echo PHP_EOL . $output . PHP_EOL; // xss ok
 
 		/**
 		 * @since 2.6.0
@@ -697,12 +696,12 @@ class Init extends Query {
 		$type = $this->get_option( 'alter_search_query_type' );
 
 		switch ( $type ) :
-			case 'post_query' :
+			case 'post_query':
 				\add_filter( 'the_posts', array( $this, '_alter_search_query_post' ), 10, 2 );
 				break;
 
-			default :
-			case 'in_query' :
+			default:
+			case 'in_query':
 				\add_action( 'pre_get_posts', array( $this, '_alter_search_query_in' ), 9999, 1 );
 				break;
 		endswitch;
@@ -718,12 +717,12 @@ class Init extends Query {
 		$type = $this->get_option( 'alter_archive_query_type' );
 
 		switch ( $type ) :
-			case 'post_query' :
+			case 'post_query':
 				\add_filter( 'the_posts', array( $this, '_alter_archive_query_post' ), 10, 2 );
 				break;
 
-			default :
-			case 'in_query' :
+			default:
+			case 'in_query':
 				\add_action( 'pre_get_posts', array( $this, '_alter_archive_query_in' ), 9999, 1 );
 				break;
 		endswitch;

@@ -48,9 +48,7 @@ class Generate_Url extends Generate_Title {
 	 * @return string The current URL.
 	 */
 	public function get_current_canonical_url() {
-
 		static $cache;
-
 		return isset( $cache ) ? $cache : $cache = $this->get_canonical_url();
 	}
 
@@ -64,12 +62,11 @@ class Generate_Url extends Generate_Title {
 	 * @return string The current permalink.
 	 */
 	public function get_current_permalink() {
-
 		static $cache;
-
-		return isset( $cache ) ? $cache : $cache = $this->create_canonical_url(
-			array( 'id' => $this->get_the_real_ID(), 'is_term' => $this->is_archive() )
-		);
+		return isset( $cache ) ? $cache : $cache = $this->create_canonical_url( [
+			'id'      => $this->get_the_real_ID(),
+			'is_term' => $this->is_archive(),
+		] );
 	}
 
 	/**
@@ -81,10 +78,10 @@ class Generate_Url extends Generate_Title {
 	 * @return string The home URL.
 	 */
 	public function get_homepage_permalink() {
-
 		static $cache;
-
-		return isset( $cache ) ? $cache : $cache = $this->create_canonical_url( array( 'id' => $this->get_the_front_page_ID() ) );
+		return isset( $cache ) ? $cache : $cache = $this->create_canonical_url( [
+			'id' => $this->get_the_front_page_ID(),
+		] );
 	}
 
 	/**
@@ -103,11 +100,11 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function create_canonical_url( $args = array() ) {
 
-		$defaults = array(
+		$defaults = [
 			'id'               => 0,
 			'taxonomy'         => '',
 			'get_custom_field' => false,
-		);
+		];
 		$args = array_merge( $defaults, $args );
 
 		return $this->get_canonical_url( $args );
@@ -243,10 +240,10 @@ class Generate_Url extends Generate_Title {
 	public function clean_canonical_url( $url ) {
 
 		if ( $this->pretty_permalinks ) {
-			$url = \esc_url( $url, array( 'http', 'https' ) );
+			$url = \esc_url( $url, [ 'http', 'https' ] );
 		} else {
 			//= Keep the &'s more readable.
-			$url = \esc_url_raw( $url, array( 'http', 'https' ) );
+			$url = \esc_url_raw( $url, [ 'http', 'https' ] );
 		}
 
 		return $url;
@@ -494,7 +491,7 @@ class Generate_Url extends Generate_Title {
 				$scheme = 'http';
 				break;
 
-			default :
+			default:
 			case 'automatic' :
 				$scheme = $this->is_ssl() ? 'https' : 'http';
 				break;
@@ -544,7 +541,7 @@ class Generate_Url extends Generate_Title {
 
 		if ( empty( $scheme ) ) {
 			$scheme = $this->is_ssl() ? 'https' : 'http';
-		} elseif ( 'admin' === $scheme || 'login' === $scheme  || 'login_post' === $scheme || 'rpc' === $scheme ) {
+		} elseif ( 'admin' === $scheme || 'login' === $scheme || 'login_post' === $scheme || 'rpc' === $scheme ) {
 			$scheme = $this->is_ssl() || \force_ssl_admin() ? 'https' : 'http';
 		} elseif ( 'http' !== $scheme && 'https' !== $scheme && 'relative' !== $scheme ) {
 			$scheme = $this->is_ssl() ? 'https' : 'http';
@@ -775,7 +772,7 @@ class Generate_Url extends Generate_Title {
 		$home_url = $this->get_homepage_permalink();
 		$url = \trailingslashit( $home_url ) . $path . $additions;
 
-		return \esc_url_raw( $url, array( 'http', 'https' ) );
+		return \esc_url_raw( $url, [ 'http', 'https' ] );
 	}
 
 	/**
@@ -850,10 +847,10 @@ class Generate_Url extends Generate_Title {
 		endif;
 
 		if ( $prev )
-			return $this->set_preferred_url_scheme( \esc_url_raw( $prev, array( 'http', 'https' ) ) );
+			return $this->set_preferred_url_scheme( \esc_url_raw( $prev, [ 'http', 'https' ] ) );
 
 		if ( $next )
-			return $this->set_preferred_url_scheme( \esc_url_raw( $next, array( 'http', 'https' ) ) );
+			return $this->set_preferred_url_scheme( \esc_url_raw( $next, [ 'http', 'https' ] ) );
 
 		return '';
 	}

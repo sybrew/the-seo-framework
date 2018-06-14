@@ -1,5 +1,6 @@
 <?php
 /**
+ * @see ./index.php
  * @package The_SEO_Framework\Classes
  */
 namespace The_SEO_Framework;
@@ -66,9 +67,9 @@ class Core {
 	 */
 	final public function __set( $name, $value ) {
 		/**
-		 * For now, no deprecation is being handled; as no properties have been deprecated.
+		 * For now, no deprecation is being handled; as no properties have been deprecated. Just removed.
 		 */
-		$this->_deprecated_function( 'the_seo_framework()->' . \esc_html( $name ), 'unknown' );
+		$this->_inaccessible_p_or_m( 'the_seo_framework()->' . \esc_html( $name ), 'unknown' );
 
 		//* Invoke default behavior.
 		$this->$name = $value;
@@ -80,21 +81,14 @@ class Core {
 	 * If property never existed, default PHP behavior is invoked.
 	 *
 	 * @since 2.7.0
+	 * @since 3.1.0 Removed known deprecations.
 	 *
 	 * @param string $name The property name.
 	 * @return mixed $var The property value.
 	 */
 	final public function __get( $name ) {
 
-		switch ( $name ) :
-			case 'pagehook' :
-				$this->_deprecated_function( 'the_seo_framework()->pagehook', '2.7.0', 'the_seo_framework()->seo_settings_page_hook' );
-				return $this->seo_settings_page_hook;
-				break;
-
-			default:
-				break;
-		endswitch;
+		$this->_inaccessible_p_or_m( 'the_seo_framework()->' . \esc_html( $name ), 'unknown' );
 
 		//* Invoke default behavior.
 		return $this->$name;
@@ -238,7 +232,7 @@ class Core {
 	 * @param array $links The current links.
 	 * @return array The plugin links.
 	 */
-	public function plugin_action_links( $links = array() ) {
+	public function plugin_action_links( $links = [] ) {
 
 		$tsf_links = array();
 
@@ -253,6 +247,7 @@ class Core {
 		 */
 		if ( ! defined( 'TSF_EXTENSION_MANAGER_VERSION' ) ) {
 			$tsfem = \get_plugins( '/the-seo-framework-extension-manager' );
+			//... I want PHP 5.5 for empty expressions :(
 			if ( empty( $tsfem ) )
 				$tsf_links['tsfem'] = '<a href="' . \esc_url( \__( 'https://wordpress.org/plugins/the-seo-framework-extension-manager/', 'autodescription' ) ) . '" rel="noreferrer noopener" target="_blank">' . \esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' ) . '</a>';
 		}
@@ -267,14 +262,13 @@ class Core {
 	 *
 	 * @return int the ID.
 	 */
-	public function get_the_front_page_ID() {
+	public function get_the_front_page_ID() { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
 
-		static $front_id = null;
+		static $front_id;
 
-		if ( isset( $front_id ) )
-			return $front_id;
-
-		return $front_id = $this->has_page_on_front() ? (int) \get_option( 'page_on_front' ) : 0;
+		return isset( $front_id )
+			? $front_id
+			: $front_id = ( $this->has_page_on_front() ? (int) \get_option( 'page_on_front' ) : 0 );
 	}
 
 	/**
@@ -303,7 +297,7 @@ class Core {
 
 		$a11y = $a11y ? 'tsf-show-icon' : '';
 
-		$notice = '<div class="notice ' . \esc_attr( $type ) . ' tsf-notice ' . $a11y . '"><p>';
+		$notice  = '<div class="notice ' . \esc_attr( $type ) . ' tsf-notice ' . $a11y . '"><p>';
 		$notice .= '<a class="hide-if-no-js tsf-dismiss" title="' . \esc_attr__( 'Dismiss', 'autodescription' ) . '"></a>';
 		$notice .= $escape ? \esc_html( $message ) : $message;
 		$notice .= '</p></div>';
@@ -322,7 +316,7 @@ class Core {
 	 * @param bool $escape Whether to escape the whole output.
 	 */
 	public function do_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
-		echo $this->generate_dismissible_notice( $message, $type, (bool) $a11y, (bool) $escape );
+		echo $this->generate_dismissible_notice( $message, $type, (bool) $a11y, (bool) $escape ); // xss ok
 	}
 
 	/**
@@ -368,7 +362,7 @@ class Core {
 	 * @return string The dismissible error notice.
 	 */
 	public function do_dismissible_sticky_notice( $message, $key, $args = array() ) {
-		echo $this->generate_dismissible_sticky_notice( $message, $key, $args );
+		echo $this->generate_dismissible_sticky_notice( $message, $key, $args ); // xss ok
 	}
 
 	/**
@@ -402,6 +396,7 @@ class Core {
 	 * Escapes all HTML, so `<` gets changed to `&lt;` and displays correctly.
 	 *
 	 * @since 2.7.0
+	 * @TODO deprecate, rename
 	 *
 	 * @param string $content Content to be wrapped in the description wrap.
 	 * @param bool $block Whether to wrap the content in <p> tags.
@@ -415,16 +410,15 @@ class Core {
 	 * Mark up content in description wrap.
 	 *
 	 * @since 2.7.0
+	 * @TODO deprecate, rename & move xss sensitivity to the output by default.
 	 *
 	 * @param string $content Content to be wrapped in the description wrap. Expected to be escaped.
 	 * @param bool $block Whether to wrap the content in <p> tags.
 	 * @return string Content wrapped int he description wrap.
 	 */
 	public function description_noesc( $content, $block = true ) {
-
 		$output = '<span class="description">' . $content . '</span>';
-		echo $block ? '<p>' . $output . '</p>' : $output;
-
+		echo $block ? '<p>' . $output . '</p>' : $output; // xss: method name explains
 	}
 
 	/**
@@ -603,7 +597,7 @@ class Core {
 
 			$url = html_entity_decode( \menu_page_url( $this->seo_settings_page_slug, false ) );
 
-			return \esc_url( $url, array( 'http', 'https' ) );
+			return \esc_url( $url, [ 'http', 'https' ] );
 		}
 
 		return '';
@@ -627,8 +621,7 @@ class Core {
 			$tzstring = '';
 
 		if ( $guess && empty( $tzstring ) ) {
-			$offset = \get_option( 'gmt_offset' );
-			$tzstring = $this->get_tzstring_from_offset( $offset );
+			$tzstring = $this->get_tzstring_from_offset( \get_option( 'gmt_offset' ) );
 		}
 
 		return $tzstring;
@@ -661,6 +654,9 @@ class Core {
 	/**
 	 * Sets and resets the timezone.
 	 *
+	 * This exists because WordPress' current_time() adds discrepancies between UTC and GMT.
+	 * This is also far more accurate than WordPress' tiny time table.
+	 *
 	 * @since 2.6.0
 	 * @since 3.0.6 Now uses the old timezone string when a new one can't be generated.
 	 *
@@ -674,17 +670,24 @@ class Core {
 		static $old_tz = null;
 
 		if ( is_null( $old_tz ) ) {
+			// See method docs.
+			// phpcs:ignore
 			$old_tz = date_default_timezone_get();
 			if ( empty( $old_tz ) )
 				$old_tz = 'UTC';
 		}
 
-		if ( $reset )
+		if ( $reset ) {
+			// See method docs.
+			// phpcs:ignore
 			return date_default_timezone_set( $old_tz );
+		}
 
 		if ( empty( $tzstring ) )
 			$tzstring = $this->get_timezone_string( true ) ?: $old_tz;
 
+		// See method docs.
+		// phpcs:ignore
 		return date_default_timezone_set( $tzstring );
 	}
 
@@ -763,7 +766,7 @@ class Core {
 		//* Count the words. Because we've converted all characters to XHTML codes, the odd ones should be only numerical.
 		$words = str_word_count( strtolower( $string ), 2, '&#0123456789;' );
 
-		$words_too_many = array();
+		$words_too_many = [];
 
 		if ( is_array( $words ) ) :
 			/**
@@ -791,12 +794,12 @@ class Core {
 						//* The encoded word is longer or equal to the bother length.
 
 						$word_len = mb_strlen( $word );
-
 						$position = $word_keys[ $word ];
+
 						$first_encountered_word = mb_substr( $string, $position, $word_len );
 
 						//* Found words that are used too frequently.
-						$words_too_many[] = array( $first_encountered_word => $count );
+						$words_too_many[] = [ $first_encountered_word => $count ];
 					}
 				}
 			}
@@ -835,7 +838,7 @@ class Core {
 
 		$get_relative_luminance = function( $v ) {
 			//= Convert to 0~1 value.
-			$v = $v / 255;
+			$v /= 255;
 
 			if ( $v > .03928 ) {
 				$lum = pow( ( $v + .055 ) / 1.055, 2.4 );
@@ -911,18 +914,18 @@ class Core {
 		/**
 		 * The conversion list's keys are per reference only.
 		 */
-		$conversions = array(
+		$conversions = [
 			'**'   => 'strong',
 			'*'    => 'em',
 			'`'    => 'code',
 			'[]()' => 'a',
-			'======'  => 'h6',
-			'====='  => 'h5',
-			'===='  => 'h4',
+			'======' => 'h6',
+			'=====' => 'h5',
+			'====' => 'h4',
 			'==='  => 'h3',
 			'=='   => 'h2',
 			'='    => 'h1',
-		);
+		];
 
 		$md_types = empty( $convert ) ? $conversions : array_intersect( $conversions, $convert );
 
@@ -973,6 +976,7 @@ class Core {
 					$amount = filter_var( $type, FILTER_SANITIZE_NUMBER_INT );
 					//* Considers word non-boundary. @TODO consider removing this?
 					$expression = sprintf( '/(?:\={%1$s})\B([^\={\%1$s}]+)\B(?:\={%1$s})/', $amount );
+
 					$count = preg_match_all( $expression, $text, $matches, PREG_PATTERN_ORDER );
 
 					for ( $i = 0; $i < $count; $i++ ) {
@@ -992,13 +996,13 @@ class Core {
 					for ( $i = 0; $i < $count; $i++ ) {
 						$text = str_replace(
 							$matches[0][ $i ],
-							sprintf( $_string, \esc_url( $matches[2][ $i ], array( 'http', 'https' ) ), \esc_html( $matches[1][ $i ] ) ),
+							sprintf( $_string, \esc_url( $matches[2][ $i ], [ 'http', 'https' ] ), \esc_html( $matches[1][ $i ] ) ),
 							$text
 						);
 					}
 					break;
 
-				default :
+				default:
 					break;
 			endswitch;
 		endforeach;

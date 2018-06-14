@@ -38,6 +38,7 @@ final class Scripts {
 	 * Codes to maintain the internal state of the scripts. This state might not reflect
 	 * the actual load state. See \WP_Dependencies instead.
 	 * @since 3.1.0
+	 * @internal
 	 * @param int <bit 1>  REGISTERED
 	 * @param int <bit 10> LOADED     (enqueued)
 	 */
@@ -80,8 +81,10 @@ final class Scripts {
 	/**
 	 * The constructor. Can't be instantiated externally from this file.
 	 *
+	 * This probably autoloads at action "admin_enqueue_scripts", priority "0".
+	 *
 	 * @since 3.1.0
-	 * Probably loads at action "admin_enqueue_scripts", priority "0".
+	 * @access private
 	 */
 	public function __construct() {
 
@@ -204,7 +207,6 @@ final class Scripts {
 
 		foreach ( static::$scripts as $s ) {
 			if ( static::get_status_of( $s['id'], $s['type'] ) & static::LOADED ) continue;
-
 
 			if ( $s['autoload'] ) {
 				switch ( $s['type'] ) {
@@ -364,8 +366,9 @@ final class Scripts {
 	 * The template will only be outputted when the related script is too.
 	 * The loop will only run when templates are registered.
 	 *
-	 * @see $this->enqueue_scripts()
 	 * @since 3.1.0
+	 * @see $this->enqueue_scripts()
+	 * @access private
 	 */
 	public function _output_templates() {
 		foreach ( static::$templates as $id => $templates )

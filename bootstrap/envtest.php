@@ -69,7 +69,7 @@ function the_seo_framework_pre_boot_test() {
 
 	$requirements = array(
 		'php' => '50400',
-		'wp' => '37965',
+		'wp'  => '37965',
 	);
 
 	   ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < $requirements['php'] and $test = 1
@@ -83,8 +83,8 @@ function the_seo_framework_pre_boot_test() {
 	}
 
 	if ( $ms ) {
-		$plugins = get_site_option( 'active_sitewide_plugins' );
-		$network_mode = isset( $plugins[ THE_SEO_FRAMEWORK_PLUGIN_BASENAME ] );
+		$_plugins = get_site_option( 'active_sitewide_plugins' );
+		$network_mode = isset( $_plugins[ plugin_basename( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE ) ] );
 	} else {
 		$network_mode = false;
 	}
@@ -96,30 +96,30 @@ function the_seo_framework_pre_boot_test() {
 	$silent = ! $admin;
 
 	//* Not good. Deactivate plugin.
-	deactivate_plugins( THE_SEO_FRAMEWORK_PLUGIN_BASENAME, $silent, $network_mode );
+	deactivate_plugins( plugin_basename( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE ), $silent, $network_mode );
 
 	//* Don't die on front-end.
 	if ( ! $admin )
 		return;
 
 	switch ( $test ) :
-		case 1 :
+		case 1:
 			//* PHP requirements not met, always count up to encourage best standards.
 			$requirement = 'PHP 5.4.0 or later';
-			$issue = 'PHP version';
-			$version = phpversion();
-			$subtitle = 'Server Requirements';
+			$issue       = 'PHP version';
+			$version     = PHP_VERSION;
+			$subtitle    = 'Server Requirements';
 			break;
 
-		case 2 :
+		case 2:
 			//* WordPress requirements not met.
 			$requirement = 'WordPress 4.6 or later';
-			$issue = 'WordPress version';
-			$version = $GLOBALS['wp_version'];
-			$subtitle = 'WordPress Requirements';
+			$issue       = 'WordPress version';
+			$version     = $GLOBALS['wp_version'];
+			$subtitle    = 'WordPress Requirements';
 			break;
 
-		default :
+		default:
 			wp_die();
 			break;
 	endswitch;

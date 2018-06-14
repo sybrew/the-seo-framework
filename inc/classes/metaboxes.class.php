@@ -81,17 +81,22 @@ class Metaboxes extends Site_Options {
 					$the_id   = \esc_attr( $id . '-tab-' . $tab );
 					$the_name = \esc_attr( $id . '-tabs' );
 
-					//* All output below is escaped.
-					?>
-					<div class="tsf-tab">
-						<input type="radio" class="tsf-tabs-radio" id="<?php echo $the_id; ?>" name="<?php echo $the_name; ?>" <?php echo $checked; ?>>
-						<label for="<?php echo $the_id; ?>" class="tsf-nav-tab">
-							<?php echo $dashicon ? '<span class="dashicons dashicons-' . \esc_attr( $dashicon ) . ' tsf-dashicons-tabs"></span>' : ''; ?>
-							<?php echo $name ? '<span class="tsf-nav-desktop">' . \esc_attr( $name ) . '</span>' : ''; ?>
-						</label>
-					</div>
-					<?php
-
+					printf(
+						'<div class=tsf-tab>%s</div>',
+						vsprintf(
+							'<input type=radio class=tsf-tabs-radio id=%1$s name="%2$s" %3$s><label for=%1$s class=tsf-nav-tab>%4$s</label>',
+							[
+								\esc_attr( $id . '-tab-' . $tab ),
+								\esc_attr( $id . '-tabs' ),
+								( 1 === $count ? 'checked' : '' ),
+								sprintf(
+									'%s%s',
+									( $dashicon ? '<span class="dashicons dashicons-' . \esc_attr( $dashicon ) . ' tsf-dashicons-tabs"></span>' : '' ),
+									( $name ? '<span class="tsf-nav-desktop">' . \esc_attr( $name ) . '</span>' : '' )
+								),
+							]
+						)
+					); // xss ok: Validator can't distinguish HTML in ternary.
 					$count++;
 				endforeach;
 				?>
@@ -137,8 +142,7 @@ class Metaboxes extends Site_Options {
 
 				if ( $callback ) {
 					$params = isset( $value['args'] ) ? $value['args'] : '';
-					//* Should already be escaped.
-					echo $this->call_function( $callback, $version, $params );
+					echo $this->call_function( $callback, $version, $params ); // xss ok
 				}
 				?>
 			</div>

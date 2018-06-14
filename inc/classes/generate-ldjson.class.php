@@ -95,7 +95,6 @@ class Generate_Ldjson extends Generate_Image {
 			$data = (array) \apply_filters_ref_array( 'the_seo_framework_receive_json_data', array( $data, $key ) );
 		}
 
-
 		if ( $encode ) {
 			$options = 0;
 			//= PHP 5.4+ ( JSON_UNESCAPED_SLASHES === 64 )
@@ -159,8 +158,6 @@ class Generate_Ldjson extends Generate_Image {
 
 		$this->setup_ld_json_transient( $this->get_the_real_ID() );
 
-		$this->the_seo_framework_debug and $this->debug_init( __METHOD__, true, $debug_key = microtime( true ), array( 'LD Json transient' => $this->ld_json_transient, 'Output from transient' => false !== $this->get_transient( $this->ld_json_transient ) ) );
-
 		$use_cache = $this->is_option_checked( 'cache_meta_schema' );
 
 		$output = $use_cache ? $this->get_transient( $this->ld_json_transient ) : false;
@@ -186,8 +183,6 @@ class Generate_Ldjson extends Generate_Image {
 				$this->set_transient( $this->ld_json_transient, $output, $expiration );
 			}
 		endif;
-
-		$this->the_seo_framework_debug and $this->debug_init( __METHOD__, false, $debug_key, array( 'LD Json transient output' => $output ) );
 
 		return $output;
 	}
@@ -542,9 +537,9 @@ class Generate_Ldjson extends Generate_Image {
 		}
 
 		if ( is_scalar( $tree_ids ) )
-			$tree_ids = array( $tree_ids );
+			$tree_ids = [ $tree_ids ];
 
-		$items = array();
+		$items = [];
 
 		foreach ( $tree_ids as $pos => $child_id ) :
 			$position = $pos + 2;
@@ -553,31 +548,32 @@ class Generate_Ldjson extends Generate_Image {
 				$data = $this->get_term_meta( $child_id );
 				if ( empty( $data['doctitle'] ) ) {
 					$cat = \get_term( $child_id, $taxonomy );
-					//* Note: WordPress Core translation.
-					$cat_name = empty( $cat->name ) ? \__( 'Uncategorized' ) : $cat->name;
+					$cat_name = empty( $cat->name ) ? \__( 'Uncategorized', 'default' ) : $cat->name;
 				} else {
 					$cat_name = $data['doctitle'];
 				}
 			} else {
 				$cat = \get_term( $child_id, $taxonomy );
-				//* Note: WordPress Core translation.
-				$cat_name = empty( $cat->name ) ? \__( 'Uncategorized' ) : $cat->name;
+				$cat_name = empty( $cat->name ) ? \__( 'Uncategorized', 'default' ) : $cat->name;
 			}
 
 			//* Store in cache.
-			$items[] = array(
+			$items[] = [
 				'@type'    => 'ListItem',
 				'position' => $position,
-				'item'     => array(
+				'item'     => [
 					'@id'  => $this->get_schema_url_id(
 						'breadcrumb',
 						'create',
-						array( 'id' => $child_id, 'taxonomy' => $taxonomy )
+						[
+							'id'       => $child_id,
+							'taxonomy' => $taxonomy,
+						]
 					),
 					'name' => $this->escape_title( $cat_name ),
 					// 'image' => $this->get_schema_image( $child_id ),
-				),
-			);
+				],
+			];
 		endforeach;
 
 		if ( $items ) {
@@ -813,7 +809,7 @@ class Generate_Ldjson extends Generate_Image {
 				$url = $this->create_canonical_url( $args );
 				break;
 
-			default :
+			default:
 				$url = '';
 				break;
 		}

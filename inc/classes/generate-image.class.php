@@ -39,13 +39,26 @@ class Generate_Image extends Generate_Url {
 	 *
 	 * @var array
 	 */
-	public $image_dimensions = array();
+	public $image_dimensions = [];
 
 	/**
 	 * Constructor, loads parent constructor.
 	 */
 	protected function __construct() {
 		parent::__construct();
+	}
+
+	/**
+	 * Registers image dimensions.
+	 *
+	 * @since 3.1.0
+	 * @uses $this->image_dimensions
+	 *
+	 * @param int   $id The image ID.
+	 * @param array $dimensions The dimensions, annodated with 'height' and 'width'.
+	 */
+	public function register_image_dimension( $id, array $dimensions ) {
+		$this->image_dimensions = $this->image_dimensions + [ $id => $dimensions ];
 	}
 
 	/**
@@ -303,6 +316,7 @@ class Generate_Image extends Generate_Url {
 			return $defaults;
 
 		//* Array merge doesn't support sanitation. We're simply type casting here.
+		// phpcs:disable -- it's ok.
 		$args['post_id']       = isset( $args['post_id'] )       ? (int) $args['post_id']        : $defaults['post_id'];
 		$args['image']         = isset( $args['image'] )         ? (string) $args['image']       : $defaults['image'];
 		$args['size']          = isset( $args['size'] )          ? $args['size']                 : $defaults['size']; // Mixed.
@@ -310,6 +324,7 @@ class Generate_Image extends Generate_Url {
 		$args['skip_fallback'] = isset( $args['skip_fallback'] ) ? (bool) $args['skip_fallback'] : $defaults['skip_fallback'];
 		$args['disallowed']    = isset( $args['disallowed'] )    ? (array) $args['disallowed']   : $defaults['disallowed'];
 		$args['escape']        = isset( $args['escape'] )        ? (bool) $args['escape']        : $defaults['escape'];
+		// phpcs:enable
 
 		return $args;
 	}
@@ -366,11 +381,14 @@ class Generate_Image extends Generate_Url {
 			$w = $_src[1]; // Width
 			$h = $_src[2]; // Height
 
-			$test_i = \esc_url_raw( $this->set_preferred_url_scheme( $i ), array( 'http', 'https' ) );
-			$test_src = \esc_url_raw( $this->set_preferred_url_scheme( $src ), array( 'http', 'https' ) );
+			$test_i = \esc_url_raw( $this->set_preferred_url_scheme( $i ), [ 'http', 'https' ] );
+			$test_src = \esc_url_raw( $this->set_preferred_url_scheme( $src ), [ 'http', 'https' ] );
 
 			if ( $test_i === $test_src )
-				$this->image_dimensions = $this->image_dimensions + array( $id => array( 'width' => $w, 'height' => $h ) );
+				$this->register_image_dimension( $id, [
+					'width'  => $w,
+					'height' => $h,
+				] );
 		}
 
 		if ( $src && $this->matches_this_domain( $src ) )
@@ -407,11 +425,14 @@ class Generate_Image extends Generate_Url {
 			$w = $_src[1]; // Width
 			$h = $_src[2]; // Height
 
-			$test_i = \esc_url_raw( $this->set_preferred_url_scheme( $i ), array( 'http', 'https' ) );
-			$test_src = \esc_url_raw( $this->set_preferred_url_scheme( $src ), array( 'http', 'https' ) );
+			$test_i = \esc_url_raw( $this->set_preferred_url_scheme( $i ), [ 'http', 'https' ] );
+			$test_src = \esc_url_raw( $this->set_preferred_url_scheme( $src ), [ 'http', 'https' ] );
 
 			if ( $test_i === $test_src )
-				$this->image_dimensions = $this->image_dimensions + array( $id => array( 'width' => $w, 'height' => $h ) );
+				$this->register_image_dimension( $id, [
+					'width'  => $w,
+					'height' => $h,
+				] );
 		}
 
 		if ( $src && $this->matches_this_domain( $src ) )
@@ -446,11 +467,14 @@ class Generate_Image extends Generate_Url {
 			$w = $_src[1]; // Width
 			$h = $_src[2]; // Height
 
-			$test_i = \esc_url_raw( $this->set_preferred_url_scheme( $i ), array( 'http', 'https' ) );
-			$test_src = \esc_url_raw( $this->set_preferred_url_scheme( $src ), array( 'http', 'https' ) );
+			$test_i = \esc_url_raw( $this->set_preferred_url_scheme( $i ), [ 'http', 'https' ] );
+			$test_src = \esc_url_raw( $this->set_preferred_url_scheme( $src ), [ 'http', 'https' ] );
 
 			if ( $test_i === $test_src )
-				$this->image_dimensions = $this->image_dimensions + array( $this->get_the_real_ID() => array( 'width' => $w, 'height' => $h ) );
+				$this->register_image_dimension( $this->get_the_real_ID(), [
+					'width'  => $w,
+					'height' => $h,
+				] );
 		}
 
 		if ( $src && $this->matches_this_domain( $src ) )
@@ -644,7 +668,10 @@ class Generate_Image extends Generate_Url {
 			//* Whether to use the post ID (Post Thumbnail) or input ID (ID was known beforehand)
 			$usage_id = ! empty( $args['get_the_real_ID'] ) ? $this->get_the_real_ID() : $id;
 
-			$this->image_dimensions = $this->image_dimensions + array( $usage_id => array( 'width' => $w, 'height' => $h ) );
+			$this->register_image_dimension( $usage_id, [
+				'width'  => $w,
+				'height' => $h,
+			] );
 		}
 
 		if ( $i && $this->matches_this_domain( $i ) )
@@ -680,7 +707,10 @@ class Generate_Image extends Generate_Url {
 					$w = $url_data[1];
 					$h = $url_data[2];
 
-					$this->image_dimensions = $this->image_dimensions + array( $this->get_the_real_ID() => array( 'width' => $w, 'height' => $h ) );
+					$this->register_image_dimension( $this->get_the_real_ID(), [
+						'width'  => $w,
+						'height' => $h,
+					] );
 				}
 			}
 		} elseif ( is_int( $size ) && function_exists( 'has_site_icon' ) ) {
@@ -723,10 +753,10 @@ class Generate_Image extends Generate_Url {
 			$logo = $url_data ? $url_data[0] : '';
 
 			if ( $set_og_dimensions && $logo ) {
-				$w = $url_data[1];
-				$h = $url_data[2];
-
-				$this->image_dimensions = $this->image_dimensions + array( $this->get_the_real_ID() => array( 'width' => $w, 'height' => $h ) );
+				$this->register_image_dimension( $this->get_the_real_ID(), [
+					'width'  => $url_data[1],
+					'height' => $url_data[2],
+				] );
 			}
 		}
 
@@ -755,8 +785,12 @@ class Generate_Image extends Generate_Url {
 			$w = (int) \get_theme_support( 'custom-header', 'width' );
 			$h = (int) \get_theme_support( 'custom-header', 'height' );
 
-			if ( $w && $h )
-				$this->image_dimensions = $this->image_dimensions + array( $this->get_the_real_ID() => array( 'width' => $w, 'height' => $h ) );
+			if ( $w && $h ) {
+				$this->register_image_dimension( $this->get_the_real_ID(), [
+					'width'  => $w,
+					'height' => $h,
+				] );
+			}
 		}
 
 		if ( $image && $this->matches_this_domain( $image ) )

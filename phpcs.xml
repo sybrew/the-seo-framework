@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<ruleset name="The SEO Framework">
+	<description>The coding standard used for The SEO Framework.</description>
+
+	<config name="minimum_supported_wp_version" value="4.6"/>
+	<config name="text_domain" type="array" value="autodescription,default"/>
+
+	<!-- Exclude minified Javascript files. -->
+	<exclude-pattern>*.min.js</exclude-pattern>
+
+	<!-- Use vip.wp.com standards, and improve/adjust -->
+	<rule ref="WordPress-VIP">
+		<!-- We don't require redundant PHP 5.2 support, nor do we limit depth. The UTF-8 failsafe is edge-case on PHP<5.5 only. -->
+		<exclude name="WordPress.WP.AlternativeFunctions.json_encode_json_encode"/>
+
+		<!-- Limiting rule is limiting. Learn elementary PHP instead... -->
+		<exclude name="Squiz.Operators.ValidLogicalOperators"/>
+
+		<!-- Inline control structures greatly condense code, thus improving readability. This rule is bad. -->
+		<exclude name="Generic.ControlStructures.InlineControlStructure"/>
+
+		<!-- Goto is bad when doing it Assembly-style (jumping through loops), but not outside in modern structure. Stop being numinous. -->
+		<exclude name="WordPress.PHP.DiscourageGoto"/>
+
+		<!-- TEMP - To condense code, we utilize this. When we move to PHP7, we'll reimplement this. -->
+		<exclude name="Squiz.PHP.DisallowMultipleAssignments"/>
+
+		<!-- TEMP - I think this was a WordPress standard that shifted...? It takes too much time to fix. Maybe later. -->
+		<exclude name="PSR2.ControlStructures.SwitchDeclaration.SpaceBeforeColonCASE"/>
+	</rule>
+
+	<!-- Set nonce checks -->
+	<rule ref="WordPress.CSRF.NonceVerification">
+		<properties>
+			<property name="customNonceVerificationFunctions" type="array" value="check_tsf_ajax_referer"/>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.XSS.EscapeOutput">
+		<!-- TODO: Report issue that T_THIS should be ignored when there's a pointer attached.
+			Now, I added: "if ( '$this' === $this->tokens[ $i ]['content'] ) return;"
+			... It turns out that there's absolutely no method support for this rule.
+		-->
+		<properties>
+			<!-- Custom list of functions which escape values for output. -->
+			<!-- sanitize_key is better than most escaping functions... -->
+			<property name="customEscapingFunctions" type="array" value="sanitize_key"/>
+			<!-- Custom list of functions whose return values are pre-escaped for output. -->
+			<property name="customAutoEscapedFunctions" type="array" value="convert_markdown"/>
+			<!-- Custom list of functions which escape values for output. -->
+			<!-- TEMP - We use this to hack the incompleteness of the check: PHP_EOL -->
+			<property name="customSanitizingFunctions" type="array" value="PHP_EOL"/>
+			<!-- Custom list of functions which print output incorporating the passed values. -->
+			<property name="customPrintingFunctions" type="array" value=""/>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.VIP.DirectDatabaseQuery">
+		<properties>
+			<property name="customCacheGetFunctions" type="array" value=""/>
+			<property name="customCacheSetFunctions" type="array" value=""/>
+			<property name="customCacheDeleteFunctions" type="array" value=""/>
+		</properties>
+	</rule>
+
+	<!-- Tweak array notifications to behave more natural -->
+	<rule ref="WordPress.Arrays.MultipleStatementAlignment">
+		<properties>
+			<property name="alignMultilineItems" value="!=100"/>
+		</properties>
+	</rule>
+
+	<!-- Tweak file name notifications -->
+	<rule ref="WordPress.Files.FileName">
+		<properties>
+			<!-- Disable inconsiderate, conflicting and redundant "class-" prepend on the filename check. Use folders and dots instead. -->
+			<property name="strict_class_file_names" type="bool" value="0"/>
+		</properties>
+	</rule>
+</ruleset>

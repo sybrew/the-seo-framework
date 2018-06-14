@@ -466,8 +466,7 @@ class Admin_Pages extends Inpost {
 			$input = implode( PHP_EOL, $input );
 
 		if ( $echo ) {
-			//* Already escaped.
-			echo '<div class="tsf-fields">' . $input . '</div>';
+			echo '<div class="tsf-fields">' . $input . '</div>'; // xss user warning.
 		} else {
 			return '<div class="tsf-fields">' . $input . '</div>';
 		}
@@ -513,8 +512,7 @@ class Admin_Pages extends Inpost {
 						. $label
 					. '</label>'
 				. '</span>'
-				. $description
-				;
+				. $description;
 
 		return $output;
 	}
@@ -555,8 +553,7 @@ class Admin_Pages extends Inpost {
 						. ' value="' . $this->get_field_value( $field_id ) . '"'
 					. ' />'
 				. '</p>'
-				. $description
-				;
+				. $description;
 
 		return $output;
 	}
@@ -577,7 +574,7 @@ class Admin_Pages extends Inpost {
 		if ( $link ) {
 			$output = sprintf(
 				'<a href="%1$s" class="tsf-tooltip-item" target="_blank" rel="nofollow noreferrer noopener" title="%2$s" data-desc="%2$s">[?]</a>',
-				\esc_url( $link, array( 'http', 'https' ) ),
+				\esc_url( $link, [ 'http', 'https' ] ),
 				\esc_attr( $description )
 			);
 		} else {
@@ -590,8 +587,7 @@ class Admin_Pages extends Inpost {
 		$output = sprintf( '<span class="tsf-tooltip-wrap">%s</span>', $output );
 
 		if ( $echo ) {
-			//* Already escaped.
-			echo $output;
+			echo $output; // xss ok
 		} else {
 			return $output;
 		}
@@ -886,7 +882,7 @@ class Admin_Pages extends Inpost {
 	public function output_character_counter_wrap( $for, $initial = 0, $display = true ) {
 		printf(
 			'<div class="tsf-counter-wrap" %s><span class="description tsf-counter">%s</span><span class="hide-if-no-js tsf-ajax"></span></div>',
-			$display ? '' : 'style="display:none;"',
+			( $display ? '' : 'style="display:none;"' ),
 			sprintf(
 				/* translators: %s = number */
 				\esc_html__( 'Characters Used: %s', 'autodescription' ),
@@ -909,18 +905,20 @@ class Admin_Pages extends Inpost {
 	 * @param bool   $display Whether to display the counter.
 	 */
 	public function output_pixel_counter_wrap( $for, $type, $display = true ) {
-		printf(
+		vprintf(
 			'<div class="tsf-pixel-counter-wrap hide-if-no-js" %s>%s%s</div>',
-			$display ? '' : 'style="display:none;"',
-			sprintf(
-				'<div id="%s_pixels" class="tsf-tooltip-wrap">%s</div>',
-				\esc_attr( $for ),
-				'<span class="tsf-pixel-counter-bar tsf-tooltip-item" aria-label="" data-desc=""><span class="tsf-pixel-counter-fluid"></span></span>'
-			),
-			sprintf(
-				'<div class="tsf-pixel-shadow-wrap"><span class="tsf-pixel-counter-shadow tsf-%s-pixel-counter-shadow"></span></div>',
-				\esc_attr( $type )
-			)
+			[
+				( $display ? '' : 'style="display:none;"' ),
+				sprintf(
+					'<div id="%s_pixels" class="tsf-tooltip-wrap">%s</div>',
+					\esc_attr( $for ),
+					'<span class="tsf-pixel-counter-bar tsf-tooltip-item" aria-label="" data-desc=""><span class="tsf-pixel-counter-fluid"></span></span>'
+				),
+				sprintf(
+					'<div class="tsf-pixel-shadow-wrap"><span class="tsf-pixel-counter-shadow tsf-%s-pixel-counter-shadow"></span></div>',
+					\esc_attr( $type )
+				),
+			]
 		);
 	}
 }

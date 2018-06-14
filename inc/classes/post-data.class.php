@@ -109,11 +109,10 @@ class Post_Data extends Detect {
 	 */
 	public function inpost_seo_save( $post_id, $post ) {
 
-		//* Nonce is done at the end of this function.
-		if ( empty( $_POST['autodescription'] ) )
+		if ( empty( $_POST['autodescription'] ) ) // CSRF ok, this is an early test to improve performance.
 			return;
 
-		$defaults = array(
+		$defaults = [
 			'_genesis_title'          => '',
 			'_genesis_description'    => '',
 			'_genesis_canonical_uri'  => '',
@@ -129,13 +128,13 @@ class Post_Data extends Detect {
 			'_open_graph_description' => '',
 			'_twitter_title'          => '',
 			'_twitter_description'    => '',
-		);
+		];
 
 		/**
 		 * Merge user submitted options with fallback defaults
 		 * Passes through nonce at the end of the function.
 		 */
-		$data = \wp_parse_args( $_POST['autodescription'], $defaults );
+		$data = \wp_parse_args( $_POST['autodescription'], $defaults ); // phpcs:ignore -- wp_unslash() will ruin intended slashes.
 
 		foreach ( (array) $data as $key => $value ) :
 			switch ( $key ) :
@@ -179,14 +178,13 @@ class Post_Data extends Detect {
 					$data[ $key ] = $this->s_one_zero( $value );
 					continue 2;
 
-				default :
+				default:
 					break;
 			endswitch;
 		endforeach;
 
-		//* Perform nonce and save fields.
+		//* Perform nonce check and save fields.
 		$this->save_custom_fields( $data, $this->inpost_nonce_field, $this->inpost_nonce_name, $post );
-
 	}
 
 	/**
@@ -214,7 +212,8 @@ class Post_Data extends Detect {
 	public function save_custom_fields( array $data, $nonce_action, $nonce_name, $post ) {
 
 		//* Verify the nonce
-		if ( ! isset( $_POST[ $nonce_name ] ) || ! \wp_verify_nonce( $_POST[ $nonce_name ], $nonce_action ) )
+		if ( ! isset( $_POST[ $nonce_name ] )
+		|| ! \wp_verify_nonce( \wp_unslash( $_POST[ $nonce_name ] ), $nonce_action ) ) // phpcs:ignore -- sanitation? huh?
 			return;
 
 		/**
@@ -288,15 +287,15 @@ class Post_Data extends Detect {
 			return;
 
 		$_taxonomies = $this->get_hierarchical_taxonomies_as( 'names', $post_type );
-		$values = array();
+		$values = [];
 
 		foreach ( $_taxonomies as $_taxonomy ) {
 			$_post_key = '_primary_term_' . $_taxonomy;
-			$values[ $_taxonomy ] = array(
+			$values[ $_taxonomy ] = [
 				'action' => $this->inpost_nonce_field . '_pt',
 				'name' => $this->inpost_nonce_name . '_pt_' . $_taxonomy,
 				'value' => isset( $_POST['autodescription'][ $_post_key ] ) ? \absint( $_POST['autodescription'][ $_post_key ] ) : false,
-			);
+			];
 		}
 
 		foreach ( $values as $t => $v ) {

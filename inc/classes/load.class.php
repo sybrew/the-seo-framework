@@ -44,9 +44,9 @@ final class Load extends Feed implements Debug_Interface {
 	 * @var bool Whether script debugging is enabled.
 	 */
 	public $the_seo_framework_debug = false,
-	       $the_seo_framework_debug_hidden = false,
-	       $the_seo_framework_use_transients = true,
-	       $script_debug = false;
+		   $the_seo_framework_debug_hidden = false,
+		   $the_seo_framework_use_transients = true,
+		   $script_debug = false;
 
 	/**
 	 * Constructor, setup debug vars and then load parent constructor.
@@ -123,7 +123,7 @@ final class Load extends Feed implements Debug_Interface {
 			$args = (array) $args;
 		}
 
-		$class = reset( $function );
+		$class  = reset( $function );
 		$method = next( $function );
 
 		/**
@@ -196,8 +196,8 @@ final class Load extends Feed implements Debug_Interface {
 	 * @param string $version     The version of WordPress that deprecated the function.
 	 * @param string $replacement Optional. The function that should have been called. Default null.
 	 */
-	public function _deprecated_function( $function, $version, $replacement = null ) {
-		Debug::get_instance()->_deprecated_function( $function, $version, $replacement );
+	public function _deprecated_function( $function, $version, $replacement = null ) { // phpcs:ignore -- invalid xss warning
+		Debug::get_instance()->_deprecated_function( $function, $version, $replacement ); // phpcs:ignore -- invalid xss warning
 	}
 
 	/**
@@ -212,13 +212,12 @@ final class Load extends Feed implements Debug_Interface {
 	 * @param string $message  A message explaining what has been done incorrectly.
 	 * @param string $version  The version of WordPress where the message was added.
 	 */
-	public function _doing_it_wrong( $function, $message, $version = null ) {
-		Debug::get_instance()->_doing_it_wrong( $function, $message, $version );
+	public function _doing_it_wrong( $function, $message, $version = null ) { // phpcs:ignore -- invalid xss warning
+		Debug::get_instance()->_doing_it_wrong( $function, $message, $version ); // phpcs:ignore -- invalid xss warning
 	}
 
 	/**
 	 * Mark a property or method inaccessible when it has been used.
-
 	 * The current behavior is to trigger a user error if WP_DEBUG is true.
 	 *
 	 * @since 2.7.0
@@ -230,6 +229,7 @@ final class Load extends Feed implements Debug_Interface {
 	public function _inaccessible_p_or_m( $p_or_m, $message = '' ) {
 		Debug::get_instance()->_inaccessible_p_or_m( $p_or_m, $message );
 	}
+
 	/**
 	 * Debug init. Simplified way of debugging a function, only works in admin.
 	 *

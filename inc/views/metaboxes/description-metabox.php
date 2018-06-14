@@ -28,8 +28,7 @@ switch ( $instance ) :
 						. '<span id="tsf-on-blogname-js">' . " $on " . $blogname . '</span>'
 						. '<span id="autodescription-descsep-js">' . " $sep " . '</span>'
 					. '</span>'
-					. $excerpt
-					;
+					. $excerpt;
 
 		$nojs_additions = '';
 		//* Add or remove additions based on option.

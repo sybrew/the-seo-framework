@@ -41,24 +41,24 @@ function _activation_setup_sitemap() {
 
 	$the_seo_framework = \the_seo_framework();
 
-	if ( isset( $the_seo_framework ) ) {
+	if ( $the_seo_framework->loaded ) {
 		$the_seo_framework->rewrite_rule_sitemap();
 		\add_action( 'shutdown', 'flush_rewrite_rules' );
 	}
 }
 
 /**
- * Turns on autoloading for The SEO Framework main options.
+ * Turns on auto loading for The SEO Framework's main options.
  *
  * @since 2.9.2
- * @since 3.1.0 No longer deletes the whole option array, trying to reactivate autoloading.
+ * @since 3.1.0 No longer deletes the whole option array, trying to reactivate auto loading.
  * @access private
  */
 function _activation_set_options_autoload() {
 
 	$the_seo_framework = \the_seo_framework();
 
-	if ( isset( $the_seo_framework ) ) {
+	if ( $the_seo_framework->loaded ) {
 		$options = $the_seo_framework->get_all_options();
 		$setting = THE_SEO_FRAMEWORK_SITE_OPTIONS;
 
@@ -68,9 +68,8 @@ function _activation_set_options_autoload() {
 
 		//? Write a small difference, so the change will be forwarded to the database.
 		$temp_options = $options;
-		if ( is_array( $temp_options ) ) {
+		if ( is_array( $temp_options ) )
 			$temp_options['update_buster'] = (int) time();
-		}
 
 		$_success = \update_option( $setting, $temp_options, 'yes' );
 		if ( $_success )

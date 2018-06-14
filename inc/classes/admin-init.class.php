@@ -595,7 +595,7 @@ class Admin_Init extends Init {
 		}
 
 		$target = \add_query_arg( $query_args, $url );
-		$target = \esc_url_raw( $target, array( 'http', 'https' ) );
+		$target = \esc_url_raw( $target, [ 'http', 'https' ] );
 
 		//* Predict white screen:
 		$headers_sent = headers_sent();
@@ -630,15 +630,13 @@ class Admin_Init extends Init {
 			return;
 
 		$headers_list = headers_list();
-		$location = sprintf( 'Location: %s', \wp_sanitize_redirect( $target ) );
+		$location     = sprintf( 'Location: %s', \wp_sanitize_redirect( $target ) );
 
 		//* Test if WordPress' redirect header is sent. Bail if true.
 		if ( in_array( $location, $headers_list, true ) )
 			return;
 
-		//* Output message:
 		printf( '<p><strong>%s</strong></p>',
-			//* Markdown escapes.
 			$this->convert_markdown(
 				sprintf(
 					/* translators: %s = Redirect URL markdown */
@@ -682,7 +680,7 @@ class Admin_Init extends Init {
 			 * Count up, reset to 0 if needed. We have 4 options: 0, 1, 2, 3
 			 * $_POST['val'] already contains updated number.
 			 */
-			$value = isset( $_POST['val'] ) ? intval( $_POST['val'] ) : $this->get_user_option( 0, 'counter_type', 3 ) + 1;
+			$value = isset( $_POST['val'] ) ? intval( $_POST['val'] ) : $this->get_user_option( 0, 'counter_type', 3 ) + 1; // input var ok
 			$value = \absint( $value );
 
 			if ( $value > 3 )
@@ -717,13 +715,13 @@ class Admin_Init extends Init {
 	public function wp_ajax_crop_image() {
 
 		$this->check_tsf_ajax_referer( 'upload_files' );
-		if ( ! \current_user_can( 'upload_files' ) )
+		if ( ! \current_user_can( 'upload_files' ) || ! isset( $_POST['id'], $_POST['context'], $_POST['cropDetails'] ) )
 			\wp_send_json_error();
 
-		$attachment_id = \absint( $_POST['id'] );
+		$attachment_id = \absint( $_POST['id'] ); // input var ok.
 
-		$context = \sanitize_key( str_replace( '_', '-', $_POST['context'] ) );
-		$data    = array_map( 'absint', $_POST['cropDetails'] );
+		$context = str_replace( '_', '-', \sanitize_key( $_POST['context'] ) ); // input var ok.
+		$data    = array_map( 'absint', $_POST['cropDetails'] ); // input var ok.
 		$cropped = \wp_crop_image( $attachment_id, $data['x1'], $data['y1'], $data['width'], $data['height'], $data['dst_width'], $data['dst_height'] );
 
 		if ( ! $cropped || \is_wp_error( $cropped ) )
@@ -786,7 +784,7 @@ class Admin_Init extends Init {
 				$attachment_id = \apply_filters( 'wp_ajax_cropped_attachment_id', $attachment_id, $context );
 				break;
 
-			default :
+			default:
 				\wp_send_json_error( [ 'message' => \esc_js( \__( 'Image could not be processed.', 'autodescription' ) ) ] );
 				break;
 		endswitch;

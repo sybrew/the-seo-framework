@@ -267,12 +267,12 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 
 ## Detailed log
 
+TODO: (regression) Fix the spacing of the tab icons on the settings page.
+
 * **For everyone:**
 	* **Added:**
-		/
 		* TODO
 	* **Improved:**
-		/
 		* TODO
 		* The plugin can now downgrade its database version to the currently installed version automatically. This makes sure necessary future upgrade procedures are reinstated when you choose to downgrade (for any reason).
 			* Since TSF v3.0.6 this happens when the user saved the options, but this could lead to inconsistent behavior on WordPress Multisite installations.
@@ -281,37 +281,30 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 		* Tooltip arrows now always follow your mouse, for a more natural look.
 		* Tooltips now support RTL screens without the arrow overflowing.
 	* **Changed:**
-		/
 		* TSF now requires WordPress 4.6, from WordPress 4.4.
 		* TSF now requires PHP 5.4, from PHP 5.6.
 		* URL input types (Canonical, Redirect) are now `url` instead of `text`. This means you need to supply a correct URL according to the browser, instead that only TSF checks for correctness after it's being saved.
 	* **Removed:**
-		/
 		* Firefox post list table compatibility and fixes that account for the wide SEO Bar; they don't work anymore as intended, and they cause issues on other well-built browsers.
 	* **Fixed:**
-		/
 		* When reactivating the plugin, there's no longer a chance for your SEO options to be wiped on a random database error.
 			* We used to delete the options, so we could reactivate option-auto-loading; now we add a buster-timestamp.
 		* Various RTL UI elements are now aligned correctly.
 		* On Firefox, checkbox options marked "default" (recommended) or "warned" (use at own risk) are now color-coded again.
 		* The SEO Bar will no longer overflow, but it will now wrap automatically when needed.
-		/
 		* TODO When adding a new category when no category is selected, the primary term is now correctly selected.
 		* TODO Links with [?] now show a pointer... (explain)
+		* TODO Social description fields now render special characters in placeholders correctly.
 
 * **For translators:**
 	* **Added:**
-		/
 		* TODO Location:
 			* TODO "Sentences"
 	* **Updated:**
-		/
 		* TODO
 	* **Changed:**
-		/
 		* TODO
 	* **Removed:**
-		/
 		* "New SEO Settings have been updated"
 
 * **For developers:**
@@ -320,17 +313,14 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 		* Want to use TSF's API? You're in (fail)safe hands with `the_seo_framework()`.
 		* Want to make sure you can use TSF's API? Call `the_seo_framework()->loaded`.
 	* **Added:**
-		/
 		* TODO
 		* Singleton class '\The_SEO_Framework\Builders\Scripts', via a "Builder Pattern", callable as e.g. `the_seo_framework()->Scripts()::function_name()`.
 			* This is the first class of this kind in The SEO Framework plugin.
 	* **Improved:**
-		/
 		* TODO
 		* A "doing it wrong" notice is now supplied when calling `the_seo_framework()` too early.
 		* Fixed all "non-passive event listener" warnings caused by jQuery, by using our own event handlers.
 	* **Changed:**
-		/
 		* TODO
 		* The plugin now loads within the `/bootstrap/` folder via the plugin's initial `autodescription.php` file, where you can more easily discern how the plugin's loaded.
 		* [JavaScript]: Tooltips are now instanced via their own object named `window.tsfTT`, eliminating the previous JS API.
@@ -338,14 +328,13 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 		* [JavaScript]: Media handlers are now instanced via their own object named `window.tsfMedia`, eliminating the previous JS API.
 		* [JavaScript]: Primary Term handlers are now instanced via their own object named `window.tsfPT`, eliminating the previous JS API.
 	* **Removed:**
-		/
 		* We removed the `seotips` folder and their contents. They were a gimmick, accumulating SEO tips brought over past plugin update changelogs.
 		* Many deprecated methods, which were deprecated on or before TSF v2.9.4 (August 30, 2017).
 		* The plugin's automagic-upgrader has been removed, which has been replaced with a static, ordered and semantic plugin upgrader since TSF v2.7.0.
+		* Meta-generator methods' debugging have been removed.
 		* TODO `the_seo_framework()->theme_doing_it_right_transient` and all that's related.
 		* TODO
 	* **Fixed:**
-		/
 		* The wpForo title compatibility filter no longer emits a PHP notice when no title is generated from their plugin.
 		* A highly unlikely PHP error now won't occur when `$wpdb` returns incomplete data on excluded archive/search IDs.
 		* TODO
@@ -414,6 +403,8 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 				* TODO `get_js_nonces()`
 			* In class: `\The_SEO_Framework\Inpost` -- Factory: `the_seo_framework()`
 				* `_include_primary_term_selector_template()`, was marked private.
+			* In class: `\The_SEO_Framework\Render` -- Factory: `the_seo_framework()`
+				* `use_googleplus_tags()` -- The G+ project uses Open Graph and structured data.
 		* **Deprecated:**
 			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
 				* `get_meta_output_cache_key()`, use `get_meta_output_cache_key_by_query()` (without Page ID) or `get_meta_output_cache_key_by_type()` (with page ID) instead.

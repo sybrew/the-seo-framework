@@ -126,12 +126,12 @@ final class Debug implements Debug_Interface {
 	 * @since 2.8.0
 	 * @see @this->_deprecated_function().
 	 *
-	 * @param string $filter		The function that was called.
-	 * @param string $version		The version of WordPress that deprecated the function.
-	 * @param string $replacement	Optional. The function that should have been called. Default null.
+	 * @param string $filter      The function that was called.
+	 * @param string $version     The version of WordPress that deprecated the function.
+	 * @param string $replacement Optional. The function that should have been called. Default null.
 	 */
 	public function _deprecated_filter( $filter, $version, $replacement = null ) {
-		$this->_deprecated_function( 'Filter ' . $filter, $version, $replacement );
+		$this->_deprecated_function( 'Filter ' . $filter, $version, $replacement ); // ignore invalid xss warnings.
 	}
 
 	/**
@@ -150,7 +150,7 @@ final class Debug implements Debug_Interface {
 	 * @param string $replacement  Optional. The function that should have been called. Default null.
 	 *                             Expected to be escaped.
 	 */
-	public function _deprecated_function( $function, $version, $replacement = null ) {
+	public function _deprecated_function( $function, $version, $replacement = null ) { // phpcs:ignore -- xss ok.
 		/**
 		 * Fires when a deprecated function is called.
 		 *
@@ -175,18 +175,20 @@ final class Debug implements Debug_Interface {
 
 			if ( isset( $replacement ) ) {
 				trigger_error(
-					/* translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification, 4: Replacement function */
-					sprintf( \esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework! Use %4$s instead.', 'autodescription' ),
+					sprintf(
+						/* translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification, 4: Replacement function */
+						\esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework! Use %4$s instead.', 'autodescription' ),
 						\esc_html( $function ),
 						'<strong>' . \esc_html__( 'deprecated', 'autodescription' ) . '</strong>',
 						\esc_html( $version ),
 						$replacement
 					)
-				);
+				); // xss ok: $replacement is expected to be escaped.
 			} else {
 				trigger_error(
-					/* translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification */
-					sprintf( \esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework with no alternative available.', 'autodescription' ),
+					sprintf(
+						/* translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification */
+						\esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework with no alternative available.', 'autodescription' ),
 						\esc_html( $function ),
 						'<strong>' . \esc_html__( 'deprecated', 'autodescription' ) . '</strong>',
 						\esc_html( $version )
@@ -213,7 +215,7 @@ final class Debug implements Debug_Interface {
 	 * @param string $message  A message explaining what has been done incorrectly.
 	 * @param string $version  The version of WordPress where the message was added.
 	 */
-	public function _doing_it_wrong( $function, $message, $version = null ) {
+	public function _doing_it_wrong( $function, $message, $version = null ) { // phpcs:ignore -- xss ok.
 		/**
 		 * Fires when the given function is being used incorrectly.
 		 *
@@ -236,17 +238,18 @@ final class Debug implements Debug_Interface {
 
 			set_error_handler( array( $this, 'error_handler_doing_it_wrong' ) );
 
-			$version = empty( $version ) ? '' : sprintf( \__( '(This message was added in version %s of The SEO Framework.)' ), $version );
+			/* translators: %s = Version number */
+			$version = empty( $version ) ? '' : sprintf( \__( '(This message was added in version %s of The SEO Framework.)', 'autodescription' ), $version );
 			trigger_error(
-				/* translators: 1: Function name, 2: 'Incorrectly', 3: Error message 4: Plugin Version notification */
-				sprintf( \esc_html__( '%1$s was called %2$s. %3$s %4$s', 'autodescription' ),
+				sprintf(
+					/* translators: 1: Function name, 2: 'Incorrectly', 3: Error message 4: Plugin Version notification */
+					\esc_html__( '%1$s was called %2$s. %3$s %4$s', 'autodescription' ),
 					\esc_html( $function ),
 					'<strong>' . \esc_html__( 'incorrectly', 'autodescription' ) . '</strong>',
-					//* Expected to be escaped.
 					$message,
 					\esc_html( $version )
 				)
-			);
+			); // xss ok: $message is expected to be escaped.
 
 			restore_error_handler();
 		}
@@ -288,8 +291,15 @@ final class Debug implements Debug_Interface {
 
 			set_error_handler( array( $this, 'error_handler_inaccessible_call' ) );
 
-			/* translators: 1: Method or Property name, 2: Message */
-			trigger_error( sprintf( \esc_html__( '%1$s is not accessible. %2$s', 'autodescription' ), '<code>' . \esc_html( $p_or_m ) . '</code>', \esc_html( $message ) ), E_USER_ERROR );
+			trigger_error(
+				sprintf(
+					/* translators: 1: Method or Property name, 2: Message */
+					\esc_html__( '%1$s is not accessible. %2$s', 'autodescription' ),
+					'<code>' . \esc_html( $p_or_m ) . '</code>',
+					\esc_html( $message )
+				),
+				E_USER_ERROR
+			);
 
 			restore_error_handler();
 		}
@@ -396,22 +406,21 @@ final class Debug implements Debug_Interface {
 
 		if ( isset( $message ) ) {
 			switch ( $code ) :
-				case E_USER_ERROR :
+				case E_USER_ERROR:
 					$type = 'Error';
 					break;
 
-				case E_USER_WARNING :
+				case E_USER_WARNING:
 					$type = 'Warning';
 					break;
 
-				case E_USER_NOTICE :
-				default :
+				case E_USER_NOTICE:
+				default:
 					$type = 'Notice';
 					break;
 			endswitch;
 
-			//* Already escaped.
-			echo sprintf( '<span><strong>%s:</strong> ', $type ) . $message;
+			echo sprintf( '<span><strong>%s:</strong> ', $type ) . $message; // xss ok
 			echo $file ? ' In ' . \esc_html( $file ) : '';
 			echo $line ? ' on line ' . \esc_html( $line ) : '';
 			echo '.</span><br>' . PHP_EOL;
@@ -462,7 +471,7 @@ final class Debug implements Debug_Interface {
 	 */
 	public static function _output_debug() {
 		//* Already escaped.
-		echo static::get_instance()->debug_output;
+		echo static::get_instance()->debug_output; // xss ok
 	}
 
 	/**
@@ -789,19 +798,19 @@ final class Debug implements Debug_Interface {
 		$plugin_memory[ $key ] = isset( $plugin_memory[ $key ] ) ? $plugin_memory[ $key ] : 0;
 
 		//* Get now.
-		$time_now = microtime( true );
+		$time_now         = microtime( true );
 		$memory_usage_now = memory_get_usage();
 
 		//* Calculate difference.
-		$difference_time = $time_now - $timer_start[ $key ];
+		$difference_time   = $time_now - $timer_start[ $key ];
 		$difference_memory = $memory_usage_now - $memory_start[ $key ];
 
 		//* Add difference to total.
-		$plugin_time[ $key ] += $difference_time;
+		$plugin_time[ $key ]   += $difference_time;
 		$plugin_memory[ $key ] += $difference_memory;
 
 		//* Reset timer and memory
-		$timer_start[ $key ] = $time_now;
+		$timer_start[ $key ]  = $time_now;
 		$memory_start[ $key ] = $memory_usage_now;
 
 		if ( $from_last ) {
@@ -844,7 +853,7 @@ final class Debug implements Debug_Interface {
 		static $previous = null;
 
 		if ( isset( $previous ) && false === $reset ) {
-			$output = microtime( true ) - $previous;
+			$output   = microtime( true ) - $previous;
 			$previous = null;
 		} else {
 			$output = $previous = microtime( true );
@@ -860,8 +869,7 @@ final class Debug implements Debug_Interface {
 	 * @access private
 	 */
 	public static function _output_debug_header() {
-		//* Already escaped.
-		echo static::get_instance()->get_debug_header_output();
+		echo static::get_instance()->get_debug_header_output(); // xss ok.
 	}
 
 	/**
@@ -917,7 +925,7 @@ final class Debug implements Debug_Interface {
 				. $tsf->yandex_site_output()
 				. $tsf->pint_site_output();
 
-		$timer = '<div style="display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( $this->timer(), 5 ) . ' seconds</div>' ;
+		$timer = '<div style="display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( $this->timer(), 5 ) . ' seconds</div>';
 
 		$title = $tsf->is_admin() ? 'Expected SEO Output' : 'Determined SEO Output';
 		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #ccc;"><h2 style="color:#ddd;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
@@ -941,11 +949,7 @@ final class Debug implements Debug_Interface {
 	 * @access private
 	 */
 	public static function _output_debug_query() {
-
-		$instance = static::$instance;
-		//* Already escaped.
-		echo $instance->get_debug_query_output();
-
+		echo $static::$instance->get_debug_query_output(); // xss ok
 	}
 
 	/**
@@ -955,11 +959,7 @@ final class Debug implements Debug_Interface {
 	 * @access private
 	 */
 	public static function _output_debug_query_from_cache() {
-
-		$instance = static::$instance;
-		//* Already escaped.
-		echo $instance->get_debug_query_output_from_cache();
-
+		echo static::$instance->get_debug_query_output_from_cache();  // xss ok
 	}
 
 	/**

@@ -55,7 +55,7 @@ function _deactivation_unset_options_autoload() {
 
 	$the_seo_framework = \the_seo_framework();
 
-	if ( isset( $the_seo_framework ) ) {
+	if ( $the_seo_framework->loaded ) {
 		$options = $the_seo_framework->get_all_options();
 		$setting = THE_SEO_FRAMEWORK_SITE_OPTIONS;
 

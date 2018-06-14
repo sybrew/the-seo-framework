@@ -69,7 +69,9 @@ class Sanitize extends Admin_Pages {
 		 *
 		 * @since 2.2.9
 		 */
-		if ( empty( $_POST ) || ! isset( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) || ! is_array( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) )
+		if ( empty( $_POST )
+		|| ! isset( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] )
+		|| ! is_array( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) ) // CSRF ok: This is just a performance check.
 			return $validated = false;
 
 		//* This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
@@ -269,7 +271,6 @@ class Sanitize extends Admin_Pages {
 				'og_tags',
 				'facebook_tags',
 				'twitter_tags',
-			//	'googleplus_tags',
 
 				'knowledge_output',
 
@@ -948,7 +949,7 @@ class Sanitize extends Admin_Pages {
 				return (string) $new_value;
 				break;
 
-			default :
+			default:
 				return 'in_query';
 				break;
 		}
@@ -1216,13 +1217,12 @@ class Sanitize extends Admin_Pages {
 
 			//* URL pattern excluding path.
 			$pattern = '/'
-			         . '((((http)(s)?)?)\:)?' // 1: maybe http: https:
-			         . '(\/\/)?'              // 2: maybe slash slash
-			         . '((www.)?)'            // 3: maybe www.
-			         . '(.*\.[a-zA-Z0-9]*)'   // 4: any legal domain with tld
-			         . '(?:\/)?'              // 5: maybe trailing slash
-			         . '/'
-			         ;
+					 . '((((http)(s)?)?)\:)?' // 1: maybe http: https:
+					 . '(\/\/)?'              // 2: maybe slash slash
+					 . '((www.)?)'            // 3: maybe www.
+					 . '(.*\.[a-zA-Z0-9]*)'   // 4: any legal domain with tld
+					 . '(?:\/)?'              // 5: maybe trailing slash
+					 . '/';
 
 			//* If link is relative, make it full again
 			if ( ! preg_match( $pattern, $url ) ) {
