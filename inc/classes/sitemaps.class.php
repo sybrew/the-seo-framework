@@ -380,10 +380,10 @@ class Sitemaps extends Metaboxes {
 				$_parsed = \wp_parse_url( $url );
 				$_r_parsed = \wp_parse_url(
 					\esc_url(
-						\wp_unslash( $_SERVER['HTTP_HOST'] ), // sanitization ok: esc_url is esc_url_raw with a bowtie.
+						\wp_unslash( $_SERVER['HTTP_HOST'] ),
 						[ 'http', 'https' ]
 					)
-				);
+				); // sanitization ok: esc_url is esc_url_raw with a bowtie.
 
 				if ( isset( $_parsed['host'] ) && isset( $_r_parsed['host'] ) )
 					if ( $_parsed['host'] !== $_r_parsed['host'] )

@@ -685,7 +685,7 @@ class Admin_Pages extends Inpost {
 	}
 
 	/**
-	 * Helper function that constructs id attributes for use in form fields.
+	 * Returns the HTML class wrap for warning/default Checkbox options.
 	 *
 	 * @since 2.6.0
 	 *
@@ -877,9 +877,9 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @param string $for     The input ID it's for.
 	 * @param string $initial The initial value for no-JS.
-	 * @param bool   $display Whether to display the counter.
+	 * @param bool   $display Whether to display the counter. (options page gimmick)
 	 */
-	public function output_character_counter_wrap( $for, $initial = 0, $display = true ) {
+	public function output_character_counter_wrap( $for, $initial = '', $display = true ) {
 		printf(
 			'<div class="tsf-counter-wrap" %s><span class="description tsf-counter">%s</span><span class="hide-if-no-js tsf-ajax"></span></div>',
 			( $display ? '' : 'style="display:none;"' ),
@@ -902,7 +902,7 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @param string $for  The input ID it's for.
 	 * @param string $type Whether it's a 'title' or 'description' counter.
-	 * @param bool   $display Whether to display the counter.
+	 * @param bool   $display Whether to display the counter. (options page gimmick)
 	 */
 	public function output_pixel_counter_wrap( $for, $type, $display = true ) {
 		vprintf(

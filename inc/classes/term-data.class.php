@@ -74,39 +74,39 @@ class Term_Data extends Post_Data {
 		static $cache;
 
 		if ( isset( $cache ) )
-			return $cache ?: array();
+			return $cache;
 
 		if ( $this->is_term_meta_capable() ) {
-			$cache = $this->get_term_meta( \get_queried_object_id() ) ?: false;
+			$cache = $this->get_term_meta( \get_queried_object_id() ) ?: [];
 		} else {
-			$cache = false;
+			$cache = [];
 		}
 
-		return $cache ?: array();
+		return $cache;
 	}
 
 	/**
 	 * Returns term meta data from ID.
-	 * Returns Genesis 2.3.0+ data if no term meta data is set.
+	 * Returns Genesis 2.3.0+ data if no term meta data is set via compat module.
 	 *
 	 * @since 2.7.0
 	 * @since 2.8.0 : Added filter.
 	 * @since 3.0.0 : Added filter.
 	 * @staticvar array $cache
 	 *
-	 * @param int $term_id The Term ID.
+	 * @param int  $term_id The Term ID.
 	 * @param bool $use_cache Whether to use caching.
 	 * @return array The term meta data.
 	 */
 	public function get_term_meta( $term_id, $use_cache = true ) {
 
 		if ( $use_cache ) {
-			static $cache = array();
+			static $cache = [];
 
 			if ( isset( $cache[ $term_id ] ) )
 				return $cache[ $term_id ];
 		} else {
-			$cache = array();
+			$cache = [];
 		}
 
 		$data = \get_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true );
@@ -133,7 +133,7 @@ class Term_Data extends Post_Data {
 		 * @param array $data The term data.
 		 * @param int $term_id The current Term ID.
 		 */
-		$data = \apply_filters( 'the_seo_framework_get_term_meta', array(), $term_id );
+		$data = \apply_filters( 'the_seo_framework_get_term_meta', [], $term_id );
 
 		return $cache[ $term_id ] = $data;
 	}
@@ -150,14 +150,14 @@ class Term_Data extends Post_Data {
 		 * Applies filters 'the_seo_framework_term_meta_defaults' : Array
 		 * @since 2.1.8
 		 */
-		return (array) \apply_filters( 'the_seo_framework_term_meta_defaults', array(
+		return (array) \apply_filters( 'the_seo_framework_term_meta_defaults', [
 			'doctitle'    => '',
 			'description' => '',
 			'noindex'     => 0,
 			'nofollow'    => 0,
 			'noarchive'   => 0,
 			'saved_flag'  => 0, // Don't touch, used to prevent data conflict with Genesis.
-		) );
+		 ] );
 	}
 
 	/**
@@ -179,7 +179,8 @@ class Term_Data extends Post_Data {
 		//* Check again against ambiguous injection.
 		if ( isset( $_POST['_wpnonce'] ) && \wp_verify_nonce( $_POST['_wpnonce'], 'update-tag_' . $term_id ) ) :
 
-			$data = isset( $_POST['autodescription-meta'] ) ? (array) $_POST['autodescription-meta'] : array();
+			// phpcs:ignore -- wp_unslash() will ruin intended slashes.
+			$data = isset( $_POST['autodescription-meta'] ) ? (array) $_POST['autodescription-meta'] : [];
 			$data = \wp_parse_args( $data, $this->get_term_meta_defaults() );
 
 			foreach ( (array) $data as $key => $value ) :
@@ -199,7 +200,7 @@ class Term_Data extends Post_Data {
 						$data[ $key ] = $this->s_one_zero( $value );
 						continue 2;
 
-					default :
+					default:
 						// Not implemented for compatibility reasons.
 						// unset( $data[ $key ] );
 						break;
@@ -272,7 +273,10 @@ class Term_Data extends Post_Data {
 			} elseif ( $this->is_tax() ) {
 				$term[ $id ] = \get_term_by( 'slug', \get_query_var( 'term' ), \get_query_var( 'taxonomy' ) );
 			} elseif ( \is_post_type_archive() ) {
-				$term[ $id ] = \get_post_type_object( \get_query_var( 'post_type' ) );
+				$post_type = \get_query_var( 'post_type' );
+				$post_type = is_array( $post_type ) ? reset( $post_type ) : $post_type;
+
+				$term[ $id ] = \get_post_type_object( $post_type );
 			}
 		}
 
@@ -325,12 +329,12 @@ class Term_Data extends Post_Data {
 	protected function get_the_term_name( $term, $singular = true, $fallback = true, $use_cache = true ) {
 
 		if ( $use_cache ) {
-			static $term_name = array();
+			static $term_name = [];
 
 			if ( isset( $term_name[ $singular ] ) )
 				return $term_name[ $singular ];
 		} else {
-			$term_name = array();
+			$term_name = [];
 		}
 
 		$ret = '';
@@ -338,7 +342,7 @@ class Term_Data extends Post_Data {
 		if ( isset( $term->taxonomy ) ) {
 			$tax_type = $term->taxonomy;
 
-			static $term_labels = array();
+			static $term_labels = [];
 
 			/**
 			 * Dynamically fetch the term name.
@@ -387,7 +391,7 @@ class Term_Data extends Post_Data {
 			$post_type = \get_post_type( $this->get_the_real_ID() );
 
 		if ( ! $post_type )
-			return array();
+			return [];
 
 		$taxonomies = \get_object_taxonomies( $post_type, 'objects' );
 		$taxonomies = array_filter( $taxonomies, function( $t ) {
@@ -399,7 +403,7 @@ class Term_Data extends Post_Data {
 				$taxonomies = array_keys( $taxonomies );
 				break;
 
-			default :
+			default:
 			case 'objects' :
 				break;
 		}

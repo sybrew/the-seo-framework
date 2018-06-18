@@ -395,10 +395,8 @@ class Generate extends User_Data {
 		if ( isset( $cache ) )
 			return $cache;
 
-		if ( ! $this->get_twitter_description() ) {
-			$retval = array();
-		} elseif ( ! $this->title_from_cache( '', '', '', true ) ) {
-			$retval = array();
+		if ( ! $this->get_twitter_description() || ! $this->get_twitter_title() ) {
+			$retval = [];
 		} else {
 			$retval = $this->get_image_from_cache() ? array( 'summary_large_image', 'summary' ) : array( 'summary' );
 		}
@@ -428,7 +426,7 @@ class Generate extends User_Data {
 	 * @return array Title separators.
 	 */
 	public function get_separator_list() {
-		return array(
+		return [
 			'pipe'   => '|',
 			'dash'   => '-',
 			'ndash'  => '&ndash;',
@@ -444,7 +442,7 @@ class Generate extends User_Data {
 			'ge'     => '&ge;',
 			'lt'     => '&lt;',
 			'gt'     => '&gt;',
-		);
+		];
 	}
 
 	/**

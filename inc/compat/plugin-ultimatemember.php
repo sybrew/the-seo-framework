@@ -25,7 +25,7 @@ function _um_user_functions_available() {
 	);
 }
 
-\add_filter( 'the_seo_framework_custom_field_title', __NAMESPACE__ . '\\_um_filter_custom_field_title', 10, 3 );
+\add_filter( 'the_seo_framework_title_from_custom_field', __NAMESPACE__ . '\\_um_filter_custom_field_title', 10, 1 );
 /**
  * Filters the custom title.
  *
@@ -37,7 +37,7 @@ function _um_user_functions_available() {
  * @param string $axonomy the TT name.
  * @return string The user title.
  */
-function _um_filter_custom_field_title( $title = '', $id = '', $taxonomy = '' ) {
+function _um_filter_custom_field_title( $title = '' ) {
 
 	if ( \The_SEO_Framework\_um_user_functions_available() && \um_is_core_page( 'user' ) && \um_get_requested_user() ) {
 		$title = \um_user( 'display_name' );

@@ -33,68 +33,18 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Render extends Admin_Init {
 
 	/**
-	 * Theme title doing it wrong boolean.
-	 *
-	 * @since 2.4.0
-	 *
-	 * @var bool Holds Theme is doing it wrong.
-	 */
-	protected $title_doing_it_wrong = null;
-
-	/**
 	 * Constructor, load parent constructor
 	 */
 	protected function __construct() {
 		parent::__construct();
 	}
 
-	/**
-	 * Cache current Title in static variable
-	 * Must be called inside the loop
-	 *
-	 * @since 2.2.2
-	 * @since 2.4.0 : If the theme is doing it right, override cache parameters to speed things up.
-	 * @staticvar array $title_cache
-	 *
-	 * @param string $title The Title to return
-	 * @param string $sep The Title sepeartor
-	 * @param string $seplocation The Title sepeartor location, accepts 'left' or 'right'.
-	 * @param bool $meta Ignore theme doing it wrong.
-	 * @return string The title
-	 */
-	public function title_from_cache( $title = '', $sep = '', $seplocation = '', $meta = false ) {
+	public function get_document_title( $title = '' ) {
+		return $this->get_title();
+	}
 
-		/**
-		 * Cache the inputs, for when the title is doing it right.
-		 * Use those values to fetch the cached title.
-		 *
-		 * @since 2.4.0
-		 */
-		static $setup_cache, $title_param_cache, $sep_param_cache, $seplocation_param_cache;
-
-		if ( ! $setup_cache ) {
-			if ( \doing_filter( 'pre_get_document_title' ) || \doing_filter( 'wp_title' ) ) {
-				$title_param_cache = $title;
-				$sep_param_cache = $sep;
-				$seplocation_param_cache = $seplocation;
-
-				$setup_cache = 'I like turtles.';
-			}
-		}
-
-		if ( isset( $this->title_doing_it_wrong ) && false === $this->title_doing_it_wrong ) {
-			$title = $title_param_cache;
-			$sep = $sep_param_cache;
-			$seplocation = $seplocation_param_cache;
-			$meta = false;
-		}
-
-		static $title_cache = array();
-
-		if ( isset( $title_cache[ $title ][ $sep ][ $seplocation ][ $meta ] ) )
-			return $title_cache[ $title ][ $sep ][ $seplocation ][ $meta ];
-
-		return $title_cache[ $title ][ $sep ][ $seplocation ][ $meta ] = $this->title( $title, $sep, $seplocation, array( 'meta' => $meta ) );
+	public function get_wp_title( $title = '', $sep = '', $seplocation = '' ) {
+		return $this->get_title();
 	}
 
 	/**

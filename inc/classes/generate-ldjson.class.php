@@ -201,7 +201,7 @@ class Generate_Ldjson extends Generate_Image {
 			return '';
 
 		$data = array(
-			'@context' => 'http://schema.org',
+			'@context' => 'https://schema.org',
 			'@type' => 'WebSite',
 			'url' => $this->get_homepage_permalink(),
 		);
@@ -264,7 +264,7 @@ class Generate_Ldjson extends Generate_Image {
 		$knowledge_name = $this->get_option( 'knowledge_name' ) ?: $this->get_blogname();
 
 		$data = array(
-			'@context' => 'http://schema.org',
+			'@context' => 'https://schema.org',
 			'@type' => ucfirst( \esc_attr( $knowledge_type ) ),
 			'url' => $this->get_homepage_permalink(),
 			'name' => $this->escape_title( $knowledge_name ),
@@ -388,9 +388,9 @@ class Generate_Ldjson extends Generate_Image {
 		foreach ( $parents as $pos => $parent_id ) {
 
 			if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-				$parent_name = $this->get_custom_field( '_genesis_title', $parent_id ) ?: ( $this->post_title_from_ID( $parent_id ) ?: $this->untitled() );
+				$parent_name = $this->get_custom_field( '_genesis_title', $parent_id ) ?: ( $this->get_generated_single_post_title( $parent_id ) ?: $this->untitled() );
 			} else {
-				$parent_name = $this->post_title_from_ID( $parent_id ) ?: $this->untitled();
+				$parent_name = $this->get_generated_single_post_title( $parent_id ) ?: $this->untitled();
 			}
 
 			$position = $pos + 2;
@@ -628,27 +628,30 @@ class Generate_Ldjson extends Generate_Image {
 	}
 
 	/**
-	 * Filters breadcrumb tree until $until is found.
+	 * Filters breadcrumb tree with IDs until $find is found.
+	 *
+	 * Magic.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param array|int $trees
-	 * @param int       $until
-	 * @return array    $trees. Empty if $until is nowhere to be found.
+	 * @param array|int $ids The (multidimensional) breadcrumb items with numeric values.
+	 *                       Or just a single numeric value, if it's the last item being scrutinized.
+	 * @param int       $find The key to find.
+	 * @return array    $trees. Empty if $find is nowhere to be found.
 	 */
-	protected function filter_ld_json_breadcrumb_trees( $trees, $until ) {
+	protected function filter_ld_json_breadcrumb_trees( $ids, $find ) {
 
-		$found = array();
+		$found = [];
 
-		if ( in_array( $until, (array) $trees, true ) ) {
-			$found = array( $until );
-		} elseif ( is_array( $trees ) ) {
-			foreach ( $trees as $tree ) {
-				if ( $this->filter_ld_json_breadcrumb_trees( $tree, $until ) ) {
+		if ( in_array( $find, (array) $ids, true ) ) {
+			$found = [ $find ];
+		} elseif ( is_array( $ids ) ) {
+			foreach ( $ids as $id ) {
+				if ( $this->filter_ld_json_breadcrumb_trees( $id, $find ) ) {
 					$found = array_splice(
-						$tree,
+						$id,
 						0,
-						array_search( $until, $tree, true ) + 1
+						array_search( $find, $id, true ) + 1
 					);
 					break;
 				}
@@ -689,14 +692,14 @@ class Generate_Ldjson extends Generate_Image {
 
 		$custom_name = $custom_name ?: $this->get_blogname();
 
-		$crumb = array(
+		$crumb = [
 			'@type'    => 'ListItem',
 			'position' => 1,
-			'item'     => array(
+			'item'     => [
 				'@id'  => $this->get_schema_url_id( 'breadcrumb', 'homepage' ),
 				'name' => $this->escape_title( $custom_name ),
-			),
-		);
+			],
+		];
 
 		if ( $image = $this->get_schema_image( $front_id, true ) )
 			$crumb['item']['image'] = $image;
@@ -728,19 +731,19 @@ class Generate_Ldjson extends Generate_Image {
 		$post_id = $this->get_the_real_ID();
 
 		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-			$name = $this->get_custom_field( '_genesis_title', $post_id ) ?: ( $this->post_title_from_ID( $post_id ) ?: $this->untitled() );
+			$name = $this->get_custom_field( '_genesis_title', $post_id ) ?: ( $this->get_generated_single_post_title( $post_id ) ?: $this->untitled() );
 		} else {
-			$name = $this->post_title_from_ID( $post_id ) ?: $this->untitled();
+			$name = $this->get_generated_single_post_title( $post_id ) ?: $this->untitled();
 		}
 
-		$crumb = array(
+		$crumb = [
 			'@type'    => 'ListItem',
 			'position' => $position,
-			'item'     => array(
+			'item'     => [
 				// '@id'  => $this->get_schema_url_id( 'breadcrumb', 'currentpage' ),
 				'name' => $this->escape_title( $name ),
-			),
-		);
+			],
+		];
 
 		if ( $image = $this->get_schema_image( $post_id, true ) )
 			$crumb['item']['image'] = $image;
@@ -767,11 +770,11 @@ class Generate_Ldjson extends Generate_Image {
 
 		$key = 'Breadcrumbs_' . $it;
 
-		$data = array(
-			'@context' => 'http://schema.org',
-			'@type' => 'BreadcrumbList',
+		$data = [
+			'@context'        => 'https://schema.org',
+			'@type'           => 'BreadcrumbList',
 			'itemListElement' => $items,
-		);
+		];
 
 		$this->build_json_data( $key, $data );
 		$json = $this->receive_json_data( $key );
@@ -794,7 +797,7 @@ class Generate_Ldjson extends Generate_Image {
 	 * @param array $args The URL generation args.
 	 * @return string The JSON URL '@id'
 	 */
-	public function get_schema_url_id( $id, $from, $args = array() ) {
+	public function get_schema_url_id( $id, $from, $args = [] ) {
 
 		switch ( $from ) {
 			case 'currentpage' :

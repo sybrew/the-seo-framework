@@ -6,7 +6,7 @@
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
 $title = __( 'XML Sitemap', 'autodescription' );
-if ( $this->add_title_additions() )
+if ( $this->use_title_branding() )
 	$title = $this->process_title_additions( $title, $this->get_blogname(), $this->get_title_seplocation( '', false ) );
 
 if ( $this->is_option_checked( 'sitemap_logo' ) ) {

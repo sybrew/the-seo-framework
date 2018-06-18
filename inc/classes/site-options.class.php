@@ -125,7 +125,7 @@ class Site_Options extends Sanitize {
 			'title_seperator'     => 'pipe',    // Title separator (note: TYPO), dropdown
 			'title_location'      => $titleloc, // Title separation location
 			'title_rem_additions' => 0,         // Remove title additions
-			'title_rem_prefixes'  => 0,         // Remove title prefixes
+			'title_rem_prefixes'  => 0,         // Remove title prefixes from archives.
 
 			// Description.
 			'description_separator' => 'pipe', // Description separator, dropdown

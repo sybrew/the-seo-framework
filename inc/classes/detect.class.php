@@ -105,12 +105,12 @@ class Detect extends Render {
 		if ( isset( $active_plugins ) )
 			return $active_plugins;
 
-		$active_plugins = (array) \get_option( 'active_plugins', array() );
+		$active_plugins = (array) \get_option( 'active_plugins', [] );
 
 		if ( \is_multisite() ) {
 			// Due to legacy code, active_sitewide_plugins stores them in the keys,
 			// whereas active_plugins stores them in the values.
-			$network_plugins = array_keys( \get_site_option( 'active_sitewide_plugins', array() ) );
+			$network_plugins = array_keys( \get_site_option( 'active_sitewide_plugins', [] ) );
 			if ( $network_plugins ) {
 				$active_plugins = array_merge( $active_plugins, $network_plugins );
 			}
@@ -269,9 +269,9 @@ class Detect extends Render {
 		if ( ! $use_cache )
 			return $this->detect_plugin_multi( $plugins );
 
-		static $cache = array();
+		static $cache = [];
 
-		$mapped = array();
+		$mapped = [];
 
 		//* Prepare multidimensional array for cache.
 		foreach ( $plugins as $key => $func ) {
@@ -556,11 +556,11 @@ class Detect extends Render {
 	 */
 	public function can_do_sitemap_robots( $check_option = true ) {
 
-		$plugins = array(
-			'functions' => array(
+		$plugins = [
+			'functions' => [
 				'jetpack_sitemap_initialize', // Jetpack
-			),
-		);
+			],
+		];
 
 		if ( $this->detect_plugin( $plugins ) )
 			return false;
@@ -627,7 +627,6 @@ class Detect extends Render {
 	 * @since 2.8.0 No longer overwrites global $wp_version
 	 * @since 3.1.0 1. No longer caches.
 	 *              2. Removed redundant parameter checks.
-	 * @staticvar array $cache
 	 *
 	 * @param string $version the three part version to compare to WordPress
 	 * @param string $compare the comparing operator, default "$version >= Current WP Version"
@@ -653,167 +652,34 @@ class Detect extends Render {
 	 * Maintains detection cache, array and strings are mixed through foreach loops.
 	 *
 	 * @since 2.2.5
-	 * @staticvar array $cache
+	 * @since 3.1.0 Removed caching
 	 *
-	 * @param string|array required $feature The features to check for.
-	 * @param bool $use_cache If set to false don't use cache.
+	 * @param string|array required $features The features to check for.
 	 * @return bool theme support.
 	 */
-	public function detect_theme_support( $features, $use_cache = true ) {
+	public function detect_theme_support( $features ) {
 
-		if ( ! $use_cache ) {
-			//* Don't use cache.
-
-			if ( is_string( $features ) && ( \current_theme_supports( $features ) ) )
+		foreach ( (array) $features as $feature ) {
+			if ( \current_theme_supports( $feature ) ) {
 				return true;
-
-			if ( is_array( $features ) ) {
-				foreach ( $features as $feature ) {
-					if ( \current_theme_supports( $feature ) ) {
-						return true;
-						break;
-					}
-					continue;
-				}
+				break;
 			}
-
-			return false;
+			continue;
 		}
 
-		//* Setup cache.
-		static $cache = array();
-
-		//* Check theme support cache
-		if ( is_string( $features ) && isset( $cache[ $features ] ) )
-			//* Feature support check has been cached
-			return $cache[ $features ];
-
-		//* Check theme support array cache
-		if ( is_array( $features ) ) {
-			foreach ( $features as $feature ) {
-				if ( isset( $cache[ $feature ] ) && $cache[ $feature ] ) {
-					// Feature is found and true.
-					return $cache[ $feature ];
-					break;
-				}
-			}
-		}
-
-		//* Setup cache values
-		if ( is_string( $features ) ) {
-			if ( \current_theme_supports( $features ) ) {
-				return $cache[ $features ] = true;
-			} else {
-				return $cache[ $features ] = false;
-			}
-		} elseif ( is_array( $features ) ) {
-			foreach ( $features as $feature ) {
-				if ( \current_theme_supports( $feature ) ) {
-					return $cache[ $feature ] = true;
-					break;
-				} else {
-					$cache[ $feature ] = false;
-					continue;
-				}
-			}
-			return $cache[ $feature ];
-		}
-
-		// No true value found so far, return false.
-		if ( ! isset( $cache[ $features ] ) )
-			$cache[ $features ] = false;
-
-		return $cache[ $features ];
+		return false;
 	}
 
 	/**
 	 * Checks a theme's support for title-tag.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $supports
-	 * @global array $_wp_theme_features
+	 * @since 3.1.0 Removed caching
 	 *
 	 * @return bool
 	 */
 	public function current_theme_supports_title_tag() {
-
-		static $supports = null;
-
-		if ( isset( $supports ) )
-			return $supports;
-
-		global $_wp_theme_features;
-
-		return $supports = isset( $_wp_theme_features['title-tag'] ) && true === $_wp_theme_features['title-tag'];
-	}
-
-	/**
-	 * Sets up doing it wrong html code for in the footer.
-	 *
-	 * @since 2.7.0
-	 *
-	 * @param null|string $title The given title
-	 * @param null|string $sep The separator
-	 * @param null|string $seplocation Whether the blogname is left or right.
-	 * @return void
-	 */
-	public function set_tell_title_doing_it_wrong( $title = null, $sep = null, $seplocation = null ) {
-		return $this->tell_title_doing_it_wrong( $title, $sep, $seplocation, false );
-	}
-
-	/**
-	 * Adds doing it wrong html code in the footer.
-	 *
-	 * @since 2.5.2.1
-	 * @staticvar bool $run
-	 * @staticvar string $sep_output
-	 * @staticvar string $display_output
-	 * @staticvar string $seplocation_output
-	 *
-	 * @param null|string $title The given title
-	 * @param null|string $sep The separator
-	 * @param null|string $seplocation Whether the blogname is left or right.
-	 * @param bool $output Whether to store cache values or echo the output in the footer.
-	 * @return void
-	 */
-	public function tell_title_doing_it_wrong( $title = null, $sep = null, $seplocation = null, $output = true ) {
-
-		if ( $output ) {
-			//* Prevent multiple output.
-			static $run = null;
-
-			if ( isset( $run ) )
-				return;
-
-			$run = true;
-		}
-
-		static $title_output = null;
-		static $sep_output = null;
-		static $seplocation_output = null;
-
-		if ( ! isset( $title_output, $sep_output, $seplocation_output ) ) {
-			//* Initiate caches, set up variables.
-
-			if ( '' === $title )
-				$title = 'empty';
-
-			if ( '' === $sep )
-				$sep = 'empty';
-
-			if ( '' === $seplocation )
-				$seplocation = 'empty';
-
-			$title_output = ! isset( $title ) ? 'notset' : $title;
-			$sep_output = ! isset( $sep ) ? 'notset' : $sep;
-			$seplocation_output = ! isset( $seplocation ) ? 'notset' : $seplocation;
-		}
-
-		//* Echo the HTML comment.
-		if ( $output )
-			echo '<!-- Title diw: "' . \esc_html( $title_output ) . '" : "' . \esc_html( $sep_output ) . '" : "' . \esc_html( $seplocation_output ) . '" -->' . "\r\n";
-
-		return;
+		return $this->detect_theme_support( 'title-tag' );
 	}
 
 	/**
@@ -827,12 +693,12 @@ class Detect extends Render {
 	 */
 	public function is_post_type_page( $type ) {
 
-		static $is_page = array();
+		static $is_page = [];
 
 		if ( isset( $is_page[ $type ] ) )
 			return $is_page[ $type ];
 
-		$post_page = (array) \get_post_types( array( 'public' => true ) );
+		$post_page = (array) \get_post_types( [ 'public' => true ] );
 
 		foreach ( $post_page as $screen ) {
 			if ( $type === $screen ) {
@@ -863,7 +729,7 @@ class Detect extends Render {
 		if ( ! $use_cache )
 			return is_int( strpos( \get_locale(), $locale ) );
 
-		static $cache = array();
+		static $cache = [];
 
 		if ( isset( $cache[ $locale ] ) )
 			return $cache[ $locale ];
@@ -875,13 +741,14 @@ class Detect extends Render {
 	 * Determines if the post type is compatible with The SEO Framework inpost metabox.
 	 *
 	 * @since 2.3.5
+	 * @since 3.1.0 The first parameter is now required.
 	 *
-	 * @param string|null $post_type
+	 * @param string $post_type
 	 * @return bool True if post type is supported.
 	 */
-	public function post_type_supports_inpost( $post_type = null ) {
+	public function post_type_supports_inpost( $post_type ) {
 
-		if ( isset( $post_type ) && $post_type ) {
+		if ( $post_type ) {
 			/**
 			 * Applies filters 'the_seo_framework_custom_post_type_support'
 			 * Determines the required post type features before TSF supports it.
@@ -936,7 +803,7 @@ class Detect extends Render {
 	 */
 	public function get_supported_post_type( $public = true, $post_type = '' ) {
 
-		static $cache = array();
+		static $cache = [];
 
 		if ( isset( $cache[ $public ][ $post_type ] ) )
 			return $cache[ $public ][ $post_type ];
@@ -972,7 +839,13 @@ class Detect extends Render {
 		 * @param string|bool $post_type The supported post type. Is boolean false if not supported.
 		 * @param string $post_type_evaluated The evaluated post type.
 		 */
-		$post_type = (string) \apply_filters( 'the_seo_framework_supported_post_type', $post_type, $post_type_evaluated );
+		$post_type = (string) \apply_filters_ref_array(
+			'the_seo_framework_supported_post_type',
+			[
+				$post_type,
+				$post_type_evaluated,
+			]
+		);
 
 		//* No supported post type has been found.
 		if ( ! $post_type )
@@ -1015,62 +888,6 @@ class Detect extends Render {
 	}
 
 	/**
-	 * Determines whether the theme is outputting the title correctly based on transient.
-	 *
-	 * @since 2.5.2
-	 * @staticvar bool $dir
-	 *
-	 * @return bool True theme is doing it right.
-	 */
-	public function theme_title_doing_it_right() {
-
-		static $dir = null;
-
-		if ( isset( $dir ) )
-			return $dir;
-
-		$transient = \get_transient( $this->theme_doing_it_right_transient );
-
-		if ( '0' === $transient )
-			return $dir = false;
-
-		/**
-		 * Transient has not been set yet (false)
-		 * or the theme is doing it right ('1').
-		 */
-		return $dir = true;
-	}
-
-	/**
-	 * Detect theme title fix extension plugin.
-	 *
-	 * @since 2.6.0
-	 * @staticvar bool $fixed
-	 *
-	 * @return bool True theme will do it right.
-	 */
-	public function theme_title_fix_active() {
-
-		static $fixed = null;
-
-		if ( isset( $fixed ) )
-			return $fixed;
-
-		return $fixed = defined( 'THE_SEO_FRAMEWORK_TITLE_FIX' ) && THE_SEO_FRAMEWORK_TITLE_FIX;
-	}
-
-	/**
-	 * Checks whether we can use special manipulation filters.
-	 *
-	 * @since 2.6.0
-	 *
-	 * @return bool True if we can manipulate title.
-	 */
-	public function can_manipulate_title() {
-		return $this->theme_title_doing_it_right() || $this->theme_title_fix_active();
-	}
-
-	/**
 	 * Determines whether a page or blog is on front.
 	 *
 	 * @since 2.6.0
@@ -1090,18 +907,15 @@ class Detect extends Render {
 
 	/**
 	 * Determines if the current theme supports the custom logo addition.
-	 * Also checks WP version.
 	 *
 	 * @since 2.8.0
-	 * @staticvar $bool $cache
+	 * @since 3.1.0: 1. No longer checks for WP version 4.5+.
+	 *               2. No longer uses caching.
 	 *
 	 * @return bool
 	 */
 	public function can_use_logo() {
-
-		static $cache = null;
-
-		return isset( $cache ) ? $cache : $this->wp_version( '4.5.0', '>=' ) && \current_theme_supports( 'custom-logo' );
+		return $this->detect_theme_support( 'custom-logo' );
 	}
 
 	/**

@@ -54,11 +54,11 @@ class Post_Data extends Detect {
 	 */
 	public function get_custom_field( $field, $post_id = null ) {
 
-		//* If field is falsy, get_post_meta() will return an array.
+		//* If field is falsesque, get_post_meta() will return an array.
 		if ( ! $field )
 			return false;
 
-		static $field_cache = array();
+		static $field_cache = [];
 
 		if ( isset( $field_cache[ $field ][ $post_id ] ) )
 			return $field_cache[ $field ][ $post_id ];
@@ -134,7 +134,8 @@ class Post_Data extends Detect {
 		 * Merge user submitted options with fallback defaults
 		 * Passes through nonce at the end of the function.
 		 */
-		$data = \wp_parse_args( $_POST['autodescription'], $defaults ); // phpcs:ignore -- wp_unslash() will ruin intended slashes.
+		// phpcs:ignore -- wp_unslash() will ruin intended slashes.
+		$data = \wp_parse_args( $_POST['autodescription'], $defaults );
 
 		foreach ( (array) $data as $key => $value ) :
 			switch ( $key ) :
@@ -291,10 +292,11 @@ class Post_Data extends Detect {
 
 		foreach ( $_taxonomies as $_taxonomy ) {
 			$_post_key = '_primary_term_' . $_taxonomy;
+
 			$values[ $_taxonomy ] = [
 				'action' => $this->inpost_nonce_field . '_pt',
-				'name' => $this->inpost_nonce_name . '_pt_' . $_taxonomy,
-				'value' => isset( $_POST['autodescription'][ $_post_key ] ) ? \absint( $_POST['autodescription'][ $_post_key ] ) : false,
+				'name'   => $this->inpost_nonce_name . '_pt_' . $_taxonomy,
+				'value'  => isset( $_POST['autodescription'][ $_post_key ] ) ? \absint( $_POST['autodescription'][ $_post_key ] ) : false,
 			];
 		}
 
@@ -323,13 +325,9 @@ class Post_Data extends Detect {
 			$excerpt = $this->fetch_excerpt( $the_id, $tt_id );
 
 		//* No need to parse an empty excerpt.
-		if ( '' === $excerpt )
-			return '';
+		if ( '' === $excerpt ) return '';
 
-		if ( $escape )
-			return $this->s_excerpt( $excerpt );
-
-		return $this->s_excerpt_raw( $excerpt );
+		return $escape ? $this->s_excerpt( $excerpt ) : $this->s_excerpt_raw( $excerpt );
 	}
 
 	/**
@@ -393,7 +391,7 @@ class Post_Data extends Detect {
 		 */
 		if ( '' !== $the_id ) {
 			if ( $this->is_blog_page( $the_id ) ) {
-				$args = array(
+				$args = [
 					'posts_per_page' => 1,
 					'offset'         => 0,
 					'category'       => '',
@@ -403,7 +401,7 @@ class Post_Data extends Detect {
 					'post_type'      => 'post',
 					'post_status'    => 'publish',
 					'cache_results'  => false,
-				);
+				];
 
 				$post = \get_posts( $args );
 			} else {
@@ -413,7 +411,7 @@ class Post_Data extends Detect {
 			/**
 			 * @since 2.3.3 Match the descriptions in admin as on the front end.
 			 */
-			$args = array(
+			$args = [
 				'posts_per_page' => 1,
 				'offset'         => 0,
 				'category'       => $tt_id,
@@ -421,7 +419,7 @@ class Post_Data extends Detect {
 				'post_type'      => 'post',
 				'post_status'    => 'publish',
 				'cache_results'  => false,
-			);
+			];
 
 			$post = \get_posts( $args );
 		} else {
@@ -473,17 +471,17 @@ class Post_Data extends Detect {
 		if ( null !== $post_id )
 			return $post_id;
 
-		$query = new \WP_Query( array(
+		$query = new \WP_Query( [
 			'posts_per_page'   => 1,
-			'post_type'        => array( 'post', 'page' ),
+			'post_type'        => [ 'post', 'page' ],
 			'orderby'          => 'date',
 			'order'            => 'DESC',
-			'post_status'      => array( 'publish', 'future', 'pending' ),
+			'post_status'      => [ 'publish', 'future', 'pending' ],
 			'fields'           => 'ids',
 			'cache_results'    => false,
 			'suppress_filters' => true,
 			'no_found_rows'    => true,
-		) );
+		] );
 
 		return $post_id = reset( $query->posts );
 	}
@@ -557,7 +555,7 @@ class Post_Data extends Detect {
 			//* Page Builder by SiteOrigin
 			return true;
 		elseif ( isset( $meta['_fl_builder_enabled'][0] ) && '1' === $meta['_fl_builder_enabled'][0] && defined( 'FL_BUILDER_VERSION' ) ) :
-			//* Beaver Builder by Fastline Media
+			//* Beaver Builder by Fastline Media... FIXME is this needed?
 			return true;
 		endif;
 
@@ -577,17 +575,7 @@ class Post_Data extends Detect {
 	 * @return bool True if protected, false otherwise.
 	 */
 	public function is_protected( $id = null ) {
-
-		$post = \get_post( $id, OBJECT );
-		$ret = false;
-
-		if ( isset( $post->post_password ) && '' !== $post->post_password ) {
-			$ret = true;
-		} elseif ( isset( $post->post_status ) && 'private' === $post->post_status ) {
-			$ret = true;
-		}
-
-		return $ret;
+		return $this->is_password_protected( $id ) || $this->is_private( $id );
 	}
 
 	/**
@@ -599,14 +587,8 @@ class Post_Data extends Detect {
 	 * @return bool True if private, false otherwise.
 	 */
 	public function is_password_protected( $id = null ) {
-
-		$post = \get_post( $id, OBJECT );
-		$ret = false;
-
-		if ( isset( $post->post_password ) && '' !== $post->post_password )
-			$ret = true;
-
-		return $ret;
+		$post = \get_post( $id );
+		return isset( $post->post_password ) && '' !== $post->post_password;
 	}
 
 	/**
@@ -618,14 +600,8 @@ class Post_Data extends Detect {
 	 * @return bool True if private, false otherwise.
 	 */
 	public function is_private( $id = null ) {
-
-		$post = \get_post( $id, OBJECT );
-		$ret = false;
-
-		if ( isset( $post->post_status ) && 'private' === $post->post_status )
-			$ret = true;
-
-		return $ret;
+		$post = \get_post( $id );
+		return isset( $post->post_status ) && 'private' === $post->post_status;
 	}
 
 	/**
@@ -636,15 +612,7 @@ class Post_Data extends Detect {
 	 * @return array The excluded post IDs.
 	 */
 	public function get_ids_excluded_from_search() {
-
-		$cache = $this->get_excluded_ids_from_cache();
-		$ids = array();
-
-		if ( ! empty( $cache['search'] ) ) {
-			$ids = $cache['search'];
-		}
-
-		return $ids;
+		return $this->get_excluded_ids_from_cache()['search'] ?: [];
 	}
 
 	/**
@@ -655,15 +623,7 @@ class Post_Data extends Detect {
 	 * @return array The excluded post IDs.
 	 */
 	public function get_ids_excluded_from_archive() {
-
-		$cache = $this->get_excluded_ids_from_cache();
-		$ids = array();
-
-		if ( ! empty( $cache['archive'] ) ) {
-			$ids = $cache['archive'];
-		}
-
-		return $ids;
+		return $this->get_excluded_ids_from_cache()['archive'] ?: [];
 	}
 
 	/**

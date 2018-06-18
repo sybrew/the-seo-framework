@@ -408,6 +408,7 @@ final class Scripts {
 	 * @since 3.1.0
 	 * @see static::output_view()
 	 * @uses static::$include_secret
+	 * @internal
 	 *
 	 * @param string $secret The passed secret.
 	 * @return bool True on success, false on failure.

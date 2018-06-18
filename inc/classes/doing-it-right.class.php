@@ -790,13 +790,11 @@ class Doing_It_Right extends Generate_Ldjson {
 		$noarchive = isset( $data['noarchive'] ) ? $data['noarchive'] : '';
 
 		$title_is_from_custom_field = (bool) $title_custom_field;
-		if ( $title_is_from_custom_field ) {
-			//! TODO Kill this line with fire.
-			$title = $this->title( '', '', '', array( 'term_id' => $term_id, 'taxonomy' => $taxonomy, 'get_custom_field' => true ) );
-		} else {
-			//! TODO Kill this line with fire.
-			$title = $this->title( '', '', '', array( 'term_id' => $term_id, 'taxonomy' => $taxonomy, 'get_custom_field' => false ) );
-		}
+
+		$title = $this->get_title( [
+			'id'       => $term_id,
+			'taxonomy' => $taxonomy,
+		] );
 
 		$description_is_from_custom_field = (bool) $description_custom_field;
 		//= Call sanitized version.
@@ -843,7 +841,6 @@ class Doing_It_Right extends Generate_Ldjson {
 	protected function the_seo_bar_post_data( $args ) {
 
 		$post_id = $args['post_id'];
-		$page_on_front = $this->is_static_frontpage( $post_id );
 
 		$title_custom_field = $this->get_custom_field( '_genesis_title', $post_id );
 		$description_custom_field = $this->get_description_from_custom_field( $post_id );
@@ -851,7 +848,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		$nofollow  = $this->get_custom_field( '_genesis_nofollow', $post_id );
 		$noarchive = $this->get_custom_field( '_genesis_noarchive', $post_id );
 
-		if ( $page_on_front ) {
+		if ( $this->is_static_frontpage( $post_id ) ) {
 			$title_custom_field = $this->get_option( 'homepage_title' ) ?: $title_custom_field;
 			// $description_custom_field = $description_custom_field; // We already got this.
 			$noindex   = $this->get_option( 'homepage_noindex' ) ?: $nofollow;
@@ -859,14 +856,9 @@ class Doing_It_Right extends Generate_Ldjson {
 			$noarchive = $this->get_option( 'homepage_noarchive' ) ?: $noarchive;
 		}
 
+		$title = $this->get_title( [ 'id' => $post_id ] );
+
 		$title_is_from_custom_field = (bool) $title_custom_field;
-		if ( $title_is_from_custom_field ) {
-			//! TODO Kill this line with fire.
-			$title = $this->title( '', '', '', array( 'term_id' => $post_id, 'page_on_front' => $page_on_front, 'get_custom_field' => true ) );
-		} else {
-			//! TODO Kill this line with fire.
-			$title = $this->title( '', '', '', array( 'term_id' => $post_id, 'page_on_front' => $page_on_front, 'get_custom_field' => false ) );
-		}
 
 		$description_is_from_custom_field = (bool) $description_custom_field;
 		//= Call sanitized version.
@@ -936,7 +928,7 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		$title_duplicated = false;
 		//* Check if title is duplicated from blogname.
-		if ( $this->add_title_additions() ) {
+		if ( $this->use_title_branding() ) {
 			//* We are using blognames in titles.
 
 			$blogname = $this->get_blogname();

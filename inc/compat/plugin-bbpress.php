@@ -11,7 +11,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() a
  *
  * @since 2.3.5
  */
-\add_filter( 'bbp_title', array( $this, 'title_from_cache' ), 99, 3 );
+\add_filter( 'bbp_title', [ $this, 'get_document_title' ], 99, 3 );
 
 \add_filter( 'the_seo_framework_seo_column_keys_order', __NAMESPACE__ . '\\_bbpress_filter_order_keys' );
 /**
@@ -23,7 +23,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() a
  * @param array $current_keys The current column keys TSF looks for.
  * @return array Expanded keyset.
  */
-function _bbpress_filter_order_keys( $current_keys = array() ) {
+function _bbpress_filter_order_keys( $current_keys = [] ) {
 
 	$new_keys = array(
 		'bbp_topic_freshness',
@@ -50,7 +50,7 @@ function _bbpress_filter_order_keys( $current_keys = array() ) {
  * @param bool $escape Whether the output will be sanitized.
  * @return string $title The bbPress title.
  */
-function _bbpress_filter_pre_title( $title = '', $args = array(), $escape = true ) {
+function _bbpress_filter_pre_title( $title = '', $args = [], $escape = true ) {
 
 	if ( \is_bbpress() ) {
 		if ( \bbp_is_topic_tag() ) {
@@ -183,7 +183,7 @@ function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $term 
  * @param array $args The description arguments.
  * @return string The custom description.
  */
-function _bbpress_filter_custom_field_description( $description = '', $args = array() ) {
+function _bbpress_filter_custom_field_description( $description = '', $args = [] ) {
 
 	if ( \is_bbpress() ) {
 		if ( \bbp_is_topic_tag() ) {

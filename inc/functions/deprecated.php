@@ -44,7 +44,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * @return bool true if SEO framework is active
  */
 function the_seo_framework_active() {
-	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', '<code>the_seo_framework()->loaded</code>' );
+	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', 'the_seo_framework()->loaded' );
 	return the_seo_framework()->loaded;
 }
 
@@ -60,7 +60,7 @@ function the_seo_framework_active() {
  */
 function the_seo_framework_version() {
 
-	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', '<code>THE_SEO_FRAMEWORK_VERSION</code>' );
+	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', 'THE_SEO_FRAMEWORK_VERSION' );
 
 	if ( the_seo_framework_active() )
 		return THE_SEO_FRAMEWORK_VERSION;
@@ -111,7 +111,7 @@ function the_seo_framework_dot_version( $version = '2.4' ) {
  * @return string|null The pagehook.
  */
 function the_seo_framework_options_pagehook() {
-	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', '<code>the_seo_framework()->pagehook</code>' );
+	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', 'the_seo_framework()->pagehook' );
 	return the_seo_framework()->pagehook;
 }
 
@@ -128,7 +128,7 @@ function the_seo_framework_options_pagehook() {
  * @return mixed The option value.
  */
 function the_seo_framework_get_option( $key, $use_cache = true ) {
-	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', '<code>the_seo_framework()->get_option( \'option_key\' )</code>' );
+	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', 'the_seo_framework()->get_option( \'option_key\' )' );
 	return the_seo_framework()->get_option( $key, $use_cache );
 }
 
@@ -143,7 +143,7 @@ function the_seo_framework_get_option( $key, $use_cache = true ) {
  * @return string|null The current page title.
  */
 function the_seo_framework_title_from_cache( $title = null ) {
-	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', '<code>the_seo_framework()->get_title()</code>' );
+	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', 'the_seo_framework()->get_title(...)' );
 	return the_seo_framework()->get_title();
 }
 
@@ -160,7 +160,7 @@ function the_seo_framework_title_from_cache( $title = null ) {
  * @return string|null The current page description.
  */
 function the_seo_framework_description_from_cache( $deprecated = false ) {
-	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', '<code>the_seo_framework()->get_description()</code>' );
+	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', 'the_seo_framework()->get_description()' );
 	return the_seo_framework()->get_description();
 }
 
@@ -174,7 +174,7 @@ function the_seo_framework_description_from_cache( $deprecated = false ) {
  * @return string|null The current page URL.
  */
 function the_seo_framework_the_url_from_cache() {
-	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', '<code>the_seo_framework()->get_current_canonical_url()</code>' );
+	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', 'the_seo_framework()->get_current_canonical_url()' );
 	return the_seo_framework()->get_current_canonical_url();
 }
 
@@ -189,7 +189,7 @@ function the_seo_framework_the_url_from_cache() {
  * @return bool
  */
 function the_seo_framework_is_settings_page() {
-	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', '<code>the_seo_framework()->is_seo_settings_page()</code>' );
+	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', 'the_seo_framework()->is_seo_settings_page()' );
 	return the_seo_framework()->is_seo_settings_page( true );
 }
 
@@ -211,7 +211,7 @@ function the_seo_framework_is_settings_page() {
  * @return bool True on success. False on failure.
  */
 function the_seo_framework_update_option( $new_option ) {
-	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', '<code>the_seo_framework()->update_settings()</code>' );
+	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', 'the_seo_framework()->update_settings()' );
 	return the_seo_framework()->update_settings( $new_option );
 }
 
@@ -225,6 +225,6 @@ function the_seo_framework_update_option( $new_option ) {
  * @return bool|string False on failure, the slug on success.
  */
 function the_seo_framework_options_page_slug() {
-	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', '<code>the_seo_framework()->seo_settings_page_slug</code>' );
+	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', 'the_seo_framework()->seo_settings_page_slug' );
 	return the_seo_framework()->seo_settings_page_slug;
 }

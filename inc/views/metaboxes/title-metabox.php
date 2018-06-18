@@ -174,8 +174,7 @@ switch ( $instance ) :
 					'title_rem_additions',
 					esc_html__( 'Remove Blogname from title?', 'autodescription' ) . ' ' . $info,
 					'',
-					false,
-					! $this->can_manipulate_title() // Only add this option if the theme is doing it right.
+					false
 				),
 				true
 			);

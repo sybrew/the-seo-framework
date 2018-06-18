@@ -835,4 +835,248 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'the_seo_framework()->description_from_cache()', '3.1.0', 'the_seo_framework()->get_description()' );
 		return $tsf->generate_description( '', array( 'social' => $social ) );
 	}
+
+	/**
+	 * Gets the title. Main function.
+	 * Always use this function for the title unless you're absolutely sure what you're doing.
+	 *
+	 * This function is used for all these: Taxonomies and Terms, Posts, Pages, Blog, front page, front-end, back-end.
+	 *
+	 * @since 1.0.0
+	 * @since 3.1.0 Deprecated
+	 * @deprecated
+	 *
+	 * Params required wp_title filter :
+	 * @param string $title The Title to return
+	 * @param string $sep The Title sepeartor
+	 * @param string $seplocation The Title sepeartor location ( accepts 'left' or 'right' )
+	 *
+	 * @since 2.4.0:
+	 * @param array $args : accepted args : {
+	 *    @param int term_id The Taxonomy Term ID when taxonomy is also filled in. Else post ID.
+	 *    @param string taxonomy The Taxonomy name.
+	 *    @param bool page_on_front Page on front condition for example generation.
+	 *    @param bool placeholder Generate placeholder, ignoring options.
+	 *    @param bool notagline Generate title without tagline.
+	 *    @param bool meta Ignore doing_it_wrong. Used in og:title/twitter:title
+	 *    @param bool get_custom_field Do not fetch custom title when false.
+	 *    @param bool description_title Fetch title for description.
+	 *    @param bool is_front_page Fetch front page title.
+	 * }
+	 * @return string $title Title
+	 */
+	public function title( $title = '', $sep = '', $seplocation = '', $args = [] ) {
+
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->title()', '3.1.0', 'the_seo_framework()->get_title(...)' );
+
+		if ( isset( $args['term_id'] ) ) {
+			$new_args = [];
+			$new_args['id'] = $args['term_id'];
+		}
+		if ( isset( $args['taxonomy'] ) ) {
+			$new_args = isset( $new_args ) ? $new_args : [];
+			$new_args['taxonomy'] = $args['taxonomy'];
+		}
+		if ( ! empty( $args['is_front_page'] ) ) {
+			$new_args = [ 'id' => $tsf->get_the_front_page_ID() ];
+		}
+
+		return $tsf->get_title( empty( $new_args ) ? null : $new_args );
+	}
+
+	/**
+	 * Generate the title based on conditions for the home page.
+	 *
+	 * @since 2.3.4
+	 * @since 2.3.8 Now checks tagline option.
+	 * @since 3.1.0 Deprecated.
+	 * @deprecated
+	 * @access private
+	 *
+	 * @param bool $get_custom_field Fetch Title from Custom Fields.
+	 * @param string $seplocation The separator location
+	 * @param string $deprecated Deprecated: The Home Page separator location
+	 * @param bool $escape Parse Title through saninitation calls.
+	 * @param bool $get_option Whether to fetch the SEO Settings option.
+	 * @return array {
+	 *    'title'       => (string) $title : The Generated "Title"
+	 *    'blogname'    => (string) $blogname : The Generated "Blogname"
+	 *    'add_tagline' => (bool) $add_tagline : Whether to add the tagline
+	 *    'seplocation' => (string) $seplocation : The Separator Location
+	 * }
+	 */
+	public function generate_home_title() {
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->generate_home_title()', '3.1.0', 'the_seo_framework()->get_title(...)' );
+		return array(
+			'title' => $tsf->get_unprocessed_title_from_generation( array( 'id' => $tsf->get_the_front_page_ID() ) ),
+			'blogname' =>  $tsf->get_home_page_tagline(),
+			'add_tagline' => $tsf->use_home_page_title_tagline(),
+			'seplocation' => $tsf->get_title_seplocation(),
+		);
+	}
+
+	/**
+	 * Gets the archive Title, including filter. Also works in admin.
+	 *
+	 * @NOTE Taken from WordPress core. Altered to work for metadata.
+	 * @see WP Core get_the_archive_title()
+	 *
+	 * @since 2.6.0
+	 * @since 2.9.2 : Added WordPress core filter 'get_the_archive_title'
+	 * @since 3.0.4 : 1. Removed WordPress core filter 'get_the_archive_title'
+	 *                2. Added filter 'the_seo_framework_generated_archive_title'
+	 * @since 3.1.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param \WP_Term|null $term The Term object.
+	 * @param array $args The Title arguments.
+	 * @return string The Archive Title, not escaped.
+	 */
+	public function get_the_real_archive_title( $term = null, $args = array() ) {
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->get_the_real_archive_title()', '3.1.0', 'the_seo_framework()->get_generated_archive_title()' );
+		return $tsf->get_generated_archive_title( $term );
+	}
+
+	/**
+	 * Determines whether to use a title prefix or not.
+	 *
+	 * @since 2.6.0
+	 * @since 3.0.0 Removed second parameter.
+	 * @since 3.1.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool
+	 */
+	public function use_archive_prefix() {
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->use_archive_prefix()', '3.1.0', 'the_seo_framework()->use_generated_archive_prefix()' );
+		return $tsf->use_generated_archive_prefix();
+	}
+
+	/**
+	 * Adds title pagination, if paginated.
+	 *
+	 * @since 2.6.0
+	 * @since 3.1.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $title The current Title.
+	 * @return string Title with maybe pagination added.
+	 */
+	public function add_title_pagination( $title ) {
+
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->add_title_pagination()', '3.1.0', 'the_seo_framework()->merge_title_pagination()' );
+
+		if ( $this->is_404() || $this->is_admin() || $this->is_preview() )
+			return $title;
+		$page = $this->page();
+		$paged = $this->paged();
+		if ( $page && $paged ) {
+			/**
+			 * @since 2.4.3
+			 * Adds page numbering within the title.
+			 */
+			if ( $paged >= 2 || $page >= 2 ) {
+				$sep = $this->get_title_separator();
+				$page_number = max( $paged, $page );
+				/**
+				 * Applies filters 'the_seo_framework_title_pagination' : string
+				 *
+				 * @since 2.9.4
+				 *
+				 * @param string $pagination  The pagination addition.
+				 * @param string $title       The old title.
+				 * @param int    $page_number The page number.
+				 * @param string $sep         The separator used.
+				 */
+				$pagination = \apply_filters_ref_array(
+					'the_seo_framework_title_pagination',
+					array(
+						/* translators: %d = page number. Front-end output. */
+						" $sep " . sprintf( \__( 'Page %d', 'autodescription' ), $page_number ),
+						$title,
+						$page_number,
+						$sep,
+					)
+				);
+				$title .= $pagination;
+			}
+		}
+		return $title;
+	}
+
+	/**
+	 * Adds the title additions to the title.
+	 *
+	 * @since 2.6.0
+	 * @since 3.1.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $title The tite.
+	 * @param string $blogname The blogname.
+	 * @param string $seplocation The separator location.
+	 * @return string Title with possible additions.
+	 */
+	public function process_title_additions( $title = '', $blogname = '', $seplocation = '' ) {
+
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->process_title_additions()', '3.1.0', 'the_seo_framework()->merge_title_branding()' );
+
+		$sep = $tsf->get_title_separator();
+
+		$title = trim( $title );
+		$blogname = trim( $blogname );
+
+		if ( $blogname && $title ) {
+			if ( 'left' === $seplocation ) {
+				$title = $blogname . " $sep " . $title;
+			} else {
+				$title = $title . " $sep " . $blogname;
+			}
+		}
+
+		return $title;
+	}
+
+	/**
+	 * Cache current Title in static variable
+	 * Must be called inside the loop
+	 *
+	 * @since 2.2.2
+	 * @since 2.4.0 : If the theme is doing it right, override cache parameters to speed things up.
+	 * @staticvar array $title_cache
+	 *
+	 * @param string $title The Title to return
+	 * @param string $sep The Title sepeartor
+	 * @param string $seplocation The Title sepeartor location, accepts 'left' or 'right'.
+	 * @param bool $meta Ignore theme doing it wrong.
+	 * @return string The title
+	 */
+	public function title_from_cache( $title = '', $sep = '', $seplocation = '', $meta = false ) {
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->title_from_cache()', '3.1.0', 'the_seo_framework()->get_title(...)' );
+		return $meta ? $tsf->get_open_graph_title() : $tsf->get_title();
+	}
+
+	/**
+	 * Fetches single term title.
+	 *
+	 * @since 2.6.0
+	 * @since 3.1.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $depr Deprecated.
+	 * @param bool   $depr Deprecated.
+	 * @param \WP_Term|null $term The WP_Term object.
+	 * @return string Single term title.
+	 */
+	public function single_term_title( $depr = '', $_depr = true, $term = null ) {
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->single_term_title()', '3.1.0', 'the_seo_framework()->get_generated_single_term_title()' );
+		return $tsf->get_generated_single_term_title( $term );
+	}
 }

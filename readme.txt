@@ -245,11 +245,31 @@ Transporting Categories, Tags and other terms' SEO data isn't supported.
 
 **Release date**
 
-* July TODOth, 2018
+* August TODOth, 2018
+
+NOTE: ref: https://theseoframework.com/?p=1792
+
+1. PHP 5.3 support has been dropped. Here's why:
+	* TODO
+2. The minimum required WordPress version now is 4.6. Here's why:
+	* TODO
+
+**Feature highlights:**
+
+* TODO
+
 
 **Summarized:**
 
+* Like previous updates, this update
 * TODO
+
+**For everyone: Better and faster titles**
+
+* Over the years, the title generation code became bigger, unsustainable, and eventually unmaintainable. So, it's now rewritten to almost half its previous size, being more straightforward and logical, without sacrificing any important features.
+* With this rewrite, we're embracing what WordPress has to offer in filters and translations. So, you can expect much greater compatibility with other plugins and your favorite language.
+* Having conditional additions to the title was the most requested feature, and that's now also available.
+* Note that this change heavily affects the title generation API. Although this change deems API adjustments less necessary, if you've used title functions or filters within this plugin and still need them, then go see the detailed log for needed adjustments. TODO make write-up, consider old features.
 
 **For developers: About the API**
 
@@ -272,20 +292,39 @@ TODO: (regression) Fix the spacing of the tab icons on the settings page.
 * **For everyone:**
 	* **Added:**
 		* TODO
+		* New title options, including:
+			* TODO Manual 404 title.
+			* TODO Manual search results prefix.
+			* TODO A toggle that disabled title additions when a manual title is used.
+			* TODO Paginated Title separator
+		* TODO New robots options that allow setting robots for each post type.
+		* TODO New sitemap options that allow setting including for each post type.
+		* TODO Doing it Right conditions for Private, Protected, Draft...
+		* TODO New option that prevents automated descriptions.
 	* **Improved:**
 		* TODO
 		* The plugin can now downgrade its database version to the currently installed version automatically. This makes sure necessary future upgrade procedures are reinstated when you choose to downgrade (for any reason).
-			* Since TSF v3.0.6 this happens when the user saved the options, but this could lead to inconsistent behavior on WordPress Multisite installations.
+			* Since TSF v3.0.6 this happens when a user saved the options, but this could lead to inconsistent behavior on WordPress Multisite installations.
 		* We removed a lot of redundant code (like option upgrade checks), which have long been superseded by better standards.
 		* Code and URL input types (Twitter profile, Webmasters' verification codes) now always flow from left to right, even if your site's written language setting is otherwise.
 		* Tooltip arrows now always follow your mouse, for a more natural look.
 		* Tooltips now support RTL screens without the arrow overflowing.
+		* Canonical, redirect, and image URLs are no longer uselessly suggested by the browser.
+		* TODO Beaver Builder templates are no longer in the sitemap. (not my fault...) `example.com/fl-builder-template/title/...`
+		* TODO bbPress replies are no longer in the sitemap. (technically, neither our fault).
+		* TODO https://wordpress.org/support/topic/problem-with-title-3/#post-10410406 fix link and verbatim, the "verified" business profile can now be any business page, even without instant articles.
+		* TODO Open Graph data validation (e.g. missing descriptions).
+		* TODO Doing it right check for empty description. Make it blue to ask if they intended it to be this way.
+			* This definitely occurs when the post is private, and no custom description is set.
 	* **Changed:**
 		* TSF now requires WordPress 4.6, from WordPress 4.4.
 		* TSF now requires PHP 5.4, from PHP 5.6.
 		* URL input types (Canonical, Redirect) are now `url` instead of `text`. This means you need to supply a correct URL according to the browser, instead that only TSF checks for correctness after it's being saved.
+		* Term title prefixes are now applied to Open Graph and Twitter titles too.
+		* The [Schema.org effort states](https://schema.org/docs/faq.html#19) they're moving towards and are going to prefer HTTPS. So, after two years including some testing, we abide to be future-proof. Note that it's a parameter, not a link.
 	* **Removed:**
 		* Firefox post list table compatibility and fixes that account for the wide SEO Bar; they don't work anymore as intended, and they cause issues on other well-built browsers.
+		* Counters now only work with JavaScript enabled. In PHP, this added too much overhead as we were predicting and counting in code.
 	* **Fixed:**
 		* When reactivating the plugin, there's no longer a chance for your SEO options to be wiped on a random database error.
 			* We used to delete the options, so we could reactivate option-auto-loading; now we add a buster-timestamp.
@@ -297,15 +336,13 @@ TODO: (regression) Fix the spacing of the tab icons on the settings page.
 		* TODO Social description fields now render special characters in placeholders correctly.
 
 * **For translators:**
-	* **Added:**
-		* TODO Location:
-			* TODO "Sentences"
-	* **Updated:**
-		* TODO
-	* **Changed:**
-		* TODO
-	* **Removed:**
-		* "New SEO Settings have been updated"
+	* **New translations are available.**
+	* **Notes:**
+		* We no longer list every single linguistic change here. It's very tedious and slows down development time tremendously.
+		* The new translations are available at the [translation page](https://translate.wordpress.org/projects/wp-plugins/autodescription)
+	* TODO:
+		* "Removed prefixes from title" should be more clear to point to archives-only.
+		* "On archives a descriptive prefix may be added to the title." needs a comma
 
 * **For developers:**
 	* **Tips:**
@@ -314,14 +351,15 @@ TODO: (regression) Fix the spacing of the tab icons on the settings page.
 		* Want to make sure you can use TSF's API? Call `the_seo_framework()->loaded`.
 	* **Added:**
 		* TODO
-		* Singleton class '\The_SEO_Framework\Builders\Scripts', via a "Builder Pattern", callable as e.g. `the_seo_framework()->Scripts()::function_name()`.
+		* Singleton class `\The_SEO_Framework\Builders\Scripts`, via a "Builder Pattern", callable as e.g. `the_seo_framework()->Scripts()::function_name()`.
 			* This is the first class of this kind in The SEO Framework plugin.
+		* The plugin now tries to remove all active `wp_title` filters, like it has been doing for `pre_get_document_title` a long time.
 	* **Improved:**
 		* TODO
 		* A "doing it wrong" notice is now supplied when calling `the_seo_framework()` too early.
 		* Fixed all "non-passive event listener" warnings caused by jQuery, by using our own event handlers.
 	* **Changed:**
-		* TODO
+		* The title generation has been overhauled.
 		* The plugin now loads within the `/bootstrap/` folder via the plugin's initial `autodescription.php` file, where you can more easily discern how the plugin's loaded.
 		* [JavaScript]: Tooltips are now instanced via their own object named `window.tsfTT`, eliminating the previous JS API.
 			* The auto-invoked API still works as intended, via CSS.
@@ -332,7 +370,8 @@ TODO: (regression) Fix the spacing of the tab icons on the settings page.
 		* Many deprecated methods, which were deprecated on or before TSF v2.9.4 (August 30, 2017).
 		* The plugin's automagic-upgrader has been removed, which has been replaced with a static, ordered and semantic plugin upgrader since TSF v2.7.0.
 		* Meta-generator methods' debugging have been removed.
-		* TODO `the_seo_framework()->theme_doing_it_right_transient` and all that's related.
+		* Title "doing it wrong" checks have been removed.
+		* TODO word this better: `the_seo_framework()->theme_doing_it_right_transient` and all that's related.
 		* TODO
 	* **Fixed:**
 		* The wpForo title compatibility filter no longer emits a PHP notice when no title is generated from their plugin.
@@ -382,6 +421,37 @@ TODO: (regression) Fix the spacing of the tab icons on the settings page.
 				* `enqueue_media_scripts()`
 				* `enqueue_primaryterm_scripts()`
 				* `_init_admin_scripts()`, private. Use `init_admin_scripts()` instead.
+			* In class `\The_SEO_Framework\Generate_Image` -- Factory: `the_seo_framework()`
+				* `register_image_dimension()`
+			* In class `\The_SEO_Framework\Generate_Title` -- Factory: `the_seo_framework()`
+				* `get_title()`
+				* `get_title_from_custom_field()`
+				* `get_generated_title()`
+				* `get_unprocessed_title_from_generation()`
+				* `generate_title_from_query()`
+				* `generate_title_from_args()`
+				* `get_generated_archive_title()`
+				* `get_generated_single_post_title()`
+				* `get_generated_single_term_title()`
+				* `get_generated_post_type_archive_title()`
+				* `get_generated_search_query_title()`
+				* `get_static_404_title()`
+				* `merge_title_branding()`
+				* `merge_title_pagination()`
+				* `merge_title_protection()`
+				* `use_title_branding()`
+				* `use_custom_title_branding()`
+				* `use_generated_archive_prefix()`
+				* `use_home_page_title_tagline()`
+				* `get_home_page_tagline()`
+				* TODO are there more??
+			* In class `\The_SEO_Framework\Builders\Scripts` -- Factory: `the_seo_framework()->Scripts()`.
+				* `::prepare()`
+				* `::get_status_of()`
+				* `::enqueue()`
+				* `::register()`
+				* `::verify()`
+				* `::_prepare_admin_scripts()`, private.
 		* **Removed:**
 			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
 				* `site_updated_plugin_option()`
@@ -404,7 +474,39 @@ TODO: (regression) Fix the spacing of the tab icons on the settings page.
 			* In class: `\The_SEO_Framework\Inpost` -- Factory: `the_seo_framework()`
 				* `_include_primary_term_selector_template()`, was marked private.
 			* In class: `\The_SEO_Framework\Render` -- Factory: `the_seo_framework()`
+				* `title_from_cache()`
 				* `use_googleplus_tags()` -- The G+ project uses Open Graph and structured data.
+			* In class: `\The_SEO_Framework\Title` -- Factory: `the_seo_framework()`
+				* TODO: Consider deprecating these instead.
+				* `build_title()`
+				* `build_title_doingitwrong()`
+				* `parse_title_args()`
+				* `reparse_title_args()`
+				* `process_title_additions()`
+				* `build_title_notagline()`
+				* `get_notagline_title()`
+				* `generate_title()`
+				* `title_for_home()`
+				* `title_for_terms()`
+				* `title_from_custom_field()`
+				* `get_custom_field_title()`
+				* `post_title_from_ID()`
+				* `get_the_search_title()`
+				* `get_the_404_title()`
+				* `add_title_additions()`
+				* `add_title_protection()`
+				* `do_title_pre_filter()`
+				* `do_title_pro_filter()`
+				* `home_page_add_title_tagline()`
+			* In class: `\The_SEO_Framework\Detect` -- Factory: `the_seo_framework()`
+				* `set_tell_title_doing_it_wrong()`
+				* `tell_title_doing_it_wrong()`
+				* `theme_title_doing_it_right()`
+				* `theme_title_fix_active()`
+				* `can_manipulate_title()`
+			* In class: `\The_SEO_Framework\Cache` -- Factory: `the_seo_framework()`
+				* `set_theme_dir_transient()`
+				* `delete_theme_dir_transient()`
 		* **Deprecated:**
 			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
 				* `get_meta_output_cache_key()`, use `get_meta_output_cache_key_by_query()` (without Page ID) or `get_meta_output_cache_key_by_type()` (with page ID) instead.
@@ -412,6 +514,14 @@ TODO: (regression) Fix the spacing of the tab icons on the settings page.
 				* `get_prefered_scheme()`, use `get_preferred_scheme()` instead. (typo)
 			* In class: `\The_SEO_Framework\Render` -- factory: `the_seo_framework()`
 				* `description_from_cache()`, use `get_description()` instead.
+			* In class: `\The_SEO_Framework\Generate_Title` -- factory: `the_seo_framework()`
+				* `title()`, goodbye, old friend. Use `get_title()` instead.
+				* `generate_home_title()`, use `get_title()` instead.
+				* `get_the_real_archive_title()`, use `get_generated_archive_title()` instead.
+				* `single_term_title()`, use `get_generated_single_term_title()` instead.
+				* `process_title_additions()`, use `merge_title_branding()` instead.
+				* `add_title_pagination()`, use `merge_title_pagination()` instead.
+				* `use_archive_prefix()`, use `use_generated_archive_prefix()` instead.
 		* **Moved:**
 			* **Note:** All deprecated methods are automatically moved to `\The_SEO_Framework\Deprecated`. This class is auto-loaded whenever a non-existing or deprecated method is called.
 			* **Note:** The changes below (currently) don't affect the factory method: `the_seo_framework()`.
@@ -421,12 +531,22 @@ TODO: (regression) Fix the spacing of the tab icons on the settings page.
 		* **Changed:**
 			* In class: `\The_SEO_Framework\Generate_Url` -- Factory: `the_seo_framework()`
 				* `set_url_scheme()`, the third parameter is now deprecated and shouldn't be used.
+			* In class `\The_SEO_Framework\Generate_Title` -- Factory: `the_seo_framework()`
+				* For these methods, the first parameter is now expecting an array or null, instead of an ID only:
+					* `get_twitter_title()`
+					* `get_open_graph_title()`
+					* `get_generated_twitter_title()`
+					* `get_generated_open_graph_title()`
 	* **Property notes:**
 		* **Removed:**
 			* In class: `\The_SEO_Framework\Admin_Init` -- Factory: `the_seo_framework()`
 				* `css_name`
 				* `js_name`
 				* `page_base_file`
+			* In class: `\The_SEO_Framework\Render` -- Factory: `the_seo_framework()`
+				* `title_doing_it_wrong`
+			* In class: `\The_SEO_Framework\Cache` -- Factory: `the_seo_framework()`
+				* `theme_doing_it_right_transient`
 	* **Action notes:**
 		* **Added:**
 			* `the_seo_framework_admin_loaded`. Runs after the plugin factory is loaded in the admin-end.
@@ -435,15 +555,35 @@ TODO: (regression) Fix the spacing of the tab icons on the settings page.
 	* **Filter notes:**
 		* **Added:**
 			* `(array) the_seo_framework_scripts`, allows you to adjust (or add to) the default script parameters.
+			* `(string) the_seo_framework_title_from_custom_field`, the meta title from custom fields.
+			* `(string) the_seo_framework_title_from_query`, the meta title from (inputted/detected) query.
 		* **Changed:**
 			* `the_seo_framework_detect_page_builder`
 				1. Now returns `null` by default.
 				2. Now, when a boolean (either true or false) is defined, it'll short-circuit this function. See [this comment](https://github.com/sybrew/the-seo-framework/issues/279#issuecomment-392735509) for more information.
+			* `the_seo_framework_custom_field_title`
+				* The first parameter now contains the unprocessed title.
+				* The third parameter is deprecated.
+				* The second parameter is now an array.
+				* This filter now works for the home page custom field title, too.
+				* Internally, this filter is now applied to the SEO Bar, too.
 		* **Removed:**
 			* `the_seo_framework_update_options_at_update`
 			* `the_seo_framework_canonical_force_scheme` (was deprecated since 2.8.0). Use `the_seo_framework_preferred_url_scheme` instead.
-			* `the_seo_framework_seo_bar_pill`
-			* `the_seo_framework_admin_color_css`
+			* `the_seo_framework_seo_bar_pill`, and all related supporting visuals -- for improved browser painting performance.
+			* `the_seo_framework_admin_color_css`, we standardized this filter's behavior into the new script handler via other means.
+			* **Title related:**
+				* `the_seo_framework_title_args`
+				* `the_seo_framework_search_title`
+				* `the_seo_framework_pre_add_title`, use `the_seo_framework_generated_title` instead.
+				* `the_seo_framework_pro_add_title`, use `the_seo_framework_generated_title` instead.
+				* `the_seo_framework_custom_field_title`, use `the_seo_framework_title_from_custom_field` instead.
+				* `the_seo_framework_add_blogname_to_title`, use the options API instead.
+				* `the_seo_framework_use_archive_title_prefix`, use the options API instead.
+				* `the_seo_framework_do_shortcodes_in_title`, use any of the two new title filters mentioned right above and return `do_shortcode( $title )` instead.
+				* `the_seo_framework_title_pagination`
+				* `the_seo_framework_title_seplocation_front`, use the options API instead.
+				* `the_seo_framework_title_seplocation`, use the options API instead.
 	* **Structural notes:**
 		* **Added:**
 			* Folder `/bootstrap/`, with:
@@ -458,11 +598,11 @@ TODO: (regression) Fix the spacing of the tab icons on the settings page.
 			* File `/inc/compat/wp-470.php`.
 			* File `/inc/classes/silencer.class.php`.
 		* **Removed:**
-			* File `/inc/compat/wp-460.php`.
-			* File `/inc/functions/plugin-activation.php`.
-			* File `/inc/functions/plugin-deactivation.php`.
-			* File `/inc/functions/upgrade.php`.
-			* File `load.php`.
+			* File `/inc/compat/wp-460.php` and all its contents.
+			* File `/inc/functions/plugin-activation.php`, moved to `/bootstrap/activation.php`.
+			* File `/inc/functions/plugin-deactivation.php`, moved to `/bootstrap/deactivation.php`.
+			* File `/inc/functions/upgrade.php`, moved to `/bootstrap/upgrade.php`.
+			* File `/load.php` moved to `/bootstrap/load.php`.
 			* Folder `/seotips/`, with:
 				* `seotips.txt`
 				* `index.php`

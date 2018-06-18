@@ -72,14 +72,8 @@ switch ( $instance ) :
 		break;
 
 	case 'inpost_general' :
-		//* Temporarily. TODO refactor.
-		$tit_len_parsed = $desc_len_parsed = '';
-		$doctitle_placeholder = $description_placeholder = '';
-		$this->_get_inpost_general_tab_vars( $tit_len_parsed, $doctitle_placeholder, $desc_len_parsed, $description_placeholder );
-		//= End temporarily.
-
 		if ( $this->is_option_checked( 'display_seo_bar_metabox' ) ) :
-		?>
+			?>
 			<div class="tsf-flex-setting tsf-flex">
 				<div class="tsf-flex-setting-label tsf-flex">
 					<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
@@ -94,8 +88,22 @@ switch ( $instance ) :
 					</div>
 				</div>
 			</div>
-		<?php
+			<?php
 		endif;
+
+		if ( $this->is_static_frontpage( $post_id ) ) {
+			$_home_title = $this->get_option( 'homepage_title' );
+
+			$title_placeholder = $_home_title
+							   ? $this->get_title_from_custom_field( [ 'id' => $post_id ] )
+							   : $this->get_generated_title( [ 'id' => $post_id ] );
+
+			$description_placeholder = $this->escape_description( $this->get_option( 'homepage_description' ) )
+									?: $this->get_generated_description( $post_id );
+		} else {
+			$title_placeholder       = $this->get_generated_title( [ 'id' => $post_id ] );
+			$description_placeholder = $this->get_generated_description( $post_id );
+		}
 
 		?>
 		<div class="tsf-flex-setting tsf-flex">
@@ -111,7 +119,7 @@ switch ( $instance ) :
 					</label>
 					<?php
 					$this->get_option( 'display_character_counter' )
-						and $this->output_character_counter_wrap( 'autodescription_title', $tit_len_parsed );
+						and $this->output_character_counter_wrap( 'autodescription_title' );
 					$this->get_option( 'display_pixel_counter' )
 						and $this->output_pixel_counter_wrap( 'autodescription_title', 'title' );
 					?>
@@ -119,7 +127,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id="tsf-title-wrap">
-					<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" placeholder="<?php echo esc_attr( $doctitle_placeholder ); ?>" value="<?php echo esc_attr( $this->get_custom_field( '_genesis_title', $post_id ) ); ?>" autocomplete=off />
+					<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" placeholder="<?php echo esc_attr( $title_placeholder ); ?>" value="<?php echo esc_attr( $this->get_custom_field( '_genesis_title', $post_id ) ); ?>" autocomplete=off />
 					<?php echo $this->output_js_title_elements(); ?>
 				</div>
 			</div>
@@ -138,7 +146,7 @@ switch ( $instance ) :
 					</label>
 					<?php
 					$this->get_option( 'display_character_counter' )
-						and $this->output_character_counter_wrap( 'autodescription_description', $desc_len_parsed );
+						and $this->output_character_counter_wrap( 'autodescription_description' );
 					$this->get_option( 'display_pixel_counter' )
 						and $this->output_pixel_counter_wrap( 'autodescription_description', 'description' );
 					?>
@@ -176,7 +184,7 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<input class="large-text" type="url" name="autodescription[_genesis_canonical_uri]" id="autodescription_canonical" placeholder="<?php echo esc_url( $canonical_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_genesis_canonical_uri' ) ); ?>" />
+				<input class="large-text" type="url" name="autodescription[_genesis_canonical_uri]" id="autodescription_canonical" placeholder="<?php echo esc_url( $canonical_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_genesis_canonical_uri' ) ); ?>" autocomplete=off />
 			</div>
 		</div>
 
@@ -307,7 +315,7 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<input class="large-text" type="url" name="autodescription[redirect]" id="autodescription_redirect" value="<?php echo esc_url( $this->get_custom_field( 'redirect' ) ); ?>" />
+				<input class="large-text" type="url" name="autodescription[redirect]" id="autodescription_redirect" value="<?php echo esc_url( $this->get_custom_field( 'redirect' ) ); ?>" autocomplete=off />
 			</div>
 		</div>
 		<?php
@@ -348,7 +356,7 @@ switch ( $instance ) :
 					</label>
 					<?php
 					$this->get_option( 'display_character_counter' )
-						and $this->output_character_counter_wrap( 'autodescription_og_title', $og_tit_len_parsed );
+						and $this->output_character_counter_wrap( 'autodescription_og_title' );
 					?>
 				</div>
 			</div>
@@ -371,7 +379,7 @@ switch ( $instance ) :
 					</label>
 					<?php
 					$this->get_option( 'display_character_counter' )
-						and $this->output_character_counter_wrap( 'autodescription_og_description', $og_desc_len_parsed );
+						and $this->output_character_counter_wrap( 'autodescription_og_description' );
 					?>
 				</div>
 			</div>
@@ -392,7 +400,7 @@ switch ( $instance ) :
 					</label>
 					<?php
 					$this->get_option( 'display_character_counter' )
-						and $this->output_character_counter_wrap( 'autodescription_twitter_title', $tw_tit_len_parsed );
+						and $this->output_character_counter_wrap( 'autodescription_twitter_title' );
 					?>
 				</div>
 			</div>
@@ -415,7 +423,7 @@ switch ( $instance ) :
 					</label>
 					<?php
 					$this->get_option( 'display_character_counter' )
-						and $this->output_character_counter_wrap( 'autodescription_twitter_description', $tw_desc_len_parsed );
+						and $this->output_character_counter_wrap( 'autodescription_twitter_description', '' );
 					?>
 				</div>
 			</div>
@@ -450,7 +458,7 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<input class="large-text" type="url" name="autodescription[_social_image_url]" id="autodescription_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_social_image_url' ) ); ?>" />
+				<input class="large-text" type="url" name="autodescription[_social_image_url]" id="autodescription_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_social_image_url' ) ); ?>" autocomplete=off />
 				<div class="hide-if-no-js tsf-social-image-buttons">
 					<?php
 					//= Already escaped.

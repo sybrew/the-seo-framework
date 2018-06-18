@@ -318,7 +318,7 @@ class Init extends Query {
 	protected function init_front_end_filters() {
 
 		//* Edit the robots.txt file
-		\add_filter( 'robots_txt', array( $this, 'robots_txt' ), 10, 2 );
+		\add_filter( 'robots_txt', [ $this, 'robots_txt' ], 10, 2 );
 
 		/**
 		 * Applies filters 'the_seo_framework_overwrite_titles'
@@ -333,11 +333,9 @@ class Init extends Query {
 			\remove_all_filters( 'pre_get_document_title', false );
 
 			//* New WordPress 4.4.0 filter. Hurray! It's also much faster :)
-			\add_filter( 'pre_get_document_title', array( $this, 'title_from_cache' ), 10 );
-			//* Override AnsPress Theme Title
-			\add_filter( 'ap_title', array( $this, 'title_from_cache' ), 99, 1 );
-			//* Override Woo Themes Title
-			\add_filter( 'woo_title', array( $this, 'title_from_cache' ), 99 );
+			\add_filter( 'pre_get_document_title', array( $this, 'get_document_title' ), 10 );
+			//* Override WooThemes Title
+			\add_filter( 'woo_title', [ $this, 'get_document_title' ], 99 );
 
 			/**
 			 * Applies filters 'the_seo_framework_manipulate_title' : boolean
@@ -345,8 +343,9 @@ class Init extends Query {
 			 * @since 2.4.1
 			 */
 			if ( \apply_filters( 'the_seo_framework_manipulate_title', true ) ) {
+				\remove_all_filters( 'wp_title', false );
 				//* Override WordPress Title
-				\add_filter( 'wp_title', array( $this, 'title_from_cache' ), 9, 3 );
+				\add_filter( 'wp_title', array( $this, 'get_wp_title' ), 9, 3 );
 			}
 		}
 	}

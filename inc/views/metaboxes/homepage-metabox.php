@@ -29,28 +29,28 @@ switch ( $instance ) :
 		 *    )
 		 * }
 		 */
-		$default_tabs = array(
-			'general' => array(
+		$default_tabs = [
+			'general' => [
 				'name'     => __( 'General', 'autodescription' ),
-				'callback' => array( $this, 'homepage_metabox_general_tab' ),
+				'callback' => [ $this, 'homepage_metabox_general_tab' ],
 				'dashicon' => 'admin-generic',
-			),
-			'additions' => array(
+			],
+			'additions' => [
 				'name'     => __( 'Additions', 'autodescription' ),
-				'callback' => array( $this, 'homepage_metabox_additions_tab' ),
+				'callback' => [ $this, 'homepage_metabox_additions_tab' ],
 				'dashicon' => 'plus',
-			),
-			'robots' => array(
+			],
+			'robots' => [
 				'name'     => __( 'Robots', 'autodescription' ),
-				'callback' => array( $this, 'homepage_metabox_robots_tab' ),
+				'callback' => [ $this, 'homepage_metabox_robots_tab' ],
 				'dashicon' => 'visibility',
-			),
-			'social' => array(
+			],
+			'social' => [
 				'name'     => __( 'Social', 'autodescription' ),
-				'callback' => array( $this, 'homepage_metabox_social_tab' ),
+				'callback' => [ $this, 'homepage_metabox_social_tab' ],
 				'dashicon' => 'share',
-			),
-		);
+			],
+		];
 
 		/**
 		 * Applies filters the_seo_framework_homepage_settings_tabs : array see $default_tabs
@@ -65,7 +65,6 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_homepage_metabox_general' :
-
 		$language = $this->google_language();
 
 		$description_from_post_message = $title_from_post_message = '';
@@ -76,27 +75,15 @@ switch ( $instance ) :
 
 		$home_id = $this->get_the_front_page_ID();
 
-		/**
-		 * Create a placeholder for when there's no custom HomePage title found.
-		 * @since 2.2.4
-		 */
-		$home_title_args = $this->generate_home_title( true, '', '', true, false );
-		if ( $this->home_page_add_title_tagline() ) {
-			$home_title_placeholder = $this->process_title_additions( $home_title_args['blogname'], $home_title_args['title'], $home_title_args['seplocation'] );
+		$frompost_title = $this->has_page_on_front() ? $this->get_custom_field( '_genesis_title', $home_id ) : '';
+		if ( $frompost_title ) {
+			//! FIXME: Doesn't consider filters.
+			if ( $this->use_title_branding( [ 'id' => $home_id ] ) ) {
+				$this->merge_title_branding( $frompost_title, [ 'id' => $home_id ] );
+			}
+			$home_title_placeholder = $frompost_title;
 		} else {
-			$home_title_placeholder = $home_title_args['title'];
-		}
-
-		/**
-		 * Check for options to calculate title length.
-		 *
-		 * @since 2.3.4
-		 */
-		if ( $this->get_option( 'homepage_title' ) ) {
-			$home_title_args = $this->generate_home_title();
-			$tit_len_pre = $this->process_title_additions( $home_title_args['title'], $home_title_args['blogname'], $home_title_args['seplocation'] );
-		} else {
-			$tit_len_pre = $home_title_placeholder;
+			$home_title_placeholder = $this->get_generated_title( [ 'id' => $home_id ] );
 		}
 
 		//* Fetch the description from the home page.
@@ -141,17 +128,6 @@ switch ( $instance ) :
 			$description_from_post_message = sprintf( __( 'Note: The %1$s is fetched from the %2$s on the %3$s.', 'autodescription' ), $description_i18n, $page_seo_settings_i18n, $home_page_i18n );
 		}
 
-		$desc_len_pre = $this->get_field_value( 'homepage_description' ) ?: $description_placeholder;
-
-		/**
-		 * Convert to what Google outputs.
-		 *
-		 * This will convert e.g. &raquo; to a single length character.
-		 * @since 2.3.4
-		 */
-		$tit_len = html_entity_decode( $this->escape_title( $tit_len_pre ) );
-		$desc_len = html_entity_decode( $this->escape_description( $desc_len_pre ) );
-
 		?>
 		<p>
 			<label for="<?php $this->field_id( 'homepage_title_tagline' ); ?>" class="tsf-toblock">
@@ -175,7 +151,7 @@ switch ( $instance ) :
 			</label>
 			<?php
 			//* Output these unconditionally, with inline CSS attached to allow reacting on settings.
-			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_title' ), $tit_len, (bool) $this->get_option( 'display_character_counter' ) );
+			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_title' ), '', (bool) $this->get_option( 'display_character_counter' ) );
 			$this->output_pixel_counter_wrap( $this->get_field_id( 'homepage_title' ), 'title', (bool) $this->get_option( 'display_pixel_counter' ) );
 			?>
 		</div>
@@ -195,7 +171,7 @@ switch ( $instance ) :
 			$this->description( sprintf( esc_html__( 'Note: The %1$s is fetched from the %2$s on the %3$s.', 'autodescription' ),
 				esc_html( $title_i18n ),
 				esc_html__( 'Page SEO Settings', 'autodescription' ),
-				esc_html( $home_page_i18n )
+				$home_page_i18n
 			) );
 		}
 
@@ -231,7 +207,7 @@ switch ( $instance ) :
 			</label>
 			<?php
 			//* Output these unconditionally, with inline CSS attached to allow reacting on settings.
-			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_description' ), $desc_len, (bool) $this->get_option( 'display_character_counter' ) );
+			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_description' ), '', (bool) $this->get_option( 'display_character_counter' ) );
 			$this->output_pixel_counter_wrap( $this->get_field_id( 'homepage_description' ), 'description', (bool) $this->get_option( 'display_pixel_counter' ) );
 			?>
 		</div>
@@ -267,15 +243,18 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_homepage_metabox_additions' :
-
 		//* Fetches escaped title parts.
-		$title_args = $this->generate_home_title();
-		$title = $title_args['title'];
-		$blogname = $title_args['blogname'];
-		$sep = $this->get_separator( 'title' );
+		$title_args = [ 'id' => $this->get_the_front_page_ID() ];
+		$_example_title = $this->escape_title(
+			$this->get_unprocessed_title_from_custom_field( $title_args )
+			?: $this->get_unprocessed_title_from_generation( $title_args )
+		);
+		// FIXME? When no blog description or tagline is set... this will be empty and ugly on no-JS.
+		$_example_blogname  = $this->get_home_page_tagline();
+		$_example_separator = $this->get_separator( 'title' );
 
-		$example_left = '<em><span class="tsf-custom-title-js">' . $title . '</span><span class="tsf-custom-blogname-js"><span class="tsf-sep-js"> ' . $sep . ' </span><span class="tsf-custom-tagline-js">' . $blogname . '</span></span></span></em>';
-		$example_right = '<em><span class="tsf-custom-blogname-js"><span class="tsf-custom-tagline-js">' . $blogname . '</span><span class="tsf-sep-js"> ' . $sep . ' </span></span><span class="tsf-custom-title-js">' . $title . '</span></em>';
+		$example_left = '<em><span class="tsf-custom-title-js">' . $_example_title . '</span><span class="tsf-custom-blogname-js"><span class="tsf-sep-js"> ' . $_example_separator . ' </span><span class="tsf-custom-tagline-js">' . $_example_blogname . '</span></span></span></em>';
+		$example_right = '<em><span class="tsf-custom-blogname-js"><span class="tsf-custom-tagline-js">' . $_example_blogname . '</span><span class="tsf-sep-js"> ' . $_example_separator . ' </span></span><span class="tsf-custom-title-js">' . $_example_title . '</span></em>';
 
 		$home_page_i18n = esc_html__( 'Home Page', 'autodescription' );
 
@@ -322,7 +301,6 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_homepage_metabox_robots' :
-
 		$language = $this->google_language();
 		$home_page_i18n = esc_html__( 'Home Page', 'autodescription' );
 
@@ -490,6 +468,6 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	default :
+	default:
 		break;
 endswitch;

@@ -11,7 +11,6 @@ $instance = $this->get_view_instance( 'the_seo_framework_description_metabox', $
 
 switch ( $instance ) :
 	case 'the_seo_framework_description_metabox_main' :
-
 		$blogname = $this->escape_description( $this->get_blogname() );
 		$sep = $this->get_separator( 'description' );
 
@@ -23,12 +22,12 @@ switch ( $instance ) :
 		$excerpt = $this->escape_description( __( 'This is an example description...', 'autodescription' ) );
 
 		//* Put it together.
-		$example	= '<span id="tsf-description-additions-js">'
-						. $page_title
-						. '<span id="tsf-on-blogname-js">' . " $on " . $blogname . '</span>'
-						. '<span id="autodescription-descsep-js">' . " $sep " . '</span>'
-					. '</span>'
-					. $excerpt;
+		$example = '<span id="tsf-description-additions-js">'
+				 . $page_title
+					 . '<span id="tsf-on-blogname-js">' . " $on " . $blogname . '</span>'
+					 . '<span id="autodescription-descsep-js">' . " $sep " . '</span>'
+				 . '</span>'
+				 . $excerpt;
 
 		$nojs_additions = '';
 		//* Add or remove additions based on option.
@@ -58,11 +57,11 @@ switch ( $instance ) :
 		 * @since 2.6.0
 		 *
 		 * @param array $default_tabs { 'id' = The identifier =>
-		 *		array(
-		 *			'name'     => The name
-		 *			'callback' => The callback function, use array for method calling
-		 *			'dashicon' => Desired dashicon
-		 *		)
+		 *   array(
+		 *      'name' => The name
+		 *      'callback' => The callback function, use array for method calling
+		 *      'dashicon' => Desired dashicon
+		 *   )
 		 * }
 		 */
 		$default_tabs = array(
@@ -92,7 +91,6 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_description_metabox_general' :
-
 		//* Let's use the same separators as for the title.
 		$description_separator = $this->get_separator_list();
 		$sep_option = $this->get_option( 'description_separator' );
@@ -108,7 +106,9 @@ switch ( $instance ) :
 			<?php foreach ( $description_separator as $name => $html ) { ?>
 				<input type="radio" name="<?php $this->field_name( 'description_separator' ); ?>" id="<?php $this->field_id( 'description_separator' . $name ); ?>" value="<?php echo esc_attr( $name ); ?>" <?php checked( $sep_option, $name ); ?> />
 				<label for="<?php $this->field_id( 'description_separator' . $name ); ?>">
-					<?php echo $html; ?>
+					<?php
+					echo $html; // xss ok
+					?>
 				</label>
 			<?php } ?>
 			</p>
@@ -117,7 +117,6 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_description_metabox_additions' :
-
 		$language = $this->google_language();
 		$google_explanation = esc_url( 'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#1' );
 
@@ -155,6 +154,6 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	default :
+	default:
 		break;
 endswitch;

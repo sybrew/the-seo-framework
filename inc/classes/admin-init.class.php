@@ -334,7 +334,7 @@ class Admin_Init extends Init {
 		$use_additions = (bool) $this->get_option( 'homepage_tagline' );
 		$home_tagline = $this->get_option( 'homepage_title_tagline' );
 		$title_location = $this->get_option( 'title_location' );
-		$title_add_additions = $this->add_title_additions();
+		$title_add_additions = $this->use_title_branding();
 		$counter_type = (int) $this->get_user_option( 0, 'counter_type', 3 );
 
 		$title_separator = $this->get_separator( 'title' );
@@ -373,15 +373,7 @@ class Admin_Init extends Init {
 					$additions = '';
 				}
 			} elseif ( $is_post_edit ) {
-				//* We're on post.php
-				$generated_doctitle_args = array(
-					'term_id' => $id,
-					'notagline' => true,
-					'get_custom_field' => false,
-				);
-
-				$default_title = $this->title( '', '', '', $generated_doctitle_args );
-
+				$default_title = $this->get_unprocessed_title_from_generation( [ 'id' => $id ] );
 				if ( $title_add_additions ) {
 					$additions = $blog_name;
 					$use_additions = true;
@@ -392,7 +384,7 @@ class Admin_Init extends Init {
 			} elseif ( $is_term_edit ) {
 				//* Category or Tag.
 				if ( isset( $GLOBALS['current_screen']->taxonomy ) && $id ) {
-					$default_title = $this->single_term_title( '', false, $this->fetch_the_term( $id ) );
+					$default_title = $this->get_generated_single_term_title( $this->fetch_the_term( $id ) );
 					$additions = $title_add_additions ? $blog_name : '';
 				}
 			} else {
@@ -416,9 +408,8 @@ class Admin_Init extends Init {
 		$term_name = '';
 		$use_term_prefix = false;
 		if ( $is_term_edit ) {
-			$_term = $this->fetch_the_term( $id );
-			$term_name = $this->get_the_term_name( $_term, true, false );
-			$use_term_prefix = $this->use_archive_prefix( $_term );
+			$term_name = $this->get_the_term_name( $this->fetch_the_term( $id ), true, false );
+			$use_term_prefix = $this->use_generated_archive_prefix();
 		}
 
 		$l10n = array(

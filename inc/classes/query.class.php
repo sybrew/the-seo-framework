@@ -868,11 +868,8 @@ class Query extends Compat {
 	 */
 	public function is_static_frontpage( $id = 0 ) {
 
-		if ( ! $id )
-			$id = $this->get_the_real_ID();
-
 		if ( 'page' === \get_option( 'show_on_front' ) )
-			return (int) \get_option( 'page_on_front' ) === $id;
+			return (int) \get_option( 'page_on_front' ) === ( $id ?: $this->get_the_real_ID() );
 
 		return false;
 	}
@@ -923,7 +920,9 @@ class Query extends Compat {
 		if ( $this->is_archive_admin() ) {
 			global $current_screen;
 
-			if ( isset( $current_screen->taxonomy ) && strlen( $current_screen->taxonomy ) >= 3 && false !== strrpos( $current_screen->taxonomy, 'tag', -3 ) )
+			if ( isset( $current_screen->taxonomy )
+			&& strlen( $current_screen->taxonomy ) >= 3
+			&& false !== strrpos( $current_screen->taxonomy, 'tag', -3 ) )
 				$is_tag = true;
 		}
 
@@ -1100,7 +1099,7 @@ class Query extends Compat {
 	 *
 	 * @since 2.6.0
 	 *
-	 * @return int $page Always a positive number.
+	 * @return int (R>0) $page Always a positive number.
 	 */
 	public function page() {
 
@@ -1115,6 +1114,29 @@ class Query extends Compat {
 		);
 
 		return $page;
+	}
+
+	/**
+	 * Fetches the number of the current page.
+	 * Fetches global $paged through Query var to prevent conflicts.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @return int (R>0) $paged Always a positive number.
+	 */
+	public function paged() {
+
+		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
+			return $cache;
+
+		$paged = \get_query_var( 'paged' );
+
+		$this->set_query_cache(
+			__METHOD__,
+			$paged = $paged ? (int) $paged : 1
+		);
+
+		return $paged;
 	}
 
 	/**
@@ -1143,7 +1165,7 @@ class Query extends Compat {
 
 				$_pages = explode( '<!--nextpage-->', $content );
 			} else {
-				$_pages = array( $post->post_content );
+				$_pages = [ $post->post_content ];
 			}
 		} else {
 			return false;
@@ -1172,29 +1194,6 @@ class Query extends Compat {
 		}
 
 		return $multipage;
-	}
-
-	/**
-	 * Fetches the number of the current page.
-	 * Fetches global $paged through Query var to prevent conflicts.
-	 *
-	 * @since 2.6.0
-	 *
-	 * @return int $paged Always a positive number.
-	 */
-	public function paged() {
-
-		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
-			return $cache;
-
-		$paged = \get_query_var( 'paged' );
-
-		$this->set_query_cache(
-			__METHOD__,
-			$paged = $paged ? (int) $paged : 1
-		);
-
-		return $paged;
 	}
 
 	/**
@@ -1253,7 +1252,7 @@ class Query extends Compat {
 			}
 		}
 
-		static $cache = array();
+		static $cache = [];
 
 		if ( func_num_args() > 2 ) {
 			$hash = isset( $value_to_set ) ? serialize( (array) func_get_arg( 2 ) ) : serialize( array_slice( func_get_args(), 2 ) );
