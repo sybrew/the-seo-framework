@@ -333,7 +333,8 @@ TODO: (regression) Fix the spacing of the tab icons on the settings page.
 		* The SEO Bar will no longer overflow, but it will now wrap automatically when needed.
 		* TODO When adding a new category when no category is selected, the primary term is now correctly selected.
 		* TODO Links with [?] now show a pointer... (explain)
-		* TODO Social description fields now render special characters in placeholders correctly.
+		* TODO Social description fields now render escaped `<..>` characters in placeholders correctly.
+		* TODO Date (and other?) archives now show valid Open Graph metadata. (description missing...)
 
 * **For translators:**
 	* **New translations are available.**
@@ -343,6 +344,7 @@ TODO: (regression) Fix the spacing of the tab icons on the settings page.
 	* TODO:
 		* "Removed prefixes from title" should be more clear to point to archives-only.
 		* "On archives a descriptive prefix may be added to the title." needs a comma
+		* "Search Engines aren't allowed to...", verbatim: "urged/discouraged".
 
 * **For developers:**
 	* **Tips:**
@@ -425,9 +427,10 @@ TODO: (regression) Fix the spacing of the tab icons on the settings page.
 				* `register_image_dimension()`
 			* In class `\The_SEO_Framework\Generate_Title` -- Factory: `the_seo_framework()`
 				* `get_title()`
-				* `get_title_from_custom_field()`
+				* `get_custom_field_title()`
 				* `get_generated_title()`
-				* `get_unprocessed_title_from_generation()`
+				* `get_unprocessed_custom_field_title()`
+				* `get_unprocessed_generated_title()`
 				* `generate_title_from_query()`
 				* `generate_title_from_args()`
 				* `get_generated_archive_title()`
@@ -561,12 +564,6 @@ TODO: (regression) Fix the spacing of the tab icons on the settings page.
 			* `the_seo_framework_detect_page_builder`
 				1. Now returns `null` by default.
 				2. Now, when a boolean (either true or false) is defined, it'll short-circuit this function. See [this comment](https://github.com/sybrew/the-seo-framework/issues/279#issuecomment-392735509) for more information.
-			* `the_seo_framework_custom_field_title`
-				* The first parameter now contains the unprocessed title.
-				* The third parameter is deprecated.
-				* The second parameter is now an array.
-				* This filter now works for the home page custom field title, too.
-				* Internally, this filter is now applied to the SEO Bar, too.
 		* **Removed:**
 			* `the_seo_framework_update_options_at_update`
 			* `the_seo_framework_canonical_force_scheme` (was deprecated since 2.8.0). Use `the_seo_framework_preferred_url_scheme` instead.
@@ -575,8 +572,8 @@ TODO: (regression) Fix the spacing of the tab icons on the settings page.
 			* **Title related:**
 				* `the_seo_framework_title_args`
 				* `the_seo_framework_search_title`
-				* `the_seo_framework_pre_add_title`, use `the_seo_framework_generated_title` instead.
-				* `the_seo_framework_pro_add_title`, use `the_seo_framework_generated_title` instead.
+				* `the_seo_framework_pre_add_title`, use `the_seo_framework_title_from_generation` instead.
+				* `the_seo_framework_pro_add_title`, use `the_seo_framework_title_from_generation` instead.
 				* `the_seo_framework_custom_field_title`, use `the_seo_framework_title_from_custom_field` instead.
 				* `the_seo_framework_add_blogname_to_title`, use the options API instead.
 				* `the_seo_framework_use_archive_title_prefix`, use the options API instead.

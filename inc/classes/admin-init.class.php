@@ -373,7 +373,7 @@ class Admin_Init extends Init {
 					$additions = '';
 				}
 			} elseif ( $is_post_edit ) {
-				$default_title = $this->get_unprocessed_title_from_generation( [ 'id' => $id ] );
+				$default_title = $this->get_unprocessed_generated_title( [ 'id' => $id ] );
 				if ( $title_add_additions ) {
 					$additions = $blog_name;
 					$use_additions = true;

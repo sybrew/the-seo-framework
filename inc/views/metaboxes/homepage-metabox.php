@@ -246,8 +246,8 @@ switch ( $instance ) :
 		//* Fetches escaped title parts.
 		$title_args = [ 'id' => $this->get_the_front_page_ID() ];
 		$_example_title = $this->escape_title(
-			$this->get_unprocessed_title_from_custom_field( $title_args )
-			?: $this->get_unprocessed_title_from_generation( $title_args )
+			$this->get_unprocessed_custom_field_title( $title_args )
+			?: $this->get_unprocessed_generated_title( $title_args )
 		);
 		// FIXME? When no blog description or tagline is set... this will be empty and ugly on no-JS.
 		$_example_blogname  = $this->get_home_page_tagline();

@@ -95,7 +95,7 @@ switch ( $instance ) :
 			$_home_title = $this->get_option( 'homepage_title' );
 
 			$title_placeholder = $_home_title
-							   ? $this->get_title_from_custom_field( [ 'id' => $post_id ] )
+							   ? $this->get_custom_field_title( [ 'id' => $post_id ] )
 							   : $this->get_generated_title( [ 'id' => $post_id ] );
 
 			$description_placeholder = $this->escape_description( $this->get_option( 'homepage_description' ) )
