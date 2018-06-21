@@ -297,14 +297,14 @@ class Site_Options extends Sanitize {
 	 * @since 2.2.2
 	 *
 	 * @uses $this->the_seo_framework_get_option() Return option from the options table and cache result.
-	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
+	 * @uses $this->settings_field
 	 *
 	 * @param string  $key       Option name.
 	 * @param boolean $use_cache Optional. Whether to use the cache value or not. Defaults to true.
 	 * @return mixed The value of this $key in the database.
 	 */
 	public function get_option( $key, $use_cache = true ) {
-		return $this->the_seo_framework_get_option( $key, THE_SEO_FRAMEWORK_SITE_OPTIONS, $use_cache );
+		return $this->the_seo_framework_get_option( $key, $this->settings_field, $use_cache );
 	}
 
 	/**
@@ -327,7 +327,7 @@ class Site_Options extends Sanitize {
 			return $cache[ $setting ];
 
 		if ( is_null( $setting ) )
-			$setting = THE_SEO_FRAMEWORK_SITE_OPTIONS;
+			$setting = $this->settings_field;
 
 		/**
 		 * Applies filters 'the_seo_framework_get_options' : boolean
@@ -410,14 +410,14 @@ class Site_Options extends Sanitize {
 	 *
 	 * @since 2.2.5
 	 * @uses $this->get_default_settings() Return option from the options table and cache result.
-	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
+	 * @uses $this->settings_field
 	 *
 	 * @param string  $key       Option name.
 	 * @param boolean $use_cache Optional. Whether to use the cache value or not. Defaults to true.
 	 * @return mixed The value of this $key in the database.
 	 */
 	public function get_default_option( $key, $use_cache = true ) {
-		return $this->get_default_settings( $key, THE_SEO_FRAMEWORK_SITE_OPTIONS, $use_cache );
+		return $this->get_default_settings( $key, $this->settings_field, $use_cache );
 	}
 
 	/**

@@ -738,14 +738,10 @@ class Render extends Admin_Init {
 	 * @uses $this->render_ld_json_scripts()
 	 *
 	 * @since 1.2.0
+	 * @since 3.1.0 No longer returns early on search, 404 or preview.
 	 * @return string The LD+json Schema.org scripts.
 	 */
 	public function ld_json() {
-
-		//* Don't output on Search, 404 or preview.
-		if ( $this->is_search() || $this->is_404() || $this->is_preview() )
-			return '';
-
 		/**
 		 * Applies filters 'the_seo_framework_ldjson_scripts' : string
 		 *
@@ -958,7 +954,7 @@ class Render extends Admin_Init {
 			return '';
 
 		if ( ! isset( $_cache ) ) {
-			$_cache = array();
+			$_cache = [];
 			/**
 			 * Applies filters 'sybre_waaijer_<3'
 			 *
@@ -1055,8 +1051,7 @@ class Render extends Admin_Init {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
-			return $cache;
+		if ( isset( $cache ) ) return $cache;
 
 		return $cache = $this->is_option_checked( 'og_tags' ) && false === $this->detect_og_plugin();
 	}
@@ -1073,8 +1068,7 @@ class Render extends Admin_Init {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
-			return $cache;
+		if ( isset( $cache ) ) return $cache;
 
 		return $cache = $this->is_option_checked( 'facebook_tags' );
 	}
@@ -1092,9 +1086,10 @@ class Render extends Admin_Init {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
-			return $cache;
+		if ( isset( $cache ) ) return $cache;
 
-		return $cache = $this->is_option_checked( 'twitter_tags' ) && false === $this->detect_twitter_card_plugin() && $this->get_current_twitter_card_type();
+		return $cache = $this->is_option_checked( 'twitter_tags' )
+			&& ! $this->detect_twitter_card_plugin()
+			&& $this->get_current_twitter_card_type();
 	}
 }

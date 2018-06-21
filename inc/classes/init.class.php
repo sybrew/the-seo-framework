@@ -71,8 +71,9 @@ class Init extends Query {
 		//* Determines Whether we're using pretty permalinks.
 		$this->pretty_permalinks = '' !== $this->permalink_structure();
 
-		\add_action( 'init', array( $this, 'init_the_seo_framework' ), 0 );
+		\add_action( 'init', [ $this, 'init_the_seo_framework' ], 0 );
 
+		$this->setup_transient_names();
 		$this->load_early_compat_files();
 	}
 
@@ -97,10 +98,6 @@ class Init extends Query {
 	 * @since 2.8.0
 	 */
 	public function init_the_seo_framework() {
-
-		//* Don't initialize cache or cause other issues on preview.
-		if ( $this->is_preview() )
-			return;
 
 		/**
 		 * @since 2.8.0
@@ -286,17 +283,17 @@ class Init extends Query {
 		 * Adding a higher priority will cause a trailing slash to be added.
 		 * We need to be in front of the queue to prevent this from happening.
 		 */
-		\add_action( 'template_redirect', array( $this, 'maybe_output_sitemap' ), 1 );
-		\add_action( 'template_redirect', array( $this, 'maybe_output_sitemap_stylesheet' ), 1 );
+		\add_action( 'template_redirect', [ $this, 'maybe_output_sitemap' ], 1 );
+		\add_action( 'template_redirect', [ $this, 'maybe_output_sitemap_stylesheet' ], 1 );
 
 		//* Initialize 301 redirects.
-		\add_action( 'template_redirect', array( $this, '_init_custom_field_redirect' ) );
+		\add_action( 'template_redirect', [ $this, '_init_custom_field_redirect' ] );
 
 		//* Initialize feed alteration.
-		\add_action( 'template_redirect', array( $this, '_init_feed_output' ) );
+		\add_action( 'template_redirect', [ $this, '_init_feed_output' ] );
 
 		//* Output meta tags.
-		\add_action( 'wp_head', array( $this, 'html_output' ), 1 );
+		\add_action( 'wp_head', [ $this, 'html_output' ], 1 );
 
 		if ( $this->is_option_checked( 'alter_archive_query' ) )
 			$this->init_alter_archive_query();
@@ -400,8 +397,11 @@ class Init extends Query {
 	 * @since 1.0.0
 	 * @since 2.8.0 Cache is busted on each new release.
 	 * @since 3.0.0 Now converts timezone if needed.
+	 * @since 3.1.0 Now no longer outputs anything on preview.
 	 */
 	public function html_output() {
+
+		if ( $this->is_preview() ) return;
 
 		/**
 		 * @since 2.6.0
@@ -529,13 +529,14 @@ class Init extends Query {
 	 * Redirects singular page to an alternate URL.
 	 *
 	 * @since 2.9.0
+	 * @since 3.1.0 Now no longer redirects on preview.
 	 * @access private
 	 *
 	 * @return void early on non-singular pages.
 	 */
 	public function _init_custom_field_redirect() {
 
-		if ( $this->is_singular() ) {
+		if ( ! $this->is_preview() && $this->is_singular() ) {
 			$url = $this->get_custom_field( 'redirect' );
 			$url && $this->do_redirect( $url );
 		}

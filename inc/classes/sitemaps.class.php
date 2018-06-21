@@ -144,6 +144,9 @@ class Sitemaps extends Metaboxes {
 			global $wp_query;
 
 			if ( isset( $wp_query->query_vars['the_seo_framework_sitemap'] ) && 'xml' === $wp_query->query_vars['the_seo_framework_sitemap'] ) {
+
+				$this->validate_sitemap_scheme();
+
 				// Don't let WordPress think this is 404.
 				$wp_query->is_404 = false;
 
@@ -165,6 +168,67 @@ class Sitemaps extends Metaboxes {
 
 				$this->output_sitemap();
 			}
+		}
+	}
+
+	/**
+	 * Verifies whether the requested URI scheme matches the home URL input.
+	 * If it doesn't, it'll redirect the visitor to the set scheme in WordPress home URL settings.
+	 *
+	 * This prevents invalid cached scheme outputs in the sitemap.
+	 *
+	 * NOTE: To alleviate bug reports, we also check for the scheme settings.
+	 *       So, if users are experiencing issues with this (they won't), then tell them to
+	 *       set a preferred URL scheme.
+	 *
+	 * Normally, WordPress takes care of this via `redirect_canonical()`.
+	 * However, `redirect_canonical()` adds unwanted trailing slashes.
+	 *
+	 * So, we output the sitemap before `redirect_canonical()` fires. Then, we need this to
+	 * prevent incorrect scheme bias when the "automattic" scheme setting is turned on.
+	 * As otherwise, the plugin will cache the sitemap with the invalid scheme.
+	 *
+	 * All this is to prevent bad(ly configured) bots triggering unwanted schemes.
+	 *
+	 * @since 3.1.0
+	 * @TODO consider hijacking get_preferred_scheme() instead.
+	 */
+	protected function validate_sitemap_scheme() {
+
+		if ( $this->get_option( 'canonical_scheme' ) !== 'automatic' ) return;
+
+		$wp_scheme = strtolower( parse_url( \get_home_url(), PHP_URL_SCHEME ) );
+		switch ( $wp_scheme ) {
+			case 'https':
+				if ( $this->is_ssl() ) return;
+				break;
+
+			case 'http':
+				if ( ! $this->is_ssl() ) return;
+				break;
+
+			default:
+				// parse_url failure. Bail.
+				return;
+				break;
+		}
+
+		//? Prevent redirect loop.
+		$fix_arg = [
+			'name'  => 'tsfrf', // abbr: tsf redirect fix
+			'value' => '1',
+		];
+		if ( empty( $_GET[ $fix_arg['name'] ] )
+		|| $_GET[ $fix_arg['name'] ] != $fix_arg['value'] ) { // loose comparison OK.
+
+			$this->clean_response_header();
+
+			\wp_safe_redirect( \add_query_arg(
+				$fix_arg['name'],
+				$fix_arg['value'],
+				$this->set_url_scheme( $this->get_sitemap_xml_url(), $wp_scheme )
+			), 301 );
+			exit;
 		}
 	}
 
@@ -207,8 +271,8 @@ class Sitemaps extends Metaboxes {
 
 		$this->the_seo_framework_debug and $memory = memory_get_usage();
 
-		$remove = array(
-			'wp_filter' => array(
+		$remove = [
+			'wp_filter' => [
 				'wp_head',
 				'admin_head',
 				'the_content',
@@ -216,7 +280,7 @@ class Sitemaps extends Metaboxes {
 				'the_excerpt_rss',
 				'wp_footer',
 				'admin_footer',
-			),
+			],
 			'wp_registered_widgets',
 			'wp_registered_sidebars',
 			'wp_registered_widget_updates',
@@ -224,7 +288,7 @@ class Sitemaps extends Metaboxes {
 			'_wp_deprecated_widgets_callbacks',
 			'posts',
 			'shortcode_tags',
-		);
+		];
 
 		foreach ( $remove as $key => $value ) {
 			if ( is_array( $value ) ) {
@@ -319,15 +383,15 @@ class Sitemaps extends Metaboxes {
 	 */
 	public function get_sitemap_urlset_open_tag() {
 
-		$schemas = array(
-			'xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9',
-			'xmlns:xhtml' => 'http://www.w3.org/1999/xhtml',
-			'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-			'xsi:schemaLocation' => array(
+		$schemas = [
+			'xmlns'              => 'http://www.sitemaps.org/schemas/sitemap/0.9',
+			'xmlns:xhtml'        => 'http://www.w3.org/1999/xhtml',
+			'xmlns:xsi'          => 'http://www.w3.org/2001/XMLSchema-instance',
+			'xsi:schemaLocation' => [
 				'http://www.sitemaps.org/schemas/sitemap/0.9',
 				'http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd',
-			),
-		);
+			],
+		];
 
 		/**
 		 * Applies filters 'the_seo_framework_sitemap_schemas' : array
@@ -573,10 +637,10 @@ class Sitemaps extends Metaboxes {
 		$totalposts = (int) \apply_filters( 'the_seo_framework_sitemap_posts_count', $this->max_posts );
 		$total_cpt_posts = (int) \apply_filters( 'the_seo_framework_sitemap_custom_posts_count', $this->max_posts );
 
-		$latest_pages = array();
-		$latest_posts = array();
-		$latest_cpt_posts = array();
-		$cpt = array();
+		$latest_pages = [];
+		$latest_posts = [];
+		$latest_cpt_posts = [];
+		$cpt = [];
 
 		//* Sets timezone according to WordPress settings.
 		$this->set_timezone();
@@ -601,11 +665,11 @@ class Sitemaps extends Metaboxes {
 
 		$wp_query = new \WP_Query;
 		$wp_query->init();
-		$query = $wp_query->query = $wp_query->query_vars = array();
+		$query = $wp_query->query = $wp_query->query_vars = [];
 
 		if ( $totalpages ) {
 			//* Ascend by the date for normal pages. Older pages get to the top of the list.
-			$defaults = array(
+			$defaults = [
 				'posts_per_page'   => $totalpages,
 				'post_type'        => 'page',
 				'orderby'          => 'date',
@@ -616,7 +680,7 @@ class Sitemaps extends Metaboxes {
 				'cache_results'    => false,
 				'suppress_filters' => false,
 				'no_found_rows'    => true,
-			);
+			];
 
 			/**
 			 * Applies filters 'the_seo_framework_sitemap_pages_query_args' : array
@@ -627,7 +691,7 @@ class Sitemaps extends Metaboxes {
 			 * @param array $args The new query arguments.
 			 * @param array $defaults The default query arguments
 			 */
-			$args = \apply_filters( 'the_seo_framework_sitemap_pages_query_args', array(), $defaults );
+			$args = \apply_filters( 'the_seo_framework_sitemap_pages_query_args', [], $defaults );
 
 			$wp_query->query = $wp_query->query_vars = \wp_parse_args( $args, $defaults );
 			$latest_pages = $wp_query->get_posts();
@@ -636,8 +700,8 @@ class Sitemaps extends Metaboxes {
 
 		if ( $latest_pages_amount > 0 ) :
 
-			$page_on_front = $this->has_page_on_front();
-			$page_on_front_id = (int) \get_option( 'page_on_front' );
+			$page_on_front     = $this->has_page_on_front();
+			$page_on_front_id  = (int) \get_option( 'page_on_front' );
 			$page_for_posts_id = (int) \get_option( 'page_for_posts' );
 
 			$id_on_front = $page_on_front ? $page_on_front_id : $page_for_posts_id;
@@ -670,15 +734,15 @@ class Sitemaps extends Metaboxes {
 						if ( $page_on_front ) {
 							$front_modified_gmt = isset( $front_page->post_modified_gmt ) ? $front_page->post_modified_gmt : '0000-00-00 00:00:00';
 						} else {
-							$args = array(
-								'numberposts' => 1,
-								'post_type' => 'post',
-								'post_status' => 'publish',
+							$args = [
+								'numberposts'  => 1,
+								'post_type'    => 'post',
+								'post_status'  => 'publish',
 								'has_password' => false,
-								'orderby' => 'post_date',
-								'order' => 'DESC',
-								'offset' => 0,
-							);
+								'orderby'      => 'post_date',
+								'order'        => 'DESC',
+								'offset'       => 0,
+							];
 							$latests_posts = \wp_get_recent_posts( $args, OBJECT );
 							$latest_post = isset( $latests_posts[0] ) ? $latests_posts[0] : null;
 							$front_modified_gmt = isset( $latest_post->post_date_gmt ) ? $latest_post->post_date_gmt : '0000-00-00 00:00:00';
@@ -708,22 +772,22 @@ class Sitemaps extends Metaboxes {
 					&& ! $this->is_protected( $blog_page->ID );
 
 				if ( $render_blog ) {
-					$_url = $this->create_canonical_url( array( 'id' => $blog_page->ID ) );
+					$_url = $this->create_canonical_url( [ 'id' => $blog_page->ID ] );
 					if ( $_url ) {
 						$content .= "\t<url>\n";
 						$content .= "\t\t<loc>" . $_url . "</loc>\n";
 
 						// Keep it consistent. Only parse if $page_lastmod is true.
 						if ( $page_lastmod ) {
-							$args = array(
-								'numberposts' => 1,
-								'post_type' => 'post',
-								'post_status' => 'publish',
+							$args = [
+								'numberposts'  => 1,
+								'post_type'    => 'post',
+								'post_status'  => 'publish',
 								'has_password' => false,
-								'orderby' => 'post_date',
-								'order' => 'DESC',
-								'offset' => 0,
-							);
+								'orderby'      => 'post_date',
+								'order'        => 'DESC',
+								'offset'       => 0,
+							];
 							$lastest_posts = \wp_get_recent_posts( $args, OBJECT );
 							$lastest_post = isset( $lastest_posts[0] ) ? $lastest_posts[0] : null;
 							$latest_post_published_gmt = isset( $lastest_post->post_date_gmt ) ? $lastest_post->post_date_gmt : '0000-00-00 00:00:00';
@@ -753,7 +817,7 @@ class Sitemaps extends Metaboxes {
 				if ( empty( $page->ID ) || ! $this->is_post_included_in_sitemap( $page->ID ) )
 					continue;
 
-				$_url = $this->create_canonical_url( array( 'id' => $page->ID ) );
+				$_url = $this->create_canonical_url( [ 'id' => $page->ID ] );
 				if ( ! $_url )
 					continue;
 
@@ -778,7 +842,7 @@ class Sitemaps extends Metaboxes {
 
 		if ( $totalposts ) {
 			//* Descend by the date for posts. The latest posts get to the top of the list after pages.
-			$defaults = array(
+			$defaults = [
 				'posts_per_page'   => $totalposts,
 				'post_type'        => 'post',
 				'orderby'          => 'date',
@@ -789,7 +853,7 @@ class Sitemaps extends Metaboxes {
 				'cache_results'    => false,
 				'suppress_filters' => false,
 				'no_found_rows'    => true,
-			);
+			];
 
 			/**
 			 * Applies filters 'the_seo_framework_sitemap_posts_query_args' : array
@@ -800,7 +864,7 @@ class Sitemaps extends Metaboxes {
 			 * @param array $args The new query arguments.
 			 * @param array $defaults The default query arguments
 			 */
-			$args = \apply_filters( 'the_seo_framework_sitemap_posts_query_args', array(), $defaults );
+			$args = \apply_filters( 'the_seo_framework_sitemap_posts_query_args', [], $defaults );
 
 			$wp_query->query = $wp_query->query_vars = \wp_parse_args( $args, $defaults );
 			$latest_posts = $wp_query->get_posts();
@@ -840,7 +904,7 @@ class Sitemaps extends Metaboxes {
 				if ( empty( $post->ID ) || ! $this->is_post_included_in_sitemap( $post->ID ) )
 					continue;
 
-				$_url = $this->create_canonical_url( array( 'id' => $post->ID ) );
+				$_url = $this->create_canonical_url( [ 'id' => $post->ID ] );
 				if ( ! $_url )
 					continue;
 
@@ -871,15 +935,15 @@ class Sitemaps extends Metaboxes {
 		endif;
 
 		if ( $total_cpt_posts ) :
-			$post_page = (array) \get_post_types( array( 'public' => true ) );
+			$post_page = (array) \get_post_types( [ 'public' => true ] );
 
 			/**
 			 * Applies filters Array the_seo_framework_sitemap_exclude_cpt : Excludes these CPT
 			 * @since 2.5.0
 			 */
-			$excluded_cpt = (array) \apply_filters( 'the_seo_framework_sitemap_exclude_cpt', array() );
+			$excluded_cpt = (array) \apply_filters( 'the_seo_framework_sitemap_exclude_cpt', [] );
 
-			$not_cpt = array( 'post', 'page', 'attachment' );
+			$not_cpt = [ 'post', 'page', 'attachment' ];
 
 			foreach ( $post_page as $post_type ) {
 				if ( false === in_array( $post_type, $not_cpt, true ) ) {
@@ -893,7 +957,7 @@ class Sitemaps extends Metaboxes {
 
 			if ( $cpt ) {
 				//* Descend by the date for CPTs. The latest posts get to the top of the list after pages.
-				$defaults = array(
+				$defaults = [
 					'posts_per_page'   => $total_cpt_posts,
 					'post_type'        => $cpt,
 					'orderby'          => 'date',
@@ -904,7 +968,7 @@ class Sitemaps extends Metaboxes {
 					'cache_results'    => false,
 					'suppress_filters' => false,
 					'no_found_rows'    => true,
-				);
+				];
 
 				/**
 				 * Applies filters 'the_seo_framework_sitemap_cpt_query_args' : array
@@ -915,7 +979,7 @@ class Sitemaps extends Metaboxes {
 				 * @param array $args The new query arguments.
 				 * @param array $defaults The default query arguments
 				 */
-				$args = \apply_filters( 'the_seo_framework_sitemap_cpt_query_args', array(), $defaults );
+				$args = \apply_filters( 'the_seo_framework_sitemap_cpt_query_args', [], $defaults );
 
 				$wp_query->query = $wp_query->query_vars = \wp_parse_args( $args, $defaults );
 				$latest_cpt_posts = $wp_query->get_posts();
@@ -950,7 +1014,7 @@ class Sitemaps extends Metaboxes {
 				if ( empty( $ctp_post->ID ) || ! $this->is_post_included_in_sitemap( $ctp_post->ID ) )
 					continue;
 
-				$_url = $this->create_canonical_url( array( 'id' => $ctp_post->ID ) );
+				$_url = $this->create_canonical_url( [ 'id' => $ctp_post->ID ] );
 				if ( ! $_url )
 					continue;
 
@@ -993,7 +1057,7 @@ class Sitemaps extends Metaboxes {
 		 *
 		 * @example return value: [ 'http://example.com' => [ 'lastmod' => '14-01-2018', 'priority' => 0.9 ] ]
 		 */
-		$custom_urls = (array) \apply_filters( 'the_seo_framework_sitemap_additional_urls', array() );
+		$custom_urls = (array) \apply_filters( 'the_seo_framework_sitemap_additional_urls', [] );
 
 		if ( $custom_urls ) {
 
@@ -1049,7 +1113,8 @@ class Sitemaps extends Metaboxes {
 	 * The URL also isn't checked, nor the position.
 	 *
 	 * @since 3.0.4
-	 * @since 3.1.0 : First filter value now works as intended.
+	 * @since 3.1.0 : 1. First filter value now works as intended.
+	 *                2. Now always returns true when $id is 0.
 	 *
 	 * @param int $id The post ID to check. When 0, the custom field will not be checked.
 	 * @return bool True if included, false otherwise.
@@ -1064,15 +1129,16 @@ class Sitemaps extends Metaboxes {
 			 * @since 2.5.2
 			 * @since 2.8.0 : No longer accepts '0' as entry.
 			 */
-			$excluded = (array) \apply_filters( 'the_seo_framework_sitemap_exclude_ids', array() );
+			$excluded = (array) \apply_filters( 'the_seo_framework_sitemap_exclude_ids', [] );
 
 			if ( empty( $excluded ) ) {
-				$excluded = array();
+				$excluded = [];
 			} else {
 				$excluded = array_flip( $excluded );
 			}
 		}
 
+		$included = true;
 		if ( ! isset( $excluded[ $id ] ) && $id ) {
 			$included = ! $this->get_custom_field( '_genesis_noindex', $id );
 		}
@@ -1132,7 +1198,7 @@ class Sitemaps extends Metaboxes {
 	 */
 	public function ping_google() {
 		$pingurl = 'http://www.google.com/webmasters/sitemaps/ping?sitemap=' . urlencode( $this->get_sitemap_xml_url() );
-		\wp_safe_remote_get( $pingurl, array( 'timeout' => 3 ) );
+		\wp_safe_remote_get( $pingurl, [ 'timeout' => 3 ] );
 	}
 
 	/**
@@ -1142,7 +1208,7 @@ class Sitemaps extends Metaboxes {
 	 */
 	public function ping_bing() {
 		$pingurl = 'http://www.bing.com/webmaster/ping.aspx?siteMap=' . urlencode( $this->get_sitemap_xml_url() );
-		\wp_safe_remote_get( $pingurl, array( 'timeout' => 3 ) );
+		\wp_safe_remote_get( $pingurl, [ 'timeout' => 3 ] );
 	}
 
 	/**
@@ -1152,7 +1218,7 @@ class Sitemaps extends Metaboxes {
 	 */
 	public function ping_yandex() {
 		$pingurl = 'http://blogs.yandex.ru/pings/?status=success&url=' . urlencode( $this->get_sitemap_xml_url() );
-		\wp_safe_remote_get( $pingurl, array( 'timeout' => 3 ) );
+		\wp_safe_remote_get( $pingurl, [ 'timeout' => 3 ] );
 	}
 
 	/**
@@ -1299,24 +1365,24 @@ class Sitemaps extends Metaboxes {
 	public function get_sitemap_colors( $get_defaults = false ) {
 
 		if ( $get_defaults ) {
-			$retval = array(
+			$colors = [
 				'main'   => '#333',
 				'accent' => '#00cd98',
-			);
+			];
 		} else {
-			$main = $this->s_color_hex( $this->get_option( 'sitemap_color_main' ) );
+			$main   = $this->s_color_hex( $this->get_option( 'sitemap_color_main' ) );
 			$accent = $this->s_color_hex( $this->get_option( 'sitemap_color_accent' ) );
 
-			$options = array(
+			$options = [
 				'main'   => $main ? '#' . $main : '',
 				'accent' => $accent ? '#' . $accent : '',
-			);
+			];
 
 			$options = array_filter( $options );
 
-			$retval = array_merge( $this->get_sitemap_colors( true ), $options );
+			$colors = array_merge( $this->get_sitemap_colors( true ), $options );
 		}
 
-		return $retval;
+		return $colors;
 	}
 }

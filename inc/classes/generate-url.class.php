@@ -420,17 +420,17 @@ class Generate_Url extends Generate_Title {
 		switch ( $_get ) {
 			case 'day' :
 				$_day = \get_query_var( 'day' );
-				$_paginate = $_paginate && $_day == $day;
+				$_paginate = $_paginate && $_day == $day; // loose comparison OK.
 				// No break. Get month too.
 
 			case 'month' :
 				$_month = \get_query_var( 'monthnum' );
-				$_paginate = $_paginate && $_month == $month;
+				$_paginate = $_paginate && $_month == $month; // loose comparison OK.
 				// No break. Get year too.
 
 			case 'year' :
 				$_year = \get_query_var( 'year' );
-				$_paginate = $_paginate && $_year == $year;
+				$_paginate = $_paginate && $_year == $year; // loose comparison OK.
 				break;
 		}
 
@@ -554,7 +554,6 @@ class Generate_Url extends Generate_Title {
 			if ( '' !== $url && '/' === $url[0] )
 				$url = '/' . ltrim( $url, "/ \t\n\r\0\x0B" );
 		} else {
-			//* This will break if $scheme is set to false.
 			$url = preg_replace( '#^\w+://#', $scheme . '://', $url );
 		}
 

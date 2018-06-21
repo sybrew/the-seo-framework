@@ -544,6 +544,7 @@ class Generate_Description extends Generate {
 	 *              : The cache will no longer be maintained on previews or search.
 	 * @since 3.0.0 : Now checks for protected posts.
 	 * @since 3.0.6 Silently deprecated.
+	 * @since 3.1.0 Removed the redundant preview check.
 	 * @deprecated Use `get_generated_description()` instead.
 	 *
 	 * @param array $args description args : {
@@ -577,7 +578,7 @@ class Generate_Description extends Generate {
 		 * Determines whether to prevent caching of transients.
 		 * @since 2.8.0
 		 */
-		$_special_q = ( ! $this->is_admin() && $this->is_search() ) || $this->is_preview();
+		$_special_q = ( ! $this->is_admin() && $this->is_search() );
 		$use_cache  = ! $_special_q && $this->is_option_checked( 'cache_meta_description' );
 
 		/**

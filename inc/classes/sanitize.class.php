@@ -70,8 +70,8 @@ class Sanitize extends Admin_Pages {
 		 * @since 2.2.9
 		 */
 		if ( empty( $_POST )
-		|| ! isset( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] )
-		|| ! is_array( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) ) // CSRF ok: This is just a performance check.
+		|| ! isset( $_POST[ $this->settings_field ] )
+		|| ! is_array( $_POST[ $this->settings_field ] ) ) // CSRF ok: This is just a performance check.
 			return $validated = false;
 
 		//* This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
@@ -85,6 +85,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.8.0
 	 * @since 3.0.6 Now updates db version, too.
+	 * @since 3.1.0 Now always flushes the cache, even before the options are updated.
 	 *
 	 * @return void Early if nonce failed.
 	 */
@@ -97,10 +98,13 @@ class Sanitize extends Admin_Pages {
 		//* Initialize sanitation filters parsed on each option update.
 		$this->init_sanitizer_filters();
 
+		//* Delete main cache now. For when the options don't change.
+		$this->delete_main_cache();
+
 		//* Flush transients after options have changed.
-		\add_action( "update_option_{$this->settings_field}", array( $this, 'delete_main_cache' ) );
-		\add_action( "update_option_{$this->settings_field}", array( $this, 'reinitialize_rewrite' ), 11 );
-		\add_action( "update_option_{$this->settings_field}", array( $this, 'update_db_version' ), 12 );
+		\add_action( "update_option_{$this->settings_field}", [ $this, 'delete_main_cache' ] );
+		\add_action( "update_option_{$this->settings_field}", [ $this, 'reinitialize_rewrite' ], 11 );
+		\add_action( "update_option_{$this->settings_field}", [ $this, 'update_db_version' ], 12 );
 	}
 
 	/**

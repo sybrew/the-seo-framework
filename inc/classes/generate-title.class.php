@@ -91,7 +91,7 @@ class Generate_Title extends Generate_Description {
 		if ( $title ) {
 			//? Only add pagination and protection if the query is autodetermined, and on a real page.
 			if ( null === $args
-			&& ! ( $this->is_404() || $this->is_admin() || $this->is_preview() ) ) {
+			&& ! ( $this->is_404() || $this->is_admin() ) ) {
 				$this->merge_title_protection( $title ); // FIXME: This should actually be represented in the admin...
 				$this->merge_title_pagination( $title );
 			}
@@ -134,7 +134,7 @@ class Generate_Title extends Generate_Description {
 		if ( $title ) {
 			//? Only add pagination and protection if the query is autodetermined, and on a real page.
 			if ( null === $args
-			&& ! ( $this->is_404() || $this->is_admin() || $this->is_preview() ) ) {
+			&& ! ( $this->is_404() || $this->is_admin() ) ) {
 				$this->merge_title_protection( $title );
 				$this->merge_title_pagination( $title );
 			}

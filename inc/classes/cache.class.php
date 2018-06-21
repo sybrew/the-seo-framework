@@ -73,9 +73,6 @@ class Cache extends Sitemaps {
 	 */
 	protected function __construct() {
 		parent::__construct();
-
-		//* Setup Transient names
-		add_action( 'plugins_loaded', array( $this, 'setup_transient_names' ), 10 );
 	}
 
 	/**
@@ -247,7 +244,7 @@ class Cache extends Sitemaps {
 	 * @param array $args Additional arguments. They can overwrite $type and $id.
 	 * @return bool true on success, false on failure.
 	 */
-	public function delete_cache( $type, $id = 0, array $args = array() ) {
+	public function delete_cache( $type, $id = 0, array $args = [] ) {
 
 		$this->parse_delete_cache_keys( $type, $id, $args );
 
