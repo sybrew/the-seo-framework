@@ -296,7 +296,7 @@ class Post_Data extends Detect {
 			$values[ $_taxonomy ] = [
 				'action' => $this->inpost_nonce_field . '_pt',
 				'name'   => $this->inpost_nonce_name . '_pt_' . $_taxonomy,
-				'value'  => isset( $_POST['autodescription'][ $_post_key ] ) ? \absint( $_POST['autodescription'][ $_post_key ] ) : false,
+				'value'  => isset( $_POST['autodescription'][ $_post_key ] ) ? \absint( $_POST['autodescription'][ $_post_key ] ) : 0,
 			];
 		}
 

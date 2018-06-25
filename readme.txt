@@ -321,8 +321,8 @@ TODO: (regression) Fix the spacing of the tab icons on the settings page.
 		* The main plugin's cache is now flushed after the SEO settings are requested to be updated, even when the options didn't change.
 		* The automated scheme detection can now prevent the sitemap from using, and caching, the wrong scheme.
 	* **Changed:**
-		* TSF now requires WordPress 4.6, from WordPress 4.4.
-		* TSF now requires PHP 5.4, from PHP 5.6.
+		* TSF now requires WordPress 4.6 (previously 4.4).
+		* TSF now requires PHP 5.4 (previously 5.3).
 		* URL input types (Canonical, Redirect) are now `url` instead of `text`. This means you need to supply a correct URL according to the browser, instead that only TSF checks for correctness after it's being saved.
 		* Term title prefixes are now applied to Open Graph and Twitter titles too.
 		* The [Schema.org effort states](https://schema.org/docs/faq.html#19) they're moving towards and are going to prefer HTTPS. So, after two years including some testing, we abide to be future-proof. Note that it's a parameter, not a link.
@@ -339,10 +339,12 @@ TODO: (regression) Fix the spacing of the tab icons on the settings page.
 		* Various RTL UI elements are now aligned correctly.
 		* On Firefox, checkbox options marked "default" (recommended) or "warned" (use at own risk) are now color-coded again.
 		* The SEO Bar will no longer overflow, but it will now wrap automatically when needed.
-		* TODO When adding a new category when no category is selected, the primary term is now correctly selected.
+		* When adding a new category when no category is selected, the primary term is now correctly assigned.
+		* When the primary term selection changed after load and when a new category is added, the previous category is no longer assigned as primary.
 		* TODO Links with [?] now show a pointer... (explain)
 		* TODO Social description fields now render escaped `<..>` characters in placeholders correctly.
 		* TODO Date (and other?) archives now show valid Open Graph metadata. (description missing...)
+		* When no description or title is found for the corresponding Open Graph or Twitter fields, no more infinite loop will occur that might crash the browser. Luckily, modern browsers detect this to prevent said crashes.
 		* When the homepage is a blog, it'll now be included in the sitemap again.
 
 * **For translators:**
