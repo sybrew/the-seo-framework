@@ -109,11 +109,9 @@ class Inpost extends Profile {
 	 * Adds the SEO meta box to post edit screens.
 	 *
 	 * @since 2.0.0
+	 * @since 3.1.0 No longer checks for SEO plugin presence.
 	 */
 	public function add_inpost_seo_box_init() {
-
-		if ( $this->detect_seo_plugins() )
-			return;
 
 		/**
 		 * Applies filters the_seo_framework_seobox_output : bool
@@ -133,10 +131,11 @@ class Inpost extends Profile {
 	 * @since 2.6.0 Can no longer run outside of the term edit scope.
 	 * @since 2.6.0 Can no longer run when another SEO plugin is active.
 	 * @since 2.8.0 Added show_ui argument for public taxonomy detection.
+	 * @since 3.1.0 No longer checks for SEO plugin presence.
 	 */
 	public function add_taxonomy_seo_box_init() {
 
-		if ( $this->detect_seo_plugins() || false === $this->is_term_edit() )
+		if ( false === $this->is_term_edit() )
 			return;
 
 		/**

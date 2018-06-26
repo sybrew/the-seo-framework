@@ -132,15 +132,15 @@ class Detect extends Render {
 	 */
 	public function conflicting_plugins() {
 
-		$conflicting_plugins = array(
-			'seo_tools' => array(
-				'Yoast SEO'                            => 'wordpress-seo/wp-seo.php',
-				'Yoast SEO Premium'                    => 'wordpress-seo-premium/wp-seo-premium.php',
-				'All in One SEO Pack'                  => 'all-in-one-seo-pack/all_in_one_seo_pack.php',
-				'SEO Ultimate'                         => 'seo-ultimate/seo-ultimate.php',
-				'Gregs High Performance SEO'           => 'gregs-high-performance-seo/ghpseo.php',
-			),
-			'sitemaps' => array(
+		$conflicting_plugins = [
+			'seo_tools' => [
+				'Yoast SEO'                  => 'wordpress-seo/wp-seo.php',
+				'Yoast SEO Premium'          => 'wordpress-seo-premium/wp-seo-premium.php',
+				'All in One SEO Pack'        => 'all-in-one-seo-pack/all_in_one_seo_pack.php',
+				'SEO Ultimate'               => 'seo-ultimate/seo-ultimate.php',
+				'Gregs High Performance SEO' => 'gregs-high-performance-seo/ghpseo.php',
+			],
+			'sitemaps' => [
 				'Google XML Sitemaps'                  => 'google-sitemap-generator/sitemap.php',
 				'Better WordPress Google XML Sitemaps' => 'bwp-google-xml-sitemaps/bwp-simple-gxs.php',
 				'Google XML Sitemaps for qTranslate'   => 'google-xml-sitemaps-v3-for-qtranslate/sitemap.php',
@@ -148,27 +148,27 @@ class Detect extends Render {
 				'Google Sitemap by BestWebSoft'        => 'google-sitemap-plugin/google-sitemap-plugin.php',
 				'Simple Wp Sitemap'                    => 'simple-wp-sitemap/simple-wp-sitemap.php',
 				'XML Sitemaps'                         => 'xml-sitemaps/xml-sitemaps.php',
-			),
-			'open_graph' => array(
-				'Add Link to Facebook'                 => 'add-link-to-facebook/add-link-to-facebook.php',
-				'Facebook AWD All in one'              => 'facebook-awd/AWD_facebook.php',
+			],
+			'open_graph' => [
+				'Add Link to Facebook'                   => 'add-link-to-facebook/add-link-to-facebook.php',
+				'Facebook AWD All in one'                => 'facebook-awd/AWD_facebook.php',
 				'Facebook Featured Image & OG Meta Tags' => 'facebook-featured-image-and-open-graph-meta-tags/fb-featured-image.php',
-				'Facebook Meta Tags'                   => 'facebook-meta-tags/facebook-metatags.php',
+				'Facebook Meta Tags'                     => 'facebook-meta-tags/facebook-metatags.php',
 				'Facebook Open Graph Meta Tags for WordPress' => 'wonderm00ns-simple-facebook-open-graph-tags/wonderm00n-open-graph.php',
-				'Facebook Thumb Fixer'                 => 'facebook-thumb-fixer/_facebook-thumb-fixer.php',
-				'Fedmichs Facebook Open Graph Meta'    => 'facebook-and-digg-thumbnail-generator/facebook-and-digg-thumbnail-generator.php',
-				'NextGEN Facebook OG'                  => 'nextgen-facebook/nextgen-facebook.php',
-				'Open Graph'                           => 'opengraph/opengraph.php',
-				'Open Graph Protocol Framework'        => 'open-graph-protocol-framework/open-graph-protocol-framework.php',
-				'Shareaholic2'                         => 'shareaholic/sexy-bookmarks.php',
-				'Social Sharing Toolkit'               => 'social-sharing-toolkit/social_sharing_toolkit.php',
-				'WordPress Social Sharing Optimization' => 'wpsso/wpsso.php',
-				'WP Facebook Open Graph protocol'      => 'wp-facebook-open-graph-protocol/wp-facebook-ogp.php',
-			),
-			'twitter_card' => array(
-				'Twitter'                              => 'twitter/twitter.php',
-			),
-		);
+				'Facebook Thumb Fixer'                   => 'facebook-thumb-fixer/_facebook-thumb-fixer.php',
+				'Fedmichs Facebook Open Graph Meta'      => 'facebook-and-digg-thumbnail-generator/facebook-and-digg-thumbnail-generator.php',
+				'NextGEN Facebook OG'                    => 'nextgen-facebook/nextgen-facebook.php',
+				'Open Graph'                             => 'opengraph/opengraph.php',
+				'Open Graph Protocol Framework'          => 'open-graph-protocol-framework/open-graph-protocol-framework.php',
+				'Shareaholic2'                           => 'shareaholic/sexy-bookmarks.php',
+				'Social Sharing Toolkit'                 => 'social-sharing-toolkit/social_sharing_toolkit.php',
+				'WordPress Social Sharing Optimization'  => 'wpsso/wpsso.php',
+				'WP Facebook Open Graph protocol'        => 'wp-facebook-open-graph-protocol/wp-facebook-ogp.php',
+			],
+			'twitter_card' => [
+				'Twitter' => 'twitter/twitter.php',
+			],
+		];
 
 		/**
 		 * Applies filters 'the_seo_framework_conflicting_plugins' : array
@@ -192,7 +192,7 @@ class Detect extends Render {
 		if ( isset( $conflicting_plugins[ $type ] ) )
 			return (array) \apply_filters( 'the_seo_framework_conflicting_plugins_type', $conflicting_plugins[ $type ], $type );
 
-		return array();
+		return [];
 	}
 
 	/**
@@ -264,7 +264,7 @@ class Detect extends Render {
 	 *              and/or functions to check for plugin existence.
 	 * @param bool $use_cache Bypasses cache if false
 	 */
-	public function can_i_use( array $plugins = array(), $use_cache = true ) {
+	public function can_i_use( array $plugins = [], $use_cache = true ) {
 
 		if ( ! $use_cache )
 			return $this->detect_plugin_multi( $plugins );
@@ -866,7 +866,7 @@ class Detect extends Render {
 	 */
 	public function post_type_supports_taxonomies( $post_type = '' ) {
 
-		static $cache = array();
+		static $cache = [];
 
 		if ( isset( $cache[ $post_type ] ) )
 			return $cache[ $post_type ];

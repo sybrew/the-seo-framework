@@ -42,8 +42,8 @@ class Generate_Ldjson extends Generate_Image {
 	/**
 	 * Builds up JSON data.
 	 *
-	 * NOTE: Array indexes with falsy values will be stripped.
-	 *       `[ 'key' => (string) 'false' ]` will pass.
+	 * NOTE: Array indexes with false-esque values will be stripped.
+	 *       `[ 'key' => (string) 'anything but 0' ]` will pass.
 	 *       `[ 'key' => '0' ]` will not pass.
 	 *
 	 * @since 2.9.3
@@ -55,7 +55,7 @@ class Generate_Ldjson extends Generate_Image {
 	 */
 	public function build_json_data( $key, array $data ) {
 
-		$key = \sanitize_key( $key );
+		$key  = \sanitize_key( $key );
 		$data = array_filter( $data );
 
 		foreach ( $data as $k => $v ) {
@@ -96,9 +96,8 @@ class Generate_Ldjson extends Generate_Image {
 		}
 
 		if ( $encode ) {
-			$options = 0;
-			//= PHP 5.4+ ( JSON_UNESCAPED_SLASHES === 64 )
-			$options |= defined( 'JSON_UNESCAPED_SLASHES' ) ? JSON_UNESCAPED_SLASHES : 0;
+			$options  = 0;
+			$options |= JSON_UNESCAPED_SLASHES;
 
 			return $data ? (string) json_encode( $data, $options ) : '';
 		}
@@ -132,16 +131,16 @@ class Generate_Ldjson extends Generate_Image {
 	 * @param array  $entry The JSON data entry.
 	 * @return array The JSON data for $key.
 	 */
-	protected function cache_json_data( $get = true, $key = '', array $entry = array() ) {
+	protected function cache_json_data( $get = true, $key = '', array $entry = [] ) {
 
-		static $data = array();
+		static $data = [];
 
 		if ( $get )
 			return $data[ $key ];
 
 		$data[ $key ][ key( $entry ) ] = reset( $entry );
 
-		return array();
+		return [];
 	}
 
 	/**
@@ -200,44 +199,42 @@ class Generate_Ldjson extends Generate_Image {
 		if ( ! $this->enable_ld_json_searchbox() )
 			return '';
 
-		$data = array(
+		$data = [
 			'@context' => 'https://schema.org',
-			'@type' => 'WebSite',
-			'url' => $this->get_homepage_permalink(),
-		);
+			'@type'    => 'WebSite',
+			'url'      => $this->get_homepage_permalink(),
+		];
 
-		name : {
-			$blogname = $this->get_blogname();
-			$kn = $this->get_option( 'knowledge_name' );
+		//= The name part.
+		$blogname = $this->get_blogname();
+		$kname    = $this->get_option( 'knowledge_name' );
 
-			$alternate_name = $kn && $kn !== $blogname ? $kn : '';
+		$alternate_name = $kname && $kname !== $blogname ? $kname : '';
 
-			$data += array(
-				'name' => $this->escape_title( $blogname ),
-				'alternateName' => $this->escape_title( $alternate_name ),
-			);
-		}
+		$data += [
+			'name'          => $this->escape_title( $blogname ),
+			'alternateName' => $this->escape_title( $alternate_name ),
+		];
 
-		//= The actual searchbox part.
-		searchbox : {
-			$action_name = 'search_term_string';
-			$search_link = $this->pretty_permalinks ? \trailingslashit( \get_search_link() ) : \get_search_link();
-			/**
-			 * Applies filters 'the_seo_framework_ld_json_search_url' : string
-			 * @since 2.7.0
-			 * @param string $search_url The default WordPress search URL without query parameters.
-			 */
-			$search_url = (string) \apply_filters( 'the_seo_framework_ld_json_search_url', $search_link );
+		//= The searchbox part.
+		$action_name = 'search_term_string';
+		$search_link = $this->pretty_permalinks ? \trailingslashit( \get_search_link() ) : \get_search_link();
+		/**
+		 * Applies filters 'the_seo_framework_ld_json_search_url' : string
+		 * @since 2.7.0
+		 * @param string $search_url The default WordPress search URL without query parameters.
+		 */
+		$search_url = (string) \apply_filters( 'the_seo_framework_ld_json_search_url', $search_link );
 
-			$data += array(
-				'potentialAction' => array(
-					'@type' => 'SearchAction',
-					'target' => sprintf( '%s{%s}', \esc_url( $search_url ), $action_name ),
-					'query-input' => sprintf( 'required name=%s', $action_name ),
-				),
-			);
-		}
+		$data += [
+			'potentialAction' => [
+				'@type'       => 'SearchAction',
+				'target'      => sprintf( '%s{%s}', \esc_url( $search_url ), $action_name ),
+				'query-input' => sprintf( 'required name=%s', $action_name ),
+			],
+		];
 
+		//= Building
 		$key = 'WebSite';
 		$this->build_json_data( $key, $data );
 		$json = $this->receive_json_data( $key );

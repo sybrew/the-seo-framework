@@ -330,8 +330,8 @@ class Init extends Query {
 			\remove_all_filters( 'pre_get_document_title', false );
 
 			//* New WordPress 4.4.0 filter. Hurray! It's also much faster :)
-			\add_filter( 'pre_get_document_title', array( $this, 'get_document_title' ), 10 );
-			//* Override WooThemes Title
+			\add_filter( 'pre_get_document_title', [ $this, 'get_document_title' ], 10 );
+			//* Override WooThemes Title TODO move this to wc compat file.
 			\add_filter( 'woo_title', [ $this, 'get_document_title' ], 99 );
 
 			/**
@@ -342,7 +342,7 @@ class Init extends Query {
 			if ( \apply_filters( 'the_seo_framework_manipulate_title', true ) ) {
 				\remove_all_filters( 'wp_title', false );
 				//* Override WordPress Title
-				\add_filter( 'wp_title', array( $this, 'get_wp_title' ), 9, 3 );
+				\add_filter( 'wp_title', [ $this, 'get_wp_title' ], 9, 3 );
 			}
 		}
 	}

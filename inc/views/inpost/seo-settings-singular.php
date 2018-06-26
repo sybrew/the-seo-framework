@@ -256,7 +256,7 @@ switch ( $instance ) :
 		$can_do_search_query = $this->is_option_checked( 'alter_search_query' );
 		?>
 
-	<?php if ( $can_do_archive_query || $can_do_search_query ) : ?>
+		<?php if ( $can_do_archive_query || $can_do_search_query ) : ?>
 		<div class="tsf-flex-setting tsf-flex">
 			<div class="tsf-flex-setting-label tsf-flex">
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
@@ -294,7 +294,7 @@ switch ( $instance ) :
 				<?php endif; ?>
 			</div>
 		</div>
-	<?php endif; ?>
+		<?php endif; ?>
 
 		<div class="tsf-flex-setting tsf-flex">
 			<div class="tsf-flex-setting-label tsf-flex">
@@ -340,8 +340,8 @@ switch ( $instance ) :
 		$tw_tit_len_parsed = $custom_tw_title ? html_entity_decode( $custom_tw_title ) : $og_tit_len_parsed;
 		$tw_desc_len_parsed = $custom_tw_desc ? html_entity_decode( $custom_tw_desc ) : $og_desc_len_parsed;
 
-		$show_og = $this->is_option_checked( 'og_tags' ) && ! $this->detect_og_plugin();
-		$show_tw = $this->is_option_checked( 'twitter_tags' ) && ! $this->detect_twitter_card_plugin();
+		$show_og = $this->is_option_checked( 'og_tags' );
+		$show_tw = $this->is_option_checked( 'twitter_tags' );
 
 		?>
 		<div class="tsf-flex-setting tsf-flex" <?php echo $show_og ? '' : 'style=display:none'; ?>>
@@ -434,7 +434,11 @@ switch ( $instance ) :
 		<?php
 
 		//* Fetch image placeholder.
-		$image_placeholder = $this->get_social_image( array( 'post_id' => $post_id, 'disallowed' => array( 'postmeta' ), 'escape' => false ) );
+		$image_placeholder = $this->get_social_image( [
+			'post_id'    => $post_id,
+			'disallowed' => [ 'postmeta' ],
+			'escape'     => false,
+		] );
 
 		?>
 		<div class="tsf-flex-setting tsf-flex">

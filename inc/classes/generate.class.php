@@ -219,13 +219,8 @@ class Generate extends User_Data {
 	 * @return string $blogname The trimmed and sanitized blogname.
 	 */
 	public function get_blogname() {
-
 		static $blogname = null;
-
-		if ( isset( $blogname ) )
-			return $blogname;
-
-		return $blogname = trim( \get_bloginfo( 'name', 'display' ) );
+		return isset( $blogname ) ? $blogname : $blogname = trim( \get_bloginfo( 'name', 'display' ) );
 	}
 
 	/**

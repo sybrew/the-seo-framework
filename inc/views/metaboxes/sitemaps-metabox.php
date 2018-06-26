@@ -24,33 +24,33 @@ switch ( $instance ) :
 		 *
 		 * @since 2.2.9
 		 */
-		$default_tabs = array(
-			'general' => array(
+		$default_tabs = [
+			'general' => [
 				'name'     => __( 'General', 'autodescription' ),
-				'callback' => array( $this, 'sitemaps_metabox_general_tab' ),
+				'callback' => [ $this, 'sitemaps_metabox_general_tab' ],
 				'dashicon' => 'admin-generic',
-			),
-			'robots' => array(
+			],
+			'robots' => [
 				'name'     => 'Robots.txt',
-				'callback' => array( $this, 'sitemaps_metabox_robots_tab' ),
+				'callback' => [ $this, 'sitemaps_metabox_robots_tab' ],
 				'dashicon' => 'share-alt2',
-			),
-			'timestamps' => array(
+			],
+			'timestamps' => [
 				'name'     => __( 'Timestamps', 'autodescription' ),
-				'callback' => array( $this, 'sitemaps_metabox_timestamps_tab' ),
+				'callback' => [ $this, 'sitemaps_metabox_timestamps_tab' ],
 				'dashicon' => 'clock',
-			),
-			'notify' => array(
+			],
+			'notify' => [
 				'name'     => _x( 'Ping', 'Ping or notify Search Engine', 'autodescription' ),
-				'callback' => array( $this, 'sitemaps_metabox_notify_tab' ),
+				'callback' => [ $this, 'sitemaps_metabox_notify_tab' ],
 				'dashicon' => 'megaphone',
-			),
-			'style' => array(
+			],
+			'style' => [
 				'name'     => __( 'Style', 'autodescription' ),
-				'callback' => array( $this, 'sitemaps_metabox_style_tab' ),
+				'callback' => [ $this, 'sitemaps_metabox_style_tab' ],
 				'dashicon' => 'art',
-			),
-		);
+			],
+		];
 
 		/**
 		 * Applies filters the_seo_framework_sitemaps_settings_tabs : array see $default_tabs
@@ -60,19 +60,6 @@ switch ( $instance ) :
 		$defaults = (array) apply_filters( 'the_seo_framework_sitemaps_settings_tabs', $default_tabs, $args );
 
 		$tabs = wp_parse_args( $args, $defaults );
-
-		$has_sitemap_plugin = $this->detect_sitemap_plugin();
-		$sitemap_detected   = $this->has_sitemap_xml();
-		$robots_detected    = $this->has_robots_txt();
-
-		/**
-		 * Remove the timestamps and notify submenus
-		 * @since 2.5.2
-		 */
-		if ( $has_sitemap_plugin || $sitemap_detected ) {
-			unset( $tabs['timestamps'] );
-			unset( $tabs['notify'] );
-		}
 
 		$this->nav_tab_wrapper( 'sitemaps', $tabs, '2.2.8' );
 		break;
@@ -87,86 +74,97 @@ switch ( $instance ) :
 		<?php
 
 		if ( $has_sitemap_plugin ) :
-			$this->description( __( 'Another active sitemap plugin has been detected. This means that the sitemap functionality has been replaced.', 'autodescription' ) );
+			$this->description( __( 'Note: Another active sitemap plugin has been detected. This means that the sitemap functionality has been superseded and these settings have no effect.', 'autodescription' ) );
+			echo '<hr>';
 		elseif ( $sitemap_detected ) :
-			$this->description( __( 'A sitemap has been detected in the root folder of your website. This means that the sitemap functionality has no effect.', 'autodescription' ) );
-		else :
-			$this->description( __( 'The Sitemap is an XML file that lists pages and posts for your website along with optional metadata about each post or page. This helps search engines crawl your website more easily.', 'autodescription' ) );
-			$this->description( __( 'The optional metadata include the post and page modified time and a page priority indication, which is automated.', 'autodescription' ) );
-
-			?>
-			<hr>
-
-			<h4><?php esc_html_e( 'Sitemap Output', 'autodescription' ); ?></h4>
-			<?php
-
-			//* Echo checkbox.
-			$this->wrap_fields(
-				$this->make_checkbox(
-					'sitemaps_output',
-					__( 'Output Sitemap?', 'autodescription' ),
-					'',
-					true
-				), true
-			);
+			$this->description( __( 'Note: A sitemap has been detected in the root folder of your website. This means that these settings have no effect.', 'autodescription' ) );
+			echo '<hr>';
 		endif;
+
+		$this->description( __( 'The Sitemap is an XML file that lists pages and posts for your website along with optional metadata about each post or page. This helps search engines crawl your website more easily.', 'autodescription' ) );
+		$this->description( __( 'The optional metadata include the post and page modified time and a page priority indication, which is automated.', 'autodescription' ) );
+		?>
+		<hr>
+
+		<h4><?php esc_html_e( 'Sitemap Output', 'autodescription' ); ?></h4>
+		<?php
+
+		//* Echo checkbox.
+		$this->wrap_fields(
+			$this->make_checkbox(
+				'sitemaps_output',
+				__( 'Output Sitemap?', 'autodescription' ),
+				'',
+				true
+			), true
+		);
 
 		if ( ! $has_sitemap_plugin && ( $this->get_option( 'sitemaps_output' ) || $sitemap_detected ) ) {
 			$here = '<a href="' . esc_url( $sitemap_url, [ 'http', 'https' ] ) . '" target="_blank" title="' . esc_attr__( 'View sitemap', 'autodescription' ) . '">' . esc_attr_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
-			$this->description_noesc( sprintf( _x( 'The sitemap can be found %s.', '%s = here', 'autodescription' ), $here ) );
+			/* translators: %s = here */
+			$this->description_noesc( sprintf( esc_html__( 'The sitemap can be found %s.', 'autodescription' ), $here ) );
 		}
 		break;
 
 	case 'the_seo_framework_sitemaps_metabox_robots':
 		$locate_url = true;
+		$show_settings = true;
 
 		?>
 		<h4><?php esc_html_e( 'Robots.txt Settings', 'autodescription' ); ?></h4>
 		<?php
 
 		if ( $this->has_robots_txt() ) :
-			$this->description( __( 'A robots.txt file has been detected in the root folder of your website; therefore no settings are able to alter its output.', 'autodescription' ) );
+			$this->description( __( 'Note: A robots.txt file has been detected in the root folder of your website. This means these settings have no effect.', 'autodescription' ) );
+			echo '<hr>';
 		elseif ( ! $this->pretty_permalinks ) :
-
-			$permalink_settings_url = admin_url( 'options-permalink.php' );
-			$here = '<a href="' . esc_url( $permalink_settings_url, [ 'http', 'https' ] ) . '" target="_blank" title="' . esc_attr__( 'Permalink Settings', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
-
-			?>
-			<h4><?php esc_html_e( "You're using the plain permalink structure.", 'autodescription' ); ?></h4>
-			<?php
-			$this->description( __( "This means the robots.txt file can't be outputted through the WordPress rewrite rules.", 'autodescription' ) );
-			?>
-			<hr>
-			<?php
-			$this->description_noesc( sprintf( esc_html_x( 'Change your Permalink Settings %s (Recommended: "Post name").', '%s = here', 'autodescription' ), $here ) );
-
 			$locate_url = false;
-		elseif ( $this->can_do_sitemap_robots( false ) ) :
-			$this->description( __( 'The robots.txt file is the first thing search engines look for. If you add the sitemap location in the robots.txt file, then search engines will look for and index the sitemap.', 'autodescription' ) );
-			$this->description( __( 'If you do not add the sitemap location to the robots.txt file, you will need to notify search engines manually through the Webmaster Console provided by the Search Engines.', 'autodescription' ) );
 
-			?>
-			<hr>
+			$this->description( __( "Note: You're using the plain permalink structure.", 'autodescription' ) );
+			$this->description( __( "This means the robots.txt file can't be outputted through the WordPress rewrite rules.", 'autodescription' ) );
+			echo '<hr>';
+			$this->description_noesc(
+				sprintf(
+					esc_html_x( 'Change your Permalink Settings %s (Recommended: "Post name").', '%s = here', 'autodescription' ),
+					sprintf(
+						'<a href="%s" target="_blank" title="%s">%s</a>',
+						esc_url( admin_url( 'options-permalink.php' ), [ 'http', 'https' ] ),
+						esc_attr__( 'Permalink Settings', 'autodescription' ),
+						esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' )
+					)
+				)
+			);
+			echo '<hr>';
+		elseif ( ! $this->can_do_sitemap_robots( false ) ) :
+			if ( $this->is_subdirectory_installation() ) {
+				$this->description( __( "Note: robots.txt files can't be generated on subdirectory installations.", 'autodescription' ) );
+				$locate_url = false;
+				$show_settings = false;
+			} else {
+				$this->description( __( 'Note: Another robots.txt sitemap location addition has been detected. This means these settings have no effect.', 'autodescription' ) );
+			}
+			echo '<hr>';
+		endif;
 
-			<h4><?php esc_html_e( 'Add sitemap location in robots.txt', 'autodescription' ); ?></h4>
-			<?php
+		$this->description( __( 'The robots.txt file is the first thing search engines look for. If you add the sitemap location in the robots.txt file, then search engines will look for and index the sitemap.', 'autodescription' ) );
+		$this->description( __( 'If you do not add the sitemap location to the robots.txt file, you will need to notify search engines manually through the Webmaster Console provided by the Search Engines.', 'autodescription' ) );
 
-			//* Echo checkbox.
+		echo '<hr>';
+
+		if ( $show_settings ) :
+
+			printf(
+				'<h4>%s</h4>',
+				esc_html__( 'Add sitemap location in robots.txt', 'autodescription' )
+			);
 			$this->wrap_fields(
 				$this->make_checkbox(
 					'sitemaps_robots',
-					esc_html__( 'Add sitemap location in robots?', 'autodescription' ) . ' ' . $this->make_info( __( 'This only has effect if the sitemap is active.', 'autodescription' ), '', false ),
+					esc_html__( 'Add sitemap location in robots?', 'autodescription' ) . ' ' . $this->make_info( __( 'This only has effect when the sitemap is active.', 'autodescription' ), '', false ),
 					'',
 					false
 				), true
 			);
-		else :
-			if ( $this->is_subdirectory_installation() ) {
-				$this->description( __( 'No robots.txt file can be generated on subdirectory installations.', 'autodescription' ) );
-				$locate_url = false;
-			} else {
-				$this->description( __( 'Another robots.txt sitemap location addition has been detected.', 'autodescription' ) );
-			}
 		endif;
 
 		if ( $locate_url ) {
@@ -211,15 +209,16 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Notify Search Engines', 'autodescription' ); ?></h4>
 		<?php
 
-		$engines = array(
+		$engines = [
 			'ping_google' => 'Google',
 			'ping_bing'   => 'Bing',
 			'ping_yandex' => 'Yandex',
-		);
+		];
 
 		$ping_checkbox = '';
 
 		foreach ( $engines as $option => $engine ) {
+			/* translators: %s = Google */
 			$ping_label = sprintf( __( 'Notify %s about sitemap changes?', 'autodescription' ), $engine );
 			$ping_checkbox .= $this->make_checkbox( $option, $ping_label, '', true );
 		}
@@ -232,9 +231,7 @@ switch ( $instance ) :
 		?>
 		<h4><?php esc_html_e( 'Sitemap Styling Settings', 'autodescription' ); ?></h4>
 		<?php
-
 		$this->description( __( 'You can style the sitemap to give it a more personal look. Styling the sitemap has no SEO value whatsoever.', 'autodescription' ) );
-
 		?>
 		<hr>
 

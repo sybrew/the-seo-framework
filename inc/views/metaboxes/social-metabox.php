@@ -86,13 +86,14 @@ switch ( $instance ) :
 		);
 
 		if ( $this->detect_og_plugin() )
-			$this->description( __( 'Note: Another Open Graph plugin has been detected.', 'autodescription' ) );
+			$this->description( __( 'Note: Another Open Graph plugin has been detected. These tags might conflict.', 'autodescription' ) );
 
 		//* Echo Facebook Tags checkbox.
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'facebook_tags',
 				__( 'Output Facebook meta tags?', 'autodescription' ),
+				/* translators: %s = Facebook */
 				sprintf( __( 'Output various tags targetted at %s.', 'autodescription' ), 'Facebook' ),
 				true
 			),
@@ -104,6 +105,7 @@ switch ( $instance ) :
 			$this->make_checkbox(
 				'twitter_tags',
 				__( 'Output Twitter meta tags?', 'autodescription' ),
+				/* translators: %s = Facebook */
 				sprintf( __( 'Output various tags targetted at %s.', 'autodescription' ), 'Twitter' ),
 				true
 			),
@@ -111,7 +113,7 @@ switch ( $instance ) :
 		);
 
 		if ( $this->detect_twitter_card_plugin() )
-			$this->description( __( 'Note: Another Twitter Card plugin has been detected.', 'autodescription' ) );
+			$this->description( __( 'Note: Another Twitter Card plugin has been detected. These tags might conflict.', 'autodescription' ) );
 
 		?>
 		<hr>
@@ -120,7 +122,11 @@ switch ( $instance ) :
 		<?php
 		$this->description( __( 'A social image can be displayed when your website is shared. It is a great way to grab attention.', 'autodescription' ) );
 
-		$image_placeholder = $this->get_social_image( array( 'post_id' => 0, 'disallowed' => array( 'homemeta', 'postmeta', 'featured' ), 'escape' => false ) );
+		$image_placeholder = $this->get_social_image( [
+			'post_id'    => 0,
+			'disallowed' => [ 'homemeta', 'postmeta', 'featured' ],
+			'escape'     => false,
+		] );
 
 		?>
 		<p>
@@ -341,6 +347,6 @@ switch ( $instance ) :
 		$this->wrap_fields( $post_publish_time_checkbox . $post_modify_time_checkbox, true );
 		break;
 
-	default :
+	default:
 		break;
 endswitch;
