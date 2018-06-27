@@ -1418,11 +1418,13 @@ class Doing_It_Right extends Generate_Ldjson {
 		$archive_short = $i18n['archive_short'];
 
 		if ( $noarchive ) {
-			$arc_notice = $archive_i18n . ' ' . sprintf( \esc_attr__( "Search Engines aren't allowed to archive this %s.", 'autodescription' ), $post_low );
+			/* translators: %s is Post/Page/Term */
+			$arc_notice = $archive_i18n . ' ' . sprintf( \esc_attr__( 'Bots are discouraged to archive this %s.', 'autodescription' ), $post_low );
 			$arc_class = $unknown;
 			$archived = false;
 		} else {
-			$arc_notice = $archive_i18n . ' ' . sprintf( \esc_attr__( 'Search Engines are allowed to archive this %s.', 'autodescription' ), $post_low );
+			/* translators: %s is Post/Page/Term */
+			$arc_notice = $archive_i18n . ' ' . sprintf( \esc_attr__( 'Bots are allowed to archive this %s.', 'autodescription' ), $post_low );
 			$arc_class = $good;
 			$arc_but = true;
 		}

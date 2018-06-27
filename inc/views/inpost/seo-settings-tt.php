@@ -34,7 +34,7 @@ $robots_settings = [
 	'noindex' => [
 		'value' => $noindex,
 		'info'  => $this->make_info(
-			__( 'This tells search engines not to show this page in their search results.', 'autodescription' ),
+			__( 'This tells search engines not to show this term in their search results.', 'autodescription' ),
 			'https://support.google.com/webmasters/answer/93710?hl=' . $language,
 			false
 		),
@@ -42,7 +42,7 @@ $robots_settings = [
 	'nofollow' => [
 		'value' => $nofollow,
 		'info'  => $this->make_info(
-			__( 'This tells search engines not to follow links on this page.', 'autodescription' ),
+			__( 'This tells search engines not to follow links on this term.', 'autodescription' ),
 			'https://support.google.com/webmasters/answer/96569?hl=' . $language,
 			false
 		),
@@ -50,7 +50,7 @@ $robots_settings = [
 	'noarchive' => [
 		'value' => $noarchive,
 		'info'  => $this->make_info(
-			__( 'This tells search engines not to follow links on this page.', 'autodescription' ),
+			__( 'This tells search engines not to save a cached copy of this term.', 'autodescription' ),
 			'https://support.google.com/webmasters/answer/79812?hl=' . $language,
 			false
 		),
@@ -79,12 +79,7 @@ $robots_settings = [
 		<tr class="form-field">
 			<th scope="row" valign="top">
 				<label for="autodescription-meta[doctitle]">
-					<strong>
-						<?php
-						/* translators: %s = Term type */
-						printf( esc_html__( '%s Title', 'autodescription' ), esc_html( $type ) );
-						?>
-					</strong>
+					<strong><?php esc_html_e( 'Meta Title', 'autodescription' ); ?></strong>
 				</label>
 				<?php
 				$this->get_option( 'display_character_counter' )
@@ -104,12 +99,7 @@ $robots_settings = [
 		<tr class="form-field">
 			<th scope="row" valign="top">
 				<label for="autodescription-meta[description]">
-					<strong>
-						<?php
-						/* translators: %s = Term type */
-						printf( esc_html__( '%s Meta Description', 'autodescription' ), esc_html( $type ) );
-						?>
-					</strong>
+					<strong><?php esc_html_e( 'Meta Description', 'autodescription' ); ?></strong>
 				</label>
 				<?php
 				$this->get_option( 'display_character_counter' )
@@ -143,10 +133,8 @@ $robots_settings = [
 										sprintf(
 											/* translators: %s = noindex/nofollow/noarchive */
 											esc_html__( 'Apply %s to this term?', 'autodescription' ),
-											//= Already escaped.
 											$this->code_wrap( $type )
 										),
-										//= Already escaped.
 										$data['info'],
 									]
 								),

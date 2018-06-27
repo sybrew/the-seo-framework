@@ -641,18 +641,18 @@ class Admin_Init extends Init {
 	}
 
 	/**
-	 * Handles counter option update on AJAX request.
+	 * Handles counter option update on AJAX request for users that can edit posts.
 	 *
 	 * @since 2.6.0
 	 * @since 2.9.0 : 1. Changed capability from 'publish_posts' to 'edit_posts'.
 	 *                2. Added json header.
+	 * @since 3.1.0 Now uses wp_send_json to send JSON data.
 	 * @securitycheck 3.0.0 OK.
 	 * @access private
 	 */
 	public function wp_ajax_update_counter_type() {
 
 		if ( $this->is_admin() && $this->doing_ajax() ) :
-
 			$this->check_tsf_ajax_referer( 'edit_posts' );
 
 			//* Remove output buffer.
@@ -662,7 +662,7 @@ class Admin_Init extends Init {
 			if ( ! \current_user_can( 'edit_posts' ) ) {
 				//* Encode and echo results. Requires JSON decode within JS.
 				\wp_send_json( [
-					'type' => 'failure',
+					'type'  => 'failure',
 					'value' => '',
 				] );
 			}

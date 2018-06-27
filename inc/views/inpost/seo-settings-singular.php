@@ -110,12 +110,15 @@ switch ( $instance ) :
 			<div class="tsf-flex-setting-label tsf-flex">
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 					<label for="autodescription_title" class="tsf-flex-setting-label-item tsf-flex">
-						<div><strong>
-							<?php
-							/* translators: %s = Post type name */
-							printf( esc_html__( 'Custom %s Title', 'autodescription' ), esc_html( $type ) );
-							?>
-						</strong></div>
+						<div><strong><?php esc_html_e( 'Meta Title', 'autodescription' ); ?></strong></div>
+						<div>
+						<?php
+						$this->make_info(
+							__( 'The meta title can be used to determine the title used on Search Engine result pages.', 'autodescription' ),
+							'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#page-titles'
+						);
+						?>
+						</div>
 					</label>
 					<?php
 					$this->get_option( 'display_character_counter' )
@@ -137,12 +140,15 @@ switch ( $instance ) :
 			<div class="tsf-flex-setting-label tsf-flex">
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 					<label for="autodescription_description" class="tsf-flex-setting-label-item tsf-flex">
-						<div><strong>
-							<?php
-							/* translators: %s = Post type name */
-							printf( esc_html__( 'Custom %s Description', 'autodescription' ), esc_html( $type ) );
-							?>
-						</strong></div>
+						<div><strong><?php esc_html_e( 'Meta Description', 'autodescription' ); ?></strong></div>
+						<div>
+						<?php
+						$this->make_info(
+							__( 'The meta description can be used to determine the text used under the title on Search Engine results pages.', 'autodescription' ),
+							'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#meta-descriptions'
+						);
+						?>
+						</div>
 					</label>
 					<?php
 					$this->get_option( 'display_character_counter' )
@@ -171,7 +177,7 @@ switch ( $instance ) :
 			<div class="tsf-flex-setting-label tsf-flex">
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 					<label for="autodescription_canonical" class="tsf-flex-setting-label-item tsf-flex">
-						<div><strong><?php esc_html_e( 'Custom Canonical URL', 'autodescription' ); ?></strong></div>
+						<div><strong><?php esc_html_e( 'Canonical URL', 'autodescription' ); ?></strong></div>
 						<div>
 						<?php
 						$this->make_info(
@@ -221,6 +227,7 @@ switch ( $instance ) :
 						printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'nofollow' ), esc_html( $type ) );
 						echo ' ';
 						$this->make_info(
+							/* translators: %s is Post or Page */
 							sprintf( __( 'This tells search engines not to follow links on this %s.', 'autodescription' ), $type ),
 							'https://support.google.com/webmasters/answer/96569?hl=' . $language
 						);
@@ -230,16 +237,16 @@ switch ( $instance ) :
 				<div class="tsf-checkbox-wrapper">
 					<label for="autodescription_noarchive"><input type="checkbox" name="autodescription[_genesis_noarchive]" id="autodescription_noarchive" value="1" <?php checked( $this->get_custom_field( '_genesis_noarchive' ) ); ?> />
 					<?php
-						/* translators: 1: Option, 2: Post or Page */
 						printf(
+							/* translators: 1: Option, 2: Post or Page */
 							esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ),
 							$this->code_wrap( 'noarchive' ),
 							esc_html( $type )
 						);
 						echo ' ';
-						/* translators: %s = Post type name */
 						$this->make_info(
 							sprintf(
+								/* translators: %s is Post or Page */
 								__( 'This tells search engines not to save a cached copy of this %s.', 'autodescription' ),
 								$type
 							),
@@ -301,7 +308,7 @@ switch ( $instance ) :
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 					<label for="autodescription_redirect" class="tsf-flex-setting-label-item tsf-flex">
 						<div>
-							<strong><?php esc_html_e( 'Custom 301 Redirect URL', 'autodescription' ); ?></strong>
+							<strong><?php esc_html_e( '301 Redirect URL', 'autodescription' ); ?></strong>
 						</div>
 						<div>
 							<?php
@@ -445,7 +452,7 @@ switch ( $instance ) :
 			<div class="tsf-flex-setting-label tsf-flex">
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 					<label for="autodescription_socialimage-url" class="tsf-flex-setting-label-item tsf-flex">
-						<div><strong><?php esc_html_e( 'Custom Social Image URL', 'autodescription' ); ?></strong></div>
+						<div><strong><?php esc_html_e( 'Social Image URL', 'autodescription' ); ?></strong></div>
 						<div>
 						<?php
 						$this->make_info(

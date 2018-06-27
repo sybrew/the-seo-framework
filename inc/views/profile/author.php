@@ -23,6 +23,7 @@ foreach ( $fields as $field => $labels ) :
 				value="<?php echo esc_attr( $labels->value ); ?>"
 				placeholder="<?php echo esc_attr( $labels->placeholder ); ?>"
 				class="regular-text <?php echo esc_attr( $labels->class ); ?>" />
+			<p class="description"><?php esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
 		</td>
 	</tr>
 	<?php

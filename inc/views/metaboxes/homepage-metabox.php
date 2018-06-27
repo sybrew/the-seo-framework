@@ -66,14 +66,9 @@ switch ( $instance ) :
 
 	case 'the_seo_framework_homepage_metabox_general' :
 		$language = $this->google_language();
+		$home_id  = $this->get_the_front_page_ID();
 
 		$description_from_post_message = $title_from_post_message = '';
-
-		$title_i18n = esc_html__( 'Title', 'autodescription' );
-		$description_i18n = esc_html__( 'Description', 'autodescription' );
-		$home_page_i18n = esc_html__( 'Home Page', 'autodescription' );
-
-		$home_id = $this->get_the_front_page_ID();
 
 		$frompost_title = $this->has_page_on_front() ? $this->get_custom_field( '_genesis_title', $home_id ) : '';
 		if ( $frompost_title ) {
@@ -124,14 +119,13 @@ switch ( $instance ) :
 		 */
 		if ( $home_description_frompost ) {
 			$page_seo_settings_i18n = __( 'Page SEO Settings', 'autodescription' );
-			/* translators: 1: Option, 2: Page SEO Settings, 3: Home Page */
-			$description_from_post_message = sprintf( __( 'Note: The %1$s is fetched from the %2$s on the %3$s.', 'autodescription' ), $description_i18n, $page_seo_settings_i18n, $home_page_i18n );
+			$this->description( __( 'Note: The description is fetched from the Page SEO Settings on the home page.', 'autodescription' ) );
 		}
 
 		?>
 		<p>
 			<label for="<?php $this->field_id( 'homepage_title_tagline' ); ?>" class="tsf-toblock">
-				<strong><?php printf( esc_html__( 'Custom %s Title Tagline', 'autodescription' ), $home_page_i18n ); ?></strong>
+				<strong><?php esc_html_e( 'Meta Title Additions', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<p>
@@ -144,8 +138,7 @@ switch ( $instance ) :
 			<label for="<?php $this->field_id( 'homepage_title' ); ?>" class="tsf-toblock">
 				<strong>
 					<?php
-					/* translators: %s = Post type */
-					printf( esc_html__( 'Custom %s Title', 'autodescription' ), $home_page_i18n );
+					esc_html_e( 'Meta Title', 'autodescription' );
 					?>
 				</strong>
 			</label>
@@ -167,12 +160,7 @@ switch ( $instance ) :
 		 * Nesting often used translations
 		 */
 		if ( $this->has_page_on_front() && ! $this->get_option( 'homepage_title' ) && $this->get_custom_field( '_genesis_title', $home_id ) ) {
-			/* translators: 1: Option, 2: Page SEO Settings, 3: Home Page */
-			$this->description( sprintf( esc_html__( 'Note: The %1$s is fetched from the %2$s on the %3$s.', 'autodescription' ),
-				esc_html( $title_i18n ),
-				esc_html__( 'Page SEO Settings', 'autodescription' ),
-				$home_page_i18n
-			) );
+			$this->description( __( 'Note: The title is fetched from the Page SEO Settings on the home page.', 'autodescription' ) );
 		}
 
 		/**
@@ -201,7 +189,7 @@ switch ( $instance ) :
 			<label for="<?php $this->field_id( 'homepage_description' ); ?>" class="tsf-toblock">
 				<strong>
 					<?php
-					printf( esc_html__( 'Custom %s Description', 'autodescription' ), $home_page_i18n );
+					esc_html_e( 'Meta Description', 'autodescription' );
 					?>
 				</strong>
 			</label>
@@ -256,12 +244,10 @@ switch ( $instance ) :
 		$example_left = '<em><span class="tsf-custom-title-js">' . $_example_title . '</span><span class="tsf-custom-blogname-js"><span class="tsf-sep-js"> ' . $_example_separator . ' </span><span class="tsf-custom-tagline-js">' . $_example_blogname . '</span></span></span></em>';
 		$example_right = '<em><span class="tsf-custom-blogname-js"><span class="tsf-custom-tagline-js">' . $_example_blogname . '</span><span class="tsf-sep-js"> ' . $_example_separator . ' </span></span><span class="tsf-custom-title-js">' . $_example_title . '</span></em>';
 
-		$home_page_i18n = esc_html__( 'Home Page', 'autodescription' );
-
 		?>
 		<fieldset>
 			<legend>
-				<h4><?php esc_html_e( 'Title Additions Location', 'autodescription' ); ?></h4>
+				<h4><?php esc_html_e( 'Meta Title Additions Location', 'autodescription' ); ?></h4>
 				<?php $this->description( __( 'This setting determines which side the added title text will go on.', 'autodescription' ) ); ?>
 			</legend>
 
@@ -290,11 +276,11 @@ switch ( $instance ) :
 		</fieldset>
 
 		<hr>
-		<h4><?php printf( esc_html__( '%s Tagline', 'autodescription' ), $home_page_i18n ); ?></h4>
+		<h4><?php esc_html_e( 'Title Additions', 'autodescription' ); ?></h4>
 		<p id="tsf-title-tagline-toggle">
 			<label for="<?php $this->field_id( 'homepage_tagline' ); ?>" class="tsf-toblock">
 				<input type="checkbox" name="<?php $this->field_name( 'homepage_tagline' ); ?>" id="<?php $this->field_id( 'homepage_tagline' ); ?>" <?php $this->is_conditional_checked( 'homepage_tagline' ); ?> value="1" <?php checked( $this->get_field_value( 'homepage_tagline' ) ); ?> />
-				<?php printf( esc_html__( 'Add site description (tagline) to the Title on the %s?', 'autodescription' ), $home_page_i18n ); ?>
+				<?php esc_html_e( 'Add Meta Title Additions to the home page title?', 'autodescription' ); ?>
 			</label>
 		</p>
 		<?php
@@ -302,7 +288,6 @@ switch ( $instance ) :
 
 	case 'the_seo_framework_homepage_metabox_robots' :
 		$language = $this->google_language();
-		$home_page_i18n = esc_html__( 'Home Page', 'autodescription' );
 
 		//* Get home page ID. If blog on front, it's 0.
 		$home_id = $this->get_the_front_page_ID();
@@ -323,16 +308,16 @@ switch ( $instance ) :
 		}
 
 		?>
-		<h4><?php esc_html_e( 'Home Page Robots Meta Settings', 'autodescription' ); ?></h4>
+		<h4><?php esc_html_e( 'Robots Meta Settings', 'autodescription' ); ?></h4>
 		<?php
 
-		$noindex_note = $noindex_post ? $checked_home : '';
-		$nofollow_note = $nofollow_post ? $checked_home : '';
+		$noindex_note   = $noindex_post ? $checked_home : '';
+		$nofollow_note  = $nofollow_post ? $checked_home : '';
 		$noarchive_note = $noarchive_post ? $checked_home : '';
 
 		//* Index label.
-		/* translators: 1: Option, 2: Location */
-		$i_label = sprintf( esc_html__( 'Apply %1$s to the %2$s?', 'autodescription' ), $this->code_wrap( 'noindex' ), $home_page_i18n );
+		/* translators: %s = noindex/nofollow/noarchive */
+		$i_label = sprintf( esc_html__( 'Apply %s to the home page?', 'autodescription' ), $this->code_wrap( 'noindex' ) );
 		$i_label .= ' ';
 		$i_label .= $this->make_info(
 			__( 'This tells search engines not to show this page in their search results.', 'autodescription' ),
@@ -341,8 +326,8 @@ switch ( $instance ) :
 		) . $noindex_note;
 
 		//* Follow label.
-		/* translators: 1: Option, 2: Location */
-		$f_label = sprintf( esc_html__( 'Apply %1$s to the %2$s?', 'autodescription' ), $this->code_wrap( 'nofollow' ), $home_page_i18n );
+		/* translators: %s = noindex/nofollow/noarchive */
+		$f_label = sprintf( esc_html__( 'Apply %s to the home page?', 'autodescription' ), $this->code_wrap( 'nofollow' ) );
 		$f_label .= ' ';
 		$f_label .= $this->make_info(
 			__( 'This tells search engines not to follow links on this page.', 'autodescription' ),
@@ -351,8 +336,8 @@ switch ( $instance ) :
 		) . $nofollow_note;
 
 		//* Archive label.
-		/* translators: 1: Option, 2: Location */
-		$a_label = sprintf( esc_html__( 'Apply %1$s to the %2$s?', 'autodescription' ), $this->code_wrap( 'noarchive' ), $home_page_i18n );
+		/* translators: %s = noindex/nofollow/noarchive */
+		$a_label = sprintf( esc_html__( 'Apply %s to the home page?', 'autodescription' ), $this->code_wrap( 'noarchive' ) );
 		$a_label .= ' ';
 		$a_label .= $this->make_info(
 			__( 'This tells search engines not to save a cached copy of this page.', 'autodescription' ),
@@ -387,22 +372,22 @@ switch ( $instance ) :
 
 		// Add notice if any options are checked on the post.
 		if ( $noindex_post || $nofollow_post || $noarchive_post ) {
-			$this->description( __( 'Note: If any of these options are unchecked, but are checked on the Home Page, they will be outputted regardless.', 'autodescription' ) );
+			$this->description( __( 'Note: If any of these options are unchecked, but are checked on the home page, they will be outputted regardless.', 'autodescription' ) );
 		}
 		?>
 
 		<hr>
 
 		<h4><?php esc_html_e( 'Home Page Pagination Robots Settings', 'autodescription' ); ?></h4>
-		<?php $this->description( __( "If your Home Page is paginated and outputs content that's also found elsewhere on the website, enabling this option might prevent duplicate content.", 'autodescription' ) ); ?>
+		<?php $this->description( __( "If your home page is paginated and outputs content that's also found elsewhere on the website, enabling this option might prevent duplicate content.", 'autodescription' ) ); ?>
 
 		<?php
 		//* Echo checkbox.
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'home_paged_noindex',
-				/* translators: 1: Option, 2: Location */
-				sprintf( esc_html__( 'Apply %1$s to every second or later page on the %2$s?', 'autodescription' ), $this->code_wrap( 'noindex' ), $home_page_i18n ),
+				/* translators: %s = noindex/nofollow/noarchive */
+				sprintf( esc_html__( 'Apply %s to every second or later page on the home page?', 'autodescription' ), $this->code_wrap( 'noindex' ) ),
 				'',
 				false
 			),
@@ -421,21 +406,21 @@ switch ( $instance ) :
 
 		if ( $this->has_page_on_front() ) {
 			$image_args = array(
-				'post_id' => $page_id,
+				'post_id'    => $page_id,
 				'disallowed' => array(
 					'homemeta',
 				),
-				'escape' => false,
+				'escape'     => false,
 			);
 		} else {
 			$image_args = array(
-				'post_id' => $page_id,
+				'post_id'    => $page_id,
 				'disallowed' => array(
 					'homemeta',
 					'postmeta',
 					'featured',
 				),
-				'escape' => false,
+				'escape'     => false,
 			);
 		}
 		$image_placeholder = $this->get_social_image( $image_args );
@@ -443,8 +428,12 @@ switch ( $instance ) :
 		?>
 		<p>
 			<label for="tsf_homepage_socialimage-url">
-				<strong><?php esc_html_e( 'Custom Homepage Image URL', 'autodescription' ); ?></strong>
-				<?php $this->make_info( __( 'Set preferred homepage Social Image URL location.', 'autodescription' ), 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>
+				<strong><?php esc_html_e( 'Social Image URL', 'autodescription' ); ?></strong>
+				<?php
+				$this->make_info(
+					__( 'Set preferred homepage Social Image URL location.', 'autodescription' ), 'https://developers.facebook.com/docs/sharing/best-practices#images'
+				);
+				?>
 			</label>
 		</p>
 		<p>

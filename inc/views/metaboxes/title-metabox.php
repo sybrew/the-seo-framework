@@ -223,8 +223,10 @@ switch ( $instance ) :
 		 * @priority low 2.6.x
 		 */
 
-		?><h4><?php esc_html_e( 'Title prefix options', 'autodescription' ); ?></h4><?php
-		$this->description( __( 'On archives a descriptive prefix may be added to the title.', 'autodescription' ) );
+		?>
+		<h4><?php esc_html_e( 'Title Prefix Options', 'autodescription' ); ?></h4>
+		<?php
+		$this->description( __( 'On archives, a descriptive prefix may be added to generated titles.', 'autodescription' ) );
 
 		?>
 		<h4><?php esc_html_e( 'Example Automated Archive Title Output', 'autodescription' ); ?></h4>
@@ -235,11 +237,11 @@ switch ( $instance ) :
 
 		<hr>
 
-		<h4><?php esc_html_e( 'Remove Archive Title Prefixes', 'autodescription' ); ?></h4>
+		<h4><?php esc_html_e( 'Archive Title Prefixes', 'autodescription' ); ?></h4>
 		<p id="title-prefixes-toggle">
 			<label for="<?php $this->field_id( 'title_rem_prefixes' ); ?>">
 				<input type="checkbox" name="<?php $this->field_name( 'title_rem_prefixes' ); ?>" id="<?php $this->field_id( 'title_rem_prefixes' ); ?>" <?php $this->is_conditional_checked( 'title_rem_prefixes' ); ?> value="1" <?php checked( $this->get_field_value( 'title_rem_prefixes' ) ); ?> />
-				<?php esc_html_e( 'Remove prefixes from title?', 'autodescription' ); ?>
+				<?php esc_html_e( 'Remove term type prefixes from title?', 'autodescription' ); ?>
 			</label>
 			<?php
 			$this->make_info(

@@ -11,16 +11,15 @@ $instance = $this->get_view_instance( 'the_seo_framework_robots_metabox', $insta
 
 switch ( $instance ) :
 	case 'the_seo_framework_robots_metabox_main' :
-
 		//* Robots types
 		$types = array(
-			'category' => __( 'Category', 'autodescription' ),
-			'tag' => __( 'Tag', 'autodescription' ),
-			'author' => __( 'Author', 'autodescription' ),
-			'date' => __( 'Date', 'autodescription' ),
-			'search' => __( 'Search Pages', 'autodescription' ),
+			'category'   => __( 'Category', 'autodescription' ),
+			'tag'        => __( 'Tag', 'autodescription' ),
+			'author'     => __( 'Author', 'autodescription' ),
+			'date'       => __( 'Date', 'autodescription' ),
+			'search'     => __( 'Search Pages', 'autodescription' ),
 			'attachment' => __( 'Attachment Pages', 'autodescription' ),
-			'site' => _x( 'the entire site', '...for the entire site', 'autodescription' ),
+			'site'       => _x( 'the entire site', '...for the entire site', 'autodescription' ),
 		);
 
 		//* Robots i18n
@@ -28,17 +27,17 @@ switch ( $instance ) :
 			'noindex' => array(
 				'value' => 'noindex',
 				'name'  => __( 'NoIndex', 'autodescription' ),
-				'desc'  => __( 'These options prevent indexing of the selected archives and pages. If you enable this, the selected archives or pages will be removed from Search Engine results pages.', 'autodescription' ),
+				'desc'  => __( 'These options most likely prevent indexing of the selected archives and pages. If you enable this, the selected archives or pages are urged to be removed from Search Engine results pages.', 'autodescription' ),
 			),
 			'nofollow' => array(
 				'value' => 'nofollow',
 				'name'  => __( 'NoFollow', 'autodescription' ),
-				'desc'  => __( 'These options prevent links from being followed on the selected archives and pages. If you enable this, the selected archives or pages in-page links will gain no SEO value, including your own links.', 'autodescription' ),
+				'desc'  => __( 'These options most likely prevent links from being followed on the selected archives and pages. If you enable this, the selected archives or pages in-page links will gain no SEO value, including your own links.', 'autodescription' ),
 			),
 			'noarchive' => array(
 				'value' => 'noarchive',
 				'name'  => __( 'NoArchive', 'autodescription' ),
-				'desc'  => __( 'These options prevent caching of the selected archives and pages. If you enable this, search engines will not create a cached copy of the selected archives or pages.', 'autodescription' ),
+				'desc'  => __( 'These options most likely prevent caching of the selected archives and pages. If you enable this, bots are urged not create a cached copy of the selected archives or pages.', 'autodescription' ),
 			),
 		);
 
@@ -97,7 +96,6 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_robots_metabox_general' :
-
 		?>
 		<h4><?php esc_html_e( 'Open Directory Settings', 'autodescription' ); ?></h4>
 		<?php
@@ -107,6 +105,7 @@ switch ( $instance ) :
 		$fields = $this->wrap_fields(
 			$this->make_checkbox(
 				'noydir',
+				/* translators: %s = noydir */
 				sprintf( esc_html__( 'Apply %s to the entire site?', 'autodescription' ), $this->code_wrap( 'noydir' ) ),
 				'',
 				false
@@ -130,6 +129,7 @@ switch ( $instance ) :
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'paged_noindex',
+				/* translators: %s = noindex */
 				sprintf( esc_html__( 'Apply %s to every second or later archive page?', 'autodescription' ), $this->code_wrap( 'noindex' ) ),
 				'',
 				false
@@ -138,12 +138,18 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_robots_metabox_no' :
-
 		$ro_value = $robots['value'];
 		$ro_name = esc_html( $robots['name'] );
 		$ro_i18n = $robots['desc'];
 
-		?><h4><?php printf( esc_html__( '%s Robots Settings', 'autodescription' ), $ro_name ); ?></h4><?php
+		?>
+		<h4>
+		<?php
+			/* translators: %s = Category/Tag/Attachment/Site/Search */
+			printf( esc_html__( '%s Robots Settings', 'autodescription' ), $ro_name );
+		?>
+		</h4>
+		<?php
 		$this->description( $ro_i18n );
 
 		$checkboxes = '';
@@ -162,17 +168,29 @@ switch ( $instance ) :
 			$id = $type . '_' . $ro_value;
 
 			//* Add <hr> if it's 'site'
-			$checkboxes .= 'site' === $type ? '<hr class="tsf-option-spacer">' : '';
+			if ( 'site' === $type ) {
+				$checkboxes .= '<hr class="tsf-option-spacer">';
+
+				if ( in_array( $ro_value, [ 'noindex', 'nofollow' ], true ) )
+					$checkboxes .= sprintf(
+						'<p><span class="description">%s</span></p>',
+						esc_html__( 'No public site should ever use this option.', 'autodescription' )
+					);
+			}
 
 			$checkboxes .= $this->make_checkbox( esc_html( $id ), $label, '', false );
 		}
 
-		?><p class="tsf-fields"><?php
+		?>
+		<p class="tsf-fields">
+		<?php
 			//* Echo checkboxes.
 			$this->wrap_fields( $checkboxes, true );
-		?></p><?php
+		?>
+		</p>
+		<?php
 		break;
 
-	default :
+	default:
 		break;
 endswitch;
