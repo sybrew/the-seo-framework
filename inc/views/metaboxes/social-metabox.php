@@ -24,28 +24,28 @@ switch ( $instance ) :
 		 *   )
 		 * }
 		 */
-		$default_tabs = array(
-			'general' => array(
+		$default_tabs = [
+			'general' => [
 				'name'     => __( 'General', 'autodescription' ),
-				'callback' => array( $this, 'social_metabox_general_tab' ),
+				'callback' => [ $this, 'social_metabox_general_tab' ],
 				'dashicon' => 'admin-generic',
-			),
-			'facebook' => array(
+			],
+			'facebook' => [
 				'name'     => 'Facebook',
-				'callback' => array( $this, 'social_metabox_facebook_tab' ),
+				'callback' => [ $this, 'social_metabox_facebook_tab' ],
 				'dashicon' => 'facebook-alt',
-			),
-			'twitter' => array(
+			],
+			'twitter' => [
 				'name'     => 'Twitter',
-				'callback' => array( $this, 'social_metabox_twitter_tab' ),
+				'callback' => [ $this, 'social_metabox_twitter_tab' ],
 				'dashicon' => 'twitter',
-			),
-			'postdates' => array(
+			],
+			'postdates' => [
 				'name'     => __( 'Post Dates', 'autodescription' ),
-				'callback' => array( $this, 'social_metabox_postdates_tab' ),
+				'callback' => [ $this, 'social_metabox_postdates_tab' ],
 				'dashicon' => 'backup',
-			),
-		);
+			],
+		];
 
 		/**
 		 * Applies filters the_seo_framework_social_settings_tabs : array see $default_tabs

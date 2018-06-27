@@ -86,7 +86,7 @@ class Generate_Image extends Generate_Url {
 		if ( ! $singular )
 			return '';
 
-		static $images = array();
+		static $images = [];
 
 		$id = (int) $id;
 
@@ -96,31 +96,31 @@ class Generate_Image extends Generate_Url {
 		if ( $singular ) {
 			if ( $id === $this->get_the_front_page_ID() ) {
 				if ( $this->has_page_on_front() ) {
-					$image_args = array(
-						'post_id' => $id,
+					$image_args = [
+						'post_id'       => $id,
 						'skip_fallback' => true,
-						'escape' => false,
-					);
+						'escape'        => false,
+					];
 				} else {
-					$image_args = array(
-						'post_id' => $id,
+					$image_args = [
+						'post_id'       => $id,
 						'skip_fallback' => true,
-						'disallowed' => array(
+						'disallowed'    => [
 							'postmeta',
 							'featured',
-						),
-						'escape' => false,
-					);
+						],
+						'escape'        => false,
+					];
 				}
 			} else {
-				$image_args = array(
-					'post_id' => $id,
+				$image_args = [
+					'post_id'       => $id,
 					'skip_fallback' => true,
-					'disallowed' => array(
+					'disallowed'    => [
 						'homemeta',
-					),
-					'escape' => false,
-				);
+					],
+					'escape'        => false,
+				];
 			}
 			$url = $this->get_social_image( $image_args, false );
 		} else {
@@ -154,7 +154,7 @@ class Generate_Image extends Generate_Url {
 	 * @param bool $set_og_dimension Whether to set open graph dimensions.
 	 * @return string The social image.
 	 */
-	public function get_social_image( $args = array(), $set_og_dimension = false ) {
+	public function get_social_image( $args = [], $set_og_dimension = false ) {
 
 		$args = $this->reparse_image_args( $args );
 
@@ -268,19 +268,19 @@ class Generate_Image extends Generate_Url {
 	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
 	 * @return array $args parsed args.
 	 */
-	public function parse_image_args( $args = array(), $defaults = array(), $get_defaults = false ) {
+	public function parse_image_args( $args = [], $defaults = [], $get_defaults = false ) {
 
 		//* Passing back the defaults reduces the memory usage.
 		if ( empty( $defaults ) ) {
-			$defaults = array(
-				'post_id'    => $this->get_the_real_ID(),
-				'image'      => '',
-				'size'       => 'full',
-				'icon'       => false,
+			$defaults = [
+				'post_id'       => $this->get_the_real_ID(),
+				'image'         => '',
+				'size'          => 'full',
+				'icon'          => false,
 				'skip_fallback' => false,
-				'disallowed' => array(),
-				'escape'     => true,
-			);
+				'disallowed'    => [],
+				'escape'        => true,
+			];
 
 			/**
 			 * Applies filters the_seo_framework_og_image_args : array
@@ -338,7 +338,7 @@ class Generate_Image extends Generate_Url {
 	 * @param array $args required The passed arguments.
 	 * @return array $args parsed args.
 	 */
-	public function reparse_image_args( $args = array() ) {
+	public function reparse_image_args( $args = [] ) {
 
 		$default_args = $this->parse_image_args( $args, '', true );
 
@@ -498,7 +498,7 @@ class Generate_Image extends Generate_Url {
 	 * @param bool $set_og_dimensions Whether to set Open Graph image dimensions.
 	 * @return string The social image URL.
 	 */
-	public function get_social_image_url_from_post_thumbnail( $id, $args = array(), $set_og_dimensions = false ) {
+	public function get_social_image_url_from_post_thumbnail( $id, $args = [], $set_og_dimensions = false ) {
 
 		$image_id = $id ? \get_post_thumbnail_id( $id ) : '';
 
@@ -526,7 +526,7 @@ class Generate_Image extends Generate_Url {
 	 * @param bool $set_og_dimensions Whether to set Open Graph image dimensions.
 	 * @return string The attachment URL.
 	 */
-	public function get_social_image_url_from_attachment( $id, $args = array(), $set_og_dimensions = false ) {
+	public function get_social_image_url_from_attachment( $id, $args = [], $set_og_dimensions = false ) {
 
 		if ( ! \wp_attachment_is_image( $id ) )
 			return '';
@@ -590,7 +590,7 @@ class Generate_Image extends Generate_Url {
 	 * @param bool $set_og_dimensions Whether to set OG dimensions.
 	 * @return string Parsed image url or empty if already called
 	 */
-	public function parse_og_image( $id, $args = array(), $set_og_dimensions = false ) {
+	public function parse_og_image( $id, $args = [], $set_og_dimensions = false ) {
 
 		//* Don't do anything if $id isn't given.
 		if ( empty( $id ) )

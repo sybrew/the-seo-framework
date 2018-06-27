@@ -16,8 +16,8 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 			<p class="tsf-top-buttons">
 				<?php
-				submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
-				submit_button( $this->page_defaults['reset_button_text'], 'secondary tsf-js-confirm-reset', $this->get_field_name( 'tsf-settings-reset' ), false, array( 'id' => '' ) );
+				submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, [ 'id' => '' ] );
+				submit_button( $this->page_defaults['reset_button_text'], 'secondary tsf-js-confirm-reset', $this->get_field_name( 'tsf-settings-reset' ), false, [ 'id' => '' ] );
 				?>
 			</p>
 		</div>
@@ -26,8 +26,8 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 
 		<div class="tsf-bottom-buttons">
 			<?php
-			submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, array( 'id' => '' ) );
-			submit_button( $this->page_defaults['reset_button_text'], 'secondary tsf-js-confirm-reset', $this->get_field_name( 'tsf-settings-reset' ), false, array( 'id' => '' ) );
+			submit_button( $this->page_defaults['save_button_text'], 'primary', 'submit', false, [ 'id' => '' ] );
+			submit_button( $this->page_defaults['reset_button_text'], 'secondary tsf-js-confirm-reset', $this->get_field_name( 'tsf-settings-reset' ), false, [ 'id' => '' ] );
 			?>
 		</div>
 	</form>

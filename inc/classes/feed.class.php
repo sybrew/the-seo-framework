@@ -53,11 +53,11 @@ class Feed extends Cache {
 		if ( ! $this->is_feed() )
 			return;
 
-		\add_filter( 'the_content_feed', array( $this, 'the_content_feed' ), 10, 2 );
+		\add_filter( 'the_content_feed', [ $this, 'the_content_feed' ], 10, 2 );
 
 		//* Only add the feed link to the excerpt if we're only building excerpts.
 		if ( $this->rss_uses_excerpt() )
-			\add_filter( 'the_excerpt_rss', array( $this, 'the_content_feed' ), 10, 1 );
+			\add_filter( 'the_excerpt_rss', [ $this, 'the_content_feed' ], 10, 1 );
 
 	}
 

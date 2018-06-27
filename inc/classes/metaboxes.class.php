@@ -58,7 +58,7 @@ class Metaboxes extends Site_Options {
 	 * @param string $version the The SEO Framework version for debugging. May be emptied.
 	 * @param bool $use_tabs Whether to output tabs, only works when $tabs is greater than 1.
 	 */
-	public function nav_tab_wrapper( $id, $tabs = array(), $version = '2.3.6', $use_tabs = true ) {
+	public function nav_tab_wrapper( $id, $tabs = [], $version = '2.3.6', $use_tabs = true ) {
 
 		//* Whether tabs are active.
 		$use_tabs = $use_tabs && count( $tabs ) > 1;
@@ -160,7 +160,7 @@ class Metaboxes extends Site_Options {
 	 * @param object|null $post The current post object.
 	 * @param array $args The metabox arguments.
 	 */
-	public function general_metabox( $post = null, $args = array() ) {
+	public function general_metabox( $post = null, $args = [] ) {
 		/**
 		 * @since 2.8.0
 		 */
@@ -179,7 +179,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
 	public function general_metabox_general_tab() {
-		$this->get_view( 'metaboxes/general-metabox', array(), 'general' );
+		$this->get_view( 'metaboxes/general-metabox', [], 'general' );
 	}
 
 	/**
@@ -189,7 +189,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
 	public function general_metabox_layout_tab() {
-		$this->get_view( 'metaboxes/general-metabox', array(), 'layout' );
+		$this->get_view( 'metaboxes/general-metabox', [], 'layout' );
 	}
 
 	/**
@@ -199,7 +199,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
 	public function general_metabox_performance_tab() {
-		$this->get_view( 'metaboxes/general-metabox', array(), 'performance' );
+		$this->get_view( 'metaboxes/general-metabox', [], 'performance' );
 	}
 
 	/**
@@ -209,7 +209,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
 	public function general_metabox_canonical_tab() {
-		$this->get_view( 'metaboxes/general-metabox', array(), 'canonical' );
+		$this->get_view( 'metaboxes/general-metabox', [], 'canonical' );
 	}
 
 	/**
@@ -219,7 +219,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
 	public function general_metabox_timestamps_tab() {
-		$this->get_view( 'metaboxes/general-metabox', array(), 'timestamps' );
+		$this->get_view( 'metaboxes/general-metabox', [], 'timestamps' );
 	}
 
 	/**
@@ -230,7 +230,7 @@ class Metaboxes extends Site_Options {
 	 * @param object|null $post The current post object.
 	 * @param array $args The metabox arguments.
 	 */
-	public function title_metabox( $post = null, $args = array() ) {
+	public function title_metabox( $post = null, $args = [] ) {
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -249,7 +249,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->title_metabox() : Callback for Title Settings box.
 	 */
 	public function title_metabox_general_tab() {
-		$this->get_view( 'metaboxes/title-metabox', array(), 'general' );
+		$this->get_view( 'metaboxes/title-metabox', [], 'general' );
 	}
 
 	/**
@@ -263,7 +263,7 @@ class Metaboxes extends Site_Options {
 	 *   'right' => Right Example
 	 * }
 	 */
-	public function title_metabox_additions_tab( $examples = array() ) {
+	public function title_metabox_additions_tab( $examples = [] ) {
 		$this->get_view( 'metaboxes/title-metabox', get_defined_vars(), 'additions' );
 	}
 
@@ -279,7 +279,7 @@ class Metaboxes extends Site_Options {
 	 * }
 	 * @param bool $showleft The example location.
 	 */
-	public function title_metabox_prefixes_tab( $additions = array(), $showleft = false ) {
+	public function title_metabox_prefixes_tab( $additions = [], $showleft = false ) {
 		$this->get_view( 'metaboxes/title-metabox', get_defined_vars(), 'prefixes' );
 	}
 
@@ -291,7 +291,7 @@ class Metaboxes extends Site_Options {
 	 * @param object|null $post The current post object.
 	 * @param array $args The metabox arguments.
 	 */
-	public function description_metabox( $post = null, $args = array() ) {
+	public function description_metabox( $post = null, $args = [] ) {
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -310,7 +310,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->description_metabox() Callback for Description Settings box.
 	 */
 	public function description_metabox_general_tab() {
-		$this->get_view( 'metaboxes/description-metabox', array(), 'general' );
+		$this->get_view( 'metaboxes/description-metabox', [], 'general' );
 	}
 
 	/**
@@ -320,7 +320,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->description_metabox() Callback for Description Settings box.
 	 */
 	public function description_metabox_additions_tab() {
-		$this->get_view( 'metaboxes/description-metabox', array(), 'additions' );
+		$this->get_view( 'metaboxes/description-metabox', [], 'additions' );
 	}
 
 	/**
@@ -331,7 +331,7 @@ class Metaboxes extends Site_Options {
 	 * @param object|null $post The current post object.
 	 * @param array $args The metabox arguments.
 	 */
-	public function robots_metabox( $post = null, $args = array() ) {
+	public function robots_metabox( $post = null, $args = [] ) {
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -350,7 +350,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->robots_metabox() Callback for Robots Settings box.
 	 */
 	protected function robots_metabox_general_tab() {
-		$this->get_view( 'metaboxes/robots-metabox', array(), 'general' );
+		$this->get_view( 'metaboxes/robots-metabox', [], 'general' );
 	}
 
 	/**
@@ -378,7 +378,7 @@ class Metaboxes extends Site_Options {
 	 * @param object|null $post The current post object.
 	 * @param array $args The navigation tabs args.
 	 */
-	public function homepage_metabox( $post = null, $args = array() ) {
+	public function homepage_metabox( $post = null, $args = [] ) {
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -397,7 +397,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
 	 */
 	public function homepage_metabox_general_tab() {
-		$this->get_view( 'metaboxes/homepage-metabox', array(), 'general' );
+		$this->get_view( 'metaboxes/homepage-metabox', [], 'general' );
 	}
 
 	/**
@@ -407,7 +407,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
 	 */
 	public function homepage_metabox_additions_tab() {
-		$this->get_view( 'metaboxes/homepage-metabox', array(), 'additions' );
+		$this->get_view( 'metaboxes/homepage-metabox', [], 'additions' );
 	}
 
 	/**
@@ -417,7 +417,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
 	 */
 	public function homepage_metabox_robots_tab() {
-		$this->get_view( 'metaboxes/homepage-metabox', array(), 'robots' );
+		$this->get_view( 'metaboxes/homepage-metabox', [], 'robots' );
 	}
 
 	/**
@@ -427,7 +427,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
 	 */
 	public function homepage_metabox_social_tab() {
-		$this->get_view( 'metaboxes/homepage-metabox', array(), 'social' );
+		$this->get_view( 'metaboxes/homepage-metabox', [], 'social' );
 	}
 
 	/**
@@ -438,7 +438,7 @@ class Metaboxes extends Site_Options {
 	 * @param object|null $post The current post object.
 	 * @param array $args the social tabs arguments.
 	 */
-	public function social_metabox( $post = null, $args = array() ) {
+	public function social_metabox( $post = null, $args = [] ) {
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -457,7 +457,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->social_metabox() Callback for Social Settings box.
 	 */
 	protected function social_metabox_general_tab() {
-		$this->get_view( 'metaboxes/social-metabox', array(), 'general' );
+		$this->get_view( 'metaboxes/social-metabox', [], 'general' );
 	}
 
 	/**
@@ -468,7 +468,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->social_metabox() Callback for Social Settings box.
 	 */
 	protected function social_metabox_facebook_tab() {
-		$this->get_view( 'metaboxes/social-metabox', array(), 'facebook' );
+		$this->get_view( 'metaboxes/social-metabox', [], 'facebook' );
 	}
 
 	/**
@@ -478,7 +478,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->social_metabox() Callback for Social Settings box.
 	 */
 	protected function social_metabox_twitter_tab() {
-		$this->get_view( 'metaboxes/social-metabox', array(), 'twitter' );
+		$this->get_view( 'metaboxes/social-metabox', [], 'twitter' );
 	}
 
 	/**
@@ -488,7 +488,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->social_metabox() Callback for Social Settings box.
 	 */
 	public function social_metabox_postdates_tab() {
-		$this->get_view( 'metaboxes/social-metabox', array(), 'postdates' );
+		$this->get_view( 'metaboxes/social-metabox', [], 'postdates' );
 	}
 
 	/**
@@ -499,7 +499,7 @@ class Metaboxes extends Site_Options {
 	 * @param object|null $post The current post object.
 	 * @param array $args the social tabs arguments.
 	 */
-	public function webmaster_metabox( $post = null, $args = array() ) {
+	public function webmaster_metabox( $post = null, $args = [] ) {
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -520,7 +520,7 @@ class Metaboxes extends Site_Options {
 	 * @param object|null $post The current post object.
 	 * @param array $args the social tabs arguments.
 	 */
-	public function sitemaps_metabox( $post = null, $args = array() ) {
+	public function sitemaps_metabox( $post = null, $args = [] ) {
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -539,7 +539,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public function sitemaps_metabox_general_tab() {
-		$this->get_view( 'metaboxes/sitemaps-metabox', array(), 'general' );
+		$this->get_view( 'metaboxes/sitemaps-metabox', [], 'general' );
 	}
 
 	/**
@@ -549,7 +549,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public function sitemaps_metabox_robots_tab() {
-		$this->get_view( 'metaboxes/sitemaps-metabox', array(), 'robots' );
+		$this->get_view( 'metaboxes/sitemaps-metabox', [], 'robots' );
 	}
 
 	/**
@@ -559,7 +559,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public function sitemaps_metabox_timestamps_tab() {
-		$this->get_view( 'metaboxes/sitemaps-metabox', array(), 'timestamps' );
+		$this->get_view( 'metaboxes/sitemaps-metabox', [], 'timestamps' );
 	}
 
 	/**
@@ -569,7 +569,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public function sitemaps_metabox_notify_tab() {
-		$this->get_view( 'metaboxes/sitemaps-metabox', array(), 'notify' );
+		$this->get_view( 'metaboxes/sitemaps-metabox', [], 'notify' );
 	}
 
 	/**
@@ -579,7 +579,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public function sitemaps_metabox_style_tab() {
-		$this->get_view( 'metaboxes/sitemaps-metabox', array(), 'style' );
+		$this->get_view( 'metaboxes/sitemaps-metabox', [], 'style' );
 	}
 
 	/**
@@ -590,7 +590,7 @@ class Metaboxes extends Site_Options {
 	 * @param object|null $post The current post object.
 	 * @param array $args the social tabs arguments.
 	 */
-	public function feed_metabox( $post = null, $args = array() ) {
+	public function feed_metabox( $post = null, $args = [] ) {
 		/**
 		 * @since 2.5.2
 		 */
@@ -610,7 +610,7 @@ class Metaboxes extends Site_Options {
 	 * @param object|null $post The current post object.
 	 * @param array $args the social tabs arguments.
 	 */
-	public function schema_metabox( $post = null, $args = array() ) {
+	public function schema_metabox( $post = null, $args = [] ) {
 		/**
 		 * @since 2.6.0
 		 */
@@ -630,7 +630,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->schema_metabox() Callback for Schema.org Settings box.
 	 */
 	public function schema_metabox_general_tab() {
-		$this->get_view( 'metaboxes/schema-metabox', array(), 'general' );
+		$this->get_view( 'metaboxes/schema-metabox', [], 'general' );
 	}
 
 	/**
@@ -640,7 +640,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->schema_metabox() Callback for Schema.org Settings box.
 	 */
 	public function schema_metabox_structure_tab() {
-		$this->get_view( 'metaboxes/schema-metabox', array(), 'structure' );
+		$this->get_view( 'metaboxes/schema-metabox', [], 'structure' );
 	}
 
 	/**
@@ -650,6 +650,6 @@ class Metaboxes extends Site_Options {
 	 * @see $this->schema_metabox() Callback for Schema.org Settings box.
 	 */
 	public function schema_metabox_presence_tab() {
-		$this->get_view( 'metaboxes/schema-metabox', array(), 'presence' );
+		$this->get_view( 'metaboxes/schema-metabox', [], 'presence' );
 	}
 }

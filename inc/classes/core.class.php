@@ -127,10 +127,10 @@ class Core {
 
 			$debug_instance = Debug::get_instance();
 
-			\add_action( 'the_seo_framework_do_before_output', array( $debug_instance, 'set_debug_query_output_cache' ) );
-			\add_action( 'admin_footer', array( $debug_instance, 'debug_screens' ) );
-			\add_action( 'admin_footer', array( $debug_instance, 'debug_output' ) );
-			\add_action( 'wp_footer', array( $debug_instance, 'debug_output' ) );
+			\add_action( 'the_seo_framework_do_before_output', [ $debug_instance, 'set_debug_query_output_cache' ] );
+			\add_action( 'admin_footer', [ $debug_instance, 'debug_screens' ] );
+			\add_action( 'admin_footer', [ $debug_instance, 'debug_output' ] );
+			\add_action( 'wp_footer', [ $debug_instance, 'debug_output' ] );
 		}
 	}
 
@@ -234,7 +234,7 @@ class Core {
 	 */
 	public function plugin_action_links( $links = [] ) {
 
-		$tsf_links = array();
+		$tsf_links = [];
 
 		if ( $this->load_options )
 			$tsf_links['settings'] = '<a href="' . \esc_url( \admin_url( 'admin.php?page=' . $this->seo_settings_page_slug ) ) . '">' . \esc_html__( 'Settings', 'autodescription' ) . '</a>';
@@ -340,7 +340,7 @@ class Core {
 	 * }
 	 * @return string The dismissible error notice.
 	 */
-	public function generate_dismissible_sticky_notice( $message, $key, $args = array() ) {
+	public function generate_dismissible_sticky_notice( $message, $key, $args = [] ) {
 		return '';
 	}
 
@@ -361,7 +361,7 @@ class Core {
 	 * }
 	 * @return string The dismissible error notice.
 	 */
-	public function do_dismissible_sticky_notice( $message, $key, $args = array() ) {
+	public function do_dismissible_sticky_notice( $message, $key, $args = [] ) {
 		echo $this->generate_dismissible_sticky_notice( $message, $key, $args ); // xss ok
 	}
 
@@ -546,7 +546,7 @@ class Core {
 	 */
 	public function maybe_lowercase_noun( $noun ) {
 
-		static $lowercase = array();
+		static $lowercase = [];
 
 		if ( isset( $lowercase[ $noun ] ) )
 			return $lowercase[ $noun ];
@@ -895,7 +895,7 @@ class Core {
 	 * @param array $args The function arguments.
 	 * @return string The markdown converted text.
 	 */
-	public function convert_markdown( $text, $convert = array(), $args = array() ) {
+	public function convert_markdown( $text, $convert = [], $args = [] ) {
 
 		preprocess : {
 			$text = str_replace( "\r\n", "\n", $text );

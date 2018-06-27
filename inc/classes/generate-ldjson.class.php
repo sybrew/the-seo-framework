@@ -59,7 +59,7 @@ class Generate_Ldjson extends Generate_Image {
 		$data = array_filter( $data );
 
 		foreach ( $data as $k => $v ) {
-			$thing = array( $k => $v );
+			$thing = [ $k => $v ];
 			$this->build_json_data_cache( $key, $thing );
 		}
 	}
@@ -92,7 +92,7 @@ class Generate_Ldjson extends Generate_Image {
 			 * @param array  $data The LD-JSON data.
 			 * @param string $key  The data key.
 			 */
-			$data = (array) \apply_filters_ref_array( 'the_seo_framework_receive_json_data', array( $data, $key ) );
+			$data = (array) \apply_filters_ref_array( 'the_seo_framework_receive_json_data', [ $data, $key ] );
 		}
 
 		if ( $encode ) {
@@ -102,7 +102,7 @@ class Generate_Ldjson extends Generate_Image {
 			return $data ? (string) json_encode( $data, $options ) : '';
 		}
 
-		return $data ?: array();
+		return $data ?: [];
 	}
 
 	/**
@@ -260,47 +260,50 @@ class Generate_Ldjson extends Generate_Image {
 		$knowledge_type = $this->get_option( 'knowledge_type' );
 		$knowledge_name = $this->get_option( 'knowledge_name' ) ?: $this->get_blogname();
 
-		$data = array(
+		$data = [
 			'@context' => 'https://schema.org',
-			'@type' => ucfirst( \esc_attr( $knowledge_type ) ),
-			'url' => $this->get_homepage_permalink(),
-			'name' => $this->escape_title( $knowledge_name ),
-		);
+			'@type'    => ucfirst( \esc_attr( $knowledge_type ) ),
+			'url'      => $this->get_homepage_permalink(),
+			'name'     => $this->escape_title( $knowledge_name ),
+		];
 
 		if ( $this->get_option( 'knowledge_logo' ) && 'organization' === $knowledge_type ) {
-			$data += array(
+			$data += [
 				'logo' => \esc_url_raw( $this->get_knowledge_logo() ),
-			);
+			];
 		}
 
 		/**
 		 * Applies filters 'the_seo_framework_json_options' : array The option names
 		 * @since Unknown. Definitely 2.7 or later.
 		 */
-		$sameurls_options = (array) \apply_filters( 'the_seo_framework_json_options', array(
-			'knowledge_facebook',
-			'knowledge_twitter',
-			'knowledge_gplus',
-			'knowledge_instagram',
-			'knowledge_youtube',
-			'knowledge_linkedin',
-			'knowledge_pinterest',
-			'knowledge_soundcloud',
-			'knowledge_tumblr',
-		) );
+		$sameurls_options = (array) \apply_filters(
+			'the_seo_framework_json_options',
+			[
+				'knowledge_facebook',
+				'knowledge_twitter',
+				'knowledge_gplus',
+				'knowledge_instagram',
+				'knowledge_youtube',
+				'knowledge_linkedin',
+				'knowledge_pinterest',
+				'knowledge_soundcloud',
+				'knowledge_tumblr',
+			]
+		);
 
-		$sameurls = array();
+		$sameurls = [];
 		foreach ( $sameurls_options as $_o ) {
 			$_ov = $this->get_option( $_o ) ?: '';
 			//* Sublevel array entries aren't getting caught by array_filter().
 			if ( $_ov )
-				$sameurls[] = \esc_url_raw( $_ov, array( 'https', 'http' ) );
+				$sameurls[] = \esc_url_raw( $_ov, [ 'https', 'http' ] );
 		}
 
 		if ( $sameurls ) {
-			$data += array(
+			$data += [
 				'sameAs' => $sameurls,
-			);
+			];
 		}
 
 		$key = 'Links';
@@ -330,12 +333,15 @@ class Generate_Ldjson extends Generate_Image {
 		 * @param string $logo       The current logo URL.
 		 * @param bool   $get_option Whether to test the option or just the fallbacks.
 		 */
-		return \apply_filters_ref_array( 'the_seo_framework_knowledge_logo', array(
-			( $get_option ? $this->get_option( 'knowledge_logo_url' ) : false )
-				?: $this->get_site_icon()
-				?: '',
-			$get_option,
-		) );
+		return \apply_filters_ref_array(
+			'the_seo_framework_knowledge_logo',
+			[
+				( $get_option ? $this->get_option( 'knowledge_logo_url' ) : false )
+					?: $this->get_site_icon()
+					?: '',
+				$get_option,
+			]
+		);
 	}
 
 	/**
@@ -379,7 +385,7 @@ class Generate_Ldjson extends Generate_Image {
 			return '';
 
 		$output = '';
-		$items = array();
+		$items = [];
 		$parents = array_reverse( $parents );
 
 		foreach ( $parents as $pos => $parent_id ) {
@@ -392,18 +398,18 @@ class Generate_Ldjson extends Generate_Image {
 
 			$position = $pos + 2;
 
-			$crumb = array(
+			$crumb = [
 				'@type'    => 'ListItem',
 				'position' => $position,
-				'item'     => array(
+				'item'     => [
 					'@id'  => $this->get_schema_url_id(
 						'breadcrumb',
 						'create',
-						array( 'id' => $parent_id )
+						[ 'id' => $parent_id ]
 					),
 					'name'  => $this->escape_title( $parent_name ),
-				),
-			);
+				],
+			];
 
 			$image = $this->get_schema_image( $parent_id );
 			if ( $image )
@@ -467,15 +473,22 @@ class Generate_Ldjson extends Generate_Image {
 		 * @param int    $post_id  The current Post ID.
 		 * @param string $taxonomy The current taxonomy (either category or product_cat).
 		 */
-		$terms = (array) \apply_filters_ref_array( 'the_seo_framework_ld_json_breadcrumb_terms', array( \get_the_terms( $post_id, $taxonomy ), $post_id, $taxonomy ) );
+		$terms = (array) \apply_filters_ref_array(
+			'the_seo_framework_ld_json_breadcrumb_terms',
+			[
+				\get_the_terms( $post_id, $taxonomy ),
+				$post_id,
+				$taxonomy,
+			]
+		);
 
 		if ( empty( $terms ) )
 			return '';
 
 		$terms = \wp_list_pluck( $terms, 'parent', 'term_id' );
 
-		$parents = array();
-		$assigned_ids = array();
+		$parents = [];
+		$assigned_ids = [];
 
 		//* Fetch cats children id's, if any.
 		foreach ( $terms as $term_id => $parent_id ) :
@@ -487,7 +500,7 @@ class Generate_Ldjson extends Generate_Image {
 				$parents[ $term_id ] = $ancestors;
 			} else {
 				//= Save current only with empty parent id..
-				$parents[ $term_id ] = array();
+				$parents[ $term_id ] = [];
 			}
 		endforeach;
 		//= Circle of life...
@@ -591,7 +604,7 @@ class Generate_Ldjson extends Generate_Image {
 	 * @param array $previous_tree A previous set tree to compare to, if set.
 	 * @return array Trees in order.
 	 */
-	protected function build_ld_json_breadcrumb_trees( $kittens, array $previous_tree = array() ) {
+	protected function build_ld_json_breadcrumb_trees( $kittens, array $previous_tree = [] ) {
 
 		$trees = $previous_tree;
 
@@ -602,10 +615,10 @@ class Generate_Ldjson extends Generate_Image {
 			} else {
 				if ( 1 === count( $kitten ) ) {
 					//* Single tree.
-					$trees[] = array( reset( $kitten ), $parent );
+					$trees[] = [ reset( $kitten ), $parent ];
 				} else {
 					//* Nested categories.
-					$add = array();
+					$add = [];
 
 					foreach ( $kitten as $kit_id => $child_id ) {
 						//* Only add if non-existent in $trees.
@@ -616,7 +629,7 @@ class Generate_Ldjson extends Generate_Image {
 					//* Put children in right order.
 					$add = array_reverse( $add );
 
-					$trees[] = array_merge( $add, array( $parent ) );
+					$trees[] = array_merge( $add, [ $parent ] );
 				}
 			}
 		}

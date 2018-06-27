@@ -132,10 +132,10 @@ class Init extends Query {
 		}
 
 		//* Add query strings for sitemap rewrite.
-		\add_action( 'init', array( $this, 'rewrite_rule_sitemap' ), 1 );
+		\add_action( 'init', [ $this, 'rewrite_rule_sitemap' ], 1 );
 
 		//* Enqueue sitemap rewrite flush
-		\add_action( 'shutdown', array( $this, 'maybe_flush_rewrite' ), 999 );
+		\add_action( 'shutdown', [ $this, 'maybe_flush_rewrite' ], 999 );
 	}
 
 	/**
@@ -146,10 +146,10 @@ class Init extends Query {
 	public function init_global_filters() {
 
 		//* Add query strings for sitemap rewrite.
-		\add_filter( 'query_vars', array( $this, 'enqueue_sitemap_query_vars' ), 1, 1 );
+		\add_filter( 'query_vars', [ $this, 'enqueue_sitemap_query_vars' ], 1, 1 );
 
 		//* Adjust category link to accommodate primary term.
-		\add_filter( 'post_link_category', array( $this, '_adjust_post_link_category' ), 10, 3 );
+		\add_filter( 'post_link_category', [ $this, '_adjust_post_link_category' ], 10, 3 );
 	}
 
 	/**
@@ -186,62 +186,62 @@ class Init extends Query {
 		$this->initialize_term_meta();
 
 		//* Save post data.
-		\add_action( 'save_post', array( $this, 'inpost_seo_save' ), 1, 2 );
-		\add_action( 'edit_attachment', array( $this, 'inattachment_seo_save' ), 1 );
-		\add_action( 'save_post', array( $this, '_save_inpost_primary_term' ), 1, 2 );
+		\add_action( 'save_post', [ $this, 'inpost_seo_save' ], 1, 2 );
+		\add_action( 'edit_attachment', [ $this, 'inattachment_seo_save' ], 1 );
+		\add_action( 'save_post', [ $this, '_save_inpost_primary_term' ], 1, 2 );
 
 		//* Enqueues admin scripts.
-		\add_action( 'admin_enqueue_scripts', array( $this, '_init_admin_scripts' ), 0, 1 );
+		\add_action( 'admin_enqueue_scripts', [ $this, '_init_admin_scripts' ], 0, 1 );
 
 		//* Add plugin links to the plugin activation page.
-		\add_filter( 'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, array( $this, 'plugin_action_links' ), 10, 2 );
+		\add_filter( 'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, [ $this, 'plugin_action_links' ], 10, 2 );
 
 		//* Initialize post states.
-		\add_action( 'current_screen', array( $this, 'post_state' ) );
+		\add_action( 'current_screen', [ $this, 'post_state' ] );
 
 		if ( $this->is_option_checked( 'display_seo_bar_tables' ) ) {
 			//* Initialize columns.
-			\add_action( 'current_screen', array( $this, 'init_columns' ) );
+			\add_action( 'current_screen', [ $this, 'init_columns' ] );
 
 			//* Ajax handlers for columns.
-			\add_action( 'wp_ajax_add-tag', array( $this, '_init_columns_wp_ajax_add_tag' ), -1 );
-			\add_action( 'wp_ajax_inline-save', array( $this, '_init_columns_wp_ajax_inline_save' ), -1 );
-			\add_action( 'wp_ajax_inline-save-tax', array( $this, '_init_columns_wp_ajax_inline_save_tax' ), -1 );
+			\add_action( 'wp_ajax_add-tag', [ $this, '_init_columns_wp_ajax_add_tag' ], -1 );
+			\add_action( 'wp_ajax_inline-save', [ $this, '_init_columns_wp_ajax_inline_save' ], -1 );
+			\add_action( 'wp_ajax_inline-save-tax', [ $this, '_init_columns_wp_ajax_inline_save_tax' ], -1 );
 		}
 
 		if ( $this->load_options ) :
 			// Enqueue i18n defaults.
-			\add_action( 'admin_init', array( $this, 'enqueue_page_defaults' ), 1 );
+			\add_action( 'admin_init', [ $this, 'enqueue_page_defaults' ], 1 );
 
 			//* Set up site settings and save/reset them
-			\add_action( 'admin_init', array( $this, 'register_settings' ), 5 );
+			\add_action( 'admin_init', [ $this, 'register_settings' ], 5 );
 
 			//* Load the SEO admin page content and handlers.
-			\add_action( 'admin_init', array( $this, 'settings_init' ), 10 );
+			\add_action( 'admin_init', [ $this, 'settings_init' ], 10 );
 
 			//* Enqueue Inpost meta boxes.
-			\add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box_init' ), 5 );
+			\add_action( 'add_meta_boxes', [ $this, 'add_inpost_seo_box_init' ], 5 );
 
 			//* Enqueue Taxonomy meta output.
-			\add_action( 'current_screen', array( $this, 'add_taxonomy_seo_box_init' ), 10 );
+			\add_action( 'current_screen', [ $this, 'add_taxonomy_seo_box_init' ], 10 );
 
 			// Add menu links and register $this->seo_settings_page_hook
-			\add_action( 'admin_menu', array( $this, 'add_menu_link' ) );
+			\add_action( 'admin_menu', [ $this, 'add_menu_link' ] );
 
 			// Set up notices
-			\add_action( 'admin_notices', array( $this, 'notices' ) );
+			\add_action( 'admin_notices', [ $this, 'notices' ] );
 
 			// Load nessecary assets
-			\add_action( 'admin_init', array( $this, 'load_assets' ) );
+			\add_action( 'admin_init', [ $this, 'load_assets' ] );
 
 			//* Admin AJAX for counter options.
-			\add_action( 'wp_ajax_the_seo_framework_update_counter', array( $this, 'wp_ajax_update_counter_type' ) );
+			\add_action( 'wp_ajax_the_seo_framework_update_counter', [ $this, 'wp_ajax_update_counter_type' ] );
 
 			//* Admin AJAX for TSF Cropper
-			\add_action( 'wp_ajax_tsf-crop-image', array( $this, 'wp_ajax_crop_image' ) );
+			\add_action( 'wp_ajax_tsf-crop-image', [ $this, 'wp_ajax_crop_image' ] );
 
 			// Add extra removable query arguments to the list.
-			\add_filter( 'removable_query_args', array( $this, 'add_removable_query_args' ) );
+			\add_filter( 'removable_query_args', [ $this, 'add_removable_query_args' ] );
 		endif;
 
 		/**
@@ -362,7 +362,7 @@ class Init extends Query {
 		$output = '';
 
 		//* Placeholder callback and args.
-		$functions = array();
+		$functions = [];
 
 		/**
 		 * @since 2.2.6
@@ -697,12 +697,12 @@ class Init extends Query {
 
 		switch ( $type ) :
 			case 'post_query':
-				\add_filter( 'the_posts', array( $this, '_alter_search_query_post' ), 10, 2 );
+				\add_filter( 'the_posts', [ $this, '_alter_search_query_post' ], 10, 2 );
 				break;
 
 			default:
 			case 'in_query':
-				\add_action( 'pre_get_posts', array( $this, '_alter_search_query_in' ), 9999, 1 );
+				\add_action( 'pre_get_posts', [ $this, '_alter_search_query_in' ], 9999, 1 );
 				break;
 		endswitch;
 	}
@@ -718,12 +718,12 @@ class Init extends Query {
 
 		switch ( $type ) :
 			case 'post_query':
-				\add_filter( 'the_posts', array( $this, '_alter_archive_query_post' ), 10, 2 );
+				\add_filter( 'the_posts', [ $this, '_alter_archive_query_post' ], 10, 2 );
 				break;
 
 			default:
 			case 'in_query':
-				\add_action( 'pre_get_posts', array( $this, '_alter_archive_query_in' ), 9999, 1 );
+				\add_action( 'pre_get_posts', [ $this, '_alter_archive_query_in' ], 9999, 1 );
 				break;
 		endswitch;
 	}
@@ -879,7 +879,7 @@ class Init extends Query {
 			 * @param bool   $do Whether to execute adjustment.
 			 * @param object $wp_query The current query. Passed by reference.
 			 */
-			if ( ! \apply_filters_ref_array( 'the_seo_framework_do_adjust_archive_query', array( true, &$wp_query ) ) )
+			if ( ! \apply_filters_ref_array( 'the_seo_framework_do_adjust_archive_query', [ true, $wp_query ] ) )
 				return true;
 		}
 

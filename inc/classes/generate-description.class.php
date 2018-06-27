@@ -101,7 +101,7 @@ class Generate_Description extends Generate {
 		 * @param string $desc The description.
 		 * @param array  $args The description arguments.
 		 */
-		$desc = (string) \apply_filters( 'the_seo_framework_custom_field_description', $desc, array( 'id' => $id ) );
+		$desc = (string) \apply_filters( 'the_seo_framework_custom_field_description', $desc, [ 'id' => $id ] );
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -231,7 +231,7 @@ class Generate_Description extends Generate {
 	 * }
 	 * @return string The description
 	 */
-	public function generate_description( $description = '', $args = array() ) {
+	public function generate_description( $description = '', $args = [] ) {
 
 		/**
 		 * Parse args.
@@ -303,18 +303,18 @@ class Generate_Description extends Generate {
 	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
 	 * @return array $args parsed args.
 	 */
-	public function parse_description_args( $args = array(), $defaults = array(), $get_defaults = false ) {
+	public function parse_description_args( $args = [], $defaults = [], $get_defaults = false ) {
 
 		//* Passing back the defaults reduces the memory usage.
 		if ( empty( $defaults ) ) {
-			$defaults = array(
+			$defaults = [
 				'id'               => $this->get_the_real_ID(),
 				'taxonomy'         => '',
 				'is_home'          => false,
 				'get_custom_field' => true,
 				'social'           => false,
 				'escape'           => true,
-			);
+			];
 
 			/**
 			 * Applies filters 'the_seo_framework_description_args' : array {
@@ -365,7 +365,7 @@ class Generate_Description extends Generate {
 	 * @param array $args required The passed arguments.
 	 * @return array $args parsed args.
 	 */
-	public function reparse_description_args( $args = array() ) {
+	public function reparse_description_args( $args = [] ) {
 
 		$default_args = $this->parse_description_args( $args, '', true );
 
@@ -377,7 +377,7 @@ class Generate_Description extends Generate {
 			}
 		} else {
 			//* Old style parameters are used. Doing it wrong.
-			$this->_doing_it_wrong( __METHOD__, 'Use $args = array() for parameters.', '2.5.0' );
+			$this->_doing_it_wrong( __METHOD__, 'Use $args = [] for parameters.', '2.5.0' );
 			$args = $default_args;
 		}
 
@@ -514,7 +514,7 @@ class Generate_Description extends Generate {
 	 * @param bool $escape Escape output when true.
 	 * @return string $output The description.
 	 */
-	public function generate_description_from_id( $args = array(), $escape = true ) {
+	public function generate_description_from_id( $args = [], $escape = true ) {
 
 		/**
 		 * Applies filters bool 'the_seo_framework_enable_auto_description'
@@ -593,7 +593,7 @@ class Generate_Description extends Generate {
 		 */
 		$excerpt = $use_cache ? $this->get_transient( $this->auto_description_transient ) : false;
 		if ( false === $excerpt ) {
-			$excerpt = array();
+			$excerpt = [];
 
 			/**
 			 * @since 2.8.0:

@@ -61,7 +61,7 @@ class Site_Options extends Sanitize {
 
 		$this->seo_settings_page_slug = 'theseoframework-settings';
 
-		\add_filter( "option_page_capability_{$this->settings_field}", array( $this, 'get_settings_capability' ) );
+		\add_filter( "option_page_capability_{$this->settings_field}", [ $this, 'get_settings_capability' ] );
 	}
 
 	/**
@@ -95,7 +95,7 @@ class Site_Options extends Sanitize {
 		 * No longer directly applies filters
 		 * @since 2.2.7
 		 */
-		return array(
+		return [
 			// General. Performance.
 			'alter_search_query' => 1, // Search query adjustments.
 			'alter_archive_query' => 1, // Archive query adjustments.
@@ -261,7 +261,7 @@ class Site_Options extends Sanitize {
 			// Schema
 			'ld_json_searchbox'   => 1, // LD+Json Sitelinks Searchbox
 			'ld_json_breadcrumbs' => 1, // LD+Json Breadcrumbs
-		);
+		];
 	}
 
 	/**
@@ -321,7 +321,7 @@ class Site_Options extends Sanitize {
 	 */
 	public function get_all_options( $setting = null, $use_current = false ) {
 
-		static $cache = array();
+		static $cache = [];
 
 		if ( ! $use_current && isset( $cache[ $setting ] ) )
 			return $cache[ $setting ];
@@ -366,7 +366,7 @@ class Site_Options extends Sanitize {
 		}
 
 		//* Setup caches
-		static $options_cache = array();
+		static $options_cache = [];
 
 		//* Check options cache
 		if ( isset( $options_cache[ $setting ][ $key ] ) )
@@ -428,7 +428,7 @@ class Site_Options extends Sanitize {
 	 * @param array $args Additional default options to filter.
 	 * @return array The SEO Framework Options
 	 */
-	protected function default_site_options( $args = array() ) {
+	protected function default_site_options( $args = [] ) {
 		/**
 		 * Applies filters the_seo_framework_default_site_options : array
 		 * @since 2.2.7
@@ -451,7 +451,7 @@ class Site_Options extends Sanitize {
 	 * @param array $args Additional warned options to filter.
 	 * @return array The SEO Framework Warned Options
 	 */
-	protected function warned_site_options( $args = array() ) {
+	protected function warned_site_options( $args = [] ) {
 		/**
 		 * Applies filters the_seo_framework_warned_site_options : array
 		 * @since 2.3.4
@@ -510,10 +510,10 @@ class Site_Options extends Sanitize {
 
 		if ( $this->get_option( 'tsf-settings-reset', false ) ) {
 			if ( \update_option( $this->settings_field, $this->default_site_options() ) ) {
-				$this->admin_redirect( $this->seo_settings_page_slug, array( 'tsf-settings-reset' => 'true' ) );
+				$this->admin_redirect( $this->seo_settings_page_slug, [ 'tsf-settings-reset' => 'true' ] );
 				exit;
 			} else {
-				$this->admin_redirect( $this->seo_settings_page_slug, array( 'error' => 'true' ) );
+				$this->admin_redirect( $this->seo_settings_page_slug, [ 'error' => 'true' ] );
 				exit;
 			}
 		}
@@ -537,7 +537,7 @@ class Site_Options extends Sanitize {
 			return false;
 		}
 
-		return $this->update_settings( array( $key => $value ) );
+		return $this->update_settings( [ $key => $value ] );
 	}
 
 	/**
@@ -603,7 +603,7 @@ class Site_Options extends Sanitize {
 			return is_array( $defaults[ $key ] ) ? \stripslashes_deep( $defaults[ $key ] ) : stripslashes( $defaults[ $key ] );
 		}
 
-		static $defaults_cache = array();
+		static $defaults_cache = [];
 
 		//* Check options cache
 		if ( isset( $defaults_cache[ $key ] ) )
@@ -651,7 +651,7 @@ class Site_Options extends Sanitize {
 			return $this->s_one_zero( $warned[ $key ] );
 		}
 
-		static $warned_cache = array();
+		static $warned_cache = [];
 
 		//* Check options cache
 		if ( isset( $warned_cache[ $key ] ) )
@@ -679,7 +679,7 @@ class Site_Options extends Sanitize {
 	 * @return array Valid Facebook locales
 	 */
 	public function fb_locales() {
-		return array(
+		return [
 			'af_ZA', // Afrikaans
 			'ak_GH', // Akan
 			'am_ET', // Amharic
@@ -820,7 +820,7 @@ class Site_Options extends Sanitize {
 			'zh_TW', // Traditional Chinese (Taiwan)
 			'zu_ZA', // Zulu
 			'zz_TR', // Zazaki
-		);
+		];
 	}
 
 	/**
@@ -835,7 +835,7 @@ class Site_Options extends Sanitize {
 	 * @return array Valid Facebook locale keys
 	 */
 	public function language_keys() {
-		return array(
+		return [
 			'af', // Afrikaans
 			'ak', // Akan
 			'am', // Amharic
@@ -976,6 +976,6 @@ class Site_Options extends Sanitize {
 			'zh', // Traditional Chinese (Taiwan)
 			'zu', // Zulu
 			'zz', // Zazaki
-		);
+		];
 	}
 }

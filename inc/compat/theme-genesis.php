@@ -20,17 +20,17 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() a
  */
 function _disable_genesis_seo( $plugins ) {
 
-	$plugins = array(
-		'classes' => array(
+	$plugins = [
+		'classes' => [
 			'\The_SEO_Framework\\Load',
-		),
-		'functions' => array(
+		],
+		'functions' => [
 			'the_seo_framework',
-		),
-		'constants' => array(
+		],
+		'constants' => [
 			'THE_SEO_FRAMEWORK_VERSION',
-		),
-	);
+		],
+	];
 
 	return $plugins;
 }
@@ -45,7 +45,7 @@ function _disable_genesis_seo( $plugins ) {
  * @param int $term_id The current term ID.
  * @return array The Genesis Term meta.
  */
-function _genesis_get_term_meta( $data = array(), $term_id = 0 ) {
+function _genesis_get_term_meta( $data = [], $term_id = 0 ) {
 
 	$data['doctitle'] = \get_term_meta( $term_id, 'doctitle', true );
 	$data['description'] = \get_term_meta( $term_id, 'description', true );

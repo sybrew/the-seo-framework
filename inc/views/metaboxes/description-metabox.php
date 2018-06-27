@@ -64,18 +64,18 @@ switch ( $instance ) :
 		 *   )
 		 * }
 		 */
-		$default_tabs = array(
-			'general' => array(
+		$default_tabs = [
+			'general' => [
 				'name'     => esc_html__( 'General', 'autodescription' ),
-				'callback' => array( $this, 'description_metabox_general_tab' ),
+				'callback' => [ $this, 'description_metabox_general_tab' ],
 				'dashicon' => 'admin-generic',
-			),
-			'additions' => array(
+			],
+			'additions' => [
 				'name'     => esc_html__( 'Additions', 'autodescription' ),
-				'callback' => array( $this, 'description_metabox_additions_tab' ),
+				'callback' => [ $this, 'description_metabox_additions_tab' ],
 				'dashicon' => 'plus',
-			),
-		);
+			],
+		];
 
 		/**
 		 * Applies filters the_seo_framework_description_settings_tabs : array see $default_tabs

@@ -46,8 +46,8 @@ class Term_Data extends Post_Data {
 	 * @since 3.0.0 No longer checks for admin query.
 	 */
 	public function initialize_term_meta() {
-		\add_action( 'edit_term', array( $this, 'update_term_meta' ), 10, 2 );
-		\add_action( 'delete_term', array( $this, 'delete_term_meta' ), 10, 2 );
+		\add_action( 'edit_term', [ $this, 'update_term_meta' ], 10, 2 );
+		\add_action( 'delete_term', [ $this, 'delete_term_meta' ], 10, 2 );
 	}
 
 	/**
@@ -251,7 +251,7 @@ class Term_Data extends Post_Data {
 	 */
 	public function fetch_the_term( $id = '' ) {
 
-		static $term = array();
+		static $term = [];
 
 		if ( isset( $term[ $id ] ) )
 			return $term[ $id ];

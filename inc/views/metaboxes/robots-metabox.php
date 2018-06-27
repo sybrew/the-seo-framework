@@ -12,7 +12,7 @@ $instance = $this->get_view_instance( 'the_seo_framework_robots_metabox', $insta
 switch ( $instance ) :
 	case 'the_seo_framework_robots_metabox_main' :
 		//* Robots types
-		$types = array(
+		$types = [
 			'category'   => __( 'Category', 'autodescription' ),
 			'tag'        => __( 'Tag', 'autodescription' ),
 			'author'     => __( 'Author', 'autodescription' ),
@@ -20,26 +20,26 @@ switch ( $instance ) :
 			'search'     => __( 'Search Pages', 'autodescription' ),
 			'attachment' => __( 'Attachment Pages', 'autodescription' ),
 			'site'       => _x( 'the entire site', '...for the entire site', 'autodescription' ),
-		);
+		];
 
 		//* Robots i18n
-		$robots = array(
-			'noindex' => array(
+		$robots = [
+			'noindex' => [
 				'value' => 'noindex',
 				'name'  => __( 'NoIndex', 'autodescription' ),
 				'desc'  => __( 'These options most likely prevent indexing of the selected archives and pages. If you enable this, the selected archives or pages are urged to be removed from Search Engine results pages.', 'autodescription' ),
-			),
-			'nofollow' => array(
+			],
+			'nofollow' => [
 				'value' => 'nofollow',
 				'name'  => __( 'NoFollow', 'autodescription' ),
 				'desc'  => __( 'These options most likely prevent links from being followed on the selected archives and pages. If you enable this, the selected archives or pages in-page links will gain no SEO value, including your own links.', 'autodescription' ),
-			),
-			'noarchive' => array(
+			],
+			'noarchive' => [
 				'value' => 'noarchive',
 				'name'  => __( 'NoArchive', 'autodescription' ),
 				'desc'  => __( 'These options most likely prevent caching of the selected archives and pages. If you enable this, bots are urged not create a cached copy of the selected archives or pages.', 'autodescription' ),
-			),
-		);
+			],
+		];
 
 		/**
 		 * Parse tabs content.
@@ -55,32 +55,32 @@ switch ( $instance ) :
 		 *    )
 		 * }
 		 */
-		$default_tabs = array(
-			'general' => array(
+		$default_tabs = [
+			'general' => [
 				'name'     => __( 'General', 'autodescription' ),
-				'callback' => array( $this, 'robots_metabox_general_tab' ),
+				'callback' => [ $this, 'robots_metabox_general_tab' ],
 				'dashicon' => 'admin-generic',
 				'args'     => '',
-			),
-			'index' => array(
+			],
+			'index' => [
 				'name'     => __( 'Indexing', 'autodescription' ),
-				'callback' => array( $this, 'robots_metabox_no_tab' ),
+				'callback' => [ $this, 'robots_metabox_no_tab' ],
 				'dashicon' => 'filter',
-				'args'     => array( $types, $robots['noindex'] ),
-			),
-			'follow' => array(
+				'args'     => [ $types, $robots['noindex'] ],
+			],
+			'follow' => [
 				'name'     => __( 'Following', 'autodescription' ),
-				'callback' => array( $this, 'robots_metabox_no_tab' ),
+				'callback' => [ $this, 'robots_metabox_no_tab' ],
 				'dashicon' => 'editor-unlink',
-				'args'     => array( $types, $robots['nofollow'] ),
-			),
-			'archive' => array(
+				'args'     => [ $types, $robots['nofollow'] ],
+			],
+			'archive' => [
 				'name'     => __( 'Archiving', 'autodescription' ),
-				'callback' => array( $this, 'robots_metabox_no_tab' ),
+				'callback' => [ $this, 'robots_metabox_no_tab' ],
 				'dashicon' => 'download',
-				'args'     => array( $types, $robots['noarchive'] ),
-			),
-		);
+				'args'     => [ $types, $robots['noarchive'] ],
+			],
+		];
 
 		/**
 		 * Applies filters 'the_seo_framework_robots_settings_tabs' : array see $default_tabs

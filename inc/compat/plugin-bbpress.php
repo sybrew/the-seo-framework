@@ -25,11 +25,11 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() a
  */
 function _bbpress_filter_order_keys( $current_keys = [] ) {
 
-	$new_keys = array(
+	$new_keys = [
 		'bbp_topic_freshness',
 		'bbp_forum_freshness',
 		'bbp_reply_created',
-	);
+	];
 
 	return array_merge( $current_keys, $new_keys );
 }

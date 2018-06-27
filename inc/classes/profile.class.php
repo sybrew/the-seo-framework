@@ -32,7 +32,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  */
 class Profile extends Doing_It_Right {
 
-	public $profile_settings = array();
+	public $profile_settings = [];
 
 	/**
 	 * Constructor, loads parent constructor.

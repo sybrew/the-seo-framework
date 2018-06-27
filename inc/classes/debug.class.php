@@ -171,7 +171,7 @@ final class Debug implements Debug_Interface {
 		 */
 		if ( WP_DEBUG && \apply_filters( 'deprecated_function_trigger_error', true ) ) {
 
-			set_error_handler( array( $this, 'error_handler_deprecated' ) );
+			set_error_handler( [ $this, 'error_handler_deprecated' ] );
 
 			if ( isset( $replacement ) ) {
 				trigger_error(
@@ -236,7 +236,7 @@ final class Debug implements Debug_Interface {
 		 */
 		if ( WP_DEBUG && \apply_filters( 'doing_it_wrong_trigger_error', true ) ) {
 
-			set_error_handler( array( $this, 'error_handler_doing_it_wrong' ) );
+			set_error_handler( [ $this, 'error_handler_doing_it_wrong' ] );
 
 			/* translators: %s = Version number */
 			$version = empty( $version ) ? '' : sprintf( \__( '(This message was added in version %s of The SEO Framework.)', 'autodescription' ), $version );
@@ -289,7 +289,7 @@ final class Debug implements Debug_Interface {
 		 */
 		if ( WP_DEBUG && \apply_filters( 'the_seo_framework_inaccessible_p_or_m_trigger_error', true ) ) {
 
-			set_error_handler( array( $this, 'error_handler_inaccessible_call' ) );
+			set_error_handler( [ $this, 'error_handler_inaccessible_call' ] );
 
 			trigger_error(
 				sprintf(
@@ -448,7 +448,7 @@ final class Debug implements Debug_Interface {
 	 * @access private
 	 */
 	public function debug_output() {
-		\the_seo_framework()->get_view( 'debug/output', array( 'debug_output' => $this->debug_output ) );
+		\the_seo_framework()->get_view( 'debug/output', [ 'debug_output' => $this->debug_output ] );
 	}
 
 	/**
@@ -656,8 +656,8 @@ final class Debug implements Debug_Interface {
 		if ( func_num_args() >= 4 ) {
 
 			//* Cache the args for $store.
-			static $cached_args = array();
-			static $hold_args = array();
+			static $cached_args = [];
+			static $hold_args = [];
 
 			$args = array_slice( func_get_args(), 3 );
 			//* Shift array.
@@ -692,12 +692,12 @@ final class Debug implements Debug_Interface {
 				$output .= $this->the_seo_framework_debug_hidden ? \esc_html( PHP_EOL . $debug_key ) . ' output. ' : '<h3>' . \esc_html( $debug_key ) . '</h3>';
 
 				if ( isset( $cached_args[ $method ] ) ) {
-					$args[] = array(
-						'profile' => array(
-							'time' => $this->profile( false, true, 'time', $key ) . ' seconds',
+					$args[] = [
+						'profile' => [
+							'time'   => $this->profile( false, true, 'time', $key ) . ' seconds',
 							'memory' => $this->profile( false, true, 'memory', $key ) . ' bytes',
-						),
-					);
+						],
+					];
 
 					$args = array_merge( $cached_args[ $method ], $args );
 
@@ -787,10 +787,10 @@ final class Debug implements Debug_Interface {
 	 */
 	public function profile( $echo = false, $from_last = false, $what = 'time', $key = '' ) {
 
-		static $timer_start = array();
-		static $memory_start = array();
-		static $plugin_time = array();
-		static $plugin_memory = array();
+		static $timer_start = [];
+		static $memory_start = [];
+		static $plugin_time = [];
+		static $plugin_memory = [];
 
 		$timer_start[ $key ] = isset( $timer_start[ $key ] ) ? $timer_start[ $key ] : 0;
 		$memory_start[ $key ] = isset( $memory_start[ $key ] ) ? $memory_start[ $key ] : 0;
@@ -888,7 +888,7 @@ final class Debug implements Debug_Interface {
 			return;
 
 		if ( $tsf->is_seo_settings_page( true ) )
-			\add_filter( 'the_seo_framework_current_object_id', array( $tsf, 'get_the_front_page_ID' ) );
+			\add_filter( 'the_seo_framework_current_object_id', [ $tsf, 'get_the_front_page_ID' ] );
 
 		//* Start timer.
 		$this->timer( true );

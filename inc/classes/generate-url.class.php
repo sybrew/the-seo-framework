@@ -98,7 +98,7 @@ class Generate_Url extends Generate_Title {
 	 * }
 	 * @return string The canonical URL, if any.
 	 */
-	public function create_canonical_url( $args = array() ) {
+	public function create_canonical_url( $args = [] ) {
 
 		$defaults = [
 			'id'               => 0,
@@ -637,7 +637,7 @@ class Generate_Url extends Generate_Title {
 				}
 			}
 		} else {
-			$url = \remove_query_arg( array( 'page', 'paged', 'cpage' ), $url );
+			$url = \remove_query_arg( [ 'page', 'paged', 'cpage' ], $url );
 		}
 
 		return $url;
@@ -740,7 +740,7 @@ class Generate_Url extends Generate_Title {
 				//= This can fail on malformed URLs
 				$query = explode( '&', $query );
 			} else {
-				$query = array( $query );
+				$query = [ $query ];
 			}
 
 			foreach ( $query as $arg ) {
@@ -879,7 +879,7 @@ class Generate_Url extends Generate_Title {
 			$url = \get_permalink( $post_id );
 		else :
 			$post = \get_post( $post_id );
-			$url = \get_permalink( $post_id );
+			$url  = \get_permalink( $post_id );
 
 			if ( $i >= 2 ) {
 				//* Fix adding pagination url.
@@ -902,7 +902,7 @@ class Generate_Url extends Generate_Title {
 				}
 			}
 
-			if ( ! $this->pretty_permalinks || in_array( $post->post_status, array( 'draft', 'auto-draft', 'pending' ), true ) ) {
+			if ( ! $this->pretty_permalinks || in_array( $post->post_status, [ 'draft', 'auto-draft', 'pending' ], true ) ) {
 
 				//* Put removed query arg back prior to adding pagination.
 				if ( isset( $query_arg ) )
@@ -1024,7 +1024,7 @@ class Generate_Url extends Generate_Title {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $url A fully qualified URL.
+	 * @param string $url   A fully qualified URL.
 	 * @param string $query A fully qualified query taken from parse_url( $url, PHP_URL_QUERY );
 	 * @return string A fully qualified URL with appended $query.
 	 */

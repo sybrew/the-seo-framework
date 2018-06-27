@@ -101,7 +101,7 @@ final class Load extends Feed implements Debug_Interface {
 	 * @param array|string $args The arguments passed to the function.
 	 * @return mixed $output The function called.
 	 */
-	public function call_function( $callback, $version = '', $args = array() ) {
+	public function call_function( $callback, $version = '', $args = [] ) {
 
 		$output = '';
 
@@ -109,7 +109,7 @@ final class Load extends Feed implements Debug_Interface {
 		 * Convert string/object to array
 		 */
 		if ( is_object( $callback ) ) {
-			$function = array( $callback, '' );
+			$function = [ $callback, '' ];
 		} else {
 			$function = (array) $callback;
 		}
@@ -118,7 +118,7 @@ final class Load extends Feed implements Debug_Interface {
 		 * Convert string/object to array
 		 */
 		if ( is_object( $args ) ) {
-			$args = array( $args, '' );
+			$args = [ $args, '' ];
 		} else {
 			$args = (array) $args;
 		}
@@ -134,10 +134,10 @@ final class Load extends Feed implements Debug_Interface {
 				if ( method_exists( $this, $method ) ) {
 					if ( empty( $args ) ) {
 						// In-Object calling.
-						$output = call_user_func( array( $this, $method ) );
+						$output = call_user_func( [ $this, $method ] );
 					} else {
 						// In-Object calling.
-						$output = call_user_func_array( array( $this, $method ), $args );
+						$output = call_user_func_array( [ $this, $method ], $args );
 					}
 				} else {
 					$this->_inaccessible_p_or_m( \esc_html( get_class( $class ) . '->' . $method . '()' ), 'Class or Method not found.', \esc_html( $version ) );
@@ -145,9 +145,9 @@ final class Load extends Feed implements Debug_Interface {
 			} else {
 				if ( method_exists( $class, $method ) ) {
 					if ( empty( $args ) ) {
-						$output = call_user_func( array( $class, $method ) );
+						$output = call_user_func( [ $class, $method ] );
 					} else {
-						$output = call_user_func_array( array( $class, $method ), $args );
+						$output = call_user_func_array( [ $class, $method ], $args );
 					}
 				} else {
 					$this->_inaccessible_p_or_m( \esc_html( get_class( $class ) . '::' . $method . '()' ), 'Class or Method not found.', \esc_html( $version ) );

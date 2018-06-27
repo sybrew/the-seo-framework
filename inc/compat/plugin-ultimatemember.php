@@ -20,7 +20,7 @@ function _um_user_functions_available() {
 	static $cache = null;
 
 	return isset( $cache ) ? $cache : $cache = \the_seo_framework()->can_i_use(
-		array( 'functions' => array( 'um_user', 'um_is_core_page', 'um_get_requested_user' ) ),
+		[ 'functions' => [ 'um_user', 'um_is_core_page', 'um_get_requested_user' ] ],
 		false
 	);
 }

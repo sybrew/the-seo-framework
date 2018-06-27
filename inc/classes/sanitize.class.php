@@ -130,87 +130,87 @@ class Sanitize extends Admin_Pages {
 		$this->add_option_filter(
 			's_title_separator',
 			$this->settings_field,
-			array(
+			[
 				'title_seperator', // NOTE: Typo
-			)
+			]
 		);
 
 		$this->add_option_filter(
 			's_description_separator',
 			$this->settings_field,
-			array(
+			[
 				'description_separator',
-			)
+			]
 		);
 
 		$this->add_option_filter(
 			's_description',
 			$this->settings_field,
-			array()
+			[]
 		);
 
 		$this->add_option_filter(
 			's_description_raw',
 			$this->settings_field,
-			array(
+			[
 				'homepage_description',
-			)
+			]
 		);
 
 		$this->add_option_filter(
 			's_title',
 			$this->settings_field,
-			array(
+			[
 				'knowledge_name',
-			)
+			]
 		);
 
 		$this->add_option_filter(
 			's_title_raw',
 			$this->settings_field,
-			array(
+			[
 				'homepage_title',
 				'homepage_title_tagline',
-			)
+			]
 		);
 
 		$this->add_option_filter(
 			's_knowledge_type',
 			$this->settings_field,
-			array(
+			[
 				'knowledge_type',
-			)
+			]
 		);
 
 		$this->add_option_filter(
 			's_left_right',
 			$this->settings_field,
-			array(
+			[
 				'title_location',
-			)
+			]
 		);
 
 		$this->add_option_filter(
 			's_left_right_home',
 			$this->settings_field,
-			array(
+			[
 				'home_title_location',
-			)
+			]
 		);
 
 		$this->add_option_filter(
 			's_alter_query_type',
 			$this->settings_field,
-			array(
+			[
 				'alter_archive_query_type',
 				'alter_search_query_type',
-			)
+			]
 		);
 
 		$this->add_option_filter(
 			's_one_zero',
 			$this->settings_field,
-			array(
+			[
 				'alter_search_query',
 				'alter_archive_query',
 
@@ -300,32 +300,32 @@ class Sanitize extends Admin_Pages {
 				'sitemaps_modified',
 				'sitemap_styles',
 				'sitemap_logo',
-			)
+			]
 		);
 
 		$this->add_option_filter(
 			's_absint',
 			$this->settings_field,
-			array(
+			[
 				'social_image_fb_id',
 				'homepage_social_image_id',
 				'knowledge_logo_id',
-			)
+			]
 		);
 
 		$this->add_option_filter(
 			's_numeric_string',
 			$this->settings_field,
-			array(
+			[
 				'timestamps_format',
-			)
+			]
 		);
 
 		/*
 		$this->add_option_filter(
 			's_no_html',
 			$this->settings_field,
-			array()
+			[]
 		);
 		*/
 
@@ -336,20 +336,20 @@ class Sanitize extends Admin_Pages {
 		$this->add_option_filter(
 			's_no_html_space',
 			$this->settings_field,
-			array(
+			[
 				'facebook_appid',
 
 				'google_verification',
 				'bing_verification',
 				'yandex_verification',
 				'pint_verification',
-			)
+			]
 		);
 
 		$this->add_option_filter(
 			's_url',
 			$this->settings_field,
-			array(
+			[
 				'knowledge_facebook',
 				'knowledge_twitter',
 				'knowledge_gplus',
@@ -359,61 +359,61 @@ class Sanitize extends Admin_Pages {
 				'knowledge_pinterest',
 				'knowledge_soundcloud',
 				'knowledge_tumblr',
-			)
+			]
 		);
 
 		$this->add_option_filter(
 			's_url_query',
 			$this->settings_field,
-			array(
+			[
 				'knowledge_linkedin',
 				'social_image_fb_url',
 				'homepage_social_image_url',
 				'knowledge_logo_url',
-			)
+			]
 		);
 
 		$this->add_option_filter(
 			's_facebook_profile',
 			$this->settings_field,
-			array(
+			[
 				'facebook_publisher',
 				'facebook_author',
-			)
+			]
 		);
 
 		$this->add_option_filter(
 			's_twitter_name',
 			$this->settings_field,
-			array(
+			[
 				'twitter_site',
 				'twitter_creator',
-			)
+			]
 		);
 
 		$this->add_option_filter(
 			's_twitter_card',
 			$this->settings_field,
-			array(
+			[
 				'twitter_card',
-			)
+			]
 		);
 
 		$this->add_option_filter(
 			's_canonical_scheme',
 			$this->settings_field,
-			array(
+			[
 				'canonical_scheme',
-			)
+			]
 		);
 
 		$this->add_option_filter(
 			's_color_hex',
 			$this->settings_field,
-			array(
+			[
 				'sitemap_color_main',
 				'sitemap_color_accent',
-			)
+			]
 		);
 	}
 
@@ -437,7 +437,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->set_option_filter( $filter, $option, $suboption );
 
-		\add_filter( 'sanitize_option_' . $option, array( $this, 'sanitize' ), 10, 2 );
+		\add_filter( 'sanitize_option_' . $option, [ $this, 'sanitize' ], 10, 2 );
 
 		return true;
 	}
@@ -460,7 +460,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	protected function set_option_filter( $filter, $option, $suboption = null, $get = false ) {
 
-		static $options = array();
+		static $options = [];
 
 		if ( $get )
 			return $options;
@@ -560,30 +560,30 @@ class Sanitize extends Admin_Pages {
 	 */
 	protected function get_available_filters() {
 
-		$default_filters = array(
-			's_left_right'            => array( $this, 's_left_right' ),
-			's_left_right_home'       => array( $this, 's_left_right_home' ),
-			's_title_separator'       => array( $this, 's_title_separator' ),
-			's_description_separator' => array( $this, 's_description_separator' ),
-			's_description'           => array( $this, 's_description' ),
-			's_description_raw'       => array( $this, 's_description_raw' ),
-			's_title'                 => array( $this, 's_title' ),
-			's_title_raw'             => array( $this, 's_title_raw' ),
-			's_knowledge_type'        => array( $this, 's_knowledge_type' ),
-			's_alter_query_type'      => array( $this, 's_alter_query_type' ),
-			's_one_zero'              => array( $this, 's_one_zero' ),
-			's_numeric_string'        => array( $this, 's_numeric_string' ),
-			's_no_html'               => array( $this, 's_no_html' ),
-			's_no_html_space'         => array( $this, 's_no_html_space' ),
-			's_absint'                => array( $this, 's_absint' ),
-			's_safe_html'             => array( $this, 's_safe_html' ),
-			's_url'                   => array( $this, 's_url' ),
-			's_url_query'             => array( $this, 's_url_query' ),
-			's_facebook_profile'      => array( $this, 's_facebook_profile' ),
-			's_twitter_name'          => array( $this, 's_twitter_name' ),
-			's_twitter_card'          => array( $this, 's_twitter_card' ),
-			's_canonical_scheme'      => array( $this, 's_canonical_scheme' ),
-		);
+		$default_filters = [
+			's_left_right'            => [ $this, 's_left_right' ],
+			's_left_right_home'       => [ $this, 's_left_right_home' ],
+			's_title_separator'       => [ $this, 's_title_separator' ],
+			's_description_separator' => [ $this, 's_description_separator' ],
+			's_description'           => [ $this, 's_description' ],
+			's_description_raw'       => [ $this, 's_description_raw' ],
+			's_title'                 => [ $this, 's_title' ],
+			's_title_raw'             => [ $this, 's_title_raw' ],
+			's_knowledge_type'        => [ $this, 's_knowledge_type' ],
+			's_alter_query_type'      => [ $this, 's_alter_query_type' ],
+			's_one_zero'              => [ $this, 's_one_zero' ],
+			's_numeric_string'        => [ $this, 's_numeric_string' ],
+			's_no_html'               => [ $this, 's_no_html' ],
+			's_no_html_space'         => [ $this, 's_no_html_space' ],
+			's_absint'                => [ $this, 's_absint' ],
+			's_safe_html'             => [ $this, 's_safe_html' ],
+			's_url'                   => [ $this, 's_url' ],
+			's_url_query'             => [ $this, 's_url_query' ],
+			's_facebook_profile'      => [ $this, 's_facebook_profile' ],
+			's_twitter_name'          => [ $this, 's_twitter_name' ],
+			's_twitter_card'          => [ $this, 's_twitter_card' ],
+			's_canonical_scheme'      => [ $this, 's_canonical_scheme' ],
+		];
 
 		/**
 		 * Applies filters the_seo_framework_available_sanitizer_filters
@@ -719,10 +719,10 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_singleline( $new_value ) {
 
-		$new_value = str_replace( array( "\r\n", "\r", "\n" ), "\n", $new_value );
+		$new_value = str_replace( [ "\r\n", "\r", "\n" ], "\n", $new_value );
 
 		$lines = explode( "\n", $new_value );
-		$new_lines = array();
+		$new_lines = [];
 
 		//* Remove line breaks
 		foreach ( $lines as $i => $line ) {
@@ -1112,7 +1112,7 @@ class Sanitize extends Admin_Pages {
 		if ( '@' !== substr( $profile, 0, 1 ) )
 			$profile = '@' . $profile;
 
-		return str_replace( array( ' ', "\t" ), '', $profile );
+		return str_replace( [ ' ', "\t" ], '', $profile );
 	}
 
 	/**
@@ -1235,20 +1235,20 @@ class Sanitize extends Admin_Pages {
 				$path = $url;
 
 				/**
-				 * Applies filters 'the_seo_framework_sanitize_redirect_url' : array
+				 * Filters arguments for sanitation of the redirection URL.
 				 *
 				 * @since 2.8.0
 				 *
 				 * @param array : { 'url' => The full URL built from $path, 'scheme' => The preferred scheme }
 				 * @param string $path the URL path.
 				 */
-				$custom_sanitize = (array) \apply_filters( 'the_seo_framework_sanitize_redirect_args', array(), $path );
+				$custom_sanitize = (array) \apply_filters( 'the_seo_framework_sanitize_redirect_args', [], $path );
 
 				if ( $custom_sanitize ) {
-					$url = $custom_sanitize['url'];
+					$url    = $custom_sanitize['url'];
 					$scheme = $custom_sanitize['scheme'];
 				} else {
-					$url = \trailingslashit( $this->get_homepage_permalink() ) . ltrim( $path, ' /' );
+					$url    = \trailingslashit( $this->get_homepage_permalink() ) . ltrim( $path, ' /' );
 					$scheme = $this->is_ssl() ? 'https' : 'http';
 				}
 
@@ -1320,10 +1320,10 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.8.2
 	 *
 	 * @param string $new_value String with potentially unwanted nbsp values.
-	 * @return string A spacy string.
+	 * @return string A spacey string.
 	 */
 	public function s_nbsp( $new_value ) {
-		return str_replace( array( '%c2%a0', '&nbsp;' ), ' ', $new_value );
+		return str_replace( [ '%c2%a0', '&nbsp;' ], ' ', $new_value );
 	}
 
 	/**
@@ -1348,13 +1348,13 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_canonical_scheme( $new_value ) {
 
-		$values = array(
+		$accepted_values = [
 			'automatic',
 			'https',
 			'http',
-		);
+		];
 
-		if ( in_array( $new_value, $values, true ) )
+		if ( in_array( $new_value, $accepted_values, true ) )
 			return (string) $new_value;
 
 		return 'automatic';

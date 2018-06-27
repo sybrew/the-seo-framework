@@ -340,7 +340,7 @@ class Render extends Admin_Init {
 						continue;
 
 					//* Parse 4096px url.
-					$img = $this->parse_og_image( $id, array(), true );
+					$img = $this->parse_og_image( $id, [], true );
 
 					if ( $img ) {
 						$output .= '<meta property="og:image" content="' . \esc_attr( $img ) . '" />' . "\r\n";

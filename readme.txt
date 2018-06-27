@@ -369,6 +369,7 @@ TODO: (regression) Fix the (redirect/canonical/image) URL input "not focusable" 
 		* TODO Date (and other?) archives now show valid Open Graph metadata. (description missing...)
 		* When no description or title is found for the corresponding Open Graph or Twitter fields, no more infinite loop will occur that might crash the browser. Luckily, modern browsers detect this to prevent said crashes.
 		* When the homepage is a blog, it'll now be included in the sitemap again.
+		* TODO (regression???) When no tagline is set in the WordPress settings, the home page will no longer display "on Site name" for the description by default.
 
 * **For translators:**
 	* **New translations are available.**

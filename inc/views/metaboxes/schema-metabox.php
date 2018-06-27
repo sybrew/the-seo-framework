@@ -35,23 +35,23 @@ switch ( $instance ) :
 			 *    )
 			 * }
 			 */
-			$default_tabs = array(
-				// 'general' => array(
+			$default_tabs = [
+				// 'general' => [
 				// 	'name'     => __( 'General', 'autodescription' ),
-				// 	'callback' => array( $this, 'schema_metabox_general_tab' ),
+				// 	'callback' => [ $this, 'schema_metabox_general_tab' ],
 				// 	'dashicon' => 'admin-generic',
-				// ),
-				'structure' => array(
+				// ],
+				'structure' => [
 					'name'     => __( 'Structure', 'autodescription' ),
-					'callback' => array( $this, 'schema_metabox_structure_tab' ),
+					'callback' => [ $this, 'schema_metabox_structure_tab' ],
 					'dashicon' => 'admin-multisite',
-				),
-				'presence' => array(
+				],
+				'presence' => [
 					'name'     => __( 'Presence', 'autodescription' ),
-					'callback' => array( $this, 'schema_metabox_presence_tab' ),
+					'callback' => [ $this, 'schema_metabox_presence_tab' ],
 					'dashicon' => 'networking',
-				),
-			);
+				],
+			];
 
 			/**
 			 * Applies filter 'the_seo_framework_schema_settings_tabs' : Array
@@ -129,10 +129,10 @@ switch ( $instance ) :
 				<?php
 				$knowledge_type = (array) apply_filters(
 					'the_seo_framework_knowledge_types',
-					array(
+					[
 						'organization' => __( 'An Organization', 'autodescription' ),
 						'person'       => __( 'A Person', 'autodescription' ),
-					)
+					]
 				);
 				foreach ( $knowledge_type as $value => $name ) {
 					echo '<option value="' . esc_attr( $value ) . '"' . selected( $this->get_field_value( 'knowledge_type' ), esc_attr( $value ), false ) . '>' . esc_html( $name ) . '</option>' . "\n";
@@ -195,71 +195,71 @@ switch ( $instance ) :
 		/**
 		 * @todo maybe genericons?
 		 */
-		$socialsites = array(
-			'facebook' => array(
+		$socialsites = [
+			'facebook' => [
 				'option'      => 'knowledge_facebook',
 				'dashicon'    => 'dashicons-facebook',
 				'desc'        => 'Facebook ' . __( 'Page', 'autodescription' ),
 				'placeholder' => 'https://www.facebook.com/' . $connectedi18n,
 				'examplelink' => 'https://www.facebook.com/me',
-			),
-			'twitter' => array(
+			],
+			'twitter' => [
 				'option'      => 'knowledge_twitter',
 				'dashicon'    => 'dashicons-twitter',
 				'desc'        => 'Twitter ' . $profile18n,
 				'placeholder' => 'https://twitter.com/' . $connectedi18n,
 				'examplelink' => 'https://twitter.com/home', // No example link available.
-			),
-			'gplus' => array(
+			],
+			'gplus' => [
 				'option'      => 'knowledge_gplus',
 				'dashicon'    => 'dashicons-googleplus',
 				'desc'        => 'Google+ ' . $profile18n,
 				'placeholder' => 'https://plus.google.com/' . $connectedi18n,
 				'examplelink' => 'https://plus.google.com/me',
-			),
-			'instagram' => array(
+			],
+			'instagram' => [
 				'option'      => 'knowledge_instagram',
 				'dashicon'    => 'genericon-instagram',
 				'desc'        => 'Instagram ' . $profile18n,
 				'placeholder' => 'https://instagram.com/' . $connectedi18n,
 				'examplelink' => 'https://instagram.com/', // No example link available.
-			),
-			'youtube' => array(
+			],
+			'youtube' => [
 				'option'      => 'knowledge_youtube',
 				'dashicon'    => 'genericon-youtube',
 				'desc'        => 'Youtube ' . $profile18n,
 				'placeholder' => 'https://www.youtube.com/channel/' . $connectedi18n,
 				'examplelink' => 'https://www.youtube.com/user/%2f', // Yes a double slash.
-			),
-			'linkedin' => array(
+			],
+			'linkedin' => [
 				'option'      => 'knowledge_linkedin',
 				'dashicon'    => 'genericon-linkedin-alt',
 				'desc'        => 'LinkedIn ' . $profile18n,
 				'placeholder' => 'https://www.linkedin.com/in/' . $connectedi18n,
 				'examplelink' => 'https://www.linkedin.com/profile/view',
-			),
-			'pinterest' => array(
+			],
+			'pinterest' => [
 				'option'      => 'knowledge_pinterest',
 				'dashicon'    => 'genericon-pinterest-alt',
 				'desc'        => 'Pinterest ' . $profile18n,
 				'placeholder' => 'https://www.pinterest.com/' . $connectedi18n . '/',
 				'examplelink' => 'https://www.pinterest.com/me/',
-			),
-			'soundcloud' => array(
+			],
+			'soundcloud' => [
 				'option'      => 'knowledge_soundcloud',
 				'dashicon'    => 'genericon-cloud', // I know, it's not the real one. D:
 				'desc'        => 'SoundCloud ' . $profile18n,
 				'placeholder' => 'https://soundcloud.com/' . $connectedi18n,
 				'examplelink' => 'https://soundcloud.com/you',
-			),
-			'tumblr' => array(
+			],
+			'tumblr' => [
 				'option'      => 'knowledge_tumblr',
 				'dashicon'    => 'genericon-tumblr',
 				'desc'        => 'Tumblr ' . __( 'Blog', 'autodescription' ),
 				'placeholder' => 'https://www.tumblr.com/blog/' . $connectedi18n,
 				'examplelink' => 'https://www.tumblr.com/dashboard',  // No example link available.
-			),
-		);
+			],
+		];
 
 		foreach ( $socialsites as $key => $v ) {
 			?>

@@ -99,17 +99,17 @@ class Cache extends Sitemaps {
 		$this->init_post_cache_actions();
 
 		//* Deletes term description transient.
-		\add_action( 'edit_term', array( $this, 'delete_auto_description_transients_term' ), 10, 3 );
-		\add_action( 'delete_term', array( $this, 'delete_auto_description_transients_term' ), 10, 4 );
+		\add_action( 'edit_term', [ $this, 'delete_auto_description_transients_term' ], 10, 3 );
+		\add_action( 'delete_term', [ $this, 'delete_auto_description_transients_term' ], 10, 4 );
 
 		//* Deletes author transient.
-		\add_action( 'profile_update', array( $this, 'delete_author_cache' ) );
+		\add_action( 'profile_update', [ $this, 'delete_author_cache' ] );
 
 		//* Delete Sitemap transient on permalink structure change.
-		\add_action( 'load-options-permalink.php', array( $this, 'delete_sitemap_transient_permalink_updated' ), 20 );
+		\add_action( 'load-options-permalink.php', [ $this, 'delete_sitemap_transient_permalink_updated' ], 20 );
 
 		//* Deletes front page description transient on Tagline change.
-		\add_action( 'update_option_blogdescription', array( $this, 'delete_auto_description_frontpage_transient' ), 10, 1 );
+		\add_action( 'update_option_blogdescription', [ $this, 'delete_auto_description_frontpage_transient' ], 10, 1 );
 	}
 
 	/**
@@ -128,18 +128,18 @@ class Cache extends Sitemaps {
 		if ( _has_run( __METHOD__ ) ) return;
 
 		//* Can-be cron actions.
-		\add_action( 'publish_post', array( $this, 'delete_post_cache' ) );
-		\add_action( 'publish_page', array( $this, 'delete_post_cache' ) );
+		\add_action( 'publish_post', [ $this, 'delete_post_cache' ] );
+		\add_action( 'publish_page', [ $this, 'delete_post_cache' ] );
 
 		//* Other actions.
-		\add_action( 'deleted_post', array( $this, 'delete_post_cache' ) );
-		\add_action( 'deleted_page', array( $this, 'delete_post_cache' ) );
-		\add_action( 'post_updated', array( $this, 'delete_post_cache' ) );
-		\add_action( 'page_updated', array( $this, 'delete_post_cache' ) );
+		\add_action( 'deleted_post', [ $this, 'delete_post_cache' ] );
+		\add_action( 'deleted_page', [ $this, 'delete_post_cache' ] );
+		\add_action( 'post_updated', [ $this, 'delete_post_cache' ] );
+		\add_action( 'page_updated', [ $this, 'delete_post_cache' ] );
 
 		//* Excluded IDs cache.
-		\add_action( 'save_post', array( $this, 'delete_excluded_ids_cache' ) );
-		\add_action( 'edit_attachment', array( $this, 'delete_excluded_ids_cache' ) );
+		\add_action( 'save_post', [ $this, 'delete_excluded_ids_cache' ] );
+		\add_action( 'edit_attachment', [ $this, 'delete_excluded_ids_cache' ] );
 	}
 
 	/**
@@ -170,7 +170,7 @@ class Cache extends Sitemaps {
 		if ( ! $post_id )
 			return false;
 
-		$success = array();
+		$success = [];
 
 		$success[] = $this->delete_cache( 'post', $post_id );
 
@@ -321,8 +321,8 @@ class Cache extends Sitemaps {
 				if ( \apply_filters( 'the_seo_framework_allow_transient_flush', false ) ) {
 					if ( ! \wp_using_ext_object_cache() ) {
 						//* Delete WordPress set transients.
-						if ( $GLOBALS['wpdb']->delete( $wpdb->options, array( 'option_name' => '%_transient_timeout_tsf_%' ) ) )
-							if ( $GLOBALS['wpdb']->delete( $wpdb->options, array( 'option_name' => '%_transient_tsf_%' ) ) )
+						if ( $GLOBALS['wpdb']->delete( $wpdb->options, [ 'option_name' => '%_transient_timeout_tsf_%' ] ) )
+							if ( $GLOBALS['wpdb']->delete( $wpdb->options, [ 'option_name' => '%_transient_tsf_%' ] ) )
 								return true;
 					}
 				}
@@ -641,7 +641,7 @@ class Cache extends Sitemaps {
 
 		$page_id = $page_id ?: $this->get_the_real_ID();
 
-		static $cached_id = array();
+		static $cached_id = [];
 
 		if ( isset( $cached_id[ $page_id ][ $taxonomy ] ) )
 			return $cached_id[ $page_id ][ $taxonomy ];
@@ -1000,7 +1000,7 @@ class Cache extends Sitemaps {
 
 		$term_id = $term_id ?: $tt_id;
 
-		$this->delete_cache( 'term', $term_id, array( 'term' => $taxonomy ) );
+		$this->delete_cache( 'term', $term_id, [ 'term' => $taxonomy ] );
 	}
 
 	/**

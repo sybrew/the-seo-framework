@@ -101,7 +101,7 @@ class Inpost extends Profile {
 	 * @param string $version the The SEO Framework version for debugging. May be emptied.
 	 * @param bool $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
 	 */
-	public function inpost_flex_nav_tab_wrapper( $id, $tabs = array(), $version = '2.3.6', $use_tabs = true ) {
+	public function inpost_flex_nav_tab_wrapper( $id, $tabs = [], $version = '2.3.6', $use_tabs = true ) {
 		$this->get_view( 'inpost/wrap', get_defined_vars() );
 	}
 
@@ -120,7 +120,7 @@ class Inpost extends Profile {
 		$show_seobox = (bool) \apply_filters( 'the_seo_framework_seobox_output', true );
 
 		if ( $show_seobox )
-			\add_action( 'add_meta_boxes', array( $this, 'add_inpost_seo_box' ), 10, 1 );
+			\add_action( 'add_meta_boxes', [ $this, 'add_inpost_seo_box' ], 10, 1 );
 
 	}
 
@@ -153,7 +153,7 @@ class Inpost extends Profile {
 
 		//* Add taxonomy meta boxes
 		foreach ( \get_taxonomies( $taxonomy_args ) as $tax_name ) {
-			\add_action( $tax_name . '_edit_form', array( $this, 'pre_seo_box' ), $priority, 2 );
+			\add_action( $tax_name . '_edit_form', [ $this, 'pre_seo_box' ], $priority, 2 );
 		}
 	}
 
@@ -178,7 +178,7 @@ class Inpost extends Profile {
 			if ( $labels ) :
 				//* Title and type are used interchangeably.
 				$label = isset( $labels->singular_name ) ? $labels->singular_name : $labels->name;
-				$args = array( $label, 'is_post_page' );
+				$args = [ $label, 'is_post_page' ];
 
 				/**
 				 * Applies filters 'the_seo_framework_metabox_id' : string
@@ -235,7 +235,7 @@ class Inpost extends Profile {
 				}
 
 				/* translators: %s = Post type name */
-				\add_meta_box( $id, $title, array( $this, 'pre_seo_box' ), $post_type, $context, $priority, $args );
+				\add_meta_box( $id, $title, [ $this, 'pre_seo_box' ], $post_type, $context, $priority, $args );
 			endif;
 		endif;
 	}

@@ -128,7 +128,7 @@ function the_seo_framework_upgrade_to_current() {
  */
 function the_seo_framework_add_upgrade_notice( $notice = '', $get = false ) {
 
-	static $cache = array();
+	static $cache = [];
 
 	if ( $get )
 		return $cache;

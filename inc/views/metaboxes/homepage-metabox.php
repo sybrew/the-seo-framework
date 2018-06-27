@@ -177,8 +177,8 @@ switch ( $instance ) :
 						esc_html__( 'A plugin has been detected that suggests to maintain this option on the [Home Page](%s).', 'autodescription' ),
 						esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) )
 					),
-					array( 'a' ),
-					array( 'a_internal' => false )
+					[ 'a' ],
+					[ 'a_internal' => false ]
 				)
 			);
 		}
@@ -223,8 +223,8 @@ switch ( $instance ) :
 						esc_html__( 'A plugin has been detected that suggests to maintain this option on the [Home Page](%s).', 'autodescription' ),
 						esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) )
 					),
-					array( 'a' ),
-					array( 'a_internal' => false )
+					[ 'a' ],
+					[ 'a_internal' => false ]
 				)
 			);
 		}
@@ -346,29 +346,26 @@ switch ( $instance ) :
 		) . $noarchive_note;
 
 		//* Echo checkboxes.
-		$this->wrap_fields(
-			array(
-				$this->make_checkbox(
-					'homepage_noindex',
-					$i_label,
-					'',
-					false
-				),
-				$this->make_checkbox(
-					'homepage_nofollow',
-					$f_label,
-					'',
-					false
-				),
-				$this->make_checkbox(
-					'homepage_noarchive',
-					$a_label,
-					'',
-					false
-				),
+		$this->wrap_fields( [
+			$this->make_checkbox(
+				'homepage_noindex',
+				$i_label,
+				'',
+				false
 			),
-			true
-		);
+			$this->make_checkbox(
+				'homepage_nofollow',
+				$f_label,
+				'',
+				false
+			),
+			$this->make_checkbox(
+				'homepage_noarchive',
+				$a_label,
+				'',
+				false
+			),
+		], true );
 
 		// Add notice if any options are checked on the post.
 		if ( $noindex_post || $nofollow_post || $noarchive_post ) {
@@ -405,23 +402,23 @@ switch ( $instance ) :
 		$page_id = $this->get_the_front_page_ID();
 
 		if ( $this->has_page_on_front() ) {
-			$image_args = array(
+			$image_args = [
 				'post_id'    => $page_id,
-				'disallowed' => array(
+				'disallowed' => [
 					'homemeta',
-				),
+				],
 				'escape'     => false,
-			);
+			];
 		} else {
-			$image_args = array(
+			$image_args = [
 				'post_id'    => $page_id,
-				'disallowed' => array(
+				'disallowed' => [
 					'homemeta',
 					'postmeta',
 					'featured',
-				),
+				],
 				'escape'     => false,
-			);
+			];
 		}
 		$image_placeholder = $this->get_social_image( $image_args );
 

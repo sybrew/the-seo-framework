@@ -12,33 +12,33 @@ $instance = $this->get_view_instance( 'the_seo_framework_general_metabox', $inst
 switch ( $instance ) :
 	case 'the_seo_framework_general_metabox_main' :
 
-		$default_tabs = array(
-		//	'general' => array(
+		$default_tabs = [
+		//	'general' => [
 		//		'name'     => __( 'General', 'autodescription' ),
-		//		'callback' => array( $this, 'general_metabox_general_tab' ),
+		//		'callback' => [ $this, 'general_metabox_general_tab' ],
 		//		'dashicon' => 'admin-generic',
-		//	),
-			'layout' => array(
+		//	],
+			'layout'      => [
 				'name'     => __( 'Layout', 'autodescription' ),
-				'callback' => array( $this, 'general_metabox_layout_tab' ),
+				'callback' => [ $this, 'general_metabox_layout_tab' ],
 				'dashicon' => 'screenoptions',
-			),
-			'performance' => array(
+			],
+			'performance' => [
 				'name'     => __( 'Performance', 'autodescription' ),
-				'callback' => array( $this, 'general_metabox_performance_tab' ),
+				'callback' => [ $this, 'general_metabox_performance_tab' ],
 				'dashicon' => 'performance',
-			),
-			'canonical' => array(
+			],
+			'canonical'   => [
 				'name'     => __( 'Canonical', 'autodescription' ),
-				'callback' => array( $this, 'general_metabox_canonical_tab' ),
+				'callback' => [ $this, 'general_metabox_canonical_tab' ],
 				'dashicon' => 'external',
-			),
-			'timestamps' => array(
+			],
+			'timestamps'  => [
 				'name'     => __( 'Timestamps', 'autodescription' ),
-				'callback' => array( $this, 'general_metabox_timestamps_tab' ),
+				'callback' => [ $this, 'general_metabox_timestamps_tab' ],
 				'dashicon' => 'clock',
-			),
-		);
+			],
+		];
 
 		/**
 		 * Applies filters `the_seo_framework_general_settings_tabs` : Array
@@ -67,23 +67,20 @@ switch ( $instance ) :
 
 		<h4><?php esc_html_e( 'SEO Bar Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->wrap_fields(
-			array(
-				$this->make_checkbox(
-					'display_seo_bar_tables',
-					esc_html__( 'Display the SEO Bar in overview tables?', 'autodescription' ),
-					'',
-					false
-				),
-				$this->make_checkbox(
-					'display_seo_bar_metabox',
-					esc_html__( 'Display the SEO Bar in the SEO Settings metabox?', 'autodescription' ),
-					'',
-					false
-				),
+		$this->wrap_fields( [
+			$this->make_checkbox(
+				'display_seo_bar_tables',
+				esc_html__( 'Display the SEO Bar in overview tables?', 'autodescription' ),
+				'',
+				false
 			),
-			true
-		);
+			$this->make_checkbox(
+				'display_seo_bar_metabox',
+				esc_html__( 'Display the SEO Bar in the SEO Settings metabox?', 'autodescription' ),
+				'',
+				false
+			),
+		], true );
 
 		?>
 		<hr>
@@ -102,23 +99,20 @@ switch ( $instance ) :
 			false
 		);
 
-		$this->wrap_fields(
-			array(
-				$this->make_checkbox(
-					'display_pixel_counter',
-					esc_html__( 'Display pixel counters?', 'autodescription' ) . ' ' . $pixel_info,
-					'',
-					false
-				),
-				$this->make_checkbox(
-					'display_character_counter',
-					esc_html__( 'Display character counters?', 'autodescription' ) . ' ' . $character_info,
-					'',
-					false
-				),
+		$this->wrap_fields( [
+			$this->make_checkbox(
+				'display_pixel_counter',
+				esc_html__( 'Display pixel counters?', 'autodescription' ) . ' ' . $pixel_info,
+				'',
+				false
 			),
-			true
-		);
+			$this->make_checkbox(
+				'display_character_counter',
+				esc_html__( 'Display character counters?', 'autodescription' ) . ' ' . $character_info,
+				'',
+				false
+			),
+		], true );
 		break;
 
 	case 'the_seo_framework_general_metabox_performance' :
@@ -147,10 +141,10 @@ switch ( $instance ) :
 
 		$query_types = (array) apply_filters(
 			'the_seo_framework_query_alteration_types',
-			array(
+			[
 				'in_query'   => _x( 'In the database', 'Perform query alteration...', 'autodescription' ),
 				'post_query' => _x( 'On the site', 'Perform query alteration...', 'autodescription' ),
-			)
+			]
 		);
 
 		$search_query_select_options = '';
@@ -158,11 +152,11 @@ switch ( $instance ) :
 		foreach ( $query_types as $value => $name ) {
 			$search_query_select_options .= vsprintf(
 				'<option value="%s" %s>%s</option>',
-				array(
+				[
 					esc_attr( $value ),
 					selected( $_current, esc_attr( $value ), false ),
 					esc_html( $name ),
-				)
+				]
 			);
 		}
 		$archive_query_select_options = '';
@@ -170,11 +164,11 @@ switch ( $instance ) :
 		foreach ( $query_types as $value => $name ) {
 			$archive_query_select_options .= vsprintf(
 				'<option value="%s" %s>%s</option>',
-				array(
+				[
 					esc_attr( $value ),
 					selected( $_current, esc_attr( $value ), false ),
 					esc_html( $name ),
-				)
+				]
 			);
 		}
 		$perform_alteration_i18n = esc_html__( 'Perform alteration:', 'autodescription' );
@@ -182,51 +176,45 @@ switch ( $instance ) :
 		$search_query_select_field = vsprintf(
 			'<label for="%1$s">%2$s</label>
 			<select name="%3$s" id="%1$s">%4$s</select>',
-			array(
+			[
 				$this->get_field_id( 'alter_search_query_type' ),
 				$perform_alteration_i18n,
 				$this->get_field_name( 'alter_search_query_type' ),
 				$search_query_select_options,
-			)
+			]
 		);
 		$archive_query_select_field = vsprintf(
 			'<label for="%1$s">%2$s</label>
 			<select name="%3$s" id="%1$s">%4$s</select>',
-			array(
+			[
 				$this->get_field_id( 'alter_archive_query_type' ),
 				$perform_alteration_i18n,
 				$this->get_field_name( 'alter_archive_query_type' ),
 				$archive_query_select_options,
-			)
+			]
 		);
 
-		$this->wrap_fields(
-			array(
-				$this->make_checkbox(
-					'alter_search_query',
-					esc_html__( 'Enable search query alteration?', 'autodescription' )
-					. ' ' . $this->make_info( __( 'This allows you to exclude pages from on-site search results.', 'autodescription' ), '', false ),
-					'',
-					false
-				),
-				$search_query_select_field,
+		$this->wrap_fields( [
+			$this->make_checkbox(
+				'alter_search_query',
+				esc_html__( 'Enable search query alteration?', 'autodescription' )
+				. ' ' . $this->make_info( __( 'This allows you to exclude pages from on-site search results.', 'autodescription' ), '', false ),
+				'',
+				false
 			),
-			true
-		);
+			$search_query_select_field,
+		], true );
 
-		$this->wrap_fields(
-			array(
-				$this->make_checkbox(
-					'alter_archive_query',
-					esc_html__( 'Enable archive query alteration?', 'autodescription' )
-					. ' ' . $this->make_info( __( 'This allows you to exclude pages from on-site archive listings.', 'autodescription' ), '', false ),
-					'',
-					false
-				),
-				$archive_query_select_field,
+		$this->wrap_fields( [
+			$this->make_checkbox(
+				'alter_archive_query',
+				esc_html__( 'Enable archive query alteration?', 'autodescription' )
+				. ' ' . $this->make_info( __( 'This allows you to exclude pages from on-site archive listings.', 'autodescription' ), '', false ),
+				'',
+				false
 			),
-			true
-		);
+			$archive_query_select_field,
+		], true );
 		?>
 		<hr>
 
@@ -235,32 +223,29 @@ switch ( $instance ) :
 		$this->description( __( 'To improve performance, generated SEO output can be stored in the database as transient cache.', 'autodescription' ) );
 		$this->description( __( 'If your website has thousands of pages, or if other forms of caching are used, you might wish to adjust these options.', 'autodescription' ) );
 
-		$this->wrap_fields(
-			array(
-				$this->make_checkbox(
-					'cache_meta_description',
-					esc_html__( 'Enable automated description output cache?', 'autodescription' )
-					. ' ' . $this->make_info( __( 'Description generation can use a lot of server resources when it reads the page content.', 'autodescription' ), '', false ),
-					'',
-					false
-				),
-				$this->make_checkbox(
-					'cache_meta_schema',
-					esc_html__( 'Enable automated Schema output cache?', 'autodescription' )
-					. ' ' . $this->make_info( __( 'Schema.org output generally makes multiple calls to the database.', 'autodescription' ), '', false ),
-					'',
-					false
-				),
-				$this->make_checkbox(
-					'cache_sitemap',
-					esc_html__( 'Enable sitemap generation cache?', 'autodescription' )
-					. ' ' . $this->make_info( __( 'Generating the sitemap can use a lot of server resources.', 'autodescription' ), '', false ),
-					'',
-					false
-				),
+		$this->wrap_fields( [
+			$this->make_checkbox(
+				'cache_meta_description',
+				esc_html__( 'Enable automated description output cache?', 'autodescription' )
+				. ' ' . $this->make_info( __( 'Description generation can use a lot of server resources when it reads the page content.', 'autodescription' ), '', false ),
+				'',
+				false
 			),
-			true
-		);
+			$this->make_checkbox(
+				'cache_meta_schema',
+				esc_html__( 'Enable automated Schema output cache?', 'autodescription' )
+				. ' ' . $this->make_info( __( 'Schema.org output generally makes multiple calls to the database.', 'autodescription' ), '', false ),
+				'',
+				false
+			),
+			$this->make_checkbox(
+				'cache_sitemap',
+				esc_html__( 'Enable sitemap generation cache?', 'autodescription' )
+				. ' ' . $this->make_info( __( 'Generating the sitemap can use a lot of server resources.', 'autodescription' ), '', false ),
+				'',
+				false
+			),
+		], true );
 
 		if ( wp_using_ext_object_cache() ) :
 			?>
@@ -303,11 +288,11 @@ switch ( $instance ) :
 				<?php
 				$scheme_types = (array) apply_filters(
 					'the_seo_framework_canonical_scheme_types',
-					array(
+					[
 						'automatic' => __( 'Detect automatically', 'autodescription' ),
 						'http'      => 'HTTP',
 						'https'     => 'HTTPS',
-					)
+					]
 				);
 				foreach ( $scheme_types as $value => $name )
 					echo '<option value="' . esc_attr( $value ) . '"' . selected( $this->get_field_value( 'canonical_scheme' ), esc_attr( $value ), false ) . '>' . esc_html( $name ) . '</option>' . "\n";

@@ -39,7 +39,7 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @var array Holds Page output defaults.
 	 */
-	public $page_defaults = array();
+	public $page_defaults = [];
 
 	/**
 	 * Name of the page hook when the menu is registered.
@@ -78,14 +78,14 @@ class Admin_Pages extends Inpost {
 
 		$this->page_defaults = (array) \apply_filters(
 			'the_seo_framework_admin_page_defaults',
-			array(
+			[
 				'save_button_text'   => \esc_html__( 'Save Settings', 'autodescription' ),
 				'reset_button_text'  => \esc_html__( 'Reset Settings', 'autodescription' ),
 				'saved_notice_text'  => \esc_html__( 'Settings are saved.', 'autodescription' ),
 				'reset_notice_text'  => \esc_html__( 'Settings are reset.', 'autodescription' ),
 				'error_notice_text'  => \esc_html__( 'Error saving settings.', 'autodescription' ),
 				'plugin_update_text' => \esc_html__( 'New SEO Settings have been updated.', 'autodescription' ),
-			)
+			]
 		);
 	}
 
@@ -105,15 +105,15 @@ class Admin_Pages extends Inpost {
 		if ( $run )
 			return;
 
-		$menu = array(
+		$menu = [
 			'page_title' => \esc_html__( 'SEO Settings', 'autodescription' ),
 			'menu_title' => \esc_html__( 'SEO', 'autodescription' ),
 			'capability' => $this->get_settings_capability(),
 			'menu_slug'  => $this->seo_settings_page_slug,
-			'callback'   => array( $this, '_output_seo_settings_wrap' ),
+			'callback'   => [ $this, '_output_seo_settings_wrap' ],
 			'icon'       => 'dashicons-search',
 			'position'   => '90.9001',
-		);
+		];
 
 		$this->seo_settings_page_hook = \add_menu_page(
 			$menu['page_title'],
@@ -139,7 +139,7 @@ class Admin_Pages extends Inpost {
 		);
 
 		//* Enqueue scripts
-		\add_action( 'admin_print_scripts-' . $this->seo_settings_page_hook, array( $this, '_init_admin_scripts' ), 11 );
+		\add_action( 'admin_print_scripts-' . $this->seo_settings_page_hook, [ $this, '_init_admin_scripts' ], 11 );
 
 		$run = true;
 	}
@@ -157,8 +157,8 @@ class Admin_Pages extends Inpost {
 			$this->handle_update_post();
 
 		//* Output metaboxes.
-		\add_action( $this->seo_settings_page_hook . '_settings_page_boxes', array( $this, '_output_seo_settings_columns' ) );
-		\add_action( 'load-' . $this->seo_settings_page_hook, array( $this, '_register_seo_settings_metaboxes' ) );
+		\add_action( $this->seo_settings_page_hook . '_settings_page_boxes', [ $this, '_output_seo_settings_columns' ] );
+		\add_action( 'load-' . $this->seo_settings_page_hook, [ $this, '_register_seo_settings_metaboxes' ] );
 	}
 
 	/**
@@ -230,10 +230,10 @@ class Admin_Pages extends Inpost {
 			\add_meta_box(
 				'autodescription-general-settings',
 				\esc_html__( 'General Settings', 'autodescription' ),
-				array( $this, 'general_metabox' ),
+				[ $this, 'general_metabox' ],
 				$this->seo_settings_page_hook,
 				'main',
-				array()
+				[]
 			);
 
 		//* Title Meta Box
@@ -241,10 +241,10 @@ class Admin_Pages extends Inpost {
 			\add_meta_box(
 				'autodescription-title-settings',
 				\esc_html__( 'Title Settings', 'autodescription' ),
-				array( $this, 'title_metabox' ),
+				[ $this, 'title_metabox' ],
 				$this->seo_settings_page_hook,
 				'main',
-				array()
+				[]
 			);
 
 		//* Description Meta Box
@@ -252,10 +252,10 @@ class Admin_Pages extends Inpost {
 			\add_meta_box(
 				'autodescription-description-settings',
 				\esc_html__( 'Description Meta Settings', 'autodescription' ),
-				array( $this, 'description_metabox' ),
+				[ $this, 'description_metabox' ],
 				$this->seo_settings_page_hook,
 				'main',
-				array()
+				[]
 			);
 
 		//* Home Page Meta Box
@@ -263,10 +263,10 @@ class Admin_Pages extends Inpost {
 			\add_meta_box(
 				'autodescription-homepage-settings',
 				\esc_html__( 'Home Page Settings', 'autodescription' ),
-				array( $this, 'homepage_metabox' ),
+				[ $this, 'homepage_metabox' ],
 				$this->seo_settings_page_hook,
 				'main',
-				array()
+				[]
 			);
 
 		//* Social Meta Box
@@ -274,10 +274,10 @@ class Admin_Pages extends Inpost {
 			\add_meta_box(
 				'autodescription-social-settings',
 				\esc_html__( 'Social Meta Settings', 'autodescription' ),
-				array( $this, 'social_metabox' ),
+				[ $this, 'social_metabox' ],
 				$this->seo_settings_page_hook,
 				'main',
-				array()
+				[]
 			);
 
 		//* Title Meta Box
@@ -285,10 +285,10 @@ class Admin_Pages extends Inpost {
 			\add_meta_box(
 				'autodescription-schema-settings',
 				\esc_html__( 'Schema Settings', 'autodescription' ),
-				array( $this, 'schema_metabox' ),
+				[ $this, 'schema_metabox' ],
 				$this->seo_settings_page_hook,
 				'main',
-				array()
+				[]
 			);
 
 		//* Robots Meta Box
@@ -296,10 +296,10 @@ class Admin_Pages extends Inpost {
 			\add_meta_box(
 				'autodescription-robots-settings',
 				\esc_html__( 'Robots Meta Settings', 'autodescription' ),
-				array( $this, 'robots_metabox' ),
+				[ $this, 'robots_metabox' ],
 				$this->seo_settings_page_hook,
 				'main',
-				array()
+				[]
 			);
 
 		//* Webmaster Meta Box
@@ -307,10 +307,10 @@ class Admin_Pages extends Inpost {
 			\add_meta_box(
 				'autodescription-webmaster-settings',
 				\esc_html__( 'Webmaster Meta Settings', 'autodescription' ),
-				array( $this, 'webmaster_metabox' ),
+				[ $this, 'webmaster_metabox' ],
 				$this->seo_settings_page_hook,
 				'main',
-				array()
+				[]
 			);
 
 		//* Sitemaps Meta Box
@@ -318,10 +318,10 @@ class Admin_Pages extends Inpost {
 			\add_meta_box(
 				'autodescription-sitemap-settings',
 				\esc_html__( 'Sitemap Settings', 'autodescription' ),
-				array( $this, 'sitemaps_metabox' ),
+				[ $this, 'sitemaps_metabox' ],
 				$this->seo_settings_page_hook,
 				'main',
-				array()
+				[]
 			);
 
 		//* Feed Meta Box
@@ -329,10 +329,10 @@ class Admin_Pages extends Inpost {
 			\add_meta_box(
 				'autodescription-feed-settings',
 				\esc_html__( 'Feed Settings', 'autodescription' ),
-				array( $this, 'feed_metabox' ),
+				[ $this, 'feed_metabox' ],
 				$this->seo_settings_page_hook,
 				'main',
-				array()
+				[]
 			);
 	}
 
@@ -600,7 +600,7 @@ class Admin_Pages extends Inpost {
 	 */
 	public function load_assets() {
 		//* Hook scripts method
-		\add_action( "load-{$this->seo_settings_page_hook}", array( $this, 'metabox_scripts' ) );
+		\add_action( "load-{$this->seo_settings_page_hook}", [ $this, 'metabox_scripts' ] );
 	}
 
 	/**

@@ -11,30 +11,31 @@ $instance = $this->get_view_instance( 'the_seo_framework_title_metabox', $instan
 
 switch ( $instance ) :
 	case 'the_seo_framework_title_metabox_main' :
-
 		$latest_post_id = $this->get_latest_post_id();
 
 		if ( $latest_post_id ) {
-			$post = get_post( $latest_post_id, OBJECT );
+			$post  = get_post( $latest_post_id, OBJECT );
 			$title = esc_attr( $post->post_title );
 		} else {
 			$title = esc_attr__( 'Example Post Title', 'autodescription' );
 		}
 
 		$blogname = $this->get_blogname();
-		$sep = $this->get_separator( 'title' );
+		$sep      = $this->get_separator( 'title' );
 
-		$additions_left = '<span class="tsf-title-additions-js">' . $blogname . '<span class="tsf-sep-js">' . " $sep " . '</span></span>';
+		$additions_left  = '<span class="tsf-title-additions-js">' . $blogname . '<span class="tsf-sep-js">' . " $sep " . '</span></span>';
 		$additions_right = '<span class="tsf-title-additions-js"><span class="tsf-sep-js">' . " $sep " . '</span>' . $blogname . '</span>';
 
-		$example_left = '<em>' . $additions_left . $title . '</em>';
+		$example_left  = '<em>' . $additions_left . $title . '</em>';
 		$example_right = '<em>' . $title . $additions_right . '</em>';
 
 		//* There's no need for "hide-if-no-js" here.
 		//* Check left first, as right is default (and thus fallback).
 		$showleft = 'left' === $this->get_option( 'title_location' );
 
-		?><h4><?php esc_html_e( 'Automated Title Settings', 'autodescription' ); ?></h4><?php
+		?>
+		<h4><?php esc_html_e( 'Automated Title Settings', 'autodescription' ); ?></h4>
+		<?php
 		$this->description( __( 'The page title is prominently shown within the browser tab as well as within the Search Engine results pages.', 'autodescription' ) );
 
 		?>
@@ -53,43 +54,43 @@ switch ( $instance ) :
 		 * @since 2.2.2
 		 *
 		 * @param array $default_tabs { 'id' = The identifier =>
-		 *		array(
-		 *			'name'     => The name
-		 *			'callback' => The callback function, use array for method calling
-		 *			'dashicon' => Desired dashicon
-		 *		)
+		 *   array(
+		 *       'name'     => The name
+		 *       'callback' => The callback function, use array for method calling
+		 *       'dashicon' => Desired dashicon
+		 *    )
 		 * }
 		 */
-		$default_tabs = array(
-			'general' => array(
+		$default_tabs = [
+			'general' => [
 				'name'     => __( 'General', 'autodescription' ),
-				'callback' => array( $this, 'title_metabox_general_tab' ),
+				'callback' => [ $this, 'title_metabox_general_tab' ],
 				'dashicon' => 'admin-generic',
-			),
-			'additions' => array(
+			],
+			'additions' => [
 				'name'     => __( 'Additions', 'autodescription' ),
-				'callback' => array( $this, 'title_metabox_additions_tab' ),
+				'callback' => [ $this, 'title_metabox_additions_tab' ],
 				'dashicon' => 'plus',
-				'args'     => array(
-					'examples' => array(
+				'args'     => [
+					'examples' => [
 						'left'  => $example_left,
 						'right' => $example_right,
-					),
-				),
-			),
-			'prefixes' => array(
+					],
+				],
+			],
+			'prefixes' => [
 				'name'     => __( 'Prefixes', 'autodescription' ),
-				'callback' => array( $this, 'title_metabox_prefixes_tab' ),
+				'callback' => [ $this, 'title_metabox_prefixes_tab' ],
 				'dashicon' => 'plus-alt',
-				'args'     => array(
-					'additions' => array(
+				'args'     => [
+					'additions' => [
 						'left'  => $additions_left,
 						'right' => $additions_right,
-					),
+					],
 					'showleft' => $showleft,
-				),
-			),
-		);
+				],
+			],
+		];
 
 		/**
 		 * Applies filters the_seo_framework_title_settings_tabs : array see $default_tabs
@@ -115,20 +116,19 @@ switch ( $instance ) :
 				<?php $this->description( __( 'If the title consists of two parts (original title and optional addition), then the separator will go in-between them.', 'autodescription' ) ); ?>
 			</legend>
 			<p id="tsf-title-separator" class="tsf-fields">
-			<?php foreach ( $title_separator as $name => $html ) { ?>
+			<?php foreach ( $title_separator as $name => $html ) : ?>
 				<input type="radio" name="<?php $this->field_name( 'title_seperator' ); ?>" id="<?php $this->field_id( 'title_seperator_' . $name ); ?>" value="<?php echo esc_attr( $name ); ?>" <?php checked( $this->get_field_value( 'title_seperator' ), $name ); ?> />
-				<label for="<?php $this->field_id( 'title_seperator_' . $name ); ?>" <?php echo in_array( $name, array( 'dash', 'pipe' ), true ) ? $recommended : ''; ?>><?php echo esc_html( $html ); ?></label>
-			<?php } ?>
+				<label for="<?php $this->field_id( 'title_seperator_' . $name ); ?>" <?php echo in_array( $name, [ 'dash', 'pipe' ], true ) ? $recommended : ''; ?>><?php echo esc_html( $html ); ?></label>
+			<?php endforeach; ?>
 			</p>
 		</fieldset>
 		<?php
 		break;
 
 	case 'the_seo_framework_title_metabox_additions' :
-
 		$language = $this->google_language();
 
-		$example_left = $examples['left'];
+		$example_left  = $examples['left'];
 		$example_right = $examples['right'];
 
 		$home_page_has_option = __( 'The Home Page has a specific option.', 'autodescription' );
@@ -191,10 +191,13 @@ switch ( $instance ) :
 		$term_labels = $this->get_tax_labels( 'category' );
 		$label = isset( $term_labels->singular_name ) ? $term_labels->singular_name : __( 'Category', 'autodescription' );
 
-		/**
-		 * @since WordPress Core 4.5.0 get_terms first parameter is converted to the latter.
-		 */
-		$cats = get_terms( array(), array( 'taxonomy' => 'category', 'fields' => 'ids', 'hide_empty' => false, 'order' => 'ASC', 'number' => 1 ) );
+		$cats = get_terms( [
+			'taxonomy'   => 'category',
+			'fields'     => 'ids',
+			'hide_empty' => false,
+			'order'      => 'ASC',
+			'number'     => 1,
+		] );
 		if ( is_array( $cats ) && ! empty( $cats ) ) {
 			//* Category should exist.
 			$cat = reset( $cats );
@@ -254,6 +257,6 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	default :
+	default:
 		break;
 endswitch;

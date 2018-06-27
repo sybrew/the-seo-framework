@@ -412,9 +412,9 @@ class Admin_Init extends Init {
 			$use_term_prefix = $this->use_generated_archive_prefix();
 		}
 
-		$l10n = array(
+		$l10n = [
 			'nonces' => $this->get_js_nonces(),
-			'states' => array(
+			'states' => [
 				'isRTL' => (bool) \is_rtl(),
 				'isHome' => $ishome,
 				'hasInput' => $has_input,
@@ -428,8 +428,8 @@ class Admin_Init extends Init {
 				'isPrivate' => $has_input && $id && $this->is_private( $id ),
 				'isPasswordProtected' => $has_input && $id && $this->is_password_protected( $id ),
 				'debug' => $this->script_debug,
-			),
-			'i18n' => array(
+			],
+			'i18n' => [
 				'saveAlert' => \__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
 				'confirmReset' => \__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
 				'good' => \__( 'Good', 'autodescription' ),
@@ -440,8 +440,8 @@ class Admin_Init extends Init {
 				'protectedTitle' => $has_input && $id ? \__( 'Protected:', 'autodescription' ) : '',
 				/* translators: Pixel counter. 1: width, 2: guideline */
 				'pixelsUsed' => $has_input ? \__( '%1$d out of %2$d pixels are used.', 'autodescription' ) : '',
-			),
-			'params' => array(
+			],
+			'params' => [
 				'objectTitle' => $default_title,
 				'defaultTitle' => $default_title,
 				'titleAdditions' => $additions,
@@ -453,10 +453,10 @@ class Admin_Init extends Init {
 				'titleLocation' => $title_location,
 				'titlePixelGuideline' => 600,
 				'descPixelGuideline' => $is_post_edit ? ( $this->is_page() ? 1820 : 1720 ) : 1820,
-			),
-		);
+			],
+		];
 
-		$decode = array( 'i18n', 'params' );
+		$decode = [ 'i18n', 'params' ];
 		$flags = ENT_COMPAT;
 		foreach ( $decode as $key ) {
 			foreach ( $l10n[ $key ] as $k => $v ) {
@@ -573,7 +573,7 @@ class Admin_Init extends Init {
 	 *               (key => value). Default is an empty array.
 	 * @return null Return early if first argument is false.
 	 */
-	public function admin_redirect( $page, array $query_args = array() ) {
+	public function admin_redirect( $page, array $query_args = [] ) {
 
 		if ( empty( $page ) )
 			return;
@@ -742,13 +742,13 @@ class Admin_Init extends Init {
 				$size       = @getimagesize( $cropped );
 				$image_type = ( $size ) ? $size['mime'] : 'image/jpeg';
 
-				$object = array(
+				$object = [
 					'post_title'     => basename( $cropped ),
 					'post_content'   => $url,
 					'post_mime_type' => $image_type,
 					'guid'           => $url,
 					'context'        => $context,
-				);
+				];
 
 				$attachment_id = \wp_insert_attachment( $object, $cropped );
 				$metadata = \wp_generate_attachment_metadata( $attachment_id, $cropped );

@@ -42,7 +42,7 @@ class Compat extends Core {
 		\add_filter( 'headway_seo_disabled', '__return_true' );
 
 		//* Jetpack compat.
-		\add_action( 'init', array( $this, 'jetpack_compat' ) );
+		\add_action( 'init', [ $this, 'jetpack_compat' ] );
 	}
 
 	/**
@@ -72,24 +72,24 @@ class Compat extends Core {
 			$this->_include_compat( 'genesis', 'theme' );
 		}
 
-		if ( $this->detect_plugin( array( 'constants' => array( 'ICL_LANGUAGE_CODE' ) ) ) ) {
+		if ( $this->detect_plugin( [ 'constants' => [ 'ICL_LANGUAGE_CODE' ] ] ) ) {
 			//* WPML
 			$this->_include_compat( 'wpml', 'plugin' );
 		}
 
-		if ( $this->detect_plugin( array( 'globals' => array( 'ultimatemember' ) ) ) ) {
+		if ( $this->detect_plugin( [ 'globals' => [ 'ultimatemember' ] ] ) ) {
 			//* Ultimate Member
 			$this->_include_compat( 'ultimatemember', 'plugin' );
 		}
-		if ( $this->detect_plugin( array( 'globals' => array( 'bp' ) ) ) ) {
+		if ( $this->detect_plugin( [ 'globals' => [ 'bp' ] ] ) ) {
 			//* BuddyPress
 			$this->_include_compat( 'buddypress', 'plugin' );
 		}
 
-		if ( $this->detect_plugin( array( 'functions' => array( 'bbpress' ) ) ) ) {
+		if ( $this->detect_plugin( [ 'functions' => [ 'bbpress' ] ] ) ) {
 			//* bbPress
 			$this->_include_compat( 'bbpress', 'plugin' );
-		} elseif ( $this->detect_plugin( array( 'constants' => array( 'WPFORO_BASENAME' ) ) ) ) {
+		} elseif ( $this->detect_plugin( [ 'constants' => [ 'WPFORO_BASENAME' ] ] ) ) {
 			//* wpForo
 			$this->_include_compat( 'wpforo', 'plugin' );
 		}
@@ -108,7 +108,7 @@ class Compat extends Core {
 	 */
 	public function _include_compat( $what, $type = 'plugin' ) {
 
-		static $included = array();
+		static $included = [];
 
 		if ( ! isset( $included[ $what ][ $type ] ) )
 			$included[ $what ][ $type ] = (bool) require THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . $type . '-' . $what . '.php';

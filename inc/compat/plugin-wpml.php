@@ -39,7 +39,7 @@ function _wpml_do_current_screen_action( $current_screen = '' ) {
  * @param array $languages_links
  * @return array
  */
-function _wpml_remove_all_languages( $languages_links = array() ) {
+function _wpml_remove_all_languages( $languages_links = [] ) {
 
 	unset( $languages_links['all'] );
 

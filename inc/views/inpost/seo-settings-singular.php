@@ -33,26 +33,26 @@ switch ( $instance ) :
 		 *    }
 		 * }
 		 */
-		$default_tabs = array(
-			'general' => array(
+		$default_tabs = [
+			'general' => [
 				'name'     => __( 'General', 'autodescription' ),
-				'callback' => array( $this, 'singular_inpost_box_general_tab' ),
+				'callback' => [ $this, 'singular_inpost_box_general_tab' ],
 				'dashicon' => 'admin-generic',
-				'args' => array( $type ),
-			),
-			'social' => array(
+				'args' => [ $type ],
+			],
+			'social' => [
 				'name'     => __( 'Social', 'autodescription' ),
-				'callback' => array( $this, 'singular_inpost_box_social_tab' ),
+				'callback' => [ $this, 'singular_inpost_box_social_tab' ],
 				'dashicon' => 'share',
-				'args' => array( $type ),
-			),
-			'visibility' => array(
+				'args' => [ $type ],
+			],
+			'visibility' => [
 				'name'     => __( 'Visibility', 'autodescription' ),
-				'callback' => array( $this, 'singular_inpost_box_visibility_tab' ),
+				'callback' => [ $this, 'singular_inpost_box_visibility_tab' ],
 				'dashicon' => 'visibility',
-				'args' => array( $type ),
-			),
-		);
+				'args' => [ $type ],
+			],
+		];
 
 		/**
 		 * Applies filters 'the_seo_framework_inpost_settings_tabs' : array
@@ -170,7 +170,7 @@ switch ( $instance ) :
 		//* Fetch Canonical URL.
 		$canonical = $this->get_custom_field( '_genesis_canonical_uri' );
 		//* Fetch Canonical URL Placeholder.
-		$canonical_placeholder = $this->create_canonical_url( array( 'id' => $post_id ) );
+		$canonical_placeholder = $this->create_canonical_url( [ 'id' => $post_id ] );
 
 		?>
 		<div class="tsf-flex-setting tsf-flex">
