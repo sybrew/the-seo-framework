@@ -296,6 +296,7 @@ NOTE: ref: https://theseoframework.com/?p=1792
 ## Detailed log
 
 TODO: (regression) Fix the spacing of the tab icons on the settings page.
+TODO: (regression) Fix the (redirect/canonical/image) URL input "not focusable" on save... (set invalid url>switch tab) ugh...
 
 * **For everyone:**
 	* **Added:**
@@ -364,7 +365,7 @@ TODO: (regression) Fix the spacing of the tab icons on the settings page.
 		* When adding a new category when no category is selected, the primary term is now correctly assigned.
 		* When the primary term selection changed after load and when a new category is added, the previous category is no longer assigned as primary.
 		* TODO Links with [?] now show a pointer... (explain)
-		* TODO Social description fields now render escaped `<..>` characters in placeholders correctly.
+		* Twitter description and title fields now render escaped `<&'">` characters in placeholders correctly when fetched from related Open Graph fields.
 		* TODO Date (and other?) archives now show valid Open Graph metadata. (description missing...)
 		* When no description or title is found for the corresponding Open Graph or Twitter fields, no more infinite loop will occur that might crash the browser. Luckily, modern browsers detect this to prevent said crashes.
 		* When the homepage is a blog, it'll now be included in the sitemap again.
