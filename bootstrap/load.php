@@ -61,9 +61,6 @@ function _init_tsf() {
 	if ( $tsf )
 		return $tsf;
 
-	if ( false === \doing_action( 'plugins_loaded' ) )
-		\_doing_it_wrong( 'the_seo_framework() || ' . __FUNCTION__, 'Use <code>the_seo_framework()</code> after action <code>plugins_loaded</code> priority 5.' );
-
 	/**
 	 * @package The_SEO_Framework
 	 */
@@ -92,6 +89,10 @@ function _init_tsf() {
 		$tsf = new \The_SEO_Framework\Silencer();
 		$tsf->loaded = false;
 	}
+
+	// did_action() checks for current action too.
+	if ( false === \did_action( 'plugins_loaded' ) )
+		$tsf->_doing_it_wrong( 'the_seo_framework() or ' . __FUNCTION__, 'Use <code>the_seo_framework()</code> after action <code>plugins_loaded</code> priority 5.', '3.1' );
 
 	return $tsf;
 }
