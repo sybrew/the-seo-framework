@@ -295,8 +295,7 @@ NOTE: ref: https://theseoframework.com/?p=1792
 
 ## Detailed log
 
-TODO: (regression) Fix the spacing of the tab icons on the settings page.
-TODO: (regression) Fix the (redirect/canonical/image) URL input "not focusable" on save... (set invalid url>switch tab) ugh...
+TODO: Regression? RTL layout fixes, namely SEO bar spacing and [?] tooltips.
 
 * **For everyone:**
 	* **Added:**
@@ -370,6 +369,9 @@ TODO: (regression) Fix the (redirect/canonical/image) URL input "not focusable" 
 		* When no description or title is found for the corresponding Open Graph or Twitter fields, no more infinite loop will occur that might crash the browser. Luckily, modern browsers detect this to prevent said crashes.
 		* When the homepage is a blog, it'll now be included in the sitemap again.
 		* TODO (regression???) When no tagline is set in the WordPress settings, the home page will no longer display "on Site name" for the description by default.
+		* Invalid settings' input are now checked before you can change tabs. This makes the saving buttons work as intended.
+			* TODO consider checking closed postboxes too.... we could add an on-publish listener that checks if our postboxes are closed, and open them if they contain invalid values.
+				* `jQuery( elem ).find( '.hndle, .handlediv' ).trigger( 'click.postboxes' );`
 
 * **For translators:**
 	* **New translations are available.**

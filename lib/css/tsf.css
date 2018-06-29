@@ -514,6 +514,10 @@ body.no-js .tsf-seo-bar-item {
 	font-weight: 600;
 }
 
+.tsf-nav-desktop {
+	margin-left: 7px;
+}
+
 .tsf-dashicons-tabs {
 	font-size: initial;
 	display: inline;

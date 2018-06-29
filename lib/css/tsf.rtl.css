@@ -651,6 +651,10 @@ a.tsf-tooltip-item {
 	font-weight: 600;
 }
 
+.tsf-nav-desktop {
+	margin-right: 7px;
+}
+
 .tsf-dashicons-tabs {
 	font-size: initial;
 	display: inline;
