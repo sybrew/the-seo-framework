@@ -336,6 +336,7 @@ TODO: Regression? RTL layout fixes, namely SEO bar spacing and [?] tooltips.
 		* The main plugin's cache is now flushed after the SEO settings are requested to be updated, even when the options didn't change.
 		* The automated scheme detection can now prevent the sitemap from using, and caching, the wrong scheme.
 		* A lot of verbatim regarding various settings, to make it more clear what they do, and when they do it.
+		* The sitemap and stylesheet should no longer be indexed by search engines.
 	* **Changed:**
 		* TSF now requires WordPress 4.6 (previously 4.4).
 		* TSF now requires PHP 5.4 (previously 5.3).

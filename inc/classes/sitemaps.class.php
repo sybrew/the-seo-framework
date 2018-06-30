@@ -86,7 +86,9 @@ class Sitemaps extends Metaboxes {
 		 * Don't do anything on a deleted or spam blog on MultiSite.
 		 * There's nothing to find anyway.
 		 */
-		return $cache = $this->is_option_checked( 'sitemaps_output' ) && false === $this->current_blog_is_spam_or_deleted();
+		return $cache =
+			$this->is_option_checked( 'sitemaps_output' )
+			&& false === $this->current_blog_is_spam_or_deleted();
 	}
 
 	/**
@@ -306,20 +308,49 @@ class Sitemaps extends Metaboxes {
 	 * Outputs sitemap.xml 'file' and header.
 	 *
 	 * @since 2.2.9
+	 * @since 3.1.0 1. Now outputs 200-response code.
+	 *              2. Now outputs robots tag, preventing indexing.
+	 *              3. Now overrides other header tags.
 	 */
 	protected function output_sitemap() {
 
 		//* Remove output, if any.
 		$this->clean_response_header();
 
-		if ( ! headers_sent() )
-			header( 'Content-type: text/xml; charset=utf-8' );
+		if ( ! headers_sent() ) {
+			\status_header( 200 );
+			header( 'Content-type: text/xml; charset=utf-8', true );
+			header( 'X-Robots-Tag: noindex, follow', true );
+		}
 
 		//* Fetch sitemap content and add trailing line. Already escaped internally.
 		$this->output_sitemap_content();
 		echo "\n";
 
 		// We're done now.
+		exit;
+	}
+
+	/**
+	 * Sitemap XSL stylesheet output.
+	 *
+	 * @since 2.8.0
+	 * @since 3.1.0 1. Now outputs 200-response code.
+	 *              2. Now outputs robots tag, preventing indexing.
+	 *              3. Now overrides other header tags.
+	 */
+	public function output_sitemap_xsl_stylesheet() {
+
+		$this->clean_response_header();
+
+		if ( ! headers_sent() ) {
+			\status_header( 200 );
+			header( 'Content-type: text/xsl; charset=utf-8', true );
+			header( 'Cache-Control: max-age=1800', true );
+			header( 'X-Robots-Tag: noindex, follow', true );
+		}
+
+		$this->get_view( 'sitemap/xsl-stylesheet' );
 		exit;
 	}
 
@@ -557,24 +588,6 @@ class Sitemaps extends Metaboxes {
 		}
 
 		return $loc;
-	}
-
-	/**
-	 * Sitemap XSL stylesheet output.
-	 *
-	 * @since 2.8.0
-	 */
-	public function output_sitemap_xsl_stylesheet() {
-
-		$this->clean_response_header();
-
-		if ( ! headers_sent() ) {
-			header( 'Content-type: text/xsl; charset=utf-8' );
-			header( 'Cache-Control: max-age=1800' );
-		}
-
-		$this->get_view( 'sitemap/xsl-stylesheet' );
-		exit;
 	}
 
 	/**
