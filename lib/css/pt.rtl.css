@@ -10,7 +10,7 @@
 	padding: 0;
 	float: left;
 	line-height: inherit;
-	display: inline-block;
+	display: block;
 }
 
 .tsf-primary-term-selector input {

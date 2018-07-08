@@ -11,7 +11,7 @@
 	padding: 0;
 	float: right;
 	line-height: inherit;
-	display: inline-block;
+	display: block;
 }
 
 .tsf-primary-term-selector input {

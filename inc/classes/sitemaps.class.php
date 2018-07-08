@@ -1074,9 +1074,6 @@ class Sitemaps extends Metaboxes {
 
 		if ( $custom_urls ) {
 
-			//* Force ent2ncr to run, regardless of filters.
-			\remove_all_filters( 'pre_ent2ncr', false );
-
 			foreach ( $custom_urls as $url => $args ) {
 
 				if ( ! is_array( $args ) ) {

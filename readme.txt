@@ -369,6 +369,9 @@ TODO: Regression? RTL layout fixes, namely SEO bar spacing and [?] tooltips.
 		* TODO Date (and other?) archives now show valid Open Graph metadata. (description missing...)
 		* When no description or title is found for the corresponding Open Graph or Twitter fields, no more infinite loop will occur that might crash the browser. Luckily, modern browsers detect this to prevent said crashes.
 		* When the homepage is a blog, it'll now be included in the sitemap again.
+		* Thanks to the upgrade to PHP 5.4, the SEO bar can now count words with non-latin special characters.
+			* In their normal form of writing, it's not able to count han characters.
+		* TODO figure out why WPML's translated sitemap doesn't flush on save. (https://wordpress.org/support/topic/multi-language-sitemaps-not-updating/)
 		* TODO (regression???) When no tagline is set in the WordPress settings, the home page will no longer display "on Site name" for the description by default.
 		* Invalid settings' input are now checked before you can change tabs. This makes the saving buttons work as intended.
 			* TODO consider checking closed postboxes too.... we could add an on-publish listener that checks if our postboxes are closed, and open them if they contain invalid values.
@@ -608,6 +611,7 @@ TODO: Regression? RTL layout fixes, namely SEO bar spacing and [?] tooltips.
 			* `the_seo_framework_detect_page_builder`
 				1. Now returns `null` by default.
 				2. Now, when a boolean (either true or false) is defined, it'll short-circuit this function. See [this comment](https://github.com/sybrew/the-seo-framework/issues/279#issuecomment-392735509) for more information.
+			* The WordPress filter `pre_ent2ncr` can now run on filter `the_seo_framework_sitemap_additional_urls`.
 		* **Removed:**
 			* `the_seo_framework_update_options_at_update`
 			* `the_seo_framework_canonical_force_scheme` (was deprecated since 2.8.0). Use `the_seo_framework_preferred_url_scheme` instead.

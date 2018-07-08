@@ -21,7 +21,7 @@ $tsf = the_seo_framework();
 		$tsf->make_info(
 			sprintf(
 				/* translators: %s = term name */
-				\esc_html__( 'You can set the primary %s through the buttons below.', 'autodescription' ),
+				\esc_html__( 'You can set the primary %s with the buttons below.', 'autodescription' ),
 				'{{data.taxonomy.name}}'
 			)
 		);

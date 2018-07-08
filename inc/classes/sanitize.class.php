@@ -46,6 +46,7 @@ class Sanitize extends Admin_Pages {
 	 * Never run a sensitive function when it's returning false. This means no nonce can be verified.
 	 *
 	 * @since 2.7.0
+	 * @since 3.1.0 Removed settings field existence check.
 	 * @securitycheck 3.0.0 OK.
 	 * @staticvar bool $verified.
 	 *
@@ -57,10 +58,6 @@ class Sanitize extends Admin_Pages {
 
 		if ( isset( $validated ) )
 			return $validated;
-
-		//* If this page doesn't store settings, no need to sanitize them
-		if ( ! $this->settings_field )
-			return $validated = false;
 
 		/**
 		 * If this page doesn't parse the site options,
@@ -430,7 +427,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @param string $filter Sanitization filter type
 	 * @param string $option Option key
-	 * @param array|string $suboption Optional. Suboption key
+	 * @param array|string $suboption Optional. Suboption key(s).
 	 * @return boolean Returns true when complete
 	 */
 	public function add_option_filter( $filter, $option, $suboption = null ) {
@@ -454,7 +451,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @param string $filter Sanitization filter type
 	 * @param string $option Option key
-	 * @param array|string $suboption Optional. Suboption key
+	 * @param array|string $suboption Optional. Suboption key(s).
 	 * @param bool $get Whether to retrieve cache.
 	 * @return array When $get is true, it will return the option filters.
 	 */
@@ -510,7 +507,7 @@ class Sanitize extends Admin_Pages {
 			return $this->do_filter( $filters[ $option ], $new_value, \get_option( $option ) );
 		} elseif ( is_array( $filters[ $option ] ) ) {
 			//* Array of suboption values to loop through
-			$old_value = \get_option( $option );
+			$old_value = \get_option( $option, [] );
 			foreach ( $filters[ $option ] as $suboption => $filter ) {
 				$old_value[ $suboption ] = isset( $old_value[ $suboption ] ) ? $old_value[ $suboption ] : '';
 				$new_value[ $suboption ] = isset( $new_value[ $suboption ] ) ? $new_value[ $suboption ] : '';

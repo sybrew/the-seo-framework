@@ -745,7 +745,16 @@ class Core {
 	 * Counts words encounters from input string.
 	 * Case insensitive. Returns first encounter of each word if found multiple times.
 	 *
+	 * Will only return words that are above set input thresholds.
+	 *
 	 * @since 2.7.0
+	 * @since 3.1.0 This method now uses PHP 5.4+ encoding, capable of UTF-8 interpreting,
+	 *              instead of relying on PHP's incomplete encoding table.
+	 *              This does mean that the functionality is crippled* when the PHP
+	 *              installation isn't unicode compatible; this is unlikely.
+	 * @staticvar bool $utf8_pcre Determines whether pcre supports UTF-8.
+	 *
+	 * *Crippled as in skipping every non-latin and diacritic character.
 	 *
 	 * @param string $string Required. The string to count words in.
 	 * @param int $amount Minimum amount of words to encounter in the string.
@@ -760,20 +769,43 @@ class Core {
 	 */
 	public function get_word_count( $string, $amount = 3, $amount_bother = 5, $bother_length = 3 ) {
 
-		//* Convert string's special characters into PHP readable words.
-		$string = htmlentities( $string, ENT_COMPAT, 'UTF-8' );
+		$string = html_entity_decode( $string );
 
-		//* Count the words. Because we've converted all characters to XHTML codes, the odd ones should be only numerical.
-		$words = str_word_count( strtolower( $string ), 2, '&#0123456789;' );
+		static $utf8_pcre = null;
+		if ( ! isset( $utf8_pcre ) )
+			$utf8_pcre = @preg_match( '/^./u', 'a' );
+
+		if ( $utf8_pcre ) {
+			$string = \wp_check_invalid_utf8( $string, true );
+			$word_list = preg_split(
+				'/\W+/mu',
+				$string,
+				-1,
+				PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_NO_EMPTY
+			);
+		} else {
+			$word_list = preg_split(
+				'/\W+/m',
+				$string,
+				-1,
+				PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_NO_EMPTY
+			);
+		}
 
 		$words_too_many = [];
 
-		if ( is_array( $words ) ) :
+		if ( count( $word_list ) ) :
 			/**
-			 * Applies filters 'the_seo_framework_bother_me_desc_length' : int Min Character length to bother you with.
 			 * @since 2.6.0
+			 * @param int $bother_length Min Character length to bother you with.
 			 */
-			$bother_me_length = (int) \apply_filters( 'the_seo_framework_bother_me_desc_length', $bother_length );
+			$bother_length = (int) \apply_filters( 'the_seo_framework_bother_me_desc_length', $bother_length );
+
+			$words = [];
+			foreach ( $word_list as $wli ) {
+				//= { $words[ int Offset ] => string Word }
+				$words[ $wli[1] ] = $wli[0];
+			}
 
 			$word_count = array_count_values( $words );
 
@@ -784,7 +816,7 @@ class Core {
 
 				foreach ( $word_count as $word => $count ) {
 
-					if ( mb_strlen( html_entity_decode( $word ) ) < $bother_me_length ) {
+					if ( mb_strlen( $word ) < $bother_length ) {
 						$run = $count >= $amount_bother;
 					} else {
 						$run = $count >= $amount;
@@ -793,10 +825,12 @@ class Core {
 					if ( $run ) {
 						//* The encoded word is longer or equal to the bother length.
 
-						$word_len = mb_strlen( $word );
-						$position = $word_keys[ $word ];
-
-						$first_encountered_word = mb_substr( $string, $position, $word_len );
+						//! Don't use mb_* here. preg_split's offset in in bytes, NOT unicode.
+						$args = [
+							'pos' => $word_keys[ $word ],
+							'len' => strlen( $word ),
+						];
+						$first_encountered_word = substr( $string, $args['pos'], $args['len'] );
 
 						//* Found words that are used too frequently.
 						$words_too_many[] = [ $first_encountered_word => $count ];

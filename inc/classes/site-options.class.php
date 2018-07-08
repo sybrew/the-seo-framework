@@ -39,7 +39,7 @@ class Site_Options extends Sanitize {
 	 *
 	 * @var string Settings field.
 	 */
-	protected $settings_field;
+	protected $settings_field = THE_SEO_FRAMEWORK_SITE_OPTIONS;
 
 	/**
 	 * Hold the SEO Settings Page ID for this plugin.
@@ -49,17 +49,13 @@ class Site_Options extends Sanitize {
 	 *
 	 * @var string The page ID
 	 */
-	public $seo_settings_page_slug;
+	public $seo_settings_page_slug = 'theseoframework-settings';
 
 	/**
 	 * Constructor, load parent constructor and set up cachable variables.
 	 */
 	protected function __construct() {
 		parent::__construct();
-
-		$this->settings_field = THE_SEO_FRAMEWORK_SITE_OPTIONS;
-
-		$this->seo_settings_page_slug = 'theseoframework-settings';
 
 		\add_filter( "option_page_capability_{$this->settings_field}", [ $this, 'get_settings_capability' ] );
 	}
@@ -473,16 +469,12 @@ class Site_Options extends Sanitize {
 	 *
 	 * @since 2.2.2
 	 * @since 2.9.0 Removed reset options check, see check_options_reset().
+	 * @since 3.1.0 Removed settings field existence check.
 	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 *
 	 * @return void Early if settings can't be registered.
 	 */
 	public function register_settings() {
-
-		//* If the settings field doesn't exist, we can't register it.
-		if ( ! $this->settings_field )
-			return;
-
 		\register_setting( $this->settings_field, $this->settings_field );
 		\add_option( $this->settings_field, $this->default_site_options() );
 
@@ -501,7 +493,7 @@ class Site_Options extends Sanitize {
 
 		/**
 		 * Security check:
-		 * Further checks are based on previously set options.
+		 * Further checks are based on previously set options, via option 'tsf-settings-reset'.
 		 * These can only be set when one has access to the Settings Page or database.
 		 * Also checks for capabilities.
 		 */

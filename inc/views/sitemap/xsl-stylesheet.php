@@ -6,7 +6,7 @@
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
 $title = __( 'XML Sitemap', 'autodescription' );
-//? Trick the system into thinking (your CPU is a rock that's tricked doing this) it's not a real page.
+//? Trick the system into thinking (your CPU is a rock that's tricked doing this) it's not a real page, by feeding a signed int.
 $this->use_title_branding( [ 'id' => -1 ] ) and $this->merge_title_branding( $title, [ 'id' => -1 ] );
 
 if ( $this->is_option_checked( 'sitemap_logo' ) ) {
