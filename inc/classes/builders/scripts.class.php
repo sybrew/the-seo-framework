@@ -30,6 +30,7 @@ $_load_scripts_class = function() {
  * @see \WP_Scripts
  * @see \WP_Dependencies
  * @access private
+ *         Use `the_seo_framework()->Scripts()` instead.
  * @final Can't be extended.
  */
 final class Scripts {

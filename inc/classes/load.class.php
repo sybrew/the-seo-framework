@@ -39,12 +39,10 @@ final class Load extends Feed implements Debug_Interface {
 	 * @since 2.2.9
 	 *
 	 * @var bool Whether debug is enabled.
-	 * @var bool Whether debug is hidden in HTMl.
 	 * @var bool Whether transients are enabled.
 	 * @var bool Whether script debugging is enabled.
 	 */
 	public $the_seo_framework_debug = false,
-		   $the_seo_framework_debug_hidden = false,
 		   $the_seo_framework_use_transients = true,
 		   $script_debug = false;
 
@@ -76,10 +74,7 @@ final class Load extends Feed implements Debug_Interface {
 
 		$this->the_seo_framework_debug = defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ?: $this->the_seo_framework_debug;
 		if ( $this->the_seo_framework_debug ) {
-			//* No need to set these to true if no debugging is enabled.
-			$this->the_seo_framework_debug_hidden = defined( 'THE_SEO_FRAMEWORK_DEBUG_HIDDEN' ) && THE_SEO_FRAMEWORK_DEBUG_HIDDEN ?: $this->the_seo_framework_debug_hidden;
-
-			$instance = \The_SEO_Framework\Debug::set_instance( $this->the_seo_framework_debug, $this->the_seo_framework_debug_hidden );
+			$instance = \The_SEO_Framework\Debug::_set_instance( $this->the_seo_framework_debug );
 		}
 
 		$this->the_seo_framework_use_transients = defined( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS' ) && THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS ? false : $this->the_seo_framework_use_transients;
@@ -92,7 +87,7 @@ final class Load extends Feed implements Debug_Interface {
 	 * Wrapper for function calling through parameters. The golden nugget.
 	 *
 	 * @since 2.2.2
-	 * @access private
+	 * @since 3.1.0 Is now protected.
 	 * @NOTE _doing_it_wrong notices go towards the callback. Unless this
 	 *      function is used wrongfully. Then the notice is about this function.
 	 *
@@ -101,7 +96,7 @@ final class Load extends Feed implements Debug_Interface {
 	 * @param array|string $args The arguments passed to the function.
 	 * @return mixed $output The function called.
 	 */
-	public function call_function( $callback, $version = '', $args = [] ) {
+	protected function call_function( $callback, $version = '', $args = [] ) {
 
 		$output = '';
 
@@ -228,25 +223,5 @@ final class Load extends Feed implements Debug_Interface {
 	 */
 	public function _inaccessible_p_or_m( $p_or_m, $message = '' ) {
 		Debug::get_instance()->_inaccessible_p_or_m( $p_or_m, $message );
-	}
-
-	/**
-	 * Debug init. Simplified way of debugging a function, only works in admin.
-	 *
-	 * @since 2.6.0
-	 * @access private
-	 *
-	 * @param string $method The function name.
-	 * @param bool $store Whether to store the output in cache for next run to pick up on.
-	 * @param double $debug_key Use $debug_key as variable, it's reserved.
-	 * @param mixed function args.
-	 * @return void early if debugging is disabled or when storing cache values.
-	 */
-	public function debug_init( $method, $store, $debug_key = null ) {
-		if ( func_num_args() >= 4 ) {
-			Debug::get_instance()->debug_init( $method, $store, $debug_key, array_slice( func_get_args(), 3 ) );
-		} else {
-			Debug::get_instance()->debug_init( $method, $store, $debug_key );
-		}
 	}
 }

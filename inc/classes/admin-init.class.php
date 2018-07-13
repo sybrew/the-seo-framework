@@ -526,7 +526,7 @@ class Admin_Init extends Init {
 	 *
 	 * Performs die() on failure.
 	 *
-	 * @since 2.9.0
+	 * @since 3.1.0 : Introduced in 2.9.0, but the name changed.
 	 * @access private
 	 *         It uses an internally and manually created prefix.
 	 * @uses WP Core check_ajax_referer()
@@ -536,7 +536,7 @@ class Admin_Init extends Init {
 	 *                   and generated between 0-12 hours ago, 2 if the nonce is
 	 *                   valid and generated between 12-24 hours ago.
 	 */
-	public function check_tsf_ajax_referer( $capability ) {
+	public function _check_tsf_ajax_referer( $capability ) {
 		return \check_ajax_referer( 'tsf-ajax-' . $capability, 'nonce', true );
 	}
 
@@ -550,11 +550,10 @@ class Admin_Init extends Init {
 	 */
 	public function add_removable_query_args( $removable_query_args = [] ) {
 
-		if ( ! is_array( $removable_query_args ) )
-			return $removable_query_args;
-
-		$removable_query_args[] = 'tsf-settings-reset';
-		$removable_query_args[] = 'tsf-settings-updated';
+		if ( is_array( $removable_query_args ) ) {
+			$removable_query_args[] = 'tsf-settings-reset';
+			$removable_query_args[] = 'tsf-settings-updated';
+		}
 
 		return $removable_query_args;
 	}
@@ -643,17 +642,14 @@ class Admin_Init extends Init {
 	/**
 	 * Handles counter option update on AJAX request for users that can edit posts.
 	 *
-	 * @since 2.6.0
-	 * @since 2.9.0 : 1. Changed capability from 'publish_posts' to 'edit_posts'.
-	 *                2. Added json header.
-	 * @since 3.1.0 Now uses wp_send_json to send JSON data.
+	 * @since 3.1.0 : Introduced in 2.6.0, but the name changed.
 	 * @securitycheck 3.0.0 OK.
 	 * @access private
 	 */
-	public function wp_ajax_update_counter_type() {
+	public function _wp_ajax_update_counter_type() {
 
 		if ( $this->is_admin() && $this->doing_ajax() ) :
-			$this->check_tsf_ajax_referer( 'edit_posts' );
+			$this->_check_tsf_ajax_referer( 'edit_posts' );
 
 			//* Remove output buffer.
 			$this->clean_response_header();
@@ -699,13 +695,13 @@ class Admin_Init extends Init {
 	 *           3. It now only accepts context 'tsf-image'
 	 *           4. It no longer accepts a default context.
 	 *
-	 * @since 2.9.0
+	 * @since 3.1.0 : Introduced in 2.9.0, but the name changed.
 	 * @securitycheck 3.0.0 OK.
 	 * @access private
 	 */
-	public function wp_ajax_crop_image() {
+	public function _wp_ajax_crop_image() {
 
-		$this->check_tsf_ajax_referer( 'upload_files' );
+		$this->_check_tsf_ajax_referer( 'upload_files' );
 		if ( ! \current_user_can( 'upload_files' ) || ! isset( $_POST['id'], $_POST['context'], $_POST['cropDetails'] ) )
 			\wp_send_json_error();
 

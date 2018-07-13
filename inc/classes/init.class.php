@@ -235,10 +235,10 @@ class Init extends Query {
 			\add_action( 'admin_init', [ $this, 'load_assets' ] );
 
 			//* Admin AJAX for counter options.
-			\add_action( 'wp_ajax_the_seo_framework_update_counter', [ $this, 'wp_ajax_update_counter_type' ] );
+			\add_action( 'wp_ajax_the_seo_framework_update_counter', [ $this, '_wp_ajax_update_counter_type' ] );
 
 			//* Admin AJAX for TSF Cropper
-			\add_action( 'wp_ajax_tsf-crop-image', [ $this, 'wp_ajax_crop_image' ] );
+			\add_action( 'wp_ajax_tsf-crop-image', [ $this, '_wp_ajax_crop_image' ] );
 
 			// Add extra removable query arguments to the list.
 			\add_filter( 'removable_query_args', [ $this, 'add_removable_query_args' ] );
@@ -350,42 +350,36 @@ class Init extends Query {
 	/**
 	 * Runs header actions.
 	 *
-	 * @since 2.2.6
-	 * @uses The_SEO_Framework_Load::call_function()
+	 * @since 3.1.0
+	 * @uses $this->call_function()
 	 *
-	 * @param string|array $args the arguments that will be passed onto the callback.
-	 * @param bool $before if the header actions should be before or after the SEO Frameworks output
+	 * @param string $location Either 'before' or 'after'.
 	 * @return string The filter output.
 	 */
-	public function header_actions( $args = '', $before = true ) {
+	public function get_legacy_header_filters_output( $location = 'before' ) {
 
 		$output = '';
-
-		//* Placeholder callback and args.
-		$functions = [];
 
 		/**
 		 * @since 2.2.6
 		 *
-		 * Applies filters 'the_seo_framework_before_output' : array before functions output
-		 * Applies filters 'the_seo_framework_after_output' : array after functions output
 		 * @param array $functions {
 		 *    'callback' => string|array The function to call.
 		 *    'args'     => scalar|array Arguments. When array, each key is a new argument.
 		 * }
 		 */
-		$filter_tag = $before ? 'the_seo_framework_before_output' : 'the_seo_framework_after_output';
-		$filter = (array) \apply_filters( $filter_tag, $functions );
-
-		$functions = \wp_parse_args( $args, $filter );
+		$functions = (array) \apply_filters( "the_seo_framework_{$location}_output", [] );
 
 		if ( $functions && is_array( $functions ) ) :
-			foreach ( $functions as $function ) :
-				$arguments = isset( $function['args'] ) ? $function['args'] : '';
-
-				if ( isset( $function['callback'] ) )
-					$output .= $this->call_function( $function['callback'], '2.2.6', $arguments );
-			endforeach;
+			foreach ( $functions as $function ) {
+				if ( isset( $function['callback'] ) ) {
+					$output .= $this->call_function(
+						$function['callback'],
+						'3.1.0',
+						isset( $function['args'] ) ? $function['args'] : ''
+					);
+				}
+			}
 		endif;
 
 		return $output;
@@ -435,7 +429,7 @@ class Init extends Query {
 			 */
 			$before = (string) \apply_filters( 'the_seo_framework_pre', '' );
 
-			$before_actions = $this->header_actions( '', true );
+			$before_legacy = $this->get_legacy_header_filters_output( 'before' );
 
 			//* Limit processing on 404 or search
 			if ( $this->is_search() ) :
@@ -489,7 +483,7 @@ class Init extends Query {
 				$set_timezone and $this->reset_timezone();
 			endif;
 
-			$after_actions = $this->header_actions( '', false );
+			$after_legacy = $this->get_legacy_header_filters_output( 'after' );
 
 			/**
 			 * Applies filters 'the_seo_framework_pro' : string
@@ -508,7 +502,7 @@ class Init extends Query {
 			if ( $generator )
 				$generator = '<meta name="generator" content="' . \esc_attr( $generator ) . '" />' . PHP_EOL;
 
-			$output = $robots . $before . $before_actions . $output . $after_actions . $after . $generator;
+			$output = $robots . $before . $before_legacy . $output . $after_legacy . $after . $generator;
 
 			$this->use_object_cache and $this->object_cache_set( $cache_key, $output, DAY_IN_SECONDS );
 		endif;

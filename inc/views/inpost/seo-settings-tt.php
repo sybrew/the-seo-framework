@@ -67,7 +67,7 @@ $robots_settings = [
 
 <table class="form-table">
 	<tbody>
-		<?php if ( 'above' === $this->inpost_seo_bar || $this->is_option_checked( 'display_seo_bar_metabox' ) ) : ?>
+		<?php if ( $this->is_option_checked( 'display_seo_bar_metabox' ) ) : ?>
 		<tr>
 			<th scope="row" valign="top"><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
 			<td>
@@ -152,15 +152,6 @@ $robots_settings = [
 				</label>
 			</td>
 		</tr>
-
-		<?php if ( 'below' === $this->inpost_seo_bar ) : ?>
-		<tr>
-			<th scope="row" valign="top"><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
-			<td>
-				<?php $this->post_status( $term_id, $taxonomy, true ); ?>
-			</td>
-		</tr>
-		<?php endif; ?>
 	</tbody>
 </table>
 <?php

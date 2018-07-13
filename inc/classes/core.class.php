@@ -127,10 +127,9 @@ class Core {
 
 			$debug_instance = Debug::get_instance();
 
-			\add_action( 'the_seo_framework_do_before_output', [ $debug_instance, 'set_debug_query_output_cache' ] );
-			\add_action( 'admin_footer', [ $debug_instance, 'debug_screens' ] );
-			\add_action( 'admin_footer', [ $debug_instance, 'debug_output' ] );
-			\add_action( 'wp_footer', [ $debug_instance, 'debug_output' ] );
+			\add_action( 'the_seo_framework_do_before_output', [ $debug_instance, '_set_debug_query_output_cache' ] );
+			\add_action( 'admin_footer', [ $debug_instance, '_debug_output' ] );
+			\add_action( 'wp_footer', [ $debug_instance, '_debug_output' ] );
 		}
 	}
 
@@ -169,9 +168,9 @@ class Core {
 	 */
 	public function get_view( $view, array $args = [], $instance = 'main' ) {
 
-		foreach ( $args as $_key => $_val )
-			$$_key = $_val;
-		unset( $_key, $_val );
+		//? extract().
+		foreach ( $args as $k => $v ) $$k = $v;
+		unset( $k, $v );
 
 		include $this->get_view_location( $view );
 	}

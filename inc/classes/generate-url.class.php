@@ -121,8 +121,6 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_canonical_url( $args = null ) {
 
-		$this->the_seo_framework_debug && false === $this->doing_sitemap and $this->debug_init( __METHOD__, true, $debug_key = microtime( true ), get_defined_vars() );
-
 		if ( $args ) {
 			//= See $this->create_canonical_url().
 			$canonical_url = $this->build_canonical_url( $args );
@@ -143,8 +141,6 @@ class Generate_Url extends Generate_Title {
 		}
 		$canonical_url = $this->clean_canonical_url( $canonical_url );
 
-		$this->the_seo_framework_debug && false === $this->doing_sitemap and $this->debug_init( __METHOD__, false, $debug_key, compact( 'canonical_url' ) );
-
 		return $canonical_url;
 	}
 
@@ -157,7 +153,7 @@ class Generate_Url extends Generate_Title {
 	 * @param array $args. Use $this->create_canonical_url().
 	 * @return string The canonical URL.
 	 */
-	protected function build_canonical_url( $args ) {
+	protected function build_canonical_url( array $args ) {
 
 		//? extract(). See $this->create_canonical_url()
 		foreach ( $args as $k => $v ) $$k = $v;

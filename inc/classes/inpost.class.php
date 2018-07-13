@@ -33,22 +33,13 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Inpost extends Profile {
 
 	/**
-	 * Add inpost SEO Bar through a filter.
-	 *
-	 * @since 2.5.2
-	 *
-	 * @var bool|string Whether and where to show the inpost SEO bar.
-	 */
-	protected $inpost_seo_bar = false;
-
-	/**
 	 * Defines inpost nonce name.
 	 *
 	 * @since 2.7.0
 	 *
 	 * @var string The nonce name.
 	 */
-	public $inpost_nonce_name;
+	public $inpost_nonce_name = 'tsf_inpost_seo_settings';
 
 	/**
 	 * Defines inpost nonce field.
@@ -57,30 +48,13 @@ class Inpost extends Profile {
 	 *
 	 * @var string The nonce field.
 	 */
-	public $inpost_nonce_field;
+	public $inpost_nonce_field = 'tsf_inpost_nonce';
 
 	/**
 	 * Constructor, load parent constructor and sets up variables.
 	 */
 	protected function __construct() {
 		parent::__construct();
-
-		$this->inpost_nonce_name = 'tsf_inpost_seo_settings';
-		$this->inpost_nonce_field = 'tsf_inpost_nonce';
-
-		/**
-		 * Applies filters bool|string the_seo_framework_inpost_seo_bar :
-		 * Whether to output the SEO bar within the inpost SEO Settings metabox.
-		 *
-		 * @since 2.5.2
-		 *
-		 * @param $inpost_seo_bar : {
-		 *    string 'above' : Outputs it above the Settings
-		 *    string 'below' : Outputs it below the Settings
-		 *    bool false     : No output.
-		 * }
-		 */
-		$this->inpost_seo_bar = \apply_filters( 'the_seo_framework_inpost_seo_bar', false );
 	}
 
 	/**
@@ -121,7 +95,6 @@ class Inpost extends Profile {
 
 		if ( $show_seobox )
 			\add_action( 'add_meta_boxes', [ $this, 'add_inpost_seo_box' ], 10, 1 );
-
 	}
 
 	/**
@@ -153,7 +126,7 @@ class Inpost extends Profile {
 
 		//* Add taxonomy meta boxes
 		foreach ( \get_taxonomies( $taxonomy_args ) as $tax_name ) {
-			\add_action( $tax_name . '_edit_form', [ $this, 'pre_seo_box' ], $priority, 2 );
+			\add_action( $tax_name . '_edit_form', [ $this, '_insert_seo_meta_box' ], $priority, 2 );
 		}
 	}
 
@@ -235,24 +208,24 @@ class Inpost extends Profile {
 				}
 
 				/* translators: %s = Post type name */
-				\add_meta_box( $id, $title, [ $this, 'pre_seo_box' ], $post_type, $context, $priority, $args );
+				\add_meta_box( $id, $title, [ $this, '_insert_seo_meta_box' ], $post_type, $context, $priority, $args );
 			endif;
 		endif;
 	}
 
 	/**
-	 * Determines post type and outputs SEO box.
+	 * Determines post type and returns the SEO box for either a post or term.
 	 *
-	 * @since 2.1.8
+	 * @since 3.1.0 : Introduced in 2.1.8, but the name changed.
 	 * @access private
 	 *
-	 * @param object $object the page/post/taxonomy object
-	 * @param array $args the page/post arguments or taxonomy slug.
+	 * @param object $object The page/post/taxonomy object.
+	 * @param array  $args   The page/post arguments or taxonomy slug.
 	 * @return string Inpost SEO box.
 	 */
-	public function pre_seo_box( $object, $args ) {
+	public function _insert_seo_meta_box( $object, $args ) {
 
-		if ( is_array( $args ) && isset( $args['args'] ) ) {
+		if ( isset( $args['args'] ) ) {
 			$args_split = $args['args'];
 
 			$page = $args_split[1];
@@ -260,26 +233,24 @@ class Inpost extends Profile {
 			// Return $args as array on post/page
 			if ( 'is_post_page' === $page ) {
 				// Note: Passes through object.
-				return $this->inpost_seo_box( $object, (array) $args );
+				return $this->get_seo_meta_box( $object, (array) $args );
 			}
 		} else {
-			return $this->inpost_seo_box( $object, '' );
+			return $this->get_seo_meta_box( $object, '' );
 		}
 
 		return '';
 	}
 
 	/**
-	 * Callback for in-post SEO meta box.
+	 * Gets the SEO meta box, for either a post or term.
 	 *
-	 * @since 2.0.0
-	 * @access private
-	 * @uses $this->get_custom_field() Get custom field value.
+	 * @since 3.1.0 : Introduced in 2.0.0, but the name changed.
 	 *
-	 * @param object $object The page/post/taxonomy object
-	 * @param array  $args   The page/post arguments or taxonomy slug
+	 * @param object $object The page/post/taxonomy object.
+	 * @param array  $args   The page/post arguments or taxonomy slug.
 	 */
-	public function inpost_seo_box( $object, $args ) {
+	protected function get_seo_meta_box( $object, $args ) {
 
 		//* Determines if it's inside a meta box or within a taxonomy page.
 		$is_term = false;
@@ -329,12 +300,12 @@ class Inpost extends Profile {
 	 * Callback function for Taxonomy and Terms inpost box.
 	 *
 	 * @since 2.9.0
-	 * @access private
+	 * @since 3.1.0 Now is protected.
 	 *
 	 * @param string $type The TT type name.
 	 * @param object $object The TT object.
 	 */
-	public function tt_inpost_box( $type, $object ) {
+	protected function tt_inpost_box( $type, $object ) {
 		/**
 		 * @since 2.9.0
 		 */
@@ -352,11 +323,11 @@ class Inpost extends Profile {
 	 * Callback function for Post and Pages inpost metabox.
 	 *
 	 * @since 2.9.0
-	 * @access private
+	 * @since 3.1.0 Now is protected.
 	 *
 	 * @param string $type The post type name.
 	 */
-	public function singular_inpost_box( $type ) {
+	protected function singular_inpost_box( $type ) {
 		/**
 		 * @since 2.9.0
 		 */
@@ -374,11 +345,11 @@ class Inpost extends Profile {
 	 * Callback function for Post and Pages inpost metabox.
 	 *
 	 * @since 2.9.0
-	 * @access private
+	 * @since 3.1.0 Now is protected.
 	 *
 	 * @param string $type The post type name.
 	 */
-	public function singular_inpost_box_general_tab( $type ) {
+	protected function singular_inpost_box_general_tab( $type ) {
 		/**
 		 * @since 2.9.0
 		 */
@@ -396,11 +367,11 @@ class Inpost extends Profile {
 	 * Callback function for Post and Pages inpost metabox.
 	 *
 	 * @since 2.9.0
-	 * @access private
+	 * @since 3.1.0 Now is protected.
 	 *
 	 * @param string $type The post type name.
 	 */
-	public function singular_inpost_box_visibility_tab( $type ) {
+	protected function singular_inpost_box_visibility_tab( $type ) {
 		/**
 		 * @since 2.9.0
 		 */
@@ -418,11 +389,11 @@ class Inpost extends Profile {
 	 * Callback function for Post and Pages inpost metabox.
 	 *
 	 * @since 2.9.0
-	 * @access private
+	 * @since 3.1.0 Now is protected.
 	 *
 	 * @param string $type The post type name.
 	 */
-	public function singular_inpost_box_social_tab( $type ) {
+	protected function singular_inpost_box_social_tab( $type ) {
 		/**
 		 * @since 2.9.0
 		 */

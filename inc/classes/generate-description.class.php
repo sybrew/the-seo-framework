@@ -942,10 +942,10 @@ class Generate_Description extends Generate {
 			] );
 		} else {
 			$data = [
-				'title' => $title[ $id ][ $ignore ],
-				'on' => $on,
+				'title'    => $title[ $id ][ $ignore ],
+				'on'       => $on,
 				'blogname' => $blogname,
-				'sep' => $sep,
+				'sep'      => $sep,
 			];
 		}
 

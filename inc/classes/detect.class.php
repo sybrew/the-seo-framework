@@ -125,7 +125,6 @@ class Detect extends Render {
 	 * Filterable list of conflicting plugins.
 	 *
 	 * @since 2.6.0
-	 * @TODO consider removing "Header and Footer"
 	 * @credits JetPack for most code.
 	 *
 	 * @return array List of conflicting plugins.
@@ -550,20 +549,12 @@ class Detect extends Render {
 	 * @since 2.9.0 Now also checks for subdirectory installations.
 	 * @since 2.9.2 Now also checks for permalinks.
 	 * @since 2.9.3 Now also checks for sitemap_robots option.
+	 * @since 3.1.0 Removed Jetpack's sitemap check -- it's no longer valid.
 	 *
 	 * @param bool $check_option Whether to check for sitemap option.
 	 * @return bool True when no conflicting plugins are detected or when The SEO Framework's Sitemaps are output.
 	 */
 	public function can_do_sitemap_robots( $check_option = true ) {
-
-		$plugins = [
-			'functions' => [
-				'jetpack_sitemap_initialize', // Jetpack
-			],
-		];
-
-		if ( $this->detect_plugin( $plugins ) )
-			return false;
 
 		if ( $check_option ) {
 			if ( ! $this->is_option_checked( 'sitemaps_output' ) || ! $this->is_option_checked( 'sitemaps_robots' ) )
@@ -627,6 +618,7 @@ class Detect extends Render {
 	 * @since 2.8.0 No longer overwrites global $wp_version
 	 * @since 3.1.0 1. No longer caches.
 	 *              2. Removed redundant parameter checks.
+	 *              3. Can now handle x.xx WordPress versions.
 	 *
 	 * @param string $version the three part version to compare to WordPress
 	 * @param string $compare the comparing operator, default "$version >= Current WP Version"
@@ -638,9 +630,9 @@ class Detect extends Render {
 
 		/**
 		 * Add a .0 if WP outputs something like 4.3 instead of 4.3.0
-		 * Does not consider 4.10.x, but that's OK with the way WP handles updates.
+		 * Does consider 4.xx, which will become 4.xx.0
 		 */
-		if ( 3 === strlen( $wp_version ) )
+		if ( 1 === substr_count( $wp_version, '.' ) )
 			$wp_version = $wp_version . '.0';
 
 		return (bool) version_compare( $wp_version, $version, $compare );

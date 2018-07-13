@@ -40,9 +40,6 @@ class Compat extends Core {
 
 		//* Disable Headway SEO.
 		\add_filter( 'headway_seo_disabled', '__return_true' );
-
-		//* Jetpack compat.
-		\add_action( 'init', [ $this, 'jetpack_compat' ] );
 	}
 
 	/**
@@ -114,23 +111,5 @@ class Compat extends Core {
 			$included[ $what ][ $type ] = (bool) require THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . $type . '-' . $what . '.php';
 
 		return $included[ $what ][ $type ];
-	}
-
-	/**
-	 * Adds compatibility with various JetPack modules.
-	 *
-	 * Recently, JetPack (4.0) made sure this filter doesn't run when The SEO Framework
-	 * is active as they've added their own compatibility check towards this plugin.
-	 * Let's wait until everyone has updated before removing this.
-	 *
-	 * @since 2.6.0
-	 * @access private
-	 */
-	public function jetpack_compat() {
-
-		if ( $this->use_og_tags() ) {
-			//* Disable Jetpack Publicize's Open Graph.
-			\add_filter( 'jetpack_enable_open_graph', '__return_false', 99 );
-		}
 	}
 }

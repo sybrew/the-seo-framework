@@ -892,7 +892,6 @@ final class Deprecated {
 	 * @since 2.3.8 Now checks tagline option.
 	 * @since 3.1.0 Deprecated.
 	 * @deprecated
-	 * @access private
 	 *
 	 * @param bool $get_custom_field Fetch Title from Custom Fields.
 	 * @param string $seplocation The separator location

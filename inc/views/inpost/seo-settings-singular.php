@@ -14,12 +14,11 @@ $type = isset( $type ) ? $type : '';
 $language = $this->google_language();
 
 switch ( $instance ) :
-	case 'inpost_main' :
+	case 'inpost_main':
 		/**
 		 * Parse inpost tabs content.
 		 *
 		 * @since 2.9.0
-		 * @see $this->call_function()
 		 * @see PHP call_user_func_array() For args.
 		 *
 		 * @param array $default_tabs {
@@ -71,7 +70,7 @@ switch ( $instance ) :
 		echo '</div>';
 		break;
 
-	case 'inpost_general' :
+	case 'inpost_general':
 		if ( $this->is_option_checked( 'display_seo_bar_metabox' ) ) :
 			?>
 			<div class="tsf-flex-setting tsf-flex">
@@ -166,7 +165,7 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	case 'inpost_visibility' :
+	case 'inpost_visibility':
 		//* Fetch Canonical URL.
 		$canonical = $this->get_custom_field( '_genesis_canonical_uri' );
 		//* Fetch Canonical URL Placeholder.
@@ -328,7 +327,7 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	case 'inpost_social' :
+	case 'inpost_social':
 		// Gets custom fields.
 		$custom_og_title = $this->get_custom_field( '_open_graph_title', $post_id );
 		$custom_tw_title = $this->get_custom_field( '_twitter_title', $post_id );

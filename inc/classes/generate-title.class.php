@@ -805,7 +805,6 @@ class Generate_Title extends Generate_Description {
 	/**
 	 * Returns title separator location.
 	 *
-	 * @access private
 	 * @since 2.6.0
 	 * @since 3.1.0 1. Removed the first $seplocation parameter.
 	 *              2. The first parameter is now $home

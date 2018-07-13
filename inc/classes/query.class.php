@@ -43,15 +43,17 @@ class Query extends Compat {
 	 * Checks whether $wp_query or $current_screen is set.
 	 *
 	 * @since 2.6.1
-	 * @since 2.9.0: Added doing it wrong notice.
-	 * @access private
+	 * @since 2.9.0 Added doing it wrong notice.
+	 * @since 3.1.0 1. Is now protected.
+	 *              2. Now asks for and passes $method.
 	 * @staticvar bool $cache : Always true if set.
 	 * @global object $wp_query
 	 * @global object|null $current_screen
 	 *
+	 * @param string $method The method that invokes this.
 	 * @return bool True when wp_query or current_screen has been initialized.
 	 */
-	public function can_cache_query() {
+	protected function can_cache_query( $method ) {
 
 		static $cache;
 
@@ -61,7 +63,7 @@ class Query extends Compat {
 		if ( isset( $GLOBALS['wp_query']->query ) || isset( $GLOBALS['current_screen'] ) )
 			return $cache = true;
 
-		$this->do_query_error_notice( __METHOD__ );
+		$this->do_query_error_notice( $method );
 
 		return false;
 	}
@@ -71,7 +73,7 @@ class Query extends Compat {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $method The original error method, from 2.9.0.
+	 * @param string $method The original caller method.
 	 */
 	protected function do_query_error_notice( $method ) {
 
@@ -111,7 +113,7 @@ class Query extends Compat {
 		if ( $this->is_admin() )
 			return $this->get_the_real_admin_ID();
 
-		$can_cache = $this->can_cache_query();
+		$can_cache = $this->can_cache_query( __METHOD__ );
 		$use_cache = $can_cache ? $use_cache : false;
 
 		if ( $use_cache ) {
@@ -135,7 +137,7 @@ class Query extends Compat {
 		 *
 		 * @param int $id
 		 * @param bool Whether the globals WP_Query or current_screen are set.
-		 * @see The_SEO_Framework_Query::can_cache_query()
+		 * @see $this->can_cache_query()
 		 *
 		 * @since 2.6.2
 		 */
@@ -304,7 +306,7 @@ class Query extends Compat {
 		if ( \is_archive() && false === $this->is_singular() )
 			return true;
 
-		if ( $this->can_cache_query() && false === $this->is_singular() ) {
+		if ( $this->can_cache_query( __METHOD__ ) && false === $this->is_singular() ) {
 			global $wp_query;
 
 			if ( $wp_query->is_post_type_archive || $wp_query->is_date || $wp_query->is_author || $wp_query->is_category || $wp_query->is_tag || $wp_query->is_tax )
@@ -386,7 +388,6 @@ class Query extends Compat {
 	 *
 	 * @since 2.6.0
 	 * @global object $current_screen
-	 * @access private
 	 *
 	 * @return bool We're on the edit screen.
 	 */
@@ -804,7 +805,6 @@ class Query extends Compat {
 	 * @uses The_SEO_Framework_Query::is_singular_admin()
 	 * @uses The_SEO_Framework_Query::is_blog_page()
 	 * @uses The_SEO_Framework_Query::is_wc_shop()
-	 * @access private
 	 *
 	 * @param string|array $post_types Optional. Post type or array of post types. Default empty string.
 	 * @return bool Post Type is singular
@@ -1044,7 +1044,7 @@ class Query extends Compat {
 		if ( ! $secure )
 			return $this->is_menu_page( $this->seo_settings_page_hook, $this->seo_settings_page_slug );
 
-		if ( null !== $cache = $this->get_query_cache( __METHOD__, null ) )
+		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
 		$page = $this->is_menu_page( $this->seo_settings_page_hook );
@@ -1226,8 +1226,8 @@ class Query extends Compat {
 	 * @staticvar mixed $cache : The cached query.
 	 * @see $this->set_query_cache(); to set query cache.
 	 *
-	 * @param string $key The key to set or get.
-	 * @param mixed $value_to_set The value to set.
+	 * @param string $method The method that wants to cache, used as the key to set or get.
+	 * @param mixed  $value_to_set The value to set.
 	 * @param array|mixed $hash Extra arguments, that will be used to generate an alternative cache key.
 	 *        Must always be inside a single array when $value_to_set is set. @see $this->set_query_cache()
 	 *        Must always be separated parameters otherwise.
@@ -1240,12 +1240,12 @@ class Query extends Compat {
 	 *       }
 	 * }
 	 */
-	public function get_query_cache( $key, $value_to_set = null ) {
+	public function get_query_cache( $method, $value_to_set = null ) {
 
 		static $can_cache_query = null;
 
 		if ( is_null( $can_cache_query ) ) {
-			if ( $this->can_cache_query() ) {
+			if ( $this->can_cache_query( $method ) ) {
 				$can_cache_query = true;
 			} else {
 				return null;
@@ -1261,15 +1261,15 @@ class Query extends Compat {
 		}
 
 		if ( isset( $value_to_set ) ) {
-			if ( isset( $cache[ $key ][ $hash ] ) ) {
-				$cache[ $key ][ $hash ] = $value_to_set;
+			if ( isset( $cache[ $method ][ $hash ] ) ) {
+				$cache[ $method ][ $hash ] = $value_to_set;
 				return false;
 			}
-			$cache[ $key ][ $hash ] = $value_to_set;
+			$cache[ $method ][ $hash ] = $value_to_set;
 			return true;
 		} else {
-			if ( isset( $cache[ $key ][ $hash ] ) )
-				return $cache[ $key ][ $hash ];
+			if ( isset( $cache[ $method ][ $hash ] ) )
+				return $cache[ $method ][ $hash ];
 		}
 
 		return null;
@@ -1281,19 +1281,19 @@ class Query extends Compat {
 	 * @since 2.7.0
 	 * @see $this->get_query_cache()
 	 *
-	 * @param string $key The key to set.
-	 * @param mixed $value_to_set If null, no cache will be set.
-	 * @param mixed $hash Extra arguments, that will be used to generate an alternative cache key.
+	 * @param string $method The method that wants to set. Used as a caching key.
+	 * @param mixed  $value_to_set If null, no cache will be set.
+	 * @param mixed  $hash Extra arguments, that will be used to generate an alternative cache key.
 	 * @return bool : {
 	 *    true If the value is being set for the first time.
 	 *    false If the value has been set and $value_to_set is being overwritten.
 	 * }
 	 */
-	public function set_query_cache( $key, $value_to_set ) {
+	public function set_query_cache( $method, $value_to_set ) {
 		if ( func_num_args() > 2 ) {
-			return $this->get_query_cache( $key, $value_to_set, array_slice( func_get_args(), 2 ) );
+			return $this->get_query_cache( $method, $value_to_set, array_slice( func_get_args(), 2 ) );
 		} else {
-			return $this->get_query_cache( $key, $value_to_set );
+			return $this->get_query_cache( $method, $value_to_set );
 		}
 	}
 }

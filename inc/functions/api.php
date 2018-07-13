@@ -122,7 +122,7 @@ namespace The_SEO_Framework {
 
 		$_file = str_replace( '/', DIRECTORY_SEPARATOR, $file );
 
-		return $loaded[ $file ] = (bool) require( THE_SEO_FRAMEWORK_DIR_PATH_TRAIT . $_file . '.trait.php' );
+		return $loaded[ $file ] = (bool) require THE_SEO_FRAMEWORK_DIR_PATH_TRAIT . $_file . '.trait.php';
 	}
 
 	/**

@@ -89,18 +89,4 @@ interface Debug_Interface {
 	 * @param string $message A message explaining what has been done incorrectly.
 	 */
 	public function _inaccessible_p_or_m( $p_or_m, $message = '' );
-
-	/**
-	 * Debug init. Simplified way of debugging a function, only works in admin.
-	 *
-	 * @since 2.6.0
-	 * @access private
-	 *
-	 * @param string $method The function name.
-	 * @param bool $store Whether to store the output in cache for next run to pick up on.
-	 * @param double $debug_key Use $debug_key as variable, it's reserved.
-	 * @param mixed function args.
-	 * @return void early if debugging is disabled or when storing cache values.
-	 */
-	public function debug_init( $method, $store, $debug_key );
 }

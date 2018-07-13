@@ -243,7 +243,6 @@ class Term_Data extends Post_Data {
 	 *
 	 * @since 2.6.0
 	 * @since 3.0.0 Can now get custom post type objects.
-	 * @access private
 	 * @todo deprecate
 	 *
 	 * @param int $id The possible taxonomy Term ID.

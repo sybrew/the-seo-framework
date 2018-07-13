@@ -296,7 +296,9 @@ NOTE: ref: https://theseoframework.com/?p=1792
 ## Detailed log
 
 TODO: Regression? RTL layout fixes, namely SEO bar spacing and [?] tooltips.
-TODO: Regression: Capital letters are estranged in the multi-word counter.
+TODO: Regression? Home page auto-generated description is incomplete when no tagline is set.
+TODO: Follow progression of https://github.com/Automattic/jetpack/pull/9912, and see if we might need to implement it ourselves.
+	Track/adjust readme changes: --JETPACK
 
 * **For everyone:**
 	* **Added:**
@@ -357,6 +359,7 @@ TODO: Regression: Capital letters are estranged in the multi-word counter.
 		* When a sitemap file or plugin is found, this plugin no longer removes its related settings.
 			* Instead, only a warning is shown on the settings page, telling that the options have no effect.
 		* AnsPress title compatibility, they handle this. TODO verify
+		* --JETPACK JetPack Open Graph compatibility checks, they handle this since 2016.
 	* **Fixed:**
 		* When reactivating or deactivating the plugin, there's no longer a chance for your SEO options to be wiped on a random database error.
 			* We used to delete the options, so we could reactivate option-auto-loading; now we add a buster-timestamp.
@@ -391,14 +394,13 @@ TODO: Regression: Capital letters are estranged in the multi-word counter.
 		* Want to use TSF's API? You're in (fail)safe hands with `the_seo_framework()`.
 		* Want to make sure you can use TSF's API? Call `the_seo_framework()->loaded`.
 	* **Added:**
-		* TODO
 		* Singleton class `\The_SEO_Framework\Builders\Scripts`, via a "Builder Pattern", callable as e.g. `the_seo_framework()->Scripts()::function_name()`.
 			* This is the first class of this kind in The SEO Framework plugin.
 		* The plugin now tries to remove all active `wp_title` filters, like it has been doing for `pre_get_document_title` a long time.
 	* **Improved:**
-		* TODO
 		* A "doing it wrong" notice is now supplied when calling `the_seo_framework()` too early.
 		* Fixed all "non-passive event listener" warnings caused by jQuery, by using our own event handlers.
+		* The "doing it wrong" notice on "too early" query calls now shows the query-class method called.
 	* **Changed:**
 		* The title generation has been overhauled.
 		* The plugin now loads within the `/bootstrap/` folder via the plugin's initial `autodescription.php` file, where you can more easily discern how the plugin's loaded.
@@ -411,14 +413,11 @@ TODO: Regression: Capital letters are estranged in the multi-word counter.
 		* We removed the `seotips` folder and their contents. They were a gimmick, accumulating SEO tips brought over past plugin update changelogs.
 		* Many deprecated methods, which were deprecated on or before TSF v2.9.4 (August 30, 2017).
 		* The plugin's automagic-upgrader has been removed, which has been replaced with a static, ordered and semantic plugin upgrader since TSF v2.7.0.
-		* Meta-generator methods' debugging have been removed.
+		* Meta-generator methods' debugging have been removed, along with all the debugging methods used for that.
 		* Title "doing it wrong" checks have been removed.
-		* TODO word this better: `the_seo_framework()->theme_doing_it_right_transient` and all that's related.
-		* TODO
 	* **Fixed:**
 		* The wpForo title compatibility filter no longer emits a PHP notice when no title is generated from their plugin.
 		* A highly unlikely PHP error now won't occur when `$wpdb` returns incomplete data on excluded archive/search IDs.
-		* TODO
 	* **Class notes:**
 		 * **Added:**
 		 	* `\The_SEO_Framework\Silencer`, called when `\The_SEO_Framework\Load` is blocked from loading in filters.
@@ -427,6 +426,8 @@ TODO: Regression: Capital letters are estranged in the multi-word counter.
 			* `THE_SEO_FRAMEWORK_PRESENT`, defined when the plugin gets past environmental tests.
 			* `THE_SEO_FRAMEWORK_BOOTSTRAP_PATH`, holds the bootstrap folder's path.
 			* `THE_SEO_FRAMEWORK_DIR_PATH_TRAIT`, holds the plugin traits' folder's path.
+		* **Ignored:** _(no longer has an effect)_
+			* `THE_SEO_FRAMEWORK_DEBUG_HIDDEN`
 	* **Function notes:**
 		* **Added:**
 			* `the_seo_framework_boot()`, marked private (do not use).
@@ -447,8 +448,7 @@ TODO: Regression: Capital letters are estranged in the multi-word counter.
 			* `the_seo_framework_dot_version()`, without a replacement.
 			* `the_seo_framework_options_pagehook()`. Use expression `the_seo_framework()->pagehook` instead.
 			* `the_seo_framework_get_option()`. Use expression `the_seo_framework()->get_option( 'option_key' )` instead.
-			/
-			* TODO `the_seo_framework_title_from_cache()`. Use expression `the_seo_framework()->get_title()` instead.
+			* `the_seo_framework_title_from_cache()`. Use expression `the_seo_framework()->get_title()` instead.
 			* `the_seo_framework_description_from_cache()`. Use expression `the_seo_framework()->get_description()` instead.
 			* `the_seo_framework_the_url_from_cache()`. Use expression `the_seo_framework()->get_current_canonical_url()` instead.
 			* `the_seo_framework_is_settings_page()`. Use expression `the_seo_framework()->is_seo_settings_page()` instead.
@@ -456,19 +456,25 @@ TODO: Regression: Capital letters are estranged in the multi-word counter.
 			* `the_seo_framework_options_page_slug()`. Use expression `the_seo_framework()->seo_settings_page_slug` instead.
 	* **Method notes:**
 		* **Note:**
-			* TODO All methods that were marked private are now prefixed with an underscore, without deprecation.
+			* Almost all methods that were marked private are now prefixed with an underscore, without deprecation.
 				* These methods are usually callbacks for WordPress hooks or filters, and shouldn't be used outside of their purposed context.
 		* **Added:**
-			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
-				* `get_view_location()`
 			* In class: `\The_SEO_Framework\Admin_Init` -- Factory: `the_seo_framework()`
 				* `Scripts()`
 				* `enqueue_media_scripts()`
 				* `enqueue_primaryterm_scripts()`
 				* `_init_admin_scripts()`, private. Use `init_admin_scripts()` instead.
-			* In class `\The_SEO_Framework\Render` -- Factory: `the_seo_framework()`
-				* `get_document_title()`
-				* `get_wp_title()`
+				* `_check_tsf_ajax_referer()`, private.
+				* `_wp_ajax_update_counter_type()`, private.
+				* `_wp_ajax_crop_image()`, private.
+			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
+				* `get_view_location()`
+			* In class: `\The_SEO_Framework\Cache` -- Factory: `the_seo_framework()`
+				* `_insert_seo_meta_box()`, private.
+			* In class: `\The_SEO_Framework\Debug`
+				* `::_set_instance()`, marked private.
+				* `_debug_output()`, marked private.
+				* `_set_debug_query_output_cache()`, marked private.
 			* In class `\The_SEO_Framework\Generate_Image` -- Factory: `the_seo_framework()`
 				* `register_image_dimension()`
 			* In class `\The_SEO_Framework\Generate_Title` -- Factory: `the_seo_framework()`
@@ -494,22 +500,17 @@ TODO: Regression: Capital letters are estranged in the multi-word counter.
 				* `use_home_page_title_tagline()`
 				* `get_home_page_tagline()`
 				* TODO are there more??
+			* In class `\The_SEO_Framework\Render` -- Factory: `the_seo_framework()`
+				* `get_document_title()`
+				* `get_wp_title()`
 			* In class `\The_SEO_Framework\Builders\Scripts` -- Factory: `the_seo_framework()->Scripts()`.
 				* `::prepare()`
 				* `::get_status_of()`
 				* `::enqueue()`
 				* `::register()`
 				* `::verify()`
-				* `::_prepare_admin_scripts()`, private.
+				* `::_prepare_admin_scripts()`, private, it's called autonomously.
 		* **Removed:**
-			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
-				* `site_updated_plugin_option()`
-				* `do_settings_updated_notice()`
-			* In class: `\The_SEO_Framework\Generate_Url` -- Factory: `the_seo_framework()`
-				* `set_url_scheme_filter()`
-			* In class: `\The_SEO_Framework\Sitemaps` -- Factory: `the_seo_framework()`
-				* `enqueue_rewrite_flush_other()`, was marked private.
-				* `flush_rewrite_rules()`, was marked private.
 			* In class: `\The_SEO_Framework\Admin_Init` -- Factory: `the_seo_framework()`
 				* `enqueue_admin_javascript()`
 				* `additional_js_l10n()`
@@ -517,13 +518,60 @@ TODO: Regression: Capital letters are estranged in the multi-word counter.
 				* `enqueue_admin_scripts()`
 				* `_register_admin_javascript()`, was marked private.
 				* `_localize_admin_javascript()`, was marked private.
+				* `check_tsf_ajax_referer()`, was marked private.
+				* `wp_ajax_update_counter_type()`, was marked private.
+				* `wp_ajax_crop_image()`, was marked private.
 				/
 				* TODO `set_js_nonces()`
 				* TODO `get_js_nonces()`
+			* In class: `\The_SEO_Framework\Admin_Pages` -- Factory: `the_seo_framework()`
+				* `make_textfield()`, was marked private.
+			* In class: `\The_SEO_Framework\Cache` -- Factory: `the_seo_framework()`
+				* `pre_seo_box()`, was marked private.
+				* `inpost_seo_box()`
+				* `set_theme_dir_transient()`
+				* `delete_theme_dir_transient()`
+				* `tt_inpost_box()`, was marked private, is now protected.
+				* `singular_inpost_box()`, was marked private, is now protected.
+				* `singular_inpost_box_general_tab()`, was marked private, is now protected.
+				* `singular_inpost_box_visibility_tab()`, was marked private, is now protected.
+				* `singular_inpost_box_social_tab()`, was marked private, is now protected.
+			* In class: `\The_SEO_Framework\Compat` -- Factory: `the_seo_framework()`
+				* `jetpack_compat()`, was marked private. --JETPACK
+			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
+				* `site_updated_plugin_option()`
+				* `do_settings_updated_notice()`
+			* In class: `\The_SEO_Framework\Debug`
+				* `::set_instance()`, was marked private.
+				* `::has_debug_output()`, was marked private.
+				* `::_output_debug()`, was marked private.
+				* `::_debug_output()`, was marked private.
+				* `profile()`, was marked private.
+				* `get_debug_information()`, was marked private.
+				* `set_debug_query_output_cache()`, was marked private.
+				* `debug_key_wrapper()`, was marked private, is now protected.
+				* `debug_value_wrapper()`, was marked private, is now protected.
+				* `timer()`, was marked private, is now protected.
+			* In class: `\The_SEO_Framework\Detect` -- Factory: `the_seo_framework()`
+				* `set_tell_title_doing_it_wrong()`
+				* `tell_title_doing_it_wrong()`
+				* `theme_title_doing_it_right()`
+				* `theme_title_fix_active()`
+				* `can_manipulate_title()`
+			* In class: `\The_SEO_Framework\Generate_Url` -- Factory: `the_seo_framework()`
+				* `set_url_scheme_filter()`
+			* In class: `\The_SEO_Framework\Init` -- Factory: `the_seo_framework()`
+				* `header_actions()`, should've only been used internally.
+				* `call_function()`, was marked private, is now protected.
 			* In class: `\The_SEO_Framework\Inpost` -- Factory: `the_seo_framework()`
 				* `_include_primary_term_selector_template()`, was marked private.
+			* In class: `\The_SEO_Framework\Load` -- Factory: `the_seo_framework()`
+				* `debug_init()`, was marked private, and it's no longer used.
 			* In class: `\The_SEO_Framework\Render` -- Factory: `the_seo_framework()`
 				* `title_from_cache()`
+			* In class: `\The_SEO_Framework\Sitemaps` -- Factory: `the_seo_framework()`
+				* `enqueue_rewrite_flush_other()`, was marked private.
+				* `flush_rewrite_rules()`, was marked private.
 				* `use_googleplus_tags()` -- The G+ project uses Open Graph and structured data.
 			* In class: `\The_SEO_Framework\Title` -- Factory: `the_seo_framework()`
 				* TODO: Consider deprecating these instead.
@@ -547,22 +595,11 @@ TODO: Regression: Capital letters are estranged in the multi-word counter.
 				* `do_title_pre_filter()`
 				* `do_title_pro_filter()`
 				* `home_page_add_title_tagline()`
-			* In class: `\The_SEO_Framework\Detect` -- Factory: `the_seo_framework()`
-				* `set_tell_title_doing_it_wrong()`
-				* `tell_title_doing_it_wrong()`
-				* `theme_title_doing_it_right()`
-				* `theme_title_fix_active()`
-				* `can_manipulate_title()`
-			* In class: `\The_SEO_Framework\Cache` -- Factory: `the_seo_framework()`
-				* `set_theme_dir_transient()`
-				* `delete_theme_dir_transient()`
+			* In class: `\The_SEO_Framework\Query` -- Factory: `the_seo_framework()`
+				* `can_cache_query()`, was marked private, is now protected.
 		* **Deprecated:**
 			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
 				* `get_meta_output_cache_key()`, use `get_meta_output_cache_key_by_query()` (without Page ID) or `get_meta_output_cache_key_by_type()` (with page ID) instead.
-			* In class: `\The_SEO_Framework\Generate_Url` -- Factory: `the_seo_framework()`
-				* `get_prefered_scheme()`, use `get_preferred_scheme()` instead. (typo)
-			* In class: `\The_SEO_Framework\Render` -- factory: `the_seo_framework()`
-				* `description_from_cache()`, use `get_description()` instead.
 			* In class: `\The_SEO_Framework\Generate_Title` -- factory: `the_seo_framework()`
 				* `title()`, goodbye, old friend. Use `get_title()` instead.
 				* `generate_home_title()`, use `get_title()` instead.
@@ -571,6 +608,10 @@ TODO: Regression: Capital letters are estranged in the multi-word counter.
 				* `process_title_additions()`, use `merge_title_branding()` instead.
 				* `add_title_pagination()`, use `merge_title_pagination()` instead.
 				* `use_archive_prefix()`, use `use_generated_archive_prefix()` instead.
+			* In class: `\The_SEO_Framework\Generate_Url` -- Factory: `the_seo_framework()`
+				* `get_prefered_scheme()`, use `get_preferred_scheme()` instead. (typo)
+			* In class: `\The_SEO_Framework\Render` -- factory: `the_seo_framework()`
+				* `description_from_cache()`, use `get_description()` instead.
 		* **Moved:**
 			* **Note:** All deprecated methods are automatically moved to `\The_SEO_Framework\Deprecated`. This class is auto-loaded whenever a non-existing or deprecated method is called.
 			* **Note:** The changes below (currently) don't affect the factory method: `the_seo_framework()`.
@@ -594,10 +635,15 @@ TODO: Regression: Capital letters are estranged in the multi-word counter.
 				* `css_name`
 				* `js_name`
 				* `page_base_file`
-			* In class: `\The_SEO_Framework\Render` -- Factory: `the_seo_framework()`
-				* `title_doing_it_wrong`
 			* In class: `\The_SEO_Framework\Cache` -- Factory: `the_seo_framework()`
 				* `theme_doing_it_right_transient`
+			* In class: `\The_SEO_Framework\Load` -- Factory: `the_seo_framework()`
+				* `the_seo_framework_debug_hidden`
+			* In class: `\The_SEO_Framework\Render` -- Factory: `the_seo_framework()`
+				* `title_doing_it_wrong`
+	* **Interface notes:**
+		* In interface: `\The_SEO_Framework\Debug_Interface`
+			* **Removed:** `debug_init()`
 	* **Action notes:**
 		* **Added:**
 			* `the_seo_framework_admin_loaded`. Runs after the plugin factory is loaded in the admin-end.
@@ -630,6 +676,7 @@ TODO: Regression: Capital letters are estranged in the multi-word counter.
 				* `the_seo_framework_title_pagination`
 				* `the_seo_framework_title_seplocation_front`, use the options API instead.
 				* `the_seo_framework_title_seplocation`, use the options API instead.
+			* `the_seo_framework_inpost_seo_bar`, use the option introduced in TSF 2.7 instead.
 	* **Structural notes:**
 		* **Added:**
 			* Folder `/bootstrap/`, with:

@@ -1295,30 +1295,6 @@ class Sitemaps extends Metaboxes {
 	}
 
 	/**
-	 * Enqueue rewrite flush for deactivation.
-	 *
-	 * @since 2.6.0
-	 * @access private
-	 * @staticvar bool $flush Only true
-	 *
-	 * @param bool $enqueue Whether to enqueue the flush or return its state.
-	 *
-	 * @return bool Whether to flush.
-	 */
-	public function enqueue_rewrite_flush_other( $enqueue = false ) {
-
-		static $flush = null;
-
-		if ( isset( $flush ) )
-			return $flush;
-
-		if ( $enqueue )
-			return $flush = true;
-
-		return false;
-	}
-
-	/**
 	 * Flush rewrite rules based on static variables.
 	 *
 	 * @since 2.3.0
