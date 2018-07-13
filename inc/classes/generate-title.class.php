@@ -323,6 +323,8 @@ class Generate_Title extends Generate_Description {
 	 */
 	protected function generate_title_from_query() {
 
+		$title = '';
+
 		if ( $this->is_404() ) {
 			$title = $this->get_static_404_title();
 		} elseif ( $this->is_search() ) {
@@ -690,7 +692,7 @@ class Generate_Title extends Generate_Description {
 
 		if ( $this->is_front_page_by_id( $id ) ) {
 			$addition    = $this->get_home_page_tagline();
-			//? Brilliant. TODO FIXME: Do an "upgrade" of this option at a 3.1.2+ release.
+			//? Brilliant. TODO FIXME: Do an "upgrade" of this option at a 3.1.2+ release, switching title with additions in the settings description.
 			$seplocation = 'left' === $this->get_home_title_seplocation() ? 'right' : 'left';
 		} else {
 			$addition    = $this->get_blogname();

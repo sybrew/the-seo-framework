@@ -296,6 +296,7 @@ NOTE: ref: https://theseoframework.com/?p=1792
 ## Detailed log
 
 TODO: Regression? RTL layout fixes, namely SEO bar spacing and [?] tooltips.
+TODO: Regression: Capital letters are estranged in the multi-word counter.
 
 * **For everyone:**
 	* **Added:**
@@ -625,7 +626,7 @@ TODO: Regression? RTL layout fixes, namely SEO bar spacing and [?] tooltips.
 				* `the_seo_framework_custom_field_title`, use `the_seo_framework_title_from_custom_field` instead.
 				* `the_seo_framework_add_blogname_to_title`, use the options API instead.
 				* `the_seo_framework_use_archive_title_prefix`, use the options API instead.
-				* `the_seo_framework_do_shortcodes_in_title`, use any of the two new title filters mentioned right above and return `do_shortcode( $title )` instead.
+				* `the_seo_framework_do_shortcodes_in_title`, use any of the two new title filters mentioned right above and return `do_shortcode( $title )` instead. -- TODO reintroduce it? -- TODO make a migration guide and link to it in the update screen?
 				* `the_seo_framework_title_pagination`
 				* `the_seo_framework_title_seplocation_front`, use the options API instead.
 				* `the_seo_framework_title_seplocation`, use the options API instead.

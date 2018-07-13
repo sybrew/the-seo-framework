@@ -779,14 +779,14 @@ class Core {
 			$string = \wp_check_invalid_utf8( $string, true );
 			$word_list = preg_split(
 				'/\W+/mu',
-				$string,
+				function_exists( 'mb_strtolower' ) ? mb_strtolower( $string ) : strtolower( $string ),
 				-1,
 				PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_NO_EMPTY
 			);
 		} else {
 			$word_list = preg_split(
 				'/\W+/m',
-				$string,
+				strtolower( $string ),
 				-1,
 				PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_NO_EMPTY
 			);
@@ -825,7 +825,7 @@ class Core {
 					if ( $run ) {
 						//* The encoded word is longer or equal to the bother length.
 
-						//! Don't use mb_* here. preg_split's offset in in bytes, NOT unicode.
+						//! Don't use mb_* here. preg_split's offset is in bytes, NOT unicode.
 						$args = [
 							'pos' => $word_keys[ $word ],
 							'len' => strlen( $word ),
