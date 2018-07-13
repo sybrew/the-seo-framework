@@ -802,24 +802,27 @@ class Query extends Compat {
 	 * Replaces and expands default WordPress is_singular().
 	 *
 	 * @since 2.5.2
+	 * @since 3.1.0 Now passes $post_types parameter in admin screens, only when it's an integer.
 	 * @uses The_SEO_Framework_Query::is_singular_admin()
 	 * @uses The_SEO_Framework_Query::is_blog_page()
 	 * @uses The_SEO_Framework_Query::is_wc_shop()
 	 *
-	 * @param string|array $post_types Optional. Post type or array of post types. Default empty string.
+	 * @param string|array|int $post_types Optional. Post type or array of post types, or ID of post. Default empty string.
 	 * @return bool Post Type is singular
 	 */
 	public function is_singular( $post_types = '' ) {
 
-		//* WP_Query functions require loop, do alternative check.
-		if ( $this->is_admin() )
-			return $this->is_singular_admin();
+		$id = null;
 
 		if ( is_int( $post_types ) ) {
 			//* Cache ID. Core is_singular() doesn't accept integers.
 			$id = $post_types;
 			$post_types = '';
 		}
+
+		//* WP_Query functions require loop, do alternative check.
+		if ( $this->is_admin() )
+			return $this->is_singular_admin( $id );
 
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post_types ) )
 			return $cache;
@@ -845,15 +848,23 @@ class Query extends Compat {
 	 * Determines if the page is singular within the admin screen.
 	 *
 	 * @since 2.5.2
+	 * @since 3.1.0 Added $post_id parameter. When used, it'll only check for it.
 	 * @global object $current_screen
 	 *
+	 * @param  null|int $post_id The post ID.
 	 * @return bool Post Type is singular
 	 */
-	public function is_singular_admin() {
+	public function is_singular_admin( $post_id = null ) {
 		global $current_screen;
 
-		if ( isset( $current_screen->base ) && ( 'edit' === $current_screen->base || 'post' === $current_screen->base ) )
-			return true;
+		if ( isset( $post_id ) ) {
+			$post = \get_post( $post_id );
+			if ( $post && $post instanceof \WP_Post )
+				return true;
+		} else {
+			if ( isset( $current_screen->base ) && ( 'edit' === $current_screen->base || 'post' === $current_screen->base ) )
+				return true;
+		}
 
 		return false;
 	}

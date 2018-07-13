@@ -296,7 +296,6 @@ NOTE: ref: https://theseoframework.com/?p=1792
 ## Detailed log
 
 TODO: Regression? RTL layout fixes, namely SEO bar spacing and [?] tooltips.
-TODO: Regression? Home page auto-generated description is incomplete when no tagline is set.
 TODO: Follow progression of https://github.com/Automattic/jetpack/pull/9912, and see if we might need to implement it ourselves.
 	Track/adjust readme changes: --JETPACK
 
@@ -340,6 +339,7 @@ TODO: Follow progression of https://github.com/Automattic/jetpack/pull/9912, and
 		* The automated scheme detection can now prevent the sitemap from using, and caching, the wrong scheme.
 		* A lot of verbatim regarding various settings, to make it more clear what they do, and when they do it.
 		* The sitemap and stylesheet should no longer be indexed by search engines.
+		* Added a description on character counters, telling what happens when you click them.
 	* **Changed:**
 		* TSF now requires WordPress 4.6 (previously 4.4).
 		* TSF now requires PHP 5.4 (previously 5.3).
@@ -368,7 +368,6 @@ TODO: Follow progression of https://github.com/Automattic/jetpack/pull/9912, and
 		* The SEO Bar will no longer overflow, but it will now wrap automatically when needed.
 		* When adding a new category when no category is selected, the primary term is now correctly assigned.
 		* When the primary term selection changed after load and when a new category is added, the previous category is no longer assigned as primary.
-		* TODO Links with [?] now show a pointer... (explain)
 		* Twitter description and title fields now render escaped `<&'">` characters in placeholders correctly when fetched from related Open Graph fields.
 		* TODO Date (and other?) archives now show valid Open Graph metadata. (description missing...)
 		* When no description or title is found for the corresponding Open Graph or Twitter fields, no more infinite loop will occur that might crash the browser. Luckily, modern browsers detect this to prevent said crashes.
@@ -376,7 +375,7 @@ TODO: Follow progression of https://github.com/Automattic/jetpack/pull/9912, and
 		* Thanks to the upgrade to PHP 5.4, the SEO bar can now count words with non-latin special characters.
 			* In their normal form of writing, it's not able to count han characters.
 		* TODO figure out why WPML's translated sitemap doesn't flush on save. (https://wordpress.org/support/topic/multi-language-sitemaps-not-updating/)
-		* TODO (regression???) When no tagline is set in the WordPress settings, the home page will no longer display "on Site name" for the description by default.
+		* When no tagline is set in the WordPress settings, the home page will no longer display "Untitled on Site name" for the description by default.
 		* Invalid settings' input are now checked before you can change tabs. This makes the saving buttons work as intended.
 			* TODO consider checking closed postboxes too.... we could add an on-publish listener that checks if our postboxes are closed, and open them if they contain invalid values.
 				* `jQuery( elem ).find( '.hndle, .handlediv' ).trigger( 'click.postboxes' );`
@@ -672,7 +671,7 @@ TODO: Follow progression of https://github.com/Automattic/jetpack/pull/9912, and
 				* `the_seo_framework_custom_field_title`, use `the_seo_framework_title_from_custom_field` instead.
 				* `the_seo_framework_add_blogname_to_title`, use the options API instead.
 				* `the_seo_framework_use_archive_title_prefix`, use the options API instead.
-				* `the_seo_framework_do_shortcodes_in_title`, use any of the two new title filters mentioned right above and return `do_shortcode( $title )` instead. -- TODO reintroduce it? -- TODO make a migration guide and link to it in the update screen?
+				* `the_seo_framework_do_shortcodes_in_title`, use any of the two new title filters mentioned right above and return `do_shortcode( $title )` instead. -- TODO make a migration guide and link to it in the update screen?
 				* `the_seo_framework_title_pagination`
 				* `the_seo_framework_title_seplocation_front`, use the options API instead.
 				* `the_seo_framework_title_seplocation`, use the options API instead.

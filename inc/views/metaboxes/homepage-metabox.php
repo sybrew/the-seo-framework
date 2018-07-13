@@ -72,7 +72,7 @@ switch ( $instance ) :
 
 		$frompost_title = $this->has_page_on_front() ? $this->get_custom_field( '_genesis_title', $home_id ) : '';
 		if ( $frompost_title ) {
-			//! FIXME: Doesn't consider filters.
+			//! FIXME: Doesn't consider filters. Inject filter here, it's hackish...?
 			if ( $this->use_title_branding( [ 'id' => $home_id ] ) ) {
 				$this->merge_title_branding( $frompost_title, [ 'id' => $home_id ] );
 			}
@@ -233,10 +233,8 @@ switch ( $instance ) :
 	case 'the_seo_framework_homepage_metabox_additions' :
 		//* Fetches escaped title parts.
 		$home_id  = $this->get_the_front_page_ID();
-		$frompost_title = $this->has_page_on_front() ? $this->get_custom_field( '_genesis_title', $home_id ) : '';
 		$_example_title = $this->escape_title(
-			$frompost_title
-			?: $this->get_unprocessed_custom_field_title( [ 'id' => $home_id ] )
+			$this->get_unprocessed_custom_field_title( [ 'id' => $home_id ] )
 			?: $this->get_unprocessed_generated_title( [ 'id' => $home_id ] )
 		);
 		// FIXME? When no blog description or tagline is set... this will be empty and ugly on no-JS.

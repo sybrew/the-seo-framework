@@ -651,12 +651,11 @@ class Generate_Description extends Generate {
 					$description = sprintf( \_x( '%1$s %2$s %3$s', '1: Title, 2: Separator, 3: Excerpt', 'autodescription' ), $title_on_blogname, $sep, $excerpt['normal'] );
 				}
 			} else {
-				//* Fetch additions ignoring options.
-				$additions = $this->generate_description_additions( $args['id'], $term, true );
-
 				//* We still add the additions when no excerpt has been found.
 				// i.e. home page or empty/shortcode filled page.
-				$description = $this->get_title_on_blogname( $additions );
+				$description = $this->get_title_on_blogname(
+					$this->generate_description_additions( $args['id'], $term, true )
+				);
 			}
 		}
 
@@ -684,20 +683,13 @@ class Generate_Description extends Generate {
 	 */
 	public function get_description_excerpt_normal( $id = 0, $term = false ) {
 
-		$title = '';
-		$on = '';
-		$blogname = '';
-		$sep = '';
-
+		$additions = '';
 		if ( $term || ! \has_excerpt( $id ) ) {
-			$title_on_blogname = $this->generate_description_additions( $id, $term, false );
-			$title = $title_on_blogname['title'];
-			$on = $title_on_blogname['on'];
-			$blogname = $title_on_blogname['blogname'];
-			$sep = $title_on_blogname['sep'];
+			$additions = $this->get_title_on_blogname(
+				$this->generate_description_additions( $id, $term, false )
+			);
 		}
 
-		$additions = trim( "$title $on $blogname" );
 		//* If there are additions, add a trailing space.
 		if ( $additions )
 			$additions .= ' ';
@@ -767,31 +759,15 @@ class Generate_Description extends Generate {
 		 * Only do so when $args['get_custom_field'] is true.
 		 * @since 2.3.4
 		 */
-		if ( $custom_field ) {
-			$description = $this->get_custom_homepage_description( [ 'is_home' => true ] );
+		$description = $custom_field ? $this->get_custom_homepage_description( [ 'is_home' => true ] ) : '';
 
-			if ( $description ) {
-
-				if ( $escape )
-					$description = $this->escape_description( $description );
-
-				return $description;
-			}
+		if ( ! $description ) {
+			$description = $this->get_title_on_blogname(
+				$this->generate_description_additions( $id, '', true )
+			);
 		}
 
-		$title_on_blogname = $this->generate_description_additions( $id, '', true );
-
-		$title = $title_on_blogname['title'];
-		$on = $title_on_blogname['on'];
-		$blogname = $title_on_blogname['blogname'];
-
-		if ( $escape ) {
-			$title = $this->escape_description( $title );
-			$on = $this->escape_description( $on );
-			$blogname = $this->escape_description( $blogname );
-		}
-
-		return $description = sprintf( '%s %s %s', $title, $on, $blogname );
+		return $escape ? $this->escape_description( $description ) : $description;
 	}
 
 	/**
@@ -837,13 +813,17 @@ class Generate_Description extends Generate {
 		if ( isset( $sep ) )
 			return $sep;
 
-		return $sep = (string) \apply_filters( 'the_seo_framework_description_separator', $this->get_separator( 'description', false ) );
+		return $sep = (string) \apply_filters(
+			'the_seo_framework_description_separator',
+			$this->get_separator( 'description', false )
+		);
 	}
 
 	/**
 	 * Returns translation string for "Title on Blogname".
 	 *
 	 * @since 2.8.0
+	 * @since 3.1.0 Now returns empty if 'title' is omitted.
 	 * @see $this->generate_description_additions()
 	 *
 	 * @param array $additions The description additions.
@@ -851,11 +831,11 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_title_on_blogname( $additions ) {
 
-		if ( empty( $additions ) )
+		if ( empty( $additions['title'] ) )
 			return '';
 
-		$title = $additions['title'];
-		$on = $additions['on'];
+		$title    = $additions['title'];
+		$on       = $additions['on'];
 		$blogname = $additions['blogname'];
 
 		/* translators: 1: Title, 2: on, 3: Blogname */

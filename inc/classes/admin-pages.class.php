@@ -833,6 +833,7 @@ class Admin_Pages extends Inpost {
 	 * Outputs character counter wrap for both JavaScript and no-Javascript.
 	 *
 	 * @since 3.0.0
+	 * @since 3.1.0 Added an "what if you click" onhover-title.
 	 *
 	 * @param string $for     The input ID it's for.
 	 * @param string $initial The initial value for no-JS.
@@ -840,8 +841,9 @@ class Admin_Pages extends Inpost {
 	 */
 	public function output_character_counter_wrap( $for, $initial = '', $display = true ) {
 		printf(
-			'<div class="tsf-counter-wrap" %s><span class="description tsf-counter">%s</span><span class="hide-if-no-js tsf-ajax"></span></div>',
+			'<div class="tsf-counter-wrap" %s><span class="description tsf-counter" title="%s">%s</span><span class="hide-if-no-js tsf-ajax"></span></div>',
 			( $display ? '' : 'style="display:none;"' ),
+			\esc_attr( 'Click to change counter type', 'autodescription' ),
 			sprintf(
 				/* translators: %s = number */
 				\esc_html__( 'Characters Used: %s', 'autodescription' ),
