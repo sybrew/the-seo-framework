@@ -581,17 +581,13 @@ class Generate_Description extends Generate {
 		$_special_q = ( ! $this->is_admin() && $this->is_search() );
 		$use_cache  = ! $_special_q && $this->is_option_checked( 'cache_meta_description' );
 
-		/**
-		 * Setup transient.
-		 */
-		$use_cache and $this->setup_auto_description_transient( $args['id'], $args['taxonomy'] );
-
 		$term = $this->fetch_the_term( $args['id'] );
+		$transient = $use_cache ? $this->get_auto_description_transient_name( $args['id'], $args['taxonomy'] ) : '';
 
 		/**
 		 * @since 2.8.0: Added check for option 'cache_meta_description'.
 		 */
-		$excerpt = $use_cache ? $this->get_transient( $this->auto_description_transient ) : false;
+		$excerpt = $transient ? $this->get_transient( $transient ) : false;
 		if ( false === $excerpt ) {
 			$excerpt = [];
 
@@ -613,14 +609,14 @@ class Generate_Description extends Generate {
 				 */
 				$expiration = WEEK_IN_SECONDS;
 
-				$this->set_transient( $this->auto_description_transient, $excerpt, $expiration );
+				$this->set_transient( $transient, $excerpt, $expiration );
 			} elseif ( $args['social'] ) {
 				$excerpt['social'] = $this->get_description_excerpt_social( $args['id'], $term );
 			} else {
 				$excerpt_normal = $this->get_description_excerpt_normal( $args['id'], $term );
 
 				$excerpt['normal'] = $excerpt_normal['excerpt'];
-				$excerpt['trim'] = $excerpt_normal['trim'];
+				$excerpt['trim']   = $excerpt_normal['trim'];
 			}
 		}
 
@@ -839,7 +835,7 @@ class Generate_Description extends Generate {
 		$blogname = $additions['blogname'];
 
 		/* translators: 1: Title, 2: on, 3: Blogname */
-		return trim( sprintf( \_x( '%1$s %2$s %3$s', 'autodescription' ), $title, $on, $blogname ) );
+		return trim( sprintf( \__( '%1$s %2$s %3$s', 'autodescription' ), $title, $on, $blogname ) );
 	}
 
 	/**

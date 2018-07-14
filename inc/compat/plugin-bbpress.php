@@ -168,7 +168,7 @@ function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $term 
 	return $excerpt;
 }
 
-\add_filter( 'the_seo_framework_custom_field_description', __NAMESPACE__ . '\_bbpress_filter_custom_field_description' );
+\add_filter( 'the_seo_framework_custom_field_description', __NAMESPACE__ . '\\_bbpress_filter_custom_field_description' );
 /**
  * Fixes bbPress custom Description.
  *
@@ -199,7 +199,7 @@ function _bbpress_filter_custom_field_description( $description = '', $args = []
 	return $description;
 }
 
-\add_filter( 'the_seo_framework_do_adjust_archive_query', __NAMESPACE__ . '\_bbpress_filter_do_adjust_query', 10, 2 );
+\add_filter( 'the_seo_framework_do_adjust_archive_query', __NAMESPACE__ . '\\_bbpress_filter_do_adjust_query', 10, 2 );
 /**
  * Fixes bbPress exclusion of first reply.
  *

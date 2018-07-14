@@ -80,7 +80,7 @@ class Generate_Ldjson extends Generate_Image {
 	 */
 	public function receive_json_data( $key, $encode = true ) {
 
-		$key = \sanitize_key( $key );
+		$key  = \sanitize_key( $key );
 		$data = $this->cache_json_data( true, $key );
 
 		if ( \has_filter( 'the_seo_framework_receive_json_data' ) ) {
@@ -155,11 +155,10 @@ class Generate_Ldjson extends Generate_Image {
 		if ( $this->has_json_ld_plugin() )
 			return '';
 
-		$this->setup_ld_json_transient( $this->get_the_real_ID() );
+		$use_cache      = $this->is_option_checked( 'cache_meta_schema' );
+		$transient_name = $use_cache ? $this->get_ld_json_transient_name( $this->get_the_real_ID() ) : '';
 
-		$use_cache = $this->is_option_checked( 'cache_meta_schema' );
-
-		$output = $use_cache ? $this->get_transient( $this->ld_json_transient ) : false;
+		$output = $transient_name ? $this->get_transient( $transient_name ) : false;
 		if ( false === $output ) :
 			if ( $this->is_real_front_page() ) {
 				//= Home page Schema.
@@ -179,7 +178,7 @@ class Generate_Ldjson extends Generate_Image {
 				 */
 				$expiration = WEEK_IN_SECONDS;
 
-				$this->set_transient( $this->ld_json_transient, $output, $expiration );
+				$this->set_transient( $transient_name, $output, $expiration );
 			}
 		endif;
 

@@ -22,7 +22,7 @@ function _disable_genesis_seo( $plugins ) {
 
 	$plugins = [
 		'classes' => [
-			'\The_SEO_Framework\\Load',
+			'\\The_SEO_Framework\\Load',
 		],
 		'functions' => [
 			'the_seo_framework',
@@ -47,11 +47,13 @@ function _disable_genesis_seo( $plugins ) {
  */
 function _genesis_get_term_meta( $data = [], $term_id = 0 ) {
 
-	$data['doctitle'] = \get_term_meta( $term_id, 'doctitle', true );
-	$data['description'] = \get_term_meta( $term_id, 'description', true );
-	$data['noindex'] = \get_term_meta( $term_id, 'noindex', true );
-	$data['nofollow'] = \get_term_meta( $term_id, 'nofollow', true );
-	$data['noarchive'] = \get_term_meta( $term_id, 'noarchive', true );
+	$genesis_data = [
+		'doctitle'    => \get_term_meta( $term_id, 'doctitle', true ),
+		'description' => \get_term_meta( $term_id, 'description', true ),
+		'noindex'     => \get_term_meta( $term_id, 'noindex', true ),
+		'nofollow'    => \get_term_meta( $term_id, 'nofollow', true ),
+		'noarchive'   => \get_term_meta( $term_id, 'noarchive', true ),
+	];
 
-	return $data;
+	return array_merge( $data, $genesis_data );
 }

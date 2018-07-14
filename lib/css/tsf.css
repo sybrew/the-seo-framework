@@ -250,12 +250,7 @@ a.tsf-dismiss:hover {
 /* END Pixel Counters */
 
 #tsf-seo-bar-wrap {
-	width: 18%;
-}
-
-/* WooCommerce fix */
-th:last-of-type#tsf-seo-bar-wrap {
-	width: 160px;
+	width: 15%;
 }
 
 .tsf-seo-bar {

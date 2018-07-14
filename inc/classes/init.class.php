@@ -73,7 +73,6 @@ class Init extends Query {
 
 		\add_action( 'init', [ $this, 'init_the_seo_framework' ], 0 );
 
-		$this->setup_transient_names();
 		$this->load_early_compat_files();
 	}
 

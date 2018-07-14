@@ -369,7 +369,7 @@ class Sitemaps extends Metaboxes {
 		 * Re-use the variable, eliminating database requests
 		 * @since 2.4.0
 		 */
-		$sitemap_content = $this->is_option_checked( 'cache_sitemap' ) ? $this->get_transient( $this->sitemap_transient ) : false;
+		$sitemap_content = $this->is_option_checked( 'cache_sitemap' ) ? $this->get_transient( $this->get_sitemap_transient_name() ) : false;
 
 		echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 		echo $this->get_sitemap_xsl_stylesheet_tag();
@@ -612,7 +612,7 @@ class Sitemaps extends Metaboxes {
 			$expiration = WEEK_IN_SECONDS;
 
 			if ( $this->is_option_checked( 'cache_sitemap' ) )
-				$this->set_transient( $this->sitemap_transient, $sitemap_content, $expiration );
+				$this->set_transient( $this->get_sitemap_transient_name(), $sitemap_content, $expiration );
 		}
 
 		return $sitemap_content;
