@@ -1123,8 +1123,9 @@ class Sitemaps extends Metaboxes {
 	 * The URL also isn't checked, nor the position.
 	 *
 	 * @since 3.0.4
-	 * @since 3.1.0 : 1. First filter value now works as intended.
-	 *                2. Now always returns true when $id is 0.
+	 * @since 3.0.6 First filter value now works as intended.
+	 * @since 3.1.0 1. Resolved a PHP notice when ID is 0, resulting in returning false-esque unintentionally.
+	 *              2. Now accepts 0 in the filter.
 	 *
 	 * @param int $id The post ID to check. When 0, the custom field will not be checked.
 	 * @return bool True if included, false otherwise.
@@ -1134,10 +1135,10 @@ class Sitemaps extends Metaboxes {
 		static $excluded = null;
 		if ( null === $excluded ) {
 			/**
-			 * Applies filters the_seo_framework_sitemap_exclude_ids : sequential array of id's
-			 *
 			 * @since 2.5.2
 			 * @since 2.8.0 : No longer accepts '0' as entry.
+			 * @since 3.1.0 : '0' is accepted again.
+			 * @param array $excluded Sequential list of excluded IDs: [ int ...post_id ]
 			 */
 			$excluded = (array) \apply_filters( 'the_seo_framework_sitemap_exclude_ids', [] );
 
@@ -1148,8 +1149,11 @@ class Sitemaps extends Metaboxes {
 			}
 		}
 
-		$included = true;
-		if ( ! isset( $excluded[ $id ] ) && $id ) {
+		// If it's not in the exclusion list, set it to true.
+		$included = ! isset( $excluded[ $id ] );
+
+		if ( $included && $id ) {
+			// If it's indexed, keep it true.
 			$included = ! $this->get_custom_field( '_genesis_noindex', $id );
 		}
 

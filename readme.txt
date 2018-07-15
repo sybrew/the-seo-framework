@@ -339,7 +339,7 @@ TODO: Regression: Title compatibility, namely UltimateMember (and others?).
 		* The main plugin's cache is now flushed after the SEO settings are requested to be updated, even when the options didn't change.
 		* The automated scheme detection can now prevent the sitemap from using, and caching, the wrong scheme.
 		* A lot of verbatim regarding various settings, to make it more clear what they do, and when they do it.
-		* The sitemap and stylesheet should no longer be indexed by search engines.
+		* The sitemap and stylesheet URLs should no longer be shown in the search results of search engines.
 		* Added a description on character counters, telling what happens when you click them.
 		* All sitemap transients are now deleted on corresponding deletion queries when using WPML.
 		* TODO We've scanned the plugin once more for performance culprits, and improved what needed improving.
@@ -357,7 +357,6 @@ TODO: Regression: Title compatibility, namely UltimateMember (and others?).
 		* Most, if not all, database transients related to this plugin have been invalidated and are being rebuilt. The old transients will be cleaned up by WordPress automatically.
 	* **Removed:**
 		* Firefox post list table compatibility and fixes that account for the wide SEO Bar; they don't work anymore as intended, and they cause issues on other well-built browsers.
-			* TODO also change `#tsf-seo-bar-wrap{width:18%}` to `width:15%`, to be in line with the other wraps.
 		* Counters now only work with JavaScript enabled. In PHP, this added too much overhead as we were predicting and counting in code.
 		* Open Graph, Twitter, and SEO plugins no longer disables certain functionality in the plugin.
 			* Instead, only a warning is shown on the settings page.
@@ -422,6 +421,7 @@ TODO: Regression: Title compatibility, namely UltimateMember (and others?).
 	* **Fixed:**
 		* The wpForo title compatibility filter no longer emits a PHP notice when no title is generated from their plugin.
 		* A highly unlikely PHP error now won't occur when `$wpdb` returns incomplete data on excluded archive/search IDs.
+		* A PHP notice and unintentionally false-esque return value when the post ID is 0, or when the post ID is excluded, in method `is_post_included_in_sitemap()`.
 	* **Class notes:**
 		 * **Added:**
 		 	* `\The_SEO_Framework\Silencer`, called when `\The_SEO_Framework\Load` is blocked from loading in filters.
@@ -430,7 +430,7 @@ TODO: Regression: Title compatibility, namely UltimateMember (and others?).
 			* `THE_SEO_FRAMEWORK_PRESENT`, defined when the plugin gets past environmental tests.
 			* `THE_SEO_FRAMEWORK_BOOTSTRAP_PATH`, holds the bootstrap folder's path.
 			* `THE_SEO_FRAMEWORK_DIR_PATH_TRAIT`, holds the plugin traits' folder's path.
-		* **Ignored:** _(no longer has an effect)_
+		* **Ignored:** _(no longer have an effect)_
 			* `THE_SEO_FRAMEWORK_DEBUG_HIDDEN`
 	* **Function notes:**
 		* **Added:**
@@ -660,6 +660,7 @@ TODO: Regression: Title compatibility, namely UltimateMember (and others?).
 			* `the_seo_framework_admin_loaded`. Runs after the plugin factory is loaded in the admin-end.
 			* `the_seo_framework_loaded`. Runs after the plugin factory is loaded on any end.
 			* `the_seo_framework_after_init`. Runs after the plugin has initialized its admin or front-end hooks. See also, the admin-only hook: `the_seo_framework_after_admin_init`.
+			* `the_seo_framework_delete_cache_{$type}`. Runs after cache deletion of `$type`.
 	* **Filter notes:**
 		* **Added:**
 			* `(array) the_seo_framework_scripts`, allows you to adjust (or add to) the default script parameters.
