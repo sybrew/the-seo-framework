@@ -146,7 +146,7 @@ switch ( $instance ) :
 		<h4>
 		<?php
 			/* translators: %s = Category/Tag/Attachment/Site/Search */
-			printf( esc_html__( '%s Robots Settings', 'autodescription' ), $ro_name );
+			printf( esc_html__( '%s Robots Settings', 'autodescription' ), $ro_name ); // xss ok
 		?>
 		</h4>
 		<?php
@@ -174,7 +174,7 @@ switch ( $instance ) :
 				if ( in_array( $ro_value, [ 'noindex', 'nofollow' ], true ) )
 					$checkboxes .= sprintf(
 						'<p><span class="description">%s</span></p>',
-						esc_html__( 'No public site should ever use this option.', 'autodescription' )
+						esc_html__( 'Warning: No public site should ever use this option.', 'autodescription' )
 					);
 			}
 

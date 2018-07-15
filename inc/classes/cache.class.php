@@ -306,7 +306,7 @@ class Cache extends Sitemaps {
 		/**
 		 * @since 3.1.0
 		 *
-		 * @param string $type    The type. Comes in handy if you use a catch-all function.
+		 * @param string $type    The type. Comes in handy when you use a catch-all function.
 		 * @param int    $id      The post, page or TT ID. Defaults to $this->get_the_real_ID().
 		 * @param array  $args    Additional arguments. They can overwrite $type and $id.
 		 * @param bool   $success Whether the action cleared.

@@ -221,24 +221,29 @@ class Core {
 	}
 
 	/**
-	 * Adds link from plugins page to SEO Settings page.
+	 * Adds various links to the plugin row on the plugin's screen.
 	 *
-	 * @since 2.2.8
-	 * @since 2.9.2 : Added TSFEM link.
-	 * @since 3.0.0 : 1. Shortened names.
-	 *                2. Added noreferrer to the external links.
+	 * @since 3.1.0
+	 * @access private
 	 *
 	 * @param array $links The current links.
 	 * @return array The plugin links.
 	 */
-	public function plugin_action_links( $links = [] ) {
+	public function _add_plugin_action_links( $links = [] ) {
 
 		$tsf_links = [];
 
 		if ( $this->load_options )
-			$tsf_links['settings'] = '<a href="' . \esc_url( \admin_url( 'admin.php?page=' . $this->seo_settings_page_slug ) ) . '">' . \esc_html__( 'Settings', 'autodescription' ) . '</a>';
+			$tsf_links['settings'] = sprintf(
+				'<a href="%s">%s</a>',
+				\esc_url( \admin_url( 'admin.php?page=' . $this->seo_settings_page_slug ) ),
+				\esc_html__( 'Settings', 'autodescription' )
+			);
 
-		$tsf_links['home'] = '<a href="' . \esc_url( 'https://theseoframework.com/' ) . '" rel="noreferrer noopener" target="_blank">' . \esc_html_x( 'Home', 'As in: The Plugin Home Page', 'autodescription' ) . '</a>';
+		$tsf_links['about'] = sprintf(
+			'<a href="https://theseoframework.com/" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
+			\esc_html__( 'About', 'autodescription' )
+		);
 
 		/**
 		 * These are weak checks.
@@ -247,11 +252,16 @@ class Core {
 		if ( ! defined( 'TSF_EXTENSION_MANAGER_VERSION' ) ) {
 			$tsfem = \get_plugins( '/the-seo-framework-extension-manager' );
 			//... I want PHP 5.5 for empty expressions :(
+			// TODO open a plugin installation screen?
 			if ( empty( $tsfem ) )
-				$tsf_links['tsfem'] = '<a href="' . \esc_url( \__( 'https://wordpress.org/plugins/the-seo-framework-extension-manager/', 'autodescription' ) ) . '" rel="noreferrer noopener" target="_blank">' . \esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' ) . '</a>';
+				$tsf_links['tsfem'] = sprintf(
+					'<a href="%s" rel="noreferrer noopener" target="_blank">%s</a>',
+					\esc_url( \__( 'https://wordpress.org/plugins/the-seo-framework-extension-manager/', 'autodescription' ) ),
+					\esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' )
+				);
 		}
 
-		return array_merge( $tsf_links, $links );
+		return array_merge( $links, $tsf_links );
 	}
 
 	/**

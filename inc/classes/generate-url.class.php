@@ -189,39 +189,39 @@ class Generate_Url extends Generate_Title {
 	 */
 	protected function generate_canonical_url() {
 
-		$id = $this->get_the_real_ID();
-		$canonical_url = '';
+		$id  = $this->get_the_real_ID();
+		$url = '';
 
 		if ( $this->is_real_front_page() ) {
 			if ( $this->has_page_on_front() )
-				$canonical_url = $this->get_singular_custom_canonical_url( $id );
-			if ( ! $canonical_url )
-				$canonical_url = $this->get_home_canonical_url();
+				$url = $this->get_singular_custom_canonical_url( $id );
+			if ( ! $url )
+				$url = $this->get_home_canonical_url();
 		} elseif ( $this->is_singular() ) {
-			$canonical_url = $this->get_singular_custom_canonical_url( $id );
-			if ( ! $canonical_url )
-				$canonical_url = $this->get_singular_canonical_url( $id );
+			$url = $this->get_singular_custom_canonical_url( $id );
+			if ( ! $url )
+				$url = $this->get_singular_canonical_url( $id );
 		} elseif ( $this->is_archive() ) {
 			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
-				$canonical_url = $this->get_taxonomial_canonical_url( $id, $this->get_current_taxonomy() );
+				$url = $this->get_taxonomial_canonical_url( $id, $this->get_current_taxonomy() );
 			} elseif ( \is_post_type_archive() ) {
-				$canonical_url = $this->get_post_type_archive_canonical_url( $id );
+				$url = $this->get_post_type_archive_canonical_url( $id );
 			} elseif ( $this->is_author() ) {
-				$canonical_url = $this->get_author_canonical_url( $id );
+				$url = $this->get_author_canonical_url( $id );
 			} elseif ( $this->is_date() ) {
 				if ( $this->is_day() ) {
-					$canonical_url = $this->get_date_canonical_url( \get_query_var( 'year' ), \get_query_var( 'monthnum' ), \get_query_var( 'day' ) );
+					$url = $this->get_date_canonical_url( \get_query_var( 'year' ), \get_query_var( 'monthnum' ), \get_query_var( 'day' ) );
 				} elseif ( $this->is_month() ) {
-					$canonical_url = $this->get_date_canonical_url( \get_query_var( 'year' ), \get_query_var( 'monthnum' ) );
+					$url = $this->get_date_canonical_url( \get_query_var( 'year' ), \get_query_var( 'monthnum' ) );
 				} elseif ( $this->is_year() ) {
-					$canonical_url = $this->get_date_canonical_url( \get_query_var( 'year' ) );
+					$url = $this->get_date_canonical_url( \get_query_var( 'year' ) );
 				}
 			}
 		} elseif ( $this->is_search() ) {
-			$canonical_url = $this->get_search_canonical_url();
+			$url = $this->get_search_canonical_url();
 		}
 
-		return $canonical_url;
+		return $url;
 	}
 
 	/**
@@ -657,54 +657,33 @@ class Generate_Url extends Generate_Title {
 	 * Generates shortlink URL.
 	 *
 	 * @since 2.2.2
+	 * @since 3.1.0 1. No longer accepts $post_id input. Output's based on query only.
+	 *              2. Shortened date archive URL length.
+	 *              3. Removed query parameter collisions.
 	 *
-	 * @param int $post_id The post ID.
 	 * @return string|null Escaped site Shortlink URL.
 	 */
-	public function get_shortlink( $post_id = 0 ) {
+	public function get_shortlink() {
 
-		if ( ! $this->get_option( 'shortlink_tag' ) )
-			return '';
+		if ( ! $this->get_option( 'shortlink_tag' ) ) return '';
+		if ( $this->is_real_front_page() ) return '';
 
-		if ( $this->is_real_front_page() || $this->is_front_page_by_id( $post_id ) )
-			return '';
+		// We slash it because plain permalinks do that too, for consistency.
+		$home = \trailingslashit( $this->get_homepage_permalink() );
+		$id   = $this->get_the_real_ID();
+		$url  = '';
 
-		$path = '';
-
-		if ( $this->is_singular( $post_id ) ) {
-			if ( 0 === $post_id )
-				$post_id = $this->get_the_real_ID();
-
-			if ( $post_id ) {
-				if ( $this->is_static_frontpage( $post_id ) ) {
-					$path = '';
-				} else {
-					//* This will be converted to '?p' later.
-					$path = '?page_id=' . $post_id;
-				}
-			}
+		if ( $this->is_singular() ) {
+			$url = \add_query_arg( [ 'p' => $id ], $home );
 		} elseif ( $this->is_archive() ) {
 			if ( $this->is_category() ) {
-				$id = \get_queried_object_id();
-				$path = '?cat=' . $id;
+				$url = \add_query_arg( [ 'cat' => $id ], $home );
 			} elseif ( $this->is_tag() ) {
-				$id = \get_queried_object_id();
-				$path = '?post_tag=' . $id;
+				$url = \add_query_arg( [ 'post_tag' => $id ], $home );
 			} elseif ( $this->is_date() && isset( $GLOBALS['wp_query']->query ) ) {
-				$query = $GLOBALS['wp_query']->query;
-				$var = '';
-
-				$first = true;
-				foreach ( $query as $key => $val ) {
-					$var .= $first ? '?' : '&';
-					$var .= $key . '=' . $val;
-					$first = false;
-				}
-
-				$path = $var;
+				$url = \add_query_arg( [ 'm' => implode( '', $GLOBALS['wp_query']->query ) ], $home );
 			} elseif ( $this->is_author() ) {
-				$id = \get_queried_object_id();
-				$path = '?author=' . $id;
+				$url = \add_query_arg( [ 'author' => $id ], $home );
 			} elseif ( $this->is_tax() ) {
 				//* Generate shortlink for object type and slug.
 				$object = \get_queried_object();
@@ -715,57 +694,28 @@ class Generate_Url extends Generate_Title {
 					$slug = isset( $object->slug ) ? urlencode( $object->slug ) : '';
 
 					if ( $slug )
-						$path = '?' . $t . '=' . $slug;
+						$url = \add_query_arg( [ $t => $slug ], $home );
 				}
 			}
 		}
 
-		if ( empty( $path ) )
-			return '';
-
-		if ( 0 === $post_id )
-			$post_id = $this->get_the_real_ID();
-
-		//* Get additional public queries from the page URL.
-		$url = \get_permalink( $post_id );
-		$query = parse_url( $url, PHP_URL_QUERY );
-
-		$additions = '';
-		if ( ! empty( $query ) ) {
-			if ( false !== strpos( $query, '&' ) ) {
-				//= This can fail on malformed URLs
-				$query = explode( '&', $query );
-			} else {
-				$query = [ $query ];
-			}
-
-			foreach ( $query as $arg ) {
-				/**
-				 * @since 2.9.4 Added $args availability check.
-				 * This is a band-aid, not a fix.
-				 * @TODO inspect prior explode().
-				 * @link https://wordpress.org/support/topic/error-when-previewing-a-draft-of-knowledge-base-article/#post-9452791
-				 */
-				if ( $arg && false === strpos( $path, $arg ) )
-					$additions .= '&' . $arg;
-			}
-		}
-
-		//* We used 'page_id' to determine duplicates. Now we can convert it to a shorter form.
-		$path = str_replace( 'page_id=', 'p=', $path );
+		if ( ! $url ) return '';
 
 		if ( $this->is_archive() || $this->is_home() ) {
 			$paged = $this->maybe_get_paged( $this->paged(), false, true );
-			if ( $paged )
-				$path .= '&paged=' . $paged;
+			$url   = \add_query_arg( [ 'paged' => $paged ], $url );
 		} else {
 			$page = $this->maybe_get_paged( $this->page(), false, true );
-			if ( $page )
-				$path .= '&page=' . $page;
+			$url  = \add_query_arg( [ 'page' => $page ], $url );
 		}
 
-		$home_url = $this->get_homepage_permalink();
-		$url = \trailingslashit( $home_url ) . $path . $additions;
+		//? Append queries other plugins might've filtered.
+		if ( $this->is_singular() ) {
+			$url = $this->append_php_query(
+				$url,
+				parse_url( \get_permalink( $id ), PHP_URL_QUERY )
+			);
+		}
 
 		return \esc_url_raw( $url, [ 'http', 'https' ] );
 	}
@@ -1019,6 +969,7 @@ class Generate_Url extends Generate_Title {
 	 * Appends given query to given URL.
 	 *
 	 * @since 3.0.0
+	 * @since 3.1.0 Now uses parse_str and add_query_arg, preventing duplicated entries.
 	 *
 	 * @param string $url   A fully qualified URL.
 	 * @param string $query A fully qualified query taken from parse_url( $url, PHP_URL_QUERY );
@@ -1029,18 +980,15 @@ class Generate_Url extends Generate_Title {
 		if ( ! $query )
 			return $url;
 
-		$p = parse_url( $url );
-		$_fragment = ! empty( $p['fragment'] ) ? $p['fragment'] : '';
-		$_query = ! empty( $p['query'] ) ? $p['query'] : '';
+		$_fragment = parse_url( $url, PHP_URL_FRAGMENT );
 
 		if ( $_fragment )
 			$url = str_replace( '#' . $_fragment, '', $url );
 
-		if ( $_query ) {
-			$url .= '&' . $query;
-		} else {
-			$url .= '?' . $query;
-		}
+		parse_str( $query, $results );
+
+		if ( $results )
+			$url = \add_query_arg( $results, $url );
 
 		if ( $_fragment )
 			$url .= '#' . $_fragment;

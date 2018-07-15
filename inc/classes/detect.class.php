@@ -275,7 +275,7 @@ class Detect extends Render {
 		//* Prepare multidimensional array for cache.
 		foreach ( $plugins as $key => $func ) {
 			if ( ! is_array( $func ) )
-				return false;
+				return false; // doing it wrong...
 
 			//* Sort alphanumeric by value, put values back after sorting.
 			$func = array_flip( $func );
@@ -287,14 +287,12 @@ class Detect extends Render {
 		}
 
 		ksort( $mapped );
+		$key = serialize( $mapped );
 
-		//* Glue with dash instead of underscore for debugging purposes.
-		$plugins_cache = implode( '-', $mapped );
+		if ( isset( $cache[ $key ] ) )
+			return $cache[ $key ];
 
-		if ( isset( $cache[ $plugins_cache ] ) )
-			return $cache[ $plugins_cache ];
-
-		return $cache[ $plugins_cache ] = $this->detect_plugin_multi( $plugins );
+		return $cache[ $key ] = $this->detect_plugin_multi( $plugins );
 	}
 
 	/**

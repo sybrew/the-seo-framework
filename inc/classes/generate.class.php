@@ -85,7 +85,7 @@ class Generate extends User_Data {
 			global $wp_query;
 
 			/**
-			 * Check if archive is empty, set noindex for those.
+			 * Check for 404, or if archive is empty: set noindex for those.
 			 * Don't check this on the home page. The home page is sacred in this regard,
 			 * because page builders and templates likely take over.
 			 * @since 2.2.8

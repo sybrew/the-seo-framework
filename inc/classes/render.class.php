@@ -43,13 +43,18 @@ class Render extends Admin_Init {
 	 * Returns the document title.
 	 *
 	 * This method serves as a callback for filter `pre_get_document_title`.
+	 * Use the_seo_framework()->get_title() instead.
 	 *
 	 * @since 3.1.0
+	 * @see $this->get_title()
 	 *
 	 * @param string $title The filterable title.
 	 * @return string The document title
 	 */
 	public function get_document_title( $title = '' ) {
+		if ( $this->is_feed() ) {
+			return $title;
+		}
 		return $this->get_title();
 	}
 
@@ -57,13 +62,18 @@ class Render extends Admin_Init {
 	 * Returns the document title.
 	 *
 	 * This method serves as a callback for filter `wp_title`.
+	 * Use the_seo_framework()->get_title() instead.
 	 *
 	 * @since 3.1.0
+	 * @see $this->get_title()
 	 *
 	 * @param string $title The filterable title.
 	 * @return string $title
 	 */
 	public function get_wp_title( $title = '', $sep = '', $seplocation = '' ) {
+		if ( $this->is_feed() ) {
+			return $title;
+		}
 		return $this->get_title();
 	}
 
@@ -1045,8 +1055,6 @@ class Render extends Admin_Init {
 	 */
 	public function shortlink() {
 
-		$id = $this->get_the_real_ID();
-
 		/**
 		 * Applies filters 'the_seo_framework_shortlink_output' : string
 		 * @since 2.6.0
@@ -1054,8 +1062,8 @@ class Render extends Admin_Init {
 		$url = (string) \apply_filters_ref_array(
 			'the_seo_framework_shortlink_output',
 			[
-				$this->get_shortlink( $id ),
-				$id,
+				$this->get_shortlink(),
+				$this->get_the_real_ID(),
 			]
 		);
 

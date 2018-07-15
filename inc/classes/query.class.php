@@ -171,6 +171,7 @@ class Query extends Compat {
 	 * functions for the current ID in the admin.
 	 *
 	 * @since 2.5.0
+	 * @since 3.1.0 Now checks for the feed.
 	 *
 	 * @return int The admin ID.
 	 */
@@ -181,11 +182,13 @@ class Query extends Compat {
 
 		$id = '';
 
-		if ( $this->is_wc_shop() ) {
-			//* WooCommerce Shop
+		if ( $this->is_feed() ) {
+			$id = \get_the_ID();
+		} elseif ( $this->is_wc_shop() ) {
+			//* WooCommerce Shop. TODO set in compat file?
 			$id = \get_option( 'woocommerce_shop_page_id' );
 		} elseif ( function_exists( 'get_question_id' ) && \did_action( 'template_redirect' ) ) {
-			//* AnsPress
+			//* AnsPress. TODO set in compat file.
 			$id = \get_question_id();
 		}
 
@@ -1237,9 +1240,9 @@ class Query extends Compat {
 	 * @staticvar mixed $cache : The cached query.
 	 * @see $this->set_query_cache(); to set query cache.
 	 *
-	 * @param string $method The method that wants to cache, used as the key to set or get.
+	 * @param string $method       The method that wants to cache, used as the key to set or get.
 	 * @param mixed  $value_to_set The value to set.
-	 * @param array|mixed $hash Extra arguments, that will be used to generate an alternative cache key.
+	 * @param array|mixed $hash    Extra arguments, that will be used to generate an alternative cache key.
 	 *        Must always be inside a single array when $value_to_set is set. @see $this->set_query_cache()
 	 *        Must always be separated parameters otherwise.
 	 * @return mixed : {
@@ -1292,9 +1295,9 @@ class Query extends Compat {
 	 * @since 2.7.0
 	 * @see $this->get_query_cache()
 	 *
-	 * @param string $method The method that wants to set. Used as a caching key.
+	 * @param string $method       The method that wants to set. Used as a caching key.
 	 * @param mixed  $value_to_set If null, no cache will be set.
-	 * @param mixed  $hash Extra arguments, that will be used to generate an alternative cache key.
+	 * @param mixed  $hash         Extra arguments, that will be used to generate an alternative cache key.
 	 * @return bool : {
 	 *    true If the value is being set for the first time.
 	 *    false If the value has been set and $value_to_set is being overwritten.

@@ -127,23 +127,19 @@ class Generate_Title extends Generate_Description {
 		 * @param array  $args  The title arguments.
 		 */
 		$title = (string) \apply_filters_ref_array( 'the_seo_framework_title_from_generation', [
-			$this->get_unprocessed_generated_title( $args ),
+			$this->get_unprocessed_generated_title( $args ) ?: $this->untitled(),
 			$args,
 		] );
 
-		if ( $title ) {
-			//? Only add pagination and protection if the query is autodetermined, and on a real page.
-			if ( null === $args
+		//? Only add pagination and protection if the query is autodetermined, and on a real page.
+		if ( null === $args
 			&& ! ( $this->is_404() || $this->is_admin() ) ) {
-				$this->merge_title_protection( $title );
-				$this->merge_title_pagination( $title );
-			}
+			$this->merge_title_protection( $title );
+			$this->merge_title_pagination( $title );
+		}
 
-			if ( $this->use_title_branding( $args ) ) {
-				$this->merge_title_branding( $title, $args );
-			}
-		} else {
-			$title = $this->untitled();
+		if ( $this->use_title_branding( $args ) ) {
+			$this->merge_title_branding( $title, $args );
 		}
 
 		return $escape ? $this->escape_title( $title ) : $title;

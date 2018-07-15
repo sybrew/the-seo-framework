@@ -33,15 +33,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Sitemaps extends Metaboxes {
 
 	/**
-	 * Maximum number of posts that show up in the sitemap.xml page.
-	 *
-	 * @since 2.2.9
-	 *
-	 * @var int Max Posts in Sitemap
-	 */
-	protected $max_posts;
-
-	/**
 	 * Checks for pretty permalinks.
 	 *
 	 * @since 2.2.9
@@ -153,13 +144,6 @@ class Sitemaps extends Metaboxes {
 				$wp_query->is_404 = false;
 
 				$this->doing_sitemap = true;
-
-				/**
-				 * Applies filters 'the_seo_framework_sitemap_post_limit' : int
-				 * @since 2.2.9
-				 * @since 2.8.0 Increased to 1200 from 700.
-				 */
-				$this->max_posts = (int) \apply_filters( 'the_seo_framework_sitemap_post_limit', 1200 );
 
 				/**
 				 * Set at least 2000 variables free.
@@ -637,18 +621,29 @@ class Sitemaps extends Metaboxes {
 		$content = '';
 
 		/**
+		 * @since 2.2.9
+		 * @since 2.8.0 Increased to 1200 from 700.
+		 * @since 3.1.0 1. Now acts as a cumulative limit, rather than an individual limit (TODO)
+		 *              2. Increased to 3600 from 1200 (TODO)
+		 *              3. Now listens to an option. (TODO)
+		 * @param int $total_post_limit
+		 */
+		$total_post_limit = (int) \apply_filters( 'the_seo_framework_sitemap_post_limit', 1200 );
+
+		/**
 		 * Maximum pages and posts to fetch.
-		 * A total of 2100, consisting of 3 times $max_posts
+		 * A total of 3600, consisting of 3 times $total_post_limit (TODO?)
 		 *
 		 * @since 2.2.9
+		 * TODO remove?
 		 *
 		 * Applies filters the_seo_framework_sitemap_pages_count : int max pages
 		 * Applies filters the_seo_framework_sitemap_posts_count : int max posts
 		 * Applies filters the_seo_framework_sitemap_custom_posts_count : int max posts
 		 */
-		$totalpages = (int) \apply_filters( 'the_seo_framework_sitemap_pages_count', $this->max_posts );
-		$totalposts = (int) \apply_filters( 'the_seo_framework_sitemap_posts_count', $this->max_posts );
-		$total_cpt_posts = (int) \apply_filters( 'the_seo_framework_sitemap_custom_posts_count', $this->max_posts );
+		$totalpages = (int) \apply_filters( 'the_seo_framework_sitemap_pages_count', $total_post_limit );
+		$totalposts = (int) \apply_filters( 'the_seo_framework_sitemap_posts_count', $total_post_limit );
+		$total_cpt_posts = (int) \apply_filters( 'the_seo_framework_sitemap_custom_posts_count', $total_post_limit );
 
 		$latest_pages = [];
 		$latest_posts = [];

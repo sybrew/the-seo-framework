@@ -56,7 +56,7 @@ function _wpml_remove_all_languages( $languages_links = [] ) {
  *       Note that we can't adjust the mandatory cache key suffix, which includes a cached language code -- required for performance.
  *       =HACK?
  *
- * @param string $type    The type. Comes in handy if you use a catch-all function.
+ * @param string $type    The type. Comes in handy when you use a catch-all function.
  * @param int    $id      The post, page or TT ID. Defaults to $this->get_the_real_ID().
  * @param array  $args    Additional arguments. They can overwrite $type and $id.
  * @param bool   $success Whether the action cleared.
@@ -72,7 +72,7 @@ function _wpml_flush_sitemap( $type, $id, $args, $success ) {
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
-				'_transient_tsf_sitemap_%'
+				$wpdb->esc_like( '_transient_tsf_sitemap_' ) . '%'
 			)
 		); // No cache OK. DB call ok.
 
@@ -81,27 +81,10 @@ function _wpml_flush_sitemap( $type, $id, $args, $success ) {
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
-				'_transient_timeout_tsf_sitemap_%'
+				$wpdb->esc_like( '_transient_timeout_tsf_sitemap_' ) . '%'
 			)
 		); // No cache OK. DB call ok.
 
 		$cleared = true;
 	}
 }
-
-// add_action( 'pre_post_update', __NAMESPACE__ . '\\_wpml_fix_locale', 10, 2 );
-// /**
-//  * Does the dirty work for updating a locale on post update.
-//  * WARNING: This will probably destroy the post, given that WPML seems to rely on the base language.
-//  *
-//  * @since 3.1.0
-//  *
-//  * @param int      $id The updated post ID.
-//  * @param \WP_Post $post The updated post.
-//  */
-// function _wpml_fix_locale( $id, $post ) {
-// 	$info = function_exists( 'wpml_get_language_information' ) ? wpml_get_language_information( $id ) : [];
-// 	if ( ! empty( $info['locale'] ) ) {
-// 		// filter 'locale' here...
-// 	}
-// }

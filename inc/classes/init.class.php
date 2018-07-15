@@ -48,23 +48,15 @@ class Init extends Query {
 		parent::__construct();
 
 		/**
-		 * Applies filters 'the_seo_framework_load_options'
-		 * Allows the options page to be removed
-		 *
 		 * @since 2.2.2
-		 *
-		 * @param bool $load_options
+		 * @param bool $load_options Whether to show or hide option pages.
 		 */
 		$this->load_options = (bool) \apply_filters( 'the_seo_framework_load_options', true );
 
 		/**
-		 * Applies filters 'the_seo_framework_use_object_cache'
-		 * Enables object caching usage.
-		 *
 		 * @since 2.4.3
 		 * @since 2.8.0 : Uses method $this->use_object_cache() as default.
-		 *
-		 * @param bool $use_object_cache
+		 * @param bool $use_object_cache Whether to enable object caching.
 		 */
 		$this->use_object_cache = (bool) \apply_filters( 'the_seo_framework_use_object_cache', $this->use_object_cache() );
 
@@ -77,10 +69,7 @@ class Init extends Query {
 	}
 
 	/**
-	 * Runs the plugin on the front-end.
-	 *
-	 * To overwrite any of the filters, use (n>0):
-	 * `add_action( 'init', callback, n );`
+	 * A true legacy. Ran the plugin on the front-end.
 	 *
 	 * @since 1.0.0
 	 * @since 2.8.0 Silently deprecated. Displaying legacy roots.
@@ -193,7 +182,7 @@ class Init extends Query {
 		\add_action( 'admin_enqueue_scripts', [ $this, '_init_admin_scripts' ], 0, 1 );
 
 		//* Add plugin links to the plugin activation page.
-		\add_filter( 'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, [ $this, 'plugin_action_links' ], 10, 2 );
+		\add_filter( 'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, [ $this, '_add_plugin_action_links' ], 10, 2 );
 
 		//* Initialize post states.
 		\add_action( 'current_screen', [ $this, 'post_state' ] );
@@ -281,6 +270,8 @@ class Init extends Query {
 		 *
 		 * Adding a higher priority will cause a trailing slash to be added.
 		 * We need to be in front of the queue to prevent this from happening.
+		 *
+		 * This brings other issues we had to fix. @see $this->validate_sitemap_scheme()
 		 */
 		\add_action( 'template_redirect', [ $this, 'maybe_output_sitemap' ], 1 );
 		\add_action( 'template_redirect', [ $this, 'maybe_output_sitemap_stylesheet' ], 1 );
@@ -317,10 +308,8 @@ class Init extends Query {
 		\add_filter( 'robots_txt', [ $this, 'robots_txt' ], 10, 2 );
 
 		/**
-		 * Applies filters 'the_seo_framework_overwrite_titles'
-		 *
 		 * @since 2.9.3
-		 * @param bool $overwrite_titles
+		 * @param bool $overwrite_titles Whether to enable title overwriting.
 		 */
 		$overwrite_titles = \apply_filters( 'the_seo_framework_overwrite_titles', true );
 
@@ -334,9 +323,8 @@ class Init extends Query {
 			\add_filter( 'woo_title', [ $this, 'get_document_title' ], 99 );
 
 			/**
-			 * Applies filters 'the_seo_framework_manipulate_title' : boolean
-			 * Disables the title tag manipulation on old themes.
 			 * @since 2.4.1
+			 * @param bool $overwrite_titles Whether to enable title overwriting.
 			 */
 			if ( \apply_filters( 'the_seo_framework_manipulate_title', true ) ) {
 				\remove_all_filters( 'wp_title', false );
@@ -361,7 +349,6 @@ class Init extends Query {
 
 		/**
 		 * @since 2.2.6
-		 *
 		 * @param array $functions {
 		 *    'callback' => string|array The function to call.
 		 *    'args'     => scalar|array Arguments. When array, each key is a new argument.
@@ -369,17 +356,15 @@ class Init extends Query {
 		 */
 		$functions = (array) \apply_filters( "the_seo_framework_{$location}_output", [] );
 
-		if ( $functions && is_array( $functions ) ) :
-			foreach ( $functions as $function ) {
-				if ( isset( $function['callback'] ) ) {
-					$output .= $this->call_function(
-						$function['callback'],
-						'3.1.0',
-						isset( $function['args'] ) ? $function['args'] : ''
-					);
-				}
+		foreach ( $functions as $function ) {
+			if ( isset( $function['callback'] ) ) {
+				$output .= $this->call_function(
+					$function['callback'],
+					'3.1.0',
+					isset( $function['args'] ) ? $function['args'] : ''
+				);
 			}
-		endif;
+		}
 
 		return $output;
 	}
@@ -411,7 +396,7 @@ class Init extends Query {
 
 		if ( $this->use_object_cache ) {
 			$cache_key = $this->get_meta_output_cache_key_by_query();
-			$output = $this->object_cache_get( $cache_key );
+			$output    = $this->object_cache_get( $cache_key );
 		} else {
 			$cache_key = '';
 			$output = false;
@@ -430,7 +415,7 @@ class Init extends Query {
 
 			$before_legacy = $this->get_legacy_header_filters_output( 'before' );
 
-			//* Limit processing on 404 or search
+			//* Limit processing and redundant tags on 404 and search.
 			if ( $this->is_search() ) :
 				$output = $this->og_locale()
 						. $this->og_type()
@@ -491,17 +476,7 @@ class Init extends Query {
 			 */
 			$after = (string) \apply_filters( 'the_seo_framework_pro', '' );
 
-			/**
-			 * Applies filters 'the_seo_framework_generator_tag' : String generator tag content.
-			 * @since 2.0.1
-			 * @see https://wordpress.org/plugins/generator-the-seo-framework/ For an alternative.
-			 */
-			$generator = (string) \apply_filters( 'the_seo_framework_generator_tag', '' );
-
-			if ( $generator )
-				$generator = '<meta name="generator" content="' . \esc_attr( $generator ) . '" />' . PHP_EOL;
-
-			$output = $robots . $before . $before_legacy . $output . $after_legacy . $after . $generator;
+			$output = $robots . $before . $before_legacy . $output . $after_legacy . $after;
 
 			$this->use_object_cache and $this->object_cache_set( $cache_key, $output, DAY_IN_SECONDS );
 		endif;
@@ -531,7 +506,7 @@ class Init extends Query {
 
 		if ( ! $this->is_preview() && $this->is_singular() ) {
 			$url = $this->get_custom_field( 'redirect' );
-			$url && $this->do_redirect( $url );
+			$url and $this->do_redirect( $url );
 		}
 	}
 
@@ -559,10 +534,7 @@ class Init extends Query {
 		}
 
 		/**
-		 * Applies filters 'the_seo_framework_redirect_status_code' : Absolute integer.
-		 *
 		 * @since 2.8.0
-		 *
 		 * @param int <unsigned> $redirect_type
 		 */
 		$redirect_type = \absint( \apply_filters( 'the_seo_framework_redirect_status_code', 301 ) );
@@ -573,7 +545,8 @@ class Init extends Query {
 		if ( ! $this->allow_external_redirect() ) {
 			//= Only HTTP/HTTPS and home URLs are allowed.
 			$path = $this->set_url_scheme( $url, 'relative' );
-			$url = \trailingslashit( $this->get_home_host() ) . ltrim( $path, ' /' );
+			$url  = \trailingslashit( $this->get_home_host() ) . ltrim( $path, ' /' );
+
 			$scheme = $this->is_ssl() ? 'https' : 'http';
 
 			\wp_safe_redirect( $this->set_url_scheme( $url, $scheme ), $redirect_type );
@@ -632,12 +605,9 @@ class Init extends Query {
 			$site_path = ( ! empty( $site_url['path'] ) ) ? \esc_attr( $site_url['path'] ) : '';
 
 			/**
-			 * Applies filters 'the_seo_framework_robots_txt_pre'
 			 * Don't forget to add line breaks ( "\r\n" || PHP_EOL )
-			 *
 			 * @since 2.5.0
-			 *
-			 * @param string $pre
+			 * @param string $pre The output before this plugin's output.
 			 */
 			$output .= (string) \apply_filters( 'the_seo_framework_robots_txt_pre', '' );
 
@@ -656,10 +626,9 @@ class Init extends Query {
 			}
 
 			/**
-			 * Applies filters 'the_seo_framework_robots_txt_pro'
 			 * Don't forget to add line breaks ( "\r\n" || PHP_EOL )
-			 *
-			 * @param string $pro
+			 * @since 2.5.0
+			 * @param string $pro The output after this plugin's output.
 			 */
 			$output .= (string) \apply_filters( 'the_seo_framework_robots_txt_pro', '' );
 
@@ -772,24 +741,25 @@ class Init extends Query {
 	 */
 	public function _alter_archive_query_in( $wp_query ) {
 
-		if ( $wp_query->is_archive || $wp_query->is_home ) {
-			if ( $this->is_archive_query_adjustment_blocked( $wp_query ) )
-				return;
+		if ( ! $wp_query->is_archive && ! $wp_query->is_home )
+			return;
 
-			$excluded = $this->get_ids_excluded_from_archive();
+		if ( $this->is_archive_query_adjustment_blocked( $wp_query ) )
+			return;
 
-			if ( ! $excluded )
-				return;
+		$excluded = $this->get_ids_excluded_from_archive();
 
-			$post__not_in = $wp_query->get( 'post__not_in' );
+		if ( ! $excluded )
+			return;
 
-			if ( ! empty( $post__not_in ) ) {
-				$excluded = array_merge( (array) $post__not_in, $excluded );
-				$excluded = array_unique( $excluded );
-			}
+		$post__not_in = $wp_query->get( 'post__not_in' );
 
-			$wp_query->set( 'post__not_in', $excluded );
+		if ( ! empty( $post__not_in ) ) {
+			$excluded = array_merge( (array) $post__not_in, $excluded );
+			$excluded = array_unique( $excluded );
 		}
+
+		$wp_query->set( 'post__not_in', $excluded );
 	}
 
 	/**
