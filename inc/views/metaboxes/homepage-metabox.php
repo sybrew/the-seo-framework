@@ -106,22 +106,6 @@ switch ( $instance ) :
 		} else {
 			$home_description_frompost = false;
 		}
-
-		/**
-		 * If the HomePage Description empty, it will check for the InPost
-		 * Description set on the Home Page. And it will set the InPost
-		 * Description as placeholder.
-		 *
-		 * Nesting often used translations.
-		 *
-		 * Notify that the homepage is a blog.
-		 * @since 2.2.2
-		 */
-		if ( $home_description_frompost ) {
-			$page_seo_settings_i18n = __( 'Page SEO Settings', 'autodescription' );
-			$this->description( __( 'Note: The description is fetched from the Page SEO Settings on the home page.', 'autodescription' ) );
-		}
-
 		?>
 		<p>
 			<label for="<?php $this->field_id( 'homepage_title_tagline' ); ?>" class="tsf-toblock">
@@ -139,6 +123,11 @@ switch ( $instance ) :
 				<strong>
 					<?php
 					esc_html_e( 'Meta Title', 'autodescription' );
+					echo ' ';
+					$this->make_info(
+						__( 'The meta title can be used to determine the title used on Search Engine result pages.', 'autodescription' ),
+						'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#page-titles'
+					);
 					?>
 				</strong>
 			</label>
@@ -190,6 +179,11 @@ switch ( $instance ) :
 				<strong>
 					<?php
 					esc_html_e( 'Meta Description', 'autodescription' );
+					echo ' ';
+					$this->make_info(
+						__( 'The meta description can be used to determine the text used under the title on Search Engine results pages.', 'autodescription' ),
+						'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#meta-descriptions'
+					);
 					?>
 				</strong>
 			</label>
@@ -204,10 +198,19 @@ switch ( $instance ) :
 			<?php echo $this->output_js_description_elements(); ?>
 		</p>
 		<?php
-		$this->description( __( 'The meta description can be used to determine the text used under the title on Search Engine results pages.', 'autodescription' ) );
 
-		if ( $description_from_post_message ) {
-			$this->description( $description_from_post_message );
+		/**
+		 * If the HomePage Description empty, it will check for the InPost
+		 * Description set on the Home Page. And it will set the InPost
+		 * Description as placeholder.
+		 *
+		 * Nesting often used translations.
+		 *
+		 * Notify that the homepage is a blog.
+		 * @since 2.2.2
+		 */
+		if ( $home_description_frompost ) {
+			$this->description( __( 'Note: The description is fetched from the Page SEO Settings on the home page.', 'autodescription' ) );
 		}
 
 		/**

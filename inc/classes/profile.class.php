@@ -92,7 +92,7 @@ class Profile extends Doing_It_Right {
 				'class'       => '',
 			],
 			$this->profile_settings->keys['twitter_page'] => (object) [
-				'name'        => \__( 'Twitter profile', 'autodescription' ),
+				'name'        => \__( 'Twitter profile name', 'autodescription' ),
 				'type'        => 'text',
 				'placeholder' => \_x( '@your-personal-username', 'Twitter @username', 'autodescription' ),
 				'value'       => $this->get_user_option( $user->ID, 'twitter_page' ),

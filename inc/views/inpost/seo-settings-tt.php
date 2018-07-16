@@ -80,6 +80,13 @@ $robots_settings = [
 			<th scope="row" valign="top">
 				<label for="autodescription-meta[doctitle]">
 					<strong><?php esc_html_e( 'Meta Title', 'autodescription' ); ?></strong>
+					<?php
+					echo ' ';
+					$this->make_info(
+						__( 'The meta title can be used to determine the title used on Search Engine result pages.', 'autodescription' ),
+						'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#page-titles'
+					);
+					?>
 				</label>
 				<?php
 				$this->get_option( 'display_character_counter' )
@@ -100,6 +107,13 @@ $robots_settings = [
 			<th scope="row" valign="top">
 				<label for="autodescription-meta[description]">
 					<strong><?php esc_html_e( 'Meta Description', 'autodescription' ); ?></strong>
+					<?php
+					echo ' ';
+					$this->make_info(
+						__( 'The meta description can be used to determine the text used under the title on Search Engine results pages.', 'autodescription' ),
+						'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#meta-descriptions'
+					);
+					?>
 				</label>
 				<?php
 				$this->get_option( 'display_character_counter' )

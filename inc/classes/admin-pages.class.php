@@ -452,6 +452,181 @@ class Admin_Pages extends Inpost {
 	}
 
 	/**
+	 * Generates dismissible notice.
+	 * Also loads scripts and styles if out of The SEO Framework's context.
+	 *
+	 * @since 2.6.0
+	 * @since 3.0.6 The messages are no longer auto-styled to "strong".
+	 *
+	 * @param string $message The notice message. Expected to be escaped if $escape is false.
+	 * @param string $type The notice type : 'updated', 'error', 'warning'. Expected to be escaped.
+	 * @param bool $a11y Whether to add an accessibility icon.
+	 * @param bool $escape Whether to escape the whole output.
+	 * @return string The dismissible error notice.
+	 */
+	public function generate_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
+
+		if ( empty( $message ) ) return '';
+
+		//* Make sure the scripts are loaded.
+		$this->init_admin_scripts();
+		$this->Scripts()::enqueue();
+
+		if ( 'warning' === $type )
+			$type = 'notice-warning';
+
+		$a11y = $a11y ? 'tsf-show-icon' : '';
+
+		$notice  = '<div class="notice ' . \esc_attr( $type ) . ' tsf-notice ' . $a11y . '"><p>';
+		$notice .= '<a class="hide-if-no-js tsf-dismiss" title="' . \esc_attr__( 'Dismiss', 'autodescription' ) . '"></a>';
+		$notice .= $escape ? \esc_html( $message ) : $message;
+		$notice .= '</p></div>';
+
+		return $notice;
+	}
+
+	/**
+	 * Echos generated dismissible notice.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param $message The notice message. Expected to be escaped if $escape is false.
+	 * @param $type The notice type : 'updated', 'error', 'warning'. Expected to be escaped.
+	 * @param bool $a11y Whether to add an accessibility icon.
+	 * @param bool $escape Whether to escape the whole output.
+	 */
+	public function do_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
+		echo $this->generate_dismissible_notice( $message, $type, (bool) $a11y, (bool) $escape ); // xss ok
+	}
+
+	/**
+	 * Generates dismissible notice that stick until the user dismisses it.
+	 * Also loads scripts and styles if out of The SEO Framework's context.
+	 *
+	 * @since 2.9.3
+	 * @see $this->do_dismissible_sticky_notice()
+	 * @uses THE_SEO_FRAMEWORK_UPDATES_CACHE
+	 * @todo make this do something.
+	 * NOTE: This method is a placeholder.
+	 *
+	 * @param string $message The notice message. Expected to be escaped if $escape is false.
+	 * @param string $key     The notice key. Must be unique and tied to the stored updates cache option.
+	 * @param array $args : {
+	 *    'type'   => string Optional. The notification type. Default 'updated'.
+	 *    'a11y'   => bool   Optional. Whether to enable accessibility. Default true.
+	 *    'escape' => bool   Optional. Whether to escape the $message. Default true.
+	 *    'color'  => string Optional. If filled in, it will output the selected color. Default ''.
+	 *    'icon'   => string Optional. If filled in, it will output the selected icon. Default ''.
+	 * }
+	 * @return string The dismissible error notice.
+	 */
+	public function generate_dismissible_sticky_notice( $message, $key, $args = [] ) {
+		return '';
+	}
+
+	/**
+	 * Echos generated dismissible sticky notice.
+	 *
+	 * @since 2.9.3
+	 * @uses $this->generate_dismissible_sticky_notice()
+	 *
+	 * @param string $message The notice message. Expected to be escaped if $escape is false.
+	 * @param string $key     The notice key. Must be unique and tied to the stored updates cache option.
+	 * @param array $args : {
+	 *    'type'   => string Optional. The notification type. Default 'updated'.
+	 *    'a11y'   => bool   Optional. Whether to enable accessibility. Default true.
+	 *    'escape' => bool   Optional. Whether to escape the $message. Default true.
+	 *    'color'  => string Optional. If filled in, it will output the selected color. Default ''.
+	 *    'icon'   => string Optional. If filled in, it will output the selected icon. Default ''.
+	 * }
+	 * @return string The dismissible error notice.
+	 */
+	public function do_dismissible_sticky_notice( $message, $key, $args = [] ) {
+		echo $this->generate_dismissible_sticky_notice( $message, $key, $args ); // xss ok
+	}
+
+	/**
+	 * Mark up content with code tags.
+	 * Escapes all HTML, so `<` gets changed to `&lt;` and displays correctly.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $content Content to be wrapped in code tags.
+	 * @return string Content wrapped in code tags.
+	 */
+	public function code_wrap( $content ) {
+		return $this->code_wrap_noesc( \esc_html( $content ) );
+	}
+
+	/**
+	 * Mark up content with code tags.
+	 * Escapes no HTML.
+	 *
+	 * @since 2.2.2
+	 *
+	 * @param string $content Content to be wrapped in code tags.
+	 * @return string Content wrapped in code tags.
+	 */
+	public function code_wrap_noesc( $content ) {
+		return '<code>' . $content . '</code>';
+	}
+
+	/**
+	 * Mark up content in description wrap.
+	 * Escapes all HTML, so `<` gets changed to `&lt;` and displays correctly.
+	 *
+	 * @since 2.7.0
+	 * @TODO deprecate, rename
+	 *
+	 * @param string $content Content to be wrapped in the description wrap.
+	 * @param bool $block Whether to wrap the content in <p> tags.
+	 * @return string Content wrapped int he description wrap.
+	 */
+	public function description( $content, $block = true ) {
+		$this->description_noesc( \esc_html( $content ), $block );
+	}
+
+	/**
+	 * Mark up content in description wrap.
+	 *
+	 * @since 2.7.0
+	 * @TODO deprecate, rename & move xss sensitivity to the output by default.
+	 *
+	 * @param string $content Content to be wrapped in the description wrap. Expected to be escaped.
+	 * @param bool $block Whether to wrap the content in <p> tags.
+	 * @return string Content wrapped int he description wrap.
+	 */
+	public function description_noesc( $content, $block = true ) {
+		$output = '<span class="description">' . $content . '</span>';
+		echo $block ? '<p>' . $output . '</p>' : $output; // xss: method name explains
+	}
+
+	/**
+	 * Google docs language determinator.
+	 *
+	 * @since 2.2.2
+	 * @staticvar string $language
+	 *
+	 * @return string language code
+	 */
+	protected function google_language() {
+
+		/**
+		 * Cache value
+		 * @since 2.2.4
+		 */
+		static $language = null;
+
+		if ( isset( $language ) )
+			return $language;
+
+		//* Language shorttag to be used in Google help pages.
+		$language = \esc_html_x( 'en', 'e.g. en for English, nl for Dutch, fi for Finish, de for German', 'autodescription' );
+
+		return $language;
+	}
+
+	/**
 	 * Echo or return a chechbox fields wrapper.
 	 *
 	 * @since 2.6.0
@@ -532,13 +707,13 @@ class Admin_Pages extends Inpost {
 
 		if ( $link ) {
 			$output = sprintf(
-				'<a href="%1$s" class="tsf-tooltip-item" target="_blank" rel="nofollow noreferrer noopener" title="%2$s" data-desc="%2$s">[?]</a>',
+				'<a href="%1$s" class="tsf-tooltip-item tsf-help" target="_blank" rel="nofollow noreferrer noopener" title="%2$s" data-desc="%2$s">[?]</a>',
 				\esc_url( $link, [ 'http', 'https' ] ),
 				\esc_attr( $description )
 			);
 		} else {
 			$output = sprintf(
-				'<span class="tsf-tooltip-item" title="%1$s" data-desc="%1$s">[?]</span>',
+				'<span class="tsf-tooltip-item tsf-help" title="%1$s" data-desc="%1$s">[?]</span>',
 				\esc_attr( $description )
 			);
 		}

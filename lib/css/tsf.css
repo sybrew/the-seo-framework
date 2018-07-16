@@ -328,6 +328,10 @@ body.no-js .tsf-seo-bar-item {
 
 /* Site Settings */
 
+.tsf-help {
+	font-weight: normal;
+}
+
 .tsf-metaboxes {
 	box-sizing: border-box;
 	max-width: 690px;

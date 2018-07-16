@@ -177,7 +177,7 @@ switch ( $instance ) :
 		$fb_author_placeholder = _x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' );
 
 		$fb_publisher = $this->get_field_value( 'facebook_publisher' );
-		$fb_publisher_placeholder = _x( 'https://www.facebook.com/YourVerifiedBusinessProfile', 'Example Verified Facebook Business URL', 'autodescription' );
+		$fb_publisher_placeholder = _x( 'https://www.facebook.com/YourBusinessProfile', 'Example Facebook Business URL', 'autodescription' );
 
 		$fb_appid = $this->get_field_value( 'facebook_appid' );
 		$fb_appid_placeholder = '123456789012345';
@@ -207,12 +207,12 @@ switch ( $instance ) :
 
 		<p>
 			<label for="<?php $this->field_id( 'facebook_publisher' ); ?>">
-				<strong><?php esc_html_e( 'Article Publisher Facebook URL', 'autodescription' ); ?></strong>
+				<strong><?php esc_html_e( 'Facebook Publisher page', 'autodescription' ); ?></strong>
 			</label>
 			<?php
 			$this->make_info(
-				__( 'To use this, you need to be a verified business.', 'autodescription' ),
-				'https://instantarticles.fb.com/'
+				__( 'Only Facebook Business Pages are accepted.', 'autodescription' ),
+				'https://www.facebook.com/business/learn/set-up-facebook-page'
 			);
 			?>
 		</p>
@@ -222,11 +222,11 @@ switch ( $instance ) :
 
 		<p>
 			<label for="<?php $this->field_id( 'facebook_author' ); ?>">
-				<strong><?php esc_html_e( 'Article Author Facebook Fallback URL', 'autodescription' ); ?></strong>
+				<strong><?php esc_html_e( 'Facebook Author Fallback Page', 'autodescription' ); ?></strong>
 			</label>
 			<?php
 			$this->make_info(
-				__( 'Your Facebook Profile.', 'autodescription' ),
+				__( 'Your Facebook profile.', 'autodescription' ),
 				'https://facebook.com/me'
 			);
 			?>

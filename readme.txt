@@ -329,8 +329,10 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 		* Tooltips now support RTL screens without the arrow overflowing.
 		* Canonical, redirect, and image URLs are no longer uselessly suggested by the browser.
 		* TODO Beaver Builder templates are no longer in the sitemap. (not my fault...) `example.com/fl-builder-template/title/...`
+			* TODO Manage this solely via the new options?
 		* TODO bbPress replies are no longer in the sitemap. (technically, neither our fault).
-		* TODO https://wordpress.org/support/topic/problem-with-title-3/#post-10410406 fix link and verbatim, the "verified" business profile can now be any business page, even without instant articles.
+			* TODO Manage this solely via the new options?
+		* The Facebook Business page URL description has been updated, to be in line with the current behavior.
 		* TODO Open Graph data validation (e.g. missing descriptions).
 		* TODO Doing it right check for empty description. Make it blue to ask if they intended it to be this way.
 			* This definitely occurs when the post is private, and no custom description is set.
@@ -349,6 +351,7 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 				* TODO SEE: https://github.com/sybrew/the-seo-framework/issues/18
 		* The SEO Bar is a little less daunting--by 13.63% to be exact.
 		* Added a descriptive warning to the sitewide `nofollow` and `noarchive` settings.
+		* Added a descriptive link to title and description settings in the home page metabox and on the term settings pages.
 	* **Changed:**
 		* TSF now requires WordPress 4.6 (previously 4.4).
 		* TSF now requires PHP 5.4 (previously 5.3).
@@ -391,7 +394,6 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 			* The Descriptions are now correct.
 			* The Titles are now fully controlled by TSF.
 			* Extranous meta output from Ultimate Member has been removed.
-		* TODO BuddyPress canonical profile links are now supported.
 		* Invalid settings' input are now checked before you can change tabs. This makes the saving buttons work as intended.
 			* TODO consider checking closed postboxes too.... we could add an on-publish listener that checks if our postboxes are closed, and open them if they contain invalid values.
 				* `jQuery( elem ).find( '.hndle, .handlediv' ).trigger( 'click.postboxes' );`
@@ -541,6 +543,16 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 			* `get_current_canonical_url()`. `\The_SEO_Framework\Render => \The_SEO_Framework\Generate_Url`.
 			* `get_current_permalink()`. `\The_SEO_Framework\Render => \The_SEO_Framework\Generate_Url`.
 			* `get_homepage_permalink()`. `\The_SEO_Framework\Render => \The_SEO_Framework\Generate_Url`.
+			* `get_the_front_page_ID()`. `\The_SEO_Framework\Core => \The_SEO_Framework\Query`.
+			* `generate_dismissible_notice()`. `\The_SEO_Framework\Core => \The_SEO_Framework\Admin_Pages`.
+			* `do_dismissible_notice()`. `\The_SEO_Framework\Core => \The_SEO_Framework\Admin_Pages`.
+			* `generate_dismissible_sticky_notice()`. `\The_SEO_Framework\Core => \The_SEO_Framework\Admin_Pages`.
+			* `do_dismissible_sticky_notice()`. `\The_SEO_Framework\Core => \The_SEO_Framework\Admin_Pages`.
+			* `code_wrap()`. `\The_SEO_Framework\Core => \The_SEO_Framework\Admin_Pages`.
+			* `code_wrap_noesc()`. `\The_SEO_Framework\Core => \The_SEO_Framework\Admin_Pages`.
+			* `description()`. `\The_SEO_Framework\Core => \The_SEO_Framework\Admin_Pages`.
+			* `description_noesc()`. `\The_SEO_Framework\Core => \The_SEO_Framework\Admin_Pages`.
+			* `google_language()`. `\The_SEO_Framework\Core => \The_SEO_Framework\Admin_Pages`.
 		* **Changed:**
 			* In class: `\The_SEO_Framework\Generate_Url` -- Factory: `the_seo_framework()`
 				* `set_url_scheme()`, the third parameter is now deprecated and shouldn't be used.

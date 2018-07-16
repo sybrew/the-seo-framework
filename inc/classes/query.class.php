@@ -108,7 +108,7 @@ class Query extends Compat {
 	 * @param bool $use_cache Whether to use the cache or not.
 	 * @return int|false The ID.
 	 */
-	public function get_the_real_ID( $use_cache = true ) {
+	public function get_the_real_ID( $use_cache = true ) { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
 
 		if ( $this->is_admin() )
 			return $this->get_the_real_admin_ID();
@@ -153,7 +153,7 @@ class Query extends Compat {
 	 *
 	 * @return int The admin ID.
 	 */
-	public function get_the_real_admin_ID() {
+	public function get_the_real_admin_ID() { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
 
 		$id = \get_the_ID();
 
@@ -175,7 +175,7 @@ class Query extends Compat {
 	 *
 	 * @return int The admin ID.
 	 */
-	public function check_the_real_ID() {
+	public function check_the_real_ID() { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
 
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
@@ -206,6 +206,22 @@ class Query extends Compat {
 	}
 
 	/**
+	 * Returns the front page ID, if home is a page.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @return int the ID.
+	 */
+	public function get_the_front_page_ID() { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
+
+		static $front_id;
+
+		return isset( $front_id )
+			? $front_id
+			: $front_id = ( $this->has_page_on_front() ? (int) \get_option( 'page_on_front' ) : 0 );
+	}
+
+	/**
 	 * Fetches the Term ID on admin pages.
 	 *
 	 * @since 2.6.0
@@ -213,6 +229,7 @@ class Query extends Compat {
 	 * @since 3.1.0 Removed WP 4.5 compat. Now uses global $tag_ID.
 	 * @securitycheck 3.0.0 OK.
 	 * @global int $tag_ID
+	 * TODO consider making the id -> ID.
 	 *
 	 * @return int Term ID.
 	 */
