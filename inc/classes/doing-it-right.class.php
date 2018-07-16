@@ -887,6 +887,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * Render the SEO bar title block and notice.
 	 *
 	 * @since 2.6.0
+	 * @since 3.1.0 No longer converts quotes for length calculation.
 	 *
 	 * @param array $args
 	 * @return string The SEO Bar Title Block
@@ -919,7 +920,12 @@ class Doing_It_Right extends Generate_Ldjson {
 		$gen_t_notice = $title_is_from_custom_field ? '' : $generated_notice;
 
 		//* Title length. Convert &#8230; to a single character as well.
-		$tit_len = mb_strlen( html_entity_decode( $title ) );
+		$tit_len = mb_strlen(
+			html_entity_decode(
+				\wp_specialchars_decode( $title, ENT_QUOTES ),
+				ENT_NOQUOTES // Quotes no longer need conversion.
+			)
+		);
 
 		//* Length notice.
 		$title_length_warning = $this->get_the_seo_bar_title_length_warning( $tit_len, $class );
@@ -969,6 +975,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * Render the SEO bar description block and notice.
 	 *
 	 * @since 2.6.0
+	 * @since 3.1.0 No longer converts quotes for length calculation.
 	 *
 	 * @param array $args
 	 * @return string The SEO Bar Description Block
@@ -986,7 +993,12 @@ class Doing_It_Right extends Generate_Ldjson {
 		$generated_short   = $i18n['generated_short'];
 
 		//* Description length. Convert &#8230; to a single character as well.
-		$desc_len = mb_strlen( html_entity_decode( $description ) );
+		$desc_len = mb_strlen(
+			html_entity_decode(
+				\wp_specialchars_decode( $description, ENT_QUOTES ),
+				ENT_NOQUOTES // Quotes no longer need conversion.
+			)
+		);
 
 		//* Fetch CSS classes.
 		$classes = $this->get_the_seo_bar_classes();

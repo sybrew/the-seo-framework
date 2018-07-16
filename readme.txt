@@ -392,6 +392,8 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 			* In their normal form of writing, it's not able to count han characters.
 		* When no tagline is set in the WordPress settings, the home page will no longer display "Untitled on Site name" for the description by default.
 		* The SEO Bar's title suggestion now interprets title protection, like "Private:" and "Protected:".
+		* Quotes and other special characters in titles and descriptions are now correctly calculated by the SEO Bar.
+			* Note that double single-quotes will be converted to single double-quotes, and they'll therefore be counted as one character.
 		* Ultimate Member support:
 			* The Canonical URL is now correct.
 			* The Descriptions are now correct.
