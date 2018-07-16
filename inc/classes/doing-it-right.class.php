@@ -894,8 +894,9 @@ class Doing_It_Right extends Generate_Ldjson {
 	protected function the_seo_bar_title_notice( $args ) {
 
 		//* Fetch data
-		$data = $this->the_seo_bar_data( $args );
+		$data  = $this->the_seo_bar_data( $args );
 		$title = $data['title'];
+
 		$title_is_from_custom_field = $data['title_is_from_custom_field'];
 
 		//* Fetch CSS classes.
@@ -1042,13 +1043,17 @@ class Doing_It_Right extends Generate_Ldjson {
 	protected function get_the_seo_bar_description_length_warning( $desc_len, $class ) {
 
 		$classes = $this->get_the_seo_bar_classes();
-		$bad  = $classes['bad'];
-		$okay = $classes['okay'];
-		$good = $classes['good'];
+		$unknown = $classes['unknown'];
+		$bad     = $classes['bad'];
+		$okay    = $classes['okay'];
+		$good    = $classes['good'];
 
 		$i18n = $this->get_the_seo_bar_i18n();
 
-		if ( $desc_len < 100 ) {
+		if ( ! $desc_len ) {
+			$notice = $i18n['length_empty'];
+			$class  = $unknown;
+		} elseif ( $desc_len < 100 ) {
 			$notice = $i18n['length_far_too_short'];
 			$class  = $bad;
 		} elseif ( $desc_len < 137 ) {
@@ -1648,7 +1653,10 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		$i18n = $this->get_the_seo_bar_i18n();
 
-		if ( $tit_len < 25 ) {
+		if ( ! $tit_len ) {
+			$notice = $i18n['length_empty'];
+			$class  = $unknown;
+		} elseif ( $tit_len < 25 ) {
 			$notice = $i18n['length_far_too_short'];
 			$class  = $classes['bad'];
 		} elseif ( $tit_len < 42 ) {
@@ -1727,6 +1735,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			'but' => \esc_attr_x( 'But', 'But there are...', 'autodescription' ),
 			'and' => \esc_attr_x( 'And', 'And there are...', 'autodescription' ),
 
+			'length_empty'         => ' ' . \esc_attr__( "There's no content.", 'autodescription' ),
 			'length_far_too_short' => ' ' . \esc_attr__( 'Length is far too short.', 'autodescription' ),
 			'length_too_short'     => ' ' . \esc_attr__( 'Length is too short.', 'autodescription' ),
 			'length_too_long'      => ' ' . \esc_attr__( 'Length is too long.', 'autodescription' ),

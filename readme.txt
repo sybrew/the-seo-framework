@@ -318,7 +318,10 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 		* TODO New sitemap options that allow setting including for each post type.
 		* TODO Doing it Right conditions for Private, Protected, Draft...
 		* TODO New option that prevents automated descriptions.
-		* Descriptive links to the in-post-edit meta title and description labels.
+		* SEO Bar checks:
+			* When the generated description is empty, it'll now tell you with a blue bar, instead of saying it's "far too short".
+			* When the generated title is empty thanks to filters, it'll now tell you with a blue bar, instead of saying it's "far too short".
+		* Descriptive links to all meta title and description labels.
 	* **Improved:**
 		* TODO
 		* The plugin can now downgrade its database version to the currently installed version automatically. This makes sure necessary future upgrade procedures are reinstated when you choose to downgrade (for any reason).
@@ -351,7 +354,6 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 				* TODO SEE: https://github.com/sybrew/the-seo-framework/issues/18
 		* The SEO Bar is a little less daunting--by 13.63% to be exact.
 		* Added a descriptive warning to the sitewide `nofollow` and `noarchive` settings.
-		* Added a descriptive link to title and description settings in the home page metabox and on the term settings pages.
 	* **Changed:**
 		* TSF now requires WordPress 4.6 (previously 4.4).
 		* TSF now requires PHP 5.4 (previously 5.3).
@@ -389,6 +391,7 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 		* Thanks to the upgrade to PHP 5.4, the SEO bar can now count words with non-latin special characters.
 			* In their normal form of writing, it's not able to count han characters.
 		* When no tagline is set in the WordPress settings, the home page will no longer display "Untitled on Site name" for the description by default.
+		* The SEO Bar's title suggestion now interprets title protection, like "Private:" and "Protected:".
 		* Ultimate Member support:
 			* The Canonical URL is now correct.
 			* The Descriptions are now correct.
@@ -437,6 +440,7 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 		* A highly unlikely PHP error now won't occur when `$wpdb` returns incomplete data on excluded archive/search IDs.
 		* A PHP notice and unintentionally false-esque return value when the post ID is 0, or when the post ID is excluded, in method `is_post_included_in_sitemap()`.
 		* A PHP warning is no longer omitted caused by a referencing parameter in `\The_SEO_Framework\_bbpress_filter_do_adjust_query()`.
+		* The SEO Bar can now read filters applied to titles.
 	* **Class notes:**
 		 * **Added:**
 		 	* `\The_SEO_Framework\Silencer`, called when `\The_SEO_Framework\Load` is blocked from loading in filters.

@@ -89,10 +89,10 @@ class Generate_Title extends Generate_Description {
 		] );
 
 		if ( $title ) {
-			//? Only add pagination and protection if the query is autodetermined, and on a real page.
+			//? Only add protection if the query is autodetermined, and on a real page.
+			$this->merge_title_protection( $title, $args );
 			if ( null === $args
-			&& ! ( $this->is_404() || $this->is_admin() ) ) {
-				$this->merge_title_protection( $title ); // FIXME: This should actually be represented in the admin...
+				&& ! ( $this->is_404() || $this->is_admin() ) ) {
 				$this->merge_title_pagination( $title );
 			}
 
@@ -131,10 +131,10 @@ class Generate_Title extends Generate_Description {
 			$args,
 		] );
 
-		//? Only add pagination and protection if the query is autodetermined, and on a real page.
+		//? Only add protection if the query is autodetermined, and on a real page.
+		$this->merge_title_protection( $title, $args );
 		if ( null === $args
 			&& ! ( $this->is_404() || $this->is_admin() ) ) {
-			$this->merge_title_protection( $title );
 			$this->merge_title_pagination( $title );
 		}
 
@@ -713,8 +713,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @param string     $title The title. Passed by reference.
-	 * @param array|null $args The query arguments. Leave null to autodetermine query.
+	 * @param string $title The title. Passed by reference.
 	 */
 	public function merge_title_pagination( &$title ) {
 
@@ -741,40 +740,41 @@ class Generate_Title extends Generate_Description {
 	 * @see $this->merge_title_prefixes()
 	 *
 	 * @param string     $title The title. Passed by reference.
+	 * @param array|null $args The query arguments. Leave null to autodetermine query.
 	 */
-	public function merge_title_protection( &$title ) {
+	public function merge_title_protection( &$title, $args = null ) {
 
-		if ( $this->is_singular() ) {
-			$post = \get_post( $this->get_the_real_ID(), OBJECT );
-			if ( isset( $post->post_password ) && '' !== $post->post_password ) {
-				/**
-				 * Filters the text prepended to the post title of private posts.
-				 *
-				 * The filter is only applied on the front end.
-				 *
-				 * @since WP Core 2.8.0
-				 *
-				 * @param string  $prepend Text displayed before the post title.
-				 *                         Default 'Private: %s'.
-				 * @param WP_Post $post    Current post object.
-				 */
-				$protected_title_format = (string) \apply_filters( 'protected_title_format', \__( 'Protected: %s', 'default' ), $post );
-				$title = sprintf( $protected_title_format, $title );
-			} elseif ( isset( $post->post_status ) && 'private' === $post->post_status ) {
-				/**
-				 * Filters the text prepended to the post title of private posts.
-				 *
-				 * The filter is only applied on the front end.
-				 *
-				 * @since WP Core 2.8.0
-				 *
-				 * @param string  $prepend Text displayed before the post title.
-				 *                         Default 'Private: %s'.
-				 * @param WP_Post $post    Current post object.
-				 */
-				$private_title_format = (string) \apply_filters( 'private_title_format', \__( 'Private: %s', 'default' ), $post );
-				$title = sprintf( $private_title_format, $title );
-			}
+		$id   = isset( $args['id'] ) ? $args['id'] : $this->get_the_real_ID();
+		$post = \get_post( $id, OBJECT );
+
+		if ( isset( $post->post_password ) && '' !== $post->post_password ) {
+			/**
+			 * Filters the text prepended to the post title of private posts.
+			 *
+			 * The filter is only applied on the front end.
+			 *
+			 * @since WP Core 2.8.0
+			 *
+			 * @param string  $prepend Text displayed before the post title.
+			 *                         Default 'Private: %s'.
+			 * @param WP_Post $post    Current post object.
+			 */
+			$protected_title_format = (string) \apply_filters( 'protected_title_format', \__( 'Protected: %s', 'default' ), $post );
+			$title = sprintf( $protected_title_format, $title );
+		} elseif ( isset( $post->post_status ) && 'private' === $post->post_status ) {
+			/**
+			 * Filters the text prepended to the post title of private posts.
+			 *
+			 * The filter is only applied on the front end.
+			 *
+			 * @since WP Core 2.8.0
+			 *
+			 * @param string  $prepend Text displayed before the post title.
+			 *                         Default 'Private: %s'.
+			 * @param WP_Post $post    Current post object.
+			 */
+			$private_title_format = (string) \apply_filters( 'private_title_format', \__( 'Private: %s', 'default' ), $post );
+			$title = sprintf( $private_title_format, $title );
 		}
 	}
 
