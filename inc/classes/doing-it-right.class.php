@@ -421,7 +421,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		 */
 		if ( '' !== $tax_id ) {
 			$is_term = true;
-			$column = $post_id;
+			$column  = $post_id;
 			$post_id = $tax_id;
 		}
 
@@ -452,14 +452,12 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		$classes = $this->get_the_seo_bar_classes();
 
-		$args = [];
-
-		$args['class'] = $classes[ $color ];
-		$args['width'] = $classes['100%'];
-		$args['notice'] = $context;
-		$args['indicator'] = $symbol;
-
-		$block = $this->wrap_the_seo_bar_block( $args );
+		$block = $this->wrap_the_seo_bar_block( [
+			'class'     => $classes[ $color ],
+			'width'     => '',
+			'notice'    => $context,
+			'indicator' => $symbol,
+		] );
 
 		if ( empty( $is_term ) )
 			$is_term = $this->is_archive();
@@ -579,6 +577,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 *
 	 * @since 2.6.0
 	 * @since 3.0.0 Now uses spans instead of a's
+	 * @since 3.1.0 Now forges a tooltip wrap.
 	 *
 	 * @param array $args : {
 	 *    string $indicator Required. The block text.
@@ -590,7 +589,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 */
 	protected function wrap_the_seo_bar_block( $args ) {
 		return vsprintf(
-			'<span class="tsf-seo-bar-section-wrap %s">%s</span>',
+			'<span class="tsf-seo-bar-section-wrap tsf-tooltip-wrap %s">%s</span>',
 			[
 				$args['width'],
 				vsprintf(
@@ -614,20 +613,14 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @since 2.6.0
 	 * @since 3.1.0 1. No longer maintains cache.
 	 *              2. No longer can create pill-shaped bars.
+	 *              3. No longer outputs a tooltip wrap. This has been shifted a layer downwards.
 	 *
-	 * @param string $content The SEO Bar content.
-	 * @param bool $is_term Whether the bar is for a term.
+	 * @param string   $content The SEO Bar content.
+	 * @param bool     $is_term Whether the bar is for a term.
 	 * @param int|null $ajax_id The unique Ajax ID to generate a small on-hover script for.
 	 * @return string The SEO Bar wrapped.
 	 */
 	protected function get_the_seo_bar_wrap( $content, $is_term, $ajax_id = null ) {
-
-		static $class = null;
-
-		if ( ! $class ) {
-			$width = $is_term ? $this->get_the_seo_bar_classes()['100%'] : '';
-			$class = 'tsf-seo-bar clearfix ' . $width;
-		}
 
 		if ( isset( $ajax_id ) ) {
 			//= Ajax handler.
@@ -635,10 +628,17 @@ class Doing_It_Right extends Generate_Ldjson {
 			//* Resets tooltips.
 			$script = '<script>tsfTT.triggerReset();</script>';
 
-			return sprintf( '<span class="%s" id="%s"><span class="tsf-seo-bar-inner-wrap tsf-tooltip-wrap">%s</span></span>', \esc_attr( $class ), \esc_attr( $ajax_id ), $content ) . $script;
+			return sprintf(
+				'<span class="tsf-seo-bar clearfix" id="%s"><span class="tsf-seo-bar-inner-wrap">%s</span></span>',
+				\esc_attr( $ajax_id ),
+				$content
+			) . $script;
 		}
 
-		return sprintf( '<span class="%s"><span class="tsf-seo-bar-inner-wrap tsf-tooltip-wrap">%s</span></span>', \esc_attr( $class ), $content );
+		return sprintf(
+			'<span class="tsf-seo-bar clearfix"><span class="tsf-seo-bar-inner-wrap">%s</span></span>',
+			$content
+		);
 	}
 
 	/**
@@ -900,7 +900,6 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		//* Fetch CSS classes.
 		$classes = $this->get_the_seo_bar_classes();
-		$ad25 = $classes['25%'];
 
 		//* Fetch i18n and put in vars
 		$i18n = $this->get_the_seo_bar_i18n();
@@ -911,7 +910,7 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		//* Initialize notice.
 		$notice = $i18n['title'];
-		$class = $classes['good'];
+		$class  = $classes['good'];
 
 		//* Generated notice.
 		$generated_notice = '<br>' . $i18n['generated'];
@@ -956,7 +955,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		$tit_wrap_args = [
 			'indicator' => $title_short,
 			'notice'    => $notice,
-			'width'     => $ad25,
+			'width'     => $classes['15%'],
 			'class'     => $class,
 		];
 
@@ -990,11 +989,10 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		//* Fetch CSS classes.
 		$classes = $this->get_the_seo_bar_classes();
-		$ad25 = $classes['25%'];
 
 		//* Initialize notice.
 		$notice = $i18n['description'];
-		$class = $classes['good'];
+		$class  = $classes['good'];
 
 		//* Length notice.
 		$desc_length_warning = $this->get_the_seo_bar_description_length_warning( $desc_len, $class );
@@ -1018,7 +1016,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		$desc_wrap_args = [
 			'indicator' => $description_short,
 			'notice'    => $notice,
-			'width'     => $ad25,
+			'width'     => $classes['15%'],
 			'class'     => $class,
 		];
 
@@ -1516,7 +1514,6 @@ class Doing_It_Right extends Generate_Ldjson {
 			$post = $args['post_i18n'];
 
 			$classes = $this->get_the_seo_bar_classes();
-			$ad_125 = $classes['12.5%'];
 
 			$i18n = $this->get_the_seo_bar_i18n();
 			$redirect_i18n = $i18n['redirect'];
@@ -1524,12 +1521,12 @@ class Doing_It_Right extends Generate_Ldjson {
 
 			/* translators:* %s = post type name */
 			$red_notice = $redirect_i18n . ' ' . sprintf( \esc_attr__( "%s isn't being redirected.", 'autodescription' ), $post );
-			$red_class = $classes['good'];
+			$red_class  = $classes['good'];
 
 			$red_wrap_args = [
 				'indicator' => $redirect_short,
 				'notice'    => $red_notice,
-				'width'     => $ad_125,
+				'width'     => $classes['12.5%'],
 				'class'     => $red_class,
 			];
 
@@ -1574,14 +1571,14 @@ class Doing_It_Right extends Generate_Ldjson {
 			$red_wrap_args = [
 				'indicator' => $i18n['redirect_short'],
 				'notice'    => $red_notice,
-				'width'     => $classes['50%'],
+				'width'     => '',
 				'class'     => $red_class,
 			];
 
 			$noi_wrap_args = [
 				'indicator' => $i18n['index_short'],
 				'notice'    => $noi_notice,
-				'width'     => $classes['50%'],
+				'width'     => '',
 				'class'     => $noi_class,
 			];
 
@@ -1601,7 +1598,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			$red_wrap_args = [
 				'indicator' => $i18n['redirect_short'],
 				'notice'    => $red_notice,
-				'width'     => $classes['100%'],
+				'width'     => '',
 				'class'     => $red_class,
 			];
 
@@ -1618,7 +1615,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			$noi_wrap_args = [
 				'indicator' => $i18n['index_short'],
 				'notice'    => $noi_notice,
-				'width'     => $classes['100%'],
+				'width'     => '',
 				'class'     => $noi_class,
 			];
 
@@ -1676,7 +1673,9 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * Returns an array of the classes used for CSS within The SEO Bar.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 Removed 'pill' index.
+	 * @since 3.1.0 1. Removed 'pill' index.
+	 *              2. Added 15% and 12.5% flex widths.
+	 *              3. Removed all other widths.
 	 *
 	 * @return array The class names.
 	 */
@@ -1687,17 +1686,8 @@ class Doing_It_Right extends Generate_Ldjson {
 			'good'    => 'tsf-seo-bar-good',
 			'unknown' => 'tsf-seo-bar-unknown',
 
-			'100%'  => 'tsf-100',
-			'60%'   => 'tsf-60',
-			'50%'   => 'tsf-50',
-			'40%'   => 'tsf-40',
-			'33%'   => 'tsf-33',
-			'25%'   => 'tsf-25',
-			'20%'   => 'tsf-20',
-			'16%'   => 'tsf-16',
-			'12.5%' => 'tsf-12-5',
-			'11%'   => 'tsf-11',
-			'10%'   => 'tsf-10',
+			'15%'     => 'tsf-seo-bar-15',
+			'12.5%'   => 'tsf-seo-bar-12-5',
 		];
 	}
 

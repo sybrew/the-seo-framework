@@ -203,8 +203,6 @@ a.tsf-dismiss:hover {
 	max-width: 100%;
 	background: #007bd2;
 	box-shadow: 0px 1px 3px 0px #ccc;
-	-webkit-transition: width .15s cubic-bezier(0.4, 0, 0.75, 1);
-	-o-transition: width .15s cubic-bezier(0.4, 0, 0.75, 1);
 	transition: width .15s cubic-bezier(0.4, 0, 0.75, 1);
 }
 
@@ -233,10 +231,6 @@ a.tsf-dismiss:hover {
 	word-wrap: normal;
 	zoom: 1;
 	text-overflow: clip;
-	-webkit-transition: none;
-	-moz-transition: none;
-	-o-transition: none;
-	-ms-transition: none;
 	transition: none;
 	font-family: arial,helvetica,sans-serif;
 	font-size: 18px;
@@ -256,7 +250,7 @@ a.tsf-dismiss:hover {
 .tsf-seo-bar {
 	display: block;
 	width: 95%;
-	max-width: 220px;
+	max-width: 190px;
 	border-radius: 0;
 	padding: 0;
 }
@@ -280,8 +274,15 @@ a.tsf-dismiss:hover {
 
 .tsf-seo-bar-section-wrap {
 	min-width: 2em;
-	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
+}
+
+.tsf-seo-bar-15 {
+	flex-basis: 15%;
+}
+
+.tsf-seo-bar-12-5 {
+	flex-basis: 12.5%;
 }
 
 .tsf-seo-bar-item {
@@ -294,40 +295,6 @@ a.tsf-dismiss:hover {
 
 body.no-js .tsf-seo-bar-item {
 	cursor: default;
-}
-
-.tsf-100 {
-	width: 100%;
-}
-.tsf-60 {
-	width: 60%;
-}
-.tsf-50 {
-	width: 50%;
-}
-.tsf-40 {
-	width: 40%;
-}
-.tsf-33 {
-	width: 33.333%;
-}
-.tsf-25 {
-	width: 25%;
-}
-.tsf-20 {
-	width: 20%;
-}
-.tsf-16 {
-	width: 16.666%;
-}
-.tsf-12-5 {
-	width: 12.5%;
-}
-.tsf-11 {
-	width: 11.333%;
-}
-.tsf-10 {
-	width: 10%;
 }
 
 .tsf-seo-bar-bad {
@@ -561,17 +528,12 @@ body.js .tsf-tabs-content.tsf-active-tab-content {
 .tsf-flex,
 #tsf-inpost-box .inside {
 	box-sizing: border-box;
-	display: -webkit-box;
 	display: -webkit-flex;
-	display: -ms-flexbox;
 	display: flex;
 	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
-	-webkit-flex-wrap: wrap;
-	-ms-flex-wrap: wrap;
-	flex-wrap: wrap;
-	-webkit-flex-direction: column;
-	flex-direction: column;
+	-webkit-flex-flow: column wrap;
+	flex-flow: column wrap;
 	-webkit-justify-content: flex-start;
 	justify-content: flex-start;
 }
@@ -582,7 +544,6 @@ body.js .tsf-tabs-content.tsf-active-tab-content {
 	-webkit-flex: 1 0 100%;
 	flex: 1 0 100%;
 	-webkit-flex-wrap: nowrap;
-	-ms-flex-wrap: nowrap;
 	flex-wrap: nowrap;
 }
 
@@ -627,11 +588,8 @@ body.js .tsf-tabs-content.tsf-active-tab-content {
 }
 
 .tsf-flex-setting-label-item {
-	-webkit-flex-wrap: nowrap;
-	-ms-flex-wrap: nowrap;
-	flex-wrap: nowrap;
-	-webkit-flex-direction: row;
-	flex-direction: row;
+	-webkit-flex-flow: row nowrap;
+	flex-flow: row nowrap;
 	-webkit-justify-content: space-between;
 	justify-content: space-between;
 	-webkit-flex-grow: 0;
@@ -676,25 +634,19 @@ input[type="radio"].tsf-flex-nav-tab-radio {
 	border-bottom: 2px solid #dadada;
 	-webkit-align-items: baseline;
 	align-items: baseline;
-	-webkit-flex-direction: row;
-	flex-direction: row;
+	-webkit-flex-flow: row nowrap;
+	flex-flow: row nowrap;
 	/* IE11 fix */
 	-webkit-flex: 1 1 100%;
 	flex: 1 1 100%;
-	/* Firefox fix */
-	-webkit-flex-wrap: nowrap;
-	-ms-flex-wrap: nowrap;
 	flex-wrap: nowrap;
 	max-width: 100%;
 	overflow: hidden;
 }
 
 .tsf-flex-nav-tab-inner {
-	-webkit-flex-direction: row;
-	flex-direction: row;
-	-webkit-flex-wrap: nowrap;
-	-ms-flex-wrap: nowrap;
-	flex-wrap: nowrap;
+	-webkit-flex-flow: row nowrap;
+	flex-flow: row nowrap;
 	/* IE11 reverse fix for newer browsers */
 	-webkit-flex: 1 0 auto;
 	flex: 1 0 auto;
@@ -721,8 +673,6 @@ input[type="radio"].tsf-flex-nav-tab-radio {
 	-webkit-flex-direction: row;
 	flex-direction: row;
 	box-shadow: 0 0 0 0 transparent inset;
-	-webkit-transition: box-shadow 0.15s ease-out;
-	-o-transition: box-shadow 0.15s ease-out;
 	transition: box-shadow 0.15s ease-out;
 	-webkit-align-items: center;
 	align-items: center;
@@ -740,8 +690,6 @@ input[type="radio"].tsf-flex-nav-tab-radio {
 
 .tsf-flex-nav-tab .tsf-flex-nav-tab-radio:checked + .tsf-flex-nav-tab-label {
 	box-shadow: 0 -2px 0 0 #007bd2 inset;
-	-webkit-transition: box-shadow 0.25s ease-in;
-	-o-transition: box-shadow 0.25s ease-in;
 	transition: box-shadow 0.25s ease-in;
 }
 
@@ -751,7 +699,6 @@ input[type="radio"].tsf-flex-nav-tab-radio {
 	/* EdgeHTML overflow fix */
 	max-width: 100%;
 	-webkit-flex-wrap: nowrap;
-	-ms-flex-wrap: nowrap;
 	flex-wrap: nowrap;
 }
 
@@ -760,9 +707,7 @@ body.js .tsf-flex-tab-content {
 }
 
 body.js .tsf-flex-tab-content.tsf-flex-tab-content-active {
-	display: -webkit-box;
 	display: -webkit-flex;
-	display: -ms-flexbox;
 	display: flex;
 }
 
@@ -906,8 +851,6 @@ input.tsf-disabled {
 #tsf-inpost-box textarea::-webkit-input-placeholder,
 .tsf-metaboxes input[type="text"]::-webkit-input-placeholder,
 .tsf-metaboxes textarea::-webkit-input-placeholder {
-	-webkit-transition: color 0.33s ease-in, text-shadow 0.33s ease-in;
-	-o-transition: color 0.33s ease-in, text-shadow 0.33s ease-in;
 	transition: color 0.33s ease-in, text-shadow 0.33s ease-in;
 }
 
@@ -915,7 +858,6 @@ input.tsf-disabled {
 #tsf-inpost-box textarea::-moz-placeholder,
 .tsf-metaboxes input[type="text"]::-moz-placeholder,
 .tsf-metaboxes textarea::-moz-placeholder {
-	-moz-transition: color 0.33s ease-in, text-shadow 0.33s ease-in;
 	transition: color 0.33s ease-in, text-shadow 0.33s ease-in;
 }
 
@@ -1017,8 +959,6 @@ body.js .tsf-flex-hide-if-js,
 }
 
 body.js .tsf-flex-hide-if-no-js {
-	display: -webkit-box;
 	display: -webkit-flex;
-	display: -ms-flexbox;
 	display: flex;
 }

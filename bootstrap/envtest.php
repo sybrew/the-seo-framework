@@ -98,7 +98,7 @@ function the_seo_framework_pre_boot_test() {
 	//* Not good. Deactivate plugin.
 	deactivate_plugins( plugin_basename( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE ), $silent, $network_mode );
 
-	//* Don't die on front-end.
+	//* Don't die on front-end. Live, my friend.
 	if ( ! $admin )
 		return;
 
@@ -120,7 +120,7 @@ function the_seo_framework_pre_boot_test() {
 			break;
 
 		default:
-			wp_die();
+			wp_die( 'oi' );
 			break;
 	endswitch;
 

@@ -309,10 +309,11 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 			* TODO A toggle that disabled title additions when a manual title is used.
 			* TODO Paginated Title separator
 		* TODO A title check is added next to every title field. (or the SEO bar... a red title tsunami)
-			* It informs you when your theme uses outdated standards, and that you should use the Title Fix extension.
+			* TODO It informs you when your theme uses outdated standards, and that you should use the Title Fix extension.
 			* TODO consider using methods that are used in Theme Check.
 			* TODO make sure it's in a non-expiring transient that might store a md5 checksum value of the theme file, which is cleared on theme switch or update. TODO rethink this... we shouldn't hinder performance, and not all PHP installations allow file reading.
 			* TODO make sure it checks for Title Fix' presence.
+		* TODO New archive options? Maybe. Include Social and Redirect.
 		* TODO New robots options that allow setting robots for each post type.
 		* TODO New sitemap options that allow setting including for each post type.
 		* TODO Doing it Right conditions for Private, Protected, Draft...
@@ -342,7 +343,11 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 		* Added a description on character counters, telling what happens when you click them.
 		* All sitemap transients are now deleted on corresponding deletion queries when using WPML.
 		* TODO We've scanned the plugin once more for performance culprits, and improved what needed improving.
-		* The SEO Bar will no longer overflow, but it will now wrap automatically when needed.
+		* The SEO Bar will no longer overflow, but it will now wrap automatically when needed. For this, we had to change a few things.
+			1. The tooltips aren't "boxed" anymore, but flow wherever they deem best.
+			2. There are 5 to 6 times as many tooltip listeners per SEO bar, as it did prior v3.0. TODO test performance and responsiveness // lighthouse?
+				* TODO SEE: https://github.com/sybrew/the-seo-framework/issues/18
+		* The SEO Bar is a little less daunting--by 13.63% to be exact.
 		* Added a descriptive warning to the sitewide `nofollow` and `noarchive` settings.
 	* **Changed:**
 		* TSF now requires WordPress 4.6 (previously 4.4).
