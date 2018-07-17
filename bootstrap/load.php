@@ -26,14 +26,17 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\_init_locale', 4 );
 /**
  * Plugin locale 'autodescription'
- * File located in plugin folder autodescription/language/
- * @since 1.0.0
+ * Files located in plugin folder `../autodescription/language/`
+ * @since 2.8.0
  */
 function _init_locale() {
+	/**
+	 * @since 1.0.0
+	 */
 	\load_plugin_textdomain(
 		'autodescription',
 		false,
-		THE_SEO_FRAMEWORK_DIR_PATH . 'language' . DIRECTORY_SEPARATOR
+		THE_SEO_FRAMEWORK_DIR_PATH . 'language'
 	);
 }
 
@@ -156,8 +159,7 @@ function _autoload_classes( $class ) {
 /**
  * Performs plugin activation actions.
  *
- * @since 2.6.6
- * @since 2.8.0: Added namespace and renamed function. Also performs PHP tests now.
+ * @since 2.8.0
  * @access private
  */
 function _do_plugin_activation() {
@@ -168,8 +170,7 @@ function _do_plugin_activation() {
 /**
  * Performs plugin deactivation actions.
  *
- * @since 2.6.6
- * @since 2.8.0: Added namespace and renamed function.
+ * @since 2.8.0
  * @access private
  */
 function _do_plugin_deactivation() {

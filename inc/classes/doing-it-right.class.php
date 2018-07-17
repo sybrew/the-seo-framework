@@ -70,7 +70,8 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @since 2.9.4 Now listens to `alter_search_query` and `alter_archive_query` options.
 	 *
 	 * @param array $states The current post states array
-	 * @param object $post The Post Object.
+	 * @param \WP_Post $post The Post Object.
+	 * @return array Adjusted $states
 	 */
 	public function add_post_state( $states = [], $post ) {
 
@@ -365,7 +366,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		 * @link https://core.trac.wordpress.org/ticket/33521
 		 */
 		if ( '' !== $tax_id ) {
-			$column = $post_id;
+			$column  = $post_id;
 			$post_id = $tax_id;
 		}
 
@@ -920,7 +921,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		$gen_t_notice = $title_is_from_custom_field ? '' : $generated_notice;
 
 		//* Title length. Convert &#8230; to a single character as well.
-		$tit_len = mb_strlen(
+		$tit_len = (int) mb_strlen(
 			html_entity_decode(
 				\wp_specialchars_decode( $title, ENT_QUOTES ),
 				ENT_NOQUOTES // Quotes no longer need conversion.
@@ -993,7 +994,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		$generated_short   = $i18n['generated_short'];
 
 		//* Description length. Convert &#8230; to a single character as well.
-		$desc_len = mb_strlen(
+		$desc_len = (int) mb_strlen(
 			html_entity_decode(
 				\wp_specialchars_decode( $description, ENT_QUOTES ),
 				ENT_NOQUOTES // Quotes no longer need conversion.

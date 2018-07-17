@@ -257,3 +257,14 @@ function the_seo_framework_do_upgrade_3060() {
 
 	update_option( 'the_seo_framework_upgraded_db_version', '3060' );
 }
+
+/**
+ * @since 3.1.0
+ * TODO
+ */
+function the_seo_framework_do_upgrade_3100() {
+	// TODO Make this work:
+	// It should get the default option keys and compare them to the database entries. Then, it should fill in the missing indexes.
+	// the_seo_framework_parse_new_options();
+	// TODO Title Seperator -> Title Separator? Now would be a great time ;)
+}

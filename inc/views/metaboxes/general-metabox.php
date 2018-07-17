@@ -11,13 +11,12 @@ $instance = $this->get_view_instance( 'the_seo_framework_general_metabox', $inst
 
 switch ( $instance ) :
 	case 'the_seo_framework_general_metabox_main' :
-
 		$default_tabs = [
-		//	'general' => [
-		//		'name'     => __( 'General', 'autodescription' ),
-		//		'callback' => [ $this, 'general_metabox_general_tab' ],
-		//		'dashicon' => 'admin-generic',
-		//	],
+			//	'general' => [
+			//		'name'     => __( 'General', 'autodescription' ),
+			//		'callback' => [ $this, 'general_metabox_general_tab' ],
+			//		'dashicon' => 'admin-generic',
+			//	],
 			'layout'      => [
 				'name'     => __( 'Layout', 'autodescription' ),
 				'callback' => [ $this, 'general_metabox_layout_tab' ],
@@ -37,6 +36,11 @@ switch ( $instance ) :
 				'name'     => __( 'Timestamps', 'autodescription' ),
 				'callback' => [ $this, 'general_metabox_timestamps_tab' ],
 				'dashicon' => 'clock',
+			],
+			'posttypes'  => [
+				'name'     => __( 'Post Types', 'autodescription' ),
+				'callback' => [ $this, 'general_metabox_posttypes_tab' ],
+				'dashicon' => 'index-card',
 			],
 		];
 
@@ -116,7 +120,6 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_general_metabox_performance' :
-
 		?>
 		<h4><?php esc_html_e( 'Performance Settings', 'autodescription' ); ?></h4>
 		<?php
@@ -382,6 +385,39 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	default :
+	case 'the_seo_framework_general_metabox_posttypes' :
+		?>
+		<h4><?php esc_html_e( 'Post Type Settings', 'autodescription' ); ?></h4>
+		<?php
+		$this->description( __( 'Post types are special content types. These options should not need changing when post types are registered correctly.', 'autodescription' ) );
+		?>
+
+		<hr>
+
+		<h4><?php esc_html_e( 'Disable SEO', 'autodescription' ); ?></h4>
+		<?php
+		$this->description( __( 'Select post types which should not receive any SEO optimization whatsoever. This will remove meta optimizations, SEO suggestions, and sitemap inclusions for the selected post types.', 'autodescription' ) );
+		$this->description( __( 'Default post types can not be disabled.', 'autodescription' ) );
+
+		$forced_pt = $this->get_forced_supported_post_types();
+		$boxes = [];
+
+		foreach ( $this->get_supported_post_types() as $post_type ) {
+			$pto = \get_post_type_object( $post_type );
+			if ( ! $pto ) continue;
+
+			$boxes[] = $this->make_checkbox_array( [
+				'id'       => 'disabled_post_types',
+				'index'    => $post_type,
+				'label'    => $pto->labels->name,
+				'escape'   => true,
+				'disabled' => in_array( $post_type, $forced_pt, true ),
+			] );
+		}
+
+		$this->wrap_fields( $boxes, true );
+		break;
+
+	default:
 		break;
 endswitch;

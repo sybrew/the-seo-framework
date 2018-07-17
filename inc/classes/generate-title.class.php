@@ -382,7 +382,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @param \WP_Term|\WP_Error $term  The Term object or error. Leave null to autodetermine query.
+	 * @param \WP_Term|\WP_Error|null $term The Term object or error. Leave null to autodetermine query.
 	 * @return string The generated archive title, not escaped.
 	 */
 	public function get_generated_archive_title( $term = null ) {
@@ -403,7 +403,7 @@ class Generate_Title extends Generate_Description {
 		 * @since 2.6.0
 		 *
 		 * @param string $title The short circuit title.
-		 * @param object $term The Term object.
+		 * @param \WP_Term $term The Term object.
 		 */
 		$title = (string) \apply_filters( 'the_seo_framework_the_archive_title', '', $term );
 
@@ -533,8 +533,8 @@ class Generate_Title extends Generate_Description {
 			 *
 			 * @since WP Core 0.71
 			 *
-			 * @param string $_post_title The single post page title.
-			 * @param object $_post       The current queried object as returned by get_queried_object().
+			 * @param string   $_post_title The single post page title.
+			 * @param \WP_Post $_post       The current queried object as returned by get_queried_object().
 			 */
 			$title = \apply_filters( 'single_post_title', $_post->post_title, $_post );
 		}
@@ -850,6 +850,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.1.0
 	 * @see $this->merge_title_branding()
+	 * TODO merge per-page options & filter.
 	 *
 	 * @param array|null $args The query arguments. Leave null to autodetermine query.
 	 * @return bool True when additions are allowed.

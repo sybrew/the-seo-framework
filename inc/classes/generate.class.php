@@ -49,7 +49,7 @@ class Generate extends User_Data {
 	 * @since 3.0.0 1: Removed noodp.
 	 *              2: Improved efficiency by grouping if statements.
 	 * @since 3.1.0 Simplified statements, often (not always) speeding things up.
-	 * @global object $wp_query
+	 * @global \WP_Query $wp_query
 	 *
 	 * @return array|null robots
 	 */

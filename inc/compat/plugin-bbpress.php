@@ -149,11 +149,11 @@ function _bbpress_filter_url_path( $path, $id = 0, $external = false ) {
  *
  * @param string $excerpt The excerpt to use.
  * @param bool $page_id The current page/term ID
- * @param object|mixed $term The current term.
+ * @param \WP_Term|null $term The current term.
  * @param int $max_char_length Determines the maximum length of excerpt after trimming.
  * @return string The excerpt.
  */
-function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $term = '', $max_char_length = 300 ) {
+function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $term = null, $max_char_length = 300 ) {
 
 	if ( \is_bbpress() ) {
 		if ( \bbp_is_topic_tag() ) {

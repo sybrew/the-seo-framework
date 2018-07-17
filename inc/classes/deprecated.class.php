@@ -47,7 +47,7 @@ final class Deprecated {
 	 *
 	 * @deprecated.
 	 *
-	 * @param object|null $term The TT object, if it isn't set, one is fetched.
+	 * @param \WP_Term|null $term The TT object, if it isn't set, one is fetched.
 	 * @param int         $term_id The term object.
 	 * @return array The SEO Framework TT data.
 	 */
@@ -84,10 +84,10 @@ final class Deprecated {
 	 *    @param bool $paged Return current page URL without pagination if false
 	 *    @param bool $paged_plural Whether to add pagination for the second or later page.
 	 *    @param bool $from_option Get the canonical uri option
-	 *    @param object $post The Post Object.
+	 *    @param \WP_Post $post The Post Object.
 	 *    @param bool $external Whether to fetch the current WP Request or get the permalink by Post Object.
 	 *    @param bool $is_term Fetch url for term.
-	 *    @param object $term The term object.
+	 *    @param \WP_Term $term The term object.
 	 *    @param bool $home Fetch home URL.
 	 *    @param bool $forceslash Fetch home URL and slash it, always.
 	 *    @param int $id The Page or Term ID.
@@ -258,10 +258,10 @@ final class Deprecated {
 				 *    @param bool $paged Return current page URL without pagination if false
 				 *    @param bool $paged_plural Whether to add pagination for the second or later page.
 				 *    @param bool $from_option Get the canonical uri option
-				 *    @param object $post The Post Object.
+				 *    @param \WP_Post $post The Post Object.
 				 *    @param bool $external Whether to fetch the current WP Request or get the permalink by Post Object.
 				 *    @param bool $is_term Fetch url for term.
-				 *    @param object $term The term object.
+				 *    @param \WP_Term $term The term object.
 				 *    @param bool $home Fetch home URL.
 				 *    @param bool $forceslash Fetch home URL and slash it, always.
 				 *    @param int $id The Page or Term ID.
@@ -471,10 +471,10 @@ final class Deprecated {
 	 * @since 2.7.0 Added home directory to output.
 	 * @since 3.0.0 Deprecated.
 	 * @deprecated
-	 * @global object $wp_rewrite
+	 * @global \WP_Rewrite $wp_rewrite
 	 * @NOTE: Handles full path, including home directory.
 	 *
-	 * @param object $term The term object.
+	 * @param \WP_Term $term The term object.
 	 * @param array|bool $args {
 	 *    'external' : Whether to fetch the WP Request or get the permalink by Post Object.
 	 *    'paged'    : Whether to add pagination for all types.

@@ -481,7 +481,7 @@ class Sitemaps extends Metaboxes {
 	 * @since 2.8.0
 	 * @since 3.0.0 1: No longer uses home URL from cache. But now uses `get_home_url()`.
 	 *              2: Now takes query parameters (if any) and restores them correctly.
-	 * @global object $wp_rewrite
+	 * @global \WP_Rewrite $wp_rewrite
 	 *
 	 * @return string URL location of the XSL stylesheet. Unescaped.
 	 */
@@ -518,7 +518,7 @@ class Sitemaps extends Metaboxes {
 	 * @since 2.9.2
 	 * @since 3.0.0 1: No longer uses home URL from cache. But now uses `get_home_url()`.
 	 *              2: Now takes query parameters (if any) and restores them correctly.
-	 * @global object $wp_rewrite
+	 * @global \WP_Rewrite $wp_rewrite
 	 *
 	 * @return string URL location of the XML sitemap. Unescaped.
 	 */
@@ -557,7 +557,7 @@ class Sitemaps extends Metaboxes {
 	 * Only allows root domains.
 	 *
 	 * @since 2.9.2
-	 * @global object $wp_rewrite
+	 * @global \WP_Rewrite $wp_rewrite
 	 *
 	 * @return string URL location of robots.txt. Unescaped.
 	 */
@@ -609,14 +609,14 @@ class Sitemaps extends Metaboxes {
 	 * @since 2.8.0 Now adjusts memory limit when possible.
 	 * @since 2.9.3 No longer crashes on WordPress sites below WP 4.6.
 	 * @since 3.0.4 No longer outputs empty URL entries.
-	 * @since 3.1.0 Removed the WP<4.6 function_exists check.
+	 * @since 3.1.0 1. Removed the WP<4.6 function_exists check.
+	 *              2. Now uses WordPress' built-in memory raiser function, with "context" sitemap.
 	 *
 	 * @return string The sitemap content.
 	 */
 	protected function generate_sitemap() {
 
-		\wp_is_ini_value_changeable( 'memory_limit' )
-			and @ini_set( 'memory_limit', WP_MAX_MEMORY_LIMIT );
+		\wp_raise_memory_limit( 'sitemap' );
 
 		$content = '';
 
@@ -1327,7 +1327,7 @@ class Sitemaps extends Metaboxes {
 	 *
 	 * @since 2.6.6.1
 	 * @access private
-	 * @global object $wp_rewrite
+	 * @global \WP_Rewrite $wp_rewrite
 	 */
 	public function flush_rewrite_rules_deactivation() {
 		global $wp_rewrite;

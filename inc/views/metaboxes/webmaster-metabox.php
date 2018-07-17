@@ -19,7 +19,9 @@ switch ( $instance ) :
 		$pint_site_url = 'https://analytics.pinterest.com/';
 		$yandex_site_url = 'https://webmaster.yandex.com/site/verification.xml';
 
-		?><h4><?php esc_html_e( 'Webmaster Integration Settings', 'autodescription' ); ?></h4><?php
+		?>
+		<h4><?php esc_html_e( 'Webmaster Integration Settings', 'autodescription' ); ?></h4>
+		<?php
 		$this->description( __( "When adding your website to Google, Bing and other Webmaster Tools, you'll be asked to add a code or file to your website for verification purposes. These options will help you easily integrate those codes.", 'autodescription' ) );
 		$this->description( __( "Verifying your website has no SEO value whatsoever. But you might gain added benefits such as search ranking insights to help you improve your website's content.", 'autodescription' ) );
 
@@ -28,7 +30,7 @@ switch ( $instance ) :
 
 		<p>
 			<label for="<?php $this->field_id( 'google_verification' ); ?>">
-				<strong><?php esc_html_e( 'Google Webmaster Verification Code', 'autodescription' ); ?></strong>
+				<strong><?php esc_html_e( 'Google Search Console Verification Code', 'autodescription' ); ?></strong>
 			</label>
 			<?php
 			$this->make_info(
@@ -88,6 +90,6 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	default :
+	default:
 		break;
 endswitch;

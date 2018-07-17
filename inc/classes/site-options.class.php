@@ -115,7 +115,10 @@ class Site_Options extends Sanitize {
 			'canonical_scheme' => 'automatic', // Canonical URL scheme.
 
 			// General. Timestamps.
-			'timestamps_format'   => '1',   // Timestamp format, numeric string
+			'timestamps_format'   => '1', // Timestamp format, numeric string
+
+			// General. Post Types.
+			'disabled_post_types' => [], // Post Type support.
 
 			// Title.
 			'title_seperator'     => 'pipe',    // Title separator (note: TYPO), dropdown

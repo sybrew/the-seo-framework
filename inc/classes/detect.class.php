@@ -728,17 +728,38 @@ class Detect extends Render {
 	}
 
 	/**
+	 * Determines if the post type is disabled from SEO all optimization.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return bool True if disabled, false otherwise.
+	 */
+	public function is_post_type_disabled( $post_type = '' ) {
+		return isset( $this->get_option( 'disabled_post_types' )[ $post_type ?: get_post_type() ] );
+	}
+
+	/**
 	 * Determines if the post type is compatible with The SEO Framework inpost metabox.
 	 *
 	 * @since 2.3.5
-	 * @since 3.1.0 The first parameter is now required.
+	 * @since 3.1.0 1. The first parameter is now required.
+	 *              2. Added caching.
+	 * @staticvar bool $has_filter
 	 *
 	 * @param string $post_type
 	 * @return bool True if post type is supported.
 	 */
 	public function post_type_supports_inpost( $post_type ) {
 
-		if ( $post_type ) {
+		if ( ! $post_type ) return false;
+
+		static $has_filter = null;
+
+		if ( null === $has_filter ) {
+			$has_filter = \has_filter( 'the_seo_framework_custom_post_type_support' );
+		}
+
+		if ( $has_filter ) {
 			/**
 			 * Applies filters 'the_seo_framework_custom_post_type_support'
 			 * Determines the required post type features before TSF supports it.
@@ -755,19 +776,17 @@ class Detect extends Render {
 				}
 				continue;
 			}
-
-			return true;
 		}
 
-		return false;
+		return true;
 	}
 
 	/**
 	 * Check if post type supports The SEO Framework.
-	 * Doesn't work on admin_init.
 	 *
 	 * @since 2.3.9
-	 * @since 3.1.0 Removed caching.
+	 * @since 3.1.0 1. Removed caching.
+	 *              2. Now works in admin.
 	 *
 	 * @param string $post_type The current post type.
 	 * @return bool true of post type is supported.
@@ -780,12 +799,37 @@ class Detect extends Render {
 	}
 
 	/**
+	 * Check if ***ALL*** taxonomy objects types support The SEO Framework.
+	 *
+	 * @since 3.1.0
+	 * @access protected
+	 * @ignore Don't use. The outcome will lead to bugs thanks to the existence of
+	 *         WP Core \register_taxonomy_for_object_type(), registering post types as an array.
+	 *
+	 * @param string The taxonomy name.
+	 * @return bool True if ***ALL*** post types in taxonomy are supported.
+	 */
+	public function taxonomy_supports_custom_seo( $taxonomy ) {
+
+		$tax = \get_taxonomy( $taxonomy );
+
+		if ( ! empty( $tax->object_type ) ) {
+			foreach ( $tax->object_type as $type ) {
+				if ( ! $this->post_type_supports_custom_seo( $type ) )
+					return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
 	 * Checks (current) Post Type for if this plugin may use it for customizable SEO.
 	 *
 	 * @since 2.6.0
 	 * @since 2.9.3 : Improved caching structure. i.e. it's faster now when no $post_type is supplied.
 	 * @staticvar array $cache
-	 * @global object $current_screen
+	 * @global \WP_Screen $current_screen
 	 *
 	 * @param bool $public Whether to only get Public Post types.
 	 * @param string $post_type Optional. The post type to check.
@@ -822,6 +866,9 @@ class Detect extends Render {
 			if ( isset( $object->public ) && ! $object->public )
 				$post_type = false;
 
+		if ( $post_type && $this->is_post_type_disabled( $post_type ) )
+			$post_type = false;
+
 		/**
 		 * Applies filters 'the_seo_framework_supported_post_type' : string
 		 * @since 2.6.2
@@ -849,7 +896,7 @@ class Detect extends Render {
 	 *
 	 * @since 2.9.3
 	 * @staticvar array $cache
-	 * @global object $current_screen
+	 * @global \WP_Screen $current_screen
 	 *
 	 * @param string $post_type Optional. The post type to check.
 	 * @return bool True when the post type has taxonomies.
@@ -875,6 +922,53 @@ class Detect extends Render {
 			return $cache[ $post_type ] = true;
 
 		return $cache[ $post_type ] = false;
+	}
+
+	/**
+	 * Returns a list of all supported post types.
+	 *
+	 * @since 3.1.0
+	 * @stativar array $cache
+	 *
+	 * @return array The supported post types.
+	 */
+	public function get_supported_post_types() {
+
+		static $cache = [];
+
+		// Can't be recursively empty. Right?
+		if ( $cache ) return $cache;
+
+		$post_types = (array) \get_post_types( [ 'public' => true ] );
+
+		array_filter( $post_types, [ $this, 'post_type_supports_custom_seo' ] );
+
+		//? array_values() because get_post_types() gives a sequential array.
+		return $cache = array_unique( array_merge( array_values( $post_types ), $this->get_forced_supported_post_types() ) );
+	}
+
+	/**
+	 * Returns a list of supported post types.
+	 *
+	 * @since 3.1.0
+	 * @staticvar $cache
+	 *
+	 * @return array Forced supported post types
+	 */
+	public function get_forced_supported_post_types() {
+		static $cache = null;
+		/**
+		 * @since 3.1.0
+		 * @param array $forced Forced supported post types
+		 */
+		return isset( $cache ) ? $cache : $cache = (array) \apply_filters(
+			'the_seo_framework_forced_supported_post_types',
+			[
+				'post',
+				'page',
+				'attachment',
+			]
+		);
 	}
 
 	/**

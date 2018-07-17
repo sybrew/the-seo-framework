@@ -21,7 +21,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() a
  * @since 2.8.0
  * @access private
  *
- * @param object $current_screen
+ * @param \WP_Screen $current_screen
  */
 function _wpml_do_current_screen_action( $current_screen = '' ) {
 
@@ -51,7 +51,8 @@ function _wpml_remove_all_languages( $languages_links = [] ) {
  * Deletes all sitemap transients, instead of just one.
  *
  * @since 3.1.0
- * @static bool $cleared
+ * @global \wpdb $wpdb
+ * @staticvar bool $cleared
  * @TODO Don't use a wpdb LIKE expression, but loop through the languages instead, and let delete_transient() handle it?
  *       Note that we can't adjust the mandatory cache key suffix, which includes a cached language code -- required for performance.
  *       =HACK?

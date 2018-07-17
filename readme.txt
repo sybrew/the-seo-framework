@@ -251,8 +251,10 @@ NOTE: ref: https://theseoframework.com/?p=1792
 
 1. PHP 5.3 support has been dropped. Here's why:
 	* TODO
-2. The minimum required WordPress version now is 4.6. Here's why:
+2. WP 4.4 and 4.5 support has been dropped. Here's why:
 	* TODO
+	* Consistent admin screen detection.
+	* Newer functionality, like memory upgrading.
 
 **Feature highlights:**
 
@@ -419,6 +421,8 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 		* Singleton class `\The_SEO_Framework\Builders\Scripts`, via a "Builder Pattern", callable as e.g. `the_seo_framework()->Scripts()::function_name()`.
 			* This is the first class of this kind in The SEO Framework plugin.
 		* The plugin now tries to remove all active `wp_title` filters, like it has been doing for `pre_get_document_title` a long time.
+		* New option indexes, available via `the_seo_framework()->get_option( $index )`, serialized on option `autodescription-site-settings`:
+			* `(array) disabled_post_types`
 	* **Improved:**
 		* A "doing it wrong" notice is now supplied when calling `the_seo_framework()` too early.
 		* Fixed all "non-passive event listener" warnings caused by jQuery, by using our own event handlers.
@@ -497,6 +501,8 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 				* `_check_tsf_ajax_referer()`, private.
 				* `_wp_ajax_update_counter_type()`, private.
 				* `_wp_ajax_crop_image()`, private.
+			* In class: `\The_SEO_Framework\Admin_Pages` -- Factory: `the_seo_framework()`
+				* `make_checkbox_array()`
 			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
 				* `get_view_location()`
 				* `_add_plugin_action_links()`, private.
@@ -508,6 +514,11 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 				* `::_set_instance()`, marked private.
 				* `_debug_output()`, marked private.
 				* `_set_debug_query_output_cache()`, marked private.
+			* In class: `\The_SEO_Framework\Detect` -- Factory: `the_seo_framework()`
+				* `is_post_type_disabled()`
+				* `taxonomy_supports_custom_seo()` TODO remove?
+				* `get_supported_post_types()`
+				* `get_forced_supported_post_types()`
 			* In class `\The_SEO_Framework\Generate_Image` -- Factory: `the_seo_framework()`
 				* `register_image_dimension()`
 			* In class `\The_SEO_Framework\Generate_Title` -- Factory: `the_seo_framework()`
@@ -533,9 +544,14 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 				* `use_home_page_title_tagline()`
 				* `get_home_page_tagline()`
 				* TODO are there more??
+			* In class `\The_SEO_Framework\Metaboxes` -- Factory: `the_seo_framework()`
+				* `general_metabox_posttypes_tab()` TODO consider making these all protected?
 			* In class `\The_SEO_Framework\Render` -- Factory: `the_seo_framework()`
 				* `get_document_title()`
 				* `get_wp_title()`
+			* In class `\The_SEO_Framework\Sanitize` -- Factory: `the_seo_framework()`
+				* `sanitize_field_id()`
+				* `s_disabled_post_types()`
 			* In class `\The_SEO_Framework\Builders\Scripts` -- Factory: `the_seo_framework()->Scripts()`.
 				* `::prepare()`
 				* `::get_status_of()`
@@ -575,6 +591,12 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 					* `get_open_graph_title()`
 					* `get_generated_twitter_title()`
 					* `get_generated_open_graph_title()`
+			* In class: `\The_SEO_Framework\Post_Data` -- Factory: `the_seo_framework()`
+				* `inattachment_seo_save()` is now marked private.
+				* `inpost_seo_save()` is now marked private.
+			* In class: `\The_SEO_Framework\Sitemaps` -- Factory: `the_seo_framework()`
+				* `generate_sitmeap()` now uses `wp_raise_memory_limit( 'sitemap' )`.
+					* This applies the WP Core filter `{$context}_memory_limit`, where `$context` is `sitemap`.
 		* **Removed:**
 			* In class: `\The_SEO_Framework\Admin_Init` -- Factory: `the_seo_framework()`
 				* `enqueue_admin_javascript()`
@@ -718,6 +740,7 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 				1. Now affects all posts.
 				2. Increased to 3600 from 1200
 				3. Now listens to an option.
+			* `the_seo_framework_custom_post_type_support` is now checked on presence. This is cached. If your filter is added too late, it won't work.
 		* **Removed:**
 			* `the_seo_framework_update_options_at_update`
 			* `the_seo_framework_canonical_force_scheme` (was deprecated since 2.8.0). Use `the_seo_framework_preferred_url_scheme` instead.

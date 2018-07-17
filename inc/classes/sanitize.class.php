@@ -318,6 +318,14 @@ class Sanitize extends Admin_Pages {
 			]
 		);
 
+		$this->add_option_filter(
+			's_disabled_post_types',
+			$this->settings_field,
+			[
+				'disabled_post_types',
+			]
+		);
+
 		/*
 		$this->add_option_filter(
 			's_no_html',
@@ -569,6 +577,7 @@ class Sanitize extends Admin_Pages {
 			's_knowledge_type'        => [ $this, 's_knowledge_type' ],
 			's_alter_query_type'      => [ $this, 's_alter_query_type' ],
 			's_one_zero'              => [ $this, 's_one_zero' ],
+			's_disabled_post_types'   => [ $this, 's_disabled_post_types' ],
 			's_numeric_string'        => [ $this, 's_numeric_string' ],
 			's_no_html'               => [ $this, 's_no_html' ],
 			's_no_html_space'         => [ $this, 's_no_html_space' ],
@@ -965,10 +974,33 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.8.0 Method is now public.
 	 *
 	 * @param mixed $new_value Should ideally be a 1 or 0 integer passed in.
-	 * @return integer 1 or 0.
+	 * @return int 1 or 0.
 	 */
 	public function s_one_zero( $new_value ) {
 		return (int) (bool) $new_value;
+	}
+
+	/**
+	 * Sanitizes disabled post type entries.
+	 *
+	 * Filters out default post types.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param mixed $new_value Should ideally be an array with post type name indexes, and 1 or 0 passed in.
+	 * @return array
+	 */
+	public function s_disabled_post_types( $new_values ) {
+		if ( ! is_array( $new_values ) ) return [];
+
+		foreach ( $this->get_forced_supported_post_types() as $forced ) {
+			unset( $new_values[ $forced ] );
+		}
+		foreach ( $new_values as $index => $value ) {
+			$new_values[ $index ] = $this->s_one_zero( $value );
+		}
+
+		return $new_values;
 	}
 
 	/**
@@ -1355,5 +1387,21 @@ class Sanitize extends Admin_Pages {
 			return (string) $new_value;
 
 		return 'automatic';
+	}
+
+	/**
+	 * Sanitizeses ID. Mainly removing spaces and coding characters.
+	 *
+	 * Unlike sanitize_key(), it doesn't alter the case nor applies filters.
+	 * It also maintains the '@' character.
+	 *
+	 * @see WordPress Core sanitize_key()
+	 * @since 3.1.0
+	 *
+	 * @param string $id The unsanitized ID.
+	 * @return string The sanitized ID.
+	 */
+	public function sanitize_field_id( $id ) {
+		return preg_replace( '/[^a-zA-Z0-9_\-@]/', '', $id );
 	}
 }

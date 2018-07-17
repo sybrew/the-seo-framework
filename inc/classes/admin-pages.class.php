@@ -417,7 +417,6 @@ class Admin_Pages extends Inpost {
 	 * @return string Full field id
 	 */
 	public function field_id( $id, $echo = true ) {
-
 		if ( $echo ) {
 			echo \esc_attr( $this->get_field_id( $id ) );
 		} else {
@@ -611,19 +610,12 @@ class Admin_Pages extends Inpost {
 	 */
 	protected function google_language() {
 
-		/**
-		 * Cache value
-		 * @since 2.2.4
-		 */
 		static $language = null;
 
-		if ( isset( $language ) )
-			return $language;
+		if ( isset( $language ) ) return $language;
 
-		//* Language shorttag to be used in Google help pages.
-		$language = \esc_html_x( 'en', 'e.g. en for English, nl for Dutch, fi for Finish, de for German', 'autodescription' );
-
-		return $language;
+		/* translators: Language shorttag to be used in Google help pages. */
+		return $language = \esc_html_x( 'en', 'e.g. en for English, nl for Dutch, fi for Finish, de for German', 'autodescription' );
 	}
 
 	/**
@@ -653,6 +645,7 @@ class Admin_Pages extends Inpost {
 	 * @since 2.6.0
 	 * @since 2.7.0 Added escape parameter. Defaults to true.
 	 * @since 3.0.3 Added $disabled parameter. Defaults to false.
+	 * @see $this->make_checkbox_array()
 	 *
 	 * @param string $field_id    The option ID. Must be within the Autodescription settings.
 	 * @param string $label       The checkbox description label.
@@ -662,32 +655,86 @@ class Admin_Pages extends Inpost {
 	 * @return string HTML checkbox output.
 	 */
 	public function make_checkbox( $field_id = '', $label = '', $description = '', $escape = true, $disabled = false ) {
+		return $this->make_checkbox_array( [
+			'id'          => $field_id,
+			'index'       => '',
+			'label'       => $label,
+			'description' => $description,
+			'escape'      => $escape,
+			'disabled'    => $disabled,
+		] );
+	}
 
-		if ( $escape ) {
-			$description = \esc_html( $description );
-			$label = \esc_html( $label );
+	/**
+	 * Returns a chechbox wrapper.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param array $args : {
+	 *    @type string $id          The option name, used as field ID.
+	 *    @type string $index       The option index, used when the option is an array.
+	 *    @type string $label       The checkbox label description, placed inline of the checkbox.
+	 *    @type string $description The checkbox additional description, placed underneat.
+	 *    @type bool   $escape      Whether to enable escaping of the $label and $description.
+	 *    @type bool   $disabled    Whether to disable the checkbox field.
+	 * }
+	 * @return string HTML checkbox output.
+	 */
+	public function make_checkbox_array( array $args = [] ) {
+
+		$args = array_merge( [
+			'id'          => '',
+			'index'       => '',
+			'label'       => '',
+			'description' => '',
+			'escape'      => true,
+			'disabled'    => false,
+		], $args );
+
+		if ( $args['escape'] ) {
+			$args['description'] = \esc_html( $args['description'] );
+			$args['label']       = \esc_html( $args['label'] );
 		}
 
-		$description = $description ? '<p class="description tsf-option-spacer">' . $description . '</p>' : '';
+		$index = $this->sanitize_field_id( $args['index'] ?: '' );
 
-		$output = '<span class="tsf-toblock">'
-					. '<label for="'
-						. $this->get_field_id( $field_id ) . '" '
-						. ( $disabled ? 'class=tsf-disabled ' : '' )
-					. '>'
-						. '<input '
-							. 'type="checkbox" '
-							. ( $disabled ? 'class=tsf-disabled disabled ' : '' )
-							. 'name="' . $this->get_field_name( $field_id ) . '" '
-							. 'id="' . $this->get_field_id( $field_id ) . '" '
-							. ( $disabled ? '' : $this->get_is_conditional_checked( $field_id ) . ' ' )
-							. 'value="1" '
-							. \checked( $this->get_field_value( $field_id ), true, false ) .
-						' />'
-						. $label
-					. '</label>'
-				. '</span>'
-				. $description;
+		$field_id = $field_name = \esc_attr( sprintf(
+			'%s%s',
+			$this->get_field_id( $args['id'] ),
+			$index ? sprintf( '[%s]', $index ) : ''
+		) );
+
+		$value = $this->get_field_value( $args['id'] );
+		if ( $index ) {
+			$value = isset( $value[ $index ] ) ? $value[ $index ] : '';
+		}
+
+		$output = sprintf(
+			'<span class="tsf-toblock">%s</span>',
+			vsprintf(
+				'<label for="%s" %s>%s</label>',
+				[
+					$field_id,
+					( $args['disabled'] ? 'class="tsf-disabled"' : '' ),
+					vsprintf(
+						'<input type=checkbox class="%s" name="%s" id="%s" value="1" %s %s /> %s',
+						[
+							( $args['disabled'] ? 'tsf-disabled' : '' ),
+							$field_name,
+							$field_id,
+							\checked( $value, true, false ),
+							(
+								( $args['disabled'] ? 'disabled' : '' )
+								?: ( $args['index'] ? '' : $this->get_is_conditional_checked( $args['id'] ) )
+							),
+							$args['label']
+						]
+					),
+				]
+			)
+		);
+
+		$output .= $args['description'] ? sprintf( '<p class="description tsf-option-spacer">%s</p>', $args['description'] ) : '';
 
 		return $output;
 	}
@@ -823,7 +870,7 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @since 2.6.0
 	 *
-	 * @param string $key The option name which returns boolean.
+	 * @param string $key       The option name which returns boolean.
 	 */
 	public function get_is_conditional_checked( $key ) {
 		return $this->is_conditional_checked( $key, $this->settings_field, true, false );
@@ -985,12 +1032,10 @@ class Admin_Pages extends Inpost {
 	 * @since 3.0.4
 	 */
 	public function output_js_title_elements() {
-		?>
-		<span id="tsf-title-reference" style="display:none"></span>
-		<span id="tsf-title-offset" class="hide-if-no-js"></span>
-		<span id="tsf-title-placeholder" class="hide-if-no-js"></span>
-		<span id="tsf-title-placeholder-prefix" class="hide-if-no-js"></span>
-		<?php
+		echo '<span id="tsf-title-reference" style="display:none"></span>';
+		echo '<span id="tsf-title-offset" class="hide-if-no-js"></span>';
+		echo '<span id="tsf-title-placeholder" class="hide-if-no-js"></span>';
+		echo '<span id="tsf-title-placeholder-prefix" class="hide-if-no-js"></span>';
 	}
 
 	/**
@@ -999,9 +1044,7 @@ class Admin_Pages extends Inpost {
 	 * @since 3.0.4
 	 */
 	public function output_js_description_elements() {
-		?>
-		<span id="tsf-description-reference" style="display:none"></span>
-		<?php
+		echo '<span id="tsf-description-reference" style="display:none"></span>';
 	}
 
 	/**

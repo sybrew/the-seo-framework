@@ -157,7 +157,7 @@ class Term_Data extends Post_Data {
 			'nofollow'    => 0,
 			'noarchive'   => 0,
 			'saved_flag'  => 0, // Don't touch, used to prevent data conflict with Genesis.
-		 ] );
+		] );
 	}
 
 	/**
@@ -319,11 +319,11 @@ class Term_Data extends Post_Data {
 	 *                2. No longer caches fallbacks.
 	 * @staticvar string $term_name : Caution: This function only runs once per screen and doesn't check the term type more than once.
 	 *
-	 * @param object $term The Taxonomy Term object.
-	 * @param bool $singular Whether to fetch a singular or plural name.
-	 * @param bool $fallback Whether to fallback on a generic name.
-	 * @param bool $use_cache Whether to read from cache.
-	 * @return string the Term name.
+	 * @param \WP_Term $term The Taxonomy Term object.
+	 * @param bool     $singular Whether to fetch a singular or plural name.
+	 * @param bool     $fallback Whether to fallback on a generic name.
+	 * @param bool     $use_cache Whether to read from cache.
+	 * @return string The term name.
 	 */
 	protected function get_the_term_name( $term, $singular = true, $fallback = true, $use_cache = true ) {
 

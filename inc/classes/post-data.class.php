@@ -86,6 +86,7 @@ class Post_Data extends Detect {
 	 *
 	 * @since 3.0.6
 	 * @uses $this->inpost_seo_save()
+	 * @access private
 	 *
 	 * @param integer $post_id Post ID.
 	 * @return void
@@ -102,6 +103,7 @@ class Post_Data extends Detect {
 	 * @since 2.9.3 : Added 'exclude_from_archive'.
 	 * @securitycheck 3.0.0 OK. NOTE: Check is done at save_custom_fields().
 	 * @uses $this->save_custom_fields() : Perform security checks and saves post meta / custom field data to a post or page.
+	 * @access private
 	 *
 	 * @param integer  $post_id Post ID.
 	 * @param \WP_Post $post    Post object.
@@ -213,8 +215,7 @@ class Post_Data extends Detect {
 	public function save_custom_fields( array $data, $nonce_action, $nonce_name, $post ) {
 
 		//* Verify the nonce
-		if ( ! isset( $_POST[ $nonce_name ] )
-		|| ! \wp_verify_nonce( \wp_unslash( $_POST[ $nonce_name ] ), $nonce_action ) ) // phpcs:ignore -- sanitation? huh?
+		if ( ! isset( $_POST[ $nonce_name ] ) || ! \wp_verify_nonce( $_POST[ $nonce_name ], $nonce_action ) )
 			return;
 
 		/**

@@ -35,7 +35,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  *               2. Now flushes the rules on shutdown.
  * @since 2.8.0: Added namespace and renamed function.
  * @access private
- * @global object $wp_rewrite
+ * @global \WP_Rewrite $wp_rewrite
  */
 function _deactivation_unset_sitemap() {
 

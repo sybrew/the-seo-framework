@@ -112,11 +112,13 @@ class Cache extends Sitemaps {
 	 * @since 2.8.0
 	 * @since 2.9.0 : Added object cache flush.
 	 * @TODO make 2.9 note work.
+	 * @since 3.1.0 : Added excluded post ids flush.
 	 */
 	public function delete_main_cache() {
 		$this->delete_cache( 'front' );
 		$this->delete_cache( 'sitemap' );
 		$this->delete_cache( 'robots' );
+		$this->delete_cache( 'excluded_post_ids' );
 		// $this->delete_cache( 'objectflush' );
 	}
 
@@ -1061,13 +1063,18 @@ class Cache extends Sitemaps {
 			$cache['archive'] = $wpdb->get_results(
 				"SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = 'exclude_from_archive'"
 			); // No cache OK, Set in autoloaded transient. DB call ok.
+
 			$cache['search'] = $wpdb->get_results(
 				"SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = 'exclude_from_archive'"
 			); // No cache OK, Set in autoloaded transient. DB call ok.
 
 			foreach ( [ 'archive', 'search' ] as $key ) {
 				array_walk( $cache[ $key ], function( &$v ) {
-					$v = isset( $v->meta_value, $v->post_id ) && $v->meta_value ? (int) $v->post_id : false;
+					if ( isset( $v->meta_value, $v->post_id ) && $v->meta_value ) {
+						$v = (int) $v->post_id;
+					} else {
+						$v = false;
+					}
 				} );
 				$cache[ $key ] = array_filter( $cache[ $key ] );
 			}

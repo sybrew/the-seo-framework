@@ -671,10 +671,10 @@ class Generate_Description extends Generate {
 	 * @since 3.0.4 Now uses 300 characters instead of 155.
 	 *
 	 * @param int $id The post/term ID.
-	 * @param bool|object The term object.
+	 * @param \WP_Term|bool The term object.
 	 * @return array {
 	 *    'excerpt' => string The excerpt. Unescaped.
-	 *    'trim' => bool Whether to trim the additions.
+	 *    'trim'    => bool   Whether to trim the additions.
 	 * }
 	 */
 	public function get_description_excerpt_normal( $id = 0, $term = false ) {
@@ -690,7 +690,7 @@ class Generate_Description extends Generate {
 		if ( $additions )
 			$additions .= ' ';
 
-		$additions_length = $additions ? mb_strlen( html_entity_decode( $additions ) ) : 0;
+		$additions_length = $additions ? (int) mb_strlen( html_entity_decode( $additions ) ) : 0;
 		/**
 		 * Determine if the title is far too long (72+, rather than 75 in the Title guidelines).
 		 * If this is the case, trim the "title on blogname" part from the description.
@@ -707,10 +707,6 @@ class Generate_Description extends Generate {
 
 		$excerpt_normal = $this->generate_excerpt( $id, $term, $max_char_length );
 
-		/**
-		 * Put in array to be accessed later.
-		 * @since 2.8.0 Added trim value.
-		 */
 		return [
 			'excerpt' => $excerpt_normal,
 			'trim'    => $trim,
@@ -723,7 +719,7 @@ class Generate_Description extends Generate {
 	 * @since 2.8.0
 	 *
 	 * @param int $id The post/term ID.
-	 * @param bool|object The term object.
+	 * @param \WP_Term|bool The term object.
 	 * @return string The social description excerpt. Unescaped.
 	 */
 	public function get_description_excerpt_social( $id = 0, $term = false ) {
@@ -773,17 +769,17 @@ class Generate_Description extends Generate {
 	 * @since 2.7.0 Removed cache.
 	 *              Whether an excerpt is available is no longer part of this check.
 
-	 * @param int $id The current page or post ID.
-	 * @param object|string $term The current Term.
+	 * @param int             $id The current page or post ID.
+	 * @param \WP_Term|string $term The current Term.
 	 * @return bool Whether to add description additions.
 	 */
 	public function add_description_additions( $id = '', $term = '' ) {
 
 		/**
 		 * Applies filters the_seo_framework_add_description_additions : {
-		 *    @param bool true to add prefix.
-		 *    @param int $id The Term object ID or The Page ID.
-		 *    @param object $term The Term object.
+		 *    @param bool     $filter Set to true to add prefix.
+		 *    @param int      $id     The Term object ID or The Page ID.
+		 *    @param \WP_term $term   The Term object.
 		 * }
 		 * @since 2.6.0
 		 */
@@ -794,9 +790,8 @@ class Generate_Description extends Generate {
 	}
 
 	/**
-	 * Gets Description Separator.
+	 * Returns Description Separator.
 	 *
-	 * Applies filters 'the_seo_framework_description_separator' : string
 	 * @since 2.3.9
 	 * @staticvar string $sep
 	 *
@@ -809,6 +804,10 @@ class Generate_Description extends Generate {
 		if ( isset( $sep ) )
 			return $sep;
 
+		/**
+		 * @since 2.3.9
+		 * @param string $sep The description separator.
+		 */
 		return $sep = (string) \apply_filters(
 			'the_seo_framework_description_separator',
 			$this->get_separator( 'description', false )
@@ -851,7 +850,7 @@ class Generate_Description extends Generate {
 	 * @see https://github.com/sybrew/the-seo-framework/issues/282
 	 *
 	 * @param int $id The post or term ID
-	 * @param object|string $term The term object
+	 * @param \WP_Term|null $term The term object
 	 * @param bool $ignore Whether to ignore options and filters.
 	 * @return array : {
 	 *    $title    => The title
@@ -860,7 +859,7 @@ class Generate_Description extends Generate {
 	 *    $sep      => The separator
 	 * }
 	 */
-	public function generate_description_additions( $id = 0, $term = '', $ignore = false ) {
+	public function generate_description_additions( $id = 0, $term = null, $ignore = false ) {
 
 		static $title = [];
 
@@ -896,10 +895,7 @@ class Generate_Description extends Generate {
 
 		if ( \has_filter( 'the_seo_framework_generated_description_additions' ) ) {
 			/**
-			 * Applies filters 'the_seo_framework_generated_description_additions'
-			 *
 			 * @since 2.9.2
-			 *
 			 * @param array $data   The description data.
 			 * @param int   $id     The object ID.
 			 * @param mixed $term   The term object, or empty (falsy).
@@ -938,11 +934,11 @@ class Generate_Description extends Generate {
 	 * @TODO remove this feature?
 	 * @deprecated
 	 *
-	 * @param int $id The page ID.
-	 * @param object|string $term The term object.
+	 * @param int $id             The page ID.
+	 * @param \WP_Term|null $term The term object.
 	 * @return string The description title.
 	 */
-	public function generate_description_title( $id = null, $term = '' ) {
+	public function generate_description_title( $id = null, $term = null ) {
 
 		if ( null === $id )
 			$id = $this->get_the_real_ID();
@@ -970,7 +966,7 @@ class Generate_Description extends Generate {
 				 */
 				/* translators: %s = Blog page title. Front-end output. */
 				$title = sprintf( \__( 'Latest posts: %s', 'autodescription' ), $title );
-			} elseif ( $term && isset( $term->term_id ) ) {
+			} elseif ( isset( $term->term_id ) ) {
 				//* We're on a taxonomy now.
 
 				$data = $this->get_term_meta( $term->term_id );
@@ -1007,11 +1003,11 @@ class Generate_Description extends Generate {
 	 * @staticvar array $excerptlength_cache Holds the excerpt length
 	 *
 	 * @param int|string $page_id required : The Page ID
-	 * @param object|null $term The Taxonomy Term.
+	 * @param \WP_Term|null $term The Taxonomy Term.
 	 * @param int $max_char_length The maximum excerpt char length.
 	 * @return string $excerpt The excerpt, not escaped.
 	 */
-	public function generate_excerpt( $page_id, $term = '', $max_char_length = 300 ) {
+	public function generate_excerpt( $page_id, $term = null, $max_char_length = 300 ) {
 
 		static $excerpt_cache = [];
 		static $excerptlength_cache = [];
@@ -1039,7 +1035,7 @@ class Generate_Description extends Generate {
 			 *
 			 * @param string $excerpt The excerpt to use.
 			 * @param bool $page_id The current page/term ID
-			 * @param object|mixed $term The current term.
+			 * @param \WP_Term|mixed $term The current term.
 			 * @param int $max_char_length Determines the maximum length of excerpt after trimming.
 			 */
 			$excerpt = (string) \apply_filters( 'the_seo_framework_fetched_description_excerpt', $excerpt, $page_id, $term, $max_char_length );

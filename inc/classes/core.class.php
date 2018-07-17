@@ -340,14 +340,18 @@ class Core {
 	 * Multisite Only.
 	 *
 	 * @since 2.6.0
-	 * @global object $current_blog. NULL on single site.
+	 * @since 3.1.0 Now uses get_site()
 	 *
 	 * @return bool Current blog is spam.
 	 */
 	public function current_blog_is_spam_or_deleted() {
-		global $current_blog;
 
-		if ( isset( $current_blog ) && ( '1' === $current_blog->spam || '1' === $current_blog->deleted ) )
+		if ( ! function_exists( '\\get_site' ) )
+			return false;
+
+		$site = \get_site();
+
+		if ( $site instanceof \WP_Site && ( '1' === $site->spam || '1' === $site->deleted ) )
 			return true;
 
 		return false;

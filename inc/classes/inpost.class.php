@@ -108,10 +108,13 @@ class Inpost extends Profile {
 	 */
 	public function add_taxonomy_seo_box_init() {
 
-		if ( false === $this->is_term_edit() )
+		if ( ! $this->is_term_edit() )
 			return;
 
-		/**
+		if ( ! $this->post_type_supports_custom_seo( $this->get_admin_post_type() ) )
+			return;
+
+			/**
 		 * High priority, this box is seen right below the post/page edit screen.
 		 * Applies filters 'the_seo_framework_term_metabox_priority' : int
 		 *
@@ -125,7 +128,7 @@ class Inpost extends Profile {
 		];
 
 		//* Add taxonomy meta boxes
-		foreach ( \get_taxonomies( $taxonomy_args ) as $tax_name ) {
+		foreach ( \get_taxonomies( $taxonomy_args, 'names' ) as $tax_name ) {
 			\add_action( $tax_name . '_edit_form', [ $this, '_insert_seo_meta_box' ], $priority, 2 );
 		}
 	}
@@ -143,74 +146,62 @@ class Inpost extends Profile {
 		 * @uses $this->post_type_supports_custom_seo()
 		 * @since 2.3.9
 		 */
-		if ( $this->post_type_supports_custom_seo( $post_type ) ) :
+		if ( ! $this->post_type_supports_custom_seo( $post_type ) )
+			return;
 
-			$post = \get_post_type_object( $post_type );
-			$labels = is_object( $post ) && isset( $post->labels ) ? $post->labels : '';
+		$post   = \get_post_type_object( $post_type );
+		$labels = is_object( $post ) && isset( $post->labels ) ? $post->labels : '';
 
-			if ( $labels ) :
-				//* Title and type are used interchangeably.
-				$label = isset( $labels->singular_name ) ? $labels->singular_name : $labels->name;
-				$args = [ $label, 'is_post_page' ];
+		if ( ! $labels )
+			return;
 
-				/**
-				 * Applies filters 'the_seo_framework_metabox_id' : string
-				 *
-				 * Alters The metabox class and ID.
-				 *
-				 * @since 2.6.0
-				 * @NOTE warning: might cause CSS and JS conflicts.
-				 * @TODO solve note.
-				 * @priority medium 2.7.0
-				 *
-				 * @param string $id The metabox class/ID.
-				 */
-				$id = (string) \apply_filters( 'the_seo_framework_metabox_id', 'tsf-inpost-box' );
+		//* Title and type are used interchangeably.
+		$label = isset( $labels->singular_name ) ? $labels->singular_name : $labels->name;
+		$args  = [ $label, 'is_post_page' ];
 
-				/**
-				 * Applies filters 'the_seo_framework_metabox_id' : string
-				 *
-				 * Alters the inpost metabox priority and class ID.
-				 *
-				 * @since 2.9.0
-				 *
-				 * @param string $context, default 'normal'. Accepts 'normal', 'side' and 'advanced'.
-				 */
-				$context = (string) \apply_filters( 'the_seo_framework_metabox_context', 'normal' );
+		/**
+		 * @since 2.6.0
+		 * @NOTE warning: might cause CSS and JS conflicts.
+		 * @TODO solve note.
+		 * @param string $id The metabox class/ID.
+		 */
+		$id = (string) \apply_filters( 'the_seo_framework_metabox_id', 'tsf-inpost-box' );
 
-				/**
-				 * High priority, this box is seen right below the post/page edit screen.
-				 *
-				 * Applies filters 'the_seo_framework_metabox_priority' : string
-				 * @since 2.6.0
-				 * @param string $default Accepts 'high', 'default', 'low'
-				 */
-				$priority = (string) \apply_filters( 'the_seo_framework_metabox_priority', 'high' );
+		/**
+		 * @since 2.9.0
+		 * @param string $context, default 'normal'. Accepts 'normal', 'side' and 'advanced'.
+		 */
+		$context = (string) \apply_filters( 'the_seo_framework_metabox_context', 'normal' );
 
-				if ( $this->is_front_page_by_id( $this->get_the_real_ID() ) ) {
-					if ( $this->can_access_settings() ) {
-						$schema = \is_rtl() ? '%2$s - %1$s' : '%1$s - %2$s';
-						$title = sprintf(
-							$schema,
-							\__( 'Homepage SEO Settings', 'autodescription' ),
-							$this->make_info(
-								\__( 'The SEO Settings take precedence over these settings.', 'autodescription' ),
-								$this->seo_settings_page_url(),
-								false
-							)
-						);
-					} else {
-						$title = \__( 'Homepage SEO Settings', 'autodescription' );
-					}
-				} else {
-					/* translators: %s = Post Type */
-					$title = sprintf( \__( '%s SEO Settings', 'autodescription' ), $label );
-				}
+		/**
+		 * High priority, this box is seen right below the post/page edit screen.
+		 * @since 2.6.0
+		 * @param string $default Accepts 'high', 'default', 'low'
+		 */
+		$priority = (string) \apply_filters( 'the_seo_framework_metabox_priority', 'high' );
 
-				/* translators: %s = Post type name */
-				\add_meta_box( $id, $title, [ $this, '_insert_seo_meta_box' ], $post_type, $context, $priority, $args );
-			endif;
-		endif;
+		if ( $this->is_front_page_by_id( $this->get_the_real_ID() ) ) {
+			if ( $this->can_access_settings() ) {
+				$schema = \is_rtl() ? '%2$s - %1$s' : '%1$s - %2$s';
+				$title = sprintf(
+					$schema,
+					\__( 'Homepage SEO Settings', 'autodescription' ),
+					$this->make_info(
+						\__( 'The SEO Settings take precedence over these settings.', 'autodescription' ),
+						$this->seo_settings_page_url(),
+						false
+					)
+				);
+			} else {
+				$title = \__( 'Homepage SEO Settings', 'autodescription' );
+			}
+		} else {
+			/* translators: %s = Post Type */
+			$title = sprintf( \__( '%s SEO Settings', 'autodescription' ), $label );
+		}
+
+		/* translators: %s = Post type name */
+		\add_meta_box( $id, $title, [ $this, '_insert_seo_meta_box' ], $post_type, $context, $priority, $args );
 	}
 
 	/**
@@ -219,8 +210,8 @@ class Inpost extends Profile {
 	 * @since 3.1.0 : Introduced in 2.1.8, but the name changed.
 	 * @access private
 	 *
-	 * @param object $object The page/post/taxonomy object.
-	 * @param array  $args   The page/post arguments or taxonomy slug.
+	 * @param mixed $object The page/post/taxonomy object.
+	 * @param array $args   The page/post arguments or taxonomy slug.
 	 * @return string Inpost SEO box.
 	 */
 	public function _insert_seo_meta_box( $object, $args ) {
@@ -247,8 +238,8 @@ class Inpost extends Profile {
 	 *
 	 * @since 3.1.0 : Introduced in 2.0.0, but the name changed.
 	 *
-	 * @param object $object The page/post/taxonomy object.
-	 * @param array  $args   The page/post arguments or taxonomy slug.
+	 * @param mixed $object The page/post/taxonomy object.
+	 * @param array $args   The page/post arguments or taxonomy slug.
 	 */
 	protected function get_seo_meta_box( $object, $args ) {
 
@@ -302,8 +293,8 @@ class Inpost extends Profile {
 	 * @since 2.9.0
 	 * @since 3.1.0 Now is protected.
 	 *
-	 * @param string $type The TT type name.
-	 * @param object $object The TT object.
+	 * @param string   $type The TT type name.
+	 * @param \WP_Term $object The TT object.
 	 */
 	protected function tt_inpost_box( $type, $object ) {
 		/**

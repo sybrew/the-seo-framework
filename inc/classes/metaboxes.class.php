@@ -157,7 +157,7 @@ class Metaboxes extends Site_Options {
 	 *
 	 * @since 2.8.0
 	 *
-	 * @param object|null $post The current post object.
+	 * @param \WP_Post|null $post The current post object.
 	 * @param array $args The metabox arguments.
 	 */
 	public function general_metabox( $post = null, $args = [] ) {
@@ -223,11 +223,21 @@ class Metaboxes extends Site_Options {
 	}
 
 	/**
+	 * Outputs General Settings meta box post types tab.
+	 *
+	 * @since 3.0.0
+	 * @see $this->general_metabox() : Callback for General Settings box.
+	 */
+	public function general_metabox_posttypes_tab() {
+		$this->get_view( 'metaboxes/general-metabox', [], 'posttypes' );
+	}
+
+	/**
 	 * Title meta box on the Site SEO Settings page.
 	 *
 	 * @since 2.2.2
 	 *
-	 * @param object|null $post The current post object.
+	 * @param \WP_Post|null $post The current post object.
 	 * @param array $args The metabox arguments.
 	 */
 	public function title_metabox( $post = null, $args = [] ) {
@@ -288,7 +298,7 @@ class Metaboxes extends Site_Options {
 	 *
 	 * @since 2.3.4
 	 *
-	 * @param object|null $post The current post object.
+	 * @param \WP_Post|null $post The current post object.
 	 * @param array $args The metabox arguments.
 	 */
 	public function description_metabox( $post = null, $args = [] ) {
@@ -328,7 +338,7 @@ class Metaboxes extends Site_Options {
 	 *
 	 * @since 2.2.2
 	 *
-	 * @param object|null $post The current post object.
+	 * @param \WP_Post|null $post The current post object.
 	 * @param array $args The metabox arguments.
 	 */
 	public function robots_metabox( $post = null, $args = [] ) {
@@ -375,7 +385,7 @@ class Metaboxes extends Site_Options {
 	 *
 	 * @since 2.2.2
 	 *
-	 * @param object|null $post The current post object.
+	 * @param \WP_Post|null $post The current post object.
 	 * @param array $args The navigation tabs args.
 	 */
 	public function homepage_metabox( $post = null, $args = [] ) {
@@ -435,7 +445,7 @@ class Metaboxes extends Site_Options {
 	 *
 	 * @since 2.2.2
 	 *
-	 * @param object|null $post The current post object.
+	 * @param \WP_Post|null $post The current post object.
 	 * @param array $args the social tabs arguments.
 	 */
 	public function social_metabox( $post = null, $args = [] ) {
@@ -496,7 +506,7 @@ class Metaboxes extends Site_Options {
 	 *
 	 * @since 2.2.4
 	 *
-	 * @param object|null $post The current post object.
+	 * @param \WP_Post|null $post The current post object.
 	 * @param array $args the social tabs arguments.
 	 */
 	public function webmaster_metabox( $post = null, $args = [] ) {
@@ -517,7 +527,7 @@ class Metaboxes extends Site_Options {
 	 * @since 2.2.9
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 *
-	 * @param object|null $post The current post object.
+	 * @param \WP_Post|null $post The current post object.
 	 * @param array $args the social tabs arguments.
 	 */
 	public function sitemaps_metabox( $post = null, $args = [] ) {
@@ -587,7 +597,7 @@ class Metaboxes extends Site_Options {
 	 *
 	 * @since 2.5.2
 	 *
-	 * @param object|null $post The current post object.
+	 * @param \WP_Post|null $post The current post object.
 	 * @param array $args the social tabs arguments.
 	 */
 	public function feed_metabox( $post = null, $args = [] ) {
@@ -607,7 +617,7 @@ class Metaboxes extends Site_Options {
 	 *
 	 * @since 2.6.0
 	 *
-	 * @param object|null $post The current post object.
+	 * @param \WP_Post|null $post The current post object.
 	 * @param array $args the social tabs arguments.
 	 */
 	public function schema_metabox( $post = null, $args = [] ) {

@@ -47,8 +47,8 @@ class Query extends Compat {
 	 * @since 3.1.0 1. Is now protected.
 	 *              2. Now asks for and passes $method.
 	 * @staticvar bool $cache : Always true if set.
-	 * @global object $wp_query
-	 * @global object|null $current_screen
+	 * @global \WP_Query $wp_query
+	 * @global \WP_Screen|null $current_screen
 	 *
 	 * @param string $method The method that invokes this.
 	 * @return bool True when wp_query or current_screen has been initialized.
@@ -97,6 +97,19 @@ class Query extends Compat {
 				$_more = false;
 			}
 		}
+	}
+
+	/**
+	 * Returns the post type name from current screen.
+	 *
+	 * @since 3.1.0
+	 * @global \WP_Screen $current_screen
+	 *
+	 * @return string
+	 */
+	public function get_admin_post_type() {
+		global $current_screen;
+		return isset( $current_screen->post_type ) ? $current_screen->post_type : '';
 	}
 
 	/**
@@ -226,29 +239,22 @@ class Query extends Compat {
 	 *
 	 * @since 2.6.0
 	 * @since 2.6.6 Moved from class The_SEO_Framework_Term_Data.
-	 * @since 3.1.0 Removed WP 4.5 compat. Now uses global $tag_ID.
-	 * @securitycheck 3.0.0 OK.
+	 * @since 3.1.0 1. Removed WP 4.5 compat. Now uses global $tag_ID.
+	 *              2. Removed caching
 	 * @global int $tag_ID
-	 * TODO consider making the id -> ID.
+	 *
+	 * TODO consider making the function name id -> ID.
 	 *
 	 * @return int Term ID.
 	 */
 	public function get_admin_term_id() {
 
-		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
-			return $cache;
-
 		if ( false === $this->is_archive_admin() )
 			return 0;
 
-		$term_id = ! empty( $GLOBALS['tag_ID'] ) ? $GLOBALS['tag_ID'] : 0;
-
-		$this->set_query_cache(
-			__METHOD__,
-			$term_id = intval( $term_id ) ? \absint( $term_id ) : 0
+		return \absint(
+			! empty( $GLOBALS['tag_ID'] ) ? $GLOBALS['tag_ID'] : 0
 		);
-
-		return $term_id;
 	}
 
 	/**
@@ -314,7 +320,7 @@ class Query extends Compat {
 	 * Detects archive pages. Also in admin.
 	 *
 	 * @since 2.6.0
-	 * @global object $wp_query
+	 * @global \WP_Query $wp_query
 	 *
 	 * @return bool
 	 */
@@ -340,7 +346,7 @@ class Query extends Compat {
 	 * Extends default WordPress is_archive() and determines screen in admin.
 	 *
 	 * @since 2.6.0
-	 * @global object $current_screen
+	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool Post Type is archive
 	 */
@@ -357,7 +363,7 @@ class Query extends Compat {
 	 * Detects Term edit screen in WP Admin.
 	 *
 	 * @since 2.6.0
-	 * @global object $current_screen
+	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool True if on Term Edit screen. False otherwise.
 	 */
@@ -369,14 +375,8 @@ class Query extends Compat {
 		global $current_screen;
 
 		$is_term_edit = false;
-
-		if ( $this->wp_version( '4.4.9999', '>' ) ) {
-			if ( isset( $current_screen->base ) && ( 'term' === $current_screen->base ) )
-				$is_term_edit = true;
-		} else {
-			if ( isset( $current_screen->base ) && ( 'edit-tags' === $current_screen->base ) )
-				$is_term_edit = true;
-		}
+		if ( isset( $current_screen->base ) && ( 'term' === $current_screen->base ) )
+			$is_term_edit = true;
 
 		$this->set_query_cache(
 			__METHOD__,
@@ -390,7 +390,7 @@ class Query extends Compat {
 	 * Detects Post edit screen in WP Admin.
 	 *
 	 * @since 2.6.0
-	 * @global object $current_screen
+	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool We're on Post Edit screen.
 	 */
@@ -407,15 +407,14 @@ class Query extends Compat {
 	 * Detects Post or Archive Lists in Admin.
 	 *
 	 * @since 2.6.0
-	 * @global object $current_screen
+	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool We're on the edit screen.
 	 */
 	public function is_wp_lists_edit() {
 		global $current_screen;
 
-		//* @NOTE WP >= 4.5 & WP < 4.5 conflict.
-		if ( isset( $current_screen->base ) && ( 'edit' === $current_screen->base || 'edit-tags' === $current_screen->base ) )
+		if ( isset( $current_screen->base ) && in_array( $current_screen->base, [ 'edit-tags', 'edit' ], true ) )
 			return true;
 
 		return false;
@@ -514,7 +513,7 @@ class Query extends Compat {
 	 * Extends default WordPress is_category() and determines screen in admin.
 	 *
 	 * @since 2.6.0
-	 * @global object $current_screen
+	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool Post Type is category
 	 */
@@ -731,7 +730,7 @@ class Query extends Compat {
 	 *
 	 * @since 2.6.0
 	 * @see $this->is_page()
-	 * @global object $current_screen;
+	 * @global \WP_Screen $current_screen;
 	 *
 	 * @return bool
 	 */
@@ -803,7 +802,7 @@ class Query extends Compat {
 	 * Detects posts within the admin area.
 	 *
 	 * @since 2.6.0
-	 * @global object $current_screen
+	 * @global \WP_Screen $current_screen
 	 * @see The_SEO_Framework_Query::is_single()
 	 *
 	 * @return bool
@@ -869,7 +868,7 @@ class Query extends Compat {
 	 *
 	 * @since 2.5.2
 	 * @since 3.1.0 Added $post_id parameter. When used, it'll only check for it.
-	 * @global object $current_screen
+	 * @global \WP_Screen $current_screen
 	 *
 	 * @param  null|int $post_id The post ID.
 	 * @return bool Post Type is singular
@@ -937,7 +936,7 @@ class Query extends Compat {
 	 * Determines if the page is a tag within the admin screen.
 	 *
 	 * @since 2.6.0
-	 * @global object $current_screen
+	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool Post Type is category.
 	 */

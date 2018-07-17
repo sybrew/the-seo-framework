@@ -52,7 +52,7 @@ class Render extends Admin_Init {
 	 * @return string The document title
 	 */
 	public function get_document_title( $title = '' ) {
-		if ( $this->is_feed() ) {
+		if ( $this->is_feed() || $this->is_post_type_disabled() ) {
 			return $title;
 		}
 		return $this->get_title();
@@ -71,7 +71,7 @@ class Render extends Admin_Init {
 	 * @return string $title
 	 */
 	public function get_wp_title( $title = '', $sep = '', $seplocation = '' ) {
-		if ( $this->is_feed() ) {
+		if ( $this->is_feed() || $this->is_post_type_disabled() ) {
 			return $title;
 		}
 		return $this->get_title();

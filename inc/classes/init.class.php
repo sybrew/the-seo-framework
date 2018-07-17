@@ -375,11 +375,13 @@ class Init extends Query {
 	 * @since 1.0.0
 	 * @since 2.8.0 Cache is busted on each new release.
 	 * @since 3.0.0 Now converts timezone if needed.
-	 * @since 3.1.0 Now no longer outputs anything on preview.
+	 * @since 3.1.0 1. Now no longer outputs anything on preview.
+	 *              2. Now no longer outputs anything on blocked post types.
 	 */
 	public function html_output() {
 
 		if ( $this->is_preview() ) return;
+		if ( $this->is_post_type_disabled() ) return;
 
 		/**
 		 * @since 2.6.0
@@ -497,17 +499,20 @@ class Init extends Query {
 	 * Redirects singular page to an alternate URL.
 	 *
 	 * @since 2.9.0
-	 * @since 3.1.0 Now no longer redirects on preview.
+	 * @since 3.1.0 1. Now no longer redirects on preview.
+	 *              2. Now listens to post type settings.
 	 * @access private
 	 *
 	 * @return void early on non-singular pages.
 	 */
 	public function _init_custom_field_redirect() {
 
-		if ( ! $this->is_preview() && $this->is_singular() ) {
-			$url = $this->get_custom_field( 'redirect' );
-			$url and $this->do_redirect( $url );
-		}
+		if ( ! $this->is_singular() ) return;
+		if ( $this->is_preview() ) return;
+		if ( $this->is_post_type_disabled() ) return;
+
+		$url = $this->get_custom_field( 'redirect' );
+		$url and $this->do_redirect( $url );
 	}
 
 	/**
@@ -830,22 +835,24 @@ class Init extends Query {
 
 		static $has_filter = null;
 
+		$blocked = false;
+
 		if ( null === $has_filter ) {
 			$has_filter = \has_filter( 'the_seo_framework_do_adjust_archive_query' );
 		}
 		if ( $has_filter ) {
 			/**
-			 * Applies filters 'the_seo_framework_do_adjust_archive_query' : boolean
-			 *
 			 * @since 2.9.4
-			 *
-			 * @param bool   $do Whether to execute adjustment.
-			 * @param object $wp_query The current query. Passed by reference.
+			 * @param bool      $do       True is unblocked (do adjustment), false is blocked (don't do adjustment).
+			 * @param \WP_Query $wp_query The current query. Passed by reference.
 			 */
 			if ( ! \apply_filters_ref_array( 'the_seo_framework_do_adjust_archive_query', [ true, $wp_query ] ) )
-				return true;
+				$blocked = true;
 		}
 
-		return false;
+		if ( isset( $wp_query->query_vars->post_type ) )
+			$blocked = $this->is_post_type_disabled( $wp_query->query_vars->post_type );
+
+		return $blocked;
 	}
 }
