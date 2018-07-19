@@ -456,7 +456,7 @@ class Sitemaps extends Metaboxes {
 			$url = \esc_url( $this->get_sitemap_xsl_url(), [ 'http', 'https' ] );
 
 			if ( ! empty( $_SERVER['HTTP_HOST'] ) ) {
-				$_parsed = \wp_parse_url( $url );
+				$_parsed   = \wp_parse_url( $url );
 				$_r_parsed = \wp_parse_url(
 					\esc_url(
 						\wp_unslash( $_SERVER['HTTP_HOST'] ),
@@ -464,7 +464,7 @@ class Sitemaps extends Metaboxes {
 					)
 				); // sanitization ok: esc_url is esc_url_raw with a bowtie.
 
-				if ( isset( $_parsed['host'] ) && isset( $_r_parsed['host'] ) )
+				if ( isset( $_parsed['host'], $_r_parsed['host'] ) )
 					if ( $_parsed['host'] !== $_r_parsed['host'] )
 						return '';
 			}
@@ -943,7 +943,6 @@ class Sitemaps extends Metaboxes {
 		endif;
 
 		if ( $total_cpt_posts ) :
-			$post_page = (array) \get_post_types( [ 'public' => true ] );
 
 			/**
 			 * Applies filters Array the_seo_framework_sitemap_exclude_cpt : Excludes these CPT
@@ -953,12 +952,10 @@ class Sitemaps extends Metaboxes {
 
 			$not_cpt = [ 'post', 'page', 'attachment' ];
 
-			foreach ( $post_page as $post_type ) {
+			foreach ( $this->get_supported_post_types() as $post_type ) {
 				if ( false === in_array( $post_type, $not_cpt, true ) ) {
 					if ( empty( $excluded_cpt ) || false === in_array( $post_type, $excluded_cpt, true ) ) {
-						if ( $this->post_type_supports_custom_seo( $post_type ) ) {
-							$cpt[] = $post_type;
-						}
+						$cpt[] = $post_type;
 					}
 				}
 			}

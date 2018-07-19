@@ -356,7 +356,7 @@ class Detect extends Render {
 		$wp_get_theme = \wp_get_theme();
 
 		$theme_parent = strtolower( $wp_get_theme->get( 'Template' ) );
-		$theme_name = strtolower( $wp_get_theme->get( 'Name' ) );
+		$theme_name   = strtolower( $wp_get_theme->get( 'Name' ) );
 
 		if ( is_string( $themes ) ) {
 			$themes = strtolower( $themes );
@@ -705,25 +705,14 @@ class Detect extends Render {
 	 * Considers en_UK, en_US, en, etc.
 	 *
 	 * @since 2.6.0
-	 * @staticvar array $locale
+	 * @since 3.1.0 Removed caching.
 	 *
 	 * @param string $locale Required, the locale.
 	 * @param bool $use_cache Set to false to bypass the cache.
-	 * @return bool Whether the locale is in the WordPress locale.
+	 * @return bool Whether the input $locale is in the current WordPress locale.
 	 */
-	public function check_wp_locale( $locale = '', $use_cache = true ) {
-
-		if ( empty( $locale ) )
-			return false;
-
-		if ( ! $use_cache )
-			return is_int( strpos( \get_locale(), $locale ) );
-
-		static $cache = [];
-
-		if ( isset( $cache[ $locale ] ) )
-			return $cache[ $locale ];
-
+	public function check_wp_locale( $locale = '' ) {
+		if ( empty( $locale ) ) return false;
 		return $cache[ $locale ] = is_int( strpos( \get_locale(), $locale ) );
 	}
 
@@ -735,7 +724,11 @@ class Detect extends Render {
 	 * @return bool True if disabled, false otherwise.
 	 */
 	public function is_post_type_disabled( $post_type = '' ) {
-		return isset( $this->get_option( 'disabled_post_types' )[ $post_type ?: get_post_type() ] );
+		return isset(
+			$this->get_option( 'disabled_post_types' )[
+				$post_type ?: \get_post_type() ?: $this->get_admin_post_type()
+			]
+		);
 	}
 
 	/**
@@ -755,9 +748,8 @@ class Detect extends Render {
 
 		static $has_filter = null;
 
-		if ( null === $has_filter ) {
+		if ( is_null( $has_filter ) )
 			$has_filter = \has_filter( 'the_seo_framework_custom_post_type_support' );
-		}
 
 		if ( $has_filter ) {
 			/**
@@ -792,10 +784,8 @@ class Detect extends Render {
 	 * @return bool true of post type is supported.
 	 */
 	public function post_type_supports_custom_seo( $post_type = '' ) {
-
-		$post_type = $this->get_supported_post_type( true, $post_type );
-
-		return $post_type && $this->post_type_supports_inpost( $post_type );
+		$post_type = $post_type ?: \get_post_type() ?: $this->get_admin_post_type();
+		return $post_type && $this->is_post_type_supported( $post_type ) && $this->post_type_supports_inpost( $post_type );
 	}
 
 	/**
@@ -824,75 +814,34 @@ class Detect extends Render {
 	}
 
 	/**
-	 * Checks (current) Post Type for if this plugin may use it for customizable SEO.
+	 * Detects if the current or inputted post type is supported and not disabled.
 	 *
-	 * @since 2.6.0
-	 * @since 2.9.3 : Improved caching structure. i.e. it's faster now when no $post_type is supplied.
-	 * @staticvar array $cache
-	 * @global \WP_Screen $current_screen
+	 * @since 3.1.0
 	 *
-	 * @param bool $public Whether to only get Public Post types.
-	 * @param string $post_type Optional. The post type to check.
-	 * @return bool|string The allowed Post Type. False if it's not supported.
+	 * @param bool $post_type
+	 * @return bool
 	 */
-	public function get_supported_post_type( $public = true, $post_type = '' ) {
-
-		static $cache = [];
-
-		if ( isset( $cache[ $public ][ $post_type ] ) )
-			return $cache[ $public ][ $post_type ];
-
-		if ( empty( $post_type ) ) {
-			global $current_screen;
-
-			if ( isset( $current_screen->post_type ) ) {
-				$post_type = $current_screen->post_type;
-			} else {
-				return false;
-			}
-		}
-
-		$post_type_evaluated = $post_type;
-
-		$object = \get_post_type_object( $post_type );
-
-		//* Check if rewrite is enabled. Bypass builtin post types.
-		if ( isset( $object->_builtin ) && false === $object->_builtin )
-			if ( isset( $object->rewrite ) && false === $object->rewrite )
-				$post_type = false;
-
-		//* Check if post is public if public parameter is set.
-		if ( $post_type && $public )
-			if ( isset( $object->public ) && ! $object->public )
-				$post_type = false;
-
-		if ( $post_type && $this->is_post_type_disabled( $post_type ) )
-			$post_type = false;
-
+	public function is_post_type_supported( $post_type = '' ) {
+		$post_type = $post_type ?: \get_post_type() ?: $this->get_admin_post_type();
 		/**
 		 * Applies filters 'the_seo_framework_supported_post_type' : string
 		 * @since 2.6.2
-		 *
-		 * @param string|bool $post_type The supported post type. Is boolean false if not supported.
+		 * @since 3.1.0 The first parameter is always a boolean now.
+		 * @param bool   $post_type Whether the post type is supported
 		 * @param string $post_type_evaluated The evaluated post type.
 		 */
-		$post_type = (string) \apply_filters_ref_array(
-			'the_seo_framework_supported_post_type',
+		return (bool) \apply_filters_ref_array( 'the_seo_framework_supported_post_type',
 			[
+				$post_type
+					&& ! $this->is_post_type_disabled( $post_type )
+					&& in_array( $post_type, $this->get_rewritable_post_types(), true ),
 				$post_type,
-				$post_type_evaluated,
 			]
 		);
-
-		//* No supported post type has been found.
-		if ( ! $post_type )
-			return $cache[ $public ][ $post_type ] = false;
-
-		return $cache[ $public ][ $post_type ] = $post_type;
 	}
 
 	/**
-	 * Checks (current) Post Type for taxonomical archives.
+	 * Checks (current) Post Type for having taxonomical archives.
 	 *
 	 * @since 2.9.3
 	 * @staticvar array $cache
@@ -908,15 +857,8 @@ class Detect extends Render {
 		if ( isset( $cache[ $post_type ] ) )
 			return $cache[ $post_type ];
 
-		if ( empty( $post_type ) ) {
-			global $current_screen;
-
-			if ( isset( $current_screen->post_type ) ) {
-				$post_type = $current_screen->post_type;
-			} else {
-				return false;
-			}
-		}
+		$post_type = $post_type ?: \get_post_type() ?: $this->get_admin_post_type();
+		if ( ! $post_type ) return false;
 
 		if ( \get_object_taxonomies( $post_type, 'names' ) )
 			return $cache[ $post_type ] = true;
@@ -933,18 +875,27 @@ class Detect extends Render {
 	 * @return array The supported post types.
 	 */
 	public function get_supported_post_types() {
-
 		static $cache = [];
-
 		// Can't be recursively empty. Right?
 		if ( $cache ) return $cache;
 
-		$post_types = (array) \get_post_types( [ 'public' => true ] );
+		return $cache = array_values( array_filter( $this->get_rewritable_post_types(), [ $this, 'is_post_type_supported' ] ) );
+	}
 
-		array_filter( $post_types, [ $this, 'post_type_supports_custom_seo' ] );
-
+	/**
+	 * Gets all post types that could possibly support SEO.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return array The post types with rewrite capabilities.
+	 */
+	protected function get_rewritable_post_types() {
+		$post_types = (array) \get_post_types( [
+			'public'  => true,
+			'rewrite' => true,
+		] );
 		//? array_values() because get_post_types() gives a sequential array.
-		return $cache = array_unique( array_merge( array_values( $post_types ), $this->get_forced_supported_post_types() ) );
+		return array_unique( array_merge( $this->get_forced_supported_post_types(), array_values( $post_types ) ) );
 	}
 
 	/**
@@ -955,7 +906,7 @@ class Detect extends Render {
 	 *
 	 * @return array Forced supported post types
 	 */
-	public function get_forced_supported_post_types() {
+	protected function get_forced_supported_post_types() {
 		static $cache = null;
 		/**
 		 * @since 3.1.0
@@ -963,11 +914,10 @@ class Detect extends Render {
 		 */
 		return isset( $cache ) ? $cache : $cache = (array) \apply_filters(
 			'the_seo_framework_forced_supported_post_types',
-			[
-				'post',
-				'page',
-				'attachment',
-			]
+			array_values( \get_post_types( [
+				'public'   => true,
+				'_builtin' => true,
+			] ) )
 		);
 	}
 

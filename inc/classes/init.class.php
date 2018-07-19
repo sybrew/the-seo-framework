@@ -380,8 +380,7 @@ class Init extends Query {
 	 */
 	public function html_output() {
 
-		if ( $this->is_preview() ) return;
-		if ( $this->is_post_type_disabled() ) return;
+		if ( $this->is_preview() || $this->is_post_type_disabled() ) return;
 
 		/**
 		 * @since 2.6.0
@@ -507,9 +506,8 @@ class Init extends Query {
 	 */
 	public function _init_custom_field_redirect() {
 
-		if ( ! $this->is_singular() ) return;
-		if ( $this->is_preview() ) return;
-		if ( $this->is_post_type_disabled() ) return;
+		if ( ! $this->is_singular() || $this->is_preview() || $this->is_post_type_disabled() )
+			return;
 
 		$url = $this->get_custom_field( 'redirect' );
 		$url and $this->do_redirect( $url );

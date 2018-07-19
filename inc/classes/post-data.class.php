@@ -313,17 +313,18 @@ class Post_Data extends Detect {
 	 *
 	 * @since 1.0.0
 	 * @since 2.8.2 : Added 4th parameter for escaping.
+	 * @since 3.1.0 No longer returns anything for taxonomies.
 	 *
 	 * @param string $excerpt the Excerpt.
 	 * @param int $the_id The Post ID.
-	 * @param int $tt_id The Taxonomy Term ID.
-	 * @param int $tt_id The Taxonomy Term ID.
+	 * @param null $deprecated No longer used.
+	 * @param bool $escape Whether to escape the excerpt.
 	 * @return string The escaped Excerpt.
 	 */
-	public function get_excerpt_by_id( $excerpt = '', $the_id = '', $tt_id = '', $escape = true ) {
+	public function get_excerpt_by_id( $excerpt = '', $the_id = '', $deprecated = null, $escape = true ) {
 
 		if ( empty( $excerpt ) )
-			$excerpt = $this->fetch_excerpt( $the_id, $tt_id );
+			$excerpt = $this->fetch_excerpt( $the_id );
 
 		//* No need to parse an empty excerpt.
 		if ( '' === $excerpt ) return '';
@@ -338,17 +339,14 @@ class Post_Data extends Detect {
 	 *
 	 * @since 2.5.2
 	 * @since 2.6.6 Detects Page builders.
+	 * @since 3.1.0 No longer returns anything for taxonomies.
 	 *
-	 * @param int $the_id The Post ID.
-	 * @param int $tt_id The Taxonomy Term ID.
+	 * @param \WP_Post|int|null $post The Post or Post ID. Leave null to automatically get.
 	 * @return string The excerpt.
 	 */
-	public function fetch_excerpt( $the_id = '', $tt_id = '' ) {
+	public function fetch_excerpt( $post = null ) {
 
-		$post = $this->fetch_post_by_id( $the_id, $tt_id, OBJECT );
-
-		if ( empty( $post ) )
-			return '';
+		$post = \get_post( $post );
 
 		/**
 		 * Fetch custom excerpt, if not empty, from the post_excerpt field.
@@ -363,96 +361,6 @@ class Post_Data extends Detect {
 		}
 
 		return $excerpt;
-	}
-
-	/**
-	 * Returns Post Array from ID.
-	 * Also returns latest post from blog or archive if applicable.
-	 *
-	 * @since 2.6.0
-	 * @since 2.6.6 Added $output parameter.
-	 *
-	 * @param int $the_id The Post ID.
-	 * @param int $tt_id The Taxonomy Term ID
-	 * @param mixed $output The value type to return. Accepts OBJECT, ARRAY_A, or ARRAY_N
-	 * @return string|array The Post Array.
-	 */
-	protected function fetch_post_by_id( $the_id = '', $tt_id = '', $output = ARRAY_A ) {
-
-		if ( '' === $the_id && '' === $tt_id ) {
-			$the_id = $this->get_the_real_ID();
-
-			if ( false === $the_id )
-				return '';
-		}
-
-		/**
-		 * @since 2.2.8 Use the 2nd parameter.
-		 * @since 2.3.3 Now casts to array
-		 */
-		if ( '' !== $the_id ) {
-			if ( $this->is_blog_page( $the_id ) ) {
-				$args = [
-					'posts_per_page' => 1,
-					'offset'         => 0,
-					'category'       => '',
-					'category_name'  => '',
-					'orderby'        => 'date',
-					'order'          => 'DESC',
-					'post_type'      => 'post',
-					'post_status'    => 'publish',
-					'cache_results'  => false,
-				];
-
-				$post = \get_posts( $args );
-			} else {
-				$post = \get_post( $the_id );
-			}
-		} elseif ( '' !== $tt_id ) {
-			/**
-			 * @since 2.3.3 Match the descriptions in admin as on the front end.
-			 */
-			$args = [
-				'posts_per_page' => 1,
-				'offset'         => 0,
-				'category'       => $tt_id,
-				'category_name'  => '',
-				'post_type'      => 'post',
-				'post_status'    => 'publish',
-				'cache_results'  => false,
-			];
-
-			$post = \get_posts( $args );
-		} else {
-			$post = \get_post( $the_id );
-		}
-
-		/**
-		 * @since 2.6.5 Transform post array to object (on Archives).
-		 */
-		if ( is_array( $post ) && isset( $post[0] ) && is_object( $post[0] ) )
-			$post = $post[0];
-
-		//* Something went wrong, nothing to be found. Return empty.
-		if ( empty( $post ) )
-			return '';
-
-		//* Stop getting something that doesn't exists. E.g. 404
-		if ( isset( $post->ID ) && 0 === $post->ID )
-			return '';
-
-		/**
-		 * @since 2.6.6
-		 */
-		if ( ARRAY_A === $output || ARRAY_N === $output ) {
-			$_post = \WP_Post::get_instance( $post );
-			$post = $_post->to_array();
-
-			if ( ARRAY_N === $output )
-				$post = array_values( $post );
-		}
-
-		return $post;
 	}
 
 	/**
@@ -556,7 +464,7 @@ class Post_Data extends Detect {
 			//* Page Builder by SiteOrigin
 			return true;
 		elseif ( isset( $meta['_fl_builder_enabled'][0] ) && '1' === $meta['_fl_builder_enabled'][0] && defined( 'FL_BUILDER_VERSION' ) ) :
-			//* Beaver Builder by Fastline Media... FIXME is this needed?
+			//* Beaver Builder by Fastline Media...
 			return true;
 		endif;
 
@@ -625,6 +533,25 @@ class Post_Data extends Detect {
 	 */
 	public function get_ids_excluded_from_archive() {
 		return $this->get_excluded_ids_from_cache()['archive'] ?: [];
+	}
+
+	/**
+	 * Returns the post type object label. Either plural or singular.
+	 *
+	 * @since 3.1.0
+	 * @see $this->get_tax_type_label() For the taxonomial alternative.
+	 *
+	 * @param string $post_type The post type. Required.
+	 * @param bool   $singular  Wether to get the singlural or plural name.
+	 * @return string The Post Type name/label, if found.
+	 */
+	public function get_post_type_label( $post_type, $singular = true ) {
+
+		$pto = \get_post_type_object( $post_type );
+
+		return $singular
+			? ( isset( $pto->labels->singular_name ) ? $pto->labels->singular_name : '' )
+			: ( isset( $pto->labels->name ) ? $pto->labels->name : '' );
 	}
 
 	/**

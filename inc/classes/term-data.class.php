@@ -239,7 +239,7 @@ class Term_Data extends Post_Data {
 	}
 
 	/**
-	 * Try to fetch a term if none can be found.
+	 * Tries to fetch a term by $id from query.
 	 *
 	 * @since 2.6.0
 	 * @since 3.0.0 Can now get custom post type objects.
@@ -255,16 +255,15 @@ class Term_Data extends Post_Data {
 		if ( isset( $term[ $id ] ) )
 			return $term[ $id ];
 
-		//* Return null if no term can be set.
+		//* Return null if no term can be detected.
 		if ( false === $this->is_archive() )
 			return false;
 
 		if ( $this->is_admin() ) {
-			global $current_screen;
-
-			if ( isset( $current_screen->taxonomy ) ) {
-				$term_id = $id ? $id : $this->get_admin_term_id();
-				$term[ $id ] = \get_term_by( 'id', $term_id, $current_screen->taxonomy );
+			$taxonomy = $this->get_current_taxonomy();
+			if ( $taxonomy ) {
+				$term_id = $id ?: $this->get_the_real_admin_ID();
+				$term[ $id ] = \get_term_by( 'id', $term_id, $taxonomy );
 			}
 		} else {
 			if ( $this->is_category() || $this->is_tag() ) {
@@ -286,93 +285,22 @@ class Term_Data extends Post_Data {
 	}
 
 	/**
-	 * Fetch Tax labels
+	 * Returns the taxonomy type object label. Either plural or singular.
 	 *
-	 * @since 2.3.1
-	 * @staticvar object $labels
+	 * @since 3.1.0
+	 * @see $this->get_post_type_label() For the singular alternative.
 	 *
-	 * @param string $tax_type the Taxonomy type.
-	 * @return object|null with all the labels as member variables
+	 * @param string $post_type The taxonomy type. Required.
+	 * @param bool   $singular  Wether to get the singlural or plural name.
+	 * @return string The Taxonomy Type name/label, if found.
 	 */
-	public function get_tax_labels( $tax_type ) {
+	public function get_tax_type_label( $tax_type, $singular = true ) {
 
-		static $labels = null;
+		$tto = \get_taxonomy( $tax_type );
 
-		if ( isset( $labels ) )
-			return $labels;
-
-		$tax_object = \get_taxonomy( $tax_type );
-
-		if ( is_object( $tax_object ) )
-			return $labels = (object) $tax_object->labels;
-
-		//* Nothing found.
-		return null;
-	}
-
-	/**
-	 * Get the current screen term labels.
-	 *
-	 * @since 2.6.0
-	 * @since 2.9.4 Added $term->label and $term->labels->singular_name as additional fallbacks.
-	 * @since 3.0.4 : 1. Now caches ->label and ->singular_name.
-	 *                2. No longer caches fallbacks.
-	 * @staticvar string $term_name : Caution: This function only runs once per screen and doesn't check the term type more than once.
-	 *
-	 * @param \WP_Term $term The Taxonomy Term object.
-	 * @param bool     $singular Whether to fetch a singular or plural name.
-	 * @param bool     $fallback Whether to fallback on a generic name.
-	 * @param bool     $use_cache Whether to read from cache.
-	 * @return string The term name.
-	 */
-	protected function get_the_term_name( $term, $singular = true, $fallback = true, $use_cache = true ) {
-
-		if ( $use_cache ) {
-			static $term_name = [];
-
-			if ( isset( $term_name[ $singular ] ) )
-				return $term_name[ $singular ];
-		} else {
-			$term_name = [];
-		}
-
-		$ret = '';
-
-		if ( isset( $term->taxonomy ) ) {
-			$tax_type = $term->taxonomy;
-
-			static $term_labels = [];
-
-			/**
-			 * Dynamically fetch the term name.
-			 * @since 2.3.1
-			 */
-			if ( ! isset( $term_labels[ $tax_type ] ) )
-				$term_labels[ $tax_type ] = $this->get_tax_labels( $tax_type );
-
-			if ( $singular ) {
-				if ( isset( $term_labels[ $tax_type ]->singular_name ) )
-					$ret = $term_labels[ $tax_type ]->singular_name;
-			} else {
-				if ( isset( $term_labels->name ) )
-					$ret = $term_labels[ $tax_type ]->name;
-			}
-		} elseif ( isset( $term->label ) ) {
-			$ret = $term->label;
-		} elseif ( isset( $term->labels->singular_name ) ) {
-			$ret = $term->labels->singular_name;
-		}
-
-		if ( $fallback && ! $ret ) {
-			//* Fallback to Page as it is generic.
-			if ( $singular ) {
-				return \esc_html__( 'Page', 'autodescription' );
-			} else {
-				return \esc_html__( 'Pages', 'autodescription' );
-			}
-		}
-
-		return $term_name[ $singular ] = $ret;
+		return $singular
+			? ( isset( $tto->labels->singular_name ) ? $tto->labels->singular_name : '' )
+			: ( isset( $tto->labels->name ) ? $tto->labels->name : '' );
 	}
 
 	/**
@@ -398,12 +326,12 @@ class Term_Data extends Post_Data {
 		} );
 
 		switch ( $get ) {
-			case 'names' :
+			case 'names':
 				$taxonomies = array_keys( $taxonomies );
 				break;
 
 			default:
-			case 'objects' :
+			case 'objects':
 				break;
 		}
 

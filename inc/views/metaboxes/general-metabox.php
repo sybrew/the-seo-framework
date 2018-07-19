@@ -402,7 +402,7 @@ switch ( $instance ) :
 		$forced_pt = $this->get_forced_supported_post_types();
 		$boxes = [];
 
-		foreach ( $this->get_supported_post_types() as $post_type ) {
+		foreach ( $this->get_rewritable_post_types() as $post_type ) {
 			$pto = \get_post_type_object( $post_type );
 			if ( ! $pto ) continue;
 

@@ -188,8 +188,7 @@ switch ( $instance ) :
 
 	case 'the_seo_framework_title_metabox_prefixes' :
 		//* Get translated category label, if it exists. Otherwise, fallback to translation.
-		$term_labels = $this->get_tax_labels( 'category' );
-		$label = isset( $term_labels->singular_name ) ? $term_labels->singular_name : __( 'Category', 'autodescription' );
+		$label = $this->get_tax_type_label( 'category', true ) ?: __( 'Category', 'default' );
 
 		$cats = get_terms( [
 			'taxonomy'   => 'category',

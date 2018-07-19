@@ -1078,4 +1078,53 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'the_seo_framework()->single_term_title()', '3.1.0', 'the_seo_framework()->get_generated_single_term_title()' );
 		return $tsf->get_generated_single_term_title( $term );
 	}
+
+	/**
+	 * Fetch Tax labels
+	 *
+	 * @since 2.3.1
+	 * @since 3.1.0 Deprecated
+	 * @deprecated
+	 * @staticvar object $labels
+	 *
+	 * @param string $tax_type the Taxonomy type.
+	 * @return object|null with all the labels as member variables
+	 */
+	public function get_tax_labels( $tax_type ) {
+
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_tax_labels()', '3.1.0' );
+
+		static $labels = null;
+
+		if ( isset( $labels ) )
+			return $labels;
+
+		$tax_object = \get_taxonomy( $tax_type );
+
+		if ( is_object( $tax_object ) )
+			return $labels = (object) $tax_object->labels;
+
+		//* Nothing found.
+		return null;
+	}
+
+	/**
+	 * Checks (current) Post Type for if this plugin may use it for customizable SEO.
+	 *
+	 * @since 2.6.0
+	 * @since 2.9.3 : Improved caching structure. i.e. it's faster now when no $post_type is supplied.
+	 * @staticvar array $cache
+	 * @since 3.1.0 1. Deprecated
+	 *              2. First parameter is implied.
+	 * @global \WP_Screen $current_screen
+	 *
+	 * @param bool $public Whether to only get Public Post types.
+	 * @param string $post_type Optional. The post type to check.
+	 * @return bool|string The allowed Post Type. False if it's not supported.
+	 */
+	public function get_supported_post_type( $public = true, $post_type = '' ) {
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->get_supported_post_type()', '3.1.0', 'the_seo_framework()->is_post_type_supported()' );
+		return $tsf->is_post_type_supported( $post_type ) ? $post_type : false;
+	}
 }

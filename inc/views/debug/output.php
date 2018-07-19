@@ -7,11 +7,17 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 
 $id = $this->get_the_real_ID();
 $mdash = ' &mdash; ';
-$term = $this->is_archive() ? $this->fetch_the_term( $id ) : '';
-$taxonomy = isset( $term->taxonomy ) ? $term->taxonomy : '';
+$taxonomy = $this->get_current_taxonomy();
 
 //* This will return 'Page' on all non-archive types (except the home page)
-$type = ! $this->is_archive() && $this->is_real_front_page() || $this->is_front_page_by_id( $id ) ? 'Front Page' : $this->get_the_term_name( $term );
+if ( ! $this->is_archive() && $this->is_real_front_page() || $this->is_front_page_by_id( $id ) ) {
+	$type = 'Front Page';
+} elseif ( $taxonomy ) {
+	$type = $this->get_tax_type_label( $taxonomy );
+} else {
+	$type = $this->get_post_type_label( get_post_type() );
+}
+
 $cache_key = $this->generate_cache_key( $this->get_the_real_ID(), $taxonomy );
 
 if ( $this->is_admin() ) {

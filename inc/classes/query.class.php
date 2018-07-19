@@ -261,12 +261,18 @@ class Query extends Compat {
 	 * Returns the current taxonomy, if any.
 	 *
 	 * @since 3.0.0
+	 * @since 3.1.0 Now works in the admin.
 	 *
 	 * @return string The queried taxonomy type.
 	 */
 	public function get_current_taxonomy() {
-		$_object = \get_queried_object();
-		return ! empty( $_object->taxonomy ) ? $_object->taxonomy : '';
+		if ( $this->is_admin() ) {
+			global $current_screen;
+			return ! empty( $current_screen->taxonomy ) ? $current_screen->taxonomy : '';
+		} else {
+			$_object = \get_queried_object();
+			return ! empty( $_object->taxonomy ) ? $_object->taxonomy : '';
+		}
 	}
 
 	/**
@@ -513,6 +519,7 @@ class Query extends Compat {
 	 * Extends default WordPress is_category() and determines screen in admin.
 	 *
 	 * @since 2.6.0
+	 * @since 3.1.0 No longer guesses category by name. It now only matches WordPress' built-in category.
 	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool Post Type is category
@@ -527,15 +534,7 @@ class Query extends Compat {
 		$is_category = false;
 
 		if ( $this->is_archive_admin() && isset( $current_screen->taxonomy ) ) {
-
-			$tax = $current_screen->taxonomy;
-			$len = strlen( $tax );
-
-			if ( $len >= 8 && false !== strrpos( $tax, 'category', -8 ) ) {
-				$is_category = true;
-			} elseif ( $len >= 3 && false !== strrpos( $tax, 'cat', -3 ) ) {
-				$is_category = true;
-			}
+			$is_category = 'category' === $current_screen->taxonomy;
 		}
 
 		$this->set_query_cache(
@@ -936,24 +935,22 @@ class Query extends Compat {
 	 * Determines if the page is a tag within the admin screen.
 	 *
 	 * @since 2.6.0
+	 * @since 3.1.0 No longer guesses tag by name. It now only matches WordPress' built-in tag.
 	 * @global \WP_Screen $current_screen
 	 *
-	 * @return bool Post Type is category.
+	 * @return bool Post Type is tag.
 	 */
 	public function is_tag_admin() {
 
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
+		global $current_screen;
+
 		$is_tag = false;
 
-		if ( $this->is_archive_admin() ) {
-			global $current_screen;
-
-			if ( isset( $current_screen->taxonomy )
-			&& strlen( $current_screen->taxonomy ) >= 3
-			&& false !== strrpos( $current_screen->taxonomy, 'tag', -3 ) )
-				$is_tag = true;
+		if ( $this->is_archive_admin() && isset( $current_screen->taxonomy ) ) {
+			$is_tag = 'post_tag' === $current_screen->taxonomy;
 		}
 
 		$this->set_query_cache(

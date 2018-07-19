@@ -269,6 +269,7 @@ class Admin_Init extends Init {
 					'makePrimary' => sprintf( \esc_html__( 'Make primary %s', 'autodescription' ), $_i18n_name ),
 					/* translators: %s = term name */
 					'primary'     => sprintf( \esc_html__( 'Primary %s', 'autodescription' ), $_i18n_name ),
+					'name'        => $_i18n_name,
 				],
 				'primary' => $this->get_primary_term_id( $id, $_t->name ) ?: 0,
 			];
@@ -383,7 +384,7 @@ class Admin_Init extends Init {
 				}
 			} elseif ( $is_term_edit ) {
 				//* Category or Tag.
-				if ( isset( $GLOBALS['current_screen']->taxonomy ) && $id ) {
+				if ( $this->get_current_taxonomy() && $id ) {
 					$default_title = $this->get_generated_single_term_title( $this->fetch_the_term( $id ) );
 					$additions = $title_add_additions ? $blog_name : '';
 				}
@@ -408,7 +409,7 @@ class Admin_Init extends Init {
 		$term_name = '';
 		$use_term_prefix = false;
 		if ( $is_term_edit ) {
-			$term_name = $this->get_the_term_name( $this->fetch_the_term( $id ), true, false );
+			$term_name = $this->get_tax_type_label( $this->get_current_taxonomy(), true );
 			$use_term_prefix = $this->use_generated_archive_prefix();
 		}
 

@@ -253,8 +253,8 @@ NOTE: ref: https://theseoframework.com/?p=1792
 	* TODO
 2. WP 4.4 and 4.5 support has been dropped. Here's why:
 	* TODO
-	* Consistent admin screen detection.
-	* Newer functionality, like memory upgrading.
+	* Consistent admin screen and post type detection, so you won't find bugs anymore stemming from backward compatibility.
+	* Newer functionality, like upgrading memory availability.
 
 **Feature highlights:**
 
@@ -320,10 +320,13 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 		* TODO New sitemap options that allow setting including for each post type.
 		* TODO Doing it Right conditions for Private, Protected, Draft...
 		* TODO New option that prevents automated descriptions.
-		* SEO Bar checks:
+		* New SEO Bar checks:
 			* When the generated description is empty, it'll now tell you with a blue bar, instead of saying it's "far too short".
 			* When the generated title is empty thanks to filters, it'll now tell you with a blue bar, instead of saying it's "far too short".
 		* Descriptive links to all meta title and description labels.
+		* Post Type Settings:
+			* Found in the General Settings meta box, they'll prevent The SEO Framework from interacting.
+			* These settings should only be used on conflicting post types, like which offer their own SEO settings, or are otherwise incorrectly registered.
 	* **Improved:**
 		* TODO
 		* The plugin can now downgrade its database version to the currently installed version automatically. This makes sure necessary future upgrade procedures are reinstated when you choose to downgrade (for any reason).
@@ -354,8 +357,11 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 			1. The tooltips aren't "boxed" anymore, but flow wherever they deem best.
 			2. There are 5 to 6 times as many tooltip listeners per SEO bar, as it did prior v3.0. TODO test performance and responsiveness // lighthouse?
 				* TODO SEE: https://github.com/sybrew/the-seo-framework/issues/18
-		* The SEO Bar is a little less daunting--by 13.63% to be exact.
-		* Added a descriptive warning to the sitewide `nofollow` and `noarchive` settings.
+		* The SEO Bar is a little less daunting--by 13.63% in width to be exact.
+		* The SEO Bar no longer performs intricate and slow requests to verify if we're on a term page on Custom Post Types list tables.
+		* The SEO Bar is now capable of articulating post type names, instead of only term names.
+		* In the robots settings meta box, we've added a descriptive warning to the sitewide `nofollow` and `noarchive` settings.
+		* The primary term selector tooltip now states the human readible and translatable name, instead of the static code name.
 	* **Changed:**
 		* TSF now requires WordPress 4.6 (previously 4.4).
 		* TSF now requires PHP 5.4 (previously 5.3).
@@ -371,6 +377,7 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 	* **Removed:**
 		* Firefox post list table compatibility and fixes that account for the wide SEO Bar; they don't work anymore as intended, and they cause issues on other well-built browsers.
 		* Counters now only work with JavaScript enabled. In PHP, this added too much overhead as we were predicting and counting in code.
+		* Description excerpts are no longer added to categories from the latest post ID.
 		* Open Graph, Twitter, and SEO plugins no longer disables certain functionality in the plugin.
 			* Instead, only a warning is shown on the settings page.
 			* We made this change as some users found this plugin to be broken when trying it out, while it was actually preventing conflicts when other plugins remained active.
@@ -404,6 +411,7 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 		* Invalid settings' input are now checked before you can change tabs. This makes the saving buttons work as intended.
 			* TODO consider checking closed postboxes too.... we could add an on-publish listener that checks if our postboxes are closed, and open them if they contain invalid values.
 				* `jQuery( elem ).find( '.hndle, .handlediv' ).trigger( 'click.postboxes' );`
+		* The SEO Bar no longer incorretly tells that CPT categories or tags are discouraged from indexing via the global settings.
 
 * **For translators:**
 	* **New translations are available.**
@@ -516,9 +524,9 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 				* `_set_debug_query_output_cache()`, marked private.
 			* In class: `\The_SEO_Framework\Detect` -- Factory: `the_seo_framework()`
 				* `is_post_type_disabled()`
+				* `is_post_type_supported()`
 				* `taxonomy_supports_custom_seo()` TODO remove?
 				* `get_supported_post_types()`
-				* `get_forced_supported_post_types()`
 			* In class `\The_SEO_Framework\Generate_Image` -- Factory: `the_seo_framework()`
 				* `register_image_dimension()`
 			* In class `\The_SEO_Framework\Generate_Title` -- Factory: `the_seo_framework()`
@@ -546,12 +554,16 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 				* TODO are there more??
 			* In class `\The_SEO_Framework\Metaboxes` -- Factory: `the_seo_framework()`
 				* `general_metabox_posttypes_tab()` TODO consider making these all protected?
+			* In class: `\The_SEO_Framework\Post_Data` -- Factory: `the_seo_framework()`
+				* `get_post_type_label()`
 			* In class `\The_SEO_Framework\Render` -- Factory: `the_seo_framework()`
 				* `get_document_title()`
 				* `get_wp_title()`
 			* In class `\The_SEO_Framework\Sanitize` -- Factory: `the_seo_framework()`
 				* `sanitize_field_id()`
 				* `s_disabled_post_types()`
+			* In class: `\The_SEO_Framework\Term_Data` -- factory: `the_seo_framework()`
+				* `get_tax_type_label()`
 			* In class `\The_SEO_Framework\Builders\Scripts` -- Factory: `the_seo_framework()->Scripts()`.
 				* `::prepare()`
 				* `::get_status_of()`
@@ -594,6 +606,10 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 			* In class: `\The_SEO_Framework\Post_Data` -- Factory: `the_seo_framework()`
 				* `inattachment_seo_save()` is now marked private.
 				* `inpost_seo_save()` is now marked private.
+
+			* In class: `\The_SEO_Framework\Query` -- Factory: `the_seo_framework()`
+				* `is_category_admin()` no longer guesses, and only returns true on WordPress' built-in categories.
+				* `is_tag_admin()` no longer guesses, and only returns true on WordPress' built-in tags.
 			* In class: `\The_SEO_Framework\Sitemaps` -- Factory: `the_seo_framework()`
 				* `generate_sitmeap()` now uses `wp_raise_memory_limit( 'sitemap' )`.
 					* This applies the WP Core filter `{$context}_memory_limit`, where `$context` is `sitemap`.
@@ -693,6 +709,8 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 		* **Deprecated:**
 			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
 				* `get_meta_output_cache_key()`, use `get_meta_output_cache_key_by_query()` (without Page ID) or `get_meta_output_cache_key_by_type()` (with page ID) instead.
+			* In class: `\The_SEO_Framework\Detect` -- factory: `the_seo_framework()`
+				* `get_supported_post_type()`, use `is_post_type_supported()` instead.
 			* In class: `\The_SEO_Framework\Generate_Title` -- factory: `the_seo_framework()`
 				* `title()`, goodbye, old friend. Use `get_title()` instead.
 				* `generate_home_title()`, use `get_title()` instead.
@@ -705,6 +723,8 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 				* `get_prefered_scheme()`, use `get_preferred_scheme()` instead. (typo)
 			* In class: `\The_SEO_Framework\Render` -- factory: `the_seo_framework()`
 				* `description_from_cache()`, use `get_description()` instead.
+			* In class: `\The_SEO_Framework\Term_Data` -- factory: `the_seo_framework()`
+				* `get_tax_labels()`, use WordPress Core functionality instead.
 	* **Property notes:**
 		* **Removed:**
 			* In class: `\The_SEO_Framework\Admin_Init` -- Factory: `the_seo_framework()`
@@ -796,6 +816,9 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 * **The full changelog can be found [here](http://theseoframework.com/?cat=2).**
 
 == Upgrade Notice ==
+
+= 3.1.0 =
+This is a major update. Make a backup of your database before upgrading. If you use the Extension Manager, update it to 1.5.2 or greater before updating this plugin. In the 3.1.0 update, WordPress 4.6 (or greater) and PHP 5.4 (or greater) is required.
 
 = 3.0.0 =
 A major update. Make a backup of your database before upgrading.

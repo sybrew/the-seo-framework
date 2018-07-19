@@ -52,10 +52,8 @@ function _wpml_remove_all_languages( $languages_links = [] ) {
  *
  * @since 3.1.0
  * @global \wpdb $wpdb
+ * @access private
  * @staticvar bool $cleared
- * @TODO Don't use a wpdb LIKE expression, but loop through the languages instead, and let delete_transient() handle it?
- *       Note that we can't adjust the mandatory cache key suffix, which includes a cached language code -- required for performance.
- *       =HACK?
  *
  * @param string $type    The type. Comes in handy when you use a catch-all function.
  * @param int    $id      The post, page or TT ID. Defaults to $this->get_the_real_ID().

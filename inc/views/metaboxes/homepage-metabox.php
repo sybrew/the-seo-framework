@@ -72,7 +72,7 @@ switch ( $instance ) :
 
 		$frompost_title = $this->has_page_on_front() ? $this->get_custom_field( '_genesis_title', $home_id ) : '';
 		if ( $frompost_title ) {
-			//! FIXME: Doesn't consider filters. Inject filter here, it's hackish...?
+			//! FIXME: Doesn't consider filters. Inject filter here, it's hackish...? Make a specific function, smelly...?
 			if ( $this->use_title_branding( [ 'id' => $home_id ] ) ) {
 				$this->merge_title_branding( $frompost_title, [ 'id' => $home_id ] );
 			}

@@ -411,23 +411,24 @@ class Generate_Title extends Generate_Description {
 			return $title;
 
 		$use_prefix = $this->use_generated_archive_prefix();
+		$_tax = isset( $term->taxonomy ) ? $term->taxonomy : '';
 
 		if ( ! $_query ) {
-			if ( ! empty( $term->taxonomy ) ) {
-				if ( 'category' === $term->taxonomy ) {
+			if ( $_tax ) {
+				if ( 'category' === $_tax ) {
 					$title = $this->get_generated_single_term_title( $term );
 					/* translators: Category archive title. 1: Category name */
-					$title = $use_prefix ? sprintf( \__( 'Category: %s', 'default' ), $this->get_the_term_name( $term ), $title ) : $title;
-				} elseif ( 'tag' === $term->taxonomy ) {
+					$title = $use_prefix ? sprintf( \__( 'Category: %s', 'default' ), $title ) : $title;
+				} elseif ( 'tag' === $_tax ) {
 					$title = $this->get_generated_single_term_title( $term );
 					/* translators: Tag archive title. 1: Tag name */
-					$title = $use_prefix ? sprintf( \__( 'Tag: %s', 'default' ), $this->get_the_term_name( $term ), $title ) : $title;
+					$title = $use_prefix ? sprintf( \__( 'Tag: %s', 'default' ), $title ) : $title;
 				} else {
 					$title = $this->get_generated_single_term_title( $term );
 
-					if ( $use_prefix ) {
+					if ( $use_prefix && $_prefix = $this->get_tax_type_label( $_tax ) ) {
 						/* translators: Front-end output. 1: Taxonomy singular name, 2: Current taxonomy term */
-						$title = sprintf( __( '%1$s: %2$s', 'autodescription' ), $this->get_the_term_name( $term, true, false ), $title );
+						$title = sprintf( __( '%1$s: %2$s', 'autodescription' ), $_prefix, $title );
 					}
 				}
 			} else {
@@ -437,11 +438,11 @@ class Generate_Title extends Generate_Description {
 			if ( $this->is_category() ) {
 				$title = $this->get_generated_single_term_title( $term );
 				/* translators: Category archive title. 1: Category name */
-				$title = $use_prefix ? sprintf( \__( 'Category: %s', 'default' ), $this->get_the_term_name( $term ), $title ) : $title;
+				$title = $use_prefix ? sprintf( \__( 'Category: %s', 'default' ), $title ) : $title;
 			} elseif ( $this->is_tag() ) {
 				$title = $this->get_generated_single_term_title( $term );
 				/* translators: Tag archive title. 1: Tag name */
-				$title = $use_prefix ? sprintf( \__( 'Tag: %s', 'default' ), $this->get_the_term_name( $term ), $title ) : $title;
+				$title = $use_prefix ? sprintf( \__( 'Tag: %s', 'default' ), $title ) : $title;
 			} elseif ( $this->is_author() ) {
 				$title = \get_the_author();
 				/* translators: Front-end output. */
@@ -484,15 +485,15 @@ class Generate_Title extends Generate_Description {
 					$title = \_x( 'Chats', 'post format archive title', 'default' );
 				}
 			} elseif ( \is_post_type_archive() ) {
-				$title = $this->get_generated_post_type_archive_title() ?: $this->get_the_term_name( $term, true, false );
+				$title = $this->get_generated_post_type_archive_title() ?: $this->get_tax_type_label( $_tax, false );
 				/* translators: Front-end output. */
 				$title = $use_prefix ? sprintf( \__( 'Archives: %s', 'default' ), $title ) : $title;
 			} elseif ( $this->is_tax() ) {
 				$title = $this->get_generated_single_term_title( $term );
 
-				if ( $use_prefix ) {
+				if ( $use_prefix && $_prefix = $this->get_tax_type_label( $_tax ) ) {
 					/* translators: Front-end output. 1: Taxonomy singular name, 2: Current taxonomy term */
-					$title = sprintf( __( '%1$s: %2$s', 'autodescription' ), $this->get_the_term_name( $term, true, false ), $title );
+					$title = sprintf( __( '%1$s: %2$s', 'autodescription' ), $_prefix, $title );
 				}
 			} else {
 				$title = \__( 'Archives', 'default' );
@@ -745,7 +746,7 @@ class Generate_Title extends Generate_Description {
 	public function merge_title_protection( &$title, $args = null ) {
 
 		$id   = isset( $args['id'] ) ? $args['id'] : $this->get_the_real_ID();
-		$post = \get_post( $id, OBJECT );
+		$post = $id ? \get_post( $id, OBJECT ) : null;
 
 		if ( isset( $post->post_password ) && '' !== $post->post_password ) {
 			/**

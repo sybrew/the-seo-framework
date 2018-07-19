@@ -1016,12 +1016,12 @@ class Generate_Description extends Generate {
 
 		//* Put excerpt in cache.
 		if ( ! isset( $excerpt_cache[ $page_id ][ $term_id ] ) ) {
-			if ( $this->is_singular( $page_id ) ) {
-				//* We're on the blog page now.
-				$excerpt = $this->get_excerpt_by_id( '', $page_id, '', false );
-			} elseif ( $term_id ) {
+			if ( $term_id ) {
 				//* We're on a taxonomy now. Fetch excerpt from latest term post.
-				$excerpt = empty( $term->description ) ? $this->get_excerpt_by_id( '', '', $page_id, false ) : $this->s_description_raw( $term->description );
+				$excerpt = ! empty( $term->description ) ? $this->s_description_raw( $term->description ) : '';
+			} elseif ( $this->is_singular( $page_id ) ) {
+				//* We're on the blog page now.
+				$excerpt = $this->get_excerpt_by_id( '', $page_id, null, false );
 			} elseif ( $this->is_author() ) {
 				$excerpt = $this->s_description_raw( \get_the_author_meta( 'description', (int) \get_query_var( 'author' ) ) );
 			} else {

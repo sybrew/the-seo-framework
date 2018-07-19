@@ -150,7 +150,7 @@ class Inpost extends Profile {
 			return;
 
 		$post   = \get_post_type_object( $post_type );
-		$labels = is_object( $post ) && isset( $post->labels ) ? $post->labels : '';
+		$labels = isset( $post->labels ) ? $post->labels : '';
 
 		if ( ! $labels )
 			return;
@@ -248,12 +248,10 @@ class Inpost extends Profile {
 
 		// Args are passed.
 		if ( isset( $args['args'] ) ) {
-			$args_split = $args['args'];
-
 			//* The post type callback arg (translated)
-			$type = $args_split[0];
+			$type = $args['args'][0];
 			//* The kind of page we're on.
-			$page = $args_split[1];
+			$page = $args['args'][1];
 
 			//* Only add nonce on post/page edit screen. Nonce for terms are handled in core.
 			if ( 'is_post_page' === $page ) {
@@ -262,20 +260,9 @@ class Inpost extends Profile {
 				// This shouldn't happen.
 				return;
 			}
-		} elseif ( is_object( $object ) ) {
-
+		} elseif ( isset( $object->taxonomy ) ) {
 			//* Singular name.
-			$type = $this->get_the_term_name( $object, true, false );
-
-			//* Plural name.
-			if ( empty( $type ) )
-				$type = $this->get_the_term_name( $object, false, false );
-
-			if ( empty( $type ) ) {
-				// Fallback to Page as it is generic.
-				$type = \__( 'Page', 'autodescription' );
-			}
-
+			$type = $this->get_tax_type_label( $object->taxonomy );
 			$is_term = true;
 		}
 

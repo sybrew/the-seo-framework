@@ -30,6 +30,8 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * Shows you if you're doing the SEO right.
  *
  * @since 2.8.0
+ * @TODO make abstract and extend for post and term types.
+ *       See `TSFEP\Output\Output()` (private plugin)
  */
 class Doing_It_Right extends Generate_Ldjson {
 
@@ -503,51 +505,28 @@ class Doing_It_Right extends Generate_Ldjson {
 			static $post_i18n = null;
 			static $is_term = null;
 
-			$term = false;
+			$term = null;
 			/**
 			 * Static caching.
 			 * @since 2.3.8
 			 */
-			if ( ! isset( $post_i18n ) && ! isset( $is_term ) ) {
-
-				//* Setup i18n values for posts and pages.
-				if ( 'post' === $type ) {
-					$post_i18n = \__( 'Post', 'autodescription' );
-					$is_term = false;
-					$term = false;
-				} elseif ( 'page' === $type ) {
-					$post_i18n = \__( 'Page', 'autodescription' );
-					$is_term = false;
-					$term = false;
+			if ( ! isset( $post_i18n, $is_term ) ) {
+				if ( $this->is_post_type_page( $type ) ) {
+					$is_term   = false;
+					$post_i18n = $this->get_post_type_label( $type );
 				} else {
-					/**
-					 * Because of static caching, $is_term was never assigned.
-					 * @since 2.4.1
-					 */
-					$is_term = true;
+					$is_term   = true;
+					$term      = $this->fetch_the_term( $post_id );
+					$post_i18n =
+						( isset( $term->taxonomy ) ? $this->get_tax_type_label( $term->taxonomy ) : '' )
+						?: $this->get_post_type_label( $type );
 				}
-			}
-
-			if ( $is_term ) {
-				//* We're on a term or taxonomy. Try fetching names. Default back to "Page".
-				$term = $this->fetch_the_term( $post_id );
-				$post_i18n = $this->get_the_term_name( $term );
-
-				/**
-				 * Check if current post type is a page or taxonomy.
-				 * Only check if is_term is not yet changed to false. To save processing power.
-				 *
-				 * @since 2.3.1
-				 */
-				if ( $this->is_post_type_page( $type ) )
-					$is_term = false;
 			}
 
 			$post_low = $this->maybe_lowercase_noun( $post_i18n );
 
 			$args = [
 				'is_term'   => $is_term,
-				'term'      => $term,
 				'post_id'   => $post_id,
 				'post_i18n' => $post_i18n,
 				'post_low'  => $post_low,
@@ -649,7 +628,6 @@ class Doing_It_Right extends Generate_Ldjson {
 	 *
 	 * @param array $args {
 	 *    'is_term'   => bool $is_term,
-	 *    'term'      => object $term,
 	 *    'post_i18n' => string $post_i18n,
 	 *    'post_low'  => string $post_low,
 	 *    'type'      => string $type,
@@ -661,9 +639,9 @@ class Doing_It_Right extends Generate_Ldjson {
 		$post_i18n = $args['post_i18n'];
 		$is_term = true;
 
-		$data = $this->get_term_meta( $args['term']->term_id );
+		$data = $this->get_term_meta( $args['post_id'] );
 
-		$noindex  = isset( $data['noindex'] ) && $data['noindex'];
+		$noindex  = ! empty( $data['noindex'] );
 		$redirect = false; // We don't apply redirect on taxonomies (yet)
 
 		//* Blocked SEO, return simple bar.
@@ -688,7 +666,6 @@ class Doing_It_Right extends Generate_Ldjson {
 	 *
 	 * @param array $args {
 	 *    'is_term'   => $is_term,
-	 *    'term'      => $term,
 	 *    'post_id'   => $post_id,
 	 *    'post_i18n' => $post_i18n,
 	 *    'post_low'  => $post_low,
@@ -698,14 +675,13 @@ class Doing_It_Right extends Generate_Ldjson {
 	 */
 	protected function the_seo_bar_page( $args ) {
 
-		$post_id = $args['post_id'];
 		$post_i18n = $args['post_i18n'];
 
 		$is_term = false;
-		$is_front_page = $this->is_static_frontpage( $post_id );
+		$is_front_page = $this->is_static_frontpage( $args['post_id'] );
 
-		$redirect = (bool) $this->get_custom_field( 'redirect', $post_id );
-		$noindex  = (bool) $this->get_custom_field( '_genesis_noindex', $post_id );
+		$redirect = (bool) $this->get_custom_field( 'redirect', $args['post_id'] );
+		$noindex  = (bool) $this->get_custom_field( '_genesis_noindex', $args['post_id'] );
 
 		if ( $is_front_page )
 			$noindex = $this->is_option_checked( 'homepage_noindex' ) ?: $noindex;
@@ -743,18 +719,14 @@ class Doing_It_Right extends Generate_Ldjson {
 	 */
 	protected function the_seo_bar_data( $args ) {
 
-		$post_id = $args['post_id'];
-
 		static $data = [];
 
-		if ( isset( $data[ $post_id ] ) )
-			return $data[ $post_id ];
+		if ( isset( $data[ $args['post_id'] ] ) )
+			return $data[ $args['post_id'] ];
 
-		if ( $args['is_term'] ) {
-			return $data[ $post_id ] = $this->the_seo_bar_term_data( $args );
-		} else {
-			return $data[ $post_id ] = $this->the_seo_bar_post_data( $args );
-		}
+		return $data[ $args['post_id'] ] = $args['is_term']
+			? $this->the_seo_bar_term_data( $args )
+			: $this->the_seo_bar_post_data( $args );
 	}
 
 	/**
@@ -778,14 +750,10 @@ class Doing_It_Right extends Generate_Ldjson {
 	 */
 	protected function the_seo_bar_term_data( $args ) {
 
-		$term = $args['term'];
-		$term_id = $args['post_id'];
-		$taxonomy = $args['type'];
-
-		$data = $this->get_term_meta( $term_id );
+		$data = $this->get_term_meta( $args['post_id'] );
 
 		$title_custom_field = isset( $data['doctitle'] ) ? $data['doctitle'] : '';
-		$description_custom_field = $this->get_description_from_custom_field( $term_id );
+		$description_custom_field = $this->get_description_from_custom_field( $args['post_id'] );
 		$noindex = isset( $data['noindex'] ) ? $data['noindex'] : '';
 		$nofollow = isset( $data['nofollow'] ) ? $data['nofollow'] : '';
 		$noarchive = isset( $data['noarchive'] ) ? $data['noarchive'] : '';
@@ -793,16 +761,16 @@ class Doing_It_Right extends Generate_Ldjson {
 		$title_is_from_custom_field = (bool) $title_custom_field;
 
 		$title = $this->get_title( [
-			'id'       => $term_id,
-			'taxonomy' => $taxonomy,
+			'id'       => $args['post_id'],
+			'taxonomy' => $args['type'],
 		] );
 
 		$description_is_from_custom_field = (bool) $description_custom_field;
 		//= Call sanitized version.
 		if ( $description_is_from_custom_field ) {
-			$description = $this->get_description_from_custom_field( $term_id );
+			$description = $this->get_description_from_custom_field( $args['post_id'] );
 		} else {
-			$description = $this->get_generated_description( $term_id );
+			$description = $this->get_generated_description( $args['post_id'] );
 		}
 
 		$noindex   = (bool) $noindex;
@@ -841,15 +809,13 @@ class Doing_It_Right extends Generate_Ldjson {
 	 */
 	protected function the_seo_bar_post_data( $args ) {
 
-		$post_id = $args['post_id'];
+		$title_custom_field = $this->get_custom_field( '_genesis_title', $args['post_id'] );
+		$description_custom_field = $this->get_description_from_custom_field( $args['post_id'] );
+		$noindex   = $this->get_custom_field( '_genesis_noindex', $args['post_id'] );
+		$nofollow  = $this->get_custom_field( '_genesis_nofollow', $args['post_id'] );
+		$noarchive = $this->get_custom_field( '_genesis_noarchive', $args['post_id'] );
 
-		$title_custom_field = $this->get_custom_field( '_genesis_title', $post_id );
-		$description_custom_field = $this->get_description_from_custom_field( $post_id );
-		$noindex   = $this->get_custom_field( '_genesis_noindex', $post_id );
-		$nofollow  = $this->get_custom_field( '_genesis_nofollow', $post_id );
-		$noarchive = $this->get_custom_field( '_genesis_noarchive', $post_id );
-
-		if ( $this->is_static_frontpage( $post_id ) ) {
+		if ( $this->is_static_frontpage( $args['post_id'] ) ) {
 			$title_custom_field = $this->get_option( 'homepage_title' ) ?: $title_custom_field;
 			// $description_custom_field = $description_custom_field; // We already got this.
 			$noindex   = $this->get_option( 'homepage_noindex' ) ?: $nofollow;
@@ -857,16 +823,16 @@ class Doing_It_Right extends Generate_Ldjson {
 			$noarchive = $this->get_option( 'homepage_noarchive' ) ?: $noarchive;
 		}
 
-		$title = $this->get_title( [ 'id' => $post_id ] );
+		$title = $this->get_title( [ 'id' => $args['post_id'] ] );
 
 		$title_is_from_custom_field = (bool) $title_custom_field;
 
 		$description_is_from_custom_field = (bool) $description_custom_field;
 		//= Call sanitized version.
 		if ( $description_is_from_custom_field ) {
-			$description = $this->get_description_from_custom_field( $post_id );
+			$description = $this->get_description_from_custom_field( $args['post_id'] );
 		} else {
-			$description = $this->get_generated_description( $post_id );
+			$description = $this->get_generated_description( $args['post_id'] );
 		}
 
 		$noindex   = (bool) $noindex;
@@ -1153,10 +1119,6 @@ class Doing_It_Right extends Generate_Ldjson {
 	 */
 	protected function the_seo_bar_index_notice( $args ) {
 
-		$term = $args['term'];
-		$is_term = $args['is_term'];
-		$post_i18n = $args['post_i18n'];
-
 		$data = $this->the_seo_bar_data( $args );
 
 		$classes = $this->get_the_seo_bar_classes();
@@ -1173,7 +1135,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		$ind_notice  = $i18n['index'];
 
 		/* Translators: %s = Post / Page / Category, etc. */
-		$ind_notice .= ' ' . sprintf( \esc_attr__( '%s is being indexed.', 'autodescription' ), $post_i18n );
+		$ind_notice .= ' ' . sprintf( \esc_attr__( '%s is being indexed.', 'autodescription' ), $args['post_i18n'] );
 		$ind_class = $good;
 
 		/**
@@ -1188,8 +1150,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		}
 
 		//* Adds notice for global archive indexing options.
-		if ( $is_term ) {
-
+		if ( $args['is_term'] ) {
 			/**
 			 * @staticvar bool $checked
 			 * @staticvar string $label
@@ -1203,7 +1164,7 @@ class Doing_It_Right extends Generate_Ldjson {
 
 			if ( $checked ) {
 				$but_and = isset( $ind_but ) ? $and_i18n : $but_i18n;
-				$label = $this->get_the_term_name( $term, false );
+				$label = $this->get_tax_type_label( $this->fetch_the_term( $args['post_id'] )->taxonomy, false );
 
 				/* translators: 1: But or And, 2: Current taxonomy term plural label */
 				$ind_notice .= '<br>' . sprintf( \esc_attr__( '%1$s indexing for %2$s have been discouraged.', 'autodescription' ), $but_and, $label );
@@ -1216,10 +1177,10 @@ class Doing_It_Right extends Generate_Ldjson {
 		 * Adds post protection notice
 		 * @since 2.8.0
 		 */
-		if ( ! $is_term && $this->is_protected( $args['post_id'] ) ) {
+		if ( ! $args['is_term'] && $this->is_protected( $args['post_id'] ) ) {
 			$but_and = isset( $ind_but ) ? $and_i18n : $but_i18n;
 			/* translators: 1 = But or And, 1 = Post/Page  */
-			$ind_notice .= '<br>' . sprintf( \esc_attr__( '%1$s the %2$s is protected from public visibility. This means indexing is discouraged.', 'autodescription' ), $but_and, $post_i18n );
+			$ind_notice .= '<br>' . sprintf( \esc_attr__( '%1$s the %2$s is protected from public visibility. This means indexing is discouraged.', 'autodescription' ), $but_and, $args['post_i18n'] );
 			$ind_class = $unknown;
 			$ind_but = true;
 		}
@@ -1238,13 +1199,16 @@ class Doing_It_Right extends Generate_Ldjson {
 		 *
 		 * @since 2.2.8
 		 */
-		if ( $is_term && isset( $term->count ) && 0 === $term->count ) {
-			$but_and = isset( $ind_but ) ? $and_i18n : $but_i18n;
+		if ( $args['is_term'] ) {
+			$term = $this->fetch_the_term( $args['post_id'] );
+			if ( isset( $term->count ) && 0 === $term->count ) {
+				$but_and = isset( $ind_but ) ? $and_i18n : $but_i18n;
 
-			/* translators: %s = But or And */
-			$ind_notice .= '<br>' . sprintf( \esc_attr__( '%s there are no posts in this term; therefore, indexing has been discouraged.', 'autodescription' ), $but_and );
-			//* Don't make it unknown if it's not good.
-			$ind_class = $ind_class !== $good ? $ind_class : $unknown;
+				/* translators: %s = But or And */
+				$ind_notice .= '<br>' . sprintf( \esc_attr__( '%s there are no posts in this term; therefore, indexing has been discouraged.', 'autodescription' ), $but_and );
+				//* Don't make it unknown if it's not good.
+				$ind_class = $ind_class !== $good ? $ind_class : $unknown;
+			}
 		}
 
 		$ind_wrap_args = [
@@ -1305,10 +1269,6 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		$followed = true;
 
-		$term = $args['term'];
-		$is_term = $args['is_term'];
-		$post_i18n = $args['post_i18n'];
-
 		$data = $this->the_seo_bar_data( $args );
 		$nofollow = $data['nofollow'];
 
@@ -1326,13 +1286,13 @@ class Doing_It_Right extends Generate_Ldjson {
 		$follow_short = $i18n['follow_short'];
 
 		if ( $nofollow ) {
-			$fol_notice = $follow_i18n . ' ' . sprintf( \esc_attr__( "%s links aren't being followed.", 'autodescription' ), $post_i18n );
+			$fol_notice = $follow_i18n . ' ' . sprintf( \esc_attr__( "%s links aren't being followed.", 'autodescription' ), $args['post_i18n'] );
 			$fol_class = $unknown;
 			$fol_but = true;
 
 			$followed = false;
 		} else {
-			$fol_notice = $follow_i18n . ' ' . sprintf( \esc_attr__( '%s links are being followed.', 'autodescription' ), $post_i18n );
+			$fol_notice = $follow_i18n . ' ' . sprintf( \esc_attr__( '%s links are being followed.', 'autodescription' ), $args['post_i18n'] );
 			$fol_class = $good;
 		}
 
@@ -1352,7 +1312,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		}
 
 		//* Adds notice for global archive indexing options.
-		if ( $is_term ) {
+		if ( $args['is_term'] ) {
 
 			/**
 			 * @staticvar bool $checked
@@ -1367,7 +1327,7 @@ class Doing_It_Right extends Generate_Ldjson {
 
 			if ( $checked ) {
 				$but_and = isset( $fol_but ) ? $and_i18n : $but_i18n;
-				$label = $this->get_the_term_name( $term, false );
+				$label = $this->get_tax_type_label( $this->fetch_the_term( $args['post_id'] )->taxonomy, false );
 
 				/* translators: 1: But or And, 2: Current taxonomy term plural label */
 				$fol_notice .= '<br>' . sprintf( \esc_attr__( '%1$s following for %2$s have been discouraged.', 'autodescription' ), $but_and, $label );
@@ -1413,12 +1373,7 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		$archived = true;
 
-		$term = $args['term'];
-		$is_term = $args['is_term'];
-		$post_low = $args['post_low'];
-
 		$data = $this->the_seo_bar_data( $args );
-		$noarchive = $data['noarchive'];
 
 		$classes = $this->get_the_seo_bar_classes();
 		$unknown = $classes['unknown'];
@@ -1433,14 +1388,14 @@ class Doing_It_Right extends Generate_Ldjson {
 		$and_i18n      = $i18n['and'];
 		$archive_short = $i18n['archive_short'];
 
-		if ( $noarchive ) {
+		if ( $data['noarchive'] ) {
 			/* translators: %s is Post/Page/Term */
-			$arc_notice = $archive_i18n . ' ' . sprintf( \esc_attr__( 'Bots are discouraged to archive this %s.', 'autodescription' ), $post_low );
+			$arc_notice = $archive_i18n . ' ' . sprintf( \esc_attr__( 'Bots are discouraged to archive this %s.', 'autodescription' ), $args['post_low'] );
 			$arc_class = $unknown;
 			$archived = false;
 		} else {
 			/* translators: %s is Post/Page/Term */
-			$arc_notice = $archive_i18n . ' ' . sprintf( \esc_attr__( 'Bots are allowed to archive this %s.', 'autodescription' ), $post_low );
+			$arc_notice = $archive_i18n . ' ' . sprintf( \esc_attr__( 'Bots are allowed to archive this %s.', 'autodescription' ), $args['post_low'] );
 			$arc_class = $good;
 			$arc_but = true;
 		}
@@ -1461,8 +1416,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		}
 
 		//* Adds notice for global archive indexing options.
-		if ( $is_term ) {
-
+		if ( $args['is_term'] ) {
 			/**
 			 * @staticvar bool $checked
 			 * @staticvar string $label
@@ -1476,7 +1430,7 @@ class Doing_It_Right extends Generate_Ldjson {
 
 			if ( $checked ) {
 				$but_and = isset( $arc_but ) ? $and_i18n : $but_i18n;
-				$label = $this->get_the_term_name( $term, false );
+				$label = $this->get_tax_type_label( $this->fetch_the_term( $args['post_id'] )->taxonomy, false );
 
 				/* translators: 1: But or And, 2: Current taxonomy term plural label */
 				$arc_notice .= '<br>' . sprintf( \esc_attr__( '%1$s archiving for %2$s have been discouraged.', 'autodescription' ), $but_and, $label );
@@ -1521,9 +1475,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 */
 	protected function the_seo_bar_redirect_notice( $args ) {
 
-		$is_term = $args['is_term'];
-
-		if ( $is_term ) {
+		if ( $args['is_term'] ) {
 			//* No redirection on taxonomies (yet).
 			$redirect_notice = '';
 		} else {
