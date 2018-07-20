@@ -875,6 +875,7 @@ class Detect extends Render {
 	 * @return array The supported post types.
 	 */
 	public function get_supported_post_types() {
+
 		static $cache = [];
 		// Can't be recursively empty. Right?
 		if ( $cache ) return $cache;
@@ -890,6 +891,7 @@ class Detect extends Render {
 	 * @return array The post types with rewrite capabilities.
 	 */
 	protected function get_rewritable_post_types() {
+
 		$post_types = (array) \get_post_types( [
 			'public'  => true,
 			'rewrite' => true,
@@ -907,6 +909,7 @@ class Detect extends Render {
 	 * @return array Forced supported post types
 	 */
 	protected function get_forced_supported_post_types() {
+
 		static $cache = null;
 		/**
 		 * @since 3.1.0
@@ -930,13 +933,8 @@ class Detect extends Render {
 	 * @return bool
 	 */
 	public function has_page_on_front() {
-
 		static $pof = null;
-
-		if ( isset( $pof ) )
-			return $pof;
-
-		return $pof = 'page' === \get_option( 'show_on_front' );
+		return isset( $pof ) ? $pof : $pof = 'page' === \get_option( 'show_on_front' );
 	}
 
 	/**
@@ -955,7 +953,7 @@ class Detect extends Render {
 	/**
 	 * Determines if the current installation is on a subdirectory.
 	 *
-	 * @since 2.9.0-
+	 * @since 2.9.0
 	 * @staticvar $bool $cache
 	 *
 	 * @return bool

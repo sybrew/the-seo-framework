@@ -288,6 +288,7 @@ class Generate_Url extends Generate_Title {
 	 * Prevents SEO attacks regarding pagination.
 	 *
 	 * @since 3.0.0
+	 * @since 3.1.0 Added WC Shop and WP Home pagination integration via $this->paged().
 	 *
 	 * @param int|null $id The page ID.
 	 * @return string The custom canonical URL, if any.
@@ -303,6 +304,10 @@ class Generate_Url extends Generate_Title {
 		$_page = \get_query_var( 'page', 0 );
 		if ( $_page !== $this->page() ) {
 			$canonical_url = $this->remove_pagination_from_url( $canonical_url, $_page );
+		}
+		$_paged = \get_query_var( 'paged', 0 );
+		if ( $_paged === $this->paged() ) {
+			$canonical_url = $this->add_url_pagination( $canonical_url, $_paged, true );
 		}
 
 		return $canonical_url;
@@ -345,7 +350,7 @@ class Generate_Url extends Generate_Title {
 
 		if ( is_int( $post_type ) ) {
 			$term_id = (int) $post_type;
-			$term = $this->fetch_the_term( $term_id );
+			$term    = $this->fetch_the_term( $term_id );
 
 			if ( $term instanceof \WP_Post_Type ) {
 				$link = \get_post_type_archive_link( $term->name );
@@ -354,6 +359,8 @@ class Generate_Url extends Generate_Title {
 					//= Adds pagination if ID matches query.
 					$link = $this->add_url_pagination( $link, $this->paged(), true );
 				}
+			} else {
+				$link = '';
 			}
 		} else {
 			$link = \get_post_type_archive_link( $post_type );
@@ -724,10 +731,11 @@ class Generate_Url extends Generate_Title {
 	 * Generates Previous and Next links.
 	 *
 	 * @since 2.2.4
+	 * @since 3.1.0 Now recognizes WC Shops and WP Blog pages as archival types.
 	 * @TODO rewrite to use the new 3.0.0+ URL generation.
 	 *
 	 * @param string $prev_next Previous or next page link.
-	 * @param int $post_id The post ID.
+	 * @param int    $post_id   The post ID.
 	 * @return string|null Escaped site Pagination URL
 	 */
 	public function get_paged_url( $prev_next = 'next', $post_id = 0 ) {
@@ -738,7 +746,10 @@ class Generate_Url extends Generate_Title {
 		$prev = '';
 		$next = '';
 
-		if ( $this->is_singular() ) :
+		$is_home    = $this->is_home();
+		$is_wc_shop = $this->is_wc_shop();
+
+		if ( $this->is_singular() && ! $is_home && ! $is_wc_shop ) :
 			if ( $this->is_real_front_page() || $this->is_static_frontpage( $post_id ) ) {
 				$output_singular_paged = $this->is_option_checked( 'prev_next_frontpage' );
 			} else {
@@ -759,7 +770,7 @@ class Generate_Url extends Generate_Title {
 					$next = $page < $_numpages ? $this->get_paged_post_url( $page + 1, $post_id, 'next' ) : '';
 				}
 			endif;
-		elseif ( $this->is_archive() || $this->is_home() ) :
+		elseif ( $this->is_archive() || $is_home || $is_wc_shop ) :
 
 			$output_archive_paged = false;
 			if ( $this->is_real_front_page() || $this->is_front_page_by_id( $post_id ) ) {
@@ -784,6 +795,7 @@ class Generate_Url extends Generate_Title {
 
 					if ( ! $paged )
 						$paged = 1;
+
 					$paged = intval( $paged ) + 1;
 
 					$next = \get_pagenum_link( $paged, false );

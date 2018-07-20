@@ -323,6 +323,8 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 		* New SEO Bar checks:
 			* When the generated description is empty, it'll now tell you with a blue bar, instead of saying it's "far too short".
 			* When the generated title is empty thanks to filters, it'll now tell you with a blue bar, instead of saying it's "far too short".
+			* TODO Draft pages correctly state their indexing status.
+			* TODO When the Blog Page is empty, and when it's not the home page, it'll show a "noindex" notification.
 		* Descriptive links to all meta title and description labels.
 		* Post Type Settings:
 			* Found in the General Settings meta box, they'll prevent The SEO Framework from interacting.
@@ -362,6 +364,8 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 		* The SEO Bar is now capable of articulating post type names, instead of only term names.
 		* In the robots settings meta box, we've added a descriptive warning to the sitewide `nofollow` and `noarchive` settings.
 		* The primary term selector tooltip now states the human readible and translatable name, instead of the static code name.
+		* WC Shop and Blog Pages now have "rel=prev/next" canonical URLs added when link relationship tags are enabled for archives.
+		* WC Shop and Blog Pages now listen to the global pagination robots' "noindex" settings.
 	* **Changed:**
 		* TSF now requires WordPress 4.6 (previously 4.4).
 		* TSF now requires PHP 5.4 (previously 5.3).
@@ -412,6 +416,7 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 			* TODO consider checking closed postboxes too.... we could add an on-publish listener that checks if our postboxes are closed, and open them if they contain invalid values.
 				* `jQuery( elem ).find( '.hndle, .handlediv' ).trigger( 'click.postboxes' );`
 		* The SEO Bar no longer incorretly tells that CPT categories or tags are discouraged from indexing via the global settings.
+		* WC Shop and Blog Pages canonical URLs now correctly output pagination.
 
 * **For translators:**
 	* **New translations are available.**
@@ -731,6 +736,8 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 				* `css_name`
 				* `js_name`
 				* `page_base_file`
+			* In class: `\The_SEO_Framework\Admin_Pages` -- Factory: `the_seo_framework()`
+				* TODO `page_defaults`
 			* In class: `\The_SEO_Framework\Cache` -- Factory: `the_seo_framework()`
 				* `theme_doing_it_right_transient`
 			* In class: `\The_SEO_Framework\Load` -- Factory: `the_seo_framework()`

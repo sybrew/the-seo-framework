@@ -343,11 +343,10 @@ class Admin_Pages extends Inpost {
 	 * @securitycheck 3.0.0 OK. NOTE: Users can however MANUALLY trigger these on the SEO settings page.
 	 * @todo convert the "get" into secure "error_notice" option. See TSF Extension Manager.
 	 * @todo convert $this->page_defaults to inline texts. It's now uselessly rendering.
-	 *
-	 * @return void
 	 */
 	public function notices() {
 
+		// Only when the admin page is registered for the user, this will run.
 		if ( false === $this->is_seo_settings_page( true ) )
 			return;
 
@@ -709,6 +708,14 @@ class Admin_Pages extends Inpost {
 			$value = isset( $value[ $index ] ) ? $value[ $index ] : '';
 		}
 
+		$cb_class = '';
+		if ( $args['disabled'] ) {
+			$cb_class = 'tsf-disabled';
+		} elseif ( ! $args['index'] ) {
+			// Can't fetch conditionals in index.
+			$cb_class = $this->get_is_conditional_checked( $args['id'], false );
+		}
+
 		$output = sprintf(
 			'<span class="tsf-toblock">%s</span>',
 			vsprintf(
@@ -719,14 +726,11 @@ class Admin_Pages extends Inpost {
 					vsprintf(
 						'<input type=checkbox class="%s" name="%s" id="%s" value="1" %s %s /> %s',
 						[
-							( $args['disabled'] ? 'tsf-disabled' : '' ),
+							$cb_class,
 							$field_name,
 							$field_id,
 							\checked( $value, true, false ),
-							(
-								( $args['disabled'] ? 'disabled' : '' )
-								?: ( $args['index'] ? '' : $this->get_is_conditional_checked( $args['id'] ) )
-							),
+							( $args['disabled'] ? 'disabled' : '' ),
 							$args['label']
 						]
 					),
@@ -801,12 +805,13 @@ class Admin_Pages extends Inpost {
 	 * This function does nothing special. But is merely a simple wrapper.
 	 * Just like code_wrap.
 	 *
-	 * @param string $key required The option name which returns boolean.
-	 * @param string $setting optional The settings field
-	 * @param bool $wrap optional output class="" or just the class name.
-	 * @param bool $echo optional echo or return the output.
-	 *
 	 * @since 2.2.5
+	 *
+	 * @param string $key  The option name which returns boolean.
+	 * @param string $setting optional The settings field.
+	 * @param bool   $wrap Whether to wrap the class name in `class="%s"`
+	 * @param bool   $echo Whether to echo or return the output.
+	 * @return string Empty on echo or the class name with an optional wrapper.
 	 */
 	public function is_default_checked( $key, $setting = '', $wrap = true, $echo = true ) {
 
@@ -836,11 +841,11 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @since 2.3.4
 	 *
-	 * @param string $key required The option name which returns boolean.
-	 * @param string $setting optional The settings field
-	 * @param bool $wrap optional output class="" or just the class name.
-	 * @param bool $echo optional echo or return the output.
-	 * @return string Empty on echo or The class with an optional wrapper.
+	 * @param string $key  The option name which returns boolean.
+	 * @param string $setting optional The settings field.
+	 * @param bool   $wrap Whether to wrap the class name in `class="%s"`
+	 * @param bool   $echo Whether to echo or return the output.
+	 * @return string Empty on echo or the class name with an optional wrapper.
 	 */
 	public function is_warning_checked( $key, $setting = '', $wrap = true, $echo = true ) {
 
@@ -869,27 +874,25 @@ class Admin_Pages extends Inpost {
 	 * Returns the HTML class wrap for warning/default Checkbox options.
 	 *
 	 * @since 2.6.0
+	 * @since 3.1.0 Added the $wrap parameter
 	 *
-	 * @param string $key       The option name which returns boolean.
+	 * @param string $key  The option name which returns boolean.
+	 * @param bool   $wrap Whether to wrap the class name in `class="%s"`
 	 */
-	public function get_is_conditional_checked( $key ) {
-		return $this->is_conditional_checked( $key, $this->settings_field, true, false );
+	public function get_is_conditional_checked( $key, $wrap = true ) {
+		return $this->is_conditional_checked( $key, $this->settings_field, $wrap, false );
 	}
 
 	/**
 	 * Returns the HTML class wrap for warning/default Checkbox options.
 	 *
-	 * This function does nothing special. But is merely a simple wrapper.
-	 * Just like code_wrap.
-	 *
-	 * @param string $key required The option name which returns boolean.
-	 * @param string $setting optional The settings field
-	 * @param bool $wrap optional output class="" or just the class name.
-	 * @param bool $echo optional echo or return the output.
-	 *
 	 * @since 2.3.4
 	 *
-	 * @return string Empty on echo or The class with an optional wrapper.
+	 * @param string $key  The option name which returns boolean.
+	 * @param string $setting optional The settings field.
+	 * @param bool   $wrap Whether to wrap the class name in `class="%s"`
+	 * @param bool   $echo Whether to echo or return the output.
+	 * @return string Empty on echo or the class name with an optional wrapper.
 	 */
 	public function is_conditional_checked( $key, $setting = '', $wrap = true, $echo = true ) {
 

@@ -48,7 +48,8 @@ class Generate extends User_Data {
 	 * @since 2.8.0 Added check for protected/private posts.
 	 * @since 3.0.0 1: Removed noodp.
 	 *              2: Improved efficiency by grouping if statements.
-	 * @since 3.1.0 Simplified statements, often (not always) speeding things up.
+	 * @since 3.1.0 1. Simplified statements, often (not always) speeding things up.
+	 *              2. Now checks for wc_shop and
 	 * @global \WP_Query $wp_query
 	 *
 	 * @return array|null robots
@@ -63,24 +64,15 @@ class Generate extends User_Data {
 			'noydir'    => $this->get_option( 'noydir' ) ? 'noydir' : '',
 		];
 
-		$is_archive    = $this->is_archive();
-		$is_front_page = $this->is_real_front_page();
-
-		/**
-		 * Check the Robots SEO settings, set noindex for paged archives.
-		 * @since 2.2.4
-		 */
-		if ( $is_archive && $this->paged() > 1 )
-			$meta['noindex'] = $this->get_option( 'paged_noindex' ) ? 'noindex' : $meta['noindex'];
-
-		if ( $is_front_page && ( $this->page() > 1 || $this->paged() > 1 ) )
-			$meta['noindex'] = $this->get_option( 'home_paged_noindex' ) ? 'noindex' : $meta['noindex'];
-
 		//* Check home page SEO settings, set noindex, nofollow and noarchive
-		if ( $is_front_page ) {
+		if ( $this->is_real_front_page() ) {
 			$meta['noindex']   = $this->get_option( 'homepage_noindex' ) ? 'noindex' : $meta['noindex'];
 			$meta['nofollow']  = $this->get_option( 'homepage_nofollow' ) ? 'nofollow' : $meta['nofollow'];
 			$meta['noarchive'] = $this->get_option( 'homepage_noarchive' ) ? 'noarchive' : $meta['noarchive'];
+
+			if ( $this->get_option( 'home_paged_noindex' ) && ( $this->page() > 1 || $this->paged() > 1 ) ) {
+				$meta['noindex'] = 'noindex';
+			}
 		} else {
 			global $wp_query;
 
@@ -95,6 +87,13 @@ class Generate extends User_Data {
 			 */
 			if ( isset( $wp_query->post_count ) && 0 === $wp_query->post_count )
 				$meta['noindex'] = 'noindex';
+
+			$is_archive = $this->is_archive();
+
+			if ( $this->get_option( 'paged_noindex' ) && $this->paged() > 1 ) {
+				if ( $is_archive || $this->is_blog_page() || $this->is_wc_shop() )
+					$meta['noindex'] = $this->get_option( 'paged_noindex' ) ? 'noindex' : $meta['noindex'];
+			}
 
 			if ( $is_archive ) {
 				$term_data = $this->get_current_term_meta();
