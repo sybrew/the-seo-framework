@@ -323,8 +323,8 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 		* New SEO Bar checks:
 			* When the generated description is empty, it'll now tell you with a blue bar, instead of saying it's "far too short".
 			* When the generated title is empty thanks to filters, it'll now tell you with a blue bar, instead of saying it's "far too short".
-			* TODO Draft pages correctly state their indexing status.
-			* TODO When the Blog Page is empty, and when it's not the home page, it'll show a "noindex" notification.
+			* Pages in draft correctly state their indexing status.
+			* When the Blog Page is empty, and when it's not the home page, it'll show a "noindex" notification.
 		* Descriptive links to all meta title and description labels.
 		* Post Type Settings:
 			* Found in the General Settings meta box, they'll prevent The SEO Framework from interacting.
@@ -338,15 +338,8 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 		* Tooltip arrows now always follow your mouse, for a more natural look.
 		* Tooltips now support RTL screens without the arrow overflowing.
 		* Canonical, redirect, and image URLs are no longer uselessly suggested by the browser.
-		* TODO Beaver Builder templates are no longer in the sitemap. (not my fault...) `example.com/fl-builder-template/title/...`
-			* TODO Manage this solely via the new options?
-		* TODO bbPress replies are no longer in the sitemap. (technically, neither our fault).
-			* TODO Manage this solely via the new options?
 		* The Facebook Business page URL description has been updated, to be in line with the current behavior.
 		* TODO Open Graph data validation (e.g. missing descriptions).
-		* TODO Doing it right check for empty description. Make it blue to ask if they intended it to be this way.
-			* This definitely occurs when the post is private, and no custom description is set.
-		* TODO Doing it right check for empty blog page.
 		* TODO WooCommerce checks are no longer blocking (performance... it means we should move "woocommerce" support to a compat file, and improve the API if necessary)
 		* The main plugin's cache is now flushed after the SEO settings are requested to be updated, even when the options didn't change.
 		* The automated scheme detection can now prevent the sitemap from using, and caching, the wrong scheme.
@@ -356,7 +349,7 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 		* All sitemap transients are now deleted on corresponding deletion queries when using WPML.
 		* TODO We've scanned the plugin once more for performance culprits, and improved what needed improving.
 		* The SEO Bar will no longer overflow, but it will now wrap automatically when needed. For this, we had to change a few things.
-			1. The tooltips aren't "boxed" anymore, but flow wherever they deem best.
+			1. The tooltips aren't "boxed in" anymore, but flow wherever they deem best.
 			2. There are 5 to 6 times as many tooltip listeners per SEO bar, as it did prior v3.0. TODO test performance and responsiveness // lighthouse?
 				* TODO SEE: https://github.com/sybrew/the-seo-framework/issues/18
 		* The SEO Bar is a little less daunting--by 13.63% in width to be exact.
@@ -387,7 +380,7 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 			* We made this change as some users found this plugin to be broken when trying it out, while it was actually preventing conflicts when other plugins remained active.
 		* When a sitemap file or plugin is found, this plugin no longer removes its related settings.
 			* Instead, only a warning is shown on the settings page, telling that the options have no effect.
-		* AnsPress title compatibility, they handle this. TODO verify
+		* AnsPress title compatibility, they handle this.
 		* --JETPACK JetPack Open Graph compatibility checks, they handle this since 2016.
 		* TODO (maybe) Description and schema output caching. They cause too much overhead, and they provide no benefit any more. In fact, they affect performance negatively.
 	* **Fixed:**
@@ -515,7 +508,7 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 				* `_wp_ajax_update_counter_type()`, private.
 				* `_wp_ajax_crop_image()`, private.
 			* In class: `\The_SEO_Framework\Admin_Pages` -- Factory: `the_seo_framework()`
-				* `make_checkbox_array()`
+				* `make_checkbox_array()` TODO Convert all settings to use it...
 			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
 				* `get_view_location()`
 				* `_add_plugin_action_links()`, private.
@@ -561,6 +554,7 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 				* `general_metabox_posttypes_tab()` TODO consider making these all protected?
 			* In class: `\The_SEO_Framework\Post_Data` -- Factory: `the_seo_framework()`
 				* `get_post_type_label()`
+				* `is_draft()`
 			* In class `\The_SEO_Framework\Render` -- Factory: `the_seo_framework()`
 				* `get_document_title()`
 				* `get_wp_title()`

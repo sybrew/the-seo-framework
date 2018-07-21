@@ -462,8 +462,7 @@ class Query extends Compat {
 	 */
 	public function is_blog_page( $id = 0 ) {
 
-		if ( empty( $id ) )
-			$id = $this->get_the_real_ID();
+		$id = $id ?: $this->get_the_real_ID();
 
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $id ) )
 			return $cache;

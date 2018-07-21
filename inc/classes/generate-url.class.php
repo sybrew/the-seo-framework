@@ -288,7 +288,7 @@ class Generate_Url extends Generate_Title {
 	 * Prevents SEO attacks regarding pagination.
 	 *
 	 * @since 3.0.0
-	 * @since 3.1.0 Added WC Shop and WP Home pagination integration via $this->paged().
+	 * @since 3.1.0 Added WC Shop and WP Blog (as page) pagination integration via $this->paged().
 	 *
 	 * @param int|null $id The page ID.
 	 * @return string The custom canonical URL, if any.
@@ -860,7 +860,7 @@ class Generate_Url extends Generate_Title {
 				}
 			}
 
-			if ( ! $this->pretty_permalinks || in_array( $post->post_status, [ 'draft', 'auto-draft', 'pending' ], true ) ) {
+			if ( ! $this->pretty_permalinks || $this->is_draft( $post ) ) {
 
 				//* Put removed query arg back prior to adding pagination.
 				if ( isset( $query_arg ) )

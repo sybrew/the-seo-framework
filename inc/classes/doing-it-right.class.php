@@ -1146,52 +1146,48 @@ class Doing_It_Right extends Generate_Ldjson {
 		if ( $this->is_option_checked( 'site_noindex' ) ) {
 			$ind_notice .= '<br>' . \esc_attr__( "But you've discouraged indexing for the whole site.", 'autodescription' );
 			$ind_class = $unknown;
-			$ind_but = true;
+			$but = true;
 		}
 
 		//* Adds notice for global archive indexing options.
 		if ( $args['is_term'] ) {
 			/**
-			 * @staticvar bool $checked
+			 * @staticvar bool $_checked
 			 * @staticvar string $label
 			 */
-			static $checked = null;
+			static $_checked, $_label;
 
-			if ( ! isset( $checked ) ) {
+			if ( ! isset( $_checked ) ) {
 				//* Fetch whether it's checked.
-				$checked = $this->the_seo_bar_archive_robots_options( 'noindex' );
+				$_checked = $this->the_seo_bar_archive_robots_options( 'noindex' );
 			}
 
-			if ( $checked ) {
-				$but_and = isset( $ind_but ) ? $and_i18n : $but_i18n;
-				$label = $this->get_tax_type_label( $this->fetch_the_term( $args['post_id'] )->taxonomy, false );
+			if ( $_checked ) {
+				$but_and = isset( $but ) ? $and_i18n : $but_i18n;
+				$_label = $_label ?: $this->get_tax_type_label( $this->fetch_the_term( $args['post_id'] )->taxonomy, false );
 
 				/* translators: 1: But or And, 2: Current taxonomy term plural label */
-				$ind_notice .= '<br>' . sprintf( \esc_attr__( '%1$s indexing for %2$s have been discouraged.', 'autodescription' ), $but_and, $label );
+				$ind_notice .= '<br>' . sprintf( \esc_attr__( '%1$s indexing for %2$s have been discouraged.', 'autodescription' ), $but_and, $_label );
 				$ind_class = $unknown;
-				$ind_but = true;
+				$but = true;
 			}
-		}
+		} elseif ( $this->is_protected( $args['post_id'] ) ) {
+			// Posts only.
 
-		/**
-		 * Adds post protection notice
-		 * @since 2.8.0
-		 */
-		if ( ! $args['is_term'] && $this->is_protected( $args['post_id'] ) ) {
-			$but_and = isset( $ind_but ) ? $and_i18n : $but_i18n;
+			$but_and = isset( $but ) ? $and_i18n : $but_i18n;
 			/* translators: 1 = But or And, 1 = Post/Page  */
 			$ind_notice .= '<br>' . sprintf( \esc_attr__( '%1$s the %2$s is protected from public visibility. This means indexing is discouraged.', 'autodescription' ), $but_and, $args['post_i18n'] );
 			$ind_class = $unknown;
-			$ind_but = true;
+			$but = true;
 		}
 
 		//* Adds notice for WordPress blog public indexing.
 		if ( false === $this->is_blog_public() ) {
-			$but_and = isset( $ind_but ) ? $and_i18n : $but_i18n;
+			$but_and = isset( $but ) ? $and_i18n : $but_i18n;
 			/* translators: %s = But or And */
 			$ind_notice .= '<br>' . sprintf( \esc_attr__( "%s the blog isn't set to public. This means WordPress discourages indexing.", 'autodescription' ), $but_and );
 			$ind_class = $bad;
-			$ind_but = true;
+			$but = true;
 		}
 
 		/**
@@ -1202,10 +1198,46 @@ class Doing_It_Right extends Generate_Ldjson {
 		if ( $args['is_term'] ) {
 			$term = $this->fetch_the_term( $args['post_id'] );
 			if ( isset( $term->count ) && 0 === $term->count ) {
-				$but_and = isset( $ind_but ) ? $and_i18n : $but_i18n;
+				$but_and = isset( $but ) ? $and_i18n : $but_i18n;
 
 				/* translators: %s = But or And */
 				$ind_notice .= '<br>' . sprintf( \esc_attr__( '%s there are no posts in this term; therefore, indexing has been discouraged.', 'autodescription' ), $but_and );
+				//* Don't make it unknown if it's not good.
+				$ind_class = $ind_class !== $good ? $ind_class : $unknown;
+				$but = true;
+			}
+		} else {
+			// Posts/pages only.
+
+			if ( $this->is_blog_page( $args['post_id'] ) ) {
+				$posts = \get_posts( [
+					'posts_per_page'   => 1,
+					'post_type'        => 'post',
+					'orderby'          => 'date',
+					'order'            => 'DESC',
+					'post_status'      => 'publish',
+					'has_password'     => false,
+					'fields'           => 'ids',
+					'cache_results'    => false,
+					'suppress_filters' => false,
+					'no_found_rows'    => true,
+				] );
+				if ( ! count( $posts ) ) {
+					$but_and = isset( $but ) ? $and_i18n : $but_i18n;
+
+					/* translators: %s = But or And */
+					$ind_notice .= '<br>' . sprintf( \esc_attr__( '%s there are no posts on this blog; therefore, indexing has been discouraged.', 'autodescription' ), $but_and );
+					//* Don't make it unknown if it's not good.
+					$ind_class = $ind_class !== $good ? $ind_class : $unknown;
+					$but = true;
+				}
+			}
+
+			if ( $this->is_draft( $args['post_id'] ) ) {
+				$but_and = isset( $but ) ? $and_i18n : $but_i18n;
+
+				/* translators: 1 = But or And, 1 = Post/Page  */
+				$ind_notice .= '<br>' . sprintf( \esc_attr__( '%1$s this %2$s is in draft; therefore, indexing has been discouraged.', 'autodescription' ), $but_and, $args['post_i18n'] );
 				//* Don't make it unknown if it's not good.
 				$ind_class = $ind_class !== $good ? $ind_class : $unknown;
 			}

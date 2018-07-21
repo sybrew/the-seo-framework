@@ -481,7 +481,7 @@ class Post_Data extends Detect {
 	 *                 This currently doesn't affect how it works.
 	 *
 	 * @param int|null|\WP_Post The post ID or WP Post object.
-	 * @return bool True if protected, false otherwise.
+	 * @return bool True if protected or private, false otherwise.
 	 */
 	public function is_protected( $id = null ) {
 		return $this->is_password_protected( $id ) || $this->is_private( $id );
@@ -493,7 +493,7 @@ class Post_Data extends Detect {
 	 * @since 3.0.0
 	 *
 	 * @param int|null|\WP_Post The post ID or WP Post object.
-	 * @return bool True if private, false otherwise.
+	 * @return bool True if protected, false otherwise.
 	 */
 	public function is_password_protected( $id = null ) {
 		$post = \get_post( $id );
@@ -511,6 +511,19 @@ class Post_Data extends Detect {
 	public function is_private( $id = null ) {
 		$post = \get_post( $id );
 		return isset( $post->post_status ) && 'private' === $post->post_status;
+	}
+
+	/**
+	 * Determines if the current post is a draft.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param int|null|\WP_Post The post ID or WP Post object.
+	 * @return bool True if draft, false otherwise.
+	 */
+	public function is_draft( $id = null ) {
+		$post = \get_post( $id );
+		return isset( $post->post_status ) && in_array( $post->post_status, [ 'draft', 'auto-draft', 'pending' ], true );
 	}
 
 	/**
