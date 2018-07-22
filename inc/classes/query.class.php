@@ -87,8 +87,8 @@ class Query extends Compat {
 
 		$this->_doing_it_wrong( \esc_html( $method ), \esc_html( $message ), '2.9.0' );
 
-		//* Backtrace debugging.
-		if ( $this->the_seo_framework_debug ) {
+		//* Backtrace debugging. TEMP true, I found an error invoked by a crawler I couldn't trace... var_dump()
+		if ( true || $this->the_seo_framework_debug ) {
 			static $_more = true;
 			$catch_all = false;
 			$depth = 10;

@@ -361,6 +361,7 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 		* WC Shop and Blog Pages now have "rel=prev/next" canonical URLs added when link relationship tags are enabled for archives.
 		* WC Shop and Blog Pages now listen to the global pagination robots' "noindex" settings.
 		* Long URLs are now truncated in the sitemap stylesheet. This does not affect the sitemap.
+		* Breadcrumbs are now rendered on non-hierarchival pages, too.
 	* **Changed:**
 		* TSF now requires WordPress 4.6 (previously 4.4).
 		* TSF now requires PHP 5.4 (previously 5.3).

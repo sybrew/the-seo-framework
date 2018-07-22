@@ -148,9 +148,6 @@ function _print_xsl_styles( $tsf ) {
 	tr:nth-of-type(2n+3) {
 		background-color: #eaeaea;
 	}
-	.odd {
-		background-color: #eaeaea;
-	}
 	#footer {
 		margin: 20px 30px;
 		font-size: 12px;
@@ -291,7 +288,7 @@ function _print_xsl_content( $tsf ) {
 	];
 	$url = [
 		'th' => sprintf( '<th>%s</th>', \esc_html( \ent2ncr( \__( 'URL', 'autodescription' ) ) ) ),
-		'td' => '<td><a href="{$itemURL}"><xsl:choose><xsl:when test="string-length($itemURL)&gt;100"><xsl:value-of select="substring($itemURL,0,97)" />...</xsl:when><xsl:otherwise><xsl:value-of select="$itemURL" /></xsl:otherwise></xsl:choose></a></td>',
+		'td' => '<td><a href="{$itemURL}"><xsl:choose><xsl:when test="string-length($itemURL)&gt;99"><xsl:value-of select="substring($itemURL,0,96)" />...</xsl:when><xsl:otherwise><xsl:value-of select="$itemURL" /></xsl:otherwise></xsl:choose></a></td>',
 	];
 
 	if ( $tsf->get_option( 'sitemaps_modified' ) ) {

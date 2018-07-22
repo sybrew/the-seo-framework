@@ -708,7 +708,7 @@ class Cache extends Sitemaps {
 		 * Noob. :D
 		 */
 		if ( empty( $the_id ) )
-			$the_id = 'noob_' . $page_id . '_' . $t;
+			$the_id = 'noob_' . $page_id . '_' . $_t;
 
 		/**
 		 * This should be at most 25 chars. Unless the $blog_id is higher than 99,999,999.

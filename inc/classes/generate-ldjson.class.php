@@ -371,31 +371,25 @@ class Generate_Ldjson extends Generate_Image {
 	 * Generates LD+JSON Breadcrumbs script for Pages.
 	 *
 	 * @since 2.9.3
+	 * @since 3.1.0 Now always generates something, regardless of parents.
 	 *
 	 * @return string LD+JSON breadcrumbs script for Pages.
 	 */
 	public function get_ld_json_breadcrumbs_page() {
 
-		$page_id = $this->get_the_real_ID();
-		//* Get ancestors.
-		$parents = \get_post_ancestors( $page_id );
-
-		if ( ! $parents )
-			return '';
-
-		$output = '';
 		$items = [];
-		$parents = array_reverse( $parents );
+		$parents = array_reverse( \get_post_ancestors( $this->get_the_real_ID() ) );
 
-		foreach ( $parents as $pos => $parent_id ) {
+		$position = 1; // 0 is the home page.
+		foreach ( $parents as $parent_id ) {
+
+			++$position;
 
 			if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
 				$parent_name = $this->get_custom_field( '_genesis_title', $parent_id ) ?: ( $this->get_generated_single_post_title( $parent_id ) ?: $this->untitled() );
 			} else {
 				$parent_name = $this->get_generated_single_post_title( $parent_id ) ?: $this->untitled();
 			}
-
-			$position = $pos + 2;
 
 			$crumb = [
 				'@type'    => 'ListItem',
@@ -417,13 +411,10 @@ class Generate_Ldjson extends Generate_Image {
 			$items[] = $crumb;
 		}
 
-		if ( $items ) {
-			array_unshift( $items, $this->get_ld_json_breadcrumb_home_crumb() );
-			array_push( $items, $this->get_ld_json_breadcrumb_current( $position ) );
-			$output .= $this->make_breadcrumb_script( $items );
-		}
+		array_unshift( $items, $this->get_ld_json_breadcrumb_home_crumb() );
+		array_push( $items, $this->get_ld_json_breadcrumb_current( $position ) );
 
-		return $output;
+		return $this->make_breadcrumb_script( $items );
 	}
 
 	/**
