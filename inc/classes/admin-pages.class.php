@@ -337,18 +337,38 @@ class Admin_Pages extends Inpost {
 	}
 
 	/**
-	 * Display notices on the save or reset of settings.
+	 * Initializes and outputs various notices.
 	 *
 	 * @since 2.2.2
+	 * @since 3.1.0 1. Added seo plugin check.
+	 *              2. Now marked private.
+	 * @access private
+	 */
+	public function notices() {
+
+		if ( $this->get_static_cache( 'check_seo_plugin_conflicts' ) && \current_user_can( 'activate_plugins' ) ) {
+			$this->detect_seo_plugins()
+				and $this->do_dismissible_notice(
+					__( 'Multiple SEO tools have been detected. You should only use one.', 'autodescription' ),
+					'warning'
+				);
+			$this->update_static_cache( 'check_seo_plugin_conflicts', 0 );
+		}
+
+		if ( $this->is_seo_settings_page( true ) ) {
+			$this->do_settings_page_notices();
+		}
+	}
+
+	/**
+	 * Display notices on SEO setting changes.
+	 *
+	 * @since 3.1.0
 	 * @securitycheck 3.0.0 OK. NOTE: Users can however MANUALLY trigger these on the SEO settings page.
 	 * @todo convert the "get" into secure "error_notice" option. See TSF Extension Manager.
 	 * @todo convert $this->page_defaults to inline texts. It's now uselessly rendering.
 	 */
-	public function notices() {
-
-		// Only when the admin page is registered for the user, this will run.
-		if ( false === $this->is_seo_settings_page( true ) )
-			return;
+	protected function do_settings_page_notices() {
 
 		$get = empty( $_GET ) ? null : $_GET;
 
@@ -475,12 +495,19 @@ class Admin_Pages extends Inpost {
 
 		$a11y = $a11y ? 'tsf-show-icon' : '';
 
-		$notice  = '<div class="notice ' . \esc_attr( $type ) . ' tsf-notice ' . $a11y . '"><p>';
-		$notice .= '<a class="hide-if-no-js tsf-dismiss" title="' . \esc_attr__( 'Dismiss', 'autodescription' ) . '"></a>';
-		$notice .= $escape ? \esc_html( $message ) : $message;
-		$notice .= '</p></div>';
-
-		return $notice;
+		return vsprintf(
+			'<div class="notice %s tsf-notice %s"><p>%s%s</p></div>',
+			[
+				\esc_attr( $type ),
+				( $a11y ? 'tsf-show-icon' : '' ),
+				sprintf(
+					'<a class="hide-if-no-js tsf-dismiss" title="%s" %s></a>',
+					\esc_attr__( 'Dismiss', 'autodescription' ),
+					''
+				),
+				( $escape ? \esc_html( $message ) : $message )
+			]
+		);
 	}
 
 	/**
@@ -731,7 +758,7 @@ class Admin_Pages extends Inpost {
 							$field_id,
 							\checked( $value, true, false ),
 							( $args['disabled'] ? 'disabled' : '' ),
-							$args['label']
+							$args['label'],
 						]
 					),
 				]
@@ -899,7 +926,7 @@ class Admin_Pages extends Inpost {
 		$class = '';
 
 		$default = $this->is_default_checked( $key, $setting, false, false );
-		$warned = $this->is_warning_checked( $key, $setting, false, false );
+		$warned  = $this->is_warning_checked( $key, $setting, false, false );
 
 		if ( '' !== $default && '' !== $warned ) {
 			$class = $default . ' ' . $warned;
@@ -1061,19 +1088,21 @@ class Admin_Pages extends Inpost {
 	 * @param bool   $display Whether to display the counter. (options page gimmick)
 	 */
 	public function output_character_counter_wrap( $for, $initial = '', $display = true ) {
-		printf(
+		vprintf(
 			'<div class="tsf-counter-wrap" %s><span class="description tsf-counter" title="%s">%s</span><span class="hide-if-no-js tsf-ajax"></span></div>',
-			( $display ? '' : 'style="display:none;"' ),
-			\esc_attr( 'Click to change counter type', 'autodescription' ),
-			sprintf(
-				/* translators: %s = number */
-				\esc_html__( 'Characters Used: %s', 'autodescription' ),
+			[
+				( $display ? '' : 'style="display:none;"' ),
+				\esc_attr( 'Click to change counter type', 'autodescription' ),
 				sprintf(
-					'<span id="%s_chars">%s</span>',
-					\esc_attr( $for ),
-					(int) mb_strlen( $initial )
-				)
-			)
+					/* translators: %s = number */
+					\esc_html__( 'Characters Used: %s', 'autodescription' ),
+					sprintf(
+						'<span id="%s_chars">%s</span>',
+						\esc_attr( $for ),
+						(int) mb_strlen( $initial )
+					)
+				),
+			]
 		);
 	}
 

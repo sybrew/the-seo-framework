@@ -87,8 +87,8 @@ class Query extends Compat {
 
 		$this->_doing_it_wrong( \esc_html( $method ), \esc_html( $message ), '2.9.0' );
 
-		//* Backtrace debugging. TEMP true, I found an error invoked by a crawler I couldn't trace... var_dump()
-		if ( true || $this->the_seo_framework_debug ) {
+		//* Backtrace debugging.
+		if ( $this->the_seo_framework_debug ) {
 			static $_more = true;
 			$catch_all = false;
 			$depth = 10;
@@ -116,6 +116,7 @@ class Query extends Compat {
 	 * Get the real page ID, also from CPT, archives, author, blog, etc.
 	 *
 	 * @since 2.5.0
+	 * @since 3.1.0 No longer checks if we can cache the query when $use_cache is false.
 	 * @staticvar int $id the ID.
 	 *
 	 * @param bool $use_cache Whether to use the cache or not.
@@ -126,8 +127,7 @@ class Query extends Compat {
 		if ( $this->is_admin() )
 			return $this->get_the_real_admin_ID();
 
-		$can_cache = $this->can_cache_query( __METHOD__ );
-		$use_cache = $can_cache ? $use_cache : false;
+		$use_cache = $use_cache && $this->can_cache_query( __METHOD__ );
 
 		if ( $use_cache ) {
 			static $id = null;
@@ -136,25 +136,20 @@ class Query extends Compat {
 				return $id;
 		}
 
-		//* Try to get ID from plugins.
-		$id = $can_cache ? $this->check_the_real_ID() : 0;
+		//* Try to get ID from plugins when caching is available.
+		$id = $use_cache ? $this->check_the_real_ID() : 0;
 
-		if ( empty( $id ) ) {
+		if ( ! $id ) {
 			//* This catches most ID's. Even Post IDs.
 			$id = \get_queried_object_id();
 		}
 
 		/**
-		 * Applies filters 'the_seo_framework_current_object_id' : integer
-		 * Can be either the Post ID, or the Term ID.
-		 *
-		 * @param int $id
-		 * @param bool Whether the globals WP_Query or current_screen are set.
-		 * @see $this->can_cache_query()
-		 *
 		 * @since 2.6.2
+		 * @param int $id Can be either the Post ID, or the Term ID.
+		 * @param bool    Whether this value is stored in runtime caching.
 		 */
-		return $id = (int) \apply_filters( 'the_seo_framework_current_object_id', $id, $can_cache );
+		return $id = (int) \apply_filters( 'the_seo_framework_current_object_id', $id, $use_cache );
 	}
 
 	/**
@@ -171,7 +166,7 @@ class Query extends Compat {
 		$id = \get_the_ID();
 
 		//* Current term ID (outside loop).
-		if ( empty( $id ) && $this->is_archive_admin() )
+		if ( ! $id && $this->is_archive_admin() )
 			$id = $this->get_admin_term_id();
 
 		return (int) \apply_filters( 'the_seo_framework_current_admin_id', $id );
@@ -184,16 +179,14 @@ class Query extends Compat {
 	 * functions for the current ID in the admin.
 	 *
 	 * @since 2.5.0
-	 * @since 3.1.0 Now checks for the feed.
+	 * @since 3.1.0 1. Now checks for the feed.
+	 *              2. No longer caches.
 	 *
 	 * @return int The admin ID.
 	 */
 	public function check_the_real_ID() { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
 
-		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
-			return $cache;
-
-		$id = '';
+		$id = 0;
 
 		if ( $this->is_feed() ) {
 			$id = \get_the_ID();
@@ -206,16 +199,10 @@ class Query extends Compat {
 		}
 
 		/**
-		 * Applies filters the_seo_framework_real_id : The Real ID for plugins on front-end.
 		 * @since 2.5.0
-		 * @TODO add to Filters API.
+		 * @param int $id
 		 */
-		$this->set_query_cache(
-			__METHOD__,
-			$id = (int) \apply_filters( 'the_seo_framework_real_id', $id )
-		);
-
-		return $id;
+		return (int) \apply_filters( 'the_seo_framework_real_id', $id );
 	}
 
 	/**

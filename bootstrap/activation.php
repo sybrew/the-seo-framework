@@ -26,6 +26,24 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 //! @php7+ convert to IIFE
 \The_SEO_Framework\_activation_setup_sitemap();
 \The_SEO_Framework\_activation_set_options_autoload();
+\The_SEO_Framework\_activation_set_plugin_check_caches();
+
+/**
+ * Nudges the plugin to check for conflicting SEO plugins.
+ *
+ * When found, it'll output a single dismissible notification.
+ *
+ * @since 3.1.0
+ * @access private
+ */
+function _activation_set_plugin_check_caches() {
+
+	$tsf = \the_seo_framework();
+
+	if ( $tsf->loaded ) {
+		$tsf->set_plugin_check_caches();
+	}
+}
 
 /**
  * Add and Flush rewrite rules on plugin activation.
@@ -39,10 +57,10 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  */
 function _activation_setup_sitemap() {
 
-	$the_seo_framework = \the_seo_framework();
+	$tsf = \the_seo_framework();
 
-	if ( $the_seo_framework->loaded ) {
-		$the_seo_framework->rewrite_rule_sitemap();
+	if ( $tsf->loaded ) {
+		$tsf->rewrite_rule_sitemap();
 		\add_action( 'shutdown', 'flush_rewrite_rules' );
 	}
 }
@@ -56,10 +74,10 @@ function _activation_setup_sitemap() {
  */
 function _activation_set_options_autoload() {
 
-	$the_seo_framework = \the_seo_framework();
+	$tsf = \the_seo_framework();
 
-	if ( $the_seo_framework->loaded ) {
-		$options = $the_seo_framework->get_all_options();
+	if ( $tsf->loaded ) {
+		$options = $tsf->get_all_options();
 		$setting = THE_SEO_FRAMEWORK_SITE_OPTIONS;
 
 		\remove_all_filters( "pre_update_option_{$setting}" );

@@ -301,6 +301,7 @@ TODO: RTL stylesheet update.
 TODO: Follow progression of https://github.com/Automattic/jetpack/pull/9912, and see if we might need to implement it ourselves.
 	Track/adjust readme changes: --JETPACK
 TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
+TODO: Regression?: Title quotes are double escaped in JS.
 
 * **For everyone:**
 	* **Added:**
@@ -330,6 +331,8 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 			* Found in the General Settings meta box, they'll prevent The SEO Framework from interacting.
 			* These settings should only be used on conflicting post types, like which offer their own SEO settings, or are otherwise incorrectly registered.
 		* The sitemap stylesheet now outputs favicon meta tags.
+		* When you activate any plugin, a check will be performed for conflicting SEO plugins; when found, a single dismissible warning notification will be outputted.
+			* Only users with plugin activation capabilities can see this message.
 	* **Improved:**
 		* TODO
 		* The plugin can now downgrade its database version to the currently installed version automatically. This makes sure necessary future upgrade procedures are reinstated when you choose to downgrade (for any reason).
@@ -426,6 +429,8 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 		* Want to check if TSF is activated? Use: `defined( 'THE_SEO_FRAMEWORK_PRESENT' )`.
 		* Want to use TSF's API? You're in (fail)safe hands with `the_seo_framework()`.
 		* Want to make sure you can use TSF's API? Call `the_seo_framework()->loaded`.
+	* **Note:**
+		* We tried to list every single change here; but, we could've overlooked a thing or two. Test your code!
 	* **Added:**
 		* Singleton class `\The_SEO_Framework\Builders\Scripts`, via a "Builder Pattern", callable as e.g. `the_seo_framework()->Scripts()::function_name()`.
 			* This is the first class of this kind in The SEO Framework plugin.
@@ -433,6 +438,7 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 		* New option indexes, available via `the_seo_framework()->get_option( $index )`, serialized on option `autodescription-site-settings`:
 			* `(array) disabled_post_types`
 		* The sitemap xsl stylesheet now has its colors defined in various `xsl:variable` elements. It's also completely reconfigurable via hooks.
+		* The plugin now initializes options cache. For instance, when the plugin's activated a temporarily value will be set that it did.
 	* **Improved:**
 		* A "doing it wrong" notice is now supplied when calling `the_seo_framework()` too early.
 		* Fixed all "non-passive event listener" warnings caused by jQuery, by using our own event handlers.
@@ -465,8 +471,11 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 			* `THE_SEO_FRAMEWORK_PRESENT`, defined when the plugin gets past environmental tests.
 			* `THE_SEO_FRAMEWORK_BOOTSTRAP_PATH`, holds the bootstrap folder's path.
 			* `THE_SEO_FRAMEWORK_DIR_PATH_TRAIT`, holds the plugin traits' folder's path.
+			* `THE_SEO_FRAMEWORK_SITE_CACHE`, holds the plugin cache option key.
 		* **Ignored:** _(no longer have an effect)_
 			* `THE_SEO_FRAMEWORK_DEBUG_HIDDEN`
+		* **Removed:**
+			* `THE_SEO_FRAMEWORK_UPDATES_CACHE`
 	* **Function notes:**
 		* **Added:**
 			* `the_seo_framework_boot()`, marked private (do not use).
@@ -478,6 +487,7 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 			* `\The_SEO_Framework\_um_filter_generated_title()`, marked private.
 			* `\The_SEO_Framework\_um_filter_generated_url()`, marked private.
 			* `\The_SEO_Framework\_um_filter_generated_description()`, marked private.
+			* `\The_SEO_Framework\_activation_set_plugin_check_caches()`, marked private.
 		* **Removed:**
 			* `the_seo_framework_pre_load()`, without deprecation--no one should've used this.
 			* `the_seo_framework_test_server()`, without deprecation--no one should've used this.
@@ -520,6 +530,7 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 				* `_insert_seo_meta_box()`, private.
 				* `get_sitemap_transient_name()`
 				* `get_auto_description_transient_name()`
+				* `set_plugin_check_caches()`
 			* In class: `\The_SEO_Framework\Debug`
 				* `::_set_instance()`, marked private.
 				* `_debug_output()`, marked private.
@@ -565,6 +576,9 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 			* In class `\The_SEO_Framework\Sanitize` -- Factory: `the_seo_framework()`
 				* `sanitize_field_id()`
 				* `s_disabled_post_types()`
+			* In class `\The_SEO_Framework\Site_Options` -- Factory: `the_seo_framework()`
+				* `get_static_cache()`
+				* `update_static_cache()`
 			* In class: `\The_SEO_Framework\Term_Data` -- factory: `the_seo_framework()`
 				* `get_tax_type_label()`
 			* In class `\The_SEO_Framework\Builders\Scripts` -- Factory: `the_seo_framework()->Scripts()`.
@@ -591,6 +605,8 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 			* `description_noesc()`. `\The_SEO_Framework\Core => \The_SEO_Framework\Admin_Pages`.
 			* `google_language()`. `\The_SEO_Framework\Core => \The_SEO_Framework\Admin_Pages`.
 		* **Changed:**
+			* In class: `\The_SEO_Framework\Admin_Pages` -- Factory: `the_seo_framework()`
+				* `notices()` is now marked private.
 			* In class: `\The_SEO_Framework\Generate_Url` -- Factory: `the_seo_framework()`
 				* `set_url_scheme()`, the third parameter is now deprecated and shouldn't be used.
 				* `get_shortlink()`:
@@ -609,10 +625,10 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 			* In class: `\The_SEO_Framework\Post_Data` -- Factory: `the_seo_framework()`
 				* `inattachment_seo_save()` is now marked private.
 				* `inpost_seo_save()` is now marked private.
-
 			* In class: `\The_SEO_Framework\Query` -- Factory: `the_seo_framework()`
 				* `is_category_admin()` no longer guesses, and only returns true on WordPress' built-in categories.
 				* `is_tag_admin()` no longer guesses, and only returns true on WordPress' built-in tags.
+				* `get_the_real_ID()` no longer invokes caching warnings when the first parameter (`$use_cache`) is false.
 			* In class: `\The_SEO_Framework\Sitemaps` -- Factory: `the_seo_framework()`
 				* `generate_sitmeap()` now uses `wp_raise_memory_limit( 'sitemap' )`.
 					* This applies the WP Core filter `{$context}_memory_limit`, where `$context` is `sitemap`.
@@ -760,7 +776,8 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 			* `(array) the_seo_framework_scripts`, allows you to adjust (or add to) the default script parameters.
 			* `(string) the_seo_framework_title_from_custom_field`, the meta title from custom fields.
 			* `(string) the_seo_framework_title_from_query`, the meta title from (inputted/detected) query.
-			* `(added) the_seo_framework_sitemap_styles`, the sitemap styles.
+			* `(array) the_seo_framework_sitemap_styles`, the sitemap styles.
+			* `(string) the_seo_framework_site_cache`, the cache option value.
 		* **Changed:**
 			* `the_seo_framework_detect_page_builder`
 				1. Now returns `null` by default.
@@ -792,6 +809,7 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 				* `the_seo_framework_title_seplocation`, use the options API instead.
 			* `the_seo_framework_inpost_seo_bar`, use the option introduced in TSF 2.7 instead.
 			* `the_seo_framework_generator_tag`, it's useless and you can do it via `add_action( 'wp_head', function() { echo <meta.../>; } );`
+			* `the_seo_framework_updates_cache`, it wasn't used.
 	* **Structural notes:**
 		* **Added:**
 			* Folder `/bootstrap/`, with:

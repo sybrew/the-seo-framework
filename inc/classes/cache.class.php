@@ -74,6 +74,8 @@ class Cache extends Sitemaps {
 
 		//* Deletes front page description transient on Tagline change.
 		\add_action( 'update_option_blogdescription', [ $this, 'delete_auto_description_frontpage_transient' ], 10, 1 );
+
+		\add_action( 'activated_plugin', [ $this, 'set_plugin_check_caches' ] );
 	}
 
 	/**
@@ -104,6 +106,15 @@ class Cache extends Sitemaps {
 		//* Excluded IDs cache.
 		\add_action( 'save_post', [ $this, 'delete_excluded_ids_cache' ] );
 		\add_action( 'edit_attachment', [ $this, 'delete_excluded_ids_cache' ] );
+	}
+
+	/**
+	 * Registers plugin cache checks on plugin activation.
+	 *
+	 * @since 3.1.0
+	 */
+	public function set_plugin_check_caches() {
+		$this->update_static_cache( 'check_seo_plugin_conflicts', 1 );
 	}
 
 	/**
@@ -329,7 +340,8 @@ class Cache extends Sitemaps {
 	 */
 	protected function parse_delete_cache_keys( &$type, &$id, &$args ) {
 
-		$id = $id ?: $this->get_the_real_ID();
+		//= Don't use cache on fetching ID.
+		$id = $id ?: $this->get_the_real_ID( false );
 
 		$defaults = [
 			'type' => $type,

@@ -486,6 +486,41 @@ class Site_Options extends Sanitize {
 	}
 
 	/**
+	 * Retrieves a single caching option.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param string $key     The option key. Required.
+	 * @param string $default The default cache value.
+	 * @return mixed Cache value on success, $default if non-existent.
+	 */
+	public function get_static_cache( $key, $default = false ) {
+		$cache = \get_option( THE_SEO_FRAMEWORK_SITE_CACHE, [] );
+		return isset( $cache[ $key ] ) ? $cache[ $key ] : $default;
+	}
+
+	/**
+	 * Updates a single caching option.
+	 *
+	 * Can return false if option is unchanged.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param string $key The cache key. Required.
+	 * @param string $value The cache value.
+	 * @return bool True on success, false on failure.
+	 */
+	public function update_static_cache( $key, $value = '' ) {
+
+		if ( ! $key ) {
+			$this->_doing_it_wrong( __METHOD__, 'No cache key has been specified.', '3.1.0' );
+			return false;
+		}
+
+		return $this->update_settings( [ $key => $value ], THE_SEO_FRAMEWORK_SITE_CACHE );
+	}
+
+	/**
 	 * Checks for options reset, and reset them.
 	 *
 	 * @since 2.9.0
@@ -522,7 +557,7 @@ class Site_Options extends Sanitize {
 	 * @since 2.9.0
 	 *
 	 * @param string $key The option key.
-	 * @param string $vlaue The option value.
+	 * @param string $value The option value.
 	 * @return bool True on success, false on failure.
 	 */
 	public function update_option( $key = '', $value = '' ) {

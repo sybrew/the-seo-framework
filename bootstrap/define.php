@@ -63,9 +63,9 @@ define( 'THE_SEO_FRAMEWORK_USER_OPTIONS', (string) apply_filters( 'the_seo_frame
 
 /**
  * Plugin updates cache database name.
- * @since 2.9.3
+ * @since 3.1.0
  */
-define( 'THE_SEO_FRAMEWORK_UPDATES_CACHE', (string) apply_filters( 'the_seo_framework_updates_cache', 'autodescription-updates-cache' ) );
+define( 'THE_SEO_FRAMEWORK_SITE_CACHE', (string) apply_filters( 'the_seo_framework_site_cache', 'autodescription-updates-cache' ) );
 
 /**
  * The plugin map URL. Has a trailing slash.

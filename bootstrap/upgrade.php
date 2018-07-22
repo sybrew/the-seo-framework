@@ -154,6 +154,23 @@ function the_seo_framework_output_upgrade_notices() {
 	}
 }
 
+/**
+ * Enqueues and outputs an Extension Manager suggestion.
+ *
+ * @since 3.1.0
+ * @staticvar bool $run
+ *
+ * @return void Early when already enqueued
+ */
+function the_seo_framework_prepare_extension_manager_suggestion() {
+	static $run = false;
+	if ( $run ) return;
+
+	require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'tsfem-suggestion.php';
+	the_seo_framework_load_extension_manager_suggestion();
+
+	$run = true;
+}
 
 /**
  * Upgrades term metadata for version 2701.
@@ -252,19 +269,31 @@ function the_seo_framework_do_upgrade_3060() {
 
 	the_seo_framework()->delete_cache( 'sitemap' );
 
-	require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'tsfem-suggestion.php';
-	the_seo_framework_load_extension_manager_suggestion();
+	the_seo_framework_prepare_extension_manager_suggestion();
 
 	update_option( 'the_seo_framework_upgraded_db_version', '3060' );
 }
 
 /**
+ * Adds caching option.
+ * Loads suggestion for TSFEM.
+ * TODO Updates title separator option.
+ * TODO Registers and sets other new options...
+ *
  * @since 3.1.0
- * TODO
+ * TODO register callback to this.
  */
 function the_seo_framework_do_upgrade_3100() {
 	// TODO Make this work:
 	// It should get the default option keys and compare them to the database entries. Then, it should fill in the missing indexes.
 	// the_seo_framework_parse_new_options();
 	// TODO Title Seperator -> Title Separator? Now would be a great time ;)
+
+	// Prevent database lookups when checking for cache.
+	add_option( THE_SEO_FRAMEWORK_SITE_CACHE, [] );
+
+	// Might they've missed it half a year ago, here it is again.
+	the_seo_framework_prepare_extension_manager_suggestion();
+
+	update_option( 'the_seo_framework_upgraded_db_version', '3100' );
 }
