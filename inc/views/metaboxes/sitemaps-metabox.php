@@ -41,7 +41,7 @@ switch ( $instance ) :
 				'dashicon' => 'clock',
 			],
 			'notify' => [
-				'name'     => _x( 'Ping', 'Ping or notify Search Engine', 'autodescription' ),
+				'name'     => _x( 'Ping', 'Ping or notify search engine', 'autodescription' ),
 				'callback' => [ $this, 'sitemaps_metabox_notify_tab' ],
 				'dashicon' => 'megaphone',
 			],
@@ -147,7 +147,7 @@ switch ( $instance ) :
 		endif;
 
 		$this->description( __( 'The robots.txt file is the first thing search engines look for. If you add the sitemap location in the robots.txt file, then search engines will look for and index the sitemap.', 'autodescription' ) );
-		$this->description( __( 'If you do not add the sitemap location to the robots.txt file, you will need to notify search engines manually through the Webmaster Console provided by the Search Engines.', 'autodescription' ) );
+		$this->description( __( 'If you do not add the sitemap location to the robots.txt file, you will need to notify search engines manually through the Webmaster Console provided by the search engines.', 'autodescription' ) );
 
 		echo '<hr>';
 

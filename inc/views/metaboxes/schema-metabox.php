@@ -18,9 +18,9 @@ switch ( $instance ) :
 		if ( $this->has_json_ld_plugin() ) :
 			$this->description( __( 'Another Schema.org plugin has been detected.', 'autodescription' ) );
 		else :
-			$this->description( __( 'The Schema.org markup is a standard way of annotating structured data for Search Engines. This markup is represented within hidden scripts throughout the website.', 'autodescription' ) );
-			$this->description( __( 'When your web pages include structured data markup, search engines can use that data to index your content better, present it more prominently in Search Results, and use it in several different applications.', 'autodescription' ) );
-			$this->description( __( 'This is also known as the "Knowledge Graph" and "Structured Data", which is under heavy active development by several Search Engines. Therefore, the usage of the outputted markup is not guaranteed.', 'autodescription' ) );
+			$this->description( __( 'The Schema.org markup is a standard way of annotating structured data for search engines. This markup is represented within hidden scripts throughout the website.', 'autodescription' ) );
+			$this->description( __( 'When your web pages include structured data markup, search engines can use that data to index your content better, present it more prominently in search results, and use it in several different applications.', 'autodescription' ) );
+			$this->description( __( 'This is also known as the "Knowledge Graph" and "Structured Data", which is under heavy active development by several search engines. Therefore, the usage of the outputted markup is not guaranteed.', 'autodescription' ) );
 
 			/**
 			 * Parse tabs content.
@@ -75,12 +75,12 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Site Structure Options', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'The site structure Schema.org output allows search engines to gain knowledge on how your website is built.', 'autodescription' ) );
-		$this->description( __( "For example, search engines display your pages' URLs when listed in the Search Results. These options allow you to enhance those URLs output.", 'autodescription' ) );
+		$this->description( __( "For example, search engines display your pages' URLs when listed in the search results. These options allow you to enhance those URLs output.", 'autodescription' ) );
 		?>
 		<hr>
 		<h4><?php esc_html_e( 'Breadcrumbs', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( "Breadcrumb trails indicate page positions in the site's hierarchy. Using the following option will show the hierarchy within the Search Results when available.", 'autodescription' ) );
+		$this->description( __( "Breadcrumb trails indicate page positions in the site's hierarchy. Using the following option will show the hierarchy within the search results when available.", 'autodescription' ) );
 
 		$info = $this->make_info( __( 'Learn how this data is used.', 'autodescription' ), 'https://developers.google.com/search/docs/data-types/breadcrumbs', false );
 		$this->wrap_fields( $this->make_checkbox(
@@ -94,7 +94,7 @@ switch ( $instance ) :
 		<hr>
 		<h4><?php echo esc_html( _x( 'Sitelinks Searchbox', 'Product name', 'autodescription' ) ); ?></h4>
 		<?php
-		$this->description( __( 'When Search users search for your brand name, the following option allows them to search through this website directly from the Search Results.', 'autodescription' ) );
+		$this->description( __( 'When Search users search for your brand name, the following option allows them to search through this website directly from the search results.', 'autodescription' ) );
 
 		$info = $this->make_info( __( 'Learn how this data is used.', 'autodescription' ), 'https://developers.google.com/search/docs/data-types/sitelinks-searchbox', false );
 		$this->wrap_fields( $this->make_checkbox(
@@ -109,7 +109,7 @@ switch ( $instance ) :
 		?>
 		<h4><?php esc_html_e( 'Authorized Presence Options', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'The authorized presence Schema.org output helps Search Engine users find ways to interact with this website.', 'autodescription' ) );
+		$this->description( __( 'The authorized presence Schema.org output helps search engine users find ways to interact with this website.', 'autodescription' ) );
 
 		$info = $this->make_info( __( 'Learn how this data is used.', 'autodescription' ), 'https://developers.google.com/search/docs/guides/enhance-site#add-your-sites-name-logo-and-social-links', false );
 		//* Echo checkbox.

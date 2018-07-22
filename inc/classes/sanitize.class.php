@@ -225,6 +225,7 @@ class Sanitize extends Admin_Pages {
 				'title_rem_additions',
 				'title_rem_prefixes',
 
+				'auto_description',
 				'description_additions',
 				'description_blogname',
 

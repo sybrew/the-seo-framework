@@ -942,7 +942,9 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * Render the SEO bar description block and notice.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 No longer converts quotes for length calculation.
+	 * @since 3.1.0 1. Fixed length calculation by no longer converting quotes.
+	 *              2. No longer outputs a "generated" notice when generation
+	 *                 is disabled via the new `auto_description` option.
 	 *
 	 * @param array $args
 	 * @return string The SEO Bar Description Block
@@ -985,9 +987,14 @@ class Doing_It_Right extends Generate_Ldjson {
 		$class = $desc_too_many['class'];
 
 		//* Generation notice.
-		$generated_notice = $i18n['generated'] . ' ';
-		$gen_d = $description_is_from_custom_field ? '' : $generated_short;
-		$gen_d_notice = $description_is_from_custom_field ? '' : $generated_notice;
+		if ( $this->get_option( 'auto_description' ) ) {
+			$generated_notice = $i18n['generated'] . ' ';
+
+			$gen_d        = $description_is_from_custom_field ? '' : $generated_short;
+			$gen_d_notice = $description_is_from_custom_field ? '' : $generated_notice;
+		} else {
+			$gen_d = $gen_d_notice = '';
+		}
 
 		//* Put everything together.
 		$notice = $notice . $gen_d_notice;

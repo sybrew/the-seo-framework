@@ -93,7 +93,7 @@ switch ( $instance ) :
 		<?php
 
 		$pixel_info = $this->make_info(
-			__( 'The pixel counter computes whether the input will fit on Search Engine Result Pages.', 'autodescription' ),
+			__( 'The pixel counter computes whether the input will fit on search engine Result Pages.', 'autodescription' ),
 			'',
 			false
 		);
@@ -236,7 +236,7 @@ switch ( $instance ) :
 			),
 			$this->make_checkbox(
 				'cache_meta_schema',
-				esc_html__( 'Enable automated Schema output cache?', 'autodescription' )
+				esc_html__( 'Enable automated Schema.org output cache?', 'autodescription' )
 				. ' ' . $this->make_info( __( 'Schema.org output generally makes multiple calls to the database.', 'autodescription' ), '', false ),
 				'',
 				false
@@ -275,7 +275,7 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Canonical URL Settings', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'The canonical URL meta tag urges search engines to go to the outputted URL.', 'autodescription' ) );
-		$this->description( __( 'If the canonical URL meta tag represents the visited page, then the Search Engine will crawl the visited page. Otherwise, the Search Engine might go to the outputted URL.', 'autodescription' ) );
+		$this->description( __( 'If the canonical URL meta tag represents the visited page, then the search engine will crawl the visited page. Otherwise, the search engine might go to the outputted URL.', 'autodescription' ) );
 		$this->description( __( 'Only adjust these options if you are aware of their SEO effects.', 'autodescription' ) );
 		?>
 		<hr>
@@ -307,8 +307,8 @@ switch ( $instance ) :
 
 		<h4><?php esc_html_e( 'Link Relationship Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'Some search engines look for relations between the content of your pages. If you have multiple pages for a single Post or Page, or have archives indexed, this option will help search engines look for the right page to display in the Search Results.', 'autodescription' ) );
-		$this->description( __( "It's recommended to turn this option on for better SEO consistency and to prevent duplicate content errors.", 'autodescription' ) );
+		$this->description( __( 'Some search engines look for relations between the content of your pages. If you have pagination on a post or page, or have archives indexed, these options will help search engines look for the right page to display in the search results.', 'autodescription' ) );
+		$this->description( __( "It's recommended to turn these options on for better SEO consistency and to prevent duplicate content errors.", 'autodescription' ) );
 
 		/* translators: %s = <code>rel</code> */
 		$prev_next_posts_label = sprintf( esc_html__( 'Add %s link tags to Posts and Pages?', 'autodescription' ), $this->code_wrap( 'rel' ) );

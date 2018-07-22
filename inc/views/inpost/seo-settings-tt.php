@@ -83,7 +83,7 @@ $robots_settings = [
 					<?php
 					echo ' ';
 					$this->make_info(
-						__( 'The meta title can be used to determine the title used on Search Engine result pages.', 'autodescription' ),
+						__( 'The meta title can be used to determine the title used on search engine result pages.', 'autodescription' ),
 						'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#page-titles'
 					);
 					?>
@@ -110,7 +110,7 @@ $robots_settings = [
 					<?php
 					echo ' ';
 					$this->make_info(
-						__( 'The meta description can be used to determine the text used under the title on Search Engine results pages.', 'autodescription' ),
+						__( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' ),
 						'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#meta-descriptions'
 					);
 					?>

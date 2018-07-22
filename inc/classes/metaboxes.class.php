@@ -464,6 +464,7 @@ class Metaboxes extends Site_Options {
 	 * Social Metabox General Tab output.
 	 *
 	 * @since 2.2.2
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->social_metabox() Callback for Social Settings box.
 	 */
 	protected function social_metabox_general_tab() {
@@ -497,7 +498,7 @@ class Metaboxes extends Site_Options {
 	 * @since 2.2.4
 	 * @see $this->social_metabox() Callback for Social Settings box.
 	 */
-	public function social_metabox_postdates_tab() {
+	protected function social_metabox_postdates_tab() {
 		$this->get_view( 'metaboxes/social-metabox', [], 'postdates' );
 	}
 
@@ -546,9 +547,10 @@ class Metaboxes extends Site_Options {
 	 * Sitemaps Metabox General Tab output.
 	 *
 	 * @since 2.2.9
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
-	public function sitemaps_metabox_general_tab() {
+	protected function sitemaps_metabox_general_tab() {
 		$this->get_view( 'metaboxes/sitemaps-metabox', [], 'general' );
 	}
 
@@ -556,9 +558,10 @@ class Metaboxes extends Site_Options {
 	 * Sitemaps Metabox Robots Tab output.
 	 *
 	 * @since 2.2.9
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
-	public function sitemaps_metabox_robots_tab() {
+	protected function sitemaps_metabox_robots_tab() {
 		$this->get_view( 'metaboxes/sitemaps-metabox', [], 'robots' );
 	}
 
@@ -566,9 +569,10 @@ class Metaboxes extends Site_Options {
 	 * Sitemaps Metabox Timestamps Tab output.
 	 *
 	 * @since 2.2.9
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
-	public function sitemaps_metabox_timestamps_tab() {
+	protected function sitemaps_metabox_timestamps_tab() {
 		$this->get_view( 'metaboxes/sitemaps-metabox', [], 'timestamps' );
 	}
 
@@ -576,9 +580,10 @@ class Metaboxes extends Site_Options {
 	 * Sitemaps Metabox Notify Tab output.
 	 *
 	 * @since 2.2.9
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
-	public function sitemaps_metabox_notify_tab() {
+	protected function sitemaps_metabox_notify_tab() {
 		$this->get_view( 'metaboxes/sitemaps-metabox', [], 'notify' );
 	}
 
@@ -586,9 +591,10 @@ class Metaboxes extends Site_Options {
 	 * Sitemaps Metabox Style Tab output.
 	 *
 	 * @since 2.8.0
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
-	public function sitemaps_metabox_style_tab() {
+	protected function sitemaps_metabox_style_tab() {
 		$this->get_view( 'metaboxes/sitemaps-metabox', [], 'style' );
 	}
 
@@ -637,9 +643,10 @@ class Metaboxes extends Site_Options {
 	 *
 	 * @since 2.8.0
 	 * @since 3.0.0 No longer used.
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->schema_metabox() Callback for Schema.org Settings box.
 	 */
-	public function schema_metabox_general_tab() {
+	protected function schema_metabox_general_tab() {
 		$this->get_view( 'metaboxes/schema-metabox', [], 'general' );
 	}
 
@@ -647,9 +654,10 @@ class Metaboxes extends Site_Options {
 	 * Schema Metabox Structure Tab output.
 	 *
 	 * @since 2.8.0
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->schema_metabox() Callback for Schema.org Settings box.
 	 */
-	public function schema_metabox_structure_tab() {
+	protected function schema_metabox_structure_tab() {
 		$this->get_view( 'metaboxes/schema-metabox', [], 'structure' );
 	}
 
@@ -657,9 +665,10 @@ class Metaboxes extends Site_Options {
 	 * Schema Metabox PResence Tab output.
 	 *
 	 * @since 2.8.0
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->schema_metabox() Callback for Schema.org Settings box.
 	 */
-	public function schema_metabox_presence_tab() {
+	protected function schema_metabox_presence_tab() {
 		$this->get_view( 'metaboxes/schema-metabox', [], 'presence' );
 	}
 }

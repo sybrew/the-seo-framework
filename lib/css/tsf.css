@@ -378,6 +378,10 @@ body.no-js .tsf-seo-bar-item {
 	border-spacing: 0;
 }
 
+#tsf-description-separator {
+	margin-bottom: 0;
+}
+
 #tsf-title-separator input,
 #tsf-description-separator input {
 	display: none;

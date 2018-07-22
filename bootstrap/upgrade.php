@@ -289,6 +289,11 @@ function the_seo_framework_do_upgrade_3100() {
 	// the_seo_framework_parse_new_options();
 	// TODO Title Seperator -> Title Separator? Now would be a great time ;)
 
+	$tsf = the_seo_framework();
+
+	// Enable auto description.
+	$tsf->update_option( 'auto_description', 1 );
+
 	// Prevent database lookups when checking for cache.
 	add_option( THE_SEO_FRAMEWORK_SITE_CACHE, [] );
 

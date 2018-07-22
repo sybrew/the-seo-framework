@@ -36,7 +36,7 @@ switch ( $instance ) :
 		?>
 		<h4><?php esc_html_e( 'Automated Title Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'The page title is prominently shown within the browser tab as well as within the Search Engine results pages.', 'autodescription' ) );
+		$this->description( __( 'The page title is prominently shown within the browser tab as well as within the search engine results pages.', 'autodescription' ) );
 
 		?>
 		<h4><?php esc_html_e( 'Example Automated Title Output', 'autodescription' ); ?></h4>
@@ -165,7 +165,7 @@ switch ( $instance ) :
 			<?php
 			$info = $this->make_info(
 				__( 'This might decouple your posts and pages from the rest of the website.', 'autodescription' ),
-				'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3',
+				'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#page-titles',
 				false
 			);
 
@@ -248,7 +248,7 @@ switch ( $instance ) :
 			<?php
 			$this->make_info(
 				__( "The prefix helps visitors and search engines determine what kind of page they're visiting.", 'autodescription' ),
-				'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#3',
+				'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#meta-descriptions',
 				true
 			);
 			?>

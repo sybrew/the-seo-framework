@@ -27,7 +27,7 @@ switch ( $instance ) :
 			'noindex' => [
 				'value' => 'noindex',
 				'name'  => __( 'NoIndex', 'autodescription' ),
-				'desc'  => __( 'These options most likely prevent indexing of the selected archives and pages. If you enable this, the selected archives or pages are urged to be removed from Search Engine results pages.', 'autodescription' ),
+				'desc'  => __( 'These options most likely prevent indexing of the selected archives and pages. If you enable this, the selected archives or pages are urged to be removed from search engine results pages.', 'autodescription' ),
 			],
 			'nofollow' => [
 				'value' => 'nofollow',

@@ -93,11 +93,11 @@ class Site_Options extends Sanitize {
 		 */
 		return [
 			// General. Performance.
-			'alter_search_query' => 1, // Search query adjustments.
+			'alter_search_query'  => 1, // Search query adjustments.
 			'alter_archive_query' => 1, // Archive query adjustments.
 
 			'alter_archive_query_type' => 'in_query', // Archive query type.
-			'alter_search_query_type' => 'in_query', // Search query type.
+			'alter_search_query_type'  => 'in_query', // Search query type.
 
 			'cache_meta_description' => 0, // Description transient cache.
 			'cache_meta_schema'      => 0, // Schema.org transient cache.
@@ -127,8 +127,9 @@ class Site_Options extends Sanitize {
 			'title_rem_prefixes'  => 0,         // Remove title prefixes from archives.
 
 			// Description.
+			'auto_description'      => 1, // Enables auto description.
 			'description_separator' => 'pipe', // Description separator, dropdown
-			'description_additions' => 1,  // "Title on Blogname" within Description
+			'description_additions' => 0,  // "Title on Blogname" within Description
 			'description_blogname'  => 1,  // "on Blogname" within Description
 			//	'description_custom'    => '', // Custom prefix TODO
 

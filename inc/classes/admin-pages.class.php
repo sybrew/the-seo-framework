@@ -284,7 +284,7 @@ class Admin_Pages extends Inpost {
 		if ( $schema )
 			\add_meta_box(
 				'autodescription-schema-settings',
-				\esc_html__( 'Schema Settings', 'autodescription' ),
+				\esc_html__( 'Schema.org Settings', 'autodescription' ),
 				[ $this, 'schema_metabox' ],
 				$this->seo_settings_page_hook,
 				'main',
@@ -505,7 +505,7 @@ class Admin_Pages extends Inpost {
 					\esc_attr__( 'Dismiss', 'autodescription' ),
 					''
 				),
-				( $escape ? \esc_html( $message ) : $message )
+				( $escape ? \esc_html( $message ) : $message ),
 			]
 		);
 	}
