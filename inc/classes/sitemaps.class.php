@@ -1075,7 +1075,7 @@ class Sitemaps extends Metaboxes {
 
 				$content .= "\t<url>\n";
 				//* No need to use static vars
-				$content .= "\t\t<loc>" . \ent2ncr( \esc_url_raw( $url, [ 'http', 'https' ] ) ) . "</loc>\n";
+				$content .= "\t\t<loc>" . \esc_url_raw( $url, [ 'http', 'https' ] ) . "</loc>\n";
 
 				if ( isset( $args['lastmod'] ) && $args['lastmod'] ) {
 					$content .= "\t\t<lastmod>" . \mysql2date( $timestamp_format, $args['lastmod'], false ) . "</lastmod>\n";

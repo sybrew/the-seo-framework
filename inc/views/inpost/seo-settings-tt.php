@@ -9,15 +9,15 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 $language = $this->google_language();
 
 //* Fetch Term ID and taxonomy.
-$term_id = $object->term_id;
+$term_id  = $object->term_id;
 $taxonomy = $object->taxonomy;
-$data = $this->get_term_meta( $object->term_id );
+$data     = $this->get_term_meta( $object->term_id );
 
-$title = isset( $data['doctitle'] ) ? $data['doctitle'] : '';
+$title       = isset( $data['doctitle'] ) ? $data['doctitle'] : '';
 $description = isset( $data['description'] ) ? $data['description'] : '';
-$noindex = isset( $data['noindex'] ) ? $data['noindex'] : '';
-$nofollow = isset( $data['nofollow'] ) ? $data['nofollow'] : '';
-$noarchive = isset( $data['noarchive'] ) ? $data['noarchive'] : '';
+$noindex     = isset( $data['noindex'] ) ? $data['noindex'] : '';
+$nofollow    = isset( $data['nofollow'] ) ? $data['nofollow'] : '';
+$noarchive   = isset( $data['noarchive'] ) ? $data['noarchive'] : '';
 
 /**
  * Generate static placeholder for when title or description is emptied

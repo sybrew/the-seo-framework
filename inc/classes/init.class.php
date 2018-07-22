@@ -265,6 +265,9 @@ class Init extends Query {
 		//* Earlier removal of the generator tag. Doesn't require filter.
 		\remove_action( 'wp_head', 'wp_generator' );
 
+		//* Adds site icon tags to the sitemap stylesheet.
+		\add_action( 'the_seo_framework_xsl_head', 'wp_site_icon', 99 );
+
 		/**
 		 * Outputs sitemap or stylesheet on request.
 		 *

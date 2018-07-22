@@ -167,7 +167,7 @@ switch ( $instance ) :
 
 			$id = $type . '_' . $ro_value;
 
-			//* Add <hr> if it's 'site'
+			//* Add warning if it's 'site'.
 			if ( 'site' === $type ) {
 				$checkboxes .= '<hr class="tsf-option-spacer">';
 

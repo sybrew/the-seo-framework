@@ -329,6 +329,7 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 		* Post Type Settings:
 			* Found in the General Settings meta box, they'll prevent The SEO Framework from interacting.
 			* These settings should only be used on conflicting post types, like which offer their own SEO settings, or are otherwise incorrectly registered.
+		* The sitemap stylesheet now outputs favicon meta tags.
 	* **Improved:**
 		* TODO
 		* The plugin can now downgrade its database version to the currently installed version automatically. This makes sure necessary future upgrade procedures are reinstated when you choose to downgrade (for any reason).
@@ -359,6 +360,7 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 		* The primary term selector tooltip now states the human readible and translatable name, instead of the static code name.
 		* WC Shop and Blog Pages now have "rel=prev/next" canonical URLs added when link relationship tags are enabled for archives.
 		* WC Shop and Blog Pages now listen to the global pagination robots' "noindex" settings.
+		* Long URLs are now truncated in the sitemap stylesheet. This does not affect the sitemap.
 	* **Changed:**
 		* TSF now requires WordPress 4.6 (previously 4.4).
 		* TSF now requires PHP 5.4 (previously 5.3).
@@ -382,7 +384,7 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 			* Instead, only a warning is shown on the settings page, telling that the options have no effect.
 		* AnsPress title compatibility, they handle this.
 		* --JETPACK JetPack Open Graph compatibility checks, they handle this since 2016.
-		* TODO (maybe) Description and schema output caching. They cause too much overhead, and they provide no benefit any more. In fact, they affect performance negatively.
+		* TODO (maybe) Description output caching. It causes too much overhead, and it provides no benefit any more. In fact, it affects performance negatively.
 	* **Fixed:**
 		* When reactivating or deactivating the plugin, there's no longer a chance for your SEO options to be wiped on a random database error.
 			* We used to delete the options, so we could reactivate option-auto-loading; now we add a buster-timestamp.
@@ -429,6 +431,7 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 		* The plugin now tries to remove all active `wp_title` filters, like it has been doing for `pre_get_document_title` a long time.
 		* New option indexes, available via `the_seo_framework()->get_option( $index )`, serialized on option `autodescription-site-settings`:
 			* `(array) disabled_post_types`
+		* The sitemap xsl stylesheet now has its colors defined in various `xsl:variable` elements. It's also completely reconfigurable via hooks.
 	* **Improved:**
 		* A "doing it wrong" notice is now supplied when calling `the_seo_framework()` too early.
 		* Fixed all "non-passive event listener" warnings caused by jQuery, by using our own event handlers.
@@ -747,11 +750,16 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 			* `the_seo_framework_loaded`. Runs after the plugin factory is loaded on any end.
 			* `the_seo_framework_after_init`. Runs after the plugin has initialized its admin or front-end hooks. See also, the admin-only hook: `the_seo_framework_after_admin_init`.
 			* `the_seo_framework_delete_cache_{$type}`. Runs after cache deletion of `$type`.
+			* `the_seo_framework_xsl_head`. Runs in the sitemap xsl stylesheet header.
+			* `the_seo_framework_xsl_description`. Runs in the sitemap xsl stylesheet description part of the HTML content.
+			* `the_seo_framework_xsl_content`. Runs in the sitemap xsl stylesheet content part of the HTML content.
+			* `the_seo_framework_xsl_footer`. Runs in the sitemap xsl stylesheet footer part of the HTML content.
 	* **Filter notes:**
 		* **Added:**
 			* `(array) the_seo_framework_scripts`, allows you to adjust (or add to) the default script parameters.
 			* `(string) the_seo_framework_title_from_custom_field`, the meta title from custom fields.
 			* `(string) the_seo_framework_title_from_query`, the meta title from (inputted/detected) query.
+			* `(added) the_seo_framework_sitemap_styles`, the sitemap styles.
 		* **Changed:**
 			* `the_seo_framework_detect_page_builder`
 				1. Now returns `null` by default.
@@ -762,6 +770,8 @@ TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
 				2. Increased to 3600 from 1200
 				3. Now listens to an option.
 			* `the_seo_framework_custom_post_type_support` is now checked on presence. This is cached. If your filter is added too late, it won't work.
+			* `the_seo_framework_sitemap_color_main`, it now reflects the main color, instead of the accent color.
+			* `the_seo_framework_sitemap_color_accent`, it now reflects the accent color, instead of the main color.
 		* **Removed:**
 			* `the_seo_framework_update_options_at_update`
 			* `the_seo_framework_canonical_force_scheme` (was deprecated since 2.8.0). Use `the_seo_framework_preferred_url_scheme` instead.
