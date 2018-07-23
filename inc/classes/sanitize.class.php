@@ -1405,4 +1405,36 @@ class Sanitize extends Admin_Pages {
 	public function sanitize_field_id( $id ) {
 		return preg_replace( '/[^a-zA-Z0-9_\-@]/', '', $id );
 	}
+
+	/**
+	 * Strips all URLs that are placed on new lines. These are prone to be embeds.
+	 *
+	 * This might leave stray line feeds.
+	 * @see $this->s_singleline();
+	 *
+	 * @since 3.1.0
+	 * @see \WP_Embed::autoembed()
+	 *
+	 * @param string $content The content to look for embed.
+	 * @return string $content Without single-lined URLs.
+	 */
+	public function strip_newline_urls( $content ) {
+		return preg_replace( '/^(?!\r|\n)\s*?(https?:\/\/[^\s<>"]+)(\s*)$/mi', '', $content );
+	}
+
+	/**
+	 * Strips all URLs that are placed in paragraphs on their own. These are prone to be embeds.
+	 *
+	 * This might leave stray line feeds.
+	 * @see $this->s_singleline();
+	 *
+	 * @since 3.1.0
+	 * @see \WP_Embed::autoembed()
+	 *
+	 * @param string $content The content to look for embed.
+	 * @return string $content Without the paragraphs containing simple URLs.
+	 */
+	public function strip_paragraph_urls( $content ) {
+		return preg_replace( '/(<p(?: [^>]*)?>\s*)(https?:\/\/[^\s<>"]+)(\s*<\/p>)/i', '', $content );
+	}
 }

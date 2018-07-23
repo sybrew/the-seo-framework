@@ -313,7 +313,8 @@ class Post_Data extends Detect {
 	 *
 	 * @since 1.0.0
 	 * @since 2.8.2 : Added 4th parameter for escaping.
-	 * @since 3.1.0 No longer returns anything for taxonomies.
+	 * @since 3.1.0 1. No longer returns anything for terms.
+	 *              2. Now strips plausible embeds URLs.
 	 *
 	 * @param string $excerpt the Excerpt.
 	 * @param int $the_id The Post ID.
@@ -339,7 +340,8 @@ class Post_Data extends Detect {
 	 *
 	 * @since 2.5.2
 	 * @since 2.6.6 Detects Page builders.
-	 * @since 3.1.0 No longer returns anything for taxonomies.
+	 * @since 3.1.0 1. No longer returns anything for terms.
+	 *              2. Now strips plausible embeds URLs.
 	 *
 	 * @param \WP_Post|int|null $post The Post or Post ID. Leave null to automatically get.
 	 * @return string The excerpt.
@@ -356,6 +358,11 @@ class Post_Data extends Detect {
 			$excerpt = $post->post_excerpt;
 		} elseif ( isset( $post->post_content ) ) {
 			$excerpt = $this->uses_page_builder( $post->ID ) ? '' : $post->post_content;
+
+			if ( $excerpt ) {
+				$excerpt = $this->strip_newline_urls( $excerpt );
+				$excerpt = $this->strip_paragraph_urls( $excerpt );
+			}
 		} else {
 			$excerpt = '';
 		}

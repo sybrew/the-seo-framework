@@ -15,10 +15,10 @@ switch ( $instance ) :
 
 		if ( $latest_post_id ) {
 			$post  = get_post( $latest_post_id, OBJECT );
-			$title = esc_attr( $post->post_title );
-		} else {
-			$title = esc_attr__( 'Example Post Title', 'autodescription' );
+			$title = trim( esc_attr( $post->post_title ) );
 		}
+
+		$title = $title ?: esc_attr__( 'Example Post Title', 'autodescription' );
 
 		$blogname = $this->get_blogname();
 		$sep      = $this->get_separator( 'title' );
