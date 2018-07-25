@@ -637,7 +637,6 @@ class Core {
 				$word_keys = array_flip( array_reverse( $words, true ) );
 
 				foreach ( $word_count as $word => $count ) {
-
 					if ( mb_strlen( $word ) < $bother_length ) {
 						$run = $count >= $amount_bother;
 					} else {

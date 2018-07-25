@@ -138,6 +138,7 @@ class Detect extends Render {
 				'All in One SEO Pack'        => 'all-in-one-seo-pack/all_in_one_seo_pack.php',
 				'SEO Ultimate'               => 'seo-ultimate/seo-ultimate.php',
 				'Gregs High Performance SEO' => 'gregs-high-performance-seo/ghpseo.php',
+				'SEOPress'                   => 'wp-seopress/seopress.php',
 			],
 			'sitemaps' => [
 				'Google XML Sitemaps'                  => 'google-sitemap-generator/sitemap.php',
@@ -149,13 +150,8 @@ class Detect extends Render {
 				'XML Sitemaps'                         => 'xml-sitemaps/xml-sitemaps.php',
 			],
 			'open_graph' => [
-				'Add Link to Facebook'                   => 'add-link-to-facebook/add-link-to-facebook.php',
-				'Facebook AWD All in one'                => 'facebook-awd/AWD_facebook.php',
-				'Facebook Featured Image & OG Meta Tags' => 'facebook-featured-image-and-open-graph-meta-tags/fb-featured-image.php',
-				'Facebook Meta Tags'                     => 'facebook-meta-tags/facebook-metatags.php',
 				'Facebook Open Graph Meta Tags for WordPress' => 'wonderm00ns-simple-facebook-open-graph-tags/wonderm00n-open-graph.php',
 				'Facebook Thumb Fixer'                   => 'facebook-thumb-fixer/_facebook-thumb-fixer.php',
-				'Fedmichs Facebook Open Graph Meta'      => 'facebook-and-digg-thumbnail-generator/facebook-and-digg-thumbnail-generator.php',
 				'NextGEN Facebook OG'                    => 'nextgen-facebook/nextgen-facebook.php',
 				'Open Graph'                             => 'opengraph/opengraph.php',
 				'Open Graph Protocol Framework'          => 'open-graph-protocol-framework/open-graph-protocol-framework.php',
@@ -164,9 +160,7 @@ class Detect extends Render {
 				'WordPress Social Sharing Optimization'  => 'wpsso/wpsso.php',
 				'WP Facebook Open Graph protocol'        => 'wp-facebook-open-graph-protocol/wp-facebook-ogp.php',
 			],
-			'twitter_card' => [
-				'Twitter' => 'twitter/twitter.php',
-			],
+			'twitter_card' => [],
 		];
 
 		/**

@@ -457,11 +457,10 @@ class Admin_Init extends Init {
 			],
 		];
 
-		$decode = [ 'i18n', 'params' ];
 		$flags = ENT_COMPAT;
-		foreach ( $decode as $key ) {
-			foreach ( $l10n[ $key ] as $k => $v ) {
-				$l10n[ $key ][ $k ] = \esc_js( \html_entity_decode( $v, $flags, 'UTF-8' ) );
+		foreach ( [ 'i18n', 'params' ] as $key ) {
+			foreach ( $l10n[ $key ] as $k => &$v ) {
+				$v = html_entity_decode( $v, $flags, 'UTF-8' );
 			}
 		}
 

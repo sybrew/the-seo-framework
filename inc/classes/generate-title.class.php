@@ -127,7 +127,7 @@ class Generate_Title extends Generate_Description {
 		 * @param array  $args  The title arguments.
 		 */
 		$title = (string) \apply_filters_ref_array( 'the_seo_framework_title_from_generation', [
-			$this->get_unprocessed_generated_title( $args ) ?: $this->untitled(),
+			$this->get_unprocessed_generated_title( $args ),
 			$args,
 		] );
 
@@ -305,7 +305,7 @@ class Generate_Title extends Generate_Description {
 			$title = $this->generate_title_from_args( $args );
 		}
 
-		return $title;
+		return $title ?: $this->untitled();
 	}
 
 	/**

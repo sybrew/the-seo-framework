@@ -241,7 +241,7 @@ switch ( $instance ) :
 			?: $this->get_unprocessed_generated_title( [ 'id' => $home_id ] )
 		);
 		// FIXME? When no blog description or tagline is set... this will be empty and ugly on no-JS.
-		$_example_blogname  = $this->get_home_page_tagline();
+		$_example_blogname  = $this->escape_title( $this->get_home_page_tagline() );
 		$_example_separator = $this->get_separator( 'title' );
 
 		$example_left = '<em><span class="tsf-custom-title-js">' . $_example_title . '</span><span class="tsf-custom-blogname-js"><span class="tsf-sep-js"> ' . $_example_separator . ' </span><span class="tsf-custom-tagline-js">' . $_example_blogname . '</span></span></span></em>';
