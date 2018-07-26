@@ -86,7 +86,7 @@ switch ( $instance ) :
 		);
 
 		if ( $this->detect_og_plugin() )
-			$this->description( __( 'Note: Another Open Graph plugin has been detected. These tags might conflict.', 'autodescription' ) );
+			$this->attention_description( __( 'Note: Another Open Graph plugin has been detected. These tags might conflict.', 'autodescription' ) );
 
 		//* Echo Facebook Tags checkbox.
 		$this->wrap_fields(
@@ -113,7 +113,7 @@ switch ( $instance ) :
 		);
 
 		if ( $this->detect_twitter_card_plugin() )
-			$this->description( __( 'Note: Another Twitter Card plugin has been detected. These tags might conflict.', 'autodescription' ) );
+			$this->attention_description( __( 'Note: Another Twitter Card plugin has been detected. These tags might conflict.', 'autodescription' ) );
 
 		?>
 		<hr>

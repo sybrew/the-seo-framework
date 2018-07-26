@@ -74,10 +74,10 @@ switch ( $instance ) :
 		<?php
 
 		if ( $has_sitemap_plugin ) :
-			$this->description( __( 'Note: Another active sitemap plugin has been detected. This means that the sitemap functionality has been superseded and these settings have no effect.', 'autodescription' ) );
+			$this->attention_description( __( 'Note: Another active sitemap plugin has been detected. This means that the sitemap functionality has been superseded and these settings have no effect.', 'autodescription' ) );
 			echo '<hr>';
 		elseif ( $sitemap_detected ) :
-			$this->description( __( 'Note: A sitemap has been detected in the root folder of your website. This means that these settings have no effect.', 'autodescription' ) );
+			$this->attention_description( __( 'Note: A sitemap has been detected in the root folder of your website. This means that these settings have no effect.', 'autodescription' ) );
 			echo '<hr>';
 		endif;
 
@@ -115,13 +115,13 @@ switch ( $instance ) :
 		<?php
 
 		if ( $this->has_robots_txt() ) :
-			$this->description( __( 'Note: A robots.txt file has been detected in the root folder of your website. This means these settings have no effect.', 'autodescription' ) );
+			$this->attention_description( __( 'Note: A robots.txt file has been detected in the root folder of your website. This means these settings have no effect.', 'autodescription' ) );
 			echo '<hr>';
 		elseif ( ! $this->pretty_permalinks ) :
 			$locate_url = false;
 
-			$this->description( __( "Note: You're using the plain permalink structure.", 'autodescription' ) );
-			$this->description( __( "This means the robots.txt file can't be outputted through the WordPress rewrite rules.", 'autodescription' ) );
+			$this->attention_description( __( "Note: You're using the plain permalink structure.", 'autodescription' ) );
+			$this->description( __( "This means the robots.txt file can't be outputted via the WordPress rewrite rules.", 'autodescription' ) );
 			echo '<hr>';
 			$this->description_noesc(
 				sprintf(
@@ -137,11 +137,11 @@ switch ( $instance ) :
 			echo '<hr>';
 		elseif ( ! $this->can_do_sitemap_robots( false ) ) :
 			if ( $this->is_subdirectory_installation() ) {
-				$this->description( __( "Note: robots.txt files can't be generated on subdirectory installations.", 'autodescription' ) );
+				$this->attention_description( __( "Note: robots.txt files can't be generated or used on subdirectory installations.", 'autodescription' ) );
 				$locate_url = false;
 				$show_settings = false;
 			} else {
-				$this->description( __( 'Note: Another robots.txt sitemap location addition has been detected. This means these settings have no effect.', 'autodescription' ) );
+				$this->attention_description( __( 'Note: Another robots.txt sitemap location addition has been detected. This means these settings have no effect.', 'autodescription' ) );
 			}
 			echo '<hr>';
 		endif;

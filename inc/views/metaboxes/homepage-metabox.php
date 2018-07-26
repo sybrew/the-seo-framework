@@ -94,18 +94,6 @@ switch ( $instance ) :
 			$description_placeholder = $this->get_generated_description( $home_id );
 		}
 
-		/**
-		 * Checks if the home is blog, the Home Page Metabox description and
-		 * the frompost description.
-		 * @since 2.3.4
-		 *
-		 * @TODO make function.
-		 */
-		if ( ! $this->get_field_value( 'homepage_description' ) && $this->has_page_on_front() && $frompost_description ) {
-			$home_description_frompost = true;
-		} else {
-			$home_description_frompost = false;
-		}
 		?>
 		<p>
 			<label for="<?php $this->field_id( 'homepage_title_tagline' ); ?>" class="tsf-toblock">
@@ -148,8 +136,8 @@ switch ( $instance ) :
 		 *
 		 * Nesting often used translations
 		 */
-		if ( $this->has_page_on_front() && ! $this->get_option( 'homepage_title' ) && $this->get_custom_field( '_genesis_title', $home_id ) ) {
-			$this->description( __( 'Note: The title is fetched from the Page SEO Settings on the home page.', 'autodescription' ) );
+		if ( $this->has_page_on_front() && $this->get_custom_field( '_genesis_title', $home_id ) ) {
+			$this->description( __( 'Note: The title placeholder is fetched from the Page SEO Settings on the home page.', 'autodescription' ) );
 		}
 
 		/**
@@ -158,7 +146,7 @@ switch ( $instance ) :
 		 * @since 2.8.0
 		 */
 		if ( apply_filters( 'the_seo_framework_warn_homepage_global_title', false ) && $this->has_page_on_front() ) {
-			printf( '<p class="attention">%s</p>',
+			$this->attention_noesc(
 				//* Markdown escapes.
 				$this->convert_markdown(
 					sprintf(
@@ -199,18 +187,10 @@ switch ( $instance ) :
 		</p>
 		<?php
 
-		/**
-		 * If the HomePage Description empty, it will check for the InPost
-		 * Description set on the Home Page. And it will set the InPost
-		 * Description as placeholder.
-		 *
-		 * Nesting often used translations.
-		 *
-		 * Notify that the homepage is a blog.
-		 * @since 2.2.2
-		 */
-		if ( $home_description_frompost ) {
-			$this->description( __( 'Note: The description is fetched from the Page SEO Settings on the home page.', 'autodescription' ) );
+		if ( $this->has_page_on_front() && $this->get_custom_field( '_genesis_description', $home_id ) ) {
+			$this->description(
+				__( 'Note: The description placeholder is fetched from the Page SEO Settings on the home page.', 'autodescription' )
+			);
 		}
 
 		/**
@@ -219,7 +199,8 @@ switch ( $instance ) :
 		 * @since 2.8.0
 		 */
 		if ( apply_filters( 'the_seo_framework_warn_homepage_global_description', false ) && $this->has_page_on_front() ) {
-			printf( '<p class="attention">%s</p>',
+			$this->attention_noesc(
+				//* Markdown escapes.
 				$this->convert_markdown(
 					sprintf(
 						/* translators: %s = Home page URL markdown */
@@ -372,16 +353,16 @@ switch ( $instance ) :
 
 		// Add notice if any options are checked on the post.
 		if ( $noindex_post || $nofollow_post || $noarchive_post ) {
-			$this->description( __( 'Note: If any of these options are unchecked, but are checked on the home page, they will be outputted regardless.', 'autodescription' ) );
+			$this->attention_description( __( 'Note: If any of these options are unchecked, but are checked on the home page, they will be outputted regardless.', 'autodescription' ) );
 		}
 		?>
 
 		<hr>
 
 		<h4><?php esc_html_e( 'Home Page Pagination Robots Settings', 'autodescription' ); ?></h4>
-		<?php $this->description( __( "If your home page is paginated and outputs content that's also found elsewhere on the website, enabling this option might prevent duplicate content.", 'autodescription' ) ); ?>
-
 		<?php
+		$this->description( __( "If your home page is paginated and outputs content that's also found elsewhere on the website, enabling this option might prevent duplicate content.", 'autodescription' ) );
+
 		//* Echo checkbox.
 		$this->wrap_fields(
 			$this->make_checkbox(

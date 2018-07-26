@@ -601,11 +601,10 @@ class Admin_Pages extends Inpost {
 	 * Escapes all HTML, so `<` gets changed to `&lt;` and displays correctly.
 	 *
 	 * @since 2.7.0
-	 * @TODO deprecate, rename
 	 *
 	 * @param string $content Content to be wrapped in the description wrap.
-	 * @param bool $block Whether to wrap the content in <p> tags.
-	 * @return string Content wrapped int he description wrap.
+	 * @param bool   $block Whether to wrap the content in <p> tags.
+	 * @return string Content wrapped in the description wrap.
 	 */
 	public function description( $content, $block = true ) {
 		$this->description_noesc( \esc_html( $content ), $block );
@@ -615,14 +614,69 @@ class Admin_Pages extends Inpost {
 	 * Mark up content in description wrap.
 	 *
 	 * @since 2.7.0
-	 * @TODO deprecate, rename & move xss sensitivity to the output by default.
 	 *
 	 * @param string $content Content to be wrapped in the description wrap. Expected to be escaped.
-	 * @param bool $block Whether to wrap the content in <p> tags.
-	 * @return string Content wrapped int he description wrap.
+	 * @param bool   $block Whether to wrap the content in <p> tags.
+	 * @return string Content wrapped in the description wrap.
 	 */
 	public function description_noesc( $content, $block = true ) {
 		$output = '<span class="description">' . $content . '</span>';
+		echo $block ? '<p>' . $output . '</p>' : $output; // xss: method name explains
+	}
+
+	/**
+	 * Mark up content in attention wrap.
+	 * Escapes all HTML, so `<` gets changed to `&lt;` and displays correctly.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param string $content Content to be wrapped in the attention wrap.
+	 * @param bool   $block Whether to wrap the content in <p> tags.
+	 * @return string Content wrapped in the attention wrap.
+	 */
+	public function attention( $content, $block = true ) {
+		$this->attention_noesc( \esc_html( $content ), $block );
+	}
+
+	/**
+	 * Mark up content in attention wrap.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param string $content Content to be wrapped in the attention wrap. Expected to be escaped.
+	 * @param bool   $block Whether to wrap the content in <p> tags.
+	 * @return string Content wrapped in the attention wrap.
+	 */
+	public function attention_noesc( $content, $block = true ) {
+		$output = '<span class="attention">' . $content . '</span>';
+		echo $block ? '<p>' . $output . '</p>' : $output; // xss: method name explains
+	}
+
+	/**
+	 * Mark up content in a description+attention wrap.
+	 * Escapes all HTML, so `<` gets changed to `&lt;` and displays correctly.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param string $content Content to be wrapped in the wrap. Expected to be escaped.
+	 * @param bool   $block Whether to wrap the content in <p> tags.
+	 * @return string Content wrapped in the wrap.
+	 */
+	public function attention_description( $content, $block = true ) {
+		$this->attention_description_noesc( \esc_html( $content ), $block );
+	}
+
+	/**
+	 * Mark up content in a description+attention wrap.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param string $content Content to be wrapped in the wrap. Expected to be escaped.
+	 * @param bool   $block Whether to wrap the content in <p> tags.
+	 * @return string Content wrapped in the wrap.
+	 */
+	public function attention_description_noesc( $content, $block = true ) {
+		$output = '<span class="description attention">' . $content . '</span>';
 		echo $block ? '<p>' . $output . '</p>' : $output; // xss: method name explains
 	}
 

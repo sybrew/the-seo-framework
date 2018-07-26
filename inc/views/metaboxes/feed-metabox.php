@@ -11,7 +11,9 @@ $instance = $this->get_view_instance( 'the_seo_framework_feed_metabox', $instanc
 
 switch ( $instance ) :
 	case 'the_seo_framework_feed_metabox_main' :
-		?><h4><?php esc_html_e( 'Content Feed Settings', 'autodescription' ); ?></h4><?php
+		?>
+		<h4><?php esc_html_e( 'Content Feed Settings', 'autodescription' ); ?></h4>
+		<?php
 		$this->description( __( "Sometimes, your content can get stolen by robots through the WordPress feeds. This can cause duplicate content issues. To prevent this from happening, it's recommended to convert the feed's content into an excerpt.", 'autodescription' ) );
 		$this->description( __( 'Adding a backlink below the feed entries will also let the visitors know where the content came from.', 'autodescription' ) );
 
@@ -37,13 +39,25 @@ switch ( $instance ) :
 			$reading_settings_title = __( 'Reading Settings', 'default' );
 			$reading_settings = '<a href="' . esc_url( $reading_settings_url ) . '" target="_blank" title="' . esc_attr( $reading_settings_title ) . '">' . esc_html( $reading_settings_title ) . '</a>';
 
-			$this->description_noesc( sprintf( esc_html_x( 'Note: The feed is already converted into an excerpt (summary) through the %s.', '%s = Reading Settings', 'autodescription' ), $reading_settings ) );
+			$this->description_noesc( sprintf(
+				/* translators: %s = Reading Settings */
+				esc_html__( 'Note: The feed is already converted into an excerpt (summary) through the %s.', 'autodescription' ),
+				$reading_settings
+			) );
 		}
 
-		$feed_url = get_feed_link();
-		$here = '<a href="' . esc_url( $feed_url ) . '" target="_blank" title="' . esc_attr__( 'View feed', 'autodescription' ) . '">' . esc_html_x( 'here', 'The feed can be found %s.', 'autodescription' ) . '</a>';
-
-		$this->description_noesc( sprintf( esc_html_x( 'The feed can be found %s.', '%s = here', 'autodescription' ), $here ) );
+		$this->description_noesc(
+			sprintf(
+				/* translators: %s = here */
+				esc_html__( 'The feed can be found %s.', 'autodescription' ),
+				sprintf(
+					'<a href="%s" target="_blank" title="%s">%s</a>',
+					esc_url( get_feed_link() ),
+					esc_attr__( 'View feed', 'autodescription' ),
+					esc_html_x( 'here', 'The feed can be found %s.', 'autodescription' )
+				)
+			)
+		);
 		break;
 
 	default :
