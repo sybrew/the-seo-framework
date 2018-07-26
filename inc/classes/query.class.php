@@ -46,6 +46,7 @@ class Query extends Compat {
 	 * @since 2.9.0 Added doing it wrong notice.
 	 * @since 3.1.0 1. Is now protected.
 	 *              2. Now asks for and passes $method.
+	 *              3. Now returns false on WP CLI.
 	 * @staticvar bool $cache : Always true if set.
 	 * @global \WP_Query $wp_query
 	 * @global \WP_Screen|null $current_screen
@@ -59,6 +60,9 @@ class Query extends Compat {
 
 		if ( isset( $cache ) )
 			return $cache;
+
+		if ( defined( 'WP_CLI' ) && WP_CLI )
+			return $cache = false;
 
 		if ( isset( $GLOBALS['wp_query']->query ) || isset( $GLOBALS['current_screen'] ) )
 			return $cache = true;
