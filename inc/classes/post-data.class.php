@@ -427,12 +427,14 @@ class Post_Data extends Detect {
 	 * Doesn't use plugin detection features as some builders might be incorporated within themes.
 	 *
 	 * Detects the following builders:
+	 * - Elementor by Elementor LTD
 	 * - Divi Builder by Elegant Themes
 	 * - Visual Composer by WPBakery
 	 * - Page Builder by SiteOrigin
 	 * - Beaver Builder by Fastline Media
 	 *
 	 * @since 2.6.6
+	 * @since 3.1.0 Added Elementor detection
 	 *
 	 * @param int $post_id
 	 * @return boolean
@@ -461,7 +463,10 @@ class Post_Data extends Detect {
 		if ( empty( $meta ) )
 			return false;
 
-		if ( isset( $meta['_et_pb_use_builder'][0] ) && 'on' === $meta['_et_pb_use_builder'][0] && defined( 'ET_BUILDER_VERSION' ) ) :
+		if ( isset( $meta['_elementor_edit_mode'][0] ) && '' !== $meta['_elementor_edit_mode'][0] && defined( 'ELEMENTOR_VERSION' ) ) :
+			//* Elementor by Elementor LTD
+			return true;
+		elseif ( isset( $meta['_et_pb_use_builder'][0] ) && 'on' === $meta['_et_pb_use_builder'][0] && defined( 'ET_BUILDER_VERSION' ) ) :
 			//* Divi Builder by Elegant Themes
 			return true;
 		elseif ( isset( $meta['_wpb_vc_js_status'][0] ) && 'true' === $meta['_wpb_vc_js_status'][0] && defined( 'WPB_VC_VERSION' ) ) :

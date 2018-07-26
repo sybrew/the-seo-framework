@@ -149,6 +149,7 @@ switch ( $instance ) :
 		$sep_option = $this->get_option( 'description_separator' );
 		$sep_option = $sep_option ? $sep_option : 'pipe';
 
+		// FIXME: what a mess...
 		?>
 		<fieldset>
 			<legend>

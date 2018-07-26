@@ -109,6 +109,7 @@ switch ( $instance ) :
 		$title_separator = $this->get_separator_list();
 		$recommended = ' class="tsf-recommended" title="' . esc_attr__( 'Recommended', 'autodescription' ) . '"';
 
+		// FIXME: What a mess...
 		?>
 		<fieldset>
 			<legend>
@@ -144,7 +145,7 @@ switch ( $instance ) :
 					<input type="radio" name="<?php $this->field_name( 'title_location' ); ?>" id="<?php $this->field_id( 'title_location_left' ); ?>" value="left" <?php checked( $this->get_field_value( 'title_location' ), 'left' ); ?> />
 					<label for="<?php $this->field_id( 'title_location_left' ); ?>">
 						<span><?php esc_html_e( 'Left:', 'autodescription' ); ?></span>
-						<?php echo $this->code_wrap_noesc( $example_left ) ?>
+						<?php echo $this->code_wrap_noesc( $example_left ); ?>
 					</label>
 				</span>
 				<span class="tsf-toblock">

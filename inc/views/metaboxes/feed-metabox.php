@@ -60,6 +60,6 @@ switch ( $instance ) :
 		);
 		break;
 
-	default :
+	default:
 		break;
 endswitch;
