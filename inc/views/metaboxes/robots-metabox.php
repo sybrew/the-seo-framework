@@ -18,16 +18,17 @@ switch ( $instance ) :
 			'author'     => __( 'Author', 'autodescription' ),
 			'date'       => __( 'Date', 'autodescription' ),
 			'search'     => __( 'Search Pages', 'autodescription' ),
-			'attachment' => __( 'Attachment Pages', 'autodescription' ),
 			'site'       => _x( 'the entire site', '...for the entire site', 'autodescription' ),
 		];
+
+		$post_types = $this->get_rewritable_post_types();
 
 		//* Robots i18n
 		$robots = [
 			'noindex' => [
 				'value' => 'noindex',
 				'name'  => __( 'NoIndex', 'autodescription' ),
-				'desc'  => __( 'These options most likely prevent indexing of the selected archives and pages. If you enable this, the selected archives or pages are urged to be removed from search engine results pages.', 'autodescription' ),
+				'desc'  => __( 'These options most likely prevent indexing of the selected archives and pages. If you enable this, the selected archives or pages will urge to be removed from search engine results pages.', 'autodescription' ),
 			],
 			'nofollow' => [
 				'value' => 'nofollow',
@@ -66,19 +67,19 @@ switch ( $instance ) :
 				'name'     => __( 'Indexing', 'autodescription' ),
 				'callback' => [ $this, 'robots_metabox_no_tab' ],
 				'dashicon' => 'filter',
-				'args'     => [ $types, $robots['noindex'] ],
+				'args'     => [ $types, $post_types, $robots['noindex'] ],
 			],
 			'follow' => [
 				'name'     => __( 'Following', 'autodescription' ),
 				'callback' => [ $this, 'robots_metabox_no_tab' ],
 				'dashicon' => 'editor-unlink',
-				'args'     => [ $types, $robots['nofollow'] ],
+				'args'     => [ $types, $post_types, $robots['nofollow'] ],
 			],
 			'archive' => [
 				'name'     => __( 'Archiving', 'autodescription' ),
 				'callback' => [ $this, 'robots_metabox_no_tab' ],
 				'dashicon' => 'download',
-				'args'     => [ $types, $robots['noarchive'] ],
+				'args'     => [ $types, $post_types, $robots['noarchive'] ],
 			],
 		];
 
@@ -141,6 +142,7 @@ switch ( $instance ) :
 		$ro_value = $robots['value'];
 		$ro_name = esc_html( $robots['name'] );
 		$ro_i18n = $robots['desc'];
+		$ro_name_wrapped = $this->code_wrap( $ro_name );
 
 		?>
 		<h4>
@@ -151,6 +153,9 @@ switch ( $instance ) :
 		</h4>
 		<?php
 		$this->description( $ro_i18n );
+		?>
+		<hr>
+		<?php
 
 		$checkboxes = '';
 		foreach ( $types as $type => $i18n ) {
@@ -158,14 +163,14 @@ switch ( $instance ) :
 			if ( 'site' === $type || 'attachment' === $type || 'search' === $type ) {
 				//* Singular.
 				/* translators: 1: Option, 2: Post Type */
-				$label = sprintf( esc_html__( 'Apply %1$s to %2$s?', 'autodescription' ), $this->code_wrap( $ro_name ), esc_html( $i18n ) );
+				$label = sprintf( esc_html__( 'Apply %1$s to %2$s?', 'autodescription' ), $ro_name_wrapped, esc_html( $i18n ) );
 			} else {
 				//* Archive.
 				/* translators: 1: Option, 2: Post Type */
-				$label = sprintf( esc_html__( 'Apply %1$s to %2$s Archives?', 'autodescription' ), $this->code_wrap( $ro_name ), esc_html( $i18n ) );
+				$label = sprintf( esc_html__( 'Apply %1$s to %2$s Archives?', 'autodescription' ), $ro_name_wrapped, esc_html( $i18n ) );
 			}
 
-			$id = $type . '_' . $ro_value;
+			$id = $this->sanitize_field_id( $type . '_' . $ro_value );
 
 			//* Add warning if it's 'site'.
 			if ( 'site' === $type ) {
@@ -178,17 +183,42 @@ switch ( $instance ) :
 					);
 			}
 
-			$checkboxes .= $this->make_checkbox( esc_html( $id ), $label, '', false );
+			$checkboxes .= $this->make_checkbox( $id, $label, '', false );
 		}
 
+		//* Echo checkboxes.
+		$this->wrap_fields( $checkboxes, true );
+
 		?>
-		<p class="tsf-fields">
+		<hr>
+
+		<h4><?php esc_html_e( 'Post Type Settings', 'autodescription' ); ?></h4>
 		<?php
-			//* Echo checkboxes.
-			$this->wrap_fields( $checkboxes, true );
-		?>
-		</p>
-		<?php
+		$this->description( __( 'These settings are applied to the post types pages and their terms.', 'autodescription' ) );
+
+		/* translators: 1: noindex/nofollow/noarchive, 2: Post Type label */
+		$_label    = esc_html__( 'Apply %1$s to %2$s?', 'autodescription' );
+		$option_id = $this->get_robots_post_type_option_id( $ro_value );
+
+		if ( in_array( $ro_value, [ 'noindex', 'nofollow' ], true ) )
+			$this->attention_description( __( 'Warning: No site should enable these options for Posts and Pages.', 'autodescription' ) );
+
+		foreach ( $post_types as $post_type ) {
+			$pto = \get_post_type_object( $post_type );
+			if ( ! $pto ) continue;
+
+			$boxes[] = $this->make_checkbox_array( [
+				'id'       => $option_id,
+				'index'    => $post_type,
+				'label'    => sprintf( $_label, $ro_name_wrapped, esc_html( $pto->labels->name ) ),
+				'escape'   => false,
+				'disabled' => false,
+				'default'  => 'noindex' === $ro_value && 'attachment' === $post_type,
+				'warned'   => in_array( $ro_value, [ 'noindex', 'nofollow' ], true ) && in_array( $post_type, [ 'page', 'post' ], true ),
+			] );
+		}
+
+		$this->wrap_fields( $boxes, true );
 		break;
 
 	default:

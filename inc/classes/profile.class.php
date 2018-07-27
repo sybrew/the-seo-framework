@@ -115,8 +115,8 @@ class Profile extends Doing_It_Right {
 	 */
 	public function _update_user_settings( $user_id ) {
 
-		check_admin_referer( 'update-user_' . $user_id );
-		if ( ! current_user_can( 'edit_user', $user_id ) ) return;
+		\check_admin_referer( 'update-user_' . $user_id );
+		if ( ! \current_user_can( 'edit_user', $user_id ) ) return;
 
 		if ( empty( $_POST ) )
 			return;

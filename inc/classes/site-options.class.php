@@ -120,7 +120,7 @@ class Site_Options extends Sanitize {
 			'disabled_post_types' => [], // Post Type support.
 
 			// Title.
-			'title_seperator'     => 'pipe',    // Title separator (note: TYPO), dropdown
+			'title_separator'     => 'pipe',    // Title separator, dropdown
 			'title_location'      => $titleloc, // Title separation location
 			'title_rem_additions' => 0,         // Remove title additions
 			'title_rem_prefixes'  => 0,         // Remove title prefixes from archives.
@@ -144,6 +144,10 @@ class Site_Options extends Sanitize {
 			'attachment_noindex' => 1, // Attachment Pages robots noindex
 			'site_noindex'       => 0, // Site Page robots noindex
 
+			$this->get_robots_post_type_option_id( 'noindex' ) => [
+				'attachment' => 1,
+			], // Post Type support.
+
 			// Robots follow.
 			'category_nofollow'   => 0, // Category Archive robots nofollow
 			'tag_nofollow'        => 0, // Tag Archive robots nofollow
@@ -153,6 +157,8 @@ class Site_Options extends Sanitize {
 			'attachment_nofollow' => 0, // Attachment Pages robots noindex
 			'site_nofollow'       => 0, // Site Page robots nofollow
 
+			$this->get_robots_post_type_option_id( 'noarchive' ) => [], // Post Type support.
+
 			// Robots archive.
 			'category_noarchive'   => 0, // Category Archive robots noarchive
 			'tag_noarchive'        => 0, // Tag Archive robots noarchive
@@ -161,6 +167,8 @@ class Site_Options extends Sanitize {
 			'search_noarchive'     => 0, // Search Page robots noarchive
 			'attachment_noarchive' => 0, // Attachment Page robots noarchive
 			'site_noarchive'       => 0, // Site Page robots noarchive
+
+			$this->get_robots_post_type_option_id( 'noarchive' ) => [], // Post Type support.
 
 			// Robots pagination index.
 			'paged_noindex'      => 1, // Every second or later page noindex
@@ -604,6 +612,7 @@ class Site_Options extends Sanitize {
 	 *
 	 * @since 2.2.4
 	 * @since 2.8.2 : No longer decodes entities on request.
+	 * @since 3.1.0 : Now returns null if the option doesn't exist, instead of -1.
 	 * @staticvar array $defaults_cache
 	 * @uses $this->settings_field
 	 * @uses $this->default_site_options()
@@ -611,8 +620,8 @@ class Site_Options extends Sanitize {
 	 * @param string $key required The option name
 	 * @param string $setting optional The settings field
 	 * @param bool $use_cache optional Use the options cache or not. For debugging purposes.
-	 * @return int|bool|string default option
-	 *         int '-1' if option doesn't exist.
+	 * @return null|bool|string default option
+	 *         null If option doesn't exist.
 	 */
 	public function get_default_settings( $key, $setting = '', $use_cache = true ) {
 
@@ -628,7 +637,7 @@ class Site_Options extends Sanitize {
 			$defaults = $this->default_site_options();
 
 			if ( ! is_array( $defaults ) || ! array_key_exists( $key, $defaults ) )
-				return -1;
+				return null;
 
 			return is_array( $defaults[ $key ] ) ? \stripslashes_deep( $defaults[ $key ] ) : stripslashes( $defaults[ $key ] );
 		}
@@ -643,7 +652,7 @@ class Site_Options extends Sanitize {
 		$defaults_cache = $this->default_site_options();
 
 		if ( ! is_array( $defaults_cache ) || ! array_key_exists( $key, (array) $defaults_cache ) )
-			$defaults_cache[ $key ] = -1;
+			$defaults_cache[ $key ] = null;
 
 		return $defaults_cache[ $key ];
 	}
@@ -652,6 +661,7 @@ class Site_Options extends Sanitize {
 	 * Get the warned setting of any of the The SEO Framework settings.
 	 *
 	 * @since 2.3.4
+	 * @since 3.1.0 : Now returns 0 if the option doesn't exist, instead of -1.
 	 * @staticvar array $warned_cache
 	 * @uses $this->settings_field
 	 * @uses $this->warned_site_options()
@@ -660,7 +670,6 @@ class Site_Options extends Sanitize {
 	 * @param string $setting optional The settings field
 	 * @param bool $use_cache optional Use the options cache or not. For debugging purposes.
 	 * @return int 0|1 Whether the option is flagged as dangerous for SEO.
-	 *         int '-1' if option doesn't exist.
 	 */
 	public function get_warned_settings( $key, $setting = '', $use_cache = true ) {
 
@@ -676,7 +685,7 @@ class Site_Options extends Sanitize {
 			$warned = $this->warned_site_options();
 
 			if ( ! is_array( $warned ) || ! array_key_exists( $key, $warned ) )
-				return -1;
+				return 0;
 
 			return $this->s_one_zero( $warned[ $key ] );
 		}
@@ -697,6 +706,18 @@ class Site_Options extends Sanitize {
 		}
 
 		return $warned_cache[ $key ];
+	}
+
+	/**
+	 * Returns the option value for Post Type robots settings.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param string $type Accepts 'noindex', 'nofollow', 'noarchive'.
+	 * @return string
+	 */
+	public function get_robots_post_type_option_id( $type ) {
+		return $this->sanitize_field_id( $type . '_post_types' );
 	}
 
 	/**

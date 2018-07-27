@@ -376,7 +376,7 @@ class Metaboxes extends Site_Options {
 	 *   'desc' string Explains what the robots type does.
 	 * }
 	 */
-	protected function robots_metabox_no_tab( $types, $robots ) {
+	protected function robots_metabox_no_tab( $types, $post_types, $robots ) {
 		$this->get_view( 'metaboxes/robots-metabox', get_defined_vars(), 'no' );
 	}
 

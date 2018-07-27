@@ -314,11 +314,10 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * Echos the SEO Bar.
 	 *
 	 * @since 2.6.0
-	 * @staticvar string $type
 	 *
-	 * @param string $column the current column    : If it's a taxonomy, this is empty
-	 * @param int $post_id the post id             : If it's a taxonomy, this is the column name
-	 * @param string $tax_id this is empty         : If it's a taxonomy, this is the taxonomy id
+	 * @param string $column the current column : If it's a taxonomy, this is empty
+	 * @param int    $post_id the post id       : If it's a taxonomy, this is the column name
+	 * @param string $tax_id this is empty      : If it's a taxonomy, this is the taxonomy id
 	 */
 	public function seo_bar( $column, $post_id, $tax_id = '' ) {
 		echo $this->get_seo_bar( $column, $post_id, $tax_id );
@@ -328,7 +327,6 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * Returns the SEO Bar for taxonomies.
 	 *
 	 * @since 3.0.4
-	 * @staticvar string $type
 	 *
 	 * @param string $string      The current column string.
 	 * @param string $column_name Name of the column.
@@ -344,9 +342,9 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @since 3.0.4
 	 * @staticvar string $type
 	 *
-	 * @param string $column the current column    : If it's a taxonomy, this is empty
-	 * @param int $post_id the post id             : If it's a taxonomy, this is the column name
-	 * @param string $tax_id this is empty         : If it's a taxonomy, this is the taxonomy id
+	 * @param string $column the current column : If it's a taxonomy, this is empty
+	 * @param int    $post_id the post id       : If it's a taxonomy, this is the column name
+	 * @param string $tax_id this is empty      : If it's a taxonomy, this is the taxonomy id
 	 */
 	public function get_seo_bar( $column, $post_id, $tax_id = '' ) {
 
@@ -356,10 +354,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			$type = \get_post_type( $post_id );
 
 			if ( false === $type || '' !== $tax_id ) {
-				$screen = (object) \get_current_screen();
-
-				if ( isset( $screen->taxonomy ) )
-					$type = $screen->taxonomy;
+				$type = $this->get_current_taxonomy();
 			}
 		}
 
@@ -384,7 +379,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @since 2.1.9
 	 *
 	 * @param string $column the current column : If it's a taxonomy, this is empty
-	 * @param int $post_id the post id          : If it's a taxonomy, this is the column name
+	 * @param int    $post_id the post id       : If it's a taxonomy, this is the column name
 	 * @param string $tax_id this is empty      : If it's a taxonomy, this is the taxonomy id
 	 */
 	public function seo_bar_ajax( $column, $post_id, $tax_id = '' ) {
@@ -395,7 +390,6 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * Returns the SEO Bar for taxonomies on AJAX.
 	 *
 	 * @since 3.0.4
-	 * @staticvar string $type
 	 *
 	 * @param string $string      The current column string.
 	 * @param string $column_name Name of the column.
@@ -444,11 +438,11 @@ class Doing_It_Right extends Generate_Ldjson {
 	 *
 	 * @since 2.6.0
 	 *
-	 * @param string $context The hover/screenreader context.
-	 * @param string $symbol The single-character symbol.
-	 * @param string $class The SEO block color code. : 'bad', 'okay', 'good', 'unknown'.
+	 * @param string   $context The hover/screenreader context.
+	 * @param string   $symbol  The single-character symbol.
+	 * @param string   $class   The SEO block color code. : 'bad', 'okay', 'good', 'unknown'.
 	 * @param int|null $ajax_id The unique Ajax ID to generate a small on-hover script for this ID. May be Arbitrary.
-	 * @param bool $echo Whether to echo the output.
+	 * @param bool     $echo    Whether to echo the output.
 	 * @return string|void The special block with wrap. Void if $echo is true.
 	 */
 	protected function post_status_special( $context, $symbol = '?', $color = 'unknown', $is_term = '', $ajax_id = null, $echo = false ) {
@@ -483,9 +477,9 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @staticvar bool $is_term If we're dealing with TT pages.
 	 * @since 2.8.0 Third parameter `$echo` has been put into effect.
 	 *
-	 * @param int $post_id The Post ID or taxonomy ID.
-	 * @param string $type Is fetched on edit.php, inpost, taxonomies, etc.
-	 * @param bool $echo Whether to echo the value. Does not eliminate return.
+	 * @param int    $post_id The Post ID or taxonomy ID.
+	 * @param string $type The content type.
+	 * @param bool   $echo Whether to echo the value. Does not eliminate return.
 	 * @return string|void $content The post SEO status. Void if $echo is true.
 	 */
 	public function post_status( $post_id = '', $type = 'inpost', $echo = false ) {
@@ -493,30 +487,33 @@ class Doing_It_Right extends Generate_Ldjson {
 		$content = '';
 
 		//* Fetch Post ID if it hasn't been provided.
-		if ( empty( $post_id ) )
+		if ( ! $post_id )
 			$post_id = $this->get_the_real_ID();
 
 		if ( $post_id ) {
 			//* Fetch Post Type.
-			if ( 'inpost' === $type || empty( $type ) )
+			if ( 'inpost' === $type || ! $type ) {
 				$type = \get_post_type( $post_id );
+			}
 
 			//* No need to re-evalute these.
-			static $post_i18n = null;
-			static $is_term = null;
+			static $post_i18n, $is_term, $taxonomy, $post_type;
 
 			$term = null;
 			/**
 			 * Static caching.
 			 * @since 2.3.8
 			 */
-			if ( ! isset( $post_i18n, $is_term ) ) {
+			if ( ! isset( $post_i18n, $is_term, $taxonomy, $post_type ) ) {
 				if ( $this->is_post_type_page( $type ) ) {
 					$is_term   = false;
 					$post_i18n = $this->get_post_type_label( $type );
+					$post_type = $type;
 				} else {
 					$is_term   = true;
 					$term      = $this->fetch_the_term( $post_id );
+					$taxonomy  = $this->get_current_taxonomy();
+					$post_type = $this->get_admin_post_type();
 					$post_i18n =
 						( isset( $term->taxonomy ) ? $this->get_tax_type_label( $term->taxonomy ) : '' )
 						?: $this->get_post_type_label( $type );
@@ -530,7 +527,8 @@ class Doing_It_Right extends Generate_Ldjson {
 				'post_id'   => $post_id,
 				'post_i18n' => $post_i18n,
 				'post_low'  => $post_low,
-				'type'      => $type,
+				'post_type' => $post_type,
+				'taxonomy'  => $taxonomy,
 			];
 
 			if ( $is_term ) {
@@ -762,7 +760,7 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		$title = $this->get_title( [
 			'id'       => $args['post_id'],
-			'taxonomy' => $args['type'],
+			'taxonomy' => $args['taxonomy'],
 		] );
 
 		$description_is_from_custom_field = (bool) $description_custom_field;
@@ -1188,6 +1186,20 @@ class Doing_It_Right extends Generate_Ldjson {
 			$but = true;
 		}
 
+		//* Adds notice for robots post type settings.
+		static $pt_checked;
+		if ( ! isset( $pt_checked ) ) {
+			$_setting = $this->get_option( $this->get_robots_post_type_option_id( 'noindex' ) );
+			$pt_checked = ! empty( $_setting[ $args['post_type'] ] );
+		}
+		if ( $pt_checked ) {
+			$but_and = isset( $but ) ? $and_i18n : $but_i18n;
+			/* translators: %s = But or And  */
+			$ind_notice .= '<br>' . sprintf( \esc_attr__( '%s the post type is discouraging from being indexed.', 'autodescription' ), $but_and );
+			$ind_class = $unknown;
+			$but = true;
+		}
+
 		//* Adds notice for WordPress blog public indexing.
 		if ( false === $this->is_blog_public() ) {
 			$but_and = isset( $but ) ? $and_i18n : $but_i18n;
@@ -1369,11 +1381,25 @@ class Doing_It_Right extends Generate_Ldjson {
 				$label = $this->get_tax_type_label( $this->fetch_the_term( $args['post_id'] )->taxonomy, false );
 
 				/* translators: 1: But or And, 2: Current taxonomy term plural label */
-				$fol_notice .= '<br>' . sprintf( \esc_attr__( '%1$s following for %2$s have been discouraged.', 'autodescription' ), $but_and, $label );
+				$fol_notice .= '<br>' . sprintf( \esc_attr__( '%1$s following of links for %2$s have been discouraged.', 'autodescription' ), $but_and, $label );
 				$fol_class = $unknown;
 
 				$followed = false;
 			}
+		}
+
+		//* Adds notice for robots post type settings.
+		static $pt_checked;
+		if ( ! isset( $pt_checked ) ) {
+			$_setting = $this->get_option( $this->get_robots_post_type_option_id( 'nofollow' ) );
+			$pt_checked = ! empty( $_setting[ $args['post_type'] ] );
+		}
+		if ( $pt_checked ) {
+			$but_and = isset( $but ) ? $and_i18n : $but_i18n;
+			/* translators: %s = But or And  */
+			$fol_notice .= '<br>' . sprintf( \esc_attr__( '%s this post type is discouraging from having its links followed.', 'autodescription' ), $but_and );
+			$fol_class = $unknown;
+			$but = true;
 		}
 
 		if ( false === $this->is_blog_public() ) {
@@ -1478,6 +1504,20 @@ class Doing_It_Right extends Generate_Ldjson {
 
 				$archived = false;
 			}
+		}
+
+		//* Adds notice for robots post type settings.
+		static $pt_checked;
+		if ( ! isset( $pt_checked ) ) {
+			$_setting = $this->get_option( $this->get_robots_post_type_option_id( 'noarchive' ) );
+			$pt_checked = ! empty( $_setting[ $args['post_type'] ] );
+		}
+		if ( $pt_checked ) {
+			$but_and = isset( $but ) ? $and_i18n : $but_i18n;
+			/* translators: %s = But or And  */
+			$arc_notice .= '<br>' . sprintf( \esc_attr__( '%s this post type is discouraging from being archived.', 'autodescription' ), $but_and );
+			$arc_class = $unknown;
+			$but = true;
 		}
 
 		if ( false === $this->is_blog_public() ) {

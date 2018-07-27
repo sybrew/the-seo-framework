@@ -264,6 +264,7 @@ NOTE: ref: https://theseoframework.com/?p=1792
 
 * Like previous updates, this update...
 * TODO
+* Attachment Pages are now known as "Media".
 
 **For everyone: Better and faster titles**
 
@@ -276,7 +277,7 @@ NOTE: ref: https://theseoframework.com/?p=1792
 **For everyone: Plugin conflict resolution**
 
 * The SEO Framework no longer disables parts of its meta output, settings and other functionality when a conflicting plugin is found.
-* Now, only warnings are shown in the settings page.
+* Now, only red warnings are shown throughout the settings page.
 * Most users aren't affected by this. However, if you think you're using any of [these plugins](TODO), you might wish to revise your settings.
 * TODO show the user a list of plugins in the plugin activation page?
 * We made this change because it was confusing to many users; the plugin even seemed broken.
@@ -288,12 +289,27 @@ NOTE: ref: https://theseoframework.com/?p=1792
 * The factory function yields many failsafe capturers so we can make future changes with peace of mind. This isn't possible with PHP functions.
 * As more than three quarters the plugin's code is dormant on most pages, in future major releases we're going to cut off the "façade" class loading (where everything's accessible via `$this`), and split them into interfacing factories, e.g.: `the_seo_framework()->generate( 'url' )::set( 'id', 1 )::get( 'relative' )`. More on this will follow for 3.2 or later after a class-map draft is set up. Or goal is to minimize performance overhead; aiming to improve it further. TODO revise this.
 
-**For developers: HTML Script changes:**
+**For developers: JavaScript changes:**
 
 * The original JS file (stemming from August 2015) was a God Object container, which grew over 3000 lines of code. So, we split the code over multiple objects, thus files, to improve maintainability and added a script loader.
 * Theoretically, we could've auto-combined the files in the loader (like WP `load-scripts.php` does), but we figured most servers use HTTP/2 now. And, if they don't, they should.
 * With this introduction, most of the split-off code's API has been dropped, without deprecation. We plan to incorporate the new API into the Extension Manager, which now maintains its own versions of almost everything.
-* We've also removed the externs file, as we long moved to Babel instead of Closure Compiler.
+* We've also removed the externs files, as we long moved to favor Babel, instead of Closure Compiler.
+
+**For everyone: Downgrade precautions:**
+
+* This plugin can be downgraded, and we try to allow downgrading without issues for at least one major version, or one year; whichever is later.
+* Sometimes, we need to go out of our way to make this possible; so, in this update, two settings require attention.
+
+1. Robots:
+	* When you downgrade from v3.1 to an earlier version of TSF, the Media/Attachment "noindex", "nofollow", and "noarchive" values may be reset.
+	* Double-check those settings when you do. It's found under "SEO Settings -> Robots Meta Settings". Labeled "Apply 'noindex/nofollow/noarchive' to Attachment Pages?"
+	* This is precautionary, because TSF maintains a copy of the old settings' keys and your values throughout the v3.1.x update cycle.
+	* So, although unlikely, failing to correctly reset this setting may cause your site to drop in SERP.
+2. Title Separator:
+	* The title separator option has been renamed as it was mispelled. This makes expanding the API more convenient.
+	* This separator may be reset to a pipe `|`.
+	* This is precautionary, because TSF maintains a copy of the old settings key and your value throughout the v3.1.x update cycle.
 
 ## Detailed log
 
@@ -319,14 +335,16 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 			* TODO consider using methods that are used in Theme Check.
 			* TODO make sure it's in a non-expiring transient that might store a md5 checksum value of the theme file, which is cleared on theme switch or update. TODO rethink this... we shouldn't hinder performance, and not all PHP installations allow file reading.
 			* TODO make sure it checks for Title Fix' presence.
-		* TODO New robots options that allow setting robots for each post type.
-		* TODO New sitemap options that allow setting including for each post type.
+		* New robots options that allow setting robots for each post type.
+			* These robots settings are applied to the whole custom post type, including its terms.
+			* The "noindex" settings also remove the post type from the sitemap.
 		* New SEO Bar checks:
 			* When the generated description is empty, it'll now tell you with a blue bar, instead of saying it's "far too short".
 			* When the generated title is empty thanks to filters, it'll now tell you with a blue bar, instead of saying it's "far too short".
 			* Pages in draft correctly state their indexing status.
 			* Pages that are protected now correctly state their indexing status.
 			* When the Blog Page is empty, and when it's not the home page, it'll show a "noindex" notification.
+			* Post types that have robots settings applied, now show them via appropriate notifications.
 		* Descriptive links to all meta title and description labels.
 		* Post Type Settings:
 			* Found in the General Settings meta box, they'll prevent The SEO Framework from interacting.
@@ -566,6 +584,8 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 				* `is_post_type_supported()`
 				* `taxonomy_supports_custom_seo()` TODO remove?
 				* `get_supported_post_types()`
+			* In class `\The_SEO_Framework\Generate` -- Factory: `the_seo_framework()`
+				* `is_post_type_robots_set()`
 			* In class `\The_SEO_Framework\Generate_Image` -- Factory: `the_seo_framework()`
 				* `register_image_dimension()`
 			* In class `\The_SEO_Framework\Generate_Title` -- Factory: `the_seo_framework()`
@@ -600,13 +620,16 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 				* `get_document_title()`
 				* `get_wp_title()`
 			* In class `\The_SEO_Framework\Sanitize` -- Factory: `the_seo_framework()`
+				* `_set_backward_compatibility()`, marked private.
 				* `sanitize_field_id()`
 				* `s_disabled_post_types()`
+				* `s_post_types()`
 				* `strip_newline_urls()`
 				* `strip_paragraph_urls()`
 			* In class `\The_SEO_Framework\Site_Options` -- Factory: `the_seo_framework()`
 				* `get_static_cache()`
 				* `update_static_cache()`
+				* `get_robots_post_type_option_id()`
 			* In class: `\The_SEO_Framework\Term_Data` -- factory: `the_seo_framework()`
 				* `get_tax_type_label()`
 			* In class `\The_SEO_Framework\Builders\Scripts` -- Factory: `the_seo_framework()->Scripts()`.
@@ -678,6 +701,8 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 				* TODO `get_js_nonces()`
 			* In class: `\The_SEO_Framework\Admin_Pages` -- Factory: `the_seo_framework()`
 				* `make_textfield()`, was marked private.
+				* `field_value()`, redundant. Use `get_option()` instead.
+				* `get_field_value()`, redundant. Use `get_option()` instead.
 			* In class: `\The_SEO_Framework\Cache` -- Factory: `the_seo_framework()`
 				* `pre_seo_box()`, was marked private.
 				* `inpost_seo_box()`

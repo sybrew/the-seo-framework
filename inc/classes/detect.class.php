@@ -715,6 +715,7 @@ class Detect extends Render {
 	 *
 	 * @since 3.1.0
 	 *
+	 * @param string $post_type The post type, optional. Leave empty to autodetermine type.
 	 * @return bool True if disabled, false otherwise.
 	 */
 	public function is_post_type_disabled( $post_type = '' ) {

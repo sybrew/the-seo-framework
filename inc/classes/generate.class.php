@@ -137,11 +137,13 @@ class Generate extends User_Data {
 			if ( $this->is_protected( $this->get_the_real_ID() ) ) {
 				$meta['noindex'] = 'noindex';
 			}
+		}
 
-			if ( $this->is_attachment() ) {
-				$meta['noindex']   = $this->get_option( 'attachment_noindex' ) ? 'noindex' : $meta['noindex'];
-				$meta['nofollow']  = $this->get_option( 'attachment_nofollow' ) ? 'nofollow' : $meta['nofollow'];
-				$meta['noarchive'] = $this->get_option( 'attachment_noarchive' ) ? 'noarchive' : $meta['noarchive'];
+		$post_type = \get_post_type();
+		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
+			$o = $this->get_option( $this->get_robots_post_type_option_id( $r ) );
+			if ( ! empty( $o[ $post_type ] ) ) {
+				$meta[ $r ] = $r;
 			}
 		}
 
@@ -153,6 +155,23 @@ class Generate extends User_Data {
 		 * @param array $meta The current term meta.
 		 */
 		return array_filter( (array) \apply_filters( 'the_seo_framework_robots_meta_array', $meta ) );
+	}
+
+	/**
+	 * Determines if the post type has a robots value set.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param string $type      Accepts 'noindex', 'nofollow', 'noarchive'.
+	 * @param string $post_type The post type, optional. Leave empty to autodetermine type.
+	 * @return bool True if disabled, false otherwise.
+	 */
+	public function is_post_type_robots_set( $type, $post_type = '' ) {
+		return isset(
+			$this->get_option( $this->get_robots_post_type_option_id( $type ) )[
+				$post_type ?: \get_post_type() ?: $this->get_admin_post_type()
+			]
+		);
 	}
 
 	/**
@@ -177,7 +196,7 @@ class Generate extends User_Data {
 
 		if ( ! isset( $sepcache[ $type ] ) ) {
 			if ( 'title' === $type ) {
-				$sep_option = $this->get_option( 'title_seperator' ); // Note: typo.
+				$sep_option = $this->get_option( 'title_separator' );
 			} else {
 				$sep_option = $this->get_option( $type . '_separator' );
 			}

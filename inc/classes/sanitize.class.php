@@ -102,6 +102,7 @@ class Sanitize extends Admin_Pages {
 		\add_action( "update_option_{$this->settings_field}", [ $this, 'delete_main_cache' ] );
 		\add_action( "update_option_{$this->settings_field}", [ $this, 'reinitialize_rewrite' ], 11 );
 		\add_action( "update_option_{$this->settings_field}", [ $this, 'update_db_version' ], 12 );
+		\add_action( "update_option_{$this->settings_field}", [ $this, '_set_backward_compatibility' ], 13 );
 	}
 
 	/**
@@ -117,18 +118,52 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
+	 * Maintains backward compatibility for the options of < 3.1.
+	 *
+	 * @since 3.1.0
+	 * @TODO  3.2.0 Remove or empty this.
+	 * @access private
+	 * @staticvar bool $running Prevents loops.
+	 */
+	public function _set_backward_compatibility() {
+		static $running = false;
+		if ( $running ) return;
+		$running = true;
+
+		db_3101: {
+			//= title_seperator backward compat.
+			$this->update_option( 'title_seperator', $this->get_option( 'title_separator', false ) );
+
+			//= Media robots backward compat.
+			foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
+				$_option = $this->get_option( $this->get_robots_post_type_option_id( $r ), false );
+				$_media_option = ! empty( $_option['attachment'] ) ? $_option['attachment'] : 0;
+
+				$this->update_option( 'attachment_' . $r, $_media_option );
+			}
+		}
+
+		$running = false;
+	}
+
+	/**
 	 * Register each of the settings with a sanitization filter type.
 	 *
 	 * @since 2.8.0
-	 * @uses method add_option_filter() Assign filter to array of settings.
+	 * @since 3.1.0 Added caching, preventing duplicate registrations.
+	 * @staticvar bool $init
+	 * @uses $this->add_option_filter() Assign filter to array of settings.
 	 */
 	public function init_sanitizer_filters() {
+
+		static $init = false;
+		if ( $init ) return;
 
 		$this->add_option_filter(
 			's_title_separator',
 			$this->settings_field,
 			[
-				'title_seperator', // NOTE: Typo
+				'title_separator',
 			]
 		);
 
@@ -326,6 +361,16 @@ class Sanitize extends Admin_Pages {
 			]
 		);
 
+		$this->add_option_filter(
+			's_post_types',
+			$this->settings_field,
+			[
+				$this->get_robots_post_type_option_id( 'noindex' ),
+				$this->get_robots_post_type_option_id( 'nofollow' ),
+				$this->get_robots_post_type_option_id( 'noarchive' ),
+			]
+		);
+
 		/*
 		$this->add_option_filter(
 			's_no_html',
@@ -420,6 +465,8 @@ class Sanitize extends Admin_Pages {
 				'sitemap_color_accent',
 			]
 		);
+
+		$init = true;
 	}
 
 	/**
@@ -578,6 +625,7 @@ class Sanitize extends Admin_Pages {
 			's_alter_query_type'      => [ $this, 's_alter_query_type' ],
 			's_one_zero'              => [ $this, 's_one_zero' ],
 			's_disabled_post_types'   => [ $this, 's_disabled_post_types' ],
+			's_post_types'            => [ $this, 's_post_types' ],
 			's_numeric_string'        => [ $this, 's_numeric_string' ],
 			's_no_html'               => [ $this, 's_no_html' ],
 			's_no_html_space'         => [ $this, 's_no_html_space' ],
@@ -618,11 +666,11 @@ class Sanitize extends Admin_Pages {
 		if ( $key )
 			return (string) $new_value;
 
-		$previous = $this->get_field_value( 'title_seperator' ); // NOTE: Typo
+		$previous = $this->get_option( 'title_separator' );
 
 		//* Fallback to default if empty.
 		if ( empty( $previous ) )
-			$previous = $this->get_default_option( 'title_seperator' ); // NOTE: Typo
+			$previous = $this->get_default_option( 'title_separator' );
 
 		return (string) $previous;
 	}
@@ -646,7 +694,7 @@ class Sanitize extends Admin_Pages {
 		if ( $key )
 			return (string) $new_value;
 
-		$previous = $this->get_field_value( 'description_separator' );
+		$previous = $this->get_option( 'description_separator' );
 
 		//* Fallback to default if empty.
 		if ( empty( $previous ) )
@@ -893,7 +941,7 @@ class Sanitize extends Admin_Pages {
 		if ( 'person' === $new_value || 'organization' === $new_value )
 			return (string) $new_value;
 
-		$previous = $this->get_field_value( 'knowledge_type' );
+		$previous = $this->get_option( 'knowledge_type' );
 
 		return (string) $previous;
 	}
@@ -912,7 +960,7 @@ class Sanitize extends Admin_Pages {
 		if ( 'left' === $new_value || 'right' === $new_value )
 			return (string) $new_value;
 
-		$previous = $this->get_field_value( 'title_location' );
+		$previous = $this->get_option( 'title_location' );
 
 		//* Fallback if previous is also empty.
 		if ( empty( $previous ) )
@@ -935,7 +983,7 @@ class Sanitize extends Admin_Pages {
 		if ( 'left' === $new_value || 'right' === $new_value )
 			return (string) $new_value;
 
-		$previous = $this->get_field_value( 'home_title_location' );
+		$previous = $this->get_option( 'home_title_location' );
 
 		//* Fallback if previous is also empty.
 		if ( empty( $previous ) )
@@ -991,11 +1039,28 @@ class Sanitize extends Admin_Pages {
 	 * @return array
 	 */
 	public function s_disabled_post_types( $new_values ) {
+
 		if ( ! is_array( $new_values ) ) return [];
 
 		foreach ( $this->get_forced_supported_post_types() as $forced ) {
 			unset( $new_values[ $forced ] );
 		}
+
+		return $this->s_post_types( $new_values );
+	}
+
+	/**
+	 * Sanitizes generic post type entries.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param mixed $new_value Should ideally be an array with post type name indexes, and 1 or 0 passed in.
+	 * @return array
+	 */
+	public function s_post_types( $new_values ) {
+
+		if ( ! is_array( $new_values ) ) return [];
+
 		foreach ( $new_values as $index => $value ) {
 			$new_values[ $index ] = $this->s_one_zero( $value );
 		}
@@ -1201,7 +1266,7 @@ class Sanitize extends Admin_Pages {
 		if ( $key )
 			return (string) $new_value;
 
-		$previous = $this->get_field_value( 'twitter_card' );
+		$previous = $this->get_option( 'twitter_card' );
 
 		if ( empty( $previous ) )
 			$previous = $this->get_default_option( 'twitter_card' );

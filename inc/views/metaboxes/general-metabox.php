@@ -151,7 +151,7 @@ switch ( $instance ) :
 		);
 
 		$search_query_select_options = '';
-		$_current = $this->get_field_value( 'alter_search_query_type' );
+		$_current = $this->get_option( 'alter_search_query_type' );
 		foreach ( $query_types as $value => $name ) {
 			$search_query_select_options .= vsprintf(
 				'<option value="%s" %s>%s</option>',
@@ -163,7 +163,7 @@ switch ( $instance ) :
 			);
 		}
 		$archive_query_select_options = '';
-		$_current = $this->get_field_value( 'alter_archive_query_type' );
+		$_current = $this->get_option( 'alter_archive_query_type' );
 		foreach ( $query_types as $value => $name ) {
 			$archive_query_select_options .= vsprintf(
 				'<option value="%s" %s>%s</option>',
@@ -291,7 +291,7 @@ switch ( $instance ) :
 					]
 				);
 				foreach ( $scheme_types as $value => $name )
-					echo '<option value="' . esc_attr( $value ) . '"' . selected( $this->get_field_value( 'canonical_scheme' ), esc_attr( $value ), false ) . '>' . esc_html( $name ) . '</option>' . "\n";
+					echo '<option value="' . esc_attr( $value ) . '"' . selected( $this->get_option( 'canonical_scheme' ), esc_attr( $value ), false ) . '>' . esc_html( $name ) . '</option>' . "\n";
 				?>
 			</select>
 		</p>
@@ -350,7 +350,7 @@ switch ( $instance ) :
 
 			<p id="sitemaps-timestamp-format" class="tsf-fields">
 				<span class="tsf-toblock">
-					<input type="radio" name="<?php $this->field_name( 'timestamps_format' ); ?>" id="<?php $this->field_id( 'timestamps_format_0' ); ?>" value="0" <?php checked( $this->get_field_value( 'timestamps_format' ), '0' ); ?> />
+					<input type="radio" name="<?php $this->field_name( 'timestamps_format' ); ?>" id="<?php $this->field_id( 'timestamps_format_0' ); ?>" value="0" <?php checked( $this->get_option( 'timestamps_format' ), '0' ); ?> />
 					<label for="<?php $this->field_id( 'timestamps_format_0' ); ?>">
 						<?php
 						echo $this->code_wrap( $timestamp_0 );
@@ -362,7 +362,7 @@ switch ( $instance ) :
 					</label>
 				</span>
 				<span class="tsf-toblock">
-					<input type="radio" name="<?php $this->field_name( 'timestamps_format' ); ?>" id="<?php $this->field_id( 'timestamps_format_1' ); ?>" value="1" <?php checked( $this->get_field_value( 'timestamps_format' ), '1' ); ?> />
+					<input type="radio" name="<?php $this->field_name( 'timestamps_format' ); ?>" id="<?php $this->field_id( 'timestamps_format_1' ); ?>" value="1" <?php checked( $this->get_option( 'timestamps_format' ), '1' ); ?> />
 					<label for="<?php $this->field_id( 'timestamps_format_1' ); ?>">
 						<?php
 						echo $this->code_wrap( $timestamp_1 );
@@ -391,6 +391,7 @@ switch ( $instance ) :
 		<?php
 		$this->description( __( 'Select post types which should not receive any SEO optimization whatsoever. This will remove meta optimizations, SEO suggestions, and sitemap inclusions for the selected post types.', 'autodescription' ) );
 		$this->description( __( 'Default post types can not be disabled.', 'autodescription' ) );
+		$this->description( __( 'These settings are applied to the post types pages and their terms.', 'autodescription' ) );
 
 		$forced_pt = $this->get_forced_supported_post_types();
 		$boxes = [];

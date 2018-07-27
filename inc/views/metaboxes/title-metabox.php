@@ -119,8 +119,8 @@ switch ( $instance ) :
 			</legend>
 			<p id="tsf-title-separator" class="tsf-fields">
 			<?php foreach ( $title_separator as $name => $html ) : ?>
-				<input type="radio" name="<?php $this->field_name( 'title_seperator' ); ?>" id="<?php $this->field_id( 'title_seperator_' . $name ); ?>" value="<?php echo esc_attr( $name ); ?>" <?php checked( $this->get_field_value( 'title_seperator' ), $name ); ?> />
-				<label for="<?php $this->field_id( 'title_seperator_' . $name ); ?>" <?php echo in_array( $name, [ 'dash', 'pipe' ], true ) ? $recommended : ''; ?>><?php echo esc_html( $html ); ?></label>
+				<input type="radio" name="<?php $this->field_name( 'title_separator' ); ?>" id="<?php $this->field_id( 'title_separator_' . $name ); ?>" value="<?php echo esc_attr( $name ); ?>" <?php checked( $this->get_option( 'title_separator' ), $name ); ?> />
+				<label for="<?php $this->field_id( 'title_separator_' . $name ); ?>" <?php echo in_array( $name, [ 'dash', 'pipe' ], true ) ? $recommended : ''; ?>><?php echo esc_html( $html ); ?></label>
 			<?php endforeach; ?>
 			</p>
 		</fieldset>
@@ -143,14 +143,14 @@ switch ( $instance ) :
 			</legend>
 			<p id="tsf-title-location" class="tsf-fields">
 				<span class="tsf-toblock">
-					<input type="radio" name="<?php $this->field_name( 'title_location' ); ?>" id="<?php $this->field_id( 'title_location_left' ); ?>" value="left" <?php checked( $this->get_field_value( 'title_location' ), 'left' ); ?> />
+					<input type="radio" name="<?php $this->field_name( 'title_location' ); ?>" id="<?php $this->field_id( 'title_location_left' ); ?>" value="left" <?php checked( $this->get_option( 'title_location' ), 'left' ); ?> />
 					<label for="<?php $this->field_id( 'title_location_left' ); ?>">
 						<span><?php esc_html_e( 'Left:', 'autodescription' ); ?></span>
 						<?php echo $this->code_wrap_noesc( $example_left ); ?>
 					</label>
 				</span>
 				<span class="tsf-toblock">
-					<input type="radio" name="<?php $this->field_name( 'title_location' ); ?>" id="<?php $this->field_id( 'title_location_right' ); ?>" value="right" <?php checked( $this->get_field_value( 'title_location' ), 'right' ); ?> />
+					<input type="radio" name="<?php $this->field_name( 'title_location' ); ?>" id="<?php $this->field_id( 'title_location_right' ); ?>" value="right" <?php checked( $this->get_option( 'title_location' ), 'right' ); ?> />
 					<label for="<?php $this->field_id( 'title_location_right' ); ?>">
 						<span><?php esc_html_e( 'Right:', 'autodescription' ); ?></span>
 						<?php echo $this->code_wrap_noesc( $example_right ); ?>

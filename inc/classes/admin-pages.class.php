@@ -444,32 +444,6 @@ class Admin_Pages extends Inpost {
 	}
 
 	/**
-	 * Helper function that returns a setting value from this form's settings
-	 * field for use in form fields.
-	 * Fetches blog option.
-	 *
-	 * @since 2.2.2
-	 *
-	 * @param string $key Field key
-	 * @return string Field value
-	 */
-	public function get_field_value( $key ) {
-		return $this->get_option( $key, $this->settings_field );
-	}
-
-	/**
-	 * Echo a setting value from this form's settings field for use in form fields.
-	 *
-	 * @since 2.2.2
-	 * @uses $this->get_field_value() Constructs value attributes for use in form fields.
-	 *
-	 * @param string $key Field key
-	 */
-	public function field_value( $key ) {
-		echo \esc_attr( $this->get_field_value( $key ) );
-	}
-
-	/**
 	 * Generates dismissible notice.
 	 * Also loads scripts and styles if out of The SEO Framework's context.
 	 *
@@ -757,6 +731,8 @@ class Admin_Pages extends Inpost {
 	 *    @type string $description The checkbox additional description, placed underneat.
 	 *    @type bool   $escape      Whether to enable escaping of the $label and $description.
 	 *    @type bool   $disabled    Whether to disable the checkbox field.
+	 *    @type bool   $default     Whether to display-as-default. This is autodetermined when no $index is set.
+	 *    @type bool   $warned      Whether to warn the checkbox field value.
 	 * }
 	 * @return string HTML checkbox output.
 	 */
@@ -769,6 +745,8 @@ class Admin_Pages extends Inpost {
 			'description' => '',
 			'escape'      => true,
 			'disabled'    => false,
+			'default'     => false,
+			'warned'      => false,
 		], $args );
 
 		if ( $args['escape'] ) {
@@ -784,7 +762,7 @@ class Admin_Pages extends Inpost {
 			$index ? sprintf( '[%s]', $index ) : ''
 		) );
 
-		$value = $this->get_field_value( $args['id'] );
+		$value = $this->get_option( $args['id'] );
 		if ( $index ) {
 			$value = isset( $value[ $index ] ) ? $value[ $index ] : '';
 		}
@@ -795,6 +773,12 @@ class Admin_Pages extends Inpost {
 		} elseif ( ! $args['index'] ) {
 			// Can't fetch conditionals in index.
 			$cb_class = $this->get_is_conditional_checked( $args['id'], false );
+		} else {
+			if ( $args['default'] ) {
+				$cb_class = 'tsf-default-selected';
+			} elseif ( $args['warned'] ) {
+				$cb_class = 'tsf-warning-selected';
+			}
 		}
 
 		$output = sprintf(

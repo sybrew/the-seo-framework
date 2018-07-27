@@ -93,7 +93,9 @@ function the_seo_framework_do_upgrade() {
 	}
 	//! From here, the upgrade procedures should be backward compatible.
 	//? This means no data may be erased for at least 1 major version, or 1 year, whichever is later.
-	if ( $version < '3100' ) {
+	if ( $version < '3101' ) {
+		the_seo_framework_do_upgrade_3101();
+		$version = '3101';
 	}
 
 	/**
@@ -277,13 +279,14 @@ function the_seo_framework_do_upgrade_3060() {
 /**
  * Adds caching option.
  * Loads suggestion for TSFEM.
- * TODO Updates title separator option.
- * TODO Registers and sets other new options...
+ * Updates title separator option.
+ * Updates auto description option.
+ * Migrates atachment indexing options.
  *
  * @since 3.1.0
  * TODO register callback to this.
  */
-function the_seo_framework_do_upgrade_3100() {
+function the_seo_framework_do_upgrade_3101() {
 	// TODO Make this work:
 	// It should get the default option keys and compare them to the database entries. Then, it should fill in the missing indexes.
 	// the_seo_framework_parse_new_options();
@@ -294,11 +297,33 @@ function the_seo_framework_do_upgrade_3100() {
 	// Enable auto description.
 	$tsf->update_option( 'auto_description', 1 );
 
+	$tsf->update_option( 'title_separator', $tsf->get_option( 'title_seperator' ) );
+
 	// Prevent database lookups when checking for cache.
 	add_option( THE_SEO_FRAMEWORK_SITE_CACHE, [] );
 
 	// Might they've missed it half a year ago, here it is again.
 	the_seo_framework_prepare_extension_manager_suggestion();
 
-	update_option( 'the_seo_framework_upgraded_db_version', '3100' );
+	if ( $tsf->get_option( 'attachment_noindex' ) ) {
+		$_option = $tsf->get_robots_post_type_option_id( 'noindex' );
+		$_value = $tsf->get_option( $_option ) ?: [];
+		$_value['attachment'] = 1;
+		$tsf->update_option( $_option, $_value );
+	}
+	if ( $tsf->get_option( 'attachment_nofollow' ) ) {
+		$_option = $tsf->get_robots_post_type_option_id( 'nofollow' );
+		$_value = $tsf->get_option( $_option ) ?: [];
+		$_value['attachment'] = 1;
+		$tsf->update_option( $_option, $_value );
+
+	}
+	if ( $tsf->get_option( 'attachment_noarchive' ) ) {
+		$_option = $tsf->get_robots_post_type_option_id( 'noarchive' );
+		$_value = $tsf->get_option( $_option ) ?: [];
+		$_value['attachment'] = 1;
+		$tsf->update_option( $_option, $_value );
+	}
+
+	update_option( 'the_seo_framework_upgraded_db_version', '3101' );
 }

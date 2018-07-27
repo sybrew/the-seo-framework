@@ -943,7 +943,6 @@ class Sitemaps extends Metaboxes {
 		endif;
 
 		if ( $total_cpt_posts ) :
-
 			/**
 			 * Applies filters Array the_seo_framework_sitemap_exclude_cpt : Excludes these CPT
 			 * @since 2.5.0
@@ -952,10 +951,13 @@ class Sitemaps extends Metaboxes {
 
 			$not_cpt = [ 'post', 'page', 'attachment' ];
 
+			$_pt_noindex = $this->get_option( $this->get_robots_post_type_option_id( 'noindex' ) );
+
 			foreach ( $this->get_supported_post_types() as $post_type ) {
-				if ( false === in_array( $post_type, $not_cpt, true ) ) {
-					if ( empty( $excluded_cpt ) || false === in_array( $post_type, $excluded_cpt, true ) ) {
-						$cpt[] = $post_type;
+				if ( ! in_array( $post_type, $not_cpt, true ) ) {
+					if ( empty( $excluded_cpt ) || ! in_array( $post_type, $excluded_cpt, true ) ) {
+						if ( empty( $_pt_noindex[ $post_type ] ) )
+							$cpt[] = $post_type;
 					}
 				}
 			}
