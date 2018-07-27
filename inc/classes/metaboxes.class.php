@@ -176,9 +176,10 @@ class Metaboxes extends Site_Options {
 	 * Outputs General Settings meta box general tab.
 	 *
 	 * @since 2.8.0
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
-	public function general_metabox_general_tab() {
+	protected function general_metabox_general_tab() {
 		$this->get_view( 'metaboxes/general-metabox', [], 'general' );
 	}
 
@@ -186,9 +187,10 @@ class Metaboxes extends Site_Options {
 	 * Outputs General Settings meta box layout tab.
 	 *
 	 * @since 2.8.0
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
-	public function general_metabox_layout_tab() {
+	protected function general_metabox_layout_tab() {
 		$this->get_view( 'metaboxes/general-metabox', [], 'layout' );
 	}
 
@@ -196,9 +198,10 @@ class Metaboxes extends Site_Options {
 	 * Outputs General Settings meta box performance tab.
 	 *
 	 * @since 2.8.0
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
-	public function general_metabox_performance_tab() {
+	protected function general_metabox_performance_tab() {
 		$this->get_view( 'metaboxes/general-metabox', [], 'performance' );
 	}
 
@@ -206,9 +209,10 @@ class Metaboxes extends Site_Options {
 	 * Outputs General Settings meta box canonical tab.
 	 *
 	 * @since 2.8.0
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
-	public function general_metabox_canonical_tab() {
+	protected function general_metabox_canonical_tab() {
 		$this->get_view( 'metaboxes/general-metabox', [], 'canonical' );
 	}
 
@@ -216,9 +220,10 @@ class Metaboxes extends Site_Options {
 	 * Outputs General Settings meta box timestamps tab.
 	 *
 	 * @since 3.0.0
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
-	public function general_metabox_timestamps_tab() {
+	protected function general_metabox_timestamps_tab() {
 		$this->get_view( 'metaboxes/general-metabox', [], 'timestamps' );
 	}
 
@@ -226,9 +231,10 @@ class Metaboxes extends Site_Options {
 	 * Outputs General Settings meta box post types tab.
 	 *
 	 * @since 3.0.0
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
-	public function general_metabox_posttypes_tab() {
+	protected function general_metabox_posttypes_tab() {
 		$this->get_view( 'metaboxes/general-metabox', [], 'posttypes' );
 	}
 
@@ -256,9 +262,10 @@ class Metaboxes extends Site_Options {
 	 * Title meta box general tab.
 	 *
 	 * @since 2.6.0
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->title_metabox() : Callback for Title Settings box.
 	 */
-	public function title_metabox_general_tab() {
+	protected function title_metabox_general_tab() {
 		$this->get_view( 'metaboxes/title-metabox', [], 'general' );
 	}
 
@@ -266,6 +273,7 @@ class Metaboxes extends Site_Options {
 	 * Title meta box general tab.
 	 *
 	 * @since 2.6.0
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->title_metabox() : Callback for Title Settings box.
 	 *
 	 * @param array $examples : array {
@@ -273,7 +281,7 @@ class Metaboxes extends Site_Options {
 	 *   'right' => Right Example
 	 * }
 	 */
-	public function title_metabox_additions_tab( $examples = [] ) {
+	protected function title_metabox_additions_tab( $examples = [] ) {
 		$this->get_view( 'metaboxes/title-metabox', get_defined_vars(), 'additions' );
 	}
 
@@ -281,6 +289,7 @@ class Metaboxes extends Site_Options {
 	 * Title meta box prefixes tab.
 	 *
 	 * @since 2.6.0
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->title_metabox() : Callback for Title Settings box.
 	 *
 	 * @param array $additions : array {
@@ -289,7 +298,7 @@ class Metaboxes extends Site_Options {
 	 * }
 	 * @param bool $showleft The example location.
 	 */
-	public function title_metabox_prefixes_tab( $additions = [], $showleft = false ) {
+	protected function title_metabox_prefixes_tab( $additions = [], $showleft = false ) {
 		$this->get_view( 'metaboxes/title-metabox', get_defined_vars(), 'prefixes' );
 	}
 
@@ -317,9 +326,10 @@ class Metaboxes extends Site_Options {
 	 * Description meta box general tab.
 	 *
 	 * @since 2.6.0
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->description_metabox() Callback for Description Settings box.
 	 */
-	public function description_metabox_general_tab() {
+	protected function description_metabox_general_tab() {
 		$this->get_view( 'metaboxes/description-metabox', [], 'general' );
 	}
 
@@ -327,9 +337,10 @@ class Metaboxes extends Site_Options {
 	 * Description meta box additions tab.
 	 *
 	 * @since 2.6.0
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->description_metabox() Callback for Description Settings box.
 	 */
-	public function description_metabox_additions_tab() {
+	protected function description_metabox_additions_tab() {
 		$this->get_view( 'metaboxes/description-metabox', [], 'additions' );
 	}
 
@@ -404,9 +415,10 @@ class Metaboxes extends Site_Options {
 	 * HomePage Metabox General Tab Output.
 	 *
 	 * @since 2.7.0
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
 	 */
-	public function homepage_metabox_general_tab() {
+	protected function homepage_metabox_general_tab() {
 		$this->get_view( 'metaboxes/homepage-metabox', [], 'general' );
 	}
 
@@ -414,9 +426,10 @@ class Metaboxes extends Site_Options {
 	 * HomePage Metabox Additions Tab Output.
 	 *
 	 * @since 2.7.0
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
 	 */
-	public function homepage_metabox_additions_tab() {
+	protected function homepage_metabox_additions_tab() {
 		$this->get_view( 'metaboxes/homepage-metabox', [], 'additions' );
 	}
 
@@ -424,9 +437,10 @@ class Metaboxes extends Site_Options {
 	 * HomePage Metabox Robots Tab Output
 	 *
 	 * @since 2.7.0
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
 	 */
-	public function homepage_metabox_robots_tab() {
+	protected function homepage_metabox_robots_tab() {
 		$this->get_view( 'metaboxes/homepage-metabox', [], 'robots' );
 	}
 
@@ -434,9 +448,10 @@ class Metaboxes extends Site_Options {
 	 * HomePage Metabox Social Tab Output
 	 *
 	 * @since 2.9.0
+	 * @since 3.1.0 Is now protected.
 	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
 	 */
-	public function homepage_metabox_social_tab() {
+	protected function homepage_metabox_social_tab() {
 		$this->get_view( 'metaboxes/homepage-metabox', [], 'social' );
 	}
 

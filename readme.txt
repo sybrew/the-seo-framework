@@ -327,7 +327,6 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 		* TODO
 		* New title options, including:
 			* TODO A toggle that disabled title additions when a manual title is used.
-			* TODO Paginated Title separator
 		* New description options, including:
 			* A toggle for automated descriptions.
 		* TODO A title check is added next to every title field. (or the SEO bar... a red title tsunami)
@@ -353,7 +352,6 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 		* When you activate any plugin, a check will be performed for conflicting SEO plugins; when found, a single dismissible warning notification will be outputted.
 			* Only users with plugin activation capabilities can see this message.
 	* **Improved:**
-		* TODO
 		* The plugin can now downgrade its database version to the currently installed version automatically. This makes sure necessary future upgrade procedures are reinstated when you choose to downgrade (for any reason).
 			* Since TSF v3.0.6 this happens when a user saved the options, but this could lead to inconsistent behavior on WordPress Multisite installations.
 		* We removed a lot of redundant code (like option upgrade checks), which have long been superseded by better standards.
@@ -582,7 +580,7 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 			* In class: `\The_SEO_Framework\Detect` -- Factory: `the_seo_framework()`
 				* `is_post_type_disabled()`
 				* `is_post_type_supported()`
-				* `taxonomy_supports_custom_seo()` TODO remove?
+				* `taxonomy_supports_custom_seo()`
 				* `get_supported_post_types()`
 			* In class `\The_SEO_Framework\Generate` -- Factory: `the_seo_framework()`
 				* `is_post_type_robots_set()`
@@ -611,8 +609,6 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 				* `use_home_page_title_tagline()`
 				* `get_home_page_tagline()`
 				* TODO are there more??
-			* In class `\The_SEO_Framework\Metaboxes` -- Factory: `the_seo_framework()`
-				* `general_metabox_posttypes_tab()` TODO consider making these all protected?
 			* In class: `\The_SEO_Framework\Post_Data` -- Factory: `the_seo_framework()`
 				* `get_post_type_label()`
 				* `is_draft()`
@@ -751,15 +747,36 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 			* In class: `\The_SEO_Framework\Load` -- Factory: `the_seo_framework()`
 				* `debug_init()`, was marked private, and it's no longer used.
 			* In class: `\The_SEO_Framework\Metabox` -- Factory: `the_seo_framework()`
-				* `social_metabox_postdates_tab()`, is now protected.
-				* `sitemaps_metabox_general_tab()`, is now protected.
-				* `sitemaps_metabox_robots_tab()`, is now protected.
-				* `sitemaps_metabox_timestamps_tab()`, is now protected.
-				* `sitemaps_metabox_notify_tab()`, is now protected.
-				* `sitemaps_metabox_style_tab()`, is now protected.
-				* `schema_metabox_general_tab()`, is now protected.
-				* `schema_metabox_structure_tab()`, is now protected.
-				* `schema_metabox_presence_tab()`, is now protected.
+				* These are now protected:
+					* `general_metabox_general_tab()`
+					* `general_metabox_layout_tab()`
+					* `general_metabox_performance_tab()`
+					* `general_metabox_canonical_tab()`
+					* `general_metabox_timestamps_tab()`
+					* `general_metabox_posttypes_tab()`
+					* `title_metabox_general_tab()`
+					* `title_metabox_additions_tab()`
+					* `title_metabox_prefixes_tab()`
+					* `description_metabox_general_tab()`
+					* `description_metabox_additions_tab()`
+					* `robots_metabox_general_tab()`
+					* `robots_metabox_no_tab()`
+					* `homepage_metabox_general_tab()`
+					* `homepage_metabox_additions_tab()`
+					* `homepage_metabox_robots_tab()`
+					* `homepage_metabox_social_tab()`
+					* `social_metabox_general_tab()`
+					* `social_metabox_facebook_tab()`
+					* `social_metabox_twitter_tab()`
+					* `social_metabox_postdates_tab()`
+					* `sitemaps_metabox_general_tab()`
+					* `sitemaps_metabox_robots_tab()`
+					* `sitemaps_metabox_timestamps_tab()`
+					* `sitemaps_metabox_notify_tab()`
+					* `sitemaps_metabox_style_tab()`
+					* `schema_metabox_general_tab()`
+					* `schema_metabox_structure_tab()`
+					* `schema_metabox_presence_tab()`
 			* In class: `\The_SEO_Framework\Render` -- Factory: `the_seo_framework()`
 				* `title_from_cache()`
 			* In class: `\The_SEO_Framework\Sitemaps` -- Factory: `the_seo_framework()`
