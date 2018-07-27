@@ -62,18 +62,11 @@ class Cache extends Sitemaps {
 
 		$this->init_post_cache_actions();
 
-		//* Deletes term description transient.
-		\add_action( 'edit_term', [ $this, 'delete_auto_description_transients_term' ], 10, 3 );
-		\add_action( 'delete_term', [ $this, 'delete_auto_description_transients_term' ], 10, 4 );
-
 		//* Deletes author transient.
 		\add_action( 'profile_update', [ $this, 'delete_author_cache' ] );
 
 		//* Delete Sitemap transient on permalink structure change.
 		\add_action( 'load-options-permalink.php', [ $this, 'delete_sitemap_transient_permalink_updated' ], 20 );
-
-		//* Deletes front page description transient on Tagline change.
-		\add_action( 'update_option_blogdescription', [ $this, 'delete_auto_description_frontpage_transient' ], 10, 1 );
 
 		\add_action( 'activated_plugin', [ $this, 'set_plugin_check_caches' ] );
 	}
@@ -234,7 +227,6 @@ class Cache extends Sitemaps {
 				$front_id = $this->get_the_front_page_ID();
 
 				$this->object_cache_delete( $this->get_meta_output_cache_key_by_type( $front_id, '', 'frontpage' ) );
-				$this->delete_auto_description_transient( $front_id, '', 'frontpage' );
 				$this->delete_ld_json_transient( $front_id, '', 'frontpage' );
 				$success = true;
 				break;
@@ -256,7 +248,6 @@ class Cache extends Sitemaps {
 					}
 
 					$this->object_cache_delete( $this->get_meta_output_cache_key_by_type( $id, '', $post_type ) );
-					$this->delete_auto_description_transient( $id, '', $post_type );
 					$this->delete_ld_json_transient( $id, '', $post_type );
 					$success = true;
 				}
@@ -265,14 +256,12 @@ class Cache extends Sitemaps {
 			//* Careful, this can only run on archive pages. For now.
 			case 'term' :
 				$this->object_cache_delete( $this->get_meta_output_cache_key_by_type( $id, $args['term'], 'term' ) );
-				$this->delete_auto_description_transient( $id, $args['term'], 'term' );
 				$this->delete_ld_json_transient( $id, $args['term'], 'term' );
 				$success = true;
 				break;
 
 			case 'author' :
 				$this->object_cache_delete( $this->get_meta_output_cache_key_by_type( $id, 'author', 'author' ) );
-				$this->delete_auto_description_transient( $id, 'author', 'author' );
 				$this->delete_ld_json_transient( $id, 'author', 'author' );
 				$success = true;
 				break;
@@ -482,32 +471,6 @@ class Cache extends Sitemaps {
 	public function get_sitemap_transient_name() {
 		$sitemap_revision = '5';
 		return $this->is_option_checked( 'cache_sitemap' ) ? $this->add_cache_key_suffix( 'tsf_sitemap_' . $sitemap_revision ) : '';
-	}
-
-	/**
-	 * Returns autodescription transients key by page ID.
-	 *
-	 * @since 3.1.0
-	 *
-	 * @param int|string|bool $id the Taxonomy or Post ID.
-	 * @param string $taxonomy The taxonomy name.
-	 * @param string $type The Post Type.
-	 * @return string The auto description transient key.
-	 */
-	public function get_auto_description_transient_name( $id = 0, $taxonomy = '', $type = null ) {
-
-		if ( false === $this->is_option_checked( 'cache_meta_description' ) )
-			return '';
-
-		$cache_key = $this->generate_cache_key( $id, $taxonomy, $type );
-		$revision  = '4';
-
-		if ( $this->add_description_additions( $id, $taxonomy ) ) {
-			$option = $this->get_option( 'description_blogname' ) ? '1' : '0';
-			return 'tsf_desc_' . $option . '_' . $revision . '_' . $cache_key;
-		} else {
-			return 'tsf_desc_noa_' . $revision . '_' . $cache_key;
-		}
 	}
 
 	/**
@@ -927,23 +890,6 @@ class Cache extends Sitemaps {
 	}
 
 	/**
-	 * Delete transient on term save/deletion.
-	 *
-	 * @since 2.3.3
-	 *
-	 * @param int $term_id The Term ID
-	 * @param int $tt_id The Term Taxonomy ID.
-	 * @param string $taxonomy The Taxonomy type.
-	 * @param mixed $deleted_term Copy of the already-deleted term. Unused.
-	 */
-	public function delete_auto_description_transients_term( $term_id, $tt_id, $taxonomy, $deleted_term = '' ) {
-
-		$term_id = $term_id ?: $tt_id;
-
-		$this->delete_cache( 'term', $term_id, [ 'term' => $taxonomy ] );
-	}
-
-	/**
 	 * Checks whether the permalink structure is updated.
 	 *
 	 * @since 2.3.0
@@ -985,46 +931,6 @@ class Cache extends Sitemaps {
 		$this->ping_searchengines();
 
 		return $run = true;
-	}
-
-	/**
-	 * Delete transient for the automatic description for blog on save request.
-	 * Returns old option, since that's passed for sanitation within WP Core.
-	 *
-	 * @since 2.3.3
-	 * @since 2.8.0 Now listens to option 'cache_meta_description' before deleting transient.
-	 * @since 2.9.1 Now no longer sets object property $this->auto_description_transient.
-	 *
-	 * @param string $old_option The previous blog description option.
-	 * @return string Previous option.
-	 */
-	public function delete_auto_description_frontpage_transient( $old_option ) {
-
-		$this->delete_auto_description_transient( $this->get_the_front_page_ID(), '', 'frontpage' );
-
-		return $old_option;
-	}
-
-	/**
-	 * Deletes transient for the automatic description on requests.
-	 *
-	 * @since 2.3.3
-	 * @since 2.8.0 : Now listens to option 'cache_meta_description' before deleting transient.
-	 * @since 2.9.1 Now no longer sets object property $this->auto_description_transient.
-	 *
-	 * @param mixed $page_id The page ID or identifier.
-	 * @param string $taxonomy The tt name.
-	 * @param string $type The Post Type
-	 * @return bool true
-	 */
-	public function delete_auto_description_transient( $page_id, $taxonomy = '', $type = null ) {
-
-		if ( $this->is_option_checked( 'cache_meta_description' ) ) {
-			$transient = $this->get_auto_description_transient_name( $page_id, $taxonomy, $type );
-			$transient and \delete_transient( $transient );
-		}
-
-		return true;
 	}
 
 	/**

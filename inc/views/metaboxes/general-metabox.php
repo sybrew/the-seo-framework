@@ -228,13 +228,6 @@ switch ( $instance ) :
 
 		$this->wrap_fields( [
 			$this->make_checkbox(
-				'cache_meta_description',
-				esc_html__( 'Enable automated description output cache?', 'autodescription' )
-				. ' ' . $this->make_info( __( 'Description generation can use a lot of server resources when it reads the page content.', 'autodescription' ), '', false ),
-				'',
-				false
-			),
-			$this->make_checkbox(
 				'cache_meta_schema',
 				esc_html__( 'Enable automated Schema.org output cache?', 'autodescription' )
 				. ' ' . $this->make_info( __( 'Schema.org output generally makes multiple calls to the database.', 'autodescription' ), '', false ),

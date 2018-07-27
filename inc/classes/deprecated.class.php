@@ -956,6 +956,21 @@ final class Deprecated {
 	}
 
 	/**
+	 * Returns untitled title.
+	 *
+	 * @since 2.6.0
+	 * @since 3.1.0 Deprecated
+	 * @deprecated
+	 *
+	 * @return string The untitled title.
+	 */
+	public function untitled() {
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->untitled()', '3.1.0', 'the_seo_framework()->get_static_untitled_title()' );
+		return $tsf->get_static_untitled_title();
+	}
+
+	/**
 	 * Adds title pagination, if paginated.
 	 *
 	 * @since 2.6.0

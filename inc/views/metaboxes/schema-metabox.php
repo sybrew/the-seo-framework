@@ -82,7 +82,11 @@ switch ( $instance ) :
 		<?php
 		$this->description( __( "Breadcrumb trails indicate page positions in the site's hierarchy. Using the following option will show the hierarchy within the search results when available.", 'autodescription' ) );
 
-		$info = $this->make_info( __( 'Learn how this data is used.', 'autodescription' ), 'https://developers.google.com/search/docs/data-types/breadcrumbs', false );
+		$info = $this->make_info(
+			__( 'Learn how this data is used.', 'autodescription' ),
+			'https://developers.google.com/search/docs/data-types/breadcrumbs',
+			false
+		);
 		$this->wrap_fields( $this->make_checkbox(
 			'ld_json_breadcrumbs',
 			esc_html__( 'Enable Breadcrumbs?', 'autodescription' ) . ' ' . $info,
@@ -96,7 +100,11 @@ switch ( $instance ) :
 		<?php
 		$this->description( __( 'When Search users search for your brand name, the following option allows them to search through this website directly from the search results.', 'autodescription' ) );
 
-		$info = $this->make_info( __( 'Learn how this data is used.', 'autodescription' ), 'https://developers.google.com/search/docs/data-types/sitelinks-searchbox', false );
+		$info = $this->make_info(
+			__( 'Learn how this data is used.', 'autodescription' ),
+			'https://developers.google.com/search/docs/data-types/sitelinks-searchbox',
+			false
+		);
 		$this->wrap_fields( $this->make_checkbox(
 			'ld_json_searchbox',
 			esc_html_x( 'Enable Sitelinks Searchbox?', 'Sitelinks Searchbox is a Product name', 'autodescription' ) . ' ' . $info,
@@ -111,7 +119,11 @@ switch ( $instance ) :
 		<?php
 		$this->description( __( 'The authorized presence Schema.org output helps search engine users find ways to interact with this website.', 'autodescription' ) );
 
-		$info = $this->make_info( __( 'Learn how this data is used.', 'autodescription' ), 'https://developers.google.com/search/docs/guides/enhance-site#add-your-sites-name-logo-and-social-links', false );
+		$info = $this->make_info(
+			__( 'Learn how this data is used.', 'autodescription' ),
+			'https://developers.google.com/search/docs/guides/enhance-site#add-your-sites-name-logo-and-social-links',
+			false
+		);
 		//* Echo checkbox.
 		$this->wrap_fields( $this->make_checkbox(
 			'knowledge_output',
@@ -154,7 +166,11 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Website logo', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( esc_html__( 'These options are used when this site represents an organization. When no logo is outputted, search engine will look elsewhere.', 'autodescription' ) );
-		$info = $this->make_info( __( 'Learn how this data is used.', 'autodescription' ), 'https://developers.google.com/search/docs/data-types/logo', false );
+		$info = $this->make_info(
+			__( 'Learn how this data is used.', 'autodescription' ),
+			'https://developers.google.com/search/docs/data-types/logo',
+			false
+		);
 		$this->wrap_fields( $this->make_checkbox(
 			'knowledge_logo',
 			esc_html__( 'Enable logo?', 'autodescription' ) . ' ' . $info,

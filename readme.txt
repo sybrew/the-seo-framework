@@ -310,8 +310,6 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 	* **Added:**
 		* TODO
 		* New title options, including:
-			* TODO Manual 404 title.
-			* TODO Manual search results prefix.
 			* TODO A toggle that disabled title additions when a manual title is used.
 			* TODO Paginated Title separator
 		* New description options, including:
@@ -323,12 +321,11 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 			* TODO make sure it checks for Title Fix' presence.
 		* TODO New robots options that allow setting robots for each post type.
 		* TODO New sitemap options that allow setting including for each post type.
-		* TODO Doing it Right conditions for Private, Protected, Draft...
-		* TODO New option that prevents automated descriptions.
 		* New SEO Bar checks:
 			* When the generated description is empty, it'll now tell you with a blue bar, instead of saying it's "far too short".
 			* When the generated title is empty thanks to filters, it'll now tell you with a blue bar, instead of saying it's "far too short".
 			* Pages in draft correctly state their indexing status.
+			* Pages that are protected now correctly state their indexing status.
 			* When the Blog Page is empty, and when it's not the home page, it'll show a "noindex" notification.
 		* Descriptive links to all meta title and description labels.
 		* Post Type Settings:
@@ -348,7 +345,6 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 		* Canonical, redirect, and image URLs are no longer uselessly suggested by the browser.
 		* The Facebook Business page URL description has been updated, to be in line with the current behavior.
 		* TODO Open Graph data validation (e.g. missing descriptions).
-		* TODO WooCommerce checks are no longer blocking (performance... it means we should move "woocommerce" support to a compat file, and improve the API if necessary)
 		* The main plugin's cache is now flushed after the SEO settings are requested to be updated, even when the options didn't change.
 		* The automated scheme detection can now prevent the sitemap from using, and caching, the wrong scheme.
 		* A lot of verbatim regarding various settings, to make it more clear what they do, and when they do it.
@@ -360,6 +356,7 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 			1. The tooltips aren't "boxed in" anymore, but flow wherever they deem best.
 			2. There are 5 to 6 times as many tooltip listeners per SEO bar, as it did prior v3.0. TODO test performance and responsiveness // lighthouse?
 				* TODO SEE: https://github.com/sybrew/the-seo-framework/issues/18
+				* Download more RAM instead? It's well established that browsers eat RAM for breakfast, especially since Spectre.
 		* The SEO Bar is a little less daunting--by 13.63% in width to be exact.
 		* The SEO Bar no longer performs intricate and slow requests to verify if we're on a term page on Custom Post Types list tables.
 		* The SEO Bar is now capable of articulating post type names, instead of only term names.
@@ -397,9 +394,7 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 				* "Add Link to Facebook" - No longer updated, relative low user base, closed for security reasons.
 			* Twitter:
 				* "Twitter" - they only embed sharing links.
-
 	* **Removed:**
-		* Firefox post list table compatibility and fixes that account for the wide SEO Bar; they don't work anymore as intended, and they cause issues on other well-built browsers.
 		* Counters now only work with JavaScript enabled. In PHP, this added too much overhead as we were predicting and counting in code.
 		* Description excerpts are no longer added to categories from the latest post ID.
 		* Open Graph, Twitter, and SEO plugins no longer disables certain functionality in the plugin.
@@ -409,12 +404,13 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 			* Instead, only a warning is shown on the settings page, telling that the options have no effect.
 		* AnsPress title compatibility, they handle this.
 		* --JETPACK JetPack Open Graph compatibility checks, they handle this since 2016.
-		* TODO (maybe) Description output caching. It causes too much overhead, and it provides no benefit any more. In fact, it affects performance negatively.
+		* Description output caching. It causes too much overhead, and it provides no benefit any more. In fact, it affects performance negatively.
 	* **Fixed:**
 		* When reactivating or deactivating the plugin, there's no longer a chance for your SEO options to be wiped on a random database error.
 			* We used to delete the options, so we could reactivate option-auto-loading; now we add a buster-timestamp.
 		* Various RTL UI elements are now aligned correctly.
 		* On Firefox, checkbox options marked "default" (recommended) or "warned" (use at own risk) are now color-coded again.
+		* On Firefox, list table overflow is now less prone to happen. We've removed compatibility fixes, and introduced a flexible system via CSS.
 		* When adding a new category when no category is selected, the primary term is now correctly assigned.
 		* When the primary term selection changed after load and when a new category is added, the previous category is no longer assigned as primary.
 		* Twitter description and title fields now render escaped `<&'">` characters in placeholders correctly when fetched from related Open Graph fields.
@@ -560,7 +556,6 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 			* In class: `\The_SEO_Framework\Cache` -- Factory: `the_seo_framework()`
 				* `_insert_seo_meta_box()`, private.
 				* `get_sitemap_transient_name()`
-				* `get_auto_description_transient_name()`
 				* `set_plugin_check_caches()`
 			* In class: `\The_SEO_Framework\Debug`
 				* `::_set_instance()`, marked private.
@@ -695,7 +690,7 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 				* `singular_inpost_box_social_tab()`, was marked private, is now protected.
 				* `setup_transient_names()`, it could only be used internally.
 				* `setup_auto_description_transient()`, it could only be used well internally.
-				* `get_auto_description_transient()`, replaced by `get_auto_description_transient_name()`. It could've returned empty, so nothing changes.
+				* `get_auto_description_transient()`, feature removed.
 				* `setup_ld_json_transient()`, it could only be used well internally.
 				* `get_ld_json_transient()`, replaced by `get_ld_json_transient_name()`. It could've returned empty, so nothing changes.
 			* In class: `\The_SEO_Framework\Compat` -- Factory: `the_seo_framework()`
@@ -783,6 +778,7 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 				* `process_title_additions()`, use `merge_title_branding()` instead.
 				* `add_title_pagination()`, use `merge_title_pagination()` instead.
 				* `use_archive_prefix()`, use `use_generated_archive_prefix()` instead.
+				* `untitled()`, use `get_static_untitled_title()` instead.
 			* In class: `\The_SEO_Framework\Generate_Url` -- Factory: `the_seo_framework()`
 				* `get_prefered_scheme()`, use `get_preferred_scheme()` instead. (typo)
 			* In class: `\The_SEO_Framework\Render` -- factory: `the_seo_framework()`

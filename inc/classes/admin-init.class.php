@@ -448,7 +448,7 @@ class Admin_Init extends Init {
 				'titleAdditions' => $additions,
 				'blogDescription' => $description,
 				'termName' => $term_name,
-				'untitledTitle' => $this->untitled(),
+				'untitledTitle' => $this->get_static_untitled_title(),
 				'titleSeparator' => $title_separator,
 				'descriptionSeparator' => $description_separator,
 				'titleLocation' => $title_location,

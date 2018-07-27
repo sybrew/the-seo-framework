@@ -386,9 +386,10 @@ class Generate_Ldjson extends Generate_Image {
 			++$position;
 
 			if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-				$parent_name = $this->get_custom_field( '_genesis_title', $parent_id ) ?: ( $this->get_generated_single_post_title( $parent_id ) ?: $this->untitled() );
+				$parent_name = $this->get_custom_field( '_genesis_title', $parent_id )
+					?: ( $this->get_generated_single_post_title( $parent_id ) ?: $this->get_static_untitled_title() );
 			} else {
-				$parent_name = $this->get_generated_single_post_title( $parent_id ) ?: $this->untitled();
+				$parent_name = $this->get_generated_single_post_title( $parent_id ) ?: $this->get_static_untitled_title();
 			}
 
 			$crumb = [
@@ -731,9 +732,10 @@ class Generate_Ldjson extends Generate_Image {
 		$post_id = $this->get_the_real_ID();
 
 		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-			$name = $this->get_custom_field( '_genesis_title', $post_id ) ?: ( $this->get_generated_single_post_title( $post_id ) ?: $this->untitled() );
+			$name = $this->get_custom_field( '_genesis_title', $post_id )
+				?: ( $this->get_generated_single_post_title( $post_id ) ?: $this->get_static_untitled_title() );
 		} else {
-			$name = $this->get_generated_single_post_title( $post_id ) ?: $this->untitled();
+			$name = $this->get_generated_single_post_title( $post_id ) ?: $this->get_static_untitled_title();
 		}
 
 		$crumb = [

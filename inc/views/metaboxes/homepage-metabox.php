@@ -261,12 +261,19 @@ switch ( $instance ) :
 
 		<hr>
 		<h4><?php esc_html_e( 'Title Additions', 'autodescription' ); ?></h4>
-		<p id="tsf-title-tagline-toggle">
-			<label for="<?php $this->field_id( 'homepage_tagline' ); ?>" class="tsf-toblock">
-				<input type="checkbox" name="<?php $this->field_name( 'homepage_tagline' ); ?>" id="<?php $this->field_id( 'homepage_tagline' ); ?>" <?php $this->is_conditional_checked( 'homepage_tagline' ); ?> value="1" <?php checked( $this->get_field_value( 'homepage_tagline' ) ); ?> />
-				<?php esc_html_e( 'Add Meta Title Additions to the home page title?', 'autodescription' ); ?>
-			</label>
-		</p>
+		<div id="tsf-title-tagline-toggle">
+		<?php
+			$this->wrap_fields(
+				$this->make_checkbox(
+					'homepage_tagline',
+					esc_html__( 'Add Meta Title Additions to the home page title?', 'autodescription' ),
+					'',
+					false
+				),
+				true
+			);
+		?>
+		</div>
 		<?php
 		break;
 
@@ -276,8 +283,8 @@ switch ( $instance ) :
 		//* Get home page ID. If blog on front, it's 0.
 		$home_id = $this->get_the_front_page_ID();
 
-		$noindex_post = $this->get_custom_field( '_genesis_noindex', $home_id );
-		$nofollow_post = $this->get_custom_field( '_genesis_nofollow', $home_id );
+		$noindex_post   = $this->get_custom_field( '_genesis_noindex', $home_id );
+		$nofollow_post  = $this->get_custom_field( '_genesis_nofollow', $home_id );
 		$noarchive_post = $this->get_custom_field( '_genesis_noarchive', $home_id );
 
 		$checked_home = '';

@@ -10,12 +10,12 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 $instance = $this->get_view_instance( 'the_seo_framework_title_metabox', $instance );
 
 switch ( $instance ) :
-	case 'the_seo_framework_title_metabox_main' :
+	case 'the_seo_framework_title_metabox_main':
 		$latest_post_id = $this->get_latest_post_id();
 
 		if ( $latest_post_id ) {
 			$post  = get_post( $latest_post_id, OBJECT );
-			$title = trim( esc_attr( $post->post_title ) );
+			$title = $post ? trim( esc_attr( $post->post_title ) ) : '';
 		}
 
 		$title = $title ?: esc_attr__( 'Example Post Title', 'autodescription' );
@@ -92,6 +92,7 @@ switch ( $instance ) :
 			],
 		];
 
+
 		/**
 		 * Applies filters the_seo_framework_title_settings_tabs : array see $default_tabs
 		 * @since 2.6.0
@@ -105,7 +106,7 @@ switch ( $instance ) :
 		$this->nav_tab_wrapper( 'title', $tabs, '2.6.0' );
 		break;
 
-	case 'the_seo_framework_title_metabox_general' :
+	case 'the_seo_framework_title_metabox_general':
 		$title_separator = $this->get_separator_list();
 		$recommended = ' class="tsf-recommended" title="' . esc_attr__( 'Recommended', 'autodescription' ) . '"';
 
@@ -126,7 +127,7 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	case 'the_seo_framework_title_metabox_additions' :
+	case 'the_seo_framework_title_metabox_additions':
 		$language = $this->google_language();
 
 		$example_left  = $examples['left'];
@@ -187,7 +188,7 @@ switch ( $instance ) :
 		$this->description( $home_page_has_option, false );
 		break;
 
-	case 'the_seo_framework_title_metabox_prefixes' :
+	case 'the_seo_framework_title_metabox_prefixes':
 		//* Get translated category label, if it exists. Otherwise, fallback to translation.
 		$label = $this->get_tax_type_label( 'category', true ) ?: __( 'Category', 'default' );
 
@@ -221,11 +222,6 @@ switch ( $instance ) :
 
 		$language = $this->google_language();
 
-		/**
-		 * @todo use checkbox function
-		 * @priority low 2.6.x
-		 */
-
 		?>
 		<h4><?php esc_html_e( 'Title Prefix Options', 'autodescription' ); ?></h4>
 		<?php
@@ -241,19 +237,24 @@ switch ( $instance ) :
 		<hr>
 
 		<h4><?php esc_html_e( 'Archive Title Prefixes', 'autodescription' ); ?></h4>
-		<p id="title-prefixes-toggle">
-			<label for="<?php $this->field_id( 'title_rem_prefixes' ); ?>">
-				<input type="checkbox" name="<?php $this->field_name( 'title_rem_prefixes' ); ?>" id="<?php $this->field_id( 'title_rem_prefixes' ); ?>" <?php $this->is_conditional_checked( 'title_rem_prefixes' ); ?> value="1" <?php checked( $this->get_field_value( 'title_rem_prefixes' ) ); ?> />
-				<?php esc_html_e( 'Remove term type prefixes from title?', 'autodescription' ); ?>
-			</label>
+		<div id="title-prefixes-toggle">
 			<?php
-			$this->make_info(
+			$info = $this->make_info(
 				__( "The prefix helps visitors and search engines determine what kind of page they're visiting.", 'autodescription' ),
 				'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#meta-descriptions',
+				false
+			);
+			$this->wrap_fields(
+				$this->make_checkbox(
+					'title_rem_prefixes',
+					esc_html__( 'Remove term type prefixes from title?', 'autodescription' ) . ' ' . $info,
+					'',
+					false
+				),
 				true
 			);
 			?>
-		</p>
+		</div>
 		<?php
 		break;
 

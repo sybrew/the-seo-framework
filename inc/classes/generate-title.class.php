@@ -305,7 +305,7 @@ class Generate_Title extends Generate_Description {
 			$title = $this->generate_title_from_args( $args );
 		}
 
-		return $title ?: $this->untitled();
+		return $title ?: $this->get_static_untitled_title();
 	}
 
 	/**
@@ -636,13 +636,11 @@ class Generate_Title extends Generate_Description {
 	/**
 	 * Returns untitled title.
 	 *
-	 * @since 2.6.0
-	 * @since 3.1.0 Now uses default translation.
-	 * TODO rename to get_static_untitled_title() ?
+	 * @since 3.1.0
 	 *
 	 * @return string The untitled title.
 	 */
-	public function untitled() {
+	public function get_static_untitled_title() {
 		return \__( 'Untitled', 'default' );
 	}
 

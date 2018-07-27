@@ -60,7 +60,7 @@ function _bbpress_filter_pre_title( $title = '', $args = [], $escape = true ) {
 				$title = $data['doctitle'];
 			} else {
 				$term = \get_queried_object();
-				$title = $term->name ?: \the_seo_framework()->untitled();
+				$title = $term->name ?: \the_seo_framework()->get_static_untitled_title();
 			}
 		}
 	}

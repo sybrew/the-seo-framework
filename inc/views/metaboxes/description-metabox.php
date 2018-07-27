@@ -122,28 +122,41 @@ switch ( $instance ) :
 		<hr>
 
 		<h4><?php esc_html_e( 'Enable Additions', 'autodescription' ); ?></h4>
-		<p id="tsf-description-additions-toggle">
-			<label for="<?php $this->field_id( 'description_additions' ); ?>">
-				<input type="checkbox" name="<?php $this->field_name( 'description_additions' ); ?>" id="<?php $this->field_id( 'description_additions' ); ?>" <?php $this->is_conditional_checked( 'description_additions' ); ?> value="1" <?php checked( $this->get_field_value( 'description_additions' ) ); ?> />
-				<?php
-				esc_html_e( 'Add additions to automated description?', 'autodescription' );
-				echo ' ';
-				$this->make_info(
-					__( 'This creates better automated meta descriptions.', 'autodescription' ),
-					'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#meta-descriptions'
-				);
-				?>
-			</label>
-		</p>
+		<div id="tsf-description-additions-toggle">
+		<?php
+			$info = $this->make_info(
+				__( 'This creates better automated meta descriptions.', 'autodescription' ),
+				'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#meta-descriptions',
+				false
+			);
+			$this->wrap_fields(
+				$this->make_checkbox(
+					'description_additions',
+					esc_html__( 'Add additions to automated description?', 'autodescription' ) . ' ' . $info,
+					'',
+					false
+				),
+				true
+			);
+		?>
+		</div>
 
 		<h4><?php esc_html_e( 'Add Blogname to Additions', 'autodescription' ); ?></h4>
-		<p id="tsf-description-onblogname-toggle">
-			<label for="<?php $this->field_id( 'description_blogname' ); ?>">
-				<input type="checkbox" name="<?php $this->field_name( 'description_blogname' ); ?>" id="<?php $this->field_id( 'description_blogname' ); ?>" <?php $this->is_conditional_checked( 'description_blogname' ); ?> value="1" <?php checked( $this->get_field_value( 'description_blogname' ) ); ?> />
-				<?php esc_html_e( 'Add the blog name to the additions?', 'autodescription' ); ?>
-			</label>
-		</p>
+		<div id="tsf-description-onblogname-toggle">
 		<?php
+			$this->wrap_fields(
+				$this->make_checkbox(
+					'description_blogname',
+					esc_html__( 'Add the blog name to the additions?', 'autodescription' ),
+					'',
+					false
+				),
+				true
+			);
+		?>
+		</div>
+		<?php
+
 		//* Let's use the same separators as for the title.
 		$description_separator = $this->get_separator_list();
 		$sep_option = $this->get_option( 'description_separator' );
