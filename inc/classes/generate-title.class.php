@@ -149,7 +149,8 @@ class Generate_Title extends Generate_Description {
 	 * Returns the Twitter meta title. Falls back to Open Graph title.
 	 *
 	 * @since 3.0.4
-	 * @since 3.1.0 The first parameter now expects an array.
+	 * @since 3.1.0 : 1. The first parameter now expects an array.
+	 *                2. Now tries to get the homepage social titles.
 	 * @uses $this->get_open_graph_title()
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
@@ -166,10 +167,11 @@ class Generate_Title extends Generate_Description {
 		} elseif ( isset( $args['id'] ) ) {
 			$id = $args['id'];
 		} else {
-			$id = null;
+			$id = $this->get_the_real_ID();
 		}
 
-		$title = $this->get_custom_field( '_twitter_title', $id )
+		$title = ( $this->is_front_page_by_id( $id ) ? $this->get_option( 'homepage_twitter_title' ) : '' )
+			  ?: $this->get_custom_field( '_twitter_title', $id )
 			  ?: $this->get_open_graph_title( $args, false );
 
 		return $escape ? $this->escape_title( $title ) : $title;
@@ -195,7 +197,8 @@ class Generate_Title extends Generate_Description {
 	 * Returns the Open Graph meta title. Falls back to meta title.
 	 *
 	 * @since 3.0.4
-	 * @since 3.1.0 The first parameter now expects an array.
+	 * @since 3.1.0 : 1. The first parameter now expects an array.
+	 *                2. Now tries to get the homepage social title.
 	 * @uses $this->get_generated_open_graph_title()
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
@@ -212,10 +215,11 @@ class Generate_Title extends Generate_Description {
 		} elseif ( isset( $args['id'] ) ) {
 			$id = $args['id'];
 		} else {
-			$id = null;
+			$id = $this->get_the_real_ID();
 		}
 
-		$title = $this->get_custom_field( '_open_graph_title', $id )
+		$title = ( $this->is_front_page_by_id( $id ) ? $this->get_option( 'homepage_og_title' ) : '' )
+			  ?: $this->get_custom_field( '_open_graph_title', $id )
 			  ?: $this->get_generated_open_graph_title( $args, false );
 
 		return $escape ? $this->escape_title( $title ) : $title;

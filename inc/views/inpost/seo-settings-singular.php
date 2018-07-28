@@ -202,6 +202,11 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
+				<?php
+				if ( $this->is_static_frontpage( $post_id ) ) {
+					$this->attention( __( 'Warning: No public site should ever disable indexing or following for the homepage.', 'autodescription' ), false );
+				}
+				?>
 				<div class="tsf-checkbox-wrapper">
 					<label for="autodescription_noindex">
 						<input type="checkbox" name="autodescription[_genesis_noindex]" id="autodescription_noindex" value="1" <?php checked( $this->get_custom_field( '_genesis_noindex' ) ); ?> />
@@ -328,23 +333,37 @@ switch ( $instance ) :
 		break;
 
 	case 'inpost_social':
-		// Gets custom fields.
-		$custom_og_title = $this->get_custom_field( '_open_graph_title', $post_id );
-		$custom_tw_title = $this->get_custom_field( '_twitter_title', $post_id );
-		$custom_og_desc  = $this->get_custom_field( '_open_graph_description', $post_id );
-		$custom_tw_desc  = $this->get_custom_field( '_twitter_description', $post_id );
+		if ( $this->is_static_frontpage( $post_id ) ) {
+			// Gets custom fields from SEO settings.
+			$home_og_title = $this->get_option( 'homepage_og_title' );
+			$home_og_desc  = $this->get_option( 'homepage_og_description' );
+			$home_tw_title = $this->get_option( 'homepage_twitter_title' );
+			$home_tw_desc  = $this->get_option( 'homepage_twitter_description' );
 
-		//! OG input falls back to default input.
-		$og_tit_placeholder = $this->get_generated_open_graph_title( $post_id );
-		$og_desc_placeholder = $this->get_generated_open_graph_description( $post_id );
-		$og_tit_len_parsed = $custom_og_title ? html_entity_decode( $custom_og_title ) : html_entity_decode( $og_tit_placeholder );
-		$og_desc_len_parsed = $custom_og_desc ? html_entity_decode( $custom_og_desc ) : html_entity_decode( $og_desc_placeholder );
+			// Gets custom fields from page.
+			$custom_og_title = $this->get_custom_field( '_open_graph_title', $post_id );
+			$custom_og_desc  = $this->get_custom_field( '_open_graph_description', $post_id );
 
-		//! Twitter input falls back to OG input.
-		$tw_tit_placeholder = $custom_og_title ?: $og_tit_placeholder;
-		$tw_desc_placeholder = $custom_og_desc ?: $og_desc_placeholder;
-		$tw_tit_len_parsed = $custom_tw_title ? html_entity_decode( $custom_tw_title ) : $og_tit_len_parsed;
-		$tw_desc_len_parsed = $custom_tw_desc ? html_entity_decode( $custom_tw_desc ) : $og_desc_len_parsed;
+			//! OG input falls back to default input.
+			$og_tit_placeholder  = $home_og_title ?: $custom_og_title ?: $this->get_generated_open_graph_title( [ 'id' => $post_id ] );
+			$og_desc_placeholder = $home_og_desc ?: $custom_og_desc ?: $this->get_generated_open_graph_description( $post_id );
+
+			//! Twitter input falls back to OG input.
+			$tw_tit_placeholder  = $home_tw_title ?: $og_tit_placeholder;
+			$tw_desc_placeholder = $home_tw_desc ?: $og_desc_placeholder;
+		} else {
+			// Gets custom fields.
+			$custom_og_title = $this->get_custom_field( '_open_graph_title', $post_id );
+			$custom_og_desc  = $this->get_custom_field( '_open_graph_description', $post_id );
+
+			//! OG input falls back to default input.
+			$og_tit_placeholder  = $this->get_generated_open_graph_title( [ 'id' => $post_id ] );
+			$og_desc_placeholder = $this->get_generated_open_graph_description( $post_id );
+
+			//! Twitter input falls back to OG input.
+			$tw_tit_placeholder  = $custom_og_title ?: $og_tit_placeholder;
+			$tw_desc_placeholder = $custom_og_desc ?: $og_desc_placeholder;
+		}
 
 		$show_og = $this->is_option_checked( 'og_tags' );
 		$show_tw = $this->is_option_checked( 'twitter_tags' );

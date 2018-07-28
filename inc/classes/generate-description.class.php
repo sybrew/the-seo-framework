@@ -110,6 +110,7 @@ class Generate_Description extends Generate {
 	 * Returns the Twitter meta description. Falls back to Open Graph description.
 	 *
 	 * @since 3.0.4
+	 * @since 3.1.0 Now tries to get the homepage social descriptions.
 	 * @uses $this->get_open_graph_description()
 	 *
 	 * @param int|null $id     The post or term ID. Falls back to queried ID if null.
@@ -121,7 +122,8 @@ class Generate_Description extends Generate {
 		if ( is_null( $id ) )
 			$id = $this->get_the_real_ID();
 
-		$desc = $this->get_custom_field( '_twitter_description', $id )
+		$desc = ( $this->is_front_page_by_id( $id ) ? $this->get_option( 'homepage_twitter_description' ) : '' )
+			 ?: $this->get_custom_field( '_twitter_description', $id )
 			 ?: $this->get_open_graph_description( $id, false );
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
@@ -131,6 +133,7 @@ class Generate_Description extends Generate {
 	 * Returns the Open Graph meta description. Falls back to meta description.
 	 *
 	 * @since 3.0.4
+	 * @since 3.1.0 Now tries to get the homepage social description.
 	 * @uses $this->get_generated_open_graph_description()
 	 *
 	 * @param int|null $id     The post or term ID. Falls back to queried ID if null.
@@ -142,7 +145,8 @@ class Generate_Description extends Generate {
 		if ( is_null( $id ) )
 			$id = $this->get_the_real_ID();
 
-		$desc = $this->get_custom_field( '_open_graph_description', $id )
+		$desc = ( $this->is_front_page_by_id( $id ) ? $this->get_option( 'homepage_og_description' ) : '' )
+			 ?: $this->get_custom_field( '_open_graph_description', $id )
 			 ?: $this->get_generated_open_graph_description( $id, false );
 
 		return $escape ? $this->escape_description( $desc ) : $desc;

@@ -62,10 +62,10 @@ class Detect extends Render {
 	 *
 	 * @since 2.9.4
 	 *
-	 * @param string $url The URL to test.
+	 * @param string $url The URL to test. Required.
 	 * @return bool true on match, false otherwise.
 	 */
-	public function matches_this_domain( $url = '' ) {
+	public function matches_this_domain( $url ) {
 
 		if ( ! $url )
 			return false;

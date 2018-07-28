@@ -1130,7 +1130,7 @@ class Admin_Pages extends Inpost {
 			'<div class="tsf-counter-wrap" %s><span class="description tsf-counter" title="%s">%s</span><span class="hide-if-no-js tsf-ajax"></span></div>',
 			[
 				( $display ? '' : 'style="display:none;"' ),
-				\esc_attr( 'Click to change counter type', 'autodescription' ),
+				\esc_attr( 'Click to change the counter type', 'autodescription' ),
 				sprintf(
 					/* translators: %s = number */
 					\esc_html__( 'Characters Used: %s', 'autodescription' ),

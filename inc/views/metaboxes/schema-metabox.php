@@ -159,7 +159,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php $this->field_name( 'knowledge_name' ); ?>" class="large-text" id="<?php $this->field_id( 'knowledge_name' ); ?>" placeholder="<?php echo esc_attr( $this->get_blogname() ) ?>" value="<?php echo esc_attr( $this->get_option( 'knowledge_name' ) ); ?>" />
+			<input type="text" name="<?php $this->field_name( 'knowledge_name' ); ?>" class="large-text" id="<?php $this->field_id( 'knowledge_name' ); ?>" placeholder="<?php echo esc_attr( $this->get_blogname() ); ?>" value="<?php echo esc_attr( $this->get_option( 'knowledge_name' ) ); ?>" autocomplete=off />
 		</p>
 		<hr>
 
@@ -293,7 +293,7 @@ switch ( $instance ) :
 				</label>
 			</p>
 			<p>
-				<input type="url" name="<?php $this->field_name( $v['option'] ); ?>" class="large-text" id="<?php $this->field_id( $v['option'] ); ?>" placeholder="<?php echo esc_attr( $v['placeholder'] ); ?>" value="<?php echo esc_attr( $this->get_option( $v['option'] ) ); ?>" />
+				<input type="url" name="<?php $this->field_name( $v['option'] ); ?>" class="large-text" id="<?php $this->field_id( $v['option'] ); ?>" placeholder="<?php echo esc_attr( $v['placeholder'] ); ?>" value="<?php echo esc_attr( $this->get_option( $v['option'] ) ); ?>" autocomplete=off />
 			</p>
 			<?php
 		}

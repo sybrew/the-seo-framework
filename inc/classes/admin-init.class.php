@@ -349,9 +349,11 @@ class Admin_Init extends Init {
 
 		$post_type = $is_post_edit ? \get_post_type( $id ) : false;
 
+		$page_on_front = $this->has_page_on_front();
+
 		if ( $is_settings_page ) {
 			// We're on our SEO settings pages.
-			if ( $this->has_page_on_front() ) {
+			if ( $page_on_front ) {
 				// Home is a page.
 				$id = \get_option( 'page_on_front' );
 				$inpost_title = $this->get_custom_field( '_genesis_title', $id );
@@ -413,47 +415,71 @@ class Admin_Init extends Init {
 			$use_term_prefix = $this->use_generated_archive_prefix();
 		}
 
+		$social_settings_locks = [];
+
+		if ( $page_on_front ) {
+			if ( $is_settings_page ) {
+				$social_settings_locks = [
+					'ogTitlePHLock'       => (bool) $this->get_custom_field( '_open_graph_title', $id ),
+					'ogDescriptionPHLock' => (bool) $this->get_custom_field( '_open_graph_description', $id ),
+					'twTitlePHLock'       => (bool) $this->get_custom_field( '_twitter_title', $id ),
+					'twDescriptionPHLock' => (bool) $this->get_custom_field( '_twitter_description', $id ),
+				];
+			} elseif ( $ishome ) {
+				// This works perfectly.
+				$social_settings_locks = [
+					'refTitleLock'       => (bool) $this->get_option( 'homepage_title' ),
+					'refDescriptionLock' => (bool) $this->get_option( 'homepage_description' ),
+					'ogTitleLock'        => (bool) $this->get_option( 'homepage_og_title' ),
+					'ogDescriptionLock'  => (bool) $this->get_option( 'homepage_og_description' ),
+					'twTitleLock'        => (bool) $this->get_option( 'homepage_twitter_title' ),
+					'twDescriptionLock'  => (bool) $this->get_option( 'homepage_twitter_description' ),
+				];
+			}
+		}
+
 		$l10n = [
 			'nonces' => $this->get_js_nonces(),
 			'states' => [
-				'isRTL' => (bool) \is_rtl(),
-				'isHome' => $ishome,
-				'hasInput' => $has_input,
-				'counterType' => \absint( $counter_type ),
-				'useTagline' => $use_additions,
-				'useTermPrefix' => $use_term_prefix,
-				'isSettingsPage' => $is_settings_page,
-				'isPostEdit' => $is_post_edit,
-				'isTermEdit' => $is_term_edit,
-				'postType' => $post_type,
-				'isPrivate' => $has_input && $id && $this->is_private( $id ),
+				'isRTL'               => (bool) \is_rtl(),
+				'isHome'              => $ishome,
+				'hasInput'            => $has_input,
+				'counterType'         => \absint( $counter_type ),
+				'useTagline'          => $use_additions,
+				'useTermPrefix'       => $use_term_prefix,
+				'isSettingsPage'      => $is_settings_page,
+				'isPostEdit'          => $is_post_edit,
+				'isTermEdit'          => $is_term_edit,
+				'postType'            => $post_type,
+				'isPrivate'           => $has_input && $id && $this->is_private( $id ),
 				'isPasswordProtected' => $has_input && $id && $this->is_password_protected( $id ),
-				'debug' => $this->script_debug,
+				'debug'               => $this->script_debug,
+				'homeLocks'           => $social_settings_locks,
 			],
-			'i18n' => [
-				'saveAlert' => \__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
-				'confirmReset' => \__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
-				'good' => \__( 'Good', 'autodescription' ),
-				'okay' => \__( 'Okay', 'autodescription' ),
-				'bad' => \__( 'Bad', 'autodescription' ),
-				'unknown' => \__( 'Unknown', 'autodescription' ),
-				'privateTitle' => $has_input && $id ? \__( 'Private:', 'autodescription' ) : '',
+			'i18n'   => [
+				'saveAlert'      => \__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
+				'confirmReset'   => \__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
+				'good'           => \__( 'Good', 'autodescription' ),
+				'okay'           => \__( 'Okay', 'autodescription' ),
+				'bad'            => \__( 'Bad', 'autodescription' ),
+				'unknown'        => \__( 'Unknown', 'autodescription' ),
+				'privateTitle'   => $has_input && $id ? \__( 'Private:', 'autodescription' ) : '',
 				'protectedTitle' => $has_input && $id ? \__( 'Protected:', 'autodescription' ) : '',
 				/* translators: Pixel counter. 1: width, 2: guideline */
-				'pixelsUsed' => $has_input ? \__( '%1$d out of %2$d pixels are used.', 'autodescription' ) : '',
+				'pixelsUsed'     => $has_input ? \__( '%1$d out of %2$d pixels are used.', 'autodescription' ) : '',
 			],
 			'params' => [
-				'objectTitle' => $default_title,
-				'defaultTitle' => $default_title,
-				'titleAdditions' => $additions,
-				'blogDescription' => $description,
-				'termName' => $term_name,
-				'untitledTitle' => $this->get_static_untitled_title(),
-				'titleSeparator' => $title_separator,
+				'objectTitle'          => $default_title,
+				'defaultTitle'         => $default_title,
+				'titleAdditions'       => $additions,
+				'blogDescription'      => $description,
+				'termName'             => $term_name,
+				'untitledTitle'        => $this->get_static_untitled_title(),
+				'titleSeparator'       => $title_separator,
 				'descriptionSeparator' => $description_separator,
-				'titleLocation' => $title_location,
-				'titlePixelGuideline' => 600,
-				'descPixelGuideline' => $is_post_edit ? ( $this->is_page() ? 1820 : 1720 ) : 1820,
+				'titleLocation'        => $title_location,
+				'titlePixelGuideline'  => 600,
+				'descPixelGuideline'   => $is_post_edit ? ( $this->is_page() ? 1820 : 1720 ) : 1820,
 			],
 		];
 

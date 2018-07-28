@@ -130,18 +130,19 @@ class Sanitize extends Admin_Pages {
 		if ( $running ) return;
 		$running = true;
 
-		db_3101: {
-			//= title_seperator backward compat.
-			$this->update_option( 'title_seperator', $this->get_option( 'title_separator', false ) );
+		db_3101:
+		//= title_seperator backward compat.
+		$this->update_option( 'title_seperator', $this->get_option( 'title_separator', false ) );
 
-			//= Media robots backward compat.
-			foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
-				$_option = $this->get_option( $this->get_robots_post_type_option_id( $r ), false );
-				$_media_option = ! empty( $_option['attachment'] ) ? $_option['attachment'] : 0;
+		//= Media robots backward compat.
+		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) :
+			$_option = $this->get_option( $this->get_robots_post_type_option_id( $r ), false );
+			$_media_option = ! empty( $_option['attachment'] ) ? $_option['attachment'] : 0;
 
-				$this->update_option( 'attachment_' . $r, $_media_option );
-			}
-		}
+			$this->update_option( 'attachment_' . $r, $_media_option );
+		endforeach;
+
+		end:;
 
 		$running = false;
 	}
@@ -186,6 +187,8 @@ class Sanitize extends Admin_Pages {
 			$this->settings_field,
 			[
 				'homepage_description',
+				'homepage_og_description',
+				'homepage_twitter_description',
 			]
 		);
 
@@ -203,6 +206,8 @@ class Sanitize extends Admin_Pages {
 			[
 				'homepage_title',
 				'homepage_title_tagline',
+				'homepage_og_description',
+				'homepage_twitter_title',
 			]
 		);
 

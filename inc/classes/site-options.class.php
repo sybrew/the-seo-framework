@@ -157,7 +157,7 @@ class Site_Options extends Sanitize {
 			'attachment_nofollow' => 0, // Attachment Pages robots noindex
 			'site_nofollow'       => 0, // Site Page robots nofollow
 
-			$this->get_robots_post_type_option_id( 'noarchive' ) => [], // Post Type support.
+			$this->get_robots_post_type_option_id( 'nofollow' ) => [], // Post Type support.
 
 			// Robots archive.
 			'category_noarchive'   => 0, // Category Archive robots noarchive
@@ -186,7 +186,12 @@ class Site_Options extends Sanitize {
 			'homepage_title_tagline' => '', // Home Page Tagline string
 			'home_title_location'    => $h_titleloc, // Title separation location
 
-			// Homepage Social FallBack image
+			// Homepage Social
+			'homepage_og_title'            => '',
+			'homepage_og_description'      => '',
+			'homepage_twitter_title'       => '',
+			'homepage_twitter_description' => '',
+
 			'homepage_social_image_url' => '',
 			'homepage_social_image_id'  => 0,
 

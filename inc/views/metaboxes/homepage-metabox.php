@@ -283,9 +283,9 @@ switch ( $instance ) :
 		//* Get home page ID. If blog on front, it's 0.
 		$home_id = $this->get_the_front_page_ID();
 
-		$noindex_post   = $this->get_custom_field( '_genesis_noindex', $home_id );
-		$nofollow_post  = $this->get_custom_field( '_genesis_nofollow', $home_id );
-		$noarchive_post = $this->get_custom_field( '_genesis_noarchive', $home_id );
+		$noindex_post   = $home_id ? $this->get_custom_field( '_genesis_noindex', $home_id ) : '';
+		$nofollow_post  = $home_id ? $this->get_custom_field( '_genesis_nofollow', $home_id ) : '';
+		$noarchive_post = $home_id ? $this->get_custom_field( '_genesis_noarchive', $home_id ) : '';
 
 		$checked_home = '';
 		/**
@@ -336,6 +336,8 @@ switch ( $instance ) :
 			false
 		) . $noarchive_note;
 
+		$this->attention_description( __( 'Warning: No public site should ever disable indexing or following for the homepage.', 'autodescription' ) );
+
 		//* Echo checkboxes.
 		$this->wrap_fields( [
 			$this->make_checkbox(
@@ -384,7 +386,136 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_homepage_metabox_social' :
+		$language = $this->google_language();
+
+		//* Get home page ID. If blog on front, it's 0.
+		$home_id = $this->get_the_front_page_ID();
+
+		// Gets custom fields from page.
+		$custom_og_title = $this->get_custom_field( '_open_graph_title', $home_id );
+		$custom_og_desc  = $this->get_custom_field( '_open_graph_description', $home_id );
+		$custom_tw_title = $this->get_custom_field( '_twitter_title', $home_id );
+		$custom_tw_desc  = $this->get_custom_field( '_twitter_description', $home_id );
+
+		// Gets custom fields from SEO settings.
+		$home_og_title = $this->get_option( 'homepage_og_title' );
+		$home_og_desc  = $this->get_option( 'homepage_og_description' );
+		// $home_tw_title = $this->get_option( 'homepage_twitter_title' );
+		// $home_tw_desc  = $this->get_option( 'homepage_twitter_description' );
+
+		//! OG input falls back to default input.
+		$og_tit_placeholder  = $custom_og_title ?: $this->get_generated_open_graph_title( [ 'id' => $home_id ] );
+		$og_desc_placeholder = $custom_og_desc ?: $this->get_generated_open_graph_description( $home_id );
+
+		//! Twitter input falls back to OG input.
+		$tw_tit_placeholder  = $custom_tw_title ?: $home_og_title ?: $og_tit_placeholder;
+		$tw_desc_placeholder = $custom_tw_desc ?: $home_og_desc ?: $og_desc_placeholder;
+
 		?>
+		<h4><?php esc_html_e( 'Open Graph Settings', 'autodescription' ); ?></h4>
+
+		<div>
+			<label for="<?php $this->field_id( 'homepage_og_title' ); ?>" class="tsf-toblock">
+				<strong>
+					<?php
+					esc_html_e( 'Open Graph Title', 'autodescription' );
+					?>
+				</strong>
+			</label>
+			<?php
+			//* Output this unconditionally, with inline CSS attached to allow reacting on settings.
+			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_og_title' ), '', (bool) $this->get_option( 'display_character_counter' ) );
+			?>
+		</div>
+		<p>
+			<input type="text" name="<?php $this->field_name( 'homepage_og_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_og_title' ); ?>" placeholder="<?php echo esc_attr( $og_tit_placeholder ); ?>" value="<?php echo esc_attr( $this->get_option( 'homepage_og_title' ) ); ?>" autocomplete=off />
+		</p>
+		<?php
+		if ( $this->has_page_on_front() && $custom_og_title ) {
+			$this->description(
+				__( 'Note: The title placeholder is fetched from the Page SEO Settings on the home page.', 'autodescription' )
+			);
+		}
+		?>
+
+		<div>
+			<label for="<?php $this->field_id( 'homepage_og_description' ); ?>" class="tsf-toblock">
+				<strong>
+					<?php
+					esc_html_e( 'Open Graph Description', 'autodescription' );
+					?>
+				</strong>
+			</label>
+			<?php
+			//* Output this unconditionally, with inline CSS attached to allow reacting on settings.
+			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_og_description' ), '', (bool) $this->get_option( 'display_character_counter' ) );
+			?>
+		</div>
+		<p>
+			<textarea name="<?php $this->field_name( 'homepage_og_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_og_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $og_desc_placeholder ); ?>"><?php echo esc_attr( $this->get_option( 'homepage_og_description' ) ); ?></textarea>
+			<?php echo $this->output_js_description_elements(); ?>
+		</p>
+		<?php
+		if ( $this->has_page_on_front() && $custom_og_desc ) {
+			$this->description(
+				__( 'Note: The description placeholder is fetched from the Page SEO Settings on the home page.', 'autodescription' )
+			);
+		}
+		?>
+		<hr>
+
+		<h4><?php esc_html_e( 'Twitter Settings', 'autodescription' ); ?></h4>
+
+		<div>
+			<label for="<?php $this->field_id( 'homepage_twitter_title' ); ?>" class="tsf-toblock">
+				<strong>
+					<?php
+					esc_html_e( 'Twitter Title', 'autodescription' );
+					?>
+				</strong>
+			</label>
+			<?php
+			//* Output this unconditionally, with inline CSS attached to allow reacting on settings.
+			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_twitter_title' ), '', (bool) $this->get_option( 'display_character_counter' ) );
+			?>
+		</div>
+		<p>
+			<input type="text" name="<?php $this->field_name( 'homepage_twitter_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_twitter_title' ); ?>" placeholder="<?php echo esc_attr( $tw_tit_placeholder ); ?>" value="<?php echo esc_attr( $this->get_option( 'homepage_twitter_title' ) ); ?>" autocomplete=off />
+		</p>
+		<?php
+		if ( $this->has_page_on_front() && ( $custom_og_title || $custom_tw_title ) ) {
+			$this->description(
+				__( 'Note: The title placeholder is fetched from the Page SEO Settings on the home page.', 'autodescription' )
+			);
+		}
+		?>
+
+		<div>
+			<label for="<?php $this->field_id( 'homepage_twitter_description' ); ?>" class="tsf-toblock">
+				<strong>
+					<?php
+					esc_html_e( 'Twitter Description', 'autodescription' );
+					?>
+				</strong>
+			</label>
+			<?php
+			//* Output this unconditionally, with inline CSS attached to allow reacting on settings.
+			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_twitter_description' ), '', (bool) $this->get_option( 'display_character_counter' ) );
+			?>
+		</div>
+		<p>
+			<textarea name="<?php $this->field_name( 'homepage_twitter_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_twitter_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $tw_desc_placeholder ); ?>"><?php echo esc_attr( $this->get_option( 'homepage_twitter_description' ) ); ?></textarea>
+			<?php echo $this->output_js_description_elements(); ?>
+		</p>
+		<?php
+		if ( $this->has_page_on_front() && ( $custom_og_desc || $custom_tw_desc ) ) {
+			$this->description(
+				__( 'Note: The description placeholder is fetched from the Page SEO Settings on the home page.', 'autodescription' )
+			);
+		}
+		?>
+		<hr>
+
 		<h4><?php esc_html_e( 'Social Image Settings', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'A social image can be displayed when your homepage is shared. It is a great way to grab attention.', 'autodescription' ) );

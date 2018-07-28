@@ -329,6 +329,11 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 			* TODO A toggle that disabled title additions when a manual title is used.
 		* New description options, including:
 			* A toggle for automated descriptions.
+		* New home page options, including:
+			* Open Graph title.
+			* Open Graph description.
+			* Twitter Title.
+			* Twitter description.
 		* TODO A title check is added next to every title field. (or the SEO bar... a red title tsunami)
 			* TODO It informs you when your theme uses outdated standards, and that you should use the Title Fix extension.
 			* TODO consider using methods that are used in Theme Check.
@@ -344,7 +349,6 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 			* Pages that are protected now correctly state their indexing status.
 			* When the Blog Page is empty, and when it's not the home page, it'll show a "noindex" notification.
 			* Post types that have robots settings applied, now show them via appropriate notifications.
-		* Descriptive links to all meta title and description labels.
 		* Post Type Settings:
 			* Found in the General Settings meta box, they'll prevent The SEO Framework from interacting.
 			* These settings should only be used on conflicting post types, like which offer their own SEO settings, or are otherwise incorrectly registered.
@@ -355,6 +359,7 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 		* The plugin can now downgrade its database version to the currently installed version automatically. This makes sure necessary future upgrade procedures are reinstated when you choose to downgrade (for any reason).
 			* Since TSF v3.0.6 this happens when a user saved the options, but this could lead to inconsistent behavior on WordPress Multisite installations.
 		* We removed a lot of redundant code (like option upgrade checks), which have long been superseded by better standards.
+		* We've added descriptive links to all meta title and description labels.
 		* Code and URL input types (Twitter profile, Webmasters' verification codes) now always flow from left to right, even if your site's written language setting is otherwise.
 		* Tooltip arrows now always follow your mouse, for a more natural look.
 		* Tooltips now support RTL screens without the arrow overflowing.
@@ -376,7 +381,8 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 		* The SEO Bar is a little less daunting--by 13.63% in width to be exact.
 		* The SEO Bar no longer performs intricate and slow requests to verify if we're on a term page on Custom Post Types list tables.
 		* The SEO Bar is now capable of articulating post type names, instead of only term names.
-		* In the robots settings meta box, we've added a descriptive warning to the sitewide `nofollow` and `noarchive` settings.
+		* In the robots settings meta box, we've added a descriptive warning for the sitewide `nofollow` and `noarchive` settings.
+		* In the homepage settings meta box, and on the in-post metabox for the homepage, we've added a descriptive warning for the `nofollow` and `noarchive` settings.
 		* The primary term selector tooltip now states the human readible and translatable name, instead of the static code name.
 		* WC Shop and Blog Pages now have "rel=prev/next" canonical URLs added when link relationship tags are enabled for archives.
 		* WC Shop and Blog Pages now listen to the global pagination robots' "noindex" settings.
@@ -386,6 +392,7 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 		* Plugin conflict notices are now shown in red.
 		* Home page setting notifications are now always showing when applicable.
 		* This plugin now detects Elementor as a conflicting plugin for content. This means that when Elementor builds a page, no automated description can be generated from the content.
+		* The in-post counters are no longer affected by your input when a preceding value is set in the Home Page SEO Settings.
 	* **Changed:**
 		* TSF now requires WordPress 4.6 (previously 4.4).
 		* TSF now requires PHP 5.4 (previously 5.3).
@@ -472,7 +479,14 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 		* The plugin now tries to remove all active `wp_title` filters, like it has been doing for `pre_get_document_title` a long time.
 		* New option indexes, available via `the_seo_framework()->get_option( $index )`, serialized on option `autodescription-site-settings`:
 			* `(array) disabled_post_types`
+			* `(array) the_seo_framework()->get_robots_post_type_option_id( 'noindex' )`
+			* `(array) the_seo_framework()->get_robots_post_type_option_id( 'nofollow' )`
+			* `(array) the_seo_framework()->get_robots_post_type_option_id( 'noarchive' )`
 			* `(int) (bool) auto_description`
+			* `(string) homepage_og_title`
+			* `(string) homepage_og_description`
+			* `(string) homepage_twitter_title`
+			* `(string) homepage_twitter_description`
 		* The sitemap xsl stylesheet now has its colors defined in various `xsl:variable` elements. It's also completely reconfigurable via hooks.
 		* The plugin now initializes options cache. For instance, when the plugin's activated a temporarily value will be set that it did.
 	* **Improved:**
@@ -636,7 +650,7 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 				* `::verify()`
 				* `::_prepare_admin_scripts()`, private, it's called autonomously.
 		* **Moved:**
-			* **Note:** All deprecated methods are automatically moved to `\The_SEO_Framework\Deprecated`. This class is auto-loaded whenever a non-existing or deprecated method is called.
+			* **Note:** All deprecated methods are moved to `\The_SEO_Framework\Deprecated`. This class is auto-loaded once a non-existing or deprecated method is called.
 			* **Note:** The changes below (currently) don't affect the factory method: `the_seo_framework()`.
 			* `get_current_canonical_url()`. `\The_SEO_Framework\Render => \The_SEO_Framework\Generate_Url`.
 			* `get_current_permalink()`. `\The_SEO_Framework\Render => \The_SEO_Framework\Generate_Url`.
@@ -692,9 +706,6 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 				* `check_tsf_ajax_referer()`, was marked private.
 				* `wp_ajax_update_counter_type()`, was marked private.
 				* `wp_ajax_crop_image()`, was marked private.
-				/
-				* TODO `set_js_nonces()`
-				* TODO `get_js_nonces()`
 			* In class: `\The_SEO_Framework\Admin_Pages` -- Factory: `the_seo_framework()`
 				* `make_textfield()`, was marked private.
 				* `field_value()`, redundant. Use `get_option()` instead.
