@@ -255,14 +255,19 @@ class Site_Options extends Sanitize {
 			'knowledge_tumblr'     => '', // Tumblr Account
 
 			// Sitemaps.
-			'sitemaps_output'      => 1,   // Output of sitemaps
-			'sitemaps_modified'    => 1,   // Add sitemaps modified time
-			'sitemaps_robots'      => 1,   // Add sitemaps location to robots.txt
-			'ping_google'          => 1,   // Ping Google
-			'ping_bing'            => 1,   // Ping Bing
-			'ping_yandex'          => 1,   // Ping Yandex
-			'sitemap_styles'       => 1,   // Whether to style the sitemap
-			'sitemap_logo'         => 1,   // Whether to add logo to sitemap
+			'sitemaps_output'      => 1,    // Output of sitemap
+			'sitemap_query_limit'   => 1200, // Sitemap post limit.
+
+			'sitemaps_modified'    => 1, // Add sitemap modified time
+
+			'sitemaps_robots'      => 1, // Add sitemap location to robots.txt
+
+			'ping_google'          => 1, // Ping Google
+			'ping_bing'            => 1, // Ping Bing
+			'ping_yandex'          => 1, // Ping Yandex
+
+			'sitemap_styles'       => 1,        // Whether to style the sitemap
+			'sitemap_logo'         => 1,        // Whether to add logo to sitemap
 			'sitemap_color_main'   => '333',    // Sitemap main color
 			'sitemap_color_accent' => '00cd98', // Sitemap accent color
 

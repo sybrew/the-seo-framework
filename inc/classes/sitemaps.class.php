@@ -623,12 +623,10 @@ class Sitemaps extends Metaboxes {
 		/**
 		 * @since 2.2.9
 		 * @since 2.8.0 Increased to 1200 from 700.
-		 * @since 3.1.0 1. Now acts as a cumulative limit, rather than an individual limit (TODO)
-		 *              2. Increased to 3600 from 1200 (TODO)
-		 *              3. Now listens to an option. (TODO)
+		 * @since 3.1.0 Now returns an option value.
 		 * @param int $total_post_limit
 		 */
-		$total_post_limit = (int) \apply_filters( 'the_seo_framework_sitemap_post_limit', 1200 );
+		$total_post_limit = (int) \apply_filters( 'the_seo_framework_sitemap_post_limit', $this->get_option( 'sitemap_query_limit' ) );
 
 		/**
 		 * Maximum pages and posts to fetch.

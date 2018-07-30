@@ -206,7 +206,7 @@ class Sanitize extends Admin_Pages {
 			[
 				'homepage_title',
 				'homepage_title_tagline',
-				'homepage_og_description',
+				'homepage_og_title',
 				'homepage_twitter_title',
 			]
 		);
@@ -471,6 +471,14 @@ class Sanitize extends Admin_Pages {
 			]
 		);
 
+		$this->add_option_filter(
+			's_min_max_sitemap',
+			$this->settings_field,
+			[
+				'sitemap_query_limit',
+			]
+		);
+
 		$init = true;
 	}
 
@@ -642,6 +650,7 @@ class Sanitize extends Admin_Pages {
 			's_twitter_name'          => [ $this, 's_twitter_name' ],
 			's_twitter_card'          => [ $this, 's_twitter_card' ],
 			's_canonical_scheme'      => [ $this, 's_canonical_scheme' ],
+			's_min_max_sitemap'       => [ $this, 's_min_max_sitemap' ],
 		];
 
 		/**
@@ -1457,6 +1466,30 @@ class Sanitize extends Admin_Pages {
 			return (string) $new_value;
 
 		return 'automatic';
+	}
+
+	/**
+	 * Sanitizes sitemap's min/max post value.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param int $new_value Integer with potentially unwanted values.
+	 * @return int A limited integer 1<=R<=20000.
+	 */
+	public function s_min_max_sitemap( $new_value ) {
+
+		$new_value = $this->s_absint( $new_value );
+
+		if ( ! $new_value ) {
+			// We assume something's wrong. Return default value.
+			$new_value = $this->get_default_option( 'sitemap_query_limit' );
+		} elseif ( $new_value < 1 ) {
+			$new_value = 1;
+		} elseif ( $new_value > 20000 ) {
+			$new_value = 20000;
+		}
+
+		return $new_value;
 	}
 
 	/**

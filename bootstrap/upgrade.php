@@ -299,11 +299,10 @@ function the_seo_framework_do_upgrade_3101() {
 
 	$tsf->update_option( 'title_separator', $tsf->get_option( 'title_seperator' ) );
 
+	$tsf->update_option( 'sitemap_query_limit', 1200 );
+
 	// Prevent database lookups when checking for cache.
 	add_option( THE_SEO_FRAMEWORK_SITE_CACHE, [] );
-
-	// Might they've missed it half a year ago, here it is again.
-	the_seo_framework_prepare_extension_manager_suggestion();
 
 	if ( $tsf->get_option( 'attachment_noindex' ) ) {
 		$_option = $tsf->get_robots_post_type_option_id( 'noindex' );
@@ -316,7 +315,6 @@ function the_seo_framework_do_upgrade_3101() {
 		$_value = $tsf->get_option( $_option ) ?: [];
 		$_value['attachment'] = 1;
 		$tsf->update_option( $_option, $_value );
-
 	}
 	if ( $tsf->get_option( 'attachment_noarchive' ) ) {
 		$_option = $tsf->get_robots_post_type_option_id( 'noarchive' );
@@ -324,6 +322,9 @@ function the_seo_framework_do_upgrade_3101() {
 		$_value['attachment'] = 1;
 		$tsf->update_option( $_option, $_value );
 	}
+
+	// Might they've missed it half a year ago, here it is again.
+	the_seo_framework_prepare_extension_manager_suggestion();
 
 	update_option( 'the_seo_framework_upgraded_db_version', '3101' );
 }
