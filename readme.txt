@@ -457,7 +457,7 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 		* The SEO Bar no longer incorretly tells that CPT categories or tags are discouraged from indexing via the global settings.
 		* WC Shop and Blog Pages canonical URLs now correctly output pagination.
 		* The title metabox's example title (from the latest post) can now be substituted for the example title when empty.
-		* TODO When no blog description or tagline is set, the left/right example titles are no longer partially emptied when JS is deactivated.
+		* When no blog description or tagline is set, the left/right example titles are no longer partially emptied when JS is deactivated.
 
 * **For translators:**
 	* **New translations are available.**
