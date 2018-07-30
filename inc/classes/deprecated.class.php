@@ -909,7 +909,7 @@ final class Deprecated {
 		$tsf = \the_seo_framework();
 		$tsf->_deprecated_function( 'the_seo_framework()->generate_home_title()', '3.1.0', 'the_seo_framework()->get_title(...)' );
 		return array(
-			'title'       => $tsf->get_unprocessed_generated_title( array( 'id' => $tsf->get_the_front_page_ID() ) ),
+			'title'       => $tsf->get_raw_generated_title( array( 'id' => $tsf->get_the_front_page_ID() ) ),
 			'blogname'    => $tsf->get_home_page_tagline(),
 			'add_tagline' => $tsf->use_home_page_title_tagline(),
 			'seplocation' => $tsf->get_title_seplocation(),

@@ -807,21 +807,14 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.8.2
 	 * @since 2.9.4 Now no longer fails when first two characters are spaces.
-	 * @see $this->s_nsbp() For converting other spaces prior to using this method.
+	 * @since 3.1.0 1. Now also catches non-breaking spaces.
+	 *              2. Now uses a regex pattern.
 	 *
 	 * @param string $new_value The input value with possible multispaces.
 	 * @return string The input string without duplicated spaces.
 	 */
 	public function s_dupe_space( $new_value ) {
-
-		$i = 0;
-		//* Run twice at most, to catch uneven multiple spaces.
-		do {
-			$new_value = str_replace( '  ', ' ', $new_value );
-			$i++;
-		} while ( $i <= 2 && false !== strpos( $new_value, '  ' ) );
-
-		return $new_value;
+		return preg_replace( '/(\xc2\xa0|\s){2,}/m', ' ', $new_value );
 	}
 
 	/**

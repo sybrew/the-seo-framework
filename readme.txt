@@ -318,9 +318,10 @@ NOTE: ref: https://theseoframework.com/?p=1792
 TODO: RTL stylesheet update.
 TODO: Follow progression of https://github.com/Automattic/jetpack/pull/9912, and see if we might need to implement it ourselves.
 	Track/adjust readme changes: --JETPACK
-TODO: Regression: Title compatibility --UltimateMember has been fixed thus far.
+TODO: Regression: Title compatibility test --UltimateMember has been fixed thus far.
 TODO: Regression? Home page title (not addition) is stripped (partially) in the front-page-inpost i18n $defaultTitle tag.
 TODO: Regression: HTML tags are now stripped from singular post types. This is due to WP's filters with strip_tags(). https://github.com/sybrew/the-seo-framework/issues/270#issuecomment-407602299
+TODO: Regression? s_title_raw() doesn't run on the example titles.
 
 * **For everyone:**
 	* **Added:**
@@ -390,6 +391,7 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 		* Home page setting notifications are now always showing when applicable.
 		* This plugin now detects Elementor as a conflicting plugin for content. This means that when Elementor builds a page, no automated description can be generated from the content.
 		* The in-post counters are no longer affected by your input when a preceding value is set in the Home Page SEO Settings.
+		* The administrative title placeholders now better resemble the real front-end output when using HTML tokens or duplicated spaces.
 	* **Changed:**
 		* TSF now requires WordPress 4.6 (previously 4.4).
 		* TSF now requires PHP 5.4 (previously 5.3).
@@ -455,6 +457,7 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 		* WC Shop and Blog Pages canonical URLs now correctly output pagination.
 		* The title metabox's example title (from the latest post) can now be substituted for the example title when empty.
 		* When no blog description or tagline is set, the left/right example titles are no longer partially emptied when JS is deactivated.
+		* Duplicated spaces are no longer counted by the pixel and character counters, and they'll be removed from the front-end output.
 
 * **For translators:**
 	* **New translations are available.**
@@ -487,6 +490,7 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 			* `(int) sitemap_query_limit`
 		* The sitemap xsl stylesheet now has its colors defined in various `xsl:variable` elements. It's also completely reconfigurable via hooks.
 		* The plugin now initializes options cache. For instance, when the plugin's activated a temporarily value will be set that it did.
+		* Various JS functions and class objects have been introduced. These are available via the API, but shouldn't be used as the JS API is still under consideration and can change at any update.
 	* **Improved:**
 		* A "doing it wrong" notice is now supplied when calling `the_seo_framework()` too early.
 		* Fixed all "non-passive event listener" warnings caused by jQuery, by using our improved own event handlers.
@@ -601,8 +605,8 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 				* `get_title()`
 				* `get_custom_field_title()`
 				* `get_generated_title()`
-				* `get_unprocessed_custom_field_title()`
-				* `get_unprocessed_generated_title()`
+				* `get_raw_custom_field_title()`
+				* `get_raw_generated_title()`
 				* `generate_title_from_query()`
 				* `generate_title_from_args()`
 				* `get_generated_archive_title()`
@@ -693,6 +697,10 @@ TODO: Regression: HTML tags are now stripped from singular post types. This is d
 			* In class: `\The_SEO_Framework\Sitemaps` -- Factory: `the_seo_framework()`
 				* `generate_sitmeap()` now uses `wp_raise_memory_limit( 'sitemap' )`.
 					* This applies the WP Core filter `{$context}_memory_limit`, where `$context` is `sitemap`.
+			* In class `\The_SEO_Framework\Sanitize` -- Factory: `the_seo_framework()`
+				* `s_dupe_space()`
+					1. Now also catches non-breaking spaces.
+					2. Now uses a regex pattern.
 		* **Removed:**
 			* In class: `\The_SEO_Framework\Admin_Init` -- Factory: `the_seo_framework()`
 				* `enqueue_admin_javascript()`

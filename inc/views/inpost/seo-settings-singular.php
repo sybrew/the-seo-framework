@@ -91,9 +91,8 @@ switch ( $instance ) :
 		endif;
 
 		if ( $this->is_static_frontpage( $post_id ) ) {
-			$_home_title = $this->get_option( 'homepage_title' );
-
-			$title_placeholder = $_home_title
+			// When the homepage title is set, we can safely get the custom field.
+			$title_placeholder = $this->escape_title( $this->get_option( 'homepage_title' ) )
 							   ? $this->get_custom_field_title( [ 'id' => $post_id ] )
 							   : $this->get_generated_title( [ 'id' => $post_id ] );
 

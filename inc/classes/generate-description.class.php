@@ -923,7 +923,7 @@ class Generate_Description extends Generate {
 				 * We're on the blog page now.
 				 * @since 2.2.8
 				 */
-				$title = $this->get_unprocessed_generated_title( [ 'id' => $id ] );
+				$title = $this->get_raw_generated_title( [ 'id' => $id ] );
 
 				/**
 				 * @TODO create option.
@@ -947,9 +947,9 @@ class Generate_Description extends Generate {
 				//* We're on a page or other archive.
 				// FIXME Code debt because we're separating the "query" vs "caller"
 				if ( $this->is_admin() ) {
-					$title = $this->get_unprocessed_generated_title( [ 'id' => $id ] );
+					$title = $this->get_raw_generated_title( [ 'id' => $id ] );
 				} elseif ( $id === $this->get_the_real_ID() ) {
-					$title = $this->get_unprocessed_generated_title();
+					$title = $this->get_raw_generated_title();
 				}
 			}
 		endif;

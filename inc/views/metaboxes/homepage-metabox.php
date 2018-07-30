@@ -76,7 +76,7 @@ switch ( $instance ) :
 			if ( $this->use_title_branding( [ 'id' => $home_id ] ) ) {
 				$this->merge_title_branding( $frompost_title, [ 'id' => $home_id ] );
 			}
-			$home_title_placeholder = $frompost_title;
+			$home_title_placeholder = $this->escape_title( $frompost_title );
 		} else {
 			$home_title_placeholder = $this->get_generated_title( [ 'id' => $home_id ] );
 		}
@@ -101,7 +101,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php $this->field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title_tagline' ); ?>" placeholder="<?php echo esc_attr( $this->escape_title( $this->get_blogdescription() ) ); ?>" value="<?php echo esc_attr( $this->get_option( 'homepage_title_tagline' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php $this->field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title_tagline' ); ?>" placeholder="<?php echo esc_attr( $this->get_home_page_tagline() ); ?>" value="<?php echo esc_attr( $this->get_option( 'homepage_title_tagline' ) ); ?>" autocomplete=off />
 		</p>
 
 		<hr>
@@ -218,8 +218,8 @@ switch ( $instance ) :
 		//* Fetches escaped title parts.
 		$home_id  = $this->get_the_front_page_ID();
 		$_example_title = $this->escape_title(
-			$this->get_unprocessed_custom_field_title( [ 'id' => $home_id ] )
-			?: $this->get_unprocessed_generated_title( [ 'id' => $home_id ] )
+			$this->get_raw_custom_field_title( [ 'id' => $home_id ] )
+			?: $this->get_raw_generated_title( [ 'id' => $home_id ] )
 		);
 		// FIXME? When no blog description or tagline is set... this will be empty and ugly on no-JS.
 		$_example_blogname  = $this->escape_title( $this->get_home_page_tagline() ?: $this->get_static_untitled_title() );
