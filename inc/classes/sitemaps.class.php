@@ -33,15 +33,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Sitemaps extends Metaboxes {
 
 	/**
-	 * Checks for pretty permalinks.
-	 *
-	 * @since 2.2.9
-	 *
-	 * @var bool true if pretty
-	 */
-	protected $pretty_permalinks;
-
-	/**
 	 * Checks if sitemap is being output.
 	 *
 	 * @since 2.5.2

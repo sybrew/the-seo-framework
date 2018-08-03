@@ -89,7 +89,7 @@ function _bbpress_filter_url_path( $path, $id = 0, $external = false ) {
 	if ( $external || ! $id )
 		return $path;
 
-	if ( '' !== \the_seo_framework()->permalink_structure() && \is_bbpress() ) :
+	if ( \the_seo_framework()->pretty_permalinks && \is_bbpress() ) :
 
 		if ( \bbp_is_single_user_topics() ) {
 			// User's topics

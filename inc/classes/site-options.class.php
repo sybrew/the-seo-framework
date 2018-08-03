@@ -197,7 +197,7 @@ class Site_Options extends Sanitize {
 
 			// Relationships
 			'shortlink_tag'       => 0, // Adds shortlink tag
-			'prev_next_posts'     => 0, // Adds next/prev tags
+			'prev_next_posts'     => 1, // Adds next/prev tags
 			'prev_next_archives'  => 1, // Adds next/prev tags
 			'prev_next_frontpage' => 1, // Adds next/prev tags
 

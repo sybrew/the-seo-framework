@@ -897,6 +897,6 @@ class Generate_Title extends Generate_Description {
 	 * @return string The trimmed tagline.
 	 */
 	public function get_home_page_tagline() {
-		return $this->s_title( trim( $this->get_option( 'homepage_title_tagline' ) ) ?: $this->get_blogdescription() ?: '' );
+		return $this->s_title_raw( trim( $this->get_option( 'homepage_title_tagline' ) ) ?: $this->get_blogdescription() ?: '' );
 	}
 }

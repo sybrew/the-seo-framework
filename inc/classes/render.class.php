@@ -274,15 +274,11 @@ class Render extends Admin_Init {
 		$id = $this->get_the_real_ID();
 
 		/**
-		 * Applies filters 'the_seo_framework_ogimage_output' : string|bool
-		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
-		 *
 		 * @NOTE: Use of this might cause incorrect meta since other functions
 		 * depend on the image from cache.
-		 *
-		 * @todo Place in listener cache.
-		 * @priority medium 2.8.0+
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 * @param string $image The social image URL.
 		 */
 		$image = \apply_filters_ref_array(
 			'the_seo_framework_ogimage_output',
@@ -292,32 +288,31 @@ class Render extends Admin_Init {
 			]
 		);
 
+		$output = '';
+
 		/**
 		 * Now returns empty string on false.
 		 * @since 2.6.0
 		 */
-		if ( false === $image )
-			return '';
-
-		$image = (string) $image;
-
-		/**
-		 * Always output
-		 * @since 2.1.1
-		 */
-		$output = '<meta property="og:image" content="' . \esc_attr( $image ) . '" />' . "\r\n";
-
 		if ( $image ) {
-			if ( ! empty( $this->image_dimensions[ $id ]['width'] ) && ! empty( $this->image_dimensions[ $id ]['height'] ) ) {
-				$output .= '<meta property="og:image:width" content="' . \esc_attr( $this->image_dimensions[ $id ]['width'] ) . '" />' . "\r\n";
-				$output .= '<meta property="og:image:height" content="' . \esc_attr( $this->image_dimensions[ $id ]['height'] ) . '" />' . "\r\n";
+
+			$image = (string) $image;
+
+			/**
+			 * Always output
+			 * @since 2.1.1
+			 */
+			$output .= '<meta property="og:image" content="' . \esc_attr( $image ) . '" />' . "\r\n";
+
+			if ( $image ) {
+				if ( ! empty( $this->image_dimensions[ $id ]['width'] ) && ! empty( $this->image_dimensions[ $id ]['height'] ) ) {
+					$output .= '<meta property="og:image:width" content="' . \esc_attr( $this->image_dimensions[ $id ]['width'] ) . '" />' . "\r\n";
+					$output .= '<meta property="og:image:height" content="' . \esc_attr( $this->image_dimensions[ $id ]['height'] ) . '" />' . "\r\n";
+				}
 			}
 		}
 
-		//* Fetch Product images.
-		$woocommerce_product_images = $this->render_woocommerce_product_og_image();
-
-		return $output . $woocommerce_product_images;
+		return $output . $this->render_woocommerce_product_og_image();
 	}
 
 	/**

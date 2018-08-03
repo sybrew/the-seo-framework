@@ -60,9 +60,6 @@ class Init extends Query {
 		 */
 		$this->use_object_cache = (bool) \apply_filters( 'the_seo_framework_use_object_cache', $this->use_object_cache() );
 
-		//* Determines Whether we're using pretty permalinks.
-		$this->pretty_permalinks = '' !== $this->permalink_structure();
-
 		\add_action( 'init', [ $this, 'init_the_seo_framework' ], 0 );
 
 		$this->load_early_compat_files();

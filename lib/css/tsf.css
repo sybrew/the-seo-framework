@@ -243,8 +243,8 @@ a.tsf-dismiss:hover {
 
 /* END Pixel Counters */
 
-#tsf-seo-bar-wrap {
-	width: 15%;
+.fixed .column-tsf-seo-bar-wrap {
+	width: 11%;
 }
 
 .tsf-seo-bar {

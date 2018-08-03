@@ -569,7 +569,7 @@ class Generate_Url extends Generate_Title {
 	 * @since 3.0.0
 	 *
 	 * @param string $url      The fully qualified URL.
-	 * @param int    $page     The page number. Must be bigger than 1.
+	 * @param int    $page     The page number. Should be bigger than 1 to paginate.
 	 * @param bool   $use_base Whether to use pagination base. True on archives, false on pages.
 	 * @return string The fully qualified URL with pagination.
 	 */
@@ -618,7 +618,8 @@ class Generate_Url extends Generate_Title {
 				( $GLOBALS['wp_rewrite']->use_trailing_slashes ? '/' : '' );
 
 			$paged = $paged ?: $this->paged();
-			$page = $page ?: $this->page();
+			$page  = $page ?: $this->page();
+
 			$find = '';
 
 			if ( $paged > 1 ) {
@@ -731,160 +732,76 @@ class Generate_Url extends Generate_Title {
 	 * Generates Previous and Next links.
 	 *
 	 * @since 2.2.4
-	 * @since 3.1.0 Now recognizes WC Shops and WP Blog pages as archival types.
-	 * @TODO rewrite to use the new 3.0.0+ URL generation.
+	 * @since 3.1.0 1. Now recognizes WC Shops and WP Blog pages as archival types.
+	 *              2. Now sanitizes canonical URL according to permalink settings.
+	 *              3. Removed second parameter. It was only a source of bugs.
+	 *              4. Removed WordPress Core `get_pagenum_link` filter.
+	 * @uses $this->get_paged_urls();
 	 *
-	 * @param string $prev_next Previous or next page link.
-	 * @param int    $post_id   The post ID.
-	 * @return string|null Escaped site Pagination URL
+	 * @param string $prev_next Whether to get the previous or next page link.
+	 *                          Accepts 'prev' and 'next'.
+	 * @return string Escaped site Pagination URL
 	 */
-	public function get_paged_url( $prev_next = 'next', $post_id = 0 ) {
-
-		if ( ! $this->get_option( 'prev_next_posts' ) && ! $this->get_option( 'prev_next_archives' ) && ! $this->get_option( 'prev_next_frontpage' ) )
-			return '';
-
-		$prev = '';
-		$next = '';
-
-		$is_home    = $this->is_home();
-		$is_wc_shop = $this->is_wc_shop();
-
-		if ( $this->is_singular() && ! $is_home && ! $is_wc_shop ) :
-			if ( $this->is_real_front_page() || $this->is_static_frontpage( $post_id ) ) {
-				$output_singular_paged = $this->is_option_checked( 'prev_next_frontpage' );
-			} else {
-				$output_singular_paged = $this->is_option_checked( 'prev_next_posts' );
-			}
-
-			if ( $output_singular_paged ) :
-
-				$page = $this->page();
-
-				if ( ! $page )
-					$page = 1;
-
-				if ( 'prev' === $prev_next ) {
-					$prev = $page > 1 ? $this->get_paged_post_url( $page - 1, $post_id, 'prev' ) : '';
-				} elseif ( 'next' === $prev_next ) {
-					$_numpages = substr_count( $this->get_post_content( $post_id ), '<!--nextpage-->' ) + 1;
-					$next = $page < $_numpages ? $this->get_paged_post_url( $page + 1, $post_id, 'next' ) : '';
-				}
-			endif;
-		elseif ( $this->is_archive() || $is_home || $is_wc_shop ) :
-
-			$output_archive_paged = false;
-			if ( $this->is_real_front_page() || $this->is_front_page_by_id( $post_id ) ) {
-				//* Only home.
-				$output_archive_paged = $this->is_option_checked( 'prev_next_frontpage' );
-			} else {
-				//* Both home and archives.
-				$output_archive_paged = $this->is_option_checked( 'prev_next_archives' );
-			}
-
-			if ( $output_archive_paged ) {
-				$paged = $this->paged();
-
-				if ( 'prev' === $prev_next && $paged > 1 ) {
-					$paged = intval( $paged ) - 1;
-
-					if ( $paged < 1 )
-						$paged = 1;
-
-					$prev = \get_pagenum_link( $paged, false );
-				} elseif ( 'next' === $prev_next && $paged < $GLOBALS['wp_query']->max_num_pages ) {
-
-					if ( ! $paged )
-						$paged = 1;
-
-					$paged = intval( $paged ) + 1;
-
-					$next = \get_pagenum_link( $paged, false );
-				}
-			}
-		endif;
-
-		if ( $prev )
-			return $this->set_preferred_url_scheme( \esc_url_raw( $prev, [ 'http', 'https' ] ) );
-
-		if ( $next )
-			return $this->set_preferred_url_scheme( \esc_url_raw( $next, [ 'http', 'https' ] ) );
-
-		return '';
+	public function get_paged_url( $next_prev ) {
+		return $this->get_paged_urls()[ $next_prev ];
 	}
 
 	/**
-	 * Returns the special URL of a paged post.
+	 * Generates Previous and Next links.
 	 *
-	 * Taken from _wp_link_page() in WordPress core, but instead of anchor markup, just return the URL.
+	 * @since 3.1.0
+	 * @staticvar array $ret
 	 *
-	 * @since 2.2.4
-	 * @since 3.0.0 Now uses WordPress permalinks.
-	 * @TODO deprecate.
-	 *
-	 * @param int $i The page number to generate the URL from.
-	 * @param int $post_id The post ID.
-	 * @param string $pos Which url to get, accepts next|prev.
-	 * @return string The unescaped paged URL.
+	 * @param string $prev_next Whether to get the previous or next page link.
+	 *                          Accepts 'prev' and 'next'.
+	 * @return array  Escaped site Pagination URL
 	 */
-	public function get_paged_post_url( $i, $post_id = 0, $pos = 'prev' ) {
+	public function get_paged_urls() {
 
-		$from_option = false;
+		static $ret;
+		if ( isset( $ret ) ) return $ret;
 
-		if ( empty( $post_id ) )
-			$post_id = $this->get_the_real_ID();
+		$prev = $next = '';
+		$_run = false;
 
-		if ( 1 === $i ) :
-			$url = \get_permalink( $post_id );
-		else :
-			$post = \get_post( $post_id );
-			$url  = \get_permalink( $post_id );
+		if ( $this->is_singular() && $this->is_multipage() && ! $this->is_wc_shop() ) {
+			$_run = $this->is_real_front_page()
+				  ? $this->get_option( 'prev_next_frontpage' )
+				  : $this->get_option( 'prev_next_posts' );
 
-			if ( $i >= 2 ) {
-				//* Fix adding pagination url.
+			if ( ! $_run ) goto end;
 
-				//* Parse query arg, put in var and remove from current URL.
-				$query_arg = parse_url( $url, PHP_URL_QUERY );
-				if ( isset( $query_arg ) )
-					$url = str_replace( '?' . $query_arg, '', $url );
+			$archive   = false;
+			$page      = $this->page();
+			$_numpages = $this->numpages();
+		} elseif ( $this->is_archive() || $this->is_home() || $this->is_wc_shop() ) {
+			$_run = $this->is_real_front_page()
+				  ? $this->get_option( 'prev_next_frontpage' )
+				  : $this->get_option( 'prev_next_archives' );
 
-				//* Continue if still bigger than or equal to 2.
-				if ( $i >= 2 ) {
-					// Calculate current page number.
-					$_current = 'next' === $pos ? (string) ( $i - 1 ) : (string) ( $i + 1 );
+			if ( ! $_run ) goto end;
 
-					//* We're adding a page.
-					$_last_occurrence = strrpos( $url, '/' . $_current . '/' );
+			$archive   = true;
+			$page      = $this->paged();
+			$_numpages = $this->numpages();
+		}
 
-					if ( false !== $_last_occurrence )
-						$url = substr_replace( $url, '/', $_last_occurrence, strlen( '/' . $_current . '/' ) );
-				}
-			}
+		if ( ! $_run ) goto end;
 
-			if ( ! $this->pretty_permalinks || $this->is_draft( $post ) ) {
+		$canonical = $this->remove_pagination_from_url( $this->get_current_canonical_url() );
 
-				//* Put removed query arg back prior to adding pagination.
-				if ( isset( $query_arg ) )
-					$url = $url . '?' . $query_arg;
+		// If this page is not the last, create a next-URL.
+		if ( $page + 1 <= $_numpages ) {
+			$next = $this->add_url_pagination( $canonical, $page + 1, $archive );
+		}
+		// If this page is not the first, create a prev-URL.
+		if ( $page > 1 ) {
+			$prev = $this->add_url_pagination( $canonical, $page - 1, $archive );
+		}
 
-				$url = \add_query_arg( 'page', $i, $url );
-			} elseif ( $this->is_static_frontpage( $post_id ) ) {
-				global $wp_rewrite;
+		end:;
 
-				$url = \trailingslashit( $url ) . \user_trailingslashit( $wp_rewrite->pagination_base . '/' . $i, 'single_paged' );
-
-				//* Add back query arg if removed.
-				if ( isset( $query_arg ) )
-					$url = $url . '?' . $query_arg;
-			} else {
-				$url = \trailingslashit( $url ) . \user_trailingslashit( $i, 'single_paged' );
-
-				//* Add back query arg if removed.
-				if ( isset( $query_arg ) )
-					$url = $url . '?' . $query_arg;
-			}
-		endif;
-
-		return $url;
+		return $ret = compact( 'next', 'prev' );
 	}
 
 	/**
@@ -919,18 +836,13 @@ class Generate_Url extends Generate_Title {
 	 * Cached WordPress permalink structure settings.
 	 *
 	 * @since 2.6.0
-	 * @staticvar string $structure
+	 * @since 3.1.0 Removed caching.
+	 * @todo deprecate
 	 *
 	 * @return string permalink structure.
 	 */
 	public function permalink_structure() {
-
-		static $structure = null;
-
-		if ( isset( $structure ) )
-			return $structure;
-
-		return $structure = \get_option( 'permalink_structure' );
+		return \get_option( 'permalink_structure' );
 	}
 
 	/**

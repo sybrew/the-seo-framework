@@ -1142,4 +1142,80 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'the_seo_framework()->get_supported_post_type()', '3.1.0', 'the_seo_framework()->is_post_type_supported()' );
 		return $tsf->is_post_type_supported( $post_type ) ? $post_type : false;
 	}
+
+	/**
+	 * Returns the special URL of a paged post.
+	 *
+	 * Taken from _wp_link_page() in WordPress core, but instead of anchor markup, just return the URL.
+	 *
+	 * @since 2.2.4
+	 * @since 3.0.0 Now uses WordPress permalinks.
+	 * @since 3.1.0 Deprecated.
+	 * @TODO deprecate.
+	 *
+	 * @param int $i The page number to generate the URL from.
+	 * @param int $post_id The post ID.
+	 * @param string $pos Which url to get, accepts next|prev.
+	 * @return string The unescaped paged URL.
+	 */
+	public function get_paged_post_url( $i, $post_id = 0, $pos = 'prev' ) {
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->get_paged_post_url()', '3.1.0', 'the_seo_framework()->get_paged_url()' );
+
+		if ( empty( $post_id ) )
+			$post_id = $tsf->get_the_real_ID();
+
+		if ( 1 === $i ) :
+			$url = \get_permalink( $post_id );
+		else :
+			$post = \get_post( $post_id );
+			$url  = \get_permalink( $post_id );
+
+			if ( $i >= 2 ) {
+				//* Fix adding pagination url.
+
+				//* Parse query arg, put in var and remove from current URL.
+				$query_arg = parse_url( $url, PHP_URL_QUERY );
+				if ( isset( $query_arg ) )
+					$url = str_replace( '?' . $query_arg, '', $url );
+
+				//* Continue if still bigger than or equal to 2.
+				if ( $i >= 2 ) {
+					// Calculate current page number.
+					$_current = 'next' === $pos ? (string) ( $i - 1 ) : (string) ( $i + 1 );
+
+					//* We're adding a page.
+					$_last_occurrence = strrpos( $url, '/' . $_current . '/' );
+
+					if ( false !== $_last_occurrence )
+						$url = substr_replace( $url, '/', $_last_occurrence, strlen( '/' . $_current . '/' ) );
+				}
+			}
+
+			if ( ! $tsf->pretty_permalinks || $tsf->is_draft( $post ) ) {
+
+				//* Put removed query arg back prior to adding pagination.
+				if ( isset( $query_arg ) )
+					$url = $url . '?' . $query_arg;
+
+				$url = \add_query_arg( 'page', $i, $url );
+			} elseif ( $tsf->is_static_frontpage( $post_id ) ) {
+				global $wp_rewrite;
+
+				$url = \trailingslashit( $url ) . \user_trailingslashit( $wp_rewrite->pagination_base . '/' . $i, 'single_paged' );
+
+				//* Add back query arg if removed.
+				if ( isset( $query_arg ) )
+					$url = $url . '?' . $query_arg;
+			} else {
+				$url = \trailingslashit( $url ) . \user_trailingslashit( $i, 'single_paged' );
+
+				//* Add back query arg if removed.
+				if ( isset( $query_arg ) )
+					$url = $url . '?' . $query_arg;
+			}
+		endif;
+
+		return $url;
+	}
 }

@@ -406,20 +406,16 @@ class Post_Data extends Detect {
 	 * Fetches Post content.
 	 *
 	 * @since 2.6.0
+	 * @since 3.1.0 1. No longer applies WordPress' default filters.
+	 *              2. No longer used internally.
+	 * @todo deprecate
 	 *
 	 * @param int $id The post ID.
 	 * @return string The post content.
 	 */
 	public function get_post_content( $id = 0 ) {
-
-		$id = $id ?: $this->get_the_real_ID();
-
-		$content = \get_post_field( 'post_content', $id );
-
-		if ( is_string( $content ) )
-			return $content;
-
-		return '';
+		$post = \get_post( $id ?: $this->get_the_real_ID() );
+		return empty( $post->post_content ) ? '' : $post->post_content;
 	}
 
 	/**

@@ -33,9 +33,22 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Query extends Compat {
 
 	/**
+	 * Checks for pretty permalinks.
+	 *
+	 * @since 2.2.9
+	 * @since 3.1.0 Now public.
+	 *
+	 * @var bool true if pretty
+	 */
+	public $pretty_permalinks;
+
+	/**
 	 * Constructor. Load parent constructor.
 	 */
 	protected function __construct() {
+
+		$this->pretty_permalinks = '' !== \get_option( 'permalink_structure' );
+
 		parent::__construct();
 	}
 
@@ -1146,7 +1159,7 @@ class Query extends Compat {
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
-		$paged = \get_query_var( 'paged' );
+		$paged = $this->is_multipage() ? \get_query_var( 'paged' ) : 1;
 
 		$this->set_query_cache(
 			__METHOD__,
@@ -1157,21 +1170,28 @@ class Query extends Compat {
 	}
 
 	/**
-	 * Determines whether the current loop is a multipage.
+	 * Determines the number of available pages.
 	 *
-	 * @since 2.7.0
-	 * @global int $pages Used as reference.
+	 * This is largely taken from \WP_Query::setup_postdata(), however, the data
+	 * we need is set up in the loop, not in the header; where TSF is active.
 	 *
-	 * @return bool True if multipage.
+	 * @since 3.1.0
+	 * @global \WP_Query $wp_query
+	 *
+	 * @return int
 	 */
-	protected function is_multipage() {
-		global $pages;
+	public function numpages() {
 
-		$_pages = $pages;
+		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
+			return $cache;
 
-		$post = $this->is_singular() || $this->is_real_front_page() ? \get_post( $this->get_the_real_ID() ) : null;
+		global $wp_query;
 
-		if ( is_object( $post ) ) {
+		$post = null;
+		if ( $this->is_singular() && ! $this->is_wc_shop() )
+			$post = \get_post( $this->get_the_real_ID() );
+
+		if ( $post instanceof \WP_Post ) {
 			$content = $post->post_content;
 			if ( false !== strpos( $content, '<!--nextpage-->' ) ) {
 				$content = str_replace( "\n<!--nextpage-->", '<!--nextpage-->', $content );
@@ -1182,35 +1202,43 @@ class Query extends Compat {
 
 				$_pages = explode( '<!--nextpage-->', $content );
 			} else {
-				$_pages = [ $post->post_content ];
+				$_pages = [ $content ];
 			}
-		} else {
-			return false;
+
+			/**
+			 * Filter the "pages" derived from splitting the post content.
+			 *
+			 * "Pages" are determined by splitting the post content based on the presence
+			 * of `<!-- nextpage -->` tags.
+			 *
+			 * @since 4.4.0 WordPress core
+			 *
+			 * @param array $_pages Array of "pages" derived from the post content.
+			 *              of `<!-- nextpage -->` tags..
+			 * @param WP_Post $post  Current post object.
+			 */
+			$_pages = \apply_filters( 'content_pagination', $_pages, $post );
+
+			$numpages = count( $_pages );
+		} elseif ( isset( $wp_query->max_num_pages ) ) {
+			$numpages = (int) $wp_query->max_num_pages;
 		}
 
-		/**
-		 * Filter the "pages" derived from splitting the post content.
-		 *
-		 * "Pages" are determined by splitting the post content based on the presence
-		 * of `<!-- nextpage -->` tags.
-		 *
-		 * @since 4.4.0 WordPress core
-		 *
-		 * @param array $_pages Array of "pages" derived from the post content.
-		 *              of `<!-- nextpage -->` tags..
-		 * @param WP_Post $post  Current post object.
-		 */
-		$_pages = \apply_filters( 'content_pagination', $_pages, $post );
+		$this->set_query_cache( __METHOD__, $numpages );
 
-		$numpages = count( $_pages );
+		return $numpages;
+	}
 
-		if ( $numpages > 1 ) {
-			$multipage = true;
-		} else {
-			$multipage = false;
-		}
-
-		return $multipage;
+	/**
+	 * Determines whether the current loop has multiple pages.
+	 *
+	 * @since 2.7.0
+	 * @since 3.1.0 Now also works on archives.
+	 *
+	 * @return bool True if multipage.
+	 */
+	protected function is_multipage() {
+		return $this->numpages() > 1;
 	}
 
 	/**
