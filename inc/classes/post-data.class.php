@@ -408,7 +408,7 @@ class Post_Data extends Detect {
 	 * @since 2.6.0
 	 * @since 3.1.0 1. No longer applies WordPress' default filters.
 	 *              2. No longer used internally.
-	 * @todo deprecate
+	 * @todo deprecate, unused.
 	 *
 	 * @param int $id The post ID.
 	 * @return string The post content.

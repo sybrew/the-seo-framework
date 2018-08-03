@@ -837,7 +837,7 @@ class Generate_Url extends Generate_Title {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 Removed caching.
-	 * @todo deprecate
+	 * @todo deprecate, use property `the_seo_framework()->pretty_permalinks` instead.
 	 *
 	 * @return string permalink structure.
 	 */

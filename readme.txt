@@ -319,9 +319,7 @@ TODO: RTL stylesheet update.
 TODO: Follow progression of https://github.com/Automattic/jetpack/pull/9912, and see if we might need to implement it ourselves.
 	Track/adjust readme changes: --JETPACK
 TODO: Regression: Title compatibility test --UltimateMember has been fixed thus far.
-TODO: Regression? Home page title (not addition) is stripped (partially) in the front-page-inpost i18n $defaultTitle tag.
-TODO: Regression: HTML tags are now stripped from singular post types. This is due to WP's filters with strip_tags(). https://github.com/sybrew/the-seo-framework/issues/270#issuecomment-407602299
-TODO: Regression? s_title_raw() doesn't run on the example titles.
+TODO: Regression: Emptying the home page title tagline when one was set will show its inputted value as a placeholder. PHP issue, not JS.
 
 TODO: Update plugin setup guide, as pagination settings have been updated.
 
@@ -462,6 +460,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* The SEO Bar no longer incorretly tells that CPT categories or tags are discouraged from indexing via the global settings.
 		* WC Shop and Blog Pages canonical URLs now correctly output pagination.
 		* The title metabox's example title (from the latest post) can now be substituted for the example title when empty.
+		* Term titles no longer have their HTML tags stripped in the generated SEO titles by default.
 		* When no blog description or tagline is set, the left/right example titles are no longer partially emptied when JS is deactivated.
 		* Duplicated spaces are no longer counted by the pixel and character counters, and they'll be removed from the front-end output.
 
@@ -680,6 +679,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* **Changed:**
 			* In class: `\The_SEO_Framework\Admin_Pages` -- Factory: `the_seo_framework()`
 				* `notices()` is now marked private.
+				* `output_character_counter_wrap()` no longer uses the second parameter, and its complete output is now hidden from no-js.
 			* In class: `\The_SEO_Framework\Generate_Url` -- Factory: `the_seo_framework()`
 				* `set_url_scheme()`, the third parameter is now deprecated and shouldn't be used.
 				* `get_shortlink()`:

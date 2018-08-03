@@ -300,6 +300,8 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_raw_generated_title( $args = null ) {
 
+		$this->remove_default_title_filters();
+
 		if ( null === $args ) {
 			$title = $this->generate_title_from_query();
 		} else {
@@ -312,7 +314,63 @@ class Generate_Title extends Generate_Description {
 			$title = $this->generate_title_from_args( $args );
 		}
 
+		$this->reset_default_title_filters();
+
 		return $title ?: $this->get_static_untitled_title();
+	}
+
+	/**
+	 * Removes default title filters, for consistent output and sanitation.
+	 *
+	 * @since 3.1.0
+	 * @internal Only to be used within $this->get_raw_generated_title()
+	 * @staticvar array $filtered An array containing removed filters.
+	 * Peformance test: 0.000005s per remove+reset on PHP 7.2, single core VPN.
+	 *
+	 * @param bool $reset Whether to reset the removed filters
+	 */
+	protected function remove_default_title_filters( $reset = false ) {
+
+		static $filtered = [];
+
+		if ( $reset ) {
+			foreach ( $filtered as $filter => $priorities ) {
+				foreach ( $priorities as $priority => $functions ) {
+					foreach ( $functions as $function ) {
+						\add_filter( $filter, $function, $priority );
+					}
+				}
+			}
+			// Reset filters.
+			$filtered = [];
+		} else {
+			$filters   = [ 'single_post_title', 'single_cat_title', 'single_tag_title' ];
+			$functions = [ 'wptexturize', 'strip_tags' ];
+
+			foreach ( $filters as $filter ) {
+				foreach ( $functions as $function ) {
+					$it = 10;
+					$i  = 0;
+					while ( $priority = \has_filter( $filter, $function ) ) {
+						$filtered[ $filter ][ $priority ][] = $function;
+						\remove_filter( $filter, $function, $priority );
+						// Some noob might've destroyed \WP_Hook. Safeguard.
+						if ( ++$i > $it ) break 1;
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Resets default title filters, for consistent output and sanitation.
+	 *
+	 * @since 3.1.0
+	 * @internal Only to be used within $this->get_raw_generated_title()
+	 * @uses $this->remove_default_title_filters()
+	 */
+	protected function reset_default_title_filters() {
+		$this->remove_default_title_filters( true );
 	}
 
 	/**

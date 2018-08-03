@@ -411,8 +411,7 @@ class Site_Options extends Sanitize {
 	 * @uses $this->the_seo_framework_get_option() Return option from the options table and cache result.
 	 * @uses THE_SEO_FRAMEWORK_NETWORK_OPTIONS
 	 *
-	 * Unused.
-	 * @todo deprecate.
+	 * @todo deprecate, unused.
 	 *
 	 * @param string  $key       Option name.
 	 * @param boolean $use_cache Optional. Whether to use the cache value or not. Defaults to true.

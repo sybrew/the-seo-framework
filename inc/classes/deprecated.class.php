@@ -1151,7 +1151,6 @@ final class Deprecated {
 	 * @since 2.2.4
 	 * @since 3.0.0 Now uses WordPress permalinks.
 	 * @since 3.1.0 Deprecated.
-	 * @TODO deprecate.
 	 *
 	 * @param int $i The page number to generate the URL from.
 	 * @param int $post_id The post ID.

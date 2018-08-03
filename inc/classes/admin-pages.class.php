@@ -1119,15 +1119,17 @@ class Admin_Pages extends Inpost {
 	 * Outputs character counter wrap for both JavaScript and no-Javascript.
 	 *
 	 * @since 3.0.0
-	 * @since 3.1.0 Added an "what if you click" onhover-title.
+	 * @since 3.1.0 : 1. Added an "what if you click" onhover-title.
+	 *                2. Removed second parameter's usage. For passing the expected string.
+	 *                3. The whole output is now hidden from no-js.
 	 *
 	 * @param string $for     The input ID it's for.
-	 * @param string $initial The initial value for no-JS.
+	 * @param string $initial The initial value for no-JS. Deprecated.
 	 * @param bool   $display Whether to display the counter. (options page gimmick)
 	 */
 	public function output_character_counter_wrap( $for, $initial = '', $display = true ) {
 		vprintf(
-			'<div class="tsf-counter-wrap" %s><span class="description tsf-counter" title="%s">%s</span><span class="hide-if-no-js tsf-ajax"></span></div>',
+			'<div class="tsf-counter-wrap hide-if-no-js" %s><span class="description tsf-counter" title="%s">%s</span><span class="tsf-ajax"></span></div>',
 			[
 				( $display ? '' : 'style="display:none;"' ),
 				\esc_attr( 'Click to change the counter type', 'autodescription' ),
@@ -1137,7 +1139,7 @@ class Admin_Pages extends Inpost {
 					sprintf(
 						'<span id="%s_chars">%s</span>',
 						\esc_attr( $for ),
-						(int) mb_strlen( $initial )
+						0
 					)
 				),
 			]
