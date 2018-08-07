@@ -263,6 +263,7 @@ class Sanitize extends Admin_Pages {
 
 				'title_rem_additions',
 				'title_rem_prefixes',
+				'title_strip_tags',
 
 				'auto_description',
 				'description_additions',
@@ -1467,7 +1468,7 @@ class Sanitize extends Admin_Pages {
 	 * @since 3.1.0
 	 *
 	 * @param int $new_value Integer with potentially unwanted values.
-	 * @return int A limited integer 1<=R<=20000.
+	 * @return int A limited integer 1<=R<=50000.
 	 */
 	public function s_min_max_sitemap( $new_value ) {
 
@@ -1478,8 +1479,8 @@ class Sanitize extends Admin_Pages {
 			$new_value = $this->get_default_option( 'sitemap_query_limit' );
 		} elseif ( $new_value < 1 ) {
 			$new_value = 1;
-		} elseif ( $new_value > 20000 ) {
-			$new_value = 20000;
+		} elseif ( $new_value > 50000 ) {
+			$new_value = 50000;
 		}
 
 		return $new_value;

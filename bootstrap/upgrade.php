@@ -29,7 +29,22 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  *
  * @since 2.7.0
  * @access private
+ * @TODO convert to class, see \TSF_Extension_Manager\Upgrader
+ *       It's a generator/iterator, so we must wait to PHP>5.5 support.
  */
+
+/**
+ * Returns the default site options.
+ *
+ * @since 3.1.0
+ * @staticvar array $cache
+ *
+ * @return array The default site options.
+ */
+function the_seo_framework_upgrade_default_site_options() {
+	static $cache;
+	return isset( $cache ) ? $cache : $cache = the_seo_framework()->get_default_site_options();
+}
 
 the_seo_framework_previous_db_version(); // sets cache.
 /**
@@ -52,19 +67,28 @@ add_action( 'admin_init', 'the_seo_framework_do_upgrade', 20 );
  * Does an iteration of upgrades in order of upgrade appearance.
  * Each called function will upgrade the version by its iteration.
  *
- * Only works on WordPress 4.4 and later to ensure and force maximum compatibility.
- *
+ * @thanks StudioPress for some code.
  * @since 2.7.0
  * @since 2.9.4 No longer tests WP version. This file won't be loaded anyway if rendered incompatible.
  * @since 3.0.0 Fewer option calls are now made when version is higher than former checks.
  * @since 3.1.0 1. Now always updates the database version to the current version, even if it's ahead.
  *              2. No longer checks for WordPress upgrade, this is handled by WordPress in ..\wp-admin\admin.php, before admin_init.
- *
- * @thanks StudioPress for some code.
+ *              3. Now sets the initial database version to the previous version (if known), or the current version.
+ *              4. Now redirects from the SEO settings page, as the options can conflict during upgrade.
  */
 function the_seo_framework_do_upgrade() {
 
+	if ( the_seo_framework()->is_seo_settings_page( false ) ) {
+		wp_redirect( self_admin_url() );
+		exit;
+	}
+
 	$version = the_seo_framework_previous_db_version();
+
+	if ( ! get_option( 'the_seo_framework_initial_db_version' ) ) {
+		//* Sets to previous if previous is known. This is a late addition.
+		update_option( 'the_seo_framework_initial_db_version', $version ?: THE_SEO_FRAMEWORK_DB_VERSION, 'no' );
+	}
 
 	if ( $version >= THE_SEO_FRAMEWORK_DB_VERSION ) {
 		the_seo_framework_upgrade_to_current();
@@ -91,17 +115,19 @@ function the_seo_framework_do_upgrade() {
 		the_seo_framework_do_upgrade_3060();
 		$version = '3060';
 	}
+
 	//! From here, the upgrade procedures should be backward compatible.
 	//? This means no data may be erased for at least 1 major version, or 1 year, whichever is later.
-	if ( $version < '3101' ) {
-		the_seo_framework_do_upgrade_3101();
-		$version = '3101';
+	if ( $version < '3102' ) {
+		the_seo_framework_do_upgrade_3102();
+		$version = '3102';
 	}
 
 	/**
 	 * @since 2.7.0
 	 */
 	do_action( 'the_seo_framework_upgraded' );
+
 }
 
 add_action( 'the_seo_framework_upgraded', 'the_seo_framework_upgrade_to_current' );
@@ -178,13 +204,20 @@ function the_seo_framework_prepare_extension_manager_suggestion() {
  * Upgrades term metadata for version 2701.
  *
  * @since 2.7.0
+ * @since 3.1.0 No longer tries to set term meta for ID 0.
+ *              `add_metadata()` already blocked this, this is defensive.
  */
 function the_seo_framework_do_upgrade_2701() {
 
 	$term_meta = get_option( 'autodescription-term-meta' );
 
-	foreach ( (array) $term_meta as $term_id => $meta ) {
-		add_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $meta, true );
+	if ( $term_meta ) {
+		foreach ( (array) $term_meta as $term_id => $meta ) {
+			add_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $meta, true );
+		}
+
+		//= Rudimentary test for remaining ~300 users of the past passed, set initial version to 2600.
+		update_option( 'the_seo_framework_initial_db_version', '2600' );
 	}
 
 	update_option( 'the_seo_framework_upgraded_db_version', '2701' );
@@ -198,10 +231,12 @@ function the_seo_framework_do_upgrade_2701() {
  */
 function the_seo_framework_do_upgrade_2802() {
 
-	the_seo_framework()->reinitialize_rewrite();
-
 	//* Delete old values from database. Removes backwards compatibility.
-	delete_option( 'autodescription-term-meta' );
+	if ( get_option( 'the_seo_framework_initial_db_version' ) < '2701' )
+		delete_option( 'autodescription-term-meta' );
+
+	if ( get_option( 'the_seo_framework_initial_db_version' ) < '2802' )
+		the_seo_framework()->reinitialize_rewrite();
 
 	update_option( 'the_seo_framework_upgraded_db_version', '2802' );
 }
@@ -211,19 +246,23 @@ function the_seo_framework_do_upgrade_2802() {
  * Invalidates object cache if changed.
  *
  * @since 2.9.0
+ * @since 3.1.0 Now only sets new options when defaults exists.
  */
 function the_seo_framework_do_upgrade_2900() {
 
-	$tsf = the_seo_framework();
+	$defaults = the_seo_framework_upgrade_default_site_options();
 
-	$card_type = trim( esc_attr( $tsf->get_option( 'twitter_card', false ) ) );
+	if ( isset( $defaults['twitter_card'] ) ) {
+		$tsf = the_seo_framework();
 
-	if ( 'photo' === $card_type ) {
-		$tsf->update_option( 'twitter_card', 'summary_large_image' );
-		$tsf->delete_object_cache();
-		the_seo_framework_add_upgrade_notice(
-			esc_html__( 'Twitter Photo Cards have been deprecated. Your site now uses Summary Cards when applicable.', 'autodescription' )
-		);
+		$card_type = trim( esc_attr( $tsf->get_option( 'twitter_card', false ) ) );
+
+		if ( 'photo' === $card_type ) {
+			$tsf->update_option( 'twitter_card', 'summary_large_image' );
+			the_seo_framework_add_upgrade_notice(
+				esc_html__( 'Twitter Photo Cards have been deprecated. Your site now uses Summary Cards when applicable.', 'autodescription' )
+			);
+		}
 	}
 
 	update_option( 'the_seo_framework_upgraded_db_version', '2900' );
@@ -236,27 +275,32 @@ function the_seo_framework_do_upgrade_2900() {
  *
  * @since 3.0.0
  * @since 3.0.6 'display_character_counter' option now correctly defaults to 1.
+ * @since 3.1.0 Now only sets new options when defaults exist, and when it's an upgraded site.
  */
 function the_seo_framework_do_upgrade_3001() {
 
 	$tsf = the_seo_framework();
 
-	$timestamp_format = $tsf->get_option( 'sitemap_timestamps', false );
-	//= Only change if option exists. Falls back to default upgrader instead.
-	if ( '' !== $timestamp_format ) {
-		$tsf->update_option( 'timestamps_format', (string) (int) $timestamp_format );
-		//= Only set notice if an actual upgrade took place. (redundancy check)
-		if ( the_seo_framework_previous_db_version() > '0' ) {
+	$defaults = the_seo_framework_upgrade_default_site_options();
+
+	if ( isset( $defaults['timestamps_format'] ) ) {
+		//= Only change if old option exists. Falls back to default upgrader otherwise.
+		$timestamp_format = $tsf->get_option( 'sitemap_timestamps', false );
+		if ( '' !== $timestamp_format ) {
+			$tsf->update_option( 'timestamps_format', (string) (int) $timestamp_format );
 			the_seo_framework_add_upgrade_notice(
 				esc_html__( 'The previous sitemap timestamp settings have been converted into new global timestamp settings.', 'autodescription' )
 			);
 		}
 	}
 
-	$tsf->update_option( 'display_character_counter', 1 );
-	$tsf->update_option( 'display_pixel_counter', 1 );
+	if ( get_option( 'the_seo_framework_initial_db_version' ) < '3001' ) {
+		if ( isset( $defaults['display_character_counter'] ) )
+			$tsf->update_option( 'display_character_counter', $defaults['display_character_counter'] );
 
-	$tsf->delete_object_cache();
+		if ( isset( $defaults['display_pixel_counter'] ) )
+			$tsf->update_option( 'display_pixel_counter', $defaults['display_pixel_counter'] );
+	}
 
 	update_option( 'the_seo_framework_upgraded_db_version', '3001' );
 }
@@ -269,7 +313,8 @@ function the_seo_framework_do_upgrade_3001() {
  */
 function the_seo_framework_do_upgrade_3060() {
 
-	the_seo_framework()->delete_cache( 'sitemap' );
+	if ( get_option( 'the_seo_framework_initial_db_version' ) < '3060' )
+		the_seo_framework()->delete_cache( 'sitemap' );
 
 	the_seo_framework_prepare_extension_manager_suggestion();
 
@@ -277,54 +322,64 @@ function the_seo_framework_do_upgrade_3060() {
 }
 
 /**
- * Adds caching option.
+ * Adds global cache option.
+ * Sets `auto_description` option.
+ * Migrates `title_seperator` option to `title_separator`.
+ * Sets `sitemap_query_limit` option.
+ * Sets `title_strip_tags` option to known behavior.
+ * Migrates `attachment_noindex` option to post type settings.
+ * Migrates `attachment_nofollow` option to post type settings.
+ * Migrates `attachment_noarchive` option to post type settings.
+ *
  * Loads suggestion for TSFEM.
- * Updates title separator option.
- * Updates auto description option.
- * Migrates atachment indexing options.
  *
  * @since 3.1.0
- * TODO register callback to this.
  */
-function the_seo_framework_do_upgrade_3101() {
-	// TODO Make this work:
-	// It should get the default option keys and compare them to the database entries. Then, it should fill in the missing indexes.
-	// the_seo_framework_parse_new_options();
-	// TODO Title Seperator -> Title Separator? Now would be a great time ;)
-
-	$tsf = the_seo_framework();
-
-	// Enable auto description.
-	$tsf->update_option( 'auto_description', 1 );
-
-	$tsf->update_option( 'title_separator', $tsf->get_option( 'title_seperator' ) );
-
-	$tsf->update_option( 'sitemap_query_limit', 1200 );
+function the_seo_framework_do_upgrade_3102() {
 
 	// Prevent database lookups when checking for cache.
 	add_option( THE_SEO_FRAMEWORK_SITE_CACHE, [] );
 
-	if ( $tsf->get_option( 'attachment_noindex' ) ) {
-		$_option = $tsf->get_robots_post_type_option_id( 'noindex' );
-		$_value = $tsf->get_option( $_option ) ?: [];
-		$_value['attachment'] = 1;
-		$tsf->update_option( $_option, $_value );
+	$tsf = the_seo_framework();
+
+	$defaults = the_seo_framework_upgrade_default_site_options();
+
+	// Transport title separator.
+	if ( isset( $defaults['title_separator'] ) )
+		$tsf->update_option( 'title_separator', $tsf->get_option( 'title_seperator' ) ?: $defaults['title_separator'] );
+
+	// Transport attachment_noindex, attachment_nofollow, and attachment_noarchive settings.
+	foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $_rtype ) {
+		$_option = $tsf->get_robots_post_type_option_id( $_rtype );
+		if ( isset( $defaults[ $_option ] ) ) {
+			if ( $tsf->get_option( 'attachment_' . $_rtype ) ) {
+				$_value = (array) ( $tsf->get_option( $_option ) ?: [] );
+				$_value['attachment'] = 1;
+				$tsf->update_option( $_option, $_value );
+			} elseif ( get_option( 'the_seo_framework_initial_db_version' ) < '3102' ) {
+				$tsf->update_option( $_option, [] );
+			}
+		}
 	}
-	if ( $tsf->get_option( 'attachment_nofollow' ) ) {
-		$_option = $tsf->get_robots_post_type_option_id( 'nofollow' );
-		$_value = $tsf->get_option( $_option ) ?: [];
-		$_value['attachment'] = 1;
-		$tsf->update_option( $_option, $_value );
-	}
-	if ( $tsf->get_option( 'attachment_noarchive' ) ) {
-		$_option = $tsf->get_robots_post_type_option_id( 'noarchive' );
-		$_value = $tsf->get_option( $_option ) ?: [];
-		$_value['attachment'] = 1;
-		$tsf->update_option( $_option, $_value );
+
+	// If it's an older installation, check for these options.
+	if ( get_option( 'the_seo_framework_initial_db_version' ) < '3102' ) {
+
+		// Adds default auto description option.
+		if ( isset( $defaults['auto_description'] ) )
+			$tsf->update_option( 'auto_description', $defaults['auto_description'] );
+
+		// Add default sitemap limit option.
+		if ( isset( $defaults['sitemap_query_limit'] ) )
+			$tsf->update_option( 'sitemap_query_limit', $defaults['sitemap_query_limit'] );
+
+		// Add non-default HTML stripping option. Defaulting to previous behavior.
+		if ( isset( $defaults['title_strip_tags'] ) )
+			$tsf->update_option( 'title_strip_tags', 0 );
 	}
 
 	// Might they've missed it half a year ago, here it is again.
 	the_seo_framework_prepare_extension_manager_suggestion();
 
-	update_option( 'the_seo_framework_upgraded_db_version', '3101' );
+	update_option( 'the_seo_framework_upgraded_db_version', '3102' );
 }

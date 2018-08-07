@@ -116,7 +116,7 @@ switch ( $instance ) :
 		$this->description( __( 'The sitemap is generated with three queries: Pages, Posts, and other Post Types. This setting affects how many posts are requested from the database per query. The home and blog pages are included separately.', 'autodescription' ) );
 		?>
 		<p>
-			<input type="number" min=1 max=20000 name="<?php $this->field_name( 'sitemap_query_limit' ); ?>" id="<?php $this->field_id( 'sitemap_query_limit' ); ?>" placeholder="<?php echo $this->get_default_option( 'sitemap_query_limit' ); ?>" value="<?php echo absint( $this->get_option( 'sitemap_query_limit' ) ); ?>" />
+			<input type="number" min=1 max=50000 name="<?php $this->field_name( 'sitemap_query_limit' ); ?>" id="<?php $this->field_id( 'sitemap_query_limit' ); ?>" placeholder="<?php echo $this->get_default_option( 'sitemap_query_limit' ); ?>" value="<?php echo absint( $this->get_option( 'sitemap_query_limit' ) ); ?>" />
 		</p>
 		<?php
 		$this->description( __( 'Consider lowering this value when the sitemap fails to generate.', 'autodescription' ) );

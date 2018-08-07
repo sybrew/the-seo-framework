@@ -12,13 +12,13 @@ $instance = $this->get_view_instance( 'the_seo_framework_title_metabox', $instan
 switch ( $instance ) :
 	case 'the_seo_framework_title_metabox_main':
 		$latest_post_id = $this->get_latest_post_id();
+		$title = '';
 
 		if ( $latest_post_id ) {
-			$post  = get_post( $latest_post_id, OBJECT );
-			$title = $post ? trim( esc_attr( $post->post_title ) ) : '';
+			$title = $this->get_raw_generated_title( [ 'id' => $latest_post_id ] );
 		}
 
-		$title = $title ?: esc_attr__( 'Example Post Title', 'autodescription' );
+		$title = $this->s_title( $title ?: __( 'Example Post Title', 'autodescription' ) );
 
 		$blogname = $this->get_blogname();
 		$sep      = $this->get_separator( 'title' );
@@ -107,24 +107,32 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_title_metabox_general':
-		$title_separator = $this->get_separator_list();
-		$recommended = ' class="tsf-recommended" title="' . esc_attr__( 'Recommended', 'autodescription' ) . '"';
-
-		// FIXME: What a mess...
 		?>
-		<fieldset>
-			<legend>
-				<h4><?php esc_html_e( 'Title Separator', 'autodescription' ); ?></h4>
-				<?php $this->description( __( 'If the title consists of two parts (original title and optional addition), then the separator will go in-between them.', 'autodescription' ) ); ?>
-			</legend>
-			<p id="tsf-title-separator" class="tsf-fields">
-			<?php foreach ( $title_separator as $name => $html ) : ?>
-				<input type="radio" name="<?php $this->field_name( 'title_separator' ); ?>" id="<?php $this->field_id( 'title_separator_' . $name ); ?>" value="<?php echo esc_attr( $name ); ?>" <?php checked( $this->get_option( 'title_separator' ), $name ); ?> />
-				<label for="<?php $this->field_id( 'title_separator_' . $name ); ?>" <?php echo in_array( $name, [ 'dash', 'pipe' ], true ) ? $recommended : ''; ?>><?php echo esc_html( $html ); ?></label>
-			<?php endforeach; ?>
-			</p>
-		</fieldset>
+		<h4><?php esc_html_e( 'Automated Title Settings', 'autodescription' ); ?></h4>
 		<?php
+		$this->description( 'A title is generated for every page.', 'autodescription' );
+		$this->description( 'Some titles may have HTML tags inserted by the author for styling.', 'autodescription' );
+
+		$info = $this->make_info(
+			sprintf(
+				/* translators: %s = HTML tag example */
+				__( 'This strips HTML tags, like %s, from the title.', 'autodescription' ),
+				'<code>&amp;lt;strong&amp;gt;</code>' // Double escape html with ampersands... brilliant.
+			),
+			'',
+			false
+		);
+		$this->wrap_fields(
+			$this->make_checkbox(
+				'title_strip_tags',
+				esc_html__( 'Strip HTML tags from generated titles?', 'autodescription' ) . ' ' . $info,
+				'',
+				false
+			),
+			true
+		);
+
+		$this->description( __( 'Tip: It is a bad practice to style titles with HTML as inconsistent behavior might occur.', 'autodescription' ) );
 		break;
 
 	case 'the_seo_framework_title_metabox_additions':
@@ -158,6 +166,26 @@ switch ( $instance ) :
 				</span>
 			</p>
 			<?php $this->description( $home_page_has_option ); ?>
+		</fieldset>
+
+		<hr>
+		<?php
+		$title_separator = $this->get_separator_list();
+		$recommended = ' class="tsf-recommended" title="' . esc_attr__( 'Recommended', 'autodescription' ) . '"';
+
+		// FIXME: What a mess...
+		?>
+		<fieldset>
+			<legend>
+				<h4><?php esc_html_e( 'Title Separator', 'autodescription' ); ?></h4>
+				<?php $this->description( __( 'If the title consists of two parts (original title, pagination, and blogname), then the separator will go in-between them.', 'autodescription' ) ); ?>
+			</legend>
+			<p id="tsf-title-separator" class="tsf-fields">
+			<?php foreach ( $title_separator as $name => $html ) : ?>
+				<input type="radio" name="<?php $this->field_name( 'title_separator' ); ?>" id="<?php $this->field_id( 'title_separator_' . $name ); ?>" value="<?php echo esc_attr( $name ); ?>" <?php checked( $this->get_option( 'title_separator' ), $name ); ?> />
+				<label for="<?php $this->field_id( 'title_separator_' . $name ); ?>" <?php echo in_array( $name, [ 'dash', 'pipe' ], true ) ? $recommended : ''; ?>><?php echo esc_html( $html ); ?></label>
+			<?php endforeach; ?>
+			</p>
 		</fieldset>
 
 		<hr>

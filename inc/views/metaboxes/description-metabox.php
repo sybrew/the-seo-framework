@@ -63,7 +63,7 @@ switch ( $instance ) :
 			__( 'A description can be automatically generated for every page.', 'autodescription' )
 		);
 		$this->description(
-			__( 'This automatically enables support for Open Graph and Twitter Cards. Therefore, it is best to leave this option enabled.', 'autodescription' )
+			__( 'Open Graph and Twitter Cards require descriptions. Therefore, it is best to leave this option enabled.', 'autodescription' )
 		);
 
 		//* Echo checkboxes.

@@ -266,6 +266,8 @@ NOTE: ref: https://theseoframework.com/?p=1792
 * TODO
 * Attachment Pages are now known as "Media".
 
+TODO note about that some options have been relocated.
+
 **For everyone: Better and faster titles**
 
 * Over the years, the title generation code became bigger, unsustainable, and eventually unmaintainable. So, it's now rewritten to almost half its previous size, being more straightforward and logical, without sacrificing any important features. In fact, we've added new features.
@@ -320,6 +322,7 @@ TODO: Follow progression of https://github.com/Automattic/jetpack/pull/9912, and
 	Track/adjust readme changes: --JETPACK
 TODO: Regression: Title compatibility test --UltimateMember has been fixed thus far.
 TODO: Regression: Emptying the home page title tagline when one was set will show its inputted value as a placeholder. PHP issue, not JS.
+TODO: Retest the upgrading process (new installation & attachment robots).
 
 TODO: Update plugin setup guide, as pagination settings have been updated.
 
@@ -327,6 +330,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 	* **Added:**
 		* TODO
 		* New title options, including:
+			* A toggle that strips HTML tags, like WordPress normally does.
 			* TODO A toggle that disabled title additions when a manual title is used.
 		* New description options, including:
 			* A toggle for automated descriptions.
@@ -362,6 +366,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* Code and URL input types (Twitter profile, Webmasters' verification codes) now always flow from left to right, even if your site's written language setting is otherwise.
 		* Tooltip arrows now always follow your mouse, for a more natural look.
 		* Tooltips now support RTL screens without the arrow overflowing.
+		* Tooltip arrows are now indented twice the size of a small object, like with `[?]`, giving them a more prominent look.
 		* Canonical, redirect, and image URLs are no longer uselessly suggested by the browser for the administrative input fields.
 		* The Facebook Business page URL description has been updated, to be in line with the current behavior.
 		* TODO Open Graph data validation (e.g. missing descriptions).
@@ -382,7 +387,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* The SEO Bar is now capable of articulating post type names, instead of only term names.
 		* In the robots settings meta box, we've added a descriptive warning for the sitewide `nofollow` and `noarchive` settings.
 		* In the homepage settings meta box, and on the in-post metabox for the homepage, we've added a descriptive warning for the `nofollow` and `noarchive` settings.
-		* The primary term selector tooltip now states the human readible and translatable name, instead of the static code name.
+		* The primary term selector tooltip now states the human readible and translatable (archive type) name, instead of the static code name.
 		* WC Shop and Blog Pages now have "rel=prev/next" canonical URLs added when link relationship tags are enabled for archives.
 		* WC Shop and Blog Pages now listen to the global pagination robots' "noindex" settings.
 		* Long URLs are now truncated in the sitemap stylesheet. This does not affect the sitemap itself, nor how search engines see the URLs.
@@ -396,6 +401,8 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 			* The overflowing is caused by a bug in Internet Explorer 6, which Firefox happily integrated, affecting roughly 30% of their users.
 			* In short, [Gecko ignores word-wrap values in tables](https://bugzilla.mozilla.org/show_bug.cgi?id=587438), and for [13 years running](https://bugzilla.mozilla.org/show_bug.cgi?id=307866), Firefox ignores overflow-preventing width values. Both these bugs combined cause mayhem.
 		* TODO maybe: Webmasters' code input now automatically stripts extraneous HTML. So, you can simply paste the code you copied from the analytical setup interfaces.
+		* The upgrade routine is now more intelligent, and is now able to skip upgrades that aren't necessary for new installations.
+		* The upgrade routine can no longer happen on the SEO Settings page; instead, it redirects you from it to prevent setting desynchronization.
 	* **Changed:**
 		* TSF now requires WordPress 4.6 (previously 4.4).
 		* TSF now requires PHP 5.4 (previously 5.3).
@@ -457,6 +464,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* Invalid settings' input are now checked before you can change tabs. This makes the saving buttons work as intended.
 			* TODO consider checking closed postboxes too.... we could add an on-publish listener that checks if our postboxes are closed, and open them if they contain invalid values.
 				* `jQuery( elem ).find( '.hndle, .handlediv' ).trigger( 'click.postboxes' );`
+			* TODO tsf.tabToggle, at the try/catch block, will fatally fail the try when the sitemap's box is closed on-load, and when it's below 1 or above 50000 (test via upgrader).
 		* The SEO Bar no longer incorretly tells that CPT categories or tags are discouraged from indexing via the global settings.
 		* WC Shop and Blog Pages canonical URLs now correctly output pagination.
 		* The title metabox's example title (from the latest post) can now be substituted for the example title when empty.
@@ -488,6 +496,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 			* `(array) the_seo_framework()->get_robots_post_type_option_id( 'nofollow' )`
 			* `(array) the_seo_framework()->get_robots_post_type_option_id( 'noarchive' )`
 			* `(int) (bool) auto_description`
+			* `(int) (bool) title_strip_tags`
 			* `(string) homepage_og_title`
 			* `(string) homepage_og_description`
 			* `(string) homepage_twitter_title`
@@ -496,6 +505,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* The sitemap xsl stylesheet now has its colors defined in various `xsl:variable` elements. It's also completely reconfigurable via hooks.
 		* The plugin now initializes options cache. For instance, when the plugin's activated a temporarily value will be set that it did.
 		* Various JS functions and class objects have been introduced. These are available via the API, but shouldn't be used as the JS API is still under consideration and can change at any update.
+		* An initial database version option has been added. This is `the_seo_framework_initial_db_version`, it's only used in the upgrading process, and it's not autoloaded.
 	* **Improved:**
 		* A "doing it wrong" notice is now supplied when calling `the_seo_framework()` too early.
 		* Fixed all "non-passive event listener" warnings caused by jQuery, by using our improved own event handlers.

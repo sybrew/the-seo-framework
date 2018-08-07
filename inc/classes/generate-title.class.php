@@ -345,7 +345,16 @@ class Generate_Title extends Generate_Description {
 			$filtered = [];
 		} else {
 			$filters   = [ 'single_post_title', 'single_cat_title', 'single_tag_title' ];
-			$functions = [ 'wptexturize', 'strip_tags' ];
+			/**
+			 * Texturization happens when outputting and saving the title; however,
+			 * we want the raw title, so we won't find unexplainable issues later.
+			 */
+			$functions = [ 'wptexturize' ];
+
+			// TODO: Is this the right location for this option check?
+			if ( ! $this->get_option( 'title_strip_tags' ) ) {
+				$functions[] = 'strip_tags';
+			}
 
 			foreach ( $filters as $filter ) {
 				foreach ( $functions as $function ) {

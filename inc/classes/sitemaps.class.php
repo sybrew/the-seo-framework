@@ -1238,10 +1238,9 @@ class Sitemaps extends Metaboxes {
 	 *
 	 * @since 2.3.0
 	 * @access private
-	 * @staticvar bool $flush Only true
+	 * @staticvar bool $flush
 	 *
 	 * @param bool $enqueue Whether to enqueue the flush or return its state.
-	 *
 	 * @return bool Whether to flush.
 	 */
 	public function enqueue_rewrite_activate( $enqueue = false ) {
@@ -1265,7 +1264,6 @@ class Sitemaps extends Metaboxes {
 	 * @staticvar bool $flush Only true
 	 *
 	 * @param bool $enqueue Whether to enqueue the flush or return its state.
-	 *
 	 * @return bool Whether to flush.
 	 */
 	public function enqueue_rewrite_deactivate( $enqueue = false ) {

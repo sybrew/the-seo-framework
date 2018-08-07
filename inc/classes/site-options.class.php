@@ -124,13 +124,13 @@ class Site_Options extends Sanitize {
 			'title_location'      => $titleloc, // Title separation location
 			'title_rem_additions' => 0,         // Remove title additions
 			'title_rem_prefixes'  => 0,         // Remove title prefixes from archives.
+			'title_strip_tags'    => 1,         // Apply 'strip tags' on titles.
 
 			// Description.
 			'auto_description'      => 1, // Enables auto description.
 			'description_separator' => 'pipe', // Description separator, dropdown
 			'description_additions' => 0,  // "Title on Blogname" within Description
 			'description_blogname'  => 1,  // "on Blogname" within Description
-			//	'description_custom'    => '', // Custom prefix TODO
 
 			// Robots directory.
 			'noydir' => 1, // Site noydir robots settings

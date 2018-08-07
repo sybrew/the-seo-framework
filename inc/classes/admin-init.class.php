@@ -336,7 +336,6 @@ class Admin_Init extends Init {
 		$home_tagline = $this->get_option( 'homepage_title_tagline' );
 		$title_location = $this->get_option( 'title_location' );
 		$title_add_additions = $this->use_title_branding();
-		$counter_type = (int) $this->get_user_option( 0, 'counter_type', 3 );
 
 		$title_separator = $this->get_separator( 'title' );
 		$description_separator = $this->get_separator( 'description' );
@@ -346,8 +345,6 @@ class Admin_Init extends Init {
 		$is_post_edit = $this->is_post_edit();
 		$is_term_edit = $this->is_term_edit();
 		$has_input = $is_settings_page || $is_post_edit || $is_term_edit;
-
-		$post_type = $is_post_edit ? \get_post_type( $id ) : false;
 
 		$page_on_front = $this->has_page_on_front();
 
@@ -444,17 +441,18 @@ class Admin_Init extends Init {
 				'isRTL'               => (bool) \is_rtl(),
 				'isHome'              => $ishome,
 				'hasInput'            => $has_input,
-				'counterType'         => \absint( $counter_type ),
+				'counterType'         => \absint( $this->get_user_option( 0, 'counter_type', 3 ) ),
 				'useTagline'          => $use_additions,
 				'useTermPrefix'       => $use_term_prefix,
 				'isSettingsPage'      => $is_settings_page,
 				'isPostEdit'          => $is_post_edit,
 				'isTermEdit'          => $is_term_edit,
-				'postType'            => $post_type,
+				'postType'            => $is_post_edit ? \get_post_type( $id ) : false,
 				'isPrivate'           => $has_input && $id && $this->is_private( $id ),
 				'isPasswordProtected' => $has_input && $id && $this->is_password_protected( $id ),
 				'debug'               => $this->script_debug,
 				'homeLocks'           => $social_settings_locks,
+				'stripTitleTags'      => (bool) $this->get_option( 'title_strip_tags' ),
 			],
 			'i18n'   => [
 				'saveAlert'      => \__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
@@ -603,7 +601,7 @@ class Admin_Init extends Init {
 		if ( empty( $page ) )
 			return;
 
-		$url = html_entity_decode( \menu_page_url( $page, false ) );
+		$url = html_entity_decode( \menu_page_url( $page, false ) ); // This can be empty... TODO test?
 
 		foreach ( $query_args as $key => $value ) {
 			if ( empty( $key ) || empty( $value ) )
