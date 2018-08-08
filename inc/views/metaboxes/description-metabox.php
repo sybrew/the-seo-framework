@@ -82,7 +82,7 @@ switch ( $instance ) :
 		$language = $this->google_language();
 
 		$blogname = $this->escape_description( $this->get_blogname() );
-		$sep = $this->get_separator( 'description' );
+		$sep = esc_html( $this->get_separator( 'description' ) );
 
 		//* Generate example.
 		$page_title = $this->escape_description( __( 'Example Title', 'autodescription' ) );

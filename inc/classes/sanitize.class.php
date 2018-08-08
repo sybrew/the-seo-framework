@@ -139,7 +139,7 @@ class Sanitize extends Admin_Pages {
 			$_option = $this->get_option( $this->get_robots_post_type_option_id( $r ), false );
 			$_media_option = ! empty( $_option['attachment'] ) ? $_option['attachment'] : 0;
 
-			$this->update_option( 'attachment_' . $r, $_media_option );
+			$this->update_option( "attachment_$r", $_media_option );
 		endforeach;
 
 		end:;

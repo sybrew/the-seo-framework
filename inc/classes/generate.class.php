@@ -178,49 +178,29 @@ class Generate extends User_Data {
 	 * Returns cached and parsed separator option.
 	 *
 	 * @since 2.3.9
-	 * @staticvar array $sepcache The separator cache.
-	 * @staticvar array $sep_esc The escaped separator cache.
+	 * @since 3.1.0 : 1. Removed caching.
+	 *                2. Removed escaping parameter.
 	 *
 	 * @param string $type The separator type. Used to fetch option.
-	 * @param bool $escape Escape the separator.
 	 * @return string The separator.
 	 */
-	public function get_separator( $type = 'title', $escape = true ) {
+	public function get_separator( $type = 'title' ) {
 
-		static $sep_esc = [];
+		$sep_option = $this->get_option( $type . '_separator' );
 
-		if ( isset( $sep_esc[ $type ][ $escape ] ) )
-			return $sep_esc[ $type ][ $escape ];
-
-		static $sepcache = [];
-
-		if ( ! isset( $sepcache[ $type ] ) ) {
-			if ( 'title' === $type ) {
-				$sep_option = $this->get_option( 'title_separator' );
-			} else {
-				$sep_option = $this->get_option( $type . '_separator' );
-			}
-
-			if ( 'pipe' === $sep_option ) {
-				$sep = '|';
-			} elseif ( 'dash' === $sep_option ) {
-				$sep = '-';
-			} elseif ( '' !== $sep_option ) {
-				//* Encapsulate within html entities.
-				$sep = '&' . $sep_option . ';';
-			} else {
-				//* Nothing found.
-				$sep = '|';
-			}
-
-			$sepcache[ $type ] = $sep;
-		}
-
-		if ( $escape ) {
-			return $sep_esc[ $type ][ $escape ] = \esc_html( $sepcache[ $type ] );
+		if ( 'pipe' === $sep_option ) {
+			$sep = '|';
+		} elseif ( 'dash' === $sep_option ) {
+			$sep = '-';
+		} elseif ( '' !== $sep_option ) {
+			//* Encapsulate within html entities.
+			$sep = '&' . $sep_option . ';';
 		} else {
-			return $sep_esc[ $type ][ $escape ] = $sepcache[ $type ];
+			//* Nothing found.
+			$sep = '|';
 		}
+
+		return $sep;
 	}
 
 	/**

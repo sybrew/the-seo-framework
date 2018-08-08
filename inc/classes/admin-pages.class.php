@@ -462,7 +462,10 @@ class Admin_Pages extends Inpost {
 
 		//* Make sure the scripts are loaded.
 		$this->init_admin_scripts();
-		$this->Scripts()::enqueue();
+
+		//! PHP 5.4 compat: put in var.
+		$scripts = $this->Scripts();
+		$scripts::enqueue();
 
 		if ( 'warning' === $type )
 			$type = 'notice-warning';

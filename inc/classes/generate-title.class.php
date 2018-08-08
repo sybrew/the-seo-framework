@@ -860,15 +860,14 @@ class Generate_Title extends Generate_Description {
 	 * @return string The Separator, unescaped.
 	 */
 	public function get_title_separator() {
-		static $sep = null;
+		static $sep;
 		/**
-		 * Applies filters 'the_seo_framework_title_separator'
 		 * @since 2.3.9
 		 * @param string $eparator The title separator
 		 */
 		return isset( $sep )
-			 ? $sep
-			 : $sep = (string) \apply_filters( 'the_seo_framework_title_separator', $this->get_separator( 'title', false ) );
+			? $sep
+			: $sep = (string) \apply_filters( 'the_seo_framework_title_separator', $this->get_separator( 'title' ) );
 	}
 
 	/**

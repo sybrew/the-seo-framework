@@ -564,6 +564,23 @@ class Core {
 	}
 
 	/**
+	 * Shortens string and adds ellipses when over a threshold in length.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param string $string The string to test and maybe trim
+	 * @param int    $over   The character limit. Must be over 0 to have effect.
+	 * @return string
+	 */
+	public function hellip_if_over( $string, $over = 0 ) {
+		if ( $over > 0 && strlen( $string ) > $over ) {
+			$string = substr( $string, 0, $over - 1 ) . '&hellip;';
+		}
+
+		return $string;
+	}
+
+	/**
 	 * Counts words encounters from input string.
 	 * Case insensitive. Returns first encounter of each word if found multiple times.
 	 *

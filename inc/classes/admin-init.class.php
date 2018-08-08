@@ -106,6 +106,7 @@ class Admin_Init extends Init {
 
 		if ( _has_run( __METHOD__ ) ) return;
 
+		//! PHP 5.4 compat: put in var. Also, we call it twice here...
 		$scripts = $this->Scripts();
 		/**
 		 * Applies filter 'the_seo_framework_scripts'.
@@ -206,7 +207,9 @@ class Admin_Init extends Init {
 		}
 		\wp_enqueue_media( $args );
 
-		$this->Scripts()::register( [
+		//! PHP 5.4 compat: put in var.
+		$scripts = $this->Scripts();
+		$scripts::register( [
 			'id'       => 'tsf-media',
 			'type'     => 'js',
 			'deps'     => [ 'jquery', 'tsf' ],
@@ -275,7 +278,9 @@ class Admin_Init extends Init {
 			];
 		}
 
-		$this->Scripts()::register( [
+		//! PHP 5.4 compat: put in var.
+		$scripts = $this->Scripts();
+		$scripts::register( [
 			[
 				'id'       => 'tsf-pt',
 				'type'     => 'js',
@@ -337,8 +342,8 @@ class Admin_Init extends Init {
 		$title_location = $this->get_option( 'title_location' );
 		$title_add_additions = $this->use_title_branding();
 
-		$title_separator = $this->get_separator( 'title' );
-		$description_separator = $this->get_separator( 'description' );
+		$title_separator = esc_html( $this->get_separator( 'title' ) );
+		$description_separator = esc_html( $this->get_separator( 'description' ) );
 
 		$ishome = false;
 		$is_settings_page = $this->is_seo_settings_page();
@@ -736,7 +741,7 @@ class Admin_Init extends Init {
 		$cropped = \wp_crop_image( $attachment_id, $data['x1'], $data['y1'], $data['width'], $data['height'], $data['dst_width'], $data['dst_height'] );
 
 		if ( ! $cropped || \is_wp_error( $cropped ) )
-			\wp_send_json_error( [ 'message' => \esc_js( \__( 'Image could not be processed.', 'autodescription' ) ) ] );
+			\wp_send_json_error( [ 'message' => \esc_js( \__( 'Image could not be processed.', 'default' ) ) ] );
 
 		switch ( $context ) :
 			case 'tsf-image':
@@ -796,7 +801,7 @@ class Admin_Init extends Init {
 				break;
 
 			default:
-				\wp_send_json_error( [ 'message' => \esc_js( \__( 'Image could not be processed.', 'autodescription' ) ) ] );
+				\wp_send_json_error( [ 'message' => \esc_js( \__( 'Image could not be processed.', 'default' ) ) ] );
 				break;
 		endswitch;
 

@@ -298,21 +298,6 @@ TODO note about that some options have been relocated.
 * With this introduction, most of the split-off code's API has been dropped, without deprecation. We plan to incorporate the new API into the Extension Manager, which now maintains its own versions of almost everything.
 * We've also removed the externs files, as we long moved to favor Babel, instead of Closure Compiler.
 
-**For everyone: Downgrade precautions:**
-
-* This plugin can be downgraded, and we try to allow downgrading without issues for at least one major version, or one year; whichever is later.
-* Sometimes, we need to go out of our way to make this possible; so, in this update, two settings require attention.
-
-1. Robots:
-	* When you downgrade from v3.1 to an earlier version of TSF, the Media/Attachment "noindex", "nofollow", and "noarchive" values may be reset.
-	* Double-check those settings when you do. It's found under "SEO Settings -> Robots Meta Settings". Labeled "Apply 'noindex/nofollow/noarchive' to Attachment Pages?"
-	* This is precautionary, because TSF maintains a copy of the old settings' keys and your values throughout the v3.1.x update cycle.
-	* So, although unlikely, failing to correctly reset this setting may cause your site to drop in SERP.
-2. Title Separator:
-	* The title separator option has been renamed as it was mispelled. This makes expanding the API more convenient.
-	* This separator may be reset to a pipe `|`.
-	* This is precautionary, because TSF maintains a copy of the old settings key and your value throughout the v3.1.x update cycle.
-
 ## Detailed log
 
 *Fred Brooks' law: "What one developer can do in one month, two developers can do in two months."*
@@ -322,7 +307,6 @@ TODO: Follow progression of https://github.com/Automattic/jetpack/pull/9912, and
 	Track/adjust readme changes: --JETPACK
 TODO: Regression: Title compatibility test --UltimateMember has been fixed thus far.
 TODO: Regression: Emptying the home page title tagline when one was set will show its inputted value as a placeholder. PHP issue, not JS.
-TODO: Retest the upgrading process (new installation & attachment robots).
 
 TODO: Update plugin setup guide, as pagination settings have been updated.
 
@@ -403,9 +387,16 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* TODO maybe: Webmasters' code input now automatically stripts extraneous HTML. So, you can simply paste the code you copied from the analytical setup interfaces.
 		* The upgrade routine is now more intelligent, and is now able to skip upgrades that aren't necessary for new installations.
 		* The upgrade routine can no longer happen on the SEO Settings page; instead, it redirects you from it to prevent setting desynchronization.
+		* The upgrade routine automatically registers the default site options for new sites, so the admin interface no longer needs to be accessed (once) for them to have effect.
+			* This is great for multisite setups that block the admin interface.
+			* It prevents/resolves all sorts of first-run bugs, like the sitemap's initial registration.
 	* **Changed:**
 		* TSF now requires WordPress 4.6 (previously 4.4).
 		* TSF now requires PHP 5.4 (previously 5.3).
+		* The upgrader can now run on the front-end, to prevent missing options (which could harm your site in ranking). This means, that when you have auto-plugin-update enabled, or left the admin dashboard before an update finished, or updated via a multisite network interface:
+			1. Some parts of the upgrade process doesn't run, like showing notifications of option changes. We will solve this in a later update, by enqueuing notifications.
+			2. If your site runs out of memory on the front-end, the upgrade process might cause a white screen. This is highly unlikely, and will resolve itself, because the upgrader keeps record of how far it's gotten. We will solve this in a later update by adding memory exhaustion checks.
+		* Upgrading from The SEO Framework 2.6.x or earlier is no longer reliable (a soft check was put in place), and we urge the ~100 webmasters still using it to reset and reconfigure their settings after updating. The upgrader was introduced in 2.7.0, and 2.7.0 or later versions will support upgrading indefinitely.
 		* URL input types (Canonical, Redirect) are now `url` instead of `text`. This means you need to supply a correct URL according to the browser, instead that only TSF checks for correctness after it's being saved.
 		* Term title prefixes are now applied to Open Graph and Twitter titles too.
 		* The [Schema.org effort states](https://schema.org/docs/faq.html#19) they're moving towards and are going to prefer HTTPS. So, after two years including some testing, we abide to be future-proof. Note that it's a parameter, not a link.
@@ -471,6 +462,8 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* Term titles no longer have their HTML tags stripped in the generated SEO titles by default.
 		* When no blog description or tagline is set, the left/right example titles are no longer partially emptied when JS is deactivated.
 		* Duplicated spaces are no longer counted by the pixel and character counters, and they'll be removed from the front-end output.
+		* Settings are now correctly registered before the plugin tries to upgrade.
+		* The sitemap is now correctly registered via `WP_Rewrite` when the plugin is installed for the first time.
 
 * **For translators:**
 	* **New translations are available.**
@@ -599,6 +592,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
 				* `get_view_location()`
 				* `_add_plugin_action_links()`, private.
+				* `hellip_if_over()`
 			* In class: `\The_SEO_Framework\Cache` -- Factory: `the_seo_framework()`
 				* `_insert_seo_meta_box()`, private.
 				* `get_sitemap_transient_name()`
@@ -690,6 +684,20 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 			* In class: `\The_SEO_Framework\Admin_Pages` -- Factory: `the_seo_framework()`
 				* `notices()` is now marked private.
 				* `output_character_counter_wrap()` no longer uses the second parameter, and its complete output is now hidden from no-js.
+			* In class: `\The_SEO_Framework\Cache` -- Factory: `the_seo_framework()`
+				* `setup_transient_names()` now runs at `plugins_loaded` priority 5 (via constructor), instead of 10 (via new action).
+			* In class `\The_SEO_Framework\Generate` -- Factory: `the_seo_framework()`
+				* `get_separator()`
+					1. Removed caching.
+					2. Removed escaping parameter, and the method no longer escapes the output.
+						* This will not lead to security issues, but it might lead to a stray visual ampersand when used incorrectly.
+						* Escaping should be done at the output, regardless.
+			* In class `\The_SEO_Framework\Generate_Title` -- Factory: `the_seo_framework()`
+				* For these methods, the first parameter is now expecting an array or null, instead of an ID only:
+					* `get_twitter_title()`
+					* `get_open_graph_title()`
+					* `get_generated_twitter_title()`
+					* `get_generated_open_graph_title()`
 			* In class: `\The_SEO_Framework\Generate_Url` -- Factory: `the_seo_framework()`
 				* `set_url_scheme()`, the third parameter is now deprecated and shouldn't be used.
 				* `get_shortlink()`:
@@ -702,14 +710,6 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 					2. Now sanitizes canonical URL according to permalink settings.
 					3. Removed second parameter. It was only a source of bugs.
 					4. Removed WordPress Core `get_pagenum_link` filter.
-			* In class: `\The_SEO_Framework\Cache` -- Factory: `the_seo_framework()`
-				* `setup_transient_names()` now runs at `plugins_loaded` priority 5 (via constructor), instead of 10 (via new action).
-			* In class `\The_SEO_Framework\Generate_Title` -- Factory: `the_seo_framework()`
-				* For these methods, the first parameter is now expecting an array or null, instead of an ID only:
-					* `get_twitter_title()`
-					* `get_open_graph_title()`
-					* `get_generated_twitter_title()`
-					* `get_generated_open_graph_title()`
 			* In class: `\The_SEO_Framework\Post_Data` -- Factory: `the_seo_framework()`
 				* `inattachment_seo_save()` is now marked private.
 				* `inpost_seo_save()` is now marked private.

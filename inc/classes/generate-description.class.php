@@ -526,6 +526,7 @@ class Generate_Description extends Generate {
 		 *
 		 * @since 2.5.0
 		 * @since 3.0.0 Now passes $args as the second parameter.
+		 * @since 3.1.0 Now listens to option.
 		 * @param bool  $autodescription Enable or disable the automated descriptions.
 		 * @param array $args            The description arguments.
 		 */
@@ -763,20 +764,17 @@ class Generate_Description extends Generate {
 	 * @return string The Separator, unescaped.
 	 */
 	public function get_description_separator() {
-
-		static $sep = null;
-
-		if ( isset( $sep ) )
-			return $sep;
-
+		static $sep;
 		/**
 		 * @since 2.3.9
 		 * @param string $sep The description separator.
 		 */
-		return $sep = (string) \apply_filters(
-			'the_seo_framework_description_separator',
-			$this->get_separator( 'description', false )
-		);
+		return isset( $sep )
+			? $sep
+			: $sep = (string) \apply_filters(
+				'the_seo_framework_description_separator',
+				$this->get_separator( 'description' )
+			);
 	}
 
 	/**

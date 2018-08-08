@@ -60,7 +60,7 @@ function the_seo_framework_previous_db_version() {
 	return isset( $cache ) ? $cache : $cache = get_option( 'the_seo_framework_upgraded_db_version', '0' );
 }
 
-add_action( 'admin_init', 'the_seo_framework_do_upgrade', 20 );
+add_action( 'init', 'the_seo_framework_do_upgrade', 20 );
 /**
  * Upgrade The SEO Framework to the latest version.
  *
@@ -75,13 +75,22 @@ add_action( 'admin_init', 'the_seo_framework_do_upgrade', 20 );
  *              2. No longer checks for WordPress upgrade, this is handled by WordPress in ..\wp-admin\admin.php, before admin_init.
  *              3. Now sets the initial database version to the previous version (if known), or the current version.
  *              4. Now redirects from the SEO settings page, as the options can conflict during upgrade.
+ *              5. Now always flushes rewrite rules after an upgrade.
+ *              6. Now registers the settings on the first run.
+ *              7. Now checks if The SEO Framework is loaded.
+ *              8. Now tries to increase memory limit. This probably isn't needed.
+ *              9. Now runs on the front-end, too, via `init`, instead of `admin_init`.
  */
 function the_seo_framework_do_upgrade() {
+
+	if ( ! the_seo_framework()->loaded ) return;
 
 	if ( the_seo_framework()->is_seo_settings_page( false ) ) {
 		wp_redirect( self_admin_url() );
 		exit;
 	}
+
+	\wp_raise_memory_limit( 'tsf_upgrade' );
 
 	$version = the_seo_framework_previous_db_version();
 
@@ -95,6 +104,10 @@ function the_seo_framework_do_upgrade() {
 		return;
 	}
 
+	if ( ! $version ) {
+		the_seo_framework_do_upgrade_1();
+		$version = '1';
+	}
 	if ( $version < '2701' ) {
 		the_seo_framework_do_upgrade_2701();
 		$version = '2701';
@@ -123,11 +136,12 @@ function the_seo_framework_do_upgrade() {
 		$version = '3102';
 	}
 
+	the_seo_framework()->reinitialize_rewrite();
+
 	/**
 	 * @since 2.7.0
 	 */
 	do_action( 'the_seo_framework_upgraded' );
-
 }
 
 add_action( 'the_seo_framework_upgraded', 'the_seo_framework_upgrade_to_current' );
@@ -194,10 +208,24 @@ function the_seo_framework_prepare_extension_manager_suggestion() {
 	static $run = false;
 	if ( $run ) return;
 
-	require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'tsfem-suggestion.php';
-	the_seo_framework_load_extension_manager_suggestion();
+	if ( is_admin() ) {
+		add_action( 'admin_init', function() {
+			require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'tsfem-suggestion.php';
+			the_seo_framework_load_extension_manager_suggestion();
+		}, 20 );
+	}
 
 	$run = true;
+}
+
+/**
+ * Sets initial values for The SEO Framework.
+ *
+ * @since 3.1.0
+ */
+function the_seo_framework_do_upgrade_1() {
+	the_seo_framework()->register_settings();
+	update_option( 'the_seo_framework_upgraded_db_version', '1' );
 }
 
 /**
@@ -235,9 +263,6 @@ function the_seo_framework_do_upgrade_2802() {
 	if ( get_option( 'the_seo_framework_initial_db_version' ) < '2701' )
 		delete_option( 'autodescription-term-meta' );
 
-	if ( get_option( 'the_seo_framework_initial_db_version' ) < '2802' )
-		the_seo_framework()->reinitialize_rewrite();
-
 	update_option( 'the_seo_framework_upgraded_db_version', '2802' );
 }
 
@@ -250,18 +275,19 @@ function the_seo_framework_do_upgrade_2802() {
  */
 function the_seo_framework_do_upgrade_2900() {
 
-	$defaults = the_seo_framework_upgrade_default_site_options();
+	if ( get_option( 'the_seo_framework_initial_db_version' ) < '2900' ) {
+		$defaults = the_seo_framework_upgrade_default_site_options();
 
-	if ( isset( $defaults['twitter_card'] ) ) {
-		$tsf = the_seo_framework();
+		if ( isset( $defaults['twitter_card'] ) ) {
+			$tsf = the_seo_framework();
 
-		$card_type = trim( esc_attr( $tsf->get_option( 'twitter_card', false ) ) );
-
-		if ( 'photo' === $card_type ) {
-			$tsf->update_option( 'twitter_card', 'summary_large_image' );
-			the_seo_framework_add_upgrade_notice(
-				esc_html__( 'Twitter Photo Cards have been deprecated. Your site now uses Summary Cards when applicable.', 'autodescription' )
-			);
+			$card_type = trim( esc_attr( $tsf->get_option( 'twitter_card', false ) ) );
+			if ( 'photo' === $card_type ) {
+				$tsf->update_option( 'twitter_card', 'summary_large_image' );
+				the_seo_framework_add_upgrade_notice(
+					esc_html__( 'Twitter Photo Cards have been deprecated. Your site now uses Summary Cards when applicable.', 'autodescription' )
+				);
+			}
 		}
 	}
 
@@ -279,22 +305,22 @@ function the_seo_framework_do_upgrade_2900() {
  */
 function the_seo_framework_do_upgrade_3001() {
 
-	$tsf = the_seo_framework();
-
-	$defaults = the_seo_framework_upgrade_default_site_options();
-
-	if ( isset( $defaults['timestamps_format'] ) ) {
-		//= Only change if old option exists. Falls back to default upgrader otherwise.
-		$timestamp_format = $tsf->get_option( 'sitemap_timestamps', false );
-		if ( '' !== $timestamp_format ) {
-			$tsf->update_option( 'timestamps_format', (string) (int) $timestamp_format );
-			the_seo_framework_add_upgrade_notice(
-				esc_html__( 'The previous sitemap timestamp settings have been converted into new global timestamp settings.', 'autodescription' )
-			);
-		}
-	}
-
 	if ( get_option( 'the_seo_framework_initial_db_version' ) < '3001' ) {
+		$tsf = the_seo_framework();
+
+		$defaults = the_seo_framework_upgrade_default_site_options();
+
+		if ( isset( $defaults['timestamps_format'] ) ) {
+			//= Only change if old option exists. Falls back to default upgrader otherwise.
+			$sitemap_timestamps = $tsf->get_option( 'sitemap_timestamps', false );
+			$tsf->update_option( 'timestamps_format', (string) (int) $sitemap_timestamps ?: $defaults['timestamps_format'] );
+			if ( '' !== $sitemap_timestamps ) {
+				the_seo_framework_add_upgrade_notice(
+					esc_html__( 'The previous sitemap timestamp settings have been converted into new global timestamp settings.', 'autodescription' )
+				);
+			}
+		}
+
 		if ( isset( $defaults['display_character_counter'] ) )
 			$tsf->update_option( 'display_character_counter', $defaults['display_character_counter'] );
 
@@ -340,30 +366,25 @@ function the_seo_framework_do_upgrade_3102() {
 	// Prevent database lookups when checking for cache.
 	add_option( THE_SEO_FRAMEWORK_SITE_CACHE, [] );
 
-	$tsf = the_seo_framework();
+	// If it's an older installation, upgrade these options.
+	if ( get_option( 'the_seo_framework_initial_db_version' ) < '3102' ) {
+		$tsf = the_seo_framework();
 
-	$defaults = the_seo_framework_upgrade_default_site_options();
+		$defaults = the_seo_framework_upgrade_default_site_options();
 
-	// Transport title separator.
-	if ( isset( $defaults['title_separator'] ) )
-		$tsf->update_option( 'title_separator', $tsf->get_option( 'title_seperator' ) ?: $defaults['title_separator'] );
+		// Transport title separator.
+		if ( isset( $defaults['title_separator'] ) )
+			$tsf->update_option( 'title_separator', $tsf->get_option( 'title_seperator' ) ?: $defaults['title_separator'] );
 
-	// Transport attachment_noindex, attachment_nofollow, and attachment_noarchive settings.
-	foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $_rtype ) {
-		$_option = $tsf->get_robots_post_type_option_id( $_rtype );
-		if ( isset( $defaults[ $_option ] ) ) {
-			if ( $tsf->get_option( 'attachment_' . $_rtype ) ) {
-				$_value = (array) ( $tsf->get_option( $_option ) ?: [] );
-				$_value['attachment'] = 1;
+		// Transport attachment_noindex, attachment_nofollow, and attachment_noarchive settings.
+		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
+			$_option = $tsf->get_robots_post_type_option_id( $r );
+			if ( isset( $defaults[ $_option ] ) ) {
+				$_value = (array) ( $tsf->get_option( $_option ) ?: $defaults[ $_option ] );
+				$_value['attachment'] = (int) (bool) $tsf->get_option( "attachment_$r" );
 				$tsf->update_option( $_option, $_value );
-			} elseif ( get_option( 'the_seo_framework_initial_db_version' ) < '3102' ) {
-				$tsf->update_option( $_option, [] );
 			}
 		}
-	}
-
-	// If it's an older installation, check for these options.
-	if ( get_option( 'the_seo_framework_initial_db_version' ) < '3102' ) {
 
 		// Adds default auto description option.
 		if ( isset( $defaults['auto_description'] ) )

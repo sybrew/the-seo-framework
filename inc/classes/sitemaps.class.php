@@ -85,7 +85,6 @@ class Sitemaps extends Metaboxes {
 
 		//* Adding rewrite rules only has effect when permalink structures are active.
 		if ( $this->can_run_sitemap() || $force ) {
-
 			/**
 			 * Don't do anything if a sitemap plugin is active.
 			 * On sitemap plugin activation, the sitemap plugin should flush the
@@ -614,10 +613,13 @@ class Sitemaps extends Metaboxes {
 		/**
 		 * @since 2.2.9
 		 * @since 2.8.0 Increased to 1200 from 700.
-		 * @since 3.1.0 Now returns an option value.
+		 * @since 3.1.0 Now returns an option value; it falls back to the default value if not set.
 		 * @param int $total_post_limit
 		 */
-		$total_post_limit = (int) \apply_filters( 'the_seo_framework_sitemap_post_limit', $this->get_option( 'sitemap_query_limit' ) );
+		$total_post_limit = (int) \apply_filters(
+			'the_seo_framework_sitemap_post_limit',
+			$this->get_option( 'sitemap_query_limit' )
+		);
 
 		/**
 		 * Maximum pages and posts to fetch.

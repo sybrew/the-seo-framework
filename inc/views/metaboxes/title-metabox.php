@@ -15,13 +15,13 @@ switch ( $instance ) :
 		$title = '';
 
 		if ( $latest_post_id ) {
-			$title = $this->get_raw_generated_title( [ 'id' => $latest_post_id ] );
+			$title = $this->hellip_if_over( $this->get_raw_generated_title( [ 'id' => $latest_post_id ] ), 60 );
 		}
 
 		$title = $this->s_title( $title ?: __( 'Example Post Title', 'autodescription' ) );
 
 		$blogname = $this->get_blogname();
-		$sep      = $this->get_separator( 'title' );
+		$sep      = esc_html( $this->get_separator( 'title' ) );
 
 		$additions_left  = '<span class="tsf-title-additions-js">' . $blogname . '<span class="tsf-sep-js">' . " $sep " . '</span></span>';
 		$additions_right = '<span class="tsf-title-additions-js"><span class="tsf-sep-js">' . " $sep " . '</span>' . $blogname . '</span>';
