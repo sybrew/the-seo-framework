@@ -456,10 +456,9 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 			* The Descriptions are now correct.
 			* The Titles are now fully controlled by TSF.
 			* Extranous meta output from Ultimate Member has been removed.
-		* Invalid settings' input are now checked before you can change tabs. This makes the saving buttons work as intended.
-			* TODO consider checking closed postboxes too.... we could add an on-publish listener that checks if our postboxes are closed, and open them if they contain invalid values.
-				* `jQuery( elem ).find( '.hndle, .handlediv' ).trigger( 'click.postboxes' );`
-			* TODO tsf.tabToggle, at the try/catch block, will fatally fail the try when the sitemap's box is closed on-load, and when it's below 1 or above 50000 (test via upgrader).
+		* Invalid settings' input are now checked, this makes the saving buttons work as intended:
+			* Before you can change tabs. It'll block the tab switch and notify you.
+			* After you close a metabox, and it'll reopen instantly to notify you.
 		* The SEO Bar no longer incorretly tells that CPT categories or tags are discouraged from indexing via the global settings.
 		* WC Shop and Blog Pages canonical URLs now correctly output pagination.
 		* WC Shop and Blog Pages shortlink URLs now correctly output pagination.
