@@ -645,12 +645,8 @@ class Sitemaps extends Metaboxes {
 		$this->set_timezone();
 		$timestamp_format = $this->get_timestamp_format();
 
-		/**
-		 * Fetch the page/post modified options.
-		 * We can't get specific on the home page, unfortunately.
-		 */
-		$sitemaps_modified = $this->is_option_checked( 'sitemaps_modified' );
-		$page_lastmod = $post_lastmod = $home_lastmod = (bool) $sitemaps_modified;
+		$show_priority = $this->is_option_checked( 'sitemaps_priority' );
+		$show_modified = $this->is_option_checked( 'sitemaps_modified' );
 
 		/**
 		 * Generation time output
@@ -660,7 +656,14 @@ class Sitemaps extends Metaboxes {
 		$timestamp = (bool) \apply_filters( 'the_seo_framework_sitemap_timestamp', true );
 
 		if ( $timestamp )
-			$content .= '<!-- ' . \esc_html__( 'Sitemap is generated on', 'autodescription' ) . ' ' . \current_time( 'Y-m-d H:i:s' ) . ' GMT -->' . "\n";
+			$content .= sprintf(
+				'<!-- %s -->',
+				sprintf(
+					/* translators: %s = timestamp */
+					\esc_html__( 'Sitemap is generated on %s', 'autodescription' ),
+					\current_time( 'Y-m-d H:i:s \G\M\T' )
+				)
+			) . "\n";
 
 		$wp_query = new \WP_Query;
 		$wp_query->init();
@@ -728,8 +731,7 @@ class Sitemaps extends Metaboxes {
 					$content .= "\t<url>\n";
 					$content .= "\t\t<loc>" . $_url . "</loc>\n";
 
-					// Keep it consistent. Only parse if page_lastmod is true.
-					if ( $home_lastmod ) {
+					if ( $show_modified ) {
 						if ( $page_on_front ) {
 							$front_modified_gmt = isset( $front_page->post_modified_gmt ) ? $front_page->post_modified_gmt : '0000-00-00 00:00:00';
 						} else {
@@ -751,7 +753,9 @@ class Sitemaps extends Metaboxes {
 							$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $front_modified_gmt ) . "</lastmod>\n";
 					}
 
-					$content .= "\t\t<priority>1.0</priority>\n";
+					if ( $show_priority ) {
+						$content .= "\t\t<priority>1.0</priority>\n";
+					}
 					$content .= "\t</url>\n";
 				}
 				//* Free memory.
@@ -776,8 +780,7 @@ class Sitemaps extends Metaboxes {
 						$content .= "\t<url>\n";
 						$content .= "\t\t<loc>" . $_url . "</loc>\n";
 
-						// Keep it consistent. Only parse if $page_lastmod is true.
-						if ( $page_lastmod ) {
+						if ( $show_modified ) {
 							$args = [
 								'numberposts'  => 1,
 								'post_type'    => 'post',
@@ -802,7 +805,9 @@ class Sitemaps extends Metaboxes {
 								$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $page_modified_gmt ) . "</lastmod>\n";
 						}
 
-						$content .= "\t\t<priority>0.9</priority>\n";
+						if ( $show_priority ) {
+							$content .= "\t\t<priority>0.9</priority>\n";
+						}
 						$content .= "\t</url>\n";
 					}
 				}
@@ -823,15 +828,16 @@ class Sitemaps extends Metaboxes {
 				$content .= "\t<url>\n";
 				$content .= "\t\t<loc>" . $_url . "</loc>\n";
 
-				// Keep it consistent. Only parse if page_lastmod is true.
-				if ( $page_lastmod ) {
+				if ( $show_modified ) {
 					$page_modified_gmt = $page->post_modified_gmt;
 
 					if ( '0000-00-00 00:00:00' !== $page_modified_gmt )
 						$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $page_modified_gmt ) . "</lastmod>\n";
 				}
 
-				$content .= "\t\t<priority>0.9</priority>\n";
+				if ( $show_priority ) {
+					$content .= "\t\t<priority>0.9</priority>\n";
+				}
 				$content .= "\t</url>\n";
 			endforeach;
 
@@ -911,22 +917,23 @@ class Sitemaps extends Metaboxes {
 				// No need to use static vars
 				$content .= "\t\t<loc>" . $_url . "</loc>\n";
 
-				// Keep it consistent. Only parse if page_lastmod is true.
-				if ( $post_lastmod ) {
+				if ( $show_modified ) {
 					$post_modified_gmt = $post->post_modified_gmt;
 
 					if ( '0000-00-00 00:00:00' !== $post_modified_gmt )
 						$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $post_modified_gmt ) . "</lastmod>\n";
 				}
 
-				$content .= "\t\t<priority>" . number_format( $priority, 1 ) . "</priority>\n";
+				if ( $show_priority ) {
+					$content .= "\t\t<priority>" . number_format( $priority, 1 ) . "</priority>\n";
+
+					// Lower the priority for the next pass.
+					$priority = $priority - $prioritydiff;
+
+					// Cast away negative numbers.
+					$priority = $priority <= 0 ? 0 : (float) $priority;
+				}
 				$content .= "\t</url>\n";
-
-				// Lower the priority for the next pass.
-				$priority = $priority - $prioritydiff;
-
-				// Cast away negative numbers.
-				$priority = $priority <= 0 ? 0 : (float) $priority;
 			endforeach;
 
 			//* Free memory.
@@ -1020,22 +1027,23 @@ class Sitemaps extends Metaboxes {
 				//* No need to use static vars
 				$content .= "\t\t<loc>" . $_url . "</loc>\n";
 
-				//* Keep it consistent. Only parse if $post_lastmod is true.
-				if ( $post_lastmod ) {
+				if ( $show_modified ) {
 					$cpt_modified_gmt = $ctp_post->post_modified_gmt;
 					//* Some CPT don't set modified time.
 					if ( '0000-00-00 00:00:00' !== $cpt_modified_gmt )
 						$content .= "\t\t<lastmod>" . $this->gmt2date( $timestamp_format, $cpt_modified_gmt ) . "</lastmod>\n";
 				}
 
-				$content .= "\t\t<priority>" . number_format( $priority_cpt, 1 ) . "</priority>\n";
+				if ( $show_priority ) {
+					$content .= "\t\t<priority>" . number_format( $priority_cpt, 1 ) . "</priority>\n";
+
+					// Lower the priority for the next pass.
+					$priority_cpt = $priority_cpt - $prioritydiff_cpt;
+
+					// Cast away negative numbers.
+					$priority_cpt = $priority_cpt <= 0 ? 0 : (float) $priority_cpt;
+				}
 				$content .= "\t</url>\n";
-
-				// Lower the priority for the next pass.
-				$priority_cpt = $priority_cpt - $prioritydiff_cpt;
-
-				// Cast away negative numbers.
-				$priority_cpt = $priority_cpt <= 0 ? 0 : (float) $priority_cpt;
 			endforeach;
 
 			//* Free memory.
@@ -1074,13 +1082,14 @@ class Sitemaps extends Metaboxes {
 					$content .= "\t\t<lastmod>" . \mysql2date( $timestamp_format, $args['lastmod'], false ) . "</lastmod>\n";
 				}
 
-				if ( isset( $args['priority'] ) && $args['priority'] ) {
-					$priority = $args['priority'];
-				} else {
-					$priority = 0.9;
+				if ( $show_priority ) {
+					if ( isset( $args['priority'] ) && $args['priority'] ) {
+						$priority = $args['priority'];
+					} else {
+						$priority = 0.9;
+					}
+					$content .= "\t\t<priority>" . number_format( $priority, 1 ) . "</priority>\n";
 				}
-
-				$content .= "\t\t<priority>" . number_format( $priority, 1 ) . "</priority>\n";
 				$content .= "\t</url>\n";
 			}
 		}

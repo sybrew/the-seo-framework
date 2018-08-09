@@ -275,11 +275,11 @@ function _print_xsl_content( $tsf ) {
 
 	$output_modified = (bool) $tsf->get_option( 'sitemaps_modified' );
 
-	$vars = implode( [
-		'<xsl:variable name="itemURL" select="sitemap:loc"/>',
-		'<xsl:variable name="lastmod" select="concat(substring(sitemap:lastmod,0,11),concat(\' \', substring(sitemap:lastmod,12,5)))"/>',
-		'<xsl:variable name="priority" select="substring(sitemap:priority,0,4)"/>',
-	] );
+	$vars = [
+		'itemURL'  => '<xsl:variable name="itemURL" select="sitemap:loc"/>',
+		'lastmod'  => '<xsl:variable name="lastmod" select="concat(substring(sitemap:lastmod,0,11),concat(\' \',substring(sitemap:lastmod,12,5)))"/>',
+		'priority' => '<xsl:variable name="priority" select="substring(sitemap:priority,0,4)"/>',
+	];
 	$empty = array_fill_keys( [ 'th', 'td' ], '' );
 
 	$url = [
@@ -298,12 +298,20 @@ function _print_xsl_content( $tsf ) {
 		];
 	} else {
 		$last_updated = $empty;
+		unset( $vars['lastmod'] );
 	}
 
-	$priority = [
-		'th' => sprintf( '<th>%s</th>', \esc_html( \ent2ncr( \__( 'Priority', 'autodescription' ) ) ) ),
-		'td' => '<td><xsl:value-of select="$priority" /></td>',
-	];
+	if ( $tsf->get_option( 'sitemaps_priority' ) ) {
+		$priority = [
+			'th' => sprintf( '<th>%s</th>', \esc_html( \ent2ncr( \__( 'Priority', 'autodescription' ) ) ) ),
+			'td' => '<td><xsl:value-of select="$priority" /></td>',
+		];
+	} else {
+		$priority = $empty;
+		unset( $vars['priority'] );
+	}
+
+	$vars = implode( $vars );
 
 	$content = <<<CONTENT
 <table>

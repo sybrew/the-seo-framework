@@ -338,7 +338,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 			* These settings should only be used on conflicting post types, like which offer their own SEO settings, or are otherwise incorrectly registered.
 		* New sitemap settings:
 			* Set the maximum posts queried per type.
-			* TODO Convert Timestamps to Metadata, and add a priority setting, which is automatically disabled.
+			* Toggle the output of priorities. This is enabled by default for old sites, disabled for new sites.
 		* The sitemap stylesheet now outputs favicon meta tags.
 		* When you activate any plugin, a check will be performed for conflicting SEO plugins; when found, a single dismissible warning notification will be outputted.
 			* Only users with plugin activation capabilities can see this message.
@@ -407,6 +407,8 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* The "Home" URL in the plugin activation page is now dubbed "About".
 		* Description additions are automatically turned off now on new sites.
 		* Link relationship tags for Posts and Pages are now automatically enabled on new installations, because there's no longer a performance impact.
+		* The sitemap's timestamp options are now found under the new "Metadata" tab.
+		* The title's separator option is now found under the "Additions" tab.
 	* **Updated:**
 		* Most, if not all, database transients related to this plugin have been invalidated and are being rebuilt. The old transients will be cleaned up by WordPress automatically.
 		* Various [?]-links have been updated. Some were redirecting, others had the URL fragment adjusted.

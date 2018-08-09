@@ -258,7 +258,8 @@ class Site_Options extends Sanitize {
 			'sitemaps_output'      => 1,    // Output of sitemap
 			'sitemap_query_limit'   => 1200, // Sitemap post limit.
 
-			'sitemaps_modified'    => 1, // Add sitemap modified time
+			'sitemaps_modified'    => 1, // Add sitemap modified time.
+			'sitemaps_priority'    => 0, // Add sitemap priorities.
 
 			'sitemaps_robots'      => 1, // Add sitemap location to robots.txt
 

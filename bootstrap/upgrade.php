@@ -131,9 +131,9 @@ function the_seo_framework_do_upgrade() {
 
 	//! From here, the upgrade procedures should be backward compatible.
 	//? This means no data may be erased for at least 1 major version, or 1 year, whichever is later.
-	if ( $version < '3102' ) {
-		the_seo_framework_do_upgrade_3102();
-		$version = '3102';
+	if ( $version < '3103' ) {
+		the_seo_framework_do_upgrade_3103();
+		$version = '3103';
 	}
 
 	the_seo_framework()->reinitialize_rewrite();
@@ -361,13 +361,13 @@ function the_seo_framework_do_upgrade_3060() {
  *
  * @since 3.1.0
  */
-function the_seo_framework_do_upgrade_3102() {
+function the_seo_framework_do_upgrade_3103() {
 
 	// Prevent database lookups when checking for cache.
 	add_option( THE_SEO_FRAMEWORK_SITE_CACHE, [] );
 
 	// If it's an older installation, upgrade these options.
-	if ( get_option( 'the_seo_framework_initial_db_version' ) < '3102' ) {
+	if ( get_option( 'the_seo_framework_initial_db_version' ) < '3103' ) {
 		$tsf = the_seo_framework();
 
 		$defaults = the_seo_framework_upgrade_default_site_options();
@@ -397,10 +397,14 @@ function the_seo_framework_do_upgrade_3102() {
 		// Add non-default HTML stripping option. Defaulting to previous behavior.
 		if ( isset( $defaults['title_strip_tags'] ) )
 			$tsf->update_option( 'title_strip_tags', 0 );
+
+		// Adds non-default priority option.
+		if ( isset( $defaults['sitemaps_priority'] ) )
+			$tsf->update_option( 'sitemaps_priority', 1 );
 	}
 
 	// Might they've missed it half a year ago, here it is again.
 	the_seo_framework_prepare_extension_manager_suggestion();
 
-	update_option( 'the_seo_framework_upgraded_db_version', '3102' );
+	update_option( 'the_seo_framework_upgraded_db_version', '3103' );
 }

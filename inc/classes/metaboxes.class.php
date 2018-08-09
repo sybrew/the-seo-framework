@@ -581,14 +581,13 @@ class Metaboxes extends Site_Options {
 	}
 
 	/**
-	 * Sitemaps Metabox Timestamps Tab output.
+	 * Sitemaps Metabox Metadata Tab output.
 	 *
-	 * @since 2.2.9
-	 * @since 3.1.0 Is now protected.
+	 * @since 3.1.0
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
-	protected function sitemaps_metabox_timestamps_tab() {
-		$this->get_view( 'metaboxes/sitemaps-metabox', [], 'timestamps' );
+	protected function sitemaps_metabox_metadata_tab() {
+		$this->get_view( 'metaboxes/sitemaps-metabox', [], 'metadata' );
 	}
 
 	/**

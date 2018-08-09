@@ -35,10 +35,10 @@ switch ( $instance ) :
 				'callback' => [ $this, 'sitemaps_metabox_robots_tab' ],
 				'dashicon' => 'share-alt2',
 			],
-			'timestamps' => [
-				'name'     => __( 'Timestamps', 'autodescription' ),
-				'callback' => [ $this, 'sitemaps_metabox_timestamps_tab' ],
-				'dashicon' => 'clock',
+			'metadata' => [
+				'name'     => __( 'Metadata', 'autodescription' ),
+				'callback' => [ $this, 'sitemaps_metabox_metadata_tab' ],
+				'dashicon' => 'index-card',
 			],
 			'notify' => [
 				'name'     => _x( 'Ping', 'Ping or notify search engine', 'autodescription' ),
@@ -192,21 +192,36 @@ switch ( $instance ) :
 		}
 		break;
 
-	case 'the_seo_framework_sitemaps_metabox_timestamps':
+	case 'the_seo_framework_sitemaps_metabox_metadata':
 		?>
 		<h4><?php esc_html_e( 'Timestamps Settings', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'The modified time suggests to search engines where to look for content changes. It has no impact on the SEO value unless you drastically change pages or posts. It then depends on how well your content is constructed.', 'autodescription' ) );
-		?>
-		<hr>
 
-		<h4><?php esc_html_e( 'Output Modified Date', 'autodescription' ); ?></h4>
-		<?php
 		//* Echo checkbox.
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'sitemaps_modified',
+				/* translators: %s = An XML tag example */
 				sprintf( esc_html__( 'Add %s to the sitemap?', 'autodescription' ), $this->code_wrap( '<lastmod>' ) ),
+				'',
+				false
+			), true
+		);
+
+		?>
+		<hr>
+
+		<h4><?php esc_html_e( 'Priority Settings', 'autodescription' ); ?></h4>
+		<?php
+		$this->description( __( 'The priority index suggests to search engines which pages are deemed more important. It has no known impact on the SEO value and it is generally ignored.', 'autodescription' ) );
+
+		//* Echo checkbox.
+		$this->wrap_fields(
+			$this->make_checkbox(
+				'sitemaps_priority',
+				/* translators: %s = An XML tag example */
+				sprintf( esc_html__( 'Add %s to the sitemap?', 'autodescription' ), $this->code_wrap( '<priority>' ) ),
 				'',
 				false
 			), true
@@ -249,6 +264,7 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Sitemap Styling Settings', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'You can style the sitemap to give it a more personal look. Styling the sitemap has no SEO value whatsoever.', 'autodescription' ) );
+		$this->description( __( 'Note: Changes might not appear to have effect directly because the stylesheet is cached in the browser for 30 minutes.', 'autodescription' ) );
 		?>
 		<hr>
 
