@@ -310,6 +310,11 @@ TODO: Regression: Emptying the home page title tagline when one was set will sho
 
 TODO: Update plugin setup guide, as pagination settings have been updated.
 
+TODO: Reintroduce these methods, as deprecated:
+	* title_from_custom_field()
+	* post_title_from_ID()
+	* ...probably more
+
 * **For everyone:**
 	* **Added:**
 		* TODO
@@ -343,6 +348,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* When you activate any plugin, a check will be performed for conflicting SEO plugins; when found, a single dismissible warning notification will be outputted.
 			* Only users with plugin activation capabilities can see this message.
 		* Breadcrumbs are now rendered on non-hierarchival pages, too.
+		* The post-edit and global SEO settings' tabs now support keyboard navigation. You'll notice they'll have an accessible border around them when using keyboard navigation.
 	* **Improved:**
 		* The plugin can now downgrade its database version to the currently installed version automatically. This makes sure necessary future upgrade procedures are reinstated when you choose to downgrade (for any reason).
 			* Since TSF v3.0.6 this happens when a user saved the options, but this could lead to inconsistent behavior on WordPress Multisite installations.
@@ -371,7 +377,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* The SEO Bar no longer performs intricate and slow requests to verify if we're on a term page on Custom Post Types list tables.
 		* The SEO Bar is now capable of articulating post type names, instead of only term names.
 		* In the robots settings meta box, we've added a descriptive warning for the sitewide `nofollow` and `noarchive` settings.
-		* In the homepage settings meta box, and on the in-post metabox for the homepage, we've added a descriptive warning for the `nofollow` and `noarchive` settings.
+		* In the homepage settings meta box, and on the post-edit metabox for the homepage, we've added a descriptive warning for the `nofollow` and `noarchive` settings.
 		* The primary term selector tooltip now states the human readible and translatable (archive type) name, instead of the static code name.
 		* WC Shop and Blog Pages now have "rel=prev/next" canonical URLs added when link relationship tags are enabled for archives.
 		* WC Shop and Blog Pages now listen to the global pagination robots' "noindex" settings.
@@ -380,7 +386,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* Plugin conflict notices are now shown in red.
 		* Home page setting notifications are now always showing when applicable.
 		* This plugin now detects Elementor as a conflicting plugin for content. This means that when Elementor builds a page, no automated description can be generated from the content.
-		* The in-post counters are no longer affected by your input when a preceding value is set in the Home Page SEO Settings.
+		* The post-edit counters are no longer affected by your input when a preceding value is set in the Home Page SEO Settings.
 		* The administrative title placeholders now better resemble the real front-end output when using HTML tokens or duplicated spaces.
 		* On Firefox, list table overflow is now less prone to happen. We've removed compatibility fixes, and introduced a flexible system via CSS.
 			* The overflowing is caused by a bug in Internet Explorer 6, which Firefox happily integrated, affecting roughly 30% of their users.

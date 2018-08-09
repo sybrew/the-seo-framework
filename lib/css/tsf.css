@@ -495,11 +495,17 @@ body.no-js .tsf-seo-bar-item {
 }
 
 input.tsf-tabs-radio {
-	display: none;
+	position: absolute;
 	width: 0;
 	height: 0;
-	position: absolute;
-	left: -9001px;
+	opacity: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	z-index: -1;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
 }
 
 .tsf-tabs-radio:checked + label,
@@ -507,6 +513,14 @@ input.tsf-tabs-radio {
 	background-color: inherit;
 	border-bottom-color: #fff;
 	color: #000;
+}
+
+/* make all border colors #fff, so it doesn't look skewed */
+.tsf-tabs-radio:focus + label:not(.tsf-no-focus-ring) {
+	box-shadow:
+		0 0 0 1px #5b9dd9,
+		0 0 2px 1px rgba(30, 140, 190, .8);
+	border-color: #fff;
 }
 
 .tsf-tabs-content {
@@ -627,14 +641,18 @@ body.js .tsf-tabs-content.tsf-active-tab-content {
 }
 
 /* Start inpost tabs */
-input[type="radio"].tsf-flex-nav-tab-radio {
-	display: none;
+input.tsf-flex-nav-tab-radio {
+	position: absolute;
 	width: 0;
 	height: 0;
+	opacity: 0;
 	margin: 0;
 	padding: 0;
-	position: absolute;
-	left: -9001px;
+	border: 0;
+	z-index: -1;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
 }
 
 .tsf-flex-nav-tab-wrapper {
@@ -686,6 +704,7 @@ input[type="radio"].tsf-flex-nav-tab-radio {
 	align-items: center;
 	-webkit-align-content: space-around;
 	align-content: space-around;
+	position: relative;
 }
 
 .tsf-flex-nav-dashicon,
@@ -697,8 +716,12 @@ input[type="radio"].tsf-flex-nav-tab-radio {
 }
 
 .tsf-flex-nav-tab .tsf-flex-nav-tab-radio:checked + .tsf-flex-nav-tab-label {
-	box-shadow: 0 -2px 0 0 #007bd2 inset;
+	box-shadow: 0 -2px 0 0 #007bd2 inset, 0 0 0 0 #007bd2 inset;
 	transition: box-shadow 0.25s ease-in;
+}
+
+.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:focus + .tsf-flex-nav-tab-label:not(.tsf-no-focus-ring) {
+	box-shadow: 0 0 0 0 #007bd2 inset, 0 0 0 1px #007bd2 inset;
 }
 
 .tsf-flex-tab-content {

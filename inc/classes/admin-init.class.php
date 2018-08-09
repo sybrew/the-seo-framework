@@ -129,7 +129,10 @@ class Admin_Init extends Init {
 					'ver'      => THE_SEO_FRAMEWORK_VERSION,
 					'inline'   => [
 						'.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:checked + .tsf-flex-nav-tab-label' => [
-							'box-shadow:0 -2px 0 0 {{$color_accent}} inset',
+							'box-shadow:0 -2px 0 0 {{$color_accent}} inset, 0 0 0 0 {{$color_accent}} inset',
+						],
+						'.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:focus + .tsf-flex-nav-tab-label:not(.tsf-no-focus-ring)' => [
+							'box-shadow:0 -2px 0 0 {{$color_accent}} inset, 0 0 0 1px {{$color_accent}} inset',
 						],
 					],
 				],
