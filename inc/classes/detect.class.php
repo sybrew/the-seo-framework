@@ -875,7 +875,9 @@ class Detect extends Render {
 		// Can't be recursively empty. Right?
 		if ( $cache ) return $cache;
 
-		return $cache = array_values( array_filter( $this->get_rewritable_post_types(), [ $this, 'is_post_type_supported' ] ) );
+		return $cache = array_values(
+			array_filter( $this->get_rewritable_post_types(), [ $this, 'is_post_type_supported' ] )
+		);
 	}
 
 	/**

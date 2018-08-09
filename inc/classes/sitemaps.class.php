@@ -636,6 +636,15 @@ class Sitemaps extends Metaboxes {
 		$totalposts = (int) \apply_filters( 'the_seo_framework_sitemap_posts_count', $total_post_limit );
 		$total_cpt_posts = (int) \apply_filters( 'the_seo_framework_sitemap_custom_posts_count', $total_post_limit );
 
+		$noindex_post_types = $this->get_option( $this->get_robots_post_type_option_id( 'noindex' ) );
+
+		if ( ! empty( $noindex_post_types['page'] ) ) {
+			$totalpages = 0;
+		}
+		if ( ! empty( $noindex_post_types['post'] ) ) {
+			$totalposts = 0;
+		}
+
 		$latest_pages = [];
 		$latest_posts = [];
 		$latest_cpt_posts = [];
@@ -941,6 +950,8 @@ class Sitemaps extends Metaboxes {
 		endif;
 
 		if ( $total_cpt_posts ) :
+			// TODO: Use only this loop, instead of separated page/post loops? See $not_cpt var.
+
 			/**
 			 * Applies filters Array the_seo_framework_sitemap_exclude_cpt : Excludes these CPT
 			 * @since 2.5.0
@@ -949,12 +960,10 @@ class Sitemaps extends Metaboxes {
 
 			$not_cpt = [ 'post', 'page', 'attachment' ];
 
-			$_pt_noindex = $this->get_option( $this->get_robots_post_type_option_id( 'noindex' ) );
-
 			foreach ( $this->get_supported_post_types() as $post_type ) {
 				if ( ! in_array( $post_type, $not_cpt, true ) ) {
 					if ( empty( $excluded_cpt ) || ! in_array( $post_type, $excluded_cpt, true ) ) {
-						if ( empty( $_pt_noindex[ $post_type ] ) )
+						if ( empty( $noindex_post_types[ $post_type ] ) )
 							$cpt[] = $post_type;
 					}
 				}
