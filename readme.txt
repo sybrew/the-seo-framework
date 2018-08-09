@@ -385,7 +385,8 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* On Firefox, list table overflow is now less prone to happen. We've removed compatibility fixes, and introduced a flexible system via CSS.
 			* The overflowing is caused by a bug in Internet Explorer 6, which Firefox happily integrated, affecting roughly 30% of their users.
 			* In short, [Gecko ignores word-wrap values in tables](https://bugzilla.mozilla.org/show_bug.cgi?id=587438), and for [13 years running](https://bugzilla.mozilla.org/show_bug.cgi?id=307866), Firefox ignores overflow-preventing width values. Both these bugs combined cause mayhem.
-		* TODO maybe: Webmasters' code input now automatically stripts extraneous HTML. So, you can simply paste the code you copied from the analytical setup interfaces.
+		*  Webmasters' code input now automatically stripts extraneous HTML. So, you can simply paste the code you copied from the analytical setup interfaces.
+			* TODO this might not work on IE11? If it doesn't, we won't upgrade this functionality to support it.
 		* The upgrade routine is now more intelligent, and is now able to skip upgrades that aren't necessary for new installations.
 		* The upgrade routine can no longer happen on the SEO Settings page; instead, it redirects you from it to prevent setting desynchronization.
 		* The upgrade routine automatically registers the default site options for new sites, so the admin interface no longer needs to be accessed (once) for them to have effect.
