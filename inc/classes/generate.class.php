@@ -91,7 +91,7 @@ class Generate extends User_Data {
 			$is_archive = $this->is_archive();
 
 			if ( $this->get_option( 'paged_noindex' ) && $this->paged() > 1 ) {
-				if ( $is_archive || $this->is_blog_page() || $this->is_wc_shop() )
+				if ( $is_archive || $this->is_singular_archive() )
 					$meta['noindex'] = $this->get_option( 'paged_noindex' ) ? 'noindex' : $meta['noindex'];
 			}
 

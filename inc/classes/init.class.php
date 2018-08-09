@@ -744,25 +744,24 @@ class Init extends Query {
 	 */
 	public function _alter_archive_query_in( $wp_query ) {
 
-		if ( ! $wp_query->is_archive && ! $wp_query->is_home )
-			return;
+		if ( $wp_query->is_archive || $wp_query->is_home ) {
+			if ( $this->is_archive_query_adjustment_blocked( $wp_query ) )
+				return;
 
-		if ( $this->is_archive_query_adjustment_blocked( $wp_query ) )
-			return;
+			$excluded = $this->get_ids_excluded_from_archive();
 
-		$excluded = $this->get_ids_excluded_from_archive();
+			if ( ! $excluded )
+				return;
 
-		if ( ! $excluded )
-			return;
+			$post__not_in = $wp_query->get( 'post__not_in' );
 
-		$post__not_in = $wp_query->get( 'post__not_in' );
+			if ( ! empty( $post__not_in ) ) {
+				$excluded = array_merge( (array) $post__not_in, $excluded );
+				$excluded = array_unique( $excluded );
+			}
 
-		if ( ! empty( $post__not_in ) ) {
-			$excluded = array_merge( (array) $post__not_in, $excluded );
-			$excluded = array_unique( $excluded );
+			$wp_query->set( 'post__not_in', $excluded );
 		}
-
-		$wp_query->set( 'post__not_in', $excluded );
 	}
 
 	/**

@@ -649,6 +649,9 @@ final class Debug implements Debug_Interface {
 		$is_wc_shop = $tsf->is_wc_shop();
 		$is_wc_product = $tsf->is_wc_product();
 		$is_seo_settings_page = $tsf->is_seo_settings_page( true );
+		$numpages = $tsf->numpages();
+		$is_multipage = $tsf->is_multipage();
+		$is_singular_archive = $tsf->is_singular_archive();
 
 		//* Don't debug the class object.
 		unset( $tsf );
@@ -694,7 +697,7 @@ final class Debug implements Debug_Interface {
 		if ( 'yup' === $cache_version ) {
 			$title = 'WordPress Query at Meta Generation';
 		} else {
-			$title = the_seo_framework()->is_admin() ? 'Expected Front-end WordPress Query' : 'Current WordPress Query';
+			$title = \is_admin() ? 'Expected Front-end WordPress Query' : 'Current WordPress Query';
 		}
 
 		$output = str_replace( PHP_EOL, '<br>' . PHP_EOL, $output );

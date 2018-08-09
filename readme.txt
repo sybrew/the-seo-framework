@@ -338,6 +338,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 			* These settings should only be used on conflicting post types, like which offer their own SEO settings, or are otherwise incorrectly registered.
 		* New sitemap settings:
 			* Set the maximum posts queried per type.
+			* TODO Convert Timestamps to Metadata, and add a priority setting, which is automatically disabled.
 		* The sitemap stylesheet now outputs favicon meta tags.
 		* When you activate any plugin, a check will be performed for conflicting SEO plugins; when found, a single dismissible warning notification will be outputted.
 			* Only users with plugin activation capabilities can see this message.
@@ -458,6 +459,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 			* TODO tsf.tabToggle, at the try/catch block, will fatally fail the try when the sitemap's box is closed on-load, and when it's below 1 or above 50000 (test via upgrader).
 		* The SEO Bar no longer incorretly tells that CPT categories or tags are discouraged from indexing via the global settings.
 		* WC Shop and Blog Pages canonical URLs now correctly output pagination.
+		* WC Shop and Blog Pages shortlink URLs now correctly output pagination.
 		* The title metabox's example title (from the latest post) can now be substituted for the example title when empty.
 		* Term titles no longer have their HTML tags stripped in the generated SEO titles by default.
 		* When no blog description or tagline is set, the left/right example titles are no longer partially emptied when JS is deactivated.
@@ -639,7 +641,9 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 				* `get_post_type_label()`
 				* `is_draft()`
 			* In class `\The_SEO_Framework\Query` -- Factory: `the_seo_framework()`
+				* `is_singular_archive()`
 				* `numpages()`
+				* `is_multipage()`, now is public, was protected.
 			* In class `\The_SEO_Framework\Render` -- Factory: `the_seo_framework()`
 				* `get_document_title()`
 				* `get_wp_title()`

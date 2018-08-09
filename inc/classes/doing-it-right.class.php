@@ -1250,6 +1250,7 @@ class Doing_It_Right extends Generate_Ldjson {
 					$ind_class = $ind_class !== $good ? $ind_class : $unknown;
 					$but = true;
 				}
+				// FIXME is this needed for WooCommerce Shop, too???
 			}
 
 			if ( $this->is_draft( $args['post_id'] ) ) {

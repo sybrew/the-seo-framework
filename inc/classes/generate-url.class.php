@@ -709,7 +709,7 @@ class Generate_Url extends Generate_Title {
 
 		if ( ! $url ) return '';
 
-		if ( $this->is_archive() || $this->is_home() ) {
+		if ( $this->is_archive() || $this->is_singular_archive() ) {
 			$paged = $this->maybe_get_paged( $this->paged(), false, true );
 			$url   = \add_query_arg( [ 'paged' => $paged ], $url );
 		} else {
@@ -764,7 +764,7 @@ class Generate_Url extends Generate_Title {
 		$prev = $next = '';
 		$_run = false;
 
-		if ( $this->is_singular() && $this->is_multipage() && ! $this->is_wc_shop() ) {
+		if ( $this->is_singular() && ! $this->is_singular_archive() && $this->is_multipage() ) {
 			$_run = $this->is_real_front_page()
 				  ? $this->get_option( 'prev_next_frontpage' )
 				  : $this->get_option( 'prev_next_posts' );
@@ -774,7 +774,7 @@ class Generate_Url extends Generate_Title {
 			$archive   = false;
 			$page      = $this->page();
 			$_numpages = $this->numpages();
-		} elseif ( $this->is_archive() || $this->is_home() || $this->is_wc_shop() ) {
+		} elseif ( $this->is_archive() || $this->is_singular_archive() ) {
 			$_run = $this->is_real_front_page()
 				  ? $this->get_option( 'prev_next_frontpage' )
 				  : $this->get_option( 'prev_next_archives' );

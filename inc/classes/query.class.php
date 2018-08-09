@@ -327,6 +327,18 @@ class Query extends Compat {
 	}
 
 	/**
+	 * Determines whether the content type is both singular and archival.
+	 * Simply put, it detects a blog page and WooCommerce shop page.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return bool
+	 */
+	public function is_singular_archive() {
+		return $this->is_blog_page() || $this->is_wc_shop();
+	}
+
+	/**
 	 * Detects archive pages. Also in admin.
 	 *
 	 * @since 2.6.0
@@ -1188,7 +1200,7 @@ class Query extends Compat {
 		global $wp_query;
 
 		$post = null;
-		if ( $this->is_singular() && ! $this->is_wc_shop() )
+		if ( $this->is_singular() && ! $this->is_singular_archive() )
 			$post = \get_post( $this->get_the_real_ID() );
 
 		if ( $post instanceof \WP_Post ) {
@@ -1233,11 +1245,12 @@ class Query extends Compat {
 	 * Determines whether the current loop has multiple pages.
 	 *
 	 * @since 2.7.0
-	 * @since 3.1.0 Now also works on archives.
+	 * @since 3.1.0 1. Now also works on archives.
+	 *              2. Now is public.
 	 *
 	 * @return bool True if multipage.
 	 */
-	protected function is_multipage() {
+	public function is_multipage() {
 		return $this->numpages() > 1;
 	}
 
