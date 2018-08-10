@@ -114,23 +114,33 @@ class Post_Data extends Detect {
 		if ( empty( $_POST['autodescription'] ) ) // CSRF ok, this is an early test to improve performance.
 			return;
 
-		$defaults = [
-			'_genesis_title'          => '',
-			'_genesis_description'    => '',
-			'_genesis_canonical_uri'  => '',
-			'redirect'                => '', // Will be displayed in custom fields when set...
-			'_social_image_url'       => '',
-			'_social_image_id'        => 0,
-			'_genesis_noindex'        => 0,
-			'_genesis_nofollow'       => 0,
-			'_genesis_noarchive'      => 0,
-			'exclude_local_search'    => 0, // Will be displayed in custom fields when set...
-			'exclude_from_archive'    => 0, // Will be displayed in custom fields when set...
-			'_open_graph_title'       => '',
-			'_open_graph_description' => '',
-			'_twitter_title'          => '',
-			'_twitter_description'    => '',
-		];
+		/**
+		 * @since 3.1.0
+		 * @param array    $defaults
+		 * @param integer  $post_id Post ID.
+		 * @param \WP_Post $post    Post object.
+		 */
+		$defaults = (array) \apply_filters_ref_array( 'the_seo_framework_inpost_seo_save_defaults', [
+			[
+				'_genesis_title'          => '',
+				'_genesis_description'    => '',
+				'_genesis_canonical_uri'  => '',
+				'redirect'                => '', // Will be displayed in custom fields when set...
+				'_social_image_url'       => '',
+				'_social_image_id'        => 0,
+				'_genesis_noindex'        => 0,
+				'_genesis_nofollow'       => 0,
+				'_genesis_noarchive'      => 0,
+				'exclude_local_search'    => 0, // Will be displayed in custom fields when set...
+				'exclude_from_archive'    => 0, // Will be displayed in custom fields when set...
+				'_open_graph_title'       => '',
+				'_open_graph_description' => '',
+				'_twitter_title'          => '',
+				'_twitter_description'    => '',
+			],
+			$post_id,
+			$post,
+		] );
 
 		/**
 		 * Merge user submitted options with fallback defaults
@@ -208,7 +218,7 @@ class Post_Data extends Detect {
 	 * @param array    $data         Key/Value pairs of data to save in '_field_name' => 'value' format.
 	 * @param string   $nonce_action Nonce action for use with wp_verify_nonce().
 	 * @param string   $nonce_name   Name of the nonce to check for permissions.
-	 * @param \WP_Post|integer $post  Post object or ID.
+	 * @param \WP_Post|integer $post Post object or ID.
 	 * @return mixed Return null if permissions incorrect, doing autosave, ajax or future post, false if update or delete
 	 *               failed, and true on success.
 	 */
@@ -244,6 +254,16 @@ class Post_Data extends Detect {
 		//* Check that the user is allowed to edit the post
 		if ( ! \current_user_can( 'edit_post', $post->ID ) )
 			return;
+
+		/**
+		 * @since 3.1.0
+		 * @param array    $data The data that's going to be saved.
+		 * @param \WP_Post $post The post object.
+		 */
+		$data = (array) \apply_filters_ref_array( 'the_seo_framework_save_custom_fields', [
+			$data,
+			$post,
+		] );
 
 		//* Cycle through $data, insert value or delete field
 		foreach ( (array) $data as $field => $value ) {

@@ -303,8 +303,6 @@ TODO note about that some options have been relocated.
 *Fred Brooks' law: "What one developer can do in one month, two developers can do in two months."*
 
 TODO: RTL stylesheet update.
-TODO: Follow progression of https://github.com/Automattic/jetpack/pull/9912, and see if we might need to implement it ourselves.
-	Track/adjust readme changes: --JETPACK
 TODO: Regression: Title compatibility test --UltimateMember has been fixed thus far.
 TODO: Regression: Emptying the home page title tagline when one was set will show its inputted value as a placeholder. PHP issue, not JS.
 
@@ -438,7 +436,7 @@ TODO: Reintroduce these methods, as deprecated:
 		* When a sitemap file or plugin is found, this plugin no longer removes its related settings.
 			* Instead, only a warning is shown on the settings page, telling that the options have no effect.
 		* AnsPress title compatibility, they handle this.
-		* --JETPACK JetPack Open Graph compatibility checks, they handle this since 2016.
+		* JetPack Open Graph compatibility checks, they handle this since 2016, and improved upon this since JetPack v6.4.
 		* Description output caching. It causes too much overhead, and it provides no benefit any more. In fact, it affects performance negatively.
 	* **Fixed:**
 		* When reactivating or deactivating the plugin, there's no longer a chance for your SEO options to be wiped on a random database error.
@@ -769,7 +767,7 @@ TODO: Reintroduce these methods, as deprecated:
 				* `setup_ld_json_transient()`, it could only be used well internally.
 				* `get_ld_json_transient()`, replaced by `get_ld_json_transient_name()`. It could've returned empty, so nothing changes.
 			* In class: `\The_SEO_Framework\Compat` -- Factory: `the_seo_framework()`
-				* `jetpack_compat()`, was marked private. --JETPACK
+				* `jetpack_compat()`, was marked private.
 			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
 				* `site_updated_plugin_option()`
 				* `do_settings_updated_notice()`
@@ -917,6 +915,9 @@ TODO: Reintroduce these methods, as deprecated:
 			* `(string) the_seo_framework_title_from_query`, the meta title from (inputted/detected) query.
 			* `(array) the_seo_framework_sitemap_styles`, the sitemap styles.
 			* `(string) the_seo_framework_site_cache`, the cache option value.
+			* `(array) the_seo_framework_inpost_seo_save_defaults`, the post SEO data defaults. Note that this doesn't change the post data prior saving.
+			* `(array) the_seo_framework_save_custom_fields`, the post SEO data, right before it's saved.
+			* `(array) the_seo_framework_save_term_data`, the term SEO data, right before it's saved.
 		* **Changed:**
 			* `the_seo_framework_detect_page_builder`
 				1. Now returns `null` by default.

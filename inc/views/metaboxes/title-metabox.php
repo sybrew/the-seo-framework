@@ -132,7 +132,7 @@ switch ( $instance ) :
 			true
 		);
 
-		$this->description( __( 'Tip: It is a bad practice to style titles with HTML as inconsistent behavior might occur.', 'autodescription' ) );
+		$this->description( __( 'Tip: It is a bad practice to style page titles with HTML as inconsistent behavior might occur.', 'autodescription' ) );
 		break;
 
 	case 'the_seo_framework_title_metabox_additions':

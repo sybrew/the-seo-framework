@@ -179,7 +179,7 @@ switch ( $instance ) :
 				if ( in_array( $ro_value, [ 'noindex', 'nofollow' ], true ) )
 					$checkboxes .= sprintf(
 						'<p><span class="description attention">%s</span></p>',
-						esc_html__( 'Warning: No public site should ever use this option.', 'autodescription' )
+						esc_html__( 'Warning: No public site should ever enable this option.', 'autodescription' )
 					);
 			}
 

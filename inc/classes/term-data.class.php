@@ -147,8 +147,8 @@ class Term_Data extends Post_Data {
 	 */
 	public function get_term_meta_defaults() {
 		/**
-		 * Applies filters 'the_seo_framework_term_meta_defaults' : Array
 		 * @since 2.1.8
+		 * @param array $defaults
 		 */
 		return (array) \apply_filters( 'the_seo_framework_term_meta_defaults', [
 			'doctitle'    => '',
@@ -168,7 +168,7 @@ class Term_Data extends Post_Data {
 	 *
 	 * @param int $term_id     Term ID.
 	 * @param int $tt_id       Term Taxonomy ID.
-	 * @param string $taxonomy Taxonomy Slug
+	 * @param string $taxonomy Taxonomy slug
 	 * @return void Early on AJAX call.
 	 */
 	public function update_term_meta( $term_id, $tt_id, $taxonomy = '' ) {
@@ -206,6 +206,20 @@ class Term_Data extends Post_Data {
 						break;
 				endswitch;
 			endforeach;
+
+			/**
+			 * @since 3.1.0
+			 * @param array  $data     The data that's going to be saved.
+			 * @param int    $term_id  Term ID.
+			 * @param int    $tt_id    Term Taxonomy ID.
+			 * @param string $taxonomy Taxonomy slug
+			 */
+			$data = (array) \apply_filters_ref_array( 'the_seo_framework_save_term_data', [
+				$data,
+				$term_id,
+				$tt_id,
+				$taxonomy,
+			] );
 
 			\update_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
 		endif;
