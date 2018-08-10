@@ -347,6 +347,7 @@ TODO: Reintroduce these methods, as deprecated:
 			* Only users with plugin activation capabilities can see this message.
 		* Breadcrumbs are now rendered on non-hierarchival pages, too.
 		* The post-edit and global SEO settings' tabs now support keyboard navigation. You'll notice they'll have an accessible border around them when using keyboard navigation.
+		* Polylang string translation support on titles and descriptions.
 	* **Improved:**
 		* The plugin can now downgrade its database version to the currently installed version automatically. This makes sure necessary future upgrade procedures are reinstated when you choose to downgrade (for any reason).
 			* Since TSF v3.0.6 this happens when a user saved the options, but this could lead to inconsistent behavior on WordPress Multisite installations.
@@ -396,6 +397,7 @@ TODO: Reintroduce these methods, as deprecated:
 		* The upgrade routine automatically registers the default site options for new sites, so the admin interface no longer needs to be accessed (once) for them to have effect.
 			* This is great for multisite setups that block the admin interface.
 			* It prevents/resolves all sorts of first-run bugs, like the sitemap's initial registration.
+		* When Polylang is active, users are now notified that it's better not to utilize some of the Home Page SEO settings metabox fields.
 	* **Changed:**
 		* TSF now requires WordPress 4.6 (previously 4.4).
 		* TSF now requires PHP 5.4 (previously 5.3).

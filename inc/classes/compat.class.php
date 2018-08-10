@@ -73,6 +73,10 @@ class Compat extends Core {
 			//* WPML
 			$this->_include_compat( 'wpml', 'plugin' );
 		}
+		if ( $this->detect_plugin( [ 'globals' => [ 'polylang' ] ] ) ) {
+			//* Polylang
+			$this->_include_compat( 'polylang', 'plugin' );
+		}
 
 		if ( $this->detect_plugin( [ 'globals' => [ 'ultimatemember' ] ] ) ) {
 			//* Ultimate Member
