@@ -33,11 +33,8 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Generate_Image extends Generate_Url {
 
 	/**
-	 * Holds the image dimensions, if found.
-	 *
 	 * @since 2.7.0
-	 *
-	 * @var array
+	 * @var array The registered image dimensions.
 	 */
 	public $image_dimensions = [];
 
@@ -59,6 +56,38 @@ class Generate_Image extends Generate_Url {
 	 */
 	public function register_image_dimension( $id, array $dimensions ) {
 		$this->image_dimensions = $this->image_dimensions + [ $id => $dimensions ];
+	}
+
+	/**
+	 * Tests and registers image dimensions from custom input.
+	 * This is meant to sanitize the JavaScript handler for custom input sources on the front-end.
+	 *
+	 * @since 3.1.0
+	 * @internal
+	 * @uses $this->register_image_dimension()
+	 *
+	 * @param int    $src_id The image source ID.
+	 * @param string $src    The known image source.
+	 * @param int    $id     The registration ID.
+	 */
+	protected function register_custom_image_dimensions( $src_id, $src, $id ) {
+
+		$_src = \wp_get_attachment_image_src( $src_id, 'full' );
+
+		if ( is_array( $_src ) && count( $_src ) >= 3 ) {
+			$i = $_src[0]; // Source URL
+			$w = $_src[1]; // Width
+			$h = $_src[2]; // Height
+
+			$test_i   = \esc_url_raw( $this->set_preferred_url_scheme( $i ), [ 'http', 'https' ] );
+			$test_src = \esc_url_raw( $this->set_preferred_url_scheme( $src ), [ 'http', 'https' ] );
+
+			if ( $test_i === $test_src )
+				$this->register_image_dimension( $id, [
+					'width'  => $w,
+					'height' => $h,
+				] );
+		}
 	}
 
 	/**
@@ -356,7 +385,6 @@ class Generate_Image extends Generate_Url {
 	 *
 	 * @since 2.9.0
 	 * @since 2.9.4 Now converts URL scheme.
-	 * @uses $this->image_dimensions
 	 *
 	 * @param int $id The post ID.
 	 * @param bool $set_og_dimensions Whether to set Open Graph and Twitter dimensions.
@@ -374,22 +402,8 @@ class Generate_Image extends Generate_Url {
 			return '';
 
 		//* Calculate image sizes.
-		if ( $set_og_dimensions && $img_id = $this->get_option( 'homepage_social_image_id' ) ) {
-			$_src = \wp_get_attachment_image_src( $img_id, 'full' );
-
-			$i = $_src[0]; // Source URL
-			$w = $_src[1]; // Width
-			$h = $_src[2]; // Height
-
-			$test_i = \esc_url_raw( $this->set_preferred_url_scheme( $i ), [ 'http', 'https' ] );
-			$test_src = \esc_url_raw( $this->set_preferred_url_scheme( $src ), [ 'http', 'https' ] );
-
-			if ( $test_i === $test_src )
-				$this->register_image_dimension( $id, [
-					'width'  => $w,
-					'height' => $h,
-				] );
-		}
+		if ( $set_og_dimensions && $img_id = $this->get_option( 'homepage_social_image_id' ) )
+			$this->register_custom_image_dimensions( $img_id, $src, $id );
 
 		if ( $src && $this->matches_this_domain( $src ) )
 			$src = $this->set_preferred_url_scheme( $src );
@@ -404,7 +418,6 @@ class Generate_Image extends Generate_Url {
 	 * @since 2.9.0 1. The second parameter now works.
 	 *              2. Fallback image ID has been removed.
 	 * @since 2.9.4 Now converts URL scheme.
-	 * @uses $this->image_dimensions
 	 *
 	 * @param int $id The post ID. Required.
 	 * @param bool $set_og_dimensions Whether to set Open Graph and Twitter dimensions.
@@ -418,22 +431,8 @@ class Generate_Image extends Generate_Url {
 			return '';
 
 		//* Calculate image sizes.
-		if ( $set_og_dimensions && $img_id = $this->get_custom_field( '_social_image_id', $id ) ) {
-			$_src = \wp_get_attachment_image_src( $img_id, 'full' );
-
-			$i = $_src[0]; // Source URL
-			$w = $_src[1]; // Width
-			$h = $_src[2]; // Height
-
-			$test_i = \esc_url_raw( $this->set_preferred_url_scheme( $i ), [ 'http', 'https' ] );
-			$test_src = \esc_url_raw( $this->set_preferred_url_scheme( $src ), [ 'http', 'https' ] );
-
-			if ( $test_i === $test_src )
-				$this->register_image_dimension( $id, [
-					'width'  => $w,
-					'height' => $h,
-				] );
-		}
+		if ( $set_og_dimensions && $img_id = $this->get_custom_field( '_social_image_id', $id ) )
+			$this->register_custom_image_dimensions( $img_id, $src, $id );
 
 		if ( $src && $this->matches_this_domain( $src ) )
 			$src = $this->set_preferred_url_scheme( $src );
@@ -447,7 +446,6 @@ class Generate_Image extends Generate_Url {
 	 * @since 2.8.2
 	 * @since 2.9.4 1: Now converts URL scheme.
 	 *              2: $set_og_dimensions now works.
-	 * @uses $this->image_dimensions
 	 *
 	 * @param bool $set_og_dimensions Whether to set open graph and twitter dimensions.
 	 * @return string The unescaped social image fallback URL.
@@ -460,22 +458,8 @@ class Generate_Image extends Generate_Url {
 			return '';
 
 		//* Calculate image sizes.
-		if ( $set_og_dimensions && $img_id = $this->get_option( 'social_image_fb_id' ) ) {
-			$_src = \wp_get_attachment_image_src( $img_id, 'full' );
-
-			$i = $_src[0]; // Source URL
-			$w = $_src[1]; // Width
-			$h = $_src[2]; // Height
-
-			$test_i = \esc_url_raw( $this->set_preferred_url_scheme( $i ), [ 'http', 'https' ] );
-			$test_src = \esc_url_raw( $this->set_preferred_url_scheme( $src ), [ 'http', 'https' ] );
-
-			if ( $test_i === $test_src )
-				$this->register_image_dimension( $this->get_the_real_ID(), [
-					'width'  => $w,
-					'height' => $h,
-				] );
-		}
+		if ( $set_og_dimensions && $img_id = $this->get_option( 'social_image_fb_id' ) )
+			$this->register_custom_image_dimensions( $img_id, $src, $this->get_the_real_ID() );
 
 		if ( $src && $this->matches_this_domain( $src ) )
 			$src = $this->set_preferred_url_scheme( $src );
@@ -698,22 +682,20 @@ class Generate_Image extends Generate_Url {
 			$site_icon_id = \get_option( 'site_icon' );
 
 			if ( $site_icon_id ) {
-				$url_data = '';
-				$url_data = \wp_get_attachment_image_src( $site_icon_id, $size );
+				$_src = \wp_get_attachment_image_src( $site_icon_id, $size );
+				if ( is_array( $_src ) && count( $_src ) >= 3 ) {
 
-				$icon = $url_data ? $url_data[0] : '';
+					$icon = $_src[0];
 
-				if ( $set_og_dimensions && $icon ) {
-					$w = $url_data[1];
-					$h = $url_data[2];
-
-					$this->register_image_dimension( $this->get_the_real_ID(), [
-						'width'  => $w,
-						'height' => $h,
-					] );
+					if ( $set_og_dimensions ) {
+						$this->register_image_dimension( $this->get_the_real_ID(), [
+							'width'  => $_src[1],
+							'height' => $_src[2],
+						] );
+					}
 				}
 			}
-		} elseif ( is_int( $size ) && function_exists( 'has_site_icon' ) ) {
+		} elseif ( is_int( $size ) ) {
 			//* Above 512 defaults to full. Loop back.
 			if ( $size > 512 )
 				return $this->get_site_icon( 'full', $set_og_dimensions );
@@ -747,16 +729,16 @@ class Generate_Image extends Generate_Url {
 		$site_logo_id = \get_theme_mod( 'custom_logo' );
 
 		if ( $site_logo_id ) {
-			$url_data = '';
-			$url_data = \wp_get_attachment_image_src( $site_logo_id, 'full' );
+			$_src = \wp_get_attachment_image_src( $site_logo_id, 'full' );
+			if ( is_array( $_src ) && count( $_src ) >= 3 ) {
+				$logo = $_src[0];
 
-			$logo = $url_data ? $url_data[0] : '';
-
-			if ( $set_og_dimensions && $logo ) {
-				$this->register_image_dimension( $this->get_the_real_ID(), [
-					'width'  => $url_data[1],
-					'height' => $url_data[2],
-				] );
+				if ( $set_og_dimensions ) {
+					$this->register_image_dimension( $this->get_the_real_ID(), [
+						'width'  => $_src[1],
+						'height' => $_src[2],
+					] );
+				}
 			}
 		}
 

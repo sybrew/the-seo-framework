@@ -473,6 +473,7 @@ TODO: Reintroduce these methods, as deprecated:
 		* Duplicated spaces are no longer counted by the pixel and character counters, and they'll be removed from the front-end output.
 		* Settings are now correctly registered before the plugin tries to upgrade.
 		* The sitemap is now correctly registered via `WP_Rewrite` when the plugin is installed for the first time.
+		* When you try to leave the page, TSF no longer conflicts with other plugins (two-way street) when trying to warn you of unsaved data.
 
 * **For translators:**
 	* **New translations are available.**
@@ -508,6 +509,7 @@ TODO: Reintroduce these methods, as deprecated:
 		* The plugin now initializes options cache. For instance, when the plugin's activated a temporarily value will be set that it did.
 		* Various JS functions and class objects have been introduced. These are available via the API, but shouldn't be used as the JS API is still under consideration and can change at any update.
 		* An initial database version option has been added. This is `the_seo_framework_initial_db_version`, it's only used in the upgrading process, and it's not autoloaded.
+		* [JavaScript]: Input fields within TSF's metaboxes with the class `tsf-input-not-saved` set will not invoke an "unsaved-work" AYS notice on page-navigation.
 	* **Improved:**
 		* A "doing it wrong" notice is now supplied when calling `the_seo_framework()` too early.
 		* Fixed all "non-passive event listener" warnings caused by jQuery, by using our improved own event handlers.
@@ -534,6 +536,7 @@ TODO: Reintroduce these methods, as deprecated:
 		* A PHP notice and unintentionally false-esque return value when the post ID is 0, or when the post ID is excluded, in method `is_post_included_in_sitemap()`.
 		* A PHP warning is no longer omitted caused by a referencing parameter in `\The_SEO_Framework\_bbpress_filter_do_adjust_query()`.
 		* The SEO Bar can now read filters applied to titles.
+		* When a custom social image goes missing, no PHP notices (regarding uncountable) will be emitted when their dimensions are calculated anymore.
 	* **Class notes:**
 		 * **Added:**
 		 	* `\The_SEO_Framework\Silencer`, called when `\The_SEO_Framework\Load` is blocked from loading in filters.

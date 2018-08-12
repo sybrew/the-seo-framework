@@ -33,7 +33,7 @@ if ( $use_tabs ) :
 				//= All output below is escaped.
 				?>
 				<div class="tsf-flex tsf-flex-nav-tab tsf-flex<?php echo $wrapper_active; ?>" id="<?php echo $wrapper_id; ?>">
-					<input type="radio" class="tsf-flex-nav-tab-radio" id="<?php echo $input_id; ?>" name="<?php echo $input_name; ?>" <?php echo $input_checked; ?>>
+					<input type="radio" class="tsf-flex-nav-tab-radio tsf-input-not-saved" id="<?php echo $input_id; ?>" name="<?php echo $input_name; ?>" <?php echo $input_checked; ?>>
 					<label for="<?php echo $input_id; ?>" class="tsf-flex tsf-flex-nav-tab-label">
 						<?php
 						echo $dashicon ? '<span class="tsf-flex dashicons dashicons-' . \esc_attr( $dashicon ) . ' tsf-flex-nav-dashicon"></span>' : '';

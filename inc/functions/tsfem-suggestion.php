@@ -159,6 +159,7 @@ function the_seo_framework_suggest_extension_manager() {
  * Loads scripts for TSFEM "Shiny Updates" implementation for WP 4.6 and later.
  *
  * @since 3.0.6
+ * @since 3.1.0 No longer checks WP version, the requirements of this plugin is equal.
  * @access private
  */
 function the_seo_framework_enqueue_installer_scripts() {
@@ -172,7 +173,7 @@ function the_seo_framework_enqueue_installer_scripts() {
 
 	$strings = [
 		'slug'       => 'the-seo-framework-extension-manager',
-		'canEnhance' => the_seo_framework()->wp_version( '4.6' ),
+		'canEnhance' => true || the_seo_framework()->wp_version( '4.6' ),
 	];
 
 	wp_register_script( $scriptname, THE_SEO_FRAMEWORK_DIR_URL . "lib/js/installer/{$scriptname}{$suffix}.js", $deps, THE_SEO_FRAMEWORK_VERSION, true );
