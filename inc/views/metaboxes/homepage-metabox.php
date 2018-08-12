@@ -94,6 +94,8 @@ switch ( $instance ) :
 			$description_placeholder = $this->get_generated_description( $home_id );
 		}
 
+		$tagline_placeholder = $this->s_title_raw( $this->get_blogdescription() );
+
 		?>
 		<p>
 			<label for="<?php $this->field_id( 'homepage_title_tagline' ); ?>" class="tsf-toblock">
@@ -101,7 +103,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php $this->field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title_tagline' ); ?>" placeholder="<?php echo esc_attr( $this->get_home_page_tagline() ); ?>" value="<?php echo esc_attr( $this->get_option( 'homepage_title_tagline' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php $this->field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title_tagline' ); ?>" placeholder="<?php echo esc_attr( $tagline_placeholder ); ?>" value="<?php echo esc_attr( $this->get_option( 'homepage_title_tagline' ) ); ?>" autocomplete=off />
 		</p>
 
 		<hr>

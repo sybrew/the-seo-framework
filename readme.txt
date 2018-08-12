@@ -303,8 +303,7 @@ TODO note about that some options have been relocated.
 *Fred Brooks' law: "What one developer can do in one month, two developers can do in two months."*
 
 TODO: RTL stylesheet update.
-TODO: Regression: Title compatibility test --UltimateMember has been fixed thus far.
-TODO: Regression: Emptying the home page title tagline when one was set will show its inputted value as a placeholder. PHP issue, not JS.
+TODO: Regression: Title compatibility test --UltimateMember has been fixed thus far. TODO wpforo
 
 TODO: Update plugin setup guide, as pagination settings have been updated.
 
