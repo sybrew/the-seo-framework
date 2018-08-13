@@ -123,16 +123,17 @@ class Post_Data extends Detect {
 		$defaults = (array) \apply_filters_ref_array( 'the_seo_framework_inpost_seo_save_defaults', [
 			[
 				'_genesis_title'          => '',
+				'_tsf_title_no_blogname'  => 0, //? The prefix I should've used from the start...
 				'_genesis_description'    => '',
 				'_genesis_canonical_uri'  => '',
-				'redirect'                => '', // Will be displayed in custom fields when set...
+				'redirect'                => '', //! Will be displayed in custom fields when set...
 				'_social_image_url'       => '',
 				'_social_image_id'        => 0,
 				'_genesis_noindex'        => 0,
 				'_genesis_nofollow'       => 0,
 				'_genesis_noarchive'      => 0,
-				'exclude_local_search'    => 0, // Will be displayed in custom fields when set...
-				'exclude_from_archive'    => 0, // Will be displayed in custom fields when set...
+				'exclude_local_search'    => 0, //! Will be displayed in custom fields when set...
+				'exclude_from_archive'    => 0, //! Will be displayed in custom fields when set...
 				'_open_graph_title'       => '',
 				'_open_graph_description' => '',
 				'_twitter_title'          => '',
@@ -146,21 +147,21 @@ class Post_Data extends Detect {
 		 * Merge user submitted options with fallback defaults
 		 * Passes through nonce at the end of the function.
 		 */
-		// phpcs:ignore -- wp_unslash() will ruin intended slashes.
-		$data = \wp_parse_args( $_POST['autodescription'], $defaults );
+		// phpcs:ignore -- wp_unslash() is nonsense.
+		$data = (array) \wp_parse_args( $_POST['autodescription'], $defaults );
 
-		foreach ( (array) $data as $key => $value ) :
+		foreach ( $data as $key => &$value ) :
 			switch ( $key ) :
 				case '_genesis_title' :
 				case '_open_graph_title' :
 				case '_twitter_title' :
-					$data[ $key ] = $this->s_title_raw( $value );
+					$value = $this->s_title_raw( $value );
 					continue 2;
 
 				case '_genesis_description' :
 				case '_open_graph_description' :
 				case '_twitter_description' :
-					$data[ $key ] = $this->s_description_raw( $value );
+					$value = $this->s_description_raw( $value );
 					continue 2;
 
 				case '_genesis_canonical_uri' :
@@ -170,28 +171,30 @@ class Post_Data extends Detect {
 					 * Also, they will only cause bugs.
 					 * Query parameters are also only used when no pretty permalinks are used. Which is bad.
 					 */
-					$data[ $key ] = $this->s_url_query( $value );
+					$value = $this->s_url_query( $value );
 					continue 2;
 
 				case '_social_image_id' :
 					//* Bound to _social_image_url.
-					$data[ $key ] = $data['_social_image_url'] ? $this->s_absint( $value ) : 0;
+					$value = $data['_social_image_url'] ? $this->s_absint( $value ) : 0;
 					continue 2;
 
 				case 'redirect' :
 					//* Let's keep this as the output really is.
-					$data[ $key ] = $this->s_redirect_url( $value );
+					$value = $this->s_redirect_url( $value );
 					continue 2;
 
+				case '_tsf_title_no_blogname' :
 				case '_genesis_noindex' :
 				case '_genesis_nofollow' :
 				case '_genesis_noarchive' :
 				case 'exclude_local_search' :
 				case 'exclude_from_archive' :
-					$data[ $key ] = $this->s_one_zero( $value );
+					$value = $this->s_one_zero( $value );
 					continue 2;
 
 				default:
+					// Don't process extraneous data for third party support.
 					break;
 			endswitch;
 		endforeach;
@@ -225,6 +228,7 @@ class Post_Data extends Detect {
 	public function save_custom_fields( array $data, $nonce_action, $nonce_name, $post ) {
 
 		//* Verify the nonce
+		// phpcs:ignore -- wp_unslash() is nonsense.
 		if ( ! isset( $_POST[ $nonce_name ] ) || ! \wp_verify_nonce( $_POST[ $nonce_name ], $nonce_action ) )
 			return;
 

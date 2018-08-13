@@ -131,6 +131,27 @@ switch ( $instance ) :
 					<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" placeholder="<?php echo esc_attr( $title_placeholder ); ?>" value="<?php echo esc_attr( $this->get_custom_field( '_genesis_title', $post_id ) ); ?>" autocomplete=off />
 					<?php echo $this->output_js_title_elements(); ?>
 				</div>
+
+				<div class="tsf-checkbox-wrapper">
+					<label for="autodescription_title_no_blogname">
+						<?php
+						if ( $this->is_static_frontpage( $post_id ) ) :
+							// Disable the input, and hide the previously stored value.
+							?>
+							<input type="checkbox" id="autodescription_title_no_blogname" value="1" <?php checked( $this->get_custom_field( '_tsf_title_no_blogname' ) ); ?> disabled />
+							<input type="hidden" name="autodescription[_tsf_title_no_blogname]" value="1" <?php checked( $this->get_custom_field( '_tsf_title_no_blogname' ) ); ?> />
+							<?php
+						else :
+							?>
+							<input type="checkbox" name="autodescription[_tsf_title_no_blogname]" id="autodescription_title_no_blogname" value="1" <?php checked( $this->get_custom_field( '_tsf_title_no_blogname' ) ); ?> />
+							<?php
+						endif;
+						esc_html_e( 'Remove the blogname?', 'autodescription' );
+						echo ' ';
+						$this->make_info( sprintf( __( 'Use this when you want to rearrange the title parts.', 'autodescription' ) ) );
+						?>
+					</label>
+				</div>
 			</div>
 		</div>
 

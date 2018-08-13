@@ -48,14 +48,17 @@ class Generate_Image extends Generate_Url {
 	/**
 	 * Registers image dimensions.
 	 *
+	 * When the `$uid` is already registered, then the dimensions registered first
+	 * will be used.
+	 *
 	 * @since 3.1.0
 	 * @uses $this->image_dimensions
 	 *
-	 * @param int   $id The image ID.
-	 * @param array $dimensions The dimensions, annodated with 'height' and 'width'.
+	 * @param scalar $uid        The unique registration ID.
+	 * @param array  $dimensions The dimensions, annodated with 'height' and 'width'.
 	 */
-	public function register_image_dimension( $id, array $dimensions ) {
-		$this->image_dimensions = $this->image_dimensions + [ $id => $dimensions ];
+	public function register_image_dimension( $uid, array $dimensions ) {
+		$this->image_dimensions += [ $uid => $dimensions ];
 	}
 
 	/**
@@ -68,9 +71,9 @@ class Generate_Image extends Generate_Url {
 	 *
 	 * @param int    $src_id The image source ID.
 	 * @param string $src    The known image source.
-	 * @param int    $id     The registration ID.
+	 * @param scalar $uid    The unique registration ID.
 	 */
-	protected function register_custom_image_dimensions( $src_id, $src, $id ) {
+	protected function register_custom_image_dimensions( $src_id, $src, $uid ) {
 
 		$_src = \wp_get_attachment_image_src( $src_id, 'full' );
 
@@ -83,7 +86,7 @@ class Generate_Image extends Generate_Url {
 			$test_src = \esc_url_raw( $this->set_preferred_url_scheme( $src ), [ 'http', 'https' ] );
 
 			if ( $test_i === $test_src )
-				$this->register_image_dimension( $id, [
+				$this->register_image_dimension( $uid, [
 					'width'  => $w,
 					'height' => $h,
 				] );
@@ -105,8 +108,8 @@ class Generate_Image extends Generate_Url {
 	 *
 	 * @TODO support Terms.
 	 *
-	 * @param int|string $id The page, post, product or term ID.
-	 * @param bool $singular Whether the ID is singular or archival.
+	 * @param int|string $id       The page, post, product or term ID.
+	 * @param bool       $singular Whether the ID is singular or archival.
 	 * @return string $url The Schema.org safe image.
 	 */
 	public function get_schema_image( $id = 0, $singular = false ) {

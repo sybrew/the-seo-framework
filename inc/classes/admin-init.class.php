@@ -335,15 +335,12 @@ class Admin_Init extends Init {
 	protected function get_javascript_l10n() {
 
 		$id = $this->get_the_real_ID();
-		$blog_name = $this->get_blogname();
-		$description = $this->get_home_page_tagline();
 		$default_title = '';
-		$additions = '';
+		$title_additions = '';
 
-		$use_additions = (bool) $this->get_option( 'homepage_tagline' );
+		$use_title_additions = $this->use_title_branding();
 		$home_tagline = $this->get_option( 'homepage_title_tagline' );
 		$title_location = $this->get_option( 'title_location' );
-		$title_add_additions = $this->use_title_branding();
 
 		$title_separator = esc_html( $this->get_separator( 'title' ) );
 		$description_separator = esc_html( $this->get_separator( 'description' ) );
@@ -366,40 +363,33 @@ class Admin_Init extends Init {
 				// Home is a blog.
 				$inpost_title = '';
 			}
-			$default_title = $inpost_title ?: $blog_name;
-			$additions = $home_tagline ?: $description;
+			$default_title = $inpost_title ?: $this->get_blogname();
+			$title_additions = $this->get_home_page_tagline();
+
+			$use_title_additions = (bool) $this->get_option( 'homepage_tagline' );
 		} else {
 			// We're somewhere within default WordPress pages.
 			if ( $this->is_static_frontpage( $id ) ) {
-				$default_title = $this->get_option( 'homepage_title' ) ?: $blog_name;
+				$default_title = $this->get_option( 'homepage_title' ) ?: $this->get_blogname();
 				$title_location = $this->get_option( 'home_title_location' );
 				$ishome = true;
 
-				if ( $use_additions ) {
-					$additions = $home_tagline ?: $description;
-				} else {
-					$additions = '';
-				}
+				$use_title_additions = (bool) $this->get_option( 'homepage_tagline' );
+				$title_additions = $this->get_home_page_tagline();
 			} elseif ( $is_post_edit ) {
 				$default_title = $this->get_raw_generated_title( [ 'id' => $id ] );
-				if ( $title_add_additions ) {
-					$additions = $blog_name;
-					$use_additions = true;
-				} else {
-					$additions = '';
-					$use_additions = false;
-				}
+				$title_additions = $this->get_blogname();
 			} elseif ( $is_term_edit ) {
 				//* Category or Tag.
 				if ( $this->get_current_taxonomy() && $id ) {
 					$default_title = $this->get_generated_single_term_title( $this->fetch_the_term( $id ) );
-					$additions = $title_add_additions ? $blog_name : '';
+					$title_additions = $this->get_blogname();
 				}
 			} else {
 				//* We're in a special place.
 				// Can't fetch title.
 				$default_title = '';
-				$additions = $title_add_additions ? $blog_name : '';
+				$title_additions = $this->get_blogname();
 			}
 		}
 
@@ -424,6 +414,7 @@ class Admin_Init extends Init {
 
 		if ( $page_on_front ) {
 			if ( $is_settings_page ) {
+				// PH = placeholder
 				$social_settings_locks = [
 					'ogTitlePHLock'       => (bool) $this->get_custom_field( '_open_graph_title', $id ),
 					'ogDescriptionPHLock' => (bool) $this->get_custom_field( '_open_graph_description', $id ),
@@ -431,7 +422,6 @@ class Admin_Init extends Init {
 					'twDescriptionPHLock' => (bool) $this->get_custom_field( '_twitter_description', $id ),
 				];
 			} elseif ( $ishome ) {
-				// This works perfectly.
 				$social_settings_locks = [
 					'refTitleLock'       => (bool) $this->get_option( 'homepage_title' ),
 					'refDescriptionLock' => (bool) $this->get_option( 'homepage_description' ),
@@ -450,7 +440,8 @@ class Admin_Init extends Init {
 				'isHome'              => $ishome,
 				'hasInput'            => $has_input,
 				'counterType'         => \absint( $this->get_user_option( 0, 'counter_type', 3 ) ),
-				'useTagline'          => $use_additions,
+				'useTagline'          => $use_title_additions,
+				'taglineLocked'       => (bool) $this->get_option( 'title_rem_additions' ),
 				'useTermPrefix'       => $use_term_prefix,
 				'isSettingsPage'      => $is_settings_page,
 				'isPostEdit'          => $is_post_edit,
@@ -477,8 +468,8 @@ class Admin_Init extends Init {
 			'params' => [
 				'objectTitle'          => $default_title,
 				'defaultTitle'         => $default_title,
-				'titleAdditions'       => $additions,
-				'blogDescription'      => $description,
+				'titleAdditions'       => $title_additions,
+				'blogDescription'      => $this->s_title_raw( $this->get_blogdescription() ),
 				'termName'             => $term_name,
 				'untitledTitle'        => $this->get_static_untitled_title(),
 				'titleSeparator'       => $title_separator,

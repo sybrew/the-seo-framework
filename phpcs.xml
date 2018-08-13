@@ -32,7 +32,7 @@
 	<!-- Set nonce checks -->
 	<rule ref="WordPress.CSRF.NonceVerification">
 		<properties>
-			<property name="customNonceVerificationFunctions" type="array" value="check_tsf_ajax_referer"/>
+			<property name="customNonceVerificationFunctions" type="array" value="_check_tsf_ajax_referer"/>
 		</properties>
 	</rule>
 

@@ -96,7 +96,7 @@ class Generate_Title extends Generate_Description {
 				$this->merge_title_pagination( $title );
 			}
 
-			if ( $this->use_title_branding( $args ) && $this->use_custom_title_branding( $args ) ) {
+			if ( $this->use_title_branding( $args ) ) {
 				$this->merge_title_branding( $title, $args );
 			}
 		}
@@ -910,25 +910,14 @@ class Generate_Title extends Generate_Description {
 	public function use_title_branding( $args = null ) {
 
 		$id = isset( $args['id'] ) ? $args['id'] : $this->get_the_real_ID();
+
 		if ( $this->is_front_page_by_id( $id ) ) {
 			return $this->use_home_page_title_tagline();
+		} elseif ( ! $this->use_singular_title_branding( $id ) ) {
+			return false;
 		}
 
 		return ! $this->get_option( 'title_rem_additions' );
-	}
-
-	/**
-	 * Determines whether to add or remove title additions when a custom field is present.
-	 *
-	 * @since 3.1.0
-	 * @see $this->merge_title_branding()
-	 * TODO merge per-page options & filter.
-	 *
-	 * @param array|null $args The query arguments. Leave null to autodetermine query.
-	 * @return bool True when additions are allowed.
-	 */
-	public function use_custom_title_branding( $args = null ) {
-		return ! $this->is_option_checked( 'custom_title_rem_additions' );
 	}
 
 	/**
@@ -952,6 +941,18 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function use_home_page_title_tagline() {
 		return $this->is_option_checked( 'homepage_tagline' ) && $this->get_home_page_tagline();
+	}
+
+	/**
+	 * Determines whether to add the tagline.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param int $id The post ID. Optional.
+	 * @return bool
+	 */
+	public function use_singular_title_branding( $id = null ) {
+		return ! $this->get_custom_field( '_tsf_title_no_blogname', $id ) && ! $this->get_option( 'title_rem_additions' );
 	}
 
 	/**

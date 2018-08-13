@@ -254,7 +254,7 @@ NOTE: ref: https://theseoframework.com/?p=1792
 2. WP 4.4 and 4.5 support has been dropped. Here's why:
 	* TODO
 	* Consistent admin screen and post type detection, so you won't find bugs anymore stemming from backward compatibility.
-	* Newer functionality, like upgrading memory availability.
+	* Newer and reliable functionality, like upgrading memory availability.
 
 **Feature highlights:**
 
@@ -281,7 +281,6 @@ TODO note about that some options have been relocated.
 * The SEO Framework no longer disables parts of its meta output, settings and other functionality when a conflicting plugin is found.
 * Now, only red warnings are shown throughout the settings page.
 * Most users aren't affected by this. However, if you think you're using any of [these plugins](TODO), you might wish to revise your settings.
-* TODO show the user a list of plugins in the plugin activation page?
 * We made this change because it was confusing to many users; the plugin even seemed broken.
 
 **For developers: About the API**
@@ -314,10 +313,9 @@ TODO: Reintroduce these methods, as deprecated:
 
 * **For everyone:**
 	* **Added:**
-		* TODO
 		* New title options, including:
 			* A toggle that strips HTML tags, like WordPress normally does.
-			* TODO A toggle that disabled title additions when a manual title is used.
+			* On every singular page edit screen, a "Remove the blogname" toggle has been added.
 		* New description options, including:
 			* A toggle for automated descriptions.
 		* New home page options, including:
@@ -521,6 +519,7 @@ TODO: Reintroduce these methods, as deprecated:
 			* The auto-invoked API still works as intended, via CSS.
 		* [JavaScript]: Media handlers are now instanced via their own object named `window.tsfMedia`, eliminating the previous JS API.
 		* [JavaScript]: Primary Term handlers are now instanced via their own object named `window.tsfPT`, eliminating the previous JS API.
+		* [JavaScript]: `tsf.params.titleAdditions` now always contains a value, unconditionally. Use `tsf.states.useTagline` and `tsf.states.taglineLocked` to determine whether it should be used (before settings change).
 		* The WordPress filter `pre_ent2ncr` can now run on filter `the_seo_framework_sitemap_additional_urls`.
 		* The WordPress filter `single_post_title` is now used for singular post titles.
 		* Query caching is now disabled in WP_CLI.
@@ -596,7 +595,7 @@ TODO: Reintroduce these methods, as deprecated:
 				* `_wp_ajax_update_counter_type()`, private.
 				* `_wp_ajax_crop_image()`, private.
 			* In class: `\The_SEO_Framework\Admin_Pages` -- Factory: `the_seo_framework()`
-				* `make_checkbox_array()` TODO Convert all settings to use it...
+				* `make_checkbox_array()`
 				* `attention()`
 				* `attention_noesc()`
 				* `attention_description()`
@@ -640,7 +639,7 @@ TODO: Reintroduce these methods, as deprecated:
 				* `merge_title_pagination()`
 				* `merge_title_protection()`
 				* `use_title_branding()`
-				* `use_custom_title_branding()`
+				* `use_singular_title_branding()`
 				* `use_generated_archive_prefix()`
 				* `use_home_page_title_tagline()`
 				* `get_home_page_tagline()`
