@@ -450,19 +450,27 @@ class Generate_Url extends Generate_Title {
 	 * Automatically adds pagination if the input matches the query.
 	 *
 	 * @since 3.0.0
+	 * @since 3.1.0 : 1. The first parameter now defaults to null.
+	 *                2. The search term is now matched with the input query if not set,
+	 *                   instead of it being empty.
 	 *
 	 * @param string $query The search query. Mustn't be escaped.
 	 *                      When left empty, the current query will be used.
 	 * @return string The search link.
 	 */
-	public function get_search_canonical_url( $query = '' ) {
+	public function get_search_canonical_url( $query = null ) {
 
-		$_query = \get_search_query( false );
-		$query = $query ?: $_query;
+		$_paginate = false;
+
+		if ( ! isset( $query ) ) {
+			$query = \get_search_query( false );
+			$_paginate = true;
+		}
+
 		$link = \get_search_link( $query );
 
-		if ( $_query === $query ) {
-			//= Adds pagination if input matches query.
+		if ( $_paginate ) {
+			//= Adds pagination if input query isn't null.
 			$link = $this->add_url_pagination( $link, $this->paged(), true );
 		}
 

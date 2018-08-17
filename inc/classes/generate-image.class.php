@@ -569,12 +569,13 @@ class Generate_Image extends Generate_Url {
 	 * @since 3.0.0 : Now sets preferred canonical URL scheme.
 	 *
 	 * @todo create formula to fetch transient.
+	 * @todo See \TSF_Extension_Manager\Extension\Articles\Front::make_amp_logo() for a better alternative?
 	 * @priority high 2.7.0
-	 * @prioerity lowered with 4K @ 2.9.3
+	 * @priority lowered with 4K @ 2.9.3
 	 *
-	 * @param int $id The attachment ID.
-	 * @param array $args The image args
-	 * @param bool $set_og_dimensions Whether to set OG dimensions.
+	 * @param int   $id                The attachment ID.
+	 * @param array $args              The image args
+	 * @param bool  $set_og_dimensions Whether to set OG dimensions.
 	 * @return string Parsed image url or empty if already called
 	 */
 	public function parse_og_image( $id, $args = [], $set_og_dimensions = false ) {

@@ -397,14 +397,20 @@ switch ( $instance ) :
 		$boxes = [];
 
 		foreach ( $this->get_rewritable_post_types() as $post_type ) {
-			$pto = \get_post_type_object( $post_type );
-			if ( ! $pto ) continue;
+			$pto = get_post_type_object( $post_type );
+			if ( ! isset( $pto->labels->name ) ) continue;
+
+			$_label = sprintf(
+				'%s &ndash; <code>%s</code>',
+				esc_html( $pto->labels->name ),
+				esc_html( $post_type )
+			);
 
 			$boxes[] = $this->make_checkbox_array( [
 				'id'       => 'disabled_post_types',
 				'index'    => $post_type,
-				'label'    => $pto->labels->name,
-				'escape'   => true,
+				'label'    => $_label,
+				'escape'   => false,
 				'disabled' => in_array( $post_type, $forced_pt, true ),
 			] );
 		}

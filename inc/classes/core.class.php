@@ -123,8 +123,8 @@ class Core {
 	 * Latest Class. Doesn't have parent.
 	 */
 	protected function __construct() {
-		if ( $this->the_seo_framework_debug ) {
 
+		if ( $this->the_seo_framework_debug ) {
 			$debug_instance = Debug::get_instance();
 
 			\add_action( 'the_seo_framework_do_before_output', [ $debug_instance, '_set_debug_query_output_cache' ] );

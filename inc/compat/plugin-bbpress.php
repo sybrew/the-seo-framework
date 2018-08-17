@@ -34,105 +34,31 @@ function _bbpress_filter_order_keys( $current_keys = [] ) {
 	return array_merge( $current_keys, $new_keys );
 }
 
-\add_filter( 'the_seo_framework_pre_add_title', __NAMESPACE__ . '\\_bbpress_filter_pre_title', 10, 3 );
+\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_bbpress_filter_pre_title', 10, 2 );
 /**
- * Fixes bbPress Titles.
- *
- * bbPress has a hard time maintaining WordPress' query after the original query.
- * Reasons unknown.
- * This function fixes the Title part.
+ * Fixes bbPress tag titles.
  *
  * @since 2.9.0
+ * @since 3.1.0 1. Updated to support new title generation.
+ *              2. Now no longer fixes the title when `is_tax()` is true. Because,
+ *                 this method is no longer necessary when bbPress fixes this issue.
+ *                 This should be fixed as of bbPress 2.6. Which seemed to be released internally August 6th, 2018.
  * @access private
  *
  * @param string $title The filter title.
  * @param array $args The title arguments.
- * @param bool $escape Whether the output will be sanitized.
  * @return string $title The bbPress title.
  */
 function _bbpress_filter_pre_title( $title = '', $args = [], $escape = true ) {
 
 	if ( \is_bbpress() ) {
-		if ( \bbp_is_topic_tag() ) {
-			$data = \the_seo_framework()->get_term_meta( \get_queried_object_id() );
-
-			if ( ! empty( $data['doctitle'] ) ) {
-				$title = $data['doctitle'];
-			} else {
-				$term = \get_queried_object();
-				$title = $term->name ?: \the_seo_framework()->get_static_untitled_title();
-			}
+		if ( \bbp_is_topic_tag() && ! \the_seo_framework()->is_tax() ) {
+			$term = \get_queried_object();
+			$title = isset( $term->name ) ? $term->name : \the_seo_framework()->get_static_untitled_title();
 		}
 	}
 
 	return $title;
-}
-
-\add_filter( 'the_seo_framework_url_path', __NAMESPACE__ . '\\_bbpress_filter_url_path', 10, 3 );
-/**
- * Fixes bbPress URLs.
- *
- * bbPress has a hard time maintaining WordPress' query after the original query.
- * Reasons unknown.
- * This function fixes the URl path part.
- *
- * @since 2.9.0
- * @access private
- *
- * @param string $path The current path.
- * @param int $id The page/post ID.
- * @param bool $external Whether the request is external (i.e. sitemap)
- * @return string The URL path.
- */
-function _bbpress_filter_url_path( $path, $id = 0, $external = false ) {
-
-	if ( $external || ! $id )
-		return $path;
-
-	if ( \the_seo_framework()->pretty_permalinks && \is_bbpress() ) :
-
-		if ( \bbp_is_single_user_topics() ) {
-			// User's topics
-			$base = \bbp_get_user_topics_created_url( \bbp_get_displayed_user_id() );
-
-		} elseif ( \bbp_is_favorites() ) {
-			// User's favorites
-			$base = \bbp_get_favorites_permalink( \bbp_get_displayed_user_id() );
-
-		} elseif ( \bbp_is_subscriptions() ) {
-			// User's subscriptions
-			$base = \bbp_get_subscriptions_permalink( \bbp_get_displayed_user_id() );
-
-		} elseif ( \bbp_is_single_user() ) {
-			// Root profile page
-			$base = \bbp_get_user_profile_url( \bbp_get_displayed_user_id() );
-
-		} elseif ( \bbp_is_single_view() ) {
-			// View
-			$base = \bbp_get_view_url();
-
-		} elseif ( \bbp_is_topic_tag() ) {
-			// Topic tag
-			$base = \bbp_get_topic_tag_link();
-
-		} elseif ( \is_page() || \is_single() ) {
-			// Page/post, skip.
-			$base = null;
-
-		} elseif ( \bbp_is_forum_archive() ) {
-			// Forum archive
-			$base = \bbp_get_forums_url();
-
-		} elseif ( \bbp_is_topic_archive() ) {
-			// Topic archive
-			$base = \bbp_get_topics_url();
-		}
-
-		if ( isset( $base ) )
-			$path = \the_seo_framework()->set_url_scheme( $base, 'relative' );
-	endif;
-
-	return $path;
 }
 
 \add_filter( 'the_seo_framework_fetched_description_excerpt', __NAMESPACE__ . '\\_bbpress_filter_excerpt_generation', 10, 4 );
@@ -145,6 +71,8 @@ function _bbpress_filter_url_path( $path, $id = 0, $external = false ) {
  *
  * @since 2.9.0
  * @since 3.0.4 : Default value for $max_char_length has been increased from 155 to 300.
+ * @since 3.1.0 Now no longer fixes the description when `is_tax()` is true.
+ *              @see `_bbpress_filter_pre_title()` for explanation.
  * @access private
  *
  * @param string $excerpt The excerpt to use.
@@ -156,11 +84,11 @@ function _bbpress_filter_url_path( $path, $id = 0, $external = false ) {
 function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $term = null, $max_char_length = 300 ) {
 
 	if ( \is_bbpress() ) {
-		if ( \bbp_is_topic_tag() ) {
+		if ( \bbp_is_topic_tag() && ! \the_seo_framework()->is_tax() ) {
 			$term = \get_queried_object();
 			$description = $term->description ?: '';
 
-			//* Always overwrite.
+			//* Always overwrite, even when none is found.
 			$excerpt = \the_seo_framework()->s_description_raw( $description );
 		}
 	}
@@ -170,7 +98,7 @@ function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $term 
 
 \add_filter( 'the_seo_framework_custom_field_description', __NAMESPACE__ . '\\_bbpress_filter_custom_field_description' );
 /**
- * Fixes bbPress custom Description.
+ * Fixes bbPress custom Description for social meta.
  *
  * bbPress has a hard time maintaining WordPress' query after the original query.
  * Reasons unknown.

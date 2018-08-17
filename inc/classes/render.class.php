@@ -534,9 +534,9 @@ class Render extends Admin_Init {
 	/**
 	 * Renders Twitter Title meta tag.
 	 *
-	 * @uses $this->get_twitter_title()
 	 * @since 2.2.2
 	 * @since 3.0.4 No longer uses $this->title_from_cache()
+	 * @uses $this->get_twitter_title()
 	 *
 	 * @return string The Twitter Title meta tag.
 	 */

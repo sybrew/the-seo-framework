@@ -15,7 +15,7 @@ add_action( 'init', __NAMESPACE__ . '\\_wpforo_fix_page' );
 function _wpforo_fix_page() {
 
 	if ( function_exists( '\\is_wpforo_page' ) && \is_wpforo_page() ) {
-		\add_filter( 'the_seo_framework_pre_add_title', __NAMESPACE__ . '\\_wpforo_filter_pre_title', 10, 3 );
+		\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_wpforo_filter_pre_title', 10, 2 );
 		\add_filter( 'get_canonical_url', function( $canonical_url, $post ) {
 			return \wpforo_get_request_uri();
 		}, 10, 2 );
@@ -30,15 +30,15 @@ function _wpforo_fix_page() {
  * Fixes wpForo page Titles.
  *
  * @since 2.9.2
- * @since 3.1.0 No longer emits an error when no wpForo title is presented.
+ * @since 3.1.0 1. No longer emits an error when no wpForo title is presented.
+ *              2. Updated to support new title generation.
  * @access private
  *
  * @param string $title The filter title.
  * @param array $args The title arguments.
- * @param bool $escape Whether the output will be sanitized.
  * @return string $title The wpForo title.
  */
-function _wpforo_filter_pre_title( $title, $args, $escape ) {
+function _wpforo_filter_pre_title( $title, $args ) {
 	$wpforo_title = \wpforo_meta_title( '' ); //= Either &$title or [ $title, ... ];
 	return is_array( $wpforo_title ) && ! empty( $wpforo_title[0] ) ? $wpforo_title[0] : $title;
 }
@@ -55,7 +55,7 @@ function _wpforo_filter_pre_title( $title, $args, $escape ) {
  */
 function _wpforo_filter_description_arguments( $defaults, $args ) {
 
-	//* Disable internal requests only. Magic variable (i.e. do overthink it, as it will loop).
+	//* Disable internal requests only. Undocumentable, to be fixed later.
 	if ( empty( $args['social'] ) && empty( $args['get_custom_field'] ) )
 		$defaults['get_custom_field'] = false;
 

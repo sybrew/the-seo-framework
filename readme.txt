@@ -302,8 +302,6 @@ TODO note about that some options have been relocated.
 *Fred Brooks' law: "What one developer can do in one month, two developers can do in two months."*
 
 TODO: RTL stylesheet update.
-TODO: Regression: Title compatibility test --UltimateMember has been fixed thus far. TODO wpforo
-
 TODO: Update plugin setup guide, as pagination settings have been updated.
 
 TODO: Reintroduce these methods, as deprecated:
@@ -437,6 +435,7 @@ TODO: Reintroduce these methods, as deprecated:
 		* AnsPress title compatibility, they handle this.
 		* JetPack Open Graph compatibility checks, they handle this since 2016, and improved upon this since JetPack v6.4.
 		* Description output caching. It causes too much overhead, and it provides no benefit any more. In fact, it affects performance negatively.
+		* TODO `noydir` robots meta tag. It's no longer used by any search engine.
 	* **Fixed:**
 		* When reactivating or deactivating the plugin, there's no longer a chance for your SEO options to be wiped on a random database error.
 			* We used to delete the options, so we could reactivate option-auto-loading; now we add a buster-timestamp.
@@ -463,8 +462,9 @@ TODO: Reintroduce these methods, as deprecated:
 			* Before you can change tabs. It'll block the tab switch and notify you.
 			* After you close a metabox, and it'll reopen instantly to notify you.
 		* The SEO Bar no longer incorretly tells that CPT categories or tags are discouraged from indexing via the global settings.
-		* WC Shop and Blog Pages canonical URLs now correctly output pagination.
-		* WC Shop and Blog Pages shortlink URLs now correctly output pagination.
+		* WC Shop and Blog pages canonical URLs now correctly output pagination.
+		* WC Shop and Blog pages shortlink URLs now correctly output pagination.
+		* TODO Search pages now correctly output pagination. // TODO REGRESSION?
 		* The title metabox's example title (from the latest post) can now be substituted for the example title when empty.
 		* Term titles no longer have their HTML tags stripped in the generated SEO titles by default.
 		* When no blog description or tagline is set, the left/right example titles are no longer partially emptied when JS is deactivated.
@@ -639,9 +639,9 @@ TODO: Reintroduce these methods, as deprecated:
 				* `merge_title_pagination()`
 				* `merge_title_protection()`
 				* `use_title_branding()`
-				* `use_singular_title_branding()`
 				* `use_generated_archive_prefix()`
 				* `use_home_page_title_tagline()`
+				* `use_singular_title_branding()`
 				* `get_home_page_tagline()`
 				* TODO are there more??
 			* In class `\The_SEO_Framework\Generate_Url` -- Factory: `the_seo_framework()`
@@ -840,7 +840,6 @@ TODO: Reintroduce these methods, as deprecated:
 				* `use_googleplus_tags()` -- The G+ project uses Open Graph and structured data.
 			* In class: `\The_SEO_Framework\Title` -- Factory: `the_seo_framework()`
 				* TODO: Consider deprecating these instead.
-				* `build_title()`
 				* `build_title_doingitwrong()`
 				* `parse_title_args()`
 				* `reparse_title_args()`
@@ -850,9 +849,7 @@ TODO: Reintroduce these methods, as deprecated:
 				* `generate_title()`
 				* `title_for_home()`
 				* `title_for_terms()`
-				* `title_from_custom_field()`
 				* `get_custom_field_title()`
-				* `post_title_from_ID()`
 				* `get_the_search_title()`
 				* `get_the_404_title()`
 				* `add_title_additions()`
@@ -869,6 +866,9 @@ TODO: Reintroduce these methods, as deprecated:
 				* `get_supported_post_type()`, use `is_post_type_supported()` instead.
 			* In class: `\The_SEO_Framework\Generate_Title` -- factory: `the_seo_framework()`
 				* `title()`, goodbye, old friend. Use `get_title()` instead.
+				* `build_title()`, use `get_title()` instead.
+				* `post_title_from_ID()`, use `get_raw_generated_title( [ 'id' => $id ] )` instead.
+				* `title_from_custom_field()`, use `get_raw_custom_field_title()` instead.
 				* `generate_home_title()`, use `get_title()` instead.
 				* `get_the_real_archive_title()`, use `get_generated_archive_title()` instead.
 				* `single_term_title()`, use `get_generated_single_term_title()` instead.
@@ -915,7 +915,7 @@ TODO: Reintroduce these methods, as deprecated:
 		* **Added:**
 			* `(array) the_seo_framework_scripts`, allows you to adjust (or add to) the default script parameters.
 			* `(string) the_seo_framework_title_from_custom_field`, the meta title from custom fields.
-			* `(string) the_seo_framework_title_from_query`, the meta title from (inputted/detected) query.
+			* `(string) the_seo_framework_title_from_generation`, the meta title from (inputted/detected) query.
 			* `(array) the_seo_framework_sitemap_styles`, the sitemap styles.
 			* `(string) the_seo_framework_site_cache`, the cache option value.
 			* `(array) the_seo_framework_inpost_seo_save_defaults`, the post SEO data defaults. Note that this doesn't change the post data prior saving.
