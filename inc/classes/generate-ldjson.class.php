@@ -85,10 +85,7 @@ class Generate_Ldjson extends Generate_Image {
 
 		if ( \has_filter( 'the_seo_framework_receive_json_data' ) ) {
 			/**
-			 * Applies filters 'the_seo_framework_recieve_json_data'
-			 *
 			 * @since 2.9.3
-			 *
 			 * @param array  $data The LD-JSON data.
 			 * @param string $key  The data key.
 			 */
@@ -155,7 +152,7 @@ class Generate_Ldjson extends Generate_Image {
 		if ( $this->has_json_ld_plugin() )
 			return '';
 
-		$use_cache      = $this->is_option_checked( 'cache_meta_schema' );
+		$use_cache      = (bool) $this->get_option( 'cache_meta_schema' );
 		$transient_name = $use_cache ? $this->get_ld_json_transient_name( $this->get_the_real_ID() ) : '';
 
 		$output = $transient_name ? $this->get_transient( $transient_name ) : false;
@@ -219,7 +216,6 @@ class Generate_Ldjson extends Generate_Image {
 		$action_name = 'search_term_string';
 		$search_link = $this->pretty_permalinks ? \trailingslashit( \get_search_link() ) : \get_search_link();
 		/**
-		 * Applies filters 'the_seo_framework_ld_json_search_url' : string
 		 * @since 2.7.0
 		 * @param string $search_url The default WordPress search URL without query parameters.
 		 */
@@ -273,8 +269,8 @@ class Generate_Ldjson extends Generate_Image {
 		}
 
 		/**
-		 * Applies filters 'the_seo_framework_json_options' : array The option names
-		 * @since Unknown. Definitely 2.7 or later.
+		 * @since 2.7 or later.
+		 * @param array The SEO Framework's option names used for sitelinks.
 		 */
 		$sameurls_options = (array) \apply_filters(
 			'the_seo_framework_json_options',
@@ -294,7 +290,6 @@ class Generate_Ldjson extends Generate_Image {
 		$sameurls = [];
 		foreach ( $sameurls_options as $_o ) {
 			$_ov = $this->get_option( $_o ) ?: '';
-			//* Sublevel array entries aren't getting caught by array_filter().
 			if ( $_ov )
 				$sameurls[] = \esc_url_raw( $_ov, [ 'https', 'http' ] );
 		}
@@ -326,8 +321,6 @@ class Generate_Ldjson extends Generate_Image {
 	 */
 	public function get_knowledge_logo( $get_option = true ) {
 		/**
-		 * Applies filters 'the_seo_framework_knowledge_logo'
-		 *
 		 * @since 3.0.0
 		 * @param string $logo       The current logo URL.
 		 * @param bool   $get_option Whether to test the option or just the fallbacks.
@@ -436,14 +429,19 @@ class Generate_Ldjson extends Generate_Image {
 		$taxonomies = $this->get_hierarchical_taxonomies_as( 'names', \get_post_type( $post_id ) );
 
 		/**
-		 * Applies filters 'the_seo_framework_ld_json_breadcrumb_taxonomies'
-		 *
 		 * @since 3.0.0
 		 * @param array|string  $taxonomies The assigned hierarchical taxonomies.
 		 * @param string        $post_type  The current post type.
 		 * @param int           $post_id    The current Post ID.
 		 */
-		$taxonomies = \apply_filters( 'the_seo_framework_ld_json_breadcrumb_taxonomies', $taxonomies, $post_type, $post_id );
+		$taxonomies = \apply_filters_ref_array(
+			'the_seo_framework_ld_json_breadcrumb_taxonomies',
+			[
+				$taxonomies,
+				$post_type,
+				$post_id,
+			]
+		);
 
 		if ( is_array( $taxonomies ) ) {
 			$taxonomy = reset( $taxonomies );
@@ -457,12 +455,10 @@ class Generate_Ldjson extends Generate_Image {
 			return '';
 
 		/**
-		 * Applies filter 'the_seo_framework_ld_json_breadcrumb_terms' : array
 		 * @since 2.8.0
-		 *
-		 * @param array  $terms The candidate terms.
+		 * @param array  $terms    The candidate terms.
 		 * @param int    $post_id  The current Post ID.
-		 * @param string $taxonomy The current taxonomy (either category or product_cat).
+		 * @param string $taxonomy The current taxonomy.
 		 */
 		$terms = (array) \apply_filters_ref_array(
 			'the_seo_framework_ld_json_breadcrumb_terms',
@@ -837,13 +833,9 @@ class Generate_Ldjson extends Generate_Image {
 		static $cache = null;
 
 		/**
-		 * Applies filters 'the_seo_framework_use_breadcrumb_seo_title' : boolean
-		 *
-		 * Determines whether to use the SEO title or only the fallback page title
-		 * in breadcrumbs.
-		 *
+		 * Determines whether to use the SEO title or only the fallback page title in breadcrumbs.
 		 * @since 2.9.0
-		 * @param bool $retval
+		 * @param bool $use_seo_title Whether to use the SEO title.
 		 */
 		return isset( $cache ) ? $cache : $cache = (bool) \apply_filters( 'the_seo_framework_use_breadcrumb_seo_title', true );
 	}
@@ -864,12 +856,11 @@ class Generate_Ldjson extends Generate_Image {
 			return $cache;
 
 		/**
-		 * Applies filters the_seo_framework_json_breadcrumb_output
 		 * @since 2.4.2
-		 * @param bool $output
+		 * @param bool $filter Whether to force disable Schema.org breadcrumbs.
 		 */
 		$filter = (bool) \apply_filters( 'the_seo_framework_json_breadcrumb_output', true );
-		$option = $this->is_option_checked( 'ld_json_breadcrumbs' );
+		$option = $this->get_option( 'ld_json_breadcrumbs' );
 
 		return $cache = $filter && $option;
 	}
@@ -890,11 +881,11 @@ class Generate_Ldjson extends Generate_Image {
 			return $cache;
 
 		/**
-		 * Applies filters 'the_seo_framework_json_search_output'
 		 * @since 2.3.9
+		 * @param bool $filter Whether to force disable Schema.org searchbox.
 		 */
 		$filter = (bool) \apply_filters( 'the_seo_framework_json_search_output', true );
-		$option = $this->is_option_checked( 'ld_json_searchbox' );
+		$option = $this->get_option( 'ld_json_searchbox' );
 
 		return $cache = $filter && $option;
 	}
@@ -915,11 +906,11 @@ class Generate_Ldjson extends Generate_Image {
 			return $cache;
 
 		/**
-		 * Applies filters 'the_seo_framework_json_search_output'
 		 * @since 2.6.5
+		 * @param bool $filter Whether to force disable Schema.org knowledge.
 		 */
 		$filter = (bool) \apply_filters( 'the_seo_framework_json_knowledge_output', true );
-		$option = $this->is_option_checked( 'knowledge_output' );
+		$option = $this->get_option( 'knowledge_output' );
 
 		return $cache = $filter && $option;
 	}

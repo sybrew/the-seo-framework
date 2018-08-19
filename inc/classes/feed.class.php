@@ -122,8 +122,8 @@ class Feed extends Cache {
 
 		$excerpt_len = (int) mb_strlen( $excerpt );
 		/**
-		 * Applies filters the_seo_framework_max_content_feed_length : The max excerpt length.
 		 * @since 2.5.2
+		 * @param int $max_len The maximum feed (multibyte) string length.
 		 */
 		$max_len = (int) \apply_filters( 'the_seo_framework_max_content_feed_length', 400 );
 
@@ -169,14 +169,14 @@ class Feed extends Cache {
 	 */
 	protected function get_feed_entry_source_link() {
 		/**
-		 * Applies filters 'the_seo_framework_feed_source_link' : string
-		 *
 		 * @since 2.6.0
 		 * @since 2.7.2 or 2.7.3: Escaped output.
-		 *
 		 * @param string $source The source indication string.
 		 */
-		$source_i18n = (string) \apply_filters( 'the_seo_framework_feed_source_link_text', \_x( 'Source', 'The content source', 'autodescription' ) );
+		$source_i18n = (string) \apply_filters(
+			'the_seo_framework_feed_source_link_text',
+			\_x( 'Source', 'The content source', 'autodescription' )
+		);
 		$content = '<p><a href="' . \esc_url( \get_permalink() ) . '" rel="nofollow">' . \esc_html( $source_i18n ) . '</a></p>';
 
 		return $content;

@@ -35,11 +35,12 @@ function _disable_genesis_seo( $plugins ) {
 	return $plugins;
 }
 
-\add_filter( 'the_seo_framework_get_term_meta', __NAMESPACE__ . '\\_genesis_get_term_meta', 10, 2 );
+\add_filter( 'the_seo_framework_term_meta_defaults', __NAMESPACE__ . '\\_genesis_get_term_meta', 10, 2 );
 /**
  * Returns Genesis term meta.
  *
  * @since 2.8.0
+ * @since 3.1.0 Now filters empty fields.
  *
  * @param array $data The current term meta.
  * @param int $term_id The current term ID.
@@ -47,13 +48,13 @@ function _disable_genesis_seo( $plugins ) {
  */
 function _genesis_get_term_meta( $data = [], $term_id = 0 ) {
 
-	$genesis_data = [
-		'doctitle'    => \get_term_meta( $term_id, 'doctitle', true ),
-		'description' => \get_term_meta( $term_id, 'description', true ),
-		'noindex'     => \get_term_meta( $term_id, 'noindex', true ),
-		'nofollow'    => \get_term_meta( $term_id, 'nofollow', true ),
-		'noarchive'   => \get_term_meta( $term_id, 'noarchive', true ),
-	];
+	$genesis_data = array_filter( [
+		'doctitle'    => \get_term_meta( $term_id, 'doctitle', true ) ?: false,
+		'description' => \get_term_meta( $term_id, 'description', true ) ?: false,
+		'noindex'     => \get_term_meta( $term_id, 'noindex', true ) ?: false,
+		'nofollow'    => \get_term_meta( $term_id, 'nofollow', true ) ?: false,
+		'noarchive'   => \get_term_meta( $term_id, 'noarchive', true ) ?: false,
+	] );
 
 	return array_merge( $data, $genesis_data );
 }

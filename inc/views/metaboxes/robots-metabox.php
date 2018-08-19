@@ -84,10 +84,9 @@ switch ( $instance ) :
 		];
 
 		/**
-		 * Applies filters 'the_seo_framework_robots_settings_tabs' : array see $default_tabs
-		 *
-		 * Used to extend Social tabs
 		 * @since 2.2.4
+		 * @param array $defaults The default tabs.
+		 * @param array $args     The args added on the callback.
 		 */
 		$defaults = (array) apply_filters( 'the_seo_framework_robots_settings_tabs', $default_tabs, $args );
 

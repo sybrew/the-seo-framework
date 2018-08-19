@@ -464,13 +464,10 @@ class Post_Data extends Detect {
 		$meta = \get_post_meta( $post_id );
 
 		/**
-		 * Applies filters 'the_seo_framework_detect_page_builder' : boolean
 		 * Determines whether a page builder has been detected.
-		 *
 		 * @since 2.6.6
 		 * @since 3.1.0 1: Now defaults to `null`
 		 *              2: Now, when a boolean (either true or false) is defined, it'll short-circuit this function.
-		 *
 		 * @param boolean|null $detected Whether a builder should be detected.
 		 * @param int          $post_id The current Post ID.
 		 * @param array        $meta The current post meta.

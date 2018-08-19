@@ -49,12 +49,8 @@ class Detect extends Render {
 	 * @return bool True if AJAX
 	 */
 	public function doing_ajax() {
-
 		static $cache = null;
-
-		null === $cache and $cache = defined( 'DOING_AJAX' ) && DOING_AJAX;
-
-		return $cache;
+		return isset( $cache ) ? $cache : $cache = defined( 'DOING_AJAX' ) && DOING_AJAX;
 	}
 
 	/**
@@ -164,8 +160,8 @@ class Detect extends Render {
 		];
 
 		/**
-		 * Applies filters 'the_seo_framework_conflicting_plugins' : array
 		 * @since 2.6.0
+		 * @param array $conflicting_plugins The conflicting plugin list.
 		 */
 		return (array) \apply_filters( 'the_seo_framework_conflicting_plugins', $conflicting_plugins );
 	}
@@ -374,6 +370,7 @@ class Detect extends Render {
 	 *
 	 * @since 1.3.0
 	 * @since 2.6.0 Uses new style detection.
+	 * @since 3.1.0: The filter no longer short-circuits the function when it's false.
 	 *
 	 * @return bool SEO plugin detected.
 	 */
@@ -389,14 +386,24 @@ class Detect extends Render {
 		if ( ! empty( $active_plugins ) ) {
 			$conflicting_plugins = $this->get_conflicting_plugins( 'seo_tools' );
 
-			foreach ( $conflicting_plugins as $plugin ) {
+			foreach ( $conflicting_plugins as $plugin_name => $plugin ) {
 				if ( in_array( $plugin, $active_plugins, true ) ) {
 					/**
-					 * Applies filters 'the_seo_framework_seo_plugin_detected' : boolean
 					 * @since 2.6.1
+					 * @since 3.1.0 Added second and third parameters.
+					 * @param bool   $detected    Whether the plugin should be detected.
+					 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
+					 * @param string $plugin      The plugin that's been detected.
 					 */
-					$detected = \apply_filters( 'the_seo_framework_seo_plugin_detected', true );
-					break;
+					$detected = \apply_filters_ref_array(
+						'the_seo_framework_seo_plugin_detected',
+						[
+							true,
+							$plugin_name,
+							$plugin,
+						]
+					);
+					if ( $detected ) break;
 				}
 			}
 		}
@@ -409,6 +416,7 @@ class Detect extends Render {
 	 *
 	 * @since 1.3.0
 	 * @since 2.8.0: No longer checks for old style filter.
+	 * @since 3.1.0: The filter no longer short-circuits the function when it's false.
 	 *
 	 * @return bool True if OG or SEO plugin detected.
 	 */
@@ -428,14 +436,24 @@ class Detect extends Render {
 		if ( ! empty( $active_plugins ) ) {
 			$conflicting_plugins = $this->get_conflicting_plugins( 'open_graph' );
 
-			foreach ( $conflicting_plugins as $plugin ) {
+			foreach ( $conflicting_plugins as $plugin_name => $plugin ) {
 				if ( in_array( $plugin, $active_plugins, true ) ) {
 					/**
-					 * Applies filters 'the_seo_framework_og_plugin_detected' : boolean
 					 * @since 2.6.1
+					 * @since 3.1.0 Added second and third parameters.
+					 * @param bool   $detected    Whether the plugin should be detected.
+					 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
+					 * @param string $plugin      The plugin that's been detected.
 					 */
-					$detected = \apply_filters( 'the_seo_framework_og_plugin_detected', true );
-					break;
+					$detected = \apply_filters_ref_array(
+						'the_seo_framework_og_plugin_detected',
+						[
+							true,
+							$plugin_name,
+							$plugin,
+						]
+					);
+					if ( $detected ) break;
 				}
 			}
 		}
@@ -447,6 +465,7 @@ class Detect extends Render {
 	 * Determines if other Twitter Card plugins are active.
 	 *
 	 * @since 2.6.0
+	 * @since 3.1.0: The filter no longer short-circuits the function when it's false.
 	 * @staticvar bool $detected
 	 *
 	 * @return bool Twitter Card plugin detected.
@@ -467,14 +486,23 @@ class Detect extends Render {
 		if ( ! empty( $active_plugins ) ) {
 			$conflicting_plugins = $this->get_conflicting_plugins( 'twitter_card' );
 
-			foreach ( $conflicting_plugins as $plugin ) {
+			foreach ( $conflicting_plugins as $plugin_name => $plugin ) {
 				if ( in_array( $plugin, $active_plugins, true ) ) {
 					/**
-					 * Applies filters 'the_seo_framework_twittercard_plugin_detected' : boolean
 					 * @since 2.6.1
+					 * @param bool   $detected    Whether the plugin should be detected.
+					 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
+					 * @param string $plugin      The plugin that's been detected.
 					 */
-					$detected = \apply_filters( 'the_seo_framework_twittercard_plugin_detected', true );
-					break;
+					$detected = \apply_filters_ref_array(
+						'the_seo_framework_twittercard_plugin_detected',
+						[
+							true,
+							$plugin_name,
+							$plugin,
+						]
+					);
+					if ( $detected ) break;
 				}
 			}
 		}
@@ -492,8 +520,8 @@ class Detect extends Render {
 	 */
 	public function has_json_ld_plugin() {
 		/**
-		 * Applies filters 'the_seo_framework_ldjson_plugin_detected' : boolean
 		 * @since 2.6.5
+		 * @param bool $detected Whether a conflicting schema plugin is detected.
 		 */
 		return (bool) \apply_filters( 'the_seo_framework_ldjson_plugin_detected', false );
 	}
@@ -502,6 +530,7 @@ class Detect extends Render {
 	 * Determines if other Sitemap plugins are active.
 	 *
 	 * @since 2.1.0
+	 * @since 3.1.0: The filter no longer short-circuits the function when it's false.
 	 * @staticvar bool $detected
 	 *
 	 * @return bool
@@ -522,10 +551,23 @@ class Detect extends Render {
 		if ( ! empty( $active_plugins ) ) {
 			$conflicting_plugins = $this->get_conflicting_plugins( 'sitemaps' );
 
-			foreach ( $conflicting_plugins as $plugin ) {
+			foreach ( $conflicting_plugins as $plugin_name => $plugin ) {
 				if ( in_array( $plugin, $active_plugins, true ) ) {
-					$detected = \apply_filters( 'the_seo_framework_sitemap_plugin_detected', true );
-					break;
+					/**
+					 * @since 2.6.1
+					 * @param bool   $detected    Whether the plugin should be detected.
+					 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
+					 * @param string $plugin      The plugin that's been detected.
+					 */
+					$detected = \apply_filters(
+						'the_seo_framework_sitemap_plugin_detected',
+						[
+							true,
+							$plugin_name,
+							$plugin,
+						]
+					);
+					if ( $detected ) break;
 				}
 			}
 		}
@@ -549,7 +591,7 @@ class Detect extends Render {
 	public function can_do_sitemap_robots( $check_option = true ) {
 
 		if ( $check_option ) {
-			if ( ! $this->is_option_checked( 'sitemaps_output' ) || ! $this->is_option_checked( 'sitemaps_robots' ) )
+			if ( ! $this->get_option( 'sitemaps_output' ) || ! $this->get_option( 'sitemaps_robots' ) )
 				return false;
 		}
 
@@ -748,7 +790,6 @@ class Detect extends Render {
 
 		if ( $has_filter ) {
 			/**
-			 * Applies filters 'the_seo_framework_custom_post_type_support'
 			 * Determines the required post type features before TSF supports it.
 			 * @since 2.3.5
 			 * @since 3.0.4 Default parameter now is `[]` instead of `['title','editor']`.
@@ -819,7 +860,6 @@ class Detect extends Render {
 	public function is_post_type_supported( $post_type = '' ) {
 		$post_type = $post_type ?: \get_post_type() ?: $this->get_admin_post_type();
 		/**
-		 * Applies filters 'the_seo_framework_supported_post_type' : string
 		 * @since 2.6.2
 		 * @since 3.1.0 The first parameter is always a boolean now.
 		 * @param bool   $post_type Whether the post type is supported

@@ -69,13 +69,13 @@ class Admin_Pages extends Inpost {
 	/**
 	 * Enqueue page defaults early.
 	 *
-	 * Applies filter 'the_seo_framework_admin_page_defaults' : Array
-	 * This filter adds i18n support for buttons and notices.
-	 *
 	 * @since 2.3.1
 	 */
 	public function enqueue_page_defaults() {
-
+		/**
+		 * @since 2.3.1
+		 * @param array $page_defaults The admin default notice sentences.
+		 */
 		$this->page_defaults = (array) \apply_filters(
 			'the_seo_framework_admin_page_defaults',
 			[
@@ -874,18 +874,19 @@ class Admin_Pages extends Inpost {
 	 * Just like code_wrap.
 	 *
 	 * @since 2.2.5
+	 * @since 3.1.0 Deprecated second parameter.
 	 *
 	 * @param string $key  The option name which returns boolean.
-	 * @param string $setting optional The settings field.
+	 * @param string $deprecated Deprecated
 	 * @param bool   $wrap Whether to wrap the class name in `class="%s"`
 	 * @param bool   $echo Whether to echo or return the output.
 	 * @return string Empty on echo or the class name with an optional wrapper.
 	 */
-	public function is_default_checked( $key, $setting = '', $wrap = true, $echo = true ) {
+	public function is_default_checked( $key, $deprecated = '', $wrap = true, $echo = true ) {
 
 		$class = '';
 
-		$default = $this->get_default_settings( $key, $setting );
+		$default = $this->get_default_settings( $key, $deprecated );
 
 		if ( 1 === $default )
 			$class = 'tsf-default-selected';
@@ -908,18 +909,19 @@ class Admin_Pages extends Inpost {
 	 * Returns the HTML class wrap for warning Checkbox options.
 	 *
 	 * @since 2.3.4
+	 * @since 3.1.0 Deprecated second parameter.
 	 *
 	 * @param string $key  The option name which returns boolean.
-	 * @param string $setting optional The settings field.
+	 * @param string $deprecated Deprecated.
 	 * @param bool   $wrap Whether to wrap the class name in `class="%s"`
 	 * @param bool   $echo Whether to echo or return the output.
 	 * @return string Empty on echo or the class name with an optional wrapper.
 	 */
-	public function is_warning_checked( $key, $setting = '', $wrap = true, $echo = true ) {
+	public function is_warning_checked( $key, $deprecated = '', $wrap = true, $echo = true ) {
 
 		$class = '';
 
-		$warned = $this->get_warned_settings( $key, $setting );
+		$warned = $this->get_warned_settings( $key, $deprecated );
 
 		if ( 1 === $warned )
 			$class = 'tsf-warning-selected';
@@ -948,13 +950,14 @@ class Admin_Pages extends Inpost {
 	 * @param bool   $wrap Whether to wrap the class name in `class="%s"`
 	 */
 	public function get_is_conditional_checked( $key, $wrap = true ) {
-		return $this->is_conditional_checked( $key, $this->settings_field, $wrap, false );
+		return $this->is_conditional_checked( $key, '', $wrap, false );
 	}
 
 	/**
 	 * Returns the HTML class wrap for warning/default Checkbox options.
 	 *
 	 * @since 2.3.4
+	 * @since 3.1.0 Deprecated second parameter.
 	 *
 	 * @param string $key  The option name which returns boolean.
 	 * @param string $setting optional The settings field.
@@ -962,12 +965,12 @@ class Admin_Pages extends Inpost {
 	 * @param bool   $echo Whether to echo or return the output.
 	 * @return string Empty on echo or the class name with an optional wrapper.
 	 */
-	public function is_conditional_checked( $key, $setting = '', $wrap = true, $echo = true ) {
+	public function is_conditional_checked( $key, $deprecated = '', $wrap = true, $echo = true ) {
 
 		$class = '';
 
-		$default = $this->is_default_checked( $key, $setting, false, false );
-		$warned  = $this->is_warning_checked( $key, $setting, false, false );
+		$default = $this->is_default_checked( $key, $deprecated, false, false );
+		$warned  = $this->is_warning_checked( $key, $deprecated, false, false );
 
 		if ( '' !== $default && '' !== $warned ) {
 			$class = $default . ' ' . $warned;
@@ -976,44 +979,6 @@ class Admin_Pages extends Inpost {
 		} elseif ( '' !== $warned ) {
 			$class = $warned;
 		}
-
-		if ( $echo ) {
-			if ( $wrap ) {
-				printf( 'class="%s"', \esc_attr( $class ) );
-			} else {
-				echo \esc_attr( $class );
-			}
-		} else {
-			if ( $wrap )
-				return sprintf( 'class="%s"', $class );
-
-			return $class;
-		}
-	}
-
-	/**
-	 * Returns the HTML class wrap for default radio options.
-	 *
-	 * @since 2.2.5
-	 *
-	 * @TODO use this
-	 * @priority low 2.8.0+
-	 *
-	 * @param string $key required The option name which returns boolean.
-	 * @param string $value required The option value which returns boolean.
-	 * @param string $setting optional The settings field
-	 * @param bool $wrap optional output class="" or just the class name.
-	 * @param bool $echo optional echo or return the output.
-	 * @return string|null the default selected class.
-	 */
-	public function is_default_radio( $key, $value, $setting = '', $wrap = true, $echo = true ) {
-
-		$class = '';
-
-		$default = $this->get_default_settings( $key, $setting );
-
-		if ( $value === $default )
-			$class = 'tsf-default-selected';
 
 		if ( $echo ) {
 			if ( $wrap ) {

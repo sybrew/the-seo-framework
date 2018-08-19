@@ -90,8 +90,9 @@ class Term_Data extends Post_Data {
 	 * Returns Genesis 2.3.0+ data if no term meta data is set via compat module.
 	 *
 	 * @since 2.7.0
-	 * @since 2.8.0 : Added filter.
-	 * @since 3.0.0 : Added filter.
+	 * @since 2.8.0 Added filter.
+	 * @since 3.0.0 Added filter.
+	 * @since 3.1.0 Deprecated filter.
 	 * @staticvar array $cache
 	 *
 	 * @param int  $term_id The Term ID.
@@ -114,26 +115,35 @@ class Term_Data extends Post_Data {
 		//* Evaluate merely by presence.
 		if ( isset( $data['saved_flag'] ) ) {
 			/**
-			 * Applies filters 'the_seo_framework_current_term_meta'.
-			 *
 			 * @since 3.0.0
-			 *
-			 * @param array $data The current term data.
+			 * @param array $data The CURRENT term data.
 			 * @param int   $term_id The term ID.
 			 */
 			return $cache[ $term_id ] = \apply_filters( 'the_seo_framework_current_term_meta', $data, $term_id );
 		}
 
+		static $checked = false;
+		if ( ! $checked && \has_filter( 'the_seo_framework_get_term_meta' ) ) {
+			$this->_doing_it_wrong( 'Filter <code>the_seo_framework_get_term_meta</code>', 'the_seo_framework_term_meta_defaults', '3.1.0' );
+		}
+		$checked = true;
+
 		/**
-		 * Applies filters 'the_seo_framework_get_term_meta'.
-		 * NOTE: Only works before TSF sets its saved - flag. To be used prior to migration.
-		 *
+		 * NOTE: Only works before TSF sets its saved-flag. To be used prior to migration.
+		 * Yes, this is inconveniently named. So, we (finally) deprecated it.
 		 * @since 2.8.0
-		 *
-		 * @param array $data The term data.
+		 * @since 3.1.0 Now uses the `get_term_meta_defaults()` callback.
+		 * @deprecated. Use `the_seo_framework_term_meta_defaults` instead.
+		 * @param array $data  The DEFAULT term data.
 		 * @param int $term_id The current Term ID.
 		 */
-		$data = \apply_filters( 'the_seo_framework_get_term_meta', [], $term_id );
+		$data = \apply_filters_ref_array(
+			'the_seo_framework_get_term_meta',
+			[
+				$this->get_term_meta_defaults(),
+				$term_id,
+			]
+		);
 
 		return $cache[ $term_id ] = $data;
 	}
@@ -142,6 +152,7 @@ class Term_Data extends Post_Data {
 	 * Returns an array of default term options.
 	 *
 	 * @since 2.7.0
+	 * @since 3.1.0 This is now always used.
 	 *
 	 * @return array The Term Metadata default options.
 	 */
@@ -177,6 +188,7 @@ class Term_Data extends Post_Data {
 			return;
 
 		//* Check again against ambiguous injection.
+		// phpcs:ignore -- wp_unslash() is nonsense.
 		if ( isset( $_POST['_wpnonce'] ) && \wp_verify_nonce( $_POST['_wpnonce'], 'update-tag_' . $term_id ) ) :
 
 			// phpcs:ignore -- wp_unslash() will ruin intended slashes.

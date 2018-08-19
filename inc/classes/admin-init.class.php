@@ -63,7 +63,7 @@ class Admin_Init extends Init {
 				'term.php',
 			];
 
-			if ( ! $this->is_option_checked( 'display_seo_bar_tables' ) ) {
+			if ( ! $this->get_option( 'display_seo_bar_tables' ) ) {
 				$enqueue_hooks = array_diff( $enqueue_hooks, [ 'edit.php', 'edit-tags.php' ] );
 			}
 
@@ -109,10 +109,7 @@ class Admin_Init extends Init {
 		//! PHP 5.4 compat: put in var. Also, we call it twice here...
 		$scripts = $this->Scripts();
 		/**
-		 * Applies filter 'the_seo_framework_scripts'.
-		 *
 		 * @since 3.1.0
-		 *
 		 * @param array  $scripts The default CSS and JS loader settings.
 		 * @param string $scripts The \The_SEO_Framework\Builders\Scripts builder class name.
 		 */
@@ -488,10 +485,8 @@ class Admin_Init extends Init {
 		}
 
 		/**
-		 * Applies filters 'the_seo_framework_js_l10n'
-		 *
 		 * @since 3.0.0
-		 * @param array $l10n
+		 * @param array $l10n The JS l10n values.
 		 */
 		return (array) \apply_filters( 'the_seo_framework_js_l10n', $l10n );
 	}

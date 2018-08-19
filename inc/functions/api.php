@@ -83,23 +83,23 @@ namespace The_SEO_Framework {
 	 *
 	 * @since 2.8.0
 	 * @access private
-	 * @staticvar bool $loaded
-	 *
+	 * @staticvar bool $load
 	 * @action plugins_loaded
+	 *
 	 * @return bool Whether to allow loading of plugin.
 	 */
 	function _can_load() {
 
-		static $loaded = null;
+		static $load = null;
 
-		if ( isset( $loaded ) )
-			return $loaded;
+		if ( isset( $load ) )
+			return $load;
 
 		/**
-		 * Applies filters 'the_seo_framework_load' : bool
 		 * @since 2.3.7
+		 * @param bool $load
 		 */
-		return $loaded = (bool) \apply_filters( 'the_seo_framework_load', true );
+		return $load = (bool) \apply_filters( 'the_seo_framework_load', true );
 	}
 
 	/**
@@ -109,6 +109,7 @@ namespace The_SEO_Framework {
 	 * @uses THE_SEO_FRAMEWORK_DIR_PATH_TRAIT
 	 * @access private
 	 * @staticvar array $loaded
+	 * @TODO use this.
 	 *
 	 * @param string $file Where the trait is for. Must be lowercase.
 	 * @return bool True if loaded, false otherwise.

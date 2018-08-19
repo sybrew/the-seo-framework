@@ -301,10 +301,7 @@ final class Deprecated {
 				$sep = $this->get_title_separator();
 				$page_number = max( $paged, $page );
 				/**
-				 * Applies filters 'the_seo_framework_title_pagination' : string
-				 *
 				 * @since 2.9.4
-				 *
 				 * @param string $pagination  The pagination addition.
 				 * @param string $title       The old title.
 				 * @param int    $page_number The page number.
@@ -567,5 +564,35 @@ final class Deprecated {
 		endif;
 
 		return $url;
+	}
+
+	/**
+	 * Checks if the string input is exactly '1'.
+	 *
+	 * @since 2.6.0
+	 * @since 3.1.0 Deprecated.
+	 *
+	 * @param string $value The value to check.
+	 * @return bool true if value is '1'
+	 */
+	public function is_checked( $value ) {
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->is_checked()', '3.1.0' );
+		return (bool) $value;
+	}
+
+	/**
+	 * Checks if the option is used and checked.
+	 *
+	 * @since 2.6.0
+	 * @since 3.1.0 Deprecated.
+	 *
+	 * @param string $option The option name.
+	 * @return bool Option is checked.
+	 */
+	public function is_option_checked( $option ) {
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->is_option_checked()', '3.1.0' );
+		return (bool) $tsf->get_option( $option );
 	}
 }

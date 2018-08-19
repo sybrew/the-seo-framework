@@ -90,14 +90,10 @@ class Generate_Description extends Generate {
 		}
 
 		/**
-		 * Applies filters 'the_seo_framework_custom_field_description' : string
-		 *
 		 * Filters the description from custom field, if any.
-		 *
 		 * @since 2.9.0
 		 * @since 3.0.6 1. Duplicated from $this->generate_description() (to be deprecated)
 		 *              2. Removed all arguments but the 'id' argument.
-		 *
 		 * @param string $desc The description.
 		 * @param array  $args The description arguments.
 		 */
@@ -248,14 +244,10 @@ class Generate_Description extends Generate {
 			$description = $this->description_from_custom_field( $args, false );
 
 			/**
-			 * Applies filters 'the_seo_framework_custom_field_description' : string
-			 *
 			 * Filters the description from custom field, if any.
-			 *
 			 * @since 2.9.0
-			 * NOTE: MOVED!!
+			 * NOTE: MOVED!! / Duplicated
 			 * @see get_description_from_custom_field()
-			 *
 			 * @param string $description The description.
 			 * @param array $args The description arguments.
 			 */
@@ -270,12 +262,8 @@ class Generate_Description extends Generate {
 			$description = $this->generate_description_from_id( $args, false );
 
 			/**
-			 * Applies filters 'the_seo_framework_generated_description' : string
-			 *
 			 * Filters the generated description, if any.
-			 *
 			 * @since 2.9.0
-			 *
 			 * @param string $description The description.
 			 * @param array $args The description arguments.
 			 */
@@ -283,8 +271,8 @@ class Generate_Description extends Generate {
 		}
 
 		/**
-		 * Applies filters 'the_seo_framework_do_shortcodes_in_description' : Boolean
 		 * @since 2.6.6
+		 * @param bool $do_shortcode Whether to run shortcodes in the description.
 		 */
 		if ( \apply_filters( 'the_seo_framework_do_shortcodes_in_description', false ) )
 			$description = \do_shortcode( $description );
@@ -321,7 +309,11 @@ class Generate_Description extends Generate {
 			];
 
 			/**
-			 * Applies filters 'the_seo_framework_description_args' : array {
+			 * @since 2.5.0
+			 * @since 3.0.4 Added escape parameter.
+			 * @since 3.0.6 Silently deprecated.
+			 * @deprecated
+			 * @param array $defaults The description defaults. {
 			 *    @param int $id the term or page id.
 			 *    @param string $taxonomy taxonomy name.
 			 *    @param bool $is_home We're generating for the home page.
@@ -329,13 +321,6 @@ class Generate_Description extends Generate {
 			 *    @param bool $social Generate Social Description when true.
 			 *    @param bool $escape Whether to escape the description.
 			 * }
-			 *
-			 * @since 2.5.0
-			 * @since 3.0.4 Added escape parameter.
-			 * @since 3.0.6 Silently deprecated.
-			 * @deprecated
-			 *
-			 * @param array $defaults The description defaults.
 			 * @param array $args The input args.
 			 */
 			$defaults = (array) \apply_filters( 'the_seo_framework_description_args', $defaults, $args );
@@ -522,15 +507,19 @@ class Generate_Description extends Generate {
 	public function generate_description_from_id( $args = [], $escape = true ) {
 
 		/**
-		 * Applies filters bool 'the_seo_framework_enable_auto_description'
-		 *
 		 * @since 2.5.0
 		 * @since 3.0.0 Now passes $args as the second parameter.
 		 * @since 3.1.0 Now listens to option.
 		 * @param bool  $autodescription Enable or disable the automated descriptions.
 		 * @param array $args            The description arguments.
 		 */
-		$autodescription = (bool) \apply_filters( 'the_seo_framework_enable_auto_description', $this->get_option( 'auto_description' ), $args );
+		$autodescription = (bool) \apply_filters_ref_array(
+			'the_seo_framework_enable_auto_description',
+			[
+				$this->get_option( 'auto_description' ),
+				$args
+			]
+		);
 		if ( false === $autodescription )
 			return '';
 
@@ -742,12 +731,12 @@ class Generate_Description extends Generate {
 	public function add_description_additions( $id = '', $term = '' ) {
 
 		/**
-		 * Applies filters the_seo_framework_add_description_additions : {
+		 * @since 2.6.0
+		 * @param array $filter : {
 		 *    @param bool     $filter Set to true to add prefix.
 		 *    @param int      $id     The Term object ID or The Page ID.
 		 *    @param \WP_term $term   The Term object.
 		 * }
-		 * @since 2.6.0
 		 */
 		$filter = \apply_filters( 'the_seo_framework_add_description_additions', true, $id, $term );
 		$option = $this->get_option( 'description_additions' );
@@ -832,7 +821,7 @@ class Generate_Description extends Generate {
 				$title[ $id ][ $ignore ] = $this->generate_description_title( $id, $term );
 			}
 
-			if ( $ignore || $this->is_option_checked( 'description_blogname' ) ) {
+			if ( $ignore || $this->get_option( 'description_blogname' ) ) {
 
 				static $on = null;
 				if ( is_null( $on ) ) {
@@ -992,14 +981,11 @@ class Generate_Description extends Generate {
 			}
 
 			/**
-			 * Applies filters 'the_seo_framework_fetched_description_excerpt' : string
-			 *
 			 * @since 2.9.0
-			 *
-			 * @param string $excerpt The excerpt to use.
-			 * @param bool $page_id The current page/term ID
+			 * @param string         $excerpt The excerpt to use.
+			 * @param bool           $page_id The current page/term ID
 			 * @param \WP_Term|mixed $term The current term.
-			 * @param int $max_char_length Determines the maximum length of excerpt after trimming.
+			 * @param int            $max_char_length Determines the maximum length of excerpt after trimming.
 			 */
 			$excerpt = (string) \apply_filters( 'the_seo_framework_fetched_description_excerpt', $excerpt, $page_id, $term, $max_char_length );
 

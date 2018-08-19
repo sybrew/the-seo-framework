@@ -46,17 +46,16 @@ class Doing_It_Right extends Generate_Ldjson {
 	/**
 	 * Add post state on edit.php to the page or post that has been altered.
 	 *
-	 * @uses $this->add_post_state
-	 *
 	 * @since 2.1.0
+	 * @uses $this->add_post_state
 	 */
 	public function post_state() {
 
 		//* Only load on singular pages.
 		if ( $this->is_singular() ) {
 			/**
-			 * Applies filters `the_seo_framework_allow_states` : boolean Whether to allow post states output.
 			 * @since 2.1.0
+			 * @param bool $allow_states Whether to allow TSF post states output.
 			 */
 			$allow_states = (bool) \apply_filters( 'the_seo_framework_allow_states', true );
 
@@ -185,11 +184,8 @@ class Doing_It_Right extends Generate_Ldjson {
 	public function init_columns( $screen = '', $doing_ajax = false ) {
 
 		/**
-		 * Applies filters 'the_seo_framework_show_seo_column' : bool
-		 *
-		 * @since ???
-		 *
-		 * @param bool $show_seo_column
+		 * @since 2.9.1 or earlier.
+		 * @param bool $show_seo_column Whether to show the SEO Bar column.
 		 */
 		$show_seo_column = (bool) \apply_filters( 'the_seo_framework_show_seo_column', true );
 
@@ -276,11 +272,9 @@ class Doing_It_Right extends Generate_Ldjson {
 		];
 
 		/**
-		 * Applies filters 'the_seo_framework_seo_column_keys_order' : array
-		 *
 		 * @since 2.8.0
-		 *
-		 * @param array $order_keys
+		 * @param array $order_keys The keys where the SEO column may be prepended to.
+		 *                          The first key found will be used.
 		 */
 		$order_keys = (array) \apply_filters( 'the_seo_framework_seo_column_keys_order', $order_keys );
 
@@ -682,7 +676,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		$noindex  = (bool) $this->get_custom_field( '_genesis_noindex', $args['post_id'] );
 
 		if ( $is_front_page )
-			$noindex = $this->is_option_checked( 'homepage_noindex' ) ?: $noindex;
+			$noindex = $this->get_option( 'homepage_noindex' ) ?: $noindex;
 
 		if ( $redirect || $noindex )
 			return $this->the_seo_bar_blocked( compact( 'is_term', 'redirect', 'noindex', 'post_i18n' ) );
@@ -1148,7 +1142,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		 *
 		 * @since 2.2.2
 		 */
-		if ( $this->is_option_checked( 'site_noindex' ) ) {
+		if ( $this->get_option( 'site_noindex' ) ) {
 			$ind_notice .= '<br>' . \esc_attr__( "But you've discouraged indexing for the whole site.", 'autodescription' );
 			$ind_class = $unknown;
 			$but = true;
@@ -1300,7 +1294,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			if ( isset( $cache[ $type ] ) )
 				return $cache[ $type ];
 
-			if ( $this->is_option_checked( $taxonomy . '_' . $type ) )
+			if ( $this->get_option( $taxonomy . '_' . $type ) )
 				return $cache[ $type ] = true;
 
 			return $cache[ $type ] = false;
@@ -1353,7 +1347,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		 *
 		 * @since 2.2.2
 		 */
-		if ( $this->is_option_checked( 'site_nofollow' ) ) {
+		if ( $this->get_option( 'site_nofollow' ) ) {
 			$but_and = isset( $fol_but ) ? $and_i18n : $but_i18n;
 			/* translators: %s = But or And */
 			$fol_notice .= '<br>' . sprintf( \esc_attr__( "%s you've discouraged the following of links for the whole site.", 'autodescription' ), $but_and );
@@ -1471,7 +1465,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		 *
 		 * @since 2.2.2
 		 */
-		if ( $this->is_option_checked( 'site_noarchive' ) ) {
+		if ( $this->get_option( 'site_noarchive' ) ) {
 			$but_and = isset( $arc_but ) ? $and_i18n : $but_i18n;
 
 			$arc_notice .= '<br>' . sprintf( \esc_attr__( "%s you've discouraged archiving for the whole site.", 'autodescription' ), $but_and );

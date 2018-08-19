@@ -280,38 +280,10 @@ class Core {
 			return $allowed;
 
 		/**
-		 * Applies filters the_seo_framework_allow_external_redirect : bool
 		 * @since 2.1.0
+		 * @param bool $allowed Whether external redirect is allowed.
 		 */
 		return $allowed = (bool) \apply_filters( 'the_seo_framework_allow_external_redirect', true );
-	}
-
-	/**
-	 * Checks if the string input is exactly '1'.
-	 *
-	 * @since 2.6.0
-	 *
-	 * @param string $value The value to check.
-	 * @return bool true if value is '1'
-	 */
-	public function is_checked( $value ) {
-
-		if ( '1' === $value )
-			return true;
-
-		return false;
-	}
-
-	/**
-	 * Checks if the option is used and checked.
-	 *
-	 * @since 2.6.0
-	 *
-	 * @param string $option The option name.
-	 * @return bool Option is checked.
-	 */
-	public function is_option_checked( $option ) {
-		return $this->is_checked( $this->get_option( $option ) );
 	}
 
 	/**
@@ -385,8 +357,6 @@ class Core {
 	 */
 	public function get_settings_capability() {
 		/**
-		 * Applies filters 'the_seo_framework_settings_capability'
-		 *
 		 * @since 2.6.0
 		 * @param string $capability The user capability required to adjust settings.
 		 */

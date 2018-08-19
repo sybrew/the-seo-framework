@@ -283,6 +283,20 @@ TODO note about that some options have been relocated.
 * Most users aren't affected by this. However, if you think you're using any of [these plugins](TODO), you might wish to revise your settings.
 * We made this change because it was confusing to many users; the plugin even seemed broken.
 
+**For everyone: API changes**
+
+* The plugin's API has been greatly overhauled and improved.
+* If you have no coding experience, but have still implemented filters/snippets acquired from the support forums, please check out the debug logs.
+* If you're getting deprecation or "doing it wrong" notices on the website or logs after updating, don't be alarmed. Copy the error or notice and paste it in our support forums in a code block. Our support team (Sybre...) will forge new snippets for you, or point you to newly available options.
+* Note that you should never set `WP_DEBUG` to `true` (in `wp-config.php`) on a production website. Set this to `false`, live sites shouldn't be actively debugged.
+
+**For developers: About the integral options**
+
+* The integral options (from checkboxes and number fields) now always return a integral type, instead of a string.
+* So, you'll now get a `0`, instead of a `'0'`.
+* This change was made because we now use `stripslashes_deep()`, which uses `stripslashes_from_strings_only()`.
+* This improves performance. And, this shouldn't affect code behavior, unless you used strict integral-string checks.
+
 **For developers: About the API**
 
 * We've removed or otherwise deprecated most API functions. We've done this to lower maintenance time drastically.
@@ -304,10 +318,7 @@ TODO note about that some options have been relocated.
 TODO: RTL stylesheet update.
 TODO: Update plugin setup guide, as pagination settings have been updated.
 
-TODO: Reintroduce these methods, as deprecated:
-	* title_from_custom_field()
-	* post_title_from_ID()
-	* ...probably more
+TODO Category "no archive" check tooltip overflows on 1080p. 'tsf-tooltip-boundary' isn't respected.
 
 * **For everyone:**
 	* **Added:**
@@ -393,6 +404,7 @@ TODO: Reintroduce these methods, as deprecated:
 			* This is great for multisite setups that block the admin interface.
 			* It prevents/resolves all sorts of first-run bugs, like the sitemap's initial registration.
 		* When Polylang is active, users are now notified that it's better not to utilize some of the Home Page SEO settings metabox fields.
+		* The settings handler has been slightly refactored to improve performance.
 	* **Changed:**
 		* TSF now requires WordPress 4.6 (previously 4.4).
 		* TSF now requires PHP 5.4 (previously 5.3).
@@ -472,6 +484,7 @@ TODO: Reintroduce these methods, as deprecated:
 		* Settings are now correctly registered before the plugin tries to upgrade.
 		* The sitemap is now correctly registered via `WP_Rewrite` when the plugin is installed for the first time.
 		* When you try to leave the page, TSF no longer conflicts with other plugins (two-way street) when trying to warn you of unsaved data.
+		* Migrating Genesis theme term-meta now has an effect on the front-end too, instead of only the administrative option fields.
 
 * **For translators:**
 	* **New translations are available.**
@@ -523,6 +536,7 @@ TODO: Reintroduce these methods, as deprecated:
 		* The WordPress filter `pre_ent2ncr` can now run on filter `the_seo_framework_sitemap_additional_urls`.
 		* The WordPress filter `single_post_title` is now used for singular post titles.
 		* Query caching is now disabled in WP_CLI.
+		* Integral options (1/0, or a number) now return an integer, instead of a number encapsulated in a string.
 	* **Removed:**
 		* We removed the `seotips` folder and their contents. They were a gimmick, accumulating SEO tips brought over past plugin update changelogs.
 		* Many deprecated methods, which were deprecated on or before TSF v2.9.4 (August 30, 2017).
@@ -754,6 +768,7 @@ TODO: Reintroduce these methods, as deprecated:
 				* `make_textfield()`, was marked private.
 				* `field_value()`, redundant. Use `get_option()` instead.
 				* `get_field_value()`, redundant. Use `get_option()` instead.
+				* `is_default_radio()`, wasn't ever used.
 			* In class: `\The_SEO_Framework\Cache` -- Factory: `the_seo_framework()`
 				* `pre_seo_box()`, was marked private.
 				* `inpost_seo_box()`
@@ -862,6 +877,8 @@ TODO: Reintroduce these methods, as deprecated:
 		* **Deprecated:**
 			* In class: `\The_SEO_Framework\Core` -- Factory: `the_seo_framework()`
 				* `get_meta_output_cache_key()`, use `get_meta_output_cache_key_by_query()` (without Page ID) or `get_meta_output_cache_key_by_type()` (with page ID) instead.
+				* `is_checked()`, use `(bool) $value` instead.
+				* `is_option_checked()`, use `(bool) the_seo_framework()->get_option()` instead.
 			* In class: `\The_SEO_Framework\Detect` -- factory: `the_seo_framework()`
 				* `get_supported_post_type()`, use `is_post_type_supported()` instead.
 			* In class: `\The_SEO_Framework\Generate_Title` -- factory: `the_seo_framework()`
@@ -921,6 +938,7 @@ TODO: Reintroduce these methods, as deprecated:
 			* `(array) the_seo_framework_inpost_seo_save_defaults`, the post SEO data defaults. Note that this doesn't change the post data prior saving.
 			* `(array) the_seo_framework_save_custom_fields`, the post SEO data, right before it's saved.
 			* `(array) the_seo_framework_save_term_data`, the term SEO data, right before it's saved.
+			* `(array) the_seo_framework_separator_list`, the separator list.
 		* **Changed:**
 			* `the_seo_framework_detect_page_builder`
 				1. Now returns `null` by default.
@@ -930,6 +948,10 @@ TODO: Reintroduce these methods, as deprecated:
 			* `the_seo_framework_sitemap_color_main`, it now reflects the main color, instead of the accent color.
 			* `the_seo_framework_sitemap_color_accent`, it now reflects the accent color, instead of the main color.
 			* `the_seo_framework_ogimage_output`, when the output is empty, the `og:image` output will no longer continue.
+			* `the_seo_framework_seo_plugin_detected`, `the_seo_framework_og_plugin_detected`, `the_seo_framework_seo_plugin_detected`, and `the_seo_framework_sitemap_plugin_detected`:
+				1. When filtered to be false, other plugins are still checked.
+				2. Added two new parameters.
+			* `the_seo_framework_term_meta_defaults` is now also used on the front-end.
 		* **Removed:**
 			* `the_seo_framework_update_options_at_update`
 			* `the_seo_framework_canonical_force_scheme` (was deprecated since 2.8.0). Use `the_seo_framework_preferred_url_scheme` instead.
@@ -950,6 +972,10 @@ TODO: Reintroduce these methods, as deprecated:
 			* `the_seo_framework_inpost_seo_bar`, use the option introduced in TSF 2.7 instead.
 			* `the_seo_framework_generator_tag`, it's useless and you can do it via `add_action( 'wp_head', function() { echo <meta.../>; } );`
 			* `the_seo_framework_updates_cache`, it wasn't used.
+		* **Deprecated:**
+			* `the_seo_framework_get_term_meta`, use `the_seo_framework_term_meta_defaults` instead.
+		* **Fixed:**
+			* `the_seo_framework_default_site_options` Now runs whenever default options are called. So, it's much more predictable, like when resetting options.
 	* **Structural notes:**
 		* **Added:**
 			* Folder `/bootstrap/`, with:

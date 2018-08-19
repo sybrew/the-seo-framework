@@ -67,7 +67,7 @@ $robots_settings = [
 
 <table class="form-table">
 	<tbody>
-		<?php if ( $this->is_option_checked( 'display_seo_bar_metabox' ) ) : ?>
+		<?php if ( $this->get_option( 'display_seo_bar_metabox' ) ) : ?>
 		<tr>
 			<th scope="row" valign="top"><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
 			<td>

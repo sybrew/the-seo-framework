@@ -43,10 +43,9 @@ switch ( $instance ) :
 		];
 
 		/**
-		 * Applies filters the_seo_framework_description_settings_tabs : array see $default_tabs
 		 * @since 2.6.0
-		 *
-		 * Used to extend Description tabs.
+		 * @param array $defaults The default tabs.
+		 * @param array $args     The args added on the callback.
 		 */
 		$defaults = (array) apply_filters( 'the_seo_framework_description_settings_tabs', $default_tabs, $args );
 

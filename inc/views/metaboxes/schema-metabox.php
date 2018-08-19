@@ -54,9 +54,9 @@ switch ( $instance ) :
 			];
 
 			/**
-			 * Applies filter 'the_seo_framework_schema_settings_tabs' : Array
 			 * @since 2.8.0
-			 * Used to extend Schema settings tabs
+			 * @param array $defaults The default tabs.
+			 * @param array $args     The args added on the callback.
 			 */
 			$defaults = (array) apply_filters( 'the_seo_framework_schema_settings_tabs', $default_tabs, $args );
 
@@ -299,6 +299,6 @@ switch ( $instance ) :
 		}
 		break;
 
-	default :
+	default:
 		break;
 endswitch;

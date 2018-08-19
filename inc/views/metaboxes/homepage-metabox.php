@@ -53,9 +53,9 @@ switch ( $instance ) :
 		];
 
 		/**
-		 * Applies filters the_seo_framework_homepage_settings_tabs : array see $default_tabs
 		 * @since 2.6.0
-		 * Used to extend HomePage tabs.
+		 * @param array $defaults The default tabs.
+		 * @param array $args     The args added on the callback.
 		 */
 		$defaults = (array) apply_filters( 'the_seo_framework_homepage_settings_tabs', $default_tabs, $args );
 
@@ -143,9 +143,8 @@ switch ( $instance ) :
 		}
 
 		/**
-		 * Applies filters 'the_seo_framework_warn_homepage_global_title' : bool
-		 *
 		 * @since 2.8.0
+		 * @param bool $warn Whether to warn that there's a plugin active with multiple home pages.
 		 */
 		if ( apply_filters( 'the_seo_framework_warn_homepage_global_title', false ) && $this->has_page_on_front() ) {
 			$this->attention_noesc(
@@ -196,9 +195,8 @@ switch ( $instance ) :
 		}
 
 		/**
-		 * Applies filters 'the_seo_framework_warn_homepage_global_description' : bool
-		 *
 		 * @since 2.8.0
+		 * @param bool $warn Whether to warn that there's a plugin active with multiple home pages.
 		 */
 		if ( apply_filters( 'the_seo_framework_warn_homepage_global_description', false ) && $this->has_page_on_front() ) {
 			$this->attention_noesc(

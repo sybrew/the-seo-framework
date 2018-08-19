@@ -161,7 +161,6 @@ class Generate_Image extends Generate_Url {
 		}
 
 		/**
-		 * Applies filters 'the_seo_framework_ld_json_breadcrumb_image' : string
 		 * @since 2.7.0
 		 * TODO deprecate filter and exchange with a suiting name.
 		 * @param string $image The current image.
@@ -235,10 +234,8 @@ class Generate_Image extends Generate_Url {
 
 		//* 5. Fetch image from fallback filter 1
 		/**
-		 * Applies filters 'the_seo_framework_og_image_after_featured' : string
 		 * @since 2.5.2
-		 *
-		 * @param string $image   The image URL.
+		 * @param string $image   The first fallback image URL.
 		 * @param int    $post_id The post ID.
 		 */
 		fallback_1 : {
@@ -254,10 +251,8 @@ class Generate_Image extends Generate_Url {
 
 		//* 7. Fetch image from fallback filter 2
 		/**
-		 * Applies filters 'the_seo_framework_og_image_after_header' : string
 		 * @since 2.5.2
-		 *
-		 * @param string $image   The image URL.
+		 * @param string $image   The second fallback image URL.
 		 * @param int    $post_id The post ID.
 		 */
 		fallback_2 : {
@@ -315,10 +310,7 @@ class Generate_Image extends Generate_Url {
 			];
 
 			/**
-			 * Applies filters the_seo_framework_og_image_args : array
-			 *
 			 * @since 2.0.1
-			 *
 			 * @param array $defaults The image defaults: {
 			 *    @param string $image The image url
 			 *    @param mixed $size The image size

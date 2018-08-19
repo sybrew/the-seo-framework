@@ -54,14 +54,12 @@ switch ( $instance ) :
 		];
 
 		/**
-		 * Applies filters 'the_seo_framework_inpost_settings_tabs' : array
-		 *
 		 * Allows for altering the inpost SEO settings metabox tabs.
 		 *
 		 * @since 2.9.0
 		 *
-		 * @param array $default_tabs The default tabs.
-		 * @param array $type The current post type display name, like "Post", "Page", "Product".
+		 * @param array  $default_tabs The default tabs.
+		 * @param string $type The current post type display name, like "Post", "Page", "Product".
 		 */
 		$tabs = (array) apply_filters( 'the_seo_framework_inpost_settings_tabs', $default_tabs, $type );
 
@@ -71,7 +69,7 @@ switch ( $instance ) :
 		break;
 
 	case 'inpost_general':
-		if ( $this->is_option_checked( 'display_seo_bar_metabox' ) ) :
+		if ( $this->get_option( 'display_seo_bar_metabox' ) ) :
 			?>
 			<div class="tsf-flex-setting tsf-flex">
 				<div class="tsf-flex-setting-label tsf-flex">
@@ -283,8 +281,8 @@ switch ( $instance ) :
 		</div>
 
 		<?php
-		$can_do_archive_query = $this->post_type_supports_taxonomies() && $this->is_option_checked( 'alter_archive_query' );
-		$can_do_search_query = $this->is_option_checked( 'alter_search_query' );
+		$can_do_archive_query = $this->post_type_supports_taxonomies() && $this->get_option( 'alter_archive_query' );
+		$can_do_search_query  = (bool) $this->get_option( 'alter_search_query' );
 		?>
 
 		<?php if ( $can_do_archive_query || $can_do_search_query ) : ?>
@@ -385,8 +383,8 @@ switch ( $instance ) :
 			$tw_desc_placeholder = $custom_og_desc ?: $og_desc_placeholder;
 		}
 
-		$show_og = $this->is_option_checked( 'og_tags' );
-		$show_tw = $this->is_option_checked( 'twitter_tags' );
+		$show_og = (bool) $this->get_option( 'og_tags' );
+		$show_tw = (bool) $this->get_option( 'twitter_tags' );
 
 		?>
 		<div class="tsf-flex-setting tsf-flex" <?php echo $show_og ? '' : 'style=display:none'; ?>>

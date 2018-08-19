@@ -311,7 +311,7 @@ class Generate extends User_Data {
 	}
 
 	/**
-	 * Returns OG Type
+	 * Returns Open Graph type value.
 	 *
 	 * @since 2.8.0
 	 * @staticvar string $type
@@ -326,12 +326,25 @@ class Generate extends User_Data {
 			return $type;
 
 		/**
-		 * Applies filters 'the_seo_framework_ogtype_output' : string
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
+		 * @param string $type The OG type.
 		 */
-		return $type = (string) \apply_filters( 'the_seo_framework_ogtype_output', $this->generate_og_type(), $this->get_the_real_ID() );
+		return $type = (string) \apply_filters_ref_array(
+			'the_seo_framework_ogtype_output',
+			[
+				$this->generate_og_type(),
+				$this->get_the_real_ID(),
+			]
+		);
 	}
+
+	/**
+	 * @since 3.1.0
+	 * @TODO use this
+	 * @see get_available_twitter_cards
+	 */
+	public function get_available_open_graph_types() { }
 
 	/**
 	 * Generates the Twitter Card type.
@@ -340,8 +353,9 @@ class Generate extends User_Data {
 	 * Otherwise, it will return 'summary' or ''.
 	 *
 	 * @since 2.7.0
-	 * @since 2.8.2 : Now considers description output.
-	 * @since 2.9.0 : Now listens to $this->get_available_twitter_cards().
+	 * @since 2.8.2 Now considers description output.
+	 * @since 2.9.0 Now listens to $this->get_available_twitter_cards().
+	 * @since 3.1.0 Now inherits filter `the_seo_framework_twittercard_output`.
 	 *
 	 * @return string The Twitter Card type.
 	 */
@@ -358,14 +372,28 @@ class Generate extends User_Data {
 
 		//* Option is equal to found cards. Output option.
 		if ( in_array( $option, $available_cards, true ) ) {
-			if ( 'summary_large_image' === $option )
-				return 'summary_large_image';
-
-			if ( 'summary' === $option )
-				return 'summary';
+			if ( 'summary_large_image' === $option ) {
+				$type = 'summary_large_image';
+			} elseif ( 'summary' === $option ) {
+				$type = 'summary';
+			}
+		} else {
+			$type = 'summary';
 		}
 
-		return 'summary';
+		/**
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 * @param string $card The generated Twitter card type.
+		 * @param int    $id   The current page or term ID.
+		 */
+		return (string) \apply_filters_ref_array(
+			'the_seo_framework_twittercard_output',
+			[
+				$type,
+				$this->get_the_real_ID(),
+			]
+		);
 	}
 
 	/**
@@ -374,7 +402,7 @@ class Generate extends User_Data {
 	 * @since 2.9.0
 	 * @staticvar bool|array $cache
 	 *
-	 * @return bool|array False when it shouldn't be used. True otherwise.
+	 * @return bool|array False when it shouldn't be used. Array of available cards otherwise.
 	 */
 	public function get_available_twitter_cards() {
 
@@ -391,9 +419,7 @@ class Generate extends User_Data {
 
 		/**
 		 * Filters the available Twitter cards on the front end.
-		 *
 		 * @since 2.9.0
-		 *
 		 * @param array $retval Use empty array to invalidate Twitter card.
 		 */
 		$retval = (array) \apply_filters( 'the_seo_framework_available_twitter_cards', $retval );
@@ -405,30 +431,37 @@ class Generate extends User_Data {
 	 * List of title separators.
 	 *
 	 * @since 2.6.0
-	 *
-	 * @todo add filter.
-	 * @todo check if filter can propagate within all functions.
+	 * @since 3.1.0 Is now filterable.
 	 *
 	 * @return array Title separators.
 	 */
 	public function get_separator_list() {
-		return [
-			'pipe'   => '|',
-			'dash'   => '-',
-			'ndash'  => '&ndash;',
-			'mdash'  => '&mdash;',
-			'bull'   => '&bull;',
-			'middot' => '&middot;',
-			'lsaquo' => '&lsaquo;',
-			'rsaquo' => '&rsaquo;',
-			'frasl'  => '&frasl;',
-			'laquo'  => '&laquo;',
-			'raquo'  => '&raquo;',
-			'le'     => '&le;',
-			'ge'     => '&ge;',
-			'lt'     => '&lt;',
-			'gt'     => '&gt;',
-		];
+		/**
+		 * @since 3.1.0
+		 * @param array $list The separator list in { option_name > display_value } format.
+		 *                    The option name should be translatable within `&...;` tags.
+		 *                    'pipe' and 'dash' are excluded from this rule.
+		 */
+		return (array) \apply_filters(
+			'the_seo_framework_separator_list',
+			[
+				'pipe'   => '|',
+				'dash'   => '-',
+				'ndash'  => '&ndash;',
+				'mdash'  => '&mdash;',
+				'bull'   => '&bull;',
+				'middot' => '&middot;',
+				'lsaquo' => '&lsaquo;',
+				'rsaquo' => '&rsaquo;',
+				'frasl'  => '&frasl;',
+				'laquo'  => '&laquo;',
+				'raquo'  => '&raquo;',
+				'le'     => '&le;',
+				'ge'     => '&ge;',
+				'lt'     => '&lt;',
+				'gt'     => '&gt;',
+			]
+		);
 	}
 
 	/**

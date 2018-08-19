@@ -45,9 +45,9 @@ switch ( $instance ) :
 		];
 
 		/**
-		 * Applies filters `the_seo_framework_general_settings_tabs` : Array
-		 * Used to extend or minimize General Settings tabs
 		 * @since 2.8.0
+		 * @param array $defaults The default tabs.
+		 * @param array $args     The args added on the callback.
 		 */
 		$defaults = (array) apply_filters( 'the_seo_framework_general_settings_tabs', $default_tabs, $args );
 

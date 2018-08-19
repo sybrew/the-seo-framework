@@ -88,8 +88,8 @@ class Inpost extends Profile {
 	public function add_inpost_seo_box_init() {
 
 		/**
-		 * Applies filters the_seo_framework_seobox_output : bool
 		 * @since 2.0.0
+		 * @param bool $show_seobox Whether to show the SEO meta box.
 		 */
 		$show_seobox = (bool) \apply_filters( 'the_seo_framework_seobox_output', true );
 
@@ -114,11 +114,10 @@ class Inpost extends Profile {
 		if ( ! $this->post_type_supports_custom_seo( $this->get_admin_post_type() ) )
 			return;
 
-			/**
+		/**
 		 * High priority, this box is seen right below the post/page edit screen.
-		 * Applies filters 'the_seo_framework_term_metabox_priority' : int
-		 *
 		 * @since 2.6.0
+		 * @param int $priority The metabox term priority.
 		 */
 		$priority = (int) \apply_filters( 'the_seo_framework_term_metabox_priority', 0 );
 

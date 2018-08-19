@@ -55,7 +55,18 @@ class Render extends Admin_Init {
 		if ( $this->is_feed() || $this->is_post_type_disabled() ) {
 			return $title;
 		}
-		return $this->get_title();
+		/**
+		 * @since 3.1.0
+		 * @param string $title The generated title.
+		 * @param int    $id    The page or term ID.
+		 */
+		return \apply_filters_ref_array(
+			'the_seo_framework_pre_get_document_title',
+			[
+				$this->get_title(),
+				$this->get_the_real_ID(),
+			]
+		);
 	}
 
 	/**
@@ -74,7 +85,18 @@ class Render extends Admin_Init {
 		if ( $this->is_feed() || $this->is_post_type_disabled() ) {
 			return $title;
 		}
-		return $this->get_title();
+		/**
+		 * @since 3.1.0
+		 * @param string $title The generated title.
+		 * @param int    $id    The page or term ID.
+		 */
+		return \apply_filters_ref_array(
+			'the_seo_framework_wp_title',
+			[
+				$this->get_title(),
+				$this->get_the_real_ID(),
+			]
+		);
 	}
 
 	/**
@@ -98,6 +120,7 @@ class Render extends Admin_Init {
 	 * Returns the current Twitter card type.
 	 *
 	 * @since 2.8.2
+	 * @since 3.1.0 Filter has been moved to generate_twitter_card_type()
 	 * @staticvar string $cache
 	 *
 	 * @return string The cached Twitter card.
@@ -122,9 +145,10 @@ class Render extends Admin_Init {
 	public function the_description() {
 
 		/**
-		 * Applies filters 'the_seo_framework_description_output' : string
 		 * @since 2.3.0
 		 * @since 2.7.0 : Added output within filter.
+		 * @param string $description The generated description.
+		 * @param int    $id          The page or term ID.
 		 */
 		$description = (string) \apply_filters_ref_array(
 			'the_seo_framework_description_output',
@@ -155,9 +179,10 @@ class Render extends Admin_Init {
 			return '';
 
 		/**
-		 * Applies filters 'the_seo_framework_ogdescription_output' : string
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
+		 * @param string $description The generated Open Graph description.
+		 * @param int    $id          The page or term ID.
 		 */
 		$description = (string) \apply_filters_ref_array(
 			'the_seo_framework_ogdescription_output',
@@ -186,9 +211,10 @@ class Render extends Admin_Init {
 			return '';
 
 		/**
-		 * Applies filters 'the_seo_framework_oglocale_output' : string
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
+		 * @param string $locale The generated locale field.
+		 * @param int    $id     The page or term ID.
 		 */
 		$locale = (string) \apply_filters_ref_array(
 			'the_seo_framework_oglocale_output',
@@ -219,9 +245,10 @@ class Render extends Admin_Init {
 			return '';
 
 		/**
-		 * Applies filters 'the_seo_framework_ogtitle_output' : string
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
+		 * @param string $title The generated Open Graph title.
+		 * @param int    $id    The page or term ID.
 		 */
 		$title = (string) \apply_filters_ref_array(
 			'the_seo_framework_ogtitle_output',
@@ -279,6 +306,7 @@ class Render extends Admin_Init {
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
 		 * @param string $image The social image URL.
+		 * @param int    $id    The page or term ID.
 		 */
 		$image = \apply_filters_ref_array(
 			'the_seo_framework_ogimage_output',
@@ -376,9 +404,10 @@ class Render extends Admin_Init {
 			return '';
 
 		/**
-		 * Applies filters 'the_seo_framework_ogsitename_output' : string
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
+		 * @param string $sitename The generated Open Graph site name.
+		 * @param int    $id       The page or term ID.
 		 */
 		$sitename = (string) \apply_filters_ref_array(
 			'the_seo_framework_ogsitename_output',
@@ -408,11 +437,7 @@ class Render extends Admin_Init {
 		if ( $this->use_og_tags() ) {
 
 			/**
-			 * Applies filters 'the_seo_framework_ogurl_output' : string
-			 * Changes og:url output.
-			 *
 			 * @since 2.9.3
-			 *
 			 * @param string $url The canonical/Open Graph URL. Must be escaped.
 			 * @param int    $id  The current page or term ID.
 			 */
@@ -443,18 +468,7 @@ class Render extends Admin_Init {
 		if ( ! $this->use_twitter_tags() )
 			return '';
 
-		/**
-		 * Applies filters 'the_seo_framework_twittercard_output' : string
-		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
-		 */
-		$card = (string) \apply_filters_ref_array(
-			'the_seo_framework_twittercard_output',
-			[
-				$this->get_current_twitter_card_type(),
-				$this->get_the_real_ID(),
-			]
-		);
+		$card = $this->get_current_twitter_card_type();
 
 		if ( $card )
 			return '<meta name="twitter:card" content="' . \esc_attr( $card ) . '" />' . "\r\n";
@@ -475,9 +489,10 @@ class Render extends Admin_Init {
 			return '';
 
 		/**
-		 * Applies filters 'the_seo_framework_twittersite_output' : string
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
+		 * @param string $site The Twitter site owner tag.
+		 * @param int    $id   The current page or term ID.
 		 */
 		$site = (string) \apply_filters_ref_array(
 			'the_seo_framework_twittersite_output',
@@ -509,13 +524,10 @@ class Render extends Admin_Init {
 			return '';
 
 		/**
-		 * Applies filters 'the_seo_framework_twittercreator_output' : string
-		 *
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
-		 *
-		 * @param string $twitter_page
-		 * @param int    $id
+		 * @param string $twitter_page The Twitter page creator.
+		 * @param int    $id           The current page or term ID.
 		 */
 		$twitter_page = (string) \apply_filters_ref_array(
 			'the_seo_framework_twittercreator_output',
@@ -546,9 +558,10 @@ class Render extends Admin_Init {
 			return '';
 
 		/**
-		 * Applies filters 'the_seo_framework_twittertitle_output' : string
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
+		 * @param string $title The generated Twitter title.
+		 * @param int    $id    The current page or term ID.
 		 */
 		$title = (string) \apply_filters_ref_array(
 			'the_seo_framework_twittertitle_output',
@@ -579,9 +592,10 @@ class Render extends Admin_Init {
 			return '';
 
 		/**
-		 * Applies filters 'the_seo_framework_twitterdescription_output' : string
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
+		 * @param string $description The generated Twitter description.
+		 * @param int    $id          The current page or term ID.
 		 */
 		$description = (string) \apply_filters_ref_array(
 			'the_seo_framework_twitterdescription_output',
@@ -612,9 +626,10 @@ class Render extends Admin_Init {
 		$id = $this->get_the_real_ID();
 
 		/**
-		 * Applies filters 'the_seo_framework_twitterimage_output' : string|bool
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
+		 * @param string $image The generated Twitter image URL.
+		 * @param int    $id    The current page or term ID.
 		 */
 		$image = (string) \apply_filters_ref_array(
 			'the_seo_framework_twitterimage_output',
@@ -656,9 +671,10 @@ class Render extends Admin_Init {
 			return '';
 
 		/**
-		 * Applies filters 'the_seo_framework_facebookauthor_output' : string
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
+		 * @param string $facebook_page The generated Facebook author page URL.
+		 * @param int    $id            The current page or term ID.
 		 */
 		$facebook_page = (string) \apply_filters_ref_array(
 			'the_seo_framework_facebookauthor_output',
@@ -691,9 +707,10 @@ class Render extends Admin_Init {
 			return '';
 
 		/**
-		 * Applies filters 'the_seo_framework_facebookpublisher_output' : string
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
+		 * @param string $publisher The Facebook publisher page URL.
+		 * @param int    $id        The current page or term ID.
 		 */
 		$publisher = (string) \apply_filters_ref_array(
 			'the_seo_framework_facebookpublisher_output',
@@ -722,9 +739,10 @@ class Render extends Admin_Init {
 			return '';
 
 		/**
-		 * Applies filters 'the_seo_framework_facebookappid_output' : string
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
+		 * @param string $app_id The Facebook app ID.
+		 * @param int    $id     The current page or term ID.
 		 */
 		$app_id = (string) \apply_filters_ref_array(
 			'the_seo_framework_facebookappid_output',
@@ -765,9 +783,10 @@ class Render extends Admin_Init {
 			return '';
 
 		/**
-		 * Applies filters 'the_seo_framework_publishedtime_output' : string
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
+		 * @param string $time The article published time.
+		 * @param int    $id   The current page or term ID.
 		 */
 		$time = (string) \apply_filters_ref_array(
 			'the_seo_framework_publishedtime_output',
@@ -809,9 +828,10 @@ class Render extends Admin_Init {
 			return '';
 
 		/**
-		 * Applies filters 'the_seo_framework_modifiedtime_output' : string
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
+		 * @param string $time The article modified time.
+		 * @param int    $id   The current page or term ID.
 		 */
 		$time = (string) \apply_filters_ref_array(
 			'the_seo_framework_modifiedtime_output',
@@ -845,11 +865,7 @@ class Render extends Admin_Init {
 	public function canonical() {
 
 		/**
-		 * Applies filters 'the_seo_framework_rel_canonical_output' : string
-		 * Changes canonical URL output.
-		 *
 		 * @since 2.6.5
-		 *
 		 * @param string $url The canonical URL. Must be escaped.
 		 * @param int    $id  The current page or term ID.
 		 */
@@ -881,10 +897,7 @@ class Render extends Admin_Init {
 	 */
 	public function ld_json() {
 		/**
-		 * Applies filters 'the_seo_framework_ldjson_scripts' : string
-		 *
 		 * @since 2.6.0
-		 *
 		 * @param string $json The JSON output. Must be escaped.
 		 * @param int    $id   The current page or term ID.
 		 */
@@ -909,8 +922,9 @@ class Render extends Admin_Init {
 	public function google_site_output() {
 
 		/**
-		 * Applies filters 'the_seo_framework_googlesite_output' : string
 		 * @since 2.6.0
+		 * @param string $code The Google verification code.
+		 * @param int    $id   The current post or term ID.
 		 */
 		$code = (string) \apply_filters_ref_array(
 			'the_seo_framework_googlesite_output',
@@ -936,8 +950,9 @@ class Render extends Admin_Init {
 	public function bing_site_output() {
 
 		/**
-		 * Applies filters 'the_seo_framework_bingsite_output' : string
 		 * @since 2.6.0
+		 * @param string $code The Bing verification code.
+		 * @param int    $id   The current post or term ID.
 		 */
 		$code = (string) \apply_filters_ref_array(
 			'the_seo_framework_bingsite_output',
@@ -963,8 +978,9 @@ class Render extends Admin_Init {
 	public function yandex_site_output() {
 
 		/**
-		 * Applies filters 'the_seo_framework_yandexsite_output' : string
 		 * @since 2.6.0
+		 * @param string $code The Yandex verification code.
+		 * @param int    $id   The current post or term ID.
 		 */
 		$code = (string) \apply_filters_ref_array(
 			'the_seo_framework_yandexsite_output',
@@ -990,8 +1006,9 @@ class Render extends Admin_Init {
 	public function pint_site_output() {
 
 		/**
-		 * Applies filters 'the_seo_framework_pintsite_output' : string
 		 * @since 2.6.0
+		 * @param string $code The Pinterest verification code.
+		 * @param int    $id   The current post or term ID.
 		 */
 		$code = (string) \apply_filters_ref_array(
 			'the_seo_framework_pintsite_output',
@@ -1022,8 +1039,9 @@ class Render extends Admin_Init {
 			return '';
 
 		/**
-		 * Applies filters 'the_seo_framework_robots_meta' : array
 		 * @since 2.6.0
+		 * @param array $meta The robots meta.
+		 * @param int   $id   The current post or term ID.
 		 */
 		$meta = (array) \apply_filters_ref_array(
 			'the_seo_framework_robots_meta',
@@ -1051,8 +1069,9 @@ class Render extends Admin_Init {
 	public function shortlink() {
 
 		/**
-		 * Applies filters 'the_seo_framework_shortlink_output' : string
 		 * @since 2.6.0
+		 * @param string $url The generated shortlink URL.
+		 * @param int    $id  The current post or term ID.
 		 */
 		$url = (string) \apply_filters_ref_array(
 			'the_seo_framework_shortlink_output',
@@ -1081,8 +1100,9 @@ class Render extends Admin_Init {
 		$id = $this->get_the_real_ID();
 
 		/**
-		 * Applies filters 'the_seo_framework_paged_url_output' : array
 		 * @since 2.6.0
+		 * @param string $next The next-page URL.
+		 * @param int    $id   The current post or term ID.
 		 */
 		$next = (string) \apply_filters_ref_array(
 			'the_seo_framework_paged_url_output_next',
@@ -1093,8 +1113,9 @@ class Render extends Admin_Init {
 		);
 
 		/**
-		 * Applies filters 'the_seo_framework_paged_url_output' : array
 		 * @since 2.6.0
+		 * @param string $next The previous-page URL.
+		 * @param int    $id   The current post or term ID.
 		 */
 		$prev = (string) \apply_filters_ref_array(
 			'the_seo_framework_paged_url_output_prev',
@@ -1131,11 +1152,8 @@ class Render extends Admin_Init {
 
 		if ( ! isset( $run ) ) {
 			/**
-			 * Applies filters 'the_seo_framework_indicator'
-			 *
 			 * @since 2.0.0
-			 *
-			 * @param bool $run Whether to run and show the indicator.
+			 * @param bool $run Whether to run and show the plugin indicator.
 			 */
 			$run = (bool) \apply_filters( 'the_seo_framework_indicator', true );
 		}
@@ -1146,11 +1164,8 @@ class Render extends Admin_Init {
 		if ( ! isset( $_cache ) ) {
 			$_cache = [];
 			/**
-			 * Applies filters 'sybre_waaijer_<3'
-			 *
 			 * @since 2.4.0
-			 *
-			 * @param bool $sybre Whether to show the hidden author name in HTML.
+			 * @param bool $sybre Whether to show the author name in the indicator.
 			 */
 			$sybre = (bool) \apply_filters( 'sybre_waaijer_<3', true );
 
@@ -1158,11 +1173,8 @@ class Render extends Admin_Init {
 			$tsf = 'The SEO Framework';
 
 			/**
-			 * Applies filters 'the_seo_framework_indicator_timing'
-			 *
 			 * @since 2.4.0
-			 *
-			 * @param bool $show_timer Whether to show the hidden generation time in HTML.
+			 * @param bool $show_timer Whether to show the generation time in the indicator.
 			 */
 			$_cache['show_timer'] = (bool) \apply_filters( 'the_seo_framework_indicator_timing', true );
 
@@ -1233,29 +1245,27 @@ class Render extends Admin_Init {
 	 * Determines whether we can use Open Graph tags on the front-end.
 	 *
 	 * @since 2.6.0
+	 * @since 3.1.0 Removed cache.
 	 * @TODO add facebook validation.
 	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
 	public function use_og_tags() {
-		static $cache = null;
-		if ( isset( $cache ) ) return $cache;
-		return $cache = $this->is_option_checked( 'og_tags' );
+		return (bool) $this->get_option( 'og_tags' );
 	}
 
 	/**
 	 * Determines whether we can use Facebook tags on the front-end.
 	 *
 	 * @since 2.6.0
+	 * @since 3.1.0 Removed cache.
 	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
 	public function use_facebook_tags() {
-		static $cache = null;
-		if ( isset( $cache ) ) return $cache;
-		return $cache = $this->is_option_checked( 'facebook_tags' );
+		return (bool) $this->get_option( 'facebook_tags' );
 	}
 
 	/**
@@ -1269,7 +1279,8 @@ class Render extends Admin_Init {
 	 */
 	public function use_twitter_tags() {
 		static $cache = null;
-		if ( isset( $cache ) ) return $cache;
-		return $cache = $this->is_option_checked( 'twitter_tags' ) && $this->get_current_twitter_card_type();
+		return isset( $cache )
+			? $cache
+			: $cache = $this->get_option( 'twitter_tags' ) && $this->get_current_twitter_card_type();
 	}
 }

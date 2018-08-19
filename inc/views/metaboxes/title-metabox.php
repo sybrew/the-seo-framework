@@ -94,10 +94,9 @@ switch ( $instance ) :
 
 
 		/**
-		 * Applies filters the_seo_framework_title_settings_tabs : array see $default_tabs
 		 * @since 2.6.0
-		 *
-		 * Used to extend Description tabs.
+		 * @param array $defaults The default tabs.
+		 * @param array $args     The args added on the callback.
 		 */
 		$defaults = (array) apply_filters( 'the_seo_framework_title_settings_tabs', $default_tabs, $args );
 
@@ -239,7 +238,7 @@ switch ( $instance ) :
 		$cat_name = get_cat_name( $cat );
 		$cat_name = $cat_name ?: __( 'Example Category', 'autodescription' );
 
-		$display_prefix = $this->is_option_checked( 'title_rem_prefixes' ) ? 'none' : 'inline';
+		$display_prefix = $this->get_option( 'title_rem_prefixes' ) ? 'none' : 'inline';
 		$title = '<span class="tsf-title-prefix-example" style="display:' . $display_prefix . '">' . esc_html( $label ) . ': </span>' . esc_html( $cat_name );
 
 		$additions_left = $additions['left'];

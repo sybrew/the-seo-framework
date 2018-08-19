@@ -72,8 +72,6 @@ class Generate_Title extends Generate_Description {
 	public function get_custom_field_title( $args = null, $escape = true ) {
 
 		/**
-		 * Applies filters 'the_seo_framework_title_from_custom_field' : string
-		 *
 		 * Filters the title from custom field, if any.
 		 *
 		 * @since 3.1.0
@@ -472,11 +470,9 @@ class Generate_Title extends Generate_Description {
 		}
 
 		/**
-		 * Applies filters 'the_seo_framework_the_archive_title' : string
-		 *
 		 * @since 2.6.0
 		 *
-		 * @param string $title The short circuit title.
+		 * @param string   $title The short circuit title.
 		 * @param \WP_Term $term The Term object.
 		 */
 		$title = (string) \apply_filters( 'the_seo_framework_the_archive_title', '', $term );
@@ -727,7 +723,7 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_generated_search_query_title() {
 		/* translators: %s: search phrase */
-		return sprintf( __( 'Search Results for &#8220;%s&#8221;', 'default' ), \get_search_query( true ) );
+		return sprintf( \__( 'Search Results for &#8220;%s&#8221;', 'default' ), \get_search_query( true ) );
 	}
 
 	/**
@@ -740,7 +736,6 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_static_404_title() {
 		/**
-		 * Applies filters 'the_seo_framework_404_title'
 		 * @since 2.5.2
 		 * @param string $title The 404 title.
 		 */
@@ -940,7 +935,7 @@ class Generate_Title extends Generate_Description {
 	 * @return bool
 	 */
 	public function use_home_page_title_tagline() {
-		return $this->is_option_checked( 'homepage_tagline' ) && $this->get_home_page_tagline();
+		return $this->get_option( 'homepage_tagline' ) && $this->get_home_page_tagline();
 	}
 
 	/**

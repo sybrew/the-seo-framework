@@ -68,9 +68,7 @@ class Sitemaps extends Metaboxes {
 		 * Don't do anything on a deleted or spam blog on MultiSite.
 		 * There's nothing to find anyway.
 		 */
-		return $cache =
-			$this->is_option_checked( 'sitemaps_output' )
-			&& false === $this->current_blog_is_spam_or_deleted();
+		return $cache = $this->get_option( 'sitemaps_output' ) && ! $this->current_blog_is_spam_or_deleted();
 	}
 
 	/**
@@ -343,7 +341,7 @@ class Sitemaps extends Metaboxes {
 		 * Re-use the variable, eliminating database requests
 		 * @since 2.4.0
 		 */
-		$sitemap_content = $this->is_option_checked( 'cache_sitemap' ) ? $this->get_transient( $this->get_sitemap_transient_name() ) : false;
+		$sitemap_content = $this->get_option( 'cache_sitemap' ) ? $this->get_transient( $this->get_sitemap_transient_name() ) : false;
 
 		echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 		echo $this->get_sitemap_xsl_stylesheet_tag();
@@ -399,9 +397,8 @@ class Sitemaps extends Metaboxes {
 		];
 
 		/**
-		 * Applies filters 'the_seo_framework_sitemap_schemas' : array
 		 * @since 2.8.0
-		 * @param array $schems The schema list. URLs are expected to be escaped.
+		 * @param array $schemas The schema list. URLs are expected to be escaped.
 		 */
 		$schemas = (array) \apply_filters( 'the_seo_framework_sitemap_schemas', $schemas );
 
@@ -441,7 +438,7 @@ class Sitemaps extends Metaboxes {
 	 */
 	public function get_sitemap_xsl_stylesheet_tag() {
 
-		if ( $this->is_option_checked( 'sitemap_styles' ) ) {
+		if ( $this->get_option( 'sitemap_styles' ) ) {
 
 			$url = \esc_url( $this->get_sitemap_xsl_url(), [ 'http', 'https' ] );
 
@@ -585,7 +582,7 @@ class Sitemaps extends Metaboxes {
 			 */
 			$expiration = WEEK_IN_SECONDS;
 
-			if ( $this->is_option_checked( 'cache_sitemap' ) )
+			if ( $this->get_option( 'cache_sitemap' ) )
 				$this->set_transient( $this->get_sitemap_transient_name(), $sitemap_content, $expiration );
 		}
 
@@ -622,15 +619,14 @@ class Sitemaps extends Metaboxes {
 		);
 
 		/**
-		 * Maximum pages and posts to fetch.
-		 * A total of 3600, consisting of 3 times $total_post_limit (TODO?)
+		 * Maximum pages, posts and cpt to fetch.
+		 * A total of 3600, consisting of 3 times $total_post_limit.
 		 *
 		 * @since 2.2.9
 		 * TODO remove?
-		 *
-		 * Applies filters the_seo_framework_sitemap_pages_count : int max pages
-		 * Applies filters the_seo_framework_sitemap_posts_count : int max posts
-		 * Applies filters the_seo_framework_sitemap_custom_posts_count : int max posts
+		 * @param int $totalpages
+		 * @param int $totalposts
+		 * @param int $total_cpt_posts
 		 */
 		$totalpages = (int) \apply_filters( 'the_seo_framework_sitemap_pages_count', $total_post_limit );
 		$totalposts = (int) \apply_filters( 'the_seo_framework_sitemap_posts_count', $total_post_limit );
@@ -654,13 +650,12 @@ class Sitemaps extends Metaboxes {
 		$this->set_timezone();
 		$timestamp_format = $this->get_timestamp_format();
 
-		$show_priority = $this->is_option_checked( 'sitemaps_priority' );
-		$show_modified = $this->is_option_checked( 'sitemaps_modified' );
+		$show_priority = (bool) $this->get_option( 'sitemaps_priority' );
+		$show_modified = (bool) $this->get_option( 'sitemaps_modified' );
 
 		/**
-		 * Generation time output
-		 *
-		 * Applies filter the_seo_framework_sitemap_timestamp : bool
+		 * @since 2.2.9
+		 * @param bool $timestamp Whether to display the timestamp.
 		 */
 		$timestamp = (bool) \apply_filters( 'the_seo_framework_sitemap_timestamp', true );
 
@@ -694,11 +689,8 @@ class Sitemaps extends Metaboxes {
 			];
 
 			/**
-			 * Applies filters 'the_seo_framework_sitemap_pages_query_args' : array
-			 *
 			 * @since 2.8.0
 			 * @since 3.0.6: $args['suppress_filters'] now defaults to false.
-			 *
 			 * @param array $args The new query arguments.
 			 * @param array $defaults The default query arguments
 			 */
@@ -870,11 +862,8 @@ class Sitemaps extends Metaboxes {
 			];
 
 			/**
-			 * Applies filters 'the_seo_framework_sitemap_posts_query_args' : array
-			 *
 			 * @since 2.8.0
 			 * @since 3.0.6: $args['suppress_filters'] now defaults to false.
-			 *
 			 * @param array $args The new query arguments.
 			 * @param array $defaults The default query arguments
 			 */
@@ -953,8 +942,8 @@ class Sitemaps extends Metaboxes {
 			// TODO: Use only this loop, instead of separated page/post loops? See $not_cpt var.
 
 			/**
-			 * Applies filters Array the_seo_framework_sitemap_exclude_cpt : Excludes these CPT
 			 * @since 2.5.0
+			 * @param array $excluded_cpt The excluded custom post types.
 			 */
 			$excluded_cpt = (array) \apply_filters( 'the_seo_framework_sitemap_exclude_cpt', [] );
 
@@ -985,11 +974,8 @@ class Sitemaps extends Metaboxes {
 				];
 
 				/**
-				 * Applies filters 'the_seo_framework_sitemap_cpt_query_args' : array
-				 *
 				 * @since 2.8.0
 				 * @since 3.0.6: $args['suppress_filters'] now defaults to false.
-				 *
 				 * @param array $args The new query arguments.
 				 * @param array $defaults The default query arguments
 				 */
@@ -1060,17 +1046,14 @@ class Sitemaps extends Metaboxes {
 		endif;
 
 		/**
-		 * Applies filters the_seo_framework_sitemap_additional_urls :
-		 *
 		 * @since 2.5.2
+		 * @example return value: [ 'http://example.com' => [ 'lastmod' => '14-01-2018', 'priority' => 0.9 ] ]
 		 * @param array $custom_urls : {
 		 *    @param string (key) $url The absolute url to the page. : array {
 		 *       @param string           $lastmod  UNIXTIME Last modified date, e.g. "2016-01-26 13:04:55"
 		 *       @param float|int|string $priority URL Priority
 		 *    }
 		 * }
-		 *
-		 * @example return value: [ 'http://example.com' => [ 'lastmod' => '14-01-2018', 'priority' => 0.9 ] ]
 		 */
 		$custom_urls = (array) \apply_filters( 'the_seo_framework_sitemap_additional_urls', [] );
 
@@ -1104,8 +1087,8 @@ class Sitemaps extends Metaboxes {
 		}
 
 		/**
-		 * Applies filters the_seo_framework_sitemap_extend : string
 		 * @since 2.5.2
+		 * @param string $extend Custom sitemap extension. Must be escaped.
 		 */
 		$extend = (string) \apply_filters( 'the_seo_framework_sitemap_extend', '' );
 
@@ -1167,39 +1150,37 @@ class Sitemaps extends Metaboxes {
 	 * Ping search engines on post publish.
 	 *
 	 * @since 2.2.9
-	 * @global int $blog_id
+	 * @since 3.1.0 Now allows one ping per language.
+	 *              @uses $this->add_cache_key_suffix()
 	 *
 	 * @return void Early if blog is not public.
 	 */
 	public function ping_searchengines() {
 
-		if ( $this->is_option_checked( 'site_noindex' ) || $this->is_blog_public() )
+		if ( $this->get_option( 'site_noindex' ) || $this->is_blog_public() )
 			return;
 
-		$transient = 'tsf_throttle_ping_' . $GLOBALS['blog_id'];
+		$transient = $this->add_cache_key_suffix( 'tsf_throttle_ping' );
 
 		//* NOTE: Use legacy get_transient to prevent ping spam.
 		if ( false === \get_transient( $transient ) ) {
 			//* Transient doesn't exist yet.
 
-			if ( $this->is_option_checked( 'ping_google' ) )
+			if ( $this->get_option( 'ping_google' ) )
 				$this->ping_google();
 
-			if ( $this->is_option_checked( 'ping_bing' ) )
+			if ( $this->get_option( 'ping_bing' ) )
 				$this->ping_bing();
 
-			if ( $this->is_option_checked( 'ping_yandex' ) )
+			if ( $this->get_option( 'ping_yandex' ) )
 				$this->ping_yandex();
 
 			// Sorry, I couldn't help myself.
 			$throttle = 'Bert and Ernie are weird.';
 
 			/**
-			 * Limit the pinging to a maximum of 1 per hour.
-			 * Transient expiration. 1 hour.
-			 *
-			 * Applies filters the_seo_framework_sitemap_throttle_s
 			 * @since 2.5.1
+			 * @param int $expiration The minimum time between two pings.
 			 */
 			$expiration = (int) \apply_filters( 'the_seo_framework_sitemap_throttle_s', HOUR_IN_SECONDS );
 

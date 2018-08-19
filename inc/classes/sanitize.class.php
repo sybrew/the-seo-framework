@@ -656,10 +656,8 @@ class Sanitize extends Admin_Pages {
 		];
 
 		/**
-		 * Applies filters the_seo_framework_available_sanitizer_filters
-		 *
 		 * @since 2.2.2
-		 * @param array $default_filters Array with keys of sanitization types,
+		 * @param array $default_filters Array with keys of sanitization types
 		 *              and values of the filter function name as a callback
 		 */
 		return (array) \apply_filters( 'the_seo_framework_available_sanitizer_filters', $default_filters );
@@ -836,12 +834,12 @@ class Sanitize extends Admin_Pages {
 	 * Sanitizes input excerpt.
 	 *
 	 * @since 2.8.0
-	 * @since 2.8.2 : 1. Added allow_shortcodes parameter.
-	 *                2. Added escape parameter
+	 * @since 2.8.2 : 1. Added $allow_shortcodes parameter.
+	 *                2. Added $escape parameter.
 	 *
-	 * @param string $excerpt the Excerpt.
-	 * @param bool $allow_shortcodes Whether to maintain shortcodes from excerpt.
-	 * @param bool $escape Whether to escape the excerpt.
+	 * @param string $excerpt          The excerpt.
+	 * @param bool   $allow_shortcodes Whether to maintain shortcodes from excerpt.
+	 * @param bool   $escape           Whether to escape the excerpt.
 	 * @return string The escaped Excerpt.
 	 */
 	public function s_excerpt( $excerpt = '', $allow_shortcodes = true, $escape = true ) {
@@ -851,8 +849,8 @@ class Sanitize extends Admin_Pages {
 			return '';
 
 		/**
-		 * Applies filters 'the_seo_framework_allow_excerpt_shortcode_tags' : boolean
 		 * @since 2.6.6.1
+		 * @param bool $allow_shortcodes Whether to allow shortcodes.
 		 */
 		if ( $allow_shortcodes && \apply_filters( 'the_seo_framework_allow_excerpt_shortcode_tags', false ) ) {
 			$excerpt = \wp_strip_all_tags( $excerpt );
@@ -872,8 +870,8 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.8.2
 	 * @see $this->s_excerpt - This is basically a copy without sanitation.
 	 *
-	 * @param string $excerpt the Excerpt.
-	 * @param bool $allow_shortcodes Whether to maintain shortcodes from excerpt.
+	 * @param string $excerpt          The excerpt.
+	 * @param bool   $allow_shortcodes Whether to maintain shortcodes from excerpt.
 	 * @return string The unescaped Excerpt.
 	 */
 	public function s_excerpt_raw( $excerpt = '', $allow_shortcodes = true ) {
@@ -886,7 +884,7 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.5.2
 	 *
 	 * @param string $title The title to escape and beautify.
-	 * @param bool $trim Whether to trim the title from whitespaces.
+	 * @param bool   $trim  Whether to trim the title from whitespaces.
 	 * @return string Escaped and beautified title.
 	 */
 	public function escape_title( $title = '', $trim = true ) {
@@ -1363,11 +1361,9 @@ class Sanitize extends Admin_Pages {
 		endif;
 
 		/**
-		 * Applies filters 'the_seo_framework_301_noqueries'
-		 *
 		 * @since 2.5.0
 		 * @since 3.0.6 Now false by default.
-		 * @param bool $noqueries
+		 * @param bool $noqueries Whether to remove query arguments from URLs.
 		 */
 		$noqueries = (bool) \apply_filters( 'the_seo_framework_301_noqueries', false );
 

@@ -48,7 +48,7 @@ class Cache extends Sitemaps {
 	 * @return bool
 	 */
 	protected function use_object_cache() {
-		return \wp_using_ext_object_cache() && $this->is_option_checked( 'cache_object' );
+		return \wp_using_ext_object_cache() && $this->get_option( 'cache_object' );
 	}
 
 	/**
@@ -144,7 +144,7 @@ class Cache extends Sitemaps {
 
 		$success[] = $this->delete_cache( 'post', $post_id );
 
-		if ( $this->is_option_checked( 'sitemaps_output' ) ) {
+		if ( $this->get_option( 'sitemaps_output' ) ) {
 			//* Don't flush sitemap on revision.
 			if ( ! \wp_is_post_revision( $post_id ) )
 				$success[] = $this->delete_cache( 'sitemap' );
@@ -324,8 +324,8 @@ class Cache extends Sitemaps {
 	 * @since 2.8.0
 	 *
 	 * @param string $type The cache type. Passed by reference.
-	 * @param int $id The post, page or TT ID. Defaults to $this->get_the_real_ID(). Passed by reference.
-	 * @param array $args Additional arguments. They can overwrite $type and $id. Passed by reference.
+	 * @param int    $id The post, page or TT ID. Defaults to $this->get_the_real_ID(). Passed by reference.
+	 * @param array  $args Additional arguments. They can overwrite $type and $id. Passed by reference.
 	 */
 	protected function parse_delete_cache_keys( &$type, &$id, &$args ) {
 
@@ -339,14 +339,12 @@ class Cache extends Sitemaps {
 		];
 
 		/**
-		 * Applies filters 'the_seo_framework_delete_cache_args' : array
-		 * Careful: might infinitely loop method delete_cache() if not done strictly.
-		 *
 		 * @since 2.8.0
-		 *
-		 * @param array $args
-		 * @param string $type
-		 * @param int $id
+		 * @NOTE Careful: Altering this might infinitely loop method delete_cache() if not done strictly.
+		 *       Don't blindly overwrite 'type'.
+		 * @param array  $args All caching arguments
+		 * @param string $type The cache type.
+		 * @param int    $id   The post or term ID.
 		 */
 		$args = (array) \apply_filters( 'the_seo_framework_delete_cache_args', $args, $type, $id );
 		$args = \wp_parse_args( $args, $defaults );
@@ -470,7 +468,7 @@ class Cache extends Sitemaps {
 	 */
 	public function get_sitemap_transient_name() {
 		$sitemap_revision = '5';
-		return $this->is_option_checked( 'cache_sitemap' ) ? $this->add_cache_key_suffix( 'tsf_sitemap_' . $sitemap_revision ) : '';
+		return $this->get_option( 'cache_sitemap' ) ? $this->add_cache_key_suffix( 'tsf_sitemap_' . $sitemap_revision ) : '';
 	}
 
 	/**
@@ -485,7 +483,7 @@ class Cache extends Sitemaps {
 	 */
 	public function get_ld_json_transient_name( $id, $taxonomy = '', $type = null ) {
 
-		if ( ! $this->is_option_checked( 'cache_meta_schema' ) )
+		if ( ! $this->get_option( 'cache_meta_schema' ) )
 			return '';
 
 		$cache_key = $this->generate_cache_key( $id, $taxonomy, $type );
@@ -948,7 +946,7 @@ class Cache extends Sitemaps {
 	 */
 	public function delete_ld_json_transient( $page_id, $taxonomy = '', $type = null ) {
 
-		if ( $this->is_option_checked( 'cache_meta_schema' ) ) {
+		if ( $this->get_option( 'cache_meta_schema' ) ) {
 			$transient = $this->get_ld_json_transient_name( $page_id, $taxonomy, $type );
 			$transient and \delete_transient( $transient );
 		}

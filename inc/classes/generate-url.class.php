@@ -509,8 +509,6 @@ class Generate_Url extends Generate_Title {
 		endswitch;
 
 		/**
-		 * Applies filters 'the_seo_framework_preferred_url_scheme'
-		 *
 		 * @since 2.8.0
 		 * @param string $scheme The current URL scheme.
 		 */

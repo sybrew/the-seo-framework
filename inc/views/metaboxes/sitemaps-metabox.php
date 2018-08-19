@@ -53,9 +53,8 @@ switch ( $instance ) :
 		];
 
 		/**
-		 * Applies filters the_seo_framework_sitemaps_settings_tabs : array see $default_tabs
-		 *
-		 * Used to extend Knowledge Graph tabs
+		 * @param array $defaults The default tabs.
+		 * @param array $args     The args added on the callback.
 		 */
 		$defaults = (array) apply_filters( 'the_seo_framework_sitemaps_settings_tabs', $default_tabs, $args );
 
@@ -119,7 +118,7 @@ switch ( $instance ) :
 			<input type="number" min=1 max=50000 name="<?php $this->field_name( 'sitemap_query_limit' ); ?>" id="<?php $this->field_id( 'sitemap_query_limit' ); ?>" placeholder="<?php echo $this->get_default_option( 'sitemap_query_limit' ); ?>" value="<?php echo absint( $this->get_option( 'sitemap_query_limit' ) ); ?>" />
 		</p>
 		<?php
-		$this->description( __( 'Consider lowering this value when the sitemap fails to generate.', 'autodescription' ) );
+		$this->description( __( 'Consider lowering this value when the sitemap shows a white screen or notifies you of memory exhaustion.', 'autodescription' ) );
 
 		break;
 

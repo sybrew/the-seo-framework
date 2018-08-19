@@ -184,7 +184,7 @@ class Init extends Query {
 		//* Initialize post states.
 		\add_action( 'current_screen', [ $this, 'post_state' ] );
 
-		if ( $this->is_option_checked( 'display_seo_bar_tables' ) ) {
+		if ( $this->get_option( 'display_seo_bar_tables' ) ) {
 			//* Initialize columns.
 			\add_action( 'current_screen', [ $this, 'init_columns' ] );
 
@@ -285,10 +285,10 @@ class Init extends Query {
 		//* Output meta tags.
 		\add_action( 'wp_head', [ $this, 'html_output' ], 1 );
 
-		if ( $this->is_option_checked( 'alter_archive_query' ) )
+		if ( $this->get_option( 'alter_archive_query' ) )
 			$this->init_alter_archive_query();
 
-		if ( $this->is_option_checked( 'alter_search_query' ) )
+		if ( $this->get_option( 'alter_search_query' ) )
 			$this->init_alter_search_query();
 
 		/**
@@ -408,9 +408,9 @@ class Init extends Query {
 			$robots = $this->robots();
 
 			/**
-			 * Applies filters 'the_seo_framework_pre' : string
 			 * Adds content before the output and caches it through Object caching.
 			 * @since 2.6.0
+			 * @param string $before The content before the SEO output.
 			 */
 			$before = (string) \apply_filters( 'the_seo_framework_pre', '' );
 
@@ -471,9 +471,9 @@ class Init extends Query {
 			$after_legacy = $this->get_legacy_header_filters_output( 'after' );
 
 			/**
-			 * Applies filters 'the_seo_framework_pro' : string
 			 * Adds content after the output and caches it through Object caching.
 			 * @since 2.6.0
+			 * @param string $after The content after the SEO output.
 			 */
 			$after = (string) \apply_filters( 'the_seo_framework_pro', '' );
 
@@ -620,9 +620,8 @@ class Init extends Query {
 			$output .= "Allow: $site_path/wp-admin/admin-ajax.php\r\n";
 
 			/**
-			 * Applies filters the_seo_framework_robots_disallow_queries : boolean
-			 * Determines whether to allow queries for robots.
 			 * @since 2.5.0
+			 * @param bool $disallow Whether to disallow robots queries.
 			 */
 			if ( \apply_filters( 'the_seo_framework_robots_disallow_queries', false ) ) {
 				$output .= "Disallow: $home_path/*?*\r\n";
