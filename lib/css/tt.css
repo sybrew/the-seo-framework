@@ -31,6 +31,7 @@ a.tsf-tooltip-item {
 	flex-flow: row wrap;
 	-webkit-justify-content: flex-start;
 	justify-content: flex-start;
+	direction: ltr;
 }
 
 .tsf-tooltip-down {

@@ -659,7 +659,6 @@ TODO Category "no archive" check tooltip overflows on 1080p. 'tsf-tooltip-bounda
 				* `use_home_page_title_tagline()`
 				* `use_singular_title_branding()`
 				* `get_home_page_tagline()`
-				* TODO are there more??
 			* In class `\The_SEO_Framework\Generate_Url` -- Factory: `the_seo_framework()`
 				* `get_paged_urls()`, returns a cached array for `get_paged_url()`.
 			* In class: `\The_SEO_Framework\Post_Data` -- Factory: `the_seo_framework()`
@@ -856,7 +855,6 @@ TODO Category "no archive" check tooltip overflows on 1080p. 'tsf-tooltip-bounda
 				* `flush_rewrite_rules()`, was marked private.
 				* `use_googleplus_tags()` -- The G+ project uses Open Graph and structured data.
 			* In class: `\The_SEO_Framework\Title` -- Factory: `the_seo_framework()`
-				* TODO: Consider deprecating these instead.
 				* `build_title_doingitwrong()`
 				* `parse_title_args()`
 				* `reparse_title_args()`

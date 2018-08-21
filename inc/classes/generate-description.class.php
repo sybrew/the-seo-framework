@@ -292,7 +292,7 @@ class Generate_Description extends Generate {
 	 *
 	 * @param array $args required The passed arguments.
 	 * @param array $defaults The default arguments.
-	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
+	 * @param bool  $get_defaults Return the default arguments. Ignoring $args.
 	 * @return array $args parsed args.
 	 */
 	public function parse_description_args( $args = [], $defaults = [], $get_defaults = false ) {
@@ -385,7 +385,7 @@ class Generate_Description extends Generate {
 	 *    @param string $taxonomy taxonomy name.
 	 *    @param bool $is_home We're generating for the home page.
 	 * }
-	 * @param bool $escape Escape the output if true.
+	 * @param bool  $escape Escape the output if true.
 	 * @return string|mixed The description.
 	 */
 	public function description_from_custom_field( $args = [], $escape = true ) {
@@ -673,8 +673,8 @@ class Generate_Description extends Generate {
 	 *
 	 * @since 2.8.0
 	 *
-	 * @param int $id The post/term ID.
-	 * @param \WP_Term|bool The term object.
+	 * @param int           $id   The post/term ID.
+	 * @param \WP_Term|bool $term The term object.
 	 * @return string The social description excerpt. Unescaped.
 	 */
 	public function get_description_excerpt_social( $id = 0, $term = false ) {
@@ -886,7 +886,7 @@ class Generate_Description extends Generate {
 	 * @TODO remove this feature?
 	 * @deprecated
 	 *
-	 * @param int $id             The page ID.
+	 * @param int           $id   The page ID.
 	 * @param \WP_Term|null $term The term object.
 	 * @return string The description title.
 	 */
@@ -954,9 +954,9 @@ class Generate_Description extends Generate {
 	 * @staticvar array $excerpt_cache Holds the excerpt
 	 * @staticvar array $excerptlength_cache Holds the excerpt length
 	 *
-	 * @param int|string $page_id required : The Page ID
-	 * @param \WP_Term|null $term The Taxonomy Term.
-	 * @param int $max_char_length The maximum excerpt char length.
+	 * @param int|string    $page_id         The Page ID. Required.
+	 * @param \WP_Term|null $term            The Taxonomy Term.
+	 * @param int           $max_char_length The maximum excerpt char length.
 	 * @return string $excerpt The excerpt, not escaped.
 	 */
 	public function generate_excerpt( $page_id, $term = null, $max_char_length = 300 ) {
@@ -1017,9 +1017,9 @@ class Generate_Description extends Generate {
 	 *
 	 * @since 2.6.0
 	 *
-	 * @param string $excerpt The untrimmed excerpt.
-	 * @param int $excerpt_length The current excerpt length.
-	 * @param int $max_char_length At what point to shave off the excerpt.
+	 * @param string $excerpt         The untrimmed excerpt.
+	 * @param int    $excerpt_length  The current excerpt length.
+	 * @param int    $max_char_length At what point to shave off the excerpt.
 	 * @return string The trimmed excerpt.
 	 */
 	public function trim_excerpt( $excerpt, $excerpt_length, $max_char_length ) {

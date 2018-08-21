@@ -106,6 +106,8 @@ class Admin_Init extends Init {
 
 		if ( _has_run( __METHOD__ ) ) return;
 
+		$rtl = \is_rtl();
+
 		//! PHP 5.4 compat: put in var. Also, we call it twice here...
 		$scripts = $this->Scripts();
 		/**
@@ -165,6 +167,9 @@ class Admin_Init extends Init {
 						],
 						'.tsf-tooltip-down .tsf-tooltip-arrow:after' => [
 							'border-bottom-color:{{$bg_accent}}',
+						],
+						'.tsf-tooltip-text' => [
+							$rtl ? 'direction:rtl;' : '',
 						],
 					],
 				],
@@ -256,7 +261,8 @@ class Admin_Init extends Init {
 
 		if ( _has_run( __METHOD__ ) ) return;
 
-		$id = $this->get_the_real_admin_ID();
+		$id  = $this->get_the_real_admin_ID();
+		$rtl = \is_rtl();
 
 		$post_type   = \get_post_type( $id );
 		$_taxonomies = $post_type ? $this->get_hierarchical_taxonomies_as( 'objects', $post_type ) : [];
@@ -275,6 +281,19 @@ class Admin_Init extends Init {
 					'name'        => $_i18n_name,
 				],
 				'primary' => $this->get_primary_term_id( $id, $_t->name ) ?: 0,
+			];
+		}
+
+		$inline_css = [];
+		if ( \is_rtl() ) {
+			$inline_css = [
+				'.tsf-primary-term-selector' => [
+					'float:left;',
+				],
+				'.tsf-primary-term-selector-help-wrap' => [
+					'left:25px;',
+					'right:initial;',
+				],
 			];
 		}
 
@@ -304,10 +323,11 @@ class Admin_Init extends Init {
 				'type'     => 'css',
 				'deps'     => [ 'tsf-tt' ],
 				'autoload' => true,
-				'hasrtl'   => true,
+				'hasrtl'   => false,
 				'name'     => 'pt',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+				'inline'   => $inline_css,
 			],
 		] );
 	}
