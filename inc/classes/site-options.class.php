@@ -129,9 +129,6 @@ class Site_Options extends Sanitize {
 				'description_additions' => 0,  // "Title on Blogname" within Description
 				'description_blogname'  => 1,  // "on Blogname" within Description
 
-				// Robots directory.
-				'noydir' => 1, // Site noydir robots settings
-
 				// Robots index.
 				'category_noindex'   => 0, // Category Archive robots noindex
 				'tag_noindex'        => 0, // Tag Archive robots noindex

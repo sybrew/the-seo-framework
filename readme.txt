@@ -447,7 +447,7 @@ TODO Category "no archive" check tooltip overflows on 1080p. 'tsf-tooltip-bounda
 		* AnsPress title compatibility, they handle this.
 		* JetPack Open Graph compatibility checks, they handle this since 2016, and improved upon this since JetPack v6.4.
 		* Description output caching. It causes too much overhead, and it provides no benefit any more. In fact, it affects performance negatively.
-		* TODO `noydir` robots meta tag. It's no longer used by any search engine.
+		* `noydir` robots meta tag. It's no longer used by any search engine.
 	* **Fixed:**
 		* When reactivating or deactivating the plugin, there's no longer a chance for your SEO options to be wiped on a random database error.
 			* We used to delete the options, so we could reactivate option-auto-loading; now we add a buster-timestamp.
@@ -485,6 +485,8 @@ TODO Category "no archive" check tooltip overflows on 1080p. 'tsf-tooltip-bounda
 		* The sitemap is now correctly registered via `WP_Rewrite` when the plugin is installed for the first time.
 		* When you try to leave the page, TSF no longer conflicts with other plugins (two-way street) when trying to warn you of unsaved data.
 		* Migrating Genesis theme term-meta now has an effect on the front-end too, instead of only the administrative option fields.
+		* TODO Parent categories where children have posts are no longer marked for "noindex" in the SEO Bar.
+			* This wasn't the real, front-end output value.
 
 * **For translators:**
 	* **New translations are available.**

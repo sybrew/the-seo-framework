@@ -390,7 +390,7 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Disable SEO', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'Select post types which should not receive any SEO optimization whatsoever. This will remove meta optimizations, SEO suggestions, and sitemap inclusions for the selected post types.', 'autodescription' ) );
-		$this->description( __( 'These settings are applied to the post types pages and their terms.', 'autodescription' ) );
+		$this->description( __( 'These settings are applied to the post type pages and their terms.', 'autodescription' ) );
 		$this->description( __( 'Default post types can not be disabled.', 'autodescription' ) );
 
 		$forced_pt = $this->get_forced_supported_post_types();

@@ -40,7 +40,7 @@ class Generate extends User_Data {
 	}
 
 	/**
-	 * Returns the `index`, `follow`, `noydir`, `noarchive` robots meta code array.
+	 * Returns the `noindex`, `nofollow`, `noarchive` robots meta code array.
 	 *
 	 * @since 2.2.2
 	 * @since 2.2.4 Added robots SEO settings check.
@@ -49,7 +49,8 @@ class Generate extends User_Data {
 	 * @since 3.0.0 1: Removed noodp.
 	 *              2: Improved efficiency by grouping if statements.
 	 * @since 3.1.0 1. Simplified statements, often (not always) speeding things up.
-	 *              2. Now checks for wc_shop and
+	 *              2. Now checks for wc_shop and blog types for pagination.
+	 *              3. Removed noydir.
 	 * @global \WP_Query $wp_query
 	 *
 	 * @return array|null robots
@@ -61,7 +62,6 @@ class Generate extends User_Data {
 			'noindex'   => $this->get_option( 'site_noindex' ) ? 'noindex' : '',
 			'nofollow'  => $this->get_option( 'site_nofollow' ) ? 'nofollow' : '',
 			'noarchive' => $this->get_option( 'site_noarchive' ) ? 'noarchive' : '',
-			'noydir'    => $this->get_option( 'noydir' ) ? 'noydir' : '',
 		];
 
 		//* Check home page SEO settings, set noindex, nofollow and noarchive

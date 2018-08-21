@@ -32,6 +32,10 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  */
 class Profile extends Doing_It_Right {
 
+	/**
+	 * @since 3.0.0
+	 * @var array|object The profile setting fields.
+	 */
 	public $profile_settings = [];
 
 	/**

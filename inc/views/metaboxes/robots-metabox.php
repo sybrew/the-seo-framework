@@ -97,34 +97,9 @@ switch ( $instance ) :
 
 	case 'the_seo_framework_robots_metabox_general' :
 		?>
-		<h4><?php esc_html_e( 'Open Directory Settings', 'autodescription' ); ?></h4>
-		<?php
-		$this->description( __( "Sometimes, search engines use resources from certain Directories to find titles and descriptions for your content. You generally don't want them to. Turn these options on to prevent them from doing so.", 'autodescription' ) );
-		$this->description( __( "The Yahoo! Directory may contain outdated SEO values. Therefore, it's best to leave the option checked.", 'autodescription' ) );
-
-		$fields = $this->wrap_fields(
-			$this->make_checkbox(
-				'noydir',
-				/* translators: %s = noydir */
-				sprintf( esc_html__( 'Apply %s to the entire site?', 'autodescription' ), $this->code_wrap( 'noydir' ) ),
-				'',
-				false
-			), true
-		);
-		?>
-		<hr>
-
 		<h4><?php esc_html_e( 'Paginated Archive Settings', 'autodescription' ); ?></h4>
-		<p class="description">
-			<?php
-			printf(
-				esc_html__( "Indexing the second or later page of any archive might cause duplication errors. Search engines look down upon them; therefore, it's recommended to disable indexing of those pages.", 'autodescription' ),
-				$this->code_wrap( 'noodp' ),
-				$this->code_wrap( 'noydir' )
-			);
-			?>
-		</p>
 		<?php
+		$this->description( __( "Indexing the second or later page of any archive might cause duplication errors. Search engines look down upon them; therefore, it's recommended to disable indexing of those pages.", 'autodescription' ) );
 
 		$this->wrap_fields(
 			$this->make_checkbox(
@@ -139,8 +114,8 @@ switch ( $instance ) :
 
 	case 'the_seo_framework_robots_metabox_no' :
 		$ro_value = $robots['value'];
-		$ro_name = esc_html( $robots['name'] );
-		$ro_i18n = $robots['desc'];
+		$ro_name  = esc_html( $robots['name'] );
+		$ro_i18n  = $robots['desc'];
 		$ro_name_wrapped = $this->code_wrap( $ro_name );
 
 		?>
@@ -193,7 +168,7 @@ switch ( $instance ) :
 
 		<h4><?php esc_html_e( 'Post Type Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'These settings are applied to the post types pages and their terms.', 'autodescription' ) );
+		$this->description( __( 'These settings are applied to the post type pages and their terms.', 'autodescription' ) );
 
 		/* translators: 1: noindex/nofollow/noarchive, 2: Post Type label */
 		$_label    = esc_html__( 'Apply %1$s to %2$s?', 'autodescription' );
