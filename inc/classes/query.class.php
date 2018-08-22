@@ -780,7 +780,7 @@ class Query extends Compat {
 	 * @return bool
 	 */
 	public function is_search() {
-		return \is_search() && ! is_admin();
+		return \is_search() && ! \is_admin();
 	}
 
 	/**

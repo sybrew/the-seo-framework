@@ -405,6 +405,8 @@ TODO Category "no archive" check tooltip overflows on 1080p. 'tsf-tooltip-bounda
 			* It prevents/resolves all sorts of first-run bugs, like the sitemap's initial registration.
 		* When Polylang is active, users are now notified that it's better not to utilize some of the Home Page SEO settings metabox fields.
 		* The settings handler has been slightly refactored to improve performance.
+		* Shortlinks now support search.
+		* Shortlinks now output shorter date-archive links.
 	* **Changed:**
 		* TSF now requires WordPress 4.6 (previously 4.4).
 		* TSF now requires PHP 5.4 (previously 5.3).
@@ -476,7 +478,7 @@ TODO Category "no archive" check tooltip overflows on 1080p. 'tsf-tooltip-bounda
 		* The SEO Bar no longer incorretly tells that CPT categories or tags are discouraged from indexing via the global settings.
 		* WC Shop and Blog pages canonical URLs now correctly output pagination.
 		* WC Shop and Blog pages shortlink URLs now correctly output pagination.
-		* TODO Search pages now correctly output pagination. // TODO REGRESSION?
+		* Search pages now correctly output pagination.
 		* The title metabox's example title (from the latest post) can now be substituted for the example title when empty.
 		* Term titles no longer have their HTML tags stripped in the generated SEO titles by default.
 		* When no blog description or tagline is set, the left/right example titles are no longer partially emptied when JS is deactivated.
@@ -732,6 +734,7 @@ TODO Category "no archive" check tooltip overflows on 1080p. 'tsf-tooltip-bounda
 					1. No longer accepts $post_id input. Output's based on query only.
 					2. Shortened date archive URL length.
 					3. Removed query parameter collisions.
+					4. Added search support.
 				* `append_php_query()`, it no longer generates duplicated query parameters.
 				* `get_paged_url()`:
 					1. Now recognizes WC Shops and WP Blog pages as archival types.

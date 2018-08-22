@@ -711,11 +711,13 @@ class Generate_Url extends Generate_Title {
 						$url = \add_query_arg( [ $t => $slug ], $home );
 				}
 			}
+		} elseif ( $this->is_search() ) {
+			$url = \add_query_arg( [ 's' => \get_search_query( false ) ], $home );
 		}
 
 		if ( ! $url ) return '';
 
-		if ( $this->is_archive() || $this->is_singular_archive() ) {
+		if ( $this->is_archive() || $this->is_singular_archive() || $this->is_search() ) {
 			$paged = $this->maybe_get_paged( $this->paged(), false, true );
 			$url   = \add_query_arg( [ 'paged' => $paged ], $url );
 		} else {
@@ -780,7 +782,7 @@ class Generate_Url extends Generate_Title {
 			$archive   = false;
 			$page      = $this->page();
 			$_numpages = $this->numpages();
-		} elseif ( $this->is_archive() || $this->is_singular_archive() ) {
+		} elseif ( $this->is_archive() || $this->is_singular_archive() || $this->is_search() ) {
 			$_run = $this->is_real_front_page()
 				  ? $this->get_option( 'prev_next_frontpage' )
 				  : $this->get_option( 'prev_next_archives' );
