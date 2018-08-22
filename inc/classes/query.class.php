@@ -485,7 +485,9 @@ class Query extends Compat {
 
 		$is_blog_page = false;
 
-		$pfp = (int) \get_option( 'page_for_posts' );
+		static $pfp = null;
+		if ( is_null( $pfp ) )
+			$pfp = (int) \get_option( 'page_for_posts' );
 
 		if ( $this->has_page_on_front() ) {
 			if ( $id && $id === $pfp && false === \is_archive() ) {

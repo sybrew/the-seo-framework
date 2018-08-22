@@ -485,8 +485,8 @@ TODO Category "no archive" check tooltip overflows on 1080p. 'tsf-tooltip-bounda
 		* The sitemap is now correctly registered via `WP_Rewrite` when the plugin is installed for the first time.
 		* When you try to leave the page, TSF no longer conflicts with other plugins (two-way street) when trying to warn you of unsaved data.
 		* Migrating Genesis theme term-meta now has an effect on the front-end too, instead of only the administrative option fields.
-		* TODO Parent categories where children have posts are no longer marked for "noindex" in the SEO Bar.
-			* This wasn't the real, front-end output value.
+		* Parent categories where children have posts are no longer automatically and incorrectly marked for "noindex" in the SEO Bar when no posts are assigned.
+			* This didn't affect the real, front-end output value.
 
 * **For translators:**
 	* **New translations are available.**

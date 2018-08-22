@@ -1209,8 +1209,22 @@ class Doing_It_Right extends Generate_Ldjson {
 		 * @since 2.2.8
 		 */
 		if ( $args['is_term'] ) {
+			$t = microtime( true );
 			$term = $this->fetch_the_term( $args['post_id'] );
-			if ( isset( $term->count ) && 0 === $term->count ) {
+
+			$_has_posts = ! empty( $term->count );
+
+			if ( ! $_has_posts && isset( $term->term_id, $term->taxonomy ) ) {
+				$children = \get_term_children( $term->term_id, $term->taxonomy );
+				foreach ( $children as $child_id ) {
+					if ( $_child_term = \get_term( $child_id, $term->taxonomy ) ) {
+						$_has_posts = ! empty( $_child_term->count );
+						if ( $_has_posts ) break;
+					}
+				}
+			}
+
+			if ( ! $_has_posts ) {
 				$but_and = isset( $but ) ? $and_i18n : $but_i18n;
 
 				/* translators: %s = But or And */

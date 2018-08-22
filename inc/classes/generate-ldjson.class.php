@@ -325,7 +325,7 @@ class Generate_Ldjson extends Generate_Image {
 		 * @param string $logo       The current logo URL.
 		 * @param bool   $get_option Whether to test the option or just the fallbacks.
 		 */
-		return \apply_filters_ref_array(
+		return (string) \apply_filters_ref_array(
 			'the_seo_framework_knowledge_logo',
 			[
 				( $get_option ? $this->get_option( 'knowledge_logo_url' ) : false )
@@ -345,15 +345,14 @@ class Generate_Ldjson extends Generate_Image {
 	 */
 	public function get_ld_json_breadcrumbs() {
 
-		if ( false === $this->enable_ld_json_breadcrumbs() )
+		if ( ! $this->enable_ld_json_breadcrumbs() )
 			return '';
 
-		//* Used to count ancestors and categories.
 		$output = '';
 
 		if ( $this->is_single() || $this->is_wc_product() ) {
 			$output = $this->get_ld_json_breadcrumbs_post();
-		} elseif ( false === $this->is_real_front_page() && $this->is_page() ) {
+		} elseif ( ! $this->is_real_front_page() && $this->is_page() ) {
 			$output = $this->get_ld_json_breadcrumbs_page();
 		}
 
