@@ -251,10 +251,15 @@ NOTE: ref: https://theseoframework.com/?p=1792
 
 1. PHP 5.3 support has been dropped. Here's why:
 	* TODO
+	* This lowers maintenance and workaround cost, and it increases our productivity; so, we can focus on faster, better, and more intelligent solutions.
 2. WP 4.4 and 4.5 support has been dropped. Here's why:
 	* TODO
 	* Consistent admin screen and post type detection, so you won't find bugs anymore stemming from backward compatibility.
 	* Newer and reliable functionality, like upgrading memory availability.
+	* This lowers maintenance and support cost, so we can focus on giving you a better product.
+3. IE11 support has been dropped? Here's why:
+	* TODO same reason as with TSFEM... Should we reintroduce it...? the hacks are still in place..
+	* Even WordPress dropped it (by accident) with their "try Gutenberg" banner (when Gutenberg is already installed). :')
 
 **Feature highlights:**
 
@@ -293,7 +298,7 @@ TODO note about that some options have been relocated.
 **For developers: About the integral options**
 
 * The integral options (from checkboxes and number fields) now always return a integral type, instead of a string.
-* So, you'll now get a `0`, instead of a `'0'`.
+* So, you'll now get a `(int) 0`, instead of a `(string) '0'`.
 * This change was made because we now use `stripslashes_deep()`, which uses `stripslashes_from_strings_only()`.
 * This improves performance. And, this shouldn't affect code behavior, unless you used strict integral-string checks.
 
@@ -315,10 +320,7 @@ TODO note about that some options have been relocated.
 
 *Fred Brooks' law: "What one developer can do in one month, two developers can do in two months."*
 
-TODO: RTL stylesheet update.
 TODO: Update plugin setup guide, as pagination settings have been updated.
-
-TODO Category "no archive" check tooltip overflows on 1080p. 'tsf-tooltip-boundary' isn't respected.
 
 * **For everyone:**
 	* **Added:**
@@ -407,6 +409,7 @@ TODO Category "no archive" check tooltip overflows on 1080p. 'tsf-tooltip-bounda
 		* The settings handler has been slightly refactored to improve performance.
 		* Shortlinks now support search.
 		* Shortlinks now output shorter date-archive links.
+		* New Google ListItem requirements have been put in place for the breadcrumbs.
 	* **Changed:**
 		* TSF now requires WordPress 4.6 (previously 4.4).
 		* TSF now requires PHP 5.4 (previously 5.3).
@@ -425,6 +428,7 @@ TODO Category "no archive" check tooltip overflows on 1080p. 'tsf-tooltip-bounda
 		* Link relationship tags for Posts and Pages are now automatically enabled on new installations, because there's no longer a performance impact.
 		* The sitemap's timestamp options are now found under the new "Metadata" tab.
 		* The title's separator option is now found under the "Additions" tab.
+		* This plugin now removes WooCommerce's breadcrumbs, to prevent output conflict, regardless of TSF's Structured Data settings.
 	* **Updated:**
 		* Most, if not all, database transients related to this plugin have been invalidated and are being rebuilt. The old transients will be cleaned up by WordPress automatically.
 		* Various [?]-links have been updated. Some were redirecting, others had the URL fragment adjusted.
@@ -741,6 +745,8 @@ TODO Category "no archive" check tooltip overflows on 1080p. 'tsf-tooltip-bounda
 					2. Now sanitizes canonical URL according to permalink settings.
 					3. Removed second parameter. It was only a source of bugs.
 					4. Removed WordPress Core `get_pagenum_link` filter.
+				* `get_current_permalink()`:
+					1. This now works for taxonomies, too.
 			* In class: `\The_SEO_Framework\Post_Data` -- Factory: `the_seo_framework()`
 				* `inattachment_seo_save()` is now marked private.
 				* `inpost_seo_save()` is now marked private.
@@ -1017,7 +1023,7 @@ TODO Category "no archive" check tooltip overflows on 1080p. 'tsf-tooltip-bounda
 == Upgrade Notice ==
 
 = 3.1.0 =
-This is a major update. Make a backup of your database before upgrading. If you use the Extension Manager, update it to 1.5.2 or greater before updating this plugin. In the 3.1.0 update, WordPress 4.6 (or greater) and PHP 5.4 (or greater) is required.
+This is a major update. Make a backup of your database before upgrading. WordPress v4.6 (or greater) and PHP v5.4 (or greater) are now required. If you use the Extension Manager, update it to v1.5.2 (or greater) before updating this plugin. Downgrading is possible.
 
 = 3.0.0 =
 A major update. Make a backup of your database before upgrading.

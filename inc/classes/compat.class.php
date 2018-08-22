@@ -94,6 +94,11 @@ class Compat extends Core {
 			//* wpForo
 			$this->_include_compat( 'wpforo', 'plugin' );
 		}
+
+		if ( $this->detect_plugin( [ 'functions' => [ 'wc' ] ] ) ) {
+			//* WooCommerce.
+			$this->_include_compat( 'woocommerce', 'plugin' );
+		}
 	}
 
 	/**

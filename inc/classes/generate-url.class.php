@@ -57,6 +57,7 @@ class Generate_Url extends Generate_Title {
 	 * This link excludes any pagination. Great for structured data.
 	 *
 	 * @since 3.0.0
+	 * @since 3.1.0 Now properly generates taxonomial URLs.
 	 * @staticvar string $cache
 	 *
 	 * @return string The current permalink.
@@ -64,8 +65,8 @@ class Generate_Url extends Generate_Title {
 	public function get_current_permalink() {
 		static $cache;
 		return isset( $cache ) ? $cache : $cache = $this->create_canonical_url( [
-			'id'      => $this->get_the_real_ID(),
-			'is_term' => $this->is_archive(),
+			'id'       => $this->get_the_real_ID(),
+			'taxonomy' => $this->get_current_taxonomy(),
 		] );
 	}
 

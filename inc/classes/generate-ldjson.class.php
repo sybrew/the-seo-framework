@@ -737,7 +737,7 @@ class Generate_Ldjson extends Generate_Image {
 			'@type'    => 'ListItem',
 			'position' => $position,
 			'item'     => [
-				// '@id'  => $this->get_schema_url_id( 'breadcrumb', 'currentpage' ),
+				'@id'  => $this->get_schema_url_id( 'breadcrumb', 'currentpage' ),
 				'name' => $this->escape_title( $name ),
 			],
 		];
