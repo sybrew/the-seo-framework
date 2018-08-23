@@ -273,8 +273,6 @@ function _print_xsl_description( $tsf ) {
  */
 function _print_xsl_content( $tsf ) {
 
-	$output_modified = (bool) $tsf->get_option( 'sitemaps_modified' );
-
 	$vars = [
 		'itemURL'  => '<xsl:variable name="itemURL" select="sitemap:loc"/>',
 		'lastmod'  => '<xsl:variable name="lastmod" select="concat(substring(sitemap:lastmod,0,11),concat(\' \',substring(sitemap:lastmod,12,5)))"/>',
@@ -282,10 +280,6 @@ function _print_xsl_content( $tsf ) {
 	];
 	$empty = array_fill_keys( [ 'th', 'td' ], '' );
 
-	$url = [
-		'th' => sprintf( '<th>%s</th>', \esc_html( \ent2ncr( \__( 'URL', 'autodescription' ) ) ) ),
-		'td' => '<td><a><xsl:attribute name="href"><xsl:value-of select="$itemURL" /></xsl:attribute><xsl:value-of select="$itemURL" /></a></td>',
-	];
 	$url = [
 		'th' => sprintf( '<th>%s</th>', \esc_html( \ent2ncr( \__( 'URL', 'autodescription' ) ) ) ),
 		'td' => '<td><a href="{$itemURL}"><xsl:choose><xsl:when test="string-length($itemURL)&gt;99"><xsl:value-of select="substring($itemURL,0,96)" />...</xsl:when><xsl:otherwise><xsl:value-of select="$itemURL" /></xsl:otherwise></xsl:choose></a></td>',

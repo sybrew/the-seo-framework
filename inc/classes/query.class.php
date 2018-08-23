@@ -266,6 +266,7 @@ class Query extends Compat {
 	 *
 	 * @since 3.0.0
 	 * @since 3.1.0 Now works in the admin.
+	 * @global \WP_Screen $current_screen
 	 *
 	 * @return string The queried taxonomy type.
 	 */

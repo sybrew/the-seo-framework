@@ -57,8 +57,9 @@ class Core {
 
 	/**
 	 * Handles unapproachable invoked properties.
+	 *
 	 * Makes sure deprecated properties are still overwritten.
-	 * If property never existed, default PHP behavior is invoked.
+	 * If the property never existed, default PHP behavior is invoked.
 	 *
 	 * @since 2.8.0
 	 *

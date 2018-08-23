@@ -211,7 +211,6 @@ class Inpost extends Profile {
 	 *
 	 * @param mixed $object The page/post/taxonomy object.
 	 * @param array $args   The page/post arguments or taxonomy slug.
-	 * @return string Inpost SEO box.
 	 */
 	public function _insert_seo_meta_box( $object, $args ) {
 
@@ -223,13 +222,11 @@ class Inpost extends Profile {
 			// Return $args as array on post/page
 			if ( 'is_post_page' === $page ) {
 				// Note: Passes through object.
-				return $this->get_seo_meta_box( $object, (array) $args );
+				$this->output_seo_meta_box( $object, (array) $args );
 			}
 		} else {
-			return $this->get_seo_meta_box( $object, '' );
+			$this->output_seo_meta_box( $object, '' );
 		}
-
-		return '';
 	}
 
 	/**
@@ -240,7 +237,7 @@ class Inpost extends Profile {
 	 * @param mixed $object The page/post/taxonomy object.
 	 * @param array $args   The page/post arguments or taxonomy slug.
 	 */
-	protected function get_seo_meta_box( $object, $args ) {
+	protected function output_seo_meta_box( $object, $args ) {
 
 		//* Determines if it's inside a meta box or within a taxonomy page.
 		$is_term = false;

@@ -652,7 +652,7 @@ class Detect extends Render {
 	 * @since 2.8.0 No longer overwrites global $wp_version
 	 * @since 3.1.0 1. No longer caches.
 	 *              2. Removed redundant parameter checks.
-	 *              3. Can now handle x.xx WordPress versions.
+	 *              3. Now supports x.yy.zz WordPress versions.
 	 *
 	 * @param string $version the three part version to compare to WordPress
 	 * @param string $compare the comparing operator, default "$version >= Current WP Version"

@@ -206,11 +206,15 @@ a.tsf-dismiss:hover {
 	transition: width .15s cubic-bezier(0.4, 0, 0.75, 1);
 }
 
-.tsf-pixel-counter-overflown .tsf-pixel-counter-fluid {
+.tsf-pixel-counter-bad .tsf-pixel-counter-fluid {
 	background-color: #dd3811;
 }
 
-.tsf-pixel-counter-fit .tsf-pixel-counter-fluid {
+.tsf-pixel-counter-okay .tsf-pixel-counter-fluid {
+	background-color: #ffa700;
+}
+
+.tsf-pixel-counter-good .tsf-pixel-counter-fluid {
 	background-color: #0cc34b;
 }
 

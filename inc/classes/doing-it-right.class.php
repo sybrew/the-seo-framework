@@ -970,7 +970,7 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		//* Length notice.
 		$desc_length_warning = $this->get_the_seo_bar_description_length_warning( $desc_len, $class );
-		$notice .= $desc_length_warning['notice'] ? $desc_length_warning['notice'] . '<br>' : '';
+		$notice .= $desc_length_warning['notice'] ? ' ' . $desc_length_warning['notice'] . '<br>' : '';
 		$class = $desc_length_warning['class'];
 
 		//* Duplicated Words notice.
@@ -1010,6 +1010,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @since 2.6.0
 	 * @since 3.0.4 : 1. Threshold "too long" has been increased from 155 to 300.
 	 *                2. Threshold "far too long" has been increased to 330 from 175.
+	 * @since 3.1.0 Now uses the new guidelines via a filterable function.
 	 *
 	 * @param int $desc_len The Title length
 	 * @param string $class The current color class.
@@ -1020,38 +1021,34 @@ class Doing_It_Right extends Generate_Ldjson {
 	 */
 	protected function get_the_seo_bar_description_length_warning( $desc_len, $class ) {
 
-		$classes = $this->get_the_seo_bar_classes();
-		$unknown = $classes['unknown'];
-		$bad     = $classes['bad'];
-		$okay    = $classes['okay'];
-		$good    = $classes['good'];
-
-		$i18n = $this->get_the_seo_bar_i18n();
+		$classes    = $this->get_the_seo_bar_classes();
+		$i18n       = $this->get_the_seo_bar_i18n();
+		$guidelines = $this->get_input_guidelines()['description']['search']['chars'];
 
 		if ( ! $desc_len ) {
 			$notice = $i18n['length_empty'];
-			$class  = $unknown;
-		} elseif ( $desc_len < 100 ) {
+			$class  = $classes['unknown'];
+		} elseif ( $desc_len < $guidelines['lower'] ) {
 			$notice = $i18n['length_far_too_short'];
-			$class  = $bad;
-		} elseif ( $desc_len < 137 ) {
+			$class  = $classes['bad'];
+		} elseif ( $desc_len < $guidelines['goodLower'] ) {
 			$notice = $i18n['length_too_short'];
 
 			// Don't make it okay if it's already bad.
-			$class = $bad === $class ? $class : $okay;
-		} elseif ( $desc_len > 300 && $desc_len < 330 ) {
+			$class = $classes['bad'] === $class ? $class : $classes['okay'];
+		} elseif ( $desc_len > $guidelines['upper'] ) {
+			$notice = $i18n['length_far_too_long'];
+			$class  = $classes['bad'];
+		} elseif ( $desc_len > $guidelines['goodUpper'] ) {
 			$notice = $i18n['length_too_long'];
 
 			// Don't make it okay if it's already bad.
-			$class = $bad === $class ? $class : $okay;
-		} elseif ( $desc_len >= 330 ) {
-			$notice = $i18n['length_far_too_long'];
-			$class  = $bad;
+			$class = $classes['bad'] === $class ? $class : $classes['okay'];
 		} else {
 			$notice = $i18n['length_good'];
 
 			// Don't make it good if it's already bad or okay.
-			$class = $good !== $class ? $class : $good;
+			$class = $classes['good'] !== $class ? $class : $classes['good'];
 		}
 
 		return compact( 'notice', 'class' );
@@ -1689,6 +1686,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * Title Length notices.
 	 *
 	 * @since 2.6.0
+	 * @since 3.1.0 Now uses the new guidelines via a filterable function.
 	 *
 	 * @param int $tit_len The Title length
 	 * @param string $class The Current Title notification class.
@@ -1700,27 +1698,27 @@ class Doing_It_Right extends Generate_Ldjson {
 	 */
 	protected function get_the_seo_bar_title_length_warning( $tit_len, $class ) {
 
-		$classes = $this->get_the_seo_bar_classes();
+		$classes    = $this->get_the_seo_bar_classes();
+		$i18n       = $this->get_the_seo_bar_i18n();
+		$guidelines = $this->get_input_guidelines()['title']['search']['chars'];
 
 		$but = false;
-
-		$i18n = $this->get_the_seo_bar_i18n();
 
 		if ( ! $tit_len ) {
 			$notice = $i18n['length_empty'];
 			$class  = $unknown;
-		} elseif ( $tit_len < 25 ) {
+		} elseif ( $tit_len < $guidelines['lower'] ) {
 			$notice = $i18n['length_far_too_short'];
 			$class  = $classes['bad'];
-		} elseif ( $tit_len < 42 ) {
+		} elseif ( $tit_len < $guidelines['goodLower'] ) {
 			$notice = $i18n['length_too_short'];
 			$class  = $classes['okay'];
-		} elseif ( $tit_len > 55 && $tit_len < 75 ) {
-			$notice = $i18n['length_too_long'];
-			$class  = $classes['okay'];
-		} elseif ( $tit_len >= 75 ) {
+		} elseif ( $tit_len > $guidelines['upper'] ) {
 			$notice = $i18n['length_far_too_long'];
 			$class  = $classes['bad'];
+		} elseif ( $tit_len > $guidelines['goodUpper'] ) {
+			$notice = $i18n['length_too_long'];
+			$class  = $classes['okay'];
 		} else {
 			$notice = $i18n['length_good'];
 			$class  = $classes['good'];
@@ -1767,6 +1765,8 @@ class Doing_It_Right extends Generate_Ldjson {
 		if ( isset( $i18n ) )
 			return $i18n;
 
+		$guideline_i18n = $this->get_input_guidelines_i18n()['long'];
+
 		return $i18n = [
 			'title'       => \esc_attr__( 'Title:', 'autodescription' ),
 			'description' => \esc_attr__( 'Description:', 'autodescription' ),
@@ -1788,12 +1788,12 @@ class Doing_It_Right extends Generate_Ldjson {
 			'but' => \esc_attr_x( 'But', 'But there are...', 'autodescription' ),
 			'and' => \esc_attr_x( 'And', 'And there are...', 'autodescription' ),
 
-			'length_empty'         => ' ' . \esc_attr__( "There's no content.", 'autodescription' ),
-			'length_far_too_short' => ' ' . \esc_attr__( 'Length is far too short.', 'autodescription' ),
-			'length_too_short'     => ' ' . \esc_attr__( 'Length is too short.', 'autodescription' ),
-			'length_too_long'      => ' ' . \esc_attr__( 'Length is too long.', 'autodescription' ),
-			'length_far_too_long'  => ' ' . \esc_attr__( 'Length is far too long.', 'autodescription' ),
-			'length_good'          => ' ' . \esc_attr__( 'Length is good.', 'autodescription' ),
+			'length_empty'         => $guideline_i18n['empty'],
+			'length_far_too_short' => $guideline_i18n['farTooShort'],
+			'length_too_short'     => $guideline_i18n['tooShort'],
+			'length_too_long'      => $guideline_i18n['tooLong'],
+			'length_far_too_long'  => $guideline_i18n['farTooLong'],
+			'length_good'          => $guideline_i18n['good'],
 		];
 	}
 }

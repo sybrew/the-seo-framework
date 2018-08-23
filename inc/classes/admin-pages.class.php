@@ -33,29 +33,22 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Admin_Pages extends Inpost {
 
 	/**
-	 * Page Defaults.
-	 *
 	 * @since 2.2.2
-	 *
-	 * @var array Holds Page output defaults.
+	 * @access private
+	 *         We're going to remove this.
+	 * @var array $page_defaults Holds Page output defaults.
 	 */
 	public $page_defaults = [];
 
 	/**
-	 * Name of the page hook when the menu is registered.
-	 *
 	 * @since 2.7.0
-	 *
-	 * @var string Page hook
+	 * @var string $seo_settings_page_hook The page hook_suffix added via WP add_menu_page()
 	 */
 	public $seo_settings_page_hook;
 
 	/**
-	 * Load the options.
-	 *
 	 * @since 2.6.0
-	 *
-	 * @var bool Load options.
+	 * @var bool $load_options Determines whether to load the options.
 	 */
 	public $load_options;
 
@@ -67,7 +60,7 @@ class Admin_Pages extends Inpost {
 	}
 
 	/**
-	 * Enqueue page defaults early.
+	 * Enqueues page defaults early.
 	 *
 	 * @since 2.3.1
 	 */

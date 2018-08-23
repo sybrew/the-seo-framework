@@ -329,10 +329,10 @@ final class Scripts {
 			$_color        = $_colors[2];
 			$_color_accent = $_colors[3];
 
-			$_rel_bg           = $tsf->get_relative_fontcolor( $_colors[0] );
-			$_rel_bg_accent    = $tsf->get_relative_fontcolor( $_colors[1] );
-			$_rel_color        = $tsf->get_relative_fontcolor( $_colors[2] );
-			$_rel_color_accent = $tsf->get_relative_fontcolor( $_colors[3] );
+			$_rel_bg           = '#' . $tsf->get_relative_fontcolor( $_colors[0] );
+			$_rel_bg_accent    = '#' . $tsf->get_relative_fontcolor( $_colors[1] );
+			$_rel_color        = '#' . $tsf->get_relative_fontcolor( $_colors[2] );
+			$_rel_color_accent = '#' . $tsf->get_relative_fontcolor( $_colors[3] );
 
 			$_table = [
 				'{{$bg}}'               => $_bg,

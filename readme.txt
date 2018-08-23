@@ -257,9 +257,6 @@ NOTE: ref: https://theseoframework.com/?p=1792
 	* Consistent admin screen and post type detection, so you won't find bugs anymore stemming from backward compatibility.
 	* Newer and reliable functionality, like upgrading memory availability.
 	* This lowers maintenance and support cost, so we can focus on giving you a better product.
-3. IE11 support has been dropped? Here's why:
-	* TODO same reason as with TSFEM... Should we reintroduce it...? the hacks are still in place..
-	* Even WordPress dropped it (by accident) with their "try Gutenberg" banner (when Gutenberg is already installed). :')
 
 **Feature highlights:**
 
@@ -399,7 +396,6 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 			* The overflowing is caused by a bug in Internet Explorer 6, which Firefox happily integrated, affecting roughly 30% of their users.
 			* In short, [Gecko ignores word-wrap values in tables](https://bugzilla.mozilla.org/show_bug.cgi?id=587438), and for [13 years running](https://bugzilla.mozilla.org/show_bug.cgi?id=307866), Firefox ignores overflow-preventing width values. Both these bugs combined cause mayhem.
 		*  Webmasters' code input now automatically stripts extraneous HTML. So, you can simply paste the code you copied from the analytical setup interfaces.
-			* TODO this might not work on IE11? If it doesn't, we won't upgrade this functionality to support it.
 		* The upgrade routine is now more intelligent, and is now able to skip upgrades that aren't necessary for new installations.
 		* The upgrade routine can no longer happen on the SEO Settings page; instead, it redirects you from it to prevent setting desynchronization.
 		* The upgrade routine automatically registers the default site options for new sites, so the admin interface no longer needs to be accessed (once) for them to have effect.
@@ -410,9 +406,18 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* Shortlinks now support search.
 		* Shortlinks now output shorter date-archive links.
 		* New Google ListItem requirements have been put in place for the breadcrumbs.
+		* The SEO Bar now suggests what you need to do with titles and descriptions that are deemed to short or long, instead of stating binary information.
+		* The character counters can now count down to zero, and will notify you off it.
+		* The pixel counter is now color coded. Hover over it to know why!
+		* Switching SEO metabox tabs or loading a page with character counters is now a tad less resource intensive.
 	* **Changed:**
 		* TSF now requires WordPress 4.6 (previously 4.4).
 		* TSF now requires PHP 5.4 (previously 5.3).
+		* The pixel and character-count guidelines have been updated:
+			1. They're much more reluctant regarding description lengths.
+			2. They're a little more reluctant regarding title lengths.
+			3. The "is there a timestamp shown is search" condition has been removed, the effect hold no evidence anymore.
+			4. They're more informative on Facebook and Twitter inputs.
 		* The upgrader can now run on the front-end, to prevent missing options (which could harm your site in ranking). This means, that when you have auto-plugin-update enabled, or left the admin dashboard before an update finished, or updated via a multisite network interface:
 			1. Some parts of the upgrade process doesn't run, like showing notifications of option changes. We will solve this in a later update, by enqueuing notifications.
 			2. If your site runs out of memory on the front-end, the upgrade process might cause a white screen. This is highly unlikely, and will resolve itself, because the upgrader keeps record of how far it's gotten. We will solve this in a later update by adding memory exhaustion checks.
@@ -444,15 +449,15 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 				* "Twitter" - they only embed sharing links.
 	* **Removed:**
 		* Counters now only work with JavaScript enabled. In PHP, this added too much overhead as we were predicting and counting in code.
-		* Description excerpts are no longer added to categories from the latest post ID.
+		* Description excerpts are no longer added to categories based on the latest post ID.
 		* Open Graph, Twitter, and SEO plugins no longer disables certain functionality in the plugin.
 			* Instead, only a warning is shown on the settings page.
 			* We made this change as some users found this plugin to be broken when trying it out, while it was actually preventing conflicts when other plugins remained active.
 		* When a sitemap file or plugin is found, this plugin no longer removes its related settings.
 			* Instead, only a warning is shown on the settings page, telling that the options have no effect.
-		* AnsPress title compatibility, they handle this.
+		* AnsPress title compatibility, they handle this correctly.
 		* JetPack Open Graph compatibility checks, they handle this since 2016, and improved upon this since JetPack v6.4.
-		* Description output caching. It causes too much overhead, and it provides no benefit any more. In fact, it affects performance negatively.
+		* Description output caching. It causes too much overhead, and it provides no benefit any longer. In fact, it degrades performance.
 		* `noydir` robots meta tag. It's no longer used by any search engine.
 	* **Fixed:**
 		* When reactivating or deactivating the plugin, there's no longer a chance for your SEO options to be wiped on a random database error.
@@ -487,12 +492,18 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* Term titles no longer have their HTML tags stripped in the generated SEO titles by default.
 		* When no blog description or tagline is set, the left/right example titles are no longer partially emptied when JS is deactivated.
 		* Duplicated spaces are no longer counted by the pixel and character counters, and they'll be removed from the front-end output.
+		* Entering lone spaces in the title and descriptions will no longer set the pixel and character counters to 0.
+		* IE11 pixel and character counters now work correctly again when a HTML symbol is introduced.
 		* Settings are now correctly registered before the plugin tries to upgrade.
 		* The sitemap is now correctly registered via `WP_Rewrite` when the plugin is installed for the first time.
 		* When you try to leave the page, TSF no longer conflicts with other plugins (two-way street) when trying to warn you of unsaved data.
 		* Migrating Genesis theme term-meta now has an effect on the front-end too, instead of only the administrative option fields.
 		* Parent categories where children have posts are no longer automatically and incorrectly marked for "noindex" in the SEO Bar when no posts are assigned.
 			* This didn't affect the real, front-end output value.
+		* Interactive tooltips arrows now no longer overflow when the balloon size becomes smaller.
+		* TODO consider fixing the primary term selector overflow... we have to change it, regardless, for Gutenberg.
+		* TODO consider adding an input buffer (25ms?) that only continues with the last input for tab switgin... This might degrade user experience.
+			* This is a race condition...
 
 * **For translators:**
 	* **New translations are available.**
@@ -529,6 +540,8 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* Various JS functions and class objects have been introduced. These are available via the API, but shouldn't be used as the JS API is still under consideration and can change at any update.
 		* An initial database version option has been added. This is `the_seo_framework_initial_db_version`, it's only used in the upgrading process, and it's not autoloaded.
 		* [JavaScript]: Input fields within TSF's metaboxes with the class `tsf-input-not-saved` set will not invoke an "unsaved-work" AYS notice on page-navigation.
+		* [JavaScript]: `tsf.i18n.inputGuidelines` is now available.
+		* [JavaScript]: `tsf.params.inputGuidelines` is now available.
 	* **Improved:**
 		* A "doing it wrong" notice is now supplied when calling `the_seo_framework()` too early.
 		* Fixed all "non-passive event listener" warnings caused by jQuery, by using our improved own event handlers.
@@ -544,13 +557,19 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* The WordPress filter `pre_ent2ncr` can now run on filter `the_seo_framework_sitemap_additional_urls`.
 		* The WordPress filter `single_post_title` is now used for singular post titles.
 		* Query caching is now disabled in WP_CLI.
-		* Integral options (1/0, or a number) now return an integer, instead of a number encapsulated in a string.
+		* Integral options (1, 0, or a number) now return an integer, instead of a number encapsulated in a string.
 	* **Removed:**
 		* We removed the `seotips` folder and their contents. They were a gimmick, accumulating SEO tips brought over past plugin update changelogs.
 		* Many deprecated methods, which were deprecated on or before TSF v2.9.4 (August 30, 2017).
 		* The plugin's automagic-upgrader has been removed, which has been replaced with a static, ordered and semantic plugin upgrader since TSF v2.7.0.
 		* Meta-generator methods' debugging have been removed, along with all the debugging methods used for that.
 		* Title "doing it wrong" checks have been removed.
+		* [JavaScript]: `tsf.params.titlePixelGuideline` is no longer available.
+		* [JavaScript]: `tsf.params.descPixelGuideline` is no longer available.
+		* [JavaScript]: `tsf.i18n.good` is no longer available.
+		* [JavaScript]: `tsf.i18n.okay` is no longer available.
+		* [JavaScript]: `tsf.i18n.bad` is no longer available.
+		* [JavaScript]: `tsf.i18n.unknown` is no longer available.
 	* **Fixed:**
 		* The wpForo title compatibility filter no longer emits a PHP notice when no title is generated from their plugin.
 		* A highly unlikely PHP error now won't occur when `$wpdb` returns incomplete data on excluded archive/search IDs.
@@ -612,6 +631,8 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 				* `Scripts()`
 				* `enqueue_media_scripts()`
 				* `enqueue_primaryterm_scripts()`
+				* `get_input_guidelines()`
+				* `get_input_guidelines_i18n()`
 				* `_init_admin_scripts()`, private. Use `init_admin_scripts()` instead.
 				* `_check_tsf_ajax_referer()`, private.
 				* `_wp_ajax_update_counter_type()`, private.
@@ -726,6 +747,10 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 					2. Removed escaping parameter, and the method no longer escapes the output.
 						* This will not lead to security issues, but it might lead to a stray visual ampersand when used incorrectly.
 						* Escaping should be done at the output, regardless.
+			* In class `\The_SEO_Framework\Detect` -- Factory: `the_seo_framework()`
+				* `wp_version()`
+					1. Now supports x.yy.zz WordPress versions.
+					2. No longer caches.
 			* In class `\The_SEO_Framework\Generate_Title` -- Factory: `the_seo_framework()`
 				* For these methods, the first parameter is now expecting an array or null, instead of an ID only:
 					* `get_twitter_title()`
@@ -948,6 +973,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 			* `(array) the_seo_framework_save_custom_fields`, the post SEO data, right before it's saved.
 			* `(array) the_seo_framework_save_term_data`, the term SEO data, right before it's saved.
 			* `(array) the_seo_framework_separator_list`, the separator list.
+			* `(array) the_seo_framework_input_guidelines`, the input guideline list.
 		* **Changed:**
 			* `the_seo_framework_detect_page_builder`
 				1. Now returns `null` by default.

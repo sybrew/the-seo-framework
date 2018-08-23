@@ -102,7 +102,7 @@ class Admin_Init extends Init {
 	 */
 	public function init_admin_scripts( $dpr = null ) {
 
-		if ( null !== $dpr ) $this->_doing_it_wrong( __METHOD__, 'The first argument is deprecated. Use <code>the_seo_framework()->Scripts()::enqueue()</code> after instead.', '3.1.0' );
+		if ( null !== $dpr ) $this->_doing_it_wrong( __METHOD__, 'The first argument is deprecated. Use <code>the_seo_framework()->Scripts()::enqueue()</code> after calling this instead.', '3.1.0' );
 
 		if ( _has_run( __METHOD__ ) ) return;
 
@@ -450,6 +450,13 @@ class Admin_Init extends Init {
 			}
 		}
 
+		$input_guidelines = [];
+		$input_guidelines_i18n = [];
+		if ( $has_input ) {
+			$input_guidelines      = $this->get_input_guidelines();
+			$input_guidelines_i18n = $this->get_input_guidelines_i18n();
+		}
+
 		$l10n = [
 			'nonces' => $this->get_js_nonces(),
 			'states' => [
@@ -471,16 +478,13 @@ class Admin_Init extends Init {
 				'stripTitleTags'      => (bool) $this->get_option( 'title_strip_tags' ),
 			],
 			'i18n'   => [
-				'saveAlert'      => \__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
-				'confirmReset'   => \__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
-				'good'           => \__( 'Good', 'autodescription' ),
-				'okay'           => \__( 'Okay', 'autodescription' ),
-				'bad'            => \__( 'Bad', 'autodescription' ),
-				'unknown'        => \__( 'Unknown', 'autodescription' ),
-				'privateTitle'   => $has_input && $id ? \__( 'Private:', 'autodescription' ) : '',
-				'protectedTitle' => $has_input && $id ? \__( 'Protected:', 'autodescription' ) : '',
+				'saveAlert'       => \__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
+				'confirmReset'    => \__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
+				'privateTitle'    => $has_input && $id ? \__( 'Private:', 'autodescription' ) : '',
+				'protectedTitle'  => $has_input && $id ? \__( 'Protected:', 'autodescription' ) : '',
 				/* translators: Pixel counter. 1: width, 2: guideline */
-				'pixelsUsed'     => $has_input ? \__( '%1$d out of %2$d pixels are used.', 'autodescription' ) : '',
+				'pixelsUsed'      => $has_input ? \__( '%1$d out of %2$d pixels are used.', 'autodescription' ) : '',
+				'inputGuidelines' => $input_guidelines_i18n,
 			],
 			'params' => [
 				'objectTitle'          => $default_title,
@@ -492,15 +496,15 @@ class Admin_Init extends Init {
 				'titleSeparator'       => $title_separator,
 				'descriptionSeparator' => $description_separator,
 				'titleLocation'        => $title_location,
-				'titlePixelGuideline'  => 600,
-				'descPixelGuideline'   => $is_post_edit ? ( $this->is_page() ? 1820 : 1720 ) : 1820,
+				'inputGuidelines'      => $input_guidelines,
 			],
 		];
 
 		$flags = ENT_COMPAT;
 		foreach ( [ 'i18n', 'params' ] as $key ) {
 			foreach ( $l10n[ $key ] as $k => &$v ) {
-				$v = html_entity_decode( $v, $flags, 'UTF-8' );
+				if ( is_scalar( $v ) )
+					$v = html_entity_decode( $v, $flags, 'UTF-8' );
 			}
 		}
 
@@ -517,6 +521,7 @@ class Admin_Init extends Init {
 	 * They are put under object 'tsfemL10n.nonces[ $key ] = $val'.
 	 *
 	 * @since 2.9.0
+	 * @access private
 	 *
 	 * @param string|array $key Required. The object key or array of keys and values. Requires escape.
 	 * @param mixed $val The object value if $key is string. Requires escape.
@@ -533,6 +538,7 @@ class Admin_Init extends Init {
 	 * If $key is an array, $val is ignored and $key's values are used instead.
 	 *
 	 * @since 2.9.0
+	 * @access private
 	 * @staticvar object $nonces The cached nonces object.
 	 *
 	 * @param string|array $key The object key or array of keys and values. Requires escape.
@@ -557,6 +563,130 @@ class Admin_Init extends Init {
 				$nonces->$k = $v;
 			}
 		}
+	}
+
+	/**
+	 * Returns the title and description input guideline table, for
+	 * (Google) search, Open Graph, and Twitter.
+	 *
+	 * @since 3.1.0
+	 * @staticvar array $guidelines
+	 * @TODO Consider splitting up search into Google, Bing, etc., as we might
+	 *       want users to set their preferred search engine. Now, these engines
+	 *       are barely any different.
+	 *
+	 * @return array
+	 */
+	public function get_input_guidelines() {
+		static $guidelines;
+		/**
+		 * @since 3.1.0
+		 * @param array $guidelines The title and description guidelines.
+		 *              Don't alter the format. Only change the numeric values.
+		 */
+		return isset( $guidelines ) ? $guidelines : $guidelines = (array) \apply_filters(
+			'the_seo_framework_input_guidelines',
+			[
+				'title' => [
+					'search' => [
+						'chars'  => [
+							'lower'     => 25,
+							'goodLower' => 42,
+							'goodUpper' => 65,
+							'upper'     => 75,
+						],
+						'pixels' => [
+							'lower'     => 200,
+							'goodLower' => 336,
+							'goodUpper' => 520,
+							'upper'     => 600,
+						],
+					],
+					'opengraph' => [
+						'chars'  => [
+							'lower'     => 15,
+							'goodLower' => 25,
+							'goodUpper' => 88,
+							'upper'     => 100,
+						],
+						'pixels' => [],
+					],
+					'twitter' => [
+						'chars'  => [
+							'lower'     => 15,
+							'goodLower' => 25,
+							'goodUpper' => 69,
+							'upper'     => 70,
+						],
+						'pixels' => [],
+					],
+				],
+				'description' => [
+					'search' => [
+						'chars'  => [
+							'lower'     => 45,
+							'goodLower' => 80,
+							'goodUpper' => 160,
+							'upper'     => 320,
+						],
+						'pixels' => [
+							'lower'     => 256,
+							'goodLower' => 455,
+							'goodUpper' => 910,
+							'upper'     => 1820,
+						],
+					],
+					'opengraph' => [
+						'chars'  => [
+							'lower'     => 45,
+							'goodLower' => 80,
+							'goodUpper' => 200,
+							'upper'     => 300,
+						],
+						'pixels' => [],
+					],
+					'twitter' => [
+						'chars'  => [
+							'lower'     => 45,
+							'goodLower' => 80,
+							'goodUpper' => 200,
+							'upper'     => 200,
+						],
+						'pixels' => [],
+					],
+				],
+			]
+		);
+	}
+
+	/**
+	 * Returns the title and description input guideline explanatory table.
+	 *
+	 * Already attribute-escaped.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return array
+	 */
+	public function get_input_guidelines_i18n() {
+		return [
+			'long' => [
+				'empty'       => \esc_attr__( "There's no content.", 'autodescription' ),
+				'farTooShort' => \esc_attr__( "It's too short and it should have more information.", 'autodescription' ),
+				'tooShort'    => \esc_attr__( "It's short and it could have more information.", 'autodescription' ),
+				'tooLong'     => \esc_attr__( "It's long and it might get truncated in search.", 'autodescription' ),
+				'farTooLong'  => \esc_attr__( "It's too long and it will get truncated in search.", 'autodescription' ),
+				'good'        => \esc_attr__( 'Length is good.', 'autodescription' ),
+			],
+			'short' => [
+				'empty'       => \esc_attr_x( 'Empty', 'The string is empty', 'autodescription' ),
+				'farTooShort' => \esc_attr__( 'Far too short', 'autodescription' ),
+				'tooShort'    => \esc_attr__( 'Too short', 'autodescription' ),
+				'tooLong'     => \esc_attr__( 'Too long', 'autodescription' ),
+				'farTooLong'  => \esc_attr__( 'Far too long', 'autodescription' ),
+				'good'        => \esc_attr__( 'Good', 'autodescription' ),
+			],
+		];
 	}
 
 	/**
