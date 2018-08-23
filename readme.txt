@@ -410,6 +410,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* The character counters can now count down to zero, and will notify you off it.
 		* The pixel counter is now color coded. Hover over it to know why!
 		* Switching SEO metabox tabs or loading a page with character counters is now a tad less resource intensive.
+		* The Google Webmasters' verification code link now directly sends you to the correct form.
 	* **Changed:**
 		* TSF now requires WordPress 4.6 (previously 4.4).
 		* TSF now requires PHP 5.4 (previously 5.3).
@@ -447,6 +448,8 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 				* "Add Link to Facebook" - No longer updated, relative low user base, closed for security reasons.
 			* Twitter:
 				* "Twitter" - they only embed sharing links.
+		* Bing Webmaster's verification code link now leads to their new landing page.
+		* Yandex Webmaster's verification code link now leads to their new landing page.
 	* **Removed:**
 		* Counters now only work with JavaScript enabled. In PHP, this added too much overhead as we were predicting and counting in code.
 		* Description excerpts are no longer added to categories based on the latest post ID.
@@ -480,7 +483,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 			* The Canonical URL is now correct.
 			* The Descriptions are now correct.
 			* The Titles are now fully controlled by TSF.
-			* Extranous meta output from Ultimate Member has been removed.
+			* Extranous (duplicated) meta output from Ultimate Member has been removed.
 		* Invalid settings' input are now checked, this makes the saving buttons work as intended:
 			* Before you can change tabs. It'll block the tab switch and notify you.
 			* After you close a metabox, and it'll reopen instantly to notify you.
@@ -501,7 +504,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* Parent categories where children have posts are no longer automatically and incorrectly marked for "noindex" in the SEO Bar when no posts are assigned.
 			* This didn't affect the real, front-end output value.
 		* Interactive tooltips arrows now no longer overflow when the balloon size becomes smaller.
-		* TODO consider fixing the primary term selector overflow... we have to change it, regardless, for Gutenberg.
+		* The primary term selector no longer overflows to the bottom. Instead, the text flows neatly to the bottom, while the button stays inline.
 		* TODO consider adding an input buffer (25ms?) that only continues with the last input for tab switgin... This might degrade user experience.
 			* This is a race condition...
 

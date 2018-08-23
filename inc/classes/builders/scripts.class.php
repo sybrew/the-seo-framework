@@ -166,7 +166,7 @@ final class Scripts {
 	 *      'file' => string $file. The full file location,
 	 *      'args' => array $args. Optional,
 	 *    }
-	 *   'inline' => array If 'type' is CSS : {
+	 *   'inline' => array If type is 'css' : {
 	 *      'selector' => array : { iterable => 'style' }
 	 *    }
 	 * }
