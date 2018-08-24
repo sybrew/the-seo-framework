@@ -278,6 +278,10 @@ TODO note about that some options have been relocated.
 * TODO notify that the title detection is removed, and the user might find title fix useful. TODO consider title fix integration?
 * For developers, note that this change heavily affects the title generation API. Although this change deems API adjustments less necessary, if you've used title functions or filters within this plugin and still need them, then go see the detailed log for needed adjustments. TODO make write-up, consider old features.
 
+**For everyone: Better and faster descriptions**
+
+* TODO See titles... same story.
+
 **For everyone: Plugin conflict resolution**
 
 * The SEO Framework no longer disables parts of its meta output, settings and other functionality when a conflicting plugin is found.
@@ -411,6 +415,8 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* The pixel counter is now color coded. Hover over it to know why!
 		* Switching SEO metabox tabs or loading a page with character counters is now a tad less resource intensive.
 		* The Google Webmasters' verification code link now directly sends you to the correct form.
+		* Improved multibyte support in automated descriptions, like for finding punctiations.
+		* Automated descriptions now try to find complete sentences by stripping the last three trailing words after the latest found punctuation mark.
 	* **Changed:**
 		* TSF now requires WordPress 4.6 (previously 4.4).
 		* TSF now requires PHP 5.4 (previously 5.3).
@@ -505,8 +511,10 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 			* This didn't affect the real, front-end output value.
 		* Interactive tooltips arrows now no longer overflow when the balloon size becomes smaller.
 		* The primary term selector no longer overflows to the bottom. Instead, the text flows neatly to the bottom, while the button stays inline.
+		* Titles and descriptions now have no chance from experiencing ID conflicts, where a post and term ID might collide.
 		* TODO consider adding an input buffer (25ms?) that only continues with the last input for tab switgin... This might degrade user experience.
 			* This is a race condition...
+		* When entering something in the Open Graph description or title fields, and then emptying it, and then entering something in the meta description or title fields, will no longer cause the Twitter title to use the latest known meta description or title field from when the Open Graph field got emptied. Whew (╯°□°）╯︵ ┻━┻
 
 * **For translators:**
 	* **New translations are available.**
@@ -845,6 +853,15 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 				* `theme_title_doing_it_right()`
 				* `theme_title_fix_active()`
 				* `can_manipulate_title()`
+			* In class `\The_SEO_Framework\Generate_Description` -- Factory: `the_seo_framework()`
+				* `parse_description_args()`
+				* `reparse_description_args()`
+				* `get_description_excerpt_normal()`
+				* `get_description_excerpt_social()`
+				* `generate_home_page_description()`
+				* `generate_description_additions()`
+				* `generate_description_title()`
+				* `generate_excerpt()`
 			* In class: `\The_SEO_Framework\Generate_Url` -- Factory: `the_seo_framework()`
 				* `set_url_scheme_filter()`
 			* In class: `\The_SEO_Framework\Init` -- Factory: `the_seo_framework()`
@@ -918,6 +935,10 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 				* `is_option_checked()`, use `(bool) the_seo_framework()->get_option()` instead.
 			* In class: `\The_SEO_Framework\Detect` -- factory: `the_seo_framework()`
 				* `get_supported_post_type()`, use `is_post_type_supported()` instead.
+			* In class `\The_SEO_Framework\Generate_Description` -- Factory: `the_seo_framework()`
+				* `generate_description()`, use `get_description` instead.
+				* `description_from_custom_field()`, use `get_description_from_custom_field()` instead.
+				* `generate_description_from_id()`, use `get_generated_description()` instead.
 			* In class: `\The_SEO_Framework\Generate_Title` -- factory: `the_seo_framework()`
 				* `title()`, goodbye, old friend. Use `get_title()` instead.
 				* `build_title()`, use `get_title()` instead.
@@ -990,6 +1011,8 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 				1. When filtered to be false, other plugins are still checked.
 				2. Added two new parameters.
 			* `the_seo_framework_term_meta_defaults` is now also used on the front-end.
+			* `the_seo_framework_custom_field_description` now passes a 'taxonomy' index in the second parameter.
+			* `the_seo_framework_fetched_description_excerpt` no longer passes a third and fourth parameter.
 		* **Removed:**
 			* `the_seo_framework_update_options_at_update`
 			* `the_seo_framework_canonical_force_scheme` (was deprecated since 2.8.0). Use `the_seo_framework_preferred_url_scheme` instead.
@@ -1010,6 +1033,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 			* `the_seo_framework_inpost_seo_bar`, use the option introduced in TSF 2.7 instead.
 			* `the_seo_framework_generator_tag`, it's useless and you can do it via `add_action( 'wp_head', function() { echo <meta.../>; } );`
 			* `the_seo_framework_updates_cache`, it wasn't used.
+			* `the_seo_framework_generated_description_additions`, use the new options instead.
 		* **Deprecated:**
 			* `the_seo_framework_get_term_meta`, use `the_seo_framework_term_meta_defaults` instead.
 		* **Fixed:**

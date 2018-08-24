@@ -12,7 +12,7 @@ $instance = $this->get_view_instance( 'the_seo_framework_description_metabox', $
 switch ( $instance ) :
 	case 'the_seo_framework_description_metabox_main' :
 		?>
-		<h4><?php printf( esc_html__( 'Automated Description Settings', 'autodescription' ) ); ?></h4>
+		<h4><?php printf( esc_html__( 'Description Settings', 'autodescription' ) ); ?></h4>
 		<?php
 		$this->description( __( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' ) );
 

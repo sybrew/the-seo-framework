@@ -405,11 +405,14 @@ switch ( $instance ) :
 
 		//! OG input falls back to default input.
 		$og_tit_placeholder  = $custom_og_title ?: $this->get_generated_open_graph_title( [ 'id' => $home_id ] );
-		$og_desc_placeholder = $custom_og_desc ?: $this->get_generated_open_graph_description( $home_id );
+		$og_desc_placeholder = $custom_og_desc ?: $this->get_generated_open_graph_description( [ 'id' => $home_id ] );
 
 		//! Twitter input falls back to OG input.
 		$tw_tit_placeholder  = $custom_tw_title ?: $home_og_title ?: $og_tit_placeholder;
-		$tw_desc_placeholder = $custom_tw_desc ?: $home_og_desc ?: $og_desc_placeholder;
+		$tw_desc_placeholder = $custom_tw_desc
+							?: $home_og_desc
+							?: $custom_og_desc
+							?: $this->get_generated_twitter_description( [ 'id' => $home_id ] );
 
 		?>
 		<h4><?php esc_html_e( 'Open Graph Settings', 'autodescription' ); ?></h4>

@@ -61,7 +61,7 @@ function _bbpress_filter_pre_title( $title = '', $args = [], $escape = true ) {
 	return $title;
 }
 
-\add_filter( 'the_seo_framework_fetched_description_excerpt', __NAMESPACE__ . '\\_bbpress_filter_excerpt_generation', 10, 4 );
+\add_filter( 'the_seo_framework_fetched_description_excerpt', __NAMESPACE__ . '\\_bbpress_filter_excerpt_generation', 10 );
 /**
  * Fixes bbPress excerpts.
  *
@@ -76,12 +76,9 @@ function _bbpress_filter_pre_title( $title = '', $args = [], $escape = true ) {
  * @access private
  *
  * @param string $excerpt The excerpt to use.
- * @param bool $page_id The current page/term ID
- * @param \WP_Term|null $term The current term.
- * @param int $max_char_length Determines the maximum length of excerpt after trimming.
  * @return string The excerpt.
  */
-function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $term = null, $max_char_length = 300 ) {
+function _bbpress_filter_excerpt_generation( $excerpt = '' ) {
 
 	if ( \is_bbpress() ) {
 		if ( \bbp_is_topic_tag() && ! \the_seo_framework()->is_tax() ) {
@@ -108,10 +105,9 @@ function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $term 
  * @access private
  *
  * @param string $description The description.
- * @param array $args The description arguments.
  * @return string The custom description.
  */
-function _bbpress_filter_custom_field_description( $description = '', $args = [] ) {
+function _bbpress_filter_custom_field_description( $description = '' ) {
 
 	if ( \is_bbpress() ) {
 		if ( \bbp_is_topic_tag() ) {

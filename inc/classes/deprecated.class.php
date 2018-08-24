@@ -595,4 +595,74 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'the_seo_framework()->is_option_checked()', '3.1.0' );
 		return (bool) $tsf->get_option( $option );
 	}
+
+	/**
+	 * Returns the custom user-inputted description.
+	 *
+	 * @since 1.0.0
+	 * @since 2.9.0 Added two filters.
+	 * @since 3.0.6 Silently deprecated.
+	 * @since 3.1.0 Deprecated.
+	 * @deprecated Use `get_description()` instead.
+	 * @deprecated Use `get_generated_description()` instead.
+	 *
+	 * @param array|null $args   An array of 'id' and 'taxonomy' values.
+	 *                           Accepts int values for backward compatibility.
+	 * @param bool       $escape Whether to escape the description.
+	 * @return string The description
+	 */
+	public function generate_description( $description = '', $args = null, $escape ) {
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->generate_description()', '3.1.0', 'the_seo_framework()->get_description()' );
+		return $tsf->get_description( $args, $escape ) ?: $description;
+	}
+
+	/**
+	 * Creates description from custom fields.
+	 *
+	 * @since 2.4.1
+	 * @since 3.0.6 Silently deprecated.
+	 * @since 3.1.0 Deprecated.
+	 * @deprecated Use `get_description_from_custom_field()` instead.
+	 *
+	 * @param array $args description args : {
+	 *    @param int $id the term or page id.
+	 *    @param string $taxonomy taxonomy name.
+	 *    @param bool $is_home We're generating for the home page.
+	 * }
+	 * @param bool  $escape Escape the output if true.
+	 * @return string|mixed The description.
+	 */
+	public function description_from_custom_field( $args = null, $escape = true ) {
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->description_from_custom_field()', '3.1.0', 'the_seo_framework()->get_description_from_custom_field()' );
+		return $tsf->get_description_from_custom_field( $args, $escape );
+	}
+
+	/**
+	 * Generates description from content while parsing filters.
+	 *
+	 * @since 2.3.3
+	 * @since 3.0.0 No longer checks for protected posts.
+	 *              Check is moved to $this->generate_the_description().
+	 * @since 3.0.6 Silently deprecated.
+	 * @since 3.1.0 Now listens to the `auto_description` option.
+	 * @deprecated Use `get_generated_description()` instead.
+	 *
+	 * @param array $args description args : {
+	 *    @param int $id the term or page id.
+	 *    @param string $taxonomy taxonomy name.
+	 *    @param bool $is_home Whether we're generating for the home page.
+	 *    @param bool $get_custom_field Do not fetch custom title when false.
+	 *    @param bool $social Generate Social Description when true.
+	 * }
+	 * @param bool $escape Escape output when true.
+	 * @return string $output The description.
+	 */
+	public function generate_description_from_id( $args = null, $escape = true ) {
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->generate_description_from_id()', '3.1.0', 'the_seo_framework()->get_generated_description()' );
+		return $tsf->get_generated_description( $args, $escape );
+	}
+
 }

@@ -341,18 +341,18 @@ class Post_Data extends Detect {
 	 *              2. Now strips plausible embeds URLs.
 	 *
 	 * @param string $excerpt the Excerpt.
-	 * @param int $the_id The Post ID.
-	 * @param null $deprecated No longer used.
-	 * @param bool $escape Whether to escape the excerpt.
-	 * @return string The escaped Excerpt.
+	 * @param int    $the_id The Post ID.
+	 * @param null   $deprecated No longer used.
+	 * @param bool   $escape Whether to escape the excerpt.
+	 * @return string The trimmed excerpt.
 	 */
-	public function get_excerpt_by_id( $excerpt = '', $the_id = '', $deprecated = null, $escape = true ) {
+	public function get_excerpt_by_id( $excerpt = '', $id = '', $deprecated = null, $escape = true ) {
 
 		if ( empty( $excerpt ) )
-			$excerpt = $this->fetch_excerpt( $the_id );
+			$excerpt = $this->fetch_excerpt( $id );
 
 		//* No need to parse an empty excerpt.
-		if ( '' === $excerpt ) return '';
+		if ( ! $excerpt ) return '';
 
 		return $escape ? $this->s_excerpt( $excerpt ) : $this->s_excerpt_raw( $excerpt );
 	}

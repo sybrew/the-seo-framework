@@ -28,7 +28,10 @@ $title_placeholder = $this->get_generated_title( [
 	'id'       => $term_id,
 	'taxonomy' => $taxonomy,
 ] );
-$description_placeholder = $this->get_generated_description( $term_id );
+$description_placeholder = $this->get_generated_description( [
+	'id'       => $term_id,
+	'taxonomy' => $taxonomy,
+] );
 
 $robots_settings = [
 	'noindex' => [

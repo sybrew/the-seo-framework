@@ -841,8 +841,7 @@ class Sanitize extends Admin_Pages {
 	public function s_excerpt( $excerpt = '', $allow_shortcodes = true, $escape = true ) {
 
 		//* No need to parse an empty excerpt.
-		if ( '' === $excerpt )
-			return '';
+		if ( '' === $excerpt ) return '';
 
 		/**
 		 * @since 2.6.6.1

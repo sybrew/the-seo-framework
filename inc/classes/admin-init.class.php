@@ -591,13 +591,13 @@ class Admin_Init extends Init {
 					'search' => [
 						'chars'  => [
 							'lower'     => 25,
-							'goodLower' => 42,
+							'goodLower' => 35,
 							'goodUpper' => 65,
 							'upper'     => 75,
 						],
 						'pixels' => [
 							'lower'     => 200,
-							'goodLower' => 336,
+							'goodLower' => 280,
 							'goodUpper' => 520,
 							'upper'     => 600,
 						],

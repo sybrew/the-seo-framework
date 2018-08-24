@@ -120,7 +120,6 @@ class Feed extends Cache {
 		//* Strip all code and lines.
 		$excerpt = $this->s_excerpt_raw( $content, false );
 
-		$excerpt_len = (int) mb_strlen( $excerpt );
 		/**
 		 * @since 2.5.2
 		 * @param int $max_len The maximum feed (multibyte) string length.
@@ -128,7 +127,7 @@ class Feed extends Cache {
 		$max_len = (int) \apply_filters( 'the_seo_framework_max_content_feed_length', 400 );
 
 		//* Generate excerpt.
-		$excerpt = $this->trim_excerpt( $excerpt, $excerpt_len, $max_len );
+		$excerpt = $this->trim_excerpt( $excerpt, 0, $max_len );
 
 		$h2_output = '';
 

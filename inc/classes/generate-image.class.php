@@ -105,6 +105,7 @@ class Generate_Image extends Generate_Url {
 	 * @since 2.9.3
 	 * @uses $this->get_social_image()
 	 * @staticvar array $images
+	 * @TODO exchange 2nd argument with $taxonomy.
 	 *
 	 * @TODO support Terms.
 	 *
@@ -179,7 +180,7 @@ class Generate_Image extends Generate_Url {
 	 * @since 3.0.6 Added attachment page compatibility.
 	 *
 	 * @todo listen to attached images within post.
-	 * @todo listen to archive images.
+	 * @todo listen to archive images. -> set taxonomy argument.
 	 *
 	 * @param array $args The image arguments.
 	 * @param bool $set_og_dimension Whether to set open graph dimensions.

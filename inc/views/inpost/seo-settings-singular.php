@@ -146,7 +146,7 @@ switch ( $instance ) :
 						endif;
 						esc_html_e( 'Remove the blogname?', 'autodescription' );
 						echo ' ';
-						$this->make_info( sprintf( __( 'Use this when you want to rearrange the title parts.', 'autodescription' ) ) );
+						$this->make_info( sprintf( __( 'Use this when you want to rearrange the title parts manually.', 'autodescription' ) ) );
 						?>
 					</label>
 				</div>
@@ -364,11 +364,14 @@ switch ( $instance ) :
 
 			//! OG input falls back to default input.
 			$og_tit_placeholder  = $home_og_title ?: $custom_og_title ?: $this->get_generated_open_graph_title( [ 'id' => $post_id ] );
-			$og_desc_placeholder = $home_og_desc ?: $custom_og_desc ?: $this->get_generated_open_graph_description( $post_id );
+			$og_desc_placeholder = $home_og_desc ?: $custom_og_desc ?: $this->get_generated_open_graph_description( [ 'id' => $post_id ] );
 
 			//! Twitter input falls back to OG input.
 			$tw_tit_placeholder  = $home_tw_title ?: $og_tit_placeholder;
-			$tw_desc_placeholder = $home_tw_desc ?: $og_desc_placeholder;
+			$tw_desc_placeholder = $home_tw_desc
+								?: $home_og_desc
+								?: $custom_og_desc
+								?: $this->get_generated_twitter_description( [ 'id' => $post_id ] );
 		} else {
 			// Gets custom fields.
 			$custom_og_title = $this->get_custom_field( '_open_graph_title', $post_id );
@@ -376,11 +379,11 @@ switch ( $instance ) :
 
 			//! OG input falls back to default input.
 			$og_tit_placeholder  = $this->get_generated_open_graph_title( [ 'id' => $post_id ] );
-			$og_desc_placeholder = $this->get_generated_open_graph_description( $post_id );
+			$og_desc_placeholder = $this->get_generated_open_graph_description( [ 'id' => $post_id ] );
 
 			//! Twitter input falls back to OG input.
 			$tw_tit_placeholder  = $custom_og_title ?: $og_tit_placeholder;
-			$tw_desc_placeholder = $custom_og_desc ?: $og_desc_placeholder;
+			$tw_desc_placeholder = $custom_og_desc ?: $this->get_generated_twitter_description( [ 'id' => $post_id ] );
 		}
 
 		$show_og = (bool) $this->get_option( 'og_tags' );

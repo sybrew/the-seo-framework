@@ -116,6 +116,10 @@ a.tsf-dismiss:hover {
 	will-change: left, right;
 }
 
+#tsf-title-placeholder {
+	display: none;
+}
+
 /* START Character Counters */
 
 .tsf-counter-wrap {
@@ -136,13 +140,14 @@ a.tsf-dismiss:hover {
 .tsf-count-bad {
 	color: #dd3811;
 }
-
 .tsf-count-okay {
 	color: #ffa700;
 }
-
 .tsf-count-good {
 	color: #0cc34b;
+}
+.tsf-count-unknown {
+	color: #007bd2;
 }
 
 .tsf-counter-one {
@@ -162,6 +167,9 @@ a.tsf-dismiss:hover {
 }
 .tsf-counter-one.tsf-count-good {
 	background-color: #0cc34b;
+}
+.tsf-counter-one.tsf-count-unknown {
+	background-color: #007bd2;
 }
 
 /* END Character Counters */

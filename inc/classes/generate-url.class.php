@@ -320,7 +320,7 @@ class Generate_Url extends Generate_Title {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int $term_id The term ID.
+	 * @param int    $term_id The term ID.
 	 * @param string $taxonomy The taxonomy.
 	 * @return string The taxonomial canonical URL, if any.
 	 */
@@ -696,7 +696,14 @@ class Generate_Url extends Generate_Title {
 			} elseif ( $this->is_tag() ) {
 				$url = \add_query_arg( [ 'post_tag' => $id ], $home );
 			} elseif ( $this->is_date() && isset( $GLOBALS['wp_query']->query ) ) {
-				$url = \add_query_arg( [ 'm' => implode( '', $GLOBALS['wp_query']->query ) ], $home );
+				// FIXME: Core Report: WP doesn't accept paged parameters w/ date parameters. It'll lead to the homepage.
+				$_query = $GLOBALS['wp_query']->query;
+				$_date = [
+					'y' => isset( $_query['year'] ) ? $_query['year'] : '',
+					'm' => isset( $_query['monthnum'] ) ? $_query['monthnum'] : '',
+					'd' => isset( $_query['day'] ) ? $_query['day'] : '',
+				];
+				$url = \add_query_arg( [ 'm' => implode( '', $_date ) ], $home );
 			} elseif ( $this->is_author() ) {
 				$url = \add_query_arg( [ 'author' => $id ], $home );
 			} elseif ( $this->is_tax() ) {

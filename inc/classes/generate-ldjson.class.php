@@ -378,7 +378,7 @@ class Generate_Ldjson extends Generate_Image {
 			++$position;
 
 			if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-				$parent_name = $this->get_custom_field( '_genesis_title', $parent_id )
+				$parent_name = $this->get_raw_custom_field_title( [ 'id' => $parent_id ] )
 					?: ( $this->get_generated_single_post_title( $parent_id ) ?: $this->get_static_untitled_title() );
 			} else {
 				$parent_name = $this->get_generated_single_post_title( $parent_id ) ?: $this->get_static_untitled_title();
@@ -493,7 +493,7 @@ class Generate_Ldjson extends Generate_Image {
 		unset( $terms );
 
 		if ( ! $parents )
-			return;
+			return '';
 
 		//* Seed out parents that have multiple assigned children.
 		foreach ( $parents as $pa_id => $child_id ) :
@@ -541,16 +541,10 @@ class Generate_Ldjson extends Generate_Image {
 			$position = $pos + 2;
 
 			if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-				$data = $this->get_term_meta( $child_id );
-				if ( empty( $data['doctitle'] ) ) {
-					$cat = \get_term( $child_id, $taxonomy );
-					$cat_name = empty( $cat->name ) ? \__( 'Uncategorized', 'default' ) : $cat->name;
-				} else {
-					$cat_name = $data['doctitle'];
-				}
+				$cat_name = $this->get_raw_custom_field_title( [ 'id' => $child_id, 'taxonomy' => $taxonomy ] )
+					?: ( $this->get_generated_single_term_title( \get_term( $child_id, $taxonomy ) ) ?: $this->get_static_untitled_title() );
 			} else {
-				$cat = \get_term( $child_id, $taxonomy );
-				$cat_name = empty( $cat->name ) ? \__( 'Uncategorized', 'default' ) : $cat->name;
+				$cat_name = $this->get_generated_single_term_title( \get_term( $child_id, $taxonomy ) ) ?: $this->get_static_untitled_title();
 			}
 
 			//* Store in cache.
@@ -674,26 +668,18 @@ class Generate_Ldjson extends Generate_Image {
 
 		$front_id = $this->get_the_front_page_ID();
 
-		$custom_name = '';
 		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-
-			$home_title = $this->get_option( 'homepage_title' );
-
-			if ( $home_title ) {
-				$custom_name = $home_title;
-			} elseif ( $this->has_page_on_front() ) {
-				$custom_name = $this->get_custom_field( '_genesis_title', $front_id ) ?: $this->get_blogname();
-			}
+			$title = $this->get_raw_custom_field_title( [ 'id' => $front_id ] ) ?: $this->get_blogname();
+		} else {
+			$title = $this->get_raw_generated_title( [ 'id' => $front_id ] ) ?: $this->get_blogname();
 		}
-
-		$custom_name = $custom_name ?: $this->get_blogname();
 
 		$crumb = [
 			'@type'    => 'ListItem',
 			'position' => 1,
 			'item'     => [
 				'@id'  => $this->get_schema_url_id( 'breadcrumb', 'homepage' ),
-				'name' => $this->escape_title( $custom_name ),
+				'name' => $this->escape_title( $title ),
 			],
 		];
 
@@ -727,7 +713,7 @@ class Generate_Ldjson extends Generate_Image {
 		$post_id = $this->get_the_real_ID();
 
 		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-			$name = $this->get_custom_field( '_genesis_title', $post_id )
+			$name = $this->get_raw_custom_field_title( [ 'id' => $post_id ] )
 				?: ( $this->get_generated_single_post_title( $post_id ) ?: $this->get_static_untitled_title() );
 		} else {
 			$name = $this->get_generated_single_post_title( $post_id ) ?: $this->get_static_untitled_title();
@@ -791,7 +777,7 @@ class Generate_Ldjson extends Generate_Image {
 	 *
 	 * @param string $id The type of script. Must be escaped.
 	 * @param string $from Where to generate from.
-	 * @param array $args The URL generation args.
+	 * @param array  $args The URL generation args.
 	 * @return string The JSON URL '@id'
 	 */
 	public function get_schema_url_id( $id, $from, $args = [] ) {

@@ -130,7 +130,7 @@ class Doing_It_Right extends Generate_Ldjson {
 
 			if ( $post_type && isset( $_POST['post_ID'] ) ) {
 				$post_id = (int) $_POST['post_ID'];
-				$access = false;
+				$access  = false;
 
 				$pto = \get_post_type_object( $post_type );
 				if ( isset( $pto->capability_type ) )
@@ -745,9 +745,14 @@ class Doing_It_Right extends Generate_Ldjson {
 		$data = $this->get_term_meta( $args['post_id'] );
 
 		$title_custom_field = isset( $data['doctitle'] ) ? $data['doctitle'] : '';
-		$description_custom_field = $this->get_description_from_custom_field( $args['post_id'] );
-		$noindex = isset( $data['noindex'] ) ? $data['noindex'] : '';
-		$nofollow = isset( $data['nofollow'] ) ? $data['nofollow'] : '';
+
+		$description_custom_field = $this->get_description_from_custom_field( [
+			'id'       => $args['post_id'],
+			'taxonomy' => $args['taxonomy'],
+		] );
+
+		$noindex   = isset( $data['noindex'] ) ? $data['noindex'] : '';
+		$nofollow  = isset( $data['nofollow'] ) ? $data['nofollow'] : '';
 		$noarchive = isset( $data['noarchive'] ) ? $data['noarchive'] : '';
 
 		$title_is_from_custom_field = (bool) $title_custom_field;
@@ -760,9 +765,12 @@ class Doing_It_Right extends Generate_Ldjson {
 		$description_is_from_custom_field = (bool) $description_custom_field;
 		//= Call sanitized version.
 		if ( $description_is_from_custom_field ) {
-			$description = $this->get_description_from_custom_field( $args['post_id'] );
+			$description = $description_custom_field;
 		} else {
-			$description = $this->get_generated_description( $args['post_id'] );
+			$description = $this->get_generated_description( [
+				'id'       => $args['post_id'],
+				'taxonomy' => $args['taxonomy'],
+			] );
 		}
 
 		$noindex   = (bool) $noindex;
@@ -802,7 +810,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	protected function the_seo_bar_post_data( $args ) {
 
 		$title_custom_field = $this->get_custom_field( '_genesis_title', $args['post_id'] );
-		$description_custom_field = $this->get_description_from_custom_field( $args['post_id'] );
+		$description_custom_field = $this->get_description_from_custom_field( [ 'id' => $args['post_id'] ] );
 		$noindex   = $this->get_custom_field( '_genesis_noindex', $args['post_id'] );
 		$nofollow  = $this->get_custom_field( '_genesis_nofollow', $args['post_id'] );
 		$noarchive = $this->get_custom_field( '_genesis_noarchive', $args['post_id'] );
@@ -822,7 +830,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		$description_is_from_custom_field = (bool) $description_custom_field;
 		//= Call sanitized version.
 		if ( $description_is_from_custom_field ) {
-			$description = $this->get_description_from_custom_field( $args['post_id'] );
+			$description = $description_custom_field;
 		} else {
 			$description = $this->get_generated_description( $args['post_id'] );
 		}
@@ -1206,7 +1214,6 @@ class Doing_It_Right extends Generate_Ldjson {
 		 * @since 2.2.8
 		 */
 		if ( $args['is_term'] ) {
-			$t = microtime( true );
 			$term = $this->fetch_the_term( $args['post_id'] );
 
 			$_has_posts = ! empty( $term->count );

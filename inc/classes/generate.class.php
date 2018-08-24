@@ -40,6 +40,31 @@ class Generate extends User_Data {
 	}
 
 	/**
+	 * Fixes generation arguments, to prevent ID conflicts with taxonomies.
+	 *
+	 * @since 3.1.0
+	 * @internal
+	 *
+	 * @param array|int|null $args The arguments, passed by reference.
+	 */
+	protected function fix_generation_args( &$args ) {
+		if ( is_array( $args ) ) {
+			$defaults = [
+				'id'       => 0,
+				'taxonomy' => '',
+			];
+			$args = array_merge( $defaults, $args );
+		} elseif ( is_numeric( $args ) ) {
+			$args = [
+				'id'       => (int) $args,
+				'taxonomy' => '',
+			];
+		} else {
+			$args = null;
+		}
+	}
+
+	/**
 	 * Returns the `noindex`, `nofollow`, `noarchive` robots meta code array.
 	 *
 	 * @since 2.2.2
