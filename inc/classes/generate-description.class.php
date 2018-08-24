@@ -405,7 +405,8 @@ class Generate_Description extends Generate {
 				$additions        = '';
 				$additions_length = 0;
 			} else {
-				$additions_length = $additions ? mb_strlen( html_entity_decode( $additions ) ) : 0;
+				//? Add 3 because of the separator.
+				$additions_length = $additions ? mb_strlen( html_entity_decode( $additions ) ) + 3 : 0;
 				if ( $additions_length > 71 ) {
 					$additions        = '';
 					$additions_length = 0;
@@ -779,7 +780,7 @@ class Generate_Description extends Generate {
 				$excerpt .= '.';
 		} elseif ( $excerpt ) {
 			//* Finds sentence-closing punctiations.
-			preg_match( '/\p{Po}$/u', $excerpt, $matches );
+			preg_match( '/\p{Po}$/su', $excerpt, $matches );
 			if ( empty( $matches ) ) // no punctuation found
 				$excerpt .= '...';
 		}
@@ -828,8 +829,8 @@ class Generate_Description extends Generate {
 	 * Determines whether to add description additions. (╯°□°）╯︵ ┻━┻
 	 *
 	 * @since 2.6.0
-	 * @since 2.7.0 Removed cache.
-	 *              Whether an excerpt is available is no longer part of this check.
+	 * @since 2.7.0 : 1. Removed cache.
+	 *                2. Removed excerpt availability check.
 
 	 * @param int             $id The current page or post ID.
 	 * @param \WP_Term|string $term The current Term.

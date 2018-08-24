@@ -1412,12 +1412,13 @@ class Sanitize extends Admin_Pages {
 	 * Replaces non-break spaces with regular spaces.
 	 *
 	 * @since 2.8.2
+	 * @since 3.1.0 Now catches all non-breaking characters.
 	 *
 	 * @param string $new_value String with potentially unwanted nbsp values.
 	 * @return string A spacey string.
 	 */
 	public function s_nbsp( $new_value ) {
-		return str_replace( [ '%c2%a0', '&nbsp;' ], ' ', $new_value );
+		return str_replace( [ '&nbsp;', '&#160;', "\xc2\xa0" ], ' ', $new_value );
 	}
 
 	/**

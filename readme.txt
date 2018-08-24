@@ -252,11 +252,13 @@ NOTE: ref: https://theseoframework.com/?p=1792
 1. PHP 5.3 support has been dropped. Here's why:
 	* TODO
 	* This lowers maintenance and workaround cost, and it increases our productivity; so, we can focus on faster, better, and more intelligent solutions.
+	* For more information, see: https://wordpress.org/support/upgrade-php/
 2. WP 4.4 and 4.5 support has been dropped. Here's why:
 	* TODO
 	* Consistent admin screen and post type detection, so you won't find bugs anymore stemming from backward compatibility.
 	* Newer and reliable functionality, like upgrading memory availability.
 	* This lowers maintenance and support cost, so we can focus on giving you a better product.
+	* For more information, see: https://codex.wordpress.org/Upgrading_WordPress
 
 **Feature highlights:**
 
