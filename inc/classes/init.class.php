@@ -418,57 +418,27 @@ class Init extends Query {
 
 			//* Limit processing and redundant tags on 404 and search.
 			if ( $this->is_search() ) :
-				$output = $this->og_locale()
-						. $this->og_type()
-						. $this->og_title()
-						. $this->og_url()
-						. $this->og_sitename()
-						. $this->shortlink()
-						. $this->canonical()
-						. $this->paged_urls()
-						. $this->google_site_output()
-						. $this->bing_site_output()
-						. $this->yandex_site_output()
-						. $this->pint_site_output();
+				$output = $this->get_all_facebook_meta_tags()
+						. $this->get_all_canonical_meta_tags();
 			elseif ( $this->is_404() ) :
-				$output = $this->google_site_output()
-						. $this->bing_site_output()
-						. $this->yandex_site_output()
-						. $this->pint_site_output();
+				// Inferred.
 			else :
 				$set_timezone = $this->uses_time_in_timestamp_format() && ( $this->output_published_time() || $this->output_modified_time() );
 				$set_timezone and $this->set_timezone();
 
 				$output = $this->the_description()
-						. $this->og_image()
-						. $this->og_locale()
-						. $this->og_type()
-						. $this->og_title()
-						. $this->og_description()
-						. $this->og_url()
-						. $this->og_sitename()
-						. $this->facebook_publisher()
-						. $this->facebook_author()
-						. $this->facebook_app_id()
+						. $this->get_all_og_meta_tags()
+						. $this->get_all_facebook_meta_tags()
 						. $this->article_published_time()
 						. $this->article_modified_time()
-						. $this->twitter_card()
-						. $this->twitter_site()
-						. $this->twitter_creator()
-						. $this->twitter_title()
-						. $this->twitter_description()
-						. $this->twitter_image()
-						. $this->shortlink()
-						. $this->canonical()
-						. $this->paged_urls()
-						. $this->ld_json()
-						. $this->google_site_output()
-						. $this->bing_site_output()
-						. $this->yandex_site_output()
-						. $this->pint_site_output();
+						. $this->get_all_twitter_meta_tags()
+						. $this->get_all_canonical_meta_tags()
+						. $this->get_all_structured_data_scripts();
 
 				$set_timezone and $this->reset_timezone();
 			endif;
+
+			$output .= $this->get_all_verification_meta_tags();
 
 			$after_legacy = $this->get_legacy_header_filters_output( 'after' );
 

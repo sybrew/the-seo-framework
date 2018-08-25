@@ -148,7 +148,7 @@ final class Scripts {
 	 * @see $this->enqueue_scripts()
 	 *
 	 * @NOTE If the script is associative, it'll be registered as-is.
-	 *       If the script is sequential (weak check!!!), it'll be iterated over, and then registered.
+	 *       If the script is sequential, it'll be iterated over, and then registered.
 	 *
 	 * @param array $script The script : {
 	 *   'id'   => string The script ID,
@@ -172,7 +172,7 @@ final class Scripts {
 	 * }
 	 */
 	public static function register( array $script ) {
-		if ( isset( $script[0] ) ) {
+		if ( array_values( $script ) === $script ) {
 			foreach ( $script as $s ) static::register( $s );
 			return;
 		}

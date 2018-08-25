@@ -265,18 +265,25 @@ class Query extends Compat {
 	 * Returns the current taxonomy, if any.
 	 *
 	 * @since 3.0.0
-	 * @since 3.1.0 Now works in the admin.
+	 * @since 3.1.0 1. Now works in the admin.
+	 *              2. Added caching
 	 * @global \WP_Screen $current_screen
+	 * @staticvar string $cache
 	 *
 	 * @return string The queried taxonomy type.
 	 */
 	public function get_current_taxonomy() {
+
+		static $cache;
+
+		if ( isset( $cache ) ) return $cache;
+
 		if ( $this->is_admin() ) {
 			global $current_screen;
-			return ! empty( $current_screen->taxonomy ) ? $current_screen->taxonomy : '';
+			return $cache = ! empty( $current_screen->taxonomy ) ? $current_screen->taxonomy : '';
 		} else {
 			$_object = \get_queried_object();
-			return ! empty( $_object->taxonomy ) ? $_object->taxonomy : '';
+			return $cache = ! empty( $_object->taxonomy ) ? $_object->taxonomy : '';
 		}
 	}
 

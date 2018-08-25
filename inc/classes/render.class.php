@@ -165,182 +165,216 @@ class Render extends Admin_Init {
 	}
 
 	/**
-	 * Renders og:description meta tag
+	 * Collects and returns all canonical meta tags.
 	 *
-	 * @since 1.3.0
-	 * @since 3.0.4 No longer uses $this->description_from_cache()
-	 * @uses $this->get_open_graph_description()
+	 * The return filter is guaranteed to run, regardless of used logic.
 	 *
-	 * @return string The Open Graph description meta tag.
+	 * @notes:
+	 * The plan is to move all related output logic into this function, to perform even
+	 * faster and smarter rendering, while giving more knowledge and control to the API user.
+	 * For example, we'll (eventually) feed back the logical parsing object, where API users
+	 * can supersede and debug the input data, so to prevent empty output.
+	 *
+	 * @since 3.2.0
+	 *
+	 * @return string $output
 	 */
-	public function og_description() {
+	public function get_all_canonical_meta_tags() {
 
-		if ( ! $this->use_og_tags() )
-			return '';
+		$output  = '';
+		$output .= $this->shortlink();
+		$output .= $this->canonical();
+		$output .= $this->paged_urls();
 
 		/**
-		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
-		 * @param string $description The generated Open Graph description.
-		 * @param int    $id          The page or term ID.
+		 * @since 3.2.0
+		 * @param string $output
+		 * @param null   $builder
 		 */
-		$description = (string) \apply_filters_ref_array(
-			'the_seo_framework_ogdescription_output',
+		return \apply_filters_ref_array(
+			'the_seo_framework_canonical_meta_tags',
 			[
-				$this->get_open_graph_description(),
-				$this->get_the_real_ID(),
+				$output,
+				null,
 			]
 		);
-
-		if ( $description )
-			return '<meta property="og:description" content="' . \esc_attr( $description ) . '" />' . "\r\n";
-
-		return '';
 	}
 
 	/**
-	 * Renders the OG locale meta tag.
+	 * Collects and returns all open graph meta tags.
 	 *
-	 * @since 1.0.0
+	 * The return filter is guaranteed to run, regardless of used logic.
 	 *
-	 * @return string The Open Graph locale meta tag.
+	 * Used by:
+	 *  - Facebook
+	 *  - Pinterest
+	 *  - Google+
+	 *  -
+	 *
+	 * @since 3.2.0
+	 * @see @notes of $this->get_all_canonical_meta_tags()
+	 *
+	 * @return string $output
 	 */
-	public function og_locale() {
+	public function get_all_og_meta_tags() {
 
-		if ( ! $this->use_og_tags() )
-			return '';
+		$builder = new Builders\OG;
+
+		if ( $builder->build() )
+			$builder->create_metatags();
 
 		/**
-		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
-		 * @param string $locale The generated locale field.
-		 * @param int    $id     The page or term ID.
+		 * @since 3.2.0
+		 * @param string                         $output
+		 * @param \The_SEO_Framework\Builders\OG $builder
 		 */
-		$locale = (string) \apply_filters_ref_array(
-			'the_seo_framework_oglocale_output',
+		return \apply_filters_ref_array(
+			'the_seo_framework_og_meta_tags',
 			[
-				$this->fetch_locale(),
-				$this->get_the_real_ID(),
+				$builder->__toString(),
+				$builder,
 			]
 		);
-
-		if ( $locale )
-			return '<meta property="og:locale" content="' . \esc_attr( $locale ) . '" />' . "\r\n";
-
-		return '';
 	}
 
 	/**
-	 * Renders the Open Graph title meta tag.
+	 * Collects and returns all Facebook meta tags.
 	 *
-	 * @since 2.0.3
-	 * @since 3.0.4 No longer uses $this->title_from_cache()
-	 * @uses $this->get_open_graph_title()
+	 * The return filter is guaranteed to run, regardless of used logic.
 	 *
-	 * @return string The Open Graph title meta tag.
+	 * @since 3.1.0
+	 * @see @notes of $this->get_all_canonical_meta_tags()
+	 *
+	 * @return string $output
 	 */
-	public function og_title() {
-
-		if ( ! $this->use_og_tags() )
-			return '';
-
-		/**
-		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
-		 * @param string $title The generated Open Graph title.
-		 * @param int    $id    The page or term ID.
-		 */
-		$title = (string) \apply_filters_ref_array(
-			'the_seo_framework_ogtitle_output',
-			[
-				$this->get_open_graph_title(),
-				$this->get_the_real_ID(),
-			]
-		);
-
-		if ( $title )
-			return '<meta property="og:title" content="' . \esc_attr( $title ) . '" />' . "\r\n";
-
-		return '';
-	}
-
-	/**
-	 * Renders the Open Graph type meta tag.
-	 *
-	 * @since 1.1.0
-	 *
-	 * @return string The Open Graph type meta tag.
-	 */
-	public function og_type() {
-
-		if ( ! $this->use_og_tags() )
-			return '';
-
-		$type = $this->get_og_type();
-
-		if ( $type )
-			return '<meta property="og:type" content="' . \esc_attr( $type ) . '" />' . "\r\n";
-
-		return '';
-	}
-
-	/**
-	 * Renders Open Graph image meta tag.
-	 *
-	 * @since 1.3.0
-	 * @since 2.6.0 : Added WooCommerce gallery images.
-	 * @since 2.7.0 : Added image dimensions if found.
-	 *
-	 * @return string The Open Graph image meta tag.
-	 */
-	public function og_image() {
-
-		if ( ! $this->use_og_tags() )
-			return '';
-
-		$id = $this->get_the_real_ID();
-
-		/**
-		 * @NOTE: Use of this might cause incorrect meta since other functions
-		 * depend on the image from cache.
-		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
-		 * @param string $image The social image URL.
-		 * @param int    $id    The page or term ID.
-		 */
-		$image = \apply_filters_ref_array(
-			'the_seo_framework_ogimage_output',
-			[
-				$this->get_image_from_cache(),
-				$id,
-			]
-		);
+	public function get_all_facebook_meta_tags() {
 
 		$output = '';
 
-		/**
-		 * Now returns empty string on false.
-		 * @since 2.6.0
-		 */
-		if ( $image ) {
-
-			$image = (string) $image;
-
-			/**
-			 * Always output
-			 * @since 2.1.1
-			 */
-			$output .= '<meta property="og:image" content="' . \esc_attr( $image ) . '" />' . "\r\n";
-
-			if ( $image ) {
-				if ( ! empty( $this->image_dimensions[ $id ]['width'] ) && ! empty( $this->image_dimensions[ $id ]['height'] ) ) {
-					$output .= '<meta property="og:image:width" content="' . \esc_attr( $this->image_dimensions[ $id ]['width'] ) . '" />' . "\r\n";
-					$output .= '<meta property="og:image:height" content="' . \esc_attr( $this->image_dimensions[ $id ]['height'] ) . '" />' . "\r\n";
-				}
-			}
+		if ( $this->get_option( 'facebook_tags' ) ) {
+			$output .= $this->facebook_publisher();
+			$output .= $this->facebook_author();
+			$output .= $this->facebook_app_id();
+		} else {
+			// $fail_reason = 'DISABLED_VIA_OPTIONS';
 		}
 
-		return $output . $this->render_woocommerce_product_og_image();
+		/**
+		 * @since 3.2.0
+		 * @param string $output
+		 * @param null   $builder
+		 */
+		return \apply_filters_ref_array(
+			'the_seo_framework_facebook_meta_tags',
+			[
+				$output,
+				null,
+			]
+		);
+	}
+
+	/**
+	 * Collects and returns all open graph meta tags.
+	 *
+	 * The return filter is guaranteed to run, regardless of used logic.
+	 *
+	 * @since 3.1.0
+	 * @see @notes of $this->get_all_canonical_meta_tags()
+	 *
+	 * @return string $output
+	 */
+	public function get_all_twitter_meta_tags() {
+
+		$output = '';
+
+		if ( $this->get_option( 'twitter_tags' ) ) {
+
+			if ( ! $this->get_twitter_title() ) {
+				// $fail_reason = 'NO_TITLE';
+				goto ret;
+			}
+			if ( ! $this->get_twitter_description() ) {
+				// $fail_reason = 'NO_DESCRIPTION';
+				goto ret;
+			}
+
+			$this->twitter_card();
+			$this->twitter_site();
+			$this->twitter_creator();
+			$this->twitter_title();
+			$this->twitter_description();
+			$this->twitter_image();
+		} else {
+			// $fail_reason = 'DISABLED_VIA_OPTIONS';
+		}
+
+		ret:;
+
+		/**
+		 * @since 3.2.0
+		 * @param string $output
+		 * @param null   $builder
+		 */
+		return \apply_filters_ref_array(
+			'the_seo_framework_twitter_meta_tags',
+			[
+				$output,
+				null,
+			]
+		);
+	}
+
+	/**
+	 * Collects and returns all open graph meta tags.
+	 *
+	 * The return filter is guaranteed to run, regardless of used logic.
+	 *
+	 * @since 3.1.0
+	 * @see @notes of $this->get_all_canonical_meta_tags()
+	 *
+	 * @return array {
+	 *     @param string 'output'
+	 *     ... // more to come.
+	 * }
+	 */
+	public function get_all_verification_meta_tags() {
+
+		$output = '';
+
+		$output .= $this->google_site_output();
+		$output .= $this->bing_site_output();
+		$output .= $this->yandex_site_output();
+		$output .= $this->pint_site_output();
+
+		/**
+		 * @since 3.2.0
+		 * @param string $output
+		 * @param null   $builder
+		 */
+		return \apply_filters_ref_array(
+			'the_seo_framework_verification_meta_tags',
+			[
+				$output,
+				null,
+			]
+		);
+	}
+
+	/**
+	 * Collects and returns all open graph meta tags.
+	 *
+	 * The return filter is guaranteed to run, regardless of used logic.
+	 *
+	 * @since 3.1.0
+	 * @see @notes of $this->get_all_canonical_meta_tags()
+	 *
+	 * @return array {
+	 *     @param string 'output'
+	 *     ... // more to come.
+	 * }
+	 */
+	public function get_all_structured_data_scripts() {
+		return $this->ld_json();
 	}
 
 	/**
@@ -388,72 +422,6 @@ class Render extends Admin_Init {
 		}
 
 		return $output;
-	}
-
-	/**
-	 * Renders Open Graph sitename meta tag.
-	 *
-	 * @since 1.3.0
-	 * @since 3.1.0 Now uses $this->get_blogname(), which trims the output.
-	 *
-	 * @return string The Open Graph sitename meta tag.
-	 */
-	public function og_sitename() {
-
-		if ( ! $this->use_og_tags() )
-			return '';
-
-		/**
-		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
-		 * @param string $sitename The generated Open Graph site name.
-		 * @param int    $id       The page or term ID.
-		 */
-		$sitename = (string) \apply_filters_ref_array(
-			'the_seo_framework_ogsitename_output',
-			[
-				$this->get_blogname(),
-				$this->get_the_real_ID(),
-			]
-		);
-
-		if ( $sitename )
-			return '<meta property="og:site_name" content="' . \esc_attr( $sitename ) . '" />' . "\r\n";
-
-		return '';
-	}
-
-	/**
-	 * Renders Open Graph URL meta tag.
-	 *
-	 * @since 1.3.0
-	 * @since 2.9.3 Added filter
-	 * @uses $this->get_current_canonical_url()
-	 *
-	 * @return string The Open Graph URL meta tag.
-	 */
-	public function og_url() {
-
-		if ( $this->use_og_tags() ) {
-
-			/**
-			 * @since 2.9.3
-			 * @param string $url The canonical/Open Graph URL. Must be escaped.
-			 * @param int    $id  The current page or term ID.
-			 */
-			$url = (string) \apply_filters_ref_array(
-				'the_seo_framework_ogurl_output',
-				[
-					$this->get_current_canonical_url(),
-					$this->get_the_real_ID(),
-				]
-			);
-
-			if ( $url )
-				return '<meta property="og:url" content="' . $url . '" />' . "\r\n";
-		}
-
-		return '';
 	}
 
 	/**
