@@ -95,10 +95,10 @@ switch ( $instance ) :
 							   : $this->get_generated_title( [ 'id' => $post_id ] );
 
 			$description_placeholder = $this->escape_description( $this->get_option( 'homepage_description' ) )
-									?: $this->get_generated_description( $post_id );
+									?: $this->get_generated_description( [ 'id' => $post_id ] );
 		} else {
 			$title_placeholder       = $this->get_generated_title( [ 'id' => $post_id ] );
-			$description_placeholder = $this->get_generated_description( $post_id );
+			$description_placeholder = $this->get_generated_description( [ 'id' => $post_id ] );
 		}
 
 		?>
@@ -364,13 +364,16 @@ switch ( $instance ) :
 
 			//! OG input falls back to default input.
 			$og_tit_placeholder  = $home_og_title ?: $custom_og_title ?: $this->get_generated_open_graph_title( [ 'id' => $post_id ] );
-			$og_desc_placeholder = $home_og_desc ?: $custom_og_desc ?: $this->get_generated_open_graph_description( [ 'id' => $post_id ] );
+			$og_desc_placeholder = $home_og_desc
+								?: $this->get_description_from_custom_field( [ 'id' => $post_id ] )
+								?: $this->get_generated_open_graph_description( [ 'id' => $post_id ] );
 
 			//! Twitter input falls back to OG input.
 			$tw_tit_placeholder  = $home_tw_title ?: $og_tit_placeholder;
 			$tw_desc_placeholder = $home_tw_desc
 								?: $home_og_desc
 								?: $custom_og_desc
+								?: $this->get_description_from_custom_field( [ 'id' => $post_id ] )
 								?: $this->get_generated_twitter_description( [ 'id' => $post_id ] );
 		} else {
 			// Gets custom fields.

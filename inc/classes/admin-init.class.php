@@ -450,6 +450,17 @@ class Admin_Init extends Init {
 			}
 		}
 
+		$social_settings_placeholders = [];
+		if ( $is_post_edit || $is_settings_page ) {
+			$social_settings_placeholders = [
+				'ogDesc' => $this->get_generated_open_graph_description( [ 'id' => $id ] ),
+				'twDesc' => $this->get_generated_twitter_description( [ 'id' => $id ] ),
+			];
+			foreach ( $social_settings_placeholders as &$v ) {
+				$v = html_entity_decode( $v, ENT_COMPAT, 'UTF-8' );
+			}
+		}
+
 		$input_guidelines = [];
 		$input_guidelines_i18n = [];
 		if ( $has_input ) {
@@ -497,12 +508,13 @@ class Admin_Init extends Init {
 				'descriptionSeparator' => $description_separator,
 				'titleLocation'        => $title_location,
 				'inputGuidelines'      => $input_guidelines,
+				'socialPlaceholders'   => $social_settings_placeholders,
 			],
 		];
 
 		$flags = ENT_COMPAT;
 		foreach ( [ 'i18n', 'params' ] as $key ) {
-			foreach ( $l10n[ $key ] as $k => &$v ) {
+			foreach ( $l10n[ $key ] as &$v ) {
 				if ( is_scalar( $v ) )
 					$v = html_entity_decode( $v, $flags, 'UTF-8' );
 			}

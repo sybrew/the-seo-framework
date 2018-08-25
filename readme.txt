@@ -370,7 +370,6 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* Tooltip arrows are now indented twice the size of a small object, like with `[?]`, giving them a more prominent look.
 		* Canonical, redirect, and image URLs are no longer uselessly suggested by the browser for the administrative input fields.
 		* The Facebook Business page URL description has been updated, to be in line with the current behavior.
-		* TODO Open Graph data validation (e.g. missing descriptions).
 		* The main plugin's cache is now flushed after the SEO settings are requested to be updated, even when the options aren't changed.
 		* The automated scheme detection can now prevent the sitemap from using, and caching, the wrong scheme.
 		* A lot of verbatim regarding various settings, to make it more clear what they do, and when they do it.
@@ -478,7 +477,6 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* When adding a new category when no category is selected, the primary term is now correctly assigned.
 		* When the primary term selection changed after load and when a new category is added, the previous category is no longer assigned as primary.
 		* Twitter description and title fields now render escaped `<&'">` characters in placeholders correctly when fetched from related Open Graph fields.
-		* TODO Date (and other?) archives now show valid Open Graph metadata. (description missing check... where's Facebook's "what's valid and when" schema..?)
 		* When no description or title is found for the corresponding Open Graph or Twitter fields, no more infinite loop will occur that might crash the browser. Luckily, modern browsers detect this to prevent said crashes.
 		* When the homepage is a blog, it'll now be included in the sitemap again.
 		* Thanks to the upgrade to PHP 5.4, the SEO bar can now count words with non-latin special characters.
@@ -517,6 +515,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* TODO consider adding an input buffer (25ms?) that only continues with the last input for tab switgin... This might degrade user experience.
 			* This is a race condition...
 		* When entering something in the Open Graph description or title fields, and then emptying it, and then entering something in the meta description or title fields, will no longer cause the Twitter title to use the latest known meta description or title field from when the Open Graph field got emptied. Whew (╯°□°）╯︵ ┻━┻
+		* When JavaScript is enabled, the social description placeholders now show their front-end value when no custom description is set.
 
 * **For translators:**
 	* **New translations are available.**
@@ -555,6 +554,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* [JavaScript]: Input fields within TSF's metaboxes with the class `tsf-input-not-saved` set will not invoke an "unsaved-work" AYS notice on page-navigation.
 		* [JavaScript]: `tsf.i18n.inputGuidelines` is now available.
 		* [JavaScript]: `tsf.params.inputGuidelines` is now available.
+		* [JavaScript]: `tsf.params.socialPlaceholders` is now available.
 	* **Improved:**
 		* A "doing it wrong" notice is now supplied when calling `the_seo_framework()` too early.
 		* Fixed all "non-passive event listener" warnings caused by jQuery, by using our improved own event handlers.
