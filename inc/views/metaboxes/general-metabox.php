@@ -273,28 +273,26 @@ switch ( $instance ) :
 		?>
 		<hr>
 
-		<p>
-			<h4><?php esc_html_e( 'Scheme Settings', 'autodescription' ); ?></h4>
+		<h4><?php esc_html_e( 'Scheme Settings', 'autodescription' ); ?></h4>
+		<?php
+		$this->description( __( 'If your website is accessible on both HTTP as HTTPS, set this to HTTPS in order to prevent duplicate content.', 'autodescription' ) );
+		$this->description( __( 'Otherwise, automatic detection is recommended.', 'autodescription' ) );
+		?>
+		<label for="<?php $this->field_id( 'canonical_scheme' ); ?>"><?php echo esc_html_x( 'Preferred canonical URL scheme:', '= Detect Automatically, HTTPS, HTTP', 'autodescription' ); ?></label>
+		<select name="<?php $this->field_name( 'canonical_scheme' ); ?>" id="<?php $this->field_id( 'canonical_scheme' ); ?>">
 			<?php
-			$this->description( __( 'If your website is accessible on both HTTP as HTTPS, set this to HTTPS in order to prevent duplicate content.', 'autodescription' ) );
-			$this->description( __( 'Otherwise, automatic detection is recommended.', 'autodescription' ) );
+			$scheme_types = (array) apply_filters(
+				'the_seo_framework_canonical_scheme_types',
+				[
+					'automatic' => __( 'Detect automatically', 'autodescription' ),
+					'http'      => 'HTTP',
+					'https'     => 'HTTPS',
+				]
+			);
+			foreach ( $scheme_types as $value => $name )
+				echo '<option value="' . esc_attr( $value ) . '"' . selected( $this->get_option( 'canonical_scheme' ), esc_attr( $value ), false ) . '>' . esc_html( $name ) . '</option>' . "\n";
 			?>
-			<label for="<?php $this->field_id( 'canonical_scheme' ); ?>"><?php echo esc_html_x( 'Preferred canonical URL scheme:', '= Detect Automatically, HTTPS, HTTP', 'autodescription' ); ?></label>
-			<select name="<?php $this->field_name( 'canonical_scheme' ); ?>" id="<?php $this->field_id( 'canonical_scheme' ); ?>">
-				<?php
-				$scheme_types = (array) apply_filters(
-					'the_seo_framework_canonical_scheme_types',
-					[
-						'automatic' => __( 'Detect automatically', 'autodescription' ),
-						'http'      => 'HTTP',
-						'https'     => 'HTTPS',
-					]
-				);
-				foreach ( $scheme_types as $value => $name )
-					echo '<option value="' . esc_attr( $value ) . '"' . selected( $this->get_option( 'canonical_scheme' ), esc_attr( $value ), false ) . '>' . esc_html( $name ) . '</option>' . "\n";
-				?>
-			</select>
-		</p>
+		</select>
 
 		<hr>
 

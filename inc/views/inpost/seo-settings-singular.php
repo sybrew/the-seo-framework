@@ -15,54 +15,7 @@ $language = $this->google_language();
 
 switch ( $instance ) :
 	case 'inpost_main':
-		/**
-		 * Parse inpost tabs content.
-		 *
-		 * @since 2.9.0
-		 * @see PHP call_user_func_array() For args.
-		 *
-		 * @param array $default_tabs {
-		 *   'id' = The identifier => {
-		 *        array(
-		 *            'name'     => The name
-		 *            'callback' => The callback function, use array for method calling
-		 *            'dashicon' => Desired dashicon
-		 *            'args'     => Callback parameters
-		 *        )
-		 *    }
-		 * }
-		 */
-		$default_tabs = [
-			'general' => [
-				'name'     => __( 'General', 'autodescription' ),
-				'callback' => [ $this, 'singular_inpost_box_general_tab' ],
-				'dashicon' => 'admin-generic',
-				'args' => [ $type ],
-			],
-			'social' => [
-				'name'     => __( 'Social', 'autodescription' ),
-				'callback' => [ $this, 'singular_inpost_box_social_tab' ],
-				'dashicon' => 'share',
-				'args' => [ $type ],
-			],
-			'visibility' => [
-				'name'     => __( 'Visibility', 'autodescription' ),
-				'callback' => [ $this, 'singular_inpost_box_visibility_tab' ],
-				'dashicon' => 'visibility',
-				'args' => [ $type ],
-			],
-		];
-
-		/**
-		 * Allows for altering the inpost SEO settings metabox tabs.
-		 *
-		 * @since 2.9.0
-		 *
-		 * @param array  $default_tabs The default tabs.
-		 * @param string $type The current post type display name, like "Post", "Page", "Product".
-		 */
-		$tabs = (array) apply_filters( 'the_seo_framework_inpost_settings_tabs', $default_tabs, $type );
-
+		$tabs = $this->get_inpost_tabs( $type );
 		echo '<div class="tsf-flex tsf-flex-inside-wrap">';
 		$this->inpost_flex_nav_tab_wrapper( 'inpost', $tabs, '2.6.0' );
 		echo '</div>';
@@ -512,21 +465,13 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<input class="large-text" type="url" name="autodescription[_social_image_url]" id="autodescription_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_social_image_url' ) ); ?>" autocomplete=off />
+				<input type="hidden" name="autodescription[_social_image_id]" id="autodescription_socialimage-id" value="<?php echo absint( $this->get_custom_field( '_social_image_id' ) ); ?>" disabled class="tsf-enable-media-if-js" />
 				<div class="hide-if-no-js tsf-social-image-buttons">
 					<?php
 					//= Already escaped.
 					echo $this->get_social_image_uploader_form( 'autodescription_socialimage' );
 					?>
 				</div>
-				<?php
-				/**
-				 * Insert form element only if JS is active. If JS is inactive, then this will cause it to be emptied on $_POST
-				 * @TODO use disabled and jQuery.removeprop( 'disabled' )?
-				 */
-				?>
-				<script>
-					document.getElementById( 'autodescription_socialimage-url' ).insertAdjacentHTML( 'afterend', '<input type="hidden" name="autodescription[_social_image_id]" id="autodescription_socialimage-id" value="<?php echo absint( $this->get_custom_field( '_social_image_id' ) ); ?>" />' );
-				</script>
 			</div>
 		</div>
 		<?php

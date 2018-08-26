@@ -76,7 +76,29 @@ class Inpost extends Profile {
 	 * @param bool $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
 	 */
 	public function inpost_flex_nav_tab_wrapper( $id, $tabs = [], $version = '2.3.6', $use_tabs = true ) {
-		$this->get_view( 'inpost/wrap', get_defined_vars() );
+		$this->get_view( 'inpost/wrap-nav', get_defined_vars() );
+		$this->get_view( 'inpost/wrap-content', get_defined_vars() );
+	}
+
+	/**
+	 * Outputs flex tab wrapper for Gutenberg.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param string $id The Nav Tab ID
+	 * @param array $tabs the tab content {
+	 *    $tabs = tab ID key = array(
+	 *       $tabs['name'] => tab name
+	 *       $tabs['callback'] => string|array callback function
+	 *       $tabs['dashicon'] => string Dashicon
+	 *       $tabs['args'] => mixed optional callback function args
+	 *    )
+	 * }
+	 * @param string $version the The SEO Framework version for debugging. May be emptied.
+	 * @param bool $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
+	 */
+	protected function gutenberg_flex_tab_wrapper( $id, $tabs, $version = '3.1.0', $use_tabs = false ) {
+		$this->get_view( 'inpost/wrap-content', get_defined_vars() );
 	}
 
 	/**
@@ -86,6 +108,8 @@ class Inpost extends Profile {
 	 * @since 3.1.0 No longer checks for SEO plugin presence.
 	 */
 	public function add_inpost_seo_box_init() {
+
+		if ( $this->is_gutenberg_page() ) return;
 
 		/**
 		 * @since 2.0.0
@@ -148,15 +172,7 @@ class Inpost extends Profile {
 		if ( ! $this->post_type_supports_custom_seo( $post_type ) )
 			return;
 
-		$post   = \get_post_type_object( $post_type );
-		$labels = isset( $post->labels ) ? $post->labels : '';
-
-		if ( ! $labels )
-			return;
-
-		//* Title and type are used interchangeably.
-		$label = isset( $labels->singular_name ) ? $labels->singular_name : $labels->name;
-		$args  = [ $label, 'is_post_page' ];
+		$label = $this->get_post_type_label( $post_type );
 
 		/**
 		 * @since 2.6.0
@@ -200,7 +216,7 @@ class Inpost extends Profile {
 		}
 
 		/* translators: %s = Post type name */
-		\add_meta_box( $id, $title, [ $this, '_insert_seo_meta_box' ], $post_type, $context, $priority, $args );
+		\add_meta_box( $id, $title, [ $this, '_insert_seo_meta_box' ], $post_type, $context, $priority, [ $label, 'is_post_page' ] );
 	}
 
 	/**
@@ -292,6 +308,66 @@ class Inpost extends Profile {
 	}
 
 	/**
+	 * Outputs Gutenberg panels scripts.
+	 *
+	 * @since 3.1.0
+	 */
+	public function _output_gutenberg_panels_script() {
+		$this->get_view(
+			'templates/gutenberg/panels',
+			[
+				'tabs' => $this->get_inpost_tabs(
+					$this->get_post_type_label( $this->get_admin_post_type() )
+				),
+			]
+		);
+	}
+
+	/**
+	 * Returns the inpost tabs.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param $type The post type label.
+	 * @return array
+	 */
+	protected function get_inpost_tabs( $label ) {
+
+		$default_tabs = [
+			'general' => [
+				'name'     => \__( 'General', 'autodescription' ),
+				'callback' => [ $this, 'singular_inpost_box_general_tab' ],
+				'dashicon' => 'admin-generic',
+				'args'     => [ $label ],
+			],
+			'social' => [
+				'name'     => \__( 'Social', 'autodescription' ),
+				'callback' => [ $this, 'singular_inpost_box_social_tab' ],
+				'dashicon' => 'share',
+				'args'     => [ $label ],
+			],
+			'visibility' => [
+				'name'     => \__( 'Visibility', 'autodescription' ),
+				'callback' => [ $this, 'singular_inpost_box_visibility_tab' ],
+				'dashicon' => 'visibility',
+				'args'     => [ $label ],
+			],
+		];
+
+		/**
+		 * Allows for altering the inpost SEO settings metabox tabs.
+		 *
+		 * @since 2.9.0
+		 *
+		 * @param array  $default_tabs The default tabs.
+		 * @param string $label The current post type display name, like "Post", "Page", "Product".
+		 */
+		$tabs = (array) \apply_filters( 'the_seo_framework_inpost_settings_tabs', $default_tabs, $label );
+
+		return $tabs;
+	}
+
+	/**
 	 * Outputs the singular inpost SEO box.
 	 *
 	 * Callback function for Post and Pages inpost metabox.
@@ -299,7 +375,7 @@ class Inpost extends Profile {
 	 * @since 2.9.0
 	 * @since 3.1.0 Now is protected.
 	 *
-	 * @param string $type The post type name.
+	 * @param string $type    The post type name.
 	 */
 	protected function singular_inpost_box( $type ) {
 		/**

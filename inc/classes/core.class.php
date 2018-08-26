@@ -167,11 +167,11 @@ class Core {
 	 *              Each array key is converted to a variable with its value attached.
 	 * @param string $instance The instance suffix to call back upon.
 	 */
-	public function get_view( $view, array $args = [], $instance = 'main' ) {
+	public function get_view( $view, array $__args = [], $instance = 'main' ) {
 
 		//? extract().
-		foreach ( $args as $k => $v ) $$k = $v;
-		unset( $k, $v );
+		foreach ( $__args as $__k => $__v ) $$__k = $__v;
+		unset( $__k, $__v, $__args );
 
 		include $this->get_view_location( $view );
 	}

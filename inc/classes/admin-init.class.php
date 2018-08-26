@@ -189,6 +189,7 @@ class Admin_Init extends Init {
 		if ( $this->is_post_edit() ) {
 			$this->enqueue_media_scripts();
 			$this->enqueue_primaryterm_scripts();
+			$this->enqueue_gutenberg_scripts();
 		} elseif ( $this->is_seo_settings_page() ) {
 			$this->enqueue_media_scripts();
 			\wp_enqueue_style( 'wp-color-picker' );
@@ -330,6 +331,46 @@ class Admin_Init extends Init {
 				'inline'   => $inline_css,
 			],
 		] );
+	}
+
+
+	/**
+	 * Enqueues Gutenberg scripts.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return void Early if already enqueued.
+	 */
+	public function enqueue_gutenberg_scripts() {
+
+		if ( ! $this->is_gutenberg_page() ) return;
+		if ( _has_run( __METHOD__ ) ) return;
+
+		$scripts = $this->Scripts();
+		$scripts::register( [
+			[
+				'id'       => 'tsf-gutenberg',
+				'type'     => 'js',
+				'deps'     => [
+					'tsf',
+					'wp-components',
+					'wp-compose',
+					'wp-data',
+					'wp-edit-post',
+					'wp-editor',
+					'wp-element',
+					'wp-i18n',
+					'wp-plugins',
+					'wp-hooks',
+				],
+				'autoload' => true,
+				'name'     => 'gutenberg',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+			],
+		] );
+
+		\add_action( 'admin_footer', [ $this, '_output_gutenberg_panels_script' ] );
 	}
 
 	/**

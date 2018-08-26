@@ -965,13 +965,26 @@ class Detect extends Render {
 	 * Determines whether a page or blog is on front.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $pof
+	 * @since 3.1.0 Removed caching.
 	 *
 	 * @return bool
 	 */
 	public function has_page_on_front() {
-		static $pof = null;
-		return isset( $pof ) ? $pof : $pof = 'page' === \get_option( 'show_on_front' );
+		return 'page' === \get_option( 'show_on_front' );
+	}
+
+	/**
+	 * Detects if we're on a Gutenberg page.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return bool;
+	 */
+	protected function is_gutenberg_page() {
+		if ( function_exists( '\\is_gutenberg_page' ) ) {
+			return \is_gutenberg_page();
+		}
+		return false;
 	}
 
 	/**

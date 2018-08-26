@@ -132,6 +132,7 @@ switch ( $instance ) :
 		</p>
 		<p>
 			<input class="large-text" type="url" name="<?php $this->field_name( 'social_image_fb_url' ); ?>" id="tsf_fb_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_option( 'social_image_fb_url' ) ); ?>" />
+			<input type="hidden" name="<?php $this->field_name( 'social_image_fb_id' ); ?>" id="tsf_fb_socialimage-id" value="<?php echo absint( $this->get_option( 'social_image_fb_id' ) ); ?>" disabled class="tsf-enable-media-if-js" />
 		</p>
 		<p class="hide-if-no-js">
 			<?php
@@ -139,16 +140,6 @@ switch ( $instance ) :
 			echo $this->get_social_image_uploader_form( 'tsf_fb_socialimage' );
 			?>
 		</p>
-		<?php
-		/**
-		 * Insert form element only if JS is active. If JS is inactive, then this will cause it to be emptied on $_POST
-		 * @TODO use disabled and jQuery.removeprop( 'disabled' )?
-		 */
-		?>
-		<script>
-			document.getElementById( 'tsf_fb_socialimage-url' ).insertAdjacentHTML( 'afterend', '<input type="hidden" name="<?php $this->field_name( 'social_image_fb_id' ); ?>" id="tsf_fb_socialimage-id" value="<?php echo absint( $this->get_option( 'social_image_fb_id' ) ); ?>" />' );
-		</script>
-
 		<hr>
 
 		<h4><?php esc_html_e( 'Site Shortlink Settings', 'autodescription' ); ?></h4>

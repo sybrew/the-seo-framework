@@ -225,7 +225,7 @@ switch ( $instance ) :
 		$_example_blogname  = $this->escape_title( $this->get_home_page_tagline() ?: $this->get_static_untitled_title() );
 		$_example_separator = esc_html( $this->get_separator( 'title' ) );
 
-		$example_left = '<em><span class="tsf-custom-title-js">' . $_example_title . '</span><span class="tsf-custom-blogname-js"><span class="tsf-sep-js"> ' . $_example_separator . ' </span><span class="tsf-custom-tagline-js">' . $_example_blogname . '</span></span></span></em>';
+		$example_left = '<em><span class="tsf-custom-title-js">' . $_example_title . '</span><span class="tsf-custom-blogname-js"><span class="tsf-sep-js"> ' . $_example_separator . ' </span><span class="tsf-custom-tagline-js">' . $_example_blogname . '</span></em>';
 		$example_right = '<em><span class="tsf-custom-blogname-js"><span class="tsf-custom-tagline-js">' . $_example_blogname . '</span><span class="tsf-sep-js"> ' . $_example_separator . ' </span></span><span class="tsf-custom-title-js">' . $_example_title . '</span></em>';
 
 		?>
@@ -563,6 +563,7 @@ switch ( $instance ) :
 		</p>
 		<p>
 			<input class="large-text" type="url" name="<?php $this->field_name( 'homepage_social_image_url' ); ?>" id="tsf_homepage_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_option( 'homepage_social_image_url' ) ); ?>" />
+			<input type="hidden" name="<?php $this->field_name( 'homepage_social_image_id' ); ?>" id="tsf_homepage_socialimage-id" value="<?php echo absint( $this->get_option( 'homepage_social_image_id' ) ); ?>" disabled class="tsf-enable-media-if-js" />
 		</p>
 		<p class="hide-if-no-js">
 			<?php
@@ -570,15 +571,6 @@ switch ( $instance ) :
 			echo $this->get_social_image_uploader_form( 'tsf_homepage_socialimage' );
 			?>
 		</p>
-		<?php
-		/**
-		 * Insert form element only if JS is active. If JS is inactive, then this will cause it to be emptied on $_POST
-		 * @TODO use disabled and jQuery.removeprop( 'disabled' )?
-		 */
-		?>
-		<script>
-			document.getElementById( 'tsf_homepage_socialimage-url' ).insertAdjacentHTML( 'afterend', '<input type="hidden" name="<?php $this->field_name( 'homepage_social_image_id' ); ?>" id="tsf_homepage_socialimage-id" value="<?php echo absint( $this->get_option( 'homepage_social_image_id' ) ); ?>" />' );
-		</script>
 		<?php
 		break;
 
