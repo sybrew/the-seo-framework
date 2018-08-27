@@ -512,8 +512,6 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* Interactive tooltips arrows now no longer overflow when the balloon size becomes smaller.
 		* The primary term selector no longer overflows to the bottom. Instead, the text flows neatly to the bottom, while the button stays inline.
 		* Titles and descriptions now have no chance from experiencing ID conflicts, where a post and term ID might collide.
-		* TODO consider adding an input buffer (25ms?) that only continues with the last input for tab switgin... This might degrade user experience.
-			* This is a race condition...
 		* When entering something in the Open Graph description or title fields, and then emptying it, and then entering something in the meta description or title fields, will no longer cause the Twitter title to use the latest known meta description or title field from when the Open Graph field got emptied. Whew (╯°□°）╯︵ ┻━┻
 		* When JavaScript is enabled, the social description placeholders now show their front-end value when no custom description is set.
 
@@ -555,6 +553,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* [JavaScript]: `tsf.i18n.inputGuidelines` is now available.
 		* [JavaScript]: `tsf.params.inputGuidelines` is now available.
 		* [JavaScript]: `tsf.params.socialPlaceholders` is now available.
+		* [JavaScript]: `tsf.states.isGutenbergPage` is now available.
 	* **Improved:**
 		* A "doing it wrong" notice is now supplied when calling `the_seo_framework()` too early.
 		* Fixed all "non-passive event listener" warnings caused by jQuery, by using our improved own event handlers.
@@ -1026,7 +1025,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 				* `the_seo_framework_pre_add_title`, use `the_seo_framework_title_from_generation` instead.
 				* `the_seo_framework_pro_add_title`, use `the_seo_framework_title_from_generation` instead.
 				* `the_seo_framework_custom_field_title`, use `the_seo_framework_title_from_custom_field` instead.
-				* `the_seo_framework_add_blogname_to_title`, use the options API instead. TODO reintroduce this?
+				* `the_seo_framework_add_blogname_to_title`, use the options API instead.
 				* `the_seo_framework_use_archive_title_prefix`, use the options API instead.
 				* `the_seo_framework_do_shortcodes_in_title`, use any of the two new title filters mentioned right above and return `do_shortcode( $title )` instead. -- TODO make a migration guide and link to it in the update screen?
 				* `the_seo_framework_title_pagination`

@@ -978,7 +978,7 @@ class Detect extends Render {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @return bool;
+	 * @return bool
 	 */
 	protected function is_gutenberg_page() {
 		if ( function_exists( '\\is_gutenberg_page' ) ) {

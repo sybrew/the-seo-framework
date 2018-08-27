@@ -81,35 +81,12 @@ class Inpost extends Profile {
 	}
 
 	/**
-	 * Outputs flex tab wrapper for Gutenberg.
-	 *
-	 * @since 3.1.0
-	 *
-	 * @param string $id The Nav Tab ID
-	 * @param array $tabs the tab content {
-	 *    $tabs = tab ID key = array(
-	 *       $tabs['name'] => tab name
-	 *       $tabs['callback'] => string|array callback function
-	 *       $tabs['dashicon'] => string Dashicon
-	 *       $tabs['args'] => mixed optional callback function args
-	 *    )
-	 * }
-	 * @param string $version the The SEO Framework version for debugging. May be emptied.
-	 * @param bool $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
-	 */
-	protected function gutenberg_flex_tab_wrapper( $id, $tabs, $version = '3.1.0', $use_tabs = false ) {
-		$this->get_view( 'inpost/wrap-content', get_defined_vars() );
-	}
-
-	/**
 	 * Adds the SEO meta box to post edit screens.
 	 *
 	 * @since 2.0.0
 	 * @since 3.1.0 No longer checks for SEO plugin presence.
 	 */
 	public function add_inpost_seo_box_init() {
-
-		if ( $this->is_gutenberg_page() ) return;
 
 		/**
 		 * @since 2.0.0
@@ -305,22 +282,6 @@ class Inpost extends Profile {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pro_tt_inpost_box' );
-	}
-
-	/**
-	 * Outputs Gutenberg panels scripts.
-	 *
-	 * @since 3.1.0
-	 */
-	public function _output_gutenberg_panels_script() {
-		$this->get_view(
-			'templates/gutenberg/panels',
-			[
-				'tabs' => $this->get_inpost_tabs(
-					$this->get_post_type_label( $this->get_admin_post_type() )
-				),
-			]
-		);
 	}
 
 	/**
