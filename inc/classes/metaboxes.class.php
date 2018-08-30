@@ -33,13 +33,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Metaboxes extends Site_Options {
 
 	/**
-	 * Constructor, load parent constructor.
-	 */
-	protected function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Setting nav tab wrappers.
 	 * Outputs Tabs and settings content.
 	 *
@@ -76,10 +69,6 @@ class Metaboxes extends Site_Options {
 				foreach ( $tabs as $tab => $value ) :
 					$dashicon = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
 					$name = isset( $value['name'] ) ? $value['name'] : '';
-
-					$checked  = 1 === $count ? 'checked' : '';
-					$the_id   = \esc_attr( $id . '-tab-' . $tab );
-					$the_name = \esc_attr( $id . '-tabs' );
 
 					printf(
 						'<div class=tsf-tab>%s</div>',

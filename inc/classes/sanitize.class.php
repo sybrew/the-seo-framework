@@ -33,13 +33,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Sanitize extends Admin_Pages {
 
 	/**
-	 * Constructor, load parent constructor
-	 */
-	protected function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Checks the SEO Settings page nonce. Returns false if nonce can't be found.
 	 * Performs wp_die() when nonce verification fails.
 	 *
@@ -777,25 +770,13 @@ class Sanitize extends Admin_Pages {
 	 * Converts multilines to single lines.
 	 *
 	 * @since 2.8.2
+	 * @since 3.1.0 Simplified method.
 	 *
 	 * @param string $new_value The input value with possible multiline.
 	 * @return string The input string without multiple lines.
 	 */
 	public function s_singleline( $new_value ) {
-
-		$new_value = str_replace( [ "\r\n", "\r", "\n" ], "\n", $new_value );
-
-		$lines = explode( "\n", $new_value );
-		$new_lines = [];
-
-		//* Remove line breaks
-		foreach ( $lines as $i => $line ) {
-			//* Don't add empty lines or paragraphs
-			if ( $line && '&nbsp;' !== $line )
-				$new_lines[] = trim( $line ) . ' ';
-		}
-
-		return trim( implode( $new_lines ) );
+		return trim( preg_replace( '/[\p{Zl}\p{Zp}\r\n]+/u', ' ', $new_value ) );
 	}
 
 	/**
@@ -810,7 +791,7 @@ class Sanitize extends Admin_Pages {
 	 * @return string The input string without duplicated spaces.
 	 */
 	public function s_dupe_space( $new_value ) {
-		return preg_replace( '/(\xc2\xa0|\s){2,}/m', ' ', $new_value );
+		return preg_replace( '/\p{Zs}{2,}/u', ' ', $new_value );
 	}
 
 	/**
@@ -1418,7 +1399,7 @@ class Sanitize extends Admin_Pages {
 	 * @return string A spacey string.
 	 */
 	public function s_nbsp( $new_value ) {
-		return str_replace( [ '&nbsp;', '&#160;', "\xc2\xa0" ], ' ', $new_value );
+		return str_replace( [ '&nbsp;', '&#160;', '&#xA0;', "\xc2\xa0" ], ' ', $new_value );
 	}
 
 	/**

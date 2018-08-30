@@ -39,13 +39,6 @@ class Generate_Image extends Generate_Url {
 	public $image_dimensions = [];
 
 	/**
-	 * Constructor, loads parent constructor.
-	 */
-	protected function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Registers image dimensions.
 	 *
 	 * When the `$uid` is already registered, then the dimensions registered first

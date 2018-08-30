@@ -43,16 +43,6 @@ class Query extends Compat {
 	public $pretty_permalinks;
 
 	/**
-	 * Constructor. Load parent constructor.
-	 */
-	protected function __construct() {
-
-		$this->pretty_permalinks = '' !== \get_option( 'permalink_structure' );
-
-		parent::__construct();
-	}
-
-	/**
 	 * Checks whether $wp_query or $current_screen is set.
 	 *
 	 * @since 2.6.1
@@ -673,7 +663,7 @@ class Query extends Compat {
 				}
 			} elseif ( 'posts' === $sof ) {
 				if ( 0 === $id ) {
-					//* 0 as ID causes a lot of issues. Just test for is_home().
+					//* 0 as ID causes many issues. Just test for is_home().
 					if ( $this->is_home() ) {
 						$is_front_page = true;
 					}
@@ -867,7 +857,7 @@ class Query extends Compat {
 		if ( $this->is_admin() )
 			return $this->is_singular_admin( $id );
 
-		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post_types ) )
+		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post_types, $id ) )
 			return $cache;
 
 		if ( ! $is_singular = \is_singular( $post_types ) ) {
@@ -881,7 +871,7 @@ class Query extends Compat {
 		$this->set_query_cache(
 			__METHOD__,
 			$is_singular,
-			$post_types
+			$post_types, $id
 		);
 
 		return $is_singular;

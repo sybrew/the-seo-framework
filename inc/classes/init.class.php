@@ -42,30 +42,6 @@ class Init extends Query {
 	protected $use_object_cache = true;
 
 	/**
-	 * Constructor. Initializes actions and loads parent constructor.
-	 */
-	protected function __construct() {
-		parent::__construct();
-
-		/**
-		 * @since 2.2.2
-		 * @param bool $load_options Whether to show or hide option pages.
-		 */
-		$this->load_options = (bool) \apply_filters( 'the_seo_framework_load_options', true );
-
-		/**
-		 * @since 2.4.3
-		 * @since 2.8.0 : Uses method $this->use_object_cache() as default.
-		 * @param bool $use_object_cache Whether to enable object caching.
-		 */
-		$this->use_object_cache = (bool) \apply_filters( 'the_seo_framework_use_object_cache', $this->use_object_cache() );
-
-		\add_action( 'init', [ $this, 'init_the_seo_framework' ], 0 );
-
-		$this->load_early_compat_files();
-	}
-
-	/**
 	 * A true legacy. Ran the plugin on the front-end.
 	 *
 	 * @since 1.0.0

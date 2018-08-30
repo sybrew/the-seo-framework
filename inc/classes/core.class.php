@@ -46,6 +46,11 @@ class Core {
 	public $loaded = false;
 
 	/**
+	 * Calling any top file without __construct() is forbidden.
+	 */
+	private function __construct() { }
+
+	/**
 	 * Unserializing instances of this object is forbidden.
 	 */
 	final protected function __wakeup() { }
@@ -117,21 +122,6 @@ class Core {
 
 		\the_seo_framework()->_inaccessible_p_or_m( 'the_seo_framework()->' . \esc_html( $name ) . '()' );
 		return;
-	}
-
-	/**
-	 * Constructor. Loads actions and filters.
-	 * Latest Class. Doesn't have parent.
-	 */
-	protected function __construct() {
-
-		if ( $this->the_seo_framework_debug ) {
-			$debug_instance = Debug::get_instance();
-
-			\add_action( 'the_seo_framework_do_before_output', [ $debug_instance, '_set_debug_query_output_cache' ] );
-			\add_action( 'admin_footer', [ $debug_instance, '_debug_output' ] );
-			\add_action( 'wp_footer', [ $debug_instance, '_debug_output' ] );
-		}
 	}
 
 	/**

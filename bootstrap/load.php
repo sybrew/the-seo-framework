@@ -100,17 +100,7 @@ function _init_tsf() {
 	return $tsf;
 }
 
-\The_SEO_Framework\_register_autoloader();
-/**
- * Registers The SEO Framework's autoloader.
- *
- * @since 3.1.0
- * @access private
- */
-function _register_autoloader() {
-	spl_autoload_register( __NAMESPACE__ . '\\_autoload_classes', true, true );
-}
-
+spl_autoload_register( __NAMESPACE__ . '\\_autoload_classes', true, true );
 /**
  * Autoloads all class files. To be used when requiring access to all or any of
  * the plugin classes.
@@ -132,7 +122,7 @@ function _autoload_classes( $class ) {
 	if ( 0 !== strpos( $class, 'The_SEO_Framework\\', 0 ) )
 		return;
 
-	$strip = __NAMESPACE__ . '\\';
+	$strip = 'The_SEO_Framework\\';
 
 	if ( strpos( $class, '_Interface' ) ) {
 		$path = THE_SEO_FRAMEWORK_DIR_PATH_INTERFACE;

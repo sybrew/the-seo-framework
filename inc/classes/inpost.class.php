@@ -51,13 +51,6 @@ class Inpost extends Profile {
 	public $inpost_nonce_field = 'tsf_inpost_nonce';
 
 	/**
-	 * Constructor, load parent constructor and sets up variables.
-	 */
-	protected function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Outputs in-post flex navigational wrapper and its content.
 	 *
 	 * @since 2.9.0

@@ -33,13 +33,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Term_Data extends Post_Data {
 
 	/**
-	 * Constructor, load parent constructor.
-	 */
-	protected function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Initializes term meta data filters and functions.
 	 *
 	 * @since 2.7.0

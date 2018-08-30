@@ -52,15 +52,6 @@ class Site_Options extends Sanitize {
 	public $seo_settings_page_slug = 'theseoframework-settings';
 
 	/**
-	 * Constructor, load parent constructor and set up cachable variables.
-	 */
-	protected function __construct() {
-		parent::__construct();
-
-		\add_filter( "option_page_capability_{$this->settings_field}", [ $this, 'get_settings_capability' ] );
-	}
-
-	/**
 	 * Holds default site options.
 	 *
 	 * @since 2.6.0

@@ -33,13 +33,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class User_Data extends Term_Data {
 
 	/**
-	 * Constructor, load parent constructor
-	 */
-	protected function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Returns default user meta.
 	 *
 	 * @since 3.0.0

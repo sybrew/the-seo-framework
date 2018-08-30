@@ -33,16 +33,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Compat extends Core {
 
 	/**
-	 * Constructor, load parent constructor
-	 */
-	protected function __construct() {
-		parent::__construct();
-
-		//* Disable Headway SEO.
-		\add_filter( 'headway_seo_disabled', '__return_true' );
-	}
-
-	/**
 	 * Requires compatibility files which are needed early or on every page.
 	 * Mostly requires premium plugins/themes, so we check actual PHP instances,
 	 * rather than common paths. As they can require manual FTP upload.
@@ -57,12 +47,15 @@ class Compat extends Core {
 			$this->_include_compat( 'mbstring', 'php' );
 		}
 
-		$wp_version = $GLOBALS['wp_version'];
+		// $wp_version = $GLOBALS['wp_version'];
 
 		// if ( version_compare( $wp_version, '4.7', '<' ) ) {
 		// 	//* WP 4.7.0
 		// 	$this->_include_compat( '470', 'wp' );
 		// }
+
+		//* Disable Headway SEO.
+		\add_filter( 'headway_seo_disabled', '__return_true' );
 
 		if ( $this->is_theme( 'genesis' ) ) {
 			//* Genesis Framework

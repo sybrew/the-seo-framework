@@ -33,13 +33,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Post_Data extends Detect {
 
 	/**
-	 * Constructor, load parent constructor
-	 */
-	protected function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Return custom field post meta data.
 	 *
 	 * Return only the first value of custom field. Return false if field is
@@ -509,11 +502,12 @@ class Post_Data extends Detect {
 	 *              2. Input parameter now default to null.
 	 *                 This currently doesn't affect how it works.
 	 *
-	 * @param int|null|\WP_Post The post ID or WP Post object.
+	 * @param int|null|\WP_Post $post The post ID or WP Post object.
 	 * @return bool True if protected or private, false otherwise.
 	 */
-	public function is_protected( $id = null ) {
-		return $this->is_password_protected( $id ) || $this->is_private( $id );
+	public function is_protected( $post = null ) {
+		$post = \get_post( $post ); // This is here so we don't create another instance.
+		return $this->is_password_protected( $post ) || $this->is_private( $post );
 	}
 
 	/**
@@ -521,11 +515,11 @@ class Post_Data extends Detect {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int|null|\WP_Post The post ID or WP Post object.
+	 * @param int|null|\WP_Post $post The post ID or WP Post object.
 	 * @return bool True if protected, false otherwise.
 	 */
-	public function is_password_protected( $id = null ) {
-		$post = \get_post( $id );
+	public function is_password_protected( $post = null ) {
+		$post = \get_post( $post );
 		return isset( $post->post_password ) && '' !== $post->post_password;
 	}
 
@@ -534,11 +528,11 @@ class Post_Data extends Detect {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int|null|\WP_Post The post ID or WP Post object.
+	 * @param int|null|\WP_Post $post The post ID or WP Post object.
 	 * @return bool True if private, false otherwise.
 	 */
-	public function is_private( $id = null ) {
-		$post = \get_post( $id );
+	public function is_private( $post = null ) {
+		$post = \get_post( $post );
 		return isset( $post->post_status ) && 'private' === $post->post_status;
 	}
 
@@ -550,8 +544,8 @@ class Post_Data extends Detect {
 	 * @param int|null|\WP_Post The post ID or WP Post object.
 	 * @return bool True if draft, false otherwise.
 	 */
-	public function is_draft( $id = null ) {
-		$post = \get_post( $id );
+	public function is_draft( $post = null ) {
+		$post = \get_post( $post );
 		return isset( $post->post_status ) && in_array( $post->post_status, [ 'draft', 'auto-draft', 'pending' ], true );
 	}
 

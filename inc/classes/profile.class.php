@@ -39,13 +39,6 @@ class Profile extends Doing_It_Right {
 	public $profile_settings = [];
 
 	/**
-	 * Constructor, loads parent constructor.
-	 */
-	protected function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Outputs profile fields and prepares saving thereof.
 	 *
 	 * @since 3.0.0

@@ -33,13 +33,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Generate_Ldjson extends Generate_Image {
 
 	/**
-	 * Constructor, load parent constructor and inits class.
-	 */
-	protected function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Builds up JSON data.
 	 *
 	 * NOTE: Array indexes with false-esque values will be stripped.

@@ -42,13 +42,6 @@ class Sitemaps extends Metaboxes {
 	protected $doing_sitemap = false;
 
 	/**
-	 * Constructor, load parent constructor and set up caches.
-	 */
-	protected function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Determines whether we can output sitemap or not based on options and blog status.
 	 *
 	 * @since 2.6.0

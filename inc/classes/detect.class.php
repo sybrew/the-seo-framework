@@ -33,13 +33,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Detect extends Render {
 
 	/**
-	 * Constructor, load parent constructor
-	 */
-	protected function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Determines if we're doing ajax.
 	 *
 	 * @todo use wp_doing_ajax() in a future version. Requires WP 4.7+.

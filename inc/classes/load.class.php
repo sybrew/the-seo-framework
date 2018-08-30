@@ -50,6 +50,7 @@ final class Load extends Feed implements Debug_Interface {
 	 * Constructor, setup debug vars and then load parent constructor.
 	 *
 	 * @staticvar int $count Prevents duplicated constructor loading.
+	 *
 	 * @return null If called twice or more.
 	 */
 	public function __construct() {
@@ -59,10 +60,41 @@ final class Load extends Feed implements Debug_Interface {
 		if ( $count++ )
 			return null;
 
-		//* Setup debug vars before initializing parents.
+		//= Setup debug vars before initializing anything else.
 		$this->init_debug_vars();
 
-		parent::__construct();
+		if ( $this->the_seo_framework_debug ) {
+			$debug_instance = Debug::get_instance();
+
+			\add_action( 'the_seo_framework_do_before_output', [ $debug_instance, '_set_debug_query_output_cache' ] );
+			\add_action( 'admin_footer', [ $debug_instance, '_debug_output' ] );
+			\add_action( 'wp_footer', [ $debug_instance, '_debug_output' ] );
+		}
+
+		//= Register the capabilities early.
+		\add_filter( "option_page_capability_{$this->settings_field}", [ $this, 'get_settings_capability' ] );
+
+		/**
+		 * @since 2.2.2
+		 * @param bool $load_options Whether to show or hide option pages.
+		 */
+		$this->load_options = (bool) \apply_filters( 'the_seo_framework_load_options', true );
+
+		/**
+		 * @since 2.4.3
+		 * @since 2.8.0 : Uses method $this->use_object_cache() as default.
+		 * @param bool $use_object_cache Whether to enable object caching.
+		 */
+		$this->use_object_cache = (bool) \apply_filters( 'the_seo_framework_use_object_cache', $this->use_object_cache() );
+
+		//? We always use this, because we need to test whether the sitemap must be outputted.
+		$this->pretty_permalinks = '' !== \get_option( 'permalink_structure' );
+
+		//= Load plugin at init 0.
+		\add_action( 'init', [ $this, 'init_the_seo_framework' ], 0 );
+
+		//= Prepare all compatibility files early.
+		$this->load_early_compat_files();
 	}
 
 	/**
@@ -100,18 +132,14 @@ final class Load extends Feed implements Debug_Interface {
 
 		$output = '';
 
-		/**
-		 * Convert string/object to array
-		 */
+		//? Convert string/object to array
 		if ( is_object( $callback ) ) {
 			$function = [ $callback, '' ];
 		} else {
 			$function = (array) $callback;
 		}
 
-		/**
-		 * Convert string/object to array
-		 */
+		//? Convert string/object to array
 		if ( is_object( $args ) ) {
 			$args = [ $args, '' ];
 		} else {
@@ -121,9 +149,7 @@ final class Load extends Feed implements Debug_Interface {
 		$class  = reset( $function );
 		$method = next( $function );
 
-		/**
-		 * Fetch method/function
-		 */
+		// Fetch method/function
 		if ( ( is_object( $class ) || is_string( $class ) ) && $class && is_string( $method ) && $method ) {
 			if ( get_class( $this ) === get_class( $class ) ) {
 				if ( method_exists( $this, $method ) ) {

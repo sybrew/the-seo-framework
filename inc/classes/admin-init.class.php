@@ -34,13 +34,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Admin_Init extends Init {
 
 	/**
-	 * Constructor. Loads parent constructor, registers script names and adds actions.
-	 */
-	protected function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Prepares scripts in the admin area.
 	 *
 	 * @since 3.1.0

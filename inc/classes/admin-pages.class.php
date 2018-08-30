@@ -53,13 +53,6 @@ class Admin_Pages extends Inpost {
 	public $load_options;
 
 	/**
-	 * Constructor. Loads parent constructor, does actions and sets up variables.
-	 */
-	protected function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Enqueues page defaults early.
 	 *
 	 * @since 2.3.1
@@ -870,16 +863,16 @@ class Admin_Pages extends Inpost {
 	 * @since 3.1.0 Deprecated second parameter.
 	 *
 	 * @param string $key  The option name which returns boolean.
-	 * @param string $deprecated Deprecated
+	 * @param string $depr Deprecated
 	 * @param bool   $wrap Whether to wrap the class name in `class="%s"`
 	 * @param bool   $echo Whether to echo or return the output.
 	 * @return string Empty on echo or the class name with an optional wrapper.
 	 */
-	public function is_default_checked( $key, $deprecated = '', $wrap = true, $echo = true ) {
+	public function is_default_checked( $key, $depr = '', $wrap = true, $echo = true ) {
 
 		$class = '';
 
-		$default = $this->get_default_settings( $key, $deprecated );
+		$default = $this->get_default_settings( $key );
 
 		if ( 1 === $default )
 			$class = 'tsf-default-selected';

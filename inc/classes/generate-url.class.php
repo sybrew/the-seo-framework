@@ -33,13 +33,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Generate_Url extends Generate_Title {
 
 	/**
-	 * Constructor, load parent constructor and set up variables.
-	 */
-	protected function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Caches and returns the current URL.
 	 *
 	 * @since 3.0.0

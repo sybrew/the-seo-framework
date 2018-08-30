@@ -33,13 +33,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Generate extends User_Data {
 
 	/**
-	 * Constructor, load parent constructor
-	 */
-	protected function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Fixes generation arguments, to prevent ID conflicts with taxonomies.
 	 *
 	 * @since 3.1.0

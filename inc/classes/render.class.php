@@ -33,13 +33,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Render extends Admin_Init {
 
 	/**
-	 * Constructor, load parent constructor
-	 */
-	protected function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Returns the document title.
 	 *
 	 * This method serves as a callback for filter `pre_get_document_title`.
@@ -1203,42 +1196,32 @@ class Render extends Admin_Init {
 	 * Determines if modified time should be used in the current query.
 	 *
 	 * @since 3.0.0
-	 * @staticvar bool $cache
+	 * @since 3.1.0 Removed caching.
 	 *
 	 * @return bool
 	 */
 	public function output_modified_time() {
 
-		static $cache;
-
-		if ( isset( $cache ) )
-			return $cache;
-
 		if ( 'article' !== $this->get_og_type() )
-			return $cache = false;
+			return false;
 
-		return $cache = (bool) $this->get_option( 'post_modify_time' );
+		return (bool) $this->get_option( 'post_modify_time' );
 	}
 
 	/**
 	 * Determines if published time should be used in the current query.
 	 *
 	 * @since 3.0.0
-	 * @staticvar bool $cache
+	 * @since 3.1.0 Removed caching.
 	 *
 	 * @return bool
 	 */
 	public function output_published_time() {
 
-		static $cache;
-
-		if ( isset( $cache ) )
-			return $cache;
-
 		if ( 'article' !== $this->get_og_type() )
 			return $cache = false;
 
-		return $cache = (bool) $this->get_option( 'post_publish_time' );
+		return (bool) $this->get_option( 'post_publish_time' );
 	}
 
 	/**

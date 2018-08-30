@@ -34,13 +34,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Feed extends Cache {
 
 	/**
-	 * Constructor, load parent constructor and run functions.
-	 */
-	protected function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Initializes feed actions and hooks.
 	 *
 	 * @since 2.9.0

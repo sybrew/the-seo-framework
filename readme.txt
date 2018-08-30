@@ -324,6 +324,7 @@ TODO note about that some options have been relocated.
 *Fred Brooks' law: "What one developer can do in one month, two developers can do in two months."*
 
 TODO: Update plugin setup guide, as pagination settings have been updated.
+TODO: Update POT file.
 
 * **For everyone:**
 	* **Added:**
@@ -341,8 +342,8 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 			* These robots settings are applied to the whole custom post type, including its terms.
 			* The "noindex" settings also remove the post type from the sitemap.
 		* New SEO Bar checks:
-			* When the generated description is empty, it'll now tell you with a blue bar, instead of saying it's "far too short".
-			* When the generated title is empty thanks to filters, it'll now tell you with a blue bar, instead of saying it's "far too short".
+			* When the generated description is empty, it'll now tell you with a blue block, instead of saying it's "far too short".
+			* When the generated title is empty thanks to filters, it'll now tell you with a blue block, instead of saying it's "far too short".
 			* Pages in draft correctly state their indexing status.
 			* Pages that are protected now correctly state their indexing status.
 			* When the Blog Page is empty, and when it's not the home page, it'll show a "noindex" notification.
@@ -376,7 +377,7 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* The sitemap and stylesheet URLs should no longer be shown in the search results of search engines.
 		* Added a description on character counters, telling what happens when you click them.
 		* All sitemap transients are now deleted on corresponding deletion queries when using WPML.
-		* TODO We've scanned the plugin once more for performance culprits, and improved what needed improving.
+		* We've scanned the plugin once more for performance culprits, and improved what needed improving.
 		* The SEO Bar will no longer overflow, but it will now wrap automatically when needed. For this, we had to change a few things.
 			1. The tooltips aren't "boxed in" anymore, but flow wherever they deem best.
 			2. There are 5 to 6 times as many tooltip listeners per SEO bar, as it did prior v3.0. TODO test performance and responsiveness // lighthouse?
@@ -385,6 +386,10 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* The SEO Bar is a little less daunting--by 13.63% in width to be exact.
 		* The SEO Bar no longer performs intricate and slow requests to verify if we're on a term page on Custom Post Types list tables.
 		* The SEO Bar is now capable of articulating post type names, instead of only term names.
+		* The SEO Bar now suggests what you need to do with titles and descriptions that are deemed to short or long, instead of stating binary information.
+		* On Firefox, list table overflow is now less prone to happen. We've removed compatibility fixes, and introduced a flexible system via CSS.
+			* The overflowing is caused by a bug in Internet Explorer 6, which Firefox happily integrated, affecting roughly 30% of their users.
+			* In short, [Gecko ignores word-wrap values in tables](https://bugzilla.mozilla.org/show_bug.cgi?id=587438), and for [13 years running](https://bugzilla.mozilla.org/show_bug.cgi?id=307866), Firefox ignores overflow-preventing width values. Both these bugs combined cause mayhem.
 		* In the robots settings meta box, we've added a descriptive warning for the sitewide `nofollow` and `noarchive` settings.
 		* In the homepage settings meta box, and on the post-edit metabox for the homepage, we've added a descriptive warning for the `nofollow` and `noarchive` settings.
 		* The primary term selector tooltip now states the human readible and translatable (archive type) name, instead of the static code name.
@@ -397,9 +402,6 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* This plugin now detects Elementor as a conflicting plugin for content. This means that when Elementor builds a page, no automated description can be generated from the content.
 		* The post-edit counters are no longer affected by your input when a preceding value is set in the Home Page SEO Settings.
 		* The administrative title placeholders now better resemble the real front-end output when using HTML tokens or duplicated spaces.
-		* On Firefox, list table overflow is now less prone to happen. We've removed compatibility fixes, and introduced a flexible system via CSS.
-			* The overflowing is caused by a bug in Internet Explorer 6, which Firefox happily integrated, affecting roughly 30% of their users.
-			* In short, [Gecko ignores word-wrap values in tables](https://bugzilla.mozilla.org/show_bug.cgi?id=587438), and for [13 years running](https://bugzilla.mozilla.org/show_bug.cgi?id=307866), Firefox ignores overflow-preventing width values. Both these bugs combined cause mayhem.
 		*  Webmasters' code input now automatically stripts extraneous HTML. So, you can simply paste the code you copied from the analytical setup interfaces.
 		* The upgrade routine is now more intelligent, and is now able to skip upgrades that aren't necessary for new installations.
 		* The upgrade routine can no longer happen on the SEO Settings page; instead, it redirects you from it to prevent setting desynchronization.
@@ -411,11 +413,10 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* Shortlinks now support search.
 		* Shortlinks now output shorter date-archive links.
 		* New Google ListItem requirements have been put in place for the breadcrumbs.
-		* The SEO Bar now suggests what you need to do with titles and descriptions that are deemed to short or long, instead of stating binary information.
 		* The character counters can now count down to zero, and will notify you off it.
 		* The pixel counter is now color coded. Hover over it to know why!
 		* Switching SEO metabox tabs or loading a page with character counters is now a tad less resource intensive.
-		* The Google Webmasters' verification code link now directly sends you to the correct form.
+		* The Google Search Console' verification code link now directly sends you to the correct form.
 		* Improved multibyte support in automated descriptions, like for finding punctiations.
 		* Automated descriptions now try to find complete sentences by stripping the last three trailing words after the latest found punctuation mark.
 	* **Changed:**
@@ -570,6 +571,8 @@ TODO: Update plugin setup guide, as pagination settings have been updated.
 		* The WordPress filter `single_post_title` is now used for singular post titles.
 		* Query caching is now disabled in WP_CLI.
 		* Integral options (1, 0, or a number) now return an integer, instead of a number encapsulated in a string.
+		* Calling any class of the `the_seo_framework()` façade other than `\The_SEO_Framework\Init` will result in a fatal error. The `\The_SEO_Framework\Core` constructor is now private and inherited by all classes but `\The_SEO_Framework\Init`.
+			* In other words: Don't instantiate the façade. Just use `the_seo_framework()`.
 	* **Removed:**
 		* We removed the `seotips` folder and their contents. They were a gimmick, accumulating SEO tips brought over past plugin update changelogs.
 		* Many deprecated methods, which were deprecated on or before TSF v2.9.4 (August 30, 2017).

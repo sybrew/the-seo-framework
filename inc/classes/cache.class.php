@@ -33,13 +33,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Cache extends Sitemaps {
 
 	/**
-	 * Constructor, load parent constructor and set up caches.
-	 */
-	protected function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Determines whether object cache is being used.
 	 *
 	 * @since 2.8.0
@@ -488,7 +481,7 @@ class Cache extends Sitemaps {
 
 		$cache_key = $this->generate_cache_key( $id, $taxonomy, $type );
 
-		$revision = '6';
+		$revision = '7';
 
 		/**
 		 * Change key based on options.

@@ -36,14 +36,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Doing_It_Right extends Generate_Ldjson {
 
 	/**
-	 * Constructor, load parent constructor.
-	 * Initalizes columns and load post states.
-	 */
-	protected function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Add post state on edit.php to the page or post that has been altered.
 	 *
 	 * @since 2.1.0
