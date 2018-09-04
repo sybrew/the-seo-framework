@@ -323,7 +323,6 @@ TODO note about that some options have been relocated.
 
 *Fred Brooks' law: "What one developer can do in one month, two developers can do in two months."*
 
-TODO: Update plugin setup guide, as pagination settings have been updated.
 TODO: Update POT file.
 
 * **For everyone:**
@@ -1017,6 +1016,8 @@ TODO: Update POT file.
 			* `the_seo_framework_term_meta_defaults` is now also used on the front-end.
 			* `the_seo_framework_custom_field_description` now passes a 'taxonomy' index in the second parameter.
 			* `the_seo_framework_fetched_description_excerpt` no longer passes a third and fourth parameter.
+			* `the_seo_framework_supported_post_type`, the first parameter is always a boolean, and no longer the accepted post type string.
+				* Use the second parameter to get the evaluated post type, instead.
 		* **Removed:**
 			* `the_seo_framework_update_options_at_update`
 			* `the_seo_framework_canonical_force_scheme` (was deprecated since 2.8.0). Use `the_seo_framework_preferred_url_scheme` instead.
@@ -1029,8 +1030,8 @@ TODO: Update POT file.
 				* `the_seo_framework_pro_add_title`, use `the_seo_framework_title_from_generation` instead.
 				* `the_seo_framework_custom_field_title`, use `the_seo_framework_title_from_custom_field` instead.
 				* `the_seo_framework_add_blogname_to_title`, use the options API instead.
+				* `the_seo_framework_do_shortcodes_in_title`, use any of the two new title filters mentioned right above and return `do_shortcode( $title )` instead.
 				* `the_seo_framework_use_archive_title_prefix`, use the options API instead.
-				* `the_seo_framework_do_shortcodes_in_title`, use any of the two new title filters mentioned right above and return `do_shortcode( $title )` instead. -- TODO make a migration guide and link to it in the update screen?
 				* `the_seo_framework_title_pagination`
 				* `the_seo_framework_title_seplocation_front`, use the options API instead.
 				* `the_seo_framework_title_seplocation`, use the options API instead.

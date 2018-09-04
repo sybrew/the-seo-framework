@@ -50,7 +50,7 @@ class Generate_Url extends Generate_Title {
 	 * This link excludes any pagination. Great for structured data.
 	 *
 	 * @since 3.0.0
-	 * @since 3.1.0 Now properly generates taxonomial URLs.
+	 * @since 3.1.0 Now properly generates taxonomical URLs.
 	 * @staticvar string $cache
 	 *
 	 * @return string The current permalink.
@@ -308,14 +308,14 @@ class Generate_Url extends Generate_Title {
 	}
 
 	/**
-	 * Returns taxonomial canonical URL.
+	 * Returns taxonomical canonical URL.
 	 * Automatically adds pagination if the ID matches the query.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param int    $term_id The term ID.
 	 * @param string $taxonomy The taxonomy.
-	 * @return string The taxonomial canonical URL, if any.
+	 * @return string The taxonomical canonical URL, if any.
 	 */
 	public function get_taxonomial_canonical_url( $term_id, $taxonomy ) {
 

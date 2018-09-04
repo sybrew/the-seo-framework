@@ -159,6 +159,7 @@ class Sitemaps extends Metaboxes {
 	 *
 	 * @since 3.1.0
 	 * @TODO consider hijacking get_preferred_scheme() instead.
+	 * @TODO consider hijacking that filter always, making the "automatic" option even more reliable.
 	 */
 	protected function validate_sitemap_scheme() {
 
@@ -177,7 +178,6 @@ class Sitemaps extends Metaboxes {
 			default:
 				// parse_url failure. Bail.
 				return;
-				break;
 		}
 
 		//? Prevent redirect loop.

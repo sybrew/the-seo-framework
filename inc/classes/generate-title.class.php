@@ -71,12 +71,10 @@ class Generate_Title extends Generate_Description {
 		 *
 		 * @param string $title The title.
 		 * @param array  $args  The title arguments.
-		 * @param null   $depr  Deprecated.
 		 */
 		$title = (string) \apply_filters_ref_array( 'the_seo_framework_title_from_custom_field', [
 			$this->get_raw_custom_field_title( $args ),
 			$args,
-			null,
 		] );
 
 		if ( $title ) {

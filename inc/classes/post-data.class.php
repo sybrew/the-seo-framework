@@ -575,7 +575,7 @@ class Post_Data extends Detect {
 	 * Returns the post type object label. Either plural or singular.
 	 *
 	 * @since 3.1.0
-	 * @see $this->get_tax_type_label() For the taxonomial alternative.
+	 * @see $this->get_tax_type_label() For the taxonomical alternative.
 	 *
 	 * @param string $post_type The post type. Required.
 	 * @param bool   $singular  Wether to get the singlural or plural name.

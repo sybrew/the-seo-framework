@@ -485,8 +485,8 @@ class Admin_Init extends Init {
 			'i18n'   => [
 				'saveAlert'       => \__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
 				'confirmReset'    => \__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
-				'privateTitle'    => $has_input && $id ? \__( 'Private:', 'autodescription' ) : '',
-				'protectedTitle'  => $has_input && $id ? \__( 'Protected:', 'autodescription' ) : '',
+				'privateTitle'    => $has_input && $id ? trim( str_replace( '%s', '', \__( 'Private: %s', 'default' ) ) ) : '',
+				'protectedTitle'  => $has_input && $id ? trim( str_replace( '%s', '', \__( 'Protected: %s', 'default' ) ) ) : '',
 				/* translators: Pixel counter. 1: width, 2: guideline */
 				'pixelsUsed'      => $has_input ? \__( '%1$d out of %2$d pixels are used.', 'autodescription' ) : '',
 				'inputGuidelines' => $input_guidelines_i18n,
