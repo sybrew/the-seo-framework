@@ -508,6 +508,7 @@ class Detect extends Render {
 	 *
 	 * @since 1.3.0
 	 * @since 2.6.1 Always return false. Let other plugin authors decide its value.
+	 * @TODO Make a list of plugins, so the users are well-informed.
 	 *
 	 * @return bool Whether another Schema.org plugin is active.
 	 */

@@ -15,55 +15,54 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Schema.org Output Settings', 'autodescription' ); ?></h4>
 		<?php
 
-		if ( $this->has_json_ld_plugin() ) :
-			$this->description( __( 'Another Schema.org plugin has been detected.', 'autodescription' ) );
-		else :
-			$this->description( __( 'The Schema.org markup is a standard way of annotating structured data for search engines. This markup is represented within hidden scripts throughout the website.', 'autodescription' ) );
-			$this->description( __( 'When your web pages include structured data markup, search engines can use that data to index your content better, present it more prominently in search results, and use it in several different applications.', 'autodescription' ) );
-			$this->description( __( 'This is also known as the "Knowledge Graph" and "Structured Data", which is under heavy active development by several search engines. Therefore, the usage of the outputted markup is not guaranteed.', 'autodescription' ) );
+		if ( $this->has_json_ld_plugin() )
+			$this->attention_description( __( 'Another Schema.org plugin has been detected. These markup settings might conflict.', 'autodescription' ) );
 
-			/**
-			 * Parse tabs content.
-			 *
-			 * @since 2.8.0
-			 *
-			 * @param array $default_tabs { 'id' = The identifier =>
-			 *    array(
-			 *       'name'     => The name
-			 *       'callback' => The callback function, use array for method calling
-			 *       'dashicon' => Desired dashicon
-			 *    )
-			 * }
-			 */
-			$default_tabs = [
-				// 'general' => [
-				// 	'name'     => __( 'General', 'autodescription' ),
-				// 	'callback' => [ $this, 'schema_metabox_general_tab' ],
-				// 	'dashicon' => 'admin-generic',
-				// ],
-				'structure' => [
-					'name'     => __( 'Structure', 'autodescription' ),
-					'callback' => [ $this, 'schema_metabox_structure_tab' ],
-					'dashicon' => 'admin-multisite',
-				],
-				'presence' => [
-					'name'     => __( 'Presence', 'autodescription' ),
-					'callback' => [ $this, 'schema_metabox_presence_tab' ],
-					'dashicon' => 'networking',
-				],
-			];
+		$this->description( __( 'The Schema.org markup is a standard way of annotating structured data for search engines. This markup is represented within hidden scripts throughout the website.', 'autodescription' ) );
+		$this->description( __( 'When your web pages include structured data markup, search engines can use that data to index your content better, present it more prominently in search results, and use it in several different applications.', 'autodescription' ) );
+		$this->description( __( 'This is also known as the "Knowledge Graph" and "Structured Data", which is under heavy active development by several search engines. Therefore, the usage of the outputted markup is not guaranteed.', 'autodescription' ) );
 
-			/**
-			 * @since 2.8.0
-			 * @param array $defaults The default tabs.
-			 * @param array $args     The args added on the callback.
-			 */
-			$defaults = (array) apply_filters( 'the_seo_framework_schema_settings_tabs', $default_tabs, $args );
+		/**
+		 * Parse tabs content.
+		 *
+		 * @since 2.8.0
+		 *
+		 * @param array $default_tabs { 'id' = The identifier =>
+		 *    array(
+		 *       'name'     => The name
+		 *       'callback' => The callback function, use array for method calling
+		 *       'dashicon' => Desired dashicon
+		 *    )
+		 * }
+		 */
+		$default_tabs = [
+			// 'general' => [
+			// 	'name'     => __( 'General', 'autodescription' ),
+			// 	'callback' => [ $this, 'schema_metabox_general_tab' ],
+			// 	'dashicon' => 'admin-generic',
+			// ],
+			'structure' => [
+				'name'     => __( 'Structure', 'autodescription' ),
+				'callback' => [ $this, 'schema_metabox_structure_tab' ],
+				'dashicon' => 'admin-multisite',
+			],
+			'presence' => [
+				'name'     => __( 'Presence', 'autodescription' ),
+				'callback' => [ $this, 'schema_metabox_presence_tab' ],
+				'dashicon' => 'networking',
+			],
+		];
 
-			$tabs = wp_parse_args( $args, $defaults );
+		/**
+		 * @since 2.8.0
+		 * @param array $defaults The default tabs.
+		 * @param array $args     The args added on the callback.
+		 */
+		$defaults = (array) apply_filters( 'the_seo_framework_schema_settings_tabs', $default_tabs, $args );
 
-			$this->nav_tab_wrapper( 'schema', $tabs, '2.8.0' );
-		endif;
+		$tabs = wp_parse_args( $args, $defaults );
+
+		$this->nav_tab_wrapper( 'schema', $tabs, '2.8.0' );
 		break;
 
 	case 'the_seo_framework_schema_metabox_general' :

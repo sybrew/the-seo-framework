@@ -600,16 +600,7 @@ class Sitemaps extends Metaboxes {
 
 		$content = '';
 
-		/**
-		 * @since 2.2.9
-		 * @since 2.8.0 Increased to 1200 from 700.
-		 * @since 3.1.0 Now returns an option value; it falls back to the default value if not set.
-		 * @param int $total_post_limit
-		 */
-		$total_post_limit = (int) \apply_filters(
-			'the_seo_framework_sitemap_post_limit',
-			$this->get_option( 'sitemap_query_limit' )
-		);
+		$total_post_limit = $this->get_sitemap_post_limit();
 
 		/**
 		 * Maximum pages, posts and cpt to fetch.
@@ -1186,9 +1177,11 @@ class Sitemaps extends Metaboxes {
 	 * Ping Google
 	 *
 	 * @since 2.2.9
+	 * @since 3.1.0 Updated ping URL. Old one still worked, too.
+	 * @link https://support.google.com/webmasters/answer/6065812?hl=en
 	 */
 	public function ping_google() {
-		$pingurl = 'http://www.google.com/webmasters/sitemaps/ping?sitemap=' . urlencode( $this->get_sitemap_xml_url() );
+		$pingurl = 'http://www.google.com/ping?sitemap=' . rawurlencode( $this->get_sitemap_xml_url() );
 		\wp_safe_remote_get( $pingurl, [ 'timeout' => 3 ] );
 	}
 
@@ -1349,5 +1342,25 @@ class Sitemaps extends Metaboxes {
 		}
 
 		return $colors;
+	}
+
+	/**
+	 * Returns the sitemap post query limit.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return int The post limit
+	 */
+	protected function get_sitemap_post_limit() {
+		/**
+		 * @since 2.2.9
+		 * @since 2.8.0 Increased to 1200 from 700.
+		 * @since 3.1.0 Now returns an option value; it falls back to the default value if not set.
+		 * @param int $total_post_limit
+		 */
+		return (int) \apply_filters(
+			'the_seo_framework_sitemap_post_limit',
+			$this->get_option( 'sitemap_query_limit' )
+		);
 	}
 }

@@ -137,13 +137,11 @@ class Generate_Ldjson extends Generate_Image {
 	 * Renders the LD+JSON scripts.
 	 *
 	 * @since 2.6.0
+	 * @since 3.1.0 No longer cares for json_ld plugins.
 	 *
 	 * @return string The LD+JSON scripts.
 	 */
 	public function render_ld_json_scripts() {
-
-		if ( $this->has_json_ld_plugin() )
-			return '';
 
 		$use_cache      = (bool) $this->get_option( 'cache_meta_schema' );
 		$transient_name = $use_cache ? $this->get_ld_json_transient_name( $this->get_the_real_ID() ) : '';

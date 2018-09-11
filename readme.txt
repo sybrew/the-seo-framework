@@ -460,7 +460,7 @@ TODO: Update POT file.
 	* **Removed:**
 		* Counters now only work with JavaScript enabled. In PHP, this added too much overhead as we were predicting and counting in code.
 		* Description excerpts are no longer added to categories based on the latest post ID.
-		* Open Graph, Twitter, and SEO plugins no longer disables certain functionality in the plugin.
+		* Open Graph, Twitter, Structured Data, and SEO plugins no longer disables certain functionality in the plugin.
 			* Instead, only a warning is shown on the settings page.
 			* We made this change as some users found this plugin to be broken when trying it out, while it was actually preventing conflicts when other plugins remained active.
 		* When a sitemap file or plugin is found, this plugin no longer removes its related settings.

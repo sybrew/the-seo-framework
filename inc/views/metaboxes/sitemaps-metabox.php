@@ -113,11 +113,21 @@ switch ( $instance ) :
 		</p>
 		<?php
 		$this->description( __( 'The sitemap is generated with three queries: Pages, Posts, and other Post Types. This setting affects how many posts are requested from the database per query. The home and blog pages are included separately.', 'autodescription' ) );
-		?>
-		<p>
-			<input type="number" min=1 max=50000 name="<?php $this->field_name( 'sitemap_query_limit' ); ?>" id="<?php $this->field_id( 'sitemap_query_limit' ); ?>" placeholder="<?php echo $this->get_default_option( 'sitemap_query_limit' ); ?>" value="<?php echo absint( $this->get_option( 'sitemap_query_limit' ) ); ?>" />
-		</p>
-		<?php
+
+		if ( \has_filter( 'the_seo_framework_sitemap_post_limit' ) ) :
+			?>
+			<input type=hidden name="<?php $this->field_name( 'sitemap_query_limit' ); ?>" value="<?php echo absint( $this->get_sitemap_post_limit() ); ?>">
+			<p>
+				<input type="number" id="<?php $this->field_id( 'sitemap_query_limit' ); ?>" value="<?php echo absint( $this->get_sitemap_post_limit() ); ?>" disabled />
+			</p>
+			<?php
+		else :
+			?>
+			<p>
+				<input type="number" min=1 max=50000 name="<?php $this->field_name( 'sitemap_query_limit' ); ?>" id="<?php $this->field_id( 'sitemap_query_limit' ); ?>" placeholder="<?php echo $this->get_default_option( 'sitemap_query_limit' ); ?>" value="<?php echo absint( $this->get_option( 'sitemap_query_limit' ) ); ?>" />
+			</p>
+			<?php
+		endif;
 		$this->description( __( 'Consider lowering this value when the sitemap shows a white screen or notifies you of memory exhaustion.', 'autodescription' ) );
 
 		break;
