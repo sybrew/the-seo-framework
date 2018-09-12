@@ -804,7 +804,7 @@ class Detect extends Render {
 	}
 
 	/**
-	 * Check if post type supports The SEO Framework.
+	 * Determines if post type supports The SEO Framework.
 	 *
 	 * @since 2.3.9
 	 * @since 3.1.0 1. Removed caching.
@@ -819,28 +819,34 @@ class Detect extends Render {
 	}
 
 	/**
-	 * Check if ***ALL*** taxonomy objects types support The SEO Framework.
+	 * Determines if the taxonomy supports The SEO Framework.
+	 *
+	 * Checks if at least one taxonomy objects post type supports The SEO Framework,
+	 * and wether the taxonomy is public and rewritable.
 	 *
 	 * @since 3.1.0
-	 * @access protected
-	 * @ignore Don't use. The outcome will lead to bugs thanks to the existence of
-	 *         WP Core \register_taxonomy_for_object_type(), registering post types as an array.
 	 *
-	 * @param string The taxonomy name.
+	 * @param string $taxonomy The taxonomy name.
 	 * @return bool True if ***ALL*** post types in taxonomy are supported.
 	 */
-	public function taxonomy_supports_custom_seo( $taxonomy ) {
+	public function taxonomy_supports_custom_seo( $taxonomy = '' ) {
 
-		$tax = \get_taxonomy( $taxonomy );
+		$taxonomy = $taxonomy ?: $this->get_current_taxonomy();
+		if ( ! $taxonomy ) return false;
 
-		if ( ! empty( $tax->object_type ) ) {
-			foreach ( $tax->object_type as $type ) {
-				if ( ! $this->post_type_supports_custom_seo( $type ) )
-					return false;
-			}
-		}
-
-		return true;
+		/**
+		 * @since 3.1.0
+		 * @param bool   $post_type Whether the post type is supported
+		 * @param string $post_type_evaluated The evaluated post type.
+		 */
+		return (bool) \apply_filters_ref_array( 'the_seo_framework_supported_taxonomy',
+			[
+				$taxonomy
+					&& ! $this->is_taxonomy_disabled( $taxonomy )
+					&& $this->is_taxonomy_public( $taxonomy ),
+				$taxonomy,
+			]
+		);
 	}
 
 	/**
@@ -953,6 +959,54 @@ class Detect extends Render {
 				'_builtin' => true,
 			] ) )
 		);
+	}
+
+	/**
+	 * Checks if at least one taxonomy objects post type supports The SEO Framework.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param string $taxonomy The taxonomy name.
+	 * @return bool True if at least one post type in taxonomy is supported.
+	 */
+	public function is_taxonomy_disabled( $taxonomy = '' ) {
+
+		$taxonomy = $taxonomy ?: $this->get_current_taxonomy();
+		if ( ! $taxonomy ) return true;
+
+		$tax = \get_taxonomy( $taxonomy );
+
+		if ( false === $tax ) return true;
+
+		if ( ! empty( $tax->object_type ) ) {
+			foreach ( $tax->object_type as $type ) {
+				if ( ! $this->is_post_type_disabled( $type ) )
+					return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Checks whether the taxonomy is public and rewritable.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param string $taxonomy The taxonomy name.
+	 * @return bool
+	 */
+	public function is_taxonomy_public( $taxonomy = '' ) {
+
+		$taxonomy = $taxonomy ?: $this->get_current_taxonomy();
+		if ( ! $taxonomy ) return false;
+
+		$tax = \get_taxonomy( $taxonomy );
+
+		if ( false === $tax ) return false;
+
+		return ! empty( $tax->public )
+			&& ( ! empty( $tax->_builtin ) || ! empty( $tax->rewrite ) );
 	}
 
 	/**

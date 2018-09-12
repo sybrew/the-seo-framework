@@ -514,6 +514,7 @@ TODO: Update POT file.
 		* Titles and descriptions now have no chance from experiencing ID conflicts, where a post and term ID might collide.
 		* When entering something in the Open Graph description or title fields, and then emptying it, and then entering something in the meta description or title fields, will no longer cause the Twitter title to use the latest known meta description or title field from when the Open Graph field got emptied. Whew (╯°□°）╯︵ ┻━┻
 		* When JavaScript is enabled, the social description placeholders now show their front-end value when no custom description is set.
+		* Taxonomies that aren't public will no longer show an SEO bar, confusing users.
 
 * **For translators:**
 	* **New translations are available.**
@@ -673,6 +674,8 @@ TODO: Update POT file.
 				* `is_post_type_disabled()`
 				* `is_post_type_supported()`
 				* `taxonomy_supports_custom_seo()`
+				* `is_taxonomy_disabled()`
+				* `is_taxonomy_public()`
 				* `get_supported_post_types()`
 			* In class `\The_SEO_Framework\Generate` -- Factory: `the_seo_framework()`
 				* `is_post_type_robots_set()`
@@ -1001,6 +1004,7 @@ TODO: Update POT file.
 			* `(array) the_seo_framework_save_term_data`, the term SEO data, right before it's saved.
 			* `(array) the_seo_framework_separator_list`, the separator list.
 			* `(array) the_seo_framework_input_guidelines`, the input guideline list.
+			* `(bool) the_seo_framework_supported_taxonomy`, whether the taxonomy is supported.
 		* **Changed:**
 			* `the_seo_framework_detect_page_builder`
 				1. Now returns `null` by default.

@@ -98,14 +98,16 @@ class Inpost extends Profile {
 	 * @since 2.6.0 Can no longer run outside of the term edit scope.
 	 * @since 2.6.0 Can no longer run when another SEO plugin is active.
 	 * @since 2.8.0 Added show_ui argument for public taxonomy detection.
-	 * @since 3.1.0 No longer checks for SEO plugin presence.
+	 * @since 3.1.0 1. No longer checks for SEO plugin presence.
+	 *              2. Now tests for the current taxonomy.
+	 *              3. Now only registers the action for the current taxonomy.
 	 */
 	public function add_taxonomy_seo_box_init() {
 
-		if ( ! $this->is_term_edit() )
+		if ( ! $this->is_term_edit() ) // implies "show_ui"
 			return;
 
-		if ( ! $this->post_type_supports_custom_seo( $this->get_admin_post_type() ) )
+		if ( ! $this->taxonomy_supports_custom_seo( $this->get_current_taxonomy() ) )
 			return;
 
 		/**
@@ -115,15 +117,8 @@ class Inpost extends Profile {
 		 */
 		$priority = (int) \apply_filters( 'the_seo_framework_term_metabox_priority', 0 );
 
-		$taxonomy_args = [
-			'public'  => true,
-			'show_ui' => true,
-		];
-
-		//* Add taxonomy meta boxes
-		foreach ( \get_taxonomies( $taxonomy_args, 'names' ) as $tax_name ) {
-			\add_action( $tax_name . '_edit_form', [ $this, '_insert_seo_meta_box' ], $priority, 2 );
-		}
+		//* Add taxonomy meta box
+		\add_action( $this->get_current_taxonomy() . '_edit_form', [ $this, '_insert_seo_meta_box' ], $priority, 2 );
 	}
 
 	/**

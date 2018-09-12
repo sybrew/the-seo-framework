@@ -98,7 +98,11 @@ class Doing_It_Right extends Generate_Ldjson {
 		 */
 		if ( $this->doing_ajax() && \check_ajax_referer( 'add-tag', '_wpnonce_add-tag', false ) ) {
 
+			// TODO why is 'post_tag' here? FIXME?
 			$taxonomy = ! empty( $_POST['taxonomy'] ) ? \sanitize_key( $_POST['taxonomy'] ) : 'post_tag';
+
+			if ( ! $this->taxonomy_supports_custom_seo( $taxonomy ) )
+				return;
 
 			if ( \current_user_can( \get_taxonomy( $taxonomy )->cap->edit_terms ) )
 				$this->init_columns( '', true );
@@ -148,16 +152,17 @@ class Doing_It_Right extends Generate_Ldjson {
 		 */
 		if ( $this->doing_ajax() && \check_ajax_referer( 'taxinlineeditnonce', '_inline_edit', false ) ) {
 			if ( empty( $_POST['taxonomy'] ) ) return;
+			if ( empty( $_POST['tax_ID'] ) ) return;
 
 			$taxonomy = \sanitize_key( $_POST['taxonomy'] );
-			$tax = \get_taxonomy( $taxonomy );
 
-			if ( $tax && isset( $_POST['tax_ID'] ) ) {
-				$tax_id = (int) $_POST['tax_ID'];
+			if ( ! $this->taxonomy_supports_custom_seo( $taxonomy ) )
+				return;
 
-				if ( \current_user_can( 'edit_term', $tax_id ) )
-					$this->init_columns( '', true );
-			}
+			$tax_id = (int) $_POST['tax_ID'];
+
+			if ( \current_user_can( 'edit_term', $tax_id ) )
+				$this->init_columns( '', true );
 		}
 	}
 
@@ -168,6 +173,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @since 2.9.1 Now supports inline edit AJAX.
 	 * @securitycheck 3.0.0 OK. NOTE: Sanity check is done in _init_columns_wp_ajax_inline_save_tax()
 	 *                          & _init_columns_wp_ajax_inline_save()
+	 * @TODO clean me up.
 	 *
 	 * @param \WP_Screen|string $screen \WP_Screen
 	 * @param bool $doing_ajax Whether we're doing an AJAX response.
@@ -209,24 +215,32 @@ class Doing_It_Right extends Generate_Ldjson {
 					\add_action( 'manage_posts_custom_column', [ $this, 'seo_bar_ajax' ], 1, 3 );
 					\add_action( 'manage_pages_custom_column', [ $this, 'seo_bar_ajax' ], 1, 3 );
 				} elseif ( $taxonomy ) {
+
+					if ( ! $this->taxonomy_supports_custom_seo( $taxonomy ) )
+						return;
+
 					//* Action: inline-save-tax does not POST screen.
 					\add_filter( 'manage_edit-' . $taxonomy . '_columns', [ $this, 'add_column' ], 1, 1 );
 				}
 
-				if ( $taxonomy )
+				if ( $taxonomy && $this->taxonomy_supports_custom_seo( $taxonomy ) )
 					\add_filter( 'manage_' . $taxonomy . '_custom_column', [ $this, 'get_taxonomy_seo_bar_ajax' ], 1, 3 );
 
 			} else {
 				$id = isset( $screen->id ) ? $screen->id : '';
 
 				if ( '' !== $id && $this->is_wp_lists_edit() ) {
-					\add_filter( 'manage_' . $id . '_columns', [ $this, 'add_column' ], 10, 1 );
 
 					$taxonomy = isset( $screen->taxonomy ) ? $screen->taxonomy : '';
 
-					if ( $taxonomy )
-						\add_filter( 'manage_' . $taxonomy . '_custom_column', [ $this, 'get_taxonomy_seo_bar' ], 1, 3 );
+					if ( $taxonomy ) {
+						if ( ! $this->taxonomy_supports_custom_seo( $taxonomy ) )
+							return;
 
+						\add_filter( 'manage_' . $taxonomy . '_custom_column', [ $this, 'get_taxonomy_seo_bar' ], 1, 3 );
+					}
+
+					\add_filter( 'manage_' . $id . '_columns', [ $this, 'add_column' ], 10, 1 );
 					/**
 					 * Always load pages and posts.
 					 * Many CPT plugins rely on these.
