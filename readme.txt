@@ -1043,6 +1043,7 @@ TODO: Update POT file.
 			* `the_seo_framework_generator_tag`, it's useless and you can do it via `add_action( 'wp_head', function() { echo <meta.../>; } );`
 			* `the_seo_framework_updates_cache`, it wasn't used.
 			* `the_seo_framework_generated_description_additions`, use the new options instead.
+			* `the_seo_framework_do_shortcodes_in_description`, use any of the description filters and return `do_shortcode( $description )` instead.
 		* **Deprecated:**
 			* `the_seo_framework_get_term_meta`, use `the_seo_framework_term_meta_defaults` instead.
 		* **Fixed:**

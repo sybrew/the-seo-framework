@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://theseoframework.com/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for any WordPress website.
- * Version: 3.1.0-beta-2018.09.12.0
+ * Version: 3.1.0-beta-2018.09.12.1
  * Author: Sybre Waaijer
  * Author URI: https://theseoframework.com/
  * License: GPLv3
@@ -48,9 +48,6 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The plugin version.
- *
- * Used as a CDN and Browser Cache buster.
- * Chrome and Firefox cache admin scripts.
  *
  * 3 point: x.x.y; x.x is major; y is minor.
  *

@@ -188,6 +188,7 @@ class Post_Data extends Detect {
 
 				default:
 					// Don't process extraneous data for third party support.
+					//* TODO set a filterable list of "allowed" option keys? -> Option Generator
 					break;
 			endswitch;
 		endforeach;

@@ -27,7 +27,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 /**
  * Sets up class loader as file is loaded.
  * This is done asynchronously, because static calls are handled prior and after.
- * @see EOF. Because of the autoloader and trait calling, we can't do it before the class is read.
+ * @see EOF. Because of the autoloader and (future) trait calling, we can't do it before the class is read.
  * @link https://bugs.php.net/bug.php?id=75771
  */
 $_load_scripts_class = function() {

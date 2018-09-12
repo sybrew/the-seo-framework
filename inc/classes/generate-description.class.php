@@ -297,7 +297,7 @@ class Generate_Description extends Generate {
 		/**
 		 * Filters the description from custom field, if any.
 		 * @since 2.9.0
-		 * @since 3.0.6 1. Duplicated from $this->generate_description() (to be deprecated)
+		 * @since 3.0.6 1. Duplicated from $this->generate_description() (deprecated)
 		 *              2. Removed all arguments but the 'id' argument.
 		 * @param string $desc The description.
 		 * @param array  $args The description arguments.

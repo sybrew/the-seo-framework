@@ -444,11 +444,13 @@ class Cache extends Sitemaps {
 	 * Returns the post ID exclusion transient name.
 	 *
 	 * @since 3.1.0
+	 * @NOTE When changing the revision, we MUST delete the old revision key manually.
+	 *       Otherwise, the transient will stay indefinitely.
 	 *
 	 * @return string The current sitemap transient name. Can be empty.
 	 */
 	public function get_exclusion_transient_name() {
-		$exclude_revision = '1';
+		$exclude_revision = '1'; // WARNING: SEE NOTE
 		return $this->add_cache_key_suffix( 'tsf_exclude_' . $exclude_revision );
 	}
 
@@ -974,7 +976,7 @@ class Cache extends Sitemaps {
 			); // No cache OK, Set in autoloaded transient. DB call ok.
 
 			$cache['search'] = $wpdb->get_results(
-				"SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = 'exclude_from_archive'"
+				"SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = 'exclude_local_search'"
 			); // No cache OK, Set in autoloaded transient. DB call ok.
 
 			foreach ( [ 'archive', 'search' ] as $key ) {

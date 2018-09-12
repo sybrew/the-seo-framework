@@ -61,6 +61,7 @@ class Init extends Query {
 	public function init_the_seo_framework() {
 
 		/**
+		 * Runs before the plugin is initialized.
 		 * @since 2.8.0
 		 */
 		\do_action( 'the_seo_framework_init' );
@@ -76,6 +77,8 @@ class Init extends Query {
 		}
 
 		/**
+		 * Runs after the plugin is initialized.
+		 * Use this to remove filters and actions.
 		 * @since 3.1.0
 		 */
 		\do_action( 'the_seo_framework_after_init' );
@@ -133,6 +136,7 @@ class Init extends Query {
 	public function init_admin_actions() {
 
 		/**
+		 * Runs before the plugin is initialized in the admin screens.
 		 * @since 2.8.0
 		 */
 		\do_action( 'the_seo_framework_admin_init' );
@@ -206,6 +210,8 @@ class Init extends Query {
 		endif;
 
 		/**
+		 * Runs after the plugin is initialized in the admin screens.
+		 * Use this to remove actions.
 		 * @since 2.9.4
 		 */
 		\do_action( 'the_seo_framework_after_admin_init' );
@@ -222,6 +228,7 @@ class Init extends Query {
 	protected function init_front_end_actions() {
 
 		/**
+		 * Runs before the plugin is initialized on the front-end.
 		 * @since 2.8.0
 		 */
 		\do_action( 'the_seo_framework_front_init' );
@@ -268,6 +275,8 @@ class Init extends Query {
 			$this->init_alter_search_query();
 
 		/**
+		 * Runs before the plugin is initialized on the front-end.
+		 * Use this to remove actions.
 		 * @since 2.9.4
 		 */
 		\do_action( 'the_seo_framework_after_front_init' );
@@ -280,7 +289,7 @@ class Init extends Query {
 	 */
 	protected function init_front_end_filters() {
 
-		//* Edit the robots.txt file
+		//* Overwrite the robots.txt file
 		\add_filter( 'robots_txt', [ $this, 'robots_txt' ], 10, 2 );
 
 		/**
@@ -801,8 +810,9 @@ class Init extends Query {
 	 * Determines whether the archive query adjustment is blocked.
 	 *
 	 * @since 2.9.4
+	 * @since 3.1.0 Now checks for the post type.
 	 *
-	 * @param \WP_Query $wp_query WP_Query object. Passed by reference.
+	 * @param \WP_Query $wp_query WP_Query object. Passed by reference for performance.
 	 * @return bool
 	 */
 	protected function is_archive_query_adjustment_blocked( &$wp_query ) {

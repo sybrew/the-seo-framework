@@ -29,41 +29,43 @@ defined( 'THE_SEO_FRAMEWORK_DB_VERSION' ) or die;
 define( 'THE_SEO_FRAMEWORK_PRESENT', true );
 
 /**
- * The plugin options database option_name.
+ * The plugin options database option_name key.
  *
  * Used for storing the SEO options array.
  *
- * @todo document filter.
- *
  * @since 2.2.2
+ * @param string THE_SEO_FRAMEWORK_SITE_OPTIONS
  */
 define( 'THE_SEO_FRAMEWORK_SITE_OPTIONS', (string) apply_filters( 'the_seo_framework_site_options', 'autodescription-site-settings' ) );
 
 /**
  * The plugin network options.
  *
- * @todo document filter.
- * Unused. @todo remove
+ * Unused in the code.
  *
  * @since 2.2.2
+ * @param string THE_SEO_FRAMEWORK_NETWORK_OPTIONS
  */
 define( 'THE_SEO_FRAMEWORK_NETWORK_OPTIONS', (string) apply_filters( 'the_seo_framework_network_settings', 'autodescription-network-settings' ) );
 
 /**
- * Plugin term options filter.
+ * Plugin term options key.
  * @since 2.7.0
+ * @param string THE_SEO_FRAMEWORK_TERM_OPTIONS
  */
 define( 'THE_SEO_FRAMEWORK_TERM_OPTIONS', (string) apply_filters( 'the_seo_framework_term_options', 'autodescription-term-settings' ) );
 
 /**
- * Plugin user term options filter.
+ * Plugin user term options key.
  * @since 2.7.0
+ * @param string THE_SEO_FRAMEWORK_USER_OPTIONS
  */
 define( 'THE_SEO_FRAMEWORK_USER_OPTIONS', (string) apply_filters( 'the_seo_framework_user_options', 'autodescription-user-settings' ) );
 
 /**
- * Plugin updates cache database name.
+ * Plugin updates cache key.
  * @since 3.1.0
+ * @param string THE_SEO_FRAMEWORK_SITE_CACHE
  */
 define( 'THE_SEO_FRAMEWORK_SITE_CACHE', (string) apply_filters( 'the_seo_framework_site_cache', 'autodescription-updates-cache' ) );
 
