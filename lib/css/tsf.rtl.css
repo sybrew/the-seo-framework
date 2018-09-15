@@ -172,7 +172,6 @@ a.tsf-dismiss:hover {
 	background-color: #007bd2;
 }
 
-
 /* END Character Counters */
 
 /* START Pixel Counters */
@@ -500,7 +499,7 @@ body.no-js .tsf-seo-bar-item {
 }
 
 .tsf-nav-desktop {
-	margin-right: 7px;
+	margin-left: 7px;
 }
 
 .tsf-dashicons-tabs {

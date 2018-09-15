@@ -679,7 +679,6 @@ input.tsf-flex-nav-tab-radio {
 	/* IE11 fix */
 	-webkit-flex: 1 1 100%;
 	flex: 1 1 100%;
-	flex-wrap: nowrap;
 	max-width: 100%;
 	overflow: hidden;
 }
