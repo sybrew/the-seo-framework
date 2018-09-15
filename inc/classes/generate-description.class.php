@@ -585,6 +585,7 @@ class Generate_Description extends Generate {
 
 		$id = $this->get_the_front_page_ID();
 
+		$excerpt = '';
 		if ( $this->is_static_frontpage( $id ) ) {
 			$excerpt = $this->get_singular_description_excerpt( $id );
 		}
