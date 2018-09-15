@@ -5,7 +5,7 @@ Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
 Requires at least: 4.6.0
 Tested up to: 4.9.6
 Requires PHP: 5.4.0
-Stable tag: 3.1.0
+Stable tag: 3.1.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -227,6 +227,10 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 == Changelog ==
 
+= 3.1.1 =
+
+This tiny update fixes [two issues with v3.1](https://theseoframework.com/?p=2598), our apologies for the inconvenience.
+
 = 3.1.0 - Pure =
 
 *"The difference between something good and something great is attention to detail." - Charles R. Swindoll[†](http://dannybeckettjr.com/2009/10/220079492/)*
@@ -280,7 +284,7 @@ Fred Brooks' law: "What [one developer](https://theseoframework.com/?p=2562#deta
 
 == Upgrade Notice ==
 
-= 3.1.0 =
+= 3.1.1 =
 This is a major upgrade. Make a backup of your database before upgrading. WordPress v4.6 (or greater) and PHP v5.4 (or greater) are now required. If you use the Extension Manager, update it to v1.5.2 (or greater) before upgrading this plugin. Downgrading to v3.0.6 possible.
 
 = 3.0.0 =

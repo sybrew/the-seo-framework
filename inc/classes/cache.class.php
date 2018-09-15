@@ -470,13 +470,14 @@ class Cache extends Sitemaps {
 	 * Returns ld_json transients for page ID.
 	 *
 	 * @since 3.1.0
+	 * @since 3.1.1 : The first parameter is now optional.
 	 *
 	 * @param int|string|bool $id the Taxonomy or Post ID. If false it will generate for the blog page.
 	 * @param string $taxonomy The taxonomy name.
 	 * @param string|null $type The post type.
 	 * @return string The ld_json cache key.
 	 */
-	public function get_ld_json_transient_name( $id, $taxonomy = '', $type = null ) {
+	public function get_ld_json_transient_name( $id = 0, $taxonomy = '', $type = null ) {
 
 		if ( ! $this->get_option( 'cache_meta_schema' ) )
 			return '';
@@ -503,6 +504,7 @@ class Cache extends Sitemaps {
 	 * @since 2.6.0 Refactored.
 	 * @since 2.9.1 : 1. Added early singular type detection.
 	 *                2. Moved generation into $this->generate_cache_key_by_query().
+	 * @since 3.1.1 : The first parameter is now optional.
 	 * @see $this->generate_cache_key_by_query() to get cache key from the query.
 	 * @see $this->generate_cache_key_by_type() to get cache key outside of the query.
 	 *
@@ -511,7 +513,7 @@ class Cache extends Sitemaps {
 	 * @param string $type The Post Type.
 	 * @return string The generated cache key by query or type.
 	 */
-	public function generate_cache_key( $id, $taxonomy = '', $type = null ) {
+	public function generate_cache_key( $id = 0, $taxonomy = '', $type = null ) {
 
 		if ( isset( $type ) )
 			return $this->generate_cache_key_by_type( $id, $taxonomy, $type );
@@ -525,6 +527,7 @@ class Cache extends Sitemaps {
 	 * Warning: This can generate errors when used too early if no type has been set.
 	 *
 	 * @since 2.9.1
+	 * @since 3.1.1 : The first parameter is now optional.
 	 * @staticvar array $cached_id : contains cache strings.
 	 * @see $this->generate_cache_key_by_type() to get cache key outside of the query.
 	 *
@@ -533,7 +536,7 @@ class Cache extends Sitemaps {
 	 * @param string $type The Post Type
 	 * @return string The generated cache key by query.
 	 */
-	public function generate_cache_key_by_query( $page_id, $taxonomy = '', $type = null ) {
+	public function generate_cache_key_by_query( $page_id = 0, $taxonomy = '', $type = null ) {
 
 		$page_id = $page_id ?: $this->get_the_real_ID();
 

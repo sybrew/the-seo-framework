@@ -304,12 +304,13 @@ class Core {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 Now uses get_site()
+	 * @since 3.1.1 Now checks for `is_multisite()`, to prevent a crash with Divi's compatibility injection.
 	 *
 	 * @return bool Current blog is spam.
 	 */
 	public function current_blog_is_spam_or_deleted() {
 
-		if ( ! function_exists( '\\get_site' ) )
+		if ( ! function_exists( '\\get_site' ) || ! \is_multisite() )
 			return false;
 
 		$site = \get_site();
