@@ -205,6 +205,18 @@ class Generate_Image extends Generate_Url {
 					goto end;
 			}
 
+			//* 2.5 Fetch image from fallback filter 0
+			custom_0 : {
+				/**
+				 * Use this to set a secondary custom image input.
+				 * @since 3.1.2
+				 * @param string $image   The image URL.
+				 * @param int    $post_id The post ID.
+				 */
+				if ( $image = (string) \apply_filters( 'the_seo_framework_og_image_alt_custom', '', $args['post_id'] ) )
+					goto end;
+			}
+
 			//* 3.a. Fetch image from featured.
 			if ( $all_allowed || false === in_array( 'featured', $args['disallowed'], true ) ) {
 				if ( $image = $this->get_social_image_url_from_post_thumbnail( $args['post_id'], $args, true ) )
@@ -220,6 +232,19 @@ class Generate_Image extends Generate_Url {
 		if ( $args['skip_fallback'] )
 			goto end;
 
+
+		//* 3.5 Fetch image from fallback filter 0
+		fallback_0 : {
+			/**
+			 * This runs before the SEO settings' fallback image call.
+			 * @since 3.1.2
+			 * @param string $image   The image URL.
+			 * @param int    $post_id The post ID.
+			 */
+			if ( $image = (string) \apply_filters( 'the_seo_framework_og_image_fallback', '', $args['post_id'] ) )
+				goto end;
+		}
+
 		//* 4. Fetch image from SEO settings
 		if ( $all_allowed || false === in_array( 'option', $args['disallowed'], true ) ) {
 			if ( $image = $this->get_social_image_url_from_seo_settings( true ) )
@@ -227,12 +252,14 @@ class Generate_Image extends Generate_Url {
 		}
 
 		//* 5. Fetch image from fallback filter 1
-		/**
-		 * @since 2.5.2
-		 * @param string $image   The first fallback image URL.
-		 * @param int    $post_id The post ID.
-		 */
 		fallback_1 : {
+			/**
+			 * NOTE: filter is slightly mislabeled.
+			 * Runs after the image from the SEO settings is fetched.
+			 * @since 2.5.2
+			 * @param string $image   The image URL.
+			 * @param int    $post_id The post ID.
+			 */
 			if ( $image = (string) \apply_filters( 'the_seo_framework_og_image_after_featured', '', $args['post_id'] ) )
 				goto end;
 		}
@@ -245,8 +272,9 @@ class Generate_Image extends Generate_Url {
 
 		//* 7. Fetch image from fallback filter 2
 		/**
+		 * Runs after theme images are fetched.
 		 * @since 2.5.2
-		 * @param string $image   The second fallback image URL.
+		 * @param string $image   The image URL.
 		 * @param int    $post_id The post ID.
 		 */
 		fallback_2 : {
@@ -704,7 +732,8 @@ class Generate_Image extends Generate_Url {
 	 * Fetches site logo brought in WordPress 4.5
 	 *
 	 * @since 2.8.0
-	 * @since 3.0.0 : Now sets preferred canonical URL scheme.
+	 * @since 3.0.0 Now sets preferred canonical URL scheme.
+	 * @since 3.1.2 Now returns empty when it's deemed too small, and OG images are set.
 	 *
 	 * @param bool $set_og_dimensions Whether to set size for OG image. Always falls back to the current post ID.
 	 * @return string URL site logo, not escaped.
@@ -724,9 +753,15 @@ class Generate_Image extends Generate_Url {
 				$logo = $_src[0];
 
 				if ( $set_og_dimensions ) {
+					$w = $_src[1];
+					$h = $_src[2];
+
+					if ( $w < 200 || $h < 200 )
+						return '';
+
 					$this->register_image_dimension( $this->get_the_real_ID(), [
-						'width'  => $_src[1],
-						'height' => $_src[2],
+						'width'  => $w,
+						'height' => $h,
 					] );
 				}
 			}
@@ -743,7 +778,7 @@ class Generate_Image extends Generate_Url {
 	 * Also sets image dimensions. Falls back to current post ID for index.
 	 *
 	 * @since 2.7.0
-	 * @since 3.0.0 : Now sets preferred canonical URL scheme.
+	 * @since 3.0.0 Now sets preferred canonical URL scheme.
 	 *
 	 * @param bool $set_og_dimensions Whether to set size for OG image. Always falls back to the current post ID.
 	 * @return string The header image URL, not escaped.

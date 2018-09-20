@@ -102,7 +102,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
 	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape    Whether to escape the title.
+	 * @param bool       $escape Whether to escape the title.
 	 * @return string The generated title output.
 	 */
 	public function get_generated_title( $args = null, $escape = true ) {
@@ -922,12 +922,17 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function merge_title_branding( &$title, $args = null ) {
 
-		$id = isset( $args['id'] ) ? $args['id'] : $this->get_the_real_ID();
+		$this->fix_generation_args( $args );
 
-		$taxonomy = null === $args ? $this->get_current_taxonomy()
-			: ( isset( $args['taxonomy'] ) ? $args['taxonomy'] : '' );
+		if ( isset( $args['id'], $args['taxonomy'] ) ) {
+			$id  = $args['id'];
+			$tax = $args['taxonomy'];
+		} else {
+			$id  = $this->get_the_real_ID();
+			$tax = $this->get_current_taxonomy();
+		}
 
-		if ( ! $taxonomy && $this->is_front_page_by_id( $id ) ) {
+		if ( ! $tax && $this->is_front_page_by_id( $id ) ) {
 			$addition    = $this->get_home_page_tagline();
 			//? Brilliant. TODO FIXME: Do an "upgrade" of this option at a 3.1.2+ release, switching title with additions in the settings description.
 			$seplocation = 'left' === $this->get_home_title_seplocation() ? 'right' : 'left';
@@ -982,17 +987,24 @@ class Generate_Title extends Generate_Description {
 	 * @see $this->merge_title_prefixes()
 	 *
 	 * @param string     $title The title. Passed by reference.
-	 * @param array|null $args The query arguments. Leave null to autodetermine query.
+	 * @param array|null $args  The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                          Leave null to autodetermine query.
 	 * @return void
 	 */
 	public function merge_title_protection( &$title, $args = null ) {
 
-		$taxonomy = null === $args ? $this->get_current_taxonomy()
-			: ( isset( $args['taxonomy'] ) ? $args['taxonomy'] : '' );
+		$this->fix_generation_args( $args );
 
-		if ( $taxonomy ) return;
+		if ( isset( $args['id'], $args['taxonomy'] ) ) {
+			$id  = $args['id'];
+			$tax = $args['taxonomy'];
+		} else {
+			$id  = $this->get_the_real_ID();
+			$tax = $this->get_current_taxonomy();
+		}
 
-		$id   = isset( $args['id'] ) ? $args['id'] : $this->get_the_real_ID();
+		if ( $tax ) return;
+
 		$post = $id ? \get_post( $id, OBJECT ) : null;
 
 		if ( isset( $post->post_password ) && '' !== $post->post_password ) {

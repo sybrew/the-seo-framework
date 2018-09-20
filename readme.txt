@@ -232,11 +232,14 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 This minor update adds more robust term ID collision checks, and adds a few missing API features.
 
 * **For everyone:**
-	* **Fixes:**
-		* Private/Protected prefixes no longer show for terms when an ID collision happens.
+	* **Fixed:**
+		* Edge case: Private/Protected prefixes no longer show on terms when a Post ID collision happens.
+		* Site logos that are too small will no longer be used for Open Graph/Twitter metadata.
 * **For developers:**
 	* **Filter notes:**
 		* Added `the_seo_framework_use_title_branding`
+		* Added `the_seo_framework_og_image_alt_custom`
+		* Added `the_seo_framework_og_image_fallback`
 
 = 3.1.1 =
 
