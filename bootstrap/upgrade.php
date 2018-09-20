@@ -245,7 +245,7 @@ function the_seo_framework_do_upgrade_2701() {
 		}
 
 		//= Rudimentary test for remaining ~300 users of the past passed, set initial version to 2600.
-		update_option( 'the_seo_framework_initial_db_version', '2600' );
+		update_option( 'the_seo_framework_initial_db_version', '2600', 'no' );
 	}
 
 	update_option( 'the_seo_framework_upgraded_db_version', '2701' );

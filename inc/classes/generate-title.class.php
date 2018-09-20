@@ -121,8 +121,8 @@ class Generate_Title extends Generate_Description {
 			$args,
 		] );
 
-		//? Only add protection if the query is autodetermined, and on a real page.
 		$this->merge_title_protection( $title, $args );
+		//? Only add protection if the query is autodetermined, and on a real page.
 		if ( null === $args
 			&& ! ( $this->is_404() || $this->is_admin() ) ) {
 			$this->merge_title_pagination( $title );
@@ -915,6 +915,7 @@ class Generate_Title extends Generate_Description {
 	 * Merges title branding, when allowed.
 	 *
 	 * @since 3.1.0
+	 * @since 3.1.2 Added strict taxonomical check.
 	 *
 	 * @param string     $title The title. Passed by reference.
 	 * @param array|null $args The query arguments. Leave null to autodetermine query.
@@ -923,7 +924,10 @@ class Generate_Title extends Generate_Description {
 
 		$id = isset( $args['id'] ) ? $args['id'] : $this->get_the_real_ID();
 
-		if ( $this->is_front_page_by_id( $id ) ) {
+		$taxonomy = null === $args ? $this->get_current_taxonomy()
+			: ( isset( $args['taxonomy'] ) ? $args['taxonomy'] : '' );
+
+		if ( ! $taxonomy && $this->is_front_page_by_id( $id ) ) {
 			$addition    = $this->get_home_page_tagline();
 			//? Brilliant. TODO FIXME: Do an "upgrade" of this option at a 3.1.2+ release, switching title with additions in the settings description.
 			$seplocation = 'left' === $this->get_home_title_seplocation() ? 'right' : 'left';
@@ -974,12 +978,19 @@ class Generate_Title extends Generate_Description {
 	 * Merges title protection prefixes.
 	 *
 	 * @since 3.1.0
+	 * @since 3.1.2 Added strict taxonomical checks for title protection.
 	 * @see $this->merge_title_prefixes()
 	 *
 	 * @param string     $title The title. Passed by reference.
 	 * @param array|null $args The query arguments. Leave null to autodetermine query.
+	 * @return void
 	 */
 	public function merge_title_protection( &$title, $args = null ) {
+
+		$taxonomy = null === $args ? $this->get_current_taxonomy()
+			: ( isset( $args['taxonomy'] ) ? $args['taxonomy'] : '' );
+
+		if ( $taxonomy ) return;
 
 		$id   = isset( $args['id'] ) ? $args['id'] : $this->get_the_real_ID();
 		$post = $id ? \get_post( $id, OBJECT ) : null;
@@ -1066,22 +1077,40 @@ class Generate_Title extends Generate_Description {
 	 * Determines whether to add or remove title branding additions.
 	 *
 	 * @since 3.1.0
+	 * @since 3.1.2: 1. Added filter.
+	 *               2. Added strict taxonomical check.
 	 * @see $this->merge_title_branding()
 	 *
-	 * @param array|null $args The query arguments. Leave null to autodetermine query.
+	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                         Leave null to autodetermine query.
 	 * @return bool True when additions are allowed.
 	 */
 	public function use_title_branding( $args = null ) {
 
 		$id = isset( $args['id'] ) ? $args['id'] : $this->get_the_real_ID();
+		$taxonomy = null === $args ? $this->get_current_taxonomy()
+			: ( isset( $args['taxonomy'] ) ? $args['taxonomy'] : '' );
 
-		if ( $this->is_front_page_by_id( $id ) ) {
-			return $this->use_home_page_title_tagline();
-		} elseif ( ! $this->use_singular_title_branding( $id ) ) {
-			return false;
+		$use = true;
+
+		if ( $taxonomy ) {
+			$use = ! $this->get_option( 'title_rem_additions' );
+		} else {
+			if ( $this->is_front_page_by_id( $id ) ) {
+				$use = $this->use_home_page_title_tagline();
+			} elseif ( ! $this->use_singular_title_branding( $id ) ) {
+				$use = false;
+			} else {
+				$use = ! $this->get_option( 'title_rem_additions' );
+			}
 		}
 
-		return ! $this->get_option( 'title_rem_additions' );
+		/**
+		 * @since 3.1.2
+		 * @param bool       $use
+		 * @param array|null $args
+		 */
+		return \apply_filters_ref_array( 'the_seo_framework_use_title_branding', [ $use, $args ] );
 	}
 
 	/**

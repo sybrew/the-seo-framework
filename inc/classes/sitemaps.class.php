@@ -152,7 +152,7 @@ class Sitemaps extends Metaboxes {
 	 * However, `redirect_canonical()` adds unwanted trailing slashes.
 	 *
 	 * So, we output the sitemap before `redirect_canonical()` fires. Then, we need this to
-	 * prevent incorrect scheme bias when the "automattic" scheme setting is turned on.
+	 * prevent incorrect scheme bias when the "automatic" scheme setting is turned on.
 	 * As otherwise, the plugin will cache the sitemap with the invalid scheme.
 	 *
 	 * All this is to prevent bad(ly configured) bots triggering unwanted schemes.

@@ -227,6 +227,17 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 == Changelog ==
 
+= 3.1.2 =
+
+This minor update adds more robust term ID collision checks, and adds a few missing API features.
+
+* **For everyone:**
+	* **Fixes:**
+		* Private/Protected prefixes no longer show for terms when an ID collision happens.
+* **For developers:**
+	* **Filter notes:**
+		* Added `the_seo_framework_use_title_branding`
+
 = 3.1.1 =
 
 This tiny update fixes [two issues with v3.1](https://theseoframework.com/?p=2598), our apologies for the inconvenience.

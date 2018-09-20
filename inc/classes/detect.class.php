@@ -131,8 +131,8 @@ class Detect extends Render {
 			],
 			'sitemaps' => [
 				'Google XML Sitemaps'                  => 'google-sitemap-generator/sitemap.php',
-				'Better WordPress Google XML Sitemaps' => 'bwp-google-xml-sitemaps/bwp-simple-gxs.php',
-				'Google XML Sitemaps for qTranslate'   => 'google-xml-sitemaps-v3-for-qtranslate/sitemap.php',
+				'Better WordPress Google XML Sitemaps' => 'bwp-google-xml-sitemaps/bwp-simple-gxs.php', // Remove?
+				'Google XML Sitemaps for qTranslate'   => 'google-xml-sitemaps-v3-for-qtranslate/sitemap.php', // Remove?
 				'XML Sitemap & Google News feeds'      => 'xml-sitemap-feed/xml-sitemap.php',
 				'Google Sitemap by BestWebSoft'        => 'google-sitemap-plugin/google-sitemap-plugin.php',
 				'Simple Wp Sitemap'                    => 'simple-wp-sitemap/simple-wp-sitemap.php',
@@ -862,7 +862,7 @@ class Detect extends Render {
 		/**
 		 * @since 2.6.2
 		 * @since 3.1.0 The first parameter is always a boolean now.
-		 * @param bool   $post_type Whether the post type is supported
+		 * @param bool   $supported           Whether the post type is supported.
 		 * @param string $post_type_evaluated The evaluated post type.
 		 */
 		return (bool) \apply_filters_ref_array( 'the_seo_framework_supported_post_type',
