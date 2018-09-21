@@ -958,6 +958,7 @@ class Generate_Title extends Generate_Description {
 	 * Merges pagination with the title, if paginated.
 	 *
 	 * @since 3.1.0
+	 * @since 3.1.2 Now uses the registered default translation.
 	 *
 	 * @param string $title The title. Passed by reference.
 	 */
@@ -969,7 +970,7 @@ class Generate_Title extends Generate_Description {
 		if ( $paged >= 2 || $page >= 2 ) {
 			$sep = $this->get_title_separator();
 
-			$paging = sprintf( \__( 'Page %d', 'default' ), max( $paged, $page ) );
+			$paging = sprintf( \__( 'Page %s', 'default' ), max( $paged, $page ) );
 
 			if ( \is_rtl() ) {
 				$title = "$paging $sep $title";

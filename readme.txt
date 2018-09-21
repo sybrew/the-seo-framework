@@ -233,8 +233,10 @@ This minor update adds more robust term ID collision checks, and adds a few miss
 
 * **For everyone:**
 	* **Fixed:**
-		* Edge case: Private/Protected prefixes no longer show on terms when a Post ID collision happens.
 		* Site logos that are too small will no longer be used for Open Graph/Twitter metadata.
+		* Paginated titles are now using the registered WordPress translation.
+		* Edge case: Private/Protected prefixes no longer show on terms when a Post ID collision happens.
+		* TODO Corner case: Some plugins (TEST ME) blocked The SEO Framework upgrading.
 * **For developers:**
 	* **Filter notes:**
 		* Added `the_seo_framework_use_title_branding`
