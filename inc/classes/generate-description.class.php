@@ -371,6 +371,8 @@ class Generate_Description extends Generate {
 	 *              2. No longer caches.
 	 *              3. Now listens to option.
 	 *              4. Added type argument.
+	 * @since 3.1.2 1. Now omits additions when the description will be deemed too short.
+	 *              2. Now no longer converts additions into excerpt when no excerpt is found.
 	 * @uses $this->generate_description()
 	 * @staticvar array $cache
 	 *
@@ -398,23 +400,19 @@ class Generate_Description extends Generate {
 		if ( ! in_array( $type, [ 'opengraph', 'twitter', 'search' ], true ) )
 			$type = 'search';
 
-		if ( $additions_superseded || 'search' !== $type ) {
-			$additions        = '';
-			$additions_length = 0;
-		} else {
+		$additions_length = 0;
+		$sep_length       = 0;
+
+		$guidelines = $this->get_input_guidelines()['description'][ $type ];
+
+		if ( ! $additions_superseded && 'search' === $type ) {
 			$additions = $this->get_description_additions( $args );
 
-			if ( ! $excerpt ) {
-				$excerpt          = $additions;
-				$additions        = '';
+			$sep_length = 3;
+			$additions_length = $additions ? mb_strlen( html_entity_decode( $additions ) ) : 0;
+			if ( $excerpt && $additions_length > 68 ) {
 				$additions_length = 0;
-			} else {
-				//? Add 3 because of the separator.
-				$additions_length = $additions ? mb_strlen( html_entity_decode( $additions ) ) + 3 : 0;
-				if ( $additions_length > 71 ) {
-					$additions        = '';
-					$additions_length = 0;
-				}
+				$sep_length       = 0;
 			}
 		}
 
@@ -429,17 +427,24 @@ class Generate_Description extends Generate {
 		$excerpt = $this->trim_excerpt(
 			$excerpt,
 			0,
-			$this->get_input_guidelines()['description'][ $type ]['chars']['goodUpper'] - $additions_length
+			$guidelines['chars']['goodUpper'] - $additions_length - $sep_length
 		);
 
-		if ( $additions ) {
-			$desc = sprintf(
-				/* translators: 1: Description additions, 2: Description separator, 3: Excerpt */
-				\__( '%1$s %2$s %3$s', 'autodescription' ),
-				$additions,
-				$this->get_description_separator(),
-				$excerpt
-			);
+		$use_additions = $additions_length
+			&& ( $excerpt || ( $additions_length >= $guidelines['chars']['lower'] ) );
+
+		if ( $use_additions ) {
+			if ( $excerpt ) {
+				$desc = sprintf(
+					/* translators: 1: Description additions, 2: Description separator, 3: Excerpt */
+					\__( '%1$s %2$s %3$s', 'autodescription' ),
+					$additions,
+					$this->get_description_separator(),
+					$excerpt
+				);
+			} else {
+				$desc = $additions;
+			}
 		} else {
 			$desc = $excerpt;
 		}
