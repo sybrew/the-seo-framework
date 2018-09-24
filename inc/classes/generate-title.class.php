@@ -922,9 +922,8 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function merge_title_branding( &$title, $args = null ) {
 
-		$this->fix_generation_args( $args );
-
-		if ( isset( $args['id'], $args['taxonomy'] ) ) {
+		if ( null === $args ) {
+			$this->fix_generation_args( $args );
 			$id  = $args['id'];
 			$tax = $args['taxonomy'];
 		} else {
@@ -994,9 +993,8 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function merge_title_protection( &$title, $args = null ) {
 
-		$this->fix_generation_args( $args );
-
-		if ( isset( $args['id'], $args['taxonomy'] ) ) {
+		if ( null === $args ) {
+			$this->fix_generation_args( $args );
 			$id  = $args['id'];
 			$tax = $args['taxonomy'];
 		} else {
