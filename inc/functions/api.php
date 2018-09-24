@@ -45,11 +45,12 @@ namespace {
 	 * Returns the database version of TSF.
 	 *
 	 * @since 3.1.0
+	 * @since 3.1.2 Now forces a string.
 	 *
 	 * @return string The database version. '0' if version isn't found.
 	 */
 	function the_seo_framework_db_version() {
-		return get_option( 'the_seo_framework_upgraded_db_version', '0' );
+		return (string) get_option( 'the_seo_framework_upgraded_db_version', '0' );
 	}
 
 	/**

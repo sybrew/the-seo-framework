@@ -136,8 +136,6 @@ function the_seo_framework_do_upgrade() {
 		$version = '3103';
 	}
 
-	the_seo_framework()->reinitialize_rewrite();
-
 	/**
 	 * @since 2.7.0
 	 */
@@ -156,6 +154,42 @@ add_action( 'the_seo_framework_upgraded', 'the_seo_framework_upgrade_to_current'
  */
 function the_seo_framework_upgrade_to_current() {
 	update_option( 'the_seo_framework_upgraded_db_version', THE_SEO_FRAMEWORK_DB_VERSION );
+}
+
+add_action( 'the_seo_framework_upgraded', 'the_seo_framework_upgrade_reinitialize_rewrite', 99 );
+/**
+ * Reinitializes the rewrite cache.
+ *
+ * This happens after the plugin's upgraded, because it's not critical, and when
+ * this fails, the upgrader won't be locked.
+ *
+ * @since 3.1.2
+ */
+function the_seo_framework_upgrade_reinitialize_rewrite() {
+	the_seo_framework()->reinitialize_rewrite();
+}
+
+add_action( 'the_seo_framework_upgraded', 'the_seo_framework_prepare_extension_manager_suggestion', 100 );
+/**
+ * Enqueues and outputs an Extension Manager suggestion.
+ *
+ * @since 3.1.0
+ * @staticvar bool $run
+ *
+ * @return void Early when already enqueued
+ */
+function the_seo_framework_prepare_extension_manager_suggestion() {
+	static $run = false;
+	if ( $run ) return;
+
+	if ( is_admin() ) {
+		add_action( 'admin_init', function() {
+			require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'tsfem-suggestion.php';
+			the_seo_framework_load_extension_manager_suggestion();
+		}, 20 );
+	}
+
+	$run = true;
 }
 
 /**
@@ -194,28 +228,6 @@ function the_seo_framework_output_upgrade_notices() {
 		//* @TODO rtl?
 		the_seo_framework()->do_dismissible_notice( 'SEO: ' . $notice, 'updated' );
 	}
-}
-
-/**
- * Enqueues and outputs an Extension Manager suggestion.
- *
- * @since 3.1.0
- * @staticvar bool $run
- *
- * @return void Early when already enqueued
- */
-function the_seo_framework_prepare_extension_manager_suggestion() {
-	static $run = false;
-	if ( $run ) return;
-
-	if ( is_admin() ) {
-		add_action( 'admin_init', function() {
-			require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'tsfem-suggestion.php';
-			the_seo_framework_load_extension_manager_suggestion();
-		}, 20 );
-	}
-
-	$run = true;
 }
 
 /**
@@ -342,8 +354,6 @@ function the_seo_framework_do_upgrade_3060() {
 	if ( get_option( 'the_seo_framework_initial_db_version' ) < '3060' )
 		the_seo_framework()->delete_cache( 'sitemap' );
 
-	the_seo_framework_prepare_extension_manager_suggestion();
-
 	update_option( 'the_seo_framework_upgraded_db_version', '3060' );
 }
 
@@ -402,9 +412,6 @@ function the_seo_framework_do_upgrade_3103() {
 		if ( isset( $defaults['sitemaps_priority'] ) )
 			$tsf->update_option( 'sitemaps_priority', 1 );
 	}
-
-	// Might they've missed it half a year ago, here it is again.
-	the_seo_framework_prepare_extension_manager_suggestion();
 
 	update_option( 'the_seo_framework_upgraded_db_version', '3103' );
 }
