@@ -229,21 +229,23 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 = 3.1.2 =
 
-This minor update adds more robust term ID collision checks, adds a few missing API features, and auto-generated descriptions that are too short are less likely to be used.
+This minor update adds more robust term ID collision checks, adds a few missing API features, and auto-generated descriptions that are far too short are now likely to be removed.
 
 * **For everyone:**
 	* **Improved:**
 		* When the description additions aren't supported by an excerpt and are deemed too short, no automated description will be outputted.
+		* Added more wpForo compatibility checks.
 	* **Fixed:**
 		* Site logos that are too small will no longer be used for Open Graph/Twitter metadata.
 		* Paginated titles are now using the registered WordPress translation.
 		* Edge case: Private/Protected prefixes no longer show on terms when a Post ID collision happens.
 		* TODO This worked: https://wordpress.org/support/topic/dashboard-link-goes-to-wp-admin/#post-10708020. Figure out why.
 * **For developers:**
-	* **Filter notes:**
-		* Added `the_seo_framework_use_title_branding`
-		* Added `the_seo_framework_og_image_alt_custom`
-		* Added `the_seo_framework_og_image_fallback`
+	* **Added filters:**
+		* `the_seo_framework_use_title_branding`
+		* `the_seo_framework_og_image_alt_custom`
+		* `the_seo_framework_og_image_fallback`
+		* `the_seo_framework_post_type_disabled`
 
 = 3.1.1 =
 

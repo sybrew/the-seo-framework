@@ -750,15 +750,25 @@ class Detect extends Render {
 	 * Determines if the post type is disabled from SEO all optimization.
 	 *
 	 * @since 3.1.0
+	 * @since 3.1.2 Now is fiterable.
 	 *
 	 * @param string $post_type The post type, optional. Leave empty to autodetermine type.
 	 * @return bool True if disabled, false otherwise.
 	 */
 	public function is_post_type_disabled( $post_type = '' ) {
-		return isset(
-			$this->get_option( 'disabled_post_types' )[
-				$post_type ?: \get_post_type() ?: $this->get_admin_post_type()
-			]
+
+		$post_type = $post_type ?: \get_post_type() ?: $this->get_admin_post_type();
+
+		/**
+		 * @since 3.1.2
+		 * @param bool   $disabled
+		 * @param string $post_type
+		 */
+		return \apply_filters( 'the_seo_framework_post_type_disabled',
+			isset(
+				$this->get_option( 'disabled_post_types' )[ $post_type ]
+			),
+			$post_type
 		);
 	}
 
