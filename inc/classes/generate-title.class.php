@@ -916,6 +916,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.1.0
 	 * @since 3.1.2 Added strict taxonomical check.
+	 * @since 3.1.3 Fixed conditional logic.
 	 *
 	 * @param string     $title The title. Passed by reference.
 	 * @param array|null $args The query arguments. Leave null to autodetermine query.
@@ -923,12 +924,12 @@ class Generate_Title extends Generate_Description {
 	public function merge_title_branding( &$title, $args = null ) {
 
 		if ( null === $args ) {
+			$id  = $this->get_the_real_ID();
+			$tax = $this->get_current_taxonomy();
+		} else {
 			$this->fix_generation_args( $args );
 			$id  = $args['id'];
 			$tax = $args['taxonomy'];
-		} else {
-			$id  = $this->get_the_real_ID();
-			$tax = $this->get_current_taxonomy();
 		}
 
 		if ( ! $tax && $this->is_front_page_by_id( $id ) ) {
@@ -984,6 +985,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.1.0
 	 * @since 3.1.2 Added strict taxonomical checks for title protection.
+ 	 * @since 3.1.3 Fixed conditional logic.
 	 * @see $this->merge_title_prefixes()
 	 *
 	 * @param string     $title The title. Passed by reference.
@@ -994,12 +996,12 @@ class Generate_Title extends Generate_Description {
 	public function merge_title_protection( &$title, $args = null ) {
 
 		if ( null === $args ) {
+			$id  = $this->get_the_real_ID();
+			$tax = $this->get_current_taxonomy();
+		} else {
 			$this->fix_generation_args( $args );
 			$id  = $args['id'];
 			$tax = $args['taxonomy'];
-		} else {
-			$id  = $this->get_the_real_ID();
-			$tax = $this->get_current_taxonomy();
 		}
 
 		if ( $tax ) return;

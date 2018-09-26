@@ -837,7 +837,7 @@ class Detect extends Render {
 	 * @since 3.1.0
 	 *
 	 * @param string $taxonomy The taxonomy name.
-	 * @return bool True if ***ALL*** post types in taxonomy are supported.
+	 * @return bool True if at least one post type in taxonomy isn't disabled.
 	 */
 	public function taxonomy_supports_custom_seo( $taxonomy = '' ) {
 
