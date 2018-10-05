@@ -88,6 +88,7 @@ class Generate_Ldjson extends Generate_Image {
 		if ( $encode ) {
 			$options  = 0;
 			$options |= JSON_UNESCAPED_SLASHES;
+			$options |= $this->script_debug ? JSON_PRETTY_PRINT : 0;
 
 			return $data ? (string) json_encode( $data, $options ) : '';
 		}
@@ -384,7 +385,7 @@ class Generate_Ldjson extends Generate_Image {
 						'create',
 						[ 'id' => $parent_id ]
 					),
-					'name'  => $this->escape_title( $parent_name ),
+					'name' => $this->escape_title( $parent_name ),
 				],
 			];
 
@@ -766,12 +767,12 @@ class Generate_Ldjson extends Generate_Image {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $id The type of script. Must be escaped.
+	 * @param string $type The type of script. Must be escaped. Unused.
 	 * @param string $from Where to generate from.
 	 * @param array  $args The URL generation args.
 	 * @return string The JSON URL '@id'
 	 */
-	public function get_schema_url_id( $id, $from, $args = [] ) {
+	public function get_schema_url_id( $type, $from, $args = [] ) {
 
 		switch ( $from ) {
 			case 'currentpage' :

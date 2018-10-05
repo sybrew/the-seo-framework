@@ -227,6 +227,18 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 == Changelog ==
 
+= 3.1.4 =
+
+* **For everyone:**
+	* **Fixed:**
+		* Hierarchical page parent's breadcrumb titles are now correct.
+
+* **For developers:**
+	* **Improved:**
+		* When `SCRIPT_DEBUG` is defined and true, JSON-LD scripts will now be made readable.
+	* **Fixed:**
+		* Fetching a title from an external page when the current page has a custom title, now no longer returns the current page title.
+
 = 3.1.3 =
 
 This update fixes incorrect logic in the homepage title additions brought in v3.1.2. Your site may be affected and we urge you to update.

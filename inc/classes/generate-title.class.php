@@ -433,6 +433,7 @@ class Generate_Title extends Generate_Description {
 	 * Gets a custom title, based on input arguments query, without additions or prefixes.
 	 *
 	 * @since 3.1.0
+	 * @since 3.1.4 Now uses the 'id' to get custom singular title.
 	 * @internal
 	 * @see $this->get_raw_custom_field_title()
 	 *
@@ -450,7 +451,7 @@ class Generate_Title extends Generate_Description {
 			if ( $this->is_front_page_by_id( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_title' ) ?: '';
 			}
-			$title = $title ?: $this->get_custom_field( '_genesis_title' ) ?: '';
+			$title = $title ?: $this->get_custom_field( '_genesis_title', $args['id'] ) ?: '';
 		}
 
 		return $title;
