@@ -1719,7 +1719,7 @@ class Doing_It_Right extends Generate_Ldjson {
 
 		if ( ! $tit_len ) {
 			$notice = $i18n['length_empty'];
-			$class  = $unknown;
+			$class  = $classes['unknown'];
 		} elseif ( $tit_len < $guidelines['lower'] ) {
 			$notice = $i18n['length_far_too_short'];
 			$class  = $classes['bad'];
