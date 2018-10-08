@@ -114,7 +114,7 @@ class Sanitize extends Admin_Pages {
 	 * Maintains backward compatibility for the options of < 3.1.
 	 *
 	 * @since 3.1.0
-	 * @TODO  3.2.0 Remove or empty this.
+	 * @TODO  3.3.0 Remove or empty this.
 	 * @access private
 	 * @staticvar bool $running Prevents loops.
 	 */

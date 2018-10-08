@@ -327,7 +327,7 @@ class Site_Options extends Sanitize {
 	 *
 	 * @param string $setting The setting key.
 	 * @param bool $use_current Whether to use WordPress' version and update the cache
-	 *             or use locally the cached version.
+	 *             or use the locally cached version.
 	 * @return array Options.
 	 */
 	public function get_all_options( $setting = null, $use_current = false ) {
@@ -361,7 +361,8 @@ class Site_Options extends Sanitize {
 	 * second DB interaction.
 	 *
 	 * @since 2.0.0
-	 * @since 2.8.2 : No longer decodes entities on request.
+	 * @since 2.8.2 No longer decodes entities on request.
+	 * @since 3.1.0 Now uses the filterable call when caching is disbaled.
 	 * @staticvar array $cache
 	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 *
@@ -375,7 +376,7 @@ class Site_Options extends Sanitize {
 		if ( ! $setting ) return '';
 
 		if ( ! $use_cache ) {
-			$options = \get_option( $setting );
+			$options = $this->get_all_options( $setting, true );
 			return isset( $options[ $key ] ) ? \stripslashes_deep( $options[ $key ] ) : '';
 		}
 

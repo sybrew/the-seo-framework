@@ -229,15 +229,26 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 = 3.1.4 =
 
+This update brings improved compatibility with WooCommerce 3.5, adds a few filters, and fixes [various logic issues](https://theseoframework.com/?p= TODO).
+
 * **For everyone:**
 	* **Fixed:**
 		* Hierarchical page parent's breadcrumb titles are now correct.
-
+		* TODO WooCommerce products' Rich Data is now used again by Google.
+			* This was caused due to us enacting on an persistent anomaly in Google's testing tool.
+			* This change affects breadcrumbs: They no longer retrieve breadcrumb enhancements from The SEO Framework -- they handle this now automatically.
+		* TODO This plugin now clears your object cache after a succesful database upgrade. This will ensure the upgrade propagates correctly to your site settings.
 * **For developers:**
 	* **Improved:**
 		* When `SCRIPT_DEBUG` is defined and true, JSON-LD scripts will now be made readable.
+		* The sitewide SEO options filter is now also used when caching is disabled.
 	* **Fixed:**
 		* Fetching a title from an external page when the current page has a custom title, now no longer returns the current page title.
+		* A PHP notice from the SEO Bar when no title can be created no longer occurs. Thanks [Jaroslav](https://github.com/dero)!
+	* **Added filters:**
+		* `(bool) the_seo_framework_use_og_tags`.
+		* `(bool) the_seo_framework_use_facebook_tags`.
+		* `(bool) the_seo_framework_use_twitter_tags`.
 
 = 3.1.3 =
 

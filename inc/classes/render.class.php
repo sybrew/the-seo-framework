@@ -1229,13 +1229,23 @@ class Render extends Admin_Init {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 Removed cache.
+	 * @since 3.1.4 : 1. Added filter.
+	 *                2. Reintroduced cache because of filter.
 	 * @TODO add facebook validation.
 	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
 	public function use_og_tags() {
-		return (bool) $this->get_option( 'og_tags' );
+		static $cache;
+		/**
+		 * @since 3.1.4
+		 * @param bool $use
+		 */
+		return isset( $cache ) ? $cache : $cache = (bool) \apply_filters(
+			'the_seo_framework_use_og_tags',
+			(bool) $this->get_option( 'og_tags' )
+		);
 	}
 
 	/**
@@ -1243,27 +1253,43 @@ class Render extends Admin_Init {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 Removed cache.
+	 * @since 3.1.4 : 1. Added filter.
+	 *                2. Reintroduced cache because of filter.
 	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
 	public function use_facebook_tags() {
-		return (bool) $this->get_option( 'facebook_tags' );
+		static $cache;
+		/**
+		 * @since 3.1.4
+		 * @param bool $use
+		 */
+		return isset( $cache ) ? $cache : $cache = (bool) \apply_filters(
+			'the_seo_framework_use_facebook_tags',
+			(bool) $this->get_option( 'facebook_tags' )
+		);
 	}
 
 	/**
 	 * Determines whether we can use Twitter tags on the front-end.
 	 *
 	 * @since 2.6.0
-	 * @since 2.8.2 : Now also considers Twitter card type output.
+	 * @since 2.8.2 Now also considers Twitter card type output.
+	 * @since 3.1.4 Added filter.
 	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
 	public function use_twitter_tags() {
-		static $cache = null;
-		return isset( $cache )
-			? $cache
-			: $cache = $this->get_option( 'twitter_tags' ) && $this->get_current_twitter_card_type();
+		static $cache;
+		/**
+		 * @since 3.1.4
+		 * @param bool $use
+		 */
+		return isset( $cache ) ? $cache : $cache = (bool) \apply_filters(
+			'the_seo_framework_use_twitter_tags',
+			$this->get_option( 'twitter_tags' ) && $this->get_current_twitter_card_type()
+		);
 	}
 }

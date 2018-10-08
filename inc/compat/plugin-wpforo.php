@@ -45,7 +45,7 @@ function _wpforo_fix_page() {
 			\remove_action( 'wp_head', 'wpforo_add_meta_tags', 1 );
 		} else {
 			\add_action( 'the_seo_framework_after_init', function() {
-				\remove_action( 'wp_head', [ the_seo_Framework(), 'html_output' ], 1 );
+				\remove_action( 'wp_head', [ \the_seo_Framework(), 'html_output' ], 1 );
 			} );
 		}
 	}
