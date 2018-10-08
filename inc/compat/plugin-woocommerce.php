@@ -13,17 +13,15 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() a
  * Initializes WooCommerce compatibility.
  *
  * @since 3.1.0
- * @uses \WooCommerce wc()
+ * @uses \is_product()
  */
 function _init_wc_compat() {
-
-	$wc = \wc();
-
-	/**
-	 * Removes WooCommerce breadcrumbs.
-	 * We supply an option to integrate this, and when enabled, the breadcrumbs will conflict.
-	 * This effectively hands over full control to the site owner regarding breadcrumbs.
-	 */
-	if ( isset( $wc->structured_data ) )
-		\remove_action( 'woocommerce_breadcrumb', [ $wc->structured_data, 'generate_breadcrumblist_data' ], 10 );
+	\add_action( 'the_seo_framework_do_before_output', function() {
+		/**
+		 * Removes TSF breadcrumbs.
+		 */
+		if ( function_exists( '\\is_product' ) && \is_product() ) {
+			\add_filter( 'the_seo_framework_json_breadcrumb_output', '__return_false' );
+		}
+	} );
 }

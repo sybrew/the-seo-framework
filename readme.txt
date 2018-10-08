@@ -229,12 +229,12 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 = 3.1.4 =
 
-This update brings improved compatibility with WooCommerce 3.5, adds a few filters, and fixes [various logic issues](https://theseoframework.com/?p= TODO).
+This update brings improved compatibility with WooCommerce, adds a few filters, and fixes [various logic issues](https://theseoframework.com/?p= TODO).
 
 * **For everyone:**
 	* **Fixed:**
 		* Hierarchical page parent's breadcrumb titles are now correct.
-		* TODO WooCommerce products' Rich Data is now used again by Google.
+		* WooCommerce products' Rich Data is now used again by Google.
 			* This was caused due to us enacting on an persistent anomaly in Google's testing tool.
 			* This change affects breadcrumbs: They no longer retrieve breadcrumb enhancements from The SEO Framework -- they handle this now automatically.
 		* TODO This plugin now clears your object cache after a succesful database upgrade. This will ensure the upgrade propagates correctly to your site settings.
