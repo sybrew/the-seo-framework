@@ -107,16 +107,15 @@ class Cache extends Sitemaps {
 	 * Flushes front-page and global transients that can be affected by options.
 	 *
 	 * @since 2.8.0
-	 * @since 2.9.0 : Added object cache flush.
-	 * @TODO make 2.9 note work.
-	 * @since 3.1.0 : Added excluded post ids flush.
+	 * @since 3.1.0 Added excluded post ids flush.
+	 * @since 3.1.4 Now flushes object cache.
 	 */
 	public function delete_main_cache() {
 		$this->delete_cache( 'front' );
 		$this->delete_cache( 'sitemap' );
 		$this->delete_cache( 'robots' );
 		$this->delete_cache( 'excluded_post_ids' );
-		// $this->delete_cache( 'objectflush' );
+		$this->delete_cache( 'object' );
 	}
 
 	/**
@@ -269,6 +268,10 @@ class Cache extends Sitemaps {
 
 			case 'excluded_post_ids' :
 				$success = $this->delete_excluded_post_ids_transient();
+				break;
+
+			case 'object' :
+				$success = \wp_cache_flush();
 				break;
 
 			case 'detection' :
