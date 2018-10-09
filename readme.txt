@@ -5,7 +5,7 @@ Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
 Requires at least: 4.6.0
 Tested up to: 4.9.6
 Requires PHP: 5.4.0
-Stable tag: 3.1.3
+Stable tag: 3.1.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -229,28 +229,7 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 = 3.1.4 =
 
-This update brings improved compatibility with WooCommerce, adds a few filters, and fixes [various logic issues](https://theseoframework.com/?p= TODO).
-
-* **For everyone:**
-	* **Changed:**
-		* The plugin now flushes the object cache whenever the SEO settings are updated.
-	* **Fixed:**
-		* Hierarchical page parent's breadcrumb titles are now correct.
-		* WooCommerce products' Rich Data is now used again by Google.
-			* This was caused due to us enacting on an persistent anomaly in Google's testing tool.
-			* This change affects breadcrumbs: They no longer retrieve breadcrumb enhancements from The SEO Framework -- they handle this now automatically.
-		* This plugin now clears your object cache after a succesful database upgrade. This will ensure the upgrade propagates correctly to your site settings.
-* **For developers:**
-	* **Improved:**
-		* When `SCRIPT_DEBUG` is defined and true, JSON-LD scripts will now be made readable.
-		* The sitewide SEO options filter is now also used when caching is disabled.
-	* **Fixed:**
-		* Fetching a title from an external page when the current page has a custom title, now no longer returns the current page title.
-		* A PHP notice from the SEO Bar when no title can be created no longer occurs. Thanks [Jaroslav](https://github.com/dero)!
-	* **Added filters:**
-		* `(bool) the_seo_framework_use_og_tags`.
-		* `(bool) the_seo_framework_use_facebook_tags`.
-		* `(bool) the_seo_framework_use_twitter_tags`.
+This update brings improved compatibility with WooCommerce, adds a few filters, and fixes [various logic issues](https://theseoframework.com/?p=2709).
 
 = 3.1.3 =
 

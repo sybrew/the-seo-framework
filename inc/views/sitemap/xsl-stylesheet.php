@@ -363,6 +363,45 @@ function _print_xsl_footer( $tsf ) {
 		);
 }
 
+\add_filter( 'site_icon_meta_tags', __NAMESPACE__ . '\\_convert_site_icon_meta_tags', PHP_INT_MAX );
+/**
+ * Converts meta tags that aren't XHTML to XHTML, loosely.
+ * Doesn't fix attribute minimization. TODO?
+ *
+ * @since 3.1.4
+ *
+ * @param array $meta_tags Site Icon meta elements.
+ * @return array The converted meta tags.
+ */
+function _convert_site_icon_meta_tags( $tags ) {
+
+	foreach ( $tags as &$tag ) {
+		$tag = \force_balance_tags( $tag );
+		$tag = \wp_kses( $tag, [
+			'link' => [
+				'charset'  => [],
+				'rel'      => [],
+				'sizes'    => [],
+				'href'     => [],
+				'hreflang' => [],
+				'media'    => [],
+				'rev'      => [],
+				'target'   => [],
+				'type'     => [],
+			],
+			'meta' => [
+				'content'    => [],
+				'property'   => [],
+				'http-equiv' => [],
+				'name'       => [],
+				'scheme'     => [],
+			],
+		], [] );
+	}
+
+	return $tags;
+}
+
 // echo here, otherwise it closes PHP.
 echo '<?xml version="1.0" encoding="UTF-8"?>';
 
