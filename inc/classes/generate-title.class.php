@@ -589,7 +589,7 @@ class Generate_Title extends Generate_Description {
 
 		$title = '';
 
-		if ( $args['taxonomy'] ) {
+		if ( isset( $args['taxonomy'] ) && $args['taxonomy'] ) {
 			$title = $this->get_generated_archive_title( \get_term( $args['id'], $args['taxonomy'] ) );
 		} else {
 			if ( $this->is_front_page_by_id( $args['id'] ) ) {
