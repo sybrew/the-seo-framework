@@ -415,17 +415,17 @@ class Generate_Url extends Generate_Title {
 		//* Determine whether the input matches query.
 		$_paginate = true;
 		switch ( $_get ) {
-			case 'day' :
+			case 'day':
 				$_day = \get_query_var( 'day' );
 				$_paginate = $_paginate && $_day == $day; // loose comparison OK.
 				// No break. Get month too.
 
-			case 'month' :
+			case 'month':
 				$_month = \get_query_var( 'monthnum' );
 				$_paginate = $_paginate && $_month == $month; // loose comparison OK.
 				// No break. Get year too.
 
-			case 'year' :
+			case 'year':
 				$_year = \get_query_var( 'year' );
 				$_paginate = $_paginate && $_year == $year; // loose comparison OK.
 				break;
@@ -488,16 +488,16 @@ class Generate_Url extends Generate_Title {
 			return $scheme;
 
 		switch ( $this->get_option( 'canonical_scheme' ) ) :
-			case 'https' :
+			case 'https':
 				$scheme = 'https';
 				break;
 
-			case 'http' :
+			case 'http':
 				$scheme = 'http';
 				break;
 
 			default:
-			case 'automatic' :
+			case 'automatic':
 				$scheme = $this->is_ssl() ? 'https' : 'http';
 				break;
 		endswitch;

@@ -10,7 +10,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 $instance = $this->get_view_instance( 'the_seo_framework_robots_metabox', $instance );
 
 switch ( $instance ) :
-	case 'the_seo_framework_robots_metabox_main' :
+	case 'the_seo_framework_robots_metabox_main':
 		//* Robots types
 		$types = [
 			'category'   => __( 'Category', 'autodescription' ),
@@ -95,7 +95,7 @@ switch ( $instance ) :
 		$this->nav_tab_wrapper( 'robots', $tabs, '2.2.4' );
 		break;
 
-	case 'the_seo_framework_robots_metabox_general' :
+	case 'the_seo_framework_robots_metabox_general':
 		?>
 		<h4><?php esc_html_e( 'Paginated Archive Settings', 'autodescription' ); ?></h4>
 		<?php
@@ -112,7 +112,7 @@ switch ( $instance ) :
 		);
 		break;
 
-	case 'the_seo_framework_robots_metabox_no' :
+	case 'the_seo_framework_robots_metabox_no':
 		$ro_value = $robots['value'];
 		$ro_name  = esc_html( $robots['name'] );
 		$ro_i18n  = $robots['desc'];

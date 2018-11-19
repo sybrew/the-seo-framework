@@ -664,5 +664,4 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'the_seo_framework()->generate_description_from_id()', '3.1.0', 'the_seo_framework()->get_generated_description()' );
 		return $tsf->get_generated_description( $args, $escape );
 	}
-
 }

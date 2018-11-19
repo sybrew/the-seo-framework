@@ -767,7 +767,7 @@ class Core {
 
 		foreach ( $md_types as $type ) :
 			switch ( $type ) :
-				case 'strong' :
+				case 'strong':
 					$count = preg_match_all( '/(?:\*{2})([^\*{\2}]+)(?:\*{2})/', $text, $matches, PREG_PATTERN_ORDER );
 
 					for ( $i = 0; $i < $count; $i++ ) {
@@ -779,7 +779,7 @@ class Core {
 					}
 					break;
 
-				case 'em' :
+				case 'em':
 					$count = preg_match_all( '/(?:\*{1})([^\*{\1}]+)(?:\*{1})/', $text, $matches, PREG_PATTERN_ORDER );
 
 					for ( $i = 0; $i < $count; $i++ ) {
@@ -791,7 +791,7 @@ class Core {
 					}
 					break;
 
-				case 'code' :
+				case 'code':
 					$count = preg_match_all( '/(?:`{1})([^`{\1}]+)(?:`{1})/', $text, $matches, PREG_PATTERN_ORDER );
 
 					for ( $i = 0; $i < $count; $i++ ) {
@@ -803,12 +803,12 @@ class Core {
 					}
 					break;
 
-				case 'h6' :
-				case 'h5' :
-				case 'h4' :
-				case 'h3' :
-				case 'h2' :
-				case 'h1' :
+				case 'h6':
+				case 'h5':
+				case 'h4':
+				case 'h3':
+				case 'h2':
+				case 'h1':
 					$amount = filter_var( $type, FILTER_SANITIZE_NUMBER_INT );
 					//* Considers word non-boundary. @TODO consider removing this?
 					$expression = sprintf( '/(?:\={%1$s})\B([^\={\%1$s}]+)\B(?:\={%1$s})/', $amount );
@@ -824,8 +824,8 @@ class Core {
 					}
 					break;
 
-				case 'a' :
-					$count = preg_match_all( '/(?:(?:\[{1})([^\]{1}]+)(?:\]{1})(?:\({1})([^\)\(]+)(?:\){1}))/', $text, $matches, PREG_PATTERN_ORDER );
+				case 'a':
+					$count = preg_match_all( '/(?:(?:\[{1})([^\]]+)(?:\]{1})(?:\({1})([^\)\(]+)(?:\){1}))/', $text, $matches, PREG_PATTERN_ORDER );
 
 					$_string = $args['a_internal'] ? '<a href="%s">%s</a>' : '<a href="%s" target="_blank" rel="nofollow noreferrer noopener">%s</a>';
 

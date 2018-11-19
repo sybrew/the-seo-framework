@@ -985,8 +985,8 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_alter_query_type( $new_value ) {
 		switch ( $new_value ) {
-			case 'in_query' :
-			case 'post_query' :
+			case 'in_query':
+			case 'post_query':
 				return (string) $new_value;
 				break;
 

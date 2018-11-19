@@ -685,8 +685,10 @@ class Generate_Description extends Generate {
 		if ( is_null( $args ) ) {
 			$term = $this->is_archive() ? \get_queried_object() : null;
 		} elseif ( ! empty( $args['taxonomy'] ) ) {
+			// DEBUG ME var_dump() https://github.com/sybrew/the-seo-framework/issues/381
 			$term = \get_term( $args['id'], $args['taxonomy'] );
 		}
+		// DEBUG ME var_dump() https://github.com/sybrew/the-seo-framework/issues/381
 
 		$additions = [
 			'title'    => '',
@@ -696,6 +698,7 @@ class Generate_Description extends Generate {
 
 		if ( $forced || $this->add_description_additions( $args['id'], $term ) ) {
 			if ( ! empty( $args['taxonomy'] ) ) {
+				// DEBUG ME var_dump() https://github.com/sybrew/the-seo-framework/issues/381
 				$title = $this->generate_title_from_args( $args );
 			} else {
 				if ( $this->is_blog_page( $args['id'] ) ) {
@@ -708,6 +711,7 @@ class Generate_Description extends Generate {
 					if ( is_null( $args ) ) {
 						$title = $this->generate_title_from_query();
 					} else {
+						// DEBUG ME var_dump() https://github.com/sybrew/the-seo-framework/issues/381
 						$title = $this->generate_title_from_args( $args );
 					}
 				}

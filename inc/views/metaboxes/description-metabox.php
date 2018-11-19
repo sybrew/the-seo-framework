@@ -10,7 +10,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 $instance = $this->get_view_instance( 'the_seo_framework_description_metabox', $instance );
 
 switch ( $instance ) :
-	case 'the_seo_framework_description_metabox_main' :
+	case 'the_seo_framework_description_metabox_main':
 		?>
 		<h4><?php printf( esc_html__( 'Description Settings', 'autodescription' ) ); ?></h4>
 		<?php
@@ -54,7 +54,7 @@ switch ( $instance ) :
 		$this->nav_tab_wrapper( 'description', $tabs, '2.6.0' );
 		break;
 
-	case 'the_seo_framework_description_metabox_general' :
+	case 'the_seo_framework_description_metabox_general':
 		?>
 		<h4><?php esc_html_e( 'Automated Description Settings', 'autodescription' ); ?></h4>
 		<?php
@@ -77,7 +77,7 @@ switch ( $instance ) :
 		);
 		break;
 
-	case 'the_seo_framework_description_metabox_additions' :
+	case 'the_seo_framework_description_metabox_additions':
 		$language = $this->google_language();
 
 		$blogname = $this->escape_description( $this->get_blogname() );

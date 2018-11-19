@@ -10,7 +10,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 $instance = $this->get_view_instance( 'the_seo_framework_social_metabox', $instance );
 
 switch ( $instance ) :
-	case 'the_seo_framework_social_metabox_main' :
+	case 'the_seo_framework_social_metabox_main':
 		/**
 		 * Parse tabs content.
 		 *
@@ -59,7 +59,7 @@ switch ( $instance ) :
 		$this->nav_tab_wrapper( 'social', $tabs, '2.2.2' );
 		break;
 
-	case 'the_seo_framework_social_metabox_general' :
+	case 'the_seo_framework_social_metabox_general':
 		?>
 		<h4><?php esc_html_e( 'Social Meta Tags Settings', 'autodescription' ); ?></h4>
 		<?php
@@ -89,7 +89,7 @@ switch ( $instance ) :
 				'facebook_tags',
 				__( 'Output Facebook meta tags?', 'autodescription' ),
 				/* translators: %s = Facebook */
-				sprintf( __( 'Output various tags targetted at %s.', 'autodescription' ), 'Facebook' ),
+				sprintf( __( 'Output various tags targeted at %s.', 'autodescription' ), 'Facebook' ),
 				true
 			),
 			true
@@ -101,7 +101,7 @@ switch ( $instance ) :
 				'twitter_tags',
 				__( 'Output Twitter meta tags?', 'autodescription' ),
 				/* translators: %s = Facebook */
-				sprintf( __( 'Output various tags targetted at %s.', 'autodescription' ), 'Twitter' ),
+				sprintf( __( 'Output various tags targeted at %s.', 'autodescription' ), 'Twitter' ),
 				true
 			),
 			true
@@ -158,7 +158,7 @@ switch ( $instance ) :
 		);
 		break;
 
-	case 'the_seo_framework_social_metabox_facebook' :
+	case 'the_seo_framework_social_metabox_facebook':
 		$fb_author = $this->get_option( 'facebook_author' );
 		$fb_author_placeholder = _x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' );
 
@@ -224,7 +224,7 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	case 'the_seo_framework_social_metabox_twitter' :
+	case 'the_seo_framework_social_metabox_twitter':
 		$tw_site = $this->get_option( 'twitter_site' );
 		$tw_site_placeholder = _x( '@your-site-username', 'Twitter @username', 'autodescription' );
 
@@ -309,7 +309,7 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	case 'the_seo_framework_social_metabox_postdates' :
+	case 'the_seo_framework_social_metabox_postdates':
 		$posts_i18n = esc_html__( 'Posts', 'autodescription' );
 		$home_i18n = esc_html__( 'Home Page', 'autodescription' );
 

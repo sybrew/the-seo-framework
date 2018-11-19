@@ -24,9 +24,6 @@
 
 		<!-- TEMP - To condense code, we utilize this. When we move to PHP7, we'll reimplement this. -->
 		<exclude name="Squiz.PHP.DisallowMultipleAssignments"/>
-
-		<!-- TEMP - I think this was a WordPress standard that shifted...? It takes too much time to fix. Maybe later. -->
-		<exclude name="PSR2.ControlStructures.SwitchDeclaration.SpaceBeforeColonCASE"/>
 	</rule>
 
 	<!-- Set nonce checks -->

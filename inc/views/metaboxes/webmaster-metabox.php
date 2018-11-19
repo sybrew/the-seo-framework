@@ -10,7 +10,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 $instance = $this->get_view_instance( 'the_seo_framework_webmaster_metabox', $instance );
 
 switch ( $instance ) :
-	case 'the_seo_framework_webmaster_metabox_main' :
+	case 'the_seo_framework_webmaster_metabox_main':
 		$site_url = $this->get_homepage_permalink();
 		$language = $this->google_language();
 

@@ -227,70 +227,31 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 == Changelog ==
 
-= 3.1.4 =
+= 3.2.0 - TODO =
 
-This update brings improved compatibility with WooCommerce, adds a few filters, and fixes [various logic issues](https://theseoframework.com/?p=2709).
-
-= 3.1.3 =
-
-This update fixes incorrect logic in the homepage title additions brought in v3.1.2. Your site may be affected and we urge you to update.
-
-Follow our guide on [how to resolve this without affecting ranking](https://theseoframework.com/?p=2654) directly after updating. Our apologies for the inconvenience!
-
-= 3.1.2 =
-
-This minor update adds more robust term ID collision checks, adds a few missing API features, and introduces [other improvements](https://theseoframework.com/?p=2641).
-
-= 3.1.1 =
-
-This tiny update fixes [two issues with v3.1](https://theseoframework.com/?p=2598), our apologies for the inconvenience.
-
-= 3.1.0 - Pure =
-
-*"The difference between something good and something great is attention to detail." - Charles R. Swindoll[†](http://dannybeckettjr.com/2009/10/220079492/)*
+*TODO quote?*
 
 **Release date**
 
-* September 15th, 2018
+* TODO, 2018
 
-**Foreword**
+**Detailed log**
 
-We've written a [foreword on v3.1](https://theseoframework.com/?p=2490), it tells the story behind of what we've done. You should read it, so you'll know what to expect from this update.
+TODO link
 
-**Feature highlights:**
+**For everyone:**
 
-* We completely redesigned the meta-titles generation, they support 114+ languages out of the box, and we’ve added new title adjustment features.
-* We've vastly improved the meta-description generation code, it now supports all languages, it leaves out junk, and it’s faster than ever before.
-* The SEO Bar is now more intelligent. It’s now aware of its WordPress, linguistic, and graphical environment, and it tells you more details.
-* The pixel counter is now the most accurate guideline in its field. Hover over it, and you’ll find it gives you more information.
-* Custom Post Type support is improved, and you can now easily manage various settings for them individually.
-* The plugin's interface is now fully accessible with added keyboard navigation.
-* ...and more than 700 other noteworthy changes, found in our [detailed log](https://theseoframework.com/?p=2562#detailed).
+* **Fixed:**
+	* A typo in the social settings metabox.
+	* TODO: See why WooCommerce titles aren't complying to the 'title_strip_tags' filter method.
 
-**Upgrade notes:**
+**For developers:**
 
-* PHP 5.3 support has been dropped. Here's why:
-	* PHP 5.3 hasn't received updates for [over 4 years](http://php.net/eol.php) and using it yields a major security risk.
-	* Using PHP 5.4 lowers our time spent on maintenance, and it increases our productivity; so, we can focus on faster, better, and more useful solutions.
-	* Learn more about [Upgrading PHP](https://wordpress.org/support/upgrade-php/).
-* WordPress 4.4 and 4.5 support has been dropped. Here's why:
-	* Although WordPress still brings security updates for versions as low as 3.7, [most users](https://wordpress.org/about/stats/) have upgraded to a newer version.
-	* WordPress brings a slightly different yet vastly better developer environment with each major release. Supporting these will not only lower our maintenance and support time, but it also brings you a better experience.
-	* Learn more about [Upgrading WordPress](https://codex.wordpress.org/Upgrading_WordPress).
+* **Other:**
+	* We now check for the `PSR2.ControlStructures.SwitchDeclaration.SpaceBeforeColonCASE` coding standard.
+* **Fixed:**
+	* convert_markdown links now support the character `1` in the content.
 
-*If, for whatever reason, you still wish to use PHP 5.3 and/or WordPress 4.4/4.5, [The SEO Framework 3.0.6](https://downloads.wordpress.org/plugin/autodescription.3.0.6.zip) still supports them.*
-
-**New and simplified API documentation**
-
-After two years, we've finally updated our [API docs](https://theseoframework.com/docs/api/), go check it out.
-
-**Like what you see?**
-
-Consider giving us [an awesome review](https://wordpress.org/support/plugin/autodescription/reviews/#new-topic-0)!
-
-**Detailed log:**
-
-Fred Brooks' law: "What [one developer](https://theseoframework.com/?p=2562#detailed) can do in one month, two developers can do in two months."
 
 = Full changelog =
 

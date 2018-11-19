@@ -10,7 +10,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 $instance = $this->get_view_instance( 'the_seo_framework_feed_metabox', $instance );
 
 switch ( $instance ) :
-	case 'the_seo_framework_feed_metabox_main' :
+	case 'the_seo_framework_feed_metabox_main':
 		?>
 		<h4><?php esc_html_e( 'Content Feed Settings', 'autodescription' ); ?></h4>
 		<?php

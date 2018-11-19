@@ -207,12 +207,12 @@ final class Scripts {
 			if ( static::get_status_of( $s['id'], $s['type'] ) & static::REGISTERED ) continue;
 
 			switch ( $s['type'] ) {
-				case 'css' :
+				case 'css':
 					\wp_register_style( $s['id'], $this->generate_file_url( $s, 'css' ), $s['deps'], $s['ver'], 'all' );
 					isset( $s['inline'] )
 						and \wp_add_inline_style( $s['id'], $this->get_inline_css( $s['inline'] ) );
 					break;
-				case 'js' :
+				case 'js':
 					\wp_register_script( $s['id'], $this->generate_file_url( $s, 'js' ), $s['deps'], $s['ver'], true );
 					isset( $s['l10n'] )
 						and \wp_localize_script( $s['id'], $s['l10n']['name'], $s['l10n']['data'] );
@@ -228,10 +228,10 @@ final class Scripts {
 
 			if ( $s['autoload'] ) {
 				switch ( $s['type'] ) {
-					case 'css' :
+					case 'css':
 						\wp_enqueue_style( $s['id'] );
 						break;
-					case 'js' :
+					case 'js':
 						\wp_enqueue_script( $s['id'] );
 						break;
 				}

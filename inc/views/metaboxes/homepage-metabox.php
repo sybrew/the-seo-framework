@@ -10,7 +10,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 $instance = $this->get_view_instance( 'the_seo_framework_homepage_metabox', $instance );
 
 switch ( $instance ) :
-	case 'the_seo_framework_homepage_metabox_main' :
+	case 'the_seo_framework_homepage_metabox_main':
 		$this->description( __( 'These settings will take precedence over the settings set within the Home Page edit screen, if any.', 'autodescription' ) );
 		?>
 		<hr>
@@ -64,7 +64,7 @@ switch ( $instance ) :
 		$this->nav_tab_wrapper( 'homepage', $tabs, '2.6.0' );
 		break;
 
-	case 'the_seo_framework_homepage_metabox_general' :
+	case 'the_seo_framework_homepage_metabox_general':
 		$language = $this->google_language();
 		$home_id  = $this->get_the_front_page_ID();
 
@@ -214,7 +214,7 @@ switch ( $instance ) :
 		}
 		break;
 
-	case 'the_seo_framework_homepage_metabox_additions' :
+	case 'the_seo_framework_homepage_metabox_additions':
 		//* Fetches escaped title parts.
 		$home_id  = $this->get_the_front_page_ID();
 		$_example_title = $this->escape_title(
@@ -277,7 +277,7 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	case 'the_seo_framework_homepage_metabox_robots' :
+	case 'the_seo_framework_homepage_metabox_robots':
 		$language = $this->google_language();
 
 		//* Get home page ID. If blog on front, it's 0.
@@ -385,7 +385,7 @@ switch ( $instance ) :
 		);
 		break;
 
-	case 'the_seo_framework_homepage_metabox_social' :
+	case 'the_seo_framework_homepage_metabox_social':
 		$language = $this->google_language();
 
 		//* Get home page ID. If blog on front, it's 0.

@@ -10,7 +10,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 $instance = $this->get_view_instance( 'the_seo_framework_schema_metabox', $instance );
 
 switch ( $instance ) :
-	case 'the_seo_framework_schema_metabox_main' :
+	case 'the_seo_framework_schema_metabox_main':
 		?>
 		<h4><?php esc_html_e( 'Schema.org Output Settings', 'autodescription' ); ?></h4>
 		<?php
@@ -65,11 +65,11 @@ switch ( $instance ) :
 		$this->nav_tab_wrapper( 'schema', $tabs, '2.8.0' );
 		break;
 
-	case 'the_seo_framework_schema_metabox_general' :
+	case 'the_seo_framework_schema_metabox_general':
 		//* Emptied @ 3.0.0
 		break;
 
-	case 'the_seo_framework_schema_metabox_structure' :
+	case 'the_seo_framework_schema_metabox_structure':
 		?>
 		<h4><?php esc_html_e( 'Site Structure Options', 'autodescription' ); ?></h4>
 		<?php
@@ -112,7 +112,7 @@ switch ( $instance ) :
 		), true );
 		break;
 
-	case 'the_seo_framework_schema_metabox_presence' :
+	case 'the_seo_framework_schema_metabox_presence':
 		?>
 		<h4><?php esc_html_e( 'Authorized Presence Options', 'autodescription' ); ?></h4>
 		<?php

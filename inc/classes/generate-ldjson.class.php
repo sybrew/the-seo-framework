@@ -775,15 +775,15 @@ class Generate_Ldjson extends Generate_Image {
 	public function get_schema_url_id( $type, $from, $args = [] ) {
 
 		switch ( $from ) {
-			case 'currentpage' :
+			case 'currentpage':
 				$url = $this->get_current_permalink();
 				break;
 
-			case 'homepage' :
+			case 'homepage':
 				$url = $this->get_homepage_permalink();
 				break;
 
-			case 'create' :
+			case 'create':
 				$url = $this->create_canonical_url( $args );
 				break;
 

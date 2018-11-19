@@ -2051,7 +2051,7 @@ msgstr ""
 
 #: inc/views/metaboxes/social-metabox.php:92
 #: inc/views/metaboxes/social-metabox.php:104
-msgid "Output various tags targetted at %s."
+msgid "Output various tags targeted at %s."
 msgstr ""
 
 #: inc/views/metaboxes/social-metabox.php:102

@@ -145,20 +145,20 @@ class Post_Data extends Detect {
 
 		foreach ( $data as $key => &$value ) :
 			switch ( $key ) :
-				case '_genesis_title' :
-				case '_open_graph_title' :
-				case '_twitter_title' :
+				case '_genesis_title':
+				case '_open_graph_title':
+				case '_twitter_title':
 					$value = $this->s_title_raw( $value );
 					continue 2;
 
-				case '_genesis_description' :
-				case '_open_graph_description' :
-				case '_twitter_description' :
+				case '_genesis_description':
+				case '_open_graph_description':
+				case '_twitter_description':
 					$value = $this->s_description_raw( $value );
 					continue 2;
 
-				case '_genesis_canonical_uri' :
-				case '_social_image_url' :
+				case '_genesis_canonical_uri':
+				case '_social_image_url':
 					/**
 					 * Remove unwanted query parameters. They're allowed by Google, but very much rather not.
 					 * Also, they will only cause bugs.
@@ -167,22 +167,22 @@ class Post_Data extends Detect {
 					$value = $this->s_url_query( $value );
 					continue 2;
 
-				case '_social_image_id' :
+				case '_social_image_id':
 					//* Bound to _social_image_url.
 					$value = $data['_social_image_url'] ? $this->s_absint( $value ) : 0;
 					continue 2;
 
-				case 'redirect' :
+				case 'redirect':
 					//* Let's keep this as the output really is.
 					$value = $this->s_redirect_url( $value );
 					continue 2;
 
-				case '_tsf_title_no_blogname' :
-				case '_genesis_noindex' :
-				case '_genesis_nofollow' :
-				case '_genesis_noarchive' :
-				case 'exclude_local_search' :
-				case 'exclude_from_archive' :
+				case '_tsf_title_no_blogname':
+				case '_genesis_noindex':
+				case '_genesis_nofollow':
+				case '_genesis_noarchive':
+				case 'exclude_local_search':
+				case 'exclude_from_archive':
 					$value = $this->s_one_zero( $value );
 					continue 2;
 
