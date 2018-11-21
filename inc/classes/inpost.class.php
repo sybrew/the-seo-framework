@@ -36,10 +36,11 @@ class Inpost extends Profile {
 	 * Defines inpost nonce name.
 	 *
 	 * @since 2.7.0
+	 * @since 3.2.0 Added '_nonce' suffix.
 	 *
 	 * @var string The nonce name.
 	 */
-	public $inpost_nonce_name = 'tsf_inpost_seo_settings';
+	public $inpost_nonce_name = 'tsf_inpost_seo_settings_nonce';
 
 	/**
 	 * Defines inpost nonce field.
@@ -331,6 +332,8 @@ class Inpost extends Profile {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_box' );
+		$this->is_gutenberg_page()
+			and $this->get_view( 'inpost/seo-settings-singular-gutenberg-data', get_defined_vars() );
 		$this->get_view( 'inpost/seo-settings-singular', get_defined_vars() );
 		/**
 		 * @since 2.9.0

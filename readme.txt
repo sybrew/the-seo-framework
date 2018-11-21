@@ -235,18 +235,32 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 * TODO, 2018
 
+**Release highlights**
+
+* A new editor (codename Gutenberg) is being shipped with WordPress 5.0. This release will make the plugin fully compatible with it.
+
 **Detailed log**
 
 TODO link
 
 **For everyone:**
 
+* **Added:**
+	* **New editor (codename Gutenberg):**
+		* Added
 * **Fixed:**
 	* A typo in the social settings metabox.
 	* TODO: See why WooCommerce titles aren't complying to the 'title_strip_tags' filter method.
 
 **For developers:**
 
+* **Added:**
+	* View: `inpost/seo-settings-singular-gutenberg-data.php`
+		* It's an abstract and intermediate placeholder to hold cloned SEO input data obtained via the Gutenberg editor.
+		* We're still planning to completely move The SEO Framework's interface into Gutenberg. From then, these fields will be removed completely. So, don't rely on this.
+* **Changed:**
+	* Method `is_gutenberg_page()` now detects the new WordPress 5.0 block editor.
+	* Property `inpost_nonce_name` now has the `_nonce` suffix, to prevent future collisions.
 * **Other:**
 	* We now check for the `PSR2.ControlStructures.SwitchDeclaration.SpaceBeforeColonCASE` coding standard.
 * **Fixed:**

@@ -254,27 +254,35 @@ class Admin_Init extends Init {
 
 		if ( _has_run( __METHOD__ ) ) return;
 
-		$id  = $this->get_the_real_admin_ID();
-		$rtl = \is_rtl();
+		$id = $this->get_the_real_admin_ID();
 
 		$post_type   = \get_post_type( $id );
 		$_taxonomies = $post_type ? $this->get_hierarchical_taxonomies_as( 'objects', $post_type ) : [];
-
 		$taxonomies = [];
 
+		$gutenberg = $this->is_gutenberg_page();
+
 		foreach ( $_taxonomies as $_t ) {
-			$_i18n_name = strtolower( $_t->labels->singular_name );
+			$_i18n_name = $_t->labels->singular_name;
 			$taxonomies[ $_t->name ] = [
 				'name'    => $_t->name,
-				'i18n'    => [
-					/* translators: %s = term name */
-					'makePrimary' => sprintf( \esc_html__( 'Make primary %s', 'autodescription' ), $_i18n_name ),
-					/* translators: %s = term name */
-					'primary'     => sprintf( \esc_html__( 'Primary %s', 'autodescription' ), $_i18n_name ),
-					'name'        => $_i18n_name,
-				],
 				'primary' => $this->get_primary_term_id( $id, $_t->name ) ?: 0,
-			];
+			] + (
+				$gutenberg ? [
+					'i18n' => [
+						/* translators: %s = term name */
+						'selectPrimary' => sprintf( \esc_html__( 'Select Primary %s', 'autodescription' ), $_i18n_name ),
+					],
+				] : [
+					'i18n' => [
+						/* translators: %s = term name */
+						'makePrimary' => sprintf( \esc_html__( 'Make primary %s', 'autodescription' ), strtolower( $_i18n_name ) ),
+						/* translators: %s = term name */
+						'primary'     => sprintf( \esc_html__( 'Primary %s', 'autodescription' ), strtolower( $_i18n_name ) ),
+						'name'        => strtolower( $_i18n_name ),
+					],
+				]
+			);
 		}
 
 		$inline_css = [];
@@ -290,15 +298,27 @@ class Admin_Init extends Init {
 			];
 		}
 
+		if ( $gutenberg ) {
+			$vars = [
+				'id'   => 'tsf-pt-gb',
+				'name' => 'pt-gb',
+			];
+		} else {
+			$vars = [
+				'id'   => 'tsf-pt',
+				'name' => 'pt',
+			];
+		}
+
 		//! PHP 5.4 compat: put in var.
 		$scripts = $this->Scripts();
 		$scripts::register( [
 			[
-				'id'       => 'tsf-pt',
+				'id'       => $vars['id'],
 				'type'     => 'js',
 				'deps'     => [ 'jquery', 'tsf', 'tsf-tt' ],
 				'autoload' => true,
-				'name'     => 'pt',
+				'name'     => $vars['name'],
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
 				'ver'      => THE_SEO_FRAMEWORK_VERSION,
 				'l10n'     => [
