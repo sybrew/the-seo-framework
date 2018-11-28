@@ -264,7 +264,7 @@ switch ( $instance ) :
 		<hr>
 
 		<h4><?php esc_html_e( 'Archive Title Prefixes', 'autodescription' ); ?></h4>
-		<div id="title-prefixes-toggle">
+		<div id="tsf-title-prefixes-toggle">
 			<?php
 			$info = $this->make_info(
 				__( "The prefix helps visitors and search engines determine what kind of page they're visiting.", 'autodescription' ),

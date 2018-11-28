@@ -1,4 +1,11 @@
 /**
+ * Gutenberg only:
+ */
+.tsf-pt-gb-selector {
+	margin-top: 8px;
+}
+
+/**
  * Primary category selectors.
  */
 .tsf-is-primary-term {

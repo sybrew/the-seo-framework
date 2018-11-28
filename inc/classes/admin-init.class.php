@@ -182,6 +182,10 @@ class Admin_Init extends Init {
 		if ( $this->is_post_edit() ) {
 			$this->enqueue_media_scripts();
 			$this->enqueue_primaryterm_scripts();
+
+			if ( $this->is_gutenberg_page() ) {
+				$this->enqueue_gutenberg_compat_scripts();
+			}
 		} elseif ( $this->is_seo_settings_page() ) {
 			$this->enqueue_media_scripts();
 			\wp_enqueue_style( 'wp-color-picker' );
@@ -192,8 +196,35 @@ class Admin_Init extends Init {
 	/**
 	 * Enqueues Media Upload and Cropping scripts.
 	 *
-	 * @since 3.1.0
+	 * @since 3.2.0
 	 * @staticvar bool|null $registered Prevents duplicate calls.
+	 */
+	public function enqueue_gutenberg_compat_scripts() {
+
+		if ( _has_run( __METHOD__ ) ) return;
+
+		$scripts = $this->Scripts();
+		$scripts::register( [
+			[
+				'id'       => 'tsf-gbc',
+				'type'     => 'js',
+				'deps'     => [ 'jquery', 'tsf' ],
+				'autoload' => true,
+				'name'     => 'tsf-gbc',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+				'l10n'     => [
+					'name' => 'tsfGBCL10n',
+					'data' => [],
+				],
+			],
+		] );
+	}
+
+	/**
+	 * Enqueues Media Upload and Cropping scripts.
+	 *
+	 * @since 3.1.0
 	 */
 	public function enqueue_media_scripts() {
 
@@ -373,7 +404,6 @@ class Admin_Init extends Init {
 		$title_location = $this->get_option( 'title_location' );
 
 		$title_separator = esc_html( $this->get_separator( 'title' ) );
-		$description_separator = esc_html( $this->get_separator( 'description' ) );
 
 		$ishome = false;
 		$is_settings_page = $this->is_seo_settings_page();
@@ -519,7 +549,6 @@ class Admin_Init extends Init {
 				'termName'             => $term_name,
 				'untitledTitle'        => $this->get_static_untitled_title(),
 				'titleSeparator'       => $title_separator,
-				'descriptionSeparator' => $description_separator,
 				'titleLocation'        => $title_location,
 				'inputGuidelines'      => $input_guidelines,
 				'socialPlaceholders'   => $social_settings_placeholders,

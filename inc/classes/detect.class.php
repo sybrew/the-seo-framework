@@ -1035,13 +1035,14 @@ class Detect extends Render {
 	 * Detects if we're on a Gutenberg page.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.0 Now detects the WP 5.0 block editor.
+	 * @since 3.2.0 : 1. Now detects the WP 5.0 block editor.
+	 *                2. Method is now public.
 	 *
 	 * @return bool
 	 */
-	protected function is_gutenberg_page() {
+	public function is_gutenberg_page() {
 		if ( function_exists( '\\use_block_editor_for_post' ) )
-			return \use_block_editor_for_post( $GLOBALS['post'] );
+			return ! empty( $GLOBALS['post'] ) && \use_block_editor_for_post( $GLOBALS['post'] );
 
 		if ( function_exists( '\\is_gutenberg_page' ) )
 			return \is_gutenberg_page();

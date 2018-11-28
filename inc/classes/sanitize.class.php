@@ -162,14 +162,6 @@ class Sanitize extends Admin_Pages {
 		);
 
 		$this->add_option_filter(
-			's_description_separator',
-			$this->settings_field,
-			[
-				'description_separator',
-			]
-		);
-
-		$this->add_option_filter(
 			's_description',
 			$this->settings_field,
 			[]
@@ -259,8 +251,6 @@ class Sanitize extends Admin_Pages {
 				'title_strip_tags',
 
 				'auto_description',
-				'description_additions',
-				'description_blogname',
 
 				'category_noindex',
 				'tag_noindex',
@@ -620,7 +610,6 @@ class Sanitize extends Admin_Pages {
 			's_left_right'            => [ $this, 's_left_right' ],
 			's_left_right_home'       => [ $this, 's_left_right_home' ],
 			's_title_separator'       => [ $this, 's_title_separator' ],
-			's_description_separator' => [ $this, 's_description_separator' ],
 			's_description'           => [ $this, 's_description' ],
 			's_description_raw'       => [ $this, 's_description_raw' ],
 			's_title'                 => [ $this, 's_title' ],
@@ -674,34 +663,6 @@ class Sanitize extends Admin_Pages {
 		//* Fallback to default if empty.
 		if ( empty( $previous ) )
 			$previous = $this->get_default_option( 'title_separator' );
-
-		return (string) $previous;
-	}
-
-	/**
-	 * Returns the description separator value string.
-	 *
-	 * @since 2.2.2
-	 * @since 2.8.0 Method is now public.
-	 *
-	 * @param mixed $new_value Should be identical to any of the $this->description_separator values
-	 * @return string Description separator option
-	 */
-	public function s_description_separator( $new_value ) {
-
-		//* Use the same as title_separator
-		$description_separator = $this->get_separator_list();
-
-		$key = array_key_exists( $new_value, $description_separator );
-
-		if ( $key )
-			return (string) $new_value;
-
-		$previous = $this->get_option( 'description_separator' );
-
-		//* Fallback to default if empty.
-		if ( empty( $previous ) )
-			$previous = $this->get_default_option( 'description_separator' );
 
 		return (string) $previous;
 	}

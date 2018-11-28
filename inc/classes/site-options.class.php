@@ -116,9 +116,6 @@ class Site_Options extends Sanitize {
 
 				// Description.
 				'auto_description'      => 1, // Enables auto description.
-				'description_separator' => 'pipe', // Description separator, dropdown
-				'description_additions' => 0,  // "Title on Blogname" within Description
-				'description_blogname'  => 1,  // "on Blogname" within Description
 
 				// Robots index.
 				'category_noindex'   => 0, // Category Archive robots noindex

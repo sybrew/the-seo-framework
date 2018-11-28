@@ -38,6 +38,7 @@ class Metaboxes extends Site_Options {
 	 *
 	 * @since 2.3.6
 	 * @since 2.6.0 Refactored.
+	 * @since 3.1.0 Now prefixes the IDs.
 	 *
 	 * @param string $id The Nav Tab ID
 	 * @param array $tabs the tab content {
@@ -68,15 +69,15 @@ class Metaboxes extends Site_Options {
 				$count = 1;
 				foreach ( $tabs as $tab => $value ) :
 					$dashicon = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
-					$name = isset( $value['name'] ) ? $value['name'] : '';
+					$name     = isset( $value['name'] ) ? $value['name'] : '';
 
 					printf(
 						'<div class=tsf-tab>%s</div>',
 						vsprintf(
 							'<input type=radio class="tsf-tabs-radio tsf-input-not-saved" id=%1$s name="%2$s" %3$s><label for=%1$s class=tsf-nav-tab>%4$s</label>',
 							[
-								\esc_attr( $id . '-tab-' . $tab ),
-								\esc_attr( $id . '-tabs' ),
+								\esc_attr( 'tsf-' . $id . '-tab-' . $tab ),
+								\esc_attr( 'tsf-' . $id . '-tabs' ),
 								( 1 === $count ? 'checked' : '' ),
 								sprintf(
 									'%s%s',
@@ -101,8 +102,8 @@ class Metaboxes extends Site_Options {
 		$count = 1;
 		foreach ( $tabs as $tab => $value ) :
 
-			$the_id   = $id . '-tab-' . $tab . '-content';
-			$the_name = $id . '-tabs-content';
+			$the_id   = 'tsf-' . $id . '-tab-' . $tab . '-content';
+			$the_name = 'tsf-' . $id . '-tabs-content';
 
 			//* Current tab for JS.
 			$current = 1 === $count ? ' tsf-active-tab-content' : '';
@@ -113,7 +114,7 @@ class Metaboxes extends Site_Options {
 				//* No-JS tabs.
 				if ( $use_tabs ) :
 					$dashicon = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
-					$name = isset( $value['name'] ) ? $value['name'] : '';
+					$name     = isset( $value['name'] ) ? $value['name'] : '';
 
 					?>
 					<div class="hide-if-js tsf-content-no-js">
@@ -309,28 +310,6 @@ class Metaboxes extends Site_Options {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_description_metabox_after' );
-	}
-
-	/**
-	 * Description meta box general tab.
-	 *
-	 * @since 2.6.0
-	 * @since 3.1.0 Is now protected.
-	 * @see $this->description_metabox() Callback for Description Settings box.
-	 */
-	protected function description_metabox_general_tab() {
-		$this->get_view( 'metaboxes/description-metabox', [], 'general' );
-	}
-
-	/**
-	 * Description meta box additions tab.
-	 *
-	 * @since 2.6.0
-	 * @since 3.1.0 Is now protected.
-	 * @see $this->description_metabox() Callback for Description Settings box.
-	 */
-	protected function description_metabox_additions_tab() {
-		$this->get_view( 'metaboxes/description-metabox', [], 'additions' );
 	}
 
 	/**

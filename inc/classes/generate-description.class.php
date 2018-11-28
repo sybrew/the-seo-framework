@@ -389,32 +389,14 @@ class Generate_Description extends Generate {
 		if ( null === $args ) {
 			$excerpt = $this->get_description_excerpt_from_query();
 			$_filter_id = $this->get_the_real_ID();
-			$additions_superseded = $this->are_description_additions_superseded();
 		} else {
 			$this->fix_generation_args( $args );
 			$_filter_id = $args['id'];
 			$excerpt = $this->get_description_excerpt_from_args( $args );
-			$additions_superseded = $this->are_description_additions_superseded( $args );
 		}
 
 		if ( ! in_array( $type, [ 'opengraph', 'twitter', 'search' ], true ) )
 			$type = 'search';
-
-		$additions_length = 0;
-		$sep_length       = 0;
-
-		$guidelines = $this->get_input_guidelines()['description'][ $type ];
-
-		if ( ! $additions_superseded && 'search' === $type ) {
-			$additions = $this->get_description_additions( $args );
-
-			$sep_length = 3;
-			$additions_length = $additions ? mb_strlen( html_entity_decode( $additions ) ) : 0;
-			if ( $excerpt && $additions_length > 68 ) {
-				$additions_length = 0;
-				$sep_length       = 0;
-			}
-		}
 
 		/**
 		 * @since 2.9.0
@@ -427,27 +409,8 @@ class Generate_Description extends Generate {
 		$excerpt = $this->trim_excerpt(
 			$excerpt,
 			0,
-			$guidelines['chars']['goodUpper'] - $additions_length - $sep_length
+			$this->get_input_guidelines()['description'][ $type ]['chars']['goodUpper']
 		);
-
-		$use_additions = $additions_length
-			&& ( $excerpt || ( $additions_length >= $guidelines['chars']['lower'] ) );
-
-		if ( $use_additions ) {
-			if ( $excerpt ) {
-				$desc = sprintf(
-					/* translators: 1: Description additions, 2: Description separator, 3: Excerpt */
-					\__( '%1$s %2$s %3$s', 'autodescription' ),
-					$additions,
-					$this->get_description_separator(),
-					$excerpt
-				);
-			} else {
-				$desc = $additions;
-			}
-		} else {
-			$desc = $excerpt;
-		}
 
 		/**
 		 * Filters the generated description, if any.
@@ -456,7 +419,7 @@ class Generate_Description extends Generate {
 		 * @param string     $description The description.
 		 * @param array|null $args The description arguments.
 		 */
-		$desc = (string) \apply_filters( 'the_seo_framework_generated_description', $desc, $args );
+		$desc = (string) \apply_filters( 'the_seo_framework_generated_description', $excerpt, $args );
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -489,27 +452,6 @@ class Generate_Description extends Generate {
 	 */
 	public function get_generated_open_graph_description( $args = null, $escape = true ) {
 		return $this->get_generated_description( $args, $escape, 'opengraph' );
-	}
-
-	/**
-	 * Determines whether description additions are used instead of an excerpt,
-	 * thus superseding the need.
-	 *
-	 * @since 3.1.0
-	 *
-	 * @param array|null $args An array of 'id' and 'taxonomy' values.
-	 * @return bool
-	 */
-	protected function are_description_additions_superseded( $args = null ) {
-
-		if ( $args ) {
-			if ( empty( $args['taxonomy'] ) )
-				return $this->is_blog_page( $args['id'] ) || $this->is_front_page_by_id( $args['id'] );
-		} else {
-			return $this->is_blog_page() || $this->is_real_front_page();
-		}
-
-		return false;
 	}
 
 	/**
@@ -576,7 +518,7 @@ class Generate_Description extends Generate {
 	 * @return string
 	 */
 	protected function get_blog_page_description_excerpt() {
-		return $this->get_description_additions( [ 'id' => (int) \get_option( 'page_for_posts' ) ], true );
+		return $this->get_description_additions( [ 'id' => (int) \get_option( 'page_for_posts' ) ] );
 	}
 
 	/**
@@ -594,7 +536,7 @@ class Generate_Description extends Generate {
 		if ( $this->is_static_frontpage( $id ) ) {
 			$excerpt = $this->get_singular_description_excerpt( $id );
 		}
-		$excerpt = $excerpt ?: $this->get_description_additions( [ 'id' => $id ], true );
+		$excerpt = $excerpt ?: $this->get_description_additions( [ 'id' => $id ] );
 
 		return $excerpt;
 	}
@@ -672,6 +614,8 @@ class Generate_Description extends Generate {
 	 * Returns additions for "Title on Blogname".
 	 *
 	 * @since 3.1.0
+	 * @since 3.2.0 : 1. Now no longer listens to options.
+	 *                2. Now only works for the front and blog pages.
 	 * @see $this->get_generated_description()
 	 *
 	 * @param array|null $args   An array of 'id' and 'taxonomy' values.
@@ -681,61 +625,22 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_description_additions( $args, $forced = false ) {
 
-		$term = null;
-		if ( is_null( $args ) ) {
-			$term = $this->is_archive() ? \get_queried_object() : null;
-		} elseif ( ! empty( $args['taxonomy'] ) ) {
-			// DEBUG ME var_dump() https://github.com/sybrew/the-seo-framework/issues/381
-			$term = \get_term( $args['id'], $args['taxonomy'] );
-		}
-		// DEBUG ME var_dump() https://github.com/sybrew/the-seo-framework/issues/381
+		$this->fix_generation_args( $args );
 
-		$additions = [
-			'title'    => '',
-			'on'       => '',
-			'blogname' => '',
-		];
-
-		if ( $forced || $this->add_description_additions( $args['id'], $term ) ) {
-			if ( ! empty( $args['taxonomy'] ) ) {
-				// DEBUG ME var_dump() https://github.com/sybrew/the-seo-framework/issues/381
-				$title = $this->generate_title_from_args( $args );
-			} else {
-				if ( $this->is_blog_page( $args['id'] ) ) {
-					$title = $this->get_raw_generated_title( $args );
-					/* translators: %s = Blog page title. Front-end output. */
-					$title = sprintf( \__( 'Latest posts: %s', 'autodescription' ), $title );
-				} elseif ( $this->is_front_page_by_id( $args['id'] ) ) {
-					$title = $this->get_home_page_tagline();
-				} else {
-					if ( is_null( $args ) ) {
-						$title = $this->generate_title_from_query();
-					} else {
-						// DEBUG ME var_dump() https://github.com/sybrew/the-seo-framework/issues/381
-						$title = $this->generate_title_from_args( $args );
-					}
-				}
-			}
-
-			if ( $forced || $this->get_option( 'description_blogname' ) ) {
-				$additions = [
-					'title'    => $title,
-					'on'       => \_x( 'on', 'Placement. e.g. Post Title "on" Blog Name', 'autodescription' ),
-					'blogname' => $this->get_blogname(),
-				];
-			} else {
-				$additions = array_merge( $additions, [
-					'title' => $title,
-				] );
-			}
+		if ( $this->is_blog_page( $args['id'] ) ) {
+			$title = $this->get_raw_generated_title( $args );
+			/* translators: %s = Blog page title. Front-end output. */
+			$title = sprintf( \__( 'Latest posts: %s', 'autodescription' ), $title );
+		} elseif ( $this->is_front_page_by_id( $args['id'] ) ) {
+			$title = $this->get_home_page_tagline();
 		}
 
-		if ( empty( $additions['title'] ) )
+		if ( empty( $title ) )
 			return '';
 
-		$title    = $additions['title'];
-		$on       = $additions['on'];
-		$blogname = $additions['blogname'];
+		$title    = $title;
+		$on       = \_x( 'on', 'Placement. e.g. Post Title "on" Blog Name', 'autodescription' );
+		$blogname = $this->get_blogname();
 
 		/* translators: 1: Title, 2: on, 3: Blogname */
 		return trim( sprintf( \__( '%1$s %2$s %3$s', 'autodescription' ), $title, $on, $blogname ) );
@@ -831,54 +736,5 @@ class Generate_Description extends Generate {
 				$args,
 			]
 		);
-	}
-
-	/**
-	 * Determines whether to add description additions. (╯°□°）╯︵ ┻━┻
-	 *
-	 * @since 2.6.0
-	 * @since 2.7.0 : 1. Removed cache.
-	 *                2. Removed excerpt availability check.
-
-	 * @param int             $id The current page or post ID.
-	 * @param \WP_Term|string $term The current Term.
-	 * @return bool Whether to add description additions.
-	 */
-	public function add_description_additions( $id = '', $term = '' ) {
-
-		/**
-		 * @since 2.6.0
-		 * @param array $filter : {
-		 *    @param bool     $filter Set to true to add prefix.
-		 *    @param int      $id     The Term object ID or The Page ID.
-		 *    @param \WP_term $term   The Term object.
-		 * }
-		 */
-		$filter = \apply_filters( 'the_seo_framework_add_description_additions', true, $id, $term );
-		$option = $this->get_option( 'description_additions' );
-
-		return $option && $filter;
-	}
-
-	/**
-	 * Returns Description Separator.
-	 *
-	 * @since 2.3.9
-	 * @staticvar string $sep
-	 *
-	 * @return string The Separator, unescaped.
-	 */
-	public function get_description_separator() {
-		static $sep;
-		/**
-		 * @since 2.3.9
-		 * @param string $sep The description separator.
-		 */
-		return isset( $sep )
-			? $sep
-			: $sep = (string) \apply_filters(
-				'the_seo_framework_description_separator',
-				$this->get_separator( 'description' )
-			);
 	}
 }
