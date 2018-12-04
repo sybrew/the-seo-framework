@@ -3,9 +3,9 @@ Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
 Requires at least: 4.6.0
-Tested up to: 4.9.6
+Tested up to: 5.0.0
 Requires PHP: 5.4.0
-Stable tag: 3.1.4
+Stable tag: 3.2.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -227,79 +227,26 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 == Changelog ==
 
-= 3.2.0 - TODO =
+= 3.2.0 - Horizon =
 
-*TODO quote?*
+*What is right to be done cannot be done too soon. - Jane Austen*
 
 **Release date**
 
-* TODO, 2018
+* December 4th, 2018
 
 **Release highlights**
 
-* A new editor (codename Gutenberg) is being shipped with WordPress 5.0. This release makes the plugin fully compatible with it.
-* Description prefixes have been removed. They're not helpful with SEO anymore as Google ignores them and Facebook strips them. They were also a source of unnecessary complexity and bugs.
+* A new editor (codename Gutenberg) will launch [in just two days](https://make.wordpress.org/core/2018/12/04/new-5-0-target-date/) with WordPress 5.0. This release makes the plugin fully compatible with it.
+* Description prefixes have been removed. Descriptions aren't used a ranking factor anymore, and gaming the system by repeating the title isn't beneficial.
+
+**Did you know?**
+
+* We recently relaunched a plugin for The SEO Framework. [Learn more](https://theseoframework.com/extension-manager/).
 
 **Detailed log**
 
-TODO link
-
-**For everyone:**
-
-* **Added:**
-	* **In the new editor:**
-		* You can now select a primary term.
-		* The example title now updates accordingly.
-		* TODO maybe... Meta description examples are now generated on auto-save, save-to-draft, and save actions.
-		* New: The canonical URL example is now forged on-the-fly.
-* **Removed:**
-	* Automated description additions and all related options are no longer available.
-		* They're still used on the front page and blog page; however, these weren't optional.
-* **Fixed:**
-	* A typo in the social settings metabox.
-
-**For developers:**
-
-* **Added:**
-	* View: `inpost/seo-settings-singular-gutenberg-data.php`
-		* It's an abstract and intermediate placeholder to hold cloned SEO input data obtained via the Gutenberg editor.
-		* We're still planning to completely move The SEO Framework's interface into Gutenberg. From then, these fields will be removed completely. So, don't rely on this.
-	* Gutenberg: A new a data dispatcher via jQuery events is now available.
-		* This might be a permanent solution, but it's treated as an intermediate step. So, don't rely on the API.
-* **Changed:**
-	* Method `is_gutenberg_page()` now detects the new WordPress 5.0 block editor.
-	* Property `inpost_nonce_name` now has the `_nonce` suffix, to prevent future collisions.
-	* HTML Element ID `title-prefixes-toggle` is now `tsf-title-prefixes-toggle`.
-	* Element tabs in the SEO settings are now prefixed with `tsf-`.
-* **Other:**
-	* We now check for the `PSR2.ControlStructures.SwitchDeclaration.SpaceBeforeColonCASE` coding standard.
-* **Fixed:**
-	* convert_markdown links now support the character `1` in the content.
-* **Option notes:**
-	* **Removed:**
-		* `description_additions`
-		* `description_blogname`
-		* `description_separator`
-* **JavaScript notes:**
-	* **Removed:**
-		* `tsfL10n.params.descriptionSeparator`
-* **Filter notes:**
-	* **Changed:**
-		* `(array) the_seo_framework_available_sanitizer_filters`
-			* Removed the `s_description_separator` index.
-		* `(array) the_seo_framework_default_site_options`
-			* Removed the `description_additions`, `description_blogname`, and `description_separator` indexes.
-	* **Removed:**
-		* `(string) the_seo_framework_description_separator`
-		* `(bool) the_seo_framework_add_description_additions`
-		* `(array) the_seo_framework_description_settings_tabs`
-* **Method notes:**
-	* **Added:**
-		* `is_gutenberg_page()`, this used to be a protected method.
-	* **Removed:**
-		* `add_description_additions()`
-		* `get_description_separator()`
-		* `s_description_separator()`
+Happy Holidays! [(╯°□°)╯︵ ┻┻](https://theseoframework.com/?p=2957)
 
 = Full changelog =
 

@@ -492,7 +492,7 @@ class Cache extends Sitemaps {
 		/**
 		 * Change key based on options.
 		 */
-		$options = $this->enable_ld_json_breadcrumbs() ? '1' : '0';
+		$options  = $this->enable_ld_json_breadcrumbs() ? '1' : '0';
 		$options .= $this->enable_ld_json_searchbox() ? '1' : '0';
 
 		return 'tsf_' . $revision . '_' . $options . '_ldjs_' . $cache_key;
