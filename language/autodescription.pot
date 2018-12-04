@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the The SEO Framework package.
 msgid ""
 msgstr ""
-"Project-Id-Version: The SEO Framework 3.1.0\n"
+"Project-Id-Version: The SEO Framework 3.2.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/autodescription\n"
-"POT-Creation-Date: 2018-09-13 22:44:39+00:00\n"
+"POT-Creation-Date: 2018-12-04 16:54:41+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,157 +12,163 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: bootstrap/upgrade.php:288
+#: bootstrap/upgrade.php:319
 msgid "Twitter Photo Cards have been deprecated. Your site now uses Summary Cards when applicable."
 msgstr ""
 
-#: bootstrap/upgrade.php:319
+#: bootstrap/upgrade.php:349
 msgid "The previous sitemap timestamp settings have been converted into new global timestamp settings."
 msgstr ""
 
-#: inc/classes/admin-init.class.php:223 inc/classes/admin-pages.class.php:1010
+#: inc/classes/admin-init.class.php:254 inc/classes/admin-pages.class.php:1010
 msgid "Select Image"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:224 inc/classes/admin-pages.class.php:1005
+#: inc/classes/admin-init.class.php:255 inc/classes/admin-pages.class.php:1005
 msgctxt "Button hover"
 msgid "Select social image"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:225
+#: inc/classes/admin-init.class.php:256
 msgid "Change Image"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:226
+#: inc/classes/admin-init.class.php:257
 msgid "Remove Image"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:227
+#: inc/classes/admin-init.class.php:258
 msgid "Remove selected social image"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:228
+#: inc/classes/admin-init.class.php:259
 msgctxt "Frame title"
 msgid "Select Social Image"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:229 inc/classes/admin-init.class.php:238
+#: inc/classes/admin-init.class.php:260 inc/classes/admin-init.class.php:269
 msgid "Use this image"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:232 inc/classes/admin-pages.class.php:1044
+#: inc/classes/admin-init.class.php:263 inc/classes/admin-pages.class.php:1044
 msgid "Select Logo"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:234
+#: inc/classes/admin-init.class.php:265
 msgid "Change Logo"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:235
+#: inc/classes/admin-init.class.php:266
 msgid "Remove Logo"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:236
+#: inc/classes/admin-init.class.php:267
 msgid "Unset selected logo"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:237
+#: inc/classes/admin-init.class.php:268
 msgctxt "Frame title"
 msgid "Select Logo"
 msgstr ""
 
 #. translators: %s = term name
 
-#: inc/classes/admin-init.class.php:271
+#: inc/classes/admin-init.class.php:305
+msgid "Select Primary %s"
+msgstr ""
+
+#. translators: %s = term name
+
+#: inc/classes/admin-init.class.php:310
 msgid "Make primary %s"
 msgstr ""
 
 #. translators: %s = term name
 
-#: inc/classes/admin-init.class.php:273
+#: inc/classes/admin-init.class.php:312
 msgid "Primary %s"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:486
+#: inc/classes/admin-init.class.php:536
 msgid "The changes you made will be lost if you navigate away from this page."
 msgstr ""
 
-#: inc/classes/admin-init.class.php:487
+#: inc/classes/admin-init.class.php:537
 msgid "Are you sure you want to reset all SEO settings to their defaults?"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:488
-#: inc/classes/generate-title.class.php:1013
+#: inc/classes/admin-init.class.php:538
+#: inc/classes/generate-title.class.php:1038
 msgid "Private: %s"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:489
-#: inc/classes/generate-title.class.php:999
+#: inc/classes/admin-init.class.php:539
+#: inc/classes/generate-title.class.php:1024
 msgid "Protected: %s"
 msgstr ""
 
 #. translators: Pixel counter. 1: width, 2: guideline
 
-#: inc/classes/admin-init.class.php:491
+#: inc/classes/admin-init.class.php:541
 msgid "%1$d out of %2$d pixels are used."
 msgstr ""
 
-#: inc/classes/admin-init.class.php:680
+#: inc/classes/admin-init.class.php:729
 msgid "There's no content."
 msgstr ""
 
-#: inc/classes/admin-init.class.php:681
+#: inc/classes/admin-init.class.php:730
 msgid "It's too short and it should have more information."
 msgstr ""
 
-#: inc/classes/admin-init.class.php:682
+#: inc/classes/admin-init.class.php:731
 msgid "It's short and it could have more information."
 msgstr ""
 
-#: inc/classes/admin-init.class.php:683
+#: inc/classes/admin-init.class.php:732
 msgid "It's long and it might get truncated in search."
 msgstr ""
 
-#: inc/classes/admin-init.class.php:684
+#: inc/classes/admin-init.class.php:733
 msgid "It's too long and it will get truncated in search."
 msgstr ""
 
-#: inc/classes/admin-init.class.php:685
+#: inc/classes/admin-init.class.php:734
 msgid "Length is good."
 msgstr ""
 
-#: inc/classes/admin-init.class.php:688
+#: inc/classes/admin-init.class.php:737
 msgctxt "The string is empty"
 msgid "Empty"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:689
+#: inc/classes/admin-init.class.php:738
 msgid "Far too short"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:690
+#: inc/classes/admin-init.class.php:739
 msgid "Too short"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:691
+#: inc/classes/admin-init.class.php:740
 msgid "Too long"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:692
+#: inc/classes/admin-init.class.php:741
 msgid "Far too long"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:693
+#: inc/classes/admin-init.class.php:742
 msgid "Good"
 msgstr ""
 
 #. translators: %s = Redirect URL markdown
 
-#: inc/classes/admin-init.class.php:807
+#: inc/classes/admin-init.class.php:856
 msgid "There has been an error redirecting. Refresh the page or follow [this link](%s)."
 msgstr ""
 
-#: inc/classes/admin-init.class.php:889 inc/classes/admin-init.class.php:949
+#: inc/classes/admin-init.class.php:938 inc/classes/admin-init.class.php:998
 msgid "Image could not be processed."
 msgstr ""
 
@@ -323,7 +329,6 @@ msgstr ""
 #. translators: %d = page number. Front-end output.
 
 #: inc/classes/deprecated.class.php:314
-#: inc/classes/generate-title.class.php:963
 msgid "Page %d"
 msgstr ""
 
@@ -571,173 +576,172 @@ msgctxt "The content source"
 msgid "Source"
 msgstr ""
 
-#. translators: 1: Description additions, 2: Description separator, 3: Excerpt
-#. translators: 1: Title, 2: on, 3: Blogname
-
-#: inc/classes/generate-description.class.php:438
-#: inc/classes/generate-description.class.php:731
-msgid "%1$s %2$s %3$s"
-msgstr ""
-
 #. translators: %s = Blog page title. Front-end output.
 
-#: inc/classes/generate-description.class.php:698
+#: inc/classes/generate-description.class.php:633
 msgid "Latest posts: %s"
 msgstr ""
 
-#: inc/classes/generate-description.class.php:713
-#: inc/views/metaboxes/description-metabox.php:88
+#: inc/classes/generate-description.class.php:642
 msgctxt "Placement. e.g. Post Title \"on\" Blog Name"
 msgid "on"
 msgstr ""
 
+#. translators: 1: Title, 2: on, 3: Blogname
+
+#: inc/classes/generate-description.class.php:646
+msgid "%1$s %2$s %3$s"
+msgstr ""
+
 #. translators: Category archive title. 1: Category name
 
-#: inc/classes/generate-title.class.php:657
-#: inc/classes/generate-title.class.php:677
+#: inc/classes/generate-title.class.php:658
+#: inc/classes/generate-title.class.php:678
 msgid "Category: %s"
 msgstr ""
 
 #. translators: Tag archive title. 1: Tag name
 
-#: inc/classes/generate-title.class.php:661
-#: inc/classes/generate-title.class.php:681
+#: inc/classes/generate-title.class.php:662
+#: inc/classes/generate-title.class.php:682
 msgid "Tag: %s"
 msgstr ""
 
 #. translators: Taxonomy term archive title. 1: Taxonomy singular name, 2:
 #. Current taxonomy term
 
-#: inc/classes/generate-title.class.php:667
-#: inc/classes/generate-title.class.php:729
+#: inc/classes/generate-title.class.php:668
+#: inc/classes/generate-title.class.php:730
 msgid "%1$s: %2$s"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:671
-#: inc/classes/generate-title.class.php:732
+#: inc/classes/generate-title.class.php:672
+#: inc/classes/generate-title.class.php:733
 msgid "Archives"
 msgstr ""
 
 #. translators: Author archive title. 1: Author name
 
-#: inc/classes/generate-title.class.php:685
+#: inc/classes/generate-title.class.php:686
 msgid "Author: %s"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:688
+#: inc/classes/generate-title.class.php:689
 msgctxt "yearly archives date format"
 msgid "Y"
 msgstr ""
 
 #. translators: Yearly archive title. 1: Year
 
-#: inc/classes/generate-title.class.php:690
+#: inc/classes/generate-title.class.php:691
 msgid "Year: %s"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:692
+#: inc/classes/generate-title.class.php:693
 msgctxt "monthly archives date format"
 msgid "F Y"
 msgstr ""
 
 #. translators: Monthly archive title. 1: Month name and year
 
-#: inc/classes/generate-title.class.php:694
+#: inc/classes/generate-title.class.php:695
 msgid "Month: %s"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:696
+#: inc/classes/generate-title.class.php:697
 msgctxt "daily archives date format"
 msgid "F j, Y"
 msgstr ""
 
 #. translators: Daily archive title. 1: Date
 
-#: inc/classes/generate-title.class.php:698
+#: inc/classes/generate-title.class.php:699
 msgid "Day: %s"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:702
+#: inc/classes/generate-title.class.php:703
 msgctxt "post format archive title"
 msgid "Asides"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:704
+#: inc/classes/generate-title.class.php:705
 msgctxt "post format archive title"
 msgid "Galleries"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:706
+#: inc/classes/generate-title.class.php:707
 msgctxt "post format archive title"
 msgid "Images"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:708
+#: inc/classes/generate-title.class.php:709
 msgctxt "post format archive title"
 msgid "Videos"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:710
+#: inc/classes/generate-title.class.php:711
 msgctxt "post format archive title"
 msgid "Quotes"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:712
+#: inc/classes/generate-title.class.php:713
 msgctxt "post format archive title"
 msgid "Links"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:714
+#: inc/classes/generate-title.class.php:715
 msgctxt "post format archive title"
 msgid "Statuses"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:716
+#: inc/classes/generate-title.class.php:717
 msgctxt "post format archive title"
 msgid "Audio"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:718
+#: inc/classes/generate-title.class.php:719
 msgctxt "post format archive title"
 msgid "Chats"
 msgstr ""
 
 #. translators: Post type archive title. 1: Post type name
 
-#: inc/classes/generate-title.class.php:723
+#: inc/classes/generate-title.class.php:724
 msgid "Archives: %s"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:883
+#: inc/classes/generate-title.class.php:884
 msgid "Untitled"
 msgstr ""
 
 #. translators: %s: search phrase
 
-#: inc/classes/generate-title.class.php:895
+#: inc/classes/generate-title.class.php:896
 msgid "Search Results for &#8220;%s&#8221;"
 msgstr ""
 
-#: inc/classes/inpost.class.php:168 inc/classes/inpost.class.php:176
+#: inc/classes/generate-title.class.php:974
+msgid "Page %s"
+msgstr ""
+
+#: inc/classes/inpost.class.php:169 inc/classes/inpost.class.php:177
 msgid "Homepage SEO Settings"
 msgstr ""
 
-#: inc/classes/inpost.class.php:170
+#: inc/classes/inpost.class.php:171
 msgid "The SEO Settings take precedence over these settings."
 msgstr ""
 
 #. translators: %s = Post Type
 #. translators: %s = Term type
 
-#: inc/classes/inpost.class.php:180 inc/views/inpost/seo-settings-tt.php:67
+#: inc/classes/inpost.class.php:181 inc/views/inpost/seo-settings-tt.php:67
 msgid "%s SEO Settings"
 msgstr ""
 
 #. translators: %s = Post type name
 
-#: inc/classes/inpost.class.php:287
-#: inc/views/metaboxes/description-metabox.php:34
-#: inc/views/metaboxes/homepage-metabox.php:34
+#: inc/classes/inpost.class.php:288 inc/views/metaboxes/homepage-metabox.php:34
 #: inc/views/metaboxes/robots-metabox.php:61
 #: inc/views/metaboxes/sitemaps-metabox.php:29
 #: inc/views/metaboxes/social-metabox.php:29
@@ -745,11 +749,11 @@ msgstr ""
 msgid "General"
 msgstr ""
 
-#: inc/classes/inpost.class.php:293 inc/views/metaboxes/homepage-metabox.php:49
+#: inc/classes/inpost.class.php:294 inc/views/metaboxes/homepage-metabox.php:49
 msgid "Social"
 msgstr ""
 
-#: inc/classes/inpost.class.php:299
+#: inc/classes/inpost.class.php:300
 msgid "Visibility"
 msgstr ""
 
@@ -995,78 +999,20 @@ msgstr ""
 msgid "Description Settings"
 msgstr ""
 
-#: inc/views/metaboxes/description-metabox.php:39
-#: inc/views/metaboxes/homepage-metabox.php:39
-#: inc/views/metaboxes/title-metabox.php:71
-msgid "Additions"
-msgstr ""
-
-#: inc/views/metaboxes/description-metabox.php:59
+#: inc/views/metaboxes/description-metabox.php:22
 msgid "Automated Description Settings"
 msgstr ""
 
-#: inc/views/metaboxes/description-metabox.php:62
+#: inc/views/metaboxes/description-metabox.php:25
 msgid "A description can be automatically generated for every page."
 msgstr ""
 
-#: inc/views/metaboxes/description-metabox.php:65
+#: inc/views/metaboxes/description-metabox.php:28
 msgid "Open Graph and Twitter Cards require descriptions. Therefore, it is best to leave this option enabled."
 msgstr ""
 
-#: inc/views/metaboxes/description-metabox.php:72
+#: inc/views/metaboxes/description-metabox.php:35
 msgid "Automatically generate description?"
-msgstr ""
-
-#: inc/views/metaboxes/description-metabox.php:87
-msgid "Example Title"
-msgstr ""
-
-#: inc/views/metaboxes/description-metabox.php:89
-msgid "This is an example excerpt..."
-msgstr ""
-
-#: inc/views/metaboxes/description-metabox.php:111
-msgid "Automated Description Additions Settings"
-msgstr ""
-
-#: inc/views/metaboxes/description-metabox.php:113
-msgid "To create a more organic description, additions can be added before the description."
-msgstr ""
-
-#: inc/views/metaboxes/description-metabox.php:114
-msgid "The additions consist of the page title, the blog name, and a separator."
-msgstr ""
-
-#: inc/views/metaboxes/description-metabox.php:117
-msgid "Example Automated Description Output"
-msgstr ""
-
-#: inc/views/metaboxes/description-metabox.php:123
-msgid "Enable Additions"
-msgstr ""
-
-#: inc/views/metaboxes/description-metabox.php:127
-msgid "This creates better automated meta descriptions."
-msgstr ""
-
-#: inc/views/metaboxes/description-metabox.php:134
-msgid "Add additions to automated description?"
-msgstr ""
-
-#: inc/views/metaboxes/description-metabox.php:143
-msgid "Add Blogname to Additions"
-msgstr ""
-
-#: inc/views/metaboxes/description-metabox.php:149
-msgid "Add the blog name to the additions?"
-msgstr ""
-
-#: inc/views/metaboxes/description-metabox.php:168
-msgid "Description Separator"
-msgstr ""
-
-#: inc/views/metaboxes/description-metabox.php:169
-msgid "When additions are enabled, this separator will go in-between the additions and the excerpt."
 msgstr ""
 
 #: inc/views/metaboxes/feed-metabox.php:15
@@ -1407,6 +1353,11 @@ msgstr ""
 
 #: inc/views/metaboxes/homepage-metabox.php:14
 msgid "These settings will take precedence over the settings set within the Home Page edit screen, if any."
+msgstr ""
+
+#: inc/views/metaboxes/homepage-metabox.php:39
+#: inc/views/metaboxes/title-metabox.php:71
+msgid "Additions"
 msgstr ""
 
 #: inc/views/metaboxes/homepage-metabox.php:44
@@ -2255,7 +2206,7 @@ msgid "If the title consists of two parts (original title, pagination, and blogn
 msgstr ""
 
 #: inc/views/metaboxes/title-metabox.php:192
-msgid "Remove Blogname from Title"
+msgid "Blog Name"
 msgstr ""
 
 #: inc/views/metaboxes/title-metabox.php:196
@@ -2263,7 +2214,7 @@ msgid "This might decouple your posts and pages from the rest of the website."
 msgstr ""
 
 #: inc/views/metaboxes/title-metabox.php:204
-msgid "Remove Blogname from title?"
+msgid "Remove blog name from the title?"
 msgstr ""
 
 #: inc/views/metaboxes/title-metabox.php:213
