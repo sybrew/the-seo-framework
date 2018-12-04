@@ -235,22 +235,11 @@ class Core {
 			'<a href="https://theseoframework.com/" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
 			\esc_html__( 'About', 'autodescription' )
 		);
-
-		/**
-		 * These are weak checks.
-		 * But it has minimum to no UX/performance impact on failure.
-		 */
-		if ( ! defined( 'TSF_EXTENSION_MANAGER_VERSION' ) ) {
-			$tsfem = \get_plugins( '/the-seo-framework-extension-manager' );
-			//... I want PHP 5.5 for empty expressions :(
-			// TODO open a plugin installation screen?
-			if ( empty( $tsfem ) )
-				$tsf_links['tsfem'] = sprintf(
-					'<a href="%s" rel="noreferrer noopener" target="_blank">%s</a>',
-					\esc_url( \__( 'https://wordpress.org/plugins/the-seo-framework-extension-manager/', 'autodescription' ) ),
-					\esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' )
-				);
-		}
+		$tsf_links['tsfem'] = sprintf(
+			'<a href="%s" rel="noreferrer noopener" target="_blank">%s</a>',
+			'https://theseoframework.com/extensions/',
+			\esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' )
+		);
 
 		return array_merge( $links, $tsf_links );
 	}

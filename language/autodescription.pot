@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: The SEO Framework 3.2.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/autodescription\n"
-"POT-Creation-Date: 2018-12-04 16:54:41+00:00\n"
+"POT-Creation-Date: 2018-12-04 18:37:38+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -276,11 +276,7 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-#: inc/classes/core.class.php:250
-msgid "https://wordpress.org/plugins/the-seo-framework-extension-manager/"
-msgstr ""
-
-#: inc/classes/core.class.php:251
+#: inc/classes/core.class.php:241
 msgctxt "Plugin extensions"
 msgid "Extensions"
 msgstr ""
