@@ -5,7 +5,7 @@ Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
 Requires at least: 4.6.0
 Tested up to: 5.0.0
 Requires PHP: 5.4.0
-Stable tag: 3.2.0
+Stable tag: 3.2.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -226,6 +226,10 @@ All The SEO Framework's metadata is put into Object cache when a caching plugin 
 Please be sure to clear your cache or adjust the plugin's caching settings if deemed necessary.
 
 == Changelog ==
+
+= 3.2.1 =
+
+This minor update [fixes script load-order issues](https://theseoframework.com/?p=2982) when other plugins try to interact with the Gutenberg plugin.
 
 = 3.2.0 - Horizon =
 

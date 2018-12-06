@@ -208,7 +208,7 @@ class Admin_Init extends Init {
 			[
 				'id'       => 'tsf-gbc',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf' ],
+				'deps'     => [ 'jquery', 'tsf', 'wp-editor', 'wp-data', 'lodash', 'react' ],
 				'autoload' => true,
 				'name'     => 'tsf-gbc',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -334,11 +334,13 @@ class Admin_Init extends Init {
 				'id'   => 'tsf-pt-gb',
 				'name' => 'pt-gb',
 			];
+			$deps = [ 'jquery', 'tsf', 'wp-hooks', 'wp-element', 'wp-components', 'wp-url', 'wp-api-fetch', 'lodash', 'react' ];
 		} else {
 			$vars = [
 				'id'   => 'tsf-pt',
 				'name' => 'pt',
 			];
+			$deps = [ 'jquery', 'tsf', 'tsf-tt' ];
 		}
 
 		//! PHP 5.4 compat: put in var.
@@ -347,7 +349,7 @@ class Admin_Init extends Init {
 			[
 				'id'       => $vars['id'],
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf', 'tsf-tt' ],
+				'deps'     => $deps,
 				'autoload' => true,
 				'name'     => $vars['name'],
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
