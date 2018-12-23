@@ -304,8 +304,12 @@ switch ( $instance ) :
 		break;
 
 	case 'inpost_social':
+		$desc_from_custom_field = $this->get_description_from_custom_field( [ 'id' => $post_id ] );
+
 		if ( $this->is_static_frontpage( $post_id ) ) {
 			// Gets custom fields from SEO settings.
+			$home_desc = $this->get_option( 'homepage_description' );
+
 			$home_og_title = $this->get_option( 'homepage_og_title' );
 			$home_og_desc  = $this->get_option( 'homepage_og_description' );
 			$home_tw_title = $this->get_option( 'homepage_twitter_title' );
@@ -316,17 +320,21 @@ switch ( $instance ) :
 			$custom_og_desc  = $this->get_custom_field( '_open_graph_description', $post_id );
 
 			//! OG input falls back to default input.
-			$og_tit_placeholder  = $home_og_title ?: $custom_og_title ?: $this->get_generated_open_graph_title( [ 'id' => $post_id ] );
+			$og_tit_placeholder  = $home_og_title
+								?: $custom_og_title
+								?: $this->get_generated_open_graph_title( [ 'id' => $post_id ] );
 			$og_desc_placeholder = $home_og_desc
-								?: $this->get_description_from_custom_field( [ 'id' => $post_id ] )
+								?: $desc_from_custom_field
 								?: $this->get_generated_open_graph_description( [ 'id' => $post_id ] );
 
 			//! Twitter input falls back to OG input.
-			$tw_tit_placeholder  = $home_tw_title ?: $og_tit_placeholder;
+			$tw_tit_placeholder  = $home_tw_title
+								?: $og_tit_placeholder;
 			$tw_desc_placeholder = $home_tw_desc
 								?: $home_og_desc
 								?: $custom_og_desc
-								?: $this->get_description_from_custom_field( [ 'id' => $post_id ] )
+								?: $home_desc
+								?: $desc_from_custom_field
 								?: $this->get_generated_twitter_description( [ 'id' => $post_id ] );
 		} else {
 			// Gets custom fields.
@@ -335,11 +343,11 @@ switch ( $instance ) :
 
 			//! OG input falls back to default input.
 			$og_tit_placeholder  = $this->get_generated_open_graph_title( [ 'id' => $post_id ] );
-			$og_desc_placeholder = $this->get_generated_open_graph_description( [ 'id' => $post_id ] );
+			$og_desc_placeholder = $desc_from_custom_field ?: $this->get_generated_open_graph_description( [ 'id' => $post_id ] );
 
 			//! Twitter input falls back to OG input.
 			$tw_tit_placeholder  = $custom_og_title ?: $og_tit_placeholder;
-			$tw_desc_placeholder = $custom_og_desc ?: $this->get_generated_twitter_description( [ 'id' => $post_id ] );
+			$tw_desc_placeholder = $custom_og_desc ?: $desc_from_custom_field ?: $this->get_generated_twitter_description( [ 'id' => $post_id ] );
 		}
 
 		$show_og = (bool) $this->get_option( 'og_tags' );

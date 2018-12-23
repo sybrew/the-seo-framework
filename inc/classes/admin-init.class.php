@@ -398,59 +398,61 @@ class Admin_Init extends Init {
 	protected function get_javascript_l10n() {
 
 		$id = $this->get_the_real_ID();
-		$default_title = '';
+
+		$default_title   = '';
 		$title_additions = '';
 
 		$use_title_additions = $this->use_title_branding();
-		$home_tagline = $this->get_option( 'homepage_title_tagline' );
-		$title_location = $this->get_option( 'title_location' );
+		$home_tagline        = $this->get_option( 'homepage_title_tagline' );
+		$title_location      = $this->get_option( 'title_location' );
+		$title_separator     = \esc_html( $this->get_separator( 'title' ) );
 
-		$title_separator = esc_html( $this->get_separator( 'title' ) );
-
-		$ishome = false;
+		$is_home          = false;
 		$is_settings_page = $this->is_seo_settings_page();
-		$is_post_edit = $this->is_post_edit();
-		$is_term_edit = $this->is_term_edit();
-		$has_input = $is_settings_page || $is_post_edit || $is_term_edit;
+		$page_on_front    = $this->has_page_on_front();
+		$is_post_edit     = $this->is_post_edit();
+		$is_term_edit     = $this->is_term_edit();
+		$has_input        = $is_settings_page || $is_post_edit || $is_term_edit;
 
-		$page_on_front = $this->has_page_on_front();
+		$_decode_flags = ENT_QUOTES | ENT_COMPAT;
 
 		if ( $is_settings_page ) {
 			// We're on our SEO settings pages.
 			if ( $page_on_front ) {
 				// Home is a page.
-				$id = \get_option( 'page_on_front' );
+				$id           = (int) \get_option( 'page_on_front' );
 				$inpost_title = $this->get_custom_field( '_genesis_title', $id );
 			} else {
 				// Home is a blog.
 				$inpost_title = '';
 			}
-			$default_title = $inpost_title ?: $this->get_blogname();
+			$default_title   = $inpost_title ?: $this->get_blogname();
 			$title_additions = $this->get_home_page_tagline();
 
 			$use_title_additions = (bool) $this->get_option( 'homepage_tagline' );
 		} else {
 			// We're somewhere within default WordPress pages.
 			if ( $this->is_static_frontpage( $id ) ) {
-				$default_title = $this->get_option( 'homepage_title' ) ?: $this->get_blogname();
+				$default_title  = $this->get_option( 'homepage_title' ) ?: $this->get_blogname();
 				$title_location = $this->get_option( 'home_title_location' );
-				$ishome = true;
+
+				$is_home = true;
 
 				$use_title_additions = (bool) $this->get_option( 'homepage_tagline' );
-				$title_additions = $this->get_home_page_tagline();
+				$title_additions     = $this->get_home_page_tagline();
 			} elseif ( $is_post_edit ) {
-				$default_title = $this->get_raw_generated_title( [ 'id' => $id ] );
+				$default_title   = $this->get_raw_generated_title( [ 'id' => $id ] );
 				$title_additions = $this->get_blogname();
 			} elseif ( $is_term_edit ) {
 				//* Category or Tag.
 				if ( $this->get_current_taxonomy() && $id ) {
-					$default_title = $this->get_generated_single_term_title( $this->fetch_the_term( $id ) );
+					$default_title   = $this->get_generated_single_term_title( $this->fetch_the_term( $id ) );
 					$title_additions = $this->get_blogname();
 				}
 			} else {
 				//* We're in a special place.
 				// Can't fetch title.
-				$default_title = '';
+				$default_title   = '';
 				$title_additions = $this->get_blogname();
 			}
 		}
@@ -468,7 +470,7 @@ class Admin_Init extends Init {
 		$term_name = '';
 		$use_term_prefix = false;
 		if ( $is_term_edit ) {
-			$term_name = $this->get_tax_type_label( $this->get_current_taxonomy(), true );
+			$term_name       = $this->get_tax_type_label( $this->get_current_taxonomy(), true );
 			$use_term_prefix = $this->use_generated_archive_prefix();
 		}
 
@@ -483,7 +485,7 @@ class Admin_Init extends Init {
 					'twTitlePHLock'       => (bool) $this->get_custom_field( '_twitter_title', $id ),
 					'twDescriptionPHLock' => (bool) $this->get_custom_field( '_twitter_description', $id ),
 				];
-			} elseif ( $ishome ) {
+			} elseif ( $is_home ) {
 				$social_settings_locks = [
 					'refTitleLock'       => (bool) $this->get_option( 'homepage_title' ),
 					'refDescriptionLock' => (bool) $this->get_option( 'homepage_description' ),
@@ -496,17 +498,31 @@ class Admin_Init extends Init {
 		}
 
 		$social_settings_placeholders = [];
+
 		if ( $is_post_edit || $is_settings_page ) {
-			$social_settings_placeholders = [
-				'ogDesc' => $this->get_generated_open_graph_description( [ 'id' => $id ] ),
-				'twDesc' => $this->get_generated_twitter_description( [ 'id' => $id ] ),
-			];
+			if ( $is_settings_page ) {
+				$social_settings_placeholders = [
+					'ogDesc' => $this->get_custom_field( '_genesis_description', $id ) ?: $this->get_generated_open_graph_description( [ 'id' => $id ] ),
+					'twDesc' => $this->get_custom_field( '_genesis_description', $id ) ?: $this->get_generated_twitter_description( [ 'id' => $id ] ),
+				];
+			} elseif ( $is_home ) {
+				$social_settings_placeholders = [
+					'ogDesc' => $this->get_option( 'homepage_description' ) ?: $this->get_generated_open_graph_description( [ 'id' => $id ] ),
+					'twDesc' => $this->get_option( 'homepage_description' ) ?: $this->get_generated_twitter_description( [ 'id' => $id ] ),
+				];
+			} else {
+				$social_settings_placeholders = [
+					'ogDesc' => $this->get_generated_open_graph_description( [ 'id' => $id ] ),
+					'twDesc' => $this->get_generated_twitter_description( [ 'id' => $id ] ),
+				];
+			}
+
 			foreach ( $social_settings_placeholders as &$v ) {
-				$v = html_entity_decode( $v, ENT_COMPAT, 'UTF-8' );
+				$v = html_entity_decode( $v, $_decode_flags, 'UTF-8' );
 			}
 		}
 
-		$input_guidelines = [];
+		$input_guidelines      = [];
 		$input_guidelines_i18n = [];
 		if ( $has_input ) {
 			$input_guidelines      = $this->get_input_guidelines();
@@ -517,7 +533,7 @@ class Admin_Init extends Init {
 			'nonces' => $this->get_js_nonces(),
 			'states' => [
 				'isRTL'               => (bool) \is_rtl(),
-				'isHome'              => $ishome,
+				'isHome'              => $is_home,
 				'hasInput'            => $has_input,
 				'counterType'         => \absint( $this->get_user_option( 0, 'counter_type', 3 ) ),
 				'useTagline'          => $use_title_additions,
@@ -544,24 +560,23 @@ class Admin_Init extends Init {
 				'inputGuidelines' => $input_guidelines_i18n,
 			],
 			'params' => [
-				'objectTitle'          => $default_title,
-				'defaultTitle'         => $default_title,
-				'titleAdditions'       => $title_additions,
-				'blogDescription'      => $this->s_title_raw( $this->get_blogdescription() ),
-				'termName'             => $term_name,
-				'untitledTitle'        => $this->get_static_untitled_title(),
-				'titleSeparator'       => $title_separator,
-				'titleLocation'        => $title_location,
-				'inputGuidelines'      => $input_guidelines,
-				'socialPlaceholders'   => $social_settings_placeholders,
+				'objectTitle'        => $this->s_title_raw( $default_title ),
+				'defaultTitle'       => $this->s_title_raw( $default_title ),
+				'titleAdditions'     => $this->s_title_raw( $title_additions ),
+				'blogDescription'    => $this->s_title_raw( $this->get_blogdescription() ),
+				'termName'           => $this->s_title_raw( $term_name ),
+				'untitledTitle'      => $this->s_title_raw( $this->get_static_untitled_title() ),
+				'titleSeparator'     => $title_separator,
+				'titleLocation'      => $title_location,
+				'inputGuidelines'    => $input_guidelines,
+				'socialPlaceholders' => $social_settings_placeholders,
 			],
 		];
 
-		$flags = ENT_COMPAT;
 		foreach ( [ 'i18n', 'params' ] as $key ) {
 			foreach ( $l10n[ $key ] as &$v ) {
 				if ( is_scalar( $v ) )
-					$v = html_entity_decode( $v, $flags, 'UTF-8' );
+					$v = html_entity_decode( $v, $_decode_flags, 'UTF-8' );
 			}
 		}
 

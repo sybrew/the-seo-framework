@@ -194,6 +194,7 @@ add_action( 'the_seo_framework_upgraded', 'the_seo_framework_prepare_extension_m
  * Enqueues and outputs an Extension Manager suggestion.
  *
  * @since 3.1.0
+ * @since 3.2.2. No longer suggests when the user is new.
  * @staticvar bool $run
  *
  * @return void Early when already enqueued
@@ -204,6 +205,7 @@ function the_seo_framework_prepare_extension_manager_suggestion() {
 
 	if ( is_admin() ) {
 		add_action( 'admin_init', function() {
+			if ( ! the_seo_framework_previous_db_version() ) return;
 			require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'tsfem-suggestion.php';
 			the_seo_framework_load_extension_manager_suggestion();
 		}, 20 );

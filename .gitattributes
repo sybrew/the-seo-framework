@@ -19,6 +19,7 @@
 *.woff2 binary
 
 .gitattributes export-ignore
+.gitignore export-ignore
 .editorconfig export-ignore
 README.md export-ignore
 composer.json export-ignore

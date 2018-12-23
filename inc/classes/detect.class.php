@@ -934,17 +934,23 @@ class Detect extends Render {
 	 * Gets all post types that could possibly support SEO.
 	 *
 	 * @since 3.1.0
+	 * @since 3.2.1 Added cache.
+	 * @staticvar $cache
 	 *
 	 * @return array The post types with rewrite capabilities.
 	 */
 	protected function get_rewritable_post_types() {
-
-		$post_types = (array) \get_post_types( [
-			'public'  => true,
-			'rewrite' => true,
-		] );
+		static $cache = null;
 		//? array_values() because get_post_types() gives a sequential array.
-		return array_unique( array_merge( $this->get_forced_supported_post_types(), array_values( $post_types ) ) );
+		return isset( $cache ) ? $cache : $cache = array_unique(
+			array_merge(
+				$this->get_forced_supported_post_types(),
+				array_values( (array) \get_post_types( [
+					'public'  => true,
+					'rewrite' => true,
+				] ) )
+			)
+		);
 	}
 
 	/**

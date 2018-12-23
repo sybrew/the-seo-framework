@@ -373,6 +373,7 @@ class Generate_Description extends Generate {
 	 *              4. Added type argument.
 	 * @since 3.1.2 1. Now omits additions when the description will be deemed too short.
 	 *              2. Now no longer converts additions into excerpt when no excerpt is found.
+	 * @since 3.2.2 Now converts HTML characters prior trimming.
 	 * @uses $this->generate_description()
 	 * @staticvar array $cache
 	 *
@@ -387,12 +388,12 @@ class Generate_Description extends Generate {
 		if ( ! $this->is_auto_description_enabled( $args ) ) return '';
 
 		if ( null === $args ) {
-			$excerpt = $this->get_description_excerpt_from_query();
+			$excerpt    = $this->get_description_excerpt_from_query();
 			$_filter_id = $this->get_the_real_ID();
 		} else {
 			$this->fix_generation_args( $args );
 			$_filter_id = $args['id'];
-			$excerpt = $this->get_description_excerpt_from_args( $args );
+			$excerpt    = $this->get_description_excerpt_from_args( $args );
 		}
 
 		if ( ! in_array( $type, [ 'opengraph', 'twitter', 'search' ], true ) )
@@ -407,7 +408,7 @@ class Generate_Description extends Generate {
 		$excerpt = (string) \apply_filters( 'the_seo_framework_fetched_description_excerpt', $excerpt, $_filter_id );
 
 		$excerpt = $this->trim_excerpt(
-			$excerpt,
+			html_entity_decode( $excerpt, ENT_QUOTES | ENT_COMPAT, 'UTF-8' ),
 			0,
 			$this->get_input_guidelines()['description'][ $type ]['chars']['goodUpper']
 		);

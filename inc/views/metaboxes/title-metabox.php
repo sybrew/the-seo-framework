@@ -87,7 +87,7 @@ switch ( $instance ) :
 						'left'  => $additions_left,
 						'right' => $additions_right,
 					],
-					'showleft' => $showleft,
+					'showleft'  => $showleft,
 				],
 			],
 		];
