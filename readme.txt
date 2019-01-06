@@ -267,7 +267,7 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 * **Updated:**
 	* The plugin readme has been overhauled.
-	* A regressed sentence has been updated.
+	* An update POT file is available.
 * **Other:**
 	* We're looking for translators! Want to translate our plugin or readme? [Reach out to us](https://theseoframework.com/contact/), and we'll gladly compensate you with a lifetime Premium license. Conditions apply, retroactively:
 		* We hand out a license after you've contributed to more than 25% of the plugin translations.
@@ -289,7 +289,8 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 	* `get_title()` no longer double-escapes the custom field title, making the second parameter useful again.
 * **Class changes:**
 	* Factory: `the_seo_framework()`, in class `The_SEO_Framework\Admin_Init`:
-		* Method `get_default_scripts()`, returns a filterable array of the default scripts.
+		* **Added:**
+			* Method `get_default_scripts()`, returns a filterable array of the default scripts.
 	* In class `The_SEO_Framework\Builders\Scripts`:
 		* **Added:**
 			* Method `forward_known_script()`, forwards a registered script to WordPress' script handler.
@@ -300,6 +301,8 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 			* Access to property `$include_secret`.
 		* **Changed:**
 			* Registered templates are now cleared from the queue. This fixes an issue with Extension Manager v2.0.2.
+* **Other:**
+	* Cleaned up code: Improved legibility of some files.
 
 = 3.2.1 =
 

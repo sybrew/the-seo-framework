@@ -115,7 +115,7 @@ class Profile extends Doing_It_Right {
 		\check_admin_referer( 'update-user_' . $user_id );
 		if ( ! \current_user_can( 'edit_user', $user_id ) ) return;
 
-		if ( empty( $_POST ) )
+		if ( empty( $_POST ) ) // input var OK.
 			return;
 
 		$user = new \WP_User( $user_id );
@@ -123,14 +123,13 @@ class Profile extends Doing_It_Right {
 		if ( ! $user->has_cap( 'publish_posts' ) )
 			return;
 
-		$success = [];
+		$success  = [];
 		$defaults = $this->get_default_user_data();
 
 		foreach ( $this->profile_settings->keys as $option => $post_key ) {
-			if ( isset( $_POST[ $post_key ] ) ) { // CSRF ok: profile_settings->keys are static.
-				//= Sanitizes value from $_POST.
-				$value = $this->{$this->profile_settings->sanitation[ $option ]}( $_POST[ $post_key ] ) // Sanitization OK.
-					   ?: $defaults[ $option ];
+			if ( isset( $_POST[ $post_key ] ) ) { // Input var ok: profile_settings->keys are static.
+				$value = $this->{$this->profile_settings->sanitation[ $option ]}( $_POST[ $post_key ] ) // Input var & sanitization OK.
+					   ?: $defaults[ $option ]; // precision alignment ok.
 
 				$success[] = (bool) $this->update_user_option( $user_id, $option, $value );
 			}

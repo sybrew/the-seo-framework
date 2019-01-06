@@ -118,10 +118,10 @@ class Generate_Url extends Generate_Title {
 		if ( $args ) {
 			//= See $this->create_canonical_url().
 			$canonical_url = $this->build_canonical_url( $args );
-			$query = false;
+			$query         = false;
 		} else {
 			$canonical_url = $this->generate_canonical_url();
-			$query = true;
+			$query         = true;
 		}
 
 		if ( ! $canonical_url )
@@ -193,6 +193,7 @@ class Generate_Url extends Generate_Title {
 				$url = $this->get_home_canonical_url();
 		} elseif ( $this->is_singular() ) {
 			$url = $this->get_singular_custom_canonical_url( $id );
+
 			if ( ! $url )
 				$url = $this->get_singular_canonical_url( $id );
 		} elseif ( $this->is_archive() ) {
@@ -416,17 +417,17 @@ class Generate_Url extends Generate_Title {
 		$_paginate = true;
 		switch ( $_get ) {
 			case 'day':
-				$_day = \get_query_var( 'day' );
+				$_day      = \get_query_var( 'day' );
 				$_paginate = $_paginate && $_day == $day; // loose comparison OK.
 				// No break. Get month too.
 
 			case 'month':
-				$_month = \get_query_var( 'monthnum' );
+				$_month    = \get_query_var( 'monthnum' );
 				$_paginate = $_paginate && $_month == $month; // loose comparison OK.
 				// No break. Get year too.
 
 			case 'year':
-				$_year = \get_query_var( 'year' );
+				$_year     = \get_query_var( 'year' );
 				$_paginate = $_paginate && $_year == $year; // loose comparison OK.
 				break;
 		}
@@ -554,6 +555,7 @@ class Generate_Url extends Generate_Title {
 
 		if ( 'relative' === $scheme ) {
 			$url = ltrim( preg_replace( '#^\w+://[^/]*#', '', $url ) );
+
 			if ( '' !== $url && '/' === $url[0] )
 				$url = '/' . ltrim( $url, "/ \t\n\r\0\x0B" );
 		} else {
@@ -691,7 +693,7 @@ class Generate_Url extends Generate_Title {
 			} elseif ( $this->is_date() && isset( $GLOBALS['wp_query']->query ) ) {
 				// FIXME: Core Report: WP doesn't accept paged parameters w/ date parameters. It'll lead to the homepage.
 				$_query = $GLOBALS['wp_query']->query;
-				$_date = [
+				$_date  = [
 					'y' => isset( $_query['year'] ) ? $_query['year'] : '',
 					'm' => isset( $_query['monthnum'] ) ? $_query['monthnum'] : '',
 					'd' => isset( $_query['day'] ) ? $_query['day'] : '',
@@ -776,7 +778,7 @@ class Generate_Url extends Generate_Title {
 		if ( $this->is_singular() && ! $this->is_singular_archive() && $this->is_multipage() ) {
 			$_run = $this->is_real_front_page()
 				  ? $this->get_option( 'prev_next_frontpage' )
-				  : $this->get_option( 'prev_next_posts' );
+				  : $this->get_option( 'prev_next_posts' ); // precision alignment ok.
 
 			if ( ! $_run ) goto end;
 
@@ -786,7 +788,7 @@ class Generate_Url extends Generate_Title {
 		} elseif ( $this->is_archive() || $this->is_singular_archive() || $this->is_search() ) {
 			$_run = $this->is_real_front_page()
 				  ? $this->get_option( 'prev_next_frontpage' )
-				  : $this->get_option( 'prev_next_archives' );
+				  : $this->get_option( 'prev_next_archives' ); // precision alignment ok.
 
 			if ( ! $_run ) goto end;
 

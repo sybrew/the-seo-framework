@@ -767,9 +767,9 @@ class Render extends Admin_Init {
 		if ( ! $this->output_published_time() )
 			return '';
 
-		$id = $this->get_the_real_ID();
-
+		$id   = $this->get_the_real_ID();
 		$post = \get_post( $id );
+
 		$post_date_gmt = $post->post_date_gmt;
 
 		if ( '0000-00-00 00:00:00' === $post_date_gmt )

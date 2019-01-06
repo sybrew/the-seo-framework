@@ -59,9 +59,8 @@ class Sanitize extends Admin_Pages {
 		 *
 		 * @since 2.2.9
 		 */
-		if ( empty( $_POST )
-		|| ! isset( $_POST[ $this->settings_field ] )
-		|| ! is_array( $_POST[ $this->settings_field ] ) ) // CSRF ok: This is just a performance check.
+		if ( empty( $_POST[ $this->settings_field ] ) // Input var ok.
+		|| ! is_array( $_POST[ $this->settings_field ] ) ) // Input var, CSRF ok: This is just a performance check.
 			return $validated = false;
 
 		//* This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
@@ -605,40 +604,37 @@ class Sanitize extends Admin_Pages {
 	 * filter function name as a callback
 	 */
 	protected function get_available_filters() {
-
-		$default_filters = [
-			's_left_right'            => [ $this, 's_left_right' ],
-			's_left_right_home'       => [ $this, 's_left_right_home' ],
-			's_title_separator'       => [ $this, 's_title_separator' ],
-			's_description'           => [ $this, 's_description' ],
-			's_description_raw'       => [ $this, 's_description_raw' ],
-			's_title'                 => [ $this, 's_title' ],
-			's_title_raw'             => [ $this, 's_title_raw' ],
-			's_knowledge_type'        => [ $this, 's_knowledge_type' ],
-			's_alter_query_type'      => [ $this, 's_alter_query_type' ],
-			's_one_zero'              => [ $this, 's_one_zero' ],
-			's_disabled_post_types'   => [ $this, 's_disabled_post_types' ],
-			's_post_types'            => [ $this, 's_post_types' ],
-			's_numeric_string'        => [ $this, 's_numeric_string' ],
-			's_no_html'               => [ $this, 's_no_html' ],
-			's_no_html_space'         => [ $this, 's_no_html_space' ],
-			's_absint'                => [ $this, 's_absint' ],
-			's_safe_html'             => [ $this, 's_safe_html' ],
-			's_url'                   => [ $this, 's_url' ],
-			's_url_query'             => [ $this, 's_url_query' ],
-			's_facebook_profile'      => [ $this, 's_facebook_profile' ],
-			's_twitter_name'          => [ $this, 's_twitter_name' ],
-			's_twitter_card'          => [ $this, 's_twitter_card' ],
-			's_canonical_scheme'      => [ $this, 's_canonical_scheme' ],
-			's_min_max_sitemap'       => [ $this, 's_min_max_sitemap' ],
-		];
-
 		/**
 		 * @since 2.2.2
 		 * @param array $default_filters Array with keys of sanitization types
 		 *              and values of the filter function name as a callback
 		 */
-		return (array) \apply_filters( 'the_seo_framework_available_sanitizer_filters', $default_filters );
+		return (array) \apply_filters( 'the_seo_framework_available_sanitizer_filters', [
+			's_left_right'          => [ $this, 's_left_right' ],
+			's_left_right_home'     => [ $this, 's_left_right_home' ],
+			's_title_separator'     => [ $this, 's_title_separator' ],
+			's_description'         => [ $this, 's_description' ],
+			's_description_raw'     => [ $this, 's_description_raw' ],
+			's_title'               => [ $this, 's_title' ],
+			's_title_raw'           => [ $this, 's_title_raw' ],
+			's_knowledge_type'      => [ $this, 's_knowledge_type' ],
+			's_alter_query_type'    => [ $this, 's_alter_query_type' ],
+			's_one_zero'            => [ $this, 's_one_zero' ],
+			's_disabled_post_types' => [ $this, 's_disabled_post_types' ],
+			's_post_types'          => [ $this, 's_post_types' ],
+			's_numeric_string'      => [ $this, 's_numeric_string' ],
+			's_no_html'             => [ $this, 's_no_html' ],
+			's_no_html_space'       => [ $this, 's_no_html_space' ],
+			's_absint'              => [ $this, 's_absint' ],
+			's_safe_html'           => [ $this, 's_safe_html' ],
+			's_url'                 => [ $this, 's_url' ],
+			's_url_query'           => [ $this, 's_url_query' ],
+			's_facebook_profile'    => [ $this, 's_facebook_profile' ],
+			's_twitter_name'        => [ $this, 's_twitter_name' ],
+			's_twitter_card'        => [ $this, 's_twitter_card' ],
+			's_canonical_scheme'    => [ $this, 's_canonical_scheme' ],
+			's_min_max_sitemap'     => [ $this, 's_min_max_sitemap' ],
+		] );
 	}
 
 	/**
@@ -1249,7 +1245,6 @@ class Sanitize extends Admin_Pages {
 		$url = strip_tags( $new_value );
 
 		if ( $url ) :
-
 			/**
 			 * Sanitize the redirect URL to only a relative link and removes first slash
 			 * @requires WP 4.1.0 and up to prevent adding upon itself.
@@ -1264,7 +1259,7 @@ class Sanitize extends Admin_Pages {
 					 . '((www.)?)'            // 3: maybe www.
 					 . '(.*\.[a-zA-Z0-9]*)'   // 4: any legal domain with tld
 					 . '(?:\/)?'              // 5: maybe trailing slash
-					 . '/';
+					 . '/'; // precision alignment OK.
 
 			//* If link is relative, make it full again
 			if ( ! preg_match( $pattern, $url ) ) {

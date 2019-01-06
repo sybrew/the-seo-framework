@@ -356,7 +356,7 @@ class Admin_Pages extends Inpost {
 	 */
 	protected function do_settings_page_notices() {
 
-		$get = empty( $_GET ) ? null : $_GET;
+		$get = empty( $_GET ) ? null : $_GET; // CSRF, input var OK.
 
 		if ( null === $get )
 			return;

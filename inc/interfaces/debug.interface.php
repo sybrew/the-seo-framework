@@ -43,7 +43,7 @@ interface Debug_Interface {
 	 * @param string $version     The version of WordPress that deprecated the function.
 	 * @param string $replacement Optional. The function that should have been called. Default null.
 	 */
-	public function _deprecated_filter( $filter, $version, $replacement = null );
+	public function _deprecated_filter( $filter, $version, $replacement = null ); // phpcs:ignore -- Internal function.
 
 	/**
 	 * Mark a function as deprecated and inform when it has been used.
@@ -59,7 +59,7 @@ interface Debug_Interface {
 	 * @param string $version     The version of WordPress that deprecated the function.
 	 * @param string $replacement Optional. The function that should have been called. Default null.
 	 */
-	public function _deprecated_function( $function, $version, $replacement = null );
+	public function _deprecated_function( $function, $version, $replacement = null ); // phpcs:ignore -- Internal function.
 
 	/**
 	 * Mark a function as deprecated and inform when it has been used.
@@ -75,7 +75,7 @@ interface Debug_Interface {
 	 * @param string $message  A message explaining what has been done incorrectly.
 	 * @param string $version  The version of WordPress where the message was added.
 	 */
-	public function _doing_it_wrong( $function, $message, $version );
+	public function _doing_it_wrong( $function, $message, $version ); // phpcs:ignore -- Internal function.
 
 	/**
 	 * Mark a property or method inaccessible when it has been used.

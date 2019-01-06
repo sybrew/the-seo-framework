@@ -93,7 +93,7 @@ switch ( $instance ) :
 		<?php
 
 		$pixel_info = $this->make_info(
-			__( 'The pixel counter computes whether the input will fit on search engine Result Pages.', 'autodescription' ),
+			__( 'The pixel counter computes whether the input will fit on search engine result pages.', 'autodescription' ),
 			'',
 			false
 		);

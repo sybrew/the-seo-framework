@@ -77,6 +77,7 @@ class Site_Options extends Sanitize {
 		 * @since 2.2.7
 		 * @param array $options The default site options.
 		 */
+		// phpcs:disable WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned -- precision alignment OK.
 		return (array) \apply_filters(
 			'the_seo_framework_default_site_options',
 			[
@@ -263,6 +264,7 @@ class Site_Options extends Sanitize {
 				'ld_json_breadcrumbs' => 1, // LD+Json Breadcrumbs
 			]
 		);
+		// phpcs:enable WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 	}
 
 	/**

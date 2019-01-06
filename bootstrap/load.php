@@ -70,7 +70,7 @@ function _init_tsf() {
 	if ( \The_SEO_Framework\_can_load() ) {
 		if ( \is_admin() ) {
 			//! TODO: admin-only loader.
-			$tsf = new \The_SEO_Framework\Load();
+			$tsf         = new \The_SEO_Framework\Load();
 			$tsf->loaded = true;
 
 			/**
@@ -79,7 +79,7 @@ function _init_tsf() {
 			 */
 			\do_action( 'the_seo_framework_admin_loaded' );
 		} else {
-			$tsf = new \The_SEO_Framework\Load();
+			$tsf         = new \The_SEO_Framework\Load();
 			$tsf->loaded = true;
 		}
 
@@ -89,7 +89,7 @@ function _init_tsf() {
 		 */
 		\do_action( 'the_seo_framework_loaded' );
 	} else {
-		$tsf = new \The_SEO_Framework\Silencer();
+		$tsf         = new \The_SEO_Framework\Silencer();
 		$tsf->loaded = false;
 	}
 
@@ -125,11 +125,11 @@ function _autoload_classes( $class ) {
 	$strip = 'The_SEO_Framework\\';
 
 	if ( strpos( $class, '_Interface' ) ) {
-		$path = THE_SEO_FRAMEWORK_DIR_PATH_INTERFACE;
+		$path      = THE_SEO_FRAMEWORK_DIR_PATH_INTERFACE;
 		$extension = '.interface.php';
-		$class = str_replace( '_Interface', '', $class );
+		$class     = str_replace( '_Interface', '', $class );
 	} else {
-		$path = THE_SEO_FRAMEWORK_DIR_PATH_CLASS;
+		$path      = THE_SEO_FRAMEWORK_DIR_PATH_CLASS;
 		$extension = '.class.php';
 
 		//: substr_count( $class, '\\', 2 ) >= 2 // strrpos... str_split...

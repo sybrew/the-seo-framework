@@ -159,7 +159,7 @@ class Core {
 	 */
 	public function get_view( $view, array $__args = [], $instance = 'main' ) {
 
-		//? extract().
+		//? A faster extract().
 		foreach ( $__args as $__k => $__v ) $$__k = $__v;
 		unset( $__k, $__v, $__args );
 
@@ -740,16 +740,16 @@ class Core {
 		 * The conversion list's keys are per reference only.
 		 */
 		$conversions = [
-			'**'   => 'strong',
-			'*'    => 'em',
-			'`'    => 'code',
-			'[]()' => 'a',
+			'**'     => 'strong',
+			'*'      => 'em',
+			'`'      => 'code',
+			'[]()'   => 'a',
 			'======' => 'h6',
-			'=====' => 'h5',
-			'====' => 'h4',
-			'==='  => 'h3',
-			'=='   => 'h2',
-			'='    => 'h1',
+			'====='  => 'h5',
+			'===='   => 'h4',
+			'==='    => 'h3',
+			'=='     => 'h2',
+			'='      => 'h1',
 		];
 
 		$md_types = empty( $convert ) ? $conversions : array_intersect( $conversions, $convert );

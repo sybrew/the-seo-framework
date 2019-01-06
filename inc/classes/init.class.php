@@ -385,7 +385,7 @@ class Init extends Query {
 			$output    = $this->object_cache_get( $cache_key );
 		} else {
 			$cache_key = '';
-			$output = false;
+			$output    = false;
 		}
 
 		if ( false === $output ) :
@@ -543,7 +543,7 @@ class Init extends Query {
 			exit;
 		}
 
-		\wp_redirect( $url, $redirect_type );
+		\wp_redirect( $url, $redirect_type ); // phpcs:ignore -- intended feature. Disable via $this->allow_external_redirect().
 		exit;
 	}
 

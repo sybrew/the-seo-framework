@@ -48,7 +48,7 @@ class Generate_Title extends Generate_Description {
 	public function get_title( $args = null, $escape = true ) {
 
 		$title = $this->get_custom_field_title( $args, false )
-			  ?: $this->get_generated_title( $args, false );
+			  ?: $this->get_generated_title( $args, false ); // precision alignment ok.
 
 		return $escape ? $this->escape_title( $title ) : $title;
 	}
@@ -154,7 +154,7 @@ class Generate_Title extends Generate_Description {
 	public function get_twitter_title( $args = null, $escape = true ) {
 
 		$title = $this->get_twitter_title_from_custom_field( $args, false )
-			  ?: $this->get_generated_twitter_title( $args, false );
+			  ?: $this->get_generated_twitter_title( $args, false ); // precision alignment ok.
 
 		return $escape ? $this->escape_title( $title ) : $title;
 	}
@@ -203,7 +203,7 @@ class Generate_Title extends Generate_Description {
 			if ( $this->is_singular() ) {
 				$title = $this->get_custom_field( '_twitter_title' )
 					  ?: $this->get_custom_field( '_open_graph_title' )
-					  ?: '';
+					  ?: ''; // precision alignment ok.
 			}
 		}
 
@@ -234,7 +234,7 @@ class Generate_Title extends Generate_Description {
 			if ( ! $title ) {
 				$title = $this->get_custom_field( '_twitter_title', $args['id'] )
 					  ?: $this->get_custom_field( '_open_graph_title', $args['id'] )
-					  ?: '';
+					  ?: ''; // precision alignment ok.
 			}
 		}
 
@@ -275,7 +275,7 @@ class Generate_Title extends Generate_Description {
 	public function get_open_graph_title( $args = null, $escape = true ) {
 
 		$title = $this->get_open_graph_title_from_custom_field( $args, false )
-			  ?: $this->get_generated_open_graph_title( $args, false );
+			  ?: $this->get_generated_open_graph_title( $args, false ); // precision alignment ok.
 
 		return $escape ? $this->escape_title( $title ) : $title;
 	}
@@ -510,7 +510,7 @@ class Generate_Title extends Generate_Description {
 			// Reset filters.
 			$filtered = [];
 		} else {
-			$filters   = [ 'single_post_title', 'single_cat_title', 'single_tag_title' ];
+			$filters = [ 'single_post_title', 'single_cat_title', 'single_tag_title' ];
 			/**
 			 * Texturization happens when outputting and saving the title; however,
 			 * we want the raw title, so we won't find unexplainable issues later.

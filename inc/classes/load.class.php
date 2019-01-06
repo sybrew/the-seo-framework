@@ -42,9 +42,9 @@ final class Load extends Feed implements Debug_Interface {
 	 * @var bool Whether transients are enabled.
 	 * @var bool Whether script debugging is enabled.
 	 */
-	public $the_seo_framework_debug = false,
-		   $the_seo_framework_use_transients = true,
-		   $script_debug = false;
+	public $the_seo_framework_debug          = false;
+	public $the_seo_framework_use_transients = true;
+	public $script_debug                     = false;
 
 	/**
 	 * Constructor, setup debug vars and then load parent constructor.

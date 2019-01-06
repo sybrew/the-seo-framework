@@ -284,6 +284,7 @@ class Cache extends Sitemaps {
 			 * @NOTE Other caching plugins can override these groups. Therefore this
 			 * does NOT work.
 			 * @TODO make this work.
+			 * @see 'object' switch-index.
 			 */
 			case 'objectflush':
 				//* @NOTE false can't pass.

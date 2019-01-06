@@ -48,7 +48,7 @@ class Generate_Description extends Generate {
 	public function get_description( $args = null, $escape = true ) {
 
 		$desc = $this->get_description_from_custom_field( $args, false )
-			 ?: $this->get_generated_description( $args, false );
+			 ?: $this->get_generated_description( $args, false ); // precision alignment ok.
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -70,7 +70,7 @@ class Generate_Description extends Generate {
 	public function get_open_graph_description( $args = null, $escape = true ) {
 
 		$desc = $this->get_open_graph_description_from_custom_field( $args, false )
-			 ?: $this->get_generated_open_graph_description( $args, false );
+			 ?: $this->get_generated_open_graph_description( $args, false ); // precision alignment ok.
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -119,7 +119,7 @@ class Generate_Description extends Generate {
 		if ( ! $desc ) {
 			if ( $this->is_singular() ) {
 				$desc = $this->get_custom_field( '_open_graph_description' )
-					 ?: $this->get_description_from_custom_field();
+					 ?: $this->get_description_from_custom_field(); // precision alignment ok.
 			}
 		}
 
@@ -149,7 +149,7 @@ class Generate_Description extends Generate {
 			}
 			if ( ! $desc ) {
 				$desc = $this->get_custom_field( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args );
+					 ?: $this->get_description_from_custom_field( $args ); // precision alignment ok.
 			}
 		}
 
@@ -174,7 +174,7 @@ class Generate_Description extends Generate {
 	public function get_twitter_description( $args = null, $escape = true ) {
 
 		$desc = $this->get_twitter_description_from_custom_field( $args, false )
-			 ?: $this->get_generated_twitter_description( $args, false );
+			 ?: $this->get_generated_twitter_description( $args, false ); // precision alignment ok.
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -222,12 +222,12 @@ class Generate_Description extends Generate {
 				 ?: $this->get_custom_field( '_twitter_description' )
 				 ?: $this->get_option( 'homepage_og_description' )
 				 ?: $this->get_custom_field( '_open_graph_description' )
-				 ?: $this->get_description_from_custom_field();
+				 ?: $this->get_description_from_custom_field();  // precision alignment ok.
 		} else {
 			if ( $this->is_singular() ) {
 				$desc = $this->get_custom_field( '_twitter_description' )
 					 ?: $this->get_custom_field( '_open_graph_description' )
-					 ?: $this->get_description_from_custom_field();
+					 ?: $this->get_description_from_custom_field(); // precision alignment ok.
 			}
 		}
 
@@ -257,11 +257,11 @@ class Generate_Description extends Generate {
 					 ?: $this->get_custom_field( '_twitter_description', $args['id'] )
 					 ?: $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_custom_field( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args );
+					 ?: $this->get_description_from_custom_field( $args ); // precision alignment ok.
 			} else {
 				$desc = $this->get_custom_field( '_twitter_description', $args['id'] )
 					 ?: $this->get_custom_field( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args );
+					 ?: $this->get_description_from_custom_field( $args ); // precision alignment ok.
 			}
 		}
 
@@ -351,7 +351,7 @@ class Generate_Description extends Generate {
 
 		if ( $args['taxonomy'] ) {
 			// $term = \get_term( $args['id'], $args['taxonomy'] ); // redundant
-			$data  = $this->get_term_meta( $args['id'] );
+			$data = $this->get_term_meta( $args['id'] );
 			$desc = ! empty( $data['description'] ) ? $data['description'] : '';
 		} else {
 			if ( $this->is_front_page_by_id( $args['id'] ) ) {
@@ -690,6 +690,7 @@ class Generate_Description extends Generate {
 		if ( ';' === substr( $excerpt, -1 ) ) {
 			//* Replace connector punctuation with a dot.
 			$excerpt = rtrim( $excerpt, ' \\/,.?!;' );
+
 			if ( $excerpt )
 				$excerpt .= '.';
 		} elseif ( $excerpt ) {

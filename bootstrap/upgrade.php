@@ -87,7 +87,7 @@ function the_seo_framework_do_upgrade() {
 	if ( ! the_seo_framework()->loaded ) return;
 
 	if ( the_seo_framework()->is_seo_settings_page( false ) ) {
-		wp_redirect( self_admin_url() );
+		wp_redirect( self_admin_url() ); // phpcs:ignore -- self_admin_url() is safe.
 		exit;
 	}
 

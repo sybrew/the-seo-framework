@@ -565,9 +565,9 @@ class Admin_Init extends Init {
 			'i18n'   => [
 				'saveAlert'       => \__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
 				'confirmReset'    => \__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
-				// phpcs: WordPress doesn't have a comment, either.
+				// phpcs:ignore -- WordPress doesn't have a comment, either.
 				'privateTitle'    => $has_input && $id ? trim( str_replace( '%s', '', \__( 'Private: %s', 'default' ) ) ) : '',
-				// phpcs: WordPress doesn't have a comment, either.
+				// phpcs:ignore -- WordPress doesn't have a comment, either.
 				'protectedTitle'  => $has_input && $id ? trim( str_replace( '%s', '', \__( 'Protected: %s', 'default' ) ) ) : '',
 				/* translators: Pixel counter. 1: width, 2: guideline */
 				'pixelsUsed'      => $has_input ? \__( '%1$d out of %2$d pixels are used.', 'autodescription' ) : '',
@@ -993,7 +993,7 @@ class Admin_Init extends Init {
 				$parent_url = \wp_get_attachment_url( $attachment_id );
 				$url        = str_replace( basename( $parent_url ), basename( $cropped ), $parent_url );
 
-				$size       = @getimagesize( $cropped );
+				$size       = @getimagesize( $cropped ); // phpcs:ignore -- Feature might not be enabled.
 				$image_type = ( $size ) ? $size['mime'] : 'image/jpeg';
 
 				$object = [

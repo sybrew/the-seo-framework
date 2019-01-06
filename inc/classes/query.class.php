@@ -268,13 +268,9 @@ class Query extends Compat {
 
 		if ( isset( $cache ) ) return $cache;
 
-		if ( $this->is_admin() ) {
-			global $current_screen;
-			return $cache = ! empty( $current_screen->taxonomy ) ? $current_screen->taxonomy : '';
-		} else {
-			$_object = \get_queried_object();
-			return $cache = ! empty( $_object->taxonomy ) ? $_object->taxonomy : '';
-		}
+		$_object = $this->is_admin() ? $GLOBALS['current_screen'] : \get_queried_object();
+
+		return $cache = ! empty( $_object->taxonomy ) ? $_object->taxonomy : '';
 	}
 
 	/**
@@ -372,11 +368,7 @@ class Query extends Compat {
 	 */
 	public function is_archive_admin() {
 		global $current_screen;
-
-		if ( isset( $current_screen->base ) && ( 'edit-tags' === $current_screen->base || 'term' === $current_screen->base ) )
-			return true;
-
-		return false;
+		return isset( $current_screen->base ) && in_array( $current_screen->base, [ 'edit-tags', 'term' ], true );
 	}
 
 	/**
@@ -394,13 +386,9 @@ class Query extends Compat {
 
 		global $current_screen;
 
-		$is_term_edit = false;
-		if ( isset( $current_screen->base ) && ( 'term' === $current_screen->base ) )
-			$is_term_edit = true;
-
 		$this->set_query_cache(
 			__METHOD__,
-			$is_term_edit
+			$is_term_edit = isset( $current_screen->base ) && ( 'term' === $current_screen->base )
 		);
 
 		return $is_term_edit;
@@ -416,11 +404,7 @@ class Query extends Compat {
 	 */
 	public function is_post_edit() {
 		global $current_screen;
-
-		if ( isset( $current_screen->base ) && 'post' === $current_screen->base )
-			return true;
-
-		return false;
+		return isset( $current_screen->base ) && 'post' === $current_screen->base;
 	}
 
 	/**
@@ -433,11 +417,7 @@ class Query extends Compat {
 	 */
 	public function is_wp_lists_edit() {
 		global $current_screen;
-
-		if ( isset( $current_screen->base ) && in_array( $current_screen->base, [ 'edit-tags', 'edit' ], true ) )
-			return true;
-
-		return false;
+		return isset( $current_screen->base ) && in_array( $current_screen->base, [ 'edit-tags', 'edit' ], true );
 	}
 
 	/**
@@ -484,6 +464,7 @@ class Query extends Compat {
 		$is_blog_page = false;
 
 		static $pfp = null;
+
 		if ( is_null( $pfp ) )
 			$pfp = (int) \get_option( 'page_for_posts' );
 
@@ -823,11 +804,7 @@ class Query extends Compat {
 	 */
 	public function is_single_admin() {
 		global $current_screen;
-
-		if ( isset( $current_screen->post_type ) && 'post' === $current_screen->post_type )
-			return true;
-
-		return false;
+		return isset( $current_screen->post_type ) && 'post' === $current_screen->post_type;
 	}
 
 	/**
@@ -849,7 +826,7 @@ class Query extends Compat {
 
 		if ( is_int( $post_types ) ) {
 			//* Cache ID. Core is_singular() doesn't accept integers.
-			$id = $post_types;
+			$id         = $post_types;
 			$post_types = '';
 		}
 
@@ -888,15 +865,13 @@ class Query extends Compat {
 	 * @return bool Post Type is singular
 	 */
 	public function is_singular_admin( $post_id = null ) {
-		global $current_screen;
 
 		if ( isset( $post_id ) ) {
 			$post = \get_post( $post_id );
-			if ( $post && $post instanceof \WP_Post )
-				return true;
+			return $post && $post instanceof \WP_Post;
 		} else {
-			if ( isset( $current_screen->base ) && ( 'edit' === $current_screen->base || 'post' === $current_screen->base ) )
-				return true;
+			global $current_screen;
+			return isset( $current_screen->base ) && in_array( $current_screen->base, [ 'edit', 'post' ], true );
 		}
 
 		return false;
@@ -1060,9 +1035,7 @@ class Query extends Compat {
 	 * @return bool True if SSL, false otherwise.
 	 */
 	public function is_ssl() {
-
 		static $cache = null;
-
 		return isset( $cache ) ? $cache : $cache = \is_ssl();
 	}
 
@@ -1089,11 +1062,9 @@ class Query extends Compat {
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
-		$page = $this->is_menu_page( $this->seo_settings_page_hook );
-
 		$this->set_query_cache(
 			__METHOD__,
-			$page
+			$page = $this->is_menu_page( $this->seo_settings_page_hook )
 		);
 
 		return $page;
@@ -1125,11 +1096,9 @@ class Query extends Compat {
 		global $page_hook;
 
 		if ( isset( $page_hook ) ) {
-			if ( $page_hook === $pagehook )
-				return true;
+			return $page_hook === $pagehook;
 		} elseif ( $this->is_admin() && $pageslug ) {
-			if ( ! empty( $_GET['page'] ) && $pageslug === $_GET['page'] )
-				return true;
+			return ! empty( $_GET['page'] ) && $pageslug === $_GET['page']; // CSRF, input var OK.
 		}
 
 		return false;

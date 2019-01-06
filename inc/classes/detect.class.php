@@ -43,6 +43,7 @@ class Detect extends Render {
 	 */
 	public function doing_ajax() {
 		static $cache = null;
+
 		return isset( $cache ) ? $cache : $cache = defined( 'DOING_AJAX' ) && DOING_AJAX;
 	}
 
@@ -1087,6 +1088,7 @@ class Detect extends Render {
 			return $cache;
 
 		$parsed_url = \wp_parse_url( \get_option( 'home' ) );
+
 		if ( ! empty( $parsed_url['path'] ) && ltrim( $parsed_url['path'], ' \\/' ) )
 			$cache = true;
 

@@ -84,8 +84,8 @@ function _activation_set_options_autoload() {
 		\remove_all_actions( "update_option_{$setting}" );
 		\remove_all_filters( "sanitize_option_{$setting}" );
 
-		//? Write a small difference, so the change will be forwarded to the database.
 		$temp_options = $options;
+		//? Write a small difference, so the change will be forwarded to the database.
 		if ( is_array( $temp_options ) )
 			$temp_options['update_buster'] = (int) time();
 

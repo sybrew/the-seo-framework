@@ -361,7 +361,7 @@ class Generate_Image extends Generate_Url {
 			return $defaults;
 
 		//* Array merge doesn't support sanitation. We're simply type casting here.
-		// phpcs:disable -- it's ok.
+		// phpcs:disable WordPress.WhiteSpace.OperatorSpacing.SpacingBefore -- precision alignment OK.
 		$args['post_id']       = isset( $args['post_id'] )       ? (int) $args['post_id']        : $defaults['post_id'];
 		$args['image']         = isset( $args['image'] )         ? (string) $args['image']       : $defaults['image'];
 		$args['size']          = isset( $args['size'] )          ? $args['size']                 : $defaults['size']; // Mixed.
@@ -369,7 +369,7 @@ class Generate_Image extends Generate_Url {
 		$args['skip_fallback'] = isset( $args['skip_fallback'] ) ? (bool) $args['skip_fallback'] : $defaults['skip_fallback'];
 		$args['disallowed']    = isset( $args['disallowed'] )    ? (array) $args['disallowed']   : $defaults['disallowed'];
 		$args['escape']        = isset( $args['escape'] )        ? (bool) $args['escape']        : $defaults['escape'];
-		// phpcs:enable
+		// phpcs:enable WordPress.WhiteSpace.OperatorSpacing.SpacingBefore
 
 		return $args;
 	}
