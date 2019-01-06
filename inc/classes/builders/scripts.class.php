@@ -82,9 +82,11 @@ final class Scripts {
 
 	/**
 	 * @since 3.1.0
+	 * @since 3.2.2 Is now a private variable.
+	 * @see static::verify()
 	 * @param string|null $include_secret The inclusion secret generated on tab load.
 	 */
-	public static $include_secret;
+	private static $include_secret;
 
 	/**
 	 * Prepares the class and loads constructor.
@@ -103,6 +105,7 @@ final class Scripts {
 	 *
 	 * @since 3.1.0
 	 * @access private
+	 * @internal
 	 */
 	public function __construct() {
 
@@ -113,6 +116,20 @@ final class Scripts {
 
 		\add_action( 'admin_enqueue_scripts', [ $this, '_prepare_admin_scripts' ], 1 );
 		\add_action( 'admin_footer', [ $this, '_output_templates' ], 999 );
+	}
+
+	/**
+	 * Prepares scripts for output on post edit screens.
+	 *
+	 * @since 3.1.0
+	 * @access private
+	 * @internal
+	 *
+	 * @param string $hook The current admin hook.
+	 */
+	public function _prepare_admin_scripts( $hook = '' ) {
+		$this->forward_known_scripts();
+		$this->autoload_known_scripts();
 	}
 
 	/**
@@ -131,7 +148,7 @@ final class Scripts {
 	}
 
 	/**
-	 * Enqueues registered scripts, styles, and templates.
+	 * Enqueues all known registered scripts, styles, and templates.
 	 *
 	 * @since 3.1.0
 	 */
@@ -141,11 +158,14 @@ final class Scripts {
 	}
 
 	/**
-	 * Registers script to be enqueued.
+	 * Registers script to be enqueued. Can register multiple scripts at once.
+	 *
+	 * A better name would've been "collect"...
 	 *
 	 * @since 3.1.0
 	 * @uses static::$scripts
-	 * @see $this->enqueue_scripts()
+	 * @see $this->forward_known_scripts()
+	 * @see $this->autoload_known_scripts()
 	 *
 	 * @NOTE If the script is associative, it'll be registered as-is.
 	 *       If the script is sequential, it'll be iterated over, and then registered.
@@ -181,62 +201,162 @@ final class Scripts {
 	}
 
 	/**
-	 * Prepares scripts for output on post edit screens.
+	 * Registers and enqueues known scripts.
 	 *
-	 * @since 3.1.0
-	 * @access private
+	 * @since 3.2.2
 	 *
-	 * @param string $hook The current admin hook.
+	 * @param string $id   The script ID.
+	 * @param string $type The script type.
 	 */
-	public function _prepare_admin_scripts( $hook = '' ) {
-		$this->enqueue_scripts();
+	public static function forward_known_script( $id, $type ) {
+		if ( ! ( static::get_status_of( $id, $type ) & static::REGISTERED ) ) {
+			foreach ( static::$scripts as $s ) {
+				if ( $s['id'] === $id ) {
+					if ( $s['type'] === $type ) {
+						static::forward_script( $s );
+					}
+				}
+			}
+		}
 	}
 
 	/**
-	 * Enqueues scripts, l10n and templates.
+	 * Registers and enqueues known scripts.
+	 *
+	 * @since 3.2.2
+	 * @uses static::forward_known_script();
+	 *
+	 * @param string $id   The script ID.
+	 * @param string $type The script type.
+	 */
+	public static function enqueue_known_script( $id, $type ) {
+
+		static::forward_known_script( $id, $type );
+
+		if ( static::get_status_of( $id, $type ) & static::REGISTERED ) {
+			if ( ! ( static::get_status_of( $id, $type ) & static::LOADED ) ) {
+				static::load_script( $id, $type );
+			}
+		}
+	}
+
+	/**
+	 * Verifies template view inclusion secret.
 	 *
 	 * @since 3.1.0
-	 * @uses static::$scripts
-	 * @uses $this->generate_file_url()
-	 * @uses $this->register_template()
+	 * @see static::output_view()
+	 * @uses static::$include_secret
+	 *
+	 * @example template file header:
+	 * `defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and The_SEO_Framework\Builders\Scripts::verify( $_secret ) or die;`
+	 *
+	 * @param string $secret The passed secret.
+	 * @return bool True on success, false on failure.
 	 */
-	private function enqueue_scripts() {
+	public static function verify( $secret ) {
+		return $secret && static::$include_secret === $secret;
+	}
 
+	/**
+	 * Forwards known scripts to WordPress' script handler. Also prepares l10n and templates.
+	 *
+	 * @since 3.2.2
+	 * @uses static::$scripts
+	 * @uses static::egister_script()
+	 */
+	private function forward_known_scripts() {
 		//= Register them first to accomodate for dependencies.
 		foreach ( static::$scripts as $s ) {
 			if ( static::get_status_of( $s['id'], $s['type'] ) & static::REGISTERED ) continue;
-
-			switch ( $s['type'] ) {
-				case 'css':
-					\wp_register_style( $s['id'], $this->generate_file_url( $s, 'css' ), $s['deps'], $s['ver'], 'all' );
-					isset( $s['inline'] )
-						and \wp_add_inline_style( $s['id'], $this->get_inline_css( $s['inline'] ) );
-					break;
-				case 'js':
-					\wp_register_script( $s['id'], $this->generate_file_url( $s, 'js' ), $s['deps'], $s['ver'], true );
-					isset( $s['l10n'] )
-						and \wp_localize_script( $s['id'], $s['l10n']['name'], $s['l10n']['data'] );
-					isset( $s['tmpl'] )
-						and $this->register_template( $s['id'], $s['tmpl'] );
-					break;
-			}
-			static::$queue[ $s['type'] ][ $s['id'] ] = static::REGISTERED;
+			static::forward_script( $s );
 		}
+	}
 
+	/**
+	 * Enqueues known scripts, and invokes the l10n and templates.
+	 *
+	 * @since 3.2.2
+	 * @uses static::$scripts
+	 * @uses static::load_script()
+	 */
+	private function autoload_known_scripts() {
 		foreach ( static::$scripts as $s ) {
-			if ( static::get_status_of( $s['id'], $s['type'] ) & static::LOADED ) continue;
-
 			if ( $s['autoload'] ) {
-				switch ( $s['type'] ) {
-					case 'css':
-						\wp_enqueue_style( $s['id'] );
-						break;
-					case 'js':
-						\wp_enqueue_script( $s['id'] );
-						break;
-				}
+				if ( static::get_status_of( $s['id'], $s['type'] ) & static::LOADED ) continue;
+				static::load_script( $s['id'], $s['type'] );
 			}
-			static::$queue[ $s['type'] ][ $s['id'] ] |= static::LOADED;
+		}
+	}
+
+	/**
+	 * Enqueues scripts in WordPress' script handler. Also prepares l10n and templates.
+	 *
+	 * @since 3.2.2
+	 * @see $this->forward_known_scripts();
+	 * @see static::enqueue_known_script();
+	 * @augments static::$queue
+	 * @uses $this->generate_file_url()
+	 * @uses $this->get_inline_css()
+	 * @uses $this->register_template()
+	 *
+	 * @param array $s The script.
+	 */
+	private static function forward_script( array $s ) {
+
+		$instance   = static::$instance;
+		$registered = false;
+
+		switch ( $s['type'] ) {
+			case 'css':
+				\wp_register_style( $s['id'], $instance->generate_file_url( $s, 'css' ), $s['deps'], $s['ver'], 'all' );
+				isset( $s['inline'] )
+					and \wp_add_inline_style( $s['id'], $instance->get_inline_css( $s['inline'] ) );
+				$registered = true;
+				break;
+			case 'js':
+				\wp_register_script( $s['id'], $instance->generate_file_url( $s, 'js' ), $s['deps'], $s['ver'], true );
+				isset( $s['l10n'] )
+					and \wp_localize_script( $s['id'], $s['l10n']['name'], $s['l10n']['data'] );
+				isset( $s['tmpl'] )
+					and $instance->register_template( $s['id'], $s['tmpl'] );
+				$registered = true;
+				break;
+		}
+		if ( $registered ) {
+			isset( static::$queue[ $s['type'] ][ $s['id'] ] )
+				and static::$queue[ $s['type'] ][ $s['id'] ] |= static::REGISTERED
+				 or static::$queue[ $s['type'] ][ $s['id'] ]  = static::REGISTERED; // Precision alignment ok.
+		}
+	}
+
+	/**
+	 * Loads known registered script.
+	 *
+	 * @since 3.2.2
+	 *
+	 * @param string $id   The script ID.
+	 * @param string $type The script type.
+	 */
+	private static function load_script( $id, $type ) {
+
+		if ( ! ( static::get_status_of( $id, $type ) & static::REGISTERED ) ) return;
+
+		$loaded = false;
+
+		switch ( $type ) {
+			case 'css':
+				\wp_enqueue_style( $id );
+				$loaded = true;
+				break;
+			case 'js':
+				\wp_enqueue_script( $id );
+				$loaded = true;
+				break;
+		}
+		if ( $loaded ) {
+			isset( static::$queue[ $type ][ $id ] )
+				and static::$queue[ $type ][ $id ] |= static::LOADED
+				 or static::$queue[ $type ][ $id ]  = static::LOADED; // Precision alignment ok.
 		}
 	}
 
@@ -310,7 +430,7 @@ final class Scripts {
 			$tsf = \the_seo_framework();
 
 			if (
-			   ! isset( $_colors[ $_scheme ]->colors )
+			   ! isset( $_colors[ $_scheme ]->colors ) // Precision alignment OK.
 			|| ! is_array( $_colors[ $_scheme ]->colors )
 			|| count( $_colors[ $_scheme ]->colors ) < 4
 			) {
@@ -385,14 +505,21 @@ final class Scripts {
 	 * The loop will only run when templates are registered.
 	 *
 	 * @since 3.1.0
-	 * @see $this->enqueue_scripts()
+	 * @since 3.2.2 Now clears outputted templates, so to prevent duplications.
+	 * @see $this->forward_known_scripts()
+	 * @see $this->register_template()
+	 * @see $this->autoload_scripts()
 	 * @access private
+	 * @internal
 	 */
 	public function _output_templates() {
-		foreach ( static::$templates as $id => $templates )
-			if ( \wp_script_is( $id, 'enqueued' ) ) // This list retains scripts after they're outputted.
+		foreach ( static::$templates as $id => $templates ) {
+			if ( \wp_script_is( $id, 'enqueued' ) ) { // This list retains scripts after they're outputted.
 				foreach ( $templates as $t )
 					$this->output_view( $t[0], $t[1] );
+				unset( static::$templates[ $id ] );
+			}
+		}
 	}
 
 	/**
@@ -418,21 +545,6 @@ final class Scripts {
 		static::$include_secret = $_secret = mt_rand() . uniqid();
 		include $file;
 		static::$include_secret = null;
-	}
-
-	/**
-	 * Verifies view inclusion secret.
-	 *
-	 * @since 3.1.0
-	 * @see static::output_view()
-	 * @uses static::$include_secret
-	 * @internal
-	 *
-	 * @param string $secret The passed secret.
-	 * @return bool True on success, false on failure.
-	 */
-	public static function verify( $secret ) {
-		return $secret && static::$include_secret === $secret;
 	}
 }
 

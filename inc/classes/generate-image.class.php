@@ -232,7 +232,6 @@ class Generate_Image extends Generate_Url {
 		if ( $args['skip_fallback'] )
 			goto end;
 
-
 		//* 3.5 Fetch image from fallback filter 0
 		fallback_0 : {
 			/**

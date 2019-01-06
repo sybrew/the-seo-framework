@@ -690,7 +690,8 @@ final class Debug implements Debug_Interface {
 			}
 
 			$value = '<font color="harrisonford">' . $type . ' ' . $value . '</font>';
-			$out = \esc_html( $name ) . ' => ' . $value;
+			$out   = \esc_html( $name ) . ' => ' . $value;
+
 			$output .= $out . PHP_EOL;
 		}
 

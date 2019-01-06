@@ -99,16 +99,38 @@ class Admin_Init extends Init {
 
 		if ( _has_run( __METHOD__ ) ) return;
 
-		$rtl = \is_rtl();
-
-		//! PHP 5.4 compat: put in var. Also, we call it twice here...
+		//! PHP 5.4 compat: put in var.
 		$scripts = $this->Scripts();
+		$scripts::register( $this->get_default_scripts() );
+
+		if ( $this->is_post_edit() ) {
+			$this->enqueue_media_scripts();
+			$this->enqueue_primaryterm_scripts();
+
+			if ( $this->is_gutenberg_page() ) {
+				$this->enqueue_gutenberg_compat_scripts();
+			}
+		} elseif ( $this->is_seo_settings_page() ) {
+			$this->enqueue_media_scripts();
+			\wp_enqueue_style( 'wp-color-picker' );
+			\wp_enqueue_script( 'wp-color-picker' );
+		}
+	}
+
+	/**
+	 * Returns a filterable sequential array of default scripts.
+	 *
+	 * @since 3.2.2
+	 *
+	 * @return array
+	 */
+	public function get_default_scripts() {
 		/**
 		 * @since 3.1.0
 		 * @param array  $scripts The default CSS and JS loader settings.
 		 * @param string $scripts The \The_SEO_Framework\Builders\Scripts builder class name.
 		 */
-		$scripts::register( (array) \apply_filters_ref_array( 'the_seo_framework_scripts', [
+		return (array) \apply_filters_ref_array( 'the_seo_framework_scripts', [
 			[
 				[
 					'id'       => 'tsf',
@@ -162,7 +184,7 @@ class Admin_Init extends Init {
 							'border-bottom-color:{{$bg_accent}}',
 						],
 						'.tsf-tooltip-text' => [
-							$rtl ? 'direction:rtl;' : '',
+							\is_rtl() ? 'direction:rtl' : '',
 						],
 					],
 				],
@@ -176,21 +198,8 @@ class Admin_Init extends Init {
 					'ver'      => THE_SEO_FRAMEWORK_VERSION,
 				],
 			],
-			$scripts,
-		] ) );
-
-		if ( $this->is_post_edit() ) {
-			$this->enqueue_media_scripts();
-			$this->enqueue_primaryterm_scripts();
-
-			if ( $this->is_gutenberg_page() ) {
-				$this->enqueue_gutenberg_compat_scripts();
-			}
-		} elseif ( $this->is_seo_settings_page() ) {
-			$this->enqueue_media_scripts();
-			\wp_enqueue_style( 'wp-color-picker' );
-			\wp_enqueue_script( 'wp-color-picker' );
-		}
+			$this->Scripts(),
+		] );
 	}
 
 	/**
@@ -289,12 +298,13 @@ class Admin_Init extends Init {
 
 		$post_type   = \get_post_type( $id );
 		$_taxonomies = $post_type ? $this->get_hierarchical_taxonomies_as( 'objects', $post_type ) : [];
-		$taxonomies = [];
+		$taxonomies  = [];
 
 		$gutenberg = $this->is_gutenberg_page();
 
 		foreach ( $_taxonomies as $_t ) {
-			$_i18n_name = $_t->labels->singular_name;
+			$singular_name = $this->get_tax_type_label( $_t->name );
+
 			$taxonomies[ $_t->name ] = [
 				'name'    => $_t->name,
 				'primary' => $this->get_primary_term_id( $id, $_t->name ) ?: 0,
@@ -302,15 +312,15 @@ class Admin_Init extends Init {
 				$gutenberg ? [
 					'i18n' => [
 						/* translators: %s = term name */
-						'selectPrimary' => sprintf( \esc_html__( 'Select Primary %s', 'autodescription' ), $_i18n_name ),
+						'selectPrimary' => sprintf( \esc_html__( 'Select Primary %s', 'autodescription' ), $singular_name ),
 					],
 				] : [
 					'i18n' => [
 						/* translators: %s = term name */
-						'makePrimary' => sprintf( \esc_html__( 'Make primary %s', 'autodescription' ), strtolower( $_i18n_name ) ),
+						'makePrimary' => sprintf( \esc_html__( 'Make primary %s', 'autodescription' ), strtolower( $singular_name ) ),
 						/* translators: %s = term name */
-						'primary'     => sprintf( \esc_html__( 'Primary %s', 'autodescription' ), strtolower( $_i18n_name ) ),
-						'name'        => strtolower( $_i18n_name ),
+						'primary'     => sprintf( \esc_html__( 'Primary %s', 'autodescription' ), strtolower( $singular_name ) ),
+						'name'        => strtolower( $singular_name ),
 					],
 				]
 			);
@@ -392,6 +402,7 @@ class Admin_Init extends Init {
 	 *              4 : Added dynamic output control.
 	 * @since 2.9.0 Added boolean $returnValue['states']['isSettingsPage']
 	 * @since 3.0.4 `descPixelGuideline` has been increased from "920 and 820" to "1820 and 1720" respectively.
+	 * @since 3.2.2 Added string $returnValue['nonces']['manage_options']
 	 *
 	 * @return array $strings The l10n strings.
 	 */
@@ -432,7 +443,14 @@ class Admin_Init extends Init {
 			$use_title_additions = (bool) $this->get_option( 'homepage_tagline' );
 		} else {
 			// We're somewhere within default WordPress pages.
-			if ( $this->is_static_frontpage( $id ) ) {
+			if ( $is_term_edit ) {
+				//* Category or Tag.
+				if ( $this->get_current_taxonomy() && $id ) {
+					// DEBUG: Use get_generated_archive_title() instead...? use_generated_archive_prefix() is in the way.
+					$default_title   = $this->get_generated_single_term_title( $this->fetch_the_term( $id ) );
+					$title_additions = $this->get_blogname();
+				}
+			} elseif ( $this->is_static_frontpage( $id ) ) { // implies $is_post_edit or $is_settings_page
 				$default_title  = $this->get_option( 'homepage_title' ) ?: $this->get_blogname();
 				$title_location = $this->get_option( 'home_title_location' );
 
@@ -443,12 +461,6 @@ class Admin_Init extends Init {
 			} elseif ( $is_post_edit ) {
 				$default_title   = $this->get_raw_generated_title( [ 'id' => $id ] );
 				$title_additions = $this->get_blogname();
-			} elseif ( $is_term_edit ) {
-				//* Category or Tag.
-				if ( $this->get_current_taxonomy() && $id ) {
-					$default_title   = $this->get_generated_single_term_title( $this->fetch_the_term( $id ) );
-					$title_additions = $this->get_blogname();
-				}
 			} else {
 				//* We're in a special place.
 				// Can't fetch title.
@@ -462,12 +474,12 @@ class Admin_Init extends Init {
 			 * Use $this->get_settings_capability() ?... might conflict with other nonces.
 			 * @augments tsfMedia 'upload_files'
 			 */
-			// 'manage_options' => \current_user_can( 'manage_options' ) ? \wp_create_nonce( 'tsf-ajax-manage_options' ) : false,
-			'upload_files' => \current_user_can( 'upload_files' ) ? \wp_create_nonce( 'tsf-ajax-upload_files' ) : false,
-			'edit_posts'   => \current_user_can( 'edit_posts' ) ? \wp_create_nonce( 'tsf-ajax-edit_posts' ) : false,
+			'manage_options' => \current_user_can( 'manage_options' ) ? \wp_create_nonce( 'tsf-ajax-manage_options' ) : false,
+			'upload_files'   => \current_user_can( 'upload_files' ) ? \wp_create_nonce( 'tsf-ajax-upload_files' ) : false,
+			'edit_posts'     => \current_user_can( 'edit_posts' ) ? \wp_create_nonce( 'tsf-ajax-edit_posts' ) : false,
 		] );
 
-		$term_name = '';
+		$term_name       = '';
 		$use_term_prefix = false;
 		if ( $is_term_edit ) {
 			$term_name       = $this->get_tax_type_label( $this->get_current_taxonomy(), true );
@@ -553,7 +565,9 @@ class Admin_Init extends Init {
 			'i18n'   => [
 				'saveAlert'       => \__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
 				'confirmReset'    => \__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
+				// phpcs: WordPress doesn't have a comment, either.
 				'privateTitle'    => $has_input && $id ? trim( str_replace( '%s', '', \__( 'Private: %s', 'default' ) ) ) : '',
+				// phpcs: WordPress doesn't have a comment, either.
 				'protectedTitle'  => $has_input && $id ? trim( str_replace( '%s', '', \__( 'Protected: %s', 'default' ) ) ) : '',
 				/* translators: Pixel counter. 1: width, 2: guideline */
 				'pixelsUsed'      => $has_input ? \__( '%1$d out of %2$d pixels are used.', 'autodescription' ) : '',
@@ -942,8 +956,12 @@ class Admin_Init extends Init {
 	public function _wp_ajax_crop_image() {
 
 		$this->_check_tsf_ajax_referer( 'upload_files' );
-		if ( ! \current_user_can( 'upload_files' ) || ! isset( $_POST['id'], $_POST['context'], $_POST['cropDetails'] ) )
+		if (
+		   ! \current_user_can( 'upload_files' ) // precision alignment ok.
+		|| ! isset( $_POST['id'], $_POST['context'], $_POST['cropDetails'] ) // input var ok.
+		) {
 			\wp_send_json_error();
+		}
 
 		$attachment_id = \absint( $_POST['id'] ); // input var ok.
 
@@ -987,7 +1005,7 @@ class Admin_Init extends Init {
 				];
 
 				$attachment_id = \wp_insert_attachment( $object, $cropped );
-				$metadata = \wp_generate_attachment_metadata( $attachment_id, $cropped );
+				$metadata      = \wp_generate_attachment_metadata( $attachment_id, $cropped );
 
 				/**
 				 * Filters the cropped image attachment metadata.

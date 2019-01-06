@@ -281,7 +281,7 @@ class Term_Data extends Post_Data {
 		if ( $this->is_admin() ) {
 			$taxonomy = $this->get_current_taxonomy();
 			if ( $taxonomy ) {
-				$term_id = $id ?: $this->get_the_real_admin_ID();
+				$term_id     = $id ?: $this->get_the_real_admin_ID();
 				$term[ $id ] = \get_term_by( 'id', $term_id, $taxonomy );
 			}
 		} else {
