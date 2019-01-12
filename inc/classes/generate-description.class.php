@@ -118,9 +118,10 @@ class Generate_Description extends Generate {
 			if ( $this->is_static_frontpage() ) {
 				$desc = $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_custom_field( '_open_graph_description' )
-					 ?: ''; // precision alignment ok
+					 ?: $this->get_description_from_custom_field(); // precision alignment ok
 			} else {
-				$desc = $this->get_option( 'homepage_og_description' ) ?: '';
+				$desc = $this->get_option( 'homepage_og_description' )
+					 ?: $this->get_description_from_custom_field(); // precision alignment ok.
 			}
 		} elseif ( $this->is_singular() ) {
 			$desc = $this->get_custom_field( '_open_graph_description' )
