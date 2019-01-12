@@ -274,7 +274,7 @@ Also note that some API changes better suited for a major release are also broug
 		* Many, many API functions' incorrectly inferred behavior (see "for developers" below).
 	* Terms now use the custom description as placeholders for the Open Graph and Twitter description.
 		* In 3.3, they're also planned to get custom fields for this.
-	* TODO In the block editor, the title is now prefixed with "Private: ..." or "Protected: ..." when required again.
+	* In the block editor, the title is now prefixed with "Private: ..." or "Protected: ..." when required again.
 * **Removed:**
 	* Internet Explorer support for tooltips.
 		* On-hover titles are available as a fallback whenever HTML support isn't required.
@@ -302,6 +302,8 @@ Also note that some API changes better suited for a major release are also broug
 		* I don't know what to do with this, yet. Expect this discrepancy to stay until a generator comes for option and meta pages.
 * **Added:**
 	* JavaScript: `tsfL10n.nonces.manage_options` has been added for strict nonce verification. Although unused, this is future-proofing.
+	* JavaScript: `tsf-updated-gutenberg-visibility` now triggers, and forwards the visibility state.
+	* JavaScript: `tsfGBC.triggerUpdate( 'visibility' )` is now available. I recommend forwarding this to the Gutenberg editor, and let `tsfGBC` trigger this automatically.
 * **Changed:**
 	* The `tsfL10n.params` and `tsfL10n.i18n` values are now escaped less rigorously. This requires extra security attention when using these values.
 * **Improved:**
