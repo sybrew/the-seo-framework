@@ -142,6 +142,7 @@ class Generate_Url extends Generate_Title {
 	 * Builds canonical URL from input arguments.
 	 *
 	 * @since 3.0.0
+	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
 	 * @see $this->create_canonical_url()
 	 *
 	 * @param array $args. Use $this->create_canonical_url().
@@ -157,16 +158,18 @@ class Generate_Url extends Generate_Title {
 		if ( $taxonomy ) {
 			$canonical_url = $this->get_taxonomial_canonical_url( $id, $taxonomy );
 		} else {
-			if ( $get_custom_field ) {
-				$canonical_url = $this->get_singular_custom_canonical_url( $id );
-			}
-
-			if ( ! $canonical_url ) {
-				if ( ! $id || ( $this->has_page_on_front() && $this->is_front_page_by_id( $id ) ) ) {
-					$canonical_url = $this->get_home_canonical_url();
-				} elseif ( $id ) {
-					$canonical_url = $this->get_singular_canonical_url( $id );
+			if ( $this->is_static_frontpage( $id ) ) {
+				if ( $get_custom_field ) {
+					$canonical_url = $this->get_singular_custom_canonical_url( $id );
 				}
+				$canonical_url = $canonical_url ?: $this->get_home_canonical_url();
+			} elseif ( $this->is_real_front_page_by_id( $id ) ) {
+				$canonical_url = $this->get_home_canonical_url();
+			} elseif ( $id ) {
+				if ( $get_custom_field ) {
+					$canonical_url = $this->get_singular_custom_canonical_url( $id );
+				}
+				$canonical_url = $canonical_url ?: $this->get_singular_canonical_url( $id );
 			}
 		}
 

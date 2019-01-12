@@ -50,6 +50,7 @@ class Query extends Compat {
 	 * @since 3.1.0 1. Is now protected.
 	 *              2. Now asks for and passes $method.
 	 *              3. Now returns false on WP CLI.
+	 * @since 3.2.2 No longer spits out errors on production websites.
 	 * @staticvar bool $cache : Always true if set.
 	 * @global \WP_Query $wp_query
 	 * @global \WP_Screen|null $current_screen
@@ -70,7 +71,7 @@ class Query extends Compat {
 		if ( isset( $GLOBALS['wp_query']->query ) || isset( $GLOBALS['current_screen'] ) )
 			return $cache = true;
 
-		$this->do_query_error_notice( $method );
+		$this->the_seo_framework_debug and $this->do_query_error_notice( $method );
 
 		return false;
 	}
@@ -82,6 +83,7 @@ class Query extends Compat {
 	 *
 	 * @param string $method The original caller method.
 	 */
+	// phpcs:disable -- Method unused in production.
 	protected function do_query_error_notice( $method ) {
 
 		$message = "You've initiated a method that uses queries too early.";
@@ -95,16 +97,12 @@ class Query extends Compat {
 		$this->_doing_it_wrong( \esc_html( $method ), \esc_html( $message ), '2.9.0' );
 
 		//* Backtrace debugging.
-		if ( $this->the_seo_framework_debug ) {
-			static $_more = true;
-			$catch_all = false;
-			$depth = 10;
-			if ( $catch_all || $_more ) {
-				error_log( var_export( debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, $depth ), true ) );
-				$_more = false;
-			}
-		}
-	}
+		// $depth = 10;
+		// if ( $_more ) {
+		// 	error_log( var_export( debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, $depth ), true ) );
+		// 	$_more = false;
+		// }
+	} // phpcs:enable
 
 	/**
 	 * Returns the post type name from current screen.
@@ -220,9 +218,7 @@ class Query extends Compat {
 	 * @return int the ID.
 	 */
 	public function get_the_front_page_ID() { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
-
 		static $front_id;
-
 		return isset( $front_id )
 			? $front_id
 			: $front_id = ( $this->has_page_on_front() ? (int) \get_option( 'page_on_front' ) : 0 );
@@ -610,12 +606,34 @@ class Query extends Compat {
 	}
 
 	/**
+	 * Checks for front page by input ID without engaging into the query.
+	 *
+	 * @NOTE This doesn't check for anomalies in the query.
+	 * So, don't use this to test user-engaged WordPress queries, ever.
+	 * WARNING: This will lead to **FALSE POSITIVES** for Date, PTA, Search, and other archives.
+	 *
+	 * @see $this->is_front_page_by_id(), which supports query checking.
+	 * @see $this->is_real_front_page(), which solely uses query checking.
+	 *
+	 * @since 3.2.2
+	 *
+	 * @param int $id The tested ID.
+	 * @return bool
+	 */
+	public function is_real_front_page_by_id( $id ) {
+		return $id === $this->get_the_front_page_ID();
+	}
+
+	/**
 	 * Checks for front page by input ID.
 	 *
-	 * Returns true if on SEO settings page and when ID is 0.
+	 * Doesn't always return true when the ID is 0, although the home page might be.
+	 * This is because it checks for the query, to prevent conflicts.
+	 * @see $this->is_real_front_page_by_id().
 	 *
 	 * @since 2.9.0
 	 * @since 2.9.3 Now tests for archive and 404 before testing home page as blog.
+	 * @since 3.2.2: Removed SEO settings page check. This now returns false on that page.
 	 *
 	 * @param int The page ID, required. Can be 0.
 	 * @return bool True if ID if for the home page.
@@ -630,32 +648,26 @@ class Query extends Compat {
 		$is_front_page = false;
 		$sof = \get_option( 'show_on_front' );
 
-		//* Elegant Themes Support. Yay.
-		if ( 0 === $id && $this->is_home() ) {
-			if ( 'page' !== $sof && 'posts' !== $sof )
-				$is_front_page = true;
-		}
-
 		//* Compare against $id
-		if ( false === $is_front_page ) {
-			if ( 'page' === $sof ) {
-				if ( (int) \get_option( 'page_on_front' ) === $id ) {
+		if ( 'page' === $sof ) {
+			if ( (int) \get_option( 'page_on_front' ) === $id ) {
+				$is_front_page = true;
+			}
+		} elseif ( 'posts' === $sof ) {
+			if ( 0 === $id ) {
+				//* 0 as ID causes many issues. Just test for is_home().
+				if ( $this->is_home() ) {
 					$is_front_page = true;
 				}
-			} elseif ( 'posts' === $sof ) {
-				if ( 0 === $id ) {
-					//* 0 as ID causes many issues. Just test for is_home().
-					if ( $this->is_home() ) {
-						$is_front_page = true;
-					}
-				} elseif ( (int) \get_option( 'page_for_posts' ) === $id ) {
-					$is_front_page = true;
-				}
+			} elseif ( (int) \get_option( 'page_for_posts' ) === $id ) {
+				$is_front_page = true;
+			}
+		} else {
+			// Elegant Themes' Extra support
+			if ( 0 === $id && $this->is_home() ) {
+				$is_front_page = true;
 			}
 		}
-
-		if ( false === $is_front_page && 0 === $id && $this->is_seo_settings_page() )
-			$is_front_page = true;
 
 		$this->set_query_cache(
 			__METHOD__,
@@ -1282,6 +1294,7 @@ class Query extends Compat {
 		static $cache = [];
 
 		if ( func_num_args() > 2 ) {
+			// phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
 			$hash = isset( $value_to_set ) ? serialize( (array) func_get_arg( 2 ) ) : serialize( array_slice( func_get_args(), 2 ) );
 		} else {
 			$hash = false;

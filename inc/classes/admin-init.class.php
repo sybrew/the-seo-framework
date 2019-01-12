@@ -513,10 +513,17 @@ class Admin_Init extends Init {
 
 		if ( $is_post_edit || $is_settings_page ) {
 			if ( $is_settings_page ) {
-				$social_settings_placeholders = [
-					'ogDesc' => $this->get_custom_field( '_genesis_description', $id ) ?: $this->get_generated_open_graph_description( [ 'id' => $id ] ),
-					'twDesc' => $this->get_custom_field( '_genesis_description', $id ) ?: $this->get_generated_twitter_description( [ 'id' => $id ] ),
-				];
+				if ( $page_on_front ) {
+					$social_settings_placeholders = [
+						'ogDesc' => $this->get_custom_field( '_genesis_description', $id ) ?: $this->get_generated_open_graph_description( [ 'id' => $id ] ),
+						'twDesc' => $this->get_custom_field( '_genesis_description', $id ) ?: $this->get_generated_twitter_description( [ 'id' => $id ] ),
+					];
+				} else {
+					$social_settings_placeholders = [
+						'ogDesc' => $this->get_generated_open_graph_description( [ 'id' => $id ] ),
+						'twDesc' => $this->get_generated_twitter_description( [ 'id' => $id ] ),
+					];
+				}
 			} elseif ( $is_home ) {
 				$social_settings_placeholders = [
 					'ogDesc' => $this->get_option( 'homepage_description' ) ?: $this->get_generated_open_graph_description( [ 'id' => $id ] ),

@@ -273,7 +273,7 @@ class Detect extends Render {
 		}
 
 		ksort( $mapped );
-		$key = serialize( $mapped );
+		$key = serialize( $mapped ); // phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
 
 		if ( isset( $cache[ $key ] ) )
 			return $cache[ $key ];
@@ -1089,9 +1089,6 @@ class Detect extends Render {
 
 		$parsed_url = \wp_parse_url( \get_option( 'home' ) );
 
-		if ( ! empty( $parsed_url['path'] ) && ltrim( $parsed_url['path'], ' \\/' ) )
-			$cache = true;
-
-		return $cache ?: $cache = false;
+		return $cache = ! empty( $parsed_url['path'] ) && ltrim( $parsed_url['path'], ' \\/' );
 	}
 }

@@ -243,6 +243,9 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 = 3.2.2 =
 
+For developers, please note that the upcoming major release (3.3.0) will introduce new taxonomical settings. Because the image-rendering integration isn't suited for this, it'll be overhauled. For more information, see [this issue](https://github.com/sybrew/the-seo-framework/issues/403).
+Also note that some API changes better suited for a major release are also brought into this minor release; these were required to fix some bugs.
+
 **For everyone:**
 
 * **Added:**
@@ -254,10 +257,16 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 * **Fixed:**
 	* When a post type has more than one hierarchical taxonomy attached, the new block editor will no longer stop working.
 	* Title and description placeholders now render more HTML characters.
-	* The homepage social description placeholders now show the correct value when only a custom homepage meta description is set.
+	* The home page social description placeholders now show the correct value when only a custom home page meta description is set.
 	* When JavaScript is disabled, the social description placeholders now show the real front-end value.
 	* When a term ID collides with the home page ID, the Meta Title additions no longer display the site tagline incorrectly.
 	* The tooltip boundary now tries to prevent creating unwanted scrollbars.
+	* Terms no longer use singular post's social & featured images on ID conflict.
+	* Frontpage-as-blog queries are stricter, this fixes:
+		* Breadcrumb home page titles.
+		* Home page meta box placeholders.
+		* [Monitor](https://theseoframework.com/extensions/monitor/) home page title checks.
+		* Many, many API functions' incorrectly inferred behavior (see "for developers" below).
 * **Removed:**
 	* Internet Explorer support for tooltips.
 * **Other:**
@@ -285,9 +294,25 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 * **Removed:**
 	* Extension Manager installation scripts.
 * **Fixed:**
-	* The homepage example title's HTML elements are now properly closing.
+	* The home page example title's HTML elements are now properly closing.
 	* `get_title()` no longer double-escapes the custom field title, making the second parameter useful again.
+	* (API) Some methods were incorrectly parsing the home page elements from external requests when the home page is a blog (ID=0). To fix this, these (protected) methods gained a check:
+		* `get_custom_open_graph_description_from_args()`
+		* `get_custom_twitter_description_from_args()`
+		* `get_custom_description_from_args()`
+		* `get_custom_twitter_title_from_args()`
+		* `get_custom_open_graph_title_from_args()`
+		* `get_custom_field_title_from_args()`
+		* `build_canonical_url()`
+* **Filter notes:**
+	* `the_seo_framework_og_image_alt_custom` no longer runs on archive pages.
 * **Class changes:**
+	* Factory: `the_seo_framework()`, in class `The_SEO_Framework\Query`:
+		* **Added:**
+			* Method `is_real_front_page_by_id()`, a simplified home page by ID test.
+				* This will return false positives for post type archives, search, and date archives.
+		* **Changed:**
+			* Method `can_cache_query()` no longer outputs query errors to users unbeknownst of TSF debugging.
 	* Factory: `the_seo_framework()`, in class `The_SEO_Framework\Admin_Init`:
 		* **Added:**
 			* Method `get_default_scripts()`, returns a filterable array of the default scripts.

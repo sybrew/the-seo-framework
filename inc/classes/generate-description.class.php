@@ -131,6 +131,7 @@ class Generate_Description extends Generate {
 	 * Falls back to meta description.
 	 *
 	 * @since 3.1.0
+	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
 	 * @see $this->get_open_graph_description()
 	 * @see $this->get_open_graph_description_from_custom_field()
 	 *
@@ -144,10 +145,14 @@ class Generate_Description extends Generate {
 		if ( $args['taxonomy'] ) {
 			$desc = '';
 		} else {
-			if ( $this->is_front_page_by_id( $args['id'] ) ) {
-				$desc = $this->get_option( 'homepage_og_description' ) ?: '';
-			}
-			if ( ! $desc ) {
+			if ( $this->is_static_frontpage( $args['id'] ) ) {
+				$desc = $this->get_option( 'homepage_og_description' )
+					 ?: $this->get_custom_field( '_open_graph_description', $args['id'] )
+					 ?: $this->get_description_from_custom_field( $args ); // precision alignment ok.
+			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+				$desc = $this->get_option( 'homepage_og_description' )
+					 ?: $this->get_description_from_custom_field( $args ); // precision alignment ok.
+			} else {
 				$desc = $this->get_custom_field( '_open_graph_description', $args['id'] )
 					 ?: $this->get_description_from_custom_field( $args ); // precision alignment ok.
 			}
@@ -239,6 +244,7 @@ class Generate_Description extends Generate {
 	 * Falls back to Open Graph description.
 	 *
 	 * @since 3.1.0
+	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
 	 * @see $this->get_twitter_description()
 	 * @see $this->get_twitter_description_from_custom_field()
 	 *
@@ -252,11 +258,15 @@ class Generate_Description extends Generate {
 		if ( $args['taxonomy'] ) {
 			$desc = '';
 		} else {
-			if ( $this->is_front_page_by_id( $args['id'] ) ) {
+			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_twitter_description' )
 					 ?: $this->get_custom_field( '_twitter_description', $args['id'] )
 					 ?: $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_custom_field( '_open_graph_description', $args['id'] )
+					 ?: $this->get_description_from_custom_field( $args ); // precision alignment ok.
+			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+				$desc = $this->get_option( 'homepage_twitter_description' )
+					 ?: $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_description_from_custom_field( $args ); // precision alignment ok.
 			} else {
 				$desc = $this->get_custom_field( '_twitter_description', $args['id'] )
@@ -339,6 +349,7 @@ class Generate_Description extends Generate {
 	 * Gets a custom description, based on input arguments query, without escaping.
 	 *
 	 * @since 3.1.0
+	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
 	 * @internal
 	 * @see $this->get_description_from_custom_field()
 	 *
@@ -354,10 +365,15 @@ class Generate_Description extends Generate {
 			$data = $this->get_term_meta( $args['id'] );
 			$desc = ! empty( $data['description'] ) ? $data['description'] : '';
 		} else {
-			if ( $this->is_front_page_by_id( $args['id'] ) ) {
+			if ( $this->is_static_frontpage( $args['id'] ) ) {
+				$desc = $this->get_option( 'homepage_description' )
+					 ?: $this->get_custom_field( '_genesis_description', $args['id'] )
+					 ?: ''; // Precision alignment ok.
+			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_description' ) ?: '';
+			} else {
+				$desc = $this->get_custom_field( '_genesis_description', $args['id'] ) ?: '';
 			}
-			$desc = $desc ?: $this->get_custom_field( '_genesis_description', $args['id'] ) ?: '';
 		}
 
 		return $desc;

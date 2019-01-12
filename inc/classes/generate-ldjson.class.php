@@ -572,15 +572,15 @@ class Generate_Ldjson extends Generate_Image {
 	 *
 	 * @since 2.9.3
 	 *
-	 * @param array $kittens The breadcrumb trees, with the key as parent.
+	 * @param array $cats          The breadcrumb trees, with the key as parent.
 	 * @param array $previous_tree A previous set tree to compare to, if set.
 	 * @return array Trees in order.
 	 */
-	protected function build_ld_json_breadcrumb_trees( $kittens, array $previous_tree = [] ) {
+	protected function build_ld_json_breadcrumb_trees( $cats, array $previous_tree = [] ) {
 
 		$trees = $previous_tree;
 
-		foreach ( $kittens as $parent => $kitten ) {
+		foreach ( $cats as $parent => $kitten ) {
 			if ( empty( $kitten ) ) {
 				//* Final cat.
 				$trees[] = $parent;
@@ -647,6 +647,9 @@ class Generate_Ldjson extends Generate_Image {
 	 * Generates homepage LD+JSON breadcrumb.
 	 *
 	 * @since 2.9.3
+	 * @since 3.2.2: 1. The title now works for the home page as blog.
+	 *               2. The image has been disabled for the home page as blog.
+	 *                    - I couldn't fix it without evading the API, which is bad.
 	 * @staticvar array $crumb
 	 *
 	 * @return array The HomePage crumb entry.
@@ -654,7 +657,6 @@ class Generate_Ldjson extends Generate_Image {
 	public function get_ld_json_breadcrumb_home_crumb() {
 
 		static $crumb = null;
-
 		if ( isset( $crumb ) )
 			return $crumb;
 

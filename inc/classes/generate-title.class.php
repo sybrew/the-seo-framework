@@ -215,6 +215,7 @@ class Generate_Title extends Generate_Description {
 	 * Falls back to Open Graph title.
 	 *
 	 * @since 3.1.0
+	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
 	 * @see $this->get_twitter_title()
 	 * @see $this->get_twitter_title_from_custom_field()
 	 *
@@ -228,10 +229,17 @@ class Generate_Title extends Generate_Description {
 		if ( $args['taxonomy'] ) {
 			$title = '';
 		} else {
-			if ( $this->is_front_page_by_id( $args['id'] ) ) {
-				$title = $this->get_option( 'homepage_twitter_title' ) ?: $this->get_option( 'homepage_og_title' ) ?: '';
-			}
-			if ( ! $title ) {
+			if ( $this->is_static_frontpage( $args['id'] ) ) {
+				$title = $this->get_option( 'homepage_twitter_title' )
+					  ?: $this->get_custom_field( '_twitter_title', $args['id'] )
+					  ?: $this->get_option( 'homepage_og_title' )
+					  ?: $this->get_custom_field( '_open_graph_title', $args['id'] )
+					  ?: ''; // precision alignment ok.
+			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+				$title = $this->get_option( 'homepage_twitter_title' )
+					  ?: $this->get_option( 'homepage_og_title' )
+					  ?: '';  // precision alignment ok.
+			} else {
 				$title = $this->get_custom_field( '_twitter_title', $args['id'] )
 					  ?: $this->get_custom_field( '_open_graph_title', $args['id'] )
 					  ?: ''; // precision alignment ok.
@@ -334,6 +342,7 @@ class Generate_Title extends Generate_Description {
 	 * Falls back to meta title.
 	 *
 	 * @since 3.1.0
+	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
 	 * @see $this->get_open_graph_title()
 	 * @see $this->get_open_graph_title_from_custom_field()
 	 *
@@ -347,10 +356,13 @@ class Generate_Title extends Generate_Description {
 		if ( $args['taxonomy'] ) {
 			$title = '';
 		} else {
-			if ( $this->is_front_page_by_id( $args['id'] ) ) {
+			if ( $this->is_static_frontpage( $args['id'] ) ) {
+				$title = $this->get_option( 'homepage_og_title' )
+					  ?: $this->get_custom_field( '_open_graph_title', $args['id'] )
+					  ?: ''; // Precision alignment ok.
+			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_og_title' ) ?: '';
-			}
-			if ( ! $title ) {
+			} else {
 				$title = $this->get_custom_field( '_open_graph_title', $args['id'] ) ?: '';
 			}
 		}
@@ -435,6 +447,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.1.0
 	 * @since 3.1.4 Now uses the 'id' to get custom singular title.
+	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
 	 * @internal
 	 * @see $this->get_raw_custom_field_title()
 	 *
@@ -449,10 +462,15 @@ class Generate_Title extends Generate_Description {
 			$data  = $this->get_term_meta( $args['id'] );
 			$title = ! empty( $data['doctitle'] ) ? $data['doctitle'] : '';
 		} else {
-			if ( $this->is_front_page_by_id( $args['id'] ) ) {
+			if ( $this->is_static_frontpage( $args['id'] ) ) {
+				$title = $this->get_option( 'homepage_title' )
+					  ?: $this->get_custom_field( '_genesis_title', $args['id'] )
+					  ?: ''; // precision alignment ok.
+			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_title' ) ?: '';
+			} else {
+				$title = $this->get_custom_field( '_genesis_title', $args['id'] ) ?: '';
 			}
-			$title = $title ?: $this->get_custom_field( '_genesis_title', $args['id'] ) ?: '';
 		}
 
 		return $title;
@@ -593,7 +611,7 @@ class Generate_Title extends Generate_Description {
 		if ( $args['taxonomy'] ) {
 			$title = $this->get_generated_archive_title( \get_term( $args['id'], $args['taxonomy'] ) );
 		} else {
-			if ( $this->is_front_page_by_id( $args['id'] ) ) {
+			if ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$title = $this->get_static_front_page_title();
 			} else {
 				$title = $this->get_generated_single_post_title( $args['id'] );
@@ -919,33 +937,26 @@ class Generate_Title extends Generate_Description {
 	 * @since 3.1.0
 	 * @since 3.1.2 Added strict taxonomical check.
 	 * @since 3.1.3 Fixed conditional logic.
+	 * @uses $this->get_title_branding_from_query()
+	 * @uses $this->get_title_branding_from_args()
 	 *
 	 * @param string     $title The title. Passed by reference.
-	 * @param array|null $args The query arguments. Leave null to autodetermine query.
+	 * @param array|null $args  The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                          Leave null to autodetermine query.
 	 */
 	public function merge_title_branding( &$title, $args = null ) {
 
 		if ( null === $args ) {
-			$id  = $this->get_the_real_ID();
-			$tax = $this->get_current_taxonomy();
+			$data = $this->get_title_branding_from_query();
 		} else {
 			$this->fix_generation_args( $args );
-			$id  = $args['id'];
-			$tax = $args['taxonomy'];
+			$data = $this->get_title_branding_from_args( $args );
 		}
 
-		if ( ! $tax && $this->is_front_page_by_id( $id ) ) {
-			$addition    = $this->get_home_page_tagline();
-			//? Brilliant. TODO FIXME: Do an "upgrade" of this option at a 3.1.2+ release, switching title with additions in the settings description.
-			$seplocation = 'left' === $this->get_home_title_seplocation() ? 'right' : 'left';
-		} else {
-			$addition    = $this->get_blogname();
-			$seplocation = $this->get_title_seplocation();
-		}
-
-		$title    = trim( $title );
-		$addition = trim( $addition );
-		$sep      = $this->get_title_separator();
+		$title       = trim( $title );
+		$addition    = trim( $data['addition'] );
+		$seplocation = $data['seplocation'];
+		$sep         = $this->get_title_separator();
 
 		if ( $addition && $title ) {
 			if ( 'left' === $seplocation ) {
@@ -954,6 +965,52 @@ class Generate_Title extends Generate_Description {
 				$title = "$title $sep $addition";
 			}
 		}
+	}
+
+	/**
+	 * Returns the addition and seplocation from query.
+	 *
+	 * @since 3.2.2
+	 * @see $this->merge_title_branding();
+	 *
+	 * @return array { 'addition', 'seplocation' }
+	 */
+	protected function get_title_branding_from_query() {
+
+		if ( $this->is_real_front_page() ) {
+			$addition    = $this->get_home_page_tagline();
+			//? Brilliant. TODO FIXME: Do an "upgrade" of this option at a 3.1.2+ release, switching title with additions in the settings description.
+			$seplocation = 'left' === $this->get_home_title_seplocation() ? 'right' : 'left';
+		} else {
+			$addition    = $this->get_blogname();
+			$seplocation = $this->get_title_seplocation();
+		}
+
+		return compact( 'addition', 'seplocation' );
+	}
+
+
+	/**
+	 * Returns the addition and seplocation from arguments.
+	 *
+	 * @since 3.2.2
+	 * @see $this->merge_title_branding();
+	 *
+	 * @param array $args The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @return array { 'addition', 'seplocation' }
+	 */
+	protected function get_title_branding_from_args( array $args ) {
+
+		if ( ! $args['taxonomy'] && $this->is_real_front_page_by_id( $args['id'] ) ) {
+			$addition    = $this->get_home_page_tagline();
+			//? Brilliant. TODO FIXME: Do an "upgrade" of this option at a 3.1.2+ release, switching title with additions in the settings description.
+			$seplocation = 'left' === $this->get_home_title_seplocation() ? 'right' : 'left';
+		} else {
+			$addition    = $this->get_blogname();
+			$seplocation = $this->get_title_seplocation();
+		}
+
+		return compact( 'addition', 'seplocation' );
 	}
 
 	/**
@@ -1022,6 +1079,7 @@ class Generate_Title extends Generate_Description {
 			 *                         Default 'Private: %s'.
 			 * @param WP_Post $post    Current post object.
 			 */
+			// phpcs:ignore -- WordPress doesn't have a comment, either.
 			$protected_title_format = (string) \apply_filters( 'protected_title_format', \__( 'Protected: %s', 'default' ), $post );
 			$title = sprintf( $protected_title_format, $title );
 		} elseif ( isset( $post->post_status ) && 'private' === $post->post_status ) {
@@ -1036,6 +1094,7 @@ class Generate_Title extends Generate_Description {
 			 *                         Default 'Private: %s'.
 			 * @param WP_Post $post    Current post object.
 			 */
+			// phpcs:ignore -- WordPress doesn't have a comment, either.
 			$private_title_format = (string) \apply_filters( 'private_title_format', \__( 'Private: %s', 'default' ), $post );
 			$title = sprintf( $private_title_format, $title );
 		}
@@ -1094,7 +1153,10 @@ class Generate_Title extends Generate_Description {
 	 * @since 3.1.0
 	 * @since 3.1.2: 1. Added filter.
 	 *               2. Added strict taxonomical check.
+	 * @since 3.2.2 Now differentiates from query and parameter input.
 	 * @see $this->merge_title_branding()
+	 * @uses $this->use_title_branding_from_query()
+	 * @uses $this->use_title_branding_from_args()
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
 	 *                         Leave null to autodetermine query.
@@ -1102,22 +1164,11 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function use_title_branding( $args = null ) {
 
-		$id = isset( $args['id'] ) ? $args['id'] : $this->get_the_real_ID();
-		$taxonomy = null === $args ? $this->get_current_taxonomy()
-			: ( isset( $args['taxonomy'] ) ? $args['taxonomy'] : '' );
-
-		$use = true;
-
-		if ( $taxonomy ) {
-			$use = ! $this->get_option( 'title_rem_additions' );
+		if ( null === $args ) {
+			$use = $this->use_title_branding_from_query();
 		} else {
-			if ( $this->is_front_page_by_id( $id ) ) {
-				$use = $this->use_home_page_title_tagline();
-			} elseif ( ! $this->use_singular_title_branding( $id ) ) {
-				$use = false;
-			} else {
-				$use = ! $this->get_option( 'title_rem_additions' );
-			}
+			$this->fix_generation_args( $args );
+			$use = $this->use_title_branding_from_args( $args );
 		}
 
 		/**
@@ -1126,6 +1177,53 @@ class Generate_Title extends Generate_Description {
 		 * @param array|null $args
 		 */
 		return \apply_filters_ref_array( 'the_seo_framework_use_title_branding', [ $use, $args ] );
+	}
+
+	/**
+	 * Determines whether to add or remove title branding additions in the query.
+	 *
+	 * @since 3.2.2
+	 * @see $this->use_title_branding()
+	 *
+	 * @return bool
+	 */
+	protected function use_title_branding_from_query() {
+
+		if ( $this->is_real_front_page() ) {
+			$use = $this->use_home_page_title_tagline();
+		} elseif ( $this->is_singular() && ! $this->use_singular_title_branding( $this->get_the_real_ID() ) ) {
+			$use = false;
+		} else {
+			$use = ! $this->get_option( 'title_rem_additions' );
+		}
+
+		return $use;
+	}
+
+	/**
+	 * Determines whether to add or remove title branding additions from provided arguments.
+	 *
+	 * @since 3.2.2
+	 * @see $this->use_title_branding()
+	 *
+	 * @param array $args The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @return bool
+	 */
+	protected function use_title_branding_from_args( array $args ) {
+
+		if ( $args['taxonomy'] ) {
+			$use = ! $this->get_option( 'title_rem_additions' );
+		} else {
+			if ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+				$use = $this->use_home_page_title_tagline();
+			} elseif ( ! $this->use_singular_title_branding( $args['id'] ) ) {
+				$use = false;
+			} else {
+				$use = ! $this->get_option( 'title_rem_additions' );
+			}
+		}
+
+		return $use;
 	}
 
 	/**
