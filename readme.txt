@@ -243,6 +243,8 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 = 3.2.2 =
 
+This minor update brings [major bug fixes](https://theseoframework.com/?p= TODO). Most notoriously, the home page settings now predict the metadata perfectly in the admin screens. Bloggers will love this update, too, as social metadata for the home blog page are now always correct.
+
 For developers, please note that the upcoming major release (3.3.0) will introduce new taxonomical settings. Because the image-rendering integration isn't suited for this, it'll be overhauled. For more information, see [this issue](https://github.com/sybrew/the-seo-framework/issues/403).
 Also note that some API changes better suited for a major release are also brought into this minor release; these were required to fix some bugs.
 
@@ -256,21 +258,29 @@ Also note that some API changes better suited for a major release are also broug
 	* The Extension Manager suggestion is back. However, it no longer includes the installer.
 * **Fixed:**
 	* When a post type has more than one hierarchical taxonomy attached, the new block editor will no longer stop working.
-	* Title and description placeholders now render more HTML characters.
-	* The home page social description placeholders now show the correct value when only a custom home page meta description is set.
+	* Title and description placeholders now render more HTML characters, so the counters are (almost always) correct.
+		* Edge cases exist for HTML characters not recognized by PHP. Keep your server up-to-date!
 	* When JavaScript is disabled, the social description placeholders now show the real front-end value.
 	* When a term ID collides with the home page ID, the Meta Title additions no longer display the site tagline incorrectly.
 	* The tooltip boundary now tries to prevent creating unwanted scrollbars.
 	* Terms no longer use singular post's social & featured images on ID conflict.
-	* Frontpage-as-blog queries are stricter, this fixes:
+	* The custom Twitter home page-as-page meta is now obtained in the correct order.
+		* This went unnoticed as no one knowingly utilizes this feature. As such, no one experienced this bug.
+	* Home page-as-blog queries are stricter, this fixes:
 		* Breadcrumb home page titles.
 		* Home page meta box placeholders.
+		* Home page social meta getters.
 		* [Monitor](https://theseoframework.com/extensions/monitor/) home page title checks.
 		* Many, many API functions' incorrectly inferred behavior (see "for developers" below).
+	* Terms now use the custom description as placeholders for the Open Graph and Twitter description.
+		* In 3.3, they're also planned to get custom fields for this.
+	* TODO In the block editor, the title is now prefixed with "Private: ..." or "Protected: ..." when required again.
 * **Removed:**
 	* Internet Explorer support for tooltips.
+		* On-hover titles are available as a fallback whenever HTML support isn't required.
 * **Other:**
 	* Confirmed WordPress 5.0.3 & Gutenberg 4.7.x support.
+	* Various performance improvements were added.
 
 **For translators:**
 
@@ -285,6 +295,11 @@ Also note that some API changes better suited for a major release are also broug
 
 **For developers:**
 
+* **Notes:**
+	* There's a discrepancy between the **protected** `get_custom_{$social}_{*}` description and title methods, where the description methods obtain the custom page description, and where the titles fall back an empty string.
+		* This was a design decision made for easy integration for the custom fields.
+		* This inconsistency caused an oversight, where social descriptions weren't generated for terms; invalidating the Twitter Card meta.
+		* I don't know what to do with this, yet. Expect this discrepancy to stay until a generator comes for option and meta pages.
 * **Added:**
 	* JavaScript: `tsfL10n.nonces.manage_options` has been added for strict nonce verification. Although unused, this is future-proofing.
 * **Changed:**
@@ -304,6 +319,7 @@ Also note that some API changes better suited for a major release are also broug
 		* `get_custom_open_graph_title_from_args()`
 		* `get_custom_field_title_from_args()`
 		* `build_canonical_url()`
+	* TODO The error handler now calculates whether an error is invoked internally or externally, so it can accurately point to the nefarious caller.
 * **Filter notes:**
 	* `the_seo_framework_og_image_alt_custom` no longer runs on archive pages.
 * **Class changes:**

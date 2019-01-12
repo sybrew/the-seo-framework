@@ -409,14 +409,14 @@ class Generate_Ldjson extends Generate_Image {
 	 * @since 3.0.0 1: Now only returns one crumb.
 	 *              2: Now listens to primary term ID.
 	 *
-	 * @return string LD+JSON breadcrumbs script for Posts.
+	 * @return string LD+JSON breadcrumbs script for Posts on success. Empty string on failure.
 	 */
 	public function get_ld_json_breadcrumbs_post() {
 
 		$output = '';
 
-		$post_id = $this->get_the_real_ID();
-		$post_type = \get_post_type( $post_id );
+		$post_id    = $this->get_the_real_ID();
+		$post_type  = \get_post_type( $post_id );
 		$taxonomies = $this->get_hierarchical_taxonomies_as( 'names', \get_post_type( $post_id ) );
 
 		/**

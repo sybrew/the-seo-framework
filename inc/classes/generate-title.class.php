@@ -187,6 +187,7 @@ class Generate_Title extends Generate_Description {
 	 * Falls back to Open Graph title.
 	 *
 	 * @since 3.1.0
+	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
 	 * @see $this->get_twitter_title()
 	 * @see $this->get_twitter_title_from_custom_field()
 	 *
@@ -197,14 +198,21 @@ class Generate_Title extends Generate_Description {
 		$title = '';
 
 		if ( $this->is_real_front_page() ) {
-			$title = $this->get_option( 'homepage_twitter_title' ) ?: $this->get_option( 'homepage_og_title' ) ?: '';
-		}
-		if ( ! $title ) {
-			if ( $this->is_singular() ) {
-				$title = $this->get_custom_field( '_twitter_title' )
+			if ( $this->is_static_frontpage() ) {
+				$title = $this->get_option( 'homepage_twitter_title' )
+					  ?: $this->get_custom_field( '_twitter_title' )
+					  ?: $this->get_option( 'homepage_og_title' )
 					  ?: $this->get_custom_field( '_open_graph_title' )
 					  ?: ''; // precision alignment ok.
+			} else {
+				$title = $this->get_option( 'homepage_twitter_title' )
+					  ?: $this->get_option( 'homepage_og_title' )
+					  ?: ''; // precision alignment ok.
 			}
+		} elseif ( $this->is_singular() ) {
+			$title = $this->get_custom_field( '_twitter_title' )
+				  ?: $this->get_custom_field( '_open_graph_title' )
+				  ?: ''; // precision alignment ok.
 		}
 
 		return $title;
@@ -316,6 +324,7 @@ class Generate_Title extends Generate_Description {
 	 * Falls back to meta title.
 	 *
 	 * @since 3.1.0
+	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
 	 * @see $this->get_open_graph_title()
 	 * @see $this->get_open_graph_title_from_custom_field()
 	 *
@@ -326,12 +335,15 @@ class Generate_Title extends Generate_Description {
 		$title = '';
 
 		if ( $this->is_real_front_page() ) {
-			$title = $this->get_option( 'homepage_og_title' ) ?: '';
-		}
-		if ( ! $title ) {
-			if ( $this->is_singular() ) {
-				$title = $this->get_custom_field( '_open_graph_title' ) ?: '';
+			if ( $this->is_static_frontpage() ) {
+				$title = $this->get_option( 'homepage_og_title' )
+					  ?: $this->get_custom_field( '_open_graph_title' )
+					  ?: ''; // precision alignment ok.
+			} else {
+				$title = $this->get_option( 'homepage_og_title' ) ?: '';
 			}
+		} elseif ( $this->is_singular() ) {
+			$title = $this->get_custom_field( '_open_graph_title' ) ?: '';
 		}
 
 		return $title;
@@ -418,6 +430,7 @@ class Generate_Title extends Generate_Description {
 	 * Gets a custom title, based on current query, without additions or prefixes.
 	 *
 	 * @since 3.1.0
+	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
 	 * @internal
 	 * @see $this->get_raw_custom_field_title()
 	 *
@@ -428,15 +441,18 @@ class Generate_Title extends Generate_Description {
 		$title = '';
 
 		if ( $this->is_real_front_page() ) {
-			$title = $this->get_option( 'homepage_title' ) ?: '';
-		}
-		if ( ! $title ) {
-			if ( $this->is_singular() ) {
-				$title = $this->get_custom_field( '_genesis_title' ) ?: '';
-			} elseif ( $this->is_term_meta_capable() ) {
-				$data  = $this->get_term_meta( $this->get_the_real_ID() );
-				$title = ! empty( $data['doctitle'] ) ? $data['doctitle'] : '';
+			if ( $this->is_static_frontpage() ) {
+				$title = $this->get_option( 'homepage_title' )
+					  ?: $this->get_custom_field( '_genesis_title' )
+					  ?: ''; // precision alignment ok.
+			} else {
+				$title = $this->get_option( 'homepage_title' ) ?: '';
 			}
+		} elseif ( $this->is_singular() ) {
+			$title = $this->get_custom_field( '_genesis_title' ) ?: '';
+		} elseif ( $this->is_term_meta_capable() ) {
+			$_data = $this->get_term_meta( $this->get_the_real_ID() );
+			$title = ! empty( $_data['doctitle'] ) ? $_data['doctitle'] : '';
 		}
 
 		return $title;
@@ -458,9 +474,8 @@ class Generate_Title extends Generate_Description {
 		$title = '';
 
 		if ( $args['taxonomy'] ) {
-			// $term = \get_term( $args['id'], $args['taxonomy'] ); // redundant
-			$data  = $this->get_term_meta( $args['id'] );
-			$title = ! empty( $data['doctitle'] ) ? $data['doctitle'] : '';
+			$_data = $this->get_term_meta( $args['id'] );
+			$title = ! empty( $_data['doctitle'] ) ? $_data['doctitle'] : '';
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_title' )
@@ -667,6 +682,7 @@ class Generate_Title extends Generate_Description {
 			return $title;
 
 		$use_prefix = $this->use_generated_archive_prefix();
+
 		$_tax = isset( $term->taxonomy ) ? $term->taxonomy : '';
 
 		if ( ! $_query ) {
@@ -1081,7 +1097,7 @@ class Generate_Title extends Generate_Description {
 			 */
 			// phpcs:ignore -- WordPress doesn't have a comment, either.
 			$protected_title_format = (string) \apply_filters( 'protected_title_format', \__( 'Protected: %s', 'default' ), $post );
-			$title = sprintf( $protected_title_format, $title );
+			$title                  = sprintf( $protected_title_format, $title );
 		} elseif ( isset( $post->post_status ) && 'private' === $post->post_status ) {
 			/**
 			 * Filters the text prepended to the post title of private posts.
@@ -1096,7 +1112,7 @@ class Generate_Title extends Generate_Description {
 			 */
 			// phpcs:ignore -- WordPress doesn't have a comment, either.
 			$private_title_format = (string) \apply_filters( 'private_title_format', \__( 'Private: %s', 'default' ), $post );
-			$title = sprintf( $private_title_format, $title );
+			$title                = sprintf( $private_title_format, $title );
 		}
 	}
 

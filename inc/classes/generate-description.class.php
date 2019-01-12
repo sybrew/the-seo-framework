@@ -104,6 +104,7 @@ class Generate_Description extends Generate {
 	 * Falls back to meta description.
 	 *
 	 * @since 3.1.0
+	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
 	 * @see $this->get_open_graph_description()
 	 * @see $this->get_open_graph_description_from_custom_field()
 	 *
@@ -114,13 +115,18 @@ class Generate_Description extends Generate {
 		$desc = '';
 
 		if ( $this->is_real_front_page() ) {
-			$desc = $this->get_option( 'homepage_og_description' ) ?: '';
-		}
-		if ( ! $desc ) {
-			if ( $this->is_singular() ) {
-				$desc = $this->get_custom_field( '_open_graph_description' )
-					 ?: $this->get_description_from_custom_field(); // precision alignment ok.
+			if ( $this->is_static_frontpage() ) {
+				$desc = $this->get_option( 'homepage_og_description' )
+					 ?: $this->get_custom_field( '_open_graph_description' )
+					 ?: ''; // precision alignment ok
+			} else {
+				$desc = $this->get_option( 'homepage_og_description' ) ?: '';
 			}
+		} elseif ( $this->is_singular() ) {
+			$desc = $this->get_custom_field( '_open_graph_description' )
+				 ?: $this->get_description_from_custom_field(); // precision alignment ok.
+		} elseif ( $this->is_term_meta_capable() ) {
+			$desc = $this->get_description_from_custom_field();
 		}
 
 		return $desc;
@@ -131,7 +137,8 @@ class Generate_Description extends Generate {
 	 * Falls back to meta description.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
+	 * @since 3.2.2: 1. Now tests for the home page as page prior getting custom field data.
+	 *               2. Now obtains custom field data for terms.
 	 * @see $this->get_open_graph_description()
 	 * @see $this->get_open_graph_description_from_custom_field()
 	 *
@@ -143,7 +150,7 @@ class Generate_Description extends Generate {
 		$desc = '';
 
 		if ( $args['taxonomy'] ) {
-			$desc = '';
+			$desc = $this->get_description_from_custom_field( $args );
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_og_description' )
@@ -213,6 +220,8 @@ class Generate_Description extends Generate {
 	 * Falls back to Open Graph description.
 	 *
 	 * @since 3.1.0
+	 * @since 3.2.2: 1. Now tests for the home page as page prior getting custom field data.
+	 *               2. Now obtains custom field data for terms.
 	 * @see $this->get_twitter_description()
 	 * @see $this->get_twitter_description_from_custom_field()
 	 *
@@ -223,17 +232,23 @@ class Generate_Description extends Generate {
 		$desc = '';
 
 		if ( $this->is_real_front_page() ) {
-			$desc = $this->get_option( 'homepage_twitter_description' )
-				 ?: $this->get_custom_field( '_twitter_description' )
-				 ?: $this->get_option( 'homepage_og_description' )
-				 ?: $this->get_custom_field( '_open_graph_description' )
-				 ?: $this->get_description_from_custom_field();  // precision alignment ok.
-		} else {
-			if ( $this->is_singular() ) {
-				$desc = $this->get_custom_field( '_twitter_description' )
-					 ?: $this->get_custom_field( '_open_graph_description' )
-					 ?: $this->get_description_from_custom_field(); // precision alignment ok.
+			if ( $this->is_static_frontpage() ) {
+				$desc = $this->get_option( 'homepage_twitter_description' )
+					?: $this->get_custom_field( '_twitter_description' )
+					?: $this->get_option( 'homepage_og_description' )
+					?: $this->get_custom_field( '_open_graph_description' )
+					?: $this->get_description_from_custom_field(); // precision alignment ok.
+			} else {
+				$desc = $this->get_option( 'homepage_twitter_description' )
+					?: $this->get_option( 'homepage_og_description' )
+					?: $this->get_description_from_custom_field(); // precision alignment ok.
 			}
+		} elseif ( $this->is_singular() ) {
+			$desc = $this->get_custom_field( '_twitter_description' )
+				 ?: $this->get_custom_field( '_open_graph_description' )
+				 ?: $this->get_description_from_custom_field(); // precision alignment ok.
+		} elseif ( $this->is_term_meta_capable() ) {
+			$desc = $this->get_description_from_custom_field();
 		}
 
 		return $desc;
@@ -244,7 +259,8 @@ class Generate_Description extends Generate {
 	 * Falls back to Open Graph description.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
+	 * @since 3.2.2: 1. Now tests for the home page as page prior getting custom field data.
+	 *               2. Now obtains custom field data for terms.
 	 * @see $this->get_twitter_description()
 	 * @see $this->get_twitter_description_from_custom_field()
 	 *
@@ -256,7 +272,7 @@ class Generate_Description extends Generate {
 		$desc = '';
 
 		if ( $args['taxonomy'] ) {
-			$desc = '';
+			$desc = $this->get_description_from_custom_field( $args );
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_twitter_description' )
@@ -321,6 +337,7 @@ class Generate_Description extends Generate {
 	 * Gets a custom description, based on expected or current query, without escaping.
 	 *
 	 * @since 3.1.0
+	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
 	 * @internal
 	 * @see $this->get_description_from_custom_field()
 	 *
@@ -331,15 +348,18 @@ class Generate_Description extends Generate {
 		$desc = '';
 
 		if ( $this->is_real_front_page() ) {
-			$desc = $this->get_option( 'homepage_description' ) ?: '';
-		}
-		if ( ! $desc ) {
-			if ( $this->is_singular() ) {
-				$desc = $this->get_custom_field( '_genesis_description' ) ?: '';
-			} elseif ( $this->is_term_meta_capable() ) {
-				$data = $this->get_term_meta( $this->get_the_real_ID() );
-				$desc = ! empty( $data['description'] ) ? $data['description'] : '';
+			if ( $this->is_static_frontpage() ) {
+				$desc = $this->get_option( 'homepage_description' )
+					 ?: $this->get_custom_field( '_genesis_description' )
+					 ?: ''; // precision alignment ok.
+			} else {
+				$desc = $this->get_option( 'homepage_description' ) ?: '';
 			}
+		} elseif ( $this->is_singular() ) {
+			$desc = $this->get_custom_field( '_genesis_description' ) ?: '';
+		} elseif ( $this->is_term_meta_capable() ) {
+			$data = $this->get_term_meta( $this->get_the_real_ID() );
+			$desc = ! empty( $data['description'] ) ? $data['description'] : '';
 		}
 
 		return $desc;
@@ -361,7 +381,6 @@ class Generate_Description extends Generate {
 		$desc = '';
 
 		if ( $args['taxonomy'] ) {
-			// $term = \get_term( $args['id'], $args['taxonomy'] ); // redundant
 			$data = $this->get_term_meta( $args['id'] );
 			$desc = ! empty( $data['description'] ) ? $data['description'] : '';
 		} else {
@@ -504,6 +523,7 @@ class Generate_Description extends Generate {
 	 * Returns a description excerpt for the current query.
 	 *
 	 * @since 3.1.0
+	 * @since 3.2.2 Fixed front-page as blog logic.
 	 *
 	 * @param array|null $args An array of 'id' and 'taxonomy' values.
 	 * @return string
@@ -517,7 +537,7 @@ class Generate_Description extends Generate {
 		} else {
 			if ( $this->is_blog_page( $args['id'] ) ) {
 				$excerpt = $this->get_blog_page_description_excerpt();
-			} elseif ( $this->is_front_page_by_id( $args['id'] ) ) {
+			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$excerpt = $this->get_front_page_description_excerpt();
 			} else {
 				$excerpt = $this->get_singular_description_excerpt( $args['id'] );
@@ -580,7 +600,6 @@ class Generate_Description extends Generate {
 
 		/**
 		 * @since 3.1.0
-		 *
 		 * @param string   $excerpt The short circuit excerpt.
 		 * @param \WP_Term $term    The Term object.
 		 */
@@ -633,6 +652,7 @@ class Generate_Description extends Generate {
 	 * @since 3.1.0
 	 * @since 3.2.0 : 1. Now no longer listens to options.
 	 *                2. Now only works for the front and blog pages.
+	 * @since 3.2.2 Now works for home pages from external requests.
 	 * @see $this->get_generated_description()
 	 *
 	 * @param array|null $args   An array of 'id' and 'taxonomy' values.
@@ -648,7 +668,7 @@ class Generate_Description extends Generate {
 			$title = $this->get_raw_generated_title( $args );
 			/* translators: %s = Blog page title. Front-end output. */
 			$title = sprintf( \__( 'Latest posts: %s', 'autodescription' ), $title );
-		} elseif ( $this->is_front_page_by_id( $args['id'] ) ) {
+		} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 			$title = $this->get_home_page_tagline();
 		}
 

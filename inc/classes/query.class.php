@@ -71,7 +71,8 @@ class Query extends Compat {
 		if ( isset( $GLOBALS['wp_query']->query ) || isset( $GLOBALS['current_screen'] ) )
 			return $cache = true;
 
-		$this->the_seo_framework_debug and $this->do_query_error_notice( $method );
+		$this->the_seo_framework_debug
+			and $this->do_query_error_notice( $method );
 
 		return false;
 	}
@@ -452,6 +453,9 @@ class Query extends Compat {
 	 */
 	public function is_blog_page( $id = 0 ) {
 
+		if ( ! $this->has_page_on_front() )
+			return false;
+
 		$id = $id ?: $this->get_the_real_ID();
 
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $id ) )
@@ -464,12 +468,10 @@ class Query extends Compat {
 		if ( is_null( $pfp ) )
 			$pfp = (int) \get_option( 'page_for_posts' );
 
-		if ( $this->has_page_on_front() ) {
-			if ( $id && $id === $pfp && false === \is_archive() ) {
-				$is_blog_page = true;
-			} elseif ( \is_home() ) {
-				$is_blog_page = true;
-			}
+		if ( $id && $id === $pfp && false === \is_archive() ) {
+			$is_blog_page = true;
+		} elseif ( \is_home() ) {
+			$is_blog_page = true;
 		}
 
 		$this->set_query_cache(
@@ -1261,8 +1263,8 @@ class Query extends Compat {
 	 * Handles object cache for the query class.
 	 *
 	 * @since 2.7.0
-	 * @staticvar bool $can_cache_query : True when this function can run.
-	 * @staticvar mixed $cache : The cached query.
+	 * @staticvar null|bool $can_cache_query : True when this function can run.
+	 * @staticvar mixed     $cache           : The cached query values.
 	 * @see $this->set_query_cache(); to set query cache.
 	 *
 	 * @param string $method       The method that wants to cache, used as the key to set or get.
@@ -1283,7 +1285,7 @@ class Query extends Compat {
 
 		static $can_cache_query = null;
 
-		if ( is_null( $can_cache_query ) ) {
+		if ( null === $can_cache_query ) {
 			if ( $this->can_cache_query( $method ) ) {
 				$can_cache_query = true;
 			} else {

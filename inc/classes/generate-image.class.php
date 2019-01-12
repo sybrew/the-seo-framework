@@ -188,7 +188,7 @@ class Generate_Image extends Generate_Url {
 				goto end;
 		}
 
-		// FIXME: is_archive() = Patch for taxonomies taking incorrect images...
+		// FIXME: `! $this->is_archive()` = Patch for taxonomies taking incorrect images...
 		if ( $args['post_id'] && ! $this->is_archive() ) {
 			//* 2. Fetch image from SEO meta upload.
 			if ( $all_allowed || false === in_array( 'postmeta', $args['disallowed'], true ) ) {
@@ -496,7 +496,7 @@ class Generate_Image extends Generate_Url {
 		if ( ! $image_id )
 			return '';
 
-		$args = $this->reparse_image_args( $args );
+		$args                    = $this->reparse_image_args( $args );
 		$args['get_the_real_ID'] = true;
 
 		$src = $this->parse_og_image( $image_id, $args, $set_og_dimensions );
@@ -522,7 +522,7 @@ class Generate_Image extends Generate_Url {
 		if ( ! \wp_attachment_is_image( $id ) )
 			return '';
 
-		$args = $this->reparse_image_args( $args );
+		$args                    = $this->reparse_image_args( $args );
 		$args['get_the_real_ID'] = true;
 
 		$src = $this->parse_og_image( $id, $args, $set_og_dimensions );
