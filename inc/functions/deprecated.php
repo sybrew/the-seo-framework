@@ -62,7 +62,7 @@ function the_seo_framework_version() {
 
 	\the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', 'THE_SEO_FRAMEWORK_VERSION' );
 
-	if ( the_seo_framework_active() )
+	if ( the_seo_framework()->loaded )
 		return THE_SEO_FRAMEWORK_VERSION;
 
 	return null;

@@ -285,12 +285,53 @@ final class Debug implements Debug_Interface {
 	}
 
 	/**
+	 * Retrieves the erroneous caller data.
+	 *
+	 * Assesses the depth of the caller based on "consistent" tracing.
+	 * This is inaccurate when an error is invoked internally; but, you can trust that
+	 * the plugin doesn't trigger this behavior.
+	 *
+	 * @since 3.2.2
+	 * @see PHP debug_backtrace()
+	 *
+	 * @return array The erroneous caller data
+	 */
+	protected function get_error() {
+
+		$backtrace = debug_backtrace();
+		/**
+		 * 0 = This function.
+		 * 1 = Error handler.
+		 * 2 = Error forwarder.
+		 * 3 = Debug handler.
+		 */
+		if ( isset( $backtrace[7]['object'] ) && is_a( $backtrace[7]['object'], \the_seo_framework_class(), false ) ) {
+			/**
+			 * 4 = TSF Factory magic method.
+			 * 5 = Error invoking thing.
+			 * 6 = TSF Factory. (the_seo_framework(), or a variable that stored this)
+			 * 7 = Erroneous caller.
+			 */
+			$error = $backtrace[7];
+		} else {
+			/**
+			 * 4 = Error invoking thing.
+			 * 5 = Erroneous caller.
+			 */
+			$error = $backtrace[5];
+		}
+
+		return $error;
+	}
+
+	/**
 	 * The SEO Framework error handler.
 	 *
-	 * Only handles notices.
+	 * Only handles user notices.
 	 * @see E_USER_NOTICE
 	 *
 	 * @since 2.6.0
+	 * @since 3.2.2 Fixed unaccounted-for backtrace depth logic since this class decoupling in 3.1
 	 *
 	 * @param int Error handling code.
 	 * @param string The error message.
@@ -298,28 +339,15 @@ final class Debug implements Debug_Interface {
 	protected function error_handler_deprecated( $code, $message ) {
 
 		//* Only do so if E_USER_NOTICE is pased.
-		if ( 1024 === $code && isset( $message ) ) {
-
-			$backtrace = debug_backtrace();
-			/**
-			 * 0 = This function. 1 = Debug function. 2 = Error trigger. 3 = Deprecated Class, 4 = Deprecated Method, 5 = Magic Method, 6 = Deprecated call.
-			 * 0 = This function. 1 = Debug function. 2 = Error trigger. 3 = Deprecated Class, 4 = Deprecated Filter, 5 = Deprecated call.
-			 */
-			if ( 'Filter ' === substr( $message, 0, 7 ) ) {
-				$error = $backtrace[5];
-			} else {
-				$error = $backtrace[6];
-			}
-
-			$this->error_handler( $error, $message );
+		if ( E_USER_NOTICE === $code && isset( $message ) ) {
+			$this->error_handler( $this->get_error(), $message );
 		}
 	}
 
 	/**
 	 * The SEO Framework error handler.
 	 *
-	 * Only handles notices.
-	 * @see E_USER_NOTICE
+	 * Only handles user notices.
 	 *
 	 * @since 2.6.0
 	 *
@@ -329,25 +357,18 @@ final class Debug implements Debug_Interface {
 	protected function error_handler_doing_it_wrong( $code, $message ) {
 
 		//* Only do so if E_USER_NOTICE is pased.
-		if ( 1024 === $code && isset( $message ) ) {
-
-			$backtrace = debug_backtrace();
-			/**
-			 * 0 = This function. 1 = Debug function. 2 = magic methods, 3 = Error trigger.
-			 */
-			$error = $backtrace[3];
-
-			$this->error_handler( $error, $message );
+		if ( E_USER_NOTICE === $code && isset( $message ) ) {
+			$this->error_handler( $this->get_error(), $message );
 		}
 	}
 
 	/**
 	 * The SEO Framework error handler.
 	 *
-	 * Only handles notices.
-	 * @see E_USER_ERROR
+	 * Only handles user errors.
 	 *
 	 * @since 2.6.0
+	 * @since 3.2.2 Fixed unaccounted-for backtrace depth logic since this class decoupling in 3.1
 	 *
 	 * @param int Error handling code.
 	 * @param string The error message.
@@ -355,16 +376,8 @@ final class Debug implements Debug_Interface {
 	protected function error_handler_inaccessible_call( $code, $message ) {
 
 		//* Only do so if E_USER_ERROR is pased.
-		if ( 256 === $code && isset( $message ) ) {
-
-			$backtrace = debug_backtrace();
-
-			/**
-			 * 0 = This function. 1-3 = Debug functions. 4-5 = magic methods, 6 = user call.
-			 */
-			$error = $backtrace[6];
-
-			$this->error_handler( $error, $message, $code );
+		if ( E_USER_ERROR === $code && isset( $message ) ) {
+			$this->error_handler( $this->get_error(), $message, $code );
 		}
 	}
 
@@ -374,7 +387,7 @@ final class Debug implements Debug_Interface {
 	 * @since 2.6.0
 	 * @since 2.8.0 added $code parameter
 	 *
-	 * @param array $error The Error location and file.
+	 * @param array $error The Error location and file data extruded from debug_backtrace().
 	 * @param string $message The error message. Expected to be escaped.
 	 * @param int $code The error handler code.
 	 */

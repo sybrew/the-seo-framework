@@ -828,7 +828,7 @@ class Admin_Init extends Init {
 	 * @since 2.9.3 : 1. Query arguments work again (regression 2.9.2).
 	 *                2. Now only accepts http and https protocols.
 	 *
-	 * @param string $page Menu slug.
+	 * @param string $page Menu slug. This slug must exist, or the redirect will loop back to the current page.
 	 * @param array  $query_args Optional. Associative array of query string arguments
 	 *               (key => value). Default is an empty array.
 	 * @return null Return early if first argument is false.

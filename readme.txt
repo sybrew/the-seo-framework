@@ -3,7 +3,7 @@ Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
 Requires at least: 4.6.0
-Tested up to: 5.0.3
+Tested up to: 5.0.4
 Requires PHP: 5.4.0
 Stable tag: 3.2.2
 License: GPLv3
@@ -279,7 +279,7 @@ Also note that some API changes better suited for a major release are also broug
 	* Internet Explorer support for tooltips.
 		* On-hover titles are available as a fallback whenever HTML support isn't required.
 * **Other:**
-	* Confirmed WordPress 5.0.3 & Gutenberg 4.7.x support.
+	* Confirmed WordPress 5.0.4 & Gutenberg 4.8.x support.
 	* Various performance improvements were added.
 
 **For translators:**
@@ -321,10 +321,15 @@ Also note that some API changes better suited for a major release are also broug
 		* `get_custom_open_graph_title_from_args()`
 		* `get_custom_field_title_from_args()`
 		* `build_canonical_url()`
-	* TODO The error handler now calculates whether an error is invoked internally or externally, so it can accurately point to the nefarious caller.
+	* The error handler now calculates whether an error is invoked internally or externally of the class, so it can accurately point to the nefarious caller.
+	* Protected or private class variables can no longer be overwritten externally.
+	* Protected or private class variables can no longer be accessed, albeit a warning popped up when doing so.
 * **Filter notes:**
 	* `the_seo_framework_og_image_alt_custom` no longer runs on archive pages.
 * **Class changes:**
+	* Factory: `the_seo_framework()`, all classes:
+		* `__set()` no longer overwrites protected or private variables.
+		* `__get()` no longer returns protected or private variables' values.
 	* Factory: `the_seo_framework()`, in class `The_SEO_Framework\Query`:
 		* **Added:**
 			* Method `is_real_front_page_by_id()`, a simplified home page by ID test.
