@@ -51,9 +51,11 @@ class User_Data extends Term_Data {
 	 * Returns the current post author ID.
 	 *
 	 * @since 3.0.0
+	 * @since 3.2.2: 1. Now no longer returns the latest post author ID on home-as-blog pages.
+	 *               2. Now always returns an integer.
 	 * @staticvar $cache
 	 *
-	 * @return int|bool Post author on success, false on failure.
+	 * @return int Post author ID on success, 0 on failure.
 	 */
 	public function get_current_post_author_id() {
 
@@ -62,9 +64,16 @@ class User_Data extends Term_Data {
 		if ( isset( $cache ) )
 			return $cache;
 
-		$post = \get_post( $this->get_the_real_ID() );
+		if ( $this->is_singular() ) {
+			$post  = \get_post( $this->get_the_real_ID() );
+			$cache = isset( $post->post_author ) ? (int) $post->post_author : 0;
+		}
+		// This works... but the function name needs to be rewritten; Also, the related meta yields no social "SEO" value.
+		// elseif ( $this->is_author() ) {
+		// 	$cache = $this->get_the_real_ID();
+		// }
 
-		return $cache = isset( $post->post_author ) ? (int) $post->post_author : false;
+		return $cache ?: $cache = 0;
 	}
 
 	/**

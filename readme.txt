@@ -23,7 +23,7 @@ It's search engine optimization done right: *No ads. No distractions. No nonsens
 = This plugin: =
 
 * **Comes preconfigured**
-The SEO Framework provides a suitable starting point for most websites via its AI. It also comes with over a hundred settings for you to tweak, learn how to manage this in our [Setup guide](https://theseoframework.com/?p=2428).
+The SEO Framework provides a suitable starting point for most websites via its AI. It also comes with over a hundred settings for you to tweak; learn how to manage this in our [Setup guide](https://theseoframework.com/?p=2428).
 
 * **Is smarter than all others**
 The SEO Framework has an AI built in that listens to all that WordPress gives to automatically optimize your pages. This saves you a lot of time, and makes it very easy to use.
@@ -38,7 +38,7 @@ The SEO Framework automatically supports the Open Graph and Twitter Cards protoc
 We don't outsource our support. Instead, the developer of this plugin, with extensive knowledge of hosting, SEO, WordPress, theming, and plugin development is here for you. Over a thousand inquiries have been answered personally within 72 hours in the past four years.
 
 * **Leaves no room for errors**
-We focus on quality rather than selling you unless features. This means that this plugin performs faster, is more accurate, has fewer bugs, and is more sustainable than others. The added benefit is that your site is unlikely to get penalized by search engines.
+We focus on quality rather than selling you useless features. This means that this plugin performs faster, is more accurate, has fewer bugs, and is more sustainable than others. The added benefit is that your site is unlikely to get penalized by search engines.
 
 * **Helps you optimize your metadata**
 The SEO Framework is the only plugin that literally has pixel-perfect guidelines for Google Search. It took years of research to get this right, and this means you can manually optimize your pages without making crucial mistakes.
@@ -272,6 +272,7 @@ Also note that some API changes better suited for a major release are also broug
 		* Home page social meta getters.
 		* [Monitor](https://theseoframework.com/extensions/monitor/) home page title checks.
 		* Many, many API functions' incorrectly inferred behavior (see "for developers" below).
+		* Twitter Card creator and Article author usermeta are no longer pulled from the latest post.
 	* Terms now use the custom description as placeholders for the Open Graph and Twitter description.
 		* In 3.3, they're also planned to get custom fields for this.
 	* In the block editor, the title is now prefixed with "Private: ..." or "Protected: ..." when required again.
