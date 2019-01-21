@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the The SEO Framework package.
 msgid ""
 msgstr ""
-"Project-Id-Version: The SEO Framework 3.2.1.9\n"
+"Project-Id-Version: The SEO Framework 3.2.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/the-seo-framework\n"
-"POT-Creation-Date: 2019-01-06 08:58:08+00:00\n"
+"POT-Creation-Date: 2019-01-21 21:55:27+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -89,86 +89,86 @@ msgstr ""
 msgid "Primary %s"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:566
+#: inc/classes/admin-init.class.php:573
 msgid "The changes you made will be lost if you navigate away from this page."
 msgstr ""
 
-#: inc/classes/admin-init.class.php:567
+#: inc/classes/admin-init.class.php:574
 msgid "Are you sure you want to reset all SEO settings to their defaults?"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:569
-#: inc/classes/generate-title.class.php:1039
+#: inc/classes/admin-init.class.php:576
+#: inc/classes/generate-title.class.php:1114
 msgid "Private: %s"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:571
-#: inc/classes/generate-title.class.php:1025
+#: inc/classes/admin-init.class.php:578
+#: inc/classes/generate-title.class.php:1099
 msgid "Protected: %s"
 msgstr ""
 
 #. translators: Pixel counter. 1: width, 2: guideline
 
-#: inc/classes/admin-init.class.php:573
+#: inc/classes/admin-init.class.php:580
 msgid "%1$d out of %2$d pixels are used."
 msgstr ""
 
-#: inc/classes/admin-init.class.php:760
+#: inc/classes/admin-init.class.php:767
 msgid "There's no content."
 msgstr ""
 
-#: inc/classes/admin-init.class.php:761
+#: inc/classes/admin-init.class.php:768
 msgid "It's too short and it should have more information."
 msgstr ""
 
-#: inc/classes/admin-init.class.php:762
+#: inc/classes/admin-init.class.php:769
 msgid "It's short and it could have more information."
 msgstr ""
 
-#: inc/classes/admin-init.class.php:763
+#: inc/classes/admin-init.class.php:770
 msgid "It's long and it might get truncated in search."
 msgstr ""
 
-#: inc/classes/admin-init.class.php:764
+#: inc/classes/admin-init.class.php:771
 msgid "It's too long and it will get truncated in search."
 msgstr ""
 
-#: inc/classes/admin-init.class.php:765
+#: inc/classes/admin-init.class.php:772
 msgid "Length is good."
 msgstr ""
 
-#: inc/classes/admin-init.class.php:768
+#: inc/classes/admin-init.class.php:775
 msgctxt "The string is empty"
 msgid "Empty"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:769
+#: inc/classes/admin-init.class.php:776
 msgid "Far too short"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:770
+#: inc/classes/admin-init.class.php:777
 msgid "Too short"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:771
+#: inc/classes/admin-init.class.php:778
 msgid "Too long"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:772
+#: inc/classes/admin-init.class.php:779
 msgid "Far too long"
 msgstr ""
 
-#: inc/classes/admin-init.class.php:773
+#: inc/classes/admin-init.class.php:780
 msgid "Good"
 msgstr ""
 
 #. translators: %s = Redirect URL markdown
 
-#: inc/classes/admin-init.class.php:887
+#: inc/classes/admin-init.class.php:894
 msgid "There has been an error redirecting. Refresh the page or follow [this link](%s)."
 msgstr ""
 
-#: inc/classes/admin-init.class.php:973 inc/classes/admin-init.class.php:1033
+#: inc/classes/admin-init.class.php:980 inc/classes/admin-init.class.php:1040
 msgid "Image could not be processed."
 msgstr ""
 
@@ -574,149 +574,149 @@ msgstr ""
 
 #. translators: %s = Blog page title. Front-end output.
 
-#: inc/classes/generate-description.class.php:634
+#: inc/classes/generate-description.class.php:671
 msgid "Latest posts: %s"
 msgstr ""
 
-#: inc/classes/generate-description.class.php:643
+#: inc/classes/generate-description.class.php:680
 msgctxt "Placement. e.g. Post Title \"on\" Blog Name"
 msgid "on"
 msgstr ""
 
 #. translators: 1: Title, 2: on, 3: Blogname
 
-#: inc/classes/generate-description.class.php:647
+#: inc/classes/generate-description.class.php:684
 msgid "%1$s %2$s %3$s"
 msgstr ""
 
 #. translators: Category archive title. 1: Category name
 
-#: inc/classes/generate-title.class.php:659
-#: inc/classes/generate-title.class.php:679
+#: inc/classes/generate-title.class.php:693
+#: inc/classes/generate-title.class.php:713
 msgid "Category: %s"
 msgstr ""
 
 #. translators: Tag archive title. 1: Tag name
 
-#: inc/classes/generate-title.class.php:663
-#: inc/classes/generate-title.class.php:683
+#: inc/classes/generate-title.class.php:697
+#: inc/classes/generate-title.class.php:717
 msgid "Tag: %s"
 msgstr ""
 
 #. translators: Taxonomy term archive title. 1: Taxonomy singular name, 2:
 #. Current taxonomy term
 
-#: inc/classes/generate-title.class.php:669
-#: inc/classes/generate-title.class.php:731
+#: inc/classes/generate-title.class.php:703
+#: inc/classes/generate-title.class.php:765
 msgid "%1$s: %2$s"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:673
-#: inc/classes/generate-title.class.php:734
+#: inc/classes/generate-title.class.php:707
+#: inc/classes/generate-title.class.php:768
 msgid "Archives"
 msgstr ""
 
 #. translators: Author archive title. 1: Author name
 
-#: inc/classes/generate-title.class.php:687
+#: inc/classes/generate-title.class.php:721
 msgid "Author: %s"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:690
+#: inc/classes/generate-title.class.php:724
 msgctxt "yearly archives date format"
 msgid "Y"
 msgstr ""
 
 #. translators: Yearly archive title. 1: Year
 
-#: inc/classes/generate-title.class.php:692
+#: inc/classes/generate-title.class.php:726
 msgid "Year: %s"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:694
+#: inc/classes/generate-title.class.php:728
 msgctxt "monthly archives date format"
 msgid "F Y"
 msgstr ""
 
 #. translators: Monthly archive title. 1: Month name and year
 
-#: inc/classes/generate-title.class.php:696
+#: inc/classes/generate-title.class.php:730
 msgid "Month: %s"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:698
+#: inc/classes/generate-title.class.php:732
 msgctxt "daily archives date format"
 msgid "F j, Y"
 msgstr ""
 
 #. translators: Daily archive title. 1: Date
 
-#: inc/classes/generate-title.class.php:700
+#: inc/classes/generate-title.class.php:734
 msgid "Day: %s"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:704
+#: inc/classes/generate-title.class.php:738
 msgctxt "post format archive title"
 msgid "Asides"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:706
+#: inc/classes/generate-title.class.php:740
 msgctxt "post format archive title"
 msgid "Galleries"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:708
+#: inc/classes/generate-title.class.php:742
 msgctxt "post format archive title"
 msgid "Images"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:710
+#: inc/classes/generate-title.class.php:744
 msgctxt "post format archive title"
 msgid "Videos"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:712
+#: inc/classes/generate-title.class.php:746
 msgctxt "post format archive title"
 msgid "Quotes"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:714
+#: inc/classes/generate-title.class.php:748
 msgctxt "post format archive title"
 msgid "Links"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:716
+#: inc/classes/generate-title.class.php:750
 msgctxt "post format archive title"
 msgid "Statuses"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:718
+#: inc/classes/generate-title.class.php:752
 msgctxt "post format archive title"
 msgid "Audio"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:720
+#: inc/classes/generate-title.class.php:754
 msgctxt "post format archive title"
 msgid "Chats"
 msgstr ""
 
 #. translators: Post type archive title. 1: Post type name
 
-#: inc/classes/generate-title.class.php:725
+#: inc/classes/generate-title.class.php:759
 msgid "Archives: %s"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:885
+#: inc/classes/generate-title.class.php:919
 msgid "Untitled"
 msgstr ""
 
 #. translators: %s: search phrase
 
-#: inc/classes/generate-title.class.php:897
+#: inc/classes/generate-title.class.php:931
 msgid "Search Results for &#8220;%s&#8221;"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:975
+#: inc/classes/generate-title.class.php:1048
 msgid "Page %s"
 msgstr ""
 

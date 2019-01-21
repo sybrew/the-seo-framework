@@ -1031,6 +1031,7 @@ class Sitemaps extends Metaboxes {
 
 		/**
 		 * @since 2.5.2
+		 * @since 3.2.2 Invalid URLs are now skipped.
 		 * @example return value: [ 'http://example.com' => [ 'lastmod' => '14-01-2018', 'priority' => 0.9 ] ]
 		 * @param array $custom_urls : {
 		 *    @param string (key) $url The absolute url to the page. : array {
@@ -1050,9 +1051,13 @@ class Sitemaps extends Metaboxes {
 					$url = $args;
 				}
 
+				$_url = \esc_url_raw( $url, [ 'http', 'https' ] );
+
+				if ( ! $_url ) continue;
+
 				$content .= "\t<url>\n";
 				//* No need to use static vars
-				$content .= "\t\t<loc>" . \esc_url_raw( $url, [ 'http', 'https' ] ) . "</loc>\n";
+				$content .= "\t\t<loc>" . $_url . "</loc>\n";
 
 				if ( isset( $args['lastmod'] ) && $args['lastmod'] ) {
 					$content .= "\t\t<lastmod>" . \mysql2date( $timestamp_format, $args['lastmod'], false ) . "</lastmod>\n";

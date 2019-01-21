@@ -12,11 +12,12 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 The SEO Framework plugin provides an automated and advanced SEO solution for your WordPress website.
 
 == Description ==
-**Easy SEO for beginners, an awesome API for experts. WordPress SEO for everyone.**
 
-The SEO Framework provides an automated, accessible, unbranded, and a lightning-fast SEO solution for your WordPress website.
+**The complete SEO solution for your WordPress website.**
 
-It's search engine optimization done right: *No ads. No distractions. No nonsense.*
+The SEO Framework is a reliable, accessible, unbranded, fully automated, and rigorously optimized SEO plugin for your website.
+
+Without ads, distractions, and nonsensical functionality, this plugin delivers a time-saving SEO solution that truly helps your website rank.
 
 [Migrate](https://theseoframework.com/?p=511) | [Setup](https://theseoframework.com/?p=2428) | [Improve](https://theseoframework.com/?p=2663) | [Extensions](https://theseoframework.com/extensions/) | [API](https://theseoframework.com/?p=82) | [Privacy](https://theseoframework.com/privacy-policy/#pluginprivacyinformation)
 
@@ -26,13 +27,7 @@ It's search engine optimization done right: *No ads. No distractions. No nonsens
 The SEO Framework provides a suitable starting point for most websites via its AI. It also comes with over a hundred settings for you to tweak; learn how to manage this in our [Setup guide](https://theseoframework.com/?p=2428).
 
 * **Is smarter than all others**
-The SEO Framework has an AI built in that listens to all that WordPress gives to automatically optimize your pages. This saves you a lot of time, and makes it very easy to use.
-
-* **Improves search presence**
-The SEO Framework ranks your website distinctively by enabling breadcrumbs for Google Search, and by automatically generating titles and descriptions according to Google's guidelines. It also notifies Google, Bing, Yandex, and all connected search networks automatically of your website's changes with its built-in sitemap.
-
-* **Improves social sharing**
-The SEO Framework automatically supports the Open Graph and Twitter Cards protocols, this helps your posts stand out when shared on various social networks.
+The SEO Framework has an AI built in that listens to all that WordPress gives to automatically optimize your pages. This saves you a lot of time and makes it very easy to use.
 
 * **Has exceptional support**
 We don't outsource our support. Instead, the developer of this plugin, with extensive knowledge of hosting, SEO, WordPress, theming, and plugin development is here for you. Over a thousand inquiries have been answered personally within 72 hours in the past four years.
@@ -40,29 +35,35 @@ We don't outsource our support. Instead, the developer of this plugin, with exte
 * **Leaves no room for errors**
 We focus on quality rather than selling you useless features. This means that this plugin performs faster, is more accurate, has fewer bugs, and is more sustainable than others. The added benefit is that your site is unlikely to get penalized by search engines.
 
+* **Is cleaner than all others**
+The SEO Framework is built for the small to large corporations and enterprises. The interface seamlessly integrates within WordPress, and interacting with it feels natural.
+
+* **Improves search presence**
+The SEO Framework ranks your website distinctively by enabling breadcrumbs for Google Search, and by automatically generating titles and descriptions according to Google's guidelines. It also notifies Google, Bing, Yandex, and all connected search networks automatically of your website's changes with its built-in sitemap.
+
+* **Improves social sharing**
+The SEO Framework automatically supports the Open Graph and Twitter Cards protocols, this helps your posts stand out when shared on various social networks.
+
 * **Helps you optimize your metadata**
-The SEO Framework is the only plugin that literally has pixel-perfect guidelines for Google Search. It took years of research to get this right, and this means you can manually optimize your pages without making crucial mistakes.
+The SEO Framework is the only plugin that literally has pixel-perfect guidelines for Google Search. It took years of research to get this right, and this means you can manually optimize your pages without making critical mistakes.
 
 * **Creates a beautiful overview**
 On your post overview pages, you'll find color-coded guidelines. They tell you how to improve when hovering over it with your mouse.
 
 * **Is completely accessible**
-We handpicked our color scheme so that people with any type of color-vision deficiency can distinguish them. Full keyboard navigation support is also implemented.
-
-* **Is cleaner than all others**
-The SEO Framework is built for the small to large corporations and enterprises. The interface seamlessly integrates within WordPress, and interacting with it feels natural.
+We handpicked our color scheme so that people with any type of color-vision deficiency can distinguish these. Full keyboard-navigation support is also implemented.
 
 * **Is always doing it right**
-The SEO Framework steers you from making significant and common SEO mistakes. It also leaves little room for you to mess up, because the plugin already does everything for you. It also automatically prevents duplicated content mistakes by enforcing strict canonical URL rules, which is something many other plugins don't do.
+The SEO Framework steers you from making significant and common SEO mistakes. It also leaves little room for you to mess up because the plugin already does everything for you. It also automatically prevents duplicated content mistakes by enforcing strict canonical URL rules, which is something many other plugins don't do.
 
 * **Follows best-practices and beyond**
 We built the plugin according to all WordPress coding guidelines. This means it neatly integrates with everything else made according to it, like bbPress and WooCommerce. This also means that the plugin is secure (there's no record of exploits) and extensible.
 
 * **Is built with developers in mind**
-We encourage other developers to add functionality to this plugin. We've done so ourself, already, with our [extensions](https://theseoframework.com/extensions/). Feel free to join in on our efforts!
+We encourage other developers to add functionality to this plugin. We've done so ourselves, already, with our [extensions](https://theseoframework.com/extensions/). Feel free to join in on our efforts!
 
 * **Respects your privacy**
-Unlike others, this plugin has no links that cloak your information, and it doesn't automatically share your email address with third parties. Learn more from our strict [privacy policy](https://theseoframework.com/privacy-policy/#pluginprivacyinformation).
+Unlike others, this plugin has no links that cloak your information, and it doesn't automatically share your email address with third parties. Learn more from our strictly adhered-to [privacy policy](https://theseoframework.com/privacy-policy/#pluginprivacyinformation).
 
 = Getting started =
 
@@ -71,7 +72,7 @@ Unlike others, this plugin has no links that cloak your information, and it does
 * Want to improve your pages? Learn how to [optimize your metadata](https://theseoframework.com/?p=2663).
 
 = Do more with extensions =
-For more advanced SEO tools and output, check out our free companion plugin [Extension Manager](https://theseoframework.com/?p=2760). Many extensions are included, among others are:
+For more advanced SEO tools and output, check out our free companion plugin [Extension Manager](https://theseoframework.com/?p=2760). Many Premium, Essentials, and Free extensions are included, among others are:
 
 * **[Focus](https://theseoframework.com/?p=2305)** helps you write targeted content with **focus keywords**, their inflections, and their synonyms. It is an indispensable addition for bloggers and businesses alike.
 * **[Local](https://theseoframework.com/?p=2306)** helps you set up local SEO business information. This could expand your business' "Knowledge Graph" card for local search listings.
@@ -236,122 +237,18 @@ This is also referred to as **structured data**.
 
 = The metadata is not being updated, and I'm using a caching plugin. =
 
-All The SEO Framework's metadata is put into Object cache when a caching plugin is available.
+The SEO Framework's metadata is put into WordPress' object cache when a caching plugin is available.
 Please be sure to clear your cache or adjust the plugin's caching settings if deemed necessary.
 
 == Changelog ==
 
 = 3.2.2 =
 
-This minor update brings [major bug fixes](https://theseoframework.com/?p= TODO). Most notoriously, the home page settings now predict the metadata perfectly in the admin screens. Bloggers will love this update, too, as social metadata for the home blog page are now always correct.
+This minor update brings [major bug fixes](https://theseoframework.com/?p=3022). Most notoriously, the home page settings now predict the metadata perfectly in the admin screens. Bloggers will love this update, too, because Facebook and Twitter metadata for the home blog page is now always correct.
 
 For developers, please note that the upcoming major release (3.3.0) will introduce new taxonomical settings. Because the image-rendering integration isn't suited for this, it'll be overhauled. For more information, see [this issue](https://github.com/sybrew/the-seo-framework/issues/403).
-Also note that some API changes better suited for a major release are also brought into this minor release; these were required to fix some bugs.
 
-**For everyone:**
-
-* **Added:**
-	* More SEO plugins are now detected and tested for conflicts.
-* **Improved:**
-	* Special HTML characters are now converted to their human-readable form when determining the autogenerated description length.
-* **Changed:**
-	* The Extension Manager suggestion is back. However, it no longer includes the installer.
-* **Fixed:**
-	* When a post type has more than one hierarchical taxonomy attached, the new block editor will no longer stop working.
-	* Title and description placeholders now render more HTML characters, so the counters are (almost always) correct.
-		* Edge cases exist for HTML characters not recognized by PHP. Keep your server up-to-date!
-	* When JavaScript is disabled, the social description placeholders now show the real front-end value.
-	* When a term ID collides with the home page ID, the Meta Title additions no longer display the site tagline incorrectly.
-	* The tooltip boundary now tries to prevent creating unwanted scrollbars.
-	* Terms no longer use singular post's social & featured images on ID conflict.
-	* The custom Twitter home page-as-page meta is now obtained in the correct order.
-		* This went unnoticed as no one knowingly utilizes this feature. As such, no one experienced this bug.
-	* Home page-as-blog queries are stricter, this fixes:
-		* Breadcrumb home page titles.
-		* Home page meta box placeholders.
-		* Home page social meta getters.
-		* [Monitor](https://theseoframework.com/extensions/monitor/) home page title checks.
-		* Many, many API functions' incorrectly inferred behavior (see "for developers" below).
-		* Twitter Card creator and Article author usermeta are no longer pulled from the latest post.
-	* Terms now use the custom description as placeholders for the Open Graph and Twitter description.
-		* In 3.3, they're also planned to get custom fields for this.
-	* In the block editor, the title is now prefixed with "Private: ..." or "Protected: ..." when required again.
-* **Removed:**
-	* Internet Explorer support for tooltips.
-		* On-hover titles are available as a fallback whenever HTML support isn't required.
-* **Other:**
-	* Confirmed WordPress 5.0.4 & Gutenberg 4.8.x support.
-	* Various performance improvements were added.
-
-**For translators:**
-
-* **Updated:**
-	* The plugin readme has been overhauled.
-	* An update POT file is available.
-* **Other:**
-	* We're looking for translators! Want to translate our plugin or readme? [Reach out to us](https://theseoframework.com/contact/), and we'll gladly compensate you with a lifetime Premium license. Conditions apply, retroactively:
-		* We hand out a license after you've contributed to more than 25% of the plugin translations.
-		* Or, we hand out a license after you've contributed to more than 50% of the readme translations.
-		* Up to one license per contributor.
-
-**For developers:**
-
-* **Notes:**
-	* There's a discrepancy between the **protected** `get_custom_{$social}_{*}` description and title methods, where the description methods obtain the custom page description, and where the titles fall back an empty string.
-		* This was a design decision made for easy integration for the custom fields.
-		* This inconsistency caused an oversight, where social descriptions weren't generated for terms; invalidating the Twitter Card meta.
-		* I don't know what to do with this, yet. Expect this discrepancy to stay until a generator comes for option and meta pages.
-* **Added:**
-	* JavaScript: `tsfL10n.nonces.manage_options` has been added for strict nonce verification. Although unused, this is future-proofing.
-	* JavaScript: `tsf-updated-gutenberg-visibility` now triggers, and forwards the visibility state.
-	* JavaScript: `tsfGBC.triggerUpdate( 'visibility' )` is now available. I recommend forwarding this to the Gutenberg editor, and let `tsfGBC` trigger this automatically.
-* **Changed:**
-	* The `tsfL10n.params` and `tsfL10n.i18n` values are now escaped less rigorously. This requires extra security attention when using these values.
-* **Improved:**
-	* `get_rewritable_post_types()`'s output is now cached. Improving performance for websites with many post types.
-* **Removed:**
-	* Extension Manager installation scripts.
-* **Fixed:**
-	* The home page example title's HTML elements are now properly closing.
-	* `get_title()` no longer double-escapes the custom field title, making the second parameter useful again.
-	* (API) Some methods were incorrectly parsing the home page elements from external requests when the home page is a blog (ID=0). To fix this, these (protected) methods gained a check:
-		* `get_custom_open_graph_description_from_args()`
-		* `get_custom_twitter_description_from_args()`
-		* `get_custom_description_from_args()`
-		* `get_custom_twitter_title_from_args()`
-		* `get_custom_open_graph_title_from_args()`
-		* `get_custom_field_title_from_args()`
-		* `build_canonical_url()`
-	* The error handler now calculates whether an error is invoked internally or externally of the class, so it can accurately point to the nefarious caller.
-	* Protected or private class variables can no longer be overwritten externally.
-	* Protected or private class variables can no longer be accessed, albeit a warning popped up when doing so.
-* **Filter notes:**
-	* `the_seo_framework_og_image_alt_custom` no longer runs on archive pages.
-* **Class changes:**
-	* Factory: `the_seo_framework()`, all classes:
-		* `__set()` no longer overwrites protected or private variables.
-		* `__get()` no longer returns protected or private variables' values.
-	* Factory: `the_seo_framework()`, in class `The_SEO_Framework\Query`:
-		* **Added:**
-			* Method `is_real_front_page_by_id()`, a simplified home page by ID test.
-				* This will return false positives for post type archives, search, and date archives.
-		* **Changed:**
-			* Method `can_cache_query()` no longer outputs query errors to users unbeknownst of TSF debugging.
-	* Factory: `the_seo_framework()`, in class `The_SEO_Framework\Admin_Init`:
-		* **Added:**
-			* Method `get_default_scripts()`, returns a filterable array of the default scripts.
-	* In class `The_SEO_Framework\Builders\Scripts`:
-		* **Added:**
-			* Method `forward_known_script()`, forwards a registered script to WordPress' script handler.
-				* Use `register()` to make a script known.
-			* Method `enqueue_known_script()`, forwards and enqueues a registered script.
-				* Invokes `forward_known_script()`.
-		* **Removed:**
-			* Access to property `$include_secret`.
-		* **Changed:**
-			* Registered templates are now cleared from the queue. This fixes an issue with Extension Manager v2.0.2.
-* **Other:**
-	* Cleaned up code: Improved legibility of some files.
+Also, for developers, note that some API changes better suited for a major release are also brought into this minor release; these were required to fix some bugs.
 
 = 3.2.1 =
 
@@ -391,7 +288,7 @@ This is a major upgrade. Make a backup of your database before upgrading. WordPr
 A major update. Make a backup of your database before upgrading.
 
 = 2.8.0 =
-In the 2.8.0 update WordPress 4.3 and PHP 5.2 support have been dropped for better code quality.
+In the 2.8.0 update, WordPress 4.3 and PHP 5.2 support have been dropped for better code quality.
 
 = 2.7.0 =
 The 2.7.0 update is required for the upcoming Extension Manager plugin and includes many improvements.

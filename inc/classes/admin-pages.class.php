@@ -335,7 +335,7 @@ class Admin_Pages extends Inpost {
 		if ( $this->get_static_cache( 'check_seo_plugin_conflicts' ) && \current_user_can( 'activate_plugins' ) ) {
 			$this->detect_seo_plugins()
 				and $this->do_dismissible_notice(
-					__( 'Multiple SEO tools have been detected. You should only use one.', 'autodescription' ),
+					\__( 'Multiple SEO tools have been detected. You should only use one.', 'autodescription' ),
 					'warning'
 				);
 			$this->update_static_cache( 'check_seo_plugin_conflicts', 0 );
