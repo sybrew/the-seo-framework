@@ -242,13 +242,26 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 == Changelog ==
 
+= 3.?.? =
+
+**Detailed log**
+
+**For everyone**
+
+* **Fixed:** The link relationship URLs work again for the home page as a blog.
+
+**For developers*
+
+* **Other:**
+	* Cleaned up code, like removing redundant function calls.
+
 = 3.2.2 =
 
 This minor update brings [major bug fixes](https://theseoframework.com/?p=3022). Most notoriously, the home page settings now predict the metadata perfectly in the admin screens. Bloggers will love this update, too, because Facebook and Twitter metadata for the home blog page is now always correct.
 
 For developers, please note that the upcoming major release (3.3.0) will introduce new taxonomical settings. Because the image-rendering integration isn't suited for this, it'll be overhauled. For more information, see [this issue](https://github.com/sybrew/the-seo-framework/issues/403).
 
-Also, for developers, note that some API changes better suited for a major release are also brought into this minor release; these were required to fix some bugs.
+Also, for developers, note that some API changes better suited for a major release were also brought into this minor release; these were required to fix some bugs.
 
 = 3.2.1 =
 
