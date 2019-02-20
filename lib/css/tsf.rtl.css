@@ -189,17 +189,15 @@ a.tsf-dismiss:hover {
 	height: 0;
 }
 
-/* 8 + 4 = 12. The 4px and 3px margins account for line height. */
+/* 8 + 4 = 12. The 4px margins account for line height. */
 .tsf-pixel-counter-wrap {
 	border-bottom: 1px solid #ccc;
 	margin-top: 12px;
-	margin-bottom: 3px;
 }
 
 .tsf-pixel-counter-bar {
 	padding-top: 7px;
 	display: block;
-	height: 3px;
 	width: 100%;
 }
 

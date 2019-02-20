@@ -3,9 +3,9 @@ Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
 Requires at least: 4.6.0
-Tested up to: 5.0.4
+Tested up to: 5.1.0
 Requires PHP: 5.4.0
-Stable tag: 3.2.2
+Stable tag: 3.2.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -242,18 +242,9 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 == Changelog ==
 
-= 3.?.? =
+= 3.2.3 =
 
-**Detailed log**
-
-**For everyone**
-
-* **Fixed:** The link relationship URLs work again for the home page as a blog.
-
-**For developers*
-
-* **Other:**
-	* Cleaned up code, like removing redundant function calls.
+This minor update fixes some old, [leftover bugs](https://theseoframework.com/?p=3105).
 
 = 3.2.2 =
 
