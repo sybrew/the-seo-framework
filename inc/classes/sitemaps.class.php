@@ -1164,9 +1164,6 @@ class Sitemaps extends Metaboxes {
 			if ( $this->get_option( 'ping_bing' ) )
 				$this->ping_bing();
 
-			if ( $this->get_option( 'ping_yandex' ) )
-				$this->ping_yandex();
-
 			/**
 			 * @since 2.5.1
 			 * @param int $expiration The minimum time between two pings.
@@ -1194,19 +1191,11 @@ class Sitemaps extends Metaboxes {
 	 * Pings the sitemap location to Bing.
 	 *
 	 * @since 2.2.9
+	 * @since 3.2.3 Updated ping URL. Old one still worked, too.
+	 * @link https://www.bing.com/webmaster/help/how-to-submit-sitemaps-82a15bd4
 	 */
 	public function ping_bing() {
-		$pingurl = 'http://www.bing.com/webmaster/ping.aspx?siteMap=' . urlencode( $this->get_sitemap_xml_url() );
-		\wp_safe_remote_get( $pingurl, [ 'timeout' => 3 ] );
-	}
-
-	/**
-	 * Pings the sitemap location to Yandex.
-	 *
-	 * @since 2.6.0
-	 */
-	public function ping_yandex() {
-		$pingurl = 'http://blogs.yandex.ru/pings/?status=success&url=' . urlencode( $this->get_sitemap_xml_url() );
+		$pingurl = 'http://www.bing.com/ping?sitemap=' . rawurlencode( $this->get_sitemap_xml_url() );
 		\wp_safe_remote_get( $pingurl, [ 'timeout' => 3 ] );
 	}
 

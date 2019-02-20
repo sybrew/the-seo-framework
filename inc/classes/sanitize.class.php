@@ -303,7 +303,6 @@ class Sanitize extends Admin_Pages {
 
 				'ping_google',
 				'ping_bing',
-				'ping_yandex',
 
 				'excerpt_the_feed',
 				'source_the_feed',

@@ -253,14 +253,13 @@ switch ( $instance ) :
 		$engines = [
 			'ping_google' => 'Google',
 			'ping_bing'   => 'Bing',
-			'ping_yandex' => 'Yandex',
 		];
 
 		$ping_checkbox = '';
 
 		foreach ( $engines as $option => $engine ) {
 			/* translators: %s = Google */
-			$ping_label = sprintf( __( 'Notify %s about sitemap changes?', 'autodescription' ), $engine );
+			$ping_label     = sprintf( __( 'Notify %s about sitemap changes?', 'autodescription' ), $engine );
 			$ping_checkbox .= $this->make_checkbox( $option, $ping_label, '', true );
 		}
 

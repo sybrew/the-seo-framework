@@ -244,7 +244,7 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 = 3.2.3 =
 
-This minor update fixes some old, [leftover bugs](https://theseoframework.com/?p=3105).
+This minor update fixes some old, [leftover bugs](https://theseoframework.com/?p=3105). We've also removed the sitemap pinging options for Yandex, as they no longer allow this.
 
 = 3.2.2 =
 

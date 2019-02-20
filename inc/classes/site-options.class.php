@@ -248,7 +248,6 @@ class Site_Options extends Sanitize {
 
 				'ping_google'          => 1, // Ping Google
 				'ping_bing'            => 1, // Ping Bing
-				'ping_yandex'          => 1, // Ping Yandex
 
 				'sitemap_styles'       => 1,        // Whether to style the sitemap
 				'sitemap_logo'         => 1,        // Whether to add logo to sitemap
