@@ -242,6 +242,28 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 == Changelog ==
 
+= 3.x.x =
+
+* **TODO:**
+	* Change "@since 3.x.x" to a real number.
+	* Stripped HTML tags in Aria labels.
+	* Fix verbatim "if the title consists of two parts..." -> "...of multiple parts..."
+	* Fix "tag" verbatim: make it "meta tag".
+	* Add filter to use_title_pagination and honor it.
+	* Add filter to use_title_protection and honor it.
+
+**Detailed log**
+
+**For everyone:**
+	* **Fixed:**
+		* Author archives no longer use protective title prefixes (like "Private: ", or "Protected: ") from a post with the same ID as the author.
+
+**For developers:**
+	* **Method notes:**
+		* **Added:**
+			* `use_title_protection()`
+			* `use_title_pagination()`
+
 = 3.2.3 =
 
 This minor update fixes some old, [leftover bugs](https://theseoframework.com/?p=3105). We've also removed the sitemap pinging options for Yandex, as they no longer allow this.
