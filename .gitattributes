@@ -18,6 +18,7 @@
 *.woff binary
 *.woff2 binary
 
+.github export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
 .editorconfig export-ignore
