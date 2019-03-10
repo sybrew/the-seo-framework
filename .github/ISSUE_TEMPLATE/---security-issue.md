@@ -1,6 +1,6 @@
 ---
 name: "\U0001F46E Security issue"
-about: "Please report security issues at https://theseoframework.com/contact/"
+about: "Please report security issues at https://theseoframework.com/contact/."
 title: ''
 labels: ''
 assignees: sybrew

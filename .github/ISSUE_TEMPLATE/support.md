@@ -1,6 +1,6 @@
 ---
-name: "\U000FEB09Support"
-about: "If you'd like to ask for support, please visit our support forums at https://wordpress.org/support/plugin/autodescription/"
+name: "\U0001F4AC Support"
+about: "If you'd like to ask for support, please visit our support forums at WordPress.org."
 title: ''
 labels: ''
 assignees: ''
