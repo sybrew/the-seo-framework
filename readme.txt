@@ -245,7 +245,6 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 = 3.x.x =
 
 * **TODO:**
-	* Change "@since 3.x.x" to a real number.
 	* Stripped HTML tags in Aria labels.
 	* Fix verbatim "if the title consists of two parts..." -> "...of multiple parts..."
 	* Fix "tag" verbatim: make it "meta tag".
@@ -259,6 +258,8 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 		* Documentation links have been added to the plugin details overview row.
 	* **Fixed:**
 		* Author archives no longer use protective title prefixes (like "Private: ", or "Protected: ") from a post with the same ID as the author.
+		* The primary term selector in the Classic Editor now correctly checks the selected primary term button when interacting via a keyboard.
+			* This bug only affected the interface; internally, the primary term was correctly selected.
 	* **Changed:**
 		* The "About" link on the plugin activation page now leads to our "about us" page.
 
