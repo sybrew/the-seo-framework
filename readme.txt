@@ -255,10 +255,25 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 **Detailed log**
 
 **For everyone:**
+	* **Added:**
+		* Documentation links have been added to the plugin details overview row.
 	* **Fixed:**
 		* Author archives no longer use protective title prefixes (like "Private: ", or "Protected: ") from a post with the same ID as the author.
+	* **Changed:**
+		* The "About" link on the plugin activation page now leads to our "about us" page.
 
 **For developers:**
+	* **File changes:**
+		* **Added:**
+			* `../inc/functions/upgrade-suggestion.php`
+		* **Removed:**
+			* `../inc/functions/tsfem-suggestion.php`
+		* **Changed:**
+			* Added namespace `The_SEO_Framework\Bootstrap` to:
+				* `../bootstrap/activation.php`
+				* `../bootstrap/deactivation.php`
+				* `../bootstrap/upgrade.php`
+				* `../bootstrap/activation.php`
 	* **Method notes:**
 		* **Added:**
 			* `use_title_protection()`

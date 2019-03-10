@@ -94,6 +94,7 @@ class Sanitize extends Admin_Pages {
 		\add_action( "update_option_{$this->settings_field}", [ $this, 'delete_main_cache' ] );
 		\add_action( "update_option_{$this->settings_field}", [ $this, 'reinitialize_rewrite' ], 11 );
 		\add_action( "update_option_{$this->settings_field}", [ $this, 'update_db_version' ], 12 );
+		//* TEMP: Set backward compatibility
 		\add_action( "update_option_{$this->settings_field}", [ $this, '_set_backward_compatibility' ], 13 );
 	}
 

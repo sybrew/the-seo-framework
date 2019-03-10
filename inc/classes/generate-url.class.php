@@ -656,6 +656,7 @@ class Generate_Url extends Generate_Title {
 	 * Adjusts category post link.
 	 *
 	 * @since 3.0.0
+	 * @access private
 	 *
 	 * @param \WP_Term  $term  The category to use in the permalink.
 	 * @param array     $terms Array of all categories (WP_Term objects) associated with the post.

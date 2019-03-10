@@ -1,7 +1,10 @@
 <?php
 /**
-* @package The_SEO_Framework/Bootstrap
-*/
+ * @package The_SEO_Framework
+ * @subpackage Bootstrap
+ * @TODO change namespace to The_SEO_Framework\Bootstrap
+ *       in a future major release.
+ */
 namespace The_SEO_Framework;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;

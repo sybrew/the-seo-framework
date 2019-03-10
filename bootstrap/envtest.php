@@ -1,6 +1,10 @@
 <?php
 /**
- * @package The_SEO_Framework/Bootstrap
+ * @package The_SEO_Framework
+ * @subpackage Bootstrap
+ *
+ * @NOTE This file MUST be written according to WordPress' minimum PHP requirements.
+ *       Which is PHP 5.2.
  */
 
 defined( 'THE_SEO_FRAMEWORK_DB_VERSION' ) or die;
@@ -26,9 +30,6 @@ defined( 'THE_SEO_FRAMEWORK_DB_VERSION' ) or die;
  * This file holds functions for testing the plugin after upgrade.
  * This file will only be called ONCE if the required version option is lower
  * compared to The SEO Framework version constant.
- *
- * @NOTE This file MUST be written according to WordPress' minimum PHP requirements.
- *       Which is PHP 5.2.
  *
  * @since 3.1.0
  * @access private

@@ -1,6 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Deprecated
+ * @package The_SEO_Framework\Classes
+ * @subpackage Classes\Deprecated
  */
 namespace The_SEO_Framework;
 

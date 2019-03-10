@@ -222,8 +222,6 @@ class Core {
 	 */
 	public function _add_plugin_action_links( $links = [] ) {
 
-		$tsf_links = [];
-
 		if ( $this->load_options )
 			$tsf_links['settings'] = sprintf(
 				'<a href="%s">%s</a>',
@@ -232,7 +230,7 @@ class Core {
 			);
 
 		$tsf_links['about'] = sprintf(
-			'<a href="https://theseoframework.com/" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
+			'<a href="https://theseoframework.com/about-us/" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
 			\esc_html__( 'About', 'autodescription' )
 		);
 		$tsf_links['tsfem'] = sprintf(
@@ -242,6 +240,48 @@ class Core {
 		);
 
 		return array_merge( $links, $tsf_links );
+	}
+
+	/**
+	 * Adds more row meta on the plugin screen.
+	 *
+	 * @since 3.2.4
+	 * @access private
+	 *
+	 * @param string[] $plugin_meta An array of the plugin's metadata,
+	 *                              including the version, author,
+	 *                              author URI, and plugin URI.
+	 * @param string   $plugin_file Path to the plugin file relative to the plugins directory.
+	 * @return array $plugin_meta
+	 */
+	public function _add_plugin_row_meta( $plugin_meta, $plugin_file ) {
+
+		if ( THE_SEO_FRAMEWORK_PLUGIN_BASENAME !== $plugin_file )
+			return $plugin_meta;
+
+		return array_merge( $plugin_meta, [
+			'docs' => vsprintf(
+				'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
+				[
+					'https://theseoframework.com/?p=80',
+					\esc_html__( 'View documentation', 'autodescription' ),
+				]
+			),
+			'API' => vsprintf(
+				'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
+				[
+					'https://theseoframework.com/?p=82',
+					\esc_html__( 'View API docs', 'autodescription' ),
+				]
+			),
+			'EM'  => vsprintf(
+				'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
+				[
+					'https://theseoframework.com/?p=2760',
+					\esc_html_x( 'Get the Extension Manager', 'Extension Manager is a product name; do not translate', 'autodescription' ),
+				]
+			),
+		] );
 	}
 
 	/**

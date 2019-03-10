@@ -1,8 +1,9 @@
 <?php
 /**
-* @package The_SEO_Framework
-*/
-namespace The_SEO_Framework;
+ * @package The_SEO_Framework
+ * @subpackage Bootstrap
+ */
+namespace The_SEO_Framework\Bootstrap;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
@@ -23,9 +24,13 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @since 3.2.4 Applied namspacing to this file. All method names have changed.
+ */
+
 //! @php7+ convert to IIFE
-\The_SEO_Framework\_deactivation_unset_options_autoload();
-\The_SEO_Framework\_deactivation_unset_sitemap();
+_deactivation_unset_options_autoload();
+_deactivation_unset_sitemap();
 
 /**
  * Flush rewrite rules on plugin deactivation.

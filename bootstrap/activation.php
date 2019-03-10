@@ -1,8 +1,9 @@
 <?php
 /**
-* @package The_SEO_Framework
-*/
-namespace The_SEO_Framework;
+ * @package The_SEO_Framework
+ * @subpackage Bootstrap
+ */
+namespace The_SEO_Framework\Bootstrap;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
@@ -23,10 +24,14 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @since 3.2.4 Applied namspacing to this file. All method names have changed.
+ */
+
 //! @php7+ convert to IIFE
-\The_SEO_Framework\_activation_setup_sitemap();
-\The_SEO_Framework\_activation_set_options_autoload();
-\The_SEO_Framework\_activation_set_plugin_check_caches();
+_activation_setup_sitemap();
+_activation_set_options_autoload();
+_activation_set_plugin_check_caches();
 
 /**
  * Nudges the plugin to check for conflicting SEO plugins.

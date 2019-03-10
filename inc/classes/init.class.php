@@ -160,6 +160,7 @@ class Init extends Query {
 
 		//* Add plugin links to the plugin activation page.
 		\add_filter( 'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, [ $this, '_add_plugin_action_links' ], 10, 2 );
+		\add_filter( 'plugin_row_meta', [ $this, '_add_plugin_row_meta' ], 10, 2 );
 
 		//* Initialize post states.
 		\add_action( 'current_screen', [ $this, 'post_state' ] );

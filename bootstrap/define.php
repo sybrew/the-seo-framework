@@ -1,6 +1,8 @@
 <?php
 /**
- * @package The_SEO_Framework/Bootstrap
+ * @package The_SEO_Framework
+ * @subpackage Bootstrap
+ * No need to annotate namespacing here... there are only plain PHP queries.
  */
 
 defined( 'THE_SEO_FRAMEWORK_DB_VERSION' ) or die;
