@@ -74,14 +74,14 @@ switch ( $instance ) :
 			$this->make_checkbox(
 				'og_tags',
 				__( 'Output Open Graph meta tags?', 'autodescription' ),
-				__( 'Facebook, Twitter, Pinterest and many other social sites make use of these tags.', 'autodescription' ),
+				__( 'Facebook, Twitter, Pinterest and many other social sites make use of these meta tags.', 'autodescription' ),
 				true
 			),
 			true
 		);
 
 		if ( $this->detect_og_plugin() )
-			$this->attention_description( __( 'Note: Another Open Graph plugin has been detected. These tags might conflict.', 'autodescription' ) );
+			$this->attention_description( __( 'Note: Another Open Graph plugin has been detected. These meta tags might conflict.', 'autodescription' ) );
 
 		//* Echo Facebook Tags checkbox.
 		$this->wrap_fields(
@@ -89,7 +89,7 @@ switch ( $instance ) :
 				'facebook_tags',
 				__( 'Output Facebook meta tags?', 'autodescription' ),
 				/* translators: %s = Facebook */
-				sprintf( __( 'Output various tags targeted at %s.', 'autodescription' ), 'Facebook' ),
+				sprintf( __( 'Output various meta tags targeted at %s.', 'autodescription' ), 'Facebook' ),
 				true
 			),
 			true
@@ -101,14 +101,14 @@ switch ( $instance ) :
 				'twitter_tags',
 				__( 'Output Twitter meta tags?', 'autodescription' ),
 				/* translators: %s = Facebook */
-				sprintf( __( 'Output various tags targeted at %s.', 'autodescription' ), 'Twitter' ),
+				sprintf( __( 'Output various meta tags targeted at %s.', 'autodescription' ), 'Twitter' ),
 				true
 			),
 			true
 		);
 
 		if ( $this->detect_twitter_card_plugin() )
-			$this->attention_description( __( 'Note: Another Twitter Card plugin has been detected. These tags might conflict.', 'autodescription' ) );
+			$this->attention_description( __( 'Note: Another Twitter Card plugin has been detected. These meta tags might conflict.', 'autodescription' ) );
 
 		?>
 		<hr>

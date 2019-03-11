@@ -244,10 +244,11 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 = 3.x.x =
 
+In this minor update, we bring you the most advanced description generation yet. The generator is now context-sensitive, so you can expect the descriptions to be even more natural; a true time-saver. Oh, we also fixed some bugs.
+
 * **TODO:**
-	* Stripped HTML tags in Aria labels.
-	* Fix verbatim "if the title consists of two parts..." -> "...of multiple parts..."
-	* Fix "tag" verbatim: make it "meta tag".
+	* Fix Polylang URLs.
+	* Fix WPML URLs.
 	* Add filter to use_title_pagination and honor it.
 	* Add filter to use_title_protection and honor it.
 
@@ -256,12 +257,23 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 **For everyone:**
 	* **Added:**
 		* Documentation links have been added to the plugin details overview row.
+	* **Improved:**
+		* Auto-generated descriptions no longer consider elements of these types for generation:
+			* `address, bdo, br, button, canvas, code, fieldset, form, h1, h2, h3, h4, h5, h6, header, hr, input, label, link, meta, nav, noscript, option, pre, samp, script, select, style, svg, table, textarea, var, video`
+	* **Changed:**
+		* The "About" link on the plugin activation page now leads to our "about us" page.
 	* **Fixed:**
 		* Author archives no longer use protective title prefixes (like "Private: ", or "Protected: ") from a post with the same ID as the author.
 		* The primary term selector in the Classic Editor now correctly checks the selected primary term button when interacting via a keyboard.
 			* This bug only affected the interface; internally, the primary term was correctly selected.
+		* Read this aloud: "Less than BR greater than generated: automatically generated"; Yes, that's stupid, and it will no longer be ennunciated by screen readers.
+			* Essentially, we've cleanly stripped `<br>` and other meta tags from the SEO bar items' ARIA-labels.
+		* Auto-generated descriptions now correctly add spaces between HTML block elements.
+
+**For translators:**
 	* **Changed:**
-		* The "About" link on the plugin activation page now leads to our "about us" page.
+		* We've changed various instances of "tags", which should've been "meta tags".
+		* "Two parts" should've been "three parts"; we've made it "multiple parts" to future-proof it.
 
 **For developers:**
 	* **File changes:**
@@ -279,6 +291,8 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 		* **Added:**
 			* `use_title_protection()`
 			* `use_title_pagination()`
+		* **Changed:**
+			* `s_excerpt()` now uses the new `strip_tags_cs()` method (with modified arguments), instead of WordPress' `wp_strip_all_tags()`.
 
 = 3.2.3 =
 

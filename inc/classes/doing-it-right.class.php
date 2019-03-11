@@ -571,10 +571,11 @@ class Doing_It_Right extends Generate_Ldjson {
 			[
 				$args['width'],
 				vsprintf(
-					'<span class="tsf-seo-bar-item tsf-tooltip-item %1$s" aria-label="%2$s" data-desc="%2$s">%3$s</span>',
+					'<span class="tsf-seo-bar-item tsf-tooltip-item %s" data-desc="%s" aria-label="%s">%s</span>',
 					[
 						$args['class'],
 						$args['notice'],
+						$this->strip_tags_cs( $args['notice'], [ 'clear' => 'br' ] ),
 						$args['indicator'],
 					]
 				),

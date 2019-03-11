@@ -781,14 +781,21 @@ class Sanitize extends Admin_Pages {
 		//* No need to parse an empty excerpt.
 		if ( '' === $excerpt ) return '';
 
+		$strip_args = [
+			'space' =>
+				[ 'article', 'aside', 'blockquote', 'dd', 'div', 'dl', 'dt', 'figcaption', 'figure', 'footer', 'li', 'main', 'ol', 'p', 'section', 'tfoot', 'ul' ],
+			'clear' =>
+				[ 'address', 'bdo', 'br', 'button', 'canvas', 'code', 'fieldset', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'input', 'label', 'link', 'meta', 'nav', 'noscript', 'option', 'pre', 'samp', 'script', 'select', 'style', 'svg', 'table', 'textarea', 'var', 'video' ],
+		];
+
 		/**
 		 * @since 2.6.6.1
 		 * @param bool $allow_shortcodes Whether to allow shortcodes.
 		 */
 		if ( $allow_shortcodes && \apply_filters( 'the_seo_framework_allow_excerpt_shortcode_tags', false ) ) {
-			$excerpt = \wp_strip_all_tags( $excerpt );
+			$excerpt = $this->strip_tags_cs( $excerpt, $strip_args );
 		} else {
-			$excerpt = \wp_strip_all_tags( \strip_shortcodes( $excerpt ) );
+			$excerpt = $this->strip_tags_cs( \strip_shortcodes( $excerpt ), $strip_args );
 		}
 
 		if ( $escape )
@@ -1462,5 +1469,65 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function strip_paragraph_urls( $content ) {
 		return preg_replace( '/(<p(?: [^>]*)?>\s*)(https?:\/\/[^\s<>"]+)(\s*<\/p>)/i', '', $content );
+	}
+
+	/**
+	 * Strips tags with HTML Context-Sensitivity and ouputs its breakdown.
+	 *
+	 * It essentially strips all tags, and replaces block-type tags' endings with spaces.
+	 * When done, it performs a sanity-cleanup via `strip_tags()`.
+	 *
+	 * Tip: You might want to use method `s_dupe_space()` to clear up the duplicated spaces afterward.
+	 *
+	 * @since 3.2.4
+	 * @link: https://www.w3schools.com/html/html_blocks.asp
+	 *
+	 * @param string $input The input text that needs its tags stripped.
+	 * @param array  $args  The input arguments: {
+	 *                         'space'   : @param array|null HTML elements that should have a space added.
+	 *                                                       If not set or null, skip check.
+	 *                                                       If empty array, use default; otherwise, use array.
+	 *                         'clear'   : @param array|null HTML elements that should be emptied and replaced with a space.
+	 *                                                       If not set or null, skip check.
+	 *                                                       If empty array, use default; otherwise, use array.
+	 *                      }
+	 *                      NOTE: WARNING The array values are forwarded to a regex without sanitization.
+	 *                      NOTE: Unlisted, script, and style tags will be stripped via PHP's `strip_tags()`.
+	 * @return string The output string without tags.
+	 */
+	public function strip_tags_cs( $input, $args = [] ) {
+
+		$default_args = [
+			'space' =>
+				[ 'address', 'article', 'aside', 'blockquote', 'dd', 'div', 'dl', 'dt', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'li', 'main', 'nav', 'ol', 'p', 'pre', 'section', 'table', 'tfoot', 'ul' ],
+			'clear' =>
+				[ 'bdo', 'br', 'button', 'canvas', 'code', 'hr', 'input', 'label', 'link', 'noscript', 'meta', 'option', 'samp', 'script', 'select', 'style', 'svg', 'textarea', 'var', 'video' ],
+		];
+
+		if ( ! $args ) {
+			$args = $default_args;
+		} else {
+			foreach ( [ 'space', 'clear' ] as $type ) {
+				if ( isset( $args[ $type ] ) ) {
+					if ( ! $args[ $type ] ) {
+						$args[ $type ] = $default_args[ $type ];
+					} else {
+						$args[ $type ] = (array) $args[ $type ];
+					}
+				}
+			}
+		}
+
+		// Clear first, so there's less to process; then add spaces.
+		foreach ( [ 'clear', 'space' ] as $type ) {
+			if ( empty( $args[ $type ] ) ) continue;
+
+			$_regex   = sprintf( '<(%s)[^>]*?>((.*?)(<\/\1>))?', implode( $args[ $type ], '|' ) );
+			$_replace = 'space' === $type ? ' $2 ' : ' ';
+
+			$input = preg_replace( "/$_regex/si", $_replace, $input );
+		}
+
+		return strip_tags( $input );
 	}
 }

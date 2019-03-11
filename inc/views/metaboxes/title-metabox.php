@@ -177,7 +177,7 @@ switch ( $instance ) :
 		<fieldset>
 			<legend>
 				<h4><?php esc_html_e( 'Title Separator', 'autodescription' ); ?></h4>
-				<?php $this->description( __( 'If the title consists of two parts (original title, pagination, and blogname), then the separator will go in-between them.', 'autodescription' ) ); ?>
+				<?php $this->description( __( 'If the title consists of multiple parts (original title, pagination, and blogname), then the separator will go in-between them.', 'autodescription' ) ); ?>
 			</legend>
 			<p id="tsf-title-separator" class="tsf-fields">
 			<?php foreach ( $title_separator as $name => $html ) : ?>
