@@ -249,6 +249,7 @@ In this minor update, we bring you the most advanced description generation yet.
 * **TODO:**
 	* Fix Polylang URLs.
 	* Fix WPML URLs.
+	* Fix pixel counter ARIA HTML.
 	* Add filter to use_title_pagination and honor it.
 	* Add filter to use_title_protection and honor it.
 
@@ -262,6 +263,8 @@ In this minor update, we bring you the most advanced description generation yet.
 			* `address, bdo, br, button, canvas, code, fieldset, form, h1, h2, h3, h4, h5, h6, header, hr, input, label, link, meta, nav, noscript, option, pre, samp, script, select, style, svg, table, textarea, var, video`
 	* **Changed:**
 		* The "About" link on the plugin activation page now leads to our "about us" page.
+		* When trailing slashes are omitted via the permalink settings, the home page URL now gets one regardless if it's a document root URL.
+			* This fixes a bug in Google Search Console, where they couldn't recognize the URL in the sitemap.
 	* **Fixed:**
 		* Author archives no longer use protective title prefixes (like "Private: ", or "Protected: ") from a post with the same ID as the author.
 		* The primary term selector in the Classic Editor now correctly checks the selected primary term button when interacting via a keyboard.

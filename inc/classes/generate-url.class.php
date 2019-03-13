@@ -248,6 +248,7 @@ class Generate_Url extends Generate_Title {
 	 * Automatically adds pagination if the ID matches the query.
 	 *
 	 * @since 3.0.0
+	 * @since 3.2.4 Now adds a slash to the home URL when it's a root URL.
 	 *
 	 * @return string The home canonical URL.
 	 */
@@ -256,15 +257,15 @@ class Generate_Url extends Generate_Title {
 		//= Prevent admin bias by passing preferred scheme.
 		$url = \get_home_url( null, '', $this->get_preferred_scheme() );
 
-		if ( $url ) {
-			if ( $this->get_the_real_ID() === (int) \get_option( 'page_for_posts' ) ) {
-				$url = $this->add_url_pagination( $url, $this->paged(), true );
-			}
+		if ( ! $url ) return '';
 
-			return \user_trailingslashit( $url );
+		if ( $this->get_the_real_ID() === (int) \get_option( 'page_for_posts' ) ) {
+			$url = $this->add_url_pagination( $url, $this->paged(), true );
 		}
 
-		return '';
+		$path = parse_url( $url, PHP_URL_PATH );
+
+		return null === $path ? \trailingslashit( $url ) : \user_trailingslashit( $url );
 	}
 
 	/**
