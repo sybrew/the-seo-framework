@@ -244,7 +244,7 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 = 3.x.x =
 
-In this minor update, we bring you the most advanced description generation yet. The generator is now context-sensitive, so you can expect the descriptions to be even more natural; a true time-saver. Oh, we also fixed some bugs.
+In this minor update, we bring you the most advanced description generation yet. The generator is now context-sensitive, so you can expect the descriptions to be even more natural; a true time-saver. Oh, we also fixed some bugs and implemented some improvements.
 
 * **TODO:**
 	* Fix Polylang URLs.
@@ -261,6 +261,8 @@ In this minor update, we bring you the most advanced description generation yet.
 	* **Improved:**
 		* Auto-generated descriptions no longer consider elements of these types for generation:
 			* `address, bdo, br, button, canvas, code, fieldset, form, h1, h2, h3, h4, h5, h6, header, hr, input, label, link, meta, nav, noscript, option, pre, samp, script, select, style, svg, table, textarea, var, video`
+		* Google can now respond to the `noindex` directive quicker.
+			* When `noindex` is set via The SEO Framework, we now remove the canonical URL when it points to the current page.
 	* **Changed:**
 		* The "About" link on the plugin activation page now leads to our "about us" page.
 		* When trailing slashes are omitted via the permalink settings, the home page URL now gets one regardless if it's a document root URL.
@@ -276,7 +278,7 @@ In this minor update, we bring you the most advanced description generation yet.
 **For translators:**
 	* **Changed:**
 		* We've changed various instances of "tags", which should've been "meta tags".
-		* "Two parts" should've been "three parts"; we've made it "multiple parts" to future-proof it.
+		* "Two parts" should've been "three parts"; we've decided to make it "multiple parts" to future-proof it.
 
 **For developers:**
 	* **File changes:**
@@ -292,6 +294,7 @@ In this minor update, we bring you the most advanced description generation yet.
 				* `../bootstrap/activation.php`
 	* **Method notes:**
 		* **Added:**
+			* `get_robots_meta()`
 			* `use_title_protection()`
 			* `use_title_pagination()`
 		* **Changed:**

@@ -870,6 +870,13 @@ class Render extends Admin_Init {
 			]
 		);
 
+		// If the page should not be indexed, and the permalink matches the canonical URL, empty it.
+		if ( in_array( 'noindex', $this->get_robots_meta(), true ) ) {
+			if ( $url === $this->get_current_permalink() ) {
+				$url = '';
+			}
+		}
+
 		/**
 		 * @since 2.7.0 Listens to the second filter.
 		 */
@@ -1031,23 +1038,36 @@ class Render extends Admin_Init {
 		if ( false === $this->is_blog_public() )
 			return '';
 
+		$meta = $this->get_robots_meta();
+
+		if ( empty( $meta ) )
+			return '';
+
+		return sprintf( '<meta name="robots" content="%s" />' . PHP_EOL, implode( ',', $meta ) );
+	}
+
+	/**
+	 * Returns the robots meta array.
+	 *
+	 * @since 3.2.4
+	 * @staticvar array|null $cache
+	 *
+	 * @return array
+	 */
+	public function get_robots_meta() {
+		static $cache = null;
 		/**
 		 * @since 2.6.0
 		 * @param array $meta The robots meta.
 		 * @param int   $id   The current post or term ID.
 		 */
-		$meta = (array) \apply_filters_ref_array(
+		return isset( $cache ) ? $cache : $cache = (array) \apply_filters_ref_array(
 			'the_seo_framework_robots_meta',
 			[
 				$this->robots_meta(),
 				$this->get_the_real_ID(),
 			]
 		);
-
-		if ( empty( $meta ) )
-			return '';
-
-		return sprintf( '<meta name="robots" content="%s" />' . PHP_EOL, implode( ',', $meta ) );
 	}
 
 	/**

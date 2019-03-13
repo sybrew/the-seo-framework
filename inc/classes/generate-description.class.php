@@ -411,7 +411,6 @@ class Generate_Description extends Generate {
 	 *              2. Now no longer converts additions into excerpt when no excerpt is found.
 	 * @since 3.2.2 Now converts HTML characters prior trimming.
 	 * @uses $this->generate_description()
-	 * @staticvar array $cache
 	 *
 	 * @param array|null $args   An array of 'id' and 'taxonomy' values.
 	 *                           Accepts int values for backward compatibility.
