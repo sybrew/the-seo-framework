@@ -3,7 +3,7 @@ Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
 Requires at least: 4.6.0
-Tested up to: 5.1.0
+Tested up to: 5.1.1
 Requires PHP: 5.4.0
 Stable tag: 3.2.3
 License: GPLv3
@@ -247,8 +247,6 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 In this minor update, we bring you the most advanced description generation yet. The generator is now context-sensitive, so you can expect the descriptions to be even more natural; a true time-saver. Oh, we also fixed some bugs and implemented some improvements.
 
 * **TODO:**
-	* Fix Polylang URLs.
-	* Fix WPML URLs.
 	* Fix pixel counter ARIA HTML.
 	* Add filter to use_title_pagination and honor it.
 	* Add filter to use_title_protection and honor it.
@@ -258,22 +256,39 @@ In this minor update, we bring you the most advanced description generation yet.
 **For everyone:**
 	* **Added:**
 		* Documentation links have been added to the plugin details overview row.
-	* **Improved:**
-		* Auto-generated descriptions no longer consider elements of these types for generation:
+		* Auto-generated descriptions no longer use elements of these types for generation:
 			* `address, bdo, br, button, canvas, code, fieldset, form, h1, h2, h3, h4, h5, h6, header, hr, input, label, link, meta, nav, noscript, option, pre, samp, script, select, style, svg, table, textarea, var, video`
+		* Auto-generated descriptions now add spaces around elements of these types (they're considered as blocks) for generation:
+			`article, aside, blockquote, dd, div, dl, dt, figcaption, figure, footer, li, main, ol, p, section, tfoot, ul`
+	* **Improved:**
 		* Google can now respond to the `noindex` directive quicker.
 			* When `noindex` is set via The SEO Framework, we now remove the canonical URL when it points to the current page.
 	* **Changed:**
 		* The "About" link on the plugin activation page now leads to our "about us" page.
+		* The links on the plugin activation page are now prepended, instead of appended.
 		* When trailing slashes are omitted via the permalink settings, the home page URL now gets one regardless if it's a document root URL.
 			* This fixes a bug in Google Search Console, where they couldn't recognize the URL in the sitemap.
 	* **Fixed:**
-		* Author archives no longer use protective title prefixes (like "Private: ", or "Protected: ") from a post with the same ID as the author.
-		* The primary term selector in the Classic Editor now correctly checks the selected primary term button when interacting via a keyboard.
-			* This bug only affected the interface; internally, the primary term was correctly selected.
-		* Read this aloud: "Less than BR greater than generated: automatically generated"; Yes, that's stupid, and it will no longer be ennunciated by screen readers.
-			* Essentially, we've cleanly stripped `<br>` and other meta tags from the SEO bar items' ARIA-labels.
-		* Auto-generated descriptions now correctly add spaces between HTML block elements.
+		* **Titles:**
+			* Author archives no longer use protective title prefixes (like "Private: ", or "Protected: ") from a post with the same ID as the author.
+		* **Accessibility:**
+			* The primary term selector in the Classic Editor now correctly checks the selected primary term button when interacting via a keyboard.
+				* This bug only affected the interface; internally, the primary term was correctly selected.
+			* Read this aloud: "Less than BR greater than generated: automatically generated"; Yes, that's stupid, and it will no longer be ennunciated by screen readers.
+				* Essentially, we've cleanly stripped `<br>` and other meta tags from the SEO bar items' ARIA-labels.
+		* **URLs:**
+			* When the home page has query parameters attached--like, for example, via WPML, it won't have a query-breaking slash added any longer.
+			* When the home page is a page, and when `<!--nextpage-->` is used, the relationship links are now correct on the first page.
+			* When pagination occurs on pages with query parameters, the query parameters are forwarded.
+				* Keep in mind that most plugins don't support pagination with query parameters, like WPML. This is beyond the capabilities of WordPress.
+					* For WPML, please don't use the `?lang={langid}` (parameter) setting. Use a the directory or (sub-)domain options instead, they're superior in behavior.
+				* Besides, if you require query parameters for your front-end plugin pages, then you've already broken WordPress. I urge to look into the WordPress Rewrite API.
+			* Polylang's home canonical and Open Graph URLs are now correct.
+				* We did this by whitelisting our files in their plugin; an autoincompatible implementation.
+				* We couldn't fix the sitemap URLs without breaking your site, because Polylang messes with the site URL too.
+					* The home URL in the sitemap is still and will always be incorrect.
+					* Other URLs don't always have a trailing slash, while they should have them.
+				* No, we're never going to blindly mix the languages into one sitemap. [Here's the reason](https://github.com/sybrew/the-seo-framework/issues/69).
 
 **For translators:**
 	* **Changed:**

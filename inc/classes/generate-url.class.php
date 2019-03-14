@@ -106,6 +106,7 @@ class Generate_Url extends Generate_Title {
 
 	/**
 	 * Returns the current canonical URL.
+	 * Removes pagination if the URL isn't obtained via the query.
 	 *
 	 * @since 3.0.0
 	 * @see $this->create_canonical_url()
@@ -248,7 +249,9 @@ class Generate_Url extends Generate_Title {
 	 * Automatically adds pagination if the ID matches the query.
 	 *
 	 * @since 3.0.0
-	 * @since 3.2.4 Now adds a slash to the home URL when it's a root URL.
+	 * @since 3.2.4 1. Now adds a slash to the home URL when it's a root URL.
+	 *              2. Now skips slashing when queries have been appended to the URL.
+	 *              3. Home-as-page pagination is now supported.
 	 *
 	 * @return string The home canonical URL.
 	 */
@@ -259,13 +262,28 @@ class Generate_Url extends Generate_Title {
 
 		if ( ! $url ) return '';
 
-		if ( $this->get_the_real_ID() === (int) \get_option( 'page_for_posts' ) ) {
+		$query_id = $this->get_the_real_ID();
+
+		if ( $this->has_page_on_front() ) {
+			if ( $this->is_static_frontpage( $query_id ) ) {
+				$url = $this->add_url_pagination( $url, $this->page(), true );
+			}
+		} elseif ( $query_id === (int) \get_option( 'page_for_posts' ) ) {
 			$url = $this->add_url_pagination( $url, $this->paged(), true );
 		}
 
-		$path = parse_url( $url, PHP_URL_PATH );
+		$parsed = parse_url( $url );
 
-		return null === $path ? \trailingslashit( $url ) : \user_trailingslashit( $url );
+		// Don't slash the home URL if it's been modified by a (translation) plugin.
+		if ( ! isset( $parsed['query'] ) ) {
+			if ( isset( $parsed['path'] ) && '/' !== $parsed['path'] ) {
+				$url = \user_trailingslashit( $url );
+			} else {
+				$url = \trailingslashit( $url );
+			}
+		}
+
+		return $url;
 	}
 
 	/**
@@ -299,14 +317,9 @@ class Generate_Url extends Generate_Title {
 		if ( ! $canonical_url )
 			return '';
 
-		//* @link https://core.trac.wordpress.org/ticket/37505
-		$_page = \get_query_var( 'page', 0 );
-		if ( $_page !== $this->page() ) {
-			$canonical_url = $this->remove_pagination_from_url( $canonical_url, $_page );
-		}
-		$_paged = \get_query_var( 'paged', 0 );
-		if ( $_paged === $this->paged() ) {
-			$canonical_url = $this->add_url_pagination( $canonical_url, $_paged, true );
+		if ( $id === $this->get_the_real_ID() ) {
+			//= Adds pagination if ID matches query.
+			$canonical_url = $this->add_url_pagination( $canonical_url, $this->page(), true );
 		}
 
 		return $canonical_url;
@@ -573,6 +586,7 @@ class Generate_Url extends Generate_Title {
 	 * Adds pagination to input URL.
 	 *
 	 * @since 3.0.0
+	 * @since 3.2.4 Now considers query arguments when using pretty permalinks.
 	 *
 	 * @param string $url      The fully qualified URL.
 	 * @param int    $page     The page number. Should be bigger than 1 to paginate.
@@ -585,6 +599,12 @@ class Generate_Url extends Generate_Title {
 			return $url;
 
 		if ( $this->pretty_permalinks ) {
+
+			$_query = parse_url( $url, PHP_URL_QUERY );
+			// Remove queries, add them back later.
+			if ( $_query )
+				$url = $this->s_url( $url );
+
 			if ( $use_base ) {
 				static $base;
 				$base = $base ?: $GLOBALS['wp_rewrite']->pagination_base;
@@ -593,6 +613,9 @@ class Generate_Url extends Generate_Title {
 			} else {
 				$url = \user_trailingslashit( \trailingslashit( $url ) . $page, 'single_paged' );
 			}
+
+			if ( $_query )
+				$url = $this->append_php_query( $url, $_query );
 		} else {
 			if ( $use_base ) {
 				$url = \add_query_arg( 'paged', $page, $url );
@@ -606,39 +629,32 @@ class Generate_Url extends Generate_Title {
 
 	/**
 	 * Removes pagination from input URL.
-	 * The URL must match this query.
+	 * The URL must match this query if no second parameter is provided.
 	 *
 	 * @since 3.0.0
+	 * @since 3.2.4 1. Now correctly removes the pagination base on singular post types.
+	 *              2. The third parameter is now removed.
+	 *              3. The second parameter now accepts null or a value.
 	 *
-	 * @param string $url   The fully qualified URL to remove pagination from.
-	 * @param int    $page  The page number to remove. If empty, it will get query.
-	 * @param int    $paged The page number to remove. If empty, it will get query.
+	 * @param string   $url  The fully qualified URL to remove pagination from.
+	 * @param int|null $page The page number to remove. If empty, it will get number from query.
 	 * @return string $url The fully qualified URL without pagination.
 	 */
-	protected function remove_pagination_from_url( $url, $page = 0, $paged = 0 ) {
+	protected function remove_pagination_from_url( $url, $page = null ) {
 
 		if ( $this->pretty_permalinks ) {
 			//* Defensive programming...
-			static $user_slash;
+			static $user_slash, $base;
 			$user_slash = isset( $user_slash ) ? $user_slash :
 				( $GLOBALS['wp_rewrite']->use_trailing_slashes ? '/' : '' );
+			$base       = $base ?: $GLOBALS['wp_rewrite']->pagination_base;
 
-			$paged = $paged ?: $this->paged();
-			$page  = $page ?: $this->page();
+			$_page = isset( $page ) ? $page : max( $this->paged(), $this->page() );
 
-			$find = '';
-
-			if ( $paged > 1 ) {
-				static $base;
-				$base = $base ?: $GLOBALS['wp_rewrite']->pagination_base;
-
-				$find = '/' . $base . '/' . $paged . $user_slash;
-			} elseif ( $page > 1 ) {
-				$find = '/' . $page . $user_slash;
-			}
-
-			if ( $find ) {
+			if ( $_page > 1 ) {
+				$find = '/' . $base . '/' . $_page . $user_slash;
 				$pos = strrpos( $url, $find );
+
 				//* Defensive programming...
 				$continue = $pos && $pos + strlen( $find ) === strlen( $url );
 				if ( $continue ) {
@@ -766,6 +782,7 @@ class Generate_Url extends Generate_Title {
 	 * Generates Previous and Next links.
 	 *
 	 * @since 3.1.0
+	 * @since 3.2.4 Now always removes the pagination base from singular URLs.
 	 * @staticvar array $ret
 	 *
 	 * @param string $prev_next Whether to get the previous or next page link.
@@ -808,11 +825,11 @@ class Generate_Url extends Generate_Title {
 
 		// If this page is not the last, create a next-URL.
 		if ( $page + 1 <= $_numpages ) {
-			$next = $this->add_url_pagination( $canonical, $page + 1, $archive );
+			$next = $this->add_url_pagination( $canonical, $page + 1, true );
 		}
 		// If this page is not the first, create a prev-URL.
 		if ( $page > 1 ) {
-			$prev = $this->add_url_pagination( $canonical, $page - 1, $archive );
+			$prev = $this->add_url_pagination( $canonical, $page - 1, true );
 		}
 
 		end:;

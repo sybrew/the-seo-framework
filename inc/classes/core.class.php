@@ -239,7 +239,7 @@ class Core {
 			\esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' )
 		);
 
-		return array_merge( $links, $tsf_links );
+		return array_merge( $tsf_links, $links );
 	}
 
 	/**
