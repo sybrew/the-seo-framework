@@ -246,8 +246,7 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 In this minor update, we bring you the most advanced description generation yet. The generator is now context-sensitive, so you can expect the descriptions to be even more natural; a true time-saver. Oh, we also fixed some bugs and implemented some improvements.
 
-* **TODO:**
-	* Fix pixel counter ARIA HTML.
+* **TODO (future update...):**
 	* Add filter to use_title_pagination and honor it.
 	* Add filter to use_title_protection and honor it.
 
@@ -263,6 +262,7 @@ In this minor update, we bring you the most advanced description generation yet.
 	* **Improved:**
 		* Google can now respond to the `noindex` directive quicker.
 			* When `noindex` is set via The SEO Framework, we now remove the canonical URL when it points to the current page.
+		* SEO attack mitigation is now also invoked on paginated the homepage-as-page.
 	* **Changed:**
 		* The "About" link on the plugin activation page now leads to our "about us" page.
 		* The links on the plugin activation page are now prepended, instead of appended.
@@ -275,13 +275,14 @@ In this minor update, we bring you the most advanced description generation yet.
 			* The primary term selector in the Classic Editor now correctly checks the selected primary term button when interacting via a keyboard.
 				* This bug only affected the interface; internally, the primary term was correctly selected.
 			* Read this aloud: "Less than BR greater than generated: automatically generated"; Yes, that's stupid, and it will no longer be ennunciated by screen readers.
-				* Essentially, we've cleanly stripped `<br>` and other meta tags from the SEO bar items' ARIA-labels.
+				* Essentially, we've cleanly stripped `<br>` and other meta tags from the SEO Bar and Pixel Counter items' ARIA-labels.
 		* **URLs:**
 			* When the home page has query parameters attached--like, for example, via WPML, it won't have a query-breaking slash added any longer.
 			* When the home page is a page, and when `<!--nextpage-->` is used, the relationship links are now correct on the first page.
 			* When pagination occurs on pages with query parameters, the query parameters are forwarded.
-				* Keep in mind that most plugins don't support pagination with query parameters, like WPML. This is beyond the capabilities of WordPress.
+				* Keep in mind that most plugins don't support proper pagination with query parameters, like WPML. This is beyond the capabilities of WordPress.
 					* For WPML, please don't use the `?lang={langid}` (parameter) setting. Use a the directory or (sub-)domain options instead, they're superior in behavior.
+					* With WPML, paginated pages' canonical URL when using the query parameter setting won't be indexed. We've forwarded this issue to their developers.
 				* Besides, if you require query parameters for your front-end plugin pages, then you've already broken WordPress. I urge to look into the WordPress Rewrite API.
 			* Polylang's home canonical and Open Graph URLs are now correct.
 				* We did this by whitelisting our files in their plugin; an autoincompatible implementation.
@@ -294,6 +295,7 @@ In this minor update, we bring you the most advanced description generation yet.
 	* **Changed:**
 		* We've changed various instances of "tags", which should've been "meta tags".
 		* "Two parts" should've been "three parts"; we've decided to make it "multiple parts" to future-proof it.
+		* TODO All instances of "home page" have been changed to "homepage", to be in line with WordPress' glossary.
 
 **For developers:**
 	* **File changes:**
@@ -312,8 +314,16 @@ In this minor update, we bring you the most advanced description generation yet.
 			* `get_robots_meta()`
 			* `use_title_protection()`
 			* `use_title_pagination()`
+			* `remove_pagination_from_url()`, used to be protected.
 		* **Changed:**
 			* `s_excerpt()` now uses the new `strip_tags_cs()` method (with modified arguments), instead of WordPress' `wp_strip_all_tags()`.
+			* `page()` and `page()` now point to the correct page if the page number doesn't exist.
+			* `get_singular_canonical_url()` now no longer tries to add pagination, as WordPress does this for us.
+			* `add_url_pagination()` now considers query arguments with pretty permalinks, and the third parameter is now optional (auto-determine).
+		* **Fixed:**
+			* `get_paged_urls()` now returns the correct singular URLs.
+				* In extent, `get_paged_url()` also works as intended for singular pages.
+				* This was found after noticing an inconsistency with the homepage-as-page versus real pages.
 
 = 3.2.3 =
 

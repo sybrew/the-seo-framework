@@ -1123,6 +1123,7 @@ class Query extends Compat {
 	 * Fetches global $page through Query Var to prevent conflicts.
 	 *
 	 * @since 2.6.0
+	 * @since 3.2.4 Added overflow protection.
 	 *
 	 * @return int (R>0) $page Always a positive number.
 	 */
@@ -1131,11 +1132,16 @@ class Query extends Compat {
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
-		$page = $this->is_multipage() ? \get_query_var( 'page' ) : 1;
+		$page = $this->is_multipage() ? (int) \get_query_var( 'page' ) : 1;
+
+		if ( $page > $this->numpages() ) {
+			// On overflow, WP returns the first page.
+			$page = 1;
+		}
 
 		$this->set_query_cache(
 			__METHOD__,
-			$page = $page ? (int) $page : 1
+			$page = $page ? $page : 1
 		);
 
 		return $page;
@@ -1146,6 +1152,7 @@ class Query extends Compat {
 	 * Fetches global $paged through Query var to prevent conflicts.
 	 *
 	 * @since 2.6.0
+	 * @since 3.2.4 Added overflow protection.
 	 *
 	 * @return int (R>0) $paged Always a positive number.
 	 */
@@ -1154,11 +1161,17 @@ class Query extends Compat {
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
-		$paged = $this->is_multipage() ? \get_query_var( 'paged' ) : 1;
+		$paged = $this->is_multipage() ? (int) \get_query_var( 'paged' ) : 1;
+		$max   = $this->numpages();
+
+		if ( $paged > $max ) {
+			// On overflow, WP returns the last page.
+			$paged = $max;
+		}
 
 		$this->set_query_cache(
 			__METHOD__,
-			$paged = $paged ? (int) $paged : 1
+			$paged = $paged ? $paged : 1
 		);
 
 		return $paged;
