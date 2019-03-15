@@ -9,7 +9,7 @@ $id = $this->get_the_real_ID();
 $mdash = ' &mdash; ';
 $taxonomy = $this->get_current_taxonomy();
 
-//* This will return 'Page' on all non-archive types (except the home page)
+//* This will return 'Page' on all non-archive types (except the homepage)
 if ( ! $this->is_archive() && $this->is_real_front_page() || $this->is_front_page_by_id( $id ) ) {
 	$type = 'Front Page';
 } elseif ( $taxonomy ) {

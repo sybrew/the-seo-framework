@@ -112,7 +112,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<?php
-		$this->description( __( 'The sitemap is generated with three queries: Pages, Posts, and other Post Types. This setting affects how many posts are requested from the database per query. The home and blog pages are included separately.', 'autodescription' ) );
+		$this->description( __( 'The sitemap is generated with three queries: Pages, posts, and other post types. This setting affects how many posts are requested from the database per query. The homepage and blog page are included separately.', 'autodescription' ) );
 
 		if ( \has_filter( 'the_seo_framework_sitemap_post_limit' ) ) :
 			?>
@@ -178,7 +178,6 @@ switch ( $instance ) :
 		echo '<hr>';
 
 		if ( $show_settings ) :
-
 			printf(
 				'<h4>%s</h4>',
 				esc_html__( 'Add sitemap location in robots.txt', 'autodescription' )

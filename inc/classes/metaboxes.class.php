@@ -360,7 +360,7 @@ class Metaboxes extends Site_Options {
 	}
 
 	/**
-	 * Home Page meta box on the Site SEO Settings page.
+	 * Outputs the Homepage meta box on the Site SEO Settings page.
 	 *
 	 * @since 2.2.2
 	 *
@@ -380,44 +380,44 @@ class Metaboxes extends Site_Options {
 	}
 
 	/**
-	 * HomePage Metabox General Tab Output.
+	 * Homepage Metabox General Tab Output.
 	 *
 	 * @since 2.7.0
 	 * @since 3.1.0 Is now protected.
-	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
+	 * @see $this->homepage_metabox() Callback for Homepage Settings box.
 	 */
 	protected function homepage_metabox_general_tab() {
 		$this->get_view( 'metaboxes/homepage-metabox', [], 'general' );
 	}
 
 	/**
-	 * HomePage Metabox Additions Tab Output.
+	 * Homepage Metabox Additions Tab Output.
 	 *
 	 * @since 2.7.0
 	 * @since 3.1.0 Is now protected.
-	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
+	 * @see $this->homepage_metabox() Callback for Homepage Settings box.
 	 */
 	protected function homepage_metabox_additions_tab() {
 		$this->get_view( 'metaboxes/homepage-metabox', [], 'additions' );
 	}
 
 	/**
-	 * HomePage Metabox Robots Tab Output
+	 * Homepage Metabox Robots Tab Output
 	 *
 	 * @since 2.7.0
 	 * @since 3.1.0 Is now protected.
-	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
+	 * @see $this->homepage_metabox() Callback for Homepage Settings box.
 	 */
 	protected function homepage_metabox_robots_tab() {
 		$this->get_view( 'metaboxes/homepage-metabox', [], 'robots' );
 	}
 
 	/**
-	 * HomePage Metabox Social Tab Output
+	 * Homepage Metabox Social Tab Output
 	 *
 	 * @since 2.9.0
 	 * @since 3.1.0 Is now protected.
-	 * @see $this->homepage_metabox() Callback for HomePage Settings box.
+	 * @see $this->homepage_metabox() Callback for Homepage Settings box.
 	 */
 	protected function homepage_metabox_social_tab() {
 		$this->get_view( 'metaboxes/homepage-metabox', [], 'social' );

@@ -140,7 +140,7 @@ switch ( $instance ) :
 		$example_left  = $examples['left'];
 		$example_right = $examples['right'];
 
-		$home_page_has_option = __( 'The Home Page has a specific option.', 'autodescription' );
+		$homepage_has_option = __( 'The homepage has a specific option.', 'autodescription' );
 
 		?>
 		<fieldset>
@@ -164,7 +164,7 @@ switch ( $instance ) :
 					</label>
 				</span>
 			</p>
-			<?php $this->description( $home_page_has_option ); ?>
+			<?php $this->description( $homepage_has_option ); ?>
 		</fieldset>
 
 		<hr>
@@ -212,7 +212,7 @@ switch ( $instance ) :
 		<?php
 		$this->attention_description( __( 'Note: Only use this option if you are aware of its SEO effects.', 'autodescription' ), false );
 		echo ' ';
-		$this->description( $home_page_has_option, false );
+		$this->description( $homepage_has_option, false );
 		break;
 
 	case 'the_seo_framework_title_metabox_prefixes':

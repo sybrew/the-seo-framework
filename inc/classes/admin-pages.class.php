@@ -184,7 +184,7 @@ class Admin_Pages extends Inpost {
 	 * @see $this->title_metabox()       Callback for Title Settings box.
 	 * @see $this->description_metabox() Callback for Description Settings box.
 	 * @see $this->robots_metabox()      Callback for Robots Settings box.
-	 * @see $this->homepage_metabox()    Callback for Home Page Settings box.
+	 * @see $this->homepage_metabox()    Callback for Homepage Settings box.
 	 * @see $this->social_metabox()      Callback for Social Settings box.
 	 * @see $this->schema_metabox()      Callback for Schema Settings box.
 	 * @see $this->webmaster_metabox()   Callback for Webmaster Settings box.
@@ -244,11 +244,11 @@ class Admin_Pages extends Inpost {
 				[]
 			);
 
-		//* Home Page Meta Box
+		//* Homepage Meta Box
 		if ( $home )
 			\add_meta_box(
 				'autodescription-homepage-settings',
-				\esc_html__( 'Home Page Settings', 'autodescription' ),
+				\esc_html__( 'Homepage Settings', 'autodescription' ),
 				[ $this, 'homepage_metabox' ],
 				$this->seo_settings_page_hook,
 				'main',

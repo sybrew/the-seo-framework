@@ -117,7 +117,7 @@ class Generate_Title extends Generate_Description {
 		 * Filters the title from query.
 		 *
 		 * @NOTE: This filter doesn't consistently run on the SEO Settings page.
-		 *        You might want to avoid this filter on the home page.
+		 *        You might want to avoid this filter on the homepage.
 		 * @since 3.1.0
 		 * @param string $title The title.
 		 * @param array  $args  The title arguments.
@@ -190,7 +190,7 @@ class Generate_Title extends Generate_Description {
 	 * Falls back to Open Graph title.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
+	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
 	 * @see $this->get_twitter_title()
 	 * @see $this->get_twitter_title_from_custom_field()
 	 *
@@ -226,7 +226,7 @@ class Generate_Title extends Generate_Description {
 	 * Falls back to Open Graph title.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
+	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
 	 * @see $this->get_twitter_title()
 	 * @see $this->get_twitter_title_from_custom_field()
 	 *
@@ -327,7 +327,7 @@ class Generate_Title extends Generate_Description {
 	 * Falls back to meta title.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
+	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
 	 * @see $this->get_open_graph_title()
 	 * @see $this->get_open_graph_title_from_custom_field()
 	 *
@@ -357,7 +357,7 @@ class Generate_Title extends Generate_Description {
 	 * Falls back to meta title.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
+	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
 	 * @see $this->get_open_graph_title()
 	 * @see $this->get_open_graph_title_from_custom_field()
 	 *
@@ -433,7 +433,7 @@ class Generate_Title extends Generate_Description {
 	 * Gets a custom title, based on current query, without additions or prefixes.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
+	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
 	 * @internal
 	 * @see $this->get_raw_custom_field_title()
 	 *
@@ -466,7 +466,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.1.0
 	 * @since 3.1.4 Now uses the 'id' to get custom singular title.
-	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
+	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
 	 * @internal
 	 * @see $this->get_raw_custom_field_title()
 	 *
@@ -1310,7 +1310,7 @@ class Generate_Title extends Generate_Description {
 	}
 
 	/**
-	 * Determines whether to add home page tagline.
+	 * Determines whether to add homepage tagline.
 	 *
 	 * @since 2.6.0
 	 * @since 3.0.4 Now checks for custom tagline or blogname existence.
@@ -1334,7 +1334,7 @@ class Generate_Title extends Generate_Description {
 	}
 
 	/**
-	 * Returns the home page tagline from option or bloginfo, when set.
+	 * Returns the homepage tagline from option or bloginfo, when set.
 	 *
 	 * @since 3.0.4
 	 * @uses $this->get_blogdescription(), this method already trims.

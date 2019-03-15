@@ -143,7 +143,7 @@ class Generate_Url extends Generate_Title {
 	 * Builds canonical URL from input arguments.
 	 *
 	 * @since 3.0.0
-	 * @since 3.2.2 Now tests for the home page as page prior getting custom field data.
+	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
 	 * @see $this->create_canonical_url()
 	 *
 	 * @param array $args. Use $this->create_canonical_url().

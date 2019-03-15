@@ -246,10 +246,6 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 In this minor update, we bring you the most advanced description generation yet. The generator is now context-sensitive, so you can expect the descriptions to be even more natural; a true time-saver. Oh, we also fixed some bugs and implemented some improvements.
 
-* **TODO (future update...):**
-	* Add filter to use_title_pagination and honor it.
-	* Add filter to use_title_protection and honor it.
-
 **Detailed log**
 
 **For everyone:**
@@ -292,10 +288,15 @@ In this minor update, we bring you the most advanced description generation yet.
 				* No, we're never going to blindly mix the languages into one sitemap. [Here's the reason](https://github.com/sybrew/the-seo-framework/issues/69).
 
 **For translators:**
+	* **Added:**
+		* A few sentences have been added, visible on the plugin overview page.
 	* **Changed:**
 		* We've changed various instances of "tags", which should've been "meta tags".
 		* "Two parts" should've been "three parts"; we've decided to make it "multiple parts" to future-proof it.
-		* TODO All instances of "home page" have been changed to "homepage", to be in line with WordPress' glossary.
+		* All instances of "home page" have been changed to "homepage", to be in line with WordPress' glossary.
+		* Various other sentences have been improved.
+	* **Updated:**
+		* Translation POT file.
 
 **For developers:**
 	* **File changes:**

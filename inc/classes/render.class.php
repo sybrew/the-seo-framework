@@ -1074,7 +1074,7 @@ class Render extends Admin_Init {
 	 * Renders Shortlink meta tag
 	 *
 	 * @since 2.2.2
-	 * @since 2.9.3 : Now work when home page is a blog.
+	 * @since 2.9.3 Now work when homepage is a blog.
 	 * @uses $this->get_shortlink()
 	 *
 	 * @return string The Shortlink meta tag.

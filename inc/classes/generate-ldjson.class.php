@@ -150,7 +150,7 @@ class Generate_Ldjson extends Generate_Image {
 		$output = $transient_name ? $this->get_transient( $transient_name ) : false;
 		if ( false === $output ) :
 			if ( $this->is_real_front_page() ) {
-				//= Home page Schema.
+				//= Homepage Schema.
 				$output = '';
 
 				$output .= $this->get_ld_json_website() ?: '';
@@ -364,7 +364,7 @@ class Generate_Ldjson extends Generate_Image {
 		$items = [];
 		$parents = array_reverse( \get_post_ancestors( $this->get_the_real_ID() ) );
 
-		$position = 1; // 0 is the home page.
+		$position = 1; // 0 is the homepage.
 		foreach ( $parents as $parent_id ) {
 
 			++$position;
@@ -647,8 +647,8 @@ class Generate_Ldjson extends Generate_Image {
 	 * Generates homepage LD+JSON breadcrumb.
 	 *
 	 * @since 2.9.3
-	 * @since 3.2.2: 1. The title now works for the home page as blog.
-	 *               2. The image has been disabled for the home page as blog.
+	 * @since 3.2.2: 1. The title now works for the homepage as blog.
+	 *               2. The image has been disabled for the homepage as blog.
 	 *                    - I couldn't fix it without evading the API, which is bad.
 	 * @staticvar array $crumb
 	 *

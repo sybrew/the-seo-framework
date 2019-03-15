@@ -311,26 +311,35 @@ switch ( $instance ) :
 
 	case 'the_seo_framework_social_metabox_postdates':
 		$posts_i18n = esc_html__( 'Posts', 'autodescription' );
-		$home_i18n = esc_html__( 'Home Page', 'autodescription' );
 
 		?>
 		<h4><?php esc_html_e( 'Post Date Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'Some social sites output the published date and modified date in the sharing snippet.', 'autodescription' ) );
+		$this->description( __( 'Some social sites output the publishing and modified date in the sharing snippet.', 'autodescription' ) );
 		?>
 		<hr>
 		<?php
 
-		/* translators: 1: Option, 2: Post Type */
-		$post_publish_time_label = sprintf( esc_html__( 'Add %1$s to %2$s?', 'autodescription' ), $this->code_wrap( 'article:published_time' ), $posts_i18n );
-		$post_publish_time_checkbox = $this->make_checkbox( 'post_publish_time', $post_publish_time_label, '', false );
+		$_options = [
+			'post_publish_time' => 'article:published_time',
+			'post_modify_time'  => 'article:modified_time',
+		];
 
-		/* translators: 1: Option, 2: Post Type */
-		$post_modify_time_label = sprintf( esc_html__( 'Add %1$s to %2$s?', 'autodescription' ), $this->code_wrap( 'article:modified_time' ), $posts_i18n );
-		$post_modify_time_checkbox = $this->make_checkbox( 'post_modify_time', $post_modify_time_label, '', false );
+		/* translators: %s = code example */
+		$label  = esc_html__( 'Add %s to posts?', 'autodescription' );
+		$output = '';
+
+		foreach ( $_options as $_option => $_example ) {
+			$output .= $this->make_checkbox(
+				$_option,
+				sprintf( $label, $this->code_wrap( $_example ) ),
+				'',
+				false
+			);
+		}
 
 		//* Echo checkboxes.
-		$this->wrap_fields( $post_publish_time_checkbox . $post_modify_time_checkbox, true );
+		$this->wrap_fields( $output, true );
 		break;
 
 	default:

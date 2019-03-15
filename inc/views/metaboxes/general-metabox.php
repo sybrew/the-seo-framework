@@ -302,15 +302,15 @@ switch ( $instance ) :
 		$this->description( __( "It's recommended to turn these options on for better SEO consistency and to prevent duplicate content errors.", 'autodescription' ) );
 
 		/* translators: %s = <code>rel</code> */
-		$prev_next_posts_label = sprintf( esc_html__( 'Add %s link tags to Posts and Pages?', 'autodescription' ), $this->code_wrap( 'rel' ) );
+		$prev_next_posts_label = sprintf( esc_html__( 'Add %s link tags to posts and pages?', 'autodescription' ), $this->code_wrap( 'rel' ) );
 		$prev_next_posts_checkbox = $this->make_checkbox( 'prev_next_posts', $prev_next_posts_label, '', false );
 
 		/* translators: %s = <code>rel</code> */
-		$prev_next_archives_label = sprintf( esc_html__( 'Add %s link tags to Archives?', 'autodescription' ), $this->code_wrap( 'rel' ) );
+		$prev_next_archives_label = sprintf( esc_html__( 'Add %s link tags to archives?', 'autodescription' ), $this->code_wrap( 'rel' ) );
 		$prev_next_archives_checkbox = $this->make_checkbox( 'prev_next_archives', $prev_next_archives_label, '', false );
 
 		/* translators: %s = <code>rel</code> */
-		$prev_next_frontpage_label = sprintf( esc_html__( 'Add %s link tags to the Home Page?', 'autodescription' ), $this->code_wrap( 'rel' ) );
+		$prev_next_frontpage_label = sprintf( esc_html__( 'Add %s link tags to the homepage?', 'autodescription' ), $this->code_wrap( 'rel' ) );
 		$prev_next_frontpage_checkbox = $this->make_checkbox( 'prev_next_frontpage', $prev_next_frontpage_label, '', false );
 
 		//* Echo checkboxes.

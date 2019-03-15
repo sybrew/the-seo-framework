@@ -629,16 +629,16 @@ class Query extends Compat {
 	/**
 	 * Checks for front page by input ID.
 	 *
-	 * Doesn't always return true when the ID is 0, although the home page might be.
+	 * Doesn't always return true when the ID is 0, although the homepage might be.
 	 * This is because it checks for the query, to prevent conflicts.
 	 * @see $this->is_real_front_page_by_id().
 	 *
 	 * @since 2.9.0
-	 * @since 2.9.3 Now tests for archive and 404 before testing home page as blog.
+	 * @since 2.9.3 Now tests for archive and 404 before testing homepage as blog.
 	 * @since 3.2.2: Removed SEO settings page check. This now returns false on that page.
 	 *
 	 * @param int The page ID, required. Can be 0.
-	 * @return bool True if ID if for the home page.
+	 * @return bool True if ID if for the homepage.
 	 */
 	public function is_front_page_by_id( $id ) {
 
@@ -681,7 +681,7 @@ class Query extends Compat {
 	}
 
 	/**
-	 * Detects home page.
+	 * Determines whether the query is for the blog page.
 	 *
 	 * @since 2.6.0
 	 * @staticvar bool $cache
