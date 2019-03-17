@@ -288,7 +288,7 @@ class Detect extends Render {
 	 * @since 2.5.2
 	 *
 	 * @param array $plugins Array of array for constants, classes and / or functions to check for plugin existence.
-	 * @return boolean True if ALL functions classes and constants exists or false if plugin constant, class or function not detected.
+	 * @return bool True if ALL functions classes and constants exists or false if plugin constant, class or function not detected.
 	 */
 	public function detect_plugin_multi( array $plugins ) {
 

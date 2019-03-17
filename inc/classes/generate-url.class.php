@@ -33,6 +33,37 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Generate_Url extends Generate_Title {
 
 	/**
+	 * Determines if the given page has a custom canonical URL.
+	 *
+	 * @since 3.2.4
+	 *
+	 * @param null|array $args The canonical URL arguments, leave null to autodetermine query : {
+	 *    int    $id               The Post, Page or Term ID to generate the URL for.
+	 *    string $taxonomy         The taxonomy.
+	 * }
+	 * @return bool
+	 */
+	public function has_custom_canonical_url( $args = null ) {
+
+		if ( ! $args ) {
+			if ( $this->is_singular() ) {
+				$has = $this->get_singular_custom_canonical_url( $this->get_the_real_ID() );
+			} else {
+				$has = false;
+			}
+		} else {
+			$this->fix_generation_args( $args );
+			if ( ! $args || $args['taxonomy'] ) {
+				$has = false;
+			} else {
+				$has = $this->get_singular_custom_canonical_url( $args['id'] );
+			}
+		}
+
+		return (bool) $has;
+	}
+
+	/**
 	 * Caches and returns the current URL.
 	 *
 	 * @since 3.0.0
@@ -48,6 +79,8 @@ class Generate_Url extends Generate_Title {
 	/**
 	 * Caches and returns the current permalink.
 	 * This link excludes any pagination. Great for structured data.
+	 *
+	 * Does not work for unregistered pages, like search, 404, date, author, and CPTA.
 	 *
 	 * @since 3.0.0
 	 * @since 3.1.0 Now properly generates taxonomical URLs.
@@ -197,7 +230,6 @@ class Generate_Url extends Generate_Title {
 				$url = $this->get_home_canonical_url();
 		} elseif ( $this->is_singular() ) {
 			$url = $this->get_singular_custom_canonical_url( $id );
-
 			if ( ! $url )
 				$url = $this->get_singular_canonical_url( $id );
 		} elseif ( $this->is_archive() ) {
@@ -269,7 +301,7 @@ class Generate_Url extends Generate_Title {
 				// Yes, use the pagination base for the homepage-as-page!
 				$url = $this->add_url_pagination( $url, $this->page(), true );
 			}
-		} elseif ( $query_id === (int) \get_option( 'page_for_posts' ) ) {
+		} elseif ( (int) \get_option( 'page_for_posts' ) === $query_id ) {
 			$url = $this->add_url_pagination( $url, $this->paged(), true );
 		}
 
@@ -304,13 +336,27 @@ class Generate_Url extends Generate_Title {
 	 *
 	 * @since 3.0.0
 	 * @since 3.1.0 Added WC Shop and WP Blog (as page) pagination integration via $this->paged().
-	 * @since 3.2.4 Removed pagination support, as the SEO attack is now mitigated via WordPress.
+	 * @since 3.2.4 Removed pagination support for singular posts, as the SEO attack is now mitigated via WordPress.
 	 *
 	 * @param int|null $id The page ID.
 	 * @return string The custom canonical URL, if any.
 	 */
 	public function get_singular_canonical_url( $id = null ) {
-		return \wp_get_canonical_url( $id ) ?: '';
+
+		$url = \wp_get_canonical_url( $id ) ?: '';
+
+		$_page = \get_query_var( 'page', 1 ) ?: 1; // WP_Query tests isset, not empty.
+		if ( $url && $_page !== $this->page() ) {
+			/** @link https://core.trac.wordpress.org/ticket/37505 */
+			$url = $this->remove_pagination_from_url( $url, $_page, false );
+		}
+
+		if ( $url && $this->is_singular_archive() ) {
+			// Singular archives, like blog pages and shop pages, use the pagination base with paged.
+			$url = $this->add_url_pagination( $url, $this->paged(), true );
+		}
+
+		return $url;
 	}
 
 	/**
@@ -575,7 +621,7 @@ class Generate_Url extends Generate_Title {
 	 *
 	 * @since 3.0.0
 	 * @since 3.2.4 1. Now considers query arguments when using pretty permalinks.
-	 *              2. The third parameter is now optional.
+	 *              2. The second and third parameters are now optional.
 	 *
 	 * @param string $url      The fully qualified URL.
 	 * @param int    $page     The page number. Should be bigger than 1 to paginate.
@@ -585,12 +631,15 @@ class Generate_Url extends Generate_Title {
 	 *                         False on singular post types.
 	 * @return string The fully qualified URL with pagination.
 	 */
-	public function add_url_pagination( $url, $page, $use_base = null ) {
+	public function add_url_pagination( $url, $page = null, $use_base = null ) {
 
-		if ( $page < 2 )
+		$_page = isset( $page ) ? $page : max( $this->paged(), $this->page() );
+
+		if ( $_page < 2 )
 			return $url;
 
-		$_use_base = isset( $use_base ) ? $use_base : $this->is_archive() || $this->is_real_front_page();
+		$_use_base = isset( $use_base ) ? $use_base :
+			$this->is_archive() || $this->is_real_front_page() || $this->is_singular_archive();
 
 		if ( $this->pretty_permalinks ) {
 
@@ -603,18 +652,18 @@ class Generate_Url extends Generate_Title {
 			$base = $base ?: $GLOBALS['wp_rewrite']->pagination_base;
 
 			if ( $_use_base ) {
-				$url = \user_trailingslashit( \trailingslashit( $url ) . $base . '/' . $page, 'paged' );
+				$url = \user_trailingslashit( \trailingslashit( $url ) . $base . '/' . $_page, 'paged' );
 			} else {
-				$url = \user_trailingslashit( \trailingslashit( $url ) . $page, 'single_paged' );
+				$url = \user_trailingslashit( \trailingslashit( $url ) . $_page, 'single_paged' );
 			}
 
 			if ( $_query )
 				$url = $this->append_php_query( $url, $_query );
 		} else {
 			if ( $_use_base ) {
-				$url = \add_query_arg( 'paged', $page, $url );
+				$url = \add_query_arg( 'paged', $_page, $url );
 			} else {
-				$url = \add_query_arg( 'page', $page, $url );
+				$url = \add_query_arg( 'page', $_page, $url );
 			}
 		}
 
@@ -652,7 +701,8 @@ class Generate_Url extends Generate_Title {
 			$_page = isset( $page ) ? $page : max( $this->paged(), $this->page() );
 
 			if ( $_page > 1 ) {
-				$_use_base = isset( $use_base ) ? $use_base : $this->is_archive() || $this->is_real_front_page();
+				$_use_base = isset( $use_base ) ? $use_base
+					: $this->is_archive() || $this->is_real_front_page() || $this->is_singular_archive();
 
 				if ( $_use_base ) {
 					$find = '/' . $base . '/' . $_page . $user_slash;
@@ -797,7 +847,8 @@ class Generate_Url extends Generate_Title {
 	 * Generates Previous and Next links.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.4 Now correctly removes the pagination base from singular URLs.
+	 * @since 3.2.4 1. Now correctly removes the pagination base from singular URLs.
+	 *              2. Now returns no URLs when a custom canonical URL is set.
 	 * @staticvar array $cache
 	 *
 	 * @return array Escaped site Pagination URLs: {
@@ -812,6 +863,8 @@ class Generate_Url extends Generate_Title {
 
 		$prev = $next = '';
 		$_run = false;
+
+		if ( $this->has_custom_canonical_url() ) goto end;
 
 		if ( $this->is_singular() && ! $this->is_singular_archive() && $this->is_multipage() ) {
 			$_run = $this->is_real_front_page()

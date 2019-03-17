@@ -158,15 +158,15 @@ class Site_Options extends Sanitize {
 				'home_paged_noindex' => 0, // Every second or later homepage noindex
 
 				// Robots home.
-				'homepage_noindex'   => 0, // Home Page robots noindex
-				'homepage_nofollow'  => 0, // Home Page robots noarchive
-				'homepage_noarchive' => 0, // Home Page robots nofollow
+				'homepage_noindex'   => 0, // Homepage robots noindex
+				'homepage_nofollow'  => 0, // Homepage robots noarchive
+				'homepage_noarchive' => 0, // Homepage robots nofollow
 
 				// Home meta.
-				'homepage_title'         => '', // Home Page Title string
-				'homepage_tagline'       => 1,  // Home Page add blog Tagline
-				'homepage_description'   => '', // Home Page Description string
-				'homepage_title_tagline' => '', // Home Page Tagline string
+				'homepage_title'         => '', // Homepage Title string
+				'homepage_tagline'       => 1,  // Homepage add blog Tagline
+				'homepage_description'   => '', // Homepage Description string
+				'homepage_title_tagline' => '', // Homepage Tagline string
 				'home_title_location'    => $h_titleloc, // Title separation location
 
 				// Homepage Social
@@ -294,8 +294,8 @@ class Site_Options extends Sanitize {
 				'title_rem_additions' => 1, // Title remove additions.
 				'site_noindex'        => 1, // Site Page robots noindex
 				'site_nofollow'       => 1, // Site Page robots nofollow
-				'homepage_noindex'    => 1, // Home Page robots noindex
-				'homepage_nofollow'   => 1, // Home Page robots noarchive
+				'homepage_noindex'    => 1, // Homepage robots noindex
+				'homepage_nofollow'   => 1, // Homepage robots noarchive
 			]
 		);
 	}

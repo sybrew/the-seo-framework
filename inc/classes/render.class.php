@@ -851,11 +851,14 @@ class Render extends Admin_Init {
 	 *
 	 * @since 2.0.6
 	 * @since 3.0.0 Deleted filter `the_seo_framework_output_canonical`.
+	 * @since 3.2.4 Now no longer returns a value when the post is not indexed with a non-custom URL.
 	 * @uses $this->get_current_canonical_url()
 	 *
 	 * @return string The Canonical URL meta tag.
 	 */
 	public function canonical() {
+
+		$_url = $this->get_current_canonical_url();
 
 		/**
 		 * @since 2.6.5
@@ -865,21 +868,20 @@ class Render extends Admin_Init {
 		$url = (string) \apply_filters_ref_array(
 			'the_seo_framework_rel_canonical_output',
 			[
-				$this->get_current_canonical_url(),
+				$_url,
 				$this->get_the_real_ID(),
 			]
 		);
 
-		// If the page should not be indexed, and the permalink matches the canonical URL, empty it.
+		// If the page should not be indexed, consider removing the canonical URL.
 		if ( in_array( 'noindex', $this->get_robots_meta(), true ) ) {
-			if ( $url === $this->get_current_permalink() ) {
+			// If the URL is filtered, don't empty it.
+			// If a custom canonical URL is set, don't empty it.
+			if ( $url === $_url && ! $this->has_custom_canonical_url() ) {
 				$url = '';
 			}
 		}
 
-		/**
-		 * @since 2.7.0 Listens to the second filter.
-		 */
 		if ( $url )
 			return '<link rel="canonical" href="' . $url . '" />' . PHP_EOL;
 
