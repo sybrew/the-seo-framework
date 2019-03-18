@@ -530,6 +530,7 @@ final class Scripts {
 	 * @see static::verify( $secret )
 	 *
 	 * @since 3.1.0
+	 * @since 3.2.4 Enabled entropy to prevent system sleep.
 	 * @uses static::$include_secret
 	 *
 	 * @param string $file The file location.
@@ -542,7 +543,7 @@ final class Scripts {
 		unset( $_key, $_val, $args );
 
 		//= Prevent private includes hijacking.
-		static::$include_secret = $_secret = mt_rand() . uniqid();
+		static::$include_secret = $_secret = mt_rand() . uniqid( '', true );
 		include $file;
 		static::$include_secret = null;
 	}
