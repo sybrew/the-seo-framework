@@ -104,12 +104,16 @@ class Admin_Init extends Init {
 		if ( $this->is_post_edit() ) {
 			$this->enqueue_media_scripts();
 			$this->enqueue_primaryterm_scripts();
+			$this->enqueue_counter_scripts();
 
 			if ( $this->is_gutenberg_page() ) {
 				$this->enqueue_gutenberg_compat_scripts();
 			}
+		} elseif ( $this->is_term_edit() ) {
+			$this->enqueue_counter_scripts();
 		} elseif ( $this->is_seo_settings_page() ) {
 			$this->enqueue_media_scripts();
+			$this->enqueue_counter_scripts();
 			\wp_enqueue_style( 'wp-color-picker' );
 			\wp_enqueue_script( 'wp-color-picker' );
 		}
@@ -204,7 +208,8 @@ class Admin_Init extends Init {
 	 * Enqueues Media Upload and Cropping scripts.
 	 *
 	 * @since 3.2.0
-	 * @staticvar bool|null $registered Prevents duplicate calls.
+	 *
+	 * @return void Early if already enqueued.
 	 */
 	public function enqueue_gutenberg_compat_scripts() {
 
@@ -232,6 +237,8 @@ class Admin_Init extends Init {
 	 * Enqueues Media Upload and Cropping scripts.
 	 *
 	 * @since 3.1.0
+	 *
+	 * @return void Early if already enqueued.
 	 */
 	public function enqueue_media_scripts() {
 
@@ -387,6 +394,54 @@ class Admin_Init extends Init {
 	}
 
 	/**
+	 * Enqueues the Pixel and Character counter scripts.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @return void Early if already enqueued.
+	 */
+	public function enqueue_counter_scripts() {
+
+		if ( _has_run( __METHOD__ ) ) return;
+
+		//! PHP 5.4 compat: put in var.
+		$scripts = $this->Scripts();
+		$scripts::register( [
+			[
+				'id'       => 'tsf-c',
+				'type'     => 'js',
+				'deps'     => [ 'jquery', 'tsf-tt', 'tsf' ],
+				'autoload' => true,
+				'name'     => 'tsfc',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+				'l10n'     => [
+					'name' => 'tsfCL10n',
+					'data' => [
+						'guidelines'  => $this->get_input_guidelines(),
+						'counterType' => \absint( $this->get_user_option( 0, 'counter_type', 3 ) ),
+						'i18n'        => [
+							'guidelines' => $this->get_input_guidelines_i18n(),
+							/* translators: Pixel counter. 1: number (value), 2: number (guideline) */
+							'pixelsUsed' => \esc_attr__( '%1$d out of %2$d pixels are used.', 'autodescription' ),
+						],
+					],
+				],
+			],
+			[
+				'id'       => 'tsf-c',
+				'type'     => 'css',
+				'deps'     => [ 'tsf-tt' ],
+				'autoload' => true,
+				'hasrtl'   => true,
+				'name'     => 'tsfc',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+			],
+		] );
+	}
+
+	/**
 	 * Generate Javascript Localization.
 	 *
 	 * @TODO rewrite, it's slow and a mess.
@@ -514,15 +569,6 @@ class Admin_Init extends Init {
 			}
 		}
 
-		counters: {
-			$input_guidelines      = [];
-			$input_guidelines_i18n = [];
-			if ( $has_input ) {
-				$input_guidelines      = $this->get_input_guidelines();
-				$input_guidelines_i18n = $this->get_input_guidelines_i18n();
-			}
-		}
-
 		deprecated: {
 			$term_name       = '';
 			$use_term_prefix = false;
@@ -560,9 +606,6 @@ class Admin_Init extends Init {
 				'privateTitle'    => $has_input && $id ? trim( str_replace( '%s', '', \__( 'Private: %s', 'default' ) ) ) : '',
 				// phpcs:ignore -- WordPress doesn't have a comment, either.
 				'protectedTitle'  => $has_input && $id ? trim( str_replace( '%s', '', \__( 'Protected: %s', 'default' ) ) ) : '',
-				/* translators: Pixel counter. 1: width, 2: guideline */
-				'pixelsUsed'      => $has_input ? \__( '%1$d out of %2$d pixels are used.', 'autodescription' ) : '',
-				'inputGuidelines' => $input_guidelines_i18n,
 			],
 			'params' => [
 				'objectTitle'        => $this->s_title_raw( $default_title ),                                       // TODO unused!
@@ -573,7 +616,6 @@ class Admin_Init extends Init {
 				'untitledTitle'      => $this->s_title_raw( $this->get_static_untitled_title() ),
 				'titleSeparator'     => $title_separator,
 				'titleLocation'      => $title_location,
-				'inputGuidelines'    => $input_guidelines,
 				'socialPlaceholders' => $social_settings_placeholders,
 			],
 		];
@@ -651,6 +693,7 @@ class Admin_Init extends Init {
 	 * @TODO Consider splitting up search into Google, Bing, etc., as we might
 	 *       want users to set their preferred search engine. Now, these engines
 	 *       are barely any different.
+	 * TODO move this to another object?
 	 *
 	 * @return array
 	 */

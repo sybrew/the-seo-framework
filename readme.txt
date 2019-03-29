@@ -273,24 +273,6 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 
 **For developers:**
 
-* **Changed:**
-	* TODO: With our most excellent users moving to HTTP/2 and beyond, we're going to take advantage of this by sending out more JavaScript files.
-		* More files is good, because we can selectively send out the files; so there's less code to parse in your browser on most requests.
-		* This also alleviates some strain on your server, as we don't have to blindly fill states and values for all requests every time.
-		* TODO PROPOSAL: Affected files (and their `*.min.js` equivalents):
-			* `tsf.js`, this file is now trimmed down to the most basic of forms.
-			* `title.js`, this file handles title input fields.
-			* `description.js`, this file handles description input fields.
-			* `counter.js`, this file handles the character and pixel counters.
-			* `term.js`, this file handles term pages.
-			* `post.js`, this file handles post pages.
-			* `term-overview.js`, this file handles term overview pages.
-			* `post-overview.js`, this file handles post overview pages.
-			* `seo-settings.js`, this file handles the SEO settings page.
-			* `seo-bar.js`, this file handles the SEO Bar.
-			* `quick-edit.js`, this file handles quick edits.
-			* `sanitize.js`, this file handles sanitization and XSS security.
-			* `ajax.js`, this file handles communication with the server.
 * **Option notes:**
 	* **Removed:**
 		* `attachment_noindex` and sanitization thereof, since 3.1, this is `noindex_post_types['attachment']`.
@@ -344,14 +326,60 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 			1. term title placeholders.
 		* `the_seo_framework_use_title_branding` now works for the homepage title in the admin screens.
 		* `the_seo_framework_title_separator` now works in the admin screens.
-* **JS notes:**
-	* **Changed:**
-		* `tsfL10n.params.titleLocation` now mirrors its value with the homepage settings for the homepage.
-			* This used to be a ravioli code mess, now it's a thin lasagna. Bon appetit!
-		* `tsfL10n.params.defaultTitle` (and `objectTitle`) now appends term prefixes, when applicable.
 	* **Removed:**
 		* `the_seo_framework_get_term_meta`, this was deprecated since 3.1.0.
 			* Use `the_seo_framework_term_meta_defaults` instead.
+* **Browser notes:**
+	* TODO: With our most excellent users moving to HTTP/2 and beyond, we're going to take full advantage of this by sending out more scripting files.
+		* More files is good, because we can selectively send out the files; so there's less code to parse in your browser on most requests.
+		* This also alleviates some strain on your server, as we don't have to blindly fill states and values for all requests every time.
+		* And, most importantly, maintaining the code will be much easier; so, we can deploy faster with fewer errors.
+		* Last but not least, WordPress is moving from plain HTML and PHP to JS. We need to get ourselves well prepared for this shift.
+		* Affected files, both `.css` and `.js` (and their `*.min.*` equivalents):
+			* DONE:
+				* `tsf`, this file is now trimmed down to the most basic of forms.
+				* `tsfc`, this file handles the character and pixel counters.
+					* Fun fact: The proposed name was `counter.js`, but uBlock blocks this script name by default.
+					* TODO make counters load in via JS only, the PHP side is useless in this.
+						* Well, PHP is required to annotate the IDs... maybe hide them by default, and unhide them via JS?
+			* TODO (PROPOSED):
+				* `title`, this file handles title input fields.
+				* `description`, this file handles description input fields.
+				* `term`, this file handles term pages.
+				* `post`, this file handles post pages.
+				* `term-overview`, this file handles term overview pages.
+				* `post-overview`, this file handles post overview pages.
+				* `seo-settings`, this file handles the SEO settings page.
+				* `seo-bar`, this file handles the SEO Bar.
+				* `quick-edit`, this file handles quick edits.
+				* `sanitize`, this file handles sanitization and XSS security.
+				* `ajax`, this file handles communication with the server.
+			* TODO consider moving this to a relay method, which switches over all known scripts, cleaning up the code.
+				* Also remove the newly introduced methods, and use a single handler method `tsf->load_script( 'tsfc', $autoload );`
+				* Also silently deprecate the 3.1 methods, and forward the calls to the one above?
+	* **JS notes:**
+		* **Added:**
+			* Object `tsfC`, including:
+				* Properties:
+					* `counterType`
+					* `counterClasses`
+				* Methods:
+					* `updatePixelCounter`
+					* `updateCharacterCounter`
+					* `triggerCounterUpdate`
+					* `resetCounterListener`
+				* Related localization & attribution object: `tsfCL10n`
+		* **Changed:**
+			* `tsfL10n.params.titleLocation` now mirrors its value with the homepage settings for the homepage.
+				* This used to be a ravioli code mess, now it's a thin lasagna. Bon appetit!
+			* `tsfL10n.params.defaultTitle` (and `objectTitle`) now appends term prefixes, when applicable.
+		* **Removed:**
+			* `tsf.counterType`, use `tsfC.counterType` instead.
+			* `tsf.counterClasses`, use `tsfC.counterClasses` instead.
+			* `tsf._initCounters`, was marked private.
+			* `tsfL10n.i18n.inputGuidelines`, use `tsfCL10n.i18n.guidelines` instead.
+			* `tsfL10n.i18n.pixelsUsed`, use `tsfCL10n.i18n.pixelsUsed` instead.
+			* `tsfL10n.params.inputGuidelines`, use `tsfCL10n.guidelines` instead.
 
 = 3.2.4 =
 
