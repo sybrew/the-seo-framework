@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: The SEO Framework 3.2.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/autodescription\n"
-"POT-Creation-Date: 2019-03-15 17:42:55+00:00\n"
+"POT-Creation-Date: 2019-03-18 18:14:20+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -786,17 +786,17 @@ msgstr ""
 
 #. translators: %s = 'The SEO Framework'
 
-#: inc/classes/render.class.php:1195
+#: inc/classes/render.class.php:1197
 msgid "Start %s"
 msgstr ""
 
 #. translators: %s = 'The SEO Framework'
 
-#: inc/classes/render.class.php:1197
+#: inc/classes/render.class.php:1199
 msgid "End %s"
 msgstr ""
 
-#: inc/classes/render.class.php:1198
+#: inc/classes/render.class.php:1200
 msgid "by Sybre Waaijer"
 msgstr ""
 
@@ -812,16 +812,6 @@ msgstr ""
 
 #: inc/classes/sitemaps.class.php:651
 msgid "Sitemap is generated on %s"
-msgstr ""
-
-#. translators: %s: SEO extensions link.
-
-#: inc/functions/tsfem-suggestion.php:95
-msgid "Looking for more SEO functionality? Check out %s."
-msgstr ""
-
-#: inc/functions/tsfem-suggestion.php:99
-msgid "The SEO Framework's extensions"
 msgstr ""
 
 #. translators: %s = Extension URL markdown

@@ -665,7 +665,7 @@ class Generate_Description extends Generate {
 		$this->fix_generation_args( $args );
 
 		if ( $this->is_blog_page( $args['id'] ) ) {
-			$title = $this->get_raw_generated_title( $args );
+			$title = $this->get_filtered_raw_generated_title( $args );
 			/* translators: %s = Blog page title. Front-end output. */
 			$title = sprintf( \__( 'Latest posts: %s', 'autodescription' ), $title );
 		} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {

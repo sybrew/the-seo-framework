@@ -89,13 +89,11 @@ class Admin_Init extends Init {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 First parameter is now deprecated.
+	 * @since 3.3.0 First parameter is now removed.
 	 *
-	 * @param bool|null $dpr Deprecated.
 	 * @return void Early if already enqueued.
 	 */
-	public function init_admin_scripts( $dpr = null ) {
-
-		if ( null !== $dpr ) $this->_doing_it_wrong( __METHOD__, 'The first argument is deprecated. Use <code>the_seo_framework()->Scripts()::enqueue()</code> after calling this instead.', '3.1.0' );
+	public function init_admin_scripts() {
 
 		if ( _has_run( __METHOD__ ) ) return;
 
@@ -392,6 +390,7 @@ class Admin_Init extends Init {
 	 * Generate Javascript Localization.
 	 *
 	 * @TODO rewrite, it's slow and a mess.
+	 * TODO TEMP remove goto mess. I added it to make sense of the structure.
 	 *
 	 * @since 2.6.0
 	 * @staticvar array $strings : The l10n strings.
@@ -408,115 +407,99 @@ class Admin_Init extends Init {
 	 */
 	protected function get_javascript_l10n() {
 
-		$id = $this->get_the_real_ID();
+		query: {
+			$is_settings_page = $this->is_seo_settings_page();
+			$is_post_edit     = $this->is_post_edit();
+			$is_term_edit     = $this->is_term_edit();
 
-		$default_title   = '';
-		$title_additions = '';
+			$_page_on_front = $this->has_page_on_front();
 
-		$use_title_additions = $this->use_title_branding();
-		$home_tagline        = $this->get_option( 'homepage_title_tagline' );
-		$title_location      = $this->get_option( 'title_location' );
-		$title_separator     = \esc_html( $this->get_separator( 'title' ) );
+			$id       = $is_settings_page ? $this->get_the_front_page_ID() : $this->get_the_real_ID();
+			$taxonomy = $this->get_current_taxonomy();
 
-		$is_home          = false;
-		$is_settings_page = $this->is_seo_settings_page();
-		$page_on_front    = $this->has_page_on_front();
-		$is_post_edit     = $this->is_post_edit();
-		$is_term_edit     = $this->is_term_edit();
-		$has_input        = $is_settings_page || $is_post_edit || $is_term_edit;
+			$is_home = $is_settings_page || ( ! $taxonomy && $this->is_static_frontpage( $id ) );
 
-		$_decode_flags = ENT_QUOTES | ENT_COMPAT;
+			$_query = compact( 'id', 'taxonomy' );
+		}
 
-		if ( $is_settings_page ) {
-			// We're on our SEO settings pages.
-			if ( $page_on_front ) {
-				// Home is a page.
-				$id           = (int) \get_option( 'page_on_front' );
-				$inpost_title = $this->get_custom_field( '_genesis_title', $id );
-			} else {
-				// Home is a blog.
-				$inpost_title = '';
-			}
-			$default_title   = $inpost_title ?: $this->get_blogname();
-			$title_additions = $this->get_home_page_tagline();
+		meta: {
+			$has_input = $is_settings_page || $is_post_edit || $is_term_edit;
+		}
 
-			$use_title_additions = (bool) $this->get_option( 'homepage_tagline' );
-		} else {
-			// We're somewhere within default WordPress pages.
-			if ( $is_term_edit ) {
-				//* Category or Tag.
-				if ( $this->get_current_taxonomy() && $id ) {
-					// DEBUG: Use get_generated_archive_title() instead...? use_generated_archive_prefix() is in the way.
-					$default_title   = $this->get_generated_single_term_title( $this->fetch_the_term( $id ) );
-					$title_additions = $this->get_blogname();
+		title: {
+			$use_title_additions = $this->use_title_branding( $_query );
+			$_title_branding     = $this->get_title_branding_from_args( $_query );
+			$title_additions     = $_title_branding['addition'];
+			$title_location      = $_title_branding['seplocation'];
+			$title_separator     = \esc_html( $this->get_title_separator( $is_home ) );
+			// Smart code... make this readable? Also, the custom field can't be filtered...
+			$default_title       =
+				   ( $is_settings_page && $_page_on_front ? $this->get_custom_field( '_genesis_title', $_query['id'] ) : '' )
+				?: ( ! $is_settings_page && $is_home ? $this->get_option( 'homepage_title' ) : '' )
+				?: ( $this->get_filtered_raw_generated_title( $_query ) );
+		}
+
+		description: {}
+
+		other: {
+			$_decode_flags = ENT_QUOTES | ENT_COMPAT;
+		}
+
+		nonces: {
+			$this->set_js_nonces( [
+				/**
+				 * Use $this->get_settings_capability() ?... might conflict with other nonces.
+				 * @augments tsfMedia 'upload_files'
+				 */
+				'manage_options' => \current_user_can( 'manage_options' ) ? \wp_create_nonce( 'tsf-ajax-manage_options' ) : false,
+				'upload_files'   => \current_user_can( 'upload_files' ) ? \wp_create_nonce( 'tsf-ajax-upload_files' ) : false,
+				'edit_posts'     => \current_user_can( 'edit_posts' ) ? \wp_create_nonce( 'tsf-ajax-edit_posts' ) : false,
+			] );
+		}
+
+		social: {
+			$social_settings_locks = [];
+
+			if ( $_page_on_front ) {
+				if ( $is_settings_page ) {
+					// PH = placeholder
+					$social_settings_locks = [
+						'ogTitlePHLock'       => (bool) $this->get_custom_field( '_open_graph_title', $id ),
+						'ogDescriptionPHLock' => (bool) $this->get_custom_field( '_open_graph_description', $id ),
+						'twTitlePHLock'       => (bool) $this->get_custom_field( '_twitter_title', $id ),
+						'twDescriptionPHLock' => (bool) $this->get_custom_field( '_twitter_description', $id ),
+					];
+				} elseif ( $is_home ) {
+					$social_settings_locks = [
+						'refTitleLock'       => (bool) $this->get_option( 'homepage_title' ),
+						'refDescriptionLock' => (bool) $this->get_option( 'homepage_description' ),
+						'ogTitleLock'        => (bool) $this->get_option( 'homepage_og_title' ),
+						'ogDescriptionLock'  => (bool) $this->get_option( 'homepage_og_description' ),
+						'twTitleLock'        => (bool) $this->get_option( 'homepage_twitter_title' ),
+						'twDescriptionLock'  => (bool) $this->get_option( 'homepage_twitter_description' ),
+					];
 				}
-			} elseif ( $this->is_static_frontpage( $id ) ) { // implies $is_post_edit or $is_settings_page
-				$default_title  = $this->get_option( 'homepage_title' ) ?: $this->get_blogname();
-				$title_location = $this->get_option( 'home_title_location' );
-
-				$is_home = true;
-
-				$use_title_additions = (bool) $this->get_option( 'homepage_tagline' );
-				$title_additions     = $this->get_home_page_tagline();
-			} elseif ( $is_post_edit ) {
-				$default_title   = $this->get_raw_generated_title( [ 'id' => $id ] );
-				$title_additions = $this->get_blogname();
-			} else {
-				//* We're in a special place.
-				// Can't fetch title.
-				$default_title   = '';
-				$title_additions = $this->get_blogname();
 			}
-		}
 
-		$this->set_js_nonces( [
-			/**
-			 * Use $this->get_settings_capability() ?... might conflict with other nonces.
-			 * @augments tsfMedia 'upload_files'
-			 */
-			'manage_options' => \current_user_can( 'manage_options' ) ? \wp_create_nonce( 'tsf-ajax-manage_options' ) : false,
-			'upload_files'   => \current_user_can( 'upload_files' ) ? \wp_create_nonce( 'tsf-ajax-upload_files' ) : false,
-			'edit_posts'     => \current_user_can( 'edit_posts' ) ? \wp_create_nonce( 'tsf-ajax-edit_posts' ) : false,
-		] );
+			$social_settings_placeholders = [];
 
-		$term_name       = '';
-		$use_term_prefix = false;
-		if ( $is_term_edit ) {
-			$term_name       = $this->get_tax_type_label( $this->get_current_taxonomy(), true );
-			$use_term_prefix = $this->use_generated_archive_prefix();
-		}
-
-		$social_settings_locks = [];
-
-		if ( $page_on_front ) {
-			if ( $is_settings_page ) {
-				// PH = placeholder
-				$social_settings_locks = [
-					'ogTitlePHLock'       => (bool) $this->get_custom_field( '_open_graph_title', $id ),
-					'ogDescriptionPHLock' => (bool) $this->get_custom_field( '_open_graph_description', $id ),
-					'twTitlePHLock'       => (bool) $this->get_custom_field( '_twitter_title', $id ),
-					'twDescriptionPHLock' => (bool) $this->get_custom_field( '_twitter_description', $id ),
-				];
-			} elseif ( $is_home ) {
-				$social_settings_locks = [
-					'refTitleLock'       => (bool) $this->get_option( 'homepage_title' ),
-					'refDescriptionLock' => (bool) $this->get_option( 'homepage_description' ),
-					'ogTitleLock'        => (bool) $this->get_option( 'homepage_og_title' ),
-					'ogDescriptionLock'  => (bool) $this->get_option( 'homepage_og_description' ),
-					'twTitleLock'        => (bool) $this->get_option( 'homepage_twitter_title' ),
-					'twDescriptionLock'  => (bool) $this->get_option( 'homepage_twitter_description' ),
-				];
-			}
-		}
-
-		$social_settings_placeholders = [];
-
-		if ( $is_post_edit || $is_settings_page ) {
-			if ( $is_settings_page ) {
-				if ( $page_on_front ) {
+			if ( $is_post_edit || $is_settings_page ) {
+				if ( $is_settings_page ) {
+					if ( $_page_on_front ) {
+						$social_settings_placeholders = [
+							'ogDesc' => $this->get_custom_field( '_genesis_description', $id ) ?: $this->get_generated_open_graph_description( [ 'id' => $id ] ),
+							'twDesc' => $this->get_custom_field( '_genesis_description', $id ) ?: $this->get_generated_twitter_description( [ 'id' => $id ] ),
+						];
+					} else {
+						$social_settings_placeholders = [
+							'ogDesc' => $this->get_generated_open_graph_description( [ 'id' => $id ] ),
+							'twDesc' => $this->get_generated_twitter_description( [ 'id' => $id ] ),
+						];
+					}
+				} elseif ( $is_home ) {
 					$social_settings_placeholders = [
-						'ogDesc' => $this->get_custom_field( '_genesis_description', $id ) ?: $this->get_generated_open_graph_description( [ 'id' => $id ] ),
-						'twDesc' => $this->get_custom_field( '_genesis_description', $id ) ?: $this->get_generated_twitter_description( [ 'id' => $id ] ),
+						'ogDesc' => $this->get_option( 'homepage_description' ) ?: $this->get_generated_open_graph_description( [ 'id' => $id ] ),
+						'twDesc' => $this->get_option( 'homepage_description' ) ?: $this->get_generated_twitter_description( [ 'id' => $id ] ),
 					];
 				} else {
 					$social_settings_placeholders = [
@@ -524,28 +507,29 @@ class Admin_Init extends Init {
 						'twDesc' => $this->get_generated_twitter_description( [ 'id' => $id ] ),
 					];
 				}
-			} elseif ( $is_home ) {
-				$social_settings_placeholders = [
-					'ogDesc' => $this->get_option( 'homepage_description' ) ?: $this->get_generated_open_graph_description( [ 'id' => $id ] ),
-					'twDesc' => $this->get_option( 'homepage_description' ) ?: $this->get_generated_twitter_description( [ 'id' => $id ] ),
-				];
-			} else {
-				$social_settings_placeholders = [
-					'ogDesc' => $this->get_generated_open_graph_description( [ 'id' => $id ] ),
-					'twDesc' => $this->get_generated_twitter_description( [ 'id' => $id ] ),
-				];
-			}
 
-			foreach ( $social_settings_placeholders as &$v ) {
-				$v = html_entity_decode( $v, $_decode_flags, 'UTF-8' );
+				foreach ( $social_settings_placeholders as &$v ) {
+					$v = html_entity_decode( $v, $_decode_flags, 'UTF-8' );
+				}
 			}
 		}
 
-		$input_guidelines      = [];
-		$input_guidelines_i18n = [];
-		if ( $has_input ) {
-			$input_guidelines      = $this->get_input_guidelines();
-			$input_guidelines_i18n = $this->get_input_guidelines_i18n();
+		counters: {
+			$input_guidelines      = [];
+			$input_guidelines_i18n = [];
+			if ( $has_input ) {
+				$input_guidelines      = $this->get_input_guidelines();
+				$input_guidelines_i18n = $this->get_input_guidelines_i18n();
+			}
+		}
+
+		deprecated: {
+			$term_name       = '';
+			$use_term_prefix = false;
+			if ( $is_term_edit ) {
+				$term_name       = $this->get_tax_type_label( $taxonomy, true );
+				$use_term_prefix = $this->use_generated_archive_prefix();
+			}
 		}
 
 		$l10n = [
@@ -557,7 +541,7 @@ class Admin_Init extends Init {
 				'counterType'         => \absint( $this->get_user_option( 0, 'counter_type', 3 ) ),
 				'useTagline'          => $use_title_additions,
 				'taglineLocked'       => (bool) $this->get_option( 'title_rem_additions' ),
-				'useTermPrefix'       => $use_term_prefix,
+				'useTermPrefix'       => $use_term_prefix,                                                          // TODO unused!
 				'isSettingsPage'      => $is_settings_page,
 				'isPostEdit'          => $is_post_edit,
 				'isTermEdit'          => $is_term_edit,
@@ -581,11 +565,11 @@ class Admin_Init extends Init {
 				'inputGuidelines' => $input_guidelines_i18n,
 			],
 			'params' => [
-				'objectTitle'        => $this->s_title_raw( $default_title ),
+				'objectTitle'        => $this->s_title_raw( $default_title ),                                       // TODO unused!
 				'defaultTitle'       => $this->s_title_raw( $default_title ),
 				'titleAdditions'     => $this->s_title_raw( $title_additions ),
 				'blogDescription'    => $this->s_title_raw( $this->get_blogdescription() ),
-				'termName'           => $this->s_title_raw( $term_name ),
+				'termName'           => $this->s_title_raw( $term_name ),                                           // TODO unused!
 				'untitledTitle'      => $this->s_title_raw( $this->get_static_untitled_title() ),
 				'titleSeparator'     => $title_separator,
 				'titleLocation'      => $title_location,

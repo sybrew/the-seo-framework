@@ -15,7 +15,7 @@ switch ( $instance ) :
 		$title = '';
 
 		if ( $latest_post_id ) {
-			$title = $this->hellip_if_over( $this->get_raw_generated_title( [ 'id' => $latest_post_id ] ), 60 );
+			$title = $this->hellip_if_over( $this->get_filtered_raw_generated_title( [ 'id' => $latest_post_id ] ), 60 );
 		}
 
 		$title = $this->s_title( $title ?: __( 'Example Post Title', 'autodescription' ) );

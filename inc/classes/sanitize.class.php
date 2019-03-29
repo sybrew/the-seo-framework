@@ -94,8 +94,8 @@ class Sanitize extends Admin_Pages {
 		\add_action( "update_option_{$this->settings_field}", [ $this, 'delete_main_cache' ] );
 		\add_action( "update_option_{$this->settings_field}", [ $this, 'reinitialize_rewrite' ], 11 );
 		\add_action( "update_option_{$this->settings_field}", [ $this, 'update_db_version' ], 12 );
-		//* TEMP: Set backward compatibility
-		\add_action( "update_option_{$this->settings_field}", [ $this, '_set_backward_compatibility' ], 13 );
+		//* TEMP: Set backward compatibility.
+		// \add_action( "update_option_{$this->settings_field}", [ $this, '_set_backward_compatibility' ], 13 );
 	}
 
 	/**
@@ -111,10 +111,10 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
-	 * Maintains backward compatibility for the options of < 3.1.
+	 * Maintains backward compatibility for older, migrated options.
 	 *
 	 * @since 3.1.0
-	 * @TODO  3.3.0 Remove or empty this.
+	 * @since 3.3.0 Emptied and is no longer enqueued.
 	 * @access private
 	 * @staticvar bool $running Prevents loops.
 	 */
@@ -122,21 +122,7 @@ class Sanitize extends Admin_Pages {
 		static $running = false;
 		if ( $running ) return;
 		$running = true;
-
-		db_3101:
-		//= title_seperator backward compat.
-		$this->update_option( 'title_seperator', $this->get_option( 'title_separator', false ) );
-
-		//= Media robots backward compat.
-		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) :
-			$_option = $this->get_option( $this->get_robots_post_type_option_id( $r ), false );
-			$_media_option = ! empty( $_option['attachment'] ) ? $_option['attachment'] : 0;
-
-			$this->update_option( "attachment_$r", $_media_option );
-		endforeach;
-
 		end:;
-
 		$running = false;
 	}
 
@@ -257,7 +243,6 @@ class Sanitize extends Admin_Pages {
 				'author_noindex',
 				'date_noindex',
 				'search_noindex',
-				'attachment_noindex',
 				'site_noindex',
 
 				'category_nofollow',
@@ -265,7 +250,6 @@ class Sanitize extends Admin_Pages {
 				'author_nofollow',
 				'date_nofollow',
 				'search_nofollow',
-				'attachment_nofollow',
 				'site_nofollow',
 
 				'category_noarchive',
@@ -273,7 +257,6 @@ class Sanitize extends Admin_Pages {
 				'author_noarchive',
 				'date_noarchive',
 				'search_noarchive',
-				'attachment_noarchive',
 				'site_noarchive',
 
 				'paged_noindex',

@@ -107,7 +107,7 @@ class Core {
 	 *
 	 * @param string $name The method name.
 	 * @param array $arguments The method arguments.
-	 * @return void
+	 * @return mixed|void
 	 */
 	final public function __call( $name, $arguments ) {
 

@@ -287,7 +287,7 @@ class Post_Data extends Detect {
 	public function _save_inpost_primary_term( $post_id, $post ) {
 
 		//* Nonce is done at the end of this function.
-		if ( empty( $_POST['autodescription'] ) )
+		if ( empty( $_POST['autodescription'] ) ) // Input var OK.
 			return;
 
 		$post_type = \get_post_type( $post_id ) ?: false;
@@ -307,7 +307,7 @@ class Post_Data extends Detect {
 			return;
 
 		$_taxonomies = $this->get_hierarchical_taxonomies_as( 'names', $post_type );
-		$values = [];
+		$values      = [];
 
 		foreach ( $_taxonomies as $_taxonomy ) {
 			$_post_key = '_primary_term_' . $_taxonomy;
@@ -316,7 +316,7 @@ class Post_Data extends Detect {
 				'action' => $this->inpost_nonce_field . '_pt',
 				'name'   => $this->inpost_nonce_name . '_pt_' . $_taxonomy,
 				'value'  => isset( $_POST['autodescription'][ $_post_key ] ) ? \absint( $_POST['autodescription'][ $_post_key ] ) : 0,
-			];
+			]; // Input var OK.
 		}
 
 		foreach ( $values as $t => $v ) {

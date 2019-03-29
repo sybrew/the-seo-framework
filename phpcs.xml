@@ -58,7 +58,7 @@
 		</properties>
 	</rule>
 
-	<!-- Tweak array notifications to behave more natural -->
+	<!-- Tweak array notifications to behave more naturally -->
 	<rule ref="WordPress.Arrays.MultipleStatementAlignment">
 		<properties>
 			<property name="alignMultilineItems" value="!=100"/>

@@ -242,6 +242,117 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 == Changelog ==
 
+TODO: The Sitemap XSL title's -1 integer is converted to a positive integer in get_post_meta()->get_metadata()
+	* Set ID to 0? -> That would match the front page ID if it's a blog.
+	* Don't check? -> That's OK.
+
+TODO: Automatically generate description? -> Automatically generate descriptions?
+TODO: Minify JS files... Ugh Node.JS
+TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
+
+= 3.3.0 =
+
+**Detailed log:**
+
+**For everyone:**
+
+* **Added:**
+	* TODO maybe: We now generate a proposed description of your content every minute.
+	* TODO maybe: We now parse shortcodes for the content dynamically.
+* **Changed:**
+	* TODO? We switched the homepage title option name from left to right, and right to left.
+		* This doesn't affect your titles, it's only semantics.
+		* NOTE TO SELF: Changing this would require us to change the default options, the filters behavior, and the JS code.. is this the best route?
+* **Removed:**
+	* **BACKWARD COMPATIBILITY!** When you upgrade to this version or later, you can't downgrade to v3.0.6 or lower without running into issues.
+		* Downgrading to v3.1.x and v3.2.x is still supported.
+		* Upgrading from v2.7.0 and higher to this version is still supported.
+		* Upgrading from all the way below v2.7.0 (December 2016!) is untested and might cause issues. Double-check your settings!
+	* TODO maybe: Remove the character counter for titles and descriptions, while keeping them for social inputs?
+	* TODO maybe: strip the removed options... (this will also happen on manual save...)
+
+**For developers:**
+
+* **Changed:**
+	* TODO: With our most excellent users moving to HTTP/2 and beyond, we're going to take advantage of this by sending out more JavaScript files.
+		* More files is good, because we can selectively send out the files; so there's less code to parse in your browser on most requests.
+		* This also alleviates some strain on your server, as we don't have to blindly fill states and values for all requests every time.
+		* TODO PROPOSAL: Affected files (and their `*.min.js` equivalents):
+			* `tsf.js`, this file is now trimmed down to the most basic of forms.
+			* `title.js`, this file handles title input fields.
+			* `description.js`, this file handles description input fields.
+			* `counter.js`, this file handles the character and pixel counters.
+			* `term.js`, this file handles term pages.
+			* `post.js`, this file handles post pages.
+			* `term-overview.js`, this file handles term overview pages.
+			* `post-overview.js`, this file handles post overview pages.
+			* `seo-settings.js`, this file handles the SEO settings page.
+			* `seo-bar.js`, this file handles the SEO Bar.
+			* `quick-edit.js`, this file handles quick edits.
+			* `sanitize.js`, this file handles sanitization and XSS security.
+			* `ajax.js`, this file handles communication with the server.
+* **Option notes:**
+	* **Removed:**
+		* `attachment_noindex` and sanitization thereof, since 3.1, this is `noindex_post_types['attachment']`.
+		* `attachment_nofollow` and sanitization thereof, since 3.1, this is `nofollow_post_types['attachment']`.
+		* `attachment_noarchive` and sanitization thereof, since 3.1, this is `noarchive_post_types['attachment']`.
+		* `title_seperator`, since 3.1, this is `title_separator` (not the previous typo).
+* **Method notes:**
+	* For object `the_seo_framework()`:
+		* **Added:**
+			* `get_filtered_raw_custom_field_title()`
+			* `get_filtered_raw_generated_title()`
+		* **Changed:**
+			* `init_admin_scripts()`, removed deprecated parameter notice.
+			* `set_url_scheme()`, removed deprecated parameter notice.
+		* **Removed:**
+			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
+				* `get_meta_output_cache_key()`
+				* `get_prefered_scheme()`
+				* `description_from_cache()`
+				* `title()`
+				* `build_title()`
+				* `generate_home_title()`
+				* `get_the_real_archive_title()`
+				* `use_archive_prefix()`
+				* `untitled()`
+				* `add_title_pagination()`
+				* `process_title_additions()`
+				* `title_from_cache()`
+				* `single_term_title()`
+				* `post_title_from_ID()`
+				* `title_from_custom_field()`
+				* `get_tax_labels()`
+				* `get_supported_post_type()`
+				* `get_paged_post_url()`
+				* `is_checked()`
+				* `is_option_checked()`
+				* `generate_description()`
+				* `description_from_custom_field()`
+				* `generate_description_from_id()`
+* **Filter notes:**
+	* **Fixed:**
+		* `the_seo_framework_title_from_generation`, now works for:
+			1. the homepage title in the admin screens.
+			1. the homepage title example in the admin screens.
+			1. the latest post title example in the admin screens.
+			1. singular breadcrumb generation.
+			1. blog page's automated description.
+		* `the_seo_framework_title_from_custom_field`, now works for:
+			1. the homepage title example in the admin screens.
+			1. all breadcrumb generation.
+			1. term title placeholders.
+		* `the_seo_framework_use_title_branding` now works for the homepage title in the admin screens.
+		* `the_seo_framework_title_separator` now works in the admin screens.
+* **JS notes:**
+	* **Changed:**
+		* `tsfL10n.params.titleLocation` now mirrors its value with the homepage settings for the homepage.
+			* This used to be a ravioli code mess, now it's a thin lasagna. Bon appetit!
+		* `tsfL10n.params.defaultTitle` (and `objectTitle`) now appends term prefixes, when applicable.
+	* **Removed:**
+		* `the_seo_framework_get_term_meta`, this was deprecated since 3.1.0.
+			* Use `the_seo_framework_term_meta_defaults` instead.
+
 = 3.2.4 =
 
 In this minor update, we bring you the most advanced description generation yet. The generator is now context-sensitive, so you can expect the descriptions to be even more natural; a real time-saver!

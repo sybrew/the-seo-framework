@@ -49,4 +49,8 @@
  *          |-> Final
  *          |-> Instance
  *
+ * # Namespace: The_SEO_Framework\Builders
+ *
+ * ## Separated:
+ *     - Scripts
  */

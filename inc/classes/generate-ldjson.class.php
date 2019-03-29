@@ -370,10 +370,10 @@ class Generate_Ldjson extends Generate_Image {
 			++$position;
 
 			if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-				$parent_name = $this->get_raw_custom_field_title( [ 'id' => $parent_id ] )
-					?: ( $this->get_generated_single_post_title( $parent_id ) ?: $this->get_static_untitled_title() );
+				$parent_name = $this->get_filtered_raw_custom_field_title( [ 'id' => $parent_id ] )
+							?: $this->get_filtered_raw_generated_title( [ 'id' => $parent_id ] );
 			} else {
-				$parent_name = $this->get_generated_single_post_title( $parent_id ) ?: $this->get_static_untitled_title();
+				$parent_name = $this->get_filtered_raw_generated_title( [ 'id' => $parent_id ] );
 			}
 
 			$crumb = [
@@ -533,8 +533,11 @@ class Generate_Ldjson extends Generate_Image {
 			$position = $pos + 2;
 
 			if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-				$cat_name = $this->get_raw_custom_field_title( [ 'id' => $child_id, 'taxonomy' => $taxonomy ] )
-					?: ( $this->get_generated_single_term_title( \get_term( $child_id, $taxonomy ) ) ?: $this->get_static_untitled_title() );
+				$cat_name = $this->get_filtered_raw_custom_field_title( [ 'id' => $child_id, 'taxonomy' => $taxonomy ] )
+					?: (
+						$this->get_generated_single_term_title( \get_term( $child_id, $taxonomy ) )
+						?: $this->get_static_untitled_title()
+					);
 			} else {
 				$cat_name = $this->get_generated_single_term_title( \get_term( $child_id, $taxonomy ) ) ?: $this->get_static_untitled_title();
 			}
@@ -663,9 +666,9 @@ class Generate_Ldjson extends Generate_Image {
 		$front_id = $this->get_the_front_page_ID();
 
 		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-			$title = $this->get_raw_custom_field_title( [ 'id' => $front_id ] ) ?: $this->get_blogname();
+			$title = $this->get_filtered_raw_custom_field_title( [ 'id' => $front_id ] ) ?: $this->get_blogname();
 		} else {
-			$title = $this->get_raw_generated_title( [ 'id' => $front_id ] ) ?: $this->get_blogname();
+			$title = $this->get_filtered_raw_generated_title( [ 'id' => $front_id ] ) ?: $this->get_blogname();
 		}
 
 		$crumb = [
@@ -707,7 +710,7 @@ class Generate_Ldjson extends Generate_Image {
 		$post_id = $this->get_the_real_ID();
 
 		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-			$name = $this->get_raw_custom_field_title( [ 'id' => $post_id ] )
+			$name = $this->get_filtered_raw_custom_field_title( [ 'id' => $post_id ] )
 				?: ( $this->get_generated_single_post_title( $post_id ) ?: $this->get_static_untitled_title() );
 		} else {
 			$name = $this->get_generated_single_post_title( $post_id ) ?: $this->get_static_untitled_title();

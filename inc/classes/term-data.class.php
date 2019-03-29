@@ -86,6 +86,7 @@ class Term_Data extends Post_Data {
 	 * @since 2.8.0 Added filter.
 	 * @since 3.0.0 Added filter.
 	 * @since 3.1.0 Deprecated filter.
+	 * @since 3.3.0 Removed deprecated filter.
 	 * @staticvar array $cache
 	 *
 	 * @param int  $term_id The Term ID.
@@ -99,13 +100,11 @@ class Term_Data extends Post_Data {
 
 			if ( isset( $cache[ $term_id ] ) )
 				return $cache[ $term_id ];
-		} else {
-			$cache = [];
 		}
 
 		$data = \get_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true );
 
-		//* Evaluate merely by presence.
+		//* Evaluate merely by presence. TODO merge this, we no longer use Genesis' for this...
 		if ( isset( $data['saved_flag'] ) ) {
 			/**
 			 * @since 3.0.0
@@ -115,30 +114,7 @@ class Term_Data extends Post_Data {
 			return $cache[ $term_id ] = \apply_filters( 'the_seo_framework_current_term_meta', $data, $term_id );
 		}
 
-		static $checked = false;
-		if ( ! $checked && \has_filter( 'the_seo_framework_get_term_meta' ) ) {
-			$this->_doing_it_wrong( 'Filter <code>the_seo_framework_get_term_meta</code>', 'the_seo_framework_term_meta_defaults', '3.1.0' );
-		}
-		$checked = true;
-
-		/**
-		 * NOTE: Only works before TSF sets its saved-flag. To be used prior to migration.
-		 * Yes, this is inconveniently named. So, we (finally) deprecated it.
-		 * @since 2.8.0
-		 * @since 3.1.0 Now uses the `get_term_meta_defaults()` callback.
-		 * @deprecated. Use `the_seo_framework_term_meta_defaults` instead.
-		 * @param array $data  The DEFAULT term data.
-		 * @param int $term_id The current Term ID.
-		 */
-		$data = \apply_filters_ref_array(
-			'the_seo_framework_get_term_meta',
-			[
-				$this->get_term_meta_defaults(),
-				$term_id,
-			]
-		);
-
-		return $cache[ $term_id ] = $data;
+		return $cache[ $term_id ] = $this->get_term_meta_defaults();
 	}
 
 	/**
