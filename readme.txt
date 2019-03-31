@@ -250,7 +250,7 @@ TODO: Automatically generate description? -> Automatically generate descriptions
 TODO: Minify JS files... Ugh Node.JS
 TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 
-= 3.3.0 =
+= 3.3.0 - Multiplex =
 
 **Detailed log:**
 
@@ -270,6 +270,15 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 		* Upgrading from all the way below v2.7.0 (December 2016!) is untested and might cause issues. Double-check your settings!
 	* TODO maybe: Remove the character counter for titles and descriptions, while keeping them for social inputs?
 	* TODO maybe: strip the removed options... (this will also happen on manual save...)
+* **Fixed:**
+	* **Accessibility:**
+		* **Global:**
+			* TODO: none...
+		* **Settings page:**
+			* When pasting a webmaster code tag in the respective settings field, no change listener was invoked, and you didn't get an ays-message when navigating from the settings page.
+			* When you clear a sitemap color input field, the default color is now displayed correctly.
+			* TODO When navigating away from the settings page, after changing the "category prefix" setting, the example no longer reflects the adjusted setting.
+				* Really... this is such an extreme corner-case.
 
 **For developers:**
 
@@ -330,7 +339,10 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 		* `the_seo_framework_get_term_meta`, this was deprecated since 3.1.0.
 			* Use `the_seo_framework_term_meta_defaults` instead.
 * **Browser notes:**
-	* TODO: With our most excellent users moving to HTTP/2 and beyond, we're going to take full advantage of this by sending out more scripting files.
+	* We've now completely abandoned support for Internet Explorer. Goodbye, old, annoying friend.
+		* TODO consider "no-js versions for IE".
+		* TODO clean up polyfills & fixes related to IE.
+	* With our most excellent users moving to HTTP/2 and beyond, we're going to take full advantage of multiplexing by sending out more scripting files.
 		* More files is good, because we can selectively send out the files; so there's less code to parse in your browser on most requests.
 		* This also alleviates some strain on your server, as we don't have to blindly fill states and values for all requests every time.
 		* And, most importantly, maintaining the code will be much easier; so, we can deploy faster with fewer errors.
@@ -338,10 +350,17 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 		* Affected files, both `.css` and `.js` (and their `*.min.*` equivalents):
 			* DONE:
 				* `tsf`, this file is now trimmed down to the most basic of forms.
+					* **Before**: 27.7KB minified, 2782 SLOC
+					* **After:** 19.4KB minified, (TODO TBD) 2087 SLOC
 				* `tsfc`, this file handles the character and pixel counters.
+					* **Namespaces:** `window.tsfC` and `window.tsfCL10n`.
+					* **Script ID:** `tsf-c`
 					* Fun fact: The proposed name was `counter.js`, but uBlock blocks this script name by default.
 					* TODO make counters load in via JS only, the PHP side is useless in this.
 						* Well, PHP is required to annotate the IDs... maybe hide them by default, and unhide them via JS?
+				* `settings`, this file handles the SEO Settings page, mostly.
+					* **Namespaces:** `window.tsfSettings` and `window.tsfSettingsL10n`.
+					* **Script ID:** `tsf-settings`
 			* TODO (PROPOSED):
 				* `title`, this file handles title input fields.
 				* `description`, this file handles description input fields.
@@ -349,7 +368,6 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 				* `post`, this file handles post pages.
 				* `term-overview`, this file handles term overview pages.
 				* `post-overview`, this file handles post overview pages.
-				* `seo-settings`, this file handles the SEO settings page.
 				* `seo-bar`, this file handles the SEO Bar.
 				* `quick-edit`, this file handles quick edits.
 				* `sanitize`, this file handles sanitization and XSS security.
@@ -372,14 +390,26 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 		* **Changed:**
 			* `tsfL10n.params.titleLocation` now mirrors its value with the homepage settings for the homepage.
 				* This used to be a ravioli code mess, now it's a thin lasagna. Bon appetit!
-			* `tsfL10n.params.defaultTitle` (and `objectTitle`) now appends term prefixes, when applicable.
+			* `tsfL10n.params.defaultTitle` now appends term prefixes, when applicable.
 		* **Removed:**
 			* `tsf.counterType`, use `tsfC.counterType` instead.
 			* `tsf.counterClasses`, use `tsfC.counterClasses` instead.
 			* `tsf._initCounters`, was marked private.
+			* `tsf._initWebmastersInput`, was marked private.
+			* `tsf.tabToggle`.
+			* `tsf.taglineToggleOnload`.
+			* `tsf.confirmedReset`.
+			* `tsf.setColorOnload`.
 			* `tsfL10n.i18n.inputGuidelines`, use `tsfCL10n.i18n.guidelines` instead.
 			* `tsfL10n.i18n.pixelsUsed`, use `tsfCL10n.i18n.pixelsUsed` instead.
+			* `tsfL10n.i18n.confirmReset`, use `tsfSettingsL10n.i18n.confirmReset` instead.
 			* `tsfL10n.params.inputGuidelines`, use `tsfCL10n.guidelines` instead.
+			* `tsfL10n.states.useTermPrefix`.
+			* `tsfL10n.states.isTermEdit`.
+			* `tsfL10n.states.postType`.
+			* `tsfL10n.states.counterType`.
+			* `tsfL10n.params.termName`.
+			* `tsfL10n.params.objectTitle`.
 
 = 3.2.4 =
 

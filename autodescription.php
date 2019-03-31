@@ -113,8 +113,9 @@ function the_seo_framework_boot() {
 	 * Prepare plugin upgrader before the plugin loads.
 	 * @since 3.1.0
 	 * @since 3.1.2 Now performs a weak check.
+	 * @since 3.3.0 Now performs a strong check, `the_seo_framework_db_version()` casts to string.
 	 */
-	if ( the_seo_framework_db_version() != THE_SEO_FRAMEWORK_DB_VERSION ) { // loose comparison OK.
+	if ( the_seo_framework_db_version() !== THE_SEO_FRAMEWORK_DB_VERSION ) {
 		require THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'upgrade.php';
 	}
 

@@ -114,8 +114,7 @@ class Admin_Init extends Init {
 		} elseif ( $this->is_seo_settings_page() ) {
 			$this->enqueue_media_scripts();
 			$this->enqueue_counter_scripts();
-			\wp_enqueue_style( 'wp-color-picker' );
-			\wp_enqueue_script( 'wp-color-picker' );
+			$this->enqueue_settings_scripts();
 		}
 	}
 
@@ -442,6 +441,50 @@ class Admin_Init extends Init {
 	}
 
 	/**
+	 * Enqueues the SEO Settings page scripts.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @return void Early if already enqueued.
+	 */
+	public function enqueue_settings_scripts() {
+
+		if ( _has_run( __METHOD__ ) ) return;
+
+		//! PHP 5.4 compat: put in var.
+		$scripts = $this->Scripts();
+		$scripts::register( [
+			[
+				'id'       => 'tsf-settings',
+				'type'     => 'js',
+				'deps'     => [ 'jquery', 'tsf', 'tsf-tt', 'wp-color-picker' ],
+				'autoload' => true,
+				'name'     => 'settings',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+				'l10n'     => [
+					'name' => 'tsfSettingsL10n',
+					'data' => [
+						'i18n' => [
+							'confirmReset' => \__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
+						],
+					],
+				],
+			],
+			[
+				'id'       => 'tsf-settings',
+				'type'     => 'css',
+				'deps'     => [ 'tsf', 'tsf-tt', 'wp-color-picker' ],
+				'autoload' => true,
+				'hasrtl'   => true,
+				'name'     => 'settings',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+			],
+		] );
+	}
+
+	/**
 	 * Generate Javascript Localization.
 	 *
 	 * @TODO rewrite, it's slow and a mess.
@@ -569,29 +612,16 @@ class Admin_Init extends Init {
 			}
 		}
 
-		deprecated: {
-			$term_name       = '';
-			$use_term_prefix = false;
-			if ( $is_term_edit ) {
-				$term_name       = $this->get_tax_type_label( $taxonomy, true );
-				$use_term_prefix = $this->use_generated_archive_prefix();
-			}
-		}
-
 		$l10n = [
 			'nonces' => $this->get_js_nonces(),
 			'states' => [
 				'isRTL'               => (bool) \is_rtl(),
 				'isHome'              => $is_home,
 				'hasInput'            => $has_input,
-				'counterType'         => \absint( $this->get_user_option( 0, 'counter_type', 3 ) ),
 				'useTagline'          => $use_title_additions,
 				'taglineLocked'       => (bool) $this->get_option( 'title_rem_additions' ),
-				'useTermPrefix'       => $use_term_prefix,                                                          // TODO unused!
 				'isSettingsPage'      => $is_settings_page,
 				'isPostEdit'          => $is_post_edit,
-				'isTermEdit'          => $is_term_edit,
-				'postType'            => $is_post_edit ? \get_post_type( $id ) : false,
 				'isPrivate'           => $has_input && $is_post_edit && $id && $this->is_private( $id ),
 				'isPasswordProtected' => $has_input && $is_post_edit && $id && $this->is_password_protected( $id ),
 				'debug'               => $this->script_debug,
@@ -601,18 +631,15 @@ class Admin_Init extends Init {
 			],
 			'i18n'   => [
 				'saveAlert'       => \__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
-				'confirmReset'    => \__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
 				// phpcs:ignore -- WordPress doesn't have a comment, either.
 				'privateTitle'    => $has_input && $id ? trim( str_replace( '%s', '', \__( 'Private: %s', 'default' ) ) ) : '',
 				// phpcs:ignore -- WordPress doesn't have a comment, either.
 				'protectedTitle'  => $has_input && $id ? trim( str_replace( '%s', '', \__( 'Protected: %s', 'default' ) ) ) : '',
 			],
 			'params' => [
-				'objectTitle'        => $this->s_title_raw( $default_title ),                                       // TODO unused!
 				'defaultTitle'       => $this->s_title_raw( $default_title ),
 				'titleAdditions'     => $this->s_title_raw( $title_additions ),
 				'blogDescription'    => $this->s_title_raw( $this->get_blogdescription() ),
-				'termName'           => $this->s_title_raw( $term_name ),                                           // TODO unused!
 				'untitledTitle'      => $this->s_title_raw( $this->get_static_untitled_title() ),
 				'titleSeparator'     => $title_separator,
 				'titleLocation'      => $title_location,

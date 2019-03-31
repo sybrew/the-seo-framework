@@ -45,7 +45,7 @@ namespace {
 	 * Returns the database version of TSF.
 	 *
 	 * @since 3.1.0
-	 * @since 3.1.2 Now forces a string.
+	 * @since 3.1.2 Now casts to string.
 	 *
 	 * @return string The database version. '0' if version isn't found.
 	 */
