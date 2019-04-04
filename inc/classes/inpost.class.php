@@ -147,12 +147,14 @@ class Inpost extends Profile {
 		 * @param string $id The metabox class/ID.
 		 */
 		$id = (string) \apply_filters( 'the_seo_framework_metabox_id', 'tsf-inpost-box' );
+		// $id = (string) \apply_filters( 'the_seo_framework_metabox_id', 'tsf-inpost-box-2' );
 
 		/**
 		 * @since 2.9.0
 		 * @param string $context, default 'normal'. Accepts 'normal', 'side' and 'advanced'.
 		 */
-		$context = (string) \apply_filters( 'the_seo_framework_metabox_context', 'normal' );
+		// $context = (string) \apply_filters( 'the_seo_framework_metabox_context', 'normal' );
+		$context = (string) \apply_filters( 'the_seo_framework_metabox_context', 'side' );
 
 		/**
 		 * High priority, this box is seen right below the post/page edit screen.

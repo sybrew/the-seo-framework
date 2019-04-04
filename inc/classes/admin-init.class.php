@@ -45,9 +45,11 @@ class Admin_Init extends Init {
 
 		$autoenqueue = false;
 
+		// TODO forward this check to init_admin_scripts()?
+
 		if ( $this->is_seo_settings_page() ) {
 			$autoenqueue = true;
-		} else {
+		} elseif ( $hook ) {
 			$enqueue_hooks = [
 				'edit.php',
 				'post.php',
@@ -57,10 +59,23 @@ class Admin_Init extends Init {
 			];
 
 			if ( ! $this->get_option( 'display_seo_bar_tables' ) ) {
-				$enqueue_hooks = array_diff( $enqueue_hooks, [ 'edit.php', 'edit-tags.php' ] );
+				$enqueue_hooks = array_diff( $enqueue_hooks, [
+					'edit.php',
+					'edit-tags.php',
+				] );
 			}
 
-			if ( isset( $hook ) && $hook && in_array( $hook, $enqueue_hooks, true ) ) {
+			if ( ! $this->post_type_supports_custom_seo() ) {
+				$enqueue_hooks = array_diff( $enqueue_hooks, [
+					'edit.php',
+					'post.php',
+					'post-new.php',
+					'edit-tags.php',
+					'term.php',
+				] );
+			}
+
+			if ( in_array( $hook, $enqueue_hooks, true ) ) {
 				if ( $this->post_type_supports_custom_seo() )
 					$autoenqueue = true;
 			}
@@ -102,6 +117,7 @@ class Admin_Init extends Init {
 		$scripts::register( $this->get_default_scripts() );
 
 		if ( $this->is_post_edit() ) {
+			$this->enqueue_post_scripts();
 			$this->enqueue_media_scripts();
 			$this->enqueue_primaryterm_scripts();
 			$this->enqueue_counter_scripts();
@@ -110,6 +126,7 @@ class Admin_Init extends Init {
 				$this->enqueue_gutenberg_compat_scripts();
 			}
 		} elseif ( $this->is_term_edit() ) {
+			$this->enqueue_term_scripts();
 			$this->enqueue_counter_scripts();
 		} elseif ( $this->is_seo_settings_page() ) {
 			$this->enqueue_media_scripts();
@@ -142,14 +159,6 @@ class Admin_Init extends Init {
 					'name'     => 'tsf',
 					'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 					'ver'      => THE_SEO_FRAMEWORK_VERSION,
-					'inline'   => [
-						'.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:checked + .tsf-flex-nav-tab-label' => [
-							'box-shadow:0 -2px 0 0 {{$color_accent}} inset, 0 0 0 0 {{$color_accent}} inset',
-						],
-						'.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:focus + .tsf-flex-nav-tab-label:not(.tsf-no-focus-ring)' => [
-							'box-shadow:0 -2px 0 0 {{$color_accent}} inset, 0 0 0 1px {{$color_accent}} inset',
-						],
-					],
 				],
 				[
 					'id'       => 'tsf',
@@ -204,7 +213,95 @@ class Admin_Init extends Init {
 	}
 
 	/**
-	 * Enqueues Media Upload and Cropping scripts.
+	 * Enqueues Post/Page edit scripts.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @return void Early if already enqueued.
+	 */
+	public function enqueue_post_scripts() {
+
+		if ( _has_run( __METHOD__ ) ) return;
+
+		//! PHP 5.4 compat: put in var.
+		$scripts = $this->Scripts();
+		$scripts::register( [
+			[
+				'id'       => 'tsf-post',
+				'type'     => 'js',
+				'deps'     => [ 'jquery', 'tsf-tt', 'tsf' ],
+				'autoload' => true,
+				'name'     => 'post',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+				'l10n'     => [
+					'name' => 'tsfPostL10n',
+					'data' => [],
+				],
+			],
+			[
+				'id'       => 'tsf-post',
+				'type'     => 'css',
+				'deps'     => [ 'tsf-tt', 'tsf' ],
+				'autoload' => true,
+				'hasrtl'   => true,
+				'name'     => 'post',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+				'inline'   => [
+					'.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:checked + .tsf-flex-nav-tab-label' => [
+						'box-shadow:0 -2px 0 0 {{$color_accent}} inset, 0 0 0 0 {{$color_accent}} inset',
+					],
+					'.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:focus + .tsf-flex-nav-tab-label:not(.tsf-no-focus-ring)' => [
+						'box-shadow:0 -2px 0 0 {{$color_accent}} inset, 0 0 0 1px {{$color_accent}} inset',
+					],
+				]
+			],
+		] );
+	}
+
+	/**
+	 * Enqueues term edit scripts.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @return void Early if already enqueued.
+	 */
+	public function enqueue_term_scripts() {
+
+		if ( _has_run( __METHOD__ ) ) return;
+
+		//! PHP 5.4 compat: put in var.
+		$scripts = $this->Scripts();
+		$scripts::register( [
+			// [
+			// 	'id'       => 'tsf-term',
+			// 	'type'     => 'js',
+			// 	'deps'     => [ 'jquery', 'tsf-tt', 'tsf' ],
+			// 	'autoload' => true,
+			// 	'name'     => 'term',
+			// 	'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+			// 	'ver'      => THE_SEO_FRAMEWORK_VERSION,
+			// 	'l10n'     => [
+			// 		'name' => 'tsfTermL10n',
+			// 		'data' => [],
+			// 	],
+			// ],
+			// [
+			// 	'id'       => 'tsf-term',
+			// 	'type'     => 'css',
+			// 	'deps'     => [ 'tsf-tt', 'tsf' ],
+			// 	'autoload' => true,
+			// 	'hasrtl'   => false,
+			// 	'name'     => 'term',
+			// 	'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+			// 	'ver'      => THE_SEO_FRAMEWORK_VERSION,
+			// ],
+		] );
+	}
+
+	/**
+	 * Enqueues Gutenberg-related scripts.
 	 *
 	 * @since 3.2.0
 	 *
@@ -214,12 +311,13 @@ class Admin_Init extends Init {
 
 		if ( _has_run( __METHOD__ ) ) return;
 
+		//! PHP 5.4 compat: put in var.
 		$scripts = $this->Scripts();
 		$scripts::register( [
 			[
 				'id'       => 'tsf-gbc',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf', 'wp-editor', 'wp-data', 'lodash', 'react' ],
+				'deps'     => [ 'jquery', 'tsf', 'tsf-post', 'wp-editor', 'wp-data', 'lodash', 'react' ],
 				'autoload' => true,
 				'name'     => 'tsf-gbc',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -348,13 +446,13 @@ class Admin_Init extends Init {
 				'id'   => 'tsf-pt-gb',
 				'name' => 'pt-gb',
 			];
-			$deps = [ 'jquery', 'tsf', 'wp-hooks', 'wp-element', 'wp-components', 'wp-url', 'wp-api-fetch', 'lodash', 'react' ];
+			$deps = [ 'jquery', 'tsf', 'tsf-post', 'wp-hooks', 'wp-element', 'wp-components', 'wp-url', 'wp-api-fetch', 'lodash', 'react' ];
 		} else {
 			$vars = [
 				'id'   => 'tsf-pt',
 				'name' => 'pt',
 			];
-			$deps = [ 'jquery', 'tsf', 'tsf-tt' ];
+			$deps = [ 'jquery', 'tsf', 'tsf-post', 'tsf-tt' ];
 		}
 
 		//! PHP 5.4 compat: put in var.

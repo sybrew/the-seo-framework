@@ -252,6 +252,8 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 
 = 3.3.0 - Multiplex =
 
+..., and, for developers, we've finally introduced a reliable JavaScript API. Documentation will follow (based on frequently asked requests).
+
 **Detailed log:**
 
 **For everyone:**
@@ -259,6 +261,9 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 * **Added:**
 	* TODO maybe: We now generate a proposed description of your content every minute.
 	* TODO maybe: We now parse shortcodes for the content dynamically.
+	* TODO maybe: multidimensional settings?
+	* TODO We've added more term settings, including:
+		* TODO
 * **Changed:**
 	* TODO? We switched the homepage title option name from left to right, and right to left.
 		* This doesn't affect your titles, it's only semantics.
@@ -349,23 +354,31 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 		* Last but not least, WordPress is moving from plain HTML and PHP to JS. We need to get ourselves well prepared for this shift.
 		* Affected files, both `.css` and `.js` (and their `*.min.*` equivalents):
 			* DONE:
-				* `tsf`, this file is now trimmed down to the most basic of forms.
-					* **Before**: 27.7KB minified, 2782 SLOC
-					* **After:** 19.4KB minified, (TODO TBD) 2087 SLOC
-				* `tsfc`, this file handles the character and pixel counters.
+				* `tsf`, these main files are now trimmed down to the most basic of forms per dependency requirements.
+					* **JS:**
+						* **Before**: 27.7KB minified, 2782 SLOC
+						* **After:** 17.3KB minified, (TODO TBD) 1844 SLOC
+					* **CSS:**
+						* **Before:** 16.0KB minified, 1006 SLOC
+						* **After:** 4.0KB minfified, (TODO TBD) 425 SLOC
+				* `tsfc`, these files handle the character and pixel counters.
 					* **Namespaces:** `window.tsfC` and `window.tsfCL10n`.
 					* **Script ID:** `tsf-c`
 					* Fun fact: The proposed name was `counter.js`, but uBlock blocks this script name by default.
 					* TODO make counters load in via JS only, the PHP side is useless in this.
 						* Well, PHP is required to annotate the IDs... maybe hide them by default, and unhide them via JS?
-				* `settings`, this file handles the SEO Settings page, mostly.
+				* `settings`, these files handle the SEO Settings page, mostly.
 					* **Namespaces:** `window.tsfSettings` and `window.tsfSettingsL10n`.
 					* **Script ID:** `tsf-settings`
+				* `post`, these files handle post SEO settings pages, mostly.
+					* **Namespaces:** `window.tsfPost` and `window.tsfPostL10n`.
+					* **Script ID:** `tsf-post`
+				* `term`, these files handle term SEO settings pages, mostly.
+					* **Namespaces:** `window.tsfTerm` and `window.tsfTermL10n`.
+					* **Script ID:** `tsf-term`
 			* TODO (PROPOSED):
 				* `title`, this file handles title input fields.
 				* `description`, this file handles description input fields.
-				* `term`, this file handles term pages.
-				* `post`, this file handles post pages.
 				* `term-overview`, this file handles term overview pages.
 				* `post-overview`, this file handles post overview pages.
 				* `seo-bar`, this file handles the SEO Bar.
@@ -386,7 +399,13 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 					* `updateCharacterCounter`
 					* `triggerCounterUpdate`
 					* `resetCounterListener`
-				* Related localization & attribution object: `tsfCL10n`
+				* Related localization & attribution object: `tsfCL10n`.
+			* Object `tsfSettings`:
+				* Related localization & attribution object: `tsfSettingsL10n`
+			* Object `tsfPost`:
+				* Related localization & attribution object: `tsfPostL10n`.
+			* TODO Object `tsfTerm`:
+				* Related localization & attribution object: `tsfTermL10n`.
 		* **Changed:**
 			* `tsfL10n.params.titleLocation` now mirrors its value with the homepage settings for the homepage.
 				* This used to be a ravioli code mess, now it's a thin lasagna. Bon appetit!
@@ -396,7 +415,12 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 			* `tsf.counterClasses`, use `tsfC.counterClasses` instead.
 			* `tsf._initCounters`, was marked private.
 			* `tsf._initWebmastersInput`, was marked private.
+			* `tsf._initCanonicalInput`, was marked private.
+			* `tsf.flexTabToggle`.
+			* `tsf.addNoFocusClass`.
+			* `tsf.setTabsOnload`.
 			* `tsf.tabToggle`.
+			* `tsf._doFlexResizeListener`, was marked private.
 			* `tsf.taglineToggleOnload`.
 			* `tsf.confirmedReset`.
 			* `tsf.setColorOnload`.

@@ -80,16 +80,12 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @since 2.2.2
 	 * @since 2.9.2 Added static cache so the method can only run once.
-	 * @staticvar bool $run True if already run.
 	 *
 	 * @return void Early if method is already called.
 	 */
 	public function add_menu_link() {
 
-		static $run = false;
-
-		if ( $run )
-			return;
+		if ( _has_run( __METHOD__ ) ) return;
 
 		$menu = [
 			'page_title' => \esc_html__( 'SEO Settings', 'autodescription' ),
@@ -126,8 +122,6 @@ class Admin_Pages extends Inpost {
 
 		//* Enqueue scripts
 		\add_action( 'admin_print_scripts-' . $this->seo_settings_page_hook, [ $this, '_init_admin_scripts' ], 11 );
-
-		$run = true;
 	}
 
 	/**
