@@ -77,6 +77,7 @@ class Query extends Compat {
 		return false;
 	}
 
+	// phpcs:disable -- Method unused in production.
 	/**
 	 * Outputs a doing it wrong notice if an error occurs in the current query.
 	 *
@@ -84,7 +85,6 @@ class Query extends Compat {
 	 *
 	 * @param string $method The original caller method.
 	 */
-	// phpcs:disable -- Method unused in production.
 	protected function do_query_error_notice( $method ) {
 
 		$message = "You've initiated a method that uses queries too early.";
@@ -103,7 +103,8 @@ class Query extends Compat {
 		// 	error_log( var_export( debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, $depth ), true ) );
 		// 	$_more = false;
 		// }
-	} // phpcs:enable
+	}
+	// phpcs:enable -- Method unused in production.
 
 	/**
 	 * Returns the post type name from current screen.
@@ -753,15 +754,33 @@ class Query extends Compat {
 	}
 
 	/**
-	 * Detects preview.
+	 * Detects preview, securely.
 	 *
 	 * @since 2.6.0
+	 * @since 3.3.0 This is now deemed a secure method.
+	 *              1. Added is_user_logged_in() check.
+	 *              2. Added is_singular() check, so get_the_ID() won't cross with blog pages.
+	 *              3. Added current_user_can() check.
+	 *              4. Added wp_verify_nonce() check.
 	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
 	public function is_preview() {
-		return \is_preview();
+
+		$is_preview = false;
+
+		if ( \is_preview()
+		&& \is_user_logged_in()
+		&& \is_singular()
+		&& \current_user_can( 'edit_post', \get_the_ID() )
+		&& isset( $_GET['preview_id'], $_GET['preview_nonce'] )
+		&& \wp_verify_nonce( $_GET['preview_nonce'], 'post_preview_' . (int) $_GET['preview_id'] )
+		) {
+			$is_preview = true;
+		}
+
+		return $is_preview;
 	}
 
 	/**

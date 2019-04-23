@@ -640,6 +640,7 @@ class Site_Options extends Sanitize {
 	 *
 	 * @since 2.5.2
 	 * @see https://www.facebook.com/translations/FacebookLocales.xml
+	 * @see https://wordpress.org/support/topic/oglocale-problem/#post-11456346
 	 * @see $this->language_keys() for the associative array keys.
 	 *
 	 * @return array Valid Facebook locales
@@ -797,6 +798,7 @@ class Site_Options extends Sanitize {
 	 *
 	 * @since 2.5.2
 	 * @see https://www.facebook.com/translations/FacebookLocales.xml
+	 * @see https://wordpress.org/support/topic/oglocale-problem/#post-11456346
 	 *
 	 * @return array Valid Facebook locale keys
 	 */

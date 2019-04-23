@@ -67,7 +67,7 @@ Unlike others, this plugin has no links that cloak your information, and it does
 
 = Getting started =
 
-* Used another plugin? Easily [migrate your SEO Data](https://theseoframework.com/?p=511).
+* Used another plugin? Easily [migrate your SEO data](https://theseoframework.com/?p=511).
 * Lost in the sea of settings? Don't worry! Read our [quick setup guide](https://theseoframework.com/?p=2428).
 * Want to improve your pages? Learn how to [optimize your metadata](https://theseoframework.com/?p=2663).
 
@@ -78,7 +78,7 @@ For more advanced SEO tools and output, check out our free companion plugin [Ext
 * **[Local](https://theseoframework.com/?p=2306)** helps you set up local SEO business information. This could expand your business' "Knowledge Graph" card for local search listings.
 * **[Title Fix](https://theseoframework.com/?p=2298)** fixes incorrect titles that are rendered by old themes.
 
-Visit our [Extensions overview page](https://theseoframework.com/extensions/) for more information.
+Visit our [extensions overview page](https://theseoframework.com/extensions/) for more information.
 
 = Unbranded, Free and for the Professional =
 The SEO Framework is unbranded! This means that we don't even put the name "The SEO Framework" anywhere within the WordPress interface, aside from the plugin activation page. This plugin makes excellent use of the default WordPress interface elements, like as if this plugin is part of WordPress. No ads, no nags. The small and hidden HTML comments can easily be disabled with the use of a filter or extension.
@@ -264,6 +264,7 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 	* TODO maybe: multidimensional settings?
 	* TODO We've added more term settings, including:
 		* TODO
+	* TODO Feeds now have a "X-Robots-tag: noindex, follow" header, so Google doesn't have to guess your intent.
 * **Changed:**
 	* TODO? We switched the homepage title option name from left to right, and right to left.
 		* This doesn't affect your titles, it's only semantics.
@@ -279,6 +280,8 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 	* **Accessibility:**
 		* **Global:**
 			* TODO: none...
+		* **Post edit:**
+			* When using the Block Editor, setting changes are registered consistently again after saving the page.
 		* **Settings page:**
 			* When pasting a webmaster code tag in the respective settings field, no change listener was invoked, and you didn't get an ays-message when navigating from the settings page.
 			* When you clear a sitemap color input field, the default color is now displayed correctly.
@@ -287,12 +290,29 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 
 **For developers:**
 
+* **Improved:**
+	* The class autoloader now considers folder structure automatically, based on the namespace used.
 * **Option notes:**
 	* **Removed:**
 		* `attachment_noindex` and sanitization thereof, since 3.1, this is `noindex_post_types['attachment']`.
 		* `attachment_nofollow` and sanitization thereof, since 3.1, this is `nofollow_post_types['attachment']`.
 		* `attachment_noarchive` and sanitization thereof, since 3.1, this is `noarchive_post_types['attachment']`.
 		* `title_seperator`, since 3.1, this is `title_separator` (not the previous typo).
+* **Class notes:**
+	* **Added:**
+		* `The_SEO_Framework\Bridges\Admin\Scripts`, this file registers all scripts, and is only loaded on the admin screens.
+			* Relies on `The_SEO_Framework\Builders\Scripts` for registering and enqueuing the scripts.
+			* **Public static methods:**
+				* `prepare_media_scripts()`
+				* `get_default_scripts()`
+				* `get_ays_scripts()`
+				* `get_post_scripts()`
+				* `get_term_scripts()`
+				* `get_gutenberg_compat_scripts()`
+				* `get_media_scripts()`
+				* `get_primaryterm_scripts()`
+				* `get_counter_scripts()`
+				* `get_settings_scripts()`
 * **Method notes:**
 	* For object `the_seo_framework()`:
 		* **Added:**
@@ -301,6 +321,8 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 		* **Changed:**
 			* `init_admin_scripts()`, removed deprecated parameter notice.
 			* `set_url_scheme()`, removed deprecated parameter notice.
+			* `is_preview()`, now checks the user capabilities, because WordPress blindly agrees with this state.
+			* TODO `get_robots_txt_url()` now also uses `$wp_query->using_index_permalinks()` to determine invalidity.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`
@@ -326,6 +348,15 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 				* `generate_description()`
 				* `description_from_custom_field()`
 				* `generate_description_from_id()`
+			* Public methods, these were marked private:
+				* `set_js_nonces()`
+				* `get_js_nonces()`
+		* **Deprecated:**
+			* **With alternatives**, refer to the source for a relayed alternative:
+				* `get_default_scripts()`,
+				* `enqueue_gutenberg_compat_scripts()`
+				* `enqueue_media_scripts()`
+				* `enqueue_primaryterm_scripts()`
 * **Filter notes:**
 	* **Fixed:**
 		* `the_seo_framework_title_from_generation`, now works for:
@@ -357,7 +388,7 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 				* `tsf`, these main files are now trimmed down to the most basic of forms per dependency requirements.
 					* **JS:**
 						* **Before**: 27.7KB minified, 2782 SLOC
-						* **After:** 17.3KB minified, (TODO TBD) 1844 SLOC
+						* **After:** 15.5KB minified, (TODO TBD) 173 SLOC
 					* **CSS:**
 						* **Before:** 16.0KB minified, 1006 SLOC
 						* **After:** 4.0KB minfified, (TODO TBD) 425 SLOC
@@ -376,6 +407,9 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 				* `term`, these files handle term SEO settings pages, mostly.
 					* **Namespaces:** `window.tsfTerm` and `window.tsfTermL10n`.
 					* **Script ID:** `tsf-term`
+				* `ays` - meaning "Are you sure?", these files handle on-navigation alerts, so to prevent loss of data.
+					* **Namespaces:** `window.tsfAys` and `window.tsfAysL10n`
+					* **Script ID:** `tsf-ays`
 			* TODO (PROPOSED):
 				* `title`, this file handles title input fields.
 				* `description`, this file handles description input fields.
@@ -406,34 +440,54 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 				* Related localization & attribution object: `tsfPostL10n`.
 			* TODO Object `tsfTerm`:
 				* Related localization & attribution object: `tsfTermL10n`.
+			* Object `tsfAys`:
+				* Methods:
+					* `reset`
+					* `getChangedState`
+					* `registerChange`
+					* `deregisterChange`
+					* `registerChangeListener`
+					* `registerResetListener`
+					* `registerUnloadListener`
+					* `reloadDefaultListeners`
+				* Related localization & attribution object: `tsfAysL10n`.
+			* Global:
+				* After tsfAys registers or resets its listeners, this jQuery event is triggered:
+					* `$( document.body ).trigger( 'tsf-registered-ays-listeners' );`
 		* **Changed:**
 			* `tsfL10n.params.titleLocation` now mirrors its value with the homepage settings for the homepage.
 				* This used to be a ravioli code mess, now it's a thin lasagna. Bon appetit!
 			* `tsfL10n.params.defaultTitle` now appends term prefixes, when applicable.
 		* **Removed:**
-			* `tsf.counterType`, use `tsfC.counterType` instead.
-			* `tsf.counterClasses`, use `tsfC.counterClasses` instead.
-			* `tsf._initCounters`, was marked private.
-			* `tsf._initWebmastersInput`, was marked private.
-			* `tsf._initCanonicalInput`, was marked private.
-			* `tsf.flexTabToggle`.
-			* `tsf.addNoFocusClass`.
-			* `tsf.setTabsOnload`.
-			* `tsf.tabToggle`.
-			* `tsf._doFlexResizeListener`, was marked private.
-			* `tsf.taglineToggleOnload`.
-			* `tsf.confirmedReset`.
-			* `tsf.setColorOnload`.
-			* `tsfL10n.i18n.inputGuidelines`, use `tsfCL10n.i18n.guidelines` instead.
-			* `tsfL10n.i18n.pixelsUsed`, use `tsfCL10n.i18n.pixelsUsed` instead.
-			* `tsfL10n.i18n.confirmReset`, use `tsfSettingsL10n.i18n.confirmReset` instead.
-			* `tsfL10n.params.inputGuidelines`, use `tsfCL10n.guidelines` instead.
-			* `tsfL10n.states.useTermPrefix`.
-			* `tsfL10n.states.isTermEdit`.
-			* `tsfL10n.states.postType`.
-			* `tsfL10n.states.counterType`.
-			* `tsfL10n.params.termName`.
-			* `tsfL10n.params.objectTitle`.
+			* `tsf.[...]`:
+				* `tsf.counterType`, use `tsfC.counterType` instead.
+				* `tsf.counterClasses`, use `tsfC.counterClasses` instead.
+				* `tsf._initCounters`, was marked private.
+				* `tsf._initWebmastersInput`, was marked private.
+				* `tsf._initCanonicalInput`, was marked private.
+				* `tsf.flexTabToggle`.
+				* `tsf.addNoFocusClass`.
+				* `tsf.setTabsOnload`.
+				* `tsf.tabToggle`.
+				* `tsf._doFlexResizeListener`, was marked private.
+				* `tsf.taglineToggleOnload`.
+				* `tsf.confirmedReset`.
+				* `tsf.setColorOnload`.
+				* `tsf.onLoadUnregisterChange`
+				* `tsf.attachUnsavedChangesListener`, use `tsfAys.registerListeners` instead.
+				* `tsf.registerChange`, use `tsfAys.registerChange` instead.
+			* `tsfL10n.[...]`:
+				* `tsfL10n.i18n.inputGuidelines`, use `tsfCL10n.i18n.guidelines` instead.
+				* `tsfL10n.i18n.pixelsUsed`, use `tsfCL10n.i18n.pixelsUsed` instead.
+				* `tsfL10n.i18n.confirmReset`, use `tsfSettingsL10n.i18n.confirmReset` instead.
+				* `tsfL10n.i18n.saveAlert`, use `tsfAysL10n.i18n.saveAlert` instead.
+				* `tsfL10n.params.inputGuidelines`, use `tsfCL10n.guidelines` instead.
+				* `tsfL10n.states.useTermPrefix`.
+				* `tsfL10n.states.isTermEdit`.
+				* `tsfL10n.states.postType`.
+				* `tsfL10n.states.counterType`.
+				* `tsfL10n.params.termName`.
+				* `tsfL10n.params.objectTitle`.
 
 = 3.2.4 =
 

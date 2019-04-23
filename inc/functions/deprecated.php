@@ -25,6 +25,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * This file contains most functions that have been deprecated.
+ * We don't want to rush removing these, as missing functions cause fatal errors.
  *
  * @ignore
  *

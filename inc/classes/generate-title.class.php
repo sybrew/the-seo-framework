@@ -1040,12 +1040,14 @@ class Generate_Title extends Generate_Description {
 	 * Returns the addition and seplocation from arguments.
 	 *
 	 * @since 3.2.2
+	 * @since 3.3.0 Is now public due to structural requirements. Do not use this!
+	 * @access private
 	 * @see $this->merge_title_branding();
 	 *
 	 * @param array $args The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @return array { 'addition', 'seplocation' }
 	 */
-	protected function get_title_branding_from_args( array $args ) {
+	public function get_title_branding_from_args( array $args ) {
 
 		if ( ! $args['taxonomy'] && $this->is_real_front_page_by_id( $args['id'] ) ) {
 			$addition    = $this->get_home_page_tagline();

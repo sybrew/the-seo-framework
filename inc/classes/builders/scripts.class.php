@@ -35,7 +35,7 @@ $_load_scripts_class = function() {
 };
 
 /**
- * Registers and outputs inpost GUI scripts. Auto-invokes everything the moment
+ * Registers and outputs admin GUI scripts. Auto-invokes everything the moment
  * this file is required.
  * Relies on \WP_Dependencies to prevent duplicate loading, and autoloading.
  *
@@ -76,7 +76,7 @@ final class Scripts {
 	/**
 	 * The internal singleton object holder.
 	 * @since 3.1.0
-	 * @param The_SEO_Framework\Builders\Scripts $instance The instance.
+	 * @param \The_SEO_Framework\Builders\Scripts $instance The instance.
 	 */
 	private static $instance;
 
@@ -105,6 +105,7 @@ final class Scripts {
 	 *
 	 * @since 3.1.0
 	 * @access private
+	 * @staticvar int $count Enforces singleton.
 	 * @internal
 	 */
 	public function __construct() {

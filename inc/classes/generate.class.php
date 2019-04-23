@@ -346,6 +346,7 @@ class Generate extends User_Data {
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
 		 * @param string $type The OG type.
+		 * @param int    $id   The page/term/object ID.
 		 */
 		return $type = (string) \apply_filters_ref_array(
 			'the_seo_framework_ogtype_output',

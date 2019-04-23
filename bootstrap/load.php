@@ -97,7 +97,7 @@ function _init_tsf() {
 	}
 
 	// did_action() checks for current action too.
-	if ( false === \did_action( 'plugins_loaded' ) )
+	if ( ! \did_action( 'plugins_loaded' ) )
 		$tsf->_doing_it_wrong( 'the_seo_framework() or ' . __FUNCTION__, 'Use <code>the_seo_framework()</code> after action <code>plugins_loaded</code> priority 5.', '3.1' );
 
 	return $tsf;
@@ -111,6 +111,7 @@ spl_autoload_register( __NAMESPACE__ . '\\_autoload_classes', true, true );
  * @since 2.8.0
  * @since 3.1.0 1. No longer maintains cache.
  *              2. Now always returns void.
+ * @since 3.3.0 Streamlined folder lookup by more effectively using the namespace.
  * @uses THE_SEO_FRAMEWORK_DIR_PATH_CLASS
  * @access private
  *
@@ -122,30 +123,29 @@ spl_autoload_register( __NAMESPACE__ . '\\_autoload_classes', true, true );
  */
 function _autoload_classes( $class ) {
 
-	if ( 0 !== strpos( $class, 'The_SEO_Framework\\', 0 ) )
-		return;
+	if ( 0 !== strpos( $class, 'The_SEO_Framework\\', 0 ) ) return;
 
-	$strip = 'The_SEO_Framework\\';
+	$_chunks       = explode( '\\', strtolower( $class ) );
+	$_chunck_count = count( $_chunks );
 
-	if ( strpos( $class, '_Interface' ) ) {
-		$path      = THE_SEO_FRAMEWORK_DIR_PATH_INTERFACE;
-		$extension = '.interface.php';
-		$class     = str_replace( '_Interface', '', $class );
+	if ( $_chunck_count > 2 ) {
+		//? $length = $_chunck_count - ( 2 = $offset (1) + $class name (1) )
+		$rel_dir = implode( DIRECTORY_SEPARATOR, array_splice( $_chunks, 1, $_chunck_count - 2 ) ) . DIRECTORY_SEPARATOR;
 	} else {
-		$path      = THE_SEO_FRAMEWORK_DIR_PATH_CLASS;
-		$extension = '.class.php';
-
-		//: substr_count( $class, '\\', 2 ) >= 2 // strrpos... str_split...
-		if ( 0 === strpos( $class, 'The_SEO_Framework\\Builders\\' ) ) {
-			$path  .= 'builders' . DIRECTORY_SEPARATOR;
-			$strip .= 'Builders\\';
-		}
+		$rel_dir = '';
 	}
 
-	$class = strtolower( str_replace( $strip, '', $class ) );
-	$class = str_replace( '_', '-', $class );
+	$class = str_replace( '_', '-', end( $_chunks ) );
 
-	require $path . $class . $extension;
+	if ( strpos( $class, '-interface' ) ) {
+		$file = str_replace( '-interface', '', $class ) . '.interface.php';
+		$path = THE_SEO_FRAMEWORK_DIR_PATH_INTERFACE;
+	} else {
+		$file = $class . '.class.php';
+		$path = THE_SEO_FRAMEWORK_DIR_PATH_CLASS;
+	}
+
+	require $path . $rel_dir . $file;
 }
 
 \add_action( 'activate_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, __NAMESPACE__ . '\\_do_plugin_activation' );
