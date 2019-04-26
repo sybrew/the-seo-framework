@@ -7,4 +7,4 @@ assignees: ''
 
 ---
 
-<!-- We'd love to know what we can add! Please elaborate why you think this feature is useful. -->
+<!-- We'd love to know what we can add! Please elaborate on why you think this feature is useful. -->

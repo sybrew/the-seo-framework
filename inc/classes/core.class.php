@@ -41,7 +41,7 @@ class Core {
 	 * @since 3.1.0
 	 * @access protected
 	 *         Don't alter this variable!!!
-	 * @var true $loaded
+	 * @var boolean $loaded
 	 */
 	public $loaded = false;
 

@@ -13,12 +13,12 @@ switch ( $instance ) :
 	case 'the_seo_framework_robots_metabox_main':
 		//* Robots types
 		$types = [
-			'category'   => __( 'Category', 'autodescription' ),
-			'tag'        => __( 'Tag', 'autodescription' ),
-			'author'     => __( 'Author', 'autodescription' ),
-			'date'       => __( 'Date', 'autodescription' ),
-			'search'     => __( 'Search Pages', 'autodescription' ),
-			'site'       => _x( 'the entire site', '...for the entire site', 'autodescription' ),
+			'category' => __( 'Category', 'autodescription' ),
+			'tag'      => __( 'Tag', 'autodescription' ),
+			'author'   => __( 'Author', 'autodescription' ),
+			'date'     => __( 'Date', 'autodescription' ),
+			'search'   => __( 'Search Pages', 'autodescription' ),
+			'site'     => _x( 'the entire site', '...for the entire site', 'autodescription' ),
 		];
 
 		$post_types = $this->get_rewritable_post_types();
@@ -27,17 +27,14 @@ switch ( $instance ) :
 		$robots = [
 			'noindex' => [
 				'value' => 'noindex',
-				'name'  => __( 'NoIndex', 'autodescription' ),
 				'desc'  => __( 'These options most likely prevent indexing of the selected archives and pages. If you enable this, the selected archives or pages will urge to be removed from search engine results pages.', 'autodescription' ),
 			],
 			'nofollow' => [
 				'value' => 'nofollow',
-				'name'  => __( 'NoFollow', 'autodescription' ),
 				'desc'  => __( 'These options most likely prevent links from being followed on the selected archives and pages. If you enable this, the selected archives or pages in-page links will gain no SEO value, including your own links.', 'autodescription' ),
 			],
 			'noarchive' => [
 				'value' => 'noarchive',
-				'name'  => __( 'NoArchive', 'autodescription' ),
 				'desc'  => __( 'These options most likely prevent caching of the selected archives and pages. If you enable this, bots are urged not create a cached copy of the selected archives or pages.', 'autodescription' ),
 			],
 		];
@@ -114,17 +111,12 @@ switch ( $instance ) :
 
 	case 'the_seo_framework_robots_metabox_no':
 		$ro_value = $robots['value'];
-		$ro_name  = esc_html( $robots['name'] );
 		$ro_i18n  = $robots['desc'];
-		$ro_name_wrapped = $this->code_wrap( $ro_name );
+
+		$ro_name_wrapped = $this->code_wrap( $ro_value );
 
 		?>
-		<h4>
-		<?php
-			/* translators: %s = Category/Tag/Attachment/Site/Search */
-			printf( esc_html__( '%s Robots Settings', 'autodescription' ), $ro_name ); // xss ok
-		?>
-		</h4>
+		<h4><?php esc_html_e( 'Robots Settings', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( $ro_i18n );
 		?>

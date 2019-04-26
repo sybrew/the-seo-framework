@@ -33,23 +33,23 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Inpost extends Profile {
 
 	/**
-	 * Defines inpost nonce name.
-	 *
 	 * @since 2.7.0
 	 * @since 3.2.0 Added '_nonce' suffix.
-	 *
-	 * @var string The nonce name.
+	 * @var string The inpost nonce name.
 	 */
 	public $inpost_nonce_name = 'tsf_inpost_seo_settings_nonce';
 
 	/**
-	 * Defines inpost nonce field.
-	 *
 	 * @since 2.7.0
-	 *
-	 * @var string The nonce field.
+	 * @var string The inpost nonce field.
 	 */
 	public $inpost_nonce_field = 'tsf_inpost_nonce';
+
+	/**
+	 * @since 3.3.0
+	 * @var string The quick edit column name.
+	 */
+	public $quick_edit_column_name = 'tsf-quick-edit';
 
 	/**
 	 * Outputs in-post flex navigational wrapper and its content.
@@ -72,6 +72,113 @@ class Inpost extends Profile {
 	public function inpost_flex_nav_tab_wrapper( $id, $tabs = [], $version = '2.3.6', $use_tabs = true ) {
 		$this->get_view( 'inpost/wrap-nav', get_defined_vars() );
 		$this->get_view( 'inpost/wrap-content', get_defined_vars() );
+	}
+
+	/**
+	 * Prepares the quick/bulk edit column.
+	 * This column is a dummy, but it's required to display quick/bulk edit items.
+	 *
+	 * @since 3.3.0
+	 * @access private
+	 *
+	 * @param \WP_Screen|string $screen \WP_Screen
+	 */
+	public function _prepare_quick_edit_columns( $screen ) {
+
+		if ( ! $this->is_wp_lists_edit() )
+			return;
+
+		/**
+		 * @since 3.3.0
+		 * @param bool $allow_quick_edit Whether to engage the quick/bulk edit fields.
+		 */
+		if ( ! \apply_filters( 'the_seo_framework_allow_quick_edit', true ) )
+			return;
+
+		if ( ! $this->post_type_supports_custom_seo( $screen->post_type ) )
+			return;
+
+		$taxonomy = isset( $screen->taxonomy ) ? $screen->taxonomy : '';
+
+		if ( $taxonomy && ! $this->taxonomy_supports_custom_seo( $taxonomy ) )
+			return;
+
+		\add_filter( 'manage_' . $screen->id . '_columns', [ $this, '_set_quick_edit_column' ], 10, 1 );
+		\add_filter( 'hidden_columns', [ $this, '_hide_quick_edit_column' ], 10, 1 );
+	}
+
+	/**
+	 * Adds hidden column to access quick/bulk-edit.
+	 *
+	 * @since 3.3.0
+	 * @access private
+	 *
+	 * @param array $columns The existing columns
+	 * @return array $columns the column data
+	 */
+	public function _set_quick_edit_column( $columns ) {
+		// Don't set a title, otherwise it's displayed in the screen settings.
+		$columns[ $this->quick_edit_column_name ] = '';
+		return $columns;
+	}
+
+	/**
+	 * Permanently hides quick/bulk-edit column.
+	 *
+	 * @since 3.3.0
+	 * @access private
+	 *
+	 * @param array $columns The existing columns
+	 * @return array $columns the column data
+	 */
+	public function _hide_quick_edit_column( $hidden ) {
+		$hidden[] = $this->quick_edit_column_name;
+		return $hidden;
+	}
+
+	/**
+	 * Displays the SEO bulk edit fields.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param string $column_name Name of the column to edit.
+	 * @param string $post_type   The post type slug, or current screen name if this is a taxonomy list table.
+	 */
+	public function _display_bulk_edit_fields( $column_name, $post_type ) {
+
+		if ( $this->quick_edit_column_name !== $column_name ) return;
+
+		// Future-proofer, might WordPress ever add bulk-edits for terms.
+		if ( $this->is_archive_admin() ) return;
+
+		// echo 'test bulk';
+	}
+
+	/**
+	 * Displays the SEO quick edit fields.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param string $column_name Name of the column to edit.
+	 * @param string $post_type   The post type slug, or current screen name if this is a taxonomy list table.
+	 * @param string taxonomy     The taxonomy name, if any.
+	 */
+	public function _display_quick_edit_fields( $column_name, $post_type, $taxonomy = '' ) {
+
+		if ( $this->quick_edit_column_name !== $column_name ) return;
+
+		if ( $taxonomy ) {
+			// $post_type is the current screen, 'edit-tags', on the term-overview screens.
+			if ( ! $this->taxonomy_supports_custom_seo( $taxonomy ) ) return;
+		} else {
+			if ( ! $this->post_type_supports_custom_seo( $post_type ) ) return;
+		}
+
+		if ( $taxonomy ) {
+			// echo 'test term';
+		} else {
+			// echo 'test post';
+		}
 	}
 
 	/**

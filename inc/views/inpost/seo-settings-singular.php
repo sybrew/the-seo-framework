@@ -150,10 +150,10 @@ switch ( $instance ) :
 						<div><strong><?php esc_html_e( 'Canonical URL', 'autodescription' ); ?></strong></div>
 						<div>
 						<?php
-						$this->make_info(
-							__( 'This urges search engines to go to the outputted URL.', 'autodescription' ),
-							'https://support.google.com/webmasters/answer/139066?hl=' . $language
-						);
+							$this->make_info(
+								__( 'This urges search engines to go to the outputted URL.', 'autodescription' ),
+								'https://support.google.com/webmasters/answer/139066?hl=' . $language
+							);
 						?>
 						</div>
 					</label>
@@ -169,67 +169,72 @@ switch ( $instance ) :
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 					<div class="tsf-flex-setting-label-item tsf-flex">
 						<div><strong><?php esc_html_e( 'Robots Meta Settings', 'autodescription' ); ?></strong></div>
+						<div>
+						<?php
+							$this->make_info(
+								__( 'These directives may urge robots not to display, follow links on, or create a cached copy of this page.', 'autodescription' ),
+								'https://developers.google.com/search/reference/robots_meta_tag#valid-indexing--serving-directives'
+							);
+						?>
+						</div>
 					</div>
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<?php
 				if ( $this->is_static_frontpage( $post_id ) ) {
-					$this->attention( __( 'Warning: No public site should ever disable indexing or following for the homepage.', 'autodescription' ), false );
+					echo '<p style=margin-top:0>';
+						$this->attention( __( 'Warning: No public site should ever disable indexability or followability for the homepage.', 'autodescription' ), false );
+						echo '<br>';
+						$this->description( __( 'Note: A non-default selection will overwrite the homepage settings.', 'autodescription' ), false );
+					echo '</p>';
 				}
+
+				$r_defaults = $this->robots_meta( [ 'id' => $post_id ], 0b11 );
+				$r_settings = [
+					'noindex'   => [
+						'id'        => 'autodescription_noindex',
+						'option'    => '_genesis_noindex',
+						'force_on'  => 'index',
+						'force_off' => 'noindex',
+						'label'     => __( 'Set page indexability to:', 'autodescription' ),
+						'_default'  => empty( $r_defaults['noindex'] ) ? 'index' : 'noindex',
+					],
+					'nofollow'  => [
+						'id'        => 'autodescription_nofollow',
+						'option'    => '_genesis_nofollow',
+						'force_on'  => 'follow',
+						'force_off' => 'nofollow',
+						'label'     => __( 'Set link followability to:', 'autodescription' ),
+						'_default'  => empty( $r_defaults['nofollow'] ) ? 'follow' : 'nofollow',
+					],
+					'noarchive' => [
+						'id'        => 'autodescription_noarchive',
+						'option'    => '_genesis_noarchive',
+						'force_on'  => 'archive',
+						'force_off' => 'noarchive',
+						'label'     => __( 'Set page archivability to:', 'autodescription' ),
+						'_default'  => empty( $r_defaults['noarchive'] ) ? 'archive' : 'noarchive',
+					],
+				];
+
+				foreach ( $r_settings as $_s ) :
+					echo $this->make_single_select_form( [
+						'id'      => $_s['id'],
+						'class'   => 'tsf-select-block',
+						'name'    => sprintf( 'autodescription[%s]', $_s['option'] ),
+						'label'   => $_s['label'],
+						'options' => [
+							/* translators: %s = default option value */
+							0  => sprintf( __( 'Default (%s)', 'autodescription' ), $_s['_default'] ),
+							-1 => $_s['force_on'],
+							1  => $_s['force_off'],
+						],
+						'default' => $this->get_custom_field( $_s['option'] ),
+						// 'info'    => $_s['_info'],
+					] );
+				endforeach;
 				?>
-				<div class="tsf-checkbox-wrapper">
-					<label for="autodescription_noindex">
-						<input type="checkbox" name="autodescription[_genesis_noindex]" id="autodescription_noindex" value="1" <?php checked( $this->get_custom_field( '_genesis_noindex' ) ); ?> />
-						<?php
-						/* translators: 1: Option, 2: Post or Page */
-						printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'noindex' ), esc_html( $type ) );
-						echo ' ';
-						$this->make_info(
-							sprintf(
-								__( 'This tells search engines not to show this %s in their search results.', 'autodescription' ),
-								$type
-							),
-							'https://support.google.com/webmasters/answer/93710?hl=' . $language
-						);
-						?>
-					</label>
-				</div>
-				<div class="tsf-checkbox-wrapper">
-					<label for="autodescription_nofollow"><input type="checkbox" name="autodescription[_genesis_nofollow]" id="autodescription_nofollow" value="1" <?php checked( $this->get_custom_field( '_genesis_nofollow' ) ); ?> />
-					<?php
-						/* translators: 1: Option, 2: Post or Page */
-						printf( esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ), $this->code_wrap( 'nofollow' ), esc_html( $type ) );
-						echo ' ';
-						$this->make_info(
-							/* translators: %s is Post or Page */
-							sprintf( __( 'This tells search engines not to follow links on this %s.', 'autodescription' ), $type ),
-							'https://support.google.com/webmasters/answer/96569?hl=' . $language
-						);
-					?>
-					</label>
-				</div>
-				<div class="tsf-checkbox-wrapper">
-					<label for="autodescription_noarchive"><input type="checkbox" name="autodescription[_genesis_noarchive]" id="autodescription_noarchive" value="1" <?php checked( $this->get_custom_field( '_genesis_noarchive' ) ); ?> />
-					<?php
-						printf(
-							/* translators: 1: Option, 2: Post or Page */
-							esc_html__( 'Apply %1$s to this %2$s', 'autodescription' ),
-							$this->code_wrap( 'noarchive' ),
-							esc_html( $type )
-						);
-						echo ' ';
-						$this->make_info(
-							sprintf(
-								/* translators: %s is Post or Page */
-								__( 'This tells search engines not to save a cached copy of this %s.', 'autodescription' ),
-								$type
-							),
-							'https://support.google.com/webmasters/answer/79812?hl=' . $language
-						);
-					?>
-					</label>
-				</div>
 			</div>
 		</div>
 
@@ -252,11 +257,7 @@ switch ( $instance ) :
 				<div class="tsf-checkbox-wrapper">
 					<label for="autodescription_exclude_local_search"><input type="checkbox" name="autodescription[exclude_local_search]" id="autodescription_exclude_local_search" value="1" <?php checked( $this->get_custom_field( 'exclude_local_search' ) ); ?> />
 						<?php
-						/* translators: %s = Post type name */
-						printf( esc_html__( 'Exclude this %s from local search', 'autodescription' ), esc_html( $type ) );
-						echo ' ';
-						/* translators: %s = Post type name */
-						$this->make_info( sprintf( __( 'This excludes this %s from local on-site search results.', 'autodescription' ), $type ) );
+						esc_html_e( 'Exclude this page from all search queries on this site.', 'autodescription' );
 						?>
 					</label>
 				</div>
@@ -265,11 +266,7 @@ switch ( $instance ) :
 				<div class="tsf-checkbox-wrapper">
 					<label for="autodescription_exclude_from_archive"><input type="checkbox" name="autodescription[exclude_from_archive]" id="autodescription_exclude_from_archive" value="1" <?php checked( $this->get_custom_field( 'exclude_from_archive' ) ); ?> />
 						<?php
-						/* translators: %s = Post type name */
-						printf( esc_html__( 'Exclude this %s from all archive listings.', 'autodescription' ), esc_html( $type ) );
-						echo ' ';
-						/* translators: %s = Post type name */
-						$this->make_info( sprintf( __( 'This excludes this %s from on-site archive pages.', 'autodescription' ), $type ) );
+						esc_html_e( 'Exclude this page from all archive queries on this site.', 'autodescription' );
 						?>
 					</label>
 				</div>

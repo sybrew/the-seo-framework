@@ -32,7 +32,7 @@ switch ( $instance ) :
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'auto_description',
-				__( 'Automatically generate description?', 'autodescription' ),
+				__( 'Automatically generate descriptions?', 'autodescription' ),
 				'',
 				true
 			),

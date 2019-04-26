@@ -35,15 +35,18 @@ switch ( $instance ) :
 		], true );
 
 		if ( $this->rss_uses_excerpt() ) {
-			$reading_settings_url = admin_url( 'options-reading.php' );
-			$reading_settings_title = __( 'Reading Settings', 'default' );
-			$reading_settings = '<a href="' . esc_url( $reading_settings_url ) . '" target="_blank" title="' . esc_attr( $reading_settings_title ) . '">' . esc_html( $reading_settings_title ) . '</a>';
-
-			$this->description_noesc( sprintf(
-				/* translators: %s = Reading Settings */
-				esc_html__( 'Note: The feed is already converted into an excerpt (summary) through the %s.', 'autodescription' ),
-				$reading_settings
-			) );
+			$this->description_noesc(
+				//* Markdown escapes.
+				$this->convert_markdown(
+					sprintf(
+						/* translators: %s = Reading Settings URL, markdown */
+						esc_html__( 'Note: The feed is already converted into an excerpt through the [Reading Settings](%s).', 'autodescription' ),
+						esc_url( admin_url( 'options-reading.php' ) )
+					),
+					[ 'a' ],
+					[ 'a_internal' => false ]
+				)
+			);
 		}
 
 		$this->description_noesc(

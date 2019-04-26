@@ -107,6 +107,8 @@ class Post_Data extends Detect {
 		if ( empty( $_POST['autodescription'] ) ) // CSRF ok, this is an early test to improve performance.
 			return;
 
+		// TODO add quick-edit condition here, and discard/filter default entry if $_POST item is not set?
+
 		/**
 		 * @since 3.1.0
 		 * @param array    $defaults
@@ -178,12 +180,15 @@ class Post_Data extends Detect {
 					continue 2;
 
 				case '_tsf_title_no_blogname':
-				case '_genesis_noindex':
-				case '_genesis_nofollow':
-				case '_genesis_noarchive':
 				case 'exclude_local_search':
 				case 'exclude_from_archive':
 					$value = $this->s_one_zero( $value );
+					continue 2;
+
+				case '_genesis_noindex':
+				case '_genesis_nofollow':
+				case '_genesis_noarchive':
+					$value = $this->s_qubit( $value );
 					continue 2;
 
 				default:

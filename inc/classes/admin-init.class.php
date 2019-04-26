@@ -48,35 +48,28 @@ class Admin_Init extends Init {
 		if ( $this->is_seo_settings_page() ) {
 			$autoenqueue = true;
 		} elseif ( $hook ) {
-			$enqueue_hooks = [
-				'edit.php',
-				'post.php',
-				'post-new.php',
-				'edit-tags.php',
-				'term.php',
-			];
 
-			if ( ! $this->get_option( 'display_seo_bar_tables' ) ) {
-				$enqueue_hooks = array_diff( $enqueue_hooks, [
-					'edit.php',
-					'edit-tags.php',
-				] );
-			}
+			$enqueue_hooks = [];
 
-			if ( ! $this->post_type_supports_custom_seo() ) {
-				$enqueue_hooks = array_diff( $enqueue_hooks, [
+			if ( $this->post_type_supports_custom_seo() ) {
+				$enqueue_hooks = [
 					'edit.php',
 					'post.php',
 					'post-new.php',
 					'edit-tags.php',
 					'term.php',
-				] );
+				];
+
+				if ( ! $this->get_option( 'display_seo_bar_tables' ) ) {
+					$enqueue_hooks = array_diff( $enqueue_hooks, [
+						'edit.php',
+						'edit-tags.php',
+					] );
+				}
 			}
 
-			if ( in_array( $hook, $enqueue_hooks, true ) ) {
-				if ( $this->post_type_supports_custom_seo() )
-					$autoenqueue = true;
-			}
+			if ( in_array( $hook, $enqueue_hooks, true ) )
+				$autoenqueue = true;
 		}
 
 		$autoenqueue and $this->init_admin_scripts();

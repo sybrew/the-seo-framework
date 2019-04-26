@@ -44,7 +44,7 @@
 			<property name="customEscapingFunctions" type="array" value="sanitize_key"/>
 			<!-- Custom list of functions whose return values are pre-escaped for output. -->
 			<!-- TEMP - We use this to hack the incompleteness of the check: PHP_EOL -->
-			<property name="customAutoEscapedFunctions" type="array" value="convert_markdown,description,code_wrap,PHP_EOL"/>
+			<property name="customAutoEscapedFunctions" type="array" value="convert_markdown,description,code_wrap,make_single_select_form,PHP_EOL"/>
 			<!-- Custom list of functions which print output incorporating the passed values. -->
 			<property name="customPrintingFunctions" type="array" value=""/>
 		</properties>

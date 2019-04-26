@@ -30,7 +30,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  *
  * @since 2.8.0
  */
-class Query extends Compat {
+class Query extends Core {
 
 	/**
 	 * Checks for pretty permalinks.
@@ -117,6 +117,22 @@ class Query extends Compat {
 	public function get_admin_post_type() {
 		global $current_screen;
 		return isset( $current_screen->post_type ) ? $current_screen->post_type : '';
+	}
+
+	/**
+	 * Returns a list of post types shared with the taxonomy.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param string $taxonomy Optional. The taxonomy to check. Defaults to current screen/query taxomy.
+	 * @return array List of post types.
+	 */
+	public function get_post_types_from_taxonomy( $taxonomy = '' ) {
+
+		$taxonomy = $taxonomy ?: $this->get_current_taxonomy();
+		$tax      = $taxonomy ? \get_taxonomy( $taxonomy ) : null;
+
+		return ! empty( $tax->object_type ) ? $tax->object_type : [];
 	}
 
 	/**

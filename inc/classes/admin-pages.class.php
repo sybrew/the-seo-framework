@@ -661,7 +661,7 @@ class Admin_Pages extends Inpost {
 	 * @since 2.6.0
 	 *
 	 * @param string $input The input to wrap. Should already be escaped.
-	 * @param boolean $echo Whether to escape echo or just return.
+	 * @param bool   $echo Whether to escape echo or just return.
 	 * @return string|void Wrapped $input.
 	 */
 	public function wrap_fields( $input = '', $echo = false ) {
@@ -674,6 +674,30 @@ class Admin_Pages extends Inpost {
 		} else {
 			return '<div class="tsf-fields">' . $input . '</div>';
 		}
+	}
+
+	/**
+	 * Makes simple and JSON-encoded data-* tags for HTML elements.
+	 *
+	 * @since 3.3.0
+	 * @internal
+	 *
+	 * @param array $data
+	 * @return string The HTML data tags.
+	 */
+	public function get_field_data( array $data ) {
+
+		$ret = '';
+		foreach ( $data as $k => $v ) {
+			if ( is_array( $v ) ) {
+				//* NOTE: Using single quotes.
+				$ret .= sprintf( " data-%s='%s'", $k, json_encode( $v, JSON_UNESCAPED_SLASHES ) );
+			} else {
+				$ret .= sprintf( ' data-%s="%s"', $k, $v );
+			}
+		}
+
+		return $ret;
 	}
 
 	/**
@@ -789,6 +813,90 @@ class Admin_Pages extends Inpost {
 		$output .= $args['description'] ? sprintf( '<p class="description tsf-option-spacer">%s</p>', $args['description'] ) : '';
 
 		return $output;
+	}
+
+	/**
+	 * Returns a HTML select form elements for qubit options: -1, 0, or 1.
+	 * Does not support "multiple" field selections.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param array $args : {
+	 *    @param string     $id       The select field ID.
+	 *    @param string     $class    The div wrapper class.
+	 *    @param string     $name     The option name.
+	 *    @param int|string $default  The current option value.
+	 *    @param array      $options  The select option values : { value => name }
+	 *    @param string     $label    The option label.
+	 *    @param string     $required Whether the field must be required.
+	 *    @param array      $data     The select field data.
+	 *    @param array      $info     Extra info field data.
+	 * }
+	 * @return string The option field.
+	 */
+	public function make_single_select_form( array $args ) {
+
+		$defaults = [
+			'id'       => '',
+			'class'    => '',
+			'name'     => '',
+			'default'  => '',
+			'options'  => [],
+			'label'    => '',
+			'required' => false,
+			'data'     => [],
+			'info'     => [],
+		];
+
+		$args = array_merge( $defaults, $args );
+
+		$html_options = $args['options'];
+		/**
+		 * This effectively destroys the option array. As such, we assigned a new value.
+		 *
+		 * @param string $name    The option name. Passed by reference, returned as the HTML option item.
+		 * @param mixed  $value
+		 * @param mixed  $default
+		 */
+		array_walk( $html_options, function( &$name, $value, $default ) {
+			$name = sprintf(
+				'<option value="%s"%s>%s</option>',
+				\esc_attr( $value ),
+				$value == $default ? ' selected' : '', // loose comparison OK.
+				\esc_html( $name )
+			);
+		}, $args['default'] );
+
+		return vsprintf(
+			sprintf( '<div class="%s">%s</div>',
+				\esc_attr( $args['class'] ),
+				( \is_rtl() ? '%2$s%1$s%3$s' : '%1$s%2$s%3$s' )
+			),
+			[
+				vsprintf(
+					'<label for=%s>%s</label>',
+					[
+						$this->sanitize_field_id( $args['id'] ),
+						\esc_html( $args['label'] ),
+					]
+				),
+				$args['info'] ? ' ' . $this->make_info(
+					$args['info'][0],
+					isset( $args['info'][1] ) ? $args['info'][1] : '',
+					false
+				) : '',
+				vsprintf(
+					'<select id=%s name=%s %s %s>%s</select>',
+					[
+						$this->sanitize_field_id( $args['id'] ),
+						\esc_attr( $args['name'] ),
+						$args['required'] ? 'required' : '',
+						$args['data'] ? $this->get_field_data( $args['data'] ) : '',
+						implode( $html_options ),
+					]
+				),
+			]
+		);
 	}
 
 	/**

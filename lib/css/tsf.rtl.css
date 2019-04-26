@@ -271,6 +271,23 @@ input.tsf-disabled {
 	margin: 1em 0;
 }
 
+.tsf-select-wrap {
+	margin-top: 7px;
+	margin-bottom: 14px;
+}
+.tsf-select-wrap:last-of-type {
+	margin-bottom: 0;
+}
+
+.tsf-select-block > select {
+	margin-top: 7px;
+	margin-bottom: 14px;
+	display: block;
+}
+.tsf-select-block:last-of-type > select {
+	margin-bottom: 0;
+}
+
 .tsf-checkbox-wrapper {
 	margin-top: 15px;
 }

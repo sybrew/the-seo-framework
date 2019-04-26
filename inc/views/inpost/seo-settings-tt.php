@@ -33,30 +33,51 @@ $description_placeholder = $this->get_generated_description( [
 	'taxonomy' => $taxonomy,
 ] );
 
+$robots_defaults = $this->robots_meta( [
+	'id'       => $term_id,
+	'taxonomy' => $taxonomy,
+], 0b11 );
+
+// TODO reintroduce the info blocks, and place the labels at the left, instead??
 $robots_settings = [
-	'noindex' => [
-		'value' => $noindex,
-		'info'  => $this->make_info(
-			__( 'This tells search engines not to show this term in their search results.', 'autodescription' ),
-			'https://support.google.com/webmasters/answer/93710?hl=' . $language,
-			false
-		),
+	'noindex'   => [
+		'id'        => 'autodescription-meta[noindex]',
+		'option'    => 'noindex',
+		'force_on'  => 'index',
+		'force_off' => 'noindex',
+		'label'     => __( 'Set term indexability to:', 'autodescription' ),
+		'_default'  => empty( $robots_defaults['noindex'] ) ? 'index' : 'noindex',
+		'_value'    => $noindex,
+		// '_info'     => [
+		// 	__( 'This tells search engines not to show this term in their search results.', 'autodescription' ),
+		// 	'https://support.google.com/webmasters/answer/93710?hl=' . $language,
+		// ],
 	],
-	'nofollow' => [
-		'value' => $nofollow,
-		'info'  => $this->make_info(
-			__( 'This tells search engines not to follow links on this term.', 'autodescription' ),
-			'https://support.google.com/webmasters/answer/96569?hl=' . $language,
-			false
-		),
+	'nofollow'  => [
+		'id'        => 'autodescription-meta[nofollow]',
+		'option'    => 'nofollow',
+		'force_on'  => 'follow',
+		'force_off' => 'nofollow',
+		'label'     => __( 'Set link followability to:', 'autodescription' ),
+		'_default'  => empty( $robots_defaults['nofollow'] ) ? 'follow' : 'nofollow',
+		'_value'    => $nofollow,
+		// '_info'     => [
+		// 	__( 'This tells search engines not to follow links on this term.', 'autodescription' ),
+		// 	'https://support.google.com/webmasters/answer/96569?hl=' . $language,
+		// ],
 	],
 	'noarchive' => [
-		'value' => $noarchive,
-		'info'  => $this->make_info(
-			__( 'This tells search engines not to save a cached copy of this term.', 'autodescription' ),
-			'https://support.google.com/webmasters/answer/79812?hl=' . $language,
-			false
-		),
+		'id'        => 'autodescription-meta[noarchive]',
+		'option'    => 'noarchive',
+		'force_on'  => 'archive',
+		'force_off' => 'noarchive',
+		'label'     => __( 'Set term archivability to:', 'autodescription' ),
+		'_default'  => empty( $robots_defaults['noarchive'] ) ? 'archive' : 'noarchive',
+		'_value'    => $noarchive,
+		// '_info'     => [
+		// 	__( 'This tells search engines not to save a cached copy of this term.', 'autodescription' ),
+		// 	'https://support.google.com/webmasters/answer/79812?hl=' . $language,
+		// ],
 	],
 ];
 
@@ -132,43 +153,42 @@ $robots_settings = [
 		</tr>
 
 		<tr>
-			<th scope="row" valign="top"><?php esc_html_e( 'Robots Meta Settings', 'autodescription' ); ?></th>
+			<th scope="row" valign="top">
+				<?php
+				esc_html_e( 'Robots Meta Settings', 'autodescription' );
+				echo ' ';
+				$this->make_info(
+					__( 'These directives may urge robots not to display, follow links on, or create a cached copy of this term.', 'autodescription' ),
+					'https://developers.google.com/search/reference/robots_meta_tag#valid-indexing--serving-directives'
+				);
+				?>
+				</th>
 			<td>
 				<?php
-				foreach ( $robots_settings as $type => $data ) :
-					?>
-					<p>
-						<?php
-						vprintf(
-							'<label for="%1$s"><input name="%1$s" id="%1$s" type="checkbox" value="1" %2$s />%3$s</label>',
-							[
-								sprintf( 'autodescription-meta[%s]', esc_attr( $type ) ),
-								checked( $data['value'], true, false ),
-								vsprintf(
-									'%s %s',
-									[
-										sprintf(
-											/* translators: %s = noindex/nofollow/noarchive */
-											esc_html__( 'Apply %s to this term?', 'autodescription' ),
-											$this->code_wrap( $type )
-										),
-										$data['info'],
-									]
-								),
-							]
-						);
-						?>
-					</p>
-					<?php
+				foreach ( $robots_settings as $_s ) :
+					echo $this->make_single_select_form( [
+						'id'      => $_s['id'],
+						'class'   => 'tsf-select-wrap',
+						'name'    => sprintf( 'autodescription[%s]', $_s['option'] ),
+						'label'   => $_s['label'] . ' ',
+						'options' => [
+							/* translators: %s = default option value */
+							0  => sprintf( __( 'Default (%s)', 'autodescription' ), $_s['_default'] ),
+							-1 => $_s['force_on'],
+							1  => $_s['force_off'],
+						],
+						'default' => $_s['_value'],
+					] );
 				endforeach;
-
-				// Output saved flag, if set then it won't fetch alternative meta anymore.
 				?>
-				<label class="hidden" for="autodescription-meta[saved_flag]">
-					<input name="autodescription-meta[saved_flag]" id="autodescription-meta[saved_flag]" type="checkbox" value="1" checked='checked' />
-				</label>
 			</td>
 		</tr>
+		<?php
+		// Output saved flag, if set then it won't fetch alternative meta anymore.
+		?>
+		<label class="hidden" for="autodescription-meta[saved_flag]">
+			<input name="autodescription-meta[saved_flag]" id="autodescription-meta[saved_flag]" type="checkbox" value="1" checked="checked" />
+		</label>
 	</tbody>
 </table>
 <?php

@@ -931,16 +931,11 @@ class Sanitize extends Admin_Pages {
 	 * @return string 'in_query' or 'post_query'
 	 */
 	public function s_alter_query_type( $new_value ) {
-		switch ( $new_value ) {
-			case 'in_query':
-			case 'post_query':
-				return (string) $new_value;
-				break;
 
-			default:
-				return 'in_query';
-				break;
-		}
+		if ( in_array( $new_value, [ 'in_query', 'post_query' ], true ) )
+			return $new_value;
+
+		return 'in_query';
 	}
 
 	/**
@@ -956,6 +951,28 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_one_zero( $new_value ) {
 		return (int) (bool) $new_value;
+	}
+
+	/**
+	 * Returns a -1, 0, or 1, based on nearest value.
+	 *
+	 * @since 3.3.0
+	 * @TODO convert to spaceship ($new_value <=> 0) at PHP 7+
+	 *
+	 * @param mixed $new_value Should ideally be -1, 0, or 1.
+	 * @return int -1, 0, or 1.
+	 */
+	public function s_qubit( $new_value ) {
+
+		if ( ! $new_value ) {
+			$new_value = 0;
+		} elseif ( $new_value < 0 ) {
+			$new_value = -1;
+		} else {
+			$new_value = 1;
+		}
+
+		return $new_value;
 	}
 
 	/**
@@ -1414,12 +1431,13 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @see WordPress Core sanitize_key()
 	 * @since 3.1.0
+	 * @since 3.3.0 Now allows square brackets.
 	 *
 	 * @param string $id The unsanitized ID.
 	 * @return string The sanitized ID.
 	 */
 	public function sanitize_field_id( $id ) {
-		return preg_replace( '/[^a-zA-Z0-9_\-@]/', '', $id );
+		return preg_replace( '/[^a-zA-Z0-9\[\]_\-@]/', '', $id );
 	}
 
 	/**

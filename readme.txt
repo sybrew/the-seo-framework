@@ -101,7 +101,7 @@ Nobody has to know about the tools you've used to create your or someone else's 
 * Automated description output options.
 * Schema.org structured data output options.
 * Various robots meta output options.
-* Many home page specific options.
+* Many homepage specific options.
 * Facebook, Twitter, and Pinterest social integration options.
 * Google, Bing, Pinterest and Yandex webmaster verification codes.
 * Sitemap integration with personalization.
@@ -242,17 +242,30 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 == Changelog ==
 
-TODO: The Sitemap XSL title's -1 integer is converted to a positive integer in get_post_meta()->get_metadata()
+TODO: The Sitemap XSL title's -1 integer is converted to a positive integer in get_post_meta() via use_title_branding() and merge_title_branding()?
+	* The title options will therefore be overwritten.
+	* Use blogname instead?
+	* Use homepage title instead?
+	* Use manual separator integration instead?
 	* Set ID to 0? -> That would match the front page ID if it's a blog.
 	* Don't check? -> That's OK.
 
-TODO: Automatically generate description? -> Automatically generate descriptions?
-TODO: Minify JS files... Ugh Node.JS
+TODO: Re-minify JS files... Ugh Node.JS
+TODO: Re-minify CSS files... Ugh web services
 TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 
 = 3.3.0 - Multiplex =
 
-..., and, for developers, we've finally introduced a reliable JavaScript API. Documentation will follow (based on frequently asked requests).
+TODO Exclaim:
+- Multidimensional/quantum options.
+- Quick & bulk edit, blended perfectly into WordPress' interface.
+- TODO More term options.
+- Downgrading & Backward compatibility warnings.
+- Mixed taxonomies on post type related settings.
+- TODO As smart as a self-driving car: Tooltips stay between the lines. Tesla needs me.
+- TODO Finally (really) translator friendly.
+
+..., and, for developers, we've finally introduced a reliable JavaScript API. Documentation will follow soon (based on frequently asked requests).
 
 **Detailed log:**
 
@@ -261,21 +274,36 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 * **Added:**
 	* TODO maybe: We now generate a proposed description of your content every minute.
 	* TODO maybe: We now parse shortcodes for the content dynamically.
-	* TODO maybe: multidimensional settings?
 	* TODO We've added more term settings, including:
 		* TODO
 	* TODO Feeds now have a "X-Robots-tag: noindex, follow" header, so Google doesn't have to guess your intent.
+	* Multidimensional selection for robots-meta on posts, pages, and terms.
+		* TODO We still need to fix the SEO Bar, and we'll likely move the robots setting groups to labels.
 * **Changed:**
 	* TODO? We switched the homepage title option name from left to right, and right to left.
 		* This doesn't affect your titles, it's only semantics.
 		* NOTE TO SELF: Changing this would require us to change the default options, the filters behavior, and the JS code.. is this the best route?
+	* TODO set `get_logo_uploader_form()`'s flex value to true.
+* **Improved:**
+	* **Spam control:**
+		* Added more `index.php` files which prevent nasty backlinks and crawlers to index this plugin's files when `Indexes` option isn't disabled in Apache.
+			* Add `Options -Indexes` to your `.htaccess` file to prevent this for all plugins that do not honor this behavior.
+	* **Accessibility:**
+		* The homepage settings may now reveal more information on where this data can be altered.
 * **Removed:**
-	* **BACKWARD COMPATIBILITY!** When you upgrade to this version or later, you can't downgrade to v3.0.6 or lower without running into issues.
-		* Downgrading to v3.1.x and v3.2.x is still supported.
-		* Upgrading from v2.7.0 and higher to this version is still supported.
-		* Upgrading from all the way below v2.7.0 (December 2016!) is untested and might cause issues. Double-check your settings!
+	* **DOWNGRADE COMPATIBILITY!** -- Global options.
+		* When you upgrade to this version or later, you can't downgrade to v3.0.6 or lower without running into issues.
+			* Downgrading to v3.1.x and v3.2.x is still supported.
+			* Upgrading from v2.7.0 and higher to this version is still supported.
+			* Upgrading from all the way below v2.7.0 (December 2016!) is untested and might cause issues. Double-check your settings!
+	* **DOWNGRADE COMPATIBILITY!** -- Post, Page, Term meta options.
+		* We added multidimensional options in the form of qubits: -1, 0, 1.
+		* When you upgrade to this version, robots meta-settings for posts, pages, and terms may have a new, previously unkown value entered: `-1`.
+			* This value means "override and disable the default robots-setting".
+				* For example, if you set `noindex` to all tags, but set `-1` to a specific tag, the tag may be indexed.
+			* Because the options were simpler before, `-1` will be treated as `1`. So, when you downgrade, this setting will yield the opposite effect.
 	* TODO maybe: Remove the character counter for titles and descriptions, while keeping them for social inputs?
-	* TODO maybe: strip the removed options... (this will also happen on manual save...)
+	* TODO maybe: strip the removed options on database upgrade... (this will also happen on manual save...)
 * **Fixed:**
 	* **Accessibility:**
 		* **Global:**
@@ -287,18 +315,37 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 			* When you clear a sitemap color input field, the default color is now displayed correctly.
 			* TODO When navigating away from the settings page, after changing the "category prefix" setting, the example no longer reflects the adjusted setting.
 				* Really... this is such an extreme corner-case.
+	* **Usability:**
+		* **Settings:**
+			* The global category and tag `noarchive` options now have an effect.
+			* The global category and tag `noindex` options no longer set `noarchive` automatically, too.
+			* The post type robots-meta and disable-seo settings now only apply to taxonomies that have all their shared post types set, instead of just the type of the most recent post published.
+
+**For translators:**
+
+* **Changed:**
+	* For the nth time: everything.
+	* **Notable changes:**
+		* Fewer `%s`, more markdown.
+		* `home page` is now `homepage`.
+		* Removed and replaced (many) instances of `this %s`.
+* **Updated:**
+	* Translation object; POT file.
 
 **For developers:**
 
 * **Improved:**
 	* The class autoloader now considers folder structure automatically, based on the namespace used.
+	*
 * **Option notes:**
 	* **Removed:**
-		* `attachment_noindex` and sanitization thereof, since 3.1, this is `noindex_post_types['attachment']`.
-		* `attachment_nofollow` and sanitization thereof, since 3.1, this is `nofollow_post_types['attachment']`.
-		* `attachment_noarchive` and sanitization thereof, since 3.1, this is `noarchive_post_types['attachment']`.
-		* `title_seperator`, since 3.1, this is `title_separator` (not the previous typo).
+		* `attachment_noindex` and sanitization thereof, since 3.1 it's changed to `noindex_post_types['attachment']`.
+		* `attachment_nofollow` and sanitization thereof, since 3.1 it's changed to `nofollow_post_types['attachment']`.
+		* `attachment_noarchive` and sanitization thereof, since 3.1 it's changed to `noarchive_post_types['attachment']`.
+		* `title_seperator`, since 3.1 it's changed to `title_separator` (note the previous typo).
 * **Class notes:**
+	* **Noted:**
+		* Methods that you shouldn't use--marked private or aren't visible--aren't listed here, unless specifically annotated.
 	* **Added:**
 		* `The_SEO_Framework\Bridges\Admin\Scripts`, this file registers all scripts, and is only loaded on the admin screens.
 			* Relies on `The_SEO_Framework\Builders\Scripts` for registering and enqueuing the scripts.
@@ -313,16 +360,28 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 				* `get_primaryterm_scripts()`
 				* `get_counter_scripts()`
 				* `get_settings_scripts()`
+	* **Removed:**
+		* `\The_SEO_Framework\Compact`
+			* Loading fewer PHP files is faster, ~0.00001s is saved.
+			* The two methods therein were moved to `\The_SEO_Framework\Load`:
+				* `load_early_compat_files()`, protected.
+				* `_include_compat()`, marked private.
 * **Method notes:**
 	* For object `the_seo_framework()`:
 		* **Added:**
 			* `get_filtered_raw_custom_field_title()`
 			* `get_filtered_raw_generated_title()`
+			* `s_qubit()`, note: this method is not registered as an option filter!
+			* `get_field_data()`
+			* `make_single_select_form()`
+			* `get_post_types_from_taxonomy()`
 		* **Changed:**
 			* `init_admin_scripts()`, removed deprecated parameter notice.
 			* `set_url_scheme()`, removed deprecated parameter notice.
 			* `is_preview()`, now checks the user capabilities, because WordPress blindly agrees with this state.
-			* TODO `get_robots_txt_url()` now also uses `$wp_query->using_index_permalinks()` to determine invalidity.
+			* TODO `get_robots_txt_url()`, now also uses `$wp_query->using_index_permalinks()` to determine invalidity.
+			* `sanitize_field_id()`, now no longer strips square brackets.
+			* `robots_meta()` now has two new parameters.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`
@@ -357,7 +416,13 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 				* `enqueue_gutenberg_compat_scripts()`
 				* `enqueue_media_scripts()`
 				* `enqueue_primaryterm_scripts()`
+				* TODO `load_assets()`
+				* TODO `metabox_scripts()`
 * **Filter notes:**
+	* **Added:**
+		* `the_seo_framework_allow_quick_edit`, boolean.
+	* **Changed:**
+		* `the_seo_framework_robots_meta_array`, now has two new parameter, `$args` and `$ignore`.
 	* **Fixed:**
 		* `the_seo_framework_title_from_generation`, now works for:
 			1. the homepage title in the admin screens.
@@ -488,6 +553,8 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
 				* `tsfL10n.states.counterType`.
 				* `tsfL10n.params.termName`.
 				* `tsfL10n.params.objectTitle`.
+* **Other:**
+	* Cleaned up code, removed redundant calls, finished my homework, took a hike, fed the birds.
 
 = 3.2.4 =
 
@@ -501,7 +568,7 @@ This minor update fixes some old, [leftover bugs](https://theseoframework.com/?p
 
 = 3.2.2 =
 
-This minor update brings [major bug fixes](https://theseoframework.com/?p=3022). Most notoriously, the home page settings now predict the metadata perfectly in the admin screens. Bloggers will love this update, too, because Facebook and Twitter metadata for the home blog page is now always correct.
+This minor update brings [major bug fixes](https://theseoframework.com/?p=3022). Most notoriously, the homepage settings now predict the metadata perfectly in the admin screens. Bloggers will love this update, too, because Facebook and Twitter metadata for the home blog page is now always correct.
 
 For developers, please note that the upcoming major release (3.3.0) will introduce new taxonomical settings. Because the image-rendering integration isn't suited for this, it'll be overhauled. For more information, see [this issue](https://github.com/sybrew/the-seo-framework/issues/403).
 

@@ -144,6 +144,8 @@ class Term_Data extends Post_Data {
 	 * Sanitizes and saves term meta data when a term is altered.
 	 *
 	 * @since 2.7.0
+	 * @since 3.3.0: 1. noindex, nofollow, noarchive are converted to qubits.
+	 *               2. Added new keys to sanitize.
 	 * @securitycheck 3.0.0 OK.
 	 *
 	 * @param int $term_id     Term ID.
@@ -177,6 +179,9 @@ class Term_Data extends Post_Data {
 					case 'noindex':
 					case 'nofollow':
 					case 'noarchive':
+						$data[ $key ] = $this->s_qubit( $value );
+						continue 2;
+
 					case 'saved_flag':
 						$data[ $key ] = $this->s_one_zero( $value );
 						continue 2;

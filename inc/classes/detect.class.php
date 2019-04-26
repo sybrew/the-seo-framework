@@ -264,6 +264,7 @@ class Detect extends Render {
 				return false; // doing it wrong...
 
 			//* Sort alphanumeric by value, put values back after sorting.
+			// TODO Use asort or usort instead???
 			$func = array_flip( $func );
 			ksort( $func );
 			$func = array_flip( $func );
@@ -588,7 +589,8 @@ class Detect extends Render {
 	public function can_do_sitemap_robots( $check_option = true ) {
 
 		if ( $check_option ) {
-			if ( ! $this->get_option( 'sitemaps_output' ) || ! $this->get_option( 'sitemaps_robots' ) )
+			if ( ! $this->get_option( 'sitemaps_output' )
+			|| ! $this->get_option( 'sitemaps_robots' ) )
 				return false;
 		}
 
@@ -988,18 +990,9 @@ class Detect extends Render {
 	 */
 	public function is_taxonomy_disabled( $taxonomy = '' ) {
 
-		$taxonomy = $taxonomy ?: $this->get_current_taxonomy();
-		if ( ! $taxonomy ) return true;
-
-		$tax = \get_taxonomy( $taxonomy );
-
-		if ( false === $tax ) return true;
-
-		if ( ! empty( $tax->object_type ) ) {
-			foreach ( $tax->object_type as $type ) {
-				if ( ! $this->is_post_type_disabled( $type ) )
-					return false;
-			}
+		foreach ( $this->get_post_types_from_taxonomy( $taxonomy ) as $type ) {
+			if ( ! $this->is_post_type_disabled( $type ) )
+				return false;
 		}
 
 		return true;

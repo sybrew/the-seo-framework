@@ -68,99 +68,40 @@ class Generate extends User_Data {
 	 * @since 3.1.0 1. Simplified statements, often (not always) speeding things up.
 	 *              2. Now checks for wc_shop and blog types for pagination.
 	 *              3. Removed noydir.
+	 * @since 3.3.0 1. Now tests for qubit metadata.
+	 *              2. Added custom query support.
+	 *              3. Added two parameters.
 	 * @global \WP_Query $wp_query
 	 *
-	 * @return array|null robots
+	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param int <bit>  $ignore The ignore level. {
+	 *    0 = 0b00: Ignore nothing.
+	 *    1 = 0b01: Ignore protection.
+	 *    2 = 0b10: Ignore post/term setting.
+	 *    3 = 0b11: Ignore protection and post/term setting.
+	 * }
+	 * @return array {
+	 *    string key => string key
+	 * }
 	 */
-	public function robots_meta() {
+	public function robots_meta( $args = null, $ignore = 0b00 ) {
 
-		//* Defaults
+		if ( null === $args ) {
+			$_meta = $this->get_robots_meta_by_query( $ignore );
+		} else {
+			$this->fix_generation_args( $args );
+			$_meta = $this->get_robots_meta_by_args( $args, $ignore );
+		}
+
 		$meta = [
-			'noindex'   => $this->get_option( 'site_noindex' ) ? 'noindex' : '',
-			'nofollow'  => $this->get_option( 'site_nofollow' ) ? 'nofollow' : '',
-			'noarchive' => $this->get_option( 'site_noarchive' ) ? 'noarchive' : '',
+			'noindex'   => '',
+			'nofollow'  => '',
+			'noarchive' => '',
 		];
 
-		//* Check homepage SEO settings, set noindex, nofollow and noarchive
-		if ( $this->is_real_front_page() ) {
-			$meta['noindex']   = $this->get_option( 'homepage_noindex' ) ? 'noindex' : $meta['noindex'];
-			$meta['nofollow']  = $this->get_option( 'homepage_nofollow' ) ? 'nofollow' : $meta['nofollow'];
-			$meta['noarchive'] = $this->get_option( 'homepage_noarchive' ) ? 'noarchive' : $meta['noarchive'];
-
-			if ( $this->get_option( 'home_paged_noindex' ) && ( $this->page() > 1 || $this->paged() > 1 ) ) {
-				$meta['noindex'] = 'noindex';
-			}
-		} else {
-			global $wp_query;
-
-			/**
-			 * Check for 404, or if archive is empty: set noindex for those.
-			 * Don't check this on the homepage. The homepage is sacred in this regard,
-			 * because page builders and templates likely take over.
-			 * @since 2.2.8
-			 *
-			 * @todo maybe create option
-			 * @priority so low... 3.0.0+
-			 */
-			if ( isset( $wp_query->post_count ) && 0 === $wp_query->post_count )
-				$meta['noindex'] = 'noindex';
-
-			$is_archive = $this->is_archive();
-
-			if ( $this->get_option( 'paged_noindex' ) && $this->paged() > 1 ) {
-				if ( $is_archive || $this->is_singular_archive() )
-					$meta['noindex'] = $this->get_option( 'paged_noindex' ) ? 'noindex' : $meta['noindex'];
-			}
-
-			if ( $is_archive ) {
-				$term_data = $this->get_current_term_meta();
-
-				if ( $term_data ) {
-					$meta['noindex']   = ! empty( $term_data['noindex'] ) ? 'noindex' : $meta['noindex'];
-					$meta['nofollow']  = ! empty( $term_data['nofollow'] ) ? 'nofollow' : $meta['nofollow'];
-					$meta['noarchive'] = ! empty( $term_data['noarchive'] ) ? 'noarchive' : $meta['noarchive'];
-				}
-
-				//* If on custom Taxonomy page, but not a category or tag, then should've received specific term SEO settings.
-				if ( $this->is_category() ) {
-					$meta['noindex']   = $this->get_option( 'category_noindex' ) ? 'noindex' : $meta['noindex'];
-					$meta['nofollow']  = $this->get_option( 'category_nofollow' ) ? 'nofollow' : $meta['nofollow'];
-					$meta['noarchive'] = $this->get_option( 'category_noindex' ) ? 'noarchive' : $meta['noarchive'];
-				} elseif ( $this->is_tag() ) {
-					$meta['noindex']   = $this->get_option( 'tag_noindex' ) ? 'noindex' : $meta['noindex'];
-					$meta['nofollow']  = $this->get_option( 'tag_nofollow' ) ? 'nofollow' : $meta['nofollow'];
-					$meta['noarchive'] = $this->get_option( 'tag_noindex' ) ? 'noarchive' : $meta['noarchive'];
-				} elseif ( $this->is_author() ) {
-					$meta['noindex']   = $this->get_option( 'author_noindex' ) ? 'noindex' : $meta['noindex'];
-					$meta['nofollow']  = $this->get_option( 'author_nofollow' ) ? 'nofollow' : $meta['nofollow'];
-					$meta['noarchive'] = $this->get_option( 'author_noarchive' ) ? 'noarchive' : $meta['noarchive'];
-				} elseif ( $this->is_date() ) {
-					$meta['noindex']   = $this->get_option( 'date_noindex' ) ? 'noindex' : $meta['noindex'];
-					$meta['nofollow']  = $this->get_option( 'date_nofollow' ) ? 'nofollow' : $meta['nofollow'];
-					$meta['noarchive'] = $this->get_option( 'date_noarchive' ) ? 'noarchive' : $meta['noarchive'];
-				}
-			} elseif ( $this->is_search() ) {
-				$meta['noindex']   = $this->get_option( 'search_noindex' ) ? 'noindex' : $meta['noindex'];
-				$meta['nofollow']  = $this->get_option( 'search_nofollow' ) ? 'nofollow' : $meta['nofollow'];
-				$meta['noarchive'] = $this->get_option( 'search_noarchive' ) ? 'noarchive' : $meta['noarchive'];
-			}
-		}
-
-		if ( $this->is_singular() ) {
-			$meta['noindex']   = $this->get_custom_field( '_genesis_noindex' ) ? 'noindex' : $meta['noindex'];
-			$meta['nofollow']  = $this->get_custom_field( '_genesis_nofollow' ) ? 'nofollow' : $meta['nofollow'];
-			$meta['noarchive'] = $this->get_custom_field( '_genesis_noarchive' ) ? 'noarchive' : $meta['noarchive'];
-
-			if ( $this->is_protected( $this->get_the_real_ID() ) ) {
-				$meta['noindex'] = 'noindex';
-			}
-		}
-
-		$post_type = \get_post_type();
-		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
-			$o = $this->get_option( $this->get_robots_post_type_option_id( $r ) );
-			if ( ! empty( $o[ $post_type ] ) ) {
-				$meta[ $r ] = $r;
+		foreach ( $_meta as $k => $v ) {
+			if ( $v ) {
+				$meta[ $k ] = $k;
 			}
 		}
 
@@ -168,10 +109,256 @@ class Generate extends User_Data {
 		 * Filters the front-end robots array, and strips empty indexes thereafter.
 		 *
 		 * @since 2.6.0
+		 * @since 3.3.0 Added two parameters.
 		 *
-		 * @param array $meta The current term meta.
+		 * @param array      $meta The current term meta.
+		 * @param array|null $args
+		 * @param int <bit>  $ignore The ignore level. {
+		 *    0 = 0b00: Ignore nothing.
+		 *    1 = 0b01: Ignore protection.
+		 *    2 = 0b10: Ignore post/term setting.
+		 *    3 = 0b11: Ignore protection and post/term setting.
+		 * }
 		 */
-		return array_filter( (array) \apply_filters( 'the_seo_framework_robots_meta_array', $meta ) );
+		return array_filter( (array) \apply_filters_ref_array( 'the_seo_framework_robots_meta_array', [
+			$meta,
+			$args,
+			$ignore,
+		] ) );
+	}
+
+	/**
+	 * Generates the `noindex`, `nofollow`, `noarchive` robots meta code array from query.
+	 *
+	 * @since 3.3.0
+	 * @global \WP_Query $wp_query
+	 *
+	 * @param int <bit>  $ignore The ignore level. {
+	 *    0 = 0b00: Ignore nothing.
+	 *    1 = 0b01: Ignore protection.
+	 *    2 = 0b10: Ignore post/term setting.
+	 *    3 = 0b11: Ignore protection and post/term setting.
+	 * }
+	 * @return array|null robots
+	 */
+	protected function get_robots_meta_by_query( $ignore = 0b00 ) {
+
+		$noindex   = (bool) $this->get_option( 'site_noindex' );
+		$nofollow  = (bool) $this->get_option( 'site_nofollow' );
+		$noarchive = (bool) $this->get_option( 'site_noarchive' );
+
+		//* Check homepage SEO settings, set noindex, nofollow and noarchive
+		if ( $this->is_real_front_page() ) {
+			$noindex   = $noindex || $this->get_option( 'homepage_noindex' );
+			$nofollow  = $nofollow || $this->get_option( 'homepage_nofollow' );
+			$noarchive = $noarchive || $this->get_option( 'homepage_noarchive' );
+
+			if ( ! ( $ignore & 0b01 ) ) :
+				$noindex = $noindex
+						|| ( $this->get_option( 'home_paged_noindex' ) && ( $this->page() > 1 || $this->paged() > 1 ) );
+			endif;
+		} else {
+			global $wp_query;
+
+			/**
+			 * Check for 404, or if archive is empty: set noindex for those.
+			 * Don't check this on the homepage. The homepage is sacred in this regard,
+			 * because page builders and templates can and will take over.
+			 *
+			 * Don't use empty(), null is regarded as indexable.
+			 */
+			if ( isset( $wp_query->post_count ) && ! $wp_query->post_count )
+				$noindex = true;
+
+			if (
+				! $noindex
+				&& $this->get_option( 'paged_noindex' )
+				&& ( $this->is_archive() || $this->is_singular_archive() )
+				&& $this->paged() > 1
+			) {
+				$noindex = true;
+			}
+
+			if ( $this->is_archive() ) {
+				//* If on custom Taxonomy page, but not a category or tag, then should've received specific term SEO settings.
+				if ( $this->is_category() ) {
+					$noindex   = $noindex || $this->get_option( 'category_noindex' );
+					$nofollow  = $nofollow || $this->get_option( 'category_nofollow' );
+					$noarchive = $noarchive || $this->get_option( 'category_noarchive' );
+				} elseif ( $this->is_tag() ) {
+					$noindex   = $noindex || $this->get_option( 'tag_noindex' );
+					$nofollow  = $nofollow || $this->get_option( 'tag_nofollow' );
+					$noarchive = $noarchive || $this->get_option( 'tag_noarchive' );
+				} elseif ( $this->is_author() ) {
+					$noindex   = $noindex || $this->get_option( 'author_noindex' );
+					$nofollow  = $nofollow || $this->get_option( 'author_nofollow' );
+					$noarchive = $noarchive || $this->get_option( 'author_noarchive' );
+				} elseif ( $this->is_date() ) {
+					$noindex   = $noindex || $this->get_option( 'date_noindex' );
+					$nofollow  = $nofollow || $this->get_option( 'date_nofollow' );
+					$noarchive = $noarchive || $this->get_option( 'date_noarchive' );
+				}
+			} elseif ( $this->is_search() ) {
+				$noindex   = $noindex || $this->get_option( 'search_noindex' );
+				$nofollow  = $nofollow || $this->get_option( 'search_nofollow' );
+				$noarchive = $noarchive || $this->get_option( 'search_noarchive' );
+			}
+		}
+
+		if ( $this->is_archive() ) {
+			// Store values from each post type bound to the taxonomy.
+			foreach ( $this->get_post_types_from_taxonomy() as $post_type ) {
+				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
+					// SECURITY: Put in array to circumvent GLOBALS injection.
+					$_post_type_meta[ $r ][] = $this->is_post_type_robots_set( $r, $post_type );
+				}
+			}
+			// Only enable if all post types have the value ticked.
+			foreach ( $_post_type_meta as $_type => $_values ) {
+				$$_type = ! in_array( false, $_values, true );
+			}
+
+			if ( ! ( $ignore & 0b10 ) ) :
+				$term_meta = $this->get_current_term_meta();
+
+				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
+					if ( isset( $term_meta[ $r ] ) ) {
+						// Test qubit
+						$$r = ( $$r | (int) $term_meta[ $r ] ) > 0;
+					}
+				}
+			endif;
+		} elseif ( $this->is_singular() ) {
+
+			$post_type = \get_post_type() ?: $this->get_admin_post_type();
+			foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
+				$$r = $$r || $this->is_post_type_robots_set( $r, $post_type );
+			}
+
+			if ( ! ( $ignore & 0b10 ) ) :
+				$post_meta = [
+					'noindex'   => $this->get_custom_field( '_genesis_noindex' ),
+					'nofollow'  => $this->get_custom_field( '_genesis_nofollow' ),
+					'noarchive' => $this->get_custom_field( '_genesis_noarchive' ),
+				];
+
+				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
+					// Test qubit
+					$$r = ( $$r | (int) $post_meta[ $r ] ) > 0;
+				}
+			endif;
+
+			// Overwrite and ignore the user's settings, regardless; unless ignore is set.
+			if ( ! ( $ignore & 0b01 ) ) :
+				if ( $this->is_protected( $this->get_the_real_ID() ) ) {
+					$noindex = true;
+				}
+			endif;
+		}
+
+		return [
+			'noindex'   => $noindex,
+			'nofollow'  => $nofollow,
+			'noarchive' => $noarchive,
+		];
+	}
+
+	/**
+	 * Generates the `noindex`, `nofollow`, `noarchive` robots meta code array from arguments.
+	 *
+	 * @since 3.3.0
+	 * @global \WP_Query $wp_query
+	 *
+	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param int <bit>  $ignore The ignore level. {
+	 *    0 = 0b00: Ignore nothing.
+	 *    1 = 0b01: Ignore protection.
+	 *    2 = 0b10: Ignore post/term setting.
+	 *    3 = 0b11: Ignore protection and post/term setting.
+	 * }
+	 * @return array|null robots
+	 */
+	protected function get_robots_meta_by_args( $args, $ignore = 0b00 ) {
+
+		$noindex   = (bool) $this->get_option( 'site_noindex' );
+		$nofollow  = (bool) $this->get_option( 'site_nofollow' );
+		$noarchive = (bool) $this->get_option( 'site_noarchive' );
+
+		if ( $args['taxonomy'] ) {
+			if ( 'category' === $args['taxonomy'] ) {
+				$noindex   = $noindex || $this->get_option( 'category_noindex' );
+				$nofollow  = $nofollow || $this->get_option( 'category_nofollow' );
+				$noarchive = $noarchive || $this->get_option( 'category_noarchive' );
+			} elseif ( 'post_tag' === $args['taxonomy'] ) {
+				$noindex   = $noindex || $this->get_option( 'tag_noindex' );
+				$nofollow  = $nofollow || $this->get_option( 'tag_nofollow' );
+				$noarchive = $noarchive || $this->get_option( 'tag_noarchive' );
+			}
+		} else {
+			if ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+				$noindex   = $noindex || $this->get_option( 'homepage_noindex' );
+				$nofollow  = $nofollow || $this->get_option( 'homepage_nofollow' );
+				$noarchive = $noarchive || $this->get_option( 'homepage_noarchive' );
+			}
+		}
+
+		if ( $args['taxonomy'] ) {
+			// Store values from each post type bound to the taxonomy.
+			foreach ( $this->get_post_types_from_taxonomy( $args['taxonomy'] ) as $post_type ) {
+				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
+					// SECURITY: Put in array to circumvent GLOBALS injection.
+					$_post_type_meta[ $r ][] = $this->is_post_type_robots_set( $r, $post_type );
+				}
+			}
+			// Only enable if all post types have the value ticked.
+			foreach ( $_post_type_meta as $_type => $_values ) {
+				$$_type = ! in_array( false, $_values, true );
+			}
+
+			if ( ! ( $ignore & 0b10 ) ) :
+				$term_meta = $this->get_term_meta( $args['id'] );
+
+				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
+					if ( isset( $term_meta[ $r ] ) ) {
+						// Test qubit
+						$$r = ( $$r | (int) $term_meta[ $r ] ) > 0;
+					}
+				}
+			endif;
+		} elseif ( $this->is_singular() ) {
+			$post_type = \get_post_type( $args['id'] );
+			foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
+				$$r = $$r || $this->is_post_type_robots_set( $r, $post_type );
+			}
+
+			if ( ! ( $ignore & 0b10 ) ) :
+				$post_meta = [
+					'noindex'   => $this->get_custom_field( '_genesis_noindex', $args['id'] ),
+					'nofollow'  => $this->get_custom_field( '_genesis_nofollow', $args['id'] ),
+					'noarchive' => $this->get_custom_field( '_genesis_noarchive', $args['id'] ),
+				];
+
+				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
+					if ( isset( $post_meta[ $r ] ) ) {
+						// Test qubit
+						$$r = ( $$r | (int) $post_meta[ $r ] ) > 0;
+					}
+				}
+			endif;
+
+			// Overwrite and ignore the user's settings, regardless; unless ignore is set.
+			if ( ! ( $ignore & 0b01 ) ) :
+				if ( $this->is_protected( $args['id'] ) ) {
+					$noindex = true;
+				}
+			endif;
+		}
+
+		return [
+			'noindex'   => $noindex,
+			'nofollow'  => $nofollow,
+			'noarchive' => $noarchive,
+		];
 	}
 
 	/**

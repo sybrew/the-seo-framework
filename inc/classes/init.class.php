@@ -191,6 +191,15 @@ class Init extends Query {
 			//* Enqueue Taxonomy meta output.
 			\add_action( 'current_screen', [ $this, 'add_taxonomy_seo_box_init' ], 10 );
 
+			//* Prepare quick-edit columns -- required as we need a custom column prior adding bulk/quick-edit fields.
+			\add_action( 'current_screen', [ $this, '_prepare_quick_edit_columns' ], 10 );
+
+			// Add Post bulk-edit fields.
+			\add_action( 'bulk_edit_custom_box', [ $this, '_display_bulk_edit_fields' ], 10, 2 );
+
+			// Add Post/Term quick-edit fields.
+			\add_action( 'quick_edit_custom_box', [ $this, '_display_quick_edit_fields' ], 10, 3 );
+
 			// Add menu links and register $this->seo_settings_page_hook
 			\add_action( 'admin_menu', [ $this, 'add_menu_link' ] );
 

@@ -98,8 +98,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		 */
 		if ( $this->doing_ajax() && \check_ajax_referer( 'add-tag', '_wpnonce_add-tag', false ) ) {
 
-			// TODO why is 'post_tag' here? FIXME?
-			$taxonomy = ! empty( $_POST['taxonomy'] ) ? \sanitize_key( $_POST['taxonomy'] ) : 'post_tag';
+			$taxonomy = ! empty( $_POST['taxonomy'] ) ? \stripslashes_from_strings_only( $_POST['taxonomy'] ) : ''; // Sanitization, CSRF ok
 
 			if ( ! $this->taxonomy_supports_custom_seo( $taxonomy ) )
 				return;
@@ -122,7 +121,7 @@ class Doing_It_Right extends Generate_Ldjson {
 		 * Securely check the referrer, instead of leaving holes everywhere.
 		 */
 		if ( $this->doing_ajax() && \check_ajax_referer( 'inlineeditnonce', '_inline_edit', false ) ) {
-			$post_type = isset( $_POST['post_type'] ) ? \sanitize_key( $_POST['post_type'] ) : false;
+			$post_type = isset( $_POST['post_type'] ) ? \stripslashes_from_strings_only( $_POST['post_type'] ) : false; // Sanitization, CSRF ok
 
 			if ( $post_type && isset( $_POST['post_ID'] ) ) {
 				$post_id = (int) $_POST['post_ID'];
@@ -154,7 +153,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			if ( empty( $_POST['taxonomy'] ) ) return;
 			if ( empty( $_POST['tax_ID'] ) ) return;
 
-			$taxonomy = \sanitize_key( $_POST['taxonomy'] );
+			$taxonomy = \stripslashes_from_strings_only( $_POST['taxonomy'] ); // Sanitization, CSRF ok
 
 			if ( ! $this->taxonomy_supports_custom_seo( $taxonomy ) )
 				return;
@@ -173,7 +172,6 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @since 2.9.1 Now supports inline edit AJAX.
 	 * @securitycheck 3.0.0 OK. NOTE: Sanity check is done in _init_columns_wp_ajax_inline_save_tax()
 	 *                          & _init_columns_wp_ajax_inline_save()
-	 * @TODO clean me up.
 	 *
 	 * @param \WP_Screen|string $screen \WP_Screen
 	 * @param bool $doing_ajax Whether we're doing an AJAX response.
@@ -182,74 +180,101 @@ class Doing_It_Right extends Generate_Ldjson {
 	public function init_columns( $screen = '', $doing_ajax = false ) {
 
 		/**
+		 * @TODO (re)move this? See option `display_seo_bar_tables`...
 		 * @since 2.9.1 or earlier.
 		 * @param bool $show_seo_column Whether to show the SEO Bar column.
 		 */
-		$show_seo_column = (bool) \apply_filters( 'the_seo_framework_show_seo_column', true );
-
-		if ( false === $show_seo_column )
+		if ( ! \apply_filters( 'the_seo_framework_show_seo_column', true ) )
 			return;
 
 		if ( $doing_ajax ) {
 			/** For CSRF @see $this->_init_columns_wp_ajax_inline_save_tax(). */
-			$post_type = isset( $_POST['post_type'] ) ? \sanitize_key( $_POST['post_type'] ) : ''; // CSRF ok
-			$post_type = $post_type ?: ( isset( $_POST['tax_type'] ) ? \sanitize_key( $_POST['tax_type'] ) : '' ); // CSRF ok
+			$post_type = isset( $_POST['post_type'] ) ? \stripslashes_from_strings_only( $_POST['post_type'] ) : ''; // Sanitization, CSRF ok
+			$post_type = $post_type
+					  ?: ( isset( $_POST['tax_type'] ) ? \stripslashes_from_strings_only( $_POST['tax_type'] ) : '' ); // Sanitization, CSRF ok
 		} else {
 			$post_type = isset( $screen->post_type ) ? $screen->post_type : '';
 		}
 
-		if ( $this->post_type_supports_custom_seo( $post_type ) ) :
-			if ( $doing_ajax ) {
-				/** For CSRF @see $this->init_columns_ajax(). */
-				$id = isset( $_POST['screen'] ) ? \sanitize_key( $_POST['screen'] ) : false; // CSRF ok
-				$taxonomy = isset( $_POST['taxonomy'] ) ? \sanitize_key( $_POST['taxonomy'] ) : false; // CSRF ok
+		if ( ! $this->post_type_supports_custom_seo( $post_type ) )
+			return;
 
-				if ( $id ) {
-					//* Everything but inline-save-tax action.
-					\add_filter( 'manage_' . $id . '_columns', [ $this, 'add_column' ], 10, 1 );
+		if ( $doing_ajax ) {
+			$taxonomy = isset( $_POST['taxonomy'] ) ? \stripslashes_from_strings_only( $_POST['taxonomy'] ) : ''; // Sanitization, CSRF ok
+		} else {
+			$taxonomy = isset( $screen->taxonomy ) ? $screen->taxonomy : '';
+		}
 
-					/**
-					 * Always load pages and posts.
-					 * Many CPT plugins rely on these.
-					 */
-					\add_action( 'manage_posts_custom_column', [ $this, 'seo_bar_ajax' ], 1, 3 );
-					\add_action( 'manage_pages_custom_column', [ $this, 'seo_bar_ajax' ], 1, 3 );
-				} elseif ( $taxonomy ) {
+		if ( $taxonomy && ! $this->taxonomy_supports_custom_seo( $taxonomy ) )
+			return;
 
-					if ( ! $this->taxonomy_supports_custom_seo( $taxonomy ) )
-						return;
+		if ( $doing_ajax ) {
+			$this->init_seo_bar_columns_ajax();
+		} else {
+			$this->init_seo_bar_columns( $screen );
+		}
+	}
 
-					//* Action: inline-save-tax does not POST screen.
-					\add_filter( 'manage_edit-' . $taxonomy . '_columns', [ $this, 'add_column' ], 1, 1 );
-				}
+	/**
+	 * Initializes SEO Bar columns for AJAX.
+	 *
+	 * @since 3.3.0
+	 */
+	protected function init_seo_bar_columns_ajax() {
 
-				if ( $taxonomy && $this->taxonomy_supports_custom_seo( $taxonomy ) )
-					\add_filter( 'manage_' . $taxonomy . '_custom_column', [ $this, 'get_taxonomy_seo_bar_ajax' ], 1, 3 );
+		/** For CSRF @see $this->init_columns_ajax(). */
+		$screen_id = isset( $_POST['screen'] ) ? \stripslashes_from_strings_only( $_POST['screen'] ) : ''; // Sanitization, CSRF ok
+		$taxonomy  = isset( $_POST['taxonomy'] ) ? \stripslashes_from_strings_only( $_POST['taxonomy'] ) : ''; // Sanitization, CSRF ok
 
-			} else {
-				$id = isset( $screen->id ) ? $screen->id : '';
+		if ( $screen_id ) {
+			//* Everything but inline-save-tax action.
+			\add_filter( 'manage_' . $screen_id . '_columns', [ $this, 'add_column' ], 10, 1 );
 
-				if ( '' !== $id && $this->is_wp_lists_edit() ) {
+			/**
+			 * Always load pages and posts.
+			 * Many CPT plugins rely on these.
+			 */
+			\add_action( 'manage_posts_custom_column', [ $this, 'seo_bar_ajax' ], 1, 3 );
+			\add_action( 'manage_pages_custom_column', [ $this, 'seo_bar_ajax' ], 1, 3 );
+		} elseif ( $taxonomy ) {
+			/**
+			 * Action "inline-save-tax" does not POST 'screen'.
+			 * @see wp_ajax_inline_save_tax():
+			 * `_get_list_table( 'WP_Terms_List_Table', array( 'screen' => 'edit-' . $taxonomy ) );`
+			 */
+			\add_filter( 'manage_edit-' . $taxonomy . '_columns', [ $this, 'add_column' ], 1, 1 );
+		}
 
-					$taxonomy = isset( $screen->taxonomy ) ? $screen->taxonomy : '';
+		// Not elseif; either request.
+		if ( $taxonomy )
+			\add_filter( 'manage_' . $taxonomy . '_custom_column', [ $this, 'get_taxonomy_seo_bar_ajax' ], 1, 3 );
+	}
 
-					if ( $taxonomy ) {
-						if ( ! $this->taxonomy_supports_custom_seo( $taxonomy ) )
-							return;
+	/**
+	 * Initializes SEO Bar columns.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param \WP_Screen|string $screen \WP_Screen
+	 */
+	protected function init_seo_bar_columns( $screen ) {
 
-						\add_filter( 'manage_' . $taxonomy . '_custom_column', [ $this, 'get_taxonomy_seo_bar' ], 1, 3 );
-					}
+		$id = isset( $screen->id ) ? $screen->id : '';
 
-					\add_filter( 'manage_' . $id . '_columns', [ $this, 'add_column' ], 10, 1 );
-					/**
-					 * Always load pages and posts.
-					 * Many CPT plugins rely on these.
-					 */
-					\add_action( 'manage_posts_custom_column', [ $this, 'seo_bar' ], 1, 3 );
-					\add_action( 'manage_pages_custom_column', [ $this, 'seo_bar' ], 1, 3 );
-				}
-			}
-		endif;
+		if ( ! $id || ! $this->is_wp_lists_edit() )
+			return;
+
+		$taxonomy = isset( $screen->taxonomy ) ? $screen->taxonomy : '';
+		if ( $taxonomy )
+			\add_filter( 'manage_' . $taxonomy . '_custom_column', [ $this, 'get_taxonomy_seo_bar' ], 1, 3 );
+
+		\add_filter( 'manage_' . $id . '_columns', [ $this, 'add_column' ], 10, 1 );
+		/**
+		 * Always load pages and posts.
+		 * Many CPT plugins rely on these.
+		 */
+		\add_action( 'manage_posts_custom_column', [ $this, 'seo_bar' ], 1, 3 );
+		\add_action( 'manage_pages_custom_column', [ $this, 'seo_bar' ], 1, 3 );
 	}
 
 	/**

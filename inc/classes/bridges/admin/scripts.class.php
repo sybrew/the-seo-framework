@@ -35,9 +35,6 @@ $_load_scripts_class = function() {
 	new Scripts();
 };
 
-// PHP 5.6+ :(
-// use function \The_SEO_Framework\_has_run;
-
 /**
  * Prepares admin GUI scripts. Auto-invokes everything the moment this file is required.
  * Relies on \The_SEO_Framework\Builders\Scripts to register and load scripts.
@@ -104,6 +101,7 @@ final class Scripts {
 	 *
 	 * @since 3.3.0
 	 * @access private
+	 * @internal This always runs; build your own loader from the public methods, instead.
 	 */
 	public static function _init() {
 
@@ -240,6 +238,7 @@ final class Scripts {
 	 * Returns default scripts' localization.
 	 *
 	 * @since 3.3.0
+	 *
 	 * @return string The default scripts localization.
 	 */
 	private static function get_javascript_l10n() {
