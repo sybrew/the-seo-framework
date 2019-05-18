@@ -411,7 +411,7 @@ class Admin_Pages extends Inpost {
 	 * @since 2.2.2
 	 * @uses $this->get_field_id() Constructs id attributes for use in form fields.
 	 *
-	 * @param string $id Field id base.
+	 * @param string  $id Field id base.
 	 * @param boolean $echo Whether to escape echo or just return.
 	 * @return string Full field id
 	 */
@@ -432,8 +432,8 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @param string $message The notice message. Expected to be escaped if $escape is false.
 	 * @param string $type The notice type : 'updated', 'error', 'warning'. Expected to be escaped.
-	 * @param bool $a11y Whether to add an accessibility icon.
-	 * @param bool $escape Whether to escape the whole output.
+	 * @param bool   $a11y Whether to add an accessibility icon.
+	 * @param bool   $escape Whether to escape the whole output.
 	 * @return string The dismissible error notice.
 	 */
 	public function generate_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
@@ -472,13 +472,13 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @since 2.7.0
 	 *
-	 * @param $message The notice message. Expected to be escaped if $escape is false.
-	 * @param $type The notice type : 'updated', 'error', 'warning'. Expected to be escaped.
-	 * @param bool $a11y Whether to add an accessibility icon.
-	 * @param bool $escape Whether to escape the whole output.
+	 * @param string $message The notice message. Expected to be escaped if $escape is false.
+	 * @param string $type    The notice type : 'updated', 'error', 'warning'. Expected to be escaped.
+	 * @param bool   $a11y    Whether to add an accessibility icon.
+	 * @param bool   $escape  Whether to escape the whole output.
 	 */
 	public function do_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
-		echo $this->generate_dismissible_notice( $message, $type, (bool) $a11y, (bool) $escape ); // xss ok
+		echo $this->generate_dismissible_notice( $message, $type, (bool) $a11y, (bool) $escape ); // phpcs:ignore -- Use $escape
 	}
 
 	/**
@@ -493,7 +493,7 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @param string $message The notice message. Expected to be escaped if $escape is false.
 	 * @param string $key     The notice key. Must be unique and tied to the stored updates cache option.
-	 * @param array $args : {
+	 * @param array  $args : {
 	 *    'type'   => string Optional. The notification type. Default 'updated'.
 	 *    'a11y'   => bool   Optional. Whether to enable accessibility. Default true.
 	 *    'escape' => bool   Optional. Whether to escape the $message. Default true.
@@ -514,17 +514,16 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @param string $message The notice message. Expected to be escaped if $escape is false.
 	 * @param string $key     The notice key. Must be unique and tied to the stored updates cache option.
-	 * @param array $args : {
+	 * @param array  $args : {
 	 *    'type'   => string Optional. The notification type. Default 'updated'.
 	 *    'a11y'   => bool   Optional. Whether to enable accessibility. Default true.
 	 *    'escape' => bool   Optional. Whether to escape the $message. Default true.
 	 *    'color'  => string Optional. If filled in, it will output the selected color. Default ''.
 	 *    'icon'   => string Optional. If filled in, it will output the selected icon. Default ''.
 	 * }
-	 * @return string The dismissible error notice.
 	 */
 	public function do_dismissible_sticky_notice( $message, $key, $args = [] ) {
-		echo $this->generate_dismissible_sticky_notice( $message, $key, $args ); // xss ok
+		echo $this->generate_dismissible_sticky_notice( $message, $key, $args ); // phpcs:ignore -- Use $args['escape']
 	}
 
 	/**
@@ -574,11 +573,10 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @param string $content Content to be wrapped in the description wrap. Expected to be escaped.
 	 * @param bool   $block Whether to wrap the content in <p> tags.
-	 * @return string Content wrapped in the description wrap.
 	 */
 	public function description_noesc( $content, $block = true ) {
 		$output = '<span class="description">' . $content . '</span>';
-		echo $block ? '<p>' . $output . '</p>' : $output; // xss: method name explains
+		echo $block ? '<p>' . $output . '</p>' : $output; // phpcs:ignore -- Method name says it's not escaped.
 	}
 
 	/**
@@ -589,7 +587,6 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @param string $content Content to be wrapped in the attention wrap.
 	 * @param bool   $block Whether to wrap the content in <p> tags.
-	 * @return string Content wrapped in the attention wrap.
 	 */
 	public function attention( $content, $block = true ) {
 		$this->attention_noesc( \esc_html( $content ), $block );
@@ -602,11 +599,10 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @param string $content Content to be wrapped in the attention wrap. Expected to be escaped.
 	 * @param bool   $block Whether to wrap the content in <p> tags.
-	 * @return string Content wrapped in the attention wrap.
 	 */
 	public function attention_noesc( $content, $block = true ) {
 		$output = '<span class="attention">' . $content . '</span>';
-		echo $block ? '<p>' . $output . '</p>' : $output; // xss: method name explains
+		echo $block ? '<p>' . $output . '</p>' : $output; // phpcs:ignore -- Method name says it's not escaped.
 	}
 
 	/**
@@ -617,7 +613,6 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @param string $content Content to be wrapped in the wrap. Expected to be escaped.
 	 * @param bool   $block Whether to wrap the content in <p> tags.
-	 * @return string Content wrapped in the wrap.
 	 */
 	public function attention_description( $content, $block = true ) {
 		$this->attention_description_noesc( \esc_html( $content ), $block );
@@ -630,11 +625,10 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @param string $content Content to be wrapped in the wrap. Expected to be escaped.
 	 * @param bool   $block Whether to wrap the content in <p> tags.
-	 * @return string Content wrapped in the wrap.
 	 */
 	public function attention_description_noesc( $content, $block = true ) {
 		$output = '<span class="description attention">' . $content . '</span>';
-		echo $block ? '<p>' . $output . '</p>' : $output; // xss: method name explains
+		echo $block ? '<p>' . $output . '</p>' : $output; // phpcs:ignore -- Method name says it's not escaped.
 	}
 
 	/**
@@ -682,7 +676,9 @@ class Admin_Pages extends Inpost {
 	 * @since 3.3.0
 	 * @internal
 	 *
-	 * @param array $data
+	 * @param array $data : {
+	 *    string $k => array|string $v
+	 * }
 	 * @return string The HTML data tags.
 	 */
 	public function get_field_data( array $data ) {
@@ -732,14 +728,14 @@ class Admin_Pages extends Inpost {
 	 * @since 3.1.0
 	 *
 	 * @param array $args : {
-	 *    @type string $id          The option name, used as field ID.
-	 *    @type string $index       The option index, used when the option is an array.
-	 *    @type string $label       The checkbox label description, placed inline of the checkbox.
-	 *    @type string $description The checkbox additional description, placed underneat.
-	 *    @type bool   $escape      Whether to enable escaping of the $label and $description.
-	 *    @type bool   $disabled    Whether to disable the checkbox field.
-	 *    @type bool   $default     Whether to display-as-default. This is autodetermined when no $index is set.
-	 *    @type bool   $warned      Whether to warn the checkbox field value.
+	 *    string $id          The option name, used as field ID.
+	 *    string $index       The option index, used when the option is an array.
+	 *    string $label       The checkbox label description, placed inline of the checkbox.
+	 *    string $description The checkbox additional description, placed underneat.
+	 *    bool   $escape      Whether to enable escaping of the $label and $description.
+	 *    bool   $disabled    Whether to disable the checkbox field.
+	 *    bool   $default     Whether to display-as-default. This is autodetermined when no $index is set.
+	 *    bool   $warned      Whether to warn the checkbox field value.
 	 * }
 	 * @return string HTML checkbox output.
 	 */

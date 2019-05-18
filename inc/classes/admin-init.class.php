@@ -37,6 +37,7 @@ class Admin_Init extends Init {
 	 * Prepares scripts in the admin area.
 	 *
 	 * @since 3.1.0
+	 * @since 3.3.0 Now discerns autoloading between taxonomies and singular types.
 	 * @access private
 	 *
 	 * @param string|null $hook The current page hook.
@@ -51,7 +52,9 @@ class Admin_Init extends Init {
 
 			$enqueue_hooks = [];
 
-			if ( $this->post_type_supports_custom_seo() ) {
+			if ( ( $this->is_archive_admin() && $this->taxonomy_supports_custom_seo() )
+			|| ( $this->is_singular_admin() && $this->post_type_supports_custom_seo() )
+			) {
 				$enqueue_hooks = [
 					'edit.php',
 					'post.php',

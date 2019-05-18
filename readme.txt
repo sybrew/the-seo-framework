@@ -2,9 +2,9 @@
 Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
-Requires at least: 4.6.0
-Tested up to: 5.1.1
-Requires PHP: 5.4.0
+Requires at least: 4.9.0
+Tested up to: 5.2
+Requires PHP: 5.5.0
 Stable tag: 3.2.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -189,10 +189,10 @@ You should read up on our [plugin setup guide](https://theseoframework.com/docs/
 
 == Frequently Asked Questions ==
 
-= Is The SEO Framework Free? =
+= Is The SEO Framework free? =
 
 Absolutely! It will stay free as well, without ads or nags!
-This plugin is all-inclusive without upsells.
+This plugin is all-inclusive, without upsells.
 
 = Is there more? =
 
@@ -242,17 +242,19 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 == Changelog ==
 
-TODO: The Sitemap XSL title's -1 integer is converted to a positive integer in get_post_meta() via use_title_branding() and merge_title_branding()?
-	* The title options will therefore be overwritten.
-	* Use blogname instead?
-	* Use homepage title instead?
-	* Use manual separator integration instead?
-	* Set ID to 0? -> That would match the front page ID if it's a blog.
-	* Don't check? -> That's OK.
-
 TODO: Re-minify JS files... Ugh Node.JS
 TODO: Re-minify CSS files... Ugh web services
-TODO: Drop IE11 support in JS? Make sure the scripts fail to load...
+TODO: Drop IE11 support in JS? Make sure the scripts fail to load... Ugh LTS
+
+TODO, maybe: backslashes are double-stripped from SEO settings...: \\z -> \z -> z
+	TODO test if this is also the case in the SEO meta settings; definitely so for Focus??
+
+TODO: Add a classmap for components, like a "metabox loader", "quickedit loader", and more?
+	* This can affect performance negatively... but it may also speed up things greatly as we offload parsing of redundant PHP, and reduce base-framework (the_seo_framework()) files.
+	* The negative effects are mitigated significantly when an opcode cacher is available, however.
+
+TODO explain why PHP 5.5 is now required.
+TODO update THE_SEO_FRAMEWORK_DB_VERSION to fire PHP upgrade environmental test.
 
 = 3.3.0 - Multiplex =
 
@@ -264,6 +266,7 @@ TODO Exclaim:
 - Mixed taxonomies on post type related settings.
 - TODO As smart as a self-driving car: Tooltips stay between the lines. Tesla needs me.
 - TODO Finally (really) translator friendly.
+- New posts are indexed faster with an even smarter sitemap.
 
 ..., and, for developers, we've finally introduced a reliable JavaScript API. Documentation will follow soon (based on frequently asked requests).
 
@@ -272,24 +275,55 @@ TODO Exclaim:
 **For everyone:**
 
 * **Added:**
-	* TODO maybe: We now generate a proposed description of your content every minute.
-	* TODO maybe: We now parse shortcodes for the content dynamically.
+	* TODO maybe: We now generate a proposed description of your content every minute on Gutenberg pages.
+	* TODO maybe: We now parse shortcodes for the content dynamically, for Focus and description generation-compatibility.
 	* TODO We've added more term settings, including:
 		* TODO
+		* TODO Redirects
+		* TODO Canonical URL
 	* TODO Feeds now have a "X-Robots-tag: noindex, follow" header, so Google doesn't have to guess your intent.
 	* Multidimensional selection for robots-meta on posts, pages, and terms.
 		* TODO We still need to fix the SEO Bar, and we'll likely move the robots setting groups to labels.
 * **Changed:**
+	* We now support WordPress v4.9 and later, instead of WordPress v4.6 and later.
+	* We now support PHP v5.5 and later, instead of PHP v5.4 and later.
 	* TODO? We switched the homepage title option name from left to right, and right to left.
 		* This doesn't affect your titles, it's only semantics.
 		* NOTE TO SELF: Changing this would require us to change the default options, the filters behavior, and the JS code.. is this the best route?
-	* TODO set `get_logo_uploader_form()`'s flex value to true.
+	* TODO set `get_logo_uploader_form()`'s flex value to true, Google allows logos of any dimension...
+	* **SEO Bar:** TODO Other states are now shown when "noindex" is set, regardless.
+		* TODO! Add this state! And rework it, in general...
+		* However, now, when the post is redirected, you'll now only see that.
+	* **Redirects:** When a post is redirected, it will no longer be included in the sitemap.
+	* **Sitemap:** The sitemap post limit now counts all posts, pages, and custom post types; instead of them separately.
+		* Note: Because we can't guess your intent when you set the option (or left it unchanged), we aren't updating this.
+		* New users will have this setting set to 3000 posts, from 1200 previously.
+	* **Sitemap:** The post query has changed.
+		1. First, we find the blog and front-page ID. We add these on top of the sitemap.
+		1. Then, we query all public hierarchical post types (pages). The sitemap query limit is used here, and we query-sort the items by published date, ascending.
+			* TODO update the explanation in the settings pages to represent this...
+		1. Then, we query all public non-hierarchical post types (posts), but no attachments, the sitemap query limit is used again, and we query-sort the items by last updated, descending.
+		1. Finally, we combine the pages and posts, and go through them, each one added will count down from the query limit.
+			* Note that only indexed pages will be displayed. If your sitemap query limit is set to 3000, and you've disabled 1000 pages, you may only see 2000 items (+2 for front-and blog page).
+			* To depict another scenario: If you have 4000 pages indexed, and any number of posts, then you may only see 3000 pages, and no posts.
+			* And another: If you have 2000 pages and 2000 posts indexed, you may only see 2000 pages, and 1000 posts.
+			* Note that, since we added multidimensional selections for noindex, a post type may hog up a large portion of this query without being used.
+				* We may will resolve this inconsistency in the future, as we're considering adding multiple sitemaps.
+	* **Sitemap:** The blog page's priority is now `1.0`, from `0.9`. Note, however, that this feature is disabled by default and deprecated by some search engines.
+	* **Sitemap:** The page and post priorities now deduce based on item's position, instead of that pages always has a priority of `0.9`.
+		* They still start at 0.9.
 * **Improved:**
 	* **Spam control:**
 		* Added more `index.php` files which prevent nasty backlinks and crawlers to index this plugin's files when `Indexes` option isn't disabled in Apache.
 			* Add `Options -Indexes` to your `.htaccess` file to prevent this for all plugins that do not honor this behavior.
 	* **Accessibility:**
 		* The homepage settings may now reveal more information on where this data can be altered.
+	* **Sitemap:**
+		* The blog page (not as homepage) now chooses a better lastmod value; based on whether the blog page was edited, or a new post was recently published.
+			* Before it was only when a post was most recently published.
+	* **Performance:**
+		* The SEO Bar now loads quicker.
+		* We offloaded a large part of the admin-sided scripts to different objects, freeing up RAM and lowering plugin boot-time.
 * **Removed:**
 	* **DOWNGRADE COMPATIBILITY!** -- Global options.
 		* When you upgrade to this version or later, you can't downgrade to v3.0.6 or lower without running into issues.
@@ -303,6 +337,8 @@ TODO Exclaim:
 				* For example, if you set `noindex` to all tags, but set `-1` to a specific tag, the tag may be indexed.
 			* Because the options were simpler before, `-1` will be treated as `1`. So, when you downgrade, this setting will yield the opposite effect.
 	* TODO maybe: Remove the character counter for titles and descriptions, while keeping them for social inputs?
+		* Also remove the related display-options?
+		* Yes, people like the character counter, but it's really not good for SEO.
 	* TODO maybe: strip the removed options on database upgrade... (this will also happen on manual save...)
 * **Fixed:**
 	* **Accessibility:**
@@ -319,7 +355,10 @@ TODO Exclaim:
 		* **Settings:**
 			* The global category and tag `noarchive` options now have an effect.
 			* The global category and tag `noindex` options no longer set `noarchive` automatically, too.
-			* The post type robots-meta and disable-seo settings now only apply to taxonomies that have all their shared post types set, instead of just the type of the most recent post published.
+			* The post type robots-meta and disable-seo settings now only apply to taxonomies that have all their shared post types set, instead of just the post type of the most recent post published.
+	* **Nitpicking:**
+		* The sitemap's XSL stylesheet no longer uses the latest post ID to determine the title generation; instead, it always adds your blogname to the right.
+		* The sitemap now can't exceed the imposed 50,000 limit; unless you use custom filters.
 
 **For translators:**
 
@@ -336,18 +375,30 @@ TODO Exclaim:
 
 * **Improved:**
 	* The class autoloader now considers folder structure automatically, based on the namespace used.
-	*
 * **Option notes:**
 	* **Removed:**
 		* `attachment_noindex` and sanitization thereof, since 3.1 it's changed to `noindex_post_types['attachment']`.
 		* `attachment_nofollow` and sanitization thereof, since 3.1 it's changed to `nofollow_post_types['attachment']`.
 		* `attachment_noarchive` and sanitization thereof, since 3.1 it's changed to `noarchive_post_types['attachment']`.
 		* `title_seperator`, since 3.1 it's changed to `title_separator` (note the previous typo).
+* **Term meta notes:**
+	* **Added:**
+		* TODO `redirect`, URL string.
+		* TODO `canonical`, URL string.
+	* **Changed:**
+		* `noindex`, it can now be set to `-1`.
+		* `nofollow`, it can now be set to `-1`.
+		* `noarchive`, it can now be set to `-1`.
+* **Post meta notes:**
+	* **Changed:**
+		* `_genesis_noindex`, it can now be set to `-1`.
+		* `_genesis_nofollow`, it can now be set to `-1`.
+		* `_genesis_noarchive`, it can now be set to `-1`.
 * **Class notes:**
 	* **Noted:**
 		* Methods that you shouldn't use--marked private or aren't visible--aren't listed here, unless specifically annotated.
 	* **Added:**
-		* `The_SEO_Framework\Bridges\Admin\Scripts`, this file registers all scripts, and is only loaded on the admin screens.
+		* `\The_SEO_Framework\Bridges\Admin\Scripts`, this file registers all scripts, and is only loaded on the admin screens.
 			* Relies on `The_SEO_Framework\Builders\Scripts` for registering and enqueuing the scripts.
 			* **Public static methods:**
 				* `prepare_media_scripts()`
@@ -360,6 +411,14 @@ TODO Exclaim:
 				* `get_primaryterm_scripts()`
 				* `get_counter_scripts()`
 				* `get_settings_scripts()`
+		* `\The_SEO_Framework\Builders\Sitemap`, this file builds the sitemap, and it's only loaded on the sitemap endpoint.
+			* **Public methods:**
+				* `__construct()`
+				* `__destruct()`
+				* `prepare_generation()`
+				* `shutdown_generation()`
+				* `build_sitemap_content()`
+				* `is_post_included_in_sitemap()`
 	* **Removed:**
 		* `\The_SEO_Framework\Compact`
 			* Loading fewer PHP files is faster, ~0.00001s is saved.
@@ -382,6 +441,7 @@ TODO Exclaim:
 			* TODO `get_robots_txt_url()`, now also uses `$wp_query->using_index_permalinks()` to determine invalidity.
 			* `sanitize_field_id()`, now no longer strips square brackets.
 			* `robots_meta()` now has two new parameters.
+			* `init_columns()` is now marked private.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`
@@ -410,6 +470,8 @@ TODO Exclaim:
 			* Public methods, these were marked private:
 				* `set_js_nonces()`
 				* `get_js_nonces()`
+			* Public methods, these were obstructing:
+				* `is_post_included_in_sitemap()`, use `new \The_SEO_Framework\Builders\Sitemap()->is_post_included_in_sitemap()` instead.
 		* **Deprecated:**
 			* **With alternatives**, refer to the source for a relayed alternative:
 				* `get_default_scripts()`,
@@ -421,8 +483,12 @@ TODO Exclaim:
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_allow_quick_edit`, boolean.
+		* `the_seo_framework_sitemap_supported_post_types`, array.
+		* `the_seo_framework_sitemap_hpt_query_args`, array.
+		* `the_seo_framework_sitemap_chpt_query_args`, array.
 	* **Changed:**
-		* `the_seo_framework_robots_meta_array`, now has two new parameter, `$args` and `$ignore`.
+		* `the_seo_framework_robots_meta_array`, now has two new parameters, `$args` and `$ignore`.
+		* `the_seo_framework_sitemap_post_limit`, now has a new parameter, `$hierarchical`.
 	* **Fixed:**
 		* `the_seo_framework_title_from_generation`, now works for:
 			1. the homepage title in the admin screens.
@@ -439,6 +505,15 @@ TODO Exclaim:
 	* **Removed:**
 		* `the_seo_framework_get_term_meta`, this was deprecated since 3.1.0.
 			* Use `the_seo_framework_term_meta_defaults` instead.
+		* `the_seo_framework_show_seo_column`, this is unreliable. Use the options API instead.
+		* `the_seo_framework_sitemap_pages_count`, use the options API or `the_seo_framework_sitemap_post_limit` instead.
+		* `the_seo_framework_sitemap_posts_count`, use the options API or `the_seo_framework_sitemap_post_limit` instead.
+		* `the_seo_framework_sitemap_custom_posts_count`, use the options API or `the_seo_framework_sitemap_post_limit` instead.
+		* `the_seo_framework_sitemap_exclude_cpt`, use `the_seo_framework_sitemap_supported_post_types` instead.
+		* `the_seo_framework_sitemap_pages_query_args`.
+		* `the_seo_framework_sitemap_posts_query_args`.
+		* `the_seo_framework_sitemap_cpt_query_args`.
+		* TODO `the_seo_framework_sitemap_exclude_cpt`, use the options API instead.
 * **Browser notes:**
 	* We've now completely abandoned support for Internet Explorer. Goodbye, old, annoying friend.
 		* TODO consider "no-js versions for IE".
@@ -453,7 +528,7 @@ TODO Exclaim:
 				* `tsf`, these main files are now trimmed down to the most basic of forms per dependency requirements.
 					* **JS:**
 						* **Before**: 27.7KB minified, 2782 SLOC
-						* **After:** 15.5KB minified, (TODO TBD) 173 SLOC
+						* **After:** 15.5KB minified, (TODO TBD) 1723 SLOC
 					* **CSS:**
 						* **Before:** 16.0KB minified, 1006 SLOC
 						* **After:** 4.0KB minfified, (TODO TBD) 425 SLOC
@@ -554,6 +629,8 @@ TODO Exclaim:
 				* `tsfL10n.params.termName`.
 				* `tsfL10n.params.objectTitle`.
 * **Other:**
+	* Updated `composer.json`, now includes developer scripts.
+	* Updated `phpcs.xml`, now uses the newer, non-VIP standards.
 	* Cleaned up code, removed redundant calls, finished my homework, took a hike, fed the birds.
 
 = 3.2.4 =

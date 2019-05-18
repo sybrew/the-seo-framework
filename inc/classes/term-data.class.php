@@ -122,6 +122,7 @@ class Term_Data extends Post_Data {
 	 *
 	 * @since 2.7.0
 	 * @since 3.1.0 This is now always used.
+	 * @since 3.3.0 Added redirect value.
 	 *
 	 * @return array The Term Metadata default options.
 	 */
@@ -133,6 +134,7 @@ class Term_Data extends Post_Data {
 		return (array) \apply_filters( 'the_seo_framework_term_meta_defaults', [
 			'doctitle'    => '',
 			'description' => '',
+			'redirect'    => '',
 			'noindex'     => 0,
 			'nofollow'    => 0,
 			'noarchive'   => 0,
@@ -148,8 +150,8 @@ class Term_Data extends Post_Data {
 	 *               2. Added new keys to sanitize.
 	 * @securitycheck 3.0.0 OK.
 	 *
-	 * @param int $term_id     Term ID.
-	 * @param int $tt_id       Term Taxonomy ID.
+	 * @param int    $term_id  Term ID.
+	 * @param int    $tt_id    Term Taxonomy ID.
 	 * @param string $taxonomy Taxonomy slug
 	 * @return void Early on AJAX call.
 	 */
@@ -184,6 +186,10 @@ class Term_Data extends Post_Data {
 
 					case 'saved_flag':
 						$data[ $key ] = $this->s_one_zero( $value );
+						continue 2;
+
+					case 'redirect':
+						$data[ $key ] = $this->s_redirect_url( $value );
 						continue 2;
 
 					default:

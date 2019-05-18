@@ -5,6 +5,7 @@
  * @TODO change namespace to The_SEO_Framework\Bootstrap
  *       in a future major release.
  */
+
 namespace The_SEO_Framework;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
@@ -129,7 +130,7 @@ function _autoload_classes( $class ) {
 	$_chunck_count = count( $_chunks );
 
 	if ( $_chunck_count > 2 ) {
-		//? $length = $_chunck_count - ( 2 = $offset (1) + $class name (1) )
+		//? directory position = $_chunck_count - ( 2 = $offset (1) + $class name (1) )
 		$rel_dir = implode( DIRECTORY_SEPARATOR, array_splice( $_chunks, 1, $_chunck_count - 2 ) ) . DIRECTORY_SEPARATOR;
 	} else {
 		$rel_dir = '';

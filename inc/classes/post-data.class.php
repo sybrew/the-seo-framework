@@ -41,8 +41,8 @@ class Post_Data extends Detect {
 	 * @since 2.0.0
 	 * @staticvar array $field_cache
 	 *
-	 * @param string $field Custom field key.
-	 * @param int $post_id The post ID
+	 * @param string $field   Custom field key.
+	 * @param int    $post_id The post ID.
 	 * @return string|boolean Return value or false on failure.
 	 */
 	public function get_custom_field( $field, $post_id = null ) {

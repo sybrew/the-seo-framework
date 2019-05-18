@@ -68,18 +68,20 @@ function _print_xsl_global_variables( $tsf ) {
  * Prints XSL title.
  *
  * @since 3.1.0
+ * @since 3.3.0 Now uses a consistent titling scheme.
  * @access private
  * @TODO move this to a dedicated sitemap "module" (a system that loads everything sitemap related).
  * @param \The_SEO_Framework\Load $tsf
  */
 function _print_xsl_title( $tsf ) {
+
 	$title = \__( 'XML Sitemap', 'autodescription' );
-	//? Trick the system into thinking (your CPU is a rock that's tricked doing this) it's not a real page, by feeding a signed int.
-	$tsf->use_title_branding( [ 'id' => -1 ] ) and $tsf->merge_title_branding( $title, [ 'id' => -1 ] );
+	$addition = $tsf->get_blogname();
+	$sep      = $tsf->get_title_separator();
 
 	printf(
 		'<title>%s</title>',
-		\esc_html( \ent2ncr( $title ) )
+		\esc_html( \ent2ncr( "$title $sep $addition" ) )
 	);
 }
 
@@ -253,9 +255,9 @@ function _print_xsl_description( $tsf ) {
 			),
 			[
 				'a' => [
-					'href' => true,
+					'href'   => true,
 					'target' => true,
-					'rel' => true,
+					'rel'    => true,
 				],
 			]
 		)
@@ -307,7 +309,8 @@ function _print_xsl_content( $tsf ) {
 
 	$vars = implode( $vars );
 
-	$content = <<<CONTENT
+	// xss OK.
+	echo <<<CONTENT
 <table>
 	<tr>
 		{$url['th']}
@@ -324,8 +327,6 @@ function _print_xsl_content( $tsf ) {
 	</xsl:for-each>
 </table>
 CONTENT;
-
-	echo $content; // xss OK.
 }
 
 \add_action( 'the_seo_framework_xsl_footer', __NAMESPACE__ . '\\_print_xsl_footer' );

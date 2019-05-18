@@ -132,8 +132,9 @@ class Generate extends User_Data {
 	 *
 	 * @since 3.3.0
 	 * @global \WP_Query $wp_query
+	 * @todo convert binary states to constants for easy maintenance.
 	 *
-	 * @param int <bit>  $ignore The ignore level. {
+	 * @param int <bit> $ignore The ignore level. {
 	 *    0 = 0b00: Ignore nothing.
 	 *    1 = 0b01: Ignore protection.
 	 *    2 = 0b10: Ignore post/term setting.
@@ -206,6 +207,7 @@ class Generate extends User_Data {
 		}
 
 		if ( $this->is_archive() ) {
+			$_post_type_meta = [];
 			// Store values from each post type bound to the taxonomy.
 			foreach ( $this->get_post_types_from_taxonomy() as $post_type ) {
 				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
@@ -266,8 +268,10 @@ class Generate extends User_Data {
 	/**
 	 * Generates the `noindex`, `nofollow`, `noarchive` robots meta code array from arguments.
 	 *
+	 * Note that the home-as-blog page can be used for this method.
+	 *
 	 * @since 3.3.0
-	 * @global \WP_Query $wp_query
+	 * @todo convert binary states to constants for easy maintenance.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @param int <bit>  $ignore The ignore level. {
@@ -303,6 +307,7 @@ class Generate extends User_Data {
 		}
 
 		if ( $args['taxonomy'] ) {
+			$_post_type_meta = [];
 			// Store values from each post type bound to the taxonomy.
 			foreach ( $this->get_post_types_from_taxonomy( $args['taxonomy'] ) as $post_type ) {
 				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
@@ -325,7 +330,7 @@ class Generate extends User_Data {
 					}
 				}
 			endif;
-		} elseif ( $this->is_singular() ) {
+		} elseif ( $args['id'] ) {
 			$post_type = \get_post_type( $args['id'] );
 			foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
 				$$r = $$r || $this->is_post_type_robots_set( $r, $post_type );
@@ -339,10 +344,8 @@ class Generate extends User_Data {
 				];
 
 				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
-					if ( isset( $post_meta[ $r ] ) ) {
-						// Test qubit
-						$$r = ( $$r | (int) $post_meta[ $r ] ) > 0;
-					}
+					// Test qubit
+					$$r = ( $$r | (int) $post_meta[ $r ] ) > 0;
 				}
 			endif;
 
@@ -362,13 +365,94 @@ class Generate extends User_Data {
 	}
 
 	/**
+	 * Generates the `noindex` robots meta code array from arguments.
+	 *
+	 * This method is tailor-made for everything that relies on the noindex-state, as it's
+	 * a very controlling and powerful feature.
+	 *
+	 * Note that the home-as-blog page can be used for this method.
+	 *
+	 * @since 3.3.0
+	 * @todo convert binary states to constants for easy maintenance.
+	 *
+	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param int <bit>  $ignore The ignore level. {
+	 *    0 = 0b00: Ignore nothing.
+	 *    1 = 0b01: Ignore protection.
+	 *    2 = 0b10: Ignore post/term setting.
+	 *    3 = 0b11: Ignore protection and post/term setting.
+	 * }
+	 * @return bool Whether noindex is set or not
+	 */
+	public function is_robots_meta_noindex_set_by_args( $args, $ignore = 0b00 ) {
+
+		$this->fix_generation_args( $args );
+
+		$noindex = (bool) $this->get_option( 'site_noindex' );
+
+		if ( $args['taxonomy'] ) {
+			if ( 'category' === $args['taxonomy'] ) {
+				$noindex   = $noindex || $this->get_option( 'category_noindex' );
+			} elseif ( 'post_tag' === $args['taxonomy'] ) {
+				$noindex   = $noindex || $this->get_option( 'tag_noindex' );
+			}
+		} else {
+			if ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+				$noindex   = $noindex || $this->get_option( 'homepage_noindex' );
+			}
+		}
+
+		if ( $args['taxonomy'] ) {
+			$_post_type_meta = [];
+			// Store values from each post type bound to the taxonomy.
+			foreach ( $this->get_post_types_from_taxonomy( $args['taxonomy'] ) as $post_type ) {
+				// SECURITY: Put in array to circumvent GLOBALS injection.
+				$_post_type_meta['noindex'][] = $this->is_post_type_robots_set( 'noindex', $post_type );
+			}
+			// Only enable if all post types have the value ticked.
+			foreach ( $_post_type_meta as $_type => $_values ) {
+				$$_type = ! in_array( false, $_values, true );
+			}
+
+			if ( ! ( $ignore & 0b10 ) ) :
+				$term_meta = $this->get_term_meta( $args['id'] );
+
+				if ( isset( $term_meta['noindex'] ) ) {
+					// Test qubit
+					$noindex = ( $noindex | (int) $term_meta['noindex'] ) > 0;
+				}
+			endif;
+		} elseif ( $args['id'] ) {
+			$post_type = \get_post_type( $args['id'] );
+			$noindex   = $noindex || $this->is_post_type_robots_set( 'noindex', $post_type );
+
+			if ( ! ( $ignore & 0b10 ) ) :
+				$post_meta = [
+					'noindex' => $this->get_custom_field( '_genesis_noindex', $args['id'] ),
+				];
+				// Test qubit
+				$noindex = ( $noindex | (int) $post_meta['noindex'] ) > 0;
+			endif;
+
+			// Overwrite and ignore the user's settings, regardless; unless ignore is set.
+			if ( ! ( $ignore & 0b01 ) ) :
+				if ( $this->is_protected( $args['id'] ) ) {
+					$noindex = true;
+				}
+			endif;
+		}
+
+		return $noindex;
+	}
+
+	/**
 	 * Determines if the post type has a robots value set.
 	 *
 	 * @since 3.1.0
 	 *
 	 * @param string $type      Accepts 'noindex', 'nofollow', 'noarchive'.
 	 * @param string $post_type The post type, optional. Leave empty to autodetermine type.
-	 * @return bool True if disabled, false otherwise.
+	 * @return bool True if noindex, nofollow, or noarchive is set; false otherwise.
 	 */
 	public function is_post_type_robots_set( $type, $post_type = '' ) {
 		return isset(
@@ -447,7 +531,7 @@ class Generate extends User_Data {
 	 *
 	 * @since 2.5.2
 	 *
-	 * @param $match the locale to match. Defaults to WordPress locale.
+	 * @param string $match the locale to match. Defaults to WordPress locale.
 	 * @return string Facebook acceptable OG locale.
 	 */
 	public function fetch_locale( $match = '' ) {

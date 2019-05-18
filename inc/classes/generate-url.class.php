@@ -947,7 +947,7 @@ class Generate_Url extends Generate_Title {
 	 *
 	 * @since 2.6.0
 	 *
-	 * @param int $paged The current page number.
+	 * @param int  $paged The current page number.
 	 * @param bool $singular Whether to allow plural and singular.
 	 * @param bool $plural Whether to allow plural regardless.
 	 *

@@ -62,7 +62,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @since 2.1.0
 	 * @since 2.9.4 Now listens to `alter_search_query` and `alter_archive_query` options.
 	 *
-	 * @param array $states The current post states array
+	 * @param array    $states The current post states array
 	 * @param \WP_Post $post The Post Object.
 	 * @return array Adjusted $states
 	 */
@@ -93,17 +93,11 @@ class Doing_It_Right extends Generate_Ldjson {
 	 */
 	public function _init_columns_wp_ajax_add_tag() {
 
-		/**
-		 * Securely check the referrer, instead of leaving holes everywhere.
-		 */
-		if ( $this->doing_ajax() && \check_ajax_referer( 'add-tag', '_wpnonce_add-tag', false ) ) {
+		if ( \check_ajax_referer( 'add-tag', '_wpnonce_add-tag', false ) && isset( $_POST['taxonomy'] ) ) {
+			$taxonomy = \stripslashes_from_strings_only( $_POST['taxonomy'] ); // Nonce, Sanitization, CSRF ok
 
-			$taxonomy = ! empty( $_POST['taxonomy'] ) ? \stripslashes_from_strings_only( $_POST['taxonomy'] ) : ''; // Sanitization, CSRF ok
-
-			if ( ! $this->taxonomy_supports_custom_seo( $taxonomy ) )
-				return;
-
-			if ( \current_user_can( \get_taxonomy( $taxonomy )->cap->edit_terms ) )
+			$tax_object = $taxonomy ? \get_taxonomy( $taxonomy ) : false;
+			if ( $tax_object && \current_user_can( $tax_object->cap->edit_terms ) )
 				$this->init_columns( '', true );
 		}
 	}
@@ -117,22 +111,14 @@ class Doing_It_Right extends Generate_Ldjson {
 	 */
 	public function _init_columns_wp_ajax_inline_save() {
 
-		/**
-		 * Securely check the referrer, instead of leaving holes everywhere.
-		 */
-		if ( $this->doing_ajax() && \check_ajax_referer( 'inlineeditnonce', '_inline_edit', false ) ) {
-			$post_type = isset( $_POST['post_type'] ) ? \stripslashes_from_strings_only( $_POST['post_type'] ) : false; // Sanitization, CSRF ok
+		if ( \check_ajax_referer( 'inlineeditnonce', '_inline_edit', false ) ) {
+			$post_type = ! empty( $_POST['post_type'] ) ? \stripslashes_from_strings_only( $_POST['post_type'] ) : false; // Sanitization, CSRF ok
+			$pto       = $post_type ? \get_post_type_object( $post_type ) : false;
 
-			if ( $post_type && isset( $_POST['post_ID'] ) ) {
-				$post_id = (int) $_POST['post_ID'];
-				$access  = false;
-
-				$pto = \get_post_type_object( $post_type );
-				if ( isset( $pto->capability_type ) )
-					$access = \current_user_can( 'edit_' . $pto->capability_type, $post_id );
-
-				if ( $access )
-					$this->init_columns( '', true );
+			if ( $pto
+			&& isset( $_POST['post_ID'] )
+			&& \current_user_can( 'edit_' . $pto->capability_type, (int) $_POST['post_ID'] ) ) {
+				$this->init_columns( '', true );
 			}
 		}
 	}
@@ -146,17 +132,8 @@ class Doing_It_Right extends Generate_Ldjson {
 	 */
 	public function _init_columns_wp_ajax_inline_save_tax() {
 
-		/**
-		 * Securely check the referrer, instead of leaving holes everywhere.
-		 */
-		if ( $this->doing_ajax() && \check_ajax_referer( 'taxinlineeditnonce', '_inline_edit', false ) ) {
-			if ( empty( $_POST['taxonomy'] ) ) return;
+		if ( \check_ajax_referer( 'taxinlineeditnonce', '_inline_edit', false ) ) {
 			if ( empty( $_POST['tax_ID'] ) ) return;
-
-			$taxonomy = \stripslashes_from_strings_only( $_POST['taxonomy'] ); // Sanitization, CSRF ok
-
-			if ( ! $this->taxonomy_supports_custom_seo( $taxonomy ) )
-				return;
 
 			$tax_id = (int) $_POST['tax_ID'];
 
@@ -170,44 +147,17 @@ class Doing_It_Right extends Generate_Ldjson {
 	 *
 	 * @since 2.1.9
 	 * @since 2.9.1 Now supports inline edit AJAX.
+	 * @since 3.3.0: 1. Now tests for ONLY the taxonomy, or ONLY the post type.
+	 *               2. Now tests taxonomy first.
+	 * @access private
 	 * @securitycheck 3.0.0 OK. NOTE: Sanity check is done in _init_columns_wp_ajax_inline_save_tax()
 	 *                          & _init_columns_wp_ajax_inline_save()
 	 *
-	 * @param \WP_Screen|string $screen \WP_Screen
-	 * @param bool $doing_ajax Whether we're doing an AJAX response.
+	 * @param \WP_Screen|string $screen     The current screen.
+	 * @param bool              $doing_ajax Whether we're doing an AJAX response.
 	 * @return void If filter is set to false.
 	 */
 	public function init_columns( $screen = '', $doing_ajax = false ) {
-
-		/**
-		 * @TODO (re)move this? See option `display_seo_bar_tables`...
-		 * @since 2.9.1 or earlier.
-		 * @param bool $show_seo_column Whether to show the SEO Bar column.
-		 */
-		if ( ! \apply_filters( 'the_seo_framework_show_seo_column', true ) )
-			return;
-
-		if ( $doing_ajax ) {
-			/** For CSRF @see $this->_init_columns_wp_ajax_inline_save_tax(). */
-			$post_type = isset( $_POST['post_type'] ) ? \stripslashes_from_strings_only( $_POST['post_type'] ) : ''; // Sanitization, CSRF ok
-			$post_type = $post_type
-					  ?: ( isset( $_POST['tax_type'] ) ? \stripslashes_from_strings_only( $_POST['tax_type'] ) : '' ); // Sanitization, CSRF ok
-		} else {
-			$post_type = isset( $screen->post_type ) ? $screen->post_type : '';
-		}
-
-		if ( ! $this->post_type_supports_custom_seo( $post_type ) )
-			return;
-
-		if ( $doing_ajax ) {
-			$taxonomy = isset( $_POST['taxonomy'] ) ? \stripslashes_from_strings_only( $_POST['taxonomy'] ) : ''; // Sanitization, CSRF ok
-		} else {
-			$taxonomy = isset( $screen->taxonomy ) ? $screen->taxonomy : '';
-		}
-
-		if ( $taxonomy && ! $this->taxonomy_supports_custom_seo( $taxonomy ) )
-			return;
-
 		if ( $doing_ajax ) {
 			$this->init_seo_bar_columns_ajax();
 		} else {
@@ -222,9 +172,24 @@ class Doing_It_Right extends Generate_Ldjson {
 	 */
 	protected function init_seo_bar_columns_ajax() {
 
-		/** For CSRF @see $this->init_columns_ajax(). */
-		$screen_id = isset( $_POST['screen'] ) ? \stripslashes_from_strings_only( $_POST['screen'] ) : ''; // Sanitization, CSRF ok
-		$taxonomy  = isset( $_POST['taxonomy'] ) ? \stripslashes_from_strings_only( $_POST['taxonomy'] ) : ''; // Sanitization, CSRF ok
+		$taxonomy = isset( $_POST['taxonomy'] ) ? \stripslashes_from_strings_only( $_POST['taxonomy'] ) : ''; // phpcs:ignore -- CSRF ok.
+
+		if ( $taxonomy ) {
+			if ( ! $this->taxonomy_supports_custom_seo( $taxonomy ) )
+				return;
+		} else {
+			/** For CSRF @see $this->_init_columns_wp_ajax_inline_save_tax(). */
+			$post_type = isset( $_POST['post_type'] ) ? \stripslashes_from_strings_only( $_POST['post_type'] ) : ''; // phpcs:ignore -- CSRF ok.
+			$post_type = $post_type
+					?: ( isset( $_POST['tax_type'] ) ? \stripslashes_from_strings_only( $_POST['tax_type'] ) : '' ); // phpcs:ignore -- CSRF ok.
+
+			if ( ! $this->post_type_supports_custom_seo( $post_type ) )
+				return;
+		}
+
+		/** For CSRF @see $this->load_columns_ajax(). */
+		$screen_id = isset( $_POST['screen'] ) ? \stripslashes_from_strings_only( $_POST['screen'] ) : ''; // phpcs:ignore -- CSRF ok.
+		$taxonomy  = isset( $_POST['taxonomy'] ) ? \stripslashes_from_strings_only( $_POST['taxonomy'] ) : ''; // phpcs:ignore -- CSRF ok.
 
 		if ( $screen_id ) {
 			//* Everything but inline-save-tax action.
@@ -258,6 +223,18 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @param \WP_Screen|string $screen \WP_Screen
 	 */
 	protected function init_seo_bar_columns( $screen ) {
+
+		$taxonomy = isset( $screen->taxonomy ) ? $screen->taxonomy : '';
+
+		if ( $taxonomy ) {
+			if ( ! $this->taxonomy_supports_custom_seo( $taxonomy ) )
+				return;
+		} else {
+			$post_type = isset( $screen->post_type ) ? $screen->post_type : '';
+
+			if ( ! $this->post_type_supports_custom_seo( $post_type ) )
+				return;
+		}
 
 		$id = isset( $screen->id ) ? $screen->id : '';
 
@@ -345,7 +322,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @param string $tax_id this is empty      : If it's a taxonomy, this is the taxonomy id
 	 */
 	public function seo_bar( $column, $post_id, $tax_id = '' ) {
-		echo $this->get_seo_bar( $column, $post_id, $tax_id );
+		echo $this->get_seo_bar( $column, $post_id, $tax_id ); // phpcs:ignore -- Output is escaped down the line.
 	}
 
 	/**
@@ -408,7 +385,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @param string $tax_id this is empty      : If it's a taxonomy, this is the taxonomy id
 	 */
 	public function seo_bar_ajax( $column, $post_id, $tax_id = '' ) {
-		echo $this->get_seo_bar_ajax( $column, $post_id, $tax_id );
+		echo $this->get_seo_bar_ajax( $column, $post_id, $tax_id ); // phpcs:ignore -- Output is escaped down the line.
 	}
 
 	/**
@@ -430,7 +407,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * @since 3.0.4
 	 *
 	 * @param string $column the current column : If it's a taxonomy, this is empty
-	 * @param int $post_id the post id          : If it's a taxonomy, this is the column name
+	 * @param int    $post_id the post id          : If it's a taxonomy, this is the column name
 	 * @param string $tax_id this is empty      : If it's a taxonomy, this is the taxonomy id
 	 */
 	public function get_seo_bar_ajax( $column, $post_id, $tax_id = '' ) {
@@ -463,14 +440,15 @@ class Doing_It_Right extends Generate_Ldjson {
 	 *
 	 * @since 2.6.0
 	 *
-	 * @param string   $context The hover/screenreader context.
-	 * @param string   $symbol  The single-character symbol.
-	 * @param string   $class   The SEO block color code. : 'bad', 'okay', 'good', 'unknown'.
-	 * @param int|null $ajax_id The unique Ajax ID to generate a small on-hover script for this ID. May be Arbitrary.
-	 * @param bool     $echo    Whether to echo the output.
+	 * @param string    $context The hover/screenreader context.
+	 * @param string    $symbol  The single-character symbol.
+	 * @param string    $color   The SEO block color code. : 'bad', 'okay', 'good', 'unknown'.
+	 * @param bool|null $is_term Whether this is for a term or singular type.
+	 * @param int|null  $ajax_id The unique Ajax ID to generate a small on-hover script for this ID. May be Arbitrary.
+	 * @param bool      $echo    Whether to echo the output.
 	 * @return string|void The special block with wrap. Void if $echo is true.
 	 */
-	protected function post_status_special( $context, $symbol = '?', $color = 'unknown', $is_term = '', $ajax_id = null, $echo = false ) {
+	protected function post_status_special( $context, $symbol = '?', $color = 'unknown', $is_term = null, $ajax_id = null, $echo = false ) {
 
 		$classes = $this->get_the_seo_bar_classes();
 
@@ -481,7 +459,7 @@ class Doing_It_Right extends Generate_Ldjson {
 			'indicator' => $symbol,
 		] );
 
-		if ( empty( $is_term ) )
+		if ( is_null( $is_term ) )
 			$is_term = $this->is_archive();
 
 		$bar = $this->get_the_seo_bar_wrap( $block, $is_term, $ajax_id );
@@ -649,6 +627,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * Output the SEO bar for Terms and Taxonomies.
 	 *
 	 * @since 2.6.0
+	 * @since 3.3.0 Now no longer outputs a noindex notice when the post is redirected.
 	 *
 	 * @param array $args {
 	 *    'is_term'   => bool $is_term,
@@ -661,16 +640,16 @@ class Doing_It_Right extends Generate_Ldjson {
 	protected function the_seo_bar_term( $args ) {
 
 		$post_i18n = $args['post_i18n'];
-		$is_term = true;
+		$is_term   = true;
 
 		$data = $this->get_term_meta( $args['post_id'] );
-
-		$noindex  = ! empty( $data['noindex'] );
-		$redirect = false; // We don't apply redirect on taxonomies (yet)
+		$redirect = false;
 
 		//* Blocked SEO, return simple bar.
-		if ( $redirect || $noindex )
-			return $this->the_seo_bar_blocked( compact( 'is_term', 'redirect', 'noindex', 'post_i18n' ) );
+		//? 'redirect' is a late addition... test if it exist!
+		//... Alternatively, loop over the taxonomies for upgrade? Note that some people have over 50,000!
+		if ( isset( $data['redirect'] ) && $data['redirect'] )
+			return $this->the_seo_bar_blocked( compact( 'is_term', 'post_i18n' ) );
 
 		$title_notice       = $this->the_seo_bar_title_notice( $args );
 		$description_notice = $this->the_seo_bar_description_notice( $args );
@@ -687,6 +666,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * Output the SEO bar for Terms and Taxonomies.
 	 *
 	 * @since 2.6.0
+	 * @since 3.3.0 Now no longer outputs a noindex notice when the post is redirected.
 	 *
 	 * @param array $args {
 	 *    'is_term'   => $is_term,
@@ -700,18 +680,10 @@ class Doing_It_Right extends Generate_Ldjson {
 	protected function the_seo_bar_page( $args ) {
 
 		$post_i18n = $args['post_i18n'];
+		$is_term   = false;
 
-		$is_term = false;
-		$is_front_page = $this->is_static_frontpage( $args['post_id'] );
-
-		$redirect = (bool) $this->get_custom_field( 'redirect', $args['post_id'] );
-		$noindex  = (bool) $this->get_custom_field( '_genesis_noindex', $args['post_id'] );
-
-		if ( $is_front_page )
-			$noindex = $this->get_option( 'homepage_noindex' ) ?: $noindex;
-
-		if ( $redirect || $noindex )
-			return $this->the_seo_bar_blocked( compact( 'is_term', 'redirect', 'noindex', 'post_i18n' ) );
+		if ( $this->get_custom_field( 'redirect', $args['post_id'] ) )
+			return $this->the_seo_bar_blocked( compact( 'is_term', 'post_i18n' ) );
 
 		$title_notice       = $this->the_seo_bar_title_notice( $args );
 		$description_notice = $this->the_seo_bar_description_notice( $args );
@@ -1637,8 +1609,6 @@ class Doing_It_Right extends Generate_Ldjson {
 	 *
 	 * @param array $args {
 	 *    $is_term => bool,
-	 *    $redirect => bool,
-	 *    $noindex => bool,
 	 *    $post_i18n => string
 	 * }
 	 * @return string The SEO Bar
@@ -1651,74 +1621,20 @@ class Doing_It_Right extends Generate_Ldjson {
 		//? extract().
 		foreach ( $args as $k => $v ) $$k = $v;
 
-		if ( $redirect && $noindex ) {
-			//* Redirect and noindex found, why bother showing SEO info?
+		/* translators:* %s = post type name */
+		$red_notice = $i18n['redirect'] . ' ' . sprintf( \esc_attr__( '%s is being redirected. This means no SEO values have to be set.', 'autodescription' ), $post_i18n );
+		$red_class  = $classes['unknown'];
 
-			/* translators:* %s = post type name */
-			$red_notice = $i18n['redirect'] . ' ' . sprintf( \esc_attr__( '%s is being redirected. This means no SEO values have to be set.', 'autodescription' ), $post_i18n );
-			$red_class  = $classes['unknown'];
+		$red_wrap_args = [
+			'indicator' => $i18n['redirect_short'],
+			'notice'    => $red_notice,
+			'width'     => '',
+			'class'     => $red_class,
+		];
 
-			/* translators:* %s = post type name */
-			$noi_notice = $i18n['index'] . ' ' . sprintf( \esc_attr__( '%s is not being indexed. This means no SEO values have to be set.', 'autodescription' ), $post_i18n );
-			$noi_class  = $classes['unknown'];
+		$redirect_notice = $this->wrap_the_seo_bar_block( $red_wrap_args );
 
-			$red_wrap_args = [
-				'indicator' => $i18n['redirect_short'],
-				'notice'    => $red_notice,
-				'width'     => '',
-				'class'     => $red_class,
-			];
-
-			$noi_wrap_args = [
-				'indicator' => $i18n['index_short'],
-				'notice'    => $noi_notice,
-				'width'     => '',
-				'class'     => $noi_class,
-			];
-
-			$redirect_notice = $this->wrap_the_seo_bar_block( $red_wrap_args );
-			$noindex_notice  = $this->wrap_the_seo_bar_block( $noi_wrap_args );
-
-			$content = $redirect_notice . $noindex_notice;
-
-			return $this->get_the_seo_bar_wrap( $content, $is_term );
-		} elseif ( $redirect && false === $noindex ) {
-			//* Redirect found, why bother showing SEO info?
-
-			/* translators:* %s = post type name */
-			$red_notice = $i18n['redirect'] . ' ' . sprintf( \esc_attr__( '%s is being redirected. This means no SEO values have to be set.', 'autodescription' ), $post_i18n );
-			$red_class  = $classes['unknown'];
-
-			$red_wrap_args = [
-				'indicator' => $i18n['redirect_short'],
-				'notice'    => $red_notice,
-				'width'     => '',
-				'class'     => $red_class,
-			];
-
-			$redirect_notice = $this->wrap_the_seo_bar_block( $red_wrap_args );
-
-			return $this->get_the_seo_bar_wrap( $redirect_notice, $is_term );
-		} elseif ( $noindex && false === $redirect ) {
-			//* Noindex found, why bother showing SEO info?
-
-			/* translators:* %s = post type name */
-			$noi_notice = $i18n['index'] . ' ' . sprintf( \esc_attr__( '%s is not being indexed. This means no SEO values have to be set.', 'autodescription' ), $post_i18n );
-			$noi_class  = $classes['unknown'];
-
-			$noi_wrap_args = [
-				'indicator' => $i18n['index_short'],
-				'notice'    => $noi_notice,
-				'width'     => '',
-				'class'     => $noi_class,
-			];
-
-			$noindex_notice = $this->wrap_the_seo_bar_block( $noi_wrap_args );
-
-			return $this->get_the_seo_bar_wrap( $noindex_notice, $is_term );
-		}
-
-		return '';
+		return $this->get_the_seo_bar_wrap( $redirect_notice, $is_term );
 	}
 
 	/**
