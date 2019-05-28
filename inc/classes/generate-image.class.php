@@ -165,8 +165,8 @@ class Generate_Image extends Generate_Url {
 	 * @todo listen to attached images within post.
 	 * @todo listen to archive images. -> set taxonomy argument.
 	 *
-	 * @param array $args The image arguments.
-	 * @param bool $set_og_dimension Whether to set open graph dimensions.
+	 * @param array $args             The image arguments.
+	 * @param bool  $set_og_dimension Whether to set open graph dimensions.
 	 * @return string The social image.
 	 */
 	public function get_social_image( $args = [], $set_og_dimension = false ) {
@@ -302,9 +302,9 @@ class Generate_Image extends Generate_Url {
 	 *
 	 * The image set in the filter will always be used as fallback
 	 *
-	 * @param array $args required The passed arguments.
-	 * @param array $defaults The default arguments.
-	 * @param bool $get_defaults Return the default arguments. Ignoring $args.
+	 * @param array $args         Required. The passed arguments.
+	 * @param array $defaults     The default arguments.
+	 * @param bool  $get_defaults Return the default arguments. Ignoring $args.
 	 * @return array $args parsed args.
 	 */
 	public function parse_image_args( $args = [], $defaults = [], $get_defaults = false ) {
@@ -393,7 +393,7 @@ class Generate_Image extends Generate_Url {
 	 * @since 2.9.0
 	 * @since 2.9.4 Now converts URL scheme.
 	 *
-	 * @param int $id The post ID.
+	 * @param int  $id                The post ID.
 	 * @param bool $set_og_dimensions Whether to set Open Graph and Twitter dimensions.
 	 * @return string The unescaped HomePage social image URL.
 	 */
@@ -426,7 +426,7 @@ class Generate_Image extends Generate_Url {
 	 *              2. Fallback image ID has been removed.
 	 * @since 2.9.4 Now converts URL scheme.
 	 *
-	 * @param int $id The post ID. Required.
+	 * @param int  $id                The post ID. Required.
 	 * @param bool $set_og_dimensions Whether to set Open Graph and Twitter dimensions.
 	 * @return string The unescaped social image URL.
 	 */
@@ -484,9 +484,9 @@ class Generate_Image extends Generate_Url {
 	 * @since 2.9.3 Now supports 4K.
 	 * @since 2.9.4 Now converts URL scheme.
 	 *
-	 * @param int $id The post ID. Required.
-	 * @param array $args The image args.
-	 * @param bool $set_og_dimensions Whether to set Open Graph image dimensions.
+	 * @param int   $id                The post ID. Required.
+	 * @param array $args              The image args.
+	 * @param bool  $set_og_dimensions Whether to set Open Graph image dimensions.
 	 * @return string The social image URL.
 	 */
 	public function get_social_image_url_from_post_thumbnail( $id, $args = [], $set_og_dimensions = false ) {
@@ -512,9 +512,9 @@ class Generate_Image extends Generate_Url {
 	 *
 	 * @since 3.0.6
 	 *
-	 * @param int $id The post ID. Required.
-	 * @param array $args The image args.
-	 * @param bool $set_og_dimensions Whether to set Open Graph image dimensions.
+	 * @param int   $id                The post ID. Required.
+	 * @param array $args              The image args.
+	 * @param bool  $set_og_dimensions Whether to set Open Graph image dimensions.
 	 * @return string The attachment URL.
 	 */
 	public function get_social_image_url_from_attachment( $id, $args = [], $set_og_dimensions = false ) {
@@ -539,7 +539,6 @@ class Generate_Image extends Generate_Url {
 	 * @since 2.5.0
 	 * @staticvar array $ids The image IDs
 	 *
-	 * @param array $args Image arguments.
 	 * @return array The image URL's.
 	 */
 	public function get_image_from_woocommerce_gallery() {
@@ -678,8 +677,8 @@ class Generate_Image extends Generate_Url {
 	 * @since 2.8.0
 	 * @since 3.0.0 : Now sets preferred canonical URL scheme.
 	 *
-	 * @param string|int $size The icon size, accepts 'full' and pixel values.
-	 * @param bool $set_og_dimensions Whether to set size for OG image. Always falls back to the current post ID.
+	 * @param string|int $size              The icon size, accepts 'full' and pixel values.
+	 * @param bool       $set_og_dimensions Whether to set size for OG image. Always falls back to the current post ID.
 	 * @return string URL site icon, not escaped.
 	 */
 	public function get_site_icon( $size = 'full', $set_og_dimensions = false ) {

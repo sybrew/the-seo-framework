@@ -35,16 +35,13 @@ class Detect extends Render {
 	/**
 	 * Determines if we're doing ajax.
 	 *
-	 * @todo use wp_doing_ajax() in a future version. Requires WP 4.7+.
 	 * @since 2.9.0
-	 * @staticvar bool $cache
+	 * @since 3.3.0 Now uses wp_doing_ajax()
 	 *
 	 * @return bool True if AJAX
 	 */
 	public function doing_ajax() {
-		static $cache = null;
-
-		return isset( $cache ) ? $cache : $cache = defined( 'DOING_AJAX' ) && DOING_AJAX;
+		return \wp_doing_ajax();
 	}
 
 	/**

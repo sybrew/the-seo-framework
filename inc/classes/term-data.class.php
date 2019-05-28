@@ -157,7 +157,7 @@ class Term_Data extends Post_Data {
 	 */
 	public function update_term_meta( $term_id, $tt_id, $taxonomy = '' ) {
 
-		if ( $this->doing_ajax() )
+		if ( \wp_doing_ajax() )
 			return;
 
 		//* Check again against ambiguous injection.

@@ -91,9 +91,8 @@ class Init extends Query {
 	 */
 	public function init_global_actions() {
 
-		if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
+		if ( \wp_doing_cron() )
 			$this->init_cron_actions();
-		}
 
 		//* Add query strings for sitemap rewrite.
 		\add_action( 'init', [ $this, 'rewrite_rule_sitemap' ], 1 );
@@ -653,10 +652,7 @@ class Init extends Query {
 	 * @since 2.9.4
 	 */
 	public function init_alter_search_query() {
-
-		$type = $this->get_option( 'alter_search_query_type' );
-
-		switch ( $type ) :
+		switch ( $this->get_option( 'alter_search_query_type' ) ) :
 			case 'post_query':
 				\add_filter( 'the_posts', [ $this, '_alter_search_query_post' ], 10, 2 );
 				break;
@@ -674,10 +670,7 @@ class Init extends Query {
 	 * @since 2.9.4
 	 */
 	public function init_alter_archive_query() {
-
-		$type = $this->get_option( 'alter_archive_query_type' );
-
-		switch ( $type ) :
+		switch ( $this->get_option( 'alter_archive_query_type' ) ) :
 			case 'post_query':
 				\add_filter( 'the_posts', [ $this, '_alter_archive_query_post' ], 10, 2 );
 				break;

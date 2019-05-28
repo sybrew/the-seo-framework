@@ -162,12 +162,14 @@ class Sitemap {
 				(int) \get_option( 'page_for_posts' ),
 			] );
 
+			$_hierarchical_posts_limit = $this->get_sitemap_post_limit( true );
+
 			/**
 			 * @since 3.3.0
 			 * @param array $args The query arguments.
 			 */
-			$args = \apply_filters( 'the_seo_framework_sitemap_hpt_query_args', [
-				'posts_per_page'   => $this->get_sitemap_post_limit( true ) + count( $_exclude_ids ),
+			$_args = \apply_filters( 'the_seo_framework_sitemap_hpt_query_args', [
+				'posts_per_page'   => $_hierarchical_posts_limit + count( $_exclude_ids ),
 				'post_type'        => $hierarchical_post_types,
 				'orderby'          => 'date',
 				'order'            => 'ASC',
@@ -179,10 +181,16 @@ class Sitemap {
 				'no_found_rows'    => true,
 			] );
 
-			$wp_query->query = $wp_query->query_vars = $args;
+			$wp_query->query = $wp_query->query_vars = $_args;
 			$hierarchical_post_ids = $wp_query->get_posts();
 
 			$hierarchical_post_ids = array_diff( $hierarchical_post_ids, $_exclude_ids );
+
+			// Stop confusion: trim query to set value.
+			// This is ultimately redundant, but it'll stop support requests by making the input value more accurate.
+			if ( count( $hierarchical_post_ids ) > $_hierarchical_posts_limit ) {
+				array_splice( $hierarchical_post_ids, $_hierarchical_posts_limit );
+			}
 		}
 
 		if ( $non_hierarchical_post_types ) {
@@ -190,7 +198,7 @@ class Sitemap {
 			 * @since 3.3.0
 			 * @param array $args The query arguments.
 			 */
-			$args = \apply_filters( 'the_seo_framework_sitemap_nhpt_query_args', [
+			$_args = \apply_filters( 'the_seo_framework_sitemap_nhpt_query_args', [
 				'posts_per_page'   => $this->get_sitemap_post_limit( false ),
 				'post_type'        => $non_hierarchical_post_types,
 				'orderby'          => 'lastmod',
@@ -203,24 +211,24 @@ class Sitemap {
 				'no_found_rows'    => true,
 			] );
 
-			$wp_query->query = $wp_query->query_vars = $args;
+			$wp_query->query = $wp_query->query_vars = $_args;
 			$non_hierarchical_post_ids = $wp_query->get_posts();
 		}
 
 		// Destroy class.
 		$wp_query = null;
 
+		$_items      = array_merge( $hierarchical_post_ids, $non_hierarchical_post_ids );
+		$total_items = count( $_items );
+
 		// 49998 = 50000-2, max sitemap items.
-		$max_items   = min( max( $this->get_sitemap_post_limit( false ), $this->get_sitemap_post_limit( true ) ), 49998 );
-		$item_count  = 0;
-		$total_items = count( $hierarchical_post_ids ) + count( $non_hierarchical_post_ids );
+		if ( $total_items > 49998 ) array_splice( $_items, 49998 );
 
 		foreach ( $this->generate_url_item_values(
-			array_merge( $hierarchical_post_ids, $non_hierarchical_post_ids ),
+			$_items,
 			compact( 'show_priority', 'show_modified', 'total_items' )
 		) as $_values ) {
 			$content .= $this->build_url_item( $_values );
-			if ( ++$item_count > $max_items ) break;
 		}
 
 		if ( \has_filter( 'the_seo_framework_sitemap_additional_urls' ) ) {
@@ -390,9 +398,9 @@ class Sitemap {
 	 * @generator
 	 * @iterator
 	 *
-	 * @param array $post_ids The post IDs to go over.
-	 * @param array $args    The generator arguments.
-	 * @param int   $count   The iteration count. Passed by reference.
+	 * @param iterable $post_ids The post IDs to go over.
+	 * @param array    $args    The generator arguments.
+	 * @param int      $count   The iteration count. Passed by reference.
 	 * @yield array|void : {
 	 *   string loc
 	 *   string lastmod
@@ -501,7 +509,8 @@ class Sitemap {
 			}
 		}
 
-		return ! isset( $excluded[ $post_id ] ) && ! static::$tsf->is_robots_meta_noindex_set_by_args( [ 'id' => $post_id ] );
+		// 0b01 as we don't need to test 'private' (because of sole 'publish'), and 'password' (because of false 'has_password')
+		return ! isset( $excluded[ $post_id ] ) && ! static::$tsf->is_robots_meta_noindex_set_by_args( [ 'id' => $post_id ], 0b01 );
 	}
 
 	/**

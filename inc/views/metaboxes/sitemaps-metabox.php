@@ -112,7 +112,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<?php
-		$this->description( __( 'The sitemap is generated with three queries: Pages, posts, and other post types. This setting affects how many posts are requested from the database per query. The homepage and blog page are included separately.', 'autodescription' ) );
+		$this->description( __( 'The sitemap is generated with two queries: Hierarchical and non-hierarchical post types. This setting affects how many posts are requested from the database per query. The homepage and blog page are included separately.', 'autodescription' ) );
 
 		if ( \has_filter( 'the_seo_framework_sitemap_post_limit' ) ) :
 			?>

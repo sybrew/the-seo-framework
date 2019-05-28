@@ -378,7 +378,7 @@ class Admin_Init extends Init {
 	 */
 	public function _wp_ajax_update_counter_type() {
 
-		if ( $this->is_admin() && $this->doing_ajax() ) :
+		if ( $this->is_admin() && \wp_doing_ajax() ) :
 			$this->_check_tsf_ajax_referer( 'edit_posts' );
 
 			//* Remove output buffer.

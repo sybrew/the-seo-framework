@@ -60,7 +60,7 @@ function _wpforo_fix_page() {
  * @access private
  *
  * @param string $title The filter title.
- * @param array $args The title arguments.
+ * @param array  $args The title arguments.
  * @return string $title The wpForo title.
  */
 function _wpforo_filter_pre_title( $title, $args ) {

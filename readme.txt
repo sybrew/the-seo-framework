@@ -242,6 +242,8 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 == Changelog ==
 
+TODO this DEV version is probably NOT compatible with PHP 5.5, nor even 5.6.
+
 TODO: Re-minify JS files... Ugh Node.JS
 TODO: Re-minify CSS files... Ugh web services
 TODO: Drop IE11 support in JS? Make sure the scripts fail to load... Ugh LTS
@@ -302,13 +304,9 @@ TODO Exclaim:
 		1. First, we find the blog and front-page ID. We add these on top of the sitemap.
 		1. Then, we query all public hierarchical post types (pages). The sitemap query limit is used here, and we query-sort the items by published date, ascending.
 			* TODO update the explanation in the settings pages to represent this...
-		1. Then, we query all public non-hierarchical post types (posts), but no attachments, the sitemap query limit is used again, and we query-sort the items by last updated, descending.
-		1. Finally, we combine the pages and posts, and go through them, each one added will count down from the query limit.
-			* Note that only indexed pages will be displayed. If your sitemap query limit is set to 3000, and you've disabled 1000 pages, you may only see 2000 items (+2 for front-and blog page).
-			* To depict another scenario: If you have 4000 pages indexed, and any number of posts, then you may only see 3000 pages, and no posts.
-			* And another: If you have 2000 pages and 2000 posts indexed, you may only see 2000 pages, and 1000 posts.
-			* Note that, since we added multidimensional selections for noindex, a post type may hog up a large portion of this query without being used.
-				* We may will resolve this inconsistency in the future, as we're considering adding multiple sitemaps.
+		1. Then, we query all public non-hierarchical post types (posts), but no attachments--the sitemap query limit is used again, and we query-sort the items by last updated, descending.
+		1. Finally, we combine the pages and posts, and go through them.
+			* Note that, at most, 50000 items will be displayed, or 49998 if the homepage is a blog.
 	* **Sitemap:** The blog page's priority is now `1.0`, from `0.9`. Note, however, that this feature is disabled by default and deprecated by some search engines.
 	* **Sitemap:** The page and post priorities now deduce based on item's position, instead of that pages always has a priority of `0.9`.
 		* They still start at 0.9.

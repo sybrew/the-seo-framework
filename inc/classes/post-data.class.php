@@ -217,10 +217,10 @@ class Post_Data extends Detect {
 	 *
 	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 *
-	 * @param array    $data         Key/Value pairs of data to save in '_field_name' => 'value' format.
-	 * @param string   $nonce_action Nonce action for use with wp_verify_nonce().
-	 * @param string   $nonce_name   Name of the nonce to check for permissions.
-	 * @param \WP_Post|integer $post Post object or ID.
+	 * @param array            $data         Key/Value pairs of data to save in '_field_name' => 'value' format.
+	 * @param string           $nonce_action Nonce action for use with wp_verify_nonce().
+	 * @param string           $nonce_name   Name of the nonce to check for permissions.
+	 * @param \WP_Post|integer $post         Post object or post ID.
 	 * @return mixed Return null if permissions incorrect, doing autosave, ajax or future post, false if update or delete
 	 *               failed, and true on success.
 	 */
@@ -237,22 +237,17 @@ class Post_Data extends Detect {
 		 * @link https://github.com/sybrew/the-seo-framework/issues/48
 		 * @link https://johnblackbourn.com/post-meta-revisions-wordpress
 		 */
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+		if ( \wp_is_post_autosave( $post ) )
 			return;
-		if ( $this->doing_ajax() )
+		if ( \wp_doing_ajax() )
 			return;
-		if ( defined( 'DOING_CRON' ) && DOING_CRON )
+		if ( \wp_doing_cron() )
+			return;
+		if ( \wp_is_post_revision( $post ) )
 			return;
 
 		//* Grab the post object
 		$post = \get_post( $post );
-
-		/**
-		 * Don't save if WP is creating a revision (same as DOING_AUTOSAVE?)
-		 * @todo @see wp_is_post_revision(), which also returns the post revision ID...
-		 */
-		if ( 'revision' === \get_post_type( $post ) )
-			return;
 
 		//* Check that the user is allowed to edit the post
 		if ( ! \current_user_can( 'edit_post', $post->ID ) )
@@ -295,20 +290,22 @@ class Post_Data extends Detect {
 		if ( empty( $_POST['autodescription'] ) ) // Input var OK.
 			return;
 
-		$post_type = \get_post_type( $post_id ) ?: false;
-
-		if ( ! $post_type )
+		if ( \wp_is_post_autosave( $post ) )
 			return;
-
-		/**
-		 * Don't save if WP is creating a revision (same as DOING_AUTOSAVE?)
-		 * @todo @see wp_is_post_revision(), which also returns the post revision ID...
-		 */
-		if ( 'revision' === $post_type )
+		if ( \wp_doing_ajax() )
+			return;
+		if ( \wp_doing_cron() )
+			return;
+		if ( \wp_is_post_revision( $post ) )
 			return;
 
 		//* Check that the user is allowed to edit the post
 		if ( ! \current_user_can( 'edit_post', $post_id ) )
+			return;
+
+		$post_type = \get_post_type( $post_id ) ?: false;
+
+		if ( ! $post_type )
 			return;
 
 		$_taxonomies = $this->get_hierarchical_taxonomies_as( 'names', $post_type );
