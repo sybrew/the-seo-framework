@@ -69,6 +69,7 @@ class Sitemaps extends Metaboxes {
 	 * This rule defines the sitemap.xml output
 	 *
 	 * @since 2.2.9
+	 * @since 3.3.0 Now only registers the stylesheet endpoint when it's enabled.
 	 *
 	 * @param bool $force add the rule anyway, regardless of detected environment.
 	 */
@@ -104,38 +105,6 @@ class Sitemaps extends Metaboxes {
 		}
 
 		return $vars;
-	}
-
-	/**
-	 * Outputs sitemap.xml 'file' and header on sitemap query.
-	 * Also cleans up globals and sets up variables.
-	 *
-	 * @since 2.2.9
-	 */
-	public function maybe_output_sitemap() {
-
-		if ( $this->can_run_sitemap() ) {
-			global $wp_query;
-
-			if ( isset( $wp_query->query_vars['the_seo_framework_sitemap'] ) && 'xml' === $wp_query->query_vars['the_seo_framework_sitemap'] ) {
-
-				$this->validate_sitemap_scheme();
-
-				// Don't let WordPress think this is 404.
-				$wp_query->is_404 = false;
-
-				$this->doing_sitemap = true;
-
-				/**
-				 * Set at least 2000 variables free.
-				 * Freeing 0.15MB on a clean WordPress installation.
-				 * @since 2.6.0
-				 */
-				$this->clean_up_globals_for_sitemap();
-
-				$this->output_sitemap();
-			}
-		}
 	}
 
 	/**
@@ -206,17 +175,52 @@ class Sitemaps extends Metaboxes {
 	 */
 	public function maybe_output_sitemap_stylesheet() {
 
-		if ( $this->can_run_sitemap() ) {
-			global $wp_query;
+		if ( ! $this->can_run_sitemap() ) return;
 
-			if ( isset( $wp_query->query_vars['the_seo_framework_sitemap'] ) && 'xsl' === $wp_query->query_vars['the_seo_framework_sitemap'] ) {
-				// Don't let WordPress think this is 404.
-				$wp_query->is_404 = false;
+		global $wp_query;
 
-				$this->doing_sitemap = true;
+		if ( isset( $wp_query->query_vars['the_seo_framework_sitemap'] )
+		&& 'xsl' === $wp_query->query_vars['the_seo_framework_sitemap'] ) {
 
-				$this->output_sitemap_xsl_stylesheet();
-			}
+			// Don't let WordPress think this is 404.
+			$wp_query->is_404 = false;
+
+			$this->doing_sitemap = true;
+
+			$this->output_sitemap_xsl_stylesheet();
+		}
+	}
+
+	/**
+	 * Outputs sitemap.xml 'file' and header on sitemap query.
+	 * Also cleans up globals and sets up variables.
+	 *
+	 * @since 2.2.9
+	 */
+	public function maybe_output_sitemap() {
+
+		if ( ! $this->can_run_sitemap() ) return;
+
+		global $wp_query;
+
+		if ( isset( $wp_query->query_vars['the_seo_framework_sitemap'] )
+		&& 'xml' === $wp_query->query_vars['the_seo_framework_sitemap'] ) {
+
+			$this->validate_sitemap_scheme();
+
+			// Don't let WordPress think this is 404.
+			$wp_query->is_404 = false;
+
+			$this->doing_sitemap = true;
+
+			/**
+			 * Set at least 2000 variables free.
+			 * Freeing 0.15MB on a clean WordPress installation.
+			 * @since 2.6.0
+			 */
+			$this->clean_up_globals_for_sitemap();
+
+			$this->output_sitemap();
 		}
 	}
 
@@ -382,28 +386,25 @@ class Sitemaps extends Metaboxes {
 	 */
 	public function get_sitemap_xsl_stylesheet_tag() {
 
-		if ( $this->get_option( 'sitemap_styles' ) ) {
+		if ( ! $this->get_option( 'sitemap_styles' ) ) return '';
 
-			$url = \esc_url( $this->get_sitemap_xsl_url(), [ 'http', 'https' ] );
+		$url = \esc_url( $this->get_sitemap_xsl_url(), [ 'http', 'https' ] );
 
-			if ( ! empty( $_SERVER['HTTP_HOST'] ) ) {
-				$_parsed   = \wp_parse_url( $url );
-				$_r_parsed = \wp_parse_url(
-					\esc_url(
-						\wp_unslash( $_SERVER['HTTP_HOST'] ),
-						[ 'http', 'https' ]
-					)
-				); // sanitization ok: esc_url is esc_url_raw with a bowtie.
+		if ( ! empty( $_SERVER['HTTP_HOST'] ) ) {
+			$_parsed   = \wp_parse_url( $url );
+			$_r_parsed = \wp_parse_url(
+				\esc_url(
+					\wp_unslash( $_SERVER['HTTP_HOST'] ),
+					[ 'http', 'https' ]
+				)
+			); // sanitization ok: esc_url is esc_url_raw with a bowtie.
 
-				if ( isset( $_parsed['host'], $_r_parsed['host'] ) )
-					if ( $_parsed['host'] !== $_r_parsed['host'] )
-						return '';
-			}
-
-			return sprintf( '<?xml-stylesheet type="text/xsl" href="%s"?>', $url ) . "\n";
+			if ( isset( $_parsed['host'], $_r_parsed['host'] ) )
+				if ( $_parsed['host'] !== $_r_parsed['host'] )
+					return '';
 		}
 
-		return '';
+		return sprintf( '<?xml-stylesheet type="text/xsl" href="%s"?>', $url ) . "\n";
 	}
 
 	/**

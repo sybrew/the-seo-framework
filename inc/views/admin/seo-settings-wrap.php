@@ -10,7 +10,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 	<form method="post" action="options.php">
 		<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
 		<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
-		<?php settings_fields( $this->settings_field ); ?>
+		<?php settings_fields( THE_SEO_FRAMEWORK_SITE_OPTIONS ); ?>
 
 		<div class="tsf-top-wrap">
 			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>

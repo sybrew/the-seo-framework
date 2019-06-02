@@ -379,6 +379,7 @@ TODO Exclaim:
 		* `attachment_nofollow` and sanitization thereof, since 3.1 it's changed to `nofollow_post_types['attachment']`.
 		* `attachment_noarchive` and sanitization thereof, since 3.1 it's changed to `noarchive_post_types['attachment']`.
 		* `title_seperator`, since 3.1 it's changed to `title_separator` (note the previous typo).
+	* Changed: `add_option()` is no longer called every admin request, only when the options aren't registered yet.
 * **Term meta notes:**
 	* **Added:**
 		* TODO `redirect`, URL string.

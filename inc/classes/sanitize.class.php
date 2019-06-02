@@ -59,12 +59,12 @@ class Sanitize extends Admin_Pages {
 		 *
 		 * @since 2.2.9
 		 */
-		if ( empty( $_POST[ $this->settings_field ] ) // Input var ok.
-		|| ! is_array( $_POST[ $this->settings_field ] ) ) // Input var, CSRF ok: This is just a performance check.
+		if ( empty( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) // Input var ok.
+		|| ! is_array( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) ) // Input var, CSRF ok: This is just a performance check.
 			return $validated = false;
 
 		//* This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
-		\check_admin_referer( $this->settings_field . '-options' );
+		\check_admin_referer( THE_SEO_FRAMEWORK_SITE_OPTIONS . '-options' );
 
 		return $validated = true;
 	}
@@ -91,11 +91,11 @@ class Sanitize extends Admin_Pages {
 		$this->delete_main_cache();
 
 		//* Flush transients after options have changed.
-		\add_action( "update_option_{$this->settings_field}", [ $this, 'delete_main_cache' ] );
-		\add_action( "update_option_{$this->settings_field}", [ $this, 'reinitialize_rewrite' ], 11 );
-		\add_action( "update_option_{$this->settings_field}", [ $this, 'update_db_version' ], 12 );
+		\add_action( 'update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'delete_main_cache' ] );
+		\add_action( 'update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'reinitialize_rewrite' ], 11 );
+		\add_action( 'update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'update_db_version' ], 12 );
 		//* TEMP: Set backward compatibility.
-		// \add_action( "update_option_{$this->settings_field}", [ $this, '_set_backward_compatibility' ], 13 );
+		// \add_action( 'update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, '_set_backward_compatibility' ], 13 );
 	}
 
 	/**
@@ -141,7 +141,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_title_separator',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'title_separator',
 			]
@@ -149,13 +149,13 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_description',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[]
 		);
 
 		$this->add_option_filter(
 			's_description_raw',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'homepage_description',
 				'homepage_og_description',
@@ -165,7 +165,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_title',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'knowledge_name',
 			]
@@ -173,7 +173,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_title_raw',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'homepage_title',
 				'homepage_title_tagline',
@@ -184,7 +184,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_knowledge_type',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'knowledge_type',
 			]
@@ -192,7 +192,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_left_right',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'title_location',
 			]
@@ -200,7 +200,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_left_right_home',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'home_title_location',
 			]
@@ -208,7 +208,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_alter_query_type',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'alter_archive_query_type',
 				'alter_search_query_type',
@@ -217,7 +217,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_one_zero',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'alter_search_query',
 				'alter_archive_query',
@@ -305,7 +305,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_absint',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'social_image_fb_id',
 				'homepage_social_image_id',
@@ -315,7 +315,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_numeric_string',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'timestamps_format',
 			]
@@ -323,7 +323,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_disabled_post_types',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'disabled_post_types',
 			]
@@ -331,7 +331,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_post_types',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				$this->get_robots_post_type_option_id( 'noindex' ),
 				$this->get_robots_post_type_option_id( 'nofollow' ),
@@ -342,7 +342,7 @@ class Sanitize extends Admin_Pages {
 		/*
 		$this->add_option_filter(
 			's_no_html',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[]
 		);
 		*/
@@ -353,7 +353,7 @@ class Sanitize extends Admin_Pages {
 		 */
 		$this->add_option_filter(
 			's_no_html_space',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'facebook_appid',
 
@@ -366,7 +366,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_url',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'knowledge_facebook',
 				'knowledge_twitter',
@@ -382,7 +382,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_url_query',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'knowledge_linkedin',
 				'social_image_fb_url',
@@ -393,7 +393,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_facebook_profile',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'facebook_publisher',
 				'facebook_author',
@@ -402,7 +402,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_twitter_name',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'twitter_site',
 				'twitter_creator',
@@ -411,7 +411,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_twitter_card',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'twitter_card',
 			]
@@ -419,7 +419,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_canonical_scheme',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'canonical_scheme',
 			]
@@ -427,7 +427,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_color_hex',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'sitemap_color_main',
 				'sitemap_color_accent',
@@ -436,7 +436,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_min_max_sitemap',
-			$this->settings_field,
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'sitemap_query_limit',
 			]

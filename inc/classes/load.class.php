@@ -72,7 +72,7 @@ final class Load extends Feed implements Debug_Interface {
 		}
 
 		//= Register the capabilities early.
-		\add_filter( "option_page_capability_{$this->settings_field}", [ $this, 'get_settings_capability' ] );
+		\add_filter( 'option_page_capability_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'get_settings_capability' ] );
 
 		/**
 		 * @since 2.2.2

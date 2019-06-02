@@ -142,6 +142,35 @@ switch ( $instance ) :
 		//* Fetch Canonical URL Placeholder.
 		$canonical_placeholder = $this->create_canonical_url( [ 'id' => $post_id ] );
 
+		//* Get robots defaults.
+		$r_defaults = $this->robots_meta( [ 'id' => $post_id ], 0b11 );
+		$r_settings = [
+			'noindex'   => [
+				'id'        => 'autodescription_noindex',
+				'option'    => '_genesis_noindex',
+				'force_on'  => 'index',
+				'force_off' => 'noindex',
+				'label'     => __( 'Indexing', 'autodescription' ),
+				'_default'  => empty( $r_defaults['noindex'] ) ? 'index' : 'noindex',
+			],
+			'nofollow'  => [
+				'id'        => 'autodescription_nofollow',
+				'option'    => '_genesis_nofollow',
+				'force_on'  => 'follow',
+				'force_off' => 'nofollow',
+				'label'     => __( 'Link following', 'autodescription' ),
+				'_default'  => empty( $r_defaults['nofollow'] ) ? 'follow' : 'nofollow',
+			],
+			'noarchive' => [
+				'id'        => 'autodescription_noarchive',
+				'option'    => '_genesis_noarchive',
+				'force_on'  => 'archive',
+				'force_off' => 'noarchive',
+				'label'     => __( 'Archiving', 'autodescription' ),
+				'_default'  => empty( $r_defaults['noarchive'] ) ? 'archive' : 'noarchive',
+			],
+		];
+
 		?>
 		<div class="tsf-flex-setting tsf-flex">
 			<div class="tsf-flex-setting-label tsf-flex">
@@ -178,61 +207,52 @@ switch ( $instance ) :
 						?>
 						</div>
 					</div>
+					<?php
+					if ( $this->is_static_frontpage( $post_id ) ) {
+						printf(
+							'<div class=tsf-flex-setting-label-sub-item><span class="description attention">%s</span></div>',
+							esc_html__( 'Warning: No public site should ever disable indexability or followability for the homepage.', 'autodescription' )
+						);
+						printf(
+							'<div class=tsf-flex-setting-label-sub-item><span class="description">%s</span></div>',
+							esc_html__( 'Note: A non-default selection will overwrite the homepage settings.', 'autodescription' )
+						);
+					}
+					?>
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<?php
-				if ( $this->is_static_frontpage( $post_id ) ) {
-					echo '<p style=margin-top:0>';
-						$this->attention( __( 'Warning: No public site should ever disable indexability or followability for the homepage.', 'autodescription' ), false );
-						echo '<br>';
-						$this->description( __( 'Note: A non-default selection will overwrite the homepage settings.', 'autodescription' ), false );
-					echo '</p>';
-				}
-
-				$r_defaults = $this->robots_meta( [ 'id' => $post_id ], 0b11 );
-				$r_settings = [
-					'noindex'   => [
-						'id'        => 'autodescription_noindex',
-						'option'    => '_genesis_noindex',
-						'force_on'  => 'index',
-						'force_off' => 'noindex',
-						'label'     => __( 'Set page indexability to:', 'autodescription' ),
-						'_default'  => empty( $r_defaults['noindex'] ) ? 'index' : 'noindex',
-					],
-					'nofollow'  => [
-						'id'        => 'autodescription_nofollow',
-						'option'    => '_genesis_nofollow',
-						'force_on'  => 'follow',
-						'force_off' => 'nofollow',
-						'label'     => __( 'Set link followability to:', 'autodescription' ),
-						'_default'  => empty( $r_defaults['nofollow'] ) ? 'follow' : 'nofollow',
-					],
-					'noarchive' => [
-						'id'        => 'autodescription_noarchive',
-						'option'    => '_genesis_noarchive',
-						'force_on'  => 'archive',
-						'force_off' => 'noarchive',
-						'label'     => __( 'Set page archivability to:', 'autodescription' ),
-						'_default'  => empty( $r_defaults['noarchive'] ) ? 'archive' : 'noarchive',
-					],
-				];
-
 				foreach ( $r_settings as $_s ) :
-					echo $this->make_single_select_form( [
-						'id'      => $_s['id'],
-						'class'   => 'tsf-select-block',
-						'name'    => sprintf( 'autodescription[%s]', $_s['option'] ),
-						'label'   => $_s['label'],
-						'options' => [
-							/* translators: %s = default option value */
-							0  => sprintf( __( 'Default (%s)', 'autodescription' ), $_s['_default'] ),
-							-1 => $_s['force_on'],
-							1  => $_s['force_off'],
-						],
-						'default' => $this->get_custom_field( $_s['option'] ),
-						// 'info'    => $_s['_info'],
-					] );
+					?>
+					<div class="tsf-flex-setting tsf-flex">
+						<div class="tsf-flex-setting-label tsf-flex">
+							<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
+								<label for="<?php echo esc_attr( $_s['id'] ); ?>" class="tsf-flex-setting-label-item tsf-flex">
+									<div><strong><?php echo esc_html( $_s['label'] ); ?></strong></div>
+								</label>
+							</div>
+						</div>
+						<div class="tsf-flex-setting-input tsf-flex">
+							<?php
+							echo $this->make_single_select_form( [
+								'id'      => $_s['id'],
+								'class'   => 'tsf-select-block',
+								'name'    => sprintf( 'autodescription[%s]', $_s['option'] ),
+								'label'   => '',
+								'options' => [
+									/* translators: %s = default option value */
+									0  => sprintf( __( 'Default (%s)', 'autodescription' ), $_s['_default'] ),
+									-1 => $_s['force_on'],
+									1  => $_s['force_off'],
+								],
+								'default' => $this->get_custom_field( $_s['option'] ),
+								// 'info'    => $_s['_info'],
+							] );
+							?>
+						</div>
+					</div>
+					<?php
 				endforeach;
 				?>
 			</div>

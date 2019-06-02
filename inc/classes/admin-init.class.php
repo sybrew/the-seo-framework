@@ -421,6 +421,9 @@ class Admin_Init extends Init {
 	 *
 	 * Copied from WordPress Core wp_ajax_crop_image.
 	 * Adjusted: 1. It accepts capability 'upload_files', instead of 'customize'.
+	 *               - This was set to 'edit_post' in WP 4.7? trac ticket got lost, probably for (invalid) security reasons.
+	 *                 In any case, that's still incorrect, and I gave up on communicating this;
+	 *                 We're not editing the image, we're creating a new one!
 	 *           2. It now only accepts TSF own AJAX nonces.
 	 *           3. It now only accepts context 'tsf-image'
 	 *           4. It no longer accepts a default context.

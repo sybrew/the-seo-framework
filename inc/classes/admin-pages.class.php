@@ -378,7 +378,7 @@ class Admin_Pages extends Inpost {
 	 * @return string Full field name
 	 */
 	public function get_field_name( $name ) {
-		return sprintf( '%s[%s]', $this->settings_field, $name );
+		return sprintf( '%s[%s]', THE_SEO_FRAMEWORK_SITE_OPTIONS, $name );
 	}
 
 	/**
@@ -402,7 +402,7 @@ class Admin_Pages extends Inpost {
 	 * @return string Full field id
 	 */
 	public function get_field_id( $id ) {
-		return sprintf( '%s[%s]', $this->settings_field, $id );
+		return sprintf( '%s[%s]', THE_SEO_FRAMEWORK_SITE_OPTIONS, $id );
 	}
 
 	/**
@@ -870,11 +870,11 @@ class Admin_Pages extends Inpost {
 			),
 			[
 				vsprintf(
-					'<label for=%s>%s</label>',
-					[
+					$args['label'] ? '<label for=%s>%s</label>' : '',
+					$args['label'] ? [
 						$this->sanitize_field_id( $args['id'] ),
 						\esc_html( $args['label'] ),
-					]
+					] : []
 				),
 				$args['info'] ? ' ' . $this->make_info(
 					$args['info'][0],

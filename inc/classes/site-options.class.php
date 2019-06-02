@@ -33,15 +33,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Site_Options extends Sanitize {
 
 	/**
-	 * Site Settings field.
-	 *
-	 * @since 2.2.2
-	 *
-	 * @var string Settings field.
-	 */
-	protected $settings_field = THE_SEO_FRAMEWORK_SITE_OPTIONS;
-
-	/**
 	 * Hold the SEO Settings Page ID for this plugin.
 	 *
 	 * @since 2.2.2
@@ -303,14 +294,14 @@ class Site_Options extends Sanitize {
 	 * @since 2.2.2
 	 *
 	 * @uses $this->the_seo_framework_get_option() Return option from the options table and cache result.
-	 * @uses $this->settings_field
+	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 *
 	 * @param string  $key       Option name.
 	 * @param boolean $use_cache Optional. Whether to use the cache value or not. Defaults to true.
 	 * @return mixed The value of this $key in the database.
 	 */
 	public function get_option( $key, $use_cache = true ) {
-		return $this->the_seo_framework_get_option( $key, $this->settings_field, $use_cache );
+		return $this->the_seo_framework_get_option( $key, THE_SEO_FRAMEWORK_SITE_OPTIONS, $use_cache );
 	}
 
 	/**
@@ -321,8 +312,8 @@ class Site_Options extends Sanitize {
 	 * @staticvar array $cache The option cache.
 	 *
 	 * @param string $setting The setting key.
-	 * @param bool $use_current Whether to use WordPress' version and update the cache
-	 *             or use the locally cached version.
+	 * @param bool   $use_current Whether to use WordPress' version and update the cache
+	 *                            or use the locally cached version.
 	 * @return array Options.
 	 */
 	public function get_all_options( $setting = null, $use_current = false ) {
@@ -333,7 +324,7 @@ class Site_Options extends Sanitize {
 			return $cache[ $setting ];
 
 		if ( ! $setting )
-			$setting = $this->settings_field;
+			$setting = THE_SEO_FRAMEWORK_SITE_OPTIONS;
 
 		/**
 		 * @since 2.0.0
@@ -405,7 +396,7 @@ class Site_Options extends Sanitize {
 	 *
 	 * @since 2.2.5
 	 * @uses $this->get_default_settings() Return option from the options table and cache result.
-	 * @uses $this->settings_field
+	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 *
 	 * @param string  $key       Option name.
 	 * @param boolean $use_cache Optional. Whether to use the cache value or not. Defaults to true.
@@ -421,14 +412,16 @@ class Site_Options extends Sanitize {
 	 * @since 2.2.2
 	 * @since 2.9.0 Removed reset options check, see check_options_reset().
 	 * @since 3.1.0 Removed settings field existence check.
+	 * @since 3.3.0 Now checks if the option exists before adding it. Shaves 20μs...
 	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 *
 	 * @return void Early if settings can't be registered.
 	 */
 	public function register_settings() {
 
-		\register_setting( $this->settings_field, $this->settings_field );
-		\add_option( $this->settings_field, $this->get_default_site_options() );
+		\register_setting( THE_SEO_FRAMEWORK_SITE_OPTIONS, THE_SEO_FRAMEWORK_SITE_OPTIONS );
+		\get_option( THE_SEO_FRAMEWORK_SITE_OPTIONS )
+			or \add_option( THE_SEO_FRAMEWORK_SITE_OPTIONS, $this->get_default_site_options() );
 
 		//* Check whether the Options Reset initialization has been added.
 		$this->check_options_reset();
@@ -488,7 +481,7 @@ class Site_Options extends Sanitize {
 			return;
 
 		if ( $this->get_option( 'tsf-settings-reset', false ) ) {
-			if ( \update_option( $this->settings_field, $this->get_default_site_options() ) ) {
+			if ( \update_option( THE_SEO_FRAMEWORK_SITE_OPTIONS, $this->get_default_site_options() ) ) {
 				$this->admin_redirect( $this->seo_settings_page_slug, [ 'tsf-settings-reset' => 'true' ] );
 				exit;
 			} else {
@@ -499,7 +492,7 @@ class Site_Options extends Sanitize {
 	}
 
 	/**
-	 * Updates a single option.
+	 * Updates a single SEO option.
 	 *
 	 * Can return false if option is unchanged.
 	 *
@@ -520,11 +513,11 @@ class Site_Options extends Sanitize {
 	}
 
 	/**
-	 * Allows updating of settings.
+	 * Allows bulk-updating of the SEO settings.
 	 *
 	 * @since 2.7.0
 	 *
-	 * @param string|array $new_option {
+	 * @param string|array $new_option : {
 	 *      if string: The string will act as a key for a new empty string option, e.g. : {
 	 *           'sitemap_index' becomes ['sitemap_index' => '']
 	 *      }
@@ -532,18 +525,18 @@ class Site_Options extends Sanitize {
 	 *            ['sitemap_index' => 1]
 	 *      }
 	 * }
-	 * @param string $settings_field The Settings Field to update. Defaults
-	 *               to The SEO Framework settings field.
+	 * @param string       $settings_field The Settings Field to update. Defaults
+	 *                                     to The SEO Framework settings field.
 	 * @return bool True on success. False on failure.
 	 */
-	public function update_settings( $new = '', $settings_field = '' ) {
+	public function update_settings( $new_option = '', $settings_field = '' ) {
 
 		if ( ! $settings_field ) {
-			$settings_field = $this->settings_field;
+			$settings_field = THE_SEO_FRAMEWORK_SITE_OPTIONS;
 			$this->init_sanitizer_filters();
 		}
 
-		$settings = \wp_parse_args( $new, \get_option( $settings_field ) );
+		$settings = \wp_parse_args( $new_option, \get_option( $settings_field ) );
 
 		return \update_option( $settings_field, $settings );
 	}
@@ -560,9 +553,9 @@ class Site_Options extends Sanitize {
 	 * @staticvar array $defaults_cache
 	 * @uses $this->get_default_site_options()
 	 *
-	 * @param string $key required The option name
-	 * @param string $depr Deprecated. Leave empty.
-	 * @param bool $use_cache optional Use the options cache or not. For debugging purposes.
+	 * @param string $key       Required. The option name
+	 * @param string $depr      Deprecated. Leave empty.
+	 * @param bool   $use_cache Optional. Use the options cache or not. For debugging purposes.
 	 * @return mixed default option
 	 *         null If option doesn't exist.
 	 */
@@ -593,7 +586,7 @@ class Site_Options extends Sanitize {
 	 * @since 2.3.4
 	 * @since 3.1.0 : Now returns 0 if the option doesn't exist, instead of -1.
 	 * @staticvar array $warned_cache
-	 * @uses $this->settings_field
+	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 * @uses $this->get_warned_site_options()
 	 *
 	 * @param string $key required The option name
@@ -639,8 +632,9 @@ class Site_Options extends Sanitize {
 	 * Returns Facebook locales array values.
 	 *
 	 * @since 2.5.2
-	 * @see https://www.facebook.com/translations/FacebookLocales.xml
+	 * @see https://www.facebook.com/translations/FacebookLocales.xml (deprecated)
 	 * @see https://wordpress.org/support/topic/oglocale-problem/#post-11456346
+	 * mirror: http://web.archive.org/web/20190601043836/https://wordpress.org/support/topic/oglocale-problem/
 	 * @see $this->language_keys() for the associative array keys.
 	 *
 	 * @return array Valid Facebook locales
@@ -797,8 +791,9 @@ class Site_Options extends Sanitize {
 	 * Use this to compare the numeric key position.
 	 *
 	 * @since 2.5.2
-	 * @see https://www.facebook.com/translations/FacebookLocales.xml
+	 * @see https://www.facebook.com/translations/FacebookLocales.xml (deprecated)
 	 * @see https://wordpress.org/support/topic/oglocale-problem/#post-11456346
+	 * mirror: http://web.archive.org/web/20190601043836/https://wordpress.org/support/topic/oglocale-problem/
 	 *
 	 * @return array Valid Facebook locale keys
 	 */
