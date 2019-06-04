@@ -121,10 +121,8 @@ class Init extends Query {
 	 * @since 2.8.0
 	 */
 	public function init_cron_actions() {
-
 		//* Flush post cache.
 		$this->init_post_cache_actions();
-
 	}
 
 	/**
@@ -140,14 +138,17 @@ class Init extends Query {
 		 */
 		\do_action( 'the_seo_framework_admin_init' );
 
-		//* Initialize caching actions.
+		//= Initialize caching actions.
 		$this->init_admin_caching_actions();
 
 		//= Initialize profile fields.
 		$this->init_profile_fields();
 
 		//= Initialize term meta filters and actions.
-		$this->initialize_term_meta();
+		$this->init_term_meta();
+
+		//= Initialize the SEO Bar
+		$this->init_seo_bar();
 
 		//* Save post data.
 		\add_action( 'save_post', [ $this, 'inpost_seo_save' ], 1, 2 );
@@ -163,16 +164,6 @@ class Init extends Query {
 
 		//* Initialize post states.
 		\add_action( 'current_screen', [ $this, 'post_state' ] );
-
-		if ( $this->get_option( 'display_seo_bar_tables' ) ) {
-			//* Initialize columns.
-			\add_action( 'current_screen', [ $this, 'init_columns' ] );
-
-			//* Ajax handlers for columns.
-			\add_action( 'wp_ajax_add-tag', [ $this, '_init_columns_wp_ajax_add_tag' ], -1 );
-			\add_action( 'wp_ajax_inline-save', [ $this, '_init_columns_wp_ajax_inline_save' ], -1 );
-			\add_action( 'wp_ajax_inline-save-tax', [ $this, '_init_columns_wp_ajax_inline_save_tax' ], -1 );
-		}
 
 		if ( $this->load_options ) :
 			// Enqueue i18n defaults.
@@ -759,7 +750,7 @@ class Init extends Query {
 	 * @since 2.9.4
 	 * @access private
 	 *
-	 * @param array    $posts The array of retrieved posts.
+	 * @param array     $posts    The array of retrieved posts.
 	 * @param \WP_Query $wp_query The WP_Query instance.
 	 * @return array $posts
 	 */
@@ -787,7 +778,7 @@ class Init extends Query {
 	 * @since 2.9.4
 	 * @access private
 	 *
-	 * @param array    $posts The array of retrieved posts.
+	 * @param array     $posts    The array of retrieved posts.
 	 * @param \WP_Query $wp_query The WP_Query instance.
 	 * @return array $posts
 	 */
@@ -815,10 +806,10 @@ class Init extends Query {
 	 * @since 2.9.4
 	 * @since 3.1.0 Now checks for the post type.
 	 *
-	 * @param \WP_Query $wp_query WP_Query object. Passed by reference for performance.
+	 * @param \WP_Query $wp_query WP_Query object.
 	 * @return bool
 	 */
-	protected function is_archive_query_adjustment_blocked( &$wp_query ) {
+	protected function is_archive_query_adjustment_blocked( $wp_query ) {
 
 		static $has_filter = null;
 

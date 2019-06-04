@@ -132,10 +132,6 @@ a.tsf-dismiss:hover {
 	padding: 0;
 }
 
-.tsf-seo-bar.tsf-100 {
-	width: 100%;
-}
-
 .tsf-seo-bar-inner-wrap {
 	display: -webkit-flex;
 	display: flex;
@@ -152,14 +148,6 @@ a.tsf-dismiss:hover {
 .tsf-seo-bar-section-wrap {
 	min-width: 2em;
 	flex: 1 1 auto;
-}
-
-.tsf-seo-bar-15 {
-	flex-basis: 15%;
-}
-
-.tsf-seo-bar-12-5 {
-	flex-basis: 12.5%;
 }
 
 .tsf-seo-bar-item {

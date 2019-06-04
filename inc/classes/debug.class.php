@@ -31,46 +31,32 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * @since 2.8.0
  */
 final class Debug implements Debug_Interface {
+	use Traits\Enclose_Stray_Private;
 
 	/**
-	 * The object instance.
-	 *
 	 * @since 2.8.0
-	 *
-	 * @var object|null This object instance.
+	 * @var object|null $instance This object instance.
 	 */
 	private static $instance = null;
 
 	/**
-	 * Cached debug/profile properties.
-	 *
 	 * @since 2.8.0
-	 *
-	 * @var bool Whether debug is enabled.
-	 * @var bool Whether debug is hidden in HTMl.
+	 * @var bool $the_seo_framework_debug Whether debug is enabled.
 	 */
 	public $the_seo_framework_debug = false;
 
 	/**
-	 * Unserializing instances of this object is forbidden.
-	 */
-	final protected function __wakeup() { }
-
-	/**
-	 * Cloning of this object is forbidden.
-	 */
-	final protected function __clone() { }
-
-	/**
 	 * Constructor.
 	 */
-	final protected function __construct() {}
+	protected function __construct() {}
 
 	/**
 	 * Sets the class instance.
 	 *
 	 * @since 3.1.0
 	 * @access private
+	 *
+	 * @param bool|null $debug Whether TSF debugging is enabled.
 	 */
 	public static function _set_instance( $debug = null ) {
 
@@ -333,8 +319,8 @@ final class Debug implements Debug_Interface {
 	 * @since 2.6.0
 	 * @since 3.2.2 Fixed unaccounted-for backtrace depth logic since this class decoupling in 3.1
 	 *
-	 * @param int Error handling code.
-	 * @param string The error message.
+	 * @param int    $code    The error handler code.
+	 * @param string $message The error message. Expected to be escaped.
 	 */
 	protected function error_handler_deprecated( $code, $message ) {
 
@@ -351,8 +337,8 @@ final class Debug implements Debug_Interface {
 	 *
 	 * @since 2.6.0
 	 *
-	 * @param int Error handling code.
-	 * @param string The error message.
+	 * @param int    $code    The error handler code.
+	 * @param string $message The error message. Expected to be escaped.
 	 */
 	protected function error_handler_doing_it_wrong( $code, $message ) {
 
@@ -370,8 +356,8 @@ final class Debug implements Debug_Interface {
 	 * @since 2.6.0
 	 * @since 3.2.2 Fixed unaccounted-for backtrace depth logic since this class decoupling in 3.1
 	 *
-	 * @param int Error handling code.
-	 * @param string The error message.
+	 * @param int    $code    The error handler code.
+	 * @param string $message The error message. Expected to be escaped.
 	 */
 	protected function error_handler_inaccessible_call( $code, $message ) {
 
@@ -387,9 +373,9 @@ final class Debug implements Debug_Interface {
 	 * @since 2.6.0
 	 * @since 2.8.0 added $code parameter
 	 *
-	 * @param array $error The Error location and file data extruded from debug_backtrace().
+	 * @param array  $error   The Error location and file data extruded from debug_backtrace().
 	 * @param string $message The error message. Expected to be escaped.
-	 * @param int $code The error handler code.
+	 * @param int    $code    The error handler code.
 	 */
 	protected function error_handler( $error, $message, $code = E_USER_NOTICE ) {
 
@@ -452,7 +438,6 @@ final class Debug implements Debug_Interface {
 	 *              2. Now is protected.
 	 *
 	 * @param string $value The debug value.
-	 * @param bool $ignore Ignore the hidden output.
 	 * @return string
 	 */
 	protected function debug_value_wrapper( $value ) {
@@ -469,8 +454,8 @@ final class Debug implements Debug_Interface {
 	 * @since 2.6.0
 	 * @since 3.1.0 Now is protected.
 	 *
-	 * @param bool $set Whether to reset the timer.
-	 * @return float PHP Microtime for code execution.
+	 * @param bool $reset Whether to reset the timer.
+	 * @return float The time it took for code execution.
 	 */
 	protected function timer( $reset = false ) {
 

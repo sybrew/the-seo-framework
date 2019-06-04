@@ -51,32 +51,33 @@ $_load_scripts_class = function() {
  * @final Can't be extended.
  */
 final class Scripts {
+	use \The_SEO_Framework\Traits\Enclose_Stray_Private;
 
 	/**
 	 * Codes to maintain the internal state of the scripts. This state might not reflect
 	 * the actual load state. See \WP_Dependencies instead.
+	 *
 	 * @since 3.1.0
 	 * @internal
-	 * @param int <bit 1>  REGISTERED
-	 * @param int <bit 10> LOADED     (enqueued)
+	 * @var int <bit 1>  REGISTERED
+	 * @var int <bit 10> LOADED     (enqueued)
 	 */
 	const REGISTERED = 0b1;
 	const LOADED     = 0b10;
 
 	/**
 	 * @since 3.1.0
-	 * @param array $scripts    The registered scripts.
-	 * @param array $templates  The registered templates.
-	 * @param array $queue      The queued scripts state.
+	 * @var array $scripts    The registered scripts.
+	 * @var array $templates  The registered templates.
+	 * @var array $queue      The queued scripts state.
 	 */
 	private static $scripts   = [];
 	private static $templates = [];
 	private static $queue     = [];
 
 	/**
-	 * The internal singleton object holder.
 	 * @since 3.1.0
-	 * @param \The_SEO_Framework\Builders\Scripts $instance The instance.
+	 * @var \The_SEO_Framework\Builders\Scripts $instance The instance.
 	 */
 	private static $instance;
 
@@ -84,7 +85,7 @@ final class Scripts {
 	 * @since 3.1.0
 	 * @since 3.2.2 Is now a private variable.
 	 * @see static::verify()
-	 * @param string|null $include_secret The inclusion secret generated on tab load.
+	 * @var string|null $include_secret The inclusion secret generated on tab load.
 	 */
 	private static $include_secret;
 
@@ -297,7 +298,7 @@ final class Scripts {
 	 * @see static::enqueue_known_script();
 	 * @augments static::$queue
 	 * @uses $this->generate_file_url()
-	 * @uses $this->get_inline_css()
+	 * @uses $this->create_inline_css()
 	 * @uses $this->register_template()
 	 *
 	 * @param array $s The script.
@@ -311,7 +312,7 @@ final class Scripts {
 			case 'css':
 				\wp_register_style( $s['id'], $instance->generate_file_url( $s, 'css' ), $s['deps'], $s['ver'], 'all' );
 				isset( $s['inline'] )
-					and \wp_add_inline_style( $s['id'], $instance->get_inline_css( $s['inline'] ) );
+					and \wp_add_inline_style( $s['id'], $instance->create_inline_css( $s['inline'] ) );
 				$registered = true;
 				break;
 			case 'js':
@@ -396,11 +397,12 @@ final class Scripts {
 	 * - {{$color_accent}}
 	 *
 	 * @since 3.1.0
+	 * @uses $this->convert_color_css()
 	 *
-	 * @param array $colors The color CSS.
+	 * @param array $styles The styles to add.
 	 * @return array $css
 	 */
-	private function get_inline_css( array $styles ) {
+	private function create_inline_css( array $styles ) {
 
 		$out = '';
 		foreach ( $styles as $selector => $css ) {
@@ -417,7 +419,7 @@ final class Scripts {
 	 * @staticvar array $c_ck Color keys.
 	 * @staticvar array $c_cv Color values.
 	 *
-	 * @param array $css
+	 * @param array $css The CSS to convert.
 	 * @return array $css
 	 */
 	private function convert_color_css( array $css ) {
@@ -480,8 +482,8 @@ final class Scripts {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @param string $id, the related script handle/ID.
-	 * @param array $templates, associative-&-singul-, or sequential-&-multi-dimensional : {
+	 * @param string $id        The related script handle/ID.
+	 * @param array  $templates Associative-&-singul-, or sequential-&-multi-dimensional : {
 	 *   'file' => string $file. The full file location,
 	 *   'args' => array $args. Optional,
 	 * }
@@ -528,6 +530,7 @@ final class Scripts {
 	 *
 	 * There's a secret key generated on each tab load. This key can be accessed
 	 * in the view through `$_secret`, and be sent back to this class.
+	 *
 	 * @see static::verify( $secret )
 	 *
 	 * @since 3.1.0

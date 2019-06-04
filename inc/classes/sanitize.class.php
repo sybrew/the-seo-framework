@@ -131,13 +131,11 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.8.0
 	 * @since 3.1.0 Added caching, preventing duplicate registrations.
-	 * @staticvar bool $init
 	 * @uses $this->add_option_filter() Assign filter to array of settings.
 	 */
 	public function init_sanitizer_filters() {
 
-		static $init = false;
-		if ( $init ) return;
+		if ( _has_run( __METHOD__ ) ) return;
 
 		$this->add_option_filter(
 			's_title_separator',
@@ -441,8 +439,6 @@ class Sanitize extends Admin_Pages {
 				'sitemap_query_limit',
 			]
 		);
-
-		$init = true;
 	}
 
 	/**
@@ -982,7 +978,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @param mixed $new_value Should ideally be an array with post type name indexes, and 1 or 0 passed in.
+	 * @param mixed $new_values Should ideally be an array with post type name indexes, and 1 or 0 passed in.
 	 * @return array
 	 */
 	public function s_disabled_post_types( $new_values ) {
@@ -1001,7 +997,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @param mixed $new_value Should ideally be an array with post type name indexes, and 1 or 0 passed in.
+	 * @param mixed $new_values Should ideally be an array with post type name indexes, and 1 or 0 passed in.
 	 * @return array
 	 */
 	public function s_post_types( $new_values ) {
@@ -1444,7 +1440,7 @@ class Sanitize extends Admin_Pages {
 	 * Strips all URLs that are placed on new lines. These are prone to be embeds.
 	 *
 	 * This might leave stray line feeds.
-	 * @see $this->s_singleline();
+	 * @see `$this->s_singleline();` to fix that.
 	 *
 	 * @since 3.1.0
 	 * @see \WP_Embed::autoembed()
@@ -1460,7 +1456,7 @@ class Sanitize extends Admin_Pages {
 	 * Strips all URLs that are placed in paragraphs on their own. These are prone to be embeds.
 	 *
 	 * This might leave stray line feeds.
-	 * @see $this->s_singleline();
+	 * @see `$this->s_singleline();` to fix that.
 	 *
 	 * @since 3.1.0
 	 * @see \WP_Embed::autoembed()

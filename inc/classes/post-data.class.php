@@ -39,11 +39,12 @@ class Post_Data extends Detect {
 	 * blank or not set.
 	 *
 	 * @since 2.0.0
+	 * @since 3.3.0 No longer strips slashes from scalar non-strings.
 	 * @staticvar array $field_cache
 	 *
 	 * @param string $field   Custom field key.
 	 * @param int    $post_id The post ID.
-	 * @return string|boolean Return value or false on failure.
+	 * @return mixed|boolean Return value or false on failure.
 	 */
 	public function get_custom_field( $field, $post_id = null ) {
 
@@ -66,7 +67,9 @@ class Post_Data extends Detect {
 			$field_cache[ $field ][ $post_id ] = '';
 
 		//* Render custom field, slashes stripped, sanitized if string
-		$field_cache[ $field ][ $post_id ] = is_array( $custom_field ) ? \stripslashes_deep( $custom_field ) : stripslashes( $custom_field );
+		$field_cache[ $field ][ $post_id ] = is_array( $custom_field )
+			? \stripslashes_deep( $custom_field )
+			: \stripslashes_from_strings_only( $custom_field );
 
 		return $field_cache[ $field ][ $post_id ];
 	}

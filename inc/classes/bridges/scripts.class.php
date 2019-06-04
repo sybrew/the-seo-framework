@@ -1,10 +1,9 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Bridges\Admin
- * @subpackage The_SEO_Framework\Bridges\Admin
+ * @package The_SEO_Framework\Classes\Bridges
  * @subpackage The_SEO_Framework\Bridges
  */
-namespace The_SEO_Framework\Bridges\Admin;
+namespace The_SEO_Framework\Bridges;
 
 /**
  * The SEO Framework plugin
@@ -50,16 +49,15 @@ $_load_scripts_class = function() {
 final class Scripts {
 
 	/**
-	 * The internal singleton object holder.
 	 * @since 3.3.0
-	 * @param \The_SEO_Framework\Bridges\Admin\Scripts $instance The instance.
+	 * @var \The_SEO_Framework\Bridges\Scripts $instance The instance.
 	 */
 	private static $instance;
 
 	/**
 	 * @since 3.3.0
-	 * @param string $builder The script builder class name.
-	 * @param string $loader  The script loader class name.
+	 * @var string $builder The script builder class name.
+	 * @var string $loader  The script loader class name (this class).
 	 */
 	private static $builder;
 	private static $loader;
@@ -134,7 +132,8 @@ final class Scripts {
 			$_scripts[] = static::get_ays_scripts();
 		}
 
-		static::$builder::register( $_scripts );
+		$builder = static::$builder;
+		$builder::register( $_scripts );
 	}
 
 	/**
@@ -167,7 +166,7 @@ final class Scripts {
 		 * @since 3.3.0 Added $loader parameter.
 		 * @param array  $scripts The default CSS and JS loader settings.
 		 * @param string $builder The \The_SEO_Framework\Builders\Scripts builder class name.
-		 * @param string $loader  The \The_SEO_Framework\Bridges\Admin\Scripts loader class name.
+		 * @param string $loader  The \The_SEO_Framework\Bridges\Scripts loader class name.
 		 */
 		return (array) \apply_filters_ref_array( 'the_seo_framework_scripts', [
 			[
@@ -683,6 +682,7 @@ final class Scripts {
 	 * @return array The script params.
 	 */
 	public static function get_counter_scripts() {
+
 		$tsf = \the_seo_framework();
 
 		return [

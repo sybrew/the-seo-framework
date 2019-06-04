@@ -83,7 +83,7 @@ switch ( $instance ) :
 
 		$info = $this->make_info(
 			__( 'Learn how this data is used.', 'autodescription' ),
-			'https://developers.google.com/search/docs/data-types/breadcrumbs',
+			'https://developers.google.com/search/docs/data-types/breadcrumb',
 			false
 		);
 		$this->wrap_fields( $this->make_checkbox(

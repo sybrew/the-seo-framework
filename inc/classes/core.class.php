@@ -32,6 +32,17 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * @since 2.8.0
  */
 class Core {
+	use Traits\Enclose_Core_Final;
+
+	/**
+	 * Properties arguments used for the \The_SEO_Framework\Generate\robots_meta() method family.
+	 *
+	 * @since 3.3.0
+	 * @var int <bitwise> ROBOTS_IGNORE_PROTECTION
+	 * @var int <bitwise> ROBOTS_IGNORE_SETTINGS
+	 */
+	const ROBOTS_IGNORE_PROTECTION = 0b01;
+	const ROBOTS_IGNORE_SETTINGS   = 0b10;
 
 	/**
 	 * Tells if this plugin is loaded.
@@ -49,16 +60,6 @@ class Core {
 	 * Calling any top file without __construct() is forbidden.
 	 */
 	private function __construct() { }
-
-	/**
-	 * Unserializing instances of this object is forbidden.
-	 */
-	final protected function __wakeup() { }
-
-	/**
-	 * Cloning of this object is forbidden.
-	 */
-	final protected function __clone() { }
 
 	/**
 	 * Handles unapproachable invoked properties.
@@ -105,8 +106,8 @@ class Core {
 	 *
 	 * @since 2.7.0
 	 *
-	 * @param string $name The method name.
-	 * @param array $arguments The method arguments.
+	 * @param string $name      The method name.
+	 * @param array  $arguments The method arguments.
 	 * @return mixed|void
 	 */
 	final public function __call( $name, $arguments ) {
@@ -152,9 +153,9 @@ class Core {
 	 * @access private
 	 * @credits Akismet For some code.
 	 *
-	 * @param string $view The file name.
-	 * @param array $args The arguments to be supplied within the file name.
-	 *              Each array key is converted to a variable with its value attached.
+	 * @param string $view     The file name.
+	 * @param array  $__args   The arguments to be supplied within the file name.
+	 *                         Each array key is converted to a variable with its value attached.
 	 * @param string $instance The instance suffix to call back upon.
 	 */
 	public function get_view( $view, array $__args = [], $instance = 'main' ) {
@@ -197,7 +198,7 @@ class Core {
 	 *
 	 * @since 2.6.0
 	 *
-	 * @param int $i The dimension to resize.
+	 * @param int $i  The dimension to resize.
 	 * @param int $r1 The deminsion that determines the ratio.
 	 * @param int $r2 The dimension to proportionate to.
 	 * @return int The proportional dimension, rounded.
@@ -206,8 +207,8 @@ class Core {
 
 		//* Get aspect ratio.
 		$ar = $r1 / $r2;
+		$i  = $i / $ar;
 
-		$i = $i / $ar;
 		return round( $i );
 	}
 
@@ -474,8 +475,8 @@ class Core {
 	 * @since 3.0.6 Now uses the old timezone string when a new one can't be generated.
 	 *
 	 * @param string $tzstring Optional. The PHP Timezone string. Best to leave empty to always get a correct one.
-	 * @link http://php.net/manual/en/timezones.php
-	 * @param bool $reset Whether to reset to default. Ignoring first parameter.
+	 *               @link http://php.net/manual/en/timezones.php
+	 * @param bool   $reset Whether to reset to default. Ignoring first parameter.
 	 * @return bool True on success. False on failure.
 	 */
 	public function set_timezone( $tzstring = '', $reset = false ) {
@@ -754,10 +755,10 @@ class Core {
 	 * @since 2.9.3 : Added $args parameter.
 	 * @link https://wordpress.org/plugins/about/readme.txt
 	 *
-	 * @param string $text The text that might contain markdown. Expected to be escaped.
-	 * @param array $convert The markdown style types wished to be converted.
-	 *              If left empty, it will convert all.
-	 * @param array $args The function arguments.
+	 * @param string $text    The text that might contain markdown. Expected to be escaped.
+	 * @param array  $convert The markdown style types wished to be converted.
+	 *                        If left empty, it will convert all.
+	 * @param array  $args    The function arguments.
 	 * @return string The markdown converted text.
 	 */
 	public function convert_markdown( $text, $convert = [], $args = [] ) {

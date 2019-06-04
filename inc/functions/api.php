@@ -110,7 +110,6 @@ namespace The_SEO_Framework {
 	 * @uses THE_SEO_FRAMEWORK_DIR_PATH_TRAIT
 	 * @access private
 	 * @staticvar array $loaded
-	 * @TODO use this.
 	 *
 	 * @param string $file Where the trait is for. Must be lowercase.
 	 * @return bool True if loaded, false otherwise.

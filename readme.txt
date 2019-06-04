@@ -258,6 +258,12 @@ TODO: Add a classmap for components, like a "metabox loader", "quickedit loader"
 TODO explain why PHP 5.5 is now required.
 TODO update THE_SEO_FRAMEWORK_DB_VERSION to fire PHP upgrade environmental test.
 
+TODO remove $page_defaults
+
+TODO "Want to opt out of future, infrequent, admin-only, non-recurring, and non-intrusive suggestions? Add this to your wp-config file: `define( 'TSF_DISABLE_SUGGESTIONS', true );`
+
+TODO Opt-in for asynchronous SEO Bars? It is possible now! :)
+
 = 3.3.0 - Multiplex =
 
 TODO Exclaim:
@@ -269,8 +275,14 @@ TODO Exclaim:
 - TODO As smart as a self-driving car: Tooltips stay between the lines. Tesla needs me.
 - TODO Finally (really) translator friendly.
 - New posts are indexed faster with an even smarter sitemap.
+- The monolithic facade "the_seo_framework()" is now much lighter, as we offloaded administrative functionality to other files.
+- TODO The SEO Bar now only lists items that truly affect the current status, instead of listing everything that might help to concludes a status.
+	* i.e., instead of "WordPress allows indexing, but you set it to noindex, and you disabled the post type", it now says "1. You set it to noindex. 1. You disabled the post type.".
 
 ..., and, for developers, we've finally introduced a reliable JavaScript API. Documentation will follow soon (based on frequently asked requests).
+
+TODO deprecated get_seo_bar use get_generated_seo_bar instead.
+TODO consider making the tooltip wider, or automatically grow or shrink based on the content. Then, assess the position (first, test overflow left, then, widen it until it overflows right, with max width: 250px?)
 
 **Detailed log:**
 
@@ -296,7 +308,7 @@ TODO Exclaim:
 	* **SEO Bar:** TODO Other states are now shown when "noindex" is set, regardless.
 		* TODO! Add this state! And rework it, in general...
 		* However, now, when the post is redirected, you'll now only see that.
-	* **Redirects:** When a post is redirected, it will no longer be included in the sitemap.
+	* **Redirects:** When a post is redirected, it will no longer be included in the sitemap. So, you no longer have to fiddle with the "index" setting to get the expected result.
 	* **Sitemap:** The sitemap post limit now counts all posts, pages, and custom post types; instead of them separately.
 		* Note: Because we can't guess your intent when you set the option (or left it unchanged), we aren't updating this.
 		* New users will have this setting set to 3000 posts, from 1200 previously.
@@ -310,6 +322,7 @@ TODO Exclaim:
 	* **Sitemap:** The blog page's priority is now `1.0`, from `0.9`. Note, however, that this feature is disabled by default and deprecated by some search engines.
 	* **Sitemap:** The page and post priorities now deduce based on item's position, instead of that pages always has a priority of `0.9`.
 		* They still start at 0.9.
+	* **Tooltips:** The tooltip text is no longer bolded by default.
 * **Improved:**
 	* **Spam control:**
 		* Added more `index.php` files which prevent nasty backlinks and crawlers to index this plugin's files when `Indexes` option isn't disabled in Apache.
@@ -393,6 +406,7 @@ TODO Exclaim:
 		* `_genesis_noindex`, it can now be set to `-1`.
 		* `_genesis_nofollow`, it can now be set to `-1`.
 		* `_genesis_noarchive`, it can now be set to `-1`.
+		* `the_seo_framework()->get_custom_field()` no longer converts all scalar types to strings.
 * **Class notes:**
 	* **Noted:**
 		* Methods that you shouldn't use--marked private or aren't visible--aren't listed here, unless specifically annotated.
@@ -440,7 +454,6 @@ TODO Exclaim:
 			* TODO `get_robots_txt_url()`, now also uses `$wp_query->using_index_permalinks()` to determine invalidity.
 			* `sanitize_field_id()`, now no longer strips square brackets.
 			* `robots_meta()` now has two new parameters.
-			* `init_columns()` is now marked private.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`
@@ -479,6 +492,11 @@ TODO Exclaim:
 				* `enqueue_primaryterm_scripts()`
 				* TODO `load_assets()`
 				* TODO `metabox_scripts()`
+* **Property notes:**
+	* For object `the_seo_framework()`:
+		* **Added:**
+			* `ROBOTS_IGNORE_PROTECTION`, used for the `robots_meta()` method family, ignores post's password/privacy settings.
+			* `ROBOTS_IGNORE_SETTINGS`, used for the `robots_meta()` method family, ignores current post/term's SEO settings.
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_allow_quick_edit`, boolean.

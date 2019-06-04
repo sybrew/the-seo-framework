@@ -95,7 +95,7 @@ $robots_settings = [
 		<tr>
 			<th scope="row" valign="top"><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
 			<td>
-				<?php $this->post_status( $term_id, $taxonomy, true ); ?>
+				<?php echo $this->get_generated_seo_bar( [ 'id' => $term_id, 'taxonomy' => $taxonomy ] ); ?>
 			</td>
 		</tr>
 		<?php endif; ?>

@@ -33,21 +33,12 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * @access private
  */
 class Sitemap {
+	use \The_SEO_Framework\Traits\Enclose_Core_Final;
 
 	/**
 	 * @var null|\The_SEO_Framework\Load
 	 */
 	private static $tsf = null;
-
-	/**
-	 * Unserializing instances of this object is forbidden.
-	 */
-	final protected function __wakeup() { }
-
-	/**
-	 * Cloning of this object is forbidden.
-	 */
-	final protected function __clone() { }
 
 	/**
 	 * Constructor.
@@ -509,8 +500,15 @@ class Sitemap {
 			}
 		}
 
-		// 0b01 as we don't need to test 'private' (because of sole 'publish'), and 'password' (because of false 'has_password')
-		return ! isset( $excluded[ $post_id ] ) && ! static::$tsf->is_robots_meta_noindex_set_by_args( [ 'id' => $post_id ], 0b01 );
+		static $_ignore = null;
+		if ( null === $_ignore ) {
+			$_tsf    = static::$tsf;
+			$_ignore = $_tsf::ROBOTS_IGNORE_PROTECTION; // php 7 please... we can't use static::$tsf::... now we need cache..
+		}
+
+		// ROBOTS_IGNORE_PROTECTION as we don't need to test 'private' (because of sole 'publish'), and 'password' (because of false 'has_password')
+		return ! isset( $excluded[ $post_id ] )
+			&& ! static::$tsf->is_robots_meta_noindex_set_by_args( [ 'id' => $post_id ], $_ignore );
 	}
 
 	/**

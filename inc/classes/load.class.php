@@ -38,9 +38,9 @@ final class Load extends Feed implements Debug_Interface {
 	 *
 	 * @since 2.2.9
 	 *
-	 * @var bool Whether debug is enabled.
-	 * @var bool Whether transients are enabled.
-	 * @var bool Whether script debugging is enabled.
+	 * @var bool $the_seo_framework_debug          Whether TSF debug is enabled.
+	 * @var bool $the_seo_framework_use_transients Whether TSF transients are enabled.
+	 * @var bool $script_debug                     Whether WP script debugging is enabled.
 	 */
 	public $the_seo_framework_debug          = false;
 	public $the_seo_framework_use_transients = true;
@@ -49,16 +49,18 @@ final class Load extends Feed implements Debug_Interface {
 	/**
 	 * Constructor, setup debug vars and then load parent constructor.
 	 *
-	 * @staticvar int $count Prevents duplicated constructor loading.
+	 * @since 2.8.0
+	 * @since 3.3.0 Now informs developer of invalid class instancing.
 	 *
 	 * @return null If called twice or more.
 	 */
 	public function __construct() {
 
-		static $count = 0;
-
-		if ( $count++ )
+		if ( _has_run( __METHOD__ ) ) {
+			// Don't construct twice, warn developer.
+			$this->_doing_it_wrong( __METHOD__, 'Do not instance this class. Use function <code>the_seo_framework()</code> instead.', '3.1.0' );
 			return null;
+		}
 
 		//= Setup debug vars before initializing anything else.
 		$this->init_debug_vars();
@@ -122,7 +124,7 @@ final class Load extends Feed implements Debug_Interface {
 	 *
 	 * @since 2.8.0
 	 * @TODO Add transients that will bypass all these checks.
-	 *       Careful, recheck on each activation -- and even FTP deletion.
+	 *       Careful, recheck on each activation -- and even FTP deletion or PHP update...
 	 */
 	protected function load_early_compat_files() {
 
@@ -206,9 +208,9 @@ final class Load extends Feed implements Debug_Interface {
 	 * @NOTE _doing_it_wrong notices go towards the callback. Unless this
 	 *      function is used wrongfully. Then the notice is about this function.
 	 *
-	 * @param array|string $callback the method array or function string.
-	 * @param string $version the version of The SEO Framework the function is used.
-	 * @param array|string $args The arguments passed to the function.
+	 * @param array|string $callback The method array or function string.
+	 * @param string       $version  The version of The SEO Framework the function is used.
+	 * @param array|string $args     The arguments passed to the function.
 	 * @return mixed $output The function called.
 	 */
 	protected function call_function( $callback, $version = '', $args = [] ) {

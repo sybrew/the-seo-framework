@@ -68,6 +68,9 @@ function _init_tsf() {
 	if ( $tsf )
 		return $tsf;
 
+	// @TODO use autoloader instead?
+	_load_trait( 'core/overload' );
+
 	/**
 	 * @package The_SEO_Framework
 	 */

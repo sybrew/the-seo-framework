@@ -34,6 +34,69 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Admin_Init extends Init {
 
 	/**
+	 * Initializes SEO Bar.
+	 *
+	 * @since 3.3.0
+	 */
+	public function init_seo_bar() {
+
+		// Initialize table output.
+		if ( $this->get_option( 'display_seo_bar_tables' ) ) {
+			$seobar = new Bridges\SeoBar;
+			$seobar->prepare_seo_bar_tables();
+		}
+	}
+
+	/**
+	 * Add post state on edit.php to the page or post that has been altered.
+	 *
+	 * @since 2.1.0
+	 * @uses $this->add_post_state
+	 */
+	public function post_state() {
+
+		//* Only load on singular pages.
+		if ( $this->is_singular() ) {
+			/**
+			 * @since 2.1.0
+			 * @param bool $allow_states Whether to allow TSF post states output.
+			 */
+			$allow_states = (bool) \apply_filters( 'the_seo_framework_allow_states', true );
+
+			if ( $allow_states )
+				\add_filter( 'display_post_states', [ $this, 'add_post_state' ], 10, 2 );
+		}
+	}
+
+	/**
+	 * Adds post states in post/page edit.php query
+	 *
+	 * @since 2.1.0
+	 * @since 2.9.4 Now listens to `alter_search_query` and `alter_archive_query` options.
+	 *
+	 * @param array    $states The current post states array
+	 * @param \WP_Post $post The Post Object.
+	 * @return array Adjusted $states
+	 */
+	public function add_post_state( $states = [], $post ) {
+
+		$post_id = isset( $post->ID ) ? $post->ID : false;
+
+		if ( $post_id ) {
+			$search_exclude  = $this->get_option( 'alter_search_query' ) && $this->get_custom_field( 'exclude_local_search', $post_id );
+			$archive_exclude = $this->get_option( 'alter_archive_query' ) && $this->get_custom_field( 'exclude_from_archive', $post_id );
+
+			if ( $search_exclude )
+				$states[] = \esc_html__( 'No Search', 'autodescription' );
+
+			if ( $archive_exclude )
+				$states[] = \esc_html__( 'No Archive', 'autodescription' );
+		}
+
+		return $states;
+	}
+
+	/**
 	 * Prepares scripts in the admin area.
 	 *
 	 * @since 3.1.0
@@ -101,14 +164,13 @@ class Admin_Init extends Init {
 	 *
 	 * The first letter of the method is capitalized, to indicate it's a class caller.
 	 *
-	 * @since 3.1.0
-	 * @loader
+	 * @since 3.3.0
+	 * @bridge
 	 *
 	 * @return string The scripts loader class name.
 	 */
 	public function ScriptsLoader() {
-		// return Bridges\Admin\Scripts::class; //= PHP 5.5+
-		return '\\The_SEO_Framework\\Bridges\\Admin\\Scripts';
+		return Bridges\Scripts::class;
 	}
 
 	/**
@@ -122,8 +184,7 @@ class Admin_Init extends Init {
 	 * @return string The scripts class name.
 	 */
 	public function Scripts() {
-		// return Builder\Scripts::class; //= PHP 5.5+
-		return '\\The_SEO_Framework\\Builders\\Scripts';
+		return Builders\Scripts::class;
 	}
 
 	/**
@@ -275,7 +336,7 @@ class Admin_Init extends Init {
 	 *
 	 * @since 2.8.0
 	 *
-	 * @param array $removable_query_args
+	 * @param array $removable_query_args The removable query arguments.
 	 * @return array The adjusted removable query args.
 	 */
 	public function add_removable_query_args( $removable_query_args = [] ) {

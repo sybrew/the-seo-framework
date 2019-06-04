@@ -30,7 +30,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  *
  * @since 3.0.0
  */
-class Profile extends Doing_It_Right {
+class Profile extends Generate_Ldjson {
 
 	/**
 	 * @since 3.0.0

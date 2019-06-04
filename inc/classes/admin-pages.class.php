@@ -818,15 +818,15 @@ class Admin_Pages extends Inpost {
 	 * @since 3.3.0
 	 *
 	 * @param array $args : {
-	 *    @param string     $id       The select field ID.
-	 *    @param string     $class    The div wrapper class.
-	 *    @param string     $name     The option name.
-	 *    @param int|string $default  The current option value.
-	 *    @param array      $options  The select option values : { value => name }
-	 *    @param string     $label    The option label.
-	 *    @param string     $required Whether the field must be required.
-	 *    @param array      $data     The select field data.
-	 *    @param array      $info     Extra info field data.
+	 *    string     $id       The select field ID.
+	 *    string     $class    The div wrapper class.
+	 *    string     $name     The option name.
+	 *    int|string $default  The current option value.
+	 *    array      $options  The select option values : { value => name }
+	 *    string     $label    The option label.
+	 *    string     $required Whether the field must be required.
+	 *    array      $data     The select field data.
+	 *    array      $info     Extra info field data.
 	 * }
 	 * @return string The option field.
 	 */
@@ -1043,10 +1043,10 @@ class Admin_Pages extends Inpost {
 	 * @since 2.3.4
 	 * @since 3.1.0 Deprecated second parameter.
 	 *
-	 * @param string $key  The option name which returns boolean.
-	 * @param string $setting optional The settings field.
-	 * @param bool   $wrap Whether to wrap the class name in `class="%s"`
-	 * @param bool   $echo Whether to echo or return the output.
+	 * @param string $key        The option name which returns boolean.
+	 * @param string $deprecated Deprecated. Used to be the settings field.
+	 * @param bool   $wrap       Whether to wrap the class name in `class="%s"`
+	 * @param bool   $echo       Whether to echo or return the output.
 	 * @return string Empty on echo or the class name with an optional wrapper.
 	 */
 	public function is_conditional_checked( $key, $deprecated = '', $wrap = true, $echo = true ) {
@@ -1076,6 +1076,24 @@ class Admin_Pages extends Inpost {
 
 			return $class;
 		}
+	}
+
+	/**
+	 * Returns the SEO Bar.
+	 *
+	 * @since 3.3.0
+	 * @uses \The_SEO_Framework\Interpreters\SeoBar::generate_bar();
+	 *
+	 * @param array $query : {
+	 *   int    $id        : Required. The current post or term ID.
+	 *   string $taxonomy  : Optional. If not set, this will interpret it as a post.
+	 *   string $post_type : Optional. If not set, this will be automatically filled.
+	 *                                 This parameter is ignored for taxonomies.
+	 * }
+	 * @return string The generated SEO bar, in HTML.
+	 */
+	public function get_generated_seo_bar( array $query ) {
+		return Interpreters\SeoBar::generate_bar( $query );
 	}
 
 	/**

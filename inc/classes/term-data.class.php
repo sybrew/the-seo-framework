@@ -35,12 +35,24 @@ class Term_Data extends Post_Data {
 	/**
 	 * Initializes term meta data filters and functions.
 	 *
-	 * @since 2.7.0
-	 * @since 3.0.0 No longer checks for admin query.
+	 * @since 3.3.0
 	 */
-	public function initialize_term_meta() {
+	public function init_term_meta() {
 		\add_action( 'edit_term', [ $this, 'update_term_meta' ], 10, 2 );
 		\add_action( 'delete_term', [ $this, 'delete_term_meta' ], 10, 2 );
+	}
+
+	/**
+	 * Initializes term meta data filters and functions.
+	 *
+	 * @since 2.7.0
+	 * @since 3.0.0 No longer checks for admin query.
+	 * @since 3.3.0 Deprecated
+	 * @deprecated
+	 * @alias $this->init_term_meta();
+	 */
+	public function initialize_term_meta() {
+		$this->init_term_meta();
 	}
 
 	/**

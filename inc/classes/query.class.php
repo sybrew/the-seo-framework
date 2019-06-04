@@ -124,7 +124,7 @@ class Query extends Core {
 	 *
 	 * @since 3.3.0
 	 *
-	 * @param string $taxonomy Optional. The taxonomy to check. Defaults to current screen/query taxomy.
+	 * @param string $taxonomy Optional. The taxonomy to check. Defaults to current screen/query taxonomy.
 	 * @return array List of post types.
 	 */
 	public function get_post_types_from_taxonomy( $taxonomy = '' ) {

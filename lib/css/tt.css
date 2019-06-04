@@ -42,7 +42,7 @@ a.tsf-tooltip-item {
 .tsf-tooltip-text-wrap {
 	padding: 10px 12px;
 	font-size: 13px;
-	font-weight: 500;
+	/* font-weight: 400; */
 	line-height: 1.625em;
 	border-radius: 3px;
 	background: #424242;
@@ -72,6 +72,23 @@ a.tsf-tooltip-item {
 	display: block;
 	width: 100%;
 	content: "\A";
+}
+
+.tsf-tooltip-text ol,
+.tsf-tooltip-text ul {
+	/* font-size: .95em; */
+	margin-left: 1em;
+	color: inherit;
+}
+
+.rtl .tsf-tooltip-text ol,
+.rtl .tsf-tooltip-text ul {
+	margin-left: 0;
+	margin-right: 1em;
+}
+
+.tsf-tooltip-text li {
+	/* font-size: .95em; */
 }
 
 .tsf-tooltip-arrow {

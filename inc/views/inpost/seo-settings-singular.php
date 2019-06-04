@@ -34,7 +34,7 @@ switch ( $instance ) :
 				</div>
 				<div class="tsf-flex-setting-input tsf-flex">
 					<div>
-						<?php $this->post_status( $post_id, 'inpost', true ); ?>
+						<?php echo $this->get_generated_seo_bar( [ 'id' => $post_id ] ); ?>
 					</div>
 				</div>
 			</div>
@@ -211,11 +211,11 @@ switch ( $instance ) :
 					if ( $this->is_static_frontpage( $post_id ) ) {
 						printf(
 							'<div class=tsf-flex-setting-label-sub-item><span class="description attention">%s</span></div>',
-							esc_html__( 'Warning: No public site should ever disable indexability or followability for the homepage.', 'autodescription' )
+							esc_html__( 'Warning: No public site should ever disable indexability or link followability for the homepage.', 'autodescription' )
 						);
 						printf(
 							'<div class=tsf-flex-setting-label-sub-item><span class="description">%s</span></div>',
-							esc_html__( 'Note: A non-default selection will overwrite the homepage settings.', 'autodescription' )
+							esc_html__( 'Note: A non-default selection will overwrite the global homepage settings.', 'autodescription' )
 						);
 					}
 					?>
