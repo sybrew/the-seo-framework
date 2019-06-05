@@ -33,6 +33,8 @@ defined( 'ABSPATH' ) or die;
 /**
  * @NOTE This file MUST be written according to WordPress' minimum PHP requirements.
  *       Which is PHP 5.2.
+ * When we only support WordPress 5.2+, it'll be PHP 5.6.
+ * When we only support WordPress 5.4?+, it'll be PHP 7.1.
  */
 
 //* Debug. Not to be used on production websites as it dumps and/or disables all kinds of stuff everywhere.
@@ -66,18 +68,21 @@ define( 'THE_SEO_FRAMEWORK_DB_VERSION', '3104' );
 
 /**
  * The plugin file, absolute unix path.
+ *
  * @since 2.2.9
  */
 define( 'THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE', __FILE__ );
 
 /**
  * The plugin's bootstrap folder location.
+ *
  * @since 3.1.0
  */
 define( 'THE_SEO_FRAMEWORK_BOOTSTRAP_PATH', dirname( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE ) . DIRECTORY_SEPARATOR . 'bootstrap' . DIRECTORY_SEPARATOR );
 
 /**
  * Checks whether to start plugin or test the server environment first.
+ *
  * @since 2.8.0
  */
 if ( get_option( 'the_seo_framework_tested_upgrade_version' ) < THE_SEO_FRAMEWORK_DB_VERSION ) {
@@ -97,37 +102,19 @@ if ( get_option( 'the_seo_framework_tested_upgrade_version' ) < THE_SEO_FRAMEWOR
  */
 function the_seo_framework_boot() {
 
-	/**
-	 * Defines environental constants.
-	 * @since 3.1.0
-	 */
+	// Defines environental constants.
 	require THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'define.php';
 
-	/**
-	 * Load plugin API functions.
-	 * @since 3.1.0
-	 */
+	// Load plugin API functions.
 	require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'api.php';
 
-	/**
-	 * Prepare plugin upgrader before the plugin loads.
-	 * @since 3.1.0
-	 * @since 3.1.2 Now performs a weak check.
-	 * @since 3.3.0 Now performs a strong check, `the_seo_framework_db_version()` casts to string.
-	 */
-	if ( the_seo_framework_db_version() !== THE_SEO_FRAMEWORK_DB_VERSION ) {
-		require THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'upgrade.php';
-	}
+	// Prepare plugin upgrader before the plugin loads.
+	the_seo_framework_db_version() !== THE_SEO_FRAMEWORK_DB_VERSION
+		and require THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'upgrade.php';
 
-	/**
-	 * Load deprecated functions.
-	 * @since 3.1.0
-	 */
+	// Load deprecated functions.
 	require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'deprecated.php';
 
-	/**
-	 * Load plugin.
-	 * @since 3.1.0
-	 */
+	// Load plugin.
 	require THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'load.php';
 }

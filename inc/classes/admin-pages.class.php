@@ -443,9 +443,7 @@ class Admin_Pages extends Inpost {
 		//* Make sure the scripts are loaded.
 		$this->init_admin_scripts();
 
-		//! PHP 5.4 compat: put in var.
-		$scripts = $this->Scripts();
-		$scripts::enqueue();
+		\The_SEO_Framework\Builders\Scripts::enqueue();
 
 		if ( 'warning' === $type )
 			$type = 'notice-warning';
@@ -560,7 +558,6 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @param string $content Content to be wrapped in the description wrap.
 	 * @param bool   $block Whether to wrap the content in <p> tags.
-	 * @return string Content wrapped in the description wrap.
 	 */
 	public function description( $content, $block = true ) {
 		$this->description_noesc( \esc_html( $content ), $block );
@@ -675,8 +672,9 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @since 3.3.0
 	 * @internal
+	 * @TODO escape input?
 	 *
-	 * @param array $data : {
+	 * @param array $data : Expected to be escaped! {
 	 *    string $k => array|string $v
 	 * }
 	 * @return string The HTML data tags.
@@ -825,7 +823,7 @@ class Admin_Pages extends Inpost {
 	 *    array      $options  The select option values : { value => name }
 	 *    string     $label    The option label.
 	 *    string     $required Whether the field must be required.
-	 *    array      $data     The select field data.
+	 *    array      $data     The select field data. Sub-items are expected to be escaped if they're not an array.
 	 *    array      $info     Extra info field data.
 	 * }
 	 * @return string The option field.
@@ -902,8 +900,8 @@ class Admin_Pages extends Inpost {
 	 * @since 3.0.0 Links are now no longer followed, referred or bound to opener.
 	 *
 	 * @param string $description The descriptive on-hover title.
-	 * @param string $link The non-escaped link.
-	 * @param bool $echo Whether to echo or return.
+	 * @param string $link        The non-escaped link.
+	 * @param bool   $echo        Whether to echo or return.
 	 * @return string HTML checkbox output if $echo is false.
 	 */
 	public function make_info( $description = '', $link = '', $echo = true ) {
@@ -928,27 +926,6 @@ class Admin_Pages extends Inpost {
 		} else {
 			return $output;
 		}
-	}
-
-	/**
-	 * Load script and stylesheet assets via metabox_scripts() methods.
-	 *
-	 * @since 2.2.2
-	 */
-	public function load_assets() {
-		//* Hook scripts method
-		\add_action( "load-{$this->seo_settings_page_hook}", [ $this, 'metabox_scripts' ] );
-	}
-
-	/**
-	 * Includes the necessary sortable metabox scripts.
-	 *
-	 * @since 2.2.2
-	 */
-	public function metabox_scripts() {
-		\wp_enqueue_script( 'common' );
-		\wp_enqueue_script( 'wp-lists' );
-		\wp_enqueue_script( 'postbox' );
 	}
 
 	/**

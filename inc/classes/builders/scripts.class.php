@@ -42,12 +42,11 @@ $_load_scripts_class = function() {
  * This handles admin-ONLY scripts for now.
  *
  * @since 3.1.0
- * @see the_seo_framework()->Scripts()
  * @see \WP_Styles
  * @see \WP_Scripts
  * @see \WP_Dependencies
+ * @see \The_SEO_Framework\Bridges\Scripts
  * @access private
- *         Use `the_seo_framework()->Scripts()` instead.
  * @final Can't be extended.
  */
 final class Scripts {
@@ -59,17 +58,17 @@ final class Scripts {
 	 *
 	 * @since 3.1.0
 	 * @internal
-	 * @var int <bit 1>  REGISTERED
-	 * @var int <bit 10> LOADED     (enqueued)
+	 * @var int <bit 01>  REGISTERED
+	 * @var int <bit 10> LOADED     (rather, enqueued)
 	 */
-	const REGISTERED = 0b1;
+	const REGISTERED = 0b01;
 	const LOADED     = 0b10;
 
 	/**
 	 * @since 3.1.0
-	 * @var array $scripts    The registered scripts.
-	 * @var array $templates  The registered templates.
-	 * @var array $queue      The queued scripts state.
+	 * @var array $scripts   The registered scripts.
+	 * @var array $templates The registered templates.
+	 * @var array $queue     The queued scripts state.
 	 */
 	private static $scripts   = [];
 	private static $templates = [];

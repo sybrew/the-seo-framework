@@ -371,7 +371,6 @@ class Generate extends User_Data {
 	 * Note that the home-as-blog page can be used for this method.
 	 *
 	 * @since 3.3.0
-	 * @todo convert binary states to constants for easy implementation.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @param int <bit>  $ignore The ignore level. {

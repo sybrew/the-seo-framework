@@ -33,18 +33,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Detect extends Render {
 
 	/**
-	 * Determines if we're doing ajax.
-	 *
-	 * @since 2.9.0
-	 * @since 3.3.0 Now uses wp_doing_ajax()
-	 *
-	 * @return bool True if AJAX
-	 */
-	public function doing_ajax() {
-		return \wp_doing_ajax();
-	}
-
-	/**
 	 * Tests if input URL matches current domain.
 	 *
 	 * @since 2.9.4
@@ -733,26 +721,12 @@ class Detect extends Render {
 	}
 
 	/**
-	 * Detect WordPress language.
-	 * Considers en_UK, en_US, en, etc.
-	 *
-	 * @since 2.6.0
-	 * @since 3.1.0 Removed caching.
-	 *
-	 * @param string $locale Required, the locale.
-	 * @return bool Whether the input $locale is in the current WordPress locale.
-	 */
-	public function check_wp_locale( $locale = '' ) {
-		return false !== strpos( \get_locale(), $locale );
-	}
-
-	/**
 	 * Determines if the post type is disabled from SEO all optimization.
 	 *
 	 * @since 3.1.0
 	 * @since 3.1.2 Now is fiterable.
 	 *
-	 * @param string $post_type The post type, optional. Leave empty to autodetermine type.
+	 * @param string $post_type Optional. The post type to check.
 	 * @return bool True if disabled, false otherwise.
 	 */
 	public function is_post_type_disabled( $post_type = '' ) {
@@ -780,7 +754,7 @@ class Detect extends Render {
 	 *              2. Added caching.
 	 * @staticvar bool $has_filter
 	 *
-	 * @param string $post_type
+	 * @param string $post_type Optional. The post type to check.
 	 * @return bool True if post type is supported.
 	 */
 	public function post_type_supports_inpost( $post_type ) {
@@ -820,7 +794,7 @@ class Detect extends Render {
 	 * @since 3.1.0 1. Removed caching.
 	 *              2. Now works in admin.
 	 *
-	 * @param string $post_type The current post type.
+	 * @param string $post_type Optional. The post type to check.
 	 * @return bool true of post type is supported.
 	 */
 	public function post_type_supports_custom_seo( $post_type = '' ) {
@@ -836,7 +810,7 @@ class Detect extends Render {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @param string $taxonomy The taxonomy name.
+	 * @param string $taxonomy Optional. The taxonomy name.
 	 * @return bool True if at least one post type in taxonomy isn't disabled.
 	 */
 	public function taxonomy_supports_custom_seo( $taxonomy = '' ) {
@@ -864,7 +838,7 @@ class Detect extends Render {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @param bool $post_type
+	 * @param string $post_type Optional. The post type to check.
 	 * @return bool
 	 */
 	public function is_post_type_supported( $post_type = '' ) {

@@ -43,19 +43,6 @@ class Term_Data extends Post_Data {
 	}
 
 	/**
-	 * Initializes term meta data filters and functions.
-	 *
-	 * @since 2.7.0
-	 * @since 3.0.0 No longer checks for admin query.
-	 * @since 3.3.0 Deprecated
-	 * @deprecated
-	 * @alias $this->init_term_meta();
-	 */
-	public function initialize_term_meta() {
-		$this->init_term_meta();
-	}
-
-	/**
 	 * Determines if current query handles term meta.
 	 *
 	 * @since 3.0.0
@@ -160,73 +147,90 @@ class Term_Data extends Post_Data {
 	 * @since 2.7.0
 	 * @since 3.3.0: 1. noindex, nofollow, noarchive are converted to qubits.
 	 *               2. Added new keys to sanitize.
+	 *               3. Now marked as private
+	 *               4. Added more protection.
 	 * @securitycheck 3.0.0 OK.
+	 * @access private
 	 *
 	 * @param int    $term_id  Term ID.
-	 * @param int    $tt_id    Term Taxonomy ID.
-	 * @param string $taxonomy Taxonomy slug
+	 * @param int    $tt_id    Term taxonomy ID.
+	 * @param string $taxonomy Taxonomy slug.
 	 * @return void Early on AJAX call.
 	 */
 	public function update_term_meta( $term_id, $tt_id, $taxonomy = '' ) {
 
-		if ( \wp_doing_ajax() )
-			return;
+		if ( \wp_doing_ajax() ) return;
 
 		//* Check again against ambiguous injection.
-		// phpcs:ignore -- wp_unslash() is nonsense.
-		if ( isset( $_POST['_wpnonce'] ) && \wp_verify_nonce( $_POST['_wpnonce'], 'update-tag_' . $term_id ) ) :
+		// Note, however: function wp_update_term() already performs all these checks for us.
+		if ( ! \current_user_can( 'edit_term', $term_id ) ) return;
+		if ( ! isset( $_POST['_wpnonce'] ) ) return;
+		if ( ! \wp_verify_nonce( \stripslashes_from_strings_only( $_POST['_wpnonce'] ), 'update-tag_' . $term_id ) ) return;
 
-			// phpcs:ignore -- wp_unslash() will ruin intended slashes.
-			$data = isset( $_POST['autodescription-meta'] ) ? (array) $_POST['autodescription-meta'] : [];
-			$data = \wp_parse_args( $data, $this->get_term_meta_defaults() );
+		// phpcs:ignore -- wp_unslash() will ruin intended slashes.
+		$data = isset( $_POST['autodescription-meta'] ) ? (array) $_POST['autodescription-meta'] : [];
+		$this->save_term_meta( $term_id, $tt_id, $taxonomy, $data );
+	}
 
-			foreach ( (array) $data as $key => $value ) :
-				switch ( $key ) :
-					case 'doctitle':
-						$data[ $key ] = $this->s_title_raw( $value );
-						continue 2;
+	/**
+	 * Saves term meta from input.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param int    $term_id  Term ID.
+	 * @param int    $tt_id    Term Taxonomy ID.
+	 * @param string $taxonomy Taxonomy slug
+	 */
+	public function save_term_meta( $term_id, $tt_id, $taxonomy, $data ) {
 
-					case 'description':
-						$data[ $key ] = $this->s_description_raw( $value );
-						continue 2;
+		$data = \wp_parse_args( $data, $this->get_term_meta_defaults() );
 
-					case 'noindex':
-					case 'nofollow':
-					case 'noarchive':
-						$data[ $key ] = $this->s_qubit( $value );
-						continue 2;
+		foreach ( (array) $data as $key => $value ) :
+			switch ( $key ) :
+				case 'doctitle':
+					$data[ $key ] = $this->s_title_raw( $value );
+					continue 2;
 
-					case 'saved_flag':
-						$data[ $key ] = $this->s_one_zero( $value );
-						continue 2;
+				case 'description':
+					$data[ $key ] = $this->s_description_raw( $value );
+					continue 2;
 
-					case 'redirect':
-						$data[ $key ] = $this->s_redirect_url( $value );
-						continue 2;
+				case 'noindex':
+				case 'nofollow':
+				case 'noarchive':
+					$data[ $key ] = $this->s_qubit( $value );
+					continue 2;
 
-					default:
-						// Not implemented for compatibility reasons.
-						// unset( $data[ $key ] );
-						break;
-				endswitch;
-			endforeach;
+				case 'saved_flag':
+					$data[ $key ] = $this->s_one_zero( $value );
+					continue 2;
 
-			/**
-			 * @since 3.1.0
-			 * @param array  $data     The data that's going to be saved.
-			 * @param int    $term_id  Term ID.
-			 * @param int    $tt_id    Term Taxonomy ID.
-			 * @param string $taxonomy Taxonomy slug
-			 */
-			$data = (array) \apply_filters_ref_array( 'the_seo_framework_save_term_data', [
-				$data,
-				$term_id,
-				$tt_id,
-				$taxonomy,
-			] );
+				case 'redirect':
+					$data[ $key ] = $this->s_redirect_url( $value );
+					continue 2;
 
-			\update_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
-		endif;
+				default:
+					// Not implemented for compatibility reasons.
+					// unset( $data[ $key ] );
+					break;
+			endswitch;
+		endforeach;
+
+		/**
+		 * @since 3.1.0
+		 * @param array  $data     The data that's going to be saved.
+		 * @param int    $term_id  The term ID.
+		 * @param int    $tt_id    The term taxonomy ID.
+		 * @param string $taxonomy The taxonomy slug.
+		 */
+		$data = (array) \apply_filters_ref_array( 'the_seo_framework_save_term_data', [
+			$data,
+			$term_id,
+			$tt_id,
+			$taxonomy,
+		] );
+
+		\update_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
 	}
 
 	/**
@@ -308,8 +312,8 @@ class Term_Data extends Post_Data {
 	 * @since 3.1.0
 	 * @see $this->get_post_type_label() For the singular alternative.
 	 *
-	 * @param string $post_type The taxonomy type. Required.
-	 * @param bool   $singular  Wether to get the singlural or plural name.
+	 * @param string $tax_type The taxonomy type. Required.
+	 * @param bool   $singular Wether to get the singlural or plural name.
 	 * @return string The Taxonomy Type name/label, if found.
 	 */
 	public function get_tax_type_label( $tax_type, $singular = true ) {

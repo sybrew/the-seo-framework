@@ -585,8 +585,8 @@ class Generate_Url extends Generate_Title {
 	 * @since 3.1.0 The third parameter ($use_filter) is now $deprecated.
 	 * @since 3.3.0 Removed the deprecated parameter.
 	 *
-	 * @param string $url Absolute url that includes a scheme.
-	 * @param string $scheme optional. Scheme to give $url. Currently 'http', 'https', 'login', 'login_post', 'admin', or 'relative'.
+	 * @param string $url    Absolute url that includes a scheme.
+	 * @param string $scheme Optional. Scheme to give $url. Currently 'http', 'https', 'login', 'login_post', 'admin', or 'relative'.
 	 * @return string url with chosen scheme.
 	 */
 	public function set_url_scheme( $url, $scheme = null ) {

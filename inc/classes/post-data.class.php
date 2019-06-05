@@ -339,10 +339,10 @@ class Post_Data extends Detect {
 	 * @since 3.1.0 1. No longer returns anything for terms.
 	 *              2. Now strips plausible embeds URLs.
 	 *
-	 * @param string $excerpt the Excerpt.
-	 * @param int    $the_id The Post ID.
+	 * @param string $excerpt    The Excerpt.
+	 * @param int    $id         The Post ID.
 	 * @param null   $deprecated No longer used.
-	 * @param bool   $escape Whether to escape the excerpt.
+	 * @param bool   $escape     Whether to escape the excerpt.
 	 * @return string The trimmed excerpt.
 	 */
 	public function get_excerpt_by_id( $excerpt = '', $id = '', $deprecated = null, $escape = true ) {

@@ -34,11 +34,11 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Admin_Init extends Init {
 
 	/**
-	 * Initializes SEO Bar.
+	 * Initializes SEO Bar tables.
 	 *
 	 * @since 3.3.0
 	 */
-	public function init_seo_bar() {
+	public function init_seo_bar_tables() {
 
 		// Initialize table output.
 		if ( $this->get_option( 'display_seo_bar_tables' ) ) {
@@ -154,37 +154,7 @@ class Admin_Init extends Init {
 
 		if ( _has_run( __METHOD__ ) ) return;
 
-		//! PHP 5.4 compat: put in var.
-		$loader = $this->ScriptsLoader();
-		$loader::_init();
-	}
-
-	/**
-	 * Returns the static scripts class object.
-	 *
-	 * The first letter of the method is capitalized, to indicate it's a class caller.
-	 *
-	 * @since 3.3.0
-	 * @bridge
-	 *
-	 * @return string The scripts loader class name.
-	 */
-	public function ScriptsLoader() {
-		return Bridges\Scripts::class;
-	}
-
-	/**
-	 * Returns the static scripts class object.
-	 *
-	 * The first letter of the method is capitalized, to indicate it's a class caller.
-	 *
-	 * @since 3.1.0
-	 * @builder
-	 *
-	 * @return string The scripts class name.
-	 */
-	public function Scripts() {
-		return Builders\Scripts::class;
+		Bridges\Scripts::_init();
 	}
 
 	/**

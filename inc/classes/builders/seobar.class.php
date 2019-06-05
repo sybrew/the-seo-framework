@@ -45,11 +45,11 @@ abstract class SeoBar {
 	/**
 	 * @since 3.3.0
 	 * @access private
-	 *    Only made public as _run_all_tests() is not available.
-	 * Shared between instances.
+	 * @abstract
+	 * Shared between instances. But, should be overwritten.
 	 * @var array All known tests.
 	 */
-	public static $tests = [ 'title', 'description', 'indexing', 'following', 'archiving', 'redirect' ];
+	public static $tests = [];
 
 	/**
 	 * @since 3.3.0
@@ -175,7 +175,7 @@ abstract class SeoBar {
 	 */
 	final public function _run_test( $tests, array $query ) {
 
-		$tests = array_intersect( self::$tests, (array) $tests );
+		$tests = array_intersect( static::$tests, (array) $tests );
 
 		static::$query = $query;
 
@@ -195,76 +195,4 @@ abstract class SeoBar {
 	 * @return bool True if there's a blocking redirect, false otherwise.
 	 */
 	abstract protected function has_blocking_redirect();
-
-	/**
-	 * Runs title tests.
-	 *
-	 * @since 3.3.0
-	 * @abstract
-	 *
-	 * @return array $item : {
-	 *    string $symbol : Required. The displayed symbol that identifies your bar.
-	 *    string $title  : Required. The title of the assessment.
-	 *    string $status : Required. Accepts 'good', 'okay', 'bad', 'unknown'.
-	 *    string $reason : Required. The final assessment: The reason for the $status.
-	 *    string $assess : Required. The assessments on why the reason is set. Keep it short and concise!
-	 *                               Does not accept HTML for performant ARIA support.
-	 * }
-	 */
-	abstract protected function test_title();
-
-	/**
-	 * Runs title tests.
-	 *
-	 * @since 3.3.0
-	 * @see test_title() for return value.
-	 * @abstract
-	 *
-	 * @return array $item
-	 */
-	abstract protected function test_description();
-
-	/**
-	 * Runs description tests.
-	 *
-	 * @since 3.3.0
-	 * @see test_title() for return value.
-	 * @abstract
-	 *
-	 * @return array $item
-	 */
-	abstract protected function test_indexing();
-
-	/**
-	 * Runs following tests.
-	 *
-	 * @since 3.3.0
-	 * @see test_title() for return value.
-	 * @abstract
-	 *
-	 * @return array $item
-	 */
-	abstract protected function test_following();
-
-	/**
-	 * Runs archiving tests.
-	 *
-	 * @since 3.3.0
-	 * @see test_title() for return value.
-	 * @abstract
-	 *
-	 * @return array $item
-	 */
-	abstract protected function test_archiving();
-
-	/**
-	 * Runs redirect tests.
-	 *
-	 * @since 3.3.0
-	 * @see test_title() for return value.
-	 * @abstract
-	 *
-	 * @return array $item
-	 */
-	abstract protected function test_redirect();
 }

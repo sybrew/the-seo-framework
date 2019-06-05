@@ -352,25 +352,6 @@ class Core {
 	}
 
 	/**
-	 * Whether to lowercase the noun or keep it UCfirst.
-	 * Depending if language is German.
-	 *
-	 * @since 2.6.0
-	 * @staticvar array $lowercase Contains nouns.
-	 *
-	 * @return string The maybe lowercase noun.
-	 */
-	public function maybe_lowercase_noun( $noun ) {
-
-		static $lowercase = [];
-
-		if ( isset( $lowercase[ $noun ] ) )
-			return $lowercase[ $noun ];
-
-		return $lowercase[ $noun ] = $this->check_wp_locale( 'de' ) ? $noun : strtolower( $noun );
-	}
-
-	/**
 	 * Returns the minimum role required to adjust settings.
 	 *
 	 * @since 3.0.0

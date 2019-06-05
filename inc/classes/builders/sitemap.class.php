@@ -99,6 +99,7 @@ class Sitemap {
 	public function build_sitemap_content() {
 
 		$content = '';
+		$count   = 0;
 
 		$show_priority = (bool) static::$tsf->get_option( 'sitemaps_priority' );
 		$show_modified = (bool) static::$tsf->get_option( 'sitemaps_modified' );
@@ -120,7 +121,8 @@ class Sitemap {
 			) . "\n";
 
 		foreach ( $this->generate_front_and_blog_url_items(
-			compact( 'show_priority', 'show_modified' )
+			compact( 'show_priority', 'show_modified' ),
+			$count
 		) as $_values )
 			$content .= $this->build_url_item( $_values );
 
@@ -173,9 +175,8 @@ class Sitemap {
 			] );
 
 			$wp_query->query = $wp_query->query_vars = $_args;
-			$hierarchical_post_ids = $wp_query->get_posts();
 
-			$hierarchical_post_ids = array_diff( $hierarchical_post_ids, $_exclude_ids );
+			$hierarchical_post_ids = array_diff( $wp_query->get_posts(), $_exclude_ids );
 
 			// Stop confusion: trim query to set value.
 			// This is ultimately redundant, but it'll stop support requests by making the input value more accurate.
@@ -203,6 +204,7 @@ class Sitemap {
 			] );
 
 			$wp_query->query = $wp_query->query_vars = $_args;
+
 			$non_hierarchical_post_ids = $wp_query->get_posts();
 		}
 
@@ -217,63 +219,35 @@ class Sitemap {
 
 		foreach ( $this->generate_url_item_values(
 			$_items,
-			compact( 'show_priority', 'show_modified', 'total_items' )
+			compact( 'show_priority', 'show_modified', 'total_items' ),
+			$count
 		) as $_values ) {
 			$content .= $this->build_url_item( $_values );
 		}
 
-		if ( \has_filter( 'the_seo_framework_sitemap_additional_urls' ) ) {
-			/**
-			 * @since 2.5.2
-			 * @since 3.2.2 Invalid URLs are now skipped.
-			 * @example return value: [ 'http://example.com' => [ 'lastmod' => '14-01-2018', 'priority' => 0.9 ] ]
-			 * @param array $custom_urls : {
-			 *    @param string (key) $url The absolute url to the page. : array {
-			 *       @param string           $lastmod  UNIXTIME Last modified date, e.g. "2016-01-26 13:04:55"
-			 *       @param float|int|string $priority URL Priority
-			 *    }
-			 * }
-			 */
-			$custom_urls = (array) \apply_filters( 'the_seo_framework_sitemap_additional_urls', [] );
-
-			$timestamp_format = static::$tsf->get_timestamp_format();
-
-			foreach ( $custom_urls as $url => $args ) {
-				if ( ! is_array( $args ) ) {
-					//* If there are no args, it's assigned as URL (per example)
-					$url = $args;
-				}
-
-				$_url = \esc_url_raw( $url, [ 'http', 'https' ] );
-
-				if ( ! $_url ) continue;
-
-				$content .= "\t<url>\n";
-				//* No need to use static vars
-				$content .= "\t\t<loc>" . $_url . "</loc>\n";
-
-				if ( isset( $args['lastmod'] ) && $args['lastmod'] ) {
-					$content .= "\t\t<lastmod>" . \mysql2date( $timestamp_format, $args['lastmod'], false ) . "</lastmod>\n";
-				}
-
-				if ( $show_priority ) {
-					if ( isset( $args['priority'] ) && $args['priority'] ) {
-						$priority = $args['priority'];
-					} else {
-						$priority = 0.9;
-					}
-					$content .= "\t\t<priority>" . number_format( $priority, 1 ) . "</priority>\n";
-				}
-				$content .= "\t</url>\n";
-			}
-		}
+		if ( \has_filter( 'the_seo_framework_sitemap_additional_urls' ) )
+			$content .= $this->get_additional_urls(
+				compact( 'show_priority', 'show_modified', 'count' ),
+				$count
+			);
 
 		/**
 		 * @since 2.5.2
+		 * @since 3.3.0 Added $args parameter
 		 * @param string $extend Custom sitemap extension. Must be escaped.
+		 * @param array $args : {
+		 *   bool $show_priority : Whether to display priority
+		 *   bool $show_modified : Whether to display modified date.
+		 *   int  $total_itemns  : Estimate: The total sitemap items before adding additional URLs.
+		 * }
 		 */
-		if ( $extend = (string) \apply_filters( 'the_seo_framework_sitemap_extend', '' ) )
-			$content .= "\t" . $extend . "\n";
+		if ( $extend = (string) \apply_filters_ref_array(
+			'the_seo_framework_sitemap_extend',
+			[
+				'',
+				compact( 'show_priority', 'show_modified', 'count' ),
+			]
+		) ) $content .= "\t" . $extend . "\n";
 
 		return $content;
 	}
@@ -284,14 +258,15 @@ class Sitemap {
 	 * @since 3.3.0
 	 * @generator
 	 *
-	 * @param array $args The generator arguments.
+	 * @param array $args  The generator arguments.
+	 * @param int   $count The iteration count. Passed by reference.
 	 * @yield array|void : {
 	 *   string loc
 	 *   string lastmod
 	 *   string priority
 	 * }
 	 */
-	protected function generate_front_and_blog_url_items( $args ) {
+	protected function generate_front_and_blog_url_items( $args, &$count = 0 ) {
 
 		$front_page_id = (int) \get_option( 'page_on_front' );
 		$posts_page_id = (int) \get_option( 'page_for_posts' );
@@ -314,6 +289,7 @@ class Sitemap {
 					$_values['priority'] = '1.0';
 				}
 
+				++$count;
 				yield $_values;
 			}
 			if ( $posts_page_id && $this->is_post_included_in_sitemap( $posts_page_id ) ) {
@@ -348,6 +324,7 @@ class Sitemap {
 					$_values['priority'] = '1.0';
 				}
 
+				++$count;
 				yield $_values;
 			}
 		} else {
@@ -377,6 +354,7 @@ class Sitemap {
 					$_values['priority'] = '1.0';
 				}
 
+				++$count;
 				yield $_values;
 			}
 		}
@@ -416,7 +394,7 @@ class Sitemap {
 					$_values['priority'] = .949999 - ( $count / $args['total_items'] );
 				}
 
-				$count++;
+				++$count;
 				yield $_values;
 			}
 		}
@@ -460,6 +438,64 @@ class Sitemap {
 				]
 			)
 		);
+	}
+
+	/**
+	 * Retrieves additional URLs and builds items from them.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param array $args  : {
+	 *   bool $show_priority : Whether to display priority
+	 *   bool $show_modified : Whether to display modified date.
+	 *   int  $count         : The total sitemap items before adding additional URLs.
+	 * }
+	 * @param int   $count The iteration count. Passed by reference.
+	 * @return string Additional sitemap URLs.
+	 */
+	protected function get_additional_urls( $args, &$count = 0 ) {
+
+		$content = '';
+		/**
+		 * @since 2.5.2
+		 * @since 3.2.2 Invalid URLs are now skipped.
+		 * @since 3.3.0 Added $args parameter.
+		 * @example return value: [ 'http://example.com' => [ 'lastmod' => '14-01-2018', 'priority' => 0.9 ] ]
+		 * @param array $custom_urls : {
+		 *    string (key) $url The absolute url to the page. : array {
+		 *       string           $lastmod  : UNIXTIME Last modified date, e.g. "2016-01-26 13:04:55"
+		 *       float|int|string $priority : URL Priority
+		 *    }
+		 * }
+		 * @param array $args : {
+		 *   bool $show_priority : Whether to display priority
+		 *   bool $show_modified : Whether to display modified date.
+		 *   int  $total_itemns  : Estimate: The total sitemap items before adding additional URLs.
+		 * }
+		 */
+		$custom_urls = (array) \apply_filters( 'the_seo_framework_sitemap_additional_urls', [], $args );
+
+		$items = [];
+
+		foreach ( $custom_urls as $url => $values ) {
+			if ( ! is_array( $values ) ) {
+				//* If there are no args, it's assigned as URL (per example)
+				$url = $values;
+			}
+
+			$_url = \esc_url_raw( $url, [ 'http', 'https' ] );
+
+			if ( ! $_url ) continue;
+
+			$items[] = [
+				'loc'      => $url,
+				'lastmod'  => ! empty( $values['lastmod'] ) ? $values['lastmod'] : '0000-00-00 00:00:00',
+				'priority' => ! empty( $values['priority'] ) ? $values['priority'] : 0.9,
+			];
+			++$count;
+		}
+
+		return $this->build_url_item( $items );
 	}
 
 	/**

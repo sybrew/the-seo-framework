@@ -39,11 +39,9 @@ $_load_scripts_class = function() {
  * Relies on \The_SEO_Framework\Builders\Scripts to register and load scripts.
  *
  * @since 3.3.0
- * @see the_seo_framework()->Scripts()
  * @see \The_SEO_Framework\Builders\Scripts
- * @see the_seo_framework()->ScriptsLoader()
- * @access private
- *         Use static calls via `the_seo_framework()->ScriptsLoader()` instead.
+ * @access protected
+ *         Use static calls The_SEO_Framework\Bridges\Scripts::funcname()
  * @final Can't be extended.
  */
 final class Scripts {
@@ -53,14 +51,6 @@ final class Scripts {
 	 * @var \The_SEO_Framework\Bridges\Scripts $instance The instance.
 	 */
 	private static $instance;
-
-	/**
-	 * @since 3.3.0
-	 * @var string $builder The script builder class name.
-	 * @var string $loader  The script loader class name (this class).
-	 */
-	private static $builder;
-	private static $loader;
 
 	/**
 	 * Prepares the class and loads constructor.
@@ -90,8 +80,6 @@ final class Scripts {
 		$tsf = \the_seo_framework();
 
 		static::$instance = &$this;
-		static::$builder  = $tsf->Scripts();
-		static::$loader   = $tsf->ScriptsLoader();
 	}
 
 	/**
@@ -105,7 +93,10 @@ final class Scripts {
 
 		$tsf = \the_seo_framework();
 
-		$_scripts[] = static::get_default_scripts();
+		$_scripts = [
+			static::get_tsf_scripts(),
+			static::get_tt_scripts(),
+		];
 
 		if ( $tsf->is_post_edit() ) {
 			static::prepare_media_scripts();
@@ -125,6 +116,7 @@ final class Scripts {
 			$_scripts[] = static::get_ays_scripts();
 		} elseif ( $tsf->is_seo_settings_page() ) {
 			static::prepare_media_scripts();
+			static::prepare_metabox_scripts();
 
 			$_scripts[] = static::get_media_scripts();
 			$_scripts[] = static::get_counter_scripts();
@@ -132,8 +124,21 @@ final class Scripts {
 			$_scripts[] = static::get_ays_scripts();
 		}
 
-		$builder = static::$builder;
-		$builder::register( $_scripts );
+		/**
+		 * @since 3.1.0
+		 * @since 3.3.0 1. Now holds all scripts.
+		 *              2. Added $loader parameter.
+		 * @param array  $scripts The default CSS and JS loader settings.
+		 * @param string $builder The \The_SEO_Framework\Builders\Scripts builder class name.
+		 * @param string $loader  The \The_SEO_Framework\Bridges\Scripts loader class name.
+		 */
+		$_scripts = \apply_filters_ref_array( 'the_seo_framework_scripts', [
+			$_scripts,
+			\The_SEO_Framework\Builders\Scripts::class,
+			static::class, // i.e. `\The_SEO_Framework\Bridges\Scripts::class`
+		] );
+
+		\The_SEO_Framework\Builders\Scripts::register( $_scripts );
 	}
 
 	/**
@@ -153,84 +158,95 @@ final class Scripts {
 	}
 
 	/**
-	 * Returns default scripts.
+	 * Prepares WordPress metabox scripts.
 	 *
 	 * @since 3.3.0
-	 * @return string The default scripts.
 	 */
-	public static function get_default_scripts() {
-		$tsf = \the_seo_framework();
+	public static function prepare_metabox_scripts() {
+		\wp_enqueue_script( 'common' );
+		\wp_enqueue_script( 'wp-lists' );
+		\wp_enqueue_script( 'postbox' );
+	}
 
-		/**
-		 * @since 3.1.0
-		 * @since 3.3.0 Added $loader parameter.
-		 * @param array  $scripts The default CSS and JS loader settings.
-		 * @param string $builder The \The_SEO_Framework\Builders\Scripts builder class name.
-		 * @param string $loader  The \The_SEO_Framework\Bridges\Scripts loader class name.
-		 */
-		return (array) \apply_filters_ref_array( 'the_seo_framework_scripts', [
+	/**
+	 * Returns the default TSF scripts.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @return array The script params.
+	 */
+	public static function get_tsf_scripts() {
+		return [
 			[
-				[
-					'id'       => 'tsf',
-					'type'     => 'css',
-					'deps'     => [ 'tsf-tt' ],
-					'autoload' => true,
-					'hasrtl'   => true,
-					'name'     => 'tsf',
-					'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
-					'ver'      => THE_SEO_FRAMEWORK_VERSION,
-				],
-				[
-					'id'       => 'tsf',
-					'type'     => 'js',
-					'deps'     => [ 'jquery', 'tsf-tt' ],
-					'autoload' => true,
-					'name'     => 'tsf',
-					'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
-					'ver'      => THE_SEO_FRAMEWORK_VERSION,
-					'l10n'     => [
-						'name' => 'tsfL10n',
-						'data' => static::get_javascript_l10n(),
-					],
-				],
-				[
-					'id'       => 'tsf-tt',
-					'type'     => 'css',
-					'deps'     => [],
-					'autoload' => true,
-					'hasrtl'   => false,
-					'name'     => 'tt',
-					'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
-					'ver'      => THE_SEO_FRAMEWORK_VERSION,
-					'inline'   => [
-						'.tsf-tooltip-text-wrap' => [
-							'background-color:{{$bg_accent}}',
-							'color:{{$rel_bg_accent}}',
-						],
-						'.tsf-tooltip-arrow:after' => [
-							'border-top-color:{{$bg_accent}}',
-						],
-						'.tsf-tooltip-down .tsf-tooltip-arrow:after' => [
-							'border-bottom-color:{{$bg_accent}}',
-						],
-						'.tsf-tooltip-text' => [
-							\is_rtl() ? 'direction:rtl' : '',
-						],
-					],
-				],
-				[
-					'id'       => 'tsf-tt',
-					'type'     => 'js',
-					'deps'     => [ 'jquery' ],
-					'autoload' => true,
-					'name'     => 'tt',
-					'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
-					'ver'      => THE_SEO_FRAMEWORK_VERSION,
+				'id'       => 'tsf',
+				'type'     => 'css',
+				'deps'     => [ 'tsf-tt' ],
+				'autoload' => true,
+				'hasrtl'   => true,
+				'name'     => 'tsf',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+			],
+			[
+				'id'       => 'tsf',
+				'type'     => 'js',
+				'deps'     => [ 'jquery', 'tsf-tt' ],
+				'autoload' => true,
+				'name'     => 'tsf',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+				'l10n'     => [
+					'name' => 'tsfL10n',
+					'data' => static::get_tsf_l10n_data(),
 				],
 			],
-			static::$builder,
-			static::$loader,
-		] );
+		];
+	}
+
+	/**
+	 * Returns TT (tooltip) scripts params.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @return array The script params.
+	 */
+	public static function get_tt_scripts() {
+		return [
+			[
+				'id'       => 'tsf-tt',
+				'type'     => 'css',
+				'deps'     => [],
+				'autoload' => true,
+				'hasrtl'   => false,
+				'name'     => 'tt',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+				'inline'   => [
+					'.tsf-tooltip-text-wrap' => [
+						'background-color:{{$bg_accent}}',
+						'color:{{$rel_bg_accent}}',
+					],
+					'.tsf-tooltip-arrow:after' => [
+						'border-top-color:{{$bg_accent}}',
+					],
+					'.tsf-tooltip-down .tsf-tooltip-arrow:after' => [
+						'border-bottom-color:{{$bg_accent}}',
+					],
+					'.tsf-tooltip-text' => [
+						\is_rtl() ? 'direction:rtl' : '',
+					],
+				],
+			],
+			[
+				'id'       => 'tsf-tt',
+				'type'     => 'js',
+				'deps'     => [ 'jquery' ],
+				'autoload' => true,
+				'name'     => 'tt',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+			],
+		];
 	}
 
 	/**
@@ -240,7 +256,7 @@ final class Scripts {
 	 *
 	 * @return string The default scripts localization.
 	 */
-	private static function get_javascript_l10n() {
+	private static function get_tsf_l10n_data() {
 
 		$tsf = \the_seo_framework();
 

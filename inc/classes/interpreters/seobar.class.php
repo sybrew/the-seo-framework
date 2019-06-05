@@ -26,16 +26,6 @@ namespace The_SEO_Framework\Interpreters;
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
- * Sets up class loader as file is loaded.
- * This is done asynchronously, because static calls are handled prior and after.
- * @see EOF. Because of the autoloader and (future) trait calling, we can't do it before the class is read.
- * @link https://bugs.php.net/bug.php?id=75771
- */
-$_load_seobar_class = function() {
-	new SeoBar();
-};
-
-/**
  * Interprets the SEO Bar into an HTML item.
  *
  * @since 3.3.0
@@ -76,15 +66,21 @@ final class SeoBar {
 	 * Constructor.
 	 *
 	 * @since 3.3.0
-	 * @access private
-	 * Don't instance this class.
 	 */
-	public function __construct() {
-
-		static $count = 0;
-		0 === $count++ or \wp_die( 'Don\'t instance <code>' . __CLASS__ . '</code>.' );
-
+	protected function __construct() {
 		static::$instance = &$this;
+	}
+
+	/**
+	 * Returns this instance.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @return static
+	 */
+	protected static function &get_instance() {
+		static::$instance instanceof static or new static;
+		return static::$instance;
 	}
 
 	/**
@@ -100,8 +96,11 @@ final class SeoBar {
 	 */
 	public static function generate_bar( array $query ) {
 
+		static $tt = 0;
+		$t = microtime( true );
+
 		static::$query = array_merge( [
-			// 'id'        => 0, // Required! Don't expect this.
+			// 'id'        => 0, // Required! Don't fill this automatically.
 			'taxonomy'  => '',
 			'post_type' => '',
 		], $query );
@@ -109,7 +108,8 @@ final class SeoBar {
 		if ( ! static::$query['taxonomy'] )
 			static::$query['post_type'] = static::$query['post_type'] ?: \get_post_type( static::$query['id'] );
 
-		static::$instance->store_default_bar_items();
+		$instance =& static::get_instance();
+		$instance->store_default_bar_items();
 
 		/**
 		 * Add custom items here.
@@ -143,13 +143,14 @@ final class SeoBar {
 		 * @since 3.3.0
 		 * @param string $class The current class name
 		 */
-		do_action( 'the_seo_framework_seo_bar', static::class );
+		\do_action( 'the_seo_framework_seo_bar', static::class );
 
-		$bar = static::$instance->create_seo_bar( static::$items );
+		$bar = $instance->create_seo_bar( static::$items );
 
 		// There's no need to leak memory.
-		static::$instance->clear_seo_bar_items();
+		$instance->clear_seo_bar_items();
 
+		echo number_format( $tt += microtime( true ) - $t, 10 ) . 's';
 		return $bar;
 	}
 
@@ -286,6 +287,7 @@ final class SeoBar {
 	 * Builds the SEO Bar item description, in either HTML or plaintext.
 	 *
 	 * @since 3.3.0
+	 * @staticvar array $gettext Cached gettext calls.
 	 *
 	 * @param array  $item See `$this->register_seo_bar_item()`
 	 * @param string $type The description type. Accepts 'html' or 'aria'.
@@ -293,12 +295,19 @@ final class SeoBar {
 	 */
 	private function build_item_description( array $item, $type ) {
 
+		static $gettext = null;
+		if ( null === $gettext ) {
+			$gettext = [
+				/* translators: 1 = SEO Bar type title, 2 = Status reason. 3 = Assessments */
+				'aria' => \__( '%1$s: %2$s %3$s', 'autodescription' ),
+			];
+		}
+
 		if ( 'aria' === $type ) {
 			$assess = $this->enumerate_assessment_list( $item );
 
 			return sprintf(
-				/* translators: 1 = SEO Bar type title, 2 = Status reason. 3 = Assessments */
-				\__( '%1$s: %2$s %3$s', 'autodescription' ),
+				$gettext['aria'],
 				$item['title'],
 				$item['reason'],
 				$this->enumerate_assessment_list( $item )
@@ -323,6 +332,7 @@ final class SeoBar {
 	 * Enumerates the assessments in a plaintext format.
 	 *
 	 * @since 3.3.0
+	 * @staticvar array $gettext Cached gettext calls.
 	 *
 	 * @param array $item See `$this->register_seo_bar_item()`
 	 * @return string The SEO Bar item assessment, in plaintext.
@@ -332,24 +342,31 @@ final class SeoBar {
 		$count       = count( $item['assess'] );
 		$assessments = [];
 
+		static $gettext = null;
+
+		if ( null === $gettext ) {
+			$gettext = [
+				/* translators: 1 = Assessment number (mind the %d), 2 = Assessment explanation */
+				'enum'        => \__( '%1$d: %2$s', 'autodescription' ),
+				/* translators: 1 = 'Assessment(s)', 2 = A list of assessment. */
+				'list'        => \__( '%1$s: %2$s', 'autodescription' ),
+				'assessment'  => \__( 'Assessment', 'autodescription' ),
+				'assessments' => \__( 'Assessments', 'autodescription' ),
+			];
+		}
+
 		if ( $count < 2 ) {
 			$assessments[] = reset( $item['assess'] );
 		} else {
 			$i = 0;
 			foreach ( $item['assess'] as $key => $text ) {
-				$assessments[] = sprintf(
-					/* translators: 1 = Assessment number (mind the %d), 2 = Assessment explanation */
-					\__( '%1$d: %2$s', 'autodescription' ),
-					++$i,
-					$text
-				);
+				$assessments[] = sprintf( $gettext['enum'], ++$i, $text );
 			}
 		}
 
 		return sprintf(
-			/* translators: 1 = 'Assessment(s)', 2 = A list of assessment. */
-			\__( '%1$s: %2$s', 'autodescription' ),
-			\_n( 'Assessment', 'Assessments', $count, 'autodescription' ),
+			$gettext['list'],
+			$count < 2 ? $gettext['assessment'] : $gettext['assessments'],
 			implode( ' ', $assessments )
 		);
 	}
@@ -386,5 +403,3 @@ final class SeoBar {
 		return $status;
 	}
 }
-
-$_load_seobar_class();

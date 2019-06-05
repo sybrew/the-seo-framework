@@ -128,7 +128,7 @@ class Inpost extends Profile {
 	 * @since 3.3.0
 	 * @access private
 	 *
-	 * @param array $columns The existing columns
+	 * @param array $hidden The existing hidden columns.
 	 * @return array $columns the column data
 	 */
 	public function _hide_quick_edit_column( $hidden ) {
@@ -161,7 +161,7 @@ class Inpost extends Profile {
 	 *
 	 * @param string $column_name Name of the column to edit.
 	 * @param string $post_type   The post type slug, or current screen name if this is a taxonomy list table.
-	 * @param string taxonomy     The taxonomy name, if any.
+	 * @param string $taxonomy    The taxonomy name, if any.
 	 */
 	public function _display_quick_edit_fields( $column_name, $post_type, $taxonomy = '' ) {
 

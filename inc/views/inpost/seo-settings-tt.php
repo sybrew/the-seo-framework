@@ -42,7 +42,7 @@ $robots_defaults = $this->robots_meta( [
 $robots_settings = [
 	'noindex'   => [
 		'id'        => 'autodescription-meta[noindex]',
-		'option'    => 'noindex',
+		'name'      => 'autodescription-meta[noindex]',
 		'force_on'  => 'index',
 		'force_off' => 'noindex',
 		'label'     => __( 'Set term indexability to:', 'autodescription' ),
@@ -55,7 +55,7 @@ $robots_settings = [
 	],
 	'nofollow'  => [
 		'id'        => 'autodescription-meta[nofollow]',
-		'option'    => 'nofollow',
+		'name'      => 'autodescription-meta[nofollow]',
 		'force_on'  => 'follow',
 		'force_off' => 'nofollow',
 		'label'     => __( 'Set link followability to:', 'autodescription' ),
@@ -68,7 +68,7 @@ $robots_settings = [
 	],
 	'noarchive' => [
 		'id'        => 'autodescription-meta[noarchive]',
-		'option'    => 'noarchive',
+		'name'      => 'autodescription-meta[noarchive]',
 		'force_on'  => 'archive',
 		'force_off' => 'noarchive',
 		'label'     => __( 'Set term archivability to:', 'autodescription' ),
@@ -166,10 +166,11 @@ $robots_settings = [
 			<td>
 				<?php
 				foreach ( $robots_settings as $_s ) :
+					// phpcs:disable -- WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo $this->make_single_select_form( [
 						'id'      => $_s['id'],
 						'class'   => 'tsf-select-wrap',
-						'name'    => sprintf( 'autodescription[%s]', $_s['option'] ),
+						'name'    => $_s['name'],
 						'label'   => $_s['label'] . ' ',
 						'options' => [
 							/* translators: %s = default option value */
@@ -179,6 +180,7 @@ $robots_settings = [
 						],
 						'default' => $_s['_value'],
 					] );
+					// phpcs:enable -- WordPress.Security.EscapeOutput.OutputNotEscaped
 				endforeach;
 				?>
 			</td>

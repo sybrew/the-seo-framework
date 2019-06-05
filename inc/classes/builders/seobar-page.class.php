@@ -38,6 +38,14 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 final class SeoBar_Page extends SeoBar {
 
 	/**
+	 * @since 3.3.0
+	 * @access private
+	 * @abstract
+	 * @var array All known tests.
+	 */
+	public static $tests = [ 'title', 'description', 'indexing', 'following', 'archiving', 'redirect' ];
+
+	/**
 	 * Tests for blocking redirection.
 	 *
 	 * @since 3.3.0

@@ -451,17 +451,24 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.2.2
 	 * @since 2.7.0: Uses external caching function.
 	 * @since 2.8.0 Renamed.
+	 * @since 3.3.0 Now caches its $option registration.
+	 * @staticvar array $cache
 	 *
-	 * @param string $filter Sanitization filter type
-	 * @param string $option Option key
+	 * @param string       $filter Sanitization filter type
+	 * @param string       $option The option key.
 	 * @param array|string $suboption Optional. Suboption key(s).
 	 * @return boolean Returns true when complete
 	 */
 	public function add_option_filter( $filter, $option, $suboption = null ) {
 
+		static $cache = [];
+
 		$this->set_option_filter( $filter, $option, $suboption );
 
-		\add_filter( 'sanitize_option_' . $option, [ $this, 'sanitize' ], 10, 2 );
+		if ( ! isset( $cache[ $option ] ) ) {
+			\add_filter( 'sanitize_option_' . $option, [ $this, 'sanitize' ], 10, 2 );
+			$cache[ $option ] = true;
+		}
 
 		return true;
 	}
@@ -476,10 +483,10 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.7.0
 	 * @staticvar $options The options filter cache.
 	 *
-	 * @param string $filter Sanitization filter type
-	 * @param string $option Option key
+	 * @param string       $filter    Sanitization filter type
+	 * @param string       $option    Option key
 	 * @param array|string $suboption Optional. Suboption key(s).
-	 * @param bool $get Whether to retrieve cache.
+	 * @param bool         $get       Whether to retrieve cache.
 	 * @return array When $get is true, it will return the option filters.
 	 */
 	protected function set_option_filter( $filter, $option, $suboption = null, $get = false ) {
@@ -953,19 +960,18 @@ class Sanitize extends Admin_Pages {
 	 * Returns a -1, 0, or 1, based on nearest value.
 	 *
 	 * @since 3.3.0
-	 * @TODO convert to spaceship ($new_value <=> 0) at PHP 7+
 	 *
 	 * @param mixed $new_value Should ideally be -1, 0, or 1.
 	 * @return int -1, 0, or 1.
 	 */
 	public function s_qubit( $new_value ) {
 
-		if ( ! $new_value ) {
-			$new_value = 0;
-		} elseif ( $new_value < 0 ) {
+		if ( $new_value < -.33 ) {
 			$new_value = -1;
-		} else {
+		} elseif ( $new_value > .33 ) {
 			$new_value = 1;
+		} else {
+			$new_value = 0;
 		}
 
 		return $new_value;

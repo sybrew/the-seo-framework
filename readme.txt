@@ -242,7 +242,7 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 == Changelog ==
 
-TODO this DEV version is probably NOT compatible with PHP 5.5, nor even 5.6.
+TODO this DEV version is probably NOT compatible with PHP 5.5.
 
 TODO: Re-minify JS files... Ugh Node.JS
 TODO: Re-minify CSS files... Ugh web services
@@ -263,6 +263,11 @@ TODO remove $page_defaults
 TODO "Want to opt out of future, infrequent, admin-only, non-recurring, and non-intrusive suggestions? Add this to your wp-config file: `define( 'TSF_DISABLE_SUGGESTIONS', true );`
 
 TODO Opt-in for asynchronous SEO Bars? It is possible now! :)
+TODO move the class constants to interfaces? This will allow free access...
+TODO move $tests list to class-specific tests. Making the SeoBar interpreter non-abstract. Mind the "self" vs "static".
+
+TODO re-affirm all changes.
+TODO quality-control the deprecations.
 
 = 3.3.0 - Multiplex =
 
@@ -281,8 +286,8 @@ TODO Exclaim:
 
 ..., and, for developers, we've finally introduced a reliable JavaScript API. Documentation will follow soon (based on frequently asked requests).
 
-TODO deprecated get_seo_bar use get_generated_seo_bar instead.
 TODO consider making the tooltip wider, or automatically grow or shrink based on the content. Then, assess the position (first, test overflow left, then, widen it until it overflows right, with max width: 250px?)
+TODO fix get_home_title_seplocation() reversal.
 
 **Detailed log:**
 
@@ -384,8 +389,11 @@ TODO consider making the tooltip wider, or automatically grow or shrink based on
 
 **For developers:**
 
+_**Note:** Only public changes are listed; internal functionality changes are listed as a global "improvement"._
+
 * **Improved:**
 	* The class autoloader now considers folder structure automatically, based on the namespace used.
+	* The script loader now discerns between posts and taxonomies, and can now prevent loading scripts when SEO is disabled for the post type or taxonomy.
 * **Option notes:**
 	* **Removed:**
 		* `attachment_noindex` and sanitization thereof, since 3.1 it's changed to `noindex_post_types['attachment']`.
@@ -406,16 +414,18 @@ TODO consider making the tooltip wider, or automatically grow or shrink based on
 		* `_genesis_noindex`, it can now be set to `-1`.
 		* `_genesis_nofollow`, it can now be set to `-1`.
 		* `_genesis_noarchive`, it can now be set to `-1`.
-		* `the_seo_framework()->get_custom_field()` no longer converts all scalar types to strings.
+		* Throughout the plugin, the scalar input types are no longer converted to strings via `the_seo_framework()->get_custom_field()`.
 * **Class notes:**
 	* **Noted:**
 		* Methods that you shouldn't use--marked private or aren't visible--aren't listed here, unless specifically annotated.
 	* **Added:**
-		* `\The_SEO_Framework\Bridges\Admin\Scripts`, this file registers all scripts, and is only loaded on the admin screens.
-			* Relies on `The_SEO_Framework\Builders\Scripts` for registering and enqueuing the scripts.
+		* `\The_SEO_Framework\Bridges\Scripts`, this file bridges The SEO Framework to the script loaders for WordPress. It registers all scripts based on the query; by default, it is only loaded on the admin screens.
+			* Relies on `\The_SEO_Framework\Builders\Scripts` for registering and enqueuing the scripts.
 			* **Public static methods:**
 				* `prepare_media_scripts()`
-				* `get_default_scripts()`
+				* `prepare_metabox_scripts()`
+				* `get_tsf_scripts()`
+				* `get_tt_scripts()`
 				* `get_ays_scripts()`
 				* `get_post_scripts()`
 				* `get_term_scripts()`
@@ -432,28 +442,87 @@ TODO consider making the tooltip wider, or automatically grow or shrink based on
 				* `shutdown_generation()`
 				* `build_sitemap_content()`
 				* `is_post_included_in_sitemap()`
+		* `\The_SEO_framework\Bridges\SeoBar`, this file bridges The SEO Framework to the SEO Bar loaders for WordPress. It prepares the list table columns and checks for post type and taxonomy compatibility.
+			* Relies on `\The_SEO_Framework\Builders\SeoBar` package for building the SEO Bar via interpreters.
+				* This package relies on `\The_SEO_framework\InterPreters\SeoBar` for interpreting the SEO Bar from PHP to HTML.
+			* This is a private class, and should not be called externally.
+		* `\The_SEO_framework\InterPreters\SeoBar`, this file interprets the SEO Bar from PHP to HTML.
+			* This class can't be instantiated.
+			* **Public constants:**
+				* `STATE_UNKNOWN`, bitwise 1
+				* `STATE_BAD`, bitwise 2
+				* `STATE_OKAY`, bitwise 4
+				* `STATE_GOOD`, bitwise 8
+			* **Public static variables:**
+				* `query`, the current SEO Bar query.
+			* **Public static methods:**
+				* `generate_bar()`
+				* `&collect_seo_bar_items()`
+				* `register_seo_bar_item()`
+				* `&edit_seo_bar_item()`
+		* `\The_SEO_framework\Builders\SeoBar`
+			* Abstract class. Must be extended.
+			* This class can't be instantiated, nor can any extending classes.
+			* **Public static variables:**
+				* `tests`, for all registered tests, there must be a corresponding `test_%s` function created.
+			* **Public methods:**
+				* `_run_test()`
+			* **Abstract methods:** These must be created.
+				* `has_blocking_redirect()`
+			* **Shared variables:** All extending classes can modify these variables, and all those classes will be affected once they are.
+				* `tsf`
+				* `query`
+				* `cache` (private)
+		* `\The_SEO_framework\Builders\SeoBar_Page`, this class extends `\The_SEO_framework\Builders\SeoBar`.
+			* Use `the_seo_framework()->get_generated_seo_bar()` to generate a bar.
+		* `\The_SEO_framework\Builders\SeoBar_Term`, this class extends `\The_SEO_framework\Builders\SeoBar`.
+			* Use `the_seo_framework()->get_generated_seo_bar()` to generate a bar.
 	* **Removed:**
 		* `\The_SEO_Framework\Compact`
 			* Loading fewer PHP files is faster, ~0.00001s is saved.
 			* The two methods therein were moved to `\The_SEO_Framework\Load`:
 				* `load_early_compat_files()`, protected.
 				* `_include_compat()`, marked private.
+		* `\The_SEO_Framework\Doing_It_Right`
+			* The methods therein are moved to the `SeoBar` class family:
+				* `\The_SEO_framework\InterPreters\SeoBar`
+				* `\The_SEO_framework\Bridges\SeoBar`
+				* `\The_SEO_framework\Builders\SeoBar`, extended by:
+					* `\The_SEO_framework\Builders\SeoBar_Page`
+					* `\The_SEO_framework\Builders\SeoBar_Term`
 * **Method notes:**
 	* For object `the_seo_framework()`:
 		* **Added:**
 			* `get_filtered_raw_custom_field_title()`
 			* `get_filtered_raw_generated_title()`
 			* `s_qubit()`, note: this method is not registered as an option filter!
-			* `get_field_data()`
-			* `make_single_select_form()`
+			* `get_field_data()`, internal use only. TODO move to interpreter?
+			* `make_single_select_form()` TODO move to interpreter?
 			* `get_post_types_from_taxonomy()`
+			* `init_seo_bar_tables()`
+			* `get_generated_seo_bar()`
+			* `is_robots_meta_noindex_set_by_args()`
+			* `init_term_meta()`
+			* `save_term_meta()`
 		* **Changed:**
-			* `init_admin_scripts()`, removed deprecated parameter notice.
-			* `set_url_scheme()`, removed deprecated parameter notice.
+			* `__construct()`, now emits warnings when instantiated twice or more.
+			* `init_admin_scripts()` removed deprecated parameter and its notice.
+			* `set_url_scheme()`, removed deprecated parameter and its notice.
 			* `is_preview()`, now checks the user capabilities, because WordPress blindly agrees with this state.
 			* TODO `get_robots_txt_url()`, now also uses `$wp_query->using_index_permalinks()` to determine invalidity.
 			* `sanitize_field_id()`, now no longer strips square brackets.
 			* `robots_meta()` now has two new parameters.
+			* `get_custom_field()` no longer converts scalar return values to strings.
+			* `add_option_filter()` no longer registers its filter more than once for an option key.
+			* `register_settings()` no longer uses `add_option()` when the options are already registered.
+			* `inpost_seo_save()` now coverts `_genesis_noindex`, `_genesis_nofollow`, and `_genesis_noarchive` to qubits.
+			* `get_term_meta()` removed deprecated filter `the_seo_framework_get_term_meta`.
+			* `get_term_meta_defaults()` now returns more values.
+			* `update_term_meta()`
+				1. Now sanitizes more values.
+				1. It's now marked as private. Use `save_term_meta()` instead.
+				1. Added redundant `current_user_can()` checks.
+				1. `noindex`, `nofollow`, and `noarchive` values are converted to qubits.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`
@@ -484,15 +553,27 @@ TODO consider making the tooltip wider, or automatically grow or shrink based on
 				* `get_js_nonces()`
 			* Public methods, these were obstructing:
 				* `is_post_included_in_sitemap()`, use `new \The_SEO_Framework\Builders\Sitemap()->is_post_included_in_sitemap()` instead.
+				* `load_assets()`, this was an internal function that only loaded a few scripts on our admin page.
 		* **Deprecated:**
-			* **With alternatives**, refer to the source for a relayed alternative:
+			* **With alternatives**, refer to the source (search for your old method) for a relayed alternative:
 				* `get_default_scripts()`,
 				* `enqueue_gutenberg_compat_scripts()`
 				* `enqueue_media_scripts()`
 				* `enqueue_primaryterm_scripts()`
-				* TODO `load_assets()`
-				* TODO `metabox_scripts()`
+				* `get_seo_bar()`
+				* `post_status()`
+				* `metabox_scripts()`
+				* `Scripts()`
+				* `doing_ajax()`
+				* `initialize_term_meta()`
+			* **Without alternatives**, go make your own:
+				* `check_wp_locale()`
+				* `maybe_lowercase_noun()`
 * **Property notes:**
+	* For object `the_seo_framework()`:
+		* **Added:**
+			* `quick_edit_column_name`, used for hidden quick edit fields.
+* **Constant notes:**
 	* For object `the_seo_framework()`:
 		* **Added:**
 			* `ROBOTS_IGNORE_PROTECTION`, used for the `robots_meta()` method family, ignores post's password/privacy settings.
@@ -503,9 +584,16 @@ TODO consider making the tooltip wider, or automatically grow or shrink based on
 		* `the_seo_framework_sitemap_supported_post_types`, array.
 		* `the_seo_framework_sitemap_hpt_query_args`, array.
 		* `the_seo_framework_sitemap_chpt_query_args`, array.
-	* **Changed:**
+	* **Improved:**
 		* `the_seo_framework_robots_meta_array`, now has two new parameters, `$args` and `$ignore`.
 		* `the_seo_framework_sitemap_post_limit`, now has a new parameter, `$hierarchical`.
+		* `the_seo_framework_sitemap_additional_urls`, now has a new parameter: `$args`.
+		* `the_seo_framework_sitemap_extend`, now has a new parameter: `$args`.
+	* **Changed:**
+		* `the_seo_framework_scripts`:
+			1. Now contains all registered scripts.
+			1. Now has a new parameter: `$bridge`.
+		* `the_seo_framework_term_meta_defaults` now holds more values in the first parameter.
 	* **Fixed:**
 		* `the_seo_framework_title_from_generation`, now works for:
 			1. the homepage title in the admin screens.

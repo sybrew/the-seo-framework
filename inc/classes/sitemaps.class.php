@@ -29,6 +29,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * Handles sitemap output.
  *
  * @since 2.8.0
+ * @TODO move this to a bridge instance.
  */
 class Sitemaps extends Metaboxes {
 
@@ -69,7 +70,6 @@ class Sitemaps extends Metaboxes {
 	 * This rule defines the sitemap.xml output
 	 *
 	 * @since 2.2.9
-	 * @since 3.3.0 Now only registers the stylesheet endpoint when it's enabled.
 	 *
 	 * @param bool $force add the rule anyway, regardless of detected environment.
 	 */

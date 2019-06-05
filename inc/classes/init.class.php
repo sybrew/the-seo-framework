@@ -147,8 +147,8 @@ class Init extends Query {
 		//= Initialize term meta filters and actions.
 		$this->init_term_meta();
 
-		//= Initialize the SEO Bar
-		$this->init_seo_bar();
+		//= Initialize the SEO Bar tables.
+		$this->init_seo_bar_tables();
 
 		//* Save post data.
 		\add_action( 'save_post', [ $this, 'inpost_seo_save' ], 1, 2 );
@@ -195,9 +195,6 @@ class Init extends Query {
 
 			// Set up notices
 			\add_action( 'admin_notices', [ $this, 'notices' ] );
-
-			// Load nessecary assets
-			\add_action( 'admin_init', [ $this, 'load_assets' ] );
 
 			//* Admin AJAX for counter options.
 			\add_action( 'wp_ajax_the_seo_framework_update_counter', [ $this, '_wp_ajax_update_counter_type' ] );
