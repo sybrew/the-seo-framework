@@ -51,7 +51,7 @@ class Generate_Title extends Generate_Description {
 	public function get_title( $args = null, $escape = true ) {
 
 		$title = $this->get_custom_field_title( $args, false )
-			  ?: $this->get_generated_title( $args, false ); // precision alignment ok.
+			  ?: $this->get_generated_title( $args, false ); // phpcs:ignore -- precision alignment ok.
 
 		return $escape ? $this->escape_title( $title ) : $title;
 	}
@@ -185,7 +185,7 @@ class Generate_Title extends Generate_Description {
 	public function get_twitter_title( $args = null, $escape = true ) {
 
 		$title = $this->get_twitter_title_from_custom_field( $args, false )
-			  ?: $this->get_generated_twitter_title( $args, false ); // precision alignment ok.
+			  ?: $this->get_generated_twitter_title( $args, false ); // phpcs:ignore -- precision alignment ok.
 
 		return $escape ? $this->escape_title( $title ) : $title;
 	}
@@ -234,16 +234,16 @@ class Generate_Title extends Generate_Description {
 					  ?: $this->get_custom_field( '_twitter_title' )
 					  ?: $this->get_option( 'homepage_og_title' )
 					  ?: $this->get_custom_field( '_open_graph_title' )
-					  ?: ''; // precision alignment ok.
+					  ?: ''; // phpcs:ignore -- precision alignment ok.
 			} else {
 				$title = $this->get_option( 'homepage_twitter_title' )
 					  ?: $this->get_option( 'homepage_og_title' )
-					  ?: ''; // precision alignment ok.
+					  ?: ''; // phpcs:ignore -- precision alignment ok.
 			}
 		} elseif ( $this->is_singular() ) {
 			$title = $this->get_custom_field( '_twitter_title' )
 				  ?: $this->get_custom_field( '_open_graph_title' )
-				  ?: ''; // precision alignment ok.
+				  ?: ''; // phpcs:ignore -- precision alignment ok.
 		}
 
 		return $title;
@@ -273,15 +273,15 @@ class Generate_Title extends Generate_Description {
 					  ?: $this->get_custom_field( '_twitter_title', $args['id'] )
 					  ?: $this->get_option( 'homepage_og_title' )
 					  ?: $this->get_custom_field( '_open_graph_title', $args['id'] )
-					  ?: ''; // precision alignment ok.
+					  ?: ''; // phpcs:ignore -- precision alignment ok.
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_twitter_title' )
 					  ?: $this->get_option( 'homepage_og_title' )
-					  ?: '';  // precision alignment ok.
+					  ?: '';  // phpcs:ignore -- precision alignment ok.
 			} else {
 				$title = $this->get_custom_field( '_twitter_title', $args['id'] )
 					  ?: $this->get_custom_field( '_open_graph_title', $args['id'] )
-					  ?: ''; // precision alignment ok.
+					  ?: ''; // phpcs:ignore -- precision alignment ok.
 			}
 		}
 
@@ -322,7 +322,7 @@ class Generate_Title extends Generate_Description {
 	public function get_open_graph_title( $args = null, $escape = true ) {
 
 		$title = $this->get_open_graph_title_from_custom_field( $args, false )
-			  ?: $this->get_generated_open_graph_title( $args, false ); // precision alignment ok.
+			  ?: $this->get_generated_open_graph_title( $args, false ); // phpcs:ignore -- precision alignment ok.
 
 		return $escape ? $this->escape_title( $title ) : $title;
 	}
@@ -369,7 +369,7 @@ class Generate_Title extends Generate_Description {
 			if ( $this->is_static_frontpage() ) {
 				$title = $this->get_option( 'homepage_og_title' )
 					  ?: $this->get_custom_field( '_open_graph_title' )
-					  ?: ''; // precision alignment ok.
+					  ?: ''; // phpcs:ignore -- precision alignment ok.
 			} else {
 				$title = $this->get_option( 'homepage_og_title' ) ?: '';
 			}
@@ -402,7 +402,7 @@ class Generate_Title extends Generate_Description {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_og_title' )
 					  ?: $this->get_custom_field( '_open_graph_title', $args['id'] )
-					  ?: ''; // Precision alignment ok.
+					  ?: ''; // phpcs:ignore -- precision alignment ok.
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_og_title' ) ?: '';
 			} else {
@@ -475,7 +475,7 @@ class Generate_Title extends Generate_Description {
 			if ( $this->is_static_frontpage() ) {
 				$title = $this->get_option( 'homepage_title' )
 					  ?: $this->get_custom_field( '_genesis_title' )
-					  ?: ''; // precision alignment ok.
+					  ?: ''; // phpcs:ignore -- precision alignment ok.
 			} else {
 				$title = $this->get_option( 'homepage_title' ) ?: '';
 			}
@@ -511,7 +511,7 @@ class Generate_Title extends Generate_Description {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_title' )
 					  ?: $this->get_custom_field( '_genesis_title', $args['id'] )
-					  ?: ''; // precision alignment ok.
+					  ?: ''; // phpcs:ignore -- precision alignment ok.
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_title' ) ?: '';
 			} else {

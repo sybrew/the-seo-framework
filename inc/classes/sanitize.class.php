@@ -1268,7 +1268,7 @@ class Sanitize extends Admin_Pages {
 					 . '((www.)?)'            // 3: maybe www.
 					 . '(.*\.[a-zA-Z0-9]*)'   // 4: any legal domain with tld
 					 . '(?:\/)?'              // 5: maybe trailing slash
-					 . '/'; // precision alignment OK.
+					 . '/'; // phpcs:ignore -- precision alignment ok.
 
 			//* If link is relative, make it full again
 			if ( ! preg_match( $pattern, $url ) ) {

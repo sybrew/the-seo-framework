@@ -162,6 +162,7 @@ class Admin_Init extends Init {
 	 * (Google) search, Open Graph, and Twitter.
 	 *
 	 * @since 3.1.0
+	 * @since 3.3.0 Now gives different values for various WordPress locales.
 	 * @staticvar array $guidelines
 	 * @TODO Consider splitting up search into Google, Bing, etc., as we might
 	 *       want users to set their preferred search engine. Now, these engines
@@ -172,21 +173,41 @@ class Admin_Init extends Init {
 	 */
 	public function get_input_guidelines() {
 		static $guidelines;
+
+		if ( isset( $guidelines ) ) return $guidelines;
+
+		// phpcs:disable -- WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
+		$guideline_adjustments = [
+			'as'    => 148 / 160, // Assamese (অসমীয়া)
+			'gu'    => 148 / 160, // Gujarati (ગુજરાતી)
+			'ml_IN' => 100 / 160, // Malayalam (മലയാളം)
+			'ja'    =>  70 / 160, // Japanese (日本語)
+			'ko_KR' =>  82 / 160, // Korean (한국어)
+			'ta_IN' => 120 / 160, // Talim (தமிழ்)
+			'zh_TW' =>  70 / 160, // Taiwanese Mandarin (Traditional Chinese) (繁體中文)
+			'zh_HK' =>  70 / 160, // Hong Kong (Chinese version) (香港中文版)
+			'zh_CN' =>  70 / 160, // Mandarin (Simplified Chinese) (简体中文)
+		];
+		// phpcs:enable -- WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
+
+		$locale = \get_locale();
+		$adjust = isset( $guideline_adjustments[ $locale ] ) ? $guideline_adjustments[ $locale ] : 1;
+
 		/**
 		 * @since 3.1.0
 		 * @param array $guidelines The title and description guidelines.
 		 *              Don't alter the format. Only change the numeric values.
 		 */
-		return isset( $guidelines ) ? $guidelines : $guidelines = (array) \apply_filters(
+		return $guidelines = (array) \apply_filters(
 			'the_seo_framework_input_guidelines',
 			[
 				'title' => [
 					'search' => [
 						'chars'  => [
-							'lower'     => 25,
-							'goodLower' => 35,
-							'goodUpper' => 65,
-							'upper'     => 75,
+							'lower'     => (int) 25 * $adjust,
+							'goodLower' => (int) 35 * $adjust,
+							'goodUpper' => (int) 65 * $adjust,
+							'upper'     => (int) 75 * $adjust,
 						],
 						'pixels' => [
 							'lower'     => 200,
@@ -217,10 +238,10 @@ class Admin_Init extends Init {
 				'description' => [
 					'search' => [
 						'chars'  => [
-							'lower'     => 45,
-							'goodLower' => 80,
-							'goodUpper' => 160,
-							'upper'     => 320,
+							'lower'     => (int) 45 * $adjust,
+							'goodLower' => (int) 80 * $adjust,
+							'goodUpper' => (int) 160 * $adjust,
+							'upper'     => (int) 320 * $adjust,
 						],
 						'pixels' => [
 							'lower'     => 256,
@@ -467,8 +488,8 @@ class Admin_Init extends Init {
 
 		$this->_check_tsf_ajax_referer( 'upload_files' );
 		if (
-		   ! \current_user_can( 'upload_files' ) // precision alignment ok.
-		|| ! isset( $_POST['id'], $_POST['context'], $_POST['cropDetails'] ) // input var ok.
+		   ! \current_user_can( 'upload_files' ) // phpcs:ignore -- precision alignment ok.
+		|| ! isset( $_POST['id'], $_POST['context'], $_POST['cropDetails'] ) // phpcs:ignore -- Input var OK.
 		) {
 			\wp_send_json_error();
 		}

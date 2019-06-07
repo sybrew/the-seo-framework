@@ -76,8 +76,8 @@ class Generate extends User_Data {
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @param int <bit>  $ignore The ignore level. {
 	 *    0 = 0b00: Ignore nothing.
-	 *    1 = 0b01: Ignore protection. (self::ROBOTS_IGNORE_PROTECTION)
-	 *    2 = 0b10: Ignore post/term setting. (self::ROBOTS_IGNORE_SETTINGS)
+	 *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
+	 *    2 = 0b10: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
 	 *    3 = 0b11: Ignore protection and post/term setting.
 	 * }
 	 * @return array {
@@ -115,8 +115,8 @@ class Generate extends User_Data {
 		 * @param array|null $args
 		 * @param int <bit>  $ignore The ignore level. {
 		 *    0 = 0b00: Ignore nothing.
-		 *    1 = 0b01: Ignore protection. (the_seo_framework()::ROBOTS_IGNORE_PROTECTION)
-		 *    2 = 0b10: Ignore post/term setting. (the_seo_framework()::ROBOTS_IGNORE_SETTINGS)
+		 *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
+		 *    2 = 0b10: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
 		 *    3 = 0b11: Ignore protection and post/term setting.
 		 * }
 		 */
@@ -135,8 +135,8 @@ class Generate extends User_Data {
 	 *
 	 * @param int <bit> $ignore The ignore level. {
 	 *    0 = 0b00: Ignore nothing.
-	 *    1 = 0b01: Ignore protection. (self::ROBOTS_IGNORE_PROTECTION)
-	 *    2 = 0b10: Ignore post/term setting. (self::ROBOTS_IGNORE_SETTINGS)
+	 *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
+	 *    2 = 0b10: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
 	 *    3 = 0b11: Ignore protection and post/term setting.
 	 * }
 	 * @return array|null robots
@@ -153,7 +153,7 @@ class Generate extends User_Data {
 			$nofollow  = $nofollow || $this->get_option( 'homepage_nofollow' );
 			$noarchive = $noarchive || $this->get_option( 'homepage_noarchive' );
 
-			if ( ! ( $ignore & self::ROBOTS_IGNORE_PROTECTION ) ) :
+			if ( ! ( $ignore & ROBOTS_IGNORE_PROTECTION ) ) :
 				$noindex = $noindex
 						|| ( $this->get_option( 'home_paged_noindex' ) && ( $this->page() > 1 || $this->paged() > 1 ) );
 			endif;
@@ -219,7 +219,7 @@ class Generate extends User_Data {
 				$$_type = ! in_array( false, $_values, true );
 			}
 
-			if ( ! ( $ignore & self::ROBOTS_IGNORE_SETTINGS ) ) :
+			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
 				$term_meta = $this->get_current_term_meta();
 
 				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
@@ -236,7 +236,7 @@ class Generate extends User_Data {
 				$$r = $$r || $this->is_post_type_robots_set( $r, $post_type );
 			}
 
-			if ( ! ( $ignore & self::ROBOTS_IGNORE_SETTINGS ) ) :
+			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
 				$post_meta = [
 					'noindex'   => $this->get_custom_field( '_genesis_noindex' ),
 					'nofollow'  => $this->get_custom_field( '_genesis_nofollow' ),
@@ -250,7 +250,7 @@ class Generate extends User_Data {
 			endif;
 
 			// Overwrite and ignore the user's settings, regardless; unless ignore is set.
-			if ( ! ( $ignore & self::ROBOTS_IGNORE_PROTECTION ) ) :
+			if ( ! ( $ignore & ROBOTS_IGNORE_PROTECTION ) ) :
 				if ( $this->is_protected( $this->get_the_real_ID() ) ) {
 					$noindex = true;
 				}
@@ -274,8 +274,8 @@ class Generate extends User_Data {
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @param int <bit>  $ignore The ignore level. {
 	 *    0 = 0b00: Ignore nothing.
-	 *    1 = 0b01: Ignore protection. (self::ROBOTS_IGNORE_PROTECTION)
-	 *    2 = 0b10: Ignore post/term setting. (self::ROBOTS_IGNORE_SETTINGS)
+	 *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
+	 *    2 = 0b10: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
 	 *    3 = 0b11: Ignore protection and post/term setting.
 	 * }
 	 * @return array|null robots
@@ -318,7 +318,7 @@ class Generate extends User_Data {
 				$$_type = ! in_array( false, $_values, true );
 			}
 
-			if ( ! ( $ignore & self::ROBOTS_IGNORE_SETTINGS ) ) :
+			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
 				$term_meta = $this->get_term_meta( $args['id'] );
 
 				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
@@ -334,7 +334,7 @@ class Generate extends User_Data {
 				$$r = $$r || $this->is_post_type_robots_set( $r, $post_type );
 			}
 
-			if ( ! ( $ignore & self::ROBOTS_IGNORE_SETTINGS ) ) :
+			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
 				$post_meta = [
 					'noindex'   => $this->get_custom_field( '_genesis_noindex', $args['id'] ),
 					'nofollow'  => $this->get_custom_field( '_genesis_nofollow', $args['id'] ),
@@ -348,7 +348,7 @@ class Generate extends User_Data {
 			endif;
 
 			// Overwrite and ignore the user's settings, regardless; unless ignore is set.
-			if ( ! ( $ignore & self::ROBOTS_IGNORE_PROTECTION ) ) :
+			if ( ! ( $ignore & ROBOTS_IGNORE_PROTECTION ) ) :
 				if ( $this->is_protected( $args['id'] ) ) {
 					$noindex = true;
 				}
@@ -375,8 +375,8 @@ class Generate extends User_Data {
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @param int <bit>  $ignore The ignore level. {
 	 *    0 = 0b00: Ignore nothing.
-	 *    1 = 0b01: Ignore protection. (self::ROBOTS_IGNORE_PROTECTION)
-	 *    2 = 0b10: Ignore post/term setting. (self::ROBOTS_IGNORE_SETTINGS)
+	 *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
+	 *    2 = 0b10: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
 	 *    3 = 0b11: Ignore protection and post/term setting.
 	 * }
 	 * @return bool Whether noindex is set or not
@@ -411,7 +411,7 @@ class Generate extends User_Data {
 				$$_type = ! in_array( false, $_values, true );
 			}
 
-			if ( ! ( $ignore & self::ROBOTS_IGNORE_SETTINGS ) ) :
+			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
 				$term_meta = $this->get_term_meta( $args['id'] );
 
 				if ( isset( $term_meta['noindex'] ) ) {
@@ -423,7 +423,7 @@ class Generate extends User_Data {
 			$post_type = \get_post_type( $args['id'] );
 			$noindex   = $noindex || $this->is_post_type_robots_set( 'noindex', $post_type );
 
-			if ( ! ( $ignore & self::ROBOTS_IGNORE_SETTINGS ) ) :
+			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
 				$post_meta = [
 					'noindex' => $this->get_custom_field( '_genesis_noindex', $args['id'] ),
 				];
@@ -432,7 +432,7 @@ class Generate extends User_Data {
 			endif;
 
 			// Overwrite and ignore the user's settings, regardless; unless ignore is set.
-			if ( ! ( $ignore & self::ROBOTS_IGNORE_PROTECTION ) ) :
+			if ( ! ( $ignore & ROBOTS_IGNORE_PROTECTION ) ) :
 				if ( $this->is_protected( $args['id'] ) ) {
 					$noindex = true;
 				}
@@ -494,7 +494,7 @@ class Generate extends User_Data {
 	 * @since 2.5.2
 	 * @staticvar string $blogname
 	 *
-	 * @return string $blogname The trimmed and sanitized blogname.
+	 * @return string $blogname The escaped and sanitized blogname.
 	 */
 	public function get_blogname() {
 		static $blogname = null;
@@ -508,18 +508,11 @@ class Generate extends User_Data {
 	 * @since 3.0.0 No longer returns untitled when empty, instead, it just returns an empty string.
 	 * @staticvar string $description
 	 *
-	 * @return string $blogname The trimmed and sanitized blog description.
+	 * @return string $blogname The escaped and sanitized blog description.
 	 */
 	public function get_blogdescription() {
-
 		static $description = null;
-
-		if ( isset( $description ) )
-			return $description;
-
-		$description = trim( \get_bloginfo( 'description', 'display' ) );
-
-		return $description = $description ?: '';
+		return isset( $description ) ? $description : $description = trim( \get_bloginfo( 'description', 'display' ) );
 	}
 
 	/**

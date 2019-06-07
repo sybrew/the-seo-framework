@@ -536,15 +536,9 @@ class Sitemap {
 			}
 		}
 
-		static $_ignore = null;
-		if ( null === $_ignore ) {
-			$_tsf    = static::$tsf;
-			$_ignore = $_tsf::ROBOTS_IGNORE_PROTECTION; // php 7 please... we can't use static::$tsf::... now we need cache..
-		}
-
 		// ROBOTS_IGNORE_PROTECTION as we don't need to test 'private' (because of sole 'publish'), and 'password' (because of false 'has_password')
 		return ! isset( $excluded[ $post_id ] )
-			&& ! static::$tsf->is_robots_meta_noindex_set_by_args( [ 'id' => $post_id ], $_ignore );
+			&& ! static::$tsf->is_robots_meta_noindex_set_by_args( [ 'id' => $post_id ], \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION );
 	}
 
 	/**

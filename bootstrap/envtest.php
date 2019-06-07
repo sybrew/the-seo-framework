@@ -5,6 +5,8 @@
  *
  * @NOTE This file MUST be written according to WordPress' minimum PHP requirements.
  *       Which is PHP 5.2.
+ * When we only support WordPress 5.2+, it'll be PHP 5.6.
+ * When we only support WordPress 5.4?+, it'll be PHP 7.1.
  */
 
 defined( 'THE_SEO_FRAMEWORK_DB_VERSION' ) or die;
@@ -74,7 +76,7 @@ function the_seo_framework_pre_boot_test() {
 	);
 
 	// phpcs:disable Generic.Formatting.MultipleStatementAlignment.NotSameWarning
-	   ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < $requirements['php'] and $test = 1 // precision alignment ok.
+	   ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < $requirements['php'] and $test = 1 // phpcs:ignore -- precision alignment ok.
 	or $GLOBALS['wp_db_version'] < $requirements['wp'] and $test = 2
 	or $test = true;
 	// phpcs:enable Generic.Formatting.MultipleStatementAlignment.NotSameWarning
@@ -116,7 +118,7 @@ function the_seo_framework_pre_boot_test() {
 
 		case 2:
 			//* WordPress requirements not met.
-			$requirement = 'WordPress 4.6 or later';
+			$requirement = 'WordPress 4.9 or later';
 			$issue       = 'WordPress version';
 			$version     = $GLOBALS['wp_version'];
 			$subtitle    = 'WordPress Requirements';

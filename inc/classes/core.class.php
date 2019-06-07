@@ -35,16 +35,6 @@ class Core {
 	use Traits\Enclose_Core_Final;
 
 	/**
-	 * Properties arguments used for the \The_SEO_Framework\Generate\robots_meta() method family.
-	 *
-	 * @since 3.3.0
-	 * @var int <bitwise> ROBOTS_IGNORE_PROTECTION
-	 * @var int <bitwise> ROBOTS_IGNORE_SETTINGS
-	 */
-	const ROBOTS_IGNORE_PROTECTION = 0b01;
-	const ROBOTS_IGNORE_SETTINGS   = 0b10;
-
-	/**
 	 * Tells if this plugin is loaded.
 	 *
 	 * @NOTE: Only `\The_SEO_Framework\_init_tsf()` should adjust this.

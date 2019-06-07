@@ -48,7 +48,7 @@ class Generate_Description extends Generate {
 	public function get_description( $args = null, $escape = true ) {
 
 		$desc = $this->get_description_from_custom_field( $args, false )
-			 ?: $this->get_generated_description( $args, false ); // precision alignment ok.
+			 ?: $this->get_generated_description( $args, false ); // phpcs:ignore -- precision alignment ok.
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -70,7 +70,7 @@ class Generate_Description extends Generate {
 	public function get_open_graph_description( $args = null, $escape = true ) {
 
 		$desc = $this->get_open_graph_description_from_custom_field( $args, false )
-			 ?: $this->get_generated_open_graph_description( $args, false ); // precision alignment ok.
+			 ?: $this->get_generated_open_graph_description( $args, false ); // phpcs:ignore -- precision alignment ok.
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -118,14 +118,14 @@ class Generate_Description extends Generate {
 			if ( $this->is_static_frontpage() ) {
 				$desc = $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_custom_field( '_open_graph_description' )
-					 ?: $this->get_description_from_custom_field(); // precision alignment ok
+					 ?: $this->get_description_from_custom_field(); // phpcs:ignore -- precision alignment ok.
 			} else {
 				$desc = $this->get_option( 'homepage_og_description' )
-					 ?: $this->get_description_from_custom_field(); // precision alignment ok.
+					 ?: $this->get_description_from_custom_field(); // phpcs:ignore -- precision alignment ok.
 			}
 		} elseif ( $this->is_singular() ) {
 			$desc = $this->get_custom_field( '_open_graph_description' )
-				 ?: $this->get_description_from_custom_field(); // precision alignment ok.
+				 ?: $this->get_description_from_custom_field(); // phpcs:ignore -- precision alignment ok.
 		} elseif ( $this->is_term_meta_capable() ) {
 			$desc = $this->get_description_from_custom_field();
 		}
@@ -156,13 +156,13 @@ class Generate_Description extends Generate {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_custom_field( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args ); // precision alignment ok.
+					 ?: $this->get_description_from_custom_field( $args ); // phpcs:ignore -- precision alignment ok.
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_og_description' )
-					 ?: $this->get_description_from_custom_field( $args ); // precision alignment ok.
+					 ?: $this->get_description_from_custom_field( $args ); // phpcs:ignore -- precision alignment ok.
 			} else {
 				$desc = $this->get_custom_field( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args ); // precision alignment ok.
+					 ?: $this->get_description_from_custom_field( $args ); // phpcs:ignore -- precision alignment ok.
 			}
 		}
 
@@ -187,7 +187,7 @@ class Generate_Description extends Generate {
 	public function get_twitter_description( $args = null, $escape = true ) {
 
 		$desc = $this->get_twitter_description_from_custom_field( $args, false )
-			 ?: $this->get_generated_twitter_description( $args, false ); // precision alignment ok.
+			 ?: $this->get_generated_twitter_description( $args, false ); // phpcs:ignore -- precision alignment ok.
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -238,16 +238,16 @@ class Generate_Description extends Generate {
 					?: $this->get_custom_field( '_twitter_description' )
 					?: $this->get_option( 'homepage_og_description' )
 					?: $this->get_custom_field( '_open_graph_description' )
-					?: $this->get_description_from_custom_field(); // precision alignment ok.
+					?: $this->get_description_from_custom_field(); // phpcs:ignore -- precision alignment ok.
 			} else {
 				$desc = $this->get_option( 'homepage_twitter_description' )
 					?: $this->get_option( 'homepage_og_description' )
-					?: $this->get_description_from_custom_field(); // precision alignment ok.
+					?: $this->get_description_from_custom_field(); // phpcs:ignore -- precision alignment ok.
 			}
 		} elseif ( $this->is_singular() ) {
 			$desc = $this->get_custom_field( '_twitter_description' )
 				 ?: $this->get_custom_field( '_open_graph_description' )
-				 ?: $this->get_description_from_custom_field(); // precision alignment ok.
+				 ?: $this->get_description_from_custom_field(); // phpcs:ignore -- precision alignment ok.
 		} elseif ( $this->is_term_meta_capable() ) {
 			$desc = $this->get_description_from_custom_field();
 		}
@@ -280,15 +280,15 @@ class Generate_Description extends Generate {
 					 ?: $this->get_custom_field( '_twitter_description', $args['id'] )
 					 ?: $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_custom_field( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args ); // precision alignment ok.
+					 ?: $this->get_description_from_custom_field( $args ); // phpcs:ignore -- precision alignment ok.
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_twitter_description' )
 					 ?: $this->get_option( 'homepage_og_description' )
-					 ?: $this->get_description_from_custom_field( $args ); // precision alignment ok.
+					 ?: $this->get_description_from_custom_field( $args ); // phpcs:ignore -- precision alignment ok.
 			} else {
 				$desc = $this->get_custom_field( '_twitter_description', $args['id'] )
 					 ?: $this->get_custom_field( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args ); // precision alignment ok.
+					 ?: $this->get_description_from_custom_field( $args ); // phpcs:ignore -- precision alignment ok.
 			}
 		}
 
@@ -352,7 +352,7 @@ class Generate_Description extends Generate {
 			if ( $this->is_static_frontpage() ) {
 				$desc = $this->get_option( 'homepage_description' )
 					 ?: $this->get_custom_field( '_genesis_description' )
-					 ?: ''; // precision alignment ok.
+					 ?: ''; // phpcs:ignore -- precision alignment ok.
 			} else {
 				$desc = $this->get_option( 'homepage_description' ) ?: '';
 			}
@@ -388,7 +388,7 @@ class Generate_Description extends Generate {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_description' )
 					 ?: $this->get_custom_field( '_genesis_description', $args['id'] )
-					 ?: ''; // Precision alignment ok.
+					 ?: ''; // phpcs:ignore -- precision alignment ok.
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_description' ) ?: '';
 			} else {
@@ -692,6 +692,9 @@ class Generate_Description extends Generate {
 	 *                3. Now has unicode support for sentence closing.
 	 *                4. Now strips last three words when preceded by a sentence closing separator.
 	 *                5. Now always leads with (inviting) dots, even if the excerpt is shorter than $max_char_length.
+	 * @since 3.3.0 : 1. Now stops parsing earlier on failure.
+	 *                2. Now performs faster queries.
+	 *                3. Now maintains last sentence with closing punctuations.
 	 * @see https://secure.php.net/manual/en/regexp.reference.unicode.php
 	 *
 	 * @param string $excerpt         The untrimmed excerpt.
@@ -705,22 +708,61 @@ class Generate_Description extends Generate {
 		preg_match( sprintf( '/.{0,%d}([^\P{Po}\'\"]|\p{Z}|$){1}/su', $max_char_length ), trim( $excerpt ), $matches );
 		$excerpt = isset( $matches[0] ) ? ( $matches[0] ?: '' ) : '';
 
-		//* Remove trailing/leading commas and spaces.
-		$excerpt = trim( $excerpt, ' ,' );
+		$excerpt = trim( $excerpt );
 
-		//* Test if there's punctuation with something trailing. The next regex will be a wild-goose chase otherwise.
-		preg_match( '/.[^\P{Po}\'\"]\p{Z}*\w/su', $excerpt, $matches );
-		if ( $matches ) {
-			//* Find words that are leading after a dot. If there are 3 or fewer, trim them.
-			//= super fast when there's punctuation with something trailing:
-			preg_match( '/(.+)(([^\P{Po}\'\"])\p{Z}*(\w+\p{Z}*){1,3})(.+)?/su', $excerpt, $matches );
-			// If $matches[5] is set, then there are more than 3 words...
-			if ( isset( $matches[1], $matches[3] ) && empty( $matches[5] ) ) {
-				$excerpt = $matches[1] . $matches[3];
+		if ( ! $excerpt ) return '';
+
+		/**
+		 * Note to self: Leading spaces will cause this regex to fail. So, trimming prior is advised.
+		 *
+		 * 1. Tests for punctuation at the start.
+		 * 2. Tests for any punctuation leading, if not found: fail and commit.
+		 * 3. Tests if first leading punctuation has nothing leading.
+		 * 4. If not, grab everything, find the last punctiation.
+		 * 5. Test if the last punctiation has nothing leading.
+		 * 6. If something's leading, grab the first 3 words and follow words separately.
+		 *
+		 * Critically optimized, so the $matches don't make much sense. Bear with me:
+		 *
+		 * @param array $matches : {
+		 *    0 : Full excerpt excluding leading punctuation. May be empty when no leading punctuation is found.
+		 *    1 : Sentence before first punctuation.
+		 *    2 : First trailing punctuation, plus everything trailing until end of sentence. (equals [3][4][5][6])
+		 *    3 : If more than one punctuation is found, this is everything leading [1] until the final punctuation.
+		 *    4 : Final punctuation found; trailing [3].
+		 *    5 : All extraneous words trailing [4].
+		 *    6 : Every 4th and later word trailing [4].
+		 * }
+		 */
+		preg_match(
+			'/(?:^\p{P}*)([\P{Po}\'\"]+\p{Z}*\w*)(*COMMIT)(\p{Po}$|(.+)?(\p{Po})((?:\p{Z}*(?:\w+\p{Z}*){1,3})(.+)?)?)/su',
+			$excerpt,
+			$matches
+		);
+
+		if ( isset( $matches[6] ) ) {
+			// Accept everything.
+			$excerpt = $matches[1] . $matches[2];
+		} elseif ( isset( $matches[5] ) ) {
+			// Last sentence is too short to make sense of. Trim it.
+			if ( isset( $matches[3] ) ) {
+				// More than one punctuation is found. Concatenate.
+				$excerpt = $matches[1] . $matches[3] . $matches[4];
+			} else {
+				// Only one complete sentence is found. Concatenate last punctuation.
+				$excerpt = $matches[1] . $matches[4];
 			}
+		} elseif ( isset( $matches[2] ) ) { // [3] and [4] may also be set, containing series of punctuation.
+			// Only one complete sentence is found. Series of punctuation, if any, is added in [2].
+			$excerpt = $matches[1] . $matches[2];
 		}
+		// elseif ( isset( $matches[1] ) ) {
+			// Unfortunately, impossible. `(*COMMIT)` destroys this. $excerpt remains unchanges.
+			// Leading punctuation may still be present.
+			// $excerpt = $matches[1];
+		// }
 
-		//* Remove leading commas again.
+		//* Remove leading commas and spaces.
 		$excerpt = rtrim( $excerpt, ' ,' );
 
 		if ( ';' === substr( $excerpt, -1 ) ) {

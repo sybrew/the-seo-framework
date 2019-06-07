@@ -129,7 +129,7 @@ class Profile extends Generate_Ldjson {
 		foreach ( $this->profile_settings->keys as $option => $post_key ) {
 			if ( isset( $_POST[ $post_key ] ) ) { // Input var ok: profile_settings->keys are static.
 				$value = $this->{$this->profile_settings->sanitation[ $option ]}( $_POST[ $post_key ] ) // Input var & sanitization OK.
-					   ?: $defaults[ $option ]; // precision alignment ok.
+					   ?: $defaults[ $option ]; // phpcs:ignore -- precision alignment ok.
 
 				$success[] = (bool) $this->update_user_option( $user_id, $option, $value );
 			}

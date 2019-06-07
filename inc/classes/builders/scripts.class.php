@@ -326,7 +326,7 @@ final class Scripts {
 		if ( $registered ) {
 			isset( static::$queue[ $s['type'] ][ $s['id'] ] )
 				and static::$queue[ $s['type'] ][ $s['id'] ] |= static::REGISTERED
-				 or static::$queue[ $s['type'] ][ $s['id'] ]  = static::REGISTERED; // Precision alignment ok.
+				 or static::$queue[ $s['type'] ][ $s['id'] ]  = static::REGISTERED; // phpcs:ignore -- precision alignment ok.
 		}
 	}
 
@@ -357,7 +357,7 @@ final class Scripts {
 		if ( $loaded ) {
 			isset( static::$queue[ $type ][ $id ] )
 				and static::$queue[ $type ][ $id ] |= static::LOADED
-				 or static::$queue[ $type ][ $id ]  = static::LOADED; // Precision alignment ok.
+				 or static::$queue[ $type ][ $id ]  = static::LOADED; // phpcs:ignore -- precision alignment ok.
 		}
 	}
 
@@ -432,7 +432,7 @@ final class Scripts {
 			$tsf = \the_seo_framework();
 
 			if (
-			   ! isset( $_colors[ $_scheme ]->colors ) // Precision alignment OK.
+			   ! isset( $_colors[ $_scheme ]->colors ) // phpcs:ignore -- precision alignment ok.
 			|| ! is_array( $_colors[ $_scheme ]->colors )
 			|| count( $_colors[ $_scheme ]->colors ) < 4
 			) {
