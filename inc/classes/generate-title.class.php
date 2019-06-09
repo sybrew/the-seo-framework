@@ -852,8 +852,9 @@ class Generate_Title extends Generate_Description {
 	 * @see WP Core single_term_title()
 	 *
 	 * @since 3.1.0
+	 * @since 3.3.0 No longer redundantly tests the query, now only uses the term input or queried object.
 	 *
-	 * @param null|\WP_Term $term    The term name, required in the admin area.
+	 * @param null|\WP_Term $term The term name, required in the admin area.
 	 * @return string The generated single term title.
 	 */
 	public function get_generated_single_term_title( $term = null ) {
@@ -864,7 +865,7 @@ class Generate_Title extends Generate_Description {
 		$term_name = '';
 
 		if ( isset( $term->name ) ) {
-			if ( $this->is_category() || 'category' === $term->taxonomy ) {
+			if ( 'category' === $term->taxonomy ) {
 				/**
 				 * Filter the category archive page title.
 				 *
@@ -873,7 +874,7 @@ class Generate_Title extends Generate_Description {
 				 * @param string $term_name Category name for archive being displayed.
 				 */
 				$term_name = \apply_filters( 'single_cat_title', $term->name );
-			} elseif ( $this->is_tag() || 'tag' === $term->taxonomy ) {
+			} elseif ( 'tag' === $term->taxonomy ) {
 				/**
 				 * Filter the tag archive page title.
 				 *
@@ -882,7 +883,7 @@ class Generate_Title extends Generate_Description {
 				 * @param string $term_name Tag name for archive being displayed.
 				 */
 				$term_name = \apply_filters( 'single_tag_title', $term->name );
-			} elseif ( $this->is_tax() || $this->is_archive_admin() ) {
+			} else {
 				/**
 				 * Filter the custom taxonomy archive page title.
 				 *
@@ -891,12 +892,6 @@ class Generate_Title extends Generate_Description {
 				 * @param string $term_name Term name for archive being displayed.
 				 */
 				$term_name = \apply_filters( 'single_term_title', $term->name );
-			} else {
-				/**
-				 * Don't filter when query is unknown.
-				 * The filters don't pass the term; so, they imply the developer knows the term from query.
-				 */
-				$term_name = $term->name;
 			}
 		}
 
@@ -1343,7 +1338,7 @@ class Generate_Title extends Generate_Description {
 	 * Determines whether to add homepage tagline.
 	 *
 	 * @since 2.6.0
-	 * @since 3.0.4 Now checks for custom tagline or blogname existence.
+	 * @since 3.0.4 Now checks for custom tagline or blog name existence.
 	 *
 	 * @return bool
 	 */

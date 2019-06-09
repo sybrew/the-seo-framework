@@ -614,30 +614,28 @@ class Core {
 			$word_count = array_count_values( $words );
 
 			//* Parse word counting.
-			if ( is_array( $word_count ) ) {
-				//* We're going to fetch words based on position, and then flip it to become the key.
-				$word_keys = array_flip( array_reverse( $words, true ) );
+			//* We're going to fetch words based on position, and then flip it to become the key.
+			$word_keys = array_flip( array_reverse( $words, true ) );
 
-				foreach ( $word_count as $word => $count ) {
-					if ( mb_strlen( $word ) < $bother_length ) {
-						$run = $count >= $amount_bother;
-					} else {
-						$run = $count >= $amount;
-					}
+			foreach ( $word_count as $word => $count ) {
+				if ( mb_strlen( $word ) < $bother_length ) {
+					$run = $count >= $amount_bother;
+				} else {
+					$run = $count >= $amount;
+				}
 
-					if ( $run ) {
-						//* The encoded word is longer or equal to the bother length.
+				if ( $run ) {
+					//* The encoded word is longer or equal to the bother length.
 
-						//! Don't use mb_* here. preg_split's offset is in bytes, NOT unicode.
-						$args = [
-							'pos' => $word_keys[ $word ],
-							'len' => strlen( $word ),
-						];
-						$first_encountered_word = substr( $string, $args['pos'], $args['len'] );
+					//! Don't use mb_* here. preg_split's offset is in bytes, NOT unicode.
+					$args = [
+						'pos' => $word_keys[ $word ],
+						'len' => strlen( $word ),
+					];
+					$first_encountered_word = substr( $string, $args['pos'], $args['len'] );
 
-						//* Found words that are used too frequently.
-						$words_too_many[] = [ $first_encountered_word => $count ];
-					}
+					//* Found words that are used too frequently.
+					$words_too_many[] = [ $first_encountered_word => $count ];
 				}
 			}
 		endif;

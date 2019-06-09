@@ -96,9 +96,6 @@ final class SeoBar {
 	 */
 	public static function generate_bar( array $query ) {
 
-		static $tt = 0;
-		$t = microtime( true );
-
 		static::$query = array_merge( [
 			// 'id'        => 0, // Required! Don't fill this automatically.
 			'taxonomy'  => '',
@@ -150,7 +147,6 @@ final class SeoBar {
 		// There's no need to leak memory.
 		$instance->clear_seo_bar_items();
 
-		echo number_format( $tt += microtime( true ) - $t, 10 ) . 's';
 		return $bar;
 	}
 
@@ -273,12 +269,12 @@ final class SeoBar {
 	private function generate_seo_bar_blocks( array $items ) {
 		foreach ( $items as $item )
 			yield vsprintf(
-				'<span class="tsf-seo-bar-section-wrap tsf-tooltip-wrap"><span class="tsf-seo-bar-item tsf-tooltip-item tsf-seo-bar-%1$s" title="%2$s" aria-label="%2$s" data-desc="%3$s">%4$s</span></span>',
+				'<span class="tsf-seo-bar-section-wrap tsf-tooltip-wrap"><span class="tsf-seo-bar-item tsf-tooltip-item tsf-seo-bar-%1$s" title="%2$s" aria-label="%2$s" data-desc="%3$s" tabindex=0>%4$s</span></span>',
 				[
-					$this->interpret_status_to_class_suffix( $item['status'] ),
+					$this->interpret_status_to_class_suffix( $item ),
 					\esc_attr( $this->build_item_description( $item, 'aria' ) ),
 					\esc_attr( $this->build_item_description( $item, 'html' ) ),
-					\esc_html( $item['symbol'] ),
+					$this->interpret_status_to_symbol( $item ),
 				]
 			);
 	}
@@ -376,12 +372,12 @@ final class SeoBar {
 	 *
 	 * @since 3.3.0
 	 *
-	 * @param int <bitwise> $status The bar's status. If mixed, it'll default.
+	 * @param array $item See `$this->register_seo_bar_item()`
 	 * @return string The HTML class-suffix.
 	 */
-	private function interpret_status_to_class_suffix( $status ) {
+	private function interpret_status_to_class_suffix( $item ) {
 
-		switch ( $status ) :
+		switch ( $item['status'] ) :
 			case static::STATE_GOOD:
 				$status = 'good';
 				break;
@@ -401,5 +397,45 @@ final class SeoBar {
 		endswitch;
 
 		return $status;
+	}
+
+	/**
+	 * Enumerates the assessments in a plaintext format.
+	 *
+	 * @since 3.3.0
+	 * @staticvar bool $use_symbols
+	 *
+	 * @param array $item See `$this->register_seo_bar_item()`
+	 * @return string The SEO Bar item assessment, in plaintext.
+	 */
+	private function interpret_status_to_symbol( array $item ) {
+
+		static $use_symbols = null;
+		if ( null === $use_symbols )
+			$use_symbols = (bool) \the_seo_framework()->get_option( 'seo_bar_symbols' );
+
+		if ( $use_symbols && $item['status'] ^ static::STATE_GOOD ) {
+			switch ( $item['status'] ) :
+				case static::STATE_OKAY:
+					// $symbol = sprintf( '<span style=font-family:dashicons; class="dashicons-flag">%s</span>', $symbol );
+					$symbol = '!?';
+					break;
+
+				case static::STATE_BAD:
+					// $symbol = sprintf( '<span style=font-family:dashicons; class="dashicons-dismiss">%s</span>', $symbol );
+					$symbol = '!!';
+					break;
+
+				default:
+				case static::STATE_UNKNOWN:
+					// $symbol = sprintf( '<span style=font-family:dashicons; class="dashicons-editor-help">%s</span>', $symbol );
+					$symbol = '??';
+					break;
+			endswitch;
+
+			return $symbol;
+		}
+
+		return \esc_html( $item['symbol'] );
 	}
 }

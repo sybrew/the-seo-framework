@@ -84,6 +84,16 @@ switch ( $instance ) :
 				'',
 				false
 			),
+			$this->make_checkbox(
+				'seo_bar_symbols',
+				esc_html__( 'Use symbols for warnings?', 'autodescription' ) . ' ' . $this->make_info(
+					__( 'If you have difficulty discerning colors, this may help you spot issues more easily.', 'autodescription' ),
+					'',
+					false
+				),
+				'',
+				false
+			),
 		], true );
 
 		?>

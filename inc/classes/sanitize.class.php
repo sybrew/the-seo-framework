@@ -229,6 +229,7 @@ class Sanitize extends Admin_Pages {
 
 				'display_seo_bar_tables',
 				'display_seo_bar_metabox',
+				'seo_bar_symbols',
 
 				'title_rem_additions',
 				'title_rem_prefixes',

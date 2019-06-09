@@ -98,11 +98,12 @@ class Query extends Core {
 		$this->_doing_it_wrong( \esc_html( $method ), \esc_html( $message ), '2.9.0' );
 
 		//* Backtrace debugging.
-		// $depth = 10;
-		// if ( $_more ) {
-		// 	error_log( var_export( debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, $depth ), true ) );
-		// 	$_more = false;
-		// }
+		$depth = 10;
+		static $_more = true;
+		if ( $_more ) {
+			error_log( var_export( debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, $depth ), true ) );
+			$_more = false;
+		}
 	}
 	// phpcs:enable -- Method unused in production.
 
@@ -461,7 +462,7 @@ class Query extends Core {
 	}
 
 	/**
-	 * Detect the separated blog page.
+	 * Detect the non-home blog page by query (ID).
 	 *
 	 * @since 2.3.4
 	 *
@@ -498,6 +499,21 @@ class Query extends Core {
 		);
 
 		return $is_blog_page;
+	}
+
+	/**
+	 * Checks blog page by sole ID.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param int $id The ID to check
+	 * @return bool
+	 */
+	public function is_blog_page_by_id( $id ) {
+
+		$pfp = (int) \get_option( 'page_for_posts' );
+
+		return $pfp !== 0 && $id === $pfp;
 	}
 
 	/**
@@ -846,6 +862,7 @@ class Query extends Core {
 	 * Detects posts within the admin area.
 	 *
 	 * @since 2.6.0
+	 * @since 3.3.0 Now no longer returns true on categories and tags.
 	 * @global \WP_Screen $current_screen
 	 * @see The_SEO_Framework_Query::is_single()
 	 *
@@ -853,7 +870,7 @@ class Query extends Core {
 	 */
 	public function is_single_admin() {
 		global $current_screen;
-		return isset( $current_screen->post_type ) && 'post' === $current_screen->post_type;
+		return $this->is_singular_admin() && isset( $current_screen->post_type ) && 'post' === $current_screen->post_type;
 	}
 
 	/**

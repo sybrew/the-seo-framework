@@ -171,10 +171,14 @@ class Admin_Init extends Init {
 	 *
 	 * @return array
 	 */
-	public function get_input_guidelines() {
-		static $guidelines;
+	public function get_input_guidelines( $locale = null ) {
 
-		if ( isset( $guidelines ) ) return $guidelines;
+		static $guidelines = [];
+
+		$locale = $locale ?: \get_locale();
+
+		if ( isset( $guidelines[ $locale ] ) )
+			return $guidelines[ $locale ];
 
 		// phpcs:disable -- WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
 		$guideline_adjustments = [
@@ -190,7 +194,6 @@ class Admin_Init extends Init {
 		];
 		// phpcs:enable -- WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
 
-		$locale = \get_locale();
 		$adjust = isset( $guideline_adjustments[ $locale ] ) ? $guideline_adjustments[ $locale ] : 1;
 
 		/**
@@ -198,7 +201,7 @@ class Admin_Init extends Init {
 		 * @param array $guidelines The title and description guidelines.
 		 *              Don't alter the format. Only change the numeric values.
 		 */
-		return $guidelines = (array) \apply_filters(
+		return $guidelines[ $locale ] = (array) \apply_filters(
 			'the_seo_framework_input_guidelines',
 			[
 				'title' => [
@@ -279,6 +282,7 @@ class Admin_Init extends Init {
 	 * Already attribute-escaped.
 	 *
 	 * @since 3.1.0
+	 * @since 3.3.0 Now added a short leading-dot version for ARIA labels.
 	 *
 	 * @return array
 	 */
@@ -299,6 +303,14 @@ class Admin_Init extends Init {
 				'tooLong'     => \esc_attr__( 'Too long', 'autodescription' ),
 				'farTooLong'  => \esc_attr__( 'Far too long', 'autodescription' ),
 				'good'        => \esc_attr__( 'Good', 'autodescription' ),
+			],
+			'shortdot' => [
+				'empty'       => \esc_attr_x( 'Empty.', 'The string is empty', 'autodescription' ),
+				'farTooShort' => \esc_attr__( 'Far too short.', 'autodescription' ),
+				'tooShort'    => \esc_attr__( 'Too short.', 'autodescription' ),
+				'tooLong'     => \esc_attr__( 'Too long.', 'autodescription' ),
+				'farTooLong'  => \esc_attr__( 'Far too long.', 'autodescription' ),
+				'good'        => \esc_attr__( 'Good.', 'autodescription' ),
 			],
 		];
 	}

@@ -1241,7 +1241,7 @@ class Render extends Admin_Init {
 	public function output_published_time() {
 
 		if ( 'article' !== $this->get_og_type() )
-			return $cache = false;
+			return false;
 
 		return (bool) $this->get_option( 'post_publish_time' );
 	}

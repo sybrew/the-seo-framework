@@ -50,6 +50,12 @@ final class SeoBar {
 	private $taxonomy = '';
 
 	/**
+	 * @since 3.3.0
+	 * @var bool $doing_ajax Whether we're satisfying an AJAX request.
+	 */
+	private $doing_ajax = false;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 3.3.0
@@ -149,7 +155,7 @@ final class SeoBar {
 	 *
 	 * @param \WP_Screen $screen The current screen.
 	 */
-	protected function init_seo_bar_columns( $screen ) {
+	private function init_seo_bar_columns( $screen ) {
 
 		if ( ! \the_seo_framework()->is_wp_lists_edit()
 		|| empty( $screen->id ) )
@@ -187,7 +193,7 @@ final class SeoBar {
 	 * @since 3.3.0
 	 * @see callers for CSRF protection.
 	 */
-	protected function init_seo_bar_columns_ajax() {
+	private function init_seo_bar_columns_ajax() {
 
 		$taxonomy  = isset( $_POST['taxonomy'] ) ? stripslashes( $_POST['taxonomy'] ) : ''; // phpcs:ignore -- CSRF ok.
 		$post_type = isset( $_POST['post_type'] ) ? stripslashes( $_POST['post_type'] ) : ''; // phpcs:ignore -- CSRF ok.
@@ -204,8 +210,9 @@ final class SeoBar {
 				return;
 		}
 
-		$this->post_type = $post_type;
-		$this->taxonomy  = $taxonomy;
+		$this->doing_ajax = true;
+		$this->post_type  = $post_type;
+		$this->taxonomy   = $taxonomy;
 
 		$screen_id = isset( $_POST['screen'] ) ? stripslashes( $_POST['screen'] ) : ''; // phpcs:ignore -- CSRF ok.
 
@@ -309,6 +316,9 @@ final class SeoBar {
 				'id'        => $post_id,
 				'post_type' => $this->post_type,
 			] );
+
+			if ( $this->doing_ajax )
+				echo $this->get_seo_bar_ajax_script(); // phpcs:ignore -- Output is escaped.
 		}
 	}
 
@@ -329,12 +339,27 @@ final class SeoBar {
 	public function _output_seo_bar_for_column_tax( $string, $column_name, $term_id ) {
 
 		if ( 'tsf-seo-bar-wrap' === $column_name ) {
-			return $string . \The_SEO_Framework\Interpreters\SeoBar::generate_bar( [
+			if ( $this->doing_ajax )
+				$string .= $this->get_seo_bar_ajax_script(); // phpcs:ignore -- Output is escaped.
+
+			return \The_SEO_Framework\Interpreters\SeoBar::generate_bar( [
 				'id'       => $term_id,
 				'taxonomy' => $this->taxonomy,
-			] );
+			] ) . $string;
 		}
 
 		return $string;
+	}
+
+	/**
+	 * Outputs a JS script that triggers SEO Bar updates.
+	 * This is a necessity as WordPress doesn't trigger actions on update.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @return string The triggering script.
+	 */
+	private function get_seo_bar_ajax_script() {
+		return "<script>'use strict';(()=>document.dispatchEvent(new Event('tsfLeUpdated')))();</script>";
 	}
 }

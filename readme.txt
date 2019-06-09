@@ -280,7 +280,8 @@ TODO Exclaim:
 - TODO As smart as a self-driving car: Tooltips stay between the lines. Tesla needs me.
 - TODO Finally (really) translator friendly.
 - New posts are indexed faster with an even smarter sitemap.
-- The monolithic facade "the_seo_framework()" is now much lighter, as we offloaded administrative functionality to other files.
+- The monolithic facade "the_seo_framework()" is now much lighter, as we offloaded loads of administrative functionality to other files.
+- The SEO Bar now has an API. You can expect more tests, items, and adjustments via extensions. (hint: Monitor & Focus.)
 - TODO The SEO Bar now only lists items that truly affect the current status, instead of listing everything that might help to concludes a status.
 	* i.e., instead of "WordPress allows indexing, but you set it to noindex, and you disabled the post type", it now says "1. You set it to noindex. 1. You disabled the post type.".
 
@@ -288,6 +289,11 @@ TODO Exclaim:
 
 TODO consider making the tooltip wider, or automatically grow or shrink based on the content. Then, assess the position (first, test overflow left, then, widen it until it overflows right, with max width: 250px?) // Alternatively, or also, set data-tt-max-width and data-tt-min-width values
 TODO fix get_home_title_seplocation() reversal.
+
+TODO when one or more posts have been excluded from the archive, the category may be empty; see if this can be reflected in the SEO output as 404.
+TODO replace `the_seo_framework_fetched_description_excerpt` with something that uses `$args`.
+
+TODO reload the SEO Bar on Gutenberg save action.
 
 **Detailed log:**
 
@@ -302,7 +308,7 @@ TODO fix get_home_title_seplocation() reversal.
 		* TODO Canonical URL
 	* TODO Feeds now have a "X-Robots-tag: noindex, follow" header, so Google doesn't have to guess your intent.
 	* Multidimensional selection for robots-meta on posts, pages, and terms.
-		* TODO We still need to fix the SEO Bar, and we'll likely move the robots setting groups to labels.
+	* A new accessibility feature for the SEO Bar. You can now convert the characters to symbols to discern warnings more easily.
 * **Changed:**
 	* We now support WordPress v4.9 and later, instead of WordPress v4.6 and later.
 	* We now support PHP v5.5 and later, instead of PHP v5.4 and later.
@@ -310,9 +316,6 @@ TODO fix get_home_title_seplocation() reversal.
 		* This doesn't affect your titles, it's only semantics.
 		* NOTE TO SELF: Changing this would require us to change the default options, the filters behavior, and the JS code.. is this the best route?
 	* TODO set `get_logo_uploader_form()`'s flex value to true, Google allows logos of any dimension...
-	* **SEO Bar:** TODO Other states are now shown when "noindex" is set, regardless.
-		* TODO! Add this state! And rework it, in general...
-		* However, now, when the post is redirected, you'll now only see that.
 	* **Redirects:** When a post is redirected, it will no longer be included in the sitemap. So, you no longer have to fiddle with the "index" setting to get the expected result.
 	* **Sitemap:** The sitemap post limit now counts all posts, pages, and custom post types; instead of them separately.
 		* Note: Because we can't guess your intent when you set the option (or left it unchanged), we aren't updating this.
@@ -334,14 +337,64 @@ TODO fix get_home_title_seplocation() reversal.
 			* Add `Options -Indexes` to your `.htaccess` file to prevent this for all plugins that do not honor this behavior.
 	* **Accessibility:**
 		* The homepage settings may now reveal more information on where this data can be altered.
+		* Screen-reader support has been reimplemented for the SEO Bar; it's now completely written out and accurate.
+		* You can now, again, navigate to the SEO Bar with your keyboard. This was disabled previously as it messed with the browser cache due to a wrong implementation.
+	* **Internationalization:**
 		* Sites supporting the Assamese, Gujarati, Malayalam, Japanese, Korean, Talim, Traditional Chinese, or Simplified Chinese now have adjusted character guidelines.
+		* UI strings that were hard to translate in other locales have been rewritten. Yes, this takes some time to get used to.
 	* **Sitemap:**
 		* The blog page (not as homepage) now chooses a better lastmod value; based on whether the blog page was edited, or a new post was recently published.
 			* Before it was only when a post was most recently published.
+	* **SEO Bar:**
+		1. Other states are now shown when "noindex" is set, regardless.
+			* However, now, when the post is redirected, you'll now only see that.
+		1. Assessments are now listed, instead of written out.
+		1. Perfect screen-reader support has been implemented.
+		1. When a part of the SEO Bar is red, it'll now halt and clear assessment and it'll tell you what to fix first.
+			* Now, you may need to fix multiple things, but you'll be guided through what needs immediate attention until it's blue, yellow, or green.
+			* TODO affirm this is the case with the robots states, and if all of these statements are 100% true?
+		1. The SEO Bar may now be altered and extended by other plugins and themes.
+		1. The SEO Bar is now regenerated in full when performing a quick or bulk edit.
+		1. Changed the assessments:
+			* **Title:**
+				* Added absent title checks.
+				* Added absent branding checks.
+				* Added page protective state prefix checks.
+				* Added term prefix checks.
+				* Added a disclaimer to the title length calculation, as it's not using pixels.
+				* Improved duplicated branding checks; it now asserts even if the branding has been disabled.
+					* Note that this check is case sensitive, while it shouldn't necessarily be. TODO test mb_strtolower() performance (Google doesn't know, strtolower is fine?)
+					* TODO use regex's built in unicode-case support to find (or loop over) duplicates?
+						* What I got thus far: `(?:^.*?)(\w+)(*COMMIT)(*PRUNE)((?:[^\1\P{Z}]+)(\1)){3,}(?:.*?$)`, `(\w+)(?=(?:.+?)(\1){3,})`, etc.
+						* Roman test sentence: `two one one one two two two three three three four four four five five five six six six seven seven seven eight eight eight nine nine nine`
+			* **Description:**
+				* Added page excerpt generation checks.
+				* Added page builder state checks.
+				* Added page protective state empty checks.
+				* Added a disclaimer to the description length calculation, as it's not using pixels.
+			* **Indexing:**
+				* Added meta override checks.
+				* Added literal exclaiming when WordPress overrules the SEO settings.
+				* Added term multiple post type checks.
+				* Added term zero post count checks.
+				* Added for non-standard robots.txt file checks.
+			* **Following:**
+				* Added meta override checks.
+				* Added literal exclaiming when WordPress overrules the SEO settings.
+				* Added term multiple post type checks.
+				* Added for non-standard robots.txt file checks.
+			* **Archiving:**
+				* Added indexing conflict checks.
+				* Added meta override checks.
+				* Added literal exclaiming when WordPress overrules the SEO settings.
+				* Added term multiple post type checks.
+				* Added for non-standard robots.txt file checks.
+			* **Redirect:**
+				* This test has been added to terms.
 	* **AI Generators:**
 		* **Descriptions:**
 			* It now works better on RTL languages, like Arabic and Hebrew; however, due to ambiguity in language construction, it will read from top to bottom (like the web is built), instead of bottom to top (like books are).
-			* It now works better on CJK languages, by using updated string length guidelines. *anotation: Language (language) @ adjusted/Roman*
+			* It now works better on non-Roman languages, by using updated string length guidelines. *anotation: Language (language) @ adjusted/Roman*
 				* Assamese (অসমীয়া) @ 148/160
 				* Gujarati (ગુજરાતી) @ 148/160
 				* Malayalam (മലയാളം) @ 100/160
@@ -391,6 +444,8 @@ TODO fix get_home_title_seplocation() reversal.
 	* **Nitpicking:**
 		* The sitemap's XSL stylesheet no longer uses the latest post ID to determine the title generation; instead, it always adds your blogname to the right.
 		* The sitemap now can't exceed the imposed 50,000 limit; unless you use custom filters.
+		* The plugin is no longer booted again when a compatibility file is loaded.
+			* This issue couldn't propagate thanks to "Just In Time" checks, but since we now emit warnings, it's been discovered.
 
 **For translators:**
 
@@ -412,6 +467,12 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 	* The script loader now discerns between posts and taxonomies, and can now prevent loading scripts when SEO is disabled for the post type or taxonomy.
 	* In the debug interface, the JSON+LD scripts are now more readable.
 * **Option notes:**
+	* **Added:**
+		* `seo_bar_symbols`
+			* Values: either `1` or `0`.
+			* Default: `0`.
+			* Location: General Settings -> Layout -> SEO Bar Settings.
+			* Use: Converts SEO Bar item symbols based on their state.
 	* **Removed:**
 		* `attachment_noindex` and sanitization thereof, since 3.1 it's changed to `noindex_post_types['attachment']`.
 		* `attachment_nofollow` and sanitization thereof, since 3.1 it's changed to `nofollow_post_types['attachment']`.
@@ -444,6 +505,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `get_tsf_scripts()`
 				* `get_tt_scripts()`
 				* `get_ays_scripts()`
+				* `get_list_edit_scripts()`
 				* `get_post_scripts()`
 				* `get_term_scripts()`
 				* `get_gutenberg_compat_scripts()`
@@ -486,6 +548,8 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `_run_test()`
 			* **Abstract methods:** These must be created.
 				* `has_blocking_redirect()`
+				* `prime_cache()`
+				* `prime_query_cache()`
 			* **Shared variables:** All extending classes can modify these variables, and all those classes will be affected once they are.
 				* `tsf`
 				* `query`
@@ -501,12 +565,23 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `load_early_compat_files()`, protected.
 				* `_include_compat()`, marked private.
 		* `\The_SEO_Framework\Doing_It_Right`
-			* The methods therein are moved to the `SeoBar` class family:
+			* Some methods therein have been moved to the `SeoBar` class family:
 				* `\The_SEO_framework\InterPreters\SeoBar`
 				* `\The_SEO_framework\Bridges\SeoBar`
 				* `\The_SEO_framework\Builders\SeoBar`, extended by:
 					* `\The_SEO_framework\Builders\SeoBar_Page`
 					* `\The_SEO_framework\Builders\SeoBar_Term`
+			* **Removed methods:**
+				* `seo_bar()`
+				* `seo_bar_ajax()`
+				* `get_seo_bar_ajax()`
+				* `get_taxonomy_seo_bar_ajax()`
+				* `get_taxonomy_seo_bar()`
+				* `get_the_seo_bar_classes()`
+				* `get_the_seo_bar_i18n()`
+			* **Deprecated methods:**
+				* `get_seo_bar()`
+				* `post_status()`
 * **Method notes:**
 	* For object `the_seo_framework()`:
 		* **Added:**
@@ -521,6 +596,8 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `is_robots_meta_noindex_set_by_args()`
 			* `init_term_meta()`
 			* `save_term_meta()`
+			* `detect_page_builder()`
+			* `is_blog_page_by_id()`
 		* **Changed:**
 			* `__construct()`, now emits warnings when instantiated twice or more.
 			* `init_admin_scripts()` removed deprecated parameter and its notice.
@@ -540,6 +617,8 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				1. It's now marked as private. Use `save_term_meta()` instead.
 				1. Added redundant `current_user_can()` checks.
 				1. `noindex`, `nofollow`, and `noarchive` values are converted to qubits.
+			* `is_single_admin()` now uses `is_singular_admin()` to check for the correctg base; so categories and tags no longer falsely return `true`.
+			* `get_generated_single_term_title()` no longer redundantly tests the query, but now only uses the term input or queried object.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`
@@ -671,6 +750,9 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `ays` - meaning "Are you sure?", these files handle on-navigation alerts, so to prevent loss of data.
 					* **Namespaces:** `window.tsfAys` and `window.tsfAysL10n`
 					* **Script ID:** `tsf-ays`
+				* `le` - meaning "List Edit", these files handle list edit page actions.
+					* **Namespaces:** `window.tsfLe` and `window.tsfLeL10n`
+					* **Script ID:** `tsf-le`
 			* TODO (PROPOSED):
 				* `title`, this file handles title input fields.
 				* `description`, this file handles description input fields.

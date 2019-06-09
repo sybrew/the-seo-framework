@@ -114,6 +114,8 @@ final class Scripts {
 			$_scripts[] = static::get_term_scripts();
 			$_scripts[] = static::get_counter_scripts();
 			$_scripts[] = static::get_ays_scripts();
+		} elseif ( $tsf->is_wp_lists_edit() ) {
+			$_scripts[] = static::get_list_edit_scripts();
 		} elseif ( $tsf->is_seo_settings_page() ) {
 			static::prepare_media_scripts();
 			static::prepare_metabox_scripts();
@@ -435,6 +437,31 @@ final class Scripts {
 							'saveAlert' => \__( 'The changes you made will be lost if you navigate away from this page.', 'autodescription' ),
 						],
 					],
+				],
+			],
+		];
+	}
+
+	/**
+	 * Returns LE (List Edit) scripts params.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @return array The script params.
+	 */
+	public static function get_list_edit_scripts() {
+		return [
+			[
+				'id'       => 'tsf-le',
+				'type'     => 'js',
+				'deps'     => [ 'jquery', 'tsf-tt' ],
+				'autoload' => true,
+				'name'     => 'le',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+				'l10n'     => [
+					'name' => 'tsfLeL10n',
+					'data' => [],
 				],
 			],
 		];

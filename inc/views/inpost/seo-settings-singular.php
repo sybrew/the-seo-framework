@@ -143,7 +143,10 @@ switch ( $instance ) :
 		$canonical_placeholder = $this->create_canonical_url( [ 'id' => $post_id ] );
 
 		//* Get robots defaults.
-		$r_defaults = $this->robots_meta( [ 'id' => $post_id ], 0b11 );
+		$r_defaults = $this->robots_meta(
+			[ 'id' => $post_id ],
+			The_SEO_Framework\ROBOTS_IGNORE_SETTINGS | The_SEO_Framework\ROBOTS_IGNORE_PROTECTION
+		);
 		$r_settings = [
 			'noindex'   => [
 				'id'        => 'autodescription_noindex',

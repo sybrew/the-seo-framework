@@ -86,6 +86,7 @@ class Site_Options extends Sanitize {
 				// General. Layout.
 				'display_seo_bar_tables'  => 1, // SEO Bar post-list tables.
 				'display_seo_bar_metabox' => 0, // SEO Bar post SEO Settings.
+				'seo_bar_symbols'         => 0, // SEO Bar symbolic display settings.
 
 				'display_pixel_counter'     => 1, // Pixel counter.
 				'display_character_counter' => 1, // Character counter.

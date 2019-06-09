@@ -179,7 +179,7 @@ class Generate_Url extends Generate_Title {
 	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
 	 * @see $this->create_canonical_url()
 	 *
-	 * @param array $args. Use $this->create_canonical_url().
+	 * @param array $args Use $this->create_canonical_url().
 	 * @return string The canonical URL.
 	 */
 	protected function build_canonical_url( array $args ) {
@@ -737,9 +737,9 @@ class Generate_Url extends Generate_Title {
 	 * @since 3.0.0
 	 * @access private
 	 *
-	 * @param \WP_Term  $term  The category to use in the permalink.
-	 * @param array     $terms Array of all categories (WP_Term objects) associated with the post.
-	 * @param \WP_Post  $post  The post in question.
+	 * @param \WP_Term $term  The category to use in the permalink.
+	 * @param array    $terms Array of all categories (WP_Term objects) associated with the post.
+	 * @param \WP_Post $post  The post in question.
 	 * @return \WP_Term The primary term.
 	 */
 	public function _adjust_post_link_category( $term, $terms = null, $post = null ) {

@@ -559,6 +559,36 @@ class Detect extends Render {
 	}
 
 	/**
+	 * Detects presence of a page builder.
+	 *
+	 * Detects the following builders:
+	 * - Elementor by Elementor LTD
+	 * - Divi Builder by Elegant Themes
+	 * - Visual Composer by WPBakery
+	 * - Page Builder by SiteOrigin
+	 * - Beaver Builder by Fastline Media
+	 *
+	 * @since 3.3.0
+	 * @staticvar bool $detected
+	 *
+	 * @return bool
+	 */
+	public function detect_page_builder() {
+
+		static $detected = null;
+
+		return isset( $detected ) ? $detected : $detected = $this->detect_plugin( [
+			'constants' => [
+				'ELEMENTOR_VERSION',
+				'ET_BUILDER_VERSION',
+				'WPB_VC_VERSION',
+				'SITEORIGIN_PANELS_VERSION',
+				'FL_BUILDER_VERSION',
+			],
+		] );
+	}
+
+	/**
 	 * Determines whether to add a line within robots based by plugin detection, or sitemap output option.
 	 *
 	 * @since 2.6.0

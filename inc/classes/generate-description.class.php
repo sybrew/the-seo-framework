@@ -535,7 +535,7 @@ class Generate_Description extends Generate {
 		if ( $args['taxonomy'] ) {
 			$excerpt = $this->get_archival_description_excerpt( \get_term( $args['id'], $args['taxonomy'] ) );
 		} else {
-			if ( $this->is_blog_page( $args['id'] ) ) {
+			if ( $this->is_blog_page_by_id( $args['id'] ) ) {
 				$excerpt = $this->get_blog_page_description_excerpt();
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$excerpt = $this->get_front_page_description_excerpt();
@@ -583,7 +583,7 @@ class Generate_Description extends Generate {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @param null|\WP_Term $term
+	 * @param null|\WP_Term $term The term.
 	 * @return string
 	 */
 	protected function get_archival_description_excerpt( $term = null ) {
@@ -647,7 +647,7 @@ class Generate_Description extends Generate {
 	}
 
 	/**
-	 * Returns additions for "Title on Blogname".
+	 * Returns additions for "Title on Blog name".
 	 *
 	 * @since 3.1.0
 	 * @since 3.2.0 : 1. Now no longer listens to options.
@@ -664,7 +664,7 @@ class Generate_Description extends Generate {
 
 		$this->fix_generation_args( $args );
 
-		if ( $this->is_blog_page( $args['id'] ) ) {
+		if ( $this->is_blog_page_by_id( $args['id'] ) ) {
 			$title = $this->get_filtered_raw_generated_title( $args );
 			/* translators: %s = Blog page title. Front-end output. */
 			$title = sprintf( \__( 'Latest posts: %s', 'autodescription' ), $title );

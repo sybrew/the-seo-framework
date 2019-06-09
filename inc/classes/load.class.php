@@ -96,7 +96,7 @@ final class Load extends Feed implements Debug_Interface {
 		\add_action( 'init', [ $this, 'init_the_seo_framework' ], 0 );
 
 		//= Prepare all compatibility files early.
-		$this->load_early_compat_files();
+		\add_action( 'plugins_loaded', '_load_early_compat_files', 5.01 );
 	}
 
 	/**
@@ -123,10 +123,10 @@ final class Load extends Feed implements Debug_Interface {
 	 * rather than common paths. As they can require manual FTP upload.
 	 *
 	 * @since 2.8.0
-	 * @TODO Add transients that will bypass all these checks.
-	 *       Careful, recheck on each activation -- and even FTP deletion or PHP update...
+	 * @since 3.3.0 Renamed to `_load_early_compat_files`, from `load_early_compat_files`
+	 * @access private
 	 */
-	protected function load_early_compat_files() {
+	public function _load_early_compat_files() {
 
 		if ( ! extension_loaded( 'mbstring' ) ) {
 			$this->_include_compat( 'mbstring', 'php' );
@@ -139,7 +139,7 @@ final class Load extends Feed implements Debug_Interface {
 		// 	$this->_include_compat( '470', 'wp' );
 		// }
 
-		//* Disable Headway SEO.
+		//* Disable Headway theme SEO.
 		\add_filter( 'headway_seo_disabled', '__return_true' );
 
 		if ( $this->is_theme( 'genesis' ) ) {

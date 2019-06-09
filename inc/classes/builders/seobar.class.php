@@ -75,6 +75,12 @@ abstract class SeoBar {
 
 	/**
 	 * @since 3.3.0
+	 * @var arrray The current query cache.
+	 */
+	protected $query_cache = [];
+
+	/**
+	 * @since 3.3.0
 	 * Not shared between instances
 	 * @var \The_SEO_Framework\Builders\SeoBar_* $instance The instance.
 	 */
@@ -90,6 +96,7 @@ abstract class SeoBar {
 	final protected function __construct() {
 		static::$instance = &$this;
 		self::$tsf        = self::$tsf ?: \the_seo_framework();
+		$this->prime_cache();
 	}
 
 	/**
@@ -125,7 +132,7 @@ abstract class SeoBar {
 	 * @since 3.3.0
 	 *
 	 * @param string $key The cache key.
-	 * @return mixed|null The cache value. Null on failure
+	 * @return mixed|null The cache value. Null on failure.
 	 */
 	final protected static function get_cache( $key ) {
 		return isset( self::$cache[ $key ] ) ? self::$cache[ $key ] : null;
@@ -179,12 +186,34 @@ abstract class SeoBar {
 
 		static::$query = $query;
 
+		$this->prime_query_cache( $this->query_cache );
+
 		if ( in_array( 'redirect', $tests, true ) && $this->has_blocking_redirect() )
 			$tests = [ 'redirect' ];
 
 		foreach ( $tests as $test )
 			yield $test => $this->{"test_$test"}();
+
+		$this->query_cache = [];
 	}
+
+	/**
+	 * Primes the cache.
+	 *
+	 * @since 3.3.0
+	 * @abstract
+	 */
+	abstract protected function prime_cache();
+
+	/**
+	 * Primes the current query cache.
+	 *
+	 * @since 3.3.0
+	 * @abstract
+	 *
+	 * @param array $query_cache The current query cache. Passed by reference.
+	 */
+	abstract protected function prime_query_cache( array &$query_cache = [] );
 
 	/**
 	 * Tests for blocking redirection.

@@ -81,7 +81,7 @@ class Generate extends User_Data {
 	 *    3 = 0b11: Ignore protection and post/term setting.
 	 * }
 	 * @return array {
-	 *    string key => string key
+	 *    string key : string key (repeated key!)
 	 * }
 	 */
 	public function robots_meta( $args = null, $ignore = 0b00 ) {
@@ -139,7 +139,11 @@ class Generate extends User_Data {
 	 *    2 = 0b10: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
 	 *    3 = 0b11: Ignore protection and post/term setting.
 	 * }
-	 * @return array|null robots
+	 * @return array|null robots : {
+	 *    bool 'noindex'
+	 *    bool 'nofollow'
+	 *    bool 'noarchive'
+	 * }
 	 */
 	protected function get_robots_meta_by_query( $ignore = 0b00 ) {
 
@@ -216,7 +220,7 @@ class Generate extends User_Data {
 			}
 			// Only enable if all post types have the value ticked.
 			foreach ( $_post_type_meta as $_type => $_values ) {
-				$$_type = ! in_array( false, $_values, true );
+				$$_type = $$_type || ! in_array( false, $_values, true );
 			}
 
 			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
@@ -225,7 +229,7 @@ class Generate extends User_Data {
 				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
 					if ( isset( $term_meta[ $r ] ) ) {
 						// Test qubit
-						$$r = ( $$r | (int) $term_meta[ $r ] ) > 0;
+						$$r = ( $$r | (int) $term_meta[ $r ] ) > .33;
 					}
 				}
 			endif;
@@ -245,7 +249,7 @@ class Generate extends User_Data {
 
 				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
 					// Test qubit
-					$$r = ( $$r | (int) $post_meta[ $r ] ) > 0;
+					$$r = ( $$r | (int) $post_meta[ $r ] ) > .33;
 				}
 			endif;
 
@@ -278,7 +282,11 @@ class Generate extends User_Data {
 	 *    2 = 0b10: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
 	 *    3 = 0b11: Ignore protection and post/term setting.
 	 * }
-	 * @return array|null robots
+	 * @return array|null robots : {
+	 *    bool 'noindex'
+	 *    bool 'nofollow'
+	 *    bool 'noarchive'
+	 * }
 	 */
 	protected function get_robots_meta_by_args( $args, $ignore = 0b00 ) {
 
@@ -305,6 +313,13 @@ class Generate extends User_Data {
 		}
 
 		if ( $args['taxonomy'] ) {
+			$term = \get_term_by( 'id', $args['id'], $args['taxonomy'] );
+			/**
+			 * Check if archive is empty: set noindex for those.
+			 */
+			if ( empty( $term->count ) )
+				$noindex = true;
+
 			$_post_type_meta = [];
 			// Store values from each post type bound to the taxonomy.
 			foreach ( $this->get_post_types_from_taxonomy( $args['taxonomy'] ) as $post_type ) {
@@ -315,7 +330,7 @@ class Generate extends User_Data {
 			}
 			// Only enable if all post types have the value ticked.
 			foreach ( $_post_type_meta as $_type => $_values ) {
-				$$_type = ! in_array( false, $_values, true );
+				$$_type = $$_type || ! in_array( false, $_values, true );
 			}
 
 			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
@@ -324,7 +339,7 @@ class Generate extends User_Data {
 				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
 					if ( isset( $term_meta[ $r ] ) ) {
 						// Test qubit
-						$$r = ( $$r | (int) $term_meta[ $r ] ) > 0;
+						$$r = ( $$r | (int) $term_meta[ $r ] ) > .33;
 					}
 				}
 			endif;
@@ -343,7 +358,7 @@ class Generate extends User_Data {
 
 				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
 					// Test qubit
-					$$r = ( $$r | (int) $post_meta[ $r ] ) > 0;
+					$$r = ( $$r | (int) $post_meta[ $r ] ) > .33;
 				}
 			endif;
 
@@ -389,17 +404,24 @@ class Generate extends User_Data {
 
 		if ( $args['taxonomy'] ) {
 			if ( 'category' === $args['taxonomy'] ) {
-				$noindex   = $noindex || $this->get_option( 'category_noindex' );
+				$noindex = $noindex || $this->get_option( 'category_noindex' );
 			} elseif ( 'post_tag' === $args['taxonomy'] ) {
-				$noindex   = $noindex || $this->get_option( 'tag_noindex' );
+				$noindex = $noindex || $this->get_option( 'tag_noindex' );
 			}
 		} else {
 			if ( $this->is_real_front_page_by_id( $args['id'] ) ) {
-				$noindex   = $noindex || $this->get_option( 'homepage_noindex' );
+				$noindex = $noindex || $this->get_option( 'homepage_noindex' );
 			}
 		}
 
 		if ( $args['taxonomy'] ) {
+			$term = \get_term_by( 'id', $args['id'], $args['taxonomy'] );
+			/**
+			 * Check if archive is empty: set noindex for those.
+			 */
+			if ( empty( $term->count ) )
+				$noindex = true;
+
 			$_post_type_meta = [];
 			// Store values from each post type bound to the taxonomy.
 			foreach ( $this->get_post_types_from_taxonomy( $args['taxonomy'] ) as $post_type ) {
@@ -416,7 +438,7 @@ class Generate extends User_Data {
 
 				if ( isset( $term_meta['noindex'] ) ) {
 					// Test qubit
-					$noindex = ( $noindex | (int) $term_meta['noindex'] ) > 0;
+					$noindex = ( $noindex | (int) $term_meta['noindex'] ) > .33;
 				}
 			endif;
 		} elseif ( $args['id'] ) {
@@ -428,7 +450,7 @@ class Generate extends User_Data {
 					'noindex' => $this->get_custom_field( '_genesis_noindex', $args['id'] ),
 				];
 				// Test qubit
-				$noindex = ( $noindex | (int) $post_meta['noindex'] ) > 0;
+				$noindex = ( $noindex | (int) $post_meta['noindex'] ) > .33;
 			endif;
 
 			// Overwrite and ignore the user's settings, regardless; unless ignore is set.
