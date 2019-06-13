@@ -133,15 +133,10 @@ a.tsf-dismiss:hover {
 }
 
 .tsf-seo-bar-inner-wrap {
-	display: -webkit-flex;
 	display: flex;
-	-webkit-flex-direction: row;
 	flex-direction: row;
-	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
-	-webkit-flex-wrap: wrap;
 	flex-wrap: wrap;
-	-webkit-justify-content: flex-start;
 	justify-content: flex-start;
 }
 
@@ -206,13 +201,9 @@ body.no-js .tsf-seo-bar-item {
  */
 .tsf-flex {
 	box-sizing: border-box;
-	display: -webkit-flex;
 	display: flex;
-	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
-	-webkit-flex-flow: column wrap;
 	flex-flow: column wrap;
-	-webkit-justify-content: flex-start;
 	justify-content: flex-start;
 }
 

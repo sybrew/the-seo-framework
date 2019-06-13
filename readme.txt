@@ -277,7 +277,7 @@ TODO Exclaim:
 - TODO More term options.
 - Downgrading & Backward compatibility warnings.
 - Mixed taxonomies on post type related settings.
-- TODO As smart as a self-driving car: Tooltips stay between the lines. Tesla needs me.
+- As smart as a self-driving car: Tooltips stay between the lines. Tesla needs me.
 - TODO Finally (really) translator friendly.
 - New posts are indexed faster with an even smarter sitemap.
 - The monolithic facade "the_seo_framework()" is now much lighter, as we offloaded loads of administrative functionality to other files.
@@ -287,7 +287,6 @@ TODO Exclaim:
 
 ..., and, for developers, we've finally introduced a reliable JavaScript API. Documentation will follow soon (based on frequently asked requests).
 
-TODO consider making the tooltip wider, or automatically grow or shrink based on the content. Then, assess the position (first, test overflow left, then, widen it until it overflows right, with max width: 250px?) // Alternatively, or also, set data-tt-max-width and data-tt-min-width values
 TODO fix get_home_title_seplocation() reversal.
 
 TODO when one or more posts have been excluded from the archive, the category may be empty; see if this can be reflected in the SEO output as 404.
@@ -330,18 +329,36 @@ TODO reload the SEO Bar on Gutenberg save action.
 	* **Sitemap:** The blog page's priority is now `1.0`, from `0.9`. Note, however, that this feature is disabled by default and deprecated by some search engines.
 	* **Sitemap:** The page and post priorities now deduce based on item's position, instead of that pages always has a priority of `0.9`.
 		* They still start at 0.9.
-	* **Tooltips:** The tooltip text is no longer bolded by default.
 * **Improved:**
-	* **Spam control:**
-		* Added more `index.php` files which prevent nasty backlinks and crawlers to index this plugin's files when `Indexes` option isn't disabled in Apache.
-			* Add `Options -Indexes` to your `.htaccess` file to prevent this for all plugins that do not honor this behavior.
 	* **Accessibility:**
 		* The homepage settings may now reveal more information on where this data can be altered.
 		* Screen-reader support has been reimplemented for the SEO Bar; it's now completely written out and accurate.
 		* You can now, again, navigate to the SEO Bar with your keyboard. This was disabled previously as it messed with the browser cache due to a wrong implementation.
+	* **AI Generators:**
+		* **Descriptions:**
+			* They now work better with RTL languages, like Arabic and Hebrew; however, due to ambiguity in language construction, it will read from top to bottom (like the web is built), instead of bottom to top (like books are).
+			* It no longer slices the last sentence off; in extent, it now allows accidental full sentences.
+			* The excerpt clause trimming is now at least twice (to infinitely) as fast.
+			* They now work better with non-Roman languages, by using updated string length guidelines, this only works if your site-language is set to these (see the **Guidelines** section below.).
+	* **Guidelines:**
+		* **Titles/Descriptions:**
+			* The character guidelines have been updated for these languages (_annotation: Language (language) @ adjusted/Roman_):
+				* Assamese (অসমীয়া) @ 148/160
+				* Gujarati (ગુજરાતી) @ 148/160
+				* Malayalam (മലയാളം) @ 100/160
+				* Japanese (日本語) @ 70/160
+				* Korean (한국어) @ 82/160
+				* Talim (தமிழ்) @ 120/160
+				* Taiwanese Mandarin (Traditional Chinese) (繁體中文) @ 70/160
+				* Hong Kong (Chinese version) (香港中文版) @ 70/160
+				* Mandarin (Simplified Chinese) (简体中文) @ 70/160
 	* **Internationalization:**
 		* Sites supporting the Assamese, Gujarati, Malayalam, Japanese, Korean, Talim, Traditional Chinese, or Simplified Chinese now have adjusted character guidelines.
 		* UI strings that were hard to translate in other locales have been rewritten. Yes, this takes some time to get used to.
+	* **Performance:**
+		* The SEO Bar now loads quicker, as redundant checks have been removed.
+		* We offloaded a large portion of the admin-sided PHP scripts to different objects, freeing up RAM and lowering plugin boot-time.
+			* Moreover, we optimized CSS and JS to be more performant and smaller in size.
 	* **Sitemap:**
 		* The blog page (not as homepage) now chooses a better lastmod value; based on whether the blog page was edited, or a new post was recently published.
 			* Before it was only when a post was most recently published.
@@ -379,6 +396,7 @@ TODO reload the SEO Bar on Gutenberg save action.
 				* Added term zero post count checks.
 				* Added for non-standard robots.txt file checks.
 			* **Following:**
+				* TODO Added indexing conflict checks
 				* Added meta override checks.
 				* Added literal exclaiming when WordPress overrules the SEO settings.
 				* Added term multiple post type checks.
@@ -391,24 +409,14 @@ TODO reload the SEO Bar on Gutenberg save action.
 				* Added for non-standard robots.txt file checks.
 			* **Redirect:**
 				* This test has been added to terms.
-	* **AI Generators:**
-		* **Descriptions:**
-			* It now works better on RTL languages, like Arabic and Hebrew; however, due to ambiguity in language construction, it will read from top to bottom (like the web is built), instead of bottom to top (like books are).
-			* It now works better on non-Roman languages, by using updated string length guidelines. *anotation: Language (language) @ adjusted/Roman*
-				* Assamese (অসমীয়া) @ 148/160
-				* Gujarati (ગુજરાતી) @ 148/160
-				* Malayalam (മലയാളം) @ 100/160
-				* Japanese (日本語) @ 70/160
-				* Korean (한국어) @ 82/160
-				* Talim (தமிழ்) @ 120/160
-				* Taiwanese Mandarin (Traditional Chinese) (繁體中文) @ 70/160
-				* Hong Kong (Chinese version) (香港中文版) @ 70/160
-				* Mandarin (Simplified Chinese) (简体中文) @ 70/160
-			* It no longer slices the last sentence off; in extent, it now allows accidental full sentences.
-			* The excerpt clause trimming is now at least twice (to infinitely) as fast.
-	* **Performance:**
-		* The SEO Bar now loads quicker, as redundant checks have been removed.
-		* We offloaded a large portion of the admin-sided PHP scripts to different objects, freeing up RAM and lowering plugin boot-time.
+	* **Spam control:**
+		* Added more `index.php` files which prevent nasty backlinks and crawlers to index this plugin's files when `Indexes` option isn't disabled in Apache.
+			* Add `Options -Indexes` to your `.htaccess` file to prevent this for all plugins that do not honor this behavior.
+	* **Tooltips:**
+		* Their text is no longer bolded by default, so you may now see different bolding in the tooltip.
+		* They now intelligently determines the position of themselves, much like a self-driving car.
+		* They now intelligently makes themselves wider or slimmer based on their contents and surrounding.
+		* Using Gutenberg with the Post SEO settings meta box in the sidebar, tooltips will no longer overflow.
 * **Removed:**
 	* **DOWNGRADE COMPATIBILITY!** -- Global options.
 		* When you upgrade to this version or later, you can't downgrade to v3.0.6 or lower without running into issues.
@@ -425,6 +433,7 @@ TODO reload the SEO Bar on Gutenberg save action.
 		* Also remove the related display-options?
 		* Yes, people like the character counter, but it's really not good for SEO.
 	* TODO maybe: strip the removed options on database upgrade... (this will also happen on manual save...)
+	* Webkit flexbox vendor prefixes in all CSS files. All browsers that relied on these have been updated to the latest spec since.
 * **Fixed:**
 	* **Accessibility:**
 		* **Global:**
@@ -797,6 +806,12 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* Global:
 				* After tsfAys registers or resets its listeners, this jQuery event is triggered:
 					* `$( document.body ).trigger( 'tsf-registered-ays-listeners' );`
+				* After the sidebar is closed in Gutenberg:
+					* `$( document.body ).trigger( 'tsf-gutenberg-sidebar-closed' );`
+				* After the sidebar is opened in Gutenberg:
+					* `$( document.body ).trigger( 'tsf-gutenberg-sidebar-opened' );`
+				* After a list item is updated in a WordPress list overview table:
+					* `document.dispatchEvent( new Event( 'tsfLeUpdated' ) );`
 		* **Changed:**
 			* `tsfL10n.params.titleLocation` now mirrors its value with the homepage settings for the homepage.
 				* This used to be a ravioli code mess, now it's a thin lasagna. Bon appetit!
