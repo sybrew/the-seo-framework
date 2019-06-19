@@ -23,7 +23,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() a
  *
  * @since 3.1.0
  *
- * @param $string The title or description
+ * @param string $string The title or description
  * @return string
  */
 function pll__( $string ) {
@@ -43,7 +43,7 @@ function pll__( $string ) {
  *
  * @since 3.2.4
  *
- * @param array $whitelist
+ * @param array $whitelist The wildcard file parts that are whitelisted.
  * @return array
  */
 function _whitelist_tsf_urls( $whitelist ) {
@@ -58,7 +58,7 @@ function _whitelist_tsf_urls( $whitelist ) {
  *
  * @since 3.2.4
  *
- * @param array $blacklist
+ * @param array $blacklist The wildcard file parts that are blacklisted.
  * @return array
  */
 function _blaclist_tsf_sitemap_styles( $blacklist ) {
@@ -73,6 +73,8 @@ function _blaclist_tsf_sitemap_styles( $blacklist ) {
  * This fixes user_trailingslashit() issues.
  *
  * @since 3.2.4
+ * @param string $url The url to fix.
+ * @param int    $id  The page or term ID.
  */
 function _fix_home_url( $url, $id ) {
 	return \the_seo_framework()->is_front_page_by_ID( $id ) && \get_option( 'permalink_structure' ) ? \trailingslashit( $url ) : $url;

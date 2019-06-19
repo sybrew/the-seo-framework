@@ -132,13 +132,6 @@ final class Load extends Feed implements Debug_Interface {
 			$this->_include_compat( 'mbstring', 'php' );
 		}
 
-		// $wp_version = $GLOBALS['wp_version'];
-
-		// if ( version_compare( $wp_version, '4.7', '<' ) ) {
-		// 	//* WP 4.7.0
-		// 	$this->_include_compat( '470', 'wp' );
-		// }
-
 		//* Disable Headway theme SEO.
 		\add_filter( 'headway_seo_disabled', '__return_true' );
 

@@ -359,6 +359,7 @@ class Init extends Query {
 	 * @since 3.0.0 Now converts timezone if needed.
 	 * @since 3.1.0 1. Now no longer outputs anything on preview.
 	 *              2. Now no longer outputs anything on blocked post types.
+	 * @access private
 	 */
 	public function html_output() {
 

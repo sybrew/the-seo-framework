@@ -107,12 +107,18 @@ function _suggest_extension_manager() {
 
 	$tsf = \the_seo_framework();
 
-	$tsf->do_dismissible_notice( $tsf->convert_markdown(
-		sprintf(
-			/* translators: %s = Extension URL markdown */
-			\esc_html__( "Looking for more SEO functionality? Check out [The SEO Framework's extensions](%s).", 'autodescription' ),
-			'https://theseoframework.com/extensions/'
+	$tsf->do_dismissible_notice(
+		$tsf->convert_markdown(
+			sprintf(
+				/* translators: %s = Extension URL markdown */
+				\esc_html__( "Looking for more SEO functionality? Check out [The SEO Framework's extensions](%s).", 'autodescription' ),
+				'https://theseoframework.com/extensions/'
+			),
+			[ 'a' ],
+			[ 'a_internal' => false ]
 		),
-		[ 'a' ]
-	), 'updated', false, false );
+		'updated',
+		false,
+		false
+	);
 }

@@ -22,7 +22,7 @@ switch ( $instance ) :
 
 		<h4><?php esc_html_e( 'Change Feed Settings', 'autodescription' ); ?></h4>
 		<?php
-		$excerpt_the_feed_label = esc_html__( 'Convert feed entries into excerpts?', 'autodescription' );
+		$excerpt_the_feed_label  = esc_html__( 'Convert feed entries into excerpts?', 'autodescription' );
 		$excerpt_the_feed_label .= ' ' . $this->make_info( __( 'By default the excerpt will be at most 400 characters long.', 'autodescription' ), '', false );
 
 		$source_the_feed_label = esc_html__( 'Add link to source below the feed entry content?', 'autodescription' );
@@ -44,7 +44,7 @@ switch ( $instance ) :
 						esc_url( admin_url( 'options-reading.php' ) )
 					),
 					[ 'a' ],
-					[ 'a_internal' => false ]
+					[ 'a_internal' => false ] // open in new window, although it's internal.
 				)
 			);
 		}

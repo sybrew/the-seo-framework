@@ -166,7 +166,7 @@ final class SeoBar_Page extends SeoBar {
 				'defaults' => [
 					'generated' => [
 						'symbol' => \_x( 'TG', 'Title Generated', 'autodescription' ),
-						'title'  => \__( 'Title', 'autodescription' ),
+						'title'  => \__( 'Title, generated', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
 						'reason' => \__( 'Automatically generated.', 'autodescription' ),
 						'assess' => [
@@ -353,7 +353,7 @@ final class SeoBar_Page extends SeoBar {
 				'defaults' => [
 					'generated' => [
 						'symbol' => \_x( 'DG', 'Description Generated', 'autodescription' ),
-						'title'  => \__( 'Description', 'autodescription' ),
+						'title'  => \__( 'Description, generated', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
 						'reason' => \__( 'Automatically generated.', 'autodescription' ),
 						'assess' => [

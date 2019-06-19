@@ -196,6 +196,73 @@ function _upgrade_reinitialize_rewrite() {
 	\the_seo_framework()->reinitialize_rewrite();
 }
 
+\add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_prepare_upgrade_notice', 99 );
+/**
+ * Prepares a notice when the upgrade is completed.
+ *
+ * @since 3.3.0
+ * @access private
+ */
+function _prepare_upgrade_notice() {
+	\add_action( 'admin_notices', __NAMESPACE__ . '\\_do_upgrade_notice' );
+}
+
+/**
+ * Outputs "your site has been upgraded" notification to applicable plugin users on upgrade.
+ *
+ * @since 3.0.6
+ * @access private
+ */
+function _do_upgrade_notice() {
+
+	if ( ! \current_user_can( 'update_plugins' ) ) return;
+
+	$tsf = \the_seo_framework();
+
+	if ( _previous_db_version() ) {
+		$tsf->do_dismissible_notice(
+			$tsf->convert_markdown(
+				sprintf(
+					/* translators: %s = Version number, surrounded in mardkwon-backticks. */
+					\esc_html__( 'Thanks for updating The SEO Framework! Your site has been upgraded successfully to use The SEO Framework at database version `%s`.', 'autodescription' ),
+					\esc_html( THE_SEO_FRAMEWORK_DB_VERSION )
+				),
+				[ 'code' ]
+			),
+			'updated',
+			false,
+			false
+		);
+	} else {
+		$tsf->do_dismissible_notice(
+			$tsf->convert_markdown(
+				sprintf(
+					/* translators: %s = Version number, surrounded in mardkwon-backticks. */
+					\esc_html__( 'Thanks for installing The SEO Framework! Your site has been upgraded successfully to use The SEO Framework at database version `%s`.', 'autodescription' ),
+					\esc_html( THE_SEO_FRAMEWORK_DB_VERSION )
+				),
+				[ 'code' ]
+			),
+			'updated',
+			false,
+			false
+		);
+		$tsf->do_dismissible_notice(
+			$tsf->convert_markdown(
+				sprintf(
+					/* translators: %s = Link, markdown. */
+					\esc_html__( "The SEO Framework only identifies itself during plugin upgrades. We'd like to use this opportunity to highlight our [plugin setup guide](%s). We hope you enjoy our free plugin. Good luck with your site!", 'autodescription' ),
+					'https://theseoframework.com/?p=2428'
+				),
+				[ 'code' ]
+			),
+			'updated',
+			false,
+			false
+		);
+	}
+}
+
 \add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_prepare_upgrade_suggestion', 100 );
 /**
  * Enqueues and outputs an Extension Manager suggestion.
@@ -228,7 +295,7 @@ function _prepare_upgrade_suggestion() {
  * @staticvar array $cache The cached notice strings.
  *
  * @param string $notice The upgrade notice.
- * @param bool $get Whether to return the upgrade notices.
+ * @param bool   $get    Whether to return the upgrade notices.
  * @return array|void The notices when $get is true.
  */
 function _add_upgrade_notice( $notice = '', $get = false ) {

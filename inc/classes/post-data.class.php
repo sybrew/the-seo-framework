@@ -456,7 +456,7 @@ class Post_Data extends Detect {
 	 * @since 3.1.0 Added Elementor detection
 	 * @since 3.3.0 Now detects page builders before looping over the meta.
 	 *
-	 * @param int $post_id
+	 * @param int $post_id The post ID to check.
 	 * @return boolean
 	 */
 	public function uses_page_builder( $post_id ) {

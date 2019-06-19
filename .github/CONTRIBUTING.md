@@ -34,6 +34,7 @@ Many WordPress users are easily convinced into using bad practices that waste th
 2. obstruct the workflow of the user, like adding notifications and pop-ups;
 3. make the user think twice, like having the user choose between HTTP status code `301` and `302`;
 4. cause a vendor lock-in which breaks sites when deactivating the plugin, like removing stop-words in permalinks.
+5. may be against search engine policies, like adding unwarranted review markup to their posts.
 
 ## Publishing extensions
 

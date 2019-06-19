@@ -21,7 +21,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() a
  * @since 2.8.0
  * @access private
  *
- * @param \WP_Screen $current_screen
+ * @param \WP_Screen $current_screen The current screen object.
  */
 function _wpml_do_current_screen_action( $current_screen = '' ) {
 
@@ -36,7 +36,7 @@ function _wpml_do_current_screen_action( $current_screen = '' ) {
  * @since 2.8.0
  * @access private
  *
- * @param array $languages_links
+ * @param array $languages_links A list of selectable languages.
  * @return array
  */
 function _wpml_remove_all_languages( $languages_links = [] ) {
@@ -55,8 +55,8 @@ function _wpml_remove_all_languages( $languages_links = [] ) {
  * @access private
  * @staticvar bool $cleared
  *
- * @param string $type    The type. Comes in handy when you use a catch-all function.
- * @param int    $id      The post, page or TT ID. Defaults to $this->get_the_real_ID().
+ * @param string $type    The flush type. Comes in handy when you use a catch-all function.
+ * @param int    $id      The post, page or TT ID. Defaults to the_seo_framework()->get_the_real_ID().
  * @param array  $args    Additional arguments. They can overwrite $type and $id.
  * @param bool   $success Whether the action cleared.
  */
@@ -76,7 +76,7 @@ function _wpml_flush_sitemap( $type, $id, $args, $success ) {
 		); // No cache OK. DB call ok.
 
 		//? We didn't use a wildcard after "_transient_" to reduce scans.
-		//  A second query is faster on saturated sites.
+		//? A second query is faster on saturated sites.
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM $wpdb->options WHERE option_name LIKE %s",

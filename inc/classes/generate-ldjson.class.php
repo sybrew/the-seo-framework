@@ -104,7 +104,6 @@ class Generate_Ldjson extends Generate_Image {
 	 *
 	 * @param string $key   The JSON data key.
 	 * @param array  $entry The JSON data entry.
-	 * @return array The JSON data for $key.
 	 */
 	protected function build_json_data_cache( $key, array $entry ) {
 		$this->cache_json_data( false, $key, $entry );

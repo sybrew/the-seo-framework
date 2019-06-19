@@ -308,6 +308,8 @@ TODO reload the SEO Bar on Gutenberg save action.
 	* TODO Feeds now have a "X-Robots-tag: noindex, follow" header, so Google doesn't have to guess your intent.
 	* Multidimensional selection for robots-meta on posts, pages, and terms.
 	* A new accessibility feature for the SEO Bar. You can now convert the characters to symbols to discern warnings more easily.
+	* After installing The SEO Framework, users who have `update_plugins` capabilities may now see a confirmation that the plugin's set up, and that there are installation instructions available.
+	* After upgrading The SEO Framework's database, users who have `update_plugins` capabilities may now see a confirmation notice that the site has been upgraded.
 * **Changed:**
 	* We now support WordPress v4.9 and later, instead of WordPress v4.6 and later.
 	* We now support PHP v5.5 and later, instead of PHP v5.4 and later.
@@ -609,6 +611,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `is_blog_page_by_id()`
 		* **Changed:**
 			* `__construct()`, now emits warnings when instantiated twice or more.
+			* `html_output()` is now marked as private.
 			* `init_admin_scripts()` removed deprecated parameter and its notice.
 			* `set_url_scheme()`, removed deprecated parameter and its notice.
 			* `is_preview()`, now checks the user capabilities, because WordPress blindly agrees with this state.
