@@ -30,7 +30,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  *
  * @since 2.8.0
  */
-class Cache extends Sitemaps {
+class Cache extends Metaboxes {
 
 	/**
 	 * Determines whether object cache is being used.
@@ -925,7 +925,12 @@ class Cache extends Sitemaps {
 
 		$transient = $this->get_sitemap_transient_name();
 		$transient and \delete_transient( $transient );
-		$this->ping_searchengines();
+
+		if ( $this->get_option( 'ping_use_cron' ) ) {
+			\The_SEO_Framework\Bridges\Ping::engage_pinging_cron();
+		} else {
+			\The_SEO_Framework\Bridges\Ping::ping_search_engines();
+		}
 
 		return $run = true;
 	}

@@ -297,11 +297,100 @@ final class Deprecated {
 	 *
 	 * @since 2.7.0
 	 * @since 3.0.0 No longer checks for admin query.
-	 * @since 3.3.0 Deprecated
+	 * @since 3.3.0 Deprecated.
 	 * @deprecated
 	 */
 	public function initialize_term_meta() {
 		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->initialize_term_meta()', '3.3.0', '\the_seo_framework()->init_term_meta()' );
 		\the_seo_framework()->init_term_meta();
+	}
+
+	/**
+	 * Ping search engines on post publish.
+	 *
+	 * @since 2.2.9
+	 * @since 2.8.0 Only worked when the blog was not public...
+	 * @since 3.1.0 Now allows one ping per language.
+	 *              @uses $this->add_cache_key_suffix()
+	 * @since 3.2.3 1. Now works as intended again.
+	 *              2. Removed Easter egg.
+	 * @since 3.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return void Early if blog is not public.
+	 */
+	public static function ping_searchengines() {
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->ping_searchengines()', '3.3.0', '\The_SEO_Framework\Bridges\Ping::ping_search_engines()' );
+		\The_SEO_Framework\Bridges\Ping::ping_search_engines();
+	}
+
+	/**
+	 * Pings the sitemap location to Google.
+	 *
+	 * @since 2.2.9
+	 * @since 3.1.0 Updated ping URL. Old one still worked, too.
+	 * @since 3.3.0 Deprecated.
+	 * @deprecated
+	 * @link https://support.google.com/webmasters/answer/6065812?hl=en
+	 */
+	public static function ping_google() {
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->ping_google()', '3.3.0', '\The_SEO_Framework\Bridges\Ping::ping_google()' );
+		\The_SEO_Framework\Bridges\Ping::ping_google();
+	}
+
+	/**
+	 * Pings the sitemap location to Bing.
+	 *
+	 * @since 2.2.9
+	 * @since 3.2.3 Updated ping URL. Old one still worked, too.
+	 * @since 3.3.0 Deprecated.
+	 * @deprecated
+	 * @link https://www.bing.com/webmaster/help/how-to-submit-sitemaps-82a15bd4
+	 */
+	public static function ping_bing() {
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->ping_bing()', '3.3.0', '\The_SEO_Framework\Bridges\Ping::ping_bing()' );
+		\The_SEO_Framework\Bridges\Ping::ping_bing();
+	}
+	/**
+	 * Returns the stylesheet XSL location URL.
+	 *
+	 * @since 2.8.0
+	 * @since 3.0.0 1: No longer uses home URL from cache. But now uses `get_home_url()`.
+	 *              2: Now takes query parameters (if any) and restores them correctly.
+	 * @global \WP_Rewrite $wp_rewrite
+	 *
+	 * @return string URL location of the XSL stylesheet. Unescaped.
+	 */
+	public function get_sitemap_xsl_url() {
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_sitemap_xsl_url()', '3.3.0', '\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url(\'xsl-stylesheet\')' );
+		return \The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url( 'xsl-stylesheet' );
+	}
+
+	/**
+	 * Returns the sitemap XML location URL.
+	 *
+	 * @since 2.9.2
+	 * @since 3.0.0 1: No longer uses home URL from cache. But now uses `get_home_url()`.
+	 *              2: Now takes query parameters (if any) and restores them correctly.
+	 * @global \WP_Rewrite $wp_rewrite
+	 *
+	 * @return string URL location of the XML sitemap. Unescaped.
+	 */
+	public function get_sitemap_xml_url() {
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_sitemap_xml_url()', '3.3.0', '\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url()' );
+		return \The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url();
+	}
+
+	/**
+	 * Sitemap XSL stylesheet output.
+	 *
+	 * @since 2.8.0
+	 * @since 3.1.0 1. Now outputs 200-response code.
+	 *              2. Now outputs robots tag, preventing indexing.
+	 *              3. Now overrides other header tags.
+	 */
+	public function output_sitemap_xsl_stylesheet() {
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->output_sitemap_xsl_stylesheet()', '3.3.0' );
+		return \The_SEO_Framework\Bridges\Sitemap::get_instance()->output_stylesheet();
 	}
 }

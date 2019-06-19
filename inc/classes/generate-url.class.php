@@ -528,6 +528,7 @@ class Generate_Url extends Generate_Title {
 	 * Can automatically be detected.
 	 *
 	 * @since 3.0.0
+	 * @since 3.3.0 Now gets the "automatic" scheme from the WordPress home URL.
 	 * @staticvar string $scheme
 	 *
 	 * @return string The preferred URl scheme.
@@ -550,7 +551,7 @@ class Generate_Url extends Generate_Title {
 
 			default:
 			case 'automatic':
-				$scheme = $this->is_ssl() ? 'https' : 'http';
+				$scheme = strtolower( parse_url( \get_home_url(), PHP_URL_SCHEME ) ) ?: ( $this->is_ssl() ? 'https' : 'http' );
 				break;
 		endswitch;
 

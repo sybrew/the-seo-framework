@@ -119,11 +119,12 @@ class Core {
 	 * Destroys output buffer, if any. To be used with AJAX and XML to clear any PHP errors or dumps.
 	 *
 	 * @since 2.8.0
-	 * @since 2.9.0 : Now flushes all levels rather than just the latest one.
+	 * @since 2.9.0 Now flushes all levels rather than just the latest one.
+	 * @since 3.3.0 Is now public.
 	 *
 	 * @return bool True on clear. False otherwise.
 	 */
-	protected function clean_response_header() {
+	public function clean_response_header() {
 
 		if ( $level = ob_get_level() ) {
 			while ( $level-- ) {
@@ -561,14 +562,12 @@ class Core {
 	 * *Crippled as in skipping every non-latin and diacritic character.
 	 *
 	 * @param string $string Required. The string to count words in.
-	 * @param int $amount Minimum amount of words to encounter in the string.
-	 *            Set to 0 to count all words longer than $bother_length.
-	 * @param int $amount_bother Minimum amount of words to encounter in the string
-	 *            that fall under the $bother_length. Set to 0 to count all words
-	 *            shorter than $bother_length.
-	 * @param int $bother_length The maximum string length of a word to pass for
-	 *            $amount_bother instead of $amount. Set to 0 to pass all words
-	 *            through $amount_bother
+	 * @param int    $amount Minimum amount of words to encounter in the string.
+	 *                       Set to 0 to count all words longer than $bother_length.
+	 * @param int    $amount_bother Minimum amount of words to encounter in the string that fall under the
+	 *                              $bother_length. Set to 0 to count all words shorter than $bother_length.
+	 * @param int    $bother_length The maximum string length of a word to pass for $amount_bother
+	 *                              instead of $amount. Set to 0 to pass all words through $amount_bother
 	 * @return array Containing arrays of words with their count.
 	 */
 	public function get_word_count( $string, $amount = 3, $amount_bother = 5, $bother_length = 3 ) {
@@ -709,6 +708,38 @@ class Core {
 		$retb = str_pad( dechex( round( $gb ) ), 2, '0', STR_PAD_LEFT );
 
 		return $retr . $retg . $retb;
+	}
+
+	/**
+	 * Returns sitemap color scheme.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @param bool $get_defaults Whether to get the default colors.
+	 * @return array The sitemap colors.
+	 */
+	public function get_sitemap_colors( $get_defaults = false ) {
+
+		if ( $get_defaults ) {
+			$colors = [
+				'main'   => '#333',
+				'accent' => '#00cd98',
+			];
+		} else {
+			$main   = $this->s_color_hex( $this->get_option( 'sitemap_color_main' ) );
+			$accent = $this->s_color_hex( $this->get_option( 'sitemap_color_accent' ) );
+
+			$options = [
+				'main'   => $main ? '#' . $main : '',
+				'accent' => $accent ? '#' . $accent : '',
+			];
+
+			$options = array_filter( $options );
+
+			$colors = array_merge( $this->get_sitemap_colors( true ), $options );
+		}
+
+		return $colors;
 	}
 
 	/**

@@ -80,6 +80,8 @@ function _init_tsf() {
 			$tsf         = new \The_SEO_Framework\Load();
 			$tsf->loaded = true;
 
+			$tsf->_load_early_compat_files();
+
 			/**
 			 * Runs after TSF is loaded in the admin.
 			 * @since 3.1.0
@@ -88,6 +90,8 @@ function _init_tsf() {
 		} else {
 			$tsf         = new \The_SEO_Framework\Load();
 			$tsf->loaded = true;
+
+			$tsf->_load_early_compat_files();
 		}
 
 		/**

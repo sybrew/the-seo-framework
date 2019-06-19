@@ -85,6 +85,7 @@ function _previous_db_version() {
  *              8. Now tries to increase memory limit. This probably isn't needed.
  *              9. Now runs on the front-end, too, via `init`, instead of `admin_init`.
  * @since 3.1.4 Now flushes object cache before the upgrade settings are called.
+ * @since 3.3.0 Removed rewrite flushing; unless upgrading from <3300 to 3300
  */
 function _do_upgrade() {
 
@@ -152,6 +153,11 @@ function _do_upgrade() {
 		$version = '3103';
 	}
 
+	if ( $version < '3300' ) {
+		_do_upgrade_3300();
+		$version = '3300';
+	}
+
 	/**
 	 * @since 2.7.0
 	 */
@@ -181,19 +187,6 @@ function _upgrade_to_current() {
 	\wp_cache_flush();
 	// (Not all cache back ends listen to 'flush')
 	\wp_cache_delete( 'alloptions', 'options' );
-}
-
-\add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_upgrade_reinitialize_rewrite', 99 );
-/**
- * Reinitializes the rewrite cache.
- *
- * This happens after the plugin's upgraded, because it's not critical, and when
- * this fails, the upgrader won't be locked.
- *
- * @since 3.1.2
- */
-function _upgrade_reinitialize_rewrite() {
-	\the_seo_framework()->reinitialize_rewrite();
 }
 
 \add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_prepare_upgrade_notice', 99 );
@@ -361,7 +354,6 @@ function _do_upgrade_2701() {
 
 /**
  * Removes term metadata for version 2802.
- * Reinitializes rewrite data for for sitemap stylesheet.
  *
  * @since 2.8.0
  */
@@ -461,8 +453,6 @@ function _do_upgrade_3060() {
  * Migrates `attachment_nofollow` option to post type settings.
  * Migrates `attachment_noarchive` option to post type settings.
  *
- * Loads suggestion for TSFEM.
- *
  * @since 3.1.0
  */
 function _do_upgrade_3103() {
@@ -508,4 +498,28 @@ function _do_upgrade_3103() {
 	}
 
 	\update_option( 'the_seo_framework_upgraded_db_version', '3103' );
+}
+
+/**
+ * Flushes rewrite rules.
+ *
+ * @since 3.3.0
+ */
+function _do_upgrade_3300() {
+
+	$tsf = \the_seo_framework();
+
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3300' ) {
+		unset( $GLOBALS['wp_rewrite']->extra_rules_top['sitemap\.xml$'] );
+		unset( $GLOBALS['wp_rewrite']->extra_rules_top['sitemap\.xsl$'] );
+		\add_action( 'shutdown', 'flush_rewrite_rules' );
+
+		$defaults = _upgrade_default_site_options();
+
+		// Add default cron pinging option.
+		if ( isset( $defaults['ping_use_cron'] ) )
+			$tsf->update_option( 'ping_use_cron', $defaults['ping_use_cron'] );
+	}
+
+	\update_option( 'the_seo_framework_upgraded_db_version', '3300' );
 }

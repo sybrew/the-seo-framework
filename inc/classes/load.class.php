@@ -94,9 +94,6 @@ final class Load extends Feed implements Debug_Interface {
 
 		//= Load plugin at init 0.
 		\add_action( 'init', [ $this, 'init_the_seo_framework' ], 0 );
-
-		//= Prepare all compatibility files early.
-		\add_action( 'plugins_loaded', '_load_early_compat_files', 5.01 );
 	}
 
 	/**
@@ -144,7 +141,7 @@ final class Load extends Feed implements Debug_Interface {
 			//* WPML
 			$this->_include_compat( 'wpml', 'plugin' );
 		}
-		if ( $this->detect_plugin( [ 'globals' => [ 'polylang' ] ] ) ) {
+		if ( $this->detect_plugin( [ 'constants' => [ 'POLYLANG_VERSION' ] ] ) ) {
 			//* Polylang
 			$this->_include_compat( 'polylang', 'plugin' );
 		}

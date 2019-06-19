@@ -269,11 +269,17 @@ TODO move $tests list to class-specific tests. Making the SeoBar interpreter non
 TODO re-affirm all changes.
 TODO quality-control the deprecations.
 
+TODO test if sitemap still works after upgrading... may need to unset the rewrite rules.
+
+TODO lock out redirect from WooCommerce shop page. https://wordpress.org/support/topic/tsf-prevents-redirect-to-search-result-page-on-woocommerce/#post-11652594
+TODO change all occurence of %s = here to markdown
+
 = 3.3.0 - Multiplex =
 
 TODO Exclaim:
 - Multidimensional/quantum options.
 - Quick & bulk edit, blended perfectly into WordPress' interface.
+- TODO Multiprocessing (cron)...
 - TODO More term options.
 - Downgrading & Backward compatibility warnings.
 - Mixed taxonomies on post type related settings.
@@ -284,6 +290,7 @@ TODO Exclaim:
 - The SEO Bar now has an API. You can expect more tests, items, and adjustments via extensions. (hint: Monitor & Focus.)
 - TODO The SEO Bar now only lists items that truly affect the current status, instead of listing everything that might help to concludes a status.
 	* i.e., instead of "WordPress allows indexing, but you set it to noindex, and you disabled the post type", it now says "1. You set it to noindex. 1. You disabled the post type.".
+- TODO rewrite changes (see Rewrite notes below...)
 
 ..., and, for developers, we've finally introduced a reliable JavaScript API. Documentation will follow soon (based on frequently asked requests).
 
@@ -293,6 +300,7 @@ TODO when one or more posts have been excluded from the archive, the category ma
 TODO replace `the_seo_framework_fetched_description_excerpt` with something that uses `$args`.
 
 TODO reload the SEO Bar on Gutenberg save action.
+TODO update wp rocket's compat file... ugh, redundant
 
 **Detailed log:**
 
@@ -310,6 +318,7 @@ TODO reload the SEO Bar on Gutenberg save action.
 	* A new accessibility feature for the SEO Bar. You can now convert the characters to symbols to discern warnings more easily.
 	* After installing The SEO Framework, users who have `update_plugins` capabilities may now see a confirmation that the plugin's set up, and that there are installation instructions available.
 	* After upgrading The SEO Framework's database, users who have `update_plugins` capabilities may now see a confirmation notice that the site has been upgraded.
+	* Search engine pinging for the sitemap can now be offloaded to the WordPress cron-scheduler; this feature is enabled by default.
 * **Changed:**
 	* We now support WordPress v4.9 and later, instead of WordPress v4.6 and later.
 	* We now support PHP v5.5 and later, instead of PHP v5.4 and later.
@@ -318,19 +327,19 @@ TODO reload the SEO Bar on Gutenberg save action.
 		* NOTE TO SELF: Changing this would require us to change the default options, the filters behavior, and the JS code.. is this the best route?
 	* TODO set `get_logo_uploader_form()`'s flex value to true, Google allows logos of any dimension...
 	* **Redirects:** When a post is redirected, it will no longer be included in the sitemap. So, you no longer have to fiddle with the "index" setting to get the expected result.
-	* **Sitemap:** The sitemap post limit now counts all posts, pages, and custom post types; instead of them separately.
-		* Note: Because we can't guess your intent when you set the option (or left it unchanged), we aren't updating this.
-		* New users will have this setting set to 3000 posts, from 1200 previously.
-	* **Sitemap:** The post query has changed.
-		1. First, we find the blog and front-page ID. We add these on top of the sitemap.
-		1. Then, we query all public hierarchical post types (pages). The sitemap query limit is used here, and we query-sort the items by published date, ascending.
-			* TODO update the explanation in the settings pages to represent this...
-		1. Then, we query all public non-hierarchical post types (posts), but no attachments--the sitemap query limit is used again, and we query-sort the items by last updated, descending.
-		1. Finally, we combine the pages and posts, and go through them.
-			* Note that, at most, 50000 items will be displayed, or 49998 if the homepage is a blog.
-	* **Sitemap:** The blog page's priority is now `1.0`, from `0.9`. Note, however, that this feature is disabled by default and deprecated by some search engines.
-	* **Sitemap:** The page and post priorities now deduce based on item's position, instead of that pages always has a priority of `0.9`.
-		* They still start at 0.9.
+	* **Sitemap:**
+		* The sitemap post limit now counts all posts, pages, and custom post types; instead of them separately.
+			* Note: Because we can't guess your intent when you set the option (or left it unchanged), we aren't updating this.
+			* New users will have this setting set to 3000 posts, from 1200 previously.
+		* The post query has changed:
+			1. First, we find the blog and front-page ID. We add these on top of the sitemap.
+			1. Then, we query all public hierarchical post types (pages). The sitemap query limit is used here, and we query-sort the items by published date, ascending.
+				* TODO update the explanation in the settings pages to represent this...
+			1. Then, we query all public non-hierarchical post types (posts), but no attachments--the sitemap query limit is used again, and we query-sort the items by last updated, descending.
+			1. Finally, we combine the pages and posts, and go through them.
+				* Note that, at most, 50000 items will be displayed, or 49998 if the homepage is a blog.
+		* The blog page's priority is now `1.0`, from `0.9`. Note, however, that this feature is disabled by default and deprecated by some search engines.
+		* The page and post priorities now deduce based on item's position from `0.9`, instead of that pages always has a priority of `0.9`.
 * **Improved:**
 	* **Accessibility:**
 		* The homepage settings may now reveal more information on where this data can be altered.
@@ -342,6 +351,8 @@ TODO reload the SEO Bar on Gutenberg save action.
 			* It no longer slices the last sentence off; in extent, it now allows accidental full sentences.
 			* The excerpt clause trimming is now at least twice (to infinitely) as fast.
 			* They now work better with non-Roman languages, by using updated string length guidelines, this only works if your site-language is set to these (see the **Guidelines** section below.).
+		* **Canonical URL:**
+			* The automatic scheme determination now uses the "Site Address" scheme in "General Settings" to fall back on.
 	* **Guidelines:**
 		* **Titles/Descriptions:**
 			* The character guidelines have been updated for these languages (_annotation: Language (language) @ adjusted/Roman_):
@@ -457,6 +468,11 @@ TODO reload the SEO Bar on Gutenberg save action.
 		* The sitemap now can't exceed the imposed 50,000 limit; unless you use custom filters.
 		* The plugin is no longer booted again when a compatibility file is loaded.
 			* This issue couldn't propagate thanks to "Just In Time" checks, but since we now emit warnings, it's been discovered.
+	* **Compatibility:**
+		* We took our hands off the WordPress Rewrite system. All plugin conflicts related to this are no longer our problem--albeit, it never was our fault.
+			* Now, we are able to finally implement Polylang's broken system for the sitemap. As such, all sitemaps now work with Polylang.
+				* Keep in mind, however, that you may wish to enable the "Hide URL language information for default language" option to remove the base language requirement to output the main language's sitemap.
+			* Thanks to [Yoast's broken and misrepresenting NGINX rules](https://kb.yoast.com/kb/xml-sitemaps-nginx/), we received too many support inquiries and negative responses as it's not interchangable; so, we made them.
 
 **For translators:**
 
@@ -504,6 +520,11 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* `_genesis_nofollow`, it can now be set to `-1`.
 		* `_genesis_noarchive`, it can now be set to `-1`.
 		* Throughout the plugin, the scalar input types are no longer converted to strings via `the_seo_framework()->get_custom_field()`.
+* **Function notes:**
+	* **Removed:**
+		* **These are non-API functions, and were marked private:**
+			* `_activation_setup_sitemap()`
+			* `_deactivation_unset_sitemap()`
 * **Class notes:**
 	* **Noted:**
 		* Methods that you shouldn't use--marked private or aren't visible--aren't listed here, unless specifically annotated.
@@ -524,13 +545,26 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `get_primaryterm_scripts()`
 				* `get_counter_scripts()`
 				* `get_settings_scripts()`
+		* `\The_SEO_Framework\Bridges\Sitemap`, this file initializes the sitemap query, and it's loaded when the sitemap functionality is enabled.
+			* **Public methods:**
+				* `get_expected_sitemap_endpoint_url()`
+				* `get_sitemap_endpoint_list()`
+				* `output_base_sitemap()`
+				* `output_stylesheet()`
+				* `output_sitemap_header()`
+				* `output_sitemap_urlset_open_tag()`
+				* `output_sitemap_urlset_close_tag()`
+			* **Public static methods:**
+				* `get_instance()`
+				* `prepare()`
 		* `\The_SEO_Framework\Builders\Sitemap`, this file builds the sitemap, and it's only loaded on the sitemap endpoint.
+			* You can extend this class to add your own sitemap interpreters.
 			* **Public methods:**
 				* `__construct()`
 				* `__destruct()`
 				* `prepare_generation()`
 				* `shutdown_generation()`
-				* `build_sitemap_content()`
+				* `build_base_sitemap_content()`
 				* `is_post_included_in_sitemap()`
 		* `\The_SEO_framework\Bridges\SeoBar`, this file bridges The SEO Framework to the SEO Bar loaders for WordPress. It prepares the list table columns and checks for post type and taxonomy compatibility.
 			* Relies on `\The_SEO_Framework\Builders\SeoBar` package for building the SEO Bar via interpreters.
@@ -662,6 +696,19 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* Public methods, these were obstructing:
 				* `is_post_included_in_sitemap()`, use `new \The_SEO_Framework\Builders\Sitemap()->is_post_included_in_sitemap()` instead.
 				* `load_assets()`, this was an internal function that only loaded a few scripts on our admin page.
+				* `get_sitemap_xsl_stylesheet_tag()`, this is now part of `\The_SEO_Framework\Builders\Sitemap::get_instance()->output_sitemap_header()`.
+				* `get_sitemap_urlset_open_tag()`, we now output it directly.
+				* `get_sitemap_urlset_close_tag()`, we now output it directly.
+			* Public methods, are now rendered ineffective:
+				* `rewrite_rule_sitemap()`
+				* `enqueue_sitemap_query_vars()`
+				* `reinitialize_rewrite()`
+				* `enqueue_rewrite_activate()`
+				* `enqueue_rewrite_deactivate()`
+				* `maybe_flush_rewrite()`
+				* `flush_rewrite_rules_activation()`
+				* `flush_rewrite_rules_deactivation()`
+				* `maybe_output_sitemap_stylesheet()`
 		* **Deprecated:**
 			* **With alternatives**, refer to the source (search for your old method) for a relayed alternative:
 				* `get_default_scripts()`,
@@ -674,6 +721,11 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `Scripts()`
 				* `doing_ajax()`
 				* `initialize_term_meta()`
+				* `ping_searchengines()`
+				* `ping_google()`
+				* `ping_bing()`
+				* `get_sitemap_xml_url()`
+				* `get_sitemap_xsl_url()`
 			* **Without alternatives**, go make your own:
 				* `check_wp_locale()`
 				* `maybe_lowercase_noun()`
@@ -688,6 +740,8 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_allow_quick_edit`, boolean.
+		* `the_seo_framework_sitemap_path_prefix`, string.
+		* `the_seo_framework_sitemap_endpoint_list`, array.
 		* `the_seo_framework_sitemap_supported_post_types`, array.
 		* `the_seo_framework_sitemap_hpt_query_args`, array.
 		* `the_seo_framework_sitemap_chpt_query_args`, array.
@@ -726,6 +780,14 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* `the_seo_framework_sitemap_posts_query_args`.
 		* `the_seo_framework_sitemap_cpt_query_args`.
 		* TODO `the_seo_framework_sitemap_exclude_cpt`, use the options API instead.
+* **Rewrite notes:**
+	* **Removed:**
+		* All WordPress rewrite manipulation.
+	* **Changed:**
+		* The following query variables have changed, in format: `from -> to`
+			* `the_seo_framework_sitemap=xml -> tsf-sitemap=base`
+			* `the_seo_framework_sitemap=xsl -> tsf-sitemap=xsl-stylesheet`
+			* **Note:** Since these endpoints are interpreted outside of the WordPress rewrite system, these endpoints may no longer work based on your permalink settings.
 * **Browser notes:**
 	* We've now completely abandoned support for Internet Explorer. Goodbye, old, annoying friend.
 		* TODO consider "no-js versions for IE".

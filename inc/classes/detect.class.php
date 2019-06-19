@@ -1065,6 +1065,46 @@ class Detect extends Render {
 	}
 
 	/**
+	 * Determines whether we can output sitemap or not based on options and blog status.
+	 *
+	 * @since 2.6.0
+	 * @since 2.9.2 : Now returns true when using plain and ugly permalinks.
+	 * @staticvar bool $cache
+	 *
+	 * @return bool
+	 */
+	public function can_run_sitemap() {
+		static $cache = null;
+		/**
+		 * Don't do anything on a deleted or spam blog on MultiSite.
+		 * There's nothing to find anyway.
+		 */
+		return $cache = isset( $cache ) ? $cache : $this->get_option( 'sitemaps_output' ) && ! $this->current_blog_is_spam_or_deleted();
+	}
+
+	/**
+	 * Returns the robots.txt location URL.
+	 * Only allows root domains.
+	 *
+	 * @since 2.9.2
+	 * @global \WP_Rewrite $wp_rewrite
+	 *
+	 * @return string URL location of robots.txt. Unescaped.
+	 */
+	public function get_robots_txt_url() {
+		global $wp_rewrite;
+
+		if ( $wp_rewrite->using_permalinks() && ! $this->is_subdirectory_installation() ) {
+			$home = \trailingslashit( $this->set_url_scheme( $this->get_home_host() ) );
+			$loc  = $home . 'robots.txt';
+		} else {
+			$loc = '';
+		}
+
+		return $loc;
+	}
+
+	/**
 	 * Determines if the current installation is on a subdirectory.
 	 *
 	 * @since 2.9.0

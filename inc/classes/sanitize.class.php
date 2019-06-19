@@ -92,7 +92,6 @@ class Sanitize extends Admin_Pages {
 
 		//* Flush transients after options have changed.
 		\add_action( 'update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'delete_main_cache' ] );
-		\add_action( 'update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'reinitialize_rewrite' ], 11 );
 		\add_action( 'update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'update_db_version' ], 12 );
 		//* TEMP: Set backward compatibility.
 		// \add_action( 'update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, '_set_backward_compatibility' ], 13 );
@@ -284,6 +283,7 @@ class Sanitize extends Admin_Pages {
 
 				'knowledge_logo',
 
+				'ping_use_cron',
 				'ping_google',
 				'ping_bing',
 

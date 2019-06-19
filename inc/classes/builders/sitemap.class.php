@@ -91,12 +91,12 @@ class Sitemap {
 	 *              2. Now uses WordPress' built-in memory raiser function, with "context" sitemap.
 	 * @since 3.3.0 1. Now assesses all public post types, in favor of qubit options.
 	 *              2. Improved performance by a factor of two+.
-	 *              3. Renamed method from "generate sitemap" to "build sitemap content".
+	 *              3. Renamed method from "generate_sitemap" to "build_base_sitemap_content".
 	 *              4. Moved to \The_SEO_Framework\Builders\Sitemap
 	 *
 	 * @return string The sitemap content.
 	 */
-	public function build_sitemap_content() {
+	public function build_base_sitemap_content() {
 
 		$content = '';
 		$count   = 0;
@@ -226,7 +226,7 @@ class Sitemap {
 		}
 
 		if ( \has_filter( 'the_seo_framework_sitemap_additional_urls' ) )
-			$content .= $this->get_additional_urls(
+			$content .= $this->get_additional_base_urls(
 				compact( 'show_priority', 'show_modified', 'count' ),
 				$count
 			);
@@ -387,11 +387,13 @@ class Sitemap {
 
 				if ( $args['show_modified'] ) {
 					$post = \get_post( $post_id );
+
 					$_values['lastmod'] = isset( $post->post_date_gmt ) ? $post->post_date_gmt : '0000-00-00 00:00:00';
 				}
 
 				if ( $args['show_priority'] ) {
-					$_values['priority'] = .949999 - ( $count / $args['total_items'] );
+					// Add at least 1 to prevent going negative. We add 9 to smoothen the slope.
+					$_values['priority'] = .949999 - ( $count / ( $args['total_items'] + 9 ) );
 				}
 
 				++$count;
@@ -453,7 +455,7 @@ class Sitemap {
 	 * @param int   $count The iteration count. Passed by reference.
 	 * @return string Additional sitemap URLs.
 	 */
-	protected function get_additional_urls( $args, &$count = 0 ) {
+	protected function get_additional_base_urls( $args, &$count = 0 ) {
 
 		$content = '';
 		/**

@@ -3,6 +3,7 @@
  * @package The_SEO_Framework\Classes\Bridges
  * @subpackage The_SEO_Framework\Bridges
  */
+
 namespace The_SEO_Framework\Bridges;
 
 /**
@@ -27,6 +28,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 /**
  * Sets up class loader as file is loaded.
  * This is done asynchronously, because static calls are handled prior and after.
+ *
  * @see EOF. Because of the autoloader and (future) trait calling, we can't do it before the class is read.
  * @link https://bugs.php.net/bug.php?id=75771
  */
@@ -45,6 +47,7 @@ $_load_scripts_class = function() {
  * @final Can't be extended.
  */
 final class Scripts {
+	use \The_SEO_Framework\Traits\Enclose_Stray_Private;
 
 	/**
 	 * @since 3.3.0
@@ -76,8 +79,6 @@ final class Scripts {
 
 		static $count = 0;
 		0 === $count++ or \wp_die( 'Don\'t instance <code>' . __CLASS__ . '</code>.' );
-
-		$tsf = \the_seo_framework();
 
 		static::$instance = &$this;
 	}

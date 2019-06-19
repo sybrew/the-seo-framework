@@ -93,12 +93,6 @@ class Init extends Query {
 
 		if ( \wp_doing_cron() )
 			$this->init_cron_actions();
-
-		//* Add query strings for sitemap rewrite.
-		\add_action( 'init', [ $this, 'rewrite_rule_sitemap' ], 1 );
-
-		//* Enqueue sitemap rewrite flush
-		\add_action( 'shutdown', [ $this, 'maybe_flush_rewrite' ], 999 );
 	}
 
 	/**
@@ -107,10 +101,6 @@ class Init extends Query {
 	 * @since 2.8.0
 	 */
 	public function init_global_filters() {
-
-		//* Add query strings for sitemap rewrite.
-		\add_filter( 'query_vars', [ $this, 'enqueue_sitemap_query_vars' ], 1, 1 );
-
 		//* Adjust category link to accommodate primary term.
 		\add_filter( 'post_link_category', [ $this, '_adjust_post_link_category' ], 10, 3 );
 	}
@@ -123,6 +113,10 @@ class Init extends Query {
 	public function init_cron_actions() {
 		//* Flush post cache.
 		$this->init_post_cache_actions();
+
+		//* Ping searchengines.
+		if ( $this->get_option( 'ping_use_cron' ) )
+			\add_action( 'tsf_sitemap_cron_hook', '\The_SEO_Framework\Bridges\Ping::ping_search_engines' );
 	}
 
 	/**
@@ -253,8 +247,8 @@ class Init extends Query {
 		 *
 		 * This brings other issues we had to fix. @see $this->validate_sitemap_scheme()
 		 */
-		\add_action( 'template_redirect', [ $this, 'maybe_output_sitemap' ], 1 );
-		\add_action( 'template_redirect', [ $this, 'maybe_output_sitemap_stylesheet' ], 1 );
+		if ( $this->can_run_sitemap() )
+			\add_action( 'template_redirect', [ $this, '_init_sitemap' ], 1 );
 
 		//* Initialize 301 redirects.
 		\add_action( 'template_redirect', [ $this, '_init_custom_field_redirect' ] );
@@ -483,16 +477,21 @@ class Init extends Query {
 	 * Redirects singular page to an alternate URL.
 	 *
 	 * @since 2.9.0
-	 * @since 3.1.0 1. Now no longer redirects on preview.
-	 *              2. Now listens to post type settings.
+	 * @since 3.1.0: 1. Now no longer redirects on preview.
+	 *               2. Now listens to post type settings.
+	 * @since 3.3.0: 1. No longer tries to redirect on "search".
+	 *               2. TODO Added term redirect support.
 	 * @access private
 	 *
 	 * @return void early on non-singular pages.
 	 */
 	public function _init_custom_field_redirect() {
 
-		if ( ! $this->is_singular() || $this->is_preview() || $this->is_post_type_disabled() )
-			return;
+		if ( ! $this->is_singular() // TODO change this line to check for post type if this is true...
+		|| $this->is_search()
+		|| $this->is_preview()
+		|| $this->is_post_type_disabled() // TODO test for taxonomy, too...
+		) return;
 
 		$url = $this->get_custom_field( 'redirect' );
 		$url and $this->do_redirect( $url );
@@ -543,6 +542,16 @@ class Init extends Query {
 
 		\wp_redirect( $url, $redirect_type ); // phpcs:ignore -- intended feature. Disable via $this->allow_external_redirect().
 		exit;
+	}
+
+	/**
+	 * Prepares sitemap output.
+	 *
+	 * @since 3.3.0
+	 * @access private
+	 */
+	public function _init_sitemap() {
+		Bridges\Sitemap::get_instance()->_init();
 	}
 
 	/**
@@ -621,7 +630,9 @@ class Init extends Query {
 
 			//* Add extra whitespace and sitemap full URL
 			if ( $this->can_do_sitemap_robots( true ) )
-				$output .= "\r\nSitemap: " . \esc_url( $this->get_sitemap_xml_url() ) . "\r\n";
+				$output .= "\r\nSitemap: " . \esc_url(
+					\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url()
+				) . "\r\n";
 
 			$this->use_object_cache and $this->object_cache_set( $cache_key, $output, 86400 );
 		endif;

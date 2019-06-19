@@ -64,9 +64,9 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_sitemaps_metabox_general':
-		$sitemap_url = $this->get_sitemap_xml_url();
+		$sitemap_url        = \The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url();
 		$has_sitemap_plugin = $this->detect_sitemap_plugin();
-		$sitemap_detected = $this->has_sitemap_xml();
+		$sitemap_detected   = $this->has_sitemap_xml();
 
 		?>
 		<h4><?php esc_html_e( 'Sitemap Integration Settings', 'autodescription' ); ?></h4>
@@ -97,7 +97,7 @@ switch ( $instance ) :
 			), true
 		);
 
-		if ( ! $has_sitemap_plugin && ( $this->get_option( 'sitemaps_output' ) || $sitemap_detected ) ) {
+		if ( ! $has_sitemap_plugin && ( $this->get_option( 'sitemaps_output' ) || ( $sitemap_detected && $this->pretty_permalinks ) ) ) {
 			$here = '<a href="' . esc_url( $sitemap_url, [ 'http', 'https' ] ) . '" target="_blank" title="' . esc_attr__( 'View sitemap', 'autodescription' ) . '">' . esc_attr_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 			/* translators: %s = here */
 			$this->description_noesc( sprintf( esc_html__( 'The sitemap can be found %s.', 'autodescription' ), $here ) );
@@ -242,6 +242,21 @@ switch ( $instance ) :
 		<?php
 		$this->description( __( 'Notifying search engines of a sitemap change is helpful to get your content indexed as soon as possible.', 'autodescription' ) );
 		$this->description( __( 'By default this will happen at most once an hour.', 'autodescription' ) );
+
+		$this->wrap_fields(
+			$this->make_checkbox(
+				'ping_use_cron',
+				esc_html__( 'Ping using cron?', 'autodescription' )
+					. ' ' . $this->make_info(
+						__( 'This speeds up post and term saving processes, by offsetting pinging to a later time.', 'autodescription' ),
+						'',
+						false
+					),
+				'',
+				false
+			),
+			true
+		);
 
 		?>
 		<hr>

@@ -235,6 +235,7 @@ class Site_Options extends Sanitize {
 
 				'sitemaps_robots'      => 1, // Add sitemap location to robots.txt
 
+				'ping_use_cron'        => 1, // Ping using CRON.
 				'ping_google'          => 1, // Ping Google
 				'ping_bing'            => 1, // Ping Bing
 

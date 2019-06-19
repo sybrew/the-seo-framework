@@ -30,25 +30,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 //! @php7+ convert to IIFE
 _deactivation_unset_options_autoload();
-_deactivation_unset_sitemap();
-
-/**
- * Flush rewrite rules on plugin deactivation.
- *
- * @since 2.6.6
- * @since 2.7.1: 1. Now no longer reinitializes global $wp_rewrite.
- *               2. Now flushes the rules on shutdown.
- * @since 2.8.0: Added namespace and renamed function.
- * @access private
- * @global \WP_Rewrite $wp_rewrite
- */
-function _deactivation_unset_sitemap() {
-
-	unset( $GLOBALS['wp_rewrite']->extra_rules_top['sitemap\.xml$'] );
-	unset( $GLOBALS['wp_rewrite']->extra_rules_top['sitemap\.xsl$'] );
-
-	\add_action( 'shutdown', 'flush_rewrite_rules' );
-}
 
 /**
  * Turns off autoloading for The SEO Framework main options.
