@@ -3,6 +3,7 @@
  * @package The_SEO_Framework
  * @subpackage Bootstrapp
  */
+
 namespace The_SEO_Framework\Bootstrap;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;

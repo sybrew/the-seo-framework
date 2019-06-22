@@ -656,13 +656,14 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `is_taxonomy_supported()`
 			* `get_post_meta_defaults()`
 		* **Changed:**
-			* `__construct()`, now emits warnings when instantiated twice or more.
+			* `__construct()` now emits warnings when instantiated twice or more.
 			* `html_output()` is now marked as private.
 			* `init_admin_scripts()` removed deprecated parameter and its notice.
-			* `set_url_scheme()`, removed deprecated parameter and its notice.
-			* `is_preview()`, now checks the user capabilities, because WordPress blindly agrees with this state.
-			* TODO `get_robots_txt_url()`, now also uses `$wp_query->using_index_permalinks()` to determine invalidity.
-			* `sanitize_field_id()`, now no longer strips square brackets.
+			* `set_url_scheme()` removed deprecated parameter and its notice.
+			* `is_preview()` now checks the user capabilities, because WordPress blindly agrees with this state.
+			* `can_do_sitemap_robots()` now uses `has_robots_txt()` and `get_robots_txt_url()` to determine validity.
+			* `get_robots_txt_url()` now returns the robots.txt URL, even if one's physically set.
+			* `sanitize_field_id()` now no longer strips square brackets.
 			* `robots_meta()` now has two new parameters.
 			* `get_custom_field()` no longer converts scalar return values to strings.
 			* `add_option_filter()` no longer registers its filter more than once for an option key.

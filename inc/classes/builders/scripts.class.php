@@ -3,6 +3,7 @@
  * @package The_SEO_Framework\Classes\Builders
  * @subpackage The_SEO_Framework\Builders
  */
+
 namespace The_SEO_Framework\Builders;
 
 /**

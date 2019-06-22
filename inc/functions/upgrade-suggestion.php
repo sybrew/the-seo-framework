@@ -3,6 +3,7 @@
  * @package The_SEO_Framework
  * @subpackage The_SEO_Framework\Suggestion
  */
+
 namespace The_SEO_Framework\Suggestion;
 
 /**

@@ -2,6 +2,7 @@
 /**
  * @package The_SEO_Framework
  */
+
 namespace The_SEO_Framework;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;

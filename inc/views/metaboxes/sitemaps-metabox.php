@@ -133,8 +133,8 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_sitemaps_metabox_robots':
-		$locate_url = true;
 		$show_settings = true;
+		$robots_url    = $this->get_robots_txt_url();
 
 		?>
 		<h4><?php esc_html_e( 'Robots.txt Settings', 'autodescription' ); ?></h4>
@@ -143,37 +143,31 @@ switch ( $instance ) :
 		if ( $this->has_robots_txt() ) :
 			$this->attention_description( __( 'Note: A robots.txt file has been detected in the root folder of your website. This means these settings have no effect.', 'autodescription' ) );
 			echo '<hr>';
-		elseif ( ! $this->pretty_permalinks ) :
-			$locate_url = false;
-
-			$this->attention_description( __( "Note: You're using the plain permalink structure.", 'autodescription' ) );
-			$this->description( __( "This means the robots.txt file can't be outputted via the WordPress rewrite rules.", 'autodescription' ) );
-			echo '<hr>';
-			$this->description_noesc(
-				sprintf(
-					esc_html_x( 'Change your Permalink Settings %s (Recommended: "Post name").', '%s = here', 'autodescription' ),
-					sprintf(
-						'<a href="%s" target="_blank" title="%s">%s</a>',
-						esc_url( admin_url( 'options-permalink.php' ), [ 'http', 'https' ] ),
-						esc_attr__( 'Permalink Settings', 'autodescription' ),
-						esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' )
-					)
-				)
-			);
-			echo '<hr>';
-		elseif ( ! $this->can_do_sitemap_robots( false ) ) :
+		elseif ( ! $robots_url ) :
 			if ( $this->is_subdirectory_installation() ) {
-				$this->attention_description( __( "Note: robots.txt files can't be generated or used on subdirectory installations.", 'autodescription' ) );
-				$locate_url = false;
-				$show_settings = false;
-			} else {
-				$this->attention_description( __( 'Note: Another robots.txt sitemap location addition has been detected. This means these settings have no effect.', 'autodescription' ) );
+				$this->attention_description( $_robots_warning );
+				echo '<hr>';
+			} elseif ( ! $this->pretty_permalinks ) {
+				$this->attention_description(
+					__( "Note: You're using the plain permalink structure; so, no robots.txt file can be generated.", 'autodescription' )
+				);
+				$this->description_noesc(
+					sprintf(
+						esc_html_x( 'Change your Permalink Settings %s (recommended: "Post name").', '%s = here', 'autodescription' ),
+						sprintf(
+							'<a href="%s" target="_blank" title="%s">%s</a>',
+							esc_url( admin_url( 'options-permalink.php' ), [ 'http', 'https' ] ),
+							esc_attr__( 'Permalink Settings', 'autodescription' ),
+							esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' )
+						)
+					)
+				);
+				echo '<hr>';
 			}
-			echo '<hr>';
 		endif;
 
 		$this->description( __( 'The robots.txt file is the first thing search engines look for. If you add the sitemap location in the robots.txt file, then search engines will look for and index the sitemap.', 'autodescription' ) );
-		$this->description( __( 'If you do not add the sitemap location to the robots.txt file, you will need to notify search engines manually through the Webmaster Console provided by the search engines.', 'autodescription' ) );
+		$this->description( __( 'If you do not add the sitemap location to the robots.txt file, you should notify search engines manually through the Webmaster Console provided by the search engines.', 'autodescription' ) );
 
 		echo '<hr>';
 
@@ -192,8 +186,7 @@ switch ( $instance ) :
 			);
 		endif;
 
-		if ( $locate_url ) {
-			$robots_url = $this->get_robots_txt_url();
+		if ( $robots_url ) {
 			$here = '<a href="' . esc_url( $robots_url, [ 'http', 'https' ] ) . '" target="_blank" title="' . esc_attr__( 'View robots.txt', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 
 			$this->description_noesc( sprintf( esc_html_x( 'The robots.txt file can be found %s.', '%s = here', 'autodescription' ), $here ) );

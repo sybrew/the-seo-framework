@@ -3,6 +3,7 @@
  * @package The_SEO_Framework\Classes
  * @subpackage Classes\Deprecated
  */
+
 namespace The_SEO_Framework;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;

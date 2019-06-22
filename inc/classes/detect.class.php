@@ -2,6 +2,7 @@
 /**
  * @package The_SEO_Framework\Classes
  */
+
 namespace The_SEO_Framework;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
@@ -597,6 +598,8 @@ class Detect extends Render {
 	 * @since 2.9.2 Now also checks for permalinks.
 	 * @since 2.9.3 Now also checks for sitemap_robots option.
 	 * @since 3.1.0 Removed Jetpack's sitemap check -- it's no longer valid.
+	 * @since 3.3.0 : 1. Now uses has_robots_txt()
+	 *              : 2. Now uses the get_robots_txt_url() to determine validity.
 	 *
 	 * @param bool $check_option Whether to check for sitemap option.
 	 * @return bool True when no conflicting plugins are detected or when The SEO Framework's Sitemaps are output.
@@ -609,13 +612,7 @@ class Detect extends Render {
 				return false;
 		}
 
-		if ( $this->is_subdirectory_installation() )
-			return false;
-
-		if ( ! $this->pretty_permalinks )
-			return false;
-
-		return true;
+		return ! $this->has_robots_txt() && strlen( $this->get_robots_txt_url() );
 	}
 
 	/**
@@ -1074,12 +1071,15 @@ class Detect extends Render {
 
 		if ( $wp_rewrite->using_permalinks() && ! $this->is_subdirectory_installation() ) {
 			$home = \trailingslashit( $this->set_url_scheme( $this->get_home_host() ) );
-			$loc  = $home . 'robots.txt';
+			$path = "{$home}robots.txt";
+		} elseif ( $this->has_robots_txt() ) {
+			$home = \trailingslashit( $this->set_url_scheme( \get_option( 'home' ) ) );
+			$path = "{$home}robots.txt";
 		} else {
-			$loc = '';
+			$path = '';
 		}
 
-		return $loc;
+		return $path;
 	}
 
 	/**
