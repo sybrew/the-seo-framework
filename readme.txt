@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
 Requires at least: 4.9.0
 Tested up to: 5.2
-Requires PHP: 5.5.0
+Requires PHP: 5.6.0
 Stable tag: 3.2.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -242,8 +242,6 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 == Changelog ==
 
-TODO this DEV version is probably NOT compatible with PHP 5.5.
-
 TODO: Re-minify JS files... Ugh Node.JS
 TODO: Re-minify CSS files... Ugh web services
 TODO: Drop IE11 support in JS? Make sure the scripts fail to load... Ugh LTS
@@ -255,7 +253,7 @@ TODO: Add a classmap for components, like a "metabox loader", "quickedit loader"
 	* This can affect performance negatively... but it may also speed up things greatly as we offload parsing of redundant PHP, and reduce base-framework (the_seo_framework()) files.
 	* The negative effects are mitigated significantly when an opcode cacher is available, however.
 
-TODO explain why PHP 5.5 is now required.
+TODO explain why PHP 5.6 is now required.
 TODO update THE_SEO_FRAMEWORK_DB_VERSION to fire PHP upgrade environmental test.
 
 TODO remove $page_defaults
@@ -325,7 +323,7 @@ TODO call "php level caching" memoization--it's a cooler word.
 	* Search engine pinging for the sitemap can now be offloaded to the WordPress cron-scheduler; this feature is enabled by default.
 * **Changed:**
 	* We now support WordPress v4.9 and later, instead of WordPress v4.6 and later.
-	* We now support PHP v5.5 and later, instead of PHP v5.4 and later.
+	* We now support PHP v5.6 and later, instead of PHP v5.4 and later.
 	* TODO? We switched the homepage title option name from left to right, and right to left.
 		* This doesn't affect your titles, it's only semantics.
 		* NOTE TO SELF: Changing this would require us to change the default options, the filters behavior, and the JS code.. is this the best route?
@@ -808,6 +806,9 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `the_seo_framework_sitemap=xml -> tsf-sitemap=base`
 			* `the_seo_framework_sitemap=xsl -> tsf-sitemap=xsl-stylesheet`
 			* **Note:** Since these endpoints are interpreted outside of the WordPress rewrite system, these endpoints may no longer work based on your permalink settings.
+* **Compatibility notes:**
+	* **Unloaded:**
+		* The mbstring compat file (`/inc/compat/php-mbstring.php`) is no longer loaded automatically, because we no longer need the compatibility function `mb_strpos`.
 * **Browser notes:**
 	* We've now completely abandoned support for Internet Explorer. Goodbye, old, annoying friend.
 		* TODO consider "no-js versions for IE".

@@ -231,9 +231,9 @@ class Detect extends Render {
 	 * @staticvar array $cache
 	 * @uses $this->detect_plugin_multi()
 	 *
-	 * @param array $plugins Array of array for globals, constants, classes
-	 *              and/or functions to check for plugin existence.
-	 * @param bool $use_cache Bypasses cache if false
+	 * @param array $plugins   Array of array for globals, constants, classes
+	 *                         and/or functions to check for plugin existence.
+	 * @param bool  $use_cache Bypasses cache if false
 	 */
 	public function can_i_use( array $plugins = [], $use_cache = true ) {
 

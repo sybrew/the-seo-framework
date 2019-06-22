@@ -96,7 +96,6 @@ class Inpost extends Profile {
 		if ( ! \apply_filters( 'the_seo_framework_allow_quick_edit', true ) )
 			return;
 
-
 		$taxonomy = isset( $screen->taxonomy ) ? $screen->taxonomy : '';
 
 		if ( $taxonomy ) {
@@ -225,9 +224,9 @@ class Inpost extends Profile {
 			return;
 
 		/**
-		 * High priority, this box is seen right below the default edit inputs.
 		 * @since 2.6.0
 		 * @param int $priority The metabox term priority.
+		 *                      Defaults to high priority, this box is seen right below the default edit inputs.
 		 */
 		$priority = (int) \apply_filters( 'the_seo_framework_term_metabox_priority', 0 );
 
@@ -264,9 +263,9 @@ class Inpost extends Profile {
 		$context = (string) \apply_filters( 'the_seo_framework_metabox_context', 'normal' );
 
 		/**
-		 * High priority, this box is seen right below the post/page edit screen.
 		 * @since 2.6.0
 		 * @param string $default Accepts 'high', 'default', 'low'
+		 *                        Defaults to high, this box is seen right below the post/page edit screen.
 		 */
 		$priority = (string) \apply_filters( 'the_seo_framework_metabox_priority', 'high' );
 
@@ -277,7 +276,7 @@ class Inpost extends Profile {
 					$schema,
 					\__( 'Homepage SEO Settings', 'autodescription' ),
 					$this->make_info(
-						\__( 'The SEO Settings take precedence over these settings.', 'autodescription' ),
+						\__( 'The SEO Settings may take precedence over these settings.', 'autodescription' ),
 						$this->seo_settings_page_url(),
 						false
 					)
@@ -387,7 +386,7 @@ class Inpost extends Profile {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @param $type The post type label.
+	 * @param string $label The post type label.
 	 * @return array
 	 */
 	protected function get_inpost_tabs( $label ) {
@@ -397,19 +396,19 @@ class Inpost extends Profile {
 				'name'     => \__( 'General', 'autodescription' ),
 				'callback' => [ $this, 'singular_inpost_box_general_tab' ],
 				'dashicon' => 'admin-generic',
-				'args'     => [ $label ],
+				'args'     => [ $label ], // TODO assign key?
 			],
 			'social' => [
 				'name'     => \__( 'Social', 'autodescription' ),
 				'callback' => [ $this, 'singular_inpost_box_social_tab' ],
 				'dashicon' => 'share',
-				'args'     => [ $label ],
+				'args'     => [ $label ], // TODO assign key?
 			],
 			'visibility' => [
 				'name'     => \__( 'Visibility', 'autodescription' ),
 				'callback' => [ $this, 'singular_inpost_box_visibility_tab' ],
 				'dashicon' => 'visibility',
-				'args'     => [ $label ],
+				'args'     => [ $label ], // TODO assign key?
 			],
 		];
 

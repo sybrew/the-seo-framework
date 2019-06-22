@@ -306,7 +306,7 @@ class Render extends Admin_Init {
 		 * @param string $image The social image URL.
 		 * @param int    $id    The page or term ID.
 		 */
-		$image = \apply_filters_ref_array(
+		$image = (string) \apply_filters_ref_array(
 			'the_seo_framework_ogimage_output',
 			[
 				$this->get_image_from_cache(),
@@ -316,18 +316,8 @@ class Render extends Admin_Init {
 
 		$output = '';
 
-		/**
-		 * Now returns empty string on false.
-		 * @since 2.6.0
-		 */
 		if ( $image ) {
 
-			$image = (string) $image;
-
-			/**
-			 * Always output
-			 * @since 2.1.1
-			 */
 			$output .= '<meta property="og:image" content="' . \esc_attr( $image ) . '" />' . "\r\n";
 
 			if ( $image ) {
@@ -1161,9 +1151,9 @@ class Render extends Admin_Init {
 	 *
 	 * @since 2.9.2
 	 *
-	 * @param string $where Determines the position of the indicator.
-	 *               Accepts 'before' for before, anything else for after.
-	 * @param int $timing Determines when the output started.
+	 * @param string $where  Determines the position of the indicator.
+	 *                       Accepts 'before' for before, anything else for after.
+	 * @param int    $timing Determines when the output started.
 	 * @return string The SEO Framework's HTML plugin indicator.
 	 */
 	public function get_plugin_indicator( $where = 'before', $timing = 0 ) {

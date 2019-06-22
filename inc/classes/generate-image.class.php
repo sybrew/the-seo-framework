@@ -80,10 +80,13 @@ class Generate_Image extends Generate_Url {
 			$test_src = \esc_url_raw( $this->set_preferred_url_scheme( $src ), [ 'http', 'https' ] );
 
 			if ( $test_i === $test_src )
-				$this->register_image_dimension( $uid, [
-					'width'  => $w,
-					'height' => $h,
-				] );
+				$this->register_image_dimension(
+					$uid,
+					[
+						'width'  => $w,
+						'height' => $h,
+					]
+				);
 		}
 	}
 
@@ -660,10 +663,13 @@ class Generate_Image extends Generate_Url {
 			//* Whether to use the post ID (Post Thumbnail) or input ID (ID was known beforehand)
 			$usage_id = ! empty( $args['get_the_real_ID'] ) ? $this->get_the_real_ID() : $id;
 
-			$this->register_image_dimension( $usage_id, [
-				'width'  => $w,
-				'height' => $h,
-			] );
+			$this->register_image_dimension(
+				$usage_id,
+				[
+					'width'  => $w,
+					'height' => $h,
+				]
+			);
 		}
 
 		if ( $i && $this->matches_this_domain( $i ) )
@@ -696,10 +702,13 @@ class Generate_Image extends Generate_Url {
 					$icon = $_src[0];
 
 					if ( $set_og_dimensions ) {
-						$this->register_image_dimension( $this->get_the_real_ID(), [
-							'width'  => $_src[1],
-							'height' => $_src[2],
-						] );
+						$this->register_image_dimension(
+							$this->get_the_real_ID(),
+							[
+								'width'  => $_src[1],
+								'height' => $_src[2],
+							]
+						);
 					}
 				}
 			}
@@ -749,10 +758,13 @@ class Generate_Image extends Generate_Url {
 					if ( $w < 200 || $h < 200 )
 						return '';
 
-					$this->register_image_dimension( $this->get_the_real_ID(), [
-						'width'  => $w,
-						'height' => $h,
-					] );
+					$this->register_image_dimension(
+						$this->get_the_real_ID(),
+						[
+							'width'  => $w,
+							'height' => $h,
+						]
+					);
 				}
 			}
 		}
@@ -783,10 +795,13 @@ class Generate_Image extends Generate_Url {
 			$h = (int) \get_theme_support( 'custom-header', 'height' );
 
 			if ( $w && $h ) {
-				$this->register_image_dimension( $this->get_the_real_ID(), [
-					'width'  => $w,
-					'height' => $h,
-				] );
+				$this->register_image_dimension(
+					$this->get_the_real_ID(),
+					[
+						'width'  => $w,
+						'height' => $h,
+					]
+				);
 			}
 		}
 

@@ -514,7 +514,7 @@ class Query extends Core {
 
 		$pfp = (int) \get_option( 'page_for_posts' );
 
-		return $pfp !== 0 && $id === $pfp;
+		return 0 !== $pfp && $id === $pfp;
 	}
 
 	/**
@@ -663,15 +663,16 @@ class Query extends Core {
 	/**
 	 * Checks for front page by input ID.
 	 *
-	 * Doesn't always return true when the ID is 0, although the homepage might be.
-	 * This is because it checks for the query, to prevent conflicts.
-	 * @see $this->is_real_front_page_by_id().
+	 * NOTE: Doesn't always return true when the ID is 0, although the homepage might be.
+	 *       This is because it checks for the query, to prevent conflicts.
+	 *
+	 * @see $this->is_real_front_page_by_id(); Alternative to NOTE above.
 	 *
 	 * @since 2.9.0
 	 * @since 2.9.3 Now tests for archive and 404 before testing homepage as blog.
 	 * @since 3.2.2: Removed SEO settings page check. This now returns false on that page.
 	 *
-	 * @param int The page ID, required. Can be 0.
+	 * @param int $id The page ID, required. Can be 0.
 	 * @return bool True if ID if for the homepage.
 	 */
 	public function is_front_page_by_id( $id ) {
@@ -682,6 +683,7 @@ class Query extends Core {
 			return $cache;
 
 		$is_front_page = false;
+
 		$sof = \get_option( 'show_on_front' );
 
 		//* Compare against $id
@@ -915,7 +917,7 @@ class Query extends Core {
 		$this->set_query_cache(
 			__METHOD__,
 			$is_singular,
-			$post_types, $id
+			...[ $post_types, $id ]
 		);
 
 		return $is_singular;
@@ -1035,7 +1037,7 @@ class Query extends Core {
 		$this->set_query_cache(
 			__METHOD__,
 			$is_tax = \is_tax( $taxonomy, $term ),
-			$taxonomy, $term
+			...[ $taxonomy, $term ]
 		);
 
 		return $is_tax;
@@ -1355,11 +1357,11 @@ class Query extends Core {
 	 * @staticvar mixed     $cache           : The cached query values.
 	 * @see $this->set_query_cache(); to set query cache.
 	 *
-	 * @param string $method       The method that wants to cache, used as the key to set or get.
-	 * @param mixed  $value_to_set The value to set.
-	 * @param array|mixed $hash    Extra arguments, that will be used to generate an alternative cache key.
-	 *        Must always be inside a single array when $value_to_set is set. @see $this->set_query_cache()
-	 *        Must always be separated parameters otherwise.
+	 * @param string      $method       The method that wants to cache, used as the key to set or get.
+	 * @param mixed       $value_to_set The value to set.
+	 * @param array|mixed ...$hash      Extra arguments, that will be used to generate an alternative cache key.
+	 *                                  Must always be inside a single array when $value_to_set is set. @see $this->set_query_cache()
+	 *                                  Must always be separated parameters otherwise.
 	 * @return mixed : {
 	 *    mixed The cached value if set and $value_to_set is null.
 	 *       null If the query can't be cached yet, or when no value has been set.
@@ -1369,7 +1371,7 @@ class Query extends Core {
 	 *       }
 	 * }
 	 */
-	public function get_query_cache( $method, $value_to_set = null ) {
+	public function get_query_cache( $method, $value_to_set = null, ...$hash ) {
 
 		static $can_cache_query = null;
 
@@ -1383,9 +1385,9 @@ class Query extends Core {
 
 		static $cache = [];
 
-		if ( func_num_args() > 2 ) {
+		if ( $hash ) {
 			// phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
-			$hash = isset( $value_to_set ) ? serialize( (array) func_get_arg( 2 ) ) : serialize( array_slice( func_get_args(), 2 ) );
+			$hash = serialize( $hash );
 		} else {
 			$hash = false;
 		}
@@ -1413,15 +1415,15 @@ class Query extends Core {
 	 *
 	 * @param string $method       The method that wants to set. Used as a caching key.
 	 * @param mixed  $value_to_set If null, no cache will be set.
-	 * @param mixed  $hash         Extra arguments, that will be used to generate an alternative cache key.
+	 * @param mixed  ...$hash      Extra arguments, that will be used to generate an alternative cache key.
 	 * @return bool : {
 	 *    true If the value is being set for the first time.
 	 *    false If the value has been set and $value_to_set is being overwritten.
 	 * }
 	 */
-	public function set_query_cache( $method, $value_to_set ) {
-		if ( func_num_args() > 2 ) {
-			return $this->get_query_cache( $method, $value_to_set, array_slice( func_get_args(), 2 ) );
+	public function set_query_cache( $method, $value_to_set, ...$hash ) {
+		if ( $hash ) {
+			return $this->get_query_cache( $method, $value_to_set, $hash );
 		} else {
 			return $this->get_query_cache( $method, $value_to_set );
 		}

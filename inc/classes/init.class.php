@@ -34,10 +34,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Init extends Query {
 
 	/**
-	 * Allow object caching through a filter.
-	 *
 	 * @since 2.4.3
-	 *
 	 * @var bool Enable object caching.
 	 */
 	protected $use_object_cache = true;
@@ -78,9 +75,9 @@ class Init extends Query {
 		}
 
 		/**
+		 * @since 3.1.0
 		 * Runs after the plugin is initialized.
 		 * Use this to remove filters and actions.
-		 * @since 3.1.0
 		 */
 		\do_action( 'the_seo_framework_after_init' );
 	}
@@ -128,8 +125,8 @@ class Init extends Query {
 	public function init_admin_actions() {
 
 		/**
-		 * Runs before the plugin is initialized in the admin screens.
 		 * @since 2.8.0
+		 * Runs before the plugin is initialized in the admin screens.
 		 */
 		\do_action( 'the_seo_framework_admin_init' );
 
@@ -202,9 +199,9 @@ class Init extends Query {
 		endif;
 
 		/**
+		 * @since 2.9.4
 		 * Runs after the plugin is initialized in the admin screens.
 		 * Use this to remove actions.
-		 * @since 2.9.4
 		 */
 		\do_action( 'the_seo_framework_after_admin_init' );
 	}
@@ -220,8 +217,8 @@ class Init extends Query {
 	protected function init_front_end_actions() {
 
 		/**
-		 * Runs before the plugin is initialized on the front-end.
 		 * @since 2.8.0
+		 * Runs before the plugin is initialized on the front-end.
 		 */
 		\do_action( 'the_seo_framework_front_init' );
 
@@ -267,9 +264,9 @@ class Init extends Query {
 			$this->init_alter_search_query();
 
 		/**
+		 * @since 2.9.4
 		 * Runs before the plugin is initialized on the front-end.
 		 * Use this to remove actions.
-		 * @since 2.9.4
 		 */
 		\do_action( 'the_seo_framework_after_front_init' );
 	}
@@ -386,9 +383,8 @@ class Init extends Query {
 			$robots = $this->robots();
 
 			/**
-			 * Adds content before the output and caches it through Object caching.
 			 * @since 2.6.0
-			 * @param string $before The content before the SEO output.
+			 * @param string $before The content before the SEO output. Stored in object cache.
 			 */
 			$before = (string) \apply_filters( 'the_seo_framework_pre', '' );
 
@@ -451,9 +447,8 @@ class Init extends Query {
 			$after_legacy = $this->get_legacy_header_filters_output( 'after' );
 
 			/**
-			 * Adds content after the output and caches it through Object caching.
 			 * @since 2.6.0
-			 * @param string $after The content after the SEO output.
+			 * @param string $after The content after the SEO output. Stored in object cache.
 			 */
 			$after = (string) \apply_filters( 'the_seo_framework_pro', '' );
 
@@ -649,10 +644,7 @@ class Init extends Query {
 			$this->use_object_cache and $this->object_cache_set( $cache_key, $output, 86400 );
 		endif;
 
-		/**
-		 * Completely override robots with output.
-		 * @since 2.5.0
-		 */
+		// Completely override robots with output.
 		$robots_txt = $output;
 
 		return $robots_txt;

@@ -314,8 +314,7 @@ final class Debug implements Debug_Interface {
 	/**
 	 * The SEO Framework error handler.
 	 *
-	 * Only handles user notices.
-	 * @see E_USER_NOTICE
+	 * Only handles user notices: E_USER_NOTICE
 	 *
 	 * @since 2.6.0
 	 * @since 3.2.2 Fixed unaccounted-for backtrace depth logic since this class decoupling in 3.1
@@ -325,8 +324,8 @@ final class Debug implements Debug_Interface {
 	 */
 	protected function error_handler_deprecated( $code, $message ) {
 
-		//* Only do so if E_USER_NOTICE is pased.
-		if ( E_USER_NOTICE === $code && isset( $message ) ) {
+		//* Only do so if E_USER_NOTICE is passed.
+		if ( E_USER_NOTICE & $code && isset( $message ) ) {
 			$this->error_handler( $this->get_error(), $message );
 		}
 	}
@@ -600,8 +599,7 @@ final class Debug implements Debug_Interface {
 	 * Wraps query status booleans in human-readable code.
 	 *
 	 * @since 2.6.6
-	 * @global bool $multipage
-	 * @global int $numpages
+	 * @since 3.3.0 Cleaned up global callers; only use TSF methods.
 	 *
 	 * @param string $cache_version 'yup' or 'nope'
 	 * @return string Wrapped Query State debug output.
@@ -610,8 +608,6 @@ final class Debug implements Debug_Interface {
 
 		//* Start timer.
 		$this->timer( true );
-
-		global $multipage, $numpages;
 
 		$tsf = \the_seo_framework();
 

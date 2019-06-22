@@ -61,8 +61,8 @@ class Core {
 	 * @since 2.8.0
 	 * @since 3.2.2 This method no longer allows to overwrite protected or private variables.
 	 *
-	 * @param string $name The property name.
-	 * @param mixed $value The property value.
+	 * @param string $name  The property name.
+	 * @param mixed  $value The property value.
 	 */
 	final public function __set( $name, $value ) {
 		/**
@@ -252,29 +252,32 @@ class Core {
 		if ( THE_SEO_FRAMEWORK_PLUGIN_BASENAME !== $plugin_file )
 			return $plugin_meta;
 
-		return array_merge( $plugin_meta, [
-			'docs' => vsprintf(
-				'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
-				[
-					'https://theseoframework.com/?p=80',
-					\esc_html__( 'View documentation', 'autodescription' ),
-				]
-			),
-			'API' => vsprintf(
-				'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
-				[
-					'https://theseoframework.com/?p=82',
-					\esc_html__( 'View API docs', 'autodescription' ),
-				]
-			),
-			'EM'  => vsprintf(
-				'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
-				[
-					'https://theseoframework.com/?p=2760',
-					\esc_html_x( 'Get the Extension Manager', 'Extension Manager is a product name; do not translate it.', 'autodescription' ),
-				]
-			),
-		] );
+		return array_merge(
+			$plugin_meta,
+			[
+				'docs' => vsprintf(
+					'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
+					[
+						'https://theseoframework.com/?p=80',
+						\esc_html__( 'View documentation', 'autodescription' ),
+					]
+				),
+				'API' => vsprintf(
+					'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
+					[
+						'https://theseoframework.com/?p=82',
+						\esc_html__( 'View API docs', 'autodescription' ),
+					]
+				),
+				'EM'  => vsprintf(
+					'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
+					[
+						'https://theseoframework.com/?p=2760',
+						\esc_html_x( 'Get the Extension Manager', 'Extension Manager is a product name; do not translate it.', 'autodescription' ),
+					]
+				),
+			]
+		);
 	}
 
 	/**
@@ -418,22 +421,15 @@ class Core {
 	 * Fetches the Timezone String from given offset.
 	 *
 	 * @since 2.6.0
+	 * @since 3.3.0 Removed PHP <5.6 support.
 	 *
 	 * @param int $offset The GMT offzet.
 	 * @return string PHP Timezone String.
 	 */
 	protected function get_tzstring_from_offset( $offset = 0 ) {
 
-		$seconds = round( $offset * HOUR_IN_SECONDS );
-
-		//* Try Daylight savings.
+		$seconds  = round( $offset * HOUR_IN_SECONDS );
 		$tzstring = timezone_name_from_abbr( '', $seconds, 1 );
-		/**
-		 * PHP bug workaround. Disable the DST check.
-		 * @link https://bugs.php.net/bug.php?id=44780
-		 */
-		if ( false === $tzstring )
-			$tzstring = timezone_name_from_abbr( '', $seconds, 0 );
 
 		return $tzstring;
 	}
@@ -770,13 +766,12 @@ class Core {
 			$text = trim( $text );
 		}
 
-		if ( '' === $text )
+		// You need 3 chars to make a markdown: *m*
+		if ( strlen( $text ) < 3 )
 			return '';
 
 		// Merge defaults with $args.
-		$args = array_merge( [
-			'a_internal' => false,
-		], $args );
+		$args = array_merge( [ 'a_internal' => false ], $args );
 
 		/**
 		 * The conversion list's keys are per reference only.

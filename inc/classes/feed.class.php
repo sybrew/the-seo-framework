@@ -74,8 +74,8 @@ class Feed extends Cache {
 	 *
 	 * @since 2.5.2
 	 *
-	 * @param $content The feed's content.
-	 * @param $feed_type The feed type (not used in excerpted content)
+	 * @param string      $content   The feed's content.
+	 * @param null|string $feed_type The feed type (not used in excerpted content)
 	 * @return string The modified feed entry.
 	 */
 	public function the_content_feed( $content = '', $feed_type = null ) {
@@ -102,6 +102,7 @@ class Feed extends Cache {
 	 * Converts feed content to excerpt.
 	 *
 	 * @since 2.9.0
+	 * @since 3.3.0 No longer uses mbstring for html tagging, it was redundant as we were looking for ASCII characters.
 	 *
 	 * @param string $content The full feed entry content.
 	 * @return string The excerpted feed.
@@ -127,20 +128,19 @@ class Feed extends Cache {
 
 		if ( 0 === strpos( $content, '<h2>' ) ) {
 			//* Add the h2 title back
-			$h2_end = mb_strpos( $content, '</h2>' );
+			$h2_end = strpos( $content, '</h2>' );
 
 			if ( false !== $h2_end ) {
-				//* Start of content, plus <h2>
-				$h2_start = 4;
+				//* Start of content, plus strlen( '<h2>' )
+				$h2_start = strlen( '<h2>' );
 				//* Remove the length of <h2>, again.
 				$h2_end = $h2_end - $h2_start;
 
 				//* Fetch h2 content.
-				$h2_content = mb_substr( $content, $h2_start, $h2_end );
+				$h2_content = substr( $content, $h2_start, $h2_end );
 
 				//* Remove the H2 content from the excerpt.
-				$count = 1;
-				$excerpt = str_replace( $h2_content, '', $excerpt, $count );
+				$excerpt = str_replace( $h2_content, '', $excerpt );
 
 				//* Wrap h2 content in h2 tags.
 				$h2_output = '<h2>' . $h2_content . '</h2>' . PHP_EOL;
@@ -170,8 +170,11 @@ class Feed extends Cache {
 			'the_seo_framework_feed_source_link_text',
 			\_x( 'Source', 'The content source', 'autodescription' )
 		);
-		$content = '<p><a href="' . \esc_url( \get_permalink() ) . '" rel="nofollow">' . \esc_html( $source_i18n ) . '</a></p>';
 
-		return $content;
+		return sprintf(
+			'<p><a href="%s" rel="nofollow">%s</a></p>',
+			\esc_url( \get_permalink() ),
+			\esc_html( $source_i18n )
+		);
 	}
 }

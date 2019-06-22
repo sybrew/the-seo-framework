@@ -41,17 +41,17 @@ class Metaboxes extends Site_Options {
 	 * @since 2.6.0 Refactored.
 	 * @since 3.1.0 Now prefixes the IDs.
 	 *
-	 * @param string $id The Nav Tab ID
-	 * @param array $tabs the tab content {
-	 *    $tabs = tab ID key = array(
-	 *       $tabs['name'] => tab name
-	 *       $tabs['callback'] => string|array callback function
-	 *       $tabs['dashicon'] => string Dashicon
-	 *       $tabs['args'] => mixed optional callback function args
-	 *    )
+	 * @param string $id       The nav-tab ID
+	 * @param array  $tabs     The tab content {
+	 *    string tab ID => array : {
+	 *       string   name     : Tab name.
+	 *       callable callback : Output function.
+	 *       string   dashicon : The dashicon to use.
+	 *       mixed    args     : Optional callback function args.
+	 *    }
 	 * }
-	 * @param string $version the The SEO Framework version for debugging. May be emptied.
-	 * @param bool $use_tabs Whether to output tabs, only works when $tabs is greater than 1.
+	 * @param string $version  The SEO Framework version for debugging. May be emptied.
+	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
 	 */
 	public function nav_tab_wrapper( $id, $tabs = [], $version = '2.3.6', $use_tabs = true ) {
 
@@ -149,7 +149,7 @@ class Metaboxes extends Site_Options {
 	 * @since 2.8.0
 	 *
 	 * @param \WP_Post|null $post The current post object.
-	 * @param array $args The metabox arguments.
+	 * @param array         $args The metabox arguments.
 	 */
 	public function general_metabox( $post = null, $args = [] ) {
 		/**
@@ -235,7 +235,7 @@ class Metaboxes extends Site_Options {
 	 * @since 2.2.2
 	 *
 	 * @param \WP_Post|null $post The current post object.
-	 * @param array $args The metabox arguments.
+	 * @param array         $args The metabox arguments.
 	 */
 	public function title_metabox( $post = null, $args = [] ) {
 		/**
@@ -287,7 +287,7 @@ class Metaboxes extends Site_Options {
 	 *   'left'  => Left Example Addtitions
 	 *   'right' => Right Example Additions
 	 * }
-	 * @param bool $showleft The example location.
+	 * @param bool  $showleft The example location.
 	 */
 	protected function title_metabox_prefixes_tab( $additions = [], $showleft = false ) {
 		$this->get_view( 'metaboxes/title-metabox', get_defined_vars(), 'prefixes' );
@@ -299,7 +299,7 @@ class Metaboxes extends Site_Options {
 	 * @since 2.3.4
 	 *
 	 * @param \WP_Post|null $post The current post object.
-	 * @param array $args The metabox arguments.
+	 * @param array         $args The metabox arguments.
 	 */
 	public function description_metabox( $post = null, $args = [] ) {
 		/**
@@ -319,7 +319,7 @@ class Metaboxes extends Site_Options {
 	 * @since 2.2.2
 	 *
 	 * @param \WP_Post|null $post The current post object.
-	 * @param array $args The metabox arguments.
+	 * @param array         $args The metabox arguments.
 	 */
 	public function robots_metabox( $post = null, $args = [] ) {
 		/**
@@ -349,7 +349,8 @@ class Metaboxes extends Site_Options {
 	 * @since 2.2.4
 	 * @see $this->robots_metabox() Callback for Robots Settings box.
 	 *
-	 * @param array $types The post types
+	 * @param array $types      The non-default robots exclusion types (date, author, etc.).
+	 * @param array $post_types The post types.
 	 * @param array $robots The robots option values : {
 	 *   'value' string The robots option value.
 	 *   'name' string The robots name.
@@ -366,7 +367,7 @@ class Metaboxes extends Site_Options {
 	 * @since 2.2.2
 	 *
 	 * @param \WP_Post|null $post The current post object.
-	 * @param array $args The navigation tabs args.
+	 * @param array         $args The navigation tabs args.
 	 */
 	public function homepage_metabox( $post = null, $args = [] ) {
 		/**
@@ -430,7 +431,7 @@ class Metaboxes extends Site_Options {
 	 * @since 2.2.2
 	 *
 	 * @param \WP_Post|null $post The current post object.
-	 * @param array $args the social tabs arguments.
+	 * @param array         $args The navigation tabs args.
 	 */
 	public function social_metabox( $post = null, $args = [] ) {
 		/**
@@ -492,7 +493,7 @@ class Metaboxes extends Site_Options {
 	 * @since 2.2.4
 	 *
 	 * @param \WP_Post|null $post The current post object.
-	 * @param array $args the social tabs arguments.
+	 * @param array         $args The navigation tabs args.
 	 */
 	public function webmaster_metabox( $post = null, $args = [] ) {
 		/**
@@ -513,7 +514,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 *
 	 * @param \WP_Post|null $post The current post object.
-	 * @param array $args the social tabs arguments.
+	 * @param array         $args The navigation tabs args.
 	 */
 	public function sitemaps_metabox( $post = null, $args = [] ) {
 		/**
@@ -587,7 +588,7 @@ class Metaboxes extends Site_Options {
 	 * @since 2.5.2
 	 *
 	 * @param \WP_Post|null $post The current post object.
-	 * @param array $args the social tabs arguments.
+	 * @param array         $args The navigation tabs args.
 	 */
 	public function feed_metabox( $post = null, $args = [] ) {
 		/**
@@ -607,7 +608,7 @@ class Metaboxes extends Site_Options {
 	 * @since 2.6.0
 	 *
 	 * @param \WP_Post|null $post The current post object.
-	 * @param array $args the social tabs arguments.
+	 * @param array         $args The navigation tabs args.
 	 */
 	public function schema_metabox( $post = null, $args = [] ) {
 		/**

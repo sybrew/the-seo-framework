@@ -43,10 +43,13 @@ class Generate extends User_Data {
 	 */
 	protected function fix_generation_args( &$args ) {
 		if ( is_array( $args ) ) {
-			$args = array_merge( [
-				'id'       => 0,
-				'taxonomy' => '',
-			], $args );
+			$args = array_merge(
+				[
+					'id'       => 0,
+					'taxonomy' => '',
+				],
+				$args
+			);
 		} elseif ( is_numeric( $args ) ) {
 			$args = [
 				'id'       => (int) $args,
@@ -121,11 +124,14 @@ class Generate extends User_Data {
 		 *    3 = 0b11: Ignore protection and post/term setting.
 		 * }
 		 */
-		return array_filter( (array) \apply_filters_ref_array( 'the_seo_framework_robots_meta_array', [
-			$meta,
-			$args,
-			$ignore,
-		] ) );
+		return array_filter( (array) \apply_filters_ref_array(
+			'the_seo_framework_robots_meta_array',
+			[
+				$meta,
+				$args,
+				$ignore,
+			]
+		) );
 	}
 
 	/**
@@ -720,9 +726,8 @@ class Generate extends User_Data {
 		}
 
 		/**
-		 * Filters the available Twitter cards on the front end.
 		 * @since 2.9.0
-		 * @param array $retval Use empty array to invalidate Twitter card.
+		 * @param array $retval The available Twitter cards. Use empty array to invalidate Twitter card.
 		 */
 		$retval = (array) \apply_filters( 'the_seo_framework_available_twitter_cards', $retval );
 

@@ -218,7 +218,7 @@ final class Deprecated {
 		] );
 
 		if ( $echo ) {
-			echo $bar;
+			echo $bar; // phpcs:ignore -- XSS ok.
 		} else {
 			return $bar;
 		}
@@ -235,7 +235,7 @@ final class Deprecated {
 	 *
 	 * @return string The scripts class name.
 	 */
-	public function Scripts() {
+	public function Scripts() { // phpcs:ignore -- Deprecated.
 		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->Scripts()', '3.3.0', '\The_SEO_Framework\Builders\Scripts::class' );
 		return \The_SEO_Framework\Builders\Scripts::class;
 	}
@@ -264,6 +264,7 @@ final class Deprecated {
 	 * @deprecated
 	 * @staticvar array $lowercase Contains nouns.
 	 *
+	 * @param string $noun The noun to lowercase.
 	 * @return string The maybe lowercase noun.
 	 */
 	public function maybe_lowercase_noun( $noun ) {

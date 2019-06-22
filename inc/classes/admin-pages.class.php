@@ -351,7 +351,7 @@ class Admin_Pages extends Inpost {
 	 */
 	protected function do_settings_page_notices() {
 
-		$get = empty( $_GET ) ? null : $_GET; // CSRF, input var OK.
+		$get = empty( $_GET ) ? null : $_GET; // phpcs:ignore -- CSRF ok. (input var is not...)
 
 		if ( null === $get )
 			return;
@@ -650,10 +650,12 @@ class Admin_Pages extends Inpost {
 	/**
 	 * Echo or return a chechbox fields wrapper.
 	 *
+	 * This method does NOT escape.
+	 *
 	 * @since 2.6.0
 	 *
 	 * @param string $input The input to wrap. Should already be escaped.
-	 * @param bool   $echo Whether to escape echo or just return.
+	 * @param bool   $echo  Whether to escape echo or just return.
 	 * @return string|void Wrapped $input.
 	 */
 	public function wrap_fields( $input = '', $echo = false ) {
@@ -662,7 +664,7 @@ class Admin_Pages extends Inpost {
 			$input = implode( PHP_EOL, $input );
 
 		if ( $echo ) {
-			echo '<div class="tsf-fields">' . $input . '</div>'; // xss user warning.
+			echo '<div class="tsf-fields">' . $input . '</div>'; // phpcs:ignore -- Escape your $input prior!
 		} else {
 			return '<div class="tsf-fields">' . $input . '</div>';
 		}
@@ -740,16 +742,19 @@ class Admin_Pages extends Inpost {
 	 */
 	public function make_checkbox_array( array $args = [] ) {
 
-		$args = array_merge( [
-			'id'          => '',
-			'index'       => '',
-			'label'       => '',
-			'description' => '',
-			'escape'      => true,
-			'disabled'    => false,
-			'default'     => false,
-			'warned'      => false,
-		], $args );
+		$args = array_merge(
+			[
+				'id'          => '',
+				'index'       => '',
+				'label'       => '',
+				'description' => '',
+				'escape'      => true,
+				'disabled'    => false,
+				'default'     => false,
+				'warned'      => false,
+			],
+			$args
+		);
 
 		if ( $args['escape'] ) {
 			$args['description'] = \esc_html( $args['description'] );
@@ -845,22 +850,26 @@ class Admin_Pages extends Inpost {
 
 		$args = array_merge( $defaults, $args );
 
+		// The walk below destroys the option array. As such, we assigned a new value.
 		$html_options = $args['options'];
-		/**
-		 * This effectively destroys the option array. As such, we assigned a new value.
-		 *
-		 * @param string $name    The option name. Passed by reference, returned as the HTML option item.
-		 * @param mixed  $value
-		 * @param mixed  $default
-		 */
-		array_walk( $html_options, function( &$name, $value, $default ) {
-			$name = sprintf(
-				'<option value="%s"%s>%s</option>',
-				\esc_attr( $value ),
-				$value == $default ? ' selected' : '', // loose comparison OK.
-				\esc_html( $name )
-			);
-		}, $args['default'] );
+
+		array_walk(
+			$html_options,
+			/**
+			 * @param string $name    The option name. Passed by reference, returned as the HTML option item.
+			 * @param mixed  $value
+			 * @param mixed  $default
+			 */
+			function( &$name, $value, $default ) {
+				$name = sprintf(
+					'<option value="%s"%s>%s</option>',
+					\esc_attr( $value ),
+					$value == $default ? ' selected' : '', // phpcs:ignore -- loose comparison OK.
+					\esc_html( $name )
+				);
+			},
+			$args['default']
+		);
 
 		return vsprintf(
 			sprintf( '<div class="%s">%s</div>',
@@ -923,7 +932,7 @@ class Admin_Pages extends Inpost {
 		$output = sprintf( '<span class="tsf-tooltip-wrap">%s</span>', $output );
 
 		if ( $echo ) {
-			echo $output; // xss ok
+			echo $output; // phpcs:ignore -- Output is escaped.
 		} else {
 			return $output;
 		}

@@ -35,17 +35,22 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 final class Load extends Feed implements Debug_Interface {
 
 	/**
-	 * Cached debug/profile properties. Initialized on plugins_loaded priority 5.
-	 *
 	 * @since 2.2.9
-	 *
-	 * @var bool $the_seo_framework_debug          Whether TSF debug is enabled.
-	 * @var bool $the_seo_framework_use_transients Whether TSF transients are enabled.
-	 * @var bool $script_debug                     Whether WP script debugging is enabled.
+	 * @var bool $the_seo_framework_debug Whether TSF-specific debug is enabled.
 	 */
-	public $the_seo_framework_debug          = false;
+	public $the_seo_framework_debug = false;
+
+	/**
+	 * @since 2.2.9
+	 * @var bool $the_seo_framework_debug Whether TSF-specific transients are used.
+	 */
 	public $the_seo_framework_use_transients = true;
-	public $script_debug                     = false;
+
+	/**
+	 * @since 2.2.9
+	 * @var bool $script_debug Whether WP script debugging is enabled.
+	 */
+	public $script_debug = false;
 
 	/**
 	 * Constructor, setup debug vars and then load parent constructor.
@@ -126,9 +131,8 @@ final class Load extends Feed implements Debug_Interface {
 	 */
 	public function _load_early_compat_files() {
 
-		if ( ! extension_loaded( 'mbstring' ) ) {
-			$this->_include_compat( 'mbstring', 'php' );
-		}
+		// if ( ! extension_loaded( 'mbstring' ) )
+		// $this->_include_compat( 'mbstring', 'php' );
 
 		//* Disable Headway theme SEO.
 		\add_filter( 'headway_seo_disabled', '__return_true' );

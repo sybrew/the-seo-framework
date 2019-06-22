@@ -3,7 +3,7 @@
 	<description>The coding standard used for The SEO Framework.</description>
 
 	<config name="minimum_supported_wp_version" value="4.9"/>
-	<config name="testVersion" value="5.5-"/>
+	<config name="testVersion" value="5.6-"/>
 
 	<rule ref="PHPCompatibilityWP"/>
 	<rule ref="WordPress-Core">

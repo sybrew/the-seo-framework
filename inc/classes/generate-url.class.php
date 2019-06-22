@@ -834,7 +834,7 @@ class Generate_Url extends Generate_Title {
 	 *              4. Removed WordPress Core `get_pagenum_link` filter.
 	 * @uses $this->get_paged_urls();
 	 *
-	 * @param string $prev_next Whether to get the previous or next page link.
+	 * @param string $next_prev Whether to get the previous or next page link.
 	 *                          Accepts 'prev' and 'next'.
 	 * @return string Escaped site Pagination URL
 	 */
@@ -969,10 +969,10 @@ class Generate_Url extends Generate_Title {
 	}
 
 	/**
-	 * Makes a fully qualified URL from input. Always uses http to fix.
-	 * @see $this->set_url_scheme()
+	 * Makes a fully qualified URL from input. Always adds http prefix, not https.
 	 *
 	 * @since 2.6.5
+	 * @see $this->set_url_scheme() To set the correct scheme.
 	 *
 	 * @param string $url Required the current maybe not fully qualified URL.
 	 * @return string $url

@@ -803,8 +803,6 @@ class Generate_Ldjson extends Generate_Image {
 	/**
 	 * Determines whether to use the SEO title or only the fallback page title.
 	 *
-	 * NOTE: Does not affect transient cache.
-	 *
 	 * @since 2.9.0
 	 * @staticvar bool $cache
 	 *
@@ -815,9 +813,9 @@ class Generate_Ldjson extends Generate_Image {
 		static $cache = null;
 
 		/**
-		 * Determines whether to use the SEO title or only the fallback page title in breadcrumbs.
 		 * @since 2.9.0
 		 * @param bool $use_seo_title Whether to use the SEO title.
+		 * NOTE: Changing this does not affect the transient cache; wait for it to clear.
 		 */
 		return isset( $cache ) ? $cache : $cache = (bool) \apply_filters( 'the_seo_framework_use_breadcrumb_seo_title', true );
 	}

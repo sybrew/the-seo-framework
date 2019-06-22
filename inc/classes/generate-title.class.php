@@ -139,10 +139,13 @@ class Generate_Title extends Generate_Description {
 		 * @param string $title The title.
 		 * @param array  $args  The title arguments.
 		 */
-		return (string) \apply_filters_ref_array( 'the_seo_framework_title_from_custom_field', [
-			$this->get_raw_custom_field_title( $args ),
-			$args,
-		] );
+		return (string) \apply_filters_ref_array(
+			'the_seo_framework_title_from_custom_field',
+			[
+				$this->get_raw_custom_field_title( $args ),
+				$args,
+			]
+		);
 	}
 
 	/**
@@ -164,10 +167,13 @@ class Generate_Title extends Generate_Description {
 		 * @param string $title The title.
 		 * @param array  $args  The title arguments.
 		 */
-		return (string) \apply_filters_ref_array( 'the_seo_framework_title_from_generation', [
-			$this->get_raw_generated_title( $args ),
-			$args,
-		] );
+		return (string) \apply_filters_ref_array(
+			'the_seo_framework_title_from_generation',
+			[
+				$this->get_raw_generated_title( $args ),
+				$args,
+			]
+		);
 	}
 
 	/**
@@ -499,6 +505,7 @@ class Generate_Title extends Generate_Description {
 	 * @internal
 	 * @see $this->get_raw_custom_field_title()
 	 *
+	 * @param array $args The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @return string The custom title.
 	 */
 	protected function get_custom_field_title_from_args( array $args ) {
@@ -1073,6 +1080,7 @@ class Generate_Title extends Generate_Description {
 		if ( $paged >= 2 || $page >= 2 ) {
 			$sep = $this->get_title_separator();
 
+			// phpcs:ignore -- WP didn't add translator code either.
 			$paging = sprintf( \__( 'Page %s', 'default' ), max( $paged, $page ) );
 
 			if ( \is_rtl() ) {
@@ -1196,7 +1204,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * NOTE: This does not guarantee that protection is to be added.
 	 *
-	 * @since 3.x.x
+	 * @since 3.2.4
 	 * @see $this->merge_title_protection()
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
@@ -1218,11 +1226,8 @@ class Generate_Title extends Generate_Description {
 	/**
 	 * Determines whether to add or remove title pagination additions.
 	 *
+	 * @since 3.2.4
 	 * NOTE: This does not guarantee that pagination is to be added.
-	 * @see $this->paged()
-	 * @see $this->page()
-	 *
-	 * @since 3.x.x
 	 * @see $this->merge_title_pagination()
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.

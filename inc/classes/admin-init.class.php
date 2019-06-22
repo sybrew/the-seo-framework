@@ -134,10 +134,13 @@ class Admin_Init extends Init {
 				];
 
 				if ( ! $this->get_option( 'display_seo_bar_tables' ) ) {
-					$enqueue_hooks = array_diff( $enqueue_hooks, [
-						'edit.php',
-						'edit-tags.php',
-					] );
+					$enqueue_hooks = array_diff(
+						$enqueue_hooks,
+						[
+							'edit.php',
+							'edit-tags.php',
+						]
+					);
 				}
 			}
 
@@ -176,6 +179,7 @@ class Admin_Init extends Init {
 	 *       are barely any different.
 	 * TODO move this to another object?
 	 *
+	 * @param string|null $locale The locale to test. If empty, it will be auto-determined.
 	 * @return array
 	 */
 	public function get_input_guidelines( $locale = null ) {
@@ -203,6 +207,7 @@ class Admin_Init extends Init {
 
 		$adjust = isset( $guideline_adjustments[ $locale ] ) ? $guideline_adjustments[ $locale ] : 1;
 
+		// phpcs:disable -- WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 		/**
 		 * @since 3.1.0
 		 * @param array $guidelines The title and description guidelines.
@@ -281,6 +286,7 @@ class Admin_Init extends Init {
 				],
 			]
 		);
+		// phpcs:enable -- WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 	}
 
 	/**
@@ -295,7 +301,7 @@ class Admin_Init extends Init {
 	 */
 	public function get_input_guidelines_i18n() {
 		return [
-			'long' => [
+			'long'     => [
 				'empty'       => \esc_attr__( "There's no content.", 'autodescription' ),
 				'farTooShort' => \esc_attr__( "It's too short and it should have more information.", 'autodescription' ),
 				'tooShort'    => \esc_attr__( "It's short and it could have more information.", 'autodescription' ),
@@ -303,7 +309,7 @@ class Admin_Init extends Init {
 				'farTooLong'  => \esc_attr__( "It's too long and it will get truncated in search.", 'autodescription' ),
 				'good'        => \esc_attr__( 'Length is good.', 'autodescription' ),
 			],
-			'short' => [
+			'short'    => [
 				'empty'       => \esc_attr_x( 'Empty', 'The string is empty', 'autodescription' ),
 				'farTooShort' => \esc_attr__( 'Far too short', 'autodescription' ),
 				'tooShort'    => \esc_attr__( 'Too short', 'autodescription' ),
@@ -333,6 +339,7 @@ class Admin_Init extends Init {
 	 * @uses WP Core check_ajax_referer()
 	 * @see @link https://developer.wordpress.org/reference/functions/check_ajax_referer/
 	 *
+	 * @param string $capability The capability that was required for the nonce check to be created.
 	 * @return false|int False if the nonce is invalid, 1 if the nonce is valid
 	 *                   and generated between 0-12 hours ago, 2 if the nonce is
 	 *                   valid and generated between 12-24 hours ago.
@@ -432,12 +439,12 @@ class Admin_Init extends Init {
 				sprintf(
 					/* translators: %s = Redirect URL markdown */
 					\esc_html__( 'There has been an error redirecting. Refresh the page or follow [this link](%s).', 'autodescription' ),
-					$target
+					\esc_url( $target )
 				),
 				[ 'a' ],
 				[ 'a_internal' => true ]
 			)
-		);
+		); // phpcs:ignore -- XSS ok: convert_markdown escapes. Added esc_url() for sanity.
 	}
 
 	/**
@@ -449,42 +456,42 @@ class Admin_Init extends Init {
 	 */
 	public function _wp_ajax_update_counter_type() {
 
-		if ( $this->is_admin() && \wp_doing_ajax() ) :
-			$this->_check_tsf_ajax_referer( 'edit_posts' );
+		if ( ! $this->is_admin() || ! \wp_doing_ajax() ) return;
 
-			//* Remove output buffer.
-			$this->clean_response_header();
+		$this->_check_tsf_ajax_referer( 'edit_posts' );
 
-			//* If current user isn't allowed to edit posts, don't do anything and kill PHP.
-			if ( ! \current_user_can( 'edit_posts' ) ) {
-				//* Encode and echo results. Requires JSON decode within JS.
-				\wp_send_json( [
-					'type'  => 'failure',
-					'value' => '',
-				] );
-			}
+		//* Remove output buffer.
+		$this->clean_response_header();
 
-			/**
-			 * Count up, reset to 0 if needed. We have 4 options: 0, 1, 2, 3
-			 * $_POST['val'] already contains updated number.
-			 */
-			$value = isset( $_POST['val'] ) ? intval( $_POST['val'] ) : $this->get_user_option( 0, 'counter_type', 3 ) + 1; // input var ok
-			$value = \absint( $value );
-
-			if ( $value > 3 )
-				$value = 0;
-
-			//* Update the option and get results of action.
-			$type = $this->update_user_option( 0, 'counter_type', $value ) ? 'success' : 'error';
-
-			$results = [
-				'type'  => $type,
-				'value' => $value,
-			];
-
+		//* If current user isn't allowed to edit posts, don't do anything and kill PHP.
+		if ( ! \current_user_can( 'edit_posts' ) ) {
 			//* Encode and echo results. Requires JSON decode within JS.
-			\wp_send_json( $results );
-		endif;
+			\wp_send_json( [
+				'type'  => 'failure',
+				'value' => '',
+			] );
+		}
+
+		/**
+		 * Count up, reset to 0 if needed. We have 4 options: 0, 1, 2, 3
+		 * $_POST['val'] already contains updated number.
+		 */
+		$value = isset( $_POST['val'] ) ? intval( $_POST['val'] ) : $this->get_user_option( 0, 'counter_type', 3 ) + 1; // phpcs:ignore -- input var OK
+		$value = \absint( $value );
+
+		if ( $value > 3 )
+			$value = 0;
+
+		//* Update the option and get results of action.
+		$type = $this->update_user_option( 0, 'counter_type', $value ) ? 'success' : 'error';
+
+		$results = [
+			'type'  => $type,
+			'value' => $value,
+		];
+
+		//* Encode and echo results. Requires JSON decode within JS.
+		\wp_send_json( $results );
 	}
 
 	/**
@@ -513,10 +520,10 @@ class Admin_Init extends Init {
 			\wp_send_json_error();
 		}
 
-		$attachment_id = \absint( $_POST['id'] ); // input var ok.
+		$attachment_id = \absint( $_POST['id'] ); // phpcs:ignore -- input var OK
 
-		$context = str_replace( '_', '-', \sanitize_key( $_POST['context'] ) ); // input var ok.
-		$data    = array_map( 'absint', $_POST['cropDetails'] ); // input var ok.
+		$context = str_replace( '_', '-', \sanitize_key( $_POST['context'] ) ); // phpcs:ignore -- input var OK
+		$data    = array_map( 'absint', $_POST['cropDetails'] ); // phpcs:ignore -- input var OK
 		$cropped = \wp_crop_image( $attachment_id, $data['x1'], $data['y1'], $data['width'], $data['height'], $data['dst_width'], $data['dst_height'] );
 
 		if ( ! $cropped || \is_wp_error( $cropped ) )

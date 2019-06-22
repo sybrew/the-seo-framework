@@ -107,28 +107,31 @@ class Post_Data extends Detect {
 		 * @param integer  $post_id Post ID.
 		 * @param \WP_Post $post    Post object.
 		 */
-		return (array) \apply_filters_ref_array( 'the_seo_framework_inpost_seo_save_defaults', [
+		return (array) \apply_filters_ref_array(
+			'the_seo_framework_inpost_seo_save_defaults',
 			[
-				'_genesis_title'          => '',
-				'_tsf_title_no_blogname'  => 0, //? The prefix I should've used from the start...
-				'_genesis_description'    => '',
-				'_genesis_canonical_uri'  => '',
-				'redirect'                => '', //! Will be displayed in custom fields when set...
-				'_social_image_url'       => '',
-				'_social_image_id'        => 0,
-				'_genesis_noindex'        => 0,
-				'_genesis_nofollow'       => 0,
-				'_genesis_noarchive'      => 0,
-				'exclude_local_search'    => 0, //! Will be displayed in custom fields when set...
-				'exclude_from_archive'    => 0, //! Will be displayed in custom fields when set...
-				'_open_graph_title'       => '',
-				'_open_graph_description' => '',
-				'_twitter_title'          => '',
-				'_twitter_description'    => '',
-			],
-			$post_id,
-			\get_post( $post_id ),
-		] );
+				[
+					'_genesis_title'          => '',
+					'_tsf_title_no_blogname'  => 0, //? The prefix I should've used from the start...
+					'_genesis_description'    => '',
+					'_genesis_canonical_uri'  => '',
+					'redirect'                => '', //! Will be displayed in custom fields when set...
+					'_social_image_url'       => '',
+					'_social_image_id'        => 0,
+					'_genesis_noindex'        => 0,
+					'_genesis_nofollow'       => 0,
+					'_genesis_noarchive'      => 0,
+					'exclude_local_search'    => 0, //! Will be displayed in custom fields when set...
+					'exclude_from_archive'    => 0, //! Will be displayed in custom fields when set...
+					'_open_graph_title'       => '',
+					'_open_graph_description' => '',
+					'_twitter_title'          => '',
+					'_twitter_description'    => '',
+				],
+				$post_id,
+				\get_post( $post_id ),
+			]
+		);
 	}
 
 	/**
@@ -248,6 +251,7 @@ class Post_Data extends Detect {
 
 		/**
 		 * Don't try to save the data under autosave, ajax, or future post.
+		 *
 		 * @TODO find a way to maintain revisions:
 		 * @link https://github.com/sybrew/the-seo-framework/issues/48
 		 * @link https://johnblackbourn.com/post-meta-revisions-wordpress
@@ -273,10 +277,13 @@ class Post_Data extends Detect {
 		 * @param array    $data The data that's going to be saved.
 		 * @param \WP_Post $post The post object.
 		 */
-		$data = (array) \apply_filters_ref_array( 'the_seo_framework_save_custom_fields', [
-			$data,
-			$post,
-		] );
+		$data = (array) \apply_filters_ref_array(
+			'the_seo_framework_save_custom_fields',
+			[
+				$data,
+				$post,
+			]
+		);
 
 		//* Cycle through $data, insert value or delete field
 		foreach ( (array) $data as $field => $value ) {
@@ -386,8 +393,8 @@ class Post_Data extends Detect {
 		$post = \get_post( $post );
 
 		/**
-		 * Fetch custom excerpt, if not empty, from the post_excerpt field.
 		 * @since 2.5.2
+		 * Fetch custom excerpt, if not empty, from the post_excerpt field.
 		 */
 		if ( ! empty( $post->post_excerpt ) ) {
 			$excerpt = $post->post_excerpt;
@@ -476,7 +483,6 @@ class Post_Data extends Detect {
 		$meta = \get_post_meta( $post_id );
 
 		/**
-		 * Determines whether a page builder has been detected.
 		 * @since 2.6.6
 		 * @since 3.1.0 1: Now defaults to `null`
 		 *              2: Now, when a boolean (either true or false) is defined, it'll short-circuit this function.
@@ -563,7 +569,7 @@ class Post_Data extends Detect {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @param int|null|\WP_Post The post ID or WP Post object.
+	 * @param int|null|\WP_Post $post The post ID or WP Post object.
 	 * @return bool True if draft, false otherwise.
 	 */
 	public function is_draft( $post = null ) {

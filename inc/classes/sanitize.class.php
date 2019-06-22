@@ -373,7 +373,6 @@ class Sanitize extends Admin_Pages {
 				'knowledge_gplus',
 				'knowledge_instagram',
 				'knowledge_youtube',
-				//	'knowledge_myspace',
 				'knowledge_pinterest',
 				'knowledge_soundcloud',
 				'knowledge_tumblr',
@@ -527,8 +526,8 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 *
-	 * @param mixed $new_value New value
-	 * @param string $option Name of the option
+	 * @param mixed  $new_value New value
+	 * @param string $option    Name of the option
 	 * @return mixed Filtered, or unfiltered value
 	 */
 	public function sanitize( $new_value, $option ) {
@@ -597,32 +596,35 @@ class Sanitize extends Admin_Pages {
 		 * @param array $default_filters Array with keys of sanitization types
 		 *              and values of the filter function name as a callback
 		 */
-		return (array) \apply_filters( 'the_seo_framework_available_sanitizer_filters', [
-			's_left_right'          => [ $this, 's_left_right' ],
-			's_left_right_home'     => [ $this, 's_left_right_home' ],
-			's_title_separator'     => [ $this, 's_title_separator' ],
-			's_description'         => [ $this, 's_description' ],
-			's_description_raw'     => [ $this, 's_description_raw' ],
-			's_title'               => [ $this, 's_title' ],
-			's_title_raw'           => [ $this, 's_title_raw' ],
-			's_knowledge_type'      => [ $this, 's_knowledge_type' ],
-			's_alter_query_type'    => [ $this, 's_alter_query_type' ],
-			's_one_zero'            => [ $this, 's_one_zero' ],
-			's_disabled_post_types' => [ $this, 's_disabled_post_types' ],
-			's_post_types'          => [ $this, 's_post_types' ],
-			's_numeric_string'      => [ $this, 's_numeric_string' ],
-			's_no_html'             => [ $this, 's_no_html' ],
-			's_no_html_space'       => [ $this, 's_no_html_space' ],
-			's_absint'              => [ $this, 's_absint' ],
-			's_safe_html'           => [ $this, 's_safe_html' ],
-			's_url'                 => [ $this, 's_url' ],
-			's_url_query'           => [ $this, 's_url_query' ],
-			's_facebook_profile'    => [ $this, 's_facebook_profile' ],
-			's_twitter_name'        => [ $this, 's_twitter_name' ],
-			's_twitter_card'        => [ $this, 's_twitter_card' ],
-			's_canonical_scheme'    => [ $this, 's_canonical_scheme' ],
-			's_min_max_sitemap'     => [ $this, 's_min_max_sitemap' ],
-		] );
+		return (array) \apply_filters(
+			'the_seo_framework_available_sanitizer_filters',
+			[
+				's_left_right'          => [ $this, 's_left_right' ],
+				's_left_right_home'     => [ $this, 's_left_right_home' ],
+				's_title_separator'     => [ $this, 's_title_separator' ],
+				's_description'         => [ $this, 's_description' ],
+				's_description_raw'     => [ $this, 's_description_raw' ],
+				's_title'               => [ $this, 's_title' ],
+				's_title_raw'           => [ $this, 's_title_raw' ],
+				's_knowledge_type'      => [ $this, 's_knowledge_type' ],
+				's_alter_query_type'    => [ $this, 's_alter_query_type' ],
+				's_one_zero'            => [ $this, 's_one_zero' ],
+				's_disabled_post_types' => [ $this, 's_disabled_post_types' ],
+				's_post_types'          => [ $this, 's_post_types' ],
+				's_numeric_string'      => [ $this, 's_numeric_string' ],
+				's_no_html'             => [ $this, 's_no_html' ],
+				's_no_html_space'       => [ $this, 's_no_html_space' ],
+				's_absint'              => [ $this, 's_absint' ],
+				's_safe_html'           => [ $this, 's_safe_html' ],
+				's_url'                 => [ $this, 's_url' ],
+				's_url_query'           => [ $this, 's_url_query' ],
+				's_facebook_profile'    => [ $this, 's_facebook_profile' ],
+				's_twitter_name'        => [ $this, 's_twitter_name' ],
+				's_twitter_card'        => [ $this, 's_twitter_card' ],
+				's_canonical_scheme'    => [ $this, 's_canonical_scheme' ],
+				's_min_max_sitemap'     => [ $this, 's_min_max_sitemap' ],
+			]
+		);
 	}
 
 	/**
@@ -1253,13 +1255,11 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_redirect_url( $new_value ) {
 
+		// phpcs:ignore -- strip_tags does what we need; esc_url takes care of the rest later.
 		$url = strip_tags( $new_value );
 
 		if ( $url ) :
-			/**
-			 * Sanitize the redirect URL to only a relative link and removes first slash
-			 * @requires WP 4.1.0 and up to prevent adding upon itself.
-			 */
+			// Sanitize the redirect URL to only a relative link and removes first slash.
 			if ( ! $this->allow_external_redirect() )
 				$url = $this->s_relative_url( $url );
 
@@ -1447,8 +1447,7 @@ class Sanitize extends Admin_Pages {
 	/**
 	 * Strips all URLs that are placed on new lines. These are prone to be embeds.
 	 *
-	 * This might leave stray line feeds.
-	 * @see `$this->s_singleline();` to fix that.
+	 * This might leave stray line feeds. Use `the_seo_framework()->s_singleline()` to fix that.
 	 *
 	 * @since 3.1.0
 	 * @see \WP_Embed::autoembed()
@@ -1463,8 +1462,7 @@ class Sanitize extends Admin_Pages {
 	/**
 	 * Strips all URLs that are placed in paragraphs on their own. These are prone to be embeds.
 	 *
-	 * This might leave stray line feeds.
-	 * @see `$this->s_singleline();` to fix that.
+	 * This might leave stray line feeds. Use `the_seo_framework()->s_singleline()` to fix that.
 	 *
 	 * @since 3.1.0
 	 * @see \WP_Embed::autoembed()

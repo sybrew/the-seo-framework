@@ -74,7 +74,7 @@ class Profile extends Generate_Ldjson {
 	 * @since 3.0.0
 	 * @access private
 	 *
-	 * @param WP_User $user WP_User object.
+	 * @param \WP_User $user WP_User object.
 	 */
 	public function _add_user_author_fields( \WP_User $user ) {
 
