@@ -57,17 +57,17 @@ class Inpost extends Profile {
 	 * @since 2.9.0
 	 * @since 3.0.0: Converted to view.
 	 *
-	 * @param string $id The Nav Tab ID
-	 * @param array $tabs the tab content {
-	 *    $tabs = tab ID key = array(
-	 *       $tabs['name'] => tab name
-	 *       $tabs['callback'] => string|array callback function
-	 *       $tabs['dashicon'] => string Dashicon
-	 *       $tabs['args'] => mixed optional callback function args
-	 *    )
+	 * @param string $id       The nav-tab ID
+	 * @param array  $tabs     The tab content {
+	 *    string tab ID => array : {
+	 *       string   name     : Tab name.
+	 *       callable callback : Output function.
+	 *       string   dashicon : The dashicon to use.
+	 *       mixed    args     : Optional callback function args.
+	 *    }
 	 * }
-	 * @param string $version the The SEO Framework version for debugging. May be emptied.
-	 * @param bool $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
+	 * @param string $version  The SEO Framework version for debugging. May be emptied.
+	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
 	 */
 	public function inpost_flex_nav_tab_wrapper( $id, $tabs = [], $version = '2.3.6', $use_tabs = true ) {
 		$this->get_view( 'inpost/wrap-nav', get_defined_vars() );
@@ -95,13 +95,16 @@ class Inpost extends Profile {
 		if ( ! \apply_filters( 'the_seo_framework_allow_quick_edit', true ) )
 			return;
 
-		if ( ! $this->post_type_supports_custom_seo( $screen->post_type ) )
-			return;
 
 		$taxonomy = isset( $screen->taxonomy ) ? $screen->taxonomy : '';
 
-		if ( $taxonomy && ! $this->taxonomy_supports_custom_seo( $taxonomy ) )
-			return;
+		if ( $taxonomy ) {
+			if ( ! $this->is_taxonomy_supported( $taxonomy ) )
+				return;
+		} else {
+			if ( ! $this->is_post_type_supported( $screen->post_type ) )
+				return;
+		}
 
 		\add_filter( 'manage_' . $screen->id . '_columns', [ $this, '_set_quick_edit_column' ], 10, 1 );
 		\add_filter( 'hidden_columns', [ $this, '_hide_quick_edit_column' ], 10, 1 );
@@ -169,9 +172,11 @@ class Inpost extends Profile {
 
 		if ( $taxonomy ) {
 			// $post_type is the current screen, 'edit-tags', on the term-overview screens.
-			if ( ! $this->taxonomy_supports_custom_seo( $taxonomy ) ) return;
+			if ( ! $this->is_taxonomy_supported( $taxonomy ) )
+				return;
 		} else {
-			if ( ! $this->post_type_supports_custom_seo( $post_type ) ) return;
+			if ( ! $this->is_post_type_supported( $post_type ) )
+				return;
 		}
 
 		if ( $taxonomy ) {
@@ -215,11 +220,11 @@ class Inpost extends Profile {
 		if ( ! $this->is_term_edit() ) // implies "show_ui"
 			return;
 
-		if ( ! $this->taxonomy_supports_custom_seo( $this->get_current_taxonomy() ) )
+		if ( ! $this->is_taxonomy_supported( $this->get_current_taxonomy() ) )
 			return;
 
 		/**
-		 * High priority, this box is seen right below the post/page edit screen.
+		 * High priority, this box is seen right below the default edit inputs.
 		 * @since 2.6.0
 		 * @param int $priority The metabox term priority.
 		 */
@@ -238,11 +243,7 @@ class Inpost extends Profile {
 	 */
 	public function add_inpost_seo_box( $post_type ) {
 
-		/**
-		 * @uses $this->post_type_supports_custom_seo()
-		 * @since 2.3.9
-		 */
-		if ( ! $this->post_type_supports_custom_seo( $post_type ) )
+		if ( ! $this->is_post_type_supported( $post_type ) )
 			return;
 
 		$label = $this->get_post_type_label( $post_type );

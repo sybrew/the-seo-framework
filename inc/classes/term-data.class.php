@@ -101,10 +101,9 @@ class Term_Data extends Post_Data {
 				return $cache[ $term_id ];
 		}
 
-		$data = \get_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true );
+		$data = \get_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true ) ?: [];
 
-		//* Evaluate merely by presence. TODO merge this, we no longer use Genesis' for this...
-		if ( isset( $data['saved_flag'] ) ) {
+		if ( $data ) {
 			/**
 			 * @since 3.0.0
 			 * @param array $data The CURRENT term data.
@@ -113,7 +112,7 @@ class Term_Data extends Post_Data {
 			return $cache[ $term_id ] = \apply_filters( 'the_seo_framework_current_term_meta', $data, $term_id );
 		}
 
-		return $cache[ $term_id ] = $this->get_term_meta_defaults();
+		return $cache[ $term_id ] = $this->get_term_meta_defaults( $term_id );
 	}
 
 	/**
@@ -121,24 +120,31 @@ class Term_Data extends Post_Data {
 	 *
 	 * @since 2.7.0
 	 * @since 3.1.0 This is now always used.
-	 * @since 3.3.0 Added redirect value.
+	 * @since 3.3.0 : 1. Added $term_id parameter.
+	 *                2. Added 'redirect' value.
+	 *                3. Removed 'saved_flag' value.
 	 *
+	 * @param int $term_id The term ID.
 	 * @return array The Term Metadata default options.
 	 */
-	public function get_term_meta_defaults() {
+	public function get_term_meta_defaults( $term_id = 0 ) {
 		/**
 		 * @since 2.1.8
 		 * @param array $defaults
+		 * @param int   $term_id The current term ID.
 		 */
-		return (array) \apply_filters( 'the_seo_framework_term_meta_defaults', [
-			'doctitle'    => '',
-			'description' => '',
-			'redirect'    => '',
-			'noindex'     => 0,
-			'nofollow'    => 0,
-			'noarchive'   => 0,
-			'saved_flag'  => 0, // Don't touch, used to prevent data conflict with Genesis.
-		] );
+		return (array) \apply_filters(
+			'the_seo_framework_term_meta_defaults',
+			[
+				'doctitle'    => '',
+				'description' => '',
+				'redirect'    => '',
+				'noindex'     => 0,
+				'nofollow'    => 0,
+				'noarchive'   => 0,
+			],
+			$term_id ?: $this->get_the_real_ID()
+		);
 	}
 
 	/**
@@ -149,6 +155,7 @@ class Term_Data extends Post_Data {
 	 *               2. Added new keys to sanitize.
 	 *               3. Now marked as private
 	 *               4. Added more protection.
+	 *               5. No longer runs when no POST data is sent.
 	 * @securitycheck 3.0.0 OK.
 	 * @access private
 	 *
@@ -159,6 +166,9 @@ class Term_Data extends Post_Data {
 	 */
 	public function update_term_meta( $term_id, $tt_id, $taxonomy = '' ) {
 
+		if ( ! isset( $_POST['autodescription-meta'] ) )
+			return;
+
 		if ( \wp_doing_ajax() ) return;
 
 		//* Check again against ambiguous injection.
@@ -168,7 +178,7 @@ class Term_Data extends Post_Data {
 		if ( ! \wp_verify_nonce( \stripslashes_from_strings_only( $_POST['_wpnonce'] ), 'update-tag_' . $term_id ) ) return;
 
 		// phpcs:ignore -- wp_unslash() will ruin intended slashes.
-		$data = isset( $_POST['autodescription-meta'] ) ? (array) $_POST['autodescription-meta'] : [];
+		$data = (array) $_POST['autodescription-meta'];
 		$this->save_term_meta( $term_id, $tt_id, $taxonomy, $data );
 	}
 
@@ -179,11 +189,12 @@ class Term_Data extends Post_Data {
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param int    $tt_id    Term Taxonomy ID.
-	 * @param string $taxonomy Taxonomy slug
+	 * @param string $taxonomy Taxonomy slug.
+	 * @param array  $data     The data to save.
 	 */
 	public function save_term_meta( $term_id, $tt_id, $taxonomy, $data ) {
 
-		$data = \wp_parse_args( $data, $this->get_term_meta_defaults() );
+		$data = \wp_parse_args( $data, $this->get_term_meta_defaults( $term_id ) );
 
 		foreach ( (array) $data as $key => $value ) :
 			switch ( $key ) :
@@ -248,7 +259,7 @@ class Term_Data extends Post_Data {
 		$data = \get_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true );
 
 		if ( is_array( $data ) ) {
-			foreach ( $this->get_term_meta_defaults() as $key => $value ) {
+			foreach ( $this->get_term_meta_defaults( $term_id ) as $key => $value ) {
 				unset( $data[ $key ] );
 			}
 		}

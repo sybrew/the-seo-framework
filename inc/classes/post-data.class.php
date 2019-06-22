@@ -92,33 +92,21 @@ class Post_Data extends Detect {
 	}
 
 	/**
-	 * Saves the SEO settings when we save a post or page.
-	 * Some values get sanitized, the rest are pulled from identically named subkeys in the $_POST['autodescription'] array.
+	 * Returns the post meta defaults.
 	 *
-	 * @since 2.0.0
-	 * @since 2.9.3 : Added 'exclude_from_archive'.
-	 * @securitycheck 3.0.0 OK. NOTE: Check is done at save_custom_fields().
-	 * @uses $this->save_custom_fields() : Perform security checks and saves post meta / custom field data to a post or page.
-	 * @access private
+	 * @since 3.3.0
 	 *
-	 * @param integer  $post_id Post ID.
-	 * @param \WP_Post $post    Post object.
-	 * @return void
+	 * @param int $post_id The post ID.
+	 * @return array The default post meta.
 	 */
-	public function inpost_seo_save( $post_id, $post ) {
-
-		if ( empty( $_POST['autodescription'] ) ) // CSRF ok, this is an early test to improve performance.
-			return;
-
-		// TODO add quick-edit condition here, and discard/filter default entry if $_POST item is not set?
-
+	public function get_post_meta_defaults( $post_id = 0 ) {
 		/**
 		 * @since 3.1.0
 		 * @param array    $defaults
 		 * @param integer  $post_id Post ID.
 		 * @param \WP_Post $post    Post object.
 		 */
-		$defaults = (array) \apply_filters_ref_array( 'the_seo_framework_inpost_seo_save_defaults', [
+		return (array) \apply_filters_ref_array( 'the_seo_framework_inpost_seo_save_defaults', [
 			[
 				'_genesis_title'          => '',
 				'_tsf_title_no_blogname'  => 0, //? The prefix I should've used from the start...
@@ -138,8 +126,31 @@ class Post_Data extends Detect {
 				'_twitter_description'    => '',
 			],
 			$post_id,
-			$post,
+			\get_post( $post_id ),
 		] );
+	}
+
+	/**
+	 * Saves the SEO settings when we save a post or page.
+	 * Some values get sanitized, the rest are pulled from identically named subkeys in the $_POST['autodescription'] array.
+	 *
+	 * @since 2.0.0
+	 * @since 2.9.3 : Added 'exclude_from_archive'.
+	 * @securitycheck 3.0.0 OK. NOTE: Check is done at save_custom_fields().
+	 * @uses $this->save_custom_fields() : Perform security checks and saves post meta / custom field data to a post or page.
+	 * @access private
+	 *
+	 * @param integer  $post_id Post ID.
+	 * @param \WP_Post $post    Post object.
+	 * @return void
+	 */
+	public function inpost_seo_save( $post_id, $post ) {
+
+		if ( empty( $_POST['autodescription'] ) ) // CSRF ok, this is an early test to improve performance.
+			return;
+
+		// TODO add quick-edit condition here, and discard/filter default entry if $_POST item is not set?
+		$defaults = $this->get_post_meta_defaults( $post_id );
 
 		/**
 		 * Merge user submitted options with fallback defaults

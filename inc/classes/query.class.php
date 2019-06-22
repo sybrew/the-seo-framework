@@ -1320,7 +1320,7 @@ class Query extends Core {
 	 * Determines whether we're on The SEO Framework's sitemap or not.
 	 *
 	 * @since 2.9.2
-	 * @since 3.3.0 Now uses static variables instead.
+	 * @since 3.3.0 Now uses static variables instead of class properties.
 	 * @staticvar bool $doing_sitemap
 	 *
 	 * @param bool $set Whether to set "doing sitemap".

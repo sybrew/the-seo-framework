@@ -45,9 +45,10 @@ class Render extends Admin_Init {
 	 * @return string The document title
 	 */
 	public function get_document_title( $title = '' ) {
-		if ( $this->is_feed() || $this->is_post_type_disabled() ) {
+
+		if ( ! $this->query_supports_seo() )
 			return $title;
-		}
+
 		/**
 		 * @since 3.1.0
 		 * @param string $title The generated title.
@@ -71,13 +72,16 @@ class Render extends Admin_Init {
 	 * @since 3.1.0
 	 * @see $this->get_title()
 	 *
-	 * @param string $title The filterable title.
+	 * @param string $title       The filterable title.
+	 * @param string $sep         The title separator.
+	 * @param string $seplocation The location of the separator (left or right).
 	 * @return string $title
 	 */
 	public function get_wp_title( $title = '', $sep = '', $seplocation = '' ) {
-		if ( $this->is_feed() || $this->is_post_type_disabled() ) {
+
+		if ( ! $this->query_supports_seo() )
 			return $title;
-		}
+
 		/**
 		 * @since 3.1.0
 		 * @param string $title The generated title.

@@ -351,6 +351,7 @@ final class Deprecated {
 		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->ping_bing()', '3.3.0', '\The_SEO_Framework\Bridges\Ping::ping_bing()' );
 		\The_SEO_Framework\Bridges\Ping::ping_bing();
 	}
+
 	/**
 	 * Returns the stylesheet XSL location URL.
 	 *
@@ -392,5 +393,42 @@ final class Deprecated {
 	public function output_sitemap_xsl_stylesheet() {
 		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->output_sitemap_xsl_stylesheet()', '3.3.0' );
 		return \The_SEO_Framework\Bridges\Sitemap::get_instance()->output_stylesheet();
+	}
+
+	/**
+	 * Determines if post type supports The SEO Framework.
+	 *
+	 * @since 2.3.9
+	 * @since 3.1.0 1. Removed caching.
+	 *              2. Now works in admin.
+	 * @since 3.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $post_type Optional. The post type to check.
+	 * @return bool true of post type is supported.
+	 */
+	public function post_type_supports_custom_seo( $post_type = '' ) {
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->post_type_supports_custom_seo()', '3.3.0', 'the_seo_framework()->is_post_type_supported()' );
+		return \the_seo_framework()->is_post_type_supported( $post_type );
+	}
+
+	/**
+	 * Determines if the taxonomy supports The SEO Framework.
+	 *
+	 * Checks if at least one taxonomy objects post type supports The SEO Framework,
+	 * and wether the taxonomy is public and rewritable.
+	 *
+	 * @since 3.1.0
+	 * @since 3.3.0 1. Now goes over all post types for the taxonomy.
+	 *              2. Can now return true if at least one post type for the taxonomy is supported.
+	 *              3. Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $taxonomy Optional. The taxonomy name.
+	 * @return bool True if at least one post type in taxonomy isn't disabled.
+	 */
+	public function taxonomy_supports_custom_seo( $taxonomy = '' ) {
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->taxonomy_supports_custom_seo()', '3.3.0', 'the_seo_framework()->is_taxonomy_supported()' );
+		return \the_seo_framework()->is_taxonomy_supported( $taxonomy );
 	}
 }

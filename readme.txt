@@ -302,6 +302,10 @@ TODO replace `the_seo_framework_fetched_description_excerpt` with something that
 TODO reload the SEO Bar on Gutenberg save action.
 TODO update wp rocket's compat file... ugh, redundant
 
+TODO split the sitemap generation type from the base class: Sitemap-Base.class.php
+
+TODO call "php level caching" memoization--it's a cooler word.
+
 **Detailed log:**
 
 **For everyone:**
@@ -326,6 +330,9 @@ TODO update wp rocket's compat file... ugh, redundant
 		* This doesn't affect your titles, it's only semantics.
 		* NOTE TO SELF: Changing this would require us to change the default options, the filters behavior, and the JS code.. is this the best route?
 	* TODO set `get_logo_uploader_form()`'s flex value to true, Google allows logos of any dimension...
+	* **Term meta:**
+		* When a term is disabled via the post type settings, saving it won't erase the custom SEO term meta.
+			* The same behavior already applied to singular post types.
 	* **Redirects:** When a post is redirected, it will no longer be included in the sitemap. So, you no longer have to fiddle with the "index" setting to get the expected result.
 	* **Sitemap:**
 		* The sitemap post limit now counts all posts, pages, and custom post types; instead of them separately.
@@ -508,12 +515,14 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 	* Changed: `add_option()` is no longer called every admin request, only when the options aren't registered yet.
 * **Term meta notes:**
 	* **Added:**
-		* TODO `redirect`, URL string.
+		* `redirect`, URL string.
 		* TODO `canonical`, URL string.
 	* **Changed:**
 		* `noindex`, it can now be set to `-1`.
 		* `nofollow`, it can now be set to `-1`.
 		* `noarchive`, it can now be set to `-1`.
+	* **Removed:**
+		* `saved_flag`, it's no longer necessary. If the term is saved with The SEO Framework enabled, the term meta will be autofilled; whether something's adjusted or not.
 * **Post meta notes:**
 	* **Changed:**
 		* `_genesis_noindex`, it can now be set to `-1`.
@@ -643,6 +652,9 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `save_term_meta()`
 			* `detect_page_builder()`
 			* `is_blog_page_by_id()`
+			* `query_supports_seo()`
+			* `is_taxonomy_supported()`
+			* `get_post_meta_defaults()`
 		* **Changed:**
 			* `__construct()`, now emits warnings when instantiated twice or more.
 			* `html_output()` is now marked as private.
@@ -663,8 +675,10 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				1. It's now marked as private. Use `save_term_meta()` instead.
 				1. Added redundant `current_user_can()` checks.
 				1. `noindex`, `nofollow`, and `noarchive` values are converted to qubits.
+				1. No longer processes data is no POST entry for `autodescription-meta` is found.
 			* `is_single_admin()` now uses `is_singular_admin()` to check for the correctg base; so categories and tags no longer falsely return `true`.
 			* `get_generated_single_term_title()` no longer redundantly tests the query, but now only uses the term input or queried object.
+			* `is_taxonomy_disabled()` now only returns true if all post types in the taxonomy are disabled, and it uses `is_post_type_supported()` instead of `is_post_type_disabled()` to do so.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`
@@ -709,6 +723,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `flush_rewrite_rules_activation()`
 				* `flush_rewrite_rules_deactivation()`
 				* `maybe_output_sitemap_stylesheet()`
+				* `post_type_supports_inpost()`
 		* **Deprecated:**
 			* **With alternatives**, refer to the source (search for your old method) for a relayed alternative:
 				* `get_default_scripts()`,
@@ -726,6 +741,8 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `ping_bing()`
 				* `get_sitemap_xml_url()`
 				* `get_sitemap_xsl_url()`
+				* `post_type_supports_custom_seo()`
+				* `taxonomy_supports_custom_seo()`
 			* **Without alternatives**, go make your own:
 				* `check_wp_locale()`
 				* `maybe_lowercase_noun()`
@@ -750,6 +767,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* `the_seo_framework_sitemap_post_limit`, now has a new parameter, `$hierarchical`.
 		* `the_seo_framework_sitemap_additional_urls`, now has a new parameter: `$args`.
 		* `the_seo_framework_sitemap_extend`, now has a new parameter: `$args`.
+		* `the_seo_framework_term_meta_defaults`, now has a new parameter: `$term_id`.
 	* **Changed:**
 		* `the_seo_framework_scripts`:
 			1. Now contains all registered scripts.
@@ -772,6 +790,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* `the_seo_framework_get_term_meta`, this was deprecated since 3.1.0.
 			* Use `the_seo_framework_term_meta_defaults` instead.
 		* `the_seo_framework_show_seo_column`, this is unreliable. Use the options API instead.
+		* `the_seo_framework_custom_post_type_support`, this is unreliable. Use the options API instead or `the_seo_framework_supported_post_type`.
 		* `the_seo_framework_sitemap_pages_count`, use the options API or `the_seo_framework_sitemap_post_limit` instead.
 		* `the_seo_framework_sitemap_posts_count`, use the options API or `the_seo_framework_sitemap_post_limit` instead.
 		* `the_seo_framework_sitemap_custom_posts_count`, use the options API or `the_seo_framework_sitemap_post_limit` instead.

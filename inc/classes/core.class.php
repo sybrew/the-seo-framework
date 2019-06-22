@@ -270,7 +270,7 @@ class Core {
 				'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
 				[
 					'https://theseoframework.com/?p=2760',
-					\esc_html_x( 'Get the Extension Manager', 'Extension Manager is a product name; do not translate', 'autodescription' ),
+					\esc_html_x( 'Get the Extension Manager', 'Extension Manager is a product name; do not translate it.', 'autodescription' ),
 				]
 			),
 		] );

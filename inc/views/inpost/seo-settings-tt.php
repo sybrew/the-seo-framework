@@ -18,6 +18,7 @@ $description = isset( $data['description'] ) ? $data['description'] : '';
 $noindex     = isset( $data['noindex'] ) ? $data['noindex'] : '';
 $nofollow    = isset( $data['nofollow'] ) ? $data['nofollow'] : '';
 $noarchive   = isset( $data['noarchive'] ) ? $data['noarchive'] : '';
+$redirect    = isset( $data['redirect'] ) ? $data['redirect'] : '';
 
 /**
  * Generate static placeholder for when title or description is emptied
@@ -147,12 +148,12 @@ $robots_settings = [
 				?>
 			</th>
 			<td>
-				<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="5" cols="50" class="large-text"><?php echo esc_html( $description ); ?></textarea>
+				<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="4" cols="50" class="large-text"><?php echo esc_html( $description ); ?></textarea>
 				<?php echo $this->output_js_description_elements(); ?>
 			</td>
 		</tr>
 
-		<tr>
+		<tr class="form-field">
 			<th scope="row" valign="top">
 				<?php
 				esc_html_e( 'Robots Meta Settings', 'autodescription' );
@@ -185,12 +186,24 @@ $robots_settings = [
 				?>
 			</td>
 		</tr>
-		<?php
-		// Output saved flag, if set then it won't fetch alternative meta anymore.
-		?>
-		<label class="hidden" for="autodescription-meta[saved_flag]">
-			<input name="autodescription-meta[saved_flag]" id="autodescription-meta[saved_flag]" type="checkbox" value="1" checked="checked" />
-		</label>
+
+		<tr class="form-field">
+			<th scope="row" valign="top">
+				<label for="autodescription-meta[redirect]">
+					<strong><?php esc_html_e( '301 Redirect URL', 'autodescription' ); ?></strong>
+					<?php
+					echo ' ';
+					$this->make_info(
+						__( 'This will force visitors to go to another URL.', 'autodescription' ),
+						'https://support.google.com/webmasters/answer/93633?hl=en'
+					);
+					?>
+				</label>
+			</th>
+			<td>
+				<input name="autodescription-meta[redirect]" id="autodescription-meta[redirect]" type=url value="<?php echo esc_attr( $redirect ); ?>" size="40" autocomplete=off />
+			</td>
+		</tr>
 	</tbody>
 </table>
 <?php

@@ -165,10 +165,10 @@ final class SeoBar {
 		$taxonomy  = isset( $screen->taxonomy ) ? $screen->taxonomy : '';
 
 		if ( $taxonomy ) {
-			if ( ! \the_seo_framework()->taxonomy_supports_custom_seo( $taxonomy ) )
+			if ( ! \the_seo_framework()->is_taxonomy_supported( $taxonomy ) )
 				return;
 		} else {
-			if ( ! \the_seo_framework()->post_type_supports_custom_seo( $post_type ) )
+			if ( ! \the_seo_framework()->is_post_type_supported( $post_type ) )
 				return;
 		}
 
@@ -203,10 +203,10 @@ final class SeoBar {
 				?: ( isset( $_POST['tax_type'] ) ? stripslashes( $_POST['tax_type'] ) : '' ); // phpcs:ignore -- CSRF ok.
 
 		if ( $taxonomy ) {
-			if ( ! \the_seo_framework()->taxonomy_supports_custom_seo( $taxonomy ) )
+			if ( ! \the_seo_framework()->is_taxonomy_supported( $taxonomy ) )
 				return;
 		} else {
-			if ( ! \the_seo_framework()->post_type_supports_custom_seo( $post_type ) )
+			if ( ! \the_seo_framework()->is_post_type_supported( $post_type ) )
 				return;
 		}
 

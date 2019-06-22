@@ -357,7 +357,7 @@ class Init extends Query {
 	 */
 	public function html_output() {
 
-		if ( $this->is_preview() || $this->is_post_type_disabled() ) return;
+		if ( $this->is_preview() || ! $this->query_supports_seo() ) return;
 
 		/**
 		 * @since 2.6.0
@@ -487,13 +487,19 @@ class Init extends Query {
 	 */
 	public function _init_custom_field_redirect() {
 
-		if ( ! $this->is_singular() // TODO change this line to check for post type if this is true...
-		|| $this->is_search()
-		|| $this->is_preview()
-		|| $this->is_post_type_disabled() // TODO test for taxonomy, too...
-		) return;
+		if ( $this->is_preview() || ! $this->query_supports_seo() ) return;
 
-		$url = $this->get_custom_field( 'redirect' );
+		$url = '';
+
+		if ( $this->is_singular() ) {
+			$url = $this->get_custom_field( 'redirect' ) ?: '';
+		} elseif ( $this->is_term_meta_capable() ) {
+			$term_meta = $this->get_current_term_meta();
+
+			if ( isset( $term_meta['redirect'] ) )
+				$url = $term_meta['redirect'] ?: '';
+		}
+
 		$url and $this->do_redirect( $url );
 	}
 
@@ -581,7 +587,7 @@ class Init extends Query {
 
 		if ( $this->use_object_cache ) {
 			$cache_key = $this->get_robots_txt_cache_key();
-			$output = $this->object_cache_get( $cache_key );
+			$output    = $this->object_cache_get( $cache_key );
 		} else {
 			$output = false;
 		}
@@ -598,13 +604,13 @@ class Init extends Query {
 				$output .= "\r\n";
 			}
 
-			$site_url = \wp_parse_url( \site_url() );
+			$site_url  = \wp_parse_url( \site_url() );
 			$site_path = ( ! empty( $site_url['path'] ) ) ? \esc_attr( $site_url['path'] ) : '';
 
 			/**
-			 * Don't forget to add line breaks ( "\r\n" || PHP_EOL )
 			 * @since 2.5.0
 			 * @param string $pre The output before this plugin's output.
+			 *                    Don't forget to add line breaks ( "\r\n" || PHP_EOL )!
 			 */
 			$output .= (string) \apply_filters( 'the_seo_framework_robots_txt_pre', '' );
 
@@ -622,17 +628,22 @@ class Init extends Query {
 			}
 
 			/**
-			 * Don't forget to add line breaks ( "\r\n" || PHP_EOL )
 			 * @since 2.5.0
 			 * @param string $pro The output after this plugin's output.
+			 *                    Don't forget to add line breaks ( "\r\n" || PHP_EOL )!
 			 */
 			$output .= (string) \apply_filters( 'the_seo_framework_robots_txt_pro', '' );
 
 			//* Add extra whitespace and sitemap full URL
-			if ( $this->can_do_sitemap_robots( true ) )
-				$output .= "\r\nSitemap: " . \esc_url(
-					\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url()
-				) . "\r\n";
+			if ( $this->can_do_sitemap_robots( true ) ) {
+				$sitemaps = Bridges\Sitemap::get_instance();
+				foreach ( $sitemaps::get_sitemap_endpoint_list() as $id => $data ) {
+					if ( ! empty( $data['robots'] ) ) {
+						$output .= sprintf( "\r\nSitemap: %s", \esc_url( $sitemaps->get_expected_sitemap_endpoint_url( $id ) ) );
+					}
+				}
+				$output .= "\r\n";
+			}
 
 			$this->use_object_cache and $this->object_cache_set( $cache_key, $output, 86400 );
 		endif;

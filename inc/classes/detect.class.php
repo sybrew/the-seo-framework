@@ -751,116 +751,29 @@ class Detect extends Render {
 	}
 
 	/**
-	 * Determines if the post type is disabled from SEO all optimization.
+	 * Determines whether the main query supports custom SEO.
 	 *
-	 * @since 3.1.0
-	 * @since 3.1.2 Now is fiterable.
+	 * @since 3.3.0
 	 *
-	 * @param string $post_type Optional. The post type to check.
-	 * @return bool True if disabled, false otherwise.
+	 * @return bool
 	 */
-	public function is_post_type_disabled( $post_type = '' ) {
+	public function query_supports_seo() {
 
-		$post_type = $post_type ?: \get_post_type() ?: $this->get_admin_post_type();
+		static $cache;
 
-		/**
-		 * @since 3.1.2
-		 * @param bool   $disabled
-		 * @param string $post_type
-		 */
-		return \apply_filters( 'the_seo_framework_post_type_disabled',
-			isset(
-				$this->get_option( 'disabled_post_types' )[ $post_type ]
-			),
-			$post_type
-		);
-	}
+		if ( isset( $cache ) ) return $cache;
 
-	/**
-	 * Determines if the post type is compatible with The SEO Framework inpost metabox.
-	 *
-	 * @since 2.3.5
-	 * @since 3.1.0 1. The first parameter is now required.
-	 *              2. Added caching.
-	 * @staticvar bool $has_filter
-	 *
-	 * @param string $post_type Optional. The post type to check.
-	 * @return bool True if post type is supported.
-	 */
-	public function post_type_supports_inpost( $post_type ) {
-
-		if ( ! $post_type ) return false;
-
-		static $has_filter = null;
-
-		if ( is_null( $has_filter ) )
-			$has_filter = \has_filter( 'the_seo_framework_custom_post_type_support' );
-
-		if ( $has_filter ) {
-			/**
-			 * Determines the required post type features before TSF supports it.
-			 * @since 2.3.5
-			 * @since 3.0.4 Default parameter now is `[]` instead of `['title','editor']`.
-			 * @param array $supports The required post type support, like 'title', 'editor'.
-			 */
-			$supports = (array) \apply_filters( 'the_seo_framework_custom_post_type_support', [] );
-
-			foreach ( $supports as $support ) {
-				if ( ! \post_type_supports( $post_type, $support ) ) {
-					return false;
-					break;
-				}
-				continue;
-			}
+		if ( $this->is_feed() ) {
+			$cache = false;
+		} elseif ( $this->is_singular() ) {
+			$cache = $this->is_post_type_supported();
+		} elseif ( $this->is_term_meta_capable() ) {
+			$cache = $this->is_taxonomy_supported();
+		} else {
+			$cache = true;
 		}
 
-		return true;
-	}
-
-	/**
-	 * Determines if post type supports The SEO Framework.
-	 *
-	 * @since 2.3.9
-	 * @since 3.1.0 1. Removed caching.
-	 *              2. Now works in admin.
-	 *
-	 * @param string $post_type Optional. The post type to check.
-	 * @return bool true of post type is supported.
-	 */
-	public function post_type_supports_custom_seo( $post_type = '' ) {
-		$post_type = $post_type ?: \get_post_type() ?: $this->get_admin_post_type();
-		return $post_type && $this->is_post_type_supported( $post_type ) && $this->post_type_supports_inpost( $post_type );
-	}
-
-	/**
-	 * Determines if the taxonomy supports The SEO Framework.
-	 *
-	 * Checks if at least one taxonomy objects post type supports The SEO Framework,
-	 * and wether the taxonomy is public and rewritable.
-	 *
-	 * @since 3.1.0
-	 *
-	 * @param string $taxonomy Optional. The taxonomy name.
-	 * @return bool True if at least one post type in taxonomy isn't disabled.
-	 */
-	public function taxonomy_supports_custom_seo( $taxonomy = '' ) {
-
-		$taxonomy = $taxonomy ?: $this->get_current_taxonomy();
-		if ( ! $taxonomy ) return false;
-
-		/**
-		 * @since 3.1.0
-		 * @param bool   $post_type Whether the post type is supported
-		 * @param string $post_type_evaluated The evaluated post type.
-		 */
-		return (bool) \apply_filters_ref_array( 'the_seo_framework_supported_taxonomy',
-			[
-				$taxonomy
-					&& ! $this->is_taxonomy_disabled( $taxonomy )
-					&& $this->is_taxonomy_public( $taxonomy ),
-				$taxonomy,
-			]
-		);
+		return $cache = $cache ?: false;
 	}
 
 	/**
@@ -872,19 +785,54 @@ class Detect extends Render {
 	 * @return bool
 	 */
 	public function is_post_type_supported( $post_type = '' ) {
+
 		$post_type = $post_type ?: \get_post_type() ?: $this->get_admin_post_type();
+
 		/**
 		 * @since 2.6.2
 		 * @since 3.1.0 The first parameter is always a boolean now.
 		 * @param bool   $supported           Whether the post type is supported.
 		 * @param string $post_type_evaluated The evaluated post type.
 		 */
-		return (bool) \apply_filters_ref_array( 'the_seo_framework_supported_post_type',
+		return (bool) \apply_filters_ref_array(
+			'the_seo_framework_supported_post_type',
 			[
 				$post_type
 					&& ! $this->is_post_type_disabled( $post_type )
 					&& in_array( $post_type, $this->get_rewritable_post_types(), true ),
 				$post_type,
+			]
+		);
+	}
+
+	/**
+	 * Determines if the taxonomy supports The SEO Framework.
+	 *
+	 * Checks if at least one taxonomy objects post type supports The SEO Framework,
+	 * and wether the taxonomy is public and rewritable.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param string $taxonomy Optional. The taxonomy name.
+	 * @return bool True if at least one post type in taxonomy isn't disabled.
+	 */
+	public function is_taxonomy_supported( $taxonomy = '' ) {
+
+		$taxonomy = $taxonomy ?: $this->get_current_taxonomy();
+
+		/**
+		 * @since 3.1.0
+		 * @since 3.3.0 Now returns only returns false when all post types in the taxonomy aren't supported.
+		 * @param bool   $post_type Whether the post type is supported
+		 * @param string $post_type_evaluated The evaluated post type.
+		 */
+		return (bool) \apply_filters_ref_array(
+			'the_seo_framework_supported_taxonomy',
+			[
+				$taxonomy
+					&& ! $this->is_taxonomy_disabled( $taxonomy )
+					&& $this->is_taxonomy_public( $taxonomy ),
+				$taxonomy,
 			]
 		);
 	}
@@ -981,10 +929,39 @@ class Detect extends Render {
 		);
 	}
 
+
+	/**
+	 * Determines if the post type is disabled from SEO all optimization.
+	 *
+	 * @since 3.1.0
+	 * @since 3.1.2 Now is fiterable.
+	 *
+	 * @param string $post_type Optional. The post type to check.
+	 * @return bool True if disabled, false otherwise.
+	 */
+	public function is_post_type_disabled( $post_type = '' ) {
+
+		$post_type = $post_type ?: \get_post_type() ?: $this->get_admin_post_type();
+
+		/**
+		 * @since 3.1.2
+		 * @param bool   $disabled
+		 * @param string $post_type
+		 */
+		return \apply_filters( 'the_seo_framework_post_type_disabled',
+			isset(
+				$this->get_option( 'disabled_post_types' )[ $post_type ]
+			),
+			$post_type
+		);
+	}
+
 	/**
 	 * Checks if at least one taxonomy objects post type supports The SEO Framework.
 	 *
 	 * @since 3.1.0
+	 * @since 3.3.0 1. Now returns true if at least one post type for the taxonomy is supported.
+	 *              2. Now uses `is_post_type_supported()` instead of `is_post_type_disabled()`.
 	 *
 	 * @param string $taxonomy The taxonomy name.
 	 * @return bool True if at least one post type in taxonomy is supported.
@@ -992,8 +969,9 @@ class Detect extends Render {
 	public function is_taxonomy_disabled( $taxonomy = '' ) {
 
 		foreach ( $this->get_post_types_from_taxonomy( $taxonomy ) as $type ) {
-			if ( ! $this->is_post_type_disabled( $type ) )
+			if ( $this->is_post_type_supported( $type ) ) {
 				return false;
+			}
 		}
 
 		return true;

@@ -187,6 +187,7 @@ final class Sitemap {
 		 *      'endpoint' => string   The expected "pretty" endpoint, meant for administrative display.
 		 *      'epregex'  => string   The endpoint regex, following the home path regex.
 		 *      'callback' => callable The callback for the sitemap output.
+		 *      'robots'   => bool     Whether the endpoint should be mentioned in the robots.txt file.
 		 *   }
 		 * }
 		 */
@@ -197,16 +198,19 @@ final class Sitemap {
 					'endpoint' => 'sitemap.xml',
 					'regex'    => '/^sitemap\.xml/',
 					'callback' => '\The_SEO_Framework\Bridges\Sitemap::output_base_sitemap',
+					'robots'   => true,
 				],
 				'index'          => [
 					'endpoint' => 'sitemap_index.xml',
 					'regex'    => '/^sitemap_index\.xml/',
 					'callback' => '\The_SEO_Framework\Bridges\Sitemap::output_base_sitemap',
+					'robots'   => false,
 				],
 				'xsl-stylesheet' => [
 					'endpoint' => 'sitemap.xsl',
 					'regex'    => '/^sitemap\.xsl/',
 					'callback' => '\The_SEO_Framework\Bridges\Sitemap::output_stylesheet',
+					'robots'   => false,
 				],
 			]
 		);

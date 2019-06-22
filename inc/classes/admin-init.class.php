@@ -115,9 +115,15 @@ class Admin_Init extends Init {
 
 			$enqueue_hooks = [];
 
-			if ( ( $this->is_archive_admin() && $this->taxonomy_supports_custom_seo() )
-			|| ( $this->is_singular_admin() && $this->post_type_supports_custom_seo() )
-			) {
+			if ( $this->is_archive_admin() ) {
+				$prepare_edit_screen = $this->is_taxonomy_supported();
+			} elseif ( $this->is_singular_admin() ) {
+				$prepare_edit_screen = $this->is_post_type_supported();
+			} else {
+				$prepare_edit_screen = false;
+			}
+
+			if ( $prepare_edit_screen ) {
 				$enqueue_hooks = [
 					'edit.php',
 					'post.php',

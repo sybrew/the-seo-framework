@@ -356,7 +356,7 @@ class Site_Options extends Sanitize {
 	 *
 	 * @param string  $key        Option name.
 	 * @param string  $setting    Optional. Settings field name. Eventually defaults to null if not passed as an argument.
-	 * @param boolean $use_cache  Optional. Whether to use the cache value or not. Default is true.
+	 * @param boolean $use_cache  Optional. Whether to use the cache value or not.
 	 * @return mixed The value of this $key in the database. Empty string on failure.
 	 */
 	public function the_seo_framework_get_option( $key, $setting = null, $use_cache = true ) {
@@ -385,8 +385,8 @@ class Site_Options extends Sanitize {
 	 *
 	 * @todo deprecate, unused.
 	 *
-	 * @param string  $key       Option name.
-	 * @param boolean $use_cache Optional. Whether to use the cache value or not. Defaults to true.
+	 * @param string  $key       Required. The option name.
+	 * @param boolean $use_cache Optional. Whether to use the cache value or not.
 	 * @return mixed The value of this $key in the database.
 	 */
 	public function get_site_option( $key, $use_cache = true ) {
@@ -400,8 +400,8 @@ class Site_Options extends Sanitize {
 	 * @uses $this->get_default_settings() Return option from the options table and cache result.
 	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 *
-	 * @param string  $key       Option name.
-	 * @param boolean $use_cache Optional. Whether to use the cache value or not. Defaults to true.
+	 * @param string  $key       Required. The option name.
+	 * @param boolean $use_cache Optional. Whether to use the cache value or not.
 	 * @return mixed The value of this $key in the database.
 	 */
 	public function get_default_option( $key, $use_cache = true ) {
@@ -450,14 +450,14 @@ class Site_Options extends Sanitize {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @param string $key The cache key. Required.
+	 * @param string $key   The cache key. Required.
 	 * @param string $value The cache value.
 	 * @return bool True on success, false on failure.
 	 */
 	public function update_static_cache( $key, $value = '' ) {
 
 		if ( ! $key ) {
-			$this->_doing_it_wrong( __METHOD__, 'No cache key has been specified.', '3.1.0' );
+			$this->_doing_it_wrong( __METHOD__, 'No valid cache key has been specified.', '3.1.0' );
 			return false;
 		}
 
@@ -500,7 +500,7 @@ class Site_Options extends Sanitize {
 	 *
 	 * @since 2.9.0
 	 *
-	 * @param string $key The option key.
+	 * @param string $key   The option key.
 	 * @param string $value The option value.
 	 * @return bool True on success, false on failure.
 	 */
@@ -555,9 +555,9 @@ class Site_Options extends Sanitize {
 	 * @staticvar array $defaults_cache
 	 * @uses $this->get_default_site_options()
 	 *
-	 * @param string $key       Required. The option name
+	 * @param string $key       Required. The option name.
 	 * @param string $depr      Deprecated. Leave empty.
-	 * @param bool   $use_cache Optional. Use the options cache or not. For debugging purposes.
+	 * @param bool   $use_cache Optional. Whether to use the options cache or not.
 	 * @return mixed default option
 	 *         null If option doesn't exist.
 	 */
@@ -591,9 +591,9 @@ class Site_Options extends Sanitize {
 	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 * @uses $this->get_warned_site_options()
 	 *
-	 * @param string $key required The option name
-	 * @param string $depr Deprecated. Leave empty.
-	 * @param bool $use_cache optional Use the options cache or not. For debugging purposes.
+	 * @param string $key       Required. The option name.
+	 * @param string $depr      Deprecated. Leave empty.
+	 * @param bool   $use_cache Optional. Whether to use the options cache or not.
 	 * @return int 0|1 Whether the option is flagged as dangerous for SEO.
 	 */
 	public function get_warned_settings( $key, $depr = '', $use_cache = true ) {
