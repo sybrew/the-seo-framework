@@ -433,4 +433,117 @@ final class Deprecated {
 		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->taxonomy_supports_custom_seo()', '3.3.0', 'the_seo_framework()->is_taxonomy_supported()' );
 		return \the_seo_framework()->is_taxonomy_supported( $taxonomy );
 	}
+
+	/**
+	 * Returns taxonomical canonical URL.
+	 * Automatically adds pagination if the ID matches the query.
+	 *
+	 * @since 3.0.0
+	 * @since 3.3.0 Deprecated
+	 * @deprecated
+	 *
+	 * @param int    $term_id The term ID.
+	 * @param string $taxonomy The taxonomy.
+	 * @return string The taxonomical canonical URL, if any.
+	 */
+	public function get_taxonomial_canonical_url( $term_id, $taxonomy ) {
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_taxonomial_canonical_url()', '3.3.0', 'the_seo_framework()->get_taxonomical_canonical_url()' );
+		return \the_seo_framework()->get_taxonomical_canonical_url( $term_id, $taxonomy );
+	}
+
+	/**
+	 * Tries to fetch a term by $id from query.
+	 *
+	 * @since 2.6.0
+	 * @since 3.0.0 Can now get custom post type objects.
+	 * @since 3.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $id The possible taxonomy Term ID.
+	 * @return false|object The Term object.
+	 */
+	public function fetch_the_term( $id = '' ) {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->fetch_the_term()', '3.3.0' );
+
+		static $term = [];
+
+		if ( isset( $term[ $id ] ) )
+			return $term[ $id ];
+
+		//* Return null if no term can be detected.
+		if ( false === $tsf->is_archive() )
+			return false;
+
+		if ( $tsf->is_admin() ) {
+			$taxonomy = $tsf->get_current_taxonomy();
+			if ( $taxonomy ) {
+				$term_id     = $id ?: $tsf->get_the_real_admin_ID();
+				$term[ $id ] = \get_term_by( 'id', $term_id, $taxonomy );
+			}
+		} else {
+			if ( $tsf->is_category() || $tsf->is_tag() ) {
+				$term[ $id ] = \get_queried_object();
+			} elseif ( $tsf->is_tax() ) {
+				$term[ $id ] = \get_term_by( 'slug', \get_query_var( 'term' ), \get_query_var( 'taxonomy' ) );
+			} elseif ( \is_post_type_archive() ) {
+				$post_type = \get_query_var( 'post_type' );
+				$post_type = is_array( $post_type ) ? reset( $post_type ) : $post_type;
+
+				$term[ $id ] = \get_post_type_object( $post_type );
+			}
+		}
+
+		if ( isset( $term[ $id ] ) )
+			return $term[ $id ];
+
+		return $term[ $id ] = false;
+	}
+
+	/**
+	 * Return custom field post meta data.
+	 *
+	 * Return only the first value of custom field. Return false if field is
+	 * blank or not set.
+	 *
+	 * @since 2.0.0
+	 * @since 3.3.0 Deprecated
+	 * @deprecated
+	 * @staticvar array $field_cache
+	 *
+	 * @param string $field     Custom field key.
+	 * @param int    $post_id   The post ID.
+	 * @return mixed|boolean Return value or false on failure.
+	 */
+	public function get_custom_field( $field, $post_id = null ) {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->get_custom_field()', '3.3.0', 'the_seo_framework()->get_post_meta_item()' );
+
+		//* If field is falsesque, get_post_meta() will return an array.
+		if ( ! $field )
+			return false;
+
+		static $field_cache = [];
+
+		if ( isset( $field_cache[ $field ][ $post_id ] ) )
+			return $field_cache[ $field ][ $post_id ];
+
+		if ( empty( $post_id ) )
+			$post_id = $tsf->get_the_real_ID();
+
+		$custom_field = \get_post_meta( $post_id, $field, true );
+
+		//* If custom field is empty, empty cache..
+		if ( empty( $custom_field ) )
+			$field_cache[ $field ][ $post_id ] = '';
+
+		//* Render custom field, slashes stripped, sanitized if string
+		$field_cache[ $field ][ $post_id ] = is_array( $custom_field ) ? \stripslashes_deep( $custom_field ) : stripslashes( $custom_field );
+
+		return $field_cache[ $field ][ $post_id ];
+	}
 }

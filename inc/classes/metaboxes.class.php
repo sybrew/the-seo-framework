@@ -87,7 +87,7 @@ class Metaboxes extends Site_Options {
 								),
 							]
 						)
-					); // xss ok: Validator can't distinguish HTML in ternary.
+					); // phpcs:ignore -- XSS ok: Validator can't distinguish HTML in ternary.
 					$count++;
 				endforeach;
 				?>

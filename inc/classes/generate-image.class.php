@@ -436,13 +436,13 @@ class Generate_Image extends Generate_Url {
 	 */
 	public function get_social_image_url_from_post_meta( $id, $set_og_dimensions = false ) {
 
-		$src = $id ? $this->get_custom_field( '_social_image_url', $id ) : '';
+		$src = $id ? $this->get_post_meta_item( '_social_image_url', $id ) : '';
 
 		if ( ! $src )
 			return '';
 
 		//* Calculate image sizes.
-		if ( $set_og_dimensions && $img_id = $this->get_custom_field( '_social_image_id', $id ) )
+		if ( $set_og_dimensions && $img_id = $this->get_post_meta_item( '_social_image_id', $id ) )
 			$this->register_custom_image_dimensions( $img_id, $src, $id );
 
 		if ( $src && $this->matches_this_domain( $src ) )

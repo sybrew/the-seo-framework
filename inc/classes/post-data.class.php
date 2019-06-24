@@ -34,62 +34,60 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Post_Data extends Detect {
 
 	/**
-	 * Return custom field post meta data.
+	 * Returns a post SEO meta item by key.
 	 *
-	 * Return only the first value of custom field. Return false if field is
-	 * blank or not set.
+	 * @since 3.3.0
+	 * @alias $this->get_post_meta_item();
 	 *
-	 * @since 2.0.0
-	 * @since 3.3.0 No longer strips slashes from scalar non-strings.
-	 * @staticvar array $field_cache
-	 *
-	 * @param string $field   Custom field key.
-	 * @param int    $post_id The post ID.
-	 * @return mixed|boolean Return value or false on failure.
+	 * @param string $item      The item to get.
+	 * @param int    $post_id   The Term ID.
+	 * @param bool   $use_cache Whether to use caching.
 	 */
-	public function get_custom_field( $field, $post_id = null ) {
+	public function get_post_meta_item( $item, $post_id = 0, $use_cache = true ) {
 
-		//* If field is falsesque, get_post_meta() will return an array.
-		if ( ! $field )
-			return false;
+		$meta = $this->get_post_meta( $post_id, $use_cache );
 
-		static $field_cache = [];
-
-		if ( isset( $field_cache[ $field ][ $post_id ] ) )
-			return $field_cache[ $field ][ $post_id ];
-
-		if ( empty( $post_id ) )
-			$post_id = $this->get_the_real_ID();
-
-		$custom_field = \get_post_meta( $post_id, $field, true );
-
-		//* If custom field is empty, empty cache..
-		if ( empty( $custom_field ) )
-			$field_cache[ $field ][ $post_id ] = '';
-
-		//* Render custom field, slashes stripped, sanitized if string
-		$field_cache[ $field ][ $post_id ] = is_array( $custom_field )
-			? \stripslashes_deep( $custom_field )
-			: \stripslashes_from_strings_only( $custom_field );
-
-		return $field_cache[ $field ][ $post_id ];
+		return isset( $meta[ $item ] ) ? $meta[ $item ] : null;
 	}
 
 	/**
-	 * Saves the SEO settings when we save an attachment.
+	 * Returns all registered custom SEO fields for a post.
 	 *
-	 * This is a passthrough method for `inpost_seo_save()`.
-	 * Sanity check is handled at `save_custom_fields()`, which `inpost_seo_save()` uses.
+	 * @since 3.3.0
+	 * @staticvar array $cache
 	 *
-	 * @since 3.0.6
-	 * @uses $this->inpost_seo_save()
-	 * @access private
-	 *
-	 * @param integer $post_id Post ID.
-	 * @return void
+	 * @param int  $post_id   The post ID.
+	 * @param bool $use_cache Whether to use caching.
+	 * @return array The post meta.
 	 */
-	public function inattachment_seo_save( $post_id ) {
-		$this->inpost_seo_save( $post_id, \get_post( $post_id ) );
+	public function get_post_meta( $post_id, $use_cache = true ) {
+
+		if ( $use_cache ) {
+			static $cache = [];
+
+			if ( isset( $cache[ $post_id ] ) )
+				return $cache[ $post_id ];
+		}
+
+		// get_post_meta() requires a valid post ID. Get that post.
+		$post = \get_post( $post_id );
+
+		if ( empty( $post->ID ) )
+			return $cache[ $post_id ] = [];
+
+		// We can't trust the filter to always contain the expected keys.
+		// However, it may contain more keys than we anticipated. Merge them.
+		$defaults = array_merge( $this->get_unfiltered_post_meta_defaults(), $this->get_post_meta_defaults( $post->ID ) );
+
+		// Filter the post meta items based on defaults' keys.
+		$meta = array_intersect_key( \get_post_meta( $post->ID ), $defaults );
+
+		// WP converts all entries to arrays. Disarray!
+		foreach ( $meta as $key => $value ) {
+			$meta[ $key ] = $value[0];
+		}
+
+		return $cache[ $post_id ] = array_merge( $defaults, $meta );
 	}
 
 	/**
@@ -110,24 +108,7 @@ class Post_Data extends Detect {
 		return (array) \apply_filters_ref_array(
 			'the_seo_framework_inpost_seo_save_defaults',
 			[
-				[
-					'_genesis_title'          => '',
-					'_tsf_title_no_blogname'  => 0, //? The prefix I should've used from the start...
-					'_genesis_description'    => '',
-					'_genesis_canonical_uri'  => '',
-					'redirect'                => '', //! Will be displayed in custom fields when set...
-					'_social_image_url'       => '',
-					'_social_image_id'        => 0,
-					'_genesis_noindex'        => 0,
-					'_genesis_nofollow'       => 0,
-					'_genesis_noarchive'      => 0,
-					'exclude_local_search'    => 0, //! Will be displayed in custom fields when set...
-					'exclude_from_archive'    => 0, //! Will be displayed in custom fields when set...
-					'_open_graph_title'       => '',
-					'_open_graph_description' => '',
-					'_twitter_title'          => '',
-					'_twitter_description'    => '',
-				],
+				$this->get_unfiltered_post_meta_defaults(),
 				$post_id,
 				\get_post( $post_id ),
 			]
@@ -135,119 +116,75 @@ class Post_Data extends Detect {
 	}
 
 	/**
+	 * Returns the unfiltered post meta defaults.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @return array The default, unfiltered, post meta.
+	 */
+	protected function get_unfiltered_post_meta_defaults() {
+		return [
+			'_genesis_title'          => '',
+			'_tsf_title_no_blogname'  => 0, //? The prefix I should've used from the start...
+			'_genesis_description'    => '',
+			'_genesis_canonical_uri'  => '',
+			'redirect'                => '', //! Will be displayed in custom fields when set...
+			'_social_image_url'       => '',
+			'_social_image_id'        => 0,
+			'_genesis_noindex'        => 0,
+			'_genesis_nofollow'       => 0,
+			'_genesis_noarchive'      => 0,
+			'exclude_local_search'    => 0, //! Will be displayed in custom fields when set...
+			'exclude_from_archive'    => 0, //! Will be displayed in custom fields when set...
+			'_open_graph_title'       => '',
+			'_open_graph_description' => '',
+			'_twitter_title'          => '',
+			'_twitter_description'    => '',
+		];
+	}
+
+	/**
+	 * Saves the SEO settings when we save an attachment.
+	 *
+	 * This is a passthrough method for `_update_post_meta()`.
+	 * Sanity check is handled at `save_custom_fields()`, which `_update_post_meta()` uses.
+	 *
+	 * @since 3.0.6
+	 * @since 3.3.0 Renamed from `inattachment_seo_save`
+	 * @uses $this->_update_post_meta()
+	 * @access private
+	 *
+	 * @param integer $post_id Post ID.
+	 * @return void
+	 */
+	public function _update_attachment_meta( $post_id ) {
+		$this->_update_post_meta( $post_id, \get_post( $post_id ) );
+	}
+
+	/**
 	 * Saves the SEO settings when we save a post or page.
 	 * Some values get sanitized, the rest are pulled from identically named subkeys in the $_POST['autodescription'] array.
 	 *
 	 * @since 2.0.0
-	 * @since 2.9.3 : Added 'exclude_from_archive'.
+	 * @since 2.9.3 Added 'exclude_from_archive'.
+	 * @since 3.3.0 Renamed from `inpost_seo_save`
 	 * @securitycheck 3.0.0 OK. NOTE: Check is done at save_custom_fields().
 	 * @uses $this->save_custom_fields() : Perform security checks and saves post meta / custom field data to a post or page.
 	 * @access private
 	 *
 	 * @param integer  $post_id Post ID.
 	 * @param \WP_Post $post    Post object.
-	 * @return void
+	 * @return void Early when no expected POST is set.
 	 */
-	public function inpost_seo_save( $post_id, $post ) {
+	public function _update_post_meta( $post_id, $post ) {
 
-		if ( empty( $_POST['autodescription'] ) ) // CSRF ok, this is an early test to improve performance.
+		if ( empty( $_POST['autodescription'] ) )
 			return;
 
-		// TODO add quick-edit condition here, and discard/filter default entry if $_POST item is not set?
-		$defaults = $this->get_post_meta_defaults( $post_id );
+		//* Grab the post object
+		$post = \get_post( $post );
 
-		/**
-		 * Merge user submitted options with fallback defaults
-		 * Passes through nonce at the end of the function.
-		 */
-		// phpcs:ignore -- wp_unslash() is nonsense.
-		$data = (array) \wp_parse_args( $_POST['autodescription'], $defaults );
-
-		foreach ( $data as $key => &$value ) :
-			switch ( $key ) :
-				case '_genesis_title':
-				case '_open_graph_title':
-				case '_twitter_title':
-					$value = $this->s_title_raw( $value );
-					continue 2;
-
-				case '_genesis_description':
-				case '_open_graph_description':
-				case '_twitter_description':
-					$value = $this->s_description_raw( $value );
-					continue 2;
-
-				case '_genesis_canonical_uri':
-				case '_social_image_url':
-					/**
-					 * Remove unwanted query parameters. They're allowed by Google, but very much rather not.
-					 * Also, they will only cause bugs.
-					 * Query parameters are also only used when no pretty permalinks are used. Which is bad.
-					 */
-					$value = $this->s_url_query( $value );
-					continue 2;
-
-				case '_social_image_id':
-					//* Bound to _social_image_url.
-					$value = $data['_social_image_url'] ? $this->s_absint( $value ) : 0;
-					continue 2;
-
-				case 'redirect':
-					//* Let's keep this as the output really is.
-					$value = $this->s_redirect_url( $value );
-					continue 2;
-
-				case '_tsf_title_no_blogname':
-				case 'exclude_local_search':
-				case 'exclude_from_archive':
-					$value = $this->s_one_zero( $value );
-					continue 2;
-
-				case '_genesis_noindex':
-				case '_genesis_nofollow':
-				case '_genesis_noarchive':
-					$value = $this->s_qubit( $value );
-					continue 2;
-
-				default:
-					// Don't process extraneous data for third party support.
-					//* TODO set a filterable list of "allowed" option keys? -> Option Generator
-					break;
-			endswitch;
-		endforeach;
-
-		//* Perform nonce check and save fields.
-		$this->save_custom_fields( $data, $this->inpost_nonce_field, $this->inpost_nonce_name, $post );
-	}
-
-	/**
-	 * Save post meta / custom field data for a post or page.
-	 *
-	 * It verifies the nonce, then checks we're not doing autosave, ajax or a future post request. It then checks the
-	 * current user's permissions, before finally* either updating the post meta, or deleting the field if the value was not
-	 * truthy.
-	 *
-	 * By passing an array of fields => values from the same metabox (and therefore same nonce) into the $data argument,
-	 * repeated checks against the nonce, request and permissions are avoided.
-	 *
-	 * @since 2.0.0
-	 * @securitycheck 3.0.0 OK.
-	 *
-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
-	 *
-	 * @param array            $data         Key/Value pairs of data to save in '_field_name' => 'value' format.
-	 * @param string           $nonce_action Nonce action for use with wp_verify_nonce().
-	 * @param string           $nonce_name   Name of the nonce to check for permissions.
-	 * @param \WP_Post|integer $post         Post object or post ID.
-	 * @return mixed Return null if permissions incorrect, doing autosave, ajax or future post, false if update or delete
-	 *               failed, and true on success.
-	 */
-	public function save_custom_fields( array $data, $nonce_action, $nonce_name, $post ) {
-
-		//* Verify the nonce
-		// phpcs:ignore -- wp_unslash() is nonsense.
-		if ( ! isset( $_POST[ $nonce_name ] ) || ! \wp_verify_nonce( $_POST[ $nonce_name ], $nonce_action ) )
-			return;
+		if ( empty( $post->ID ) ) return;
 
 		/**
 		 * Don't try to save the data under autosave, ajax, or future post.
@@ -256,29 +193,67 @@ class Post_Data extends Detect {
 		 * @link https://github.com/sybrew/the-seo-framework/issues/48
 		 * @link https://johnblackbourn.com/post-meta-revisions-wordpress
 		 */
-		if ( \wp_is_post_autosave( $post ) )
-			return;
-		if ( \wp_doing_ajax() )
-			return;
-		if ( \wp_doing_cron() )
-			return;
-		if ( \wp_is_post_revision( $post ) )
-			return;
+		if ( \wp_is_post_autosave( $post ) ) return;
+		if ( \wp_doing_ajax() ) return;
+		if ( \wp_doing_cron() ) return;
+		if ( \wp_is_post_revision( $post ) ) return;
 
-		//* Grab the post object
-		$post = \get_post( $post );
+		$nonce_name   = $this->inpost_nonce_name;
+		$nonce_action = $this->inpost_nonce_field;
 
 		//* Check that the user is allowed to edit the post
-		if ( ! \current_user_can( 'edit_post', $post->ID ) )
-			return;
+		if ( ! \current_user_can( 'edit_post', $post->ID ) ) return;
+		if ( ! isset( $_POST[ $nonce_name ] ) ) return;
+		if ( ! \wp_verify_nonce( \stripslashes_from_strings_only( $_POST[ $nonce_name ] ), $nonce_action ) ) return;
+
+		$data = (array) $_POST['autodescription'];
+
+		//* Perform nonce check and save fields.
+		$this->save_post_meta( $post, $data );
+	}
+
+	/**
+	 * Save post meta / custom field data for a singular post type.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param \WP_Post|integer $post Post object or post ID.
+	 * @param array            $data The post meta fields to update.
+	 */
+	public function save_post_meta( $post, array $data ) {
+
+		$post = \get_post( $post );
+
+		if ( ! $post ) return;
+
+		$data = (array) \wp_parse_args( $data, $this->get_post_meta_defaults( $post->ID ) );
+		$data = $this->sanitize_post_meta( $data );
+
+		if ( \has_filter( 'the_seo_framework_save_custom_fields' ) ) {
+			$this->_deprecated_filter( 'the_seo_framework_save_custom_fields', '3.3.0', 'the_seo_framework_save_post_meta' );
+			/**
+			 * @since 3.1.0
+			 * @since 3.3.0 Deprecated.
+			 * @deprecated
+			 * @param array    $data The data that's going to be saved.
+			 * @param \WP_Post $post The post object.
+			 */
+			$data = (array) \apply_filters_ref_array(
+				'the_seo_framework_save_custom_fields',
+				[
+					$data,
+					$post,
+				]
+			);
+		}
 
 		/**
-		 * @since 3.1.0
+		 * @since 3.3.0
 		 * @param array    $data The data that's going to be saved.
 		 * @param \WP_Post $post The post object.
 		 */
 		$data = (array) \apply_filters_ref_array(
-			'the_seo_framework_save_custom_fields',
+			'the_seo_framework_save_post_meta',
 			[
 				$data,
 				$post,
@@ -287,10 +262,12 @@ class Post_Data extends Detect {
 
 		//* Cycle through $data, insert value or delete field
 		foreach ( (array) $data as $field => $value ) {
-			//* Save $value, or delete if the $value is empty
+			//* Save $value, or delete if the $value is empty.
 			if ( $value ) {
 				\update_post_meta( $post->ID, $field, $value );
 			} else {
+				// We shouldn't do this, as the "default" meta may be "on", and the switch may be "off"...
+				// We'll resolve this when we enter a EAV database-model, as with terms.
 				\delete_post_meta( $post->ID, $field );
 			}
 		}
@@ -312,23 +289,29 @@ class Post_Data extends Detect {
 		if ( empty( $_POST['autodescription'] ) ) // Input var OK.
 			return;
 
-		if ( \wp_is_post_autosave( $post ) )
-			return;
-		if ( \wp_doing_ajax() )
-			return;
-		if ( \wp_doing_cron() )
-			return;
-		if ( \wp_is_post_revision( $post ) )
-			return;
+		//* Grab the post object
+		$post = \get_post( $post );
+
+		if ( empty( $post->ID ) ) return;
+
+		/**
+		 * Don't try to save the data under autosave, ajax, or future post.
+		 *
+		 * @TODO find a way to maintain revisions:
+		 * @link https://github.com/sybrew/the-seo-framework/issues/48
+		 * @link https://johnblackbourn.com/post-meta-revisions-wordpress
+		 */
+		if ( \wp_is_post_autosave( $post ) ) return;
+		if ( \wp_doing_ajax() ) return;
+		if ( \wp_doing_cron() ) return;
+		if ( \wp_is_post_revision( $post ) ) return;
 
 		//* Check that the user is allowed to edit the post
-		if ( ! \current_user_can( 'edit_post', $post_id ) )
-			return;
+		if ( ! \current_user_can( 'edit_post', $post->ID ) ) return;
 
-		$post_type = \get_post_type( $post_id ) ?: false;
+		$post_type = \get_post_type( $post->ID ) ?: false;
 
-		if ( ! $post_type )
-			return;
+		if ( ! $post_type ) return;
 
 		$_taxonomies = $this->get_hierarchical_taxonomies_as( 'names', $post_type );
 		$values      = [];
@@ -340,76 +323,15 @@ class Post_Data extends Detect {
 				'action' => $this->inpost_nonce_field . '_pt',
 				'name'   => $this->inpost_nonce_name . '_pt_' . $_taxonomy,
 				'value'  => isset( $_POST['autodescription'][ $_post_key ] ) ? \absint( $_POST['autodescription'][ $_post_key ] ) : 0,
-			]; // Input var OK.
+			];
 		}
 
 		foreach ( $values as $t => $v ) {
-			if ( \wp_verify_nonce( $v['name'], $v['action'] ) ) {
-				$this->update_primary_term_id( $post_id, $t, $v['value'] );
+			if ( ! isset( $_POST[ $v['name'] ] ) ) continue;
+			if ( \wp_verify_nonce( \stripslashes_from_strings_only( $_POST[ $v['name'] ] ), $v['action'] ) ) {
+				$this->update_primary_term_id( $post->ID, $t, $v['value'] );
 			}
 		}
-	}
-
-	/**
-	 * Fetches or parses the excerpt of the post.
-	 *
-	 * @since 1.0.0
-	 * @since 2.8.2 : Added 4th parameter for escaping.
-	 * @since 3.1.0 1. No longer returns anything for terms.
-	 *              2. Now strips plausible embeds URLs.
-	 *
-	 * @param string $excerpt    The Excerpt.
-	 * @param int    $id         The Post ID.
-	 * @param null   $deprecated No longer used.
-	 * @param bool   $escape     Whether to escape the excerpt.
-	 * @return string The trimmed excerpt.
-	 */
-	public function get_excerpt_by_id( $excerpt = '', $id = '', $deprecated = null, $escape = true ) {
-
-		if ( empty( $excerpt ) )
-			$excerpt = $this->fetch_excerpt( $id );
-
-		//* No need to parse an empty excerpt.
-		if ( ! $excerpt ) return '';
-
-		return $escape ? $this->s_excerpt( $excerpt ) : $this->s_excerpt_raw( $excerpt );
-	}
-
-	/**
-	 * Fetches excerpt from post excerpt or fetches the full post content.
-	 * Determines if a page builder is used to return an empty string.
-	 * Does not sanitize output.
-	 *
-	 * @since 2.5.2
-	 * @since 2.6.6 Detects Page builders.
-	 * @since 3.1.0 1. No longer returns anything for terms.
-	 *              2. Now strips plausible embeds URLs.
-	 *
-	 * @param \WP_Post|int|null $post The Post or Post ID. Leave null to automatically get.
-	 * @return string The excerpt.
-	 */
-	public function fetch_excerpt( $post = null ) {
-
-		$post = \get_post( $post );
-
-		/**
-		 * @since 2.5.2
-		 * Fetch custom excerpt, if not empty, from the post_excerpt field.
-		 */
-		if ( ! empty( $post->post_excerpt ) ) {
-			$excerpt = $post->post_excerpt;
-		} elseif ( isset( $post->post_content ) ) {
-			$excerpt = $this->uses_page_builder( $post->ID ) ? '' : $post->post_content;
-
-			if ( $excerpt ) {
-				$excerpt = $this->strip_newline_urls( $excerpt );
-				$excerpt = $this->strip_paragraph_urls( $excerpt );
-			}
-		} else {
-			$excerpt = '';
-		}
-
-		return $excerpt;
 	}
 
 	/**
@@ -657,7 +579,7 @@ class Post_Data extends Detect {
 	 * @return int     The primary term ID. 0 if not set.
 	 */
 	public function get_primary_term_id( $post_id = null, $taxonomy = '' ) {
-		return (int) $this->get_custom_field( '_primary_term_' . $taxonomy, $post_id ) ?: 0;
+		return (int) \get_post_meta( $post_id, '_primary_term_' . $taxonomy, true ) ?: 0;
 	}
 
 	/**

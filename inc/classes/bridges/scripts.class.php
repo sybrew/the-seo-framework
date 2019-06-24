@@ -135,11 +135,14 @@ final class Scripts {
 		 * @param string $builder The \The_SEO_Framework\Builders\Scripts builder class name.
 		 * @param string $loader  The \The_SEO_Framework\Bridges\Scripts loader class name.
 		 */
-		$_scripts = \apply_filters_ref_array( 'the_seo_framework_scripts', [
-			$_scripts,
-			\The_SEO_Framework\Builders\Scripts::class,
-			static::class, // i.e. `\The_SEO_Framework\Bridges\Scripts::class`
-		] );
+		$_scripts = \apply_filters_ref_array(
+			'the_seo_framework_scripts',
+			[
+				$_scripts,
+				\The_SEO_Framework\Builders\Scripts::class,
+				static::class, // i.e. `\The_SEO_Framework\Bridges\Scripts::class`
+			]
+		);
 
 		\The_SEO_Framework\Builders\Scripts::register( $_scripts );
 	}
@@ -290,7 +293,7 @@ final class Scripts {
 			$title_separator     = \esc_html( $tsf->get_title_separator( $is_home ) );
 			// Smart code... make this readable? Also, the custom field can't be filtered...
 			$default_title       =
-				   ( $is_settings_page && $_page_on_front ? $tsf->get_custom_field( '_genesis_title', $_query['id'] ) : '' )
+				   ( $is_settings_page && $_page_on_front ? $tsf->get_post_meta_item( '_genesis_title', $_query['id'] ) : '' )
 				?: ( ! $is_settings_page && $is_home ? $tsf->get_option( 'homepage_title' ) : '' )
 				?: ( $tsf->get_filtered_raw_generated_title( $_query ) );
 		}
@@ -308,10 +311,10 @@ final class Scripts {
 				if ( $is_settings_page ) {
 					// PH = placeholder
 					$social_settings_locks = [
-						'ogTitlePHLock'       => (bool) $tsf->get_custom_field( '_open_graph_title', $id ),
-						'ogDescriptionPHLock' => (bool) $tsf->get_custom_field( '_open_graph_description', $id ),
-						'twTitlePHLock'       => (bool) $tsf->get_custom_field( '_twitter_title', $id ),
-						'twDescriptionPHLock' => (bool) $tsf->get_custom_field( '_twitter_description', $id ),
+						'ogTitlePHLock'       => (bool) $tsf->get_post_meta_item( '_open_graph_title', $id ),
+						'ogDescriptionPHLock' => (bool) $tsf->get_post_meta_item( '_open_graph_description', $id ),
+						'twTitlePHLock'       => (bool) $tsf->get_post_meta_item( '_twitter_title', $id ),
+						'twDescriptionPHLock' => (bool) $tsf->get_post_meta_item( '_twitter_description', $id ),
 					];
 				} elseif ( $is_home ) {
 					$social_settings_locks = [
@@ -325,32 +328,33 @@ final class Scripts {
 				}
 			}
 
-			$social_settings_placeholders = [];
+			$social_settings_placeholders = [
+				'ogDesc' => '',
+				'twDesc' => '',
+			];
 
-			if ( $is_post_edit || $is_settings_page ) {
+			if ( $has_input ) {
 				if ( $is_settings_page ) {
 					if ( $_page_on_front ) {
 						$social_settings_placeholders = [
-							'ogDesc' => $tsf->get_custom_field( '_genesis_description', $id ) ?: $tsf->get_generated_open_graph_description( [ 'id' => $id ] ),
-							'twDesc' => $tsf->get_custom_field( '_genesis_description', $id ) ?: $tsf->get_generated_twitter_description( [ 'id' => $id ] ),
-						];
-					} else {
-						$social_settings_placeholders = [
-							'ogDesc' => $tsf->get_generated_open_graph_description( [ 'id' => $id ] ),
-							'twDesc' => $tsf->get_generated_twitter_description( [ 'id' => $id ] ),
+							'ogDesc' => $tsf->get_post_meta_item( '_genesis_description', $id ),
+							'twDesc' => $tsf->get_post_meta_item( '_genesis_description', $id ),
 						];
 					}
 				} elseif ( $is_home ) {
 					$social_settings_placeholders = [
-						'ogDesc' => $tsf->get_option( 'homepage_description' ) ?: $tsf->get_generated_open_graph_description( [ 'id' => $id ] ),
-						'twDesc' => $tsf->get_option( 'homepage_description' ) ?: $tsf->get_generated_twitter_description( [ 'id' => $id ] ),
-					];
-				} else {
-					$social_settings_placeholders = [
-						'ogDesc' => $tsf->get_generated_open_graph_description( [ 'id' => $id ] ),
-						'twDesc' => $tsf->get_generated_twitter_description( [ 'id' => $id ] ),
+						'ogDesc' => $tsf->get_option( 'homepage_description' ),
+						'twDesc' => $tsf->get_option( 'homepage_description' ),
 					];
 				}
+
+				$social_settings_placeholders['ogDesc'] =
+					$social_settings_placeholders['ogDesc']
+					?: $tsf->get_generated_open_graph_description( $_query );
+
+				$social_settings_placeholders['twDesc'] =
+					$social_settings_placeholders['twDesc']
+					?: $tsf->get_generated_twitter_description( $_query );
 
 				foreach ( $social_settings_placeholders as &$v ) {
 					$v = html_entity_decode( $v, $_decode_flags, 'UTF-8' );
@@ -390,10 +394,10 @@ final class Scripts {
 				'protectedTitle'  => $has_input && $id ? trim( str_replace( '%s', '', \__( 'Protected: %s', 'default' ) ) ) : '',
 			],
 			'params' => [
-				'defaultTitle'       => $tsf->s_title_raw( $default_title ),
-				'titleAdditions'     => $tsf->s_title_raw( $title_additions ),
-				'blogDescription'    => $tsf->s_title_raw( $tsf->get_blogdescription() ),
-				'untitledTitle'      => $tsf->s_title_raw( $tsf->get_static_untitled_title() ),
+				'defaultTitle'       => $has_input ? $tsf->s_title_raw( $default_title ) : '',
+				'titleAdditions'     => $has_input ? $tsf->s_title_raw( $title_additions ) : '',
+				'blogDescription'    => $has_input ? $tsf->s_title_raw( $tsf->get_blogdescription() ) : '',
+				'untitledTitle'      => $has_input ? $tsf->s_title_raw( $tsf->get_static_untitled_title() ) : '',
 				'titleSeparator'     => $title_separator,
 				'titleLocation'      => $title_location,
 				'socialPlaceholders' => $social_settings_placeholders,
@@ -533,16 +537,16 @@ final class Scripts {
 			// 		'data' => [],
 			// 	],
 			// ],
-			// [
-			// 	'id'       => 'tsf-term',
-			// 	'type'     => 'css',
-			// 	'deps'     => [ 'tsf-tt', 'tsf' ],
-			// 	'autoload' => true,
-			// 	'hasrtl'   => false,
-			// 	'name'     => 'term',
-			// 	'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
-			// 	'ver'      => THE_SEO_FRAMEWORK_VERSION,
-			// ],
+			[
+				'id'       => 'tsf-term',
+				'type'     => 'css',
+				'deps'     => [ 'tsf-tt', 'tsf' ],
+				'autoload' => true,
+				'hasrtl'   => false,
+				'name'     => 'term',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+			],
 		];
 	}
 

@@ -877,13 +877,11 @@ class Admin_Pages extends Inpost {
 				( \is_rtl() ? '%2$s%1$s%3$s' : '%1$s%2$s%3$s' )
 			),
 			[
-				vsprintf(
-					$args['label'] ? '<label for=%s>%s</label>' : '',
-					$args['label'] ? [
-						$this->sanitize_field_id( $args['id'] ),
-						\esc_html( $args['label'] ),
-					] : []
-				),
+				$args['label'] ? sprintf(
+					'<label for=%s>%s</label> ', // NOTE: extra space!
+					$this->sanitize_field_id( $args['id'] ),
+					\esc_html( $args['label'] )
+				) : '',
 				$args['info'] ? ' ' . $this->make_info(
 					$args['info'][0],
 					isset( $args['info'][1] ) ? $args['info'][1] : '',
@@ -1181,10 +1179,10 @@ class Admin_Pages extends Inpost {
 	 *                3. The whole output is now hidden from no-js.
 	 *
 	 * @param string $for     The input ID it's for.
-	 * @param string $initial The initial value for no-JS. Deprecated.
+	 * @param string $depr    The initial value for no-JS. Deprecated.
 	 * @param bool   $display Whether to display the counter. (options page gimmick)
 	 */
-	public function output_character_counter_wrap( $for, $initial = '', $display = true ) {
+	public function output_character_counter_wrap( $for, $depr = '', $display = true ) {
 		vprintf(
 			'<div class="tsf-counter-wrap hide-if-no-js" %s><span class="description tsf-counter" title="%s">%s</span><span class="tsf-ajax"></span></div>',
 			[

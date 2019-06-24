@@ -84,8 +84,8 @@ class Admin_Init extends Init {
 		$post_id = isset( $post->ID ) ? $post->ID : false;
 
 		if ( $post_id ) {
-			$search_exclude  = $this->get_option( 'alter_search_query' ) && $this->get_custom_field( 'exclude_local_search', $post_id );
-			$archive_exclude = $this->get_option( 'alter_archive_query' ) && $this->get_custom_field( 'exclude_from_archive', $post_id );
+			$search_exclude  = $this->get_option( 'alter_search_query' ) && $this->get_post_meta_item( 'exclude_local_search', $post_id );
+			$archive_exclude = $this->get_option( 'alter_archive_query' ) && $this->get_post_meta_item( 'exclude_from_archive', $post_id );
 
 			if ( $search_exclude )
 				$states[] = \esc_html__( 'No Search', 'autodescription' );

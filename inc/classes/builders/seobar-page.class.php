@@ -117,7 +117,7 @@ final class SeoBar_Page extends SeoBar {
 	 * @return bool True if there's a blocking redirect, false otherwise.
 	 */
 	protected function has_blocking_redirect() {
-		return (bool) static::$tsf->get_custom_field( 'redirect', static::$query['id'] );
+		return (bool) static::$tsf->get_post_meta_item( 'redirect', static::$query['id'] );
 	}
 
 	/**
@@ -612,7 +612,7 @@ final class SeoBar_Page extends SeoBar {
 		}
 
 		if ( 0 !== static::$tsf->s_qubit(
-			static::$tsf->get_custom_field( '_genesis_noindex', static::$query['id'] )
+			static::$tsf->get_post_meta_item( '_genesis_noindex', static::$query['id'] )
 		) ) {
 			// Status is already set.
 
@@ -737,7 +737,7 @@ final class SeoBar_Page extends SeoBar {
 		}
 
 		if ( 0 !== static::$tsf->s_qubit(
-			static::$tsf->get_custom_field( '_genesis_nofollow', static::$query['id'] )
+			static::$tsf->get_post_meta_item( '_genesis_nofollow', static::$query['id'] )
 		) ) {
 			// Status is already set.
 
@@ -863,7 +863,7 @@ final class SeoBar_Page extends SeoBar {
 		}
 
 		if ( 0 !== static::$tsf->s_qubit(
-			static::$tsf->get_custom_field( '_genesis_noarchive', static::$query['id'] )
+			static::$tsf->get_post_meta_item( '_genesis_noarchive', static::$query['id'] )
 		) ) {
 			// Status is already set.
 
@@ -900,7 +900,7 @@ final class SeoBar_Page extends SeoBar {
 	 */
 	protected function test_redirect() {
 
-		if ( ! static::$tsf->get_custom_field( 'redirect', static::$query['id'] ) ) {
+		if ( ! static::$tsf->get_post_meta_item( 'redirect', static::$query['id'] ) ) {
 			return static::get_cache( 'page/redirect/default/0' ) ?: static::set_cache(
 				'page/redirect/default/0',
 				[

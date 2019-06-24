@@ -106,6 +106,7 @@ class Generate_Description extends Generate {
 	 *
 	 * @since 3.1.0
 	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
+	 * @since 3.3.0 Added term meta item checks.
 	 * @see $this->get_open_graph_description()
 	 * @see $this->get_open_graph_description_from_custom_field()
 	 *
@@ -118,17 +119,18 @@ class Generate_Description extends Generate {
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$desc = $this->get_option( 'homepage_og_description' )
-					 ?: $this->get_custom_field( '_open_graph_description' )
+					 ?: $this->get_post_meta_item( '_open_graph_description' )
 					 ?: $this->get_description_from_custom_field(); // phpcs:ignore -- precision alignment ok.
 			} else {
 				$desc = $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_description_from_custom_field(); // phpcs:ignore -- precision alignment ok.
 			}
 		} elseif ( $this->is_singular() ) {
-			$desc = $this->get_custom_field( '_open_graph_description' )
+			$desc = $this->get_post_meta_item( '_open_graph_description' )
 				 ?: $this->get_description_from_custom_field(); // phpcs:ignore -- precision alignment ok.
 		} elseif ( $this->is_term_meta_capable() ) {
-			$desc = $this->get_description_from_custom_field();
+			$desc = $this->get_term_meta_item( 'og_description' )
+				 ?: $this->get_description_from_custom_field(); // phpcs:ignore -- precision alignment ok.
 		}
 
 		return $desc;
@@ -141,6 +143,7 @@ class Generate_Description extends Generate {
 	 * @since 3.1.0
 	 * @since 3.2.2: 1. Now tests for the homepage as page prior getting custom field data.
 	 *               2. Now obtains custom field data for terms.
+	 * @since 3.3.0 Added term meta item checks.
 	 * @see $this->get_open_graph_description()
 	 * @see $this->get_open_graph_description_from_custom_field()
 	 *
@@ -152,17 +155,18 @@ class Generate_Description extends Generate {
 		$desc = '';
 
 		if ( $args['taxonomy'] ) {
-			$desc = $this->get_description_from_custom_field( $args );
+			$desc = $this->get_term_meta_item( 'og_description', $args['id'] )
+				 ?: $this->get_description_from_custom_field( $args ); // phpcs:ignore -- precision alignment ok.
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_og_description' )
-					 ?: $this->get_custom_field( '_open_graph_description', $args['id'] )
+					 ?: $this->get_post_meta_item( '_open_graph_description', $args['id'] )
 					 ?: $this->get_description_from_custom_field( $args ); // phpcs:ignore -- precision alignment ok.
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_description_from_custom_field( $args ); // phpcs:ignore -- precision alignment ok.
 			} else {
-				$desc = $this->get_custom_field( '_open_graph_description', $args['id'] )
+				$desc = $this->get_post_meta_item( '_open_graph_description', $args['id'] )
 					 ?: $this->get_description_from_custom_field( $args ); // phpcs:ignore -- precision alignment ok.
 			}
 		}
@@ -224,6 +228,7 @@ class Generate_Description extends Generate {
 	 * @since 3.1.0
 	 * @since 3.2.2: 1. Now tests for the homepage as page prior getting custom field data.
 	 *               2. Now obtains custom field data for terms.
+	 * @since 3.3.0 Added term meta item checks.
 	 * @see $this->get_twitter_description()
 	 * @see $this->get_twitter_description_from_custom_field()
 	 *
@@ -236,21 +241,27 @@ class Generate_Description extends Generate {
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$desc = $this->get_option( 'homepage_twitter_description' )
-					?: $this->get_custom_field( '_twitter_description' )
+					?: $this->get_post_meta_item( '_twitter_description' )
 					?: $this->get_option( 'homepage_og_description' )
-					?: $this->get_custom_field( '_open_graph_description' )
-					?: $this->get_description_from_custom_field(); // phpcs:ignore -- precision alignment ok.
+					?: $this->get_post_meta_item( '_open_graph_description' )
+					?: $this->get_description_from_custom_field()
+					?: ''; // phpcs:ignore -- precision alignment ok.
 			} else {
 				$desc = $this->get_option( 'homepage_twitter_description' )
 					?: $this->get_option( 'homepage_og_description' )
-					?: $this->get_description_from_custom_field(); // phpcs:ignore -- precision alignment ok.
+					?: $this->get_description_from_custom_field()
+					?: ''; // phpcs:ignore -- precision alignment ok.
 			}
 		} elseif ( $this->is_singular() ) {
-			$desc = $this->get_custom_field( '_twitter_description' )
-				 ?: $this->get_custom_field( '_open_graph_description' )
-				 ?: $this->get_description_from_custom_field(); // phpcs:ignore -- precision alignment ok.
+			$desc = $this->get_post_meta_item( '_twitter_description' )
+				 ?: $this->get_post_meta_item( '_open_graph_description' )
+				 ?: $this->get_description_from_custom_field()
+				 ?: ''; // phpcs:ignore -- precision alignment ok.
 		} elseif ( $this->is_term_meta_capable() ) {
-			$desc = $this->get_description_from_custom_field();
+			$desc = $this->get_term_meta_item( 'tw_description' )
+				 ?: $this->get_term_meta_item( 'og_description' )
+				 ?: $this->get_description_from_custom_field()
+				 ?: ''; // phpcs:ignore -- precision alignment ok.
 		}
 
 		return $desc;
@@ -263,6 +274,7 @@ class Generate_Description extends Generate {
 	 * @since 3.1.0
 	 * @since 3.2.2: 1. Now tests for the homepage as page prior getting custom field data.
 	 *               2. Now obtains custom field data for terms.
+	 * @since 3.3.0 Added term meta item checks.
 	 * @see $this->get_twitter_description()
 	 * @see $this->get_twitter_description_from_custom_field()
 	 *
@@ -271,25 +283,29 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_custom_twitter_description_from_args( array $args ) {
 
-		$desc = '';
-
 		if ( $args['taxonomy'] ) {
-			$desc = $this->get_description_from_custom_field( $args );
+			$desc = $this->get_term_meta_item( 'tw_description', $args['id'] )
+				 ?: $this->get_term_meta_item( 'og_description', $args['id'] )
+				 ?: $this->get_description_from_custom_field( $args )
+				 ?: ''; // phpcs:ignore -- precision alignment ok.
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_twitter_description' )
-					 ?: $this->get_custom_field( '_twitter_description', $args['id'] )
+					 ?: $this->get_post_meta_item( '_twitter_description', $args['id'] )
 					 ?: $this->get_option( 'homepage_og_description' )
-					 ?: $this->get_custom_field( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args ); // phpcs:ignore -- precision alignment ok.
+					 ?: $this->get_post_meta_item( '_open_graph_description', $args['id'] )
+					 ?: $this->get_description_from_custom_field( $args )
+					 ?: ''; // phpcs:ignore -- precision alignment ok.
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_twitter_description' )
 					 ?: $this->get_option( 'homepage_og_description' )
-					 ?: $this->get_description_from_custom_field( $args ); // phpcs:ignore -- precision alignment ok.
+					 ?: $this->get_description_from_custom_field( $args )
+					 ?: ''; // phpcs:ignore -- precision alignment ok.
 			} else {
-				$desc = $this->get_custom_field( '_twitter_description', $args['id'] )
-					 ?: $this->get_custom_field( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args ); // phpcs:ignore -- precision alignment ok.
+				$desc = $this->get_post_meta_item( '_twitter_description', $args['id'] )
+					 ?: $this->get_post_meta_item( '_open_graph_description', $args['id'] )
+					 ?: $this->get_description_from_custom_field( $args )
+					 ?: ''; // phpcs:ignore -- precision alignment ok.
 			}
 		}
 
@@ -323,11 +339,10 @@ class Generate_Description extends Generate {
 		}
 
 		/**
-		 * Filters the description from custom field, if any.
 		 * @since 2.9.0
 		 * @since 3.0.6 1. Duplicated from $this->generate_description() (deprecated)
 		 *              2. Removed all arguments but the 'id' argument.
-		 * @param string $desc The description.
+		 * @param string $desc The custom-field description.
 		 * @param array  $args The description arguments.
 		 */
 		$desc = (string) \apply_filters( 'the_seo_framework_custom_field_description', $desc, $args );
@@ -352,16 +367,15 @@ class Generate_Description extends Generate {
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$desc = $this->get_option( 'homepage_description' )
-					 ?: $this->get_custom_field( '_genesis_description' )
+					 ?: $this->get_post_meta_item( '_genesis_description' )
 					 ?: ''; // phpcs:ignore -- precision alignment ok.
 			} else {
 				$desc = $this->get_option( 'homepage_description' ) ?: '';
 			}
 		} elseif ( $this->is_singular() ) {
-			$desc = $this->get_custom_field( '_genesis_description' ) ?: '';
+			$desc = $this->get_post_meta_item( '_genesis_description' ) ?: '';
 		} elseif ( $this->is_term_meta_capable() ) {
-			$data = $this->get_term_meta( $this->get_the_real_ID() );
-			$desc = ! empty( $data['description'] ) ? $data['description'] : '';
+			$desc = $this->get_term_meta_item( 'description' ) ?: '';
 		}
 
 		return $desc;
@@ -380,20 +394,17 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_custom_description_from_args( array $args ) {
 
-		$desc = '';
-
 		if ( $args['taxonomy'] ) {
-			$data = $this->get_term_meta( $args['id'] );
-			$desc = ! empty( $data['description'] ) ? $data['description'] : '';
+			$desc = $this->get_term_meta_item( 'description', $args['id'] ) ?: '';
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_description' )
-					 ?: $this->get_custom_field( '_genesis_description', $args['id'] )
+					 ?: $this->get_post_meta_item( '_genesis_description', $args['id'] )
 					 ?: ''; // phpcs:ignore -- precision alignment ok.
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_description' ) ?: '';
 			} else {
-				$desc = $this->get_custom_field( '_genesis_description', $args['id'] ) ?: '';
+				$desc = $this->get_post_meta_item( '_genesis_description', $args['id'] ) ?: '';
 			}
 		}
 
@@ -450,10 +461,9 @@ class Generate_Description extends Generate {
 		);
 
 		/**
-		 * Filters the generated description, if any.
 		 * @since 2.9.0
 		 * @since 3.1.0 No longer passes 3rd and 4th parameter.
-		 * @param string     $description The description.
+		 * @param string     $description The generated description.
 		 * @param array|null $args The description arguments.
 		 */
 		$desc = (string) \apply_filters( 'the_seo_framework_generated_description', $excerpt, $args );
@@ -682,6 +692,68 @@ class Generate_Description extends Generate {
 
 		/* translators: 1: Title, 2: on, 3: Blogname */
 		return trim( sprintf( \__( '%1$s %2$s %3$s', 'autodescription' ), $title, $on, $blogname ) );
+	}
+
+	/**
+	 * Fetches or parses the excerpt of the post.
+	 *
+	 * @since 1.0.0
+	 * @since 2.8.2 : Added 4th parameter for escaping.
+	 * @since 3.1.0 1. No longer returns anything for terms.
+	 *              2. Now strips plausible embeds URLs.
+	 *
+	 * @param string $excerpt    The Excerpt.
+	 * @param int    $id         The Post ID.
+	 * @param null   $deprecated No longer used.
+	 * @param bool   $escape     Whether to escape the excerpt.
+	 * @return string The trimmed excerpt.
+	 */
+	public function get_excerpt_by_id( $excerpt = '', $id = '', $deprecated = null, $escape = true ) {
+
+		if ( empty( $excerpt ) )
+			$excerpt = $this->fetch_excerpt( $id );
+
+		//* No need to parse an empty excerpt.
+		if ( ! $excerpt ) return '';
+
+		return $escape ? $this->s_excerpt( $excerpt ) : $this->s_excerpt_raw( $excerpt );
+	}
+
+	/**
+	 * Fetches excerpt from post excerpt or fetches the full post content.
+	 * Determines if a page builder is used to return an empty string.
+	 * Does not sanitize output.
+	 *
+	 * @since 2.5.2
+	 * @since 2.6.6 Detects Page builders.
+	 * @since 3.1.0 1. No longer returns anything for terms.
+	 *              2. Now strips plausible embeds URLs.
+	 *
+	 * @param \WP_Post|int|null $post The Post or Post ID. Leave null to automatically get.
+	 * @return string The excerpt.
+	 */
+	public function fetch_excerpt( $post = null ) {
+
+		$post = \get_post( $post );
+
+		/**
+		 * @since 2.5.2
+		 * Fetch custom excerpt, if not empty, from the post_excerpt field.
+		 */
+		if ( ! empty( $post->post_excerpt ) ) {
+			$excerpt = $post->post_excerpt;
+		} elseif ( isset( $post->post_content ) ) {
+			$excerpt = $this->uses_page_builder( $post->ID ) ? '' : $post->post_content;
+
+			if ( $excerpt ) {
+				$excerpt = $this->strip_newline_urls( $excerpt );
+				$excerpt = $this->strip_paragraph_urls( $excerpt );
+			}
+		} else {
+			$excerpt = '';
+		}
+
+		return $excerpt;
 	}
 
 	/**

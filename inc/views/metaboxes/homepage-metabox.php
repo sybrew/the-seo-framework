@@ -70,7 +70,7 @@ switch ( $instance ) :
 
 		$description_from_post_message = $title_from_post_message = '';
 
-		$frompost_title = $this->has_page_on_front() ? $this->get_custom_field( '_genesis_title', $home_id ) : '';
+		$frompost_title = $this->has_page_on_front() ? $this->get_post_meta_item( '_genesis_title', $home_id ) : '';
 		if ( $frompost_title ) {
 			//! FIXME: Doesn't consider filters. Inject filter here, it's hackish...? Make a specific function, smelly...?
 			if ( $this->use_title_branding( [ 'id' => $home_id ] ) ) {
@@ -82,7 +82,7 @@ switch ( $instance ) :
 		}
 
 		//* Fetch the description from the homepage.
-		$frompost_description = $this->has_page_on_front() ? $this->get_custom_field( '_genesis_description', $home_id ) : '';
+		$frompost_description = $this->has_page_on_front() ? $this->get_post_meta_item( '_genesis_description', $home_id ) : '';
 
 		/**
 		 * Create a placeholder.
@@ -138,7 +138,7 @@ switch ( $instance ) :
 		 *
 		 * Nesting often used translations
 		 */
-		if ( $this->has_page_on_front() && $this->get_custom_field( '_genesis_title', $home_id ) ) {
+		if ( $this->has_page_on_front() && $this->get_post_meta_item( '_genesis_title', $home_id ) ) {
 			$this->description( __( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' ) );
 		}
 
@@ -188,7 +188,7 @@ switch ( $instance ) :
 		</p>
 		<?php
 
-		if ( $this->has_page_on_front() && $this->get_custom_field( '_genesis_description', $home_id ) ) {
+		if ( $this->has_page_on_front() && $this->get_post_meta_item( '_genesis_description', $home_id ) ) {
 			$this->description(
 				__( 'Note: The description placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
 			);
@@ -283,9 +283,9 @@ switch ( $instance ) :
 		//* Get homepage ID. If blog on front, it's 0.
 		$home_id = $this->get_the_front_page_ID();
 
-		$noindex_post   = $home_id ? $this->get_custom_field( '_genesis_noindex', $home_id ) : '';
-		$nofollow_post  = $home_id ? $this->get_custom_field( '_genesis_nofollow', $home_id ) : '';
-		$noarchive_post = $home_id ? $this->get_custom_field( '_genesis_noarchive', $home_id ) : '';
+		$noindex_post   = $home_id ? $this->get_post_meta_item( '_genesis_noindex', $home_id ) : '';
+		$nofollow_post  = $home_id ? $this->get_post_meta_item( '_genesis_nofollow', $home_id ) : '';
+		$noarchive_post = $home_id ? $this->get_post_meta_item( '_genesis_noarchive', $home_id ) : '';
 
 		$checked_home = '';
 		/**
@@ -411,10 +411,10 @@ switch ( $instance ) :
 		$home_id = $this->get_the_front_page_ID();
 
 		// Gets custom fields from page.
-		$custom_og_title = $this->get_custom_field( '_open_graph_title', $home_id );
-		$custom_og_desc  = $this->get_custom_field( '_open_graph_description', $home_id );
-		$custom_tw_title = $this->get_custom_field( '_twitter_title', $home_id );
-		$custom_tw_desc  = $this->get_custom_field( '_twitter_description', $home_id );
+		$custom_og_title = $this->get_post_meta_item( '_open_graph_title', $home_id );
+		$custom_og_desc  = $this->get_post_meta_item( '_open_graph_description', $home_id );
+		$custom_tw_title = $this->get_post_meta_item( '_twitter_title', $home_id );
+		$custom_tw_desc  = $this->get_post_meta_item( '_twitter_description', $home_id );
 
 		// Gets custom fields from SEO settings.
 		$home_og_title = $this->get_option( 'homepage_og_title' );

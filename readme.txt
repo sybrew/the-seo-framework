@@ -277,7 +277,7 @@ TODO change all occurence of %s = here to markdown
 TODO Exclaim:
 - Multidimensional/quantum options.
 - Quick & bulk edit, blended perfectly into WordPress' interface.
-- TODO Multiprocessing (cron)...
+- Multiprocessing (cron)...
 - TODO More term options.
 - Downgrading & Backward compatibility warnings.
 - Mixed taxonomies on post type related settings.
@@ -286,9 +286,11 @@ TODO Exclaim:
 - New posts are indexed faster with an even smarter sitemap.
 - The monolithic facade "the_seo_framework()" is now much lighter, as we offloaded loads of administrative functionality to other files.
 - The SEO Bar now has an API. You can expect more tests, items, and adjustments via extensions. (hint: Monitor & Focus.)
-- TODO The SEO Bar now only lists items that truly affect the current status, instead of listing everything that might help to concludes a status.
+- The SEO Bar now only lists items that truly affect the current status, instead of listing everything that might help to concludes a status.
 	* i.e., instead of "WordPress allows indexing, but you set it to noindex, and you disabled the post type", it now says "1. You set it to noindex. 1. You disabled the post type.".
-- TODO rewrite changes (see Rewrite notes below...)
+- Rewrite changes (see Rewrite notes below...)
+- Performance improvmenets (in numbers)
+- Why term and post meta saving methods have changed: We needed to replace these systems for a more standardized system, so we could implement bulk/quick edit more consistently.
 
 ..., and, for developers, we've finally introduced a reliable JavaScript API. Documentation will follow soon (based on frequently asked requests).
 
@@ -297,12 +299,17 @@ TODO fix get_home_title_seplocation() reversal.
 TODO when one or more posts have been excluded from the archive, the category may be empty; see if this can be reflected in the SEO output as 404.
 TODO replace `the_seo_framework_fetched_description_excerpt` with something that uses `$args`.
 
-TODO reload the SEO Bar on Gutenberg save action.
+TODO reload the SEO Bar on Gutenberg save action. https://github.com/sybrew/the-seo-framework/issues/361
 TODO update wp rocket's compat file... ugh, redundant
 
 TODO split the sitemap generation type from the base class: Sitemap-Base.class.php
 
 TODO call "php level caching" memoization--it's a cooler word.
+
+TODO convert all get_custom_field() calls to get_post_meta_item()!
+
+TODO primary term selection should have natsort ID via PHP predefined.
+TODO maybe? Add "no_blogname" term option.
 
 **Detailed log:**
 
@@ -312,18 +319,24 @@ TODO call "php level caching" memoization--it's a cooler word.
 	* TODO maybe: We now generate a proposed description of your content every minute on Gutenberg pages.
 	* TODO maybe: We now parse shortcodes for the content dynamically, for Focus and description generation-compatibility.
 	* TODO We've added more term settings, including:
-		* TODO
-		* TODO Redirects
-		* TODO Canonical URL
+		* Open Graph title and description inputs.
+		* Twitter title and description inputs.
+		* TODO social image input.
+		* 301 Redirect input.
+		* Canonical URL input.
 	* TODO Feeds now have a "X-Robots-tag: noindex, follow" header, so Google doesn't have to guess your intent.
+	* TODO Comment pagination now has a forced noindex robots meta tag, so Google doesn't have to guess your intent.
 	* Multidimensional selection for robots-meta on posts, pages, and terms.
 	* A new accessibility feature for the SEO Bar. You can now convert the characters to symbols to discern warnings more easily.
 	* After installing The SEO Framework, users who have `update_plugins` capabilities may now see a confirmation that the plugin's set up, and that there are installation instructions available.
 	* After upgrading The SEO Framework's database, users who have `update_plugins` capabilities may now see a confirmation notice that the site has been upgraded.
 	* Search engine pinging for the sitemap can now be offloaded to the WordPress cron-scheduler; this feature is enabled by default.
+	* The estimated plugin-boot time is added to the closing HTML comment; which adds the bulk of the page-loading time of this plugin. In this update, we decreased that time, greatly--and we're proudly showing it.
 * **Changed:**
 	* We now support WordPress v4.9 and later, instead of WordPress v4.6 and later.
 	* We now support PHP v5.6 and later, instead of PHP v5.4 and later.
+	* Backslashes are no longer stripped from post meta. Slash away!
+		* This also resolves an issue where the number of slashes are halved every time you update the post.
 	* TODO? We switched the homepage title option name from left to right, and right to left.
 		* This doesn't affect your titles, it's only semantics.
 		* NOTE TO SELF: Changing this would require us to change the default options, the filters behavior, and the JS code.. is this the best route?
@@ -514,19 +527,28 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 * **Term meta notes:**
 	* **Added:**
 		* `redirect`, URL string.
-		* TODO `canonical`, URL string.
+		* `canonical`, URL string.
+		* `og_title`, URL string.
+		* `og_description`, URL string.
+		* `tw_title`, URL string.
+		* `tw_description`, URL string.
+		* TODO social image
 	* **Changed:**
 		* `noindex`, it can now be set to `-1`.
 		* `nofollow`, it can now be set to `-1`.
 		* `noarchive`, it can now be set to `-1`.
 	* **Removed:**
 		* `saved_flag`, it's no longer necessary. If the term is saved with The SEO Framework enabled, the term meta will be autofilled; whether something's adjusted or not.
+	* **Other:**
+		* Arbitrary keys may no longer be stored. Use the new API instead.
 * **Post meta notes:**
 	* **Changed:**
 		* `_genesis_noindex`, it can now be set to `-1`.
 		* `_genesis_nofollow`, it can now be set to `-1`.
 		* `_genesis_noarchive`, it can now be set to `-1`.
 		* Throughout the plugin, the scalar input types are no longer converted to strings via `the_seo_framework()->get_custom_field()`.
+	* **Other:**
+		* Arbitrary keys may no longer be stored. Use the new API instead.
 * **Function notes:**
 	* **Removed:**
 		* **These are non-API functions, and were marked private:**
@@ -648,11 +670,19 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `is_robots_meta_noindex_set_by_args()`
 			* `init_term_meta()`
 			* `save_term_meta()`
+			* `update_single_term_meta_item()`
+			* `save_post_meta()`
+			* TODO `update_single_post_meta_item()`
+			* `sanitize_term_meta()`
+			* `sanitize_post_meta()`
 			* `detect_page_builder()`
 			* `is_blog_page_by_id()`
 			* `query_supports_seo()`
 			* `is_taxonomy_supported()`
 			* `get_post_meta_defaults()`
+			* `get_taxonomical_canonical_url()`, note: this method was called `get_taxonomial_canonical_url()`
+			* `get_taxonomical_custom_canonical_url()`
+			* `get_term_meta_item()`
 		* **Changed:**
 			* `__construct()` now emits warnings when instantiated twice or more.
 			* `html_output()` is now marked as private.
@@ -663,11 +693,12 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `get_robots_txt_url()` now returns the robots.txt URL, even if one's physically set.
 			* `sanitize_field_id()` now no longer strips square brackets.
 			* `robots_meta()` now has two new parameters.
-			* `get_custom_field()` no longer converts scalar return values to strings.
 			* `add_option_filter()` no longer registers its filter more than once for an option key.
 			* `register_settings()` no longer uses `add_option()` when the options are already registered.
-			* `inpost_seo_save()` now coverts `_genesis_noindex`, `_genesis_nofollow`, and `_genesis_noarchive` to qubits.
-			* `get_term_meta()` removed deprecated filter `the_seo_framework_get_term_meta`.
+			* `inpost_seo_save()` (removed, now `_update_post_meta()`) now coverts `_genesis_noindex`, `_genesis_nofollow`, and `_genesis_noarchive` to qubits.
+			* `get_term_meta()`
+				1. Removed deprecated filter `the_seo_framework_get_term_meta`.
+				1. Now fills in defaults if older term meta isn't set.
 			* `get_term_meta_defaults()` now returns more values.
 			* `update_term_meta()`
 				1. Now sanitizes more values.
@@ -678,6 +709,11 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `is_single_admin()` now uses `is_singular_admin()` to check for the correctg base; so categories and tags no longer falsely return `true`.
 			* `get_generated_single_term_title()` no longer redundantly tests the query, but now only uses the term input or queried object.
 			* `is_taxonomy_disabled()` now only returns true if all post types in the taxonomy are disabled, and it uses `is_post_type_supported()` instead of `is_post_type_disabled()` to do so.
+			* `create_canonical_url()` and `get_canonical_url()` can now fetch custom canonical URLs for terms; this is implied via trickling down methods.
+			* `get_post_type_archive_canonical_url()`
+				1. Now only accepts strings or null as the first parameter.
+				1. Forwarded post type object calling to WordPress' URL function.
+			* `_save_inpost_primary_term()` now works as intended; and it no longer accidentally falls back on the other post meta handlers.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`
@@ -706,6 +742,9 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* Public methods, these were marked private:
 				* `set_js_nonces()`
 				* `get_js_nonces()`
+				* `inattachment_seo_save()`
+				* `inpost_seo_save()`
+				* `save_custom_fields()`
 			* Public methods, these were obstructing:
 				* `is_post_included_in_sitemap()`, use `new \The_SEO_Framework\Builders\Sitemap()->is_post_included_in_sitemap()` instead.
 				* `load_assets()`, this was an internal function that only loaded a few scripts on our admin page.
@@ -742,9 +781,12 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `get_sitemap_xsl_url()`
 				* `post_type_supports_custom_seo()`
 				* `taxonomy_supports_custom_seo()`
+				* `get_taxonomial_canonical_url()`
+				* `get_custom_field()`
 			* **Without alternatives**, go make your own:
 				* `check_wp_locale()`
 				* `maybe_lowercase_noun()`
+				* `fetch_the_term()`
 * **Property notes:**
 	* For object `the_seo_framework()`:
 		* **Added:**
@@ -785,6 +827,8 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			1. term title placeholders.
 		* `the_seo_framework_use_title_branding` now works for the homepage title in the admin screens.
 		* `the_seo_framework_title_separator` now works in the admin screens.
+	* **Deprecated:**
+		* `the_seo_framework_save_custom_fields`, use `the_seo_framework_save_post_meta` instead. Same syntax.
 	* **Removed:**
 		* `the_seo_framework_get_term_meta`, this was deprecated since 3.1.0.
 			* Use `the_seo_framework_term_meta_defaults` instead.
@@ -823,16 +867,14 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `tsf`, these main files are now trimmed down to the most basic of forms per dependency requirements.
 					* **JS:**
 						* **Before:** 27.7KB minified, 2782 SLOC
-						* **After:** 15.5KB minified, (TODO TBD) 1723 SLOC
+						* **After:** 15.2KB minified, (TODO TBD) 1662 SLOC
 					* **CSS:**
 						* **Before:** 16.0KB minified, 1006 SLOC
-						* **After:** 4.0KB minfified, (TODO TBD) 425 SLOC
+						* **After:** 6.15KB minfified, (TODO TBD) 421 SLOC
 				* `tsfc`, these files handle the character and pixel counters.
 					* **Namespaces:** `window.tsfC` and `window.tsfCL10n`.
 					* **Script ID:** `tsf-c`
 					* Fun fact: The proposed name was `counter.js`, but uBlock blocks this script name by default.
-					* TODO make counters load in via JS only, the PHP side is useless in this.
-						* Well, PHP is required to annotate the IDs... maybe hide them by default, and unhide them via JS?
 				* `settings`, these files handle the SEO Settings page, mostly.
 					* **Namespaces:** `window.tsfSettings` and `window.tsfSettingsL10n`.
 					* **Script ID:** `tsf-settings`
@@ -842,6 +884,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `term`, these files handle term SEO settings pages, mostly.
 					* **Namespaces:** `window.tsfTerm` and `window.tsfTermL10n`.
 					* **Script ID:** `tsf-term`
+					* TODO the JS is empty!
 				* `ays` - meaning "Are you sure?", these files handle on-navigation alerts, so to prevent loss of data.
 					* **Namespaces:** `window.tsfAys` and `window.tsfAysL10n`
 					* **Script ID:** `tsf-ays`

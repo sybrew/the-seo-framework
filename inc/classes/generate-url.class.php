@@ -178,6 +178,7 @@ class Generate_Url extends Generate_Title {
 	 *
 	 * @since 3.0.0
 	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
+	 * @since 3.3.0 Can now fetch custom canonical URL for terms.
 	 * @see $this->create_canonical_url()
 	 *
 	 * @param array $args Use $this->create_canonical_url().
@@ -185,36 +186,37 @@ class Generate_Url extends Generate_Title {
 	 */
 	protected function build_canonical_url( array $args ) {
 
-		//? extract(). See $this->create_canonical_url()
-		foreach ( $args as $k => $v ) $$k = $v;
+		$url = '';
 
-		$canonical_url = '';
-
-		if ( $taxonomy ) {
-			$canonical_url = $this->get_taxonomial_canonical_url( $id, $taxonomy );
+		if ( $args['taxonomy'] ) {
+			if ( $args['get_custom_field'] ) {
+				$url = $this->get_taxonomical_custom_canonical_url( $args['id'] );
+			}
+			$url = $url ?: $this->get_taxonomical_canonical_url( $args['id'], $args['taxonomy'] );
 		} else {
-			if ( $this->is_static_frontpage( $id ) ) {
-				if ( $get_custom_field ) {
-					$canonical_url = $this->get_singular_custom_canonical_url( $id );
+			if ( $this->is_static_frontpage( $args['id'] ) ) {
+				if ( $args['get_custom_field'] ) {
+					$url = $this->get_singular_custom_canonical_url( $args['id'] );
 				}
-				$canonical_url = $canonical_url ?: $this->get_home_canonical_url();
-			} elseif ( $this->is_real_front_page_by_id( $id ) ) {
-				$canonical_url = $this->get_home_canonical_url();
-			} elseif ( $id ) {
-				if ( $get_custom_field ) {
-					$canonical_url = $this->get_singular_custom_canonical_url( $id );
+				$url = $url ?: $this->get_home_canonical_url();
+			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+				$url = $this->get_home_canonical_url();
+			} elseif ( $args['id'] ) {
+				if ( $args['get_custom_field'] ) {
+					$url = $this->get_singular_custom_canonical_url( $args['id'] );
 				}
-				$canonical_url = $canonical_url ?: $this->get_singular_canonical_url( $id );
+				$url = $url ?: $this->get_singular_canonical_url( $args['id'] );
 			}
 		}
 
-		return $canonical_url;
+		return $url;
 	}
 
 	/**
 	 * Generates canonical URL from current query.
 	 *
 	 * @since 3.0.0
+	 * @since 3.3.0 Can now fetch custom canonical URL for terms.
 	 * @see $this->get_canonical_url()
 	 *
 	 * @return string The canonical URL.
@@ -235,9 +237,11 @@ class Generate_Url extends Generate_Title {
 				$url = $this->get_singular_canonical_url( $id );
 		} elseif ( $this->is_archive() ) {
 			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
-				$url = $this->get_taxonomial_canonical_url( $id, $this->get_current_taxonomy() );
+				$url = $this->get_taxonomical_custom_canonical_url( $id );
+				if ( ! $url )
+					$url = $this->get_taxonomical_canonical_url( $id, $this->get_current_taxonomy() );
 			} elseif ( \is_post_type_archive() ) {
-				$url = $this->get_post_type_archive_canonical_url( $id );
+				$url = $this->get_post_type_archive_canonical_url();
 			} elseif ( $this->is_author() ) {
 				$url = $this->get_author_canonical_url( $id );
 			} elseif ( $this->is_date() ) {
@@ -329,7 +333,7 @@ class Generate_Url extends Generate_Title {
 	 * @return string The custom canonical URL, if any.
 	 */
 	public function get_singular_custom_canonical_url( $id ) {
-		return $this->get_custom_field( '_genesis_canonical_uri', $id ) ?: '';
+		return $this->get_post_meta_item( '_genesis_canonical_uri', $id ) ?: '';
 	}
 
 	/**
@@ -361,18 +365,33 @@ class Generate_Url extends Generate_Title {
 	}
 
 	/**
+	 * Returns taxonomical custom field's canonical URL.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param int $term_id The term ID.
+	 * @return string The custom canonical URL, if any.
+	 */
+	public function get_taxonomical_custom_canonical_url( $term_id ) {
+		return $this->get_term_meta_item( 'canonical', $term_id ) ?: '';
+	}
+
+	/**
 	 * Returns taxonomical canonical URL.
 	 * Automatically adds pagination if the ID matches the query.
 	 *
 	 * @since 3.0.0
+	 * @since 3.3.0 1. Renamed from "get_taxonomical_canonical_url" (note the typo)
+	 *              2. Now works on the admin-screens.
 	 *
 	 * @param int    $term_id The term ID.
 	 * @param string $taxonomy The taxonomy.
 	 * @return string The taxonomical canonical URL, if any.
 	 */
-	public function get_taxonomial_canonical_url( $term_id, $taxonomy ) {
+	public function get_taxonomical_canonical_url( $term_id, $taxonomy ) {
 
-		$link = \get_term_link( $term_id, $taxonomy );
+		$term = \get_term_by( 'id', $term_id, $taxonomy );
+		$link = \get_term_link( $term, $taxonomy );
 
 		if ( \is_wp_error( $link ) )
 			return '';
@@ -389,31 +408,35 @@ class Generate_Url extends Generate_Title {
 	 * Returns post type archive canonical URL.
 	 *
 	 * @since 3.0.0
+	 * @since 3.3.0 : 1. Deprecated first parameter as integer. Use strings or null.
+	 *                2. Now forwards post type object calling to WordPress' function.
 	 *
-	 * @param int|string $post_type The post type archive ID or post type.
+	 * @param null|string $post_type The post type archive's post type.
+	 *                               Leave null to use query, and allow pagination.
 	 * @return string The post type archive canonical URL, if any.
 	 */
-	public function get_post_type_archive_canonical_url( $post_type ) {
+	public function get_post_type_archive_canonical_url( $post_type = null ) {
 
 		if ( is_int( $post_type ) ) {
-			$term_id = (int) $post_type;
-			$term    = $this->fetch_the_term( $term_id );
-
-			if ( $term instanceof \WP_Post_Type ) {
-				$link = \get_post_type_archive_link( $term->name );
-
-				if ( $term_id === $this->get_the_real_ID() ) {
-					//= Adds pagination if ID matches query.
-					$link = $this->add_url_pagination( $link, $this->paged(), true );
-				}
-			} else {
-				$link = '';
-			}
-		} else {
-			$link = \get_post_type_archive_link( $post_type );
+			$this->_doing_it_wrong( __METHOD__, 'Only send strings or null in the first parameter.', '3.3.0' );
+			$post_type = '';
 		}
 
-		return $link ?: '';
+		$query = true;
+
+		if ( null === $post_type ) {
+			$post_type = \get_query_var( 'post_type' );
+			$post_type = is_array( $post_type ) ? reset( $post_type ) : $post_type;
+
+			$query = false;
+		}
+
+		$link = \get_post_type_archive_link( $post_type ) ?: '';
+
+		if ( $query && $link )
+			$link = $this->add_url_pagination( $link, $this->paged(), true );
+
+		return $link;
 	}
 
 	/**

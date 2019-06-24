@@ -226,6 +226,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.1.0
 	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
+	 * @since 3.3.0 Added term meta item checks.
 	 * @see $this->get_twitter_title()
 	 * @see $this->get_twitter_title_from_custom_field()
 	 *
@@ -238,9 +239,9 @@ class Generate_Title extends Generate_Description {
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$title = $this->get_option( 'homepage_twitter_title' )
-					  ?: $this->get_custom_field( '_twitter_title' )
+					  ?: $this->get_post_meta_item( '_twitter_title' )
 					  ?: $this->get_option( 'homepage_og_title' )
-					  ?: $this->get_custom_field( '_open_graph_title' )
+					  ?: $this->get_post_meta_item( '_open_graph_title' )
 					  ?: ''; // phpcs:ignore -- precision alignment ok.
 			} else {
 				$title = $this->get_option( 'homepage_twitter_title' )
@@ -248,8 +249,12 @@ class Generate_Title extends Generate_Description {
 					  ?: ''; // phpcs:ignore -- precision alignment ok.
 			}
 		} elseif ( $this->is_singular() ) {
-			$title = $this->get_custom_field( '_twitter_title' )
-				  ?: $this->get_custom_field( '_open_graph_title' )
+			$title = $this->get_post_meta_item( '_twitter_title' )
+				  ?: $this->get_post_meta_item( '_open_graph_title' )
+				  ?: ''; // phpcs:ignore -- precision alignment ok.
+		} elseif ( $this->is_term_meta_capable() ) {
+			$title = $this->get_term_meta_item( 'tw_title' )
+				  ?: $this->get_term_meta_item( 'og_title' )
 				  ?: ''; // phpcs:ignore -- precision alignment ok.
 		}
 
@@ -262,6 +267,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.1.0
 	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
+	 * @since 3.3.0 Added term meta item checks.
 	 * @see $this->get_twitter_title()
 	 * @see $this->get_twitter_title_from_custom_field()
 	 *
@@ -270,24 +276,24 @@ class Generate_Title extends Generate_Description {
 	 */
 	protected function get_custom_twitter_title_from_args( array $args ) {
 
-		$title = '';
-
 		if ( $args['taxonomy'] ) {
-			$title = '';
+			$title = $this->get_term_meta_item( 'tw_title', $args['id'] )
+				  ?: $this->get_term_meta_item( 'og_title', $args['id'] )
+				  ?: ''; // phpcs:ignore -- precision alignment ok.
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_twitter_title' )
-					  ?: $this->get_custom_field( '_twitter_title', $args['id'] )
+					  ?: $this->get_post_meta_item( '_twitter_title', $args['id'] )
 					  ?: $this->get_option( 'homepage_og_title' )
-					  ?: $this->get_custom_field( '_open_graph_title', $args['id'] )
+					  ?: $this->get_post_meta_item( '_open_graph_title', $args['id'] )
 					  ?: ''; // phpcs:ignore -- precision alignment ok.
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_twitter_title' )
 					  ?: $this->get_option( 'homepage_og_title' )
 					  ?: '';  // phpcs:ignore -- precision alignment ok.
 			} else {
-				$title = $this->get_custom_field( '_twitter_title', $args['id'] )
-					  ?: $this->get_custom_field( '_open_graph_title', $args['id'] )
+				$title = $this->get_post_meta_item( '_twitter_title', $args['id'] )
+					  ?: $this->get_post_meta_item( '_open_graph_title', $args['id'] )
 					  ?: ''; // phpcs:ignore -- precision alignment ok.
 			}
 		}
@@ -363,6 +369,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.1.0
 	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
+	 * @since 3.3.0 Added term meta item checks.
 	 * @see $this->get_open_graph_title()
 	 * @see $this->get_open_graph_title_from_custom_field()
 	 *
@@ -375,13 +382,15 @@ class Generate_Title extends Generate_Description {
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$title = $this->get_option( 'homepage_og_title' )
-					  ?: $this->get_custom_field( '_open_graph_title' )
+					  ?: $this->get_post_meta_item( '_open_graph_title' )
 					  ?: ''; // phpcs:ignore -- precision alignment ok.
 			} else {
 				$title = $this->get_option( 'homepage_og_title' ) ?: '';
 			}
 		} elseif ( $this->is_singular() ) {
-			$title = $this->get_custom_field( '_open_graph_title' ) ?: '';
+			$title = $this->get_post_meta_item( '_open_graph_title' ) ?: '';
+		} elseif ( $this->is_term_meta_capable() ) {
+			$title = $this->get_term_meta_item( 'og_title' ) ?: '';
 		}
 
 		return $title;
@@ -393,6 +402,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.1.0
 	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
+	 * @since 3.3.0 Added term meta item checks.
 	 * @see $this->get_open_graph_title()
 	 * @see $this->get_open_graph_title_from_custom_field()
 	 *
@@ -404,16 +414,16 @@ class Generate_Title extends Generate_Description {
 		$title = '';
 
 		if ( $args['taxonomy'] ) {
-			$title = '';
+			$title = $this->get_term_meta_item( 'og_title', $args['id'] ) ?: '';
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_og_title' )
-					  ?: $this->get_custom_field( '_open_graph_title', $args['id'] )
+					  ?: $this->get_post_meta_item( '_open_graph_title', $args['id'] )
 					  ?: ''; // phpcs:ignore -- precision alignment ok.
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_og_title' ) ?: '';
 			} else {
-				$title = $this->get_custom_field( '_open_graph_title', $args['id'] ) ?: '';
+				$title = $this->get_post_meta_item( '_open_graph_title', $args['id'] ) ?: '';
 			}
 		}
 
@@ -481,16 +491,15 @@ class Generate_Title extends Generate_Description {
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$title = $this->get_option( 'homepage_title' )
-					  ?: $this->get_custom_field( '_genesis_title' )
+					  ?: $this->get_post_meta_item( '_genesis_title' )
 					  ?: ''; // phpcs:ignore -- precision alignment ok.
 			} else {
 				$title = $this->get_option( 'homepage_title' ) ?: '';
 			}
 		} elseif ( $this->is_singular() ) {
-			$title = $this->get_custom_field( '_genesis_title' ) ?: '';
+			$title = $this->get_post_meta_item( '_genesis_title' ) ?: '';
 		} elseif ( $this->is_term_meta_capable() ) {
-			$_data = $this->get_term_meta( $this->get_the_real_ID() );
-			$title = ! empty( $_data['doctitle'] ) ? $_data['doctitle'] : '';
+			$title = $this->get_term_meta_item( 'doctitle' ) ?: '';
 		}
 
 		return $title;
@@ -513,17 +522,16 @@ class Generate_Title extends Generate_Description {
 		$title = '';
 
 		if ( $args['taxonomy'] ) {
-			$_data = $this->get_term_meta( $args['id'] );
-			$title = ! empty( $_data['doctitle'] ) ? $_data['doctitle'] : '';
+			$title = $this->get_term_meta_item( 'doctitle', $args['id'] ) ?: '';
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_title' )
-					  ?: $this->get_custom_field( '_genesis_title', $args['id'] )
+					  ?: $this->get_post_meta_item( '_genesis_title', $args['id'] )
 					  ?: ''; // phpcs:ignore -- precision alignment ok.
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_title' ) ?: '';
 			} else {
-				$title = $this->get_custom_field( '_genesis_title', $args['id'] ) ?: '';
+				$title = $this->get_post_meta_item( '_genesis_title', $args['id'] ) ?: '';
 			}
 		}
 
@@ -1361,7 +1369,7 @@ class Generate_Title extends Generate_Description {
 	 * @return bool
 	 */
 	public function use_singular_title_branding( $id = null ) {
-		return ! $this->get_custom_field( '_tsf_title_no_blogname', $id ) && ! $this->get_option( 'title_rem_additions' );
+		return ! $this->get_post_meta_item( '_tsf_title_no_blogname', $id ) && ! $this->get_option( 'title_rem_additions' );
 	}
 
 	/**

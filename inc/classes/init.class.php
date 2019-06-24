@@ -59,8 +59,8 @@ class Init extends Query {
 	public function init_the_seo_framework() {
 
 		/**
-		 * Runs before the plugin is initialized.
 		 * @since 2.8.0
+		 * Runs before the plugin is initialized.
 		 */
 		\do_action( 'the_seo_framework_init' );
 
@@ -143,8 +143,8 @@ class Init extends Query {
 		$this->init_seo_bar_tables();
 
 		//* Save post data.
-		\add_action( 'save_post', [ $this, 'inpost_seo_save' ], 1, 2 );
-		\add_action( 'edit_attachment', [ $this, 'inattachment_seo_save' ], 1 );
+		\add_action( 'save_post', [ $this, '_update_post_meta' ], 1, 2 );
+		\add_action( 'edit_attachment', [ $this, '_update_attachment_meta' ], 1 );
 		\add_action( 'save_post', [ $this, '_save_inpost_primary_term' ], 1, 2 );
 
 		//* Enqueues admin scripts.
@@ -488,7 +488,7 @@ class Init extends Query {
 		$url = '';
 
 		if ( $this->is_singular() ) {
-			$url = $this->get_custom_field( 'redirect' ) ?: '';
+			$url = $this->get_post_meta_item( 'redirect' ) ?: '';
 		} elseif ( $this->is_term_meta_capable() ) {
 			$term_meta = $this->get_current_term_meta();
 
@@ -774,7 +774,7 @@ class Init extends Query {
 				return $posts;
 
 			foreach ( $posts as $n => $post ) {
-				if ( $this->get_custom_field( 'exclude_local_search', $post->ID ) ) {
+				if ( $this->get_post_meta_item( 'exclude_local_search', $post->ID ) ) {
 					unset( $posts[ $n ] );
 				}
 			}
@@ -802,7 +802,7 @@ class Init extends Query {
 				return $posts;
 
 			foreach ( $posts as $n => $post ) {
-				if ( $this->get_custom_field( 'exclude_from_archive', $post->ID ) ) {
+				if ( $this->get_post_meta_item( 'exclude_from_archive', $post->ID ) ) {
 					unset( $posts[ $n ] );
 				}
 			}

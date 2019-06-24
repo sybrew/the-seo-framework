@@ -9,8 +9,8 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 $instance = $this->get_view_instance( 'inpost', $instance );
 
 //* Setup default vars.
-$post_id = $this->get_the_real_ID();
-$type = isset( $type ) ? $type : '';
+$post_id  = $this->get_the_real_ID();
+$type     = isset( $type ) ? $type : '';
 $language = $this->google_language();
 
 switch ( $instance ) :
@@ -79,7 +79,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id="tsf-title-wrap">
-					<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" placeholder="<?php echo esc_attr( $title_placeholder ); ?>" value="<?php echo esc_attr( $this->get_custom_field( '_genesis_title', $post_id ) ); ?>" autocomplete=off />
+					<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" placeholder="<?php echo esc_attr( $title_placeholder ); ?>" value="<?php echo esc_attr( $this->get_post_meta_item( '_genesis_title', $post_id ) ); ?>" autocomplete=off />
 					<?php echo $this->output_js_title_elements(); ?>
 				</div>
 
@@ -89,12 +89,12 @@ switch ( $instance ) :
 						if ( $this->is_static_frontpage( $post_id ) ) :
 							// Disable the input, and hide the previously stored value.
 							?>
-							<input type="checkbox" id="autodescription_title_no_blogname" value="1" <?php checked( $this->get_custom_field( '_tsf_title_no_blogname' ) ); ?> disabled />
-							<input type="hidden" name="autodescription[_tsf_title_no_blogname]" value="1" <?php checked( $this->get_custom_field( '_tsf_title_no_blogname' ) ); ?> />
+							<input type="checkbox" id="autodescription_title_no_blogname" value="1" <?php checked( $this->get_post_meta_item( '_tsf_title_no_blogname' ) ); ?> disabled />
+							<input type="hidden" name="autodescription[_tsf_title_no_blogname]" value="1" <?php checked( $this->get_post_meta_item( '_tsf_title_no_blogname' ) ); ?> />
 							<?php
 						else :
 							?>
-							<input type="checkbox" name="autodescription[_tsf_title_no_blogname]" id="autodescription_title_no_blogname" value="1" <?php checked( $this->get_custom_field( '_tsf_title_no_blogname' ) ); ?> />
+							<input type="checkbox" name="autodescription[_tsf_title_no_blogname]" id="autodescription_title_no_blogname" value="1" <?php checked( $this->get_post_meta_item( '_tsf_title_no_blogname' ) ); ?> />
 							<?php
 						endif;
 						esc_html_e( 'Remove the blogname?', 'autodescription' );
@@ -129,7 +129,7 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class="large-text" name="autodescription[_genesis_description]" id="autodescription_description" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="4" cols="4"><?php echo esc_attr( $this->get_custom_field( '_genesis_description', $post_id ) ); ?></textarea>
+				<textarea class="large-text" name="autodescription[_genesis_description]" id="autodescription_description" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="4" cols="4"><?php echo esc_attr( $this->get_post_meta_item( '_genesis_description', $post_id ) ); ?></textarea>
 				<?php echo $this->output_js_description_elements(); ?>
 			</div>
 		</div>
@@ -138,7 +138,7 @@ switch ( $instance ) :
 
 	case 'inpost_visibility':
 		//* Fetch Canonical URL.
-		$canonical = $this->get_custom_field( '_genesis_canonical_uri' );
+		$canonical = $this->get_post_meta_item( '_genesis_canonical_uri' );
 		//* Fetch Canonical URL Placeholder.
 		$canonical_placeholder = $this->create_canonical_url( [ 'id' => $post_id ] );
 
@@ -192,7 +192,7 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<input class="large-text" type="url" name="autodescription[_genesis_canonical_uri]" id="autodescription_canonical" placeholder="<?php echo esc_url( $canonical_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_genesis_canonical_uri' ) ); ?>" autocomplete=off />
+				<input class="large-text" type="url" name="autodescription[_genesis_canonical_uri]" id="autodescription_canonical" placeholder="<?php echo esc_url( $canonical_placeholder ); ?>" value="<?php echo esc_url( $this->get_post_meta_item( '_genesis_canonical_uri' ) ); ?>" autocomplete=off />
 			</div>
 		</div>
 
@@ -237,7 +237,7 @@ switch ( $instance ) :
 							</div>
 						</div>
 						<div class="tsf-flex-setting-input tsf-flex">
-							<?php
+						<?php
 							echo $this->make_single_select_form( [
 								'id'      => $_s['id'],
 								'class'   => 'tsf-select-block',
@@ -249,10 +249,10 @@ switch ( $instance ) :
 									-1 => $_s['force_on'],
 									1  => $_s['force_off'],
 								],
-								'default' => $this->get_custom_field( $_s['option'] ),
+								'default' => $this->get_post_meta_item( $_s['option'] ),
 								// 'info'    => $_s['_info'],
 							] );
-							?>
+						?>
 						</div>
 					</div>
 					<?php
@@ -278,7 +278,7 @@ switch ( $instance ) :
 			<div class="tsf-flex-setting-input tsf-flex">
 				<?php if ( $can_do_search_query ) : ?>
 				<div class="tsf-checkbox-wrapper">
-					<label for="autodescription_exclude_local_search"><input type="checkbox" name="autodescription[exclude_local_search]" id="autodescription_exclude_local_search" value="1" <?php checked( $this->get_custom_field( 'exclude_local_search' ) ); ?> />
+					<label for="autodescription_exclude_local_search"><input type="checkbox" name="autodescription[exclude_local_search]" id="autodescription_exclude_local_search" value="1" <?php checked( $this->get_post_meta_item( 'exclude_local_search' ) ); ?> />
 						<?php
 						esc_html_e( 'Exclude this page from all search queries on this site.', 'autodescription' );
 						?>
@@ -287,7 +287,7 @@ switch ( $instance ) :
 				<?php endif; ?>
 				<?php if ( $can_do_archive_query ) : ?>
 				<div class="tsf-checkbox-wrapper">
-					<label for="autodescription_exclude_from_archive"><input type="checkbox" name="autodescription[exclude_from_archive]" id="autodescription_exclude_from_archive" value="1" <?php checked( $this->get_custom_field( 'exclude_from_archive' ) ); ?> />
+					<label for="autodescription_exclude_from_archive"><input type="checkbox" name="autodescription[exclude_from_archive]" id="autodescription_exclude_from_archive" value="1" <?php checked( $this->get_post_meta_item( 'exclude_from_archive' ) ); ?> />
 						<?php
 						esc_html_e( 'Exclude this page from all archive queries on this site.', 'autodescription' );
 						?>
@@ -317,7 +317,7 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<input class="large-text" type="url" name="autodescription[redirect]" id="autodescription_redirect" value="<?php echo esc_url( $this->get_custom_field( 'redirect' ) ); ?>" autocomplete=off />
+				<input class="large-text" type="url" name="autodescription[redirect]" id="autodescription_redirect" value="<?php echo esc_url( $this->get_post_meta_item( 'redirect' ) ); ?>" autocomplete=off />
 			</div>
 		</div>
 		<?php
@@ -336,8 +336,8 @@ switch ( $instance ) :
 			$home_tw_desc  = $this->get_option( 'homepage_twitter_description' );
 
 			// Gets custom fields from page.
-			$custom_og_title = $this->get_custom_field( '_open_graph_title', $post_id );
-			$custom_og_desc  = $this->get_custom_field( '_open_graph_description', $post_id );
+			$custom_og_title = $this->get_post_meta_item( '_open_graph_title', $post_id );
+			$custom_og_desc  = $this->get_post_meta_item( '_open_graph_description', $post_id );
 
 			//! OG input falls back to default input.
 			$og_tit_placeholder  = $home_og_title
@@ -358,8 +358,8 @@ switch ( $instance ) :
 								?: $this->get_generated_twitter_description( [ 'id' => $post_id ] );
 		} else {
 			// Gets custom fields.
-			$custom_og_title = $this->get_custom_field( '_open_graph_title', $post_id );
-			$custom_og_desc  = $this->get_custom_field( '_open_graph_description', $post_id );
+			$custom_og_title = $this->get_post_meta_item( '_open_graph_title', $post_id );
+			$custom_og_desc  = $this->get_post_meta_item( '_open_graph_description', $post_id );
 
 			//! OG input falls back to default input.
 			$og_tit_placeholder  = $this->get_generated_open_graph_title( [ 'id' => $post_id ] );
@@ -370,6 +370,7 @@ switch ( $instance ) :
 			$tw_desc_placeholder = $custom_og_desc ?: $desc_from_custom_field ?: $this->get_generated_twitter_description( [ 'id' => $post_id ] );
 		}
 
+		// Yes, this is hacky, but we don't want to lose the user's input.
 		$show_og = (bool) $this->get_option( 'og_tags' );
 		$show_tw = (bool) $this->get_option( 'twitter_tags' );
 
@@ -392,7 +393,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id="tsf-og-title-wrap">
-					<input class="large-text" type="text" name="autodescription[_open_graph_title]" id="autodescription_og_title" placeholder="<?php echo esc_attr( $og_tit_placeholder ); ?>" value="<?php echo esc_attr( $this->get_custom_field( '_open_graph_title' ) ); ?>" autocomplete=off />
+					<input class="large-text" type="text" name="autodescription[_open_graph_title]" id="autodescription_og_title" placeholder="<?php echo esc_attr( $og_tit_placeholder ); ?>" value="<?php echo esc_attr( $this->get_post_meta_item( '_open_graph_title' ) ); ?>" autocomplete=off />
 				</div>
 			</div>
 		</div>
@@ -414,7 +415,7 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class="large-text" name="autodescription[_open_graph_description]" id="autodescription_og_description" placeholder="<?php echo esc_attr( $og_desc_placeholder ); ?>" rows="3" cols="4"><?php echo esc_attr( $this->get_custom_field( '_open_graph_description' ) ); ?></textarea>
+				<textarea class="large-text" name="autodescription[_open_graph_description]" id="autodescription_og_description" placeholder="<?php echo esc_attr( $og_desc_placeholder ); ?>" rows="3" cols="4"><?php echo esc_attr( $this->get_post_meta_item( '_open_graph_description' ) ); ?></textarea>
 			</div>
 		</div>
 
@@ -436,7 +437,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id="tsf-twitter-title-wrap">
-					<input class="large-text" type="text" name="autodescription[_twitter_title]" id="autodescription_twitter_title" placeholder="<?php echo esc_attr( $tw_tit_placeholder ); ?>" value="<?php echo esc_attr( $this->get_custom_field( '_twitter_title' ) ); ?>" autocomplete=off />
+					<input class="large-text" type="text" name="autodescription[_twitter_title]" id="autodescription_twitter_title" placeholder="<?php echo esc_attr( $tw_tit_placeholder ); ?>" value="<?php echo esc_attr( $this->get_post_meta_item( '_twitter_title' ) ); ?>" autocomplete=off />
 				</div>
 			</div>
 		</div>
@@ -453,12 +454,12 @@ switch ( $instance ) :
 					</label>
 					<?php
 					$this->get_option( 'display_character_counter' )
-						and $this->output_character_counter_wrap( 'autodescription_twitter_description', '' );
+						and $this->output_character_counter_wrap( 'autodescription_twitter_description' );
 					?>
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class="large-text" name="autodescription[_twitter_description]" id="autodescription_twitter_description" placeholder="<?php echo esc_attr( $tw_desc_placeholder ); ?>" rows="3" cols="4"><?php echo esc_attr( $this->get_custom_field( '_twitter_description' ) ); ?></textarea>
+				<textarea class="large-text" name="autodescription[_twitter_description]" id="autodescription_twitter_description" placeholder="<?php echo esc_attr( $tw_desc_placeholder ); ?>" rows="3" cols="4"><?php echo esc_attr( $this->get_post_meta_item( '_twitter_description' ) ); ?></textarea>
 			</div>
 		</div>
 		<?php
@@ -492,8 +493,8 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<input class="large-text" type="url" name="autodescription[_social_image_url]" id="autodescription_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_custom_field( '_social_image_url' ) ); ?>" autocomplete=off />
-				<input type="hidden" name="autodescription[_social_image_id]" id="autodescription_socialimage-id" value="<?php echo absint( $this->get_custom_field( '_social_image_id' ) ); ?>" disabled class="tsf-enable-media-if-js" />
+				<input class="large-text" type="url" name="autodescription[_social_image_url]" id="autodescription_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_post_meta_item( '_social_image_url' ) ); ?>" autocomplete=off />
+				<input type="hidden" name="autodescription[_social_image_id]" id="autodescription_socialimage-id" value="<?php echo absint( $this->get_post_meta_item( '_social_image_id' ) ); ?>" disabled class="tsf-enable-media-if-js" />
 				<div class="hide-if-no-js tsf-social-image-buttons">
 					<?php
 					//= Already escaped.

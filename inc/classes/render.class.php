@@ -352,7 +352,7 @@ class Render extends Admin_Init {
 			if ( $images && is_array( $images ) ) {
 
 				$post_id = $this->get_the_real_ID();
-				$post_manual_og = $this->get_custom_field( '_social_image_id', $post_id );
+				$post_manual_og = $this->get_post_meta_item( '_social_image_id', $post_id );
 				$featured_id = $post_manual_og ? (int) $post_manual_og : (int) \get_post_thumbnail_id( $post_id );
 
 				foreach ( $images as $id ) {
@@ -1150,6 +1150,8 @@ class Render extends Admin_Init {
 	 * Returns the plugin hidden HTML indicators.
 	 *
 	 * @since 2.9.2
+	 * @since 3.3.0 Added boot timers.
+	 * @staticvar array $cache
 	 *
 	 * @param string $where  Determines the position of the indicator.
 	 *                       Accepts 'before' for before, anything else for after.
@@ -1158,55 +1160,51 @@ class Render extends Admin_Init {
 	 */
 	public function get_plugin_indicator( $where = 'before', $timing = 0 ) {
 
-		static $run, $_cache;
+		static $cache;
 
-		if ( ! isset( $run ) ) {
-			/**
-			 * @since 2.0.0
-			 * @param bool $run Whether to run and show the plugin indicator.
-			 */
-			$run = (bool) \apply_filters( 'the_seo_framework_indicator', true );
+		if ( ! $cache ) {
+			$cache = [
+				/**
+				 * @since 2.0.0
+				 * @param bool $run Whether to run and show the plugin indicator.
+				 */
+				'run'        => (bool) \apply_filters( 'the_seo_framework_indicator', true ),
+				/**
+				 * @since 2.4.0
+				 * @param bool $sybre Whether to show the author name in the indicator.
+				 */
+				'author'     => (bool) \apply_filters( 'sybre_waaijer_<3', true ) ? \esc_html__( 'by Sybre Waaijer', 'autodescription' ) : '',
+				/**
+				 * @since 2.4.0
+				 * @param bool $show_timer Whether to show the generation time in the indicator.
+				 */
+				'show_timer' => (bool) \apply_filters( 'the_seo_framework_indicator_timing', true ),
+			];
 		}
 
-		if ( false === $run )
+		if ( false === $cache['run'] )
 			return '';
 
-		if ( ! isset( $_cache ) ) {
-			$_cache = [];
-			/**
-			 * @since 2.4.0
-			 * @param bool $sybre Whether to show the author name in the indicator.
-			 */
-			$sybre = (bool) \apply_filters( 'sybre_waaijer_<3', true );
-
-			// Plugin name can't be translated. Yay.
-			$tsf = 'The SEO Framework';
-
-			/**
-			 * @since 2.4.0
-			 * @param bool $show_timer Whether to show the generation time in the indicator.
-			 */
-			$_cache['show_timer'] = (bool) \apply_filters( 'the_seo_framework_indicator_timing', true );
-
-			/* translators: %s = 'The SEO Framework' */
-			$_cache['start'] = sprintf( \esc_html__( 'Start %s', 'autodescription' ), $tsf );
-			/* translators: %s = 'The SEO Framework' */
-			$_cache['end'] = sprintf( \esc_html__( 'End %s', 'autodescription' ), $tsf );
-			$_cache['author'] = $sybre ? ' ' . \esc_html__( 'by Sybre Waaijer', 'autodescription' ) : '';
-		}
-
 		if ( 'before' === $where ) {
-			$output = $_cache['start'] . $_cache['author'];
-		} else {
-			if ( $_cache['show_timer'] && $timing ) {
-				$timer = ' | ' . number_format( microtime( true ) - $timing, 5 ) . 's';
-			} else {
-				$timer = '';
-			}
-			$output = $_cache['end'] . $_cache['author'] . $timer;
-		}
+			/* translators: 1 = The SEO Framework, 2 = 'by Sybre Waaijer */
+			$output = sprintf( '%1$s %2$s', 'The SEO Framework', $cache['author'] );
 
-		return sprintf( '<!-- %s -->', $output ) . PHP_EOL;
+			return sprintf( '<!-- %s -->', trim( $output ) ) . PHP_EOL;
+		} else {
+			if ( $cache['show_timer'] && $timing ) {
+				$timers = sprintf(
+					' | %s meta | %s boot',
+					number_format( microtime( true ) - $timing, 5 ) . 's',
+					number_format( _bootstrap_timer(), 5 ) . 's'
+				);
+			} else {
+				$timers = '';
+			}
+			/* translators: 1 = The SEO Framework, 2 = 'by Sybre Waaijer */
+			$output = sprintf( '%1$s %2$s', 'The SEO Framework', $cache['author'] ) . $timers;
+
+			return sprintf( '<!-- / %s -->', trim( $output ) ) . PHP_EOL;
+		}
 	}
 
 	/**

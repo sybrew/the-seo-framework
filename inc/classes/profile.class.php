@@ -51,7 +51,7 @@ class Profile extends Generate_Ldjson {
 			return;
 
 		$this->profile_settings = (object) [
-			'keys' => [
+			'keys'       => [
 				'facebook_page' => 'tsf_facebook_page',
 				'twitter_page'  => 'tsf_twitter_page',
 			],
@@ -89,7 +89,7 @@ class Profile extends Generate_Ldjson {
 				'value'       => $this->get_user_option( $user->ID, 'facebook_page' ),
 				'class'       => '',
 			],
-			$this->profile_settings->keys['twitter_page'] => (object) [
+			$this->profile_settings->keys['twitter_page']  => (object) [
 				'name'        => \__( 'Twitter profile name', 'autodescription' ),
 				'type'        => 'text',
 				'placeholder' => \_x( '@your-personal-username', 'Twitter @username', 'autodescription' ),

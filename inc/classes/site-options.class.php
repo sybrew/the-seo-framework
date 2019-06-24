@@ -53,10 +53,6 @@ class Site_Options extends Sanitize {
 	 */
 	public function get_default_site_options() {
 
-		/**
-		 * Switch when RTL is active;
-		 * @since 2.5.0
-		 */
 		if ( \is_rtl() ) {
 			$titleloc   = 'left';
 			$h_titleloc = 'right';
@@ -222,7 +218,6 @@ class Site_Options extends Sanitize {
 				'knowledge_instagram'  => '', // Instagram Account
 				'knowledge_youtube'    => '', // Youtube Account
 				'knowledge_linkedin'   => '', // Linkedin Account
-				//	'knowledge_myspace'    => '', // MySpace Account // meh.
 				'knowledge_pinterest'  => '', // Pinterest Account
 				'knowledge_soundcloud' => '', // SoundCloud Account
 				'knowledge_tumblr'     => '', // Tumblr Account

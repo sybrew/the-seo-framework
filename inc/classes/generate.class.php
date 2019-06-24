@@ -249,9 +249,9 @@ class Generate extends User_Data {
 
 			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
 				$post_meta = [
-					'noindex'   => $this->get_custom_field( '_genesis_noindex' ),
-					'nofollow'  => $this->get_custom_field( '_genesis_nofollow' ),
-					'noarchive' => $this->get_custom_field( '_genesis_noarchive' ),
+					'noindex'   => $this->get_post_meta_item( '_genesis_noindex' ),
+					'nofollow'  => $this->get_post_meta_item( '_genesis_nofollow' ),
+					'noarchive' => $this->get_post_meta_item( '_genesis_noarchive' ),
 				];
 
 				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
@@ -358,9 +358,9 @@ class Generate extends User_Data {
 
 			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
 				$post_meta = [
-					'noindex'   => $this->get_custom_field( '_genesis_noindex', $args['id'] ),
-					'nofollow'  => $this->get_custom_field( '_genesis_nofollow', $args['id'] ),
-					'noarchive' => $this->get_custom_field( '_genesis_noarchive', $args['id'] ),
+					'noindex'   => $this->get_post_meta_item( '_genesis_noindex', $args['id'] ),
+					'nofollow'  => $this->get_post_meta_item( '_genesis_nofollow', $args['id'] ),
+					'noarchive' => $this->get_post_meta_item( '_genesis_noarchive', $args['id'] ),
 				];
 
 				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
@@ -454,7 +454,7 @@ class Generate extends User_Data {
 
 			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
 				$post_meta = [
-					'noindex' => $this->get_custom_field( '_genesis_noindex', $args['id'] ),
+					'noindex' => $this->get_post_meta_item( '_genesis_noindex', $args['id'] ),
 				];
 				// Test qubit
 				$noindex = ( $noindex | (int) $post_meta['noindex'] ) > .33;

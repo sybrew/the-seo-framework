@@ -628,6 +628,124 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
+	 * Sanitizes term meta.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param array $data The term meta to sanitize.
+	 * @return array The sanitized term meta.
+	 */
+	public function sanitize_term_meta( array $data ) {
+
+		foreach ( $data as $key => &$value ) :
+			switch ( $key ) :
+				case 'doctitle':
+				case 'og_title':
+				case 'tw_title':
+					$value = $this->s_title_raw( $value );
+					continue 2;
+
+				case 'description':
+				case 'og_description':
+				case 'tw_description':
+					$value = $this->s_description_raw( $value );
+					continue 2;
+
+				case 'canonical':
+				case 'social_image_url':
+					$value = $this->s_url_query( $value );
+					continue 2;
+
+				case 'social_image_id':
+					//* Bound to social_image_url.
+					$value = $data['social_image_url'] ? $this->s_absint( $value ) : 0;
+					continue 2;
+
+				case 'noindex':
+				case 'nofollow':
+				case 'noarchive':
+					$value = $this->s_qubit( $value );
+					continue 2;
+
+				case 'redirect':
+					$value = $this->s_redirect_url( $value );
+					continue 2;
+
+				default:
+					unset( $data[ $key ] );
+					break;
+			endswitch;
+		endforeach;
+
+		return $data;
+	}
+
+	/**
+	 * Sanitizes post meta.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param array $data The post meta to sanitize.
+	 * @return array The sanitized post meta.
+	 */
+	public function sanitize_post_meta( array $data ) {
+
+		foreach ( $data as $key => &$value ) :
+			switch ( $key ) :
+				case '_genesis_title':
+				case '_open_graph_title':
+				case '_twitter_title':
+					$value = $this->s_title_raw( $value );
+					continue 2;
+
+				case '_genesis_description':
+				case '_open_graph_description':
+				case '_twitter_description':
+					$value = $this->s_description_raw( $value );
+					continue 2;
+
+				case '_genesis_canonical_uri':
+				case '_social_image_url':
+					/**
+					 * Remove unwanted query parameters. They're allowed by Google, but very much rather not.
+					 * Also, they will only cause bugs.
+					 * Query parameters are also only used when no pretty permalinks are used. Which is bad.
+					 */
+					$value = $this->s_url_query( $value );
+					continue 2;
+
+				case '_social_image_id':
+					//* Bound to _social_image_url.
+					$value = $data['_social_image_url'] ? $this->s_absint( $value ) : 0;
+					continue 2;
+
+				case '_genesis_noindex':
+				case '_genesis_nofollow':
+				case '_genesis_noarchive':
+					$value = $this->s_qubit( $value );
+					continue 2;
+
+				case 'redirect':
+					//* Let's keep this as the output really is.
+					$value = $this->s_redirect_url( $value );
+					continue 2;
+
+				case '_tsf_title_no_blogname':
+				case 'exclude_local_search':
+				case 'exclude_from_archive':
+					$value = $this->s_one_zero( $value );
+					continue 2;
+
+				default:
+					unset( $data[ $key ] );
+					break;
+			endswitch;
+		endforeach;
+
+		return $data;
+	}
+
+	/**
 	 * Returns the title separator value string.
 	 *
 	 * @since 2.2.2

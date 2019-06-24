@@ -117,9 +117,10 @@ spl_autoload_register( __NAMESPACE__ . '\\_autoload_classes', true, true );
  * the plugin classes.
  *
  * @since 2.8.0
- * @since 3.1.0 1. No longer maintains cache.
- *              2. Now always returns void.
- * @since 3.3.0 Streamlined folder lookup by more effectively using the namespace.
+ * @since 3.1.0 : 1. No longer maintains cache.
+ *                2. Now always returns void.
+ * @since 3.3.0 : 1. Streamlined folder lookup by more effectively using the namespace.
+ *                2. Added timing functionality
  * @uses THE_SEO_FRAMEWORK_DIR_PATH_CLASS
  * @access private
  *
@@ -132,6 +133,8 @@ spl_autoload_register( __NAMESPACE__ . '\\_autoload_classes', true, true );
 function _autoload_classes( $class ) {
 
 	if ( 0 !== strpos( $class, 'The_SEO_Framework\\', 0 ) ) return;
+
+	$_bootstrap_timer = microtime( true );
 
 	$_chunks       = explode( '\\', strtolower( $class ) );
 	$_chunck_count = count( $_chunks );
@@ -154,6 +157,8 @@ function _autoload_classes( $class ) {
 	}
 
 	require $path . $rel_dir . $file;
+
+	_bootstrap_timer( microtime( true ) - $_bootstrap_timer );
 }
 
 \add_action( 'activate_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, __NAMESPACE__ . '\\_do_plugin_activation' );
