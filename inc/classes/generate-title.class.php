@@ -73,16 +73,14 @@ class Generate_Title extends Generate_Description {
 		$title = $this->get_filtered_raw_custom_field_title( $args );
 
 		if ( $title ) {
-			//? Only add protection if the query is autodetermined, and on a real page.
 			if ( $this->use_title_protection( $args ) )
 				$this->merge_title_protection( $title, $args );
 
 			if ( $this->use_title_pagination( $args ) )
 				$this->merge_title_pagination( $title );
 
-			if ( $this->use_title_branding( $args ) ) {
+			if ( $this->use_title_branding( $args ) )
 				$this->merge_title_branding( $title, $args );
-			}
 		}
 
 		return $escape ? $this->escape_title( $title ) : $title;

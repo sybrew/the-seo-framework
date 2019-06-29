@@ -244,14 +244,14 @@ final class SeoBar_Term extends SeoBar {
 			$item['assess']['branding'] = $cache['assess']['branding']['manual'];
 		}
 
-		$brand_count = substr_count( $title, $cache['params']['blogname'] );
+		$brand_count = $cache['params']['blogname'] ? substr_count( $title, $cache['params']['blogname'] ) : 0;
 
 		if ( ! $brand_count ) {
 			// Override branding state.
 			$item['status']             = \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN;
 			$item['reason']             = $cache['reason']['notbranded'];
 			$item['assess']['branding'] = $cache['assess']['branding']['not'];
-		} elseif ( substr_count( $title, $cache['params']['blogname'] ) > 1 ) {
+		} elseif ( $brand_count > 1 ) {
 			$item['status']               = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;
 			$item['reason']               = $cache['reason']['duplicated'];
 			$item['assess']['duplicated'] = $cache['assess']['duplicated'];

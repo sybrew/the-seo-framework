@@ -40,15 +40,15 @@ switch ( $instance ) :
 				'callback' => [ $this, 'homepage_metabox_additions_tab' ],
 				'dashicon' => 'plus',
 			],
-			'robots' => [
-				'name'     => __( 'Robots', 'autodescription' ),
-				'callback' => [ $this, 'homepage_metabox_robots_tab' ],
-				'dashicon' => 'visibility',
-			],
 			'social' => [
 				'name'     => __( 'Social', 'autodescription' ),
 				'callback' => [ $this, 'homepage_metabox_social_tab' ],
 				'dashicon' => 'share',
+			],
+			'robots' => [
+				'name'     => __( 'Robots', 'autodescription' ),
+				'callback' => [ $this, 'homepage_metabox_robots_tab' ],
+				'dashicon' => 'visibility',
 			],
 		];
 
@@ -277,133 +277,6 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	case 'the_seo_framework_homepage_metabox_robots':
-		$language = $this->google_language();
-
-		//* Get homepage ID. If blog on front, it's 0.
-		$home_id = $this->get_the_front_page_ID();
-
-		$noindex_post   = $home_id ? $this->get_post_meta_item( '_genesis_noindex', $home_id ) : '';
-		$nofollow_post  = $home_id ? $this->get_post_meta_item( '_genesis_nofollow', $home_id ) : '';
-		$noarchive_post = $home_id ? $this->get_post_meta_item( '_genesis_noarchive', $home_id ) : '';
-
-		$checked_home = '';
-		/**
-		 * Shows user that the setting is checked on the homepage.
-		 * Adds starting - with space to maintain readability.
-		 *
-		 * @since 2.2.4
-		 */
-		if ( $noindex_post || $nofollow_post || $noarchive_post ) {
-			$checked_home = sprintf(
-				'- %s',
-				vsprintf(
-					'<a href="%s" title="%s" target=_blank class=attention>%s</a>',
-					[
-						esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) ),
-						esc_attr__( 'View Homepage Settings', 'autodescription' ),
-						esc_html__( 'Overwritten via page settings', 'autodescription' ),
-					]
-				)
-			);
-		}
-
-		?>
-		<h4><?php esc_html_e( 'Robots Meta Settings', 'autodescription' ); ?></h4>
-		<?php
-
-		$noindex_note   = $noindex_post ? $checked_home : '';
-		$nofollow_note  = $nofollow_post ? $checked_home : '';
-		$noarchive_note = $noarchive_post ? $checked_home : '';
-
-		//* Index label.
-		/* translators: %s = noindex/nofollow/noarchive */
-		$i_label = sprintf( esc_html__( 'Apply %s to the homepage?', 'autodescription' ), $this->code_wrap( 'noindex' ) );
-		$i_label .= ' ';
-		$i_label .= $this->make_info(
-			__( 'This tells search engines not to show this page in their search results.', 'autodescription' ),
-			'https://support.google.com/webmasters/answer/93710?hl=' . $language,
-			false
-		) . $noindex_note;
-
-		//* Follow label.
-		/* translators: %s = noindex/nofollow/noarchive */
-		$f_label = sprintf( esc_html__( 'Apply %s to the homepage?', 'autodescription' ), $this->code_wrap( 'nofollow' ) );
-		$f_label .= ' ';
-		$f_label .= $this->make_info(
-			__( 'This tells search engines not to follow links on this page.', 'autodescription' ),
-			'https://support.google.com/webmasters/answer/96569?hl=' . $language,
-			false
-		) . $nofollow_note;
-
-		//* Archive label.
-		/* translators: %s = noindex/nofollow/noarchive */
-		$a_label = sprintf( esc_html__( 'Apply %s to the homepage?', 'autodescription' ), $this->code_wrap( 'noarchive' ) );
-		$a_label .= ' ';
-		$a_label .= $this->make_info(
-			__( 'This tells search engines not to save a cached copy of this page.', 'autodescription' ),
-			'https://support.google.com/webmasters/answer/79812?hl=' . $language,
-			false
-		) . $noarchive_note;
-
-		$this->attention_description( __( 'Warning: No public site should ever disable indexing or following for the homepage.', 'autodescription' ) );
-
-		//* Echo checkboxes.
-		$this->wrap_fields( [
-			$this->make_checkbox(
-				'homepage_noindex',
-				$i_label,
-				'',
-				false
-			),
-			$this->make_checkbox(
-				'homepage_nofollow',
-				$f_label,
-				'',
-				false
-			),
-			$this->make_checkbox(
-				'homepage_noarchive',
-				$a_label,
-				'',
-				false
-			),
-		], true );
-
-		if ( $this->has_page_on_front() ) {
-			$this->description_noesc(
-				$this->convert_markdown(
-					sprintf(
-						/* translators: %s = Homepage URL markdown */
-						esc_html__( 'Note: These options may be overwritten on the [page settings](%s).', 'autodescription' ),
-						esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) )
-					),
-					[ 'a' ],
-					[ 'a_internal' => false ]
-				)
-			);
-		}
-		?>
-
-		<hr>
-
-		<h4><?php esc_html_e( 'Homepage Pagination Robots Settings', 'autodescription' ); ?></h4>
-		<?php
-		$this->description( __( "If your homepage is paginated and outputs content that's also found elsewhere on the website, enabling this option might prevent duplicate content.", 'autodescription' ) );
-
-		//* Echo checkbox.
-		$this->wrap_fields(
-			$this->make_checkbox(
-				'home_paged_noindex',
-				/* translators: %s = noindex/nofollow/noarchive */
-				sprintf( esc_html__( 'Apply %s to every second or later page on the homepage?', 'autodescription' ), $this->code_wrap( 'noindex' ) ),
-				'',
-				false
-			),
-			true
-		);
-		break;
-
 	case 'the_seo_framework_homepage_metabox_social':
 		$language = $this->google_language();
 
@@ -591,6 +464,133 @@ switch ( $instance ) :
 			?>
 		</p>
 		<?php
+		break;
+
+	case 'the_seo_framework_homepage_metabox_robots':
+		$language = $this->google_language();
+
+		//* Get homepage ID. If blog on front, it's 0.
+		$home_id = $this->get_the_front_page_ID();
+
+		$noindex_post   = $home_id ? $this->get_post_meta_item( '_genesis_noindex', $home_id ) : '';
+		$nofollow_post  = $home_id ? $this->get_post_meta_item( '_genesis_nofollow', $home_id ) : '';
+		$noarchive_post = $home_id ? $this->get_post_meta_item( '_genesis_noarchive', $home_id ) : '';
+
+		$checked_home = '';
+		/**
+		 * Shows user that the setting is checked on the homepage.
+		 * Adds starting - with space to maintain readability.
+		 *
+		 * @since 2.2.4
+		 */
+		if ( $noindex_post || $nofollow_post || $noarchive_post ) {
+			$checked_home = sprintf(
+				'- %s',
+				vsprintf(
+					'<a href="%s" title="%s" target=_blank class=attention>%s</a>',
+					[
+						esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) ),
+						esc_attr__( 'View Homepage Settings', 'autodescription' ),
+						esc_html__( 'Overwritten via page settings', 'autodescription' ),
+					]
+				)
+			);
+		}
+
+		?>
+		<h4><?php esc_html_e( 'Robots Meta Settings', 'autodescription' ); ?></h4>
+		<?php
+
+		$noindex_note   = $noindex_post ? $checked_home : '';
+		$nofollow_note  = $nofollow_post ? $checked_home : '';
+		$noarchive_note = $noarchive_post ? $checked_home : '';
+
+		//* Index label.
+		/* translators: %s = noindex/nofollow/noarchive */
+		$i_label = sprintf( esc_html__( 'Apply %s to the homepage?', 'autodescription' ), $this->code_wrap( 'noindex' ) );
+		$i_label .= ' ';
+		$i_label .= $this->make_info(
+			__( 'This tells search engines not to show this page in their search results.', 'autodescription' ),
+			'https://support.google.com/webmasters/answer/93710?hl=' . $language,
+			false
+		) . $noindex_note;
+
+		//* Follow label.
+		/* translators: %s = noindex/nofollow/noarchive */
+		$f_label = sprintf( esc_html__( 'Apply %s to the homepage?', 'autodescription' ), $this->code_wrap( 'nofollow' ) );
+		$f_label .= ' ';
+		$f_label .= $this->make_info(
+			__( 'This tells search engines not to follow links on this page.', 'autodescription' ),
+			'https://support.google.com/webmasters/answer/96569?hl=' . $language,
+			false
+		) . $nofollow_note;
+
+		//* Archive label.
+		/* translators: %s = noindex/nofollow/noarchive */
+		$a_label = sprintf( esc_html__( 'Apply %s to the homepage?', 'autodescription' ), $this->code_wrap( 'noarchive' ) );
+		$a_label .= ' ';
+		$a_label .= $this->make_info(
+			__( 'This tells search engines not to save a cached copy of this page.', 'autodescription' ),
+			'https://support.google.com/webmasters/answer/79812?hl=' . $language,
+			false
+		) . $noarchive_note;
+
+		$this->attention_description( __( 'Warning: No public site should ever disable indexing or following for the homepage.', 'autodescription' ) );
+
+		//* Echo checkboxes.
+		$this->wrap_fields( [
+			$this->make_checkbox(
+				'homepage_noindex',
+				$i_label,
+				'',
+				false
+			),
+			$this->make_checkbox(
+				'homepage_nofollow',
+				$f_label,
+				'',
+				false
+			),
+			$this->make_checkbox(
+				'homepage_noarchive',
+				$a_label,
+				'',
+				false
+			),
+		], true );
+
+		if ( $this->has_page_on_front() ) {
+			$this->description_noesc(
+				$this->convert_markdown(
+					sprintf(
+						/* translators: %s = Homepage URL markdown */
+						esc_html__( 'Note: These options may be overwritten on the [page settings](%s).', 'autodescription' ),
+						esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) )
+					),
+					[ 'a' ],
+					[ 'a_internal' => false ]
+				)
+			);
+		}
+		?>
+
+		<hr>
+
+		<h4><?php esc_html_e( 'Homepage Pagination Robots Settings', 'autodescription' ); ?></h4>
+		<?php
+		$this->description( __( "If your homepage is paginated and outputs content that's also found elsewhere on the website, enabling this option might prevent duplicate content.", 'autodescription' ) );
+
+		//* Echo checkbox.
+		$this->wrap_fields(
+			$this->make_checkbox(
+				'home_paged_noindex',
+				/* translators: %s = noindex/nofollow/noarchive */
+				sprintf( esc_html__( 'Apply %s to every second or later page on the homepage?', 'autodescription' ), $this->code_wrap( 'noindex' ) ),
+				'',
+				false
+			),
+			true
+		);
 		break;
 
 	default:

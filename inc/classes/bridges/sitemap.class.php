@@ -475,7 +475,6 @@ final class Sitemap {
 			'wp_registered_widget_controls',
 			'_wp_deprecated_widgets_callbacks',
 			'posts',
-			'shortcode_tags',
 		];
 
 		foreach ( $remove as $key => $value ) {
@@ -486,6 +485,9 @@ final class Sitemap {
 				unset( $GLOBALS[ $value ] );
 			}
 		}
+
+		// This one requires to be an array for wp_texturize(). There's an API, let's use it:
+		\remove_all_shortcodes();
 
 		$freed_memory = $memory - memory_get_usage();
 	}

@@ -149,6 +149,7 @@ function _do_upgrade() {
 
 	//! From here, the upgrade procedures should be backward compatible.
 	//? This means no data may be erased for at least 1 major version, or 1 year, whichever is later.
+	//? We must manually delete settings that are no longer used; we merge them otherwise.
 	if ( $version < '3103' ) {
 		_do_upgrade_3103();
 		$version = '3103';

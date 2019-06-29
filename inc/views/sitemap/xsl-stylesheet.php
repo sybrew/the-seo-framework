@@ -14,7 +14,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() a
  * @since 3.1.0
  * @access private
  * @TODO move this to a dedicated sitemap "module" (a system that loads everything sitemap related).
- * @param \The_SEO_Framework\Load $tsf
+ * @param \The_SEO_Framework\Load $tsf the_seo_framework() object.
  */
 function _print_xsl_global_variables( $tsf ) {
 
@@ -26,7 +26,7 @@ function _print_xsl_global_variables( $tsf ) {
 
 	$colors = $tsf->get_sitemap_colors();
 
-	//= Styles colors.
+	// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- s_color_hex() escapes.
 	printf(
 		'<xsl:variable name="colorMain" select="\'%s\'"/>',
 		'#' . $tsf->s_color_hex(
@@ -37,7 +37,7 @@ function _print_xsl_global_variables( $tsf ) {
 			 */
 			\apply_filters( 'the_seo_framework_sitemap_color_main', $colors['main'] )
 		)
-	); // xss ok.
+	);
 	printf(
 		'<xsl:variable name="colorAccent" select="\'%s\'"/>',
 		'#' . $tsf->s_color_hex(
@@ -48,7 +48,7 @@ function _print_xsl_global_variables( $tsf ) {
 			 */
 			\apply_filters( 'the_seo_framework_sitemap_color_accent', $colors['accent'] )
 		)
-	); // xss ok.
+	);
 	printf(
 		'<xsl:variable name="relativeFontColor" select="\'%s\'"/>',
 		'#' . $tsf->s_color_hex(
@@ -61,7 +61,8 @@ function _print_xsl_global_variables( $tsf ) {
 				$tsf->get_relative_fontcolor( $colors['main'] )
 			)
 		)
-	); // xss ok.
+	);
+	// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 \add_action( 'the_seo_framework_xsl_head', __NAMESPACE__ . '\\_print_xsl_title' );
@@ -72,11 +73,11 @@ function _print_xsl_global_variables( $tsf ) {
  * @since 3.3.0 Now uses a consistent titling scheme.
  * @access private
  * @TODO move this to a dedicated sitemap "module" (a system that loads everything sitemap related).
- * @param \The_SEO_Framework\Load $tsf
+ * @param \The_SEO_Framework\Load $tsf the_seo_framework() object.
  */
 function _print_xsl_title( $tsf ) {
 
-	$title = \__( 'XML Sitemap', 'autodescription' );
+	$title    = \__( 'XML Sitemap', 'autodescription' );
 	$addition = $tsf->get_blogname();
 	$sep      = $tsf->get_title_separator();
 
@@ -93,7 +94,7 @@ function _print_xsl_title( $tsf ) {
  * @since 3.1.0
  * @access private
  * @TODO move this to a dedicated sitemap "module" (a system that loads everything sitemap related).
- * @param \The_SEO_Framework\Load $tsf
+ * @param \The_SEO_Framework\Load $tsf the_seo_framework() object.
  */
 function _print_xsl_styles( $tsf ) {
 
@@ -180,7 +181,7 @@ STYLES;
  * @since 3.1.0
  * @access private
  * @TODO move this to a dedicated sitemap "module" (a system that loads everything sitemap related).
- * @param \The_SEO_Framework\Load $tsf
+ * @param \The_SEO_Framework\Load $tsf the_seo_framework() object.
  */
 function _print_xsl_description( $tsf ) {
 
@@ -272,7 +273,7 @@ function _print_xsl_description( $tsf ) {
  * @since 3.1.0
  * @access private
  * @TODO move this to a dedicated sitemap "module" (a system that loads everything sitemap related).
- * @param \The_SEO_Framework\Load $tsf
+ * @param \The_SEO_Framework\Load $tsf the_seo_framework() object.
  */
 function _print_xsl_content( $tsf ) {
 
@@ -310,7 +311,7 @@ function _print_xsl_content( $tsf ) {
 
 	$vars = implode( $vars );
 
-	// xss OK.
+	// phpcs:ignore -- WordPress.Security.EscapeOutput.OutputNotEscaped
 	echo <<<CONTENT
 <table>
 	<tr>
@@ -337,7 +338,7 @@ CONTENT;
  * @since 3.1.0
  * @access private
  * @TODO move this to a dedicated sitemap "module" (a system that loads everything sitemap related).
- * @param \The_SEO_Framework\Load $tsf
+ * @param \The_SEO_Framework\Load $tsf the_seo_framework() object.
  */
 function _print_xsl_footer( $tsf ) {
 
@@ -372,33 +373,37 @@ function _print_xsl_footer( $tsf ) {
  *
  * @since 3.1.4
  *
- * @param array $meta_tags Site Icon meta elements.
+ * @param array $tags Site Icon meta elements.
  * @return array The converted meta tags.
  */
 function _convert_site_icon_meta_tags( $tags ) {
 
 	foreach ( $tags as &$tag ) {
 		$tag = \force_balance_tags( $tag );
-		$tag = \wp_kses( $tag, [
-			'link' => [
-				'charset'  => [],
-				'rel'      => [],
-				'sizes'    => [],
-				'href'     => [],
-				'hreflang' => [],
-				'media'    => [],
-				'rev'      => [],
-				'target'   => [],
-				'type'     => [],
+		$tag = \wp_kses(
+			$tag,
+			[
+				'link' => [
+					'charset'  => [],
+					'rel'      => [],
+					'sizes'    => [],
+					'href'     => [],
+					'hreflang' => [],
+					'media'    => [],
+					'rev'      => [],
+					'target'   => [],
+					'type'     => [],
+				],
+				'meta' => [
+					'content'    => [],
+					'property'   => [],
+					'http-equiv' => [],
+					'name'       => [],
+					'scheme'     => [],
+				],
 			],
-			'meta' => [
-				'content'    => [],
-				'property'   => [],
-				'http-equiv' => [],
-				'name'       => [],
-				'scheme'     => [],
-			],
-		], [] );
+			[]
+		);
 	}
 
 	return $tags;

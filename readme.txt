@@ -248,6 +248,7 @@ TODO: Drop IE11 support in JS? Make sure the scripts fail to load... Ugh LTS
 
 TODO, maybe: backslashes are double-stripped from SEO settings...: \\z -> \z -> z
 	TODO test if this is also the case in the SEO meta settings; definitely so for Focus??
+		* This is fixed for both Meta and Term descriptions; already noted in changelog.
 
 TODO: Add a classmap for components, like a "metabox loader", "quickedit loader", and more?
 	* This can affect performance negatively... but it may also speed up things greatly as we offload parsing of redundant PHP, and reduce base-framework (the_seo_framework()) files.
@@ -262,7 +263,6 @@ TODO "Want to opt out of future, infrequent, admin-only, non-recurring, and non-
 
 TODO Opt-in for asynchronous SEO Bars? It is possible now! :)
 TODO move the class constants to interfaces? This will allow free access...
-TODO move $tests list to class-specific tests. Making the SeoBar interpreter non-abstract. Mind the "self" vs "static".
 
 TODO re-affirm all changes.
 TODO quality-control the deprecations.
@@ -310,6 +310,11 @@ TODO convert all get_custom_field() calls to get_post_meta_item()!
 
 TODO primary term selection should have natsort ID via PHP predefined.
 TODO maybe? Add "no_blogname" term option.
+TODO when initializing scripts, consider whether counter scripts should be loaded in depending on settings?
+
+TODO When changing the slug of a term, the canonical URL placeholder now updates with it.
+
+TODO test RTL.
 
 **Detailed log:**
 
@@ -319,6 +324,7 @@ TODO maybe? Add "no_blogname" term option.
 	* TODO maybe: We now generate a proposed description of your content every minute on Gutenberg pages.
 	* TODO maybe: We now parse shortcodes for the content dynamically, for Focus and description generation-compatibility.
 	* TODO We've added more term settings, including:
+		* TODO blogname removal.
 		* Open Graph title and description inputs.
 		* Twitter title and description inputs.
 		* TODO social image input.
@@ -335,8 +341,9 @@ TODO maybe? Add "no_blogname" term option.
 * **Changed:**
 	* We now support WordPress v4.9 and later, instead of WordPress v4.6 and later.
 	* We now support PHP v5.6 and later, instead of PHP v5.4 and later.
-	* Backslashes are no longer stripped from post meta. Slash away!
+	* Backslashes (back-solidus) are no longer stripped from post and term meta. Slash away!
 		* This also resolves an issue where the number of slashes are halved every time you update the post.
+		* NOTE: The site settings doesn't support this feature, because WordPress implements PHP 4.x compatibility on options which strip them.
 	* TODO? We switched the homepage title option name from left to right, and right to left.
 		* This doesn't affect your titles, it's only semantics.
 		* NOTE TO SELF: Changing this would require us to change the default options, the filters behavior, and the JS code.. is this the best route?
@@ -363,6 +370,12 @@ TODO maybe? Add "no_blogname" term option.
 		* The homepage settings may now reveal more information on where this data can be altered.
 		* Screen-reader support has been reimplemented for the SEO Bar; it's now completely written out and accurate.
 		* You can now, again, navigate to the SEO Bar with your keyboard. This was disabled previously as it messed with the browser cache due to a wrong implementation.
+		* When clicking the title prefix, like "Category: " or "Private: ", the text selection now goes to the beginning, instead of the end.
+			* When double-clicking on the title prefix, you'll select the first word (or piece of whitespace).
+			* When triple-clicking on the title prefix, you'll select the whole input.
+		* When clicking the title addition, like "- My Site", the text selection no longer just goes to the end regardless of its position, but now goes to the beginning if it's prefixed.
+			* When double-clicking on the title addition, you'll now select the last word (or first, if prefixed) (or piece of whitespace).
+			* When triple-clicking on the title addition, you'll select the whole input.
 	* **AI Generators:**
 		* **Descriptions:**
 			* They now work better with RTL languages, like Arabic and Hebrew; however, due to ambiguity in language construction, it will read from top to bottom (like the web is built), instead of bottom to top (like books are).
@@ -386,10 +399,17 @@ TODO maybe? Add "no_blogname" term option.
 	* **Internationalization:**
 		* Sites supporting the Assamese, Gujarati, Malayalam, Japanese, Korean, Talim, Traditional Chinese, or Simplified Chinese now have adjusted character guidelines.
 		* UI strings that were hard to translate in other locales have been rewritten. Yes, this takes some time to get used to.
+	* **Layout:**
+		* Reordered the Homepage Settings metabox tabs to be more in line with the Post Meta Settings metabox.
 	* **Performance:**
 		* The SEO Bar now loads quicker, as redundant checks have been removed.
 		* We offloaded a large portion of the admin-sided PHP scripts to different objects, freeing up RAM and lowering plugin boot-time.
-			* Moreover, we optimized CSS and JS to be more performant and smaller in size.
+		* The admin helper-scripts have been optimized to execute no unnecessary paint-jobs, lowering browser-CPU usage.
+		* We split the main JavaScript and CSS files into multiple, dedicated files. Improving performance and lowering power consumption on all pages where TSF is active.
+			* **HTTP/2:** To take full advantage of this chaange, multiplexing support (like in HTTP/2) is advised.
+			* **CSS:** This significantly lowers class and ID lookups on every page load and DOM update, which drastically lowers processing time.
+			* **JS:** The main advantage of splitting these files is that if one script fails, the other may still continue. The performance should remain roughly the same; however, further optimizations have been implemented.
+			* **PR:** Love using WordPress on the go? Now you can for longer! Also, lower power consumption is great for the environment, times 100,000.
 	* **Sitemap:**
 		* The blog page (not as homepage) now chooses a better lastmod value; based on whether the blog page was edited, or a new post was recently published.
 			* Before it was only when a post was most recently published.
@@ -460,9 +480,6 @@ TODO maybe? Add "no_blogname" term option.
 			* This value means "override and disable the default robots-setting".
 				* For example, if you set `noindex` to all tags, but set `-1` to a specific tag, the tag may be indexed.
 			* Because the options were simpler before, `-1` will be treated as `1`. So, when you downgrade, this setting will yield the opposite effect.
-	* TODO maybe: Remove the character counter for titles and descriptions, while keeping them for social inputs?
-		* Also remove the related display-options?
-		* Yes, people like the character counter, but it's really not good for SEO.
 	* TODO maybe: strip the removed options on database upgrade... (this will also happen on manual save...)
 	* Webkit flexbox vendor prefixes in all CSS files. All browsers that relied on these have been updated to the latest spec since.
 * **Fixed:**
@@ -471,11 +488,11 @@ TODO maybe? Add "no_blogname" term option.
 			* TODO: none...
 		* **Post edit:**
 			* When using the Block Editor, setting changes are registered consistently again after saving the page.
+			* When you're editing the homepage via the post settings, the disabled "Remove the blogname?" option's tooltip now states it's handled elsewhere.
 		* **Settings page:**
 			* When pasting a webmaster code tag in the respective settings field, no change listener was invoked, and you didn't get an ays-message when navigating from the settings page.
 			* When you clear a sitemap color input field, the default color is now displayed correctly.
-			* TODO When navigating away from the settings page, after changing the "category prefix" setting, the example no longer reflects the adjusted setting.
-				* Really... this is such an extreme corner-case.
+			* Trailing, leading, and double spaces are now trimmed from the homepage title examples.
 	* **Usability:**
 		* **Settings:**
 			* The global category and tag `noarchive` options now have an effect.
@@ -483,14 +500,35 @@ TODO maybe? Add "no_blogname" term option.
 			* The post type robots-meta and disable-seo settings now only apply to taxonomies that have all their shared post types set, instead of just the post type of the most recent post published.
 	* **Nitpicking:**
 		* The sitemap's XSL stylesheet no longer uses the latest post ID to determine the title generation; instead, it always adds your blogname to the right.
-		* The sitemap now can't exceed the imposed 50,000 limit; unless you use custom filters.
+		* The sitemap now can't exceed the imposed 50,000 limit; unless you use custom filters to extend the sitemap beyond that.
 		* The plugin is no longer booted again when a compatibility file is loaded.
 			* This issue couldn't propagate thanks to "Just In Time" checks, but since we now emit warnings, it's been discovered.
+		* If the homepage is a page, and it's private or protected, the homepage Meta Title field on the SEO Settings page now reflects that.
 	* **Compatibility:**
 		* We took our hands off the WordPress Rewrite system. All plugin conflicts related to this are no longer our problem--albeit, it never was our fault.
 			* Now, we are able to finally implement Polylang's broken system for the sitemap. As such, all sitemaps now work with Polylang.
 				* Keep in mind, however, that you may wish to enable the "Hide URL language information for default language" option to remove the base language requirement to output the main language's sitemap.
 			* Thanks to [Yoast's broken and misrepresenting NGINX rules](https://kb.yoast.com/kb/xml-sitemaps-nginx/), we received too many support inquiries and negative responses as it's not interchangable; so, we made them.
+* **Not fixed:**
+	* **Note:** These bugs are edge-cases that were found during "breaking sessions". The overhead required to fix these is currently too high for further consideration.
+	* **Titles:**
+		* When you empty your site name in the general settings, title examples in the settings area may fail to process correctly.
+		* Some WordPress character texturizations aren't converted in the title inputs, only in the display. For example, `--` should become `&mdash;`.
+			* WordPress is becoming more JavaScript powered every release, we may see compatibility forwarded in the future.
+		* Back-solidi are not stripped from the autogenerated titles and descriptions.
+			* Because WordPress applies PHP 4 compatibility on some settings by stripping back-solidi, and then not on others, this leads to inconsistent behavior we'd have to fix independently for each case.
+			* Takeaway: Don't use backward solidi in WordPress, use `&#92;` if you must instead.
+		* The "Remove the blogname?" option is not hidden when doing so globally.
+			* We highly discourage using the global option to achieve this. We left this option visible to let users recognize there are alternatives.
+	* **Meta input:**
+		* TODO (we have a fix in place? tsf.decodeEntities()?) When you enter a HTML entity in the title or description input, like `&mdash;`, these won't be processed further until you save the title and reload the post edit, term edit, or SEO settings page.
+			* The viable fix we tried created XSS security issues, and as such, was dropped.
+			* Another fix we tried would prevent rendering of some characters, like back-solidi, and greater/smaller than symbols.
+	* **Interface:**
+		* When navigating away from the settings page, after changing the "category prefix" setting, the related example no longer reflects the adjusted setting.
+	* **Filters:**
+		* When using custom meta title or meta description filters, they may not be processed for the met input.
+			* Fixing this requires restructuring the custom title and description methods with flags.
 
 **For translators:**
 
@@ -507,10 +545,11 @@ TODO maybe? Add "no_blogname" term option.
 
 _**Note:** Only public changes are listed; internal functionality changes are listed as a global "improvement"._
 
-* **Improved:**
-	* The class autoloader now considers folder structure automatically, based on the namespace used.
-	* The script loader now discerns between posts and taxonomies, and can now prevent loading scripts when SEO is disabled for the post type or taxonomy.
-	* In the debug interface, the JSON+LD scripts are now more readable.
+* **General changes:**
+	* **Improved:**
+		* The class autoloader now considers folder structure automatically, based on the namespace used.
+		* The script loader now discerns between posts and taxonomies, and can now prevent loading scripts when SEO is disabled for the post type or taxonomy.
+		* In the debug interface, the JSON+LD scripts are now more readable.
 * **Option notes:**
 	* **Added:**
 		* `seo_bar_symbols`
@@ -561,19 +600,24 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* `\The_SEO_Framework\Bridges\Scripts`, this file bridges The SEO Framework to the script loaders for WordPress. It registers all scripts based on the query; by default, it is only loaded on the admin screens.
 			* Relies on `\The_SEO_Framework\Builders\Scripts` for registering and enqueuing the scripts.
 			* **Public static methods:**
+				* `decode_entities()`
+				* `decode_all_entities()`
 				* `prepare_media_scripts()`
 				* `prepare_metabox_scripts()`
 				* `get_tsf_scripts()`
 				* `get_tt_scripts()`
 				* `get_ays_scripts()`
 				* `get_list_edit_scripts()`
+				* `get_settings_scripts()`
 				* `get_post_scripts()`
 				* `get_term_scripts()`
 				* `get_gutenberg_compat_scripts()`
 				* `get_media_scripts()`
+				* `get_title_scripts()`
+				* `get_description_scripts()`
+				* `get_social_scripts()`
 				* `get_primaryterm_scripts()`
 				* `get_counter_scripts()`
-				* `get_settings_scripts()`
 		* `\The_SEO_Framework\Bridges\Sitemap`, this file initializes the sitemap query, and it's loaded when the sitemap functionality is enabled.
 			* **Public methods:**
 				* `get_expected_sitemap_endpoint_url()`
@@ -662,6 +706,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `get_filtered_raw_custom_field_title()`
 			* `get_filtered_raw_generated_title()`
 			* `s_qubit()`, note: this method is not registered as an option filter!
+			* `s_bsol_raw()`, note: this method is not registered as an option filter!
 			* `get_field_data()`, internal use only. TODO move to interpreter?
 			* `make_single_select_form()` TODO move to interpreter?
 			* `get_post_types_from_taxonomy()`
@@ -672,7 +717,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `save_term_meta()`
 			* `update_single_term_meta_item()`
 			* `save_post_meta()`
-			* TODO `update_single_post_meta_item()`
+			* `update_single_post_meta_item()`
 			* `sanitize_term_meta()`
 			* `sanitize_post_meta()`
 			* `detect_page_builder()`
@@ -830,6 +875,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 	* **Deprecated:**
 		* `the_seo_framework_save_custom_fields`, use `the_seo_framework_save_post_meta` instead. Same syntax.
 	* **Removed:**
+		* `the_seo_framework_js_l10n`, overhauled.
 		* `the_seo_framework_get_term_meta`, this was deprecated since 3.1.0.
 			* Use `the_seo_framework_term_meta_defaults` instead.
 		* `the_seo_framework_show_seo_column`, this is unreliable. Use the options API instead.
@@ -841,7 +887,6 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* `the_seo_framework_sitemap_pages_query_args`.
 		* `the_seo_framework_sitemap_posts_query_args`.
 		* `the_seo_framework_sitemap_cpt_query_args`.
-		* TODO `the_seo_framework_sitemap_exclude_cpt`, use the options API instead.
 * **Rewrite notes:**
 	* **Removed:**
 		* All WordPress rewrite manipulation.
@@ -855,73 +900,66 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* The mbstring compat file (`/inc/compat/php-mbstring.php`) is no longer loaded automatically, because we no longer need the compatibility function `mb_strpos`.
 * **Browser notes:**
 	* We've now completely abandoned support for Internet Explorer. Goodbye, old, annoying friend.
-		* TODO consider "no-js versions for IE".
-		* TODO clean up polyfills & fixes related to IE.
+		* TODO consider "no-js versions for IE". TODO See: 'tsf-js'.
+		* TODO clean up polyfills & fixes related to IE. (Done?)
 	* With our most excellent users moving to HTTP/2 and beyond, we're going to take full advantage of multiplexing by sending out more scripting files.
 		* More files is good, because we can selectively send out the files; so there's less code to parse in your browser on most requests.
 		* This also alleviates some strain on your server, as we don't have to blindly fill states and values for all requests every time.
 		* And, most importantly, maintaining the code will be much easier; so, we can deploy faster with fewer errors.
 		* Last but not least, WordPress is moving from plain HTML and PHP to JS. We need to get ourselves well prepared for this shift.
+		* TODO clean up RTL scripts? It's redundant having a change for only one CSS rule; offload it to `.rtl ...`?
 		* Affected files, both `.css` and `.js` (and their `*.min.*` equivalents):
-			* DONE:
-				* `tsf`, these main files are now trimmed down to the most basic of forms per dependency requirements.
-					* **JS:**
-						* **Before:** 27.7KB minified, 2782 SLOC
-						* **After:** 15.2KB minified, (TODO TBD) 1662 SLOC
-					* **CSS:**
-						* **Before:** 16.0KB minified, 1006 SLOC
-						* **After:** 6.15KB minfified, (TODO TBD) 421 SLOC
-				* `tsfc`, these files handle the character and pixel counters.
-					* **Namespaces:** `window.tsfC` and `window.tsfCL10n`.
-					* **Script ID:** `tsf-c`
-					* Fun fact: The proposed name was `counter.js`, but uBlock blocks this script name by default.
-				* `settings`, these files handle the SEO Settings page, mostly.
-					* **Namespaces:** `window.tsfSettings` and `window.tsfSettingsL10n`.
-					* **Script ID:** `tsf-settings`
-				* `post`, these files handle post SEO settings pages, mostly.
-					* **Namespaces:** `window.tsfPost` and `window.tsfPostL10n`.
-					* **Script ID:** `tsf-post`
-				* `term`, these files handle term SEO settings pages, mostly.
-					* **Namespaces:** `window.tsfTerm` and `window.tsfTermL10n`.
-					* **Script ID:** `tsf-term`
-					* TODO the JS is empty!
-				* `ays` - meaning "Are you sure?", these files handle on-navigation alerts, so to prevent loss of data.
-					* **Namespaces:** `window.tsfAys` and `window.tsfAysL10n`
-					* **Script ID:** `tsf-ays`
-				* `le` - meaning "List Edit", these files handle list edit page actions.
-					* **Namespaces:** `window.tsfLe` and `window.tsfLeL10n`
-					* **Script ID:** `tsf-le`
+			* `ays` - meaning "Are you sure?", these files handle on-navigation alerts, so to prevent loss of data.
+				* **Namespaces:** `window.tsfAys` and `window.tsfAysL10n`
+				* **Script ID:** `tsf-ays`
+			* `post`, these files handle post SEO settings pages, mostly.
+				* **Namespaces:** `window.tsfPost` and `window.tsfPostL10n`.
+				* **Script ID:** `tsf-post`
+			* `term`, these files handle term SEO settings pages, mostly.
+				* **Namespaces:** `window.tsfTerm` and `window.tsfTermL10n`.
+				* **Script ID:** `tsf-term`
+			* `tsf`, these main files are now trimmed down to the most basic of forms per dependency requirements.
+				* **JS:**
+					* **Before:** 27.7KB minified, 2782 SLOC
+					* **After:** 2.3KB minified, (TODO TBD) 455 SLOC
+				* **CSS:**
+					* **Before:** 16.0KB minified, 1006 SLOC
+					* **After:** 6.15KB minfified, (TODO TBD) 421 SLOC
+			* `tsfc`, these files handle the character and pixel counters.
+				* **Namespaces:** `window.tsfC` and `window.tsfCL10n`.
+				* **Script ID:** `tsf-c`
+				* Fun fact: The proposed name was `counter.js`, but uBlock blocks this script name by default.
+			* `settings`, these files handle the SEO Settings page, mostly.
+				* **Namespaces:** `window.tsfSettings` and `window.tsfSettingsL10n`.
+				* **Script ID:** `tsf-settings`
 			* TODO (PROPOSED):
-				* `title`, this file handles title input fields.
-				* `description`, this file handles description input fields.
-				* `term-overview`, this file handles term overview pages.
-				* `post-overview`, this file handles post overview pages.
 				* `seo-bar`, this file handles the SEO Bar.
 				* `quick-edit`, this file handles quick edits.
 				* `sanitize`, this file handles sanitization and XSS security.
 				* `ajax`, this file handles communication with the server.
 			* TODO consider moving this to a relay method, which switches over all known scripts, cleaning up the code.
 				* Also remove the newly introduced methods, and use a single handler method `tsf->load_script( 'tsfc', $autoload );`
-				* Also silently deprecate the 3.1 methods, and forward the calls to the one above?
+				* Also silently deprecate the 3.1 methods, and forward the calls to the one above? TODO is this already done?
+		* Affected files, only `.js` (and their `*.min.*` equivalents):
+			* `description`, these files handle meta description inputs.
+				* **Namespaces:** `window.tsfDescription` and `window.tsfDescriptionL10n`.
+				* **Script ID:** `tsf-description`
+			* `le` - meaning "List Edit", these files handle list edit page actions.
+				* **Namespaces:** `window.tsfLe` and `window.tsfLeL10n`
+				* **Script ID:** `tsf-le`
+				* TODO may this gets CSS?
+			* `title`, these files handle meta title inputs.
+				* **Namespaces:** `window.tsfTitle` and `window.tsfTitleL10n`.
+				* **Script ID:** `tsf-title`
+			* `social`, these files handle social meta inputs.
+				* **Namespaces:** `window.tsfSocial` and `window.tsfSocialL10n`.
+				* **Script ID:** `tsf-social`
 	* **JS notes:**
+		* **Announcement:** There's finally a reliable JS API for The SEO Framework. Enjoy!
 		* **Added:**
-			* Object `tsfC`, including:
-				* Properties:
-					* `counterType`
-					* `counterClasses`
-				* Methods:
-					* `updatePixelCounter`
-					* `updateCharacterCounter`
-					* `triggerCounterUpdate`
-					* `resetCounterListener`
-				* Related localization & attribution object: `tsfCL10n`.
-			* Object `tsfSettings`:
-				* Related localization & attribution object: `tsfSettingsL10n`
-			* Object `tsfPost`:
-				* Related localization & attribution object: `tsfPostL10n`.
-			* TODO Object `tsfTerm`:
-				* Related localization & attribution object: `tsfTermL10n`.
 			* Object `tsfAys`:
+				* Properties:
+					`l10n`
 				* Methods:
 					* `reset`
 					* `getChangedState`
@@ -932,6 +970,66 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 					* `registerUnloadListener`
 					* `reloadDefaultListeners`
 				* Related localization & attribution object: `tsfAysL10n`.
+			* Object `tsfDescription`:
+				* Properties:
+					* `l10n`
+				* Methods:
+					* `setInputElement`
+					* `getState`
+					* `updateState`
+					* `triggerCounter`
+					* `triggerInput`
+					* `enqueueTriggerInput`
+					* `triggerUnregisteredInput`
+					* `enqueueUnregisteredInputTrigger`
+				* Related localization & attribution object: `tsfDescriptionL10n`.
+			* Object `tsfLe`:
+				* Properties:
+					* `l10n`
+				* Related localization & attribution object: `tsfLeL10n`.
+			* Object `tsfPost`:
+				* Properties:
+					* `l10n`
+				* Related localization & attribution object: `tsfPostL10n`.
+			* Object `tsfSettings`:
+				* Properties:
+					* `l10n`
+				* Related localization & attribution object: `tsfSettingsL10n`
+			* Object `tsfSocial`:
+				* Properties:
+					* `l10n`
+				* Methods:
+					* `initTitleInputs`
+					* `initDescriptionInputs`
+				* Related localization & attribution object: `tsfSettingsL10n`
+			* Object `tsfTerm`:
+				* Properties:
+					* `l10n`
+				* Related localization & attribution object: `tsfTermL10n`.
+			* Object `tsfTitle`:
+				* Properties:
+					* `l10n`
+				* Methods:
+					* `setInputElement`
+					* `getState`
+					* `updateState`
+					* `triggerCounter`
+					* `triggerInput`
+					* `enqueueTriggerInput`
+					* `triggerUnregisteredInput`
+					* `enqueueUnregisteredInputTrigger`
+				* Related localization & attribution object: `tsfTitleL10n`.
+			* Object `tsfC`, including:
+				* Properties:
+					* `counterType`
+					* `counterClasses`
+					* `l10n`
+				* Methods:
+					* `updatePixelCounter`
+					* `updateCharacterCounter`
+					* `triggerCounterUpdate`
+					* `resetCounterListener`
+				* Related localization & attribution object: `tsfCL10n`.
 			* Global:
 				* After tsfAys registers or resets its listeners, this jQuery event is triggered:
 					* `$( document.body ).trigger( 'tsf-registered-ays-listeners' );`
@@ -942,9 +1040,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* After a list item is updated in a WordPress list overview table:
 					* `document.dispatchEvent( new Event( 'tsfLeUpdated' ) );`
 		* **Changed:**
-			* `tsfL10n.params.titleLocation` now mirrors its value with the homepage settings for the homepage.
-				* This used to be a ravioli code mess, now it's a thin lasagna. Bon appetit!
-			* `tsfL10n.params.defaultTitle` now appends term prefixes, when applicable.
+			* TODO list changes? It's overhauled...
 		* **Removed:**
 			* `tsf.[...]`:
 				* `tsf.counterType`, use `tsfC.counterType` instead.

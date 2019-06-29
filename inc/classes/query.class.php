@@ -165,7 +165,7 @@ class Query extends Core {
 		$id = $use_cache ? $this->check_the_real_ID() : 0;
 
 		if ( ! $id ) {
-			//* This catches most ID's. Even Post IDs.
+			//* This catches most IDs. Even Post IDs.
 			$id = \get_queried_object_id();
 		}
 

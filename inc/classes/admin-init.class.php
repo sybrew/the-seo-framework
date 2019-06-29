@@ -191,7 +191,7 @@ class Admin_Init extends Init {
 		if ( isset( $guidelines[ $locale ] ) )
 			return $guidelines[ $locale ];
 
-		// phpcs:disable -- WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
+		// phpcs:disable WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
 		$guideline_adjustments = [
 			'as'    => 148 / 160, // Assamese (অসমীয়া)
 			'gu'    => 148 / 160, // Gujarati (ગુજરાતી)
@@ -203,11 +203,11 @@ class Admin_Init extends Init {
 			'zh_HK' =>  70 / 160, // Hong Kong (Chinese version) (香港中文版)
 			'zh_CN' =>  70 / 160, // Mandarin (Simplified Chinese) (简体中文)
 		];
-		// phpcs:enable -- WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
+		// phpcs:enable WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
 
 		$adjust = isset( $guideline_adjustments[ $locale ] ) ? $guideline_adjustments[ $locale ] : 1;
 
-		// phpcs:disable -- WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
+		// phpcs:disable WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 		/**
 		 * @since 3.1.0
 		 * @param array $guidelines The title and description guidelines.
@@ -286,7 +286,7 @@ class Admin_Init extends Init {
 				],
 			]
 		);
-		// phpcs:enable -- WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
+		// phpcs:enable WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 	}
 
 	/**

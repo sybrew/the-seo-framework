@@ -28,6 +28,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 /**
  * Sets up class loader as file is loaded.
  * This is done asynchronously, because static calls are handled prior and after.
+ *
  * @see EOF. Because of the autoloader and (future) trait calling, we can't do it before the class is read.
  * @link https://bugs.php.net/bug.php?id=75771
  */
@@ -126,10 +127,8 @@ final class Scripts {
 	 * @since 3.1.0
 	 * @access private
 	 * @internal
-	 *
-	 * @param string $hook The current admin hook.
 	 */
-	public function _prepare_admin_scripts( $hook = '' ) {
+	public function _prepare_admin_scripts() {
 		$this->forward_known_scripts();
 		$this->autoload_known_scripts();
 	}

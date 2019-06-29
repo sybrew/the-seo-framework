@@ -276,7 +276,7 @@ $robots_settings = [
 			<td>
 				<?php
 				foreach ( $robots_settings as $_s ) :
-					// phpcs:disable -- WordPress.Security.EscapeOutput.OutputNotEscaped, make_single_select_form() escapes.
+					// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- make_single_select_form() escapes.
 					echo $this->make_single_select_form( [
 						'id'      => $_s['id'],
 						'class'   => 'tsf-term-select-wrap',
@@ -291,7 +291,7 @@ $robots_settings = [
 						'default' => $_s['_value'],
 						'info'    => $_s['_info'],
 					] );
-					// phpcs:enable -- WordPress.Security.EscapeOutput.OutputNotEscaped
+					// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 				endforeach;
 				?>
 			</td>

@@ -41,6 +41,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.7.0
 	 * @since 3.1.0 Removed settings field existence check.
+	 * @since 3.3.0 Added redundant user capability check.
 	 * @securitycheck 3.0.0 OK.
 	 * @staticvar bool $verified.
 	 *
@@ -60,11 +61,16 @@ class Sanitize extends Admin_Pages {
 		 *
 		 * @since 2.2.9
 		 */
-		if ( empty( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) // Input var ok.
-		|| ! is_array( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) ) // Input var, CSRF ok: This is just a performance check.
+		if ( empty( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] )
+		|| ! is_array( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) ) // phpcs:ignore -- this is just a performance check.
 			return $validated = false;
 
-		//* This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
+		// This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
+		if ( ! \current_user_can( $this->get_settings_capability() ) )
+			return $validated = false;
+
+		// This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
+		// This also checks the nonce: `_wpnonce`.
 		\check_admin_referer( THE_SEO_FRAMEWORK_SITE_OPTIONS . '-options' );
 
 		return $validated = true;
@@ -81,9 +87,8 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function handle_update_post() {
 
-		//* Verify update nonce.
-		if ( false === $this->verify_seo_settings_nonce() )
-			return;
+		//* Verify update headers.
+		if ( ! $this->verify_seo_settings_nonce() ) return;
 
 		//* Initialize sanitation filters parsed on each option update.
 		$this->init_sanitizer_filters();
@@ -1497,6 +1502,18 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_bsol( $new_value ) {
 		return str_replace( '\\', '&#92;', stripslashes( $new_value ) );
+	}
+
+	/**
+	 * Replaces backslash with entity backslash.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param string $new_value String with potentially wanted \ values.
+	 * @return string A string with safe HTML encoded backslashes.
+	 */
+	public function s_bsol_raw( $new_value ) {
+		return str_replace( '\\', '&#92;', $new_value );
 	}
 
 	/**

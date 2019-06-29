@@ -213,6 +213,23 @@ class Post_Data extends Detect {
 	}
 
 	/**
+	 * Updates single post meta value.
+	 *
+	 * Note that this method can be more resource intensive than you intend it to be,
+	 * as it reprocesses all post meta.
+	 *
+	 * @since 3.3.0
+	 * @uses $this->save_post_meta() to process all data.
+	 *
+	 * @param string           $item  The item to update.
+	 * @param mixed            $value The value the item should be at.
+	 * @param \WP_Post|integer $post  Post object or post ID.
+	 */
+	public function update_single_post_meta_item( $item, $value, $post ) {
+		$this->save_post_meta( $post, [ $item => $value ] );
+	}
+
+	/**
 	 * Save post meta / custom field data for a singular post type.
 	 *
 	 * @since 3.3.0
