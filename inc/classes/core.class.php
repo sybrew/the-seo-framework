@@ -172,7 +172,7 @@ class Core {
 	}
 
 	/**
-	 * Fetches view instance for switch.
+	 * Fetches view instance for view-switch statements.
 	 *
 	 * @since 2.7.0
 	 *

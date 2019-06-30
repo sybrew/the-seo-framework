@@ -972,6 +972,7 @@ class Sanitize extends Admin_Pages {
 	 * Sanitizes input title as output.
 	 *
 	 * @since 2.8.2
+	 * @since 3.3.0 Now normalizes `&` entities.
 	 *
 	 * @param string $new_value The input Title.
 	 * @return string Sanitized, beautified and trimmed title.
@@ -1196,6 +1197,19 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_no_html_space( $new_value ) {
 		return str_replace( ' ', '', strip_tags( $new_value ) );
+	}
+
+	/**
+	 * Escapes attributes after converting `&` to `&amp;` to prevent double-escaping
+	 * of entities in HTML input value attributes.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param string $new_value String with possibly ampersands.
+	 * @return string
+	 */
+	public function s_esc_attr_super_amp( $new_value ) {
+		return \esc_attr( str_replace( '&', '&amp;', $new_value ) );
 	}
 
 	/**

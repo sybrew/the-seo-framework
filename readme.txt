@@ -279,6 +279,7 @@ TODO Exclaim:
 - Quick & bulk edit, blended perfectly into WordPress' interface.
 - Multiprocessing (cron)...
 - TODO More term options.
+- Counters can now reliably parse HTML.
 - Downgrading & Backward compatibility warnings.
 - Mixed taxonomies on post type related settings.
 - As smart as a self-driving car: Tooltips stay between the lines. Tesla needs me.
@@ -291,6 +292,7 @@ TODO Exclaim:
 - Rewrite changes (see Rewrite notes below...)
 - Performance improvmenets (in numbers)
 - Why term and post meta saving methods have changed: We needed to replace these systems for a more standardized system, so we could implement bulk/quick edit more consistently.
+- Completely revised JS API.
 
 ..., and, for developers, we've finally introduced a reliable JavaScript API. Documentation will follow soon (based on frequently asked requests).
 
@@ -396,6 +398,7 @@ TODO test RTL.
 				* Taiwanese Mandarin (Traditional Chinese) (繁體中文) @ 70/160
 				* Hong Kong (Chinese version) (香港中文版) @ 70/160
 				* Mandarin (Simplified Chinese) (简体中文) @ 70/160
+			* The pixel and character counters now parse your input as HTML, giving you a more accurate rating.
 	* **Internationalization:**
 		* Sites supporting the Assamese, Gujarati, Malayalam, Japanese, Korean, Talim, Traditional Chinese, or Simplified Chinese now have adjusted character guidelines.
 		* UI strings that were hard to translate in other locales have been rewritten. Yes, this takes some time to get used to.
@@ -406,7 +409,7 @@ TODO test RTL.
 		* We offloaded a large portion of the admin-sided PHP scripts to different objects, freeing up RAM and lowering plugin boot-time.
 		* The admin helper-scripts have been optimized to execute no unnecessary paint-jobs, lowering browser-CPU usage.
 		* We split the main JavaScript and CSS files into multiple, dedicated files. Improving performance and lowering power consumption on all pages where TSF is active.
-			* **HTTP/2:** To take full advantage of this chaange, multiplexing support (like in HTTP/2) is advised.
+			* **HTTP/2:** To take full advantage of this change, multiplexing support (like in HTTP/2) is advised.
 			* **CSS:** This significantly lowers class and ID lookups on every page load and DOM update, which drastically lowers processing time.
 			* **JS:** The main advantage of splitting these files is that if one script fails, the other may still continue. The performance should remain roughly the same; however, further optimizations have been implemented.
 			* **PR:** Love using WordPress on the go? Now you can for longer! Also, lower power consumption is great for the environment, times 100,000.
@@ -487,7 +490,7 @@ TODO test RTL.
 		* **Global:**
 			* TODO: none...
 		* **Post edit:**
-			* When using the Block Editor, setting changes are registered consistently again after saving the page.
+			* When using the Block Editor, after saving the page, setting changes are registered consistently again to the "Are you sure you wish to leave with unsaved changes?" notification handler.
 			* When you're editing the homepage via the post settings, the disabled "Remove the blogname?" option's tooltip now states it's handled elsewhere.
 		* **Settings page:**
 			* When pasting a webmaster code tag in the respective settings field, no change listener was invoked, and you didn't get an ays-message when navigating from the settings page.
@@ -498,6 +501,10 @@ TODO test RTL.
 			* The global category and tag `noarchive` options now have an effect.
 			* The global category and tag `noindex` options no longer set `noarchive` automatically, too.
 			* The post type robots-meta and disable-seo settings now only apply to taxonomies that have all their shared post types set, instead of just the post type of the most recent post published.
+		* **Meta:**
+			* When you re-save a pre-escaped HTML input in the title or meta-fields, they will no longer be reparsed.
+				* Before: `&amp;&mdash;` -> `&amp;mdash;` -> `&mdash;` -> `—`
+				* Now: `&amp;&mdash;` -> `&amp;mdash;` -> `&amp;mdash;` -> to infinity and beyond.
 	* **Nitpicking:**
 		* The sitemap's XSL stylesheet no longer uses the latest post ID to determine the title generation; instead, it always adds your blogname to the right.
 		* The sitemap now can't exceed the imposed 50,000 limit; unless you use custom filters to extend the sitemap beyond that.
@@ -512,14 +519,14 @@ TODO test RTL.
 * **Not fixed:**
 	* **Note:** These bugs are edge-cases that were found during "breaking sessions". The overhead required to fix these is currently too high for further consideration.
 	* **Titles:**
-		* When you empty your site name in the general settings, title examples in the settings area may fail to process correctly.
+		* When you empty your site name in the general settings (which you should never do), title examples in the settings area may fail to process correctly.
 		* Some WordPress character texturizations aren't converted in the title inputs, only in the display. For example, `--` should become `&mdash;`.
 			* WordPress is becoming more JavaScript powered every release, we may see compatibility forwarded in the future.
 		* Back-solidi are not stripped from the autogenerated titles and descriptions.
 			* Because WordPress applies PHP 4 compatibility on some settings by stripping back-solidi, and then not on others, this leads to inconsistent behavior we'd have to fix independently for each case.
 			* Takeaway: Don't use backward solidi in WordPress, use `&#92;` if you must instead.
 		* The "Remove the blogname?" option is not hidden when doing so globally.
-			* We highly discourage using the global option to achieve this. We left this option visible to let users recognize there are alternatives.
+			* We highly discourage using the global option to achieve this. We left this option visible to let users recognize there is since an alternative.
 	* **Meta input:**
 		* TODO (we have a fix in place? tsf.decodeEntities()?) When you enter a HTML entity in the title or description input, like `&mdash;`, these won't be processed further until you save the title and reload the post edit, term edit, or SEO settings page.
 			* The viable fix we tried created XSS security issues, and as such, was dropped.
@@ -921,7 +928,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `tsf`, these main files are now trimmed down to the most basic of forms per dependency requirements.
 				* **JS:**
 					* **Before:** 27.7KB minified, 2782 SLOC
-					* **After:** 2.3KB minified, (TODO TBD) 455 SLOC
+					* **After:** 2.4KB minified, (TODO TBD) 481 SLOC
 				* **CSS:**
 					* **Before:** 16.0KB minified, 1006 SLOC
 					* **After:** 6.15KB minfified, (TODO TBD) 421 SLOC

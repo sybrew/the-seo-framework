@@ -62,7 +62,7 @@
 			<!-- Custom list of functions which escape values for output. -->
 			<!-- sanitize_key is better than most escaping functions... -->
 			<property name="customEscapingFunctions" type="array" value="sanitize_key"/>
-			<!-- Custom list of functions whose return values are pre-escaped for output. -->
+			<!-- Custom list of functions whose return values are pre-escaped for output. Doesn't work, as we need $this... -->
 			<property name="customAutoEscapedFunctions" type="array" value="convert_markdown,description,code_wrap,make_single_select_form"/>
 			<!-- Custom list of functions which print output incorporating the passed values. -->
 			<property name="customPrintingFunctions" type="array" value=""/>

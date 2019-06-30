@@ -134,7 +134,7 @@ $robots_settings = [
 			</th>
 			<td>
 				<div id="tsf-title-wrap">
-					<input name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" type="text" placeholder="<?php echo esc_attr( $title_placeholder ); ?>" value="<?php echo esc_attr( $title ); ?>" size="40" autocomplete=off />
+					<input name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" type="text" placeholder="<?php echo esc_attr( $title_placeholder ); ?>" value="<?php echo $this->s_esc_attr_super_amp( $title ); ?>" size="40" autocomplete=off />
 					<?php $this->output_js_title_elements(); ?>
 				</div>
 			</td>
@@ -160,7 +160,7 @@ $robots_settings = [
 				?>
 			</th>
 			<td>
-				<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="4" cols="50" class="large-text"><?php echo esc_html( $description ); ?></textarea>
+				<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="4" cols="50" class="large-text"><?php echo $this->s_esc_attr_super_amp( $description ); ?></textarea>
 				<?php
 				// phpcs:ignore -- output_js_description_elements() is escaped.
 				echo $this->output_js_description_elements();
@@ -186,7 +186,7 @@ $robots_settings = [
 			</th>
 			<td>
 				<div id="tsf-og-title-wrap">
-					<input name="autodescription-meta[og_title]" id="autodescription-meta[og_title]" type="text" placeholder="<?php echo esc_attr( $og_title_placeholder ); ?>" value="<?php echo esc_attr( $og_title ); ?>" size="40" autocomplete=off />
+					<input name="autodescription-meta[og_title]" id="autodescription-meta[og_title]" type="text" placeholder="<?php echo esc_attr( $og_title_placeholder ); ?>" value="<?php echo $this->s_esc_attr_super_amp( $og_title ); ?>" size="40" autocomplete=off />
 				</div>
 			</td>
 		</tr>
@@ -202,7 +202,7 @@ $robots_settings = [
 				?>
 			</th>
 			<td>
-				<textarea name="autodescription-meta[og_description]" id="autodescription-meta[og_description]" placeholder="<?php echo esc_attr( $og_description_placeholder ); ?>" rows="4" cols="50" class="large-text"><?php echo esc_html( $og_description ); ?></textarea>
+				<textarea name="autodescription-meta[og_description]" id="autodescription-meta[og_description]" placeholder="<?php echo esc_attr( $og_description_placeholder ); ?>" rows="4" cols="50" class="large-text"><?php echo $this->s_esc_attr_super_amp( $og_description ); ?></textarea>
 			</td>
 		</tr>
 
@@ -218,7 +218,7 @@ $robots_settings = [
 			</th>
 			<td>
 				<div id="tsf-tw-title-wrap">
-					<input name="autodescription-meta[tw_title]" id="autodescription-meta[tw_title]" type="text" placeholder="<?php echo esc_attr( $tw_title_placeholder ); ?>" value="<?php echo esc_attr( $tw_title ); ?>" size="40" autocomplete=off />
+					<input name="autodescription-meta[tw_title]" id="autodescription-meta[tw_title]" type="text" placeholder="<?php echo esc_attr( $tw_title_placeholder ); ?>" value="<?php echo $this->s_esc_attr_super_amp( $tw_title ); ?>" size="40" autocomplete=off />
 				</div>
 			</td>
 		</tr>
@@ -234,7 +234,7 @@ $robots_settings = [
 				?>
 			</th>
 			<td>
-				<textarea name="autodescription-meta[tw_description]" id="autodescription-meta[tw_description]" placeholder="<?php echo esc_attr( $tw_description_placeholder ); ?>" rows="4" cols="50" class="large-text"><?php echo esc_html( $tw_description ); ?></textarea>
+				<textarea name="autodescription-meta[tw_description]" id="autodescription-meta[tw_description]" placeholder="<?php echo esc_attr( $tw_description_placeholder ); ?>" rows="4" cols="50" class="large-text"><?php echo $this->s_esc_attr_super_amp( $tw_description ); ?></textarea>
 			</td>
 		</tr>
 	</tbody>

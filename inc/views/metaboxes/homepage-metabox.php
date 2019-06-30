@@ -103,7 +103,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php $this->field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title_tagline' ); ?>" placeholder="<?php echo esc_attr( $tagline_placeholder ); ?>" value="<?php echo esc_attr( $this->get_option( 'homepage_title_tagline' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php $this->field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title_tagline' ); ?>" placeholder="<?php echo esc_attr( $tagline_placeholder ); ?>" value="<?php echo $this->s_esc_attr_super_amp( $this->get_option( 'homepage_title_tagline' ) ); ?>" autocomplete=off />
 		</p>
 
 		<hr>
@@ -128,7 +128,7 @@ switch ( $instance ) :
 			?>
 		</div>
 		<p id="tsf-title-wrap">
-			<input type="text" name="<?php $this->field_name( 'homepage_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title' ); ?>" placeholder="<?php echo esc_attr( $home_title_placeholder ); ?>" value="<?php echo esc_attr( $this->get_option( 'homepage_title' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php $this->field_name( 'homepage_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title' ); ?>" placeholder="<?php echo esc_attr( $home_title_placeholder ); ?>" value="<?php echo $this->s_esc_attr_super_amp( $this->get_option( 'homepage_title' ) ); ?>" autocomplete=off />
 			<?php $this->output_js_title_elements(); ?>
 		</p>
 		<?php
@@ -326,7 +326,7 @@ switch ( $instance ) :
 			?>
 		</div>
 		<p>
-			<input type="text" name="<?php $this->field_name( 'homepage_og_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_og_title' ); ?>" placeholder="<?php echo esc_attr( $og_tit_placeholder ); ?>" value="<?php echo esc_attr( $this->get_option( 'homepage_og_title' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php $this->field_name( 'homepage_og_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_og_title' ); ?>" placeholder="<?php echo esc_attr( $og_tit_placeholder ); ?>" value="<?php echo $this->s_esc_attr_super_amp( $this->get_option( 'homepage_og_title' ) ); ?>" autocomplete=off />
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && $custom_og_title ) {
@@ -378,7 +378,7 @@ switch ( $instance ) :
 			?>
 		</div>
 		<p>
-			<input type="text" name="<?php $this->field_name( 'homepage_twitter_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_twitter_title' ); ?>" placeholder="<?php echo esc_attr( $tw_tit_placeholder ); ?>" value="<?php echo esc_attr( $this->get_option( 'homepage_twitter_title' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php $this->field_name( 'homepage_twitter_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_twitter_title' ); ?>" placeholder="<?php echo esc_attr( $tw_tit_placeholder ); ?>" value="<?php echo $this->s_esc_attr_super_amp( $this->get_option( 'homepage_twitter_title' ) ); ?>" autocomplete=off />
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && ( $custom_og_title || $custom_tw_title ) ) {
