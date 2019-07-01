@@ -503,8 +503,8 @@ TODO test RTL.
 			* The post type robots-meta and disable-seo settings now only apply to taxonomies that have all their shared post types set, instead of just the post type of the most recent post published.
 		* **Meta:**
 			* When you re-save a pre-escaped HTML input in the title or meta-fields, they will no longer be reparsed.
-				* Before: `&amp;&mdash;` -> `&amp;mdash;` -> `&mdash;` -> `—`
-				* Now: `&amp;&mdash;` -> `&amp;mdash;` -> `&amp;mdash;` -> to infinity and beyond.
+				* Before: `&amp;mdash;` -> `&amp;mdash;` -> `&mdash;` -> `—`
+				* Now: `&amp;mdash;` -> `&amp;mdash;` -> `&amp;mdash;` -> to infinity and beyond.
 	* **Nitpicking:**
 		* The sitemap's XSL stylesheet no longer uses the latest post ID to determine the title generation; instead, it always adds your blogname to the right.
 		* The sitemap now can't exceed the imposed 50,000 limit; unless you use custom filters to extend the sitemap beyond that.
@@ -637,15 +637,18 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* **Public static methods:**
 				* `get_instance()`
 				* `prepare()`
-		* `\The_SEO_Framework\Builders\Sitemap`, this file builds the sitemap, and it's only loaded on the sitemap endpoint.
+		* `\The_SEO_Framework\Builders\Sitemap`, this file builds the sitemap, and it's only loaded on sitemap endpoints.
 			* You can extend this class to add your own sitemap interpreters.
 			* **Public methods:**
 				* `__construct()`
 				* `__destruct()`
 				* `prepare_generation()`
 				* `shutdown_generation()`
-				* `build_base_sitemap_content()`
+				* `build_sitemap()`, abstract.
 				* `is_post_included_in_sitemap()`
+		* `\The_SEO_Framework\Builders\Sitemap_Base`, extends `\The_SEO_Framework\Builders\Sitemap`.
+			* **Public methods:**
+				* `build_sitemap()`, abstractly defined.
 		* `\The_SEO_framework\Bridges\SeoBar`, this file bridges The SEO Framework to the SEO Bar loaders for WordPress. It prepares the list table columns and checks for post type and taxonomy compatibility.
 			* Relies on `\The_SEO_Framework\Builders\SeoBar` package for building the SEO Bar via interpreters.
 				* This package relies on `\The_SEO_framework\InterPreters\SeoBar` for interpreting the SEO Bar from PHP to HTML.

@@ -27,13 +27,13 @@ if ( false === $sitemap_content ) {
 	$sitemap_generated = true;
 
 	//* Transient doesn't exist yet.
-	$sitemap_builder = new \The_SEO_Framework\Builders\Sitemap;
-	$sitemap_builder->prepare_generation();
+	$sitemap_base = new \The_SEO_Framework\Builders\Sitemap_Base;
+	$sitemap_base->prepare_generation();
 
-	$sitemap_content = $sitemap_builder->build_base_sitemap_content();
+	$sitemap_content = $sitemap_base->build_sitemap();
 
-	$sitemap_builder->shutdown_generation();
-	$sitemap_builder = null; // destroy class.
+	$sitemap_base->shutdown_generation();
+	$sitemap_base = null; // destroy class.
 
 	/**
 	 * Transient expiration: 1 week.
