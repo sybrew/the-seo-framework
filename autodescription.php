@@ -42,8 +42,9 @@ defined( 'ABSPATH' ) or die;
 // 	if ( is_admin() ) {
 // 		define( 'THE_SEO_FRAMEWORK_DEBUG', true );
 // 		define( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS', true );
-// 		delete_option( 'the_seo_framework_upgraded_db_version' );
-// 		delete_option( 'the_seo_framework_tested_upgrade_version' );
+//		delete_option( 'the_seo_framework_upgraded_db_version' );
+//		( $_GET['reset_tsf_upgrade'] ?? 0 ) and delete_option( 'the_seo_framework_upgraded_db_version' );
+// 		( $_GET['reset_tsf_tested'] ?? 0 ) and delete_option( 'the_seo_framework_tested_upgrade_version' );
 // 		add_filter( 'the_seo_framework_use_object_cache', '__return_false' );
 // 	}
 // }},0);
@@ -64,7 +65,7 @@ define( 'THE_SEO_FRAMEWORK_VERSION', '3.3.0' );
  *
  * @since 2.7.0
  */
-define( 'THE_SEO_FRAMEWORK_DB_VERSION', '3104' );
+define( 'THE_SEO_FRAMEWORK_DB_VERSION', '3300' );
 
 /**
  * The plugin file, absolute unix path.

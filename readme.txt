@@ -296,8 +296,6 @@ TODO Exclaim:
 
 ..., and, for developers, we've finally introduced a reliable JavaScript API. Documentation will follow soon (based on frequently asked requests).
 
-TODO fix get_home_title_seplocation() reversal.
-
 TODO when one or more posts have been excluded from the archive, the category may be empty; see if this can be reflected in the SEO output as 404.
 TODO replace `the_seo_framework_fetched_description_excerpt` with something that uses `$args`.
 
@@ -318,10 +316,24 @@ TODO When changing the slug of a term, the canonical URL placeholder now updates
 
 TODO test RTL.
 
+TODO add plugin-upgrade-notice (bottom of readme).
+
 **Detailed log:**
 
 **For everyone:**
 
+* **Upgrading:**
+	* Upgrading happens automatically after you update the plugin, on any page but the SEO settings page.
+		* If you find yourself on the settings page during an upgrade, you'll be booted to the first available admin page.
+			* If you are unable to access the settings page after updating, you may encounter a caching plugin error. Flush your site's cache and it should finalize.
+		* The initiator is independent from WordPress' "updating" action callback to support updating via FTP.
+	* For all users, the database version will be set to `3300`. Current users might find their options being altered.
+	* **What'll change for current users?**
+		1. The old sitemap endpoints are removed from the rewrite rules, and the rewrite rules are flushed for one last time at PHP shutdown.
+		1. The title separator `dash` will be converted to `ndash`, because that was already the case.
+		1. The cron-job-pinging option is set to enabled (default), this will improve post-saving performance.
+		1. The "home title additions location" is now a "home title location", this means that left is now right, and vice versa.
+			* This is a downgrade-compatibility breaking change!
 * **Added:**
 	* TODO maybe: We now generate a proposed description of your content every minute on Gutenberg pages.
 	* TODO maybe: We now parse shortcodes for the content dynamically, for Focus and description generation-compatibility.
@@ -346,10 +358,10 @@ TODO test RTL.
 	* Backslashes (back-solidus) are no longer stripped from post and term meta. Slash away!
 		* This also resolves an issue where the number of slashes are halved every time you update the post.
 		* NOTE: The site settings doesn't support this feature, because WordPress implements PHP 4.x compatibility on options which strip them.
-	* TODO? We switched the homepage title option name from left to right, and right to left.
+	* We switched the homepage title option name from left to right, and right to left.
 		* This doesn't affect your titles, it's only semantics.
-		* NOTE TO SELF: Changing this would require us to change the default options, the filters behavior, and the JS code.. is this the best route?
 	* TODO set `get_logo_uploader_form()`'s flex value to true, Google allows logos of any dimension...
+	* We removed the "recommended" title separator highlighting, RSS parsers are great at rendering HTML entities, so this shouldn't be an issue.
 	* **Term meta:**
 		* When a term is disabled via the post type settings, saving it won't erase the custom SEO term meta.
 			* The same behavior already applied to singular post types.
@@ -398,7 +410,7 @@ TODO test RTL.
 				* Taiwanese Mandarin (Traditional Chinese) (繁體中文) @ 70/160
 				* Hong Kong (Chinese version) (香港中文版) @ 70/160
 				* Mandarin (Simplified Chinese) (简体中文) @ 70/160
-			* The pixel and character counters now parse your input as HTML, giving you a more accurate rating.
+			* The pixel and character counters now parse your input as HTML, giving you a more accurate rating. For example, HTML entities are now decoded on-the-fly.
 	* **Internationalization:**
 		* Sites supporting the Assamese, Gujarati, Malayalam, Japanese, Korean, Talim, Traditional Chinese, or Simplified Chinese now have adjusted character guidelines.
 		* UI strings that were hard to translate in other locales have been rewritten. Yes, this takes some time to get used to.
@@ -483,6 +495,9 @@ TODO test RTL.
 			* This value means "override and disable the default robots-setting".
 				* For example, if you set `noindex` to all tags, but set `-1` to a specific tag, the tag may be indexed.
 			* Because the options were simpler before, `-1` will be treated as `1`. So, when you downgrade, this setting will yield the opposite effect.
+	* **DOWNGRADE COMPATIBILITY!** -- Homepage title options.
+		* The title additions locations (left and right) are now switched.
+		* This was necessary to flatten and simplify the title-API, so home-specific checks no longer need to be reversed.
 	* TODO maybe: strip the removed options on database upgrade... (this will also happen on manual save...)
 	* Webkit flexbox vendor prefixes in all CSS files. All browsers that relied on these have been updated to the latest spec since.
 * **Fixed:**
@@ -505,6 +520,10 @@ TODO test RTL.
 			* When you re-save a pre-escaped HTML input in the title or meta-fields, they will no longer be reparsed.
 				* Before: `&amp;mdash;` -> `&amp;mdash;` -> `&mdash;` -> `—`
 				* Now: `&amp;mdash;` -> `&amp;mdash;` -> `&amp;mdash;` -> to infinity and beyond.
+			* The dash `-` separator selection has been removed, because it was converted to `&ndash;` via WordPress' texturization.
+				* All sites using this separator will be upgraded to use the `ndash` option now.
+				* We couldn't leave this separator in as it was obstructing a security feature. To secure the title's output, without losing any information you put it, we relied on WordPress texturization options.
+					* We could extrude that from WordPress' texturization, but that'd cause discrepancy, and, as such, it wouldn't be sustainable.
 	* **Nitpicking:**
 		* The sitemap's XSL stylesheet no longer uses the latest post ID to determine the title generation; instead, it always adds your blogname to the right.
 		* The sitemap now can't exceed the imposed 50,000 limit; unless you use custom filters to extend the sitemap beyond that.
@@ -527,10 +546,8 @@ TODO test RTL.
 			* Takeaway: Don't use backward solidi in WordPress, use `&#92;` if you must instead.
 		* The "Remove the blogname?" option is not hidden when doing so globally.
 			* We highly discourage using the global option to achieve this. We left this option visible to let users recognize there is since an alternative.
-	* **Meta input:**
-		* TODO (we have a fix in place? tsf.decodeEntities()?) When you enter a HTML entity in the title or description input, like `&mdash;`, these won't be processed further until you save the title and reload the post edit, term edit, or SEO settings page.
-			* The viable fix we tried created XSS security issues, and as such, was dropped.
-			* Another fix we tried would prevent rendering of some characters, like back-solidi, and greater/smaller than symbols.
+		* TODO (consider?) HTML entities aren't converted in the Homepage SEO Settings' title-additions examples.
+			* This brings security issues when not done correctly... TODO but we now have handlers in place.
 	* **Interface:**
 		* When navigating away from the settings page, after changing the "category prefix" setting, the related example no longer reflects the adjusted setting.
 	* **Filters:**
@@ -769,6 +786,9 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				1. Now only accepts strings or null as the first parameter.
 				1. Forwarded post type object calling to WordPress' URL function.
 			* `_save_inpost_primary_term()` now works as intended; and it no longer accidentally falls back on the other post meta handlers.
+			* `get_separator_list()` no longer returns the `dash` index.
+			* `get_home_title_seplocation()` return value, left is now right, and vice versa.
+				* In extent, `get_title_seplocation( true )` also yields this behavior.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`
@@ -869,6 +889,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			1. Now contains all registered scripts.
 			1. Now has a new parameter: `$bridge`.
 		* `the_seo_framework_term_meta_defaults` now holds more values in the first parameter.
+		* `the_seo_framework_separator_list` no longer yields the `dash` index.
 	* **Fixed:**
 		* `the_seo_framework_title_from_generation`, now works for:
 			1. the homepage title in the admin screens.
@@ -931,7 +952,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `tsf`, these main files are now trimmed down to the most basic of forms per dependency requirements.
 				* **JS:**
 					* **Before:** 27.7KB minified, 2782 SLOC
-					* **After:** 2.4KB minified, (TODO TBD) 481 SLOC
+					* **After:** 2.1KB minified, (TODO TBD) 449 SLOC
 				* **CSS:**
 					* **Before:** 16.0KB minified, 1006 SLOC
 					* **After:** 6.15KB minfified, (TODO TBD) 421 SLOC
@@ -1019,6 +1040,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* Object `tsfTitle`:
 				* Properties:
 					* `l10n`
+					* `untitledTitle`
 				* Methods:
 					* `setInputElement`
 					* `getState`
@@ -1050,7 +1072,21 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* After a list item is updated in a WordPress list overview table:
 					* `document.dispatchEvent( new Event( 'tsfLeUpdated' ) );`
 		* **Changed:**
-			* TODO list changes? It's overhauled...
+			* Object `tsf`, overhauled:
+				* Properties:
+					`l10n`
+				* Methods:
+					* `stripTags`
+					* `decodeEntities`
+					* `escapeString`
+					* `ampHTMLtoText`
+					* `sDoubleSpace`
+					* `getStringLength`
+					* `convertJSONResponse`
+					* `setAjaxLoader`
+					* `unsetAjaxLoader`
+					* `resetAjaxLoader`
+				* Related localization & attribution object: `tsfL10n`.
 		* **Removed:**
 			* `tsf.[...]`:
 				* `tsf.counterType`, use `tsfC.counterType` instead.
@@ -1070,17 +1106,28 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `tsf.attachUnsavedChangesListener`, use `tsfAys.registerListeners` instead.
 				* `tsf.registerChange`, use `tsfAys.registerChange` instead.
 			* `tsfL10n.[...]`:
-				* `tsfL10n.i18n.inputGuidelines`, use `tsfCL10n.i18n.guidelines` instead.
-				* `tsfL10n.i18n.pixelsUsed`, use `tsfCL10n.i18n.pixelsUsed` instead.
-				* `tsfL10n.i18n.confirmReset`, use `tsfSettingsL10n.i18n.confirmReset` instead.
-				* `tsfL10n.i18n.saveAlert`, use `tsfAysL10n.i18n.saveAlert` instead.
-				* `tsfL10n.params.inputGuidelines`, use `tsfCL10n.guidelines` instead.
+				* `tsfL10n.states.isHome`.
+				* `tsfL10n.states.hasInput`.
+				* `tsfL10n.states.counterType`.
+				* `tsfL10n.states.useTagline`.
+				* `tsfL10n.states.taglineLocked`.
 				* `tsfL10n.states.useTermPrefix`.
+				* `tsfL10n.states.isSettingsPage`.
+				* `tsfL10n.states.isPostEdit`.
 				* `tsfL10n.states.isTermEdit`.
 				* `tsfL10n.states.postType`.
-				* `tsfL10n.states.counterType`.
-				* `tsfL10n.params.termName`.
-				* `tsfL10n.params.objectTitle`.
+				* `tsfL10n.states.isPrivate`.
+				* `tsfL10n.states.isPasswordProtected`.
+				* `tsfL10n.states.homeLocks`.
+				* `tsfL10n.states.stripTitleTags`.
+				* `tsfL10n.states.isGutenbergPage`.
+				* `tsfL10n.i18n.saveAlert`, use `tsfAysL10n.i18n.saveAlert` instead.
+				* `tsfL10n.i18n.confirmReset`, use `tsfSettingsL10n.i18n.confirmReset` instead.
+				* `tsfL10n.i18n.privateTitle`.
+				* `tsfL10n.i18n.protectedTitle`.
+				* `tsfL10n.i18n.pixelsUsed`, use `tsfCL10n.i18n.pixelsUsed` instead.
+				* `tsfL10n.i18n.inputGuidelines`, use `tsfCL10n.i18n.guidelines` instead.
+				* `tsfL10n.params`, all all indexes therein.
 * **Other:**
 	* Updated `composer.json`, now includes developer scripts.
 	* Updated `phpcs.xml`, now uses the newer, non-VIP standards.

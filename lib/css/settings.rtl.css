@@ -71,12 +71,6 @@
 	font-size: 16px;
 }
 
-#tsf-title-separator label.tsf-recommended,
-#tsf-description-separator label.tsf-recommended {
-	border: 1px solid #0cc34b;
-	box-shadow: -1px -1px 1px #0cc34b inset;
-}
-
 #tsf-title-separator input:hover + label,
 #tsf-title-separator label:hover,
 #tsf-description-separator input:hover + label,

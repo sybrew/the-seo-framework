@@ -169,20 +169,20 @@ switch ( $instance ) :
 
 		<hr>
 		<?php
-		$title_separator = $this->get_separator_list();
-		$recommended = ' class="tsf-recommended" title="' . esc_attr__( 'Recommended', 'autodescription' ) . '"';
+		$title_separator         = $this->get_separator_list();
+		$default_title_separator = $this->get_option( 'title_separator' );
 
 		// FIXME: What a mess...
 		?>
 		<fieldset>
 			<legend>
 				<h4><?php esc_html_e( 'Title Separator', 'autodescription' ); ?></h4>
-				<?php $this->description( __( 'If the title consists of multiple parts (original title, pagination, and blogname), then the separator will go in-between them.', 'autodescription' ) ); ?>
+				<?php $this->description( __( 'If the title consists of multiple parts, then the separator will go in-between them.', 'autodescription' ) ); ?>
 			</legend>
 			<p id="tsf-title-separator" class="tsf-fields">
 			<?php foreach ( $title_separator as $name => $html ) : ?>
-				<input type="radio" name="<?php $this->field_name( 'title_separator' ); ?>" id="<?php $this->field_id( 'title_separator_' . $name ); ?>" value="<?php echo esc_attr( $name ); ?>" <?php checked( $this->get_option( 'title_separator' ), $name ); ?> />
-				<label for="<?php $this->field_id( 'title_separator_' . $name ); ?>" <?php echo in_array( $name, [ 'dash', 'pipe' ], true ) ? $recommended : ''; ?>><?php echo esc_html( $html ); ?></label>
+				<input type="radio" name="<?php $this->field_name( 'title_separator' ); ?>" id="<?php $this->field_id( 'title_separator_' . $name ); ?>" value="<?php echo esc_attr( $name ); ?>" <?php checked( $default_title_separator, $name ); ?> />
+				<label for="<?php $this->field_id( 'title_separator_' . $name ); ?>"><?php echo esc_html( $html ); ?></label>
 			<?php endforeach; ?>
 			</p>
 		</fieldset>

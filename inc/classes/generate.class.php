@@ -494,6 +494,7 @@ class Generate extends User_Data {
 	 * @since 2.3.9
 	 * @since 3.1.0 : 1. Removed caching.
 	 *                2. Removed escaping parameter.
+	 * @since 3.3.0 No longer converts the `dash` separator option.
 	 *
 	 * @param string $type The separator type. Used to fetch option.
 	 * @return string The separator.
@@ -504,8 +505,6 @@ class Generate extends User_Data {
 
 		if ( 'pipe' === $sep_option ) {
 			$sep = '|';
-		} elseif ( 'dash' === $sep_option ) {
-			$sep = '-';
 		} elseif ( '' !== $sep_option ) {
 			//* Encapsulate within html entities.
 			$sep = '&' . $sep_option . ';';
@@ -739,21 +738,22 @@ class Generate extends User_Data {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 Is now filterable.
+	 * @since 3.3.0 Removed the dash key.
 	 *
 	 * @return array Title separators.
 	 */
 	public function get_separator_list() {
 		/**
 		 * @since 3.1.0
+		 * @since 3.3.0 Removed the dash key.
 		 * @param array $list The separator list in { option_name > display_value } format.
 		 *                    The option name should be translatable within `&...;` tags.
-		 *                    'pipe' and 'dash' are excluded from this rule.
+		 *                    'pipe' is excluded from this rule.
 		 */
 		return (array) \apply_filters(
 			'the_seo_framework_separator_list',
 			[
 				'pipe'   => '|',
-				'dash'   => '-',
 				'ndash'  => '&ndash;',
 				'mdash'  => '&mdash;',
 				'bull'   => '&bull;',

@@ -48,6 +48,7 @@ class Site_Options extends Sanitize {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 Now applies filters 'the_seo_framework_default_site_options'
+	 * @since 3.3.0 `home_title_location` is now switched from right to left, or vice-versa.
 	 *
 	 * @return array Default site options.
 	 */
@@ -55,10 +56,10 @@ class Site_Options extends Sanitize {
 
 		if ( \is_rtl() ) {
 			$titleloc   = 'left';
-			$h_titleloc = 'right';
+			$h_titleloc = 'left';
 		} else {
 			$titleloc   = 'right';
-			$h_titleloc = 'left';
+			$h_titleloc = 'right';
 		}
 
 		/**

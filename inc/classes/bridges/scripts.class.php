@@ -638,14 +638,21 @@ final class Scripts {
 			'taxonomy' => $tsf->get_current_taxonomy(),
 		];
 
-		$_title_branding = $tsf->get_title_branding_from_args( $_query );
-		$_default_title  = '';
+		if ( ! $_query['taxonomy'] && $tsf->is_static_frontpage( $_query['id'] ) ) {
+			$addition    = $tsf->get_home_page_tagline();
+			$seplocation = $tsf->get_home_title_seplocation();
+		} else {
+			$addition    = $tsf->get_blogname();
+			$seplocation = $tsf->get_title_seplocation();
+		}
 
 		// NOTE: The custom fields can't be filtered...
 		if ( $tsf->is_seo_settings_page() && $tsf->has_page_on_front() ) {
 			$_default_title = $tsf->get_post_meta_item( '_genesis_title', $_query['id'] ) ?: '';
 		} elseif ( ! $_query['taxonomy'] && $tsf->is_static_frontpage( $_query['id'] ) ) {
 			$_default_title = $tsf->get_option( 'homepage_title' ) ?: '';
+		} else {
+			$_default_title = '';
 		}
 
 		$_default_title = $_default_title ?: $tsf->get_filtered_raw_generated_title( $_query );
@@ -664,8 +671,8 @@ final class Scripts {
 					'states' => [
 						'useTagline'        => $tsf->use_title_branding( $_query ),
 						'titleSeparator'    => static::decode_entities( $tsf->s_title_raw( $tsf->get_title_separator() ) ),
-						'additionPlacement' => 'left' === $_title_branding['seplocation'] ? 'before' : 'after',
-						'additionValue'     => static::decode_entities( $tsf->s_title_raw( $_title_branding['addition'] ) ),
+						'additionPlacement' => 'left' === $seplocation ? 'before' : 'after',
+						'additionValue'     => static::decode_entities( $tsf->s_title_raw( $addition ) ),
 						'defaultTitle'      => static::decode_entities( $tsf->s_title_raw( $_default_title ) ),
 						'prefixPlacement'   => \is_rtl() ? 'after' : 'before',
 					],

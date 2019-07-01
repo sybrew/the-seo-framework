@@ -102,12 +102,13 @@ function _do_upgrade() {
 	\wp_raise_memory_limit( 'tsf_upgrade' );
 
 	/**
-	 * From WordPress' .../update-core.php
+	 * Clear the cache to prevent an update_option() from saving a stale database version to the cache.
+	 * Not all caching plugins recognize 'flush', so delete the options cache too, just to be safe.
+	 *
+	 * @see WordPress' `.../update-core.php`
 	 * @since 3.1.4
 	 */
-	// Clear the cache to prevent an update_option() from saving a stale database version to the cache
 	\wp_cache_flush();
-	// (Not all cache back ends listen to 'flush')
 	\wp_cache_delete( 'alloptions', 'options' );
 
 	$version = _previous_db_version();
@@ -182,12 +183,13 @@ function _upgrade_to_current() {
 	\update_option( 'the_seo_framework_upgraded_db_version', THE_SEO_FRAMEWORK_DB_VERSION );
 
 	/**
-	 * From WordPress' .../update-core.php
+	 * Clear the cache to prevent a get_option() from retrieving a stale database version to the cache.
+	 * Not all caching plugins recognize 'flush', so delete the options cache too, just to be safe.
+	 *
+	 * @see WordPress' `.../update-core.php`
 	 * @since 3.1.4
 	 */
-	// Clear the cache to prevent a get_option() from retrieving a stale database version to the cache
 	\wp_cache_flush();
-	// (Not all cache back ends listen to 'flush')
 	\wp_cache_delete( 'alloptions', 'options' );
 }
 
@@ -249,7 +251,8 @@ function _do_upgrade_notice() {
 					\esc_html__( "The SEO Framework only identifies itself during plugin upgrades. We'd like to use this opportunity to highlight our [plugin setup guide](%s). We hope you enjoy our free plugin. Good luck with your site!", 'autodescription' ),
 					'https://theseoframework.com/?p=2428'
 				),
-				[ 'code' ]
+				[ 'a' ],
+				[ 'a_internal' => false ]
 			),
 			'updated',
 			false,
@@ -274,10 +277,14 @@ function _prepare_upgrade_suggestion() {
 	if ( $run ) return;
 
 	if ( \is_admin() ) {
-		\add_action( 'admin_init', function() {
-			if ( ! _previous_db_version() ) return;
-			require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'upgrade-suggestion.php';
-		}, 20 );
+		\add_action(
+			'admin_init',
+			function() {
+				if ( ! _previous_db_version() ) return;
+				require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'upgrade-suggestion.php';
+			},
+			20
+		);
 	}
 
 	$run = true;
@@ -347,7 +354,7 @@ function _do_upgrade_2701() {
 			\add_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $meta, true );
 		}
 
-		//= Rudimentary test for remaining ~300 users of the past passed, set initial version to 2600.
+		//= Rudimentary test for remaining ~300 users of earlier versions passed, set initial version to 2600.
 		\update_option( 'the_seo_framework_initial_db_version', '2600', 'no' );
 	}
 
@@ -470,14 +477,14 @@ function _do_upgrade_3103() {
 
 		// Transport title separator.
 		if ( isset( $defaults['title_separator'] ) )
-			$tsf->update_option( 'title_separator', $tsf->get_option( 'title_seperator' ) ?: $defaults['title_separator'] );
+			$tsf->update_option( 'title_separator', $tsf->get_option( 'title_seperator', false ) ?: $defaults['title_separator'] );
 
 		// Transport attachment_noindex, attachment_nofollow, and attachment_noarchive settings.
 		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
 			$_option = $tsf->get_robots_post_type_option_id( $r );
 			if ( isset( $defaults[ $_option ] ) ) {
-				$_value = (array) ( $tsf->get_option( $_option ) ?: $defaults[ $_option ] );
-				$_value['attachment'] = (int) (bool) $tsf->get_option( "attachment_$r" );
+				$_value = (array) ( $tsf->get_option( $_option, false ) ?: $defaults[ $_option ] );
+				$_value['attachment'] = (int) (bool) $tsf->get_option( "attachment_$r", false );
 				$tsf->update_option( $_option, $_value );
 			}
 		}
@@ -504,6 +511,7 @@ function _do_upgrade_3103() {
 
 /**
  * Flushes rewrite rules.
+ * Converts title separator's dash option to ndash.
  *
  * @since 3.3.0
  */
@@ -512,15 +520,28 @@ function _do_upgrade_3300() {
 	$tsf = \the_seo_framework();
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3300' ) {
-		unset( $GLOBALS['wp_rewrite']->extra_rules_top['sitemap\.xml$'] );
-		unset( $GLOBALS['wp_rewrite']->extra_rules_top['sitemap\.xsl$'] );
+		unset(
+			$GLOBALS['wp_rewrite']->extra_rules_top['sitemap\.xml$'],
+			$GLOBALS['wp_rewrite']->extra_rules_top['sitemap\.xsl$']
+		); // redundant?
 		\add_action( 'shutdown', 'flush_rewrite_rules' );
 
 		$defaults = _upgrade_default_site_options();
 
+		// Convert 'dash' title option to 'ndash'.
+		if ( 'dash' === $tsf->get_option( 'title_separator', false ) )
+			$tsf->update_option( 'title_separator', 'ndash' );
+
 		// Add default cron pinging option.
 		if ( isset( $defaults['ping_use_cron'] ) )
 			$tsf->update_option( 'ping_use_cron', $defaults['ping_use_cron'] );
+
+		$home_title_location = $tsf->get_option( 'home_title_location', false );
+		if ( 'left' === $home_title_location ) {
+			$tsf->update_option( 'home_title_location', 'right' );
+		} else {
+			$tsf->update_option( 'home_title_location', 'left' );
+		}
 	}
 
 	\update_option( 'the_seo_framework_upgraded_db_version', '3300' );

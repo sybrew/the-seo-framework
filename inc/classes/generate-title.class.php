@@ -1035,8 +1035,7 @@ class Generate_Title extends Generate_Description {
 
 		if ( $this->is_real_front_page() ) {
 			$addition    = $this->get_home_page_tagline();
-			//? Brilliant. TODO FIXME: Do an "upgrade" of this option at a 3.1.2+ release, switching title with additions in the settings description.
-			$seplocation = 'left' === $this->get_home_title_seplocation() ? 'right' : 'left';
+			$seplocation = $this->get_home_title_seplocation();
 		} else {
 			$addition    = $this->get_blogname();
 			$seplocation = $this->get_title_seplocation();
@@ -1049,19 +1048,16 @@ class Generate_Title extends Generate_Description {
 	 * Returns the addition and seplocation from arguments.
 	 *
 	 * @since 3.2.2
-	 * @since 3.3.0 Is now public due to structural requirements. Do not use this!
-	 * @access private
 	 * @see $this->merge_title_branding();
 	 *
 	 * @param array $args The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @return array { 'addition', 'seplocation' }
 	 */
-	public function get_title_branding_from_args( array $args ) {
+	protected function get_title_branding_from_args( array $args ) {
 
 		if ( ! $args['taxonomy'] && $this->is_real_front_page_by_id( $args['id'] ) ) {
 			$addition    = $this->get_home_page_tagline();
-			//? Brilliant. TODO FIXME: Do an "upgrade" of this option at a 3.1.2+ release, switching title with additions in the settings description.
-			$seplocation = 'left' === $this->get_home_title_seplocation() ? 'right' : 'left';
+			$seplocation = $this->get_home_title_seplocation();
 		} else {
 			$addition    = $this->get_blogname();
 			$seplocation = $this->get_title_seplocation();
@@ -1185,6 +1181,7 @@ class Generate_Title extends Generate_Description {
 	 *              2. The first parameter is now $home
 	 *              3. Removed caching.
 	 *              4. Removed filters.
+	 * @since 3.3.0 The homepage option's return value is now reversed from expected.
 	 *
 	 * @param bool $home The home separator location.
 	 * @return string The separator location.
@@ -1198,6 +1195,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 Removed first parameter.
+	 * @since 3.3.0 Left is now right, and right is now left.
 	 *
 	 * @return string The Seplocation for the homepage.
 	 */
