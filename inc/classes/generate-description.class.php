@@ -830,7 +830,7 @@ class Generate_Description extends Generate {
 			$excerpt = $matches[1] . $matches[2];
 		}
 		// elseif ( isset( $matches[1] ) ) {
-			// Unfortunately, impossible. `(*COMMIT)` destroys this. $excerpt remains unchanges.
+			// Unfortunately, impossible. `(*COMMIT)` destroys this. $excerpt remains unchanged.
 			// Leading punctuation may still be present.
 			// $excerpt = $matches[1];
 		// }

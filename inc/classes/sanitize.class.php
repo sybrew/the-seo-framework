@@ -1280,18 +1280,18 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.8.0 Method is now public.
 	 * @since 3.0.0: 1. Now removes '@' from the URL path.
 	 *               2. Now removes spaces and tabs.
+	 * @since 3.3.0 Now returns empty on lone `@` entries.
 	 *
 	 * @param string $new_value String with potentially wrong Twitter username.
 	 * @return string String with 'correct' Twitter username
 	 */
 	public function s_twitter_name( $new_value ) {
 
-		if ( empty( $new_value ) )
-			return '';
+		if ( empty( $new_value ) ) return '';
+		if ( '@' === $new_value ) return '';
 
 		$profile = trim( strip_tags( $new_value ) );
-		$profile = $this->s_relative_url( $profile );
-		$profile = rtrim( $profile, ' /' );
+		$profile = trim( $this->s_relative_url( $profile ), ' /' );
 
 		if ( '@' !== substr( $profile, 0, 1 ) )
 			$profile = '@' . $profile;
@@ -1305,19 +1305,21 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
 	 * @since 3.0.6 Now allows a sole query argument when profile.php is used.
+	 * @since 3.3.0 No longer returns a plain Facebook URL when the entry path is sanitized to become empty.
 	 *
 	 * @param string $new_value String with potentially wrong Facebook profile URL.
 	 * @return string String with 'correct' Facebook profile URL.
 	 */
 	public function s_facebook_profile( $new_value ) {
 
-		if ( empty( $new_value ) )
-			return '';
+		if ( empty( $new_value ) ) return '';
 
-		$link = trim( strip_tags( $new_value ) );
+		$path = trim( strip_tags( $new_value ) );
+		$path = trim( $this->s_relative_url( $path ), ' /' );
 
-		$link = 'https://www.facebook.com/' . $this->s_relative_url( $link );
-		$link = rtrim( $link, ' /' );
+		if ( ! $path ) return '';
+
+		$link = 'https://www.facebook.com/' . $path;
 
 		if ( strpos( $link, 'profile.php' ) ) {
 			//= Gets query parameters.
@@ -1353,8 +1355,7 @@ class Sanitize extends Admin_Pages {
 
 		$key = array_key_exists( $new_value, $card );
 
-		if ( $key )
-			return (string) $new_value;
+		if ( $key ) return (string) $new_value;
 
 		$previous = $this->get_option( 'twitter_card' );
 
@@ -1365,19 +1366,18 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
-	 * Converts full URL paths to absolute paths.
-	 *
-	 * Removes the http or https protocols and the domain. Keeps the path '/' at the
-	 * beginning, so it isn't a true relative link, but from the web root base.
+	 * Converts absolute URLs to relative URLs, if they weren't already.
+	 * The method should more aptly be named: "maybe_make_url_relative()".
 	 *
 	 * @since 2.6.5
 	 * @since 2.8.0 Method is now public.
+	 * @since 3.3.0 No longer strips the prepended / path.
 	 *
 	 * @param string $url Full Path URL or relative URL.
 	 * @return string Abolute path.
 	 */
 	public function s_relative_url( $url ) {
-		return ltrim( preg_replace( '|^(https?:)?//[^/]+(/.*)|i', '$2', $url ), ' \//' );
+		return preg_replace( '/^(https?:)?\/\/[^\/]+(\/.*)/i', '$2', $url );
 	}
 
 	/**
@@ -1386,55 +1386,60 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.2.4
 	 * @since 2.8.0 Method is now public.
 	 * @since 3.0.6 Noqueries is now disabled by default.
+	 * @since 3.3.0 : 1. Now always expects a fully qualified URL, and as such, it uses `set_url_scheme()`
+	 *                2. Now tests URL schemes case-insensitive.
 	 *
 	 * @param string $new_value String with potentially unwanted redirect URL.
 	 * @return string The Sanitized Redirect URL
 	 */
 	public function s_redirect_url( $new_value ) {
 
-		// phpcs:ignore -- strip_tags does what we need; esc_url takes care of the rest later.
+		// phpcs:ignore -- strip_tags does exactly what we need; esc_url takes care of the rest later.
+		// wp_strip_all_tags does too much redundant stuff.
 		$url = strip_tags( $new_value );
 
 		if ( $url ) :
+			$_allow_external = $this->allow_external_redirect();
 			// Sanitize the redirect URL to only a relative link and removes first slash.
-			if ( ! $this->allow_external_redirect() )
-				$url = $this->s_relative_url( $url );
+			if ( ! $_allow_external ) {
+				$url         = $this->set_url_scheme( $url, 'relative' );
+				$is_relative = true;
+			} else {
+				//* URL pattern excluding path.
+				$pattern = '/'
+						. '^'                  // 0: Start of string.
+						. '((https?)?\:)?'     // 1: maybe http:/https:
+						. '(\/\/)?'            // 2: maybe slash slash
+						. '(.*\.[a-z0-9]*)'    // 3: any qualified (sub+)domain with tld
+						. '/i'; // phpcs:ignore -- precision alignment ok.
 
-			//* URL pattern excluding path.
-			$pattern = '/'
-					 . '((((http)(s)?)?)\:)?' // 1: maybe http: https:
-					 . '(\/\/)?'              // 2: maybe slash slash
-					 . '((www.)?)'            // 3: maybe www.
-					 . '(.*\.[a-zA-Z0-9]*)'   // 4: any legal domain with tld
-					 . '(?:\/)?'              // 5: maybe trailing slash
-					 . '/'; // phpcs:ignore -- precision alignment ok.
+				$is_relative = ! preg_match( $pattern, $url );
+			}
 
-			//* If link is relative, make it full again
-			if ( ! preg_match( $pattern, $url ) ) {
+			//* If link is relative, make it full again by prepending the current home path.
+			if ( $is_relative ) {
 
-				//* The url is a relative path
+				//* The URL is a relative path
 				$path = $url;
 
 				/**
 				 * Filters arguments for sanitation of the redirection URL.
 				 *
 				 * @since 2.8.0
+				 * When using filter `the_seo_framework_allow_external_redirect`, this will have no effect.
 				 *
-				 * @param array : { 'url' => The full URL built from $path, 'scheme' => The preferred scheme }
-				 * @param string $path the URL path.
+				 * @param array  $custom_url : { 'url' => The full URL built from $path, 'scheme' => The preferred scheme }
+				 * @param string $path       The current URL path, which won't be readded if this filter is used.
 				 */
-				$custom_sanitize = (array) \apply_filters( 'the_seo_framework_sanitize_redirect_args', [], $path );
+				$custom_url = (array) \apply_filters( 'the_seo_framework_sanitize_redirect_args', [], ltrim( $path, ' /' ) );
 
-				if ( $custom_sanitize ) {
-					$url    = $custom_sanitize['url'];
-					$scheme = $custom_sanitize['scheme'];
+				if ( $_allow_external && $custom_url ) {
+					$url    = $custom_url['url'];
+					$scheme = $custom_url['scheme'] ?: '';
 				} else {
 					$url    = \trailingslashit( $this->get_homepage_permalink() ) . ltrim( $path, ' /' );
 					$scheme = $this->is_ssl() ? 'https' : 'http';
 				}
-
-				//* When nothing is found, fall back on WP defaults (is_ssl).
-				$scheme = isset( $scheme ) ? $scheme : '';
 
 				$url = $this->set_url_scheme( $url, $scheme );
 			}
@@ -1487,7 +1492,7 @@ class Sanitize extends Admin_Pages {
 		if ( '' === $color )
 			return '';
 
-		if ( preg_match( '|^([A-Fa-f0-9]{3}){1,2}$|', $color ) )
+		if ( preg_match( '/^([A-Fa-f0-9]{3}){1,2}$/', $color ) )
 			return $color;
 
 		return '';

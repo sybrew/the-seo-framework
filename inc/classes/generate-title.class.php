@@ -134,8 +134,8 @@ class Generate_Title extends Generate_Description {
 		 *
 		 * @since 3.1.0
 		 *
-		 * @param string $title The title.
-		 * @param array  $args  The title arguments.
+		 * @param string     $title The title.
+		 * @param array|null $args  The title arguments.
 		 */
 		return (string) \apply_filters_ref_array(
 			'the_seo_framework_title_from_custom_field',
@@ -162,8 +162,8 @@ class Generate_Title extends Generate_Description {
 		 * @NOTE: This filter doesn't consistently run on the SEO Settings page.
 		 *        You might want to avoid this filter on the homepage.
 		 * @since 3.1.0
-		 * @param string $title The title.
-		 * @param array  $args  The title arguments.
+		 * @param string     $title The title.
+		 * @param array|null $args  The title arguments.
 		 */
 		return (string) \apply_filters_ref_array(
 			'the_seo_framework_title_from_generation',

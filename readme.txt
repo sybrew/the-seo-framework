@@ -312,6 +312,8 @@ TODO primary term selection should have natsort ID via PHP predefined.
 TODO maybe? Add "no_blogname" term option.
 TODO when initializing scripts, consider whether counter scripts should be loaded in depending on settings?
 
+TODO add description HTML-parsing to term-description fields.
+
 TODO When changing the slug of a term, the canonical URL placeholder now updates with it.
 
 TODO test RTL.
@@ -789,6 +791,13 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `get_separator_list()` no longer returns the `dash` index.
 			* `get_home_title_seplocation()` return value, left is now right, and vice versa.
 				* In extent, `get_title_seplocation( true )` also yields this behavior.
+			* `s_twitter_name()` now returns empty on lone `@` entries.
+			* `s_facebook_profile()` No longer returns a plain Facebook URL when the entry path is sanitized to become empty.
+			* `s_relative_url()` no longer trims the prepending `/`.
+			* `s_redirect_url()`
+				1. No longer lets through double-absolute URLs (e.g. `https://google.com/https://google.com/path/to/file/`) when filter `the_seo_framework_allow_external_redirect` is set to false.
+					* This isn't a security issue, `do_redirect()` always prepended the local host for sanity.
+				2. Now tests URL schemes case-insensitive.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`

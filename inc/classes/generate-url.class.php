@@ -627,7 +627,7 @@ class Generate_Url extends Generate_Title {
 		$url = $this->make_fully_qualified_url( $url );
 
 		if ( 'relative' === $scheme ) {
-			$url = ltrim( preg_replace( '#^\w+://[^/]*#', '', $url ) );
+			$url = ltrim( preg_replace( '/^\w+:\/\/[^\/]*/', '', $url ) );
 
 			if ( '' !== $url && '/' === $url[0] )
 				$url = '/' . ltrim( $url, "/ \t\n\r\0\x0B" );
