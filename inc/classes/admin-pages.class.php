@@ -675,7 +675,6 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @since 3.3.0
 	 * @internal
-	 * @TODO escape input?
 	 *
 	 * @param array $data : Expected to be escaped! {
 	 *    string $k => array|string $v
@@ -686,6 +685,7 @@ class Admin_Pages extends Inpost {
 
 		$ret = '';
 		foreach ( $data as $k => $v ) {
+			$k = strtolower( preg_replace( '/[A-Z]/', '-$0', $k ) );
 			if ( is_array( $v ) ) {
 				//* NOTE: Using single quotes.
 				$ret .= sprintf( " data-%s='%s'", $k, json_encode( $v, JSON_UNESCAPED_SLASHES ) );
@@ -1099,15 +1099,21 @@ class Admin_Pages extends Inpost {
 		$s_input_id = \esc_attr( $input_id );
 
 		$content = vsprintf(
-			'<button type=button data-href="%1$s" class="tsf-set-image-button button button-primary button-small" title="%2$s" id="%3$s-select"
-				data-input-id="%3$s" data-input-type="social" data-width="%4$s" data-height="%5$s" data-flex="%6$d">%7$s</button>',
+			'<button type=button data-href="%s" class="tsf-set-image-button button button-primary button-small" title="%s" id="%s-select"
+				%s>%s</button>',
 			[
 				\esc_url( \get_upload_iframe_src( 'image', $this->get_the_real_ID() ) ),
 				\esc_attr_x( 'Select social image', 'Button hover', 'autodescription' ),
 				$s_input_id,
-				'1200',
-				'630',
-				true,
+				$this->get_field_data( [
+					'inputId'   => $s_input_id,
+					'inputType' => 'social',
+					'width'     => 1200,
+					'height'    => 630,
+					'minWidth'  => 200,
+					'minHeight' => 200,
+					'flex'      => true,
+				] ),
 				\esc_html__( 'Select Image', 'autodescription' ),
 			]
 		);
@@ -1133,15 +1139,21 @@ class Admin_Pages extends Inpost {
 		$s_input_id = \esc_attr( $input_id );
 
 		$content = vsprintf(
-			'<button type=button data-href="%1$s" class="tsf-set-image-button button button-primary button-small" title="%2$s" id="%3$s-select"
-				data-input-id="%3$s" data-input-type="logo" data-width="%4$s" data-height="%5$s" data-flex="%6$d">%7$s</button>',
+			'<button type=button data-href="%s" class="tsf-set-image-button button button-primary button-small" title="%s" id="%s-select"
+				%s>%s</button>',
 			[
 				\esc_url( \get_upload_iframe_src( 'image', $this->get_the_real_ID() ) ),
-				'',
+				'', // Redundant
 				$s_input_id,
-				'512',
-				'512',
-				false,
+				$this->get_field_data( [
+					'inputId'   => $s_input_id,
+					'inputType' => 'logo',
+					'width'     => 512,
+					'height'    => 512,
+					'minWidth'  => 112,
+					'minHeight' => 112,
+					'flex'      => true,
+				] ),
 				\esc_html__( 'Select Logo', 'autodescription' ),
 			]
 		);

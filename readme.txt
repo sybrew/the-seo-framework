@@ -356,7 +356,7 @@ TODO add plugin-upgrade-notice (bottom of readme).
 		* NOTE: The site settings doesn't support this feature, because WordPress implements PHP 4.x compatibility on options which strip them.
 	* We switched the homepage title option name from left to right, and right to left.
 		* This doesn't affect your titles, it's only semantics.
-	* TODO set `get_logo_uploader_form()`'s flex value to true, Google allows logos of any dimension...
+	* Schema.org logos may now be of any proportion, instead of only square, and cropping them must exceed 112px squared.
 	* We removed the "recommended" title separator highlighting, RSS parsers are great at rendering HTML entities, so this shouldn't be an issue.
 	* **Term meta:**
 		* When a term is disabled via the post type settings, saving it won't erase the custom SEO term meta.

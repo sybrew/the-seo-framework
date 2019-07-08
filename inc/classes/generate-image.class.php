@@ -755,7 +755,7 @@ class Generate_Image extends Generate_Url {
 					$w = $_src[1];
 					$h = $_src[2];
 
-					if ( $w < 200 || $h < 200 )
+					if ( $w < 200 || $h < 200 ) // This should be 112x112 for schema
 						return '';
 
 					$this->register_image_dimension(

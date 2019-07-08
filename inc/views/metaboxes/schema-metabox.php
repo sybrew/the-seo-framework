@@ -182,7 +182,6 @@ switch ( $instance ) :
 		<p>
 			<label for="knowledge_logo-url">
 				<strong><?php esc_html_e( 'Logo URL', 'autodescription' ); ?></strong>
-				<?php $this->make_info( __( 'The logo image must be square.', 'autodescription' ) ); ?>
 			</label>
 		</p>
 		<p>
