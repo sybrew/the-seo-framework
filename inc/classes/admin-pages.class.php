@@ -457,7 +457,7 @@ class Admin_Pages extends Inpost {
 				\esc_attr( $type ),
 				( $a11y ? 'tsf-show-icon' : '' ),
 				sprintf(
-					'<a class="hide-if-no-js tsf-dismiss" title="%s" %s></a>',
+					'<a class="hide-if-no-tsf-js tsf-dismiss" title="%s" %s></a>',
 					\esc_attr__( 'Dismiss', 'autodescription' ),
 					''
 				),
@@ -1167,10 +1167,10 @@ class Admin_Pages extends Inpost {
 	 * @since 3.0.4
 	 */
 	public function output_js_title_elements() {
-		echo '<span id="tsf-title-reference" style="display:none"></span>';
-		echo '<span id="tsf-title-offset" class="hide-if-no-js"></span>';
-		echo '<span id="tsf-title-placeholder" class="hide-if-no-js"></span>';
-		echo '<span id="tsf-title-placeholder-prefix" class="hide-if-no-js"></span>';
+		echo '<span id=tsf-title-reference style=display:none></span>';
+		echo '<span id=tsf-title-offset class=hide-if-no-tsf-js></span>';
+		echo '<span id=tsf-title-placeholder class=hide-if-no-tsf-js></span>';
+		echo '<span id=tsf-title-placeholder-prefix class=hide-if-no-tsf-js></span>';
 	}
 
 	/**
@@ -1196,7 +1196,7 @@ class Admin_Pages extends Inpost {
 	 */
 	public function output_character_counter_wrap( $for, $depr = '', $display = true ) {
 		vprintf(
-			'<div class="tsf-counter-wrap hide-if-no-js" %s><span class="description tsf-counter" title="%s">%s</span><span class="tsf-ajax"></span></div>',
+			'<div class="tsf-counter-wrap hide-if-no-tsf-js" %s><span class="description tsf-counter" title="%s">%s</span><span class="tsf-ajax"></span></div>',
 			[
 				( $display ? '' : 'style="display:none;"' ),
 				\esc_attr__( 'Click to change the counter type', 'autodescription' ),
@@ -1224,7 +1224,7 @@ class Admin_Pages extends Inpost {
 	 */
 	public function output_pixel_counter_wrap( $for, $type, $display = true ) {
 		vprintf(
-			'<div class="tsf-pixel-counter-wrap hide-if-no-js" %s>%s%s</div>',
+			'<div class="tsf-pixel-counter-wrap hide-if-no-tsf-js" %s>%s%s</div>',
 			[
 				( $display ? '' : 'style="display:none;"' ),
 				sprintf(

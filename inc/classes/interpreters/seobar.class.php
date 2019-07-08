@@ -67,7 +67,7 @@ final class SeoBar {
 	 *
 	 * @since 3.3.0
 	 */
-	protected function __construct() {
+	private function __construct() {
 		static::$instance = &$this;
 	}
 
@@ -78,7 +78,7 @@ final class SeoBar {
 	 *
 	 * @return static
 	 */
-	protected static function &get_instance() {
+	private static function &get_instance() {
 		static::$instance instanceof static or new static;
 		return static::$instance;
 	}

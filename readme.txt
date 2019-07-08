@@ -244,18 +244,12 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 TODO: Re-minify JS files... Ugh Node.JS
 TODO: Re-minify CSS files... Ugh web services
-TODO: Drop IE11 support in JS? Make sure the scripts fail to load... Ugh LTS
 
 TODO, maybe: backslashes are double-stripped from SEO settings...: \\z -> \z -> z
 	TODO test if this is also the case in the SEO meta settings; definitely so for Focus??
 		* This is fixed for both Meta and Term descriptions; already noted in changelog.
 
-TODO: Add a classmap for components, like a "metabox loader", "quickedit loader", and more?
-	* This can affect performance negatively... but it may also speed up things greatly as we offload parsing of redundant PHP, and reduce base-framework (the_seo_framework()) files.
-	* The negative effects are mitigated significantly when an opcode cacher is available, however.
-
 TODO explain why PHP 5.6 is now required.
-TODO update THE_SEO_FRAMEWORK_DB_VERSION to fire PHP upgrade environmental test.
 
 TODO remove $page_defaults
 
@@ -266,8 +260,8 @@ TODO move the class constants to interfaces? This will allow free access...
 
 TODO re-affirm all changes.
 TODO quality-control the deprecations.
-
-TODO test if sitemap still works after upgrading... may need to unset the rewrite rules.
+TODO test RTL.
+TODO improve plugin-upgrade-notice (bottom of readme).
 
 TODO lock out redirect from WooCommerce shop page. https://wordpress.org/support/topic/tsf-prevents-redirect-to-search-result-page-on-woocommerce/#post-11652594
 TODO change all occurence of %s = here to markdown
@@ -294,25 +288,18 @@ TODO Exclaim:
 - Why term and post meta saving methods have changed: We needed to replace these systems for a more standardized system, so we could implement bulk/quick edit more consistently.
 - Completely revised JS API.
 
-..., and, for developers, we've finally introduced a reliable JavaScript API. Documentation will follow soon (based on frequently asked requests).
+..., and, for developers, we've finally introduced a reliable JavaScript API. Documentation will follow based on frequently asked requests.
 
 TODO replace `the_seo_framework_fetched_description_excerpt` with something that uses `$args`.
 
 TODO reload the SEO Bar on Gutenberg save action. https://github.com/sybrew/the-seo-framework/issues/361
 TODO update wp rocket's compat file... ugh, redundant
-
-TODO split the sitemap generation type from the base class: Sitemap-Base.class.php
+TODO test all compat files...
 
 TODO call "php level caching" memoization--it's a cooler word.
 
 TODO primary term selection should have natsort ID via PHP predefined.
-TODO when initializing scripts, consider whether counter scripts should be loaded in depending on settings?
-
 TODO When changing the slug of a term, the canonical URL placeholder now updates with it.
-
-TODO test RTL.
-
-TODO add plugin-upgrade-notice (bottom of readme).
 
 **Detailed log:**
 
@@ -494,7 +481,7 @@ TODO add plugin-upgrade-notice (bottom of readme).
 	* **DOWNGRADE COMPATIBILITY!** -- Homepage title options.
 		* The title additions locations (left and right) are now switched.
 		* This was necessary to flatten and simplify the title-API, so home-specific checks no longer need to be reversed.
-	* TODO maybe: strip the removed options on database upgrade... (this will also happen on manual save...)
+	* TODO maybe: strip old (< v3.1) removed options on database upgrade... (this will also happen on manual save...)
 	* Webkit flexbox vendor prefixes in all CSS files. All browsers that relied on these have been updated to the latest spec since.
 * **Fixed:**
 	* **Accessibility:**
@@ -938,15 +925,15 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 	* **Unloaded:**
 		* The mbstring compat file (`/inc/compat/php-mbstring.php`) is no longer loaded automatically, because we no longer need the compatibility function `mb_strpos`.
 * **Browser notes:**
-	* We've now completely abandoned support for Internet Explorer. Goodbye, old, annoying friend.
-		* TODO consider "no-js versions for IE". TODO See: 'tsf-js'.
+	* We've now officially abandoned support for Internet Explorer. Goodbye, old, annoying friend.
+		* To enhance support for other deprecated browsers along the way, we now use a body class we control: `tsf-js` and `tsf-no-js`. Now, this body class changes from `tsf-no-js` to `tsf-js` only when the browser supports ES2015.
 		* TODO clean up polyfills & fixes related to IE. (Done?)
 	* With our most excellent users moving to HTTP/2 and beyond, we're going to take full advantage of multiplexing by sending out more scripting files.
 		* More files is good, because we can selectively send out the files; so there's less code to parse in your browser on most requests.
 		* This also alleviates some strain on your server, as we don't have to blindly fill states and values for all requests every time.
 		* And, most importantly, maintaining the code will be much easier; so, we can deploy faster with fewer errors.
 		* Last but not least, WordPress is moving from plain HTML and PHP to JS. We need to get ourselves well prepared for this shift.
-		* TODO clean up RTL scripts? It's redundant having a change for only one CSS rule; offload it to `.rtl ...`?
+		* TODO clean up RTL scripts? It's redundant having a change for only one CSS rule; offload it to `.rtl ...` (which is slower...)?
 		* Affected files, both `.css` and `.js` (and their `*.min.*` equivalents):
 			* `ays` - meaning "Are you sure?", these files handle on-navigation alerts, so to prevent loss of data.
 				* **Namespaces:** `window.tsfAys` and `window.tsfAysL10n`
@@ -968,13 +955,13 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* **Namespaces:** `window.tsfC` and `window.tsfCL10n`.
 				* **Script ID:** `tsf-c`
 				* Fun fact: The proposed name was `counter.js`, but uBlock blocks this script name by default.
+				* Note that this file is loaded conditionally, based on the user's settings.
 			* `settings`, these files handle the SEO Settings page, mostly.
 				* **Namespaces:** `window.tsfSettings` and `window.tsfSettingsL10n`.
 				* **Script ID:** `tsf-settings`
 			* TODO (PROPOSED):
 				* `seo-bar`, this file handles the SEO Bar.
 				* `quick-edit`, this file handles quick edits.
-				* `sanitize`, this file handles sanitization and XSS security.
 				* `ajax`, this file handles communication with the server.
 			* TODO consider moving this to a relay method, which switches over all known scripts, cleaning up the code.
 				* Also remove the newly introduced methods, and use a single handler method `tsf->load_script( 'tsfc', $autoload );`
@@ -1138,7 +1125,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `tsfL10n.params`, all all indexes therein.
 * **Other:**
 	* Updated `composer.json`, now includes developer scripts.
-	* Updated `phpcs.xml`, now uses the newer, non-VIP standards.
+	* Updated `phpcs.xml`, now uses the newer, non-WordPress.com VIP-exclusive standards.
 	* Cleaned up code, removed redundant calls, finished my homework, took a hike, fed the birds.
 
 = 3.2.4 =
@@ -1189,6 +1176,9 @@ Happy Holidays! [(╯°□°)╯︵ ┻┻](https://theseoframework.com/?p=2957)
 * **The full changelog can be found [here](http://theseoframework.com/?cat=2).**
 
 == Upgrade Notice ==
+
+= 3.3.0 =
+TODO This is a major upgrade. Make a backup of your database before updating. WordPress v4.9 (or higher) and PHP v5.6 (or higher) are now required. If you use the Extension Manager, update it to v2.TBA.TBA (or higher) before updating this plugin. Downgrading to v3.2.4 is possible, however with caveats.
 
 = 3.1.1 =
 This is a major upgrade. Make a backup of your database before upgrading. WordPress v4.6 (or greater) and PHP v5.4 (or greater) are now required. If you use the Extension Manager, update it to v1.5.2 (or greater) before upgrading this plugin. Downgrading to v3.0.6 possible.

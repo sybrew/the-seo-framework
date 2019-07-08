@@ -65,7 +65,7 @@ class Metaboxes extends Site_Options {
 		 */
 		if ( $use_tabs ) :
 			?>
-			<div class="tsf-nav-tab-wrapper hide-if-no-js" id="<?php echo \esc_attr( $id . '-tabs-wrapper' ); ?>">
+			<div class="tsf-nav-tab-wrapper hide-if-no-tsf-js" id="<?php echo \esc_attr( $id . '-tabs-wrapper' ); ?>">
 				<?php
 				$count = 1;
 				foreach ( $tabs as $tab => $value ) :
@@ -118,7 +118,7 @@ class Metaboxes extends Site_Options {
 					$name     = isset( $value['name'] ) ? $value['name'] : '';
 
 					?>
-					<div class="hide-if-js tsf-content-no-js">
+					<div class="hide-if-tsf-js tsf-content-no-js">
 						<div class="tsf-tab tsf-tab-no-js">
 							<span class="tsf-nav-tab tsf-active-tab">
 								<?php echo $dashicon ? '<span class="dashicons dashicons-' . \esc_attr( $dashicon ) . ' tsf-dashicons-tabs"></span>' : ''; ?>

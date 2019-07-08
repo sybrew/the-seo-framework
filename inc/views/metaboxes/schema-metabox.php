@@ -185,11 +185,11 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<span class="hide-if-js attention"><?php esc_html_e( 'Setting a logo requires JavaScript.', 'autodescription' ); ?></span>
+			<span class="hide-if-tsf-js attention"><?php esc_html_e( 'Setting a logo requires JavaScript.', 'autodescription' ); ?></span>
 			<input class="large-text" type="url" readonly="readonly" data-readonly="1" name="<?php $this->field_name( 'knowledge_logo_url' ); ?>" id="knowledge_logo-url" placeholder="<?php echo esc_url( $logo_placeholder ); ?>" value="<?php echo esc_url( $this->get_option( 'knowledge_logo_url' ) ); ?>" />
 			<input type="hidden" name="<?php $this->field_name( 'knowledge_logo_id' ); ?>" id="knowledge_logo-id" value="<?php echo absint( $this->get_option( 'knowledge_logo_id' ) ); ?>" />
 		</p>
-		<p class="hide-if-no-js">
+		<p class="hide-if-no-tsf-js">
 			<?php
 			//* Already escaped.
 			echo $this->get_logo_uploader_form( 'knowledge_logo' );

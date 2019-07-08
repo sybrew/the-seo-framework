@@ -3,6 +3,11 @@
  * https://color.adobe.com/create/color-wheel/?base=2&rule=Custom&selected=1&name=Mijn%20Color-thema&mode=rgb&rgbvalues=0,0,0,1,0.6289566724811484,0.10577297701442445,0.04724043389094745,0.7647058823529411,0.2945255209368204,0,0.4806705005377058,0.8235294117647058,0.8666666666666667,0.2196078431372549,0.06666666666666667&swatchOrder=0,1,2,3,4
  */
 
+.tsf-js .hide-if-tsf-js,
+.tsf-no-js .hide-if-no-tsf-js {
+	display: none;
+}
+
 /**
  * Dismissible Notices.
  */

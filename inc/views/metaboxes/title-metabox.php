@@ -29,7 +29,7 @@ switch ( $instance ) :
 		$example_left  = '<em>' . $additions_left . $title . '</em>';
 		$example_right = '<em>' . $title . $additions_right . '</em>';
 
-		//* There's no need for "hide-if-no-js" here.
+		//* There's no need for "hide-if-no-tsf-js" here.
 		//* Check left first, as right is default (and thus fallback).
 		$showleft = 'left' === $this->get_option( 'title_location' );
 
@@ -241,10 +241,10 @@ switch ( $instance ) :
 		$display_prefix = $this->get_option( 'title_rem_prefixes' ) ? 'none' : 'inline';
 		$title = '<span class="tsf-title-prefix-example" style="display:' . $display_prefix . '">' . esc_html( $label ) . ': </span>' . esc_html( $cat_name );
 
-		$additions_left = $additions['left'];
+		$additions_left  = $additions['left'];
 		$additions_right = $additions['right'];
 
-		$example_left = '<em>' . $additions_left . $title . '</em>';
+		$example_left  = '<em>' . $additions_left . $title . '</em>';
 		$example_right = '<em>' . $title . $additions_right . '</em>';
 
 		$language = $this->google_language();

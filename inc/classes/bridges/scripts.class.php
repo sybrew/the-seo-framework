@@ -112,12 +112,13 @@ final class Scripts {
 			$_scripts[] = static::get_description_scripts();
 			$_scripts[] = static::get_social_scripts();
 			$_scripts[] = static::get_primaryterm_scripts();
-			$_scripts[] = static::get_counter_scripts();
 			$_scripts[] = static::get_ays_scripts();
 
-			if ( $tsf->is_gutenberg_page() ) {
+			if ( $tsf->get_option( 'display_pixel_counter' ) || $tsf->get_option( 'display_character_counter' ) )
+				$_scripts[] = static::get_counter_scripts();
+
+			if ( $tsf->is_gutenberg_page() )
 				$_scripts[] = static::get_gutenberg_compat_scripts();
-			}
 		} elseif ( $tsf->is_term_edit() ) {
 			static::prepare_media_scripts();
 
@@ -126,8 +127,10 @@ final class Scripts {
 			$_scripts[] = static::get_title_scripts();
 			$_scripts[] = static::get_description_scripts();
 			$_scripts[] = static::get_social_scripts();
-			$_scripts[] = static::get_counter_scripts();
 			$_scripts[] = static::get_ays_scripts();
+
+			if ( $tsf->get_option( 'display_pixel_counter' ) || $tsf->get_option( 'display_character_counter' ) )
+				$_scripts[] = static::get_counter_scripts();
 		} elseif ( $tsf->is_wp_lists_edit() ) {
 			$_scripts[] = static::get_list_edit_scripts();
 		} elseif ( $tsf->is_seo_settings_page() ) {
@@ -139,8 +142,10 @@ final class Scripts {
 			$_scripts[] = static::get_title_scripts();
 			$_scripts[] = static::get_description_scripts();
 			$_scripts[] = static::get_social_scripts();
-			$_scripts[] = static::get_counter_scripts();
 			$_scripts[] = static::get_ays_scripts();
+
+			// Always load unconditionally, options may enable the counters dynamically.
+			$_scripts[] = static::get_counter_scripts();
 		}
 
 		/**

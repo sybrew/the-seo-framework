@@ -111,11 +111,6 @@ input.tsf-flex-nav-tab-radio {
 
 .tsf-flex-nav-tab {
 	flex-direction: row;
-	/* Edge bug */
-	flex: 0 1 125px;
-	/* IE11 bug */
-	flex: 1 1 100%;
-	/* Edge/IE11 fix */
 	flex: 1 1 auto;
 	max-width: 125px; /* I wanted this to be flex-basis */
 }
@@ -190,11 +185,7 @@ body.js .tsf-flex-tab-content.tsf-flex-tab-content-active {
  * Start override
  */
 
-body.js .tsf-flex-hide-if-js,
-.tsf-flex-hide-if-no-js {
+.tsf-js .tsf-flex-hide-if-js,
+.tsf-no-js .tsf-flex-hide-if-no-js {
 	display: none;
-}
-
-body.js .tsf-flex-hide-if-no-js {
-	display: flex;
 }

@@ -500,7 +500,7 @@ switch ( $instance ) :
 			<div class="tsf-flex-setting-input tsf-flex">
 				<input class="large-text" type="url" name="autodescription[_social_image_url]" id="autodescription_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_post_meta_item( '_social_image_url' ) ); ?>" autocomplete=off />
 				<input type="hidden" name="autodescription[_social_image_id]" id="autodescription_socialimage-id" value="<?php echo absint( $this->get_post_meta_item( '_social_image_id' ) ); ?>" disabled class="tsf-enable-media-if-js" />
-				<div class="hide-if-no-js tsf-social-image-buttons">
+				<div class="hide-if-no-tsf-js tsf-social-image-buttons">
 					<?php
 					//= Already escaped.
 					echo $this->get_social_image_uploader_form( 'autodescription_socialimage' );

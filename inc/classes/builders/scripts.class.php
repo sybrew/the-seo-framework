@@ -117,8 +117,37 @@ final class Scripts {
 
 		static::$instance = &$this;
 
+		\add_filter( 'admin_body_class', [ $this, '_add_body_class' ] );
+		\add_action( 'in_admin_header', [ $this, '_print_tsfjs_script' ] );
+
 		\add_action( 'admin_enqueue_scripts', [ $this, '_prepare_admin_scripts' ], 1 );
 		\add_action( 'admin_footer', [ $this, '_output_templates' ], 999 );
+	}
+
+	/**
+	 * Adds admin-body classes.
+	 *
+	 * @since 3.3.0
+	 * @access private
+	 * @internal
+	 *
+	 * @param string $classes Space-separated list of CSS classes.
+	 * @return string
+	 */
+	public function _add_body_class( $classes ) {
+		// Add spaces at both sides, because who knows what others do.
+		return ' tsf-no-js ' . $classes;
+	}
+
+	/**
+	 * Prints the TSF no-js transform script, using ES2015 (ECMA-262).
+	 *
+	 * @since 3.3.0
+	 * @access private
+	 * @internal
+	 */
+	public function _print_tsfjs_script() {
+		echo "<script>(()=>{document.body.classList.replace('tsf-no-js','tsf-js');const a=0;})()</script>";
 	}
 
 	/**
