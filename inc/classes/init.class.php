@@ -461,7 +461,7 @@ class Init extends Query {
 				. $output
 				. $this->get_plugin_indicator( 'after', $init_start );
 
-		echo PHP_EOL . $output . PHP_EOL; // xss ok
+		echo PHP_EOL . $output . PHP_EOL; // phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- xss ok.
 
 		/**
 		 * @since 2.6.0
@@ -542,7 +542,8 @@ class Init extends Query {
 			exit;
 		}
 
-		\wp_redirect( $url, $redirect_type ); // phpcs:ignore -- intended feature. Disable via $this->allow_external_redirect().
+		// phpcs:ignore, WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- intended feature. Disable via $this->allow_external_redirect().
+		\wp_redirect( $url, $redirect_type );
 		exit;
 	}
 
@@ -592,7 +593,7 @@ class Init extends Query {
 			$output = '';
 
 			$parsed_home_url = \wp_parse_url( rtrim( \get_home_url(), ' /\\' ) );
-			$home_path = ! empty( $parsed_home_url['path'] ) ? \esc_attr( $parsed_home_url['path'] ) : '';
+			$home_path       = ! empty( $parsed_home_url['path'] ) ? \esc_attr( $parsed_home_url['path'] ) : '';
 
 			if ( $this->is_subdirectory_installation() || $home_path ) {
 				$output .= '# This is an invalid robots.txt location.' . "\r\n";

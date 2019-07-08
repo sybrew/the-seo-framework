@@ -478,7 +478,7 @@ final class Debug implements Debug_Interface {
 	 * @access private
 	 */
 	public static function _output_debug_header() {
-		echo static::get_instance()->get_debug_header_output(); // xss ok.
+		echo static::get_instance()->get_debug_header_output(); // phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -612,49 +612,50 @@ final class Debug implements Debug_Interface {
 		$tsf = \the_seo_framework();
 
 		//* Only get true/false values.
-		$page_id = $tsf->get_the_real_ID();
-		$is_404 = $tsf->is_404();
-		$is_admin = $tsf->is_admin();
-		$is_attachment = $tsf->is_attachment();
-		$is_archive = $tsf->is_archive();
-		$is_term_edit = $tsf->is_term_edit();
-		$is_post_edit = $tsf->is_post_edit();
-		$is_wp_lists_edit = $tsf->is_wp_lists_edit();
-		$is_author = $tsf->is_author();
-		$is_blog_page = $tsf->is_blog_page();
-		$is_category = $tsf->is_category();
-		$is_date = $tsf->is_date();
-		$is_year = $tsf->is_year();
-		$is_month = $tsf->is_month();
-		$is_day = $tsf->is_day();
-		$is_feed = $tsf->is_feed();
-		$is_real_front_page = $tsf->is_real_front_page();
-		$is_front_page_by_id = $tsf->is_front_page_by_id( $tsf->get_the_real_ID() );
-		$is_home = $tsf->is_home();
-		$is_page = $tsf->is_page();
-		$page = $tsf->page();
-		$paged = $tsf->paged();
-		$is_preview = $tsf->is_preview();
-		$is_search = $tsf->is_search();
-		$is_single = $tsf->is_single();
-		$is_singular = $tsf->is_singular();
-		$is_static_frontpage = $tsf->is_static_frontpage();
-		$is_tag = $tsf->is_tag();
-		$is_tax = $tsf->is_tax();
-		$is_wc_shop = $tsf->is_wc_shop();
-		$is_wc_product = $tsf->is_wc_product();
+		$page_id              = $tsf->get_the_real_ID();
+		$is_404               = $tsf->is_404();
+		$is_admin             = $tsf->is_admin();
+		$is_attachment        = $tsf->is_attachment();
+		$is_archive           = $tsf->is_archive();
+		$is_term_edit         = $tsf->is_term_edit();
+		$is_post_edit         = $tsf->is_post_edit();
+		$is_wp_lists_edit     = $tsf->is_wp_lists_edit();
+		$is_author            = $tsf->is_author();
+		$is_blog_page         = $tsf->is_blog_page();
+		$is_category          = $tsf->is_category();
+		$is_date              = $tsf->is_date();
+		$is_year              = $tsf->is_year();
+		$is_month             = $tsf->is_month();
+		$is_day               = $tsf->is_day();
+		$is_feed              = $tsf->is_feed();
+		$is_real_front_page   = $tsf->is_real_front_page();
+		$is_front_page_by_id  = $tsf->is_front_page_by_id( $tsf->get_the_real_ID() );
+		$is_home              = $tsf->is_home();
+		$is_page              = $tsf->is_page();
+		$page                 = $tsf->page();
+		$paged                = $tsf->paged();
+		$is_preview           = $tsf->is_preview();
+		$is_search            = $tsf->is_search();
+		$is_single            = $tsf->is_single();
+		$is_singular          = $tsf->is_singular();
+		$is_static_frontpage  = $tsf->is_static_frontpage();
+		$is_tag               = $tsf->is_tag();
+		$is_tax               = $tsf->is_tax();
+		$is_wc_shop           = $tsf->is_wc_shop();
+		$is_wc_product        = $tsf->is_wc_product();
 		$is_seo_settings_page = $tsf->is_seo_settings_page( true );
-		$numpages = $tsf->numpages();
-		$is_multipage = $tsf->is_multipage();
-		$is_singular_archive = $tsf->is_singular_archive();
+		$numpages             = $tsf->numpages();
+		$is_multipage         = $tsf->is_multipage();
+		$is_singular_archive  = $tsf->is_singular_archive();
 
 		//* Don't debug the class object.
 		unset( $tsf );
 
 		//* Get all above vars, split them in two (true and false) and sort them by key names.
-		$vars = get_defined_vars();
-		$current = array_filter( $vars );
+		$vars        = get_defined_vars();
+		$current     = array_filter( $vars );
 		$not_current = array_diff_key( $vars, $current );
+
 		ksort( $current );
 		ksort( $not_current );
 

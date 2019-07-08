@@ -1,6 +1,6 @@
 .tsf-term-select-wrap {
 	margin-top: 7px;
-    margin-bottom: 14px;
+	margin-bottom: 14px;
 	max-width: 95%;
 }
 
@@ -16,4 +16,16 @@
 .tsf-term-select-wrap select {
 	display: block;
 	width: 100%;
+}
+
+.tsf-term-checkbox-wrap {
+	display: block;
+	margin-top: 14px;
+	margin-left: 2px;
+	width: 95%; /* calc -2px... meh */
+}
+
+.rtl .tsf-term-checkbox-wrap {
+	margin-left: 0;
+	margin-right: 2px;
 }

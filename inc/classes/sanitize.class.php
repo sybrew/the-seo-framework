@@ -676,6 +676,10 @@ class Sanitize extends Admin_Pages {
 					$value = $this->s_redirect_url( $value );
 					continue 2;
 
+				case 'title_no_blog_name':
+					$value = $this->s_one_zero( $value );
+					continue 2;
+
 				default:
 					unset( $data[ $key ] );
 					break;
@@ -1288,10 +1292,11 @@ class Sanitize extends Admin_Pages {
 	public function s_twitter_name( $new_value ) {
 
 		if ( empty( $new_value ) ) return '';
-		if ( '@' === $new_value ) return '';
 
 		$profile = trim( strip_tags( $new_value ) );
 		$profile = trim( $this->s_relative_url( $profile ), ' /' );
+
+		if ( '@' === $profile ) return '';
 
 		if ( '@' !== substr( $profile, 0, 1 ) )
 			$profile = '@' . $profile;

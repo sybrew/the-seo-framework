@@ -137,6 +137,14 @@ $robots_settings = [
 					<input name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" type="text" placeholder="<?php echo esc_attr( $title_placeholder ); ?>" value="<?php echo $this->s_esc_attr_super_amp( $title ); ?>" size="40" autocomplete=off />
 					<?php $this->output_js_title_elements(); ?>
 				</div>
+				<label for="autodescription-meta[title_no_blog_name]" class="tsf-term-checkbox-wrap">
+					<input type="checkbox" name="autodescription-meta[title_no_blog_name]" id="autodescription-meta[title_no_blog_name]" value="1" <?php checked( $this->get_term_meta_item( 'title_no_blog_name', $term_id ) ); ?> />
+					<?php
+					esc_html_e( 'Remove the blog name?', 'autodescription' );
+					echo ' ';
+					$this->make_info( sprintf( __( 'Use this when you want to rearrange the title parts manually.', 'autodescription' ) ) );
+					?>
+				</label>
 			</td>
 		</tr>
 

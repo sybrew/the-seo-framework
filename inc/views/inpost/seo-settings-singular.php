@@ -94,14 +94,14 @@ switch ( $instance ) :
 							<input type="checkbox" id="autodescription_title_no_blogname" value="1" <?php checked( $this->get_post_meta_item( '_tsf_title_no_blogname' ) ); ?> disabled />
 							<input type="hidden" name="autodescription[_tsf_title_no_blogname]" value="1" <?php checked( $this->get_post_meta_item( '_tsf_title_no_blogname' ) ); ?> />
 							<?php
-							esc_html_e( 'Remove the blogname?', 'autodescription' );
+							esc_html_e( 'Remove the blog name?', 'autodescription' );
 							echo ' ';
 							$this->make_info( sprintf( __( 'For the homepage, this option must be managed at the SEO Settings.', 'autodescription' ) ) );
 						else :
 							?>
 							<input type="checkbox" name="autodescription[_tsf_title_no_blogname]" id="autodescription_title_no_blogname" value="1" <?php checked( $this->get_post_meta_item( '_tsf_title_no_blogname' ) ); ?> />
 							<?php
-							esc_html_e( 'Remove the blogname?', 'autodescription' );
+							esc_html_e( 'Remove the blog name?', 'autodescription' );
 							echo ' ';
 							$this->make_info( sprintf( __( 'Use this when you want to rearrange the title parts manually.', 'autodescription' ) ) );
 						endif;

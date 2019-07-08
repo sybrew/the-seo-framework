@@ -144,7 +144,8 @@ class Term_Data extends Post_Data {
 	 * @since 3.1.0 This is now always used.
 	 * @since 3.3.0 : 1. Added $term_id parameter.
 	 *                2. Added 'redirect' value.
-	 *                3. Removed 'saved_flag' value.
+	 *                3. Added 'title_no_blog_name' value.
+	 *                4. Removed 'saved_flag' value.
 	 *
 	 * @param int $term_id The term ID.
 	 * @return array The Term Metadata default options.
@@ -158,19 +159,20 @@ class Term_Data extends Post_Data {
 		return (array) \apply_filters(
 			'the_seo_framework_term_meta_defaults',
 			[
-				'doctitle'         => '',
-				'description'      => '',
-				'og_title'         => '',
-				'og_description'   => '',
-				'tw_title'         => '',
-				'tw_description'   => '',
-				'social_image_url' => '',
-				'social_image_id'  => 0,
-				'canonical'        => '',
-				'noindex'          => 0,
-				'nofollow'         => 0,
-				'noarchive'        => 0,
-				'redirect'         => '',
+				'doctitle'          => '',
+				'title_no_blog_name' => 0,
+				'description'       => '',
+				'og_title'          => '',
+				'og_description'    => '',
+				'tw_title'          => '',
+				'tw_description'    => '',
+				'social_image_url'  => '',
+				'social_image_id'   => 0,
+				'canonical'         => '',
+				'noindex'           => 0,
+				'nofollow'          => 0,
+				'noarchive'         => 0,
+				'redirect'          => '',
 			],
 			$term_id ?: $this->get_the_real_ID()
 		);
@@ -245,9 +247,9 @@ class Term_Data extends Post_Data {
 	 * @param string $taxonomy Taxonomy slug.
 	 * @param array  $data     The data to save.
 	 */
-	public function save_term_meta( $term_id, $tt_id, $taxonomy, $data ) {
+	public function save_term_meta( $term_id, $tt_id, $taxonomy, array $data ) {
 
-		$data = (array) \wp_parse_args( $data, $this->get_term_meta( $term_id, false ) );
+		$data = (array) \wp_parse_args( $data, $this->get_term_meta_defaults( $term_id ) );
 		$data = $this->sanitize_term_meta( $data );
 
 		/**

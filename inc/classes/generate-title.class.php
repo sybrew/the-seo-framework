@@ -1290,6 +1290,7 @@ class Generate_Title extends Generate_Description {
 	 * Determines whether to add or remove title branding additions in the query.
 	 *
 	 * @since 3.2.2
+	 * @since 3.3.0 Added use_taxonomical_title_branding() check.
 	 * @see $this->use_title_branding()
 	 *
 	 * @return bool
@@ -1298,7 +1299,9 @@ class Generate_Title extends Generate_Description {
 
 		if ( $this->is_real_front_page() ) {
 			$use = $this->use_home_page_title_tagline();
-		} elseif ( $this->is_singular() && ! $this->use_singular_title_branding( $this->get_the_real_ID() ) ) {
+		} elseif ( $this->is_singular() && ! $this->use_singular_title_branding() ) {
+			$use = false;
+		} elseif ( $this->is_term_meta_capable() && ! $this->use_taxonomical_title_branding() ) {
 			$use = false;
 		} else {
 			$use = ! $this->get_option( 'title_rem_additions' );
@@ -1311,6 +1314,7 @@ class Generate_Title extends Generate_Description {
 	 * Determines whether to add or remove title branding additions from provided arguments.
 	 *
 	 * @since 3.2.2
+	 * @since 3.3.0 Added use_taxonomical_title_branding() check.
 	 * @see $this->use_title_branding()
 	 *
 	 * @param array $args The query arguments. Accepts 'id' and 'taxonomy'.
@@ -1319,13 +1323,19 @@ class Generate_Title extends Generate_Description {
 	protected function use_title_branding_from_args( array $args ) {
 
 		if ( $args['taxonomy'] ) {
-			$use = ! $this->get_option( 'title_rem_additions' );
+			if ( ! $this->use_taxonomical_title_branding( $args['id'] ) ) {
+				$use = false;
+			} else {
+				// Redundant?
+				$use = ! $this->get_option( 'title_rem_additions' );
+			}
 		} else {
 			if ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$use = $this->use_home_page_title_tagline();
 			} elseif ( ! $this->use_singular_title_branding( $args['id'] ) ) {
 				$use = false;
 			} else {
+				// Redundant?
 				$use = ! $this->get_option( 'title_rem_additions' );
 			}
 		}
@@ -1357,15 +1367,27 @@ class Generate_Title extends Generate_Description {
 	}
 
 	/**
-	 * Determines whether to add the tagline.
+	 * Determines whether to add the title tagline for the post.
 	 *
 	 * @since 3.1.0
 	 *
 	 * @param int $id The post ID. Optional.
 	 * @return bool
 	 */
-	public function use_singular_title_branding( $id = null ) {
+	public function use_singular_title_branding( $id = 0 ) {
 		return ! $this->get_post_meta_item( '_tsf_title_no_blogname', $id ) && ! $this->get_option( 'title_rem_additions' );
+	}
+
+	/**
+	 * Determines whether to add the title tagline for the term.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param int $id The term ID. Optional.
+	 * @return bool
+	 */
+	public function use_taxonomical_title_branding( $id = 0 ) {
+		return ! $this->get_term_meta_item( 'title_no_blog_name', $id ) && ! $this->get_option( 'title_rem_additions' );
 	}
 
 	/**

@@ -184,7 +184,6 @@ class Detect extends Render {
 			foreach ( $plugins['globals'] as $name ) {
 				if ( isset( $GLOBALS[ $name ] ) ) {
 					return true;
-					break;
 				}
 			}
 		}
@@ -194,7 +193,6 @@ class Detect extends Render {
 			foreach ( $plugins['constants'] as $name ) {
 				if ( defined( $name ) ) {
 					return true;
-					break;
 				}
 			}
 		}
@@ -204,7 +202,6 @@ class Detect extends Render {
 			foreach ( $plugins['functions'] as $name ) {
 				if ( function_exists( $name ) ) {
 					return true;
-					break;
 				}
 			}
 		}
@@ -214,7 +211,6 @@ class Detect extends Render {
 			foreach ( $plugins['classes'] as $name ) {
 				if ( class_exists( $name ) ) {
 					return true;
-					break;
 				}
 			}
 		}
@@ -284,7 +280,6 @@ class Detect extends Render {
 			foreach ( $plugins['classes'] as $name ) {
 				if ( ! class_exists( $name ) ) {
 					return false;
-					break;
 				}
 			}
 		}
@@ -294,7 +289,6 @@ class Detect extends Render {
 			foreach ( $plugins['functions'] as $name ) {
 				if ( ! function_exists( $name ) ) {
 					return false;
-					break;
 				}
 			}
 		}
@@ -304,7 +298,6 @@ class Detect extends Render {
 			foreach ( $plugins['constants'] as $name ) {
 				if ( ! defined( $name ) ) {
 					return false;
-					break;
 				}
 			}
 		}
@@ -340,7 +333,6 @@ class Detect extends Render {
 				$theme = strtolower( $theme );
 				if ( $theme === $theme_parent || $theme === $theme_name ) {
 					return true;
-					break;
 				}
 			}
 		}
@@ -411,8 +403,8 @@ class Detect extends Render {
 			return $detected;
 
 		//* Detect SEO plugins beforehand.
-		if ( $detected = $this->detect_seo_plugins() )
-			return $detected;
+		if ( $this->detect_seo_plugins() )
+			return $detected = true;
 
 		$active_plugins = $this->active_plugins();
 
@@ -461,8 +453,8 @@ class Detect extends Render {
 			return $detected;
 
 		//* Detect SEO plugins beforehand.
-		if ( $detected = $this->detect_seo_plugins() )
-			return $detected;
+		if ( $this->detect_seo_plugins() )
+			return $detected = true;
 
 		$active_plugins = $this->active_plugins();
 
@@ -527,8 +519,8 @@ class Detect extends Render {
 			return $detected;
 
 		//* Detect SEO plugins beforehand.
-		if ( $detected = $this->detect_seo_plugins() )
-			return $detected;
+		if ( $this->detect_seo_plugins() )
+			return $detected = true;
 
 		$active_plugins = $this->active_plugins();
 
@@ -699,7 +691,6 @@ class Detect extends Render {
 		foreach ( (array) $features as $feature ) {
 			if ( \current_theme_supports( $feature ) ) {
 				return true;
-				break;
 			}
 			continue;
 		}
@@ -740,7 +731,6 @@ class Detect extends Render {
 		foreach ( $post_page as $screen ) {
 			if ( $type === $screen ) {
 				return $is_page[ $type ] = true;
-				break;
 			}
 		}
 

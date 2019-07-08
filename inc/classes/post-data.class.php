@@ -283,8 +283,6 @@ class Post_Data extends Detect {
 			if ( $value ) {
 				\update_post_meta( $post->ID, $field, $value );
 			} else {
-				// We shouldn't do this, as the "default" meta may be "on", and the switch may be "off"...
-				// We'll resolve this when we enter a EAV database-model, as with terms.
 				\delete_post_meta( $post->ID, $field );
 			}
 		}

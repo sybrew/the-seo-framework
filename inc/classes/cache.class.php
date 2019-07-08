@@ -353,13 +353,13 @@ class Cache extends Metaboxes {
 	 * Set the value of the transient.
 	 *
 	 * Prevents setting of transients when they're disabled.
-	 * @see $this->the_seo_framework_use_transients
 	 *
 	 * @since 2.6.0
+	 * @uses $this->the_seo_framework_use_transients
 	 *
-	 * @param string $transient Transient name. Expected to not be SQL-escaped.
-	 * @param string $value Transient value. Expected to not be SQL-escaped.
-	 * @param int $expiration Optional Transient expiration date, optional. Expected to not be SQL-escaped.
+	 * @param string $transient  Transient name. Expected to not be SQL-escaped.
+	 * @param string $value      Transient value. Expected to not be SQL-escaped.
+	 * @param int    $expiration Transient expiration date, optional. Expected to not be SQL-escaped.
 	 */
 	public function set_transient( $transient, $value, $expiration = 0 ) {
 
@@ -373,9 +373,9 @@ class Cache extends Metaboxes {
 	 * If the transient does not exists, does not have a value or has expired,
 	 * or transients have been disabled through a constant, then the transient
 	 * will be false.
-	 * @see $this->the_seo_framework_use_transients
 	 *
 	 * @since 2.6.0
+	 * @uses $this->the_seo_framework_use_transients
 	 *
 	 * @param string $transient Transient name. Expected to not be SQL-escaped.
 	 * @return mixed|bool Value of the transient. False on failure or non existing transient.
@@ -751,7 +751,8 @@ class Cache extends Metaboxes {
 	 * @staticvar string $locale
 	 * @global string $blog_id
 	 *
-	 * @return string the cache key.
+	 * @param string $key The cache key.
+	 * @return string
 	 */
 	protected function add_cache_key_suffix( $key = '' ) {
 
@@ -773,17 +774,15 @@ class Cache extends Metaboxes {
 	 */
 	public function generate_front_page_cache_key( $type = '' ) {
 
-		if ( empty( $type ) ) {
+		if ( ! $type ) {
 			if ( $this->has_page_on_front() ) {
 				$type = 'page';
 			} else {
 				$type = 'blog';
 			}
-		} else {
-			$type = \esc_sql( $type );
 		}
 
-		return $the_id = 'h' . $type . '_' . $this->get_the_front_page_ID();
+		return \esc_sql( 'h' . $type . '_' . $this->get_the_front_page_ID() );
 	}
 
 	/**
@@ -812,7 +811,7 @@ class Cache extends Metaboxes {
 			}
 		}
 
-		if ( empty( $the_id ) ) {
+		if ( ! $the_id ) {
 			if ( mb_strlen( $taxonomy ) >= 5 ) {
 				$the_id = mb_substr( $taxonomy, 0, 5 );
 			} else {
@@ -837,7 +836,7 @@ class Cache extends Metaboxes {
 
 		$revision = '1';
 
-		return $cache_key = 'robots_txt_output_' . $revision . $GLOBALS['blog_id'];
+		return 'robots_txt_output_' . $revision . $GLOBALS['blog_id'];
 	}
 
 	/**
@@ -858,7 +857,7 @@ class Cache extends Metaboxes {
 		$page  = (string) $this->page();
 		$paged = (string) $this->paged();
 
-		return $cache_key = 'seo_framework_output_' . $key . '_' . $paged . '_' . $page;
+		return 'seo_framework_output_' . $key . '_' . $paged . '_' . $page;
 	}
 
 	/**
@@ -884,7 +883,7 @@ class Cache extends Metaboxes {
 		//= Refers to the first page, always.
 		$_page = $_paged = '1';
 
-		return $cache_key = 'seo_framework_output_' . $key . '_' . $_paged . '_' . $_page;
+		return 'seo_framework_output_' . $key . '_' . $_paged . '_' . $_page;
 	}
 
 	/**
@@ -990,13 +989,16 @@ class Cache extends Metaboxes {
 			); // No cache OK, Set in autoloaded transient. DB call ok.
 
 			foreach ( [ 'archive', 'search' ] as $key ) {
-				array_walk( $cache[ $key ], function( &$v ) {
-					if ( isset( $v->meta_value, $v->post_id ) && $v->meta_value ) {
-						$v = (int) $v->post_id;
-					} else {
-						$v = false;
+				array_walk(
+					$cache[ $key ],
+					function( &$v ) {
+						if ( isset( $v->meta_value, $v->post_id ) && $v->meta_value ) {
+							$v = (int) $v->post_id;
+						} else {
+							$v = false;
+						}
 					}
-				} );
+				);
 				$cache[ $key ] = array_filter( $cache[ $key ] );
 			}
 
