@@ -78,7 +78,7 @@ class Query extends Core {
 		return false;
 	}
 
-	// phpcs:disable -- Method unused in production.
+	// phpcs:disable -- method unused in production.
 	/**
 	 * Outputs a doing it wrong notice if an error occurs in the current query.
 	 *
@@ -102,7 +102,7 @@ class Query extends Core {
 		$depth = 10;
 		static $_more = true;
 		if ( $_more ) {
-			error_log( var_export( debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, $depth ), true ) );
+			error_log( var_export( @debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, $depth ), true ) );
 			$_more = false;
 		}
 	}
@@ -1167,7 +1167,10 @@ class Query extends Core {
 		if ( isset( $page_hook ) ) {
 			return $page_hook === $pagehook;
 		} elseif ( $this->is_admin() && $pageslug ) {
-			return ! empty( $_GET['page'] ) && $pageslug === $_GET['page']; // CSRF, input var OK.
+			// N.B. $_GET['page'] === $plugin_page after admin_init...
+
+			// phpcs:ignore, WordPress.Security.NonceVerification -- This is a public variable, no data is processed.
+			return ! empty( $_GET['page'] ) && $pageslug === $_GET['page'];
 		}
 
 		return false;

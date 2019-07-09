@@ -5,16 +5,16 @@
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
+// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+
 //* Get the language the Google page should assume.
 $language = $this->google_language();
 
 //* Fetch Term ID and taxonomy.
 $term_id  = $object->term_id;
-// phpcs:ignore -- WordPress.WP.GlobalVariablesOverride.Prohibited: No, we're not in global scope. We're not overriding globals.
 $taxonomy = $object->taxonomy;
 $meta     = $this->get_term_meta( $object->term_id );
 
-// phpcs:ignore -- WordPress.WP.GlobalVariablesOverride.Prohibited: No, we're not in global scope. We're not overriding globals.
 $title       = isset( $meta['doctitle'] ) ? $meta['doctitle'] : '';
 $description = isset( $meta['description'] ) ? $meta['description'] : '';
 $canonical   = isset( $meta['canonical'] ) ? $meta['canonical'] : '';
@@ -170,8 +170,7 @@ $robots_settings = [
 			<td>
 				<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="4" cols="50" class="large-text"><?php echo $this->s_esc_attr_super_amp( $description ); ?></textarea>
 				<?php
-				// phpcs:ignore -- output_js_description_elements() is escaped.
-				echo $this->output_js_description_elements();
+				$this->output_js_description_elements();
 				?>
 			</td>
 		</tr>
@@ -284,7 +283,7 @@ $robots_settings = [
 			<td>
 				<?php
 				foreach ( $robots_settings as $_s ) :
-					// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- make_single_select_form() escapes.
+					// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
 					echo $this->make_single_select_form( [
 						'id'      => $_s['id'],
 						'class'   => 'tsf-term-select-wrap',
@@ -299,7 +298,7 @@ $robots_settings = [
 						'default' => $_s['_value'],
 						'info'    => $_s['_info'],
 					] );
-					// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+					// phpcs:enable, WordPress.Security.EscapeOutput
 				endforeach;
 				?>
 			</td>

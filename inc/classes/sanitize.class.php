@@ -96,11 +96,26 @@ class Sanitize extends Admin_Pages {
 		//* Delete main cache now. For when the options don't change.
 		$this->delete_main_cache();
 
+		//* Sets that the options are unchanged, preemptively.
+		$this->update_static_cache( 'settings_notice', 'unchanged' );
+		//* But, if this action fires, we can assure that the settings have been changed.
+		\add_action( 'update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, '_set_option_updated_notice' ], 0 );
+
 		//* Flush transients after options have changed.
 		\add_action( 'update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'delete_main_cache' ] );
 		\add_action( 'update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'update_db_version' ], 12 );
 		//* TEMP: Set backward compatibility.
 		// \add_action( 'update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, '_set_backward_compatibility' ], 13 );
+	}
+
+	/**
+	 * Sets the settings notice cache to "updated".
+	 *
+	 * @since 3.3.0
+	 * @access private
+	 */
+	public function _set_option_updated_notice() {
+		$this->update_static_cache( 'settings_notice', 'updated' );
 	}
 
 	/**
@@ -121,7 +136,7 @@ class Sanitize extends Admin_Pages {
 	 * @since 3.1.0
 	 * @since 3.3.0 Emptied and is no longer enqueued.
 	 * @access private
-	 * @staticvar bool $running Prevents loops.
+	 * @staticvar bool $running Prevents on-update loops.
 	 */
 	public function _set_backward_compatibility() {
 		static $running = false;
@@ -1410,13 +1425,15 @@ class Sanitize extends Admin_Pages {
 				$url         = $this->set_url_scheme( $url, 'relative' );
 				$is_relative = true;
 			} else {
+				// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 				//* URL pattern excluding path.
 				$pattern = '/'
-						. '^'                  // 0: Start of string.
-						. '((https?)?\:)?'     // 1: maybe http:/https:
-						. '(\/\/)?'            // 2: maybe slash slash
-						. '(.*\.[a-z0-9]*)'    // 3: any qualified (sub+)domain with tld
-						. '/i'; // phpcs:ignore -- precision alignment ok.
+						 . '^'                  // 0: Start of string.
+						 . '((https?)?\:)?'     // 1: maybe http:/https:
+						 . '(\/\/)?'            // 2: maybe slash slash
+						 . '(.*\.[a-z0-9]*)'    // 3: any qualified (sub+)domain with tld
+						 . '/i';
+				// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 				$is_relative = ! preg_match( $pattern, $url );
 			}

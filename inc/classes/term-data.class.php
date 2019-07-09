@@ -47,11 +47,12 @@ class Term_Data extends Post_Data {
 	 * Determines if current query handles term meta.
 	 *
 	 * @since 3.0.0
+	 * @since 3.3.0 No longer lists post type archives as term-meta. It's not a taxonomy.
 	 *
 	 * @return bool
 	 */
 	public function is_term_meta_capable() {
-		return $this->is_category() || $this->is_tag() || $this->is_tax() || \is_post_type_archive();
+		return $this->is_category() || $this->is_tag() || $this->is_tax();
 	}
 
 	/**

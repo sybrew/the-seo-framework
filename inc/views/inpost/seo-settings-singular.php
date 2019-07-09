@@ -5,15 +5,15 @@
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
+// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+
 //* Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'inpost', $instance );
 
 //* Setup default vars.
-// phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited -- This isn't the global scope.
 $post_id  = $this->get_the_real_ID();
 $type     = isset( $type ) ? $type : '';
 $language = $this->google_language();
-// phpcs:enable WordPress.WP.GlobalVariablesOverride.Prohibited
 
 switch ( $instance ) :
 	case 'inpost_main':
@@ -82,7 +82,7 @@ switch ( $instance ) :
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id="tsf-title-wrap">
 					<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" placeholder="<?php echo esc_attr( $title_placeholder ); ?>" value="<?php echo $this->s_esc_attr_super_amp( $this->get_post_meta_item( '_genesis_title', $post_id ) ); ?>" autocomplete=off />
-					<?php echo $this->output_js_title_elements(); ?>
+					<?php $this->output_js_title_elements(); ?>
 				</div>
 
 				<div class="tsf-checkbox-wrapper">
@@ -135,7 +135,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<textarea class="large-text" name="autodescription[_genesis_description]" id="autodescription_description" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="4" cols="4"><?php echo $this->s_esc_attr_super_amp( $this->get_post_meta_item( '_genesis_description', $post_id ) ); ?></textarea>
-				<?php echo $this->output_js_description_elements(); ?>
+				<?php $this->output_js_description_elements(); ?>
 			</div>
 		</div>
 		<?php

@@ -158,8 +158,8 @@ class Init extends Query {
 		\add_action( 'current_screen', [ $this, 'post_state' ] );
 
 		if ( $this->load_options ) :
-			// Enqueue i18n defaults.
-			\add_action( 'admin_init', [ $this, 'enqueue_page_defaults' ], 1 );
+			//* Loads setting notices.
+			\add_action( 'the_seo_framework_setting_notices', [ $this, '_do_settings_page_notices' ] );
 
 			//* Set up site settings and save/reset them
 			\add_action( 'admin_init', [ $this, 'register_settings' ], 5 );
@@ -193,9 +193,6 @@ class Init extends Query {
 
 			//* Admin AJAX for TSF Cropper
 			\add_action( 'wp_ajax_tsf-crop-image', [ $this, '_wp_ajax_crop_image' ] );
-
-			// Add extra removable query arguments to the list.
-			\add_filter( 'removable_query_args', [ $this, 'add_removable_query_args' ] );
 		endif;
 
 		/**
@@ -464,7 +461,8 @@ class Init extends Query {
 				. $output
 				. $this->get_plugin_indicator( 'after', $init_start );
 
-		echo PHP_EOL . $output . PHP_EOL; // phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- xss ok.
+		// phpcs:ignore, WordPress.Security.EscapeOutput -- $output is escaped.
+		echo PHP_EOL . $output . PHP_EOL;
 
 		/**
 		 * @since 2.6.0
@@ -578,8 +576,6 @@ class Init extends Query {
 	 * @return string Robots.txt output.
 	 */
 	public function robots_txt( $robots_txt = '', $public = '' ) {
-
-		var_dump( $this );
 
 		/**
 		 * Don't do anything if the blog isn't public.

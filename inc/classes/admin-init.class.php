@@ -191,7 +191,7 @@ class Admin_Init extends Init {
 		if ( isset( $guidelines[ $locale ] ) )
 			return $guidelines[ $locale ];
 
-		// phpcs:disable WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
+		// phpcs:disable, WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
 		$guideline_adjustments = [
 			'as'    => 148 / 160, // Assamese (অসমীয়া)
 			'gu'    => 148 / 160, // Gujarati (ગુજરાતી)
@@ -203,11 +203,11 @@ class Admin_Init extends Init {
 			'zh_HK' =>  70 / 160, // Hong Kong (Chinese version) (香港中文版)
 			'zh_CN' =>  70 / 160, // Mandarin (Simplified Chinese) (简体中文)
 		];
-		// phpcs:enable WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
+		// phpcs:enable, WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
 
 		$adjust = isset( $guideline_adjustments[ $locale ] ) ? $guideline_adjustments[ $locale ] : 1;
 
-		// phpcs:disable WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
+		// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 		/**
 		 * @since 3.1.0
 		 * @param array $guidelines The title and description guidelines.
@@ -286,7 +286,7 @@ class Admin_Init extends Init {
 				],
 			]
 		);
-		// phpcs:enable WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
+		// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 	}
 
 	/**
@@ -349,24 +349,6 @@ class Admin_Init extends Init {
 	}
 
 	/**
-	 * Adds removable query args to WordPress query arg handler.
-	 *
-	 * @since 2.8.0
-	 *
-	 * @param array $removable_query_args The removable query arguments.
-	 * @return array The adjusted removable query args.
-	 */
-	public function add_removable_query_args( $removable_query_args = [] ) {
-
-		if ( is_array( $removable_query_args ) ) {
-			$removable_query_args[] = 'tsf-settings-reset';
-			$removable_query_args[] = 'tsf-settings-updated';
-		}
-
-		return $removable_query_args;
-	}
-
-	/**
 	 * Redirect the user to an admin page, and add query args to the URL string
 	 * for alerts, etc.
 	 *
@@ -424,8 +406,7 @@ class Admin_Init extends Init {
 	 */
 	protected function handle_admin_redirect_error( $target = '' ) {
 
-		if ( empty( $target ) )
-			return;
+		if ( ! $target ) return;
 
 		$headers_list = headers_list();
 		$location     = sprintf( 'Location: %s', \wp_sanitize_redirect( $target ) );
@@ -434,6 +415,7 @@ class Admin_Init extends Init {
 		if ( in_array( $location, $headers_list, true ) )
 			return;
 
+		// phpcs:disable, WordPress.Security.EscapeOutput -- convert_markdown escapes. Added esc_url() for sanity.
 		printf( '<p><strong>%s</strong></p>',
 			$this->convert_markdown(
 				sprintf(
@@ -444,7 +426,8 @@ class Admin_Init extends Init {
 				[ 'a' ],
 				[ 'a_internal' => true ]
 			)
-		); // phpcs:ignore -- XSS ok: convert_markdown escapes. Added esc_url() for sanity.
+		);
+		// phpcs:enable, WordPress.Security.EscapeOutput
 	}
 
 	/**
@@ -458,6 +441,7 @@ class Admin_Init extends Init {
 
 		if ( ! $this->is_admin() || ! \wp_doing_ajax() ) return;
 
+		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer() does this.
 		$this->_check_tsf_ajax_referer( 'edit_posts' );
 
 		//* Remove output buffer.
@@ -476,7 +460,11 @@ class Admin_Init extends Init {
 		 * Count up, reset to 0 if needed. We have 4 options: 0, 1, 2, 3
 		 * $_POST['val'] already contains updated number.
 		 */
-		$value = isset( $_POST['val'] ) ? intval( $_POST['val'] ) : $this->get_user_option( 0, 'counter_type', 3 ) + 1; // phpcs:ignore -- input var OK
+		if ( isset( $_POST['val'] ) ) {
+			$value = (int) $_POST['val'];
+		} else {
+			$value = $this->get_user_option( 0, 'counter_type', 3 ) + 1;
+		}
 		$value = \absint( $value );
 
 		if ( $value > 3 )
@@ -492,6 +480,8 @@ class Admin_Init extends Init {
 
 		//* Encode and echo results. Requires JSON decode within JS.
 		\wp_send_json( $results );
+
+		// phpcs:enable, WordPress.Security.NonceVerification
 	}
 
 	/**
@@ -512,18 +502,18 @@ class Admin_Init extends Init {
 	 */
 	public function _wp_ajax_crop_image() {
 
+		// This checks the nonce, re:to all 'WordPress.Security.NonceVerification' below
+		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer does this.
 		$this->_check_tsf_ajax_referer( 'upload_files' );
-		if (
-		   ! \current_user_can( 'upload_files' ) // phpcs:ignore -- precision alignment ok.
-		|| ! isset( $_POST['id'], $_POST['context'], $_POST['cropDetails'] ) // phpcs:ignore -- Input var OK.
-		) {
+
+		if ( ! \current_user_can( 'upload_files' ) || ! isset( $_POST['id'], $_POST['context'], $_POST['cropDetails'] ) ) {
 			\wp_send_json_error();
 		}
 
-		$attachment_id = \absint( $_POST['id'] ); // phpcs:ignore -- input var OK
+		$attachment_id = \absint( $_POST['id'] );
 
-		$context = str_replace( '_', '-', \sanitize_key( $_POST['context'] ) ); // phpcs:ignore -- input var OK
-		$data    = array_map( 'absint', $_POST['cropDetails'] ); // phpcs:ignore -- input var OK
+		$context = str_replace( '_', '-', \sanitize_key( $_POST['context'] ) );
+		$data    = array_map( 'absint', $_POST['cropDetails'] );
 		$cropped = \wp_crop_image( $attachment_id, $data['x1'], $data['y1'], $data['width'], $data['height'], $data['dst_width'], $data['dst_height'] );
 
 		if ( ! $cropped || \is_wp_error( $cropped ) )
@@ -592,5 +582,7 @@ class Admin_Init extends Init {
 		endswitch;
 
 		\wp_send_json_success( \wp_prepare_attachment_for_js( $attachment_id ) );
+
+		// phpcs:enable, WordPress.Security.NonceVerification
 	}
 }

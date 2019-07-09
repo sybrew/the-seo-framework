@@ -29,7 +29,7 @@ function _print_xsl_global_variables( $tsf ) {
 
 	$colors = $tsf->get_sitemap_colors();
 
-	// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- s_color_hex() escapes.
+	// phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped -- s_color_hex() escapes.
 	printf(
 		'<xsl:variable name="colorMain" select="\'%s\'"/>',
 		'#' . $tsf->s_color_hex(
@@ -65,7 +65,7 @@ function _print_xsl_global_variables( $tsf ) {
 			)
 		)
 	);
-	// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+	// phpcs:enable, WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 \add_action( 'the_seo_framework_xsl_head', __NAMESPACE__ . '\\_print_xsl_title' );
@@ -314,7 +314,7 @@ function _print_xsl_content( $tsf ) {
 
 	$vars = implode( $vars );
 
-	// phpcs:ignore -- WordPress.Security.EscapeOutput.OutputNotEscaped
+	// phpcs:disable, WordPress.Security.EscapeOutput, output is escaped.
 	echo <<<CONTENT
 <table>
 	<tr>
@@ -332,6 +332,7 @@ function _print_xsl_content( $tsf ) {
 	</xsl:for-each>
 </table>
 CONTENT;
+	// phpcs:enable, WordPress.Security.EscapeOutput
 }
 
 \add_action( 'the_seo_framework_xsl_footer', __NAMESPACE__ . '\\_print_xsl_footer' );

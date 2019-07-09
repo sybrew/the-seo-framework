@@ -48,8 +48,10 @@ class Generate_Description extends Generate {
 	 */
 	public function get_description( $args = null, $escape = true ) {
 
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 		$desc = $this->get_description_from_custom_field( $args, false )
-			 ?: $this->get_generated_description( $args, false ); // phpcs:ignore -- precision alignment ok.
+			 ?: $this->get_generated_description( $args, false );
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -70,8 +72,10 @@ class Generate_Description extends Generate {
 	 */
 	public function get_open_graph_description( $args = null, $escape = true ) {
 
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 		$desc = $this->get_open_graph_description_from_custom_field( $args, false )
-			 ?: $this->get_generated_open_graph_description( $args, false ); // phpcs:ignore -- precision alignment ok.
+			 ?: $this->get_generated_open_graph_description( $args, false );
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -115,23 +119,24 @@ class Generate_Description extends Generate {
 	protected function get_custom_open_graph_description_from_query() {
 
 		$desc = '';
-
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$desc = $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_post_meta_item( '_open_graph_description' )
-					 ?: $this->get_description_from_custom_field(); // phpcs:ignore -- precision alignment ok.
+					 ?: $this->get_description_from_custom_field();
 			} else {
 				$desc = $this->get_option( 'homepage_og_description' )
-					 ?: $this->get_description_from_custom_field(); // phpcs:ignore -- precision alignment ok.
+					 ?: $this->get_description_from_custom_field();
 			}
 		} elseif ( $this->is_singular() ) {
 			$desc = $this->get_post_meta_item( '_open_graph_description' )
-				 ?: $this->get_description_from_custom_field(); // phpcs:ignore -- precision alignment ok.
+				 ?: $this->get_description_from_custom_field();
 		} elseif ( $this->is_term_meta_capable() ) {
 			$desc = $this->get_term_meta_item( 'og_description' )
-				 ?: $this->get_description_from_custom_field(); // phpcs:ignore -- precision alignment ok.
+				 ?: $this->get_description_from_custom_field();
 		}
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $desc;
 	}
@@ -153,23 +158,24 @@ class Generate_Description extends Generate {
 	protected function get_custom_open_graph_description_from_args( array $args ) {
 
 		$desc = '';
-
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $args['taxonomy'] ) {
 			$desc = $this->get_term_meta_item( 'og_description', $args['id'] )
-				 ?: $this->get_description_from_custom_field( $args ); // phpcs:ignore -- precision alignment ok.
+				 ?: $this->get_description_from_custom_field( $args );
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_post_meta_item( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args ); // phpcs:ignore -- precision alignment ok.
+					 ?: $this->get_description_from_custom_field( $args );
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_og_description' )
-					 ?: $this->get_description_from_custom_field( $args ); // phpcs:ignore -- precision alignment ok.
+					 ?: $this->get_description_from_custom_field( $args );
 			} else {
 				$desc = $this->get_post_meta_item( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args ); // phpcs:ignore -- precision alignment ok.
+					 ?: $this->get_description_from_custom_field( $args );
 			}
 		}
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $desc;
 	}
@@ -191,8 +197,10 @@ class Generate_Description extends Generate {
 	 */
 	public function get_twitter_description( $args = null, $escape = true ) {
 
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		$desc = $this->get_twitter_description_from_custom_field( $args, false )
-			 ?: $this->get_generated_twitter_description( $args, false ); // phpcs:ignore -- precision alignment ok.
+			 ?: $this->get_generated_twitter_description( $args, false );
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -237,32 +245,33 @@ class Generate_Description extends Generate {
 	protected function get_custom_twitter_description_from_query() {
 
 		$desc = '';
-
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$desc = $this->get_option( 'homepage_twitter_description' )
-					?: $this->get_post_meta_item( '_twitter_description' )
-					?: $this->get_option( 'homepage_og_description' )
-					?: $this->get_post_meta_item( '_open_graph_description' )
-					?: $this->get_description_from_custom_field()
-					?: ''; // phpcs:ignore -- precision alignment ok.
+					 ?: $this->get_post_meta_item( '_twitter_description' )
+					 ?: $this->get_option( 'homepage_og_description' )
+					 ?: $this->get_post_meta_item( '_open_graph_description' )
+					 ?: $this->get_description_from_custom_field()
+					 ?: '';
 			} else {
 				$desc = $this->get_option( 'homepage_twitter_description' )
 					?: $this->get_option( 'homepage_og_description' )
 					?: $this->get_description_from_custom_field()
-					?: ''; // phpcs:ignore -- precision alignment ok.
+					?: '';
 			}
 		} elseif ( $this->is_singular() ) {
 			$desc = $this->get_post_meta_item( '_twitter_description' )
 				 ?: $this->get_post_meta_item( '_open_graph_description' )
 				 ?: $this->get_description_from_custom_field()
-				 ?: ''; // phpcs:ignore -- precision alignment ok.
+				 ?: '';
 		} elseif ( $this->is_term_meta_capable() ) {
 			$desc = $this->get_term_meta_item( 'tw_description' )
 				 ?: $this->get_term_meta_item( 'og_description' )
 				 ?: $this->get_description_from_custom_field()
-				 ?: ''; // phpcs:ignore -- precision alignment ok.
+				 ?: '';
 		}
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $desc;
 	}
@@ -283,11 +292,12 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_custom_twitter_description_from_args( array $args ) {
 
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $args['taxonomy'] ) {
 			$desc = $this->get_term_meta_item( 'tw_description', $args['id'] )
 				 ?: $this->get_term_meta_item( 'og_description', $args['id'] )
 				 ?: $this->get_description_from_custom_field( $args )
-				 ?: ''; // phpcs:ignore -- precision alignment ok.
+				 ?: '';
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_twitter_description' )
@@ -295,19 +305,20 @@ class Generate_Description extends Generate {
 					 ?: $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_post_meta_item( '_open_graph_description', $args['id'] )
 					 ?: $this->get_description_from_custom_field( $args )
-					 ?: ''; // phpcs:ignore -- precision alignment ok.
+					 ?: '';
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_twitter_description' )
 					 ?: $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_description_from_custom_field( $args )
-					 ?: ''; // phpcs:ignore -- precision alignment ok.
+					 ?: '';
 			} else {
 				$desc = $this->get_post_meta_item( '_twitter_description', $args['id'] )
 					 ?: $this->get_post_meta_item( '_open_graph_description', $args['id'] )
 					 ?: $this->get_description_from_custom_field( $args )
-					 ?: ''; // phpcs:ignore -- precision alignment ok.
+					 ?: '';
 			}
 		}
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $desc;
 	}
@@ -364,11 +375,12 @@ class Generate_Description extends Generate {
 
 		$desc = '';
 
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$desc = $this->get_option( 'homepage_description' )
 					 ?: $this->get_post_meta_item( '_genesis_description' )
-					 ?: ''; // phpcs:ignore -- precision alignment ok.
+					 ?: '';
 			} else {
 				$desc = $this->get_option( 'homepage_description' ) ?: '';
 			}
@@ -377,6 +389,7 @@ class Generate_Description extends Generate {
 		} elseif ( $this->is_term_meta_capable() ) {
 			$desc = $this->get_term_meta_item( 'description' ) ?: '';
 		}
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $desc;
 	}
@@ -394,19 +407,21 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_custom_description_from_args( array $args ) {
 
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $args['taxonomy'] ) {
 			$desc = $this->get_term_meta_item( 'description', $args['id'] ) ?: '';
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_description' )
 					 ?: $this->get_post_meta_item( '_genesis_description', $args['id'] )
-					 ?: ''; // phpcs:ignore -- precision alignment ok.
+					 ?: '';
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_description' ) ?: '';
 			} else {
 				$desc = $this->get_post_meta_item( '_genesis_description', $args['id'] ) ?: '';
 			}
 		}
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $desc;
 	}

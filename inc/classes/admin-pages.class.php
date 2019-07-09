@@ -34,14 +34,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Admin_Pages extends Inpost {
 
 	/**
-	 * @since 2.2.2
-	 * @access private
-	 *         We're going to remove this.
-	 * @var array $page_defaults Holds Page output defaults.
-	 */
-	public $page_defaults = [];
-
-	/**
 	 * @since 2.7.0
 	 * @var string $seo_settings_page_hook The page hook_suffix added via WP add_menu_page()
 	 */
@@ -52,29 +44,6 @@ class Admin_Pages extends Inpost {
 	 * @var bool $load_options Determines whether to load the options.
 	 */
 	public $load_options;
-
-	/**
-	 * Enqueues page defaults early.
-	 *
-	 * @since 2.3.1
-	 */
-	public function enqueue_page_defaults() {
-		/**
-		 * @since 2.3.1
-		 * @param array $page_defaults The admin default notice sentences.
-		 */
-		$this->page_defaults = (array) \apply_filters(
-			'the_seo_framework_admin_page_defaults',
-			[
-				'save_button_text'   => \esc_html__( 'Save Settings', 'autodescription' ),
-				'reset_button_text'  => \esc_html__( 'Reset Settings', 'autodescription' ),
-				'saved_notice_text'  => \esc_html__( 'Settings are saved.', 'autodescription' ),
-				'reset_notice_text'  => \esc_html__( 'Settings are reset.', 'autodescription' ),
-				'error_notice_text'  => \esc_html__( 'Error saving settings.', 'autodescription' ),
-				'plugin_update_text' => \esc_html__( 'New SEO Settings have been updated.', 'autodescription' ),
-			]
-		);
-	}
 
 	/**
 	 * Adds menu links under "settings" in the wp-admin dashboard
@@ -335,36 +304,48 @@ class Admin_Pages extends Inpost {
 				);
 			$this->update_static_cache( 'check_seo_plugin_conflicts', 0 );
 		}
-
-		if ( $this->is_seo_settings_page( true ) ) {
-			$this->do_settings_page_notices();
-		}
 	}
 
 	/**
-	 * Display notices on SEO setting changes.
+	 * Outputs notices on SEO setting changes.
 	 *
-	 * @since 3.1.0
-	 * @securitycheck 3.0.0 OK. NOTE: Users can however MANUALLY trigger these on the SEO settings page.
-	 * @todo convert the "get" into secure "error_notice" option. See TSF Extension Manager.
-	 * @todo convert $this->page_defaults to inline texts. It's now uselessly rendering.
+	 * @since 3.3.0
+	 * @access private
 	 */
-	protected function do_settings_page_notices() {
+	public function _do_settings_page_notices() {
 
-		$get = empty( $_GET ) ? null : $_GET; // phpcs:ignore -- CSRF ok. (input var is not...)
+		$notice = $this->get_static_cache( 'settings_notice' );
 
-		if ( null === $get )
-			return;
+		if ( ! $notice ) return;
 
-		if ( isset( $get['settings-updated'] ) && 'true' === $get['settings-updated'] ) :
-			$this->do_dismissible_notice( $this->page_defaults['saved_notice_text'], 'updated' );
-		elseif ( isset( $get['tsf-settings-reset'] ) && 'true' === $get['tsf-settings-reset'] ) :
-			$this->do_dismissible_notice( $this->page_defaults['reset_notice_text'], 'warning' );
-		elseif ( isset( $get['error'] ) && 'true' === $get['error'] ) :
-			$this->do_dismissible_notice( $this->page_defaults['error_notice_text'], 'error' );
-		elseif ( isset( $get['tsf-settings-updated'] ) && 'true' === $get['tsf-settings-updated'] ) :
-			$this->do_dismissible_notice( $this->page_defaults['plugin_update_text'], 'updated' );
-		endif;
+		$message = '';
+		$type    = '';
+
+		switch ( $notice ) {
+			case 'updated':
+				$message = \__( 'SEO settings are saved, and the caches have been flushed.', 'autodescription' );
+				$type    = 'updated';
+				break;
+
+			case 'unchanged':
+				$message = \__( 'No SEO settings were changed, but the caches have been flushed.', 'autodescription' );
+				$type    = 'warning';
+				break;
+
+			case 'reset':
+				$message = \__( 'SEO settings are reset, and the caches have been flushed.', 'autodescription' );
+				$type    = 'warning';
+				break;
+
+			case 'error':
+				$message = \__( 'An unknown error occurred saving SEO settings.', 'autodescription' );
+				$type    = 'error';
+				break;
+		}
+
+		$this->update_static_cache( 'settings_notice', '' );
+
+		$message and $this->do_dismissible_notice( $message, $type ?: 'updated' );
 	}
 
 	/**
@@ -477,7 +458,8 @@ class Admin_Pages extends Inpost {
 	 * @param bool   $escape  Whether to escape the whole output.
 	 */
 	public function do_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
-		echo $this->generate_dismissible_notice( $message, $type, (bool) $a11y, (bool) $escape ); // phpcs:ignore -- Use $escape
+		// phpcs:ignore, WordPress.Security.EscapeOutput -- use $escape
+		echo $this->generate_dismissible_notice( $message, $type, (bool) $a11y, (bool) $escape );
 	}
 
 	/**
@@ -522,7 +504,8 @@ class Admin_Pages extends Inpost {
 	 * }
 	 */
 	public function do_dismissible_sticky_notice( $message, $key, $args = [] ) {
-		echo $this->generate_dismissible_sticky_notice( $message, $key, $args ); // phpcs:ignore -- Use $args['escape']
+		// phpcs:ignore, WordPress.Security.EscapeOutput -- use $args['escape']
+		echo $this->generate_dismissible_sticky_notice( $message, $key, $args );
 	}
 
 	/**
@@ -574,7 +557,8 @@ class Admin_Pages extends Inpost {
 	 */
 	public function description_noesc( $content, $block = true ) {
 		$output = '<span class="description">' . $content . '</span>';
-		echo $block ? '<p>' . $output . '</p>' : $output; // phpcs:ignore -- Method name says it's not escaped.
+		// phpcs:ignore, WordPress.Security.EscapeOutput -- Method clearly states it's not escaped.
+		echo $block ? '<p>' . $output . '</p>' : $output;
 	}
 
 	/**
@@ -600,7 +584,8 @@ class Admin_Pages extends Inpost {
 	 */
 	public function attention_noesc( $content, $block = true ) {
 		$output = '<span class="attention">' . $content . '</span>';
-		echo $block ? '<p>' . $output . '</p>' : $output; // phpcs:ignore -- Method name says it's not escaped.
+		// phpcs:ignore, WordPress.Security.EscapeOutput -- Method clearly states it's not escaped.
+		echo $block ? '<p>' . $output . '</p>' : $output;
 	}
 
 	/**
@@ -626,7 +611,8 @@ class Admin_Pages extends Inpost {
 	 */
 	public function attention_description_noesc( $content, $block = true ) {
 		$output = '<span class="description attention">' . $content . '</span>';
-		echo $block ? '<p>' . $output . '</p>' : $output; // phpcs:ignore -- Method name says it's not escaped.
+		// phpcs:ignore, WordPress.Security.EscapeOutput -- Method clearly states it's not escaped.
+		echo $block ? '<p>' . $output . '</p>' : $output;
 	}
 
 	/**

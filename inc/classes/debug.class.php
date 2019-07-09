@@ -97,7 +97,7 @@ final class Debug implements Debug_Interface {
 	 * @param string $replacement Optional. The function that should have been called. Default null.
 	 */
 	public function _deprecated_filter( $filter, $version, $replacement = null ) {
-		$this->_deprecated_function( 'Filter ' . $filter, $version, $replacement ); // ignore invalid xss warnings.
+		$this->_deprecated_function( 'Filter ' . $filter, $version, $replacement ); // phpcs:ignore -- Wrong assert, copied method.
 	}
 
 	/**
@@ -116,7 +116,7 @@ final class Debug implements Debug_Interface {
 	 * @param string $replacement  Optional. The function that should have been called. Default null.
 	 *                             Expected to be escaped.
 	 */
-	public function _deprecated_function( $function, $version, $replacement = null ) { // phpcs:ignore -- xss ok.
+	public function _deprecated_function( $function, $version, $replacement = null ) { // phpcs:ignore -- Wrong assert, copied method.
 		/**
 		 * Fires when a deprecated function is called.
 		 *
@@ -181,7 +181,7 @@ final class Debug implements Debug_Interface {
 	 * @param string $message  A message explaining what has been done incorrectly.
 	 * @param string $version  The version of WordPress where the message was added.
 	 */
-	public function _doing_it_wrong( $function, $message, $version = null ) { // phpcs:ignore -- xss ok.
+	public function _doing_it_wrong( $function, $message, $version = null ) { // phpcs:ignore -- Wrong assert, copied method.
 		/**
 		 * Fires when the given function is being used incorrectly.
 		 *
@@ -285,7 +285,7 @@ final class Debug implements Debug_Interface {
 	 */
 	protected function get_error() {
 
-		$backtrace = debug_backtrace();
+		$backtrace = @debug_backtrace();
 		/**
 		 * 0 = This function.
 		 * 1 = Error handler.
@@ -398,7 +398,8 @@ final class Debug implements Debug_Interface {
 					break;
 			endswitch;
 
-			echo sprintf( '<span><strong>%s:</strong> ', $type ) . $message; // xss ok
+			// phpcs:ignore, WordPress.Security.EscapeOutput -- output is escaped.
+			echo sprintf( '<span><strong>%s:</strong> ', $type ) . $message;
 			echo $file ? ' In ' . \esc_html( $file ) : '';
 			echo $line ? ' on line ' . \esc_html( $line ) : '';
 			echo '.</span><br>' . PHP_EOL;
@@ -478,7 +479,7 @@ final class Debug implements Debug_Interface {
 	 * @access private
 	 */
 	public static function _output_debug_header() {
-		echo static::get_instance()->get_debug_header_output(); // phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo static::get_instance()->get_debug_header_output(); // phpcs:ignore, WordPress.Security.EscapeOutput -- callee escapes.
 	}
 
 	/**

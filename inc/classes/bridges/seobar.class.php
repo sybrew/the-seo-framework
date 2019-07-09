@@ -99,7 +99,7 @@ final class SeoBar {
 		|| empty( $_POST['taxonomy'] ) )
 			return;
 
-		$taxonomy = stripslashes( $_POST['taxonomy'] ); // phpcs:ignore -- Nonce, Sanitization, CSRF ok
+		$taxonomy   = stripslashes( $_POST['taxonomy'] );
 		$tax_object = $taxonomy ? \get_taxonomy( $taxonomy ) : false;
 
 		if ( $tax_object && \current_user_can( $tax_object->cap->edit_terms ) )
@@ -121,7 +121,7 @@ final class SeoBar {
 		|| empty( $_POST['post_type'] ) )
 			return;
 
-		$post_type = stripslashes( $_POST['post_type'] ); // phpcs:ignore -- Nonce, Sanitization, CSRF ok
+		$post_type = stripslashes( $_POST['post_type'] );
 		$pto       = $post_type ? \get_post_type_object( $post_type ) : false;
 
 		if ( $pto && \current_user_can( 'edit_' . $pto->capability_type, (int) $_POST['post_ID'] ) )
@@ -192,15 +192,19 @@ final class SeoBar {
 	 *
 	 * @since 3.3.0
 	 * @see callers for CSRF protection.
+	 *    `_prepare_columns_wp_ajax_add_tag()`
+	 *    `_prepare_columns_wp_ajax_inline_save()`
+	 *    `_prepare_columns_wp_ajax_inline_save_tax()`
 	 */
 	private function init_seo_bar_columns_ajax() {
+		// phpcs:disable, WordPress.Security.NonceVerification -- _prepare_columns_wp_ajax_* verifies this.
 
-		$taxonomy  = isset( $_POST['taxonomy'] ) ? stripslashes( $_POST['taxonomy'] ) : ''; // phpcs:ignore -- CSRF ok.
-		$post_type = isset( $_POST['post_type'] ) ? stripslashes( $_POST['post_type'] ) : ''; // phpcs:ignore -- CSRF ok.
+		$taxonomy  = isset( $_POST['taxonomy'] ) ? stripslashes( $_POST['taxonomy'] ) : '';
+		$post_type = isset( $_POST['post_type'] ) ? stripslashes( $_POST['post_type'] ) : '';
 
 		//? /wp-admin/js/inline-edit-tax.js doesn't send post_type, instead, it sends tax_type, which is the same.
 		$post_type = $post_type
-				?: ( isset( $_POST['tax_type'] ) ? stripslashes( $_POST['tax_type'] ) : '' ); // phpcs:ignore -- CSRF ok.
+				?: ( isset( $_POST['tax_type'] ) ? stripslashes( $_POST['tax_type'] ) : '' );
 
 		if ( $taxonomy ) {
 			if ( ! \the_seo_framework()->is_taxonomy_supported( $taxonomy ) )
@@ -214,7 +218,7 @@ final class SeoBar {
 		$this->post_type  = $post_type;
 		$this->taxonomy   = $taxonomy;
 
-		$screen_id = isset( $_POST['screen'] ) ? stripslashes( $_POST['screen'] ) : ''; // phpcs:ignore -- CSRF ok.
+		$screen_id = isset( $_POST['screen'] ) ? stripslashes( $_POST['screen'] ) : '';
 
 		// Not elseif; either request.
 		if ( $taxonomy )
@@ -233,11 +237,13 @@ final class SeoBar {
 		} elseif ( $taxonomy ) {
 			/**
 			 * Action "inline-save-tax" does not POST 'screen'.
+			 *
 			 * @see WP Core wp_ajax_inline_save_tax():
-			 * `_get_list_table( 'WP_Terms_List_Table', array( 'screen' => 'edit-' . $taxonomy ) );`
+			 *    `_get_list_table( 'WP_Terms_List_Table', array( 'screen' => 'edit-' . $taxonomy ) );`
 			 */
 			\add_filter( 'manage_edit-' . $taxonomy . '_columns', [ $this, '_add_column' ], 1, 1 );
 		}
+		// phpcs:enable, WordPress.Security.NonceVerification
 	}
 
 	/**

@@ -887,10 +887,11 @@ class Generate_Url extends Generate_Title {
 
 		if ( $this->has_custom_canonical_url() ) goto end;
 
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $this->is_singular() && ! $this->is_singular_archive() && $this->is_multipage() ) {
 			$_run = $this->is_real_front_page()
 				  ? $this->get_option( 'prev_next_frontpage' )
-				  : $this->get_option( 'prev_next_posts' ); // phpcs:ignore -- precision alignment ok.
+				  : $this->get_option( 'prev_next_posts' );
 
 			if ( ! $_run ) goto end;
 
@@ -899,7 +900,7 @@ class Generate_Url extends Generate_Title {
 		} elseif ( $this->is_real_front_page() || $this->is_archive() || $this->is_singular_archive() || $this->is_search() ) {
 			$_run = $this->is_real_front_page()
 				  ? $this->get_option( 'prev_next_frontpage' )
-				  : $this->get_option( 'prev_next_archives' ); // phpcs:ignore -- precision alignment ok.
+				  : $this->get_option( 'prev_next_archives' );
 
 			if ( ! $_run ) goto end;
 
@@ -908,6 +909,7 @@ class Generate_Url extends Generate_Title {
 		} else {
 			goto end;
 		}
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		$canonical = $this->remove_pagination_from_url( $this->get_current_canonical_url() );
 

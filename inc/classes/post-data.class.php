@@ -300,9 +300,7 @@ class Post_Data extends Detect {
 	 */
 	public function _save_inpost_primary_term( $post_id, $post ) {
 
-		//* Nonce is done at the end of this function.
-		if ( empty( $_POST['autodescription'] ) ) // Input var OK.
-			return;
+		if ( empty( $_POST['autodescription'] ) ) return;
 
 		//* Grab the post object
 		$post = \get_post( $post );

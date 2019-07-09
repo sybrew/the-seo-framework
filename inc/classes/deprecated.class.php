@@ -215,7 +215,8 @@ final class Deprecated {
 		] );
 
 		if ( $echo ) {
-			echo $bar; // phpcs:ignore -- XSS ok.
+			// phpcs:ignore, WordPress.Security.EscapeOutput -- the SEO Bar is escaped.
+			echo $bar;
 		} else {
 			return $bar;
 		}

@@ -301,6 +301,8 @@ TODO call "php level caching" memoization--it's a cooler word.
 TODO primary term selection should have natsort ID via PHP predefined.
 TODO When changing the slug of a term, the canonical URL placeholder now updates with it.
 
+TODO TSF no longer resizes images, and instead ignores them, when they're above 4096x4096 px.
+
 **Detailed log:**
 
 **For everyone:**
@@ -375,6 +377,8 @@ TODO When changing the slug of a term, the canonical URL placeholder now updates
 		* When clicking the title addition, like "- My Site", the text selection no longer just goes to the end regardless of its position, but now goes to the beginning if it's prefixed.
 			* When double-clicking on the title addition, you'll now select the last word (or first, if prefixed) (or piece of whitespace).
 			* When triple-clicking on the title addition, you'll select the whole input.
+		* When updating the SEO settings, but when no settings have been changed, you now get a proper notification.
+		* The SEO Settings update notifications now also state that caches are flushed.
 	* **AI Generators:**
 		* **Descriptions:**
 			* They now work better with RTL languages, like Arabic and Hebrew; however, due to ambiguity in language construction, it will read from top to bottom (like the web is built), instead of bottom to top (like books are).
@@ -405,6 +409,8 @@ TODO When changing the slug of a term, the canonical URL placeholder now updates
 		* The SEO Bar now loads quicker, as redundant checks have been removed.
 		* We offloaded a large portion of the admin-sided PHP scripts to different objects, freeing up RAM and lowering plugin boot-time.
 		* The admin helper-scripts have been optimized to execute no unnecessary paint-jobs, lowering browser-CPU usage.
+		* The SEO Settings notifications no longer get dragged around your page on-load, and instead are preemptively placed. This prevents painting the whole page three times.
+		* We now mostly use WordPress' built-in window-resize debounce-handler, which reduces some processing required.
 		* We split the main JavaScript and CSS files into multiple, dedicated files. Improving performance and lowering power consumption on all pages where TSF is active.
 			* **HTTP/2:** To take full advantage of this change, multiplexing support (like in HTTP/2) is advised.
 			* **CSS:** This significantly lowers class and ID lookups on every page load and DOM update, which drastically lowers processing time.
@@ -515,6 +521,8 @@ TODO When changing the slug of a term, the canonical URL placeholder now updates
 		* The plugin is no longer booted again when a compatibility file is loaded.
 			* This issue couldn't propagate thanks to "Just In Time" checks, but since we now emit warnings, it's been discovered.
 		* If the homepage is a page, and it's private or protected, the homepage Meta Title field on the SEO Settings page now reflects that.
+		* Our upgrader is fast. But, just in case, we increased the PHP execution-timeout to 300 seconds, instead of the normal 30~60 seconds.
+			* This may not yield effective on every site, depending on the PHP configuration.
 	* **Compatibility:**
 		* We took our hands off the WordPress Rewrite system. All plugin conflicts related to this are no longer our problem--albeit, it never was our fault.
 			* Now, we are able to finally implement Polylang's broken system for the sitemap. As such, all sitemaps now work with Polylang.
@@ -562,13 +570,20 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* The class autoloader now considers folder structure automatically, based on the namespace used.
 		* The script loader now discerns between posts and taxonomies, and can now prevent loading scripts when SEO is disabled for the post type or taxonomy.
 		* In the debug interface, the JSON+LD scripts are now more readable.
+		* The script loader now accepts and contatenates inline JS.
 * **Option notes:**
 	* **Added:**
-		* `seo_bar_symbols`
-			* Values: either `1` or `0`.
-			* Default: `0`.
-			* Location: General Settings -> Layout -> SEO Bar Settings.
-			* Use: Converts SEO Bar item symbols based on their state.
+		* Under `THE_SEO_FRAMEWORK_SITE_OPTIONS`:
+			* `seo_bar_symbols`
+				* Values: either `1` or `0`.
+				* Default: `0`.
+				* Location: General Settings -> Layout -> SEO Bar Settings.
+				* Use: Converts SEO Bar item symbols based on their state.
+		* Under `THE_SEO_FRAMEWORK_SITE_CACHE`:
+			* `settings_notice`
+				* Values: Any simple string.
+				* Default: `''`.
+				* Use: Holds the last-update action resolution state, so proper notifications can be send.
 	* **Removed:**
 		* `attachment_noindex` and sanitization thereof, since 3.1 it's changed to `noindex_post_types['attachment']`.
 		* `attachment_nofollow` and sanitization thereof, since 3.1 it's changed to `nofollow_post_types['attachment']`.
@@ -788,6 +803,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				2. Now tests URL schemes case-insensitive.
 			* `has_robots_txt()`, now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
 			* `has_sitemap_xml()`, now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
+			* `is_term_meta_capable()` no longer incorrectly determines post type archives as capable; they aren't considered term taxonomies, because they don't yield taxonomies, but solely post types.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`
@@ -836,6 +852,8 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `flush_rewrite_rules_deactivation()`
 				* `maybe_output_sitemap_stylesheet()`
 				* `post_type_supports_inpost()`
+				* `enqueue_page_defaults()`
+				* `add_removable_query_args()`
 		* **Deprecated:**
 			* **With alternatives**, refer to the source (search for your old method) for a relayed alternative:
 				* `get_default_scripts()`,
@@ -867,6 +885,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `quick_edit_column_name`, used for hidden quick edit fields.
 		* **Removed:**
 			* `profile_settings`
+			* `page_defaults`
 * **Constant notes:**
 	* **Namespace `\The_SEO_Framework\`:**
 		* `ROBOTS_IGNORE_PROTECTION`, used for the `the_seo_framework()->robots_meta()` method family, ignores post's password/privacy settings.
@@ -874,6 +893,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 * **Action notes:**
 	* **Added:**
 		* `the_seo_framework_sitemap_header`, runs in the sitemap HTTP header.
+		* `the_seo_framework_setting_notices`, runs below the settings header.
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_allow_quick_edit`, boolean.
@@ -922,6 +942,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* `the_seo_framework_sitemap_pages_query_args`.
 		* `the_seo_framework_sitemap_posts_query_args`.
 		* `the_seo_framework_sitemap_cpt_query_args`.
+		* `the_seo_framework_admin_page_defaults`, we trust our defaults are right.
 * **Rewrite notes:**
 	* **Removed:**
 		* All WordPress rewrite manipulation.

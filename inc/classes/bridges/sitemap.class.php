@@ -326,7 +326,8 @@ final class Sitemap {
 		}
 		$urlset .= '>';
 
-		echo $urlset . "\n"; // phpcs:ignore -- XSS ok.
+		// phpcs:ignore, WordPress.Security.EscapeOutput -- Output is static from filter.
+		echo $urlset . "\n";
 	}
 
 	/**

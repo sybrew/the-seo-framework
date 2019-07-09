@@ -66,7 +66,7 @@ class Site_Options extends Sanitize {
 		 * @since 2.2.7
 		 * @param array $options The default site options.
 		 */
-		// phpcs:disable WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned -- precision alignment OK.
+		// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment -- precision alignment OK.
 		return (array) \apply_filters(
 			'the_seo_framework_default_site_options',
 			[
@@ -250,7 +250,7 @@ class Site_Options extends Sanitize {
 				'ld_json_breadcrumbs' => 1, // LD+Json Breadcrumbs
 			]
 		);
-		// phpcs:enable WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
+		// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment
 	}
 
 	/**
@@ -470,23 +470,17 @@ class Site_Options extends Sanitize {
 	 */
 	protected function check_options_reset() {
 
-		/**
-		 * Security check:
-		 * Further checks are based on previously set options, via option 'tsf-settings-reset'.
-		 * These can only be set when one has access to the Settings Page or database.
-		 * Also checks for capabilities.
-		 */
-		if ( ! $this->can_access_settings() || ! $this->is_seo_settings_page( false ) )
+		if ( ! $this->is_seo_settings_page( false ) || ! $this->can_access_settings() )
 			return;
 
 		if ( $this->get_option( 'tsf-settings-reset', false ) ) {
 			if ( \update_option( THE_SEO_FRAMEWORK_SITE_OPTIONS, $this->get_default_site_options() ) ) {
-				$this->admin_redirect( $this->seo_settings_page_slug, [ 'tsf-settings-reset' => 'true' ] );
-				exit;
+				$this->update_static_cache( 'settings_notice', 'reset' );
 			} else {
-				$this->admin_redirect( $this->seo_settings_page_slug, [ 'error' => 'true' ] );
-				exit;
+				$this->update_static_cache( 'settings_notice', 'error' );
 			}
+			$this->admin_redirect( $this->seo_settings_page_slug );
+			exit;
 		}
 	}
 

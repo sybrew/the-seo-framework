@@ -6,6 +6,8 @@
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
+// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+
 //* Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_homepage_metabox', $instance );
 
@@ -184,7 +186,7 @@ switch ( $instance ) :
 		</div>
 		<p>
 			<textarea name="<?php $this->field_name( 'homepage_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $description_placeholder ); ?>"><?php echo esc_attr( $this->get_option( 'homepage_description' ) ); ?></textarea>
-			<?php echo $this->output_js_description_elements(); ?>
+			<?php $this->output_js_description_elements(); ?>
 		</p>
 		<?php
 
@@ -232,7 +234,7 @@ switch ( $instance ) :
 		<fieldset>
 			<legend>
 				<h4><?php esc_html_e( 'Meta Title Location', 'autodescription' ); ?></h4>
-				<?php $this->description( __( 'This setting determines which side the title text will go on.', 'autodescription' ) ); ?>
+				<?php $this->description( __( 'This setting determines which side the additions text will go on.', 'autodescription' ) ); ?>
 			</legend>
 
 			<p id="tsf-home-title-location" class="tsf-fields">
@@ -351,7 +353,7 @@ switch ( $instance ) :
 		</div>
 		<p>
 			<textarea name="<?php $this->field_name( 'homepage_og_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_og_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $og_desc_placeholder ); ?>"><?php echo esc_attr( $this->get_option( 'homepage_og_description' ) ); ?></textarea>
-			<?php echo $this->output_js_description_elements(); ?>
+			<?php $this->output_js_description_elements(); ?>
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && $custom_og_desc ) {
@@ -403,7 +405,7 @@ switch ( $instance ) :
 		</div>
 		<p>
 			<textarea name="<?php $this->field_name( 'homepage_twitter_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_twitter_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $tw_desc_placeholder ); ?>"><?php echo esc_attr( $this->get_option( 'homepage_twitter_description' ) ); ?></textarea>
-			<?php echo $this->output_js_description_elements(); ?>
+			<?php $this->output_js_description_elements(); ?>
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && ( $custom_og_desc || $custom_tw_desc ) ) {

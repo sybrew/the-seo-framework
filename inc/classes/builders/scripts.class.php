@@ -349,13 +349,15 @@ final class Scripts {
 					and \wp_localize_script( $s['id'], $s['l10n']['name'], $s['l10n']['data'] );
 				isset( $s['tmpl'] )
 					and $instance->register_template( $s['id'], $s['tmpl'] );
+				isset( $s['inline'] )
+					and \wp_add_inline_script( $s['id'], $instance->create_inline_js( $s['inline'] ) );
 				$registered = true;
 				break;
 		}
 		if ( $registered ) {
 			isset( static::$queue[ $s['type'] ][ $s['id'] ] )
 				and static::$queue[ $s['type'] ][ $s['id'] ] |= static::REGISTERED
-				 or static::$queue[ $s['type'] ][ $s['id'] ]  = static::REGISTERED; // phpcs:ignore -- precision alignment ok.
+				 or static::$queue[ $s['type'] ][ $s['id'] ]  = static::REGISTERED; // phpcs:ignore, WordPress.WhiteSpace
 		}
 	}
 
@@ -386,7 +388,7 @@ final class Scripts {
 		if ( $loaded ) {
 			isset( static::$queue[ $type ][ $id ] )
 				and static::$queue[ $type ][ $id ] |= static::LOADED
-				 or static::$queue[ $type ][ $id ]  = static::LOADED; // phpcs:ignore -- precision alignment ok.
+				 or static::$queue[ $type ][ $id ]  = static::LOADED; // phpcs:ignore, WordPress.WhiteSpace
 		}
 	}
 
@@ -428,13 +430,32 @@ final class Scripts {
 	 * @uses $this->convert_color_css()
 	 *
 	 * @param array $styles The styles to add.
-	 * @return array $css
+	 * @return string
 	 */
 	private function create_inline_css( array $styles ) {
 
 		$out = '';
 		foreach ( $styles as $selector => $css ) {
 			$out .= $selector . '{' . implode( ';', $this->convert_color_css( $css ) ) . '}';
+		}
+
+		return $out;
+	}
+
+
+	/**
+	 * Concatenates inline JS.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param array $scripts The scripts to add.
+	 * @return string
+	 */
+	private function create_inline_js( array $scripts ) {
+
+		$out = '';
+		foreach ( $scripts as $script ) {
+			$out .= ";$script";
 		}
 
 		return $out;
@@ -461,7 +482,7 @@ final class Scripts {
 			$tsf = \the_seo_framework();
 
 			if (
-			   ! isset( $_colors[ $_scheme ]->colors ) // phpcs:ignore -- precision alignment ok.
+			   ! isset( $_colors[ $_scheme ]->colors ) // phpcs:ignore, WordPress.WhiteSpace
 			|| ! is_array( $_colors[ $_scheme ]->colors )
 			|| count( $_colors[ $_scheme ]->colors ) < 4
 			) {

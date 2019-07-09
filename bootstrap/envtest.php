@@ -75,11 +75,11 @@ function the_seo_framework_pre_boot_test() {
 		'wp'  => '37965',
 	);
 
-	// phpcs:disable Generic.Formatting.MultipleStatementAlignment.NotSameWarning
-	   ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < $requirements['php'] and $test = 1 // phpcs:ignore -- precision alignment ok.
+	// phpcs:disable, Generic.Formatting.MultipleStatementAlignment, WordPress.WhiteSpace.PrecisionAlignment
+	   ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < $requirements['php'] and $test = 1
 	or $GLOBALS['wp_db_version'] < $requirements['wp'] and $test = 2
 	or $test = true;
-	// phpcs:enable Generic.Formatting.MultipleStatementAlignment.NotSameWarning
+	// phpcs:enable, Generic.Formatting.MultipleStatementAlignment, WordPress.WhiteSpace.PrecisionAlignment
 
 	//* All good.
 	if ( true === $test ) {

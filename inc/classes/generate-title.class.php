@@ -51,8 +51,10 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_title( $args = null, $escape = true ) {
 
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		$title = $this->get_custom_field_title( $args, false )
-			  ?: $this->get_generated_title( $args, false ); // phpcs:ignore -- precision alignment ok.
+			  ?: $this->get_generated_title( $args, false );
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $escape ? $this->escape_title( $title ) : $title;
 	}
@@ -189,8 +191,10 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_twitter_title( $args = null, $escape = true ) {
 
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		$title = $this->get_twitter_title_from_custom_field( $args, false )
-			  ?: $this->get_generated_twitter_title( $args, false ); // phpcs:ignore -- precision alignment ok.
+			  ?: $this->get_generated_twitter_title( $args, false );
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $escape ? $this->escape_title( $title ) : $title;
 	}
@@ -233,28 +237,29 @@ class Generate_Title extends Generate_Description {
 	protected function get_custom_twitter_title_from_query() {
 
 		$title = '';
-
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$title = $this->get_option( 'homepage_twitter_title' )
 					  ?: $this->get_post_meta_item( '_twitter_title' )
 					  ?: $this->get_option( 'homepage_og_title' )
 					  ?: $this->get_post_meta_item( '_open_graph_title' )
-					  ?: ''; // phpcs:ignore -- precision alignment ok.
+					  ?: '';
 			} else {
 				$title = $this->get_option( 'homepage_twitter_title' )
 					  ?: $this->get_option( 'homepage_og_title' )
-					  ?: ''; // phpcs:ignore -- precision alignment ok.
+					  ?: '';
 			}
 		} elseif ( $this->is_singular() ) {
 			$title = $this->get_post_meta_item( '_twitter_title' )
 				  ?: $this->get_post_meta_item( '_open_graph_title' )
-				  ?: ''; // phpcs:ignore -- precision alignment ok.
+				  ?: '';
 		} elseif ( $this->is_term_meta_capable() ) {
 			$title = $this->get_term_meta_item( 'tw_title' )
 				  ?: $this->get_term_meta_item( 'og_title' )
-				  ?: ''; // phpcs:ignore -- precision alignment ok.
+				  ?: '';
 		}
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $title;
 	}
@@ -274,27 +279,29 @@ class Generate_Title extends Generate_Description {
 	 */
 	protected function get_custom_twitter_title_from_args( array $args ) {
 
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $args['taxonomy'] ) {
 			$title = $this->get_term_meta_item( 'tw_title', $args['id'] )
 				  ?: $this->get_term_meta_item( 'og_title', $args['id'] )
-				  ?: ''; // phpcs:ignore -- precision alignment ok.
+				  ?: '';
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_twitter_title' )
 					  ?: $this->get_post_meta_item( '_twitter_title', $args['id'] )
 					  ?: $this->get_option( 'homepage_og_title' )
 					  ?: $this->get_post_meta_item( '_open_graph_title', $args['id'] )
-					  ?: ''; // phpcs:ignore -- precision alignment ok.
+					  ?: '';
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_twitter_title' )
 					  ?: $this->get_option( 'homepage_og_title' )
-					  ?: '';  // phpcs:ignore -- precision alignment ok.
+					  ?: '';
 			} else {
 				$title = $this->get_post_meta_item( '_twitter_title', $args['id'] )
 					  ?: $this->get_post_meta_item( '_open_graph_title', $args['id'] )
-					  ?: ''; // phpcs:ignore -- precision alignment ok.
+					  ?: '';
 			}
 		}
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $title;
 	}
@@ -332,8 +339,10 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_open_graph_title( $args = null, $escape = true ) {
 
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		$title = $this->get_open_graph_title_from_custom_field( $args, false )
-			  ?: $this->get_generated_open_graph_title( $args, false ); // phpcs:ignore -- precision alignment ok.
+			  ?: $this->get_generated_open_graph_title( $args, false );
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $escape ? $this->escape_title( $title ) : $title;
 	}
@@ -376,12 +385,12 @@ class Generate_Title extends Generate_Description {
 	protected function get_custom_open_graph_title_from_query() {
 
 		$title = '';
-
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$title = $this->get_option( 'homepage_og_title' )
 					  ?: $this->get_post_meta_item( '_open_graph_title' )
-					  ?: ''; // phpcs:ignore -- precision alignment ok.
+					  ?: '';
 			} else {
 				$title = $this->get_option( 'homepage_og_title' ) ?: '';
 			}
@@ -390,6 +399,7 @@ class Generate_Title extends Generate_Description {
 		} elseif ( $this->is_term_meta_capable() ) {
 			$title = $this->get_term_meta_item( 'og_title' ) ?: '';
 		}
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $title;
 	}
@@ -410,20 +420,21 @@ class Generate_Title extends Generate_Description {
 	protected function get_custom_open_graph_title_from_args( array $args ) {
 
 		$title = '';
-
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $args['taxonomy'] ) {
 			$title = $this->get_term_meta_item( 'og_title', $args['id'] ) ?: '';
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_og_title' )
 					  ?: $this->get_post_meta_item( '_open_graph_title', $args['id'] )
-					  ?: ''; // phpcs:ignore -- precision alignment ok.
+					  ?: '';
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_og_title' ) ?: '';
 			} else {
 				$title = $this->get_post_meta_item( '_open_graph_title', $args['id'] ) ?: '';
 			}
 		}
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $title;
 	}
@@ -485,12 +496,12 @@ class Generate_Title extends Generate_Description {
 	protected function get_custom_field_title_from_query() {
 
 		$title = '';
-
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$title = $this->get_option( 'homepage_title' )
 					  ?: $this->get_post_meta_item( '_genesis_title' )
-					  ?: ''; // phpcs:ignore -- precision alignment ok.
+					  ?: '';
 			} else {
 				$title = $this->get_option( 'homepage_title' ) ?: '';
 			}
@@ -499,6 +510,7 @@ class Generate_Title extends Generate_Description {
 		} elseif ( $this->is_term_meta_capable() ) {
 			$title = $this->get_term_meta_item( 'doctitle' ) ?: '';
 		}
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $title;
 	}
@@ -518,20 +530,21 @@ class Generate_Title extends Generate_Description {
 	protected function get_custom_field_title_from_args( array $args ) {
 
 		$title = '';
-
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $args['taxonomy'] ) {
 			$title = $this->get_term_meta_item( 'doctitle', $args['id'] ) ?: '';
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_title' )
 					  ?: $this->get_post_meta_item( '_genesis_title', $args['id'] )
-					  ?: ''; // phpcs:ignore -- precision alignment ok.
+					  ?: '';
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_title' ) ?: '';
 			} else {
 				$title = $this->get_post_meta_item( '_genesis_title', $args['id'] ) ?: '';
 			}
 		}
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $title;
 	}
@@ -1299,10 +1312,10 @@ class Generate_Title extends Generate_Description {
 
 		if ( $this->is_real_front_page() ) {
 			$use = $this->use_home_page_title_tagline();
-		} elseif ( $this->is_singular() && ! $this->use_singular_title_branding() ) {
-			$use = false;
-		} elseif ( $this->is_term_meta_capable() && ! $this->use_taxonomical_title_branding() ) {
-			$use = false;
+		} elseif ( $this->is_singular() ) {
+			$use = $this->use_singular_title_branding();
+		} elseif ( $this->is_term_meta_capable() || \is_post_type_archive() ) {
+			$use = $this->use_taxonomical_title_branding();
 		} else {
 			$use = ! $this->get_option( 'title_rem_additions' );
 		}
@@ -1323,20 +1336,12 @@ class Generate_Title extends Generate_Description {
 	protected function use_title_branding_from_args( array $args ) {
 
 		if ( $args['taxonomy'] ) {
-			if ( ! $this->use_taxonomical_title_branding( $args['id'] ) ) {
-				$use = false;
-			} else {
-				// Redundant?
-				$use = ! $this->get_option( 'title_rem_additions' );
-			}
+			$use = $this->use_taxonomical_title_branding( $args['id'] );
 		} else {
 			if ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$use = $this->use_home_page_title_tagline();
-			} elseif ( ! $this->use_singular_title_branding( $args['id'] ) ) {
-				$use = false;
 			} else {
-				// Redundant?
-				$use = ! $this->get_option( 'title_rem_additions' );
+				$use = $this->use_singular_title_branding( $args['id'] );
 			}
 		}
 

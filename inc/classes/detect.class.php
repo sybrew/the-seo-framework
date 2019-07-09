@@ -760,7 +760,7 @@ class Detect extends Render {
 
 		if ( $this->is_feed() ) {
 			$cache = false;
-		} elseif ( $this->is_singular() ) {
+		} elseif ( $this->is_singular() || \is_post_type_archive() ) {
 			$cache = $this->is_post_type_supported();
 		} elseif ( $this->is_term_meta_capable() ) {
 			$cache = $this->is_taxonomy_supported();

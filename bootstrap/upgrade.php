@@ -86,7 +86,8 @@ function _previous_db_version() {
  *              8. Now tries to increase memory limit. This probably isn't needed.
  *              9. Now runs on the front-end, too, via `init`, instead of `admin_init`.
  * @since 3.1.4 Now flushes object cache before the upgrade settings are called.
- * @since 3.3.0 Removed rewrite flushing; unless upgrading from <3300 to 3300
+ * @since 3.3.0 1. Removed rewrite flushing; unless upgrading from <3300 to 3300
+ *              2. Added time limit changes.
  */
 function _do_upgrade() {
 
@@ -100,6 +101,9 @@ function _do_upgrade() {
 	}
 
 	\wp_raise_memory_limit( 'tsf_upgrade' );
+
+	// phpcs:ignore, WordPress.PHP.NoSilencedErrors -- Function may be disabled.
+	@set_time_limit( 300 );
 
 	/**
 	 * Clear the cache to prevent an update_option() from saving a stale database version to the cache.
