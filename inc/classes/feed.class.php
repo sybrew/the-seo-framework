@@ -35,27 +35,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Feed extends Cache {
 
 	/**
-	 * Initializes feed actions and hooks.
-	 *
-	 * @since 2.9.0
-	 * @access private
-	 *
-	 * @return void Early if this request isn't for a feed.
-	 */
-	public function _init_feed_output() {
-
-		if ( ! $this->is_feed() )
-			return;
-
-		\add_filter( 'the_content_feed', [ $this, 'the_content_feed' ], 10, 2 );
-
-		//* Only add the feed link to the excerpt if we're only building excerpts.
-		if ( $this->rss_uses_excerpt() )
-			\add_filter( 'the_excerpt_rss', [ $this, 'the_content_feed' ], 10, 1 );
-
-	}
-
-	/**
 	 * Determines whether the WordPress excerpt RSS feed option is used.
 	 *
 	 * @since 2.6.0
@@ -80,8 +59,7 @@ class Feed extends Cache {
 	 */
 	public function the_content_feed( $content = '', $feed_type = null ) {
 
-		if ( ! $content )
-			return '';
+		if ( ! $content ) return '';
 
 		/**
 		 * Don't alter already-excerpts or descriptions.
@@ -109,8 +87,7 @@ class Feed extends Cache {
 	 */
 	protected function convert_feed_entry_to_excerpt( $content = '' ) {
 
-		if ( ! $content )
-			return '';
+		if ( ! $content ) return '';
 
 		//* Strip all code and lines.
 		$excerpt = $this->s_excerpt_raw( $content, false );

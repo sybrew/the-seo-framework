@@ -611,6 +611,7 @@ class Detect extends Render {
 	 * Detects presence of robots.txt in root folder.
 	 *
 	 * @since 2.5.2
+	 * @since 3.3.0 Now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
 	 * @staticvar $has_robots
 	 *
 	 * @return bool Whether the robots.txt file exists.
@@ -622,6 +623,9 @@ class Detect extends Render {
 		if ( isset( $has_robots ) )
 			return $has_robots;
 
+		// Ensure get_home_path() is declared.
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+
 		$path = \get_home_path() . 'robots.txt';
 
 		return $has_robots = file_exists( $path );
@@ -631,6 +635,7 @@ class Detect extends Render {
 	 * Detects presence of sitemap.xml in root folder.
 	 *
 	 * @since 2.5.2
+	 * @since 3.3.0 Now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
 	 * @staticvar bool $has_map
 	 *
 	 * @return bool Whether the sitemap.xml file exists.
@@ -641,6 +646,9 @@ class Detect extends Render {
 
 		if ( isset( $has_map ) )
 			return $has_map;
+
+		// Ensure get_home_path() is declared.
+		require_once ABSPATH . 'wp-admin/includes/file.php';
 
 		$path = \get_home_path() . 'sitemap.xml';
 

@@ -168,9 +168,8 @@ class Generate_Url extends Generate_Title {
 		if ( $this->matches_this_domain( $canonical_url ) ) {
 			$canonical_url = $this->set_preferred_url_scheme( $canonical_url );
 		}
-		$canonical_url = $this->clean_canonical_url( $canonical_url );
 
-		return $canonical_url;
+		return $this->clean_canonical_url( $canonical_url );
 	}
 
 	/**
@@ -493,17 +492,17 @@ class Generate_Url extends Generate_Title {
 		switch ( $_get ) {
 			case 'day':
 				$_day      = \get_query_var( 'day' );
-				$_paginate = $_paginate && $_day == $day; // loose comparison OK.
+				$_paginate = $_paginate && $_day == $day; // phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison
 				// No break. Get month too.
 
 			case 'month':
 				$_month    = \get_query_var( 'monthnum' );
-				$_paginate = $_paginate && $_month == $month; // loose comparison OK.
+				$_paginate = $_paginate && $_month == $month; // phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison
 				// No break. Get year too.
 
 			case 'year':
 				$_year     = \get_query_var( 'year' );
-				$_paginate = $_paginate && $_year == $year; // loose comparison OK.
+				$_paginate = $_paginate && $_year == $year; // phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison
 				break;
 		}
 

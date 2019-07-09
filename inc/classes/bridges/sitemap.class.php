@@ -135,6 +135,12 @@ final class Sitemap {
 		 */
 		$this->clean_up_globals();
 
+		/**
+		 * @since 3.3.0
+		 * @param string $sitemap_id The sitemap ID. See `static::get_sitemap_endpoint_list()`.
+		 */
+		\do_action( 'the_seo_framework_sitemap_header', $sitemap_id );
+
 		call_user_func( $this->get_sitemap_endpoint_list()[ $sitemap_id ]['callback'] );
 	}
 
@@ -234,7 +240,6 @@ final class Sitemap {
 		if ( ! headers_sent() ) {
 			\status_header( 200 );
 			header( 'Content-type: text/xml; charset=utf-8', true );
-			header( 'X-Robots-Tag: noindex, follow', true );
 		}
 
 		//* Fetch sitemap content and add trailing line. Already escaped internally.
@@ -263,7 +268,6 @@ final class Sitemap {
 			\status_header( 200 );
 			header( 'Content-type: text/xsl; charset=utf-8', true );
 			header( 'Cache-Control: max-age=1800', true );
-			header( 'X-Robots-Tag: noindex, follow', true );
 		}
 
 		static::$tsf->get_view( 'sitemap/xsl-stylesheet' );

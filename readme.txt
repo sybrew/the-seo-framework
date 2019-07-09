@@ -327,8 +327,10 @@ TODO When changing the slug of a term, the canonical URL placeholder now updates
 		* TODO social image input.
 		* 301 Redirect input.
 		* Canonical URL input.
-	* TODO Feeds now have a "X-Robots-tag: noindex, follow" header, so Google doesn't have to guess your intent.
-	* TODO Comment pagination now has a forced noindex robots meta tag, so Google doesn't have to guess your intent.
+	* Google (and other search engines...) no longer have to guess your intent and possibily index these endpoints mistakenly:
+		* Feeds, via a `X-Robots-Tag` header.
+		* robots.txt, via a `X-Robots-Tag` header.
+		* Comment pagination, via a forced `noindex` robots' meta tag.
 	* Multidimensional selection for robots-meta on posts, pages, and terms.
 	* A new accessibility feature for the SEO Bar. You can now convert the characters to symbols to discern warnings more easily.
 	* After installing The SEO Framework, users who have `update_plugins` capabilities may now see a confirmation that the plugin's set up, and that there are installation instructions available.
@@ -784,6 +786,8 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				1. No longer lets through double-absolute URLs (e.g. `https://google.com/https://google.com/path/to/file/`) when filter `the_seo_framework_allow_external_redirect` is set to false.
 					* This isn't a security issue, `do_redirect()` always prepended the local host for sanity.
 				2. Now tests URL schemes case-insensitive.
+			* `has_robots_txt()`, now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
+			* `has_sitemap_xml()`, now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`
@@ -861,10 +865,15 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 	* For object `the_seo_framework()`:
 		* **Added:**
 			* `quick_edit_column_name`, used for hidden quick edit fields.
+		* **Removed:**
+			* `profile_settings`
 * **Constant notes:**
 	* **Namespace `\The_SEO_Framework\`:**
 		* `ROBOTS_IGNORE_PROTECTION`, used for the `the_seo_framework()->robots_meta()` method family, ignores post's password/privacy settings.
 		* `ROBOTS_IGNORE_SETTINGS`, used for the `the_seo_framework()->robots_meta()` method family, ignores current post/term's SEO settings.
+* **Action notes:**
+	* **Added:**
+		* `the_seo_framework_sitemap_header`, runs in the sitemap HTTP header.
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_allow_quick_edit`, boolean.

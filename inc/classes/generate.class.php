@@ -266,6 +266,11 @@ class Generate extends User_Data {
 					$noindex = true;
 				}
 			endif;
+
+			// Overwrite and ignore the user's settings, always. Noindex on comment pagination.
+			if ( (int) \get_query_var( 'cpage', 0 ) > 0 ) {
+				$noindex = true;
+			}
 		}
 
 		return [

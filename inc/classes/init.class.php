@@ -234,9 +234,6 @@ class Init extends Query {
 		//* Earlier removal of the generator tag. Doesn't require filter.
 		\remove_action( 'wp_head', 'wp_generator' );
 
-		//* Adds site icon tags to the sitemap stylesheet.
-		\add_action( 'the_seo_framework_xsl_head', 'wp_site_icon', 99 );
-
 		/**
 		 * Outputs sitemap or stylesheet on request.
 		 *
@@ -251,8 +248,9 @@ class Init extends Query {
 		//* Initialize 301 redirects.
 		\add_action( 'template_redirect', [ $this, '_init_custom_field_redirect' ] );
 
-		//* Initialize feed alteration.
-		\add_action( 'template_redirect', [ $this, '_init_feed_output' ] );
+		//* Sets robots headers.
+		\add_action( 'template_redirect', [ $this, '_init_robots_headers' ] );
+		\add_action( 'the_seo_framework_sitemap_header', [ $this, '_output_robots_noindex_headers' ] );
 
 		//* Output meta tags.
 		\add_action( 'wp_head', [ $this, 'html_output' ], 1 );
@@ -262,6 +260,13 @@ class Init extends Query {
 
 		if ( $this->get_option( 'alter_search_query' ) )
 			$this->init_alter_search_query();
+
+		//* Alter the content feed.
+		\add_filter( 'the_content_feed', [ $this, 'the_content_feed' ], 10, 2 );
+
+		//* Only add the feed link to the excerpt if we're only building excerpts.
+		if ( $this->rss_uses_excerpt() )
+			\add_filter( 'the_excerpt_rss', [ $this, 'the_content_feed' ], 10, 1 );
 
 		/**
 		 * @since 2.9.4
@@ -285,9 +290,7 @@ class Init extends Query {
 		 * @since 2.9.3
 		 * @param bool $overwrite_titles Whether to enable title overwriting.
 		 */
-		$overwrite_titles = \apply_filters( 'the_seo_framework_overwrite_titles', true );
-
-		if ( $overwrite_titles ) {
+		if ( \apply_filters( 'the_seo_framework_overwrite_titles', true ) ) {
 			//* Removes all pre_get_document_title filters.
 			\remove_all_filters( 'pre_get_document_title', false );
 
@@ -298,7 +301,7 @@ class Init extends Query {
 
 			/**
 			 * @since 2.4.1
-			 * @param bool $overwrite_titles Whether to enable title overwriting.
+			 * @param bool $overwrite_titles Whether to enable legacy title overwriting.
 			 */
 			if ( \apply_filters( 'the_seo_framework_manipulate_title', true ) ) {
 				\remove_all_filters( 'wp_title', false );
@@ -576,6 +579,8 @@ class Init extends Query {
 	 */
 	public function robots_txt( $robots_txt = '', $public = '' ) {
 
+		var_dump( $this );
+
 		/**
 		 * Don't do anything if the blog isn't public.
 		 */
@@ -592,10 +597,7 @@ class Init extends Query {
 		if ( false === $output ) :
 			$output = '';
 
-			$parsed_home_url = \wp_parse_url( rtrim( \get_home_url(), ' /\\' ) );
-			$home_path       = ! empty( $parsed_home_url['path'] ) ? \esc_attr( $parsed_home_url['path'] ) : '';
-
-			if ( $this->is_subdirectory_installation() || $home_path ) {
+			if ( $this->is_subdirectory_installation() ) {
 				$output .= '# This is an invalid robots.txt location.' . "\r\n";
 				$output .= '# Please visit: ' . \esc_url( \trailingslashit( $this->set_preferred_url_scheme( $this->get_home_host() ) ) . 'robots.txt' ) . "\r\n";
 				$output .= "\r\n";
@@ -621,7 +623,7 @@ class Init extends Query {
 			 * @param bool $disallow Whether to disallow robots queries.
 			 */
 			if ( \apply_filters( 'the_seo_framework_robots_disallow_queries', false ) ) {
-				$output .= "Disallow: $home_path/*?*\r\n";
+				$output .= "Disallow: /*?*\r\n";
 			}
 
 			/**
@@ -634,7 +636,7 @@ class Init extends Query {
 			//* Add extra whitespace and sitemap full URL
 			if ( $this->can_do_sitemap_robots( true ) ) {
 				$sitemaps = Bridges\Sitemap::get_instance();
-				foreach ( $sitemaps::get_sitemap_endpoint_list() as $id => $data ) {
+				foreach ( $sitemaps->get_sitemap_endpoint_list() as $id => $data ) {
 					if ( ! empty( $data['robots'] ) ) {
 						$output .= sprintf( "\r\nSitemap: %s", \esc_url( $sitemaps->get_expected_sitemap_endpoint_url( $id ) ) );
 					}
@@ -649,6 +651,32 @@ class Init extends Query {
 		$robots_txt = $output;
 
 		return $robots_txt;
+	}
+
+	/**
+	 * Adjusts the X-Robots tag headers.
+	 *
+	 * @since 3.3.0
+	 * @access private
+	 */
+	public function _init_robots_headers() {
+
+		if ( $this->is_feed() || $this->is_robots() ) {
+			$this->_output_robots_noindex_headers();
+		}
+	}
+
+	/**
+	 * Sets the X-Robots tag headers to 'noindex, follow'.
+	 *
+	 * @since 3.3.0
+	 * @access private
+	 */
+	public function _output_robots_noindex_headers() {
+
+		if ( ! headers_sent() ) {
+			header( 'X-Robots-Tag: noindex, follow', true );
+		}
 	}
 
 	/**

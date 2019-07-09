@@ -34,38 +34,40 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Profile extends Generate_Ldjson {
 
 	/**
-	 * @since 3.0.0
-	 * @var array|object The profile setting fields.
-	 */
-	public $profile_settings = [];
-
-	/**
 	 * Outputs profile fields and prepares saving thereof.
 	 *
 	 * @since 3.0.0
 	 */
 	protected function init_profile_fields() {
 
-		//= No need to load anything if the user can't even publish posts.
-		if ( ! \current_user_can( 'publish_posts' ) )
-			return;
-
-		$this->profile_settings = (object) [
-			'keys'       => [
-				'facebook_page' => 'tsf_facebook_page',
-				'twitter_page'  => 'tsf_twitter_page',
-			],
-			'sanitation' => [
-				'facebook_page' => 's_facebook_profile',
-				'twitter_page'  => 's_twitter_name',
-			],
-		];
+		//= No need to load anything if the current user can't even publish posts.
+		if ( ! \current_user_can( 'publish_posts' ) ) return;
 
 		\add_action( 'show_user_profile', [ $this, '_add_user_author_fields' ], 0, 1 );
 		\add_action( 'edit_user_profile', [ $this, '_add_user_author_fields' ], 0, 1 );
 
 		\add_action( 'personal_options_update', [ $this, '_update_user_settings' ], 10, 1 );
 		\add_action( 'edit_user_profile_update', [ $this, '_update_user_settings' ], 10, 1 );
+	}
+
+	/**
+	 * Returns the current profile field settings.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @return \stdClass The profile settings.
+	 */
+	protected function get_profile_field_settings() {
+		return (object) [
+			'keys'       => [
+				'facebook_page' => 'tsf_facebook_page',
+				'twitter_page'  => 'tsf_twitter_page',
+			],
+			'sanitization' => [
+				'facebook_page' => 's_facebook_profile',
+				'twitter_page'  => 's_twitter_name',
+			],
+		];
 	}
 
 	/**
@@ -78,18 +80,19 @@ class Profile extends Generate_Ldjson {
 	 */
 	public function _add_user_author_fields( \WP_User $user ) {
 
-		if ( ! $user->has_cap( 'publish_posts' ) )
-			return;
+		if ( ! $user->has_cap( 'publish_posts' ) ) return;
+
+		$_field_settings = $this->get_profile_field_settings();
 
 		$fields = [
-			$this->profile_settings->keys['facebook_page'] => (object) [
+			$_field_settings->keys['facebook_page'] => (object) [
 				'name'        => \__( 'Facebook profile page', 'autodescription' ),
 				'type'        => 'url',
 				'placeholder' => \_x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' ),
 				'value'       => $this->get_user_option( $user->ID, 'facebook_page' ),
 				'class'       => '',
 			],
-			$this->profile_settings->keys['twitter_page']  => (object) [
+			$_field_settings->keys['twitter_page']  => (object) [
 				'name'        => \__( 'Twitter profile name', 'autodescription' ),
 				'type'        => 'text',
 				'placeholder' => \_x( '@your-personal-username', 'Twitter @username', 'autodescription' ),
@@ -113,24 +116,24 @@ class Profile extends Generate_Ldjson {
 	 */
 	public function _update_user_settings( $user_id ) {
 
+		if ( empty( $_POST ) ) return;
+
 		\check_admin_referer( 'update-user_' . $user_id );
 		if ( ! \current_user_can( 'edit_user', $user_id ) ) return;
 
-		if ( empty( $_POST ) ) // input var OK.
-			return;
-
 		$user = new \WP_User( $user_id );
 
-		if ( ! $user->has_cap( 'publish_posts' ) )
-			return;
+		if ( ! $user->has_cap( 'publish_posts' ) ) return;
 
 		$success  = [];
 		$defaults = $this->get_default_user_data();
 
-		foreach ( $this->profile_settings->keys as $option => $post_key ) {
-			if ( isset( $_POST[ $post_key ] ) ) { // Input var ok: profile_settings->keys are static.
-				$value = $this->{$this->profile_settings->sanitation[ $option ]}( $_POST[ $post_key ] ) // Input var & sanitization OK.
-					   ?: $defaults[ $option ]; // phpcs:ignore -- precision alignment ok.
+		$_field_settings = $this->get_profile_field_settings();
+
+		foreach ( $_field_settings->keys as $option => $post_key ) {
+			if ( isset( $_POST[ $post_key ] ) ) {
+				$value = $this->{$_field_settings->sanitization[ $option ]}( $_POST[ $post_key ] )
+					   ?: $defaults[ $option ]; // phpcs:ignore, WordPress.WhiteSpace
 
 				$success[] = (bool) $this->update_user_option( $user_id, $option, $value );
 			}

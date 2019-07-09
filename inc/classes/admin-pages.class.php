@@ -864,7 +864,7 @@ class Admin_Pages extends Inpost {
 				$name = sprintf(
 					'<option value="%s"%s>%s</option>',
 					\esc_attr( $value ),
-					$value == $default ? ' selected' : '', // phpcs:ignore -- loose comparison OK.
+					$value == $default ? ' selected' : '', // phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison
 					\esc_html( $name )
 				);
 			},
