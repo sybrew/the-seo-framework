@@ -48,10 +48,10 @@ class Generate_Description extends Generate {
 	 */
 	public function get_description( $args = null, $escape = true ) {
 
-		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		$desc = $this->get_description_from_custom_field( $args, false )
 			 ?: $this->get_generated_description( $args, false );
-		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -72,10 +72,10 @@ class Generate_Description extends Generate {
 	 */
 	public function get_open_graph_description( $args = null, $escape = true ) {
 
-		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		$desc = $this->get_open_graph_description_from_custom_field( $args, false )
 			 ?: $this->get_generated_open_graph_description( $args, false );
-		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}

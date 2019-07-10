@@ -1262,11 +1262,16 @@ class Query extends Core {
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
-		if ( $this->is_admin() ) return 1;
+		if ( $this->is_admin() ) {
+			$numpages = 1;
+			$this->set_query_cache( __METHOD__, $numpages );
+			return $numpages;
+		}
 
 		global $wp_query;
 
 		$post = null;
+
 		if ( $this->is_singular() && ! $this->is_singular_archive() )
 			$post = \get_post( $this->get_the_real_ID() );
 

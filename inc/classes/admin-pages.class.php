@@ -470,6 +470,7 @@ class Admin_Pages extends Inpost {
 	 * @see $this->do_dismissible_sticky_notice()
 	 * @uses THE_SEO_FRAMEWORK_UPDATES_CACHE
 	 * @todo make this do something.
+	 * @ignore
 	 * NOTE: This method is a placeholder.
 	 *
 	 * @param string $message The notice message. Expected to be escaped if $escape is false.
@@ -492,6 +493,7 @@ class Admin_Pages extends Inpost {
 	 *
 	 * @since 2.9.3
 	 * @uses $this->generate_dismissible_sticky_notice()
+	 * @ignore
 	 *
 	 * @param string $message The notice message. Expected to be escaped if $escape is false.
 	 * @param string $key     The notice key. Must be unique and tied to the stored updates cache option.

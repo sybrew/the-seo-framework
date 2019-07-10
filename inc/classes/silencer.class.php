@@ -45,7 +45,7 @@ final class Silencer {
 	}
 
 	public function __set( $name, $value ) {
-		return;
+		return $value;
 	}
 
 	public function __isset( $name ) {

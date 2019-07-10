@@ -78,8 +78,8 @@ define( 'THE_SEO_FRAMEWORK_SITE_CACHE', (string) \apply_filters( 'the_seo_framew
 
 /**
  * The plugin map URL. Has a trailing slash.
- *
  * Used for calling browser files.
+ *
  * @since 2.2.2
  */
 define( 'THE_SEO_FRAMEWORK_DIR_URL', \plugin_dir_url( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE ) );

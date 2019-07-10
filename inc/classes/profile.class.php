@@ -59,7 +59,7 @@ class Profile extends Generate_Ldjson {
 	 */
 	protected function get_profile_field_settings() {
 		return (object) [
-			'keys'       => [
+			'keys'         => [
 				'facebook_page' => 'tsf_facebook_page',
 				'twitter_page'  => 'tsf_twitter_page',
 			],

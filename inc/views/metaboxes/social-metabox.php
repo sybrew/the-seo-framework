@@ -200,7 +200,7 @@ switch ( $instance ) :
 			<?php
 			$this->make_info(
 				__( 'Only Facebook Business Pages are accepted.', 'autodescription' ),
-				'https://www.facebook.com/business/learn/set-up-facebook-page'
+				'https://www.facebook.com/business/pages/set-up'
 			);
 			?>
 		</p>

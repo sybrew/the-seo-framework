@@ -18,7 +18,6 @@
  *
  * ## Façade (bottom is called first):
  *    -  | Core
- *       | Compat
  *       | Query
  *       | Init
  *       | Admin_Init
@@ -33,7 +32,6 @@
  *       | Generate_Url
  *       | Generate_Image
  *       | Generate_Ldjson
- *       | Doing_It_Right
  *       | Profile
  *       | Inpost
  *       | Admin_Pages
@@ -48,9 +46,4 @@
  *             - Debug_Interface
  *          |-> Final
  *          |-> Instance
- *
- * # Namespace: The_SEO_Framework\Builders
- *
- * ## Separated:
- *     - Scripts
  */

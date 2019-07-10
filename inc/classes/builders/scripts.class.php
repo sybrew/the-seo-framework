@@ -61,7 +61,7 @@ final class Scripts {
 	 * @since 3.1.0
 	 * @internal
 	 * @var int <bit 01>  REGISTERED
-	 * @var int <bit 10> LOADED     (rather, enqueued)
+	 * @var int <bit 10>  LOADED     (rather, enqueued)
 	 */
 	const REGISTERED = 0b01;
 	const LOADED     = 0b10;
@@ -69,12 +69,20 @@ final class Scripts {
 	/**
 	 * @since 3.1.0
 	 * @var array $scripts   The registered scripts.
+	 */
+	private static $scripts = [];
+
+	/**
+	 * @since 3.1.0
 	 * @var array $templates The registered templates.
+	 */
+	private static $templates = [];
+
+	/**
+	 * @since 3.1.0
 	 * @var array $queue     The queued scripts state.
 	 */
-	private static $scripts   = [];
-	private static $templates = [];
-	private static $queue     = [];
+	private static $queue = [];
 
 	/**
 	 * @since 3.1.0
@@ -512,7 +520,7 @@ final class Scripts {
 				'{{$bg_accent}}'        => $_bg_accent,
 				'{{$rel_bg_accent}}'    => $_rel_bg_accent,
 				'{{$color}}'            => $_color,
-				'{{$rel_color}}'        => $_color,
+				'{{$rel_color}}'        => $_rel_color,
 				'{{$color_accent}}'     => $_color_accent,
 				'{{$rel_color_accent}}' => $_rel_color_accent,
 			];
@@ -595,7 +603,8 @@ final class Scripts {
 			$$_key = $_val;
 		unset( $_key, $_val, $args );
 
-		//= Prevent private includes hijacking.
+		//= Prevents private-includes hijacking.
+		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis -- Read the include?
 		static::$include_secret = $_secret = mt_rand() . uniqid( '', true );
 		include $file;
 		static::$include_secret = null;

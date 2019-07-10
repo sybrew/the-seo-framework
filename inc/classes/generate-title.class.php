@@ -617,6 +617,7 @@ class Generate_Title extends Generate_Description {
 				foreach ( $functions as $function ) {
 					$it = 10;
 					$i  = 0;
+					// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
 					while ( $priority = \has_filter( $filter, $function ) ) {
 						$filtered[ $filter ][ $priority ][] = $function;
 						\remove_filter( $filter, $function, $priority );
@@ -754,9 +755,10 @@ class Generate_Title extends Generate_Description {
 					/* translators: Tag archive title. 1: Tag name */
 					$title = $use_prefix ? sprintf( \__( 'Tag: %s', 'default' ), $title ) : $title;
 				} else {
-					$title = $this->get_generated_single_term_title( $term );
+					$title   = $this->get_generated_single_term_title( $term );
+					$_prefix = $use_prefix ? $this->get_tax_type_label( $_tax ) : '';
 
-					if ( $use_prefix && $_prefix = $this->get_tax_type_label( $_tax ) ) {
+					if ( $_prefix ) {
 						/* translators: Taxonomy term archive title. 1: Taxonomy singular name, 2: Current taxonomy term */
 						$title = sprintf( \__( '%1$s: %2$s', 'autodescription' ), $_prefix, $title );
 					}
@@ -816,9 +818,10 @@ class Generate_Title extends Generate_Description {
 				/* translators: Post type archive title. 1: Post type name */
 				$title = $use_prefix ? sprintf( \__( 'Archives: %s', 'default' ), $title ) : $title;
 			} elseif ( $this->is_tax() ) {
-				$title = $this->get_generated_single_term_title( $term );
+				$title   = $this->get_generated_single_term_title( $term );
+				$_prefix = $use_prefix ? $this->get_tax_type_label( $_tax ) : '';
 
-				if ( $use_prefix && $_prefix = $this->get_tax_type_label( $_tax ) ) {
+				if ( $_prefix ) {
 					/* translators: Taxonomy term archive title. 1: Taxonomy singular name, 2: Current taxonomy term */
 					$title = sprintf( \__( '%1$s: %2$s', 'autodescription' ), $_prefix, $title );
 				}

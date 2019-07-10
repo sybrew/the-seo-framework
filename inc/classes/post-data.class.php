@@ -566,10 +566,9 @@ class Post_Data extends Detect {
 
 		$primary_id = $this->get_primary_term_id( $post_id, $taxonomy );
 
-		if ( ! $primary_id )
-			return false;
+		if ( ! $primary_id ) return false;
 
-		$terms = \get_the_terms( $post_id, $taxonomy );
+		$terms        = \get_the_terms( $post_id, $taxonomy );
 		$primary_term = false;
 
 		foreach ( $terms as $term ) {

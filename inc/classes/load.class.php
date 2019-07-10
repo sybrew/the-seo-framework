@@ -111,7 +111,7 @@ final class Load extends Feed implements Debug_Interface {
 
 		$this->the_seo_framework_debug = defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ?: $this->the_seo_framework_debug;
 		if ( $this->the_seo_framework_debug ) {
-			$instance = \The_SEO_Framework\Debug::_set_instance( $this->the_seo_framework_debug );
+			\The_SEO_Framework\Debug::_set_instance( $this->the_seo_framework_debug );
 		}
 
 		$this->the_seo_framework_use_transients = defined( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS' ) && THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS ? false : $this->the_seo_framework_use_transients;

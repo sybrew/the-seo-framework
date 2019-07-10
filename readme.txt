@@ -571,6 +571,8 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* The script loader now discerns between posts and taxonomies, and can now prevent loading scripts when SEO is disabled for the post type or taxonomy.
 		* In the debug interface, the JSON+LD scripts are now more readable.
 		* The script loader now accepts and contatenates inline JS.
+	* **Fixed:**
+		* Registering inline scripts now correctly converts `{{$rel_color}}`.
 * **Option notes:**
 	* **Added:**
 		* Under `THE_SEO_FRAMEWORK_SITE_OPTIONS`:
@@ -708,7 +710,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* `\The_SEO_framework\Builders\SeoBar_Term`, this class extends `\The_SEO_framework\Builders\SeoBar`.
 			* Use `the_seo_framework()->get_generated_seo_bar()` to generate a bar.
 	* **Removed:**
-		* `\The_SEO_Framework\Compact`
+		* `\The_SEO_Framework\Compat`
 			* Loading fewer PHP files is faster, ~0.00001s is saved.
 			* The two methods therein were moved to `\The_SEO_Framework\Load`:
 				* `load_early_compat_files()`, protected.

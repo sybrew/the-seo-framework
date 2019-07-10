@@ -133,9 +133,8 @@ class Generate_Url extends Generate_Title {
 			'taxonomy'         => '',
 			'get_custom_field' => false,
 		];
-		$args = array_merge( $defaults, $args );
 
-		return $this->get_canonical_url( $args );
+		return $this->get_canonical_url( array_merge( $defaults, $args ) );
 	}
 
 	/**
@@ -226,19 +225,19 @@ class Generate_Url extends Generate_Title {
 		$url = '';
 
 		if ( $this->is_real_front_page() ) {
-			if ( $this->has_page_on_front() )
-				$url = $this->get_singular_custom_canonical_url( $id );
-			if ( ! $url )
+			if ( $this->has_page_on_front() ) {
+				$url = $this->get_singular_custom_canonical_url( $id )
+					?: $this->get_home_canonical_url();
+			} else {
 				$url = $this->get_home_canonical_url();
+			}
 		} elseif ( $this->is_singular() ) {
-			$url = $this->get_singular_custom_canonical_url( $id );
-			if ( ! $url )
-				$url = $this->get_singular_canonical_url( $id );
+			$url = $this->get_singular_custom_canonical_url( $id )
+				?: $this->get_singular_canonical_url( $id );
 		} elseif ( $this->is_archive() ) {
-			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
-				$url = $this->get_taxonomical_custom_canonical_url( $id );
-				if ( ! $url )
-					$url = $this->get_taxonomical_canonical_url( $id, $this->get_current_taxonomy() );
+			if ( $this->is_term_meta_capable() ) {
+				$url = $this->get_taxonomical_custom_canonical_url( $id )
+					?: $this->get_taxonomical_canonical_url( $id, $this->get_current_taxonomy() );
 			} elseif ( \is_post_type_archive() ) {
 				$url = $this->get_post_type_archive_canonical_url();
 			} elseif ( $this->is_author() ) {
@@ -805,6 +804,7 @@ class Generate_Url extends Generate_Title {
 					'm' => isset( $_query['monthnum'] ) ? $_query['monthnum'] : '',
 					'd' => isset( $_query['day'] ) ? $_query['day'] : '',
 				];
+
 				$url = \add_query_arg( [ 'm' => implode( '', $_date ) ], $home );
 			} elseif ( $this->is_author() ) {
 				$url = \add_query_arg( [ 'author' => $id ], $home );
@@ -812,13 +812,11 @@ class Generate_Url extends Generate_Title {
 				//* Generate shortlink for object type and slug.
 				$object = \get_queried_object();
 
-				$t = isset( $object->taxonomy ) ? urlencode( $object->taxonomy ) : '';
+				$tax  = isset( $object->taxonomy ) ? $object->taxonomy : '';
+				$slug = isset( $object->slug ) ? $object->slug : '';
 
-				if ( $t ) {
-					$slug = isset( $object->slug ) ? urlencode( $object->slug ) : '';
-
-					if ( $slug )
-						$url = \add_query_arg( [ $t => $slug ], $home );
+				if ( $tax && $slug ) {
+					$url = \add_query_arg( [ $tax => $slug ], $home );
 				}
 			}
 		} elseif ( $this->is_search() ) {

@@ -5,8 +5,10 @@
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
-$id = $this->get_the_real_ID();
-$mdash = ' &mdash; ';
+// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+
+$id       = $this->get_the_real_ID();
+$mdash    = ' &mdash; ';
 $taxonomy = $this->get_current_taxonomy();
 
 //* This will return 'Page' on all non-archive types (except the homepage)

@@ -281,7 +281,9 @@ class Generate_Ldjson extends Generate_Image {
 
 		$sameurls = [];
 		foreach ( $sameurls_options as $_o ) {
+
 			$_ov = $this->get_option( $_o ) ?: '';
+
 			if ( $_ov )
 				$sameurls[] = \esc_url_raw( $_ov, [ 'https', 'http' ] );
 		}
@@ -361,7 +363,7 @@ class Generate_Ldjson extends Generate_Image {
 	 */
 	public function get_ld_json_breadcrumbs_page() {
 
-		$items = [];
+		$items   = [];
 		$parents = array_reverse( \get_post_ancestors( $this->get_the_real_ID() ) );
 
 		$position = 1; // 0 is the homepage.
@@ -390,6 +392,7 @@ class Generate_Ldjson extends Generate_Image {
 			];
 
 			$image = $this->get_schema_image( $parent_id );
+
 			if ( $image )
 				$crumb['item']['image'] = $image;
 
@@ -465,7 +468,7 @@ class Generate_Ldjson extends Generate_Image {
 
 		$terms = \wp_list_pluck( $terms, 'parent', 'term_id' );
 
-		$parents = [];
+		$parents      = [];
 		$assigned_ids = [];
 
 		//* Fetch cats children id's, if any.
@@ -502,14 +505,13 @@ class Generate_Ldjson extends Generate_Image {
 		if ( ! $tree_ids )
 			return '';
 
-		$primary_term = $this->get_primary_term( $post_id, $taxonomy );
+		$primary_term    = $this->get_primary_term( $post_id, $taxonomy );
 		$primary_term_id = $primary_term ? (int) $primary_term->term_id : 0;
 
 		$filtered = false;
 		/**
 		 * Only get one crumb.
 		 * If a category has multiple trees, it will filter until found.
-		 * @since 3.0.0
 		 */
 		if ( $primary_term_id ) {
 			$_trees = $this->filter_ld_json_breadcrumb_trees( $tree_ids, $primary_term_id );
@@ -680,7 +682,9 @@ class Generate_Ldjson extends Generate_Image {
 			],
 		];
 
-		if ( $image = $this->get_schema_image( $front_id, true ) )
+		$image = $this->get_schema_image( $front_id, true );
+
+		if ( $image )
 			$crumb['item']['image'] = $image;
 
 		return $crumb;
@@ -725,7 +729,9 @@ class Generate_Ldjson extends Generate_Image {
 			],
 		];
 
-		if ( $image = $this->get_schema_image( $post_id, true ) )
+		$image = $this->get_schema_image( $post_id, true );
+
+		if ( $image )
 			$crumb['item']['image'] = $image;
 
 		return $crumb;

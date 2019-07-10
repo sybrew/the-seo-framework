@@ -201,7 +201,6 @@ final class Deprecated {
 		}
 
 		if ( $tsf->is_post_type_page( $type ) ) {
-			$post_i18n = $tsf->get_post_type_label( $type );
 			$post_type = $type;
 		} else {
 			$taxonomy  = $tsf->get_current_taxonomy();

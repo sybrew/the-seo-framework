@@ -479,7 +479,8 @@ final class Debug implements Debug_Interface {
 	 * @access private
 	 */
 	public static function _output_debug_header() {
-		echo static::get_instance()->get_debug_header_output(); // phpcs:ignore, WordPress.Security.EscapeOutput -- callee escapes.
+		// phpcs:ignore, WordPress.Security.EscapeOutput -- callee escapes.
+		echo static::get_instance()->get_debug_header_output();
 	}
 
 	/**
@@ -648,6 +649,7 @@ final class Debug implements Debug_Interface {
 		$numpages             = $tsf->numpages();
 		$is_multipage         = $tsf->is_multipage();
 		$is_singular_archive  = $tsf->is_singular_archive();
+		$is_term_meta_capable = $tsf->is_term_meta_capable();
 
 		//* Don't debug the class object.
 		unset( $tsf );

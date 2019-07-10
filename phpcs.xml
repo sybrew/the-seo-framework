@@ -11,6 +11,9 @@
 		<exclude name="WordPress.WP.AlternativeFunctions.json_encode_json_encode"/>
 		<exclude name="WordPress.WP.AlternativeFunctions.parse_url_parse_url"/>
 
+		<!-- No. mt_rand() is perfectly fine. -->
+		<exclude name="WordPress.WP.AlternativeFunctions.rand_mt_rand"/>
+
 		<!-- We don't need to clutter code. -->
 		<exclude name="WordPress.Classes.ClassInstantiation.MissingParenthesis"/>
 
@@ -60,12 +63,12 @@
 		-->
 		<properties>
 			<!-- Custom list of functions which escape values for output. -->
-			<!-- sanitize_key is better than most escaping functions... -->
+			<!-- sanitize_key is more effective than most escaping functions... -->
 			<property name="customEscapingFunctions" type="array" value="sanitize_key"/>
 			<!-- Custom list of functions whose return values are pre-escaped for output. Doesn't work, as we need $this... -->
-			<property name="customAutoEscapedFunctions" type="array" value="convert_markdown,description,code_wrap,make_single_select_form"/>
+			<!-- <property name="customAutoEscapedFunctions" type="array" value="convert_markdown,description,code_wrap,make_single_select_form"/> -->
 			<!-- Custom list of functions which print output incorporating the passed values. -->
-			<property name="customPrintingFunctions" type="array" value=""/>
+			<!-- <property name="customPrintingFunctions" type="array" value=""/> -->
 		</properties>
 	</rule>
 

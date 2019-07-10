@@ -267,7 +267,14 @@ class Generate extends User_Data {
 				}
 			endif;
 
-			// Overwrite and ignore the user's settings, always. Noindex on comment pagination.
+			/**
+			 * Noindex on comment pagination.
+			 * Overwrites and ignores the user's settings, always.
+			 *
+			 * N.B. WordPress protects this query variable with options 'page_comments'
+			 * and 'default_comments_page' via `redirect_canonical()`, so we don't have to.
+			 * For reference, it fires `remove_query_arg( 'cpage', $redirect['query'] )`;
+			 */
 			if ( (int) \get_query_var( 'cpage', 0 ) > 0 ) {
 				$noindex = true;
 			}
@@ -530,7 +537,9 @@ class Generate extends User_Data {
 	 * @return string $blogname The escaped and sanitized blogname.
 	 */
 	public function get_blogname() {
+
 		static $blogname = null;
+
 		return isset( $blogname ) ? $blogname : $blogname = trim( \get_bloginfo( 'name', 'display' ) );
 	}
 
@@ -544,7 +553,9 @@ class Generate extends User_Data {
 	 * @return string $blogname The escaped and sanitized blog description.
 	 */
 	public function get_blogdescription() {
+
 		static $description = null;
+
 		return isset( $description ) ? $description : $description = trim( \get_bloginfo( 'description', 'display' ) );
 	}
 
@@ -559,44 +570,44 @@ class Generate extends User_Data {
 	 */
 	public function fetch_locale( $match = '' ) {
 
-		if ( empty( $match ) )
+		if ( ! $match )
 			$match = \get_locale();
 
-		$match_len = strlen( $match );
-		$valid_locales = (array) $this->fb_locales();
-		$default = 'en_US';
+		$match_len     = strlen( $match );
+		$valid_locales = $this->fb_locales();
 
 		if ( $match_len > 5 ) {
-			//* More than full is used. Make it just full.
-			$match = substr( $match, 0, 5 );
 			$match_len = 5;
+			// More than standard-full locale ID is used. Make it just full.
+			$match = substr( $match, 0, $match_len );
 		}
 
 		if ( 5 === $match_len ) {
-			//* Full locale is used.
+			// Full locale is used.
 
-			//* Return the match if found.
 			if ( in_array( $match, $valid_locales, true ) )
 				return $match;
 
-			//* Convert to only language portion.
-			$match = substr( $match, 0, 2 );
+			// Convert to only language portion.
 			$match_len = 2;
+			$match     = substr( $match, 0, $match_len );
 		}
 
 		if ( 2 === $match_len ) {
-			//* Language key is provided.
+			// Only a language key is provided.
 
 			$locale_keys = (array) $this->language_keys();
 
-			//* No need to do for each loop. Just match the keys.
-			if ( $key = array_search( $match, $locale_keys, true ) ) {
-				//* Fetch the corresponding value from key within the language array.
+			// Find first matching key.
+			$key = array_search( $match, $locale_keys, true );
+
+			if ( $key ) {
 				return $valid_locales[ $key ];
 			}
 		}
 
-		return $default;
+		// Return default locale.
+		return 'en_US';
 	}
 
 	/**
@@ -655,6 +666,7 @@ class Generate extends User_Data {
 	 * @since 3.1.0
 	 * @TODO use this
 	 * @see get_available_twitter_cards
+	 * @ignore
 	 */
 	public function get_available_open_graph_types() { }
 
