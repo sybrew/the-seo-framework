@@ -160,20 +160,20 @@ class Term_Data extends Post_Data {
 		return (array) \apply_filters(
 			'the_seo_framework_term_meta_defaults',
 			[
-				'doctitle'          => '',
+				'doctitle'           => '',
 				'title_no_blog_name' => 0,
-				'description'       => '',
-				'og_title'          => '',
-				'og_description'    => '',
-				'tw_title'          => '',
-				'tw_description'    => '',
-				'social_image_url'  => '',
-				'social_image_id'   => 0,
-				'canonical'         => '',
-				'noindex'           => 0,
-				'nofollow'          => 0,
-				'noarchive'         => 0,
-				'redirect'          => '',
+				'description'        => '',
+				'og_title'           => '',
+				'og_description'     => '',
+				'tw_title'           => '',
+				'tw_description'     => '',
+				'social_image_url'   => '',
+				'social_image_id'    => 0,
+				'canonical'          => '',
+				'noindex'            => 0,
+				'nofollow'           => 0,
+				'noarchive'          => 0,
+				'redirect'           => '',
 			],
 			$term_id ?: $this->get_the_real_ID()
 		);
@@ -251,7 +251,7 @@ class Term_Data extends Post_Data {
 	public function save_term_meta( $term_id, $tt_id, $taxonomy, array $data ) {
 
 		$data = (array) \wp_parse_args( $data, $this->get_term_meta_defaults( $term_id ) );
-		$data = $this->sanitize_term_meta( $data );
+		$data = $this->s_term_meta( $data );
 
 		/**
 		 * @since 3.1.0

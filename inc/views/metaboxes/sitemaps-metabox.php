@@ -100,7 +100,7 @@ switch ( $instance ) :
 		);
 
 		if ( ! $has_sitemap_plugin && ( $this->get_option( 'sitemaps_output' ) || ( $sitemap_detected && $this->pretty_permalinks ) ) ) {
-			$here = '<a href="' . esc_url( $sitemap_url, [ 'http', 'https' ] ) . '" target="_blank" title="' . esc_attr__( 'View sitemap', 'autodescription' ) . '">' . esc_attr_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
+			$here = '<a href="' . esc_url( $sitemap_url, [ 'https', 'http' ] ) . '" target="_blank" title="' . esc_attr__( 'View sitemap', 'autodescription' ) . '">' . esc_attr_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 			/* translators: %s = here */
 			$this->description_noesc( sprintf( esc_html__( 'The sitemap can be found %s.', 'autodescription' ), $here ) );
 		}
@@ -131,7 +131,6 @@ switch ( $instance ) :
 			<?php
 		endif;
 		$this->description( __( 'Consider lowering this value when the sitemap shows a white screen or notifies you of memory exhaustion.', 'autodescription' ) );
-
 		break;
 
 	case 'the_seo_framework_sitemaps_metabox_robots':
@@ -143,11 +142,15 @@ switch ( $instance ) :
 		<?php
 
 		if ( $this->has_robots_txt() ) :
-			$this->attention_description( __( 'Note: A robots.txt file has been detected in the root folder of your website. This means these settings have no effect.', 'autodescription' ) );
+			$this->attention_description(
+				__( 'Note: A robots.txt file has been detected in the root folder of your website. This means these settings have no effect.', 'autodescription' )
+			);
 			echo '<hr>';
 		elseif ( ! $robots_url ) :
 			if ( $this->is_subdirectory_installation() ) {
-				$this->attention_description( $_robots_warning );
+				$this->attention_description(
+					__( "Note: robots.txt files can't be generated or used on subdirectory installations.", 'autodescription' )
+				);
 				echo '<hr>';
 			} elseif ( ! $this->pretty_permalinks ) {
 				$this->attention_description(
@@ -158,7 +161,7 @@ switch ( $instance ) :
 						esc_html_x( 'Change your Permalink Settings %s (recommended: "Post name").', '%s = here', 'autodescription' ),
 						sprintf(
 							'<a href="%s" target="_blank" title="%s">%s</a>',
-							esc_url( admin_url( 'options-permalink.php' ), [ 'http', 'https' ] ),
+							esc_url( admin_url( 'options-permalink.php' ), [ 'https', 'http' ] ),
 							esc_attr__( 'Permalink Settings', 'autodescription' ),
 							esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' )
 						)
@@ -189,7 +192,7 @@ switch ( $instance ) :
 		endif;
 
 		if ( $robots_url ) {
-			$here = '<a href="' . esc_url( $robots_url, [ 'http', 'https' ] ) . '" target="_blank" title="' . esc_attr__( 'View robots.txt', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
+			$here = '<a href="' . esc_url( $robots_url, [ 'https', 'http' ] ) . '" target="_blank" title="' . esc_attr__( 'View robots.txt', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
 
 			$this->description_noesc( sprintf( esc_html_x( 'The robots.txt file can be found %s.', '%s = here', 'autodescription' ), $here ) );
 		}

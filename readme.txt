@@ -251,12 +251,12 @@ TODO, maybe: backslashes are double-stripped from SEO settings...: \\z -> \z -> 
 
 TODO explain why PHP 5.6 is now required.
 
-TODO remove $page_defaults
-
 TODO "Want to opt out of future, infrequent, admin-only, non-recurring, and non-intrusive suggestions? Add this to your wp-config file: `define( 'TSF_DISABLE_SUGGESTIONS', true );`
 
 TODO Opt-in for asynchronous SEO Bars? It is possible now! :)
 TODO move the class constants to interfaces? This will allow free access...
+
+TODO The dropdown menus may overflow in the gutenberg sidebar (notortiously in Focus)... fix their max-width?
 
 TODO re-affirm all changes.
 TODO quality-control the deprecations.
@@ -266,13 +266,17 @@ TODO improve plugin-upgrade-notice (bottom of readme).
 TODO lock out redirect from WooCommerce shop page. https://wordpress.org/support/topic/tsf-prevents-redirect-to-search-result-page-on-woocommerce/#post-11652594
 TODO change all occurence of %s = here to markdown
 
+TODO revise how is_wc_product and is_wc_shop are implemented, and add filters instead.
+	-> route is_wc_shop to is_singular_archive? It's used nowhere except at a (filterable) ID function...
+	-> is_product()
+
 = 3.3.0 - Multiplex =
 
 TODO Exclaim:
 - Multidimensional/quantum options.
 - Quick & bulk edit, blended perfectly into WordPress' interface.
 - Multiprocessing (cron)...
-- TODO More term options.
+- More term options.
 - Counters can now reliably parse HTML.
 - Downgrading & Backward compatibility warnings.
 - Mixed taxonomies on post type related settings.
@@ -303,6 +307,15 @@ TODO When changing the slug of a term, the canonical URL placeholder now updates
 
 TODO TSF no longer resizes images, and instead ignores them, when they're above 4096x4096 px.
 
+TODO test if is_preview() is also true on customizer, which would mean our security-check is too strict.
+
+TODO when the tooltip is squashed, it may again overflow vertically... See title tooltip:
+	* </wp-admin/edit-tags.php?taxonomy=pa_test&post_type=product>
+
+TODO add new filters to og_image() and twitter_image().
+
+TODO add listener for "Product Category Thumbnail" in the WC compat file, as per #110's opening "Alternatively," comment.
+
 **Detailed log:**
 
 **For everyone:**
@@ -322,11 +335,11 @@ TODO TSF no longer resizes images, and instead ignores them, when they're above 
 * **Added:**
 	* TODO maybe: We now generate a proposed description of your content every minute on Gutenberg pages.
 	* TODO maybe: We now parse shortcodes for the content dynamically, for Focus and description generation-compatibility.
-	* TODO We've added more term settings, including:
+	* We've added more term settings, including:
 		* Blog name removal.
 		* Open Graph title and description inputs.
 		* Twitter title and description inputs.
-		* TODO social image input.
+		* Social image input.
 		* 301 Redirect input.
 		* Canonical URL input.
 	* Google (and other search engines...) no longer have to guess your intent and possibily index these endpoints mistakenly:
@@ -339,6 +352,9 @@ TODO TSF no longer resizes images, and instead ignores them, when they're above 
 	* After upgrading The SEO Framework's database, users who have `update_plugins` capabilities may now see a confirmation notice that the site has been upgraded.
 	* Search engine pinging for the sitemap can now be offloaded to the WordPress cron-scheduler; this feature is enabled by default.
 	* The estimated plugin-boot time is added to the closing HTML comment; which adds the bulk of the page-loading time of this plugin. In this update, we decreased that time, greatly--and we're proudly showing it.
+	* The term meta inputs now have the "are you sure you want to leave this page?"-listener attached.
+	* Multiple social images may now be outputted. How this affects sharing depends on the social network.
+	* Alt-tags are now provided with social images, which help with accessibility when sharing your page.
 * **Changed:**
 	* We now support WordPress v4.9 and later, instead of WordPress v4.6 and later.
 	* We now support PHP v5.6 and later, instead of PHP v5.4 and later.
@@ -349,6 +365,8 @@ TODO TSF no longer resizes images, and instead ignores them, when they're above 
 		* This doesn't affect your titles, it's only semantics.
 	* Schema.org logos may now be of any proportion, instead of only square, and cropping them must exceed 112px squared.
 	* We removed the "recommended" title separator highlighting, RSS parsers are great at rendering HTML entities, so this shouldn't be an issue.
+	* We no longer generate images when they're deemed to large.
+		* Although this worked as intended, we highly doubt users will be uploading images over 4096x4096px, and it's a waste of resources to test each image.
 	* **Term meta:**
 		* When a term is disabled via the post type settings, saving it won't erase the custom SEO term meta.
 			* The same behavior already applied to singular post types.
@@ -411,6 +429,7 @@ TODO TSF no longer resizes images, and instead ignores them, when they're above 
 		* The admin helper-scripts have been optimized to execute no unnecessary paint-jobs, lowering browser-CPU usage.
 		* The SEO Settings notifications no longer get dragged around your page on-load, and instead are preemptively placed. This prevents painting the whole page three times.
 		* We now mostly use WordPress' built-in window-resize debounce-handler, which reduces some processing required.
+		* We now default all URL escaping to check for HTTPS first, instead of HTTP. If you're not on the TLS protocol already... do it! It's free, and good for SEO.
 		* We split the main JavaScript and CSS files into multiple, dedicated files. Improving performance and lowering power consumption on all pages where TSF is active.
 			* **HTTP/2:** To take full advantage of this change, multiplexing support (like in HTTP/2) is advised.
 			* **CSS:** This significantly lowers class and ID lookups on every page load and DOM update, which drastically lowers processing time.
@@ -626,7 +645,21 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 * **Class notes:**
 	* **Noted:**
 		* Methods that you shouldn't use--marked private or aren't visible--aren't listed here, unless specifically annotated.
-	* **Added:**
+	* **Added classes:**
+		* `\The_SEO_Framework\Builders\Images`, this file holds generators for images.
+			* **Example usage:**
+				* Get one URL:
+					* `$url = \The_SEO_Framework\Builders\Images::get_featured_image_details()->current()['url'];`
+				* Get multiple URLs, if any:
+					* `foreach ( \The_SEO_Framework\Builders\Images::get_featured_image_details() as $details ) { $url = $details['url']; }`
+			* **Public static methods, all generators:**
+				* `get_attachment_image_details`
+				* `get_featured_image_details`
+				* TODO `get_content_image_details`
+				* `get_fallback_image_details`
+				* `get_theme_header_image_details`
+				* `get_site_logo_image_details`
+				* `get_site_icon_image_details`
 		* `\The_SEO_Framework\Bridges\Scripts`, this file bridges The SEO Framework to the script loaders for WordPress. It registers all scripts based on the query; by default, it is only loaded on the admin screens.
 			* Relies on `\The_SEO_Framework\Builders\Scripts` for registering and enqueuing the scripts.
 			* **Public static methods:**
@@ -648,30 +681,6 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `get_social_scripts()`
 				* `get_primaryterm_scripts()`
 				* `get_counter_scripts()`
-		* `\The_SEO_Framework\Bridges\Sitemap`, this file initializes the sitemap query, and it's loaded when the sitemap functionality is enabled.
-			* **Public methods:**
-				* `get_expected_sitemap_endpoint_url()`
-				* `get_sitemap_endpoint_list()`
-				* `output_base_sitemap()`
-				* `output_stylesheet()`
-				* `output_sitemap_header()`
-				* `output_sitemap_urlset_open_tag()`
-				* `output_sitemap_urlset_close_tag()`
-			* **Public static methods:**
-				* `get_instance()`
-				* `prepare()`
-		* `\The_SEO_Framework\Builders\Sitemap`, this file builds the sitemap, and it's only loaded on sitemap endpoints.
-			* You can extend this class to add your own sitemap interpreters.
-			* **Public methods:**
-				* `__construct()`
-				* `__destruct()`
-				* `prepare_generation()`
-				* `shutdown_generation()`
-				* `build_sitemap()`, abstract.
-				* `is_post_included_in_sitemap()`
-		* `\The_SEO_Framework\Builders\Sitemap_Base`, extends `\The_SEO_Framework\Builders\Sitemap`.
-			* **Public methods:**
-				* `build_sitemap()`, abstractly defined.
 		* `\The_SEO_framework\Bridges\SeoBar`, this file bridges The SEO Framework to the SEO Bar loaders for WordPress. It prepares the list table columns and checks for post type and taxonomy compatibility.
 			* Relies on `\The_SEO_Framework\Builders\SeoBar` package for building the SEO Bar via interpreters.
 				* This package relies on `\The_SEO_framework\InterPreters\SeoBar` for interpreting the SEO Bar from PHP to HTML.
@@ -679,10 +688,10 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* `\The_SEO_framework\InterPreters\SeoBar`, this file interprets the SEO Bar from PHP to HTML.
 			* This class can't be instantiated.
 			* **Public constants:**
-				* `STATE_UNKNOWN`, bitwise 1
-				* `STATE_BAD`, bitwise 2
-				* `STATE_OKAY`, bitwise 4
-				* `STATE_GOOD`, bitwise 8
+				* `STATE_UNKNOWN`, bitwise 1.
+				* `STATE_BAD`, bitwise 2.
+				* `STATE_OKAY`, bitwise 4.
+				* `STATE_GOOD`, bitwise 8.
 			* **Public static variables:**
 				* `query`, the current SEO Bar query.
 			* **Public static methods:**
@@ -709,12 +718,54 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* Use `the_seo_framework()->get_generated_seo_bar()` to generate a bar.
 		* `\The_SEO_framework\Builders\SeoBar_Term`, this class extends `\The_SEO_framework\Builders\SeoBar`.
 			* Use `the_seo_framework()->get_generated_seo_bar()` to generate a bar.
-	* **Removed:**
+		* `\The_SEO_Framework\Bridges\Sitemap`, this file initializes the sitemap query, and it's loaded when the sitemap functionality is enabled.
+			* **Public methods:**
+				* `get_expected_sitemap_endpoint_url()`
+				* `get_sitemap_endpoint_list()`
+				* `output_base_sitemap()`
+				* `output_stylesheet()`
+				* `output_sitemap_header()`
+				* `output_sitemap_urlset_open_tag()`
+				* `output_sitemap_urlset_close_tag()`
+			* **Public static methods:**
+				* `get_instance()`
+				* `prepare()`
+		* `\The_SEO_Framework\Builders\Sitemap`, this file builds the sitemap, and it's only loaded on sitemap endpoints.
+			* You can extend this class to add your own sitemap interpreters.
+			* **Public methods:**
+				* `__construct()`
+				* `__destruct()`
+				* `prepare_generation()`
+				* `shutdown_generation()`
+				* `build_sitemap()`, abstract.
+				* `is_post_included_in_sitemap()`
+		* `\The_SEO_Framework\Builders\Sitemap_Base`, extends `\The_SEO_Framework\Builders\Sitemap`.
+			* **Public methods:**
+				* `build_sitemap()`, abstractly defined.
+	* **Removed classes:**
 		* `\The_SEO_Framework\Compat`
 			* Loading fewer PHP files is faster, ~0.00001s is saved.
 			* The two methods therein were moved to `\The_SEO_Framework\Load`:
 				* `load_early_compat_files()`, protected.
 				* `_include_compat()`, marked private.
+		* `\The_SEO_Framework\Sitemap`
+			* This file has been split over multiple files, to the `Sitemap` class family:
+				* `\The_SEO_framework\Bridges\Sitemap`
+				* `\The_SEO_framework\Builders\Sitemap`, extended by:
+					* `\The_SEO_framework\Builders\Sitemap_Base`
+			* **Removed methods:**`
+				* TODO evaluate:
+				* `rewrite_rule_sitemap()`
+				* `enqueue_sitemap_query_vars()`
+				* `reinitialize_rewrite()`
+				* `enqueue_rewrite_activate()`
+				* `enqueue_rewrite_deactivate()`
+				* `maybe_flush_rewrite()`
+				* `flush_rewrite_rules_activation()`
+				* `flush_rewrite_rules_deactivation()`
+				* `maybe_output_sitemap_stylesheet()`
+			* **Deprecated methods:**
+				* TODO
 		* `\The_SEO_Framework\Doing_It_Right`
 			* Some methods therein have been moved to the `SeoBar` class family:
 				* `\The_SEO_framework\InterPreters\SeoBar`
@@ -751,8 +802,8 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `update_single_term_meta_item()`
 			* `save_post_meta()`
 			* `update_single_post_meta_item()`
-			* `sanitize_term_meta()`
-			* `sanitize_post_meta()`
+			* `s_term_meta()`
+			* `s_post_meta()`
 			* `detect_page_builder()`
 			* `is_blog_page_by_id()`
 			* `query_supports_seo()`
@@ -762,6 +813,14 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `get_taxonomical_custom_canonical_url()`
 			* `get_term_meta_item()`
 			* `use_taxonomical_title_branding()`
+			* `is_attachment_admin()`
+			* `is_wc_product_admin()`
+			* `get_safe_schema_image()`
+			* `s_image_details()`
+			* `s_image_details_deep()`
+			* `s_field_id()`
+			* `get_hierarchical_post_types()`
+			* `get_nonhierarchical_post_types()`
 		* **Changed:**
 			* `__construct()` now emits warnings when instantiated twice or more.
 			* `html_output()` is now marked as private.
@@ -785,7 +844,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				1. Added redundant `current_user_can()` checks.
 				1. `noindex`, `nofollow`, and `noarchive` values are converted to qubits.
 				1. No longer processes data is no POST entry for `autodescription-meta` is found.
-			* `is_single_admin()` now uses `is_singular_admin()` to check for the correctg base; so categories and tags no longer falsely return `true`.
+			* `is_single_admin()` now uses `is_singular_admin()` to check for the correct base; so categories and tags no longer falsely return `true`.
 			* `get_generated_single_term_title()` no longer redundantly tests the query, but now only uses the term input or queried object.
 			* `is_taxonomy_disabled()` now only returns true if all post types in the taxonomy are disabled, and it uses `is_post_type_supported()` instead of `is_post_type_disabled()` to do so.
 			* `create_canonical_url()` and `get_canonical_url()` can now fetch custom canonical URLs for terms; this is implied via trickling down methods.
@@ -802,10 +861,27 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `s_redirect_url()`
 				1. No longer lets through double-absolute URLs (e.g. `https://google.com/https://google.com/path/to/file/`) when filter `the_seo_framework_allow_external_redirect` is set to false.
 					* This isn't a security issue, `do_redirect()` always prepended the local host for sanity.
-				2. Now tests URL schemes case-insensitive.
+				1. Now tests URL schemes case-insensitive.
 			* `has_robots_txt()`, now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
 			* `has_sitemap_xml()`, now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
 			* `is_term_meta_capable()` no longer incorrectly determines post type archives as capable; they aren't considered term taxonomies, because they don't yield taxonomies, but solely post types.
+			* `is_category_admin()`
+				1. Removed caching.
+			* `is_page()`
+				1. Now tests for hierarchical post types, which is more reliable.
+			* `is_single()`
+				1. Now tests for nonhierarchical post types, which is more reliable.
+			* `is_singular()`
+				1. No longer processes integers as input.
+					TODO deprecation notice?
+			* `is_singular_admin()`
+				1. Removed first parameter.
+					TODO deprecation notice?
+			* `is_tag_admin()`
+				1. Removed caching.
+			* `is_wc_product()`
+				1. Added admin support.
+				1. Added a parameter for the Post ID or post to test.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`
@@ -844,18 +920,14 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `get_sitemap_urlset_open_tag()`, we now output it directly.
 				* `get_sitemap_urlset_close_tag()`, we now output it directly.
 			* Public methods, are now rendered ineffective:
-				* `rewrite_rule_sitemap()`
-				* `enqueue_sitemap_query_vars()`
-				* `reinitialize_rewrite()`
-				* `enqueue_rewrite_activate()`
-				* `enqueue_rewrite_deactivate()`
-				* `maybe_flush_rewrite()`
-				* `flush_rewrite_rules_activation()`
-				* `flush_rewrite_rules_deactivation()`
-				* `maybe_output_sitemap_stylesheet()`
 				* `post_type_supports_inpost()`
 				* `enqueue_page_defaults()`
 				* `add_removable_query_args()`
+				* `register_image_dimension()`
+				* `parse_image_args()`
+				* `parse_og_image()`
+			* **Many more public methods were removed:**
+				* See the "class notes" above.
 		* **Deprecated:**
 			* **With alternatives**, refer to the source (search for your old method) for a relayed alternative:
 				* `get_default_scripts()`,
@@ -877,6 +949,18 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `taxonomy_supports_custom_seo()`
 				* `get_taxonomial_canonical_url()`
 				* `get_custom_field()`
+				* `get_schema_image()`
+				* `get_social_image()`
+				* `get_social_image_url_from_home_meta()`
+				* `get_social_image_url_from_post_meta()`
+				* `get_social_image_url_from_seo_settings()`
+				* `get_social_image_url_from_post_thumbnail()`
+				* `get_social_image_url_from_attachment()`
+				* `get_image_from_woocommerce_gallery()`
+				* `get_header_image()`
+				* `get_site_icon()`
+				* `get_site_logo()`
+				* `sanitize_field_id()`
 			* **Without alternatives**, go make your own:
 				* `check_wp_locale()`
 				* `maybe_lowercase_noun()`

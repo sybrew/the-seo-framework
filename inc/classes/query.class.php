@@ -315,13 +315,17 @@ class Query extends Core {
 	 * Detects attachment page.
 	 *
 	 * @since 2.6.0
+	 * @since 3.3.0 Now reliably works on admin screens.
 	 *
 	 * @param mixed $attachment Attachment ID, title, slug, or array of such.
 	 * @return bool
 	 */
 	public function is_attachment( $attachment = '' ) {
 
-		if ( empty( $attachment ) )
+		if ( $this->is_admin() )
+			return $this->is_attachment_admin();
+
+		if ( ! $attachment )
 			return \is_attachment();
 
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $attachment ) )
@@ -334,6 +338,19 @@ class Query extends Core {
 		);
 
 		return $is_attachment;
+	}
+
+	/**
+	 * Detects attachments within the admin area.
+	 *
+	 * @since 3.3.0
+	 * @see $this->is_attachment()
+	 * @global \WP_Screen $current_screen;
+	 *
+	 * @return bool
+	 */
+	public function is_attachment_admin() {
+		return $this->is_singular_admin() && 'attachment' === $this->get_admin_post_type();
 	}
 
 	/**
@@ -548,29 +565,13 @@ class Query extends Core {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 No longer guesses category by name. It now only matches WordPress' built-in category.
+	 * @since 3.3.0 Removed caching.
 	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool Post Type is category
 	 */
 	public function is_category_admin() {
-
-		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
-			return $cache;
-
-		global $current_screen;
-
-		$is_category = false;
-
-		if ( $this->is_archive_admin() && isset( $current_screen->taxonomy ) ) {
-			$is_category = 'category' === $current_screen->taxonomy;
-		}
-
-		$this->set_query_cache(
-			__METHOD__,
-			$is_category
-		);
-
-		return $is_category;
+		return $this->is_archive_admin() && 'category' === $this->get_current_taxonomy();
 	}
 
 	/**
@@ -744,6 +745,7 @@ class Query extends Core {
 	 * When $page is supplied, it will check against the current object. So it will not work in the admin screens.
 	 *
 	 * @since 2.6.0
+	 * @since 3.3.0 Now tests for post type, which is more reliable.
 	 * @staticvar bool $cache
 	 * @uses $this->is_singular()
 	 *
@@ -761,9 +763,15 @@ class Query extends Core {
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $page ) )
 			return $cache;
 
+		if ( is_int( $page ) || $page instanceof \WP_Post ) {
+			$is_page = in_array( \get_post_type( $page ), $this->get_hierarchical_post_types(), true );
+		} else {
+			$is_page = \is_page( $page );
+		}
+
 		$this->set_query_cache(
 			__METHOD__,
-			$is_page = \is_page( $page ),
+			$is_page,
 			$page
 		);
 
@@ -774,18 +782,13 @@ class Query extends Core {
 	 * Detects pages within the admin area.
 	 *
 	 * @since 2.6.0
+	 * @since 3.3.0 Now tests for post type, although redundant.
 	 * @see $this->is_page()
-	 * @global \WP_Screen $current_screen;
 	 *
 	 * @return bool
 	 */
 	public function is_page_admin() {
-		global $current_screen;
-
-		if ( isset( $current_screen->post_type ) && 'page' === $current_screen->post_type )
-			return true;
-
-		return false;
+		return $this->is_singular_admin() && in_array( $this->get_admin_post_type(), $this->get_hierarchical_post_types(), true );
 	}
 
 	/**
@@ -835,6 +838,7 @@ class Query extends Core {
 	 * When $post is supplied, it will check against the current object. So it will not work in the admin screens.
 	 *
 	 * @since 2.6.0
+	 * @since 3.3.0 Now tests for post type, which is more reliable.
 	 * @staticvar bool $cache
 	 * @uses The_SEO_Framework_Query::is_single_admin()
 	 *
@@ -846,15 +850,18 @@ class Query extends Core {
 		if ( $this->is_admin() )
 			return $this->is_single_admin();
 
-		if ( empty( $post ) )
-			return \is_single();
-
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post ) )
 			return $cache;
 
+		if ( is_int( $post ) || $post instanceof \WP_Post ) {
+			$is_single = in_array( \get_post_type( $post ), $this->get_nonhierarchical_post_types(), true );
+		} else {
+			$is_single = \is_single( $post );
+		}
+
 		$this->set_query_cache(
 			__METHOD__,
-			$is_single = \is_single( $post ),
+			$is_single,
 			$post
 		);
 
@@ -866,14 +873,13 @@ class Query extends Core {
 	 *
 	 * @since 2.6.0
 	 * @since 3.3.0 Now no longer returns true on categories and tags.
-	 * @global \WP_Screen $current_screen
 	 * @see The_SEO_Framework_Query::is_single()
 	 *
 	 * @return bool
 	 */
 	public function is_single_admin() {
-		global $current_screen;
-		return $this->is_singular_admin() && isset( $current_screen->post_type ) && 'post' === $current_screen->post_type;
+		// Checks for "is_singular_admin()" because the post type is non-hierarchical.
+		return $this->is_singular_admin() && in_array( $this->get_admin_post_type(), $this->get_nonhierarchical_post_types(), true );
 	}
 
 	/**
@@ -882,42 +888,38 @@ class Query extends Core {
 	 *
 	 * @since 2.5.2
 	 * @since 3.1.0 Now passes $post_types parameter in admin screens, only when it's an integer.
+	 * @since 3.3.0 No longer processes integers as input.
 	 * @uses The_SEO_Framework_Query::is_singular_admin()
 	 * @uses The_SEO_Framework_Query::is_blog_page()
 	 * @uses The_SEO_Framework_Query::is_wc_shop()
 	 *
-	 * @param string|array|int $post_types Optional. Post type or array of post types, or ID of post. Default empty string.
+	 * @param string|array $post_types Optional. Post type or array of post types. Default empty string.
 	 * @return bool Post Type is singular
 	 */
 	public function is_singular( $post_types = '' ) {
 
-		$id = null;
-
 		if ( is_int( $post_types ) ) {
-			//* Cache ID. Core is_singular() doesn't accept integers.
-			$id         = $post_types;
+			// Integers are no longer accepted.
 			$post_types = '';
 		}
 
 		//* WP_Query functions require loop, do alternative check.
 		if ( $this->is_admin() )
-			return $this->is_singular_admin( $id );
+			return $this->is_singular_admin();
 
-		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post_types, $id ) )
+		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post_types ) )
 			return $cache;
 
-		if ( ! $is_singular = \is_singular( $post_types ) ) {
-			$id = isset( $id ) ? $id : $this->get_the_real_ID();
+		$is_singular = \is_singular( $post_types );
 
-			//* Check for somewhat singulars. We need this to adjust Meta data filled in Posts.
-			if ( $this->is_blog_page( $id ) || $this->is_wc_shop() )
-				$is_singular = true;
+		if ( ! $is_singular && ! $post_types ) {
+			$is_singular = $this->is_singular_archive();
 		}
 
 		$this->set_query_cache(
 			__METHOD__,
 			$is_singular,
-			...[ $post_types, $id ]
+			$post_types
 		);
 
 		return $is_singular;
@@ -928,22 +930,14 @@ class Query extends Core {
 	 *
 	 * @since 2.5.2
 	 * @since 3.1.0 Added $post_id parameter. When used, it'll only check for it.
+	 * @since 3.3.0 Removed first parameter.
 	 * @global \WP_Screen $current_screen
 	 *
-	 * @param  null|int $post_id The post ID.
 	 * @return bool Post Type is singular
 	 */
-	public function is_singular_admin( $post_id = null ) {
-
-		if ( isset( $post_id ) ) {
-			$post = \get_post( $post_id );
-			return $post && $post instanceof \WP_Post;
-		} else {
-			global $current_screen;
-			return isset( $current_screen->base ) && in_array( $current_screen->base, [ 'edit', 'post' ], true );
-		}
-
-		return false;
+	public function is_singular_admin() {
+		global $current_screen;
+		return isset( $current_screen->base ) && in_array( $current_screen->base, [ 'edit', 'post' ], true );
 	}
 
 	/**
@@ -995,35 +989,20 @@ class Query extends Core {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 No longer guesses tag by name. It now only matches WordPress' built-in tag.
+	 * @since 3.3.0 Removed caching.
 	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool Post Type is tag.
 	 */
 	public function is_tag_admin() {
-
-		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
-			return $cache;
-
-		global $current_screen;
-
-		$is_tag = false;
-
-		if ( $this->is_archive_admin() && isset( $current_screen->taxonomy ) ) {
-			$is_tag = 'post_tag' === $current_screen->taxonomy;
-		}
-
-		$this->set_query_cache(
-			__METHOD__,
-			$is_tag
-		);
-
-		return $is_tag;
+		return $this->is_archive_admin() && 'post_tag' === $this->get_current_taxonomy();
 	}
 
 	/**
 	 * Detects taxonomy archives.
 	 *
 	 * @since 2.6.0
+	 * @TODO add is_tax_admin() ?
 	 *
 	 * @param string|array     $taxonomy Optional. Taxonomy slug or slugs.
 	 * @param int|string|array $term     Optional. Term ID, name, slug or array of Term IDs, names, and slugs.
@@ -1068,20 +1047,46 @@ class Query extends Core {
 	 * Determines if the page is the WooCommerce plugin Product page.
 	 *
 	 * @since 2.5.2
+	 * @since 3.3.0 : 1. Added admin support.
+	 *                2. Added parameter for the Post ID or post to test.
 	 *
+	 * @param int|\WP_Post $post When set, checks if the post is of type product.
 	 * @return bool True if on a WooCommerce Product page.
 	 */
-	public function is_wc_product() {
+	public function is_wc_product( $post = 0 ) {
 
-		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
+		if ( $this->is_admin() )
+			return $this->is_wc_product_admin();
+
+		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post ) )
 			return $cache;
+
+		if ( $post ) {
+			$is_product = 'product' === \get_post_type( $post );
+		} else {
+			$is_product = function_exists( 'is_product' ) && \is_product();
+		}
 
 		$this->set_query_cache(
 			__METHOD__,
-			$is_product = false === $this->is_admin() && function_exists( 'is_product' ) && \is_product()
+			$is_product,
+			$post
 		);
 
 		return $is_product;
+	}
+
+	/**
+	 * Detects products within the admin area.
+	 *
+	 * @since 3.3.0
+	 * @see The_SEO_Framework_Query::is_wc_product()
+	 *
+	 * @return bool
+	 */
+	public function is_wc_product_admin() {
+		// Checks for "is_singular_admin()" because the post type is non-hierarchical.
+		return $this->is_singular_admin() && 'product' === $this->get_admin_post_type();
 	}
 
 	/**
@@ -1306,6 +1311,9 @@ class Query extends Core {
 			$numpages = count( $_pages );
 		} elseif ( isset( $wp_query->max_num_pages ) ) {
 			$numpages = (int) $wp_query->max_num_pages;
+		} else {
+			// Empty or faulty query, bail.
+			$numpages = 0;
 		}
 
 		$this->set_query_cache( __METHOD__, $numpages );
@@ -1430,10 +1438,6 @@ class Query extends Core {
 	 * }
 	 */
 	public function set_query_cache( $method, $value_to_set, ...$hash ) {
-		if ( $hash ) {
-			return $this->get_query_cache( $method, $value_to_set, $hash );
-		} else {
-			return $this->get_query_cache( $method, $value_to_set );
-		}
+		return $this->get_query_cache( $method, $value_to_set, $hash );
 	}
 }

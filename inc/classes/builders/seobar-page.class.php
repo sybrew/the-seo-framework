@@ -334,7 +334,7 @@ final class SeoBar_Page extends SeoBar {
 			[
 				'params'   => [
 					/* translators: 1 = An assessment, 2 = Disclaimer, e.g. "take it with a grain of salt" */
-					'disclaim' => \__( '%1$s (%2$s)', 'autodescription' ),
+					'disclaim'  => \__( '%1$s (%2$s)', 'autodescription' ),
 					'estimated' => \__( 'Estimated from the number of characters found. The pixel counter asserts the true length.', 'autodescription' ),
 				],
 				'assess'   => [
@@ -786,7 +786,7 @@ final class SeoBar_Page extends SeoBar {
 					'notpublished' => \__( 'The page is not published.', 'autodescription' ),
 				],
 				'defaults' => [
-					'archive' => [
+					'archive'   => [
 						'symbol' => \_x( 'A', 'Archiving', 'autodescription' ),
 						'title'  => \__( 'Archiving', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
@@ -804,7 +804,7 @@ final class SeoBar_Page extends SeoBar {
 							'base' => \__( 'The robots meta does not allow archiving.', 'autodescription' ),
 						],
 					],
-					'draft' => [
+					'draft'    => [
 						'symbol' => \_x( 'A', 'Archiving', 'autodescription' ),
 						'title'  => \__( 'Archiving', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN,

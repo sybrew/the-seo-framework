@@ -38,7 +38,6 @@
  *       | Sanitize
  *       | Site_Options
  *       | Metaboxes
- *       | Sitemaps
  *       | Cache
  *       | Feed
  *       | Load

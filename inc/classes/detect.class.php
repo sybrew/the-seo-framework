@@ -37,6 +37,7 @@ class Detect extends Render {
 	 * Tests if input URL matches current domain.
 	 *
 	 * @since 2.9.4
+	 * @since 3.3.0 Improved performance.
 	 *
 	 * @param string $url The URL to test. Required.
 	 * @return bool true on match, false otherwise.
@@ -49,12 +50,12 @@ class Detect extends Render {
 		static $home_domain;
 
 		if ( ! $home_domain ) {
-			$home_domain = \esc_url_raw( \get_home_url(), [ 'http', 'https' ] );
+			$home_domain = \esc_url_raw( \get_home_url(), [ 'https', 'http' ] );
 			//= Simply convert to HTTPS/HTTP based on is_ssl()
 			$home_domain = $this->set_url_scheme( $home_domain );
 		}
 
-		$url = \esc_url_raw( $url, [ 'http', 'https' ] );
+		$url = \esc_url_raw( $url, [ 'https', 'http' ] );
 		//= Simply convert to HTTPS/HTTP based on is_ssl()
 		$url = $this->set_url_scheme( $url );
 

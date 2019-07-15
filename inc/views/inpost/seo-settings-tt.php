@@ -50,6 +50,10 @@ $og_description_placeholder = $description ?: $this->get_generated_open_graph_de
 $tw_title_placeholder       = $og_title ?: $og_title_placeholder;
 $tw_description_placeholder = $og_description ?: $description ?: $this->get_generated_twitter_description( $_generator_args );
 
+//! Social image placeholder.
+$image_details     = current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) );
+$image_placeholder = isset( $image_details['url'] ) ? $image_details['url'] : '';
+
 $canonical_placeholder = $this->create_canonical_url( $_generator_args ); // implies get_custom_field = false
 $robots_defaults       = $this->robots_meta( $_generator_args, The_SEO_Framework\ROBOTS_IGNORE_PROTECTION | The_SEO_Framework\ROBOTS_IGNORE_SETTINGS );
 
@@ -99,7 +103,7 @@ $robots_settings = [
 ?>
 <h2><?php esc_html_e( 'General SEO Settings', 'autodescription' ); ?></h2>
 
-<table class="form-table">
+<table class="form-table tsf-term-meta">
 	<tbody>
 		<?php if ( $this->get_option( 'display_seo_bar_metabox' ) ) : ?>
 		<tr class="form-field">
@@ -179,7 +183,7 @@ $robots_settings = [
 
 <h2><?php esc_html_e( 'Social SEO Settings', 'autodescription' ); ?></h2>
 
-<table class="form-table">
+<table class="form-table tsf-term-meta">
 	<tbody>
 		<tr class="form-field" <?php echo $show_og ? '' : 'style=display:none'; ?>>
 			<th scope="row" valign="top">
@@ -244,12 +248,37 @@ $robots_settings = [
 				<textarea name="autodescription-meta[tw_description]" id="autodescription-meta[tw_description]" placeholder="<?php echo esc_attr( $tw_description_placeholder ); ?>" rows="4" cols="50" class="large-text"><?php echo $this->s_esc_attr_super_amp( $tw_description ); ?></textarea>
 			</td>
 		</tr>
+
+		<tr class="form-field">
+			<th scope="row" valign="top">
+				<label for="autodescription-meta[social_image_url]">
+					<strong><?php esc_html_e( 'Social Image URL', 'autodescription' ); ?></strong>
+					<?php
+					echo ' ';
+					$this->make_info(
+						__( "The social image URL can be used by search engines and social networks alike. It's best to use an image with a 1.91:1 aspect ratio that is at least 1200px wide for universal support.", 'autodescription' ),
+						'https://developers.facebook.com/docs/sharing/best-practices#images'
+					);
+					?>
+				</label>
+			</th>
+			<td>
+				<input name="autodescription-meta[social_image_url]" id="autodescription_meta_socialimage-url" type="text" placeholder="<?php echo esc_attr( $image_placeholder ); ?>" value="<?php echo esc_attr( $social_image_url ); ?>" size="40" autocomplete=off />
+				<input type="hidden" name="autodescription-meta[social_image_id]" id="autodescription_meta_socialimage-id" value="<?php echo absint( $social_image_id ); ?>" disabled class="tsf-enable-media-if-js" />
+				<div class="hide-if-no-tsf-js tsf-term-button-wrap">
+					<?php
+					// phpcs:ignore, WordPress.Security.EscapeOutput -- Already escaped.
+					echo $this->get_social_image_uploader_form( 'autodescription_meta_socialimage' );
+					?>
+				</div>
+			</td>
+		</tr>
 	</tbody>
 </table>
 
 <h2><?php esc_html_e( 'Visibility SEO Settings', 'autodescription' ); ?></h2>
 
-<table class="form-table">
+<table class="form-table tsf-term-meta">
 	<tbody>
 		<tr class="form-field">
 			<th scope="row" valign="top">

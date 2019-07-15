@@ -116,18 +116,21 @@ class Sitemap_Base extends Sitemap {
 			 * @since 3.3.0
 			 * @param array $args The query arguments.
 			 */
-			$_args = \apply_filters( 'the_seo_framework_sitemap_hpt_query_args', [
-				'posts_per_page'   => $_hierarchical_posts_limit + count( $_exclude_ids ),
-				'post_type'        => $hierarchical_post_types,
-				'orderby'          => 'date',
-				'order'            => 'ASC',
-				'post_status'      => 'publish',
-				'has_password'     => false,
-				'fields'           => 'ids',
-				'cache_results'    => false,
-				'suppress_filters' => false,
-				'no_found_rows'    => true,
-			] );
+			$_args = \apply_filters(
+				'the_seo_framework_sitemap_hpt_query_args',
+				[
+					'posts_per_page'   => $_hierarchical_posts_limit + count( $_exclude_ids ),
+					'post_type'        => $hierarchical_post_types,
+					'orderby'          => 'date',
+					'order'            => 'ASC',
+					'post_status'      => 'publish',
+					'has_password'     => false,
+					'fields'           => 'ids',
+					'cache_results'    => false,
+					'suppress_filters' => false,
+					'no_found_rows'    => true,
+				]
+			);
 
 			$wp_query->query = $wp_query->query_vars = $_args;
 
@@ -145,18 +148,21 @@ class Sitemap_Base extends Sitemap {
 			 * @since 3.3.0
 			 * @param array $args The query arguments.
 			 */
-			$_args = \apply_filters( 'the_seo_framework_sitemap_nhpt_query_args', [
-				'posts_per_page'   => $this->get_sitemap_post_limit( false ),
-				'post_type'        => $non_hierarchical_post_types,
-				'orderby'          => 'lastmod',
-				'order'            => 'DESC',
-				'post_status'      => 'publish',
-				'has_password'     => false,
-				'fields'           => 'ids',
-				'cache_results'    => false,
-				'suppress_filters' => false,
-				'no_found_rows'    => true,
-			] );
+			$_args = \apply_filters(
+				'the_seo_framework_sitemap_nhpt_query_args',
+				[
+					'posts_per_page'   => $this->get_sitemap_post_limit( false ),
+					'post_type'        => $non_hierarchical_post_types,
+					'orderby'          => 'lastmod',
+					'order'            => 'DESC',
+					'post_status'      => 'publish',
+					'has_password'     => false,
+					'fields'           => 'ids',
+					'cache_results'    => false,
+					'suppress_filters' => false,
+					'no_found_rows'    => true,
+				]
+			);
 
 			$wp_query->query = $wp_query->query_vars = $_args;
 
@@ -236,7 +242,7 @@ class Sitemap_Base extends Sitemap {
 				$_values['loc'] = static::$tsf->create_canonical_url( [ 'id' => $front_page_id ] );
 
 				if ( $args['show_modified'] ) {
-					$post = \get_post( $front_page_id );
+					$post               = \get_post( $front_page_id );
 					$_values['lastmod'] = isset( $post->post_date_gmt ) ? $post->post_date_gmt : false;
 				}
 
@@ -253,19 +259,22 @@ class Sitemap_Base extends Sitemap {
 				$_values['loc'] = static::$tsf->create_canonical_url( [ 'id' => $posts_page_id ] );
 
 				if ( $args['show_modified'] ) {
-					$latests_posts = \wp_get_recent_posts( [
-						'numberposts'  => 1,
-						'post_type'    => 'post',
-						'post_status'  => 'publish',
-						'has_password' => false,
-						'orderby'      => 'post_date',
-						'order'        => 'DESC',
-						'offset'       => 0,
-					], OBJECT );
+					$latests_posts = \wp_get_recent_posts(
+						[
+							'numberposts'  => 1,
+							'post_type'    => 'post',
+							'post_status'  => 'publish',
+							'has_password' => false,
+							'orderby'      => 'post_date',
+							'order'        => 'DESC',
+							'offset'       => 0,
+						],
+						OBJECT
+					);
 					$latest_post   = isset( $latests_posts[0] ) ? $latests_posts[0] : null;
 					$_lastmod_post = isset( $latest_post->post_date_gmt ) ? $latest_post->post_date_gmt : '0000-00-00 00:00:00';
 
-					$post = \get_post( $posts_page_id );
+					$post          = \get_post( $posts_page_id );
 					$_lastmod_blog = isset( $post->post_date_gmt ) ? $post->post_date_gmt : '0000-00-00 00:00:00';
 
 					if ( strtotime( $_lastmod_post ) > strtotime( $_lastmod_blog ) ) {
@@ -290,15 +299,18 @@ class Sitemap_Base extends Sitemap {
 				$_values['loc'] = static::$tsf->get_homepage_permalink();
 
 				if ( $args['show_modified'] ) {
-					$latests_posts = \wp_get_recent_posts( [
-						'numberposts'  => 1,
-						'post_type'    => 'post',
-						'post_status'  => 'publish',
-						'has_password' => false,
-						'orderby'      => 'post_date',
-						'order'        => 'DESC',
-						'offset'       => 0,
-					], OBJECT );
+					$latests_posts = \wp_get_recent_posts(
+						[
+							'numberposts'  => 1,
+							'post_type'    => 'post',
+							'post_status'  => 'publish',
+							'has_password' => false,
+							'orderby'      => 'post_date',
+							'order'        => 'DESC',
+							'offset'       => 0,
+						],
+						OBJECT
+					);
 					$latest_post   = isset( $latests_posts[0] ) ? $latests_posts[0] : null;
 					$_lastmod_post = isset( $latest_post->post_date_gmt ) ? $latest_post->post_date_gmt : '0000-00-00 00:00:00';
 
@@ -440,7 +452,7 @@ class Sitemap_Base extends Sitemap {
 				$url = $values;
 			}
 
-			$_url = \esc_url_raw( $url, [ 'http', 'https' ] );
+			$_url = \esc_url_raw( $url, [ 'https', 'http' ] );
 
 			if ( ! $_url ) continue;
 

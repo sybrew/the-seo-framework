@@ -786,7 +786,7 @@ class Generate_Description extends Generate {
 	 * @see https://secure.php.net/manual/en/regexp.reference.unicode.php
 	 *
 	 * @param string $excerpt         The untrimmed excerpt.
-	 * @param int    $depr            The current excerpt length. No longer needed.
+	 * @param int    $depr            The current excerpt length. No longer needed. Deprecated.
 	 * @param int    $max_char_length At what point to shave off the excerpt.
 	 * @return string The trimmed excerpt.
 	 */

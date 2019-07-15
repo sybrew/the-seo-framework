@@ -655,7 +655,7 @@ class Sanitize extends Admin_Pages {
 	 * @param array $data The term meta to sanitize.
 	 * @return array The sanitized term meta.
 	 */
-	public function sanitize_term_meta( array $data ) {
+	public function s_term_meta( array $data ) {
 
 		foreach ( $data as $key => &$value ) :
 			switch ( $key ) :
@@ -712,7 +712,7 @@ class Sanitize extends Admin_Pages {
 	 * @param array $data The post meta to sanitize.
 	 * @return array The sanitized post meta.
 	 */
-	public function sanitize_post_meta( array $data ) {
+	public function s_post_meta( array $data ) {
 
 		foreach ( $data as $key => &$value ) :
 			switch ( $key ) :
@@ -1607,16 +1607,16 @@ class Sanitize extends Admin_Pages {
 	 * Sanitizeses ID. Mainly removing spaces and coding characters.
 	 *
 	 * Unlike sanitize_key(), it doesn't alter the case nor applies filters.
-	 * It also maintains the '@' character.
+	 * It also maintains the '@' character and square brackets.
 	 *
 	 * @see WordPress Core sanitize_key()
-	 * @since 3.1.0
-	 * @since 3.3.0 Now allows square brackets.
+	 * @since 3.3.0
+	 * @deprecated
 	 *
 	 * @param string $id The unsanitized ID.
 	 * @return string The sanitized ID.
 	 */
-	public function sanitize_field_id( $id ) {
+	public function s_field_id( $id ) {
 		return preg_replace( '/[^a-zA-Z0-9\[\]_\-@]/', '', $id );
 	}
 
@@ -1708,5 +1708,95 @@ class Sanitize extends Admin_Pages {
 		}
 
 		return strip_tags( $input );
+	}
+
+	/**
+	 * Cleans known parameters from image details.
+	 *
+	 * @since 3.3.0
+	 * @NOTE If the input details are associative, they'll be converted to sequential.
+	 *
+	 * @param array $details The image details, either associative (see $defaults) or sequential.
+	 * @return array The image details array, sequential: int => {
+	 *    string url:    The image URL,
+	 *    int    id:     The image ID,
+	 *    int    width:  The image width in pixels,
+	 *    int    height: The image height in pixels,
+	 *    string alt:    The image alt tag,
+	 * }
+	 */
+	public function s_image_details( array $details ) {
+
+		if ( array_values( $details ) === $details )
+			return $this->s_image_details_deep( $details );
+
+		$defaults = [
+			'url'    => '',
+			'id'     => 0,
+			'width'  => 0,
+			'height' => 0,
+			'alt'    => '',
+		];
+
+		list( $url, $id, $width, $height, $alt ) = array_values( array_merge( $defaults, $details ) );
+
+		if ( ! $url ) return $defaults;
+
+		if ( $this->matches_this_domain( $url ) ) {
+			$url = $this->set_preferred_url_scheme( $url );
+		}
+		$url = $this->s_url_query( $url );
+
+		if ( ! $url ) return $defaults;
+
+		$width  = (int) $width;
+		$height = (int) $height;
+
+		if ( ! $width || ! $height )
+			$width = $height = 0;
+
+		if ( $alt ) {
+			$alt = \wp_strip_all_tags( $alt );
+			// 420: https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/summary.html
+			// Don't "ai"-trim if under, it's unlikely to always be a sentence.
+			$alt = strlen( $alt ) > 420 ? $this->trim_excerpt( $alt, 0, 420 ) : $alt;
+		}
+
+		return compact( 'url', 'id', 'width', 'height', 'alt' );
+	}
+
+	/**
+	 * Iterates over and cleans known parameters from image details. Also strips out duplicates.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param array $details_array The image details, preferably sequential.
+	 * @return array The image details array, sequential: int => {
+	 *    string url:    The image URL,
+	 *    int    id:     The image ID,
+	 *    int    width:  The image width in pixels,
+	 *    int    height: The image height in pixels,
+	 *    string alt:    The image alt tag,
+	 * }
+	 */
+	public function s_image_details_deep( array $details_array ) {
+
+		$cleaned_details = [];
+
+		// Failsafe. Convert associative detailts to a multidimensional sequential array.
+		if ( isset( $details_array['url'] ) )
+			$details_array = [ $details_array ];
+
+		foreach ( $details_array as $details ) {
+			$cleaned_details[] = $this->s_image_details( $details );
+		}
+
+		$a = array_values(
+			array_intersect_key(
+				$cleaned_details,
+				array_unique( array_filter( array_column( $cleaned_details, 'url' ) ) )
+			)
+		);
+		return $a;
 	}
 }

@@ -749,7 +749,7 @@ class Admin_Pages extends Inpost {
 			$args['label']       = \esc_html( $args['label'] );
 		}
 
-		$index = $this->sanitize_field_id( $args['index'] ?: '' );
+		$index = $this->s_field_id( $args['index'] ?: '' );
 
 		$field_id = $field_name = \esc_attr( sprintf(
 			'%s%s',
@@ -867,7 +867,7 @@ class Admin_Pages extends Inpost {
 			[
 				$args['label'] ? sprintf(
 					'<label for=%s>%s</label> ', // NOTE: extra space!
-					$this->sanitize_field_id( $args['id'] ),
+					$this->s_field_id( $args['id'] ),
 					\esc_html( $args['label'] )
 				) : '',
 				$args['info'] ? ' ' . $this->make_info(
@@ -878,7 +878,7 @@ class Admin_Pages extends Inpost {
 				vsprintf(
 					'<select id=%s name=%s %s %s>%s</select>',
 					[
-						$this->sanitize_field_id( $args['id'] ),
+						$this->s_field_id( $args['id'] ),
 						\esc_attr( $args['name'] ),
 						$args['required'] ? 'required' : '',
 						$args['data'] ? $this->get_field_data( $args['data'] ) : '',
@@ -905,7 +905,7 @@ class Admin_Pages extends Inpost {
 		if ( $link ) {
 			$output = sprintf(
 				'<a href="%1$s" class="tsf-tooltip-item tsf-help" target="_blank" rel="nofollow noreferrer noopener" title="%2$s" data-desc="%2$s">[?]</a>',
-				\esc_url( $link, [ 'http', 'https' ] ),
+				\esc_url( $link, [ 'https', 'http' ] ),
 				\esc_attr( $description )
 			);
 		} else {

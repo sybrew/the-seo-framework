@@ -138,7 +138,7 @@ switch ( $instance ) :
 				$label = sprintf( esc_html__( 'Apply %1$s to %2$s Archives?', 'autodescription' ), $ro_name_wrapped, esc_html( $i18n ) );
 			}
 
-			$id = $this->sanitize_field_id( $type . '_' . $ro_value );
+			$id = $this->s_field_id( $type . '_' . $ro_value );
 
 			//* Add warning if it's 'site'.
 			if ( 'site' === $type ) {

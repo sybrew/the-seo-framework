@@ -724,6 +724,7 @@ class Generate extends User_Data {
 	 * Determines which Twitter cards can be used.
 	 *
 	 * @since 2.9.0
+	 * @since 3.3.0 Now only asserts the Title as required.
 	 * @staticvar bool|array $cache
 	 *
 	 * @return bool|array False when it shouldn't be used. Array of available cards otherwise.
@@ -735,10 +736,10 @@ class Generate extends User_Data {
 		if ( isset( $cache ) )
 			return $cache;
 
-		if ( ! $this->get_twitter_description() || ! $this->get_twitter_title() ) {
+		if ( ! $this->get_twitter_title() ) {
 			$retval = [];
 		} else {
-			$retval = $this->get_image_from_cache() ? [ 'summary_large_image', 'summary' ] : [ 'summary' ];
+			$retval = [ 'summary_large_image', 'summary' ];
 		}
 
 		/**

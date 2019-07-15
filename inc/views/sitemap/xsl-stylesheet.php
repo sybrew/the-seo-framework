@@ -210,15 +210,15 @@ function _print_xsl_description( $tsf ) {
 	echo \wp_kses(
 		sprintf(
 			'<a href="%s"><h1>%s%s</h1></a>',
-			\esc_url( \ent2ncr( \get_home_url() ), [ 'http', 'https' ] ),
+			\esc_url( \ent2ncr( \get_home_url() ), [ 'https', 'http' ] ),
 			$logo,
 			\esc_html( \ent2ncr(
 				$tsf->get_blogname() . ' &mdash; ' . \__( 'XML Sitemap', 'autodescription' )
 			) )
 		),
 		[
-			'h1' => true,
-			'a' => [
+			'h1'  => true,
+			'a'   => [
 				'href' => true,
 			],
 			'img' => [

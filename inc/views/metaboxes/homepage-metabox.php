@@ -11,6 +11,14 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 //* Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_homepage_metabox', $instance );
 
+$language = $this->google_language();
+$home_id  = $this->get_the_front_page_ID();
+
+$_generator_args = [
+	'id'       => $home_id,
+	'taxonomy' => '',
+];
+
 switch ( $instance ) :
 	case 'the_seo_framework_homepage_metabox_main':
 		$this->description( __( 'These settings will take precedence over the settings set within the homepage edit screen, if any.', 'autodescription' ) );
@@ -67,24 +75,21 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_homepage_metabox_general':
-		$language = $this->google_language();
-		$home_id  = $this->get_the_front_page_ID();
-
 		$description_from_post_message = $title_from_post_message = '';
 
-		$frompost_title = $this->has_page_on_front() ? $this->get_post_meta_item( '_genesis_title', $home_id ) : '';
+		$frompost_title = $home_id ? $this->get_post_meta_item( '_genesis_title', $home_id ) : '';
 		if ( $frompost_title ) {
 			//! FIXME: Doesn't consider filters. Inject filter here, it's hackish...? Make a specific function, smelly...?
-			if ( $this->use_title_branding( [ 'id' => $home_id ] ) ) {
-				$this->merge_title_branding( $frompost_title, [ 'id' => $home_id ] );
+			if ( $this->use_title_branding( $_generator_args ) ) {
+				$this->merge_title_branding( $frompost_title, $_generator_args );
 			}
 			$home_title_placeholder = $this->escape_title( $frompost_title );
 		} else {
-			$home_title_placeholder = $this->get_generated_title( [ 'id' => $home_id ] );
+			$home_title_placeholder = $this->get_generated_title( $_generator_args );
 		}
 
 		//* Fetch the description from the homepage.
-		$frompost_description = $this->has_page_on_front() ? $this->get_post_meta_item( '_genesis_description', $home_id ) : '';
+		$frompost_description = $home_id ? $this->get_post_meta_item( '_genesis_description', $home_id ) : '';
 
 		/**
 		 * Create a placeholder.
@@ -93,7 +98,7 @@ switch ( $instance ) :
 		if ( $frompost_description ) {
 			$description_placeholder = $frompost_description;
 		} else {
-			$description_placeholder = $this->get_generated_description( [ 'id' => $home_id ] );
+			$description_placeholder = $this->get_generated_description( $_generator_args );
 		}
 
 		$tagline_placeholder = $this->s_title_raw( $this->get_blogdescription() );
@@ -140,7 +145,7 @@ switch ( $instance ) :
 		 *
 		 * Nesting often used translations
 		 */
-		if ( $this->has_page_on_front() && $this->get_post_meta_item( '_genesis_title', $home_id ) ) {
+		if ( $home_id && $this->get_post_meta_item( '_genesis_title', $home_id ) ) {
 			$this->description( __( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' ) );
 		}
 
@@ -148,7 +153,7 @@ switch ( $instance ) :
 		 * @since 2.8.0
 		 * @param bool $warn Whether to warn that there's a plugin active with multiple homepages.
 		 */
-		if ( apply_filters( 'the_seo_framework_warn_homepage_global_title', false ) && $this->has_page_on_front() ) {
+		if ( $home_id && apply_filters( 'the_seo_framework_warn_homepage_global_title', false ) ) {
 			$this->attention_noesc(
 				//* Markdown escapes.
 				$this->convert_markdown(
@@ -190,7 +195,7 @@ switch ( $instance ) :
 		</p>
 		<?php
 
-		if ( $this->has_page_on_front() && $this->get_post_meta_item( '_genesis_description', $home_id ) ) {
+		if ( $home_id && $this->get_post_meta_item( '_genesis_description', $home_id ) ) {
 			$this->description(
 				__( 'Note: The description placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
 			);
@@ -200,7 +205,7 @@ switch ( $instance ) :
 		 * @since 2.8.0
 		 * @param bool $warn Whether to warn that there's a plugin active with multiple homepages.
 		 */
-		if ( apply_filters( 'the_seo_framework_warn_homepage_global_description', false ) && $this->has_page_on_front() ) {
+		if ( $home_id && apply_filters( 'the_seo_framework_warn_homepage_global_description', false ) ) {
 			$this->attention_noesc(
 				//* Markdown escapes.
 				$this->convert_markdown(
@@ -218,10 +223,8 @@ switch ( $instance ) :
 
 	case 'the_seo_framework_homepage_metabox_additions':
 		//* Fetches escaped title parts.
-		$home_id  = $this->get_the_front_page_ID();
 		$_example_title = $this->escape_title(
-			$this->get_filtered_raw_custom_field_title( [ 'id' => $home_id ] )
-			?: $this->get_filtered_raw_generated_title( [ 'id' => $home_id ] )
+			$this->get_filtered_raw_custom_field_title( $_generator_args ) ?: $this->get_filtered_raw_generated_title( $_generator_args )
 		);
 		// FIXME? When no blog description or tagline is set... this will be empty and ugly on no-JS.
 		$_example_blogname  = $this->escape_title( $this->get_home_page_tagline() ?: $this->get_static_untitled_title() );
@@ -280,16 +283,11 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_homepage_metabox_social':
-		$language = $this->google_language();
-
-		//* Get homepage ID. If blog on front, it's 0.
-		$home_id = $this->get_the_front_page_ID();
-
 		// Gets custom fields from page.
-		$custom_og_title = $this->get_post_meta_item( '_open_graph_title', $home_id );
-		$custom_og_desc  = $this->get_post_meta_item( '_open_graph_description', $home_id );
-		$custom_tw_title = $this->get_post_meta_item( '_twitter_title', $home_id );
-		$custom_tw_desc  = $this->get_post_meta_item( '_twitter_description', $home_id );
+		$custom_og_title = $home_id ? $this->get_post_meta_item( '_open_graph_title', $home_id ) : '';
+		$custom_og_desc  = $home_id ? $this->get_post_meta_item( '_open_graph_description', $home_id ) : '';
+		$custom_tw_title = $home_id ? $this->get_post_meta_item( '_twitter_title', $home_id ) : '';
+		$custom_tw_desc  = $home_id ? $this->get_post_meta_item( '_twitter_description', $home_id ) : '';
 
 		// Gets custom fields from SEO settings.
 		$home_og_title = $this->get_option( 'homepage_og_title' );
@@ -298,18 +296,18 @@ switch ( $instance ) :
 		// $home_tw_desc  = $this->get_option( 'homepage_twitter_description' );
 
 		//! OG input falls back to default input.
-		$og_tit_placeholder  = $custom_og_title ?: $this->get_generated_open_graph_title( [ 'id' => $home_id ] );
+		$og_tit_placeholder  = $custom_og_title ?: $this->get_generated_open_graph_title( $_generator_args );
 		$og_desc_placeholder = $custom_og_desc
-							?: $this->get_description_from_custom_field( [ 'id' => $home_id ] )
-							?: $this->get_generated_open_graph_description( [ 'id' => $home_id ] );
+							?: $this->get_description_from_custom_field( $_generator_args )
+							?: $this->get_generated_open_graph_description( $_generator_args );
 
 		//! Twitter input falls back to OG input.
 		$tw_tit_placeholder  = $custom_tw_title ?: $home_og_title ?: $og_tit_placeholder;
 		$tw_desc_placeholder = $custom_tw_desc
 							?: $home_og_desc
 							?: $custom_og_desc
-							?: $this->get_description_from_custom_field( [ 'id' => $home_id ] )
-							?: $this->get_generated_twitter_description( [ 'id' => $home_id ] );
+							?: $this->get_description_from_custom_field( $_generator_args )
+							?: $this->get_generated_twitter_description( $_generator_args );
 
 		?>
 		<h4><?php esc_html_e( 'Open Graph Settings', 'autodescription' ); ?></h4>
@@ -420,29 +418,9 @@ switch ( $instance ) :
 		<?php
 		$this->description( __( 'A social image can be displayed when your homepage is shared. It is a great way to grab attention.', 'autodescription' ) );
 
-		//* Get the front-page ID. It's 0 if front page is blog.
-		$page_id = $this->get_the_front_page_ID();
-
-		if ( $this->has_page_on_front() ) {
-			$image_args = [
-				'post_id'    => $page_id,
-				'disallowed' => [
-					'homemeta',
-				],
-				'escape'     => false,
-			];
-		} else {
-			$image_args = [
-				'post_id'    => $page_id,
-				'disallowed' => [
-					'homemeta',
-					'postmeta',
-					'featured',
-				],
-				'escape'     => false,
-			];
-		}
-		$image_placeholder = $this->get_social_image( $image_args );
+		//* Fetch image placeholder.
+		$image_details     = current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) );
+		$image_placeholder = isset( $image_details['url'] ) ? $image_details['url'] : '';
 
 		?>
 		<p>
@@ -450,7 +428,7 @@ switch ( $instance ) :
 				<strong><?php esc_html_e( 'Social Image URL', 'autodescription' ); ?></strong>
 				<?php
 				$this->make_info(
-					__( 'Set preferred homepage Social Image URL location.', 'autodescription' ), 'https://developers.facebook.com/docs/sharing/best-practices#images'
+					__( "The social image URL can be used by search engines and social networks alike. It's best to use an image with a 1.91:1 aspect ratio that is at least 1200px wide for universal support.", 'autodescription' ), 'https://developers.facebook.com/docs/sharing/best-practices#images'
 				);
 				?>
 			</label>
@@ -469,11 +447,6 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_homepage_metabox_robots':
-		$language = $this->google_language();
-
-		//* Get homepage ID. If blog on front, it's 0.
-		$home_id = $this->get_the_front_page_ID();
-
 		$noindex_post   = $home_id ? $this->get_post_meta_item( '_genesis_noindex', $home_id ) : '';
 		$nofollow_post  = $home_id ? $this->get_post_meta_item( '_genesis_nofollow', $home_id ) : '';
 		$noarchive_post = $home_id ? $this->get_post_meta_item( '_genesis_noarchive', $home_id ) : '';

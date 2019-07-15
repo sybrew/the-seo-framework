@@ -375,7 +375,7 @@ class Admin_Init extends Init {
 		}
 
 		$target = \add_query_arg( $query_args, $url );
-		$target = \esc_url_raw( $target, [ 'http', 'https' ] );
+		$target = \esc_url_raw( $target, [ 'https', 'http' ] );
 
 		//* Predict white screen:
 		$headers_sent = headers_sent();

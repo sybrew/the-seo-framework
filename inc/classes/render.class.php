@@ -103,15 +103,21 @@ class Render extends Admin_Init {
 	 *
 	 * @since 2.2.2
 	 * @since 2.7.0 $get_id parameter has been added.
+	 * @since 3.3.0 Now uses the new image generator.
 	 * @staticvar string $cache
 	 *
 	 * @return string The image URL.
 	 */
 	public function get_image_from_cache() {
 
-		static $cache = null;
+		$url = '';
 
-		return isset( $cache ) ? $cache : $cache = $this->get_social_image( [], true );
+		foreach ( $this->get_image_details_from_cache() as $image ) {
+			$url = $image['url'];
+			break;
+		}
+
+		return $url;
 	}
 
 	/**
@@ -293,85 +299,20 @@ class Render extends Admin_Init {
 	 */
 	public function og_image() {
 
-		if ( ! $this->use_og_tags() )
-			return '';
-
-		$id = $this->get_the_real_ID();
-
-		/**
-		 * @NOTE: Use of this might cause incorrect meta since other functions
-		 * depend on the image from cache.
-		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
-		 * @param string $image The social image URL.
-		 * @param int    $id    The page or term ID.
-		 */
-		$image = (string) \apply_filters_ref_array(
-			'the_seo_framework_ogimage_output',
-			[
-				$this->get_image_from_cache(),
-				$id,
-			]
-		);
+		if ( ! $this->use_og_tags() ) return '';
 
 		$output = '';
 
-		if ( $image ) {
+		foreach ( $this->get_image_details_from_cache() as $image ) {
+			$output .= '<meta property="og:image" content="' . \esc_attr( $image['url'] ) . '" />' . "\r\n";
 
-			$output .= '<meta property="og:image" content="' . \esc_attr( $image ) . '" />' . "\r\n";
-
-			if ( $image ) {
-				if ( ! empty( $this->image_dimensions[ $id ]['width'] ) && ! empty( $this->image_dimensions[ $id ]['height'] ) ) {
-					$output .= '<meta property="og:image:width" content="' . \esc_attr( $this->image_dimensions[ $id ]['width'] ) . '" />' . "\r\n";
-					$output .= '<meta property="og:image:height" content="' . \esc_attr( $this->image_dimensions[ $id ]['height'] ) . '" />' . "\r\n";
-				}
+			if ( $image['height'] && $image['width'] ) {
+				$output .= '<meta property="og:image:width" content="' . \esc_attr( $image['width'] ) . '" />' . "\r\n";
+				$output .= '<meta property="og:image:height" content="' . \esc_attr( $image['height'] ) . '" />' . "\r\n";
 			}
-		}
 
-		return $output . $this->render_woocommerce_product_og_image();
-	}
-
-	/**
-	 * Renders WooCommerce Product Gallery OG images.
-	 *
-	 * @since 2.6.0
-	 * @since 2.7.0 : Added image dimensions if found.
-	 * @since 2.8.0 : Checks for featured ID internally, rather than using a far-off cache.
-	 * @TODO move this to wc compat file.
-	 *
-	 * @return string The rendered OG Image.
-	 */
-	public function render_woocommerce_product_og_image() {
-
-		$output = '';
-
-		if ( $this->is_wc_product() ) {
-
-			$images = $this->get_image_from_woocommerce_gallery();
-
-			if ( $images && is_array( $images ) ) {
-
-				$post_id = $this->get_the_real_ID();
-				$post_manual_og = $this->get_post_meta_item( '_social_image_id', $post_id );
-				$featured_id = $post_manual_og ? (int) $post_manual_og : (int) \get_post_thumbnail_id( $post_id );
-
-				foreach ( $images as $id ) {
-
-					if ( $id === $featured_id )
-						continue;
-
-					//* Parse 4096px url.
-					$img = $this->parse_og_image( $id, [], true );
-
-					if ( $img ) {
-						$output .= '<meta property="og:image" content="' . \esc_attr( $img ) . '" />' . "\r\n";
-
-						if ( ! empty( $this->image_dimensions[ $id ]['width'] ) && ! empty( $this->image_dimensions[ $id ]['height'] ) ) {
-							$output .= '<meta property="og:image:width" content="' . \esc_attr( $this->image_dimensions[ $id ]['width'] ) . '" />' . "\r\n";
-							$output .= '<meta property="og:image:height" content="' . \esc_attr( $this->image_dimensions[ $id ]['height'] ) . '" />' . "\r\n";
-						}
-					}
-				}
+			if ( $image['alt'] ) {
+				$output .= '<meta property="og:image:alt" content="' . \esc_attr( $image['alt'] ) . '" />' . "\r\n";
 			}
 		}
 
@@ -388,8 +329,7 @@ class Render extends Admin_Init {
 	 */
 	public function og_sitename() {
 
-		if ( ! $this->use_og_tags() )
-			return '';
+		if ( ! $this->use_og_tags() ) return '';
 
 		/**
 		 * @since 2.3.0
@@ -608,33 +548,20 @@ class Render extends Admin_Init {
 	 */
 	public function twitter_image() {
 
-		if ( ! $this->use_twitter_tags() )
-			return '';
-
-		$id = $this->get_the_real_ID();
-
-		/**
-		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
-		 * @param string $image The generated Twitter image URL.
-		 * @param int    $id    The current page or term ID.
-		 */
-		$image = (string) \apply_filters_ref_array(
-			'the_seo_framework_twitterimage_output',
-			[
-				$this->get_image_from_cache(),
-				$id,
-			]
-		);
+		if ( ! $this->use_twitter_tags() ) return '';
 
 		$output = '';
 
-		if ( $image ) {
-			$output = '<meta name="twitter:image" content="' . \esc_attr( $image ) . '" />' . "\r\n";
+		foreach ( $this->get_image_details_from_cache() as $image ) {
+			$output .= '<meta property="twitter:image" content="' . \esc_attr( $image['url'] ) . '" />' . "\r\n";
 
-			if ( ! empty( $this->image_dimensions[ $id ]['width'] ) && ! empty( $this->image_dimensions[ $id ]['height'] ) ) {
-				$output .= '<meta name="twitter:image:width" content="' . \esc_attr( $this->image_dimensions[ $id ]['width'] ) . '" />' . "\r\n";
-				$output .= '<meta name="twitter:image:height" content="' . \esc_attr( $this->image_dimensions[ $id ]['height'] ) . '" />' . "\r\n";
+			if ( $image['height'] && $image['width'] ) {
+				$output .= '<meta property="twitter:image:width" content="' . \esc_attr( $image['width'] ) . '" />' . "\r\n";
+				$output .= '<meta property="twitter:image:height" content="' . \esc_attr( $image['height'] ) . '" />' . "\r\n";
+			}
+
+			if ( $image['alt'] ) {
+				$output .= '<meta property="twitter:image:alt" content="' . \esc_attr( $image['alt'] ) . '" />' . "\r\n";
 			}
 		}
 
@@ -673,7 +600,7 @@ class Render extends Admin_Init {
 		);
 
 		if ( $facebook_page )
-			return '<meta property="article:author" content="' . \esc_attr( \esc_url_raw( $facebook_page, [ 'http', 'https' ] ) ) . '" />' . "\r\n";
+			return '<meta property="article:author" content="' . \esc_attr( \esc_url_raw( $facebook_page, [ 'https', 'http' ] ) ) . '" />' . "\r\n";
 
 		return '';
 	}
@@ -709,7 +636,7 @@ class Render extends Admin_Init {
 		);
 
 		if ( $publisher )
-			return '<meta property="article:publisher" content="' . \esc_attr( \esc_url_raw( $publisher, [ 'http', 'https' ] ) ) . '" />' . "\r\n";
+			return '<meta property="article:publisher" content="' . \esc_attr( \esc_url_raw( $publisher, [ 'https', 'http' ] ) ) . '" />' . "\r\n";
 
 		return '';
 	}

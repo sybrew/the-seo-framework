@@ -76,7 +76,7 @@ function the_seo_framework_version() {
  * @since 3.1.0 Deprecated
  * @deprecated
  *
- * @param string version The two dot version: x.v
+ * @param string $version The two dot version: x.v
  * @return bool False plugin inactive or version compare yields negative results.
  */
 function the_seo_framework_dot_version( $version = '2.4' ) {

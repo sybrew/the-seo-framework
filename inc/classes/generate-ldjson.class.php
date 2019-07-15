@@ -323,11 +323,41 @@ class Generate_Ldjson extends Generate_Image {
 			'the_seo_framework_knowledge_logo',
 			[
 				( $get_option ? $this->get_option( 'knowledge_logo_url' ) : false )
-					?: $this->get_site_icon()
+					?: Builders\Images::get_site_icon_image_details()->current()['url']
 					?: '',
 				$get_option,
 			]
 		);
+	}
+
+	/**
+	 * Returns image URL suitable for Schema items.
+	 *
+	 * These are images that are strictly assigned to the Post or Page, fallbacks are omitted.
+	 * Themes should compliment these. If not, then Open Graph should at least
+	 * compliment these.
+	 * If that's not even true, then I don't know what happens. But then you're
+	 * in a grey area... @TODO make images optional for Schema?
+	 *
+	 * @since 3.3.0
+	 * @uses $this->get_image_details()
+	 *
+	 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                            Leave null to autodetermine query.
+	 * @param bool       $details Whether to return all details, or just a simple URL.
+	 * @return string|array $url The Schema.org safe image.
+	 */
+	public function get_safe_schema_image( $args = null, $details = false ) {
+
+		static $image_details = null;
+
+		if ( ! isset( $image_details ) )
+			$image_details = current( $this->get_image_details( $args, true, 'schema' ) );
+
+		if ( $details )
+			return $image_details;
+
+		return isset( $image_details['url'] ) ? $image_details['url'] : '';
 	}
 
 	/**
@@ -344,10 +374,12 @@ class Generate_Ldjson extends Generate_Image {
 
 		$output = '';
 
-		if ( $this->is_single() || $this->is_wc_product() ) {
-			$output = $this->get_ld_json_breadcrumbs_post();
-		} elseif ( ! $this->is_real_front_page() && $this->is_page() ) {
-			$output = $this->get_ld_json_breadcrumbs_page();
+		if ( $this->is_singular() && ! $this->is_real_front_page() ) {
+			if ( $this->is_single() ) {
+				$output = $this->get_ld_json_breadcrumbs_post();
+			} else {
+				$output = $this->get_ld_json_breadcrumbs_page();
+			}
 		}
 
 		return $output;
@@ -358,6 +390,7 @@ class Generate_Ldjson extends Generate_Image {
 	 *
 	 * @since 2.9.3
 	 * @since 3.1.0 Now always generates something, regardless of parents.
+	 * @since 3.3.0 Removed the image input requirement.
 	 *
 	 * @return string LD+JSON breadcrumbs script for Pages.
 	 */
@@ -390,11 +423,6 @@ class Generate_Ldjson extends Generate_Image {
 					'name' => $this->escape_title( $parent_name ),
 				],
 			];
-
-			$image = $this->get_schema_image( $parent_id );
-
-			if ( $image )
-				$crumb['item']['image'] = $image;
 
 			$items[] = $crumb;
 		}
@@ -558,7 +586,6 @@ class Generate_Ldjson extends Generate_Image {
 						]
 					),
 					'name' => $this->escape_title( $cat_name ),
-					// 'image' => $this->get_schema_image( $child_id ),
 				],
 			];
 		endforeach;
@@ -655,6 +682,7 @@ class Generate_Ldjson extends Generate_Image {
 	 * @since 3.2.2: 1. The title now works for the homepage as blog.
 	 *               2. The image has been disabled for the homepage as blog.
 	 *                    - I couldn't fix it without evading the API, which is bad.
+	 * @since 3.3.0 Removed the image input requirement.
 	 * @staticvar array $crumb
 	 *
 	 * @return array The HomePage crumb entry.
@@ -682,11 +710,6 @@ class Generate_Ldjson extends Generate_Image {
 			],
 		];
 
-		$image = $this->get_schema_image( $front_id, true );
-
-		if ( $image )
-			$crumb['item']['image'] = $image;
-
 		return $crumb;
 	}
 
@@ -695,6 +718,7 @@ class Generate_Ldjson extends Generate_Image {
 	 *
 	 * @since 2.9.3
 	 * @since 3.0.0 Removed @id output to allow for more same-page schema items.
+	 * @since 3.3.0 Removed the image input requirement.
 	 * @staticvar array $crumb
 	 *
 	 * @param int $position The previous crumb position.
@@ -728,11 +752,6 @@ class Generate_Ldjson extends Generate_Image {
 				'name' => $this->escape_title( $name ),
 			],
 		];
-
-		$image = $this->get_schema_image( $post_id, true );
-
-		if ( $image )
-			$crumb['item']['image'] = $image;
 
 		return $crumb;
 	}

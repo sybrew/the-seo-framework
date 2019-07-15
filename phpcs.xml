@@ -72,6 +72,12 @@
 		</properties>
 	</rule>
 
+	<rule ref="VariableAnalysis.CodeAnalysis.VariableAnalysis">
+		<properties>
+			<property name="validUndefinedVariableNames" type="string" value="this"/>
+		</properties>
+	</rule>
+
 	<!-- Exclude minified scripts. -->
 	<exclude-pattern>*.min.js</exclude-pattern>
 	<exclude-pattern>*.min.css</exclude-pattern>

@@ -34,780 +34,479 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Generate_Image extends Generate_Url {
 
 	/**
-	 * @since 2.7.0
-	 * @var array The registered image dimensions.
+	 * Returns the image details from cache.
+	 * Only to be used within the loop, uses default parameters, inlucing the 'social' context.
+	 *
+	 * @since 3.3.0
+	 * @staticvar array $cache
+	 *
+	 * @return array The image details array, sequential: int => {
+	 *    string url:    The image URL,
+	 *    int    id:     The image ID,
+	 *    int    width:  The image width in pixels,
+	 *    int    height: The image height in pixels,
+	 *    string alt:    The image alt tag,
+	 * }
 	 */
-	public $image_dimensions = [];
-
-	/**
-	 * Registers image dimensions.
-	 *
-	 * When the `$uid` is already registered, then the dimensions registered first
-	 * will be used.
-	 *
-	 * @since 3.1.0
-	 * @uses $this->image_dimensions
-	 *
-	 * @param scalar $uid        The unique registration ID.
-	 * @param array  $dimensions The dimensions, annodated with 'height' and 'width'.
-	 */
-	public function register_image_dimension( $uid, array $dimensions ) {
-		$this->image_dimensions += [ $uid => $dimensions ];
+	public function get_image_details_from_cache() {
+		static $cache;
+		return isset( $cache ) ? $cache : $cache = $this->get_image_details();
 	}
 
 	/**
-	 * Tests and registers image dimensions from custom input.
-	 * This is meant to sanitize the JavaScript handler for custom input sources on the front-end.
+	 * Returns image details.
 	 *
-	 * @since 3.1.0
-	 * @internal
-	 * @uses $this->register_image_dimension()
+	 * @since 3.3.0
 	 *
-	 * @param int    $src_id The image source ID.
-	 * @param string $src    The known image source.
-	 * @param scalar $uid    The unique registration ID.
+	 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                            Leave null to autodetermine query.
+	 * @param bool       $single  Whether to fetch one image, or multiple.
+	 * @param string     $context The filter context. Default 'social'.
+	 * @param bool       $clean   Whether to clean the image, like stripping duplicates and erroneous items.
+	 *                            It's best to leave this enabled, unless you're merging the calls, and clean up yourself.
+	 * @return array The image details array, sequential: int => {
+	 *    string url:    The image URL,
+	 *    int    id:     The image ID,
+	 *    int    width:  The image width in pixels,
+	 *    int    height: The image height in pixels,
+	 *    string alt:    The image alt tag,
+	 * }
 	 */
-	protected function register_custom_image_dimensions( $src_id, $src, $uid ) {
+	public function get_image_details( $args = null, $single = false, $context = 'social', $clean = true ) {
 
-		$_src = \wp_get_attachment_image_src( $src_id, 'full' );
+		if ( $single ) {
+			$details = $this->get_custom_field_image_details( $args, $single, false );
 
-		if ( is_array( $_src ) && count( $_src ) >= 3 ) {
-			$i = $_src[0]; // Source URL
-			$w = $_src[1]; // Width
-			$h = $_src[2]; // Height
-
-			$test_i   = \esc_url_raw( $this->set_preferred_url_scheme( $i ), [ 'http', 'https' ] );
-			$test_src = \esc_url_raw( $this->set_preferred_url_scheme( $src ), [ 'http', 'https' ] );
-
-			if ( $test_i === $test_src )
-				$this->register_image_dimension(
-					$uid,
-					[
-						'width'  => $w,
-						'height' => $h,
-					]
-				);
-		}
-	}
-
-	/**
-	 * Returns image URL suitable for Schema items.
-	 *
-	 * These are images that are strictly assigned to the Post or Page.
-	 * Themes should compliment these. If not, then Open Graph should at least
-	 * compliment these.
-	 * If that's not even true, then I don't know what happens. But then you're
-	 * in a grey area... @TODO make images optional for Schema?
-	 *
-	 * @since 2.9.3
-	 * @since 3.2.2 No longer relies on the query.
-	 * @uses $this->get_social_image()
-	 * @staticvar array $images
-	 * @TODO exchange 2nd argument with $taxonomy.
-	 *
-	 * @TODO support Terms.
-	 *
-	 * @param int|string $id       The page, post, product or term ID.
-	 * @param bool       $singular Whether the ID is singular or archival.
-	 * @return string $url The Schema.org safe image.
-	 */
-	public function get_schema_image( $id = 0, $singular = false ) {
-
-		//= TODO remove this when term images are introduced.
-		if ( ! $singular )
-			return '';
-
-		static $images = [];
-
-		$id = (int) $id;
-
-		if ( isset( $images[ $id ][ $singular ] ) )
-			return $images[ $id ][ $singular ];
-
-		if ( $singular ) {
-			if ( $this->is_real_front_page_by_id( $id ) ) {
-				$image_args = [
-					'post_id'       => $id,
-					'skip_fallback' => true,
-					'escape'        => false,
-				];
-			} else {
-				$image_args = [
-					'post_id'       => $id,
-					'skip_fallback' => true,
-					'disallowed'    => [
-						'homemeta',
-					],
-					'escape'        => false,
-				];
-			}
-			$url = $this->get_social_image( $image_args, false );
+			if ( empty( $details['url'] ) )
+				$details = $this->get_generated_image_details( $args, $single, $context, false );
 		} else {
-			//* Placeholder for when Terms get image uploads.
-			$url = '';
-		}
-
-		/**
-		 * @since 2.7.0
-		 * TODO deprecate filter and exchange with a suiting name.
-		 * @param string $image The current image.
-		 * @param int $id The page, post, product or term ID.
-		 * @param bool $singular Whether the ID is singular.
-		 */
-		$url = \apply_filters( 'the_seo_framework_ld_json_breadcrumb_image', $url, $id, $singular );
-
-		return $images[ $id ][ $singular ] = \esc_url_raw( $url );
-	}
-
-	/**
-	 * Returns social image URL and sets $this->image_dimensions.
-	 *
-	 * @since 2.9.0
-	 * @since 3.0.6 Added attachment page compatibility.
-	 * @since 3.2.2 Now skips the singular meta images on archives.
-	 *
-	 * @todo listen to attached images within post.
-	 * @todo listen to archive images. -> set taxonomy argument.
-	 *
-	 * @param array $args             The image arguments.
-	 * @param bool  $set_og_dimension Whether to set open graph dimensions.
-	 * @return string The social image.
-	 */
-	public function get_social_image( $args = [], $set_og_dimension = false ) {
-
-		$args = $this->reparse_image_args( $args );
-
-		//* 0. Image from argument.
-		pre_0 : {
-			if ( $image = $args['image'] )
-				goto end;
-		}
-
-		//* Check if there are no disallowed arguments.
-		$all_allowed = empty( $args['disallowed'] );
-
-		//* 1. Fetch image from homepage SEO meta upload.
-		if ( $all_allowed || false === in_array( 'homemeta', $args['disallowed'], true ) ) {
-			if ( $image = $this->get_social_image_url_from_home_meta( $args['post_id'], true ) )
-				goto end;
-		}
-
-		// FIXME: `! $this->is_archive()` = Patch for taxonomies taking incorrect images...
-		if ( $args['post_id'] && ! $this->is_archive() ) {
-			//* 2. Fetch image from SEO meta upload.
-			if ( $all_allowed || false === in_array( 'postmeta', $args['disallowed'], true ) ) {
-				if ( $image = $this->get_social_image_url_from_post_meta( $args['post_id'], true ) )
-					goto end;
-			}
-
-			//* 2.5 Fetch image from fallback filter 0
-			custom_0 : {
-				/**
-				 * Use this to set a secondary custom image input.
-				 * @since 3.1.2
-				 * @param string $image   The image URL.
-				 * @param int    $post_id The post ID.
-				 */
-				if ( $image = (string) \apply_filters( 'the_seo_framework_og_image_alt_custom', '', $args['post_id'] ) )
-					goto end;
-			}
-
-			//* 3.a. Fetch image from featured.
-			if ( $all_allowed || false === in_array( 'featured', $args['disallowed'], true ) ) {
-				if ( $image = $this->get_social_image_url_from_post_thumbnail( $args['post_id'], $args, true ) )
-					goto end;
-			}
-			//* 3.b. Fetch image from attachment page.
-			if ( $all_allowed || false === in_array( 'attachment', $args['disallowed'], true ) ) {
-				if ( $image = $this->get_social_image_url_from_attachment( $args['post_id'], $args, true ) )
-					goto end;
-			}
-		}
-
-		if ( $args['skip_fallback'] )
-			goto end;
-
-		//* 3.5 Fetch image from fallback filter 0
-		fallback_0 : {
-			/**
-			 * This runs before the SEO settings' fallback image call.
-			 * @since 3.1.2
-			 * @param string $image   The image URL.
-			 * @param int    $post_id The post ID.
-			 */
-			if ( $image = (string) \apply_filters( 'the_seo_framework_og_image_fallback', '', $args['post_id'] ) )
-				goto end;
-		}
-
-		//* 4. Fetch image from SEO settings
-		if ( $all_allowed || false === in_array( 'option', $args['disallowed'], true ) ) {
-			if ( $image = $this->get_social_image_url_from_seo_settings( true ) )
-				goto end;
-		}
-
-		//* 5. Fetch image from fallback filter 1
-		fallback_1 : {
-			/**
-			 * NOTE: filter is slightly mislabeled.
-			 * Runs after the image from the SEO settings is fetched.
-			 * @since 2.5.2
-			 * @param string $image   The image URL.
-			 * @param int    $post_id The post ID.
-			 */
-			if ( $image = (string) \apply_filters( 'the_seo_framework_og_image_after_featured', '', $args['post_id'] ) )
-				goto end;
-		}
-
-		//* 6. Fallback: Get header image if exists
-		if ( ( $all_allowed || false === in_array( 'header', $args['disallowed'], true ) ) && \current_theme_supports( 'custom-header', 'default-image' ) ) {
-			if ( $image = $this->get_header_image( true ) )
-				goto end;
-		}
-
-		//* 7. Fetch image from fallback filter 2
-		/**
-		 * Runs after theme images are fetched.
-		 * @since 2.5.2
-		 * @param string $image   The image URL.
-		 * @param int    $post_id The post ID.
-		 */
-		fallback_2 : {
-			if ( $image = (string) \apply_filters( 'the_seo_framework_og_image_after_header', '', $args['post_id'] ) )
-				goto end;
-		}
-
-		//* 8. Get the WP 4.5 Site Logo
-		if ( ( $all_allowed || false === in_array( 'logo', $args['disallowed'], true ) ) && $this->can_use_logo() ) {
-			if ( $image = $this->get_site_logo( true ) )
-				goto end;
-		}
-
-		//* 9. Get the WP 4.3 Site Icon
-		if ( $all_allowed || false === in_array( 'icon', $args['disallowed'], true ) ) {
-			if ( $image = $this->get_site_icon( 'full', true ) )
-				goto end;
-		}
-
-		end :;
-
-		if ( $args['escape'] && $image )
-			$image = \esc_url( $image );
-
-		return (string) $image;
-	}
-
-	/**
-	 * Parse and sanitize image args.
-	 *
-	 * @since 2.5.0
-	 * @since 2.9.0 : 1. Removed 'attr' index, it was unused.
-	 *                2. Added 'skip_fallback' option.
-	 *                3. Added 'escape' option.
-	 *
-	 * The image set in the filter will always be used as fallback
-	 *
-	 * @param array $args         Required. The passed arguments.
-	 * @param array $defaults     The default arguments.
-	 * @param bool  $get_defaults Return the default arguments. Ignoring $args.
-	 * @return array $args parsed args.
-	 */
-	public function parse_image_args( $args = [], $defaults = [], $get_defaults = false ) {
-
-		//* Passing back the defaults reduces the memory usage.
-		if ( empty( $defaults ) ) {
-			$defaults = [
-				'post_id'       => $this->get_the_real_ID(),
-				'image'         => '',
-				'size'          => 'full',
-				'icon'          => false,
-				'skip_fallback' => false,
-				'disallowed'    => [],
-				'escape'        => true,
-			];
-
-			/**
-			 * @since 2.0.1
-			 * @param array $defaults The image defaults: {
-			 *    @param string $image The image url
-			 *    @param mixed $size The image size
-			 *    @param bool $icon Fetch Image icon
-			 *    @param bool 'skip_fallback' Whether to skip fallback images.
-			 *    @param array $disallowed Disallowed image types : Allowed values {
-			 *        array (
-			 *            'homemeta',
-			 *            'postmeta',
-			 *            'featured',
-			 *            'attachment',
-			 *            'option',
-			 *            'header',
-			 *            'logo',
-			 *            'icon',
-			 *        )
-			 *    }
-			 *    @param bool 'escape' Whether to escape output.
-			 * }
-			 * @param array $args The input args.
-			 */
-			$defaults = (array) \apply_filters( 'the_seo_framework_og_image_args', $defaults, $args );
-		}
-
-		//* Return early if it's only a default args request.
-		if ( $get_defaults )
-			return $defaults;
-
-		//* Array merge doesn't support sanitation. We're simply type casting here.
-		// phpcs:disable, WordPress.WhiteSpace.OperatorSpacing.SpacingBefore -- precision alignment OK.
-		$args['post_id']       = isset( $args['post_id'] )       ? (int) $args['post_id']        : $defaults['post_id'];
-		$args['image']         = isset( $args['image'] )         ? (string) $args['image']       : $defaults['image'];
-		$args['size']          = isset( $args['size'] )          ? $args['size']                 : $defaults['size']; // Mixed.
-		$args['icon']          = isset( $args['icon'] )          ? (bool) $args['icon']          : $defaults['icon'];
-		$args['skip_fallback'] = isset( $args['skip_fallback'] ) ? (bool) $args['skip_fallback'] : $defaults['skip_fallback'];
-		$args['disallowed']    = isset( $args['disallowed'] )    ? (array) $args['disallowed']   : $defaults['disallowed'];
-		$args['escape']        = isset( $args['escape'] )        ? (bool) $args['escape']        : $defaults['escape'];
-		// phpcs:enable, WordPress.WhiteSpace.OperatorSpacing.SpacingBefore
-
-		return $args;
-	}
-
-	/**
-	 * Reparses image args.
-	 *
-	 * @since 2.6.6
-	 * @since 2.9.2 Now passes args to filter.
-	 *
-	 * @param array $args required The passed arguments.
-	 * @return array $args parsed args.
-	 */
-	public function reparse_image_args( $args = [] ) {
-
-		$default_args = $this->parse_image_args( $args, '', true );
-
-		if ( empty( $args ) ) {
-			$args = $default_args;
-		} else {
-			$args = $this->parse_image_args( $args, $default_args );
-		}
-
-		return $args;
-	}
-
-	/**
-	 * Returns unescaped HomePage settings image URL from post ID input.
-	 *
-	 * @since 2.9.0
-	 * @since 2.9.4 Now converts URL scheme.
-	 *
-	 * @param int  $id                The post ID.
-	 * @param bool $set_og_dimensions Whether to set Open Graph and Twitter dimensions.
-	 * @return string The unescaped HomePage social image URL.
-	 */
-	public function get_social_image_url_from_home_meta( $id = 0, $set_og_dimensions = false ) {
-
-		//* Don't output if not on the front page ...FIXME... by query.
-		if ( false === $this->is_front_page_by_id( $id ) )
-			return '';
-
-		$src = $this->get_option( 'homepage_social_image_url' );
-
-		if ( ! $src )
-			return '';
-
-		//* Calculate image sizes.
-		if ( $set_og_dimensions && $img_id = $this->get_option( 'homepage_social_image_id' ) )
-			$this->register_custom_image_dimensions( $img_id, $src, $id );
-
-		if ( $src && $this->matches_this_domain( $src ) )
-			$src = $this->set_preferred_url_scheme( $src );
-
-		return $src;
-	}
-
-	/**
-	 * Returns unescaped Post settings image URL from post ID input.
-	 *
-	 * @since 2.8.0
-	 * @since 2.9.0 1. The second parameter now works.
-	 *              2. Fallback image ID has been removed.
-	 * @since 2.9.4 Now converts URL scheme.
-	 *
-	 * @param int  $id                The post ID. Required.
-	 * @param bool $set_og_dimensions Whether to set Open Graph and Twitter dimensions.
-	 * @return string The unescaped social image URL.
-	 */
-	public function get_social_image_url_from_post_meta( $id, $set_og_dimensions = false ) {
-
-		$src = $id ? $this->get_post_meta_item( '_social_image_url', $id ) : '';
-
-		if ( ! $src )
-			return '';
-
-		//* Calculate image sizes.
-		if ( $set_og_dimensions && $img_id = $this->get_post_meta_item( '_social_image_id', $id ) )
-			$this->register_custom_image_dimensions( $img_id, $src, $id );
-
-		if ( $src && $this->matches_this_domain( $src ) )
-			$src = $this->set_preferred_url_scheme( $src );
-
-		return $src;
-	}
-
-	/**
-	 * Returns unescaped URL from options input.
-	 *
-	 * @since 2.8.2
-	 * @since 2.9.4 1: Now converts URL scheme.
-	 *              2: $set_og_dimensions now works.
-	 *
-	 * @param bool $set_og_dimensions Whether to set open graph and twitter dimensions.
-	 * @return string The unescaped social image fallback URL.
-	 */
-	public function get_social_image_url_from_seo_settings( $set_og_dimensions = false ) {
-
-		$src = $this->get_option( 'social_image_fb_url' );
-
-		if ( ! $src )
-			return '';
-
-		//* Calculate image sizes.
-		if ( $set_og_dimensions && $img_id = $this->get_option( 'social_image_fb_id' ) )
-			$this->register_custom_image_dimensions( $img_id, $src, $this->get_the_real_ID() );
-
-		if ( $src && $this->matches_this_domain( $src ) )
-			$src = $this->set_preferred_url_scheme( $src );
-
-		return $src;
-	}
-
-	/**
-	 * Fetches image from post thumbnail.
-	 *
-	 * Resizes the image between 4096px if bigger. Then it saves the image and
-	 * Keeps dimensions relative.
-	 *
-	 * @since 2.9.0
-	 * @since 2.9.3 Now supports 4K.
-	 * @since 2.9.4 Now converts URL scheme.
-	 *
-	 * @param int   $id                The post ID. Required.
-	 * @param array $args              The image args.
-	 * @param bool  $set_og_dimensions Whether to set Open Graph image dimensions.
-	 * @return string The social image URL.
-	 */
-	public function get_social_image_url_from_post_thumbnail( $id, $args = [], $set_og_dimensions = false ) {
-
-		$image_id = $id ? \get_post_thumbnail_id( $id ) : '';
-
-		if ( ! $image_id )
-			return '';
-
-		$args                    = $this->reparse_image_args( $args );
-		$args['get_the_real_ID'] = true;
-
-		$src = $this->parse_og_image( $image_id, $args, $set_og_dimensions );
-
-		if ( $src && $this->matches_this_domain( $src ) )
-			$src = $this->set_preferred_url_scheme( $src );
-
-		return $src;
-	}
-
-	/**
-	 * Returns the social image URL from an attachment page.
-	 *
-	 * @since 3.0.6
-	 *
-	 * @param int   $id                The post ID. Required.
-	 * @param array $args              The image args.
-	 * @param bool  $set_og_dimensions Whether to set Open Graph image dimensions.
-	 * @return string The attachment URL.
-	 */
-	public function get_social_image_url_from_attachment( $id, $args = [], $set_og_dimensions = false ) {
-
-		if ( ! \wp_attachment_is_image( $id ) )
-			return '';
-
-		$args                    = $this->reparse_image_args( $args );
-		$args['get_the_real_ID'] = true;
-
-		$src = $this->parse_og_image( $id, $args, $set_og_dimensions );
-
-		if ( $src && $this->matches_this_domain( $src ) )
-			$src = $this->set_preferred_url_scheme( $src );
-
-		return $src;
-	}
-
-	/**
-	 * Fetches images id's from WooCommerce gallery
-	 *
-	 * @since 2.5.0
-	 * @staticvar array $ids The image IDs
-	 *
-	 * @return array The image URL's.
-	 */
-	public function get_image_from_woocommerce_gallery() {
-
-		static $ids = null;
-
-		if ( isset( $ids ) )
-			return $ids;
-
-		$attachment_ids = '';
-
-		$post_id = $this->get_the_real_ID();
-
-		if ( \metadata_exists( 'post', $post_id, '_product_image_gallery' ) ) {
-			$product_image_gallery = \get_post_meta( $post_id, '_product_image_gallery', true );
-
-			$attachment_ids = array_map( 'absint', array_filter( explode( ',', $product_image_gallery ) ) );
-		}
-
-		return $ids = $attachment_ids;
-	}
-
-	/**
-	 * Parses OG image to correct size.
-	 *
-	 * @since 2.5.0
-	 * @since 2.8.0 : 1. Removed staticvar.
-	 *                2. Now adds ID call to OG image called listener.
-	 * @since 2.9.0 : Added $set_og_dimension parameter
-	 * @since 2.9.3 : 4k baby.
-	 * @since 3.0.0 : Now sets preferred canonical URL scheme.
-	 *
-	 * @todo create formula to fetch transient.
-	 * @todo See \TSF_Extension_Manager\Extension\Articles\Front::make_amp_logo() for a better alternative?
-	 * @priority high 2.7.0
-	 * @priority lowered with 4K @ 2.9.3
-	 *
-	 * @param int   $id                The attachment ID.
-	 * @param array $args              The image args
-	 * @param bool  $set_og_dimensions Whether to set OG dimensions.
-	 * @return string Parsed image url or empty if already called
-	 */
-	public function parse_og_image( $id, $args = [], $set_og_dimensions = false ) {
-
-		//* Don't do anything if $id isn't given.
-		if ( empty( $id ) )
-			return;
-
-		if ( empty( $args ) )
-			$args = $this->reparse_image_args( $args );
-
-		$src = \wp_get_attachment_image_src( $id, $args['size'], $args['icon'] );
-
-		$i = $src[0]; // Source URL
-		$w = $src[1]; // Width
-		$h = $src[2]; // Height
-
-		//* @TODO add filter that can lower it?
-		$_size = 4096;
-
-		//* Preferred 4096px, resize it
-		if ( $w > $_size || $h > $_size ) :
-
-			if ( $w === $h ) {
-				//* Square
-				$w = $_size;
-				$h = $_size;
-			} elseif ( $w > $h ) {
-				//* Landscape, set $w to 4096.
-				$h = $this->proportionate_dimensions( $h, $w, $w = $_size );
-			} elseif ( $h > $w ) {
-				//* Portrait, set $h to 4096.
-				$w = $this->proportionate_dimensions( $w, $h, $h = $_size );
-			}
-
-			//* Get path of image and load it into the wp_get_image_editor
-			$i_file_path = \get_attached_file( $id );
-			$i_file_ext  = pathinfo( $i_file_path, PATHINFO_EXTENSION );
-
-			if ( $i_file_ext ) {
-				$i_file_dir_name = pathinfo( $i_file_path, PATHINFO_DIRNAME );
-				//* Add trailing slash.
-				$i_file_dir_name = '/' === substr( $i_file_dir_name, -1 ) ? $i_file_dir_name : $i_file_dir_name . '/';
-
-				$i_file_file_name = pathinfo( $i_file_path, PATHINFO_FILENAME );
-
-				//* Yes I know, I should use generate_filename(), but it's slower.
-				//* Will look at that later. This is already 100 lines of correctly working code.
-				$new_image_dirfile = $i_file_dir_name . $i_file_file_name . '-' . $w . 'x' . $h . '.' . $i_file_ext;
-
-				//* Generate image URL.
-				$upload_dir     = \wp_upload_dir();
-				$upload_url     = $upload_dir['baseurl'];
-				$upload_basedir = $upload_dir['basedir'];
-
-				//* We've got our image path.
-				$i = str_ireplace( $upload_basedir, '', $new_image_dirfile );
-				$i = $upload_url . $i;
-
-				// Generate file if it doesn't exists yet.
-				if ( ! file_exists( $new_image_dirfile ) ) {
-
-					$image_editor = \wp_get_image_editor( $i_file_path );
-
-					if ( ! \is_wp_error( $image_editor ) ) {
-						$image_editor->resize( $w, $h, false );
-						$image_editor->set_quality( 82 ); // Let's save some bandwidth, Facebook compresses it even further anyway.
-						$image_editor->save( $new_image_dirfile );
-					} else {
-						//* Image has failed to create.
-						$i = '';
-					}
-				}
-			}
-		endif;
-
-		if ( $set_og_dimensions ) {
-			//* Whether to use the post ID (Post Thumbnail) or input ID (ID was known beforehand)
-			$usage_id = ! empty( $args['get_the_real_ID'] ) ? $this->get_the_real_ID() : $id;
-
-			$this->register_image_dimension(
-				$usage_id,
-				[
-					'width'  => $w,
-					'height' => $h,
-				]
+			$details = array_merge(
+				$this->get_custom_field_image_details( $args, $single, false ),
+				$this->get_generated_image_details( $args, $single, $context, false )
 			);
 		}
 
-		if ( $i && $this->matches_this_domain( $i ) )
-			$i = $this->set_preferred_url_scheme( $i );
-
-		return $i;
+		return $clean ? $this->s_image_details( $details ) : $details;
 	}
 
 	/**
-	 * Fetches site icon brought in WordPress 4.3
+	 * Returns single custom field image details.
 	 *
-	 * @since 2.8.0
-	 * @since 3.0.0 : Now sets preferred canonical URL scheme.
+	 * @since 3.3.0
 	 *
-	 * @param string|int $size              The icon size, accepts 'full' and pixel values.
-	 * @param bool       $set_og_dimensions Whether to set size for OG image. Always falls back to the current post ID.
-	 * @return string URL site icon, not escaped.
+	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                           Leave null to autodetermine query.
+	 * @param bool       $single Whether to fetch one image, or multiple. Unused, reserved.
+	 * @param bool       $clean  Whether to clean the image, like stripping duplicates and erroneous items.
+	 *                           It's best to leave this enabled, unless you're merging the calls, and clean up yourself.
+	 * @return array The image details array, sequential: int => {
+	 *    string url:    The image URL,
+	 *    int    id:     The image ID,
+	 *    int    width:  The image width in pixels,
+	 *    int    height: The image height in pixels,
+	 *    string alt:    The image alt tag,
+	 * }
 	 */
-	public function get_site_icon( $size = 'full', $set_og_dimensions = false ) {
+	public function get_custom_field_image_details( $args = null, $single = false, $clean = true ) {
 
-		$icon = '';
+		if ( null === $args ) {
+			$details = $this->get_custom_field_image_details_from_query();
+		} else {
+			$this->fix_generation_args( $args );
+			$details = $this->get_custom_field_image_details_from_args( $args );
+		}
 
-		if ( 'full' === $size ) {
-			$site_icon_id = \get_option( 'site_icon' );
+		return $clean ? $this->s_image_details( $details ) : $details;
+	}
 
-			if ( $site_icon_id ) {
-				$_src = \wp_get_attachment_image_src( $site_icon_id, $size );
-				if ( is_array( $_src ) && count( $_src ) >= 3 ) {
+	/**
+	 * Returns single or multiple generates image details.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                            Leave null to autodetermine query.
+	 * @param bool       $single  Whether to fetch one image, or multiple.
+	 * @param string     $context The filter context. Default 'social'.
+	 * @param bool       $clean   Whether to clean the image, like stripping duplicates and erroneous items.
+	 *                            It's best to leave this enabled, unless you're merging the calls, and clean up yourself.
+	 * @return array The image details array, sequential: int => {
+	 *    string url:    The image URL,
+	 *    int    id:     The image ID,
+	 *    int    width:  The image width in pixels,
+	 *    int    height: The image height in pixels,
+	 *    string alt:    The image alt tag,
+	 * }
+	 */
+	public function get_generated_image_details( $args = null, $single = false, $context = 'social', $clean = true ) {
 
-					$icon = $_src[0];
+		if ( null === $args ) {
+			$details = $this->generate_image_details( null, $single, $context );
+		} else {
+			$this->fix_generation_args( $args );
+			$details = $this->generate_image_details( $args, $single, $context );
+		}
 
-					if ( $set_og_dimensions ) {
-						$this->register_image_dimension(
-							$this->get_the_real_ID(),
-							[
-								'width'  => $_src[1],
-								'height' => $_src[2],
-							]
-						);
-					}
+		return $clean ? $this->s_image_details( $details ) : $details;
+	}
+
+	/**
+	 * Returns single custom field image details from query.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @return array The image details array, sequential: int => {
+	 *    string url:    The image URL,
+	 *    int    id:     The image ID,
+	 *    int    width:  The image width in pixels,
+	 *    int    height: The image height in pixels,
+	 *    string alt:    The image alt tag,
+	 * }
+	 */
+	protected function get_custom_field_image_details_from_query() {
+
+		if ( $this->is_real_front_page() ) {
+			if ( $this->is_static_frontpage() ) {
+				$details = [
+					'url' => $this->get_option( 'homepage_social_image_url' ),
+					'id'  => $this->get_option( 'homepage_social_image_id' ),
+				];
+				if ( ! $details['url'] ) {
+					$details = [
+						'url' => $this->get_post_meta_item( '_social_image_url' ),
+						'id'  => $this->get_post_meta_item( '_social_image_id' ),
+					];
+				}
+			} else {
+				$details = [
+					'url' => $this->get_option( 'homepage_social_image_url' ),
+					'id'  => $this->get_option( 'homepage_social_image_id' ),
+				];
+			}
+		} elseif ( $this->is_singular() ) {
+			$details = [
+				'url' => $this->get_post_meta_item( '_social_image_url' ),
+				'id'  => $this->get_post_meta_item( '_social_image_id' ),
+			];
+		} elseif ( $this->is_term_meta_capable() ) {
+			$details = [
+				'url' => $this->get_term_meta_item( 'social_image_url' ),
+				'id'  => $this->get_term_meta_item( 'social_image_id' ),
+			];
+		} else {
+			$details = [
+				'url' => '',
+				'id'  => 0,
+			];
+		}
+
+		if ( $details['url'] ) {
+			$details = $this->merge_extra_image_details( $details, 'full' );
+		} else {
+			$details = [
+				'url' => '',
+				'id'  => 0,
+			];
+		}
+
+		return [ $details ];
+	}
+
+	/**
+	 * Returns single custom field image details from arguments.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param array $args The query arguments. Must have 'id' and 'taxonomy'.
+	 * @return array The image details array, sequential: int => {
+	 *    string url:    The image URL,
+	 *    int    id:     The image ID,
+	 *    int    width:  The image width in pixels,
+	 *    int    height: The image height in pixels,
+	 *    string alt:    The image alt tag,
+	 * }
+	 */
+	protected function get_custom_field_image_details_from_args( $args ) {
+
+		if ( $args['taxonomy'] ) {
+			$details = [
+				'url' => $this->get_term_meta_item( 'social_image_url', $args['id'] ),
+				'id'  => $this->get_term_meta_item( 'social_image_id', $args['id'] ),
+			];
+		} else {
+			if ( $this->is_static_frontpage( $args['id'] ) ) {
+				$details = [
+					'url' => $this->get_option( 'homepage_social_image_url' ),
+					'id'  => $this->get_option( 'homepage_social_image_id' ),
+				];
+				if ( ! $details['url'] ) {
+					$details = [
+						'url' => $this->get_post_meta_item( '_social_image_url', $args['id'] ),
+						'id'  => $this->get_post_meta_item( '_social_image_id', $args['id'] ),
+					];
+				}
+			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+				$details = [
+					'url' => $this->get_option( 'homepage_social_image_url' ),
+					'id'  => $this->get_option( 'homepage_social_image_id' ),
+				];
+			} else {
+				$details = [
+					'url' => $this->get_post_meta_item( '_social_image_url', $args['id'] ),
+					'id'  => $this->get_post_meta_item( '_social_image_id', $args['id'] ),
+				];
+			}
+		}
+
+		if ( $details['url'] ) {
+			$details = $this->merge_extra_image_details( $details, 'full' );
+		} else {
+			$details = [
+				'url' => '',
+				'id'  => 0,
+			];
+		}
+
+		return [ $details ];
+	}
+
+	/**
+	 * Returns image generation parameters.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                            Leave null to autodetermine query.
+	 * @param string     $context The filter context. Default 'social'.
+	 *                            May be (for example) 'breadcrumb' or 'article' for structured data.
+	 * @return array The image generation parameters, associative: {
+	 *    string  size:     The image size,
+	 *    boolean multi:    Whether multiple images may be returned,
+	 *    array   cbs:      An array of image generation callbacks, in order of most important to least.
+	 *                      When 'multi' (or $single input) parameter is "false", it will use the first found.
+	 *    array   fallback: An array of image generaiton callbacks, in order of most important to least,
+	 *                      Only one image is obtained from the fallback, and only if the regular cbs don't
+	 *                      return any image.
+	 * }
+	 */
+	public function get_image_generation_params( $args = null, $context = 'social' ) {
+
+		if ( null !== $args )
+			$this->fix_generation_args( $args );
+
+		$builder = Builders\Images::class;
+
+		if ( null === $args ) {
+			if ( $this->is_singular() ) {
+				if ( $this->is_attachment() ) {
+					$cbs = [
+						'attachment' => "$builder::get_attachment_image_details",
+					];
+				} else {
+					$cbs = [
+						'featured' => "$builder::get_featured_image_details",
+						'content'  => "$builder::get_content_image_details",
+					];
+				}
+			} elseif ( $this->is_term_meta_capable() ) {
+				$cbs = [];
+			} else {
+				$cbs = [];
+			}
+		} else {
+			if ( $args['taxonomy'] ) {
+				$cbs = [];
+			} else {
+				if ( \wp_attachment_is_image( $args['id'] ) ) {
+					$cbs = [
+						'attachment' => "$builder::get_attachment_image_details",
+					];
+				} else {
+					$cbs = [
+						'featured' => "$builder::get_featured_image_details",
+						'content'  => "$builder::get_content_image_details",
+					];
 				}
 			}
-		} elseif ( is_int( $size ) ) {
-			//* Above 512 defaults to full. Loop back.
-			if ( $size > 512 )
-				return $this->get_site_icon( 'full', $set_og_dimensions );
-
-			//* Also applies (MultiSite) filters.
-			$icon = \get_site_icon_url( $size );
 		}
 
-		if ( $icon && $this->matches_this_domain( $icon ) )
-			$icon = $this->set_preferred_url_scheme( $icon );
+		if ( 'social' === $context ) {
+			$fallback = [
+				'settings' => "$builder::get_fallback_image_details",
+				'header'   => "$builder::get_theme_header_image_details",
+				'logo'     => "$builder::get_site_logo_image_details",
+				'icon'     => "$builder::get_site_icon_image_details",
+			];
+		} else {
+			$fallback = [];
+		}
 
-		return $icon;
+		/**
+		 * @since 3.3.0
+		 * @param array      $params  : [
+		 *    string  size:     The image size to use.
+		 *    boolean multi:    Whether to allow multiple images to be returned.
+		 *    array   cbs:      The callbacks to parse. Ideally be generators, so we can halt remotely.
+		 *    array   fallback: The callbacks to parse. Ideally be generators, so we can halt remotely.
+		 * ];
+		 * @param array|null $args    The query arguments. Contians 'id' and 'taxonomy'.
+		 *                            Is null when query is autodetermined.
+		 * @param string     $context The filter context. Default 'social'.
+		 *                            May be (for example) 'breadcrumb' or 'article' for structured data.
+		 */
+		return \apply_filters_ref_array(
+			'the_seo_framework_image_generation_params',
+			[
+				[
+					'size'     => 'full',
+					'multi'    => true,
+					'cbs'      => $cbs,
+					'fallback' => $fallback,
+				],
+				$args,
+				$context,
+			]
+		);
 	}
 
 	/**
-	 * Fetches site logo brought in WordPress 4.5
+	 * Generates image details.
 	 *
-	 * @since 2.8.0
-	 * @since 3.0.0 Now sets preferred canonical URL scheme.
-	 * @since 3.1.2 Now returns empty when it's deemed too small, and OG images are set.
+	 * @since 3.3.0
 	 *
-	 * @param bool $set_og_dimensions Whether to set size for OG image. Always falls back to the current post ID.
-	 * @return string URL site logo, not escaped.
+	 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                            Leave null to autodetermine query.
+	 * @param bool       $single  Whether to fetch one image, or multiple.
+	 * @param string     $context The context of the image generation, albeit 'social', 'schema', etc.
+	 * @return array The image details array, sequential: int => {
+	 *    string url:    The image URL,
+	 *    int    id:     The image ID,
+	 *    int    width:  The image width in pixels,
+	 *    int    height: The image height in pixels,
+	 *    string alt:    The image alt tag,
+	 * }
 	 */
-	public function get_site_logo( $set_og_dimensions = false ) {
+	protected function generate_image_details( $args, $single = true, $context = 'social' ) {
 
-		if ( false === $this->can_use_logo() )
-			return '';
+		$params = $this->get_image_generation_params( $args, $context );
+		$single = $single || ! $params['multi'];
 
-		$logo = '';
+		$details = $this->process_image_cbs( $params['cbs'], $args, $params['size'], $single )
+				?: $this->process_image_cbs( $params['fallback'], $args, $params['size'], true );
 
-		$site_logo_id = \get_theme_mod( 'custom_logo' );
+		return $details;
+	}
 
-		if ( $site_logo_id ) {
-			$_src = \wp_get_attachment_image_src( $site_logo_id, 'full' );
-			if ( is_array( $_src ) && count( $_src ) >= 3 ) {
-				$logo = $_src[0];
+	/**
+	 * Processes image detail callbacks.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param array      $cbs    The callbacks to parse. Ideally be generators, so we can halt early.
+	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                           Leave null to autodetermine query.
+	 * @param sring      $size   The image size to use.
+	 * @param bool       $single Whether to fetch one image, or multiple.
+	 * @return array The image details array, sequential: int => {
+	 *    string url:    The image URL,
+	 *    int    id:     The image ID,
+	 *    int    width:  The image width in pixels,
+	 *    int    height: The image height in pixels,
+	 *    string alt:    The image alt tag,
+	 * }
+	 */
+	protected function process_image_cbs( $cbs, $args, $size, $single ) {
 
-				if ( $set_og_dimensions ) {
-					$w = $_src[1];
-					$h = $_src[2];
+		$items = [];
+		$i     = 0;
 
-					if ( $w < 200 || $h < 200 ) // This should be 112x112 for schema
-						return '';
-
-					$this->register_image_dimension(
-						$this->get_the_real_ID(),
-						[
-							'width'  => $w,
-							'height' => $h,
-						]
-					);
+		foreach ( $cbs as $cb ) {
+			foreach ( call_user_func_array( $cb, [ $args, $size ] ) as $details ) {
+				if ( $details['url'] && $this->s_url_query( $details['url'] ) ) {
+					$items[ $i++ ] = $this->merge_extra_image_details( $details, $size );
+					if ( $single ) break 2;
 				}
 			}
 		}
 
-		if ( $logo && $this->matches_this_domain( $logo ) )
-			$logo = $this->set_preferred_url_scheme( $logo );
-
-		return $logo;
+		return $items;
 	}
 
 	/**
-	 * Returns header image URL.
-	 * Also sets image dimensions. Falls back to current post ID for index.
+	 * Adds image dimension and alt parameters to the input details, if any.
 	 *
-	 * @since 2.7.0
-	 * @since 3.0.0 Now sets preferred canonical URL scheme.
+	 * @since 3.3.0
 	 *
-	 * @param bool $set_og_dimensions Whether to set size for OG image. Always falls back to the current post ID.
-	 * @return string The header image URL, not escaped.
+	 * @param array  $details The image details array, associative: {
+	 *    string url:    The image URL,
+	 *    int    id:     The image ID,
+	 * }
+	 * @param string $size    The size of the image used.
+	 * @return array The image details array, associative: {
+	 *    string url:    The image URL,
+	 *    int    id:     The image ID,
+	 *    int    width:  The image width in pixels,
+	 *    int    height: The image height in pixels,
+	 *    string alt:    The image alt tag,
+	 * }
 	 */
-	public function get_header_image( $set_og_dimensions = false ) {
+	public function merge_extra_image_details( array $details, $size = 'full' ) {
 
-		$image = \get_header_image();
+		$details += [ 'alt' => $this->get_image_alt_tag( $details['id'] ) ];
+		$details += $this->get_image_dimensions( $details['id'], $details['url'], $size );
 
-		if ( $set_og_dimensions && $image ) {
+		return $details;
+	}
 
-			$w = (int) \get_theme_support( 'custom-header', 'width' );
-			$h = (int) \get_theme_support( 'custom-header', 'height' );
+	/**
+	 * Generates image dimensions.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param int    $src_id The source ID of the image.
+	 * @param string $url    The source URL of the image. Ideally related to the $src_id.
+	 * @param string $size   The size of the image used.
+	 * @return array The image dimensions, associative: {
+	 *    int width:  The image width in pixels,
+	 *    int height: The image height in pixels,
+	 * }
+	 */
+	public function get_image_dimensions( $src_id, $url, $size ) {
 
-			if ( $w && $h ) {
-				$this->register_image_dimension(
-					$this->get_the_real_ID(),
-					[
-						'width'  => $w,
-						'height' => $h,
-					]
-				);
+		$image = \wp_get_attachment_image_src( $src_id, $size );
+
+		$dimensions = [
+			'width'  => 0,
+			'height' => 0,
+		];
+
+		if ( $image ) {
+			list( $src, $width, $height ) = $image;
+
+			$test_src = \esc_url_raw( $this->set_url_scheme( $src, 'https' ), [ 'https', 'http' ] );
+			$test_url = \esc_url_raw( $this->set_url_scheme( $url, 'https' ), [ 'https', 'http' ] );
+
+			if ( $test_src === $test_url ) {
+				$dimensions = [
+					'width'  => $width,
+					'height' => $height,
+				];
 			}
 		}
 
-		if ( $image && $this->matches_this_domain( $image ) )
-			$image = $this->set_preferred_url_scheme( $image );
+		return $dimensions;
+	}
 
-		return $image;
+	/**
+	 * Generates image dimensions.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param int $src_id The source ID of the image.
+	 * @return string The image alt tag
+	 */
+	public function get_image_alt_tag( $src_id ) {
+		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- Fix `wp_get_attachment_image()` first.
+		return $src_id ? trim( strip_tags( \get_post_meta( $src_id, '_wp_attachment_image_alt', true ) ) ) : '';
 	}
 }

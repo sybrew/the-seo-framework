@@ -15,6 +15,11 @@ $post_id  = $this->get_the_real_ID();
 $type     = isset( $type ) ? $type : '';
 $language = $this->google_language();
 
+$_generator_args = [
+	'id'       => $post_id,
+	'taxonomy' => '',
+];
+
 switch ( $instance ) :
 	case 'inpost_main':
 		$tabs = $this->get_inpost_tabs( $type );
@@ -36,7 +41,7 @@ switch ( $instance ) :
 				</div>
 				<div class="tsf-flex-setting-input tsf-flex">
 					<div>
-						<?php echo $this->get_generated_seo_bar( [ 'id' => $post_id ] ); ?>
+						<?php echo $this->get_generated_seo_bar( $_generator_args ); ?>
 					</div>
 				</div>
 			</div>
@@ -46,14 +51,14 @@ switch ( $instance ) :
 		if ( $this->is_static_frontpage( $post_id ) ) {
 			// When the homepage title is set, we can safely get the custom field.
 			$title_placeholder = $this->escape_title( $this->get_option( 'homepage_title' ) )
-							   ? $this->get_custom_field_title( [ 'id' => $post_id ] )
-							   : $this->get_generated_title( [ 'id' => $post_id ] );
+							   ? $this->get_custom_field_title( $_generator_args )
+							   : $this->get_generated_title( $_generator_args );
 
 			$description_placeholder = $this->escape_description( $this->get_option( 'homepage_description' ) )
-									?: $this->get_generated_description( [ 'id' => $post_id ] );
+									?: $this->get_generated_description( $_generator_args );
 		} else {
-			$title_placeholder       = $this->get_generated_title( [ 'id' => $post_id ] );
-			$description_placeholder = $this->get_generated_description( [ 'id' => $post_id ] );
+			$title_placeholder       = $this->get_generated_title( $_generator_args );
+			$description_placeholder = $this->get_generated_description( $_generator_args );
 		}
 
 		?>
@@ -142,14 +147,12 @@ switch ( $instance ) :
 		break;
 
 	case 'inpost_visibility':
-		//* Fetch Canonical URL.
-		$canonical = $this->get_post_meta_item( '_genesis_canonical_uri' );
-		//* Fetch Canonical URL Placeholder.
-		$canonical_placeholder = $this->create_canonical_url( [ 'id' => $post_id ] );
+		$canonical             = $this->get_post_meta_item( '_genesis_canonical_uri' );
+		$canonical_placeholder = $this->create_canonical_url( $_generator_args );
 
 		//* Get robots defaults.
 		$r_defaults = $this->robots_meta(
-			[ 'id' => $post_id ],
+			$_generator_args,
 			The_SEO_Framework\ROBOTS_IGNORE_SETTINGS | The_SEO_Framework\ROBOTS_IGNORE_PROTECTION
 		);
 		$r_settings = [
@@ -329,7 +332,7 @@ switch ( $instance ) :
 		break;
 
 	case 'inpost_social':
-		$desc_from_custom_field = $this->get_description_from_custom_field( [ 'id' => $post_id ] );
+		$desc_from_custom_field = $this->get_description_from_custom_field( $_generator_args );
 
 		if ( $this->is_static_frontpage( $post_id ) ) {
 			// Gets custom fields from SEO settings.
@@ -347,10 +350,10 @@ switch ( $instance ) :
 			//! OG input falls back to default input.
 			$og_tit_placeholder  = $home_og_title
 								?: $custom_og_title
-								?: $this->get_generated_open_graph_title( [ 'id' => $post_id ] );
+								?: $this->get_generated_open_graph_title( $_generator_args );
 			$og_desc_placeholder = $home_og_desc
 								?: $desc_from_custom_field
-								?: $this->get_generated_open_graph_description( [ 'id' => $post_id ] );
+								?: $this->get_generated_open_graph_description( $_generator_args );
 
 			//! Twitter input falls back to OG input.
 			$tw_tit_placeholder  = $home_tw_title
@@ -360,19 +363,19 @@ switch ( $instance ) :
 								?: $custom_og_desc
 								?: $home_desc
 								?: $desc_from_custom_field
-								?: $this->get_generated_twitter_description( [ 'id' => $post_id ] );
+								?: $this->get_generated_twitter_description( $_generator_args );
 		} else {
 			// Gets custom fields.
 			$custom_og_title = $this->get_post_meta_item( '_open_graph_title', $post_id );
 			$custom_og_desc  = $this->get_post_meta_item( '_open_graph_description', $post_id );
 
 			//! OG input falls back to default input.
-			$og_tit_placeholder  = $this->get_generated_open_graph_title( [ 'id' => $post_id ] );
-			$og_desc_placeholder = $desc_from_custom_field ?: $this->get_generated_open_graph_description( [ 'id' => $post_id ] );
+			$og_tit_placeholder  = $this->get_generated_open_graph_title( $_generator_args );
+			$og_desc_placeholder = $desc_from_custom_field ?: $this->get_generated_open_graph_description( $_generator_args );
 
 			//! Twitter input falls back to OG input.
 			$tw_tit_placeholder  = $custom_og_title ?: $og_tit_placeholder;
-			$tw_desc_placeholder = $custom_og_desc ?: $desc_from_custom_field ?: $this->get_generated_twitter_description( [ 'id' => $post_id ] );
+			$tw_desc_placeholder = $custom_og_desc ?: $desc_from_custom_field ?: $this->get_generated_twitter_description( $_generator_args );
 		}
 
 		// Yes, this is hacky, but we don't want to lose the user's input.
@@ -470,11 +473,8 @@ switch ( $instance ) :
 		<?php
 
 		//* Fetch image placeholder.
-		$image_placeholder = $this->get_social_image( [
-			'post_id'    => $post_id,
-			'disallowed' => [ 'postmeta' ],
-			'escape'     => false,
-		] );
+		$image_details     = current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) );
+		$image_placeholder = isset( $image_details['url'] ) ? $image_details['url'] : '';
 
 		?>
 		<div class="tsf-flex-setting tsf-flex">
@@ -485,11 +485,7 @@ switch ( $instance ) :
 						<div>
 						<?php
 						$this->make_info(
-							sprintf(
-								/* translators: %s = Post type name */
-								__( 'Set preferred %s Social Image URL location.', 'autodescription' ),
-								$type
-							),
+							__( "The social image URL can be used by search engines and social networks alike. It's best to use an image with a 1.91:1 aspect ratio that is at least 1200px wide for universal support.", 'autodescription' ),
 							'https://developers.facebook.com/docs/sharing/best-practices#images'
 						);
 						?>
@@ -502,7 +498,7 @@ switch ( $instance ) :
 				<input type="hidden" name="autodescription[_social_image_id]" id="autodescription_socialimage-id" value="<?php echo absint( $this->get_post_meta_item( '_social_image_id' ) ); ?>" disabled class="tsf-enable-media-if-js" />
 				<div class="hide-if-no-tsf-js tsf-social-image-buttons">
 					<?php
-					//= Already escaped.
+					// phpcs:ignore, WordPress.Security.EscapeOutput -- Already escaped.
 					echo $this->get_social_image_uploader_form( 'autodescription_socialimage' );
 					?>
 				</div>
@@ -510,5 +506,4 @@ switch ( $instance ) :
 		</div>
 		<?php
 		break;
-
 endswitch;

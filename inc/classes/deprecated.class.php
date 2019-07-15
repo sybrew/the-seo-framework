@@ -543,4 +543,282 @@ final class Deprecated {
 
 		return $field_cache[ $field ][ $post_id ];
 	}
+
+	/**
+	 * Returns image URL suitable for Schema items.
+	 *
+	 * These are images that are strictly assigned to the Post or Page, fallbacks are omitted.
+	 * Themes should compliment these. If not, then Open Graph should at least
+	 * compliment these.
+	 * If that's not even true, then I don't know what happens. But then you're
+	 * in a grey area... @TODO make images optional for Schema?
+	 *
+	 * @since 2.9.3
+	 * @since 3.2.2 No longer relies on the query.
+	 * @since 3.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int|string $id       The page, post, product or term ID.
+	 * @param bool       $singular Whether the ID is singular or archival.
+	 * @return string|array $url The Schema.org safe image.
+	 */
+	public function get_schema_image( $id = 0, $singular = false ) {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->get_schema_image()', '3.3.0', 'the_seo_framework()->get_safe_schema_image()' );
+
+		if ( ! $singular ) return '';
+
+		return $tsf->get_safe_schema_image( $id ?: null, false );
+	}
+
+	/**
+	 * Returns social image URL.
+	 *
+	 * @since 2.9.0
+	 * @since 3.0.6 Added attachment page compatibility.
+	 * @since 3.2.2 Now skips the singular meta images on archives.
+	 * @since 3.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array $args The image arguments.
+	 * @return string The social image.
+	 */
+	public function get_social_image( $args = [] ) {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->get_social_image()', '3.3.0', 'the_seo_framework()->get_image_from_cache()' );
+
+		if ( isset( $args['post_id'] ) && $args['post_id'] ) {
+			$image = current( $tsf->get_image_details( [ 'id' => $args['post_id'] ], true ) );
+		} else {
+			$image = current( $tsf->get_image_details( null, true ) );
+		}
+
+		return isset( $image['url'] ) ? $image['url'] : '';
+	}
+
+	/**
+	 * Returns unescaped HomePage settings image URL from post ID input.
+	 *
+	 * @since 2.9.0
+	 * @since 2.9.4 Now converts URL scheme.
+	 * @since 3.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int  $id The post ID.
+	 * @return string The unescaped HomePage social image URL.
+	 */
+	public function get_social_image_url_from_home_meta() {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->get_social_image_url_from_home_meta()', '3.3.0', "the_seo_framework()->get_option( 'homepage_social_image_url' )" );
+
+		if ( false === $tsf->is_front_page_by_id( $id ) )
+			return '';
+
+		$src = $tsf->get_option( 'homepage_social_image_url' );
+
+		if ( ! $src )
+			return '';
+
+		if ( $src && $tsf->matches_this_domain( $src ) )
+			$src = $tsf->set_preferred_url_scheme( $src );
+
+		return $src;
+	}
+
+	/**
+	 * Returns unescaped Post settings image URL from post ID input.
+	 *
+	 * @since 2.8.0
+	 * @since 2.9.0 1. The second parameter now works.
+	 *              2. Fallback image ID has been removed.
+	 * @since 2.9.4 Now converts URL scheme.
+	 * @since 3.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $id The post ID. Required.
+	 * @return string The unescaped social image URL.
+	 */
+	public function get_social_image_url_from_post_meta( $id ) {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->get_social_image_url_from_post_meta()', '3.3.0', "the_seo_framework()->get_post_meta_item( '_social_image_url' )" );
+
+		$src = $id ? $tsf->get_post_meta_item( '_social_image_url', $id ) : '';
+
+		if ( ! $src )
+			return '';
+
+		if ( $src && $tsf->matches_this_domain( $src ) )
+			$src = $tsf->set_preferred_url_scheme( $src );
+
+		return $src;
+	}
+
+	/**
+	 * Returns unescaped URL from options input.
+	 *
+	 * @since 2.8.2
+	 * @since 2.9.4 1: Now converts URL scheme.
+	 *              2: $set_og_dimensions now works.
+	 * @since 3.3.0 Deprecated
+	 * @deprecated
+	 *
+	 * @return string The unescaped social image fallback URL.
+	 */
+	public function get_social_image_url_from_seo_settings() {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->get_social_image_url_from_seo_settings()', '3.3.0', "the_seo_framework()->get_option( 'social_image_fb_url' )" );
+
+		$src = $tsf->get_option( 'social_image_fb_url' );
+
+		if ( $src && $tsf->matches_this_domain( $src ) )
+			$src = $tsf->set_preferred_url_scheme( $src );
+
+		return $src;
+	}
+
+	/**
+	 * Fetches image from post thumbnail.
+	 *
+	 * @since 2.9.0
+	 * @since 2.9.3 Now supports 4K.
+	 * @since 2.9.4 Now converts URL scheme.
+	 * @since 3.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $id The post ID. Required.
+	 * @return string The social image URL.
+	 */
+	public function get_social_image_url_from_post_thumbnail( $id ) {
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_social_image_url_from_post_thumbnail()', '3.3.0' );
+		return \The_SEO_Framework\Builders\Images::get_featured_image_details(
+			[
+				'id'       => $id,
+				'taxonomy' => '',
+			]
+		)->current()['url'];
+	}
+
+	/**
+	 * Returns the social image URL from an attachment page.
+	 *
+	 * @since 3.0.6
+	 * @since 3.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $id The post ID. Required.
+	 * @return string The attachment URL.
+	 */
+	public function get_social_image_url_from_attachment( $id ) {
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_social_image_url_from_attachment()', '3.3.0' );
+		return \The_SEO_Framework\Builders\Images::get_attachment_image_details(
+			[
+				'id'       => $id,
+				'taxonomy' => '',
+			]
+		)->current()['url'];
+	}
+
+	/**
+	 * Fetches images id's from WooCommerce gallery
+	 *
+	 * @since 2.5.0
+	 * @since 3.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return array The image URL's.
+	 */
+	public function get_image_from_woocommerce_gallery() {
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_image_from_woocommerce_gallery()', '3.3.0' );
+
+		$ids = [];
+
+		if ( function_exists( '\The_SEO_Framework\_get_product_gallery_image_details' ) ) {
+			foreach ( \The_SEO_Framework\_get_product_gallery_image_details() as $details ) {
+				$ids[] = $details['id'];
+			}
+		}
+
+		return $ids;
+	}
+
+	/**
+	 * Returns header image URL.
+	 * Also sets image dimensions. Falls back to current post ID for index.
+	 *
+	 * @since 2.7.0
+	 * @since 3.0.0 Now sets preferred canonical URL scheme.
+	 * @since 3.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The header image URL, not escaped.
+	 */
+	public function get_header_image() {
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_header_image()', '3.3.0' );
+		return \The_SEO_Framework\Builders\Images::get_theme_header_image_details()->current()['url'];
+	}
+
+	/**
+	 * Fetches site icon brought in WordPress 4.3
+	 *
+	 * @since 2.8.0
+	 * @since 3.0.0 : Now sets preferred canonical URL scheme.
+	 * @since 3.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string|int $size The icon size, accepts 'full' and pixel values.
+	 * @return string URL site icon, not escaped.
+	 */
+	public function get_site_icon( $size = 'full' ) {
+
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_site_icon()', '3.3.0' );
+
+		$size = is_string( $size ) ? $size : 'full';
+
+		return \The_SEO_Framework\Builders\Images::get_site_icon_image_details( null, $size )->current()['url'];
+	}
+
+	/**
+	 * Fetches site logo brought in WordPress 4.5
+	 *
+	 * @since 2.8.0
+	 * @since 3.0.0 Now sets preferred canonical URL scheme.
+	 * @since 3.1.2 Now returns empty when it's deemed too small, and OG images are set.
+	 * @since 3.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string URL site logo, not escaped.
+	 */
+	public function get_site_logo() {
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_site_logo()', '3.3.0' );
+		return \The_SEO_Framework\Builders\Images::get_site_logo_image_details()->current()['url'];
+	}
+
+	/**
+	 * Sanitizeses ID. Mainly removing spaces and coding characters.
+	 *
+	 * Unlike sanitize_key(), it doesn't alter the case nor applies filters.
+	 * It also maintains the '@' character.
+	 *
+	 * @see WordPress Core sanitize_key()
+	 * @since 3.1.0
+	 * @since 3.3.0 Now allows square brackets.
+	 * @deprecated
+	 *
+	 * @param string $id The unsanitized ID.
+	 * @return string The sanitized ID.
+	 */
+	public function sanitize_field_id( $id ) {
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->sanitize_field_id()', '3.3.0', 'the_seo_framework()->s_field_id()' );
+		return preg_replace( '/[^a-zA-Z0-9\[\]_\-@]/', '', $id );
+	}
 }

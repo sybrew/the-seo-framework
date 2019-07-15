@@ -141,14 +141,13 @@ abstract class SeoBar {
 	/**
 	 * Runs all SEO bar tests.
 	 *
-	 * @since 3.3.0
+	 * @since ?.?.?
 	 * @access private
-	 *         This method will be removed, see todo:
-	 * @ignore
 	 * @generator
 	 * @TODO only available from PHP 7+
+	 * @ignore
 	 *
-	 * @param array $args : {
+	 * @param array $query : {
 	 *   int    $id        : Required. The current post or term ID.
 	 *   string $taxonomy  : Optional. If not set, this will interpret it as a post.
 	 *   string $post_type : Optional. If not set, this will be automatically filled.
@@ -158,8 +157,8 @@ abstract class SeoBar {
 	 *    string $test => array The testing results.
 	 * }
 	 */
-	// public static function _run_all_tests( array $args ) {
-	// 	yield from static::run_test( static::$tests, $args );
+	// public static function _run_all_tests( array $query ) {
+	// yield from static::_run_test( static::$tests, $query );
 	// }
 
 	/**

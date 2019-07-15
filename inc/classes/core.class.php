@@ -281,6 +281,44 @@ class Core {
 	}
 
 	/**
+	 * Returns an array of hierarchical post types.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @return array The public hierarchical post types with rewrite.
+	 */
+	public function get_hierarchical_post_types() {
+		static $types;
+		return $types ?: $types = \get_post_types(
+			[
+				'hierarchical' => true,
+				'public'       => true,
+				'rewrite'      => true,
+			],
+			'names'
+		);
+	}
+
+	/**
+	 * Returns an array of nonhierarchical post types.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @return array The public nonhierarchical post types with rewrite.
+	 */
+	public function get_nonhierarchical_post_types() {
+		static $types;
+		return $types ?: $types = \get_post_types(
+			[
+				'hierarchical' => false,
+				'public'       => true,
+				'rewrite'      => true,
+			],
+			'names'
+		);
+	}
+
+	/**
 	 * Whether to allow external redirect through the 301 redirect option.
 	 *
 	 * @since 2.6.0
@@ -387,7 +425,7 @@ class Core {
 
 			$url = html_entity_decode( \menu_page_url( $this->seo_settings_page_slug, false ) );
 
-			return \esc_url( $url, [ 'http', 'https' ] );
+			return \esc_url( $url, [ 'https', 'http' ] );
 		}
 
 		return '';
@@ -858,7 +896,7 @@ class Core {
 					for ( $i = 0; $i < $count; $i++ ) {
 						$text = str_replace(
 							$matches[0][ $i ],
-							sprintf( $_string, \esc_url( $matches[2][ $i ], [ 'http', 'https' ] ), \esc_html( $matches[1][ $i ] ) ),
+							sprintf( $_string, \esc_url( $matches[2][ $i ], [ 'https', 'http' ] ), \esc_html( $matches[1][ $i ] ) ),
 							$text
 						);
 					}

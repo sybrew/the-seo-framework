@@ -270,10 +270,10 @@ class Generate_Url extends Generate_Title {
 	public function clean_canonical_url( $url ) {
 
 		if ( $this->pretty_permalinks ) {
-			$url = \esc_url( $url, [ 'http', 'https' ] );
+			$url = \esc_url( $url, [ 'https', 'http' ] );
 		} else {
 			//= Keep the &'s more readable.
-			$url = \esc_url_raw( $url, [ 'http', 'https' ] );
+			$url = \esc_url_raw( $url, [ 'https', 'http' ] );
 		}
 
 		return $url;
@@ -841,7 +841,7 @@ class Generate_Url extends Generate_Title {
 			);
 		}
 
-		return \esc_url_raw( $url, [ 'http', 'https' ] );
+		return \esc_url_raw( $url, [ 'https', 'http' ] );
 	}
 
 	/**

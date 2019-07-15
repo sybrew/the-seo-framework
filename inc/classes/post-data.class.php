@@ -244,7 +244,7 @@ class Post_Data extends Detect {
 		if ( ! $post ) return;
 
 		$data = (array) \wp_parse_args( $data, $this->get_post_meta_defaults( $post->ID ) );
-		$data = $this->sanitize_post_meta( $data );
+		$data = $this->s_post_meta( $data );
 
 		if ( \has_filter( 'the_seo_framework_save_custom_fields' ) ) {
 			$this->_deprecated_filter( 'the_seo_framework_save_custom_fields', '3.3.0', 'the_seo_framework_save_post_meta' );
