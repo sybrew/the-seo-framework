@@ -637,6 +637,7 @@ final class Debug implements Debug_Interface {
 		$page                 = $tsf->page();
 		$paged                = $tsf->paged();
 		$is_preview           = $tsf->is_preview();
+		$is_customize_preview = $tsf->is_customize_preview();
 		$is_search            = $tsf->is_search();
 		$is_single            = $tsf->is_single();
 		$is_singular          = $tsf->is_singular();

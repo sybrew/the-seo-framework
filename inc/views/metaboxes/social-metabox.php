@@ -123,7 +123,7 @@ switch ( $instance ) :
 		<p>
 			<label for="tsf_fb_socialimage-url">
 				<strong><?php esc_html_e( 'Social Image Fallback URL', 'autodescription' ); ?></strong>
-				<?php $this->make_info( __( 'Set preferred Social Image fallback URL location.', 'autodescription' ), 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>
+				<?php $this->make_info( __( 'When no image is available from the page or term, this fallback image will be used instead.', 'autodescription' ), 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>
 			</label>
 		</p>
 		<p>

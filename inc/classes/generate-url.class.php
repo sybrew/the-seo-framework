@@ -117,6 +117,7 @@ class Generate_Url extends Generate_Title {
 	 * The URL will never be paginated.
 	 *
 	 * @since 3.0.0
+	 * @since 3.3.0 Now preemptively fixes the generation arguments, for easier implementation.
 	 * @uses $this->get_canonical_url()
 	 *
 	 * @param array $args The canonical URL arguments : {
@@ -127,6 +128,9 @@ class Generate_Url extends Generate_Title {
 	 * @return string The canonical URL, if any.
 	 */
 	public function create_canonical_url( $args = [] ) {
+
+		$this->fix_generation_args( $args );
+		$args = $args ?: [];
 
 		$defaults = [
 			'id'               => 0,
@@ -993,8 +997,12 @@ class Generate_Url extends Generate_Title {
 	/**
 	 * Makes a fully qualified URL from input. Always adds http prefix, not https.
 	 *
+	 * NOTE: Expects the URL to have either a scheme, or a relative scheme set.
+	 * Domain-relative URLs aren't parsed correctly.
+	 *
 	 * @since 2.6.5
-	 * @see $this->set_url_scheme() To set the correct scheme.
+	 * @see `$this->set_url_scheme()` to set the correct scheme.
+	 * @see `$this->convert_to_url_if_path()` to create URLs from paths.
 	 *
 	 * @param string $url Required the current maybe not fully qualified URL.
 	 * @return string $url
@@ -1008,6 +1016,23 @@ class Generate_Url extends Generate_Title {
 		}
 
 		return $url;
+	}
+
+	/**
+	 * Makes a fully qualified URL from any input.
+	 *
+	 * @since 3.3.0
+	 * @see `$this->s_relative_url()` to make URLs relative.
+	 *
+	 * @param string $path Either the URL or path. Will always be transformed to the current domain.
+	 * @param string $url  The URL to add the path to. Defaults to the current home URL.
+	 * @return string $url
+	 */
+	public function convert_to_url_if_path( $path, $url = '' ) {
+		return \WP_Http::make_absolute_url(
+			$path,
+			\trailingslashit( $url ?: $this->set_preferred_url_scheme( $this->get_home_host() ) )
+		);
 	}
 
 	/**

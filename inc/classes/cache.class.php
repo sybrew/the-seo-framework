@@ -185,13 +185,12 @@ class Cache extends Metaboxes {
 	 * Deletes object cache.
 	 *
 	 * @since 2.9.0
-	 * @TODO make this work.
+	 * @since 3.3.0 Now does something.
 	 *
 	 * @return bool True on success, false on failure.
 	 */
 	public function delete_object_cache() {
-		return false;
-		// return $this->delete_cache( 'objectflush' );
+		return $this->delete_cache( 'object' );
 	}
 
 	/**
@@ -274,27 +273,6 @@ class Cache extends Metaboxes {
 				break;
 
 			case 'detection':
-				break;
-
-			/**
-			 * Flush whole object cache group.
-			 * Set here for external functions to use. It works because of magic methods.
-			 *
-			 * @NOTE Other caching plugins can override these groups. Therefore this
-			 * does NOT work.
-			 * @TODO make this work.
-			 * @see 'object' switch-index.
-			 */
-			case 'objectflush':
-				//* @NOTE false can't pass.
-				if ( false && $this->use_object_cache ) {
-					if ( isset( $GLOBALS['wp_object_cache']->cache['the_seo_framework'] ) ) {
-						$_cache = $GLOBALS['wp_object_cache']->cache;
-						unset( $_cache['the_seo_framework'] );
-						$GLOBALS['wp_object_cache']->cache = $_cache;
-						$success = true;
-					}
-				}
 				break;
 
 			default:

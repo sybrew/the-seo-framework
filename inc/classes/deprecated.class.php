@@ -742,7 +742,7 @@ final class Deprecated {
 
 		$ids = [];
 
-		if ( function_exists( '\The_SEO_Framework\_get_product_gallery_image_details' ) ) {
+		if ( function_exists( '\\The_SEO_Framework\\_get_product_gallery_image_details' ) ) {
 			foreach ( \The_SEO_Framework\_get_product_gallery_image_details() as $details ) {
 				$ids[] = $details['id'];
 			}

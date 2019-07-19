@@ -744,7 +744,7 @@ class Generate_Description extends Generate {
 	 * @since 3.1.0 1. No longer returns anything for terms.
 	 *              2. Now strips plausible embeds URLs.
 	 *
-	 * @param \WP_Post|int|null $post The Post or Post ID. Leave null to automatically get.
+	 * @param \WP_Post|int|null $post The Post or Post ID. Leave null to get current post.
 	 * @return string The excerpt.
 	 */
 	public function fetch_excerpt( $post = null ) {

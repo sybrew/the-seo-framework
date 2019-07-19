@@ -575,6 +575,20 @@ class Query extends Core {
 	}
 
 	/**
+	 * Detects customizer preview.
+	 *
+	 * Unlike is_preview(), WordPress has prior security checks for this
+	 * in `\WP_Customize_Manager::setup_theme()`.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @return bool
+	 */
+	public function is_customize_preview() {
+		return \is_customize_preview();
+	}
+
+	/**
 	 * Detects date archives.
 	 *
 	 * @since 2.6.0

@@ -96,7 +96,7 @@ if ( get_option( 'the_seo_framework_tested_upgrade_version' ) < THE_SEO_FRAMEWOR
 }
 
 /**
- * Starts the plugin.
+ * Starts the plugin, loads files outside of the global scope.
  *
  * @since 3.1.0
  * @access private

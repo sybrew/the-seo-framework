@@ -351,11 +351,12 @@ class Init extends Query {
 	 * @since 3.0.0 Now converts timezone if needed.
 	 * @since 3.1.0 1. Now no longer outputs anything on preview.
 	 *              2. Now no longer outputs anything on blocked post types.
+	 * @since 3.3.0 Now no longer outputs anything on Customizer.
 	 * @access private
 	 */
 	public function html_output() {
 
-		if ( $this->is_preview() || ! $this->query_supports_seo() ) return;
+		if ( $this->is_preview() || $this->is_customize_preview() || ! $this->query_supports_seo() ) return;
 
 		/**
 		 * @since 2.6.0
@@ -477,14 +478,15 @@ class Init extends Query {
 	 * @since 3.1.0: 1. Now no longer redirects on preview.
 	 *               2. Now listens to post type settings.
 	 * @since 3.3.0: 1. No longer tries to redirect on "search".
-	 *               2. TODO Added term redirect support.
+	 *               2. Added term redirect support.
+	 *               3. No longer redirects on Customizer.
 	 * @access private
 	 *
 	 * @return void early on non-singular pages.
 	 */
 	public function _init_custom_field_redirect() {
 
-		if ( $this->is_preview() || ! $this->query_supports_seo() ) return;
+		if ( $this->is_preview() || $this->is_customize_preview() || ! $this->query_supports_seo() ) return;
 
 		$url = '';
 

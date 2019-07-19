@@ -305,16 +305,13 @@ TODO call "php level caching" memoization--it's a cooler word.
 TODO primary term selection should have natsort ID via PHP predefined.
 TODO When changing the slug of a term, the canonical URL placeholder now updates with it.
 
-TODO TSF no longer resizes images, and instead ignores them, when they're above 4096x4096 px.
-
-TODO test if is_preview() is also true on customizer, which would mean our security-check is too strict.
-
 TODO when the tooltip is squashed, it may again overflow vertically... See title tooltip:
 	* </wp-admin/edit-tags.php?taxonomy=pa_test&post_type=product>
 
 TODO add new filters to og_image() and twitter_image().
 
-TODO add listener for "Product Category Thumbnail" in the WC compat file, as per #110's opening "Alternatively," comment.
+TODO adjust the title & description guidelines when using summary instead of summary large image for Twitter?
+TODO index.php stuff
 
 **Detailed log:**
 
@@ -344,8 +341,9 @@ TODO add listener for "Product Category Thumbnail" in the WC compat file, as per
 		* Canonical URL input.
 	* Google (and other search engines...) no longer have to guess your intent and possibily index these endpoints mistakenly:
 		* Feeds, via a `X-Robots-Tag` header.
-		* robots.txt, via a `X-Robots-Tag` header.
 		* Comment pagination, via a forced `noindex` robots' meta tag.
+		* robots.txt, via a `X-Robots-Tag` header.
+			* Only when outputted via PHP. Web servers don't launch WordPress otherwise.
 	* Multidimensional selection for robots-meta on posts, pages, and terms.
 	* A new accessibility feature for the SEO Bar. You can now convert the characters to symbols to discern warnings more easily.
 	* After installing The SEO Framework, users who have `update_plugins` capabilities may now see a confirmation that the plugin's set up, and that there are installation instructions available.
@@ -354,7 +352,10 @@ TODO add listener for "Product Category Thumbnail" in the WC compat file, as per
 	* The estimated plugin-boot time is added to the closing HTML comment; which adds the bulk of the page-loading time of this plugin. In this update, we decreased that time, greatly--and we're proudly showing it.
 	* The term meta inputs now have the "are you sure you want to leave this page?"-listener attached.
 	* Multiple social images may now be outputted. How this affects sharing depends on the social network.
+	* Social images may now be obtained from your post or page's content.
+		* TODO make this optional? The performance penalty is neglegible...
 	* Alt-tags are now provided with social images, which help with accessibility when sharing your page.
+	* For WooCommerce, the Product Category Thumbnail is now considered for social images.
 * **Changed:**
 	* We now support WordPress v4.9 and later, instead of WordPress v4.6 and later.
 	* We now support PHP v5.6 and later, instead of PHP v5.4 and later.
@@ -365,8 +366,11 @@ TODO add listener for "Product Category Thumbnail" in the WC compat file, as per
 		* This doesn't affect your titles, it's only semantics.
 	* Schema.org logos may now be of any proportion, instead of only square, and cropping them must exceed 112px squared.
 	* We removed the "recommended" title separator highlighting, RSS parsers are great at rendering HTML entities, so this shouldn't be an issue.
-	* We no longer generate images when they're deemed to large.
+	* We no longer automatically resize images when they're deemed to large.
 		* Although this worked as intended, we highly doubt users will be uploading images over 4096x4096px, and it's a waste of resources to test each image.
+		* Moreover, these resized images weren't registered with WordPress.
+		* When images are found to be over 4096 pixels in width or height, they'll be discarded.
+	* SEO meta generation no longer occurs when using Customizer.
 	* **Term meta:**
 		* When a term is disabled via the post type settings, saving it won't erase the custom SEO term meta.
 			* The same behavior already applied to singular post types.
@@ -397,18 +401,23 @@ TODO add listener for "Product Category Thumbnail" in the WC compat file, as per
 			* When triple-clicking on the title addition, you'll select the whole input.
 		* When updating the SEO settings, but when no settings have been changed, you now get a proper notification.
 		* The SEO Settings update notifications now also state that caches are flushed.
+		* HTML entities are now converted from your input to the examples and placeholders. Like in the Homepage SEO Settings' title-additions examples, and in the Open Graph and Twitter placeholders.
 	* **AI Generators:**
 		* **Descriptions:**
 			* They now work better with RTL languages, like Arabic and Hebrew; however, due to ambiguity in language construction, it will read from top to bottom (like the web is built), instead of bottom to top (like books are).
 			* It no longer slices the last sentence off; in extent, it now allows accidental full sentences.
 			* The excerpt clause trimming is now at least twice (to infinitely) as fast.
-			* They now work better with non-Roman languages, by using updated string length guidelines, this only works if your site-language is set to these (see the **Guidelines** section below.).
+			* They now work better with non-Roman languages, by using updated string length guidelines, this only works if your site-language is set to these (see the **Guidelines** (character) section below.).
+			* They now account for German's extra capitalization width.
 		* **Canonical URL:**
 			* The automatic scheme determination now uses the "Site Address" scheme in "General Settings" to fall back on.
 	* **Guidelines:**
 		* **Titles/Descriptions:**
 			* The character guidelines have been updated for these languages (_annotation: Language (language) @ adjusted/Roman_):
 				* Assamese (অসমীয়া) @ 148/160
+				* Austrian German (Österreichisch Deutsch) @ 158/160
+				* Swiss German (Schweiz Deutsch) @ 158/160
+				* German (Deutsch) @ 158/160
 				* Gujarati (ગુજરાતી) @ 148/160
 				* Malayalam (മലയാളം) @ 100/160
 				* Japanese (日本語) @ 70/160
@@ -417,9 +426,16 @@ TODO add listener for "Product Category Thumbnail" in the WC compat file, as per
 				* Taiwanese Mandarin (Traditional Chinese) (繁體中文) @ 70/160
 				* Hong Kong (Chinese version) (香港中文版) @ 70/160
 				* Mandarin (Simplified Chinese) (简体中文) @ 70/160
+			* The pixel guidelines have been updated for these languages (_annotation: Language (language) @ adjusted/Roman_):
+				* Arabic (العربية) @ 760/910
+				* Moroccan Arabic (العربية المغربية) @ 760/910
+				* South Azerbaijani (گؤنئی آذربایجان) @ 760/910
+				* Iran Farsi (فارسی) @ 760/910
+				* Hazaragi (هزاره گی) @ 760/910
+				* Central Kurdish (كوردی) @ 760/910
 			* The pixel and character counters now parse your input as HTML, giving you a more accurate rating. For example, HTML entities are now decoded on-the-fly.
 	* **Internationalization:**
-		* Sites supporting the Assamese, Gujarati, Malayalam, Japanese, Korean, Talim, Traditional Chinese, or Simplified Chinese now have adjusted character guidelines.
+		* Sites set to the Assamese, Gujarati, Malayalam, Japanese, Korean, Talim, Traditional Chinese, or Simplified Chinese languages now have adjusted character guidelines.
 		* UI strings that were hard to translate in other locales have been rewritten. Yes, this takes some time to get used to.
 	* **Layout:**
 		* Reordered the Homepage Settings metabox tabs to be more in line with the Post Meta Settings metabox.
@@ -510,6 +526,7 @@ TODO add listener for "Product Category Thumbnail" in the WC compat file, as per
 		* This was necessary to flatten and simplify the title-API, so home-specific checks no longer need to be reversed.
 	* TODO maybe: strip old (< v3.1) removed options on database upgrade... (this will also happen on manual save...)
 	* Webkit flexbox vendor prefixes in all CSS files. All browsers that relied on these have been updated to the latest spec since.
+	* Image support for breadcrumbs has been removed, search engines don't seem to use these, and documentation for it disappeared.
 * **Fixed:**
 	* **Accessibility:**
 		* **Global:**
@@ -542,6 +559,8 @@ TODO add listener for "Product Category Thumbnail" in the WC compat file, as per
 		* If the homepage is a page, and it's private or protected, the homepage Meta Title field on the SEO Settings page now reflects that.
 		* Our upgrader is fast. But, just in case, we increased the PHP execution-timeout to 300 seconds, instead of the normal 30~60 seconds.
 			* This may not yield effective on every site, depending on the PHP configuration.
+		* Redirects no longer occur when using the Customizer.
+			* WordPress already has a protection against this by bouncing you back; but, you can now preview the page.
 	* **Compatibility:**
 		* We took our hands off the WordPress Rewrite system. All plugin conflicts related to this are no longer our problem--albeit, it never was our fault.
 			* Now, we are able to finally implement Polylang's broken system for the sitemap. As such, all sitemaps now work with Polylang.
@@ -558,15 +577,16 @@ TODO add listener for "Product Category Thumbnail" in the WC compat file, as per
 			* Takeaway: Don't use backward solidi in WordPress, use `&#92;` if you must instead.
 		* The "Remove the blog name?" option is not hidden when doing so globally.
 			* We highly discourage using the global option to achieve this. We left this option visible to let users recognize there is since an alternative.
-		* TODO (consider?) HTML entities aren't converted in the Homepage SEO Settings' title-additions examples.
-			* This brings security issues when not done correctly... TODO but we now have handlers in place.
 	* **Interface:**
 		* When navigating away from the settings page, after changing the "category prefix" setting, the related example no longer reflects the adjusted setting.
 	* **Terms:**
 		* When all posts attached to a term have been excluded from being shown in archives, the term may be empty, and `noindex` will be set. The SEO Bar isn't aware of this, because it doesn't run such a query.
 			* Making it aware may slow your admin queries down significantly. We haven't found the time to see if this can be integrated via available queries.
+	* **Images:**
+		* When default social images are found to be too large, they'll be discarded, and no fallbacks will be used instead.
+			* Your input images must either be intentionally malformed, or the images are far too large (over 4096 pixels in width or height).
 	* **Filters:**
-		* When using custom meta title or meta description filters, they may not be processed for the met input.
+		* When using custom meta title or meta description filters, they may not be processed for the meta input fields.
 			* Fixing this requires restructuring the custom title and description methods with flags.
 
 **For translators:**
@@ -620,7 +640,8 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* `og_description`, URL string.
 		* `tw_title`, URL string.
 		* `tw_description`, URL string.
-		* TODO social image
+		* `social_image_url`, URL string.
+		* `social_image_id`, int.
 	* **Changed:**
 		* `noindex`, it can now be set to `-1`.
 		* `nofollow`, it can now be set to `-1`.
@@ -655,7 +676,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* **Public static methods, all generators:**
 				* `get_attachment_image_details`
 				* `get_featured_image_details`
-				* TODO `get_content_image_details`
+				* `get_content_image_details`
 				* `get_fallback_image_details`
 				* `get_theme_header_image_details`
 				* `get_site_logo_image_details`
@@ -815,12 +836,14 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `use_taxonomical_title_branding()`
 			* `is_attachment_admin()`
 			* `is_wc_product_admin()`
+			* `is_customize_preview()`
 			* `get_safe_schema_image()`
 			* `s_image_details()`
 			* `s_image_details_deep()`
 			* `s_field_id()`
 			* `get_hierarchical_post_types()`
 			* `get_nonhierarchical_post_types()`
+			* `convert_to_url_if_path()`
 		* **Changed:**
 			* `__construct()` now emits warnings when instantiated twice or more.
 			* `html_output()` is now marked as private.
@@ -848,6 +871,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `get_generated_single_term_title()` no longer redundantly tests the query, but now only uses the term input or queried object.
 			* `is_taxonomy_disabled()` now only returns true if all post types in the taxonomy are disabled, and it uses `is_post_type_supported()` instead of `is_post_type_disabled()` to do so.
 			* `create_canonical_url()` and `get_canonical_url()` can now fetch custom canonical URLs for terms; this is implied via trickling down methods.
+			* `create_canonical_url()` now fixes input args preemptively to be in line with other getters. So you could enter an integer, although you shouldn't.
 			* `get_post_type_archive_canonical_url()`
 				1. Now only accepts strings or null as the first parameter.
 				1. Forwarded post type object calling to WordPress' URL function.
@@ -882,6 +906,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `is_wc_product()`
 				1. Added admin support.
 				1. Added a parameter for the Post ID or post to test.
+			* `delete_object_cache()` now actually does something: flushes the object cache.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`

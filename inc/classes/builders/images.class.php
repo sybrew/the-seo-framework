@@ -51,17 +51,24 @@ final class Images {
 	 * @param string     $size The size of the image to get.
 	 * @yield array : {
 	 *    string url: The image URL location,
-	 *    int    id:  The image ID, if any,
+	 *    int    id:  The image ID,
 	 * }
 	 */
 	public static function get_attachment_image_details( $args = null, $size = 'full' ) {
 
 		$id = isset( $args['id'] ) ? $args['id'] : \the_seo_framework()->get_the_real_ID();
 
-		yield [
-			'url' => \wp_get_attachment_image_url( $id, $size ),
-			'id'  => $id,
-		];
+		if ( $id ) {
+			yield [
+				'url' => \wp_get_attachment_image_url( $id, $size ) ?: '',
+				'id'  => $id,
+			];
+		} else {
+			yield [
+				'url' => '',
+				'id'  => 0,
+			];
+		}
 	}
 
 	/**
@@ -75,7 +82,7 @@ final class Images {
 	 * @param string     $size The size of the image to get.
 	 * @yield array : {
 	 *    string url: The image URL location,
-	 *    int    id:  The image ID, if any,
+	 *    int    id:  The image ID,
 	 * }
 	 */
 	public static function get_featured_image_details( $args = null, $size = 'full' ) {
@@ -83,10 +90,17 @@ final class Images {
 		$post_id = isset( $args['id'] ) ? $args['id'] : \the_seo_framework()->get_the_real_ID();
 		$id      = \get_post_thumbnail_id( $post_id );
 
-		yield [
-			'url' => \wp_get_attachment_image_url( $id, $size ),
-			'id'  => $id,
-		];
+		if ( $id ) {
+			yield [
+				'url' => \wp_get_attachment_image_url( $id, $size ) ?: '',
+				'id'  => $id,
+			];
+		} else {
+			yield [
+				'url' => '',
+				'id'  => 0,
+			];
+		}
 	}
 
 	/**
@@ -94,21 +108,59 @@ final class Images {
 	 *
 	 * @since 3.3.0
 	 * @generator
+	 * TODO consider matching these images with wp-content/uploads items via database calls, which is heavy...
+	 *      Combine query, instead of using WP API? Only do that for the first image, instead?
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
 	 *                         Leave null to autodetermine query.
 	 * @param string     $size The size of the image to get.
 	 * @yield array : {
 	 *    string url: The image URL location,
-	 *    int    id:  The image ID, if any,
+	 *    int    id:  The image ID,
 	 * }
 	 */
 	public static function get_content_image_details( $args = null, $size = 'full' ) {
-		// TODO
-		yield [
-			'url' => '',
-			'id'  => 0,
-		];
+
+		$tsf = \the_seo_framework();
+
+		if ( null === $args ) {
+			if ( $tsf->is_singular() ) {
+				$content = $tsf->get_post_content();
+			}
+		} else {
+			if ( $args['taxonomy'] ) {
+				$content = '';
+			} else {
+				$content = $tsf->get_post_content( $args['id'] );
+			}
+		}
+
+		$matches = [];
+
+		// strlen( '<img src=a>' ) === 11; yes, that's a valid self-closing tag with a relative source.
+		if ( strlen( $content ) > 10 && false !== stripos( $content, '<img' ) ) {
+			preg_match_all(
+				'/<img[^>]+src=(\"|\')?([^\"\'>\s]+)\1?.*?>/mi',
+				$content,
+				$matches,
+				PREG_SET_ORDER
+			);
+		}
+
+		if ( $matches ) {
+			foreach ( $matches as $match ) {
+				// Assume every URL to be correct?
+				yield [
+					'url' => $match[2] ?: '',
+					'id'  => 0,
+				];
+			}
+		} else {
+			yield [
+				'url' => '',
+				'id'  => 0,
+			];
+		}
 	}
 
 	/**
@@ -122,7 +174,7 @@ final class Images {
 	 * @param string     $size The size of the image to get.
 	 * @yield array : {
 	 *    string url: The image URL location,
-	 *    int    id:  The image ID, if any,
+	 *    int    id:  The image ID,
 	 * }
 	 */
 	public static function get_fallback_image_details( $args = null, $size = 'full' ) {
@@ -130,8 +182,8 @@ final class Images {
 		$tsf = \the_seo_framework();
 
 		yield [
-			'url' => $tsf->get_option( 'social_image_fb_url' ),
-			'id'  => $tsf->get_option( 'social_image_fb_id' ),
+			'url' => $tsf->get_option( 'social_image_fb_url' ) ?: '',
+			'id'  => $tsf->get_option( 'social_image_fb_id' ) ?: 0,
 		];
 	}
 
@@ -148,7 +200,7 @@ final class Images {
 	 * @param string     $size The size of the image to get.
 	 * @yield array : {
 	 *    string url: The image URL location,
-	 *    int    id:  The image ID, if any,
+	 *    int    id:  The image ID,
 	 * }
 	 */
 	public static function get_theme_header_image_details( $args = null, $size = 'full' ) {
@@ -157,12 +209,12 @@ final class Images {
 
 		if ( empty( $header->attachment_id ) ) { // This property isn't returned by default.
 			yield [
-				'url' => $header->url,
+				'url' => $header->url ?: '',
 				'id'  => 0,
 			];
 		} else {
 			yield [
-				'url' => \wp_get_attachment_image_url( $header->attachment_id, $size ),
+				'url' => \wp_get_attachment_image_url( $header->attachment_id, $size ) ?: '',
 				'id'  => $header->attachment_id,
 			];
 		}
@@ -179,7 +231,7 @@ final class Images {
 	 * @param string     $size The size of the image to get.
 	 * @yield array : {
 	 *    string url: The image URL location,
-	 *    int    id:  The image ID, if any,
+	 *    int    id:  The image ID,
 	 * }
 	 */
 	public static function get_site_logo_image_details( $args = null, $size = 'full' ) {
@@ -188,7 +240,7 @@ final class Images {
 
 		if ( $id ) {
 			yield [
-				'url' => \wp_get_attachment_image_url( $id, $size ),
+				'url' => \wp_get_attachment_image_url( $id, $size ) ?: '',
 				'id'  => $id,
 			];
 		} else {
@@ -210,7 +262,7 @@ final class Images {
 	 * @param string     $size The size of the image to get.
 	 * @yield array : {
 	 *    string url: The image URL location,
-	 *    int    id:  The image ID, if any,
+	 *    int    id:  The image ID,
 	 * }
 	 */
 	public static function get_site_icon_image_details( $args = null, $size = 'full' ) {
@@ -219,7 +271,7 @@ final class Images {
 
 		if ( $id ) {
 			yield [
-				'url' => \wp_get_attachment_image_url( $id, $size ),
+				'url' => \wp_get_attachment_image_url( $id, $size ) ?: '',
 				'id'  => $id,
 			];
 		} else {

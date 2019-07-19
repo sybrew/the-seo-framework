@@ -171,8 +171,15 @@ class Admin_Init extends Init {
 	 * Returns the title and description input guideline table, for
 	 * (Google) search, Open Graph, and Twitter.
 	 *
+	 * NB: Some scripts have wide characters. These are recognized by Google, and have been adjusted for in the chactacter
+	 * guidelines. German is a special Case, where we account for the Capitalization of Nouns.
+	 *
+	 * NB: Although the Arabic & Farsi scripts are much smaller in width, Google seems to be using the 160 & 70 char limits
+	 * strictly... As such, we stricten the guidelines for pixels instead.
+	 *
 	 * @since 3.1.0
-	 * @since 3.3.0 Now gives different values for various WordPress locales.
+	 * @since 3.3.0 1. Now gives different values for various WordPress locales.
+	 *              2. Added $locale input parameter.
 	 * @staticvar array $guidelines
 	 * @TODO Consider splitting up search into Google, Bing, etc., as we might
 	 *       want users to set their preferred search engine. Now, these engines
@@ -188,12 +195,18 @@ class Admin_Init extends Init {
 
 		$locale = $locale ?: \get_locale();
 
+		// Strip the "_formal" and other suffixes. 5 length: xx_YY
+		$locale = substr( $locale, 0, 5 );
+
 		if ( isset( $guidelines[ $locale ] ) )
 			return $guidelines[ $locale ];
 
 		// phpcs:disable, WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
-		$guideline_adjustments = [
+		$character_adjustments = [
 			'as'    => 148 / 160, // Assamese (অসমীয়া)
+			'de_AT' => 158 / 160, // Austrian German (Österreichisch Deutsch)
+			'de_CH' => 158 / 160, // Swiss German (Schweiz Deutsch)
+			'de_DE' => 158 / 160, // German (Deutsch)
 			'gu'    => 148 / 160, // Gujarati (ગુજરાતી)
 			'ml_IN' => 100 / 160, // Malayalam (മലയാളം)
 			'ja'    =>  70 / 160, // Japanese (日本語)
@@ -205,7 +218,18 @@ class Admin_Init extends Init {
 		];
 		// phpcs:enable, WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
 
-		$adjust = isset( $guideline_adjustments[ $locale ] ) ? $guideline_adjustments[ $locale ] : 1;
+		$c_adjust = isset( $character_adjustments[ $locale ] ) ? $character_adjustments[ $locale ] : 1;
+
+		$pixel_adjustments = [
+			'ar'    => 760 / 910, // Arabic (العربية)
+			'ary'   => 760 / 910, // Moroccan Arabic (العربية المغربية)
+			'azb'   => 760 / 910, // South Azerbaijani (گؤنئی آذربایجان)
+			'fa_IR' => 760 / 910, // Iran Farsi (فارسی)
+			'haz'   => 760 / 910, // Hazaragi (هزاره گی)
+			'ckb'   => 760 / 910, // Central Kurdish (كوردی)
+		];
+
+		$p_adjust = isset( $pixel_adjustments[ $locale ] ) ? $pixel_adjustments[ $locale ] : 1;
 
 		// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 		/**
@@ -219,16 +243,16 @@ class Admin_Init extends Init {
 				'title' => [
 					'search' => [
 						'chars'  => [
-							'lower'     => (int) 25 * $adjust,
-							'goodLower' => (int) 35 * $adjust,
-							'goodUpper' => (int) 65 * $adjust,
-							'upper'     => (int) 75 * $adjust,
+							'lower'     => (int) ( 25 * $c_adjust ),
+							'goodLower' => (int) ( 35 * $c_adjust ),
+							'goodUpper' => (int) ( 65 * $c_adjust ),
+							'upper'     => (int) ( 75 * $c_adjust ),
 						],
 						'pixels' => [
-							'lower'     => 200,
-							'goodLower' => 280,
-							'goodUpper' => 520,
-							'upper'     => 600,
+							'lower'     => (int) ( 200 * $p_adjust ),
+							'goodLower' => (int) ( 280 * $p_adjust ),
+							'goodUpper' => (int) ( 520 * $p_adjust ),
+							'upper'     => (int) ( 600 * $p_adjust ),
 						],
 					],
 					'opengraph' => [
@@ -253,16 +277,16 @@ class Admin_Init extends Init {
 				'description' => [
 					'search' => [
 						'chars'  => [
-							'lower'     => (int) 45 * $adjust,
-							'goodLower' => (int) 80 * $adjust,
-							'goodUpper' => (int) 160 * $adjust,
-							'upper'     => (int) 320 * $adjust,
+							'lower'     => (int) ( 45 * $c_adjust ),
+							'goodLower' => (int) ( 80 * $c_adjust ),
+							'goodUpper' => (int) ( 160 * $c_adjust ),
+							'upper'     => (int) ( 320 * $c_adjust ),
 						],
 						'pixels' => [
-							'lower'     => 256,
-							'goodLower' => 455,
-							'goodUpper' => 910,
-							'upper'     => 1820,
+							'lower'     => (int) ( 256 * $p_adjust ),
+							'goodLower' => (int) ( 455 * $p_adjust ),
+							'goodUpper' => (int) ( 910 * $p_adjust ),
+							'upper'     => (int) ( 1820 * $p_adjust ),
 						],
 					],
 					'opengraph' => [

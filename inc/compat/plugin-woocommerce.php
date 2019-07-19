@@ -48,18 +48,29 @@ function _init_wc_compat() {
  */
 function _adjust_image_generation_params( $params, $args ) {
 
-	$is_product = false;
+	$is_product          = false;
+	$is_product_category = false;
 
 	if ( null === $args ) {
-		$is_product = \the_seo_framework()->is_wc_product();
+		$is_product          = \the_seo_framework()->is_wc_product();
+		$is_product_category = function_exists( '\\is_product_category' ) && is_product_category();
 	} else {
-		if ( ! $args['taxonomy'] ) {
+		if ( $args['taxonomy'] ) {
+			if ( function_exists( '\\is_product_category' ) ) {
+				$term                = \get_term_by( 'id', $args['id'], $args['taxonomy'] );
+				$is_product_category = $term && \is_product_category( $term );
+			}
+		} else {
 			$is_product = \the_seo_framework()->is_wc_product( $args['id'] );
 		}
 	}
 
 	if ( $is_product ) {
 		$params['cbs']['wc_gallery'] = __NAMESPACE__ . '\\_get_product_gallery_image_details';
+	}
+
+	if ( $is_product_category ) {
+		$params['cbs']['wc_thumbnail'] = __NAMESPACE__ . '\\_get_product_category_thumbnail_image_details';
 	}
 
 	return $params;
@@ -76,24 +87,12 @@ function _adjust_image_generation_params( $params, $args ) {
  * @param string     $size The size of the image to get.
  * @yield array : {
  *    string url: The image URL location,
- *    int    id:  The image ID, if any,
+ *    int    id:  The image ID,
  * }
  */
 function _get_product_gallery_image_details( $args = null, $size = 'full' ) {
 
-	$post_id = 0;
-
-	if ( null === $args ) {
-		if ( \the_seo_framework()->is_wc_product() ) {
-			$post_id = \the_seo_framework()->get_the_real_ID();
-		}
-	} else {
-		if ( ! $args['taxonomy'] ) {
-			if ( \the_seo_framework()->is_wc_product( $args['id'] ) ) {
-				$post_id = $args['id'];
-			}
-		}
-	}
+	$post_id = isset( $args['id'] ) ? $args['id'] : \the_seo_framework()->get_the_real_ID();
 
 	$attachment_ids = [];
 
@@ -103,17 +102,50 @@ function _get_product_gallery_image_details( $args = null, $size = 'full' ) {
 		$attachment_ids = array_map( 'absint', array_filter( explode( ',', $product_image_gallery ) ) );
 	}
 
-	if ( ! $attachment_ids ) {
-		yield [
-			'url' => '',
-			'id'  => 0,
-		];
-	} else {
+	if ( $attachment_ids ) {
 		foreach ( $attachment_ids as $id ) {
 			yield [
 				'url' => \wp_get_attachment_image_url( $id, $size ),
 				'id'  => $id,
 			];
 		}
+	} else {
+		yield [
+			'url' => '',
+			'id'  => 0,
+		];
+	}
+}
+
+/**
+ * Generates image URL and ID from the WooCommerce product category thumbnail entries.
+ *
+ * @since 3.3.0
+ * @generator
+ *
+ * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
+ *                         Leave null to autodetermine query.
+ * @param string     $size The size of the image to get.
+ * @yield array : {
+ *    string url: The image URL location,
+ *    int    id:  The image ID,
+ * }
+ */
+function _get_product_category_thumbnail_image_details( $args = null, $size = 'full' ) {
+
+	$term_id = isset( $args['id'] ) ? $args['id'] : \the_seo_framework()->get_the_real_ID();
+
+	$thumbnail_id = \get_term_meta( $term_id, 'thumbnail_id', true ) ?: 0;
+
+	if ( $thumbnail_id ) {
+		yield [
+			'url' => \wp_get_attachment_image_url( $thumbnail_id, $size ) ?: '',
+			'id'  => $thumbnail_id,
+		];
+	} else {
+		yield [
+			'url' => '',
+			'id'  => 0,
+		];
 	}
 }

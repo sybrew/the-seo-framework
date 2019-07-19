@@ -1714,7 +1714,7 @@ class Sanitize extends Admin_Pages {
 	 * Cleans known parameters from image details.
 	 *
 	 * @since 3.3.0
-	 * @NOTE If the input details are associative, they'll be converted to sequential.
+	 * @NOTE If the input details are in an associative array, they'll be converted to sequential.
 	 *
 	 * @param array $details The image details, either associative (see $defaults) or sequential.
 	 * @return array The image details array, sequential: int => {
@@ -1744,6 +1744,9 @@ class Sanitize extends Admin_Pages {
 
 		if ( $this->matches_this_domain( $url ) ) {
 			$url = $this->set_preferred_url_scheme( $url );
+		} else {
+			// Also sets preferred URL scheme if path.
+			$url = $this->convert_to_url_if_path( $url );
 		}
 		$url = $this->s_url_query( $url );
 
@@ -1754,6 +1757,8 @@ class Sanitize extends Admin_Pages {
 
 		if ( ! $width || ! $height )
 			$width = $height = 0;
+
+		if ( $width > 4096 || $height > 4096 ) return $defaults;
 
 		if ( $alt ) {
 			$alt = \wp_strip_all_tags( $alt );
