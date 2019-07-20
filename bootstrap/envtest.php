@@ -1,7 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework
- * @subpackage Bootstrap
+ * @package The_SEO_Framework/Bootstrap
  *
  * @NOTE This file MUST be written according to WordPress' minimum PHP requirements.
  *       Which is PHP 5.2.
@@ -71,7 +70,7 @@ function the_seo_framework_pre_boot_test() {
 	}
 
 	$requirements = array(
-		'php' => '50500',
+		'php' => '50600',
 		'wp'  => '37965',
 	);
 

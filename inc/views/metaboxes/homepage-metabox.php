@@ -510,29 +510,32 @@ switch ( $instance ) :
 			false
 		) . $noarchive_note;
 
-		$this->attention_description( __( 'Warning: No public site should ever disable indexing or following for the homepage.', 'autodescription' ) );
+		$this->attention_description( __( 'Warning: No public site should ever apply "noindex" or "nofollow" for the homepage..', 'autodescription' ) );
 
 		//* Echo checkboxes.
-		$this->wrap_fields( [
-			$this->make_checkbox(
-				'homepage_noindex',
-				$i_label,
-				'',
-				false
-			),
-			$this->make_checkbox(
-				'homepage_nofollow',
-				$f_label,
-				'',
-				false
-			),
-			$this->make_checkbox(
-				'homepage_noarchive',
-				$a_label,
-				'',
-				false
-			),
-		], true );
+		$this->wrap_fields(
+			[
+				$this->make_checkbox(
+					'homepage_noindex',
+					$i_label,
+					'',
+					false
+				),
+				$this->make_checkbox(
+					'homepage_nofollow',
+					$f_label,
+					'',
+					false
+				),
+				$this->make_checkbox(
+					'homepage_noarchive',
+					$a_label,
+					'',
+					false
+				),
+			],
+			true
+		);
 
 		if ( $this->has_page_on_front() ) {
 			$this->description_noesc(
