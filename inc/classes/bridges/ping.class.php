@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Bridges
- * @subpackage The_SEO_Framework\Bridges
+ * @package The_SEO_Framework\Classes\Bridges\Ping
+ * @subpackage The_SEO_Framework\Sitemap
  */
 
 namespace The_SEO_Framework\Bridges;

@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Views\Admin
- * @subpackage The_SEO_Framework\Views\Metaboxes
+ * @package The_SEO_Framework\Views\Admin\Metaboxes
+ * @subpackage The_SEO_Framework\Admin\Settings
  */
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
@@ -27,17 +27,17 @@ switch ( $instance ) :
 		 * }
 		 */
 		$default_tabs = [
-			'general' => [
+			'general'   => [
 				'name'     => __( 'General', 'autodescription' ),
 				'callback' => [ $this, 'social_metabox_general_tab' ],
 				'dashicon' => 'admin-generic',
 			],
-			'facebook' => [
+			'facebook'  => [
 				'name'     => 'Facebook',
 				'callback' => [ $this, 'social_metabox_facebook_tab' ],
 				'dashicon' => 'facebook-alt',
 			],
-			'twitter' => [
+			'twitter'   => [
 				'name'     => 'Twitter',
 				'callback' => [ $this, 'social_metabox_twitter_tab' ],
 				'dashicon' => 'twitter',
@@ -142,7 +142,6 @@ switch ( $instance ) :
 		<?php
 		$this->description( __( 'The shortlink tag can be manually used for microblogging services like Twitter, but it has no SEO value whatsoever.', 'autodescription' ) );
 
-		//* Echo checkboxes.
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'shortlink_tag',
@@ -155,13 +154,13 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_social_metabox_facebook':
-		$fb_author = $this->get_option( 'facebook_author' );
+		$fb_author             = $this->get_option( 'facebook_author' );
 		$fb_author_placeholder = _x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' );
 
-		$fb_publisher = $this->get_option( 'facebook_publisher' );
+		$fb_publisher             = $this->get_option( 'facebook_publisher' );
 		$fb_publisher_placeholder = _x( 'https://www.facebook.com/YourBusinessProfile', 'Example Facebook Business URL', 'autodescription' );
 
-		$fb_appid = $this->get_option( 'facebook_appid' );
+		$fb_appid             = $this->get_option( 'facebook_appid' );
 		$fb_appid_placeholder = '123456789012345';
 
 		?>
@@ -221,10 +220,10 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_social_metabox_twitter':
-		$tw_site = $this->get_option( 'twitter_site' );
+		$tw_site             = $this->get_option( 'twitter_site' );
 		$tw_site_placeholder = _x( '@your-site-username', 'Twitter @username', 'autodescription' );
 
-		$tw_creator = $this->get_option( 'twitter_creator' );
+		$tw_creator             = $this->get_option( 'twitter_creator' );
 		$tw_creator_placeholder = _x( '@your-personal-username', 'Twitter @username', 'autodescription' );
 
 		$twitter_card = $this->get_twitter_card_types();
@@ -334,7 +333,6 @@ switch ( $instance ) :
 			);
 		}
 
-		//* Echo checkboxes.
 		$this->wrap_fields( $output, true );
 		break;
 

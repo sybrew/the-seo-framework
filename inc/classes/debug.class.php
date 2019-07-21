@@ -1,11 +1,14 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes
+ * @package The_SEO_Framework\Classes\Debug
+ * @subpackage The_SEO_Framework\Debug
  */
 
 namespace The_SEO_Framework;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+// phpcs:disable, WordPress.PHP.DevelopmentFunctions -- This whole class is meant for development.
 
 /**
  * The SEO Framework plugin
@@ -147,9 +150,9 @@ final class Debug implements Debug_Interface {
 						\esc_html( $function ),
 						'<strong>' . \esc_html__( 'deprecated', 'autodescription' ) . '</strong>',
 						\esc_html( $version ),
-						$replacement
+						$replacement // phpcs:ignore, WordPress.Security.EscapeOutput -- See doc comment.
 					)
-				); // xss ok: $replacement is expected to be escaped.
+				);
 			} else {
 				trigger_error(
 					sprintf(
@@ -178,7 +181,7 @@ final class Debug implements Debug_Interface {
 	 * @access private
 	 *
 	 * @param string $function The function that was called.
-	 * @param string $message  A message explaining what has been done incorrectly.
+	 * @param string $message  A message explaining what has been done incorrectly. Must be escaped.
 	 * @param string $version  The version of WordPress where the message was added.
 	 */
 	public function _doing_it_wrong( $function, $message, $version = null ) { // phpcs:ignore -- Wrong assert, copied method.
@@ -212,10 +215,10 @@ final class Debug implements Debug_Interface {
 					\esc_html__( '%1$s was called %2$s. %3$s %4$s', 'autodescription' ),
 					\esc_html( $function ),
 					'<strong>' . \esc_html__( 'incorrectly', 'autodescription' ) . '</strong>',
-					$message,
+					$message, // phpcs:ignore, WordPress.Security.EscapeOutput -- See doc comment.
 					\esc_html( $version )
 				)
-			); // xss ok: $message is expected to be escaped.
+			);
 
 			restore_error_handler();
 		}
@@ -285,6 +288,7 @@ final class Debug implements Debug_Interface {
 	 */
 	protected function get_error() {
 
+		// phpcs:ignore, WordPress.PHP.NoSilencedErrors -- This feature may be disabled.
 		$backtrace = @debug_backtrace();
 		/**
 		 * 0 = This function.
@@ -555,7 +559,8 @@ final class Debug implements Debug_Interface {
 	 * @access private
 	 */
 	public static function _output_debug_query() {
-		echo static::$instance->get_debug_query_output(); // xss ok
+		// phpcs:ignore, WordPress.Security.EscapeOutput -- This escapes.
+		echo static::$instance->get_debug_query_output();
 	}
 
 	/**
@@ -565,7 +570,8 @@ final class Debug implements Debug_Interface {
 	 * @access private
 	 */
 	public static function _output_debug_query_from_cache() {
-		echo static::$instance->get_debug_query_output_from_cache();  // xss ok
+		// phpcs:ignore, WordPress.Security.EscapeOutput -- This escapes.
+		echo static::$instance->get_debug_query_output_from_cache();
 	}
 
 	/**
@@ -675,8 +681,8 @@ final class Debug implements Debug_Interface {
 				$value = \esc_attr( var_export( $value, true ) );
 			}
 
-			$value = '<font color="harrisonford">' . $type . ' ' . $value . '</font>';
-			$out   = \esc_html( $name ) . ' => ' . $value;
+			$value   = '<font color="harrisonford">' . $type . ' ' . $value . '</font>';
+			$out     = \esc_html( $name ) . ' => ' . $value;
 			$output .= '<span style="background:#dadada">' . $out . '</span>' . PHP_EOL;
 		}
 

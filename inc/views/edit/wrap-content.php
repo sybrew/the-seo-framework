@@ -1,6 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Views\Inpost
+ * @package The_SEO_Framework\Views\Edit
+ * @subpackage The_SEO_Framework\Admin\Edit\Inpost
  */
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
@@ -18,7 +19,7 @@ $use_tabs = $use_tabs && count( $tabs ) > 1;
 $count = 1;
 foreach ( $tabs as $tab => $value ) :
 
-	$radio_id = \esc_attr( 'tsf-flex-' . $id . '-tab-' . $tab . '-content' );
+	$radio_id    = \esc_attr( 'tsf-flex-' . $id . '-tab-' . $tab . '-content' );
 	$radio_class = \esc_attr( 'tsf-flex-' . $id . '-tabs-content' );
 
 	//* Current tab for JS.
@@ -29,7 +30,7 @@ foreach ( $tabs as $tab => $value ) :
 		<?php
 		//* No-JS tabs.
 		if ( $use_tabs ) :
-			$dashicon = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
+			$dashicon   = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
 			$label_name = isset( $value['name'] ) ? $value['name'] : '';
 
 			?>
@@ -48,8 +49,7 @@ foreach ( $tabs as $tab => $value ) :
 
 		if ( $callback ) {
 			$params = isset( $value['args'] ) ? $value['args'] : '';
-			//* Should already be escaped.
-			echo $this->call_function( $callback, $version, $params );
+			call_user_func_array( $callback, (array) $params );
 		}
 		?>
 	</div>

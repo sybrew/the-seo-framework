@@ -1,6 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework/Bootstrap
+ * @package The_SEO_Framework\Bootstrap\Install
  *
  * @NOTE This file MUST be written according to WordPress' minimum PHP requirements.
  *       Which is PHP 5.2.
@@ -138,9 +138,12 @@ function the_seo_framework_pre_boot_test() {
 		sprintf(
 			'<p><strong>The SEO Framework</strong> requires <em>%s</em>. Sorry about that!<br>Your %s is: <code>%s</code></p>
 			<p>Do you want to <strong><a onclick="window.history.back()" href="%s">go back</a></strong>?</p>',
-			esc_html( $requirement ), esc_html( $issue ), esc_html( $version ), esc_url( $pluginspage )
+			esc_html( $requirement ),
+			esc_html( $issue ),
+			esc_html( $version ),
+			esc_url( $pluginspage )
 		),
-		sprintf( 'The SEO Framework &laquo; %s', esc_attr( $subtitle ) ),
+		esc_attr( sprintf( 'The SEO Framework &laquo; %s', $subtitle ) ),
 		array( 'response' => intval( $response ) )
 	);
 }

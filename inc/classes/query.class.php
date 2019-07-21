@@ -1,6 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes
+ * @package The_SEO_Framework\Classes\Facade\Query
  */
 
 namespace The_SEO_Framework;

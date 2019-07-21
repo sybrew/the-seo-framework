@@ -1,6 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes
+ * @package The_SEO_Framework\Classes\Facade\Generate
+ * @subpackage The_SEO_Framework\Getters
  */
 
 namespace The_SEO_Framework;

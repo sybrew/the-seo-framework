@@ -1,6 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes
+ * @package The_SEO_Framework\Classes\Facade\Render
+ * @subpackage The_SEO_Framework\Front
  */
 
 namespace The_SEO_Framework;

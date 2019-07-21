@@ -1,6 +1,8 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes
+ * @package The_SEO_Framework\Classes\Facade\Load
+ *
+ * This is the main file called.
  */
 
 namespace The_SEO_Framework;
@@ -30,7 +32,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * Extending upon parent classes.
  *
  * @since 2.8.0
- * @uses interface Debug_Interface
  */
 final class Load extends Feed implements Debug_Interface {
 
@@ -193,81 +194,6 @@ final class Load extends Feed implements Debug_Interface {
 			$included[ $what ][ $type ] = (bool) require THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . $type . '-' . $what . '.php';
 
 		return $included[ $what ][ $type ];
-	}
-
-	/**
-	 * Wrapper for function calling through parameters. The golden nugget.
-	 *
-	 * @since 2.2.2
-	 * @since 3.1.0 Is now protected.
-	 * @NOTE _doing_it_wrong notices go towards the callback. Unless this
-	 *      function is used wrongfully. Then the notice is about this function.
-	 *
-	 * @param array|string $callback The method array or function string.
-	 * @param string       $version  The version of The SEO Framework the function is used.
-	 * @param array|string $args     The arguments passed to the function.
-	 * @return mixed $output The function called.
-	 */
-	protected function call_function( $callback, $version = '', $args = [] ) {
-
-		$output = '';
-
-		//? Convert string/object to array
-		if ( is_object( $callback ) ) {
-			$function = [ $callback, '' ];
-		} else {
-			$function = (array) $callback;
-		}
-
-		//? Convert string/object to array
-		if ( is_object( $args ) ) {
-			$args = [ $args, '' ];
-		} else {
-			$args = (array) $args;
-		}
-
-		$class  = reset( $function );
-		$method = next( $function );
-
-		// Fetch method/function
-		if ( ( is_object( $class ) || is_string( $class ) ) && $class && is_string( $method ) && $method ) {
-			if ( get_class( $this ) === get_class( $class ) ) {
-				if ( method_exists( $this, $method ) ) {
-					if ( empty( $args ) ) {
-						// In-Object calling.
-						$output = call_user_func( [ $this, $method ] );
-					} else {
-						// In-Object calling.
-						$output = call_user_func_array( [ $this, $method ], $args );
-					}
-				} else {
-					$this->_inaccessible_p_or_m( \esc_html( get_class( $class ) . '->' . $method . '()' ), 'Class or Method not found.', \esc_html( $version ) );
-				}
-			} else {
-				if ( method_exists( $class, $method ) ) {
-					if ( empty( $args ) ) {
-						$output = call_user_func( [ $class, $method ] );
-					} else {
-						$output = call_user_func_array( [ $class, $method ], $args );
-					}
-				} else {
-					$this->_inaccessible_p_or_m( \esc_html( get_class( $class ) . '::' . $method . '()' ), 'Class or Method not found.', \esc_html( $version ) );
-				}
-			}
-		} elseif ( is_string( $class ) && $class ) {
-			//* Class is function.
-			$func = $class;
-
-			if ( empty( $args ) ) {
-				$output = call_user_func( $func );
-			} else {
-				$output = call_user_func_array( $func, $args );
-			}
-		} else {
-			$this->_doing_it_wrong( __METHOD__, 'Function needs to be called as a string.', \esc_html( $version ) );
-		}
-
-		return $output;
 	}
 
 	/**

@@ -1,6 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes
+ * @package The_SEO_Framework\Classes\Facade\Admin_Pages
+ * @subpackage The_SEO_Framework\Admin\Settings
  */
 
 namespace The_SEO_Framework;
@@ -31,7 +32,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  *
  * @since 2.8.0
  */
-class Admin_Pages extends Inpost {
+class Admin_Pages extends Edit {
 
 	/**
 	 * @since 2.7.0

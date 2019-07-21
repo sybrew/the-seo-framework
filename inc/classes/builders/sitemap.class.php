@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Builders
- * @subpackage The_SEO_Framework\Builders
+ * @package The_SEO_Framework\Classes\Builders\Sitemap
+ * @subpackage The_SEO_Framework\Sitemap
  */
 
 namespace The_SEO_Framework\Builders;

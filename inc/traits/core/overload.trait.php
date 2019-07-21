@@ -1,7 +1,6 @@
 <?php
 /**
  * @package The_SEO_Framework\Traits\Overload
- * @subpackage The_SEO_Framework\Traits
  */
 
 namespace The_SEO_Framework\Traits;

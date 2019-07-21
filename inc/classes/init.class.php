@@ -1,6 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes
+ * @package The_SEO_Framework\Classes\Facade\Init
  */
 
 namespace The_SEO_Framework;
@@ -114,7 +114,7 @@ class Init extends Query {
 
 		//* Ping searchengines.
 		if ( $this->get_option( 'ping_use_cron' ) )
-			\add_action( 'tsf_sitemap_cron_hook', '\The_SEO_Framework\Bridges\Ping::ping_search_engines' );
+			\add_action( 'tsf_sitemap_cron_hook', '\\The_SEO_Framework\\Bridges\\Ping::ping_search_engines' );
 	}
 
 	/**
@@ -312,7 +312,6 @@ class Init extends Query {
 	 * Runs header actions.
 	 *
 	 * @since 3.1.0
-	 * @uses $this->call_function()
 	 *
 	 * @param string $location Either 'before' or 'after'.
 	 * @return string The filter output.
@@ -331,12 +330,10 @@ class Init extends Query {
 		$functions = (array) \apply_filters( "the_seo_framework_{$location}_output", [] );
 
 		foreach ( $functions as $function ) {
-			if ( isset( $function['callback'] ) ) {
-				$output .= $this->call_function(
-					$function['callback'],
-					'3.1.0',
-					isset( $function['args'] ) ? $function['args'] : ''
-				);
+			if ( ! empty( $function['callback'] ) ) {
+				$args = isset( $function['args'] ) ? $function['args'] : '';
+
+				$output .= call_user_func_array( $function['callback'], (array) $args );
 			}
 		}
 

@@ -1,6 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes
+ * @package The_SEO_Framework\Classes\Facade\Sanitize
+ * @subpackage The_SEO_Framework\Admin
  */
 
 namespace The_SEO_Framework;
@@ -358,14 +359,6 @@ class Sanitize extends Admin_Pages {
 				$this->get_robots_post_type_option_id( 'noarchive' ),
 			]
 		);
-
-		/*
-		$this->add_option_filter(
-			's_no_html',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
-			[]
-		);
-		*/
 
 		/**
 		 * @todo create content="code" stripper
@@ -1202,6 +1195,7 @@ class Sanitize extends Admin_Pages {
 	 * @return string String without HTML in it.
 	 */
 	public function s_no_html( $new_value ) {
+		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
 		return strip_tags( $new_value );
 	}
 
@@ -1215,6 +1209,7 @@ class Sanitize extends Admin_Pages {
 	 * @return string String without HTML and breaks in it.
 	 */
 	public function s_no_html_space( $new_value ) {
+		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
 		return str_replace( ' ', '', strip_tags( $new_value ) );
 	}
 
@@ -1227,7 +1222,7 @@ class Sanitize extends Admin_Pages {
 	 * @param string $new_value String with possibly ampersands.
 	 * @return string
 	 */
-	public function s_esc_attr_super_amp( $new_value ) {
+	public function esc_attr_preserve_amp( $new_value ) {
 		return \esc_attr( str_replace( '&', '&amp;', $new_value ) );
 	}
 
@@ -1246,8 +1241,7 @@ class Sanitize extends Admin_Pages {
 		 * If queries have been tokenized, take the value before the query args.
 		 * Otherwise it's empty, so take the current value.
 		 */
-		$no_query_url = strtok( $new_value, '?' );
-		$url = $no_query_url ?: $new_value;
+		$url = strtok( $new_value, '?' ) ?: $new_value;
 
 		return \esc_url_raw( $url );
 	}
@@ -1308,6 +1302,7 @@ class Sanitize extends Admin_Pages {
 
 		if ( empty( $new_value ) ) return '';
 
+		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
 		$profile = trim( strip_tags( $new_value ) );
 		$profile = trim( $this->s_relative_url( $profile ), ' /' );
 
@@ -1334,6 +1329,7 @@ class Sanitize extends Admin_Pages {
 
 		if ( empty( $new_value ) ) return '';
 
+		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
 		$path = trim( strip_tags( $new_value ) );
 		$path = trim( $this->s_relative_url( $path ), ' /' );
 
@@ -1414,8 +1410,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_redirect_url( $new_value ) {
 
-		// phpcs:ignore -- strip_tags does exactly what we need; esc_url takes care of the rest later.
-		// wp_strip_all_tags does too much redundant stuff.
+		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
 		$url = strip_tags( $new_value );
 
 		if ( $url ) :
@@ -1707,6 +1702,7 @@ class Sanitize extends Admin_Pages {
 			$input = preg_replace( "/$_regex/si", $_replace, $input );
 		}
 
+		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- $args define stripping of 'script' and 'style'.
 		return strip_tags( $input );
 	}
 

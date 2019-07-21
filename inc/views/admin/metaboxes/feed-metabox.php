@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Views\Admin
- * @subpackage The_SEO_Framework\Views\Metaboxes
+ * @package The_SEO_Framework\Views\Admin\Metaboxes
+ * @subpackage The_SEO_Framework\Admin\Settings
  */
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
@@ -28,11 +28,13 @@ switch ( $instance ) :
 		$source_the_feed_label = esc_html__( 'Add link to source below the feed entry content?', 'autodescription' );
 		$source_the_feed_label .= ' ' . $this->make_info( __( 'This link will not be followed by search engines.', 'autodescription' ), '', false );
 
-		//* Echo checkboxes.
-		$this->wrap_fields( [
-			$this->make_checkbox( 'excerpt_the_feed', $excerpt_the_feed_label, '', false ),
-			$this->make_checkbox( 'source_the_feed', $source_the_feed_label, '', false ),
-		], true );
+		$this->wrap_fields(
+			[
+				$this->make_checkbox( 'excerpt_the_feed', $excerpt_the_feed_label, '', false ),
+				$this->make_checkbox( 'source_the_feed', $source_the_feed_label, '', false ),
+			],
+			true
+		);
 
 		if ( $this->rss_uses_excerpt() ) {
 			$this->description_noesc(

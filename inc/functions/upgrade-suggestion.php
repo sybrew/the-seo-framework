@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework
- * @subpackage The_SEO_Framework\Suggestion
+ * @package The_SEO_Framework\Suggestion
+ * @subpackage The_SEO_Framework\Bootstrap\Install
  */
 
 namespace The_SEO_Framework\Suggestion;
@@ -77,6 +77,7 @@ function _prepare() {
 	$envtest = false;
 
 	//? PHP_VERSION_ID is definitely defined, but let's keep it homonymous with the envtest of TSFEM.
+	// phpcs:ignore, WordPress.WhiteSpace.PrecisionAlignment
 	   ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < $_req['php']['5.5'] and $envtest = 1
 	or PHP_VERSION_ID >= 50600 && PHP_VERSION_ID < $_req['php']['5.6'] and $envtest = 2
 	or $GLOBALS['wp_db_version'] < $_req['wp'] and $envtest = 3

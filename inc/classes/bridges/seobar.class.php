@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Bridges
- * @subpackage The_SEO_Framework\Bridges
+ * @package The_SEO_Framework\Classes\Bridges\SeoBar
+ * @subpackage The_SEO_Framework\SeoBar
  */
 
 namespace The_SEO_Framework\Bridges;
@@ -283,11 +283,12 @@ final class SeoBar {
 
 		foreach ( $order_keys as $key ) {
 			//* Put value in $offset, if not false, break loop.
-			if ( false !== ( $offset = array_search( $key, $column_keys, true ) ) )
+			$offset = array_search( $key, $column_keys, true );
+			if ( false !== $offset )
 				break;
 		}
 
-		//* I tried but found nothing
+		//* It tried but found nothing
 		if ( false === $offset ) {
 			//* Add SEO bar at the end of columns.
 			$columns = array_merge( $columns, $seocolumn );

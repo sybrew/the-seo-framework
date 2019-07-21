@@ -1,6 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes
+ * @package The_SEO_Framework\Classes\Facade\Admin_Init
+ * @subpackage The_SEO_Framework\Admin
  */
 
 namespace The_SEO_Framework;

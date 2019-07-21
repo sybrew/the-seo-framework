@@ -1,7 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework
- * @subpackage Bootstrapp
+ * @package The_SEO_Framework\Bootstrap\Install
  */
 
 namespace The_SEO_Framework\Bootstrap;
@@ -224,8 +223,8 @@ function _do_upgrade_notice() {
 		$tsf->do_dismissible_notice(
 			$tsf->convert_markdown(
 				sprintf(
-					/* translators: %s = Version number, surrounded in mardkwon-backticks. */
-					\esc_html__( 'Thanks for updating The SEO Framework! Your site has been upgraded successfully to use The SEO Framework at database version `%s`.', 'autodescription' ),
+					/* translators: %s = Version number, surrounded in markdown-backticks. */
+					\esc_html__( 'Thank you for updating The SEO Framework! Your site has been upgraded successfully to use The SEO Framework at database version `%s`.', 'autodescription' ),
 					\esc_html( THE_SEO_FRAMEWORK_DB_VERSION )
 				),
 				[ 'code' ]
@@ -238,8 +237,8 @@ function _do_upgrade_notice() {
 		$tsf->do_dismissible_notice(
 			$tsf->convert_markdown(
 				sprintf(
-					/* translators: %s = Version number, surrounded in mardkwon-backticks. */
-					\esc_html__( 'Thanks for installing The SEO Framework! Your site has been upgraded successfully to use The SEO Framework at database version `%s`.', 'autodescription' ),
+					/* translators: %s = Version number, surrounded in markdown-backticks. */
+					\esc_html__( 'Thank you for installing The SEO Framework! Your site has been upgraded successfully to use The SEO Framework at database version `%s`.', 'autodescription' ),
 					\esc_html( THE_SEO_FRAMEWORK_DB_VERSION )
 				),
 				[ 'code' ]
@@ -277,21 +276,22 @@ function _do_upgrade_notice() {
  * @return void Early when already enqueued
  */
 function _prepare_upgrade_suggestion() {
-	static $run = false;
-	if ( $run ) return;
+	if ( ! \is_admin() ) return;
+	if ( ! _previous_db_version() ) return;
 
-	if ( \is_admin() ) {
-		\add_action(
-			'admin_init',
-			function() {
-				if ( ! _previous_db_version() ) return;
-				require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'upgrade-suggestion.php';
-			},
-			20
-		);
-	}
+	\add_action( 'admin_init', __NAMESPACE__ . '\\_include_upgrade_suggestion', 20 );
+}
 
-	$run = true;
+/**
+ * Loads plugin suggestion file
+ *
+ * @since 3.3.0
+ */
+function _include_upgrade_suggestion() {
+
+	if ( \The_SEO_Framework\_has_run( __METHOD__ ) ) return;
+
+	require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'upgrade-suggestion.php';
 }
 
 /**
@@ -487,7 +487,7 @@ function _do_upgrade_3103() {
 		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
 			$_option = $tsf->get_robots_post_type_option_id( $r );
 			if ( isset( $defaults[ $_option ] ) ) {
-				$_value = (array) ( $tsf->get_option( $_option, false ) ?: $defaults[ $_option ] );
+				$_value               = (array) ( $tsf->get_option( $_option, false ) ?: $defaults[ $_option ] );
 				$_value['attachment'] = (int) (bool) $tsf->get_option( "attachment_$r", false );
 				$tsf->update_option( $_option, $_value );
 			}

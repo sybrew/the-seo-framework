@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Bridges
- * @subpackage The_SEO_Framework\Bridges
+ * @package The_SEO_Framework\Classes\Bridges\Sitemap
+ * @subpackage The_SEO_Framework\Sitemap
  */
 
 namespace The_SEO_Framework\Bridges;
@@ -387,7 +387,7 @@ final class Sitemap {
 		// Loop over the sitemap endpoints, and see if it matches the stripped uri.
 		if ( $path_info['use_query_var'] ) {
 			foreach ( $this->get_sitemap_endpoint_list() as $_id => $_data ) {
-				$_regex = '/^' . preg_quote( $id, '/' ) . '/';
+				$_regex = '/^' . preg_quote( $_id, '/' ) . '/';
 				if ( preg_match( $_regex, $stripped_uri ) ) {
 					$sitemap_id = $_id;
 					break;

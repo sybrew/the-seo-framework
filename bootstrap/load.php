@@ -1,9 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework
- * @subpackage Bootstrap
- * @TODO change namespace to The_SEO_Framework\Bootstrap
- *       in a future major release.
+ * @package The_SEO_Framework\Bootstrap
  */
 
 namespace The_SEO_Framework;
@@ -31,6 +28,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 /**
  * Plugin locale 'autodescription'
  * Files located in plugin folder `../autodescription/language/`
+ *
  * @since 2.8.0
  */
 function _init_locale() {
@@ -83,8 +81,8 @@ function _init_tsf() {
 			$tsf->_load_early_compat_files();
 
 			/**
-			 * Runs after TSF is loaded in the admin.
 			 * @since 3.1.0
+			 * Runs after TSF is loaded in the admin.
 			 */
 			\do_action( 'the_seo_framework_admin_loaded' );
 		} else {
@@ -95,8 +93,8 @@ function _init_tsf() {
 		}
 
 		/**
-		 * Runs after TSF is loaded.
 		 * @since 3.1.0
+		 * Runs after TSF is loaded.
 		 */
 		\do_action( 'the_seo_framework_loaded' );
 	} else {

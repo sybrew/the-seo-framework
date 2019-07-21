@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Builders
- * @subpackage The_SEO_Framework\Builders
+ * @package The_SEO_Framework\Classes\Builders\SeoBar
+ * @subpackage The_SEO_Framework\SeoBar
  */
 
 namespace The_SEO_Framework\Builders;

@@ -9,6 +9,8 @@
  * License: GPLv3
  * Text Domain: autodescription
  * Domain Path: /language
+ *
+ * @package The_SEO_Framework\Bootstrap
  */
 
 defined( 'ABSPATH' ) or die;
@@ -37,7 +39,8 @@ defined( 'ABSPATH' ) or die;
  * When we only support WordPress 5.4?+, it'll be PHP 7.1.
  */
 
-//* Debug. Not to be used on production websites as it dumps and/or disables all kinds of stuff everywhere.
+// phpcs:disable, Squiz.Commenting.InlineComment, Squiz.PHP.CommentedOutCode
+// Debug. Not to be used on production websites as it dumps and/or disables all kinds of stuff everywhere.
 // add_action( 'plugins_loaded', function() { if ( is_super_admin() ) {
 // 	if ( is_admin() ) {
 // 		define( 'THE_SEO_FRAMEWORK_DEBUG', true );
@@ -48,6 +51,7 @@ defined( 'ABSPATH' ) or die;
 // 		add_filter( 'the_seo_framework_use_object_cache', '__return_false' );
 // 	}
 // }},0);
+// phpcs:enable, Squiz.Commenting.InlineComment, Squiz.PHP.CommentedOutCode
 
 /**
  * The plugin version.

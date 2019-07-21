@@ -1,7 +1,7 @@
 <?php
 /**
- * @see ./index.php
- * @package The_SEO_Framework\Classes
+ * @package The_SEO_Framework\Classes\Facade\Core
+ * @see ./index.php for facade details.
  */
 
 namespace The_SEO_Framework;
@@ -89,7 +89,6 @@ class Core {
 	 */
 	final public function __get( $name ) {
 		$this->_inaccessible_p_or_m( 'the_seo_framework()->' . $name, 'unknown' );
-		return;
 	}
 
 	/**
@@ -113,7 +112,6 @@ class Core {
 		}
 
 		\the_seo_framework()->_inaccessible_p_or_m( 'the_seo_framework()->' . $name . '()' );
-		return;
 	}
 
 	/**
@@ -127,10 +125,10 @@ class Core {
 	 */
 	public function clean_response_header() {
 
-		if ( $level = ob_get_level() ) {
-			while ( $level-- ) {
-				ob_end_clean();
-			}
+		$level = ob_get_level();
+
+		if ( $level ) {
+			while ( $level-- ) ob_end_clean();
 			return true;
 		}
 

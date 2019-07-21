@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Builders
- * @subpackage The_SEO_Framework\Builders
+ * @package The_SEO_Framework\Classes\Builders\Images
+ * @subpackage The_SEO_Framework\Getters\Image
  */
 
 namespace The_SEO_Framework\Builders;

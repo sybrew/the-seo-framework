@@ -313,6 +313,10 @@ TODO add new filters to og_image() and twitter_image().
 TODO adjust the title & description guidelines when using summary instead of summary large image for Twitter?
 TODO index.php stuff
 
+TODO rename the inpost-class to be more inclusive of "Term edit".
+
+TODO do something nicer with interpret_status_to_symbol()
+
 **Detailed log:**
 
 **For everyone:**
@@ -611,6 +615,8 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* The script loader now discerns between posts and taxonomies, and can now prevent loading scripts when SEO is disabled for the post type or taxonomy.
 		* In the debug interface, the JSON+LD scripts are now more readable.
 		* The script loader now accepts and contatenates inline JS.
+	* **Changed:**
+		* Custom setting tabs and their content-callbacks should no longer have their output be returned, but always be printed instead.
 	* **Fixed:**
 		* Registering inline scripts now correctly converts `{{$rel_color}}`.
 * **Option notes:**
@@ -770,24 +776,14 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* The two methods therein were moved to `\The_SEO_Framework\Load`:
 				* `load_early_compat_files()`, protected.
 				* `_include_compat()`, marked private.
+		* `\The_SEO_Framework\Inpost`
+			* It's now named `\The_SEO_Framework\Edit`.
+			* This is part of the facade object `the_seo_framework()`, so this class shouldn't be called externally.
 		* `\The_SEO_Framework\Sitemap`
 			* This file has been split over multiple files, to the `Sitemap` class family:
 				* `\The_SEO_framework\Bridges\Sitemap`
 				* `\The_SEO_framework\Builders\Sitemap`, extended by:
 					* `\The_SEO_framework\Builders\Sitemap_Base`
-			* **Removed methods:**`
-				* TODO evaluate:
-				* `rewrite_rule_sitemap()`
-				* `enqueue_sitemap_query_vars()`
-				* `reinitialize_rewrite()`
-				* `enqueue_rewrite_activate()`
-				* `enqueue_rewrite_deactivate()`
-				* `maybe_flush_rewrite()`
-				* `flush_rewrite_rules_activation()`
-				* `flush_rewrite_rules_deactivation()`
-				* `maybe_output_sitemap_stylesheet()`
-			* **Deprecated methods:**
-				* TODO
 		* `\The_SEO_Framework\Doing_It_Right`
 			* Some methods therein have been moved to the `SeoBar` class family:
 				* `\The_SEO_framework\InterPreters\SeoBar`
@@ -796,16 +792,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 					* `\The_SEO_framework\Builders\SeoBar_Page`
 					* `\The_SEO_framework\Builders\SeoBar_Term`
 			* **Removed methods:**
-				* `seo_bar()`
-				* `seo_bar_ajax()`
-				* `get_seo_bar_ajax()`
-				* `get_taxonomy_seo_bar_ajax()`
-				* `get_taxonomy_seo_bar()`
-				* `get_the_seo_bar_classes()`
-				* `get_the_seo_bar_i18n()`
 			* **Deprecated methods:**
-				* `get_seo_bar()`
-				* `post_status()`
 * **Method notes:**
 	* For object `the_seo_framework()`:
 		* **Added:**
@@ -842,6 +829,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `s_image_details()`
 			* `s_image_details_deep()`
 			* `s_field_id()`
+			* `esc_attr_preserve_amp()`
 			* `get_hierarchical_post_types()`
 			* `get_nonhierarchical_post_types()`
 			* `convert_to_url_if_path()`
@@ -952,6 +940,22 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `register_image_dimension()`
 				* `parse_image_args()`
 				* `parse_og_image()`
+				* `rewrite_rule_sitemap()`
+				* `enqueue_sitemap_query_vars()`
+				* `reinitialize_rewrite()`
+				* `enqueue_rewrite_activate()`
+				* `enqueue_rewrite_deactivate()`
+				* `maybe_flush_rewrite()`
+				* `flush_rewrite_rules_activation()`
+				* `flush_rewrite_rules_deactivation()`
+				* `maybe_output_sitemap_stylesheet()`
+				* `seo_bar()`
+				* `seo_bar_ajax()`
+				* `get_seo_bar_ajax()`
+				* `get_taxonomy_seo_bar_ajax()`
+				* `get_taxonomy_seo_bar()`
+				* `get_the_seo_bar_classes()`
+				* `get_the_seo_bar_i18n()`
 			* **Many more public methods were removed:**
 				* See the "class notes" above.
 		* **Deprecated:**
@@ -991,6 +995,8 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `check_wp_locale()`
 				* `maybe_lowercase_noun()`
 				* `fetch_the_term()`
+				* `current_theme_supports_title_tag()`
+				* `can_use_logo()`
 * **Property notes:**
 	* For object `the_seo_framework()`:
 		* **Added:**

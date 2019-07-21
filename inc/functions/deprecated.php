@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework
- * @subpackage Deprecated
+ * @package The_SEO_Framework\API
+ * @subpackage The_SEO_Framework\Debug\Deprecated
  */
 
 /**

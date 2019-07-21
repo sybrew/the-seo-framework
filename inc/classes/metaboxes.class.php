@@ -1,6 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes
+ * @package The_SEO_Framework\Classes\Facade\Metaboxes
+ * @subpackage The_SEO_Framework\Admin\Settings
  */
 
 namespace The_SEO_Framework;
@@ -133,7 +134,7 @@ class Metaboxes extends Site_Options {
 
 				if ( $callback ) {
 					$params = isset( $value['args'] ) ? $value['args'] : '';
-					echo $this->call_function( $callback, $version, $params ); // xss ok
+					call_user_func_array( $callback, (array) $params );
 				}
 				?>
 			</div>
@@ -156,7 +157,7 @@ class Metaboxes extends Site_Options {
 		 * @since 2.8.0
 		 */
 		\do_action( 'the_seo_framework_general_metabox_before' );
-		$this->get_view( 'metaboxes/general-metabox', $args );
+		$this->get_view( 'admin/metaboxes/general-metabox', $args );
 		/**
 		 * @since 2.8.0
 		 */
@@ -171,7 +172,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
 	protected function general_metabox_general_tab() {
-		$this->get_view( 'metaboxes/general-metabox', [], 'general' );
+		$this->get_view( 'admin/metaboxes/general-metabox', [], 'general' );
 	}
 
 	/**
@@ -182,7 +183,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
 	protected function general_metabox_layout_tab() {
-		$this->get_view( 'metaboxes/general-metabox', [], 'layout' );
+		$this->get_view( 'admin/metaboxes/general-metabox', [], 'layout' );
 	}
 
 	/**
@@ -193,7 +194,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
 	protected function general_metabox_performance_tab() {
-		$this->get_view( 'metaboxes/general-metabox', [], 'performance' );
+		$this->get_view( 'admin/metaboxes/general-metabox', [], 'performance' );
 	}
 
 	/**
@@ -204,7 +205,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
 	protected function general_metabox_canonical_tab() {
-		$this->get_view( 'metaboxes/general-metabox', [], 'canonical' );
+		$this->get_view( 'admin/metaboxes/general-metabox', [], 'canonical' );
 	}
 
 	/**
@@ -215,7 +216,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
 	protected function general_metabox_timestamps_tab() {
-		$this->get_view( 'metaboxes/general-metabox', [], 'timestamps' );
+		$this->get_view( 'admin/metaboxes/general-metabox', [], 'timestamps' );
 	}
 
 	/**
@@ -226,7 +227,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->general_metabox() : Callback for General Settings box.
 	 */
 	protected function general_metabox_posttypes_tab() {
-		$this->get_view( 'metaboxes/general-metabox', [], 'posttypes' );
+		$this->get_view( 'admin/metaboxes/general-metabox', [], 'posttypes' );
 	}
 
 	/**
@@ -242,7 +243,7 @@ class Metaboxes extends Site_Options {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_title_metabox_before' );
-		$this->get_view( 'metaboxes/title-metabox', $args );
+		$this->get_view( 'admin/metaboxes/title-metabox', $args );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -257,7 +258,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->title_metabox() : Callback for Title Settings box.
 	 */
 	protected function title_metabox_general_tab() {
-		$this->get_view( 'metaboxes/title-metabox', [], 'general' );
+		$this->get_view( 'admin/metaboxes/title-metabox', [], 'general' );
 	}
 
 	/**
@@ -273,7 +274,7 @@ class Metaboxes extends Site_Options {
 	 * }
 	 */
 	protected function title_metabox_additions_tab( $examples = [] ) {
-		$this->get_view( 'metaboxes/title-metabox', get_defined_vars(), 'additions' );
+		$this->get_view( 'admin/metaboxes/title-metabox', get_defined_vars(), 'additions' );
 	}
 
 	/**
@@ -290,7 +291,7 @@ class Metaboxes extends Site_Options {
 	 * @param bool  $showleft The example location.
 	 */
 	protected function title_metabox_prefixes_tab( $additions = [], $showleft = false ) {
-		$this->get_view( 'metaboxes/title-metabox', get_defined_vars(), 'prefixes' );
+		$this->get_view( 'admin/metaboxes/title-metabox', get_defined_vars(), 'prefixes' );
 	}
 
 	/**
@@ -306,7 +307,7 @@ class Metaboxes extends Site_Options {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_description_metabox_before' );
-		$this->get_view( 'metaboxes/description-metabox', $args );
+		$this->get_view( 'admin/metaboxes/description-metabox', $args );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -326,7 +327,7 @@ class Metaboxes extends Site_Options {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_robots_metabox_before' );
-		$this->get_view( 'metaboxes/robots-metabox', $args );
+		$this->get_view( 'admin/metaboxes/robots-metabox', $args );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -340,7 +341,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->robots_metabox() Callback for Robots Settings box.
 	 */
 	protected function robots_metabox_general_tab() {
-		$this->get_view( 'metaboxes/robots-metabox', [], 'general' );
+		$this->get_view( 'admin/metaboxes/robots-metabox', [], 'general' );
 	}
 
 	/**
@@ -358,7 +359,7 @@ class Metaboxes extends Site_Options {
 	 * }
 	 */
 	protected function robots_metabox_no_tab( $types, $post_types, $robots ) {
-		$this->get_view( 'metaboxes/robots-metabox', get_defined_vars(), 'no' );
+		$this->get_view( 'admin/metaboxes/robots-metabox', get_defined_vars(), 'no' );
 	}
 
 	/**
@@ -374,7 +375,7 @@ class Metaboxes extends Site_Options {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_homepage_metabox_before' );
-		$this->get_view( 'metaboxes/homepage-metabox', $args );
+		$this->get_view( 'admin/metaboxes/homepage-metabox', $args );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -389,7 +390,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->homepage_metabox() Callback for Homepage Settings box.
 	 */
 	protected function homepage_metabox_general_tab() {
-		$this->get_view( 'metaboxes/homepage-metabox', [], 'general' );
+		$this->get_view( 'admin/metaboxes/homepage-metabox', [], 'general' );
 	}
 
 	/**
@@ -400,7 +401,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->homepage_metabox() Callback for Homepage Settings box.
 	 */
 	protected function homepage_metabox_additions_tab() {
-		$this->get_view( 'metaboxes/homepage-metabox', [], 'additions' );
+		$this->get_view( 'admin/metaboxes/homepage-metabox', [], 'additions' );
 	}
 
 	/**
@@ -411,7 +412,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->homepage_metabox() Callback for Homepage Settings box.
 	 */
 	protected function homepage_metabox_robots_tab() {
-		$this->get_view( 'metaboxes/homepage-metabox', [], 'robots' );
+		$this->get_view( 'admin/metaboxes/homepage-metabox', [], 'robots' );
 	}
 
 	/**
@@ -422,7 +423,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->homepage_metabox() Callback for Homepage Settings box.
 	 */
 	protected function homepage_metabox_social_tab() {
-		$this->get_view( 'metaboxes/homepage-metabox', [], 'social' );
+		$this->get_view( 'admin/metaboxes/homepage-metabox', [], 'social' );
 	}
 
 	/**
@@ -438,7 +439,7 @@ class Metaboxes extends Site_Options {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_social_metabox_before' );
-		$this->get_view( 'metaboxes/social-metabox', $args );
+		$this->get_view( 'admin/metaboxes/social-metabox', $args );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -453,7 +454,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->social_metabox() Callback for Social Settings box.
 	 */
 	protected function social_metabox_general_tab() {
-		$this->get_view( 'metaboxes/social-metabox', [], 'general' );
+		$this->get_view( 'admin/metaboxes/social-metabox', [], 'general' );
 	}
 
 	/**
@@ -464,7 +465,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->social_metabox() Callback for Social Settings box.
 	 */
 	protected function social_metabox_facebook_tab() {
-		$this->get_view( 'metaboxes/social-metabox', [], 'facebook' );
+		$this->get_view( 'admin/metaboxes/social-metabox', [], 'facebook' );
 	}
 
 	/**
@@ -474,7 +475,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->social_metabox() Callback for Social Settings box.
 	 */
 	protected function social_metabox_twitter_tab() {
-		$this->get_view( 'metaboxes/social-metabox', [], 'twitter' );
+		$this->get_view( 'admin/metaboxes/social-metabox', [], 'twitter' );
 	}
 
 	/**
@@ -484,7 +485,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->social_metabox() Callback for Social Settings box.
 	 */
 	protected function social_metabox_postdates_tab() {
-		$this->get_view( 'metaboxes/social-metabox', [], 'postdates' );
+		$this->get_view( 'admin/metaboxes/social-metabox', [], 'postdates' );
 	}
 
 	/**
@@ -500,7 +501,7 @@ class Metaboxes extends Site_Options {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_webmaster_metabox_before' );
-		$this->get_view( 'metaboxes/webmaster-metabox', $args );
+		$this->get_view( 'admin/metaboxes/webmaster-metabox', $args );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -521,7 +522,7 @@ class Metaboxes extends Site_Options {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_sitemaps_metabox_before' );
-		$this->get_view( 'metaboxes/sitemaps-metabox', $args );
+		$this->get_view( 'admin/metaboxes/sitemaps-metabox', $args );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -536,7 +537,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	protected function sitemaps_metabox_general_tab() {
-		$this->get_view( 'metaboxes/sitemaps-metabox', [], 'general' );
+		$this->get_view( 'admin/metaboxes/sitemaps-metabox', [], 'general' );
 	}
 
 	/**
@@ -547,7 +548,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	protected function sitemaps_metabox_robots_tab() {
-		$this->get_view( 'metaboxes/sitemaps-metabox', [], 'robots' );
+		$this->get_view( 'admin/metaboxes/sitemaps-metabox', [], 'robots' );
 	}
 
 	/**
@@ -557,7 +558,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	protected function sitemaps_metabox_metadata_tab() {
-		$this->get_view( 'metaboxes/sitemaps-metabox', [], 'metadata' );
+		$this->get_view( 'admin/metaboxes/sitemaps-metabox', [], 'metadata' );
 	}
 
 	/**
@@ -568,7 +569,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	protected function sitemaps_metabox_notify_tab() {
-		$this->get_view( 'metaboxes/sitemaps-metabox', [], 'notify' );
+		$this->get_view( 'admin/metaboxes/sitemaps-metabox', [], 'notify' );
 	}
 
 	/**
@@ -579,7 +580,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	protected function sitemaps_metabox_style_tab() {
-		$this->get_view( 'metaboxes/sitemaps-metabox', [], 'style' );
+		$this->get_view( 'admin/metaboxes/sitemaps-metabox', [], 'style' );
 	}
 
 	/**
@@ -595,7 +596,7 @@ class Metaboxes extends Site_Options {
 		 * @since 2.5.2
 		 */
 		\do_action( 'the_seo_framework_feed_metabox_before' );
-		$this->get_view( 'metaboxes/feed-metabox', $args );
+		$this->get_view( 'admin/metaboxes/feed-metabox', $args );
 		/**
 		 * @since 2.5.2
 		 */
@@ -615,7 +616,7 @@ class Metaboxes extends Site_Options {
 		 * @since 2.6.0
 		 */
 		\do_action( 'the_seo_framework_schema_metabox_before' );
-		$this->get_view( 'metaboxes/schema-metabox', $args );
+		$this->get_view( 'admin/metaboxes/schema-metabox', $args );
 		/**
 		 * @since 2.6.0
 		 */
@@ -631,7 +632,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->schema_metabox() Callback for Schema.org Settings box.
 	 */
 	protected function schema_metabox_general_tab() {
-		$this->get_view( 'metaboxes/schema-metabox', [], 'general' );
+		$this->get_view( 'admin/metaboxes/schema-metabox', [], 'general' );
 	}
 
 	/**
@@ -642,7 +643,7 @@ class Metaboxes extends Site_Options {
 	 * @see $this->schema_metabox() Callback for Schema.org Settings box.
 	 */
 	protected function schema_metabox_structure_tab() {
-		$this->get_view( 'metaboxes/schema-metabox', [], 'structure' );
+		$this->get_view( 'admin/metaboxes/schema-metabox', [], 'structure' );
 	}
 
 	/**
@@ -653,6 +654,6 @@ class Metaboxes extends Site_Options {
 	 * @see $this->schema_metabox() Callback for Schema.org Settings box.
 	 */
 	protected function schema_metabox_presence_tab() {
-		$this->get_view( 'metaboxes/schema-metabox', [], 'presence' );
+		$this->get_view( 'admin/metaboxes/schema-metabox', [], 'presence' );
 	}
 }

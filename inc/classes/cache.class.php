@@ -1,6 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes
+ * @package The_SEO_Framework\Classes\Facade\Cache
+ * @subpackage The_SEO_Framework\Cache
  */
 
 namespace The_SEO_Framework;
@@ -130,8 +131,7 @@ class Cache extends Metaboxes {
 	 */
 	public function delete_post_cache( $post_id ) {
 
-		if ( ! $post_id )
-			return false;
+		if ( ! $post_id ) return false;
 
 		$success[] = $this->delete_cache( 'post', $post_id );
 
@@ -529,7 +529,7 @@ class Cache extends Metaboxes {
 
 		//* Placeholder ID.
 		$the_id = '';
-		$_t = $taxonomy;
+		$_t     = $taxonomy;
 
 		if ( $this->is_404() ) {
 			$the_id = '_404_';

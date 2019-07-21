@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Views\Admin
- * @subpackage The_SEO_Framework\Views\Metaboxes
+ * @package The_SEO_Framework\Views\Admin\Metaboxes
+ * @subpackage The_SEO_Framework\Admin\Settings
  */
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
@@ -14,11 +14,6 @@ $instance = $this->get_view_instance( 'the_seo_framework_general_metabox', $inst
 switch ( $instance ) :
 	case 'the_seo_framework_general_metabox_main':
 		$default_tabs = [
-			//	'general' => [
-			//		'name'     => __( 'General', 'autodescription' ),
-			//		'callback' => [ $this, 'general_metabox_general_tab' ],
-			//		'dashicon' => 'admin-generic',
-			//	],
 			'layout'      => [
 				'name'     => __( 'Layout', 'autodescription' ),
 				'callback' => [ $this, 'general_metabox_layout_tab' ],
@@ -58,10 +53,6 @@ switch ( $instance ) :
 		$this->nav_tab_wrapper( 'general', $tabs, '2.8.0' );
 		break;
 
-	case 'the_seo_framework_general_metabox_general':
-		echo 'Nothing to see here yet.';
-		break;
-
 	case 'the_seo_framework_general_metabox_layout':
 		?>
 		<h4><?php esc_html_e( 'Administrative Layout Settings', 'autodescription' ); ?></h4>
@@ -73,30 +64,33 @@ switch ( $instance ) :
 
 		<h4><?php esc_html_e( 'SEO Bar Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->wrap_fields( [
-			$this->make_checkbox(
-				'display_seo_bar_tables',
-				esc_html__( 'Display the SEO Bar in overview tables?', 'autodescription' ),
-				'',
-				false
-			),
-			$this->make_checkbox(
-				'display_seo_bar_metabox',
-				esc_html__( 'Display the SEO Bar in the SEO Settings metabox?', 'autodescription' ),
-				'',
-				false
-			),
-			$this->make_checkbox(
-				'seo_bar_symbols',
-				esc_html__( 'Use symbols for warnings?', 'autodescription' ) . ' ' . $this->make_info(
-					__( 'If you have difficulty discerning colors, this may help you spot issues more easily.', 'autodescription' ),
+		$this->wrap_fields(
+			[
+				$this->make_checkbox(
+					'display_seo_bar_tables',
+					esc_html__( 'Display the SEO Bar in overview tables?', 'autodescription' ),
 					'',
 					false
 				),
-				'',
-				false
-			),
-		], true );
+				$this->make_checkbox(
+					'display_seo_bar_metabox',
+					esc_html__( 'Display the SEO Bar in the SEO Settings metabox?', 'autodescription' ),
+					'',
+					false
+				),
+				$this->make_checkbox(
+					'seo_bar_symbols',
+					esc_html__( 'Use symbols for warnings?', 'autodescription' ) . ' ' . $this->make_info(
+						__( 'If you have difficulty discerning colors, this may help you spot issues more easily.', 'autodescription' ),
+						'',
+						false
+					),
+					'',
+					false
+				),
+			],
+			true
+		);
 
 		?>
 		<hr>
@@ -115,20 +109,23 @@ switch ( $instance ) :
 			false
 		);
 
-		$this->wrap_fields( [
-			$this->make_checkbox(
-				'display_pixel_counter',
-				esc_html__( 'Display pixel counters?', 'autodescription' ) . ' ' . $pixel_info,
-				'',
-				false
-			),
-			$this->make_checkbox(
-				'display_character_counter',
-				esc_html__( 'Display character counters?', 'autodescription' ) . ' ' . $character_info,
-				'',
-				false
-			),
-		], true );
+		$this->wrap_fields(
+			[
+				$this->make_checkbox(
+					'display_pixel_counter',
+					esc_html__( 'Display pixel counters?', 'autodescription' ) . ' ' . $pixel_info,
+					'',
+					false
+				),
+				$this->make_checkbox(
+					'display_character_counter',
+					esc_html__( 'Display character counters?', 'autodescription' ) . ' ' . $character_info,
+					'',
+					false
+				),
+			],
+			true
+		);
 		break;
 
 	case 'the_seo_framework_general_metabox_performance':
@@ -209,27 +206,33 @@ switch ( $instance ) :
 			]
 		);
 
-		$this->wrap_fields( [
-			$this->make_checkbox(
-				'alter_search_query',
-				esc_html__( 'Enable search query alteration?', 'autodescription' )
-				. ' ' . $this->make_info( __( 'This allows you to exclude pages from on-site search results.', 'autodescription' ), '', false ),
-				'',
-				false
-			),
-			$search_query_select_field,
-		], true );
+		$this->wrap_fields(
+			[
+				$this->make_checkbox(
+					'alter_search_query',
+					esc_html__( 'Enable search query alteration?', 'autodescription' )
+					. ' ' . $this->make_info( __( 'This allows you to exclude pages from on-site search results.', 'autodescription' ), '', false ),
+					'',
+					false
+				),
+				$search_query_select_field,
+			],
+			true
+		);
 
-		$this->wrap_fields( [
-			$this->make_checkbox(
-				'alter_archive_query',
-				esc_html__( 'Enable archive query alteration?', 'autodescription' )
-				. ' ' . $this->make_info( __( 'This allows you to exclude pages from on-site archive listings.', 'autodescription' ), '', false ),
-				'',
-				false
-			),
-			$archive_query_select_field,
-		], true );
+		$this->wrap_fields(
+			[
+				$this->make_checkbox(
+					'alter_archive_query',
+					esc_html__( 'Enable archive query alteration?', 'autodescription' )
+					. ' ' . $this->make_info( __( 'This allows you to exclude pages from on-site archive listings.', 'autodescription' ), '', false ),
+					'',
+					false
+				),
+				$archive_query_select_field,
+			],
+			true
+		);
 		?>
 		<hr>
 
@@ -238,22 +241,25 @@ switch ( $instance ) :
 		$this->description( __( 'To improve performance, generated SEO output can be stored in the database as transient cache.', 'autodescription' ) );
 		$this->description( __( 'If your website has thousands of pages, or if other forms of caching are used, you might wish to adjust these options.', 'autodescription' ) );
 
-		$this->wrap_fields( [
-			$this->make_checkbox(
-				'cache_meta_schema',
-				esc_html__( 'Enable automated Schema.org output cache?', 'autodescription' )
-				. ' ' . $this->make_info( __( 'Schema.org output generally makes multiple calls to the database.', 'autodescription' ), '', false ),
-				'',
-				false
-			),
-			$this->make_checkbox(
-				'cache_sitemap',
-				esc_html__( 'Enable sitemap generation cache?', 'autodescription' )
-				. ' ' . $this->make_info( __( 'Generating the sitemap can use a lot of server resources.', 'autodescription' ), '', false ),
-				'',
-				false
-			),
-		], true );
+		$this->wrap_fields(
+			[
+				$this->make_checkbox(
+					'cache_meta_schema',
+					esc_html__( 'Enable automated Schema.org output cache?', 'autodescription' )
+					. ' ' . $this->make_info( __( 'Schema.org output generally makes multiple calls to the database.', 'autodescription' ), '', false ),
+					'',
+					false
+				),
+				$this->make_checkbox(
+					'cache_sitemap',
+					esc_html__( 'Enable sitemap generation cache?', 'autodescription' )
+					. ' ' . $this->make_info( __( 'Generating the sitemap can use a lot of server resources.', 'autodescription' ), '', false ),
+					'',
+					false
+				),
+			],
+			true
+		);
 
 		if ( wp_using_ext_object_cache() ) :
 			?>
@@ -314,18 +320,17 @@ switch ( $instance ) :
 		$this->description( __( "It's recommended to turn these options on for better SEO consistency and to prevent duplicate content errors.", 'autodescription' ) );
 
 		/* translators: %s = <code>rel</code> */
-		$prev_next_posts_label = sprintf( esc_html__( 'Add %s link tags to posts and pages?', 'autodescription' ), $this->code_wrap( 'rel' ) );
+		$prev_next_posts_label    = sprintf( esc_html__( 'Add %s link tags to posts and pages?', 'autodescription' ), $this->code_wrap( 'rel' ) );
 		$prev_next_posts_checkbox = $this->make_checkbox( 'prev_next_posts', $prev_next_posts_label, '', false );
 
 		/* translators: %s = <code>rel</code> */
-		$prev_next_archives_label = sprintf( esc_html__( 'Add %s link tags to archives?', 'autodescription' ), $this->code_wrap( 'rel' ) );
+		$prev_next_archives_label    = sprintf( esc_html__( 'Add %s link tags to archives?', 'autodescription' ), $this->code_wrap( 'rel' ) );
 		$prev_next_archives_checkbox = $this->make_checkbox( 'prev_next_archives', $prev_next_archives_label, '', false );
 
 		/* translators: %s = <code>rel</code> */
-		$prev_next_frontpage_label = sprintf( esc_html__( 'Add %s link tags to the homepage?', 'autodescription' ), $this->code_wrap( 'rel' ) );
+		$prev_next_frontpage_label    = sprintf( esc_html__( 'Add %s link tags to the homepage?', 'autodescription' ), $this->code_wrap( 'rel' ) );
 		$prev_next_frontpage_checkbox = $this->make_checkbox( 'prev_next_frontpage', $prev_next_frontpage_label, '', false );
 
-		//* Echo checkboxes.
 		$this->wrap_fields( $prev_next_posts_checkbox . $prev_next_archives_checkbox . $prev_next_frontpage_checkbox, true );
 		break;
 
@@ -363,6 +368,7 @@ switch ( $instance ) :
 					<input type="radio" name="<?php $this->field_name( 'timestamps_format' ); ?>" id="<?php $this->field_id( 'timestamps_format_0' ); ?>" value="0" <?php checked( $this->get_option( 'timestamps_format' ), '0' ); ?> />
 					<label for="<?php $this->field_id( 'timestamps_format_0' ); ?>">
 						<?php
+						// phpcs:ignore, WordPress.Security.EscapeOutput -- code_wrap escapes.
 						echo $this->code_wrap( $timestamp_0 );
 						echo ' ';
 						$this->make_info(
@@ -375,6 +381,7 @@ switch ( $instance ) :
 					<input type="radio" name="<?php $this->field_name( 'timestamps_format' ); ?>" id="<?php $this->field_id( 'timestamps_format_1' ); ?>" value="1" <?php checked( $this->get_option( 'timestamps_format' ), '1' ); ?> />
 					<label for="<?php $this->field_id( 'timestamps_format_1' ); ?>">
 						<?php
+						// phpcs:ignore, WordPress.Security.EscapeOutput -- code_wrap escapes.
 						echo $this->code_wrap( $timestamp_1 );
 						echo ' ';
 						$this->make_info(

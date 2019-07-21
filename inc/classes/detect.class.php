@@ -1,6 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes
+ * @package The_SEO_Framework\Classes\Facade\Detect
+ * @subpackage The_SEO_Framework\Compatibility
  */
 
 namespace The_SEO_Framework;
@@ -32,39 +33,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * @since 2.8.0
  */
 class Detect extends Render {
-
-	/**
-	 * Tests if input URL matches current domain.
-	 *
-	 * @since 2.9.4
-	 * @since 3.3.0 Improved performance.
-	 *
-	 * @param string $url The URL to test. Required.
-	 * @return bool true on match, false otherwise.
-	 */
-	public function matches_this_domain( $url ) {
-
-		if ( ! $url )
-			return false;
-
-		static $home_domain;
-
-		if ( ! $home_domain ) {
-			$home_domain = \esc_url_raw( \get_home_url(), [ 'https', 'http' ] );
-			//= Simply convert to HTTPS/HTTP based on is_ssl()
-			$home_domain = $this->set_url_scheme( $home_domain );
-		}
-
-		$url = \esc_url_raw( $url, [ 'https', 'http' ] );
-		//= Simply convert to HTTPS/HTTP based on is_ssl()
-		$url = $this->set_url_scheme( $url );
-
-		//= If they start with the same, we can assume it's the same domain.
-		if ( 0 === stripos( $url, $home_domain ) )
-			return true;
-
-		return false;
-	}
 
 	/**
 	 * Returns list of active plugins.
@@ -708,18 +676,6 @@ class Detect extends Render {
 	}
 
 	/**
-	 * Checks a theme's support for title-tag.
-	 *
-	 * @since 2.6.0
-	 * @since 3.1.0 Removed caching
-	 *
-	 * @return bool
-	 */
-	public function current_theme_supports_title_tag() {
-		return $this->detect_theme_support( 'title-tag' );
-	}
-
-	/**
 	 * Detect if the current screen type is a page or taxonomy.
 	 *
 	 * @since 2.3.1
@@ -1023,19 +979,6 @@ class Detect extends Render {
 			return \is_gutenberg_page();
 
 		return false;
-	}
-
-	/**
-	 * Determines if the current theme supports the custom logo addition.
-	 *
-	 * @since 2.8.0
-	 * @since 3.1.0: 1. No longer checks for WP version 4.5+.
-	 *               2. No longer uses caching.
-	 *
-	 * @return bool
-	 */
-	public function can_use_logo() {
-		return $this->detect_theme_support( 'custom-logo' );
 	}
 
 	/**

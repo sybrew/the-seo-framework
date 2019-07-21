@@ -1,6 +1,7 @@
 <?php
 /**
  * @package The_SEO_Framework\Views\Sitemap
+ * @subpackage The_SEO_Framework\Sitemap
  */
 
 namespace The_SEO_Framework;
@@ -191,13 +192,15 @@ function _print_xsl_description( $tsf ) {
 	$logo = '';
 	if ( $tsf->get_option( 'sitemap_logo' ) ) {
 
-		$_src = $tsf->can_use_logo() ? \wp_get_attachment_image_src( \get_theme_mod( 'custom_logo' ), [ 29, 29 ] ) : [];
+		$id = \get_theme_mod( 'custom_logo' ) ?: 0;
+
+		$_src = $id ? \wp_get_attachment_image_src( $id, [ 29, 29 ] ) : [];
 		/**
 		 * @since 2.8.0
-		 * @param array $_src The logo: {
+		 * @param array $_src An empty array, or the logo details: {
 		 *    0 => The image URL,
-		 *    1 => width in px,
-		 *    2 => height in px,
+		 *    1 => The width in px,
+		 *    2 => The height in px,
 		 * }
 		 */
 		$_src = (array) \apply_filters( 'the_seo_framework_sitemap_logo', $_src );

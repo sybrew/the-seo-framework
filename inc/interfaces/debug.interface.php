@@ -1,6 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes
+ * @package The_SEO_Framework\Interfaces\Debug
+ * @subpackage The_SEO_Framework\Debug
  */
 
 namespace The_SEO_Framework;

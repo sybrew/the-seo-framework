@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Builders
- * @subpackage The_SEO_Framework\Builders
+ * @package The_SEO_Framework\Classes\Builders\Sitemap\Base
+ * @subpackage The_SEO_Framework\Sitemap
  */
 
 namespace The_SEO_Framework\Builders;
@@ -202,13 +202,16 @@ class Sitemap_Base extends Sitemap {
 		 *   int  $total_itemns  : Estimate: The total sitemap items before adding additional URLs.
 		 * }
 		 */
-		if ( $extend = (string) \apply_filters_ref_array(
+		$extend = (string) \apply_filters_ref_array(
 			'the_seo_framework_sitemap_extend',
 			[
 				'',
 				compact( 'show_priority', 'show_modified', 'count' ),
 			]
-		) ) $content .= "\t" . $extend . "\n";
+		);
+
+		if ( $extend )
+			$content .= "\t" . $extend . "\n";
 
 		return $content;
 	}
@@ -234,11 +237,11 @@ class Sitemap_Base extends Sitemap {
 
 		if ( static::$tsf->has_page_on_front() ) {
 			if ( $front_page_id && $this->is_post_included_in_sitemap( $front_page_id ) ) {
-				// PHP7:...
+				// TODO use this instead @ PHP7
 				// yield from $this->generate_url_item_values()
 
 				// Reset.
-				$_values = [];
+				$_values        = [];
 				$_values['loc'] = static::$tsf->create_canonical_url( [ 'id' => $front_page_id ] );
 
 				if ( $args['show_modified'] ) {
@@ -255,7 +258,7 @@ class Sitemap_Base extends Sitemap {
 			}
 			if ( $posts_page_id && $this->is_post_included_in_sitemap( $posts_page_id ) ) {
 				// Reset.
-				$_values = [];
+				$_values        = [];
 				$_values['loc'] = static::$tsf->create_canonical_url( [ 'id' => $posts_page_id ] );
 
 				if ( $args['show_modified'] ) {
@@ -295,7 +298,7 @@ class Sitemap_Base extends Sitemap {
 			// Blog page as front.
 			if ( $this->is_post_included_in_sitemap( 0 ) ) {
 				// Reset.
-				$_values = [];
+				$_values        = [];
 				$_values['loc'] = static::$tsf->get_homepage_permalink();
 
 				if ( $args['show_modified'] ) {
@@ -387,6 +390,7 @@ class Sitemap_Base extends Sitemap {
 		if ( empty( $args['loc'] ) ) return '';
 
 		static $timestamp_format = null;
+
 		$timestamp_format = $timestamp_format ?: static::$tsf->get_timestamp_format();
 
 		return sprintf(
@@ -424,7 +428,6 @@ class Sitemap_Base extends Sitemap {
 	 */
 	protected function get_additional_base_urls( $args, &$count = 0 ) {
 
-		$content = '';
 		/**
 		 * @since 2.5.2
 		 * @since 3.2.2 Invalid URLs are now skipped.

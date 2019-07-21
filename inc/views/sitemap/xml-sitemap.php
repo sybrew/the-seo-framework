@@ -1,6 +1,7 @@
 <?php
 /**
  * @package The_SEO_Framework\Views\Sitemap
+ * @subpackage The_SEO_Framework\Sitemap
  */
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() and $this instanceof $_this or die;

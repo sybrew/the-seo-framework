@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Builders
- * @subpackage The_SEO_Framework\Builders
+ * @package The_SEO_Framework\Classes\Builders\SeoBar\Page
+ * @subpackage The_SEO_Framework\SeoBar
  */
 
 namespace The_SEO_Framework\Builders;
@@ -173,7 +173,7 @@ final class SeoBar_Page extends SeoBar {
 							'base' => \__( "It's built using the page title.", 'autodescription' ),
 						],
 					],
-					'custom' => [
+					'custom'    => [
 						'symbol' => \_x( 'T', 'Title', 'autodescription' ),
 						'title'  => \__( 'Title', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
@@ -360,7 +360,7 @@ final class SeoBar_Page extends SeoBar {
 							'base' => \__( "It's built using the page content.", 'autodescription' ),
 						],
 					],
-					'custom' => [
+					'custom'    => [
 						'symbol' => \_x( 'D', 'Description', 'autodescription' ),
 						'title'  => \__( 'Description', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
@@ -523,7 +523,7 @@ final class SeoBar_Page extends SeoBar {
 					'notpublished' => \__( 'The page is not published.', 'autodescription' ),
 				],
 				'defaults' => [
-					'index' => [
+					'index'   => [
 						'symbol' => \_x( 'I', 'Indexing', 'autodescription' ),
 						'title'  => \__( 'Indexing', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
@@ -541,7 +541,7 @@ final class SeoBar_Page extends SeoBar {
 							'base' => \__( 'The robots meta does not allow indexing.', 'autodescription' ),
 						],
 					],
-					'draft' => [
+					'draft'   => [
 						'symbol' => \_x( 'I', 'Indexing', 'autodescription' ),
 						'title'  => \__( 'Indexing', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN,
@@ -660,7 +660,7 @@ final class SeoBar_Page extends SeoBar {
 					'notpublished' => \__( 'The page is not published.', 'autodescription' ),
 				],
 				'defaults' => [
-					'follow' => [
+					'follow'   => [
 						'symbol' => \_x( 'F', 'Following', 'autodescription' ),
 						'title'  => \__( 'Following', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
@@ -678,7 +678,7 @@ final class SeoBar_Page extends SeoBar {
 							'base' => \__( 'The robots meta does not allow link following.', 'autodescription' ),
 						],
 					],
-					'draft' => [
+					'draft'    => [
 						'symbol' => \_x( 'F', 'Following', 'autodescription' ),
 						'title'  => \__( 'Following', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN,
@@ -804,7 +804,7 @@ final class SeoBar_Page extends SeoBar {
 							'base' => \__( 'The robots meta does not allow archiving.', 'autodescription' ),
 						],
 					],
-					'draft'    => [
+					'draft'     => [
 						'symbol' => \_x( 'A', 'Archiving', 'autodescription' ),
 						'title'  => \__( 'Archiving', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN,

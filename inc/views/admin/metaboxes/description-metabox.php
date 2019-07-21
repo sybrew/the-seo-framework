@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Views\Admin
- * @subpackage The_SEO_Framework\Views\Metaboxes
+ * @package The_SEO_Framework\Views\Admin\Metaboxes
+ * @subpackage The_SEO_Framework\Admin\Settings
  */
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
@@ -28,7 +28,6 @@ switch ( $instance ) :
 			__( 'Open Graph and Twitter Cards require descriptions. Therefore, it is best to leave this option enabled.', 'autodescription' )
 		);
 
-		//* Echo checkboxes.
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'auto_description',

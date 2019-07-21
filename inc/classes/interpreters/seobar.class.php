@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Interpreters
- * @subpackage The_SEO_Framework\Interpreters
+ * @package The_SEO_Framework\Classes\Interpreters\SeoBar
+ * @subpackage The_SEO_Framework\SeoBar
  */
 
 namespace The_SEO_Framework\Interpreters;
@@ -96,11 +96,16 @@ final class SeoBar {
 	 */
 	public static function generate_bar( array $query ) {
 
-		static::$query = array_merge( [
-			// 'id'        => 0, // Required! Don't fill this automatically.
-			'taxonomy'  => '',
-			'post_type' => '',
-		], $query );
+		static::$query = array_merge(
+			[
+				'id'        => 0,
+				'taxonomy'  => '',
+				'post_type' => '',
+			],
+			$query
+		);
+
+		if ( ! static::$query['id'] ) return '';
 
 		if ( ! static::$query['taxonomy'] )
 			static::$query['post_type'] = static::$query['post_type'] ?: \get_post_type( static::$query['id'] );
@@ -247,6 +252,7 @@ final class SeoBar {
 	private function create_seo_bar( array $items ) {
 
 		$blocks = [];
+
 		foreach ( $this->generate_seo_bar_blocks( $items ) as $block )
 			$blocks[] = $block;
 
@@ -411,6 +417,7 @@ final class SeoBar {
 	private function interpret_status_to_symbol( array $item ) {
 
 		static $use_symbols = null;
+
 		if ( null === $use_symbols )
 			$use_symbols = (bool) \the_seo_framework()->get_option( 'seo_bar_symbols' );
 

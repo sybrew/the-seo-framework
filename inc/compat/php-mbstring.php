@@ -1,6 +1,9 @@
 <?php
 /**
  * @package The_SEO_Framework\Compat\PHP\mbstring
+ * @subpackage The_SEO_Framework\Compatibility
+ *
+ * @ignore this file isn't loaded.
  */
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;

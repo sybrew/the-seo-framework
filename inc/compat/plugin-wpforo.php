@@ -1,6 +1,7 @@
 <?php
 /**
  * @package The_SEO_Framework\Compat\Plugin\wpForo
+ * @subpackage The_SEO_Framework\Compatibility
  */
 
 namespace The_SEO_Framework;

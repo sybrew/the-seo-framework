@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package The_SEO_Framework\Templates\Inpost
+ * @subpackage The_SEO_Framework\Admin\Edit\Inpost
+ */
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and The_SEO_Framework\Builders\Scripts::verify( $_secret ) or die;
 

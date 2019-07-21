@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Views\Admin
- * @subpackage The_SEO_Framework\Views\Metaboxes
+ * @package The_SEO_Framework\Views\Admin\Metaboxes
+ * @subpackage The_SEO_Framework\Admin\Settings
  */
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
@@ -107,7 +107,8 @@ switch ( $instance ) :
 				sprintf( esc_html__( 'Apply %s to every second or later archive page?', 'autodescription' ), $this->code_wrap( 'noindex' ) ),
 				'',
 				false
-			), true
+			),
+			true
 		);
 		break;
 
@@ -128,7 +129,7 @@ switch ( $instance ) :
 		$checkboxes = '';
 		foreach ( $types as $type => $i18n ) {
 
-			if ( 'site' === $type || 'attachment' === $type || 'search' === $type ) {
+			if ( in_array( $type, [ 'site', 'attachment', 'search' ], true ) ) {
 				//* Singular.
 				/* translators: 1: Option, 2: Post Type */
 				$label = sprintf( esc_html__( 'Apply %1$s to %2$s?', 'autodescription' ), $ro_name_wrapped, esc_html( $i18n ) );
@@ -154,7 +155,6 @@ switch ( $instance ) :
 			$checkboxes .= $this->make_checkbox( $id, $label, '', false );
 		}
 
-		//* Echo checkboxes.
 		$this->wrap_fields( $checkboxes, true );
 
 		?>
@@ -170,6 +170,10 @@ switch ( $instance ) :
 
 		if ( in_array( $ro_value, [ 'noindex', 'nofollow' ], true ) )
 			$this->attention_description( __( 'Warning: No site should enable these options for Posts and Pages.', 'autodescription' ) );
+
+		// TODO can we assume that there's at least one post type at all times? Can WP be used in this way, albeit headless?
+		// Let's assign $boxes, for that matter.
+		$boxes = [];
 
 		foreach ( $post_types as $post_type ) {
 			$pto = \get_post_type_object( $post_type );

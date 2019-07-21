@@ -1,6 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes
+ * @package The_SEO_Framework\Classes\Facade\Generate_Url
+ * @subpackage The_SEO_Framework\Getters\URL
  */
 
 namespace The_SEO_Framework;
@@ -154,7 +155,7 @@ class Generate_Url extends Generate_Title {
 	public function get_canonical_url( $args = null ) {
 
 		if ( $args ) {
-			//= See $this->create_canonical_url().
+			// See and use `$this->create_canonical_url()` instead.
 			$canonical_url = $this->build_canonical_url( $args );
 			$query         = false;
 		} else {
@@ -995,10 +996,12 @@ class Generate_Url extends Generate_Title {
 	}
 
 	/**
-	 * Makes a fully qualified URL from input. Always adds http prefix, not https.
+	 * Makes a fully qualified URL by adding the scheme prefix.
+	 * Always adds http prefix, not https.
 	 *
 	 * NOTE: Expects the URL to have either a scheme, or a relative scheme set.
-	 * Domain-relative URLs aren't parsed correctly.
+	 *       Domain-relative URLs aren't parsed correctly.
+	 *       '/path/to/folder/` will become `http:///path/to/folder/`
 	 *
 	 * @since 2.6.5
 	 * @see `$this->set_url_scheme()` to set the correct scheme.
@@ -1064,5 +1067,38 @@ class Generate_Url extends Generate_Title {
 			$url .= '#' . $_fragment;
 
 		return $url;
+	}
+
+	/**
+	 * Tests if input URL matches current domain.
+	 *
+	 * @since 2.9.4
+	 * @since 3.3.0 Improved performance.
+	 *
+	 * @param string $url The URL to test. Required.
+	 * @return bool true on match, false otherwise.
+	 */
+	public function matches_this_domain( $url ) {
+
+		if ( ! $url )
+			return false;
+
+		static $home_domain;
+
+		if ( ! $home_domain ) {
+			$home_domain = \esc_url_raw( \get_home_url(), [ 'https', 'http' ] );
+			//= Simply convert to HTTPS/HTTP based on is_ssl()
+			$home_domain = $this->set_url_scheme( $home_domain );
+		}
+
+		$url = \esc_url_raw( $url, [ 'https', 'http' ] );
+		//= Simply convert to HTTPS/HTTP based on is_ssl()
+		$url = $this->set_url_scheme( $url );
+
+		//= If they start with the same, we can assume it's the same domain.
+		if ( 0 === stripos( $url, $home_domain ) )
+			return true;
+
+		return false;
 	}
 }

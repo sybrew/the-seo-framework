@@ -1,6 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes
+ * @package The_SEO_Framework\Classes\Facade\Site_Options
+ * @subpackage The_SEO_Framework\Data
  */
 
 namespace The_SEO_Framework;

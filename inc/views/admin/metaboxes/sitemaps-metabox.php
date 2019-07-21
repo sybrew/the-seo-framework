@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Views\Admin
- * @subpackage The_SEO_Framework\Views\Metaboxes
+ * @package The_SEO_Framework\Views\Admin\Metaboxes
+ * @subpackage The_SEO_Framework\Admin\Settings
  */
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
@@ -27,12 +27,12 @@ switch ( $instance ) :
 		 * @since 2.2.9
 		 */
 		$default_tabs = [
-			'general' => [
+			'general'  => [
 				'name'     => __( 'General', 'autodescription' ),
 				'callback' => [ $this, 'sitemaps_metabox_general_tab' ],
 				'dashicon' => 'admin-generic',
 			],
-			'robots' => [
+			'robots'   => [
 				'name'     => 'Robots.txt',
 				'callback' => [ $this, 'sitemaps_metabox_robots_tab' ],
 				'dashicon' => 'share-alt2',
@@ -42,12 +42,12 @@ switch ( $instance ) :
 				'callback' => [ $this, 'sitemaps_metabox_metadata_tab' ],
 				'dashicon' => 'index-card',
 			],
-			'notify' => [
+			'notify'   => [
 				'name'     => _x( 'Ping', 'Ping or notify search engine', 'autodescription' ),
 				'callback' => [ $this, 'sitemaps_metabox_notify_tab' ],
 				'dashicon' => 'megaphone',
 			],
-			'style' => [
+			'style'    => [
 				'name'     => __( 'Style', 'autodescription' ),
 				'callback' => [ $this, 'sitemaps_metabox_style_tab' ],
 				'dashicon' => 'art',
@@ -96,7 +96,8 @@ switch ( $instance ) :
 				__( 'Output Sitemap?', 'autodescription' ),
 				'',
 				true
-			), true
+			),
+			true
 		);
 
 		if ( ! $has_sitemap_plugin && ( $this->get_option( 'sitemaps_output' ) || ( $sitemap_detected && $this->pretty_permalinks ) ) ) {
@@ -126,7 +127,7 @@ switch ( $instance ) :
 		else :
 			?>
 			<p>
-				<input type="number" min=1 max=50000 name="<?php $this->field_name( 'sitemap_query_limit' ); ?>" id="<?php $this->field_id( 'sitemap_query_limit' ); ?>" placeholder="<?php echo $this->get_default_option( 'sitemap_query_limit' ); ?>" value="<?php echo absint( $this->get_option( 'sitemap_query_limit' ) ); ?>" />
+				<input type="number" min=1 max=50000 name="<?php $this->field_name( 'sitemap_query_limit' ); ?>" id="<?php $this->field_id( 'sitemap_query_limit' ); ?>" placeholder="<?php echo absint( $this->get_default_option( 'sitemap_query_limit' ) ); ?>" value="<?php echo absint( $this->get_option( 'sitemap_query_limit' ) ); ?>" />
 			</p>
 			<?php
 		endif;
@@ -212,7 +213,8 @@ switch ( $instance ) :
 				sprintf( esc_html__( 'Add %s to the sitemap?', 'autodescription' ), $this->code_wrap( '<lastmod>' ) ),
 				'',
 				false
-			), true
+			),
+			true
 		);
 
 		?>
@@ -230,7 +232,8 @@ switch ( $instance ) :
 				sprintf( esc_html__( 'Add %s to the sitemap?', 'autodescription' ), $this->code_wrap( '<priority>' ) ),
 				'',
 				false
-			), true
+			),
+			true
 		);
 		break;
 
@@ -291,14 +294,14 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Enable styling', 'autodescription' ); ?></h4>
 		<?php
 
-		//* Echo checkboxes.
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'sitemap_styles',
 				esc_html__( 'Style Sitemap?', 'autodescription' ) . ' ' . $this->make_info( __( 'This makes the sitemap more readable for humans.', 'autodescription' ), '', false ),
 				'',
 				false
-			), true
+			),
+			true
 		);
 
 		?>
@@ -307,17 +310,15 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Style configuration', 'autodescription' ); ?></h4>
 		<?php
 
-		if ( $this->can_use_logo() ) :
-			//* Echo checkbox.
-			$this->wrap_fields(
-				$this->make_checkbox(
-					'sitemap_logo',
-					esc_html__( 'Add site logo?', 'autodescription' ) . ' ' . $this->make_info( __( 'The logo is set in Customizer.', 'autodescription' ), '', false ),
-					'',
-					false
-				), true
-			);
-		endif;
+		$this->wrap_fields(
+			$this->make_checkbox(
+				'sitemap_logo',
+				esc_html__( 'Add site logo?', 'autodescription' ) . ' ' . $this->make_info( __( 'The logo is set in Customizer.', 'autodescription' ), '', false ),
+				'',
+				false
+			),
+			true
+		);
 
 		$current_colors = $this->get_sitemap_colors();
 		$default_colors = $this->get_sitemap_colors( true );

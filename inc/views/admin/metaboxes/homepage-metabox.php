@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Views\Admin
- * @subpackage The_SEO_Framework\Views\Metaboxes
+ * @package The_SEO_Framework\Views\Admin\Metaboxes
+ * @subpackage The_SEO_Framework\Admin\Settings
  */
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
@@ -40,7 +40,7 @@ switch ( $instance ) :
 		 * }
 		 */
 		$default_tabs = [
-			'general' => [
+			'general'   => [
 				'name'     => __( 'General', 'autodescription' ),
 				'callback' => [ $this, 'homepage_metabox_general_tab' ],
 				'dashicon' => 'admin-generic',
@@ -50,12 +50,12 @@ switch ( $instance ) :
 				'callback' => [ $this, 'homepage_metabox_additions_tab' ],
 				'dashicon' => 'plus',
 			],
-			'social' => [
+			'social'    => [
 				'name'     => __( 'Social', 'autodescription' ),
 				'callback' => [ $this, 'homepage_metabox_social_tab' ],
 				'dashicon' => 'share',
 			],
-			'robots' => [
+			'robots'    => [
 				'name'     => __( 'Robots', 'autodescription' ),
 				'callback' => [ $this, 'homepage_metabox_robots_tab' ],
 				'dashicon' => 'visibility',
@@ -91,10 +91,6 @@ switch ( $instance ) :
 		//* Fetch the description from the homepage.
 		$frompost_description = $home_id ? $this->get_post_meta_item( '_genesis_description', $home_id ) : '';
 
-		/**
-		 * Create a placeholder.
-		 * @since 2.3.4
-		 */
 		if ( $frompost_description ) {
 			$description_placeholder = $frompost_description;
 		} else {
@@ -110,7 +106,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php $this->field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title_tagline' ); ?>" placeholder="<?php echo esc_attr( $tagline_placeholder ); ?>" value="<?php echo $this->s_esc_attr_super_amp( $this->get_option( 'homepage_title_tagline' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php $this->field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title_tagline' ); ?>" placeholder="<?php echo esc_attr( $tagline_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_title_tagline' ) ); ?>" autocomplete=off />
 		</p>
 
 		<hr>
@@ -135,16 +131,10 @@ switch ( $instance ) :
 			?>
 		</div>
 		<p id="tsf-title-wrap">
-			<input type="text" name="<?php $this->field_name( 'homepage_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title' ); ?>" placeholder="<?php echo esc_attr( $home_title_placeholder ); ?>" value="<?php echo $this->s_esc_attr_super_amp( $this->get_option( 'homepage_title' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php $this->field_name( 'homepage_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title' ); ?>" placeholder="<?php echo esc_attr( $home_title_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_title' ) ); ?>" autocomplete=off />
 			<?php $this->output_js_title_elements(); ?>
 		</p>
 		<?php
-		/**
-		 * If the home title is fetched from the post, notify about that instead.
-		 * @since 2.2.4
-		 *
-		 * Nesting often used translations
-		 */
 		if ( $home_id && $this->get_post_meta_item( '_genesis_title', $home_id ) ) {
 			$this->description( __( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' ) );
 		}
@@ -230,7 +220,8 @@ switch ( $instance ) :
 		$_example_blogname  = $this->escape_title( $this->get_home_page_tagline() ?: $this->get_static_untitled_title() );
 		$_example_separator = esc_html( $this->get_separator( 'title' ) );
 
-		$example_left = '<em><span class="tsf-custom-blogname-js"><span class="tsf-custom-tagline-js">' . $_example_blogname . '</span><span class="tsf-sep-js"> ' . $_example_separator . ' </span></span><span class="tsf-custom-title-js">' . $_example_title . '</span></em>';
+		// TODO very readable.
+		$example_left  = '<em><span class="tsf-custom-blogname-js"><span class="tsf-custom-tagline-js">' . $_example_blogname . '</span><span class="tsf-sep-js"> ' . $_example_separator . ' </span></span><span class="tsf-custom-title-js">' . $_example_title . '</span></em>';
 		$example_right = '<em><span class="tsf-custom-title-js">' . $_example_title . '</span><span class="tsf-custom-blogname-js"><span class="tsf-sep-js"> ' . $_example_separator . ' </span><span class="tsf-custom-tagline-js">' . $_example_blogname . '</span></span></em>';
 
 		?>
@@ -246,7 +237,7 @@ switch ( $instance ) :
 					<label for="<?php $this->field_id( 'home_title_location_left' ); ?>">
 						<span><?php esc_html_e( 'Left:', 'autodescription' ); ?></span>
 						<?php
-						//* Already escaped.
+						// phpcs:ignore, WordPress.Security.EscapeOutput -- $example_left is already escaped.
 						echo $this->code_wrap_noesc( $example_left );
 						?>
 					</label>
@@ -256,7 +247,7 @@ switch ( $instance ) :
 					<label for="<?php $this->field_id( 'home_title_location_right' ); ?>">
 						<span><?php esc_html_e( 'Right:', 'autodescription' ); ?></span>
 						<?php
-						//* Already escaped.
+						// phpcs:ignore, WordPress.Security.EscapeOutput -- $example_right is already escaped.
 						echo $this->code_wrap_noesc( $example_right );
 						?>
 					</label>
@@ -326,7 +317,7 @@ switch ( $instance ) :
 			?>
 		</div>
 		<p>
-			<input type="text" name="<?php $this->field_name( 'homepage_og_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_og_title' ); ?>" placeholder="<?php echo esc_attr( $og_tit_placeholder ); ?>" value="<?php echo $this->s_esc_attr_super_amp( $this->get_option( 'homepage_og_title' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php $this->field_name( 'homepage_og_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_og_title' ); ?>" placeholder="<?php echo esc_attr( $og_tit_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_og_title' ) ); ?>" autocomplete=off />
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && $custom_og_title ) {
@@ -350,7 +341,7 @@ switch ( $instance ) :
 			?>
 		</div>
 		<p>
-			<textarea name="<?php $this->field_name( 'homepage_og_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_og_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $og_desc_placeholder ); ?>"><?php echo esc_attr( $this->get_option( 'homepage_og_description' ) ); ?></textarea>
+			<textarea name="<?php $this->field_name( 'homepage_og_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_og_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $og_desc_placeholder ); ?>" autocomplete=off><?php echo esc_attr( $this->get_option( 'homepage_og_description' ) ); ?></textarea>
 			<?php $this->output_js_description_elements(); ?>
 		</p>
 		<?php
@@ -378,7 +369,7 @@ switch ( $instance ) :
 			?>
 		</div>
 		<p>
-			<input type="text" name="<?php $this->field_name( 'homepage_twitter_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_twitter_title' ); ?>" placeholder="<?php echo esc_attr( $tw_tit_placeholder ); ?>" value="<?php echo $this->s_esc_attr_super_amp( $this->get_option( 'homepage_twitter_title' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php $this->field_name( 'homepage_twitter_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_twitter_title' ); ?>" placeholder="<?php echo esc_attr( $tw_tit_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_twitter_title' ) ); ?>" autocomplete=off />
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && ( $custom_og_title || $custom_tw_title ) ) {
@@ -402,7 +393,7 @@ switch ( $instance ) :
 			?>
 		</div>
 		<p>
-			<textarea name="<?php $this->field_name( 'homepage_twitter_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_twitter_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $tw_desc_placeholder ); ?>"><?php echo esc_attr( $this->get_option( 'homepage_twitter_description' ) ); ?></textarea>
+			<textarea name="<?php $this->field_name( 'homepage_twitter_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_twitter_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $tw_desc_placeholder ); ?>" autocomplete=off><?php echo esc_attr( $this->get_option( 'homepage_twitter_description' ) ); ?></textarea>
 			<?php $this->output_js_description_elements(); ?>
 		</p>
 		<?php
@@ -428,7 +419,8 @@ switch ( $instance ) :
 				<strong><?php esc_html_e( 'Social Image URL', 'autodescription' ); ?></strong>
 				<?php
 				$this->make_info(
-					__( "The social image URL can be used by search engines and social networks alike. It's best to use an image with a 1.91:1 aspect ratio that is at least 1200px wide for universal support.", 'autodescription' ), 'https://developers.facebook.com/docs/sharing/best-practices#images'
+					__( "The social image URL can be used by search engines and social networks alike. It's best to use an image with a 1.91:1 aspect ratio that is at least 1200px wide for universal support.", 'autodescription' ),
+					'https://developers.facebook.com/docs/sharing/best-practices#images'
 				);
 				?>
 			</label>
@@ -439,7 +431,6 @@ switch ( $instance ) :
 		</p>
 		<p class="hide-if-no-tsf-js">
 			<?php
-			//* Already escaped.
 			echo $this->get_social_image_uploader_form( 'tsf_homepage_socialimage' );
 			?>
 		</p>
@@ -482,7 +473,7 @@ switch ( $instance ) :
 
 		//* Index label.
 		/* translators: %s = noindex/nofollow/noarchive */
-		$i_label = sprintf( esc_html__( 'Apply %s to the homepage?', 'autodescription' ), $this->code_wrap( 'noindex' ) );
+		$i_label  = sprintf( esc_html__( 'Apply %s to the homepage?', 'autodescription' ), $this->code_wrap( 'noindex' ) );
 		$i_label .= ' ';
 		$i_label .= $this->make_info(
 			__( 'This tells search engines not to show this page in their search results.', 'autodescription' ),
@@ -492,7 +483,7 @@ switch ( $instance ) :
 
 		//* Follow label.
 		/* translators: %s = noindex/nofollow/noarchive */
-		$f_label = sprintf( esc_html__( 'Apply %s to the homepage?', 'autodescription' ), $this->code_wrap( 'nofollow' ) );
+		$f_label  = sprintf( esc_html__( 'Apply %s to the homepage?', 'autodescription' ), $this->code_wrap( 'nofollow' ) );
 		$f_label .= ' ';
 		$f_label .= $this->make_info(
 			__( 'This tells search engines not to follow links on this page.', 'autodescription' ),
@@ -502,7 +493,7 @@ switch ( $instance ) :
 
 		//* Archive label.
 		/* translators: %s = noindex/nofollow/noarchive */
-		$a_label = sprintf( esc_html__( 'Apply %s to the homepage?', 'autodescription' ), $this->code_wrap( 'noarchive' ) );
+		$a_label  = sprintf( esc_html__( 'Apply %s to the homepage?', 'autodescription' ), $this->code_wrap( 'noarchive' ) );
 		$a_label .= ' ';
 		$a_label .= $this->make_info(
 			__( 'This tells search engines not to save a cached copy of this page.', 'autodescription' ),
@@ -512,7 +503,6 @@ switch ( $instance ) :
 
 		$this->attention_description( __( 'Warning: No public site should ever apply "noindex" or "nofollow" for the homepage..', 'autodescription' ) );
 
-		//* Echo checkboxes.
 		$this->wrap_fields(
 			[
 				$this->make_checkbox(

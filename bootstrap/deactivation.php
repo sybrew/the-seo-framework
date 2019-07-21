@@ -1,7 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework
- * @subpackage Bootstrap
+ * @package The_SEO_Framework/Bootstrap\Install
  */
 
 namespace The_SEO_Framework\Bootstrap;

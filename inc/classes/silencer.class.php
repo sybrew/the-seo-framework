@@ -1,6 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework
+ * @package The_SEO_Framework\Classes\Silencer
+ * @subpackage The_SEO_Framework\Classes\Facade
  */
 
 namespace The_SEO_Framework;

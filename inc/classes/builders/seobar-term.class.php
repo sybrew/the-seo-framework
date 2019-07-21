@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Builders
- * @subpackage The_SEO_Framework\Builders
+ * @package The_SEO_Framework\Classes\Builders\SeoBar\Term
+ * @subpackage The_SEO_Framework\SeoBar
  */
 
 namespace The_SEO_Framework\Builders;
@@ -177,7 +177,7 @@ final class SeoBar_Term extends SeoBar {
 							'base' => \__( "It's built using the page title.", 'autodescription' ),
 						],
 					],
-					'custom' => [
+					'custom'    => [
 						'symbol' => \_x( 'T', 'Title', 'autodescription' ),
 						'title'  => \__( 'Title', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
@@ -315,7 +315,7 @@ final class SeoBar_Term extends SeoBar {
 			[
 				'params'   => [
 					/* translators: 1 = An assessment, 2 = Disclaimer, e.g. "take it with a grain of salt" */
-					'disclaim' => \__( '%1$s (%2$s)', 'autodescription' ),
+					'disclaim'  => \__( '%1$s (%2$s)', 'autodescription' ),
 					'estimated' => \__( 'Estimated from the number of characters found. The pixel counter asserts the true length.', 'autodescription' ),
 				],
 				'assess'   => [
@@ -338,7 +338,7 @@ final class SeoBar_Term extends SeoBar {
 							'base' => \__( "It's built using the term description field.", 'autodescription' ),
 						],
 					],
-					'custom' => [
+					'custom'    => [
 						'symbol' => \_x( 'D', 'Description', 'autodescription' ),
 						'title'  => \__( 'Description', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
@@ -484,7 +484,7 @@ final class SeoBar_Term extends SeoBar {
 					'emptyoverride' => \__( 'The term is empty yet still indexed.', 'autodescription' ),
 				],
 				'defaults' => [
-					'index' => [
+					'index'   => [
 						'symbol' => \_x( 'I', 'Indexing', 'autodescription' ),
 						'title'  => \__( 'Indexing', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
@@ -596,13 +596,13 @@ final class SeoBar_Term extends SeoBar {
 					'notpublic' => \__( 'WordPress discourages crawling via the Reading Settings.', 'autodescription' ),
 					'site'      => \__( 'Link following is discouraged for the whole site at the SEO Settings screen.', 'autodescription' ),
 					'posttypes' => \__( 'Link following is discouraged for all bound post types to this term at the SEO Settings screen.', 'autodescription' ),
-					'override' => \__( 'The SEO meta input overrides the indexing state.', 'autodescription' ),
+					'override'  => \__( 'The SEO meta input overrides the indexing state.', 'autodescription' ),
 				],
 				'reason'   => [
 					'notpublic' => \__( 'WordPress overrides the robots directive.', 'autodescription' ),
 				],
 				'defaults' => [
-					'follow' => [
+					'follow'   => [
 						'symbol' => \_x( 'F', 'Following', 'autodescription' ),
 						'title'  => \__( 'Following', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
@@ -705,7 +705,7 @@ final class SeoBar_Term extends SeoBar {
 					'notpublic' => \__( 'WordPress overrides the robots directive.', 'autodescription' ),
 				],
 				'defaults' => [
-					'archive' => [
+					'archive'   => [
 						'symbol' => \_x( 'A', 'Archiving', 'autodescription' ),
 						'title'  => \__( 'Archiving', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,

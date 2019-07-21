@@ -1,6 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes
+ * @package The_SEO_Framework\Classes\Facade\Generate_Ldjson
+ * @subpackage The_SEO_Framework\Getters\Schema
  */
 
 namespace The_SEO_Framework;

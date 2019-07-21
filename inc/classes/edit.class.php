@@ -1,6 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes
+ * @package The_SEO_Framework\Classes\Facade\Edit
+ * @subpackage The_SEO_Framework\Admin\Edit
  */
 
 namespace The_SEO_Framework;
@@ -25,13 +26,14 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  */
 
 /**
- * Class The_SEO_Framework\Inpost
+ * Class The_SEO_Framework\Edit
  *
  * Outputs Taxonomy, Post and Page meta boxes
  *
  * @since 2.8.0
+ * @since 3.3.0 Changed class name to "Edit".
  */
-class Inpost extends Profile {
+class Edit extends Profile {
 
 	/**
 	 * @since 2.7.0
@@ -57,6 +59,7 @@ class Inpost extends Profile {
 	 *
 	 * @since 2.9.0
 	 * @since 3.0.0: Converted to view.
+	 * @since 3.3.0: Deprecated second parameter, silently.
 	 *
 	 * @param string $id       The nav-tab ID
 	 * @param array  $tabs     The tab content {
@@ -67,12 +70,12 @@ class Inpost extends Profile {
 	 *       mixed    args     : Optional callback function args.
 	 *    }
 	 * }
-	 * @param string $version  The SEO Framework version for debugging. May be emptied.
+	 * @param null   $_depr    Deprecated.
 	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
 	 */
-	public function inpost_flex_nav_tab_wrapper( $id, $tabs = [], $version = '2.3.6', $use_tabs = true ) {
-		$this->get_view( 'inpost/wrap-nav', get_defined_vars() );
-		$this->get_view( 'inpost/wrap-content', get_defined_vars() );
+	public function inpost_flex_nav_tab_wrapper( $id, $tabs = [], $_depr = null, $use_tabs = true ) {
+		$this->get_view( 'edit/wrap-nav', get_defined_vars() );
+		$this->get_view( 'edit/wrap-content', get_defined_vars() );
 	}
 
 	/**
@@ -374,7 +377,7 @@ class Inpost extends Profile {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_tt_inpost_box' );
-		$this->get_view( 'inpost/seo-settings-tt', get_defined_vars() );
+		$this->get_view( 'edit/seo-settings-tt', get_defined_vars() );
 		/**
 		 * @since 2.9.0
 		 */
@@ -392,13 +395,13 @@ class Inpost extends Profile {
 	protected function get_inpost_tabs( $label ) {
 
 		$default_tabs = [
-			'general' => [
+			'general'    => [
 				'name'     => \__( 'General', 'autodescription' ),
 				'callback' => [ $this, 'singular_inpost_box_general_tab' ],
 				'dashicon' => 'admin-generic',
 				'args'     => [ $label ], // TODO assign key?
 			],
-			'social' => [
+			'social'    => [
 				'name'     => \__( 'Social', 'autodescription' ),
 				'callback' => [ $this, 'singular_inpost_box_social_tab' ],
 				'dashicon' => 'share',
@@ -441,8 +444,8 @@ class Inpost extends Profile {
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_box' );
 		$this->is_gutenberg_page()
-			and $this->get_view( 'inpost/seo-settings-singular-gutenberg-data', get_defined_vars() );
-		$this->get_view( 'inpost/seo-settings-singular', get_defined_vars() );
+			and $this->get_view( 'edit/seo-settings-singular-gutenberg-data', get_defined_vars() );
+		$this->get_view( 'edit/seo-settings-singular', get_defined_vars() );
 		/**
 		 * @since 2.9.0
 		 */
@@ -464,7 +467,7 @@ class Inpost extends Profile {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_general_tab' );
-		$this->get_view( 'inpost/seo-settings-singular', get_defined_vars(), 'general' );
+		$this->get_view( 'edit/seo-settings-singular', get_defined_vars(), 'general' );
 		/**
 		 * @since 2.9.0
 		 */
@@ -486,7 +489,7 @@ class Inpost extends Profile {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_visibility_tab' );
-		$this->get_view( 'inpost/seo-settings-singular', get_defined_vars(), 'visibility' );
+		$this->get_view( 'edit/seo-settings-singular', get_defined_vars(), 'visibility' );
 		/**
 		 * @since 2.9.0
 		 */
@@ -508,7 +511,7 @@ class Inpost extends Profile {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_social_tab' );
-		$this->get_view( 'inpost/seo-settings-singular', get_defined_vars(), 'social' );
+		$this->get_view( 'edit/seo-settings-singular', get_defined_vars(), 'social' );
 		/**
 		 * @since 2.9.0
 		 */

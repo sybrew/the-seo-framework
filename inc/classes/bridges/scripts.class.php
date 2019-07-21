@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Bridges
- * @subpackage The_SEO_Framework\Bridges
+ * @package The_SEO_Framework\Classes\Bridges\Scripts
+ * @subpackage The_SEO_Framework\Scripts
  */
 
 namespace The_SEO_Framework\Bridges;
@@ -293,7 +293,7 @@ final class Scripts {
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 				'ver'      => THE_SEO_FRAMEWORK_VERSION,
 				'inline'   => [
-					'.tsf-tooltip-text-wrap' => [
+					'.tsf-tooltip-text-wrap'   => [
 						'background-color:{{$bg_accent}}',
 						'color:{{$rel_bg_accent}}',
 					],
@@ -303,7 +303,7 @@ final class Scripts {
 					'.tsf-tooltip-down .tsf-tooltip-arrow:after' => [
 						'border-bottom-color:{{$bg_accent}}',
 					],
-					'.tsf-tooltip-text' => [
+					'.tsf-tooltip-text'        => [
 						\is_rtl() ? 'direction:rtl' : '',
 					],
 				],
@@ -399,12 +399,12 @@ final class Scripts {
 				'l10n'     => [
 					'name' => 'tsfSettingsL10n',
 					'data' => [
-						'i18n' => [
-							'confirmReset' => \__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
-							// phpcs:ignore -- WordPress doesn't have a comment, either.
-							'privateTitle'    => static::decode_entities( trim( str_replace( '%s', '', \__( 'Private: %s', 'default' ) ) ) ),
-							// phpcs:ignore -- WordPress doesn't have a comment, either.
-							'protectedTitle'  => static::decode_entities( trim( str_replace( '%s', '', \__( 'Protected: %s', 'default' ) ) ) ),
+						'i18n'   => [
+							'confirmReset'   => \__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
+							// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
+							'privateTitle'   => static::decode_entities( trim( str_replace( '%s', '', \__( 'Private: %s', 'default' ) ) ) ),
+							// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
+							'protectedTitle' => static::decode_entities( trim( str_replace( '%s', '', \__( 'Protected: %s', 'default' ) ) ) ),
 						],
 						'states' => [
 							'isFrontPrivate'   => $front_id && $tsf->is_private( $front_id ),
@@ -877,7 +877,7 @@ final class Scripts {
 		$inline_css = [];
 		if ( \is_rtl() ) {
 			$inline_css = [
-				'.tsf-primary-term-selector' => [
+				'.tsf-primary-term-selector'           => [
 					'float:left;',
 				],
 				'.tsf-primary-term-selector-help-wrap' => [

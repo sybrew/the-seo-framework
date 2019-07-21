@@ -33,7 +33,7 @@
  *       | Generate_Image
  *       | Generate_Ldjson
  *       | Profile
- *       | Inpost
+ *       | Edit
  *       | Admin_Pages
  *       | Sanitize
  *       | Site_Options

@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes
- * @subpackage Classes\Deprecated
+ * @package The_SEO_Framework\Classes\Deprecated
+ * @subpackage The_SEO_Framework\Debug\Deprecated
  */
 
 namespace The_SEO_Framework;
@@ -608,10 +608,10 @@ final class Deprecated {
 	 * @since 3.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param int  $id The post ID.
+	 * @param int $id The post ID.
 	 * @return string The unescaped HomePage social image URL.
 	 */
-	public function get_social_image_url_from_home_meta() {
+	public function get_social_image_url_from_home_meta( $id = 0 ) {
 
 		$tsf = \the_seo_framework();
 
@@ -811,7 +811,8 @@ final class Deprecated {
 	 *
 	 * @see WordPress Core sanitize_key()
 	 * @since 3.1.0
-	 * @since 3.3.0 Now allows square brackets.
+	 * @since 3.3.0 1. Now allows square brackets.
+	 *              2. Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $id The unsanitized ID.
@@ -820,5 +821,36 @@ final class Deprecated {
 	public function sanitize_field_id( $id ) {
 		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->sanitize_field_id()', '3.3.0', 'the_seo_framework()->s_field_id()' );
 		return preg_replace( '/[^a-zA-Z0-9\[\]_\-@]/', '', $id );
+	}
+
+	/**
+	 * Checks a theme's support for title-tag.
+	 *
+	 * @since 2.6.0
+	 * @since 3.1.0 Removed caching
+	 * @since 3.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool
+	 */
+	public function current_theme_supports_title_tag() {
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->sanitize_field_id()', '3.3.0' );
+		return \the_seo_framework()->detect_theme_support( 'title-tag' );
+	}
+
+	/**
+	 * Determines if the current theme supports the custom logo addition.
+	 *
+	 * @since 2.8.0
+	 * @since 3.1.0: 1. No longer checks for WP version 4.5+.
+	 *               2. No longer uses caching.
+	 * @since 3.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool
+	 */
+	public function can_use_logo() {
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->can_use_logo()', '3.3.0' );
+		return \the_seo_framework()->detect_theme_support( 'custom-logo' );
 	}
 }

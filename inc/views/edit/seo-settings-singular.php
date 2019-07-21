@@ -1,6 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Views\Inpost
+ * @package The_SEO_Framework\Views\Edit
+ * @subpackage The_SEO_Framework\Admin\Edit\Inpost
  */
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
@@ -50,9 +51,11 @@ switch ( $instance ) :
 
 		if ( $this->is_static_frontpage( $post_id ) ) {
 			// When the homepage title is set, we can safely get the custom field.
+			// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 			$title_placeholder = $this->escape_title( $this->get_option( 'homepage_title' ) )
 							   ? $this->get_custom_field_title( $_generator_args )
 							   : $this->get_generated_title( $_generator_args );
+			// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 			$description_placeholder = $this->escape_description( $this->get_option( 'homepage_description' ) )
 									?: $this->get_generated_description( $_generator_args );
@@ -86,7 +89,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id="tsf-title-wrap">
-					<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" placeholder="<?php echo esc_attr( $title_placeholder ); ?>" value="<?php echo $this->s_esc_attr_super_amp( $this->get_post_meta_item( '_genesis_title', $post_id ) ); ?>" autocomplete=off />
+					<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" placeholder="<?php echo esc_attr( $title_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_genesis_title', $post_id ) ); ?>" autocomplete=off />
 					<?php $this->output_js_title_elements(); ?>
 				</div>
 
@@ -139,7 +142,7 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class="large-text" name="autodescription[_genesis_description]" id="autodescription_description" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="4" cols="4"><?php echo $this->s_esc_attr_super_amp( $this->get_post_meta_item( '_genesis_description', $post_id ) ); ?></textarea>
+				<textarea class="large-text" name="autodescription[_genesis_description]" id="autodescription_description" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="4" cols="4" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_genesis_description', $post_id ) ); ?></textarea>
 				<?php $this->output_js_description_elements(); ?>
 			</div>
 		</div>
@@ -258,7 +261,6 @@ switch ( $instance ) :
 									1  => $_s['force_off'],
 								],
 								'default' => $this->get_post_meta_item( $_s['option'] ),
-								// 'info'    => $_s['_info'],
 							] );
 						?>
 						</div>
@@ -401,7 +403,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id="tsf-og-title-wrap">
-					<input class="large-text" type="text" name="autodescription[_open_graph_title]" id="autodescription_og_title" placeholder="<?php echo esc_attr( $og_tit_placeholder ); ?>" value="<?php echo $this->s_esc_attr_super_amp( $this->get_post_meta_item( '_open_graph_title' ) ); ?>" autocomplete=off />
+					<input class="large-text" type="text" name="autodescription[_open_graph_title]" id="autodescription_og_title" placeholder="<?php echo esc_attr( $og_tit_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_open_graph_title' ) ); ?>" autocomplete=off />
 				</div>
 			</div>
 		</div>
@@ -423,7 +425,7 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class="large-text" name="autodescription[_open_graph_description]" id="autodescription_og_description" placeholder="<?php echo esc_attr( $og_desc_placeholder ); ?>" rows="3" cols="4"><?php echo $this->s_esc_attr_super_amp( $this->get_post_meta_item( '_open_graph_description' ) ); ?></textarea>
+				<textarea class="large-text" name="autodescription[_open_graph_description]" id="autodescription_og_description" placeholder="<?php echo esc_attr( $og_desc_placeholder ); ?>" rows="3" cols="4" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_open_graph_description' ) ); ?></textarea>
 			</div>
 		</div>
 
@@ -445,7 +447,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id="tsf-twitter-title-wrap">
-					<input class="large-text" type="text" name="autodescription[_twitter_title]" id="autodescription_twitter_title" placeholder="<?php echo esc_attr( $tw_tit_placeholder ); ?>" value="<?php echo $this->s_esc_attr_super_amp( $this->get_post_meta_item( '_twitter_title' ) ); ?>" autocomplete=off />
+					<input class="large-text" type="text" name="autodescription[_twitter_title]" id="autodescription_twitter_title" placeholder="<?php echo esc_attr( $tw_tit_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_twitter_title' ) ); ?>" autocomplete=off />
 				</div>
 			</div>
 		</div>
@@ -467,7 +469,7 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class="large-text" name="autodescription[_twitter_description]" id="autodescription_twitter_description" placeholder="<?php echo esc_attr( $tw_desc_placeholder ); ?>" rows="3" cols="4"><?php echo $this->s_esc_attr_super_amp( $this->get_post_meta_item( '_twitter_description' ) ); ?></textarea>
+				<textarea class="large-text" name="autodescription[_twitter_description]" id="autodescription_twitter_description" placeholder="<?php echo esc_attr( $tw_desc_placeholder ); ?>" rows="3" cols="4" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_twitter_description' ) ); ?></textarea>
 			</div>
 		</div>
 		<?php
