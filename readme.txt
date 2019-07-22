@@ -256,19 +256,12 @@ TODO "Want to opt out of future, infrequent, admin-only, non-recurring, and non-
 TODO Opt-in for asynchronous SEO Bars? It is possible now! :)
 TODO move the class constants to interfaces? This will allow free access...
 
-TODO The dropdown menus may overflow in the gutenberg sidebar (notortiously in Focus)... fix their max-width?
+TODO The dropdown menus may overflow in the classic/block sidebar (notortiously in Focus)... fix their max-width?
 
 TODO re-affirm all changes.
 TODO quality-control the deprecations.
 TODO test RTL.
 TODO improve plugin-upgrade-notice (bottom of readme).
-
-TODO lock out redirect from WooCommerce shop page. https://wordpress.org/support/topic/tsf-prevents-redirect-to-search-result-page-on-woocommerce/#post-11652594
-TODO change all occurence of %s = here to markdown
-
-TODO revise how is_wc_product and is_wc_shop are implemented, and add filters instead.
-	-> route is_wc_shop to is_singular_archive? It's used nowhere except at a (filterable) ID function...
-	-> is_product()
 
 = 3.3.0 - Multiplex =
 
@@ -281,7 +274,7 @@ TODO Exclaim:
 - Downgrading & Backward compatibility warnings.
 - Mixed taxonomies on post type related settings.
 - As smart as a self-driving car: Tooltips stay between the lines. Tesla needs me.
-- TODO Finally (really) translator friendly.
+- Finally translator friendly; at least, for as far as we could conceive.
 - New posts are indexed faster with an even smarter sitemap.
 - The monolithic facade "the_seo_framework()" is now much lighter, as we offloaded loads of administrative functionality to other files.
 - The SEO Bar now has an API. You can expect more tests, items, and adjustments via extensions. (hint: Monitor & Focus.)
@@ -308,12 +301,10 @@ TODO When changing the slug of a term, the canonical URL placeholder now updates
 TODO when the tooltip is squashed, it may again overflow vertically... See title tooltip:
 	* </wp-admin/edit-tags.php?taxonomy=pa_test&post_type=product>
 
-TODO add new filters to og_image() and twitter_image().
+TODO add new filters to og_image() and twitter_image()? Reimplement the old ones for backward compatibility?
 
 TODO adjust the title & description guidelines when using summary instead of summary large image for Twitter?
 TODO index.php stuff
-
-TODO rename the inpost-class to be more inclusive of "Term edit".
 
 TODO do something nicer with interpret_status_to_symbol()
 
@@ -331,11 +322,9 @@ TODO do something nicer with interpret_status_to_symbol()
 		1. The old sitemap endpoints are removed from the rewrite rules, and the rewrite rules are flushed for one last time at PHP shutdown.
 		1. The title separator `dash` will be converted to `ndash`, because that was already the case.
 		1. The cron-job-pinging option is set to enabled (default), this will improve post-saving performance.
-		1. The "home title additions location" is now a "home title location", this means that left is now right, and vice versa.
-			* This is a downgrade-compatibility breaking change!
+		1. The homepage's "Meta Title Additions Location" was not in line with the global title location option. So, we rectified that. This means that left is now right, and vice versa.
+			* This is a downgrade-compatibility breaking change! If you must downgrade, you must reverse this option manually.
 * **Added:**
-	* TODO maybe: We now generate a proposed description of your content every minute on Gutenberg pages.
-	* TODO maybe: We now parse shortcodes for the content dynamically, for Focus and description generation-compatibility.
 	* We've added more term settings, including:
 		* Blog name removal.
 		* Open Graph title and description inputs.
@@ -357,7 +346,6 @@ TODO do something nicer with interpret_status_to_symbol()
 	* The term meta inputs now have the "are you sure you want to leave this page?"-listener attached.
 	* Multiple social images may now be outputted. How this affects sharing depends on the social network.
 	* Social images may now be obtained from your post or page's content.
-		* TODO make this optional? The performance penalty is neglegible...
 	* Alt-tags are now provided with social images, which help with accessibility when sharing your page.
 	* For WooCommerce, the Product Category Thumbnail is now considered for social images.
 * **Changed:**
@@ -365,7 +353,7 @@ TODO do something nicer with interpret_status_to_symbol()
 	* We now support PHP v5.6 and later, instead of PHP v5.4 and later.
 	* Backslashes (back-solidus) are no longer stripped from post and term meta. Slash away!
 		* This also resolves an issue where the number of slashes are halved every time you update the post.
-		* NOTE: The site settings doesn't support this feature, because WordPress implements PHP 4.x compatibility on options which strip them.
+		* Note that the site settings doesn't support this functionality, because WordPress implements PHP 4.x compatibility on options that strip them.
 	* We switched the homepage title option name from left to right, and right to left.
 		* This doesn't affect your titles, it's only semantics.
 	* Schema.org logos may now be of any proportion, instead of only square, and cropping them must exceed 112px squared.
@@ -386,7 +374,6 @@ TODO do something nicer with interpret_status_to_symbol()
 		* The post query has changed:
 			1. First, we find the blog and front-page ID. We add these on top of the sitemap.
 			1. Then, we query all public hierarchical post types (pages). The sitemap query limit is used here, and we query-sort the items by published date, ascending.
-				* TODO update the explanation in the settings pages to represent this...
 			1. Then, we query all public non-hierarchical post types (posts), but no attachments--the sitemap query limit is used again, and we query-sort the items by last updated, descending.
 			1. Finally, we combine the pages and posts, and go through them.
 				* Note that, at most, 50000 items will be displayed, or 49998 if the homepage is a blog.
@@ -416,6 +403,7 @@ TODO do something nicer with interpret_status_to_symbol()
 			* They now account for German's extra capitalization width.
 		* **Canonical URL:**
 			* The automatic scheme determination now uses the "Site Address" scheme in "General Settings" to fall back on.
+				* With that, we also updated the settings' documentation.
 	* **Guidelines:**
 		* **Titles/Descriptions:**
 			* The character guidelines have been updated for these languages (_annotation: Language (language) @ adjusted/Roman_):
@@ -444,6 +432,8 @@ TODO do something nicer with interpret_status_to_symbol()
 		* UI strings that were hard to translate in other locales have been rewritten. Yes, this takes some time to get used to.
 	* **Layout:**
 		* Reordered the Homepage Settings metabox tabs to be more in line with the Post Meta Settings metabox.
+		* Some option headers are now better aligned to the center.
+		* We now thoroughly exclaim what the sitemap is and isn't for.
 	* **Performance:**
 		* The SEO Bar now loads quicker, as redundant checks have been removed.
 		* We offloaded a large portion of the admin-sided PHP scripts to different objects, freeing up RAM and lowering plugin boot-time.
@@ -529,7 +519,6 @@ TODO do something nicer with interpret_status_to_symbol()
 	* **DOWNGRADE COMPATIBILITY!** -- Homepage title options.
 		* The title additions locations (left and right) are now switched.
 		* This was necessary to flatten and simplify the title-API, so home-specific checks no longer need to be reversed.
-	* TODO maybe: strip old (< v3.1) removed options on database upgrade... (this will also happen on manual save...)
 	* Webkit flexbox vendor prefixes in all CSS files. All browsers that relied on these have been updated to the latest spec since.
 	* Image support for breadcrumbs has been removed, search engines don't seem to use these, and documentation for it disappeared.
 * **Fixed:**
@@ -599,9 +588,9 @@ TODO do something nicer with interpret_status_to_symbol()
 * **Changed:**
 	* For the nth time: everything.
 	* **Notable changes:**
-		* Fewer `%s`, more markdown.
-		* `home page` is now `homepage`.
-		* Removed and replaced (many) instances of `this %s`.
+		* Fewer `%s`, more Markdown. This means that you'll see fewer fragmented sentences, but do mind the Markdown markup!
+		* `home page` is now consistently `homepage`.
+		* Removed and replaced (most) instances of grammatical gender-(in)sensitive pronouns which would make it impossible to translating correctly, like `this %s`, `that %s`, and `the %s`.
 * **Updated:**
 	* Translation object; POT file.
 
@@ -833,6 +822,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `get_hierarchical_post_types()`
 			* `get_nonhierarchical_post_types()`
 			* `convert_to_url_if_path()`
+			* `detect_site_url_scheme()`
 		* **Changed:**
 			* `__construct()` now emits warnings when instantiated twice or more.
 			* `html_output()` is now marked as private.
@@ -886,16 +876,17 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				1. Now tests for nonhierarchical post types, which is more reliable.
 			* `is_singular()`
 				1. No longer processes integers as input.
-					TODO deprecation notice?
 			* `is_singular_admin()`
 				1. Removed first parameter.
-					TODO deprecation notice?
 			* `is_tag_admin()`
 				1. Removed caching.
 			* `is_wc_product()`
 				1. Added admin support.
 				1. Added a parameter for the Post ID or post to test.
 			* `delete_object_cache()` now actually does something: flushes the object cache.
+			* `get_available_twitter_cards`
+				1. Now only asserts the social titles as required.
+				1. Now always returns an array, instead of a boolean (false) on failure.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`

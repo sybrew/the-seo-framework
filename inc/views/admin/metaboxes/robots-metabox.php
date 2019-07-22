@@ -15,11 +15,11 @@ switch ( $instance ) :
 	case 'the_seo_framework_robots_metabox_main':
 		//* Robots types
 		$types = [
-			'category' => __( 'Category', 'autodescription' ),
-			'tag'      => __( 'Tag', 'autodescription' ),
-			'author'   => __( 'Author', 'autodescription' ),
-			'date'     => __( 'Date', 'autodescription' ),
-			'search'   => __( 'Search Pages', 'autodescription' ),
+			'category' => __( 'Category archives', 'autodescription' ),
+			'tag'      => __( 'Tag archives', 'autodescription' ),
+			'author'   => __( 'Author pages', 'autodescription' ),
+			'date'     => __( 'Date archives', 'autodescription' ),
+			'search'   => __( 'Search pages', 'autodescription' ),
 			'site'     => _x( 'the entire site', '...for the entire site', 'autodescription' ),
 		];
 
@@ -27,11 +27,11 @@ switch ( $instance ) :
 
 		//* Robots i18n
 		$robots = [
-			'noindex' => [
+			'noindex'   => [
 				'value' => 'noindex',
 				'desc'  => __( 'These options most likely prevent indexing of the selected archives and pages. If you enable this, the selected archives or pages will urge to be removed from search engine results pages.', 'autodescription' ),
 			],
-			'nofollow' => [
+			'nofollow'  => [
 				'value' => 'nofollow',
 				'desc'  => __( 'These options most likely prevent links from being followed on the selected archives and pages. If you enable this, the selected archives or pages in-page links will gain no SEO value, including your own links.', 'autodescription' ),
 			],
@@ -62,13 +62,13 @@ switch ( $instance ) :
 				'dashicon' => 'admin-generic',
 				'args'     => '',
 			],
-			'index' => [
+			'index'   => [
 				'name'     => __( 'Indexing', 'autodescription' ),
 				'callback' => [ $this, 'robots_metabox_no_tab' ],
 				'dashicon' => 'filter',
 				'args'     => [ $types, $post_types, $robots['noindex'] ],
 			],
-			'follow' => [
+			'follow'  => [
 				'name'     => __( 'Following', 'autodescription' ),
 				'callback' => [ $this, 'robots_metabox_no_tab' ],
 				'dashicon' => 'editor-unlink',
@@ -103,8 +103,11 @@ switch ( $instance ) :
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'paged_noindex',
-				/* translators: %s = noindex */
-				sprintf( esc_html__( 'Apply %s to every second or later archive page?', 'autodescription' ), $this->code_wrap( 'noindex' ) ),
+				$this->convert_markdown(
+					/* translators: the backticks are Markdown! Preserve them as-is! */
+					esc_html__( 'Apply `noindex` to every second or later archive page?', 'autodescription' ),
+					[ 'code' ]
+				),
 				'',
 				false
 			),
@@ -115,6 +118,9 @@ switch ( $instance ) :
 	case 'the_seo_framework_robots_metabox_no':
 		$ro_value = $robots['value'];
 		$ro_i18n  = $robots['desc'];
+
+		/* translators: 1 = noindex/nofollow/noarchive, 2 = Post, Post type, Category archives, the entire site, etc. */
+		$apply_x_to_y_i18n = esc_html__( 'Apply %1$s to %2$s?', 'autodescription' );
 
 		$ro_name_wrapped = $this->code_wrap( $ro_value );
 
@@ -129,15 +135,11 @@ switch ( $instance ) :
 		$checkboxes = '';
 		foreach ( $types as $type => $i18n ) {
 
-			if ( in_array( $type, [ 'site', 'attachment', 'search' ], true ) ) {
-				//* Singular.
-				/* translators: 1: Option, 2: Post Type */
-				$label = sprintf( esc_html__( 'Apply %1$s to %2$s?', 'autodescription' ), $ro_name_wrapped, esc_html( $i18n ) );
-			} else {
-				//* Archive.
-				/* translators: 1: Option, 2: Post Type */
-				$label = sprintf( esc_html__( 'Apply %1$s to %2$s Archives?', 'autodescription' ), $ro_name_wrapped, esc_html( $i18n ) );
-			}
+			$label = sprintf(
+				$apply_x_to_y_i18n,
+				$ro_name_wrapped,
+				esc_html( $i18n )
+			);
 
 			$id = $this->s_field_id( $type . '_' . $ro_value );
 
@@ -164,8 +166,6 @@ switch ( $instance ) :
 		<?php
 		$this->description( __( 'These settings are applied to the post type pages and their terms.', 'autodescription' ) );
 
-		/* translators: 1: noindex/nofollow/noarchive, 2: Post Type label */
-		$_label    = esc_html__( 'Apply %1$s to %2$s?', 'autodescription' );
 		$option_id = $this->get_robots_post_type_option_id( $ro_value );
 
 		if ( in_array( $ro_value, [ 'noindex', 'nofollow' ], true ) )
@@ -182,7 +182,12 @@ switch ( $instance ) :
 			$boxes[] = $this->make_checkbox_array( [
 				'id'       => $option_id,
 				'index'    => $post_type,
-				'label'    => sprintf( $_label, $ro_name_wrapped, esc_html( $pto->labels->name ) ),
+				'label'    => sprintf(
+					// RTL supported: Because the post types are Roman, browsers enforce the order.
+					'%s &ndash; <code>%s</code>',
+					sprintf( $apply_x_to_y_i18n, $ro_name_wrapped, esc_html( $pto->labels->name ) ),
+					esc_html( $post_type )
+				),
 				'escape'   => false,
 				'disabled' => false,
 				'default'  => 'noindex' === $ro_value && 'attachment' === $post_type,

@@ -73,6 +73,9 @@ switch ( $instance ) :
 		?>
 		<h4><?php esc_html_e( 'Sitemap Integration Settings', 'autodescription' ); ?></h4>
 		<?php
+		$this->description( __( 'The sitemap is an XML file that lists indexable pages of your website along with optional metadata. This helps search engines find new and updated content more quickly.', 'autodescription' ) );
+
+		$this->description( __( 'The sitemap does not contribute to ranking, only indexing. Therefore, it is perfectly fine not having every indexable page in the sitemap.', 'autodescription' ) );
 
 		if ( $has_sitemap_plugin ) :
 			$this->attention_description( __( 'Note: Another active sitemap plugin has been detected. This means that the sitemap functionality has been superseded and these settings have no effect.', 'autodescription' ) );
@@ -81,8 +84,6 @@ switch ( $instance ) :
 			$this->attention_description( __( 'Note: A sitemap has been detected in the root folder of your website. This means that these settings have no effect.', 'autodescription' ) );
 			echo '<hr>';
 		endif;
-
-		$this->description( __( 'The sitemap is an XML file that lists posts from your website along with additional metadata. This helps search engines crawl your website more easily.', 'autodescription' ) );
 		?>
 		<hr>
 
@@ -101,9 +102,13 @@ switch ( $instance ) :
 		);
 
 		if ( ! $has_sitemap_plugin && ( $this->get_option( 'sitemaps_output' ) || ( $sitemap_detected && $this->pretty_permalinks ) ) ) {
-			$here = '<a href="' . esc_url( $sitemap_url, [ 'https', 'http' ] ) . '" target="_blank" title="' . esc_attr__( 'View sitemap', 'autodescription' ) . '">' . esc_attr_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
-			/* translators: %s = here */
-			$this->description_noesc( sprintf( esc_html__( 'The sitemap can be found %s.', 'autodescription' ), $here ) );
+			$this->description_noesc(
+				sprintf(
+					'<a href="%s" target=_blank rel=noopener>%s</a>',
+					esc_url( \The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url(), [ 'https', 'http' ] ),
+					esc_html__( 'View the base sitemap.', 'autodescription' )
+				)
+			);
 		}
 
 		?>
@@ -158,44 +163,52 @@ switch ( $instance ) :
 					__( "Note: You're using the plain permalink structure; so, no robots.txt file can be generated.", 'autodescription' )
 				);
 				$this->description_noesc(
-					sprintf(
-						esc_html_x( 'Change your Permalink Settings %s (recommended: "Post name").', '%s = here', 'autodescription' ),
+					$this->convert_markdown(
 						sprintf(
-							'<a href="%s" target="_blank" title="%s">%s</a>',
+							/* translators: 1 = Link to settings, Markdown. 2 = example input, also markdown! Preserve the Markdown as-is! */
+							esc_html__( 'Change your [Permalink Settings](%1$s). Recommended structure: `%2$s`.', 'autodescription' ),
 							esc_url( admin_url( 'options-permalink.php' ), [ 'https', 'http' ] ),
-							esc_attr__( 'Permalink Settings', 'autodescription' ),
-							esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' )
-						)
+							'/%category%/%postname%/'
+						),
+						[ 'code', 'a' ],
+						[ 'a_internal' => false ] // open in new window.
 					)
 				);
 				echo '<hr>';
 			}
 		endif;
 
-		$this->description( __( 'The robots.txt file is the first thing search engines look for. If you add the sitemap location in the robots.txt file, then search engines will look for and index the sitemap.', 'autodescription' ) );
-		$this->description( __( 'If you do not add the sitemap location to the robots.txt file, you should notify search engines manually through the Webmaster Console provided by the search engines.', 'autodescription' ) );
+		$this->description( __( 'The robots.txt output is the first thing search engines look for before crawling your site. If you add the sitemap location in that output, then search engines may automatically access and index the sitemap.', 'autodescription' ) );
+		$this->description( __( 'If you do not add the sitemap location to the robots.txt output, you should manually notify search engines manually through the webmaster-interface provided by the search engines.', 'autodescription' ) );
 
 		echo '<hr>';
 
 		if ( $show_settings ) :
 			printf(
 				'<h4>%s</h4>',
-				esc_html__( 'Add sitemap location in robots.txt', 'autodescription' )
+				esc_html__( 'Sitemap Hinting', 'autodescription' )
 			);
 			$this->wrap_fields(
 				$this->make_checkbox(
 					'sitemaps_robots',
-					esc_html__( 'Add sitemap location in robots?', 'autodescription' ) . ' ' . $this->make_info( __( 'This only has effect when the sitemap is active.', 'autodescription' ), '', false ),
-					'',
+					esc_html__( 'Add sitemap location to robots.txt?', 'autodescription' ),
+					esc_html__( 'This only works when the sitemap is active.', 'autodescription' ),
 					false
-				), true
+				),
+				true
 			);
 		endif;
 
-		if ( $robots_url ) {
-			$here = '<a href="' . esc_url( $robots_url, [ 'https', 'http' ] ) . '" target="_blank" title="' . esc_attr__( 'View robots.txt', 'autodescription' ) . '">' . esc_html_x( 'here', 'The sitemap can be found %s.', 'autodescription' ) . '</a>';
+		$robots_url = $this->get_robots_txt_url();
 
-			$this->description_noesc( sprintf( esc_html_x( 'The robots.txt file can be found %s.', '%s = here', 'autodescription' ), $here ) );
+		if ( $robots_url ) {
+			$this->description_noesc(
+				sprintf(
+					'<a href="%s" target=_blank rel=noopener>%s</a>',
+					esc_url( $robots_url, [ 'https', 'http' ] ),
+					esc_html__( 'View the robots.txt output.', 'autodescription' )
+				)
+			);
 		}
 		break;
 
@@ -203,14 +216,17 @@ switch ( $instance ) :
 		?>
 		<h4><?php esc_html_e( 'Timestamps Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'The modified time suggests to search engines where to look for content changes. It has no impact on the SEO value unless you drastically change pages or posts. It then depends on how well your content is constructed.', 'autodescription' ) );
+		$this->description( __( 'The modified time suggests to search engines where to look for content changes first.', 'autodescription' ) );
 
 		//* Echo checkbox.
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'sitemaps_modified',
-				/* translators: %s = An XML tag example */
-				sprintf( esc_html__( 'Add %s to the sitemap?', 'autodescription' ), $this->code_wrap( '<lastmod>' ) ),
+				$this->convert_markdown(
+					/* translators: the backticks are Markdown! Preserve them as-is! */
+					esc_html__( 'Add `<lastmod>` to the sitemap?', 'autodescription' ),
+					[ 'code' ]
+				),
 				'',
 				false
 			),
@@ -228,8 +244,11 @@ switch ( $instance ) :
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'sitemaps_priority',
-				/* translators: %s = An XML tag example */
-				sprintf( esc_html__( 'Add %s to the sitemap?', 'autodescription' ), $this->code_wrap( '<priority>' ) ),
+				$this->convert_markdown(
+					/* translators: the backticks are Markdown! Preserve them as-is! */
+					esc_html__( 'Add `<priority>` to the sitemap?', 'autodescription' ),
+					[ 'code' ]
+				),
 				'',
 				false
 			),
@@ -247,7 +266,7 @@ switch ( $instance ) :
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'ping_use_cron',
-				esc_html__( 'Ping using cron?', 'autodescription' )
+				esc_html__( 'Use cron for pinging?', 'autodescription' )
 					. ' ' . $this->make_info(
 						__( 'This speeds up post and term saving processes, by offsetting pinging to a later time.', 'autodescription' ),
 						'',
@@ -286,8 +305,8 @@ switch ( $instance ) :
 		?>
 		<h4><?php esc_html_e( 'Sitemap Styling Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'You can style the sitemap to give it a more personal look. Styling the sitemap has no SEO value whatsoever.', 'autodescription' ) );
-		$this->description( __( 'Note: Changes might not appear to have effect directly because the stylesheet is cached in the browser for 30 minutes.', 'autodescription' ) );
+		$this->description( __( 'You can style the sitemap to give it a more personal look for your visitors. Search engines do not use these styles.', 'autodescription' ) );
+		$this->description( __( 'Note: Changes may not appear to have effect directly because the stylesheet is cached in the browser for 30 minutes.', 'autodescription' ) );
 		?>
 		<hr>
 

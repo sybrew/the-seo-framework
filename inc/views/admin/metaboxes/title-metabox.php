@@ -14,7 +14,7 @@ $instance = $this->get_view_instance( 'the_seo_framework_title_metabox', $instan
 switch ( $instance ) :
 	case 'the_seo_framework_title_metabox_main':
 		$latest_post_id = $this->get_latest_post_id();
-		$title = '';
+		$title          = '';
 
 		if ( $latest_post_id ) {
 			$title = $this->hellip_if_over( $this->get_filtered_raw_generated_title( [ 'id' => $latest_post_id ] ), 60 );
@@ -64,7 +64,7 @@ switch ( $instance ) :
 		 * }
 		 */
 		$default_tabs = [
-			'general' => [
+			'general'   => [
 				'name'     => __( 'General', 'autodescription' ),
 				'callback' => [ $this, 'title_metabox_general_tab' ],
 				'dashicon' => 'admin-generic',
@@ -80,7 +80,7 @@ switch ( $instance ) :
 					],
 				],
 			],
-			'prefixes' => [
+			'prefixes'  => [
 				'name'     => __( 'Prefixes', 'autodescription' ),
 				'callback' => [ $this, 'title_metabox_prefixes_tab' ],
 				'dashicon' => 'plus-alt',
@@ -118,7 +118,7 @@ switch ( $instance ) :
 			sprintf(
 				/* translators: %s = HTML tag example */
 				__( 'This strips HTML tags, like %s, from the title.', 'autodescription' ),
-				'<code>&amp;lt;strong&amp;gt;</code>' // Double escape html with ampersands... brilliant.
+				'<code>&amp;lt;strong&amp;gt;</code>' // Double escaped HTML (&amp;) for attribute display.
 			),
 			'',
 			false
@@ -147,8 +147,7 @@ switch ( $instance ) :
 		?>
 		<fieldset>
 			<legend>
-				<h4><?php esc_html_e( 'Title Additions Location', 'autodescription' ); ?></h4>
-				<?php $this->description( __( 'This setting determines which side the added title text will go on.', 'autodescription' ) ); ?>
+				<h4><?php esc_html_e( 'Blog Name Location', 'autodescription' ); ?></h4>
 			</legend>
 			<p id="tsf-title-location" class="tsf-fields">
 				<span class="tsf-toblock">
@@ -240,27 +239,36 @@ switch ( $instance ) :
 		$cat_name = get_cat_name( $cat );
 		$cat_name = $cat_name ?: __( 'Example Category', 'autodescription' );
 
-		$display_prefix = $this->get_option( 'title_rem_prefixes' ) ? 'none' : 'inline';
-		$title = '<span class="tsf-title-prefix-example" style="display:' . $display_prefix . '">' . esc_html( $label ) . ': </span>' . esc_html( $cat_name );
+		$title = sprintf(
+			'<span class="tsf-title-prefix-example" style=display:%s>%s: </span> %s',
+			$this->get_option( 'title_rem_prefixes' ) ? 'none' : 'inline',
+			esc_html( $label ),
+			esc_html( $cat_name )
+		);
 
-		$additions_left  = $additions['left'];
-		$additions_right = $additions['right'];
-
-		$example_left  = '<em>' . $additions_left . $title . '</em>';
-		$example_right = '<em>' . $title . $additions_right . '</em>';
+		$example_left  = '<em>' . $additions['left'] . $title . '</em>';
+		$example_right = '<em>' . $title . $additions['right'] . '</em>';
 
 		$language = $this->google_language();
 
 		?>
 		<h4><?php esc_html_e( 'Title Prefix Options', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'On archives, a descriptive prefix may be added to generated titles.', 'autodescription' ) );
+		$this->description( __( 'For archives, a descriptive prefix may be added to generated titles.', 'autodescription' ) );
 
 		?>
 		<h4><?php esc_html_e( 'Example Automated Archive Title Output', 'autodescription' ); ?></h4>
 		<p>
-			<span class="tsf-title-additions-example-left" style="display:<?php echo $showleft ? 'inline' : 'none'; ?>"><?php echo $this->code_wrap_noesc( $example_left ); ?></span>
-			<span class="tsf-title-additions-example-right" style="display:<?php echo $showleft ? 'none' : 'inline'; ?>"><?php echo $this->code_wrap_noesc( $example_right ); ?></span>
+			<span class="tsf-title-additions-example-left" style="display:<?php echo $showleft ? 'inline' : 'none'; ?>">
+				<?php
+				echo $this->code_wrap_noesc( $example_left );
+				?>
+			</span>
+			<span class="tsf-title-additions-example-right" style="display:<?php echo $showleft ? 'none' : 'inline'; ?>">
+				<?php
+				echo $this->code_wrap_noesc( $example_right );
+				?>
+			</span>
 		</p>
 
 		<hr>

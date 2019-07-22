@@ -674,23 +674,18 @@ class Generate extends User_Data {
 	/**
 	 * Generates the Twitter Card type.
 	 *
-	 * When there's an image found, it will take the said option.
-	 * Otherwise, it will return 'summary' or ''.
-	 *
 	 * @since 2.7.0
 	 * @since 2.8.2 Now considers description output.
 	 * @since 2.9.0 Now listens to $this->get_available_twitter_cards().
 	 * @since 3.1.0 Now inherits filter `the_seo_framework_twittercard_output`.
 	 *
-	 * @return string The Twitter Card type.
+	 * @return string The Twitter Card type. When no social title is found, an empty string will be returned.
 	 */
 	public function generate_twitter_card_type() {
 
 		$available_cards = $this->get_available_twitter_cards();
 
-		//* No valid Twitter cards have been found.
-		if ( false === $available_cards )
-			return '';
+		if ( ! $available_cards ) return '';
 
 		$option = $this->get_option( 'twitter_card' );
 		$option = trim( \esc_attr( $option ) );
@@ -725,10 +720,11 @@ class Generate extends User_Data {
 	 * Determines which Twitter cards can be used.
 	 *
 	 * @since 2.9.0
-	 * @since 3.3.0 Now only asserts the Title as required.
+	 * @since 3.3.0 1. Now only asserts the social titles as required.
+	 *              2. Now always returns an array, instead of a boolean (false) on failure.
 	 * @staticvar bool|array $cache
 	 *
-	 * @return bool|array False when it shouldn't be used. Array of available cards otherwise.
+	 * @return array False when it shouldn't be used. Array of available cards otherwise.
 	 */
 	public function get_available_twitter_cards() {
 
@@ -749,7 +745,7 @@ class Generate extends User_Data {
 		 */
 		$retval = (array) \apply_filters( 'the_seo_framework_available_twitter_cards', $retval );
 
-		return $cache = $retval ?: false;
+		return $cache = $retval ?: [];
 	}
 
 	/**

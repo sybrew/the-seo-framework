@@ -91,15 +91,10 @@
 }
 
 #tsf-title-location label span,
-#tsf-home-title-location label span,
-#tsf-twitter-cards label span {
+#tsf-home-title-location label span {
 	display: inline-block;
 	min-width: 60px;
 	vertical-align: baseline;
-}
-
-#tsf-twitter-cards label span {
-	min-width: 150px;
 }
 
 #tsf-home-title-location label .tsf-custom-title-js,

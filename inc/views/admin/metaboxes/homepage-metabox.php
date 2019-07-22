@@ -111,30 +111,30 @@ switch ( $instance ) :
 
 		<hr>
 
-		<div>
+		<p>
 			<label for="<?php $this->field_id( 'homepage_title' ); ?>" class="tsf-toblock">
-				<strong>
-					<?php
-					esc_html_e( 'Meta Title', 'autodescription' );
+				<strong><?php esc_html_e( 'Meta Title', 'autodescription' ); ?></strong>
+				<?php
 					echo ' ';
 					$this->make_info(
 						__( 'The meta title can be used to determine the title used on search engine result pages.', 'autodescription' ),
 						'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#page-titles'
 					);
-					?>
-				</strong>
+				?>
 			</label>
 			<?php
 			//* Output these unconditionally, with inline CSS attached to allow reacting on settings.
 			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_title' ), '', (bool) $this->get_option( 'display_character_counter' ) );
 			$this->output_pixel_counter_wrap( $this->get_field_id( 'homepage_title' ), 'title', (bool) $this->get_option( 'display_pixel_counter' ) );
 			?>
-		</div>
+		</p>
 		<p id="tsf-title-wrap">
 			<input type="text" name="<?php $this->field_name( 'homepage_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title' ); ?>" placeholder="<?php echo esc_attr( $home_title_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_title' ) ); ?>" autocomplete=off />
 			<?php $this->output_js_title_elements(); ?>
 		</p>
 		<?php
+		$this->description( __( 'Note: The input value of this field may be used to annotate the name of the homepage elsewhere. Do not switch this value with the optional title additions for aesthetics.', 'autodescription' ) );
+
 		if ( $home_id && $this->get_post_meta_item( '_genesis_title', $home_id ) ) {
 			$this->description( __( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' ) );
 		}
@@ -160,25 +160,23 @@ switch ( $instance ) :
 		?>
 		<hr>
 
-		<div>
+		<p>
 			<label for="<?php $this->field_id( 'homepage_description' ); ?>" class="tsf-toblock">
-				<strong>
-					<?php
-					esc_html_e( 'Meta Description', 'autodescription' );
+				<strong><?php esc_html_e( 'Meta Description', 'autodescription' ); ?></strong>
+				<?php
 					echo ' ';
 					$this->make_info(
 						__( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' ),
 						'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#meta-descriptions'
 					);
-					?>
-				</strong>
+				?>
 			</label>
 			<?php
 			//* Output these unconditionally, with inline CSS attached to allow reacting on settings.
 			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_description' ), '', (bool) $this->get_option( 'display_character_counter' ) );
 			$this->output_pixel_counter_wrap( $this->get_field_id( 'homepage_description' ), 'description', (bool) $this->get_option( 'display_pixel_counter' ) );
 			?>
-		</div>
+		</p>
 		<p>
 			<textarea name="<?php $this->field_name( 'homepage_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $description_placeholder ); ?>"><?php echo esc_attr( $this->get_option( 'homepage_description' ) ); ?></textarea>
 			<?php $this->output_js_description_elements(); ?>
@@ -227,8 +225,7 @@ switch ( $instance ) :
 		?>
 		<fieldset>
 			<legend>
-				<h4><?php esc_html_e( 'Meta Title Location', 'autodescription' ); ?></h4>
-				<?php $this->description( __( 'This setting determines which side the additions text will go on.', 'autodescription' ) ); ?>
+				<h4><?php esc_html_e( 'Meta Title Additions Location', 'autodescription' ); ?></h4>
 			</legend>
 
 			<p id="tsf-home-title-location" class="tsf-fields">
@@ -301,9 +298,7 @@ switch ( $instance ) :
 							?: $this->get_generated_twitter_description( $_generator_args );
 
 		?>
-		<h4><?php esc_html_e( 'Open Graph Settings', 'autodescription' ); ?></h4>
-
-		<div>
+		<p>
 			<label for="<?php $this->field_id( 'homepage_og_title' ); ?>" class="tsf-toblock">
 				<strong>
 					<?php
@@ -315,7 +310,7 @@ switch ( $instance ) :
 			//* Output this unconditionally, with inline CSS attached to allow reacting on settings.
 			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_og_title' ), '', (bool) $this->get_option( 'display_character_counter' ) );
 			?>
-		</div>
+		</p>
 		<p>
 			<input type="text" name="<?php $this->field_name( 'homepage_og_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_og_title' ); ?>" placeholder="<?php echo esc_attr( $og_tit_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_og_title' ) ); ?>" autocomplete=off />
 		</p>
@@ -327,7 +322,7 @@ switch ( $instance ) :
 		}
 		?>
 
-		<div>
+		<p>
 			<label for="<?php $this->field_id( 'homepage_og_description' ); ?>" class="tsf-toblock">
 				<strong>
 					<?php
@@ -339,7 +334,7 @@ switch ( $instance ) :
 			//* Output this unconditionally, with inline CSS attached to allow reacting on settings.
 			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_og_description' ), '', (bool) $this->get_option( 'display_character_counter' ) );
 			?>
-		</div>
+		</p>
 		<p>
 			<textarea name="<?php $this->field_name( 'homepage_og_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_og_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $og_desc_placeholder ); ?>" autocomplete=off><?php echo esc_attr( $this->get_option( 'homepage_og_description' ) ); ?></textarea>
 			<?php $this->output_js_description_elements(); ?>
@@ -353,9 +348,7 @@ switch ( $instance ) :
 		?>
 		<hr>
 
-		<h4><?php esc_html_e( 'Twitter Settings', 'autodescription' ); ?></h4>
-
-		<div>
+		<p>
 			<label for="<?php $this->field_id( 'homepage_twitter_title' ); ?>" class="tsf-toblock">
 				<strong>
 					<?php
@@ -367,7 +360,7 @@ switch ( $instance ) :
 			//* Output this unconditionally, with inline CSS attached to allow reacting on settings.
 			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_twitter_title' ), '', (bool) $this->get_option( 'display_character_counter' ) );
 			?>
-		</div>
+		</p>
 		<p>
 			<input type="text" name="<?php $this->field_name( 'homepage_twitter_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_twitter_title' ); ?>" placeholder="<?php echo esc_attr( $tw_tit_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_twitter_title' ) ); ?>" autocomplete=off />
 		</p>
@@ -379,7 +372,7 @@ switch ( $instance ) :
 		}
 		?>
 
-		<div>
+		<p>
 			<label for="<?php $this->field_id( 'homepage_twitter_description' ); ?>" class="tsf-toblock">
 				<strong>
 					<?php
@@ -391,7 +384,7 @@ switch ( $instance ) :
 			//* Output this unconditionally, with inline CSS attached to allow reacting on settings.
 			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_twitter_description' ), '', (bool) $this->get_option( 'display_character_counter' ) );
 			?>
-		</div>
+		</p>
 		<p>
 			<textarea name="<?php $this->field_name( 'homepage_twitter_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_twitter_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $tw_desc_placeholder ); ?>" autocomplete=off><?php echo esc_attr( $this->get_option( 'homepage_twitter_description' ) ); ?></textarea>
 			<?php $this->output_js_description_elements(); ?>
@@ -456,8 +449,8 @@ switch ( $instance ) :
 					'<a href="%s" title="%s" target=_blank class=attention>%s</a>',
 					[
 						esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) ),
-						esc_attr__( 'View Homepage Settings', 'autodescription' ),
-						esc_html__( 'Overwritten via page settings', 'autodescription' ),
+						esc_attr__( 'Edit homepage page settings', 'autodescription' ),
+						esc_html__( 'Overwritten by page settings', 'autodescription' ),
 					]
 				)
 			);
@@ -467,41 +460,55 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Robots Meta Settings', 'autodescription' ); ?></h4>
 		<?php
 
-		$noindex_note   = $noindex_post ? $checked_home : '';
-		$nofollow_note  = $nofollow_post ? $checked_home : '';
-		$noarchive_note = $noarchive_post ? $checked_home : '';
+		$i_label = sprintf(
+			/* translators: 1: Option label, 2: [?] option info note, 3: Optional warning */
+			esc_html__( '%1$s %2$s %3$s', 'autodescription' ),
+			$this->convert_markdown(
+				/* translators: the backticks are Markdown! Preserve them as-is! */
+				esc_html__( 'Apply `noindex` to the homepage?', 'autodescription' ),
+				[ 'code' ]
+			),
+			$this->make_info(
+				__( 'This tells search engines not to show this page in their search results.', 'autodescription' ),
+				'https://support.google.com/webmasters/answer/93710?hl=' . $language,
+				false
+			),
+			$noindex_post ? $checked_home : ''
+		);
 
-		//* Index label.
-		/* translators: %s = noindex/nofollow/noarchive */
-		$i_label  = sprintf( esc_html__( 'Apply %s to the homepage?', 'autodescription' ), $this->code_wrap( 'noindex' ) );
-		$i_label .= ' ';
-		$i_label .= $this->make_info(
-			__( 'This tells search engines not to show this page in their search results.', 'autodescription' ),
-			'https://support.google.com/webmasters/answer/93710?hl=' . $language,
-			false
-		) . $noindex_note;
+		$f_label = sprintf(
+			/* translators: 1: Option label, 2: [?] option info note, 3: Optional warning */
+			esc_html__( '%1$s %2$s %3$s', 'autodescription' ),
+			$this->convert_markdown(
+				/* translators: the backticks are Markdown! Preserve them as-is! */
+				esc_html__( 'Apply `nofollow` to the homepage?', 'autodescription' ),
+				[ 'code' ]
+			),
+			$this->make_info(
+				__( 'This tells search engines not to follow links on this page.', 'autodescription' ),
+				'https://support.google.com/webmasters/answer/96569?hl=' . $language,
+				false
+			),
+			$nofollow_post ? $checked_home : ''
+		);
 
-		//* Follow label.
-		/* translators: %s = noindex/nofollow/noarchive */
-		$f_label  = sprintf( esc_html__( 'Apply %s to the homepage?', 'autodescription' ), $this->code_wrap( 'nofollow' ) );
-		$f_label .= ' ';
-		$f_label .= $this->make_info(
-			__( 'This tells search engines not to follow links on this page.', 'autodescription' ),
-			'https://support.google.com/webmasters/answer/96569?hl=' . $language,
-			false
-		) . $nofollow_note;
+		$a_label = sprintf(
+			/* translators: 1: Option label, 2: [?] option info note, 3: Optional warning */
+			esc_html__( '%1$s %2$s %3$s', 'autodescription' ),
+			$this->convert_markdown(
+				/* translators: the backticks are Markdown! Preserve them as-is! */
+				esc_html__( 'Apply `noarchive` to the homepage?', 'autodescription' ),
+				[ 'code' ]
+			),
+			$this->make_info(
+				__( 'This tells search engines not to save a cached copy of this page.', 'autodescription' ),
+				'https://support.google.com/webmasters/answer/79812?hl=' . $language,
+				false
+			),
+			$noarchive_post ? $checked_home : ''
+		);
 
-		//* Archive label.
-		/* translators: %s = noindex/nofollow/noarchive */
-		$a_label  = sprintf( esc_html__( 'Apply %s to the homepage?', 'autodescription' ), $this->code_wrap( 'noarchive' ) );
-		$a_label .= ' ';
-		$a_label .= $this->make_info(
-			__( 'This tells search engines not to save a cached copy of this page.', 'autodescription' ),
-			'https://support.google.com/webmasters/answer/79812?hl=' . $language,
-			false
-		) . $noarchive_note;
-
-		$this->attention_description( __( 'Warning: No public site should ever apply "noindex" or "nofollow" for the homepage..', 'autodescription' ) );
+		$this->attention_description( __( 'Warning: No public site should ever apply "noindex" or "nofollow" to the homepage.', 'autodescription' ) );
 
 		$this->wrap_fields(
 			[
@@ -532,7 +539,7 @@ switch ( $instance ) :
 				$this->convert_markdown(
 					sprintf(
 						/* translators: %s = Homepage URL markdown */
-						esc_html__( 'Note: These options may be overwritten on the [page settings](%s).', 'autodescription' ),
+						esc_html__( 'Note: These options may be overwritten by the [page settings](%s).', 'autodescription' ),
 						esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) )
 					),
 					[ 'a' ],
@@ -546,14 +553,17 @@ switch ( $instance ) :
 
 		<h4><?php esc_html_e( 'Homepage Pagination Robots Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( "If your homepage is paginated and outputs content that's also found elsewhere on the website, enabling this option might prevent duplicate content.", 'autodescription' ) );
+		$this->description( __( "If your homepage is paginated and outputs content that's also found elsewhere on the website, enabling this option may prevent duplicate content.", 'autodescription' ) );
 
 		//* Echo checkbox.
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'home_paged_noindex',
-				/* translators: %s = noindex/nofollow/noarchive */
-				sprintf( esc_html__( 'Apply %s to every second or later page on the homepage?', 'autodescription' ), $this->code_wrap( 'noindex' ) ),
+				$this->convert_markdown(
+					/* translators: the backticks are Markdown! Preserve them as-is! */
+					esc_html__( 'Apply `noindex` to every second or later page on the homepage?', 'autodescription' ),
+					[ 'code' ]
+				),
 				'',
 				false
 			),

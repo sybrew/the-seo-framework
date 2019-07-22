@@ -249,6 +249,7 @@ switch ( $instance ) :
 						</div>
 						<div class="tsf-flex-setting-input tsf-flex">
 						<?php
+							// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
 							echo $this->make_single_select_form( [
 								'id'      => $_s['id'],
 								'class'   => 'tsf-select-block',
@@ -262,6 +263,7 @@ switch ( $instance ) :
 								],
 								'default' => $this->get_post_meta_item( $_s['option'] ),
 							] );
+							// phpcs:enable, WordPress.Security.EscapeOutput
 						?>
 						</div>
 					</div>

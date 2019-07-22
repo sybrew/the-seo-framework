@@ -25,7 +25,7 @@ switch ( $instance ) :
 		$excerpt_the_feed_label  = esc_html__( 'Convert feed entries into excerpts?', 'autodescription' );
 		$excerpt_the_feed_label .= ' ' . $this->make_info( __( 'By default the excerpt will be at most 400 characters long.', 'autodescription' ), '', false );
 
-		$source_the_feed_label = esc_html__( 'Add link to source below the feed entry content?', 'autodescription' );
+		$source_the_feed_label  = esc_html__( 'Add link to source below the feed entry content?', 'autodescription' );
 		$source_the_feed_label .= ' ' . $this->make_info( __( 'This link will not be followed by search engines.', 'autodescription' ), '', false );
 
 		$this->wrap_fields(
@@ -38,10 +38,9 @@ switch ( $instance ) :
 
 		if ( $this->rss_uses_excerpt() ) {
 			$this->description_noesc(
-				//* Markdown escapes.
 				$this->convert_markdown(
 					sprintf(
-						/* translators: %s = Reading Settings URL, markdown */
+						/* translators: %s = Reading Settings URL. Links are in Markdown! */
 						esc_html__( 'Note: The feed is already converted into an excerpt through the [Reading Settings](%s).', 'autodescription' ),
 						esc_url( admin_url( 'options-reading.php' ) )
 					),
@@ -53,14 +52,9 @@ switch ( $instance ) :
 
 		$this->description_noesc(
 			sprintf(
-				/* translators: %s = here */
-				esc_html__( 'The feed can be found %s.', 'autodescription' ),
-				sprintf(
-					'<a href="%s" target="_blank" title="%s">%s</a>',
-					esc_url( get_feed_link() ),
-					esc_attr__( 'View feed', 'autodescription' ),
-					esc_html_x( 'here', 'The feed can be found %s.', 'autodescription' )
-				)
+				'<a href="%s" target=_blank rel=noopener>%s</a>',
+				esc_url( get_feed_link(), [ 'https', 'http' ] ),
+				esc_html__( 'View the main feed.', 'autodescription' )
 			)
 		);
 		break;

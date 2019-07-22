@@ -488,6 +488,8 @@ class Init extends Query {
 		$url = '';
 
 		if ( $this->is_singular() ) {
+			// TODO excluse is_singular_archive()? Those can create issues...
+
 			$url = $this->get_post_meta_item( 'redirect' ) ?: '';
 		} elseif ( $this->is_term_meta_capable() ) {
 			$term_meta = $this->get_current_term_meta();

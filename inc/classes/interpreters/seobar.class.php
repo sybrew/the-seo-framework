@@ -348,9 +348,9 @@ final class SeoBar {
 
 		if ( null === $gettext ) {
 			$gettext = [
-				/* translators: 1 = Assessment number (mind the %d), 2 = Assessment explanation */
+				/* translators: 1 = Assessment number (mind the %d (D)), 2 = Assessment explanation */
 				'enum'        => \__( '%1$d: %2$s', 'autodescription' ),
-				/* translators: 1 = 'Assessment(s)', 2 = A list of assessment. */
+				/* translators: 1 = 'Assessment(s)', 2 = A list of assessments. */
 				'list'        => \__( '%1$s: %2$s', 'autodescription' ),
 				'assessment'  => \__( 'Assessment', 'autodescription' ),
 				'assessments' => \__( 'Assessments', 'autodescription' ),

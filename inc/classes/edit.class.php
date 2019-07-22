@@ -288,11 +288,10 @@ class Edit extends Profile {
 				$title = \__( 'Homepage SEO Settings', 'autodescription' );
 			}
 		} else {
-			/* translators: %s = Post Type */
+			/* translators: %s = Post Type label */
 			$title = sprintf( \__( '%s SEO Settings', 'autodescription' ), $label );
 		}
 
-		/* translators: %s = Post type name */
 		\add_meta_box( $id, $title, [ $this, '_insert_seo_meta_box' ], $post_type, $context, $priority, [ $label, 'is_post_page' ] );
 	}
 

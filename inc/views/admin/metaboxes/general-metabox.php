@@ -34,7 +34,7 @@ switch ( $instance ) :
 				'callback' => [ $this, 'general_metabox_timestamps_tab' ],
 				'dashicon' => 'clock',
 			],
-			'posttypes'  => [
+			'posttypes'   => [
 				'name'     => __( 'Post Types', 'autodescription' ),
 				'callback' => [ $this, 'general_metabox_posttypes_tab' ],
 				'dashicon' => 'index-card',
@@ -103,6 +103,7 @@ switch ( $instance ) :
 			'',
 			false
 		);
+
 		$character_info = $this->make_info(
 			__( 'The character counter is based on guidelines.', 'autodescription' ),
 			'',
@@ -154,8 +155,8 @@ switch ( $instance ) :
 		$query_types = (array) apply_filters(
 			'the_seo_framework_query_alteration_types',
 			[
-				'in_query'   => _x( 'In the database', 'Perform query alteration...', 'autodescription' ),
-				'post_query' => _x( 'On the site', 'Perform query alteration...', 'autodescription' ),
+				'in_query'   => _x( 'In the database', 'Perform query alteration: In the database', 'autodescription' ),
+				'post_query' => _x( 'On the site', 'Perform query alteration: On the site', 'autodescription' ),
 			]
 		);
 
@@ -195,6 +196,7 @@ switch ( $instance ) :
 				$search_query_select_options,
 			]
 		);
+
 		$archive_query_select_field = vsprintf(
 			'<label for="%1$s">%2$s</label>
 			<select name="%3$s" id="%1$s">%4$s</select>',
@@ -273,7 +275,7 @@ switch ( $instance ) :
 					'cache_object',
 					esc_html__( 'Enable object cache?', 'autodescription' )
 					. ' ' . $this->make_info( __( 'Object cache generally works faster than transient cache.', 'autodescription' ), '', false ),
-					esc_html__( 'An object cache handler has been detected. If you enable this option, you might wish to disable the Schema.org transient caching.', 'autodescription' ),
+					esc_html__( 'An object cache handler has been detected. If you enable this option, you may wish to disable the Schema.org transient caching.', 'autodescription' ),
 					false
 				),
 				true
@@ -286,15 +288,13 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Canonical URL Settings', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'The canonical URL meta tag urges search engines to go to the outputted URL.', 'autodescription' ) );
-		$this->description( __( 'If the canonical URL meta tag represents the visited page, then the search engine will crawl the visited page. Otherwise, the search engine might go to the outputted URL.', 'autodescription' ) );
-		$this->description( __( 'Only adjust these options if you are aware of their SEO effects.', 'autodescription' ) );
+		$this->description( __( 'If the canonical URL meta tag represents the visited page, then the search engine will crawl the visited page. Otherwise, the search engine may go to the outputted URL.', 'autodescription' ) );
 		?>
 		<hr>
 
 		<h4><?php esc_html_e( 'Scheme Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'If your website is accessible on both HTTP as HTTPS, set this to HTTPS in order to prevent duplicate content.', 'autodescription' ) );
-		$this->description( __( 'Otherwise, automatic detection is recommended.', 'autodescription' ) );
+		$this->description( __( 'If your website is accessible via both HTTP as HTTPS, you may want to set this to HTTPS if not detected automatically. Secure connections are preferred by search engines.', 'autodescription' ) );
 		?>
 		<label for="<?php $this->field_id( 'canonical_scheme' ); ?>"><?php echo esc_html_x( 'Preferred canonical URL scheme:', '= Detect Automatically, HTTPS, HTTP', 'autodescription' ); ?></label>
 		<select name="<?php $this->field_name( 'canonical_scheme' ); ?>" id="<?php $this->field_id( 'canonical_scheme' ); ?>">
@@ -302,7 +302,11 @@ switch ( $instance ) :
 			$scheme_types = (array) apply_filters(
 				'the_seo_framework_canonical_scheme_types',
 				[
-					'automatic' => __( 'Detect automatically', 'autodescription' ),
+					'automatic' => sprintf(
+						/* translators: %s = HTTP or HTTPS */
+						__( 'Detect automatically (%s)', 'autodescription' ),
+						strtoupper( $this->detect_site_url_scheme() )
+					),
 					'http'      => 'HTTP',
 					'https'     => 'HTTPS',
 				]
@@ -319,17 +323,38 @@ switch ( $instance ) :
 		$this->description( __( 'Some search engines look for relations between the content of your pages. If you have pagination on a post or page, or have archives indexed, these options will help search engines look for the right page to display in the search results.', 'autodescription' ) );
 		$this->description( __( "It's recommended to turn these options on for better SEO consistency and to prevent duplicate content errors.", 'autodescription' ) );
 
-		/* translators: %s = <code>rel</code> */
-		$prev_next_posts_label    = sprintf( esc_html__( 'Add %s link tags to posts and pages?', 'autodescription' ), $this->code_wrap( 'rel' ) );
-		$prev_next_posts_checkbox = $this->make_checkbox( 'prev_next_posts', $prev_next_posts_label, '', false );
+		$prev_next_posts_checkbox = $this->make_checkbox(
+			'prev_next_posts',
+			$this->convert_markdown(
+				/* translators: the backticks are Markdown! Preserve them as-is! */
+				\esc_html__( 'Add `rel` link tags to posts and pages?', 'autodescription' ),
+				[ 'code' ]
+			),
+			'',
+			false
+		);
 
-		/* translators: %s = <code>rel</code> */
-		$prev_next_archives_label    = sprintf( esc_html__( 'Add %s link tags to archives?', 'autodescription' ), $this->code_wrap( 'rel' ) );
-		$prev_next_archives_checkbox = $this->make_checkbox( 'prev_next_archives', $prev_next_archives_label, '', false );
+		$prev_next_archives_checkbox = $this->make_checkbox(
+			'prev_next_archives',
+			$this->convert_markdown(
+				/* translators: the backticks are Markdown! Preserve them as-is! */
+				\esc_html__( 'Add `rel` link tags to archives?', 'autodescription' ),
+				[ 'code' ]
+			),
+			'',
+			false
+		);
 
-		/* translators: %s = <code>rel</code> */
-		$prev_next_frontpage_label    = sprintf( esc_html__( 'Add %s link tags to the homepage?', 'autodescription' ), $this->code_wrap( 'rel' ) );
-		$prev_next_frontpage_checkbox = $this->make_checkbox( 'prev_next_frontpage', $prev_next_frontpage_label, '', false );
+		$prev_next_frontpage_checkbox = $this->make_checkbox(
+			'prev_next_frontpage',
+			$this->convert_markdown(
+				/* translators: the backticks are Markdown! Preserve them as-is! */
+				\esc_html__( 'Add `rel` link tags to the homepage?', 'autodescription' ),
+				[ 'code' ]
+			),
+			'',
+			false
+		);
 
 		$this->wrap_fields( $prev_next_posts_checkbox . $prev_next_archives_checkbox . $prev_next_frontpage_checkbox, true );
 		break;
@@ -353,7 +378,7 @@ switch ( $instance ) :
 		?>
 		<h4><?php esc_html_e( 'Timestamp Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'Timestamps indicate when a page has been published and modified.', 'autodescription' ) );
+		$this->description( __( 'Timestamps help indicate when a page has been published and modified.', 'autodescription' ) );
 		?>
 		<hr>
 
@@ -411,7 +436,7 @@ switch ( $instance ) :
 		$this->description( __( 'Default post types can not be disabled.', 'autodescription' ) );
 
 		$forced_pt = $this->get_forced_supported_post_types();
-		$boxes = [];
+		$boxes     = [];
 
 		foreach ( $this->get_rewritable_post_types() as $post_type ) {
 			$pto = get_post_type_object( $post_type );

@@ -90,8 +90,7 @@ switch ( $instance ) :
 			$this->make_checkbox(
 				'facebook_tags',
 				__( 'Output Facebook meta tags?', 'autodescription' ),
-				/* translators: %s = Facebook */
-				sprintf( __( 'Output various meta tags targeted at %s.', 'autodescription' ), 'Facebook' ),
+				__( 'Output various meta tags targeted at Facebook.', 'autodescription' ),
 				true
 			),
 			true
@@ -102,8 +101,7 @@ switch ( $instance ) :
 			$this->make_checkbox(
 				'twitter_tags',
 				__( 'Output Twitter meta tags?', 'autodescription' ),
-				/* translators: %s = Facebook */
-				sprintf( __( 'Output various meta tags targeted at %s.', 'autodescription' ), 'Twitter' ),
+				__( 'Output various meta tags targeted at Twitter.', 'autodescription' ),
 				true
 			),
 			true
@@ -131,10 +129,7 @@ switch ( $instance ) :
 			<input type="hidden" name="<?php $this->field_name( 'social_image_fb_id' ); ?>" id="tsf_fb_socialimage-id" value="<?php echo absint( $this->get_option( 'social_image_fb_id' ) ); ?>" disabled class="tsf-enable-media-if-js" />
 		</p>
 		<p class="hide-if-no-tsf-js">
-			<?php
-			//* Already escaped.
-			echo $this->get_social_image_uploader_form( 'tsf_fb_socialimage' );
-			?>
+			<?php echo $this->get_social_image_uploader_form( 'tsf_fb_socialimage' ); ?>
 		</p>
 		<hr>
 
@@ -174,13 +169,14 @@ switch ( $instance ) :
 		<p>
 			<label for="<?php $this->field_id( 'facebook_appid' ); ?>">
 				<strong><?php esc_html_e( 'Facebook App ID', 'autodescription' ); ?></strong>
+				<?php
+				echo ' ';
+				$this->make_info(
+					__( 'Get Facebook App ID.', 'autodescription' ),
+					'https://developers.facebook.com/apps'
+				);
+				?>
 			</label>
-			<?php
-			$this->make_info(
-				__( 'Get Facebook App ID.', 'autodescription' ),
-				'https://developers.facebook.com/apps'
-			);
-			?>
 		</p>
 		<p>
 			<input type="text" name="<?php $this->field_name( 'facebook_appid' ); ?>" class="large-text ltr" id="<?php $this->field_id( 'facebook_appid' ); ?>" placeholder="<?php echo esc_attr( $fb_appid_placeholder ); ?>" value="<?php echo esc_attr( $fb_appid ); ?>" />
@@ -189,13 +185,14 @@ switch ( $instance ) :
 		<p>
 			<label for="<?php $this->field_id( 'facebook_publisher' ); ?>">
 				<strong><?php esc_html_e( 'Facebook Publisher page', 'autodescription' ); ?></strong>
+				<?php
+				echo ' ';
+				$this->make_info(
+					__( 'Only Facebook Business Pages are accepted.', 'autodescription' ),
+					'https://www.facebook.com/business/pages/set-up'
+				);
+				?>
 			</label>
-			<?php
-			$this->make_info(
-				__( 'Only Facebook Business Pages are accepted.', 'autodescription' ),
-				'https://www.facebook.com/business/pages/set-up'
-			);
-			?>
 		</p>
 		<p>
 			<input type="url" name="<?php $this->field_name( 'facebook_publisher' ); ?>" class="large-text" id="<?php $this->field_id( 'facebook_publisher' ); ?>" placeholder="<?php echo esc_attr( $fb_publisher_placeholder ); ?>" value="<?php echo esc_attr( $fb_publisher ); ?>" />
@@ -204,13 +201,14 @@ switch ( $instance ) :
 		<p>
 			<label for="<?php $this->field_id( 'facebook_author' ); ?>">
 				<strong><?php esc_html_e( 'Facebook Author Fallback Page', 'autodescription' ); ?></strong>
+				<?php
+				echo ' ';
+				$this->make_info(
+					__( 'Your Facebook profile.', 'autodescription' ),
+					'https://facebook.com/me'
+				);
+				?>
 			</label>
-			<?php
-			$this->make_info(
-				__( 'Your Facebook profile.', 'autodescription' ),
-				'https://facebook.com/me'
-			);
-			?>
 		</p>
 		<?php $this->description( __( 'Authors can override this option on their profile page.', 'autodescription' ) ); ?>
 		<p>
@@ -239,12 +237,8 @@ switch ( $instance ) :
 		<fieldset id="tsf-twitter-cards">
 			<legend><h4><?php esc_html_e( 'Twitter Card Type', 'autodescription' ); ?></h4></legend>
 			<?php
-			$this->description_noesc(
-				sprintf(
-					/* translators: %s = "summary" Twitter card type */
-					esc_html__( 'What kind of Twitter card would you like to use? It will default to %s if no image is found.', 'autodescription' ),
-					$this->code_wrap( 'summary' )
-				)
+			$this->description(
+				__( 'The Twitter Card type may have the image highlighted, either small at the side or large above.', 'autodescription' )
 			);
 			?>
 
@@ -255,8 +249,17 @@ switch ( $instance ) :
 				<span class="tsf-toblock">
 					<input type="radio" name="<?php $this->field_name( 'twitter_card' ); ?>" id="<?php $this->field_id( 'twitter_card_' . $type ); ?>" value="<?php echo esc_attr( $type ); ?>" <?php checked( $this->get_option( 'twitter_card' ), $type ); ?> />
 					<label for="<?php $this->field_id( 'twitter_card_' . $type ); ?>">
-						<span><?php echo $this->code_wrap( $name ); ?></span>
-						<a class="description" href="<?php echo esc_url( 'https://dev.twitter.com/cards/types/' . $name ); ?>" target="_blank" title="Twitter Card <?php echo esc_attr( $name ) . ' ' . esc_attr__( 'Example', 'autodescription' ); ?>"><?php esc_html_e( 'Example', 'autodescription' ); ?></a>
+						<span>
+							<?php
+							echo $this->code_wrap( $name );
+							echo ' ';
+							$this->make_info(
+								esc_html( 'Learn more about this card.' ),
+								esc_url( 'https://dev.twitter.com/cards/types/' . $name ),
+								true
+							);
+							?>
+						</span>
 					</label>
 				</span>
 				<?php
@@ -274,13 +277,14 @@ switch ( $instance ) :
 		<p>
 			<label for="<?php $this->field_id( 'twitter_site' ); ?>" class="tsf-toblock">
 				<strong><?php esc_html_e( 'Website Twitter Profile', 'autodescription' ); ?></strong>
+				<?php
+				echo ' ';
+				$this->make_info(
+					__( 'Find your @username.', 'autodescription' ),
+					'https://twitter.com/home'
+				);
+				?>
 			</label>
-			<?php
-			$this->make_info(
-				__( 'Find your @username.', 'autodescription' ),
-				'https://twitter.com/home'
-			);
-			?>
 		</p>
 		<p>
 			<input type="text" name="<?php $this->field_name( 'twitter_site' ); ?>" class="large-text ltr" id="<?php $this->field_id( 'twitter_site' ); ?>" placeholder="<?php echo esc_attr( $tw_site_placeholder ); ?>" value="<?php echo esc_attr( $tw_site ); ?>" />
@@ -289,13 +293,14 @@ switch ( $instance ) :
 		<p>
 			<label for="<?php $this->field_id( 'twitter_creator' ); ?>" class="tsf-toblock">
 				<strong><?php esc_html_e( 'Twitter Author Fallback Profile', 'autodescription' ); ?></strong>
+				<?php
+				echo ' ';
+				$this->make_info(
+					__( 'Find your @username.', 'autodescription' ),
+					'https://twitter.com/home'
+				);
+				?>
 			</label>
-			<?php
-			$this->make_info(
-				__( 'Find your @username.', 'autodescription' ),
-				'https://twitter.com/home'
-			);
-			?>
 		</p>
 		<?php $this->description( __( 'Authors can override this option on their profile page.', 'autodescription' ) ); ?>
 		<p>
@@ -310,30 +315,36 @@ switch ( $instance ) :
 		?>
 		<h4><?php esc_html_e( 'Post Date Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'Some social sites output the publishing and modified date in the sharing snippet.', 'autodescription' ) );
+		$this->description( __( "Some social sites output the shared post's publishing and modified date in the sharing snippet.", 'autodescription' ) );
 		?>
 		<hr>
 		<?php
 
-		$_options = [
-			'post_publish_time' => 'article:published_time',
-			'post_modify_time'  => 'article:modified_time',
-		];
-
-		/* translators: %s = code example */
-		$label  = esc_html__( 'Add %s to posts?', 'autodescription' );
-		$output = '';
-
-		foreach ( $_options as $_option => $_example ) {
-			$output .= $this->make_checkbox(
-				$_option,
-				sprintf( $label, $this->code_wrap( $_example ) ),
-				'',
-				false
-			);
-		}
-
-		$this->wrap_fields( $output, true );
+		$this->wrap_fields(
+			[
+				$this->make_checkbox(
+					'post_publish_time',
+					$this->convert_markdown(
+						/* translators: the backticks are Markdown! Preserve them as-is! */
+						esc_html__( 'Add `article:published_time` to posts?', 'autodescription' ),
+						[ 'code' ]
+					),
+					'',
+					false
+				),
+				$this->make_checkbox(
+					'post_modify_time',
+					$this->convert_markdown(
+						/* translators: the backticks are Markdown! Preserve them as-is! */
+						esc_html__( 'Add `article:modified_time` to posts?', 'autodescription' ),
+						[ 'code' ]
+					),
+					'',
+					false
+				),
+			],
+			true
+		);
 		break;
 
 	default:

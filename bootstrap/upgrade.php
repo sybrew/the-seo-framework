@@ -252,7 +252,7 @@ function _do_upgrade_notice() {
 				sprintf(
 					/* translators: %s = Link, markdown. */
 					\esc_html__( "The SEO Framework only identifies itself during plugin upgrades. We'd like to use this opportunity to highlight our [plugin setup guide](%s). We hope you enjoy our free plugin. Good luck with your site!", 'autodescription' ),
-					'https://theseoframework.com/?p=2428'
+					'https://theseoframework.com/docs/seo-plugin-setup/' // Use https://tsf.fyi/docs/setup ? Needless redirection...
 				),
 				[ 'a' ],
 				[ 'a_internal' => false ]

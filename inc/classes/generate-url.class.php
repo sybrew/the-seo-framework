@@ -578,7 +578,7 @@ class Generate_Url extends Generate_Title {
 
 			default:
 			case 'automatic':
-				$scheme = strtolower( parse_url( \get_home_url(), PHP_URL_SCHEME ) ) ?: ( $this->is_ssl() ? 'https' : 'http' );
+				$scheme = $this->detect_site_url_scheme();
 				break;
 		endswitch;
 
@@ -589,6 +589,17 @@ class Generate_Url extends Generate_Title {
 		$scheme = (string) \apply_filters( 'the_seo_framework_preferred_url_scheme', $scheme );
 
 		return $scheme;
+	}
+
+	/**
+	 * Detects site's URL scheme from site options.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @return string The detected URl scheme, lowercase.
+	 */
+	public function detect_site_url_scheme() {
+		return strtolower( parse_url( \get_home_url(), PHP_URL_SCHEME ) ) ?: ( $this->is_ssl() ? 'https' : 'http' );
 	}
 
 	/**
