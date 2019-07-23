@@ -119,6 +119,7 @@ spl_autoload_register( __NAMESPACE__ . '\\_autoload_classes', true, true );
  *                2. Now always returns void.
  * @since 3.3.0 : 1. Streamlined folder lookup by more effectively using the namespace.
  *                2. Added timing functionality
+ *                3. No longer loads interfaces automatically.
  * @uses THE_SEO_FRAMEWORK_DIR_PATH_CLASS
  * @access private
  *
@@ -146,13 +147,8 @@ function _autoload_classes( $class ) {
 
 	$class = str_replace( '_', '-', end( $_chunks ) );
 
-	if ( strpos( $class, '-interface' ) ) {
-		$file = str_replace( '-interface', '', $class ) . '.interface.php';
-		$path = THE_SEO_FRAMEWORK_DIR_PATH_INTERFACE;
-	} else {
-		$file = $class . '.class.php';
-		$path = THE_SEO_FRAMEWORK_DIR_PATH_CLASS;
-	}
+	$file = $class . '.class.php';
+	$path = THE_SEO_FRAMEWORK_DIR_PATH_CLASS;
 
 	require $path . $rel_dir . $file;
 

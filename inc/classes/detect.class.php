@@ -1039,7 +1039,7 @@ class Detect extends Render {
 		if ( isset( $cache ) )
 			return $cache;
 
-		$parsed_url = \wp_parse_url( \get_option( 'home' ) );
+		$parsed_url = parse_url( \get_option( 'home' ) );
 
 		return $cache = ! empty( $parsed_url['path'] ) && ltrim( $parsed_url['path'], ' \\/' );
 	}

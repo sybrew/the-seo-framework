@@ -40,8 +40,8 @@ class Term_Data extends Post_Data {
 	 * @since 3.3.0
 	 */
 	public function init_term_meta() {
-		\add_action( 'edit_term', [ $this, '_update_term_meta' ], 10, 2 );
-		\add_action( 'delete_term', [ $this, '_delete_term_meta' ], 10, 2 );
+		\add_action( 'edit_term', [ $this, '_update_term_meta' ], 10, 3 );
+		\add_action( 'delete_term', [ $this, '_delete_term_meta' ], 10, 3 );
 	}
 
 	/**
@@ -124,19 +124,48 @@ class Term_Data extends Post_Data {
 				return $cache[ $term_id ];
 		}
 
+		/**
+		 * We can't trust the filter to always contain the expected keys.
+		 * However, it may contain more keys than we anticipated. Merge them.
+		 */
+		$defaults = array_merge(
+			$this->get_unfiltered_term_meta_defaults(),
+			$this->get_term_meta_defaults( $term_id )
+		);
+
 		$meta = \get_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true ) ?: [];
 
-		if ( $meta ) {
-			$meta = \wp_parse_args( $meta, $this->get_term_meta_defaults( $term_id ) );
-			/**
-			 * @since 3.0.0
-			 * @param array $meta The CURRENT term data.
-			 * @param int   $term_id The term ID.
-			 */
-			return $cache[ $term_id ] = \apply_filters( 'the_seo_framework_current_term_meta', $meta, $term_id );
+		static $has_deprecated_filter = null;
+		if ( null === $has_deprecated_filter && \has_filter( 'the_seo_framework_current_term_meta' ) ) {
+			$has_deprecated_filter = true;
+			$this->_deprecated_filter( 'the_seo_framework_current_term_meta', '3.3.0', 'get_term_metadata' );
 		}
 
-		return $cache[ $term_id ] = $this->get_term_meta_defaults( $term_id );
+		if ( $has_deprecated_filter && $meta ) {
+			/**
+			 * @since 3.0.0
+			 * @since 3.3.0 Deprecated.
+			 * @deprecated
+			 * @param array $meta The CURRENT term metadata.
+			 * @param int   $term_id The term ID.
+			 */
+			$meta = \apply_filters( 'the_seo_framework_current_term_meta', $meta, $term_id );
+
+			/**
+			 * Filter the extraneous term meta items based on defaults' keys.
+			 * This is redundant, but in line with the requirement at `get_post_meta()`
+			 * where we get all metadata without a key.
+			 *
+			 * @see `$this->s_term_meta()`, which strips them out, already. As such,
+			 * we only use this when the (deprecated) filter is used.
+			 */
+			$meta = array_intersect_key(
+				$meta,
+				$defaults
+			);
+		}
+
+		return $cache[ $term_id ] = array_merge( $defaults, $meta );
 	}
 
 	/**
@@ -158,55 +187,72 @@ class Term_Data extends Post_Data {
 		 * @param array $defaults
 		 * @param int   $term_id The current term ID.
 		 */
-		return (array) \apply_filters(
+		return (array) \apply_filters_ref_array(
 			'the_seo_framework_term_meta_defaults',
 			[
-				'doctitle'           => '',
-				'title_no_blog_name' => 0,
-				'description'        => '',
-				'og_title'           => '',
-				'og_description'     => '',
-				'tw_title'           => '',
-				'tw_description'     => '',
-				'social_image_url'   => '',
-				'social_image_id'    => 0,
-				'canonical'          => '',
-				'noindex'            => 0,
-				'nofollow'           => 0,
-				'noarchive'          => 0,
-				'redirect'           => '',
-			],
-			$term_id ?: $this->get_the_real_ID()
+				$this->get_unfiltered_term_meta_defaults(),
+				$term_id ?: $this->get_the_real_ID(),
+			]
 		);
+	}
+
+	/**
+	 * Returns the unfiltered term meta defaults.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @return array The default, unfiltered, post meta.
+	 */
+	protected function get_unfiltered_term_meta_defaults() {
+		return [
+			'doctitle'           => '',
+			'title_no_blog_name' => 0,
+			'description'        => '',
+			'og_title'           => '',
+			'og_description'     => '',
+			'tw_title'           => '',
+			'tw_description'     => '',
+			'social_image_url'   => '',
+			'social_image_id'    => 0,
+			'canonical'          => '',
+			'noindex'            => 0,
+			'nofollow'           => 0,
+			'noarchive'          => 0,
+			'redirect'           => '',
+		];
 	}
 
 	/**
 	 * Sanitizes and saves term meta data when a term is altered.
 	 *
 	 * @since 2.7.0
-	 * @since 3.3.0: 1. noindex, nofollow, noarchive are converted to qubits.
-	 *               2. Added new keys to sanitize.
-	 *               3. Now marked as private.
-	 *               4. Added more protection.
-	 *               5. No longer runs when no POST data is sent.
-	 *               6. Now uses the current term meta to set new values.
-	 *               7. No longer deletes meta from abstracting plugins on save when they're deactivated.
-	 *               8. Renamed from update_term_meta()
+	 * @since 3.3.0: 1. Renamed from `update_term_meta`
+	 *               2. noindex, nofollow, noarchive are now converted to qubits.
+	 *               3. Added new keys to sanitize.
+	 *               4. Now marked as private.
+	 *               5. Added more sanity protection.
+	 *               6. No longer runs when no `autodescription-meta` POST data is sent.
+	 *               7. Now uses the current term meta to set new values.
+	 *               8. No longer deletes meta from abstracting plugins on save when they're deactivated.
+	 *               9. Now allows updating during `WP_AJAX`.
 	 * @securitycheck 3.0.0 OK.
 	 * @access private
-	 *         Use save_term_meta instead.
+	 *         Use $this->save_term_meta() instead.
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param int    $tt_id    Term taxonomy ID.
 	 * @param string $taxonomy Taxonomy slug.
 	 * @return void Early on AJAX call.
 	 */
-	public function _update_term_meta( $term_id, $tt_id, $taxonomy = '' ) {
+	public function _update_term_meta( $term_id, $tt_id, $taxonomy ) {
 
-		if ( ! isset( $_POST['autodescription-meta'] ) )
-			return;
+		// The 'autodescription-meta' index should only be used when using the editor.
+		// Quick and bulk-edit should be halted here.
+		if ( ! isset( $_POST['autodescription-meta'] ) ) return;
 
-		if ( \wp_doing_ajax() ) return;
+		$term = \get_term_by( 'id', $term_id, $taxonomy );
+
+		if ( ! $term ) return;
 
 		//* Check again against ambiguous injection...
 		// Note, however: function wp_update_term() already performs all these checks for us before firing this action.
@@ -236,7 +282,15 @@ class Term_Data extends Post_Data {
 	 * @param string $taxonomy Taxonomy slug.
 	 */
 	public function update_single_term_meta_item( $item, $value, $term_id, $tt_id, $taxonomy ) {
-		$this->save_term_meta( $term_id, $tt_id, $taxonomy, [ $item => $value ] );
+
+		$term = \get_term_by( 'id', $term_id, $taxonomy );
+
+		if ( ! $term ) return;
+
+		$meta          = $this->get_term_meta( $term_id, false );
+		$meta[ $item ] = $value;
+
+		$this->save_term_meta( $term_id, $tt_id, $taxonomy, $meta );
 	}
 
 	/**
@@ -250,6 +304,10 @@ class Term_Data extends Post_Data {
 	 * @param array  $data     The data to save.
 	 */
 	public function save_term_meta( $term_id, $tt_id, $taxonomy, array $data ) {
+
+		$term = \get_term_by( 'id', $term_id, $taxonomy );
+
+		if ( ! $term ) return;
 
 		$data = (array) \wp_parse_args( $data, $this->get_term_meta_defaults( $term_id ) );
 		$data = $this->s_term_meta( $data );
@@ -281,10 +339,11 @@ class Term_Data extends Post_Data {
 	 * @since 3.3.0
 	 * @access private
 	 *
-	 * @param int $term_id Term ID.
-	 * @param int $tt_id   Term Taxonomy ID.
+	 * @param int    $term_id  Term ID.
+	 * @param int    $tt_id    Term Taxonomy ID.
+	 * @param string $taxonomy Taxonomy slug.
 	 */
-	public function _delete_term_meta( $term_id, $tt_id ) {
+	public function _delete_term_meta( $term_id, $tt_id, $taxonomy ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 		$this->delete_term_meta( $term_id );
 	}
 

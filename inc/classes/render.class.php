@@ -72,14 +72,13 @@ class Render extends Admin_Init {
 	 * Use the_seo_framework()->get_title() instead.
 	 *
 	 * @since 3.1.0
+	 * @since 3.3.0 Removed extraneous, unused parameters.
 	 * @see $this->get_title()
 	 *
 	 * @param string $title       The filterable title.
-	 * @param string $sep         The title separator.
-	 * @param string $seplocation The location of the separator (left or right).
 	 * @return string $title
 	 */
-	public function get_wp_title( $title = '', $sep = '', $seplocation = '' ) {
+	public function get_wp_title( $title = '' ) {
 
 		if ( ! $this->query_supports_seo() )
 			return $title;
@@ -1122,8 +1121,8 @@ class Render extends Admin_Init {
 			if ( $cache['show_timer'] && $timing ) {
 				$timers = sprintf(
 					' | %s meta | %s boot',
-					number_format( microtime( true ) - $timing, 5 ) . 's',
-					number_format( _bootstrap_timer(), 5 ) . 's'
+					number_format( ( microtime( true ) - $timing ) * 1e3, 2 ) . 'ms',
+					number_format( _bootstrap_timer() * 1e3, 2 ) . 'ms'
 				);
 			} else {
 				$timers = '';

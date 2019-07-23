@@ -33,8 +33,9 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * Holds plugin debug functions.
  *
  * @since 2.8.0
+ * @since 3.3.0 No longer implements an interface. It's implied.
  */
-final class Debug implements Debug_Interface {
+final class Debug {
 	use Traits\Enclose_Stray_Private;
 
 	/**

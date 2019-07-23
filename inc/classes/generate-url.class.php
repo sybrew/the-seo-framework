@@ -593,6 +593,11 @@ class Generate_Url extends Generate_Title {
 
 	/**
 	 * Detects site's URL scheme from site options.
+	 * Falls back to is_ssl() when the hom misconfigured via wp-config.php
+	 *
+	 * NOTE: Some (insecure, e.g. SP) implementations for the `WP_HOME` constant, where
+	 * the scheme is interpreted from the request, may cause this to be unreliable.
+	 * We're going to ignore those edge-cases; they're doing it wrong.
 	 *
 	 * @since 3.3.0
 	 *
@@ -959,7 +964,7 @@ class Generate_Url extends Generate_Title {
 		if ( isset( $cache ) )
 			return $cache;
 
-		$parsed_url = \wp_parse_url( \get_home_url() );
+		$parsed_url = parse_url( \get_home_url() );
 
 		$host = isset( $parsed_url['host'] ) ? $parsed_url['host'] : '';
 

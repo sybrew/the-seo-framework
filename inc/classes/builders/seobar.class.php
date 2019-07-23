@@ -34,10 +34,10 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * @link <https://www.php.net/manual/en/language.oop5.late-static-bindings.php>
  *
  * @access private
- * @internal
- * @abstract: Implements test_{$*}, see $tests for *.
- * @see \The_SEO_Framework\Interpreters\SeoBar
  *      Use \The_SEO_Framework\Interpreters\SeoBar::generate_bar() instead.
+ * @internal
+ * @abstract: Implements test_{$*}, see property $tests and method `_run_test()` for what * may be.
+ * @see \The_SEO_Framework\Interpreters\SeoBar
  */
 abstract class SeoBar {
 	use \The_SEO_Framework\Traits\Enclose_Core_Final;

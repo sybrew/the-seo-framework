@@ -8,8 +8,6 @@
  *    - Deprecated
  *       |-> Final
  *    - Debug
- *       |-> Interface:
- *          -  Debug_Interface
  *       |-> Final
  *
  * ## Failsafe:
@@ -41,8 +39,6 @@
  *       | Cache
  *       | Feed
  *       | Load
- *          |-> Interface:
- *             - Debug_Interface
  *          |-> Final
- *          |-> Instance
+ *          |-> Instanced in function `the_seo_framework()`
  */

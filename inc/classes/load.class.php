@@ -32,8 +32,9 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * Extending upon parent classes.
  *
  * @since 2.8.0
+ * @since 3.3.0 No longer implements an interface. It's implied.
  */
-final class Load extends Feed implements Debug_Interface {
+final class Load extends Feed {
 
 	/**
 	 * @since 2.2.9

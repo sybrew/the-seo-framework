@@ -328,6 +328,7 @@ class Query extends Core {
 		if ( ! $attachment )
 			return \is_attachment();
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $attachment ) )
 			return $cache;
 
@@ -414,6 +415,7 @@ class Query extends Core {
 	 */
 	public function is_term_edit() {
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
@@ -467,6 +469,7 @@ class Query extends Core {
 		if ( empty( $author ) )
 			return \is_author();
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $author ) )
 			return $cache;
 
@@ -494,6 +497,7 @@ class Query extends Core {
 
 		$id = $id ?: $this->get_the_real_ID();
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $id ) )
 			return $cache;
 
@@ -548,6 +552,7 @@ class Query extends Core {
 		if ( $this->is_admin() )
 			return $this->is_category_admin();
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $category ) )
 			return $cache;
 
@@ -632,6 +637,7 @@ class Query extends Core {
 	 */
 	public function is_real_front_page() {
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
@@ -694,6 +700,7 @@ class Query extends Core {
 
 		$id = (int) $id;
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $id ) )
 			return $cache;
 
@@ -774,6 +781,7 @@ class Query extends Core {
 		if ( empty( $page ) )
 			return \is_page();
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $page ) )
 			return $cache;
 
@@ -864,6 +872,7 @@ class Query extends Core {
 		if ( $this->is_admin() )
 			return $this->is_single_admin();
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post ) )
 			return $cache;
 
@@ -921,6 +930,7 @@ class Query extends Core {
 		if ( $this->is_admin() )
 			return $this->is_singular_admin();
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post_types ) )
 			return $cache;
 
@@ -986,6 +996,7 @@ class Query extends Core {
 		if ( $this->is_admin() )
 			return $this->is_tag_admin();
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $tag ) )
 			return $cache;
 
@@ -1024,13 +1035,15 @@ class Query extends Core {
 	 */
 	public function is_tax( $taxonomy = '', $term = '' ) {
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $taxonomy, $term ) )
 			return $cache;
 
 		$this->set_query_cache(
 			__METHOD__,
 			$is_tax = \is_tax( $taxonomy, $term ),
-			...[ $taxonomy, $term ]
+			$taxonomy,
+			$term
 		);
 
 		return $is_tax;
@@ -1046,6 +1059,7 @@ class Query extends Core {
 	 */
 	public function is_wc_shop() {
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
@@ -1072,6 +1086,7 @@ class Query extends Core {
 		if ( $this->is_admin() )
 			return $this->is_wc_product_admin();
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post ) )
 			return $cache;
 
@@ -1123,7 +1138,9 @@ class Query extends Core {
 	 * @return bool True if SSL, false otherwise.
 	 */
 	public function is_ssl() {
+
 		static $cache = null;
+
 		return isset( $cache ) ? $cache : $cache = \is_ssl();
 	}
 
@@ -1147,6 +1164,7 @@ class Query extends Core {
 		if ( ! $secure )
 			return $this->is_menu_page( $this->seo_settings_page_hook, $this->seo_settings_page_slug );
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
@@ -1207,6 +1225,7 @@ class Query extends Core {
 	 */
 	public function page() {
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
@@ -1241,6 +1260,7 @@ class Query extends Core {
 	 */
 	public function paged() {
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
@@ -1278,6 +1298,7 @@ class Query extends Core {
 	 */
 	public function numpages() {
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
@@ -1389,9 +1410,7 @@ class Query extends Core {
 	 *
 	 * @param string      $method       The method that wants to cache, used as the key to set or get.
 	 * @param mixed       $value_to_set The value to set.
-	 * @param array|mixed ...$hash      Extra arguments, that will be used to generate an alternative cache key.
-	 *                                  Must always be inside a single array when $value_to_set is set. @see $this->set_query_cache()
-	 *                                  Must always be separated parameters otherwise.
+	 * @param array|mixed ...$hash      Extra arguments, that will are used to differentiaty queries.
 	 * @return mixed : {
 	 *    mixed The cached value if set and $value_to_set is null.
 	 *       null If the query can't be cached yet, or when no value has been set.
@@ -1452,6 +1471,6 @@ class Query extends Core {
 	 * }
 	 */
 	public function set_query_cache( $method, $value_to_set, ...$hash ) {
-		return $this->get_query_cache( $method, $value_to_set, $hash );
+		return $this->get_query_cache( $method, $value_to_set, ...$hash );
 	}
 }

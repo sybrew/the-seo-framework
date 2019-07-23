@@ -37,11 +37,17 @@ class Post_Data extends Detect {
 	/**
 	 * Returns a post SEO meta item by key.
 	 *
+	 * Unlike other post meta calls, no \WP_Post object is accepted as an input value,
+	 * this is done for performance reasons, so we can cache here, instead of relying on
+	 * WordPress' cache, where they cast many filters and redundantly sanitize the object.
+	 *
+	 * When we'll be moving to PHP 7 and later, we'll enforce type hinting.
+	 *
 	 * @since 3.3.0
 	 * @alias $this->get_post_meta_item();
 	 *
 	 * @param string $item      The item to get.
-	 * @param int    $post_id   The Term ID.
+	 * @param int    $post_id   The post ID.
 	 * @param bool   $use_cache Whether to use caching.
 	 */
 	public function get_post_meta_item( $item, $post_id = 0, $use_cache = true ) {
@@ -53,6 +59,12 @@ class Post_Data extends Detect {
 
 	/**
 	 * Returns all registered custom SEO fields for a post.
+	 *
+	 * Unlike other post meta calls, no \WP_Post object is accepted as an input value,
+	 * this is done for performance reasons, so we can cache here, instead of relying on
+	 * WordPress' cache, where they cast many filters and redundantly sanitize the object.
+	 *
+	 * When we'll be moving to PHP 7 and later, we'll enforce type hinting.
 	 *
 	 * @since 3.3.0
 	 * @staticvar array $cache
@@ -70,20 +82,28 @@ class Post_Data extends Detect {
 				return $cache[ $post_id ];
 		}
 
-		// get_post_meta() requires a valid post ID. Get that post.
+		// get_post_meta() requires a valid post ID. Make sure that post exists.
 		$post = \get_post( $post_id );
 
-		if ( empty( $post->ID ) )
+		if ( ! $post )
 			return $cache[ $post_id ] = [];
 
-		// We can't trust the filter to always contain the expected keys.
-		// However, it may contain more keys than we anticipated. Merge them.
-		$defaults = array_merge( $this->get_unfiltered_post_meta_defaults(), $this->get_post_meta_defaults( $post->ID ) );
+		/**
+		 * We can't trust the filter to always contain the expected keys.
+		 * However, it may contain more keys than we anticipated. Merge them.
+		 */
+		$defaults = array_merge(
+			$this->get_unfiltered_post_meta_defaults(),
+			$this->get_post_meta_defaults( $post->ID )
+		);
 
 		// Filter the post meta items based on defaults' keys.
-		$meta = array_intersect_key( \get_post_meta( $post->ID ), $defaults );
+		$meta = array_intersect_key(
+			\get_post_meta( $post->ID ), // Gets all post meta. This is a discrepancy with get_term_meta()!
+			$defaults
+		);
 
-		// WP converts all entries to arrays. Disarray!
+		// WP converts all entries to arrays, because we got ALL entries. Disarray!
 		foreach ( $meta as $key => $value ) {
 			$meta[ $key ] = $value[0];
 		}
@@ -93,6 +113,12 @@ class Post_Data extends Detect {
 
 	/**
 	 * Returns the post meta defaults.
+	 *
+	 * Unlike other post meta calls, no \WP_Post object is accepted as an input value,
+	 * this is done for performance reasons, so we can cache here, instead of relying on
+	 * WordPress' cache, where they cast many filters and redundantly sanitize the object.
+	 *
+	 * When we'll be moving to PHP 7 and later, we'll enforce type hinting.
 	 *
 	 * @since 3.3.0
 	 *
@@ -107,7 +133,7 @@ class Post_Data extends Detect {
 		 * @param \WP_Post $post    Post object.
 		 */
 		return (array) \apply_filters_ref_array(
-			'the_seo_framework_inpost_seo_save_defaults',
+			'the_seo_framework_inpost_seo_save_defaults', // TODO rename to the_seo_framework_post_meta_defaults
 			[
 				$this->get_unfiltered_post_meta_defaults(),
 				$post_id,
@@ -145,75 +171,6 @@ class Post_Data extends Detect {
 	}
 
 	/**
-	 * Saves the SEO settings when we save an attachment.
-	 *
-	 * This is a passthrough method for `_update_post_meta()`.
-	 * Sanity check is handled at `save_custom_fields()`, which `_update_post_meta()` uses.
-	 *
-	 * @since 3.0.6
-	 * @since 3.3.0 Renamed from `inattachment_seo_save`
-	 * @uses $this->_update_post_meta()
-	 * @access private
-	 *
-	 * @param integer $post_id Post ID.
-	 * @return void
-	 */
-	public function _update_attachment_meta( $post_id ) {
-		$this->_update_post_meta( $post_id, \get_post( $post_id ) );
-	}
-
-	/**
-	 * Saves the SEO settings when we save a post or page.
-	 * Some values get sanitized, the rest are pulled from identically named subkeys in the $_POST['autodescription'] array.
-	 *
-	 * @since 2.0.0
-	 * @since 2.9.3 Added 'exclude_from_archive'.
-	 * @since 3.3.0 Renamed from `inpost_seo_save`
-	 * @securitycheck 3.0.0 OK. NOTE: Check is done at save_custom_fields().
-	 * @uses $this->save_custom_fields() : Perform security checks and saves post meta / custom field data to a post or page.
-	 * @access private
-	 *
-	 * @param integer  $post_id Post ID.
-	 * @param \WP_Post $post    Post object.
-	 * @return void Early when no expected POST is set.
-	 */
-	public function _update_post_meta( $post_id, $post ) {
-
-		if ( empty( $_POST['autodescription'] ) )
-			return;
-
-		//* Grab the post object
-		$post = \get_post( $post );
-
-		if ( empty( $post->ID ) ) return;
-
-		/**
-		 * Don't try to save the data under autosave, ajax, or future post.
-		 *
-		 * @TODO find a way to maintain revisions:
-		 * @link https://github.com/sybrew/the-seo-framework/issues/48
-		 * @link https://johnblackbourn.com/post-meta-revisions-wordpress
-		 */
-		if ( \wp_is_post_autosave( $post ) ) return;
-		if ( \wp_doing_ajax() ) return;
-		if ( \wp_doing_cron() ) return;
-		if ( \wp_is_post_revision( $post ) ) return;
-
-		$nonce_name   = $this->inpost_nonce_name;
-		$nonce_action = $this->inpost_nonce_field;
-
-		//* Check that the user is allowed to edit the post
-		if ( ! \current_user_can( 'edit_post', $post->ID ) ) return;
-		if ( ! isset( $_POST[ $nonce_name ] ) ) return;
-		if ( ! \wp_verify_nonce( \stripslashes_from_strings_only( $_POST[ $nonce_name ] ), $nonce_action ) ) return;
-
-		$data = (array) $_POST['autodescription'];
-
-		//* Perform nonce check and save fields.
-		$this->save_post_meta( $post, $data );
-	}
-
-	/**
 	 * Updates single post meta value.
 	 *
 	 * Note that this method can be more resource intensive than you intend it to be,
@@ -224,10 +181,18 @@ class Post_Data extends Detect {
 	 *
 	 * @param string           $item  The item to update.
 	 * @param mixed            $value The value the item should be at.
-	 * @param \WP_Post|integer $post  Post object or post ID.
+	 * @param \WP_Post|integer $post  The post object or post ID.
 	 */
 	public function update_single_post_meta_item( $item, $value, $post ) {
-		$this->save_post_meta( $post, [ $item => $value ] );
+
+		$post = \get_post( $post );
+
+		if ( ! $post ) return;
+
+		$meta          = $this->get_post_meta( $post->ID, false );
+		$meta[ $item ] = $value;
+
+		$this->save_post_meta( $post->ID, $meta );
 	}
 
 	/**
@@ -235,8 +200,8 @@ class Post_Data extends Detect {
 	 *
 	 * @since 3.3.0
 	 *
-	 * @param \WP_Post|integer $post Post object or post ID.
-	 * @param array            $data The post meta fields to update.
+	 * @param \WP_Post|integer $post The post object or post ID.
+	 * @param array            $data The post meta fields, will be merged with the defaults.
 	 */
 	public function save_post_meta( $post, array $data ) {
 
@@ -284,47 +249,118 @@ class Post_Data extends Detect {
 			if ( $value ) {
 				\update_post_meta( $post->ID, $field, $value );
 			} else {
+				// This is fine for as long as we merge the get values with the defaults.
 				\delete_post_meta( $post->ID, $field );
 			}
 		}
 	}
 
 	/**
-	 * Saves primary term data for posts.
+	 * Saves the SEO settings when we save an attachment.
 	 *
-	 * @since 3.0.0
-	 * @securitycheck 3.0.0 OK.
+	 * This is a passthrough method for `_update_post_meta()`.
+	 * Sanity check is handled at `save_custom_fields()`, which `_update_post_meta()` uses.
 	 *
-	 * @param integer  $post_id Post ID.
-	 * @param \WP_Post $post    Post object.
+	 * @since 3.0.6
+	 * @since 3.3.0 Renamed from `inattachment_seo_save`
+	 * @uses $this->_update_post_meta()
+	 * @access private
+	 *
+	 * @param int $post_id The post ID.
 	 * @return void
 	 */
-	public function _save_inpost_primary_term( $post_id, $post ) {
+	public function _update_attachment_meta( $post_id ) {
+		$this->_update_post_meta( $post_id, \get_post( $post_id ) );
+	}
 
+	/**
+	 * Saves the SEO settings when we save a post or page.
+	 * Some values get sanitized, the rest are pulled from identically named subkeys in the $_POST['autodescription'] array.
+	 *
+	 * @since 2.0.0
+	 * @since 2.9.3 Added 'exclude_from_archive'.
+	 * @since 3.3.0 1. Renamed from `inpost_seo_save`
+	 *              2. Now allows updating during `WP_CRON`.
+	 *              3. Now allows updating during `WP_AJAX`.
+	 * @securitycheck 3.0.0 OK. NOTE: Check is done at save_custom_fields().
+	 * @uses $this->save_custom_fields() : Perform security checks and saves post meta / custom field data to a post or page.
+	 * @access private
+	 *
+	 * @param int      $post_id The post ID. Unused, but sent through filter.
+	 * @param \WP_Post $post    The post object.
+	 * @return void Early when no expected POST is set.
+	 */
+	public function _update_post_meta( $post_id, $post ) {
+
+		// The 'autodescription' index should only be used when using the editor.
+		// Quick and bulk-edit should be halted here.
 		if ( empty( $_POST['autodescription'] ) ) return;
 
-		//* Grab the post object
 		$post = \get_post( $post );
 
-		if ( empty( $post->ID ) ) return;
+		if ( ! $post ) return;
 
 		/**
-		 * Don't try to save the data under autosave, ajax, or future post.
+		 * Don't try to save the data prior autosave, or revision post (is_preview).
 		 *
 		 * @TODO find a way to maintain revisions:
 		 * @link https://github.com/sybrew/the-seo-framework/issues/48
 		 * @link https://johnblackbourn.com/post-meta-revisions-wordpress
 		 */
 		if ( \wp_is_post_autosave( $post ) ) return;
-		if ( \wp_doing_ajax() ) return;
-		if ( \wp_doing_cron() ) return;
 		if ( \wp_is_post_revision( $post ) ) return;
+
+		$nonce_name   = $this->inpost_nonce_name;
+		$nonce_action = $this->inpost_nonce_field;
 
 		//* Check that the user is allowed to edit the post
 		if ( ! \current_user_can( 'edit_post', $post->ID ) ) return;
+		if ( ! isset( $_POST[ $nonce_name ] ) ) return;
+		if ( ! \wp_verify_nonce( \stripslashes_from_strings_only( $_POST[ $nonce_name ] ), $nonce_action ) ) return;
+
+		$data = (array) $_POST['autodescription'];
+
+		//* Perform nonce check and save fields.
+		$this->save_post_meta( $post, $data );
+	}
+
+	/**
+	 * Saves primary term data for posts.
+	 *
+	 * @since 3.0.0
+	 * @since 3.3.0 1. Now allows updating during `WP_CRON`.
+	 *              2. Now allows updating during `WP_AJAX`.
+	 * @securitycheck 3.0.0 OK.
+	 *
+	 * @param int      $post_id The post ID. Unused, but sent through filter.
+	 * @param \WP_Post $post    The post object.
+	 * @return void
+	 */
+	public function _save_inpost_primary_term( $post_id, $post ) {
+
+		// The 'autodescription' index should only be used when using the editor.
+		// Quick and bulk-edit should be halted here.
+		if ( empty( $_POST['autodescription'] ) ) return;
+
+		$post = \get_post( $post );
+
+		if ( empty( $post->ID ) ) return;
+
+		/**
+		 * Don't try to save the data prior autosave, or revision post (is_preview).
+		 *
+		 * @TODO find a way to maintain revisions:
+		 * @link https://github.com/sybrew/the-seo-framework/issues/48
+		 * @link https://johnblackbourn.com/post-meta-revisions-wordpress
+		 */
+		if ( \wp_is_post_autosave( $post ) ) return;
+		if ( \wp_is_post_revision( $post ) ) return;
+
+		//* Check that the user is allowed to edit the post. Nonce checks are done in bulk later.
+		if ( ! \current_user_can( 'edit_post', $post->ID ) ) return;
 
 		$post_type = \get_post_type( $post->ID ) ?: false;
-
+		// Can this even fail?
 		if ( ! $post_type ) return;
 
 		$_taxonomies = $this->get_hierarchical_taxonomies_as( 'names', $post_type );

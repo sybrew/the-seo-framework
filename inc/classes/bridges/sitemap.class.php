@@ -419,13 +419,8 @@ final class Sitemap {
 	private function get_sitemap_base_path_info() {
 		global $wp_rewrite;
 
-		// Get path fragment from home_url().
-		$home      = \wp_parse_url( \home_url() );
-		$home_path = isset( $home['path'] ) ? $home['path'] : '';
-
-		$home_path = rtrim( $home_path, '/' );
-
-		$prefix = $this->get_sitemap_path_prefix();
+		$home_path = rtrim( parse_url( \get_home_url(), PHP_URL_PATH ), '/' );
+		$prefix    = $this->get_sitemap_path_prefix();
 
 		$use_query_var = false;
 

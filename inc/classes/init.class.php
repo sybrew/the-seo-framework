@@ -303,7 +303,7 @@ class Init extends Query {
 			if ( \apply_filters( 'the_seo_framework_manipulate_title', true ) ) {
 				\remove_all_filters( 'wp_title', false );
 				//* Override WordPress Title
-				\add_filter( 'wp_title', [ $this, 'get_wp_title' ], 9, 3 );
+				\add_filter( 'wp_title', [ $this, 'get_wp_title' ], 9 );
 			}
 		}
 	}
@@ -600,8 +600,7 @@ class Init extends Query {
 				$output .= "\r\n";
 			}
 
-			$site_url  = \wp_parse_url( \site_url() );
-			$site_path = ( ! empty( $site_url['path'] ) ) ? \esc_attr( $site_url['path'] ) : '';
+			$site_path = \esc_attr( parse_url( \site_url(), PHP_URL_PATH ) ) ?: '';
 
 			/**
 			 * @since 2.5.0

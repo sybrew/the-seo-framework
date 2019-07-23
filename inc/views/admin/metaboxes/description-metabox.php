@@ -14,7 +14,9 @@ switch ( $instance ) :
 		?>
 		<h4><?php printf( esc_html__( 'Description Settings', 'autodescription' ) ); ?></h4>
 		<?php
-		$this->description( __( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' ) );
+		$this->description(
+			__( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' )
+		);
 
 		?>
 		<hr>

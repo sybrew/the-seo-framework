@@ -606,6 +606,10 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* The script loader now accepts and contatenates inline JS.
 	* **Changed:**
 		* Custom setting tabs and their content-callbacks should no longer have their output be returned, but always be printed instead.
+	* **Removed:**
+		* PHP 5.4 and 5.5 support. The plugin now requires PHP 5.6 and higher.
+			* With that, we no longer require using `wp_parse_args()` and other backward-compatible functionality.
+			* You'll also find that our API has changed. For example, we now use generators to send images.
 	* **Fixed:**
 		* Registering inline scripts now correctly converts `{{$rel_color}}`.
 * **Option notes:**
@@ -781,7 +785,15 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 					* `\The_SEO_framework\Builders\SeoBar_Page`
 					* `\The_SEO_framework\Builders\SeoBar_Term`
 			* **Removed methods:**
+				* TODO?
 			* **Deprecated methods:**
+				* TODO?
+	* **Rmeoved interfaces:**
+		* `\The_SEO_Framework\Debug_Interface`
+			* Implementors:
+				1. `\The_SEO_Framework\Load`
+				1. `\The_SEO_Framework\Debug`
+			* Was redundant, added to load time. Removed.
 * **Method notes:**
 	* For object `the_seo_framework()`:
 		* **Added:**
@@ -835,17 +847,25 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `robots_meta()` now has two new parameters.
 			* `add_option_filter()` no longer registers its filter more than once for an option key.
 			* `register_settings()` no longer uses `add_option()` when the options are already registered.
-			* `inpost_seo_save()` (removed, now `_update_post_meta()`) now coverts `_genesis_noindex`, `_genesis_nofollow`, and `_genesis_noarchive` to qubits.
+			* `inpost_seo_save()`
+				1. Renamed to `_update_post_meta()`.
+				1. Now coverts `_genesis_noindex`, `_genesis_nofollow`, and `_genesis_noarchive` to qubits.
+				1. Now allows updating during `WP_CRON`, this was to protect against bulk-and quick-edit; which we now handle.
+				1. Now allows updating during `WP_AJAX`, this was to protect against bulk-and quick-edit; which we now handle.
+			* `_update_term_meta()`
+				1. Renamed from `update_term_meta`
+				1. noindex, nofollow, noarchive are now converted to qubits.
+				1. Added new keys to sanitize.
+				1. Now marked as private.
+				1. Added more sanity protection. Superfluous: "Does the term exist? Is the user allowed to do this?"
+				1. No longer runs when no `autodescription-meta` POST data is sent.
+				1. Now uses the current term meta to set new values.
+				1. No longer deletes meta from abstracting plugins on save when they're deactivated.
+				1. Now allows updating during `WP_AJAX`, this was to protect against bulk-and quick-edit; which we now handle.
 			* `get_term_meta()`
 				1. Removed deprecated filter `the_seo_framework_get_term_meta`.
 				1. Now fills in defaults if older term meta isn't set.
 			* `get_term_meta_defaults()` now returns more values.
-			* `update_term_meta()`
-				1. Now sanitizes more values.
-				1. It's now marked as private. Use `save_term_meta()` instead.
-				1. Added redundant `current_user_can()` checks.
-				1. `noindex`, `nofollow`, and `noarchive` values are converted to qubits.
-				1. No longer processes data is no POST entry for `autodescription-meta` is found.
 			* `is_single_admin()` now uses `is_singular_admin()` to check for the correct base; so categories and tags no longer falsely return `true`.
 			* `get_generated_single_term_title()` no longer redundantly tests the query, but now only uses the term input or queried object.
 			* `is_taxonomy_disabled()` now only returns true if all post types in the taxonomy are disabled, and it uses `is_post_type_supported()` instead of `is_post_type_disabled()` to do so.
@@ -1037,7 +1057,11 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* `the_seo_framework_use_title_branding` now works for the homepage title in the admin screens.
 		* `the_seo_framework_title_separator` now works in the admin screens.
 	* **Deprecated:**
-		* `the_seo_framework_save_custom_fields`, use `the_seo_framework_save_post_meta` instead. Same syntax.
+		* `the_seo_framework_save_custom_fields`, use `the_seo_framework_save_post_meta` instead. Same syntax, same effect, better name.
+		* `the_seo_framework_current_term_meta`, use `get_term_metadata` instead. See WordPress function `get_metadata()` for details.
+			* We know, the `get_term_metadata` filter is inconvenient, but so is maintaining and explaining the filter we deprecated.
+			* This filter was largely only in place because we didn't have bulk-editing systems in place. But, now we do.
+			* Moreover, there are many more hooks through which you can influence this, like when updating the term meta. Those hooks are vastly more reliable, because the term meta may be obtained elsewhere, without using our API.
 	* **Removed:**
 		* `the_seo_framework_js_l10n`, overhauled.
 		* `the_seo_framework_get_term_meta`, this was deprecated since 3.1.0.
