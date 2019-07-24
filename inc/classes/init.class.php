@@ -165,7 +165,7 @@ class Init extends Query {
 			\add_action( 'admin_init', [ $this, 'register_settings' ], 5 );
 
 			//* Load the SEO admin page content and handlers.
-			\add_action( 'admin_init', [ $this, 'settings_init' ], 10 );
+			\add_action( 'admin_init', [ $this, '_settings_init' ], 10 );
 
 			//* Enqueue Inpost meta boxes.
 			\add_action( 'add_meta_boxes', [ $this, 'add_inpost_seo_box_init' ], 5 );

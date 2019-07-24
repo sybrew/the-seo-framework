@@ -739,6 +739,9 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* Use `the_seo_framework()->get_generated_seo_bar()` to generate a bar.
 		* `\The_SEO_framework\Builders\SeoBar_Term`, this class extends `\The_SEO_framework\Builders\SeoBar`.
 			* Use `the_seo_framework()->get_generated_seo_bar()` to generate a bar.
+		* `\The_SEO_Framework\Bridges\SeoSettings`
+			* This class can't be instantiated.
+			* This class is marked protected, only for internal use.
 		* `\The_SEO_Framework\Bridges\Sitemap`, this file initializes the sitemap query, and it's loaded when the sitemap functionality is enabled.
 			* **Public methods:**
 				* `get_expected_sitemap_endpoint_url()`
@@ -769,6 +772,9 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* The two methods therein were moved to `\The_SEO_Framework\Load`:
 				* `load_early_compat_files()`, protected.
 				* `_include_compat()`, marked private.
+		* `\The_SEO_Framework\Metaboxes`
+			* All but one of the methods therein were moved to `\The_SEO_Framework\Bridges\SeoSettings`.
+			* Method `nav_tab_wrapper()` was moved to `\The_SEO_Framework\Admin_Pages`.
 		* `\The_SEO_Framework\Inpost`
 			* It's now named `\The_SEO_Framework\Edit`.
 			* This is part of the facade object `the_seo_framework()`, so this class shouldn't be called externally.
@@ -904,9 +910,11 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				1. Added admin support.
 				1. Added a parameter for the Post ID or post to test.
 			* `delete_object_cache()` now actually does something: flushes the object cache.
-			* `get_available_twitter_cards`
+			* `get_available_twitter_cards()`
 				1. Now only asserts the social titles as required.
 				1. Now always returns an array, instead of a boolean (false) on failure.
+			* `nav_tab_wrapper()`
+				1. Deprecated third parameter, silently.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`
@@ -941,9 +949,20 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* Public methods, these were obstructing:
 				* `is_post_included_in_sitemap()`, use `new \The_SEO_Framework\Builders\Sitemap()->is_post_included_in_sitemap()` instead.
 				* `load_assets()`, this was an internal function that only loaded a few scripts on our admin page.
+				* `settings_init()`, this was an internal function that handles the update state automatically. Is now `_settings_init()`.
 				* `get_sitemap_xsl_stylesheet_tag()`, this is now part of `\The_SEO_Framework\Builders\Sitemap::get_instance()->output_sitemap_header()`.
 				* `get_sitemap_urlset_open_tag()`, we now output it directly.
 				* `get_sitemap_urlset_close_tag()`, we now output it directly.
+				* `general_metabox()`, this was and should've been used internally only.
+				* `title_metabox()`, this was and should've been used internally only.
+				* `description_metabox()`, this was and should've been used internally only.
+				* `robots_metabox()`, this was and should've been used internally only.
+				* `homepage_metabox()`, this was and should've been used internally only.
+				* `social_metabox()`, this was and should've been used internally only.
+				* `webmaster_metabox()`, this was and should've been used internally only.
+				* `sitemaps_metabox()`, this was and should've been used internally only.
+				* `feed_metabox()`, this was and should've been used internally only.
+				* `schema_metabox()`, this was and should've been used internally only.
 			* Public methods, are now rendered ineffective:
 				* `post_type_supports_inpost()`
 				* `enqueue_page_defaults()`
@@ -1043,6 +1062,15 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			1. Now has a new parameter: `$bridge`.
 		* `the_seo_framework_term_meta_defaults` now holds more values in the first parameter.
 		* `the_seo_framework_separator_list` no longer yields the `dash` index.
+		* `the_seo_framework_{$type}_settings_tabs`, the callback indexes have been changed for these filters, as the class structure changed:
+			* TODO `the_seo_framework_inpost_settings_tabs`
+			* `the_seo_framework_general_settings_tabs`
+			* `the_seo_framework_homepage_settings_tabs`
+			* `the_seo_framework_robots_settings_tabs`
+			* `the_seo_framework_schema_settings_tabs`
+			* `the_seo_framework_sitemaps_settings_tabs`
+			* `the_seo_framework_social_settings_tabs`
+			* `the_seo_framework_title_settings_tabs`
 	* **Fixed:**
 		* `the_seo_framework_title_from_generation`, now works for:
 			1. the homepage title in the admin screens.

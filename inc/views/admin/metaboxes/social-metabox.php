@@ -4,6 +4,8 @@
  * @subpackage The_SEO_Framework\Admin\Settings
  */
 
+use The_SEO_Framework\Bridges\SeoSettings;
+
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
@@ -29,22 +31,22 @@ switch ( $instance ) :
 		$default_tabs = [
 			'general'   => [
 				'name'     => __( 'General', 'autodescription' ),
-				'callback' => [ $this, 'social_metabox_general_tab' ],
+				'callback' => SeoSettings::class . '::_social_metabox_general_tab',
 				'dashicon' => 'admin-generic',
 			],
 			'facebook'  => [
 				'name'     => 'Facebook',
-				'callback' => [ $this, 'social_metabox_facebook_tab' ],
+				'callback' => SeoSettings::class . '::_social_metabox_facebook_tab',
 				'dashicon' => 'facebook-alt',
 			],
 			'twitter'   => [
 				'name'     => 'Twitter',
-				'callback' => [ $this, 'social_metabox_twitter_tab' ],
+				'callback' => SeoSettings::class . '::_social_metabox_twitter_tab',
 				'dashicon' => 'twitter',
 			],
 			'postdates' => [
 				'name'     => __( 'Post Dates', 'autodescription' ),
-				'callback' => [ $this, 'social_metabox_postdates_tab' ],
+				'callback' => SeoSettings::class . '::_social_metabox_postdates_tab',
 				'dashicon' => 'backup',
 			],
 		];

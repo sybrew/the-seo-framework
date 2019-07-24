@@ -63,7 +63,7 @@ class Admin_Pages extends Edit {
 			'menu_title' => \esc_html__( 'SEO', 'autodescription' ),
 			'capability' => $this->get_settings_capability(),
 			'menu_slug'  => $this->seo_settings_page_slug,
-			'callback'   => [ $this, '_output_seo_settings_wrap' ],
+			'callback'   => Bridges\SeoSettings::class . '::_output_seo_settings_wrap',
 			'icon'       => 'dashicons-search',
 			'position'   => '90.9001',
 		];
@@ -98,213 +98,24 @@ class Admin_Pages extends Edit {
 	/**
 	 * Initialize the settings page.
 	 *
-	 * @since 2.2.2
-	 * @since 2.8.0 Handled settings POST initialization.
+	 * @since 3.3.0
+	 * @access private
 	 */
-	public function settings_init() {
+	public function _settings_init() {
 
 		//* Handle post-update actions. Must be initialized on admin_init and is initalized on options.php.
 		if ( 'options.php' === $GLOBALS['pagenow'] )
 			$this->handle_update_post();
 
 		//* Output metaboxes.
-		\add_action( $this->seo_settings_page_hook . '_settings_page_boxes', [ $this, '_output_seo_settings_columns' ] );
-		\add_action( 'load-' . $this->seo_settings_page_hook, [ $this, '_register_seo_settings_metaboxes' ] );
-	}
-
-	/**
-	 * Outputs SEO Settings page wrap.
-	 *
-	 * @since 3.0.0
-	 * @access private
-	 */
-	public function _output_seo_settings_wrap() {
-		/**
-		 * @since 3.0.0
-		 */
-		\do_action( 'the_seo_framework_pre_seo_settings' );
-		$this->get_view( 'admin/seo-settings-wrap', get_defined_vars() );
-		/**
-		 * @since 3.0.0
-		 */
-		\do_action( 'the_seo_framework_pro_seo_settings' );
-	}
-
-	/**
-	 * Outputs SEO Settings columns.
-	 *
-	 * @since 3.0.0
-	 * @access private
-	 */
-	public function _output_seo_settings_columns() {
-		$this->get_view( 'admin/seo-settings-columns', get_defined_vars() );
-	}
-
-	/**
-	 * Registers meta boxes on the Site SEO Settings page.
-	 *
-	 * @since 3.0.0
-	 * @access private
-	 * @see $this->general_metabox()     Callback for General Settings box.
-	 * @see $this->title_metabox()       Callback for Title Settings box.
-	 * @see $this->description_metabox() Callback for Description Settings box.
-	 * @see $this->robots_metabox()      Callback for Robots Settings box.
-	 * @see $this->homepage_metabox()    Callback for Homepage Settings box.
-	 * @see $this->social_metabox()      Callback for Social Settings box.
-	 * @see $this->schema_metabox()      Callback for Schema Settings box.
-	 * @see $this->webmaster_metabox()   Callback for Webmaster Settings box.
-	 * @see $this->sitemaps_metabox()    Callback for Sitemap Settings box.
-	 * @see $this->feed_metabox()        Callback for Feed Settings box.
-	 */
-	public function _register_seo_settings_metaboxes() {
-
-		/**
-		 * Various metabox filters.
-		 * Set any to false if you wish the meta box to be removed.
-		 *
-		 * @since 2.2.4
-		 * @since 2.8.0: Added `the_seo_framework_general_metabox` filter.
-		 */
-		$general     = (bool) \apply_filters( 'the_seo_framework_general_metabox', true );
-		$title       = (bool) \apply_filters( 'the_seo_framework_title_metabox', true );
-		$description = (bool) \apply_filters( 'the_seo_framework_description_metabox', true );
-		$robots      = (bool) \apply_filters( 'the_seo_framework_robots_metabox', true );
-		$home        = (bool) \apply_filters( 'the_seo_framework_home_metabox', true );
-		$social      = (bool) \apply_filters( 'the_seo_framework_social_metabox', true );
-		$schema      = (bool) \apply_filters( 'the_seo_framework_schema_metabox', true );
-		$webmaster   = (bool) \apply_filters( 'the_seo_framework_webmaster_metabox', true );
-		$sitemap     = (bool) \apply_filters( 'the_seo_framework_sitemap_metabox', true );
-		$feed        = (bool) \apply_filters( 'the_seo_framework_feed_metabox', true );
-
-		//* Title Meta Box
-		if ( $general )
-			\add_meta_box(
-				'autodescription-general-settings',
-				\esc_html__( 'General Settings', 'autodescription' ),
-				[ $this, 'general_metabox' ],
-				$this->seo_settings_page_hook,
-				'main',
-				[]
-			);
-
-		//* Title Meta Box
-		if ( $title )
-			\add_meta_box(
-				'autodescription-title-settings',
-				\esc_html__( 'Title Settings', 'autodescription' ),
-				[ $this, 'title_metabox' ],
-				$this->seo_settings_page_hook,
-				'main',
-				[]
-			);
-
-		//* Description Meta Box
-		if ( $description )
-			\add_meta_box(
-				'autodescription-description-settings',
-				\esc_html__( 'Description Meta Settings', 'autodescription' ),
-				[ $this, 'description_metabox' ],
-				$this->seo_settings_page_hook,
-				'main',
-				[]
-			);
-
-		//* Homepage Meta Box
-		if ( $home )
-			\add_meta_box(
-				'autodescription-homepage-settings',
-				\esc_html__( 'Homepage Settings', 'autodescription' ),
-				[ $this, 'homepage_metabox' ],
-				$this->seo_settings_page_hook,
-				'main',
-				[]
-			);
-
-		//* Social Meta Box
-		if ( $social )
-			\add_meta_box(
-				'autodescription-social-settings',
-				\esc_html__( 'Social Meta Settings', 'autodescription' ),
-				[ $this, 'social_metabox' ],
-				$this->seo_settings_page_hook,
-				'main',
-				[]
-			);
-
-		//* Title Meta Box
-		if ( $schema )
-			\add_meta_box(
-				'autodescription-schema-settings',
-				\esc_html__( 'Schema.org Settings', 'autodescription' ),
-				[ $this, 'schema_metabox' ],
-				$this->seo_settings_page_hook,
-				'main',
-				[]
-			);
-
-		//* Robots Meta Box
-		if ( $robots )
-			\add_meta_box(
-				'autodescription-robots-settings',
-				\esc_html__( 'Robots Meta Settings', 'autodescription' ),
-				[ $this, 'robots_metabox' ],
-				$this->seo_settings_page_hook,
-				'main',
-				[]
-			);
-
-		//* Webmaster Meta Box
-		if ( $webmaster )
-			\add_meta_box(
-				'autodescription-webmaster-settings',
-				\esc_html__( 'Webmaster Meta Settings', 'autodescription' ),
-				[ $this, 'webmaster_metabox' ],
-				$this->seo_settings_page_hook,
-				'main',
-				[]
-			);
-
-		//* Sitemaps Meta Box
-		if ( $sitemap )
-			\add_meta_box(
-				'autodescription-sitemap-settings',
-				\esc_html__( 'Sitemap Settings', 'autodescription' ),
-				[ $this, 'sitemaps_metabox' ],
-				$this->seo_settings_page_hook,
-				'main',
-				[]
-			);
-
-		//* Feed Meta Box
-		if ( $feed )
-			\add_meta_box(
-				'autodescription-feed-settings',
-				\esc_html__( 'Feed Settings', 'autodescription' ),
-				[ $this, 'feed_metabox' ],
-				$this->seo_settings_page_hook,
-				'main',
-				[]
-			);
-	}
-
-	/**
-	 * Initializes and outputs various notices.
-	 *
-	 * @since 2.2.2
-	 * @since 3.1.0 1. Added seo plugin check.
-	 *              2. Now marked private.
-	 * @access private
-	 */
-	public function notices() {
-
-		if ( $this->get_static_cache( 'check_seo_plugin_conflicts' ) && \current_user_can( 'activate_plugins' ) ) {
-			$this->detect_seo_plugins()
-				and $this->do_dismissible_notice(
-					\__( 'Multiple SEO tools have been detected. You should only use one.', 'autodescription' ),
-					'warning'
-				);
-			$this->update_static_cache( 'check_seo_plugin_conflicts', 0 );
-		}
+		\add_action(
+			$this->seo_settings_page_hook . '_settings_page_boxes',
+			Bridges\SeoSettings::class . '::_output_seo_settings_columns'
+		);
+		\add_action(
+			'load-' . $this->seo_settings_page_hook,
+			Bridges\SeoSettings::class . '::_register_seo_settings_metaboxes'
+		);
 	}
 
 	/**
@@ -313,9 +124,11 @@ class Admin_Pages extends Edit {
 	 * @since 3.3.0
 	 * @access private
 	 */
-	public function _do_settings_page_notices() {
+	public static function _do_settings_page_notices() {
 
-		$notice = $this->get_static_cache( 'settings_notice' );
+		$tsf = \the_seo_framework();
+
+		$notice = $tsf->get_static_cache( 'settings_notice' );
 
 		if ( ! $notice ) return;
 
@@ -344,9 +157,54 @@ class Admin_Pages extends Edit {
 				break;
 		}
 
-		$this->update_static_cache( 'settings_notice', '' );
+		$tsf->update_static_cache( 'settings_notice', '' );
 
-		$message and $this->do_dismissible_notice( $message, $type ?: 'updated' );
+		$message and $tsf->do_dismissible_notice( $message, $type ?: 'updated' );
+	}
+
+	/**
+	 * Initializes and outputs various notices.
+	 *
+	 * @since 2.2.2
+	 * @since 3.1.0 1. Added seo plugin check.
+	 *              2. Now marked private.
+	 * @access private
+	 */
+	public function notices() {
+
+		if ( $this->get_static_cache( 'check_seo_plugin_conflicts' ) && \current_user_can( 'activate_plugins' ) ) {
+			$this->detect_seo_plugins()
+				and $this->do_dismissible_notice(
+					\__( 'Multiple SEO tools have been detected. You should only use one.', 'autodescription' ),
+					'warning'
+				);
+			$this->update_static_cache( 'check_seo_plugin_conflicts', 0 );
+		}
+	}
+
+	/**
+	 * Setting nav tab wrappers.
+	 * Outputs Tabs and settings content.
+	 *
+	 * @since 2.3.6
+	 * @since 2.6.0 Refactored.
+	 * @since 3.1.0 Now prefixes the IDs.
+	 * @since 3.3.0 Deprecated third parameter.
+	 *
+	 * @param string $id      The nav-tab ID
+	 * @param array  $tabs    The tab content {
+	 *    string tab ID => array : {
+	 *       string   name     : Tab name.
+	 *       callable callback : Output function.
+	 *       string   dashicon : The dashicon to use.
+	 *       mixed    args     : Optional callback function args.
+	 *    }
+	 * }
+	 * @param null   $depr     Deprecated.
+	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
+	 */
+	public function nav_tab_wrapper( $id, $tabs = [], $depr = null, $use_tabs = true ) {
+		Bridges\SeoSettings::_nav_tab_wrapper( $id, $tabs, $use_tabs );
 	}
 
 	/**

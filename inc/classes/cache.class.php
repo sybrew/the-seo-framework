@@ -32,7 +32,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  *
  * @since 2.8.0
  */
-class Cache extends Metaboxes {
+class Cache extends Site_Options {
 
 	/**
 	 * Determines whether object cache is being used.

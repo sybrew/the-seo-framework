@@ -4,6 +4,8 @@
  * @subpackage The_SEO_Framework\Admin\Settings
  */
 
+use The_SEO_Framework\Bridges\SeoSettings;
+
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
@@ -29,27 +31,27 @@ switch ( $instance ) :
 		$default_tabs = [
 			'general'  => [
 				'name'     => __( 'General', 'autodescription' ),
-				'callback' => [ $this, 'sitemaps_metabox_general_tab' ],
+				'callback' => SeoSettings::class . '::_sitemaps_metabox_general_tab',
 				'dashicon' => 'admin-generic',
 			],
 			'robots'   => [
 				'name'     => 'Robots.txt',
-				'callback' => [ $this, 'sitemaps_metabox_robots_tab' ],
+				'callback' => SeoSettings::class . '::_sitemaps_metabox_robots_tab',
 				'dashicon' => 'share-alt2',
 			],
 			'metadata' => [
 				'name'     => __( 'Metadata', 'autodescription' ),
-				'callback' => [ $this, 'sitemaps_metabox_metadata_tab' ],
+				'callback' => SeoSettings::class . '::_sitemaps_metabox_metadata_tab',
 				'dashicon' => 'index-card',
 			],
 			'notify'   => [
 				'name'     => _x( 'Ping', 'Ping or notify search engine', 'autodescription' ),
-				'callback' => [ $this, 'sitemaps_metabox_notify_tab' ],
+				'callback' => SeoSettings::class . '::_sitemaps_metabox_notify_tab',
 				'dashicon' => 'megaphone',
 			],
 			'style'    => [
 				'name'     => __( 'Style', 'autodescription' ),
-				'callback' => [ $this, 'sitemaps_metabox_style_tab' ],
+				'callback' => SeoSettings::class . '::_sitemaps_metabox_style_tab',
 				'dashicon' => 'art',
 			],
 		];

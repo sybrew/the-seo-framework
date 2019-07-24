@@ -4,6 +4,8 @@
  * @subpackage The_SEO_Framework\Admin\Settings
  */
 
+use The_SEO_Framework\Bridges\SeoSettings;
+
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
@@ -16,27 +18,27 @@ switch ( $instance ) :
 		$default_tabs = [
 			'layout'      => [
 				'name'     => __( 'Layout', 'autodescription' ),
-				'callback' => [ $this, 'general_metabox_layout_tab' ],
+				'callback' => SeoSettings::class . '::_general_metabox_layout_tab',
 				'dashicon' => 'screenoptions',
 			],
 			'performance' => [
 				'name'     => __( 'Performance', 'autodescription' ),
-				'callback' => [ $this, 'general_metabox_performance_tab' ],
+				'callback' => SeoSettings::class . '::_general_metabox_performance_tab',
 				'dashicon' => 'performance',
 			],
 			'canonical'   => [
 				'name'     => __( 'Canonical', 'autodescription' ),
-				'callback' => [ $this, 'general_metabox_canonical_tab' ],
+				'callback' => SeoSettings::class . '::_general_metabox_canonical_tab',
 				'dashicon' => 'external',
 			],
 			'timestamps'  => [
 				'name'     => __( 'Timestamps', 'autodescription' ),
-				'callback' => [ $this, 'general_metabox_timestamps_tab' ],
+				'callback' => SeoSettings::class . '::_general_metabox_timestamps_tab',
 				'dashicon' => 'clock',
 			],
 			'posttypes'   => [
 				'name'     => __( 'Post Types', 'autodescription' ),
-				'callback' => [ $this, 'general_metabox_posttypes_tab' ],
+				'callback' => SeoSettings::class . '::_general_metabox_posttypes_tab',
 				'dashicon' => 'index-card',
 			],
 		];
@@ -161,7 +163,7 @@ switch ( $instance ) :
 		);
 
 		$search_query_select_options = '';
-		$_current = $this->get_option( 'alter_search_query_type' );
+		$_current                    = $this->get_option( 'alter_search_query_type' );
 		foreach ( $query_types as $value => $name ) {
 			$search_query_select_options .= vsprintf(
 				'<option value="%s" %s>%s</option>',
@@ -172,8 +174,9 @@ switch ( $instance ) :
 				]
 			);
 		}
+
 		$archive_query_select_options = '';
-		$_current = $this->get_option( 'alter_archive_query_type' );
+		$_current                     = $this->get_option( 'alter_archive_query_type' );
 		foreach ( $query_types as $value => $name ) {
 			$archive_query_select_options .= vsprintf(
 				'<option value="%s" %s>%s</option>',
@@ -184,6 +187,7 @@ switch ( $instance ) :
 				]
 			);
 		}
+
 		$perform_alteration_i18n = esc_html__( 'Perform alteration:', 'autodescription' );
 
 		$search_query_select_field = vsprintf(

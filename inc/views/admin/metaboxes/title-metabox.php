@@ -4,6 +4,8 @@
  * @subpackage The_SEO_Framework\Admin\Settings
  */
 
+use The_SEO_Framework\Bridges\SeoSettings;
+
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
@@ -66,12 +68,12 @@ switch ( $instance ) :
 		$default_tabs = [
 			'general'   => [
 				'name'     => __( 'General', 'autodescription' ),
-				'callback' => [ $this, 'title_metabox_general_tab' ],
+				'callback' => SeoSettings::class . '::_title_metabox_general_tab',
 				'dashicon' => 'admin-generic',
 			],
 			'additions' => [
 				'name'     => __( 'Additions', 'autodescription' ),
-				'callback' => [ $this, 'title_metabox_additions_tab' ],
+				'callback' => SeoSettings::class . '::_title_metabox_additions_tab',
 				'dashicon' => 'plus',
 				'args'     => [
 					'examples' => [
@@ -82,7 +84,7 @@ switch ( $instance ) :
 			],
 			'prefixes'  => [
 				'name'     => __( 'Prefixes', 'autodescription' ),
-				'callback' => [ $this, 'title_metabox_prefixes_tab' ],
+				'callback' => SeoSettings::class . '::_title_metabox_prefixes_tab',
 				'dashicon' => 'plus-alt',
 				'args'     => [
 					'additions' => [

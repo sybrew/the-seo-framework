@@ -35,7 +35,6 @@
  *       | Admin_Pages
  *       | Sanitize
  *       | Site_Options
- *       | Metaboxes
  *       | Cache
  *       | Feed
  *       | Load

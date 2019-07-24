@@ -4,6 +4,8 @@
  * @subpackage The_SEO_Framework\Admin\Settings
  */
 
+use The_SEO_Framework\Bridges\SeoSettings;
+
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
@@ -38,19 +40,14 @@ switch ( $instance ) :
 		 * }
 		 */
 		$default_tabs = [
-			// 'general' => [
-			// 	'name'     => __( 'General', 'autodescription' ),
-			// 	'callback' => [ $this, 'schema_metabox_general_tab' ],
-			// 	'dashicon' => 'admin-generic',
-			// ],
 			'structure' => [
 				'name'     => __( 'Structure', 'autodescription' ),
-				'callback' => [ $this, 'schema_metabox_structure_tab' ],
+				'callback' => SeoSettings::class . '::_schema_metabox_structure_tab',
 				'dashicon' => 'admin-multisite',
 			],
-			'presence' => [
+			'presence'  => [
 				'name'     => __( 'Presence', 'autodescription' ),
-				'callback' => [ $this, 'schema_metabox_presence_tab' ],
+				'callback' => SeoSettings::class . '::_schema_metabox_presence_tab',
 				'dashicon' => 'networking',
 			],
 		];
@@ -65,10 +62,6 @@ switch ( $instance ) :
 		$tabs = wp_parse_args( $args, $defaults );
 
 		$this->nav_tab_wrapper( 'schema', $tabs, '2.8.0' );
-		break;
-
-	case 'the_seo_framework_schema_metabox_general':
-		//* Emptied @ 3.0.0
 		break;
 
 	case 'the_seo_framework_schema_metabox_structure':
@@ -88,12 +81,15 @@ switch ( $instance ) :
 			'https://developers.google.com/search/docs/data-types/breadcrumb',
 			false
 		);
-		$this->wrap_fields( $this->make_checkbox(
-			'ld_json_breadcrumbs',
-			esc_html__( 'Enable Breadcrumbs?', 'autodescription' ) . ' ' . $info,
-			'',
-			false
-		), true );
+		$this->wrap_fields(
+			$this->make_checkbox(
+				'ld_json_breadcrumbs',
+				esc_html__( 'Enable Breadcrumbs?', 'autodescription' ) . ' ' . $info,
+				'',
+				false
+			),
+			true
+		);
 
 		?>
 		<hr>
@@ -106,12 +102,15 @@ switch ( $instance ) :
 			'https://developers.google.com/search/docs/data-types/sitelinks-searchbox',
 			false
 		);
-		$this->wrap_fields( $this->make_checkbox(
-			'ld_json_searchbox',
-			esc_html_x( 'Enable Sitelinks Searchbox?', 'Sitelinks Searchbox is a Product name', 'autodescription' ) . ' ' . $info,
-			'',
-			false
-		), true );
+		$this->wrap_fields(
+			$this->make_checkbox(
+				'ld_json_searchbox',
+				esc_html_x( 'Enable Sitelinks Searchbox?', 'Sitelinks Searchbox is a Product name', 'autodescription' ) . ' ' . $info,
+				'',
+				false
+			),
+			true
+		);
 		break;
 
 	case 'the_seo_framework_schema_metabox_presence':
@@ -126,12 +125,15 @@ switch ( $instance ) :
 			false
 		);
 		//* Echo checkbox.
-		$this->wrap_fields( $this->make_checkbox(
-			'knowledge_output',
-			esc_html__( 'Output Authorized Presence?', 'autodescription' ) . ' ' . $info,
-			'',
-			false
-		), true );
+		$this->wrap_fields(
+			$this->make_checkbox(
+				'knowledge_output',
+				esc_html__( 'Output Authorized Presence?', 'autodescription' ) . ' ' . $info,
+				'',
+				false
+			),
+			true
+		);
 		?>
 		<hr>
 
@@ -172,12 +174,14 @@ switch ( $instance ) :
 			'https://developers.google.com/search/docs/data-types/logo',
 			false
 		);
-		$this->wrap_fields( $this->make_checkbox(
-			'knowledge_logo',
-			esc_html__( 'Enable logo?', 'autodescription' ) . ' ' . $info,
-			'',
-			false
-		), true );
+		$this->wrap_fields(
+			$this->make_checkbox(
+				'knowledge_logo',
+				esc_html__( 'Enable logo?', 'autodescription' ) . ' ' . $info,
+				'',
+				false
+			),
+		true );
 
 		$logo_placeholder = $this->get_knowledge_logo( false );
 		?>
@@ -206,55 +210,55 @@ switch ( $instance ) :
 		$this->description( __( 'These settings do not affect sharing behavior with the social networks.', 'autodescription' ) );
 
 		$connectedi18n = _x( 'RelatedProfile', 'No spaces. E.g. https://facebook.com/RelatedProfile', 'autodescription' );
-		$profile18n = _x( 'Profile', 'Social Profile', 'autodescription' );
+		$profile18n    = _x( 'Profile', 'Social Profile', 'autodescription' );
 
 		/**
 		 * @todo maybe genericons?
 		 */
 		$socialsites = [
-			'facebook' => [
+			'facebook'   => [
 				'option'      => 'knowledge_facebook',
 				'dashicon'    => 'dashicons-facebook',
 				'desc'        => 'Facebook ' . __( 'Page', 'autodescription' ),
 				'placeholder' => 'https://www.facebook.com/' . $connectedi18n,
 				'examplelink' => 'https://www.facebook.com/me',
 			],
-			'twitter' => [
+			'twitter'    => [
 				'option'      => 'knowledge_twitter',
 				'dashicon'    => 'dashicons-twitter',
 				'desc'        => 'Twitter ' . $profile18n,
 				'placeholder' => 'https://twitter.com/' . $connectedi18n,
 				'examplelink' => 'https://twitter.com/home', // No example link available.
 			],
-			'gplus' => [
+			'gplus'      => [
 				'option'      => 'knowledge_gplus',
 				'dashicon'    => 'dashicons-googleplus',
 				'desc'        => 'Google+ ' . $profile18n,
 				'placeholder' => 'https://plus.google.com/' . $connectedi18n,
 				'examplelink' => 'https://plus.google.com/me',
 			],
-			'instagram' => [
+			'instagram'  => [
 				'option'      => 'knowledge_instagram',
 				'dashicon'    => 'genericon-instagram',
 				'desc'        => 'Instagram ' . $profile18n,
 				'placeholder' => 'https://instagram.com/' . $connectedi18n,
 				'examplelink' => 'https://instagram.com/', // No example link available.
 			],
-			'youtube' => [
+			'youtube'    => [
 				'option'      => 'knowledge_youtube',
 				'dashicon'    => 'genericon-youtube',
 				'desc'        => 'Youtube ' . $profile18n,
 				'placeholder' => 'https://www.youtube.com/channel/' . $connectedi18n,
 				'examplelink' => 'https://www.youtube.com/user/%2f', // Yes a double slash.
 			],
-			'linkedin' => [
+			'linkedin'   => [
 				'option'      => 'knowledge_linkedin',
 				'dashicon'    => 'genericon-linkedin-alt',
 				'desc'        => 'LinkedIn ' . $profile18n,
 				'placeholder' => 'https://www.linkedin.com/in/' . $connectedi18n,
 				'examplelink' => 'https://www.linkedin.com/profile/view',
 			],
-			'pinterest' => [
+			'pinterest'  => [
 				'option'      => 'knowledge_pinterest',
 				'dashicon'    => 'genericon-pinterest-alt',
 				'desc'        => 'Pinterest ' . $profile18n,
@@ -268,7 +272,7 @@ switch ( $instance ) :
 				'placeholder' => 'https://soundcloud.com/' . $connectedi18n,
 				'examplelink' => 'https://soundcloud.com/you',
 			],
-			'tumblr' => [
+			'tumblr'     => [
 				'option'      => 'knowledge_tumblr',
 				'dashicon'    => 'genericon-tumblr',
 				'desc'        => 'Tumblr ' . __( 'Blog', 'autodescription' ),
