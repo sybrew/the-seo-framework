@@ -1408,9 +1408,9 @@ class Query extends Core {
 	 * @staticvar mixed     $cache           : The cached query values.
 	 * @see $this->set_query_cache(); to set query cache.
 	 *
-	 * @param string      $method       The method that wants to cache, used as the key to set or get.
-	 * @param mixed       $value_to_set The value to set.
-	 * @param array|mixed ...$hash      Extra arguments, that will are used to differentiaty queries.
+	 * @param string $method       The method that wants to cache, used as the key to set or get.
+	 * @param mixed  $value_to_set The value to set.
+	 * @param mixed  ...$hash      Extra arguments, that will are used to differentiaty queries.
 	 * @return mixed : {
 	 *    mixed The cached value if set and $value_to_set is null.
 	 *       null If the query can't be cached yet, or when no value has been set.

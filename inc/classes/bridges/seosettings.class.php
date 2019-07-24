@@ -28,6 +28,8 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 /**
  * Prepares the SEO Settings page interface.
  *
+ * Note the use of "metabox" instead of "meta_box" throughout.
+ *
  * @since 3.3.0
  * @access protected
  * @internal
@@ -37,72 +39,12 @@ final class SeoSettings {
 	use \The_SEO_Framework\Traits\Enclose_Stray_Private;
 
 	/**
-	 * Setting nav tab wrappers.
-	 * Outputs Tabs and settings content.
-	 *
-	 * @since 3.3.0
-	 * @access private
-	 *
-	 * @param string $id       The nav-tab ID
-	 * @param array  $tabs     The tab content {
-	 *    string tab ID => array : {
-	 *       string   name     : Tab name.
-	 *       callable callback : Output function.
-	 *       string   dashicon : The dashicon to use.
-	 *       mixed    args     : Optional callback function args.
-	 *    }
-	 * }
-	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
-	 */
-	public static function _nav_tab_wrapper( $id, $tabs = [], $use_tabs = true ) {
-		\the_seo_framework()->get_view( 'admin/nav-wrap', get_defined_vars() );
-	}
-
-	/**
-	 * Outputs SEO Settings page wrap.
-	 *
-	 * @since 3.3.0
-	 * @access private
-	 */
-	public static function _output_seo_settings_wrap() {
-		/**
-		 * @since 3.0.0
-		 */
-		\do_action( 'the_seo_framework_pre_seo_settings' );
-		\the_seo_framework()->get_view( 'admin/seo-settings-wrap', get_defined_vars() );
-		/**
-		 * @since 3.0.0
-		 */
-		\do_action( 'the_seo_framework_pro_seo_settings' );
-	}
-
-	/**
-	 * Outputs SEO Settings columns.
-	 *
-	 * @since 3.3.0
-	 * @access private
-	 */
-	public static function _output_seo_settings_columns() {
-		\the_seo_framework()->get_view( 'admin/seo-settings-columns', get_defined_vars() );
-	}
-
-	/**
 	 * Registers meta boxes on the Site SEO Settings page.
 	 *
 	 * @since 3.3.0
 	 * @access private
-	 * @see static::general_metabox()     Callback for General Settings box.
-	 * @see static::title_metabox()       Callback for Title Settings box.
-	 * @see static::description_metabox() Callback for Description Settings box.
-	 * @see static::robots_metabox()      Callback for Robots Settings box.
-	 * @see static::homepage_metabox()    Callback for Homepage Settings box.
-	 * @see static::social_metabox()      Callback for Social Settings box.
-	 * @see static::schema_metabox()      Callback for Schema Settings box.
-	 * @see static::webmaster_metabox()   Callback for Webmaster Settings box.
-	 * @see static::sitemaps_metabox()    Callback for Sitemap Settings box.
-	 * @see static::feed_metabox()        Callback for Feed Settings box.
 	 */
-	public static function _register_seo_settings_metaboxes() {
+	public static function _register_seo_settings_meta_boxes() {
 
 		/**
 		 * Various metabox filters.
@@ -124,7 +66,7 @@ final class SeoSettings {
 
 		$settings_page_hook = \the_seo_framework()->seo_settings_page_hook;
 
-		//* Title Meta Box
+		//* General Meta Box
 		if ( $general )
 			\add_meta_box(
 				'autodescription-general-settings',
@@ -179,7 +121,7 @@ final class SeoSettings {
 				[]
 			);
 
-		//* Title Meta Box
+		//* Schema Meta Box
 		if ( $schema )
 			\add_meta_box(
 				'autodescription-schema-settings',
@@ -233,6 +175,57 @@ final class SeoSettings {
 				'main',
 				[]
 			);
+	}
+
+	/**
+	 * Setting nav tab wrappers.
+	 * Outputs Tabs and settings content.
+	 *
+	 * @since 3.3.0
+	 * @access private
+	 *
+	 * @param string $id      The nav-tab ID.
+	 * @param array  $tabs    The tab content {
+	 *    string tab ID => array : {
+	 *       string   name     : Tab name.
+	 *       callable callback : Output function.
+	 *       string   dashicon : The dashicon to use.
+	 *       mixed    args     : Optional callback function args.
+	 *    }
+	 * }
+	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
+	 */
+	public static function _nav_tab_wrapper( $id, $tabs = [], $use_tabs = true ) {
+		\the_seo_framework()->get_view( 'admin/wrap-nav', get_defined_vars() );
+		\the_seo_framework()->get_view( 'admin/wrap-content', get_defined_vars() );
+	}
+
+	/**
+	 * Outputs SEO Settings page wrap.
+	 *
+	 * @since 3.3.0
+	 * @access private
+	 */
+	public static function _output_wrap() {
+		/**
+		 * @since 3.0.0
+		 */
+		\do_action( 'the_seo_framework_pre_seo_settings' );
+		\the_seo_framework()->get_view( 'admin/seo-settings-wrap' );
+		/**
+		 * @since 3.0.0
+		 */
+		\do_action( 'the_seo_framework_pro_seo_settings' );
+	}
+
+	/**
+	 * Outputs SEO Settings columns.
+	 *
+	 * @since 3.3.0
+	 * @access private
+	 */
+	public static function _output_columns() {
+		\the_seo_framework()->get_view( 'admin/seo-settings-columns' );
 	}
 
 	/**

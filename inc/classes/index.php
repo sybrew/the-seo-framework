@@ -31,7 +31,6 @@
  *       | Generate_Image
  *       | Generate_Ldjson
  *       | Profile
- *       | Edit
  *       | Admin_Pages
  *       | Sanitize
  *       | Site_Options

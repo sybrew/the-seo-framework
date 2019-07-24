@@ -4,6 +4,8 @@
  * @subpackage The_SEO_Framework\Admin\Edit\Inpost
  */
 
+use The_SEO_Framework\Bridges\PostSettings;
+
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
@@ -12,8 +14,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 $instance = $this->get_view_instance( 'inpost', $instance );
 
 //* Setup default vars.
-$post_id  = $this->get_the_real_ID();
-$type     = isset( $type ) ? $type : '';
+$post_id  = $this->get_the_real_ID(); // We also have access to object $post at the main call...
 $language = $this->google_language();
 
 $_generator_args = [
@@ -23,9 +24,37 @@ $_generator_args = [
 
 switch ( $instance ) :
 	case 'inpost_main':
-		$tabs = $this->get_inpost_tabs( $type );
+		$default_tabs = [
+			'general'    => [
+				'name'     => \__( 'General', 'autodescription' ),
+				'callback' => PostSettings::class . '::_general_tab',
+				'dashicon' => 'admin-generic',
+			],
+			'social'    => [
+				'name'     => \__( 'Social', 'autodescription' ),
+				'callback' => PostSettings::class . '::_social_tab',
+				'dashicon' => 'share',
+			],
+			'visibility' => [
+				'name'     => \__( 'Visibility', 'autodescription' ),
+				'callback' => PostSettings::class . '::_visibility_tab',
+				'dashicon' => 'visibility',
+			],
+		];
+
+		/**
+		 * Allows for altering the inpost SEO settings metabox tabs.
+		 *
+		 * @since 2.9.0
+		 * @since 3.3.0 Removed the second parameter (post type label)
+		 *
+		 * @param array $default_tabs The default tabs.
+		 * @param null  $depr         The post type label. Deprecated.
+		 */
+		$tabs = (array) \apply_filters( 'the_seo_framework_inpost_settings_tabs', $default_tabs, null );
+
 		echo '<div class="tsf-flex tsf-flex-inside-wrap">';
-		$this->inpost_flex_nav_tab_wrapper( 'inpost', $tabs, '2.6.0' );
+		PostSettings::_flex_nav_tab_wrapper( 'inpost', $tabs );
 		echo '</div>';
 		break;
 

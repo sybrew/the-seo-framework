@@ -35,6 +35,19 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Post_Data extends Detect {
 
 	/**
+	 * @since 2.7.0
+	 * @since 3.2.0 Added '_nonce' suffix.
+	 * @var string The inpost nonce name.
+	 */
+	public $inpost_nonce_name = 'tsf_inpost_seo_settings_nonce';
+
+	/**
+	 * @since 2.7.0
+	 * @var string The inpost nonce field.
+	 */
+	public $inpost_nonce_field = 'tsf_inpost_nonce';
+
+	/**
 	 * Returns a post SEO meta item by key.
 	 *
 	 * Unlike other post meta calls, no \WP_Post object is accepted as an input value,

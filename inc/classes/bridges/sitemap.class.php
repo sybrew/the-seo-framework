@@ -203,19 +203,19 @@ final class Sitemap {
 				'base'           => [
 					'endpoint' => 'sitemap.xml',
 					'regex'    => '/^sitemap\.xml/',
-					'callback' => '\The_SEO_Framework\Bridges\Sitemap::output_base_sitemap',
+					'callback' => static::class . '::output_base_sitemap',
 					'robots'   => true,
 				],
 				'index'          => [
 					'endpoint' => 'sitemap_index.xml',
 					'regex'    => '/^sitemap_index\.xml/',
-					'callback' => '\The_SEO_Framework\Bridges\Sitemap::output_base_sitemap',
+					'callback' => static::class . '::output_base_sitemap',
 					'robots'   => false,
 				],
 				'xsl-stylesheet' => [
 					'endpoint' => 'sitemap.xsl',
 					'regex'    => '/^sitemap\.xsl/',
-					'callback' => '\The_SEO_Framework\Bridges\Sitemap::output_stylesheet',
+					'callback' => static::class . '::output_stylesheet',
 					'robots'   => false,
 				],
 			]

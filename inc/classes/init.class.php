@@ -109,12 +109,12 @@ class Init extends Query {
 	 * @since 2.8.0
 	 */
 	public function init_cron_actions() {
-		//* Flush post cache.
+		//* Init post update/delete caching actions.
 		$this->init_post_cache_actions();
 
 		//* Ping searchengines.
 		if ( $this->get_option( 'ping_use_cron' ) )
-			\add_action( 'tsf_sitemap_cron_hook', '\\The_SEO_Framework\\Bridges\\Ping::ping_search_engines' );
+			\add_action( 'tsf_sitemap_cron_hook', Bridges\Ping::class . '::ping_search_engines' );
 	}
 
 	/**
@@ -164,23 +164,14 @@ class Init extends Query {
 			//* Set up site settings and save/reset them
 			\add_action( 'admin_init', [ $this, 'register_settings' ], 5 );
 
-			//* Load the SEO admin page content and handlers.
-			\add_action( 'admin_init', [ $this, '_settings_init' ], 10 );
-
 			//* Enqueue Inpost meta boxes.
-			\add_action( 'add_meta_boxes', [ $this, 'add_inpost_seo_box_init' ], 5 );
+			\add_action( 'add_meta_boxes', [ $this, '_init_post_edit_view' ], 5, 2 );
 
 			//* Enqueue Taxonomy meta output.
-			\add_action( 'current_screen', [ $this, 'add_taxonomy_seo_box_init' ], 10 );
+			\add_action( 'current_screen', [ $this, '_init_term_edit_view' ], 10 );
 
 			//* Prepare quick-edit columns -- required as we need a custom column prior adding bulk/quick-edit fields.
 			\add_action( 'current_screen', [ $this, '_prepare_quick_edit_columns' ], 10 );
-
-			// Add Post bulk-edit fields.
-			\add_action( 'bulk_edit_custom_box', [ $this, '_display_bulk_edit_fields' ], 10, 2 );
-
-			// Add Post/Term quick-edit fields.
-			\add_action( 'quick_edit_custom_box', [ $this, '_display_quick_edit_fields' ], 10, 3 );
 
 			// Add menu links and register $this->seo_settings_page_hook
 			\add_action( 'admin_menu', [ $this, 'add_menu_link' ] );

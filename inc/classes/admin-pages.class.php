@@ -32,7 +32,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  *
  * @since 2.8.0
  */
-class Admin_Pages extends Edit {
+class Admin_Pages extends Profile {
 
 	/**
 	 * @since 2.7.0
@@ -63,7 +63,7 @@ class Admin_Pages extends Edit {
 			'menu_title' => \esc_html__( 'SEO', 'autodescription' ),
 			'capability' => $this->get_settings_capability(),
 			'menu_slug'  => $this->seo_settings_page_slug,
-			'callback'   => Bridges\SeoSettings::class . '::_output_seo_settings_wrap',
+			'callback'   => [ $this, '_output_settings_wrap' ],
 			'icon'       => 'dashicons-search',
 			'position'   => '90.9001',
 		];
@@ -96,26 +96,115 @@ class Admin_Pages extends Edit {
 	}
 
 	/**
-	 * Initialize the settings page.
+	 * Outputs the SEO Settings page wrap.
 	 *
 	 * @since 3.3.0
 	 * @access private
 	 */
-	public function _settings_init() {
+	public function _output_settings_wrap() {
 
-		//* Handle post-update actions. Must be initialized on admin_init and is initalized on options.php.
-		if ( 'options.php' === $GLOBALS['pagenow'] )
-			$this->handle_update_post();
-
-		//* Output metaboxes.
 		\add_action(
 			$this->seo_settings_page_hook . '_settings_page_boxes',
-			Bridges\SeoSettings::class . '::_output_seo_settings_columns'
+			Bridges\SeoSettings::class . '::_output_columns'
 		);
+
+		Bridges\SeoSettings::_register_seo_settings_meta_boxes();
+		Bridges\SeoSettings::_output_wrap();
+	}
+
+	/**
+	 * Prepares post edit view, like outputting the fields.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param string   $post_type The current post type.
+	 * @param \WP_Post $post      The Post object.
+	 */
+	public function _init_post_edit_view( $post_type, $post ) {
+
+		if ( ! $this->is_post_edit() ) return;
+		if ( ! $this->is_post_type_supported( $post_type ) ) return;
+
+		/**
+		 * @since 2.0.0
+		 * @param bool $show_seobox Whether to show the SEO meta box.
+		 */
+		$show_seobox = (bool) \apply_filters( 'the_seo_framework_seobox_output', true );
+
+		if ( $show_seobox )
+			\add_action(
+				'add_meta_boxes',
+				Bridges\PostSettings::class . '::_prepare_meta_box'
+			);
+	}
+
+	/**
+	 * Prepares term edit view, like outputting the fields.
+	 *
+	 * @since 3.3.0
+	 */
+	public function _init_term_edit_view() {
+
+		if ( ! $this->is_term_edit() ) return;
+
+		$taxonomy = $this->get_current_taxonomy();
+
+		if ( ! $this->is_taxonomy_supported( $taxonomy ) ) return;
+
+		/**
+		 * @since 2.6.0
+		 * @param int $priority The metabox term priority.
+		 *                      Defaults to a high priority, this box is seen soon below the default edit inputs.
+		 */
+		$priority = (int) \apply_filters( 'the_seo_framework_term_metabox_priority', 0 );
+
 		\add_action(
-			'load-' . $this->seo_settings_page_hook,
-			Bridges\SeoSettings::class . '::_register_seo_settings_metaboxes'
+			$taxonomy . '_edit_form',
+			Bridges\TermSettings::class . '::_prepare_setting_fields',
+			$priority,
+			2
 		);
+	}
+
+	/**
+	 * Prepares the quick/bulk edit column.
+	 * This column is a dummy, but it's required to display quick/bulk edit items.
+	 *
+	 * @since 3.3.0
+	 * @access private
+	 *
+	 * @param \WP_Screen|string $screen \WP_Screen
+	 */
+	public function _prepare_quick_edit_columns( $screen ) {
+
+		if ( ! $this->is_wp_lists_edit() ) return;
+
+		/**
+		 * @since 3.3.0
+		 * @param bool $allow_quick_edit Whether to engage the quick/bulk edit fields.
+		 */
+		if ( ! \apply_filters( 'the_seo_framework_allow_quick_edit', true ) ) return;
+
+		$taxonomy = isset( $screen->taxonomy ) ? $screen->taxonomy : '';
+
+		if ( $taxonomy ) {
+			if ( ! $this->is_taxonomy_supported( $taxonomy ) )
+				return;
+		} else {
+			if ( ! $this->is_post_type_supported( $screen->post_type ) )
+				return;
+		}
+
+		\add_filter( 'manage_' . $screen->id . '_columns', Bridges\ListEdit::class . '::_set_quick_edit_column', 10, 1 );
+		\add_filter( 'hidden_columns', Bridges\ListEdit::class . '::_hide_quick_edit_column', 10, 1 );
+
+		if ( ! $taxonomy ) {
+			// WordPress doesn't support this feature yet for taxonomies.
+			// Exclude it for when the time may come and faulty fields are displayed.
+			// Mind the "2".
+			\add_action( 'bulk_edit_custom_box', Bridges\ListEdit::class . '::_display_bulk_edit_fields', 10, 2 );
+		}
+		\add_action( 'quick_edit_custom_box', Bridges\ListEdit::class . '::_display_quick_edit_fields', 10, 3 );
 	}
 
 	/**
@@ -189,7 +278,7 @@ class Admin_Pages extends Edit {
 	 * @since 2.3.6
 	 * @since 2.6.0 Refactored.
 	 * @since 3.1.0 Now prefixes the IDs.
-	 * @since 3.3.0 Deprecated third parameter.
+	 * @since 3.3.0 Deprecated third parameter, silently.
 	 *
 	 * @param string $id      The nav-tab ID
 	 * @param array  $tabs    The tab content {
@@ -205,6 +294,29 @@ class Admin_Pages extends Edit {
 	 */
 	public function nav_tab_wrapper( $id, $tabs = [], $depr = null, $use_tabs = true ) {
 		Bridges\SeoSettings::_nav_tab_wrapper( $id, $tabs, $use_tabs );
+	}
+
+	/**
+	 * Outputs in-post flex navigational wrapper and its content.
+	 *
+	 * @since 2.9.0
+	 * @since 3.0.0: Converted to view.
+	 * @since 3.3.0: Deprecated third parameter, silently.
+	 *
+	 * @param string $id       The nav-tab ID
+	 * @param array  $tabs     The tab content {
+	 *    string tab ID => array : {
+	 *       string   name     : Tab name.
+	 *       callable callback : Output function.
+	 *       string   dashicon : The dashicon to use.
+	 *       mixed    args     : Optional callback function args.
+	 *    }
+	 * }
+	 * @param null   $_depr    Deprecated.
+	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
+	 */
+	public static function inpost_flex_nav_tab_wrapper( $id, $tabs = [], $_depr = null, $use_tabs = true ) {
+		Bridges\PostSettings::_flex_nav_tab_wrapper( $id, $tabs, $use_tabs );
 	}
 
 	/**
@@ -343,7 +455,7 @@ class Admin_Pages extends Edit {
 	 * }
 	 * @return string The dismissible error notice.
 	 */
-	public function generate_dismissible_sticky_notice( $message, $key, $args = [] ) {
+	public function generate_dismissible_sticky_notice( $message, $key, $args = [] ) { // phpcs:ignore -- unused.
 		return '';
 	}
 
@@ -490,7 +602,7 @@ class Admin_Pages extends Edit {
 
 		if ( isset( $language ) ) return $language;
 
-		/* translators: Language shorttag to be used in Google help pages. */
+		/* translators: Language shorttag to be used for Google help pages. */
 		return $language = \esc_html_x( 'en', 'e.g. en for English, nl for Dutch, fi for Finish, de for German', 'autodescription' );
 	}
 

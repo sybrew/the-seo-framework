@@ -4,6 +4,8 @@
  * @subpackage The_SEO_Framework\Admin\Edit\Term
  */
 
+use The_SEO_Framework\Bridges\TermSettings;
+
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
@@ -12,25 +14,24 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 $language = $this->google_language();
 
 //* Fetch Term ID and taxonomy.
-$term_id  = $object->term_id;
-$taxonomy = $object->taxonomy;
-$meta     = $this->get_term_meta( $object->term_id );
+$term_id = $term->term_id;
+$meta    = $this->get_term_meta( $term_id );
 
-$title       = isset( $meta['doctitle'] ) ? $meta['doctitle'] : '';
-$description = isset( $meta['description'] ) ? $meta['description'] : '';
-$canonical   = isset( $meta['canonical'] ) ? $meta['canonical'] : '';
-$noindex     = isset( $meta['noindex'] ) ? $meta['noindex'] : '';
-$nofollow    = isset( $meta['nofollow'] ) ? $meta['nofollow'] : '';
-$noarchive   = isset( $meta['noarchive'] ) ? $meta['noarchive'] : '';
-$redirect    = isset( $meta['redirect'] ) ? $meta['redirect'] : '';
+$title       = $meta['doctitle'];
+$description = $meta['description'];
+$canonical   = $meta['canonical'];
+$noindex     = $meta['noindex'];
+$nofollow    = $meta['nofollow'];
+$noarchive   = $meta['noarchive'];
+$redirect    = $meta['redirect'];
 
-$social_image_url = isset( $meta['social_image_url'] ) ? $meta['social_image_url'] : '';
-$social_image_id  = isset( $meta['social_image_id'] ) ? $meta['social_image_id'] : '';
+$social_image_url = $meta['social_image_url'];
+$social_image_id  = $meta['social_image_id'];
 
-$og_title       = isset( $meta['og_title'] ) ? $meta['og_title'] : '';
-$og_description = isset( $meta['og_description'] ) ? $meta['og_description'] : '';
-$tw_title       = isset( $meta['tw_title'] ) ? $meta['tw_title'] : '';
-$tw_description = isset( $meta['tw_description'] ) ? $meta['tw_description'] : '';
+$og_title       = $meta['og_title'];
+$og_description = $meta['og_description'];
+$tw_title       = $meta['tw_title'];
+$tw_description = $meta['tw_description'];
 
 $_generator_args = [
 	'id'       => $term_id,

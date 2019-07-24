@@ -52,19 +52,6 @@ switch ( $instance ) :
 		<hr>
 		<?php
 
-		/**
-		 * Parse tabs content.
-		 *
-		 * @since 2.2.2
-		 *
-		 * @param array $default_tabs { 'id' = The identifier =>
-		 *   array(
-		 *       'name'     => The name
-		 *       'callback' => The callback function, use array for method calling
-		 *       'dashicon' => Desired dashicon
-		 *    )
-		 * }
-		 */
 		$default_tabs = [
 			'general'   => [
 				'name'     => __( 'General', 'autodescription' ),
@@ -96,7 +83,6 @@ switch ( $instance ) :
 			],
 		];
 
-
 		/**
 		 * @since 2.6.0
 		 * @param array $defaults The default tabs.
@@ -106,7 +92,7 @@ switch ( $instance ) :
 
 		$tabs = wp_parse_args( $args, $defaults );
 
-		$this->nav_tab_wrapper( 'title', $tabs, '2.6.0' );
+		SeoSettings::_nav_tab_wrapper( 'title', $tabs );
 		break;
 
 	case 'the_seo_framework_title_metabox_general':

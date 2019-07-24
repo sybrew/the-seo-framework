@@ -685,7 +685,7 @@ class Core {
 	 * @link https://www.w3.org/TR/2008/REC-WCAG20-20081211/#visual-audio-contrast-contrast
 	 * @link https://www.w3.org/WAI/GL/wiki/Relative_luminance
 	 *
-	 * @param string $hex The 3 to 6 character RGB hex. '#' prefix is supported.
+	 * @param string $hex The 3 to 6 character RGB hex. The '#' prefix may be added.
 	 * @return string The hexadecimal RGB relative font color, without '#' prefix.
 	 */
 	public function get_relative_fontcolor( $hex = '' ) {
@@ -708,7 +708,7 @@ class Core {
 			$v /= 255;
 
 			if ( $v > .03928 ) {
-				$lum = pow( ( $v + .055 ) / 1.055, 2.4 );
+				$lum = ( ( $v + .055 ) / 1.055 ) ** 2.4;
 			} else {
 				$lum = $v / 12.92;
 			}

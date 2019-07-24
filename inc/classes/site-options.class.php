@@ -425,6 +425,10 @@ class Site_Options extends Sanitize {
 
 		//* Check whether the Options Reset initialization has been added.
 		$this->check_options_reset();
+
+		//* Handle post-update actions. Must be initialized on admin_init and is initalized on options.php.
+		if ( 'options.php' === $GLOBALS['pagenow'] )
+			$this->handle_update_post();
 	}
 
 	/**

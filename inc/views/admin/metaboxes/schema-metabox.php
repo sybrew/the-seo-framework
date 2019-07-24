@@ -26,19 +26,6 @@ switch ( $instance ) :
 		$this->description( __( 'When your web pages include structured data markup, search engines can use that data to index your content better, present it more prominently in search results, and use it in several different applications.', 'autodescription' ) );
 		$this->description( __( 'This is also known as the "Knowledge Graph" and "Structured Data", which is under heavy active development by several search engines. Therefore, the usage of the outputted markup is not guaranteed.', 'autodescription' ) );
 
-		/**
-		 * Parse tabs content.
-		 *
-		 * @since 2.8.0
-		 *
-		 * @param array $default_tabs { 'id' = The identifier =>
-		 *    array(
-		 *       'name'     => The name
-		 *       'callback' => The callback function, use array for method calling
-		 *       'dashicon' => Desired dashicon
-		 *    )
-		 * }
-		 */
 		$default_tabs = [
 			'structure' => [
 				'name'     => __( 'Structure', 'autodescription' ),
@@ -61,7 +48,7 @@ switch ( $instance ) :
 
 		$tabs = wp_parse_args( $args, $defaults );
 
-		$this->nav_tab_wrapper( 'schema', $tabs, '2.8.0' );
+		SeoSettings::_nav_tab_wrapper( 'schema', $tabs );
 		break;
 
 	case 'the_seo_framework_schema_metabox_structure':

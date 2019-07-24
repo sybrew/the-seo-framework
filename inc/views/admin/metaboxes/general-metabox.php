@@ -52,7 +52,7 @@ switch ( $instance ) :
 
 		$tabs = wp_parse_args( $args, $defaults );
 
-		$this->nav_tab_wrapper( 'general', $tabs, '2.8.0' );
+		SeoSettings::_nav_tab_wrapper( 'general', $tabs );
 		break;
 
 	case 'the_seo_framework_general_metabox_layout':

@@ -15,19 +15,6 @@ $instance = $this->get_view_instance( 'the_seo_framework_social_metabox', $insta
 
 switch ( $instance ) :
 	case 'the_seo_framework_social_metabox_main':
-		/**
-		 * Parse tabs content.
-		 *
-		 * @since 2.2.2
-		 *
-		 * @param array $default_tabs { 'id' = The identifier =>
-		 *   array(
-		 *       'name'     => The name
-		 *       'callback' => The callback function, use array for method calling
-		 *       'dashicon' => Desired dashicon
-		 *   )
-		 * }
-		 */
 		$default_tabs = [
 			'general'   => [
 				'name'     => __( 'General', 'autodescription' ),
@@ -60,7 +47,7 @@ switch ( $instance ) :
 
 		$tabs = wp_parse_args( $args, $defaults );
 
-		$this->nav_tab_wrapper( 'social', $tabs, '2.2.2' );
+		SeoSettings::_nav_tab_wrapper( 'social', $tabs );
 		break;
 
 	case 'the_seo_framework_social_metabox_general':

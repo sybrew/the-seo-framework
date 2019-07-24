@@ -43,20 +43,6 @@ switch ( $instance ) :
 			],
 		];
 
-		/**
-		 * Parse tabs content.
-		 *
-		 * @since 2.2.2
-		 *
-		 * @param array $default_tabs { 'id' = The identifier =>
-		 *    array(
-		 *       'name'     => The name
-		 *       'callback' => function callback
-		 *       'dashicon' => WordPress Dashicon
-		 *       'args'     => function args
-		 *    )
-		 * }
-		 */
 		$default_tabs = [
 			'general' => [
 				'name'     => __( 'General', 'autodescription' ),
@@ -93,7 +79,7 @@ switch ( $instance ) :
 
 		$tabs = wp_parse_args( $args, $defaults );
 
-		$this->nav_tab_wrapper( 'robots', $tabs, '2.2.4' );
+		SeoSettings::_nav_tab_wrapper( 'robots', $tabs );
 		break;
 
 	case 'the_seo_framework_robots_metabox_general':

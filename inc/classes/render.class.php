@@ -553,15 +553,15 @@ class Render extends Admin_Init {
 		$output = '';
 
 		foreach ( $this->get_image_details_from_cache() as $image ) {
-			$output .= '<meta property="twitter:image" content="' . \esc_attr( $image['url'] ) . '" />' . "\r\n";
+			$output .= '<meta name="twitter:image" content="' . \esc_attr( $image['url'] ) . '" />' . "\r\n";
 
 			if ( $image['height'] && $image['width'] ) {
-				$output .= '<meta property="twitter:image:width" content="' . \esc_attr( $image['width'] ) . '" />' . "\r\n";
-				$output .= '<meta property="twitter:image:height" content="' . \esc_attr( $image['height'] ) . '" />' . "\r\n";
+				$output .= '<meta name="twitter:image:width" content="' . \esc_attr( $image['width'] ) . '" />' . "\r\n";
+				$output .= '<meta name="twitter:image:height" content="' . \esc_attr( $image['height'] ) . '" />' . "\r\n";
 			}
 
 			if ( $image['alt'] ) {
-				$output .= '<meta property="twitter:image:alt" content="' . \esc_attr( $image['alt'] ) . '" />' . "\r\n";
+				$output .= '<meta name="twitter:image:alt" content="' . \esc_attr( $image['alt'] ) . '" />' . "\r\n";
 			}
 		}
 

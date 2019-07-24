@@ -1,7 +1,7 @@
 <?php
 /**
  * @package The_SEO_Framework\Views\Edit
- * @subpackage The_SEO_Framework\Admin\Edit\Inpost
+ * @subpackage The_SEO_Framework\Admin\Edit\Post
  */
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;

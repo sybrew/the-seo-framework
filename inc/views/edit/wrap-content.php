@@ -10,13 +10,13 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 
 //* Whether tabs are active.
 $use_tabs = $use_tabs && count( $tabs ) > 1;
+$count    = 1;
 
 /**
  * Start Content.
  *
  * The content is relative to the navigation, and uses CSS to become visible.
  */
-$count = 1;
 foreach ( $tabs as $tab => $value ) :
 
 	$radio_id    = \esc_attr( 'tsf-flex-' . $id . '-tab-' . $tab . '-content' );

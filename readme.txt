@@ -242,6 +242,12 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 == Changelog ==
 
+TODO:
+	- 3.2.4: 28 files loaded on the front-end, 16.97ms boot time (with dumps, can't do without). 2.49ms meta time. With TSFEM.
+	- 3.3.0: TBD 24 files loaded on the front-end, 10.49ms boot time (with dumps). 2.55ms meta time, with many more features. With TSFEM.
+		- Ergo, the plugin is 16.97/10.60 = 1.62 (or 62%) faster.
+	Exclaim: We made the fastest feature-rich SEO plugin "almost twice" (use different wording?) as fast.
+
 TODO: Re-minify JS files... Ugh Node.JS
 TODO: Re-minify CSS files... Ugh web services
 
@@ -739,7 +745,16 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* Use `the_seo_framework()->get_generated_seo_bar()` to generate a bar.
 		* `\The_SEO_framework\Builders\SeoBar_Term`, this class extends `\The_SEO_framework\Builders\SeoBar`.
 			* Use `the_seo_framework()->get_generated_seo_bar()` to generate a bar.
+		* `\The_SEO_Framework\Bridges\ListEdit`
+			* This class can't be instantiated.
+			* This class is marked protected, only for internal use.
+		* `\The_SEO_Framework\Bridges\PostSettings`
+			* This class can't be instantiated.
+			* This class is marked protected, only for internal use.
 		* `\The_SEO_Framework\Bridges\SeoSettings`
+			* This class can't be instantiated.
+			* This class is marked protected, only for internal use.
+		* `\The_SEO_Framework\Bridges\TermSettings`
 			* This class can't be instantiated.
 			* This class is marked protected, only for internal use.
 		* `\The_SEO_Framework\Bridges\Sitemap`, this file initializes the sitemap query, and it's loaded when the sitemap functionality is enabled.
@@ -776,7 +791,6 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* All but one of the methods therein were moved to `\The_SEO_Framework\Bridges\SeoSettings`.
 			* Method `nav_tab_wrapper()` was moved to `\The_SEO_Framework\Admin_Pages`.
 		* `\The_SEO_Framework\Inpost`
-			* It's now named `\The_SEO_Framework\Edit`.
 			* This is part of the facade object `the_seo_framework()`, so this class shouldn't be called externally.
 		* `\The_SEO_Framework\Sitemap`
 			* This file has been split over multiple files, to the `Sitemap` class family:
@@ -953,16 +967,19 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `get_sitemap_xsl_stylesheet_tag()`, this is now part of `\The_SEO_Framework\Builders\Sitemap::get_instance()->output_sitemap_header()`.
 				* `get_sitemap_urlset_open_tag()`, we now output it directly.
 				* `get_sitemap_urlset_close_tag()`, we now output it directly.
-				* `general_metabox()`, this was and should've been used internally only.
-				* `title_metabox()`, this was and should've been used internally only.
-				* `description_metabox()`, this was and should've been used internally only.
-				* `robots_metabox()`, this was and should've been used internally only.
-				* `homepage_metabox()`, this was and should've been used internally only.
-				* `social_metabox()`, this was and should've been used internally only.
-				* `webmaster_metabox()`, this was and should've been used internally only.
-				* `sitemaps_metabox()`, this was and should've been used internally only.
-				* `feed_metabox()`, this was and should've been used internally only.
-				* `schema_metabox()`, this was and should've been used internally only.
+			* Public methods, these were meant to only be used internally:
+				* `add_inpost_seo_box_init()`
+				* `add_taxonomy_seo_box_init()`
+				* `general_metabox()`
+				* `title_metabox()`
+				* `description_metabox()`
+				* `robots_metabox()`
+				* `homepage_metabox()`
+				* `social_metabox()`
+				* `webmaster_metabox()`
+				* `sitemaps_metabox()`
+				* `feed_metabox()`
+				* `schema_metabox()`
 			* Public methods, are now rendered ineffective:
 				* `post_type_supports_inpost()`
 				* `enqueue_page_defaults()`
@@ -1029,8 +1046,6 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `can_use_logo()`
 * **Property notes:**
 	* For object `the_seo_framework()`:
-		* **Added:**
-			* `quick_edit_column_name`, used for hidden quick edit fields.
 		* **Removed:**
 			* `profile_settings`
 			* `page_defaults`
@@ -1042,6 +1057,8 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 	* **Added:**
 		* `the_seo_framework_sitemap_header`, runs in the sitemap HTTP header.
 		* `the_seo_framework_setting_notices`, runs below the settings header.
+* **Hook notes:**
+	* TODO maybe? List all WP API callback changes: removal, added, changed. Good luck with the backtrace...
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_allow_quick_edit`, boolean.
@@ -1063,7 +1080,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* `the_seo_framework_term_meta_defaults` now holds more values in the first parameter.
 		* `the_seo_framework_separator_list` no longer yields the `dash` index.
 		* `the_seo_framework_{$type}_settings_tabs`, the callback indexes have been changed for these filters, as the class structure changed:
-			* TODO `the_seo_framework_inpost_settings_tabs`
+			* `the_seo_framework_inpost_settings_tabs`
 			* `the_seo_framework_general_settings_tabs`
 			* `the_seo_framework_homepage_settings_tabs`
 			* `the_seo_framework_robots_settings_tabs`
@@ -1071,6 +1088,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `the_seo_framework_sitemaps_settings_tabs`
 			* `the_seo_framework_social_settings_tabs`
 			* `the_seo_framework_title_settings_tabs`
+		* `the_seo_framework_inpost_settings_tabs`, the second parameter is deprecated, and henceforth yields `null`.
 	* **Fixed:**
 		* `the_seo_framework_title_from_generation`, now works for:
 			1. the homepage title in the admin screens.
@@ -1104,6 +1122,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* `the_seo_framework_sitemap_posts_query_args`.
 		* `the_seo_framework_sitemap_cpt_query_args`.
 		* `the_seo_framework_admin_page_defaults`, we trust our defaults are right.
+		* `the_seo_framework_metabox_id`, this never worked reliably.
 * **Rewrite notes:**
 	* **Removed:**
 		* All WordPress rewrite manipulation.

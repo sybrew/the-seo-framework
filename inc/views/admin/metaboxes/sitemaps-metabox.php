@@ -15,19 +15,6 @@ $instance = $this->get_view_instance( 'the_seo_framework_sitemaps_metabox', $ins
 
 switch ( $instance ) :
 	case 'the_seo_framework_sitemaps_metabox_main':
-		/**
-		 * Parse tabs content
-		 *
-		 * @param array $default_tabs {
-		 *    'id' = The identifier => array(
-		 *       'name'     => The name
-		 *       'callback' => The callback function, use array for method calling
-		 *       'dashicon' => Desired dashicon
-		 *    )
-		 * }
-		 *
-		 * @since 2.2.9
-		 */
 		$default_tabs = [
 			'general'  => [
 				'name'     => __( 'General', 'autodescription' ),
@@ -64,7 +51,7 @@ switch ( $instance ) :
 
 		$tabs = wp_parse_args( $args, $defaults );
 
-		$this->nav_tab_wrapper( 'sitemaps', $tabs, '2.2.8' );
+		SeoSettings::_nav_tab_wrapper( 'sitemaps', $tabs );
 		break;
 
 	case 'the_seo_framework_sitemaps_metabox_general':

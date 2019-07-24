@@ -10,6 +10,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 
 //* Whether tabs are active.
 $use_tabs = $use_tabs && count( $tabs ) > 1;
+$count    = 1;
 
 /**
  * Start navigational tabs.
@@ -21,7 +22,6 @@ if ( $use_tabs ) :
 	<div class="tsf-flex tsf-flex-nav-tab-wrapper tsf-flex-hide-if-no-js" id="<?php echo \esc_attr( 'tsf-flex-' . $id . '-tabs-wrapper' ); ?>">
 		<div class="tsf-flex tsf-flex-nav-tab-inner">
 			<?php
-			$count = 1;
 			foreach ( $tabs as $tab => $value ) :
 				$dashicon = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
 				$label_name = isset( $value['name'] ) ? $value['name'] : '';
