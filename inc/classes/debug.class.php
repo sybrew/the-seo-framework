@@ -101,7 +101,7 @@ final class Debug {
 	 * @param string $replacement Optional. The function that should have been called. Default null.
 	 */
 	public function _deprecated_filter( $filter, $version, $replacement = null ) {
-		$this->_deprecated_function( 'Filter ' . $filter, $version, $replacement ); // phpcs:ignore -- Wrong assert, copied method.
+		$this->_deprecated_function( 'Filter ' . $filter, $version, $replacement ); // phpcs:ignore -- Wrong asserts, copied method name.
 	}
 
 	/**
@@ -120,7 +120,7 @@ final class Debug {
 	 * @param string $replacement  Optional. The function that should have been called. Default null.
 	 *                             Expected to be escaped.
 	 */
-	public function _deprecated_function( $function, $version, $replacement = null ) { // phpcs:ignore -- Wrong assert, copied method.
+	public function _deprecated_function( $function, $version, $replacement = null ) { // phpcs:ignore -- Wrong asserts, copied method name.
 		/**
 		 * Fires when a deprecated function is called.
 		 *
@@ -185,7 +185,7 @@ final class Debug {
 	 * @param string $message  A message explaining what has been done incorrectly. Must be escaped.
 	 * @param string $version  The version of WordPress where the message was added.
 	 */
-	public function _doing_it_wrong( $function, $message, $version = null ) { // phpcs:ignore -- Wrong assert, copied method.
+	public function _doing_it_wrong( $function, $message, $version = null ) { // phpcs:ignore -- Wrong asserts, copied method name.
 		/**
 		 * Fires when the given function is being used incorrectly.
 		 *

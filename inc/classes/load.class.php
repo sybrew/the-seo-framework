@@ -224,8 +224,8 @@ final class Load extends Feed {
 	 * @param string $version     The version of WordPress that deprecated the function.
 	 * @param string $replacement Optional. The function that should have been called. Default null.
 	 */
-	public function _deprecated_function( $function, $version, $replacement = null ) { // phpcs:ignore -- invalid xss warning
-		Debug::get_instance()->_deprecated_function( $function, $version, $replacement ); // phpcs:ignore -- invalid xss warning
+	public function _deprecated_function( $function, $version, $replacement = null ) { // phpcs:ignore -- Wrong asserts, copied method name.
+		Debug::get_instance()->_deprecated_function( $function, $version, $replacement ); // phpcs:ignore -- Wrong asserts, copied method name.
 	}
 
 	/**
@@ -240,8 +240,8 @@ final class Load extends Feed {
 	 * @param string $message  A message explaining what has been done incorrectly.
 	 * @param string $version  The version of WordPress where the message was added.
 	 */
-	public function _doing_it_wrong( $function, $message, $version = null ) { // phpcs:ignore -- invalid xss warning
-		Debug::get_instance()->_doing_it_wrong( $function, $message, $version ); // phpcs:ignore -- invalid xss warning
+	public function _doing_it_wrong( $function, $message, $version = null ) { // phpcs:ignore -- Wrong asserts, copied method name.
+		Debug::get_instance()->_doing_it_wrong( $function, $message, $version ); // phpcs:ignore -- Wrong asserts, copied method name.
 	}
 
 	/**

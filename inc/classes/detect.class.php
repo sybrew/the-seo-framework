@@ -225,7 +225,8 @@ class Detect extends Render {
 		}
 
 		ksort( $mapped );
-		$key = serialize( $mapped ); // phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
+		// phpcs:ignore, WordPress.PHP.DiscouragedPHPFunctions -- No objects are inserted, nor is this ever unserialized.
+		$key = serialize( $mapped );
 
 		if ( isset( $cache[ $key ] ) )
 			return $cache[ $key ];

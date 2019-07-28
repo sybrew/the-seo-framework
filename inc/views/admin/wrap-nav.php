@@ -40,7 +40,7 @@ if ( $use_tabs ) :
 						),
 					]
 				)
-			); // phpcs:ignore -- XSS ok: Validator can't distinguish HTML in ternary.
+			);
 			$count++;
 		endforeach;
 		?>

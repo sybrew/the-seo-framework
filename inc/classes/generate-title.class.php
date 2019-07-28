@@ -1099,7 +1099,7 @@ class Generate_Title extends Generate_Description {
 		if ( $paged >= 2 || $page >= 2 ) {
 			$sep = $this->get_title_separator();
 
-			// phpcs:ignore -- WP didn't add translator code either.
+			// phpcs:ignore, WordPress.WP.I18n -- WP didn't add translator code either.
 			$paging = sprintf( \__( 'Page %s', 'default' ), max( $paged, $page ) );
 
 			if ( \is_rtl() ) {
@@ -1150,7 +1150,7 @@ class Generate_Title extends Generate_Description {
 			 *                         Default 'Private: %s'.
 			 * @param WP_Post $post    Current post object.
 			 */
-			// phpcs:ignore -- WordPress doesn't have a comment, either.
+			// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
 			$protected_title_format = (string) \apply_filters( 'protected_title_format', \__( 'Protected: %s', 'default' ), $post );
 			$title                  = sprintf( $protected_title_format, $title );
 		} elseif ( isset( $post->post_status ) && 'private' === $post->post_status ) {
@@ -1165,7 +1165,7 @@ class Generate_Title extends Generate_Description {
 			 *                         Default 'Private: %s'.
 			 * @param WP_Post $post    Current post object.
 			 */
-			// phpcs:ignore -- WordPress doesn't have a comment, either.
+			// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
 			$private_title_format = (string) \apply_filters( 'private_title_format', \__( 'Private: %s', 'default' ), $post );
 			$title                = sprintf( $private_title_format, $title );
 		}

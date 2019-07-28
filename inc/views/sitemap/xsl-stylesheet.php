@@ -171,11 +171,16 @@ function _print_xsl_styles( $tsf ) {
 		border-bottom: none;
 	}
 STYLES;
-	/**
-	 * @since 3.1.0
-	 * @param string $styles The sitemap XHTML styles.
-	 */
-	printf( '<style style="text/css">%s</style>', \apply_filters( 'the_seo_framework_sitemap_styles', $styles ) ); // xss ok.
+	// phpcs:disable, WordPress.Security.EscapeOutput
+	printf(
+		'<style style="text/css">%s</style>',
+		/**
+		 * @since 3.1.0
+		 * @param string $styles The sitemap XHTML styles. Must be escaped.
+		 */
+		\apply_filters( 'the_seo_framework_sitemap_styles', $styles )
+	);
+	// phpcs:enable, WordPress.Security.EscapeOutput
 }
 
 \add_action( 'the_seo_framework_xsl_description', __NAMESPACE__ . '\\_print_xsl_description' );

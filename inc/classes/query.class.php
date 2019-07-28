@@ -1435,7 +1435,7 @@ class Query extends Core {
 		static $cache = [];
 
 		if ( $hash ) {
-			// phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
+			// phpcs:ignore, WordPress.PHP.DiscouragedPHPFunctions -- No objects are inserted, nor is this ever unserialized.
 			$hash = serialize( $hash );
 		} else {
 			$hash = false;

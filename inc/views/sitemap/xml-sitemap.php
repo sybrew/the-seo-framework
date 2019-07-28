@@ -11,10 +11,6 @@ $this->the_seo_framework_debug and $timer_start = microtime( true );
 $sitemap_bridge = \The_SEO_Framework\Bridges\Sitemap::get_instance();
 $sitemap_bridge->output_sitemap_header();
 
-/**
- * Output debug prior output.
- * @since 2.8.0
- */
 if ( $this->the_seo_framework_debug ) {
 	echo '<!-- Site estimated peak usage prior to generation: ' . number_format( memory_get_peak_usage() / 1024 / 1024, 3 ) . ' MB -->' . "\n";
 	echo '<!-- System estimated peak usage prior to generation: ' . number_format( memory_get_peak_usage( true ) / 1024 / 1024, 3 ) . ' MB -->' . "\n";
@@ -23,7 +19,8 @@ if ( $this->the_seo_framework_debug ) {
 $sitemap_bridge->output_sitemap_urlset_open_tag();
 
 $sitemap_generated = false;
-$sitemap_content = $this->get_option( 'cache_sitemap' ) ? $this->get_transient( $this->get_sitemap_transient_name() ) : false;
+$sitemap_content   = $this->get_option( 'cache_sitemap' ) ? $this->get_transient( $this->get_sitemap_transient_name() ) : false;
+
 if ( false === $sitemap_content ) {
 	$sitemap_generated = true;
 
@@ -45,7 +42,8 @@ if ( false === $sitemap_content ) {
 	if ( $this->get_option( 'cache_sitemap' ) )
 		$this->set_transient( $this->get_sitemap_transient_name(), $sitemap_content, $expiration );
 }
-echo $sitemap_content; // phpcs:ignore -- Output is escaped.
+// phpcs:ignore, WordPress.Security.EscapeOutput
+echo $sitemap_content;
 
 $sitemap_bridge->output_sitemap_urlset_close_tag();
 
@@ -55,10 +53,6 @@ if ( $sitemap_generated ) {
 	echo "\n" . '<!-- ' . \esc_html__( 'Sitemap is served from cache', 'autodescription' ) . ' -->';
 }
 
-/**
- * Output debug info.
- * @since 2.3.7
- */
 if ( $this->the_seo_framework_debug ) {
 	echo "\n" . '<!-- Site estimated peak usage: ' . number_format( memory_get_peak_usage() / 1024 / 1024, 3 ) . ' MB -->';
 	echo "\n" . '<!-- System estimated peak usage: ' . number_format( memory_get_peak_usage( true ) / 1024 / 1024, 3 ) . ' MB -->';

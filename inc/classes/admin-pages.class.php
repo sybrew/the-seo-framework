@@ -582,7 +582,8 @@ class Admin_Pages extends Profile {
 			$input = implode( PHP_EOL, $input );
 
 		if ( $echo ) {
-			echo '<div class="tsf-fields">' . $input . '</div>'; // phpcs:ignore -- Escape your $input prior!
+			// phpcs:ignore, WordPress.Security.EscapeOutput -- Escape your $input prior!
+			echo '<div class="tsf-fields">' . $input . '</div>';
 		} else {
 			return '<div class="tsf-fields">' . $input . '</div>';
 		}
@@ -851,7 +852,8 @@ class Admin_Pages extends Profile {
 		$output = sprintf( '<span class="tsf-tooltip-wrap">%s</span>', $output );
 
 		if ( $echo ) {
-			echo $output; // phpcs:ignore -- Output is escaped.
+			// phpcs:ignore, WordPress.Security.EscapeOutput
+			echo $output;
 		} else {
 			return $output;
 		}

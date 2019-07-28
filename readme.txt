@@ -259,11 +259,6 @@ TODO explain why PHP 5.6 is now required.
 
 TODO "Want to opt out of future, infrequent, admin-only, non-recurring, and non-intrusive suggestions? Add this to your wp-config file: `define( 'TSF_DISABLE_SUGGESTIONS', true );`
 
-TODO Opt-in for asynchronous SEO Bars? It is possible now! :)
-TODO move the class constants to interfaces? This will allow free access...
-
-TODO The dropdown menus may overflow in the classic/block sidebar (notortiously in Focus)... fix their max-width?
-
 TODO re-affirm all changes.
 TODO quality-control the deprecations.
 TODO test RTL.
@@ -301,13 +296,8 @@ TODO test all compat files...
 
 TODO call "php level caching" memoization--it's a cooler word.
 
-TODO primary term selection should have natsort ID via PHP predefined.
-TODO When changing the slug of a term, the canonical URL placeholder now updates with it.
-
 TODO when the tooltip is squashed, it may again overflow vertically... See title tooltip:
 	* </wp-admin/edit-tags.php?taxonomy=pa_test&post_type=product>
-
-TODO add new filters to og_image() and twitter_image()? Reimplement the old ones for backward compatibility?
 
 TODO adjust the title & description guidelines when using summary instead of summary large image for Twitter?
 TODO index.php stuff
@@ -572,6 +562,7 @@ TODO transform .rtl css from simple files to a single file, like post.css' `.tsf
 				* We couldn't leave this separator in as it was obstructing a security feature. To secure the title's output, without losing any information you put it, we relied on WordPress texturization options.
 					* We could extrude that from WordPress' texturization, but that'd cause discrepancy, and, as such, it wouldn't be sustainable.
 			* The post status is now correctly refreshed after using quick-edit.
+			* The primary term ID is now correctly preassigned for posts that have been created when this plugin wasn't active.
 	* **Nitpicking:**
 		* The sitemap's XSL stylesheet no longer uses the latest post ID to determine the title generation; instead, it always adds your blog name to the right.
 		* The sitemap now can't exceed the imposed 50,000 limit; unless you use custom filters to extend the sitemap beyond that.
@@ -1163,6 +1154,8 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* `the_seo_framework_admin_page_defaults`, we trust our defaults are right.
 		* `the_seo_framework_metabox_id`, this never worked reliably.
 		* `the_seo_framework_allow_states`, use the action handler instead.
+		* `the_seo_framework_ogimage_output`, use the new image generator, instead.
+		* `the_seo_framework_twitterimage_output`, use the new image generator, instead.
 * **Rewrite notes:**
 	* **Removed:**
 		* All WordPress rewrite manipulation.

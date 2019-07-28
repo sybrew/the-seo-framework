@@ -30,7 +30,7 @@ switch ( $instance ) :
 				'callback' => PostSettings::class . '::_general_tab',
 				'dashicon' => 'admin-generic',
 			],
-			'social'    => [
+			'social'     => [
 				'name'     => \__( 'Social', 'autodescription' ),
 				'callback' => PostSettings::class . '::_social_tab',
 				'dashicon' => 'share',

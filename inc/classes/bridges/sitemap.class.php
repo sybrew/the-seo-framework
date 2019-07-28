@@ -286,7 +286,8 @@ final class Sitemap {
 		if ( static::$tsf->get_option( 'sitemap_styles' ) ) {
 			printf(
 				'<?xml-stylesheet type="text/xsl" href="%s"?>',
-				$this->get_expected_sitemap_endpoint_url( 'xsl-stylesheet' ) // phpcs:ignore -- Output is escaped.
+				// phpcs:ignore, WordPress.Security.EscapeOutput
+				$this->get_expected_sitemap_endpoint_url( 'xsl-stylesheet' )
 			);
 		}
 	}

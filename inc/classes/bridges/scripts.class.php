@@ -476,10 +476,10 @@ final class Scripts {
 							'isGutenbergPage' => $tsf->is_gutenberg_page(),
 						],
 						'i18n'   => [
-							// phpcs:ignore -- WordPress doesn't have a comment, either.
-							'privateTitle'    => static::decode_entities( trim( str_replace( '%s', '', \__( 'Private: %s', 'default' ) ) ) ),
-							// phpcs:ignore -- WordPress doesn't have a comment, either.
-							'protectedTitle'  => static::decode_entities( trim( str_replace( '%s', '', \__( 'Protected: %s', 'default' ) ) ) ),
+							// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
+							'privateTitle'   => static::decode_entities( trim( str_replace( '%s', '', \__( 'Private: %s', 'default' ) ) ) ),
+							// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
+							'protectedTitle' => static::decode_entities( trim( str_replace( '%s', '', \__( 'Protected: %s', 'default' ) ) ) ),
 						],
 						'params' => [
 							'isFront'                 => $is_static_frontpage,
@@ -863,9 +863,24 @@ final class Scripts {
 		foreach ( $_taxonomies as $_t ) {
 			$singular_name = $tsf->get_tax_type_label( $_t->name );
 
+			$primary_term_id = $tsf->get_primary_term_id( $id, $_t->name ) ?: 0;
+
+			if ( ! $primary_term_id ) {
+				/**
+				 * This is essentially how the filter "post_link_category" gets its
+				 * primary term. However, this is without trying to support PHP 5.2.
+				 */
+				$terms = \get_the_terms( $id, $_t->name );
+				if ( $terms && ! \is_wp_error( $terms ) ) {
+					$term_ids = array_column( $terms, 'term_id' );
+					sort( $term_ids );
+					$primary_term_id = reset( $term_ids );
+				}
+			}
+
 			$taxonomies[ $_t->name ] = [
 				'name'    => $_t->name,
-				'primary' => $tsf->get_primary_term_id( $id, $_t->name ) ?: 0,
+				'primary' => $primary_term_id,
 			] + (
 				$gutenberg ? [
 					'i18n' => [

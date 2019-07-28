@@ -16,9 +16,9 @@ switch ( $instance ) :
 		$site_url = $this->get_homepage_permalink();
 		$language = $this->google_language();
 
-		$bing_site_url = 'https://www.bing.com/webmaster/home/addsite?addurl=' . rawurlencode( $site_url );
+		$bing_site_url   = 'https://www.bing.com/webmaster/home/addsite?addurl=' . rawurlencode( $site_url );
 		$google_site_url = 'https://www.google.com/webmasters/verification/verification?hl=' . $language . '&siteUrl=' . rawurlencode( $site_url ) . '&tid=alternate&vtype=vmeta';
-		$pint_site_url = 'https://analytics.pinterest.com/';
+		$pint_site_url   = 'https://analytics.pinterest.com/';
 		$yandex_site_url = 'https://webmaster.yandex.com/sites/add/?hostName=' . rawurlencode( $site_url );
 
 		?>

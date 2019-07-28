@@ -112,8 +112,8 @@ $robots_settings = [
 			<th scope="row" valign="top"><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
 			<td>
 				<?php
-				// phpcs:ignore -- get_generated_seo_bar() escapes.
-				echo $this->get_generated_seo_bar( [ 'id' => $term_id, 'taxonomy' => $taxonomy ] );
+				// phpcs:ignore, WordPress.Security.EscapeOutput -- get_generated_seo_bar() escapes.
+				echo $this->get_generated_seo_bar( $_generator_args );
 				?>
 			</td>
 		</tr>

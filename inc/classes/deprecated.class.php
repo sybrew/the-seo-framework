@@ -232,7 +232,7 @@ final class Deprecated {
 	 *
 	 * @return string The scripts class name.
 	 */
-	public function Scripts() { // phpcs:ignore -- Deprecated.
+	public function Scripts() { // phpcs:ignore, WordPress.NamingConventions.ValidFunctionName
 		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->Scripts()', '3.3.0', '\The_SEO_Framework\Builders\Scripts::class' );
 		return \The_SEO_Framework\Builders\Scripts::class;
 	}

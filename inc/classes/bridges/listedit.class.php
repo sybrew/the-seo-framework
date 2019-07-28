@@ -199,7 +199,7 @@ final class ListEdit extends ListTable {
 		printf(
 			'<span class=hidden id=%s data-le="%s"></span>',
 			sprintf( 'tsfLeData[%s]', (int) $post_id ),
-			// phpcs:ignore -- WordPress.Security.EscapeOutput, esc_attr is too aggressive.
+			// phpcs:ignore, WordPress.Security.EscapeOutput -- esc_attr is too aggressive.
 			htmlspecialchars( json_encode( $data, JSON_UNESCAPED_SLASHES | JSON_FORCE_OBJECT ), ENT_QUOTES, 'UTF-8' )
 		);
 	}
