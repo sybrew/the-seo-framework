@@ -88,7 +88,7 @@ final class SeoBar_Term extends SeoBar {
 	 */
 	protected function prime_query_cache( array &$query_cache = [] ) {
 
-		$term = \get_term_by( 'id', static::$query['id'], static::$query['taxonomy'] );
+		$term = \get_term( static::$query['id'], static::$query['taxonomy'] );
 
 		$query_cache = [
 			'term'   => $term,

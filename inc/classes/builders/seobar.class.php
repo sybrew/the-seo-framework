@@ -106,7 +106,7 @@ abstract class SeoBar {
 	 *
 	 * @return static
 	 */
-	final public static function &get_instance() {
+	final public static function get_instance() {
 		static::$instance instanceof static or new static;
 		return static::$instance;
 	}

@@ -39,48 +39,35 @@ class Admin_Init extends Init {
 	 * Initializes SEO Bar tables.
 	 *
 	 * @since 3.3.0
+	 * @access private
 	 */
-	public function init_seo_bar_tables() {
+	public function _init_seo_bar_tables() {
 
-		// Initialize table output.
 		if ( $this->get_option( 'display_seo_bar_tables' ) ) {
-			$seobar = new Bridges\SeoBar;
-			$seobar->prepare_seo_bar_tables();
+			new Bridges\SeoBar;
 		}
 	}
 
 	/**
-	 * Add post state on edit.php to the page or post that has been altered.
+	 * Initializes List Edit tables.
 	 *
-	 * @since 2.1.0
-	 * @uses $this->add_post_state
+	 * @since 3.3.0
+	 * @access private
 	 */
-	public function post_state() {
-
-		//* Only load on singular pages.
-		if ( $this->is_singular() ) {
-			/**
-			 * @since 2.1.0
-			 * @param bool $allow_states Whether to allow TSF post states output.
-			 */
-			$allow_states = (bool) \apply_filters( 'the_seo_framework_allow_states', true );
-
-			if ( $allow_states )
-				\add_filter( 'display_post_states', [ $this, 'add_post_state' ], 10, 2 );
-		}
+	public function _init_list_edit() {
+		new Bridges\ListEdit;
 	}
 
 	/**
 	 * Adds post states in post/page edit.php query
 	 *
-	 * @since 2.1.0
-	 * @since 2.9.4 Now listens to `alter_search_query` and `alter_archive_query` options.
+	 * @since 3.3.0
 	 *
 	 * @param array    $states The current post states array
 	 * @param \WP_Post $post The Post Object.
 	 * @return array Adjusted $states
 	 */
-	public function add_post_state( $states = [], $post ) {
+	public function _add_post_state( $states = [], $post ) {
 
 		$post_id = isset( $post->ID ) ? $post->ID : false;
 
@@ -565,7 +552,8 @@ class Admin_Init extends Init {
 				$parent_url = \wp_get_attachment_url( $attachment_id );
 				$url        = str_replace( basename( $parent_url ), basename( $cropped ), $parent_url );
 
-				$size       = @getimagesize( $cropped ); // phpcs:ignore -- Feature might not be enabled.
+				// phpcs:ignore, WordPress.PHP.NoSilencedErrors -- Feature may not be enabled.
+				$size       = @getimagesize( $cropped );
 				$image_type = ( $size ) ? $size['mime'] : 'image/jpeg';
 
 				$object = [

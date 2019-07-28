@@ -118,7 +118,10 @@ switch ( $instance ) :
 			<input type="hidden" name="<?php $this->field_name( 'social_image_fb_id' ); ?>" id="tsf_fb_socialimage-id" value="<?php echo absint( $this->get_option( 'social_image_fb_id' ) ); ?>" disabled class="tsf-enable-media-if-js" />
 		</p>
 		<p class="hide-if-no-tsf-js">
-			<?php echo $this->get_social_image_uploader_form( 'tsf_fb_socialimage' ); ?>
+			<?php
+			// phpcs:ignore, WordPress.Security.EscapeOutput
+			echo $this->get_social_image_uploader_form( 'tsf_fb_socialimage' );
+			?>
 		</p>
 		<hr>
 
@@ -240,7 +243,7 @@ switch ( $instance ) :
 					<label for="<?php $this->field_id( 'twitter_card_' . $type ); ?>">
 						<span>
 							<?php
-							echo $this->code_wrap( $name );
+							echo $this->code_wrap( $name ); // phpcs:ignore, WordPress.Security.EscapeOutput
 							echo ' ';
 							$this->make_info(
 								esc_html( 'Learn more about this card.' ),
@@ -304,7 +307,7 @@ switch ( $instance ) :
 		?>
 		<h4><?php esc_html_e( 'Post Date Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( "Some social sites output the shared post's publishing and modified date in the sharing snippet.", 'autodescription' ) );
+		$this->description( __( "Some social sites output the shared post's publishing and modified data in the sharing snippet.", 'autodescription' ) );
 		?>
 		<hr>
 		<?php

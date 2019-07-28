@@ -179,6 +179,12 @@ input.tsf-tabs-radio {
 	margin: 1.33em auto 0;
 }
 
+.tsf-tabs-content select {
+	width: 100%;
+	max-width: max-content;
+	text-overflow: ellipsis;
+}
+
 .tsf-content-no-js {
 	margin: 1.33em auto;
 }

@@ -313,6 +313,11 @@ TODO adjust the title & description guidelines when using summary instead of sum
 TODO index.php stuff
 
 TODO do something nicer with interpret_status_to_symbol()
+TODO add media handler to auto-fill the input data for tooltip dynamically (tooltip-text="<img src=src style=max-width:200;max-height:200/>")
+
+TODO https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/14 "on a custom post type archive, TSF outputs structured data of the first post in the list."
+
+TODO transform .rtl css from simple files to a single file, like post.css' `.tsf-social-image-buttons{}`.
 
 **Detailed log:**
 
@@ -331,7 +336,7 @@ TODO do something nicer with interpret_status_to_symbol()
 		1. The homepage's "Meta Title Additions Location" was not in line with the global title location option. So, we rectified that. This means that left is now right, and vice versa.
 			* This is a downgrade-compatibility breaking change! If you must downgrade, you must reverse this option manually.
 * **Added:**
-	* We've added more term settings, including:
+	* More term settings, including:
 		* Blog name removal.
 		* Open Graph title and description inputs.
 		* Twitter title and description inputs.
@@ -343,6 +348,20 @@ TODO do something nicer with interpret_status_to_symbol()
 		* Comment pagination, via a forced `noindex` robots' meta tag.
 		* robots.txt, via a `X-Robots-Tag` header.
 			* Only when outputted via PHP. Web servers don't launch WordPress otherwise.
+	* Bulk editing is now possible, intuitively, via WordPress' native bulk-editor!
+		* You can now change the following SEO settings for all posts, pages, products, etc.:
+			* Indexing
+			* Link following
+			* Archiving
+		* Leave them as `&mdash; No Change &mdash;` to keep the value unchanged.
+		* Note that we can't assert the expected value of `Default`, because no two pages are be alike.
+	* Quick editing is now possible, also intuitively, via WordPress' native quick-editor!
+		* You can change the following SEO settings for everything public:
+			* Canonical URL
+			* Indexing
+			* Link following
+			* Archiving
+			* Redirecting
 	* Multidimensional selection for robots-meta on posts, pages, and terms.
 	* A new accessibility feature for the SEO Bar. You can now convert the characters to symbols to discern warnings more easily.
 	* After installing The SEO Framework, users who have `update_plugins` capabilities may now see a confirmation that the plugin's set up, and that there are installation instructions available.
@@ -531,11 +550,12 @@ TODO do something nicer with interpret_status_to_symbol()
 	* **Accessibility:**
 		* **Global:**
 			* TODO: none...
+			* Our input-select elements no longer overflow to the right (or left, on RTL) of your screen. Most notably, with our [Focus extension](https://theseoframework.com/extensions/focus/#overview)'s homonymous example selector.
 		* **Post edit:**
 			* When using the Block Editor, after saving the page, setting changes are registered consistently again to the "Are you sure you wish to leave with unsaved changes?" notification handler.
 			* When you're editing the homepage via the post settings, the disabled "Remove the blog name?" option's tooltip now states it's handled elsewhere.
 		* **Settings page:**
-			* When pasting a webmaster code tag in the respective settings field, no change listener was invoked, and you didn't get an ays-message when navigating from the settings page.
+			* When pasting a webmaster code tag in the respective settings field, no change listener was invoked, and you didn't get an "Are you sure?"-message when navigating from the settings page with unchanged settings.
 			* When you clear a sitemap color input field, the default color is now displayed correctly.
 			* Trailing, leading, and double spaces are now trimmed from the homepage title examples.
 	* **Usability:**
@@ -551,6 +571,7 @@ TODO do something nicer with interpret_status_to_symbol()
 				* All sites using this separator will be upgraded to use the `ndash` option now.
 				* We couldn't leave this separator in as it was obstructing a security feature. To secure the title's output, without losing any information you put it, we relied on WordPress texturization options.
 					* We could extrude that from WordPress' texturization, but that'd cause discrepancy, and, as such, it wouldn't be sustainable.
+			* The post status is now correctly refreshed after using quick-edit.
 	* **Nitpicking:**
 		* The sitemap's XSL stylesheet no longer uses the latest post ID to determine the title generation; instead, it always adds your blog name to the right.
 		* The sitemap now can't exceed the imposed 50,000 limit; unless you use custom filters to extend the sitemap beyond that.
@@ -673,114 +694,136 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 	* **Noted:**
 		* Methods that you shouldn't use--marked private or aren't visible--aren't listed here, unless specifically annotated.
 	* **Added classes:**
-		* `\The_SEO_Framework\Builders\Images`, this file holds generators for images.
-			* **Example usage:**
-				* Get one URL:
-					* `$url = \The_SEO_Framework\Builders\Images::get_featured_image_details()->current()['url'];`
-				* Get multiple URLs, if any:
-					* `foreach ( \The_SEO_Framework\Builders\Images::get_featured_image_details() as $details ) { $url = $details['url']; }`
-			* **Public static methods, all generators:**
-				* `get_attachment_image_details`
-				* `get_featured_image_details`
-				* `get_content_image_details`
-				* `get_fallback_image_details`
-				* `get_theme_header_image_details`
-				* `get_site_logo_image_details`
-				* `get_site_icon_image_details`
-		* `\The_SEO_Framework\Bridges\Scripts`, this file bridges The SEO Framework to the script loaders for WordPress. It registers all scripts based on the query; by default, it is only loaded on the admin screens.
-			* Relies on `\The_SEO_Framework\Builders\Scripts` for registering and enqueuing the scripts.
-			* **Public static methods:**
-				* `decode_entities()`
-				* `decode_all_entities()`
-				* `prepare_media_scripts()`
-				* `prepare_metabox_scripts()`
-				* `get_tsf_scripts()`
-				* `get_tt_scripts()`
-				* `get_ays_scripts()`
-				* `get_list_edit_scripts()`
-				* `get_settings_scripts()`
-				* `get_post_scripts()`
-				* `get_term_scripts()`
-				* `get_gutenberg_compat_scripts()`
-				* `get_media_scripts()`
-				* `get_title_scripts()`
-				* `get_description_scripts()`
-				* `get_social_scripts()`
-				* `get_primaryterm_scripts()`
-				* `get_counter_scripts()`
-		* `\The_SEO_framework\Bridges\SeoBar`, this file bridges The SEO Framework to the SEO Bar loaders for WordPress. It prepares the list table columns and checks for post type and taxonomy compatibility.
-			* Relies on `\The_SEO_Framework\Builders\SeoBar` package for building the SEO Bar via interpreters.
-				* This package relies on `\The_SEO_framework\InterPreters\SeoBar` for interpreting the SEO Bar from PHP to HTML.
-			* This is a private class, and should not be called externally.
-		* `\The_SEO_framework\InterPreters\SeoBar`, this file interprets the SEO Bar from PHP to HTML.
-			* This class can't be instantiated.
-			* **Public constants:**
-				* `STATE_UNKNOWN`, bitwise 1.
-				* `STATE_BAD`, bitwise 2.
-				* `STATE_OKAY`, bitwise 4.
-				* `STATE_GOOD`, bitwise 8.
-			* **Public static variables:**
-				* `query`, the current SEO Bar query.
-			* **Public static methods:**
-				* `generate_bar()`
-				* `&collect_seo_bar_items()`
-				* `register_seo_bar_item()`
-				* `&edit_seo_bar_item()`
-		* `\The_SEO_framework\Builders\SeoBar`
-			* Abstract class. Must be extended.
-			* This class can't be instantiated, nor can any extending classes.
-			* **Public static variables:**
-				* `tests`, for all registered tests, there must be a corresponding `test_%s` function created.
-			* **Public methods:**
-				* `_run_test()`
-			* **Abstract methods:** These must be created.
-				* `has_blocking_redirect()`
-				* `prime_cache()`
-				* `prime_query_cache()`
-			* **Shared variables:** All extending classes can modify these variables, and all those classes will be affected once they are.
-				* `tsf`
-				* `query`
-				* `cache` (private)
-		* `\The_SEO_framework\Builders\SeoBar_Page`, this class extends `\The_SEO_framework\Builders\SeoBar`.
-			* Use `the_seo_framework()->get_generated_seo_bar()` to generate a bar.
-		* `\The_SEO_framework\Builders\SeoBar_Term`, this class extends `\The_SEO_framework\Builders\SeoBar`.
-			* Use `the_seo_framework()->get_generated_seo_bar()` to generate a bar.
-		* `\The_SEO_Framework\Bridges\ListEdit`
-			* This class can't be instantiated.
-			* This class is marked protected, only for internal use.
-		* `\The_SEO_Framework\Bridges\PostSettings`
-			* This class can't be instantiated.
-			* This class is marked protected, only for internal use.
-		* `\The_SEO_Framework\Bridges\SeoSettings`
-			* This class can't be instantiated.
-			* This class is marked protected, only for internal use.
-		* `\The_SEO_Framework\Bridges\TermSettings`
-			* This class can't be instantiated.
-			* This class is marked protected, only for internal use.
-		* `\The_SEO_Framework\Bridges\Sitemap`, this file initializes the sitemap query, and it's loaded when the sitemap functionality is enabled.
-			* **Public methods:**
-				* `get_expected_sitemap_endpoint_url()`
-				* `get_sitemap_endpoint_list()`
-				* `output_base_sitemap()`
-				* `output_stylesheet()`
-				* `output_sitemap_header()`
-				* `output_sitemap_urlset_open_tag()`
-				* `output_sitemap_urlset_close_tag()`
-			* **Public static methods:**
-				* `get_instance()`
-				* `prepare()`
-		* `\The_SEO_Framework\Builders\Sitemap`, this file builds the sitemap, and it's only loaded on sitemap endpoints.
-			* You can extend this class to add your own sitemap interpreters.
-			* **Public methods:**
-				* `__construct()`
-				* `__destruct()`
-				* `prepare_generation()`
-				* `shutdown_generation()`
-				* `build_sitemap()`, abstract.
-				* `is_post_included_in_sitemap()`
-		* `\The_SEO_Framework\Builders\Sitemap_Base`, extends `\The_SEO_Framework\Builders\Sitemap`.
-			* **Public methods:**
-				* `build_sitemap()`, abstractly defined.
+		* `\The_SEO_Framework\Bridges\` family:
+			* `\The_SEO_Framework\Bridges\ListEdit`, this class extends `\The_SEO_framework\Bridges\ListTable`.
+			* `\The_SEO_Framework\Bridges\ListTable`, holds basic caller functionality for WordPress list tables.
+				* Abstract class. Must be extended.
+				* **Public methods:**
+					* `__construct()`, initializes the callbacks, always.
+				* **Abstract methods:**
+					* `_add_column()`
+					* `_output_column_contents_for_post()`
+					* `_output_column_contents_for_term()`
+						* Note that this function must be created and return its first parameter as it's a filter callback.
+				* **Shared properties:**
+					* `$post_type`
+					* `$taxonomy`
+					* `$doing_ajax`
+			* `\The_SEO_Framework\Bridges\Ping`, holds callback functionality for search engine sitemap-pinging and cron-engaging thereof.
+				* This class can't be instantiated.
+				* **Public static methods:**
+					* `engage_pinging_cron()`
+					* `ping_search_engines()`
+					* `ping_google()`
+					* `ping_bing()`
+			* `\The_SEO_Framework\Bridges\PostSettings`
+				* This class can't be instantiated.
+				* This class is marked protected, only for internal use.
+			* `\The_SEO_Framework\Bridges\Scripts`, this file bridges The SEO Framework to the script loaders for WordPress. It registers all scripts based on the query; by default, it is only loaded on the admin screens.
+				* Relies on `\The_SEO_Framework\Builders\Scripts` for registering and enqueuing the scripts.
+				* **Public static methods:**
+					* `decode_entities()`
+					* `decode_all_entities()`
+					* `prepare_media_scripts()`
+					* `prepare_metabox_scripts()`
+					* `get_tsf_scripts()`
+					* `get_tt_scripts()`
+					* `get_ays_scripts()`
+					* `get_list_edit_scripts()`
+					* `get_settings_scripts()`
+					* `get_post_scripts()`
+					* `get_term_scripts()`
+					* `get_gutenberg_compat_scripts()`
+					* `get_media_scripts()`
+					* `get_title_scripts()`
+					* `get_description_scripts()`
+					* `get_social_scripts()`
+					* `get_primaryterm_scripts()`
+					* `get_counter_scripts()`
+			* `\The_SEO_framework\Bridges\SeoBar`, this file bridges The SEO Framework to the SEO Bar loaders for WordPress. It prepares the list table columns and checks for post type and taxonomy compatibility.
+				* Relies on `\The_SEO_Framework\Builders\SeoBar` package for building the SEO Bar via interpreters.
+					* This package relies on `\The_SEO_framework\InterPreters\SeoBar` for interpreting the SEO Bar from PHP to HTML.
+				* This is a private class, and should not be called externally.
+			* `\The_SEO_Framework\Bridges\SeoSettings`
+				* This class can't be instantiated.
+				* This class is marked protected, only for internal use.
+			* `\The_SEO_Framework\Bridges\Sitemap`, this file initializes the sitemap query, and it's loaded when the sitemap functionality is enabled.
+				* **Public methods:**
+					* `get_expected_sitemap_endpoint_url()`
+					* `get_sitemap_endpoint_list()`
+					* `output_base_sitemap()`
+					* `output_stylesheet()`
+					* `output_sitemap_header()`
+					* `output_sitemap_urlset_open_tag()`
+					* `output_sitemap_urlset_close_tag()`
+				* **Public static methods:**
+					* `get_instance()`
+					* `prepare()`
+			* `\The_SEO_Framework\Bridges\TermSettings`
+				* This class can't be instantiated.
+				* This class is marked protected, only for internal use.
+		* `\The_SEO_Framework\Builders\` family:
+			* `\The_SEO_Framework\Builders\Images`, this file holds generators for images.
+				* **Example usage:**
+					* Get one URL:
+						* `$url = \The_SEO_Framework\Builders\Images::get_featured_image_details()->current()['url'];`
+					* Get multiple URLs, if any:
+						* `foreach ( \The_SEO_Framework\Builders\Images::get_featured_image_details() as $details ) { $url = $details['url']; }`
+				* **Public static methods, all generators:**
+					* `get_attachment_image_details`
+					* `get_featured_image_details`
+					* `get_content_image_details`
+					* `get_fallback_image_details`
+					* `get_theme_header_image_details`
+					* `get_site_logo_image_details`
+					* `get_site_icon_image_details`
+			* `\The_SEO_framework\Builders\SeoBar`
+				* Abstract class. Must be extended.
+				* This class can't be instantiated, nor can any extending classes.
+				* **Public static variables:**
+					* `tests`, for all registered tests, there must be a corresponding `test_%s` function created.
+				* **Public methods:**
+					* `_run_test()`
+				* **Abstract methods:** These must be created.
+					* `has_blocking_redirect()`
+					* `prime_cache()`
+					* `prime_query_cache()`
+				* **Shared variables:** All extending classes can modify these variables, and all those classes will be affected once they are.
+					* `tsf`
+					* `query`
+					* `cache` (private)
+			* `\The_SEO_framework\Builders\SeoBar_Page`, this class extends `\The_SEO_framework\Builders\SeoBar`.
+				* Use `the_seo_framework()->get_generated_seo_bar()` to generate a bar.
+			* `\The_SEO_framework\Builders\SeoBar_Term`, this class extends `\The_SEO_framework\Builders\SeoBar`.
+				* Use `the_seo_framework()->get_generated_seo_bar()` to generate a bar.
+			* `\The_SEO_Framework\Builders\Sitemap`, this file builds the sitemap, and it's only loaded on sitemap endpoints.
+				* You can extend this class to add your own sitemap interpreters.
+				* **Public methods:**
+					* `__construct()`
+					* `__destruct()`
+					* `prepare_generation()`
+					* `shutdown_generation()`
+					* `build_sitemap()`, abstract.
+					* `is_post_included_in_sitemap()`
+			* `\The_SEO_Framework\Builders\Sitemap_Base`, extends `\The_SEO_Framework\Builders\Sitemap`.
+				* **Public methods:**
+					* `build_sitemap()`, abstractly defined.
+		* `\The_SEO_Framework\InterPreters\` family:
+			* `\The_SEO_framework\InterPreters\SeoBar`, this file interprets the SEO Bar from PHP to HTML.
+				* This class can't be instantiated.
+				* **Public constants:**
+					* `STATE_UNKNOWN`, bitwise 1.
+					* `STATE_BAD`, bitwise 2.
+					* `STATE_OKAY`, bitwise 4.
+					* `STATE_GOOD`, bitwise 8.
+				* **Public static variables:**
+					* `query`, the current SEO Bar query.
+				* **Public static methods:**
+					* `generate_bar()`
+					* `&collect_seo_bar_items()`
+					* `register_seo_bar_item()`
+					* `&edit_seo_bar_item()`
+			* TODO `\The_SEO_framework\InterPreters\HTML`
 	* **Removed classes:**
 		* `\The_SEO_Framework\Compat`
 			* Loading fewer PHP files is faster, ~0.00001s is saved.
@@ -793,21 +836,17 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* `\The_SEO_Framework\Inpost`
 			* This is part of the facade object `the_seo_framework()`, so this class shouldn't be called externally.
 		* `\The_SEO_Framework\Sitemap`
-			* This file has been split over multiple files, to the `Sitemap` class family:
+			* This file has been split over multiple files, to the new `Sitemap` class family:
 				* `\The_SEO_framework\Bridges\Sitemap`
 				* `\The_SEO_framework\Builders\Sitemap`, extended by:
 					* `\The_SEO_framework\Builders\Sitemap_Base`
 		* `\The_SEO_Framework\Doing_It_Right`
-			* Some methods therein have been moved to the `SeoBar` class family:
+			* Some methods therein have been moved to the new `SeoBar` class family:
 				* `\The_SEO_framework\InterPreters\SeoBar`
 				* `\The_SEO_framework\Bridges\SeoBar`
 				* `\The_SEO_framework\Builders\SeoBar`, extended by:
 					* `\The_SEO_framework\Builders\SeoBar_Page`
 					* `\The_SEO_framework\Builders\SeoBar_Term`
-			* **Removed methods:**
-				* TODO?
-			* **Deprecated methods:**
-				* TODO?
 	* **Rmeoved interfaces:**
 		* `\The_SEO_Framework\Debug_Interface`
 			* Implementors:
@@ -824,7 +863,6 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `get_field_data()`, internal use only. TODO move to interpreter?
 			* `make_single_select_form()` TODO move to interpreter?
 			* `get_post_types_from_taxonomy()`
-			* `init_seo_bar_tables()`
 			* `get_generated_seo_bar()`
 			* `is_robots_meta_noindex_set_by_args()`
 			* `init_term_meta()`
@@ -980,6 +1018,8 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* `sitemaps_metabox()`
 				* `feed_metabox()`
 				* `schema_metabox()`
+				* `add_post_state()`
+				* `post_state()`
 			* Public methods, are now rendered ineffective:
 				* `post_type_supports_inpost()`
 				* `enqueue_page_defaults()`
@@ -1057,11 +1097,10 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 	* **Added:**
 		* `the_seo_framework_sitemap_header`, runs in the sitemap HTTP header.
 		* `the_seo_framework_setting_notices`, runs below the settings header.
-* **Hook notes:**
+* **WordPress hook notes:**
 	* TODO maybe? List all WP API callback changes: removal, added, changed. Good luck with the backtrace...
 * **Filter notes:**
 	* **Added:**
-		* `the_seo_framework_allow_quick_edit`, boolean.
 		* `the_seo_framework_sitemap_path_prefix`, string.
 		* `the_seo_framework_sitemap_endpoint_list`, array.
 		* `the_seo_framework_sitemap_supported_post_types`, array.
@@ -1123,6 +1162,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* `the_seo_framework_sitemap_cpt_query_args`.
 		* `the_seo_framework_admin_page_defaults`, we trust our defaults are right.
 		* `the_seo_framework_metabox_id`, this never worked reliably.
+		* `the_seo_framework_allow_states`, use the action handler instead.
 * **Rewrite notes:**
 	* **Removed:**
 		* All WordPress rewrite manipulation.
@@ -1157,10 +1197,10 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `tsf`, these main files are now trimmed down to the most basic of forms per dependency requirements.
 				* **JS:**
 					* **Before:** 27.7KB minified, 2782 SLOC
-					* **After:** 2.1KB minified, (TODO TBD) 449 SLOC
+					* **After:** 2.4KB minified, (TODO TBD) 488 SLOC
 				* **CSS:**
 					* **Before:** 16.0KB minified, 1006 SLOC
-					* **After:** 6.15KB minfified, (TODO TBD) 421 SLOC
+					* **After:** 6.15KB minfified, (TODO TBD) 427 SLOC
 			* `tsfc`, these files handle the character and pixel counters.
 				* **Namespaces:** `window.tsfC` and `window.tsfCL10n`.
 				* **Script ID:** `tsf-c`
@@ -1287,6 +1327,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 					* `ampHTMLtoText`
 					* `sDoubleSpace`
 					* `getStringLength`
+					* `selectByValue`
 					* `convertJSONResponse`
 					* `setAjaxLoader`
 					* `unsetAjaxLoader`

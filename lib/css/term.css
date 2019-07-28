@@ -16,7 +16,12 @@
 
 .tsf-term-select-wrap select {
 	display: block;
+}
+
+.tsf-term-meta select {
 	width: 100%;
+	max-width: 100%;
+	text-overflow: ellipsis;
 }
 
 .tsf-term-checkbox-wrap {

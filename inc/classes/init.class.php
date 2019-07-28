@@ -139,9 +139,6 @@ class Init extends Query {
 		//= Initialize term meta filters and actions.
 		$this->init_term_meta();
 
-		//= Initialize the SEO Bar tables.
-		$this->init_seo_bar_tables();
-
 		//* Save post data.
 		\add_action( 'save_post', [ $this, '_update_post_meta' ], 1, 2 );
 		\add_action( 'edit_attachment', [ $this, '_update_attachment_meta' ], 1 );
@@ -154,29 +151,32 @@ class Init extends Query {
 		\add_filter( 'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, [ $this, '_add_plugin_action_links' ], 10, 2 );
 		\add_filter( 'plugin_row_meta', [ $this, '_add_plugin_row_meta' ], 10, 2 );
 
-		//* Initialize post states.
-		\add_action( 'current_screen', [ $this, 'post_state' ] );
-
 		if ( $this->load_options ) :
+			//* Set up site settings and allow saving resetting them.
+			\add_action( 'admin_init', [ $this, 'register_settings' ], 5 );
+
+			//* Initialize the SEO Bar for tables.
+			\add_action( 'admin_init', [ $this, '_init_seo_bar_tables' ] );
+
+			//* Initialize List Edit for tables.
+			\add_action( 'admin_init', [ $this, '_init_list_edit' ] );
+
+			//* Adds post states to list view tables.
+			\add_filter( 'display_post_states', [ $this, '_add_post_state' ], 10, 2 );
+
 			//* Loads setting notices.
 			\add_action( 'the_seo_framework_setting_notices', [ $this, '_do_settings_page_notices' ] );
 
-			//* Set up site settings and save/reset them
-			\add_action( 'admin_init', [ $this, 'register_settings' ], 5 );
-
-			//* Enqueue Inpost meta boxes.
+			//* Enqueue Post meta boxes.
 			\add_action( 'add_meta_boxes', [ $this, '_init_post_edit_view' ], 5, 2 );
 
-			//* Enqueue Taxonomy meta output.
-			\add_action( 'current_screen', [ $this, '_init_term_edit_view' ], 10 );
+			//* Enqueue Term meta output.
+			\add_action( 'current_screen', [ $this, '_init_term_edit_view' ] );
 
-			//* Prepare quick-edit columns -- required as we need a custom column prior adding bulk/quick-edit fields.
-			\add_action( 'current_screen', [ $this, '_prepare_quick_edit_columns' ], 10 );
-
-			// Add menu links and register $this->seo_settings_page_hook
+			//* Add menu links and register $this->seo_settings_page_hook
 			\add_action( 'admin_menu', [ $this, 'add_menu_link' ] );
 
-			// Set up notices
+			//* Set up notices
 			\add_action( 'admin_notices', [ $this, 'notices' ] );
 
 			//* Admin AJAX for counter options.
@@ -654,7 +654,7 @@ class Init extends Query {
 	}
 
 	/**
-	 * Sets the X-Robots tag headers to 'noindex, follow'.
+	 * Sets the X-Robots tag headers to 'noindex'.
 	 *
 	 * @since 3.3.0
 	 * @access private
@@ -662,7 +662,7 @@ class Init extends Query {
 	public function _output_robots_noindex_headers() {
 
 		if ( ! headers_sent() ) {
-			header( 'X-Robots-Tag: noindex, follow', true );
+			header( 'X-Robots-Tag: noindex', true );
 		}
 	}
 

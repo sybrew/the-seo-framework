@@ -95,7 +95,8 @@ function _do_upgrade() {
 	if ( ! $tsf->loaded ) return;
 
 	if ( $tsf->is_seo_settings_page( false ) ) {
-		\wp_redirect( \self_admin_url() ); // phpcs:ignore -- self_admin_url() is safe.
+		// phpcs:ignore, WordPress.Security.SafeRedirect -- self_admin_url() is safe.
+		\wp_redirect( \self_admin_url() );
 		exit;
 	}
 

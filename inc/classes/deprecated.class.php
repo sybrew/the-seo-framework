@@ -478,7 +478,7 @@ final class Deprecated {
 			$taxonomy = $tsf->get_current_taxonomy();
 			if ( $taxonomy ) {
 				$term_id     = $id ?: $tsf->get_the_real_admin_ID();
-				$term[ $id ] = \get_term_by( 'id', $term_id, $taxonomy );
+				$term[ $id ] = \get_term( $term_id, $taxonomy );
 			}
 		} else {
 			if ( $tsf->is_category() || $tsf->is_tag() ) {

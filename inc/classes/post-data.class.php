@@ -262,7 +262,7 @@ class Post_Data extends Detect {
 			if ( $value ) {
 				\update_post_meta( $post->ID, $field, $value );
 			} else {
-				// This is fine for as long as we merge the get values with the defaults.
+				// This is fine for as long as we merge the getter values with the defaults.
 				\delete_post_meta( $post->ID, $field );
 			}
 		}
@@ -272,7 +272,7 @@ class Post_Data extends Detect {
 	 * Saves the SEO settings when we save an attachment.
 	 *
 	 * This is a passthrough method for `_update_post_meta()`.
-	 * Sanity check is handled at `save_custom_fields()`, which `_update_post_meta()` uses.
+	 * Sanity checks are handled deeper.
 	 *
 	 * @since 3.0.6
 	 * @since 3.3.0 Renamed from `inattachment_seo_save`
@@ -287,27 +287,43 @@ class Post_Data extends Detect {
 	}
 
 	/**
-	 * Saves the SEO settings when we save a post or page.
-	 * Some values get sanitized, the rest are pulled from identically named subkeys in the $_POST['autodescription'] array.
+	 * Saves the Post SEO Meta settings on quick-edit, bulk-edit, or post-edit.
 	 *
 	 * @since 2.0.0
 	 * @since 2.9.3 Added 'exclude_from_archive'.
 	 * @since 3.3.0 1. Renamed from `inpost_seo_save`
 	 *              2. Now allows updating during `WP_CRON`.
 	 *              3. Now allows updating during `WP_AJAX`.
-	 * @securitycheck 3.0.0 OK. NOTE: Check is done at save_custom_fields().
-	 * @uses $this->save_custom_fields() : Perform security checks and saves post meta / custom field data to a post or page.
 	 * @access private
 	 *
 	 * @param int      $post_id The post ID. Unused, but sent through filter.
 	 * @param \WP_Post $post    The post object.
-	 * @return void Early when no expected POST is set.
 	 */
 	public function _update_post_meta( $post_id, $post ) {
+		// phpcs:disable, WordPress.Security.NonceVerification
 
-		// The 'autodescription' index should only be used when using the editor.
-		// Quick and bulk-edit should be halted here.
-		if ( empty( $_POST['autodescription'] ) ) return;
+		if ( ! empty( $_POST['autodescription-quick'] ) ) {
+			$this->update_quick_edit_post_meta( $post_id, $post );
+		} elseif ( ! empty( $_REQUEST['autodescription-bulk'] ) ) {
+			// This is sent via GET. Keep using $_REQUEST for future-compatibility.
+			$this->update_bulk_edit_post_meta( $post_id, $post );
+		} elseif ( ! empty( $_POST['autodescription'] ) ) {
+			$this->update_post_edit_post_meta( $post_id, $post );
+		}
+
+		// phpcs:enable, WordPress.Security.NonceVerification
+	}
+
+	/**
+	 * Overwrites all of the post meta on post-edit.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param int      $post_id The post ID. Unused.
+	 * @param \WP_Post $post    The post object.
+	 * @return void
+	 */
+	protected function update_post_edit_post_meta( $post_id, $post ) {
 
 		$post = \get_post( $post );
 
@@ -334,6 +350,117 @@ class Post_Data extends Detect {
 		$data = (array) $_POST['autodescription'];
 
 		//* Perform nonce check and save fields.
+		$this->save_post_meta( $post, $data );
+	}
+
+	/**
+	 * Overwrites a part of the post meta on quick-edit.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param int      $post_id The post ID. Unused.
+	 * @param \WP_Post $post    The post object.
+	 * @return void
+	 */
+	protected function update_quick_edit_post_meta( $post_id, $post ) {
+
+		$post = \get_post( $post );
+
+		if ( empty( $post->ID ) ) return;
+
+		//* Check again against ambiguous injection...
+		// Note, however: function wp_ajax_inline_save() already performs all these checks for us before firing this callback's action.
+		if ( ! \current_user_can( 'edit_post', $post->ID ) ) return;
+		if ( ! \check_ajax_referer( 'inlineeditnonce', '_inline_edit', false ) ) return;
+
+		$new_data = [];
+
+		foreach ( (array) $_POST['autodescription-quick'] as $key => $value ) :
+			switch ( $key ) :
+				case 'noindex':
+				case 'nofollow':
+				case 'noarchive':
+					$new_data[ "_genesis_$key" ] = $value;
+					break;
+
+				case 'redirect':
+					$new_data[ $key ] = $value;
+					break;
+
+				case 'canonical':
+					$new_data['_genesis_canonical_uri'] = $value;
+					break;
+
+				default:
+					break;
+			endswitch;
+		endforeach;
+
+		// Unlike the post-edit saving, we don't reset the data, just overwrite what's given.
+		// This is because we only update a portion of the meta.
+		$data = array_merge(
+			$this->get_post_meta( $post->ID, false ),
+			$new_data
+		);
+
+		$this->save_post_meta( $post, $data );
+	}
+
+	/**
+	 * Overwrites a park of the post meta on bulk-edit.
+	 *
+	 * @since 3.3.0
+	 * @staticvar bool $verified_referer Will hold true after the first update passes.
+	 *
+	 * @param int      $post_id The post ID. Unused.
+	 * @param \WP_Post $post    The post object.
+	 * @return void
+	 */
+	protected function update_bulk_edit_post_meta( $post_id, $post ) {
+
+		$post = \get_post( $post );
+
+		if ( empty( $post->ID ) ) return;
+
+		//* Check again against ambiguous injection...
+		// Note, however: function bulk_edit_posts() already performs all these checks for us before firing this callback's action.
+		if ( ! \current_user_can( 'edit_post', $post->ID ) ) return;
+
+		static $verified_referer = false;
+		if ( ! $verified_referer ) {
+			\check_admin_referer( 'bulk-posts' );
+			$verified_referer = true;
+		}
+
+		static $new_data = null;
+
+		if ( ! isset( $new_data ) ) {
+			$new_data = [];
+
+			// This is sent via GET. Keep using $_REQUEST for future-compatibility.
+			foreach ( (array) $_REQUEST['autodescription-bulk'] as $key => $value ) :
+				if ( 'nochange' === $value ) continue;
+
+				switch ( $key ) :
+					case 'noindex':
+					case 'nofollow':
+					case 'noarchive':
+						$new_data[ "_genesis_$key" ] = $value;
+						break;
+
+					default:
+						break;
+				endswitch;
+			endforeach;
+		}
+
+		// Unlike the post-edit saving, we don't reset the data, just overwrite what's given.
+		// This is because we only update a portion of the meta.
+		$data = array_merge(
+			$this->get_post_meta( $post->ID, false ),
+			$new_data
+		);
+
 		$this->save_post_meta( $post, $data );
 	}
 

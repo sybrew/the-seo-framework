@@ -78,7 +78,7 @@ final class SeoBar {
 	 *
 	 * @return static
 	 */
-	private static function &get_instance() {
+	private static function get_instance() {
 		static::$instance instanceof static or new static;
 		return static::$instance;
 	}
@@ -110,7 +110,7 @@ final class SeoBar {
 		if ( ! static::$query['taxonomy'] )
 			static::$query['post_type'] = static::$query['post_type'] ?: \get_post_type( static::$query['id'] );
 
-		$instance =& static::get_instance();
+		$instance = static::get_instance();
 		$instance->store_default_bar_items();
 
 		/**

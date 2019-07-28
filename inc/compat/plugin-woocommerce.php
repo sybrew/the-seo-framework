@@ -58,7 +58,7 @@ function _adjust_image_generation_params( $params, $args ) {
 	} else {
 		if ( $args['taxonomy'] ) {
 			if ( function_exists( '\\is_product_category' ) ) {
-				$term                = \get_term_by( 'id', $args['id'], $args['taxonomy'] );
+				$term                = \get_term( $args['id'], $args['taxonomy'] );
 				$is_product_category = $term && \is_product_category( $term );
 			}
 		} else {

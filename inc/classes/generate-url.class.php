@@ -393,7 +393,7 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_taxonomical_canonical_url( $term_id, $taxonomy ) {
 
-		$term = \get_term_by( 'id', $term_id, $taxonomy );
+		$term = \get_term( $term_id, $taxonomy );
 		$link = \get_term_link( $term, $taxonomy );
 
 		if ( \is_wp_error( $link ) )

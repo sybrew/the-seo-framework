@@ -242,26 +242,73 @@ class Term_Data extends Post_Data {
 	 * @param int    $term_id  Term ID.
 	 * @param int    $tt_id    Term taxonomy ID.
 	 * @param string $taxonomy Taxonomy slug.
-	 * @return void Early on AJAX call.
 	 */
 	public function _update_term_meta( $term_id, $tt_id, $taxonomy ) {
+		// phpcs:disable, WordPress.Security.NonceVerification
 
-		// The 'autodescription-meta' index should only be used when using the editor.
-		// Quick and bulk-edit should be halted here.
-		if ( ! isset( $_POST['autodescription-meta'] ) ) return;
+		if ( ! empty( $_POST['autodescription-quick'] ) ) {
+			$this->update_quick_edit_term_meta( $term_id, $tt_id, $taxonomy );
+		} elseif ( ! empty( $_POST['autodescription-meta'] ) ) {
+			$this->update_term_edit_term_meta( $term_id, $tt_id, $taxonomy );
+		}
 
-		$term = \get_term_by( 'id', $term_id, $taxonomy );
+		// phpcs:enable, WordPress.Security.NonceVerification
+	}
+
+	/**
+	 * Overwrites all of the term meta on term-edit.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param int    $term_id  Term ID.
+	 * @param int    $tt_id    Term taxonomy ID.
+	 * @param string $taxonomy Taxonomy slug.
+	 * @return void
+	 */
+	protected function update_term_edit_term_meta( $term_id, $tt_id, $taxonomy ) {
+
+		$term = \get_term( $term_id, $taxonomy );
 
 		if ( ! $term ) return;
 
 		//* Check again against ambiguous injection...
-		// Note, however: function wp_update_term() already performs all these checks for us before firing this action.
+		// Note, however: function wp_update_term() already performs all these checks for us before firing this callback's action.
 		if ( ! \current_user_can( 'edit_term', $term_id ) ) return;
 		if ( ! isset( $_POST['_wpnonce'] ) ) return;
 		if ( ! \wp_verify_nonce( \stripslashes_from_strings_only( $_POST['_wpnonce'] ), 'update-tag_' . $term_id ) ) return;
 
-		// phpcs:ignore -- wp_unslash() will ruin intended slashes.
 		$data = (array) $_POST['autodescription-meta'];
+
+		$this->save_term_meta( $term_id, $tt_id, $taxonomy, $data );
+	}
+
+	/**
+	 * Overwrites a part of the term meta on quick-edit.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param int    $term_id  Term ID.
+	 * @param int    $tt_id    Term taxonomy ID.
+	 * @param string $taxonomy Taxonomy slug.
+	 * @return void
+	 */
+	protected function update_quick_edit_term_meta( $term_id, $tt_id, $taxonomy ) {
+
+		$term = \get_term( $term_id, $taxonomy );
+
+		if ( ! $term ) return;
+
+		//* Check again against ambiguous injection...
+		// Note, however: function wp_ajax_inline_save_tax() already performs all these checks for us before firing this callback's action.
+		if ( ! \current_user_can( 'edit_term', $term_id ) ) return;
+		if ( ! \check_ajax_referer( 'taxinlineeditnonce', '_inline_edit', false ) ) return;
+
+		// Unlike the term-edit saving, we don't reset the data, just overwrite what's given.
+		// This is because we only update a portion of the meta.
+		$data = array_merge(
+			$this->get_term_meta( $term_id, false ),
+			(array) $_POST['autodescription-quick']
+		);
 
 		$this->save_term_meta( $term_id, $tt_id, $taxonomy, $data );
 	}
@@ -283,7 +330,7 @@ class Term_Data extends Post_Data {
 	 */
 	public function update_single_term_meta_item( $item, $value, $term_id, $tt_id, $taxonomy ) {
 
-		$term = \get_term_by( 'id', $term_id, $taxonomy );
+		$term = \get_term( $term_id, $taxonomy );
 
 		if ( ! $term ) return;
 
@@ -305,7 +352,7 @@ class Term_Data extends Post_Data {
 	 */
 	public function save_term_meta( $term_id, $tt_id, $taxonomy, array $data ) {
 
-		$term = \get_term_by( 'id', $term_id, $taxonomy );
+		$term = \get_term( $term_id, $taxonomy );
 
 		if ( ! $term ) return;
 

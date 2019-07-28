@@ -89,6 +89,7 @@ final class SeoBar_Page extends SeoBar {
 	protected function prime_query_cache( array &$query_cache = [] ) {
 		$query_cache = [
 			'post'   => \get_post( static::$query['id'] ),
+			'meta'   => static::$tsf->get_post_meta( static::$query['id'], true ), // Use TSF cache--TSF initializes it anyway.
 			'states' => [
 				'ishome'      => static::$tsf->is_real_front_page_by_id( static::$query['id'] ),
 				'locale'      => \get_locale(),
@@ -117,14 +118,13 @@ final class SeoBar_Page extends SeoBar {
 	 * @return bool True if there's a blocking redirect, false otherwise.
 	 */
 	protected function has_blocking_redirect() {
-		return (bool) static::$tsf->get_post_meta_item( 'redirect', static::$query['id'] );
+		return ! empty( $this->query_cache['meta']['redirect'] );
 	}
 
 	/**
 	 * Runs title tests.
 	 *
 	 * @since 3.3.0
-	 * @staticvar array $cache Holds test cache.
 	 *
 	 * @return array $item : {
 	 *    string  $symbol : The displayed symbol that identifies your bar.
@@ -338,7 +338,7 @@ final class SeoBar_Page extends SeoBar {
 					'estimated' => \__( 'Estimated from the number of characters found. The pixel counter asserts the true length.', 'autodescription' ),
 				],
 				'assess'   => [
-					'empty'     => \__( 'No description could be generated.', 'autodescription' ),
+					'empty'     => \__( 'There is no usable content, so no description could be generated.', 'autodescription' ),
 					'builder'   => \__( 'A foreign page builder is used, so no description is generated.', 'autodescription' ),
 					'protected' => \__( 'The page is protected, so no description is generated.', 'autodescription' ),
 					'excerpt'   => \__( "It's built using the excerpt field.", 'autodescription' ),
@@ -611,9 +611,7 @@ final class SeoBar_Page extends SeoBar {
 			$item['assess']['posttype'] = $cache['assess']['posttype'];
 		}
 
-		if ( 0 !== static::$tsf->s_qubit(
-			static::$tsf->get_post_meta_item( '_genesis_noindex', static::$query['id'] )
-		) ) {
+		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['_genesis_noindex'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype, homepage, nor site as "blocking" if there's an overide.
@@ -736,9 +734,7 @@ final class SeoBar_Page extends SeoBar {
 			$item['assess']['posttype'] = $cache['assess']['posttype'];
 		}
 
-		if ( 0 !== static::$tsf->s_qubit(
-			static::$tsf->get_post_meta_item( '_genesis_nofollow', static::$query['id'] )
-		) ) {
+		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['_genesis_nofollow'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype, homepage, nor site as "blocking" if there's an overide.
@@ -862,9 +858,7 @@ final class SeoBar_Page extends SeoBar {
 			$item['assess']['posttype'] = $cache['assess']['posttype'];
 		}
 
-		if ( 0 !== static::$tsf->s_qubit(
-			static::$tsf->get_post_meta_item( '_genesis_noarchive', static::$query['id'] )
-		) ) {
+		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['_genesis_noarchive'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype, homepage, nor site as "blocking" if there's an overide.
@@ -900,7 +894,7 @@ final class SeoBar_Page extends SeoBar {
 	 */
 	protected function test_redirect() {
 
-		if ( ! static::$tsf->get_post_meta_item( 'redirect', static::$query['id'] ) ) {
+		if ( empty( $this->query_cache['meta']['redirect'] ) ) {
 			return static::get_cache( 'page/redirect/default/0' ) ?: static::set_cache(
 				'page/redirect/default/0',
 				[

@@ -360,8 +360,18 @@ final class Scripts {
 		return [
 			[
 				'id'       => 'tsf-le',
+				'type'     => 'css',
+				'deps'     => [ 'tsf' ],
+				'autoload' => true,
+				'hasrtl'   => false,
+				'name'     => 'le',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+			],
+			[
+				'id'       => 'tsf-le',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf-tt' ],
+				'deps'     => [ 'jquery', 'tsf' ],
 				'autoload' => true,
 				'name'     => 'le',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',

@@ -1,3 +1,9 @@
+#tsf-inpost-box .inside select {
+	width: 100%;
+	max-width: 99%;
+	text-overflow: ellipsis;
+}
+
 #tsf-inpost-box .inside {
 	box-sizing: border-box;
 	display: flex;

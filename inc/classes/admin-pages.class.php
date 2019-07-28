@@ -167,47 +167,6 @@ class Admin_Pages extends Profile {
 	}
 
 	/**
-	 * Prepares the quick/bulk edit column.
-	 * This column is a dummy, but it's required to display quick/bulk edit items.
-	 *
-	 * @since 3.3.0
-	 * @access private
-	 *
-	 * @param \WP_Screen|string $screen \WP_Screen
-	 */
-	public function _prepare_quick_edit_columns( $screen ) {
-
-		if ( ! $this->is_wp_lists_edit() ) return;
-
-		/**
-		 * @since 3.3.0
-		 * @param bool $allow_quick_edit Whether to engage the quick/bulk edit fields.
-		 */
-		if ( ! \apply_filters( 'the_seo_framework_allow_quick_edit', true ) ) return;
-
-		$taxonomy = isset( $screen->taxonomy ) ? $screen->taxonomy : '';
-
-		if ( $taxonomy ) {
-			if ( ! $this->is_taxonomy_supported( $taxonomy ) )
-				return;
-		} else {
-			if ( ! $this->is_post_type_supported( $screen->post_type ) )
-				return;
-		}
-
-		\add_filter( 'manage_' . $screen->id . '_columns', Bridges\ListEdit::class . '::_set_quick_edit_column', 10, 1 );
-		\add_filter( 'hidden_columns', Bridges\ListEdit::class . '::_hide_quick_edit_column', 10, 1 );
-
-		if ( ! $taxonomy ) {
-			// WordPress doesn't support this feature yet for taxonomies.
-			// Exclude it for when the time may come and faulty fields are displayed.
-			// Mind the "2".
-			\add_action( 'bulk_edit_custom_box', Bridges\ListEdit::class . '::_display_bulk_edit_fields', 10, 2 );
-		}
-		\add_action( 'quick_edit_custom_box', Bridges\ListEdit::class . '::_display_quick_edit_fields', 10, 3 );
-	}
-
-	/**
 	 * Outputs notices on SEO setting changes.
 	 *
 	 * @since 3.3.0
@@ -646,8 +605,11 @@ class Admin_Pages extends Profile {
 		foreach ( $data as $k => $v ) {
 			$k = strtolower( preg_replace( '/[A-Z]/', '-$0', $k ) );
 			if ( is_array( $v ) ) {
-				//* NOTE: Using single quotes.
-				$ret .= sprintf( " data-%s='%s'", $k, json_encode( $v, JSON_UNESCAPED_SLASHES ) );
+				$ret .= sprintf(
+					' data-%s="%s"',
+					$k,
+					htmlspecialchars( json_encode( $v, JSON_UNESCAPED_SLASHES ), ENT_QUOTES, 'UTF-8' )
+				);
 			} else {
 				$ret .= sprintf( ' data-%s="%s"', $k, $v );
 			}
@@ -823,7 +785,7 @@ class Admin_Pages extends Profile {
 				$name = sprintf(
 					'<option value="%s"%s>%s</option>',
 					\esc_attr( $value ),
-					$value == $default ? ' selected' : '', // phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison
+					(string) $value === (string) $default ? ' selected' : '',
 					\esc_html( $name )
 				);
 			},
