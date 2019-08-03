@@ -590,9 +590,8 @@ class Core {
 	 *              instead of relying on PHP's incomplete encoding table.
 	 *              This does mean that the functionality is crippled* when the PHP
 	 *              installation isn't unicode compatible; this is unlikely.
-	 * @staticvar bool $utf8_pcre Determines whether pcre supports UTF-8.
-	 *
-	 * *Crippled as in skipping every non-latin and diacritic character.
+	 * @since 3.3.0 Now expects PCRE UTF-8 encoding support.
+	 * @staticvar bool   $use_mb Determines whether we can use mb_* functions.
 	 *
 	 * @param string $string Required. The string to count words in.
 	 * @param int    $amount Minimum amount of words to encounter in the string.
@@ -606,27 +605,20 @@ class Core {
 	public function get_word_count( $string, $amount = 3, $amount_bother = 5, $bother_length = 3 ) {
 
 		$string = html_entity_decode( $string );
+		$string = \wp_check_invalid_utf8( $string );
 
-		static $utf8_pcre = null;
-		if ( ! isset( $utf8_pcre ) )
-			$utf8_pcre = @preg_match( '/^./u', 'a' );
+		if ( ! $string ) return [];
 
-		if ( $utf8_pcre ) {
-			$string = \wp_check_invalid_utf8( $string, true );
-			$word_list = preg_split(
-				'/\W+/mu',
-				function_exists( 'mb_strtolower' ) ? mb_strtolower( $string ) : strtolower( $string ),
-				-1,
-				PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_NO_EMPTY
-			);
-		} else {
-			$word_list = preg_split(
-				'/\W+/m',
-				strtolower( $string ),
-				-1,
-				PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_NO_EMPTY
-			);
-		}
+		static $use_mb;
+
+		isset( $use_mb ) or $use_mb = extension_loaded( 'mbstring' );
+
+		$word_list = preg_split(
+			'/\W+/miu',
+			$use_mb ? mb_strtolower( $string ) : strtolower( $string ),
+			-1,
+			PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_NO_EMPTY
+		);
 
 		$words_too_many = [];
 

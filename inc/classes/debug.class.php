@@ -289,7 +289,7 @@ final class Debug {
 	 */
 	protected function get_error() {
 
-		// phpcs:ignore, WordPress.PHP.NoSilencedErrors -- This feature may be disabled.
+		// phpcs:ignore, WordPress.PHP.NoSilencedErrors -- Feature may be disabled.
 		$backtrace = @debug_backtrace();
 		/**
 		 * 0 = This function.

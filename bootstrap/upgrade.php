@@ -102,7 +102,7 @@ function _do_upgrade() {
 
 	\wp_raise_memory_limit( 'tsf_upgrade' );
 
-	// phpcs:ignore, WordPress.PHP.NoSilencedErrors -- Function may be disabled.
+	// phpcs:ignore, WordPress.PHP.NoSilencedErrors -- Feature may be disabled.
 	@set_time_limit( 300 );
 
 	/**

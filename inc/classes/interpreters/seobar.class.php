@@ -376,6 +376,9 @@ final class SeoBar {
 	/**
 	 * Interprets binary status to a SEO Bar HTML class suffix.
 	 *
+	 * TODO instead of going over them in a switch, allow adding the binary data?
+	 *      This would meant hat we use the & logical operator, instead.
+	 *
 	 * @since 3.3.0
 	 *
 	 * @param array $item See `$this->register_seo_bar_item()`

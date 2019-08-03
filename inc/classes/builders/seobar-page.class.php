@@ -141,11 +141,11 @@ final class SeoBar_Page extends SeoBar {
 			'page/title/defaults',
 			[
 				'params'   => [
-					'untitled'  => static::$tsf->get_static_untitled_title(),
-					'blogname'  => static::$tsf->get_blogname(),
+					'untitled'        => static::$tsf->get_static_untitled_title(),
+					'blogname_quoted' => preg_quote( static::$tsf->get_blogname(), '/' ),
 					/* translators: 1 = An assessment, 2 = Disclaimer, e.g. "take it with a grain of salt" */
-					'disclaim'  => \__( '%1$s (%2$s)', 'autodescription' ),
-					'estimated' => \__( 'Estimated from the number of characters found. The pixel counter asserts the true length.', 'autodescription' ),
+					'disclaim'        => \__( '%1$s (%2$s)', 'autodescription' ),
+					'estimated'       => \__( 'Estimated from the number of characters found. The pixel counter asserts the true length.', 'autodescription' ),
 				],
 				'assess'   => [
 					'empty'      => \__( 'No title could be fetched.', 'autodescription' ),
@@ -263,7 +263,14 @@ final class SeoBar_Page extends SeoBar {
 			}
 		}
 
-		$brand_count = $cache['params']['blogname'] ? substr_count( $title, $cache['params']['blogname'] ) : 0;
+		$brand_count =
+			strlen( $cache['params']['blogname_quoted'] )
+			? preg_match_all(
+				"/{$cache['params']['blogname_quoted']}/ui",
+				$title,
+				$matches
+			)
+			: 0;
 
 		if ( ! $brand_count ) {
 			// Override branding state.
@@ -529,7 +536,7 @@ final class SeoBar_Page extends SeoBar {
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
 						'reason' => \__( 'Page may be indexed.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( 'The robots meta allows indexing.', 'autodescription' ),
+							'base' => \__( 'The robots meta tag allows indexing.', 'autodescription' ),
 						],
 					],
 					'noindex' => [
@@ -538,7 +545,7 @@ final class SeoBar_Page extends SeoBar {
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN,
 						'reason' => \__( 'Page may not be indexed.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( 'The robots meta does not allow indexing.', 'autodescription' ),
+							'base' => \__( 'The robots meta tag does not allow indexing.', 'autodescription' ),
 						],
 					],
 					'draft'   => [
@@ -652,6 +659,7 @@ final class SeoBar_Page extends SeoBar {
 					'site'      => \__( 'Link following is discouraged for the whole site at the SEO Settings screen.', 'autodescription' ),
 					'posttype'  => \__( 'Link following is discouraged for this post type at the SEO Settings screen.', 'autodescription' ),
 					'override'  => \__( 'The SEO meta input overrides the link following state.', 'autodescription' ),
+					'noindex'   => \__( 'The page may not be indexed, this may also discourage link following.', 'autodescription' ),
 				],
 				'reason'   => [
 					'notpublic'    => \__( 'WordPress overrides the robots directive.', 'autodescription' ),
@@ -664,7 +672,7 @@ final class SeoBar_Page extends SeoBar {
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
 						'reason' => \__( 'Page links may be followed.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( 'The robots meta allows link following.', 'autodescription' ),
+							'base' => \__( 'The robots meta tag allows link following.', 'autodescription' ),
 						],
 					],
 					'nofollow' => [
@@ -673,7 +681,7 @@ final class SeoBar_Page extends SeoBar {
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN,
 						'reason' => \__( 'Page links may not be followed.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( 'The robots meta does not allow link following.', 'autodescription' ),
+							'base' => \__( 'The robots meta tag does not allow link following.', 'autodescription' ),
 						],
 					],
 					'draft'    => [
@@ -747,9 +755,16 @@ final class SeoBar_Page extends SeoBar {
 			$item['assess']['override'] = $cache['assess']['override'];
 		}
 
-		if ( ! $this->query_cache['states']['robotsmeta']['nofollow'] && $robots_global['hasrobotstxt'] ) {
-			// Don't change status, we do not parse the robots.txt file. Merely disclaim.
-			$item['assess']['robotstxt'] = $cache['assess']['robotstxt'];
+		if ( ! $this->query_cache['states']['robotsmeta']['nofollow'] ) {
+			if ( $this->query_cache['states']['robotsmeta']['noindex'] ) {
+				$item['status']            = \The_SEO_Framework\Interpreters\SeoBar::STATE_OKAY;
+				$item['assess']['noindex'] = $cache['assess']['noindex'];
+			}
+
+			if (  $robots_global['hasrobotstxt'] ) {
+				// Don't change status, we do not parse the robots.txt file. Merely disclaim.
+				$item['assess']['robotstxt'] = $cache['assess']['robotstxt'];
+			}
 		}
 
 		return $item;
@@ -775,7 +790,7 @@ final class SeoBar_Page extends SeoBar {
 					'site'      => \__( 'Archiving is discouraged for the whole site at the SEO Settings screen.', 'autodescription' ),
 					'posttype'  => \__( 'Archiving is discouraged for this post type at the SEO Settings screen.', 'autodescription' ),
 					'override'  => \__( 'The SEO meta input overrides the archiving state.', 'autodescription' ),
-					'noindex'   => \__( 'The page may not be indexed, this may also discourages archiving.', 'autodescription' ),
+					'noindex'   => \__( 'The page may not be indexed, this may also discourage archiving.', 'autodescription' ),
 				],
 				'reason'   => [
 					'notpublic'    => \__( 'WordPress overrides the robots directive.', 'autodescription' ),
@@ -788,7 +803,7 @@ final class SeoBar_Page extends SeoBar {
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
 						'reason' => \__( 'Page may be archived.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( 'The robots meta allows archiving.', 'autodescription' ),
+							'base' => \__( 'The robots meta tag allows archiving.', 'autodescription' ),
 						],
 					],
 					'noarchive' => [
@@ -797,7 +812,7 @@ final class SeoBar_Page extends SeoBar {
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN,
 						'reason' => \__( 'Page may not be archived.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( 'The robots meta does not allow archiving.', 'autodescription' ),
+							'base' => \__( 'The robots meta tag does not allow archiving.', 'autodescription' ),
 						],
 					],
 					'draft'     => [
@@ -871,14 +886,16 @@ final class SeoBar_Page extends SeoBar {
 			$item['assess']['override'] = $cache['assess']['override'];
 		}
 
-		if ( $this->query_cache['states']['robotsmeta']['noindex'] ) {
-			$item['status']            = \The_SEO_Framework\Interpreters\SeoBar::STATE_OKAY;
-			$item['assess']['noindex'] = $cache['assess']['noindex'];
-		}
+		if ( ! $this->query_cache['states']['robotsmeta']['noarchive'] ) {
+			if ( $this->query_cache['states']['robotsmeta']['noindex'] ) {
+				$item['status']            = \The_SEO_Framework\Interpreters\SeoBar::STATE_OKAY;
+				$item['assess']['noindex'] = $cache['assess']['noindex'];
+			}
 
-		if ( ! $this->query_cache['states']['robotsmeta']['noarchive'] && $robots_global['hasrobotstxt'] ) {
-			// Don't change status, we do not parse the robots.txt file. Merely disclaim.
-			$item['assess']['robotstxt'] = $cache['assess']['robotstxt'];
+			if ( $robots_global['hasrobotstxt'] ) {
+				// Don't change status, we do not parse the robots.txt file. Merely disclaim.
+				$item['assess']['robotstxt'] = $cache['assess']['robotstxt'];
+			}
 		}
 
 		return $item;
