@@ -350,7 +350,7 @@ class Generate_Image extends Generate_Url {
 		 *    array   cbs:      The callbacks to parse. Ideally be generators, so we can halt remotely.
 		 *    array   fallback: The callbacks to parse. Ideally be generators, so we can halt remotely.
 		 * ];
-		 * @param array|null $args    The query arguments. Contians 'id' and 'taxonomy'.
+		 * @param array|null $args    The query arguments. Contains 'id' and 'taxonomy'.
 		 *                            Is null when query is autodetermined.
 		 * @param string     $context The filter context. Default 'social'.
 		 *                            May be (for example) 'breadcrumb' or 'article' for structured data.

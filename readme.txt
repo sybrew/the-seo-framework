@@ -305,8 +305,6 @@ TODO index.php stuff
 TODO do something nicer with interpret_status_to_symbol()
 TODO add media handler to auto-fill the input data for tooltip dynamically (tooltip-text="<img src=src style=max-width:200;max-height:200/>")
 
-TODO https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/14 "on a custom post type archive, TSF outputs structured data of the first post in the list."
-
 TODO transform .rtl css from simple files to a single file, like post.css' `.tsf-social-image-buttons{}`.
 
 **Detailed log:**
@@ -380,7 +378,7 @@ TODO transform .rtl css from simple files to a single file, like post.css' `.tsf
 	* SEO meta generation no longer occurs when using Customizer.
 	* **Term meta:**
 		* When a term is disabled via the post type settings, saving it won't erase the custom SEO term meta.
-			* The same behavior already applied to singular post types.
+			* The same behavior already applied to singular post items.
 	* **Redirects:** When a post is redirected, it will no longer be included in the sitemap. So, you no longer have to fiddle with the "index" setting to get the expected result.
 	* **Sitemap:**
 		* The sitemap post limit now counts all posts, pages, and custom post types; instead of them separately.
@@ -449,6 +447,8 @@ TODO transform .rtl css from simple files to a single file, like post.css' `.tsf
 		* Reordered the Homepage Settings metabox tabs to be more in line with the Post Meta Settings metabox.
 		* Some option headers are now better aligned to the center.
 		* We now thoroughly exclaim what the sitemap is and isn't for.
+		* Google+ is deceased, so we added an icon indicating that, cleared the placeholder, and removed the assumed profile redirection link.
+			* We didn't remove the option, because you may practically add a link to a non-Google+ profile. We'll transform these options to an array of inputs when anything goes for Google's Knowledge Graph.
 	* **Performance:**
 		* The SEO Bar now loads quicker, as redundant checks have been removed.
 		* We offloaded a large portion of the admin-sided PHP scripts to different objects, freeing up RAM and lowering plugin boot-time.
@@ -551,8 +551,9 @@ TODO transform .rtl css from simple files to a single file, like post.css' `.tsf
 	* **Usability:**
 		* **Settings:**
 			* The global category and tag `noarchive` options now have an effect.
-			* The global category and tag `noindex` options no longer set `noarchive` automatically, too.
-			* The post type robots-meta and disable-seo settings now only apply to taxonomies that have all their shared post types set, instead of just the post type of the most recent post published.
+			* The global category and tag `noindex` options no longer set `noarchive` automatically, too. Albeit, that's implied.
+			* The post type robots-meta and disable-seo settings now only apply to taxonomies and terms that have all their shared post types set, instead of just the post type of the most recent post published.
+				* The settings screens' contextual information reflect this change.
 		* **Meta:**
 			* When you re-save a pre-escaped HTML input in the title or meta-fields, they will no longer be reparsed.
 				* Before: `&amp;mdash;` -> `&amp;mdash;` -> `&mdash;` -> `—`
@@ -562,7 +563,7 @@ TODO transform .rtl css from simple files to a single file, like post.css' `.tsf
 				* We couldn't leave this separator in as it was obstructing a security feature. To secure the title's output, without losing any information you put it, we relied on WordPress texturization options.
 					* We could extrude that from WordPress' texturization, but that'd cause discrepancy, and, as such, it wouldn't be sustainable.
 			* The post status is now correctly refreshed after using quick-edit.
-			* The primary term ID is now correctly preassigned for posts that have been created when this plugin wasn't active.
+			* The primary term ID is now correctly visually preassigned for posts that have been created when this plugin wasn't active.
 	* **Nitpicking:**
 		* The sitemap's XSL stylesheet no longer uses the latest post ID to determine the title generation; instead, it always adds your blog name to the right.
 		* The sitemap now can't exceed the imposed 50,000 limit; unless you use custom filters to extend the sitemap beyond that.
@@ -578,6 +579,7 @@ TODO transform .rtl css from simple files to a single file, like post.css' `.tsf
 			* Now, we are able to finally implement Polylang's broken system for the sitemap. As such, all sitemaps now work with Polylang.
 				* Keep in mind, however, that you may wish to enable the "Hide URL language information for default language" option to remove the base language requirement to output the main language's sitemap.
 			* Thanks to [Yoast's broken and misrepresenting NGINX rules](https://kb.yoast.com/kb/xml-sitemaps-nginx/), we received too many support inquiries and negative responses as it's not interchangable; so, we made them.
+		* TODO When using Jetpack's Publicize or Verification tools, we will now remove their meta tags when the output conflicts.
 * **Not fixed:**
 	* **Note:** These bugs are edge-cases that were found during "breaking sessions". The overhead required to fix these is currently too high for further consideration.
 	* **Titles:**

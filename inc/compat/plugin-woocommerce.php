@@ -43,7 +43,7 @@ function _init_wc_compat() {
  *    array   cbs:      The callbacks to parse. Ideally be generators, so we can halt remotely.
  *    array   fallback: The callbacks to parse. Ideally be generators, so we can halt remotely.
  * ];
- * @param array|null $args The query arguments. Contians 'id' and 'taxonomy'.
+ * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
  *                         Is null when query is autodetermined.
  * @return array $params
  */

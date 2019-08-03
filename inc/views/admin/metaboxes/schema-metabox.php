@@ -193,11 +193,10 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Connected Social Pages', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( "Don't have a page at a site or is the profile only privately accessible? Leave that field empty. Unsure? Fill it in anyway.", 'autodescription' ) );
-		$this->description( __( 'Add the link that leads directly to the social page of this website.', 'autodescription' ) );
+		$this->description( __( 'Add links that lead directly to the connected social pages of this website.', 'autodescription' ) );
 		$this->description( __( 'These settings do not affect sharing behavior with the social networks.', 'autodescription' ) );
 
 		$connectedi18n = _x( 'RelatedProfile', 'No spaces. E.g. https://facebook.com/RelatedProfile', 'autodescription' );
-		$profile18n    = _x( 'Profile', 'Social Profile', 'autodescription' );
 
 		/**
 		 * @todo maybe genericons?
@@ -206,63 +205,63 @@ switch ( $instance ) :
 			'facebook'   => [
 				'option'      => 'knowledge_facebook',
 				'dashicon'    => 'dashicons-facebook',
-				'desc'        => 'Facebook ' . __( 'Page', 'autodescription' ),
+				'desc'        => __( 'Facebook Page', 'autodescription' ),
 				'placeholder' => 'https://www.facebook.com/' . $connectedi18n,
 				'examplelink' => 'https://www.facebook.com/me',
 			],
 			'twitter'    => [
 				'option'      => 'knowledge_twitter',
 				'dashicon'    => 'dashicons-twitter',
-				'desc'        => 'Twitter ' . $profile18n,
+				'desc'        => __( 'Twitter Profile', 'autodescription' ),
 				'placeholder' => 'https://twitter.com/' . $connectedi18n,
 				'examplelink' => 'https://twitter.com/home', // No example link available.
 			],
 			'gplus'      => [
 				'option'      => 'knowledge_gplus',
 				'dashicon'    => 'dashicons-googleplus',
-				'desc'        => 'Google+ ' . $profile18n,
-				'placeholder' => 'https://plus.google.com/' . $connectedi18n,
-				'examplelink' => 'https://plus.google.com/me',
+				'desc'        => _x( 'Google+ Profile&#8224;', 'Google+ is dead. &#8224; is a cross, indicating that.', 'autodescription' ),
+				'placeholder' => '',
+				'examplelink' => 'https://plus.google.com/me', // Left in, as Google redirects you to their deceased information page.
 			],
 			'instagram'  => [
 				'option'      => 'knowledge_instagram',
 				'dashicon'    => 'genericon-instagram',
-				'desc'        => 'Instagram ' . $profile18n,
+				'desc'        => __( 'Instagram Profile', 'autodescription' ),
 				'placeholder' => 'https://instagram.com/' . $connectedi18n,
 				'examplelink' => 'https://instagram.com/', // No example link available.
 			],
 			'youtube'    => [
 				'option'      => 'knowledge_youtube',
 				'dashicon'    => 'genericon-youtube',
-				'desc'        => 'Youtube ' . $profile18n,
+				'desc'        => __( 'Youtube Profile', 'autodescription' ),
 				'placeholder' => 'https://www.youtube.com/channel/' . $connectedi18n,
 				'examplelink' => 'https://www.youtube.com/user/%2f', // Yes a double slash.
 			],
 			'linkedin'   => [
 				'option'      => 'knowledge_linkedin',
 				'dashicon'    => 'genericon-linkedin-alt',
-				'desc'        => 'LinkedIn ' . $profile18n,
+				'desc'        => __( 'LinkedIn Profile', 'autodescription' ),
 				'placeholder' => 'https://www.linkedin.com/in/' . $connectedi18n,
 				'examplelink' => 'https://www.linkedin.com/profile/view',
 			],
 			'pinterest'  => [
 				'option'      => 'knowledge_pinterest',
 				'dashicon'    => 'genericon-pinterest-alt',
-				'desc'        => 'Pinterest ' . $profile18n,
+				'desc'        => __( 'Pinterest Profile', 'autodescription' ),
 				'placeholder' => 'https://www.pinterest.com/' . $connectedi18n . '/',
 				'examplelink' => 'https://www.pinterest.com/me/',
 			],
 			'soundcloud' => [
 				'option'      => 'knowledge_soundcloud',
 				'dashicon'    => 'genericon-cloud', // I know, it's not the real one. D:
-				'desc'        => 'SoundCloud ' . $profile18n,
+				'desc'        => __( 'SoundCloud Profile', 'autodescription' ),
 				'placeholder' => 'https://soundcloud.com/' . $connectedi18n,
 				'examplelink' => 'https://soundcloud.com/you',
 			],
 			'tumblr'     => [
 				'option'      => 'knowledge_tumblr',
 				'dashicon'    => 'genericon-tumblr',
-				'desc'        => 'Tumblr ' . __( 'Blog', 'autodescription' ),
+				'desc'        => __( 'Tumblr Blog', 'autodescription' ),
 				'placeholder' => 'https://www.tumblr.com/blog/' . $connectedi18n,
 				'examplelink' => 'https://www.tumblr.com/dashboard',  // No example link available.
 			],

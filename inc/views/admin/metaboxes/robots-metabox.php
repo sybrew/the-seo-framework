@@ -152,7 +152,7 @@ switch ( $instance ) :
 
 		<h4><?php esc_html_e( 'Post Type Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'These settings are applied to the post type pages and their terms.', 'autodescription' ) );
+		$this->description( __( 'These settings are applied to the post type pages and their terms. When terms are shared between post types, all their post types should be checked for this to have an effect.', 'autodescription' ) );
 
 		$option_id = $this->get_robots_post_type_option_id( $ro_value );
 
