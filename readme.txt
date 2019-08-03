@@ -379,6 +379,7 @@ TODO transform .rtl css from simple files to a single file, like post.css' `.tsf
 		* Moreover, these resized images weren't registered with WordPress.
 		* When images are found to be over 4096 pixels in width or height, they'll be discarded.
 	* SEO meta generation no longer occurs when using Customizer.
+	* Redirects may now be set and performed on protocols other than `http` and `https`.
 	* **Term meta:**
 		* When a term is disabled via the post type settings, saving it won't erase the custom SEO term meta.
 			* The same behavior already applied to singular post items.
@@ -492,6 +493,10 @@ TODO transform .rtl css from simple files to a single file, like post.css' `.tsf
 				* Added page builder state checks.
 				* Added page protective state empty checks.
 				* Added a disclaimer to the description length calculation, as it's not using pixels.
+				* TODO Improved duplicated words check:
+					* TODO use regex's built in unicode-case support to find (or loop over) duplicates?
+						* What I got thus far: `(?:^.*?)(\w+)(*COMMIT)(*PRUNE)((?:[^\1\P{Z}]+)(\1)){3,}(?:.*?$)`, `(\w+)(?=(?:.+?)(\1){3,})`, etc.
+						* Latin test sentence: `two one one one two two two three three three four four four five five five six six six seven seven seven eight eight eight nine nine nine`
 			* **Indexing:**
 				* Added meta override checks.
 				* Added literal exclaiming when WordPress overrules the SEO settings.
@@ -574,6 +579,7 @@ TODO transform .rtl css from simple files to a single file, like post.css' `.tsf
 			* This may not yield effective on every site, depending on the PHP configuration.
 		* Redirects no longer occur when using the Customizer.
 			* WordPress already has a protection against this by bouncing you back; but, you can now preview the page.
+		* The notice-dismiss button color is now the same as WordPress' default.
 	* **Compatibility:**
 		* We took our hands off the WordPress Rewrite system. All plugin conflicts related to this are no longer our problem--albeit, it never was our fault.
 			* Now, we are able to finally implement Polylang's broken system for the sitemap. As such, all sitemaps now work with Polylang.
@@ -603,6 +609,16 @@ TODO transform .rtl css from simple files to a single file, like post.css' `.tsf
 	* **Filters:**
 		* When using custom meta title or meta description filters, they may not be processed for the meta input fields.
 			* Fixing this requires restructuring the custom title and description methods with flags.
+	* **Redirects:**
+		* We're not detecting whether a redirect will loop back to the current page.
+			* To do this accurately, we need to predict whether the endpoint leads to any of the plausible endpoints WordPress supports. This is expensive on your CPU.
+			* WordPress' rewrite system also has autocompletion, among other features, that will force us to follow the redirect internally before sending it out.
+			* And last but not least, we can't detect wether a query parameter is handled further by other systems embedded, like translation plugins.
+			* To resolve all of the above, we could send a custom "Redirect by" and "Redirecting to" headers, and test for that to prevent a loop. Unfortunately, these headers are volatile when WordPress or other plugins take over (multiple endpoints, autocompletion, etc.), nullifying this effort.
+			* To conclude, just make sure you don't point the redirect URL to the page itself.
+		* We're not detecting whether redirects are initiated on post-as-archive pages, like the blog page, or the WooCommerce product page.
+			* Redirecting such pages may cause unexpected behavior on subsequent endpoints that rely on these pages as their base points.
+			* This also accounts for many other pages, like those, which are based on a custom field or shortcode.
 
 **For translators:**
 
@@ -724,9 +740,9 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 					* `get_tt_scripts()`
 					* `get_ays_scripts()`
 					* `get_list_edit_scripts()`
-					* `get_settings_scripts()`
-					* `get_post_scripts()`
-					* `get_term_scripts()`
+					* `get_seo_settings_scripts()`
+					* `get_post_edit_scripts()`
+					* `get_term_edit_scripts()`
 					* `get_gutenberg_compat_scripts()`
 					* `get_media_scripts()`
 					* `get_title_scripts()`
@@ -934,24 +950,20 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `s_facebook_profile()` No longer returns a plain Facebook URL when the entry path is sanitized to become empty.
 			* `s_relative_url()` no longer trims the prepending `/`.
 			* `s_redirect_url()`
-				1. No longer lets through double-absolute URLs (e.g. `https://google.com/https://google.com/path/to/file/`) when filter `the_seo_framework_allow_external_redirect` is set to false.
-					* This isn't a security issue, `do_redirect()` always prepended the local host for sanity.
-				1. Now tests URL schemes case-insensitive.
+				1. Removed rudimentary relative URL testing.
+				1. Removed input transformation filters, and with that, removed redundant multisite spam protection.
+				1. Now allows all protocols. Enjoy!
+				1. Now no longer lets through double-absolute URLs (e.g. `https://google.com/https://google.com/path/to/file/`) when filter `the_seo_framework_allow_external_redirect` is set to false.
+					* This isn't a security issue, `do_redirect()` always prepended (and still does prepend) the local host for sanity.
 			* `has_robots_txt()`, now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
 			* `has_sitemap_xml()`, now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
 			* `is_term_meta_capable()` no longer incorrectly determines post type archives as capable; they aren't considered term taxonomies, because they don't yield taxonomies, but solely post types.
-			* `is_category_admin()`
-				1. Removed caching.
-			* `is_page()`
-				1. Now tests for hierarchical post types, which is more reliable.
-			* `is_single()`
-				1. Now tests for nonhierarchical post types, which is more reliable.
-			* `is_singular()`
-				1. No longer processes integers as input.
-			* `is_singular_admin()`
-				1. Removed first parameter.
-			* `is_tag_admin()`
-				1. Removed caching.
+			* `is_category_admin()` removed caching.
+			* `is_page()`, now tests for hierarchical post types, which is more reliable.
+			* `is_single()` now tests for nonhierarchical post types, which is more reliable.
+			* `is_singular()` now no longer processes integers as input.
+			* `is_singular_admin()` removed first parameter.
+			* `is_tag_admin()` removed caching.
 			* `is_wc_product()`
 				1. Added admin support.
 				1. Added a parameter for the Post ID or post to test.
@@ -959,10 +971,8 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `get_available_twitter_cards()`
 				1. Now only asserts the social titles as required.
 				1. Now always returns an array, instead of a boolean (false) on failure.
-			* `nav_tab_wrapper()`
-				1. Deprecated third parameter, silently.
-			* `get_word_count()`
-				1. Now expects PCRE UTF-8 encoding support.
+			* `nav_tab_wrapper()`, deprecated third parameter, silently.
+			* `get_word_count()` now expects PCRE UTF-8 encoding support.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`
@@ -1161,6 +1171,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* `the_seo_framework_allow_states`, use the action handler instead.
 		* `the_seo_framework_ogimage_output`, use the new image generator, instead.
 		* `the_seo_framework_twitterimage_output`, use the new image generator, instead.
+		* `the_seo_framework_sanitize_redirect_args`, this was obstructing sanity.
 * **Rewrite notes:**
 	* **Removed:**
 		* All WordPress rewrite manipulation.
@@ -1181,7 +1192,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* This also alleviates some strain on your server, as we don't have to blindly fill states and values for all requests every time.
 		* And, most importantly, maintaining the code will be much easier; so, we can deploy faster with fewer errors.
 		* Last but not least, WordPress is moving from plain HTML and PHP to JS. We need to get ourselves well prepared for this shift.
-		* TODO clean up RTL scripts? It's redundant having a change for only one CSS rule; offload it to `.rtl ...` (which is slower...)?
+		* We cleaned up the RTL-specific scripts, and embedded an RTL body-class check instead in the LTR scripts. This is slightly slower, but decreases the heft of the plugin package significantly.
 		* Affected files, both `.css` and `.js` (and their `*.min.*` equivalents):
 			* `ays` - meaning "Are you sure?", these files handle on-navigation alerts, so to prevent loss of data.
 				* **Namespaces:** `window.tsfAys` and `window.tsfAysL10n`

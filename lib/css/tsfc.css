@@ -55,10 +55,14 @@
 
 /* START Pixel Counters */
 
-/*Temporarily fix.*/
+/* Temporarily fix for SEO settings page. */
 .tsf-tabs-content .tsf-pixel-counter-wrap {
 	margin-left: 1px;
 	max-width: 99%;
+}
+body.rtl .tsf-tabs-content .tsf-pixel-counter-wrap {
+	margin-left: 0;
+	margin-right: 1px;
 }
 
 .tsf-pixel-shadow-wrap {
@@ -124,6 +128,12 @@
 	font-family: arial,helvetica,sans-serif;
 	font-size: 18px;
 	font-weight: 400;
+}
+
+body.rtl .tsf-description-pixel-counter-shadow,
+body.rtl .tsf-title-pixel-counter-shadow {
+	left: initial;
+	right: 0;
 }
 
 .tsf-description-pixel-counter-shadow {

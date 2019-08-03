@@ -106,7 +106,7 @@ final class Scripts {
 		if ( $tsf->is_post_edit() ) {
 			static::prepare_media_scripts();
 
-			$_scripts[] = static::get_post_scripts();
+			$_scripts[] = static::get_post_edit_scripts();
 			$_scripts[] = static::get_media_scripts();
 			$_scripts[] = static::get_title_scripts();
 			$_scripts[] = static::get_description_scripts();
@@ -122,7 +122,7 @@ final class Scripts {
 		} elseif ( $tsf->is_term_edit() ) {
 			static::prepare_media_scripts();
 
-			$_scripts[] = static::get_term_scripts();
+			$_scripts[] = static::get_term_edit_scripts();
 			$_scripts[] = static::get_media_scripts();
 			$_scripts[] = static::get_title_scripts();
 			$_scripts[] = static::get_description_scripts();
@@ -137,7 +137,7 @@ final class Scripts {
 			static::prepare_media_scripts();
 			static::prepare_metabox_scripts();
 
-			$_scripts[] = static::get_settings_scripts();
+			$_scripts[] = static::get_seo_settings_scripts();
 			$_scripts[] = static::get_media_scripts();
 			$_scripts[] = static::get_title_scripts();
 			$_scripts[] = static::get_description_scripts();
@@ -240,7 +240,7 @@ final class Scripts {
 				'type'     => 'css',
 				'deps'     => [ 'tsf-tt' ],
 				'autoload' => true,
-				'hasrtl'   => true,
+				'hasrtl'   => false,
 				'name'     => 'tsf',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 				'ver'      => THE_SEO_FRAMEWORK_VERSION,
@@ -391,7 +391,7 @@ final class Scripts {
 	 *
 	 * @return array The script params.
 	 */
-	public static function get_settings_scripts() {
+	public static function get_seo_settings_scripts() {
 
 		$tsf = \the_seo_framework();
 
@@ -428,7 +428,7 @@ final class Scripts {
 				'type'     => 'css',
 				'deps'     => [ 'tsf', 'tsf-tt', 'wp-color-picker' ],
 				'autoload' => true,
-				'hasrtl'   => true,
+				'hasrtl'   => false,
 				'name'     => 'settings',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 				'ver'      => THE_SEO_FRAMEWORK_VERSION,
@@ -443,7 +443,7 @@ final class Scripts {
 	 *
 	 * @return array The script params.
 	 */
-	public static function get_post_scripts() {
+	public static function get_post_edit_scripts() {
 
 		$tsf = \the_seo_framework();
 		$id  = $tsf->get_the_real_ID();
@@ -497,7 +497,7 @@ final class Scripts {
 				'type'     => 'css',
 				'deps'     => [ 'tsf-tt', 'tsf' ],
 				'autoload' => true,
-				'hasrtl'   => true,
+				'hasrtl'   => false,
 				'name'     => 'post',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 				'ver'      => THE_SEO_FRAMEWORK_VERSION,
@@ -520,7 +520,7 @@ final class Scripts {
 	 *
 	 * @return array The script params.
 	 */
-	public static function get_term_scripts() {
+	public static function get_term_edit_scripts() {
 
 		$tsf = \the_seo_framework();
 
@@ -997,7 +997,7 @@ final class Scripts {
 				'type'     => 'css',
 				'deps'     => [ 'tsf-tt' ],
 				'autoload' => true,
-				'hasrtl'   => true,
+				'hasrtl'   => false,
 				'name'     => 'tsfc',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 				'ver'      => THE_SEO_FRAMEWORK_VERSION,

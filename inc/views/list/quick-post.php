@@ -49,7 +49,7 @@ $robots_settings = [
 				<?php
 				foreach ( $robots_settings as $_setting ) :
 					// This is bad accessibility, but it's exactly as bad as WP is, and we don't want to stray away from their standards.
-					echo '<label>';
+					echo '<label class=clear>';
 						printf( '<span class=title>%s</span>', esc_html( $_setting['label'] ) );
 						// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
 						echo $this->make_single_select_form( [

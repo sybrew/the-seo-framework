@@ -79,6 +79,11 @@
 	margin-left: 1px;
 }
 
+body.rtl .tsf-social-image-buttons {
+	margin-right: 1px;
+	margin-left: 0px;
+}
+
 .tsf-flex-setting-input textarea {
 	max-height: 250px;
 }

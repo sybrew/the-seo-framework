@@ -1397,13 +1397,16 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
-	 * Sanitizes the Redirect URL
+	 * Sanitizes the Redirect URL.
 	 *
 	 * @since 2.2.4
 	 * @since 2.8.0 Method is now public.
 	 * @since 3.0.6 Noqueries is now disabled by default.
-	 * @since 3.3.0 : 1. Now always expects a fully qualified URL, and as such, it uses `set_url_scheme()`
-	 *                2. Now tests URL schemes case-insensitive.
+	 * @since 3.3.0 : 1. Removed rudimentary relative URL testing.
+	 *                2. Removed input transformation filters, and with that, removed redundant multisite spam protection.
+	 *                3. Now allows all protocols. Enjoy!
+	 *                4. Now no longer lets through double-absolute URLs (e.g. `https://google.com/https://google.com/path/to/file/`)
+	 *                   when filter `the_seo_framework_allow_external_redirect` is set to false.
 	 *
 	 * @param string $new_value String with potentially unwanted redirect URL.
 	 * @return string The Sanitized Redirect URL
@@ -1413,54 +1416,20 @@ class Sanitize extends Admin_Pages {
 		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
 		$url = strip_tags( $new_value );
 
-		if ( $url ) :
-			$_allow_external = $this->allow_external_redirect();
-			// Sanitize the redirect URL to only a relative link and removes first slash.
-			if ( ! $_allow_external ) {
-				$url         = $this->set_url_scheme( $url, 'relative' );
-				$is_relative = true;
-			} else {
-				// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
-				//* URL pattern excluding path.
-				$pattern = '/'
-						 . '^'                  // 0: Start of string.
-						 . '((https?)?\:)?'     // 1: maybe http:/https:
-						 . '(\/\/)?'            // 2: maybe slash slash
-						 . '(.*\.[a-z0-9]*)'    // 3: any qualified (sub+)domain with tld
-						 . '/i';
-				// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
+		if ( ! $url ) return '';
 
-				$is_relative = ! preg_match( $pattern, $url );
-			}
+		// This is checked when redirecting, as well.
+		if ( ! $this->allow_external_redirect() )
+			$url = $this->set_url_scheme( $url, 'relative' );
 
-			//* If link is relative, make it full again by prepending the current home path.
-			if ( $is_relative ) {
+		$new_url = $this->convert_to_url_if_path( $url );
 
-				//* The URL is a relative path
-				$path = $url;
-
-				/**
-				 * Filters arguments for sanitation of the redirection URL.
-				 *
-				 * @since 2.8.0
-				 * When using filter `the_seo_framework_allow_external_redirect`, this will have no effect.
-				 *
-				 * @param array  $custom_url : { 'url' => The full URL built from $path, 'scheme' => The preferred scheme }
-				 * @param string $path       The current URL path, which won't be readded if this filter is used.
-				 */
-				$custom_url = (array) \apply_filters( 'the_seo_framework_sanitize_redirect_args', [], ltrim( $path, ' /' ) );
-
-				if ( $_allow_external && $custom_url ) {
-					$url    = $custom_url['url'];
-					$scheme = $custom_url['scheme'] ?: '';
-				} else {
-					$url    = \trailingslashit( $this->get_homepage_permalink() ) . ltrim( $path, ' /' );
-					$scheme = $this->is_ssl() ? 'https' : 'http';
-				}
-
-				$url = $this->set_url_scheme( $url, $scheme );
-			}
-		endif;
+		// Only adjust scheme if it used to be relative.
+		if ( $new_url !== $url ) {
+			$url = $this->set_preferred_url_scheme( $new_url );
+		} else {
+			$url = $new_url;
+		}
 
 		/**
 		 * @since 2.5.0

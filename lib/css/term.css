@@ -31,7 +31,7 @@
 	width: 95%; /* calc -2px... meh */
 }
 
-.rtl .tsf-term-checkbox-wrap {
+body.rtl .tsf-term-checkbox-wrap {
 	margin-left: 0;
 	margin-right: 2px;
 }

@@ -10,9 +10,12 @@
 	vertical-align: top;
 }
 
-.tsf-top-wrap > h1,
-.tsf-top-wrap > h2 {
+.tsf-top-wrap > h1 {
 	float: left;
+}
+
+body.rtl .tsf-top-wrap > h1 {
+	float: right;
 }
 
 .tsf-metaboxes .metabox-holder {
@@ -23,8 +26,16 @@
 	float: right;
 }
 
+body.rtl .tsf-top-button {
+	float: left;
+}
+
 .tsf-bottom-buttons {
 	text-align: right;
+}
+
+body.rtl .tsf-bottom-buttons {
+	text-align: left;
 }
 
 .tsf-metaboxes .tsf-top-buttons input,
@@ -134,6 +145,12 @@
 	background: #f1f1f1;
 	color: #555;
 	font-weight: 600;
+}
+
+body.rtl .tsf-nav-tab {
+	float: right;
+	margin-left: 0;
+	margin-right: .5em;
 }
 
 .tsf-nav-desktop {
