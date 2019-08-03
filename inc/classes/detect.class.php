@@ -39,7 +39,7 @@ class Detect extends Render {
 	 *
 	 * @since 2.6.1
 	 * @staticvar array $active_plugins
-	 * @credits JetPack for most code.
+	 * @credits Jetpack for most code.
 	 *
 	 * @return array List of active plugins.
 	 */
@@ -70,7 +70,7 @@ class Detect extends Render {
 	 * Filterable list of conflicting plugins.
 	 *
 	 * @since 2.6.0
-	 * @credits JetPack for most code.
+	 * @credits Jetpack for most code.
 	 *
 	 * @return array List of conflicting plugins.
 	 */

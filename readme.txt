@@ -579,7 +579,8 @@ TODO transform .rtl css from simple files to a single file, like post.css' `.tsf
 			* Now, we are able to finally implement Polylang's broken system for the sitemap. As such, all sitemaps now work with Polylang.
 				* Keep in mind, however, that you may wish to enable the "Hide URL language information for default language" option to remove the base language requirement to output the main language's sitemap.
 			* Thanks to [Yoast's broken and misrepresenting NGINX rules](https://kb.yoast.com/kb/xml-sitemaps-nginx/), we received too many support inquiries and negative responses as it's not interchangable; so, we made them.
-		* TODO When using Jetpack's Publicize or Verification tools, we will now remove their meta tags when the output conflicts.
+		* When using Jetpack's Publicize, their Twitter Card and Open Graph tags are now outputted only when TSF's are disabled.
+			* When using TSF's Open Graph tags, Jetpack's Twitter Card meta tags are removed as well. As for why, see [this issue comment](https://github.com/Automattic/jetpack/issues/13146#issuecomment-516841698).
 * **Not fixed:**
 	* **Note:** These bugs are edge-cases that were found during "breaking sessions". The overhead required to fix these is currently too high for further consideration.
 	* **Titles:**

@@ -297,6 +297,18 @@ class Init extends Query {
 				\add_filter( 'wp_title', [ $this, 'get_wp_title' ], 9 );
 			}
 		}
+
+		if ( $this->get_option( 'og_tags' ) ) {
+			//* Disable Jetpack's Open Graph tags. But Sybre, compat files? Yes.
+			\add_filter( 'jetpack_enable_open_graph', '__return_false' );
+		}
+
+		if ( $this->get_option( 'twitter_tags' ) ) {
+			//* Disable Jetpack's Twitter Card tags. But Sybre, compat files? Maybe.
+			\add_filter( 'jetpack_disable_twitter_cards', '__return_true' );
+			// Future, maybe. See <https://github.com/Automattic/jetpack/issues/13146#issuecomment-516841698>
+			// \add_filter( 'jetpack_enable_twitter_cards', '__return_false' );
+		}
 	}
 
 	/**
