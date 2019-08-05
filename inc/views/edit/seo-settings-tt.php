@@ -253,7 +253,7 @@ $robots_settings = [
 
 		<tr class="form-field">
 			<th scope="row" valign="top">
-				<label for="autodescription-meta[social_image_url]">
+				<label for="autodescription_meta_socialimage-url">
 					<strong><?php esc_html_e( 'Social Image URL', 'autodescription' ); ?></strong>
 					<?php
 					echo ' ';
@@ -265,7 +265,7 @@ $robots_settings = [
 				</label>
 			</th>
 			<td>
-				<input name="autodescription-meta[social_image_url]" id="autodescription_meta_socialimage-url" type="text" placeholder="<?php echo esc_attr( $image_placeholder ); ?>" value="<?php echo esc_attr( $social_image_url ); ?>" size="40" autocomplete=off />
+				<input name="autodescription-meta[social_image_url]" id="autodescription_meta_socialimage-url" type="url" placeholder="<?php echo esc_attr( $image_placeholder ); ?>" value="<?php echo esc_attr( $social_image_url ); ?>" size="40" autocomplete=off />
 				<input type="hidden" name="autodescription-meta[social_image_id]" id="autodescription_meta_socialimage-id" value="<?php echo absint( $social_image_id ); ?>" disabled class="tsf-enable-media-if-js" />
 				<div class="hide-if-no-tsf-js tsf-term-button-wrap">
 					<?php

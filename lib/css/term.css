@@ -35,3 +35,25 @@ body.rtl .tsf-term-checkbox-wrap {
 	margin-left: 0;
 	margin-right: 2px;
 }
+
+@media only screen and (max-width: 782px) {
+	.tsf-term-button-wrap,
+	.tsf-term-select-wrap {
+		max-width: 100%;
+	}
+
+	.tsf-term-checkbox-wrap {
+		width: 100%;
+	}
+
+	/* WP forgotten template... TODO open trac ticket. */
+	.form-table td input[type="url"] {
+		width: 100%;
+		font-size: 16px;
+		line-height: 1.5;
+		padding: 7px 10px;
+		display: block;
+		max-width: none;
+		box-sizing: border-box;
+	}
+}

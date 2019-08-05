@@ -251,10 +251,6 @@ TODO:
 TODO: Re-minify JS files... Ugh Node.JS
 TODO: Re-minify CSS files... Ugh web services
 
-TODO, maybe: backslashes are double-stripped from SEO settings...: \\z -> \z -> z
-	TODO test if this is also the case in the SEO meta settings; definitely so for Focus??
-		* This is fixed for both Meta and Term descriptions; already noted in changelog.
-
 TODO explain why PHP 5.6 is now required.
 
 TODO "Want to opt out of future, infrequent, admin-only, non-recurring, and non-intrusive suggestions? Add this to your wp-config file: `define( 'TSF_DISABLE_SUGGESTIONS', true );`
@@ -301,14 +297,13 @@ TODO call "php level caching" memoization--it's a cooler word.
 
 TODO when the tooltip is squashed, it may again overflow vertically... See title tooltip:
 	* </wp-admin/edit-tags.php?taxonomy=pa_test&post_type=product>
+	* Punt? This is working as intended on every device we tested already... we can better ship with this bug than wait another week...
 
 TODO adjust the title & description guidelines when using summary instead of summary large image for Twitter?
+	-> Punt? When we rework the social aspect of this plugin...
 TODO index.php stuff
 
 TODO do something nicer with interpret_status_to_symbol()
-TODO add media handler to auto-fill the input data for tooltip dynamically (tooltip-text="<img src=src style=max-width:200;max-height:200/>")
-
-TODO transform .rtl css from simple files to a single file, like post.css' `.tsf-social-image-buttons{}`.
 
 **Detailed log:**
 
@@ -355,6 +350,7 @@ TODO transform .rtl css from simple files to a single file, like post.css' `.tsf
 			* Redirecting
 	* Multidimensional selection for robots-meta on posts, pages, and terms.
 	* A new accessibility feature for the SEO Bar. You can now convert the characters to symbols to discern warnings more easily.
+	* Image fields now have an image icon nearby. Hover over it (or tap it) to preview the image.
 	* After installing The SEO Framework, users who have `update_plugins` capabilities may now see a confirmation that the plugin's set up, and that there are installation instructions available.
 	* After upgrading The SEO Framework's database, users who have `update_plugins` capabilities may now see a confirmation notice that the site has been upgraded.
 	* Search engine pinging for the sitemap can now be offloaded to the WordPress cron-scheduler; this feature is enabled by default.
@@ -369,7 +365,7 @@ TODO transform .rtl css from simple files to a single file, like post.css' `.tsf
 	* We now support PHP v5.6 and later, instead of PHP v5.4 and later.
 	* Backslashes (back-solidus) are no longer stripped from post and term meta. Slash away!
 		* This also resolves an issue where the number of slashes are halved every time you update the post.
-		* Note that the site settings doesn't support this functionality, because WordPress implements PHP 4.x compatibility on options that strip them.
+		* Note that the site settings doesn't support this functionality, because WordPress implements PHP 4.x compatibility on options that strip them (this is explained as "not fixed" below).
 	* We switched the homepage title option name from left to right, and right to left.
 		* This doesn't affect your titles, it's only semantics.
 	* Schema.org logos may now be of any proportion, instead of only square, and cropping them must exceed 112px squared.
@@ -475,7 +471,6 @@ TODO transform .rtl css from simple files to a single file, like post.css' `.tsf
 		1. Perfect screen-reader support has been implemented.
 		1. When a part of the SEO Bar is red, it'll now halt and clear assessment and it'll tell you what to fix first.
 			* Now, you may need to fix multiple things, but you'll be guided through what needs immediate attention until it's blue, yellow, or green.
-			* TODO affirm this is the case with the robots states, and if all of these statements are 100% true?
 		1. The SEO Bar may now be altered and extended by other plugins and themes.
 		1. The SEO Bar is now regenerated in full when performing a quick or bulk edit.
 		1. Changed the assessments:
@@ -493,10 +488,7 @@ TODO transform .rtl css from simple files to a single file, like post.css' `.tsf
 				* Added page builder state checks.
 				* Added page protective state empty checks.
 				* Added a disclaimer to the description length calculation, as it's not using pixels.
-				* TODO Improved duplicated words check:
-					* TODO use regex's built in unicode-case support to find (or loop over) duplicates?
-						* What I got thus far: `(?:^.*?)(\w+)(*COMMIT)(*PRUNE)((?:[^\1\P{Z}]+)(\1)){3,}(?:.*?$)`, `(\w+)(?=(?:.+?)(\1){3,})`, etc.
-						* Latin test sentence: `two one one one two two two three three three four four four five five five six six six seven seven seven eight eight eight nine nine nine`
+				* Tweaked the duplicated-word checks, by bothering you less often on shorter words.
 			* **Indexing:**
 				* Added meta override checks.
 				* Added literal exclaiming when WordPress overrules the SEO settings.
@@ -603,6 +595,9 @@ TODO transform .rtl css from simple files to a single file, like post.css' `.tsf
 	* **Terms:**
 		* When all posts attached to a term have been excluded from being shown in archives, the term may be empty, and `noindex` will be set. The SEO Bar isn't aware of this, because it doesn't run such a query.
 			* Making it aware may slow your admin queries down significantly. We haven't found the time to see if this can be integrated via available queries.
+	* **Settings:**
+		* Back-solidi (`&#92;`) are not parsed correctly for the SEO Settings. This is because WordPress handles our sanitization for those settings, and they process slashes before sending the data to us.
+			* So, input this: `&#92;&#92;z`, and you get this: `&#92;z`. Save again, and you get this: `z`. In other words, try using `&amp;#92;`, instead.
 	* **Images:**
 		* When default social images are found to be too large, they'll be discarded, and no fallbacks will be used instead.
 			* Your input images must either be intentionally malformed, or the images are far too large (over 4096 pixels in width or height).
@@ -833,7 +828,6 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 					* `&collect_seo_bar_items()`
 					* `register_seo_bar_item()`
 					* `&edit_seo_bar_item()`
-			* TODO `\The_SEO_framework\InterPreters\HTML`
 	* **Removed classes:**
 		* `\The_SEO_Framework\Compat`
 			* Loading fewer PHP files is faster, ~0.00001s is saved.
@@ -870,8 +864,8 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `get_filtered_raw_generated_title()`
 			* `s_qubit()`, note: this method is not registered as an option filter!
 			* `s_bsol_raw()`, note: this method is not registered as an option filter!
-			* `get_field_data()`, internal use only. TODO move to interpreter?
-			* `make_single_select_form()` TODO move to interpreter?
+			* `get_field_data()`, internal use only.
+			* `make_single_select_form()`
 			* `get_post_types_from_taxonomy()`
 			* `get_generated_seo_bar()`
 			* `is_robots_meta_noindex_set_by_args()`
@@ -972,7 +966,12 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				1. Now only asserts the social titles as required.
 				1. Now always returns an array, instead of a boolean (false) on failure.
 			* `nav_tab_wrapper()`, deprecated third parameter, silently.
-			* `get_word_count()` now expects PCRE UTF-8 encoding support.
+			* `get_word_count()`
+				1. Now expects PCRE UTF-8 encoding support.
+				1. Moved filter outside of this function.
+				1. Short length now works as intended, instead of comparing as less, it compares as less or equal to.
+			* `get_social_image_uploader_form()` now adds a media preview dispenser.
+			* `get_logo_uploader_form()` now adds a media preview dispenser.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`
@@ -1103,8 +1102,6 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 	* **Added:**
 		* `the_seo_framework_sitemap_header`, runs in the sitemap HTTP header.
 		* `the_seo_framework_setting_notices`, runs below the settings header.
-* **WordPress hook notes:**
-	* TODO maybe? List all WP API callback changes: removal, added, changed. Good luck with the backtrace...
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_sitemap_path_prefix`, string.
@@ -1134,6 +1131,9 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `the_seo_framework_social_settings_tabs`
 			* `the_seo_framework_title_settings_tabs`
 		* `the_seo_framework_inpost_settings_tabs`, the second parameter is deprecated, and henceforth yields `null`.
+		* `the_seo_framework_bother_me_desc_length`
+			1. Now moved to the SEO Bar callers, and now only runs once per session.
+			1. The entered and default length is now counted as minimum, instead of minimum minus one.
 	* **Fixed:**
 		* `the_seo_framework_title_from_generation`, now works for:
 			1. the homepage title in the admin screens.
@@ -1186,7 +1186,6 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 * **Browser notes:**
 	* We've now officially abandoned support for Internet Explorer. Goodbye, old, annoying friend.
 		* To enhance support for other deprecated browsers along the way, we now use a body class we control: `tsf-js` and `tsf-no-js`. Now, this body class changes from `tsf-no-js` to `tsf-js` only when the browser supports ES2015.
-		* TODO clean up polyfills & fixes related to IE. (Done?)
 	* With our most excellent users moving to HTTP/2 and beyond, we're going to take full advantage of multiplexing by sending out more scripting files.
 		* More files is good, because we can selectively send out the files; so there's less code to parse in your browser on most requests.
 		* This also alleviates some strain on your server, as we don't have to blindly fill states and values for all requests every time.
@@ -1197,6 +1196,11 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `ays` - meaning "Are you sure?", these files handle on-navigation alerts, so to prevent loss of data.
 				* **Namespaces:** `window.tsfAys` and `window.tsfAysL10n`
 				* **Script ID:** `tsf-ays`
+			* `c`, these files handle the character and pixel counters.
+				* **Namespaces:** `window.tsfC` and `window.tsfCL10n`.
+				* **Script ID:** `tsf-c`
+				* Fun fact: The proposed name was `counter.js`, but uBlock blocks this script name by default.
+				* Note that this file is loaded conditionally, based on the user's settings.
 			* `post`, these files handle post SEO settings pages, mostly.
 				* **Namespaces:** `window.tsfPost` and `window.tsfPostL10n`.
 				* **Script ID:** `tsf-post`
@@ -1206,33 +1210,20 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `tsf`, these main files are now trimmed down to the most basic of forms per dependency requirements.
 				* **JS:**
 					* **Before:** 27.7KB minified, 2782 SLOC
-					* **After:** 2.4KB minified, (TODO TBD) 488 SLOC
+					* **After:** 2.4KB minified, 488 SLOC
 				* **CSS:**
 					* **Before:** 16.0KB minified, 1006 SLOC
-					* **After:** 6.15KB minfified, (TODO TBD) 427 SLOC
-			* `tsfc`, these files handle the character and pixel counters.
-				* **Namespaces:** `window.tsfC` and `window.tsfCL10n`.
-				* **Script ID:** `tsf-c`
-				* Fun fact: The proposed name was `counter.js`, but uBlock blocks this script name by default.
-				* Note that this file is loaded conditionally, based on the user's settings.
+					* **After:** 6.6KB minfified, 457 SLOC
 			* `settings`, these files handle the SEO Settings page, mostly.
 				* **Namespaces:** `window.tsfSettings` and `window.tsfSettingsL10n`.
 				* **Script ID:** `tsf-settings`
-			* TODO (PROPOSED):
-				* `seo-bar`, this file handles the SEO Bar.
-				* `quick-edit`, this file handles quick edits.
-				* `ajax`, this file handles communication with the server.
-			* TODO consider moving this to a relay method, which switches over all known scripts, cleaning up the code.
-				* Also remove the newly introduced methods, and use a single handler method `tsf->load_script( 'tsfc', $autoload );`
-				* Also silently deprecate the 3.1 methods, and forward the calls to the one above? TODO is this already done?
+			* `le` - meaning "List Edit", these files handle list edit page actions.
+				* **Namespaces:** `window.tsfLe` and `window.tsfLeL10n`
+				* **Script ID:** `tsf-le`
 		* Affected files, only `.js` (and their `*.min.*` equivalents):
 			* `description`, these files handle meta description inputs.
 				* **Namespaces:** `window.tsfDescription` and `window.tsfDescriptionL10n`.
 				* **Script ID:** `tsf-description`
-			* `le` - meaning "List Edit", these files handle list edit page actions.
-				* **Namespaces:** `window.tsfLe` and `window.tsfLeL10n`
-				* **Script ID:** `tsf-le`
-				* TODO may this gets CSS?
 			* `title`, these files handle meta title inputs.
 				* **Namespaces:** `window.tsfTitle` and `window.tsfTitleL10n`.
 				* **Script ID:** `tsf-title`
@@ -1342,6 +1333,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 					* `unsetAjaxLoader`
 					* `resetAjaxLoader`
 				* Related localization & attribution object: `tsfL10n`.
+			* Object `tsfGBC` now resides in `gbc.{.min}.js`, instead of `tsf-gbc{.min}.js`
 		* **Removed:**
 			* `tsf.[...]`:
 				* `tsf.counterType`, use `tsfC.counterType` instead.
@@ -1438,7 +1430,7 @@ Happy Holidays! [(╯°□°)╯︵ ┻┻](https://theseoframework.com/?p=2957)
 == Upgrade Notice ==
 
 = 3.3.0 =
-TODO This is a major upgrade. Make a backup of your database before updating. WordPress v4.9 (or higher) and PHP v5.6 (or higher) are now required. If you use the Extension Manager, update it to v2.TBA.TBA (or higher) before updating this plugin. Downgrading to v3.2.4 is possible, however with caveats.
+TODO This is a major upgrade. Make a backup of your database before updating. WordPress v4.9 (or higher) and PHP v5.6 (or higher) are now required. If you use the Extension Manager, update it to v2.TBA.TBA (or higher) before updating this plugin. Downgrading to v3.2.4 is possible, however with the caveat that the homepage title will flip its order.
 
 = 3.1.1 =
 This is a major upgrade. Make a backup of your database before upgrading. WordPress v4.6 (or greater) and PHP v5.4 (or greater) are now required. If you use the Extension Manager, update it to v1.5.2 (or greater) before upgrading this plugin. Downgrading to v3.0.6 possible.

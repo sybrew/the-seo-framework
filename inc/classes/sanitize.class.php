@@ -1418,7 +1418,7 @@ class Sanitize extends Admin_Pages {
 
 		if ( ! $url ) return '';
 
-		// This is checked when redirecting, as well.
+		// This is also checked when performing a redirect.
 		if ( ! $this->allow_external_redirect() )
 			$url = $this->set_url_scheme( $url, 'relative' );
 
@@ -1761,12 +1761,11 @@ class Sanitize extends Admin_Pages {
 			$cleaned_details[] = $this->s_image_details( $details );
 		}
 
-		$a = array_values(
+		return array_values(
 			array_intersect_key(
 				$cleaned_details,
 				array_unique( array_filter( array_column( $cleaned_details, 'url' ) ) )
 			)
 		);
-		return $a;
 	}
 }

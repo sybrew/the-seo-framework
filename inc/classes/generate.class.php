@@ -333,7 +333,7 @@ class Generate extends User_Data {
 		}
 
 		if ( $args['taxonomy'] ) {
-			$term = \get_term($args['id'], $args['taxonomy'] );
+			$term = \get_term( $args['id'], $args['taxonomy'] );
 			/**
 			 * Check if archive is empty: set noindex for those.
 			 */

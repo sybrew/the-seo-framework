@@ -74,7 +74,7 @@ function _init_tsf() {
 	 */
 	if ( \The_SEO_Framework\_can_load() ) {
 		if ( \is_admin() ) {
-			//! TODO: admin-only loader.
+			//! TODO: admin-only loader?
 			$tsf         = new \The_SEO_Framework\Load();
 			$tsf->loaded = true;
 

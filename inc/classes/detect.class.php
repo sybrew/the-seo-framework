@@ -845,11 +845,13 @@ class Detect extends Render {
 	 * @return array The post types with rewrite capabilities.
 	 */
 	protected function get_rewritable_post_types() {
+
 		static $cache = null;
-		//? array_values() because get_post_types() gives a sequential array.
+
 		return isset( $cache ) ? $cache : $cache = array_unique(
 			array_merge(
 				$this->get_forced_supported_post_types(),
+				//? array_values() because get_post_types() gives a sequential array.
 				array_values( (array) \get_post_types( [
 					'public'  => true,
 					'rewrite' => true,

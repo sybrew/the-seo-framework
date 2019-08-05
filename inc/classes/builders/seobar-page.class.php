@@ -341,8 +341,13 @@ final class SeoBar_Page extends SeoBar {
 			[
 				'params'   => [
 					/* translators: 1 = An assessment, 2 = Disclaimer, e.g. "take it with a grain of salt" */
-					'disclaim'  => \__( '%1$s (%2$s)', 'autodescription' ),
-					'estimated' => \__( 'Estimated from the number of characters found. The pixel counter asserts the true length.', 'autodescription' ),
+					'disclaim'   => \__( '%1$s (%2$s)', 'autodescription' ),
+					'estimated'  => \__( 'Estimated from the number of characters found. The pixel counter asserts the true length.', 'autodescription' ),
+					/**
+					 * @since 2.6.0
+					 * @param int $dupe_short The minimum stringlength of words to find as dupes.
+					 */
+					'dupe_short' => (int) \apply_filters( 'the_seo_framework_bother_me_desc_length', 3 ),
 				],
 				'assess'   => [
 					'empty'     => \__( 'There is no usable content, so no description could be generated.', 'autodescription' ),
@@ -430,7 +435,7 @@ final class SeoBar_Page extends SeoBar {
 		}
 
 		// Fetch words that are outputted more than 3 times.
-		$duplicated_words = static::$tsf->get_word_count( $desc );
+		$duplicated_words = static::$tsf->get_word_count( $desc, 3, 5, $cache['params']['dupe_short'] );
 
 		if ( $duplicated_words ) {
 			$dupes = [];

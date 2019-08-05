@@ -1010,6 +1010,7 @@ class Admin_Pages extends Profile {
 	 *
 	 * @since 2.8.0
 	 * @since 3.1.0 No longer prepares media l10n data.
+	 * @since 3.3.0 Now adds a media preview dispenser.
 	 *
 	 * @param string $input_id Required. The HTML input id to pass URL into.
 	 * @return string The image uploader button.
@@ -1041,6 +1042,11 @@ class Admin_Pages extends Profile {
 			]
 		);
 
+		$content .= vsprintf(
+			'<span class="tsf-tooltip-wrap"><span id="%1$s-preview" class="tsf-image-preview tsf-tooltip-item dashicons dashicons-format-image" data-for="%1$s"></span></span>',
+			$s_input_id
+		);
+
 		return $content;
 	}
 
@@ -1050,6 +1056,7 @@ class Admin_Pages extends Profile {
 	 *
 	 * @since 3.0.0
 	 * @since 3.1.0 No longer prepares media l10n data.
+	 * @since 3.3.0 Now adds a media preview dispenser.
 	 *
 	 * @param string $input_id Required. The HTML input id to pass URL into.
 	 * @return string The image uploader button.
@@ -1079,6 +1086,11 @@ class Admin_Pages extends Profile {
 				] ),
 				\esc_html__( 'Select Logo', 'autodescription' ),
 			]
+		);
+
+		$content .= vsprintf(
+			'<span class="tsf-tooltip-wrap"><span id="%1$s-preview" class="tsf-image-preview tsf-tooltip-item dashicons dashicons-format-image" data-for="%1$s"></span></span>',
+			$s_input_id
 		);
 
 		return $content;

@@ -335,13 +335,12 @@ class Generate_Ldjson extends Generate_Image {
 	 * Returns image URL suitable for Schema items.
 	 *
 	 * These are images that are strictly assigned to the Post or Page, fallbacks are omitted.
-	 * Themes should compliment these. If not, then Open Graph should at least
-	 * compliment these.
-	 * If that's not even true, then I don't know what happens. But then you're
-	 * in a grey area... @TODO make images optional for Schema?
+	 * Themes should compliment these. If not, then Open Graph should at least compliment these.
+	 * If that's not even true, then I don't know what happens. But then you're in a grey area...
 	 *
 	 * @since 3.3.0
 	 * @uses $this->get_image_details()
+	 * @ignore Not used internally, only externally.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
 	 *                            Leave null to autodetermine query.

@@ -186,12 +186,15 @@ final class Scripts {
 	 * @since 3.3.0
 	 * @uses static::decode_entities();
 	 *
-	 * @param array|string $values The entries to decode.
+	 * @param mixed $values The entries to decode.
 	 * @return mixed
 	 */
 	public static function decode_all_entities( $values ) {
 
-		foreach ( (array) $values as &$v ) {
+		if ( is_scalar( $values ) )
+			return static::decode_entities( $values );
+
+		foreach ( $values as &$v ) {
 			$v = static::decode_entities( $v );
 		}
 
@@ -581,7 +584,7 @@ final class Scripts {
 				'type'     => 'js',
 				'deps'     => [ 'jquery', 'tsf', 'tsf-post', 'wp-editor', 'wp-data', 'lodash', 'react' ],
 				'autoload' => true,
-				'name'     => 'tsf-gbc',
+				'name'     => 'gbc',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
 				'ver'      => THE_SEO_FRAMEWORK_VERSION,
 				'l10n'     => [
@@ -603,7 +606,7 @@ final class Scripts {
 		return [
 			'id'       => 'tsf-media',
 			'type'     => 'js',
-			'deps'     => [ 'jquery', 'media', 'tsf' ],
+			'deps'     => [ 'jquery', 'media', 'tsf-tt', 'tsf' ],
 			'autoload' => true,
 			'name'     => 'media',
 			'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -976,7 +979,7 @@ final class Scripts {
 				'type'     => 'js',
 				'deps'     => [ 'jquery', 'tsf-tt', 'tsf' ],
 				'autoload' => true,
-				'name'     => 'tsfc',
+				'name'     => 'c',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
 				'ver'      => THE_SEO_FRAMEWORK_VERSION,
 				'l10n'     => [
