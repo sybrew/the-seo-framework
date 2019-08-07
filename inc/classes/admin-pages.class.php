@@ -1174,4 +1174,131 @@ class Admin_Pages extends Profile {
 			]
 		);
 	}
+
+	/**
+	 * Calculates the social title and description placeholder values.
+	 * This is intricated, voluminous, and convoluted; but, there's no other way :(
+	 *
+	 * @since 3.3.0
+	 * @access private
+	 *
+	 * @param array  $args An array of 'id' and 'taxonomy' values.
+	 * @param string $for  The screen it's for. Accepts 'edit' and 'settings'.
+	 * @return array An array social of titles and descriptions.
+	 */
+	public function _get_social_placeholders( array $args, $for = 'edit' ) {
+
+		$desc_from_custom_field = $this->get_description_from_custom_field( $args );
+
+		if ( 'settings' === $for ) {
+			$pm_edit_og_title = $args['id'] ? $this->get_post_meta_item( '_open_graph_title', $args['id'] ) : '';
+			$pm_edit_og_desc  = $args['id'] ? $this->get_post_meta_item( '_open_graph_description', $args['id'] ) : '';
+			$pm_edit_tw_title = $args['id'] ? $this->get_post_meta_item( '_twitter_title', $args['id'] ) : '';
+			$pm_edit_tw_desc  = $args['id'] ? $this->get_post_meta_item( '_twitter_description', $args['id'] ) : '';
+
+			// Gets custom fields from SEO settings.
+			$home_og_title = $this->get_option( 'homepage_og_title' );
+			$home_og_desc  = $this->get_option( 'homepage_og_description' );
+
+			//! OG title generator falls back to meta input. The description does not.
+			$og_tit_placeholder  = $pm_edit_og_title
+								?: $this->get_generated_open_graph_title( $args );
+			$og_desc_placeholder = $pm_edit_og_desc
+								?: $desc_from_custom_field
+								?: $this->get_generated_open_graph_description( $args );
+
+			//! TW title generator falls back to meta input. The description does not.
+			$tw_tit_placeholder  = $pm_edit_tw_title
+								?: $home_og_title
+								?: $pm_edit_og_title
+								?: $this->get_generated_twitter_title( $args );
+			$tw_desc_placeholder = $pm_edit_tw_desc
+								?: $home_og_desc
+								?: $pm_edit_og_desc
+								?: $desc_from_custom_field
+								?: $this->get_generated_twitter_description( $args );
+		} elseif ( 'edit' === $for ) {
+			if ( ! $args['taxonomy'] ) {
+				if ( $this->is_static_frontpage( $args['id'] ) ) {
+					// Gets custom fields from SEO settings.
+					$home_desc = $this->get_option( 'homepage_description' );
+
+					$home_og_title = $this->get_option( 'homepage_og_title' );
+					$home_og_desc  = $this->get_option( 'homepage_og_description' );
+					$home_tw_title = $this->get_option( 'homepage_twitter_title' );
+					$home_tw_desc  = $this->get_option( 'homepage_twitter_description' );
+
+					// Gets custom fields from page.
+					$custom_og_title = $this->get_post_meta_item( '_open_graph_title', $args['id'] );
+					$custom_og_desc  = $this->get_post_meta_item( '_open_graph_description', $args['id'] );
+
+					//! OG title generator falls back to meta input. The description does not.
+					$og_tit_placeholder  = $home_og_title
+										?: $this->get_generated_open_graph_title( $args );
+					$og_desc_placeholder = $home_og_desc
+										?: $home_desc
+										?: $desc_from_custom_field
+										?: $this->get_generated_open_graph_description( $args );
+
+					//! TW title generator falls back to meta input. The description does not.
+					$tw_tit_placeholder  = $home_tw_title
+										?: $home_og_title
+										?: $custom_og_title
+										?: $this->get_generated_twitter_title( $args );
+					$tw_desc_placeholder = $home_tw_desc
+										?: $home_og_desc
+										?: $custom_og_desc
+										?: $home_desc
+										?: $desc_from_custom_field
+										?: $this->get_generated_twitter_description( $args );
+				} else {
+					// Gets custom fields.
+					$custom_og_title = $this->get_post_meta_item( '_open_graph_title', $args['id'] );
+					$custom_og_desc  = $this->get_post_meta_item( '_open_graph_description', $args['id'] );
+
+					//! OG title generator falls back to meta input. The description does not.
+					$og_tit_placeholder  = $this->get_generated_open_graph_title( $args );
+					$og_desc_placeholder = $desc_from_custom_field
+										?: $this->get_generated_open_graph_description( $args );
+
+					//! TW title generator falls back to meta input. The description does not.
+					$tw_tit_placeholder  = $custom_og_title
+										?: $this->get_generated_twitter_title( $args );
+					$tw_desc_placeholder = $custom_og_desc
+										?: $desc_from_custom_field
+										?: $this->get_generated_twitter_description( $args );
+				}
+			} else {
+				$meta = $this->get_term_meta( $args['id'] );
+
+				//! OG title generator falls back to meta input. The description does not.
+				$og_tit_placeholder  = $this->get_generated_open_graph_title( $args );
+				$og_desc_placeholder = $desc_from_custom_field
+									?: $this->get_generated_open_graph_description( $args );
+
+				//! TW title generator falls back to meta input. The description does not.
+				$tw_tit_placeholder  = $meta['og_title']
+									?: $og_tit_placeholder;
+				$tw_desc_placeholder = $meta['og_description']
+									?: $desc_from_custom_field
+									?: $this->get_generated_twitter_description( $args );
+			}
+		} else {
+			$og_tit_placeholder  = '';
+			$tw_tit_placeholder  = '';
+			$og_desc_placeholder = '';
+			$tw_desc_placeholder = '';
+		}
+
+		return [
+			'title'       => [
+				'og'      => $og_tit_placeholder,
+				'twitter' => $tw_tit_placeholder,
+			],
+			'description' => [
+				'og'      => $og_desc_placeholder,
+				'twitter' => $tw_desc_placeholder,
+			],
+		];
+	}
 }

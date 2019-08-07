@@ -61,11 +61,12 @@ switch ( $instance ) :
 	case 'inpost_general':
 		if ( $this->get_option( 'display_seo_bar_metabox' ) ) :
 			?>
-			<div class="tsf-flex-setting tsf-flex">
+			<div class="tsf-flex-setting tsf-flex" id="tsf-doing-it-right-wrap">
 				<div class="tsf-flex-setting-label tsf-flex">
 					<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 						<div class="tsf-flex-setting-label-item tsf-flex">
 							<div><strong><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></strong></div>
+							<div><span class="tsf-ajax"></span></div>
 						</div>
 					</div>
 				</div>
@@ -254,7 +255,7 @@ switch ( $instance ) :
 					if ( $this->is_static_frontpage( $post_id ) ) {
 						printf(
 							'<div class=tsf-flex-setting-label-sub-item><span class="description attention">%s</span></div>',
-							esc_html__( 'Warning: No public site should ever disable indexability or link followability for the homepage.', 'autodescription' )
+							esc_html__( 'Warning: No public site should ever apply "noindex" or "nofollow" to the homepage.', 'autodescription' )
 						);
 						printf(
 							'<div class=tsf-flex-setting-label-sub-item><span class="description">%s</span></div>',
@@ -365,51 +366,7 @@ switch ( $instance ) :
 		break;
 
 	case 'inpost_social':
-		$desc_from_custom_field = $this->get_description_from_custom_field( $_generator_args );
-
-		if ( $this->is_static_frontpage( $post_id ) ) {
-			// Gets custom fields from SEO settings.
-			$home_desc = $this->get_option( 'homepage_description' );
-
-			$home_og_title = $this->get_option( 'homepage_og_title' );
-			$home_og_desc  = $this->get_option( 'homepage_og_description' );
-			$home_tw_title = $this->get_option( 'homepage_twitter_title' );
-			$home_tw_desc  = $this->get_option( 'homepage_twitter_description' );
-
-			// Gets custom fields from page.
-			$custom_og_title = $this->get_post_meta_item( '_open_graph_title', $post_id );
-			$custom_og_desc  = $this->get_post_meta_item( '_open_graph_description', $post_id );
-
-			//! OG input falls back to default input.
-			$og_tit_placeholder  = $home_og_title
-								?: $custom_og_title
-								?: $this->get_generated_open_graph_title( $_generator_args );
-			$og_desc_placeholder = $home_og_desc
-								?: $desc_from_custom_field
-								?: $this->get_generated_open_graph_description( $_generator_args );
-
-			//! Twitter input falls back to OG input.
-			$tw_tit_placeholder  = $home_tw_title
-								?: $og_tit_placeholder;
-			$tw_desc_placeholder = $home_tw_desc
-								?: $home_og_desc
-								?: $custom_og_desc
-								?: $home_desc
-								?: $desc_from_custom_field
-								?: $this->get_generated_twitter_description( $_generator_args );
-		} else {
-			// Gets custom fields.
-			$custom_og_title = $this->get_post_meta_item( '_open_graph_title', $post_id );
-			$custom_og_desc  = $this->get_post_meta_item( '_open_graph_description', $post_id );
-
-			//! OG input falls back to default input.
-			$og_tit_placeholder  = $this->get_generated_open_graph_title( $_generator_args );
-			$og_desc_placeholder = $desc_from_custom_field ?: $this->get_generated_open_graph_description( $_generator_args );
-
-			//! Twitter input falls back to OG input.
-			$tw_tit_placeholder  = $custom_og_title ?: $og_tit_placeholder;
-			$tw_desc_placeholder = $custom_og_desc ?: $desc_from_custom_field ?: $this->get_generated_twitter_description( $_generator_args );
-		}
+		$social_placeholders = $this->_get_social_placeholders( $_generator_args );
 
 		// Yes, this is hacky, but we don't want to lose the user's input.
 		$show_og = (bool) $this->get_option( 'og_tags' );
@@ -434,7 +391,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id="tsf-og-title-wrap">
-					<input class="large-text" type="text" name="autodescription[_open_graph_title]" id="autodescription_og_title" placeholder="<?php echo esc_attr( $og_tit_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_open_graph_title' ) ); ?>" autocomplete=off />
+					<input class="large-text" type="text" name="autodescription[_open_graph_title]" id="autodescription_og_title" placeholder="<?php echo esc_attr( $social_placeholders['title']['og'] ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_open_graph_title' ) ); ?>" autocomplete=off />
 				</div>
 			</div>
 		</div>
@@ -456,7 +413,7 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class="large-text" name="autodescription[_open_graph_description]" id="autodescription_og_description" placeholder="<?php echo esc_attr( $og_desc_placeholder ); ?>" rows="3" cols="4" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_open_graph_description' ) ); ?></textarea>
+				<textarea class="large-text" name="autodescription[_open_graph_description]" id="autodescription_og_description" placeholder="<?php echo esc_attr( $social_placeholders['description']['og'] ); ?>" rows="3" cols="4" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_open_graph_description' ) ); ?></textarea>
 			</div>
 		</div>
 
@@ -478,7 +435,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id="tsf-twitter-title-wrap">
-					<input class="large-text" type="text" name="autodescription[_twitter_title]" id="autodescription_twitter_title" placeholder="<?php echo esc_attr( $tw_tit_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_twitter_title' ) ); ?>" autocomplete=off />
+					<input class="large-text" type="text" name="autodescription[_twitter_title]" id="autodescription_twitter_title" placeholder="<?php echo esc_attr( $social_placeholders['title']['twitter'] ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_twitter_title' ) ); ?>" autocomplete=off />
 				</div>
 			</div>
 		</div>
@@ -500,14 +457,19 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class="large-text" name="autodescription[_twitter_description]" id="autodescription_twitter_description" placeholder="<?php echo esc_attr( $tw_desc_placeholder ); ?>" rows="3" cols="4" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_twitter_description' ) ); ?></textarea>
+				<textarea class="large-text" name="autodescription[_twitter_description]" id="autodescription_twitter_description" placeholder="<?php echo esc_attr( $social_placeholders['description']['twitter'] ); ?>" rows="3" cols="4" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_twitter_description' ) ); ?></textarea>
 			</div>
 		</div>
 		<?php
 
 		//* Fetch image placeholder.
-		$image_details     = current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) );
-		$image_placeholder = isset( $image_details['url'] ) ? $image_details['url'] : '';
+		if ( $this->is_static_frontpage( $post_id ) && $this->get_option( 'homepage_social_image_url' ) ) {
+			$image_details     = current( $this->get_image_details( $_generator_args, true, 'social', true ) );
+			$image_placeholder = isset( $image_details['url'] ) ? $image_details['url'] : '';
+		} else {
+			$image_details     = current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) );
+			$image_placeholder = isset( $image_details['url'] ) ? $image_details['url'] : '';
+		}
 
 		?>
 		<div class="tsf-flex-setting tsf-flex">

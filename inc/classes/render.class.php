@@ -99,7 +99,7 @@ class Render extends Admin_Init {
 
 	/**
 	 * Caches current Image URL in static variable.
-	 * Must be called inside the loop.
+	 * To be used on the front-end only.
 	 *
 	 * @since 2.2.2
 	 * @since 2.7.0 $get_id parameter has been added.
@@ -114,7 +114,7 @@ class Render extends Admin_Init {
 
 		foreach ( $this->get_image_details_from_cache() as $image ) {
 			$url = $image['url'];
-			break;
+			if ( $url ) break;
 		}
 
 		return $url;
@@ -736,7 +736,7 @@ class Render extends Admin_Init {
 
 		$id = $this->get_the_real_ID();
 
-		$post = \get_post( $id );
+		$post              = \get_post( $id );
 		$post_modified_gmt = $post->post_modified_gmt;
 
 		if ( '0000-00-00 00:00:00' === $post_modified_gmt )
@@ -1100,6 +1100,7 @@ class Render extends Admin_Init {
 				 * @since 2.4.0
 				 * @param bool $sybre Whether to show the author name in the indicator.
 				 */
+				// phpcs:ignore, WordPress.NamingConventions.ValidHookName -- Easter egg.
 				'author'     => (bool) \apply_filters( 'sybre_waaijer_<3', true ) ? \esc_html__( 'by Sybre Waaijer', 'autodescription' ) : '',
 				/**
 				 * @since 2.4.0

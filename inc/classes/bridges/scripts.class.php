@@ -477,6 +477,7 @@ final class Scripts {
 							'isPrivate'       => $tsf->is_private( $id ),
 							'isProtected'     => $tsf->is_password_protected( $id ),
 							'isGutenbergPage' => $tsf->is_gutenberg_page(),
+							'id'              => (int) $id,
 						],
 						'i18n'   => [
 							// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
@@ -727,7 +728,7 @@ final class Scripts {
 			$_default_description = $tsf->get_option( 'homepage_description' ) ?: '';
 		}
 
-		$_default_description = $_default_description ?: $tsf->get_generated_description( $_query );
+		$_default_description = $_default_description ?: $tsf->get_generated_description( $_query, false );
 
 		return [
 			'id'       => 'tsf-description',
@@ -741,7 +742,7 @@ final class Scripts {
 				'name' => 'tsfDescriptionL10n',
 				'data' => [
 					'states' => [
-						'defaultDescription' => static::decode_entities( $tsf->s_title_raw( $_default_description ) ),
+						'defaultDescription' => static::decode_entities( $tsf->s_description( $_default_description ) ),
 					],
 				],
 			],
@@ -815,13 +816,13 @@ final class Scripts {
 			}
 		}
 
-		$settings_placeholders['ogDesc'] =
-			$settings_placeholders['ogDesc']
-			?: $tsf->get_generated_open_graph_description( $_query );
+		$settings_placeholders['ogDesc'] = $tsf->s_description(
+			$settings_placeholders['ogDesc'] ?: $tsf->get_generated_open_graph_description( $_query, false )
+		);
 
-		$settings_placeholders['twDesc'] =
-			$settings_placeholders['twDesc']
-			?: $tsf->get_generated_twitter_description( $_query );
+		$settings_placeholders['twDesc'] = $tsf->s_description(
+			$settings_placeholders['twDesc'] ?: $tsf->get_generated_twitter_description( $_query, false )
+		);
 
 		return [
 			'id'       => 'tsf-social',
@@ -836,6 +837,8 @@ final class Scripts {
 				'data' => [
 					'params' => [
 						'homeLocks'    => $home_locks,
+					],
+					'states' => [
 						'placeholders' => static::decode_all_entities( $settings_placeholders ),
 					],
 				],

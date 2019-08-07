@@ -266,25 +266,7 @@ switch ( $instance ) :
 		$custom_tw_title = $home_id ? $this->get_post_meta_item( '_twitter_title', $home_id ) : '';
 		$custom_tw_desc  = $home_id ? $this->get_post_meta_item( '_twitter_description', $home_id ) : '';
 
-		// Gets custom fields from SEO settings.
-		$home_og_title = $this->get_option( 'homepage_og_title' );
-		$home_og_desc  = $this->get_option( 'homepage_og_description' );
-		// $home_tw_title = $this->get_option( 'homepage_twitter_title' );
-		// $home_tw_desc  = $this->get_option( 'homepage_twitter_description' );
-
-		//! OG input falls back to default input.
-		$og_tit_placeholder  = $custom_og_title ?: $this->get_generated_open_graph_title( $_generator_args );
-		$og_desc_placeholder = $custom_og_desc
-							?: $this->get_description_from_custom_field( $_generator_args )
-							?: $this->get_generated_open_graph_description( $_generator_args );
-
-		//! Twitter input falls back to OG input.
-		$tw_tit_placeholder  = $custom_tw_title ?: $home_og_title ?: $og_tit_placeholder;
-		$tw_desc_placeholder = $custom_tw_desc
-							?: $home_og_desc
-							?: $custom_og_desc
-							?: $this->get_description_from_custom_field( $_generator_args )
-							?: $this->get_generated_twitter_description( $_generator_args );
+		$social_placeholders = $this->_get_social_placeholders( $_generator_args, 'settings' );
 
 		?>
 		<p>
@@ -301,7 +283,7 @@ switch ( $instance ) :
 			?>
 		</p>
 		<p>
-			<input type="text" name="<?php $this->field_name( 'homepage_og_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_og_title' ); ?>" placeholder="<?php echo esc_attr( $og_tit_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_og_title' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php $this->field_name( 'homepage_og_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_og_title' ); ?>" placeholder="<?php echo esc_attr( $social_placeholders['title']['og'] ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_og_title' ) ); ?>" autocomplete=off />
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && $custom_og_title ) {
@@ -325,7 +307,7 @@ switch ( $instance ) :
 			?>
 		</p>
 		<p>
-			<textarea name="<?php $this->field_name( 'homepage_og_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_og_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $og_desc_placeholder ); ?>" autocomplete=off><?php echo esc_attr( $this->get_option( 'homepage_og_description' ) ); ?></textarea>
+			<textarea name="<?php $this->field_name( 'homepage_og_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_og_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $social_placeholders['description']['og'] ); ?>" autocomplete=off><?php echo esc_attr( $this->get_option( 'homepage_og_description' ) ); ?></textarea>
 			<?php $this->output_js_description_elements(); ?>
 		</p>
 		<?php
@@ -351,7 +333,7 @@ switch ( $instance ) :
 			?>
 		</p>
 		<p>
-			<input type="text" name="<?php $this->field_name( 'homepage_twitter_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_twitter_title' ); ?>" placeholder="<?php echo esc_attr( $tw_tit_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_twitter_title' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php $this->field_name( 'homepage_twitter_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_twitter_title' ); ?>" placeholder="<?php echo esc_attr( $social_placeholders['title']['twitter'] ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_twitter_title' ) ); ?>" autocomplete=off />
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && ( $custom_og_title || $custom_tw_title ) ) {
@@ -375,7 +357,7 @@ switch ( $instance ) :
 			?>
 		</p>
 		<p>
-			<textarea name="<?php $this->field_name( 'homepage_twitter_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_twitter_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $tw_desc_placeholder ); ?>" autocomplete=off><?php echo esc_attr( $this->get_option( 'homepage_twitter_description' ) ); ?></textarea>
+			<textarea name="<?php $this->field_name( 'homepage_twitter_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_twitter_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $social_placeholders['description']['twitter'] ); ?>" autocomplete=off><?php echo esc_attr( $this->get_option( 'homepage_twitter_description' ) ); ?></textarea>
 			<?php $this->output_js_description_elements(); ?>
 		</p>
 		<?php

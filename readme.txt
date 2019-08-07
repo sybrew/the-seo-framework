@@ -294,16 +294,13 @@ TODO update wp rocket's compat file... ugh, redundant
 TODO test all compat files...
 
 TODO call "php level caching" memoization--it's a cooler word.
-
-TODO when the tooltip is squashed, it may again overflow vertically... See title tooltip:
-	* </wp-admin/edit-tags.php?taxonomy=pa_test&post_type=product>
-	* Punt? This is working as intended on every device we tested already... we can better ship with this bug than wait another week...
-
-TODO adjust the title & description guidelines when using summary instead of summary large image for Twitter?
-	-> Punt? When we rework the social aspect of this plugin...
 TODO index.php stuff
 
 TODO do something nicer with interpret_status_to_symbol()
+
+TODO did we fix this, or was it regression: The social description fields now hold their true generated description as an example when no custom meta description is met.
+
+TODO set AJAX failure listeners?
 
 **Detailed log:**
 
@@ -340,7 +337,7 @@ TODO do something nicer with interpret_status_to_symbol()
 			* Link following
 			* Archiving
 		* Leave them as `&mdash; No Change &mdash;` to keep the value unchanged.
-		* Note that we can't assert the expected value of `Default`, because no two pages are be alike.
+		* Note that we can't assert the expected value of `Default`, because no two pages are alike.
 	* Quick editing is now possible, also intuitively, via WordPress' native quick-editor!
 		* You can change the following SEO settings for everything public:
 			* Canonical URL
@@ -357,9 +354,14 @@ TODO do something nicer with interpret_status_to_symbol()
 	* The estimated plugin-boot time is added to the closing HTML comment; which adds the bulk of the page-loading time of this plugin. In this update, we decreased that time, greatly--and we're proudly showing it.
 	* The term meta inputs now have the "are you sure you want to leave this page?"-listener attached.
 	* Multiple social images may now be outputted. How this affects sharing depends on the social network.
+	* Fallback images are now always appeneded; you can no longer overwrite them.
 	* Social images may now be obtained from your post or page's content.
 	* Alt-tags are now provided with social images, which help with accessibility when sharing your page.
 	* For WooCommerce, the Product Category Thumbnail is now considered for social images.
+	* When using the Block Editor, AKA WordPress 5.0+'s Gutenberg, on post update:
+		1. A new SEO Bar is inserted (when enabled).
+		1. The description placeholders will refresh.
+		1. The social image placeholder will refresh.
 * **Changed:**
 	* We now support WordPress v4.9 and later, instead of WordPress v4.6 and later.
 	* We now support PHP v5.6 and later, instead of PHP v5.4 and later.
@@ -516,6 +518,7 @@ TODO do something nicer with interpret_status_to_symbol()
 		* Their text is no longer bolded by default, so you may now see different bolding in the tooltip.
 		* They now intelligently determines the position of themselves, much like a self-driving car.
 		* They now intelligently makes themselves wider or slimmer based on their contents and surrounding.
+			* When you make text wider or slimmer, it becomes taller. So, it also calculate whether it will overflow to the top or bottom of its container.
 		* Using Gutenberg with the Post SEO settings meta box in the sidebar, tooltips will no longer overflow.
 * **Removed:**
 	* **DOWNGRADE COMPATIBILITY!** -- Global options.
@@ -604,6 +607,11 @@ TODO do something nicer with interpret_status_to_symbol()
 	* **Filters:**
 		* When using custom meta title or meta description filters, they may not be processed for the meta input fields.
 			* Fixing this requires restructuring the custom title and description methods with flags.
+	* **Block editor:**
+		* When you edit the homepage via the block editor, and add or remove any of the homepage social descriptions via the SEO Settings page, and then hit "Update" in the block editor, the social-locks won't be altered.
+			* Fixing this would require us to send out new locks.
+			* This is such an edge-case that would be "fun" if we made that seamless, but "practical" is another word that stops us here. If we didn't mention it, we'd dare to bet none of our 100,000 users would've ever noticed in a million years.
+			* Moreover, WordPress is far from ready when it comes to a REST-driven admin interface. Ignoring Calypso, Gutenberg is the only first-party WP interface that is JS driven. There are still no tools available for us that would allow us to easily integrate this.
 	* **Redirects:**
 		* We're not detecting whether a redirect will loop back to the current page.
 			* To do this accurately, we need to predict whether the endpoint leads to any of the plausible endpoints WordPress supports. This is expensive on your CPU.
@@ -972,6 +980,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				1. Short length now works as intended, instead of comparing as less, it compares as less or equal to.
 			* `get_social_image_uploader_form()` now adds a media preview dispenser.
 			* `get_logo_uploader_form()` now adds a media preview dispenser.
+			* `strip_tags_cs()` now allows emptying the indexes `space` and `clear`.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`
@@ -1277,6 +1286,8 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* Methods:
 					* `initTitleInputs`
 					* `initDescriptionInputs`
+					* `getState`
+					* `updateState`
 				* Related localization & attribution object: `tsfSettingsL10n`
 			* Object `tsfTerm`:
 				* Properties:
@@ -1334,6 +1345,8 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 					* `resetAjaxLoader`
 				* Related localization & attribution object: `tsfL10n`.
 			* Object `tsfGBC` now resides in `gbc.{.min}.js`, instead of `tsf-gbc{.min}.js`
+			* Object `tsfTT`:
+				* We now add the default tooltip boundary (`.tsf-tooltip-boundary`) to `#wpwrap`, instead of `#wpcontent`.
 		* **Removed:**
 			* `tsf.[...]`:
 				* `tsf.counterType`, use `tsfC.counterType` instead.

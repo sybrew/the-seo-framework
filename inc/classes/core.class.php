@@ -546,7 +546,7 @@ class Core {
 	 * @return string The timestamp format used in PHP date.
 	 */
 	public function get_timestamp_format() {
-		return '1' === $this->get_option( 'timestamps_format' ) ? 'Y-m-d\TH:iP' : 'Y-m-d';
+		return $this->uses_time_in_timestamp_format() ? 'Y-m-d\TH:iP' : 'Y-m-d';
 	}
 
 	/**

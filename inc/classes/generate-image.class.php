@@ -78,7 +78,7 @@ class Generate_Image extends Generate_Url {
 		if ( $single ) {
 			$details = $this->get_custom_field_image_details( $args, $single, false );
 
-			if ( empty( $details['url'] ) )
+			if ( empty( $details[0]['url'] ) )
 				$details = $this->get_generated_image_details( $args, $single, $context, false );
 		} else {
 			$details = array_merge(
@@ -454,8 +454,8 @@ class Generate_Image extends Generate_Url {
 	 */
 	public function merge_extra_image_details( array $details, $size = 'full' ) {
 
-		$details += [ 'alt' => $this->get_image_alt_tag( $details['id'] ) ];
 		$details += $this->get_image_dimensions( $details['id'], $details['url'], $size );
+		$details += [ 'alt' => $this->get_image_alt_tag( $details['id'] ) ];
 
 		return $details;
 	}

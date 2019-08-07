@@ -182,6 +182,9 @@ class Init extends Query {
 			//* Admin AJAX for counter options.
 			\add_action( 'wp_ajax_the_seo_framework_update_counter', [ $this, '_wp_ajax_update_counter_type' ] );
 
+			//* Admin AJAX for Gutenberg SEO Bar update.
+			\add_action( 'wp_ajax_the_seo_framework_update_post_data', [ $this, '_wp_ajax_get_post_data' ] );
+
 			//* Admin AJAX for TSF Cropper
 			\add_action( 'wp_ajax_tsf-crop-image', [ $this, '_wp_ajax_crop_image' ] );
 		endif;
@@ -458,12 +461,8 @@ class Init extends Query {
 			$this->use_object_cache and $this->object_cache_set( $cache_key, $output, DAY_IN_SECONDS );
 		endif;
 
-		$output = $this->get_plugin_indicator( 'before' )
-				. $output
-				. $this->get_plugin_indicator( 'after', $init_start );
-
 		// phpcs:ignore, WordPress.Security.EscapeOutput -- $output is escaped.
-		echo PHP_EOL . $output . PHP_EOL;
+		echo PHP_EOL, $this->get_plugin_indicator( 'before' ), $output, $this->get_plugin_indicator( 'after', $init_start ), PHP_EOL;
 
 		/**
 		 * @since 2.6.0

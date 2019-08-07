@@ -829,8 +829,9 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
-	 * Returns an one-line sanitized description without nbsp and tabs.
+	 * Returns an single-line, trimmed description without dupliacated spaces, nbsp, or tabs.
 	 * Does NOT escape.
+	 * Also converts back-solidi to their respective HTML entities for non-destructive handling.
 	 *
 	 * @since 2.8.2
 	 *
@@ -895,6 +896,7 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.8.0
 	 * @since 2.8.2 : 1. Added $allow_shortcodes parameter.
 	 *                2. Added $escape parameter.
+	 * @see `$this->strip_tags_cs()`
 	 *
 	 * @param string $excerpt          The excerpt.
 	 * @param bool   $allow_shortcodes Whether to maintain shortcodes from excerpt.
@@ -981,7 +983,8 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
-	 * Sanitizes input title as output.
+	 * Returns an single-line, trimmed title without dupliacated spaces, nbsp, or tabs.
+	 * Also converts back-solidi to their respective HTML entities for non-destructive handling.
 	 *
 	 * @since 2.8.2
 	 * @since 3.3.0 Now normalizes `&` entities.
@@ -1623,19 +1626,22 @@ class Sanitize extends Admin_Pages {
 	 * Tip: You might want to use method `s_dupe_space()` to clear up the duplicated spaces afterward.
 	 *
 	 * @since 3.2.4
+	 * @since 3.3.0 Now allows emptying the indexes `space` and `clear`.
 	 * @link: https://www.w3schools.com/html/html_blocks.asp
 	 *
 	 * @param string $input The input text that needs its tags stripped.
 	 * @param array  $args  The input arguments: {
-	 *                         'space'   : @param array|null HTML elements that should have a space added.
+	 *                         'space'   : @param array|null HTML elements that should have a space added around it.
 	 *                                                       If not set or null, skip check.
-	 *                                                       If empty array, use default; otherwise, use array.
+	 *                                                       If empty array, skips stripping; otherwise, use input.
 	 *                         'clear'   : @param array|null HTML elements that should be emptied and replaced with a space.
 	 *                                                       If not set or null, skip check.
-	 *                                                       If empty array, use default; otherwise, use array.
+	 *                                                       If empty array, skips stripping; otherwise, use input.
 	 *                      }
 	 *                      NOTE: WARNING The array values are forwarded to a regex without sanitization.
 	 *                      NOTE: Unlisted, script, and style tags will be stripped via PHP's `strip_tags()`.
+	 *                            Also note that their contents are maintained as-is, without added spaces.
+	 *                            It is why you should always list `style` and `script` in the `clear` array.
 	 * @return string The output string without tags.
 	 */
 	public function strip_tags_cs( $input, $args = [] ) {
@@ -1653,7 +1659,7 @@ class Sanitize extends Admin_Pages {
 			foreach ( [ 'space', 'clear' ] as $type ) {
 				if ( isset( $args[ $type ] ) ) {
 					if ( ! $args[ $type ] ) {
-						$args[ $type ] = $default_args[ $type ];
+						$args[ $type ] = [];
 					} else {
 						$args[ $type ] = (array) $args[ $type ];
 					}
@@ -1671,7 +1677,7 @@ class Sanitize extends Admin_Pages {
 			$input = preg_replace( "/$_regex/si", $_replace, $input );
 		}
 
-		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- $args define stripping of 'script' and 'style'.
+		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- $args defines stripping of 'script' and 'style'.
 		return strip_tags( $input );
 	}
 

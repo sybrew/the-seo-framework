@@ -451,8 +451,6 @@ class Admin_Init extends Init {
 	 */
 	public function _wp_ajax_update_counter_type() {
 
-		if ( ! $this->is_admin() || ! \wp_doing_ajax() ) return;
-
 		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer() does this.
 		$this->_check_tsf_ajax_referer( 'edit_posts' );
 
@@ -494,6 +492,114 @@ class Admin_Init extends Init {
 		\wp_send_json( $results );
 
 		// phpcs:enable, WordPress.Security.NonceVerification
+	}
+
+	/**
+	 * Gets an SEO Bar for AJAX during edit-post.
+	 *
+	 * @since 3.3.0
+	 * @access private
+	 */
+	public function _wp_ajax_get_post_data() {
+
+		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer() does this.
+		$this->_check_tsf_ajax_referer( 'edit_posts' );
+
+		// CLear output buffer.
+		$this->clean_response_header();
+
+		$post_id = \absint( $_POST['post_id'] );
+
+		if ( ! $post_id || ! \current_user_can( 'edit_post', $post_id ) ) {
+			\wp_send_json( [
+				'type' => 'failure',
+				'data' => [],
+			] );
+		}
+
+		$_get_defaults = [
+			'seobar'          => false,
+			'metadescription' => false,
+			'ogdescription'   => false,
+			'twdescription'   => false,
+			'imageurl'        => false,
+		];
+
+		// Only get what's indexed in the defaults and set as "true".
+		$get = array_keys(
+			array_filter(
+				array_intersect_key(
+					array_merge(
+						$_get_defaults,
+						(array) ( isset( $_POST['get'] ) ? $_POST['get'] : [] )
+					),
+					$_get_defaults
+				)
+			)
+		);
+
+		$_generator_args = [
+			'id'       => $post_id,
+			'taxonomy' => '',
+		];
+
+		$data = [];
+
+		foreach ( $get as $g ) :
+			switch ( $g ) {
+				case 'seobar':
+					$data[ $g ] = $this->get_generated_seo_bar( $_generator_args );
+					break;
+
+				case 'metadescription':
+				case 'ogdescription':
+				case 'twdescription':
+					switch ( $g ) {
+						case 'metadescription':
+							if ( $this->is_static_frontpage( $post_id ) ) {
+								// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
+								$data[ $g ] = $this->get_option( 'homepage_description' )
+										   ?: $this->get_generated_description( $_generator_args, false );
+								// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
+							} else {
+								$data[ $g ] = $this->get_generated_description( $_generator_args, false );
+							}
+							break;
+						case 'ogdescription':
+							// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- Smart loop.
+							$_social_ph = isset( $_social_ph ) ? $_social_ph : $this->_get_social_placeholders( $_generator_args );
+							$data[ $g ] = $_social_ph['description']['og'];
+							break;
+						case 'twdescription':
+							// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- Smart loop.
+							$_social_ph = isset( $_social_ph ) ? $_social_ph : $this->_get_social_placeholders( $_generator_args );
+							$data[ $g ] = $_social_ph['description']['twitter'];
+							break;
+					}
+
+					$data[ $g ] = Bridges\Scripts::decode_entities( $this->s_description( $data[ $g ] ) );
+					break;
+
+				case 'imageurl':
+					if ( $this->is_static_frontpage( $post_id ) && $this->get_option( 'homepage_social_image_url' ) ) {
+						$image_details = current( $this->get_image_details( $_generator_args, true, 'social', true ) );
+						$data[ $g ]    = isset( $image_details['url'] ) ? $image_details['url'] : '';
+					} else {
+						$image_details = current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) );
+						$data[ $g ]    = isset( $image_details['url'] ) ? $image_details['url'] : '';
+					}
+					break;
+
+				default:
+					break;
+			}
+		endforeach;
+
+		\wp_send_json( [
+			'type'      => 'success',
+			'data'      => $data,
+			'processed' => $get,
+		] );
 	}
 
 	/**
