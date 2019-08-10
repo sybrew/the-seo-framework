@@ -138,7 +138,8 @@ class Generate_Title extends Generate_Description {
 		 * @since 3.1.0
 		 *
 		 * @param string     $title The title.
-		 * @param array|null $args  The title arguments.
+		 * @param array|null $args  The query arguments. Contains 'id' and 'taxonomy'.
+		 *                          Is null when query is autodetermined.
 		 */
 		return (string) \apply_filters_ref_array(
 			'the_seo_framework_title_from_custom_field',
@@ -163,10 +164,11 @@ class Generate_Title extends Generate_Description {
 		 * Filters the title from query.
 		 *
 		 * @NOTE: This filter doesn't consistently run on the SEO Settings page.
-		 *        You might want to avoid this filter on the homepage.
+		 *        You may want to avoid this filter for the homepage, by returning the default value.
 		 * @since 3.1.0
 		 * @param string     $title The title.
-		 * @param array|null $args  The title arguments.
+		 * @param array|null $args  The query arguments. Contains 'id' and 'taxonomy'.
+		 *                          Is null when query is autodetermined.
 		 */
 		return (string) \apply_filters_ref_array(
 			'the_seo_framework_title_from_generation',
@@ -1297,8 +1299,9 @@ class Generate_Title extends Generate_Description {
 
 		/**
 		 * @since 3.1.2
-		 * @param bool       $use
-		 * @param array|null $args
+		 * @param string     $use  Whether to use branding.
+		 * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
+		 *                         Is null when query is autodetermined.
 		 */
 		return \apply_filters_ref_array( 'the_seo_framework_use_title_branding', [ $use, $args ] );
 	}

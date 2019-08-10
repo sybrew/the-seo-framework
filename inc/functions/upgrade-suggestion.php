@@ -67,21 +67,22 @@ function _prepare() {
 	if ( ! empty( $plugin['the-seo-framework-extension-manager/the-seo-framework-extension-manager.php'] ) ) return;
 
 	/** @source https://github.com/sybrew/The-SEO-Framework-Extension-Manager/blob/34674828a9e79bf72584e23aaa4a82ea1f154229/bootstrap/envtest.php#L51-L62 */
-	$_req = [
+	$envtest = false;
+	$_req    = [
 		'php' => [
 			'5.5' => 50521,
 			'5.6' => 50605,
 		],
 		'wp'  => '37965',
 	];
-	$envtest = false;
 
 	//? PHP_VERSION_ID is definitely defined, but let's keep it homonymous with the envtest of TSFEM.
-	// phpcs:ignore, WordPress.WhiteSpace.PrecisionAlignment
+	// phpcs:disable, Generic.Formatting.MultipleStatementAlignment, WordPress.WhiteSpace.PrecisionAlignment
 	   ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < $_req['php']['5.5'] and $envtest = 1
 	or PHP_VERSION_ID >= 50600 && PHP_VERSION_ID < $_req['php']['5.6'] and $envtest = 2
 	or $GLOBALS['wp_db_version'] < $_req['wp'] and $envtest = 3
 	or $envtest = true;
+	// phpcs:enable, Generic.Formatting.MultipleStatementAlignment, WordPress.WhiteSpace.PrecisionAlignment
 
 	//? 5
 	if ( true !== $envtest ) return;
@@ -112,11 +113,12 @@ function _suggest_extension_manager() {
 	$tsf->do_dismissible_notice(
 		$tsf->convert_markdown(
 			sprintf(
-				/* translators: %s = Extension URL markdown */
-				\esc_html__( "Looking for more SEO functionality? Check out [The SEO Framework's extensions](%s).", 'autodescription' ),
+				/* translators: The URLs are in markdown! Don't add spaces around the brackets. 1 = first URL, 2 = second URL. */
+				\esc_html__( 'We hope you like this latest version of The SEO Framework. Even with all the new features and optimization, it remains the fastest, most lightweight, and highest performing of all the top WordPress SEO plugins. Because we don\'t fill our plugin with annoying ads, like the other guys, several of our additional services can be easily missed, like the [Extension Manager](%1$s) for example. These extra services add incredible functionality, such as Structured Data, Focus Subject Analysis, and even Spam Protection. We are confident these innovative and professional solutions will help you boost your site\'s SEO performance. And the best part is, we bundle many of the extensions for free. [Give them a try](%2$s).', 'autodescription' ),
+				'https://theseoframework.com/extension-manager/',
 				'https://theseoframework.com/extensions/'
 			),
-			[ 'a' ],
+			[ 'a' ], // 'strong' ?
 			[ 'a_internal' => false ]
 		),
 		'updated',

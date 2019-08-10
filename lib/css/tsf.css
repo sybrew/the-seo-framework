@@ -11,8 +11,14 @@
 /**
  * Dismissible Notices.
  */
-.tsf-notice {
+.notice.tsf-notice {
 	position: relative;
+	padding-right: 38px;
+}
+
+body.rtl .notice.tsf-notice {
+	padding-right: 12px;
+	padding-left: 38px;
 }
 
 .tsf-notice.tsf-show-icon p:before {
@@ -209,7 +215,6 @@ body.no-js .tsf-seo-bar-item {
 }
 
 /* Taxonomies overflow fix */
-/* @todo Needs to be changed within Javascript to show information below bar on first 2 entries */
 #col-container, #col-right {
 	overflow: initial;
 }
@@ -431,6 +436,17 @@ body.rtl .tsf-remove-image-button.button {
 }
 
 @media screen and (max-width: 782px) {
+	.notice.tsf-notice,
+	.wp-core-ui .notice.tsf-notice {
+		padding-right: 46px;
+	}
+
+	body.rtl .notice.tsf-notice,
+	body.rtl.wp-core-ui .notice.tsf-notice {
+		padding-right: 10px;
+		padding-left: 46px;
+	}
+
 	.tsf-metaboxes p.tsf-fields,
 	.tsf-inpost-box p.tsf-fields {
 		line-height: 2.8;

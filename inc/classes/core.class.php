@@ -222,7 +222,7 @@ class Core {
 
 		$tsf_links['about'] = sprintf(
 			'<a href="https://theseoframework.com/about-us/" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
-			\esc_html__( 'About', 'autodescription' )
+			\esc_html_x( 'About', 'About us', 'autodescription' )
 		);
 		$tsf_links['tsfem'] = sprintf(
 			'<a href="%s" rel="noreferrer noopener" target="_blank">%s</a>',
@@ -256,21 +256,21 @@ class Core {
 				'docs' => vsprintf(
 					'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
 					[
-						'https://theseoframework.com/?p=80',
+						'https://tsf.fyi/docs',
 						\esc_html__( 'View documentation', 'autodescription' ),
 					]
 				),
 				'API'  => vsprintf(
 					'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
 					[
-						'https://theseoframework.com/?p=82',
+						'https://tsf.fyi/docs/api',
 						\esc_html__( 'View API docs', 'autodescription' ),
 					]
 				),
 				'EM'   => vsprintf(
 					'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
 					[
-						'https://theseoframework.com/?p=2760',
+						'https://tsf.fyi/extension-manager',
 						\esc_html_x( 'Get the Extension Manager', 'Extension Manager is a product name; do not translate it.', 'autodescription' ),
 					]
 				),
@@ -649,6 +649,7 @@ class Core {
 						'pos' => $word_keys[ $word ],
 						'len' => strlen( $word ),
 					];
+
 					$first_encountered_word = substr( $string, $args['pos'], $args['len'] );
 
 					//* Found words that are used too frequently.

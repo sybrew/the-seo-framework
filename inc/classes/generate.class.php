@@ -117,7 +117,8 @@ class Generate extends User_Data {
 		 * @since 3.3.0 Added two parameters.
 		 *
 		 * @param array      $meta The current term meta.
-		 * @param array|null $args
+		 * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
+		 *                         Is null when query is autodetermined.
 		 * @param int <bit>  $ignore The ignore level. {
 		 *    0 = 0b00: Ignore nothing.
 		 *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)

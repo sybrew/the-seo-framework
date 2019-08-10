@@ -341,6 +341,7 @@ class Admin_Pages extends Profile {
 	 *
 	 * @since 2.6.0
 	 * @since 3.0.6 The messages are no longer auto-styled to "strong".
+	 * @since 3.3.0 Added a tabindex, so keyboard navigation is possible on the "empty" dashicon.
 	 *
 	 * @param string $message The notice message. Expected to be escaped if $escape is false.
 	 * @param string $type The notice type : 'updated', 'error', 'warning'. Expected to be escaped.
@@ -363,16 +364,15 @@ class Admin_Pages extends Profile {
 		$a11y = $a11y ? 'tsf-show-icon' : '';
 
 		return vsprintf(
-			'<div class="notice %s tsf-notice %s"><p>%s%s</p></div>',
+			'<div class="notice %s tsf-notice %s"><p>%s</p>%s</div>',
 			[
 				\esc_attr( $type ),
 				( $a11y ? 'tsf-show-icon' : '' ),
-				sprintf(
-					'<a class="hide-if-no-tsf-js tsf-dismiss" title="%s" %s></a>',
-					\esc_attr__( 'Dismiss', 'autodescription' ),
-					''
-				),
 				( $escape ? \esc_html( $message ) : $message ),
+				sprintf(
+					'<a class="hide-if-no-tsf-js tsf-dismiss" title="%s" tabindex=0></a>',
+					\esc_attr__( 'Dismiss this notice', 'autodescription' )
+				),
 			]
 		);
 	}
@@ -828,6 +828,7 @@ class Admin_Pages extends Profile {
 	 *
 	 * @since 2.6.0
 	 * @since 3.0.0 Links are now no longer followed, referred or bound to opener.
+	 * @since 3.3.0 Now adds a tabindex to the span tag, so you can focus it using keyboard navigation.
 	 *
 	 * @param string $description The descriptive on-hover title.
 	 * @param string $link        The non-escaped link.
@@ -844,7 +845,7 @@ class Admin_Pages extends Profile {
 			);
 		} else {
 			$output = sprintf(
-				'<span class="tsf-tooltip-item tsf-help" title="%1$s" data-desc="%1$s">[?]</span>',
+				'<span class="tsf-tooltip-item tsf-help" title="%1$s" data-desc="%1$s" tabindex=0>[?]</span>',
 				\esc_attr( $description )
 			);
 		}
@@ -1043,7 +1044,7 @@ class Admin_Pages extends Profile {
 		);
 
 		$content .= vsprintf(
-			'<span class="tsf-tooltip-wrap"><span id="%1$s-preview" class="tsf-image-preview tsf-tooltip-item dashicons dashicons-format-image" data-for="%1$s"></span></span>',
+			'<span class="tsf-tooltip-wrap"><span id="%1$s-preview" class="tsf-image-preview tsf-tooltip-item dashicons dashicons-format-image" data-for="%1$s" tabindex=0></span></span>',
 			$s_input_id
 		);
 
@@ -1089,7 +1090,7 @@ class Admin_Pages extends Profile {
 		);
 
 		$content .= vsprintf(
-			'<span class="tsf-tooltip-wrap"><span id="%1$s-preview" class="tsf-image-preview tsf-tooltip-item dashicons dashicons-format-image" data-for="%1$s"></span></span>',
+			'<span class="tsf-tooltip-wrap"><span id="%1$s-preview" class="tsf-image-preview tsf-tooltip-item dashicons dashicons-format-image" data-for="%1$s" tabindex=0></span></span>',
 			$s_input_id
 		);
 
@@ -1165,7 +1166,7 @@ class Admin_Pages extends Profile {
 				sprintf(
 					'<div id="%s_pixels" class="tsf-tooltip-wrap">%s</div>',
 					\esc_attr( $for ),
-					'<span class="tsf-pixel-counter-bar tsf-tooltip-item" aria-label="" data-desc=""><span class="tsf-pixel-counter-fluid"></span></span>'
+					'<span class="tsf-pixel-counter-bar tsf-tooltip-item" aria-label="" data-desc="" tabindex=0><span class="tsf-pixel-counter-fluid"></span></span>'
 				),
 				sprintf(
 					'<div class="tsf-pixel-shadow-wrap"><span class="tsf-pixel-counter-shadow tsf-%s-pixel-counter-shadow"></span></div>',

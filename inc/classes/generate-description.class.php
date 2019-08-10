@@ -354,8 +354,9 @@ class Generate_Description extends Generate {
 		 * @since 2.9.0
 		 * @since 3.0.6 1. Duplicated from $this->generate_description() (deprecated)
 		 *              2. Removed all arguments but the 'id' argument.
-		 * @param string $desc The custom-field description.
-		 * @param array  $args The description arguments.
+		 * @param string     $desc The custom-field description.
+		 * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
+		 *                         Is null when query is autodetermined.
 		 */
 		$desc = (string) \apply_filters( 'the_seo_framework_custom_field_description', $desc, $args );
 
@@ -451,12 +452,10 @@ class Generate_Description extends Generate {
 		if ( ! $this->is_auto_description_enabled( $args ) ) return '';
 
 		if ( null === $args ) {
-			$excerpt    = $this->get_description_excerpt_from_query();
-			$_filter_id = $this->get_the_real_ID();
+			$excerpt = $this->get_description_excerpt_from_query();
 		} else {
 			$this->fix_generation_args( $args );
-			$_filter_id = $args['id'];
-			$excerpt    = $this->get_description_excerpt_from_args( $args );
+			$excerpt = $this->get_description_excerpt_from_args( $args );
 		}
 
 		if ( ! in_array( $type, [ 'opengraph', 'twitter', 'search' ], true ) )
@@ -465,10 +464,14 @@ class Generate_Description extends Generate {
 		/**
 		 * @since 2.9.0
 		 * @since 3.1.0 No longer passes 3rd and 4th parameter.
-		 * @param string $excerpt The excerpt to use.
-		 * @param int    $page_id The current page/term ID
+		 * @since 3.3.0 1. Deprecated second parameter.
+		 *              2. Added third parameter: $args.
+		 * @param string     $excerpt The excerpt to use.
+		 * @param int        $page_id Deprecated.
+		 * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
+		 *                         Is null when query is autodetermined.
 		 */
-		$excerpt = (string) \apply_filters( 'the_seo_framework_fetched_description_excerpt', $excerpt, $_filter_id );
+		$excerpt = (string) \apply_filters( 'the_seo_framework_fetched_description_excerpt', $excerpt, 0, $args );
 
 		$excerpt = $this->trim_excerpt(
 			html_entity_decode( $excerpt, ENT_QUOTES | ENT_COMPAT, 'UTF-8' ),
@@ -479,8 +482,9 @@ class Generate_Description extends Generate {
 		/**
 		 * @since 2.9.0
 		 * @since 3.1.0 No longer passes 3rd and 4th parameter.
-		 * @param string     $description The generated description.
-		 * @param array|null $args The description arguments.
+		 * @param string     $desc The generated description.
+		 * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
+		 *                         Is null when query is autodetermined.
 		 */
 		$desc = (string) \apply_filters( 'the_seo_framework_generated_description', $excerpt, $args );
 
@@ -609,6 +613,7 @@ class Generate_Description extends Generate {
 	 * Returns a description excerpt for archives.
 	 *
 	 * @since 3.1.0
+	 * @since 3.3.0 Now processes HTML tags via s_excerpt_raw() for the author descriptions.
 	 *
 	 * @param null|\WP_Term $term The term.
 	 * @return string
@@ -627,6 +632,7 @@ class Generate_Description extends Generate {
 
 		/**
 		 * @since 3.1.0
+		 * @see `\the_seo_framework()->s_excerpt_raw()` to strip HTML tags neatly.
 		 * @param string   $excerpt The short circuit excerpt.
 		 * @param \WP_Term $term    The Term object.
 		 */
@@ -640,9 +646,11 @@ class Generate_Description extends Generate {
 			$excerpt = ! empty( $term->description ) ? $this->s_description_raw( $term->description ) : '';
 		} else {
 			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
+				// WordPress DOES NOT allow HTML in term descriptions, not even if you're a super-administrator.
+				// See https://wpvulndb.com/vulnerabilities/9445. We won't parse HTMl tags unless WordPress adds native support.
 				$excerpt = ! empty( $term->description ) ? $this->s_description_raw( $term->description ) : '';
 			} elseif ( $this->is_author() ) {
-				$excerpt = $this->s_description_raw( \get_the_author_meta( 'description', (int) \get_query_var( 'author' ) ) );
+				$excerpt = $this->s_excerpt_raw( \get_the_author_meta( 'description', (int) \get_query_var( 'author' ) ) );
 			} elseif ( \is_post_type_archive() ) {
 				// TODO
 				$excerpt = '';
@@ -786,6 +794,9 @@ class Generate_Description extends Generate {
 	 *                3. Now maintains last sentence with closing punctuations.
 	 * @see https://secure.php.net/manual/en/regexp.reference.unicode.php
 	 *
+	 * We use `[^\P{Po}\'\"]` because WordPress texturizes ' and " to fall under `\P{Po}`, while they don't untexturized.
+	 * This is perfect. Please have the cortesy to credit us when taking it.
+	 *
 	 * @param string $excerpt         The untrimmed excerpt.
 	 * @param int    $depr            The current excerpt length. No longer needed. Deprecated.
 	 * @param int    $max_char_length At what point to shave off the excerpt.
@@ -818,13 +829,13 @@ class Generate_Description extends Generate {
 		 *    1 : Sentence before first punctuation.
 		 *    2 : First trailing punctuation, plus everything trailing until end of sentence. (equals [3][4][5][6])
 		 *    3 : If more than one punctuation is found, this is everything leading [1] until the final punctuation.
-		 *    4 : Final punctuation found; trailing [3].
+		 *    4 : Final punctuation found, excluding quote tags; trailing [3].
 		 *    5 : All extraneous words trailing [4].
 		 *    6 : Every 4th and later word trailing [4].
 		 * }
 		 */
 		preg_match(
-			'/(?:^\p{P}*)([\P{Po}\'\"]+\p{Z}*\w*)(*COMMIT)(\p{Po}$|(.+)?(\p{Po})((?:\p{Z}*(?:\w+\p{Z}*){1,3})(.+)?)?)/su',
+			'/(?:^\p{P}*)([\P{Po}\'\"]+\p{Z}*\w*)(*COMMIT)(\p{Po}$|(.+)?([^\P{Po}\'\"])((?:\p{Z}*(?:\w+\p{Z}*){1,3})(.+)?)?)/su',
 			$excerpt,
 			$matches
 		);
@@ -895,8 +906,9 @@ class Generate_Description extends Generate {
 		 * @since 2.5.0
 		 * @since 3.0.0 Now passes $args as the second parameter.
 		 * @since 3.1.0 Now listens to option.
-		 * @param bool  $autodescription Enable or disable the automated descriptions.
-		 * @param array $args            The description arguments.
+		 * @param bool       $autodescription Enable or disable the automated descriptions.
+		 * @param array|null $args            The query arguments. Contains 'id' and 'taxonomy'.
+		 *                                    Is null when query is autodetermined.
 		 */
 		return (bool) \apply_filters_ref_array(
 			'the_seo_framework_enable_auto_description',

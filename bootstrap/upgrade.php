@@ -87,12 +87,15 @@ function _previous_db_version() {
  * @since 3.1.4 Now flushes object cache before the upgrade settings are called.
  * @since 3.3.0 1. Removed rewrite flushing; unless upgrading from <3300 to 3300
  *              2. Added time limit changes.
+ *              3. No longer runs during AJAX.
  */
 function _do_upgrade() {
 
 	$tsf = \the_seo_framework();
 
 	if ( ! $tsf->loaded ) return;
+
+	if ( \wp_doing_ajax() ) return;
 
 	if ( $tsf->is_seo_settings_page( false ) ) {
 		// phpcs:ignore, WordPress.Security.SafeRedirect -- self_admin_url() is safe.
@@ -231,19 +234,12 @@ function _do_upgrade_notice() {
 				[ 'code' ]
 			),
 			'updated',
-			false,
+			true,
 			false
 		);
 	} else {
 		$tsf->do_dismissible_notice(
-			$tsf->convert_markdown(
-				sprintf(
-					/* translators: %s = Version number, surrounded in markdown-backticks. */
-					\esc_html__( 'Thank you for installing The SEO Framework! Your site has been upgraded successfully to use The SEO Framework at database version `%s`.', 'autodescription' ),
-					\esc_html( THE_SEO_FRAMEWORK_DB_VERSION )
-				),
-				[ 'code' ]
-			),
+			\esc_html__( 'Thank you for installing The SEO Framework! Your site is now optimized for SEO, automatically. We hope you enjoy our free plugin. Good luck with your site!', 'autodescription' ),
 			'updated',
 			false,
 			false
@@ -252,7 +248,7 @@ function _do_upgrade_notice() {
 			$tsf->convert_markdown(
 				sprintf(
 					/* translators: %s = Link, markdown. */
-					\esc_html__( "The SEO Framework only identifies itself during plugin upgrades. We'd like to use this opportunity to highlight our [plugin setup guide](%s). We hope you enjoy our free plugin. Good luck with your site!", 'autodescription' ),
+					\esc_html__( "The SEO Framework only identifies itself rarely during plugin upgrades. We'd like to use this opportunity to highlight our [plugin setup guide](%s).", 'autodescription' ),
 					'https://theseoframework.com/docs/seo-plugin-setup/' // Use https://tsf.fyi/docs/setup ? Needless redirection...
 				),
 				[ 'a' ],
@@ -538,8 +534,17 @@ function _do_upgrade_3300() {
 			$tsf->update_option( 'title_separator', 'ndash' );
 
 		// Add default cron pinging option.
-		if ( isset( $defaults['ping_use_cron'] ) )
+		if ( isset( $defaults['ping_use_cron'] ) ) {
 			$tsf->update_option( 'ping_use_cron', $defaults['ping_use_cron'] );
+
+			if ( $defaults['ping_use_cron'] ) {
+				if ( $tsf->get_option( 'ping_google', false ) || $tsf->get_option( 'ping_bing', false ) ) {
+					_add_upgrade_notice(
+						\esc_html__( 'A cronjob is now used to ping search engines and alerts them to changes in your sitemap.', 'autodescription' )
+					);
+				}
+			}
+		}
 
 		$home_title_location = $tsf->get_option( 'home_title_location', false );
 		if ( 'left' === $home_title_location ) {
@@ -547,6 +552,10 @@ function _do_upgrade_3300() {
 		} else {
 			$tsf->update_option( 'home_title_location', 'left' );
 		}
+
+		_add_upgrade_notice(
+			\esc_html__( 'The positions in the "Meta Title Additions Location" on the homepage have been reversed, left to right, but the output has not been changed. If you must downgrade for some reason, remember switch the location back again.', 'autodescription' )
+		);
 	}
 
 	\update_option( 'the_seo_framework_upgraded_db_version', '3300' );

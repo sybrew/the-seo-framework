@@ -14,19 +14,22 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() a
  */
 \remove_action( 'wp_head', 'um_profile_dynamic_meta_desc', 9999999 );
 
-\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_um_filter_generated_title', 10, 1 );
+\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_um_filter_generated_title', 10, 2 );
 /**
  * Filters the custom title for UM.
  *
  * @since 3.1.0
+ * @since 3.3.0 No longer overrules external queries.
  * @access private
  *
- * @param string $title The current title.
+ * @param string     $title The filter title.
+ * @param array|null $args  The query arguments. Contains 'id' and 'taxonomy'.
+ *                          Is null when query is autodetermined.
  * @return string The filtered title.
  */
-function _um_filter_generated_title( $title = '' ) {
+function _um_filter_generated_title( $title = '', $args = null ) {
 
-	if ( \the_seo_framework()->can_i_use( [
+	if ( null === $args && \the_seo_framework()->can_i_use( [
 		'functions' => [
 			'um_is_core_page',
 			'um_get_requested_user',
@@ -38,7 +41,7 @@ function _um_filter_generated_title( $title = '' ) {
 	] ) ) {
 		if ( \um_is_core_page( 'user' ) && \um_get_requested_user() ) {
 			\um_fetch_user( \um_get_requested_user() );
-			$user_id = um_user( 'ID' );
+			$user_id = \um_user( 'ID' );
 			\um_reset_user();
 
 			$title = \um_get_display_name( $user_id );
@@ -72,7 +75,7 @@ function _um_filter_generated_url( $url = '' ) {
 	] ) ) {
 		if ( \um_is_core_page( 'user' ) && \um_get_requested_user() ) {
 			\um_fetch_user( \um_get_requested_user() );
-			$url = um_user_profile_url();
+			$url = \um_user_profile_url();
 			\um_reset_user();
 		}
 	}
@@ -80,19 +83,22 @@ function _um_filter_generated_url( $url = '' ) {
 	return $url;
 }
 
-\add_filter( 'the_seo_framework_generated_description', __NAMESPACE__ . '\\_um_filter_generated_description', 10, 1 );
+\add_filter( 'the_seo_framework_generated_description', __NAMESPACE__ . '\\_um_filter_generated_description', 10, 2 );
 /**
  * Filters the generated description for UM.
  *
  * @since 3.1.0
+ * @since 3.3.0 No longer overrules external queries.
  * @access private
  *
- * @param string $url The current description.
+ * @param string     $desc The generated description.
+ * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
+ *                         Is null when query is autodetermined.
  * @return string The filtered description.
  */
-function _um_filter_generated_description( $description = '' ) {
+function _um_filter_generated_description( $desc = '', $args = null ) {
 
-	if ( \the_seo_framework()->can_i_use( [
+	if ( null === $args && \the_seo_framework()->can_i_use( [
 		'functions' => [
 			'um_is_core_page',
 			'um_get_requested_user',
@@ -112,10 +118,10 @@ function _um_filter_generated_description( $description = '' ) {
 			} catch ( \Exception $e ) {
 				$_description = '';
 			}
-			$description = $_description ?: $description;
+			$desc = $_description ?: $desc;
 			\um_reset_user();
 		}
 	}
 
-	return $description;
+	return $desc;
 }

@@ -1,6 +1,5 @@
 === The SEO Framework ===
 Contributors: Cybr
-Donate link: https://theseoframework.com/donate/
 Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
 Requires at least: 4.9.0
 Tested up to: 5.2
@@ -284,10 +283,12 @@ TODO Exclaim:
 - We now explicitely expect PCRE to support UTF-8 mode, always. When it doesn't, the hosting company you're with is using a highly unlikely external PCRE installation, with an even more unlikely configuration based on asinine assumptions.
 	* We confirmed that, when this extension isn't correctly configured, no security issues persist. However, some strings you entered in our setting fields may be emptied abruptly.
 	* Since we incidentally enforced this since v3.1 on critical functionality (based on misrepresented PHP5.4 support) and had zero complaints, we'll now structurally enforce this for performance and ease of maintenance henceforth.
+- Accessibility improvements.
+- Tooltip improvements.
+- We added upgrade notices only visible to administrators who can `update_plugins`. These notices convey TSF's name and a message.
+	- All other notices wont mention "The SEO Framework", and use generic messages instead. Nor do we anywhere else mention in the dashboard (aside from the plugin activation page, obviously). As we always promised we wouldn't.
 
 ..., and, for developers, we've finally introduced a reliable JavaScript API. Documentation will follow based on frequently asked requests.
-
-TODO replace `the_seo_framework_fetched_description_excerpt` with something that uses `$args`.
 
 TODO reload the SEO Bar on Gutenberg save action. https://github.com/sybrew/the-seo-framework/issues/361
 TODO update wp rocket's compat file... ugh, redundant
@@ -296,18 +297,32 @@ TODO test all compat files...
 TODO call "php level caching" memoization--it's a cooler word.
 TODO index.php stuff
 
-TODO do something nicer with interpret_status_to_symbol()
+TODO do something nicer with interpret_status_to_symbol() ("We're not completely satisfied on this integration, but we'll revisit that later; building this update took long enough already.")
 
 TODO did we fix this, or was it regression: The social description fields now hold their true generated description as an example when no custom meta description is met.
 
 TODO set AJAX failure listeners?
+
+TODO revise plugin setup guide:
+1. Canonical scheme selection is no longer required as our detection is rigid (edge case: unless someone defines `WP_HOME` with scheme irrelevance and without forced http->https redirection).
+1. The Schema logo is no longer required to be square,
+1. "search engine result pages" (lowercase) -> abbr SERP.
+1. might -> may, it reads easier.
+1. On your preference -> per your preference?
+1. be displayed -> is displayed? (rewrite sentence)
+1. add images? I mean, it's well written, sure. We need to weigh whether we want to push content down in favor of these.
+1. The h4 headers aren't well discernable. We use these in the sidebar, too. So, careful about adjustments. See https://tsf.fyi/docs/improve/, where it's more clear.
+1. five to ten -> is now lower?
+1. what you can adjust (and what impact it has).
+1. make use of -> make the most of?
+1. if -> when?
 
 **Detailed log:**
 
 **For everyone:**
 
 * **Upgrading:**
-	* Upgrading happens automatically after you update the plugin, on any page but the SEO settings page.
+	* Upgrading happens automatically after you update the plugin, on any page but the SEO settings page, nor during a AJAX requests.
 		* If you find yourself on the settings page during an upgrade, you'll be booted to the first available admin page.
 			* If you are unable to access the settings page after updating, you may encounter a caching plugin error. Flush your site's cache and it should finalize.
 		* The initiator is independent from WordPress' "updating" action callback to support updating via FTP.
@@ -315,7 +330,7 @@ TODO set AJAX failure listeners?
 	* **What'll change for current users?**
 		1. The old sitemap endpoints are removed from the rewrite rules, and the rewrite rules are flushed for one last time at PHP shutdown.
 		1. The title separator `dash` will be converted to `ndash`, because that was already the case.
-		1. The cron-job-pinging option is set to enabled (default), this will improve post-saving performance.
+		1. The cronjob-pinging option is set to enabled (default), this will improve post-saving performance.
 		1. The homepage's "Meta Title Additions Location" was not in line with the global title location option. So, we rectified that. This means that left is now right, and vice versa.
 			* This is a downgrade-compatibility breaking change! If you must downgrade, you must reverse this option manually.
 * **Added:**
@@ -352,6 +367,7 @@ TODO set AJAX failure listeners?
 	* After upgrading The SEO Framework's database, users who have `update_plugins` capabilities may now see a confirmation notice that the site has been upgraded.
 	* Search engine pinging for the sitemap can now be offloaded to the WordPress cron-scheduler; this feature is enabled by default.
 	* The estimated plugin-boot time is added to the closing HTML comment; which adds the bulk of the page-loading time of this plugin. In this update, we decreased that time, greatly--and we're proudly showing it.
+		* This time is greatly affected by checking for plugin conflicts, and fixing those on-the-fly. So, if you use bbPress, BuddyPress, WooCommerce, wpForo, PolyLang, or WPML, you may see this number go (far) above 12ms. Some have a greater impact than others.
 	* The term meta inputs now have the "are you sure you want to leave this page?"-listener attached.
 	* Multiple social images may now be outputted. How this affects sharing depends on the social network.
 	* Fallback images are now always appeneded; you can no longer overwrite them.
@@ -378,6 +394,8 @@ TODO set AJAX failure listeners?
 		* When images are found to be over 4096 pixels in width or height, they'll be discarded.
 	* SEO meta generation no longer occurs when using Customizer.
 	* Redirects may now be set and performed on protocols other than `http` and `https`.
+	* Using iOS touch, tooltips arrows are now centered, instead of being near where you touched.
+		* This is because we added "focus" accessibility support, which will otherwise conflict and make the arrow jump.
 	* **Term meta:**
 		* When a term is disabled via the post type settings, saving it won't erase the custom SEO term meta.
 			* The same behavior already applied to singular post items.
@@ -453,6 +471,8 @@ TODO set AJAX failure listeners?
 			* We didn't remove the option, because you may practically add a link to a non-Google+ profile. We'll transform these options to an array of inputs when anything goes for Google's Knowledge Graph.
 	* **Performance:**
 		* The SEO Bar now loads quicker, as redundant checks have been removed.
+		* Moving your mouse over a tooltip item now requires less processing by removing inefficient jQuery dependencies, reducing the restyling time by 32% (based on a single test).
+		* Tooltip creation also no longer uses inefficient jQuery dependencies anymore, reducing the generation time by 50% (based on a single test).
 		* We offloaded a large portion of the admin-sided PHP scripts to different objects, freeing up RAM and lowering plugin boot-time.
 		* The admin helper-scripts have been optimized to execute no unnecessary paint-jobs, lowering browser-CPU usage.
 		* The SEO Settings notifications no longer get dragged around your page on-load, and instead are preemptively placed. This prevents painting the whole page three times.
@@ -541,6 +561,12 @@ TODO set AJAX failure listeners?
 	* **Accessibility:**
 		* **Global:**
 			* Our input-select elements no longer overflow to the right (or left, on RTL) of your screen. Most notably, with our [Focus extension](https://theseoframework.com/extensions/focus/#overview)'s homonymous example selector.
+			* Dismissible notices can now be dismissed using keyboard navigation on all browsers.
+			* You can now focus the SEO Bar items. Screen readers will exclaim what's written.
+			* In extent, tooltips are now displayed when focusing an element that has one.
+			* And, extent to that, you can now focus on `[?]` marks that aren't hyperlinks, and the pixel counter.
+			* Fixed an inexplicable text rendering issue for tooltips on iOS.
+			* Added extra padding to the notifications, so that the text won't be overlapped by the dismiss-button.
 		* **Post edit:**
 			* When using the Block Editor, after saving the page, setting changes are registered consistently again to the "Are you sure you wish to leave with unsaved changes?" notification handler.
 			* When you're editing the homepage via the post settings, the disabled "Remove the blog name?" option's tooltip now states it's handled elsewhere.
@@ -548,6 +574,8 @@ TODO set AJAX failure listeners?
 			* When pasting a webmaster code tag in the respective settings field, no change listener was invoked, and you didn't get an "Are you sure?"-message when navigating from the settings page with unchanged settings.
 			* When you clear a sitemap color input field, the default color is now displayed correctly.
 			* Trailing, leading, and double spaces are now trimmed from the homepage title examples.
+	* **Meta tags:**
+		* We now correctly strip HTML tags from the "Biographical Info" section for the description-generator on author archives.
 	* **Usability:**
 		* **Settings:**
 			* The global category and tag `noarchive` options now have an effect.
@@ -592,9 +620,19 @@ TODO set AJAX failure listeners?
 			* Because WordPress applies PHP 4 compatibility on some settings by stripping back-solidi, and then not on others, this leads to inconsistent behavior we'd have to fix independently for each case.
 			* Takeaway: Don't use backward solidi in WordPress, use `&amp;#92;` if you must instead.
 		* The "Remove the blog name?" option is not hidden when doing so globally.
-			* We highly discourage using the global option to achieve this. We left this option visible to let users recognize there is since an alternative.
+			* We highly discourage using the global option to achieve the implied behavior. We left this option visible to let users recognize there is an alternative since.
 	* **Interface:**
 		* When navigating away from the settings page, after changing the "category prefix" setting, the related example no longer reflects the adjusted setting.
+		* This bug is introduced in this version. Using EdgeHTML, when hovering (without moving) or focusing (either via keyboard navigation or via touching) an object with a tooltip, both our tooltip as the browser-native tooltip is shown.
+			* This is something we can't fix. See https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/6793560/
+			* Bootstrap has the same issue, and denied a fix for it. See https://github.com/twbs/bootstrap/issues/18692 & https://github.com/twbs/bootstrap/pull/19434
+			* This will be fixed when EdgeHTML phases out in favor for Chromium (Blink). This will be sooner than later.
+			* **Workaround:** Refocus the element or move your mouse, and the browser-tooltip should be gone.
+		* This bug is introduced in this version. When loading in the new image-preview tooltip in the sidebar of Gutenberg for the first time, the browser needs to paint the image in the GPU memory. This takes too long (yes, anything above 15ms is too long), and causes our calculations to fail.
+			* For us to account for this, we need to know when the image finishes painting, and then show (or readjust) the tooltip. This is a janky experience.
+				* We already preload the image in your browser-cache (either disk or RAM), but we don't paint it preemptively.
+			* The workaround for this issue is to load in the tooltip once, remove your pointer, and then reload it.
+			* The horrendously small working area in the Gutenberg sidebar is unwelcomed by many among us. We still are not confident in moving our meta box there permanently.
 	* **Terms:**
 		* When all posts attached to a term have been excluded from being shown in archives, the term may be empty, and `noindex` will be set. The SEO Bar isn't aware of this, because it doesn't run such a query.
 			* Making it aware may slow your admin queries down significantly. We haven't found the time to see if this can be integrated via available queries.
@@ -646,10 +684,11 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* The script loader now accepts and contatenates inline JS.
 	* **Changed:**
 		* Custom setting tabs and their content-callbacks should no longer have their output be returned, but always be printed instead.
+		* The helper tooltip item for primary-term selection using the classic editor may now be repositioned differently, to account for the new keyboard-navigation-supported tooltips, making the positioning more natural.
 	* **Removed:**
 		* PHP 5.4 and 5.5 support. The plugin now requires PHP 5.6 and higher.
-			* With that, we no longer require using `wp_parse_args()` and other backward-compatible functionality.
-			* You'll also find that our API has changed. For example, we now use generators to send images.
+			* With that, we no longer require using `wp_json_encode()`, `wp_parse_url()`, and other backward-compatible functionality.
+			* You'll also find that our API has changed. For example, we now use generators to yield images.
 	* **Fixed:**
 		* Registering inline scripts now correctly converts `{{$rel_color}}`.
 * **Option notes:**
@@ -981,6 +1020,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `get_social_image_uploader_form()` now adds a media preview dispenser.
 			* `get_logo_uploader_form()` now adds a media preview dispenser.
 			* `strip_tags_cs()` now allows emptying the indexes `space` and `clear`.
+			* `generate_dismissible_notice()` now adds a tabindex to the dismiss-dashicon, so keyboard naviation is possible.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`
@@ -1143,6 +1183,9 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* `the_seo_framework_bother_me_desc_length`
 			1. Now moved to the SEO Bar callers, and now only runs once per session.
 			1. The entered and default length is now counted as minimum, instead of minimum minus one.
+		* `the_seo_framework_fetched_description_excerpt`
+			1. Deprecated second parameter.
+			1. Added third paramter: `$args`.
 	* **Fixed:**
 		* `the_seo_framework_title_from_generation`, now works for:
 			1. the homepage title in the admin screens.
@@ -1222,7 +1265,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 					* **After:** 2.4KB minified, 488 SLOC
 				* **CSS:**
 					* **Before:** 16.0KB minified, 1006 SLOC
-					* **After:** 6.6KB minfified, 457 SLOC
+					* **After:** 7.1KB minfified, 480 SLOC
 			* `settings`, these files handle the SEO Settings page, mostly.
 				* **Namespaces:** `window.tsfSettings` and `window.tsfSettingsL10n`.
 				* **Script ID:** `tsf-settings`
