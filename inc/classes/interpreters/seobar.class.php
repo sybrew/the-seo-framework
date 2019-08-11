@@ -28,7 +28,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 /**
  * Interprets the SEO Bar into an HTML item.
  *
- * @since 3.3.0
+ * @since 4.0.0
  * TODO @see \the_seo_framework()->get_new_seo_bar( $args ) for easy access. (name tbd)
  *
  * @access public
@@ -43,19 +43,19 @@ final class SeoBar {
 	const STATE_GOOD    = 0b1000;
 
 	/**
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @var mixed $query The current SEO Bar's query items.
 	 */
 	public static $query = [];
 
 	/**
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @var \The_SEO_Framework\Interpreters\SeoBar $instance The instance.
 	 */
 	private static $instance;
 
 	/**
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @var array $item The current SEO Bar item list : {
 	 *
 	 * }
@@ -65,7 +65,7 @@ final class SeoBar {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	private function __construct() {
 		static::$instance = &$this;
@@ -74,7 +74,7 @@ final class SeoBar {
 	/**
 	 * Returns this instance.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return static
 	 */
@@ -84,7 +84,7 @@ final class SeoBar {
 	}
 
 	/**
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param array $query : {
 	 *   int    $id        : Required. The current post or term ID.
@@ -142,7 +142,7 @@ final class SeoBar {
 		 * } );
 		 * `
 		 *
-		 * @since 3.3.0
+		 * @since 4.0.0
 		 * @param string $class The current class name
 		 */
 		\do_action( 'the_seo_framework_seo_bar', static::class );
@@ -158,7 +158,7 @@ final class SeoBar {
 	/**
 	 * Passes the SEO Bar item collection by reference.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @collector
 	 *
 	 * @return array SEO Bar items. Passed by reference.
@@ -170,7 +170,7 @@ final class SeoBar {
 	/**
 	 * Registers or overwrites an SEO Bar item.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param string $key The item key.
 	 * @param array  $item : {
@@ -189,7 +189,7 @@ final class SeoBar {
 	/**
 	 * Passes an SEO Bar item by reference.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @collector
 	 * @staticvar $_void The void. If an item doesn't exist, it's put in here,
 	 *                   only to be obliterated, annihilated, extirpated, eradicated, etc.
@@ -215,7 +215,7 @@ final class SeoBar {
 	/**
 	 * Clears the SEO Bar items.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	private function clear_seo_bar_items() {
 		static::$items = [];
@@ -224,7 +224,7 @@ final class SeoBar {
 	/**
 	 * Stores the SEO Bar items.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @factory
 	 */
 	private function store_default_bar_items() {
@@ -244,7 +244,7 @@ final class SeoBar {
 	/**
 	 * Converts registered items to a full HTML SEO Bar.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param array $items The SEO Bar items.
 	 * @return string The SEO Bar
@@ -266,7 +266,7 @@ final class SeoBar {
 	/**
 	 * Generates SEO Bar single HTML block content.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @generator
 	 *
 	 * @param array $items The SEO Bar items.
@@ -288,7 +288,7 @@ final class SeoBar {
 	/**
 	 * Builds the SEO Bar item description, in either HTML or plaintext.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @staticvar array $gettext Cached gettext calls.
 	 *
 	 * @param array  $item See `$this->register_seo_bar_item()`
@@ -333,7 +333,7 @@ final class SeoBar {
 	/**
 	 * Enumerates the assessments in a plaintext format.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @staticvar array $gettext Cached gettext calls.
 	 *
 	 * @param array $item See `$this->register_seo_bar_item()`
@@ -379,7 +379,7 @@ final class SeoBar {
 	 * TODO instead of going over them in a switch, allow adding the binary data?
 	 *      This would meant hat we use the & logical operator, instead.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param array $item See `$this->register_seo_bar_item()`
 	 * @return string The HTML class-suffix.
@@ -411,7 +411,7 @@ final class SeoBar {
 	/**
 	 * Enumerates the assessments in a plaintext format.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @staticvar bool $use_symbols
 	 *
 	 * @param array $item See `$this->register_seo_bar_item()`

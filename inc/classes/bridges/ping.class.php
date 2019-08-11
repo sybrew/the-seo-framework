@@ -28,7 +28,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 /**
  * Pings search engines.
  *
- * @since 3.3.0
+ * @since 4.0.0
  * @uses \The_SEO_Framework\Bridges\Sitemap.
  * @access protected
  * @final Can't be extended.
@@ -44,7 +44,7 @@ final class Ping {
 	/**
 	 * Prepares a CRON-based ping within 30 seconds of calling this.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	public static function engage_pinging_cron() {
 		\wp_schedule_single_event( time() + 30, 'tsf_sitemap_cron_hook' );
@@ -59,7 +59,7 @@ final class Ping {
 	 *              @uses $this->add_cache_key_suffix()
 	 * @since 3.2.3 1. Now works as intended again.
 	 *              2. Removed Easter egg.
-	 * @since 3.3.0 Moved to \The_SEO_Framework\Bridges\Ping
+	 * @since 4.0.0 Moved to \The_SEO_Framework\Bridges\Ping
 	 *
 	 * @return void Early if blog is not public.
 	 */
@@ -97,7 +97,7 @@ final class Ping {
 	 *
 	 * @since 2.2.9
 	 * @since 3.1.0 Updated ping URL. Old one still worked, too.
-	 * @since 3.3.0 Moved to \The_SEO_Framework\Bridges\Ping
+	 * @since 4.0.0 Moved to \The_SEO_Framework\Bridges\Ping
 	 * @link https://support.google.com/webmasters/answer/6065812?hl=en
 	 */
 	public static function ping_google() {
@@ -112,7 +112,7 @@ final class Ping {
 	 *
 	 * @since 2.2.9
 	 * @since 3.2.3 Updated ping URL. Old one still worked, too.
-	 * @since 3.3.0 Moved to \The_SEO_Framework\Bridges\Ping
+	 * @since 4.0.0 Moved to \The_SEO_Framework\Bridges\Ping
 	 * @link https://www.bing.com/webmaster/help/how-to-submit-sitemaps-82a15bd4
 	 */
 	public static function ping_bing() {

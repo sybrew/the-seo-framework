@@ -44,7 +44,7 @@ $_load_scripts_class = function() {
  * - states may and are expected to be changed, like a page title.
  * - params shouldn't change, like the page ID.
  *
- * @since 3.3.0
+ * @since 4.0.0
  * @see \The_SEO_Framework\Builders\Scripts
  * @access protected
  *         Use static calls The_SEO_Framework\Bridges\Scripts::funcname()
@@ -54,7 +54,7 @@ final class Scripts {
 	use \The_SEO_Framework\Traits\Enclose_Stray_Private;
 
 	/**
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @var \The_SEO_Framework\Bridges\Scripts $instance The instance.
 	 */
 	private static $instance;
@@ -65,7 +65,7 @@ final class Scripts {
 	 * Use this if the actions need to be registered early, but nothing else of
 	 * this class is needed yet.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	public static function prepare() {}
 
@@ -74,7 +74,7 @@ final class Scripts {
 	 *
 	 * This probably autoloads at action "admin_enqueue_scripts", priority "0".
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @staticvar int $count Enforces singleton.
 	 * @internal
@@ -90,7 +90,7 @@ final class Scripts {
 	/**
 	 * Initializes scripts based on admin query.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @internal This always runs; build your own loader from the public methods, instead.
 	 */
@@ -150,7 +150,7 @@ final class Scripts {
 
 		/**
 		 * @since 3.1.0
-		 * @since 3.3.0 1. Now holds all scripts.
+		 * @since 4.0.0 1. Now holds all scripts.
 		 *              2. Added $loader parameter.
 		 * @param array  $scripts The default CSS and JS loader settings.
 		 * @param string $builder The \The_SEO_Framework\Builders\Scripts builder class name.
@@ -171,7 +171,7 @@ final class Scripts {
 	/**
 	 * Decodes entities of a string.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param mixed $value If string, it'll be decoded.
 	 * @return mixed
@@ -183,7 +183,7 @@ final class Scripts {
 	/**
 	 * Decodes all entities of the input.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @uses static::decode_entities();
 	 *
 	 * @param mixed $values The entries to decode.
@@ -204,7 +204,7 @@ final class Scripts {
 	/**
 	 * Prepares WordPress Media scripts.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	public static function prepare_media_scripts() {
 
@@ -221,7 +221,7 @@ final class Scripts {
 	/**
 	 * Prepares WordPress metabox scripts.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	public static function prepare_metabox_scripts() {
 		\wp_enqueue_script( 'common' );
@@ -232,7 +232,7 @@ final class Scripts {
 	/**
 	 * Returns the default TSF scripts.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return array The script params.
 	 */
@@ -280,7 +280,7 @@ final class Scripts {
 	/**
 	 * Returns TT (tooltip) scripts params.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return array The script params.
 	 */
@@ -326,7 +326,7 @@ final class Scripts {
 	/**
 	 * Returns AYS (Are you sure?) scripts params.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return array The script params.
 	 */
@@ -355,7 +355,7 @@ final class Scripts {
 	/**
 	 * Returns LE (List Edit) scripts params.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return array The script params.
 	 */
@@ -390,7 +390,7 @@ final class Scripts {
 	/**
 	 * Returns the SEO Settings page script params.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return array The script params.
 	 */
@@ -442,7 +442,7 @@ final class Scripts {
 	/**
 	 * Returns Post edit scripts params.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return array The script params.
 	 */
@@ -520,7 +520,7 @@ final class Scripts {
 	/**
 	 * Returns Term scripts params.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return array The script params.
 	 */
@@ -574,7 +574,7 @@ final class Scripts {
 	/**
 	 * Returns Gutenberg compatibility scripts params.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return array The script params.
 	 */
@@ -599,7 +599,7 @@ final class Scripts {
 	/**
 	 * Returns Media scripts params.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return array The script params.
 	 */
@@ -644,7 +644,7 @@ final class Scripts {
 	/**
 	 * Returns Title scripts params.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return array The script params.
 	 */
@@ -706,7 +706,7 @@ final class Scripts {
 	/**
 	 * Returns Description scripts params.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return array The script params.
 	 */
@@ -752,7 +752,7 @@ final class Scripts {
 	/**
 	 * Returns Social scripts params.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return array The script params.
 	 */
@@ -850,7 +850,7 @@ final class Scripts {
 	/**
 	 * Returns Primary Term Selection scripts params.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return array The script params.
 	 */
@@ -968,7 +968,7 @@ final class Scripts {
 	/**
 	 * Returns the Pixel and Character counter script params.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return array The script params.
 	 */

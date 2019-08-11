@@ -109,7 +109,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 /**
  * Holds private overloading functions to prevent injection or abstraction.
  *
- * @since 3.3.0
+ * @since 4.0.0
  * @access private
  */
 trait Enclose_Stray_Private {
@@ -122,7 +122,7 @@ trait Enclose_Stray_Private {
 /**
  * Forces all classes and subclasses to prevent injection or abstraction.
  *
- * @since 3.3.0
+ * @since 4.0.0
  * @access private
  */
 trait Enclose_Core_Final {

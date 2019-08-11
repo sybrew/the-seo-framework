@@ -19,7 +19,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() a
  * Filters the custom title for UM.
  *
  * @since 3.1.0
- * @since 3.3.0 No longer overrules external queries.
+ * @since 4.0.0 No longer overrules external queries.
  * @access private
  *
  * @param string     $title The filter title.
@@ -88,7 +88,7 @@ function _um_filter_generated_url( $url = '' ) {
  * Filters the generated description for UM.
  *
  * @since 3.1.0
- * @since 3.3.0 No longer overrules external queries.
+ * @since 4.0.0 No longer overrules external queries.
  * @access private
  *
  * @param string     $desc The generated description.

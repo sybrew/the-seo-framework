@@ -338,7 +338,7 @@ class Generate_Ldjson extends Generate_Image {
 	 * Themes should compliment these. If not, then Open Graph should at least compliment these.
 	 * If that's not even true, then I don't know what happens. But then you're in a grey area...
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @uses $this->get_image_details()
 	 * @ignore Not used internally, only externally.
 	 *
@@ -390,7 +390,7 @@ class Generate_Ldjson extends Generate_Image {
 	 *
 	 * @since 2.9.3
 	 * @since 3.1.0 Now always generates something, regardless of parents.
-	 * @since 3.3.0 Removed the image input requirement.
+	 * @since 4.0.0 Removed the image input requirement.
 	 *
 	 * @return string LD+JSON breadcrumbs script for Pages.
 	 */
@@ -682,7 +682,7 @@ class Generate_Ldjson extends Generate_Image {
 	 * @since 3.2.2: 1. The title now works for the homepage as blog.
 	 *               2. The image has been disabled for the homepage as blog.
 	 *                    - I couldn't fix it without evading the API, which is bad.
-	 * @since 3.3.0 Removed the image input requirement.
+	 * @since 4.0.0 Removed the image input requirement.
 	 * @staticvar array $crumb
 	 *
 	 * @return array The HomePage crumb entry.
@@ -718,7 +718,7 @@ class Generate_Ldjson extends Generate_Image {
 	 *
 	 * @since 2.9.3
 	 * @since 3.0.0 Removed @id output to allow for more same-page schema items.
-	 * @since 3.3.0 Removed the image input requirement.
+	 * @since 4.0.0 Removed the image input requirement.
 	 * @staticvar array $crumb
 	 *
 	 * @param int $position The previous crumb position.

@@ -243,7 +243,7 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 TODO:
 	- 3.2.4: 28 files loaded on the front-end, 16.97ms boot time (with dumps, can't do without). 2.49ms meta time. With TSFEM.
-	- 3.3.0: TBD 24 files loaded on the front-end, 10.49ms boot time (with dumps). 2.55ms meta time, with many more features. With TSFEM.
+	- 4.0.0: TBD 24 files loaded on the front-end, 10.49ms boot time (with dumps). 2.55ms meta time, with many more features. With TSFEM.
 		- Ergo, the plugin is 16.97/10.60 = 1.62 (or 62%) faster.
 	Exclaim: We made the fastest feature-rich SEO plugin "almost twice" (use different wording?) as fast.
 
@@ -259,7 +259,7 @@ TODO quality-control the deprecations.
 TODO test RTL.
 TODO improve plugin-upgrade-notice (bottom of readme).
 
-= 3.3.0 - Multiplex =
+= 4.0.0 - Multiplex =
 
 TODO Exclaim:
 - Multidimensional/quantum options.
@@ -1440,7 +1440,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 
 In this minor update, we bring you the most advanced description generation yet. The generator is now context-sensitive, so you can expect the descriptions to be even more natural; a real time-saver!
 
-Oh, we also [fixed some bugs](https://theseoframework.com/?p=3130), and we've implemented some improvements in preparation for version 3.3.0.
+Oh, we also [fixed some bugs](https://theseoframework.com/?p=3130), and we've implemented some improvements in preparation for version 4.0.0.
 
 = 3.2.3 =
 
@@ -1450,7 +1450,7 @@ This minor update fixes some old, [leftover bugs](https://theseoframework.com/?p
 
 This minor update brings [major bug fixes](https://theseoframework.com/?p=3022). Most notoriously, the homepage settings now predict the metadata perfectly in the admin screens. Bloggers will love this update, too, because Facebook and Twitter metadata for the home blog page is now always correct.
 
-For developers, please note that the upcoming major release (3.3.0) will introduce new taxonomical settings. Because the image-rendering integration isn't suited for this, it'll be overhauled. For more information, see [this issue](https://github.com/sybrew/the-seo-framework/issues/403).
+For developers, please note that the upcoming major release (4.0.0) will introduce new taxonomical settings. Because the image-rendering integration isn't suited for this, it'll be overhauled. For more information, see [this issue](https://github.com/sybrew/the-seo-framework/issues/403).
 
 Also, for developers, note that some API changes better suited for a major release were also brought into this minor release; these were required to fix some bugs.
 
@@ -1485,7 +1485,7 @@ Happy Holidays! [(╯°□°)╯︵ ┻┻](https://theseoframework.com/?p=2957)
 
 == Upgrade Notice ==
 
-= 3.3.0 =
+= 4.0.0 =
 TODO This is a major upgrade. Make a backup of your database before updating. WordPress v4.9 (or higher) and PHP v5.6 (or higher) are now required. If you use the Extension Manager, update it to v2.TBA.TBA (or higher) before updating this plugin. Downgrading to v3.2.4 is possible, however with the caveat that the homepage title will flip its order.
 
 = 3.1.1 =

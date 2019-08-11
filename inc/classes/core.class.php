@@ -119,7 +119,7 @@ class Core {
 	 *
 	 * @since 2.8.0
 	 * @since 2.9.0 Now flushes all levels rather than just the latest one.
-	 * @since 3.3.0 Is now public.
+	 * @since 4.0.0 Is now public.
 	 *
 	 * @return bool True on clear. False otherwise.
 	 */
@@ -281,7 +281,7 @@ class Core {
 	/**
 	 * Returns an array of hierarchical post types.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return array The public hierarchical post types with rewrite.
 	 */
@@ -300,7 +300,7 @@ class Core {
 	/**
 	 * Returns an array of nonhierarchical post types.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return array The public nonhierarchical post types with rewrite.
 	 */
@@ -457,7 +457,7 @@ class Core {
 	 * Fetches the Timezone String from given offset.
 	 *
 	 * @since 2.6.0
-	 * @since 3.3.0 Removed PHP <5.6 support.
+	 * @since 4.0.0 Removed PHP <5.6 support.
 	 *
 	 * @param int $offset The GMT offzet.
 	 * @return string PHP Timezone String.
@@ -590,7 +590,7 @@ class Core {
 	 *              instead of relying on PHP's incomplete encoding table.
 	 *              This does mean that the functionality is crippled when the PHP
 	 *              installation isn't unicode compatible; this is unlikely.
-	 * @since 3.3.0 1. Now expects PCRE UTF-8 encoding support.
+	 * @since 4.0.0 1. Now expects PCRE UTF-8 encoding support.
 	 *              2. Moved filter outside of this function.
 	 *              3. Short length now works as intended, instead of comparing as less, it compares as less or equal to.
 	 * @staticvar bool   $use_mb Determines whether we can use mb_* functions.

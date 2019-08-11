@@ -111,7 +111,7 @@ class Generate_Description extends Generate {
 	 *
 	 * @since 3.1.0
 	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
-	 * @since 3.3.0 Added term meta item checks.
+	 * @since 4.0.0 Added term meta item checks.
 	 * @see $this->get_open_graph_description()
 	 * @see $this->get_open_graph_description_from_custom_field()
 	 *
@@ -149,7 +149,7 @@ class Generate_Description extends Generate {
 	 * @since 3.1.0
 	 * @since 3.2.2: 1. Now tests for the homepage as page prior getting custom field data.
 	 *               2. Now obtains custom field data for terms.
-	 * @since 3.3.0 Added term meta item checks.
+	 * @since 4.0.0 Added term meta item checks.
 	 * @see $this->get_open_graph_description()
 	 * @see $this->get_open_graph_description_from_custom_field()
 	 *
@@ -237,7 +237,7 @@ class Generate_Description extends Generate {
 	 * @since 3.1.0
 	 * @since 3.2.2: 1. Now tests for the homepage as page prior getting custom field data.
 	 *               2. Now obtains custom field data for terms.
-	 * @since 3.3.0 Added term meta item checks.
+	 * @since 4.0.0 Added term meta item checks.
 	 * @see $this->get_twitter_description()
 	 * @see $this->get_twitter_description_from_custom_field()
 	 *
@@ -284,7 +284,7 @@ class Generate_Description extends Generate {
 	 * @since 3.1.0
 	 * @since 3.2.2: 1. Now tests for the homepage as page prior getting custom field data.
 	 *               2. Now obtains custom field data for terms.
-	 * @since 3.3.0 Added term meta item checks.
+	 * @since 4.0.0 Added term meta item checks.
 	 * @see $this->get_twitter_description()
 	 * @see $this->get_twitter_description_from_custom_field()
 	 *
@@ -464,7 +464,7 @@ class Generate_Description extends Generate {
 		/**
 		 * @since 2.9.0
 		 * @since 3.1.0 No longer passes 3rd and 4th parameter.
-		 * @since 3.3.0 1. Deprecated second parameter.
+		 * @since 4.0.0 1. Deprecated second parameter.
 		 *              2. Added third parameter: $args.
 		 * @param string     $excerpt The excerpt to use.
 		 * @param int        $page_id Deprecated.
@@ -613,7 +613,7 @@ class Generate_Description extends Generate {
 	 * Returns a description excerpt for archives.
 	 *
 	 * @since 3.1.0
-	 * @since 3.3.0 Now processes HTML tags via s_excerpt_raw() for the author descriptions.
+	 * @since 4.0.0 Now processes HTML tags via s_excerpt_raw() for the author descriptions.
 	 *
 	 * @param null|\WP_Term $term The term.
 	 * @return string
@@ -789,7 +789,7 @@ class Generate_Description extends Generate {
 	 *                3. Now has unicode support for sentence closing.
 	 *                4. Now strips last three words when preceded by a sentence closing separator.
 	 *                5. Now always leads with (inviting) dots, even if the excerpt is shorter than $max_char_length.
-	 * @since 3.3.0 : 1. Now stops parsing earlier on failure.
+	 * @since 4.0.0 : 1. Now stops parsing earlier on failure.
 	 *                2. Now performs faster queries.
 	 *                3. Now maintains last sentence with closing punctuations.
 	 * @see https://secure.php.net/manual/en/regexp.reference.unicode.php

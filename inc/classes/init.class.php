@@ -354,7 +354,7 @@ class Init extends Query {
 	 * @since 3.0.0 Now converts timezone if needed.
 	 * @since 3.1.0 1. Now no longer outputs anything on preview.
 	 *              2. Now no longer outputs anything on blocked post types.
-	 * @since 3.3.0 Now no longer outputs anything on Customizer.
+	 * @since 4.0.0 Now no longer outputs anything on Customizer.
 	 * @access private
 	 */
 	public function html_output() {
@@ -476,7 +476,7 @@ class Init extends Query {
 	 * @since 2.9.0
 	 * @since 3.1.0: 1. Now no longer redirects on preview.
 	 *               2. Now listens to post type settings.
-	 * @since 3.3.0: 1. No longer tries to redirect on "search".
+	 * @since 4.0.0: 1. No longer tries to redirect on "search".
 	 *               2. Added term redirect support.
 	 *               3. No longer redirects on Customizer.
 	 * @access private
@@ -554,7 +554,7 @@ class Init extends Query {
 	/**
 	 * Prepares sitemap output.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 */
 	public function _init_sitemap() {
@@ -654,7 +654,7 @@ class Init extends Query {
 	/**
 	 * Adjusts the X-Robots tag headers.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 */
 	public function _init_robots_headers() {
@@ -667,7 +667,7 @@ class Init extends Query {
 	/**
 	 * Sets the X-Robots tag headers to 'noindex'.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 */
 	public function _output_robots_noindex_headers() {

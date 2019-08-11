@@ -98,7 +98,7 @@ class Admin_Pages extends Profile {
 	/**
 	 * Outputs the SEO Settings page wrap.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 */
 	public function _output_settings_wrap() {
@@ -115,7 +115,7 @@ class Admin_Pages extends Profile {
 	/**
 	 * Prepares post edit view, like outputting the fields.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param string   $post_type The current post type.
 	 * @param \WP_Post $post      The Post object.
@@ -141,7 +141,7 @@ class Admin_Pages extends Profile {
 	/**
 	 * Prepares term edit view, like outputting the fields.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	public function _init_term_edit_view() {
 
@@ -169,7 +169,7 @@ class Admin_Pages extends Profile {
 	/**
 	 * Outputs notices on SEO setting changes.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 */
 	public static function _do_settings_page_notices() {
@@ -237,7 +237,7 @@ class Admin_Pages extends Profile {
 	 * @since 2.3.6
 	 * @since 2.6.0 Refactored.
 	 * @since 3.1.0 Now prefixes the IDs.
-	 * @since 3.3.0 Deprecated third parameter, silently.
+	 * @since 4.0.0 Deprecated third parameter, silently.
 	 *
 	 * @param string $id      The nav-tab ID
 	 * @param array  $tabs    The tab content {
@@ -260,7 +260,7 @@ class Admin_Pages extends Profile {
 	 *
 	 * @since 2.9.0
 	 * @since 3.0.0: Converted to view.
-	 * @since 3.3.0: Deprecated third parameter, silently.
+	 * @since 4.0.0: Deprecated third parameter, silently.
 	 *
 	 * @param string $id       The nav-tab ID
 	 * @param array  $tabs     The tab content {
@@ -341,7 +341,7 @@ class Admin_Pages extends Profile {
 	 *
 	 * @since 2.6.0
 	 * @since 3.0.6 The messages are no longer auto-styled to "strong".
-	 * @since 3.3.0 Added a tabindex, so keyboard navigation is possible on the "empty" dashicon.
+	 * @since 4.0.0 Added a tabindex, so keyboard navigation is possible on the "empty" dashicon.
 	 *
 	 * @param string $message The notice message. Expected to be escaped if $escape is false.
 	 * @param string $type The notice type : 'updated', 'error', 'warning'. Expected to be escaped.
@@ -592,7 +592,7 @@ class Admin_Pages extends Profile {
 	/**
 	 * Makes simple and JSON-encoded data-* tags for HTML elements.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @internal
 	 *
 	 * @param array $data : Expected to be escaped! {
@@ -741,7 +741,7 @@ class Admin_Pages extends Profile {
 	 * Returns a HTML select form elements for qubit options: -1, 0, or 1.
 	 * Does not support "multiple" field selections.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param array $args : {
 	 *    string     $id       The select field ID.
@@ -828,7 +828,7 @@ class Admin_Pages extends Profile {
 	 *
 	 * @since 2.6.0
 	 * @since 3.0.0 Links are now no longer followed, referred or bound to opener.
-	 * @since 3.3.0 Now adds a tabindex to the span tag, so you can focus it using keyboard navigation.
+	 * @since 4.0.0 Now adds a tabindex to the span tag, so you can focus it using keyboard navigation.
 	 *
 	 * @param string $description The descriptive on-hover title.
 	 * @param string $link        The non-escaped link.
@@ -990,7 +990,7 @@ class Admin_Pages extends Profile {
 	/**
 	 * Returns the SEO Bar.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @uses \The_SEO_Framework\Interpreters\SeoBar::generate_bar();
 	 *
 	 * @param array $query : {
@@ -1011,7 +1011,7 @@ class Admin_Pages extends Profile {
 	 *
 	 * @since 2.8.0
 	 * @since 3.1.0 No longer prepares media l10n data.
-	 * @since 3.3.0 Now adds a media preview dispenser.
+	 * @since 4.0.0 Now adds a media preview dispenser.
 	 *
 	 * @param string $input_id Required. The HTML input id to pass URL into.
 	 * @return string The image uploader button.
@@ -1057,7 +1057,7 @@ class Admin_Pages extends Profile {
 	 *
 	 * @since 3.0.0
 	 * @since 3.1.0 No longer prepares media l10n data.
-	 * @since 3.3.0 Now adds a media preview dispenser.
+	 * @since 4.0.0 Now adds a media preview dispenser.
 	 *
 	 * @param string $input_id Required. The HTML input id to pass URL into.
 	 * @return string The image uploader button.
@@ -1180,7 +1180,7 @@ class Admin_Pages extends Profile {
 	 * Calculates the social title and description placeholder values.
 	 * This is intricated, voluminous, and convoluted; but, there's no other way :(
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 *
 	 * @param array  $args An array of 'id' and 'taxonomy' values.

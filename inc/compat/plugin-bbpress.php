@@ -45,7 +45,7 @@ function _bbpress_filter_order_keys( $current_keys = [] ) {
  *              2. Now no longer fixes the title when `is_tax()` is true. Because,
  *                 this method is no longer necessary when bbPress fixes this issue.
  *                 This should be fixed as of bbPress 2.6. Which seemed to be released internally August 6th, 2018.
- * @since 3.3.0 No longer overrules external queries.
+ * @since 4.0.0 No longer overrules external queries.
  * @access private
  *
  * @param string     $title The filter title.
@@ -77,7 +77,7 @@ function _bbpress_filter_pre_title( $title = '', $args = null ) {
  * @since 3.0.4 : Default value for $max_char_length has been increased from 155 to 300.
  * @since 3.1.0 Now no longer fixes the description when `is_tax()` is true.
  *              @see `_bbpress_filter_pre_title()` for explanation.
- * @since 3.3.0 No longer overrules external queries.
+ * @since 4.0.0 No longer overrules external queries.
  * @access private
  *
  * @param string     $excerpt The excerpt to use.
@@ -110,7 +110,7 @@ function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $args 
  * This function fixes the Custom Description part.
  *
  * @since 2.9.0
- * @since 3.3.0 No longer overrules external queries.
+ * @since 4.0.0 No longer overrules external queries.
  * @access private
  *
  * @param string     $desc The custom-field description.

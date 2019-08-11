@@ -28,7 +28,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 /**
  * Prepares the List Edit view interface.
  *
- * @since 3.3.0
+ * @since 4.0.0
  * @access protected
  * @internal
  * @final Can't be extended.
@@ -36,7 +36,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 final class ListEdit extends ListTable {
 
 	/**
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @var string The column name.
 	 */
 	private $column_name = 'tsf-quick-edit';
@@ -44,7 +44,7 @@ final class ListEdit extends ListTable {
 	/**
 	 * Constructor, sets column name and calls parent.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	public function __construct() {
 		parent::__construct();
@@ -56,7 +56,7 @@ final class ListEdit extends ListTable {
 	/**
 	 * Prepares the quick/bulk edit output.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 *
 	 * @param \WP_Screen|string $screen \WP_Screen
@@ -77,7 +77,7 @@ final class ListEdit extends ListTable {
 	/**
 	 * Permanently hides quick/bulk-edit column.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 *
 	 * @param array $hidden The existing hidden columns.
@@ -92,7 +92,7 @@ final class ListEdit extends ListTable {
 	 * Adds hidden column to access quick/bulk-edit.
 	 * This column is a dummy, but it's required to display quick/bulk edit items.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @abstract
 	 *
@@ -108,7 +108,7 @@ final class ListEdit extends ListTable {
 	/**
 	 * Displays the SEO bulk edit fields.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 *
 	 * @param string $column_name Name of the column to edit.
@@ -130,7 +130,7 @@ final class ListEdit extends ListTable {
 	/**
 	 * Displays the SEO quick edit fields.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 *
 	 * @param string $column_name Name of the column to edit.
@@ -151,7 +151,7 @@ final class ListEdit extends ListTable {
 	/**
 	 * Outputs the quick edit data for posts and pages.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @abstract
 	 *
@@ -207,7 +207,7 @@ final class ListEdit extends ListTable {
 	/**
 	 * Returns the quick edit data for terms.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @abstract
 	 * @NOTE Unlike `_output_column_post_data()`, this is a filter callback.

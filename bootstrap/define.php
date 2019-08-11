@@ -142,7 +142,7 @@ define( 'THE_SEO_FRAMEWORK_DIR_PATH_COMPAT', THE_SEO_FRAMEWORK_DIR_PATH . 'inc' 
 /**
  * Robots setting, ignore protection.
  *
- * @since 3.3.0
+ * @since 4.0.0
  * @see \The_SEO_Framework\Generate\robots_meta()
  */
 const ROBOTS_IGNORE_PROTECTION = 0b01;
@@ -150,7 +150,7 @@ const ROBOTS_IGNORE_PROTECTION = 0b01;
 /**
  * Robots setting, ignore settings.
  *
- * @since 3.3.0
+ * @since 4.0.0
  * @see \The_SEO_Framework\Generate\robots_meta()
  */
 const ROBOTS_IGNORE_SETTINGS = 0b10;

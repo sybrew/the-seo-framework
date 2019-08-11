@@ -85,7 +85,7 @@ function _previous_db_version() {
  *              8. Now tries to increase memory limit. This probably isn't needed.
  *              9. Now runs on the front-end, too, via `init`, instead of `admin_init`.
  * @since 3.1.4 Now flushes object cache before the upgrade settings are called.
- * @since 3.3.0 1. Removed rewrite flushing; unless upgrading from <3300 to 3300
+ * @since 4.0.0 1. Removed rewrite flushing; unless upgrading from <3300 to 3300
  *              2. Added time limit changes.
  *              3. No longer runs during AJAX.
  */
@@ -204,7 +204,7 @@ function _upgrade_to_current() {
 /**
  * Prepares a notice when the upgrade is completed.
  *
- * @since 3.3.0
+ * @since 4.0.0
  * @access private
  */
 function _prepare_upgrade_notice() {
@@ -282,7 +282,7 @@ function _prepare_upgrade_suggestion() {
 /**
  * Loads plugin suggestion file
  *
- * @since 3.3.0
+ * @since 4.0.0
  */
 function _include_upgrade_suggestion() {
 
@@ -514,7 +514,7 @@ function _do_upgrade_3103() {
  * Flushes rewrite rules.
  * Converts title separator's dash option to ndash.
  *
- * @since 3.3.0
+ * @since 4.0.0
  */
 function _do_upgrade_3300() {
 

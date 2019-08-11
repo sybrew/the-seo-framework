@@ -36,7 +36,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * of extra load time, every single admin request, however, because we memoize deep checks.
  * Totally negligible.
  *
- * @since 3.3.0
+ * @since 4.0.0
  * @access private
  * @abstract
  */
@@ -44,19 +44,19 @@ abstract class ListTable {
 	use \The_SEO_Framework\Traits\Enclose_Core_Final;
 
 	/**
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @var string $post_type The current post type.
 	 */
 	protected $post_type = '';
 
 	/**
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @var string $taxonomy The current taxonomy.
 	 */
 	protected $taxonomy = '';
 
 	/**
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @var bool $doing_ajax Whether we're satisfying an AJAX request.
 	 */
 	protected $doing_ajax = false;
@@ -64,7 +64,7 @@ abstract class ListTable {
 	/**
 	 * Constructor, loads actions.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 */
 	public function __construct() {
@@ -81,7 +81,7 @@ abstract class ListTable {
 	/**
 	 * Initializes columns for current screen.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 *
 	 * @param \WP_Screen|string $screen \WP_Screen
@@ -93,7 +93,7 @@ abstract class ListTable {
 	/**
 	 * Initializes columns for adding a tag or category.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 */
 	public function _prepare_columns_wp_ajax_add_tag() {
@@ -112,7 +112,7 @@ abstract class ListTable {
 	/**
 	 * Initializes columns for adding a tag or category.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 */
 	public function _prepare_columns_wp_ajax_inline_save() {
@@ -132,7 +132,7 @@ abstract class ListTable {
 	/**
 	 * Initializes columns for adding a tag or category.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @securitycheck 3.0.0 OK.
 	 * @access private
 	 */
@@ -151,7 +151,7 @@ abstract class ListTable {
 	/**
 	 * Initializes columns.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param \WP_Screen $screen The current screen.
 	 */
@@ -190,7 +190,7 @@ abstract class ListTable {
 	/**
 	 * Initializes columns for AJAX.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @see callers for CSRF protection.
 	 *    `_prepare_columns_wp_ajax_add_tag()`
 	 *    `_prepare_columns_wp_ajax_inline_save()`
@@ -249,7 +249,7 @@ abstract class ListTable {
 	/**
 	 * Add column on edit(-tags).php
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @abstract
 	 *
@@ -261,7 +261,7 @@ abstract class ListTable {
 	/**
 	 * Outputs the SEO Bar for posts and pages.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @abstract
 	 *
@@ -273,7 +273,7 @@ abstract class ListTable {
 	/**
 	 * Returns the contents for a column on tax screens.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @abstract
 	 * @NOTE Unlike _output_seo_bar_for_column(), this is a filter callback.

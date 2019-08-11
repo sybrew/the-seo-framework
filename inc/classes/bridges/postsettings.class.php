@@ -30,7 +30,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  *
  * TODO carry over what we implemented in TSFEM, and make that the standard.
  *
- * @since 3.3.0
+ * @since 4.0.0
  * @access protected
  * @internal
  * @final Can't be extended.
@@ -41,7 +41,7 @@ final class PostSettings {
 	/**
 	 * Registers the meta box for the Post edit screens.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param string $post_type The current Post Type.
 	 */
@@ -91,7 +91,7 @@ final class PostSettings {
 	 * Setting nav tab wrappers.
 	 * Outputs Tabs and settings content.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 *
 	 * @param string $id      The nav-tab ID.
@@ -113,7 +113,7 @@ final class PostSettings {
 	/**
 	 * Outputs the meta box.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	public static function _meta_box() {
 
@@ -140,7 +140,7 @@ final class PostSettings {
 	 * Outputs nonce fields for the post settings.
 	 * Redundant, but added for sanity.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	private static function output_nonce_field() {
 		$tsf = \the_seo_framework();
@@ -150,7 +150,7 @@ final class PostSettings {
 	/**
 	 * Outputs the Post SEO box general tab.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	public static function _general_tab() {
 		/**
@@ -167,7 +167,7 @@ final class PostSettings {
 	/**
 	 * Outputs the Post SEO box visibility tab.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	public static function _visibility_tab() {
 		/**
@@ -184,7 +184,7 @@ final class PostSettings {
 	/**
 	 * Outputs the Post SEO box social tab.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	public static function _social_tab() {
 		/**

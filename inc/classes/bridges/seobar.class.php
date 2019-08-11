@@ -28,7 +28,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 /**
  * Loads the SEO Bar for administrative tables.
  *
- * @since 3.3.0
+ * @since 4.0.0
  * @uses \The_SEO_Framework\Interpreters\SeoBar
  * @see \The_SEO_Framework\Interpreters\SeoBar to generate a bar.
  *
@@ -37,7 +37,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 final class SeoBar extends ListTable {
 
 	/**
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @var string The column name.
 	 */
 	private $column_name = 'tsf-seo-bar-wrap';
@@ -48,7 +48,7 @@ final class SeoBar extends ListTable {
 	 * Also determines where the column should be placed. Preferred before comments, then data, then tags.
 	 * When none found, it will add the column to the end.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @abstract
 	 *
@@ -106,7 +106,7 @@ final class SeoBar extends ListTable {
 	/**
 	 * Outputs the SEO Bar for posts and pages.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @abstract
 	 *
@@ -130,7 +130,7 @@ final class SeoBar extends ListTable {
 	/**
 	 * Returns the SEO Bar for terms.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @abstract
 	 * @NOTE Unlike _output_seo_bar_for_column(), this is a filter callback.
@@ -160,7 +160,7 @@ final class SeoBar extends ListTable {
 	 * Outputs a JS script that triggers SEO Bar updates.
 	 * This is a necessity as WordPress doesn't trigger actions on update.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 *
 	 * @return string The triggering script.

@@ -72,7 +72,7 @@ class Render extends Admin_Init {
 	 * Use the_seo_framework()->get_title() instead.
 	 *
 	 * @since 3.1.0
-	 * @since 3.3.0 Removed extraneous, unused parameters.
+	 * @since 4.0.0 Removed extraneous, unused parameters.
 	 * @see $this->get_title()
 	 *
 	 * @param string $title       The filterable title.
@@ -103,7 +103,7 @@ class Render extends Admin_Init {
 	 *
 	 * @since 2.2.2
 	 * @since 2.7.0 $get_id parameter has been added.
-	 * @since 3.3.0 Now uses the new image generator.
+	 * @since 4.0.0 Now uses the new image generator.
 	 * @staticvar string $cache
 	 *
 	 * @return string The image URL.
@@ -1077,7 +1077,7 @@ class Render extends Admin_Init {
 	 * Returns the plugin hidden HTML indicators.
 	 *
 	 * @since 2.9.2
-	 * @since 3.3.0 Added boot timers.
+	 * @since 4.0.0 Added boot timers.
 	 * @staticvar array $cache
 	 *
 	 * @param string $where  Determines the position of the indicator.

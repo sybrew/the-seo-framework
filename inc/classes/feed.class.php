@@ -81,7 +81,7 @@ class Feed extends Cache {
 	 * Converts feed content to excerpt.
 	 *
 	 * @since 2.9.0
-	 * @since 3.3.0 No longer uses mbstring for html tagging, it was redundant as we were looking for ASCII characters.
+	 * @since 4.0.0 No longer uses mbstring for html tagging, it was redundant as we were looking for ASCII characters.
 	 *
 	 * @param string $content The full feed entry content.
 	 * @return string The excerpted feed.

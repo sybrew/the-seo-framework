@@ -38,7 +38,7 @@ class Generate_Image extends Generate_Url {
 	 * Returns the image details from cache.
 	 * Only to be used within the loop, uses default parameters, inlucing the 'social' context.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @staticvar array $cache
 	 *
 	 * @return array The image details array, sequential: int => {
@@ -57,7 +57,7 @@ class Generate_Image extends Generate_Url {
 	/**
 	 * Returns image details.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
 	 *                            Leave null to autodetermine query.
@@ -93,7 +93,7 @@ class Generate_Image extends Generate_Url {
 	/**
 	 * Returns single custom field image details.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
 	 *                           Leave null to autodetermine query.
@@ -123,7 +123,7 @@ class Generate_Image extends Generate_Url {
 	/**
 	 * Returns single or multiple generates image details.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
 	 *                            Leave null to autodetermine query.
@@ -154,7 +154,7 @@ class Generate_Image extends Generate_Url {
 	/**
 	 * Returns single custom field image details from query.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return array The image details array, sequential: int => {
 	 *    string url:    The image URL,
@@ -216,7 +216,7 @@ class Generate_Image extends Generate_Url {
 	/**
 	 * Returns single custom field image details from arguments.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param array $args The query arguments. Must have 'id' and 'taxonomy'.
 	 * @return array The image details array, sequential: int => {
@@ -274,7 +274,7 @@ class Generate_Image extends Generate_Url {
 	/**
 	 * Returns image generation parameters.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
 	 *                            Leave null to autodetermine query.
@@ -343,7 +343,7 @@ class Generate_Image extends Generate_Url {
 		}
 
 		/**
-		 * @since 3.3.0
+		 * @since 4.0.0
 		 * @param array      $params  : [
 		 *    string  size:     The image size to use.
 		 *    boolean multi:    Whether to allow multiple images to be returned.
@@ -373,7 +373,7 @@ class Generate_Image extends Generate_Url {
 	/**
 	 * Generates image details.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
 	 *                            Leave null to autodetermine query.
@@ -402,7 +402,7 @@ class Generate_Image extends Generate_Url {
 	/**
 	 * Processes image detail callbacks.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param array      $cbs    The callbacks to parse. Ideally be generators, so we can halt early.
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
@@ -437,7 +437,7 @@ class Generate_Image extends Generate_Url {
 	/**
 	 * Adds image dimension and alt parameters to the input details, if any.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param array  $details The image details array, associative: {
 	 *    string url:    The image URL,
@@ -463,7 +463,7 @@ class Generate_Image extends Generate_Url {
 	/**
 	 * Generates image dimensions.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param int    $src_id The source ID of the image.
 	 * @param string $url    The source URL of the image. Ideally related to the $src_id.
@@ -502,7 +502,7 @@ class Generate_Image extends Generate_Url {
 	/**
 	 * Generates image dimensions.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param int $src_id The source ID of the image.
 	 * @return string The image alt tag

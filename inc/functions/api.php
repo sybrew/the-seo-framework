@@ -145,7 +145,7 @@ namespace The_SEO_Framework {
 	/**
 	 * Adds and returns-to the bootstrap timer.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @staticvar $time The estimated total time for bootstrapping.
 	 *

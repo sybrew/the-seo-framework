@@ -38,7 +38,7 @@ class Admin_Init extends Init {
 	/**
 	 * Initializes SEO Bar tables.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 */
 	public function _init_seo_bar_tables() {
@@ -51,7 +51,7 @@ class Admin_Init extends Init {
 	/**
 	 * Initializes List Edit tables.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 */
 	public function _init_list_edit() {
@@ -61,7 +61,7 @@ class Admin_Init extends Init {
 	/**
 	 * Adds post states in post/page edit.php query
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param array    $states The current post states array
 	 * @param \WP_Post $post The Post Object.
@@ -89,7 +89,7 @@ class Admin_Init extends Init {
 	 * Prepares scripts in the admin area.
 	 *
 	 * @since 3.1.0
-	 * @since 3.3.0 Now discerns autoloading between taxonomies and singular types.
+	 * @since 4.0.0 Now discerns autoloading between taxonomies and singular types.
 	 * @access private
 	 *
 	 * @param string|null $hook The current page hook.
@@ -144,7 +144,7 @@ class Admin_Init extends Init {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 First parameter is now deprecated.
-	 * @since 3.3.0 First parameter is now removed.
+	 * @since 4.0.0 First parameter is now removed.
 	 *
 	 * @return void Early if already enqueued.
 	 */
@@ -166,7 +166,7 @@ class Admin_Init extends Init {
 	 * strictly... As such, we stricten the guidelines for pixels instead.
 	 *
 	 * @since 3.1.0
-	 * @since 3.3.0 1. Now gives different values for various WordPress locales.
+	 * @since 4.0.0 1. Now gives different values for various WordPress locales.
 	 *              2. Added $locale input parameter.
 	 * @staticvar array $guidelines
 	 * @TODO Consider splitting up search into Google, Bing, etc., as we might
@@ -307,7 +307,7 @@ class Admin_Init extends Init {
 	 * Already attribute-escaped.
 	 *
 	 * @since 3.1.0
-	 * @since 3.3.0 Now added a short leading-dot version for ARIA labels.
+	 * @since 4.0.0 Now added a short leading-dot version for ARIA labels.
 	 *
 	 * @return array
 	 */
@@ -497,7 +497,7 @@ class Admin_Init extends Init {
 	/**
 	 * Gets an SEO Bar for AJAX during edit-post.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 */
 	public function _wp_ajax_get_post_data() {

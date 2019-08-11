@@ -118,7 +118,7 @@ class Generate_Url extends Generate_Title {
 	 * The URL will never be paginated.
 	 *
 	 * @since 3.0.0
-	 * @since 3.3.0 Now preemptively fixes the generation arguments, for easier implementation.
+	 * @since 4.0.0 Now preemptively fixes the generation arguments, for easier implementation.
 	 * @uses $this->get_canonical_url()
 	 *
 	 * @param array $args The canonical URL arguments : {
@@ -181,7 +181,7 @@ class Generate_Url extends Generate_Title {
 	 *
 	 * @since 3.0.0
 	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
-	 * @since 3.3.0 Can now fetch custom canonical URL for terms.
+	 * @since 4.0.0 Can now fetch custom canonical URL for terms.
 	 * @see $this->create_canonical_url()
 	 *
 	 * @param array $args Use $this->create_canonical_url().
@@ -219,7 +219,7 @@ class Generate_Url extends Generate_Title {
 	 * Generates canonical URL from current query.
 	 *
 	 * @since 3.0.0
-	 * @since 3.3.0 Can now fetch custom canonical URL for terms.
+	 * @since 4.0.0 Can now fetch custom canonical URL for terms.
 	 * @see $this->get_canonical_url()
 	 *
 	 * @return string The canonical URL.
@@ -370,7 +370,7 @@ class Generate_Url extends Generate_Title {
 	/**
 	 * Returns taxonomical custom field's canonical URL.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param int $term_id The term ID.
 	 * @return string The custom canonical URL, if any.
@@ -384,7 +384,7 @@ class Generate_Url extends Generate_Title {
 	 * Automatically adds pagination if the ID matches the query.
 	 *
 	 * @since 3.0.0
-	 * @since 3.3.0 1. Renamed from "get_taxonomical_canonical_url" (note the typo)
+	 * @since 4.0.0 1. Renamed from "get_taxonomical_canonical_url" (note the typo)
 	 *              2. Now works on the admin-screens.
 	 *
 	 * @param int    $term_id The term ID.
@@ -411,7 +411,7 @@ class Generate_Url extends Generate_Title {
 	 * Returns post type archive canonical URL.
 	 *
 	 * @since 3.0.0
-	 * @since 3.3.0 : 1. Deprecated first parameter as integer. Use strings or null.
+	 * @since 4.0.0 : 1. Deprecated first parameter as integer. Use strings or null.
 	 *                2. Now forwards post type object calling to WordPress' function.
 	 *
 	 * @param null|string $post_type The post type archive's post type.
@@ -421,7 +421,7 @@ class Generate_Url extends Generate_Title {
 	public function get_post_type_archive_canonical_url( $post_type = null ) {
 
 		if ( is_int( $post_type ) ) {
-			$this->_doing_it_wrong( __METHOD__, 'Only send strings or null in the first parameter.', '3.3.0' );
+			$this->_doing_it_wrong( __METHOD__, 'Only send strings or null in the first parameter.', '4.0.0' );
 			$post_type = '';
 		}
 
@@ -555,7 +555,7 @@ class Generate_Url extends Generate_Title {
 	 * Can automatically be detected.
 	 *
 	 * @since 3.0.0
-	 * @since 3.3.0 Now gets the "automatic" scheme from the WordPress home URL.
+	 * @since 4.0.0 Now gets the "automatic" scheme from the WordPress home URL.
 	 * @staticvar string $scheme
 	 *
 	 * @return string The preferred URl scheme.
@@ -599,7 +599,7 @@ class Generate_Url extends Generate_Title {
 	 * the scheme is interpreted from the request, may cause this to be unreliable.
 	 * We're going to ignore those edge-cases; they're doing it wrong.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return string The detected URl scheme, lowercase.
 	 */
@@ -627,7 +627,7 @@ class Generate_Url extends Generate_Title {
 	 * @since 2.4.2
 	 * @since 3.0.0 $use_filter now defaults to false.
 	 * @since 3.1.0 The third parameter ($use_filter) is now $deprecated.
-	 * @since 3.3.0 Removed the deprecated parameter.
+	 * @since 4.0.0 Removed the deprecated parameter.
 	 *
 	 * @param string $url    Absolute url that includes a scheme.
 	 * @param string $scheme Optional. Scheme to give $url. Currently 'http', 'https', 'login', 'login_post', 'admin', or 'relative'.
@@ -1040,7 +1040,7 @@ class Generate_Url extends Generate_Title {
 	/**
 	 * Makes a fully qualified URL from any input.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @see `$this->s_relative_url()` to make URLs relative.
 	 *
 	 * @param string $path Either the URL or path. Will always be transformed to the current domain.
@@ -1089,7 +1089,7 @@ class Generate_Url extends Generate_Title {
 	 * Tests if input URL matches current domain.
 	 *
 	 * @since 2.9.4
-	 * @since 3.3.0 Improved performance.
+	 * @since 4.0.0 Improved performance.
 	 *
 	 * @param string $url The URL to test. Required.
 	 * @return bool true on match, false otherwise.

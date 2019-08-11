@@ -30,7 +30,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  *
  * Note the use of "metabox" instead of "meta_box" throughout.
  *
- * @since 3.3.0
+ * @since 4.0.0
  * @access protected
  * @internal
  * @final Can't be extended.
@@ -41,7 +41,7 @@ final class SeoSettings {
 	/**
 	 * Registers meta boxes on the Site SEO Settings page.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 */
 	public static function _register_seo_settings_meta_boxes() {
@@ -181,7 +181,7 @@ final class SeoSettings {
 	 * Setting nav tab wrappers.
 	 * Outputs Tabs and settings content.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 *
 	 * @param string $id      The nav-tab ID.
@@ -203,7 +203,7 @@ final class SeoSettings {
 	/**
 	 * Outputs SEO Settings page wrap.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 */
 	public static function _output_wrap() {
@@ -221,7 +221,7 @@ final class SeoSettings {
 	/**
 	 * Outputs SEO Settings columns.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 */
 	public static function _output_columns() {
@@ -231,7 +231,7 @@ final class SeoSettings {
 	/**
 	 * Outputs General Settings meta box on the Site SEO Settings page.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 *
 	 * @param \WP_Post|null $post The current post object.
@@ -252,7 +252,7 @@ final class SeoSettings {
 	/**
 	 * Outputs General Settings meta box general tab.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
@@ -263,7 +263,7 @@ final class SeoSettings {
 	/**
 	 * Outputs General Settings meta box layout tab.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
@@ -274,7 +274,7 @@ final class SeoSettings {
 	/**
 	 * Outputs General Settings meta box performance tab.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
@@ -285,7 +285,7 @@ final class SeoSettings {
 	/**
 	 * Outputs General Settings meta box canonical tab.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
@@ -296,7 +296,7 @@ final class SeoSettings {
 	/**
 	 * Outputs General Settings meta box timestamps tab.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
@@ -307,7 +307,7 @@ final class SeoSettings {
 	/**
 	 * Outputs General Settings meta box post types tab.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
@@ -318,7 +318,7 @@ final class SeoSettings {
 	/**
 	 * Title meta box on the Site SEO Settings page.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 *
 	 * @param \WP_Post|null $post The current post object.
@@ -339,7 +339,7 @@ final class SeoSettings {
 	/**
 	 * Title meta box general tab.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::title_metabox() : Callback for Title Settings box.
 	 */
@@ -350,7 +350,7 @@ final class SeoSettings {
 	/**
 	 * Title meta box general tab.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::title_metabox() : Callback for Title Settings box.
 	 *
@@ -366,7 +366,7 @@ final class SeoSettings {
 	/**
 	 * Title meta box prefixes tab.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::title_metabox() : Callback for Title Settings box.
 	 *
@@ -383,7 +383,7 @@ final class SeoSettings {
 	/**
 	 * Description meta box on the Site SEO Settings page.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 *
 	 * @param \WP_Post|null $post The current post object.
@@ -404,7 +404,7 @@ final class SeoSettings {
 	/**
 	 * Robots meta box on the Site SEO Settings page.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 *
 	 * @param \WP_Post|null $post The current post object.
@@ -425,7 +425,7 @@ final class SeoSettings {
 	/**
 	 * Robots Metabox General Tab output.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::robots_metabox() Callback for Robots Settings box.
 	 */
@@ -436,7 +436,7 @@ final class SeoSettings {
 	/**
 	 * Robots Metabox "No-: Index/Follow/Archive" Tab output.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::robots_metabox() Callback for Robots Settings box.
 	 *
@@ -455,7 +455,7 @@ final class SeoSettings {
 	/**
 	 * Outputs the Homepage meta box on the Site SEO Settings page.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 *
 	 * @param \WP_Post|null $post The current post object.
@@ -476,7 +476,7 @@ final class SeoSettings {
 	/**
 	 * Homepage Metabox General Tab Output.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::homepage_metabox() Callback for Homepage Settings box.
 	 */
@@ -487,7 +487,7 @@ final class SeoSettings {
 	/**
 	 * Homepage Metabox Additions Tab Output.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::homepage_metabox() Callback for Homepage Settings box.
 	 */
@@ -498,7 +498,7 @@ final class SeoSettings {
 	/**
 	 * Homepage Metabox Robots Tab Output
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::homepage_metabox() Callback for Homepage Settings box.
 	 */
@@ -509,7 +509,7 @@ final class SeoSettings {
 	/**
 	 * Homepage Metabox Social Tab Output
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::homepage_metabox() Callback for Homepage Settings box.
 	 */
@@ -520,7 +520,7 @@ final class SeoSettings {
 	/**
 	 * Social meta box on the Site SEO Settings page.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 *
 	 * @param \WP_Post|null $post The current post object.
@@ -541,7 +541,7 @@ final class SeoSettings {
 	/**
 	 * Social Metabox General Tab output.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::social_metabox() Callback for Social Settings box.
 	 */
@@ -552,7 +552,7 @@ final class SeoSettings {
 	/**
 	 * Social Metabox Facebook Tab output.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::social_metabox() Callback for Social Settings box.
 	 */
@@ -563,7 +563,7 @@ final class SeoSettings {
 	/**
 	 * Social Metabox Twitter Tab output.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::social_metabox() Callback for Social Settings box.
 	 */
@@ -574,7 +574,7 @@ final class SeoSettings {
 	/**
 	 * Social Metabox PostDates Tab output.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::social_metabox() Callback for Social Settings box.
 	 */
@@ -585,7 +585,7 @@ final class SeoSettings {
 	/**
 	 * Webmaster meta box on the Site SEO Settings page.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 *
 	 * @param \WP_Post|null $post The current post object.
@@ -606,7 +606,7 @@ final class SeoSettings {
 	/**
 	 * Sitemaps meta box on the Site SEO Settings page.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 *
@@ -628,7 +628,7 @@ final class SeoSettings {
 	/**
 	 * Sitemaps Metabox General Tab output.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
@@ -639,7 +639,7 @@ final class SeoSettings {
 	/**
 	 * Sitemaps Metabox Robots Tab output.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
@@ -650,7 +650,7 @@ final class SeoSettings {
 	/**
 	 * Sitemaps Metabox Metadata Tab output.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
@@ -661,7 +661,7 @@ final class SeoSettings {
 	/**
 	 * Sitemaps Metabox Notify Tab output.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
@@ -672,7 +672,7 @@ final class SeoSettings {
 	/**
 	 * Sitemaps Metabox Style Tab output.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
@@ -683,7 +683,7 @@ final class SeoSettings {
 	/**
 	 * Feed Metabox on the Site SEO Settings page.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 *
 	 * @param \WP_Post|null $post The current post object.
@@ -704,7 +704,7 @@ final class SeoSettings {
 	/**
 	 * Schema Metabox on the Site SEO Settings page.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 *
 	 * @param \WP_Post|null $post The current post object.
@@ -725,7 +725,7 @@ final class SeoSettings {
 	/**
 	 * Schema Metabox Structure Tab output.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::schema_metabox() Callback for Schema.org Settings box.
 	 */
@@ -736,7 +736,7 @@ final class SeoSettings {
 	/**
 	 * Schema Metabox PResence Tab output.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @see static::schema_metabox() Callback for Schema.org Settings box.
 	 */

@@ -35,7 +35,7 @@ function _init_wc_compat() {
 /**
  * Adjusts image generation parameters.
  *
- * @since 3.3.0
+ * @since 4.0.0
  *
  * @param array      $params : [
  *    string  size:     The image size to use.
@@ -80,7 +80,7 @@ function _adjust_image_generation_params( $params, $args ) {
 /**
  * Generates image URLs and IDs from the WooCommerce product gallary entries.
  *
- * @since 3.3.0
+ * @since 4.0.0
  * @generator
  *
  * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
@@ -121,7 +121,7 @@ function _get_product_gallery_image_details( $args = null, $size = 'full' ) {
 /**
  * Generates image URL and ID from the WooCommerce product category thumbnail entries.
  *
- * @since 3.3.0
+ * @since 4.0.0
  * @generator
  *
  * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.

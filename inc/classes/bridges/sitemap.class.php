@@ -39,7 +39,7 @@ $_load_sitemap_class = function() {
 /**
  * Prepares sitemap output.
  *
- * @since 3.3.0
+ * @since 4.0.0
  * @access protected
  * @final Can't be extended.
  */
@@ -47,7 +47,7 @@ final class Sitemap {
 	use \The_SEO_Framework\Traits\Enclose_Stray_Private;
 
 	/**
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @var \The_SEO_Framework\Bridges\Sitemap
 	 */
 	private static $instance;
@@ -60,7 +60,7 @@ final class Sitemap {
 	/**
 	 * Returns this instance.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return \The_SEO_Framework\Bridges\Sitemap $instance
 	 */
@@ -74,7 +74,7 @@ final class Sitemap {
 	 * Use this if the actions need to be registered early, but nothing else of
 	 * this class is needed yet.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	public static function prepare() {}
 
@@ -83,7 +83,7 @@ final class Sitemap {
 	 *
 	 * This probably autoloads at action "admin_enqueue_scripts", priority "0".
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @staticvar int $count Enforces singleton.
 	 * @internal
@@ -100,7 +100,7 @@ final class Sitemap {
 	/**
 	 * Initializes scripts based on admin query.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @internal This always runs; build your own loader from the public methods, instead.
 	 */
@@ -136,7 +136,7 @@ final class Sitemap {
 		$this->clean_up_globals();
 
 		/**
-		 * @since 3.3.0
+		 * @since 4.0.0
 		 * @param string $sitemap_id The sitemap ID. See `static::get_sitemap_endpoint_list()`.
 		 */
 		\do_action( 'the_seo_framework_sitemap_header', $sitemap_id );
@@ -147,7 +147,7 @@ final class Sitemap {
 	/**
 	 * Returns the expected sitemap endpoint for the given ID.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @global \WP_Rewrite $wp_rewrite
 	 *
 	 * @param string $id The base ID. Default 'base'.
@@ -178,7 +178,7 @@ final class Sitemap {
 	/**
 	 * Returns a list of known sitemap endpoints.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @static array $list
 	 *
 	 * @return array The sitemap endpoints with their callbacks.
@@ -186,7 +186,7 @@ final class Sitemap {
 	public function get_sitemap_endpoint_list() {
 		static $list;
 		/**
-		 * @since 3.3.0
+		 * @since 4.0.0
 		 * @see $this->get_sitemap_endpoint_regex_list()
 		 * @param array $list The endpoints: {
 		 *   'id' => array: {
@@ -229,7 +229,7 @@ final class Sitemap {
 	 * @since 3.1.0 1. Now outputs 200-response code.
 	 *              2. Now outputs robots tag, preventing indexing.
 	 *              3. Now overrides other header tags.
-	 * @since 3.3.0 1. Moved to \The_SEO_Framework\Bridges\Sitemap
+	 * @since 4.0.0 1. Moved to \The_SEO_Framework\Bridges\Sitemap
 	 *              2. Renamed from `output_sitemap()`
 	 */
 	public function output_base_sitemap() {
@@ -257,7 +257,7 @@ final class Sitemap {
 	 * @since 3.1.0 1. Now outputs 200-response code.
 	 *              2. Now outputs robots tag, preventing indexing.
 	 *              3. Now overrides other header tags.
-	 * @since 3.3.0 1. Moved to \The_SEO_Framework\Bridges\Sitemap
+	 * @since 4.0.0 1. Moved to \The_SEO_Framework\Bridges\Sitemap
 	 *              2. Renamed from `output_sitemap_xsl_stylesheet()`
 	 */
 	public function output_stylesheet() {
@@ -277,7 +277,7 @@ final class Sitemap {
 	/**
 	 * Outputs the sitemap header.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	public function output_sitemap_header() {
 
@@ -295,7 +295,7 @@ final class Sitemap {
 	/**
 	 * Returns the opening tag for the sitemap urlset.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	public function output_sitemap_urlset_open_tag() {
 
@@ -334,7 +334,7 @@ final class Sitemap {
 	/**
 	 * Outputs the closing tag for the sitemap urlset.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	public function output_sitemap_urlset_close_tag() {
 		echo '</urlset>';
@@ -344,7 +344,7 @@ final class Sitemap {
 	 * Returns the sitemap path prefix.
 	 * Useful when the prefix path is non-standard, like notoriously in Polylang.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return string The path prefix.
 	 */
@@ -353,7 +353,7 @@ final class Sitemap {
 		 * Ignore RFC2616 slashlessness by adding a slash;
 		 * this makes life easier when trailing and testing the URL, as well.
 		 *
-		 * @since 3.3.0
+		 * @since 4.0.0
 		 * @param string $prefix The path prefix. Ideally appended with a slash.
 		 *                       Recommended return value: "$prefix$custompath/"
 		 */
@@ -363,7 +363,7 @@ final class Sitemap {
 	/**
 	 * Gets the sitemap ID based on the current request URI.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param string $raw_uri The raw request URI.
 	 * @return string|false The endpoint ID on success, false on failure.
@@ -409,7 +409,7 @@ final class Sitemap {
 	/**
 	 * Returns the base path information for the sitemap.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @global \WP_Rewrite $wp_rewrite
 	 *
 	 * @return array : {
@@ -445,7 +445,7 @@ final class Sitemap {
 	 *
 	 * @since 2.6.0
 	 * @since 2.8.0 Renamed from clean_up_globals().
-	 * @since 3.3.0 1. Moved to \The_SEO_Framework\Bridges\Sitemap
+	 * @since 4.0.0 1. Moved to \The_SEO_Framework\Bridges\Sitemap
 	 *              2. Renamed from clean_up_globals_for_sitemap()
 	 *
 	 * @param bool $get_freed_memory Whether to return the freed memory in bytes.

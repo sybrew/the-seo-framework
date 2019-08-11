@@ -28,7 +28,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 /**
  * Generates the base sitemap.
  *
- * @since 3.3.0
+ * @since 4.0.0
  *
  * @access private
  */
@@ -43,7 +43,7 @@ class Sitemap_Base extends Sitemap {
 	 * @since 3.0.4 No longer outputs empty URL entries.
 	 * @since 3.1.0 1. Removed the WP<4.6 function_exists check.
 	 *              2. Now uses WordPress' built-in memory raiser function, with "context" sitemap.
-	 * @since 3.3.0 1. Now assesses all public post types, in favor of qubit options.
+	 * @since 4.0.0 1. Now assesses all public post types, in favor of qubit options.
 	 *              2. Improved performance by a factor of two+.
 	 *              3. Renamed method from "generate_sitemap" to abstract extension "build_sitemap".
 	 *              4. Moved to \The_SEO_Framework\Builders\Sitemap_Base
@@ -84,7 +84,7 @@ class Sitemap_Base extends Sitemap {
 		$post_types = array_diff( static::$tsf->get_supported_post_types(), [ 'attachment' ] );
 
 		/**
-		 * @since 3.3.0
+		 * @since 4.0.0
 		 * @param array $post_types The supported post types.
 		 */
 		$post_types = (array) \apply_filters( 'the_seo_framework_sitemap_supported_post_types', $post_types );
@@ -113,7 +113,7 @@ class Sitemap_Base extends Sitemap {
 			$_hierarchical_posts_limit = $this->get_sitemap_post_limit( true );
 
 			/**
-			 * @since 3.3.0
+			 * @since 4.0.0
 			 * @param array $args The query arguments.
 			 */
 			$_args = \apply_filters(
@@ -145,7 +145,7 @@ class Sitemap_Base extends Sitemap {
 
 		if ( $non_hierarchical_post_types ) {
 			/**
-			 * @since 3.3.0
+			 * @since 4.0.0
 			 * @param array $args The query arguments.
 			 */
 			$_args = \apply_filters(
@@ -194,7 +194,7 @@ class Sitemap_Base extends Sitemap {
 
 		/**
 		 * @since 2.5.2
-		 * @since 3.3.0 Added $args parameter
+		 * @since 4.0.0 Added $args parameter
 		 * @param string $extend Custom sitemap extension. Must be escaped.
 		 * @param array $args : {
 		 *   bool $show_priority : Whether to display priority
@@ -219,7 +219,7 @@ class Sitemap_Base extends Sitemap {
 	/**
 	 * Generates front-and blog page sitemap items.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @generator
 	 *
 	 * @param array $args  The generator arguments.
@@ -333,7 +333,7 @@ class Sitemap_Base extends Sitemap {
 	/**
 	 * Generates front-and blog page sitemap URL item values.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @generator
 	 * @iterator
 	 *
@@ -375,7 +375,7 @@ class Sitemap_Base extends Sitemap {
 	/**
 	 * Builds and returns a sitemap URL item.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @staticvar string $timestamp_format
 	 *
 	 * @param array $args : {
@@ -416,7 +416,7 @@ class Sitemap_Base extends Sitemap {
 	/**
 	 * Retrieves additional URLs and builds items from them.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param array $args  : {
 	 *   bool $show_priority : Whether to display priority
@@ -431,7 +431,7 @@ class Sitemap_Base extends Sitemap {
 		/**
 		 * @since 2.5.2
 		 * @since 3.2.2 Invalid URLs are now skipped.
-		 * @since 3.3.0 Added $args parameter.
+		 * @since 4.0.0 Added $args parameter.
 		 * @example return value: [ 'http://example.com' => [ 'lastmod' => '14-01-2018', 'priority' => 0.9 ] ]
 		 * @param array $custom_urls : {
 		 *    string (key) $url The absolute url to the page. : array {

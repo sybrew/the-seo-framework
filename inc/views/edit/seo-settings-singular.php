@@ -46,7 +46,7 @@ switch ( $instance ) :
 		 * Allows for altering the inpost SEO settings metabox tabs.
 		 *
 		 * @since 2.9.0
-		 * @since 3.3.0 Removed the second parameter (post type label)
+		 * @since 4.0.0 Removed the second parameter (post type label)
 		 *
 		 * @param array $default_tabs The default tabs.
 		 * @param null  $depr         The post type label. Deprecated.

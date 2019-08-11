@@ -28,7 +28,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 /**
  * Prepares the Term Settings view interface.
  *
- * @since 3.3.0
+ * @since 4.0.0
  * @access protected
  * @internal
  * @final Can't be extended.
@@ -39,7 +39,7 @@ final class TermSettings {
 	/**
 	 * Prepares the setting fields.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param \WP_Term $term     Current taxonomy term object.
 	 * @param string   $taxonomy Current taxonomy slug.
@@ -51,7 +51,7 @@ final class TermSettings {
 	/**
 	 * Outputs the term settings fields.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param \WP_Term $term     Current taxonomy term object.
 	 * @param string   $taxonomy Current taxonomy slug.

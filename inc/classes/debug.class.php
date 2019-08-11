@@ -33,7 +33,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * Holds plugin debug functions.
  *
  * @since 2.8.0
- * @since 3.3.0 No longer implements an interface. It's implied.
+ * @since 4.0.0 No longer implements an interface. It's implied.
  */
 final class Debug {
 	use Traits\Enclose_Stray_Private;
@@ -608,7 +608,7 @@ final class Debug {
 	 * Wraps query status booleans in human-readable code.
 	 *
 	 * @since 2.6.6
-	 * @since 3.3.0 Cleaned up global callers; only use TSF methods.
+	 * @since 4.0.0 Cleaned up global callers; only use TSF methods.
 	 *
 	 * @param string $cache_version 'yup' or 'nope'
 	 * @return string Wrapped Query State debug output.

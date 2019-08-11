@@ -117,7 +117,7 @@ spl_autoload_register( __NAMESPACE__ . '\\_autoload_classes', true, true );
  * @since 2.8.0
  * @since 3.1.0 : 1. No longer maintains cache.
  *                2. Now always returns void.
- * @since 3.3.0 : 1. Streamlined folder lookup by more effectively using the namespace.
+ * @since 4.0.0 : 1. Streamlined folder lookup by more effectively using the namespace.
  *                2. Added timing functionality
  *                3. No longer loads interfaces automatically.
  * @uses THE_SEO_FRAMEWORK_DIR_PATH_CLASS

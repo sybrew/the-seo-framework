@@ -42,7 +42,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.7.0
 	 * @since 3.1.0 Removed settings field existence check.
-	 * @since 3.3.0 Added redundant user capability check.
+	 * @since 4.0.0 Added redundant user capability check.
 	 * @securitycheck 3.0.0 OK.
 	 * @staticvar bool $verified.
 	 *
@@ -112,7 +112,7 @@ class Sanitize extends Admin_Pages {
 	/**
 	 * Sets the settings notice cache to "updated".
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 */
 	public function _set_option_updated_notice() {
@@ -135,7 +135,7 @@ class Sanitize extends Admin_Pages {
 	 * Maintains backward compatibility for older, migrated options.
 	 *
 	 * @since 3.1.0
-	 * @since 3.3.0 Emptied and is no longer enqueued.
+	 * @since 4.0.0 Emptied and is no longer enqueued.
 	 * @access private
 	 * @staticvar bool $running Prevents on-update loops.
 	 */
@@ -465,7 +465,7 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.2.2
 	 * @since 2.7.0: Uses external caching function.
 	 * @since 2.8.0 Renamed.
-	 * @since 3.3.0 Now caches its $option registration.
+	 * @since 4.0.0 Now caches its $option registration.
 	 * @staticvar array $cache
 	 *
 	 * @param string       $filter Sanitization filter type
@@ -643,7 +643,7 @@ class Sanitize extends Admin_Pages {
 	/**
 	 * Sanitizes term meta.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param array $data The term meta to sanitize.
 	 * @return array The sanitized term meta.
@@ -700,7 +700,7 @@ class Sanitize extends Admin_Pages {
 	/**
 	 * Sanitizes post meta.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param array $data The post meta to sanitize.
 	 * @return array The sanitized post meta.
@@ -987,7 +987,7 @@ class Sanitize extends Admin_Pages {
 	 * Also converts back-solidi to their respective HTML entities for non-destructive handling.
 	 *
 	 * @since 2.8.2
-	 * @since 3.3.0 Now normalizes `&` entities.
+	 * @since 4.0.0 Now normalizes `&` entities.
 	 *
 	 * @param string $new_value The input Title.
 	 * @return string Sanitized, beautified and trimmed title.
@@ -1102,7 +1102,7 @@ class Sanitize extends Admin_Pages {
 	/**
 	 * Returns a -1, 0, or 1, based on nearest value.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param mixed $new_value Should ideally be -1, 0, or 1.
 	 * @return int -1, 0, or 1.
@@ -1220,7 +1220,7 @@ class Sanitize extends Admin_Pages {
 	 * Escapes attributes after converting `&` to `&amp;` to prevent double-escaping
 	 * of entities in HTML input value attributes.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param string $new_value String with possibly ampersands.
 	 * @return string
@@ -1296,7 +1296,7 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.8.0 Method is now public.
 	 * @since 3.0.0: 1. Now removes '@' from the URL path.
 	 *               2. Now removes spaces and tabs.
-	 * @since 3.3.0 Now returns empty on lone `@` entries.
+	 * @since 4.0.0 Now returns empty on lone `@` entries.
 	 *
 	 * @param string $new_value String with potentially wrong Twitter username.
 	 * @return string String with 'correct' Twitter username
@@ -1323,7 +1323,7 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
 	 * @since 3.0.6 Now allows a sole query argument when profile.php is used.
-	 * @since 3.3.0 No longer returns a plain Facebook URL when the entry path is sanitized to become empty.
+	 * @since 4.0.0 No longer returns a plain Facebook URL when the entry path is sanitized to become empty.
 	 *
 	 * @param string $new_value String with potentially wrong Facebook profile URL.
 	 * @return string String with 'correct' Facebook profile URL.
@@ -1390,7 +1390,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.6.5
 	 * @since 2.8.0 Method is now public.
-	 * @since 3.3.0 No longer strips the prepended / path.
+	 * @since 4.0.0 No longer strips the prepended / path.
 	 *
 	 * @param string $url Full Path URL or relative URL.
 	 * @return string Abolute path.
@@ -1405,7 +1405,7 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.2.4
 	 * @since 2.8.0 Method is now public.
 	 * @since 3.0.6 Noqueries is now disabled by default.
-	 * @since 3.3.0 : 1. Removed rudimentary relative URL testing.
+	 * @since 4.0.0 : 1. Removed rudimentary relative URL testing.
 	 *                2. Removed input transformation filters, and with that, removed redundant multisite spam protection.
 	 *                3. Now allows all protocols. Enjoy!
 	 *                4. Now no longer lets through double-absolute URLs (e.g. `https://google.com/https://google.com/path/to/file/`)
@@ -1515,7 +1515,7 @@ class Sanitize extends Admin_Pages {
 	/**
 	 * Replaces backslash with entity backslash.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param string $new_value String with potentially wanted \ values.
 	 * @return string A string with safe HTML encoded backslashes.
@@ -1577,7 +1577,7 @@ class Sanitize extends Admin_Pages {
 	 * It also maintains the '@' character and square brackets.
 	 *
 	 * @see WordPress Core sanitize_key()
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @deprecated
 	 *
 	 * @param string $id The unsanitized ID.
@@ -1626,7 +1626,7 @@ class Sanitize extends Admin_Pages {
 	 * Tip: You might want to use method `s_dupe_space()` to clear up the duplicated spaces afterward.
 	 *
 	 * @since 3.2.4
-	 * @since 3.3.0 Now allows emptying the indexes `space` and `clear`.
+	 * @since 4.0.0 Now allows emptying the indexes `space` and `clear`.
 	 * @link: https://www.w3schools.com/html/html_blocks.asp
 	 *
 	 * @param string $input The input text that needs its tags stripped.
@@ -1684,7 +1684,7 @@ class Sanitize extends Admin_Pages {
 	/**
 	 * Cleans known parameters from image details.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @NOTE If the input details are in an associative array, they'll be converted to sequential.
 	 *
 	 * @param array $details The image details, either associative (see $defaults) or sequential.
@@ -1744,7 +1744,7 @@ class Sanitize extends Admin_Pages {
 	/**
 	 * Iterates over and cleans known parameters from image details. Also strips out duplicates.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param array $details_array The image details, preferably sequential.
 	 * @return array The image details array, sequential: int => {

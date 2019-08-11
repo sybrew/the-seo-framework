@@ -49,7 +49,7 @@ class Site_Options extends Sanitize {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 Now applies filters 'the_seo_framework_default_site_options'
-	 * @since 3.3.0 `home_title_location` is now switched from right to left, or vice-versa.
+	 * @since 4.0.0 `home_title_location` is now switched from right to left, or vice-versa.
 	 *
 	 * @return array Default site options.
 	 */
@@ -412,7 +412,7 @@ class Site_Options extends Sanitize {
 	 * @since 2.2.2
 	 * @since 2.9.0 Removed reset options check, see check_options_reset().
 	 * @since 3.1.0 Removed settings field existence check.
-	 * @since 3.3.0 Now checks if the option exists before adding it. Shaves 20μs...
+	 * @since 4.0.0 Now checks if the option exists before adding it. Shaves 20μs...
 	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 *
 	 * @return void Early if settings can't be registered.

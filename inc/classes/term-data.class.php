@@ -37,7 +37,7 @@ class Term_Data extends Post_Data {
 	/**
 	 * Initializes term meta data filters and functions.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	public function init_term_meta() {
 		\add_action( 'edit_term', [ $this, '_update_term_meta' ], 10, 3 );
@@ -48,7 +48,7 @@ class Term_Data extends Post_Data {
 	 * Determines if current query handles term meta.
 	 *
 	 * @since 3.0.0
-	 * @since 3.3.0 No longer lists post type archives as term-meta. It's not a taxonomy.
+	 * @since 4.0.0 No longer lists post type archives as term-meta. It's not a taxonomy.
 	 *
 	 * @return bool
 	 */
@@ -107,7 +107,7 @@ class Term_Data extends Post_Data {
 	 * @since 2.8.0 Added filter.
 	 * @since 3.0.0 Added filter.
 	 * @since 3.1.0 Deprecated filter.
-	 * @since 3.3.0 1. Removed deprecated filter.
+	 * @since 4.0.0 1. Removed deprecated filter.
 	 *              2. Now fills in defaults.
 	 * @staticvar array $cache
 	 *
@@ -138,13 +138,13 @@ class Term_Data extends Post_Data {
 		static $has_deprecated_filter = null;
 		if ( null === $has_deprecated_filter && \has_filter( 'the_seo_framework_current_term_meta' ) ) {
 			$has_deprecated_filter = true;
-			$this->_deprecated_filter( 'the_seo_framework_current_term_meta', '3.3.0', 'get_term_metadata' );
+			$this->_deprecated_filter( 'the_seo_framework_current_term_meta', '4.0.0', 'get_term_metadata' );
 		}
 
 		if ( $has_deprecated_filter && $meta ) {
 			/**
 			 * @since 3.0.0
-			 * @since 3.3.0 Deprecated.
+			 * @since 4.0.0 Deprecated.
 			 * @deprecated
 			 * @param array $meta The CURRENT term metadata.
 			 * @param int   $term_id The term ID.
@@ -173,7 +173,7 @@ class Term_Data extends Post_Data {
 	 *
 	 * @since 2.7.0
 	 * @since 3.1.0 This is now always used.
-	 * @since 3.3.0 : 1. Added $term_id parameter.
+	 * @since 4.0.0 : 1. Added $term_id parameter.
 	 *                2. Added 'redirect' value.
 	 *                3. Added 'title_no_blog_name' value.
 	 *                4. Removed 'saved_flag' value.
@@ -199,7 +199,7 @@ class Term_Data extends Post_Data {
 	/**
 	 * Returns the unfiltered term meta defaults.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return array The default, unfiltered, post meta.
 	 */
@@ -226,7 +226,7 @@ class Term_Data extends Post_Data {
 	 * Sanitizes and saves term meta data when a term is altered.
 	 *
 	 * @since 2.7.0
-	 * @since 3.3.0: 1. Renamed from `update_term_meta`
+	 * @since 4.0.0: 1. Renamed from `update_term_meta`
 	 *               2. noindex, nofollow, noarchive are now converted to qubits.
 	 *               3. Added new keys to sanitize.
 	 *               4. Now marked as private.
@@ -258,7 +258,7 @@ class Term_Data extends Post_Data {
 	/**
 	 * Overwrites all of the term meta on term-edit.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param int    $tt_id    Term taxonomy ID.
@@ -285,7 +285,7 @@ class Term_Data extends Post_Data {
 	/**
 	 * Overwrites a part of the term meta on quick-edit.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param int    $tt_id    Term taxonomy ID.
@@ -319,7 +319,7 @@ class Term_Data extends Post_Data {
 	 * Note that this method can be more resource intensive than you intend it to be,
 	 * as it reprocesses all term meta.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @uses $this->save_term_meta() to process all data.
 	 *
 	 * @param string $item     The item to update.
@@ -343,7 +343,7 @@ class Term_Data extends Post_Data {
 	/**
 	 * Updates term meta from input.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param int    $tt_id    Term Taxonomy ID.
@@ -383,7 +383,7 @@ class Term_Data extends Post_Data {
 	 * Delete term meta data when a term is deleted.
 	 * Deletes only the default data keys; or everything when only that is present.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 *
 	 * @param int    $term_id  Term ID.
@@ -399,7 +399,7 @@ class Term_Data extends Post_Data {
 	 * Deletes only the default data keys; or everything when only that is present.
 	 *
 	 * @since 2.7.0
-	 * @since 3.3.0 Removed 2nd, unused, parameter.
+	 * @since 4.0.0 Removed 2nd, unused, parameter.
 	 *
 	 * @param int $term_id Term ID.
 	 */

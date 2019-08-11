@@ -74,7 +74,7 @@ function _print_xsl_global_variables( $tsf ) {
  * Prints XSL title.
  *
  * @since 3.1.0
- * @since 3.3.0 Now uses a consistent titling scheme.
+ * @since 4.0.0 Now uses a consistent titling scheme.
  * @access private
  * @TODO move this to a dedicated sitemap "module" (a system that loads everything sitemap related).
  * @param \The_SEO_Framework\Load $tsf the_seo_framework() object.

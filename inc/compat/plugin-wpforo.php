@@ -58,7 +58,7 @@ function _wpforo_fix_page() {
  * @since 2.9.2
  * @since 3.1.0 1. No longer emits an error when no wpForo title is presented.
  *              2. Updated to support new title generation.
- * @since 3.3.0 No longer overrules external queries.
+ * @since 4.0.0 No longer overrules external queries.
  * @access private
  *
  * @param string     $title The filter title.

@@ -32,7 +32,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  *
  * @since 2.8.0
  * @since 3.1.0: Removed all methods deprecated in 3.0.0.
- * @since 3.3.0: Removed all methods deprecated in 3.1.0.
+ * @since 4.0.0: Removed all methods deprecated in 3.1.0.
  * @ignore
  */
 final class Deprecated {
@@ -46,7 +46,7 @@ final class Deprecated {
 	 * Returns a filterable sequential array of default scripts.
 	 *
 	 * @since 3.2.2
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return array
@@ -54,7 +54,7 @@ final class Deprecated {
 	public function get_default_scripts() {
 
 		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->get_default_scripts()', '3.3.0' );
+		$tsf->_deprecated_function( 'the_seo_framework()->get_default_scripts()', '4.0.0' );
 
 		return array_merge(
 			\The_SEO_Framework\Bridges\Scripts::get_tsf_scripts(),
@@ -66,7 +66,7 @@ final class Deprecated {
 	 * Enqueues Gutenberg-related scripts.
 	 *
 	 * @since 3.2.0
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return void Early if already enqueued.
@@ -74,7 +74,7 @@ final class Deprecated {
 	public function enqueue_gutenberg_compat_scripts() {
 
 		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->enqueue_gutenberg_compat_scripts()', '3.3.0' );
+		$tsf->_deprecated_function( 'the_seo_framework()->enqueue_gutenberg_compat_scripts()', '4.0.0' );
 
 		if ( \The_SEO_Framework\_has_run( __METHOD__ ) ) return;
 
@@ -87,7 +87,7 @@ final class Deprecated {
 	 * Enqueues Media Upload and Cropping scripts.
 	 *
 	 * @since 3.1.0
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return void Early if already enqueued.
@@ -95,7 +95,7 @@ final class Deprecated {
 	public function enqueue_media_scripts() {
 
 		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->enqueue_media_scripts()', '3.3.0' );
+		$tsf->_deprecated_function( 'the_seo_framework()->enqueue_media_scripts()', '4.0.0' );
 
 		if ( \The_SEO_Framework\_has_run( __METHOD__ ) ) return;
 
@@ -114,7 +114,7 @@ final class Deprecated {
 	 * Enqueues Primary Term Selection scripts.
 	 *
 	 * @since 3.1.0
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return void Early if already enqueued.
@@ -122,7 +122,7 @@ final class Deprecated {
 	public function enqueue_primaryterm_scripts() {
 
 		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->enqueue_primaryterm_scripts()', '3.3.0' );
+		$tsf->_deprecated_function( 'the_seo_framework()->enqueue_primaryterm_scripts()', '4.0.0' );
 
 		if ( \The_SEO_Framework\_has_run( __METHOD__ ) ) return;
 
@@ -137,7 +137,7 @@ final class Deprecated {
 	 * @since 2.2.2
 	 */
 	public function metabox_scripts() {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->metabox_scripts()', '3.3.0', '\The_SEO_Framework\Bridges\Scripts::prepare_metabox_scripts()' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->metabox_scripts()', '4.0.0', '\The_SEO_Framework\Bridges\Scripts::prepare_metabox_scripts()' );
 		\The_SEO_Framework\Bridges\Scripts::prepare_metabox_scripts();
 	}
 
@@ -145,7 +145,7 @@ final class Deprecated {
 	 * Returns the SEO Bar.
 	 *
 	 * @since 3.0.4
-	 * @since 3.3.0 Deprecated
+	 * @since 4.0.0 Deprecated
 	 * @staticvar string $type
 	 * @deprecated
 	 *
@@ -156,7 +156,7 @@ final class Deprecated {
 	public function get_seo_bar( $column, $post_id, $tax_id ) {
 
 		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->post_status()', '3.3.0', 'the_seo_framework()->get_generated_seo_bar()' );
+		$tsf->_deprecated_function( 'the_seo_framework()->post_status()', '4.0.0', 'the_seo_framework()->get_generated_seo_bar()' );
 
 		$type = \get_post_type( $post_id );
 
@@ -179,7 +179,7 @@ final class Deprecated {
 	 * @staticvar string $post_i18n The post type slug.
 	 * @staticvar bool $is_term If we're dealing with TT pages.
 	 * @since 2.8.0 Third parameter `$echo` has been put into effect.
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int    $post_id The Post ID or taxonomy ID.
@@ -191,7 +191,7 @@ final class Deprecated {
 
 		$tsf = \the_seo_framework();
 
-		$tsf->_deprecated_function( 'the_seo_framework()->post_status()', '3.3.0', 'the_seo_framework()->get_generated_seo_bar()' );
+		$tsf->_deprecated_function( 'the_seo_framework()->post_status()', '4.0.0', 'the_seo_framework()->get_generated_seo_bar()' );
 
 		if ( ! $post_id )
 			$post_id = $tsf->get_the_real_ID();
@@ -227,13 +227,13 @@ final class Deprecated {
 	 * The first letter of the method is capitalized, to indicate it's a class caller.
 	 *
 	 * @since 3.1.0
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The scripts class name.
 	 */
 	public function Scripts() { // phpcs:ignore, WordPress.NamingConventions.ValidFunctionName
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->Scripts()', '3.3.0', '\The_SEO_Framework\Builders\Scripts::class' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->Scripts()', '4.0.0', '\The_SEO_Framework\Builders\Scripts::class' );
 		return \The_SEO_Framework\Builders\Scripts::class;
 	}
 
@@ -241,14 +241,14 @@ final class Deprecated {
 	 * Determines if we're doing ajax.
 	 *
 	 * @since 2.9.0
-	 * @since 3.3.0 1. Now uses wp_doing_ajax()
+	 * @since 4.0.0 1. Now uses wp_doing_ajax()
 	 *              2. Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool True if AJAX
 	 */
 	public function doing_ajax() {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->doing_ajax()', '3.3.0', 'wp_doing_ajax' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->doing_ajax()', '4.0.0', 'wp_doing_ajax' );
 		return \wp_doing_ajax();
 	}
 
@@ -257,7 +257,7 @@ final class Deprecated {
 	 * Depending if language is German.
 	 *
 	 * @since 2.6.0
-	 * @since 3.3.0 Deprecated
+	 * @since 4.0.0 Deprecated
 	 * @deprecated
 	 * @staticvar array $lowercase Contains nouns.
 	 *
@@ -266,7 +266,7 @@ final class Deprecated {
 	 */
 	public function maybe_lowercase_noun( $noun ) {
 
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->maybe_lowercase_noun()', '3.3.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->maybe_lowercase_noun()', '4.0.0' );
 
 		static $lowercase = [];
 
@@ -287,7 +287,7 @@ final class Deprecated {
 	 * @return bool Whether the input $locale is in the current WordPress locale.
 	 */
 	public function check_wp_locale( $locale = '' ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->check_wp_locale()', '3.3.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->check_wp_locale()', '4.0.0' );
 		return false !== strpos( \get_locale(), $locale );
 	}
 
@@ -296,11 +296,11 @@ final class Deprecated {
 	 *
 	 * @since 2.7.0
 	 * @since 3.0.0 No longer checks for admin query.
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 */
 	public function initialize_term_meta() {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->initialize_term_meta()', '3.3.0', '\the_seo_framework()->init_term_meta()' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->initialize_term_meta()', '4.0.0', '\the_seo_framework()->init_term_meta()' );
 		\the_seo_framework()->init_term_meta();
 	}
 
@@ -313,13 +313,13 @@ final class Deprecated {
 	 *              @uses $this->add_cache_key_suffix()
 	 * @since 3.2.3 1. Now works as intended again.
 	 *              2. Removed Easter egg.
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return void Early if blog is not public.
 	 */
 	public static function ping_searchengines() {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->ping_searchengines()', '3.3.0', '\The_SEO_Framework\Bridges\Ping::ping_search_engines()' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->ping_searchengines()', '4.0.0', '\The_SEO_Framework\Bridges\Ping::ping_search_engines()' );
 		\The_SEO_Framework\Bridges\Ping::ping_search_engines();
 	}
 
@@ -328,12 +328,12 @@ final class Deprecated {
 	 *
 	 * @since 2.2.9
 	 * @since 3.1.0 Updated ping URL. Old one still worked, too.
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 * @link https://support.google.com/webmasters/answer/6065812?hl=en
 	 */
 	public static function ping_google() {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->ping_google()', '3.3.0', '\The_SEO_Framework\Bridges\Ping::ping_google()' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->ping_google()', '4.0.0', '\The_SEO_Framework\Bridges\Ping::ping_google()' );
 		\The_SEO_Framework\Bridges\Ping::ping_google();
 	}
 
@@ -342,12 +342,12 @@ final class Deprecated {
 	 *
 	 * @since 2.2.9
 	 * @since 3.2.3 Updated ping URL. Old one still worked, too.
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 * @link https://www.bing.com/webmaster/help/how-to-submit-sitemaps-82a15bd4
 	 */
 	public static function ping_bing() {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->ping_bing()', '3.3.0', '\The_SEO_Framework\Bridges\Ping::ping_bing()' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->ping_bing()', '4.0.0', '\The_SEO_Framework\Bridges\Ping::ping_bing()' );
 		\The_SEO_Framework\Bridges\Ping::ping_bing();
 	}
 
@@ -362,7 +362,7 @@ final class Deprecated {
 	 * @return string URL location of the XSL stylesheet. Unescaped.
 	 */
 	public function get_sitemap_xsl_url() {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_sitemap_xsl_url()', '3.3.0', '\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url(\'xsl-stylesheet\')' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_sitemap_xsl_url()', '4.0.0', '\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url(\'xsl-stylesheet\')' );
 		return \The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url( 'xsl-stylesheet' );
 	}
 
@@ -377,7 +377,7 @@ final class Deprecated {
 	 * @return string URL location of the XML sitemap. Unescaped.
 	 */
 	public function get_sitemap_xml_url() {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_sitemap_xml_url()', '3.3.0', '\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url()' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_sitemap_xml_url()', '4.0.0', '\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url()' );
 		return \The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url();
 	}
 
@@ -390,7 +390,7 @@ final class Deprecated {
 	 *              3. Now overrides other header tags.
 	 */
 	public function output_sitemap_xsl_stylesheet() {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->output_sitemap_xsl_stylesheet()', '3.3.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->output_sitemap_xsl_stylesheet()', '4.0.0' );
 		return \The_SEO_Framework\Bridges\Sitemap::get_instance()->output_stylesheet();
 	}
 
@@ -400,14 +400,14 @@ final class Deprecated {
 	 * @since 2.3.9
 	 * @since 3.1.0 1. Removed caching.
 	 *              2. Now works in admin.
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $post_type Optional. The post type to check.
 	 * @return bool true of post type is supported.
 	 */
 	public function post_type_supports_custom_seo( $post_type = '' ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->post_type_supports_custom_seo()', '3.3.0', 'the_seo_framework()->is_post_type_supported()' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->post_type_supports_custom_seo()', '4.0.0', 'the_seo_framework()->is_post_type_supported()' );
 		return \the_seo_framework()->is_post_type_supported( $post_type );
 	}
 
@@ -418,7 +418,7 @@ final class Deprecated {
 	 * and wether the taxonomy is public and rewritable.
 	 *
 	 * @since 3.1.0
-	 * @since 3.3.0 1. Now goes over all post types for the taxonomy.
+	 * @since 4.0.0 1. Now goes over all post types for the taxonomy.
 	 *              2. Can now return true if at least one post type for the taxonomy is supported.
 	 *              3. Deprecated.
 	 * @deprecated
@@ -427,7 +427,7 @@ final class Deprecated {
 	 * @return bool True if at least one post type in taxonomy isn't disabled.
 	 */
 	public function taxonomy_supports_custom_seo( $taxonomy = '' ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->taxonomy_supports_custom_seo()', '3.3.0', 'the_seo_framework()->is_taxonomy_supported()' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->taxonomy_supports_custom_seo()', '4.0.0', 'the_seo_framework()->is_taxonomy_supported()' );
 		return \the_seo_framework()->is_taxonomy_supported( $taxonomy );
 	}
 
@@ -436,7 +436,7 @@ final class Deprecated {
 	 * Automatically adds pagination if the ID matches the query.
 	 *
 	 * @since 3.0.0
-	 * @since 3.3.0 Deprecated
+	 * @since 4.0.0 Deprecated
 	 * @deprecated
 	 *
 	 * @param int    $term_id The term ID.
@@ -444,7 +444,7 @@ final class Deprecated {
 	 * @return string The taxonomical canonical URL, if any.
 	 */
 	public function get_taxonomial_canonical_url( $term_id, $taxonomy ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_taxonomial_canonical_url()', '3.3.0', 'the_seo_framework()->get_taxonomical_canonical_url()' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_taxonomial_canonical_url()', '4.0.0', 'the_seo_framework()->get_taxonomical_canonical_url()' );
 		return \the_seo_framework()->get_taxonomical_canonical_url( $term_id, $taxonomy );
 	}
 
@@ -453,7 +453,7 @@ final class Deprecated {
 	 *
 	 * @since 2.6.0
 	 * @since 3.0.0 Can now get custom post type objects.
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $id The possible taxonomy Term ID.
@@ -463,7 +463,7 @@ final class Deprecated {
 
 		$tsf = \the_seo_framework();
 
-		$tsf->_deprecated_function( 'the_seo_framework()->fetch_the_term()', '3.3.0' );
+		$tsf->_deprecated_function( 'the_seo_framework()->fetch_the_term()', '4.0.0' );
 
 		static $term = [];
 
@@ -506,7 +506,7 @@ final class Deprecated {
 	 * blank or not set.
 	 *
 	 * @since 2.0.0
-	 * @since 3.3.0 Deprecated
+	 * @since 4.0.0 Deprecated
 	 * @deprecated
 	 * @staticvar array $field_cache
 	 *
@@ -518,7 +518,7 @@ final class Deprecated {
 
 		$tsf = \the_seo_framework();
 
-		$tsf->_deprecated_function( 'the_seo_framework()->get_custom_field()', '3.3.0', 'the_seo_framework()->get_post_meta_item()' );
+		$tsf->_deprecated_function( 'the_seo_framework()->get_custom_field()', '4.0.0', 'the_seo_framework()->get_post_meta_item()' );
 
 		//* If field is falsesque, get_post_meta() will return an array.
 		if ( ! $field )
@@ -555,7 +555,7 @@ final class Deprecated {
 	 *
 	 * @since 2.9.3
 	 * @since 3.2.2 No longer relies on the query.
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int|string $id       The page, post, product or term ID.
@@ -566,7 +566,7 @@ final class Deprecated {
 
 		$tsf = \the_seo_framework();
 
-		$tsf->_deprecated_function( 'the_seo_framework()->get_schema_image()', '3.3.0', 'the_seo_framework()->get_safe_schema_image()' );
+		$tsf->_deprecated_function( 'the_seo_framework()->get_schema_image()', '4.0.0', 'the_seo_framework()->get_safe_schema_image()' );
 
 		if ( ! $singular ) return '';
 
@@ -579,7 +579,7 @@ final class Deprecated {
 	 * @since 2.9.0
 	 * @since 3.0.6 Added attachment page compatibility.
 	 * @since 3.2.2 Now skips the singular meta images on archives.
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array $args The image arguments.
@@ -589,7 +589,7 @@ final class Deprecated {
 
 		$tsf = \the_seo_framework();
 
-		$tsf->_deprecated_function( 'the_seo_framework()->get_social_image()', '3.3.0', 'the_seo_framework()->get_image_from_cache()' );
+		$tsf->_deprecated_function( 'the_seo_framework()->get_social_image()', '4.0.0', 'the_seo_framework()->get_image_from_cache()' );
 
 		if ( isset( $args['post_id'] ) && $args['post_id'] ) {
 			$image = current( $tsf->get_image_details( [ 'id' => $args['post_id'] ], true ) );
@@ -605,7 +605,7 @@ final class Deprecated {
 	 *
 	 * @since 2.9.0
 	 * @since 2.9.4 Now converts URL scheme.
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $id The post ID.
@@ -615,7 +615,7 @@ final class Deprecated {
 
 		$tsf = \the_seo_framework();
 
-		$tsf->_deprecated_function( 'the_seo_framework()->get_social_image_url_from_home_meta()', '3.3.0', "the_seo_framework()->get_option( 'homepage_social_image_url' )" );
+		$tsf->_deprecated_function( 'the_seo_framework()->get_social_image_url_from_home_meta()', '4.0.0', "the_seo_framework()->get_option( 'homepage_social_image_url' )" );
 
 		if ( false === $tsf->is_front_page_by_id( $id ) )
 			return '';
@@ -638,7 +638,7 @@ final class Deprecated {
 	 * @since 2.9.0 1. The second parameter now works.
 	 *              2. Fallback image ID has been removed.
 	 * @since 2.9.4 Now converts URL scheme.
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $id The post ID. Required.
@@ -648,7 +648,7 @@ final class Deprecated {
 
 		$tsf = \the_seo_framework();
 
-		$tsf->_deprecated_function( 'the_seo_framework()->get_social_image_url_from_post_meta()', '3.3.0', "the_seo_framework()->get_post_meta_item( '_social_image_url' )" );
+		$tsf->_deprecated_function( 'the_seo_framework()->get_social_image_url_from_post_meta()', '4.0.0', "the_seo_framework()->get_post_meta_item( '_social_image_url' )" );
 
 		$src = $id ? $tsf->get_post_meta_item( '_social_image_url', $id ) : '';
 
@@ -667,7 +667,7 @@ final class Deprecated {
 	 * @since 2.8.2
 	 * @since 2.9.4 1: Now converts URL scheme.
 	 *              2: $set_og_dimensions now works.
-	 * @since 3.3.0 Deprecated
+	 * @since 4.0.0 Deprecated
 	 * @deprecated
 	 *
 	 * @return string The unescaped social image fallback URL.
@@ -676,7 +676,7 @@ final class Deprecated {
 
 		$tsf = \the_seo_framework();
 
-		$tsf->_deprecated_function( 'the_seo_framework()->get_social_image_url_from_seo_settings()', '3.3.0', "the_seo_framework()->get_option( 'social_image_fb_url' )" );
+		$tsf->_deprecated_function( 'the_seo_framework()->get_social_image_url_from_seo_settings()', '4.0.0', "the_seo_framework()->get_option( 'social_image_fb_url' )" );
 
 		$src = $tsf->get_option( 'social_image_fb_url' );
 
@@ -692,14 +692,14 @@ final class Deprecated {
 	 * @since 2.9.0
 	 * @since 2.9.3 Now supports 4K.
 	 * @since 2.9.4 Now converts URL scheme.
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $id The post ID. Required.
 	 * @return string The social image URL.
 	 */
 	public function get_social_image_url_from_post_thumbnail( $id ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_social_image_url_from_post_thumbnail()', '3.3.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_social_image_url_from_post_thumbnail()', '4.0.0' );
 		return \The_SEO_Framework\Builders\Images::get_featured_image_details(
 			[
 				'id'       => $id,
@@ -712,14 +712,14 @@ final class Deprecated {
 	 * Returns the social image URL from an attachment page.
 	 *
 	 * @since 3.0.6
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $id The post ID. Required.
 	 * @return string The attachment URL.
 	 */
 	public function get_social_image_url_from_attachment( $id ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_social_image_url_from_attachment()', '3.3.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_social_image_url_from_attachment()', '4.0.0' );
 		return \The_SEO_Framework\Builders\Images::get_attachment_image_details(
 			[
 				'id'       => $id,
@@ -732,13 +732,13 @@ final class Deprecated {
 	 * Fetches images id's from WooCommerce gallery
 	 *
 	 * @since 2.5.0
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return array The image URL's.
 	 */
 	public function get_image_from_woocommerce_gallery() {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_image_from_woocommerce_gallery()', '3.3.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_image_from_woocommerce_gallery()', '4.0.0' );
 
 		$ids = [];
 
@@ -757,13 +757,13 @@ final class Deprecated {
 	 *
 	 * @since 2.7.0
 	 * @since 3.0.0 Now sets preferred canonical URL scheme.
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The header image URL, not escaped.
 	 */
 	public function get_header_image() {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_header_image()', '3.3.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_header_image()', '4.0.0' );
 		return \The_SEO_Framework\Builders\Images::get_theme_header_image_details()->current()['url'];
 	}
 
@@ -772,7 +772,7 @@ final class Deprecated {
 	 *
 	 * @since 2.8.0
 	 * @since 3.0.0 : Now sets preferred canonical URL scheme.
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string|int $size The icon size, accepts 'full' and pixel values.
@@ -780,7 +780,7 @@ final class Deprecated {
 	 */
 	public function get_site_icon( $size = 'full' ) {
 
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_site_icon()', '3.3.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_site_icon()', '4.0.0' );
 
 		$size = is_string( $size ) ? $size : 'full';
 
@@ -793,13 +793,13 @@ final class Deprecated {
 	 * @since 2.8.0
 	 * @since 3.0.0 Now sets preferred canonical URL scheme.
 	 * @since 3.1.2 Now returns empty when it's deemed too small, and OG images are set.
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string URL site logo, not escaped.
 	 */
 	public function get_site_logo() {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_site_logo()', '3.3.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_site_logo()', '4.0.0' );
 		return \The_SEO_Framework\Builders\Images::get_site_logo_image_details()->current()['url'];
 	}
 
@@ -811,7 +811,7 @@ final class Deprecated {
 	 *
 	 * @see WordPress Core sanitize_key()
 	 * @since 3.1.0
-	 * @since 3.3.0 1. Now allows square brackets.
+	 * @since 4.0.0 1. Now allows square brackets.
 	 *              2. Deprecated.
 	 * @deprecated
 	 *
@@ -819,7 +819,7 @@ final class Deprecated {
 	 * @return string The sanitized ID.
 	 */
 	public function sanitize_field_id( $id ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->sanitize_field_id()', '3.3.0', 'the_seo_framework()->s_field_id()' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->sanitize_field_id()', '4.0.0', 'the_seo_framework()->s_field_id()' );
 		return preg_replace( '/[^a-zA-Z0-9\[\]_\-@]/', '', $id );
 	}
 
@@ -828,13 +828,13 @@ final class Deprecated {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 Removed caching
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
 	 */
 	public function current_theme_supports_title_tag() {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->sanitize_field_id()', '3.3.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->sanitize_field_id()', '4.0.0' );
 		return \the_seo_framework()->detect_theme_support( 'title-tag' );
 	}
 
@@ -844,13 +844,13 @@ final class Deprecated {
 	 * @since 2.8.0
 	 * @since 3.1.0: 1. No longer checks for WP version 4.5+.
 	 *               2. No longer uses caching.
-	 * @since 3.3.0 Deprecated.
+	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
 	 */
 	public function can_use_logo() {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->can_use_logo()', '3.3.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->can_use_logo()', '4.0.0' );
 		return \the_seo_framework()->detect_theme_support( 'custom-logo' );
 	}
 }

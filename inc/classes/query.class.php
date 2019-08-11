@@ -124,7 +124,7 @@ class Query extends Core {
 	/**
 	 * Returns a list of post types shared with the taxonomy.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param string $taxonomy Optional. The taxonomy to check. Defaults to current screen/query taxonomy.
 	 * @return array List of post types.
@@ -315,7 +315,7 @@ class Query extends Core {
 	 * Detects attachment page.
 	 *
 	 * @since 2.6.0
-	 * @since 3.3.0 Now reliably works on admin screens.
+	 * @since 4.0.0 Now reliably works on admin screens.
 	 *
 	 * @param mixed $attachment Attachment ID, title, slug, or array of such.
 	 * @return bool
@@ -344,7 +344,7 @@ class Query extends Core {
 	/**
 	 * Detects attachments within the admin area.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @see $this->is_attachment()
 	 * @global \WP_Screen $current_screen;
 	 *
@@ -526,7 +526,7 @@ class Query extends Core {
 	/**
 	 * Checks blog page by sole ID.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param int $id The ID to check
 	 * @return bool
@@ -570,7 +570,7 @@ class Query extends Core {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 No longer guesses category by name. It now only matches WordPress' built-in category.
-	 * @since 3.3.0 Removed caching.
+	 * @since 4.0.0 Removed caching.
 	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool Post Type is category
@@ -585,7 +585,7 @@ class Query extends Core {
 	 * Unlike is_preview(), WordPress has prior security checks for this
 	 * in `\WP_Customize_Manager::setup_theme()`.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return bool
 	 */
@@ -766,7 +766,7 @@ class Query extends Core {
 	 * When $page is supplied, it will check against the current object. So it will not work in the admin screens.
 	 *
 	 * @since 2.6.0
-	 * @since 3.3.0 Now tests for post type, which is more reliable.
+	 * @since 4.0.0 Now tests for post type, which is more reliable.
 	 * @staticvar bool $cache
 	 * @uses $this->is_singular()
 	 *
@@ -804,7 +804,7 @@ class Query extends Core {
 	 * Detects pages within the admin area.
 	 *
 	 * @since 2.6.0
-	 * @since 3.3.0 Now tests for post type, although redundant.
+	 * @since 4.0.0 Now tests for post type, although redundant.
 	 * @see $this->is_page()
 	 *
 	 * @return bool
@@ -817,7 +817,7 @@ class Query extends Core {
 	 * Detects preview, securely.
 	 *
 	 * @since 2.6.0
-	 * @since 3.3.0 This is now deemed a secure method.
+	 * @since 4.0.0 This is now deemed a secure method.
 	 *              1. Added is_user_logged_in() check.
 	 *              2. Added is_singular() check, so get_the_ID() won't cross with blog pages.
 	 *              3. Added current_user_can() check.
@@ -860,7 +860,7 @@ class Query extends Core {
 	 * When $post is supplied, it will check against the current object. So it will not work in the admin screens.
 	 *
 	 * @since 2.6.0
-	 * @since 3.3.0 Now tests for post type, which is more reliable.
+	 * @since 4.0.0 Now tests for post type, which is more reliable.
 	 * @staticvar bool $cache
 	 * @uses The_SEO_Framework_Query::is_single_admin()
 	 *
@@ -895,7 +895,7 @@ class Query extends Core {
 	 * Detects posts within the admin area.
 	 *
 	 * @since 2.6.0
-	 * @since 3.3.0 Now no longer returns true on categories and tags.
+	 * @since 4.0.0 Now no longer returns true on categories and tags.
 	 * @see The_SEO_Framework_Query::is_single()
 	 *
 	 * @return bool
@@ -911,7 +911,7 @@ class Query extends Core {
 	 *
 	 * @since 2.5.2
 	 * @since 3.1.0 Now passes $post_types parameter in admin screens, only when it's an integer.
-	 * @since 3.3.0 No longer processes integers as input.
+	 * @since 4.0.0 No longer processes integers as input.
 	 * @uses The_SEO_Framework_Query::is_singular_admin()
 	 * @uses The_SEO_Framework_Query::is_blog_page()
 	 * @uses The_SEO_Framework_Query::is_wc_shop()
@@ -954,7 +954,7 @@ class Query extends Core {
 	 *
 	 * @since 2.5.2
 	 * @since 3.1.0 Added $post_id parameter. When used, it'll only check for it.
-	 * @since 3.3.0 Removed first parameter.
+	 * @since 4.0.0 Removed first parameter.
 	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool Post Type is singular
@@ -1014,7 +1014,7 @@ class Query extends Core {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 No longer guesses tag by name. It now only matches WordPress' built-in tag.
-	 * @since 3.3.0 Removed caching.
+	 * @since 4.0.0 Removed caching.
 	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool Post Type is tag.
@@ -1075,7 +1075,7 @@ class Query extends Core {
 	 * Determines if the page is the WooCommerce plugin Product page.
 	 *
 	 * @since 2.5.2
-	 * @since 3.3.0 : 1. Added admin support.
+	 * @since 4.0.0 : 1. Added admin support.
 	 *                2. Added parameter for the Post ID or post to test.
 	 *
 	 * @param int|\WP_Post $post When set, checks if the post is of type product.
@@ -1108,7 +1108,7 @@ class Query extends Core {
 	/**
 	 * Detects products within the admin area.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @see The_SEO_Framework_Query::is_wc_product()
 	 *
 	 * @return bool
@@ -1374,7 +1374,7 @@ class Query extends Core {
 	 * Determines whether we're on The SEO Framework's sitemap or not.
 	 *
 	 * @since 2.9.2
-	 * @since 3.3.0 Now uses static variables instead of class properties.
+	 * @since 4.0.0 Now uses static variables instead of class properties.
 	 * @staticvar bool $doing_sitemap
 	 *
 	 * @param bool $set Whether to set "doing sitemap".

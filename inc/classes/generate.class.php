@@ -73,7 +73,7 @@ class Generate extends User_Data {
 	 * @since 3.1.0 1. Simplified statements, often (not always) speeding things up.
 	 *              2. Now checks for wc_shop and blog types for pagination.
 	 *              3. Removed noydir.
-	 * @since 3.3.0 1. Now tests for qubit metadata.
+	 * @since 4.0.0 1. Now tests for qubit metadata.
 	 *              2. Added custom query support.
 	 *              3. Added two parameters.
 	 * @global \WP_Query $wp_query
@@ -114,7 +114,7 @@ class Generate extends User_Data {
 		 * Filters the front-end robots array, and strips empty indexes thereafter.
 		 *
 		 * @since 2.6.0
-		 * @since 3.3.0 Added two parameters.
+		 * @since 4.0.0 Added two parameters.
 		 *
 		 * @param array      $meta The current term meta.
 		 * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
@@ -139,7 +139,7 @@ class Generate extends User_Data {
 	/**
 	 * Generates the `noindex`, `nofollow`, `noarchive` robots meta code array from query.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @global \WP_Query $wp_query
 	 *
 	 * @param int <bit> $ignore The ignore level. {
@@ -294,7 +294,7 @@ class Generate extends User_Data {
 	 *
 	 * Note that the home-as-blog page can be used for this method.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @param int <bit>  $ignore The ignore level. {
@@ -406,7 +406,7 @@ class Generate extends User_Data {
 	 *
 	 * Note that the home-as-blog page can be used for this method.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @param int <bit>  $ignore The ignore level. {
@@ -508,7 +508,7 @@ class Generate extends User_Data {
 	 * @since 2.3.9
 	 * @since 3.1.0 : 1. Removed caching.
 	 *                2. Removed escaping parameter.
-	 * @since 3.3.0 No longer converts the `dash` separator option.
+	 * @since 4.0.0 No longer converts the `dash` separator option.
 	 *
 	 * @param string $type The separator type. Used to fetch option.
 	 * @return string The separator.
@@ -721,7 +721,7 @@ class Generate extends User_Data {
 	 * Determines which Twitter cards can be used.
 	 *
 	 * @since 2.9.0
-	 * @since 3.3.0 1. Now only asserts the social titles as required.
+	 * @since 4.0.0 1. Now only asserts the social titles as required.
 	 *              2. Now always returns an array, instead of a boolean (false) on failure.
 	 * @staticvar bool|array $cache
 	 *
@@ -754,14 +754,14 @@ class Generate extends User_Data {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 Is now filterable.
-	 * @since 3.3.0 Removed the dash key.
+	 * @since 4.0.0 Removed the dash key.
 	 *
 	 * @return array Title separators.
 	 */
 	public function get_separator_list() {
 		/**
 		 * @since 3.1.0
-		 * @since 3.3.0 Removed the dash key.
+		 * @since 4.0.0 Removed the dash key.
 		 * @param array $list The separator list in { option_name > display_value } format.
 		 *                    The option name should be translatable within `&...;` tags.
 		 *                    'pipe' is excluded from this rule.

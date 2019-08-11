@@ -56,7 +56,7 @@ class Post_Data extends Detect {
 	 *
 	 * When we'll be moving to PHP 7 and later, we'll enforce type hinting.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @alias $this->get_post_meta_item();
 	 *
 	 * @param string $item      The item to get.
@@ -79,7 +79,7 @@ class Post_Data extends Detect {
 	 *
 	 * When we'll be moving to PHP 7 and later, we'll enforce type hinting.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @staticvar array $cache
 	 *
 	 * @param int  $post_id   The post ID.
@@ -133,7 +133,7 @@ class Post_Data extends Detect {
 	 *
 	 * When we'll be moving to PHP 7 and later, we'll enforce type hinting.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param int $post_id The post ID.
 	 * @return array The default post meta.
@@ -158,7 +158,7 @@ class Post_Data extends Detect {
 	/**
 	 * Returns the unfiltered post meta defaults.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return array The default, unfiltered, post meta.
 	 */
@@ -189,7 +189,7 @@ class Post_Data extends Detect {
 	 * Note that this method can be more resource intensive than you intend it to be,
 	 * as it reprocesses all post meta.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @uses $this->save_post_meta() to process all data.
 	 *
 	 * @param string           $item  The item to update.
@@ -211,7 +211,7 @@ class Post_Data extends Detect {
 	/**
 	 * Save post meta / custom field data for a singular post type.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param \WP_Post|integer $post The post object or post ID.
 	 * @param array            $data The post meta fields, will be merged with the defaults.
@@ -226,10 +226,10 @@ class Post_Data extends Detect {
 		$data = $this->s_post_meta( $data );
 
 		if ( \has_filter( 'the_seo_framework_save_custom_fields' ) ) {
-			$this->_deprecated_filter( 'the_seo_framework_save_custom_fields', '3.3.0', 'the_seo_framework_save_post_meta' );
+			$this->_deprecated_filter( 'the_seo_framework_save_custom_fields', '4.0.0', 'the_seo_framework_save_post_meta' );
 			/**
 			 * @since 3.1.0
-			 * @since 3.3.0 Deprecated.
+			 * @since 4.0.0 Deprecated.
 			 * @deprecated
 			 * @param array    $data The data that's going to be saved.
 			 * @param \WP_Post $post The post object.
@@ -244,7 +244,7 @@ class Post_Data extends Detect {
 		}
 
 		/**
-		 * @since 3.3.0
+		 * @since 4.0.0
 		 * @param array    $data The data that's going to be saved.
 		 * @param \WP_Post $post The post object.
 		 */
@@ -275,7 +275,7 @@ class Post_Data extends Detect {
 	 * Sanity checks are handled deeper.
 	 *
 	 * @since 3.0.6
-	 * @since 3.3.0 Renamed from `inattachment_seo_save`
+	 * @since 4.0.0 Renamed from `inattachment_seo_save`
 	 * @uses $this->_update_post_meta()
 	 * @access private
 	 *
@@ -291,7 +291,7 @@ class Post_Data extends Detect {
 	 *
 	 * @since 2.0.0
 	 * @since 2.9.3 Added 'exclude_from_archive'.
-	 * @since 3.3.0 1. Renamed from `inpost_seo_save`
+	 * @since 4.0.0 1. Renamed from `inpost_seo_save`
 	 *              2. Now allows updating during `WP_CRON`.
 	 *              3. Now allows updating during `WP_AJAX`.
 	 * @access private
@@ -317,7 +317,7 @@ class Post_Data extends Detect {
 	/**
 	 * Overwrites all of the post meta on post-edit.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param int      $post_id The post ID. Unused.
 	 * @param \WP_Post $post    The post object.
@@ -356,7 +356,7 @@ class Post_Data extends Detect {
 	/**
 	 * Overwrites a part of the post meta on quick-edit.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param int      $post_id The post ID. Unused.
 	 * @param \WP_Post $post    The post object.
@@ -409,7 +409,7 @@ class Post_Data extends Detect {
 	/**
 	 * Overwrites a park of the post meta on bulk-edit.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @staticvar bool $verified_referer Will hold true after the first update passes.
 	 *
 	 * @param int      $post_id The post ID. Unused.
@@ -468,7 +468,7 @@ class Post_Data extends Detect {
 	 * Saves primary term data for posts.
 	 *
 	 * @since 3.0.0
-	 * @since 3.3.0 1. Now allows updating during `WP_CRON`.
+	 * @since 4.0.0 1. Now allows updating during `WP_CRON`.
 	 *              2. Now allows updating during `WP_AJAX`.
 	 * @securitycheck 3.0.0 OK.
 	 *
@@ -585,7 +585,7 @@ class Post_Data extends Detect {
 	 *
 	 * @since 2.6.6
 	 * @since 3.1.0 Added Elementor detection
-	 * @since 3.3.0 Now detects page builders before looping over the meta.
+	 * @since 4.0.0 Now detects page builders before looping over the meta.
 	 *
 	 * @param int $post_id The post ID to check.
 	 * @return boolean

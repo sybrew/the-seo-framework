@@ -185,7 +185,7 @@ class Cache extends Site_Options {
 	 * Deletes object cache.
 	 *
 	 * @since 2.9.0
-	 * @since 3.3.0 Now does something.
+	 * @since 4.0.0 Now does something.
 	 *
 	 * @return bool True on success, false on failure.
 	 */

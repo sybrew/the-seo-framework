@@ -28,7 +28,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 /**
  * Generates the SEO Bar for posts.
  *
- * @since 3.3.0
+ * @since 4.0.0
  *
  * @access private
  * @internal
@@ -38,7 +38,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 final class SeoBar_Page extends SeoBar {
 
 	/**
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @abstract
 	 * @var array All known tests.
@@ -48,7 +48,7 @@ final class SeoBar_Page extends SeoBar {
 	/**
 	 * Primes the cache.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @abstract
 	 */
 	protected function prime_cache() {
@@ -81,7 +81,7 @@ final class SeoBar_Page extends SeoBar {
 	/**
 	 * Primes the current query cache.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @abstract
 	 *
 	 * @param array $query_cache The current query cache. Passed by reference.
@@ -112,7 +112,7 @@ final class SeoBar_Page extends SeoBar {
 	/**
 	 * Tests for blocking redirection.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @abstract
 	 *
 	 * @return bool True if there's a blocking redirect, false otherwise.
@@ -124,7 +124,7 @@ final class SeoBar_Page extends SeoBar {
 	/**
 	 * Runs title tests.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return array $item : {
 	 *    string  $symbol : The displayed symbol that identifies your bar.
@@ -329,7 +329,7 @@ final class SeoBar_Page extends SeoBar {
 	/**
 	 * Runs title tests.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @see test_title() for return value.
 	 *
 	 * @return array $item
@@ -510,7 +510,7 @@ final class SeoBar_Page extends SeoBar {
 	/**
 	 * Runs description tests.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @see test_title() for return value.
 	 *
 	 * @return array $item
@@ -647,7 +647,7 @@ final class SeoBar_Page extends SeoBar {
 	/**
 	 * Runs following tests.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @see test_title() for return value.
 	 *
 	 * @return array $item
@@ -778,7 +778,7 @@ final class SeoBar_Page extends SeoBar {
 	/**
 	 * Runs archiving tests.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @see test_title() for return value.
 	 *
 	 * @return array $item
@@ -909,7 +909,7 @@ final class SeoBar_Page extends SeoBar {
 	/**
 	 * Runs redirect tests.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @see test_title() for return value.
 	 *
 	 * @return array $item

@@ -135,7 +135,7 @@ final class Scripts {
 	/**
 	 * Adds admin-body classes.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @internal
 	 *
@@ -150,7 +150,7 @@ final class Scripts {
 	/**
 	 * Prints the TSF no-js transform script, using ES2015 (ECMA-262).
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @internal
 	 */
@@ -454,7 +454,7 @@ final class Scripts {
 	/**
 	 * Concatenates inline JS.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param array $scripts The scripts to add.
 	 * @return string

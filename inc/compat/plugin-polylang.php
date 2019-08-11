@@ -75,7 +75,7 @@ function _blaclist_tsf_sitemap_styles( $blacklist ) {
 /**
  * Fixes the sitemap prefix, because setting the home URL globally requires only one filter.
  *
- * @since 3.3.0
+ * @since 4.0.0
  * @param string $prefix The path prefix. Ideally appended with a slash.
  *                       Recommended return value: "$prefix$custompath/"
  * @return string New prefix.

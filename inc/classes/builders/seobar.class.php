@@ -28,7 +28,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 /**
  * Generates the SEO Bar.
  *
- * @since 3.3.0
+ * @since 4.0.0
  * Mind the late static binding. We use "self" if the variable is shared between instances.
  * We use "static" if the variable isn't shared between instances.
  * @link <https://www.php.net/manual/en/language.oop5.late-static-bindings.php>
@@ -43,7 +43,7 @@ abstract class SeoBar {
 	use \The_SEO_Framework\Traits\Enclose_Core_Final;
 
 	/**
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @abstract
 	 * Shared between instances. But, should be overwritten.
@@ -52,14 +52,14 @@ abstract class SeoBar {
 	public static $tests = [];
 
 	/**
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * Shared between instances.
 	 * @var null|\The_SEO_Framework\Load
 	 */
 	protected static $tsf = null;
 
 	/**
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * Shared between instances.
 	 * @var array $cache A non-volatile caching status. Holds post type settings,
 	 *                   among other things, to be used in generation.
@@ -67,20 +67,20 @@ abstract class SeoBar {
 	private static $cache = [];
 
 	/**
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * Not shared between instances.
 	 * @var array $query The current query for the SEO Bar.
 	 */
 	protected static $query;
 
 	/**
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @var arrray The current query cache.
 	 */
 	protected $query_cache = [];
 
 	/**
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * Not shared between instances
 	 * @var \The_SEO_Framework\Builders\SeoBar_* $instance The instance.
 	 */
@@ -91,7 +91,7 @@ abstract class SeoBar {
 	 *
 	 * Sets late static binding.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	final protected function __construct() {
 		static::$instance = &$this;
@@ -102,7 +102,7 @@ abstract class SeoBar {
 	/**
 	 * Returns this instance.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return static
 	 */
@@ -115,7 +115,7 @@ abstract class SeoBar {
 	 * Sets non-volatile cache by key value.
 	 * This cache will stick around for multiple SEO Bar generations.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param string $key   The cache key.
 	 * @param mixed  $value The cache value.
@@ -129,7 +129,7 @@ abstract class SeoBar {
 	 * Retrieves non-volatile cache value by key.
 	 * This cache will stick around for multiple SEO Bar generations.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param string $key The cache key.
 	 * @return mixed|null The cache value. Null on failure.
@@ -164,7 +164,7 @@ abstract class SeoBar {
 	/**
 	 * Runs one or more SEO bar tests.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @access private
 	 * @generator
 	 *
@@ -199,7 +199,7 @@ abstract class SeoBar {
 	/**
 	 * Primes the cache.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @abstract
 	 */
 	abstract protected function prime_cache();
@@ -207,7 +207,7 @@ abstract class SeoBar {
 	/**
 	 * Primes the current query cache.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @abstract
 	 *
 	 * @param array $query_cache The current query cache. Passed by reference.
@@ -217,7 +217,7 @@ abstract class SeoBar {
 	/**
 	 * Tests for blocking redirection.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @abstract
 	 *
 	 * @return bool True if there's a blocking redirect, false otherwise.

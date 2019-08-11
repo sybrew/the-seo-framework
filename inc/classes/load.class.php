@@ -32,7 +32,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * Extending upon parent classes.
  *
  * @since 2.8.0
- * @since 3.3.0 No longer implements an interface. It's implied.
+ * @since 4.0.0 No longer implements an interface. It's implied.
  */
 final class Load extends Feed {
 
@@ -58,7 +58,7 @@ final class Load extends Feed {
 	 * Constructor, setup debug vars and then load parent constructor.
 	 *
 	 * @since 2.8.0
-	 * @since 3.3.0 Now informs developer of invalid class instancing.
+	 * @since 4.0.0 Now informs developer of invalid class instancing.
 	 *
 	 * @return null If called twice or more.
 	 */
@@ -128,7 +128,7 @@ final class Load extends Feed {
 	 * rather than common paths. As they can require manual FTP upload.
 	 *
 	 * @since 2.8.0
-	 * @since 3.3.0 Renamed to `_load_early_compat_files`, from `load_early_compat_files`
+	 * @since 4.0.0 Renamed to `_load_early_compat_files`, from `load_early_compat_files`
 	 * @access private
 	 */
 	public function _load_early_compat_files() {

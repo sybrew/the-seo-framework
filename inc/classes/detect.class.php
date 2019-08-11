@@ -531,7 +531,7 @@ class Detect extends Render {
 	 * - Page Builder by SiteOrigin
 	 * - Beaver Builder by Fastline Media
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @staticvar bool $detected
 	 *
 	 * @return bool
@@ -560,7 +560,7 @@ class Detect extends Render {
 	 * @since 2.9.2 Now also checks for permalinks.
 	 * @since 2.9.3 Now also checks for sitemap_robots option.
 	 * @since 3.1.0 Removed Jetpack's sitemap check -- it's no longer valid.
-	 * @since 3.3.0 : 1. Now uses has_robots_txt()
+	 * @since 4.0.0 : 1. Now uses has_robots_txt()
 	 *              : 2. Now uses the get_robots_txt_url() to determine validity.
 	 *
 	 * @param bool $check_option Whether to check for sitemap option.
@@ -581,7 +581,7 @@ class Detect extends Render {
 	 * Detects presence of robots.txt in root folder.
 	 *
 	 * @since 2.5.2
-	 * @since 3.3.0 Now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
+	 * @since 4.0.0 Now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
 	 * @staticvar $has_robots
 	 *
 	 * @return bool Whether the robots.txt file exists.
@@ -605,7 +605,7 @@ class Detect extends Render {
 	 * Detects presence of sitemap.xml in root folder.
 	 *
 	 * @since 2.5.2
-	 * @since 3.3.0 Now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
+	 * @since 4.0.0 Now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
 	 * @staticvar bool $has_map
 	 *
 	 * @return bool Whether the sitemap.xml file exists.
@@ -706,7 +706,7 @@ class Detect extends Render {
 	/**
 	 * Determines whether the main query supports custom SEO.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return bool
 	 */
@@ -764,7 +764,7 @@ class Detect extends Render {
 	 * Checks if at least one taxonomy objects post type supports The SEO Framework,
 	 * and wether the taxonomy is public and rewritable.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @param string $taxonomy Optional. The taxonomy name.
 	 * @return bool True if at least one post type in taxonomy isn't disabled.
@@ -775,7 +775,7 @@ class Detect extends Render {
 
 		/**
 		 * @since 3.1.0
-		 * @since 3.3.0 Now returns only returns false when all post types in the taxonomy aren't supported.
+		 * @since 4.0.0 Now returns only returns false when all post types in the taxonomy aren't supported.
 		 * @param bool   $post_type Whether the post type is supported
 		 * @param string $post_type_evaluated The evaluated post type.
 		 */
@@ -915,7 +915,7 @@ class Detect extends Render {
 	 * Checks if at least one taxonomy objects post type supports The SEO Framework.
 	 *
 	 * @since 3.1.0
-	 * @since 3.3.0 1. Now returns true if at least one post type for the taxonomy is supported.
+	 * @since 4.0.0 1. Now returns true if at least one post type for the taxonomy is supported.
 	 *              2. Now uses `is_post_type_supported()` instead of `is_post_type_disabled()`.
 	 *
 	 * @param string $taxonomy The taxonomy name.

@@ -28,7 +28,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 /**
  * Generates images.
  *
- * @since 3.3.0
+ * @since 4.0.0
  */
 final class Images {
 	use \The_SEO_Framework\Traits\Enclose_Core_Final;
@@ -36,14 +36,14 @@ final class Images {
 	/**
 	 * The constructor. Or rather, the lack thereof.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	private function __construct() { }
 
 	/**
 	 * Generates image URLs and IDs from the attachment page entry.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @generator
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
@@ -74,7 +74,7 @@ final class Images {
 	/**
 	 * Generates image URLs and IDs from the featured image input.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @generator
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
@@ -106,7 +106,7 @@ final class Images {
 	/**
 	 * Generates image URLs and IDs from the content.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @generator
 	 * TODO consider matching these images with wp-content/uploads items via database calls, which is heavy...
 	 *      Combine query, instead of using WP API? Only do that for the first image, instead?
@@ -166,7 +166,7 @@ final class Images {
 	/**
 	 * Generates image URLs and IDs from the fallback image options.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @generator
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
@@ -192,7 +192,7 @@ final class Images {
 	 *
 	 * N.B. This output may be randomized.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @generator
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
@@ -223,7 +223,7 @@ final class Images {
 	/**
 	 * Generates image URLs and IDs from the logo modification.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @generator
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
@@ -254,7 +254,7 @@ final class Images {
 	/**
 	 * Generates image URLs and IDs from site icon options.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @generator
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.

@@ -28,7 +28,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 /**
  * Generates the sitemap.
  *
- * @since 3.3.0
+ * @since 4.0.0
  * @abstract
  *
  * @access public
@@ -44,7 +44,7 @@ abstract class Sitemap {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	final public function __construct() {
 		static::$tsf = \the_seo_framework();
@@ -53,7 +53,7 @@ abstract class Sitemap {
 	/**
 	 * Destructor.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	final public function __destruct() {
 		static::$tsf = null;
@@ -62,7 +62,7 @@ abstract class Sitemap {
 	/**
 	 * Prepares sitemap generation by raising the memory limit and fixing the timezone.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	final public function prepare_generation() {
 
@@ -75,7 +75,7 @@ abstract class Sitemap {
 	/**
 	 * Shuts down the sitemap generator.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 */
 	final public function shutdown_generation() {
 		static::$tsf->reset_timezone();
@@ -84,7 +84,7 @@ abstract class Sitemap {
 	/**
 	 * Returns the sitemap content.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 * @abstract
 	 *
 	 * @return string The sitemap content.
@@ -101,7 +101,7 @@ abstract class Sitemap {
 	 * @since 3.0.6 First filter value now works as intended.
 	 * @since 3.1.0 1. Resolved a PHP notice when ID is 0, resulting in returning false-esque unintentionally.
 	 *              2. Now accepts 0 in the filter.
-	 * @since 3.3.0 1. Now tests qubit options.
+	 * @since 4.0.0 1. Now tests qubit options.
 	 *              2. Now tests for redirect settings.
 	 *              3. First parameter can now be a post object.
 	 *              4. If the first parameter is 0, it's now indicative of a home-as-blog page.
@@ -138,7 +138,7 @@ abstract class Sitemap {
 	 * Returns the sitemap post query limit.
 	 *
 	 * @since 3.1.0
-	 * @since 3.3.0 Moved to \The_SEO_Framework\Builders\Sitemap
+	 * @since 4.0.0 Moved to \The_SEO_Framework\Builders\Sitemap
 	 *
 	 * @param bool $hierarchical Whether the query is for hierarchical post types or not.
 	 * @return int The post limit
@@ -148,7 +148,7 @@ abstract class Sitemap {
 		 * @since 2.2.9
 		 * @since 2.8.0 Increased to 1200 from 700.
 		 * @since 3.1.0 Now returns an option value; it falls back to the default value if not set.
-		 * @since 3.3.0 1. The default is now 3000, from 1200.
+		 * @since 4.0.0 1. The default is now 3000, from 1200.
 		 *              2. Now passes a second parameter.
 		 * @param int $total_post_limit
 		 * @param bool $hierarchical Whether the query is for hierarchical post types or not.

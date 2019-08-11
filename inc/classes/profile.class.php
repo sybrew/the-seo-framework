@@ -54,7 +54,7 @@ class Profile extends Generate_Ldjson {
 	/**
 	 * Returns the current profile field settings.
 	 *
-	 * @since 3.3.0
+	 * @since 4.0.0
 	 *
 	 * @return \stdClass The profile settings.
 	 */
