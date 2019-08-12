@@ -181,9 +181,9 @@ final class SeoBar_Term extends SeoBar {
 						'symbol' => \_x( 'T', 'Title', 'autodescription' ),
 						'title'  => \__( 'Title', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
-						'reason' => \__( 'Obtained from SEO meta input.', 'autodescription' ),
+						'reason' => \__( 'Obtained from term SEO meta input.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( "It's built from SEO meta input.", 'autodescription' ),
+							'base' => \__( "It's built from term SEO meta input.", 'autodescription' ),
 						],
 					],
 				],
@@ -354,9 +354,9 @@ final class SeoBar_Term extends SeoBar {
 						'symbol' => \_x( 'D', 'Description', 'autodescription' ),
 						'title'  => \__( 'Description', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
-						'reason' => \__( 'Obtained from SEO meta input.', 'autodescription' ),
+						'reason' => \__( 'Obtained from term SEO meta input.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( "It's built from SEO meta input.", 'autodescription' ),
+							'base' => \__( "It's built from term SEO meta input.", 'autodescription' ),
 						],
 					],
 				],
@@ -486,14 +486,16 @@ final class SeoBar_Term extends SeoBar {
 					'notpublic'     => \__( 'WordPress discourages crawling via the Reading Settings.', 'autodescription' ),
 					'site'          => \__( 'Indexing is discouraged for the whole site at the SEO Settings screen.', 'autodescription' ),
 					'posttypes'     => \__( 'Indexing is discouraged for all bound post types to this term at the SEO Settings screen.', 'autodescription' ),
-					'override'      => \__( 'The SEO meta input overrides the indexing state.', 'autodescription' ),
+					'override'      => \__( 'The term SEO meta input overrides the indexing state.', 'autodescription' ),
 					'empty'         => \__( 'No posts are attached to this term, so indexing is disabled.', 'autodescription' ),
 					'emptyoverride' => \__( 'No posts are attached to this term, so indexing should be disabled.', 'autodescription' ),
+					'canonicalurl'  => \__( 'A custom canonical URL is set that points to another page.', 'autodescription' ),
 				],
 				'reason'   => [
 					'notpublic'     => \__( 'WordPress overrides the robots directive.', 'autodescription' ),
 					'empty'         => \__( 'The term is empty.', 'autodescription' ),
 					'emptyoverride' => \__( 'The term is empty yet still indexed.', 'autodescription' ),
+					'canonicalurl'  => \__( 'The canonical URL points to another page.', 'autodescription' ),
 				],
 				'defaults' => [
 					'index'   => [
@@ -565,6 +567,26 @@ final class SeoBar_Term extends SeoBar {
 			$item['assess']['override'] = $cache['assess']['override'];
 		}
 
+		if ( $this->query_cache['meta']['canonical'] ) {
+			$permalink = static::$tsf->create_canonical_url( [
+				'id'               => static::$query['id'],
+				'taxonomy'         => static::$query['taxonomy'],
+				'get_custom_field' => false,
+			] );
+			// We create it because filters may apply.
+			$canonical = static::$tsf->create_canonical_url( [
+				'id'               => static::$query['id'],
+				'taxonomy'         => static::$query['taxonomy'],
+				'get_custom_field' => true,
+			] );
+			if ( $permalink !== $canonical ) {
+				$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN;
+				$item['reason'] = $cache['reason']['canonicalurl'];
+
+				$item['assess']['protected'] = $cache['assess']['canonicalurl'];
+			}
+		}
+
 		if ( $this->query_cache['states']['isempty'] ) {
 			if ( $this->query_cache['states']['robotsmeta']['noindex'] ) {
 				// Everything's as intended...
@@ -608,7 +630,7 @@ final class SeoBar_Term extends SeoBar {
 					'notpublic' => \__( 'WordPress discourages crawling via the Reading Settings.', 'autodescription' ),
 					'site'      => \__( 'Link following is discouraged for the whole site at the SEO Settings screen.', 'autodescription' ),
 					'posttypes' => \__( 'Link following is discouraged for all bound post types to this term at the SEO Settings screen.', 'autodescription' ),
-					'override'  => \__( 'The SEO meta input overrides the link following state.', 'autodescription' ),
+					'override'  => \__( 'The term SEO meta input overrides the link following state.', 'autodescription' ),
 					'noindex'   => \__( 'The term may not be indexed, this may also discourage link following.', 'autodescription' ),
 				],
 				'reason'   => [
@@ -718,7 +740,7 @@ final class SeoBar_Term extends SeoBar {
 					'notpublic' => \__( 'WordPress discourages crawling via the Reading Settings.', 'autodescription' ),
 					'site'      => \__( 'Archiving is discouraged for the whole site at the SEO Settings screen.', 'autodescription' ),
 					'posttypes' => \__( 'Archiving is discouraged for all bound post types to this term at the SEO Settings screen.', 'autodescription' ),
-					'override'  => \__( 'The SEO meta input overrides the archiving state.', 'autodescription' ),
+					'override'  => \__( 'The term SEO meta input overrides the archiving state.', 'autodescription' ),
 					'noindex'   => \__( 'The term may not be indexed, this may also discourage archiving.', 'autodescription' ),
 				],
 				'reason'   => [
@@ -796,7 +818,7 @@ final class SeoBar_Term extends SeoBar {
 
 		if ( ! $this->query_cache['states']['robotsmeta']['noarchive'] ) {
 			if ( $this->query_cache['states']['robotsmeta']['noindex'] ) {
-				$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_OKAY;
+				$item['status']            = \The_SEO_Framework\Interpreters\SeoBar::STATE_OKAY;
 				$item['assess']['noindex'] = $cache['assess']['noindex'];
 			}
 

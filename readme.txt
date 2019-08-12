@@ -290,16 +290,12 @@ TODO Exclaim:
 
 ..., and, for developers, we've finally introduced a reliable JavaScript API. Documentation will follow based on frequently asked requests.
 
-TODO reload the SEO Bar on Gutenberg save action. https://github.com/sybrew/the-seo-framework/issues/361
 TODO update wp rocket's compat file... ugh, redundant
 TODO test all compat files...
 
 TODO call "php level caching" memoization--it's a cooler word.
-TODO index.php stuff
 
 TODO do something nicer with interpret_status_to_symbol() ("We're not completely satisfied on this integration, but we'll revisit that later; building this update took long enough already.")
-
-TODO did we fix this, or was it regression: The social description fields now hold their true generated description as an example when no custom meta description is met.
 
 TODO set AJAX failure listeners?
 
@@ -367,7 +363,6 @@ TODO revise plugin setup guide:
 	* After upgrading The SEO Framework's database, users who have `update_plugins` capabilities may now see a confirmation notice that the site has been upgraded.
 	* Search engine pinging for the sitemap can now be offloaded to the WordPress cron-scheduler; this feature is enabled by default.
 	* The estimated plugin-boot time is added to the closing HTML comment; which adds the bulk of the page-loading time of this plugin. In this update, we decreased that time, greatly--and we're proudly showing it.
-		* This time is greatly affected by checking for plugin conflicts, and fixing those on-the-fly. So, if you use bbPress, BuddyPress, WooCommerce, wpForo, PolyLang, or WPML, you may see this number go (far) above 12ms. Some have a greater impact than others.
 	* The term meta inputs now have the "are you sure you want to leave this page?"-listener attached.
 	* Multiple social images may now be outputted. How this affects sharing depends on the social network.
 	* Fallback images are now always appeneded; you can no longer overwrite them.
@@ -504,7 +499,7 @@ TODO revise plugin setup guide:
 				* Added a disclaimer to the title length calculation, as it's not using pixels.
 				* Improved duplicated branding checks:
 					1. It now asserts even if the branding has been disabled.
-					2. It now support unicode and capitalization (ignoring) thereof.
+					2. It now support unicode and ignoring capitalization thereof.
 			* **Description:**
 				* Added page excerpt generation checks.
 				* Added page builder state checks.
@@ -517,6 +512,7 @@ TODO revise plugin setup guide:
 				* Added term multiple post type checks.
 				* Added term zero post count checks.
 				* Added for non-standard robots.txt file checks.
+				* Added externally-pointing canonical URL tests.
 			* **Following:**
 				* Added indexing conflict checks.
 				* Added meta override checks.

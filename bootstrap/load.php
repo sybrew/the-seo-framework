@@ -122,9 +122,10 @@ spl_autoload_register( __NAMESPACE__ . '\\_autoload_classes', true, true );
  *                3. No longer loads interfaces automatically.
  * @uses THE_SEO_FRAMEWORK_DIR_PATH_CLASS
  * @access private
+ * @staticvar bool $_timenow Whether to time this request. Used to prevent stacking timers during class extending.
  *
  * @NOTE 'The_SEO_Framework\' is a reserved namespace. Using it outside of this
- *       plugin's scope coul result in an error.
+ *       plugin's scope could result in an error.
  *
  * @param string $class The class name.
  * @return void Early if the class is not within the current namespace.
@@ -133,7 +134,13 @@ function _autoload_classes( $class ) {
 
 	if ( 0 !== strpos( $class, 'The_SEO_Framework\\', 0 ) ) return;
 
-	$_bootstrap_timer = microtime( true );
+	static $_timenow = true;
+	if ( $_timenow ) {
+		$_bootstrap_timer = microtime( true );
+		$_timenow         = false;
+	} else {
+		$_bootstrap_timer = 0;
+	}
 
 	$_chunks       = explode( '\\', strtolower( $class ) );
 	$_chunck_count = count( $_chunks );
@@ -147,12 +154,12 @@ function _autoload_classes( $class ) {
 
 	$class = str_replace( '_', '-', end( $_chunks ) );
 
-	$file = $class . '.class.php';
-	$path = THE_SEO_FRAMEWORK_DIR_PATH_CLASS;
+	require THE_SEO_FRAMEWORK_DIR_PATH_CLASS . $rel_dir . $class . '.class.php';
 
-	require $path . $rel_dir . $file;
-
-	_bootstrap_timer( microtime( true ) - $_bootstrap_timer );
+	if ( $_bootstrap_timer ) {
+		_bootstrap_timer( microtime( true ) - $_bootstrap_timer );
+		$_timenow = true;
+	}
 }
 
 \add_action( 'activate_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, __NAMESPACE__ . '\\_do_plugin_activation' );

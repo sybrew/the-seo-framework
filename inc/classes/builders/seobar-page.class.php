@@ -177,9 +177,9 @@ final class SeoBar_Page extends SeoBar {
 						'symbol' => \_x( 'T', 'Title', 'autodescription' ),
 						'title'  => \__( 'Title', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
-						'reason' => \__( 'Obtained from SEO meta input.', 'autodescription' ),
+						'reason' => \__( 'Obtained from page SEO meta input.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( "It's built from SEO meta input.", 'autodescription' ),
+							'base' => \__( "It's built from page SEO meta input.", 'autodescription' ),
 						],
 					],
 				],
@@ -376,9 +376,9 @@ final class SeoBar_Page extends SeoBar {
 						'symbol' => \_x( 'D', 'Description', 'autodescription' ),
 						'title'  => \__( 'Description', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
-						'reason' => \__( 'Obtained from SEO meta input.', 'autodescription' ),
+						'reason' => \__( 'Obtained from page SEO meta input.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( "It's built from SEO meta input.", 'autodescription' ),
+							'base' => \__( "It's built from page SEO meta input.", 'autodescription' ),
 						],
 					],
 				],
@@ -522,17 +522,19 @@ final class SeoBar_Page extends SeoBar {
 			[
 				'params'   => [],
 				'assess'   => [
-					'robotstxt' => \__( 'The robots.txt file is nonstandard, and may still direct search engines differently.', 'autodescription' ),
-					'notpublic' => \__( 'WordPress discourages crawling via the Reading Settings.', 'autodescription' ),
-					'site'      => \__( 'Indexing is discouraged for the whole site at the SEO Settings screen.', 'autodescription' ),
-					'posttype'  => \__( 'Indexing is discouraged for this post type at the SEO Settings screen.', 'autodescription' ),
-					'protected' => \__( 'The page is protected, so indexing is discouraged.', 'autodescription' ),
-					'override'  => \__( 'The SEO meta input overrides the indexing state.', 'autodescription' ),
+					'robotstxt'    => \__( 'The robots.txt file is nonstandard, and may still direct search engines differently.', 'autodescription' ),
+					'notpublic'    => \__( 'WordPress discourages crawling via the Reading Settings.', 'autodescription' ),
+					'site'         => \__( 'Indexing is discouraged for the whole site at the SEO Settings screen.', 'autodescription' ),
+					'posttype'     => \__( 'Indexing is discouraged for this post type at the SEO Settings screen.', 'autodescription' ),
+					'protected'    => \__( 'The page is protected, so indexing is discouraged.', 'autodescription' ),
+					'override'     => \__( 'The page SEO meta input overrides the indexing state.', 'autodescription' ),
+					'canonicalurl' => \__( 'A custom canonical URL is set that points to another page.', 'autodescription' ),
 				],
 				'reason'   => [
 					'notpublic'    => \__( 'WordPress overrides the robots directive.', 'autodescription' ),
 					'protected'    => \__( 'The page is protected.', 'autodescription' ),
 					'notpublished' => \__( 'The page is not published.', 'autodescription' ),
+					'canonicalurl' => \__( 'The canonical URL points to another page.', 'autodescription' ),
 				],
 				'defaults' => [
 					'index'   => [
@@ -623,6 +625,24 @@ final class SeoBar_Page extends SeoBar {
 			$item['assess']['posttype'] = $cache['assess']['posttype'];
 		}
 
+		if ( $this->query_cache['meta']['_genesis_canonical_uri'] ) {
+			$permalink = static::$tsf->create_canonical_url( [
+				'id'               => static::$query['id'],
+				'get_custom_field' => false,
+			] );
+			// We create it because filters may apply.
+			$canonical = static::$tsf->create_canonical_url( [
+				'id'               => static::$query['id'],
+				'get_custom_field' => true,
+			] );
+			if ( $permalink !== $canonical ) {
+				$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN;
+				$item['reason'] = $cache['reason']['canonicalurl'];
+
+				$item['assess']['protected'] = $cache['assess']['canonicalurl'];
+			}
+		}
+
 		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['_genesis_noindex'] ) ) {
 			// Status is already set.
 
@@ -663,7 +683,7 @@ final class SeoBar_Page extends SeoBar {
 					'notpublic' => \__( 'WordPress discourages crawling via the Reading Settings.', 'autodescription' ),
 					'site'      => \__( 'Link following is discouraged for the whole site at the SEO Settings screen.', 'autodescription' ),
 					'posttype'  => \__( 'Link following is discouraged for this post type at the SEO Settings screen.', 'autodescription' ),
-					'override'  => \__( 'The SEO meta input overrides the link following state.', 'autodescription' ),
+					'override'  => \__( 'The page SEO meta input overrides the link following state.', 'autodescription' ),
 					'noindex'   => \__( 'The page may not be indexed, this may also discourage link following.', 'autodescription' ),
 				],
 				'reason'   => [
@@ -794,7 +814,7 @@ final class SeoBar_Page extends SeoBar {
 					'notpublic' => \__( 'WordPress discourages crawling via the Reading Settings.', 'autodescription' ),
 					'site'      => \__( 'Archiving is discouraged for the whole site at the SEO Settings screen.', 'autodescription' ),
 					'posttype'  => \__( 'Archiving is discouraged for this post type at the SEO Settings screen.', 'autodescription' ),
-					'override'  => \__( 'The SEO meta input overrides the archiving state.', 'autodescription' ),
+					'override'  => \__( 'The page SEO meta input overrides the archiving state.', 'autodescription' ),
 					'noindex'   => \__( 'The page may not be indexed, this may also discourage archiving.', 'autodescription' ),
 				],
 				'reason'   => [
