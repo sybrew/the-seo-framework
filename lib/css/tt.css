@@ -69,6 +69,11 @@ a.tsf-tooltip-item {
 	content: "\A";
 }
 
+/* fix transparent images */
+.tsf-tooltip-text img {
+    background: #fff;
+}
+
 .tsf-tooltip-text ol,
 .tsf-tooltip-text ul {
 	/* Padding is removed by WP via common.css, so we don't have to. */

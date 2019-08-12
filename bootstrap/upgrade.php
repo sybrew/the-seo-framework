@@ -540,7 +540,7 @@ function _do_upgrade_3300() {
 			if ( $defaults['ping_use_cron'] ) {
 				if ( $tsf->get_option( 'ping_google', false ) || $tsf->get_option( 'ping_bing', false ) ) {
 					_add_upgrade_notice(
-						\esc_html__( 'A cronjob is now used to ping search engines and alerts them to changes in your sitemap.', 'autodescription' )
+						\esc_html__( 'A cronjob is now used to ping search engines and it alerts them to changes in your sitemap.', 'autodescription' )
 					);
 				}
 			}

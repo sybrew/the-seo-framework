@@ -836,7 +836,7 @@ final class Scripts {
 				'name' => 'tsfSocialL10n',
 				'data' => [
 					'params' => [
-						'homeLocks'    => $home_locks,
+						'homeLocks' => $home_locks,
 					],
 					'states' => [
 						'placeholders' => static::decode_all_entities( $settings_placeholders ),

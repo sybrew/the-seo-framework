@@ -157,9 +157,11 @@ abstract class SeoBar {
 	 *    string $test => array The testing results.
 	 * }
 	 */
+	// phpcs:disable, Squiz.PHP.CommentedOutCode -- Ignore. PHP 7.0+
 	// public static function _run_all_tests( array $query ) {
 	// yield from static::_run_test( static::$tests, $query );
 	// }
+	// phpcs:enable, Squiz.PHP.CommentedOutCode
 
 	/**
 	 * Runs one or more SEO bar tests.

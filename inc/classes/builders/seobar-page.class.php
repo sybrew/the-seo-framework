@@ -766,7 +766,7 @@ final class SeoBar_Page extends SeoBar {
 				$item['assess']['noindex'] = $cache['assess']['noindex'];
 			}
 
-			if (  $robots_global['hasrobotstxt'] ) {
+			if ( $robots_global['hasrobotstxt'] ) {
 				// Don't change status, we do not parse the robots.txt file. Merely disclaim.
 				$item['assess']['robotstxt'] = $cache['assess']['robotstxt'];
 			}

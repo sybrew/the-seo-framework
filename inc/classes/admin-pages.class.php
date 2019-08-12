@@ -590,33 +590,45 @@ class Admin_Pages extends Profile {
 	}
 
 	/**
-	 * Makes simple and JSON-encoded data-* tags for HTML elements.
+	 * Makes either simple or JSON-encoded data-* attributes for HTML elements.
 	 *
 	 * @since 4.0.0
 	 * @internal
 	 *
-	 * @param array $data : Expected to be escaped! {
-	 *    string $k => array|string $v
+	 * @param array $data : {
+	 *    string $k => mixed $v
 	 * }
-	 * @return string The HTML data tags.
+	 * @return string The HTML data attributes, with added space to the start.
 	 */
-	public function get_field_data( array $data ) {
+	public function make_data_attributes( array $data ) {
 
-		$ret = '';
+		$ret = [];
+
 		foreach ( $data as $k => $v ) {
-			$k = strtolower( preg_replace( '/[A-Z]/', '-$0', $k ) );
-			if ( is_array( $v ) ) {
-				$ret .= sprintf(
-					' data-%s="%s"',
-					$k,
-					htmlspecialchars( json_encode( $v, JSON_UNESCAPED_SLASHES ), ENT_QUOTES, 'UTF-8' )
+			if ( ! is_scalar( $v ) ) {
+				$ret[] = sprintf(
+					'data-%s="%s"',
+					strtolower( preg_replace(
+						'/([A-Z])/',
+						'-$1',
+						preg_replace( '/[^a-z0-9_\-]/i', '', $k )
+					) ), // dash case.
+					htmlspecialchars( json_encode( $v, JSON_UNESCAPED_SLASHES ), ENT_COMPAT, 'UTF-8' )
 				);
 			} else {
-				$ret .= sprintf( ' data-%s="%s"', $k, $v );
+				$ret[] = sprintf(
+					'data-%s="%s"',
+					strtolower( preg_replace(
+						'/([A-Z])/',
+						'-$1',
+						preg_replace( '/[^a-z0-9_\-]/i', '', $k )
+					) ), // dash case.
+					\esc_attr( $v )
+				);
 			}
 		}
 
-		return $ret;
+		return ' ' . implode( ' ', $ret );
 	}
 
 	/**
@@ -815,7 +827,7 @@ class Admin_Pages extends Profile {
 						$this->s_field_id( $args['id'] ),
 						\esc_attr( $args['name'] ),
 						$args['required'] ? 'required' : '',
-						$args['data'] ? $this->get_field_data( $args['data'] ) : '',
+						$args['data'] ? $this->make_data_attributes( $args['data'] ) : '',
 						implode( $html_options ),
 					]
 				),
@@ -1030,7 +1042,7 @@ class Admin_Pages extends Profile {
 				\esc_url( \get_upload_iframe_src( 'image', $this->get_the_real_ID() ) ),
 				\esc_attr_x( 'Select social image', 'Button hover', 'autodescription' ),
 				$s_input_id,
-				$this->get_field_data( [
+				$this->make_data_attributes( [
 					'inputId'   => $s_input_id,
 					'inputType' => 'social',
 					'width'     => 1200,
@@ -1076,7 +1088,7 @@ class Admin_Pages extends Profile {
 				\esc_url( \get_upload_iframe_src( 'image', $this->get_the_real_ID() ) ),
 				'', // Redundant
 				$s_input_id,
-				$this->get_field_data( [
+				$this->make_data_attributes( [
 					'inputId'   => $s_input_id,
 					'inputType' => 'logo',
 					'width'     => 512,

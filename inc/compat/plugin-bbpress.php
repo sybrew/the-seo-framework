@@ -56,7 +56,7 @@ function _bbpress_filter_order_keys( $current_keys = [] ) {
 function _bbpress_filter_pre_title( $title = '', $args = null ) {
 
 	if ( null === $args && \is_bbpress() ) {
-		if ( \bbp_is_topic_tag() && ! \the_seo_framework()->is_tax() ) {
+		if ( \bbp_is_topic_tag() ) {
 			$term  = \get_queried_object();
 			$title = isset( $term->name ) ? $term->name : \the_seo_framework()->get_static_untitled_title();
 		}
@@ -89,7 +89,7 @@ function _bbpress_filter_pre_title( $title = '', $args = null ) {
 function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $args = null ) {
 
 	if ( null === $args && \is_bbpress() ) {
-		if ( \bbp_is_topic_tag() && ! \the_seo_framework()->is_tax() ) {
+		if ( \bbp_is_topic_tag() ) {
 			$term        = \get_queried_object();
 			$description = $term->description ?: '';
 

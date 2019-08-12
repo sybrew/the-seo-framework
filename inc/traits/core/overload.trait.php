@@ -106,6 +106,9 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  *      - <No keyword>: Should not exist.
  */
 
+// phpcs:disable, Squiz.Commenting.FunctionComment.Missing -- The trait doc explains it.
+// phpcs:disable, Generic.Files.OneObjectStructurePerFile.MultipleFound -- This is a collective, preloaded file for all overloading.
+
 /**
  * Holds private overloading functions to prevent injection or abstraction.
  *

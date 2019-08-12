@@ -427,18 +427,15 @@ final class SeoBar {
 		if ( $use_symbols && $item['status'] ^ static::STATE_GOOD ) {
 			switch ( $item['status'] ) :
 				case static::STATE_OKAY:
-					// $symbol = sprintf( '<span style=font-family:dashicons; class="dashicons-flag">%s</span>', $symbol );
 					$symbol = '!?';
 					break;
 
 				case static::STATE_BAD:
-					// $symbol = sprintf( '<span style=font-family:dashicons; class="dashicons-dismiss">%s</span>', $symbol );
 					$symbol = '!!';
 					break;
 
 				default:
 				case static::STATE_UNKNOWN:
-					// $symbol = sprintf( '<span style=font-family:dashicons; class="dashicons-editor-help">%s</span>', $symbol );
 					$symbol = '??';
 					break;
 			endswitch;

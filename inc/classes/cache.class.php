@@ -632,26 +632,13 @@ class Cache extends Site_Options {
 					break;
 			endswitch;
 		} elseif ( $this->is_search() ) {
-			$query = '';
-
-			//* TODO figure out why this check is here... admin compat maybe?
-			//! TODO convert the search query to a hash: search_(hash)... encode first!
-			if ( function_exists( 'get_search_query' ) ) {
-				$search_query = \get_search_query( $_escaped = true );
-
-				if ( $search_query )
-					$query = str_replace( ' ', '', $search_query );
-
-				//* Limit to 10 chars.
-				if ( mb_strlen( $query ) > 10 )
-					$query = mb_substr( $query, 0, 10 );
-
-				$query = \esc_sql( $query );
-			}
+			//* Remove spaces. Limit to 10 chars.
+			// TODO use metahpone?
+			$query = \esc_sql( substr( str_replace( ' ', '', \get_search_query( true ) ), 0, 10 ) );
 
 			//* Temporarily disable caches to prevent database spam.
 			$this->the_seo_framework_use_transients = false;
-			$this->use_object_cache = false;
+			$this->use_object_cache                 = false;
 
 			$the_id = $page_id . '_s_' . $query;
 		}

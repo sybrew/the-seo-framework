@@ -38,16 +38,24 @@ function _wpforo_fix_page() {
 			\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_wpforo_filter_pre_title', 10, 2 );
 
 		if ( $override['meta'] ) {
-			\add_filter( 'get_canonical_url', function( $canonical_url, $post ) {
-				return function_exists( '\\wpforo_get_request_uri' ) ? \wpforo_get_request_uri() : $canonical_url;
-			}, 10, 2 );
+			\add_filter(
+				'get_canonical_url',
+				function( $canonical_url, $post ) {
+					return function_exists( '\\wpforo_get_request_uri' ) ? \wpforo_get_request_uri() : $canonical_url;
+				},
+				10,
+				2
+			);
 
 			//* Remove wpforo SEO meta output.
 			\remove_action( 'wp_head', 'wpforo_add_meta_tags', 1 );
 		} else {
-			\add_action( 'the_seo_framework_after_init', function() {
-				\remove_action( 'wp_head', [ \the_seo_framework(), 'html_output' ], 1 );
-			} );
+			\add_action(
+				'the_seo_framework_after_init',
+				function() {
+					\remove_action( 'wp_head', [ \the_seo_framework(), 'html_output' ], 1 );
+				}
+			);
 		}
 	}
 }
@@ -73,5 +81,5 @@ function _wpforo_filter_pre_title( $title = '', $args = null ) {
 		$title        = is_array( $wpforo_title ) && ! empty( $wpforo_title[0] ) ? $wpforo_title[0] : $title;
 	}
 
-	return $title
+	return $title;
 }

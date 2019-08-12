@@ -911,7 +911,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `get_filtered_raw_generated_title()`
 			* `s_qubit()`, note: this method is not registered as an option filter!
 			* `s_bsol_raw()`, note: this method is not registered as an option filter!
-			* `get_field_data()`, internal use only.
+			* `make_data_attributes()`, internal use only.
 			* `make_single_select_form()`
 			* `get_post_types_from_taxonomy()`
 			* `get_generated_seo_bar()`
