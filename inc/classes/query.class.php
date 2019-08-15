@@ -149,7 +149,7 @@ class Query extends Core {
 	 */
 	public function get_the_real_ID( $use_cache = true ) { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
 
-		if ( $this->is_admin() )
+		if ( \is_admin() )
 			return $this->get_the_real_admin_ID();
 
 		$use_cache = $use_cache && $this->can_cache_query( __METHOD__ );
@@ -284,7 +284,7 @@ class Query extends Core {
 
 		if ( isset( $cache ) ) return $cache;
 
-		$_object = $this->is_admin() ? $GLOBALS['current_screen'] : \get_queried_object();
+		$_object = \is_admin() ? $GLOBALS['current_screen'] : \get_queried_object();
 
 		return $cache = ! empty( $_object->taxonomy ) ? $_object->taxonomy : '';
 	}
@@ -322,7 +322,7 @@ class Query extends Core {
 	 */
 	public function is_attachment( $attachment = '' ) {
 
-		if ( $this->is_admin() )
+		if ( \is_admin() )
 			return $this->is_attachment_admin();
 
 		if ( ! $attachment )
@@ -376,7 +376,7 @@ class Query extends Core {
 	 */
 	public function is_archive() {
 
-		if ( $this->is_admin() )
+		if ( \is_admin() )
 			return $this->is_archive_admin();
 
 		if ( \is_archive() && false === $this->is_singular() )
@@ -549,7 +549,7 @@ class Query extends Core {
 	 */
 	public function is_category( $category = '' ) {
 
-		if ( $this->is_admin() )
+		if ( \is_admin() )
 			return $this->is_category_admin();
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
@@ -767,6 +767,7 @@ class Query extends Core {
 	 *
 	 * @since 2.6.0
 	 * @since 4.0.0 Now tests for post type, which is more reliable.
+	 * @ignore not used internally, polar opposite of is_single().
 	 * @staticvar bool $cache
 	 * @uses $this->is_singular()
 	 *
@@ -775,7 +776,7 @@ class Query extends Core {
 	 */
 	public function is_page( $page = '' ) {
 
-		if ( $this->is_admin() )
+		if ( \is_admin() )
 			return $this->is_page_admin();
 
 		if ( empty( $page ) )
@@ -869,7 +870,7 @@ class Query extends Core {
 	 */
 	public function is_single( $post = '' ) {
 
-		if ( $this->is_admin() )
+		if ( \is_admin() )
 			return $this->is_single_admin();
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
@@ -927,23 +928,21 @@ class Query extends Core {
 		}
 
 		//* WP_Query functions require loop, do alternative check.
-		if ( $this->is_admin() )
+		if ( \is_admin() )
 			return $this->is_singular_admin();
 
+		if ( $post_types )
+			return \is_singular( $post_types );
+
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
-		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post_types ) )
+		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
-		$is_singular = \is_singular( $post_types );
-
-		if ( ! $is_singular && ! $post_types ) {
-			$is_singular = $this->is_singular_archive();
-		}
+		$is_singular = \is_singular() || $this->is_singular_archive();
 
 		$this->set_query_cache(
 			__METHOD__,
-			$is_singular,
-			$post_types
+			$is_singular
 		);
 
 		return $is_singular;
@@ -993,7 +992,7 @@ class Query extends Core {
 	public function is_tag( $tag = '' ) {
 
 		//* Admin requires another check.
-		if ( $this->is_admin() )
+		if ( \is_admin() )
 			return $this->is_tag_admin();
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
@@ -1065,7 +1064,7 @@ class Query extends Core {
 
 		$this->set_query_cache(
 			__METHOD__,
-			$is_shop = false === $this->is_admin() && function_exists( 'is_shop' ) && \is_shop()
+			$is_shop = ! \is_admin() && function_exists( 'is_shop' ) && \is_shop()
 		);
 
 		return $is_shop;
@@ -1083,7 +1082,7 @@ class Query extends Core {
 	 */
 	public function is_wc_product( $post = 0 ) {
 
-		if ( $this->is_admin() )
+		if ( \is_admin() )
 			return $this->is_wc_product_admin();
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
@@ -1158,7 +1157,7 @@ class Query extends Core {
 	 */
 	public function is_seo_settings_page( $secure = true ) {
 
-		if ( ! $this->is_admin() )
+		if ( ! \is_admin() )
 			return false;
 
 		if ( ! $secure )
@@ -1203,7 +1202,7 @@ class Query extends Core {
 
 		if ( isset( $page_hook ) ) {
 			return $page_hook === $pagehook;
-		} elseif ( $this->is_admin() && $pageslug ) {
+		} elseif ( \is_admin() && $pageslug ) {
 			// N.B. $_GET['page'] === $plugin_page after admin_init...
 
 			// phpcs:ignore, WordPress.Security.NonceVerification -- This is a public variable, no data is processed.
@@ -1302,7 +1301,7 @@ class Query extends Core {
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
-		if ( $this->is_admin() ) {
+		if ( \is_admin() ) {
 			$numpages = 1;
 			$this->set_query_cache( __METHOD__, $numpages );
 			return $numpages;

@@ -548,24 +548,6 @@ class Admin_Pages extends Profile {
 	}
 
 	/**
-	 * Google docs language determinator.
-	 *
-	 * @since 2.2.2
-	 * @staticvar string $language
-	 *
-	 * @return string language code
-	 */
-	protected function google_language() {
-
-		static $language = null;
-
-		if ( isset( $language ) ) return $language;
-
-		/* translators: Language shorttag to be used for Google help pages. */
-		return $language = \esc_html_x( 'en', 'e.g. en for English, nl for Dutch, fi for Finish, de for German', 'autodescription' );
-	}
-
-	/**
 	 * Echo or return a chechbox fields wrapper.
 	 *
 	 * This method does NOT escape.

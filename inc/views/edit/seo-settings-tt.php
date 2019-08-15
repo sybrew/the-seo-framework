@@ -10,9 +10,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-//* Get the language the Google page should assume.
-$language = $this->google_language();
-
 //* Fetch Term ID and taxonomy.
 $term_id = $term->term_id;
 $meta    = $this->get_term_meta( $term_id );
@@ -65,7 +62,7 @@ $robots_settings = [
 		'_value'    => $noindex,
 		'_info'     => [
 			__( 'This tells search engines not to show this term in their search results.', 'autodescription' ),
-			'https://support.google.com/webmasters/answer/93710?hl=' . $language,
+			'https://support.google.com/webmasters/answer/93710',
 		],
 	],
 	'nofollow'  => [
@@ -78,7 +75,7 @@ $robots_settings = [
 		'_value'    => $nofollow,
 		'_info'     => [
 			__( 'This tells search engines not to follow links on this term.', 'autodescription' ),
-			'https://support.google.com/webmasters/answer/96569?hl=' . $language,
+			'https://support.google.com/webmasters/answer/96569',
 		],
 	],
 	'noarchive' => [
@@ -91,7 +88,7 @@ $robots_settings = [
 		'_value'    => $noarchive,
 		'_info'     => [
 			__( 'This tells search engines not to save a cached copy of this term.', 'autodescription' ),
-			'https://support.google.com/webmasters/answer/79812?hl=' . $language,
+			'https://support.google.com/webmasters/answer/79812',
 		],
 	],
 ];
@@ -121,7 +118,7 @@ $robots_settings = [
 					echo ' ';
 					$this->make_info(
 						__( 'The meta title can be used to determine the title used on search engine result pages.', 'autodescription' ),
-						'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#page-titles'
+						'https://support.google.com/webmasters/answer/35624#page-titles'
 					);
 					?>
 				</label>
@@ -156,7 +153,7 @@ $robots_settings = [
 					echo ' ';
 					$this->make_info(
 						__( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' ),
-						'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#meta-descriptions'
+						'https://support.google.com/webmasters/answer/35624#meta-descriptions'
 					);
 					?>
 				</label>
@@ -284,7 +281,7 @@ $robots_settings = [
 					echo ' ';
 					$this->make_info(
 						__( 'This urges search engines to go to the outputted URL.', 'autodescription' ),
-						'https://support.google.com/webmasters/answer/139066?hl=' . $language
+						'https://support.google.com/webmasters/answer/139066'
 					);
 					?>
 				</label>
@@ -337,7 +334,7 @@ $robots_settings = [
 					echo ' ';
 					$this->make_info(
 						__( 'This will force visitors to go to another URL.', 'autodescription' ),
-						'https://support.google.com/webmasters/answer/93633?hl=' . $language
+						'https://support.google.com/webmasters/answer/93633'
 					);
 					?>
 				</label>

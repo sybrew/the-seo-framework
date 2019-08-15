@@ -67,7 +67,7 @@ class Init extends Query {
 		$this->init_global_actions();
 		$this->init_global_filters();
 
-		if ( $this->is_admin() ) {
+		if ( \is_admin() ) {
 			$this->init_admin_actions();
 		} else {
 			$this->init_front_end_actions();

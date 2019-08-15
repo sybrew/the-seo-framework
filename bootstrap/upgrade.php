@@ -554,7 +554,7 @@ function _do_upgrade_3300() {
 		}
 
 		_add_upgrade_notice(
-			\esc_html__( 'The positions in the "Meta Title Additions Location" on the homepage have been reversed, left to right, but the output has not been changed. If you must downgrade for some reason, remember switch the location back again.', 'autodescription' )
+			\esc_html__( 'The positions in the "Meta Title Additions Location" on the homepage have been reversed, left to right, but the output has not been changed. If you must downgrade for some reason, remember to switch the location back again.', 'autodescription' )
 		);
 	}
 

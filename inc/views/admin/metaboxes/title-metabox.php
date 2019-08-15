@@ -125,8 +125,6 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_title_metabox_additions':
-		$language = $this->google_language();
-
 		$example_left  = $examples['left'];
 		$example_right = $examples['right'];
 
@@ -183,7 +181,7 @@ switch ( $instance ) :
 			<?php
 			$info = $this->make_info(
 				__( 'This might decouple your posts and pages from the rest of the website.', 'autodescription' ),
-				'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#page-titles',
+				'https://support.google.com/webmasters/answer/35624#page-titles',
 				false
 			);
 
@@ -237,8 +235,6 @@ switch ( $instance ) :
 		$example_left  = '<em>' . $additions['left'] . $title . '</em>';
 		$example_right = '<em>' . $title . $additions['right'] . '</em>';
 
-		$language = $this->google_language();
-
 		?>
 		<h4><?php esc_html_e( 'Title Prefix Options', 'autodescription' ); ?></h4>
 		<?php
@@ -266,7 +262,7 @@ switch ( $instance ) :
 			<?php
 			$info = $this->make_info(
 				__( "The prefix helps visitors and search engines determine what kind of page they're visiting.", 'autodescription' ),
-				'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#page-titles',
+				'https://support.google.com/webmasters/answer/35624#page-titles',
 				false
 			);
 			$this->wrap_fields(

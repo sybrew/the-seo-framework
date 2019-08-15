@@ -474,7 +474,7 @@ final class Deprecated {
 		if ( false === $tsf->is_archive() )
 			return false;
 
-		if ( $tsf->is_admin() ) {
+		if ( \is_admin() ) {
 			$taxonomy = $tsf->get_current_taxonomy();
 			if ( $taxonomy ) {
 				$term_id     = $id ?: $tsf->get_the_real_admin_ID();

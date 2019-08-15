@@ -1261,7 +1261,7 @@ class Generate_Title extends Generate_Description {
 
 		//? Only add pagination if the query is autodetermined, and on a real page.
 		if ( null === $args ) {
-			if ( $this->is_404() || $this->is_admin() ) {
+			if ( $this->is_404() || \is_admin() ) {
 				$use = false;
 			} else {
 				$use = true;
@@ -1406,11 +1406,18 @@ class Generate_Title extends Generate_Description {
 	 * Returns the homepage tagline from option or bloginfo, when set.
 	 *
 	 * @since 3.0.4
+	 * @since 4.0.0 Added caching.
+	 * @staticvar string $cache
 	 * @uses $this->get_blogdescription(), this method already trims.
 	 *
 	 * @return string The trimmed tagline.
 	 */
 	public function get_home_page_tagline() {
-		return $this->s_title_raw( trim( $this->get_option( 'homepage_title_tagline' ) ) ?: $this->get_blogdescription() ?: '' );
+		static $cache;
+		return $cache ?: $cache = $this->s_title_raw(
+			trim( $this->get_option( 'homepage_title_tagline' ) )
+			?: $this->get_blogdescription()
+			?: ''
+		);
 	}
 }

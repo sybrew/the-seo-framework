@@ -15,7 +15,6 @@ $instance = $this->get_view_instance( 'inpost', $instance );
 
 //* Setup default vars.
 $post_id  = $this->get_the_real_ID(); // We also have access to object $post at the main call...
-$language = $this->google_language();
 
 $_generator_args = [
 	'id'       => $post_id,
@@ -104,7 +103,7 @@ switch ( $instance ) :
 						<?php
 						$this->make_info(
 							__( 'The meta title can be used to determine the title used on search engine result pages.', 'autodescription' ),
-							'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#page-titles'
+							'https://support.google.com/webmasters/answer/35624#page-titles'
 						);
 						?>
 						</div>
@@ -158,7 +157,7 @@ switch ( $instance ) :
 						<?php
 						$this->make_info(
 							__( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' ),
-							'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#meta-descriptions'
+							'https://support.google.com/webmasters/answer/35624#meta-descriptions'
 						);
 						?>
 						</div>
@@ -225,7 +224,7 @@ switch ( $instance ) :
 						<?php
 							$this->make_info(
 								__( 'This urges search engines to go to the outputted URL.', 'autodescription' ),
-								'https://support.google.com/webmasters/answer/139066?hl=' . $language
+								'https://support.google.com/webmasters/answer/139066'
 							);
 						?>
 						</div>
@@ -351,7 +350,7 @@ switch ( $instance ) :
 							<?php
 							$this->make_info(
 								__( 'This will force visitors to go to another URL.', 'autodescription' ),
-								'https://support.google.com/webmasters/answer/93633?hl=' . $language
+								'https://support.google.com/webmasters/answer/93633'
 							);
 							?>
 						</div>

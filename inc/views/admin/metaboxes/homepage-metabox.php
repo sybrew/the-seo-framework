@@ -13,7 +13,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 //* Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_homepage_metabox', $instance );
 
-$language = $this->google_language();
 $home_id  = $this->get_the_front_page_ID();
 
 $_generator_args = [
@@ -107,7 +106,7 @@ switch ( $instance ) :
 					echo ' ';
 					$this->make_info(
 						__( 'The meta title can be used to determine the title used on search engine result pages.', 'autodescription' ),
-						'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#page-titles'
+						'https://support.google.com/webmasters/answer/35624#page-titles'
 					);
 				?>
 			</label>
@@ -156,7 +155,7 @@ switch ( $instance ) :
 					echo ' ';
 					$this->make_info(
 						__( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' ),
-						'https://support.google.com/webmasters/answer/35624?hl=' . $language . '#meta-descriptions'
+						'https://support.google.com/webmasters/answer/35624#meta-descriptions'
 					);
 				?>
 			</label>
@@ -441,7 +440,7 @@ switch ( $instance ) :
 			),
 			$this->make_info(
 				__( 'This tells search engines not to show this page in their search results.', 'autodescription' ),
-				'https://support.google.com/webmasters/answer/93710?hl=' . $language,
+				'https://support.google.com/webmasters/answer/93710',
 				false
 			),
 			$noindex_post ? $checked_home : ''
@@ -457,7 +456,7 @@ switch ( $instance ) :
 			),
 			$this->make_info(
 				__( 'This tells search engines not to follow links on this page.', 'autodescription' ),
-				'https://support.google.com/webmasters/answer/96569?hl=' . $language,
+				'https://support.google.com/webmasters/answer/96569',
 				false
 			),
 			$nofollow_post ? $checked_home : ''
@@ -473,7 +472,7 @@ switch ( $instance ) :
 			),
 			$this->make_info(
 				__( 'This tells search engines not to save a cached copy of this page.', 'autodescription' ),
-				'https://support.google.com/webmasters/answer/79812?hl=' . $language,
+				'https://support.google.com/webmasters/answer/79812',
 				false
 			),
 			$noarchive_post ? $checked_home : ''

@@ -299,6 +299,9 @@ TODO do something nicer with interpret_status_to_symbol() ("We're not completely
 
 TODO set AJAX failure listeners?
 
+TODO the AYS doesn't always fire, and may sometimes be BLOCKED during a race condition (user leaves page before it clears....)
+TODO the get_locale() call for get_input_guidelines() doesn't work on the admin-side. As such, it'll create an irregular experience. Add a filter with the post ID, and modify it via the WPML and Polylang compat files?
+
 TODO revise plugin setup guide:
 1. Canonical scheme selection is no longer required as our detection is rigid (edge case: unless someone defines `WP_HOME` with scheme irrelevance and without forced http->https redirection).
 1. The Schema logo is no longer required to be square,
@@ -389,8 +392,6 @@ TODO revise plugin setup guide:
 		* When images are found to be over 4096 pixels in width or height, they'll be discarded.
 	* SEO meta generation no longer occurs when using Customizer.
 	* Redirects may now be set and performed on protocols other than `http` and `https`.
-	* Using iOS touch, tooltips arrows are now centered, instead of being near where you touched.
-		* This is because we added "focus" accessibility support, which will otherwise conflict and make the arrow jump.
 	* **Term meta:**
 		* When a term is disabled via the post type settings, saving it won't erase the custom SEO term meta.
 			* The same behavior already applied to singular post items.
@@ -422,12 +423,14 @@ TODO revise plugin setup guide:
 		* The SEO Settings update notifications now also state that caches are flushed.
 		* HTML entities are now converted from your input to the examples and placeholders. Like in the Homepage SEO Settings' title-additions examples, and in the Open Graph and Twitter placeholders.
 		* Various sentences have been updated to be more easily interpretable.
+		* Informational links to Google pages no longer predict your language; Google does this for you automatically based on your locations or preferences.
 	* **AI Generators:**
 		* **Descriptions:**
 			* They now work better with RTL languages, like Arabic and Hebrew; however, due to ambiguity in language construction, it will read from top to bottom (like the web is built), instead of bottom to top (like books are).
-			* It no longer slices the last sentence off; in extent, it now allows accidental full sentences.
-			* The excerpt clause trimming is now at least twice (to infinitely) as fast.
-			* They now work better with non-Roman languages, by using updated string length guidelines, this only works if your site-language is set to these (see the **Guidelines** (character) section below.).
+			* It no longer accidentally slices the last sentence off when they're a full sentence.
+			* The excerpt-clause trimming is now at least twice (to infinitely) as fast, by utilizing simpler algorithms for text lengths.
+			* They now work better with non-Roman languages, by using updated string length guidelines. This only works if your site-language is set to these, not via translation plugins.
+				* See the **Guidelines** (character) section below for details.
 			* They now account for German's extra capitalization width.
 		* **Canonical URL:**
 			* The automatic scheme determination now uses the "Site Address" scheme in "General Settings" to fall back on.
@@ -456,10 +459,11 @@ TODO revise plugin setup guide:
 				* Central Kurdish (كوردی) @ 760/910
 			* The pixel and character counters now parse your input as HTML, giving you a more accurate rating. For example, HTML entities are now decoded on-the-fly.
 	* **Internationalization:**
-		* Sites set to the Assamese, Gujarati, Malayalam, Japanese, Korean, Talim, Traditional Chinese, or Simplified Chinese languages now have adjusted character guidelines.
+		* Sites set to the Assamese, German, Gujarati, Malayalam, Japanese, Korean, Talim, Traditional Chinese, or Simplified Chinese languages now have adjusted character guidelines.
+		* Sites set to the Arabic, Azerbaijani, Farsi, Hazaragi, or Kurdish languages now have adjusted pixel guidelines.
 		* UI strings that were hard to translate in other locales have been rewritten. Yes, this takes some time to get used to.
 	* **Layout:**
-		* Reordered the Homepage Settings metabox tabs to be more in line with the Post Meta Settings metabox.
+		* Reordered the Homepage Settings meta box tabs to be more in line with the Post Meta Settings meta box.
 		* Some option headers are now better aligned to the center.
 		* We now thoroughly exclaim what the sitemap is and isn't for.
 		* Google+ is deceased, so we added an icon indicating that, cleared the placeholder, and removed the assumed profile redirection link.
@@ -1017,6 +1021,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `get_logo_uploader_form()` now adds a media preview dispenser.
 			* `strip_tags_cs()` now allows emptying the indexes `space` and `clear`.
 			* `generate_dismissible_notice()` now adds a tabindex to the dismiss-dashicon, so keyboard naviation is possible.
+			* `get_home_page_tagline()` added caching.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`

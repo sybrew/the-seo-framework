@@ -500,7 +500,7 @@ final class Debug {
 
 		$tsf = \the_seo_framework();
 
-		if ( $tsf->is_admin() && ! $tsf->is_term_edit() && ! $tsf->is_post_edit() && ! $tsf->is_seo_settings_page( true ) )
+		if ( \is_admin() && ! $tsf->is_term_edit() && ! $tsf->is_post_edit() && ! $tsf->is_seo_settings_page( true ) )
 			return;
 
 		if ( $tsf->is_seo_settings_page( true ) )
@@ -540,7 +540,7 @@ final class Debug {
 
 		$timer = '<div style="display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( $this->timer(), 5 ) . ' seconds</div>';
 
-		$title = $tsf->is_admin() ? 'Expected SEO Output' : 'Determined SEO Output';
+		$title = \is_admin() ? 'Expected SEO Output' : 'Determined SEO Output';
 		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #ccc;"><h2 style="color:#ddd;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
 
 		//* Escape it, replace EOL with breaks, and style everything between quotes (which are ending with space).
