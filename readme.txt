@@ -241,23 +241,12 @@ Please be sure to clear your cache or adjust the plugin's caching settings if de
 
 == Changelog ==
 
-TODO:
-	- 3.2.4: 28 files loaded on the front-end, 16.97ms boot time (with dumps, can't do without). 2.49ms meta time. With TSFEM.
-	- 4.0.0: TBD 24 files loaded on the front-end, 10.49ms boot time (with dumps). 2.55ms meta time, with many more features. With TSFEM.
-		- Ergo, the plugin is 16.97/10.60 = 1.62 (or 62%) faster.
-	Exclaim: We made the fastest feature-rich SEO plugin "almost twice" (use different wording?) as fast.
-
 TODO: Re-minify JS files... Ugh Node.JS
 TODO: Re-minify CSS files... Ugh web services
 
 TODO explain why PHP 5.6 is now required.
 
 TODO "Want to opt out of future, infrequent, admin-only, non-recurring, and non-intrusive suggestions? Add this to your wp-config file: `define( 'TSF_DISABLE_SUGGESTIONS', true );`
-
-TODO re-affirm all changes.
-TODO quality-control the deprecations.
-TODO test RTL.
-TODO improve plugin-upgrade-notice (bottom of readme).
 
 = 4.0.0 - Multiplex =
 
@@ -293,13 +282,6 @@ TODO Exclaim:
 TODO update wp rocket's compat file... ugh, redundant
 TODO test all compat files...
 
-TODO call "php level caching" memoization--it's a cooler word.
-
-TODO do something nicer with interpret_status_to_symbol() ("We're not completely satisfied on this integration, but we'll revisit that later; building this update took long enough already.")
-
-TODO set AJAX failure listeners?
-
-TODO the AYS doesn't always fire, and may sometimes be BLOCKED during a race condition (user leaves page before it clears....)
 TODO the get_locale() call for get_input_guidelines() doesn't work on the admin-side. As such, it'll create an irregular experience. Add a filter with the post ID, and modify it via the WPML and Polylang compat files?
 
 TODO revise plugin setup guide:
@@ -361,6 +343,7 @@ TODO revise plugin setup guide:
 			* Redirecting
 	* Multidimensional selection for robots-meta on posts, pages, and terms.
 	* A new accessibility feature for the SEO Bar. You can now convert the characters to symbols to discern warnings more easily.
+		* We're not completely satisfied on this integration, but we'll revisit that after we get enough feedback.
 	* Image fields now have an image icon nearby. Hover over it (or tap it) to preview the image.
 	* After installing The SEO Framework, users who have `update_plugins` capabilities may now see a confirmation that the plugin's set up, and that there are installation instructions available.
 	* After upgrading The SEO Framework's database, users who have `update_plugins` capabilities may now see a confirmation notice that the site has been upgraded.
@@ -424,6 +407,7 @@ TODO revise plugin setup guide:
 		* HTML entities are now converted from your input to the examples and placeholders. Like in the Homepage SEO Settings' title-additions examples, and in the Open Graph and Twitter placeholders.
 		* Various sentences have been updated to be more easily interpretable.
 		* Informational links to Google pages no longer predict your language; Google does this for you automatically based on your locations or preferences.
+		* AJAX failures are now handled gracefully.
 	* **AI Generators:**
 		* **Descriptions:**
 			* They now work better with RTL languages, like Arabic and Hebrew; however, due to ambiguity in language construction, it will read from top to bottom (like the web is built), instead of bottom to top (like books are).
@@ -999,12 +983,12 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `has_robots_txt()`, now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
 			* `has_sitemap_xml()`, now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
 			* `is_term_meta_capable()` no longer incorrectly determines post type archives as capable; they aren't considered term taxonomies, because they don't yield taxonomies, but solely post types.
-			* `is_category_admin()` removed caching.
+			* `is_category_admin()` removed memoization.
 			* `is_page()`, now tests for hierarchical post types, which is more reliable.
 			* `is_single()` now tests for nonhierarchical post types, which is more reliable.
 			* `is_singular()` now no longer processes integers as input.
 			* `is_singular_admin()` removed first parameter.
-			* `is_tag_admin()` removed caching.
+			* `is_tag_admin()` removed memoization.
 			* `is_wc_product()`
 				1. Added admin support.
 				1. Added a parameter for the Post ID or post to test.
@@ -1021,7 +1005,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `get_logo_uploader_form()` now adds a media preview dispenser.
 			* `strip_tags_cs()` now allows emptying the indexes `space` and `clear`.
 			* `generate_dismissible_notice()` now adds a tabindex to the dismiss-dashicon, so keyboard naviation is possible.
-			* `get_home_page_tagline()` added caching.
+			* `get_home_page_tagline()` added memoization.
 		* **Removed:**
 			* Deprecated methods, these were marked deprecated since 3.1.0 (September 13, 2018):
 				* `get_meta_output_cache_key()`
@@ -1487,7 +1471,7 @@ Happy Holidays! [(╯°□°)╯︵ ┻┻](https://theseoframework.com/?p=2957)
 == Upgrade Notice ==
 
 = 4.0.0 =
-TODO This is a major upgrade. Make a backup of your database before updating. WordPress v4.9 (or higher) and PHP v5.6 (or higher) are now required. If you use the Extension Manager, update it to v2.TBA.TBA (or higher) before updating this plugin. Downgrading to v3.2.4 is possible, however with the caveat that the homepage title will flip its order.
+This is a major upgrade. Make a backup of your database before updating. WordPress v4.9 (or higher) and PHP v5.6 (or higher) are now required. If you use the Extension Manager, update it to v2.1.0 (or higher) before updating this plugin. Downgrading to v3.2.4 is possible, however with the caveat that the homepage title will flip its output order.
 
 = 3.1.1 =
 This is a major upgrade. Make a backup of your database before upgrading. WordPress v4.6 (or greater) and PHP v5.4 (or greater) are now required. If you use the Extension Manager, update it to v1.5.2 (or greater) before upgrading this plugin. Downgrading to v3.0.6 possible.
