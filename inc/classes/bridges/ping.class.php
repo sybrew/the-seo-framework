@@ -69,7 +69,7 @@ final class Ping {
 
 		if ( $tsf->get_option( 'site_noindex' ) || ! $tsf->is_blog_public() ) return;
 
-		$transient = $tsf->add_cache_key_suffix( 'tsf_throttle_ping' );
+		$transient = $tsf->generate_cache_key( 0, '', 'ping' );
 
 		//* NOTE: Use legacy get_transient to prevent ping spam.
 		if ( false === \get_transient( $transient ) ) {

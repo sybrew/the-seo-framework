@@ -451,7 +451,7 @@ class Generate extends User_Data {
 			}
 			// Only enable if all post types have the value ticked.
 			foreach ( $_post_type_meta as $_type => $_values ) {
-				$$_type = ! in_array( false, $_values, true );
+				$$_type = $$_type || ! in_array( false, $_values, true );
 			}
 
 			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :

@@ -135,6 +135,48 @@ abstract class Sitemap {
 	}
 
 	/**
+	 * Determines if post is possibly included in the sitemap.
+	 *
+	 * This is a weak check, as the filter might not be present outside of the sitemap's scope.
+	 * The URL also isn't checked, nor the position.
+	 *
+	 * @since 4.0.0
+	 * @see https://github.com/sybrew/tsf-term-sitemap for example.
+	 *
+	 * @param int    $term_id  The Term ID to check.
+	 * @param string $taxonomy The taxonomy.
+	 * @return bool True if included, false otherwise.
+	 */
+	final public function is_term_included_in_sitemap( $term_id, $taxonomy ) {
+
+		static $excluded = null;
+		if ( null === $excluded ) {
+			/**
+			 * @since 4.0.0
+			 * @ignore NOT USED INTERNALLY!
+			 * @param array $excluded Sequential list of excluded IDs: [ int ...term_id ]
+			 */
+			$excluded = (array) \apply_filters( 'the_seo_framework_sitemap_exclude_term_ids', [] );
+
+			if ( empty( $excluded ) ) {
+				$excluded = [];
+			} else {
+				$excluded = array_flip( $excluded );
+			}
+		}
+
+		// ROBOTS_IGNORE_PROTECTION as we don't need to test 'private' (because of sole 'publish'), and 'password' (because of false 'has_password')
+		return ! isset( $excluded[ $post_id ] )
+			&& ! static::$tsf->is_robots_meta_noindex_set_by_args(
+				[
+					'id' => $term_id,
+					'taxonomy' => $taxonomy
+				],
+				\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION
+			);
+	}
+
+	/**
 	 * Returns the sitemap post query limit.
 	 *
 	 * @since 3.1.0

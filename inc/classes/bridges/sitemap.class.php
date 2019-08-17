@@ -141,7 +141,7 @@ final class Sitemap {
 		 */
 		\do_action( 'the_seo_framework_sitemap_header', $sitemap_id );
 
-		call_user_func( $this->get_sitemap_endpoint_list()[ $sitemap_id ]['callback'] );
+		call_user_func( $this->get_sitemap_endpoint_list()[ $sitemap_id ]['callback'], $sitemap_id );
 	}
 
 	/**

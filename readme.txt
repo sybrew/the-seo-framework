@@ -282,8 +282,6 @@ TODO Exclaim:
 TODO update wp rocket's compat file... ugh, redundant
 TODO test all compat files...
 
-TODO the get_locale() call for get_input_guidelines() doesn't work on the admin-side. As such, it'll create an irregular experience. Add a filter with the post ID, and modify it via the WPML and Polylang compat files?
-
 TODO revise plugin setup guide:
 1. Canonical scheme selection is no longer required as our detection is rigid (edge case: unless someone defines `WP_HOME` with scheme irrelevance and without forced http->https redirection).
 1. The Schema logo is no longer required to be square,
@@ -413,8 +411,13 @@ TODO revise plugin setup guide:
 			* They now work better with RTL languages, like Arabic and Hebrew; however, due to ambiguity in language construction, it will read from top to bottom (like the web is built), instead of bottom to top (like books are).
 			* It no longer accidentally slices the last sentence off when they're a full sentence.
 			* The excerpt-clause trimming is now at least twice (to infinitely) as fast, by utilizing simpler algorithms for text lengths.
-			* They now work better with non-Roman languages, by using updated string length guidelines. This only works if your site-language is set to these, not via translation plugins.
+			* They now work better with non-Roman languages, by using updated string length guidelines.
 				* See the **Guidelines** (character) section below for details.
+				* This only works when your site-language is set to these, not via translation plugins.
+					* Translation plugins are capable of supporting these during loops; this has been supported since WordPress version 4.7 (2016) thanks to the new user-locale functionality.
+					* For instance, in the admin term-view loop, they could dynamically change the WordPress locale, without affecting the interface.
+					* And, for instance, when loading the post or term editor, they could set the locale, also without affecting the interface.
+					* We preemptively added support for these situations by relying on WordPress. I implore them to address this, because until then, it'll be an irregular experience.
 			* They now account for German's extra capitalization width.
 		* **Canonical URL:**
 			* The automatic scheme determination now uses the "Site Address" scheme in "General Settings" to fall back on.
@@ -562,6 +565,8 @@ TODO revise plugin setup guide:
 		* We now correctly strip HTML tags from the "Biographical Info" section for the description-generator on author archives.
 	* **Usability:**
 		* **Settings:**
+			* The global site-wide `noindex` option no longer sets `nofollow` automatically, too. Albeit, that's implied.
+			* The global site-wide `nofollow` option now has an effect.
 			* The global category and tag `noarchive` options now have an effect.
 			* The global category and tag `noindex` options no longer set `noarchive` automatically, too. Albeit, that's implied.
 			* The post type robots-meta and disable-seo settings now only apply to taxonomies and terms that have all their shared post types set, instead of just the post type of the most recent post published.
@@ -841,6 +846,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 					* `shutdown_generation()`
 					* `build_sitemap()`, abstract.
 					* `is_post_included_in_sitemap()`
+					* `is_term_included_in_sitemap()`
 			* `\The_SEO_Framework\Builders\Sitemap_Base`, extends `\The_SEO_Framework\Builders\Sitemap`.
 				* **Public methods:**
 					* `build_sitemap()`, abstractly defined.
@@ -1141,8 +1147,9 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* `the_seo_framework_sitemap_path_prefix`, string.
 		* `the_seo_framework_sitemap_endpoint_list`, array.
 		* `the_seo_framework_sitemap_supported_post_types`, array.
-		* `the_seo_framework_sitemap_hpt_query_args`, array.
-		* `the_seo_framework_sitemap_chpt_query_args`, array.
+		* `the_seo_framework_sitemap_hpt_query_args`, array. htp = Hierarchical post types.
+		* `the_seo_framework_sitemap_nhpt_query_args`, array. nhtp = Non-hierarchical post types.
+		* `the_seo_framework_sitemap_exclude_term_ids`, array. Not used internally.
 	* **Improved:**
 		* `the_seo_framework_robots_meta_array`, now has two new parameters, `$args` and `$ignore`.
 		* `the_seo_framework_sitemap_post_limit`, now has a new parameter, `$hierarchical`.

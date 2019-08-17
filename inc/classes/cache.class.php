@@ -698,6 +698,8 @@ class Cache extends Site_Options {
 			case 'term':
 				return $this->add_cache_key_suffix( $this->generate_taxonomical_cache_key( $page_id, $taxonomy ) );
 				break;
+			case 'ping':
+				return $this->add_cache_key_suffix( 'tsf_throttle_ping' );
 			default:
 				$this->_doing_it_wrong( __METHOD__, 'Third parameter must be a known type.', '2.6.5' );
 				return $this->add_cache_key_suffix( \esc_sql( $type . '_' . $page_id . '_' . $taxonomy ) );
@@ -711,22 +713,16 @@ class Cache extends Site_Options {
 	 * Adds cache key suffix based on blog id and locale.
 	 *
 	 * @since 2.7.0
-	 * @since 2.8.0 1: $locale is now static.
-	 *              2: $key may now be empty.
-	 * @staticvar string $locale
+	 * @since 2.8.0 1. $locale is now static.
+	 *              2. $key may now be empty.
+	 * @since 4.0.0 Removed caching, so to support translation plugin loops.
 	 * @global string $blog_id
 	 *
 	 * @param string $key The cache key.
 	 * @return string
 	 */
 	protected function add_cache_key_suffix( $key = '' ) {
-
-		static $locale = null;
-
-		if ( is_null( $locale ) )
-			$locale = strtolower( \get_locale() );
-
-		return $key . '_' . $GLOBALS['blog_id'] . '_' . $locale;
+		return $key . '_' . $GLOBALS['blog_id'] . '_' . strtolower( \get_locale() );
 	}
 
 	/**
