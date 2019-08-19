@@ -303,6 +303,8 @@ class Render extends Admin_Init {
 
 		$output = '';
 
+		$multi = (bool) $this->get_option( 'multi_og_image' );
+
 		foreach ( $this->get_image_details_from_cache() as $image ) {
 			$output .= '<meta property="og:image" content="' . \esc_attr( $image['url'] ) . '" />' . "\r\n";
 
@@ -314,6 +316,9 @@ class Render extends Admin_Init {
 			if ( $image['alt'] ) {
 				$output .= '<meta property="og:image:alt" content="' . \esc_attr( $image['alt'] ) . '" />' . "\r\n";
 			}
+
+			if ( ! $multi )
+				break;
 		}
 
 		return $output;
@@ -563,6 +568,9 @@ class Render extends Admin_Init {
 			if ( $image['alt'] ) {
 				$output .= '<meta name="twitter:image:alt" content="' . \esc_attr( $image['alt'] ) . '" />' . "\r\n";
 			}
+
+			// Only grab a single image. Twitter grabs the final (less favorable) image otherwise.
+			break;
 		}
 
 		return $output;

@@ -149,7 +149,7 @@ final class Images {
 
 		if ( $matches ) {
 			foreach ( $matches as $match ) {
-				// Assume every URL to be correct?
+				// Assume every URL to be correct? Yes. WordPress assumes that too.
 				yield [
 					'url' => $match[2] ?: '',
 					'id'  => 0,

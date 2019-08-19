@@ -298,6 +298,8 @@ class Sanitize extends Admin_Pages {
 				'facebook_tags',
 				'twitter_tags',
 
+				'multi_og_image',
+
 				'knowledge_output',
 
 				'post_publish_time',
@@ -1296,18 +1298,24 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.8.0 Method is now public.
 	 * @since 3.0.0: 1. Now removes '@' from the URL path.
 	 *               2. Now removes spaces and tabs.
-	 * @since 4.0.0 Now returns empty on lone `@` entries.
+	 * @since 4.0.0: 1. Now returns empty on lone `@` entries.
+	 *               2. Now returns empty when using only spaces and tabs.
 	 *
 	 * @param string $new_value String with potentially wrong Twitter username.
 	 * @return string String with 'correct' Twitter username
 	 */
 	public function s_twitter_name( $new_value ) {
 
+		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
+		$new_value = strip_tags( $new_value );
+		$new_value = $this->s_singleline( $new_value );
+		$new_value = $this->s_nbsp( $new_value );
+		$new_value = $this->s_tabs( $new_value );
+		$new_value = trim( $new_value );
+
 		if ( empty( $new_value ) ) return '';
 
-		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
-		$profile = trim( strip_tags( $new_value ) );
-		$profile = trim( $this->s_relative_url( $profile ), ' /' );
+		$profile = trim( $this->s_relative_url( $new_value ), ' /' );
 
 		if ( '@' === $profile ) return '';
 
@@ -1323,18 +1331,24 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
 	 * @since 3.0.6 Now allows a sole query argument when profile.php is used.
-	 * @since 4.0.0 No longer returns a plain Facebook URL when the entry path is sanitized to become empty.
+	 * @since 4.0.0: 1. No longer returns a plain Facebook URL when the entry path is sanitized to become empty.
+	 *               2. Now returns empty when using only spaces and tabs.
 	 *
 	 * @param string $new_value String with potentially wrong Facebook profile URL.
 	 * @return string String with 'correct' Facebook profile URL.
 	 */
 	public function s_facebook_profile( $new_value ) {
 
+		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
+		$new_value = strip_tags( $new_value );
+		$new_value = $this->s_singleline( $new_value );
+		$new_value = $this->s_nbsp( $new_value );
+		$new_value = $this->s_tabs( $new_value );
+		$new_value = trim( $new_value );
+
 		if ( empty( $new_value ) ) return '';
 
-		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
-		$path = trim( strip_tags( $new_value ) );
-		$path = trim( $this->s_relative_url( $path ), ' /' );
+		$path = trim( $this->s_relative_url( $new_value ), ' /' );
 
 		if ( ! $path ) return '';
 

@@ -348,7 +348,9 @@ TODO revise plugin setup guide:
 	* Search engine pinging for the sitemap can now be offloaded to the WordPress cron-scheduler; this feature is enabled by default.
 	* The estimated plugin-boot time is added to the closing HTML comment; which adds the bulk of the page-loading time of this plugin. In this update, we decreased that time, greatly--and we're proudly showing it.
 	* The term meta inputs now have the "are you sure you want to leave this page?"-listener attached.
-	* Multiple social images may now be outputted. How this affects sharing depends on the social network.
+	* An option to have multiple social images to be outputted. How this affects sharing depends on the social network.
+		* We disabled multiple images for Twitter Cards, because Twitter doesn't handle this well: They grab the final (less favorable) image found by default, they don't allow you to select an image, etc.
+		* Sites that upgraded from TSF v3.2.4 or below have this option disabled by default. New installations have this enabled.
 	* Fallback images are now always appeneded; you can no longer overwrite them.
 	* Social images may now be obtained from your post or page's content.
 	* Alt-tags are now provided with social images, which help with accessibility when sharing your page.
@@ -571,6 +573,7 @@ TODO revise plugin setup guide:
 			* The global category and tag `noindex` options no longer set `noarchive` automatically, too. Albeit, that's implied.
 			* The post type robots-meta and disable-seo settings now only apply to taxonomies and terms that have all their shared post types set, instead of just the post type of the most recent post published.
 				* The settings screens' contextual information reflect this change.
+			* When setting a space in any Twitter Profile fields, no longer a lone `@` will be set.
 		* **Meta:**
 			* When you re-save a pre-escaped HTML input in the title or meta-fields, they will no longer be reparsed.
 				* Before: `&amp;mdash;` -> `&amp;mdash;` -> `&mdash;` -> `—`
@@ -685,9 +688,14 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* Under `THE_SEO_FRAMEWORK_SITE_OPTIONS`:
 			* `seo_bar_symbols`
 				* Values: either `1` or `0`.
-				* Default: `0`.
+				* Default: `0`, for all sites.
 				* Location: General Settings -> Layout -> SEO Bar Settings.
 				* Use: Converts SEO Bar item symbols based on their state.
+			* `multi_og_image`
+				* Values: either `1` or `0`.
+				* Default: `1` for new sites. `0` for upgraded sites.
+				* Location: Social Meta Settings -> General -> Social Image Settings.
+				* Use: Allows TSF to output multiple OG image tags. This does NOT affect the image parser.
 		* Under `THE_SEO_FRAMEWORK_SITE_CACHE`:
 			* `settings_notice`
 				* Values: Any simple string.
@@ -977,8 +985,12 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 			* `get_separator_list()` no longer returns the `dash` index.
 			* `get_home_title_seplocation()` return value, left is now right, and vice versa.
 				* In extent, `get_title_seplocation( true )` also yields this behavior.
-			* `s_twitter_name()` now returns empty on lone `@` entries.
-			* `s_facebook_profile()` No longer returns a plain Facebook URL when the entry path is sanitized to become empty.
+			* `s_twitter_name()`
+				1. Now returns empty on lone `@` entries.
+				1. Now returns empty when using only spaces and tabs.
+			* `s_facebook_profile()`
+				1. No longer returns a plain Facebook URL when the entry path is sanitized to become empty.
+				1. Now returns empty when using only spaces and tabs.
 			* `s_relative_url()` no longer trims the prepending `/`.
 			* `s_redirect_url()`
 				1. Removed rudimentary relative URL testing.

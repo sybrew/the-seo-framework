@@ -191,6 +191,9 @@ class Site_Options extends Sanitize {
 				'facebook_tags'   => 1, // Output the Facebook meta tags
 				'twitter_tags'    => 1, // Output the Twitter meta tags
 
+				// Social image settings.
+				'multi_og_image'  => 1,
+
 				// Social FallBack images (fb = fallback)
 				'social_image_fb_url'   => '', // Fallback image URL
 				'social_image_fb_id'    => 0, // Fallback image ID

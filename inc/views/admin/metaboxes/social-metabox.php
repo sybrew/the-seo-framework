@@ -106,6 +106,16 @@ switch ( $instance ) :
 		<?php
 		$this->description( __( 'A social image can be displayed when your website is shared. It is a great way to grab attention.', 'autodescription' ) );
 
+
+		$this->wrap_fields(
+			$this->make_checkbox(
+				'multi_og_image',
+				__( 'Output multiple Open Graph image tags?', 'autodescription' ),
+				__( 'This enables users to select any image attached to the page shared on social networks, like Facebook.', 'autodescription' ),
+				true
+			),
+			true
+		);
 		?>
 		<p>
 			<label for="tsf_fb_socialimage-url">
