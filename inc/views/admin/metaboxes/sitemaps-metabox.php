@@ -83,7 +83,7 @@ switch ( $instance ) :
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'sitemaps_output',
-				__( 'Output Sitemap?', 'autodescription' ),
+				__( 'Output sitemap?', 'autodescription' ),
 				'',
 				true
 			),

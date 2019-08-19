@@ -37,6 +37,12 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 final class Load extends Feed {
 
 	/**
+	 * @since 2.4.3
+	 * @var bool Enable object caching.
+	 */
+	protected $use_object_cache = true;
+
+	/**
 	 * @since 2.2.9
 	 * @var bool $the_seo_framework_debug Whether TSF-specific debug is enabled.
 	 */

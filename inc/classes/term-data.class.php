@@ -48,7 +48,7 @@ class Term_Data extends Post_Data {
 	 * Determines if current query handles term meta.
 	 *
 	 * @since 3.0.0
-	 * @since 4.0.0 No longer lists post type archives as term-meta. It's not a taxonomy.
+	 * @since 4.0.0 No longer lists post type archives as term-meta capable. It's not a taxonomy.
 	 *
 	 * @return bool
 	 */

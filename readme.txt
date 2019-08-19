@@ -563,6 +563,7 @@ TODO revise plugin setup guide:
 			* When pasting a webmaster code tag in the respective settings field, no change listener was invoked, and you didn't get an "Are you sure?"-message when navigating from the settings page with unchanged settings.
 			* When you clear a sitemap color input field, the default color is now displayed correctly.
 			* Trailing, leading, and double spaces are now trimmed from the homepage title examples.
+			* We moved the Meta Title Additions for the Homepage Settings to the Additions tab. This way, users are less prone to fill these in the wrong order.
 	* **Meta tags:**
 		* We now correctly strip HTML tags from the "Biographical Info" section for the description-generator on author archives.
 	* **Usability:**
@@ -696,11 +697,24 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* Default: `1` for new sites. `0` for upgraded sites.
 				* Location: Social Meta Settings -> General -> Social Image Settings.
 				* Use: Allows TSF to output multiple OG image tags. This does NOT affect the image parser.
+			* `ping_use_cron`
+				* Values: either `1` or `0`.
+				* Default: `0`, for all sites.
+				* Location: Sitemap Settings -> Ping -> Ping Settings.
+				* Use: Enables pinging via cron-jobs.
 		* Under `THE_SEO_FRAMEWORK_SITE_CACHE`:
 			* `settings_notice`
 				* Values: Any simple string.
-				* Default: `''`.
+				* Default: `''` (empty string).
 				* Use: Holds the last-update action resolution state, so proper notifications can be send.
+	* **Changed:**
+		* Under `THE_SEO_FRAMEWORK_SITE_OPTIONS`:
+			* `home_title_location`
+				* Values: either `left` or `right`, as before.
+				* Default: `left` when RTL (Arabic, Hebrew, etc.), `right` when LTR (Roman, Latin, etc.).
+				* Location: Homepage Settings -> Additions -> Meta Title Additions Location.
+				* Use: Sets the location of the Home Page Title and the Additions.
+				* What's changed: When upgrading, left becomes right, and vice versa. This simplifies the API.
 	* **Removed:**
 		* `attachment_noindex` and sanitization thereof, since 3.1 it's changed to `noindex_post_types['attachment']`.
 		* `attachment_nofollow` and sanitization thereof, since 3.1 it's changed to `nofollow_post_types['attachment']`.

@@ -34,12 +34,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Init extends Query {
 
 	/**
-	 * @since 2.4.3
-	 * @var bool Enable object caching.
-	 */
-	protected $use_object_cache = true;
-
-	/**
 	 * A true legacy. Ran the plugin on the front-end.
 	 *
 	 * @since 1.0.0

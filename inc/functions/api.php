@@ -153,7 +153,7 @@ namespace The_SEO_Framework {
 	 * @return int The accumulated time, roughly.
 	 */
 	function _bootstrap_timer( $add = 0 ) {
-		static $time = 0;
+		static $time  = 0;
 		return $time += $add;
 	}
 }

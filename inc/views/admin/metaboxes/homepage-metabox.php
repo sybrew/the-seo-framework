@@ -84,20 +84,7 @@ switch ( $instance ) :
 		} else {
 			$description_placeholder = $this->get_generated_description( $_generator_args );
 		}
-
-		$tagline_placeholder = $this->s_title_raw( $this->get_blogdescription() );
-
 		?>
-		<p>
-			<label for="<?php $this->field_id( 'homepage_title_tagline' ); ?>" class="tsf-toblock">
-				<strong><?php esc_html_e( 'Meta Title Additions', 'autodescription' ); ?></strong>
-			</label>
-		</p>
-		<p>
-			<input type="text" name="<?php $this->field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title_tagline' ); ?>" placeholder="<?php echo esc_attr( $tagline_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_title_tagline' ) ); ?>" autocomplete=off />
-		</p>
-
-		<hr>
 
 		<p>
 			<label for="<?php $this->field_id( 'homepage_title' ); ?>" class="tsf-toblock">
@@ -121,7 +108,7 @@ switch ( $instance ) :
 			<?php $this->output_js_title_elements(); ?>
 		</p>
 		<?php
-		$this->description( __( 'Note: The input value of this field may be used to annotate the name of the homepage elsewhere. Do not switch this value with the optional title additions for aesthetics.', 'autodescription' ) );
+		$this->description( __( 'Note: The input value of this field may be used to describe the name of the site elsewhere.', 'autodescription' ) );
 
 		if ( $home_id && $this->get_post_meta_item( '_genesis_title', $home_id ) ) {
 			$this->description( __( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' ) );
@@ -198,6 +185,8 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_homepage_metabox_additions':
+		$tagline_placeholder = $this->s_title_raw( $this->get_blogdescription() );
+
 		//* Fetches escaped title parts.
 		$_example_title = $this->escape_title(
 			$this->get_filtered_raw_custom_field_title( $_generator_args ) ?: $this->get_filtered_raw_generated_title( $_generator_args )
@@ -211,6 +200,32 @@ switch ( $instance ) :
 		$example_right = '<em><span class="tsf-custom-title-js">' . $_example_title . '</span><span class="tsf-custom-blogname-js"><span class="tsf-sep-js"> ' . $_example_separator . ' </span><span class="tsf-custom-tagline-js">' . $_example_blogname . '</span></span></em>';
 
 		?>
+
+		<p>
+			<label for="<?php $this->field_id( 'homepage_title_tagline' ); ?>" class="tsf-toblock">
+				<strong><?php esc_html_e( 'Meta Title Additions', 'autodescription' ); ?></strong>
+			</label>
+		</p>
+		<p>
+			<input type="text" name="<?php $this->field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title_tagline' ); ?>" placeholder="<?php echo esc_attr( $tagline_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_title_tagline' ) ); ?>" autocomplete=off />
+		</p>
+
+		<div id="tsf-title-tagline-toggle">
+		<?php
+			$this->wrap_fields(
+				$this->make_checkbox(
+					'homepage_tagline',
+					esc_html__( 'Add Meta Title Additions to the homepage title?', 'autodescription' ),
+					'',
+					false
+				),
+				true
+			);
+		?>
+		</div>
+
+		<hr>
+
 		<fieldset>
 			<legend>
 				<h4><?php esc_html_e( 'Meta Title Additions Location', 'autodescription' ); ?></h4>
@@ -239,22 +254,6 @@ switch ( $instance ) :
 				</span>
 			</p>
 		</fieldset>
-
-		<hr>
-		<h4><?php esc_html_e( 'Title Additions', 'autodescription' ); ?></h4>
-		<div id="tsf-title-tagline-toggle">
-		<?php
-			$this->wrap_fields(
-				$this->make_checkbox(
-					'homepage_tagline',
-					esc_html__( 'Add Meta Title Additions to the homepage title?', 'autodescription' ),
-					'',
-					false
-				),
-				true
-			);
-		?>
-		</div>
 		<?php
 		break;
 
