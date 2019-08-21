@@ -355,7 +355,7 @@ TODO revise plugin setup guide:
 	* Social images may now be obtained from your post or page's content.
 	* Alt-tags are now provided with social images, which help with accessibility when sharing your page.
 	* For WooCommerce, the Product Category Thumbnail is now considered for social images.
-	* When using the Block Editor, AKA WordPress 5.0+'s Gutenberg, on post update:
+	* When using the Block Editor, AKA WordPress 5.0+'s Gutenberg, on post update (and also on preview and autosave when creating a new post):
 		1. A new SEO Bar is inserted (when enabled).
 		1. The description placeholders will refresh.
 		1. The social image placeholder will refresh.
@@ -1302,6 +1302,7 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 				* **Script ID:** `tsf-social`
 	* **JS notes:**
 		* **Announcement:** There's finally a reliable JS API for The SEO Framework. Enjoy!
+		* **Note:** We added a plethora of events, and some now have added parameters. These are only documented in the code.
 		* **Added:**
 			* Object `tsfAys`:
 				* Properties:
