@@ -160,8 +160,10 @@ final class SeoBar extends ListTable {
 	 * Outputs a JS script that triggers SEO Bar updates.
 	 * This is a necessity as WordPress doesn't trigger actions on update.
 	 *
+	 * TODO bind to WordPress' function instead? Didn't we already do that?!
+	 * See: `tsfLe._hijackListeners()`; Although, that doesn't cover "adding" new items.
+	 *
 	 * @since 4.0.0
-	 * @access private
 	 *
 	 * @return string The triggering script.
 	 */

@@ -187,6 +187,7 @@ final class Sitemap {
 		static $list;
 		/**
 		 * @since 4.0.0
+		 * @link Example: https://github.com/sybrew/tsf-term-sitemap
 		 * @see $this->get_sitemap_endpoint_regex_list()
 		 * @param array $list The endpoints: {
 		 *   'id' => array: {

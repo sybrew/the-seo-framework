@@ -114,36 +114,11 @@ final class SeoBar {
 		$instance->store_default_bar_items();
 
 		/**
-		 * Add custom items here.
+		 * Add or adjust SEO Bar items here.
 		 *
-		 * Example (@TODO: move this to API docs):
-		 * `
-		 * add_action( 'the_seo_framework_seo_bar', function( $class ) {
-		 *    // Add your item, or overwrite a current one.
-		 *    $class::register_seo_bar_item( 'myitem', [
-		 *       'symbol' => 'L',
-		 *       'title'  => \__( 'A', 'autodescription' ),
-		 *       'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN,
-		 *       'reason' => \__( 'Unknown B.', 'autodescription' ),
-		 *       'assess' => [
-		 *          'redirect' => \__( 'B is unkown.', 'autodescription' ),
-		 *          'asd' => \__( 'B is unkown.', 'autodescription' ),
-		 *          'sdf' => \__( 'B is unkown.', 'autodescription' ),
-		 *       ],
-		 *    ] );
-		 *
-		 *    // Edit known items. Warning: Advanced magic! Know your PHP.
-		 *    // NB: If the item isn't registered, this won't produce errors, but it will be voided.
-		 *    $index_item                       = &$class::edit_seo_bar_item( 'indexing' );
-		 *    $index_item['status']             = $class::STATE_BAD;
-		 *    $index_item['reason']             = 'Robots.txt blocks all crawlers.';
-		 *    $index_item['assess']             = []; // clear all assessments... be considerate!
-		 *    $index_item['assess']['somekey']  = 'This is a developer site. Plugin "MyNoRobotsPlease - My Robots.txt Overwriter" is activated.';
-		 * } );
-		 * `
-		 *
+		 * @link Example: https://gist.github.com/sybrew/59130560fcbeb98f7580dc11c54ba174
 		 * @since 4.0.0
-		 * @param string $class The current class name
+		 * @param string $interpreter The interpreter class name.
 		 */
 		\do_action( 'the_seo_framework_seo_bar', static::class );
 
@@ -230,14 +205,27 @@ final class SeoBar {
 	private function store_default_bar_items() {
 
 		if ( static::$query['taxonomy'] ) {
-			$instance = \The_SEO_Framework\Builders\SeoBar_Term::get_instance();
+			$builder = \The_SEO_Framework\Builders\SeoBar_Term::get_instance();
 		} else {
-			$instance = \The_SEO_Framework\Builders\SeoBar_Page::get_instance();
+			$builder = \The_SEO_Framework\Builders\SeoBar_Page::get_instance();
 		}
+
+		/**
+		 * Adjust interpreter and builder items here.
+		 *
+		 * The only use we can think of here is removing items from `$builder::$tests`,
+		 * and reading `$interpreter::$query`. Do not add tests here. Do not alter the query.
+		 *
+		 * @link Example: https://gist.github.com/sybrew/03dd428deadc860309879e1d5208e1c4
+		 * @since 4.0.0
+		 * @param string                             $interpreter The current class name.
+		 * @param \The_SEO_Framework\Builders\SeoBar $builder     The builder object.
+		 */
+		\do_action_ref_array( 'the_seo_framework_prepare_seo_bar', [ static::class, $builder ] );
 
 		$items = &$this->collect_seo_bar_items();
 
-		foreach ( $instance->_run_test( $instance::$tests, static::$query ) as $key => $data )
+		foreach ( $builder->_run_test( $builder::$tests, static::$query ) as $key => $data )
 			$items[ $key ] = $data;
 	}
 

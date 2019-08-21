@@ -39,7 +39,6 @@ final class SeoBar_Page extends SeoBar {
 
 	/**
 	 * @since 4.0.0
-	 * @access private
 	 * @abstract
 	 * @var array All known tests.
 	 */
@@ -947,6 +946,9 @@ final class SeoBar_Page extends SeoBar {
 					'assess' => [
 						'redirect' => \__( 'All visitors and crawlers may access this page.', 'autodescription' ),
 					],
+					'meta'   => [
+						'blocking' => false,
+					],
 				]
 			);
 		} else {
@@ -959,6 +961,9 @@ final class SeoBar_Page extends SeoBar {
 					'reason' => \__( 'Page redirects visitors.', 'autodescription' ),
 					'assess' => [
 						'redirect' => \__( 'All visitors and crawlers are being redirected. So, no other SEO enhancements are effective.', 'autodescription' ),
+					],
+					'meta'   => [
+						'blocking' => true,
 					],
 				]
 			);

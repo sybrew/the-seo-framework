@@ -250,6 +250,9 @@ class Core {
 		if ( THE_SEO_FRAMEWORK_PLUGIN_BASENAME !== $plugin_file )
 			return $plugin_meta;
 
+		$plugins = \get_plugins();
+		$_get_em = empty( $plugins['the-seo-framework-extension-manager/the-seo-framework-extension-manager.php'] );
+
 		return array_merge(
 			$plugin_meta,
 			[
@@ -271,7 +274,7 @@ class Core {
 					'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
 					[
 						'https://tsf.fyi/extension-manager',
-						\esc_html_x( 'Get the Extension Manager', 'Extension Manager is a product name; do not translate it.', 'autodescription' ),
+						$_get_em ? \esc_html_x( 'Get the Extension Manager', 'Extension Manager is a product name; do not translate it.', 'autodescription' ) : 'Extension Manager',
 					]
 				),
 			]

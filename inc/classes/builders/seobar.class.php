@@ -44,7 +44,6 @@ abstract class SeoBar {
 
 	/**
 	 * @since 4.0.0
-	 * @access private
 	 * @abstract
 	 * Shared between instances. But, should be overwritten.
 	 * @var array All known tests.
