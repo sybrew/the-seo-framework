@@ -726,7 +726,14 @@ class Detect extends Render {
 			$cache = true;
 		}
 
-		return $cache = $cache ?: false;
+		/**
+		 * @since 4.0.0
+		 * @param bool $supported Whether the query supports SEO.
+		 */
+		return $cache = \apply_filters(
+			'the_seo_framework_query_supports_seo',
+			$cache ?: false
+		);
 	}
 
 	/**

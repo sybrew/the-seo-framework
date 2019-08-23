@@ -1170,11 +1170,12 @@ _**Note:** Only public changes are listed; internal functionality changes are li
 		* `the_seo_framework_setting_notices`, runs below the settings header.
 * **Filter notes:**
 	* **Added:**
+		* `the_seo_framework_query_supports_seo`, boolean.
 		* `the_seo_framework_sitemap_path_prefix`, string.
 		* `the_seo_framework_sitemap_endpoint_list`, array.
 		* `the_seo_framework_sitemap_supported_post_types`, array.
-		* `the_seo_framework_sitemap_hpt_query_args`, array. htp = Hierarchical post types.
-		* `the_seo_framework_sitemap_nhpt_query_args`, array. nhtp = Non-hierarchical post types.
+		* `the_seo_framework_sitemap_hpt_query_args`, array. hpt = Hierarchical post types.
+		* `the_seo_framework_sitemap_nhpt_query_args`, array. nhpt = Non-hierarchical post types.
 		* `the_seo_framework_sitemap_exclude_term_ids`, array. Not used internally.
 	* **Improved:**
 		* `the_seo_framework_robots_meta_array`, now has two new parameters, `$args` and `$ignore`.
