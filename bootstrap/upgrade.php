@@ -86,8 +86,9 @@ function _previous_db_version() {
  *              9. Now runs on the front-end, too, via `init`, instead of `admin_init`.
  * @since 3.1.4 Now flushes object cache before the upgrade settings are called.
  * @since 4.0.0 1. Removed rewrite flushing; unless upgrading from <3300 to 3300
- *              2. Added time limit changes.
+ *              2. Added time limit.
  *              3. No longer runs during AJAX.
+ *              4. Added an upgrading lock. Preventing upgrades running simultaneously.
  */
 function _do_upgrade() {
 
@@ -102,6 +103,13 @@ function _do_upgrade() {
 		\wp_redirect( \self_admin_url() );
 		exit;
 	}
+
+	// Check if upgrade is locked. Otherwise, lock it.
+	if ( \get_transient( 'tsf_upgrade_lock' ) ) return;
+	\set_transient( 'tsf_upgrade_lock', true, 300 );
+
+	// Register this AFTER the transient is set. Otherwise, it may clear the transient in another thread.
+	register_shutdown_function( __NAMESPACE__ . '\\_release_upgrade_lock' );
 
 	\wp_raise_memory_limit( 'tsf_upgrade' );
 
@@ -174,6 +182,17 @@ function _do_upgrade() {
 	\do_action( 'the_seo_framework_upgraded' );
 }
 
+/**
+ * Releases the upgrade lock on shutdown.
+ *
+ * When the upgrader halts, timeouts, or crashes for any reason, this will run.
+ *
+ * @since 4.0.0
+ */
+function _release_upgrade_lock() {
+	\delete_transient( 'tsf_upgrade_lock' );
+}
+
 \add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_upgrade_to_current' );
 /**
  * Upgrades the Database version to the latest version.
@@ -205,7 +224,6 @@ function _upgrade_to_current() {
  * Prepares a notice when the upgrade is completed.
  *
  * @since 4.0.0
- * @access private
  */
 function _prepare_upgrade_notice() {
 	\add_action( 'admin_notices', __NAMESPACE__ . '\\_do_upgrade_notice' );
@@ -215,7 +233,6 @@ function _prepare_upgrade_notice() {
  * Outputs "your site has been upgraded" notification to applicable plugin users on upgrade.
  *
  * @since 3.0.6
- * @access private
  */
 function _do_upgrade_notice() {
 
@@ -228,7 +245,7 @@ function _do_upgrade_notice() {
 			$tsf->convert_markdown(
 				sprintf(
 					/* translators: %s = Version number, surrounded in markdown-backticks. */
-					\esc_html__( 'Thank you for updating The SEO Framework! Your site has been upgraded successfully to use The SEO Framework at database version `%s`.', 'autodescription' ),
+					\esc_html__( 'Thank you for updating The SEO Framework! Your website has been upgraded successfully to use The SEO Framework at database version `%s`.', 'autodescription' ),
 					\esc_html( THE_SEO_FRAMEWORK_DB_VERSION )
 				),
 				[ 'code' ]
@@ -239,7 +256,7 @@ function _do_upgrade_notice() {
 		);
 	} else {
 		$tsf->do_dismissible_notice(
-			\esc_html__( 'Thank you for installing The SEO Framework! Your site is now optimized for SEO, automatically. We hope you enjoy our free plugin. Good luck with your site!', 'autodescription' ),
+			\esc_html__( 'Thank you for installing The SEO Framework! Your website is now optimized for SEO, automatically. We hope you enjoy our free plugin. Good luck with your site!', 'autodescription' ),
 			'updated',
 			false,
 			false
@@ -511,8 +528,13 @@ function _do_upgrade_3103() {
 }
 
 /**
- * Flushes rewrite rules.
+ * Flushes rewrite rules for one last time.
  * Converts title separator's dash option to ndash.
+ * Enables pinging via cron.
+ * Flips the home_title_location option from left to right, and vice versa.
+ *
+ * Annotated as 3300, because 4.0 was supposed to be the 3.3 update before we
+ * refactored the whole API.
  *
  * @since 4.0.0
  */
@@ -529,7 +551,7 @@ function _do_upgrade_3300() {
 
 		$defaults = _upgrade_default_site_options();
 
-		// Convert 'dash' title option to 'ndash'.
+		// Convert 'dash' title option to 'ndash', silently. Nothing really changes for the user.
 		if ( 'dash' === $tsf->get_option( 'title_separator', false ) )
 			$tsf->update_option( 'title_separator', 'ndash' );
 
@@ -540,7 +562,7 @@ function _do_upgrade_3300() {
 			if ( $defaults['ping_use_cron'] ) {
 				if ( $tsf->get_option( 'ping_google', false ) || $tsf->get_option( 'ping_bing', false ) ) {
 					_add_upgrade_notice(
-						\esc_html__( 'A cronjob is now used to ping search engines and it alerts them to changes in your sitemap.', 'autodescription' )
+						\esc_html__( 'A cronjob is now used to ping search engines, and it alerts them to changes in your sitemap.', 'autodescription' )
 					);
 				}
 			}
@@ -554,7 +576,7 @@ function _do_upgrade_3300() {
 		}
 
 		_add_upgrade_notice(
-			\esc_html__( 'The positions in the "Meta Title Additions Location" on the homepage have been reversed, left to right, but the output has not been changed. If you must downgrade for some reason, remember to switch the location back again.', 'autodescription' )
+			\esc_html__( 'The positions in the "Meta Title Additions Location" setting for the homepage have been reversed, left to right, but the output has not been changed. If you must downgrade for some reason, remember to switch the location back again.', 'autodescription' )
 		);
 	}
 

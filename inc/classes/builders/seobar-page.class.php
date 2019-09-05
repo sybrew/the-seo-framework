@@ -151,7 +151,7 @@ final class SeoBar_Page extends SeoBar {
 					'untitled'   => \__( 'No title could be fetched, "Untitled" is used instead.', 'autodescription' ),
 					'protected'  => \__( 'A page protection state is added which increases the length.', 'autodescription' ),
 					'branding'   => [
-						'not'       => \__( "It's not branded.", 'autodescription' ),
+						'not'       => \__( "It's not branded. Search engines may ignore your title.", 'autodescription' ),
 						'manual'    => \__( "It's manually branded.", 'autodescription' ),
 						'automatic' => \__( "It's automatically branded.", 'autodescription' ),
 					],

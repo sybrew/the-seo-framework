@@ -155,7 +155,7 @@ final class SeoBar_Term extends SeoBar {
 					'untitled'   => \__( 'No title could be fetched, "Untitled" is used instead.', 'autodescription' ),
 					'prefixed'   => \__( 'A term label prefix is automatically added which increases the length.', 'autodescription' ),
 					'branding'   => [
-						'not'       => \__( "It's not branded.", 'autodescription' ),
+						'not'       => \__( "It's not branded. Search engines may ignore your title.", 'autodescription' ),
 						'manual'    => \__( "It's manually branded.", 'autodescription' ),
 						'automatic' => \__( "It's automatically branded.", 'autodescription' ),
 					],

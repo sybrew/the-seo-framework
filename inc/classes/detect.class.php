@@ -717,23 +717,20 @@ class Detect extends Render {
 		if ( isset( $cache ) ) return $cache;
 
 		if ( $this->is_feed() ) {
-			$cache = false;
+			$supported = false;
 		} elseif ( $this->is_singular() || \is_post_type_archive() ) {
-			$cache = $this->is_post_type_supported();
+			$supported = $this->is_post_type_supported();
 		} elseif ( $this->is_term_meta_capable() ) {
-			$cache = $this->is_taxonomy_supported();
+			$supported = $this->is_taxonomy_supported();
 		} else {
-			$cache = true;
+			$supported = true;
 		}
 
 		/**
 		 * @since 4.0.0
 		 * @param bool $supported Whether the query supports SEO.
 		 */
-		return $cache = \apply_filters(
-			'the_seo_framework_query_supports_seo',
-			$cache ?: false
-		);
+		return $cache = (bool) \apply_filters( 'the_seo_framework_query_supports_seo', $supported );
 	}
 
 	/**
@@ -995,18 +992,14 @@ class Detect extends Render {
 	 * Determines whether we can output sitemap or not based on options and blog status.
 	 *
 	 * @since 2.6.0
-	 * @since 2.9.2 : Now returns true when using plain and ugly permalinks.
+	 * @since 2.9.2 No longer checks for plain and ugly permalinks.
+	 * @since 4.0.0 Removed caching.
 	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
 	public function can_run_sitemap() {
-		static $cache = null;
-		/**
-		 * Don't do anything on a deleted or spam blog on MultiSite.
-		 * There's nothing to find anyway.
-		 */
-		return $cache = isset( $cache ) ? $cache : $this->get_option( 'sitemaps_output' ) && ! $this->current_blog_is_spam_or_deleted();
+		return $this->get_option( 'sitemaps_output' ) && ! $this->current_blog_is_spam_or_deleted();
 	}
 
 	/**

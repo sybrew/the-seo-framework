@@ -135,6 +135,8 @@ final class Deprecated {
 	 * Includes the necessary sortable metabox scripts.
 	 *
 	 * @since 2.2.2
+	 * @since 4.0.0 Deprecated.
+	 * @deprecated
 	 */
 	public function metabox_scripts() {
 		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->metabox_scripts()', '4.0.0', '\The_SEO_Framework\Bridges\Scripts::prepare_metabox_scripts()' );
@@ -282,6 +284,8 @@ final class Deprecated {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 Removed caching.
+	 * @since 4.0.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @param string $locale Required, the locale.
 	 * @return bool Whether the input $locale is in the current WordPress locale.
@@ -357,6 +361,8 @@ final class Deprecated {
 	 * @since 2.8.0
 	 * @since 3.0.0 1: No longer uses home URL from cache. But now uses `get_home_url()`.
 	 *              2: Now takes query parameters (if any) and restores them correctly.
+	 * @since 4.0.0 Deprecated.
+	 * @deprecated
 	 * @global \WP_Rewrite $wp_rewrite
 	 *
 	 * @return string URL location of the XSL stylesheet. Unescaped.
@@ -372,6 +378,8 @@ final class Deprecated {
 	 * @since 2.9.2
 	 * @since 3.0.0 1: No longer uses home URL from cache. But now uses `get_home_url()`.
 	 *              2: Now takes query parameters (if any) and restores them correctly.
+	 * @since 4.0.0 Deprecated.
+	 * @deprecated
 	 * @global \WP_Rewrite $wp_rewrite
 	 *
 	 * @return string URL location of the XML sitemap. Unescaped.
@@ -388,6 +396,8 @@ final class Deprecated {
 	 * @since 3.1.0 1. Now outputs 200-response code.
 	 *              2. Now outputs robots tag, preventing indexing.
 	 *              3. Now overrides other header tags.
+	 * @since 4.0.0 Deprecated.
+	 * @deprecated
 	 */
 	public function output_sitemap_xsl_stylesheet() {
 		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->output_sitemap_xsl_stylesheet()', '4.0.0' );
