@@ -89,6 +89,7 @@ function _previous_db_version() {
  *              2. Added time limit.
  *              3. No longer runs during AJAX.
  *              4. Added an upgrading lock. Preventing upgrades running simultaneously.
+ *                 While this lock is active, the SEO Settings can't be accessed, either.
  */
 function _do_upgrade() {
 
@@ -188,6 +189,7 @@ function _do_upgrade() {
  * When the upgrader halts, timeouts, or crashes for any reason, this will run.
  *
  * @since 4.0.0
+ * @TODO add cache flush? @see _upgrade_to_current()
  */
 function _release_upgrade_lock() {
 	\delete_transient( 'tsf_upgrade_lock' );
@@ -543,6 +545,7 @@ function _do_upgrade_3300() {
 	$tsf = \the_seo_framework();
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3300' ) {
+		// Remove old rewrite rules.
 		unset(
 			$GLOBALS['wp_rewrite']->extra_rules_top['sitemap\.xml$'],
 			$GLOBALS['wp_rewrite']->extra_rules_top['sitemap\.xsl$']
@@ -568,6 +571,7 @@ function _do_upgrade_3300() {
 			}
 		}
 
+		// Flip the homepage title location to make it in line with all other titles.
 		$home_title_location = $tsf->get_option( 'home_title_location', false );
 		if ( 'left' === $home_title_location ) {
 			$tsf->update_option( 'home_title_location', 'right' );

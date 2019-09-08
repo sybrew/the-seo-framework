@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://theseoframework.com/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for your WordPress website.
- * Version: 4.0.0-rc3
+ * Version: 4.0.0-rc3.1
  * Author: The SEO Framework Team
  * Author URI: https://theseoframework.com/
  * License: GPLv3
@@ -40,7 +40,9 @@ defined( 'ABSPATH' ) or die;
  */
 
 // phpcs:disable, Squiz.Commenting.InlineComment, Squiz.PHP.CommentedOutCode
-// Debug. Not to be used on production websites as it dumps and/or disables all kinds of stuff everywhere.
+//
+// Debug: Not to be used on production websites as it dumps and/or disables all kinds of stuff everywhere.
+//
 // add_action( 'plugins_loaded', function() { if ( is_super_admin() ) {
 // if ( is_admin() ) {
 // 	define( 'THE_SEO_FRAMEWORK_DEBUG', true );

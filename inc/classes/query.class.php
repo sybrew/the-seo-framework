@@ -571,7 +571,6 @@ class Query extends Core {
 	 * @since 2.6.0
 	 * @since 3.1.0 No longer guesses category by name. It now only matches WordPress' built-in category.
 	 * @since 4.0.0 Removed caching.
-	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool Post Type is category
 	 */
@@ -1014,7 +1013,6 @@ class Query extends Core {
 	 * @since 2.6.0
 	 * @since 3.1.0 No longer guesses tag by name. It now only matches WordPress' built-in tag.
 	 * @since 4.0.0 Removed caching.
-	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool Post Type is tag.
 	 */

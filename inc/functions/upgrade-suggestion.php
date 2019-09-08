@@ -113,12 +113,12 @@ function _suggest_extension_manager() {
 	$tsf->do_dismissible_notice(
 		$tsf->convert_markdown(
 			sprintf(
-				/* translators: The URLs are in markdown! Don't add spaces around the brackets. 1 = first URL, 2 = second URL. */
-				\esc_html__( 'We hope you like this latest version of The SEO Framework. Even with all the new features and optimization, it remains the fastest, most lightweight, and highest performing of all the top WordPress SEO plugins. Because we don\'t fill our plugin with annoying ads, like the other guys, several of our additional services can be easily missed, like the [Extension Manager](%1$s) for example. These extra services add incredible functionality, such as Structured Data, Focus Subject Analysis, and even Spam Protection. We are confident these innovative and professional solutions will help you boost your site\'s SEO performance. And the best part is, we bundle many of the extensions for free. [Give them a try](%2$s).', 'autodescription' ),
+				'**A word from Sybre, the developer of The SEO Framework:** We spent 3000 hours on version 4.0 of The SEO Framework, optimizing every aspect of the plugin, resulting in [1000 changes](%s), making this the highest performing SEO plugin! We humbly believe it shows we put you and your website first. There are still no ads or constant annoyances in your dashboard. As a result, many of our users don\'t know about [The SEO Framework &mdash; Extension Manager](%s). The extensions give extra SEO functionality, like **structured data for publishers**, **focus subject analysis**, and **spam protection**. All programmed with same meticulous standards. Many of the extensions are **free**, and the paid ones help to finance all our work. Consider [giving them a try](%s). Thank you.',
+				'https://theseoframework.com/about/an-introduction-to-a-thousand-changes/',
 				'https://theseoframework.com/extension-manager/',
 				'https://theseoframework.com/extensions/'
 			),
-			[ 'a' ], // 'strong' ?
+			[ 'a', 'strong' ],
 			[ 'a_internal' => false ]
 		),
 		'updated',

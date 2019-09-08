@@ -994,7 +994,6 @@ class Detect extends Render {
 	 * @since 2.6.0
 	 * @since 2.9.2 No longer checks for plain and ugly permalinks.
 	 * @since 4.0.0 Removed caching.
-	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */

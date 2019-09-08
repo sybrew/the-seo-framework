@@ -560,7 +560,7 @@ final class SeoBar_Page extends SeoBar {
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN,
 						'reason' => \__( 'Page is invisible.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( "This page isn't published and can't be found.", 'autodescription' ),
+							'base' => \__( "This page isn't published and can't be found publicly.", 'autodescription' ),
 						],
 					],
 				],
@@ -714,7 +714,7 @@ final class SeoBar_Page extends SeoBar {
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN,
 						'reason' => \__( 'Page is invisible.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( "This page isn't published and can't be found.", 'autodescription' ),
+							'base' => \__( "This page isn't published and can't be found publicly.", 'autodescription' ),
 						],
 					],
 				],
@@ -845,7 +845,7 @@ final class SeoBar_Page extends SeoBar {
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN,
 						'reason' => \__( 'Page is invisible.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( "This page isn't published and can't be found.", 'autodescription' ),
+							'base' => \__( "This page isn't published and can't be found publicly.", 'autodescription' ),
 						],
 					],
 				],

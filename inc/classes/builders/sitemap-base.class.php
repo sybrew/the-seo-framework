@@ -246,7 +246,7 @@ class Sitemap_Base extends Sitemap {
 
 				if ( $args['show_modified'] ) {
 					$post               = \get_post( $front_page_id );
-					$_values['lastmod'] = isset( $post->post_date_gmt ) ? $post->post_date_gmt : false;
+					$_values['lastmod'] = isset( $post->post_modified_gmt ) ? $post->post_modified_gmt : false;
 				}
 
 				if ( $args['show_priority'] ) {
@@ -275,13 +275,13 @@ class Sitemap_Base extends Sitemap {
 						OBJECT
 					);
 					$latest_post   = isset( $latests_posts[0] ) ? $latests_posts[0] : null;
-					$_lastmod_post = isset( $latest_post->post_date_gmt ) ? $latest_post->post_date_gmt : '0000-00-00 00:00:00';
+					$_publish_post = isset( $latest_post->post_date_gmt ) ? $latest_post->post_date_gmt : '0000-00-00 00:00:00';
 
 					$post          = \get_post( $posts_page_id );
-					$_lastmod_blog = isset( $post->post_date_gmt ) ? $post->post_date_gmt : '0000-00-00 00:00:00';
+					$_lastmod_blog = isset( $post->post_modified_gmt ) ? $post->post_modified_gmt : '0000-00-00 00:00:00';
 
-					if ( strtotime( $_lastmod_post ) > strtotime( $_lastmod_blog ) ) {
-						$_values['lastmod'] = $_lastmod_post;
+					if ( strtotime( $_publish_post ) > strtotime( $_lastmod_blog ) ) {
+						$_values['lastmod'] = $_publish_post;
 					} else {
 						$_values['lastmod'] = $_lastmod_blog;
 					}
@@ -315,9 +315,9 @@ class Sitemap_Base extends Sitemap {
 						OBJECT
 					);
 					$latest_post   = isset( $latests_posts[0] ) ? $latests_posts[0] : null;
-					$_lastmod_post = isset( $latest_post->post_date_gmt ) ? $latest_post->post_date_gmt : '0000-00-00 00:00:00';
+					$_publish_post = isset( $latest_post->post_date_gmt ) ? $latest_post->post_date_gmt : '0000-00-00 00:00:00';
 
-					$_values['lastmod'] = $_lastmod_post;
+					$_values['lastmod'] = $_publish_post;
 				}
 
 				if ( $args['show_priority'] ) {
@@ -351,14 +351,13 @@ class Sitemap_Base extends Sitemap {
 
 		foreach ( $post_ids as $post_id ) {
 			if ( $this->is_post_included_in_sitemap( $post_id ) ) {
-				$_values = [];
-
+				$_values        = [];
 				$_values['loc'] = static::$tsf->create_canonical_url( [ 'id' => $post_id ] );
 
 				if ( $args['show_modified'] ) {
 					$post = \get_post( $post_id );
 
-					$_values['lastmod'] = isset( $post->post_date_gmt ) ? $post->post_date_gmt : '0000-00-00 00:00:00';
+					$_values['lastmod'] = isset( $post->post_modified_gmt ) ? $post->post_modified_gmt : '0000-00-00 00:00:00';
 				}
 
 				if ( $args['show_priority'] ) {

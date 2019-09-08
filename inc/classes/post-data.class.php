@@ -57,7 +57,6 @@ class Post_Data extends Detect {
 	 * When we'll be moving to PHP 7 and later, we'll enforce type hinting.
 	 *
 	 * @since 4.0.0
-	 * @alias $this->get_post_meta_item();
 	 *
 	 * @param string $item      The item to get.
 	 * @param int    $post_id   The post ID.
