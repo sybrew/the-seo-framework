@@ -219,6 +219,11 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
+= 4.0.1 =
+
+**Fixed:**
+	* `the_seo_framework_sitemap_additional_urls` filter now works again as intended.
+
 = 4.0.0 - Multiplex =
 
 *It is our choices, Harry, that show what we truly are, far more than our abilities. - [J.K. Rowling](https://www.jkrowling.com/book/harry-potter-chamber-secrets/)*

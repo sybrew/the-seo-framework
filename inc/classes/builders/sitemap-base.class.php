@@ -186,11 +186,14 @@ class Sitemap_Base extends Sitemap {
 			$content .= $this->build_url_item( $_values );
 		}
 
-		if ( \has_filter( 'the_seo_framework_sitemap_additional_urls' ) )
-			$content .= $this->get_additional_base_urls(
+		if ( \has_filter( 'the_seo_framework_sitemap_additional_urls' ) ) {
+			foreach ( $this->generate_additional_base_urls(
 				compact( 'show_priority', 'show_modified', 'count' ),
 				$count
-			);
+			) as $_values ) {
+				$content .= $this->build_url_item( $_values );
+			}
+		}
 
 		/**
 		 * @since 2.5.2
@@ -344,7 +347,6 @@ class Sitemap_Base extends Sitemap {
 	 *   string loc
 	 *   string lastmod
 	 *   string priority
-	 *   int    total_items
 	 * }
 	 */
 	protected function generate_url_item_values( $post_ids, $args, &$count = 0 ) {
@@ -416,6 +418,10 @@ class Sitemap_Base extends Sitemap {
 	 * Retrieves additional URLs and builds items from them.
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.1: 1. Converted to generator and iterator. Therefore, renamed function.
+	 *               2. Now actually does something.
+	 * @generator
+	 * @iterator
 	 *
 	 * @param array $args  : {
 	 *   bool $show_priority : Whether to display priority
@@ -423,9 +429,13 @@ class Sitemap_Base extends Sitemap {
 	 *   int  $count         : The total sitemap items before adding additional URLs.
 	 * }
 	 * @param int   $count The iteration count. Passed by reference.
-	 * @return string Additional sitemap URLs.
+	 * @yield array|void : {
+	 *   string loc
+	 *   string lastmod
+	 *   string priority
+	 * }
 	 */
-	protected function get_additional_base_urls( $args, &$count = 0 ) {
+	protected function generate_additional_base_urls( $args, &$count = 0 ) {
 
 		/**
 		 * @since 2.5.2
@@ -434,7 +444,7 @@ class Sitemap_Base extends Sitemap {
 		 * @example return value: [ 'http://example.com' => [ 'lastmod' => '14-01-2018', 'priority' => 0.9 ] ]
 		 * @param array $custom_urls : {
 		 *    string (key) $url The absolute url to the page. : array {
-		 *       string           $lastmod  : UNIXTIME Last modified date, e.g. "2016-01-26 13:04:55"
+		 *       string           $lastmod  : UNIXTIME <GMT+0> Last modified date, e.g. "2016-01-26 13:04:55"
 		 *       float|int|string $priority : URL Priority
 		 *    }
 		 * }
@@ -446,26 +456,27 @@ class Sitemap_Base extends Sitemap {
 		 */
 		$custom_urls = (array) \apply_filters( 'the_seo_framework_sitemap_additional_urls', [], $args );
 
-		$items = [];
-
 		foreach ( $custom_urls as $url => $values ) {
 			if ( ! is_array( $values ) ) {
 				//* If there are no args, it's assigned as URL (per example)
 				$url = $values;
 			}
 
-			$_url = \esc_url_raw( $url, [ 'https', 'http' ] );
+			// Test if URL is valid.
+			if ( ! \esc_url_raw( $url, [ 'https', 'http' ] ) ) continue;
 
-			if ( ! $_url ) continue;
+			$_values['loc'] = $url;
 
-			$items[] = [
-				'loc'      => $url,
-				'lastmod'  => ! empty( $values['lastmod'] ) ? $values['lastmod'] : '0000-00-00 00:00:00',
-				'priority' => ! empty( $values['priority'] ) ? $values['priority'] : 0.9,
-			];
+			if ( $args['show_modified'] ) {
+				$_values['lastmod'] = ! empty( $values['lastmod'] ) ? $values['lastmod'] : '0000-00-00 00:00:00';
+			}
+
+			if ( $args['show_priority'] ) {
+				$_values['priority'] = ! empty( $values['priority'] ) ? $values['priority'] : 0.9;
+			}
+
 			++$count;
+			yield $_values;
 		}
-
-		return $this->build_url_item( $items );
 	}
 }
