@@ -231,7 +231,7 @@ switch ( $instance ) :
 		?>
 		<h4><?php esc_html_e( 'Default Twitter Integration Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'Twitter post sharing works mostly through Open Graph. However, you can also link your Business and Personal Twitter pages, among various other options.', 'autodescription' ) );
+		$this->description( __( 'Twitter post sharing works mostly through Twitter Cards, and may fall back to use Open Graph. However, you can also link your Business and Personal Twitter pages, among various other options.', 'autodescription' ) );
 
 		?>
 		<hr>

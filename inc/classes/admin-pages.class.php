@@ -93,6 +93,18 @@ class Admin_Pages extends Profile {
 
 		//* Enqueue scripts
 		\add_action( 'admin_print_scripts-' . $this->seo_settings_page_hook, [ $this, '_init_admin_scripts' ], 11 );
+		\add_action( 'load-' . $this->seo_settings_page_hook, [ $this, '_register_seo_settings_meta_boxes' ] );
+	}
+
+	/**
+	 * Registers the meta boxes early, so WordPress recognizes them for user-settings.
+	 *
+	 * @since 4.0.0
+	 * @see $this->_output_settings_wrap()
+	 * @access private
+	 */
+	public function _register_seo_settings_meta_boxes() {
+		Bridges\SeoSettings::_register_seo_settings_meta_boxes();
 	}
 
 	/**
@@ -108,7 +120,6 @@ class Admin_Pages extends Profile {
 			Bridges\SeoSettings::class . '::_output_columns'
 		);
 
-		Bridges\SeoSettings::_register_seo_settings_meta_boxes();
 		Bridges\SeoSettings::_output_wrap();
 	}
 

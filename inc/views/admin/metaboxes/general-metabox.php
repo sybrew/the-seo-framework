@@ -325,7 +325,7 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Link Relationship Settings', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'Some search engines look for relations between the content of your pages. If you have pagination on a post or page, or have archives indexed, these options will help search engines look for the right page to display in the search results.', 'autodescription' ) );
-		$this->description( __( "It's recommended to turn these options on for better SEO consistency and to prevent duplicate content errors.", 'autodescription' ) );
+		$this->description( __( "It's recommended to turn these options on for better SEO consistency and to prevent duplicated content issues.", 'autodescription' ) );
 
 		$prev_next_posts_checkbox = $this->make_checkbox(
 			'prev_next_posts',

@@ -152,7 +152,7 @@ Optionally, also install our free [Extension Manager](https://theseoframework.co
 
 1. The SEO Framework shows you how your site is performing, at a glance. These are what we call the SEO Bar.
 2. Hover over, tap on, or focus any SEO Bar item and it will tell you what's asserted from your environment.
-3. This SEO meta box is displayed on pages. It's everything you need. Here you can see the pixel counters.
+3. The SEO meta box is displayed on all pages. It's everything you need. Here you can see the pixel counters.
 4. These SEO settings are shown on the term edit screen. It seamlessly blends into your WordPress interface.
 5. The SEO settings page of The SEO Framework. Every setting is explained thoroughly. You're in full control.
 
