@@ -465,6 +465,8 @@ class Sitemap_Base extends Sitemap {
 			// Test if URL is valid.
 			if ( ! \esc_url_raw( $url, [ 'https', 'http' ] ) ) continue;
 
+			// Reset.
+			$_values        = [];
 			$_values['loc'] = $url;
 
 			if ( $args['show_modified'] ) {

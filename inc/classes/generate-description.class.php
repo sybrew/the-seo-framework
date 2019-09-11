@@ -725,6 +725,7 @@ class Generate_Description extends Generate {
 	 * @since 2.8.2 : Added 4th parameter for escaping.
 	 * @since 3.1.0 1. No longer returns anything for terms.
 	 *              2. Now strips plausible embeds URLs.
+	 * @since 4.0.1 The second parameter `$id` now defaults to int 0, instead of an empty string.
 	 *
 	 * @param string $excerpt    The Excerpt.
 	 * @param int    $id         The Post ID.
@@ -732,7 +733,7 @@ class Generate_Description extends Generate {
 	 * @param bool   $escape     Whether to escape the excerpt.
 	 * @return string The trimmed excerpt.
 	 */
-	public function get_excerpt_by_id( $excerpt = '', $id = '', $deprecated = null, $escape = true ) {
+	public function get_excerpt_by_id( $excerpt = '', $id = 0, $deprecated = null, $escape = true ) {
 
 		if ( empty( $excerpt ) )
 			$excerpt = $this->fetch_excerpt( $id );
@@ -752,13 +753,15 @@ class Generate_Description extends Generate {
 	 * @since 2.6.6 Detects Page builders.
 	 * @since 3.1.0 1. No longer returns anything for terms.
 	 *              2. Now strips plausible embeds URLs.
+	 * @since 4.0.1 Now fetches the real ID when no post is supplied.
+	 *              Internally, this was never an issue. @see `$this->get_singular_description_excerpt()`
 	 *
 	 * @param \WP_Post|int|null $post The Post or Post ID. Leave null to get current post.
 	 * @return string The excerpt.
 	 */
 	public function fetch_excerpt( $post = null ) {
 
-		$post = \get_post( $post );
+		$post = \get_post( $post ?: $this->get_the_real_ID() );
 
 		/**
 		 * @since 2.5.2

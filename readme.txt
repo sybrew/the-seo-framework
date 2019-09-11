@@ -4,7 +4,7 @@ Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
 Requires at least: 4.9.0
 Tested up to: 5.2
 Requires PHP: 5.6.0
-Stable tag: 4.0.0
+Stable tag: 4.0.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -221,8 +221,11 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.0.1 =
 
-**Fixed:**
-	* `the_seo_framework_sitemap_additional_urls` filter now works again as intended.
+Thank you for trusting us by upgrading to TSF 4.0.0 earlier! We've received many warm and welcoming responses, and we're very grateful.
+
+Even though we churned 40% of the code, we only confirmed two bugs in that update. This minor update [addresses those bugs]().
+
+Our users reported some admin scripting issues when updating from v3.2.4 to v4.0. These issues are out of our reach, and we provided several solutions [in this post](https://wordpress.org/support/topic/4-0-admin-interface-not-loading-correctly/).
 
 = 4.0.0 - Multiplex =
 

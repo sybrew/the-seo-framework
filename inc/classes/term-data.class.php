@@ -79,6 +79,7 @@ class Term_Data extends Post_Data {
 	 * Returns and caches term meta for the current query.
 	 *
 	 * @since 3.0.0
+	 * @since 4.0.1 Now uses the filterable `get_the_real_ID()`
 	 * @staticvar array $cache
 	 *
 	 * @return array The current term meta.
@@ -91,7 +92,7 @@ class Term_Data extends Post_Data {
 			return $cache;
 
 		if ( $this->is_term_meta_capable() ) {
-			$cache = $this->get_term_meta( \get_queried_object_id() ) ?: [];
+			$cache = $this->get_term_meta( $this->get_the_real_ID() ) ?: [];
 		} else {
 			$cache = [];
 		}

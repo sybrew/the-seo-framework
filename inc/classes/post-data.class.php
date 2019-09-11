@@ -57,6 +57,7 @@ class Post_Data extends Detect {
 	 * When we'll be moving to PHP 7 and later, we'll enforce type hinting.
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.1 Now obtains the real ID when none is supplied.
 	 *
 	 * @param string $item      The item to get.
 	 * @param int    $post_id   The post ID.
@@ -64,7 +65,7 @@ class Post_Data extends Detect {
 	 */
 	public function get_post_meta_item( $item, $post_id = 0, $use_cache = true ) {
 
-		$meta = $this->get_post_meta( $post_id, $use_cache );
+		$meta = $this->get_post_meta( $post_id ?: $this->get_the_real_ID(), $use_cache );
 
 		return isset( $meta[ $item ] ) ? $meta[ $item ] : null;
 	}
