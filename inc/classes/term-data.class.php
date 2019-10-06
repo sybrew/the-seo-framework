@@ -260,6 +260,8 @@ class Term_Data extends Post_Data {
 	 * Overwrites all of the term meta on term-edit.
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.2 1: Now tests for valid term ID in the term object.
+	 *              2: Now continues using the filtered term object.
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param int    $tt_id    Term taxonomy ID.
@@ -270,23 +272,26 @@ class Term_Data extends Post_Data {
 
 		$term = \get_term( $term_id, $taxonomy );
 
-		if ( ! $term ) return;
+		// We could test for is_wp_error( $term ), but this is more to the point.
+		if ( empty( $term->term_id ) ) return;
 
 		//* Check again against ambiguous injection...
 		// Note, however: function wp_update_term() already performs all these checks for us before firing this callback's action.
-		if ( ! \current_user_can( 'edit_term', $term_id ) ) return;
+		if ( ! \current_user_can( 'edit_term', $term->term_id ) ) return;
 		if ( ! isset( $_POST['_wpnonce'] ) ) return;
-		if ( ! \wp_verify_nonce( \stripslashes_from_strings_only( $_POST['_wpnonce'] ), 'update-tag_' . $term_id ) ) return;
+		if ( ! \wp_verify_nonce( \stripslashes_from_strings_only( $_POST['_wpnonce'] ), 'update-tag_' . $term->term_id ) ) return;
 
 		$data = (array) $_POST['autodescription-meta'];
 
-		$this->save_term_meta( $term_id, $tt_id, $taxonomy, $data );
+		$this->save_term_meta( $term->term_id, $tt_id, $taxonomy, $data );
 	}
 
 	/**
 	 * Overwrites a part of the term meta on quick-edit.
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.2 1: Now tests for valid term ID in the term object.
+	 *              2: Now continues using the filtered term object.
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param int    $tt_id    Term taxonomy ID.
@@ -297,21 +302,22 @@ class Term_Data extends Post_Data {
 
 		$term = \get_term( $term_id, $taxonomy );
 
-		if ( ! $term ) return;
+		// We could test for is_wp_error( $term ), but this is more to the point.
+		if ( empty( $term->term_id ) ) return;
 
 		//* Check again against ambiguous injection...
 		// Note, however: function wp_ajax_inline_save_tax() already performs all these checks for us before firing this callback's action.
-		if ( ! \current_user_can( 'edit_term', $term_id ) ) return;
+		if ( ! \current_user_can( 'edit_term', $term->term_id ) ) return;
 		if ( ! \check_ajax_referer( 'taxinlineeditnonce', '_inline_edit', false ) ) return;
 
 		// Unlike the term-edit saving, we don't reset the data, just overwrite what's given.
 		// This is because we only update a portion of the meta.
 		$data = array_merge(
-			$this->get_term_meta( $term_id, false ),
+			$this->get_term_meta( $term->term_id, false ),
 			(array) $_POST['autodescription-quick']
 		);
 
-		$this->save_term_meta( $term_id, $tt_id, $taxonomy, $data );
+		$this->save_term_meta( $term->term_id, $tt_id, $taxonomy, $data );
 	}
 
 	/**
@@ -321,6 +327,8 @@ class Term_Data extends Post_Data {
 	 * as it reprocesses all term meta.
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.2 1: Now tests for valid term ID in the term object.
+	 *              2: Now continues using the filtered term object.
 	 * @uses $this->save_term_meta() to process all data.
 	 *
 	 * @param string $item     The item to update.
@@ -333,18 +341,21 @@ class Term_Data extends Post_Data {
 
 		$term = \get_term( $term_id, $taxonomy );
 
-		if ( ! $term ) return;
+		// We could test for is_wp_error( $term ), but this is more to the point.
+		if ( empty( $term->term_id ) ) return;
 
-		$meta          = $this->get_term_meta( $term_id, false );
+		$meta          = $this->get_term_meta( $term->term_id, false );
 		$meta[ $item ] = $value;
 
-		$this->save_term_meta( $term_id, $tt_id, $taxonomy, $meta );
+		$this->save_term_meta( $term->term_id, $tt_id, $taxonomy, $meta );
 	}
 
 	/**
 	 * Updates term meta from input.
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.2 1: Now tests for valid term ID in the term object.
+	 *              2: Now continues using the filtered term object.
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param int    $tt_id    Term Taxonomy ID.
@@ -355,9 +366,10 @@ class Term_Data extends Post_Data {
 
 		$term = \get_term( $term_id, $taxonomy );
 
-		if ( ! $term ) return;
+		// We could test for is_wp_error( $term ), but this is more to the point.
+		if ( empty( $term->term_id ) ) return;
 
-		$data = (array) \wp_parse_args( $data, $this->get_term_meta_defaults( $term_id ) );
+		$data = (array) \wp_parse_args( $data, $this->get_term_meta_defaults( $term->term_id ) );
 		$data = $this->s_term_meta( $data );
 
 		/**
@@ -371,13 +383,13 @@ class Term_Data extends Post_Data {
 			'the_seo_framework_save_term_data',
 			[
 				$data,
-				$term_id,
+				$term->term_id,
 				$tt_id,
 				$taxonomy,
 			]
 		);
 
-		\update_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
+		\update_term_meta( $term->term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
 	}
 
 	/**

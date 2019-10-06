@@ -716,6 +716,7 @@ class Generate_Title extends Generate_Description {
 	 * @see WP Core get_the_archive_title()
 	 *
 	 * @since 3.1.0
+	 * @since 4.0.2 Now asserts the correct tag taxonomy condition.
 	 *
 	 * @param \WP_Term|\WP_Error|null $term The Term object or error. Leave null to autodetermine query.
 	 * @return string The generated archive title, not escaped.
@@ -753,7 +754,7 @@ class Generate_Title extends Generate_Description {
 					$title = $this->get_generated_single_term_title( $term );
 					/* translators: Category archive title. 1: Category name */
 					$title = $use_prefix ? sprintf( \__( 'Category: %s', 'default' ), $title ) : $title;
-				} elseif ( 'tag' === $_tax ) {
+				} elseif ( 'post_tag' === $_tax ) {
 					$title = $this->get_generated_single_term_title( $term );
 					/* translators: Tag archive title. 1: Tag name */
 					$title = $use_prefix ? sprintf( \__( 'Tag: %s', 'default' ), $title ) : $title;
@@ -838,8 +839,8 @@ class Generate_Title extends Generate_Description {
 		 *
 		 * @since 3.0.4
 		 *
-		 * @param string $title Archive title to be displayed.
-		 * @param \WP_Term $term The term object.
+		 * @param string   $title Archive title to be displayed.
+		 * @param \WP_Term $term  The term object.
 		 */
 		return \apply_filters( 'the_seo_framework_generated_archive_title', $title, $term );
 	}
@@ -886,6 +887,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.1.0
 	 * @since 4.0.0 No longer redundantly tests the query, now only uses the term input or queried object.
+	 * @since 4.0.2 Now asserts the correct tag taxonomy condition.
 	 *
 	 * @param null|\WP_Term $term The term name, required in the admin area.
 	 * @return string The generated single term title.
@@ -907,7 +909,7 @@ class Generate_Title extends Generate_Description {
 				 * @param string $term_name Category name for archive being displayed.
 				 */
 				$term_name = \apply_filters( 'single_cat_title', $term->name );
-			} elseif ( 'tag' === $term->taxonomy ) {
+			} elseif ( 'post_tag' === $term->taxonomy ) {
 				/**
 				 * Filter the tag archive page title.
 				 *
@@ -1311,6 +1313,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.2.2
 	 * @since 4.0.0 Added use_taxonomical_title_branding() check.
+	 * @since 4.0.2 Removed contemned \is_post_type_archive() check for taxonomical branding.
 	 * @see $this->use_title_branding()
 	 *
 	 * @return bool
@@ -1321,7 +1324,7 @@ class Generate_Title extends Generate_Description {
 			$use = $this->use_home_page_title_tagline();
 		} elseif ( $this->is_singular() ) {
 			$use = $this->use_singular_title_branding();
-		} elseif ( $this->is_term_meta_capable() || \is_post_type_archive() ) {
+		} elseif ( $this->is_term_meta_capable() ) {
 			$use = $this->use_taxonomical_title_branding();
 		} else {
 			$use = ! $this->get_option( 'title_rem_additions' );

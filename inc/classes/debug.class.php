@@ -658,6 +658,7 @@ final class Debug {
 		$is_multipage         = $tsf->is_multipage();
 		$is_singular_archive  = $tsf->is_singular_archive();
 		$is_term_meta_capable = $tsf->is_term_meta_capable();
+		$is_post_type_archive = \is_post_type_archive();
 
 		//* Don't debug the class object.
 		unset( $tsf );

@@ -80,6 +80,7 @@ class Post_Data extends Detect {
 	 * When we'll be moving to PHP 7 and later, we'll enforce type hinting.
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.2 Now tests for valid post ID in the post object.
 	 * @staticvar array $cache
 	 *
 	 * @param int  $post_id   The post ID.
@@ -98,7 +99,7 @@ class Post_Data extends Detect {
 		// get_post_meta() requires a valid post ID. Make sure that post exists.
 		$post = \get_post( $post_id );
 
-		if ( ! $post )
+		if ( empty( $post->ID ) )
 			return $cache[ $post_id ] = [];
 
 		/**
