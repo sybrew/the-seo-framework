@@ -451,7 +451,7 @@ class Sitemap_Base extends Sitemap {
 		 * @param array $args : {
 		 *   bool $show_priority : Whether to display priority
 		 *   bool $show_modified : Whether to display modified date.
-		 *   int  $total_itemns  : Estimate: The total sitemap items before adding additional URLs.
+		 *   int  $count         : Estimate: The total sitemap items before adding additional URLs.
 		 * }
 		 */
 		$custom_urls = (array) \apply_filters( 'the_seo_framework_sitemap_additional_urls', [], $args );

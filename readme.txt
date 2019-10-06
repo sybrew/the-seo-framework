@@ -223,7 +223,13 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 **For everyone:**
 
+**For translators:**
+
+* **Fixed:**
+	* A typo.
+
 **For developers:**
+
 * **Changed:**
 	* The overloading trait-collection is now loaded during the plugin load phase, instead of at `plugins_loaded`.
 		* This addresses an issue where some plugins call The SEO Framework before it's loaded.

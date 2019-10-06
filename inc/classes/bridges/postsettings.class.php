@@ -53,7 +53,7 @@ final class PostSettings {
 
 		/**
 		 * @since 2.9.0
-		 * @param string $context, default 'normal'. Accepts 'normal', 'side' and 'advanced'.
+		 * @param string $context Accepts 'normal', 'side', and 'advanced'.
 		 */
 		$context = (string) \apply_filters( 'the_seo_framework_metabox_context', 'normal' );
 

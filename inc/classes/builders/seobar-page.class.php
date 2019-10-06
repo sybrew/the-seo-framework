@@ -148,7 +148,7 @@ final class SeoBar_Page extends SeoBar {
 				],
 				'assess'   => [
 					'empty'      => \__( 'No title could be fetched.', 'autodescription' ),
-					'untitled'   => \__( 'No title could be fetched, "Untitled" is used instead.', 'autodescription' ),
+					'untitled'   => \__( 'No title could be fetched, "Untitled" is used instead.', 'autodescription' ), // TODO use [params][untitled]?
 					'protected'  => \__( 'A page protection state is added which increases the length.', 'autodescription' ),
 					'branding'   => [
 						'not'       => \__( "It's not branded. Search engines may ignore your title.", 'autodescription' ),

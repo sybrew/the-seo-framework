@@ -76,7 +76,7 @@ define( 'THE_SEO_FRAMEWORK_USER_OPTIONS', (string) \apply_filters( 'the_seo_fram
 define( 'THE_SEO_FRAMEWORK_SITE_CACHE', (string) \apply_filters( 'the_seo_framework_site_cache', 'autodescription-updates-cache' ) );
 
 /**
- * The plugin map URL. Has a trailing slash.
+ * The plugin folder URL. Has a trailing slash.
  * Used for calling browser files.
  *
  * @since 2.2.2
@@ -91,49 +91,49 @@ define( 'THE_SEO_FRAMEWORK_DIR_URL', \plugin_dir_url( THE_SEO_FRAMEWORK_PLUGIN_B
 define( 'THE_SEO_FRAMEWORK_PLUGIN_BASENAME', \plugin_basename( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE ) );
 
 /**
- * The plugin map absolute path. Used for calling php files.
+ * The plugin folder absolute path. Used for calling php files.
  *
  * @since 2.2.2
  */
 define( 'THE_SEO_FRAMEWORK_DIR_PATH', dirname( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE ) . DIRECTORY_SEPARATOR );
 
 /**
- * The plugin views map absolute path.
+ * The plugin views folder absolute path.
  *
  * @since 2.7.0
  */
 define( 'THE_SEO_FRAMEWORK_DIR_PATH_VIEWS', THE_SEO_FRAMEWORK_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR );
 
 /**
- * The plugin class map absolute path.
+ * The plugin class folder absolute path.
  *
  * @since 2.2.9
  */
 define( 'THE_SEO_FRAMEWORK_DIR_PATH_CLASS', THE_SEO_FRAMEWORK_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
 
 /**
- * The plugin trait map absolute path.
+ * The plugin trait folder absolute path.
  *
  * @since 3.1.0
  */
 define( 'THE_SEO_FRAMEWORK_DIR_PATH_TRAIT', THE_SEO_FRAMEWORK_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'traits' . DIRECTORY_SEPARATOR );
 
 /**
- * The plugin interface map absolute path.
+ * The plugin interface folder absolute path.
  *
  * @since 2.8.0
  */
 define( 'THE_SEO_FRAMEWORK_DIR_PATH_INTERFACE', THE_SEO_FRAMEWORK_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'interfaces' . DIRECTORY_SEPARATOR );
 
 /**
- * The plugin function map absolute path.
+ * The plugin function folder absolute path.
  *
  * @since 2.2.9
  */
 define( 'THE_SEO_FRAMEWORK_DIR_PATH_FUNCT', THE_SEO_FRAMEWORK_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'functions' . DIRECTORY_SEPARATOR );
 
 /**
- * The plugin function map absolute path.
+ * The plugin compatibility folder absolute path.
  *
  * @since 2.8.0
  */

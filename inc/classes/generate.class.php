@@ -114,7 +114,7 @@ class Generate extends User_Data {
 		 * Filters the front-end robots array, and strips empty indexes thereafter.
 		 *
 		 * @since 2.6.0
-		 * @since 4.0.0 Added two parameters.
+		 * @since 4.0.0 Added two parameters ($args and $ignore).
 		 *
 		 * @param array      $meta The current term meta.
 		 * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
