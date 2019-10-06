@@ -99,7 +99,7 @@ The SEO Framework works on many things without notifying you, because the best s
 * It prevents canonical errors for categories, pages, subdomains, and WordPress Multisite domain mapping.
 * It stops SEO attacks that are caused by pagination exploits in WordPress by telling the search engine to look at the existing last page instead.
 * It discourages 404 pages and empty categories from being indexed, even when they don't send a 404 response.
-* It automatically notifies Google, Bing, and Yandex on website updates when sitemaps are enabled.
+* It automatically notifies Google and the Bing network on website updates when sitemaps are enabled.
 * It discourages search engines from indexing feeds and the sitemap. This doesn't mean they won't use them, they only won't show them in their search results.
 * It directs search engines from the comment pages back to the post holding those comments.
 
@@ -218,6 +218,15 @@ The SEO Framework does not provide the display of breadcrumbs. This is theme-ter
 If you wish to display breadcrumbs, then your theme should provide this. Alternatively, there are [other plugins](https://wordpress.org/plugins/search/breadcrumbs/) that help you do this.
 
 == Changelog ==
+
+= 4.0.2 =
+
+**For everyone:**
+
+**For developers:**
+* **Changed:**
+	* The overloading trait-collection is now loaded during the plugin load phase, instead of at `plugins_loaded`.
+		* This addresses an issue where some plugins call The SEO Framework before it's loaded.
 
 = 4.0.1 =
 
